@@ -18,8 +18,8 @@ import warnings
 
 from argparse import Namespace
 from settings import Settings, get_settings
-from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
-from typing_extensions import TypeGuard
+from time import sleep
+from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
 
 try:
@@ -47,7 +47,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.5.1"
+__version__ = "0.6.0"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -568,6 +568,8 @@ def stream_input(stream: typing.TextIO, queue: "asyncio.Queue[str]"):
             else:
                 if text:
                     queue.put_nowait(text)
+                else:
+                    sleep(0.01)  # non-blocking stream
 
     from threading import Thread
     thread = Thread(target=queuer, name=f"Stream handler for {stream.name}", daemon=True)
