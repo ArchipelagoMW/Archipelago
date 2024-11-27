@@ -204,7 +204,7 @@ class CVCotMWorld(World):
         if self.options.countdown:
             offset_data.update(get_countdown_flags(self, active_locations))
         # Start Inventory
-        start_inventory_data = get_start_inventory_data(self.multiworld.precollected_items[self.player])
+        start_inventory_data = get_start_inventory_data(self)
         offset_data.update(start_inventory_data[0])
 
         patch = CVCotMProcedurePatch(player=self.player, player_name=self.player_name)

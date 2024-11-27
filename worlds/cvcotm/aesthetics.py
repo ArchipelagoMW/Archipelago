@@ -1,5 +1,5 @@
-from BaseClasses import ItemClassification, Location, Item
-from .options import ItemDropRandomization, Countdown, RequiredSkirmishes
+from BaseClasses import ItemClassification, Location
+from .options import ItemDropRandomization, Countdown, RequiredSkirmishes, IronMaidenBehavior
 from .locations import cvcotm_location_info
 from .items import cvcotm_item_info, MAJORS_CLASSIFICATIONS
 from .data import iname
@@ -698,7 +698,7 @@ def select_drop(world: "CVCotMWorld", drop_list: List[int], drops_placed: List[i
     return drop_list[eligible_items[random_result]]
 
 
-def get_start_inventory_data(precollected_items: List[Item]) -> Tuple[Dict[int, bytes], bool]:
+def get_start_inventory_data(world: "CVCotMWorld") -> Tuple[Dict[int, bytes], bool]:
     """Calculate and return the starting inventory arrays. Different items go into different arrays, so they all have
     to be handled accordingly."""
     start_inventory_data = {}
@@ -709,15 +709,18 @@ def get_start_inventory_data(precollected_items: List[Item]) -> Tuple[Dict[int, 
                    "extra magic": 0,
                    "extra hearts": 0}
     start_with_detonator = False
+    # If the Iron Maiden Behavior option is set to Start Broken, consider ourselves starting with the Maiden Detonator.
+    if world.options.iron_maiden_behavior == IronMaidenBehavior.option_start_broken:
+        start_with_detonator = True
 
     # Always start with the Dash Boots.
     magic_items_array[0] = 1
 
-    for item in precollected_items:
+    for item in world.multiworld.precollected_items[world.player]:
 
         array_offset = item.code & 0xFF
 
-        # If it's the Maiden Detonator we're starting with, set the boolean for it to True.
+        # If it's a Maiden Detonator we're starting with, set the boolean for it to True.
         if item.name == iname.ironmaidens:
             start_with_detonator = True
         # If it's a Max Up we're starting with, check if increasing the extra amount of that stat will put us over the
