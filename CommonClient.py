@@ -710,6 +710,11 @@ class CommonContext:
 
     def run_cli(self):
         if sys.stdin:
+            if sys.stdin.fileno() != 0:
+                from multiprocessing import parent_process
+                if parent_process():
+                    return  # ignore MultiProcessing pipe
+
             # steam overlay breaks when starting console_loop
             if 'gameoverlayrenderer' in os.environ.get('LD_PRELOAD', ''):
                 logger.info("Skipping terminal input, due to conflicting Steam Overlay detected. Please use GUI only.")

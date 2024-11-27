@@ -727,15 +727,15 @@ class Context:
             if not hint.local and data not in concerns[hint.finding_player]:
                 concerns[hint.finding_player].append(data)
             # remember hints in all cases
-            if not hint.found:
-                # since hints are bidirectional, finding player and receiving player,
-                # we can check once if hint already exists
-                if hint not in self.hints[team, hint.finding_player]:
-                    self.hints[team, hint.finding_player].add(hint)
-                    new_hint_events.add(hint.finding_player)
-                    for player in self.slot_set(hint.receiving_player):
-                        self.hints[team, player].add(hint)
-                        new_hint_events.add(player)
+
+            # since hints are bidirectional, finding player and receiving player,
+            # we can check once if hint already exists
+            if hint not in self.hints[team, hint.finding_player]:
+                self.hints[team, hint.finding_player].add(hint)
+                new_hint_events.add(hint.finding_player)
+                for player in self.slot_set(hint.receiving_player):
+                    self.hints[team, player].add(hint)
+                    new_hint_events.add(player)
 
             self.logger.info("Notice (Team #%d): %s" % (team + 1, format_hint(self, team, hint)))
         for slot in new_hint_events:
@@ -1960,8 +1960,10 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def _cmd_exit(self) -> bool:
         """Shutdown the server"""
-        self.ctx.server.ws_server.close()
-        self.ctx.exit_event.set()
+        try:
+            self.ctx.server.ws_server.close()
+        finally:
+            self.ctx.exit_event.set()
         return True
 
     @mark_raw
