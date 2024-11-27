@@ -14,7 +14,8 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
 
     def test_given_single_mods_when_generate_then_basic_checks(self):
         for mod in options.Mods.valid_keys:
-            with self.solo_world_sub_test(f"Mod: {mod}", {options.Mods: mod}) as (multi_world, _):
+            world_options = {options.Mods: mod, options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false}
+            with self.solo_world_sub_test(f"Mod: {mod}", world_options) as (multi_world, _):
                 self.assert_basic_checks(multi_world)
                 self.assert_stray_mod_items(mod, multi_world)
 
@@ -22,8 +23,9 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
         for option in options.EntranceRandomization.options:
             for mod in options.Mods.valid_keys:
                 world_options = {
-                    options.EntranceRandomization.internal_name: options.EntranceRandomization.options[option],
-                    options.Mods: mod
+                    options.EntranceRandomization: options.EntranceRandomization.options[option],
+                    options.Mods: mod,
+                    options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false
                 }
                 with self.solo_world_sub_test(f"entrance_randomization: {option}, Mod: {mod}", world_options) as (multi_world, _):
                     self.assert_basic_checks(multi_world)
@@ -73,7 +75,7 @@ class TestBaseItemGeneration(SVTestBase):
         items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
         items_to_ignore.extend(resource_pack.name for resource_pack in items.items_by_group[Group.RESOURCE_PACK])
         items_to_ignore.append("The Gateway Gazette")
-        progression_items = [item for item in items.all_items if item.classification is ItemClassification.progression
+        progression_items = [item for item in items.all_items if item.classification & ItemClassification.progression
                              and item.name not in items_to_ignore]
         for progression_item in progression_items:
             with self.subTest(f"{progression_item.name}"):
@@ -103,7 +105,7 @@ class TestNoGingerIslandModItemGeneration(SVTestBase):
         items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
         items_to_ignore.extend(resource_pack.name for resource_pack in items.items_by_group[Group.RESOURCE_PACK])
         items_to_ignore.append("The Gateway Gazette")
-        progression_items = [item for item in items.all_items if item.classification is ItemClassification.progression
+        progression_items = [item for item in items.all_items if item.classification & ItemClassification.progression
                              and item.name not in items_to_ignore]
         for progression_item in progression_items:
             with self.subTest(f"{progression_item.name}"):

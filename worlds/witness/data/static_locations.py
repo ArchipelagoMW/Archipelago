@@ -104,6 +104,8 @@ GENERAL_LOCATIONS = {
     "Town RGB House Upstairs Right",
     "Town RGB House Sound Room Right",
 
+    "Town Pet the Dog",
+
     "Windmill Theater Entry Panel",
     "Theater Exit Left Panel",
     "Theater Exit Right Panel",
@@ -404,6 +406,10 @@ GENERAL_LOCATIONS = {
     "Challenge Vault Box",
     "Theater Challenge Video",
     "Mountain Bottom Floor Discard",
+}
+
+GENERAL_LOCATION_HEXES = {
+    static_witness_logic.ENTITIES_BY_NAME[entity_name]["entity_hex"] for entity_name in GENERAL_LOCATIONS
 }
 
 OBELISK_SIDES = {

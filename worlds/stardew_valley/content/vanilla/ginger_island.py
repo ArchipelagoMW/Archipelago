@@ -3,6 +3,7 @@ from ..game_content import ContentPack, StardewContent
 from ...data import villagers_data, fish_data
 from ...data.game_item import ItemTag, Tag
 from ...data.harvest import ForagingSource, HarvestFruitTreeSource, HarvestCropSource
+from ...data.requirement import WalnutRequirement
 from ...data.shop import ShopSource
 from ...strings.book_names import Book
 from ...strings.crop_names import Fruit, Vegetable
@@ -10,7 +11,7 @@ from ...strings.fish_names import Fish
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
 from ...strings.metal_names import Fossil, Mineral
-from ...strings.region_names import Region
+from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed
 
@@ -62,6 +63,9 @@ ginger_island_content_pack = GingerIslandContentPack(
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             ShopSource(items_price=((10, Mineral.diamond),), shop_region=Region.volcano_dwarf_shop),
         ),
+        Book.queen_of_sauce_cookbook: (
+            Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
+            ShopSource(money_price=50000, shop_region=LogicRegion.bookseller_2, other_requirements=(WalnutRequirement(100),)),),  # Worst book ever
 
     },
     fishes=(

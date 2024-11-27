@@ -41,9 +41,7 @@ all_random_settings = {
     Friendsanity.internal_name:             "random",
     FriendsanityHeartSize.internal_name:    "random",
     Booksanity.internal_name:               "random",
-    Walnutsanity.internal_name:             "random",
     NumberOfMovementBuffs.internal_name:    "random",
-    EnabledFillerBuffs.internal_name:       "random",
     ExcludeGingerIsland.internal_name:      "random",
     TrapItems.internal_name:                "random",
     MultipleDaySleepEnabled.internal_name:  "random",
@@ -57,8 +55,6 @@ all_random_settings = {
 }
 
 easy_settings = {
-    "progression_balancing":                ProgressionBalancing.default,
-    "accessibility":                        Accessibility.option_items,
     Goal.internal_name:                     Goal.option_community_center,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            "very rich",
@@ -103,8 +99,6 @@ easy_settings = {
 }
 
 medium_settings = {
-    "progression_balancing":                25,
-    "accessibility":                        Accessibility.option_locations,
     Goal.internal_name:                     Goal.option_community_center,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            "rich",
@@ -149,8 +143,6 @@ medium_settings = {
 }
 
 hard_settings = {
-    "progression_balancing":                0,
-    "accessibility":                        Accessibility.option_locations,
     Goal.internal_name:                     Goal.option_grandpa_evaluation,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            "extra",
@@ -195,8 +187,6 @@ hard_settings = {
 }
 
 nightmare_settings = {
-    "progression_balancing":                0,
-    "accessibility":                        Accessibility.option_locations,
     Goal.internal_name:                     Goal.option_community_center,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            "vanilla",
@@ -241,8 +231,6 @@ nightmare_settings = {
 }
 
 short_settings = {
-    "progression_balancing":                ProgressionBalancing.default,
-    "accessibility":                        Accessibility.option_items,
     Goal.internal_name:                     Goal.option_bottom_of_the_mines,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            "filthy rich",
@@ -287,8 +275,6 @@ short_settings = {
 }
 
 minsanity_settings = {
-    "progression_balancing":                ProgressionBalancing.default,
-    "accessibility":                        Accessibility.option_minimal,
     Goal.internal_name:                     Goal.default,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            StartingMoney.default,
@@ -333,8 +319,6 @@ minsanity_settings = {
 }
 
 allsanity_settings = {
-    "progression_balancing":                ProgressionBalancing.default,
-    "accessibility":                        Accessibility.option_locations,
     Goal.internal_name:                     Goal.default,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            StartingMoney.default,

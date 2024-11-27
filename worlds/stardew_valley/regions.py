@@ -87,7 +87,8 @@ vanilla_regions = [
     RegionData(Region.jotpk_world_3),
     RegionData(Region.junimo_kart_1, [Entrance.reach_junimo_kart_2]),
     RegionData(Region.junimo_kart_2, [Entrance.reach_junimo_kart_3]),
-    RegionData(Region.junimo_kart_3),
+    RegionData(Region.junimo_kart_3, [Entrance.reach_junimo_kart_4]),
+    RegionData(Region.junimo_kart_4),
     RegionData(Region.alex_house),
     RegionData(Region.trailer),
     RegionData(Region.mayor_house),
@@ -137,7 +138,8 @@ vanilla_regions = [
                [Entrance.island_west_to_islandfarmhouse, Entrance.island_west_to_gourmand_cave, Entrance.island_west_to_crystals_cave,
                 Entrance.island_west_to_shipwreck, Entrance.island_west_to_qi_walnut_room, Entrance.use_farm_obelisk, Entrance.parrot_express_jungle_to_docks,
                 Entrance.parrot_express_jungle_to_dig_site, Entrance.parrot_express_jungle_to_volcano, LogicEntrance.grow_spring_crops_on_island,
-                LogicEntrance.grow_summer_crops_on_island, LogicEntrance.grow_fall_crops_on_island, LogicEntrance.grow_winter_crops_on_island, LogicEntrance.grow_indoor_crops_on_island],
+                LogicEntrance.grow_summer_crops_on_island, LogicEntrance.grow_fall_crops_on_island, LogicEntrance.grow_winter_crops_on_island,
+                LogicEntrance.grow_indoor_crops_on_island],
                is_ginger_island=True),
     RegionData(Region.island_east, [Entrance.island_east_to_leo_hut, Entrance.island_east_to_island_shrine], is_ginger_island=True),
     RegionData(Region.island_shrine, is_ginger_island=True),
@@ -329,6 +331,7 @@ vanilla_connections = [
     ConnectionData(Entrance.play_junimo_kart, Region.junimo_kart_1),
     ConnectionData(Entrance.reach_junimo_kart_2, Region.junimo_kart_2),
     ConnectionData(Entrance.reach_junimo_kart_3, Region.junimo_kart_3),
+    ConnectionData(Entrance.reach_junimo_kart_4, Region.junimo_kart_4),
     ConnectionData(Entrance.town_to_sam_house, Region.sam_house,
                    flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.LEAD_TO_OPEN_AREA),
     ConnectionData(Entrance.town_to_haley_house, Region.haley_house,
@@ -536,7 +539,7 @@ def create_final_regions(world_options) -> List[RegionData]:
 def create_final_connections_and_regions(world_options) -> Tuple[Dict[str, ConnectionData], Dict[str, RegionData]]:
     regions_data: Dict[str, RegionData] = {region.name: region for region in create_final_regions(world_options)}
     connections = {connection.name: connection for connection in vanilla_connections}
-    connections = modify_connections_for_mods(connections, world_options.mods)
+    connections = modify_connections_for_mods(connections, sorted(world_options.mods.value))
     include_island = world_options.exclude_ginger_island == ExcludeGingerIsland.option_false
     return remove_ginger_island_regions_and_connections(regions_data, connections, include_island)
 
@@ -563,10 +566,8 @@ def remove_ginger_island_regions_and_connections(regions_by_name: Dict[str, Regi
     return connections, regions_by_name
 
 
-def modify_connections_for_mods(connections: Dict[str, ConnectionData], mods) -> Dict[str, ConnectionData]:
-    if mods is None:
-        return connections
-    for mod in mods.value:
+def modify_connections_for_mods(connections: Dict[str, ConnectionData], mods: Iterable) -> Dict[str, ConnectionData]:
+    for mod in mods:
         if mod not in ModDataList:
             continue
         if mod in vanilla_connections_to_remove_by_mod:

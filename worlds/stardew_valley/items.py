@@ -2,6 +2,7 @@ import csv
 import enum
 import logging
 from dataclasses import dataclass, field
+from functools import reduce
 from pathlib import Path
 from random import Random
 from typing import Dict, List, Protocol, Union, Set, Optional
@@ -124,17 +125,14 @@ class StardewItemDeleter(Protocol):
 
 
 def load_item_csv():
-    try:
-        from importlib.resources import files
-    except ImportError:
-        from importlib_resources import files  # noqa
+    from importlib.resources import files
 
     items = []
     with files(data).joinpath("items.csv").open() as file:
         item_reader = csv.DictReader(file)
         for item in item_reader:
             id = int(item["id"]) if item["id"] else None
-            classification = ItemClassification[item["classification"]]
+            classification = reduce((lambda a, b: a | b), {ItemClassification[str_classification] for str_classification in item["classification"].split(",")})
             groups = {Group[group] for group in item["groups"].split(",") if group}
             mod_name = str(item["mod_name"]) if item["mod_name"] else None
             items.append(ItemData(id, item["name"], classification, mod_name, groups))
@@ -409,8 +407,9 @@ def create_special_quest_rewards(item_factory: StardewItemFactory, options: Star
     else:
         items.append(item_factory(Wallet.bears_knowledge, ItemClassification.useful))  # Not necessary outside of SVE
     items.append(item_factory(Wallet.iridium_snake_milk))
-    items.append(item_factory("Fairy Dust Recipe"))
     items.append(item_factory("Dark Talisman"))
+    if options.exclude_ginger_island == ExcludeGingerIsland.option_false:
+        items.append(item_factory("Fairy Dust Recipe"))
 
 
 def create_help_wanted_quest_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):

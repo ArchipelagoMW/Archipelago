@@ -6,8 +6,8 @@ import sys
 sys.path.append(os.path.join("worlds", "lingo"))
 sys.path.append(".")
 sys.path.append("..")
-from datatypes import Door, DoorType, EntranceType, Painting, Panel, Progression, Room, RoomAndDoor, RoomAndPanel,\
-    RoomEntrance
+from datatypes import Door, DoorType, EntranceType, Painting, Panel, PanelDoor, Progression, Room, RoomAndDoor,\
+    RoomAndPanel, RoomAndPanelDoor, RoomEntrance
 
 import hashlib
 import pickle
@@ -18,10 +18,12 @@ import Utils
 ALL_ROOMS: List[Room] = []
 DOORS_BY_ROOM: Dict[str, Dict[str, Door]] = {}
 PANELS_BY_ROOM: Dict[str, Dict[str, Panel]] = {}
+PANEL_DOORS_BY_ROOM: Dict[str, Dict[str, PanelDoor]] = {}
 PAINTINGS: Dict[str, Painting] = {}
 
-PROGRESSIVE_ITEMS: List[str] = []
-PROGRESSION_BY_ROOM: Dict[str, Dict[str, Progression]] = {}
+PROGRESSIVE_ITEMS: Set[str] = set()
+PROGRESSIVE_DOORS_BY_ROOM: Dict[str, Dict[str, Progression]] = {}
+PROGRESSIVE_PANELS_BY_ROOM: Dict[str, Dict[str, Progression]] = {}
 
 PAINTING_ENTRANCES: int = 0
 PAINTING_EXIT_ROOMS: Set[str] = set()
@@ -37,7 +39,12 @@ PANEL_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
 DOOR_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
 DOOR_ITEM_IDS: Dict[str, Dict[str, int]] = {}
 DOOR_GROUP_ITEM_IDS: Dict[str, int] = {}
+PANEL_DOOR_ITEM_IDS: Dict[str, Dict[str, int]] = {}
+PANEL_GROUP_ITEM_IDS: Dict[str, int] = {}
 PROGRESSIVE_ITEM_IDS: Dict[str, int] = {}
+
+# This doesn't need to be stored in the datafile.
+PANEL_DOOR_BY_PANEL_BY_ROOM: Dict[str, Dict[str, str]] = {}
 
 
 def hash_file(path):
@@ -53,7 +60,7 @@ def hash_file(path):
 
 def load_static_data(ll1_path, ids_path):
     global PAINTING_EXITS, SPECIAL_ITEM_IDS, PANEL_LOCATION_IDS, DOOR_LOCATION_IDS, DOOR_ITEM_IDS, \
-        DOOR_GROUP_ITEM_IDS, PROGRESSIVE_ITEM_IDS
+        DOOR_GROUP_ITEM_IDS, PROGRESSIVE_ITEM_IDS, PANEL_DOOR_ITEM_IDS, PANEL_GROUP_ITEM_IDS
 
     # Load in all item and location IDs. These are broken up into groups based on the type of item/location.
     with open(ids_path, "r") as file:
@@ -85,6 +92,17 @@ def load_static_data(ll1_path, ids_path):
         if "door_groups" in config:
             for item_name, item_id in config["door_groups"].items():
                 DOOR_GROUP_ITEM_IDS[item_name] = item_id
+
+        if "panel_doors" in config:
+            for room_name, panel_doors in config["panel_doors"].items():
+                PANEL_DOOR_ITEM_IDS[room_name] = {}
+
+                for panel_door, item_id in panel_doors.items():
+                    PANEL_DOOR_ITEM_IDS[room_name][panel_door] = item_id
+
+        if "panel_groups" in config:
+            for item_name, item_id in config["panel_groups"].items():
+                PANEL_GROUP_ITEM_IDS[item_name] = item_id
 
         if "progression" in config:
             for item_name, item_id in config["progression"].items():
@@ -145,6 +163,46 @@ def process_entrance(source_room, doors, room_obj):
 
         for door, entrance_type in entrances.items():
             room_obj.entrances.append(RoomEntrance(source_room, door, entrance_type))
+
+
+def process_panel_door(room_name, panel_door_name, panel_door_data):
+    global PANEL_DOORS_BY_ROOM, PANEL_DOOR_BY_PANEL_BY_ROOM
+
+    panels: List[RoomAndPanel] = list()
+    for panel in panel_door_data["panels"]:
+        if isinstance(panel, dict):
+            panels.append(RoomAndPanel(panel["room"], panel["panel"]))
+        else:
+            panels.append(RoomAndPanel(room_name, panel))
+
+    for panel in panels:
+        PANEL_DOOR_BY_PANEL_BY_ROOM.setdefault(panel.room, {})[panel.panel] = RoomAndPanelDoor(room_name,
+                                                                                               panel_door_name)
+
+    if "item_name" in panel_door_data:
+        item_name = panel_door_data["item_name"]
+    else:
+        panel_per_room = dict()
+        for panel in panels:
+            panel_room_name = room_name if panel.room is None else panel.room
+            panel_per_room.setdefault(panel_room_name, []).append(panel.panel)
+
+        room_strs = list()
+        for door_room_str, door_panels_str in panel_per_room.items():
+            room_strs.append(door_room_str + " - " + ", ".join(door_panels_str))
+
+        if len(panels) == 1:
+            item_name = f"{room_strs[0]} (Panel)"
+        else:
+            item_name = " and ".join(room_strs) + " (Panels)"
+
+    if "panel_group" in panel_door_data:
+        panel_group = panel_door_data["panel_group"]
+    else:
+        panel_group = None
+
+    panel_door_obj = PanelDoor(item_name, panel_group)
+    PANEL_DOORS_BY_ROOM[room_name][panel_door_name] = panel_door_obj
 
 
 def process_panel(room_name, panel_name, panel_data):
@@ -227,13 +285,18 @@ def process_panel(room_name, panel_name, panel_data):
     else:
         non_counting = False
 
+    if room_name in PANEL_DOOR_BY_PANEL_BY_ROOM and panel_name in PANEL_DOOR_BY_PANEL_BY_ROOM[room_name]:
+        panel_door = PANEL_DOOR_BY_PANEL_BY_ROOM[room_name][panel_name]
+    else:
+        panel_door = None
+
     if "location_name" in panel_data:
         location_name = panel_data["location_name"]
     else:
         location_name = None
 
     panel_obj = Panel(required_rooms, required_doors, required_panels, colors, check, event, exclude_reduce,
-                      achievement, non_counting, location_name)
+                      achievement, non_counting, panel_door, location_name)
     PANELS_BY_ROOM[room_name][panel_name] = panel_obj
 
 
@@ -325,7 +388,7 @@ def process_door(room_name, door_name, door_data):
         painting_ids = []
 
     door_type = DoorType.NORMAL
-    if door_name.endswith(" Sunwarp"):
+    if room_name == "Sunwarps":
         door_type = DoorType.SUNWARP
     elif room_name == "Pilgrim Antechamber" and door_name == "Sun Painting":
         door_type = DoorType.SUN_PAINTING
@@ -404,11 +467,11 @@ def process_sunwarp(room_name, sunwarp_data):
         SUNWARP_EXITS[sunwarp_data["dots"] - 1] = room_name
 
 
-def process_progression(room_name, progression_name, progression_doors):
-    global PROGRESSIVE_ITEMS, PROGRESSION_BY_ROOM
+def process_progressive_door(room_name, progression_name, progression_doors):
+    global PROGRESSIVE_ITEMS, PROGRESSIVE_DOORS_BY_ROOM
 
     # Progressive items are configured as a list of doors.
-    PROGRESSIVE_ITEMS.append(progression_name)
+    PROGRESSIVE_ITEMS.add(progression_name)
 
     progression_index = 1
     for door in progression_doors:
@@ -419,8 +482,28 @@ def process_progression(room_name, progression_name, progression_doors):
             door_room = room_name
             door_door = door
 
-        room_progressions = PROGRESSION_BY_ROOM.setdefault(door_room, {})
+        room_progressions = PROGRESSIVE_DOORS_BY_ROOM.setdefault(door_room, {})
         room_progressions[door_door] = Progression(progression_name, progression_index)
+        progression_index += 1
+
+
+def process_progressive_panel(room_name, progression_name, progression_panel_doors):
+    global PROGRESSIVE_ITEMS, PROGRESSIVE_PANELS_BY_ROOM
+
+    # Progressive items are configured as a list of panel doors.
+    PROGRESSIVE_ITEMS.add(progression_name)
+
+    progression_index = 1
+    for panel_door in progression_panel_doors:
+        if isinstance(panel_door, Dict):
+            panel_door_room = panel_door["room"]
+            panel_door_door = panel_door["panel_door"]
+        else:
+            panel_door_room = room_name
+            panel_door_door = panel_door
+
+        room_progressions = PROGRESSIVE_PANELS_BY_ROOM.setdefault(panel_door_room, {})
+        room_progressions[panel_door_door] = Progression(progression_name, progression_index)
         progression_index += 1
 
 
@@ -432,6 +515,12 @@ def process_room(room_name, room_data):
     if "entrances" in room_data:
         for source_room, doors in room_data["entrances"].items():
             process_entrance(source_room, doors, room_obj)
+
+    if "panel_doors" in room_data:
+        PANEL_DOORS_BY_ROOM[room_name] = dict()
+
+        for panel_door_name, panel_door_data in room_data["panel_doors"].items():
+            process_panel_door(room_name, panel_door_name, panel_door_data)
 
     if "panels" in room_data:
         PANELS_BY_ROOM[room_name] = dict()
@@ -454,8 +543,11 @@ def process_room(room_name, room_data):
             process_sunwarp(room_name, sunwarp_data)
 
     if "progression" in room_data:
-        for progression_name, progression_doors in room_data["progression"].items():
-            process_progression(room_name, progression_name, progression_doors)
+        for progression_name, pdata in room_data["progression"].items():
+            if "doors" in pdata:
+                process_progressive_door(room_name, progression_name, pdata["doors"])
+            if "panel_doors" in pdata:
+                process_progressive_panel(room_name, progression_name, pdata["panel_doors"])
 
     ALL_ROOMS.append(room_obj)
 
@@ -492,8 +584,10 @@ if __name__ == '__main__':
         "ALL_ROOMS": ALL_ROOMS,
         "DOORS_BY_ROOM": DOORS_BY_ROOM,
         "PANELS_BY_ROOM": PANELS_BY_ROOM,
+        "PANEL_DOORS_BY_ROOM": PANEL_DOORS_BY_ROOM,
         "PROGRESSIVE_ITEMS": PROGRESSIVE_ITEMS,
-        "PROGRESSION_BY_ROOM": PROGRESSION_BY_ROOM,
+        "PROGRESSIVE_DOORS_BY_ROOM": PROGRESSIVE_DOORS_BY_ROOM,
+        "PROGRESSIVE_PANELS_BY_ROOM": PROGRESSIVE_PANELS_BY_ROOM,
         "PAINTING_ENTRANCES": PAINTING_ENTRANCES,
         "PAINTING_EXIT_ROOMS": PAINTING_EXIT_ROOMS,
         "PAINTING_EXITS": PAINTING_EXITS,
@@ -506,6 +600,8 @@ if __name__ == '__main__':
         "DOOR_LOCATION_IDS": DOOR_LOCATION_IDS,
         "DOOR_ITEM_IDS": DOOR_ITEM_IDS,
         "DOOR_GROUP_ITEM_IDS": DOOR_GROUP_ITEM_IDS,
+        "PANEL_DOOR_ITEM_IDS": PANEL_DOOR_ITEM_IDS,
+        "PANEL_GROUP_ITEM_IDS": PANEL_GROUP_ITEM_IDS,
         "PROGRESSIVE_ITEM_IDS": PROGRESSIVE_ITEM_IDS,
     }
     
