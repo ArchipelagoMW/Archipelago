@@ -4,6 +4,7 @@ from typing import ClassVar
 
 import yaml
 
+import Options
 import settings
 from BaseClasses import Tutorial, Item, ItemClassification
 from Utils import visualize_regions
@@ -12,6 +13,8 @@ from worlds.LauncherComponents import Component, SuffixIdentifier, Type, compone
 from worlds.generic.Rules import add_item_rule
 from Options import OptionGroup
 
+# Relative Imports
+from .Hints import get_hints_by_option
 from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items, ALL_ITEMS_TABLE
 from .Locations import *
 from .LuigiOptions import LMOptions
@@ -66,6 +69,7 @@ class LMWeb(WebWorld):
             LuigiOptions.Goal,
             LuigiOptions.RankRequirement,
             LuigiOptions.MarioItems,
+            LuigiOptions.BooGates,
             LuigiOptions.WashroomBooCount,
             LuigiOptions.BalconyBooCount,
             LuigiOptions.FinalBooCount,
@@ -260,7 +264,8 @@ class LMWorld(World):
             for location, data in BOO_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
                 entry = LMLocation(self.player, location, region, data)
-                add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
+                if self.options.boo_gates == 1 and self.options.boo_radar != 2:
+                    add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
                 if entry.code == 675:
                     add_rule(entry, lambda state: state.has_group("Medal", self.player), "and")
                 elif entry.code == 679:
@@ -284,7 +289,8 @@ class LMWorld(World):
                 entry.address = None
                 entry.code = None
                 entry.place_locked_item(Item("Boo", ItemClassification.progression, None, self.player))
-                add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
+                if self.options.boo_gates == 1 and self.options.boo_radar != 2:
+                    add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
                 if entry.code == 675:
                     add_rule(entry, lambda state: state.has_group("Medal", self.player), "and")
                 elif entry.code == 679:
@@ -317,6 +323,11 @@ class LMWorld(World):
             add_rule(loc, lambda state: state.has("Gold Diamond", self.player, rankcalc), "and")
 
     def generate_early(self):
+        if (self.options.boosanity == 1 or self.options.boo_gates == 1) and self.options.boo_radar == 2:
+            raise Options.OptionError(f"When Boo Radar is excluded, neither Boosanity nor Boo Gates can be active "
+                                      f"This error was found in {self.player_name}'s Luigi's Mansion world. "
+                                      f"Please fix their YAML")
+
         if self.options.enemizer == 1:
             set_ghost_type(self, self.ghost_affected_regions)
         elif self.options.enemizer == 2:
@@ -441,6 +452,8 @@ class LMWorld(World):
                 exclude += ["Boo"]
         if self.options.good_vacuum == 2:
             exclude += ["Poltergust 4000"]
+        if self.options.boo_radar == 2:
+            exclude += ["Boo Radar"]
         for item, data in ITEM_TABLE.items():
             if data.doorid in self.open_doors.keys() and self.open_doors[data.doorid] == 1:
                 exclude += [item]
@@ -478,6 +491,7 @@ class LMWorld(World):
             "Locations": {},
             "Entrances": {},
             "Room Enemies": {},
+            "Hints": {},
         }
 
         # Output relevant options to file
@@ -486,6 +500,7 @@ class LMWorld(World):
 
         output_data["Entrances"] = self.open_doors
         output_data["Room Enemies"] = self.ghost_affected_regions
+        #output_data["Hints"] = get_hints_by_option(self.multiworld, self.player)
 
         # Output which item has been placed at each location
         locations = self.multiworld.get_locations(self.player)

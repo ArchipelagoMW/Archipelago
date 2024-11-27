@@ -39,9 +39,13 @@ class SpeedySpirits(Toggle):
     display_name = "Speedy Spirits"
 
 
-class StartWithBooRadar(Toggle):
+class StartWithBooRadar(Choice):
     """Start with Boo Radar"""
     display_name = "Boo Radar"
+    option_start_with = 0
+    option_include = 1
+    option_exclude = 2
+    default = 1
 
 
 class Plants(Toggle):
@@ -64,6 +68,16 @@ class Furnisanity(Toggle):
     Adds every interactable, such a dressers, paintings, candles, and light fixtures, to the location pool
     """
     display_name = "Furnisanity"
+
+
+class BooGates(Toggle):
+    """
+    Toggle the events that prevent progress unless a certain number of boos have been caught
+
+    Default to on. If this is turned off, the Boo Count options are ignored, and Boo Radar becomes filler.
+    """
+    display_name = "Boo Gates"
+    default = 1
 
 
 class MarioItems(Range):
@@ -178,6 +192,7 @@ class LMOptions(PerGameCommonOptions):
     boosanity: Boosanity
     portrait_ghosts: PortraitGhosts
     speedy_spirits: SpeedySpirits
+    boo_gates: BooGates
     mario_items: MarioItems
     washroom_boo_count: WashroomBooCount
     balcony_boo_count: BalconyBooCount
