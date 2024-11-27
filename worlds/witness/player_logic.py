@@ -876,10 +876,10 @@ class WitnessPlayerLogic:
                 self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item_name)
                 child_items = cast(ProgressiveItemDefinition,
                                    static_witness_logic.ALL_ITEMS[progressive_item_name]).child_item_names
-                multi_list = [child_item for child_item in child_items
+                progressive_list = [child_item for child_item in child_items
                               if child_item in self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME]
-                self.PARENT_ITEM_COUNT_PER_BASE_ITEM[item] = multi_list.index(item) + 1
-                self.PROGRESSIVE_LISTS[progressive_item_name] = multi_list
+                self.PARENT_ITEM_COUNT_PER_BASE_ITEM[item] = progressive_list.index(item) + 1
+                self.PROGRESSIVE_LISTS[progressive_item_name] = progressive_list
             else:
                 self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME.add(item)
 
