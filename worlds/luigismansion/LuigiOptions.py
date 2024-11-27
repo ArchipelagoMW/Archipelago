@@ -119,6 +119,7 @@ class Enemizer(Choice):
     option_vanilla = 0
     option_randomized_elements = 1
     option_no_elements = 2
+    default = 0
 
 
 class DoorRando(Toggle):
