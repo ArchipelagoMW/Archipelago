@@ -193,9 +193,7 @@ class LuigisMansionRandomizer:
         update_key_info(self.jmp_key_info_table, self.output_data)
         update_obj_info(self.jmp_obj_info_table)
         update_generator_info(self.jmp_generator_info_table)
-
-        if self.output_data["Options"]["enemizer"] > 0:
-            update_enemy_info(self.jmp_enemy_info_table, self.output_data)
+        update_enemy_info(self.jmp_enemy_info_table, self.output_data)
 
         # Updates all the data entries in each jmp table in the szp file.
         self.update_maptwo_info_table(self.jmp_character_info_table)
