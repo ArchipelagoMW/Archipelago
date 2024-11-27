@@ -2360,7 +2360,6 @@ def load_server_cert(path: str, cert_key: typing.Optional[str]) -> "ssl.SSLConte
 async def main(args: argparse.Namespace):
     Utils.init_logging(name="Server",
                        loglevel=args.loglevel.lower(),
-                       write_mode="w",
                        add_timestamp=args.logtime)
 
     ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
