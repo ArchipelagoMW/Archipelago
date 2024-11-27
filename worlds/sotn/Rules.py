@@ -744,6 +744,10 @@ def set_rules(world: MultiWorld, player: int, options: dict) -> None:
                                                                       sotn_has_flying(state, player))))
 
     # TOP - Castle Keep
+    if esanity:
+        location = world.get_location("Enemysanity: 56 - Flea rider", player)
+        set_rule(location, lambda  state: sotn_has_flying(state, player) or state.has("Gravity boots", player))
+
     location = world.get_location("TOP - Turquoise", player)
     set_rule(location, lambda state: sotn_has_any(state, player))
 
@@ -1359,11 +1363,11 @@ def set_rules_limited(world: MultiWorld, player: int, options: dict) -> None:
     location = world.get_location("NO3 - Jewel sword", player)
     set_rule(location, lambda state: state.has("Soul of bat", player) and state.has("Soul of wolf", player))
 
-    if esanity and rules == 2:
+    if esanity:
         location = world.get_location("Enemysanity: 84 - Gurkha", player)
         set_rule(location, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
 
-    if dsanity and rules == 2:
+    if dsanity:
         location = world.get_location("Dropsanity: 84 - Gurkha", player)
         set_rule(location, lambda state: state.has("Gravity boots", player) or sotn_has_flying(state, player))
 
