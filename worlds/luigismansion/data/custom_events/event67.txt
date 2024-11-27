@@ -5,7 +5,7 @@
 -----------------------------------------------------------------------
 <CASE>"66on"
 <WIPEKIND>(3)
-<BGM>(26)
+<BGM>(7)
 <WARP>(12)
 <WAIT>(10)
 <END>
@@ -18,18 +18,17 @@
 <WINDOW>(0)<COLOR>(4)
 <SAY><COLOR>(6)Boolossus Warp activated
 <WAIT>(90)
-<BGMSTOP>
+<BGM>(7)
 <CLOSEWINDOW>(0)
 <SETLUIGI>(5)
 <WIPEKIND>(3)
-<BGM>(26)
 <WARP>(2)
 <WAIT>(120)
 <WINDOW>(0)<COLOR>(4)
 <SAY><COLOR>(6)Boolossus Warp activated
 <WARPMOVE>(5)
 <WAIT>(300)
-<BGMSTOP>
+<BGM>(7)
 <CLOSEWINDOW>(0)
 <END>
 
@@ -41,11 +40,10 @@
 <WINDOW>(0)<COLOR>(4)
 <SAY><COLOR>(2)Bogmire Warp activated
 <WAIT>(90)
-<BGMSTOP>
+<BGM>(7)
 <CLOSEWINDOW>(0)
 <SETLUIGI>(2)
 <WIPEKIND>(3)
-<BGM>(26)
 <WARP>(2)
 ========
 Everything after me is ignoredit seems like
@@ -55,7 +53,7 @@ Everything after me is ignoredit seems like
 <SAY><COLOR>(2)Bogmire Warp activated
 <WARPMOVE>(2)
 <WAIT>(300)
-<BGMSTOP>
+<BGM>(7)
 <CLOSEWINDOW>(0)
 <END>
 
@@ -67,18 +65,17 @@ Everything after me is ignoredit seems like
 <WINDOW>(0)<COLOR>(4)
 <SAY><COLOR>(1)Chauncey Warp activated
 <WAIT>(90)
-<BGMSTOP>
+<BGM>(7)
 <CLOSEWINDOW>(0)
 <SETLUIGI>(1)
 <WIPEKIND>(3)
-<BGM>(26)
 <WARP>(2)
 <WAIT>(120)
 <WINDOW>(0)<COLOR>(4)
 <SAY><COLOR>(1)Chauncey Warp activated
 <WARPMOVE>(1)
 <WAIT>(300)
-<BGMSTOP>
+<BGM>(7)
 <CLOSEWINDOW>(0)
 <END>
 

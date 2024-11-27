@@ -366,8 +366,8 @@ def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_
         if x["arg0"] in {101, 102, 103, 104, 105, 106}:
             x["arg0"] = 0.0
 
-        # If this is a book/bookshelf, set it to just shake, no book interaction.
-        if x["move"] == 16:
+        # If this is a book/bookshelf, set it to just shake, no book interaction. Only modify in the Study.
+        if x["move"] == 16 and x["room_no"] == 34:
             x["move"] = 0
 
         # If one of Vincent's painting, update the flag to disable zoom instead.
@@ -422,8 +422,14 @@ ROOM_TO_ID = {
 
 def apply_new_ghost(x, element):
     # The list of ghosts that can replace the vanilla ones. Only includes the ones without elements.
-    # TODO: Allow the tenjyo and tenjyo2 (Ceiling ghosts) to be supported. Will require changing their Y Position value.
-    random_ghosts_to_patch = ["yapoo1", "mapoo1", "mopoo1", "banaoba", "topoo1", "topoo4", "heypo1", "heypo2", "skul", "putcher1"]
+    random_ghosts_to_patch = [["yapoo1"], ["mapoo1"], ["mopoo1"], ["banaoba"],
+                              ["topoo1", "topoo2", "topoo3", "topoo4"],
+                              ["heypo1", "heypo2", "heypo3", "heypo4", "heypo5", "heypo6", "heypo7", "heypo8"],
+                              ["putcher1"], ["tenjyo", "tenjyo2"]]
+
+    # If the vanilla ghost is a Ceiling Ghost, reduce its spawning Y position so the new ghost spawns on the floor.
+    if "tenjyo" in x["name"]:
+        x["pos_y"] -= 200.000
 
     # If a room is supposed to have an element, replace all the ghosts in it to be only ghosts with that element.
     # Otherwise, randomize the ghosts between the non-element ones from the list.
@@ -435,7 +441,11 @@ def apply_new_ghost(x, element):
         case "Fire":
             x["name"] = "yapoo2"
         case "No Element":
-            x["name"] = choice(random_ghosts_to_patch)
+            x["name"] = choice(choice(random_ghosts_to_patch))
+
+    # If the new ghost is a Ceiling Ghost, increase its spawning Y position so it spawns in the air.
+    if "tenjyo" in x["name"]:
+        x["pos_y"] += 200.000
 
 def update_enemy_info(enemy_info, output_data):
     # A list of all the ghost actors of the game we want to replace.

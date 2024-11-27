@@ -14,7 +14,6 @@ from worlds.generic.Rules import add_item_rule
 from Options import OptionGroup
 
 # Relative Imports
-from .Hints import get_hints_by_option
 from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items, ALL_ITEMS_TABLE
 from .Locations import *
 from .LuigiOptions import LMOptions
