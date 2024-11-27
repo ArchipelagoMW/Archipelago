@@ -93,17 +93,6 @@ class CVCotMWorld(World):
         # Generate the player's unique authentication
         self.auth = bytearray(self.random.getrandbits(8) for _ in range(16))
 
-        # If playing with the Completion Goal option set to Battle Arena while the Required Skirmishes option is set to
-        # All Bosses And Arena, set the latter down to just All Bosses instead. The Location in the Ceremonial Room
-        # would require the Goal to be sent before it can be accessed at all, and that would be weird.
-        if self.options.completion_goal == CompletionGoal.option_battle_arena and self.options.required_skirmishes == \
-                RequiredSkirmishes.option_all_bosses_and_arena:
-            logging.warning(f"[{self.player_name}] Requiring a Last Key to be obtained from "
-                            f"the Battle Arena while requiring just the Battle Arena to be completed for Goal "
-                            f"completion makes the Ceremonial Room item impossible to obtain without completing the "
-                            f"Goal first. Changing Required Skirmishes to just All Bosses.")
-            self.options.required_skirmishes.value = RequiredSkirmishes.option_all_bosses
-
         # If Required Skirmishes are on, force the Required and Available Last Keys to 8 or 9 depending on which option
         # was chosen.
         if self.options.required_skirmishes == RequiredSkirmishes.option_all_bosses:
