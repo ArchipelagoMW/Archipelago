@@ -42,10 +42,7 @@ already completed on previous sessions upon connecting.
 NOTE: If "All Bosses" was chosen for the "Required Skirmishes" option, 8 Last Keys will be required, and they will be guaranteed
 to be placed behind all 8 bosses (that are not Dracula). If "All Bosses And Arena" was chosen for the option, an additional
 required 9th Last Key will be placed on the Shinning Armor <sup>sic</sup> pedestal at the end of the Battle Arena in addition to
-the 8 that will be behind all the bosses. Because it would be impossible to obtain the Ceremonial Room floor item before completing
-the goal if just winning in the Battle Arena were required for goal completion, the "Completion Goal" option's "Battle Arena"
-choice and the "Required Skirmishes" option's "All Bosses And Arena" choice are incompatible with each other; the latter option 
-will change to "All Bosses" in such a case.
+the 8 that will be behind all the bosses.
 
 If you aren't sure what goal you have, there are two in-game ways you can check:
 
