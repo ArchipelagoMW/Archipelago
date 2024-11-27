@@ -260,13 +260,14 @@ class SotnWorld(World):
                 self.create_item("Exploration token"))
 
         extra_list = extra.current_key.split(';')
-        for i in extra_list:
-            try:
-                if added_items < 10:
-                    extrapool += [self.create_item(i)]
-                    added_items += 1
-            except KeyError:
-                print(f"ERROR: Could not find the item {i}")
+        if len(extra_list) > 0 and extra_list[0] != '{}':
+            for i in extra_list:
+                try:
+                    if added_items < 10:
+                        extrapool += [self.create_item(i)]
+                        added_items += 1
+                except KeyError:
+                    print(f"ERROR: Could not find the item {i}")
 
         added_items = 0
 
