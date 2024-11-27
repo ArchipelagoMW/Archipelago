@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict, Any
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
-                     PerGameCommonOptions, OptionGroup)
+                     PerGameCommonOptions, OptionGroup, Visibility)
 from .er_data import portal_mapping
 
 
@@ -37,27 +37,6 @@ class AbilityShuffling(Toggle):
     """
     internal_name = "ability_shuffling"
     display_name = "Shuffle Abilities"
-
-
-class LogicRules(Choice):
-    """
-    Set which logic rules to use for your world.
-    Restricted: Standard logic, no glitches.
-    No Major Glitches: Sneaky Laurels zips, ice grapples through doors, shooting the west bell, and boss quick kills are included in logic.
-    * Ice grappling through the Ziggurat door is not in logic since you will get stuck in there without Prayer.
-    Unrestricted: Logic in No Major Glitches, as well as ladder storage to get to certain places early.
-    * Torch is given to the player at the start of the game due to the high softlock potential with various tricks. Using the torch is not required in logic.
-    * Using Ladder Storage to get to individual chests is not in logic to avoid tedium.
-    * Getting knocked out of the air by enemies during Ladder Storage to reach places is not in logic, except for in Rooted Ziggurat Lower. This is so you're not punished for playing with enemy rando on.
-    """
-    internal_name = "logic_rules"
-    display_name = "Logic Rules"
-    option_restricted = 0
-    option_no_major_glitches = 1
-    alias_nmg = 1
-    option_unrestricted = 2
-    alias_ur = 2
-    default = 0
 
 
 class Lanternless(Toggle):
@@ -132,8 +111,10 @@ class EntranceRando(TextChoice):
     internal_name = "entrance_rando"
     display_name = "Entrance Rando"
     alias_false = 0
+    alias_off = 0
     option_no = 0
     alias_true = 1
+    alias_on = 1
     option_yes = 1
     default = 0
 
@@ -171,8 +152,8 @@ class ShuffleLadders(Toggle):
     """
     internal_name = "shuffle_ladders"
     display_name = "Shuffle Ladders"
-    
-    
+
+
 class TunicPlandoConnections(PlandoConnections):
     """
     Generic connection plando. Format is:
@@ -187,6 +168,82 @@ class TunicPlandoConnections(PlandoConnections):
     duplicate_exits = True
 
 
+class LaurelsZips(Toggle):
+    """
+    Choose whether to include using the Hero's Laurels to zip through gates, doors, and tricky spots.
+    Notable inclusions are the Monastery gate, Ruined Passage door, Old House gate, Forest Grave Path gate, and getting from the Back of Swamp to the Middle of Swamp.
+    """
+    internal_name = "laurels_zips"
+    display_name = "Laurels Zips Logic"
+
+
+class IceGrappling(Choice):
+    """
+    Choose whether grappling frozen enemies is in logic.
+    Easy includes ice grappling enemies that are in range without luring them. May include clips through terrain.
+    Medium includes using ice grapples to push enemies through doors or off ledges without luring them. Also includes bringing an enemy over to the Temple Door to grapple through it.
+    Hard includes luring or grappling enemies to get to where you want to go.
+    Enabling any of these difficulty options will give the player the Torch to return to the Overworld checkpoint to avoid softlocks. Using the Torch is considered in logic.
+    Note: You will still be expected to ice grapple to the slime in East Forest from below with this option off.
+    """
+    internal_name = "ice_grappling"
+    display_name = "Ice Grapple Logic"
+    option_off = 0
+    option_easy = 1
+    option_medium = 2
+    option_hard = 3
+    default = 0
+
+
+class LadderStorage(Choice):
+    """
+    Choose whether Ladder Storage is in logic.
+    Easy includes uses of Ladder Storage to get to open doors over a long distance without too much difficulty. May include convenient elevation changes (going up Mountain stairs, stairs in front of Special Shop, etc.).
+    Medium includes the above as well as changing your elevation using the environment and getting knocked down by melee enemies mid-LS.
+    Hard includes the above as well as going behind the map to enter closed doors from behind, shooting a fuse with the magic wand to knock yourself down at close range, and getting into the Cathedral Secret Legend room mid-LS.
+    Enabling any of these difficulty options will give the player the Torch to return to the Overworld checkpoint to avoid softlocks. Using the Torch is considered in logic.
+    Opening individual chests while doing ladder storage is excluded due to tedium.
+    Knocking yourself out of LS with a bomb is excluded due to the problematic nature of consumables in logic.
+    """
+    internal_name = "ladder_storage"
+    display_name = "Ladder Storage Logic"
+    option_off = 0
+    option_easy = 1
+    option_medium = 2
+    option_hard = 3
+    default = 0
+
+
+class LadderStorageWithoutItems(Toggle):
+    """
+    If disabled, you logically require Stick, Sword, or Magic Orb to perform Ladder Storage.
+    If enabled, you will be expected to perform Ladder Storage without progression items.
+    This can be done with the plushie code, a Golden Coin, Prayer, and many other options.
+
+    This option has no effect if you do not have Ladder Storage Logic enabled.
+    """
+    internal_name = "ladder_storage_without_items"
+    display_name = "Ladder Storage without Items"
+
+
+class LogicRules(Choice):
+    """
+    This option has been superseded by the individual trick options.
+    If set to nmg, it will set Ice Grappling to medium and Laurels Zips on.
+    If set to ur, it will do nmg as well as set Ladder Storage to medium.
+    It is here to avoid breaking old yamls, and will be removed at a later date.
+    """
+    visibility = Visibility.none
+    internal_name = "logic_rules"
+    display_name = "Logic Rules"
+    option_restricted = 0
+    option_no_major_glitches = 1
+    alias_nmg = 1
+    option_unrestricted = 2
+    alias_ur = 2
+    default = 0
+
+
 @dataclass
 class TunicOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -197,22 +254,30 @@ class TunicOptions(PerGameCommonOptions):
     shuffle_ladders: ShuffleLadders
     entrance_rando: EntranceRando
     fixed_shop: FixedShop
-    logic_rules: LogicRules
     fool_traps: FoolTraps
     hexagon_quest: HexagonQuest
     hexagon_goal: HexagonGoal
     extra_hexagon_percentage: ExtraHexagonPercentage
+    laurels_location: LaurelsLocation
     lanternless: Lanternless
     maskless: Maskless
-    laurels_location: LaurelsLocation
+    laurels_zips: LaurelsZips
+    ice_grappling: IceGrappling
+    ladder_storage: LadderStorage
+    ladder_storage_without_items: LadderStorageWithoutItems
     plando_connections: TunicPlandoConnections
+
+    logic_rules: LogicRules
       
 
 tunic_option_groups = [
     OptionGroup("Logic Options", [
-        LogicRules,
         Lanternless,
         Maskless,
+        LaurelsZips,
+        IceGrappling,
+        LadderStorage,
+        LadderStorageWithoutItems
     ])
 ]
 
@@ -229,9 +294,12 @@ tunic_option_presets: Dict[str, Dict[str, Any]] = {
     "Glace Mode": {
         "accessibility": "minimal",
         "ability_shuffling": True,
-        "entrance_rando": "yes",
+        "entrance_rando": True,
         "fool_traps": "onslaught",
-        "logic_rules": "unrestricted",
+        "laurels_zips": True,
+        "ice_grappling": "hard",
+        "ladder_storage": "hard",
+        "ladder_storage_without_items": True,
         "maskless": True,
         "lanternless": True,
     },
