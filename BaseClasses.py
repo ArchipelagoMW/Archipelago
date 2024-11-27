@@ -1384,7 +1384,12 @@ class Spoiler:
 
         # second phase, sphere 0
         removed_precollected: List[Item] = []
-        for item in (i for i in chain.from_iterable(multiworld.precollected_items.values()) if i.advancement):
+
+        # The lists of precollected items are going to be mutated by removing one item at a time to determine if each
+        # item is required to beat the game, and re-adding that item if it was required, so copies of the lists need to
+        # be made before iterating.
+        for item in (i for i in chain.from_iterable(items.copy() for items in multiworld.precollected_items.values())
+                     if i.advancement):
             logging.debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
             multiworld.precollected_items[item.player].remove(item)
             multiworld.state.remove(item)
