@@ -202,7 +202,7 @@ def _has_item(item: str, world: "WitnessWorld",
         return lambda state: _can_do_theater_to_tunnels(state, world)
 
     prog_item = static_witness_logic.get_parent_progressive_item(item)
-    needed_amount = player_logic.MULTI_AMOUNTS[item]
+    needed_amount = player_logic.PARENT_ITEM_COUNT_PER_BASE_ITEM[item]
 
     simple_rule: SimpleItemRepresentation = SimpleItemRepresentation(prog_item, needed_amount)
     return simple_rule
