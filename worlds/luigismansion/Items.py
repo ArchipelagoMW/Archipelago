@@ -119,7 +119,8 @@ filler_items: Dict[str, LMItemData] = {
     "Nothing": LMItemData("Nothing", 44, IC.filler),
     "Small Heart": LMItemData("Heart", 45, IC.filler),
     "Large Heart": LMItemData("Heart", 47, IC.filler),
-    "Bomb": LMItemData("Trap", 50, IC.trap)
+    "Bomb": LMItemData("Trap", 50, IC.trap),
+    "Ice Trap": LMItemData("Trap", 52, IC.trap)
 }
 
 ALL_ITEMS_TABLE = {**ITEM_TABLE,

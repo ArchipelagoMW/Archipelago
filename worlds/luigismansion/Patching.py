@@ -147,6 +147,7 @@ def update_item_info_table(item_info_table_entry, output_data):
 
     #__add_info_item(item_info_table_entry, "mkinoko")
     __add_info_item(item_info_table_entry, "itembomb")
+    __add_info_item(item_info_table_entry, "ice")
 
     #__add_info_item(item_info_table_entry, "elffst")
     #__add_info_item(item_info_table_entry, "elwfst")
@@ -191,6 +192,7 @@ def update_item_appear_table(item_appear_table_entry, output_data):
 
     __add_appear_item(item_appear_table_entry, "mkinoko")
     __add_appear_item(item_appear_table_entry, "itembomb")
+    __add_appear_item(item_appear_table_entry, "ice")
 
     __add_appear_item(item_appear_table_entry, "elffst")
     __add_appear_item(item_appear_table_entry, "elwfst")
@@ -318,6 +320,8 @@ def get_item_name(item_name, item_data):
             return "lheart"
         case "Bomb":
             return "itembomb"
+        case "Ice Trap":
+            return "ice"
 
     return "nothing"
 
