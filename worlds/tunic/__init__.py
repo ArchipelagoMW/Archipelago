@@ -432,6 +432,7 @@ class TunicWorld(World):
         # this would be in a stage if there was an appropriate stage for it
         self.player_item_link_locations = {}
         groups = self.multiworld.get_player_groups(self.player)
+        # checking if groups so that this doesn't run if the player isn't in a group
         if groups:
             if not self.item_link_locations:
                 tunic_worlds: Tuple[TunicWorld] = self.multiworld.get_game_worlds("TUNIC")
