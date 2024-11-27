@@ -384,7 +384,7 @@ def compare_results(
         comparator: str):
     if yaml_value is None:
         return False
-    if isinstance(yaml_value, str|bool|int) and isinstance(trigger_value, str|bool|int):
+    if isinstance(yaml_value, Union[str, bool, int]) and isinstance(trigger_value, Union[str, bool, int]):
         yaml_value = str(yaml_value).lower()
         trigger_value = str(trigger_value).lower()
     if comparator == "=":
@@ -394,7 +394,7 @@ def compare_results(
     try:
         yaml_value = int(yaml_value)
         trigger_value = int(trigger_value)
-    except ValueError:
+    except (ValueError, TypeError):
         raise Exception("Value of option_name and option_result must be integers if comparison is not = or !=")
     if comparator == "<":
         return yaml_value < trigger_value
