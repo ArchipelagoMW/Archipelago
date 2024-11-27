@@ -128,21 +128,20 @@ class EnergyBeep(DefaultOnToggle):
     """Toggles the low health energy beep in Super Metroid."""
     display_name = "Energy Beep"
 
-
-smz3_options: typing.Dict[str, type(Option)] = {
-    "start_inventory_from_pool": StartInventoryPool,
-    "accessibility": ItemsAccessibility,
-    "sm_logic": SMLogic,
-    "sword_location": SwordLocation,
-    "morph_location": MorphLocation,
-    "goal": Goal,
-    "key_shuffle": KeyShuffle,
-    "open_tower": OpenTower, 
-    "ganon_vulnerable": GanonVulnerable,
-    "open_tourian": OpenTourian,
-    "spin_jumps_animation": SpinJumpsAnimation,
-    "heart_beep_speed": HeartBeepSpeed,
-    "heart_color": HeartColor, 
-    "quick_swap": QuickSwap,
-    "energy_beep": EnergyBeep
-    }
+@dataclass
+class SMZ3Options(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
+    accessibility: ItemsAccessibility
+    sm_logic: SMLogic
+    sword_location: SwordLocation
+    morph_location: MorphLocation
+    goal: Goal
+    key_shuffle: KeyShuffle
+    open_tower: OpenTower
+    ganon_vulnerable: GanonVulnerable
+    open_tourian: OpenTourian
+    spin_jumps_animation: SpinJumpsAnimation
+    heart_beep_speed: HeartBeepSpeed
+    heart_color: HeartColor
+    quick_swap: QuickSwap
+    energy_beep: EnergyBeep
