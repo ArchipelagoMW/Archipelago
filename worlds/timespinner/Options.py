@@ -379,6 +379,7 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     cantoran: Cantoran
     lore_checks: LoreChecks
     boss_rando: BossRando
+    enemy_rando: EnemyRando
     damage_rando: DamageRando
     damage_rando_overrides: DamageRandoOverrides
     hp_cap: HpCap
@@ -445,6 +446,7 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
     Cantoran: hidden(Cantoran) # type: ignore
     LoreChecks: hidden(LoreChecks) # type: ignore
     BossRando: hidden(BossRando) # type: ignore
+    EnemyRando: hidden(EnemyRando) # type: ignore
     DamageRando: hidden(DamageRando) # type: ignore
     DamageRandoOverrides: HiddenDamageRandoOverrides
     HpCap: hidden(HpCap) # type: ignore
@@ -515,6 +517,10 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
         if self.BossRando != BossRando.default and \
             self.boss_rando == BossRando.default:
             self.boss_rando.value = self.BossRando.value
+            self.has_replaced_options.value = Toggle.option_true
+        if self.EnemyRando != EnemyRando.default and \
+            self.enemy_rando == EnemyRando.default:
+            self.enemy_rando.value = self.EnemyRando.value
             self.has_replaced_options.value = Toggle.option_true
         if self.DamageRando != DamageRando.default and \
             self.damage_rando == DamageRando.default:
