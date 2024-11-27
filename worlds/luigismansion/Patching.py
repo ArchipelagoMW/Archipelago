@@ -85,7 +85,7 @@ def __get_chest_size_from_item(item_name):
         case "Large Heart":
             return 1
 
-        case "Poison Mushroom" | "Bomb" | "Gold Diamond":
+        case "Poison Mushroom" | "Bomb" | "Ice Trap" | "Gold Diamond":
             return 2
 
         case "Fire Element Medal" | "Water Element Medal" | "Ice Element Medal":
@@ -265,14 +265,11 @@ def __get_item_chest_visual(item_name):
         case "Small Heart" | "Large Heart":
             return "ytakara1"
 
-        case "Poison Mushroom" | "Bomb":
-            return "ytakara1"
-
-        case "Fire Element Medal":
+        case "Fire Element Medal" | "Bomb":
             return "rtakara1"
-        case "Water Element Medal":
+        case "Water Element Medal" | "Poison Mushroom":
             return "btakara1"
-        case "Ice Element Medal":
+        case "Ice Element Medal" | "Ice Trap":
             return "wtakara1"
 
         case "Mario's Hat" | "Mario's Letter" | "Mario's Shoe" | "Mario's Glove" | "Mario's Star":
