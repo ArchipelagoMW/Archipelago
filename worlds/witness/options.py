@@ -457,7 +457,7 @@ witness_option_groups = [
         MountainLasers,
         ChallengeLasers,
     ]),
-    OptionGroup("Panel Hunt Settings", [
+    OptionGroup("Panel Hunt Options", [
         PanelHuntRequiredPercentage,
         PanelHuntTotal,
         PanelHuntPostgame,
