@@ -217,7 +217,8 @@ class SC2MissionOrder(MissionOrderNode):
             # Check for accessible missions
             cur_missions: Set[SC2MOGenMission] = {
                 mission for mission in next_missions
-                if mission.is_unlocked(beaten_missions)
+                if not mission.option_empty
+                and mission.is_unlocked(beaten_missions)
             }
             if len(cur_missions) == 0:
                 raise Exception(f"Mission order ran out of accessible missions during iteration {iterations}")
@@ -230,10 +231,12 @@ class SC2MissionOrder(MissionOrderNode):
                 # If the beaten missions at depth X unlock a mission, said mission can be beaten at depth X+1 
                 mission.min_depth = mission.entry_rule.get_depth(beaten_missions) + 1
                 new_next = [
-                    next_mission for next_mission in mission.next if not (
-                        next_mission in cur_missions or
-                        next_mission in beaten_missions or
-                        next_mission in new_beaten_missions
+                    next_mission for next_mission in mission.next
+                    if not next_mission.option_empty
+                    and not (
+                        next_mission in cur_missions
+                        or next_mission in beaten_missions
+                        or next_mission in new_beaten_missions
                     )
                 ]
                 next_missions.update(new_next)
@@ -267,10 +270,11 @@ class SC2MissionOrder(MissionOrderNode):
         # Make sure we didn't miss anything
         assert len(accessible_campaigns) == len(self.campaigns)
         assert len(accessible_layouts) == sum(len(campaign.layouts) for campaign in self.campaigns)
-        assert len(beaten_missions) == sum(
+        total_missions = sum(
             len([mission for mission in layout.missions if not mission.option_empty])
             for campaign in self.campaigns for layout in campaign.layouts
         )
+        assert len(beaten_missions) == total_missions, f'Can only access {len(beaten_missions)} missions out of {total_missions}'
 
         # Fill campaign/layout depth values as min/max of their children
         for campaign in self.campaigns:
