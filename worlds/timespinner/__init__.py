@@ -98,6 +98,7 @@ class TimespinnerWorld(World):
             "Cantoran": self.options.cantoran.value,
             "LoreChecks": self.options.lore_checks.value,
             "BossRando": self.options.boss_rando.value,
+            "EnemyRando": self.options.enemy_rando.value,
             "DamageRando": self.options.damage_rando.value,
             "DamageRandoOverrides": self.options.damage_rando_overrides.value,
             "HpCap": self.options.hp_cap.value,
@@ -190,7 +191,7 @@ class TimespinnerWorld(World):
 
         if self.options.has_replaced_options:
             warning = \
-                f"NOTICE: Timespinner options for player '{self.player_name}' where renamed from PasCalCase to snake_case, " \
+                f"NOTICE: Timespinner options for player '{self.player_name}' were renamed from PascalCase to snake_case, " \
                 "please update your yaml"
 
             spoiler_handle.write("\n")

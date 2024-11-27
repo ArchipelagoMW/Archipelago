@@ -46,7 +46,7 @@
 /worlds/clique/ @ThePhar
 
 # Dark Souls III
-/worlds/dark_souls_3/ @Marechal-L
+/worlds/dark_souls_3/ @Marechal-L @nex3
 
 # Donkey Kong Country 3
 /worlds/dkc3/ @PoryGone
@@ -118,9 +118,6 @@
 # Noita
 /worlds/noita/ @ScipioWright @heinermann
 
-# Ocarina of Time
-/worlds/oot/ @espeon65536
-
 # Old School Runescape
 /worlds/osrs @digiholic
 
@@ -146,7 +143,7 @@
 /worlds/shivers/ @GodlFire
 
 # A Short Hike
-/worlds/shorthike/ @chandler05
+/worlds/shorthike/ @chandler05 @BrandenEK
 
 # Sonic Adventure 2 Battle
 /worlds/sa2b/ @PoryGone @RaspberrySpace
@@ -229,6 +226,9 @@
 
 # Links Awakening DX
 # /worlds/ladx/
+
+# Ocarina of Time
+# /worlds/oot/
 
 ## Disabled Unmaintained Worlds
 
