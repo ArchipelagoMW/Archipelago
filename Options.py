@@ -856,7 +856,7 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mappin
         return self.value.__len__()
 
     # __getitem__ fallback fails for Counters, so we define this explicitly
-    def __contains__(self, item):
+    def __contains__(self, item) -> bool:
         return item in self.value
 
 
