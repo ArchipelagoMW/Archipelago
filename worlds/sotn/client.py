@@ -312,7 +312,7 @@ class SotNClient(BizHawkClient):
                             if 0 <= self.options.goal <= 2:
                                 if self.options.goal == 0:
                                     status = await bizhawk.read(ctx.bizhawk_ctx, [(0x03c0ec, 1, "MainRAM")])
-                                    if status[0] == b'?':
+                                    if status[0] == b'\x7f':
                                         game_end = True
                                 elif self.options.goal == 1:
                                     shaft_ta = await bizhawk.read(ctx.bizhawk_ctx, [(0x03ca60, 2, "MainRAM")])
