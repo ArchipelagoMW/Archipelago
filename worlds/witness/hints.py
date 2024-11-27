@@ -591,9 +591,11 @@ def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations
     hints = []
 
     for hinted_area in hinted_areas:
-        hint_string, prog_amount, hunt_panels = word_area_hint(world, hinted_area, items_per_area[hinted_area])
+        hint_string, progression_amount, hunt_panels = word_area_hint(world, hinted_area, items_per_area[hinted_area])
 
-        hints.append(WitnessWordedHint(hint_string, None, f"hinted_area:{hinted_area}", prog_amount, hunt_panels))
+        hints.append(
+            WitnessWordedHint(hint_string, None, f"hinted_area:{hinted_area}", progression_amount, hunt_panels)
+        )
 
     if len(hinted_areas) < amount:
         logging.warning(f"Was not able to make {amount} area hints for player {world.player_name}. "
