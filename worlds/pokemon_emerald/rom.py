@@ -73,6 +73,7 @@ _FANFARES: Dict[str, int] = {
     "MUS_OBTAIN_SYMBOL":       318,
     "MUS_REGISTER_MATCH_CALL": 135,
 }
+_EVOLUTION_FANFARE_INDEX = list(_FANFARES.keys()).index("MUS_EVOLVED")
 
 CAVE_EVENT_NAME_TO_ID = {
     "TERRA_CAVE_ROUTE_114_1": 1,
@@ -114,6 +115,14 @@ class PokemonEmeraldProcedurePatch(APProcedurePatch, APTokenMixin):
 
 
 def write_tokens(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch) -> None:
+    # TODO: Remove when the base patch is updated to include this change
+    # Moves an NPC to avoid overlapping people during trainersanity
+    patch.write_token(
+        APTokenTypes.WRITE,
+        0x53A298 + (0x18 * 7) + 4,  # Space Center 1F event address + 8th event + 4-byte offset for x coord
+        struct.pack("<H", 11)
+    )
+
     # Set free fly location
     if world.options.free_fly_location:
         patch.write_token(
@@ -653,6 +662,15 @@ def write_tokens(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePat
         # Shuffle the lists, pair new tracks with original tracks, set the new track ids, and set new fanfare durations
         randomized_fanfares = [fanfare_name for fanfare_name in _FANFARES]
         world.random.shuffle(randomized_fanfares)
+
+        # Prevent the evolution fanfare from receiving the poke flute by swapping it with something else.
+        # The poke flute sound causes the evolution scene to get stuck for like 40 seconds
+        if randomized_fanfares[_EVOLUTION_FANFARE_INDEX] == "MUS_RG_POKE_FLUTE":
+            swap_index = (_EVOLUTION_FANFARE_INDEX + 1) % len(_FANFARES)
+            temp = randomized_fanfares[_EVOLUTION_FANFARE_INDEX]
+            randomized_fanfares[_EVOLUTION_FANFARE_INDEX] = randomized_fanfares[swap_index]
+            randomized_fanfares[swap_index] = temp
+
         for i, fanfare_pair in enumerate(zip(_FANFARES.keys(), randomized_fanfares)):
             patch.write_token(
                 APTokenTypes.WRITE,
@@ -817,6 +835,8 @@ def _randomize_opponent_battle_type(world: "PokemonEmeraldWorld", patch: Pokemon
 
 
 def _randomize_move_tutor_moves(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch, easter_egg: Tuple[int, int]) -> None:
+    FORTREE_MOVE_TUTOR_INDEX = 24
+
     if easter_egg[0] == 2:
         for i in range(30):
             patch.write_token(
@@ -840,18 +860,26 @@ def _randomize_move_tutor_moves(world: "PokemonEmeraldWorld", patch: PokemonEmer
     # Always set Fortree move tutor to Dig
     patch.write_token(
         APTokenTypes.WRITE,
-        data.rom_addresses["gTutorMoves"] + (24 * 2),
+        data.rom_addresses["gTutorMoves"] + (FORTREE_MOVE_TUTOR_INDEX * 2),
         struct.pack("<H", data.constants["MOVE_DIG"])
     )
 
     # Modify compatibility
     if world.options.tm_tutor_compatibility.value != -1:
         for species in data.species.values():
+            compatibility = bool_array_to_int([
+                world.random.randrange(0, 100) < world.options.tm_tutor_compatibility.value
+                for _ in range(32)
+            ])
+
+            # Make sure Dig tutor has reasonable (>=50%) compatibility
+            if world.options.tm_tutor_compatibility.value < 50:
+                compatibility &= ~(1 << FORTREE_MOVE_TUTOR_INDEX)
+                if world.random.random() < 0.5:
+                    compatibility |= 1 << FORTREE_MOVE_TUTOR_INDEX
+
             patch.write_token(
                 APTokenTypes.WRITE,
                 data.rom_addresses["sTutorLearnsets"] + (species.species_id * 4),
-                struct.pack("<I", bool_array_to_int([
-                    world.random.randrange(0, 100) < world.options.tm_tutor_compatibility.value
-                    for _ in range(32)
-                ]))
+                struct.pack("<I", compatibility)
             )
