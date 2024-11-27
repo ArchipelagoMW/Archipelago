@@ -125,10 +125,7 @@ class StardewItemDeleter(Protocol):
 
 
 def load_item_csv():
-    try:
-        from importlib.resources import files
-    except ImportError:
-        from importlib_resources import files  # noqa
+    from importlib.resources import files
 
     items = []
     with files(data).joinpath("items.csv").open() as file:

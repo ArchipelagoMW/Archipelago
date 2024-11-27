@@ -17,7 +17,7 @@ from Utils import get_file_safe_name
 if typing.TYPE_CHECKING:
     from flask import Flask
 
-Utils.local_path.cached_path = os.path.dirname(__file__) or "."  # py3.8 is not abs. remove "." when dropping 3.8
+Utils.local_path.cached_path = os.path.dirname(__file__)
 settings.no_gui = True
 configpath = os.path.abspath("config.yaml")
 if not os.path.exists(configpath):  # fall back to config.yaml in home

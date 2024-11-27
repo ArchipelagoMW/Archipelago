@@ -130,10 +130,7 @@ class StardewLocationCollector(Protocol):
 
 
 def load_location_csv() -> List[LocationData]:
-    try:
-        from importlib.resources import files
-    except ImportError:
-        from importlib_resources import files
+    from importlib.resources import files
 
     with files(data).joinpath("locations.csv").open() as file:
         reader = csv.DictReader(file)
