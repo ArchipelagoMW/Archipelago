@@ -50,6 +50,8 @@ class WitnessWorld(World):
     topology_present = False
     web = WitnessWebWorld()
 
+    origin_region_name = "Entry"
+
     options_dataclass = TheWitnessOptions
     options: TheWitnessOptions
 
@@ -78,7 +80,7 @@ class WitnessWorld(World):
 
     def _get_slot_data(self) -> Dict[str, Any]:
         return {
-            "seed": self.random.randrange(0, 1000000),
+            "seed": self.options.puzzle_randomization_seed.value,
             "victory_location": int(self.player_logic.VICTORY_LOCATION, 16),
             "panelhex_to_id": self.player_locations.CHECK_PANELHEX_TO_ID,
             "item_id_to_door_hexes": static_witness_items.get_item_to_door_mappings(),
