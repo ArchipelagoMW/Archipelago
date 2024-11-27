@@ -701,29 +701,30 @@ def set_access_rules(world: 'GSTLAWorld'):
 
     add_rule(world.get_location(LocationName.Mars_Lighthouse_Teleport_Lapis),
              lambda state: state.has(ItemName.Pound_Cube, player) and state.has(ItemName.Burst_Brooch, player) and
+                            state.has(ItemName.Grindstone, player) and state.has(ItemName.Blaze, player))
+    
+    add_rule(world.get_location(LocationName.Balm),
+             lambda state: state.has(ItemName.Pound_Cube, player) and state.has(ItemName.Burst_Brooch, player) and
                             state.has(ItemName.Grindstone, player) and
                            (state.has(ItemName.Blaze, player) or state.has(ItemName.Teleport_Lapis, player)))
-
-    add_rule(world.get_location(LocationName.Mars_Lighthouse_Mars_Star),
-             lambda state: state.has(ItemName.Pound_Cube, player) and state.has(ItemName.Burst_Brooch, player) and state.has(ItemName.Blaze, player))
 
     add_rule(world.get_location(LocationName.Mars_Lighthouse_Mars_Star),
              lambda state: state.has(ItemName.Flame_Dragons_defeated, player))
 
     add_rule(world.get_location(LocationName.Mars_Lighthouse_Orihalcon),
-             lambda state: state.has(ItemName.Pound_Cube, player) and state.has(ItemName.Burst_Brooch, player) and state.has(ItemName.Blaze, player))
+             lambda state: state.has(ItemName.Pound_Cube, player) and state.has(ItemName.Burst_Brooch, player) and state.has(ItemName.Blaze, player) and state.has(ItemName.Grindstone, player))
 
     add_rule(world.get_location(LocationName.Mars_Lighthouse_Valkyrie_Mail),
              lambda state: state.has(ItemName.Pound_Cube, player) and state.has(ItemName.Burst_Brooch, player) and state.has(ItemName.Blaze, player) and
-                           state.has(ItemName.Reveal, player) and state.has(ItemName.Teleport_Lapis, player))
+                           state.has(ItemName.Reveal, player) and state.has(ItemName.Teleport_Lapis, player) and state.has(ItemName.Grindstone, player))
 
     add_rule(world.get_location(LocationName.Mars_Lighthouse_Sol_Blade),
              lambda state: state.has(ItemName.Pound_Cube, player) and state.has(ItemName.Burst_Brooch, player) and state.has(ItemName.Blaze, player) and
-                           state.has(ItemName.Reveal, player) and state.has(ItemName.Teleport_Lapis, player))
+                           state.has(ItemName.Reveal, player) and state.has(ItemName.Teleport_Lapis, player) and state.has(ItemName.Grindstone, player))
 
     add_rule(world.get_location(LocationName.Mars_Lighthouse_Flame_Dragons_fight),
              lambda state: state.count_group(ItemType.Character.name, player) >= 3 and state.has(ItemName.Teleport_Lapis, player) and state.has(ItemName.Pound_Cube, player) and
-                           state.has(ItemName.Burst_Brooch, player) and state.has(ItemName.Blaze, player) and state.has(ItemName.Reveal, player))
+                           state.has(ItemName.Burst_Brooch, player) and state.has(ItemName.Grindstone, player) and state.has(ItemName.Blaze, player) and state.has(ItemName.Reveal, player))
 
 
     #Mars Lighthouse activated
@@ -733,7 +734,8 @@ def set_access_rules(world: 'GSTLAWorld'):
 
     add_rule(world.get_location(LocationName.Mars_Lighthouse_Doom_Dragon_Fight),
              lambda state: state.count_group(ItemType.Character.name, player) >= 3 and state.has(ItemName.Cyclone_Chip, player) and state.has(ItemName.Hover_Jade, player) and
-                           state.has(ItemName.Frost_Jewel, player) and state.has(ItemName.Carry_Stone, player) and state.has(ItemName.Sand, player))
+                           state.has(ItemName.Frost_Jewel, player) and state.has(ItemName.Burst_Brooch, player) and state.has(ItemName.Blaze, player) and state.has(ItemName.Carry_Stone, player) and 
+                           state.has(ItemName.Sand, player) and state.has(ItemName.Reveal, player) and state.has(ItemName.Teleport_Lapis, player))
 
     #djinn logic
     if world.options.djinn_logic > 0:
@@ -849,7 +851,7 @@ def set_access_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Cyclone_Chip, player))
  
         add_rule(world.get_location(LocationName.Gaia_Rock_Cloud_Brand),
-             lambda state: state.has(ItemName.Sand, player) and state.has(ItemName.Serpent_defeated, player))
+             lambda state: state.has(ItemName.Sand, player) and state.has(ItemName.Growth, player))
 
         add_rule(world.get_location(LocationName.Yallam_Nut),
              lambda state: state.has(ItemName.Cyclone_Chip, player))

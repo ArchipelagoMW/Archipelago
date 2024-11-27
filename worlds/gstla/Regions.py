@@ -66,6 +66,9 @@ def create_regions(world: 'GSTLAWorld'):
 
     if world.options.lemurian_ship < 2:
         regions_copy[RegionName.Lemurian_Ship].locations.append(LocationName.Lemurian_Ship_Engine_Room)
+        regions_copy[RegionName.Lemurian_Ship].locations.append(LocationName.Lemurian_Ship_Aqua_Hydra_fight)
+    else:
+        regions_copy[RegionName.Lemurian_Ship_Revisit].locations.append(LocationName.Lemurian_Ship_Aqua_Hydra_fight)
 
     if world.options.start_with_wings_of_anemos == 0:
         regions_copy[RegionName.Reunion].locations.append(LocationName.Contigo_Wings_of_Anemos)
@@ -374,7 +377,6 @@ regions: Dict[str, EntranceData] = {
     ]),
     RegionName.Lemurian_Ship: EntranceData(RegionName.Lemurian_Ship,
     [
-        LocationName.Lemurian_Ship_Aqua_Hydra_fight
     ]),
     RegionName.Lemurian_Ship_Revisit: EntranceData(RegionName.Lemurian_Ship_Revisit,
     [
