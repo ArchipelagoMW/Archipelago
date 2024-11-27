@@ -1,6 +1,6 @@
 import typing
 
-from Options import Choice, Option, Toggle, DefaultOnToggle, Range, ItemsAccessibility, StartInventoryPool
+from Options import Choice, Option, PerGameCommonOptions, Toggle, DefaultOnToggle, Range, ItemsAccessibility, StartInventoryPool
 from dataclasses import dataclass
 
 class SMLogic(Choice):
