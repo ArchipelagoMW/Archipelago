@@ -317,6 +317,8 @@ class AutocompleteHintInput(TextInput):
         if len(value) >= self.min_chars:
             self.dropdown.clear_widgets()
             ctx: context_type = App.get_running_app().ctx
+            if not ctx.game:
+                return
             item_names = ctx.item_names._game_store[ctx.game].values()
 
             def on_press(button: Button):
