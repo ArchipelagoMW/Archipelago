@@ -127,57 +127,9 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
         elif component.display_name == "Text Client":
             text_client_component = component
 
-    from kvui import MDApp, MDButton, MDButtonText, MDBoxLayout, MDLabel, Clock, Window
-    from kivymd.uix.dialog import (MDDialog, MDDialogIcon, MDDialogHeadlineText,
-                                   MDDialogContentContainer, MDDialogSupportingText)
-    from kivymd.uix.list import MDListItem, MDListItemLeadingIcon, MDListItemSupportingText
+    from kvui import MDApp, MDButton, MDButtonText, Clock, Window
+    from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogContentContainer, MDDialogSupportingText
     from kivymd.uix.divider import MDDivider
-
-    class Popup(MDApp):
-        timer_label: MDLabel
-        remaining_time: Optional[int]
-
-        def __init__(self):
-            self.title = "Connect to Multiworld"
-            self.icon = r"data/icon.png"
-            super().__init__()
-
-        def build(self):
-            layout = MDBoxLayout(orientation="vertical")
-
-            if client_component is None:
-                self.remaining_time = 7
-                label_text = (f"A game client able to parse URIs was not detected for {game}.\n"
-                              f"Launching Text Client in 7 seconds...")
-                self.timer_label = MDLabel(text=label_text)
-                layout.add_widget(self.timer_label)
-                Clock.schedule_interval(self.update_label, 1)
-            else:
-                layout.add_widget(MDLabel(text="Select client to open and connect with."))
-                button_row = MDBoxLayout(orientation="horizontal", size_hint=(1, 0.4))
-
-                text_client_button = MDButton(
-                    MDButtonText(text_client_component.display_name),
-                    on_release=lambda *args: run_component(text_client_component, *launch_args)
-                )
-                button_row.add_widget(text_client_button)
-
-                game_client_button = MDButton(
-                    MDButtonText(client_component.display_name),
-                    on_release=lambda *args: run_component(client_component, *launch_args)
-                )
-                button_row.add_widget(game_client_button)
-
-                layout.add_widget(button_row)
-
-            return layout
-
-        def _stop(self, *largs):
-            # see run_gui Launcher _stop comment for details
-            self.root_window.close()
-            super()._stop(*largs)
-
-    # Popup().run()
 
     if not client_component:
         popup_text = MDDialogSupportingText(text=f"A game client able to parse URIs was not detected for {game}.\n"
@@ -189,7 +141,7 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
                 # countdown the timer and string replace the number
                 popup_text.remaining_time -= 1
                 popup_text.text = popup_text.text.replace(
-                    str(popup_text.remaining_time + 1), str(popup_text.remaining_time)
+                    f"{popup_text.remaining_time + 1} seconds", f"{popup_text.remaining_time} seconds"
                 )
             else:
                 # our timer is finished so launch text client and close down
