@@ -701,7 +701,8 @@ def set_access_rules(world: 'GSTLAWorld'):
 
     add_rule(world.get_location(LocationName.Mars_Lighthouse_Teleport_Lapis),
              lambda state: state.has(ItemName.Pound_Cube, player) and state.has(ItemName.Burst_Brooch, player) and
-                            state.has(ItemName.Grindstone, player) and state.has(ItemName.Blaze, player))
+                            state.has(ItemName.Grindstone, player) and
+                           (state.has(ItemName.Blaze, player) or state.has(ItemName.Teleport_Lapis, player)))
     
     add_rule(world.get_location(LocationName.Balm),
              lambda state: state.has(ItemName.Pound_Cube, player) and state.has(ItemName.Burst_Brooch, player) and
