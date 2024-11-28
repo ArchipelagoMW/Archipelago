@@ -196,14 +196,13 @@ def _get_available_blast_shields(
         if shield not in [BlastShieldType.Disabled, BlastShieldType.No_Blast_Shield]
     ]
     if (
-        str,
-        world.options.blast_shield_randomization.value
-        == BlastShieldRandomization.option_replace_existing,
+        world.options.blast_shield_randomization
+        == BlastShieldRandomization.option_replace_existing
     ):
         available_shields.remove(BlastShieldType.Missile)
 
     if (
-        world.options.blast_shield_available_types.value
+        world.options.blast_shield_available_types
         == BlastShieldAvailableTypes.option_all
         and not force_exclude_combo_doors
     ):
