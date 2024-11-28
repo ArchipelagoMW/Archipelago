@@ -180,8 +180,8 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
     # Popup().run()
 
     if not client_component:
-        popup_text = MDDialogSupportingText(text=(f"A game client able to parse URIs was not detected for {game}.\n"
-                              f"Launching Text Client in 7 seconds..."))
+        popup_text = MDDialogSupportingText(text=f"A game client able to parse URIs was not detected for {game}.\n"
+                              f"Launching Text Client in 7 seconds...")
         popup_text.remaining_time = 7
 
         def update_label(dt):
@@ -202,7 +202,7 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
 
         component_buttons = []
     else:
-        popup_text = MDDialogSupportingText(text="Select client to open and connect with."),
+        popup_text = MDDialogSupportingText(text="Select client to open and connect with.")
         component_buttons = [MDDivider()]
         for component in [text_client_component, *client_component]:
             component_buttons.append(MDButton(
