@@ -1549,7 +1549,9 @@ item_table = {
     item_names.INFESTED_LIBERATOR_DEFENDER_MODE:
         ItemData(380 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 8, SC2Race.ZERG, parent_item=item_names.INFESTED_LIBERATOR,
                  classification=ItemClassification.progression),
-
+    item_names.ABERRATION_PROGRESSIVE_BANELING_LAUNCH:
+        ItemData(381 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Progressive, 4, SC2Race.ZERG, parent_item=item_names.ABERRATION, quantity=2),
+    
     item_names.KERRIGAN_KINETIC_BLAST: ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 0, SC2Race.ZERG, classification=ItemClassification.progression),
     item_names.KERRIGAN_HEROIC_FORTITUDE: ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 1, SC2Race.ZERG, classification=ItemClassification.progression),
     item_names.KERRIGAN_LEAPING_STRIKE: ItemData(402 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 2, SC2Race.ZERG, classification=ItemClassification.progression),

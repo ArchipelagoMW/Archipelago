@@ -707,6 +707,10 @@ item_descriptions = {
     item_names.ABERRATION_PROTECTIVE_COVER: "Aberrations grant damage reduction to allied units directly beneath them.",
     item_names.ABERRATION_BANELING_INCUBATION: "Aberrations spawn 2 Banelings upon death.",
     item_names.ABERRATION_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.ABERRATION),
+    item_names.ABERRATION_PROGRESSIVE_BANELING_LAUNCH: inspect.cleandoc("""
+        Level 1: Allows Aberrations to periodically throw generated Banelings at air targets.
+        Level 2: Can store up to 3 Banelings. Can consume Banelings to recharge faster. Thrown Banelings benefit from Baneling upgrades. 
+    """),
     item_names.CORRUPTOR_MONSTROUS_RESILIENCE: "Corruptors gain +100 life.",
     item_names.CORRUPTOR_CONSTRUCT_REGENERATION: "Corruptors gain increased life regeneration.",
     item_names.CORRUPTOR_SCOURGE_INCUBATION: "Corruptors spawn 2 Scourge upon death (3 with Swarm Scourge).",
