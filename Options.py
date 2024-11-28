@@ -228,11 +228,11 @@ class FreeText(Option[str]):
 class NumericOption(Option[int], abc.ABC):
     default = 0
 
-    def __eq__(self, other: typing.Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         if isinstance(other, NumericOption):
             return self.value == other.value
         else:
-            return typing.cast(bool, self.value == other)
+            return self.value == other
 
     def __lt__(self, other: typing.Union[int, NumericOption]) -> bool:
         if isinstance(other, NumericOption):
