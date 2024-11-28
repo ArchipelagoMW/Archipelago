@@ -19,7 +19,6 @@
 <WINDOW>(0)<COLOR>(4)
 <SAY><COLOR>(6)Boolossus Warp activated
 <WAIT>(120)
-<BGMSTOP>
 <CLOSEWINDOW>(0)
 <SETLUIGI>(5)
 <WIPEKIND>(3)
@@ -35,7 +34,6 @@
 <WINDOW>(0)<COLOR>(4)
 <SAY><COLOR>(2)Bogmire Warp activated
 <WAIT>(120)
-<BGMSTOP>
 <CLOSEWINDOW>(0)
 <SETLUIGI>(2)
 <WIPEKIND>(3)
