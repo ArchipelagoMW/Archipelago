@@ -250,10 +250,15 @@ class PanelHuntDiscourageSameAreaFactor(Range):
 class PuzzleRandomization(Choice):
     """
     Puzzles in this randomizer are randomly generated. This option changes the difficulty/types of puzzles.
+    "Sigma Normal" randomizes puzzles close to their original mechanics and difficulty.
+    "Sigma Expert" is an entirely new experience with extremely difficult random puzzles. Do not underestimate this mode, it is brutal.
+    "Umbra Variety" focuses on unique symbol combinations not featured in the original game. It is harder than Sigma Normal, but easier than Sigma Expert.
+    "None" means that the puzzles are unchanged from the original game.
     """
     display_name = "Puzzle Randomization"
     option_sigma_normal = 0
     option_sigma_expert = 1
+    option_umbra_variety = 3
     option_none = 2
 
 
@@ -396,6 +401,17 @@ class DeathLinkAmnesty(Range):
     default = 1
 
 
+class PuzzleRandomizationSeed(Range):
+    """
+    Sigma Rando, which is the basis for all puzzle randomization in this randomizer, uses a seed from 1 to 9999999 for the puzzle randomization.
+    This option lets you set this seed yourself.
+    """
+    display_name = "Puzzle Randomization Seed"
+    range_start = 1
+    range_end = 9999999
+    default = "random"
+
+
 @dataclass
 class TheWitnessOptions(PerGameCommonOptions):
     puzzle_randomization: PuzzleRandomization
@@ -430,6 +446,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     laser_hints: LaserHints
     death_link: DeathLink
     death_link_amnesty: DeathLinkAmnesty
+    puzzle_randomization_seed: PuzzleRandomizationSeed
     shuffle_dog: ShuffleDog
 
 
@@ -440,7 +457,7 @@ witness_option_groups = [
         MountainLasers,
         ChallengeLasers,
     ]),
-    OptionGroup("Panel Hunt Settings", [
+    OptionGroup("Panel Hunt Options", [
         PanelHuntRequiredPercentage,
         PanelHuntTotal,
         PanelHuntPostgame,
@@ -478,6 +495,7 @@ witness_option_groups = [
         ElevatorsComeToYou,
         DeathLink,
         DeathLinkAmnesty,
+        PuzzleRandomizationSeed,
     ]),
     OptionGroup("Silly Options", [
         ShuffleDog,
