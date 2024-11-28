@@ -948,6 +948,21 @@ class SC2Logic:
             )
         )
 
+    def zerg_basic_air_to_ground(self, state: CollectionState) -> bool:
+        return (
+            state.has_any({
+                item_names.MUTALISK, item_names.INFESTED_BANSHEE
+            }, self.player)
+            or self.morph_guardian(state)
+            or self.morph_brood_lord(state)
+            or (
+                self.morph_devourer(state) and state.has(item_names.DEVOURER_PRESCIENT_SPORES, self.player)
+            )
+        )
+
+    def zerg_versatile_air(self, state: CollectionState) -> bool:
+        return self.zerg_basic_air_to_air(state) and self.zerg_basic_air_to_ground(state)
+
     def zerg_infested_tank_with_ammo(self, state: CollectionState) -> bool:
         return (
                 state.has(item_names.INFESTED_SIEGE_TANK, self.player)
