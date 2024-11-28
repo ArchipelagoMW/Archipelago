@@ -4,7 +4,7 @@ import functools
 import settings
 import threading
 import typing
-from typing import Any, Dict, List, Set, Tuple, Optional
+from typing import Any, Dict, List, Set, Tuple, Optional, Union
 import os
 import logging
 
@@ -12,7 +12,7 @@ from BaseClasses import ItemClassification, LocationProgressType, \
     MultiWorld, Item, CollectionState, Entrance, Tutorial
 
 from .gen_data import GenData
-from .logic import cs_to_zz_locs
+from .logic import ZillionLogicCache
 from .region import ZillionLocation, ZillionRegion
 from .options import ZillionOptions, validate, z_option_groups
 from .id_maps import ZillionSlotInfo, get_slot_info, item_name_to_id as _item_name_to_id, \
@@ -21,7 +21,6 @@ from .id_maps import ZillionSlotInfo, get_slot_info, item_name_to_id as _item_na
 from .item import ZillionItem
 from .patch import ZillionPatch
 
-from zilliandomizer.randomizer import Randomizer as ZzRandomizer
 from zilliandomizer.system import System
 from zilliandomizer.logic_components.items import RESCUE, items as zz_items, Item as ZzItem
 from zilliandomizer.logic_components.locations import Location as ZzLocation, Req
@@ -121,6 +120,7 @@ class ZillionWorld(World):
     """ This is kind of a cache to avoid iterating through all the multiworld locations in logic. """
     slot_data_ready: threading.Event
     """ This event is set in `generate_output` when the data is ready for `fill_slot_data` """
+    logic_cache: Union[ZillionLogicCache, None] = None
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
@@ -134,9 +134,6 @@ class ZillionWorld(World):
         self.id_to_zz_item = id_to_zz_item
 
     def generate_early(self) -> None:
-        if not hasattr(self.multiworld, "zillion_logic_cache"):
-            setattr(self.multiworld, "zillion_logic_cache", {})
-
         zz_op, item_counts = validate(self.options)
 
         if zz_op.early_scope:
@@ -145,10 +142,10 @@ class ZillionWorld(World):
         self._item_counts = item_counts
 
         with redirect_stdout(self.lsi):  # type: ignore
-            self.zz_system.make_randomizer(zz_op)
-
-            self.zz_system.seed(self.multiworld.seed)
+            self.zz_system.set_options(zz_op)
+            self.zz_system.seed(self.random.randrange(1999999999))
             self.zz_system.make_map()
+            self.zz_system.make_randomizer()
 
         # just in case the options changed anything (I don't think they do)
         assert self.zz_system.randomizer, "init failed"
@@ -163,6 +160,8 @@ class ZillionWorld(World):
         assert self.zz_system.randomizer, "generate_early hasn't been called"
         assert self.id_to_zz_item, "generate_early hasn't been called"
         p = self.player
+        logic_cache = ZillionLogicCache(p, self.zz_system.randomizer, self.id_to_zz_item)
+        self.logic_cache = logic_cache
         w = self.multiworld
         self.my_locations = []
 
@@ -201,15 +200,12 @@ class ZillionWorld(World):
                 if not zz_loc.item:
 
                     def access_rule_wrapped(zz_loc_local: ZzLocation,
-                                            p: int,
-                                            zz_r: ZzRandomizer,
-                                            id_to_zz_item: Dict[int, ZzItem],
+                                            lc: ZillionLogicCache,
                                             cs: CollectionState) -> bool:
-                        accessible = cs_to_zz_locs(cs, p, zz_r, id_to_zz_item)
+                        accessible = lc.cs_to_zz_locs(cs)
                         return zz_loc_local in accessible
 
-                    access_rule = functools.partial(access_rule_wrapped,
-                                                    zz_loc, self.player, self.zz_system.randomizer, self.id_to_zz_item)
+                    access_rule = functools.partial(access_rule_wrapped, zz_loc, logic_cache)
 
                     loc_name = self.zz_system.randomizer.loc_name_2_pretty[zz_loc.name]
                     loc = ZillionLocation(zz_loc, self.player, loc_name, here)
@@ -401,13 +397,6 @@ class ZillionWorld(World):
         assert self.zz_system.randomizer, "didn't get randomizer from generate_early"
         game = self.zz_system.get_game()
         return get_slot_info(game.regions, game.char_order[0], game.loc_name_2_pretty)
-
-    # def modify_multidata(self, multidata: Dict[str, Any]) -> None:
-    #     """For deeper modification of server multidata."""
-    #     # not modifying multidata, just want to call this at the end of the generation process
-    #     cache = getattr(self.multiworld, "zillion_logic_cache")
-    #     import sys
-    #     print(sys.getsizeof(cache))
 
     # end of ordered Main.py calls
 

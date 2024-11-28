@@ -1,8 +1,8 @@
 # Archipelago World Code Owners / Maintainers Document
 #
-# This file is used to notate the current "owners" or "maintainers" of any currently merged world folder. For any pull
-# requests that modify these worlds, a code owner must approve the PR in addition to a core maintainer. This is not to
-# be used for files/folders outside the /worlds folder, those will always need sign off from a core maintainer.
+# This file is used to notate the current "owners" or "maintainers" of any currently merged world folder as well as
+# certain documentation. For any pull requests that modify these worlds/docs, a code owner must approve the PR in
+# addition to a core maintainer. All other files and folders are owned and maintained by core maintainers directly.
 #
 # All usernames must be GitHub usernames (and are case sensitive).
 
@@ -46,7 +46,7 @@
 /worlds/clique/ @ThePhar
 
 # Dark Souls III
-/worlds/dark_souls_3/ @Marechal-L
+/worlds/dark_souls_3/ @Marechal-L @nex3
 
 # Donkey Kong Country 3
 /worlds/dkc3/ @PoryGone
@@ -78,6 +78,9 @@
 # Kirby's Dream Land 3
 /worlds/kdl3/ @Silvris
 
+# Kingdom Hearts
+/worlds/kh1/ @gaithern
+
 # Kingdom Hearts 2
 /worlds/kh2/ @JaredWeakStrike
 
@@ -103,6 +106,9 @@
 # Minecraft
 /worlds/minecraft/ @KonoTyran @espeon65536
 
+# Mega Man 2
+/worlds/mm2/ @Silvris
+
 # MegaMan Battle Network 3
 /worlds/mmbn3/ @digiholic
 
@@ -112,8 +118,8 @@
 # Noita
 /worlds/noita/ @ScipioWright @heinermann
 
-# Ocarina of Time
-/worlds/oot/ @espeon65536
+# Old School Runescape
+/worlds/osrs @digiholic
 
 # Overcooked! 2
 /worlds/overcooked2/ @toasterparty
@@ -137,7 +143,7 @@
 /worlds/shivers/ @GodlFire
 
 # A Short Hike
-/worlds/shorthike/ @chandler05
+/worlds/shorthike/ @chandler05 @BrandenEK
 
 # Sonic Adventure 2 Battle
 /worlds/sa2b/ @PoryGone @RaspberrySpace
@@ -193,6 +199,9 @@
 # The Witness
 /worlds/witness/ @NewSoupVi @blastron
 
+# Yacht Dice
+/worlds/yachtdice/ @spinerak
+
 # Yoshi's Island
 /worlds/yoshisisland/ @PinkSwitch
 
@@ -218,6 +227,9 @@
 # Links Awakening DX
 # /worlds/ladx/
 
+# Ocarina of Time
+# /worlds/oot/
+
 ## Disabled Unmaintained Worlds
 
 # The following worlds in this repo are currently unmaintained and disabled as they do not work in core. If you are
@@ -226,3 +238,11 @@
 
 # Ori and the Blind Forest
 # /worlds_disabled/oribf/
+
+###################
+## Documentation ##
+###################
+
+# Apworld Dev Faq
+/docs/apworld_dev_faq.md @qwint @ScipioWright
+

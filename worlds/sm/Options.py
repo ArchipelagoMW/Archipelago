@@ -1,6 +1,7 @@
 import typing
-from Options import Choice, Range, OptionDict, OptionList, OptionSet, Option, Toggle, DefaultOnToggle
+from Options import Choice, PerGameCommonOptions, Range, OptionDict, OptionList, OptionSet, Option, Toggle, DefaultOnToggle
 from .variaRandomizer.utils.objectives import _goals
+from dataclasses import dataclass
 
 class StartItemsRemovesFromPool(Toggle):
     """Remove items in starting inventory from pool."""
@@ -372,62 +373,62 @@ class RelaxedRoundRobinCF(Toggle):
     """
     display_name = "Relaxed round robin Crystal Flash"
 
-sm_options: typing.Dict[str, type(Option)] = {
-    "start_inventory_removes_from_pool": StartItemsRemovesFromPool,
-    "preset": Preset,
-    "start_location": StartLocation,
-    "remote_items": RemoteItems,
-    "death_link": DeathLink,
-    #"majors_split": "Full",
-    #"scav_num_locs": "10",
-    #"scav_randomized": "off",
-    #"scav_escape": "off",
-    "max_difficulty": MaxDifficulty,
-    #"progression_speed": "medium",
-    #"progression_difficulty": "normal",
-    "morph_placement": MorphPlacement,
-    #"suits_restriction": SuitsRestriction,
-    "hide_items": HideItems,
-    "strict_minors": StrictMinors,
-    "missile_qty": MissileQty,
-    "super_qty": SuperQty,
-    "power_bomb_qty": PowerBombQty,
-    "minor_qty": MinorQty,
-    "energy_qty": EnergyQty,
-    "area_randomization": AreaRandomization,
-    "area_layout": AreaLayout,
-    "doors_colors_rando": DoorsColorsRando,
-    "allow_grey_doors": AllowGreyDoors,
-    "boss_randomization": BossRandomization,
-    #"minimizer": "off",
-    #"minimizer_qty": "45",
-    #"minimizer_tourian": "off",
-    "escape_rando": EscapeRando,
-    "remove_escape_enemies": RemoveEscapeEnemies,
-    "fun_combat": FunCombat,
-    "fun_movement": FunMovement,
-    "fun_suits": FunSuits,
-    "layout_patches": LayoutPatches,
-    "varia_tweaks": VariaTweaks,
-    "nerfed_charge": NerfedCharge,
-    "gravity_behaviour": GravityBehaviour,
-    #"item_sounds": "on",
-    "elevators_speed": ElevatorsSpeed,
-    "fast_doors": DoorsSpeed,
-    "spin_jump_restart": SpinJumpRestart,
-    "rando_speed": SpeedKeep,
-    "infinite_space_jump": InfiniteSpaceJump,
-    "refill_before_save": RefillBeforeSave,
-    "hud": Hud,
-    "animals": Animals,
-    "no_music": NoMusic,
-    "random_music": RandomMusic,
-    "custom_preset": CustomPreset,
-    "varia_custom_preset": VariaCustomPreset,
-    "tourian": Tourian,
-    "custom_objective": CustomObjective,
-    "custom_objective_list": CustomObjectiveList,
-    "custom_objective_count": CustomObjectiveCount,
-    "objective": Objective,
-    "relaxed_round_robin_cf": RelaxedRoundRobinCF,
-    }
+@dataclass
+class SMOptions(PerGameCommonOptions):
+    start_inventory_removes_from_pool: StartItemsRemovesFromPool
+    preset: Preset
+    start_location: StartLocation
+    remote_items: RemoteItems
+    death_link: DeathLink
+    #majors_split: "Full"
+    #scav_num_locs: "10"
+    #scav_randomized: "off"
+    #scav_escape: "off"
+    max_difficulty: MaxDifficulty
+    #progression_speed": "medium"
+    #progression_difficulty": "normal"
+    morph_placement: MorphPlacement
+    #suits_restriction": SuitsRestriction
+    hide_items: HideItems
+    strict_minors: StrictMinors
+    missile_qty: MissileQty
+    super_qty: SuperQty
+    power_bomb_qty: PowerBombQty
+    minor_qty: MinorQty
+    energy_qty: EnergyQty
+    area_randomization: AreaRandomization
+    area_layout: AreaLayout
+    doors_colors_rando: DoorsColorsRando
+    allow_grey_doors: AllowGreyDoors
+    boss_randomization: BossRandomization
+    #minimizer: "off"
+    #minimizer_qty: "45"
+    #minimizer_tourian: "off"
+    escape_rando: EscapeRando
+    remove_escape_enemies: RemoveEscapeEnemies
+    fun_combat: FunCombat
+    fun_movement: FunMovement
+    fun_suits: FunSuits
+    layout_patches: LayoutPatches
+    varia_tweaks: VariaTweaks
+    nerfed_charge: NerfedCharge
+    gravity_behaviour: GravityBehaviour
+    #item_sounds: "on"
+    elevators_speed: ElevatorsSpeed
+    fast_doors: DoorsSpeed
+    spin_jump_restart: SpinJumpRestart
+    rando_speed: SpeedKeep
+    infinite_space_jump: InfiniteSpaceJump
+    refill_before_save: RefillBeforeSave
+    hud: Hud
+    animals: Animals
+    no_music: NoMusic
+    random_music: RandomMusic
+    custom_preset: CustomPreset
+    varia_custom_preset: VariaCustomPreset
+    tourian: Tourian
+    custom_objective: CustomObjective
+    custom_objective_list: CustomObjectiveList
+    custom_objective_count: CustomObjectiveCount
+    objective: Objective
+    relaxed_round_robin_cf: RelaxedRoundRobinCF

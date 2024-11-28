@@ -1,9 +1,9 @@
 from random import Random
 from typing import Dict, TYPE_CHECKING
 
-from worlds.generic.Rules import set_rule, forbid_item
+from worlds.generic.Rules import set_rule, forbid_item, add_rule
 from BaseClasses import CollectionState
-from .options import TunicOptions
+from .options import TunicOptions, LadderStorage, IceGrappling
 if TYPE_CHECKING:
     from . import TunicWorld
 
@@ -11,6 +11,7 @@ laurels = "Hero's Laurels"
 grapple = "Magic Orb"
 ice_dagger = "Magic Dagger"
 fire_wand = "Magic Wand"
+gun = "Gun"
 lantern = "Lantern"
 fairies = "Fairy"
 coins = "Golden Coin"
@@ -26,6 +27,11 @@ green_hexagon = "Green Questagon"
 blue_hexagon = "Blue Questagon"
 gold_hexagon = "Gold Questagon"
 
+# "Quarry - [East] Bombable Wall" is excluded from this list since it has slightly different rules
+bomb_walls = ["East Forest - Bombable Wall", "Eastern Vault Fortress - [East Wing] Bombable Wall",
+              "Overworld - [Central] Bombable Wall", "Overworld - [Southwest] Bombable Wall Near Fountain",
+              "Quarry - [West] Upper Area Bombable Wall", "Ruined Atoll - [Northwest] Bombable Wall"]
+
 
 def randomize_ability_unlocks(random: Random, options: TunicOptions) -> Dict[str, int]:
     ability_requirement = [1, 1, 1]
@@ -38,302 +44,346 @@ def randomize_ability_unlocks(random: Random, options: TunicOptions) -> Dict[str
     return dict(zip(abilities, ability_requirement))
 
 
-def has_ability(state: CollectionState, player: int, ability: str, options: TunicOptions,
-                ability_unlocks: Dict[str, int]) -> bool:
+def has_ability(ability: str, state: CollectionState, world: "TunicWorld") -> bool:
+    options = world.options
+    ability_unlocks = world.ability_unlocks
     if not options.ability_shuffling:
         return True
     if options.hexagon_quest:
-        return state.has(gold_hexagon, player, ability_unlocks[ability])
-    return state.has(ability, player)
+        return state.has(gold_hexagon, world.player, ability_unlocks[ability])
+    return state.has(ability, world.player)
 
 
 # a check to see if you can whack things in melee at all
 def has_stick(state: CollectionState, player: int) -> bool:
-    return state.has("Stick", player) or state.has("Sword Upgrade", player, 1) or state.has("Sword", player)
+    return (state.has("Stick", player) or state.has("Sword Upgrade", player, 1)
+            or state.has("Sword", player))
 
 
 def has_sword(state: CollectionState, player: int) -> bool:
     return state.has("Sword", player) or state.has("Sword Upgrade", player, 2)
 
 
-def has_ice_grapple_logic(long_range: bool, state: CollectionState, player: int, options: TunicOptions,
-                          ability_unlocks: Dict[str, int]) -> bool:
-    if not options.logic_rules:
-        return False
+def laurels_zip(state: CollectionState, world: "TunicWorld") -> bool:
+    return world.options.laurels_zips and state.has(laurels, world.player)
 
+
+def has_ice_grapple_logic(long_range: bool, difficulty: IceGrappling, state: CollectionState, world: "TunicWorld") -> bool:
+    if world.options.ice_grappling < difficulty:
+        return False
     if not long_range:
-        return state.has_all({ice_dagger, grapple}, player)
+        return state.has_all({ice_dagger, grapple}, world.player)
     else:
-        return state.has_all({ice_dagger, fire_wand, grapple}, player) and \
-            has_ability(state, player, icebolt, options, ability_unlocks)
+        return state.has_all({ice_dagger, fire_wand, grapple}, world.player) and has_ability(icebolt, state, world)
 
 
-def can_ladder_storage(state: CollectionState, player: int, options: TunicOptions) -> bool:
-    if options.logic_rules == "unrestricted" and has_stick(state, player):
-        return True
-    else:
+def can_ladder_storage(state: CollectionState, world: "TunicWorld") -> bool:
+    if not world.options.ladder_storage:
         return False
-
-
-def has_mask(state: CollectionState, player: int, options: TunicOptions) -> bool:
-    if options.maskless:
+    if world.options.ladder_storage_without_items:
         return True
-    else:
-        return state.has(mask, player)
+    return has_stick(state, world.player) or state.has(grapple, world.player)
 
 
-def has_lantern(state: CollectionState, player: int, options: TunicOptions) -> bool:
-    if options.lanternless:
-        return True
-    else:
-        return state.has(lantern, player)
+def has_mask(state: CollectionState, world: "TunicWorld") -> bool:
+    return world.options.maskless or state.has(mask, world.player)
 
 
-def set_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> None:
-    multiworld = world.multiworld
+def has_lantern(state: CollectionState, world: "TunicWorld") -> bool:
+    return world.options.lanternless or state.has(lantern, world.player)
+
+
+def set_region_rules(world: "TunicWorld") -> None:
     player = world.player
     options = world.options
 
-    multiworld.get_entrance("Overworld -> Overworld Holy Cross", player).access_rule = \
-        lambda state: has_ability(state, player, holy_cross, options, ability_unlocks)
-    multiworld.get_entrance("Overworld -> Beneath the Well", player).access_rule = \
+    world.get_entrance("Overworld -> Overworld Holy Cross").access_rule = \
+        lambda state: has_ability(holy_cross, state, world)
+    world.get_entrance("Overworld -> Beneath the Well").access_rule = \
         lambda state: has_stick(state, player) or state.has(fire_wand, player)
-    multiworld.get_entrance("Overworld -> Dark Tomb", player).access_rule = \
-        lambda state: has_lantern(state, player, options)
-    multiworld.get_entrance("Overworld -> West Garden", player).access_rule = \
+    world.get_entrance("Overworld -> Dark Tomb").access_rule = \
+        lambda state: has_lantern(state, world)
+    # laurels in, ladder storage in through the furnace, or ice grapple down the belltower
+    world.get_entrance("Overworld -> West Garden").access_rule = \
+        lambda state: (state.has(laurels, player)
+                       or can_ladder_storage(state, world)
+                       or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
+    world.get_entrance("Overworld -> Eastern Vault Fortress").access_rule = \
         lambda state: state.has(laurels, player) \
-        or can_ladder_storage(state, player, options)
-    multiworld.get_entrance("Overworld -> Eastern Vault Fortress", player).access_rule = \
-        lambda state: state.has(laurels, player) \
-        or has_ice_grapple_logic(True, state, player, options, ability_unlocks) \
-        or can_ladder_storage(state, player, options)
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world) \
+        or can_ladder_storage(state, world)
     # using laurels or ls to get in is covered by the -> Eastern Vault Fortress rules
-    multiworld.get_entrance("Overworld -> Beneath the Vault", player).access_rule = \
-        lambda state: has_lantern(state, player, options) and \
-        has_ability(state, player, prayer, options, ability_unlocks)
-    multiworld.get_entrance("Ruined Atoll -> Library", player).access_rule = \
-        lambda state: state.has_any({grapple, laurels}, player) and \
-        has_ability(state, player, prayer, options, ability_unlocks)
-    multiworld.get_entrance("Overworld -> Quarry", player).access_rule = \
+    world.get_entrance("Overworld -> Beneath the Vault").access_rule = \
+        lambda state: (has_lantern(state, world) and has_ability(prayer, state, world)
+                       # there's some boxes in the way
+                       and (has_stick(state, player) or state.has_any((gun, grapple, fire_wand), player)))
+    world.get_entrance("Ruined Atoll -> Library").access_rule = \
+        lambda state: state.has_any({grapple, laurels}, player) and has_ability(prayer, state, world)
+    world.get_entrance("Overworld -> Quarry").access_rule = \
         lambda state: (has_sword(state, player) or state.has(fire_wand, player)) \
-        and (state.has_any({grapple, laurels}, player) or can_ladder_storage(state, player, options))
-    multiworld.get_entrance("Quarry Back -> Quarry", player).access_rule = \
+        and (state.has_any({grapple, laurels, gun}, player) or can_ladder_storage(state, world))
+    world.get_entrance("Quarry Back -> Quarry").access_rule = \
         lambda state: has_sword(state, player) or state.has(fire_wand, player)
-    multiworld.get_entrance("Quarry -> Lower Quarry", player).access_rule = \
-        lambda state: has_mask(state, player, options)
-    multiworld.get_entrance("Lower Quarry -> Rooted Ziggurat", player).access_rule = \
-        lambda state: state.has(grapple, player) and has_ability(state, player, prayer, options, ability_unlocks)
-    multiworld.get_entrance("Swamp -> Cathedral", player).access_rule = \
-        lambda state: state.has(laurels, player) and has_ability(state, player, prayer, options, ability_unlocks) \
-        or has_ice_grapple_logic(False, state, player, options, ability_unlocks)
-    multiworld.get_entrance("Overworld -> Spirit Arena", player).access_rule = \
-        lambda state: (state.has(gold_hexagon, player, options.hexagon_goal.value) if options.hexagon_quest.value
-                       else state.has_all({red_hexagon, green_hexagon, blue_hexagon}, player) and state.has_group_unique("Hero Relics", player, 6)) and \
-        has_ability(state, player, prayer, options, ability_unlocks) and has_sword(state, player) and \
-        state.has_any({lantern, laurels}, player)
+    world.get_entrance("Quarry -> Lower Quarry").access_rule = \
+        lambda state: has_mask(state, world)
+    world.get_entrance("Lower Quarry -> Rooted Ziggurat").access_rule = \
+        lambda state: state.has(grapple, player) and has_ability(prayer, state, world)
+    world.get_entrance("Swamp -> Cathedral").access_rule = \
+        lambda state: (state.has(laurels, player) and has_ability(prayer, state, world)) \
+        or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
+    world.get_entrance("Overworld -> Spirit Arena").access_rule = \
+        lambda state: ((state.has(gold_hexagon, player, options.hexagon_goal.value) if options.hexagon_quest.value
+                       else state.has_all({red_hexagon, green_hexagon, blue_hexagon}, player)
+                       and state.has_group_unique("Hero Relics", player, 6))
+                       and has_ability(prayer, state, world) and has_sword(state, player)
+                       and state.has_any({lantern, laurels}, player))
+
+    world.get_region("Quarry").connect(world.get_region("Rooted Ziggurat"),
+                                       rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_hard, state, world)
+                                       and has_ability(prayer, state, world))
+
+    if options.ladder_storage >= LadderStorage.option_medium:
+        # ls at any ladder in a safe spot in quarry to get to the monastery rope entrance
+        world.get_region("Quarry Back").connect(world.get_region("Monastery"),
+                                                rule=lambda state: can_ladder_storage(state, world))
 
 
-def set_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> None:
-    multiworld = world.multiworld
+def set_location_rules(world: "TunicWorld") -> None:
     player = world.player
-    options = world.options
 
-    forbid_item(multiworld.get_location("Secret Gathering Place - 20 Fairy Reward", player), fairies, player)
+    forbid_item(world.get_location("Secret Gathering Place - 20 Fairy Reward"), fairies, player)
 
     # Ability Shuffle Exclusive Rules
-    set_rule(multiworld.get_location("Far Shore - Page Pickup", player),
-             lambda state: has_ability(state, player, prayer, options, ability_unlocks))
-    set_rule(multiworld.get_location("Fortress Courtyard - Chest Near Cave", player),
-             lambda state: has_ability(state, player, prayer, options, ability_unlocks) or state.has(laurels, player)
-             or can_ladder_storage(state, player, options)
-             or (has_ice_grapple_logic(True, state, player, options, ability_unlocks)
-                 and has_lantern(state, player, options)))
-    set_rule(multiworld.get_location("Fortress Courtyard - Page Near Cave", player),
-             lambda state: has_ability(state, player, prayer, options, ability_unlocks) or state.has(laurels, player)
-             or can_ladder_storage(state, player, options)
-             or (has_ice_grapple_logic(True, state, player, options, ability_unlocks)
-                 and has_lantern(state, player, options)))
-    set_rule(multiworld.get_location("East Forest - Dancing Fox Spirit Holy Cross", player),
-             lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
-    set_rule(multiworld.get_location("Forest Grave Path - Holy Cross Code by Grave", player),
-             lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
-    set_rule(multiworld.get_location("East Forest - Golden Obelisk Holy Cross", player),
-             lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
-    set_rule(multiworld.get_location("Beneath the Well - [Powered Secret Room] Chest", player),
-             lambda state: has_ability(state, player, prayer, options, ability_unlocks))
-    set_rule(multiworld.get_location("West Garden - [North] Behind Holy Cross Door", player),
-             lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
-    set_rule(multiworld.get_location("Library Hall - Holy Cross Chest", player),
-             lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
-    set_rule(multiworld.get_location("Eastern Vault Fortress - [West Wing] Candles Holy Cross", player),
-             lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
-    set_rule(multiworld.get_location("West Garden - [Central Highlands] Holy Cross (Blue Lines)", player),
-             lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
-    set_rule(multiworld.get_location("Quarry - [Back Entrance] Bushes Holy Cross", player),
-             lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
-    set_rule(multiworld.get_location("Cathedral - Secret Legend Trophy Chest", player),
-             lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
+    set_rule(world.get_location("Far Shore - Page Pickup"),
+             lambda state: has_ability(prayer, state, world))
+    set_rule(world.get_location("Fortress Courtyard - Chest Near Cave"),
+             lambda state: has_ability(prayer, state, world)
+             or state.has(laurels, player)
+             or can_ladder_storage(state, world)
+             or (has_ice_grapple_logic(True, IceGrappling.option_easy, state, world)
+                 and has_lantern(state, world)))
+    set_rule(world.get_location("Fortress Courtyard - Page Near Cave"),
+             lambda state: has_ability(prayer, state, world) or state.has(laurels, player)
+             or can_ladder_storage(state, world)
+             or (has_ice_grapple_logic(True, IceGrappling.option_easy, state, world)
+                 and has_lantern(state, world)))
+    set_rule(world.get_location("East Forest - Dancing Fox Spirit Holy Cross"),
+             lambda state: has_ability(holy_cross, state, world))
+    set_rule(world.get_location("Forest Grave Path - Holy Cross Code by Grave"),
+             lambda state: has_ability(holy_cross, state, world))
+    set_rule(world.get_location("East Forest - Golden Obelisk Holy Cross"),
+             lambda state: has_ability(holy_cross, state, world))
+    set_rule(world.get_location("Beneath the Well - [Powered Secret Room] Chest"),
+             lambda state: has_ability(prayer, state, world))
+    set_rule(world.get_location("West Garden - [North] Behind Holy Cross Door"),
+             lambda state: has_ability(holy_cross, state, world))
+    set_rule(world.get_location("Library Hall - Holy Cross Chest"),
+             lambda state: has_ability(holy_cross, state, world))
+    set_rule(world.get_location("Eastern Vault Fortress - [West Wing] Candles Holy Cross"),
+             lambda state: has_ability(holy_cross, state, world))
+    set_rule(world.get_location("West Garden - [Central Highlands] Holy Cross (Blue Lines)"),
+             lambda state: has_ability(holy_cross, state, world))
+    set_rule(world.get_location("Quarry - [Back Entrance] Bushes Holy Cross"),
+             lambda state: has_ability(holy_cross, state, world))
+    set_rule(world.get_location("Cathedral - Secret Legend Trophy Chest"),
+             lambda state: has_ability(holy_cross, state, world))
 
     # Overworld
-    set_rule(multiworld.get_location("Overworld - [Southwest] Fountain Page", player),
+    set_rule(world.get_location("Overworld - [Southwest] Fountain Page"),
              lambda state: state.has(laurels, player))
-    set_rule(multiworld.get_location("Overworld - [Southwest] Grapple Chest Over Walkway", player),
+    set_rule(world.get_location("Overworld - [Southwest] Grapple Chest Over Walkway"),
              lambda state: state.has_any({grapple, laurels}, player))
-    set_rule(multiworld.get_location("Overworld - [Southwest] West Beach Guarded By Turret 2", player),
+    set_rule(world.get_location("Overworld - [Southwest] West Beach Guarded By Turret 2"),
              lambda state: state.has_any({grapple, laurels}, player))
-    set_rule(multiworld.get_location("Far Shore - Secret Chest", player),
-             lambda state: state.has(laurels, player) and has_ability(state, player, prayer, options, ability_unlocks))
-    set_rule(multiworld.get_location("Overworld - [Southeast] Page on Pillar by Swamp", player),
+    set_rule(world.get_location("Far Shore - Secret Chest"),
+             lambda state: state.has(laurels, player) and has_ability(prayer, state, world))
+    set_rule(world.get_location("Overworld - [Southeast] Page on Pillar by Swamp"),
              lambda state: state.has(laurels, player))
-    set_rule(multiworld.get_location("Old House - Normal Chest", player),
+    set_rule(world.get_location("Old House - Normal Chest"),
              lambda state: state.has(house_key, player)
-             or has_ice_grapple_logic(False, state, player, options, ability_unlocks)
-             or (state.has(laurels, player) and options.logic_rules))
-    set_rule(multiworld.get_location("Old House - Holy Cross Chest", player),
-             lambda state: has_ability(state, player, holy_cross, options, ability_unlocks) and
-             (state.has(house_key, player)
-             or has_ice_grapple_logic(False, state, player, options, ability_unlocks)
-             or (state.has(laurels, player) and options.logic_rules)))
-    set_rule(multiworld.get_location("Old House - Shield Pickup", player),
+             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
+             or laurels_zip(state, world))
+    set_rule(world.get_location("Old House - Holy Cross Chest"),
+             lambda state: has_ability(holy_cross, state, world) and (
+                     state.has(house_key, player)
+                     or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
+                     or laurels_zip(state, world)))
+    set_rule(world.get_location("Old House - Shield Pickup"),
              lambda state: state.has(house_key, player)
-             or has_ice_grapple_logic(False, state, player, options, ability_unlocks)
-             or (state.has(laurels, player) and options.logic_rules))
-    set_rule(multiworld.get_location("Overworld - [Northwest] Page on Pillar by Dark Tomb", player),
+             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
+             or laurels_zip(state, world))
+    set_rule(world.get_location("Overworld - [Northwest] Page on Pillar by Dark Tomb"),
              lambda state: state.has(laurels, player))
-    set_rule(multiworld.get_location("Overworld - [Southwest] From West Garden", player),
+    set_rule(world.get_location("Overworld - [Southwest] From West Garden"),
              lambda state: state.has(laurels, player))
-    set_rule(multiworld.get_location("Overworld - [West] Chest After Bell", player),
+    set_rule(world.get_location("Overworld - [West] Chest After Bell"),
              lambda state: state.has(laurels, player)
-             or (has_lantern(state, player, options) and has_sword(state, player))
-             or can_ladder_storage(state, player, options))
-    set_rule(multiworld.get_location("Overworld - [Northwest] Chest Beneath Quarry Gate", player),
-             lambda state: state.has_any({grapple, laurels}, player) or options.logic_rules)
-    set_rule(multiworld.get_location("Overworld - [East] Grapple Chest", player),
+             or (has_lantern(state, world) and has_sword(state, player))
+             or can_ladder_storage(state, world))
+    set_rule(world.get_location("Overworld - [Northwest] Chest Beneath Quarry Gate"),
+             lambda state: state.has_any({grapple, laurels}, player))
+    set_rule(world.get_location("Overworld - [East] Grapple Chest"),
              lambda state: state.has(grapple, player))
-    set_rule(multiworld.get_location("Special Shop - Secret Page Pickup", player),
+    set_rule(world.get_location("Special Shop - Secret Page Pickup"),
              lambda state: state.has(laurels, player))
-    set_rule(multiworld.get_location("Sealed Temple - Holy Cross Chest", player),
-             lambda state: has_ability(state, player, holy_cross, options, ability_unlocks) and
-             (state.has(laurels, player)
-              or (has_lantern(state, player, options) and
-                  (has_sword(state, player) or state.has(fire_wand, player)))
-              or has_ice_grapple_logic(False, state, player, options, ability_unlocks)))
-    set_rule(multiworld.get_location("Sealed Temple - Page Pickup", player),
+    set_rule(world.get_location("Sealed Temple - Holy Cross Chest"),
+             lambda state: has_ability(holy_cross, state, world)
+             and (state.has(laurels, player) or (has_lantern(state, world) and (has_sword(state, player)
+                                                                                or state.has(fire_wand, player)))
+                  or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)))
+    set_rule(world.get_location("Sealed Temple - Page Pickup"),
              lambda state: state.has(laurels, player)
-             or (has_lantern(state, player, options) and (has_sword(state, player) or state.has(fire_wand, player)))
-             or has_ice_grapple_logic(False, state, player, options, ability_unlocks))
-    set_rule(multiworld.get_location("West Furnace - Lantern Pickup", player),
+             or (has_lantern(state, world) and (has_sword(state, player) or state.has(fire_wand, player)))
+             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
+    set_rule(world.get_location("West Furnace - Lantern Pickup"),
              lambda state: has_stick(state, player) or state.has_any({fire_wand, laurels}, player))
 
-    set_rule(multiworld.get_location("Secret Gathering Place - 10 Fairy Reward", player),
+    set_rule(world.get_location("Secret Gathering Place - 10 Fairy Reward"),
              lambda state: state.has(fairies, player, 10))
-    set_rule(multiworld.get_location("Secret Gathering Place - 20 Fairy Reward", player),
+    set_rule(world.get_location("Secret Gathering Place - 20 Fairy Reward"),
              lambda state: state.has(fairies, player, 20))
-    set_rule(multiworld.get_location("Coins in the Well - 3 Coins", player),
+    set_rule(world.get_location("Coins in the Well - 3 Coins"),
              lambda state: state.has(coins, player, 3))
-    set_rule(multiworld.get_location("Coins in the Well - 6 Coins", player),
+    set_rule(world.get_location("Coins in the Well - 6 Coins"),
              lambda state: state.has(coins, player, 6))
-    set_rule(multiworld.get_location("Coins in the Well - 10 Coins", player),
+    set_rule(world.get_location("Coins in the Well - 10 Coins"),
              lambda state: state.has(coins, player, 10))
-    set_rule(multiworld.get_location("Coins in the Well - 15 Coins", player),
+    set_rule(world.get_location("Coins in the Well - 15 Coins"),
              lambda state: state.has(coins, player, 15))
 
     # East Forest
-    set_rule(multiworld.get_location("East Forest - Lower Grapple Chest", player),
+    set_rule(world.get_location("East Forest - Lower Grapple Chest"),
              lambda state: state.has(grapple, player))
-    set_rule(multiworld.get_location("East Forest - Lower Dash Chest", player),
+    set_rule(world.get_location("East Forest - Lower Dash Chest"),
              lambda state: state.has_all({grapple, laurels}, player))
-    set_rule(multiworld.get_location("East Forest - Ice Rod Grapple Chest", player),
+    set_rule(world.get_location("East Forest - Ice Rod Grapple Chest"),
              lambda state: state.has_all({grapple, ice_dagger, fire_wand}, player)
-             and has_ability(state, player, icebolt, options, ability_unlocks))
+             and has_ability(icebolt, state, world))
 
     # West Garden
-    set_rule(multiworld.get_location("West Garden - [North] Across From Page Pickup", player),
+    set_rule(world.get_location("West Garden - [North] Across From Page Pickup"),
              lambda state: state.has(laurels, player))
-    set_rule(multiworld.get_location("West Garden - [West] In Flooded Walkway", player),
+    set_rule(world.get_location("West Garden - [West] In Flooded Walkway"),
              lambda state: state.has(laurels, player))
-    set_rule(multiworld.get_location("West Garden - [West Lowlands] Tree Holy Cross Chest", player),
+    set_rule(world.get_location("West Garden - [West Lowlands] Tree Holy Cross Chest"),
+             lambda state: state.has(laurels, player) and has_ability(holy_cross, state, world))
+    set_rule(world.get_location("West Garden - [East Lowlands] Page Behind Ice Dagger House"),
+             lambda state: (state.has(laurels, player) and has_ability(prayer, state, world))
+             or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
+    set_rule(world.get_location("West Garden - [Central Lowlands] Below Left Walkway"),
+             lambda state: state.has(laurels, player))
+    set_rule(world.get_location("West Garden - [Central Highlands] After Garden Knight"),
              lambda state: state.has(laurels, player)
-             and has_ability(state, player, holy_cross, options, ability_unlocks))
-    set_rule(multiworld.get_location("West Garden - [East Lowlands] Page Behind Ice Dagger House", player),
-             lambda state: (state.has(laurels, player) and has_ability(state, player, prayer, options, ability_unlocks))
-             or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
-    set_rule(multiworld.get_location("West Garden - [Central Lowlands] Below Left Walkway", player),
-             lambda state: state.has(laurels, player))
-    set_rule(multiworld.get_location("West Garden - [Central Highlands] After Garden Knight", player),
-             lambda state: state.has(laurels, player)
-             or (has_lantern(state, player, options) and has_sword(state, player))
-             or can_ladder_storage(state, player, options))
+             or (has_lantern(state, world) and has_sword(state, player))
+             or can_ladder_storage(state, world))
 
     # Ruined Atoll
-    set_rule(multiworld.get_location("Ruined Atoll - [West] Near Kevin Block", player),
+    set_rule(world.get_location("Ruined Atoll - [West] Near Kevin Block"),
              lambda state: state.has(laurels, player))
-    set_rule(multiworld.get_location("Ruined Atoll - [East] Locked Room Lower Chest", player),
-             lambda state: state.has(laurels, player) or state.has(key, player, 2))
-    set_rule(multiworld.get_location("Ruined Atoll - [East] Locked Room Upper Chest", player),
-             lambda state: state.has(laurels, player) or state.has(key, player, 2))
-    set_rule(multiworld.get_location("Librarian - Hexagon Green", player),
-             lambda state: has_sword(state, player) or options.logic_rules)
+    # ice grapple push a crab through the door
+    set_rule(world.get_location("Ruined Atoll - [East] Locked Room Lower Chest"),
+             lambda state: state.has(laurels, player) or state.has(key, player, 2)
+             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
+    set_rule(world.get_location("Ruined Atoll - [East] Locked Room Upper Chest"),
+             lambda state: state.has(laurels, player) or state.has(key, player, 2)
+             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
+    set_rule(world.get_location("Librarian - Hexagon Green"),
+             lambda state: has_sword(state, player))
 
     # Frog's Domain
-    set_rule(multiworld.get_location("Frog's Domain - Side Room Grapple Secret", player),
+    set_rule(world.get_location("Frog's Domain - Side Room Grapple Secret"),
              lambda state: state.has_any({grapple, laurels}, player))
-    set_rule(multiworld.get_location("Frog's Domain - Grapple Above Hot Tub", player),
+    set_rule(world.get_location("Frog's Domain - Grapple Above Hot Tub"),
              lambda state: state.has_any({grapple, laurels}, player))
-    set_rule(multiworld.get_location("Frog's Domain - Escape Chest", player),
+    set_rule(world.get_location("Frog's Domain - Escape Chest"),
              lambda state: state.has_any({grapple, laurels}, player))
+
+    # Library Lab
+    set_rule(world.get_location("Library Lab - Page 1"),
+             lambda state: has_stick(state, player) or state.has_any((fire_wand, gun), player))
+    set_rule(world.get_location("Library Lab - Page 2"),
+             lambda state: has_stick(state, player) or state.has_any((fire_wand, gun), player))
+    set_rule(world.get_location("Library Lab - Page 3"),
+             lambda state: has_stick(state, player) or state.has_any((fire_wand, gun), player))
 
     # Eastern Vault Fortress
-    set_rule(multiworld.get_location("Fortress Leaf Piles - Secret Chest", player),
-             lambda state: state.has(laurels, player))
-    set_rule(multiworld.get_location("Fortress Arena - Siege Engine/Vault Key Pickup", player),
-             lambda state: has_sword(state, player) and
-             (has_ability(state, player, prayer, options, ability_unlocks)
-              or has_ice_grapple_logic(False, state, player, options, ability_unlocks)))
-    set_rule(multiworld.get_location("Fortress Arena - Hexagon Red", player),
-             lambda state: state.has(vault_key, player) and
-             (has_ability(state, player, prayer, options, ability_unlocks)
-              or has_ice_grapple_logic(False, state, player, options, ability_unlocks)))
+    # yes, you can clear the leaves with dagger
+    # gun isn't included since it can only break one leaf pile at a time, and we don't check how much mana you have
+    # but really, I expect the player to just throw a bomb at them if they don't have melee
+    set_rule(world.get_location("Fortress Leaf Piles - Secret Chest"),
+             lambda state: state.has(laurels, player) and (has_stick(state, player) or state.has(ice_dagger, player)))
+    set_rule(world.get_location("Fortress Arena - Siege Engine/Vault Key Pickup"),
+             lambda state: has_sword(state, player)
+             and (has_ability(prayer, state, world)
+                  or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)))
+    set_rule(world.get_location("Fortress Arena - Hexagon Red"),
+             lambda state: state.has(vault_key, player)
+             and (has_ability(prayer, state, world)
+                  or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)))
 
     # Beneath the Vault
-    set_rule(multiworld.get_location("Beneath the Fortress - Bridge", player),
+    set_rule(world.get_location("Beneath the Fortress - Bridge"),
              lambda state: has_stick(state, player) or state.has_any({laurels, fire_wand}, player))
-    set_rule(multiworld.get_location("Beneath the Fortress - Obscured Behind Waterfall", player),
-             lambda state: has_stick(state, player) and has_lantern(state, player, options))
+    set_rule(world.get_location("Beneath the Fortress - Obscured Behind Waterfall"),
+             lambda state: has_stick(state, player) and has_lantern(state, world))
 
     # Quarry
-    set_rule(multiworld.get_location("Quarry - [Central] Above Ladder Dash Chest", player),
+    set_rule(world.get_location("Quarry - [Central] Above Ladder Dash Chest"),
              lambda state: state.has(laurels, player))
-    set_rule(multiworld.get_location("Rooted Ziggurat Upper - Near Bridge Switch", player),
+    set_rule(world.get_location("Rooted Ziggurat Upper - Near Bridge Switch"),
              lambda state: has_sword(state, player) or state.has_all({fire_wand, laurels}, player))
-    # nmg - kill boss scav with orb + firecracker, or similar
-    set_rule(multiworld.get_location("Rooted Ziggurat Lower - Hexagon Blue", player),
-             lambda state: has_sword(state, player) or (state.has(grapple, player) and options.logic_rules))
+    set_rule(world.get_location("Rooted Ziggurat Lower - Hexagon Blue"),
+             lambda state: has_sword(state, player))
 
     # Swamp
-    set_rule(multiworld.get_location("Cathedral Gauntlet - Gauntlet Reward", player),
+    set_rule(world.get_location("Cathedral Gauntlet - Gauntlet Reward"),
              lambda state: (state.has(fire_wand, player) and has_sword(state, player))
-             and (state.has(laurels, player)
-                  or has_ice_grapple_logic(False, state, player, options, ability_unlocks)))
-    set_rule(multiworld.get_location("Swamp - [Entrance] Above Entryway", player),
+             and (state.has(laurels, player) 
+                  or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)))
+    set_rule(world.get_location("Swamp - [Entrance] Above Entryway"),
              lambda state: state.has(laurels, player))
-    set_rule(multiworld.get_location("Swamp - [South Graveyard] Upper Walkway Dash Chest", player),
+    set_rule(world.get_location("Swamp - [South Graveyard] Upper Walkway Dash Chest"),
              lambda state: state.has(laurels, player))
-    set_rule(multiworld.get_location("Swamp - [Outside Cathedral] Obscured Behind Memorial", player),
+    set_rule(world.get_location("Swamp - [Outside Cathedral] Obscured Behind Memorial"),
              lambda state: state.has(laurels, player))
-    set_rule(multiworld.get_location("Swamp - [South Graveyard] 4 Orange Skulls", player),
+    set_rule(world.get_location("Swamp - [South Graveyard] 4 Orange Skulls"),
              lambda state: has_sword(state, player))
 
     # Hero's Grave
-    set_rule(multiworld.get_location("Hero's Grave - Tooth Relic", player),
-             lambda state: state.has(laurels, player) and has_ability(state, player, prayer, options, ability_unlocks))
-    set_rule(multiworld.get_location("Hero's Grave - Mushroom Relic", player),
-             lambda state: state.has(laurels, player) and has_ability(state, player, prayer, options, ability_unlocks))
-    set_rule(multiworld.get_location("Hero's Grave - Ash Relic", player),
-             lambda state: state.has(laurels, player) and has_ability(state, player, prayer, options, ability_unlocks))
-    set_rule(multiworld.get_location("Hero's Grave - Flowers Relic", player),
-             lambda state: state.has(laurels, player) and has_ability(state, player, prayer, options, ability_unlocks))
-    set_rule(multiworld.get_location("Hero's Grave - Effigy Relic", player),
-             lambda state: state.has(laurels, player) and has_ability(state, player, prayer, options, ability_unlocks))
-    set_rule(multiworld.get_location("Hero's Grave - Feathers Relic", player),
-             lambda state: state.has(laurels, player) and has_ability(state, player, prayer, options, ability_unlocks))
+    set_rule(world.get_location("Hero's Grave - Tooth Relic"),
+             lambda state: state.has(laurels, player) and has_ability(prayer, state, world))
+    set_rule(world.get_location("Hero's Grave - Mushroom Relic"),
+             lambda state: state.has(laurels, player) and has_ability(prayer, state, world))
+    set_rule(world.get_location("Hero's Grave - Ash Relic"),
+             lambda state: state.has(laurels, player) and has_ability(prayer, state, world))
+    set_rule(world.get_location("Hero's Grave - Flowers Relic"),
+             lambda state: state.has(laurels, player) and has_ability(prayer, state, world))
+    set_rule(world.get_location("Hero's Grave - Effigy Relic"),
+             lambda state: state.has(laurels, player) and has_ability(prayer, state, world))
+    set_rule(world.get_location("Hero's Grave - Feathers Relic"),
+             lambda state: state.has(laurels, player) and has_ability(prayer, state, world))
+
+    # Bombable Walls
+    for location_name in bomb_walls:
+        # has_sword is there because you can buy bombs in the shop
+        set_rule(world.get_location(location_name),
+                 lambda state: state.has(gun, player)
+                 or has_sword(state, player)
+                 or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
+    add_rule(world.get_location("Cube Cave - Holy Cross Chest"),
+             lambda state: state.has(gun, player)
+             or has_sword(state, player)
+             or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
+    # can't ice grapple to this one, not enough space
+    set_rule(world.get_location("Quarry - [East] Bombable Wall"),
+             lambda state: state.has(gun, player) or has_sword(state, player))
+
+    # Shop
+    set_rule(world.get_location("Shop - Potion 1"),
+             lambda state: has_sword(state, player))
+    set_rule(world.get_location("Shop - Potion 2"),
+             lambda state: has_sword(state, player))
+    set_rule(world.get_location("Shop - Coin 1"),
+             lambda state: has_sword(state, player))
+    set_rule(world.get_location("Shop - Coin 2"),
+             lambda state: has_sword(state, player))

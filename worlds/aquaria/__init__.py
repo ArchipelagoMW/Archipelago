@@ -117,25 +117,23 @@ class AquariaWorld(World):
         Create an AquariaItem using 'name' as item name.
         """
         result: AquariaItem
-        try:
-            data = item_table[name]
-            classification: ItemClassification = ItemClassification.useful
-            if data.type == ItemType.JUNK:
-                classification = ItemClassification.filler
-            elif data.type == ItemType.PROGRESSION:
-                classification = ItemClassification.progression
-            result = AquariaItem(name, classification, data.id, self.player)
-        except BaseException:
-            raise Exception('The item ' + name + ' is not valid.')
+        data = item_table[name]
+        classification: ItemClassification = ItemClassification.useful
+        if data.type == ItemType.JUNK:
+            classification = ItemClassification.filler
+        elif data.type == ItemType.PROGRESSION:
+            classification = ItemClassification.progression
+        result = AquariaItem(name, classification, data.id, self.player)
 
         return result
 
-    def __pre_fill_item(self, item_name: str, location_name: str, precollected) -> None:
+    def __pre_fill_item(self, item_name: str, location_name: str, precollected,
+                        itemClassification: ItemClassification = ItemClassification.useful) -> None:
         """Pre-assign an item to a location"""
         if item_name not in precollected:
             self.exclude.append(item_name)
             data = item_table[item_name]
-            item = AquariaItem(item_name, ItemClassification.useful, data.id, self.player)
+            item = AquariaItem(item_name, itemClassification, data.id, self.player)
             self.multiworld.get_location(location_name, self.player).place_locked_item(item)
 
     def get_filler_item_name(self):
@@ -164,7 +162,8 @@ class AquariaWorld(World):
             self.__pre_fill_item("Transturtle Abyss right", "Abyss right area, Transturtle", precollected)
             self.__pre_fill_item("Transturtle Final Boss", "Final Boss area, Transturtle", precollected)
             # The last two are inverted because in the original game, they are special turtle that communicate directly
-            self.__pre_fill_item("Transturtle Simon Says", "Arnassi Ruins, Transturtle", precollected)
+            self.__pre_fill_item("Transturtle Simon Says", "Arnassi Ruins, Transturtle", precollected,
+                                 ItemClassification.progression)
             self.__pre_fill_item("Transturtle Arnassi Ruins", "Simon Says area, Transturtle", precollected)
         for name, data in item_table.items():
             if name not in self.exclude:
@@ -204,11 +203,16 @@ class AquariaWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {"ingredientReplacement": self.ingredients_substitution,
-                "aquarianTranslate": bool(self.options.aquarian_translation.value),
+                "aquarian_translate": bool(self.options.aquarian_translation.value),
+                "blind_goal": bool(self.options.blind_goal.value),
                 "secret_needed": self.options.objective.value > 0,
                 "minibosses_to_kill": self.options.mini_bosses_to_beat.value,
                 "bigbosses_to_kill": self.options.big_bosses_to_beat.value,
                 "skip_first_vision": bool(self.options.skip_first_vision.value),
                 "unconfine_home_water_energy_door": self.options.unconfine_home_water.value in [1, 3],
                 "unconfine_home_water_transturtle": self.options.unconfine_home_water.value in [2, 3],
+                "bind_song_needed_to_get_under_rock_bulb": bool(self.options.bind_song_needed_to_get_under_rock_bulb),
+                "no_progression_hard_or_hidden_locations": bool(self.options.no_progression_hard_or_hidden_locations),
+                "light_needed_to_get_to_dark_places": bool(self.options.light_needed_to_get_to_dark_places),
+                "turtle_randomizer": self.options.turtle_randomizer.value,
                 }
