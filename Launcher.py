@@ -20,7 +20,8 @@ import urllib.parse
 import webbrowser
 from os.path import isfile
 from shutil import which
-from typing import Callable, Optional, Sequence, Tuple, Union
+from typing import Callable, Optional, Sequence, Tuple, Union, Any
+
 
 if __name__ == "__main__":
     import ModuleUpdate
@@ -114,7 +115,7 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
     url = urllib.parse.urlparse(path)
     queries = urllib.parse.parse_qs(url.query)
     launch_args = (path, *launch_args)
-    client_component = None
+    client_component = []
     text_client_component = None
     if "game" in queries:
         game = queries["game"][0]
@@ -122,11 +123,15 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
         game = "Archipelago"
     for component in components:
         if component.supports_uri and component.game_name == game:
-            client_component = component
+            client_component.append(component)
         elif component.display_name == "Text Client":
             text_client_component = component
 
-    from kvui import MDApp, MDButton, MDBoxLayout, MDLabel, Clock, Window
+    from kvui import MDApp, MDButton, MDButtonText, MDBoxLayout, MDLabel, Clock, Window
+    from kivymd.uix.dialog import (MDDialog, MDDialogIcon, MDDialogHeadlineText,
+                                   MDDialogContentContainer, MDDialogSupportingText)
+    from kivymd.uix.list import MDListItem, MDListItemLeadingIcon, MDListItemSupportingText
+    from kivymd.uix.divider import MDDivider
 
     class Popup(MDApp):
         timer_label: MDLabel
@@ -152,13 +157,13 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
                 button_row = MDBoxLayout(orientation="horizontal", size_hint=(1, 0.4))
 
                 text_client_button = MDButton(
-                    text=text_client_component.display_name,
+                    MDButtonText(text_client_component.display_name),
                     on_release=lambda *args: run_component(text_client_component, *launch_args)
                 )
                 button_row.add_widget(text_client_button)
 
                 game_client_button = MDButton(
-                    text=client_component.display_name,
+                    MDButtonText(client_component.display_name),
                     on_release=lambda *args: run_component(client_component, *launch_args)
                 )
                 button_row.add_widget(game_client_button)
@@ -167,26 +172,58 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
 
             return layout
 
-        def update_label(self, dt):
-            if self.remaining_time > 1:
-                # countdown the timer and string replace the number
-                self.remaining_time -= 1
-                self.timer_label.text = self.timer_label.text.replace(
-                    str(self.remaining_time + 1), str(self.remaining_time)
-                )
-            else:
-                # our timer is finished so launch text client and close down
-                run_component(text_client_component, *launch_args)
-                Clock.unschedule(self.update_label)
-                MDApp.get_running_app().stop()
-                Window.close()
-
         def _stop(self, *largs):
             # see run_gui Launcher _stop comment for details
             self.root_window.close()
             super()._stop(*largs)
 
-    Popup().run()
+    # Popup().run()
+
+    if not client_component:
+        popup_text = MDDialogSupportingText(text=(f"A game client able to parse URIs was not detected for {game}.\n"
+                              f"Launching Text Client in 7 seconds..."))
+        popup_text.remaining_time = 7
+
+        def update_label(dt):
+            if popup_text.remaining_time > 1:
+                # countdown the timer and string replace the number
+                popup_text.remaining_time -= 1
+                popup_text.text = popup_text.text.replace(
+                    str(popup_text.remaining_time + 1), str(popup_text.remaining_time)
+                )
+            else:
+                # our timer is finished so launch text client and close down
+                run_component(text_client_component, *launch_args)
+                Clock.unschedule(update_label)
+                MDApp.get_running_app().stop()
+                Window.close()
+
+        Clock.schedule_interval(update_label, 1)
+
+        component_buttons = []
+    else:
+        popup_text = MDDialogSupportingText(text="Select client to open and connect with."),
+        component_buttons = [MDDivider()]
+        for component in [text_client_component, *client_component]:
+            component_buttons.append(MDButton(
+                MDButtonText(text=component.display_name),
+                on_release= lambda *args, comp=component: run_component(comp, *launch_args),
+                style="text"
+            ))
+        component_buttons.append(MDDivider())
+
+    MDDialog(
+        # Headline
+        MDDialogHeadlineText(text="Connect to Multiworld"),
+        # Text
+        popup_text,
+        # Content
+        MDDialogContentContainer(
+            *component_buttons,
+            orientation="vertical"
+        ),
+
+    ).open()
 
 
 def identify(path: Union[None, str]) -> Tuple[Union[None, str], Union[None, Component]]:
@@ -255,7 +292,7 @@ def create_shortcut(button, component: Component):
 refresh_components: Optional[Callable[[], None]] = None
 
 
-def run_gui():
+def run_gui(path: str, args: Any):
     from kvui import (MDApp, MDFloatLayout, MDGridLayout, MDButton, MDLabel, MDButtonText, MDButtonIcon, ScrollBox,
                       ContainerLayout, Widget, MDBoxLayout)
     from kivy.core.window import Window
@@ -276,11 +313,13 @@ def run_gui():
         grid: MDGridLayout
         button_layout: Optional[ScrollBox] = None
 
-        def __init__(self, ctx=None):
+        def __init__(self, ctx=None, path=None, args=None):
             self.title = self.base_title + " " + Utils.__version__
             self.ctx = ctx
             self.icon = r"data/icon.png"
             self.favorites = []
+            self.launch_uri = path
+            self.launch_args = args
             persistent = Utils.persistent_load()
             if "launcher" in persistent:
                 if "favorites" in persistent["launcher"]:
@@ -395,6 +434,7 @@ def run_gui():
             self.button_layout = ScrollBox()
             self.button_layout.layout.orientation = "vertical"
             self.button_layout.layout.spacing = 10
+            self.button_layout.scroll_wheel_distance = 40
             self.grid.add_widget(self.button_layout)
             self.grid.padding = 10
             self.grid.spacing = 5
@@ -446,6 +486,12 @@ def run_gui():
 
             return self.top_screen
 
+        def on_start(self):
+            if self.launch_uri:
+                handle_uri(self.launch_uri, self.launch_args)
+                self.launch_uri = None
+                self.launch_args = None
+
         @staticmethod
         def component_action(button):
             MDSnackbar(MDSnackbarText(text="Opening in a new window..."), y=dp(24), pos_hint={"center_x": 0.5},
@@ -473,7 +519,7 @@ def run_gui():
             Utils.persistent_store("launcher", "favorites", self.favorites)
             super().on_stop()
 
-    Launcher().run()
+    Launcher(path=path, args=args).run()
 
     # avoiding Launcher reference leak
     # and don't try to do something with widgets after window closed
@@ -500,16 +546,14 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
 
     path = args.get("Patch|Game|Component|url", None)
     if path is not None:
-        if path.startswith("archipelago://"):
-            handle_uri(path, args.get("args", ()))
-            return
-        file, component = identify(path)
-        if file:
-            args['file'] = file
-        if component:
-            args['component'] = component
-        if not component:
-            logging.warning(f"Could not identify Component responsible for {path}")
+        if not path.startswith("archipelago://"):
+            file, component = identify(path)
+            if file:
+                args['file'] = file
+            if component:
+                args['component'] = component
+            if not component:
+                logging.warning(f"Could not identify Component responsible for {path}")
 
     if args["update_settings"]:
         update_settings()
@@ -518,7 +562,7 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
     elif "component" in args:
         run_component(args["component"], *args["args"])
     elif not args["update_settings"]:
-        run_gui()
+        run_gui(path, args.get("args", ()))
 
 
 if __name__ == '__main__':
