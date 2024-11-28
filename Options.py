@@ -348,7 +348,7 @@ class NumericOption(Option[int], abc.ABC):
     def __pos__(self) -> int:
         return +(self.value)
 
-    def __pow__(self, exponent: complex, modulus: typing.Optional[int] = None) -> typing.Any:
+    def __pow__(self, exponent: complex, modulus: int | None = None) -> typing.Any:
         if modulus is None:
             return self.value ** exponent
         assert isinstance(exponent, int)
