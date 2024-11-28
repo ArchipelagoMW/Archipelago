@@ -2,7 +2,7 @@ import json
 import os
 from typing import Any, Dict
 from Fill import distribute_items_restrictive
-from ..PrimeOptions import DoorColorRandomization
+from ..PrimeOptions import BlastShieldRandomization, DoorColorRandomization
 from ..Config import make_config
 from . import MetroidPrimeTestBase
 
@@ -65,7 +65,7 @@ class TestAllRandomizedOutput(MetroidPrimeTestBase):
     options = {
         "elevator_randomization": True,
         "door_color_randomization": DoorColorRandomization.option_regional,
-        "blast_shield_randomization": "mix_it_up",
+        "blast_shield_randomization": BlastShieldRandomization.option_mix_it_up,
     }
 
     def test_output_generates_correctly_with_all_randomized(self) -> None:

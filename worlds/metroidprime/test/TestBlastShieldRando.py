@@ -1,6 +1,6 @@
 import math
 from Fill import distribute_items_restrictive
-from ..PrimeOptions import DoorColorRandomization
+from ..PrimeOptions import BlastShieldRandomization, DoorColorRandomization
 from ..data.DoorData import get_door_data_by_room_names
 from ..data.BlastShieldRegions import get_valid_blast_shield_regions_by_area
 from ..data.RoomData import AreaData
@@ -47,7 +47,7 @@ beam_combo_items = [
 
 class TestNoBlastShieldRando(MetroidPrimeTestBase):
     options = {
-        "blast_shield_randomization": "none",
+        "blast_shield_randomization": BlastShieldRandomization.option_none
     }
 
     def test_all_blast_shields_are_not_randomized(self):
@@ -90,7 +90,7 @@ class TestNoBlastShieldRando(MetroidPrimeTestBase):
 
 
 class TestReplaceBlastShieldRando(MetroidPrimeTestBase):
-    options = {"blast_shield_randomization": "replace_existing"}
+    options = {"blast_shield_randomization": BlastShieldRandomization.option_replace_existing}
 
     def test_blast_shield_mapping_is_generated_for_each_vanilla_door(self):
         world: "MetroidPrimeWorld" = self.world
@@ -157,7 +157,7 @@ class TestReplaceBlastShieldRando(MetroidPrimeTestBase):
 class TestBlastShieldMapping(MetroidPrimeTestBase):
     run_default_tests = False  # type: ignore
     options = {
-        "blast_shield_randomization": "replace_existing",
+        "blast_shield_randomization": BlastShieldRandomization.option_replace_existing,
         "blast_shield_available_types": "all",
         "blast_shield_mapping": {
             "Tallon Overworld": {
@@ -211,7 +211,7 @@ class TestBlastShieldMapping(MetroidPrimeTestBase):
 class TestBlastShieldMappingWithProgressiveBeams(MetroidPrimeTestBase):
     run_default_tests = False  # type: ignore
     options = {
-        "blast_shield_randomization": "replace_existing",
+        "blast_shield_randomization": BlastShieldRandomization.option_replace_existing,
         "blast_shield_available_types": "all",
         "missile_launcher": 1,
         "progressive_beam_upgrades": True,
@@ -255,7 +255,7 @@ class TestBlastShieldMappingWithProgressiveBeams(MetroidPrimeTestBase):
 
 class TestIncludeBeamCombos(MetroidPrimeTestBase):
     options = {
-        "blast_shield_randomization": "replace_existing",
+        "blast_shield_randomization": BlastShieldRandomization.option_replace_existing,
         "blast_shield_available_types": "all",
         "trick_difficulty": "easy",
     }
@@ -278,7 +278,7 @@ class TestIncludeBeamCombos(MetroidPrimeTestBase):
 
 class TestMixItUpBlastShieldRando(MetroidPrimeTestBase):
     options = {
-        "blast_shield_randomization": "mix_it_up",
+        "blast_shield_randomization": BlastShieldRandomization.option_mix_it_up,
         "blast_shield_frequency": "low",
         "trick_difficulty": "easy",
     }
@@ -417,8 +417,8 @@ class TestLockedDoorsWithDoorColorRandoAndBlastShieldRandomization(
     options = {
         "locked_door_count": 1,
         "blast_shield_frequency": "low",
-        "blast_shield_randomization": "mix_it_up",
-        "door_color_randomization": "global",
+        "blast_shield_randomization": BlastShieldRandomization.option_mix_it_up,
+        "door_color_randomization": DoorColorRandomization.option_global,
         "trick_difficulty": "medium",
     }
 
@@ -441,7 +441,7 @@ class TestLockedDoorsWithDoorColorRandoAndBlastShieldRandomization(
 class TestSubRegionUsesBlastShields(MetroidPrimeTestBase):
     run_default_tests = False  # type: ignore
     options = {
-        "blast_shield_randomization": "mix_it_up",
+        "blast_shield_randomization": BlastShieldRandomization.option_mix_it_up,
         "blast_shield_frequency": "low",
         "blast_shield_available_types": "all",
         "blast_shield_mapping": {
@@ -550,7 +550,7 @@ class TestSubRegionUsesBlastShields(MetroidPrimeTestBase):
 class TestBlastShieldsAndDoorColorRando(MetroidPrimeTestBase):
     run_default_tests = False  # type: ignore
     options = {
-        "blast_shield_randomization": "mix_it_up",
+        "blast_shield_randomization": BlastShieldRandomization.option_mix_it_up,
         "blast_shield_frequency": "low",
         "blast_shield_available_types": "all",
         "blast_shield_mapping": {

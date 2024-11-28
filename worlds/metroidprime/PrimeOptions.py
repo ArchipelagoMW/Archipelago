@@ -14,8 +14,9 @@ from Options import (
     OptionGroup,
 )
 from dataclasses import dataclass
+
+from .Enum import StartRoomDifficulty
 from .LogicCombat import CombatLogicDifficulty
-from .data.StartRoomData import StartRoomDifficulty
 
 
 class HudColor(Enum):

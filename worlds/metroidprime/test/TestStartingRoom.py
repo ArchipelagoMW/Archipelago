@@ -1,8 +1,10 @@
 from typing import List
 from Fill import distribute_items_restrictive
+from ..Enum import StartRoomDifficulty
+from ..PrimeOptions import BlastShieldRandomization
 from ..Items import SuitUpgrade
 from ..data.RoomNames import RoomName
-from ..data.StartRoomData import StartRoomDifficulty, all_start_rooms
+from ..data.StartRoomData import all_start_rooms
 from . import MetroidPrimeTestBase
 from .. import MetroidPrimeWorld
 
@@ -131,7 +133,7 @@ class TestNormalStartingRoomWithBlastShieldRandoMixItUp(MetroidPrimeTestBase):
     run_default_tests = False  # type: ignore
     options = {
         "starting_room": StartRoomDifficulty.Normal.value,
-        "blast_shield_randomization": "mix_it_up",
+        "blast_shield_randomization": BlastShieldRandomization.option_mix_it_up,
         "elevator_randomization": True,
     }
 

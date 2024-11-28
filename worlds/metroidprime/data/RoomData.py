@@ -7,6 +7,7 @@ from BaseClasses import (
     LocationProgressType,
     Region,
 )
+from ..PrimeOptions import DoorColorRandomization
 from ..BlastShieldRando import BlastShieldType
 from ..DoorRando import DoorLockType
 from ..Items import ProgressiveUpgrade, SuitUpgrade
@@ -214,7 +215,8 @@ class AreaData:
         color_mapping: Dict[str, str] = (
             world.door_color_mapping[self.area_name].type_mapping
             if world.door_color_mapping
-            and world.options.door_color_randomization != "none"
+            and world.options.door_color_randomization
+            != DoorColorRandomization.option_none
             else {}
         )
         for room_name, room_data in self.rooms.items():
@@ -226,7 +228,8 @@ class AreaData:
                     continue
 
                 if (
-                    world.options.door_color_randomization != "none"
+                    world.options.door_color_randomization
+                    != DoorColorRandomization.option_none
                     and door_data.exclude_from_rando is False
                     and door_data.defaultLock.value in color_mapping
                 ):

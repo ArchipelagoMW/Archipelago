@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 class TestNoDoorRando(MetroidPrimeTestBase):
     options = {
-        "door_color_randomization": "none",
+        "door_color_randomization": DoorColorRandomization.option_none,
     }
 
     def test_all_door_types_are_not_randomized(self):
@@ -38,7 +38,7 @@ class TestNoDoorRando(MetroidPrimeTestBase):
 
 class TestStartingBeamRandoWithNoDoorRando(MetroidPrimeTestBase):
     options = {
-        "door_color_randomization": "none",
+        "door_color_randomization": DoorColorRandomization.option_none,
         "randomize_starting_beam": True,
         "include_power_beam_doors": True,
     }
@@ -46,7 +46,7 @@ class TestStartingBeamRandoWithNoDoorRando(MetroidPrimeTestBase):
 
 class TestGlobalDoorRando(MetroidPrimeTestBase):
     options = {
-        "door_color_randomization": "global",
+        "door_color_randomization": DoorColorRandomization.option_global,
     }
 
     def test_all_door_types_are_randomized_globally(self):
@@ -131,7 +131,7 @@ class TestRegionalDoorRando(MetroidPrimeTestBase):
 
 class TestDoorRandoWithDifferentStartRoomNonRequiredBeam(MetroidPrimeTestBase):
     options = {
-        "door_color_randomization": "global",
+        "door_color_randomization": DoorColorRandomization.option_global,
         "starting_room_name": RoomName.Tower_Chamber.value,
     }
 
@@ -150,7 +150,7 @@ class TestDoorRandoWithDifferentStartRoomNonRequiredBeam(MetroidPrimeTestBase):
 
 class TestDoorRandoWithDifferentStartRoomWithRequiredBeam(MetroidPrimeTestBase):
     options = {
-        "door_color_randomization": "global",
+        "door_color_randomization": DoorColorRandomization.option_global,
         "starting_room_name": RoomName.Save_Station_B.value,
     }
 
@@ -169,7 +169,7 @@ class TestDoorRandoWithDifferentStartRoomWithRequiredBeam(MetroidPrimeTestBase):
 
 class TestGlobalDoorRandoWithBombAndPowerDoors(MetroidPrimeTestBase):
     options = {
-        "door_color_randomization": "global",
+        "door_color_randomization": DoorColorRandomization.option_global,
         "include_morph_ball_bomb_doors": True,
         "include_power_beam_doors": True,
     }

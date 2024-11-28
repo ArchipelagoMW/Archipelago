@@ -1,7 +1,10 @@
 import copy
 from dataclasses import dataclass, field
-from enum import Enum
 from typing import TYPE_CHECKING, Callable, Dict, List, Optional, cast
+
+from ..Enum import StartRoomDifficulty
+
+from ..PrimeOptions import BlastShieldRandomization, DoorColorRandomization
 
 from ..DoorRando import BEAM_TO_LOCK_MAPPING
 
@@ -18,13 +21,6 @@ BEAM_ITEMS = [
     SuitUpgrade.Wave_Beam,
     SuitUpgrade.Plasma_Beam,
 ]
-
-
-class StartRoomDifficulty(Enum):
-    Normal = -1
-    Safe = 0
-    Dangerous = 1
-    Buckle_Up = 2
 
 
 @dataclass
@@ -343,15 +339,17 @@ def _has_elevator_rando(world: "MetroidPrimeWorld") -> bool:
 
 
 def _has_no_pre_scan_elevators_with_shuffle_scan(world: "MetroidPrimeWorld") -> bool:
-    return bool(not world.options.pre_scan_elevators.value
-                and world.options.shuffle_scan_visor.value)
+    return bool(
+        not world.options.pre_scan_elevators.value
+        and world.options.shuffle_scan_visor.value
+    )
 
 
 def _has_options_that_allow_more_landing_site_checks(
     world: "MetroidPrimeWorld",
 ) -> bool:
     return (
-        world.options.blast_shield_randomization != "none"
+        world.options.blast_shield_randomization != BlastShieldRandomization.option_none
         or world.options.trick_difficulty != "no_tricks"
     ) and not world.options.elevator_randomization
 
@@ -468,7 +466,7 @@ def init_starting_beam(world: "MetroidPrimeWorld"):
 
     # Remap beam to a new color based on door randomization
     elif (
-        world.options.door_color_randomization != "none"
+        world.options.door_color_randomization != DoorColorRandomization.option_none
         and loadout_beam
         and loadout_beam != SuitUpgrade.Power_Beam
         and not world.starting_room_data.force_starting_beam

@@ -1,6 +1,7 @@
+from ..Enum import StartRoomDifficulty
 from ..data.AreaNames import MetroidPrimeArea
 from ..data.RoomNames import RoomName
-from ..data.StartRoomData import StartRoomData, StartRoomDifficulty
+from ..data.StartRoomData import StartRoomData
 from ..data.Transports import get_random_elevator_mapping
 from . import MetroidPrimeTestBase
 

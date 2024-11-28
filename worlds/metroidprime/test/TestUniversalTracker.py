@@ -1,5 +1,5 @@
+from ..Enum import StartRoomDifficulty
 from ..PrimeOptions import DoorColorRandomization
-from ..data.StartRoomData import StartRoomDifficulty
 from ..Items import SuitUpgrade
 from ..data.RoomNames import RoomName
 from typing import Any, TYPE_CHECKING, Dict

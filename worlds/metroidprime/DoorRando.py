@@ -1,6 +1,8 @@
 import copy
 from enum import Enum
 
+from .PrimeOptions import DoorColorRandomization
+
 from .WorldMapping import AreaMapping, WorldMapping
 
 from .data.RoomNames import RoomName
@@ -105,7 +107,7 @@ def get_world_door_mapping(world: "MetroidPrimeWorld") -> WorldDoorColorMapping:
 
     assert world.starting_room_data is not None
 
-    if world.options.door_color_randomization == "global":
+    if world.options.door_color_randomization == DoorColorRandomization.option_global:
         global_mapping = generate_random_door_color_mapping(
             world, world.starting_room_data.area
         )

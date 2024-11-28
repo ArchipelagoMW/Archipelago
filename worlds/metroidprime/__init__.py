@@ -195,7 +195,7 @@ class MetroidPrimeWorld(World):
 
         # Randomize Door Colors
         if (
-            self.options.door_color_randomization != "none"
+            self.options.door_color_randomization != DoorColorRandomization.option_none
             and not self.door_color_mapping
         ):
             self.door_color_mapping = get_world_door_mapping(self)
