@@ -211,7 +211,7 @@ class MetroidPrimeWorld(World):
                 self.options.blast_shield_mapping.value
             )
         elif (
-            cast(str, self.options.blast_shield_randomization.value)
+            self.options.blast_shield_randomization.value
             != BlastShieldRandomization.option_none
             or self.options.locked_door_count > 0
         ):
@@ -368,7 +368,7 @@ class MetroidPrimeWorld(World):
                 spoiler_handle.write(f"    {door} -> {color}\n")
 
         if (
-            cast(str, self.options.blast_shield_randomization.value)
+            self.options.blast_shield_randomization.value
             != BlastShieldRandomization.option_none
             or self.options.locked_door_count > 0
         ):
