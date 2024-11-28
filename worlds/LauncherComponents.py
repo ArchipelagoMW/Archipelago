@@ -35,7 +35,7 @@ class Component:
     script_name: Optional[str]
     """Recommended to use func instead; Name of file to run when the component is called"""
     frozen_name: Optional[str]
-    """Recommended to use func instead; Name of the frozen EXE file for this component"""
+    """Recommended to use func instead; Name of the frozen executable file for this component"""
     icon: str  # just the name, no suffix
     """Lookup ID for the icon path in LauncherComponents.icon_paths"""
     cli: bool
