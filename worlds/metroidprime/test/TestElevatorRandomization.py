@@ -55,7 +55,6 @@ class AllowListElevatorRando(MetroidPrimeTestBase):
             },
         )
         self.world.starting_room_data = fake_start
-        self.world.options.elevator_mapping.value = {}
         mapping = get_random_elevator_mapping(self.world)
         assert (
             mapping[MetroidPrimeArea.Tallon_Overworld.value][

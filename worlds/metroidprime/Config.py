@@ -214,7 +214,7 @@ def make_config(world: "MetroidPrimeWorld") -> Dict[str, Any]:
             "removeHiveMecha": bool(options.remove_hive_mecha.value),
             "multiworldDolPatches": False,
             "startingItems": {
-                "combatVisor": True,  # starting_inventory(world, "Combat Visor"),
+                "combatVisor": True,
                 "powerSuit": True,
                 "powerBeam": starting_inventory(world, SuitUpgrade.Power_Beam.value)
                 or starting_inventory(

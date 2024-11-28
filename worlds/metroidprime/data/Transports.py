@@ -211,14 +211,6 @@ def get_random_elevator_mapping(
                     source_area, source_elevator, target_area, destination_elevator
                 )
 
-    # Distribute the plando elevators
-    plando_elevators = world.options.elevator_mapping.value
-    for area, elevators in plando_elevators.items():
-        for source, dest in elevators.items():
-            source = get_room_name_by_transport_name(source)
-            dest = get_room_name_by_transport_name(dest)
-            one_way_map_elevator(area, source, dest)
-
     # Distribute denied elevators
     for source_area, elevators in denied_elevators.items():
         for source_elevator in elevators:

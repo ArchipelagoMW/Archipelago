@@ -2,11 +2,11 @@ from ..data.StartRoomData import StartRoomDifficulty
 from ..Items import SuitUpgrade
 from ..data.RoomNames import RoomName
 from typing import Any, TYPE_CHECKING, Dict
-from . import MetroidPrimeTestBase
+from . import MetroidPrimeUniversalTrackerTestBase
 
 if TYPE_CHECKING:
     from .. import MetroidPrimeWorld
-options: Dict[str, Any] = {
+slot_data: Dict[str, Any] = {
     "door_color_randomization": "regional",
     "starting_room": StartRoomDifficulty.Safe.value,
     "include_power_beam_doors": True,
@@ -97,10 +97,10 @@ options: Dict[str, Any] = {
 }
 
 
-class TestUniversalTracker(MetroidPrimeTestBase):
+class TestUniversalTracker(MetroidPrimeUniversalTrackerTestBase):
     auto_construct = False
     run_default_tests = False  # type: ignore
-    options = options
+    options = slot_data
 
     def test_door_randomization_is_preserved(self):
         self.world_setup()  # type: ignore
@@ -143,5 +143,6 @@ class TestUniversalTracker(MetroidPrimeTestBase):
     def test_elevator_mapping_is_preserved(self):
         self.world_setup()  # type: ignore
         world: "MetroidPrimeWorld" = self.world
+        self.init_passhthrough(slot_data)
         self.world.generate_early()
-        self.assertEqual(world.elevator_mapping, self.options["elevator_mapping"])
+        self.assertEqual(world.elevator_mapping, slot_data["elevator_mapping"])

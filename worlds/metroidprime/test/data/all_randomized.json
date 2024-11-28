@@ -240,7 +240,7 @@
       "Artifact of Chozo": "The &push;&main-color=#c300ff;Artifact of Chozo&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Magmoor Caverns: Shore Tunnel&pop;.",
       "Artifact of Nature": "The &push;&main-color=#c300ff;Artifact of Nature&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Phendrana Drifts: Quarantine Cave&pop;.",
       "Artifact of Sun": "The &push;&main-color=#c300ff;Artifact of Sun&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Chozo Ruins: Hall of the Elders&pop;.",
-      "Artifact of World": "The &push;&main-color=#c300ff;Artifact of World&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Tallon Overworld: Hydro Access Tunnel&pop;.",
+      "Artifact of World": "The &push;&main-color=#c300ff;Artifact of World&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Magmoor Caverns: Fiery Shores - Morph Track&pop;.",
       "Artifact of Spirit": "The &push;&main-color=#c300ff;Artifact of Spirit&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Tallon Overworld: Landing Site&pop;.",
       "Artifact of Newborn": "The &push;&main-color=#c300ff;Artifact of Newborn&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Phendrana Drifts: Gravity Chamber - Grapple Ledge&pop;.",
       "Artifact of Truth": "The &push;&main-color=#c300ff;Artifact of Truth&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Phendrana Drifts: Ruined Courtyard&pop;.",
@@ -256,10 +256,10 @@
     "Tallon Overworld": {
       "transports": {
         "Tallon Overworld North (Tallon Canyon)": "Chozo Ruins West (Main Plaza)",
-        "Tallon Overworld East (Frigate Crash Site)": "Magmoor Caverns North (Lava Lake)",
-        "Tallon Overworld South (Great Tree Hall, Upper)": "Phazon Mines East (Main Quarry)",
-        "Tallon Overworld West (Root Cave)": "Chozo Ruins East (Reflecting Pool, Save Station)",
-        "Tallon Overworld South (Great Tree Hall, Lower)": "Magmoor Caverns South (Magmoor Workstation, Debris)",
+        "Tallon Overworld West (Root Cave)": "Magmoor Caverns East (Twin Fires)",
+        "Tallon Overworld East (Frigate Crash Site)": "Chozo Ruins East (Reflecting Pool, Save Station)",
+        "Tallon Overworld South (Great Tree Hall, Upper)": "Chozo Ruins South (Reflecting Pool, Far End)",
+        "Tallon Overworld South (Great Tree Hall, Lower)": "Phazon Mines East (Main Quarry)",
         "Artifact Temple": "Crater Entry Point"
       },
       "rooms": {
@@ -306,10 +306,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Power Bomb Expansion",
-              "hudmemoText": "Power Bomb Expansion Acquired!",
+              "scanText": "Energy Tank",
+              "hudmemoText": "Energy Tank Acquired!",
               "currIncrease": 0,
-              "model": "Power Bomb Expansion",
+              "model": "Energy Tank",
               "showIcon": true
             }
           ],
@@ -348,10 +348,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Energy Tank",
-              "hudmemoText": "Energy Tank Acquired!",
+              "scanText": "Power Bomb Expansion",
+              "hudmemoText": "Power Bomb Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Energy Tank",
+              "model": "Power Bomb Expansion",
               "showIcon": true
             }
           ],
@@ -404,10 +404,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Artifact of World",
-              "hudmemoText": "Artifact of World Acquired!",
+              "scanText": "X-Ray Visor",
+              "hudmemoText": "X-Ray Visor Acquired!",
               "currIncrease": 0,
-              "model": "Artifact of World",
+              "model": "X-Ray Visor",
               "showIcon": true
             }
           ],
@@ -472,10 +472,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Power Bomb Expansion",
-              "hudmemoText": "Power Bomb Expansion Acquired!",
+              "scanText": "Energy Tank",
+              "hudmemoText": "Energy Tank Acquired!",
               "currIncrease": 0,
-              "model": "Power Bomb Expansion",
+              "model": "Energy Tank",
               "showIcon": true
             }
           ],
@@ -644,9 +644,9 @@
     "Chozo Ruins": {
       "transports": {
         "Chozo Ruins West (Main Plaza)": "Tallon Overworld North (Tallon Canyon)",
-        "Chozo Ruins East (Reflecting Pool, Save Station)": "Tallon Overworld West (Root Cave)",
-        "Chozo Ruins South (Reflecting Pool, Far End)": "Phazon Mines West (Phazon Processing Center)",
-        "Chozo Ruins North (Sun Tower)": "Magmoor Caverns South (Magmoor Workstation, Save Station)"
+        "Chozo Ruins North (Sun Tower)": "Magmoor Caverns North (Lava Lake)",
+        "Chozo Ruins East (Reflecting Pool, Save Station)": "Tallon Overworld East (Frigate Crash Site)",
+        "Chozo Ruins South (Reflecting Pool, Far End)": "Tallon Overworld South (Great Tree Hall, Upper)"
       },
       "rooms": {
         "Antechamber": {
@@ -773,10 +773,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Missile Expansion",
-              "hudmemoText": "Missile Expansion Acquired!",
+              "scanText": "Wave Beam",
+              "hudmemoText": "Wave Beam Acquired!",
               "currIncrease": 0,
-              "model": "Missile",
+              "model": "Wave Beam",
               "showIcon": true
             },
             {
@@ -810,10 +810,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Flamethrower",
-              "hudmemoText": "Flamethrower Acquired!",
+              "scanText": "Power Bomb Expansion",
+              "hudmemoText": "Power Bomb Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Flamethrower",
+              "model": "Power Bomb Expansion",
               "showIcon": true
             }
           ],
@@ -855,10 +855,10 @@
             },
             {
               "type": "Unknown Item 1",
-              "scanText": "Ice Beam",
-              "hudmemoText": "Ice Beam Acquired!",
+              "scanText": "Energy Tank",
+              "hudmemoText": "Energy Tank Acquired!",
               "currIncrease": 0,
-              "model": "Ice Beam",
+              "model": "Energy Tank",
               "showIcon": true
             }
           ],
@@ -1059,10 +1059,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Space Jump Boots",
-              "hudmemoText": "Space Jump Boots Acquired!",
+              "scanText": "Varia Suit",
+              "hudmemoText": "Varia Suit Acquired!",
               "currIncrease": 0,
-              "model": "Space Jump Boots",
+              "model": "Varia Suit",
               "showIcon": true
             }
           ],
@@ -1093,10 +1093,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Gravity Suit",
-              "hudmemoText": "Gravity Suit Acquired!",
+              "scanText": "Plasma Beam",
+              "hudmemoText": "Plasma Beam Acquired!",
               "currIncrease": 0,
-              "model": "Gravity Suit",
+              "model": "Plasma Beam",
               "showIcon": true
             }
           ],
@@ -1216,10 +1216,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Varia Suit",
-              "hudmemoText": "Varia Suit Acquired!",
+              "scanText": "Missile Expansion",
+              "hudmemoText": "Missile Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Varia Suit",
+              "model": "Missile",
               "showIcon": true
             }
           ],
@@ -1385,10 +1385,10 @@
             },
             {
               "type": "Unknown Item 1",
-              "scanText": "Plasma Beam",
-              "hudmemoText": "Plasma Beam Acquired!",
+              "scanText": "Charge Beam",
+              "hudmemoText": "Charge Beam Acquired!",
               "currIncrease": 0,
-              "model": "Plasma Beam",
+              "model": "Charge Beam",
               "showIcon": true
             }
           ],
@@ -1409,11 +1409,11 @@
     },
     "Magmoor Caverns": {
       "transports": {
-        "Magmoor Caverns North (Lava Lake)": "Tallon Overworld East (Frigate Crash Site)",
-        "Magmoor Caverns West (Monitor Station)": "Phendrana Drifts South (Quarantine Cave)",
-        "Magmoor Caverns South (Magmoor Workstation, Debris)": "Tallon Overworld South (Great Tree Hall, Lower)",
-        "Magmoor Caverns South (Magmoor Workstation, Save Station)": "Chozo Ruins North (Sun Tower)",
-        "Magmoor Caverns East (Twin Fires)": "Phendrana Drifts North (Phendrana Shorelines)"
+        "Magmoor Caverns North (Lava Lake)": "Chozo Ruins North (Sun Tower)",
+        "Magmoor Caverns West (Monitor Station)": "Phendrana Drifts North (Phendrana Shorelines)",
+        "Magmoor Caverns East (Twin Fires)": "Tallon Overworld West (Root Cave)",
+        "Magmoor Caverns South (Magmoor Workstation, Save Station)": "Phendrana Drifts South (Quarantine Cave)",
+        "Magmoor Caverns South (Magmoor Workstation, Debris)": "Phazon Mines West (Phazon Processing Center)"
       },
       "rooms": {
         "Burning Trail": {
@@ -1428,10 +1428,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Power Bomb Expansion",
-              "hudmemoText": "Power Bomb Expansion Acquired!",
+              "scanText": "Artifact of World",
+              "hudmemoText": "Artifact of World Acquired!",
               "currIncrease": 0,
-              "model": "Power Bomb Expansion",
+              "model": "Artifact of World",
               "showIcon": true
             },
             {
@@ -1667,10 +1667,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Energy Tank",
-              "hudmemoText": "Energy Tank Acquired!",
+              "scanText": "Flamethrower",
+              "hudmemoText": "Flamethrower Acquired!",
               "currIncrease": 0,
-              "model": "Energy Tank",
+              "model": "Flamethrower",
               "showIcon": true
             }
           ],
@@ -1696,10 +1696,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Energy Tank",
-              "hudmemoText": "Energy Tank Acquired!",
+              "scanText": "Gravity Suit",
+              "hudmemoText": "Gravity Suit Acquired!",
               "currIncrease": 0,
-              "model": "Energy Tank",
+              "model": "Gravity Suit",
               "showIcon": true
             }
           ],
@@ -1721,8 +1721,8 @@
     },
     "Phendrana Drifts": {
       "transports": {
-        "Phendrana Drifts South (Quarantine Cave)": "Magmoor Caverns West (Monitor Station)",
-        "Phendrana Drifts North (Phendrana Shorelines)": "Magmoor Caverns East (Twin Fires)"
+        "Phendrana Drifts North (Phendrana Shorelines)": "Magmoor Caverns West (Monitor Station)",
+        "Phendrana Drifts South (Quarantine Cave)": "Magmoor Caverns South (Magmoor Workstation, Save Station)"
       },
       "rooms": {
         "Aether Lab Entryway": {
@@ -1953,18 +1953,18 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "X-Ray Visor",
-              "hudmemoText": "X-Ray Visor Acquired!",
+              "scanText": "Space Jump Boots",
+              "hudmemoText": "Space Jump Boots Acquired!",
               "currIncrease": 0,
-              "model": "X-Ray Visor",
+              "model": "Space Jump Boots",
               "showIcon": true
             },
             {
               "type": "Unknown Item 1",
-              "scanText": "Energy Tank",
-              "hudmemoText": "Energy Tank Acquired!",
+              "scanText": "Power Bomb Expansion",
+              "hudmemoText": "Power Bomb Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Energy Tank",
+              "model": "Power Bomb Expansion",
               "showIcon": true
             }
           ],
@@ -1974,10 +1974,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Charge Beam",
-              "hudmemoText": "Charge Beam Acquired!",
+              "scanText": "Ice Beam",
+              "hudmemoText": "Ice Beam Acquired!",
               "currIncrease": 0,
-              "model": "Charge Beam",
+              "model": "Ice Beam",
               "showIcon": true
             }
           ],
@@ -2320,10 +2320,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Missile Expansion",
-              "hudmemoText": "Missile Expansion Acquired!",
+              "scanText": "Power Bomb Expansion",
+              "hudmemoText": "Power Bomb Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Missile",
+              "model": "Power Bomb Expansion",
               "showIcon": true
             }
           ],
@@ -2385,10 +2385,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Power Bomb Expansion",
-              "hudmemoText": "Power Bomb Expansion Acquired!",
+              "scanText": "Wavebuster",
+              "hudmemoText": "Wavebuster Acquired!",
               "currIncrease": 0,
-              "model": "Power Bomb Expansion",
+              "model": "Wavebuster",
               "showIcon": true
             }
           ],
@@ -2453,8 +2453,8 @@
     },
     "Phazon Mines": {
       "transports": {
-        "Phazon Mines East (Main Quarry)": "Tallon Overworld South (Great Tree Hall, Upper)",
-        "Phazon Mines West (Phazon Processing Center)": "Chozo Ruins South (Reflecting Pool, Far End)"
+        "Phazon Mines East (Main Quarry)": "Tallon Overworld South (Great Tree Hall, Lower)",
+        "Phazon Mines West (Phazon Processing Center)": "Magmoor Caverns South (Magmoor Workstation, Debris)"
       },
       "rooms": {
         "Central Dynamo": {
@@ -2613,10 +2613,10 @@
             },
             {
               "type": "Unknown Item 1",
-              "scanText": "Wavebuster",
-              "hudmemoText": "Wavebuster Acquired!",
+              "scanText": "Energy Tank",
+              "hudmemoText": "Energy Tank Acquired!",
               "currIncrease": 0,
-              "model": "Wavebuster",
+              "model": "Energy Tank",
               "showIcon": true
             }
           ],
@@ -2727,10 +2727,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Wave Beam",
-              "hudmemoText": "Wave Beam Acquired!",
+              "scanText": "Missile Expansion",
+              "hudmemoText": "Missile Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Wave Beam",
+              "model": "Missile",
               "showIcon": true
             }
           ],

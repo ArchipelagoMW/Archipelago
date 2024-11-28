@@ -188,9 +188,9 @@ class RemoveThermalRequirements(Choice):
 
 class StartingRoom(Choice):
     """Determines the starting room of the game. This will change your starting loadout depending on the room.
-    Normal: Start at the Talon Overworld Landing Site. If elevator randomization is enabled, or Shuffle Scan Visor + Don't Pre Scan Elevators and you do not have tricks or mix it up blast shield randomization enabled, this will switch to Save Station 1 in Chozo Ruins.
+    Normal: Start at the Talon Overworld Landing Site. Most randomization options, when enabled, will move the starting room to Save Station 1 in Chozo Ruins due to the restrictive nature of the landing site starting room.
     Safe: Start in rooms that will not require a significant combat challenge to progress from. Without disable_starting_room_bk_prevention enabled, this may assign you a new beam and an item in order to make the seed feasible
-    Buckle Up: Start in rooms that will pose a significant challenge to players with no energy tanks or suit upgrades. Fun for the aspiring masochist (less fun for their friends in BK).
+    Buckle Up: Start in rooms that will pose a significant challenge to players with no energy tanks or suit upgrades. Fun for the aspiring masochist (less fun for their friends waiting in BK).
     """
 
     display_name = "Starting Room Randomization"
@@ -230,14 +230,6 @@ class ElevatorRandomization(Toggle):
     """Randomizes the elevators between regions."""
 
     display_name = "Elevator Randomization"
-
-
-class ElevatorMapping(OptionDict):
-    """Which elevators go to which regions, only visible for spoiler."""
-
-    display_name = "Elevator Mapping"
-    visibility = Visibility.none
-    default = {}
 
 
 class DoorColorRandomization(Choice):
@@ -343,6 +335,7 @@ class RandomizeStartingBeam(Toggle):
 
 class StartingBeam(TextChoice):
     """Used to override the starting beam if Randomize Starting Beam is disabled, or to display the starting beam if it is enabled."""
+
     visibility = Visibility.spoiler
     display_name = "Starting Beam"
     default = "none"
@@ -463,7 +456,6 @@ class MetroidPrimeOptions(PerGameCommonOptions):
     shuffle_scan_visor: ShuffleScanVisor
     pre_scan_elevators: PreScanElevators
     elevator_randomization: ElevatorRandomization
-    elevator_mapping: ElevatorMapping
     door_color_randomization: DoorColorRandomization
     door_color_mapping: DoorColorMapping
     blast_shield_randomization: BlastShieldRandomization

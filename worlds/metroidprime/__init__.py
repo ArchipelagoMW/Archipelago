@@ -170,10 +170,14 @@ class MetroidPrimeWorld(World):
                         "local_early_items",
                         "priority_locations",
                         "exclude_locations",
+                        "elevator_mapping",
                     ]:
                         option.value = set(value)
                     else:
                         option.value = value
+
+                if key == "elevator_mapping":
+                    self.elevator_mapping = value
 
     def generate_early(self) -> None:
         if hasattr(self.multiworld, "re_gen_passthrough"):
@@ -220,11 +224,8 @@ class MetroidPrimeWorld(World):
             apply_blast_shield_mapping(self)
 
         # Randomize Elevators
-        if self.options.elevator_mapping:
-            self.elevator_mapping = self.options.elevator_mapping.value
-        elif self.options.elevator_randomization:
+        if self.options.elevator_randomization and not self.elevator_mapping:
             self.elevator_mapping = get_random_elevator_mapping(self)
-            self.options.elevator_mapping.value = self.elevator_mapping
 
         # Init starting inventory
         starting_items = generate_start_inventory(self)
@@ -325,6 +326,7 @@ class MetroidPrimeWorld(World):
             and not o.startswith("__")
         ]
         slot_data: Dict[str, Any] = self.options.as_dict(*non_cosmetic_options)
+        slot_data["elevator_mapping"] = self.elevator_mapping
 
         return slot_data
 
