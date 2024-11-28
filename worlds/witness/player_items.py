@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Dict, List, Set
 from BaseClasses import Item, ItemClassification, MultiWorld
 
 from .data import static_items as static_witness_items
-from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import (
     DoorItemDefinition,
     ItemCategory,
@@ -16,7 +15,7 @@ from .data.item_definition_classes import (
     ProgressiveItemDefinition,
     WeightedItemDefinition,
 )
-from .data.utils import build_weighted_int_list
+from .data.utils import build_weighted_int_list, cast_not_none
 from .locations import WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
 
@@ -42,7 +41,7 @@ class WitnessPlayerItems:
                  player_locations: WitnessPlayerLocations) -> None:
         """Adds event items after logic changes due to options"""
 
-        self._world: "WitnessWorld" = world
+        self._world: WitnessWorld = world
         self._multiworld: MultiWorld = world.multiworld
         self._player_id: int = world.player
         self._logic: WitnessPlayerLogic = player_logic
@@ -87,7 +86,8 @@ class WitnessPlayerItems:
                                      if data.classification == ItemClassification.useful}.items():
             if item_name in static_witness_items._special_usefuls:
                 continue
-            elif item_name == "Energy Capacity":
+
+            if item_name == "Energy Capacity":
                 self._mandatory_items[item_name] = NUM_ENERGY_UPGRADES
             elif isinstance(item_data.classification, ProgressiveItemDefinition):
                 self._mandatory_items[item_name] = len(item_data.mappings)
@@ -96,7 +96,7 @@ class WitnessPlayerItems:
 
         # Add event items to the item definition list for later lookup.
         for event_location in self._locations.EVENT_LOCATION_TABLE:
-            location_name = player_logic.EVENT_ITEM_PAIRS[event_location]
+            location_name = player_logic.EVENT_ITEM_PAIRS[event_location][0]
             self.item_data[location_name] = ItemData(None, ItemDefinition(0, ItemCategory.EVENT),
                                                      ItemClassification.progression, False)
 
@@ -154,16 +154,12 @@ class WitnessPlayerItems:
         """
         output: Set[str] = set()
         if self._world.options.shuffle_symbols:
-            output = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
+            discards_on = self._world.options.shuffle_discarded_panels
+            mode = self._world.options.puzzle_randomization.current_key
 
-            if self._world.options.shuffle_discarded_panels:
-                if self._world.options.puzzle_randomization == "sigma_expert":
-                    output.add("Arrows")
-                else:
-                    output.add("Triangles")
-
-            # Replace progressive items with their parents.
-            output = {static_witness_logic.get_parent_progressive_item(item) for item in output}
+            output = static_witness_items.ALWAYS_GOOD_SYMBOL_ITEMS | static_witness_items.MODE_SPECIFIC_GOOD_ITEMS[mode]
+            if discards_on:
+                output |= static_witness_items.MODE_SPECIFIC_GOOD_DISCARD_ITEMS[mode]
 
         # Remove items that are mentioned in any plando options. (Hopefully, in the future, plando will get resolved
         #   before create_items so that we'll be able to check placed items instead of just removing all items mentioned
@@ -184,15 +180,16 @@ class WitnessPlayerItems:
                                 output -= {item for item, weight in inner_item.items() if weight}
 
         # Sort the output for consistency across versions if the implementation changes but the logic does not.
-        return sorted(list(output))
+        return sorted(output)
 
     def get_door_ids_in_pool(self) -> List[int]:
         """
         Returns the total set of all door IDs that are controlled by items in the pool.
         """
         output: List[int] = []
-        for item_name, item_data in {name: data for name, data in self.item_data.items()
-                                     if isinstance(data.definition, DoorItemDefinition)}.items():
+        for item_name, item_data in dict(self.item_data.items()).items():
+            if not isinstance(item_data.definition, DoorItemDefinition):
+                continue
             output += [int(hex_string, 16) for hex_string in item_data.definition.panel_id_hexes]
 
         return output
@@ -201,18 +198,21 @@ class WitnessPlayerItems:
         """
         Returns the item IDs of symbol items that were defined in the configuration file but are not in the pool.
         """
-        return [data.ap_code for name, data in static_witness_items.ITEM_DATA.items()
-                if name not in self.item_data.keys() and data.definition.category is ItemCategory.SYMBOL]
+        return [
+            # data.ap_code is guaranteed for a symbol definition
+            cast_not_none(data.ap_code) for name, data in static_witness_items.ITEM_DATA.items()
+            if name not in self.item_data.keys() and data.definition.category is ItemCategory.SYMBOL
+        ]
 
     def get_progressive_item_ids_in_pool(self) -> Dict[int, List[int]]:
         output: Dict[int, List[int]] = {}
-        for item_name, quantity in {name: quantity for name, quantity in self._mandatory_items.items()}.items():
+        for item_name, quantity in dict(self._mandatory_items.items()).items():
             item = self.item_data[item_name]
             if isinstance(item.definition, ProgressiveItemDefinition):
                 # Note: we need to reference the static table here rather than the player-specific one because the child
-                #   items were removed from the pool when we pruned out all progression items not in the settings.
-                output[item.ap_code] = [static_witness_items.ITEM_DATA[child_item].ap_code
-                                        for child_item in item.definition.child_item_names]
+                # items were removed from the pool when we pruned out all progression items not in the options.
+                output[cast_not_none(item.ap_code)] = [cast_not_none(static_witness_items.ITEM_DATA[child_item].ap_code)
+                                                       for child_item in item.definition.child_item_names]
         return output
 
 
