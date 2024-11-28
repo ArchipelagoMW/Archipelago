@@ -810,8 +810,8 @@ regions:
         key:
           - asteroid_belt
           - moon_shaped_like_a_butt
-        filler: 4
-        useful_nonprogression: 2
+        filler: 1
+        useful_nonprogression: 1
       ability_check_dc: 1
       exits:
         - asteroid_with_pants
@@ -831,7 +831,7 @@ regions:
         key:
           - red_matador_cape
           - lab_rat
-        filler: 4
+        filler: 1
         useful_nonprogression: 2
       ability_check_dc: 1
       exits:
@@ -842,7 +842,7 @@ regions:
       unrandomized_items:
         key:
           - foreign_coin
-        filler: 4
+        filler: 1
         useful_nonprogression: 2
       ability_check_dc: 1
       exits:
@@ -887,7 +887,7 @@ regions:
         key:
           - pharaoh_not_anti_mummy_spray
           - ziggu_rat
-        filler: 4
+        filler: 2
         useful_nonprogression: 2
       ability_check_dc: 1
       exits:
@@ -955,7 +955,7 @@ regions:
         key:
           - fifty_cents
           - notorious_r_a_t
-        filler: 4
+        filler: 2
         useful_nonprogression: 2
       ability_check_dc: 1
       exits:
@@ -967,7 +967,7 @@ regions:
         key:
           - gym_rat
           - forklift_certification
-        filler: 4
+        filler: 2
         useful_nonprogression: 2
       ability_check_dc: 1
       exits:
@@ -978,7 +978,7 @@ regions:
       unrandomized_items:
         key:
           - childs_first_hand_axe
-        filler: 4
+        filler: 2
         useful_nonprogression: 2
       ability_check_dc: 1
       exits:
@@ -998,7 +998,7 @@ regions:
       unrandomized_items:
         key:
           - acro_rat
-        filler: 4
+        filler: 3
         useful_nonprogression: 2
       ability_check_dc: 1
       exits:
@@ -1033,7 +1033,7 @@ regions:
         key:
           - lost_ctrl_key
           - hammer_of_problem_solving
-        filler: 4
+        filler: 1
         useful_nonprogression: 2
       ability_check_dc: 1
       exits:
@@ -1086,7 +1086,7 @@ regions:
       unrandomized_items:
         key:
           - computer_rat
-        filler: 4
+        filler: 14
         useful_nonprogression: 2
       ability_check_dc: 1
       exits:
@@ -1106,8 +1106,8 @@ regions:
     after_restaurant:
       name_template: 'After Restaurant #{n}'
       unrandomized_items:
-        useful_nonprogression: 14
-        filler: 13
+        useful_nonprogression: 16
+        filler: 15
       ability_check_dc: 16
       exits:
         - bowling_ball_door
@@ -1174,8 +1174,8 @@ regions:
         key:
           - item: pack_rat
             count: 5
-        useful_nonprogression: 6
-        filler: 7
+        useful_nonprogression: 5
+        filler: 16
       ability_check_dc: 10
       exits:
         - basketball
