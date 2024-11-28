@@ -23,6 +23,8 @@ perf_logger = logging.getLogger("performance")
 
 class AutoWorldRegister(type):
     world_types: Dict[str, Type[World]] = {}
+    # Set by worlds.__init__ to avoid cyclic dependencies
+    network_data_package_ref = None
     __file__: str
     zip_path: Optional[str]
     settings_key: str
@@ -87,6 +89,9 @@ class AutoWorldRegister(type):
             if dct["game"] in AutoWorldRegister.world_types:
                 raise RuntimeError(f"""Game {dct["game"]} already registered.""")
             AutoWorldRegister.world_types[dct["game"]] = new_class
+            # Cannot be imported at the module level without causing cyclic dependencies.
+            from worlds import network_data_package
+            network_data_package["games"][dct["game"]] = new_class.get_data_package_data()
         new_class.__file__ = sys.modules[new_class.__module__].__file__
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
@@ -95,6 +100,7 @@ class AutoWorldRegister(type):
             world_folder_name = mod_name[7:].lower() if mod_name.startswith("worlds.") else mod_name.lower()
             new_class.settings_key = world_folder_name + "_options"
         new_class.__settings = None
+
         return new_class
 
 
@@ -246,6 +252,15 @@ class WebWorld(metaclass=WebWorldRegister):
 
     item_descriptions: Dict[str, str] = {}
     """An optional map from item names (or item group names) to brief descriptions for users."""
+
+
+# Must be before `World` due to class creation/module loading order.
+def data_package_checksum(data: "GamesPackage") -> str:
+    """Calculates the data package checksum for a game from a dict"""
+    assert "checksum" not in data, "Checksum already in data"
+    assert sorted(data) == list(data), "Data not ordered"
+    from NetUtils import encode
+    return hashlib.sha1(encode(data).encode()).hexdigest()
 
 
 class World(metaclass=AutoWorldRegister):
@@ -583,11 +598,3 @@ class World(metaclass=AutoWorldRegister):
 # please use a prefix as all of them get clobbered together
 class LogicMixin(metaclass=AutoLogicRegister):
     pass
-
-
-def data_package_checksum(data: "GamesPackage") -> str:
-    """Calculates the data package checksum for a game from a dict"""
-    assert "checksum" not in data, "Checksum already in data"
-    assert sorted(data) == list(data), "Data not ordered"
-    from NetUtils import encode
-    return hashlib.sha1(encode(data).encode()).hexdigest()

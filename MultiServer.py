@@ -282,6 +282,7 @@ class Context:
     # Data package retrieval
     def _load_game_data(self):
         import worlds
+        worlds.ensure_all_worlds_loaded()
         self.gamespackage = worlds.network_data_package["games"]
 
         self.item_name_groups = {world_name: world.item_name_groups for world_name, world in

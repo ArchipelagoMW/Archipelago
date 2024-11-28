@@ -30,6 +30,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         os.makedirs(args.outputpath, exist_ok=True)
         output_path.cached_path = args.outputpath
 
+    games = set(args.game.values())
+    worlds.ensure_all_worlds_loaded(games)
+
     start = time.perf_counter()
     # initialize the multiworld
     multiworld = MultiWorld(args.multi)

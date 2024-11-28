@@ -1,9 +1,16 @@
 import unittest
 
 from worlds.AutoWorld import AutoWorldRegister
+from worlds import ensure_all_worlds_loaded
 
 
 class TestWebDescriptions(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ensure_all_worlds_loaded()
+
     def test_item_descriptions_have_valid_names(self) -> None:
         """Ensure all item descriptions match an item name or item group name"""
         for game_name, world_type in AutoWorldRegister.world_types.items():
