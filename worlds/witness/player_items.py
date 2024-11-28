@@ -54,9 +54,8 @@ class WitnessPlayerItems:
         # Remove all progression items that aren't actually in the game.
         self.item_data = {
             name: data for (name, data) in self.item_data.items()
-            if data.classification not in
-               {ItemClassification.progression, ItemClassification.progression_skip_balancing}
-               or name in player_logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME
+            if ItemClassification.progression not in data.classification
+            or name in player_logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME
         }
 
         # Downgrade door items
@@ -73,7 +72,7 @@ class WitnessPlayerItems:
         # Add progression items to the mandatory item list.
         progression_dict = {
             name: data for (name, data) in self.item_data.items()
-            if data.classification in {ItemClassification.progression, ItemClassification.progression_skip_balancing}
+            if ItemClassification.progression in data.classification
         }
         for item_name, item_data in progression_dict.items():
             if isinstance(item_data.definition, ProgressiveItemDefinition):
