@@ -3,9 +3,12 @@ from typing import Any, Dict
 from Options import Accessibility, ProgressionBalancing, DeathLink
 from .options import Goal, StartingMoney, ProfitMargin, BundleRandomization, BundlePrice, EntranceRandomization, SeasonRandomization, Cropsanity, \
     BackpackProgression, ToolProgression, ElevatorProgression, SkillProgression, BuildingProgression, FestivalLocations, ArcadeMachineLocations, \
-    SpecialOrderLocations, QuestLocations, Fishsanity, Museumsanity, Friendsanity, FriendsanityHeartSize, NumberOfMovementBuffs, NumberOfLuckBuffs, \
-    ExcludeGingerIsland, TrapItems, MultipleDaySleepEnabled, MultipleDaySleepCost, ExperienceMultiplier, FriendshipMultiplier, DebrisMultiplier, QuickStart, \
-    Gifting, FarmType, Monstersanity, Shipsanity, Cooksanity, Chefsanity, Craftsanity
+    SpecialOrderLocations, QuestLocations, Fishsanity, Museumsanity, Friendsanity, FriendsanityHeartSize, NumberOfMovementBuffs, ExcludeGingerIsland, TrapItems, \
+    MultipleDaySleepEnabled, MultipleDaySleepCost, ExperienceMultiplier, FriendshipMultiplier, DebrisMultiplier, QuickStart, \
+    Gifting, FarmType, Monstersanity, Shipsanity, Cooksanity, Chefsanity, Craftsanity, Booksanity, Walnutsanity, EnabledFillerBuffs
+
+# @formatter:off
+from .strings.ap_names.ap_option_names import OptionName
 
 all_random_settings = {
     "progression_balancing":                "random",
@@ -37,8 +40,8 @@ all_random_settings = {
     Craftsanity.internal_name:              "random",
     Friendsanity.internal_name:             "random",
     FriendsanityHeartSize.internal_name:    "random",
+    Booksanity.internal_name:               "random",
     NumberOfMovementBuffs.internal_name:    "random",
-    NumberOfLuckBuffs.internal_name:        "random",
     ExcludeGingerIsland.internal_name:      "random",
     TrapItems.internal_name:                "random",
     MultipleDaySleepEnabled.internal_name:  "random",
@@ -52,8 +55,6 @@ all_random_settings = {
 }
 
 easy_settings = {
-    "progression_balancing":                ProgressionBalancing.default,
-    "accessibility":                        Accessibility.option_items,
     Goal.internal_name:                     Goal.option_community_center,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            "very rich",
@@ -70,7 +71,7 @@ easy_settings = {
     BuildingProgression.internal_name:      BuildingProgression.option_progressive_very_cheap,
     FestivalLocations.internal_name:        FestivalLocations.option_easy,
     ArcadeMachineLocations.internal_name:   ArcadeMachineLocations.option_disabled,
-    SpecialOrderLocations.internal_name:    SpecialOrderLocations.option_disabled,
+    SpecialOrderLocations.internal_name:    SpecialOrderLocations.option_vanilla_very_short,
     QuestLocations.internal_name:           "minimum",
     Fishsanity.internal_name:               Fishsanity.option_only_easy_fish,
     Museumsanity.internal_name:             Museumsanity.option_milestones,
@@ -81,8 +82,10 @@ easy_settings = {
     Craftsanity.internal_name:              Craftsanity.option_none,
     Friendsanity.internal_name:             Friendsanity.option_none,
     FriendsanityHeartSize.internal_name:    4,
+    Booksanity.internal_name:               Booksanity.option_none,
+    Walnutsanity.internal_name:             Walnutsanity.preset_none,
     NumberOfMovementBuffs.internal_name:    8,
-    NumberOfLuckBuffs.internal_name:        8,
+    EnabledFillerBuffs.internal_name:       EnabledFillerBuffs.preset_all,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_true,
     TrapItems.internal_name:                TrapItems.option_easy,
     MultipleDaySleepEnabled.internal_name:  MultipleDaySleepEnabled.option_true,
@@ -96,8 +99,6 @@ easy_settings = {
 }
 
 medium_settings = {
-    "progression_balancing":                25,
-    "accessibility":                        Accessibility.option_locations,
     Goal.internal_name:                     Goal.option_community_center,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            "rich",
@@ -109,12 +110,12 @@ medium_settings = {
     Cropsanity.internal_name:               Cropsanity.option_enabled,
     BackpackProgression.internal_name:      BackpackProgression.option_early_progressive,
     ToolProgression.internal_name:          ToolProgression.option_progressive_cheap,
-    ElevatorProgression.internal_name:      ElevatorProgression.option_progressive_from_previous_floor,
+    ElevatorProgression.internal_name:      ElevatorProgression.option_progressive,
     SkillProgression.internal_name:         SkillProgression.option_progressive,
     BuildingProgression.internal_name:      BuildingProgression.option_progressive_cheap,
     FestivalLocations.internal_name:        FestivalLocations.option_hard,
     ArcadeMachineLocations.internal_name:   ArcadeMachineLocations.option_victories_easy,
-    SpecialOrderLocations.internal_name:    SpecialOrderLocations.option_board_only,
+    SpecialOrderLocations.internal_name:    SpecialOrderLocations.option_board_short,
     QuestLocations.internal_name:           "normal",
     Fishsanity.internal_name:               Fishsanity.option_exclude_legendaries,
     Museumsanity.internal_name:             Museumsanity.option_milestones,
@@ -125,8 +126,10 @@ medium_settings = {
     Craftsanity.internal_name:              Craftsanity.option_none,
     Friendsanity.internal_name:             Friendsanity.option_starting_npcs,
     FriendsanityHeartSize.internal_name:    4,
+    Booksanity.internal_name:               Booksanity.option_power_skill,
+    Walnutsanity.internal_name:             [OptionName.walnutsanity_puzzles],
     NumberOfMovementBuffs.internal_name:    6,
-    NumberOfLuckBuffs.internal_name:        6,
+    EnabledFillerBuffs.internal_name:       EnabledFillerBuffs.preset_all,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_true,
     TrapItems.internal_name:                TrapItems.option_medium,
     MultipleDaySleepEnabled.internal_name:  MultipleDaySleepEnabled.option_true,
@@ -140,25 +143,23 @@ medium_settings = {
 }
 
 hard_settings = {
-    "progression_balancing":                0,
-    "accessibility":                        Accessibility.option_locations,
     Goal.internal_name:                     Goal.option_grandpa_evaluation,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            "extra",
     ProfitMargin.internal_name:             "normal",
     BundleRandomization.internal_name:      BundleRandomization.option_remixed,
     BundlePrice.internal_name:              BundlePrice.option_expensive,
-    EntranceRandomization.internal_name:    EntranceRandomization.option_buildings,
+    EntranceRandomization.internal_name:    EntranceRandomization.option_buildings_without_house,
     SeasonRandomization.internal_name:      SeasonRandomization.option_randomized,
     Cropsanity.internal_name:               Cropsanity.option_enabled,
     BackpackProgression.internal_name:      BackpackProgression.option_progressive,
     ToolProgression.internal_name:          ToolProgression.option_progressive,
     ElevatorProgression.internal_name:      ElevatorProgression.option_progressive_from_previous_floor,
-    SkillProgression.internal_name:         SkillProgression.option_progressive,
+    SkillProgression.internal_name:         SkillProgression.option_progressive_with_masteries,
     BuildingProgression.internal_name:      BuildingProgression.option_progressive,
     FestivalLocations.internal_name:        FestivalLocations.option_hard,
     ArcadeMachineLocations.internal_name:   ArcadeMachineLocations.option_full_shuffling,
-    SpecialOrderLocations.internal_name:    SpecialOrderLocations.option_board_qi,
+    SpecialOrderLocations.internal_name:    SpecialOrderLocations.option_board_qi_short,
     QuestLocations.internal_name:           "lots",
     Fishsanity.internal_name:               Fishsanity.option_all,
     Museumsanity.internal_name:             Museumsanity.option_all,
@@ -169,8 +170,10 @@ hard_settings = {
     Craftsanity.internal_name:              Craftsanity.option_none,
     Friendsanity.internal_name:             Friendsanity.option_all,
     FriendsanityHeartSize.internal_name:    4,
+    Booksanity.internal_name:               Booksanity.option_all,
+    Walnutsanity.internal_name:             Walnutsanity.preset_all,
     NumberOfMovementBuffs.internal_name:    4,
-    NumberOfLuckBuffs.internal_name:        4,
+    EnabledFillerBuffs.internal_name:       EnabledFillerBuffs.default,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_false,
     TrapItems.internal_name:                TrapItems.option_hard,
     MultipleDaySleepEnabled.internal_name:  MultipleDaySleepEnabled.option_true,
@@ -184,8 +187,6 @@ hard_settings = {
 }
 
 nightmare_settings = {
-    "progression_balancing":                0,
-    "accessibility":                        Accessibility.option_locations,
     Goal.internal_name:                     Goal.option_community_center,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            "vanilla",
@@ -198,7 +199,7 @@ nightmare_settings = {
     BackpackProgression.internal_name:      BackpackProgression.option_progressive,
     ToolProgression.internal_name:          ToolProgression.option_progressive,
     ElevatorProgression.internal_name:      ElevatorProgression.option_progressive_from_previous_floor,
-    SkillProgression.internal_name:         SkillProgression.option_progressive,
+    SkillProgression.internal_name:         SkillProgression.option_progressive_with_masteries,
     BuildingProgression.internal_name:      BuildingProgression.option_progressive,
     FestivalLocations.internal_name:        FestivalLocations.option_hard,
     ArcadeMachineLocations.internal_name:   ArcadeMachineLocations.option_full_shuffling,
@@ -213,8 +214,10 @@ nightmare_settings = {
     Craftsanity.internal_name:              Craftsanity.option_none,
     Friendsanity.internal_name:             Friendsanity.option_all_with_marriage,
     FriendsanityHeartSize.internal_name:    4,
+    Booksanity.internal_name:               Booksanity.option_all,
+    Walnutsanity.internal_name:             Walnutsanity.preset_all,
     NumberOfMovementBuffs.internal_name:    2,
-    NumberOfLuckBuffs.internal_name:        2,
+    EnabledFillerBuffs.internal_name:       EnabledFillerBuffs.preset_none,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_false,
     TrapItems.internal_name:                TrapItems.option_hell,
     MultipleDaySleepEnabled.internal_name:  MultipleDaySleepEnabled.option_true,
@@ -228,8 +231,6 @@ nightmare_settings = {
 }
 
 short_settings = {
-    "progression_balancing":                ProgressionBalancing.default,
-    "accessibility":                        Accessibility.option_items,
     Goal.internal_name:                     Goal.option_bottom_of_the_mines,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            "filthy rich",
@@ -241,12 +242,12 @@ short_settings = {
     Cropsanity.internal_name:               Cropsanity.option_disabled,
     BackpackProgression.internal_name:      BackpackProgression.option_early_progressive,
     ToolProgression.internal_name:          ToolProgression.option_progressive_very_cheap,
-    ElevatorProgression.internal_name:      ElevatorProgression.option_progressive_from_previous_floor,
+    ElevatorProgression.internal_name:      ElevatorProgression.option_progressive,
     SkillProgression.internal_name:         SkillProgression.option_progressive,
     BuildingProgression.internal_name:      BuildingProgression.option_progressive_very_cheap,
     FestivalLocations.internal_name:        FestivalLocations.option_disabled,
     ArcadeMachineLocations.internal_name:   ArcadeMachineLocations.option_disabled,
-    SpecialOrderLocations.internal_name:    SpecialOrderLocations.option_disabled,
+    SpecialOrderLocations.internal_name:    SpecialOrderLocations.option_vanilla_very_short,
     QuestLocations.internal_name:           "none",
     Fishsanity.internal_name:               Fishsanity.option_none,
     Museumsanity.internal_name:             Museumsanity.option_none,
@@ -257,8 +258,10 @@ short_settings = {
     Craftsanity.internal_name:              Craftsanity.option_none,
     Friendsanity.internal_name:             Friendsanity.option_none,
     FriendsanityHeartSize.internal_name:    4,
+    Booksanity.internal_name:               Booksanity.option_none,
+    Walnutsanity.internal_name:             Walnutsanity.preset_none,
     NumberOfMovementBuffs.internal_name:    10,
-    NumberOfLuckBuffs.internal_name:        10,
+    EnabledFillerBuffs.internal_name:       EnabledFillerBuffs.preset_all,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_true,
     TrapItems.internal_name:                TrapItems.option_easy,
     MultipleDaySleepEnabled.internal_name:  MultipleDaySleepEnabled.option_true,
@@ -272,8 +275,6 @@ short_settings = {
 }
 
 minsanity_settings = {
-    "progression_balancing":                ProgressionBalancing.default,
-    "accessibility":                        Accessibility.option_minimal,
     Goal.internal_name:                     Goal.default,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            StartingMoney.default,
@@ -290,7 +291,7 @@ minsanity_settings = {
     BuildingProgression.internal_name:      BuildingProgression.option_vanilla,
     FestivalLocations.internal_name:        FestivalLocations.option_disabled,
     ArcadeMachineLocations.internal_name:   ArcadeMachineLocations.option_disabled,
-    SpecialOrderLocations.internal_name:    SpecialOrderLocations.option_disabled,
+    SpecialOrderLocations.internal_name:    SpecialOrderLocations.option_vanilla_very_short,
     QuestLocations.internal_name:           "none",
     Fishsanity.internal_name:               Fishsanity.option_none,
     Museumsanity.internal_name:             Museumsanity.option_none,
@@ -301,8 +302,10 @@ minsanity_settings = {
     Craftsanity.internal_name:              Craftsanity.option_none,
     Friendsanity.internal_name:             Friendsanity.option_none,
     FriendsanityHeartSize.internal_name:    FriendsanityHeartSize.default,
+    Booksanity.internal_name:               Booksanity.option_none,
+    Walnutsanity.internal_name:             Walnutsanity.preset_none,
     NumberOfMovementBuffs.internal_name:    NumberOfMovementBuffs.default,
-    NumberOfLuckBuffs.internal_name:        NumberOfLuckBuffs.default,
+    EnabledFillerBuffs.internal_name:       EnabledFillerBuffs.default,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_true,
     TrapItems.internal_name:                TrapItems.default,
     MultipleDaySleepEnabled.internal_name:  MultipleDaySleepEnabled.default,
@@ -316,8 +319,6 @@ minsanity_settings = {
 }
 
 allsanity_settings = {
-    "progression_balancing":                ProgressionBalancing.default,
-    "accessibility":                        Accessibility.option_locations,
     Goal.internal_name:                     Goal.default,
     FarmType.internal_name:                 "random",
     StartingMoney.internal_name:            StartingMoney.default,
@@ -330,7 +331,7 @@ allsanity_settings = {
     BackpackProgression.internal_name:      BackpackProgression.option_early_progressive,
     ToolProgression.internal_name:          ToolProgression.option_progressive,
     ElevatorProgression.internal_name:      ElevatorProgression.option_progressive,
-    SkillProgression.internal_name:         SkillProgression.option_progressive,
+    SkillProgression.internal_name:         SkillProgression.option_progressive_with_masteries,
     BuildingProgression.internal_name:      BuildingProgression.option_progressive,
     FestivalLocations.internal_name:        FestivalLocations.option_hard,
     ArcadeMachineLocations.internal_name:   ArcadeMachineLocations.option_full_shuffling,
@@ -345,8 +346,10 @@ allsanity_settings = {
     Craftsanity.internal_name:              Craftsanity.option_all,
     Friendsanity.internal_name:             Friendsanity.option_all,
     FriendsanityHeartSize.internal_name:    1,
+    Booksanity.internal_name:               Booksanity.option_all,
+    Walnutsanity.internal_name:             Walnutsanity.preset_all,
     NumberOfMovementBuffs.internal_name:    12,
-    NumberOfLuckBuffs.internal_name:        12,
+    EnabledFillerBuffs.internal_name:       EnabledFillerBuffs.preset_all,
     ExcludeGingerIsland.internal_name:      ExcludeGingerIsland.option_false,
     TrapItems.internal_name:                TrapItems.default,
     MultipleDaySleepEnabled.internal_name:  MultipleDaySleepEnabled.default,
@@ -358,6 +361,8 @@ allsanity_settings = {
     Gifting.internal_name:                  Gifting.default,
     "death_link":                           DeathLink.default,
 }
+# @formatter:on
+
 
 sv_options_presets: Dict[str, Dict[str, Any]] = {
     "All random": all_random_settings,

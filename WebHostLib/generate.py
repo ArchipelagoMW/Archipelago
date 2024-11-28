@@ -81,6 +81,7 @@ def start_generation(options: Dict[str, Union[dict, str]], meta: Dict[str, Any])
     elif len(gen_options) > app.config["MAX_ROLL"]:
         flash(f"Sorry, generating of multiworlds is limited to {app.config['MAX_ROLL']} players. "
               f"If you have a larger group, please generate it yourself and upload it.")
+        return redirect(url_for(request.endpoint, **(request.view_args or {})))
     elif len(gen_options) >= app.config["JOB_THRESHOLD"]:
         gen = Generation(
             options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
@@ -134,6 +135,7 @@ def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=Non
                                                                        {"bosses", "items", "connections", "texts"}))
         erargs.skip_prog_balancing = False
         erargs.skip_output = False
+        erargs.csv_output = False
 
         name_counter = Counter()
         for player, (playerfile, settings) in enumerate(gen_options.items(), 1):

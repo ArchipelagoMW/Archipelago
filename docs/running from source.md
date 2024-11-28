@@ -8,7 +8,7 @@ use that version. These steps are for developers or platforms without compiled r
 
 What you'll need:
  * [Python 3.8.7 or newer](https://www.python.org/downloads/), not the Windows Store version
-   * **Python 3.12 is currently unsupported**
+   * Python 3.12.x is currently the newest supported version
  * pip: included in downloads from python.org, separate in many Linux distributions
  * Matching C compiler
    * possibly optional, read operating system specific sections
@@ -31,14 +31,14 @@ After this, you should be able to run the programs.
 
 Recommended steps
  * Download and install a "Windows installer (64-bit)" from the [Python download page](https://www.python.org/downloads)
-   * **Python 3.12 is currently unsupported**
+   * [read above](#General) which versions are supported
 
  * **Optional**: Download and install Visual Studio Build Tools from
    [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
    * Refer to [Windows Compilers on the python wiki](https://wiki.python.org/moin/WindowsCompilers) for details. 
      Generally, selecting the box for "Desktop Development with C++" will provide what you need.
    * Build tools are not required if all modules are installed pre-compiled. Pre-compiled modules are pinned on
-     [Discord in #archipelago-dev](https://discord.com/channels/731205301247803413/731214280439103580/905154456377757808)
+     [Discord in #ap-core-dev](https://discord.com/channels/731205301247803413/731214280439103580/905154456377757808)
 
  * It is recommended to use [PyCharm IDE](https://www.jetbrains.com/pycharm/)
  * Run Generate.py which will prompt installation of missing modules, press enter to confirm
@@ -85,4 +85,4 @@ PyCharm has a built-in version control integration that supports Git.
 
 ## Running tests
 
-Run `pip install pytest pytest-subtests`, then use your IDE to run tests or run `pytest` from the source folder.
+Information about running tests can be found in [tests.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/tests.md#running-tests)
