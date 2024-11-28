@@ -4840,6 +4840,30 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.LAST_STAND_Z.mission_name, "1.5 Billion Zerg", SC2_RACESWAP_LOC_ID_OFFSET + 11805, LocationType.VANILLA,
                            logic.zerg_last_stand_requirement
                            ),
+        make_location_data(SC2Mission.FORBIDDEN_WEAPON_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 11900, LocationType.VICTORY,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.FORBIDDEN_WEAPON_T.mission_name, "South Solarite", SC2_RACESWAP_LOC_ID_OFFSET + 11901, LocationType.VANILLA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.FORBIDDEN_WEAPON_T.mission_name, "North Solarite", SC2_RACESWAP_LOC_ID_OFFSET + 11902, LocationType.VANILLA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.FORBIDDEN_WEAPON_T.mission_name, "Northwest Solarite", SC2_RACESWAP_LOC_ID_OFFSET + 11903, LocationType.VANILLA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.FORBIDDEN_WEAPON_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 12000, LocationType.VICTORY,
+                           logic.zerg_competent_comp_competent_aa
+                           ),
+        make_location_data(SC2Mission.FORBIDDEN_WEAPON_Z.mission_name, "South Solarite", SC2_RACESWAP_LOC_ID_OFFSET + 12001, LocationType.VANILLA,
+                           logic.zerg_competent_comp_competent_aa
+                           ),
+        make_location_data(SC2Mission.FORBIDDEN_WEAPON_Z.mission_name, "North Solarite", SC2_RACESWAP_LOC_ID_OFFSET + 12002, LocationType.VANILLA,
+                           logic.zerg_competent_comp_competent_aa
+                           ),
+        make_location_data(SC2Mission.FORBIDDEN_WEAPON_Z.mission_name, "Northwest Solarite", SC2_RACESWAP_LOC_ID_OFFSET + 12003, LocationType.VANILLA,
+                           logic.zerg_competent_comp_competent_aa
+                           ),
     ]
 
     beat_events = []
