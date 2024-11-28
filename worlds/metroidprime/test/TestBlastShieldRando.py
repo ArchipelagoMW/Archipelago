@@ -1,5 +1,6 @@
 import math
 from Fill import distribute_items_restrictive
+from ..PrimeOptions import DoorColorRandomization
 from ..data.DoorData import get_door_data_by_room_names
 from ..data.BlastShieldRegions import get_valid_blast_shield_regions_by_area
 from ..data.RoomData import AreaData
@@ -562,7 +563,7 @@ class TestBlastShieldsAndDoorColorRando(MetroidPrimeTestBase):
                 },
             }
         },
-        "door_color_randomization": "regional",
+        "door_color_randomization": DoorColorRandomization.option_regional,
         "door_color_mapping": {
             "Chozo Ruins": {
                 "area": "Chozo Ruins",

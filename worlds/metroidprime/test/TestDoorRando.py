@@ -1,4 +1,5 @@
 from Fill import distribute_items_restrictive
+from ..PrimeOptions import DoorColorRandomization
 from ..Items import SuitUpgrade
 from ..DoorRando import DoorLockType
 
@@ -87,7 +88,7 @@ class TestGlobalDoorRando(MetroidPrimeTestBase):
 
 class TestRegionalDoorRando(MetroidPrimeTestBase):
     options = {
-        "door_color_randomization": "regional",
+        "door_color_randomization": DoorColorRandomization.option_regional,
     }
 
     def test_all_door_types_are_randomized_across_a_region(self):
@@ -166,64 +167,6 @@ class TestDoorRandoWithDifferentStartRoomWithRequiredBeam(MetroidPrimeTestBase):
         )
 
 
-class TestDoorPlando(MetroidPrimeTestBase):
-    options = {
-        "door_color_randomization": "regional",
-        "door_color_mapping": {
-            "Chozo Ruins": {
-                "area": "Chozo Ruins",
-                "type_mapping": {
-                    "Wave Beam": "Ice Beam",
-                    "Ice Beam": "Plasma Beam",
-                    "Plasma Beam": "Wave Beam",
-                },
-            },
-            "Magmoor Caverns": {
-                "area": "Magmoor Caverns",
-                "type_mapping": {
-                    "Wave Beam": "Plasma Beam",
-                    "Ice Beam": "Wave Beam",
-                    "Plasma Beam": "Ice Beam",
-                },
-            },
-            "Phendrana Drifts": {
-                "area": "Phendrana Drifts",
-                "type_mapping": {
-                    "Wave Beam": "Plasma Beam",
-                    "Ice Beam": "Wave Beam",
-                    "Plasma Beam": "Ice Beam",
-                },
-            },
-            "Tallon Overworld": {
-                "area": "Tallon Overworld",
-                "type_mapping": {
-                    "Wave Beam": "Plasma Beam",
-                    "Ice Beam": "Wave Beam",
-                    "Plasma Beam": "Ice Beam",
-                },
-            },
-            "Phazon Mines": {
-                "area": "Phazon Mines",
-                "type_mapping": {
-                    "Wave Beam": "Plasma Beam",
-                    "Ice Beam": "Wave Beam",
-                    "Plasma Beam": "Ice Beam",
-                },
-            },
-        },
-    }
-
-    def test_door_mapping_gets_set_from_plando(self):
-        self.world.generate_early()
-        world: "MetroidPrimeWorld" = self.world
-        assert world.door_color_mapping
-        self.assertTrue(
-            len(world.door_color_mapping) > 0, "Door color mapping should not be empty"
-        )
-        for area in MetroidPrimeArea:
-            self.assertEqual(world.door_color_mapping[area.value].type_mapping, world.options.door_color_mapping.get(area.value).get("type_mapping"), "Door color mapping should be set from plando")  # type: ignore
-
-
 class TestGlobalDoorRandoWithBombAndPowerDoors(MetroidPrimeTestBase):
     options = {
         "door_color_randomization": "global",
@@ -233,7 +176,6 @@ class TestGlobalDoorRandoWithBombAndPowerDoors(MetroidPrimeTestBase):
 
     def test_bomb_doors_are_applied_to_single_region_that_is_not_start(self):
         world: "MetroidPrimeWorld" = self.world
-        world.options.door_color_mapping.value = None  # type: ignore
         world.generate_early()
         bomb_door_region = None
 
@@ -273,7 +215,7 @@ class TestGlobalDoorRandoWithBombAndPowerDoors(MetroidPrimeTestBase):
 
 class TestRegionalobalDoorRandoWithBombAndPowerDoors(MetroidPrimeTestBase):
     options = {
-        "door_color_randomization": "regional",
+        "door_color_randomization": DoorColorRandomization.option_regional,
         "include_morph_ball_bomb_doors": True,
         "include_power_beam_doors": True,
     }
@@ -303,7 +245,7 @@ class TestRegionalobalDoorRandoWithBombAndPowerDoors(MetroidPrimeTestBase):
 
 class TestBeamRandoWithDoorRando(MetroidPrimeTestBase):
     options = {
-        "door_color_randomization": "regional",
+        "door_color_randomization": DoorColorRandomization.option_regional,
         "include_power_beam_doors": True,
         "randomize_starting_beam": True,
     }
@@ -312,7 +254,6 @@ class TestBeamRandoWithDoorRando(MetroidPrimeTestBase):
         self,
     ):
         world: "MetroidPrimeWorld" = self.world
-        world.options.door_color_mapping.value = None  # type: ignore
         world.generate_early()
 
         assert world.starting_room_data.selected_loadout

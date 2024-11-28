@@ -260,14 +260,6 @@ class BlastShieldRandomization(Choice):
     default = 0
 
 
-class DoorColorMapping(OptionDict):
-    """Which door colors go to which colors."""
-
-    display_name = "Door Color Mapping"
-    visibility = Visibility.none
-    default = {}
-
-
 class BlastShieldMapping(OptionDict):
     """Which blast shield types go to which colors."""
 
@@ -457,7 +449,6 @@ class MetroidPrimeOptions(PerGameCommonOptions):
     pre_scan_elevators: PreScanElevators
     elevator_randomization: ElevatorRandomization
     door_color_randomization: DoorColorRandomization
-    door_color_mapping: DoorColorMapping
     blast_shield_randomization: BlastShieldRandomization
     blast_shield_mapping: BlastShieldMapping
     blast_shield_frequency: BlastShieldFrequency

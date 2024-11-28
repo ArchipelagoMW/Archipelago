@@ -36,6 +36,7 @@ from .Locations import every_location
 from .ItemPool import generate_item_pool, generate_start_inventory
 from .PrimeOptions import (
     BlastShieldRandomization,
+    DoorColorRandomization,
     MetroidPrimeOptions,
     prime_option_groups,
 )
@@ -171,6 +172,7 @@ class MetroidPrimeWorld(World):
                         "priority_locations",
                         "exclude_locations",
                         "elevator_mapping",
+                        "door_color_mapping",
                     ]:
                         option.value = set(value)
                     else:
@@ -178,6 +180,11 @@ class MetroidPrimeWorld(World):
 
                 if key == "elevator_mapping":
                     self.elevator_mapping = value
+
+                if key == "door_color_mapping":
+                    self.door_color_mapping = WorldDoorColorMapping.from_option_value(
+                        value
+                    )
 
     def generate_early(self) -> None:
         if hasattr(self.multiworld, "re_gen_passthrough"):
@@ -187,15 +194,11 @@ class MetroidPrimeWorld(World):
         init_starting_room_data(self)
 
         # Randomize Door Colors
-        if self.options.door_color_mapping:
-            self.door_color_mapping = WorldDoorColorMapping.from_option_value(
-                self.options.door_color_mapping.value
-            )
-        elif self.options.door_color_randomization != "none":
+        if (
+            self.options.door_color_randomization != "none"
+            and not self.door_color_mapping
+        ):
             self.door_color_mapping = get_world_door_mapping(self)
-            self.options.door_color_mapping.value = (
-                self.door_color_mapping.to_option_value()
-            )
 
         init_starting_beam(self)
 
@@ -327,6 +330,8 @@ class MetroidPrimeWorld(World):
         ]
         slot_data: Dict[str, Any] = self.options.as_dict(*non_cosmetic_options)
         slot_data["elevator_mapping"] = self.elevator_mapping
+        if self.door_color_mapping:
+            slot_data["door_color_mapping"] = self.door_color_mapping.to_option_value()
 
         return slot_data
 
@@ -350,7 +355,10 @@ class MetroidPrimeWorld(World):
                         f"    {ELEVATOR_USEFUL_NAMES[source]} -> {ELEVATOR_USEFUL_NAMES[target]}\n"
                     )
 
-        if self.options.door_color_randomization == "regional":
+        if (
+            self.options.door_color_randomization
+            == DoorColorRandomization.option_regional
+        ):
             assert self.door_color_mapping is not None
             spoiler_handle.write(f"\n\nDoor Color Mapping({player_name}):\n")
 
@@ -359,7 +367,10 @@ class MetroidPrimeWorld(World):
                 for door, color in mapping.type_mapping.items():
                     spoiler_handle.write(f"    {door} -> {color}\n")
 
-        elif self.options.door_color_randomization == "global":
+        elif (
+            self.options.door_color_randomization
+            == DoorColorRandomization.option_global
+        ):
             assert self.door_color_mapping is not None
             spoiler_handle.write(f"\n\nDoor Color Mapping({player_name}):\n")
             for door, color in self.door_color_mapping[

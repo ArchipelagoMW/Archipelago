@@ -168,6 +168,3 @@ def remap_doors_to_power_beam_if_necessary(world: "MetroidPrimeWorld"):
                         world.door_color_mapping[area].type_mapping[
                             original
                         ] = DoorLockType.Power_Beam.value
-            world.options.door_color_mapping.value = (
-                world.door_color_mapping.to_option_value()
-            )

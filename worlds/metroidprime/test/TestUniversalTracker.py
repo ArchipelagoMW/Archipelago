@@ -1,3 +1,4 @@
+from ..PrimeOptions import DoorColorRandomization
 from ..data.StartRoomData import StartRoomDifficulty
 from ..Items import SuitUpgrade
 from ..data.RoomNames import RoomName
@@ -7,7 +8,7 @@ from . import MetroidPrimeUniversalTrackerTestBase
 if TYPE_CHECKING:
     from .. import MetroidPrimeWorld
 slot_data: Dict[str, Any] = {
-    "door_color_randomization": "regional",
+    "door_color_randomization": DoorColorRandomization.option_regional,
     "starting_room": StartRoomDifficulty.Safe.value,
     "include_power_beam_doors": True,
     "include_bomb_doors": True,
@@ -105,12 +106,13 @@ class TestUniversalTracker(MetroidPrimeUniversalTrackerTestBase):
     def test_door_randomization_is_preserved(self):
         self.world_setup()  # type: ignore
         world: "MetroidPrimeWorld" = self.world
+        self.init_passhthrough(slot_data)
         self.world.generate_early()
         assert world.door_color_mapping
         for area in world.door_color_mapping.keys():
             self.assertEqual(
                 world.door_color_mapping[area].type_mapping,
-                self.options["door_color_mapping"][area]["type_mapping"],
+                slot_data["door_color_mapping"][area]["type_mapping"],
             )
 
     def test_starting_room_info_is_preserved(self):
