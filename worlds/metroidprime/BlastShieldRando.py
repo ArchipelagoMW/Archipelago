@@ -7,7 +7,7 @@ from .data.BlastShieldRegions import get_valid_blast_shield_regions_by_area
 from .data.RoomNames import RoomName
 from .PrimeOptions import BlastShieldAvailableTypes, BlastShieldRandomization
 from .data.AreaNames import MetroidPrimeArea
-from typing import TYPE_CHECKING, Any, Dict, List, cast
+from typing import TYPE_CHECKING, Any, Dict, List
 
 if TYPE_CHECKING:
     from . import MetroidPrimeWorld
@@ -88,7 +88,7 @@ def get_world_blast_shield_mapping(
         )
 
     if (
-        cast(str, world.options.blast_shield_randomization.value)
+        world.options.blast_shield_randomization.value
         != BlastShieldRandomization.option_none
     ):
         for area in MetroidPrimeArea:
@@ -115,7 +115,7 @@ def _generate_blast_shield_mapping_for_area(
     total_beam_combo_doors = 0
 
     if (
-        cast(str, world.options.blast_shield_randomization.value)
+        world.options.blast_shield_randomization.value
         == BlastShieldRandomization.option_mix_it_up
     ):
         blast_shield_regions = get_valid_blast_shield_regions_by_area(world, area)
@@ -146,7 +146,7 @@ def _generate_blast_shield_mapping_for_area(
                 total_beam_combo_doors += 1
 
     elif (
-        cast(str, world.options.blast_shield_randomization.value)
+        world.options.blast_shield_randomization.value
         == BlastShieldRandomization.option_replace_existing
     ):
         for room_name, room_data in world.game_region_data[area].rooms.items():
@@ -196,8 +196,9 @@ def _get_available_blast_shields(
         if shield not in [BlastShieldType.Disabled, BlastShieldType.No_Blast_Shield]
     ]
     if (
-        cast(str, world.options.blast_shield_randomization.value)
-        == BlastShieldRandomization.option_replace_existing
+        str,
+        world.options.blast_shield_randomization.value
+        == BlastShieldRandomization.option_replace_existing,
     ):
         available_shields.remove(BlastShieldType.Missile)
 
