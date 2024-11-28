@@ -47,7 +47,7 @@ class ZillionSettings(settings.Group):
         """
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
-    rom_start: typing.Union[RomStart, bool] = RomStart("retroarch")
+    rom_start: RomStart | bool = RomStart("retroarch")
 
 
 class ZillionWebWorld(WebWorld):
