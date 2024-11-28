@@ -12,10 +12,7 @@ if sys.platform == "win32":
 
     # kivy 2.2.0 introduced DPI awareness on Windows, but it makes the UI enter an infinitely recursive re-layout
     # by setting the application to not DPI Aware, Windows handles scaling the entire window on its own, ignoring kivy's
-    try:
-        ctypes.windll.shcore.SetProcessDpiAwareness(0)
-    except FileNotFoundError:  # shcore may not be found on <= Windows 7
-        pass  # TODO: remove silent except when Python 3.8 is phased out.
+    ctypes.windll.shcore.SetProcessDpiAwareness(0)
 
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
@@ -298,6 +295,9 @@ class ServerLabel(HovererableLabel, MDTooltip):
                             f"\nYou currently have {ctx.hint_points} points."
                 elif ctx.hint_cost == 0:
                     text += "\n!hint is free to use."
+                if ctx.stored_data and "_read_race_mode" in ctx.stored_data:
+                    text += "\nRace mode is enabled." \
+                        if ctx.stored_data["_read_race_mode"] else "\nRace mode is disabled."
             else:
                 text += f"\nYou are not authenticated yet."
 
