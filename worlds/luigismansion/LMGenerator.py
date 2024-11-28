@@ -251,7 +251,7 @@ class LuigisMansionRandomizer:
         self.update_custom_event("48", False, lines)
 
         # Generator function to combine all necessary files into an ISO file.
-        # Returned information is ignored. //Todo Maybe there is something better to put here?
+        # Returned information is ignored. # Todo Maybe there is something better to put here?
         for _, _ in self.export_files_from_memory():  # next_progress_text, files_done
             continue # percentage_done = files_done/len(self.gcm.files_by_path)
 
