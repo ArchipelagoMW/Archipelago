@@ -59,6 +59,7 @@ class Setting:
             "multiworld": self.multiworld,
             "aesthetic": self.aesthetic,
             "default": self.default,
+            "value": self.value
         }
         if self.options:
             result["options"] = [{"key": option_key, "short": option_short, "label": option_label} for option_key, option_short, option_label in self.options]

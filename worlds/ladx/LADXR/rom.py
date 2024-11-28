@@ -7,9 +7,7 @@ h2b = binascii.unhexlify
 
 
 class ROM:
-    def __init__(self, filename, patches=None):
-        data = open(Utils.user_path(filename), "rb").read()
-
+    def __init__(self, data, patches=None):
         if patches:
             for patch in patches:
                 data = bsdiff4.patch(data, patch)
@@ -76,6 +74,9 @@ class ROM:
         else:
             for bank in self.banks:
                 file.write(bank)
+
+    def export(self):
+        return b"".join(self.banks)
 
     def readHexSeed(self):
         return self.banks[0x3E][0x2F00:0x2F10].hex().upper()

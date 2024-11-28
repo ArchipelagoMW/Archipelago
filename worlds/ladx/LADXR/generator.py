@@ -2,9 +2,10 @@ import binascii
 import importlib.util
 import importlib.machinery
 import os
-import pkgutil
+import random
+import pickle
 from collections import defaultdict
-from typing import TYPE_CHECKING
+from typing import Dict
 
 from .romTables import ROMWithTables
 from . import assembler
@@ -68,17 +69,16 @@ from BaseClasses import ItemClassification
 from ..Locations import LinksAwakeningLocation
 from ..Options import TrendyGame, Palette, MusicChangeCondition, BootsControls
 
-if TYPE_CHECKING:
-    from .. import LinksAwakeningWorld
-
 
 # Function to generate a final rom, this patches the rom with all required patches
-def generateRom(args, world: "LinksAwakeningWorld"):
+def generateRom(base_rom: bytes, args, data: Dict, player, player_name):
+    random.seed(data["seed"] + player)
+    multi_key = binascii.unhexlify(data["multi_key"].encode())
+    item_list = pickle.loads(binascii.unhexlify(data["item_list"].encode()))
+    ladxr_settings = {x["key"]: x["value"] for x in data["ladxr_settings"]}
     rom_patches = []
-    player_names = list(world.multiworld.player_name.values())
-
-    rom = ROMWithTables(args.input_filename, rom_patches)
-    rom.player_names = player_names
+    rom = ROMWithTables(base_rom, rom_patches)
+    rom.player_names = data["player_names"]
     pymods = []
     if args.pymod:
         for pymod in args.pymod:
@@ -89,10 +89,8 @@ def generateRom(args, world: "LinksAwakeningWorld"):
     for pymod in pymods:
         pymod.prePatch(rom)
 
-    if world.ladxr_settings.gfxmod:
-        patches.aesthetics.gfxMod(rom, os.path.join("data", "sprites", "ladx", world.ladxr_settings.gfxmod))
-
-    item_list = [item for item in world.ladxr_logic.iteminfo_list if not isinstance(item, KeyLocation)]
+    if ladxr_settings["gfxmod"]:
+        patches.aesthetics.gfxMod(rom, os.path.join("data", "sprites", "ladx", ladxr_settings["gfxmod"]))
 
     assembler.resetConsts()
     assembler.const("INV_SIZE", 16)
@@ -121,7 +119,7 @@ def generateRom(args, world: "LinksAwakeningWorld"):
     assembler.const("wLinkSpawnDelay", 0xDE13)
 
     #assembler.const("HARDWARE_LINK", 1)
-    assembler.const("HARD_MODE", 1 if world.ladxr_settings.hardmode != "none" else 0)
+    assembler.const("HARD_MODE", 1 if ladxr_settings["hardmode"] != "none" else 0)
 
     patches.core.cleanup(rom)
     patches.save.singleSaveSlot(rom)
@@ -135,7 +133,7 @@ def generateRom(args, world: "LinksAwakeningWorld"):
     patches.core.easyColorDungeonAccess(rom)
     patches.owl.removeOwlEvents(rom)
     patches.enemies.fixArmosKnightAsMiniboss(rom)
-    patches.bank3e.addBank3E(rom, world.multi_key, world.player, player_names)
+    patches.bank3e.addBank3E(rom, multi_key, player, data["player_names"])
     patches.bank3f.addBank3F(rom)
     patches.bank34.addBank34(rom, item_list)
     patches.core.removeGhost(rom)
@@ -145,12 +143,12 @@ def generateRom(args, world: "LinksAwakeningWorld"):
     patches.core.injectMainLoop(rom)
 
     from ..Options import ShuffleSmallKeys, ShuffleNightmareKeys
-
-    if world.options.shuffle_small_keys != ShuffleSmallKeys.option_original_dungeon or\
-            world.options.shuffle_nightmare_keys != ShuffleNightmareKeys.option_original_dungeon:
+    # TODO probably cant compare this way
+    if data["ap_options"]["shuffle_small_keys"] != ShuffleSmallKeys.option_original_dungeon or\
+            data["ap_options"]["shuffle_nightmare_keys"] != ShuffleNightmareKeys.option_original_dungeon:
         patches.inventory.advancedInventorySubscreen(rom)
     patches.inventory.moreSlots(rom)
-    if world.ladxr_settings.witch:
+    if ladxr_settings["witch"]:
         patches.witch.updateWitch(rom)
     patches.softlock.fixAll(rom)
     patches.maptweaks.tweakMap(rom)
@@ -164,9 +162,9 @@ def generateRom(args, world: "LinksAwakeningWorld"):
     patches.tarin.updateTarin(rom)
     patches.fishingMinigame.updateFinishingMinigame(rom)
     patches.health.upgradeHealthContainers(rom)
-    if world.ladxr_settings.owlstatues in ("dungeon", "both"):
+    if ladxr_settings["owlstatues"] in ("dungeon", "both"):
         patches.owl.upgradeDungeonOwlStatues(rom)
-    if world.ladxr_settings.owlstatues in ("overworld", "both"):
+    if ladxr_settings["owlstatues"] in ("overworld", "both"):
         patches.owl.upgradeOverworldOwlStatues(rom)
     patches.goldenLeaf.fixGoldenLeaf(rom)
     patches.heartPiece.fixHeartPiece(rom)
@@ -176,145 +174,97 @@ def generateRom(args, world: "LinksAwakeningWorld"):
     patches.songs.upgradeMarin(rom)
     patches.songs.upgradeManbo(rom)
     patches.songs.upgradeMamu(rom)
-    if world.ladxr_settings.tradequest:
-        patches.tradeSequence.patchTradeSequence(rom, world.ladxr_settings.boomerang)
+    if ladxr_settings["tradequest"]:
+        patches.tradeSequence.patchTradeSequence(rom, ladxr_settings["boomerang"])
     else:
         # Monkey bridge patch, always have the bridge there.
         rom.patch(0x00, 0x333D, assembler.ASM("bit 4, e\njr Z, $05"), b"", fill_nop=True)
-    patches.bowwow.fixBowwow(rom, everywhere=world.ladxr_settings.bowwow != 'normal')
-    if world.ladxr_settings.bowwow != 'normal':
+    patches.bowwow.fixBowwow(rom, everywhere=ladxr_settings["bowwow"] != 'normal')
+    if ladxr_settings["bowwow"] != 'normal':
         patches.bowwow.bowwowMapPatches(rom)
     patches.desert.desertAccess(rom)
-    if world.ladxr_settings.overworld == 'dungeondive':
+    if ladxr_settings["overworld"] == 'dungeondive':
         patches.overworld.patchOverworldTilesets(rom)
         patches.overworld.createDungeonOnlyOverworld(rom)
-    elif world.ladxr_settings.overworld == 'nodungeons':
+    elif ladxr_settings["overworld"] == 'nodungeons':
         patches.dungeon.patchNoDungeons(rom)
-    elif world.ladxr_settings.overworld == 'random':
-        patches.overworld.patchOverworldTilesets(rom)
-        mapgen.store_map(rom, world.ladxr_logic.world.map)
+    #elif world.ladxr_settings["overworld"] == 'random':
+    #    patches.overworld.patchOverworldTilesets(rom)
+    #    mapgen.store_map(rom, world.ladxr_logic.world.map)
     #if settings.dungeon_items == 'keysy':
     #    patches.dungeon.removeKeyDoors(rom)
     # patches.reduceRNG.slowdownThreeOfAKind(rom)
     patches.reduceRNG.fixHorseHeads(rom)
     patches.bomb.onlyDropBombsWhenHaveBombs(rom)
-    if world.options.music_change_condition == MusicChangeCondition.option_always:
+    if data["ap_options"]["music_change_condition"] == MusicChangeCondition.option_always:
         patches.aesthetics.noSwordMusic(rom)
-    patches.aesthetics.reduceMessageLengths(rom, world.random)
+    patches.aesthetics.reduceMessageLengths(rom, random)
     patches.aesthetics.allowColorDungeonSpritesEverywhere(rom)
-    if world.ladxr_settings.music == 'random':
-        patches.music.randomizeMusic(rom, world.random)
-    elif world.ladxr_settings.music == 'off':
+    if ladxr_settings["music"] == 'random':
+        patches.music.randomizeMusic(rom, random)
+    elif ladxr_settings["music"] == 'off':
         patches.music.noMusic(rom)
-    if world.ladxr_settings.noflash:
+    if ladxr_settings["noflash"]:
         patches.aesthetics.removeFlashingLights(rom)
-    if world.ladxr_settings.hardmode == "oracle":
+    if ladxr_settings["hardmode"] == "oracle":
         patches.hardMode.oracleMode(rom)
-    elif world.ladxr_settings.hardmode == "hero":
+    elif ladxr_settings["hardmode"] == "hero":
         patches.hardMode.heroMode(rom)
-    elif world.ladxr_settings.hardmode == "ohko":
+    elif ladxr_settings["hardmode"] == "ohko":
         patches.hardMode.oneHitKO(rom)
-    if world.ladxr_settings.superweapons:
+    if ladxr_settings["superweapons"]:
         patches.weapons.patchSuperWeapons(rom)
-    if world.ladxr_settings.textmode == 'fast':
+    if ladxr_settings["textmode"] == 'fast':
         patches.aesthetics.fastText(rom)
-    if world.ladxr_settings.textmode == 'none':
+    if ladxr_settings["textmode"] == 'none':
         patches.aesthetics.fastText(rom)
         patches.aesthetics.noText(rom)
-    if not world.ladxr_settings.nagmessages:
+    if not ladxr_settings["nagmessages"]:
         patches.aesthetics.removeNagMessages(rom)
-    if world.ladxr_settings.lowhpbeep == 'slow':
+    if ladxr_settings["lowhpbeep"] == 'slow':
         patches.aesthetics.slowLowHPBeep(rom)
-    if world.ladxr_settings.lowhpbeep == 'none':
+    if ladxr_settings["lowhpbeep"] == 'none':
         patches.aesthetics.removeLowHPBeep(rom)
-    if 0 <= int(world.ladxr_settings.linkspalette):
-        patches.aesthetics.forceLinksPalette(rom, int(world.ladxr_settings.linkspalette))
+    if 0 <= int(ladxr_settings["linkspalette"]):
+        patches.aesthetics.forceLinksPalette(rom, int(ladxr_settings["linkspalette"]))
     if args.romdebugmode:
         # The default rom has this build in, just need to set a flag and we get this save.
         rom.patch(0, 0x0003, "00", "01")
 
     # Patch the sword check on the shopkeeper turning around.
-    if world.ladxr_settings.steal == 'never':
+    if ladxr_settings["steal"] == 'never':
         rom.patch(4, 0x36F9, "FA4EDB", "3E0000")
-    elif world.ladxr_settings.steal == 'always':
+    elif ladxr_settings["steal"] == 'always':
         rom.patch(4, 0x36F9, "FA4EDB", "3E0100")
 
-    if world.ladxr_settings.hpmode == 'inverted':
+    if ladxr_settings["hpmode"] == 'inverted':
         patches.health.setStartHealth(rom, 9)
-    elif world.ladxr_settings.hpmode == '1':
+    elif ladxr_settings["hpmode"] == '1':
         patches.health.setStartHealth(rom, 1)
 
     patches.inventory.songSelectAfterOcarinaSelect(rom)
-    if world.ladxr_settings.quickswap == 'a':
+    if ladxr_settings["quickswap"] == 'a':
         patches.core.quickswap(rom, 1)
-    elif world.ladxr_settings.quickswap == 'b':
+    elif ladxr_settings["quickswap"] == 'b':
         patches.core.quickswap(rom, 0)
     
-    patches.core.addBootsControls(rom, world.options.boots_controls)
+    patches.core.addBootsControls(rom, data["ap_options"]["boots_controls"])
 
+    hints.addHints(rom, random, data["hint_texts"])
 
-    world_setup = world.ladxr_logic.world_setup
-
-    JUNK_HINT = 0.33
-    RANDOM_HINT= 0.66
-    # USEFUL_HINT = 1.0
-    # TODO: filter events, filter unshuffled keys
-    all_items = world.multiworld.get_items()
-    our_items = [item for item in all_items
-                 if item.player == world.player
-                 and item.location
-                 and item.code is not None
-                 and item.location.show_in_spoiler]
-    our_useful_items = [item for item in our_items if ItemClassification.progression in item.classification]
-
-    def gen_hint():
-        chance = world.random.uniform(0, 1)
-        if chance < JUNK_HINT:
-            return None
-        elif chance < RANDOM_HINT:
-            location = world.random.choice(our_items).location
-        else: # USEFUL_HINT
-            location = world.random.choice(our_useful_items).location
-
-        if location.item.player == world.player:
-            name = "Your"
-        else:
-            name = f"{world.multiworld.player_name[location.item.player]}'s"
-            # filter out { and } since they cause issues with string.format later on
-            name = name.replace("{", "").replace("}", "")
-
-        if isinstance(location, LinksAwakeningLocation):
-            location_name = location.ladxr_item.metadata.name
-        else:
-            location_name = location.name
-
-        hint = f"{name} {location.item} is at {location_name}"
-        if location.player != world.player:
-            # filter out { and } since they cause issues with string.format later on
-            player_name = world.multiworld.player_name[location.player].replace("{", "").replace("}", "")
-            hint += f" in {player_name}'s world"
-
-        # Cap hint size at 85
-        # Realistically we could go bigger but let's be safe instead
-        hint = hint[:85]
-
-        return hint
-
-    hints.addHints(rom, world.random, gen_hint)
-
-    if world_setup.goal == "raft":
+    if data["world_setup"]["goal"] == "raft":
         patches.goal.setRaftGoal(rom)
-    elif world_setup.goal in ("bingo", "bingo-full"):
-        patches.bingo.setBingoGoal(rom, world_setup.bingo_goals, world_setup.goal)
-    elif world_setup.goal == "seashells":
+    elif data["world_setup"]["goal"] in ("bingo", "bingo-full"):
+        patches.bingo.setBingoGoal(rom, data["world_setup"]["bingo_goals"], data["world_setup"]["goal"])
+    elif data["world_setup"]["goal"] == "seashells":
         patches.goal.setSeashellGoal(rom, 20)
     else:
-        patches.goal.setRequiredInstrumentCount(rom, world_setup.goal)
+        patches.goal.setRequiredInstrumentCount(rom, data["world_setup"]["goal"])
 
     # Patch the generated logic into the rom
-    patches.chest.setMultiChest(rom, world_setup.multichest)
-    if world.ladxr_settings.overworld not in {"dungeondive", "random"}:
-        patches.entrances.changeEntrances(rom, world_setup.entrance_mapping)
+    patches.chest.setMultiChest(rom, data["world_setup"]["multichest"])
+    if ladxr_settings["overworld"] not in {"dungeondive", "random"}:
+        patches.entrances.changeEntrances(rom, data["world_setup"]["entrance_mapping"])
     for spot in item_list:
         if spot.item and spot.item.startswith("*"):
             spot.item = spot.item[1:]
@@ -325,23 +275,22 @@ def generateRom(args, world: "LinksAwakeningWorld"):
                 # There are only 101 player name slots (99 + "The Server" + "another world"), so don't use more than that
                 mw = 100
         spot.patch(rom, spot.item, multiworld=mw)
-    patches.enemies.changeBosses(rom, world_setup.boss_mapping)
-    patches.enemies.changeMiniBosses(rom, world_setup.miniboss_mapping)
+    #patches.enemies.changeBosses(rom, data["world_setup"]["boss_mapping"])
+    #patches.enemies.changeMiniBosses(rom, data["world_setup"]["miniboss_mapping"])
 
     if not args.romdebugmode:
         patches.core.addFrameCounter(rom, len(item_list))
 
     patches.core.warpHome(rom)  # Needs to be done after setting the start location.
-    patches.titleScreen.setRomInfo(rom, world.multi_key, world.multiworld.seed_name, world.ladxr_settings,
-                                   world.player_name, world.player)
-    if world.options.ap_title_screen:
+    patches.titleScreen.setRomInfo(rom, data, ladxr_settings, player, player_name)
+    if data["ap_options"]["ap_title_screen"]:
         patches.titleScreen.setTitleGraphics(rom)
     patches.endscreen.updateEndScreen(rom)
     patches.aesthetics.updateSpriteData(rom)
     if args.doubletrouble:
         patches.enemies.doubleTrouble(rom)
 
-    if world.options.text_shuffle:
+    if data["ap_options"]["text_shuffle"]:
         buckets = defaultdict(list)
         # For each ROM bank, shuffle text within the bank
         for n, data in enumerate(rom.texts._PointerTable__data):
@@ -351,20 +300,20 @@ def generateRom(args, world: "LinksAwakeningWorld"):
         for bucket in buckets.values():
             # For each bucket, make a copy and shuffle
             shuffled = bucket.copy()
-            world.random.shuffle(shuffled)
+            random.shuffle(shuffled)
             # Then put new text in
             for bucket_idx, (orig_idx, data) in enumerate(bucket):
                 rom.texts[shuffled[bucket_idx][0]] = data
     
 
-    if world.options.trendy_game != TrendyGame.option_normal:
+    if data["ap_options"]["trendy_game"] != TrendyGame.option_normal:
 
         # TODO: if 0 or 4, 5, remove inaccurate conveyor tiles
 
 
         room_editor = RoomEditor(rom, 0x2A0)
 
-        if world.options.trendy_game == TrendyGame.option_easy:
+        if data["ap_options"]["trendy_game"] == TrendyGame.option_easy:
             # Set physics flag on all objects
             for i in range(0, 6):
                 rom.banks[0x4][0x6F1E + i -0x4000] = 0x4
@@ -375,7 +324,7 @@ def generateRom(args, world: "LinksAwakeningWorld"):
             # Add new conveyor to "push" yoshi (it's only a visual)
             room_editor.objects.append(Object(5, 3, 0xD0))
 
-            if world.options.trendy_game >= TrendyGame.option_harder:
+            if data["ap_options"]["trendy_game"] >= TrendyGame.option_harder:
                 """
                 Data_004_76A0::
                     db   $FC, $00, $04, $00, $00
@@ -389,12 +338,12 @@ def generateRom(args, world: "LinksAwakeningWorld"):
                     TrendyGame.option_impossible: (3, 16),
                 }
                 def speed():
-                    return world.random.randint(*speeds[world.options.trendy_game])
+                    return random.randint(*speeds[data["ap_options"]["trendy_game"]])
                 rom.banks[0x4][0x76A0-0x4000] = 0xFF - speed()
                 rom.banks[0x4][0x76A2-0x4000] = speed()
                 rom.banks[0x4][0x76A6-0x4000] = speed()
                 rom.banks[0x4][0x76A8-0x4000] = 0xFF - speed()
-                if world.options.trendy_game >= TrendyGame.option_hardest:
+                if data["ap_options"]["trendy_game"] >= TrendyGame.option_hardest:
                     rom.banks[0x4][0x76A1-0x4000] = 0xFF - speed()
                     rom.banks[0x4][0x76A3-0x4000] = speed()
                     rom.banks[0x4][0x76A5-0x4000] = speed()
@@ -418,10 +367,10 @@ def generateRom(args, world: "LinksAwakeningWorld"):
             for channel in range(3):
                 color[channel] = color[channel] * 31 // 0xbc
 
-    if world.options.warp_improvements:
-        patches.core.addWarpImprovements(rom, world.options.additional_warp_points)
+    if data["ap_options"]["warp_improvements"]:
+        patches.core.addWarpImprovements(rom, data["ap_options"]["additional_warp_points"])
 
-    palette = world.options.palette
+    palette = data["ap_options"]["palette"]
     if palette != Palette.option_normal:
         ranges = {
             # Object palettes
@@ -487,10 +436,10 @@ def generateRom(args, world: "LinksAwakeningWorld"):
 
     SEED_LOCATION = 0x0134
     # Patch over the title
-    assert(len(world.multi_key) == 12)
-    rom.patch(0x00, SEED_LOCATION, None, binascii.hexlify(world.multi_key))
+    assert(len(multi_key) == 12)
+    rom.patch(0x00, SEED_LOCATION, None, binascii.hexlify(multi_key))
 
     for pymod in pymods:
         pymod.postPatch(rom)
 
-    return rom
+    return rom.export()
