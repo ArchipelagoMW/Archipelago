@@ -183,7 +183,7 @@ class IceGrappling(Choice):
     Easy includes ice grappling enemies that are in range without luring them. May include clips through terrain.
     Medium includes using ice grapples to push enemies through doors or off ledges without luring them. Also includes bringing an enemy over to the Temple Door to grapple through it.
     Hard includes luring or grappling enemies to get to where you want to go.
-    The Medium and Hard options will give the player the Torch to return to the Overworld checkpoint to avoid softlocks. Using the Torch is considered in logic.
+    Enabling any of these difficulty options will give the player the Torch to return to the Overworld checkpoint to avoid softlocks. Using the Torch is considered in logic.
     Note: You will still be expected to ice grapple to the slime in East Forest from below with this option off.
     """
     internal_name = "ice_grappling"
@@ -201,7 +201,7 @@ class LadderStorage(Choice):
     Easy includes uses of Ladder Storage to get to open doors over a long distance without too much difficulty. May include convenient elevation changes (going up Mountain stairs, stairs in front of Special Shop, etc.).
     Medium includes the above as well as changing your elevation using the environment and getting knocked down by melee enemies mid-LS.
     Hard includes the above as well as going behind the map to enter closed doors from behind, shooting a fuse with the magic wand to knock yourself down at close range, and getting into the Cathedral Secret Legend room mid-LS.
-    Enabling any of these difficulty options will give the player the Torch item to return to the Overworld checkpoint to avoid softlocks. Using the Torch is considered in logic.
+    Enabling any of these difficulty options will give the player the Torch to return to the Overworld checkpoint to avoid softlocks. Using the Torch is considered in logic.
     Opening individual chests while doing ladder storage is excluded due to tedium.
     Knocking yourself out of LS with a bomb is excluded due to the problematic nature of consumables in logic.
     """

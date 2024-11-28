@@ -185,11 +185,9 @@ class Context:
     slot_info: typing.Dict[int, NetworkSlot]
     generator_version = Version(0, 0, 0)
     checksums: typing.Dict[str, str]
-    item_names: typing.Dict[str, typing.Dict[int, str]] = (
-        collections.defaultdict(lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})')))
+    item_names: typing.Dict[str, typing.Dict[int, str]]
     item_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
-    location_names: typing.Dict[str, typing.Dict[int, str]] = (
-        collections.defaultdict(lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})')))
+    location_names: typing.Dict[str, typing.Dict[int, str]]
     location_name_groups: typing.Dict[str, typing.Dict[str, typing.Set[str]]]
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
     all_location_and_group_names: typing.Dict[str, typing.Set[str]]
@@ -197,7 +195,6 @@ class Context:
     spheres: typing.List[typing.Dict[int, typing.Set[int]]]
     """ each sphere is { player: { location_id, ... } } """
     logger: logging.Logger
-
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
@@ -269,6 +266,10 @@ class Context:
         self.location_name_groups = {}
         self.all_item_and_group_names = {}
         self.all_location_and_group_names = {}
+        self.item_names = collections.defaultdict(
+            lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown item (ID:{code})'))
+        self.location_names = collections.defaultdict(
+            lambda: Utils.KeyedDefaultDict(lambda code: f'Unknown location (ID:{code})'))
         self.non_hintable_names = collections.defaultdict(frozenset)
 
         self._load_game_data()
@@ -726,15 +727,15 @@ class Context:
             if not hint.local and data not in concerns[hint.finding_player]:
                 concerns[hint.finding_player].append(data)
             # remember hints in all cases
-            if not hint.found:
-                # since hints are bidirectional, finding player and receiving player,
-                # we can check once if hint already exists
-                if hint not in self.hints[team, hint.finding_player]:
-                    self.hints[team, hint.finding_player].add(hint)
-                    new_hint_events.add(hint.finding_player)
-                    for player in self.slot_set(hint.receiving_player):
-                        self.hints[team, player].add(hint)
-                        new_hint_events.add(player)
+
+            # since hints are bidirectional, finding player and receiving player,
+            # we can check once if hint already exists
+            if hint not in self.hints[team, hint.finding_player]:
+                self.hints[team, hint.finding_player].add(hint)
+                new_hint_events.add(hint.finding_player)
+                for player in self.slot_set(hint.receiving_player):
+                    self.hints[team, player].add(hint)
+                    new_hint_events.add(player)
 
             self.logger.info("Notice (Team #%d): %s" % (team + 1, format_hint(self, team, hint)))
         for slot in new_hint_events:
@@ -1153,7 +1154,10 @@ class CommandProcessor(metaclass=CommandMeta):
         if not raw:
             return
         try:
-            command = shlex.split(raw, comments=False)
+            try:
+                command = shlex.split(raw, comments=False)
+            except ValueError:  # most likely: "ValueError: No closing quotation"
+                command = raw.split()
             basecommand = command[0]
             if basecommand[0] == self.marker:
                 method = self.commands.get(basecommand[1:].lower(), None)
@@ -1956,8 +1960,10 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def _cmd_exit(self) -> bool:
         """Shutdown the server"""
-        self.ctx.server.ws_server.close()
-        self.ctx.exit_event.set()
+        try:
+            self.ctx.server.ws_server.close()
+        finally:
+            self.ctx.exit_event.set()
         return True
 
     @mark_raw

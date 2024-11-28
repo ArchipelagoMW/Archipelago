@@ -7,7 +7,7 @@ use that version. These steps are for developers or platforms without compiled r
 ## General
 
 What you'll need:
- * [Python 3.8.7 or newer](https://www.python.org/downloads/), not the Windows Store version
+ * [Python 3.10.15 or newer](https://www.python.org/downloads/), not the Windows Store version
    * Python 3.12.x is currently the newest supported version
  * pip: included in downloads from python.org, separate in many Linux distributions
  * Matching C compiler
@@ -85,4 +85,4 @@ PyCharm has a built-in version control integration that supports Git.
 
 ## Running tests
 
-Run `pip install pytest pytest-subtests`, then use your IDE to run tests or run `pytest` from the source folder.
+Information about running tests can be found in [tests.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/tests.md#running-tests)
