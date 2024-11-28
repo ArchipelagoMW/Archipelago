@@ -728,8 +728,7 @@ class FreeFlyLocation(Toggle):
 class FreeFlyBlacklist(OptionSet):
     """
     Disables specific locations as valid free fly locations.
-    Does nothing if Free Fly Location is set to false.
-    If all locations are disabled free fly location will be set to Littleroot Town.
+    Has no effect if Free Fly Location is disabled.
     """
     display_name = "Free Fly Blacklist"
     valid_keys = [

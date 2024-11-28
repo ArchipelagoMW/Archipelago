@@ -75,6 +75,18 @@ VISITED_EVENT_NAME_TO_ID = {
     "EVENT_VISITED_SOUTHERN_ISLAND": 17,
 }
 
+BLACKLIST_OPTION_TO_VISITED_EVENT = {
+    "Slateport City": "EVENT_VISITED_SLATEPORT_CITY",
+    "Mauville City": "EVENT_VISITED_MAUVILLE_CITY",
+    "Verdanturf Town": "EVENT_VISITED_VERDANTURF_TOWN",
+    "Fallarbor Town": "EVENT_VISITED_FALLARBOR_TOWN",
+    "Lavaridge Town": "EVENT_VISITED_LAVARIDGE_TOWN",
+    "Fortree City": "EVENT_VISITED_FORTREE_CITY",
+    "Lilycove City": "EVENT_VISITED_LILYCOVE_CITY",
+    "Mossdeep City": "EVENT_VISITED_MOSSDEEP_CITY",
+    "Sootopolis City": "EVENT_VISITED_SOOTOPOLIS_CITY",
+    "Ever Grande City": "EVENT_VISITED_EVER_GRANDE_CITY",
+}
 
 class PokemonEmeraldLocation(Location):
     game: str = "Pokemon Emerald"
@@ -173,20 +185,7 @@ def set_free_fly(world: "PokemonEmeraldWorld") -> None:
     # If not enabled, set it to Littleroot Town by default
     fly_location_name = "EVENT_VISITED_LITTLEROOT_TOWN"
     if world.options.free_fly_location:
-        free_fly_locations = [
-            "EVENT_VISITED_SLATEPORT_CITY" if "Slateport City" not in world.options.free_fly_blacklist else None,
-            "EVENT_VISITED_MAUVILLE_CITY" if "Mauville City" not in world.options.free_fly_blacklist else None,
-            "EVENT_VISITED_VERDANTURF_TOWN" if "Verdanturf Town" not in world.options.free_fly_blacklist else None,
-            "EVENT_VISITED_FALLARBOR_TOWN" if "Fallarbor Town" not in world.options.free_fly_blacklist else None,
-            "EVENT_VISITED_LAVARIDGE_TOWN" if "Lavaridge Town" not in world.options.free_fly_blacklist else None,
-            "EVENT_VISITED_FORTREE_CITY" if "Fortree City" not in world.options.free_fly_blacklist else None,
-            "EVENT_VISITED_LILYCOVE_CITY" if "Lilycove City" not in world.options.free_fly_blacklist else None,
-            "EVENT_VISITED_MOSSDEEP_CITY" if "Mossdeep City" not in world.options.free_fly_blacklist else None,
-            "EVENT_VISITED_SOOTOPOLIS_CITY" if "Sootopolis City" not in world.options.free_fly_blacklist else None,
-            "EVENT_VISITED_EVER_GRANDE_CITY" if "Ever Grande City" not in world.options.free_fly_blacklist else None,
-        ]
-
-        free_fly_locations = [location for location in free_fly_locations if location is not None]
+        free_fly_locations = sorted(map(lambda city: BLACKLIST_OPTION_TO_VISITED_EVENT[city], world.options.free_fly_blacklist.value))
         if free_fly_locations:
             fly_location_name = world.random.choice(free_fly_locations)
 
