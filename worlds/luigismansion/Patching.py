@@ -349,12 +349,8 @@ def set_key_info_entry(key_entry, item_data, item_name):
     key_entry["open_door_no"] = item_data["door_id"]
     key_entry["appear_type"] = 0
     key_entry["invisible"] = 0
-
-    # Allow the Ghost Foyer Key to be spawned at the beginning of the game and work properly.
-    if item_name == "Ghost Foyer Key":
-        key_entry["name"] = "gameboy" #Todo remove this line after testing. Proper name is above.
-        key_entry["appear_flag"] = 0
-        key_entry["disappear_flag"] = 0
+    key_entry["appear_flag"] = 0
+    key_entry["disappear_flag"] = 0
 
 # List of Location names and their index in keyinfo.
 LOCATION_TO_INDEX = {
@@ -381,6 +377,8 @@ higher_up_furniture = ["Painting", "Fan", "Mirror", "Picture"]
 
 def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_data):
     for x in furniture_info_entry.info_file_field_entries:
+        x["item_table"] = 0
+
         # If any of the arguments are used in the Study bookshelves / reading books, disable this.
         if x["arg0"] in {101, 102, 103, 104, 105, 106}:
             x["arg0"] = 0.0
@@ -417,6 +415,7 @@ def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_
 
 # List of Room names and their ID. Used for the Enemizer.
 ROOM_TO_ID = {
+    "Mirror Room": 4,
     "Wardrobe": 38,
     "Laundry Room": 5,
     "Hidden Room": 1,
@@ -441,7 +440,7 @@ ROOM_TO_ID = {
 def apply_new_ghost(x, element):
     # The list of ghosts that can replace the vanilla ones. Only includes the ones without elements.
     # TODO: Allow the tenjyo and tenjyo2 (Ceiling ghosts) to be supported. Will require changing their Y Position value.
-    random_ghosts_to_patch = ["yapoo1", "mapoo1", "mopoo1", "banaoba", "topoo1", "topoo4", "heypo1", "heypo2", "skul", "putcher1"]
+    random_ghosts_to_patch = ["yapoo1", "mapoo1", "mopoo1", "banaoba", "topoo1", "topoo4", "heypo1", "heypo2", "putcher1"]
 
     # If a room is supposed to have an element, replace all the ghosts in it to be only ghosts with that element.
     # Otherwise, randomize the ghosts between the non-element ones from the list.
@@ -464,7 +463,7 @@ def update_enemy_info(enemy_info, output_data):
                   "banaoba",
                   "topoo1", "topoo2", "topoo3", "topoo4",
                   "heypo1", "heypo2", "heypo3", "heypo4", "heypo5", "heypo6", "heypo7", "heypo8",
-                  "putcher1",
+                  "putcher1", "skul",
                   "tenjyo", "tenjyo2"]
 
     for x in enemy_info.info_file_field_entries[:]:
