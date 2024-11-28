@@ -223,7 +223,7 @@ location_data = [
                  Missable(92)),
     LocationData("Victory Road 2F-C", "East Item", "Full Heal", rom_addresses["Missable_Victory_Road_2F_Item_2"],
                  Missable(93)),
-    LocationData("Victory Road 2F-W", "West Item", "TM05 Mega Kick", rom_addresses["Missable_Victory_Road_2F_Item_3"],
+    LocationData("Victory Road 2F-C", "West Item", "TM05 Mega Kick", rom_addresses["Missable_Victory_Road_2F_Item_3"],
                  Missable(94)),
     LocationData("Victory Road 2F-NW", "North Item Near Moltres", "Guard Spec", rom_addresses["Missable_Victory_Road_2F_Item_4"],
                  Missable(95)),
