@@ -2783,6 +2783,145 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.SMASH_AND_GRAB_P.mission_name, "Defeat Kerrigan", SC2_RACESWAP_LOC_ID_OFFSET + 1607, LocationType.MASTERY,
             logic.protoss_competent_comp
         ),
+        make_location_data(SC2Mission.THE_DIG_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1700, LocationType.VICTORY,
+            lambda state: (
+                logic.zerg_basic_kerriganless_anti_air(state)
+                and logic.zerg_defense_rating(state, False, True) >= 8
+                and logic.zerg_defense_rating(state, False, False) >= 6
+                and logic.zerg_common_unit(state))
+        ),
+        make_location_data(SC2Mission.THE_DIG_Z.mission_name, "Left Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1701, LocationType.VANILLA,
+            lambda state: (
+                logic.zerg_defense_rating(state, False, False) >= 6
+                and logic.zerg_common_unit(state))
+        ),
+        make_location_data(SC2Mission.THE_DIG_Z.mission_name, "Right Ground Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1702, LocationType.VANILLA,
+            lambda state: (
+                logic.zerg_defense_rating(state, False, False) >= 6
+                and logic.zerg_common_unit(state))
+        ),
+        make_location_data(SC2Mission.THE_DIG_Z.mission_name, "Right Cliff Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1703, LocationType.VANILLA,
+            lambda state: (
+                logic.zerg_defense_rating(state, False, False) >= 6
+                and logic.zerg_common_unit(state))
+        ),
+        make_location_data(SC2Mission.THE_DIG_Z.mission_name, "Moebius Base", SC2_RACESWAP_LOC_ID_OFFSET + 1704, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_DIG_Z.mission_name, "Door Outer Layer", SC2_RACESWAP_LOC_ID_OFFSET + 1705, LocationType.EXTRA,
+            lambda state: (
+                logic.zerg_defense_rating(state, False, False) >= 6
+                and logic.zerg_common_unit(state))
+        ),
+        make_location_data(SC2Mission.THE_DIG_Z.mission_name, "Door Thermal Barrier", SC2_RACESWAP_LOC_ID_OFFSET + 1706, LocationType.EXTRA,
+            lambda state: (
+                logic.zerg_basic_kerriganless_anti_air(state)
+                and logic.zerg_defense_rating(state, False, True) >= 8
+                and logic.zerg_defense_rating(state, False, False) >= 6
+                and logic.zerg_common_unit(state))
+        ),
+        make_location_data(SC2Mission.THE_DIG_Z.mission_name, "Cutting Through the Core", SC2_RACESWAP_LOC_ID_OFFSET + 1707, LocationType.EXTRA,
+            lambda state: (
+                logic.zerg_basic_kerriganless_anti_air(state)
+                and logic.zerg_defense_rating(state, False, True) >= 8
+                and logic.zerg_defense_rating(state, False, False) >= 6
+                and logic.zerg_common_unit(state))
+        ),
+        make_location_data(SC2Mission.THE_DIG_Z.mission_name, "Structure Access Imminent", SC2_RACESWAP_LOC_ID_OFFSET + 1708, LocationType.EXTRA,
+            lambda state: (
+                logic.zerg_basic_kerriganless_anti_air(state)
+                and logic.zerg_defense_rating(state, False, True) >= 8
+                and logic.zerg_defense_rating(state, False, False) >= 6
+                and logic.zerg_common_unit(state))
+        ),
+        make_location_data(SC2Mission.THE_DIG_Z.mission_name, "Northwestern Protoss Base", SC2_RACESWAP_LOC_ID_OFFSET + 1709, LocationType.MASTERY,
+            lambda state: (
+                logic.zerg_basic_kerriganless_anti_air(state)
+                and logic.zerg_defense_rating(state, False, True) >= 8
+                and logic.zerg_defense_rating(state, False, False) >= 6
+                and logic.zerg_common_unit(state)
+                and logic.zerg_base_buster(state))
+        ),
+        make_location_data(SC2Mission.THE_DIG_Z.mission_name, "Northeastern Protoss Base", SC2_RACESWAP_LOC_ID_OFFSET + 1710, LocationType.MASTERY,
+            lambda state: (
+                logic.zerg_basic_kerriganless_anti_air(state)
+                and logic.zerg_defense_rating(state, False, True) >= 8
+                and logic.zerg_defense_rating(state, False, False) >= 6
+                and logic.zerg_common_unit(state)
+                and logic.zerg_base_buster(state))
+        ),
+        make_location_data(SC2Mission.THE_DIG_Z.mission_name, "Eastern Protoss Base", SC2_RACESWAP_LOC_ID_OFFSET + 1711, LocationType.MASTERY,
+            lambda state: (
+                logic.zerg_basic_kerriganless_anti_air(state)
+                and logic.zerg_defense_rating(state, False, True) >= 8
+                and logic.zerg_defense_rating(state, False, False) >= 6
+                and logic.zerg_common_unit(state)
+                and logic.zerg_base_buster(state))
+        ),
+        make_location_data(SC2Mission.THE_DIG_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1800, LocationType.VICTORY,
+            lambda state: (
+                logic.protoss_basic_anti_air(state)
+                and logic.protoss_defense_rating(state, False) >= 6
+                and logic.protoss_common_unit(state))
+        ),
+        make_location_data(SC2Mission.THE_DIG_P.mission_name, "Left Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1801, LocationType.VANILLA,
+            lambda state: (
+                logic.protoss_defense_rating(state, False) >= 6
+                and logic.protoss_common_unit(state))
+        ),
+        make_location_data(SC2Mission.THE_DIG_P.mission_name, "Right Ground Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1802, LocationType.VANILLA,
+            lambda state: (
+                logic.protoss_defense_rating(state, False) >= 6
+                and logic.protoss_common_unit(state))
+        ),
+        make_location_data(SC2Mission.THE_DIG_P.mission_name, "Right Cliff Relic", SC2_RACESWAP_LOC_ID_OFFSET + 1803, LocationType.VANILLA,
+            lambda state: (
+                logic.protoss_defense_rating(state, False) >= 6
+                and logic.protoss_common_unit(state))
+        ),
+        make_location_data(SC2Mission.THE_DIG_P.mission_name, "Moebius Base", SC2_RACESWAP_LOC_ID_OFFSET + 1804, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_DIG_P.mission_name, "Door Outer Layer", SC2_RACESWAP_LOC_ID_OFFSET + 1805, LocationType.EXTRA,
+            lambda state: (
+                logic.protoss_defense_rating(state, False) >= 6
+                and logic.protoss_common_unit(state))
+        ),
+        make_location_data(SC2Mission.THE_DIG_P.mission_name, "Door Thermal Barrier", SC2_RACESWAP_LOC_ID_OFFSET + 1806, LocationType.EXTRA,
+            lambda state: (
+                logic.protoss_basic_anti_air(state)
+                and logic.protoss_defense_rating(state, False) >= 6
+                and logic.protoss_common_unit(state))
+        ),
+        make_location_data(SC2Mission.THE_DIG_P.mission_name, "Cutting Through the Core", SC2_RACESWAP_LOC_ID_OFFSET + 1807, LocationType.EXTRA,
+            lambda state: (
+                logic.protoss_basic_anti_air(state)
+                and logic.protoss_defense_rating(state, False) >= 6
+                and logic.protoss_common_unit(state))
+        ),
+        make_location_data(SC2Mission.THE_DIG_P.mission_name, "Structure Access Imminent", SC2_RACESWAP_LOC_ID_OFFSET + 1808, LocationType.EXTRA,
+            lambda state: (
+                logic.protoss_basic_anti_air(state)
+                and logic.protoss_defense_rating(state, False) >= 6
+                and logic.protoss_common_unit(state))
+        ),
+        make_location_data(SC2Mission.THE_DIG_P.mission_name, "Northwestern Protoss Base", SC2_RACESWAP_LOC_ID_OFFSET + 1809, LocationType.MASTERY,
+            lambda state: (
+                logic.protoss_basic_anti_air(state)
+                and logic.protoss_defense_rating(state, False) >= 6
+                and logic.protoss_common_unit(state)
+                and (logic.protoss_competent_comp(state) or state.has(item_names.OBSERVER, player)))
+        ),
+        make_location_data(SC2Mission.THE_DIG_P.mission_name, "Northeastern Protoss Base", SC2_RACESWAP_LOC_ID_OFFSET + 1810, LocationType.MASTERY,
+            lambda state: (
+                logic.protoss_basic_anti_air(state)
+                and logic.protoss_defense_rating(state, False) >= 6
+                and logic.protoss_common_unit(state)
+                and (logic.protoss_competent_comp(state) or state.has(item_names.OBSERVER, player)))
+        ),
+        make_location_data(SC2Mission.THE_DIG_P.mission_name, "Eastern Protoss Base", SC2_RACESWAP_LOC_ID_OFFSET + 1811, LocationType.MASTERY,
+            lambda state: (
+                logic.protoss_basic_anti_air(state)
+                and logic.protoss_defense_rating(state, False) >= 6
+                and logic.protoss_common_unit(state)
+                and (logic.protoss_competent_comp(state) or state.has(item_names.OBSERVER, player)))
+        ),
         make_location_data(SC2Mission.SUPERNOVA_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 2100, LocationType.VICTORY,
             lambda state: (
                 logic.zerg_competent_comp_competent_aa(state)
