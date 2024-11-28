@@ -272,6 +272,9 @@ def set_access_rules(world: 'GSTLAWorld'):
     add_rule(world.get_location(LocationName.Yampi_Desert_Trainers_Whip),
              lambda state: state.has(ItemName.Lash_Pebble, player) or state.has(ItemName.Sand, player))
 
+    add_rule(world.get_location(LocationName.Yampi_Desert_Blow_Mace),
+             lambda state: state.has(ItemName.Pound_Cube, player))
+
     add_rule(world.get_location(LocationName.Yampi_Desert_Cave_Water_of_Life),
              lambda state: state.has(ItemName.Sand, player))
 
