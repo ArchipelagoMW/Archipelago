@@ -140,9 +140,8 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
             if popup_text.remaining_time > 1:
                 # countdown the timer and string replace the number
                 popup_text.remaining_time -= 1
-                popup_text.text = popup_text.text.replace(
-                    f"{popup_text.remaining_time + 1} seconds", f"{popup_text.remaining_time} seconds"
-                )
+                popup_text.text = f"A game client able to parse URIs was not detected for {game}.\n"\
+                              f"Launching Text Client in {popup_text.remaining_time} seconds..."
             else:
                 # our timer is finished so launch text client and close down
                 run_component(text_client_component, *launch_args)
