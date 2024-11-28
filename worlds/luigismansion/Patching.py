@@ -150,6 +150,7 @@ def __get_key_name(door_id):
 
 
 def update_item_appear_table(item_appear_table_entry, output_data):
+    # Todo remove duplicate entries from keys here
     # Add the special items, so they can be spawned from treasure chests or furniture in game.
     items_to_add = ["mkinoko", "itembomb", "ice", "elffst", "elwfst", "elifst", "mstar", "mglove", "mshoes",
                     "rdiamond"]
