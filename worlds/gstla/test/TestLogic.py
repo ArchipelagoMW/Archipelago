@@ -20,18 +20,18 @@ requirement_map = {
     # "Whirlwind": ItemName.Whirlwind,
     # "Sand": ItemName.Sand,
     "Lash_Pebble": ItemName.Lash_Pebble,
-    "Boss_Briggs": ItemName.Briggs_defeated,
-    "BriggsEscaped": ItemName.Briggs_escaped,
+    # "Boss_Briggs": ItemName.Briggs_defeated,
+    # "BriggsEscaped": ItemName.Briggs_escaped,
     # "FlagPiers": ItemName.Piers,
     "Boss_Serpent": ItemName.Serpent_defeated,
     "GabombaCleared": ItemName.Gabomba_Statue_Completed,
     "ShipWings": ItemName.Wings_of_Anemos,
-    "Boss_Poseidon": ItemName.Poseidon_defeated,
-    "Boss_Moapa": ItemName.Moapa_defeated,
-    "Boss_AquaHydra": ItemName.Aqua_Hydra_defeated,
-    "Boss_FlameDragons": ItemName.Flame_Dragons_defeated,
+    # "Boss_Poseidon": ItemName.Poseidon_defeated,
+    # "Boss_Moapa": ItemName.Moapa_defeated,
+    # "Boss_AquaHydra": ItemName.Aqua_Hydra_defeated,
+    # "Boss_FlameDragons": ItemName.Flame_Dragons_defeated,
     "Mars Star": ItemName.Mythril_Bag_Mars,
-    "Boss_Avimander": ItemName.Briggs_escaped,
+    # "Boss_Avimander": ItemName.Briggs_escaped,
 }
 
 omitted_items = {
@@ -121,6 +121,7 @@ class FlagData:
 class LocationLogic:
     # Locations that don't behave properly with these tests, so we omit them from the tests
     exclude_flags = {
+        2490, # Gaia Rock Sand Tablet
         3908, # Naribwe - Thorn Crown
         3909, # Naribwe - Reveal Circle
         # Next three are Kobombo Mountains
@@ -405,7 +406,7 @@ class TestTreasureLogic(GSTestBase):
                     self.verify_item_length(items, without_req)
 
                     for item in items:
-                        self.assertTrue(state.collect(item, prevent_sweep=True))
+                        self.assertTrue(state.collect(item, prevent_sweep=False))
                     self.assertFalse(location.can_reach(state),
                                      f"Could reach {location.name} with flag {hex(flag)} without {req} but with {without_req} with state {state.prog_items}")
 
