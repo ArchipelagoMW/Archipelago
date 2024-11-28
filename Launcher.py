@@ -386,6 +386,8 @@ def run_gui(path: str, args: Any):
             self.button_layout.layout.orientation = "vertical"
             self.button_layout.layout.spacing = 10
             self.button_layout.scroll_wheel_distance = 40
+            self.button_layout.do_scroll_x = False
+            self.button_layout.scroll_type = ["content", "bars"]
             self.grid.add_widget(self.button_layout)
             self.grid.padding = 10
             self.grid.spacing = 5
