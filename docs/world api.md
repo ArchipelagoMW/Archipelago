@@ -466,7 +466,7 @@ The world has to provide the following things for generation:
 
 * the properties mentioned above
 * additions to the item pool
-* additions to the regions list: at least one called "Menu"
+* additions to the regions list: at least one using the world class's `origin_region_name` ("Menu" by default)
 * locations placed inside those regions
 * a `def create_item(self, item: str) -> MyGameItem` to create any item on demand
 * applying `self.multiworld.push_precollected` for world-defined start inventory
