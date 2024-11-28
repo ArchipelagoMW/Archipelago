@@ -366,7 +366,10 @@ class LinksAwakeningWorld(World):
         # Remove dungeon items we are about to put in from the state so that we don't double count
         for item in all_dungeon_items_to_fill:
             all_state.remove(item)
-        
+
+        # Remove "An Alarm Clock" from "Windfish" to avoid fill_restrictive thinking the game has been beaten
+        all_state.remove(self.get_location("Windfish").item)
+
         # Finally, fill!
         fill_restrictive(self.multiworld, all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=False)
 
