@@ -584,6 +584,7 @@ class GameManager(App):
         self.hint_log = HintLog(self.json_to_kivy_parser)
         self.log_panels["Hints"] = hint_panel.content = HintLayout()
         hint_panel.content.add_widget(self.hint_log)
+        self.tabs.add_widget(hint_panel)
 
         if len(self.logging_pairs) == 1:
             self.tabs.default_tab_text = "Archipelago"
