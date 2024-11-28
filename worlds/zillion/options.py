@@ -1,7 +1,6 @@
 from collections import Counter
 from dataclasses import dataclass
-from typing import ClassVar, Dict, Literal, Tuple
-from typing_extensions import TypeGuard  # remove when Python >= 3.10
+from typing import ClassVar, Dict, Literal, Tuple, TypeGuard
 
 from Options import Choice, DefaultOnToggle, NamedRange, OptionGroup, PerGameCommonOptions, Range, Removed, Toggle
 
@@ -233,6 +232,7 @@ class ZillionSkill(Range):
     range_start = 0
     range_end = 5
     default = 2
+    display_name = "skill"
 
 
 class ZillionStartingCards(NamedRange):
