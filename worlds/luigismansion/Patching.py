@@ -121,9 +121,9 @@ def __get_key_name(door_id):
             return "key01"
 
 def update_item_info_table(item_info_table_entry, output_data):
-    item_info_table_entry.info_file_field_entries.clear()
+    #item_info_table_entry.info_file_field_entries.clear()
 
-    __add_info_item(item_info_table_entry, "nothing")
+    #__add_info_item(item_info_table_entry, "nothing")
 
     # For every key found in the generation output, add an entry for it in "iteminfotable".
     for item_name, item_data in output_data["Locations"].items():
@@ -138,28 +138,28 @@ def update_item_info_table(item_info_table_entry, output_data):
             })
 
     # Add the rest of the items that can spawn in the game, so they can be spawned from treasure chests or furniture.
-    __add_info_item(item_info_table_entry, "money")
+    #__add_info_item(item_info_table_entry, "money")
     __add_info_item(item_info_table_entry, "rdiamond")
 
-    __add_info_item(item_info_table_entry, "sheart", 10, 0)
-    __add_info_item(item_info_table_entry, "mheart", 20, 0)
-    __add_info_item(item_info_table_entry, "lheart", 50, 0)
+    #__add_info_item(item_info_table_entry, "sheart", 10, 0)
+    #__add_info_item(item_info_table_entry, "mheart", 20, 0)
+    #__add_info_item(item_info_table_entry, "lheart", 50, 0)
 
-    __add_info_item(item_info_table_entry, "move_sheart", 10, 1)
-    __add_info_item(item_info_table_entry, "move_mheart", 20, 1)
-    __add_info_item(item_info_table_entry, "move_lheart", 50, 1)
+    #__add_info_item(item_info_table_entry, "move_sheart", 10, 1)
+    #__add_info_item(item_info_table_entry, "move_mheart", 20, 1)
+    #__add_info_item(item_info_table_entry, "move_lheart", 50, 1)
 
-    __add_info_item(item_info_table_entry, "mkinoko")
+    #__add_info_item(item_info_table_entry, "mkinoko")
     __add_info_item(item_info_table_entry, "itembomb")
 
-    __add_info_item(item_info_table_entry, "elffst")
-    __add_info_item(item_info_table_entry, "elwfst")
-    __add_info_item(item_info_table_entry, "elifst")
+    #__add_info_item(item_info_table_entry, "elffst")
+    #__add_info_item(item_info_table_entry, "elwfst")
+    #__add_info_item(item_info_table_entry, "elifst")
 
-    __add_info_item(item_info_table_entry, "mcap")
-    __add_info_item(item_info_table_entry, "mletter")
-    __add_info_item(item_info_table_entry, "mshoes")
-    __add_info_item(item_info_table_entry, "mglove")
+    #__add_info_item(item_info_table_entry, "mcap")
+    #__add_info_item(item_info_table_entry, "mletter")
+    #__add_info_item(item_info_table_entry, "mshoes")
+    #__add_info_item(item_info_table_entry, "mglove")
     __add_info_item(item_info_table_entry, "mstar")
 
 def __add_info_item(item_info_table_entry, item_name, hp_amount = 0, is_escape = 0):
@@ -377,8 +377,6 @@ higher_up_furniture = ["Painting", "Fan", "Mirror", "Picture"]
 
 def update_furniture_info(furniture_info_entry, item_appear_table_entry, output_data):
     for x in furniture_info_entry.info_file_field_entries:
-        x["item_table"] = 0
-
         # If any of the arguments are used in the Study bookshelves / reading books, disable this.
         if x["arg0"] in {101, 102, 103, 104, 105, 106}:
             x["arg0"] = 0.0
