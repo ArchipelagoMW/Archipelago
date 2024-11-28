@@ -3,8 +3,7 @@ from contextlib import redirect_stdout
 import functools
 import settings
 import threading
-import typing
-from typing import Any, Dict, List, Set, Tuple, Optional, Union
+from typing import Any, ClassVar
 import os
 import logging
 
@@ -49,7 +48,7 @@ class ZillionSettings(settings.Group):
         """
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
-    rom_start: typing.Union[RomStart, bool] = RomStart("retroarch")
+    rom_start: RomStart | bool = RomStart("retroarch")
 
 
 class ZillionWebWorld(WebWorld):
@@ -78,7 +77,7 @@ class ZillionWorld(World):
     options_dataclass = ZillionOptions
     options: ZillionOptions  # type: ignore
 
-    settings: typing.ClassVar[ZillionSettings]  # type: ignore
+    settings: ClassVar[ZillionSettings]  # type: ignore
     # these type: ignore are because of this issue: https://github.com/python/typing/discussions/1486
 
     topology_present = True  # indicate if world type has any meaningful layout/pathing
@@ -91,7 +90,7 @@ class ZillionWorld(World):
 
     class LogStreamInterface:
         logger: logging.Logger
-        buffer: List[str]
+        buffer: list[str]
 
         def __init__(self, logger: logging.Logger) -> None:
             self.logger = logger
@@ -110,19 +109,19 @@ class ZillionWorld(World):
 
     lsi: LogStreamInterface
 
-    id_to_zz_item: Optional[Dict[int, ZzItem]] = None
+    id_to_zz_item: dict[int, ZzItem] | None = None
     zz_system: System
-    _item_counts: "Counter[str]" = Counter()
+    _item_counts: Counter[str] = Counter()
     """
     These are the items counts that will be in the game,
     which might be different from the item counts the player asked for in options
     (if the player asked for something invalid).
     """
-    my_locations: List[ZillionLocation] = []
+    my_locations: list[ZillionLocation] = []
     """ This is kind of a cache to avoid iterating through all the multiworld locations in logic. """
     slot_data_ready: threading.Event
     """ This event is set in `generate_output` when the data is ready for `fill_slot_data` """
-    logic_cache: Union[ZillionLogicCache, None] = None
+    logic_cache: ZillionLogicCache | None = None
 
     def __init__(self, world: MultiWorld, player: int) -> None:
         super().__init__(world, player)
@@ -183,7 +182,7 @@ class ZillionWorld(World):
 
         start = self.zz_system.randomizer.regions["start"]
 
-        all_regions: Dict[str, ZillionRegion] = {}
+        all_regions: dict[str, ZillionRegion] = {}
         for here_zz_name, zz_r in self.zz_system.randomizer.regions.items():
             here_name = "Menu" if here_zz_name == "start" else zz_reg_name_to_reg_name(here_zz_name)
             all_regions[here_name] = ZillionRegion(zz_r, here_name, here_name, p, w)
@@ -191,7 +190,7 @@ class ZillionWorld(World):
 
         limited_skill = Req(gun=3, jump=3, skill=self.zz_system.randomizer.options.skill, hp=940, red=1, floppy=126)
         queue = deque([start])
-        done: Set[str] = set()
+        done: set[str] = set()
         while len(queue):
             zz_here = queue.popleft()
             here_name = "Menu" if zz_here.name == "start" else zz_reg_name_to_reg_name(zz_here.name)
@@ -277,7 +276,7 @@ class ZillionWorld(World):
                 to_stay: Chars = "JJ"
                 if "JJ" in item_pool:
                     group_players = set(group["players"])
-                    players_start_chars: List[Tuple[int, Chars]] = []
+                    players_start_chars: list[tuple[int, Chars]] = []
                     for player in group_players:
                         z_world = multiworld.worlds[player]
                         assert isinstance(z_world, ZillionWorld)
@@ -289,7 +288,7 @@ class ZillionWorld(World):
                     elif start_char_counts["Champ"] > start_char_counts["Apple"]:
                         to_stay = "Champ"
                     else:  # equal
-                        choices: Tuple[Chars, ...] = ("Apple", "Champ")
+                        choices: tuple[Chars, ...] = ("Apple", "Champ")
                         to_stay = multiworld.random.choice(choices)
 
                     for p, sc in players_start_chars:
@@ -316,10 +315,10 @@ class ZillionWorld(World):
 
         assert self.zz_system.randomizer, "generate_early hasn't been called"
 
-        # debug_zz_loc_ids: Dict[str, int] = {}
+        # debug_zz_loc_ids: dict[str, int] = {}
         empty = zz_items[4]
         multi_item = empty  # a different patcher method differentiates empty from ap multi item
-        multi_items: Dict[str, Tuple[str, str]] = {}  # zz_loc_name to (item_name, player_name)
+        multi_items: dict[str, tuple[str, str]] = {}  # zz_loc_name to (item_name, player_name)
         for z_loc in self.multiworld.get_locations(self.player):
             assert isinstance(z_loc, ZillionLocation)
             # debug_zz_loc_ids[z_loc.zz_loc.name] = id(z_loc.zz_loc)
@@ -342,7 +341,7 @@ class ZillionWorld(World):
         #     print(id_)
         # print("size:", len(debug_zz_loc_ids))
 
-        # debug_loc_to_id: Dict[str, int] = {}
+        # debug_loc_to_id: dict[str, int] = {}
         # regions = self.zz_randomizer.regions
         # for region in regions.values():
         #     for loc in region.locations:

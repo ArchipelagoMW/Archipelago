@@ -3,7 +3,7 @@ import base64
 import io
 import pkgutil
 import platform
-from typing import Any, ClassVar, Coroutine, Dict, List, Optional, Protocol, Tuple, cast
+from typing import Any, ClassVar, Coroutine, Protocol, cast
 
 from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
@@ -40,7 +40,7 @@ class ToggleCallback(Protocol):
 
 
 class SetRoomCallback(Protocol):
-    def __call__(self, rooms: List[List[int]]) -> object: ...
+    def __call__(self, rooms: list[list[int]]) -> object: ...
 
 
 class ZillionContext(CommonContext):
@@ -48,7 +48,7 @@ class ZillionContext(CommonContext):
     command_processor = ZillionCommandProcessor
     items_handling = 1  # receive items from other players
 
-    known_name: Optional[str]
+    known_name: str | None
     """ This is almost the same as `auth` except `auth` is reset to `None` when server disconnects, and this isn't. """
 
     from_game: "asyncio.Queue[events.EventFromGame]"
@@ -57,11 +57,11 @@ class ZillionContext(CommonContext):
     """ local checks watched by server """
     next_item: int
     """ index in `items_received` """
-    ap_id_to_name: Dict[int, str]
-    ap_id_to_zz_id: Dict[int, int]
+    ap_id_to_name: dict[int, str]
+    ap_id_to_zz_id: dict[int, int]
     start_char: Chars = "JJ"
-    rescues: Dict[int, RescueInfo] = {}
-    loc_mem_to_id: Dict[int, int] = {}
+    rescues: dict[int, RescueInfo] = {}
+    loc_mem_to_id: dict[int, int] = {}
     got_room_info: asyncio.Event
     """ flag for connected to server """
     got_slot_data: asyncio.Event
@@ -121,7 +121,7 @@ class ZillionContext(CommonContext):
         self.items_received.clear()
 
     @override
-    def on_deathlink(self, data: Dict[str, Any]) -> None:
+    def on_deathlink(self, data: dict[str, Any]) -> None:
         self.to_game.put_nowait(events.DeathEventToGame())
         return super().on_deathlink(data)
 
@@ -155,8 +155,8 @@ class ZillionContext(CommonContext):
                 MAP_WIDTH: ClassVar[int] = 281
 
                 map_background: CoreImage
-                _number_textures: List[Texture] = []
-                rooms: List[List[int]] = []
+                _number_textures: list[Texture] = []
+                rooms: list[list[int]] = []
 
                 def __init__(self, **kwargs: Any) -> None:  # noqa: ANN401
                     super().__init__(**kwargs)
@@ -218,7 +218,7 @@ class ZillionContext(CommonContext):
                     self.map_widget.width = 0
                 self.container.do_layout()
 
-            def set_rooms(self, rooms: List[List[int]]) -> None:
+            def set_rooms(self, rooms: list[list[int]]) -> None:
                 self.map_widget.rooms = rooms
                 self.map_widget.update_map()
 
@@ -229,7 +229,7 @@ class ZillionContext(CommonContext):
         self.ui_task = asyncio.create_task(run_co, name="UI")
 
     @override
-    def on_package(self, cmd: str, args: Dict[str, Any]) -> None:
+    def on_package(self, cmd: str, args: dict[str, Any]) -> None:
         self.room_item_numbers_to_ui()
         if cmd == "Connected":
             logger.info("logged in to Archipelago server")
@@ -289,7 +289,7 @@ class ZillionContext(CommonContext):
             if "keys" not in args:
                 logger.warning(f"invalid Retrieved packet to ZillionClient: {args}")
                 return
-            keys = cast(Dict[str, Optional[str]], args["keys"])
+            keys = cast(dict[str, str | None], args["keys"])
             doors_b64 = keys.get(f"zillion-{self.auth}-doors", None)
             if doors_b64:
                 logger.info("received door data from server")
@@ -372,7 +372,7 @@ class ZillionContext(CommonContext):
             self.next_item = len(self.items_received)
 
 
-def name_seed_from_ram(data: bytes) -> Tuple[str, str]:
+def name_seed_from_ram(data: bytes) -> tuple[str, str]:
     """ returns player name, and end of seed string """
     if len(data) == 0:
         # no connection to game

@@ -1,5 +1,3 @@
-from typing import Optional
-
 from typing_extensions import override
 
 from zilliandomizer.logic_components.regions import Region as ZzRegion
@@ -32,7 +30,7 @@ class ZillionLocation(Location):
                  zz_loc: ZzLocation,
                  player: int,
                  name: str,
-                 parent: Optional[Region] = None) -> None:
+                 parent: Region | None = None) -> None:
         loc_id = loc_name_to_id[name]
         super().__init__(player, name, loc_id, parent)
         self.zz_loc = zz_loc

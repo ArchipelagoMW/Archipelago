@@ -1,5 +1,5 @@
 import os
-from typing import BinaryIO, Optional
+from typing import BinaryIO
 import zipfile
 
 from typing_extensions import override
@@ -24,8 +24,8 @@ class ZillionPatch(APAutoPatchInterface):
     """ JSON encoded """
 
     def __init__(self,
-                 path: Optional[str] = None,
-                 player: Optional[int] = None,
+                 path: str | None = None,
+                 player: int | None = None,
                  player_name: str = "",
                  server: str = "",
                  *,
@@ -56,7 +56,7 @@ class ZillionPatch(APAutoPatchInterface):
         write_rom_from_gen_data(self.gen_data_str, target)
 
 
-def get_base_rom_path(file_name: Optional[str] = None) -> str:
+def get_base_rom_path(file_name: str | None = None) -> str:
     from . import ZillionSettings, ZillionWorld
     settings: ZillionSettings = ZillionWorld.settings
     if not file_name:
