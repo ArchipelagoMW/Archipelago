@@ -331,6 +331,10 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
         return super(SelectableLabel, self).refresh_view_attrs(
             rv, index, data)
 
+    def refresh_view_layout(self, rv, index, layout, viewport):
+        super(SelectableLabel, self).refresh_view_layout(rv, index, layout, viewport)
+        self.height = self.texture_size[1]
+
     def on_size(self, instance_label, size: list) -> None:
         super().on_size(instance_label, size)
         if self.parent:
@@ -390,8 +394,11 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
         self.location_text = data["location"]["text"]
         self.entrance_text = data["entrance"]["text"]
         self.found_text = data["found"]["text"]
-        self.height = self.minimum_height
         return super(HintLabel, self).refresh_view_attrs(rv, index, data)
+
+    def refresh_view_layout(self, rv, index, layout, viewport):
+        super(HintLabel, self).refresh_view_layout(rv, index, layout, viewport)
+        self.set_height(self, 0)
 
     def on_touch_down(self, touch):
         """ Add selection on touch down """
@@ -672,9 +679,6 @@ class GameManager(MDApp):
         return new_tab
 
     def update_texts(self, dt):
-        if hasattr(self.tabs.carousel.slides[0], "fix_heights"):
-            self.tabs.carousel.slides[0].fix_heights()  # TODO: remove this when Kivy fixes this upstream
-        # KIVYMDTODO: see if this bug exists in KivyMD
         if self.ctx.server:
             self.title = self.base_title + " " + Utils.__version__ + \
                          f" | Connected to: {self.ctx.server_address} " \
@@ -806,12 +810,6 @@ class UILog(MDRecycleView):
         if len(self.data) > self.messages:
             self.data.pop(0)
 
-    def fix_heights(self):
-        """Workaround fix for divergent texture and layout heights"""
-        for element in self.children[0].children:
-            if element.height != element.texture_size[1]:
-                element.height = element.texture_size[1]
-
 
 class HintLog(MDRecycleView):
     header = {
@@ -823,7 +821,7 @@ class HintLog(MDRecycleView):
         "found": {"text": "[u]Status[/u]"},
         "striped": True,
     }
-
+    data: typing.List[typing.Any]
     sort_key: str = ""
     reversed: bool = False
 
@@ -866,12 +864,6 @@ class HintLog(MDRecycleView):
     @staticmethod
     def hint_sorter(element: dict) -> str:
         return ""
-
-    def fix_heights(self):
-        """Workaround fix for divergent texture and layout heights"""
-        for element in self.children[0].children:
-            max_height = max(child.texture_size[1] for child in element.children)
-            element.height = max_height
 
 
 class E(ExceptionHandler):
