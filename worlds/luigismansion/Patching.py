@@ -415,6 +415,10 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
 
 # Dictionary of Room names and their ID. Used for the Enemizer.
 ROOM_ID_TO_NAME = {
+    39: "Anteroom",
+    35: "Parlor",
+    27: "Sitting Room",
+    16: "Graveyard",
     4: "Mirror Room",
     38: "Wardrobe",
     5: "Laundry Room",
@@ -457,8 +461,8 @@ def update_enemy_info(enemy_info, output_data):
                 continue
             room_enemy_entry = next(((key, val) for (key, val) in output_data["Room Enemies"].items() if
                 ROOM_ID_TO_NAME[x["room_no"]] == key and x["name"] in ghost_list), None)
-            if not room_enemy_entry is None:
-                apply_new_ghost(x, room_enemy_entry[1])
+            if not room_enemy_entry is None or x["room_no"] == 35:
+                apply_new_ghost(x, "No Element" if x["room_no"] == 35 else room_enemy_entry[1])
 
         # Disables enemies in furniture to allow them to spawn properly if an item is hidden inside said furniture.
         # if x["access_name"] != "(null)":

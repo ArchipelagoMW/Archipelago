@@ -117,7 +117,7 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Laundry Clear Chest": LMLocationData("Laundry Room", 710, "Chest", 4, []),
     "Cold Storage Clear Chest": LMLocationData("Cold Storage", 48, "Chest", 33,
                                               ["Fire Element Medal"]),
-    #"Breaker Room Clear Chest": LMLocationData("Breaker Room", 49, "Chest", 36),
+    "Breaker Room Clear Chest": LMLocationData("Breaker Room", 49, "Chest", 36),
     "Twins' Room Clear Chest": LMLocationData("Twins' Room", 25, "Chest", 25, []),  # requires any kind of element medal
     "Billiards Room Clear Chest": LMLocationData("Billiards Room", 26, "Chest", 9, []),
     "Balcony Clear Chest": LMLocationData("Balcony", 27, "Chest", 31,

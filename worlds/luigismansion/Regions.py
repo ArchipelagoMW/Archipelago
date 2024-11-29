@@ -25,7 +25,9 @@ GHOST_TO_ROOM = {
     "Armory": "No Element",
     "Pipe Room": "No Element",
     "Artist's Studio": "No Element",
-    "Mirror Room": "No Element"
+    "Mirror Room": "No Element",
+    "Graveyard": "No Element",
+    "Anteroom": "No Element"
 }
 
 
