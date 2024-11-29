@@ -77,6 +77,8 @@ def update_event_info(event_info):
             x["PlayerStop"] = 0
             x["EventLoad"] = 0
 
+        if x["EventNo"] == 65:
+            x["disappear_flag"] = 10
 
 def update_character_info(character_info, output_data):
     # Removes useless cutscene objects and the vacuum in the Parlor under the closet.
@@ -129,6 +131,7 @@ def update_generator_info(generator_info):
         # This prevents being softlocked in Boolossus and having to reset the game without saving.
         if x["type"] == "demotel2":
             x["appear_flag"] = 22
+            x["disappear_flag"] = 11
 
 
 def update_obj_info(obj_info):
@@ -290,7 +293,7 @@ def update_treasure_table(treasure_info, character_info, output_data):
                     "cdiamond": 0,
                     "rdiamond": 0,
                     "effect": 1 if chest_size == 2 else 0,
-                    "camera": 1
+                    "camera": 0
                     })
 
 
