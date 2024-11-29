@@ -275,7 +275,7 @@ class ZillionWorld(World):
                 item_pool = group["item_pool"]
                 to_stay: Chars = "JJ"
                 if "JJ" in item_pool:
-                    group_players = set(group["players"])
+                    group["players"] = group_players = set(group["players"])
                     players_start_chars: list[tuple[int, Chars]] = []
                     for player in group_players:
                         z_world = multiworld.worlds[player]
@@ -294,7 +294,6 @@ class ZillionWorld(World):
                     for p, sc in players_start_chars:
                         if sc != to_stay:
                             group_players.remove(p)
-                    group["players"] = group_players
                 group_world = group["world"]
                 assert isinstance(group_world, ZillionWorld)
                 group_world._make_item_maps(to_stay)
