@@ -482,7 +482,7 @@ def get_text_after(text: str, start: str) -> str:
     return text[text.index(start) + len(start):]
 
 
-loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}
+loglevel_mapping = {name.lower(): level for name, level in logging.getLevelNamesMapping().items()}
 
 
 def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
