@@ -168,7 +168,7 @@ class ZillionWorld(World):
         self.logic_cache = logic_cache
         w = self.multiworld
         self.my_locations = []
-        dead_end_locations: List[ZillionLocation] = []
+        dead_end_locations: list[ZillionLocation] = []
 
         self.zz_system.randomizer.place_canister_gun_reqs()
         # low probability that place_canister_gun_reqs() results in empty 1st sphere
