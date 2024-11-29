@@ -595,6 +595,7 @@ item_descriptions = {
     item_names.SWARM_HOST: "Siege unit that attacks by rooting in place and continually spawning Locusts.",
     item_names.INFESTOR: "Support caster that can move while burrowed. Can use the Fungal Growth, Parasitic Domination, and Consumption abilities.",
     item_names.ULTRALISK: "Massive melee attacker. Has an area-damage cleave attack.",
+    item_names.PYGALISK: "Miniature melee attacker. Summoned from the predator nest in large quantities and low cooldown.",
     item_names.SPORE_CRAWLER: "Anti-air defensive structure that can detect cloaked units.",
     item_names.SPINE_CRAWLER: "Anti-ground defensive structure.",
     item_names.CORRUPTOR: "Anti-air flying attacker specializing in taking down enemy capital ships.",
@@ -639,6 +640,9 @@ item_descriptions = {
     item_names.ULTRALISK_BURROW_CHARGE: "Allows Ultralisks to burrow and charge at enemy units, knocking back and stunning units when it emerges.",
     item_names.ULTRALISK_TISSUE_ASSIMILATION: "Ultralisks recover health when they deal damage.",
     item_names.ULTRALISK_MONARCH_BLADES: "Ultralisks gain increased splash damage.",
+    item_names.PYGALISK_STIM: _ability_desc("Pygalisks", "Stimpack", f"temporarily increases movement and attack speed at the cost of {STIMPACK_SMALL_COST} health"),
+    item_names.PYGALISK_DUCAL_BLADES: "Pygalisks do splash damage.",
+    item_names.PYGALISK_COMBAT_CARAPACE: "Increases Pygalisk health by +25.",
     item_names.CORRUPTOR_CAUSTIC_SPRAY: "Allows Corruptors to use the Caustic Spray ability, which deals ramping damage to buildings over time.",
     item_names.CORRUPTOR_CORRUPTION: "Allows Corruptors to use the Corruption ability, which causes a target enemy unit to take increased damage.",
     item_names.SCOURGE_VIRULENT_SPORES: "Scourge will deal splash damage.",
@@ -707,6 +711,10 @@ item_descriptions = {
     item_names.ABERRATION_PROTECTIVE_COVER: "Aberrations grant damage reduction to allied units directly beneath them.",
     item_names.ABERRATION_BANELING_INCUBATION: "Aberrations spawn 2 Banelings upon death.",
     item_names.ABERRATION_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.ABERRATION),
+    item_names.ABERRATION_PROGRESSIVE_BANELING_LAUNCH: inspect.cleandoc("""
+        Level 1: Allows Aberrations to periodically throw generated Banelings at air targets.
+        Level 2: Can store up to 3 Banelings. Can consume Banelings to recharge faster. Thrown Banelings benefit from Baneling upgrades. 
+    """),
     item_names.CORRUPTOR_MONSTROUS_RESILIENCE: "Corruptors gain +100 life.",
     item_names.CORRUPTOR_CONSTRUCT_REGENERATION: "Corruptors gain increased life regeneration.",
     item_names.CORRUPTOR_SCOURGE_INCUBATION: "Corruptors spawn 2 Scourge upon death (3 with Swarm Scourge).",
