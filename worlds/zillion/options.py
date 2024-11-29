@@ -1,7 +1,6 @@
 from collections import Counter
 from dataclasses import dataclass
-from typing import ClassVar, Dict, Literal, Tuple
-from typing_extensions import TypeGuard  # remove when Python >= 3.10
+from typing import ClassVar, Literal, TypeGuard
 
 from Options import Choice, DefaultOnToggle, NamedRange, OptionGroup, PerGameCommonOptions, Range, Removed, Toggle
 
@@ -108,7 +107,7 @@ class ZillionStartChar(Choice):
     display_name = "start character"
     default = "random"
 
-    _name_capitalization: ClassVar[Dict[int, Chars]] = {
+    _name_capitalization: ClassVar[dict[int, Chars]] = {
         option_jj: "JJ",
         option_apple: "Apple",
         option_champ: "Champ",
@@ -233,6 +232,7 @@ class ZillionSkill(Range):
     range_start = 0
     range_end = 5
     default = 2
+    display_name = "skill"
 
 
 class ZillionStartingCards(NamedRange):
@@ -320,7 +320,7 @@ z_option_groups = [
 ]
 
 
-def convert_item_counts(ic: "Counter[str]") -> ZzItemCounts:
+def convert_item_counts(ic: Counter[str]) -> ZzItemCounts:
     tr: ZzItemCounts = {
         ID.card: ic["ID Card"],
         ID.red: ic["Red ID Card"],
@@ -334,7 +334,7 @@ def convert_item_counts(ic: "Counter[str]") -> ZzItemCounts:
     return tr
 
 
-def validate(options: ZillionOptions) -> "Tuple[ZzOptions, Counter[str]]":
+def validate(options: ZillionOptions) -> tuple[ZzOptions, Counter[str]]:
     """
     adjusts options to make game completion possible
 
