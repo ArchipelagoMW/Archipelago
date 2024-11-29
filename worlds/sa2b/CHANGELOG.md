@@ -15,6 +15,7 @@
 ### Bug Fixes:
 - Added missing `Dry Lagoon - 12 Animals` location
 - Chaos Emeralds should no longer disproportionately end up in Cannon's Core or the final Level Gate
+- Going into submenus from the pause menu should no longer reset traps
 - Chao Garden:
 	- Prevent races from occasionally becoming uncompletable when using the "Prize Only" option
 	- Properly allow Hero Chao to participate in Dark Races
