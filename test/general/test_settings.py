@@ -4,10 +4,10 @@ from settings import Group
 from worlds.AutoWorld import AutoWorldRegister
 
 
-class TestNameGroups(TestCase):
+class TestSettings(TestCase):
     def test_settings_can_update(self) -> None:
         """
-        Test that there are no empty item name groups, which is likely a bug.
+        Test that world settings can update.
         """
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game=game_name):
