@@ -24,7 +24,7 @@ env:
 jobs:
   # build-release-macos: # LF volunteer
 
-  build-win-py310: # RCs will still be built and signed by hand
+  build-win: # RCs will still be built and signed by hand
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
