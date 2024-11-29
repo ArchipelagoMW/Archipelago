@@ -293,16 +293,6 @@ class ALTTPWorld(World):
                 break
 
     def generate_early(self):
-        # write old options
-        import dataclasses
-        is_first = self.player == min(self.multiworld.get_game_players(self.game))
-
-        for field in dataclasses.fields(self.options_dataclass):
-            if is_first:
-                setattr(self.multiworld, field.name, {})
-            getattr(self.multiworld, field.name)[self.player] = getattr(self.options, field.name)
-        # end of old options re-establisher
-
         multiworld = self.multiworld
 
         self.fix_trock_doors = (self.options.entrance_shuffle != 'vanilla' or self.options.mode == 'inverted')
