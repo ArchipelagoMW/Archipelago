@@ -46,6 +46,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     multiworld.sprite_pool = args.sprite_pool.copy()
 
     multiworld.set_options(args)
+    if args.csv_output:
+        from Options import dump_player_options
+        dump_player_options(multiworld)
     multiworld.set_item_links()
     multiworld.state = CollectionState(multiworld)
     logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, multiworld.seed)
@@ -273,7 +276,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 def precollect_hint(location):
                     entrance = er_hint_data.get(location.player, {}).get(location.address, "")
                     hint = NetUtils.Hint(location.item.player, location.player, location.address,
-                                         location.item.code, False, entrance, location.item.flags)
+                                         location.item.code, False, entrance, location.item.flags, False)
                     precollected_hints[location.player].add(hint)
                     if location.item.player not in multiworld.groups:
                         precollected_hints[location.item.player].add(hint)
@@ -335,6 +338,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     "seed_name": multiworld.seed_name,
                     "spheres": spheres,
                     "datapackage": data_package,
+                    "race_mode": int(multiworld.is_race),
                 }
                 AutoWorld.call_all(multiworld, "modify_multidata", multidata)
 
