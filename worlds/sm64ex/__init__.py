@@ -106,7 +106,7 @@ class SM64World(World):
         # Power Stars
         star_range = self.number_of_stars
         # Vanilla 100 Coin stars have to removed from the pool if other max star increasing options are active.
-        if (self.options.enable_coin_stars == "vanilla" and self.number_of_stars >= 15):
+        if (self.options.enable_coin_stars == "vanilla" and star_range >= 15):
             star_range -= 15
         self.multiworld.itempool += [self.create_item("Power Star") for i in range(0,star_range)]
         # Keys
