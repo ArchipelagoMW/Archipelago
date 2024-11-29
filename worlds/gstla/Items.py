@@ -25,9 +25,9 @@ class GSTLAItem(Item):
             super(GSTLAItem, self).__init__(item.name, item.progression, item.id, player) 
         self.item_data = item
 
-AP_PLACEHOLDER_ITEM = ItemData(0xA00, "AP Placeholder", ItemClassification.filler, -1, ItemType.Consumable)
+AP_USEFUL_PLACEHOLDER_ITEM = ItemData(0xA00, "AP Useful Placeholder", ItemClassification.useful, -1, ItemType.Consumable)
 AP_PROG_PLACEHOLDER_ITEM = ItemData(0xA0A, "AP Progression Placeholder", ItemClassification.progression, -1, ItemType.Consumable)
-AP_USEFUL_PLACEHOLDER_ITEM = ItemData(0xA0B, "AP Useful Placeholder", ItemClassification.useful, -1, ItemType.Consumable)
+AP_PLACEHOLDER_ITEM = ItemData(0xA0B, "AP Placeholder", ItemClassification.filler, -1, ItemType.Consumable)
 
 all_items = all_gen_items
 item_table: Dict[str, ItemData] = {item.name: item for item in all_items}
