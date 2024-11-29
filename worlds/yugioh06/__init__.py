@@ -50,7 +50,7 @@ from .client_bh import YuGiOh2006Client
 class Yugioh06Web(WebWorld):
     theme = "stone"
     setup = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up Yu-Gi-Oh! - Ultimate Masters Edition - World Championship Tournament 2006 "
         "for Archipelago on your computer.",
         "English",
