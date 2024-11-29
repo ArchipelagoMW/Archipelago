@@ -2783,6 +2783,97 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.SMASH_AND_GRAB_P.mission_name, "Defeat Kerrigan", SC2_RACESWAP_LOC_ID_OFFSET + 1607, LocationType.MASTERY,
             logic.protoss_competent_comp
         ),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1900, LocationType.VICTORY,
+            lambda state: (
+                logic.zerg_basic_kerriganless_anti_air(state)
+                and (logic.zerg_versatile_air(state)
+                    or state.has_any({item_names.YGGDRASIL, item_names.OVERLORD_VENTRAL_SACS, item_names.NYDUS_WORM}, player)
+                    and logic.zerg_common_unit(state)))
+        ),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_Z.mission_name, "1st Data Core", SC2_RACESWAP_LOC_ID_OFFSET + 1901, LocationType.VANILLA),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_Z.mission_name, "2nd Data Core", SC2_RACESWAP_LOC_ID_OFFSET + 1902, LocationType.VANILLA,
+            lambda state: (
+                logic.zerg_versatile_air(state)
+                or state.has_any({item_names.YGGDRASIL, item_names.OVERLORD_VENTRAL_SACS, item_names.NYDUS_WORM}, player)
+                    and logic.zerg_common_unit(state))
+        ),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_Z.mission_name, "South Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 1903, LocationType.EXTRA,
+            lambda state: state.has_any({item_names.YGGDRASIL, item_names.OVERLORD_VENTRAL_SACS, item_names.NYDUS_WORM}, player)
+        ),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_Z.mission_name, "Wall Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 1904, LocationType.EXTRA,
+            lambda state: state.has_any({item_names.YGGDRASIL, item_names.OVERLORD_VENTRAL_SACS, item_names.NYDUS_WORM}, player)
+        ),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_Z.mission_name, "Mid Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 1905, LocationType.EXTRA,
+            lambda state: state.has_any({item_names.YGGDRASIL, item_names.OVERLORD_VENTRAL_SACS, item_names.NYDUS_WORM}, player)
+        ),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_Z.mission_name, "Nydus Roof Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 1906, LocationType.EXTRA,
+            lambda state: state.has_any({item_names.YGGDRASIL, item_names.OVERLORD_VENTRAL_SACS, item_names.NYDUS_WORM}, player)
+        ),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_Z.mission_name, "Alive Inside Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 1907, LocationType.EXTRA,
+            lambda state: state.has_any({item_names.YGGDRASIL, item_names.OVERLORD_VENTRAL_SACS, item_names.NYDUS_WORM}, player)
+        ),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_Z.mission_name, "Brutalisk", SC2_RACESWAP_LOC_ID_OFFSET + 1908, LocationType.VANILLA,
+            lambda state: (
+                logic.zerg_basic_kerriganless_anti_air(state)
+                and (logic.zerg_versatile_air(state)
+                    or state.has_any({item_names.YGGDRASIL, item_names.OVERLORD_VENTRAL_SACS, item_names.NYDUS_WORM}, player)
+                    and logic.zerg_common_unit(state)))
+        ),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_Z.mission_name, "3rd Data Core", SC2_RACESWAP_LOC_ID_OFFSET + 1909, LocationType.VANILLA,
+            lambda state: (
+                logic.zerg_basic_kerriganless_anti_air(state)
+                and (logic.zerg_versatile_air(state)
+                    or state.has_any({item_names.YGGDRASIL, item_names.OVERLORD_VENTRAL_SACS, item_names.NYDUS_WORM}, player)
+                    and logic.zerg_common_unit(state)))
+        ),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 2000, LocationType.VICTORY,
+            lambda state: (
+                logic.protoss_basic_anti_air(state)
+                and (logic.protoss_fleet(state)
+                    or state.has(item_names.WARP_PRISM, player)
+                    and logic.protoss_common_unit(state)))
+        ),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_P.mission_name, "1st Data Core", SC2_RACESWAP_LOC_ID_OFFSET + 2001, LocationType.VANILLA),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_P.mission_name, "2nd Data Core", SC2_RACESWAP_LOC_ID_OFFSET + 2002, LocationType.VANILLA,
+            lambda state: (
+                logic.protoss_fleet(state)
+                or (state.has(item_names.WARP_PRISM, player)
+                    and logic.protoss_common_unit(state)))
+        ),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_P.mission_name, "South Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 2003, LocationType.EXTRA,
+            lambda state: state.has(item_names.WARP_PRISM, player)
+                           and (adv_tactics or state.has(item_names.PROGRESSIVE_WARP_RELOCATE, player))
+        ),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_P.mission_name, "Wall Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 2004, LocationType.EXTRA,
+            lambda state: state.has(item_names.WARP_PRISM, player)
+                           and (adv_tactics or state.has(item_names.PROGRESSIVE_WARP_RELOCATE, player))
+        ),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_P.mission_name, "Mid Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 2005, LocationType.EXTRA,
+            lambda state: state.has(item_names.WARP_PRISM, player)
+                           and (adv_tactics or state.has(item_names.PROGRESSIVE_WARP_RELOCATE, player))
+        ),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_P.mission_name, "Nydus Roof Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 2006, LocationType.EXTRA,
+            lambda state: state.has(item_names.WARP_PRISM, player)
+                           and (adv_tactics or state.has(item_names.PROGRESSIVE_WARP_RELOCATE, player))
+        ),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_P.mission_name, "Alive Inside Rescue", SC2_RACESWAP_LOC_ID_OFFSET + 2007, LocationType.EXTRA,
+            lambda state: state.has(item_names.WARP_PRISM, player)
+                           and (adv_tactics or state.has(item_names.PROGRESSIVE_WARP_RELOCATE, player))
+        ),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_P.mission_name, "Brutalisk", SC2_RACESWAP_LOC_ID_OFFSET + 2008, LocationType.VANILLA,
+            lambda state: (
+                logic.protoss_basic_anti_air(state)
+                and (logic.protoss_fleet(state)
+                    or state.has(item_names.WARP_PRISM, player)
+                    and logic.protoss_common_unit(state)))
+        ),
+        make_location_data(SC2Mission.THE_MOEBIUS_FACTOR_P.mission_name, "3rd Data Core", SC2_RACESWAP_LOC_ID_OFFSET + 2009, LocationType.VANILLA,
+            lambda state: (
+                logic.protoss_basic_anti_air(state)
+                and (logic.protoss_fleet(state)
+                    or state.has(item_names.WARP_PRISM, player)
+                    and logic.protoss_common_unit(state)))
+        ),
         make_location_data(SC2Mission.SUPERNOVA_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 2100, LocationType.VICTORY,
             lambda state: (
                 logic.zerg_competent_comp_competent_aa(state)
