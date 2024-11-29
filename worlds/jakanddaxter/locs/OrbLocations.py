@@ -51,41 +51,57 @@ def create_address(level_index: int, bundle_index: int) -> int:
 
 # What follows is our methods of generating all the name/ID pairs for location_name_to_id.
 # Remember that not every bundle will be used in the actual seed, we just need a static map of strings to ints.
-locGR_orbBundleTable = {create_address(level_table_with_global["Geyser Rock"]["level_index"], index): f"Geyser Rock Orb Bundle {index + 1}"
+locGR_orbBundleTable = {create_address(level_table_with_global["Geyser Rock"]["level_index"], index):
+                        f"Geyser Rock Orb Bundle {index + 1}"
                         for index in range(level_table_with_global["Geyser Rock"]["orbs"])}
-locSV_orbBundleTable = {create_address(level_table_with_global["Sandover Village"]["level_index"], index): f"Sandover Village Orb Bundle {index + 1}"
+locSV_orbBundleTable = {create_address(level_table_with_global["Sandover Village"]["level_index"], index):
+                        f"Sandover Village Orb Bundle {index + 1}"
                         for index in range(level_table_with_global["Sandover Village"]["orbs"])}
-locFJ_orbBundleTable = {create_address(level_table_with_global["Forbidden Jungle"]["level_index"], index): f"Forbidden Jungle Orb Bundle {index + 1}"
+locFJ_orbBundleTable = {create_address(level_table_with_global["Forbidden Jungle"]["level_index"], index):
+                        f"Forbidden Jungle Orb Bundle {index + 1}"
                         for index in range(level_table_with_global["Forbidden Jungle"]["orbs"])}
-locSB_orbBundleTable = {create_address(level_table_with_global["Sentinel Beach"]["level_index"], index): f"Sentinel Beach Orb Bundle {index + 1}"
+locSB_orbBundleTable = {create_address(level_table_with_global["Sentinel Beach"]["level_index"], index):
+                        f"Sentinel Beach Orb Bundle {index + 1}"
                         for index in range(level_table_with_global["Sentinel Beach"]["orbs"])}
-locMI_orbBundleTable = {create_address(level_table_with_global["Misty Island"]["level_index"], index): f"Misty Island Orb Bundle {index + 1}"
+locMI_orbBundleTable = {create_address(level_table_with_global["Misty Island"]["level_index"], index):
+                        f"Misty Island Orb Bundle {index + 1}"
                         for index in range(level_table_with_global["Misty Island"]["orbs"])}
-locFC_orbBundleTable = {create_address(level_table_with_global["Fire Canyon"]["level_index"], index): f"Fire Canyon Orb Bundle {index + 1}"
+locFC_orbBundleTable = {create_address(level_table_with_global["Fire Canyon"]["level_index"], index):
+                        f"Fire Canyon Orb Bundle {index + 1}"
                         for index in range(level_table_with_global["Fire Canyon"]["orbs"])}
-locRV_orbBundleTable = {create_address(level_table_with_global["Rock Village"]["level_index"], index): f"Rock Village Orb Bundle {index + 1}"
+locRV_orbBundleTable = {create_address(level_table_with_global["Rock Village"]["level_index"], index):
+                        f"Rock Village Orb Bundle {index + 1}"
                         for index in range(level_table_with_global["Rock Village"]["orbs"])}
-locLPC_orbBundleTable = {create_address(level_table_with_global["Lost Precursor City"]["level_index"], index): f"Lost Precursor City Orb Bundle {index + 1}"
-                        for index in range(level_table_with_global["Lost Precursor City"]["orbs"])}
-locBS_orbBundleTable = {create_address(level_table_with_global["Boggy Swamp"]["level_index"], index): f"Boggy Swamp Orb Bundle {index + 1}"
+locLPC_orbBundleTable = {create_address(level_table_with_global["Lost Precursor City"]["level_index"], index):
+                         f"Lost Precursor City Orb Bundle {index + 1}"
+                         for index in range(level_table_with_global["Lost Precursor City"]["orbs"])}
+locBS_orbBundleTable = {create_address(level_table_with_global["Boggy Swamp"]["level_index"], index):
+                        f"Boggy Swamp Orb Bundle {index + 1}"
                         for index in range(level_table_with_global["Boggy Swamp"]["orbs"])}
-locPB_orbBundleTable = {create_address(level_table_with_global["Precursor Basin"]["level_index"], index): f"Precursor Basin Orb Bundle {index + 1}"
+locPB_orbBundleTable = {create_address(level_table_with_global["Precursor Basin"]["level_index"], index):
+                        f"Precursor Basin Orb Bundle {index + 1}"
                         for index in range(level_table_with_global["Precursor Basin"]["orbs"])}
-locMP_orbBundleTable = {create_address(level_table_with_global["Mountain Pass"]["level_index"], index): f"Mountain Pass Orb Bundle {index + 1}"
+locMP_orbBundleTable = {create_address(level_table_with_global["Mountain Pass"]["level_index"], index):
+                        f"Mountain Pass Orb Bundle {index + 1}"
                         for index in range(level_table_with_global["Mountain Pass"]["orbs"])}
-locVC_orbBundleTable = {create_address(level_table_with_global["Volcanic Crater"]["level_index"], index): f"Volcanic Crater Orb Bundle {index + 1}"
+locVC_orbBundleTable = {create_address(level_table_with_global["Volcanic Crater"]["level_index"], index):
+                        f"Volcanic Crater Orb Bundle {index + 1}"
                         for index in range(level_table_with_global["Volcanic Crater"]["orbs"])}
-locSM_orbBundleTable = {create_address(level_table_with_global["Snowy Mountain"]["level_index"], index): f"Snowy Mountain Orb Bundle {index + 1}"
+locSM_orbBundleTable = {create_address(level_table_with_global["Snowy Mountain"]["level_index"], index):
+                        f"Snowy Mountain Orb Bundle {index + 1}"
                         for index in range(level_table_with_global["Snowy Mountain"]["orbs"])}
-locSC_orbBundleTable = {create_address(level_table_with_global["Spider Cave"]["level_index"], index): f"Spider Cave Orb Bundle {index + 1}"
+locSC_orbBundleTable = {create_address(level_table_with_global["Spider Cave"]["level_index"], index):
+                        f"Spider Cave Orb Bundle {index + 1}"
                         for index in range(level_table_with_global["Spider Cave"]["orbs"])}
-locLT_orbBundleTable = {create_address(level_table_with_global["Lava Tube"]["level_index"], index): f"Lava Tube Orb Bundle {index + 1}"
+locLT_orbBundleTable = {create_address(level_table_with_global["Lava Tube"]["level_index"], index):
+                        f"Lava Tube Orb Bundle {index + 1}"
                         for index in range(level_table_with_global["Lava Tube"]["orbs"])}
-locGMC_orbBundleTable = {create_address(level_table_with_global["Gol and Maia's Citadel"]["level_index"], index): f"Gol and Maia's Citadel Orb Bundle {index + 1}"
-                        for index in range(level_table_with_global["Gol and Maia's Citadel"]["orbs"])}
-locGlobal_orbBundleTable = {create_address(level_table_with_global[""]["level_index"], index): f"Orb Bundle {index + 1}"
-                        for index in range(level_table_with_global[""]["orbs"])}
-
+locGMC_orbBundleTable = {create_address(level_table_with_global["Gol and Maia's Citadel"]["level_index"], index):
+                         f"Gol and Maia's Citadel Orb Bundle {index + 1}"
+                         for index in range(level_table_with_global["Gol and Maia's Citadel"]["orbs"])}
+locGlobal_orbBundleTable = {create_address(level_table_with_global[""]["level_index"], index):
+                            f"Orb Bundle {index + 1}"
+                            for index in range(level_table_with_global[""]["orbs"])}
 loc_orbBundleTable = {
     **locGR_orbBundleTable,
     **locSV_orbBundleTable,
