@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 import json
-from typing import Dict, Tuple
 
 from zilliandomizer.game import Game as ZzGame
 
@@ -9,7 +8,7 @@ from zilliandomizer.game import Game as ZzGame
 class GenData:
     """ data passed from generation to patcher """
 
-    multi_items: Dict[str, Tuple[str, str]]
+    multi_items: dict[str, tuple[str, str]]
     """ zz_loc_name to (item_name, player_name) """
     zz_game: ZzGame
     game_id: bytes
