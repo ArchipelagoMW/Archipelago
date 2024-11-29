@@ -168,7 +168,7 @@ class SC2Mission(Enum):
     AMON_S_REACH = 58, "Amon's Reach (Protoss)", SC2Campaign.LOTV, "Shakuras", SC2Race.PROTOSS, MissionPools.EASY, "ap_amon_s_reach", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     LAST_STAND = 59, "Last Stand (Protoss)", SC2Campaign.LOTV, "Shakuras", SC2Race.PROTOSS, MissionPools.HARD, "ap_last_stand", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.TimedDefense|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     FORBIDDEN_WEAPON = 60, "Forbidden Weapon (Protoss)", SC2Campaign.LOTV, "Purifier", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_forbidden_weapon", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.Countdown|MissionFlag.VsProtoss|MissionFlag.HasRaceSwap
-    TEMPLE_OF_UNIFICATION = 61, "Temple of Unification", SC2Campaign.LOTV, "Ulnar", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_temple_of_unification", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.VsTP
+    TEMPLE_OF_UNIFICATION = 61, "Temple of Unification (Protoss)", SC2Campaign.LOTV, "Ulnar", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_temple_of_unification", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.VsTP|MissionFlag.HasRaceSwap
     THE_INFINITE_CYCLE = 62, "The Infinite Cycle", SC2Campaign.LOTV, "Ulnar", SC2Race.ANY, MissionPools.HARD, "ap_the_infinite_cycle", MissionFlag.Protoss|MissionFlag.Kerrigan|MissionFlag.NoBuild|MissionFlag.VsTP
     HARBINGER_OF_OBLIVION = 63, "Harbinger of Oblivion", SC2Campaign.LOTV, "Ulnar", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_harbinger_of_oblivion", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.Countdown|MissionFlag.VsTP|MissionFlag.AiZergAlly
     UNSEALING_THE_PAST = 64, "Unsealing the Past", SC2Campaign.LOTV, "Purifier", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_unsealing_the_past", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.AutoScroller|MissionFlag.VsZerg
@@ -300,7 +300,8 @@ class SC2Mission(Enum):
     LAST_STAND_Z = 201, "Last Stand (Zerg)", SC2Campaign.LOTV, "Shakuras", SC2Race.ZERG, MissionPools.HARD, "ap_last_stand", MissionFlag.Zerg|MissionFlag.TimedDefense|MissionFlag.VsZerg|MissionFlag.RaceSwap
     FORBIDDEN_WEAPON_T = 202, "Forbidden Weapon (Terran)", SC2Campaign.LOTV, "Purifier", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_forbidden_weapon", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsProtoss|MissionFlag.RaceSwap
     FORBIDDEN_WEAPON_Z = 203, "Forbidden Weapon (Zerg)", SC2Campaign.LOTV, "Purifier", SC2Race.ZERG, MissionPools.MEDIUM, "ap_forbidden_weapon", MissionFlag.Zerg|MissionFlag.Countdown|MissionFlag.VsProtoss|MissionFlag.RaceSwap
-    # 204/205 - Temple of Unification
+    TEMPLE_OF_UNIFICATION_T = 204, "Temple of Unification (Terran)", SC2Campaign.LOTV, "Ulnar", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_temple_of_unification", MissionFlag.Terran|MissionFlag.VsTP|MissionFlag.RaceSwap
+    TEMPLE_OF_UNIFICATION_Z = 205, "Temple of Unification (Zerg)", SC2Campaign.LOTV, "Ulnar", SC2Race.ZERG, MissionPools.HARD, "ap_temple_of_unification", MissionFlag.Zerg|MissionFlag.VsTP|MissionFlag.RaceSwap
     # 206/207 - The Infinite Cycle
     # 208/209 - Harbinger of Oblivion
     # 210/211 - Unsealing the Past

@@ -5094,6 +5094,48 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.FORBIDDEN_WEAPON_Z.mission_name, "Northwest Solarite", SC2_RACESWAP_LOC_ID_OFFSET + 12003, LocationType.VANILLA,
                            logic.zerg_competent_comp_competent_aa
                            ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 12100, LocationType.VICTORY,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_T.mission_name, "Mid Celestial Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12101, LocationType.EXTRA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_T.mission_name, "West Celestial Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12102, LocationType.EXTRA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_T.mission_name, "South Celestial Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12103, LocationType.EXTRA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_T.mission_name, "East Celestial Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12104, LocationType.EXTRA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_T.mission_name, "North Celestial Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12105, LocationType.EXTRA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_T.mission_name, "Titanic Warp Prism", SC2_RACESWAP_LOC_ID_OFFSET + 12106, LocationType.VANILLA,
+                           logic.terran_beats_protoss_deathball
+                           ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 12200, LocationType.VICTORY,
+                           logic.zerg_temple_of_unification_requirement
+                           ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_Z.mission_name, "Mid Celestial Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12201, LocationType.EXTRA,
+                           logic.zerg_temple_of_unification_requirement
+                           ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_Z.mission_name, "West Celestial Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12202, LocationType.EXTRA,
+                           logic.zerg_temple_of_unification_requirement
+                           ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_Z.mission_name, "South Celestial Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12203, LocationType.EXTRA,
+                           logic.zerg_temple_of_unification_requirement
+                           ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_Z.mission_name, "East Celestial Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12204, LocationType.EXTRA,
+                           logic.zerg_temple_of_unification_requirement
+                           ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_Z.mission_name, "North Celestial Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12205, LocationType.EXTRA,
+                           logic.zerg_temple_of_unification_requirement
+                           ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_Z.mission_name, "Titanic Warp Prism", SC2_RACESWAP_LOC_ID_OFFSET + 12206, LocationType.VANILLA,
+                           logic.zerg_temple_of_unification_requirement
+                           ),
     ]
 
     beat_events = []

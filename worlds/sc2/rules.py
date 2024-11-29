@@ -1193,6 +1193,25 @@ class SC2Logic:
             and self.zerg_defense_rating(state, True) >= 3
         )
 
+    def zerg_temple_of_unification_requirement(self, state: CollectionState) -> bool:
+        # Don't be locked to roach/hydra
+        return (
+                self.zerg_competent_comp(state)
+                and self.zerg_competent_anti_air(state)
+                and (
+                        state.has_any({item_names.INFESTED_BANSHEE, item_names.INFESTED_LIBERATOR}, self.player)
+                        or state.has_all({item_names.MUTALISK, item_names.MUTALISK_SUNDERING_GLAIVE}, self.player)
+                        or self.zerg_big_monsters(state)
+                        or (
+                                self.advanced_tactics
+                                and (
+                                        state.has_any({item_names.INFESTOR, item_names.DEFILER, item_names.BROOD_QUEEN}, self.player)
+                                        or self.morph_viper(state)
+                                )
+                        )
+                )
+        )
+
     def basic_kerrigan(self, state: CollectionState) -> bool:
         # One active ability that can be used to defeat enemies directly on Standard
         if (not self.advanced_tactics
