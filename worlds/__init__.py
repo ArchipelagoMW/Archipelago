@@ -5,6 +5,7 @@ import os
 import sys
 import warnings
 import zipimport
+import zipfile
 import time
 import dataclasses
 from typing import Dict, List, TypedDict
@@ -96,13 +97,9 @@ class WorldSource:
             failed_world_loads.append(os.path.basename(self.path).rsplit(".", 1)[0])
             return False
 
-
-# find potential world containers, currently folders and zip-importable .apworld's
-world_sources: List[WorldSource] = []
-for folder in (folder for folder in (user_folder, local_folder) if folder):
-    relative = folder == local_folder
+# Function to load worlds from a folder or a zip file within that folder
+def load_worlds_from_folder(folder: str, relative: bool):
     for entry in os.scandir(folder):
-        # prevent loading of __pycache__ and allow _* for non-world folders, disable files/folders starting with "."
         if not entry.name.startswith(("_", ".")):
             file_name = entry.name if relative else os.path.join(folder, entry.name)
             if entry.is_dir():
@@ -114,6 +111,26 @@ for folder in (folder for folder in (user_folder, local_folder) if folder):
                     logging.warning(f"excluding {entry.name} from world sources because it has no __init__.py")
             elif entry.is_file() and entry.name.endswith(".apworld"):
                 world_sources.append(WorldSource(file_name, is_zip=True, relative=relative))
+
+# Function to load worlds when AP is running from within a zip archive
+def load_worlds_from_zip(zip_file: str):
+    zip_file = zip_file.split(".zip")[0] + ".zip"
+    with zipfile.ZipFile(zip_file, 'r') as z:
+        for file_name in z.namelist():
+            if not file_name.startswith("worlds/"):
+                continue
+            file_name = file_name.split("worlds/")[1]
+            if not file_name.startswith(("_", ".")):
+                world_sources.append(WorldSource(file_name, is_zip=True, relative=True))
+
+# find potential world containers, currently folders and zip-importable .apworld's
+world_sources: List[WorldSource] = []
+for folder in (folder for folder in (user_folder, local_folder) if folder):
+    if ".zip" in folder:
+        load_worlds_from_zip(folder)
+    else:
+        relative = folder == local_folder
+        load_worlds_from_folder(folder, relative)
 
 # import all submodules to trigger AutoWorldRegister
 world_sources.sort()
