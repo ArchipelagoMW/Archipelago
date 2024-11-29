@@ -164,6 +164,16 @@ class ObeliskKeys(DefaultOnToggle):
     display_name = "Obelisk Keys"
 
 
+class UnlockableWarps(Toggle):
+    """
+    Adds unlockable fast travel points to the game.
+    These warp points are represented by spheres in game. You walk up to one, you unlock it for warping.
+
+    The warp points are: Entry, Symmetry Island, Desert, Quarry, Keep, Shipwreck, Town, Jungle, Bunker, Treehouse, Mountaintop, Caves.
+    """
+    display_name = "Unlockable Fast Travel Points"
+
+
 class ShufflePostgame(Toggle):
     """
     Adds locations into the pool that are guaranteed to become accessible after or at the same time as your goal.
@@ -401,6 +411,17 @@ class DeathLinkAmnesty(Range):
     default = 1
 
 
+class PuzzleRandomizationSeed(Range):
+    """
+    Sigma Rando, which is the basis for all puzzle randomization in this randomizer, uses a seed from 1 to 9999999 for the puzzle randomization.
+    This option lets you set this seed yourself.
+    """
+    display_name = "Puzzle Randomization Seed"
+    range_start = 1
+    range_end = 9999999
+    default = "random"
+
+
 @dataclass
 class TheWitnessOptions(PerGameCommonOptions):
     puzzle_randomization: PuzzleRandomization
@@ -413,6 +434,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     shuffle_discarded_panels: ShuffleDiscardedPanels
     shuffle_vault_boxes: ShuffleVaultBoxes
     obelisk_keys: ObeliskKeys
+    unlockable_warps: UnlockableWarps
     shuffle_EPs: ShuffleEnvironmentalPuzzles  # noqa: N815
     EP_difficulty: EnvironmentalPuzzlesDifficulty
     shuffle_postgame: ShufflePostgame
@@ -435,6 +457,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     laser_hints: LaserHints
     death_link: DeathLink
     death_link_amnesty: DeathLinkAmnesty
+    puzzle_randomization_seed: PuzzleRandomizationSeed
     shuffle_dog: ShuffleDog
 
 
@@ -445,7 +468,7 @@ witness_option_groups = [
         MountainLasers,
         ChallengeLasers,
     ]),
-    OptionGroup("Panel Hunt Settings", [
+    OptionGroup("Panel Hunt Options", [
         PanelHuntRequiredPercentage,
         PanelHuntTotal,
         PanelHuntPostgame,
@@ -467,6 +490,9 @@ witness_option_groups = [
         ShuffleBoat,
         ObeliskKeys,
     ]),
+    OptionGroup("Warps", [
+       UnlockableWarps,
+    ]),
     OptionGroup("Filler Items", [
         PuzzleSkipAmount,
         TrapPercentage,
@@ -483,6 +509,7 @@ witness_option_groups = [
         ElevatorsComeToYou,
         DeathLink,
         DeathLinkAmnesty,
+        PuzzleRandomizationSeed,
     ]),
     OptionGroup("Silly Options", [
         ShuffleDog,
