@@ -282,7 +282,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     if type(location.address) == int:
                         assert location.item.code is not None, "item code None should be event, " \
                                                                "location.address should then also be None. Location: " \
-                                                               f" {location}"
+                                                               f" {location}, Item: {location.item}"
                         assert location.address not in locations_data[location.player], (
                             f"Locations with duplicate address. {location} and "
                             f"{locations_data[location.player][location.address]}")
