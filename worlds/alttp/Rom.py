@@ -2413,7 +2413,7 @@ def write_strings(rom, multiworld, player):
     if multiworld.worlds[player].has_progressive_bows and (w.difficulty_requirements.progressive_bow_limit >= 2 or (
             multiworld.swordless[player] or multiworld.glitches_required[player] == 'no_glitches')):
         prog_bow_locs = multiworld.find_item_locations('Progressive Bow', player, True)
-        multiworld.worlds[player].random.shuffle(prog_bow_locs)
+        local_random.shuffle(prog_bow_locs)
         found_bow = False
         found_bow_alt = False
         while prog_bow_locs and not (found_bow and found_bow_alt):

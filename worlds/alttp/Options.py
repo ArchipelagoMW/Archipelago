@@ -825,4 +825,3 @@ class ALTTPOptions(PerGameCommonOptions):
     goals: Removed
     smallkey_shuffle: Removed
     bigkey_shuffle: Removed
-

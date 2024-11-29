@@ -1,11 +1,13 @@
 import logging
 import os
 import random
-import settings
 import threading
 import typing
 
+import settings
 from BaseClasses import Item, CollectionState, Tutorial, MultiWorld
+from worlds.AutoWorld import World, WebWorld, LogicMixin
+from .Client import ALTTPSNIClient
 from .Dungeons import create_dungeons, Dungeon
 from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
@@ -14,14 +16,12 @@ from .Items import item_init_table, item_name_groups, item_table, GetBeemizerIte
 from .Options import ALTTPOptions, small_key_shuffle
 from .Regions import lookup_name_to_id, create_regions, mark_light_world_regions, lookup_vanilla_location_to_entrance, \
     is_main_entrance, key_drop_data
-from .Client import ALTTPSNIClient
 from .Rom import LocalRom, patch_rom, patch_race_rom, check_enemizer, patch_enemizer, apply_rom_settings, \
     get_hash_string, get_base_rom_path, LttPDeltaPatch
 from .Rules import set_rules
 from .Shops import create_shops, Shop, push_shop_inventories, ShopType, price_rate_display, price_type_display_name
-from .SubClasses import ALttPItem, LTTPRegionType
-from worlds.AutoWorld import World, WebWorld, LogicMixin
 from .StateHelpers import can_buy_unlimited
+from .SubClasses import ALttPItem, LTTPRegionType
 
 lttp_logger = logging.getLogger("A Link to the Past")
 
@@ -286,13 +286,22 @@ class ALTTPWorld(World):
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
         if multiworld.is_race:
-            import xxtea
+            import xxtea  # noqa
         for player in multiworld.get_game_players(cls.game):
             if multiworld.worlds[player].use_enemizer:
                 check_enemizer(multiworld.worlds[player].enemizer_path)
                 break
 
     def generate_early(self):
+        # write old options
+        import dataclasses
+        is_first = self.player == min(self.multiworld.get_game_players(self.game))
+
+        for field in dataclasses.fields(self.options_dataclass):
+            if is_first:
+                setattr(self.multiworld, field.name, {})
+            getattr(self.multiworld, field.name)[self.player] = getattr(self.options, field.name)
+        # end of old options re-establisher
 
         multiworld = self.multiworld
 
