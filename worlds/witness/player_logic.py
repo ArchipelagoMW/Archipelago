@@ -984,7 +984,7 @@ class WitnessPlayerLogic:
         Makes event-item pairs for entities with associated events, unless these entities are disabled.
         """
 
-        self.ALWAYS_EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION] = "Victory"
+        self.USED_EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION].append("Victory")
 
         for event_hex, event_name in self.ALWAYS_EVENT_NAMES_BY_HEX.items():
             self.USED_EVENT_NAMES_BY_HEX[event_hex].append(event_name)
