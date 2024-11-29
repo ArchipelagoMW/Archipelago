@@ -858,11 +858,10 @@ def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = Non
     task.add_done_callback(_faf_tasks.discard)
 
 
-def deprecate(message: str):
+def deprecate(message: str, add_stacklevels: int = 0):
     if __debug__:
         raise Exception(message)
-    import warnings
-    warnings.warn(message)
+    warnings.warn(message, stacklevel=2 + add_stacklevels)
 
 
 class DeprecateDict(dict):
@@ -876,10 +875,9 @@ class DeprecateDict(dict):
 
     def __getitem__(self, item: Any) -> Any:
         if self.should_error:
-            deprecate(self.log_message)
+            deprecate(self.log_message, add_stacklevels=1)
         elif __debug__:
-            import warnings
-            warnings.warn(self.log_message)
+            warnings.warn(self.log_message, stacklevel=2)
         return super().__getitem__(item)
 
 
