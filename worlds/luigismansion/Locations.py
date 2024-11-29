@@ -89,7 +89,7 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
 
 
     # Game Event Locations
-    # "Diamond Door":     LMLocationData("Balcony", None, "Event", 0, ["Diamond Key"], "Blackout"),
+    "Breaker Box":     LMLocationData("Breaker Room", None, "Event", 0, [], "Blackout"),
     # LMLocationData('Nursery', 'Chauncey',  None),
     # LMLocationData('Graveyard', 'Bogmire',  None),
     "Boolossus Boo 1":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
@@ -781,10 +781,10 @@ PORTRAIT_LOCATION_TABLE: dict[str, LMLocationData] = {
 SPEEDY_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Wardrobe Speedy Spirit": LMLocationData("Wardrobe", 643, "BSpeedy", 128, []),
     "Study Speedy Spirit": LMLocationData("Study", 644, "BSpeedy", 113, []),
-    #"Nursery Speedy Spirit": LMLocationData("Nursery", 645, "DBSpeedy", 148, ["Blackout"]),
+    #"Nursery Speedy Spirit": LMLocationData("Nursery", 645, "BSpeedy", 148, ["Blackout"]),
     "Storage Room Speedy Spirit": LMLocationData("Storage Room", 646, "BSpeedy", 58, []),
-    #"Hidden Room Speedy Spirit": LMLocationData("Hidden Room", 647, "DBSpeedy", 72, ["Blackout"]),
-    #"Conservatory Speedy Spirit": LMLocationData("Conservatory", 648, "DBSpeedy", 113, ["Blackout"]),
+    #"Hidden Room Speedy Spirit": LMLocationData("Hidden Room", 647, "BSpeedy", 72, ["Blackout"]),
+    #"Conservatory Speedy Spirit": LMLocationData("Conservatory", 648, "BSpeedy", 113, ["Blackout"]),
     "Dining Room Speedy Spirit": LMLocationData("Dining Room", 649, "BSpeedy", 60, []),
     "Kitchen Speedy Spirit": LMLocationData("Kitchen", 650, "BSpeedy", 66, []),
     "Rec Room Speedy Spirit": LMLocationData("Rec Room", 651, "BSpeedy", 67, []),
