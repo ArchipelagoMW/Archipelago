@@ -114,20 +114,16 @@ class TunicWorld(World):
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "TUNIC" in self.multiworld.re_gen_passthrough:
+                self.using_ut = True
                 self.passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
                 self.options.start_with_sword.value = self.passthrough["start_with_sword"]
                 self.options.keys_behind_bosses.value = self.passthrough["keys_behind_bosses"]
                 self.options.sword_progression.value = self.passthrough["sword_progression"]
                 self.options.ability_shuffling.value = self.passthrough["ability_shuffling"]
-                # this option is newer than 0.5.0, and so should be handled in some fashion
-                try:
-                    self.options.laurels_zips.value = self.passthrough["laurels_zips"]
-                    self.options.ice_grappling.value = self.passthrough["ice_grappling"]
-                    self.options.ladder_storage.value = self.passthrough["ladder_storage"]
-                    self.options.ladder_storage_without_items = self.passthrough["ladder_storage_without_items"]
-                except KeyError:
-                    warning("The TUNIC APWorld that the multiworld was generated with is newer than the one in "
-                            "your Archipelago installation. Consider updating your APWorld to a newer version.")
+                self.options.laurels_zips.value = self.passthrough["laurels_zips"]
+                self.options.ice_grappling.value = self.passthrough["ice_grappling"]
+                self.options.ladder_storage.value = self.passthrough["ladder_storage"]
+                self.options.ladder_storage_without_items = self.passthrough["ladder_storage_without_items"]
                 self.options.lanternless.value = self.passthrough["lanternless"]
                 self.options.maskless.value = self.passthrough["maskless"]
                 self.options.hexagon_quest.value = self.passthrough["hexagon_quest"]
