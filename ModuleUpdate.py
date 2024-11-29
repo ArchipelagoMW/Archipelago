@@ -5,8 +5,8 @@ import multiprocessing
 import warnings
 
 
-if sys.version_info < (3, 8, 6):
-    raise RuntimeError("Incompatible Python Version. 3.8.7+ is supported.")
+if sys.version_info < (3, 10, 11):
+    raise RuntimeError(f"Incompatible Python Version found: {sys.version_info}. 3.10.11+ is supported.")
 
 # don't run update if environment is frozen/compiled or if not the parent process (skip in subprocess)
 _skip_update = bool(getattr(sys, "frozen", False) or multiprocessing.parent_process())
@@ -75,12 +75,12 @@ def update(yes: bool = False, force: bool = False) -> None:
     if not update_ran:
         update_ran = True
 
+        install_pkg_resources(yes=yes)
+        import pkg_resources
+
         if force:
             update_command()
             return
-
-        install_pkg_resources(yes=yes)
-        import pkg_resources
 
         prev = ""  # if a line ends in \ we store here and merge later
         for req_file in requirements_files:
