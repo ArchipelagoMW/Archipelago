@@ -18,8 +18,8 @@ import warnings
 
 from argparse import Namespace
 from settings import Settings, get_settings
-from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
-from typing_extensions import TypeGuard
+from time import sleep
+from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
 
 try:
@@ -47,7 +47,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.5.1"
+__version__ = "0.6.0"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -421,7 +421,8 @@ class RestrictedUnpickler(pickle.Unpickler):
         if module == "builtins" and name in safe_builtins:
             return getattr(builtins, name)
         # used by MultiServer -> savegame/multidata
-        if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint", "SlotType", "NetworkSlot"}:
+        if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint",
+                                             "SlotType", "NetworkSlot", "HintStatus"}:
             return getattr(self.net_utils_module, name)
         # Options and Plando are unpickled by WebHost -> Generate
         if module == "worlds.generic" and name == "PlandoItem":
@@ -514,10 +515,13 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
             return self.condition(record)
 
     file_handler.addFilter(Filter("NoStream", lambda record: not getattr(record,  "NoFile", False)))
+    file_handler.addFilter(Filter("NoCarriageReturn", lambda record: '\r' not in record.msg))
     root_logger.addHandler(file_handler)
     if sys.stdout:
+        formatter = logging.Formatter(fmt='[%(asctime)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
         stream_handler = logging.StreamHandler(sys.stdout)
         stream_handler.addFilter(Filter("NoFile", lambda record: not getattr(record, "NoStream", False)))
+        stream_handler.setFormatter(formatter)
         root_logger.addHandler(stream_handler)
 
     # Relay unhandled exceptions to logger.
@@ -568,6 +572,8 @@ def stream_input(stream: typing.TextIO, queue: "asyncio.Queue[str]"):
             else:
                 if text:
                     queue.put_nowait(text)
+                else:
+                    sleep(0.01)  # non-blocking stream
 
     from threading import Thread
     thread = Thread(target=queuer, name=f"Stream handler for {stream.name}", daemon=True)

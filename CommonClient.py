@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
 from MultiServer import CommandProcessor
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
-                      RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, SlotType)
+                      RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, HintStatus, SlotType)
 from Utils import Version, stream_input, async_start
 from worlds import network_data_package, AutoWorldRegister
 import os
@@ -412,6 +412,7 @@ class CommonContext:
             await self.server.socket.close()
         if self.server_task is not None:
             await self.server_task
+        self.ui.update_hints()
 
     async def send_msgs(self, msgs: typing.List[typing.Any]) -> None:
         """ `msgs` JSON serializable """
@@ -551,7 +552,14 @@ class CommonContext:
             await self.ui_task
         if self.input_task:
             self.input_task.cancel()
-
+    
+    # Hints
+    def update_hint(self, location: int, finding_player: int, status: typing.Optional[HintStatus]) -> None:
+        msg = {"cmd": "UpdateHint", "location": location, "player": finding_player}
+        if status is not None:
+            msg["status"] = status
+        async_start(self.send_msgs([msg]), name="update_hint")
+    
     # DataPackage
     async def prepare_data_package(self, relevant_games: typing.Set[str],
                                    remote_date_package_versions: typing.Dict[str, int],
@@ -710,6 +718,11 @@ class CommonContext:
 
     def run_cli(self):
         if sys.stdin:
+            if sys.stdin.fileno() != 0:
+                from multiprocessing import parent_process
+                if parent_process():
+                    return  # ignore MultiProcessing pipe
+
             # steam overlay breaks when starting console_loop
             if 'gameoverlayrenderer' in os.environ.get('LD_PRELOAD', ''):
                 logger.info("Skipping terminal input, due to conflicting Steam Overlay detected. Please use GUI only.")

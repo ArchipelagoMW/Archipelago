@@ -98,6 +98,7 @@ class TimespinnerWorld(World):
             "Cantoran": self.options.cantoran.value,
             "LoreChecks": self.options.lore_checks.value,
             "BossRando": self.options.boss_rando.value,
+            "EnemyRando": self.options.enemy_rando.value,
             "DamageRando": self.options.damage_rando.value,
             "DamageRandoOverrides": self.options.damage_rando_overrides.value,
             "HpCap": self.options.hp_cap.value,
