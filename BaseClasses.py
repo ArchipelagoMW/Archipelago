@@ -1,18 +1,16 @@
 from __future__ import annotations
 
 import collections
-import itertools
 import functools
 import logging
 import random
 import secrets
-import typing  # this can go away when Python 3.8 support is dropped
 from argparse import Namespace
 from collections import Counter, deque
 from collections.abc import Collection, MutableSequence
 from enum import IntEnum, IntFlag
 from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Iterable, Iterator, List, Mapping, NamedTuple,
-                    Optional, Protocol, Set, Tuple, Union, Type)
+                    Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING)
 
 from typing_extensions import NotRequired, TypedDict
 
@@ -20,7 +18,7 @@ import NetUtils
 import Options
 import Utils
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from worlds import AutoWorld
 
 
@@ -231,7 +229,7 @@ class MultiWorld():
         for player in self.player_ids:
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
             self.worlds[player] = world_type(self, player)
-            options_dataclass: typing.Type[Options.PerGameCommonOptions] = world_type.options_dataclass
+            options_dataclass: type[Options.PerGameCommonOptions] = world_type.options_dataclass
             self.worlds[player].options = options_dataclass(**{option_key: getattr(args, option_key)[player]
                                                                for option_key in options_dataclass.type_hints})
 
@@ -976,7 +974,7 @@ class Region:
     entrances: List[Entrance]
     exits: List[Entrance]
     locations: List[Location]
-    entrance_type: ClassVar[Type[Entrance]] = Entrance
+    entrance_type: ClassVar[type[Entrance]] = Entrance
 
     class Register(MutableSequence):
         region_manager: MultiWorld.RegionManager
@@ -1076,7 +1074,7 @@ class Region:
             return entrance.parent_region.get_connecting_entrance(is_main_entrance)
 
     def add_locations(self, locations: Dict[str, Optional[int]],
-                      location_type: Optional[Type[Location]] = None) -> None:
+                      location_type: Optional[type[Location]] = None) -> None:
         """
         Adds locations to the Region object, where location_type is your Location class and locations is a dict of
         location names to address.
@@ -1113,7 +1111,7 @@ class Region:
         return exit_
 
     def add_exits(self, exits: Union[Iterable[str], Dict[str, Optional[str]]],
-                  rules: Dict[str, Callable[[CollectionState], bool]] = None) -> None:
+                  rules: Dict[str, Callable[[CollectionState], bool]] = None) -> List[Entrance]:
         """
         Connects current region to regions in exit dictionary. Passed region names must exist first.
 
@@ -1123,10 +1121,14 @@ class Region:
         """
         if not isinstance(exits, Dict):
             exits = dict.fromkeys(exits)
-        for connecting_region, name in exits.items():
-            self.connect(self.multiworld.get_region(connecting_region, self.player),
-                         name,
-                         rules[connecting_region] if rules and connecting_region in rules else None)
+        return [
+            self.connect(
+                self.multiworld.get_region(connecting_region, self.player),
+                name,
+                rules[connecting_region] if rules and connecting_region in rules else None,
+            )
+            for connecting_region, name in exits.items()
+        ]
 
     def __repr__(self):
         return self.multiworld.get_name_string_for_object(self) if self.multiworld else f'{self.name} (Player {self.player})'
@@ -1266,6 +1268,10 @@ class Item:
         return ItemClassification.trap in self.classification
 
     @property
+    def filler(self) -> bool:
+        return not (self.advancement or self.useful or self.trap)
+
+    @property
     def excludable(self) -> bool:
         return not (self.advancement or self.useful)
 
@@ -1387,14 +1393,21 @@ class Spoiler:
 
         # second phase, sphere 0
         removed_precollected: List[Item] = []
-        for item in (i for i in chain.from_iterable(multiworld.precollected_items.values()) if i.advancement):
-            logging.debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
-            multiworld.precollected_items[item.player].remove(item)
-            multiworld.state.remove(item)
-            if not multiworld.can_beat_game():
-                multiworld.push_precollected(item)
-            else:
-                removed_precollected.append(item)
+
+        for precollected_items in multiworld.precollected_items.values():
+            # The list of items is mutated by removing one item at a time to determine if each item is required to beat
+            # the game, and re-adding that item if it was required, so a copy needs to be made before iterating.
+            for item in precollected_items.copy():
+                if not item.advancement:
+                    continue
+                logging.debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
+                precollected_items.remove(item)
+                multiworld.state.remove(item)
+                if not multiworld.can_beat_game():
+                    # Add the item back into `precollected_items` and collect it into `multiworld.state`.
+                    multiworld.push_precollected(item)
+                else:
+                    removed_precollected.append(item)
 
         # we are now down to just the required progress items in collection_spheres. Unfortunately
         # the previous pruning stage could potentially have made certain items dependant on others
@@ -1533,7 +1546,7 @@ class Spoiler:
                 [f"  {location}: {item}" for (location, item) in sphere.items()] if isinstance(sphere, dict) else
                 [f"  {item}" for item in sphere])) for (sphere_nr, sphere) in self.playthrough.items()]))
             if self.unreachables:
-                outfile.write('\n\nUnreachable Items:\n\n')
+                outfile.write('\n\nUnreachable Progression Items:\n\n')
                 outfile.write(
                     '\n'.join(['%s: %s' % (unreachable.item, unreachable) for unreachable in self.unreachables]))
 

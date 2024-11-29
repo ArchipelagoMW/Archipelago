@@ -27,7 +27,6 @@ from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
 from .strings.ap_names.ap_option_names import OptionName
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
-from .strings.ap_names.event_names import Event
 from .strings.ap_names.mods.mod_items import SVEQuestItem, SVERunes
 from .strings.ap_names.transport_names import Transportation
 from .strings.artisan_good_names import ArtisanGood
@@ -251,7 +250,8 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, Entrance.enter_witch_warp_cave, logic.quest.has_dark_talisman() | (logic.mod.magic.can_blink()))
     set_entrance_rule(multiworld, player, Entrance.enter_witch_hut, (logic.has(ArtisanGood.void_mayonnaise) | logic.mod.magic.can_blink()))
     set_entrance_rule(multiworld, player, Entrance.enter_mutant_bug_lair,
-                      (logic.received(Event.start_dark_talisman_quest) & logic.relationship.can_meet(NPC.krobus)) | logic.mod.magic.can_blink())
+                      (logic.wallet.has_rusty_key() & logic.region.can_reach(Region.railroad) & logic.relationship.can_meet(
+                          NPC.krobus)) | logic.mod.magic.can_blink())
     set_entrance_rule(multiworld, player, Entrance.enter_casino, logic.quest.has_club_card())
 
     set_bedroom_entrance_rules(logic, multiworld, player, world_options)
@@ -307,8 +307,7 @@ def set_mines_floor_entrance_rules(logic, multiworld, player):
         rule = logic.mine.has_mine_elevator_to_floor(floor - 10)
         if floor == 5 or floor == 45 or floor == 85:
             rule = rule & logic.mine.can_progress_in_the_mines_from_floor(floor)
-        entrance = multiworld.get_entrance(dig_to_mines_floor(floor), player)
-        MultiWorldRules.set_rule(entrance, rule)
+        set_entrance_rule(multiworld, player, dig_to_mines_floor(floor), rule)
 
 
 def set_skull_cavern_floor_entrance_rules(logic, multiworld, player):
@@ -316,8 +315,7 @@ def set_skull_cavern_floor_entrance_rules(logic, multiworld, player):
         rule = logic.mod.elevator.has_skull_cavern_elevator_to_floor(floor - 25)
         if floor == 25 or floor == 75 or floor == 125:
             rule = rule & logic.mine.can_progress_in_the_skull_cavern_from_floor(floor)
-        entrance = multiworld.get_entrance(dig_to_skull_floor(floor), player)
-        MultiWorldRules.set_rule(entrance, rule)
+        set_entrance_rule(multiworld, player, dig_to_skull_floor(floor), rule)
 
 
 def set_blacksmith_entrance_rules(logic, multiworld, player):
@@ -346,9 +344,8 @@ def set_skill_entrance_rules(logic, multiworld, player, world_options: StardewVa
 
 
 def set_blacksmith_upgrade_rule(logic, multiworld, player, entrance_name: str, item_name: str, tool_material: str):
-    material_entrance = multiworld.get_entrance(entrance_name, player)
     upgrade_rule = logic.has(item_name) & logic.money.can_spend(tool_upgrade_prices[tool_material])
-    MultiWorldRules.set_rule(material_entrance, upgrade_rule)
+    set_entrance_rule(multiworld, player, entrance_name, upgrade_rule)
 
 
 def set_festival_entrance_rules(logic, multiworld, player):
@@ -880,25 +877,19 @@ def set_traveling_merchant_day_rules(logic: StardewLogic, multiworld: MultiWorld
 
 
 def set_arcade_machine_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
-    MultiWorldRules.add_rule(multiworld.get_entrance(Entrance.play_junimo_kart, player),
-                             logic.received(Wallet.skull_key))
+    play_junimo_kart_rule = logic.received(Wallet.skull_key)
+
     if world_options.arcade_machine_locations != ArcadeMachineLocations.option_full_shuffling:
+        set_entrance_rule(multiworld, player, Entrance.play_junimo_kart, play_junimo_kart_rule)
         return
 
-    MultiWorldRules.add_rule(multiworld.get_entrance(Entrance.play_junimo_kart, player),
-                             logic.has("Junimo Kart Small Buff"))
-    MultiWorldRules.add_rule(multiworld.get_entrance(Entrance.reach_junimo_kart_2, player),
-                             logic.has("Junimo Kart Medium Buff"))
-    MultiWorldRules.add_rule(multiworld.get_entrance(Entrance.reach_junimo_kart_3, player),
-                             logic.has("Junimo Kart Big Buff"))
-    MultiWorldRules.add_rule(multiworld.get_entrance(Entrance.reach_junimo_kart_4, player),
-                             logic.has("Junimo Kart Max Buff"))
-    MultiWorldRules.add_rule(multiworld.get_entrance(Entrance.play_journey_of_the_prairie_king, player),
-                             logic.has("JotPK Small Buff"))
-    MultiWorldRules.add_rule(multiworld.get_entrance(Entrance.reach_jotpk_world_2, player),
-                             logic.has("JotPK Medium Buff"))
-    MultiWorldRules.add_rule(multiworld.get_entrance(Entrance.reach_jotpk_world_3, player),
-                             logic.has("JotPK Big Buff"))
+    set_entrance_rule(multiworld, player, Entrance.play_junimo_kart, play_junimo_kart_rule & logic.has("Junimo Kart Small Buff"))
+    set_entrance_rule(multiworld, player, Entrance.reach_junimo_kart_2, logic.has("Junimo Kart Medium Buff"))
+    set_entrance_rule(multiworld, player, Entrance.reach_junimo_kart_3, logic.has("Junimo Kart Big Buff"))
+    set_entrance_rule(multiworld, player, Entrance.reach_junimo_kart_4, logic.has("Junimo Kart Max Buff"))
+    set_entrance_rule(multiworld, player, Entrance.play_journey_of_the_prairie_king, logic.has("JotPK Small Buff"))
+    set_entrance_rule(multiworld, player, Entrance.reach_jotpk_world_2, logic.has("JotPK Medium Buff"))
+    set_entrance_rule(multiworld, player, Entrance.reach_jotpk_world_3, logic.has("JotPK Big Buff"))
     MultiWorldRules.add_rule(multiworld.get_location("Journey of the Prairie King Victory", player),
                              logic.has("JotPK Max Buff"))
 
@@ -1049,6 +1040,7 @@ def set_entrance_rule(multiworld, player, entrance: str, rule: StardewRule):
         potentially_required_regions = look_for_indirect_connection(rule)
         if potentially_required_regions:
             for region in potentially_required_regions:
+                logger.debug(f"Registering indirect condition for {region} -> {entrance}")
                 multiworld.register_indirect_condition(multiworld.get_region(region, player), multiworld.get_entrance(entrance, player))
 
         MultiWorldRules.set_rule(multiworld.get_entrance(entrance, player), rule)
