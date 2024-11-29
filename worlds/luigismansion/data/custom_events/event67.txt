@@ -15,21 +15,14 @@
 <CHECKFLAG>(81)"81on""81off"
 -----------------------------------------------------------------------
 <CASE>"81on"
+<BGM>(7)
 <WINDOW>(0)<COLOR>(4)
 <SAY><COLOR>(6)Boolossus Warp activated
-<WAIT>(90)
-<BGM>(7)
+<WAIT>(120)
 <CLOSEWINDOW>(0)
 <SETLUIGI>(5)
 <WIPEKIND>(3)
 <WARP>(2)
-<WAIT>(120)
-<WINDOW>(0)<COLOR>(4)
-<SAY><COLOR>(6)Boolossus Warp activated
-<WARPMOVE>(5)
-<WAIT>(300)
-<BGM>(7)
-<CLOSEWINDOW>(0)
 <END>
 
 =====================================================================
@@ -37,24 +30,14 @@
 <CHECKFLAG>(67)"67on""67off"
 ----------------------------------------------------------------------
 <CASE>"67on"
+<BGM>(7)
 <WINDOW>(0)<COLOR>(4)
 <SAY><COLOR>(2)Bogmire Warp activated
-<WAIT>(90)
-<BGM>(7)
+<WAIT>(120)
 <CLOSEWINDOW>(0)
 <SETLUIGI>(2)
 <WIPEKIND>(3)
 <WARP>(2)
-========
-Everything after me is ignoredit seems like
-========
-<WAIT>(120)
-<WINDOW>(0)<COLOR>(4)
-<SAY><COLOR>(2)Bogmire Warp activated
-<WARPMOVE>(2)
-<WAIT>(300)
-<BGM>(7)
-<CLOSEWINDOW>(0)
 <END>
 
 =====================================================================
@@ -62,21 +45,14 @@ Everything after me is ignoredit seems like
 <CHECKFLAG>(46)"46on""46off"
 ----------------------------------------------------------------------
 <CASE>"46on"
+<BGM>(7)
 <WINDOW>(0)<COLOR>(4)
 <SAY><COLOR>(1)Chauncey Warp activated
-<WAIT>(90)
-<BGM>(7)
+<WAIT>(120)
 <CLOSEWINDOW>(0)
 <SETLUIGI>(1)
 <WIPEKIND>(3)
 <WARP>(2)
-<WAIT>(120)
-<WINDOW>(0)<COLOR>(4)
-<SAY><COLOR>(1)Chauncey Warp activated
-<WARPMOVE>(1)
-<WAIT>(300)
-<BGM>(7)
-<CLOSEWINDOW>(0)
 <END>
 
 =====================================================================---
