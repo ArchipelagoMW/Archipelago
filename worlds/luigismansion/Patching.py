@@ -62,17 +62,20 @@ def update_event_info(event_info):
             x["pos_x"] = 3500.277000
             x["pos_y"] = -550.000000
             x["pos_z"] = -2164.792000
-            x["EventFlag"] = 28
-            x["EventArea"] = 200
-            x["EventIf"] = 2
+            x["EventFlag"] = 25
+            x["EventArea"] = 400
+            x["EventIf"] = 1
             x["EventLock"] = 0
             x["PlayerStop"] = 0
+            x["EventLoad"] = 0
 
         # Update the blackout off event trigger to be A-pressed based
         if x["EventNo"] == 45:
-            x["EventIf"] = 2
+            x["EventIf"] = 1
+            x["EventArea"] = 400
             x["EventLock"] = 0
             x["PlayerStop"] = 0
+            x["EventLoad"] = 0
 
 
 def update_character_info(character_info, output_data):
@@ -174,14 +177,6 @@ def update_item_info_table(item_info, output_data):
         if item_data["door_id"] > 0 and current_item not in already_added_keys:
             __add_info_item(item_info, item_data)
 
-def __add_new_info_item(item_info, item_name):
-    item_info.info_file_field_entries.append({
-        "name": item_name,
-        "character_name": item_name,
-        "open_door_no": 0,
-        "hp_amount": 0,
-        "is_escape": 0
-    })
 
 def __add_info_item(item_info, item_data, open_door_no = 0, hp_amount = 0, is_escape = 0, info_item_name=None):
     if info_item_name is None:
@@ -333,21 +328,6 @@ def __get_item_chest_visual(item_name):
     return "btakara1"
 
 
-def __set_key_info_entry(key_info_single_entry, item_data):
-    # Disable the item's invisible status by default.
-    # This is needed since we change the appear_type to 0, which makes items other than keys not spawn out of bounds.
-    key_info_single_entry["name"] = __get_item_name(item_data)
-    key_info_single_entry["open_door_no"] = item_data["door_id"]
-    key_info_single_entry["appear_type"] = 0
-    key_info_single_entry["invisible"] = 0
-    key_info_single_entry["appear_flag"] = 0
-    key_info_single_entry["disappear_flag"] = 0
-
-    # Allow the Ghost Foyer Key to be spawned at the beginning of the game and work properly.
-    # if item_name == "Ghost Foyer Key":
-        # key_entry["name"] = "gameboy" #Todo remove this line after testing. Proper name is above.
-
-
 # Dictionary of Location names and their index in keyinfo.
 LOCATION_TO_INDEX = {
     "The Well Key": 0,
@@ -366,8 +346,24 @@ def update_key_info(key_info, output_data):
 
         __set_key_info_entry(key_info.info_file_field_entries[LOCATION_TO_INDEX[item_name]], item_data)
 
+        # if item_name == "Ghost Foyer Key":
+            # key_info.info_file_field_entries[LOCATION_TO_INDEX[item_name]]["name"] = "vbody"
+            # Todo remove this line after testing. Proper name is above.
+
     # Remove the cutscene HD key from the Foyer, which only appears in the cutscene.
     key_info.info_file_field_entries.remove(key_info.info_file_field_entries[2])
+
+
+def __set_key_info_entry(key_info_single_entry, item_data):
+    # Disable the item's invisible status by default.
+    # This is needed since we change the appear_type to 0, which makes items other than keys not spawn out of bounds.
+    key_info_single_entry["name"] = __get_item_name(item_data) if not item_data["door_id"] > 0 else (
+            __get_key_name(item_data["door_id"]))
+    key_info_single_entry["open_door_no"] = item_data["door_id"]
+    key_info_single_entry["appear_type"] = 0
+    key_info_single_entry["invisible"] = 0
+    key_info_single_entry["appear_flag"] = 0
+    key_info_single_entry["disappear_flag"] = 0
 
 
 def update_furniture_info(furniture_info, item_appear_info, output_data):
