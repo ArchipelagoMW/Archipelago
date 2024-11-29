@@ -1690,7 +1690,7 @@ class SC2Logic:
             and self.zerg_army_weapon_armor_upgrade_min_level(state) >= 2
         )
 
-    def harbinger_of_oblivion_requirement(self, state: CollectionState) -> bool:
+    def protoss_harbinger_of_oblivion_requirement(self, state: CollectionState) -> bool:
         return (
             self.protoss_anti_armor_anti_air(state)
             and (self.take_over_ai_allies
@@ -1699,6 +1699,31 @@ class SC2Logic:
                     and self.protoss_hybrid_counter(state)
                 )
             )
+        )
+
+    def terran_harbinger_of_oblivion_requirement(self, state: CollectionState) -> bool:
+        return (
+                self.terran_competent_anti_air(state)
+                and (
+                        self.take_over_ai_allies
+                        or (
+                                self.terran_beats_protoss_deathball(state)
+                                and state.has_any({item_names.BATTLECRUISER, item_names.LIBERATOR, item_names.SIEGE_TANK, item_names.THOR}, self.player)
+                        )
+                )
+        )
+
+    def zerg_harbinger_of_oblivion_requirement(self, state: CollectionState) -> bool:
+        return (
+                self.zerg_competent_anti_air(state)
+                and self.zerg_common_unit(state)
+                and (
+                        self.take_over_ai_allies
+                        or (
+                                self.zerg_competent_comp(state)
+                                and self.zerg_big_monsters(state)
+                        )
+                )
         )
 
     def protoss_competent_comp(self, state: CollectionState) -> bool:

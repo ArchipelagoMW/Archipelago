@@ -1808,27 +1808,27 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.the_infinite_cycle_requirement
         ),
         make_location_data(SC2Mission.HARBINGER_OF_OBLIVION.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 1400, LocationType.VICTORY,
-            logic.harbinger_of_oblivion_requirement
+            logic.protoss_harbinger_of_oblivion_requirement
         ),
         make_location_data(SC2Mission.HARBINGER_OF_OBLIVION.mission_name, "Artanis", SC2LOTV_LOC_ID_OFFSET + 1401, LocationType.EXTRA),
         make_location_data(SC2Mission.HARBINGER_OF_OBLIVION.mission_name, "Northwest Void Crystal", SC2LOTV_LOC_ID_OFFSET + 1402, LocationType.EXTRA,
-            logic.harbinger_of_oblivion_requirement
+            logic.protoss_harbinger_of_oblivion_requirement
         ),
         make_location_data(SC2Mission.HARBINGER_OF_OBLIVION.mission_name, "Northeast Void Crystal", SC2LOTV_LOC_ID_OFFSET + 1403, LocationType.EXTRA,
-            logic.harbinger_of_oblivion_requirement
+            logic.protoss_harbinger_of_oblivion_requirement
         ),
         make_location_data(SC2Mission.HARBINGER_OF_OBLIVION.mission_name, "Southwest Void Crystal", SC2LOTV_LOC_ID_OFFSET + 1404, LocationType.EXTRA,
-            logic.harbinger_of_oblivion_requirement
+            logic.protoss_harbinger_of_oblivion_requirement
         ),
         make_location_data(SC2Mission.HARBINGER_OF_OBLIVION.mission_name, "Southeast Void Crystal", SC2LOTV_LOC_ID_OFFSET + 1405, LocationType.EXTRA,
-            logic.harbinger_of_oblivion_requirement
+            logic.protoss_harbinger_of_oblivion_requirement
         ),
         make_location_data(SC2Mission.HARBINGER_OF_OBLIVION.mission_name, "South Xel'Naga Vessel", SC2LOTV_LOC_ID_OFFSET + 1406, LocationType.VANILLA),
         make_location_data(SC2Mission.HARBINGER_OF_OBLIVION.mission_name, "Mid Xel'Naga Vessel", SC2LOTV_LOC_ID_OFFSET + 1407, LocationType.VANILLA,
-            logic.harbinger_of_oblivion_requirement
+            logic.protoss_harbinger_of_oblivion_requirement
         ),
         make_location_data(SC2Mission.HARBINGER_OF_OBLIVION.mission_name, "North Xel'Naga Vessel", SC2LOTV_LOC_ID_OFFSET + 1408, LocationType.VANILLA,
-            logic.harbinger_of_oblivion_requirement
+            logic.protoss_harbinger_of_oblivion_requirement
         ),
         make_location_data(SC2Mission.UNSEALING_THE_PAST.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 1500, LocationType.VICTORY,
             lambda state: (
@@ -5135,6 +5135,52 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            ),
         make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_Z.mission_name, "Titanic Warp Prism", SC2_RACESWAP_LOC_ID_OFFSET + 12206, LocationType.VANILLA,
                            logic.zerg_temple_of_unification_requirement
+                           ),
+        make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 12500, LocationType.VICTORY,
+                           logic.terran_harbinger_of_oblivion_requirement
+                           ),
+        make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_T.mission_name, "Artanis", SC2_RACESWAP_LOC_ID_OFFSET + 12501, LocationType.EXTRA),
+        make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_T.mission_name, "Northwest Void Crystal", SC2_RACESWAP_LOC_ID_OFFSET + 12502, LocationType.EXTRA,
+                           logic.terran_harbinger_of_oblivion_requirement
+                           ),
+        make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_T.mission_name, "Northeast Void Crystal", SC2_RACESWAP_LOC_ID_OFFSET + 12503, LocationType.EXTRA,
+                           logic.terran_harbinger_of_oblivion_requirement
+                           ),
+        make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_T.mission_name, "Southwest Void Crystal", SC2_RACESWAP_LOC_ID_OFFSET + 12504, LocationType.EXTRA,
+                           logic.terran_harbinger_of_oblivion_requirement
+                           ),
+        make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_T.mission_name, "Southeast Void Crystal", SC2_RACESWAP_LOC_ID_OFFSET + 12505, LocationType.EXTRA,
+                           logic.terran_harbinger_of_oblivion_requirement
+                           ),
+        make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_T.mission_name, "South Xel'Naga Vessel", SC2_RACESWAP_LOC_ID_OFFSET + 12506, LocationType.VANILLA),
+        make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_T.mission_name, "Mid Xel'Naga Vessel", SC2_RACESWAP_LOC_ID_OFFSET + 12507, LocationType.VANILLA,
+                           logic.terran_harbinger_of_oblivion_requirement
+                           ),
+        make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_T.mission_name, "North Xel'Naga Vessel", SC2_RACESWAP_LOC_ID_OFFSET + 12508, LocationType.VANILLA,
+                           logic.terran_harbinger_of_oblivion_requirement
+                           ),
+        make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 12600, LocationType.VICTORY,
+                           logic.zerg_harbinger_of_oblivion_requirement
+                           ),
+        make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_Z.mission_name, "Artanis", SC2_RACESWAP_LOC_ID_OFFSET + 12601, LocationType.EXTRA),
+        make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_Z.mission_name, "Northwest Void Crystal", SC2_RACESWAP_LOC_ID_OFFSET + 12602, LocationType.EXTRA,
+                           logic.zerg_harbinger_of_oblivion_requirement
+                           ),
+        make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_Z.mission_name, "Northeast Void Crystal", SC2_RACESWAP_LOC_ID_OFFSET + 12603, LocationType.EXTRA,
+                           logic.zerg_harbinger_of_oblivion_requirement
+                           ),
+        make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_Z.mission_name, "Southwest Void Crystal", SC2_RACESWAP_LOC_ID_OFFSET + 12604, LocationType.EXTRA,
+                           logic.zerg_harbinger_of_oblivion_requirement
+                           ),
+        make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_Z.mission_name, "Southeast Void Crystal", SC2_RACESWAP_LOC_ID_OFFSET + 12605, LocationType.EXTRA,
+                           logic.zerg_harbinger_of_oblivion_requirement
+                           ),
+        make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_Z.mission_name, "South Xel'Naga Vessel", SC2_RACESWAP_LOC_ID_OFFSET + 12606, LocationType.VANILLA),
+        make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_Z.mission_name, "Mid Xel'Naga Vessel", SC2_RACESWAP_LOC_ID_OFFSET + 12607, LocationType.VANILLA,
+                           logic.zerg_harbinger_of_oblivion_requirement
+                           ),
+        make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_Z.mission_name, "North Xel'Naga Vessel", SC2_RACESWAP_LOC_ID_OFFSET + 12608, LocationType.VANILLA,
+                           logic.zerg_harbinger_of_oblivion_requirement
                            ),
     ]
 
