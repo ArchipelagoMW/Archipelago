@@ -272,6 +272,7 @@ These packets are sent purely from client to server. They are not accepted by cl
 * [Sync](#Sync)
 * [LocationChecks](#LocationChecks)
 * [LocationScouts](#LocationScouts)
+* [UpdateHint](#UpdateHint)
 * [StatusUpdate](#StatusUpdate)
 * [Say](#Say)
 * [GetDataPackage](#GetDataPackage)
@@ -341,6 +342,29 @@ This is useful in cases where an item appears in the game world, such as 'ledge 
 | ---- | ---- | ----- |
 | locations | list\[int\] | The ids of the locations seen by the client. May contain any number of locations, even ones sent before; duplicates do not cause issues with the Archipelago server. |
 | create_as_hint | int | If non-zero, the scouted locations get created and broadcasted as a player-visible hint. <br/>If 2 only new hints are broadcast, however this does not remove them from the LocationInfo reply. |
+
+### UpdateHint
+Sent to the server to update the status of a Hint. The client must be the 'receiving_player' of the Hint, or the update fails.
+
+### Arguments
+| Name | Type | Notes |
+| ---- | ---- | ----- |
+| player | int | The ID of the player whose location is being hinted for. |
+| location | int | The ID of the location to update the hint for. If no hint exists for this location, the packet is ignored. |
+| status | [HintStatus](#HintStatus) | Optional. If included, sets the status of the hint to this status. |
+
+#### HintStatus
+An enumeration containing the possible hint states.
+
+```python
+import enum
+class HintStatus(enum.IntEnum):
+    HINT_FOUND = 0
+    HINT_UNSPECIFIED = 1
+    HINT_NO_PRIORITY = 10
+    HINT_AVOID = 20
+    HINT_PRIORITY = 30
+```
 
 ### StatusUpdate
 Sent to the server to update on the sender's status. Examples include readiness or goal completion. (Example: defeated Ganon in A Link to the Past)
