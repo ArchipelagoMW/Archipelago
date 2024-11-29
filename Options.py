@@ -828,7 +828,10 @@ class VerifyKeys(metaclass=FreezeValidKeys):
                                     f"is not a valid location name from {world.game}. "
                                     f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
 
+    def __iter__(self) -> typing.Iterator[typing.Any]:
+        return self.value.__iter__()
 
+    
 class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mapping[str, typing.Any]):
     default = {}
     supports_weighting = False
