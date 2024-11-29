@@ -740,7 +740,51 @@ class Range(NumericOption):
 
     @staticmethod
     def triangular(lower: int, end: int, tri: typing.Optional[int] = None) -> int:
-        return int(round(random.triangular(lower, end, tri), 0))
+        if lower == end:
+            return lower
+
+        if lower > end:
+            # Swap the two so that `lower` is always smaller. This simplifies later code.
+            lower, end = end, lower
+
+        if tri is not None and (tri < lower or tri > end):
+            # random.triangular allows this for performance reasons, but it is not well-defined/documented behaviour, so
+            # we'll reject this scenario for simplicity.
+            raise Exception(f"Triangular distribution mode {tri} is outside the allowed range {lower}-{end}")
+
+        # To produce integers from [a, b] from a continuous distribution, it is easier to start with a continuous
+        # distribution that is [a, b+1). For example, for lower=0 and end=2, the continuous distribution of [0, 3) can
+        # be split into 3 groups: 0 <= x < 1, 1 <= x < 2 and 2 <= x < 3.
+        new_end = end + 1
+        if tri is not None:
+            # `tri` needs to be remapped from the original [lower, end) range to the new [lower, new_end) range.
+            # Normalize to the range [0, 1).
+            # '[lower, end)' - lower = '[0, end - lower)'
+            # '[0, end - lower)' / (end - lower) = '[0, 1)'
+            tri_normalized = (tri - lower) / (end - lower)
+            # Scale up to fit the new range and then offset back by lower.
+            # '[0, 1)' * (new_end - lower) = '[0, new_end - lower)'
+            # '[0, new_end - lower)' + lower = '[lower, new_end)'
+            tri_rescaled = tri_normalized * (new_end - lower) + lower
+        else:
+            tri_rescaled = None
+
+        # To produce integers from these floats, truncate towards `lower` by using `math.floor`.
+        # Truncating with `int(my_float)` truncates towards `0`, so would not work correctly with `lower < 0`.
+        # Given the previous example for a continuous distribution of [0, 3):
+        # 0 <= x < 1 -> 0
+        # 1 <= x < 2 -> 1
+        # 2 <= x < 3 -> 2
+        r_int = math.floor(random.triangular(lower, new_end, tri_rescaled))
+
+        # Unlike, `random.random()` which is a-inclusive to b-exclusive, [a, b), `random.triangular()` is a-inclusive to
+        # b-inclusive, [a, b], so there is a chance of getting exactly b.
+        # With 1 million calls of `random.triangular(0.9999999999, 1, 1)` might return `1` a single time. `lower` and
+        # `end` are integers so are always at least 1 apart, so the chance of getting exactly `end` should be very
+        # small.
+        # Because `tri` has been limited to `lower <= tri <= end` and `lower` and `end` have been swapped if `lower`
+        # was greater than `end`, `r_int` only needs to be checked for being larger than `end`.
+        return min(end, r_int)
 
 
 class NamedRange(Range):
