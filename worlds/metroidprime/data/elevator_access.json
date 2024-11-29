@@ -1,0 +1,818 @@
+{
+  "Arboretum": {
+    "allow": {
+      "Transport to Tallon Overworld North": [
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Transport to Magmoor Caverns North": [
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins South = 97%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Transport to Tallon Overworld East": [
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Phazon Mines East = 97%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Chozo Ruins North = 97%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Chozo Ruins": [
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Magmoor Caverns East = 97%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 97%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ]
+    },
+    "deny": {}
+  },
+  "Burn Dome Access": {
+    "allow": {
+      "Transport to Tallon Overworld North": [
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phazon Mines West = 97%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Transport to Magmoor Caverns North": [
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Transport to Tallon Overworld East": [
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Chozo Ruins": [
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Phazon Mines East = 97%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ]
+    },
+    "deny": {}
+  },
+  "Ruined Fountain": {
+    "allow": {
+      "Transport to Tallon Overworld North": [
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Phazon Mines East = 93%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Chozo Ruins North = 97%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Tallon Overworld West = 93%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 97%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 93%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Transport to Magmoor Caverns North": [
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins East = 97%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins South = 93%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Tallon Overworld West = 97%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 97%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Transport to Tallon Overworld East": [
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Magmoor Caverns East = 97%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Chozo Ruins South = 97%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Phazon Mines East = 97%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Chozo Ruins North = 97%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 93%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Tallon Overworld West = 97%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phazon Mines West = 97%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 93%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 97%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Chozo Ruins": [
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Chozo Ruins West = 97%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 97%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 97%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ]
+    },
+    "deny": {}
+  },
+  "Save Station 1": {
+    "allow": {
+      "Transport to Tallon Overworld North": [
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Transport to Magmoor Caverns North": [
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Transport to Tallon Overworld East": [
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Chozo Ruins South = 97%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 97%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Chozo Ruins": [
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ]
+    },
+    "deny": {}
+  },
+  "Save Station 2": {
+    "allow": {
+      "Transport to Tallon Overworld North": [
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Chozo Ruins South = 97%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Transport to Magmoor Caverns North": [
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Phazon Mines East = 97%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Transport to Tallon Overworld East": [
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Chozo Ruins": [
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Magmoor Caverns East = 97%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ]
+    },
+    "deny": {}
+  },
+  "Tower Chamber": {
+    "allow": {
+      "Transport to Tallon Overworld North": [
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 97%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Transport to Magmoor Caverns North": [
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 97%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Transport to Tallon Overworld East": [
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Chozo Ruins": [
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Phazon Mines East = 97%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ]
+    },
+    "deny": {}
+  },
+  "Warrior Shrine": {
+    "allow": {
+      "Transport to Chozo Ruins North": [
+        "[Magmoor Caverns]: Transport to Chozo Ruins North -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Magmoor Caverns]: Transport to Chozo Ruins North -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Magmoor Caverns]: Transport to Chozo Ruins North -> [Chozo Ruins]: Transport to Tallon Overworld North = 100%"
+      ]
+    },
+    "deny": {
+      "Transport to Chozo Ruins North": [
+        "[Magmoor Caverns]: Transport to Chozo Ruins North -> [Tallon Overworld]: Transport to Chozo Ruins East = 53%",
+        "[Magmoor Caverns]: Transport to Chozo Ruins North -> [Tallon Overworld]: Transport to Chozo Ruins South = 47%",
+        "[Magmoor Caverns]: Transport to Chozo Ruins North -> [Tallon Overworld]: Transport to Phazon Mines East = 47%",
+        "[Magmoor Caverns]: Transport to Chozo Ruins North -> [Chozo Ruins]: Transport to Tallon Overworld East = 43%",
+        "[Magmoor Caverns]: Transport to Chozo Ruins North -> [Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South = 47%",
+        "[Magmoor Caverns]: Transport to Chozo Ruins North -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 43%",
+        "[Magmoor Caverns]: Transport to Chozo Ruins North -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 47%",
+        "[Magmoor Caverns]: Transport to Chozo Ruins North -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 53%",
+        "[Magmoor Caverns]: Transport to Chozo Ruins North -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 53%"
+      ],
+      "Transport to Phendrana Drifts North": [
+        "[Magmoor Caverns]: Transport to Phendrana Drifts North -> [Tallon Overworld]: Transport to Chozo Ruins West = 60%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts North -> [Tallon Overworld]: Transport to Magmoor Caverns East = 60%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts North -> [Tallon Overworld]: Transport to Chozo Ruins East = 67%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts North -> [Tallon Overworld]: Transport to Chozo Ruins South = 53%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts North -> [Tallon Overworld]: Transport to Phazon Mines East = 73%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts North -> [Chozo Ruins]: Transport to Tallon Overworld North = 73%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts North -> [Chozo Ruins]: Transport to Magmoor Caverns North = 53%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts North -> [Chozo Ruins]: Transport to Tallon Overworld East = 60%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts North -> [Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South = 67%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts North -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 67%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts North -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 83%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts North -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 50%"
+      ],
+      "Transport to Tallon Overworld West": [
+        "[Magmoor Caverns]: Transport to Tallon Overworld West -> [Tallon Overworld]: Transport to Chozo Ruins West = 70%",
+        "[Magmoor Caverns]: Transport to Tallon Overworld West -> [Tallon Overworld]: Transport to Chozo Ruins East = 67%",
+        "[Magmoor Caverns]: Transport to Tallon Overworld West -> [Tallon Overworld]: Transport to Chozo Ruins South = 57%",
+        "[Magmoor Caverns]: Transport to Tallon Overworld West -> [Tallon Overworld]: Transport to Phazon Mines East = 70%",
+        "[Magmoor Caverns]: Transport to Tallon Overworld West -> [Chozo Ruins]: Transport to Tallon Overworld North = 63%",
+        "[Magmoor Caverns]: Transport to Tallon Overworld West -> [Chozo Ruins]: Transport to Magmoor Caverns North = 77%",
+        "[Magmoor Caverns]: Transport to Tallon Overworld West -> [Chozo Ruins]: Transport to Tallon Overworld East = 77%",
+        "[Magmoor Caverns]: Transport to Tallon Overworld West -> [Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South = 63%",
+        "[Magmoor Caverns]: Transport to Tallon Overworld West -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 77%",
+        "[Magmoor Caverns]: Transport to Tallon Overworld West -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 77%",
+        "[Magmoor Caverns]: Transport to Tallon Overworld West -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 40%",
+        "[Magmoor Caverns]: Transport to Tallon Overworld West -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 57%"
+      ],
+      "Transport to Phendrana Drifts South": [
+        "[Magmoor Caverns]: Transport to Phendrana Drifts South -> [Tallon Overworld]: Transport to Chozo Ruins West = 77%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts South -> [Tallon Overworld]: Transport to Magmoor Caverns East = 37%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts South -> [Tallon Overworld]: Transport to Chozo Ruins East = 60%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts South -> [Tallon Overworld]: Transport to Chozo Ruins South = 43%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts South -> [Tallon Overworld]: Transport to Phazon Mines East = 57%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts South -> [Chozo Ruins]: Transport to Tallon Overworld North = 47%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts South -> [Chozo Ruins]: Transport to Magmoor Caverns North = 80%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts South -> [Chozo Ruins]: Transport to Tallon Overworld East = 63%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts South -> [Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South = 57%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts South -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 60%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts South -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 60%",
+        "[Magmoor Caverns]: Transport to Phendrana Drifts South -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 63%"
+      ],
+      "Transport to Phazon Mines West": [
+        "[Magmoor Caverns]: Transport to Phazon Mines West -> [Tallon Overworld]: Transport to Chozo Ruins West = 53%",
+        "[Magmoor Caverns]: Transport to Phazon Mines West -> [Tallon Overworld]: Transport to Magmoor Caverns East = 60%",
+        "[Magmoor Caverns]: Transport to Phazon Mines West -> [Tallon Overworld]: Transport to Chozo Ruins East = 70%",
+        "[Magmoor Caverns]: Transport to Phazon Mines West -> [Tallon Overworld]: Transport to Chozo Ruins South = 57%",
+        "[Magmoor Caverns]: Transport to Phazon Mines West -> [Tallon Overworld]: Transport to Phazon Mines East = 77%",
+        "[Magmoor Caverns]: Transport to Phazon Mines West -> [Chozo Ruins]: Transport to Tallon Overworld North = 67%",
+        "[Magmoor Caverns]: Transport to Phazon Mines West -> [Chozo Ruins]: Transport to Magmoor Caverns North = 53%",
+        "[Magmoor Caverns]: Transport to Phazon Mines West -> [Chozo Ruins]: Transport to Tallon Overworld East = 73%",
+        "[Magmoor Caverns]: Transport to Phazon Mines West -> [Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South = 67%",
+        "[Magmoor Caverns]: Transport to Phazon Mines West -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 60%",
+        "[Magmoor Caverns]: Transport to Phazon Mines West -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 70%",
+        "[Magmoor Caverns]: Transport to Phazon Mines West -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 70%"
+      ]
+    }
+  },
+  "East Tower": {
+    "allow": {
+      "Transport to Magmoor Caverns West": [
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Chozo Ruins]: Transport to Tallon Overworld North = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Chozo Ruins]: Transport to Magmoor Caverns North = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Chozo Ruins]: Transport to Tallon Overworld East = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 93%"
+      ],
+      "Phendrana Drifts": [
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Tallon Overworld]: Transport to Chozo Ruins West = 97%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Chozo Ruins]: Transport to Tallon Overworld North = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Chozo Ruins]: Transport to Magmoor Caverns North = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Chozo Ruins]: Transport to Tallon Overworld East = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ]
+    },
+    "deny": {}
+  },
+  "Save Station B": {
+    "allow": {
+      "Transport to Magmoor Caverns West": [
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Tallon Overworld]: Transport to Chozo Ruins South = 90%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Chozo Ruins]: Transport to Tallon Overworld North = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Chozo Ruins]: Transport to Magmoor Caverns North = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 90%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 90%"
+      ],
+      "Phendrana Drifts": [
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Tallon Overworld]: Transport to Chozo Ruins West = 93%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Tallon Overworld]: Transport to Magmoor Caverns East = 97%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Tallon Overworld]: Transport to Chozo Ruins East = 93%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Tallon Overworld]: Transport to Chozo Ruins South = 97%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Tallon Overworld]: Transport to Phazon Mines East = 97%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Chozo Ruins]: Transport to Tallon Overworld North = 97%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Chozo Ruins]: Transport to Magmoor Caverns North = 93%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Chozo Ruins]: Transport to Tallon Overworld East = 97%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South = 97%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 90%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 93%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 90%"
+      ]
+    },
+    "deny": {
+      "Transport to Magmoor Caverns West": [
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Tallon Overworld]: Transport to Phazon Mines East = 87%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Chozo Ruins]: Transport to Tallon Overworld East = 80%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South = 77%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Magmoor Caverns]: Transport to Tallon Overworld West = 83%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 87%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Magmoor Caverns]: Transport to Phazon Mines West = 87%"
+      ],
+      "Phendrana Drifts": [
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Magmoor Caverns]: Transport to Chozo Ruins North = 87%"
+      ]
+    }
+  },
+  "Arbor Chamber": {
+    "allow": {
+      "Transport to Chozo Ruins West": [
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Chozo Ruins]: Transport to Magmoor Caverns North = 97%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Chozo Ruins]: Transport to Tallon Overworld East = 93%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South = 97%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Magmoor Caverns]: Transport to Chozo Ruins North = 97%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 97%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Magmoor Caverns]: Transport to Tallon Overworld West = 90%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Magmoor Caverns]: Transport to Phazon Mines West = 90%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 97%"
+      ],
+      "Transport to Magmoor Caverns East": [
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Chozo Ruins]: Transport to Tallon Overworld North = 100%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Chozo Ruins]: Transport to Magmoor Caverns North = 97%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Chozo Ruins]: Transport to Tallon Overworld East = 93%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South = 90%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Magmoor Caverns]: Transport to Chozo Ruins North = 93%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 97%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 97%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Magmoor Caverns]: Transport to Phazon Mines West = 93%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 90%"
+      ],
+      "Transport to Chozo Ruins East": [
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Chozo Ruins]: Transport to Tallon Overworld North = 90%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South = 97%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 97%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 93%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Magmoor Caverns]: Transport to Phazon Mines West = 93%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 90%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Transport to Chozo Ruins South": [
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Chozo Ruins]: Transport to Tallon Overworld North = 90%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Magmoor Caverns]: Transport to Chozo Ruins North = 93%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 97%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 93%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 90%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 93%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 90%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 97%"
+      ],
+      "Transport to Phazon Mines East": [
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Chozo Ruins]: Transport to Magmoor Caverns North = 97%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Chozo Ruins]: Transport to Tallon Overworld East = 97%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South = 90%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Magmoor Caverns]: Transport to Chozo Ruins North = 93%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 97%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Magmoor Caverns]: Transport to Tallon Overworld West = 97%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 93%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Magmoor Caverns]: Transport to Phazon Mines West = 90%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 93%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%"
+      ]
+    },
+    "deny": {
+      "Transport to Chozo Ruins West": [
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 70%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 80%"
+      ],
+      "Transport to Magmoor Caverns East": [
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 67%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 87%"
+      ],
+      "Transport to Chozo Ruins East": [
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Chozo Ruins]: Transport to Magmoor Caverns North = 83%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Magmoor Caverns]: Transport to Chozo Ruins North = 87%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Magmoor Caverns]: Transport to Tallon Overworld West = 87%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 87%"
+      ],
+      "Transport to Chozo Ruins South": [
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Chozo Ruins]: Transport to Magmoor Caverns North = 87%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Chozo Ruins]: Transport to Tallon Overworld East = 83%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Magmoor Caverns]: Transport to Tallon Overworld West = 83%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Magmoor Caverns]: Transport to Phazon Mines West = 83%"
+      ],
+      "Transport to Phazon Mines East": [
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Chozo Ruins]: Transport to Tallon Overworld North = 87%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 77%"
+      ]
+    }
+  },
+  "Transport to Chozo Ruins East": {
+    "allow": {
+      "Transport to Chozo Ruins West": [
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Chozo Ruins]: Transport to Magmoor Caverns North = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Chozo Ruins]: Transport to Tallon Overworld East = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South = 97%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Magmoor Caverns]: Transport to Tallon Overworld West = 97%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 90%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 97%",
+        "[Tallon Overworld]: Transport to Chozo Ruins West -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Transport to Magmoor Caverns East": [
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Chozo Ruins]: Transport to Tallon Overworld North = 100%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Chozo Ruins]: Transport to Magmoor Caverns North = 100%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Chozo Ruins]: Transport to Tallon Overworld East = 97%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South = 100%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Magmoor Caverns]: Transport to Chozo Ruins North = 97%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 97%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Magmoor Caverns]: Transport to Phazon Mines West = 97%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 97%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Tallon Overworld]: Transport to Magmoor Caverns East -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 93%"
+      ],
+      "Transport to Chozo Ruins East": [
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Chozo Ruins]: Transport to Tallon Overworld North = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Chozo Ruins]: Transport to Magmoor Caverns North = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South = 97%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Magmoor Caverns]: Transport to Chozo Ruins North = 97%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 93%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Magmoor Caverns]: Transport to Tallon Overworld West = 97%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Magmoor Caverns]: Transport to Phazon Mines West = 93%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 97%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins East -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Transport to Chozo Ruins South": [
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Chozo Ruins]: Transport to Tallon Overworld North = 97%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Chozo Ruins]: Transport to Magmoor Caverns North = 97%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Chozo Ruins]: Transport to Tallon Overworld East = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Magmoor Caverns]: Transport to Chozo Ruins North = 93%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Magmoor Caverns]: Transport to Phazon Mines West = 93%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 93%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 97%",
+        "[Tallon Overworld]: Transport to Chozo Ruins South -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 97%"
+      ],
+      "Transport to Phazon Mines East": [
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Chozo Ruins]: Transport to Tallon Overworld North = 100%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Chozo Ruins]: Transport to Magmoor Caverns North = 100%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Chozo Ruins]: Transport to Tallon Overworld East = 93%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South = 100%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Magmoor Caverns]: Transport to Chozo Ruins North = 97%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 97%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 97%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Tallon Overworld]: Transport to Phazon Mines East -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 97%"
+      ]
+    },
+    "deny": {}
+  },
+  "Quarantine Monitor": {
+    "allow": {
+      "Transport to Magmoor Caverns West": [
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Chozo Ruins]: Transport to Tallon Overworld North = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Chozo Ruins]: Transport to Magmoor Caverns North = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Chozo Ruins]: Transport to Tallon Overworld East = 97%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Phendrana Drifts]: Transport to Magmoor Caverns West -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 97%"
+      ],
+      "Phendrana Drifts: Transport to Magmoor Caverns South": [
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Tallon Overworld]: Transport to Phazon Mines East = 97%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Chozo Ruins]: Transport to Tallon Overworld North = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Chozo Ruins]: Transport to Magmoor Caverns North = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Chozo Ruins]: Transport to Tallon Overworld East = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Magmoor Caverns]: Transport to Phazon Mines West = 97%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ]
+    },
+    "deny": {}
+  },
+  "Sunchamber Lobby": {
+    "allow": {
+      "Transport to Tallon Overworld North": [
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Tallon Overworld West = 97%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Magmoor Caverns]: Transport to Phazon Mines West = 97%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld North -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Transport to Magmoor Caverns North": [
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Transport to Magmoor Caverns North -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Transport to Tallon Overworld East": [
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Chozo Ruins South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Transport to Tallon Overworld East -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ],
+      "Chozo Ruins": [
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Chozo Ruins West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Magmoor Caverns East = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Chozo Ruins East = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Tallon Overworld]: Transport to Phazon Mines East = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Chozo Ruins North = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phendrana Drifts North = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Tallon Overworld West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phendrana Drifts South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Magmoor Caverns]: Transport to Phazon Mines West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phendrana Drifts]: Transport to Magmoor Caverns West = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phendrana Drifts]: Phendrana Drifts: Transport to Magmoor Caverns South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phazon Mines]: Phazon Mines: Transport to Tallon Overworld South = 100%",
+        "[Chozo Ruins]: Chozo Ruins: Transport to Tallon Overworld South -> [Phazon Mines]: Phazon Mines: Transport to Magmoor Caverns South = 100%"
+      ]
+    },
+    "deny": {}
+  }
+}
