@@ -9,7 +9,7 @@ import bsdiff4
 
 import settings
 from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial, MultiWorld
-from Fill import fill_restrictive
+from Fill import fill_restrictive, remaining_fill, FillError
 from worlds.AutoWorld import WebWorld, World
 from .Common import *
 from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningItem, TradeItemData,
@@ -370,8 +370,17 @@ class LinksAwakeningWorld(World):
         # Remove "An Alarm Clock" from "Windfish" to avoid fill_restrictive thinking the game has been beaten
         all_state.remove(self.get_location("Windfish").item)
 
-        # Finally, fill!
-        fill_restrictive(self.multiworld, all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=False)
+        # Finally, fill. Do partial placement for minimal accessibility.
+        allow_partial = (self.options.accessibility == "minimal")
+        fill_restrictive(self.multiworld, all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=allow_partial)
+
+        if allow_partial:
+            # With these items placed, the game should be beatable!
+            if not self.multiworld.can_beat_game(self.multiworld.get_all_state(use_cache=False)):
+                raise FillError("The game is unbeatable after filling dungeons.")
+
+            # Fill all remaining dungeon items (these items will become unreachable, which is fine in minimal accessibility)
+            remaining_fill(self.multiworld, all_dungeon_locs_to_fill, all_dungeon_items_to_fill)
 
     name_cache = {}
     # Tries to associate an icon from another game with an icon we have
