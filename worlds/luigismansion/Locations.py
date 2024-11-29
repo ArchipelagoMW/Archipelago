@@ -794,7 +794,7 @@ SPEEDY_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Breaker Room Speedy Spirit": LMLocationData("Breaker Room", 656, "BSpeedy", 7, []),
     "Cellar Speedy Spirit": LMLocationData("Cellar", 657, "BSpeedy", 6, []),
     "Sealed Room Speedy Spirit": LMLocationData("Sealed Room", 658, "BSpeedy", 125, []),
-    # Gold Mice Locations
+    # Gold Mice Locations TODO split into separate option
     #        LMLocationData('Study', 'Study Cheese Gold Mouse', 659),
     #        LMLocationData('Fortune-Teller\'s Room', 'Fortune-Teller\'s Room Cheese Gold Mouse', 660),
     #        LMLocationData('Dining Room', 'Dining Room Cheese Gold Mouse', 661),

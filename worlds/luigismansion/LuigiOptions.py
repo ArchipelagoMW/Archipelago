@@ -48,6 +48,23 @@ class StartWithBooRadar(Choice):
     default = 1
 
 
+class PortraitHints(Toggle):
+    """Choose to add hints to the scans of the Portrait Ghosts in the mansions"""
+    display_name = "Portrait Ghost Hints"
+
+
+class HintDistribution(Choice):
+    """Choose the level of hint from in-game hints. Will affect Portrait Ghost hints if the option is on."""
+    display_name = "Hint Distribution"
+    option_balanced = 0
+    option_junk = 1
+    option_chaos = 2
+    option_strong = 3
+    option_vague = 4
+    option_disabled = 5
+    default = 0
+
+
 class Plants(Toggle):
     """Adds all plants to location pool"""
     display_name = "Plantsanity"
@@ -117,9 +134,9 @@ class Boosanity(Toggle):
     display_name = "Boosanity"
 
 
-class PortraitGhosts(Toggle):
+class Portrification(Toggle):
     """Turn Portrait Ghosts into checks in addition to their clear chests"""
-    display_name = "Portrait Ghosts"
+    display_name = "Portrification"
 
 
 class Enemizer(Choice):
@@ -186,11 +203,13 @@ class LMOptions(PerGameCommonOptions):
     pickup_animation: PickupAnim
     random_music: RandomMusic
     door_rando: DoorRando
+    portrait_hints: PortraitHints
+    hint_distribution: HintDistribution
     toadsanity: Toadsanity
     plantsanity: Plants
     furnisanity: Furnisanity
     boosanity: Boosanity
-    portrait_ghosts: PortraitGhosts
+    portrification: Portrification
     speedy_spirits: SpeedySpirits
     boo_gates: BooGates
     mario_items: MarioItems

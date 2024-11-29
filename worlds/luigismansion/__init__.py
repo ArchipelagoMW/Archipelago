@@ -17,6 +17,7 @@ from Options import OptionGroup
 from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items, ALL_ITEMS_TABLE
 from .Locations import *
 from .LuigiOptions import LMOptions
+from .Hints import get_hints_by_option
 from .Regions import *
 from . import Rules
 
@@ -52,7 +53,7 @@ class LMWeb(WebWorld):
             LuigiOptions.Plants,
             LuigiOptions.Toadsanity,
             LuigiOptions.Boosanity,
-            LuigiOptions.PortraitGhosts,
+            LuigiOptions.Portrification,
             LuigiOptions.SpeedySpirits
         ]),
         OptionGroup("QOL Changes", [
@@ -62,7 +63,9 @@ class LMWeb(WebWorld):
             LuigiOptions.BetterVacuum,
             LuigiOptions.StartWithBooRadar,
             LuigiOptions.StartHiddenMansion,
-            LuigiOptions.RandomMusic
+            LuigiOptions.RandomMusic,
+            LuigiOptions.HintDistribution,
+            LuigiOptions.PortraitHints
         ]),
         OptionGroup("Access Options", [
             LuigiOptions.Goal,
@@ -239,7 +242,7 @@ class LMWorld(World):
                         else:
                             add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
                 region.locations.append(entry)
-        if self.options.portrait_ghosts:
+        if self.options.portrification:
             for location, data in PORTRAIT_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
                 entry = LMLocation(self.player, location, region, data)
@@ -499,7 +502,7 @@ class LMWorld(World):
 
         output_data["Entrances"] = self.open_doors
         output_data["Room Enemies"] = self.ghost_affected_regions
-        #output_data["Hints"] = get_hints_by_option(self.multiworld, self.player)
+        output_data["Hints"] = get_hints_by_option(self.multiworld, self.player)
 
         # Output which item has been placed at each location
         locations = self.multiworld.get_locations(self.player)
@@ -557,7 +560,8 @@ class LMWorld(World):
             "plantsanity": self.options.plantsanity.value,
             "furnisanity": self.options.furnisanity.value,
             "boosanity": self.options.boosanity.value,
-            "portrait ghosts": self.options.portrait_ghosts.value,
+            "boo gates": self.options.boo_gates.value,
+            "portrait ghosts": self.options.portrification.value,
             "speedy spirits": self.options.speedy_spirits.value,
             "clairvoya requirement": self.options.mario_items.value,
             "washroom boo count": self.options.washroom_boo_count.value,
