@@ -321,7 +321,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
                                   f"{ex}\nPlease close all AP instances and delete manually.")
 
         # regular cx build
-        self.buildtime = datetime.datetime.utcnow()
+        self.buildtime = datetime.datetime.now(datetime.timezone.utc)
         super().run()
 
         # manually copy built modules to lib folder. cx_Freeze does not know they exist.
