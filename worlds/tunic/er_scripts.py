@@ -1,7 +1,7 @@
 from typing import Dict, List, Set, Tuple, TYPE_CHECKING
 from BaseClasses import Region, ItemClassification, Item, Location
 from .locations import location_table
-from .er_data import Portal, portal_mapping, traversal_requirements, DeadEnd, RegionInfo
+from .er_data import Portal, portal_mapping, traversal_requirements, DeadEnd, RegionInfo, get_portal_outlet_region
 from .er_rules import set_er_region_rules
 from Options import PlandoConnection
 from .options import EntranceRando
@@ -405,19 +405,21 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         # then we find a portal in an inaccessible region
         if check_success == 1:
             for portal in two_plus:
-                if portal.region not in connected_regions:
+                # we care about the outlet region here -- the region we get if we connect this portal in
+                portal_region = get_portal_outlet_region(portal, world)
+                if portal_region not in connected_regions:
                     # if secret gathering place happens to get paired really late, you can end up running out
                     if not has_laurels and len(two_plus) < 80:
                         # if you plando'd secret gathering place with laurels at 10 fairies, you're the reason for this
                         if waterfall_plando:
                             cr = connected_regions.copy()
-                            cr.add(portal.region)
+                            cr.add(portal_region)
                             if "Secret Gathering Place" not in update_reachable_regions(cr, traversal_reqs, has_laurels, logic_tricks):
                                 continue
-                        elif portal.region != "Secret Gathering Place":
+                        elif portal_region != "Secret Gathering Place":
                             continue
                     portal2 = portal
-                    connected_regions.add(portal.region)
+                    connected_regions.add(portal_region)
                     two_plus.remove(portal)
                     check_success = 2
                     break
