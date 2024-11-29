@@ -104,7 +104,11 @@ class SM64World(World):
         # 1Up Mushrooms
         self.multiworld.itempool += [self.create_item("1Up Mushroom") for i in range(0,self.filler_count)]
         # Power Stars
-        self.multiworld.itempool += [self.create_item("Power Star") for i in range(0,self.number_of_stars)]
+        star_range = self.number_of_stars
+        # Vanilla 100 Coin stars have to removed from the pool if other max star increasing options are active.
+        if (self.options.enable_coin_stars == "vanilla" and self.number_of_stars >= 15):
+            star_range -= 15
+        self.multiworld.itempool += [self.create_item("Power Star") for i in range(0,star_range)]
         # Keys
         if (not self.options.progressive_keys):
             key1 = self.create_item("Basement Key")
