@@ -34,7 +34,6 @@ from .data.utils import (
     get_discard_exclusion_list,
     get_early_caves_list,
     get_early_caves_start_list,
-    get_elevators_come_to_you,
     get_entity_hunt,
     get_ep_all_individual,
     get_ep_easy,
@@ -626,8 +625,29 @@ class WitnessPlayerLogic:
         if world.options.early_caves == "add_to_pool" and not remote_doors:
             adjustment_linesets_in_order.append(get_early_caves_list())
 
-        if world.options.elevators_come_to_you:
-            adjustment_linesets_in_order.append(get_elevators_come_to_you())
+        if "Quarry Elevator" in world.options.elevators_come_to_you:
+            adjustment_linesets_in_order.append([
+                "New Connections:",
+                "Quarry - Quarry Elevator - TrueOneWay",
+                "Outside Quarry - Quarry Elevator - TrueOneWay",
+            ])
+        if "Bunker Elevator" in world.options.elevators_come_to_you:
+            adjustment_linesets_in_order.append([
+                "New Connections:",
+                "Outside Bunker - Bunker Elevator - TrueOneWay",
+            ])
+        if "Swamp Long Bridge" in world.options.elevators_come_to_you:
+            adjustment_linesets_in_order.append([
+                "New Connections:",
+                "Outside Swamp - Swamp Long Bridge - TrueOneWay",
+                "Swamp Near Boat - Swamp Long Bridge - TrueOneWay",
+                "Requirement Changes:",
+                "0x035DE - 0x17E2B - True",  # Swamp Purple Sand Bottom EP
+            ])
+        # if "Town Maze Rooftop Bridge" in world.options.elevators_come_to_you:
+        #     adjustment_linesets_in_order.append([
+        #         "New Connections:"
+        #         "Town Red Rooftop - Town Maze Rooftop - TrueOneWay"
 
         if world.options.victory_condition == "panel_hunt":
             adjustment_linesets_in_order.append(get_entity_hunt())
