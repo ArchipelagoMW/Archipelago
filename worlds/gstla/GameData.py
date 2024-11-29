@@ -175,7 +175,7 @@ SPECIAL_NAMES = {
     427: ItemName(427, 'Rusty_Staff_GoblinsRod',"Rusty Staff - Goblin's Rod"),
     123: ItemName(123, 'Dragon_Shield_GS', "Dragon Shield GS"),
     132: ItemName(132, 'Spirit_Gloves_GS', 'Spirit Gloves GS'),
-    222: ItemName(222, 'Mythril_Bag_Mars', 'Mythril Bag (Mars)'),
+    222: ItemName(222, 'Mars_Star', 'Mars Star'),
     223: ItemName(223, 'Mythril_Bag_Jupiter', 'Mythril Bag (Jupiter)'),
     224: ItemName(224, 'Mythril_Bag_Empty', 'Mythril Bag (Empty)'),
     245: ItemName(245, 'Mythril_Bag_Mars_Jupiter', 'Mythril Bag (Mars & Jupiter)'),

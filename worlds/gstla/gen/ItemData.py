@@ -242,7 +242,7 @@ ItemData(2569, "Mimic 8", ItemClassification.trap, 994644, ItemType.Mimic, True)
 
 other_progression: List[ItemData] = [
 ItemData(65, "Shaman's Rod", ItemClassification.progression, 732816, ItemType.Weapon, False),
-ItemData(222, "Mythril Bag (Mars)", ItemClassification.progression, 739724, ItemType.KeyItem, False),
+ItemData(222, "Mars Star", ItemClassification.progression, 739724, ItemType.KeyItem, False),
 ItemData(242, "Black Crystal", ItemClassification.progression, 740604, ItemType.Consumable, False),
 ItemData(243, "Red Key", ItemClassification.progression, 740648, ItemType.Consumable, False),
 ItemData(244, "Blue Key", ItemClassification.progression, 740692, ItemType.Consumable, False),

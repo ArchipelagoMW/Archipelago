@@ -388,7 +388,7 @@ class ItemName(str, Enum):
     Trainers_Whip = "Trainer's Whip"
     Tomegathericon = "Tomegathericon"
     # KeyItem
-    Mythril_Bag_Mars = "Mythril Bag (Mars)"
+    Mars_Star = "Mars Star"
     # Mimic
     Mimic_0 = "Mimic 0"
     Mimic_1 = "Mimic 1"
@@ -711,7 +711,7 @@ item_id_by_name: Dict[int, ItemName] = {
     "Grindstone": 3736,
     "Hover Jade": 3737,
     "Teleport Lapis": 3740,
-    "Mythril Bag (Mars)": 222,
+    "Mars Star": 222,
     "Smoke Bomb": 226,
     "Sleep Bomb": 227,
     "Lucky Medal": 229,
@@ -1225,7 +1225,7 @@ name_by_item_id: Dict[ItemName, int] = {
     3736: "Grindstone",
     3737: "Hover Jade",
     3740: "Teleport Lapis",
-    222: "Mythril Bag (Mars)",
+    222: "Mars Star",
     226: "Smoke Bomb",
     227: "Sleep Bomb",
     229: "Lucky Medal",

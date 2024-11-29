@@ -116,7 +116,7 @@ def set_entrance_rules(world: 'GSTLAWorld'):
     add_rule(world.get_entrance(EntranceName.WesternSeaToProx),
              lambda state: state.has(ItemName.Magma_Ball, player))
     add_rule(world.get_entrance(EntranceName.MarsLighthouseToMarsLighthouse_Activated),
-            lambda state: state.has(ItemName.Flame_Dragons_defeated, player) and state.has(ItemName.Mythril_Bag_Mars, player))
+            lambda state: state.has(ItemName.Flame_Dragons_defeated, player) and state.has(ItemName.Mars_Star, player))
     
     if world.options.lemurian_ship == 0:
         add_rule(world.get_entrance(EntranceName.MadraToLemurianShip),
