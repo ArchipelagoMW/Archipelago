@@ -1636,7 +1636,7 @@ item_table = {
     # Protoss Units (those that aren't as items in WoL (Prophecy))
     item_names.OBSERVER:
         ItemData(0 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 9, SC2Race.PROTOSS,
-                 classification=ItemClassification.filler),
+                 classification=ItemClassification.progression),
     item_names.CENTURION:
         ItemData(1 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 10, SC2Race.PROTOSS,
                  classification=ItemClassification.progression),

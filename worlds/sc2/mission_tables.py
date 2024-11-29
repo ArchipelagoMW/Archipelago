@@ -108,7 +108,7 @@ class SC2Mission(Enum):
     SAFE_HAVEN = 6, "Safe Haven (Terran)", SC2Campaign.WOL, "Colonist", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_safe_haven", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsProtoss|MissionFlag.HasRaceSwap
     HAVENS_FALL = 7, "Haven's Fall (Terran)", SC2Campaign.WOL, "Colonist", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_havens_fall", MissionFlag.Terran|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     SMASH_AND_GRAB = 8, "Smash and Grab (Terran)", SC2Campaign.WOL, "Artifact", SC2Race.TERRAN, MissionPools.EASY, "ap_smash_and_grab", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsPZ|MissionFlag.HasRaceSwap
-    THE_DIG = 9, "The Dig", SC2Campaign.WOL, "Artifact", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_the_dig", MissionFlag.Terran|MissionFlag.TimedDefense|MissionFlag.VsProtoss
+    THE_DIG = 9, "The Dig (Terran)", SC2Campaign.WOL, "Artifact", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_the_dig", MissionFlag.Terran|MissionFlag.TimedDefense|MissionFlag.VsProtoss|MissionFlag.HasRaceSwap
     THE_MOEBIUS_FACTOR = 10, "The Moebius Factor (Terran)", SC2Campaign.WOL, "Artifact", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_the_moebius_factor", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     SUPERNOVA = 11, "Supernova (Terran)", SC2Campaign.WOL, "Artifact", SC2Race.TERRAN, MissionPools.HARD, "ap_supernova", MissionFlag.Terran|MissionFlag.Countdown|MissionFlag.VsProtoss|MissionFlag.HasRaceSwap
     MAW_OF_THE_VOID = 12, "Maw of the Void (Terran)", SC2Campaign.WOL, "Artifact", SC2Race.TERRAN, MissionPools.HARD, "ap_maw_of_the_void", MissionFlag.Terran|MissionFlag.VsProtoss|MissionFlag.HasRaceSwap
@@ -212,7 +212,8 @@ class SC2Mission(Enum):
     HAVENS_FALL_P = 97, "Haven's Fall (Protoss)", SC2Campaign.WOL, "Colonist", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_havens_fall", MissionFlag.Protoss|MissionFlag.VsZerg|MissionFlag.RaceSwap
     SMASH_AND_GRAB_Z = 98, "Smash and Grab (Zerg)", SC2Campaign.WOL, "Artifact", SC2Race.ZERG, MissionPools.MEDIUM, "ap_smash_and_grab", MissionFlag.Zerg|MissionFlag.Countdown|MissionFlag.VsPZ|MissionFlag.RaceSwap
     SMASH_AND_GRAB_P = 99, "Smash and Grab (Protoss)", SC2Campaign.WOL, "Artifact", SC2Race.PROTOSS, MissionPools.EASY, "ap_smash_and_grab", MissionFlag.Protoss|MissionFlag.Countdown|MissionFlag.VsPZ|MissionFlag.RaceSwap
-    # 100/101 - The Dig
+    THE_DIG_Z = 100, "The Dig (Zerg)", SC2Campaign.WOL, "Artifact", SC2Race.ZERG, MissionPools.MEDIUM, "ap_the_dig", MissionFlag.Zerg|MissionFlag.TimedDefense|MissionFlag.VsProtoss|MissionFlag.RaceSwap
+    THE_DIG_P = 101, "The Dig (Protoss)", SC2Campaign.WOL, "Artifact", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_the_dig", MissionFlag.Protoss|MissionFlag.TimedDefense|MissionFlag.VsProtoss|MissionFlag.RaceSwap
     THE_MOEBIUS_FACTOR_Z = 102, "The Moebius Factor (Zerg)", SC2Campaign.WOL, "Artifact", SC2Race.ZERG, MissionPools.MEDIUM, "ap_the_moebius_factor", MissionFlag.Zerg|MissionFlag.Countdown|MissionFlag.VsZerg|MissionFlag.RaceSwap
     THE_MOEBIUS_FACTOR_P = 103, "The Moebius Factor (Protoss)", SC2Campaign.WOL, "Artifact", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_the_moebius_factor", MissionFlag.Protoss|MissionFlag.Countdown|MissionFlag.VsZerg|MissionFlag.RaceSwap
     SUPERNOVA_Z = 104, "Supernova (Zerg)", SC2Campaign.WOL, "Artifact", SC2Race.ZERG, MissionPools.HARD, "ap_supernova", MissionFlag.Zerg|MissionFlag.Countdown|MissionFlag.VsProtoss|MissionFlag.RaceSwap
