@@ -8,8 +8,8 @@ import typing
 import bsdiff4
 
 import settings
-from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial, MultiWorld
-from Fill import fill_restrictive, remaining_fill, FillError
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Tutorial, MultiWorld
+from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from .Common import *
 from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningItem, TradeItemData,
@@ -362,25 +362,25 @@ class LinksAwakeningWorld(World):
         all_dungeon_items_to_fill.sort(key=priority)
 
         # Set up state
-        all_state = self.multiworld.get_all_state(use_cache=False)
+        partial_all_state = CollectionState(self.multiworld)
+        # Collect every item from the item pool and every pre-fill item like MultiWorld.get_all_state, but don't sweep.
+        for item in self.multiworld.itempool:
+            partial_all_state.collect(item, prevent_sweep=True)
+        for player in self.multiworld.player_ids:
+            subworld = self.multiworld.worlds[player]
+            for item in subworld.get_pre_fill_items():
+                partial_all_state.collect(item, prevent_sweep=True)
+        # get_all_state would normally sweep here, but we need to remove our dungeon items first.
+        
         # Remove dungeon items we are about to put in from the state so that we don't double count
         for item in all_dungeon_items_to_fill:
-            all_state.remove(item)
+            partial_all_state.remove(item)
 
-        # Remove "An Alarm Clock" from "Windfish" to avoid fill_restrictive thinking the game has been beaten
-        all_state.remove(self.get_location("Windfish").item)
+        # Sweep to pick up already placed items that are reachable with everything but the dungeon items.
+        partial_all_state.sweep_for_advancements()
+        
+        fill_restrictive(self.multiworld, partial_all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=False)
 
-        # Finally, fill. Do partial placement for minimal accessibility.
-        allow_partial = (self.options.accessibility == "minimal")
-        fill_restrictive(self.multiworld, all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=allow_partial)
-
-        if allow_partial:
-            # With these items placed, the game should be beatable!
-            if not self.multiworld.can_beat_game(self.multiworld.get_all_state(use_cache=False)):
-                raise FillError("The game is unbeatable after filling dungeons.")
-
-            # Fill all remaining dungeon items (these items will become unreachable, which is fine in minimal accessibility)
-            remaining_fill(self.multiworld, all_dungeon_locs_to_fill, all_dungeon_items_to_fill)
 
     name_cache = {}
     # Tries to associate an icon from another game with an icon we have
