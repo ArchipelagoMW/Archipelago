@@ -62,3 +62,10 @@ class TestPostgameGroupedDoors(WitnessTestBase):
         "door_groupings": "regional",
         "victory_condition": "elevator",
     }
+
+
+class TestPostgamePanels(WitnessTestBase):
+    options = {
+        "victory_condition": "mountain_box_long",
+        "shuffle_postgame": True
+    }
