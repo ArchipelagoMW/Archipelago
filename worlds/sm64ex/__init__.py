@@ -3,7 +3,7 @@ import os
 import json
 from .Items import item_table, action_item_table, cannon_item_table, SM64Item
 from .Locations import location_table, SM64Location
-from .Options import SM64Options
+from .Options import sm64_options_groups, SM64Options
 from .Rules import set_rules
 from .Regions import create_regions, sm64_level_to_entrances, SM64Levels
 from BaseClasses import Item, Tutorial, ItemClassification, Region
@@ -19,6 +19,8 @@ class SM64Web(WebWorld):
         "setup/en",
         ["N00byKing"]
     )]
+
+    option_groups = sm64_options_groups
 
 
 class SM64World(World):
