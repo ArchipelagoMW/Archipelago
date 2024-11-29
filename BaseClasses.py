@@ -1545,7 +1545,7 @@ class Spoiler:
                 [f"  {location}: {item}" for (location, item) in sphere.items()] if isinstance(sphere, dict) else
                 [f"  {item}" for item in sphere])) for (sphere_nr, sphere) in self.playthrough.items()]))
             if self.unreachables:
-                outfile.write('\n\nUnreachable Items:\n\n')
+                outfile.write('\n\nUnreachable Progression Items:\n\n')
                 outfile.write(
                     '\n'.join(['%s: %s' % (unreachable.item, unreachable) for unreachable in self.unreachables]))
 
