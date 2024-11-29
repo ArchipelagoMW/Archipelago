@@ -580,11 +580,10 @@ class GameManager(App):
                 # show Archipelago tab if other logging is present
                 self.tabs.add_widget(panel)
 
-        hint_panel = TabbedPanelItem(text="Hints")
+        hint_panel = self.add_client_tab("Hints", HintLayout())
         self.hint_log = HintLog(self.json_to_kivy_parser)
-        self.log_panels["Hints"] = hint_panel.content = HintLayout()
+        self.log_panels["Hints"] = hint_panel.content
         hint_panel.content.add_widget(self.hint_log)
-        self.tabs.add_widget(hint_panel)
 
         if len(self.logging_pairs) == 1:
             self.tabs.default_tab_text = "Archipelago"
