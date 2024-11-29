@@ -480,7 +480,8 @@ def set_access_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Whirlwind, player))
 
     add_rule(world.get_location(LocationName.Gaia_Rock_Serpent_Fight),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 2 and state.has(ItemName.Cyclone_Chip, player) and state.has(ItemName.Dancing_Idol, player))
+             lambda state: state.count_group(ItemType.Character.name, player) >= 2 and state.has(ItemName.Cyclone_Chip, player)
+                           and state.has(ItemName.Dancing_Idol, player) and state.has(ItemName.Growth, player))
 
 
     #Tundaria Tower
