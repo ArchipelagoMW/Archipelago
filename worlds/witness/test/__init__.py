@@ -1,11 +1,13 @@
-from test.bases import WorldTestBase
-from test.general import gen_steps, setup_multiworld
-from test.multiworld.test_multiworlds import MultiworldTestBase
-from typing import Any, ClassVar, Dict, Iterable, List, Mapping, Union, cast
+from typing import Any, ClassVar, Dict, Iterable, List, Mapping, Union
 
 from BaseClasses import CollectionState, Entrance, Item, Location, Region
 
+from test.bases import WorldTestBase
+from test.general import gen_steps, setup_multiworld
+from test.multiworld.test_multiworlds import MultiworldTestBase
+
 from .. import WitnessWorld
+from ..data.utils import cast_not_none
 
 
 class WitnessTestBase(WorldTestBase):
@@ -31,7 +33,7 @@ class WitnessTestBase(WorldTestBase):
         event_items = [item for item in self.multiworld.get_items() if item.name == item_name]
         self.assertTrue(event_items, f"Event item {item_name} does not exist.")
 
-        event_locations = [cast(Location, event_item.location) for event_item in event_items]
+        event_locations = [cast_not_none(event_item.location) for event_item in event_items]
 
         # Checking for an access dependency on an event item requires a bit of extra work,
         # as state.remove forces a sweep, which will pick up the event item again right after we tried to remove it.
@@ -159,3 +161,36 @@ class WitnessMultiworldTestBase(MultiworldTestBase):
         if isinstance(item_names, str):
             item_names = (item_names,)
         return [item for item in self.multiworld.itempool if item.name in item_names and item.player == player]
+
+    def assert_location_exists(self, location_name: str, player: int, strict_check: bool = True) -> None:
+        """
+        Assert that a location exists in this world.
+        If strict_check, also make sure that this (non-event) location COULD exist.
+        """
+
+        world = self.multiworld.worlds[player]
+
+        if strict_check:
+            self.assertIn(location_name, world.location_name_to_id, f"Location {location_name} can never exist")
+
+        try:
+            world.get_location(location_name)
+        except KeyError:
+            self.fail(f"Location {location_name} does not exist.")
+
+    def assert_location_does_not_exist(self, location_name: str, player: int, strict_check: bool = True) -> None:
+        """
+        Assert that a location exists in this world.
+        If strict_check, be explicit about whether the location could exist in the first place.
+        """
+
+        world = self.multiworld.worlds[player]
+
+        if strict_check:
+            self.assertIn(location_name, world.location_name_to_id, f"Location {location_name} can never exist")
+
+        self.assertRaises(
+            KeyError,
+            lambda _: world.get_location(location_name),
+            f"Location {location_name} exists, but is not supposed to.",
+        )
