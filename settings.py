@@ -166,7 +166,7 @@ class Group:
                 candidates = (
                     [] if annotation is None else (
                         typing.get_args(annotation)
-                        if typing.get_origin(annotation) in {Union, types.UnionType}
+                        if typing.get_origin(annotation) in (Union, types.UnionType)
                         else [annotation]
                     )
                 )
