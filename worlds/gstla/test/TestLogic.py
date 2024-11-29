@@ -30,7 +30,7 @@ requirement_map = {
     # "Boss_Moapa": ItemName.Moapa_defeated,
     # "Boss_AquaHydra": ItemName.Aqua_Hydra_defeated,
     # "Boss_FlameDragons": ItemName.Flame_Dragons_defeated,
-    "Mars Star": ItemName.Mythril_Bag_Mars,
+    # "Mars Star": ItemName.Mythril_Bag_Mars,
     # "Boss_Avimander": ItemName.Briggs_escaped,
 }
 
