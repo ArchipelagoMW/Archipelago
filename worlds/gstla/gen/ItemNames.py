@@ -390,15 +390,15 @@ class ItemName(str, Enum):
     # KeyItem
     Mars_Star = "Mars Star"
     # Mimic
-    Mimic_0 = "Mimic 0"
-    Mimic_1 = "Mimic 1"
-    Mimic_2 = "Mimic 2"
-    Mimic_3 = "Mimic 3"
-    Mimic_4 = "Mimic 4"
-    Mimic_5 = "Mimic 5"
-    Mimic_6 = "Mimic 6"
-    Mimic_7 = "Mimic 7"
-    Mimic_8 = "Mimic 8"
+    Milquetoast_Mimic = "Milquetoast Mimic"
+    Clumsy_Mimic = "Clumsy Mimic"
+    Mimic = "Mimic"
+    Journeyman_Mimic = "Journeyman Mimic"
+    Advanced_Mimic = "Advanced Mimic"
+    Sacred_Mimic = "Sacred Mimic"
+    Royal_Mimic = "Royal Mimic"
+    Imperial_Mimic = "Imperial Mimic"
+    Divine_Mimic = "Divine Mimic"
     
 
     #Summons
@@ -541,15 +541,15 @@ class ItemName(str, Enum):
 
 item_id_by_name: Dict[int, ItemName] = {
     "???": 0,
-    "Mimic 0": 2561,
-    "Mimic 1": 2562,
-    "Mimic 2": 2563,
-    "Mimic 3": 2564,
-    "Mimic 4": 2565,
-    "Mimic 5": 2566,
-    "Mimic 6": 2567,
-    "Mimic 7": 2568,
-    "Mimic 8": 2569,
+    "Milquetoast Mimic": 2561,
+    "Clumsy Mimic": 2562,
+    "Mimic": 2563,
+    "Journeyman Mimic": 2564,
+    "Advanced Mimic": 2565,
+    "Sacred Mimic": 2566,
+    "Royal Mimic": 2567,
+    "Imperial Mimic": 2568,
+    "Divine Mimic": 2569,
     "Empty": 0,
     "Long Sword": 1,
     "Broad Sword": 2,
@@ -1055,15 +1055,15 @@ item_id_by_name: Dict[int, ItemName] = {
 }
 
 name_by_item_id: Dict[ItemName, int] = {
-    2561: "Mimic 0",
-    2562: "Mimic 1",
-    2563: "Mimic 2",
-    2564: "Mimic 3",
-    2565: "Mimic 4",
-    2566: "Mimic 5",
-    2567: "Mimic 6",
-    2568: "Mimic 7",
-    2569: "Mimic 8",
+    2561: "Milquetoast Mimic",
+    2562: "Clumsy Mimic",
+    2563: "Mimic",
+    2564: "Journeyman Mimic",
+    2565: "Advanced Mimic",
+    2566: "Sacred Mimic",
+    2567: "Royal Mimic",
+    2568: "Imperial Mimic",
+    2569: "Divine Mimic",
     0: "Empty",
     1: "Long Sword",
     2: "Broad Sword",

@@ -228,15 +228,15 @@ characters: List[ItemData] = [
 ]
 
 mimics: List[ItemData] = [
-ItemData(2561, "Mimic 0", ItemClassification.trap, 991872, ItemType.Mimic, True),
-ItemData(2562, "Mimic 1", ItemClassification.trap, 992520, ItemType.Mimic, True),
-ItemData(2563, "Mimic 2", ItemClassification.trap, 992852, ItemType.Mimic, True),
-ItemData(2564, "Mimic 3", ItemClassification.trap, 993268, ItemType.Mimic, True),
-ItemData(2565, "Mimic 4", ItemClassification.trap, 993476, ItemType.Mimic, True),
-ItemData(2566, "Mimic 5", ItemClassification.trap, 994268, ItemType.Mimic, True),
-ItemData(2567, "Mimic 6", ItemClassification.trap, 994388, ItemType.Mimic, True),
-ItemData(2568, "Mimic 7", ItemClassification.trap, 994536, ItemType.Mimic, True),
-ItemData(2569, "Mimic 8", ItemClassification.trap, 994644, ItemType.Mimic, True),
+ItemData(2561, "Milquetoast Mimic", ItemClassification.trap, 991872, ItemType.Mimic, True),
+ItemData(2562, "Clumsy Mimic", ItemClassification.trap, 992520, ItemType.Mimic, True),
+ItemData(2563, "Mimic", ItemClassification.trap, 992852, ItemType.Mimic, True),
+ItemData(2564, "Journeyman Mimic", ItemClassification.trap, 993268, ItemType.Mimic, True),
+ItemData(2565, "Advanced Mimic", ItemClassification.trap, 993476, ItemType.Mimic, True),
+ItemData(2566, "Sacred Mimic", ItemClassification.trap, 994268, ItemType.Mimic, True),
+ItemData(2567, "Royal Mimic", ItemClassification.trap, 994388, ItemType.Mimic, True),
+ItemData(2568, "Imperial Mimic", ItemClassification.trap, 994536, ItemType.Mimic, True),
+ItemData(2569, "Divine Mimic", ItemClassification.trap, 994644, ItemType.Mimic, True),
 
 ]
 

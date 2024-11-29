@@ -19,6 +19,18 @@ num_words = {
     10: 'Ten'
 }
 
+mimic_names = [
+    "Milquetoast Mimic",
+    "Clumsy Mimic",
+    "Mimic",
+    "Journeyman Mimic",
+    "Advanced Mimic",
+    "Sacred Mimic",
+    "Royal Mimic",
+    "Imperial Mimic",
+    "Divine Mimic"
+]
+
 
 class LocationDatum(NamedTuple):
     rando_flag: int
@@ -294,7 +306,7 @@ class GameData:
             if datum.vanilla_name == 'Mimic':
                 self.raw_item_data.append(
                     # Agreed upon rando id of 0xA00 + mimic id
-                    ItemDatum(0xA01 + datum.vanilla_contents,"Mimic %d" % datum.vanilla_contents, datum.addr[0], ItemType.Mimic, ItemFlags.NONE, 0, True)
+                    ItemDatum(0xA01 + datum.vanilla_contents, mimic_names[datum.vanilla_contents], datum.addr[0], ItemType.Mimic, ItemFlags.NONE, 0, True)
                 )
             else:
                 self.vanilla_item_ids.add(datum.vanilla_contents)
