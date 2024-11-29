@@ -520,7 +520,12 @@ async def run_game(ctx: JakAndDaxterContext):
             goalc_process = subprocess.Popen(goalc_args, creationflags=subprocess.CREATE_NEW_CONSOLE)
 
     except AttributeError as e:
-        ctx.on_log_error(logger, f"Host.yaml does not contain {e.args[0]}, unable to locate game executables.")
+        if " " in e.args[0]:
+            # YAML keys in Host.yaml ought to contain no spaces, which means this is a much more important error.
+            ctx.on_log_error(logger, e.args[0])
+        else:
+            ctx.on_log_error(logger,
+                             f"Host.yaml does not contain {e.args[0]}, unable to locate game executables.")
         return
     except FileNotFoundError as e:
         msg = (f"The following path could not be found: {e.filename}\n"
