@@ -8,30 +8,15 @@
     cursor: unset;
 }
 
-#games h1{
+#games h1, #games details summary.h1{
     font-size: 60px;
     cursor: unset;
 }
 
-#games h2{
+#games h2, #games details summary.h2{
     color: #93dcff;
     margin-bottom: 2px;
-}
-
-#games .collapse-toggle{
-    cursor: pointer;
-}
-
-#games h2 .collapse-arrow{
-    font-size: 20px;
-    display: inline-block; /* make vertical-align work */
-    padding-bottom: 9px;
-    vertical-align: middle;
-    padding-right: 8px;
-}
-
-#games p.collapsed{
-    display: none;
+    text-transform: none;
 }
 
 #games a{

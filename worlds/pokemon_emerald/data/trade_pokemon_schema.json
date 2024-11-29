@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pokemon",
+  "type": "object",
+  "required": ["version", "language", "nickname", "personality", "species", "experience", "ivs", "evs", "moves", "trainer"],
+  "properties": {
+    "version": {
+      "description": "The version of this schema that the data is formatted to match",
+      "type": "string",
+      "const": "1"
+    },
+    "language": {
+      "description": "The language of origin",
+      "enum": [
+        "Japanese",
+        "English",
+        "French",
+        "Italian",
+        "German",
+        "Spanish"
+      ]
+    },
+    "nickname": {
+      "description": "The pokemon's nickname",
+      "type": "string",
+      "minLength": 1
+    },
+    "personality": {
+      "description": "The pokemon's 32-bit personality value",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4294967295
+    },
+    "species": {
+      "description": "The national dex number of the pokemon species",
+      "type": "integer",
+      "minimum": 0
+    },
+    "item": {
+      "description": "The id of the item the pokemon is holding according to modern tables",
+      "type": "integer"
+    },
+    "experience": {
+      "description": "The current total EXP",
+      "type": "integer",
+      "minimum": 0
+    },
+    "ability": {
+      "description": "The value of the ability bit (hidden abilities should be a separate bit)",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "ivs": {
+      "description": "The 6 IVs of the pokemon",
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 31
+      },
+      "minItems": 6,
+      "maxItems": 6
+    },
+    "evs": {
+      "description": "The 6 EVs of the pokemon",
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 255
+      },
+      "minItems": 6,
+      "maxItems": 6
+    },
+    "conditions": {
+      "description": "The 6 condition (contest) stats of the pokemon",
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 255
+      },
+      "minItems": 6,
+      "maxItems": 6
+    },
+    "pokerus": {
+      "description": "The value of the pokerus status byte",
+      "type": "integer",
+      "minimum": 0
+    },
+    "game": {
+      "description": "The id of the game the pokemon originated in",
+      "type": "integer",
+      "minimum": 0
+    },
+    "location_met": {
+      "description": "The location id for where the pokemon was met",
+      "type": "integer",
+      "minimum": 0
+    },
+    "level_met": {
+      "description": "The level the pokemon was met at",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "ball": {
+      "description": "The type of poke ball the pokemon was caught in",
+      "type": "integer",
+      "minimum": 1
+    },
+    "moves": {
+      "description": "The move id, PP, and PP Ups used for each move slot",
+      "type": "array",
+      "items": {
+        "type": "array",
+        "prefixItems": [
+          {
+            "description": "The move's id according to modern tables (use 0 for an empty slot)",
+            "type": "integer"
+          },
+          {
+            "description": "The move's max PP",
+            "type": "integer",
+            "minimum": 1
+          },
+          {
+            "description": "The number of times a PP Up has been used on this move",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 3
+          }
+        ],
+        "minLength": 4,
+        "maxLength": 4
+      }
+    },
+    "trainer": {
+      "description": "Original trainer info",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "The original trainer's name",
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "description": "The original trainer's 32-bit ID (includes secret id as higher order bytes)",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "female": {
+          "description": "Whether the original trainer is female",
+          "type": "boolean"
+        }
+      },
+      "required": ["name", "id"]
+    }
+  }
+}

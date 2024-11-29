@@ -22,8 +22,8 @@ from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
 from .Client import SMZ3SNIClient
 from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
 from .ips import IPS_Patch
-from .Options import smz3_options
-from Options import Accessibility
+from .Options import SMZ3Options
+from Options import Accessibility, ItemsAccessibility
 
 world_folder = os.path.dirname(__file__)
 logger = logging.getLogger("SMZ3")
@@ -68,8 +68,9 @@ class SMZ3World(World):
     """
     game: str = "SMZ3"
     topology_present = False
-    data_version = 3
-    option_definitions = smz3_options
+    options_dataclass = SMZ3Options
+    options: SMZ3Options
+
     item_names: Set[str] = frozenset(TotalSMZ3Item.lookup_name_to_id)
     location_names: Set[str]
     item_name_to_id = TotalSMZ3Item.lookup_name_to_id
@@ -190,14 +191,14 @@ class SMZ3World(World):
         self.config = Config()
         self.config.GameMode = GameMode.Multiworld
         self.config.Z3Logic = Z3Logic.Normal
-        self.config.SMLogic = SMLogic(self.multiworld.sm_logic[self.player].value)
-        self.config.SwordLocation = SwordLocation(self.multiworld.sword_location[self.player].value)
-        self.config.MorphLocation = MorphLocation(self.multiworld.morph_location[self.player].value)
-        self.config.Goal = Goal(self.multiworld.goal[self.player].value)
-        self.config.KeyShuffle = KeyShuffle(self.multiworld.key_shuffle[self.player].value)
-        self.config.OpenTower = OpenTower(self.multiworld.open_tower[self.player].value)
-        self.config.GanonVulnerable = GanonVulnerable(self.multiworld.ganon_vulnerable[self.player].value)
-        self.config.OpenTourian = OpenTourian(self.multiworld.open_tourian[self.player].value)
+        self.config.SMLogic = SMLogic(self.options.sm_logic.value)
+        self.config.SwordLocation = SwordLocation(self.options.sword_location.value)
+        self.config.MorphLocation = MorphLocation(self.options.morph_location.value)
+        self.config.Goal = Goal(self.options.goal.value)
+        self.config.KeyShuffle = KeyShuffle(self.options.key_shuffle.value)
+        self.config.OpenTower = OpenTower(self.options.open_tower.value)
+        self.config.GanonVulnerable = GanonVulnerable(self.options.ganon_vulnerable.value)
+        self.config.OpenTourian = OpenTourian(self.options.open_tourian.value)
 
         self.local_random = random.Random(self.multiworld.random.randint(0, 1000))
         self.smz3World = TotalSMZ3World(self.config, self.multiworld.get_player_name(self.player), self.player, self.multiworld.seed_name)
@@ -216,7 +217,6 @@ class SMZ3World(World):
 
         niceItems = TotalSMZ3Item.Item.CreateNicePool(self.smz3World)
         junkItems = TotalSMZ3Item.Item.CreateJunkPool(self.smz3World)
-        allJunkItems = niceItems + junkItems
         self.junkItemsNames = [item.Type.name for item in junkItems]
 
         if (self.smz3World.Config.Keysanity):
@@ -224,12 +224,13 @@ class SMZ3World(World):
         else:
             progressionItems = self.progression
             # Dungeons items here are not in the itempool and will be prefilled locally so they must stay local
-            self.multiworld.non_local_items[self.player].value -= frozenset(item_name for item_name in self.item_names if TotalSMZ3Item.Item.IsNameDungeonItem(item_name))
+            self.options.non_local_items.value -= frozenset(item_name for item_name in self.item_names if TotalSMZ3Item.Item.IsNameDungeonItem(item_name))
             for item in self.keyCardsItems:
                 self.multiworld.push_precollected(SMZ3Item(item.Type.name, ItemClassification.filler, item.Type, self.item_name_to_id[item.Type.name], self.player, item))
 
         itemPool = [SMZ3Item(item.Type.name, ItemClassification.progression, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in progressionItems] + \
-                    [SMZ3Item(item.Type.name, ItemClassification.filler, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in allJunkItems]
+                    [SMZ3Item(item.Type.name, ItemClassification.useful, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in niceItems] + \
+                    [SMZ3Item(item.Type.name, ItemClassification.filler, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in junkItems]
         self.smz3DungeonItems = [SMZ3Item(item.Type.name, ItemClassification.progression, item.Type, self.item_name_to_id[item.Type.name], self.player, item) for item in self.dungeon]
         self.multiworld.itempool += itemPool
 
@@ -245,7 +246,7 @@ class SMZ3World(World):
             set_rule(entrance, lambda state, region=region: region.CanEnter(state.smz3state[self.player]))
             for loc in region.Locations:
                 l = self.locations[loc.Name]
-                if self.multiworld.accessibility[self.player] != 'locations':
+                if self.options.accessibility.value != ItemsAccessibility.option_full:
                     l.always_allow = lambda state, item, loc=loc: \
                         item.game == "SMZ3" and \
                         loc.alwaysAllow(item.item, state.smz3state[self.player])
@@ -284,55 +285,89 @@ class SMZ3World(World):
         return offworldSprites
 
     def convert_to_sm_item_name(self, itemName):
-        charMap = { "A" : 0x3CE0, 
-                    "B" : 0x3CE1,
-                    "C" : 0x3CE2,
-                    "D" : 0x3CE3,
-                    "E" : 0x3CE4,
-                    "F" : 0x3CE5,
-                    "G" : 0x3CE6,
-                    "H" : 0x3CE7,
-                    "I" : 0x3CE8,
-                    "J" : 0x3CE9,
-                    "K" : 0x3CEA,
-                    "L" : 0x3CEB,
-                    "M" : 0x3CEC,
-                    "N" : 0x3CED,
-                    "O" : 0x3CEE,
-                    "P" : 0x3CEF,
-                    "Q" : 0x3CF0,
-                    "R" : 0x3CF1,
-                    "S" : 0x3CF2,
-                    "T" : 0x3CF3,
-                    "U" : 0x3CF4,
-                    "V" : 0x3CF5,
-                    "W" : 0x3CF6,
-                    "X" : 0x3CF7,
-                    "Y" : 0x3CF8,
-                    "Z" : 0x3CF9,
-                    " " : 0x3C4E,
-                    "!" : 0x3CFF,
-                    "?" : 0x3CFE,
-                    "'" : 0x3CFD,
-                    "," : 0x3CFB,
-                    "." : 0x3CFA,
-                    "-" : 0x3CCF,
-                    "_" : 0x000E,
-                    "1" : 0x3C00,
-                    "2" : 0x3C01,
-                    "3" : 0x3C02,
-                    "4" : 0x3C03,
-                    "5" : 0x3C04,
-                    "6" : 0x3C05,
-                    "7" : 0x3C06,
-                    "8" : 0x3C07,
-                    "9" : 0x3C08,
-                    "0" : 0x3C09,
-                    "%" : 0x3C0A}
+        # SMZ3 uses a different font; this map is not compatible with just SM alone.
+        charMap = {
+            "A": 0x3CE0,
+            "B": 0x3CE1,
+            "C": 0x3CE2,
+            "D": 0x3CE3,
+            "E": 0x3CE4,
+            "F": 0x3CE5,
+            "G": 0x3CE6,
+            "H": 0x3CE7,
+            "I": 0x3CE8,
+            "J": 0x3CE9,
+            "K": 0x3CEA,
+            "L": 0x3CEB,
+            "M": 0x3CEC,
+            "N": 0x3CED,
+            "O": 0x3CEE,
+            "P": 0x3CEF,
+            "Q": 0x3CF0,
+            "R": 0x3CF1,
+            "S": 0x3CF2,
+            "T": 0x3CF3,
+            "U": 0x3CF4,
+            "V": 0x3CF5,
+            "W": 0x3CF6,
+            "X": 0x3CF7,
+            "Y": 0x3CF8,
+            "Z": 0x3CF9,
+            " ": 0x3C4E,
+            "!": 0x3CFF,
+            "?": 0x3CFE,
+            "'": 0x3CFD,
+            ",": 0x3CFB,
+            ".": 0x3CFA,
+            "-": 0x3CCF,
+            "1": 0x3C80,
+            "2": 0x3C81,
+            "3": 0x3C82,
+            "4": 0x3C83,
+            "5": 0x3C84,
+            "6": 0x3C85,
+            "7": 0x3C86,
+            "8": 0x3C87,
+            "9": 0x3C88,
+            "0": 0x3C89,
+            "%": 0x3C0A,
+            "a": 0x3C90,
+            "b": 0x3C91,
+            "c": 0x3C92,
+            "d": 0x3C93,
+            "e": 0x3C94,
+            "f": 0x3C95,
+            "g": 0x3C96,
+            "h": 0x3C97,
+            "i": 0x3C98,
+            "j": 0x3C99,
+            "k": 0x3C9A,
+            "l": 0x3C9B,
+            "m": 0x3C9C,
+            "n": 0x3C9D,
+            "o": 0x3C9E,
+            "p": 0x3C9F,
+            "q": 0x3CA0,
+            "r": 0x3CA1,
+            "s": 0x3CA2,
+            "t": 0x3CA3,
+            "u": 0x3CA4,
+            "v": 0x3CA5,
+            "w": 0x3CA6,
+            "x": 0x3CA7,
+            "y": 0x3CA8,
+            "z": 0x3CA9,
+            '"': 0x3CAA,
+            ":": 0x3CAB,
+            "~": 0x3CAC,
+            "@": 0x3CAD,
+            "#": 0x3CAE,
+            "+": 0x3CAF,
+            "_": 0x000E
+        }
         data = []
 
-        itemName = itemName.upper()[:26]
-        itemName = itemName.strip()
+        itemName = itemName.replace("_", "-").strip()[:26]
         itemName = itemName.center(26, " ")    
         itemName = "___" + itemName + "___"
 
@@ -372,12 +407,12 @@ class SMZ3World(World):
         patch = {}
 
         # smSpinjumps
-        if (self.multiworld.spin_jumps_animation[self.player].value == 1):
+        if (self.options.spin_jumps_animation.value == 1):
             patch[self.SnesCustomization(0x9B93FE)] = bytearray([0x01])
 
         # z3HeartBeep
         values =    [ 0x00, 0x80, 0x40, 0x20, 0x10]
-        index = self.multiworld.heart_beep_speed[self.player].value
+        index = self.options.heart_beep_speed.value
         patch[0x400033] = bytearray([values[index if index < len(values) else 2]])
 
         # z3HeartColor
@@ -387,17 +422,17 @@ class SMZ3World(World):
                         [0x2C, [0xC9, 0x69]],
                         [0x28, [0xBC, 0x02]]
                     ]
-        index = self.multiworld.heart_color[self.player].value
+        index = self.options.heart_color.value
         (hud, fileSelect) = values[index if index < len(values) else 0]
         for i in range(0, 20, 2):
             patch[self.SnesCustomization(0xDFA1E + i)] = bytearray([hud])
         patch[self.SnesCustomization(0x1BD6AA)] = bytearray(fileSelect)
 
         # z3QuickSwap
-        patch[0x40004B] = bytearray([0x01 if self.multiworld.quick_swap[self.player].value else 0x00])
+        patch[0x40004B] = bytearray([0x01 if self.options.quick_swap.value else 0x00])
 
         # smEnergyBeepOff
-        if (self.multiworld.energy_beep[self.player].value == 0):
+        if (self.options.energy_beep.value == 0):
             for ([addr, value]) in [
                             [0x90EA9B, 0x80],
                             [0x90F337, 0x80],
@@ -518,7 +553,7 @@ class SMZ3World(World):
         # some small or big keys (those always_allow) can be unreachable in-game
         # while logic still collects some of them (probably to simulate the player collecting pot keys in the logic), some others don't
         # so we need to remove those exceptions as progression items
-        if self.multiworld.accessibility[self.player] == 'items':
+        if self.options.accessibility.value == ItemsAccessibility.option_items:
             state = CollectionState(self.multiworld)
             locs = [self.multiworld.get_location("Swamp Palace - Big Chest", self.player),
                    self.multiworld.get_location("Skull Woods - Big Chest", self.player),
@@ -527,7 +562,6 @@ class SMZ3World(World):
                 if (loc.item.player == self.player and loc.always_allow(state, loc.item)):
                     loc.item.classification = ItemClassification.filler
                     loc.item.item.Progression = False
-                    loc.item.location.event = False
                     self.unreachable.append(loc)
 
     def get_filler_item_name(self) -> str:
@@ -573,7 +607,6 @@ class SMZ3World(World):
                         break
                 assert itemFromPool is not None, "Can't find anymore item(s) to pre fill GT"
                 self.multiworld.push_item(loc, itemFromPool, False)
-                loc.event = False
         toRemove.sort(reverse = True)
         for i in toRemove: 
             self.multiworld.itempool.pop(i)

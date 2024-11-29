@@ -1,5 +1,5 @@
-from test.TestBase import WorldTestBase
-from ...Items import ItemFactory
+from test.bases import WorldTestBase
+from ...Items import item_factory
 
 
 class PyramidTestBase(WorldTestBase):
@@ -32,6 +32,6 @@ class GoalPyramidTest(PyramidTestBase):
         self.assertFalse(self.can_reach_entrance("Pyramid Hole"))
         self.collect_by_name(["Hammer", "Progressive Glove", "Moon Pearl"])
         self.assertFalse(self.can_reach_entrance("Pyramid Hole"))
-        self.multiworld.state.collect(ItemFactory("Beat Agahnim 2", 1))
+        self.collect(item_factory("Beat Agahnim 2", self.multiworld.worlds[1]))
         self.assertTrue(self.can_reach_entrance("Pyramid Hole"))
 

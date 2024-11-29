@@ -10,7 +10,7 @@ from worlds import AutoWorld
 from worlds.AutoWorld import World, call_all
 
 from BaseClasses import Location, MultiWorld, CollectionState, ItemClassification, Item
-from worlds.alttp.Items import ItemFactory
+from worlds.alttp.Items import item_factory
 
 
 class TestBase(unittest.TestCase):
@@ -23,8 +23,8 @@ class TestBase(unittest.TestCase):
         state = CollectionState(self.multiworld)
         for item in items:
             item.classification = ItemClassification.progression
-            state.collect(item, event=True)
-        state.sweep_for_events()
+            state.collect(item, prevent_sweep=True)
+        state.sweep_for_advancements()
         state.update_reachable_regions(1)
         self._state_cache[self.multiworld, tuple(items)] = state
         return state
@@ -91,15 +91,15 @@ class TestBase(unittest.TestCase):
             items = self.multiworld.itempool[:]
             items = [item for item in items if
                      item.name not in all_except and not ("Bottle" in item.name and "AnyBottle" in all_except)]
-            items.extend(ItemFactory(item_pool[0], 1))
+            items.extend(item_factory(item_pool[0], self.multiworld.worlds[1]))
         else:
-            items = ItemFactory(item_pool[0], 1)
+            items = item_factory(item_pool[0], self.multiworld.worlds[1])
         return self.get_state(items)
 
     def _get_items_partial(self, item_pool, missing_item):
         new_items = item_pool[0].copy()
         new_items.remove(missing_item)
-        items = ItemFactory(new_items, 1)
+        items = item_factory(new_items, self.multiworld.worlds[1])
         return self.get_state(items)
 
 
@@ -221,8 +221,8 @@ class WorldTestBase(unittest.TestCase):
         if isinstance(items, Item):
             items = (items,)
         for item in items:
-            if item.location and item.location.event and item.location in self.multiworld.state.events:
-                self.multiworld.state.events.remove(item.location)
+            if item.location and item.advancement and item.location in self.multiworld.state.advancements:
+                self.multiworld.state.advancements.remove(item.location)
             self.multiworld.state.remove(item)
 
     def can_reach_location(self, location: str) -> bool:
@@ -292,14 +292,12 @@ class WorldTestBase(unittest.TestCase):
         """Ensure all state can reach everything and complete the game with the defined options"""
         if not (self.run_default_tests and self.constructed):
             return
-        with self.subTest("Game", game=self.game):
-            excluded = self.multiworld.worlds[self.player].options.exclude_locations.value
+        with self.subTest("Game", game=self.game, seed=self.multiworld.seed):
             state = self.multiworld.get_all_state(False)
             for location in self.multiworld.get_locations():
-                if location.name not in excluded:
-                    with self.subTest("Location should be reached", location=location):
-                        reachable = location.can_reach(state)
-                        self.assertTrue(reachable, f"{location.name} unreachable")
+                with self.subTest("Location should be reached", location=location.name):
+                    reachable = location.can_reach(state)
+                    self.assertTrue(reachable, f"{location.name} unreachable")
             with self.subTest("Beatable"):
                 self.multiworld.state = state
                 self.assertBeatable(True)
@@ -308,7 +306,7 @@ class WorldTestBase(unittest.TestCase):
         """Ensure empty state can reach at least one location with the defined options"""
         if not (self.run_default_tests and self.constructed):
             return
-        with self.subTest("Game", game=self.game):
+        with self.subTest("Game", game=self.game, seed=self.multiworld.seed):
             state = CollectionState(self.multiworld)
             locations = self.multiworld.get_reachable_locations(state, self.player)
             self.assertGreater(len(locations), 0,
@@ -329,7 +327,7 @@ class WorldTestBase(unittest.TestCase):
                 for n in range(len(locations) - 1, -1, -1):
                     if locations[n].can_reach(state):
                         sphere.append(locations.pop(n))
-                self.assertTrue(sphere or self.multiworld.accessibility[1] == "minimal",
+                self.assertTrue(sphere or self.multiworld.worlds[1].options.accessibility == "minimal",
                                 f"Unreachable locations: {locations}")
                 if not sphere:
                     break

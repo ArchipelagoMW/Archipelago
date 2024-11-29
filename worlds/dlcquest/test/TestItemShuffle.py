@@ -7,7 +7,10 @@ wooden_sword = "Wooden Sword"
 pickaxe = "Pickaxe"
 humble_bindle = "Humble Indie Bindle"
 box_supplies = "Box of Various Supplies"
-items = [sword, gun, wooden_sword, pickaxe, humble_bindle, box_supplies]
+locations = [sword, gun, wooden_sword, pickaxe, humble_bindle, box_supplies]
+prog_weapon_basic = "DLC Quest: Progressive Weapon"
+prog_weapon_lfod = "Live Freemium or Die: Progressive Weapon"
+items = [prog_weapon_basic, prog_weapon_lfod, humble_bindle, box_supplies]
 
 important_pack = "Incredibly Important Pack"
 
@@ -22,9 +25,14 @@ class TestItemShuffle(DLCQuestTestBase):
             with self.subTest(f"{item}"):
                 self.assertIn(item, item_names)
 
+    def test_progressive_weapon_in_pool(self):
+        item_names = [item.name for item in self.multiworld.get_items()]
+        self.assertEqual(item_names.count(prog_weapon_basic), 2)
+        self.assertEqual(item_names.count(prog_weapon_lfod), 2)
+
     def test_item_locations_in_pool(self):
         location_names = {location.name for location in self.multiworld.get_locations()}
-        for item_location in items:
+        for item_location in locations:
             with self.subTest(f"{item_location}"):
                 self.assertIn(item_location, location_names)
 
@@ -42,7 +50,7 @@ class TestItemShuffle(DLCQuestTestBase):
         movement_pack = self.multiworld.create_item("Movement Pack", self.player)
         self.collect(movement_pack)
         self.assertFalse(self.can_reach_location(gun))
-        sword_item = self.multiworld.create_item(sword, self.player)
+        sword_item = self.multiworld.create_item(prog_weapon_basic, self.player)
         self.collect(sword_item)
         self.assertFalse(self.can_reach_location(gun))
         gun_pack = self.multiworld.create_item("Gun Pack", self.player)
@@ -57,7 +65,7 @@ class TestItemShuffle(DLCQuestTestBase):
 
     def test_bindle_location_has_correct_rules(self):
         self.assertFalse(self.can_reach_location(humble_bindle))
-        wooden_sword_item = self.multiworld.create_item(wooden_sword, self.player)
+        wooden_sword_item = self.multiworld.create_item(prog_weapon_lfod, self.player)
         self.collect(wooden_sword_item)
         self.assertFalse(self.can_reach_location(humble_bindle))
         plants_pack = self.multiworld.create_item("Harmless Plants Pack", self.player)
@@ -78,7 +86,7 @@ class TestItemShuffle(DLCQuestTestBase):
 
     def test_box_supplies_location_has_correct_rules(self):
         self.assertFalse(self.can_reach_location(box_supplies))
-        wooden_sword_item = self.multiworld.create_item(wooden_sword, self.player)
+        wooden_sword_item = self.multiworld.create_item(prog_weapon_lfod, self.player)
         self.collect(wooden_sword_item)
         self.assertFalse(self.can_reach_location(box_supplies))
         plants_pack = self.multiworld.create_item("Harmless Plants Pack", self.player)
@@ -96,7 +104,7 @@ class TestItemShuffle(DLCQuestTestBase):
 
     def test_pickaxe_location_has_correct_rules(self):
         self.assertFalse(self.can_reach_location(pickaxe))
-        wooden_sword_item = self.multiworld.create_item(wooden_sword, self.player)
+        wooden_sword_item = self.multiworld.create_item(prog_weapon_lfod, self.player)
         self.collect(wooden_sword_item)
         self.assertFalse(self.can_reach_location(pickaxe))
         plants_pack = self.multiworld.create_item("Harmless Plants Pack", self.player)
@@ -125,6 +133,6 @@ class TestNoItemShuffle(DLCQuestTestBase):
 
     def test_item_locations_not_in_pool(self):
         location_names = {location.name for location in self.multiworld.get_locations()}
-        for item_location in items:
+        for item_location in locations:
             with self.subTest(f"{item_location}"):
                 self.assertNotIn(item_location, location_names)
