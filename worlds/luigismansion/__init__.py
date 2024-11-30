@@ -475,9 +475,8 @@ class LMWorld(World):
 
     def get_filler_item_name(self) -> str:
         filler = list(filler_items.keys())
-        filler_weights = [10, 10, 20, 10, 5, 10, 15]
+        filler_weights = [10, 10, 20, 10, 5, 10, 15, 15]
         return self.random.choices(filler, weights=filler_weights, k=1)[0]
-        # return self.multiworld.random.choice([item_name for item_name in filler_items])
 
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Mario's Painting", self.player)

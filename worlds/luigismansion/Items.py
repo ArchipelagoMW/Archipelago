@@ -115,12 +115,13 @@ filler_items: Dict[str, LMItemData] = {
     # "Ruby": LMItemData("Money", 60, IC.filler),
     # "Diamond": LMItemData("Money", 62, IC.filler),
     "Poison Mushroom": LMItemData("Trap", 42, IC.trap),
-    #"Ghost": LMItemData("Trap", 43, IC.trap),
+    # "Ghost": LMItemData("Trap", 43, IC.trap),
     "Nothing": LMItemData("Nothing", 44, IC.filler),
     "Small Heart": LMItemData("Heart", 45, IC.filler),
     "Large Heart": LMItemData("Heart", 47, IC.filler),
     "Bomb": LMItemData("Trap", 50, IC.trap),
-    "Ice Trap": LMItemData("Trap", 106, IC.trap)
+    "Ice Trap": LMItemData("Trap", 106, IC.trap),
+    "Banana Trap": LMItemData("Trap", 63, IC.trap)
 }
 
 ALL_ITEMS_TABLE = {**ITEM_TABLE,
