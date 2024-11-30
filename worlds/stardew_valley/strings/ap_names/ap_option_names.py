@@ -1,8 +1,11 @@
-class OptionName:
+class WalnutsanityOptionName:
     walnutsanity_puzzles = "Puzzles"
     walnutsanity_bushes = "Bushes"
     walnutsanity_dig_spots = "Dig Spots"
     walnutsanity_repeatables = "Repeatables"
+
+
+class BuffOptionName:
     buff_luck = "Luck"
     buff_damage = "Damage"
     buff_defense = "Defense"
