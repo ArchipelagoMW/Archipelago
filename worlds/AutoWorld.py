@@ -252,15 +252,6 @@ class WebWorld(metaclass=WebWorldRegister):
     """An optional map from item names (or item group names) to brief descriptions for users."""
 
 
-# Must be before `World` due to class creation/module loading order.
-def data_package_checksum(data: "GamesPackage") -> str:
-    """Calculates the data package checksum for a game from a dict"""
-    assert "checksum" not in data, "Checksum already in data"
-    assert sorted(data) == list(data), "Data not ordered"
-    from NetUtils import encode
-    return hashlib.sha1(encode(data).encode()).hexdigest()
-
-
 class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
@@ -590,6 +581,14 @@ class World(metaclass=AutoWorldRegister):
         }
         res["checksum"] = data_package_checksum(res)
         return res
+
+
+def data_package_checksum(data: "GamesPackage") -> str:
+    """Calculates the data package checksum for a game from a dict"""
+    assert "checksum" not in data, "Checksum already in data"
+    assert sorted(data) == list(data), "Data not ordered"
+    from NetUtils import encode
+    return hashlib.sha1(encode(data).encode()).hexdigest()
 
 
 # any methods attached to this can be used as part of CollectionState,
