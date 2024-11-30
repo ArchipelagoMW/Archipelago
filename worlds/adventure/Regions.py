@@ -153,6 +153,7 @@ def create_regions(options: PerGameCommonOptions, multiworld: MultiWorld, player
 
 
 # Placeholder for adding sets of priority locations at generation, possibly as an option in the future
+# def determine_priority_locations(multiworld: MultiWorld, dragon_slay_check: bool) -> {}:
 def determine_priority_locations() -> {}:
     priority_locations = {}
     return priority_locations
