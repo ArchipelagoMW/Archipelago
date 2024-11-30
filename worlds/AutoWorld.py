@@ -33,7 +33,10 @@ class AutoWorldRegister(type):
         # lazy loading + caching to minimize runtime cost
         if cls.__settings is None:
             from settings import get_settings
-            cls.__settings = get_settings()[cls.settings_key]
+            try:
+                cls.__settings = get_settings()[cls.settings_key]
+            except AttributeError:
+                return None
         return cls.__settings
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:

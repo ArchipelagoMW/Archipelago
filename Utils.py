@@ -515,10 +515,13 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
             return self.condition(record)
 
     file_handler.addFilter(Filter("NoStream", lambda record: not getattr(record,  "NoFile", False)))
+    file_handler.addFilter(Filter("NoCarriageReturn", lambda record: '\r' not in record.msg))
     root_logger.addHandler(file_handler)
     if sys.stdout:
+        formatter = logging.Formatter(fmt='[%(asctime)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
         stream_handler = logging.StreamHandler(sys.stdout)
         stream_handler.addFilter(Filter("NoFile", lambda record: not getattr(record, "NoStream", False)))
+        stream_handler.setFormatter(formatter)
         root_logger.addHandler(stream_handler)
 
     # Relay unhandled exceptions to logger.
@@ -855,11 +858,10 @@ def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = Non
     task.add_done_callback(_faf_tasks.discard)
 
 
-def deprecate(message: str):
+def deprecate(message: str, add_stacklevels: int = 0):
     if __debug__:
         raise Exception(message)
-    import warnings
-    warnings.warn(message)
+    warnings.warn(message, stacklevel=2 + add_stacklevels)
 
 
 class DeprecateDict(dict):
@@ -873,10 +875,9 @@ class DeprecateDict(dict):
 
     def __getitem__(self, item: Any) -> Any:
         if self.should_error:
-            deprecate(self.log_message)
+            deprecate(self.log_message, add_stacklevels=1)
         elif __debug__:
-            import warnings
-            warnings.warn(self.log_message)
+            warnings.warn(self.log_message, stacklevel=2)
         return super().__getitem__(item)
 
 

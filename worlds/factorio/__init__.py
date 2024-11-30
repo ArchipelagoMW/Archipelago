@@ -12,7 +12,8 @@ from worlds.LauncherComponents import Component, components, Type, launch_subpro
 from worlds.generic import Rules
 from .Locations import location_pools, location_table
 from .Mod import generate_mod
-from .Options import FactorioOptions, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal, TechCostDistribution
+from .Options import (FactorioOptions, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal,
+                      TechCostDistribution, option_groups)
 from .Shapes import get_shapes
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, \
     all_product_sources, required_technologies, get_rocket_requirements, \
@@ -61,6 +62,7 @@ class FactorioWeb(WebWorld):
         "setup/en",
         ["Berserker, Farrak Kilhn"]
     )]
+    option_groups = option_groups
 
 
 class FactorioItem(Item):
