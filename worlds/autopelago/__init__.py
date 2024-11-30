@@ -8,7 +8,7 @@ from .AutopelagoDefinitions import GAME_NAME, AutopelagoGameRequirement, Autopel
     location_name_to_progression_item_name, location_names_with_fixed_rewards, game_specific_nonprogression_items, \
     generic_nonprogression_item_table, total_available_rat_count, max_required_rat_count, \
     AutopelagoNonProgressionItemType, autopelago_item_classification_of, location_name_to_nonprogression_item, \
-    autopelago_regions
+    autopelago_regions, item_name_groups, location_name_groups
 from .options import ArchipelagoGameOptions
 
 from BaseClasses import CollectionState, Item, Location, MultiWorld, Region, Tutorial
@@ -102,14 +102,14 @@ class AutopelagoWorld(World):
     # been able to get away with populating these just based on what we actually need.
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
+    item_name_groups = item_name_groups
+    location_name_groups = location_name_groups
 
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
 
     # insert other ClassVar values... suggestions include:
-    # - item_name_groups
     # - item_descriptions
-    # - location_name_groups
     # - location_descriptions
     # - hint_blacklist (should it include the goal item?)
 
@@ -117,10 +117,6 @@ class AutopelagoWorld(World):
         item_id = item_name_to_id[name] if name in item_name_to_id else None
         if classification is None:
             classification = item_name_to_classification[name]
-            if classification is None:
-                # not observed during a real generation, but it's technically a part of the contract. once we fully
-                # stabilize, *ALL* items will be in item_name_to_classification, so this can go away.
-                classification = ItemClassification.filler
         item = AutopelagoItem(name, classification, item_id, self.player)
         return item
 
@@ -165,14 +161,13 @@ class AutopelagoWorld(World):
                     nonprog_type = 'trap'
                 next_filler_becomes_trap = not next_filler_becomes_trap
 
-            classification = autopelago_item_classification_of(nonprog_type)
             if category_to_next_offset[nonprog_type] >= len(nonprogression_item_table[nonprog_type]):
                 if nonprog_type == 'filler':
                     nonprog_type = 'trap'
                 elif nonprog_type == 'trap':
                     nonprog_type = 'filler'
             next_item = nonprogression_item_table[nonprog_type][category_to_next_offset[nonprog_type]]
-            self.multiworld.itempool.append(self.create_item(next_item, classification))
+            self.multiworld.itempool.append(self.create_item(next_item))
             category_to_next_offset[nonprog_type] += 1
 
     def create_regions(self):
