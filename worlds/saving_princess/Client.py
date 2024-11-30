@@ -1,3 +1,4 @@
+import argparse
 import zipfile
 from io import BytesIO
 
@@ -203,8 +204,15 @@ def install() -> None:
     logging.info("Done!")
 
 
-def launch() -> None:
-    """Check the mod installation, then launch the game"""
+def launch(*args: str) -> Any:
+    """Check args, then the mod installation, then launch the game"""
+    url: str = ""
+    if args:
+        parser = argparse.ArgumentParser(description=f"{GAME_NAME} Client Launcher")
+        parser.add_argument("url", type=str, nargs="?", help="Archipelago Webhost uri to auto connect to.")
+        args = parser.parse_args(args)
+        url = args.url
+
     Utils.init_logging(CLIENT_NAME, exception_logger="Client")
 
     os.chdir(SavingPrincessWorld.settings.install_folder)
@@ -228,7 +236,7 @@ def launch() -> None:
     if SavingPrincessWorld.settings.launch_game:
         logging.info("Launching game.")
         try:
-            subprocess.run(SavingPrincessWorld.settings.launch_command)
+            subprocess.run(f"{SavingPrincessWorld.settings.launch_command} {url}")
         except FileNotFoundError:
             error = ("Could not run the game!\n\n"
                      "Please check that launch_command in options.yaml or host.yaml is set up correctly.")

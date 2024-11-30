@@ -10,13 +10,13 @@ from . import Options, Items, Locations
 from .Constants import *
 
 
-def launch_client():
+def launch_client(*args: str):
     from .Client import launch
-    launch_subprocess(launch, name=CLIENT_NAME)
+    launch_subprocess(launch(*args), name=CLIENT_NAME)
 
 
 components.append(
-    Component(f"{GAME_NAME} Client", func=launch_client, component_type=ComponentType.CLIENT)
+    Component(f"{GAME_NAME} Client", game_name=GAME_NAME, func=launch_client, component_type=ComponentType.CLIENT, supports_uri=True)
 )
 
 
