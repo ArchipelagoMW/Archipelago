@@ -23,8 +23,6 @@ perf_logger = logging.getLogger("performance")
 
 class AutoWorldRegister(type):
     world_types: Dict[str, Type[World]] = {}
-    # Set by worlds.__init__ to avoid cyclic dependencies
-    network_data_package_ref = None
     __file__: str
     zip_path: Optional[str]
     settings_key: str
