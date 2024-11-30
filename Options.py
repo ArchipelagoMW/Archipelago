@@ -8,16 +8,17 @@ import numbers
 import random
 import typing
 import enum
+from collections import defaultdict
 from copy import deepcopy
 from dataclasses import dataclass
 
 from schema import And, Optional, Or, Schema
 from typing_extensions import Self
 
-from Utils import get_fuzzy_results, is_iterable_except_str
+from Utils import get_file_safe_name, get_fuzzy_results, is_iterable_except_str, output_path
 
 if typing.TYPE_CHECKING:
-    from BaseClasses import PlandoOptions
+    from BaseClasses import MultiWorld, PlandoOptions
     from worlds.AutoWorld import World
     import pathlib
 
@@ -827,7 +828,10 @@ class VerifyKeys(metaclass=FreezeValidKeys):
                                     f"is not a valid location name from {world.game}. "
                                     f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
 
+    def __iter__(self) -> typing.Iterator[typing.Any]:
+        return self.value.__iter__()
 
+    
 class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mapping[str, typing.Any]):
     default = {}
     supports_weighting = False
@@ -1335,7 +1339,7 @@ class PriorityLocations(LocationSet):
 
 
 class DeathLink(Toggle):
-    """When you die, everyone dies. Of course the reverse is true too."""
+    """When you die, everyone who enabled death link dies. Of course, the reverse is true too."""
     display_name = "Death Link"
     rich_text_doc = True
 
@@ -1459,22 +1463,26 @@ it.
 def get_option_groups(world: typing.Type[World], visibility_level: Visibility = Visibility.template) -> typing.Dict[
         str, typing.Dict[str, typing.Type[Option[typing.Any]]]]:
     """Generates and returns a dictionary for the option groups of a specified world."""
-    option_groups = {option: option_group.name
-                     for option_group in world.web.option_groups
-                     for option in option_group.options}
+    option_to_name = {option: option_name for option_name, option in world.options_dataclass.type_hints.items()}
+
+    ordered_groups = {group.name: group.options for group in world.web.option_groups}
+
     # add a default option group for uncategorized options to get thrown into
-    ordered_groups = ["Game Options"]
-    [ordered_groups.append(group) for group in option_groups.values() if group not in ordered_groups]
-    grouped_options = {group: {} for group in ordered_groups}
-    for option_name, option in world.options_dataclass.type_hints.items():
-        if visibility_level & option.visibility:
-            grouped_options[option_groups.get(option, "Game Options")][option_name] = option
+    if "Game Options" not in ordered_groups:
+        grouped_options = set(option for group in ordered_groups.values() for option in group)
+        ungrouped_options = [option for option in option_to_name if option not in grouped_options]
+        # only add the game options group if we have ungrouped options
+        if ungrouped_options:
+            ordered_groups = {**{"Game Options": ungrouped_options}, **ordered_groups}
 
-    # if the world doesn't have any ungrouped options, this group will be empty so just remove it
-    if not grouped_options["Game Options"]:
-        del grouped_options["Game Options"]
-
-    return grouped_options
+    return {
+        group: {
+            option_to_name[option]: option
+            for option in group_options
+            if (visibility_level in option.visibility and option in option_to_name)
+        }
+        for group, group_options in ordered_groups.items()
+    }
 
 
 def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True) -> None:
@@ -1530,5 +1538,44 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
             del file_data
 
-            with open(os.path.join(target_folder, game_name + ".yaml"), "w", encoding="utf-8-sig") as f:
+            with open(os.path.join(target_folder, get_file_safe_name(game_name) + ".yaml"), "w", encoding="utf-8-sig") as f:
                 f.write(res)
+
+
+def dump_player_options(multiworld: MultiWorld) -> None:
+    from csv import DictWriter
+
+    game_players = defaultdict(list)
+    for player, game in multiworld.game.items():
+        game_players[game].append(player)
+    game_players = dict(sorted(game_players.items()))
+
+    output = []
+    per_game_option_names = [
+        getattr(option, "display_name", option_key)
+        for option_key, option in PerGameCommonOptions.type_hints.items()
+    ]
+    all_option_names = per_game_option_names.copy()
+    for game, players in game_players.items():
+        game_option_names = per_game_option_names.copy()
+        for player in players:
+            world = multiworld.worlds[player]
+            player_output = {
+                "Game": multiworld.game[player],
+                "Name": multiworld.get_player_name(player),
+            }
+            output.append(player_output)
+            for option_key, option in world.options_dataclass.type_hints.items():
+                if issubclass(Removed, option):
+                    continue
+                display_name = getattr(option, "display_name", option_key)
+                player_output[display_name] = getattr(world.options, option_key).current_option_name
+                if display_name not in game_option_names:
+                    all_option_names.append(display_name)
+                    game_option_names.append(display_name)
+
+    with open(output_path(f"generate_{multiworld.seed_name}.csv"), mode="w", newline="") as file:
+        fields = ["Game", "Name", *all_option_names]
+        writer = DictWriter(file, fields)
+        writer.writeheader()
+        writer.writerows(output)

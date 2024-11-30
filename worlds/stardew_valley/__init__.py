@@ -206,25 +206,10 @@ class StardewValleyWorld(World):
             self.multiworld.push_precollected(self.create_starting_item("Progressive Coop"))
 
     def setup_player_events(self):
-        self.setup_construction_events()
-        self.setup_quest_events()
         self.setup_action_events()
         self.setup_logic_events()
 
-    def setup_construction_events(self):
-        can_construct_buildings = LocationData(None, RegionName.carpenter, Event.can_construct_buildings)
-        self.create_event_location(can_construct_buildings, True_(), Event.can_construct_buildings)
-
-    def setup_quest_events(self):
-        start_dark_talisman_quest = LocationData(None, RegionName.railroad, Event.start_dark_talisman_quest)
-        self.create_event_location(start_dark_talisman_quest, self.logic.wallet.has_rusty_key(), Event.start_dark_talisman_quest)
-
     def setup_action_events(self):
-        can_ship_event = LocationData(None, LogicRegion.shipping, Event.can_ship_items)
-        self.create_event_location(can_ship_event, true_, Event.can_ship_items)
-        can_shop_pierre_event = LocationData(None, RegionName.pierre_store, Event.can_shop_at_pierre)
-        self.create_event_location(can_shop_pierre_event, true_, Event.can_shop_at_pierre)
-
         spring_farming = LocationData(None, LogicRegion.spring_farming, Event.spring_farming)
         self.create_event_location(spring_farming, true_, Event.spring_farming)
         summer_farming = LocationData(None, LogicRegion.summer_farming, Event.summer_farming)
@@ -319,7 +304,7 @@ class StardewValleyWorld(World):
         if override_classification is None:
             override_classification = item.classification
 
-        if override_classification == ItemClassification.progression:
+        if override_classification & ItemClassification.progression:
             self.total_progression_items += 1
         return StardewItem(item.name, override_classification, item.code, self.player)
 
