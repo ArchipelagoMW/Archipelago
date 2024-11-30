@@ -27,7 +27,8 @@ GHOST_TO_ROOM = {
     "Artist's Studio": "No Element",
     "Mirror Room": "No Element",
     "Graveyard": "No Element",
-    "Anteroom": "No Element"
+    "Anteroom": "No Element",
+    "Sitting Room": "Fire" # Fire
 }
 
 
@@ -125,7 +126,7 @@ def connect_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "Astral Hall", "Observatory", "Observatory Key", 40,
             lambda state: Rules.can_fst_fire(state, player))
     connect(multiworld, player, "Sitting Room", "Guest Room", "Guest Room", 30,
-            lambda state: Rules.can_fst_fire(state, player) and Rules.can_fst_water(state, player))
+            lambda state: Rules.can_fst_fire(state, player))
     connect(multiworld, player, "Safari Room", "3F Right Hallway", "3F Right Hallway Key", 55)
     connect(multiworld, player, "3F Right Hallway", "Artist's Studio", "Art Studio Key", 63)
     connect(multiworld, player, "3F Right Hallway", "Balcony", "Balcony Key", 62,
