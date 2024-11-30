@@ -27,7 +27,7 @@ from .UnderworldGlitchRules import underworld_glitches_rules
 def set_rules(world):
     player = world.player
     world = world.multiworld
-    if world.options.glitches_required == 'no_logic':
+    if world.worlds[player].options.glitches_required == 'no_logic':
         if player == next(player_id for player_id in world.get_game_players("A Link to the Past")
                           if world.worlds[player_id].options.glitches_required == 'no_logic'):  # only warn one time
             logging.info(
@@ -40,8 +40,8 @@ def set_rules(world):
         else:
             # Set access rules according to max glitches for multiworld progression.
             # Set accessibility to none, and shuffle assuming the no logic players can always win
-            world.options.accessibility.value = ItemsAccessibility.option_minimal
-            world.options.progression_balancing.value = 0
+            world.worlds[player].options.accessibility.value = ItemsAccessibility.option_minimal
+            world.worlds[player].options.progression_balancing.value = 0
 
     else:
         world.completion_condition[player] = lambda state: state.has('Triforce', player)
@@ -49,52 +49,52 @@ def set_rules(world):
     dungeon_boss_rules(world, player)
     global_rules(world, player)
 
-    if world.options.mode != 'inverted':
+    if world.worlds[player].options.mode != 'inverted':
         default_rules(world, player)
 
-    if world.options.mode == 'open':
+    if world.worlds[player].options.mode == 'open':
         open_rules(world, player)
-    elif world.options.mode == 'standard':
+    elif world.worlds[player].options.mode == 'standard':
         standard_rules(world, player)
-    elif world.options.mode == 'inverted':
+    elif world.worlds[player].options.mode == 'inverted':
         open_rules(world, player)
         inverted_rules(world, player)
     else:
-        raise NotImplementedError(f'World state {world.options.mode} is not implemented yet')
+        raise NotImplementedError(f'World state {world.worlds[player].options.mode} is not implemented yet')
 
-    if world.options.glitches_required == 'no_glitches':
+    if world.worlds[player].options.glitches_required == 'no_glitches':
         no_glitches_rules(world, player)
         forbid_bomb_jump_requirements(world, player)
-    elif world.options.glitches_required == 'overworld_glitches':
+    elif world.worlds[player].options.glitches_required == 'overworld_glitches':
         # Initially setting no_glitches_rules to set the baseline rules for some
         # entrances. The overworld_glitches_rules set is primarily additive.
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
         overworld_glitches_rules(world, player)
         forbid_bomb_jump_requirements(world, player)
-    elif world.options.glitches_required.value in ['hybrid_major_glitches', 'no_logic']:
+    elif world.worlds[player].options.glitches_required.value in ['hybrid_major_glitches', 'no_logic']:
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
         overworld_glitches_rules(world, player)
         underworld_glitches_rules(world, player)
         bomb_jump_requirements(world, player)
-    elif world.options.glitches_required == 'minor_glitches':
+    elif world.worlds[player].options.glitches_required == 'minor_glitches':
         no_glitches_rules(world, player)
         fake_flipper_rules(world, player)
         forbid_bomb_jump_requirements(world, player)
     else:
         raise NotImplementedError(f'Not implemented yet: Logic - {world.options.glitches_required}')
 
-    if world.options.goal == 'bosses':
+    if world.worlds[player].options.goal == 'bosses':
         # require all bosses to beat ganon
         add_rule(world.get_location('Ganon', player), lambda state: state.can_reach('Master Sword Pedestal', 'Location', player) and state.has('Beat Agahnim 1', player) and state.has('Beat Agahnim 2', player) and has_crystals(state, 7, player))
-    elif world.options.goal == 'ganon':
+    elif world.worlds[player].options.goal == 'ganon':
         # require aga2 to beat ganon
         add_rule(world.get_location('Ganon', player), lambda state: state.has('Beat Agahnim 2', player))
 
-    if world.options.mode != 'inverted':
+    if world.worlds[player].options.mode != 'inverted':
         set_big_bomb_rules(world, player)
-        if world.options.glitches_required.current_key in {'overworld_glitches', 'hybrid_major_glitches', 'no_logic'} and world.options.entrance_shuffle.current_key not in {'insanity', 'insanity_legacy', 'madness'}:
+        if world.worlds[player].options.glitches_required.current_key in {'overworld_glitches', 'hybrid_major_glitches', 'no_logic'} and world.worlds[player].options.entrance_shuffle.current_key not in {'insanity', 'insanity_legacy', 'madness'}:
             path_to_courtyard = mirrorless_path_to_castle_courtyard(world, player)
             add_rule(world.get_entrance('Pyramid Fairy', player), lambda state: state.multiworld.get_entrance('Dark Death Mountain Offset Mirror', player).can_reach(state) and all(rule(state) for rule in path_to_courtyard), 'or')
     else:
@@ -102,24 +102,24 @@ def set_rules(world):
 
     # if swamp and dam have not been moved we require mirror for swamp palace
     # however there is mirrorless swamp in hybrid MG, so we don't necessarily want this. HMG handles this requirement itself. 
-    if not world.worlds[player].swamp_patch_required and world.options.glitches_required.value not in ['hybrid_major_glitches', 'no_logic']:
+    if not world.worlds[player].swamp_patch_required and world.worlds[player].options.glitches_required.value not in ['hybrid_major_glitches', 'no_logic']:
         add_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Magic Mirror', player))
 
     # GT Entrance may be required for Turtle Rock for OWG and < 7 required
-    ganons_tower = world.get_entrance('Inverted Ganons Tower' if world.options.mode == 'inverted' else 'Ganons Tower', player)
-    if (world.options.crystals_needed_for_gt == 7
-            and not (world.options.glitches_required.value
+    ganons_tower = world.get_entrance('Inverted Ganons Tower' if world.worlds[player].options.mode == 'inverted' else 'Ganons Tower', player)
+    if (world.worlds[player].options.crystals_needed_for_gt == 7
+            and not (world.worlds[player].options.glitches_required.value
                      in ['overworld_glitches', 'hybrid_major_glitches', 'no_logic']
-                     and world.options.mode != 'inverted')):
+                     and world.worlds[player].options.mode != 'inverted')):
         set_rule(ganons_tower, lambda state: False)
 
     set_trock_key_rules(world, player)
 
     set_rule(ganons_tower, lambda state: has_crystals(state, state.multiworld.worlds[player].options.crystals_needed_for_gt, player))
-    if world.options.mode != 'inverted' and world.options.glitches_required in ['overworld_glitches', 'hybrid_major_glitches', 'no_logic']:
+    if world.worlds[player].options.mode != 'inverted' and world.worlds[player].options.glitches_required in ['overworld_glitches', 'hybrid_major_glitches', 'no_logic']:
         add_rule(world.get_entrance('Ganons Tower', player), lambda state: state.multiworld.get_entrance('Ganons Tower Ascent', player).can_reach(state), 'or')
 
-    set_bunny_rules(world, player, world.options.mode == 'inverted')
+    set_bunny_rules(world, player, world.worlds[player].options.mode == 'inverted')
 
 
 def mirrorless_path_to_castle_courtyard(world, player):
