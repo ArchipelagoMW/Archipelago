@@ -92,7 +92,7 @@ def stop_room(app_client: "FlaskClient",
               room_id: str,
               timeout: Optional[float] = None,
               simulate_idle: bool = True) -> None:
-    from datetime import datetime, timedelta
+    from datetime import datetime, timedelta, timezone
     from time import sleep
 
     from pony.orm import db_session
@@ -111,9 +111,9 @@ def stop_room(app_client: "FlaskClient",
     with db_session:
         room: Room = Room.get(id=room_uuid)
         if simulate_idle:
-            new_last_activity = datetime.utcnow() - timedelta(seconds=room.timeout + 5)
+            new_last_activity = datetime.now(timezone.utc) - timedelta(seconds=room.timeout + 5)
         else:
-            new_last_activity = datetime.utcnow() - timedelta(days=3)
+            new_last_activity = datetime.now(timezone.utc) - timedelta(days=3)
         room.last_activity = new_last_activity
         address = f"localhost:{room.last_port}" if room.last_port > 0 else None
         if address:
