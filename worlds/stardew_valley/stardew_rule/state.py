@@ -1,10 +1,13 @@
 from dataclasses import dataclass
-from typing import Iterable, Union, List, Tuple, Hashable
+from typing import Iterable, Union, List, Tuple, Hashable, TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from .base import BaseStardewRule, CombinableStardewRule
 from .protocol import StardewRule
 from ..strings.ap_names.event_names import Event
+
+if TYPE_CHECKING:
+    from .. import StardewValleyWorld
 
 
 class TotalReceived(BaseStardewRule):
