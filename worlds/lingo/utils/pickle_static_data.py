@@ -1,7 +1,7 @@
 from typing import Dict, List, Set, Optional
 
 import os
-from ..datatypes import Door, DoorType, EntranceType, Painting, Panel, PanelDoor, Progression, Room, RoomAndDoor, =\
+from ..datatypes import Door, DoorType, EntranceType, Painting, Panel, PanelDoor, Progression, Room, RoomAndDoor, \
     RoomAndPanel, RoomAndPanelDoor, RoomEntrance
 
 import hashlib
