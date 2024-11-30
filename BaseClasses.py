@@ -604,6 +604,49 @@ class MultiWorld():
                 state.collect(location.item, True, location)
             locations -= sphere
 
+    def get_sendable_spheres(self) -> Iterator[Set[Location]]:
+        """
+        yields a set of multiserver sendable locations (location.item.code: int) for each logical sphere
+
+        If there are unreachable locations, the last sphere of reachable locations is followed by an empty set,
+        and then a set of all of the unreachable locations.
+        """
+        state = CollectionState(self)
+        locations: Set[Location] = set()
+        events: Set[Location] = set()
+        for location in self.get_filled_locations():
+            if type(location.item.code) is int:
+                locations.add(location)
+            else:
+                events.add(location)
+
+        while locations:
+            sphere: Set[Location] = set()
+
+            # cull events out
+            done_events: Set[Union[Location, None]] = {None}
+            while done_events:
+                done_events = set()
+                for event in events:
+                    if event.can_reach(state):
+                        state.collect(event.item, True, event)
+                        done_events.add(event)
+                events -= done_events
+
+            for location in locations:
+                if location.can_reach(state):
+                    sphere.add(location)
+
+            yield sphere
+            if not sphere:
+                if locations:
+                    yield locations  # unreachable locations
+                break
+
+            for location in sphere:
+                state.collect(location.item, True, location)
+            locations -= sphere
+
     def fulfills_accessibility(self, state: Optional[CollectionState] = None):
         """Check if accessibility rules are fulfilled with current or supplied state."""
         if not state:

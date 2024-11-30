@@ -306,11 +306,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
                 # get spheres -> filter address==None -> skip empty
                 spheres: List[Dict[int, Set[int]]] = []
-                for sphere in multiworld.get_spheres():
+                for sphere in multiworld.get_sendable_spheres():
                     current_sphere: Dict[int, Set[int]] = collections.defaultdict(set)
                     for sphere_location in sphere:
-                        if type(sphere_location.address) is int:
-                            current_sphere[sphere_location.player].add(sphere_location.address)
+                        current_sphere[sphere_location.player].add(sphere_location.address)
 
                     if current_sphere:
                         spheres.append(dict(current_sphere))
