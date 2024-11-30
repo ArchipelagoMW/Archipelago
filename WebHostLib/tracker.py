@@ -274,9 +274,9 @@ class TrackerData:
         Does not include players who have no activity recorded.
         """
         last_activity: Dict[TeamPlayer, datetime.timedelta] = {}
-        now = datetime.datetime.utcnow()
+        now = datetime.datetime.now(datetime.timezone.utc)
         for (team, player), timestamp in self._multisave.get("client_activity_timers", []):
-            last_activity[team, player] = now - datetime.datetime.utcfromtimestamp(timestamp)
+            last_activity[team, player] = now - datetime.datetime.fromtimestamp(timestamp, datetime.timezone.utc)
 
         return last_activity
 
@@ -307,7 +307,6 @@ def _process_if_request_valid(incoming_request: Request, room: Optional[Room]) -
         if_modified = parsedate_to_datetime(if_modified_str)
         if if_modified.tzinfo is None:
             abort(400)  # standard requires "GMT" timezone
-        # database may use datetime.utcnow(), which is timezone-naive. convert to timezone-aware.
         last_activity = room.last_activity
         if last_activity.tzinfo is None:
             last_activity = room.last_activity.replace(tzinfo=datetime.timezone.utc)

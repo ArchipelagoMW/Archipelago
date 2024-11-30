@@ -172,7 +172,7 @@ def host_room(room: UUID):
     if room is None:
         return abort(404)
 
-    now = datetime.datetime.utcnow()
+    now = datetime.datetime.now(datetime.timezone.utc)
     # indicate that the page should reload to get the assigned port
     should_refresh = ((not room.last_port and now - room.creation_time < datetime.timedelta(seconds=3))
                       or room.last_activity < now - datetime.timedelta(seconds=room.timeout))
