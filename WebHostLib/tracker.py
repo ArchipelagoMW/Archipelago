@@ -2706,6 +2706,7 @@ if "Hollow Knight" in network_data_package["games"]:
             enabled_trackers=enabled_trackers,
             current_tracker="Hollow Knight",
             room=tracker_data.room,
+            get_slot_info=tracker_data.get_slot_info,
             all_slots=tracker_data.get_all_slots(),
             room_players=tracker_data.get_all_players(),
             locations=tracker_data.get_room_locations(),
