@@ -36,6 +36,12 @@ def copy(src: str, dst: str) -> None:
     with open(dst_folder / "__init__.py", "w", encoding="utf-8") as f:
         f.write(contents)
 
+    with open(dst_folder / "ap_info.json", "r", encoding="utf-8-sig") as f:
+        contents = f.read()
+    contents = re.sub(r'[\'"]game[\'"]\s*:\s*[\'"]' + re.escape(src) + r'[\'"]', f'"game": "{dst}"', contents)
+    with open(dst_folder / "ap_info.json", "w", encoding="utf-8") as f:
+        f.write(contents)
+
 
 def delete(name: str) -> None:
     assert name in _new_worlds, "World not created by this script"
