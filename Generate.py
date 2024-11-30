@@ -468,7 +468,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         raise Exception(f"Invalid game: {ret.game}")
     if ret.game not in AutoWorldRegister.world_types:
         from worlds import ensure_all_worlds_loaded
-        ensure_all_worlds_loaded({ret.game})
+        ensure_all_worlds_loaded(ret.game)
     if ret.game not in AutoWorldRegister.world_types:
         from worlds import failed_world_loads
         picks = Utils.get_fuzzy_results(ret.game, list(AutoWorldRegister.world_types) + failed_world_loads, limit=1)[0]

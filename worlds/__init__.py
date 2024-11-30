@@ -75,7 +75,7 @@ class WorldSource:
     type: typing.Literal["zip", "py", "pyc"]
     relative: bool = True  # relative to regular world import folder
     time_taken: float = -1.0
-    game: str | None = None
+    game: str | None = dataclasses.field(init=False)
     module_name: str = dataclasses.field(init=False)
 
     def __post_init__(self):
@@ -272,6 +272,9 @@ class WorldFinder(importlib.abc.MetaPathFinder):
 # Insert our meta path finder for worlds before the others so that we intercept the builtin meta path finder that is
 # usually able to handle importing non-zip worlds.
 # Our meta path finder is also capable of importing zipped worlds.
+# -- If it is not desired to intercept the loading of non-zip worlds (Python seems to be capable of loading them itself,
+# but you lose easier module execution benchmarking), then the meta path finder can be appended to the end of the list
+# instead, and it will only handle zipped worlds.
 sys.meta_path.insert(0, WorldFinder())
 
 
