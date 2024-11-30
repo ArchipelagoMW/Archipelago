@@ -1,6 +1,9 @@
 import typing
 import random
-from Options import Option, DefaultOnToggle, Toggle, Range, OptionList, OptionSet, DeathLink
+from dataclasses import dataclass
+from Options import Option, DefaultOnToggle, Toggle, Range, OptionSet, DeathLink, PlandoConnections, \
+    PerGameCommonOptions, OptionGroup
+from .EntranceShuffle import entrance_shuffle_table
 from .LogicTricks import normalized_name_tricks
 from .ColorSFXOptions import *
 
@@ -27,6 +30,11 @@ class TrackRandomRange(Range):
                 ret.randomized = True
             return ret
         raise RuntimeError(f"All options specified in \"{cls.display_name}\" are weighted as zero.")
+
+
+class OoTPlandoConnections(PlandoConnections):
+    entrances = set([connection[1][0] for connection in entrance_shuffle_table])
+    exits = set([connection[2][0] for connection in entrance_shuffle_table if len(connection) > 2])
 
 
 class Logic(Choice): 
@@ -1264,31 +1272,177 @@ sfx_options: typing.Dict[str, type(Option)] = {
 }
 
 
-class LogicTricks(OptionList):
+class LogicTricks(OptionSet):
     """Set various tricks for logic in Ocarina of Time. 
     Format as a comma-separated list of "nice" names: ["Fewer Tunic Requirements", "Hidden Grottos without Stone of Agony"].
     A full list of supported tricks can be found at:
     https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LogicTricks.py
     """
     display_name = "Logic Tricks"
-    valid_keys = frozenset(normalized_name_tricks)
+    valid_keys = tuple(normalized_name_tricks.keys())
     valid_keys_casefold = True
 
 
-# All options assembled into a single dict
-oot_options: typing.Dict[str, type(Option)] = {
-    "logic_rules": Logic, 
-    "logic_no_night_tokens_without_suns_song": NightTokens, 
-    **open_options, 
-    **world_options, 
-    **bridge_options,
-    **dungeon_items_options,
-    **shuffle_options,
-    **timesavers_options,
-    **misc_options, 
-    **itempool_options,
-    **cosmetic_options,
-    **sfx_options,
-    "logic_tricks": LogicTricks,
-    "death_link": DeathLink,
-}
+@dataclass
+class OoTOptions(PerGameCommonOptions):
+    plando_connections: OoTPlandoConnections
+    death_link: DeathLink
+    logic_rules: Logic
+    logic_no_night_tokens_without_suns_song: NightTokens
+    logic_tricks: LogicTricks
+    open_forest: Forest
+    open_kakariko: Gate
+    open_door_of_time: DoorOfTime
+    zora_fountain: Fountain
+    gerudo_fortress: Fortress
+    bridge: Bridge
+    trials: Trials
+    starting_age: StartingAge
+    shuffle_interior_entrances: InteriorEntrances
+    shuffle_grotto_entrances: GrottoEntrances
+    shuffle_dungeon_entrances: DungeonEntrances
+    shuffle_overworld_entrances: OverworldEntrances
+    owl_drops: OwlDrops
+    warp_songs: WarpSongs
+    spawn_positions: SpawnPositions
+    shuffle_bosses: BossEntrances
+    # mix_entrance_pools: MixEntrancePools
+    # decouple_entrances: DecoupleEntrances
+    triforce_hunt: TriforceHunt
+    triforce_goal: TriforceGoal
+    extra_triforce_percentage: ExtraTriforces
+    bombchus_in_logic: LogicalChus
+    dungeon_shortcuts: DungeonShortcuts
+    dungeon_shortcuts_list: DungeonShortcutsList
+    mq_dungeons_mode: MQDungeons
+    mq_dungeons_list: MQDungeonList
+    mq_dungeons_count: MQDungeonCount
+    # empty_dungeons_mode: EmptyDungeons
+    # empty_dungeons_list: EmptyDungeonList
+    # empty_dungeon_count: EmptyDungeonCount
+    bridge_stones: BridgeStones
+    bridge_medallions: BridgeMedallions
+    bridge_rewards: BridgeRewards
+    bridge_tokens: BridgeTokens
+    bridge_hearts: BridgeHearts
+    shuffle_mapcompass: ShuffleMapCompass
+    shuffle_smallkeys: ShuffleKeys
+    shuffle_hideoutkeys: ShuffleGerudoKeys
+    shuffle_bosskeys: ShuffleBossKeys
+    enhance_map_compass: EnhanceMC
+    shuffle_ganon_bosskey: ShuffleGanonBK
+    ganon_bosskey_medallions: GanonBKMedallions
+    ganon_bosskey_stones: GanonBKStones
+    ganon_bosskey_rewards: GanonBKRewards
+    ganon_bosskey_tokens: GanonBKTokens
+    ganon_bosskey_hearts: GanonBKHearts
+    key_rings: KeyRings
+    key_rings_list: KeyRingList
+    shuffle_song_items: SongShuffle
+    shopsanity: ShopShuffle
+    shop_slots: ShopSlots
+    shopsanity_prices: ShopPrices
+    tokensanity: TokenShuffle
+    shuffle_scrubs: ScrubShuffle
+    shuffle_child_trade: ShuffleChildTrade
+    shuffle_freestanding_items: ShuffleFreestanding
+    shuffle_pots: ShufflePots
+    shuffle_crates: ShuffleCrates
+    shuffle_cows: ShuffleCows
+    shuffle_beehives: ShuffleBeehives
+    shuffle_kokiri_sword: ShuffleSword
+    shuffle_ocarinas: ShuffleOcarinas
+    shuffle_gerudo_card: ShuffleCard
+    shuffle_beans: ShuffleBeans
+    shuffle_medigoron_carpet_salesman: ShuffleMedigoronCarpet
+    shuffle_frog_song_rupees: ShuffleFrogRupees
+    no_escape_sequence: SkipEscape
+    no_guard_stealth: SkipStealth
+    no_epona_race: SkipEponaRace
+    skip_some_minigame_phases: SkipMinigamePhases
+    complete_mask_quest: CompleteMaskQuest
+    useful_cutscenes: UsefulCutscenes
+    fast_chests: FastChests
+    free_scarecrow: FreeScarecrow
+    fast_bunny_hood: FastBunny
+    plant_beans: PlantBeans
+    chicken_count: ChickenCount
+    big_poe_count: BigPoeCount
+    fae_torch_count: FAETorchCount
+    correct_chest_appearances: CorrectChestAppearance
+    minor_items_as_major_chest: MinorInMajor
+    invisible_chests: InvisibleChests
+    correct_potcrate_appearances: CorrectPotCrateAppearance
+    hints: Hints
+    misc_hints: MiscHints
+    hint_dist: HintDistribution
+    text_shuffle: TextShuffle
+    damage_multiplier: DamageMultiplier
+    deadly_bonks: DeadlyBonks
+    no_collectible_hearts: HeroMode
+    starting_tod: StartingToD
+    blue_fire_arrows: BlueFireArrows
+    fix_broken_drops: FixBrokenDrops
+    start_with_consumables: ConsumableStart
+    start_with_rupees: RupeeStart
+    item_pool_value: ItemPoolValue
+    junk_ice_traps: IceTraps
+    ice_trap_appearance: IceTrapVisual
+    adult_trade_start: AdultTradeStart
+    default_targeting: Targeting
+    display_dpad: DisplayDpad
+    dpad_dungeon_menu: DpadDungeonMenu
+    correct_model_colors: CorrectColors
+    background_music: BackgroundMusic
+    fanfares: Fanfares
+    ocarina_fanfares: OcarinaFanfares
+    kokiri_color: kokiri_color
+    goron_color:  goron_color
+    zora_color:   zora_color
+    silver_gauntlets_color:   silver_gauntlets_color
+    golden_gauntlets_color:   golden_gauntlets_color
+    mirror_shield_frame_color: mirror_shield_frame_color
+    navi_color_default_inner: navi_color_default_inner
+    navi_color_default_outer: navi_color_default_outer
+    navi_color_enemy_inner:   navi_color_enemy_inner
+    navi_color_enemy_outer:   navi_color_enemy_outer
+    navi_color_npc_inner:     navi_color_npc_inner
+    navi_color_npc_outer:     navi_color_npc_outer
+    navi_color_prop_inner:    navi_color_prop_inner
+    navi_color_prop_outer:    navi_color_prop_outer
+    sword_trail_duration: SwordTrailDuration
+    sword_trail_color_inner: sword_trail_color_inner
+    sword_trail_color_outer: sword_trail_color_outer
+    bombchu_trail_color_inner: bombchu_trail_color_inner
+    bombchu_trail_color_outer: bombchu_trail_color_outer
+    boomerang_trail_color_inner: boomerang_trail_color_inner
+    boomerang_trail_color_outer: boomerang_trail_color_outer
+    heart_color:          heart_color
+    magic_color:          magic_color
+    a_button_color:       a_button_color
+    b_button_color:       b_button_color
+    c_button_color:       c_button_color
+    start_button_color:   start_button_color
+    sfx_navi_overworld:   sfx_navi_overworld
+    sfx_navi_enemy:       sfx_navi_enemy
+    sfx_low_hp:           sfx_low_hp
+    sfx_menu_cursor:      sfx_menu_cursor
+    sfx_menu_select:      sfx_menu_select
+    sfx_nightfall:        sfx_nightfall
+    sfx_horse_neigh:      sfx_horse_neigh
+    sfx_hover_boots:      sfx_hover_boots
+    sfx_ocarina:          SfxOcarina
+
+
+oot_option_groups: typing.List[OptionGroup] = [
+    OptionGroup("Open", [option for option in open_options.values()]),
+    OptionGroup("World", [*[option for option in world_options.values()],
+                *[option for option in bridge_options.values()]]),
+    OptionGroup("Shuffle", [option for option in shuffle_options.values()]),
+    OptionGroup("Dungeon Items", [option for option in dungeon_items_options.values()]),
+    OptionGroup("Timesavers", [option for option in timesavers_options.values()]),
+    OptionGroup("Misc", [option for option in misc_options.values()]),
+    OptionGroup("Item Pool", [option for option in itempool_options.values()]),
+    OptionGroup("Cosmetics", [option for option in cosmetic_options.values()]),
+    OptionGroup("SFX", [option for option in sfx_options.values()])
+]

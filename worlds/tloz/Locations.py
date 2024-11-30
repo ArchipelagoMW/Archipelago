@@ -99,10 +99,26 @@ shop_locations = [
     "Potion Shop Item Left", "Potion Shop Item Middle", "Potion Shop Item Right"
 ]
 
+take_any_locations = [
+    "Take Any Item Left", "Take Any Item Middle", "Take Any Item Right"
+]
+
+sword_cave_locations = [
+    "Starting Sword Cave", "White Sword Pond", "Magical Sword Grave"
+]
+
 food_locations = [
-    "Level 7 Map", "Level 7 Boss", "Level 7 Triforce", "Level 7 Key Drop (Goriyas)",
+    "Level 7 Item (Red Candle)", "Level 7 Map", "Level 7 Boss", "Level 7 Triforce", "Level 7 Key Drop (Goriyas)",
     "Level 7 Bomb Drop (Moldorms North)", "Level 7 Bomb Drop (Goriyas North)",
     "Level 7 Bomb Drop (Dodongos)", "Level 7 Rupee Drop (Goriyas North)"
+]
+
+gohma_locations = [
+    "Level 6 Boss", "Level 6 Triforce", "Level 8 Item (Magical Key)", "Level 8 Bomb Drop (Darknuts North)"
+]
+
+gleeok_locations = [
+    "Level 4 Boss", "Level 4 Triforce", "Level 8 Boss", "Level 8 Triforce"
 ]
 
 floor_location_game_offsets_early = {

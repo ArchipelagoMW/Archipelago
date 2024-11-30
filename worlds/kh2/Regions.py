@@ -1,9 +1,11 @@
 import typing
 
 from BaseClasses import MultiWorld, Region
+from . import Locations
 
-from .Locations import KH2Location, event_location_to_item
-from . import LocationName, RegionName, Events_Table
+from .Subclasses import KH2Location
+from .Names import LocationName, RegionName
+from .Items import Events_Table
 
 KH2REGIONS: typing.Dict[str, typing.List[str]] = {
     "Menu":                        [],
@@ -788,7 +790,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.ArmoredXemnas2EventLocation
     ],
     RegionName.FinalXemnas:        [
-        LocationName.FinalXemnas
+        LocationName.FinalXemnasEventLocation
     ],
     RegionName.DataXemnas:         [
         LocationName.XemnasDataPowerBoost,
@@ -933,7 +935,7 @@ def create_regions(self):
 
     for level_region_name in level_region_list:
         KH2REGIONS[level_region_name] = []
-    if multiworld.LevelDepth[player] == "level_50":
+    if self.options.LevelDepth == "level_50":
         KH2REGIONS[RegionName.LevelsVS1] = [LocationName.Lvl2, LocationName.Lvl4, LocationName.Lvl7, LocationName.Lvl9,
                                             LocationName.Lvl10]
         KH2REGIONS[RegionName.LevelsVS3] = [LocationName.Lvl12, LocationName.Lvl14, LocationName.Lvl15,
@@ -947,7 +949,7 @@ def create_regions(self):
         KH2REGIONS[RegionName.LevelsVS15] = [LocationName.Lvl50]
 
     # level 99
-    elif multiworld.LevelDepth[player] == "level_99":
+    elif self.options.LevelDepth == "level_99":
         KH2REGIONS[RegionName.LevelsVS1] = [LocationName.Lvl7, LocationName.Lvl9]
         KH2REGIONS[RegionName.LevelsVS3] = [LocationName.Lvl12, LocationName.Lvl15, LocationName.Lvl17,
                                             LocationName.Lvl20]
@@ -963,7 +965,7 @@ def create_regions(self):
         KH2REGIONS[RegionName.LevelsVS26] = [LocationName.Lvl99]
     # level sanity
     # has to be [] instead of {} for in
-    elif multiworld.LevelDepth[player] in ["level_50_sanity", "level_99_sanity"]:
+    elif self.options.LevelDepth in ["level_50_sanity", "level_99_sanity"]:
         KH2REGIONS[RegionName.LevelsVS1] = [LocationName.Lvl2, LocationName.Lvl3, LocationName.Lvl4, LocationName.Lvl5,
                                             LocationName.Lvl6,
                                             LocationName.Lvl7, LocationName.Lvl8, LocationName.Lvl9, LocationName.Lvl10]
@@ -984,7 +986,7 @@ def create_regions(self):
                                              LocationName.Lvl46, LocationName.Lvl47, LocationName.Lvl48,
                                              LocationName.Lvl49, LocationName.Lvl50]
         # level 99 sanity
-        if multiworld.LevelDepth[player] == "level_99_sanity":
+        if self.options.LevelDepth == "level_99_sanity":
             KH2REGIONS[RegionName.LevelsVS15] = [LocationName.Lvl51, LocationName.Lvl52, LocationName.Lvl53,
                                                  LocationName.Lvl54,
                                                  LocationName.Lvl55, LocationName.Lvl56, LocationName.Lvl57,
@@ -1010,7 +1012,7 @@ def create_regions(self):
                                                  LocationName.Lvl95, LocationName.Lvl96, LocationName.Lvl97,
                                                  LocationName.Lvl98, LocationName.Lvl99]
     KH2REGIONS[RegionName.Summon] = []
-    if multiworld.SummonLevelLocationToggle[player]:
+    if self.options.SummonLevelLocationToggle:
         KH2REGIONS[RegionName.Summon] = [LocationName.Summonlvl2,
                                          LocationName.Summonlvl3,
                                          LocationName.Summonlvl4,
@@ -1020,7 +1022,8 @@ def create_regions(self):
     multiworld.regions += [create_region(multiworld, player, active_locations, region, locations) for region, locations in
                            KH2REGIONS.items()]
     # fill the event locations with events
-    for location, item in event_location_to_item.items():
+
+    for location, item in Locations.event_location_to_item.items():
         multiworld.get_location(location, player).place_locked_item(
                 multiworld.worlds[player].create_event_item(item))
 

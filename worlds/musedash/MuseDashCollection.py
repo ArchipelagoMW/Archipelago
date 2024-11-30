@@ -22,11 +22,15 @@ class MuseDashCollections:
     ]
 
     MUSE_PLUS_DLC: str = "Muse Plus"
+
+    # Ordering matters for webhost. Order goes: Muse Plus, Time Limited Muse Plus Dlcs, Paid Dlcs
     DLC: List[str] = [
-        # MUSE_PLUS_DLC, # To be included when OptionSets are rendered as part of basic settings.
-        # "maimai DX Limited-time Suite", # Part of Muse Plus. Goes away 31st Jan 2026.
-        "Miku in Museland", # Paid DLC not included in Muse Plus
-        "MSR Anthology", # Part of Muse Plus. Goes away 20th Jan 2024.
+        MUSE_PLUS_DLC,
+        "CHUNITHM COURSE MUSE",  # Part of Muse Plus. Goes away 22nd May 2027.
+        "maimai DX Limited-time Suite",  # Part of Muse Plus. Goes away 31st Jan 2026.
+        "MSR Anthology",  # Now no longer available.
+        "Miku in Museland",  # Paid DLC not included in Muse Plus
+        "Rin Len's Mirrorland",  # Paid DLC not included in Muse Plus
     ]
 
     DIFF_OVERRIDES: List[str] = [
@@ -34,6 +38,16 @@ class MuseDashCollections:
         "Rush-Hour",
         "Find this Month's Featured Playlist",
         "PeroPero in the Universe",
+        "umpopoff",
+        "P E R O P E R O Brother Dance",
+    ]
+    
+    REMOVED_SONGS = [
+        "CHAOS Glitch",
+        "FM 17314 SUGAR RADIO",
+        "Yume Ou Mono Yo Secret",
+        "Echo over you... Secret",
+        "Tsukuyomi Ni Naru Replaced",
     ]
 
     album_items: Dict[str, AlbumData] = {}
@@ -41,7 +55,7 @@ class MuseDashCollections:
     song_items: Dict[str, SongData] = {}
     song_locations: Dict[str, int] = {}
 
-    vfx_trap_items: Dict[str, int] = {
+    trap_items: Dict[str, int] = {
         "Bad Apple Trap": STARTING_CODE + 1,
         "Pixelate Trap": STARTING_CODE + 2,
         "Ripple Trap": STARTING_CODE + 3,
@@ -49,14 +63,29 @@ class MuseDashCollections:
         "Chromatic Aberration Trap": STARTING_CODE + 5,
         "Background Freeze Trap": STARTING_CODE + 6,
         "Gray Scale Trap": STARTING_CODE + 7,
-    }
-
-    sfx_trap_items: Dict[str, int] = {
         "Nyaa SFX Trap": STARTING_CODE + 8,
         "Error SFX Trap": STARTING_CODE + 9,
+        "Focus Line Trap": STARTING_CODE + 10,  
     }
 
-    item_names_to_id: ChainMap = ChainMap({}, sfx_trap_items, vfx_trap_items)
+    sfx_trap_items: List[str] = [
+        "Nyaa SFX Trap",
+        "Error SFX Trap",
+    ]
+
+    filler_items: Dict[str, int] = {
+        "Great To Perfect (10 Pack)": STARTING_CODE + 30,
+        "Miss To Great (5 Pack)": STARTING_CODE + 31,
+        "Extra Life": STARTING_CODE + 32,
+    }
+
+    filler_item_weights: Dict[str, int] = {
+        "Great To Perfect (10 Pack)": 10,
+        "Miss To Great (5 Pack)": 3,
+        "Extra Life": 1,
+    }
+
+    item_names_to_id: ChainMap = ChainMap({}, filler_items, trap_items)
     location_names_to_id: ChainMap = ChainMap(song_locations, album_locations)
 
     def __init__(self) -> None:
@@ -81,11 +110,22 @@ class MuseDashCollections:
             steamer_mode = sections[3] == "True"
 
             if song_name in self.DIFF_OVERRIDES:
-                # Note: These difficulties may not actually be representative of these songs.
-                # The game does not provide these difficulties so they have to be filled in.
-                diff_of_easy = 4
-                diff_of_hard = 7
-                diff_of_master = 10
+                # These songs use non-standard difficulty values. Which are being overriden with standard values.
+                # But also avoid filling any missing difficulties (i.e. 0s) with a difficulty value.
+                if sections[4] != '0':
+                    diff_of_easy = 4
+                else:
+                    diff_of_easy = None
+
+                if sections[5] != '0':
+                    diff_of_hard = 7
+                else:
+                    diff_of_hard = None
+
+                if sections[6] != '0':
+                    diff_of_master = 10
+                else:
+                    diff_of_master = None
             else:
                 diff_of_easy = self.parse_song_difficulty(sections[4])
                 diff_of_hard = self.parse_song_difficulty(sections[5])
@@ -117,6 +157,9 @@ class MuseDashCollections:
         for songKey, songData in self.song_items.items():
             if not self.song_matches_dlc_filter(songData, dlc_songs):
                 continue
+                
+            if songKey in self.REMOVED_SONGS:
+                continue
 
             if streamer_mode_active and not songData.streamer_mode:
                 continue
@@ -134,6 +177,9 @@ class MuseDashCollections:
                 continue
 
         return filtered_list
+
+    def filter_songs_to_dlc(self, song_list: List[str], dlc_songs: Set[str]) -> List[str]:
+        return [song for song in song_list if self.song_matches_dlc_filter(self.song_items[song], dlc_songs)]
 
     def song_matches_dlc_filter(self, song: SongData, dlc_songs: Set[str]) -> bool:
         if song.album in self.FREE_ALBUMS:

@@ -42,9 +42,9 @@ including the exclamation point.
 
 ### Collect/Release
 - `!collect` Grants you all the remaining items for your world by collecting them from all games. Typically used after 
-goal completion.
-- `!release` Releases all items contained in your world to other worlds. Typically, done automatically by the sever, but
-can be configured to allow/require manual usage of this command.
+  goal completion.
+- `!release` Releases all items contained in your world to other worlds. Typically, done automatically by the server,
+  but can be configured to allow/require manual usage of this command.
 
 ### Cheats
 - `!getitem <item>` Cheats an item to the currently connected slot, if it is enabled in the server.
@@ -95,7 +95,9 @@ The following commands are available in the clients that use the CommonClient, f
 - `/received` Displays all the items you have received from all players, including yourself.
 - `/missing` Displays all the locations along with their current status (checked/missing).
 - `/items` Lists all the item names for the current game.
+- `/item_groups` Lists all the item group names for the current game.
 - `/locations` Lists all the location names for the current game.
+- `/location_groups` Lists all the location group names for the current game.
 - `/ready` Sends ready status to the server.
 - Typing anything that doesn't start with `/` will broadcast a message to all players.
 

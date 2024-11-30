@@ -1,7 +1,20 @@
 import typing
+from dataclasses import dataclass
+from functools import cached_property
 
-from Options import Choice, Range, DeathLink, Toggle, DefaultOnToggle, StartInventoryPool
+from Options import (
+    Choice,
+    Range,
+    DeathLink,
+    Toggle,
+    DefaultOnToggle,
+    StartInventoryPool,
+    ItemDict,
+    PerGameCommonOptions,
+)
+
 from .creatures import all_creatures, Definitions
+from .items import ItemType, item_names_by_type
 
 
 class SwimRule(Choice):
@@ -99,17 +112,31 @@ class AggressiveScanLogic(Choice):
 
 
 class SubnauticaDeathLink(DeathLink):
-    """When you die, everyone dies. Of course the reverse is true too.
-    Note: can be toggled via in-game console command "deathlink"."""
+    __doc__ = DeathLink.__doc__ + "\n\n    Note: can be toggled via in-game console command \"deathlink\"."
 
 
-option_definitions = {
-    "swim_rule": SwimRule,
-    "early_seaglide": EarlySeaglide,
-    "free_samples": FreeSamples,
-    "goal": Goal,
-    "creature_scans": CreatureScans,
-    "creature_scan_logic": AggressiveScanLogic,
-    "death_link": SubnauticaDeathLink,
-    "start_inventory_from_pool": StartInventoryPool,
-}
+class FillerItemsDistribution(ItemDict):
+    """Random chance weights of various filler resources that can be obtained.
+    Available items: """
+    __doc__ += ", ".join(f"\"{item_name}\"" for item_name in item_names_by_type[ItemType.resource])
+    valid_keys = sorted(item_names_by_type[ItemType.resource])
+    default = {item_name: 1 for item_name in item_names_by_type[ItemType.resource]}
+    display_name = "Filler Items Distribution"
+
+    @cached_property
+    def weights_pair(self) -> typing.Tuple[typing.List[str], typing.List[int]]:
+        from itertools import accumulate
+        return list(self.value.keys()), list(accumulate(self.value.values()))
+
+
+@dataclass
+class SubnauticaOptions(PerGameCommonOptions):
+    swim_rule: SwimRule
+    early_seaglide: EarlySeaglide
+    free_samples: FreeSamples
+    goal: Goal
+    creature_scans: CreatureScans
+    creature_scan_logic: AggressiveScanLogic
+    death_link: SubnauticaDeathLink
+    start_inventory_from_pool: StartInventoryPool
+    filler_items_distribution: FillerItemsDistribution

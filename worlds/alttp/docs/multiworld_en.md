@@ -2,15 +2,15 @@
 
 ## Required Software
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for
-`SNI Client - A Link to the Past Patch Setup`
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
 - [SNI](https://github.com/alttpo/sni/releases). This is automatically included with your Archipelago installation above.
 - SNI is not compatible with (Q)Usb2Snes.
-- Hardware or software capable of loading and playing SNES ROM files
+- Hardware or software capable of loading and playing SNES ROM files, including:
     - An emulator capable of connecting to SNI
-      ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
-       [BizHawk](https://tasvideos.org/BizHawk), or
-       [RetroArch](https://retroarch.com?page=platforms) 1.10.1 or newer). Or,
+      ([snes9x-nwa](https://github.com/Skarsnik/snes9x-emunwa/releases), [snes9x-rr](https://github.com/gocha/snes9x-rr/releases),
+       [BSNES-plus](https://github.com/black-sliver/bsnes-plus),
+       [BizHawk](http://tasvideos.org/BizHawk.html), or
+       [RetroArch](https://retroarch.com?page=platforms) 1.10.1 or newer)
     - An SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), or other compatible hardware. **note: 
 modded SNES minis are currently not supported by SNI. Some users have claimed success with QUsb2Snes for this system,
 but it is not supported.**
@@ -18,11 +18,12 @@ but it is not supported.**
 
 ## Installation Procedures
 
-1. Download and install SNIClient from the link above, making sure to install the most recent version.
-   **The installer file is located in the assets section at the bottom of the version information**.
-    - During setup, you will be asked to locate your base ROM file. This is your Japanese Link to the Past ROM file.
+1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer 
+   file is located in the assets section at the bottom of the version information.**
+2. The first time you do local generation or patch your game, you will be asked to locate your base ROM file.
+   This is your Japanese Link to the Past ROM file. This only needs to be done once.
 
-2. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
+3. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
    files.
     1. Extract your emulator's folder to your Desktop, or somewhere you will remember.
     2. Right-click on a ROM file and select **Open with...**
@@ -47,6 +48,11 @@ client, and will also create your ROM in the same place as your patch file.
 When the client launched automatically, SNI should have also automatically launched in the background. If this is its
 first time launching, you may be prompted to allow it to communicate through the Windows Firewall.
 
+#### snes9x-nwa
+
+1. Click on the Network Menu and check **Enable Emu Network Control**
+2. Load your ROM file if it hasn't already been loaded.
+
 ##### snes9x-rr
 
 1. Load your ROM file if it hasn't already been loaded.
@@ -57,6 +63,11 @@ first time launching, you may be prompted to allow it to communicate through the
     - Look in the Archipelago folder for `/SNI/lua/`.
 6. If you see an error while loading the script that states `socket.dll missing` or similar, navigate to the folder of 
 the lua you are using in your file explorer and copy the `socket.dll` to the base folder of your snes9x install.
+
+#### BSNES-Plus
+
+1. Load your ROM file if it hasn't already been loaded.
+2. The emulator should automatically connect while SNI is running.
 
 ##### BizHawk
 

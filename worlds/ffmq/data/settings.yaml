@@ -85,7 +85,7 @@ Final Fantasy Mystic Quest:
     Normal: 0
     OneAndHalf: 0
     Double: 0
-    DoubleHalf: 0
+    DoubleAndHalf: 0
     Triple: 0
     Quadruple: 0
   companion_leveling_type:
@@ -98,7 +98,7 @@ Final Fantasy Mystic Quest:
     BenPlus10: 0
   companion_spellbook_type:
     Standard: 0
-    StandardExtended: 0
+    Extended: 0
     RandomBalanced: 0
     RandomChaos: 0
   starting_companion:

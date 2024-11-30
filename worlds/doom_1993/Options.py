@@ -1,6 +1,5 @@
-import typing
-
-from Options import AssembleOptions, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
+from Options import PerGameCommonOptions, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
+from dataclasses import dataclass
 
 
 class Goal(Choice):
@@ -113,7 +112,7 @@ class StartWithComputerAreaMaps(Toggle):
 class ResetLevelOnDeath(DefaultOnToggle):
     """When dying, levels are reset and monsters respawned. But inventory and checks are kept.
     Turning this setting off is considered easy mode. Good for new players that don't know the levels well."""
-    display_name="Reset Level on Death"
+    display_name = "Reset Level on Death"
 
 
 class Episode1(DefaultOnToggle):
@@ -140,21 +139,22 @@ class Episode4(Toggle):
     display_name = "Episode 4"
 
 
-options: typing.Dict[str, AssembleOptions] = {
-    "start_inventory_from_pool": StartInventoryPool,
-    "goal": Goal,
-    "difficulty": Difficulty,
-    "random_monsters": RandomMonsters,
-    "random_pickups": RandomPickups,
-    "random_music": RandomMusic,
-    "flip_levels": FlipLevels,
-    "allow_death_logic": AllowDeathLogic,
-    "pro": Pro,
-    "start_with_computer_area_maps": StartWithComputerAreaMaps,
-    "death_link": DeathLink,
-    "reset_level_on_death": ResetLevelOnDeath,
-    "episode1": Episode1,
-    "episode2": Episode2,
-    "episode3": Episode3,
-    "episode4": Episode4
-}
+@dataclass
+class DOOM1993Options(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
+    goal: Goal
+    difficulty: Difficulty
+    random_monsters: RandomMonsters
+    random_pickups: RandomPickups
+    random_music: RandomMusic
+    flip_levels: FlipLevels
+    allow_death_logic: AllowDeathLogic
+    pro: Pro
+    start_with_computer_area_maps: StartWithComputerAreaMaps
+    death_link: DeathLink
+    reset_level_on_death: ResetLevelOnDeath
+    episode1: Episode1
+    episode2: Episode2
+    episode3: Episode3
+    episode4: Episode4
+

@@ -638,7 +638,7 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
         add_rule(multiworld.get_location(LocationName.radical_highway_omo_2, player),
                  lambda state: state.has(ItemName.shadow_air_shoes, player))
         add_rule(multiworld.get_location(LocationName.weapons_bed_omo_2, player),
-                 lambda state: state.has(ItemName.eggman_jet_engine, player))
+                 lambda state: state.has(ItemName.eggman_large_cannon, player))
 
         add_rule(multiworld.get_location(LocationName.mission_street_omo_3, player),
                  lambda state: state.has(ItemName.tails_booster, player))

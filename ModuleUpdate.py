@@ -4,14 +4,29 @@ import subprocess
 import multiprocessing
 import warnings
 
-local_dir = os.path.dirname(__file__)
-requirements_files = {os.path.join(local_dir, 'requirements.txt')}
 
-if sys.version_info < (3, 8, 6):
-    raise RuntimeError("Incompatible Python Version. 3.8.7+ is supported.")
+if sys.version_info < (3, 10, 11):
+    raise RuntimeError(f"Incompatible Python Version found: {sys.version_info}. 3.10.11+ is supported.")
 
 # don't run update if environment is frozen/compiled or if not the parent process (skip in subprocess)
-update_ran = getattr(sys, "frozen", False) or multiprocessing.parent_process()
+_skip_update = bool(getattr(sys, "frozen", False) or multiprocessing.parent_process())
+update_ran = _skip_update
+
+
+class RequirementsSet(set):
+    def add(self, e):
+        global update_ran
+        update_ran &= _skip_update
+        super().add(e)
+
+    def update(self, *s):
+        global update_ran
+        update_ran &= _skip_update
+        super().update(*s)
+
+
+local_dir = os.path.dirname(__file__)
+requirements_files = RequirementsSet((os.path.join(local_dir, 'requirements.txt'),))
 
 if not update_ran:
     for entry in os.scandir(os.path.join(local_dir, "worlds")):
@@ -55,17 +70,17 @@ def install_pkg_resources(yes=False):
         subprocess.call([sys.executable, "-m", "pip", "install", "--upgrade", "setuptools"])
 
 
-def update(yes=False, force=False):
+def update(yes: bool = False, force: bool = False) -> None:
     global update_ran
     if not update_ran:
         update_ran = True
 
+        install_pkg_resources(yes=yes)
+        import pkg_resources
+
         if force:
             update_command()
             return
-
-        install_pkg_resources(yes=yes)
-        import pkg_resources
 
         prev = ""  # if a line ends in \ we store here and merge later
         for req_file in requirements_files:

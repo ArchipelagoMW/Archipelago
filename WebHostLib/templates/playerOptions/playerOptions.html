@@ -1,0 +1,166 @@
+{% extends 'pageWrapper.html' %}
+{% import 'playerOptions/macros.html' as inputs with context %}
+
+{% block head %}
+    <title>{{ world_name }} Options</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/playerOptions/playerOptions.css") }}" />
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/md5.min.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/js-yaml.min.js") }}"></script>
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/playerOptions.js") }}"></script>
+
+    <noscript>
+        <style>
+            .js-required{
+                display: none !important;
+            }
+        </style>
+    </noscript>
+{% endblock %}
+
+{% block body %}
+    {% include 'header/'+theme+'Header.html' %}
+    <div id="player-options" class="markdown" data-game="{{ world_name }}" data-presets="{{ presets }}">
+        <noscript>
+            <div class="js-warning-banner">
+                This page has reduced functionality without JavaScript.
+            </div>
+        </noscript>
+
+        <div id="user-message">{{ message }}</div>
+
+        <div id="player-options-header">
+            <h1>{{ world_name }}</h1>
+            <h1>Player Options</h1>
+        </div>
+        <p>Choose the options you would like to play with! You may generate a single-player game from this page,
+            or download an options file you can use to participate in a MultiWorld.</p>
+
+        <p>
+            A more advanced options configuration for all games can be found on the
+            <a href="weighted-options">Weighted options</a> page.
+            <br />
+            A list of all games you have generated can be found on the <a href="/user-content">User Content Page</a>.
+            <br />
+            You may also download the
+            <a href="/static/generated/configs/{{ world_name | get_file_safe_name }}.yaml">template file for this game</a>.
+        </p>
+
+        <form id="options-form" method="post" enctype="application/x-www-form-urlencoded" action="generate-yaml">
+            <div id="meta-options">
+                <div>
+                    <label for="player-name">
+                        Player Name: <span class="interactive" data-tooltip="This is the name you use to connect with your game. This is also known as your 'slot name'.">(?)</span>
+                    </label>
+                    <input id="player-name" placeholder="Player" name="name" maxlength="16" />
+                </div>
+                <div class="js-required">
+                    <label for="game-options-preset">
+                        Options Preset: <span class="interactive" data-tooltip="Select from a list of developer-curated presets (if any) or reset all options to their defaults.">(?)</span>
+                    </label>
+                    <select id="game-options-preset" name="game-options-preset" disabled>
+                        <option value="default">Default</option>
+                        {% for preset_name in world.web.options_presets %}
+                            <option value="{{ preset_name }}">{{ preset_name }}</option>
+                        {% endfor %}
+                        <option value="custom" hidden>Custom</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="option-groups">
+                {% for group_name, group_options in option_groups.items() %}
+                    <details class="group-container" {% if not start_collapsed[group_name] %}open{% endif %}>
+                        <summary class="h2">{{ group_name }}</summary>
+                        <div class="game-options">
+                            <div class="left">
+                                {% for option_name, option in group_options.items() %}
+                                    {% if loop.index <= (loop.length / 2)|round(0,"ceil") %}
+                                        {% if issubclass(option, Options.Toggle) %}
+                                            {{ inputs.Toggle(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.TextChoice) %}
+                                            {{ inputs.TextChoice(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.Choice) %}
+                                            {{ inputs.Choice(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.NamedRange) %}
+                                            {{ inputs.NamedRange(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.Range) %}
+                                            {{ inputs.Range(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.FreeText) %}
+                                            {{ inputs.FreeText(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
+                                            {{ inputs.ItemDict(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
+                                            {{ inputs.OptionList(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.LocationSet) and option.verify_location_name %}
+                                            {{ inputs.LocationSet(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.ItemSet) and option.verify_item_name %}
+                                            {{ inputs.ItemSet(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}
+                                            {{ inputs.OptionSet(option_name, option) }}
+
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <div class="right">
+                                {% for option_name, option in group_options.items() %}
+                                    {% if loop.index > (loop.length / 2)|round(0,"ceil") %}
+                                        {% if issubclass(option, Options.Toggle) %}
+                                            {{ inputs.Toggle(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.TextChoice) %}
+                                            {{ inputs.TextChoice(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.Choice) %}
+                                            {{ inputs.Choice(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.NamedRange) %}
+                                            {{ inputs.NamedRange(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.Range) %}
+                                            {{ inputs.Range(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.FreeText) %}
+                                            {{ inputs.FreeText(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
+                                            {{ inputs.ItemDict(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
+                                            {{ inputs.OptionList(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.LocationSet) and option.verify_location_name %}
+                                            {{ inputs.LocationSet(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.ItemSet) and option.verify_item_name %}
+                                            {{ inputs.ItemSet(option_name, option) }}
+
+                                        {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}
+                                            {{ inputs.OptionSet(option_name, option) }}
+
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </details>
+                {% endfor %}
+            </div>
+
+            <div id="player-options-button-row">
+                <input type="submit" name="intent-export" value="Export Options" />
+                <input type="submit" name="intent-generate" value="Generate Single-Player Game">
+            </div>
+        </form>
+    </div>
+{% endblock %}

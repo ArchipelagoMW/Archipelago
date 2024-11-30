@@ -14,7 +14,7 @@ from worlds.generic.Rules import forbid_item
 
 class BumpStikWeb(WebWorld):
     tutorials = [Tutorial(
-        "Bumper Stickers Setup Tutorial",
+        "Bumper Stickers Setup Guide",
         "A guide to setting up the Archipelago Bumper Stickers software on your computer.",
         "English",
         "setup_en.md",
@@ -39,14 +39,13 @@ class BumpStikWorld(World):
     location_name_to_id = location_table
     item_name_groups = item_groups
 
-    data_version = 1
-
     required_client_version = (0, 3, 8)
 
-    option_definitions = bumpstik_options
+    options: BumpstikOptions
+    options_dataclass = BumpstikOptions
 
-    def __init__(self, world: MultiWorld, player: int):
-        super(BumpStikWorld, self).__init__(world, player)
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super(BumpStikWorld, self).__init__(multiworld, player)
         self.task_advances = TaskAdvances.default
         self.turners = Turners.default
         self.paint_cans = PaintCans.default
@@ -86,13 +85,13 @@ class BumpStikWorld(World):
         return "Nothing"
 
     def generate_early(self):
-        self.task_advances = self.multiworld.task_advances[self.player].value
-        self.turners = self.multiworld.turners[self.player].value
-        self.paint_cans = self.multiworld.paint_cans[self.player].value
-        self.traps = self.multiworld.trap_count[self.player].value
-        self.rainbow_trap_weight = self.multiworld.rainbow_trap_weight[self.player].value
-        self.spinner_trap_weight = self.multiworld.spinner_trap_weight[self.player].value
-        self.killer_trap_weight = self.multiworld.killer_trap_weight[self.player].value
+        self.task_advances = self.options.task_advances.value
+        self.turners = self.options.turners.value
+        self.paint_cans = self.options.paint_cans.value
+        self.traps = self.options.trap_count.value
+        self.rainbow_trap_weight = self.options.rainbow_trap_weight.value
+        self.spinner_trap_weight = self.options.spinner_trap_weight.value
+        self.killer_trap_weight = self.options.killer_trap_weight.value
 
     def create_regions(self):
         create_regions(self.multiworld, self.player)
@@ -116,16 +115,16 @@ class BumpStikWorld(World):
         self.multiworld.itempool += item_pool
 
     def set_rules(self):
-        for x in range(1, 32):
-            self.multiworld.get_location(f"Treasure Bumper {x + 1}", self.player).access_rule = \
-                lambda state, x = x: state.has("Treasure Bumper", self.player, x)
-        for x in range(1, 5):
-            self.multiworld.get_location(f"Bonus Booster {x + 1}", self.player).access_rule = \
-                lambda state, x = x: state.has("Booster Bumper", self.player, x)
+        for treasure_count in range(1, 33):
+            self.multiworld.get_location(f"Treasure Bumper {treasure_count}", self.player).access_rule = \
+                lambda state, treasure_held = treasure_count: state.has("Treasure Bumper", self.player, treasure_held)
+        for booster_count in range(1, 6):
+            self.multiworld.get_location(f"Bonus Booster {booster_count}", self.player).access_rule = \
+                lambda state, booster_held = booster_count: state.has("Booster Bumper", self.player, booster_held)
         self.multiworld.get_location("Level 5 - Cleared all Hazards", self.player).access_rule = \
             lambda state: state.has("Hazard Bumper", self.player, 25)
             
         self.multiworld.completion_condition[self.player] = \
-            lambda state: state.has("Booster Bumper", self.player, 5) and \
-            state.has("Treasure Bumper", self.player, 32)
+            lambda state: state.has_all_counts({"Booster Bumper": 5, "Treasure Bumper": 32, "Hazard Bumper": 25}, \
+                self.player)
 

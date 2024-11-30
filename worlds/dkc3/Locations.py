@@ -2,6 +2,7 @@ import typing
 
 from BaseClasses import Location
 from .Names import LocationName
+from worlds.AutoWorld import World
 
 
 class DKC3Location(Location):
@@ -321,13 +322,13 @@ all_locations = {
 location_table = {}
 
 
-def setup_locations(world, player: int):
+def setup_locations(world: World):
     location_table = {**level_location_table, **boss_location_table, **secret_cave_location_table}
 
-    if False:#world.include_trade_sequence[player].value:
+    if False:#world.options.include_trade_sequence:
         location_table.update({**brothers_bear_location_table})
 
-    if world.kongsanity[player].value:
+    if world.options.kongsanity:
         location_table.update({**kong_location_table})
 
     return location_table

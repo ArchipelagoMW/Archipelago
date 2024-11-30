@@ -6,7 +6,7 @@ class SequenceBreaksTest(SoETestBase):
     """Tests that 'on' doesn't put sequence breaks in logic. This is also the test base for in-logic."""
     options: typing.Dict[str, typing.Any] = {"sequence_breaks": "on"}
 
-    def testSequenceBreaksAccess(self):
+    def test_sequence_breaks_access(self) -> None:
         in_logic = self.options["sequence_breaks"] == "logic"
 
         # some locations that just need any weapon + sequence break
@@ -30,7 +30,7 @@ class SequenceBreaksTest(SoETestBase):
         self.collect_by_name("Bronze Spear")  # Escape now just needs either Megataur or Rimsala dead
         self.assertEqual(self.can_reach_location("Escape"), in_logic)
 
-    def testSequenceBreaksGoal(self):
+    def test_sequence_breaks_goal(self) -> None:
         in_logic = self.options["sequence_breaks"] == "logic"
 
         # don't need Energy Core with sequence breaks in logic
