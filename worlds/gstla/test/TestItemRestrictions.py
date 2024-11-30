@@ -30,19 +30,19 @@ class TestItemRestrictions(GSTestBase):
     def test_ensure_mimic_restricts(self):
         world = self.get_world()
         loc = world.get_location(LocationName.Contigo_Isaac)
-        mimic = world.create_item(ItemName.Mimic_0)
+        mimic = world.create_item(ItemName.Milquetoast_Mimic)
         self.assertFalse(loc.can_fill(self.multiworld.state, mimic, False))
 
     def test_ensure_event_type_restricts(self):
         world = self.get_world()
         loc = world.get_location(LocationName.Daila_Psy_Crystal)
-        mimic = world.create_item(ItemName.Mimic_4)
+        mimic = world.create_item(ItemName.Journeyman_Mimic)
         self.assertFalse(loc.can_fill(self.multiworld.state, mimic, False))
 
     def test_ensure_specific_restriction_low(self):
         world = self.get_world()
         loc = world.get_location(LocationName.Idejima_Growth)
-        mimic = world.create_item(ItemName.Mimic_4)
+        mimic = world.create_item(ItemName.Journeyman_Mimic)
         self.assertFalse(loc.can_fill(self.multiworld.state, mimic, False))
         coin = world.create_item(ItemName.Coins_82)
         self.assertFalse(loc.can_fill(self.multiworld.state, coin, False))
@@ -50,7 +50,7 @@ class TestItemRestrictions(GSTestBase):
     def test_ensure_specific_restriction_high(self):
         world = self.get_world()
         loc = world.get_location(LocationName.Kibombo_Douse_Drop)
-        mimic = world.create_item(ItemName.Mimic_4)
+        mimic = world.create_item(ItemName.Journeyman_Mimic)
         self.assertFalse(loc.can_fill(self.multiworld.state, mimic, False))
         coin = world.create_item(ItemName.Coins_82)
         self.assertFalse(loc.can_fill(self.multiworld.state, coin, False))

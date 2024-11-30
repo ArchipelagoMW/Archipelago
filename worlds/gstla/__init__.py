@@ -98,25 +98,24 @@ class GSTLAWorld(World):
     item_name_groups = {
         ItemType.Djinn.name: {item.name for item in all_items if item.type == ItemType.Djinn},
         ItemType.Character.name: {item.name for item in all_items if item.type == ItemType.Character},
-        ItemType.Mimic.name: {item.name for item in all_items if item.type == ItemType.Mimic}
-        # "Lash": [ItemName.Lash_Pebble.name],
-        # "Pound": [ItemName.Pound_Cube.name],
-        # "Force": [ItemName.Orb_of_Force.name],
-        # "Douse": [ItemName.Douse_Drop.name],
-        # "Frost": [ItemName.Frost_Jewel.name],
-        # "Lift": [ItemName.Lifting_Gem.name],
-        # "Carry": [ItemName.Carry_Stone.name],
-        # "Catch": [ItemName.Catch_Beads.name],
-        # "Tremor": [ItemName.Tremor_Bit.name],
-        # "Scoop": [ItemName.Scoop_Gem.name],
-        # "Cyclone": [ItemName.Cyclone_Chip.name],
-        # "Burst": [ItemName.Burst_Brooch.name],
-        # "Grind": [ItemName.Grindstone.name],
-        # "Teleport": [ItemName.Teleport_Lapis.name],
-        # "Shamans Rod": [ItemName.Shamans_Rod.name],
-        # "Sea Gods Tear": [ItemName.Sea_Gods_Tear.name],
-        # "Lil Turtle": [ItemName.Lil_Turtle.name],
-        # "Mars Star": [ItemName.Mythril_Bag_Mars.name]
+        ItemType.Mimic.name: {item.name for item in all_items if item.type == ItemType.Mimic},
+        "Lash": {ItemName.Lash_Pebble.value},
+        "Pound": {ItemName.Pound_Cube.value},
+        "Force": {ItemName.Orb_of_Force.value},
+        "Douse": {ItemName.Douse_Drop.value},
+        "Frost": {ItemName.Frost_Jewel.value},
+        "Lift": {ItemName.Lifting_Gem.value},
+        "Carry": {ItemName.Carry_Stone.value},
+        "Catch": {ItemName.Catch_Beads.value},
+        "Tremor": {ItemName.Tremor_Bit.value},
+        "Scoop": {ItemName.Scoop_Gem.value},
+        "Cyclone": {ItemName.Cyclone_Chip.value},
+        "Burst": {ItemName.Burst_Brooch.value},
+        "Grind": {ItemName.Grindstone.value},
+        "Teleport": {ItemName.Teleport_Lapis.value},
+        "Shamans Rod": {ItemName.Shamans_Rod.value},
+        "Sea Gods Tear": {ItemName.Sea_Gods_Tear.value},
+        "Lil Turtle": {ItemName.Lil_Turtle.value}
     }
 
     def generate_early(self) -> None:
@@ -173,9 +172,10 @@ class GSTLAWorld(World):
 
     def get_pre_fill_items(self) -> List["Item"]:
         pre_fill = []
-        for _,val in GSTLAWorld.item_name_groups.items():
-            for item in val:
-                pre_fill.append(create_item(item, self.player))
+        for key,val in GSTLAWorld.item_name_groups.items():
+            if key in [ItemType.Djinn.name, ItemType.Character.name, ItemType.Mimic.name]:
+                for item in val:
+                    pre_fill.append(create_item(item, self.player))
         return pre_fill
 
     def generate_basic(self):
