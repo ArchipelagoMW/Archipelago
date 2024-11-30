@@ -16,22 +16,22 @@ if TYPE_CHECKING:
     from .. import GSTLALocation, GSTLAWorld
 
 requirement_map = {
-    # "Ship": ItemName.Ship,
-    # "Whirlwind": ItemName.Whirlwind,
-    # "Sand": ItemName.Sand,
-    "Lash_Pebble": ItemName.Lash_Pebble,
-    # "Boss_Briggs": ItemName.Briggs_defeated,
-    # "BriggsEscaped": ItemName.Briggs_escaped,
-    # "FlagPiers": ItemName.Piers,
+    # "Ship": ItemName.Ship.value,
+    # "Whirlwind": ItemName.Whirlwind.value,
+    # "Sand": ItemName.Sand.value,
+    "Lash_Pebble": ItemName.Lash_Pebble.value,
+    # "Boss_Briggs": ItemName.Briggs_defeated.value,
+    # "BriggsEscaped": ItemName.Briggs_escaped.value,
+    # "FlagPiers": ItemName.Piers.value,
     "Boss_Serpent": ItemName.Serpent_defeated,
-    "GabombaCleared": ItemName.Gabomba_Statue_Completed,
-    "ShipWings": ItemName.Wings_of_Anemos,
-    # "Boss_Poseidon": ItemName.Poseidon_defeated,
-    # "Boss_Moapa": ItemName.Moapa_defeated,
-    # "Boss_AquaHydra": ItemName.Aqua_Hydra_defeated,
-    # "Boss_FlameDragons": ItemName.Flame_Dragons_defeated,
-    # "Mars Star": ItemName.Mythril_Bag_Mars,
-    # "Boss_Avimander": ItemName.Briggs_escaped,
+    "GabombaCleared": ItemName.Gabomba_Statue_Completed.value,
+    "ShipWings": ItemName.Wings_of_Anemos.value,
+    # "Boss_Poseidon": ItemName.Poseidon_defeated.value,
+    # "Boss_Moapa": ItemName.Moapa_defeated.value,
+    # "Boss_AquaHydra": ItemName.Aqua_Hydra_defeated.value,
+    # "Boss_FlameDragons": ItemName.Flame_Dragons_defeated.value,
+    # "Mars Star": ItemName.Mythril_Bag_Mars.value,
+    # "Boss_Avimander": ItemName.Briggs_escaped.value
 }
 
 omitted_items = {
