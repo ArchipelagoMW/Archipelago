@@ -494,7 +494,7 @@ class Choice(NumericOption):
 
     def __gt__(self, other: typing.Union[Choice, int, str]):
         if isinstance(other, str):
-            assert other in self.options, f"compared against an unknown string. {self} < {other}"
+            assert other in self.options, f"compared against an unknown string. {self} > {other}"
             other = self.options[other]
         return super(Choice, self).__gt__(other)
 
