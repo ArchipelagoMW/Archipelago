@@ -500,13 +500,13 @@ class Choice(NumericOption):
 
     def __le__(self, other: typing.Union[Choice, int, str]):
         if isinstance(other, str):
-            assert other in self.options, f"compared against an unknown string. {self} < {other}"
+            assert other in self.options, f"compared against an unknown string. {self} <= {other}"
             other = self.options[other]
         return super(Choice, self).__le__(other)
 
     def __ge__(self, other: typing.Union[Choice, int, str]):
         if isinstance(other, str):
-            assert other in self.options, f"compared against an unknown string. {self} < {other}"
+            assert other in self.options, f"compared against an unknown string. {self} >= {other}"
             other = self.options[other]
         return super(Choice, self).__ge__(other)
 
