@@ -975,9 +975,13 @@ def get_status_string(ctx: Context, team: int, tag: str):
         tagged = len([client for client in ctx.clients[team][slot] if tag in client.tags])
         completion_text = f"({len(ctx.location_checks[team, slot])}/{len(ctx.locations[slot])})"
         tag_text = f" {tagged} of which are tagged {tag}" if connected and tag else ""
-        goal_text = " and has finished." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_GOAL else "."
+        status_text = (
+            " and has finished." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_GOAL else
+            " and is ready." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_READY else
+            "."
+            )
         text += f"\n{ctx.get_aliased_name(team, slot)} has {connected} connection{'' if connected == 1 else 's'}" \
-                f"{tag_text}{goal_text} {completion_text}"
+                f"{tag_text}{status_text} {completion_text}"
     return text
 
 
