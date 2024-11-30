@@ -23,7 +23,7 @@ if typing.TYPE_CHECKING:
     import pathlib
 
 
-def roll_percentage(percentage: typing.Union[int, float]) -> bool:
+def roll_percentage(percentage: int | float) -> bool:
     """Roll a percentage chance.
     percentage is expected to be in range [0, 100]"""
     return random.random() < (float(percentage) / 100)
@@ -1419,12 +1419,12 @@ class ItemLinks(OptionList):
 
 
 class PlandoItem(typing.NamedTuple):
-    items: typing.Union[typing.List[str], typing.Dict[str, typing.Any]]
-    locations: typing.List[str]
-    world: typing.Union[int, str, bool, None, typing.Iterable[str], typing.Set[int]] = False
+    items: list[str] | dict[str, typing.Any]
+    locations: list[str]
+    world: int | str | bool | None | typing.Iterable[str] | set[int] = False
     from_pool: bool = True
-    force: typing.Union[bool, typing.Literal["silent"]] = "silent"
-    count: typing.Union[int, bool, typing.Dict[str, int]] = False
+    force: bool | typing.Literal["silent"] = "silent"
+    count: int | bool | dict[str, int] = False
     percentage: int = 100
 
 
