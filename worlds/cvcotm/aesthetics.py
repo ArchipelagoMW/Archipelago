@@ -660,7 +660,7 @@ def select_drop(world: "CVCotMWorld", drop_list: List[int], drops_placed: List[i
 
     eligible_items = [0] * NUMBER_ITEMS
 
-    drops_from_start_index = drop_list[start_index:]  # Cut list from start_index
+    drops_from_start_index = drops_placed[start_index:]  # Cut list from start_index
 
     lowest_number = min(drops_from_start_index)
     indices_with_lowest_number = [index for index, placed in enumerate(drops_from_start_index) if
@@ -672,9 +672,9 @@ def select_drop(world: "CVCotMWorld", drop_list: List[int], drops_placed: List[i
     # Increment the number of this item placed, unless it should be exclusive to the boss / candle, in which case
     # set it to an arbitrarily large number to make it exclusive.
     if exclusive_drop:
-        drops_placed[eligible_items[random_index]] += 999
+        drops_placed[random_index] += 999
     else:
-        drops_placed[eligible_items[random_index]] += 1
+        drops_placed[random_index] += 1
 
     # Return the item ID
     return drop_list[eligible_items[random_index]]
