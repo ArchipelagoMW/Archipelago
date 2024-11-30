@@ -43,10 +43,14 @@ def __get_item_name(item_data):
     return "nothing"
 
 
-def update_event_info(event_info):
+def update_event_info(event_info, boo_checks: bool):
     # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
     # boss battles / grabbing boss keys, and various cutscenes etc.
-    events_to_remove = [15, 11, 42, 80, 96, 16, 70, 69, 35, 85, 73, 47, 54, 91, 92, 93, 94]
+    events_to_remove = [15, 11, 42, 80, 70, 69, 35, 85, 73, 54, 91, 92, 93, 94]
+
+    # Only remove the boo checks if the player does not want them.
+    if not boo_checks:
+        events_to_remove = events_to_remove + [16, 47, 96]
     event_info.info_file_field_entries = list(filter(
         lambda info_entry: not info_entry["EventNo"] in events_to_remove, event_info.info_file_field_entries))
 
@@ -372,6 +376,7 @@ def __set_key_info_entry(key_info_single_entry, item_data):
 def update_furniture_info(furniture_info, item_appear_info, output_data):
     for x in furniture_info.info_file_field_entries:
         # If any of the arguments are used in the Study bookshelves / reading books, disable this.
+        # Todo Update this to include Nana's Journal, E Gadd's Guide to Ghost, and Lydia's book
         if x["arg0"] in [101, 102, 103, 104, 105, 106]:
             x["arg0"] = 0.0
 
