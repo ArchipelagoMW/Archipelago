@@ -27,7 +27,7 @@ requirement_map = {
     # "FlagPiers": ItemName.Piers,
     # "Boss_Serpent": ItemName.Serpent_defeated,
     # "GabombaCleared": ItemName.Gabomba_Statue_Completed,
-    "ShipWings": ItemName.Wings_of_Anemos,
+    "ShipWings": ItemName.Wings_of_Anemos.value,
     # "Boss_Poseidon": ItemName.Poseidon_defeated,
     # "Boss_Moapa": ItemName.Moapa_defeated,
     # "Boss_AquaHydra": ItemName.Aqua_Hydra_defeated,
@@ -331,13 +331,6 @@ class TestTreasureLogic(GSTestBase):
             x.rando_flag: world.get_location(loc_names_by_id[x.ap_id])
             for x in all_locations if x.loc_type != LocationType.Event and x.loc_type != LocationType.Djinn
         }
-        filled_locs = self.multiworld.get_filled_locations(self.player)
-        for loc in filled_locs:
-            if loc.item == ItemName.Piers:
-                loc.item.location = None
-                loc.item = None
-                loc.locked = False
-                break
         self.test_state = world.multiworld.state.copy()
         self.event_items: Dict[str, ItemData] = {}
         for event in events:
@@ -347,18 +340,26 @@ class TestTreasureLogic(GSTestBase):
         for _ in range(7):
             self.test_state.collect(world.create_item(ItemName.Isaac), True)
 
-        TestTreasureLogic.skip_missing_reqs[2328] = {ItemName.Douse_Drop, ItemName.Black_Crystal}
-        TestTreasureLogic.skip_missing_reqs[3923] = {ItemName.Douse_Drop, ItemName.Black_Crystal}
-        TestTreasureLogic.skip_missing_reqs[3987] = {ItemName.Douse_Drop, ItemName.Black_Crystal}
-        TestTreasureLogic.skip_missing_reqs[2303] = {ItemName.Douse_Drop, ItemName.Black_Crystal}
-        TestTreasureLogic.skip_missing_reqs[3922] = {ItemName.Douse_Drop, ItemName.Black_Crystal, ItemName.Pound_Cube}
-        TestTreasureLogic.skip_missing_reqs[3919] = {ItemName.Douse_Drop, ItemName.Black_Crystal}
-        TestTreasureLogic.skip_missing_reqs[3920] = {ItemName.Douse_Drop, ItemName.Black_Crystal}
+        TestTreasureLogic.skip_missing_reqs[2328] = {ItemName.Douse_Drop, ItemName.Black_Crystal, ItemName.Piers}
+        TestTreasureLogic.skip_missing_reqs[3923] = {ItemName.Douse_Drop, ItemName.Black_Crystal, ItemName.Piers}
+        TestTreasureLogic.skip_missing_reqs[3987] = {ItemName.Douse_Drop, ItemName.Black_Crystal, ItemName.Piers}
+        TestTreasureLogic.skip_missing_reqs[2303] = {ItemName.Douse_Drop, ItemName.Black_Crystal, ItemName.Piers}
+        TestTreasureLogic.skip_missing_reqs[3922] = {ItemName.Douse_Drop, ItemName.Black_Crystal, ItemName.Piers, ItemName.Pound_Cube}
+        TestTreasureLogic.skip_missing_reqs[3919] = {ItemName.Douse_Drop, ItemName.Black_Crystal, ItemName.Piers}
+        TestTreasureLogic.skip_missing_reqs[3920] = {ItemName.Douse_Drop, ItemName.Black_Crystal, ItemName.Piers}
         # self.test_state.collect(world.create_item(ItemName.Black_Crystal), True)
 
     def test_treasure_logic(self):
         logic = LocationLogic()
         dir_name = os.path.join(SCRIPT_DIR, '..', 'data', 'location_logic')
+
+        filled_locs = self.multiworld.get_filled_locations(self.player)
+        for loc in filled_locs:
+            if loc.item.name == ItemName.Piers:
+                loc.item.location = None
+                loc.item = None
+                loc.locked = False
+                break
         # with open(os.path.join(dir_name, 'MagmaRock.json')) as infile:
         # with open(os.path.join(dir_name, 'MarsLighthouse.json')) as infile:
         #         json_data = json.load(infile)
@@ -494,18 +495,6 @@ class TestTreasureLogic(GSTestBase):
         # for reqs in logic.location_reqs:
         #     print(reqs)
 
-        funn_locs = {
-            2328,
-            2923,
-            2987,
-            2303,
-            3922
-        }
-        reqs_by_flag = defaultdict(lambda: [])
-        for loc in logic.location_reqs:
-            if loc.flag in funn_locs:
-                reqs_by_flag[loc.flag].append(loc)
-
         for loc in logic.location_reqs:
             self.sub_test_location(loc)
 
@@ -554,9 +543,9 @@ class TestTreasureLogic(GSTestBase):
 
                     for item in items:
                         self.assertTrue(state.collect(item, prevent_sweep=False))
-                    if req in state.prog_items[self.player]:
-                        # TODO: not a valid test in this case
-                        continue
+                    # if req in state.prog_items[self.player]:
+                    #     # TODO: not a valid test in this case
+                    #     continue
                     self.assertFalse(location.can_reach(state),
                                      f"Could reach {location.name} with flag {hex(flag)} without {req} but with {without_req} with state {state.prog_items}")
 
