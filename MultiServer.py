@@ -1892,7 +1892,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     return
 
                 target_item, target_player, flags = ctx.locations[client.slot][location]
-                if create_as_hint:
+                if create_as_hint and self.ctx.hint_cost <= 100:
                     hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location,
                                                           HintStatus.HINT_UNSPECIFIED))
                 locs.append(NetworkItem(target_item, location, target_player, flags))
