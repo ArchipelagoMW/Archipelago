@@ -1,12 +1,7 @@
 from typing import Dict, List, Set, Optional
 
 import os
-import sys
-
-sys.path.append(os.path.join("worlds", "lingo"))
-sys.path.append(".")
-sys.path.append("..")
-from datatypes import Door, DoorType, EntranceType, Painting, Panel, PanelDoor, Progression, Room, RoomAndDoor,\
+from ..datatypes import Door, DoorType, EntranceType, Painting, Panel, PanelDoor, Progression, Room, RoomAndDoor, \
     RoomAndPanel, RoomAndPanelDoor, RoomEntrance
 
 import hashlib
