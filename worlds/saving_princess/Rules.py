@@ -39,6 +39,10 @@ def set_rules(world: "SavingPrincessWorld"):
                 and state.has_any({ITEM_WEAPON_FIRE, ITEM_WEAPON_ICE, ITEM_WEAPON_VOLT}, world.player)
         )
 
+    # all special weapons required so that the boss' weapons can be targeted
+    def all_weapons(state: CollectionState) -> bool:
+        return state.has_all({ITEM_WEAPON_FIRE, ITEM_WEAPON_ICE, ITEM_WEAPON_VOLT}, world.player)
+
     def is_gate_unlocked(state: CollectionState) -> bool:
         # the gate unlocks with all 4 boss keys, although this only applies to extended pool
         if world.is_pool_expanded:
@@ -101,6 +105,10 @@ def set_rules(world: "SavingPrincessWorld"):
     # now for the final area regions, which have different rules based on if ep is on
     set_rule(get_region_entrance(REGION_ELECTRICAL), lambda state: is_gate_unlocked(state))
     set_rule(get_region_entrance(REGION_ELECTRICAL_POWERED), lambda state: is_power_on(state))
+
+    # brainos requires all weapons, cannot destroy the cannons otherwise
+    if world.is_pool_expanded:
+        set_rule(get_location(EP_LOCATION_ELECTRICAL_FINAL_BOSS), lambda state: all_weapons(state))
 
     # if not expanded pool, place the events for the boss kills and generator
     if not world.is_pool_expanded:
