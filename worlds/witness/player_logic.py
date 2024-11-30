@@ -398,12 +398,11 @@ class WitnessPlayerLogic:
                 if connection[0] == target_region:
                     self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].remove(connection)
 
-                    if panel_set_string == "TrueOneWay":
-                        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].add(
-                            (target_region, frozenset({frozenset(["TrueOneWay"])}))
-                        )
+                    new_rule = parse_lambda(panel_set_string)
+                    if new_rule == frozenset({frozenset(["TrueOneWay"])}):
+                        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].add((target_region, new_rule))
                     else:
-                        new_lambda = logical_or_witness_rules([connection[1], parse_lambda(panel_set_string)])
+                        new_lambda = logical_or_witness_rules([connection[1], ])
                         self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].add((target_region, new_lambda))
                     break
             else:
