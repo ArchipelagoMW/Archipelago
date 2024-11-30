@@ -24,14 +24,15 @@ env:
 jobs:
   # build-release-macos: # LF volunteer
 
-  build-win-py38: # RCs will still be built and signed by hand
+  build-win: # RCs will still be built and signed by hand
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
       - name: Install python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.8'
+          python-version: '~3.12.7'
+          check-latest: true
       - name: Download run-time dependencies
         run: |
           Invoke-WebRequest -Uri https://github.com/Ijwu/Enemizer/releases/download/${Env:ENEMIZER_VERSION}/win-x64.zip -OutFile enemizer.zip
@@ -111,10 +112,11 @@ jobs:
       - name: Get a recent python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '~3.12.7'
+          check-latest: true
       - name: Install build-time dependencies
         run: |
-          echo "PYTHON=python3.11" >> $GITHUB_ENV
+          echo "PYTHON=python3.12" >> $GITHUB_ENV
           wget -nv https://github.com/AppImage/AppImageKit/releases/download/$APPIMAGETOOL_VERSION/appimagetool-x86_64.AppImage
           chmod a+rx appimagetool-x86_64.AppImage
           ./appimagetool-x86_64.AppImage --appimage-extract

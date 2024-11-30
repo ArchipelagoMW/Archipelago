@@ -1,15 +1,11 @@
 from __future__ import annotations
 
+from graphlib import TopologicalSorter
 from typing import Iterable, Mapping, Callable
 
 from .game_content import StardewContent, ContentPack, StardewFeatures
 from .vanilla.base import base_game as base_game_content_pack
 from ..data.game_item import GameItem, ItemSource
-
-try:
-    from graphlib import TopologicalSorter
-except ImportError:
-    from graphlib_backport import TopologicalSorter  # noqa
 
 
 def unpack_content(features: StardewFeatures, packs: Iterable[ContentPack]) -> StardewContent:
