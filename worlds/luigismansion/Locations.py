@@ -117,7 +117,7 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Laundry Clear Chest": LMLocationData("Laundry Room", 710, "Chest", 4, []),
     "Cold Storage Clear Chest": LMLocationData("Cold Storage", 48, "Chest", 33,
                                               ["Fire Element Medal"]),
-    #"Breaker Room Clear Chest": LMLocationData("Breaker Room", 49, "Chest", 36),
+    "Breaker Room Clear Chest": LMLocationData("Breaker Room", 49, "Chest", 36, ["Blackout"]),
     "Twins' Room Clear Chest": LMLocationData("Twins' Room", 25, "Chest", 25, []),  # requires any kind of element medal
     "Billiards Room Clear Chest": LMLocationData("Billiards Room", 26, "Chest", 9, []),
     "Balcony Clear Chest": LMLocationData("Balcony", 27, "Chest", 31,
@@ -135,7 +135,7 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0,
                                         ["Fire Element Medal"]),
     "Fortune Teller Clear Chest": LMLocationData("Fortune-Teller's Room", 5, "Chest", 2, []), #requires player chosen amount
-    #"Wardrobe Clear Chest": LMLocationData("Wardrobe", 0, "Chest", 22),
+    "Wardrobe Clear Chest": LMLocationData("Wardrobe", 0, "Chest-Blackout", 22,["Blackout"]),
     "Study Clear Chest": LMLocationData("Study", 1, "Chest", 19, []),
     "Master Bedroom Clear Chest": LMLocationData("Master Bedroom", 2, "Chest", 18, []),
     "Nursery Clear Chest": LMLocationData("Nursery", 3, "Chest", 15, []),
@@ -768,7 +768,7 @@ PORTRAIT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Miss Petunia, the Bathing Beauty":     LMLocationData("2F Bathroom", 634, "Portrait", 83, ["Ice Element Medal"]),
     "Nana, the Scarf-Knitting Granny":      LMLocationData("Nana's Room", 635, "Portrait", 76, []),
     "Sue Pea, the Dozing Girl":             LMLocationData("Guest Room", 636, "Portrait", 78, ["Water Element Medal"]),
-    "Uncle Grimmly, Hermit of the Darkness": LMLocationData("Wardrobe", 637, "Portrait", 16),
+    "Uncle Grimmly, Hermit of the Darkness": LMLocationData("Wardrobe", 637, "Portrait", 16, ["Blackout"]),
     "Boolossus, the Jumbo Ghost":           LMLocationData("Balcony", 638, "Portrait", 56, ["Ice Element Medal"]),
     # Bosses not in map2
     "Jarvis, the Jar Collector":            LMLocationData("Ceramics Studio", 639, "Portrait", 0, ["Ice Element Medal"]),
