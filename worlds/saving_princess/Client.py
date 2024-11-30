@@ -1,3 +1,6 @@
+import zipfile
+from io import BytesIO
+
 import bsdiff4
 from datetime import datetime
 import hashlib
@@ -39,6 +42,7 @@ files_to_clean: Set[str] = {
     "Saving Princess v0_8.exe",
     "splash.png",
     "gm-apclientpp.dll",
+    "LICENSE",
     "original_data.win",
     "versions.json",
 }
@@ -47,11 +51,6 @@ file_hashes: Dict[str, str] = {
     "D3DX9_43.dll": "86e39e9161c3d930d93822f1563c280d",
     "Saving Princess v0_8.exe": "cc3ad10c782e115d93c5b9fbc5675eaf",
     "original_data.win": "f97b80204bd9ae535faa5a8d1e5eb6ca",
-}
-
-download_urls: Dict[str, str] = {
-    DLL_NAME: DLL_URL,
-    PATCH_NAME: PATCH_URL,
 }
 
 
@@ -103,6 +102,7 @@ def send_request(request_url: str) -> UrlResponse:
 def update(target_asset: str, url: str) -> bool:
     """
     Returns True if the data was fetched and installed
+        (or it was already on the latest version, or the user refused the update)
     Returns False if rate limit was exceeded
     """
     try:
@@ -126,33 +126,25 @@ def update(target_asset: str, url: str) -> bool:
         update_available = get_timestamp(newest_date) > get_timestamp(get_date(target_asset))
         if update_available and messagebox.askyesnocancel(f"New {target_asset}",
                                                           "Would you like to install the new version now?"):
-            if target_asset == DLL_NAME:
-                download_dll(release_url)
-            else:
-                patch_game(release_url)
+            # unzip and patch
+            with urllib.request.urlopen(release_url) as download:
+                with zipfile.ZipFile(BytesIO(download.read())) as zf:
+                    zf.extractall()
+            patch_game()
             set_date(target_asset, newest_date)
     except (ValueError, RuntimeError, urllib.error.HTTPError):
-        update_error = f"Failed to apply update to {target_asset}."
+        update_error = f"Failed to apply update."
         messagebox.showerror("Failure", update_error)
         raise RuntimeError(update_error)
     return True
 
 
-def download_dll(url: str) -> None:
-    """Downloads the dll from the provided url and saves it to the installation folder"""
-    logging.info("Downloading dll.")
-    with urllib.request.urlopen(url) as download:
-        with open(DLL_NAME, "wb") as dll:
-            dll.write(download.read())
-        logging.info("Done!")
-
-
-def patch_game(url: str) -> None:
-    """Downloads the patch from the provided url and applies it to data.win"""
+def patch_game() -> None:
+    """Applies the patch to data.win"""
     logging.info("Proceeding to patch.")
-    with urllib.request.urlopen(url) as download:
+    with open(PATCH_NAME, "rb") as patch:
         with open("original_data.win", "rb") as data:
-            patched_data = bsdiff4.patch(data.read(), download.read())
+            patched_data = bsdiff4.patch(data.read(), patch.read())
         with open("data.win", "wb") as data:
             data.write(patched_data)
         logging.info("Done!")
@@ -227,12 +219,10 @@ def launch() -> None:
             return
 
     # check for updates
-    for asset_name, download_url in download_urls.items():
-        if not update(asset_name, download_url):
-            messagebox.showinfo("Rate limit exceeded",
-                                "GitHub REST API limit exceeded, could not check for updates.\n\n"
-                                "This will not prevent the game from being played if it was already playable.")
-            break
+    if not update(DOWNLOAD_NAME, DOWNLOAD_URL):
+        messagebox.showinfo("Rate limit exceeded",
+                            "GitHub REST API limit exceeded, could not check for updates.\n\n"
+                            "This will not prevent the game from being played if it was already playable.")
 
     # and try to launch the game
     if SavingPrincessWorld.settings.launch_game:
