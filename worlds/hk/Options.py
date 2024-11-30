@@ -1,6 +1,5 @@
 import typing
 import re
-import typing
 from dataclasses import make_dataclass
 
 from .ExtractedData import logic_options, starts, pool_options
