@@ -1643,6 +1643,21 @@ class SC2Logic:
     def protoss_can_merge_dark_archon(self, state: CollectionState) -> bool:
         return state.has(item_names.DARK_ARCHON, self.player) or state.has_all({item_names.DARK_TEMPLAR, item_names.DARK_TEMPLAR_DARK_ARCHON_MELD}, self.player)
 
+    def protoss_competent_comp(self, state: CollectionState) -> bool:
+        return (
+                self.protoss_common_unit(state)
+                and self.protoss_competent_anti_air(state)
+                and self.protoss_hybrid_counter(state)
+                and self.protoss_basic_splash(state)
+                and self.protoss_army_weapon_armor_upgrade_min_level(state) >= 2
+        )
+
+    def protoss_heal(self, state: CollectionState) -> bool:
+        return (
+                state.has_any((item_names.SENTRY, item_names.SHIELD_BATTERY, item_names.RECONSTRUCTION_BEAM), self.player)
+                or state.has_all((item_names.CARRIER, item_names.CARRIER_REPAIR_DRONES), self.player)
+        )
+
     def protoss_last_stand_requirement(self, state: CollectionState) -> bool:
         return (
             self.protoss_common_unit(state)
@@ -1778,13 +1793,45 @@ class SC2Logic:
             )
         )
 
-    def protoss_competent_comp(self, state: CollectionState) -> bool:
+    def terran_purification_requirement(self, state: CollectionState) -> bool:
         return (
-                self.protoss_common_unit(state)
-                and self.protoss_competent_anti_air(state)
-                and self.protoss_hybrid_counter(state)
-                and self.protoss_basic_splash(state)
-                and self.protoss_army_weapon_armor_upgrade_min_level(state) >= 2
+            self.terran_competent_comp(state)
+            and self.terran_competent_anti_air(state)
+            and self.terran_very_hard_mission_weapon_armor_level(state)
+            and self.terran_defense_rating(state, True, False) >= 10
+            and (
+                state.has_any({item_names.LIBERATOR, item_names.THOR}, self.player)
+                or (
+                    state.has(item_names.SIEGE_TANK, self.player)
+                    and (self.advanced_tactics or state.has(item_names.SIEGE_TANK_MAELSTROM_ROUNDS, self.player))
+                )
+            )
+            and (
+                state.has_all({item_names.VIKING, item_names.VIKING_SHREDDER_ROUNDS}, self.player)
+                or (
+                    state.has(item_names.BANSHEE, self.player)
+                    and (
+                        state.has(item_names.BANSHEE_SHOCKWAVE_MISSILE_BATTERY, self.player)
+                        or (
+                            self.advanced_tactics
+                            and state.has(item_names.BANSHEE_ROCKET_BARRAGE, self.player)
+                        )
+                    )
+                )
+            )
+        )
+
+    def zerg_purification_requirement(self, state: CollectionState) -> bool:
+        return (
+            self.zerg_competent_comp(state)
+            and self.zerg_competent_anti_air(state)
+            and self.zerg_competent_defense(state)
+            and self.zerg_big_monsters(state)
+            and (
+                state.has(item_names.ULTRALISK, self.player)
+                or self.morph_igniter(state)
+                or self.morph_lurker(state)
+            )
         )
 
     def steps_of_the_rite_requirement(self, state: CollectionState) -> bool:
@@ -1795,12 +1842,6 @@ class SC2Logic:
                 and self.protoss_competent_anti_air(state)
                 and self.protoss_static_defense(state)
             )
-        )
-
-    def protoss_heal(self, state: CollectionState) -> bool:
-        return (
-            state.has_any((item_names.SENTRY, item_names.SHIELD_BATTERY, item_names.RECONSTRUCTION_BEAM), self.player)
-            or state.has_all((item_names.CARRIER, item_names.CARRIER_REPAIR_DRONES), self.player)
         )
 
     def templars_charge_requirement(self, state: CollectionState) -> bool:

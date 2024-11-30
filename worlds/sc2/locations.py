@@ -5260,6 +5260,90 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                                            )
                                    )
                            )),
+        make_location_data(SC2Mission.PURIFICATION_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 12900, LocationType.VICTORY,
+                           logic.terran_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_T.mission_name, "North Sector: West Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 12901, LocationType.VANILLA,
+                           logic.terran_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_T.mission_name, "North Sector: Northeast Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 12902, LocationType.EXTRA,
+                           logic.terran_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_T.mission_name, "North Sector: Southeast Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 12903, LocationType.EXTRA,
+                           logic.terran_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_T.mission_name, "South Sector: West Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 12904, LocationType.VANILLA,
+                           logic.terran_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_T.mission_name, "South Sector: North Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 12905, LocationType.EXTRA,
+                           logic.terran_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_T.mission_name, "South Sector: East Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 12906, LocationType.EXTRA,
+                           logic.terran_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_T.mission_name, "West Sector: West Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 12907, LocationType.VANILLA,
+                           logic.terran_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_T.mission_name, "West Sector: Mid Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 12908, LocationType.EXTRA,
+                           logic.terran_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_T.mission_name, "West Sector: East Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 12909, LocationType.EXTRA,
+                           logic.terran_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_T.mission_name, "East Sector: North Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 12910, LocationType.VANILLA,
+                           logic.terran_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_T.mission_name, "East Sector: West Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 12911, LocationType.EXTRA,
+                           logic.terran_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_T.mission_name, "East Sector: South Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 12912, LocationType.EXTRA,
+                           logic.terran_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_T.mission_name, "Purifier Warden", SC2_RACESWAP_LOC_ID_OFFSET + 12913, LocationType.VANILLA,
+                           logic.terran_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 13000, LocationType.VICTORY,
+                           logic.zerg_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_Z.mission_name, "North Sector: West Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 13001, LocationType.VANILLA,
+                           logic.zerg_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_Z.mission_name, "North Sector: Northeast Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 13002, LocationType.EXTRA,
+                           logic.zerg_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_Z.mission_name, "North Sector: Southeast Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 13003, LocationType.EXTRA,
+                           logic.zerg_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_Z.mission_name, "South Sector: West Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 13004, LocationType.VANILLA,
+                           logic.zerg_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_Z.mission_name, "South Sector: North Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 13005, LocationType.EXTRA,
+                           logic.zerg_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_Z.mission_name, "South Sector: East Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 13006, LocationType.EXTRA,
+                           logic.zerg_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_Z.mission_name, "West Sector: West Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 13007, LocationType.VANILLA,
+                           logic.zerg_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_Z.mission_name, "West Sector: Mid Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 13008, LocationType.EXTRA,
+                           logic.zerg_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_Z.mission_name, "West Sector: East Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 13009, LocationType.EXTRA,
+                           logic.zerg_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_Z.mission_name, "East Sector: North Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 13010, LocationType.VANILLA,
+                           logic.zerg_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_Z.mission_name, "East Sector: West Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 13011, LocationType.EXTRA,
+                           logic.zerg_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_Z.mission_name, "East Sector: South Null Circuit", SC2_RACESWAP_LOC_ID_OFFSET + 13012, LocationType.EXTRA,
+                           logic.zerg_purification_requirement
+                           ),
+        make_location_data(SC2Mission.PURIFICATION_Z.mission_name, "Purifier Warden", SC2_RACESWAP_LOC_ID_OFFSET + 13013, LocationType.VANILLA,
+                           logic.zerg_purification_requirement
+                           ),
     ]
 
     beat_events = []

@@ -681,7 +681,7 @@ item_table = {
                  parent_item=item_names.BANSHEE),
     item_names.BANSHEE_ROCKET_BARRAGE:
         ItemData(339 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_4, 20, SC2Race.TERRAN,
-                 parent_item=item_names.BANSHEE),
+                 classification=ItemClassification.progression, parent_item=item_names.BANSHEE),
     item_names.GHOST_RESOURCE_EFFICIENCY:
         ItemData(340 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_4, 21, SC2Race.TERRAN,
                  parent_item=item_names.GHOST),
