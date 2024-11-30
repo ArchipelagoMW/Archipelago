@@ -375,13 +375,9 @@ def __set_key_info_entry(key_info_single_entry, item_data):
 
 def update_furniture_info(furniture_info, item_appear_info, output_data):
     for x in furniture_info.info_file_field_entries:
-        # If any of the arguments are used in the Study bookshelves / reading books, disable this.
-        # Todo Update this to include Nana's Journal, E Gadd's Guide to Ghost, and Lydia's book
-        if x["arg0"] in [101, 102, 103, 104, 105, 106]:
-            x["arg0"] = 0.0
-
         # If this is a book/bookshelf, set it to just shake, no book interaction.
-        if x["move"] == 16:
+        # Make sure to exclude Nana's knit ball bowl so they can drop on the floor properly.
+        if x["move"] == 16 and x["name"] is not "o_tuku1":
             x["move"] = 0
 
         # If one of Vincent's painting, update the flag to disable zoom instead.
