@@ -391,7 +391,7 @@ class WitnessPlayerLogic:
         These will then hava a cascading effect on other entities that are locked "behind" them.
         """
 
-        postgame_adjustments = []
+        postgame_adjustments: list[OptionAdjustment] = []
 
         # Make some quick references to some options
         remote_doors = world.options.shuffle_doors >= 2  # "Panels" mode has no region accessibility implications.
@@ -461,7 +461,7 @@ class WitnessPlayerLogic:
         return postgame_adjustments
 
     def handle_panelhunt_postgame(self, world: "WitnessWorld") -> List[OptionAdjustment]:
-        postgame_adjustments = []
+        postgame_adjustments: list[OptionAdjustment] = []
 
         # Make some quick references to some options
         panel_hunt_postgame = world.options.panel_hunt_postgame
