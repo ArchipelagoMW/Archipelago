@@ -48,7 +48,7 @@ item_pool += [self.create_filler() for _ in range(total_locations - len(item_poo
 
 ### I learned about indirect conditions in the world API document, but I want to know more. What are they and why are they necessary?
 
-The world API document mentions registering indirect conditions using multiworld.register_indirect_condition() and **when** you should use them, but not *how* they work and *why* they are necessary. This is because the explanation is quite complicated.
+The world API document mentions how to use `multiworld.register_indirect_condition` to register indirect conditions and **when** you should use them, but not *how* they work and *why* they are necessary. This is because the explanation is quite complicated.
 
 Region sweep (the algorithm that determines which regions are reachable) is a Breadth-First Search of the region graph from the origin region, checking entrances one by one and adding newly reached nodes (regions) and their entrances to the queue until there is nothing more to check.
 
