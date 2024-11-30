@@ -4,21 +4,21 @@ from BaseClasses import ItemClassification as IC
 from worlds.AutoWorld import World
 
 
-def GetBeemizerItem(multiworld, player: int, item):
+def GetBeemizerItem(world, player: int, item):
     item_name = item if isinstance(item, str) else item.name
 
     if item_name not in trap_replaceable:
         return item
 
     # first roll - replaceable item should be replaced, within beemizer_total_chance
-    if not multiworld.worlds[player].options.beemizer_total_chance or multiworld.random.random() > (multiworld.worlds[player].options.beemizer_total_chance / 100):
+    if not world.worlds[player].options.beemizer_total_chance or world.random.random() > (world.worlds[player].options.beemizer_total_chance / 100):
         return item
 
     # second roll - bee replacement should be trap, within beemizer_trap_chance
-    if not multiworld.worlds[player].options.beemizer_trap_chance or multiworld.random.random() > (multiworld.worlds[player].options.beemizer_trap_chance / 100):
-        return "Bee" if isinstance(item, str) else multiworld.create_item("Bee", player)
+    if not world.worlds[player].options.beemizer_trap_chance or world.random.random() > (world.worlds[player].options.beemizer_trap_chance / 100):
+        return "Bee" if isinstance(item, str) else world.create_item("Bee", player)
     else:
-        return "Bee Trap" if isinstance(item, str) else multiworld.create_item("Bee Trap", player)
+        return "Bee Trap" if isinstance(item, str) else world.create_item("Bee Trap", player)
 
 
 def item_factory(items: typing.Union[str, typing.Iterable[str]], world: World):
