@@ -121,7 +121,7 @@ def get_definitions_file(adjustment_file: str) -> List[str]:
 
 
 def get_audio_logs() -> List[str]:
-    return get_definitions_file("Audio_Logs.txt")
+    return get_definitions_file("Audio_ogs.txt")
 
 
 def get_sigma_normal_logic() -> List[str]:
