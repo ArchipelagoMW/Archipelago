@@ -138,7 +138,7 @@ This means that, for these specific mods, if you decide to include them in your 
 with the assumption that you will install and play with these mods. The multiworld will contain related items and locations
 for these mods, the specifics will vary from mod to mod
 
-[Supported Mods Documentation](https://github.com/agilbert1412/StardewArchipelago/blob/5.x.x/Documentation/Supported%20Mods.md)
+[Supported Mods Documentation](https://github.com/agilbert1412/StardewArchipelago/blob/6.x.x/Documentation/Supported%20Mods.md)
 
 List of supported mods:
 

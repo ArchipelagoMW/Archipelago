@@ -22,16 +22,15 @@ from os.path import isfile
 from shutil import which
 from typing import Callable, Optional, Sequence, Tuple, Union
 
-import Utils
-import settings
-from worlds.LauncherComponents import Component, components, Type, SuffixIdentifier, icon_paths
-
 if __name__ == "__main__":
     import ModuleUpdate
     ModuleUpdate.update()
 
-from Utils import is_frozen, user_path, local_path, init_logging, open_filename, messagebox, \
-    is_windows, is_macos, is_linux
+import settings
+import Utils
+from Utils import (init_logging, is_frozen, is_linux, is_macos, is_windows, local_path, messagebox, open_filename,
+                   user_path)
+from worlds.LauncherComponents import Component, components, icon_paths, SuffixIdentifier, Type
 
 
 def open_host_yaml():
@@ -182,6 +181,11 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
                 App.get_running_app().stop()
                 Window.close()
 
+        def _stop(self, *largs):
+            # see run_gui Launcher _stop comment for details
+            self.root_window.close()
+            super()._stop(*largs)
+
     Popup().run()
 
 
@@ -242,9 +246,8 @@ refresh_components: Optional[Callable[[], None]] = None
 
 
 def run_gui():
-    from kvui import App, ContainerLayout, GridLayout, Button, Label, ScrollBox, Widget
+    from kvui import App, ContainerLayout, GridLayout, Button, Label, ScrollBox, Widget, ApAsyncImage
     from kivy.core.window import Window
-    from kivy.uix.image import AsyncImage
     from kivy.uix.relativelayout import RelativeLayout
 
     class Launcher(App):
@@ -277,8 +280,8 @@ def run_gui():
                 button.component = component
                 button.bind(on_release=self.component_action)
                 if component.icon != "icon":
-                    image = AsyncImage(source=icon_paths[component.icon],
-                                       size=(38, 38), size_hint=(None, 1), pos=(5, 0))
+                    image = ApAsyncImage(source=icon_paths[component.icon],
+                                         size=(38, 38), size_hint=(None, 1), pos=(5, 0))
                     box_layout = RelativeLayout(size_hint_y=None, height=40)
                     box_layout.add_widget(button)
                     box_layout.add_widget(image)
