@@ -28,12 +28,23 @@ function random_offset_position(position, offset)
 end
 
 function fire_entity_at_players(entity_name, speed)
+    local entities = {}
     for _, player in ipairs(game.forces["player"].players) do
-        current_character = player.character
-        if current_character ~= nil then
-            current_character.surface.create_entity{name=entity_name,
-                position=random_offset_position(current_character.position, 128),
-                target=current_character, speed=speed}
+        if player.character ~= nil then
+            table.insert(entities, player.character)
         end
+    end
+    return fire_entity_at_entities(entity_name, entities, speed)
+end
+
+function fire_entity_at_entities(entity_name, entities, speed)
+    for _, current_entity in ipairs(entities) do
+        local target = current_entity
+        if target.health == nil then
+            target = target.position
+        end
+        current_entity.surface.create_entity{name=entity_name,
+            position=random_offset_position(current_entity.position, 128),
+            target=target, speed=speed}
     end
 end
