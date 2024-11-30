@@ -326,7 +326,7 @@
         </div>
     {% endif %}
 
-    
+
 
     <script>
         const parser = new DOMParser();
@@ -345,7 +345,13 @@
             }
 
             const fakeDOM = parser.parseFromString(await response.text(), "text/html");
-            document.querySelector(".inventory-grid").innerHTML = fakeDOM.querySelector(".inventory-grid").innerHTML;
+
+            const inventoryGrid = document.querySelectorAll(".inventory-grid");
+            const fakeInventoryGrid = fakeDOM.querySelectorAll(".inventory-grid");
+            
+            for (let i = 0; i < inventoryGrid.length; ++i) {
+                inventoryGrid[i].innerHTML = fakeInventoryGrid[i].innerHTML;
+            }
 
             const regionDetailElements = document.querySelectorAll(".region-details");
             const fakeDetailElements = fakeDOM.querySelectorAll(".region-details");
