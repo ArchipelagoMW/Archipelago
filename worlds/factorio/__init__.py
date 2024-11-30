@@ -77,6 +77,7 @@ all_items["Grenade Trap"] = factorio_base_id - 4
 all_items["Cluster Grenade Trap"] = factorio_base_id - 5
 all_items["Artillery Trap"] = factorio_base_id - 6
 all_items["Atomic Rocket Trap"] = factorio_base_id - 7
+all_items["Atomic Cliff Remover Trap"] = factorio_base_id - 8
 
 
 class Factorio(World):
@@ -142,6 +143,7 @@ class Factorio(World):
                          self.options.grenade_traps + \
                          self.options.cluster_grenade_traps + \
                          self.options.atomic_rocket_traps + \
+                         self.options.atomic_cliff_remover_traps + \
                          self.options.artillery_traps
 
         location_pool = []
@@ -194,7 +196,8 @@ class Factorio(World):
     def create_items(self) -> None:
         self.custom_technologies = self.set_custom_technologies()
         self.set_custom_recipes()
-        traps = ("Evolution", "Attack", "Teleport", "Grenade", "Cluster Grenade", "Artillery", "Atomic Rocket")
+        traps = ("Evolution", "Attack", "Teleport", "Grenade", "Cluster Grenade", "Artillery", "Atomic Rocket",
+                 "Atomic Cliff Remover")
         for trap_name in traps:
             self.multiworld.itempool.extend(self.create_item(f"{trap_name} Trap") for _ in
                                             range(getattr(self.options,

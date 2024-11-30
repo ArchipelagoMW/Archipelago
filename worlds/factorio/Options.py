@@ -272,6 +272,12 @@ class AtomicRocketTrapCount(TrapCount):
     display_name = "Atomic Rocket Traps"
 
 
+class AtomicCliffRemoverTrapCount(TrapCount):
+    """Trap items that when received trigger an atomic rocket explosion on a random cliff.
+    Warning: there is no warning. The launch is instantaneous."""
+    display_name = "Atomic Cliff Remover Traps"
+
+
 class EvolutionTrapCount(TrapCount):
     """Trap items that when received increase the enemy evolution."""
     display_name = "Evolution Traps"
@@ -467,6 +473,7 @@ class FactorioOptions(PerGameCommonOptions):
     cluster_grenade_traps: ClusterGrenadeTrapCount
     artillery_traps: ArtilleryTrapCount
     atomic_rocket_traps: AtomicRocketTrapCount
+    atomic_cliff_remover_traps: AtomicCliffRemoverTrapCount
     attack_traps: AttackTrapCount
     evolution_traps: EvolutionTrapCount
     evolution_trap_increase: EvolutionTrapIncrease
@@ -500,6 +507,7 @@ option_groups: list[OptionGroup] = [
             ClusterGrenadeTrapCount,
             ArtilleryTrapCount,
             AtomicRocketTrapCount,
+            AtomicCliffRemoverTrapCount,
         ],
         start_collapsed=True
     ),
