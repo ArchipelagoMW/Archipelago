@@ -89,6 +89,7 @@ class CastlevaniaCotMClient(BizHawkClient):
     game = "Castlevania - Circle of the Moon"
     system = "GBA"
     patch_suffix = ".apcvcotm"
+    sent_initial_packets: bool
     self_induced_death: bool
     local_checked_locations: Set[int]
     client_set_events = {flag_name: False for flag, flag_name in EVENT_FLAG_MAP.items()}
@@ -135,6 +136,7 @@ class CastlevaniaCotMClient(BizHawkClient):
         ctx.auth = base64.b64encode(auth_raw).decode("utf-8")
         # Initialize all the local client attributes here so that nothing will be carried over from a previous CotM if
         # the player tried changing CotM ROMs without resetting their Bizhawk Client instance.
+        self.sent_initial_packets = False
         self.local_checked_locations = set()
         self.self_induced_death = False
         self.client_set_events = {flag_name: False for flag, flag_name in EVENT_FLAG_MAP.items()}
@@ -176,6 +178,20 @@ class CastlevaniaCotMClient(BizHawkClient):
             return
 
         try:
+            # Scout all Locations and get our Set events upon initial connection.
+            if not self.sent_initial_packets:
+                await ctx.send_msgs([{
+                    "cmd": "LocationScouts",
+                    "locations": [code for name, code in get_location_names_to_ids().items()
+                                  if code in ctx.server_locations],
+                    "create_as_hint": 0
+                }])
+                await ctx.send_msgs([{
+                    "cmd": "Get",
+                    "keys": [f"castlevania_cotm_events_{ctx.team}_{ctx.slot}"]
+                }])
+                self.sent_initial_packets = True
+
             read_state = await bizhawk.read(ctx.bizhawk_ctx, [(GAME_STATE_ADDRESS, 1, "EWRAM"),
                                                               (FLAGS_ARRAY_START, 32, "EWRAM"),
                                                               (CARDS_ARRAY_START, 20, "EWRAM"),
@@ -245,21 +261,6 @@ class CastlevaniaCotMClient(BizHawkClient):
 
                 await ctx.send_death(f"{ctx.player_names[ctx.slot]} perished in {area_of_death}. Dracula has won!")
 
-            # Scout all Locations and get our Set events.
-            if ctx.locations_info == {}:
-                await ctx.send_msgs([{
-                    "cmd": "LocationScouts",
-                    "locations": [code for name, code in get_location_names_to_ids().items()
-                                  if code in ctx.server_locations],
-                    "create_as_hint": 0
-                }])
-                await ctx.send_msgs([{
-                    "cmd": "Get",
-                    "keys": [f"castlevania_cotm_events_{ctx.team}_{ctx.slot}"]
-                }])
-                # Some other parts of this need the scouted Location info and Set events, so return now.
-                return
-
             # Update the Dracula II and Battle Arena events already being done on past separate sessions for if the
             # player is running the Battle Arena and Dracula goal.
             if f"castlevania_cotm_events_{ctx.team}_{ctx.slot}" in ctx.stored_data:
@@ -311,7 +312,7 @@ class CastlevaniaCotMClient(BizHawkClient):
                 self.currently_dead = True
 
             # If we have a queue of Locations to inject "sent" messages with, do so before giving any subsequent Items.
-            elif self.sent_message_queue and ok_to_inject and not self.currently_dead:
+            elif self.sent_message_queue and ok_to_inject and not self.currently_dead and ctx.locations_info:
                 loc = self.sent_message_queue[0]
                 # Truncate the Item name. ArchipIDLE's FFXIV Item is 214 characters, for comparison.
                 item_name = ctx.item_names.lookup_in_slot(ctx.locations_info[loc].item, ctx.locations_info[loc].player)
@@ -504,8 +505,9 @@ class CastlevaniaCotMClient(BizHawkClient):
                 if locs_to_send is not None:
                     # Capture all the Locations with non-local Items to send that are in ctx.missing_locations
                     # (the ones that were definitely never sent before).
-                    self.sent_message_queue += [loc for loc in locs_to_send if loc in ctx.missing_locations and
-                                                ctx.locations_info[loc].player != ctx.slot]
+                    if ctx.locations_info:
+                        self.sent_message_queue += [loc for loc in locs_to_send if loc in ctx.missing_locations and
+                                                    ctx.locations_info[loc].player != ctx.slot]
 
                     await ctx.send_msgs([{
                         "cmd": "LocationChecks",
@@ -525,6 +527,7 @@ class CastlevaniaCotMClient(BizHawkClient):
 
             # Send game clear if we've satisfied the win condition.
             if not ctx.finished_game and win_condition:
+                ctx.finished_game = True
                 await ctx.send_msgs([{
                     "cmd": "StatusUpdate",
                     "status": ClientStatus.CLIENT_GOAL
