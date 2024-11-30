@@ -24,7 +24,7 @@
 <FRAMEEND>
 <SE>(95)
 <WINDOW>(1)<COLOR>(4)
-<SAY><COLOR>(2)Fool! More ghosts for you,<COLOR>(1)\nGreen Man<COLOR>(2)! We're coming for you...
+<SAY><COLOR>(2)Fool! Now there are more ghosts for\nyou, <COLOR>(1)Green Man<COLOR>(2)!
 <WAIT>(120)
 <CLOSEWINDOW>(1)
 <END>
