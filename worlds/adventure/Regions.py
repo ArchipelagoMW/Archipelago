@@ -1,6 +1,6 @@
 from BaseClasses import MultiWorld, Region, Entrance, LocationProgressType
 from Options import PerGameCommonOptions
-from .Locations import location_table, LocationData, AdventureLocation, dragon_room_to_region
+from .Locations import location_table, AdventureLocation, dragon_room_to_region
 
 
 def connect(world: MultiWorld, player: int, source: str, target: str, rule: callable = lambda state: True,
