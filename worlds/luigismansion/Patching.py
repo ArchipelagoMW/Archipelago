@@ -387,7 +387,7 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
     higher_up_furniture = ["Painting", "Fan", "Mirror", "Picture"]
 
     for item_name, item_data in output_data["Locations"].items():
-        if not item_data["type"] == "Furniture":
+        if not (item_data["type"] == "Furniture" or item_data["type"] == "Plant"):
             continue
 
         # Update any furniture up high to spawn items at a lower y offset
@@ -411,6 +411,9 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
                 randrange(1, 3))
             furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate_num"] = (
                 randrange(10, 40))
+        else:
+            furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate"] = 0
+            furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate_num"] = 0
 
 
 # Dictionary of Room names and their ID. Used for the Enemizer.
