@@ -507,6 +507,7 @@ option_groups: list[OptionGroup] = [
             ClusterGrenadeTrapCount,
             ArtilleryTrapCount,
             AtomicRocketTrapCount,
+            AtomicCliffRemoverTrapCount,
         ],
         start_collapsed=True
     ),
