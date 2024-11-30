@@ -6,6 +6,7 @@ from .locations import BASE_ID
 from .options import IronMaidenBehavior
 
 from typing import TYPE_CHECKING, Dict, NamedTuple, Optional
+from collections import Counter
 
 if TYPE_CHECKING:
     from . import CVCotMWorld
@@ -96,12 +97,12 @@ def get_item_names_to_ids() -> Dict[str, int]:
 
 def get_item_counts(world: "CVCotMWorld") -> Dict[ItemClassification, Dict[str, int]]:
 
-    item_counts: Dict[ItemClassification, Dict[str, int]] = {
-        ItemClassification.progression: {},
-        ItemClassification.progression_skip_balancing: {},
-        ItemClassification.useful | ItemClassification.progression: {},
-        ItemClassification.useful: {},
-        ItemClassification.filler: {},
+    item_counts: Dict[ItemClassification, Counter[str, int]] = {
+        ItemClassification.progression: Counter(),
+        ItemClassification.progression_skip_balancing: Counter(),
+        ItemClassification.useful | ItemClassification.progression: Counter(),
+        ItemClassification.useful: Counter(),
+        ItemClassification.filler: Counter(),
     }
     total_items = 0
     # Items to be skipped over in the main Item creation loop.
@@ -204,10 +205,7 @@ def get_item_counts(world: "CVCotMWorld") -> Dict[ItemClassification, Dict[str, 
     # Add filler items at random until the total Items = the total Locations.
     while total_items < len(world.multiworld.get_unfilled_locations(world.player)):
         filler_to_add = world.random.choice(FILLER_ITEM_NAMES)
-        if filler_to_add in item_counts[ItemClassification.filler]:
-            item_counts[ItemClassification.filler][filler_to_add] += 1
-        else:
-            item_counts[ItemClassification.filler][filler_to_add] = 1
+        item_counts[ItemClassification.filler][filler_to_add] += 1
         total_items += 1
 
     return item_counts

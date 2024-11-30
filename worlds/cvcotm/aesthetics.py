@@ -401,7 +401,6 @@ BOSS_IDS = [enemy_id for enemy_id in range(len(cvcotm_enemy_info)) if cvcotm_ene
 
 ENEMY_TABLE_START = 0xCB2C4
 
-NUMBER_ENEMIES = 141
 NUMBER_ITEMS = 55
 
 COUNTDOWN_TABLE_ADDR = 0x673400
@@ -540,10 +539,10 @@ def populate_enemy_drops(world: "CVCotMWorld") -> Dict[int, bytes]:
     placed_common_items = [0] * len(COMMON_ITEMS)
     placed_rare_items = [0] * len(RARE_ITEMS)
 
-    regular_drops = [0] * NUMBER_ENEMIES
-    regular_drop_chances = [0] * NUMBER_ENEMIES
-    rare_drops = [0] * NUMBER_ENEMIES
-    rare_drop_chances = [0] * NUMBER_ENEMIES
+    regular_drops = [0] * len(cvcotm_enemy_info)
+    regular_drop_chances = [0] * len(cvcotm_enemy_info)
+    rare_drops = [0] * len(cvcotm_enemy_info)
+    rare_drop_chances = [0] * len(cvcotm_enemy_info)
 
     # Set boss items first to prevent boss drop duplicates.
     # If Tiered mode is enabled, make these items exclusive to these enemies by adding an arbitrary integer larger
@@ -557,7 +556,7 @@ def populate_enemy_drops(world: "CVCotMWorld") -> Dict[int, bytes]:
             regular_drops[boss_id] = select_drop(world, RARE_ITEMS, placed_rare_items, start_index=len(COMMON_ITEMS))
 
     # Setting drop logic for all enemies.
-    for i in range(NUMBER_ENEMIES):
+    for i in range(len(cvcotm_enemy_info)):
 
         # Give Dracula II Shining Armor occasionally as a joke.
         if cvcotm_enemy_info[i].type == "final boss":
@@ -641,7 +640,7 @@ def populate_enemy_drops(world: "CVCotMWorld") -> Dict[int, bytes]:
     # Return the randomized drop data as bytes with their respective offsets.
     enemy_address = ENEMY_TABLE_START
     drop_data = {}
-    for i in range(NUMBER_ENEMIES):
+    for i, enemy_info in enumerate(cvcotm_enemy_info):
         drop_data[enemy_address] = bytes([regular_drops[i], 0, regular_drop_chances[i] & 0xFF,
                                           regular_drop_chances[i] >> 8, rare_drops[i], 0, rare_drop_chances[i] & 0xFF,
                                           rare_drop_chances[i] >> 8])
@@ -656,46 +655,29 @@ def select_drop(world: "CVCotMWorld", drop_list: List[int], drops_placed: List[i
     selected before. In order to ensure an even number of drops are distributed, drops that were selected the least are
     the ones that will be picked from.
 
-    If Item Drop Randomization is set to Hard, calling this with True as the exclusive_drop param will force the number
-    of the chosen item really high to ensure it will never be picked again."""
+    Calling this with exclusive_drop param being True will force the number of the chosen item really high to ensure it
+    will never be picked again."""
 
-    number_valid_drops = 0
     eligible_items = [0] * NUMBER_ITEMS
-    lowest_number = drops_placed[start_index]
 
-    # Only make eligible drops which we have placed the least.
-    i = start_index
-    while i < len(drop_list):
-        # A drop with the priority we are expecting is available to add as a candidate.
-        if drops_placed[i] == lowest_number:
-            eligible_items[number_valid_drops] = i
-            number_valid_drops += 1
-            i += 1
+    drops_from_start_index = drop_list[start_index:]  # Cut list from start_index
 
-        # If this condition is met, there is at least one item that hasn't been placed as many times as the others.
-        # We have to lower the lowest number and start from the beginning of the loop to capture all the valid indices.
-        elif drops_placed[i] < lowest_number:
-            lowest_number = drops_placed[i]
-            number_valid_drops = 0
-            i = start_index
+    lowest_number = min(drops_from_start_index)
+    indices_with_lowest_number = [index for index, placed in enumerate(drops_from_start_index) if
+                                  placed == lowest_number]
 
-        else:
-            i += 1
-
-    # Post-condition: Our array eligible_items has number_valid_drops many valid item indices as its elements.
-
-    # Select a random valid item from the index of valid choices.
-    random_result = world.random.randrange(number_valid_drops)
+    random_index = world.random.choice(indices_with_lowest_number)
+    random_index += start_index  # Add start_index back on
 
     # Increment the number of this item placed, unless it should be exclusive to the boss / candle, in which case
     # set it to an arbitrarily large number to make it exclusive.
     if exclusive_drop:
-        drops_placed[eligible_items[random_result]] += 999
+        drops_placed[eligible_items[random_index]] += 999
     else:
-        drops_placed[eligible_items[random_result]] += 1
+        drops_placed[eligible_items[random_index]] += 1
 
     # Return the item ID
-    return drop_list[eligible_items[random_result]]
+    return drop_list[eligible_items[random_index]]
 
 
 def get_start_inventory_data(world: "CVCotMWorld") -> Tuple[Dict[int, bytes], bool]:
