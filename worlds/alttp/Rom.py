@@ -1853,9 +1853,9 @@ def apply_oof_sfx(rom, oof: str):
 
 
 def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, sprite: str, oof: str, palettes_options,
-                       multiworld=None, player=1, allow_random_on_event=False, reduceflashing=False,
+                       world=None, player=1, allow_random_on_event=False, reduceflashing=False,
                        triforcehud: str = None, deathlink: bool = False, allowcollect: bool = False):
-    local_random = random if not multiworld else multiworld.worlds[player].random
+    local_random = random if not world else world.worlds[player].random
     disable_music: bool = not music
     # enable instant item menu
     if menuspeed == 'instant':
@@ -1993,7 +1993,7 @@ def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, spri
                              (0b00000100 if allowcollect else 0))
 
     apply_random_sprite_on_event(rom, sprite, local_random, allow_random_on_event,
-                                 multiworld.sprite_pool[player] if multiworld else [])
+                                 world.sprite_pool[player] if world else [])
 
     if oof is not None:
         apply_oof_sfx(rom, oof)
