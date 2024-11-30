@@ -1,6 +1,6 @@
 import logging
 from random import Random
-from typing import Dict, Any, Iterable, Optional, Union, List, TextIO
+from typing import Dict, Any, Iterable, Optional, List, TextIO
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from Options import PerGameCommonOptions, Accessibility
@@ -93,7 +93,6 @@ class StardewValleyWorld(World):
     randomized_entrances: Dict[str, str]
 
     total_progression_items: int
-    excluded_from_total_progression_items: List[str] = [Event.received_walnuts]
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -208,7 +207,7 @@ class StardewValleyWorld(World):
 
         if self.options.season_randomization == SeasonRandomization.option_disabled:
             for season in season_pool:
-                self.multiworld.push_precollected(self.create_starting_item(season))
+                self.multiworld.push_precollected(self.create_item(season))
             return
 
         if [item for item in self.multiworld.precollected_items[self.player]
@@ -218,12 +217,13 @@ class StardewValleyWorld(World):
         if self.options.season_randomization == SeasonRandomization.option_randomized_not_winter:
             season_pool = [season for season in season_pool if season.name != "Winter"]
 
-        starting_season = self.create_starting_item(self.random.choice(season_pool))
+        item1 = self.random.choice(season_pool)
+        starting_season = self.create_item(item1)
         self.multiworld.push_precollected(starting_season)
 
     def precollect_farm_type_items(self):
         if self.options.farm_type == FarmType.option_meadowlands and self.options.building_progression & BuildingProgression.option_progressive:
-            self.multiworld.push_precollected(self.create_starting_item("Progressive Coop"))
+            self.multiworld.push_precollected(self.create_item("Progressive Coop"))
 
     def setup_player_events(self):
         self.setup_action_events()
@@ -317,7 +317,7 @@ class StardewValleyWorld(World):
     def get_all_location_names(self) -> List[str]:
         return list(location.name for location in self.multiworld.get_locations(self.player))
 
-    def create_item(self, item: Union[str, ItemData], override_classification: ItemClassification = None) -> StardewItem:
+    def create_item(self, item: str | ItemData, override_classification: ItemClassification = None) -> StardewItem:
         if isinstance(item, str):
             item = item_table[item]
 
@@ -325,12 +325,6 @@ class StardewValleyWorld(World):
             override_classification = item.classification
 
         return StardewItem(item.name, override_classification, item.code, self.player)
-
-    def create_starting_item(self, item: Union[str, ItemData]) -> StardewItem:
-        if isinstance(item, str):
-            item = item_table[item]
-
-        return StardewItem(item.name, item.classification, item.code, self.player)
 
     def create_event_location(self, location_data: LocationData, rule: StardewRule = None, item: Optional[str] = None):
         if rule is None:
