@@ -1,6 +1,6 @@
 import itertools
 
-from Options import NamedRange
+from Options import NamedRange, Accessibility
 from . import SVTestCase, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x, solo_multiworld
 from .assertion import WorldAssertMixin
 from .long.option_names import all_option_choices
@@ -53,6 +53,23 @@ class TestGoal(SVTestCase):
             with self.solo_world_sub_test(f"Goal: {goal}, Location: {location}", world_options) as (multi_world, _):
                 victory = multi_world.find_item("Victory", 1)
                 self.assertEqual(victory.name, location)
+
+    def test_given_perfection_goal_when_generate_then_accessibility_is_forced_to_full(self):
+        """There is a bug with the current victory condition of the perfection goal that can create unwinnable seeds if the accessibility is set to minimal and
+        the world gets flooded with progression items through plando. This will increase the amount of collected progression items pass the total amount
+        calculated for the world when creating the item pool. This will cause the victory condition to be met before all locations are collected, so some could
+        be left inaccessible, which in practice will make the seed unwinnable. 
+        """
+        for accessibility in Accessibility.options.keys():
+            world_options = {Goal.internal_name: Goal.option_perfection, "accessibility": accessibility}
+            with self.solo_world_sub_test(f"Accessibility: {accessibility}", world_options) as (_, world):
+                self.assertEqual(world.options.accessibility, Accessibility.option_full)
+
+    def test_given_allsanity_goal_when_generate_then_accessibility_is_forced_to_full(self):
+        for accessibility in Accessibility.options.keys():
+            world_options = {Goal.internal_name: Goal.option_allsanity, "accessibility": accessibility}
+            with self.solo_world_sub_test(f"Accessibility: {accessibility}", world_options) as (_, world):
+                self.assertEqual(world.options.accessibility, Accessibility.option_full)
 
 
 class TestSeasonRandomization(SVTestCase):
