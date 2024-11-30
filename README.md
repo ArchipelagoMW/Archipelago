@@ -76,6 +76,7 @@ Currently, the following games are supported:
 * Kingdom Hearts 1
 * Mega Man 2
 * Yacht Dice
+* Faxanadu
 * Castlevania: Circle of the Moon
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).

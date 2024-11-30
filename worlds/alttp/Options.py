@@ -1,7 +1,7 @@
-import typing
+from dataclasses import dataclass
 
 from BaseClasses import MultiWorld
-from Options import Choice, Range, DeathLink, DefaultOnToggle, FreeText, ItemsAccessibility, Option, \
+from Options import Choice, Range, DeathLink, DefaultOnToggle, FreeText, ItemsAccessibility, PerGameCommonOptions, \
     PlandoBosses, PlandoConnections, PlandoTexts, Removed, StartInventoryPool, Toggle
 from .EntranceShuffle import default_connections, default_dungeon_connections, \
     inverted_default_connections, inverted_default_dungeon_connections
@@ -742,86 +742,86 @@ class ALttPPlandoTexts(PlandoTexts):
     valid_keys = TextTable.valid_keys
 
 
-alttp_options: typing.Dict[str, type(Option)] = {
-    "accessibility": ItemsAccessibility,
-    "plando_connections": ALttPPlandoConnections,
-    "plando_texts": ALttPPlandoTexts,
-    "start_inventory_from_pool": StartInventoryPool,
-    "goal": Goal,
-    "mode": Mode,
-    "glitches_required": GlitchesRequired,
-    "dark_room_logic": DarkRoomLogic,
-    "open_pyramid": OpenPyramid,
-    "crystals_needed_for_gt": CrystalsTower,
-    "crystals_needed_for_ganon": CrystalsGanon,
-    "triforce_pieces_mode": TriforcePiecesMode,
-    "triforce_pieces_percentage": TriforcePiecesPercentage,
-    "triforce_pieces_required": TriforcePiecesRequired,
-    "triforce_pieces_available": TriforcePiecesAvailable,
-    "triforce_pieces_extra": TriforcePiecesExtra,
-    "entrance_shuffle": EntranceShuffle,
-    "entrance_shuffle_seed": EntranceShuffleSeed,
-    "big_key_shuffle": big_key_shuffle,
-    "small_key_shuffle": small_key_shuffle,
-    "key_drop_shuffle": key_drop_shuffle,
-    "compass_shuffle": compass_shuffle,
-    "map_shuffle": map_shuffle,
-    "restrict_dungeon_item_on_boss": RestrictBossItem,
-    "item_pool": ItemPool,
-    "item_functionality": ItemFunctionality,
-    "enemy_health": EnemyHealth,
-    "enemy_damage": EnemyDamage,
-    "progressive": Progressive,
-    "swordless": Swordless,
-    "dungeon_counters": DungeonCounters,
-    "retro_bow": RetroBow,
-    "retro_caves": RetroCaves,
-    "hints": Hints,
-    "scams": Scams,
-    "boss_shuffle": LTTPBosses,
-    "pot_shuffle": PotShuffle,
-    "enemy_shuffle": EnemyShuffle,
-    "killable_thieves": KillableThieves,
-    "bush_shuffle": BushShuffle,
-    "shop_item_slots": ShopItemSlots,
-    "randomize_shop_inventories": RandomizeShopInventories,
-    "shuffle_shop_inventories": ShuffleShopInventories,
-    "include_witch_hut": IncludeWitchHut,
-    "randomize_shop_prices": RandomizeShopPrices,
-    "randomize_cost_types": RandomizeCostTypes,
-    "shop_price_modifier": ShopPriceModifier,
-    "shuffle_capacity_upgrades": ShuffleCapacityUpgrades,
-    "bombless_start": BomblessStart,
-    "shuffle_prizes": ShufflePrizes,
-    "tile_shuffle": TileShuffle,
-    "misery_mire_medallion": MiseryMireMedallion,
-    "turtle_rock_medallion": TurtleRockMedallion,
-    "glitch_boots": GlitchBoots,
-    "beemizer_total_chance": BeemizerTotalChance,
-    "beemizer_trap_chance": BeemizerTrapChance,
-    "timer": Timer,
-    "countdown_start_time": CountdownStartTime,
-    "red_clock_time": RedClockTime,
-    "blue_clock_time": BlueClockTime,
-    "green_clock_time": GreenClockTime,
-    "death_link": DeathLink,
-    "allow_collect": AllowCollect,
-    "ow_palettes": OWPalette,
-    "uw_palettes": UWPalette,
-    "hud_palettes": HUDPalette,
-    "sword_palettes": SwordPalette,
-    "shield_palettes": ShieldPalette,
-    # "link_palettes": LinkPalette,
-    "heartbeep": HeartBeep,
-    "heartcolor": HeartColor,
-    "quickswap": QuickSwap,
-    "menuspeed": MenuSpeed,
-    "music": Music,
-    "reduceflashing": ReduceFlashing,
-    "triforcehud": TriforceHud,
+@dataclass
+class ALTTPOptions(PerGameCommonOptions):
+    accessibility: ItemsAccessibility
+    plando_connections: ALttPPlandoConnections
+    plando_texts: ALttPPlandoTexts
+    start_inventory_from_pool: StartInventoryPool
+    goal: Goal
+    mode: Mode
+    glitches_required: GlitchesRequired
+    dark_room_logic: DarkRoomLogic
+    open_pyramid: OpenPyramid
+    crystals_needed_for_gt: CrystalsTower
+    crystals_needed_for_ganon: CrystalsGanon
+    triforce_pieces_mode: TriforcePiecesMode
+    triforce_pieces_percentage: TriforcePiecesPercentage
+    triforce_pieces_required: TriforcePiecesRequired
+    triforce_pieces_available: TriforcePiecesAvailable
+    triforce_pieces_extra: TriforcePiecesExtra
+    entrance_shuffle: EntranceShuffle
+    entrance_shuffle_seed: EntranceShuffleSeed
+    big_key_shuffle: big_key_shuffle
+    small_key_shuffle: small_key_shuffle
+    key_drop_shuffle: key_drop_shuffle
+    compass_shuffle: compass_shuffle
+    map_shuffle: map_shuffle
+    restrict_dungeon_item_on_boss: RestrictBossItem
+    item_pool: ItemPool
+    item_functionality: ItemFunctionality
+    enemy_health: EnemyHealth
+    enemy_damage: EnemyDamage
+    progressive: Progressive
+    swordless: Swordless
+    dungeon_counters: DungeonCounters
+    retro_bow: RetroBow
+    retro_caves: RetroCaves
+    hints: Hints
+    scams: Scams
+    boss_shuffle: LTTPBosses
+    pot_shuffle: PotShuffle
+    enemy_shuffle: EnemyShuffle
+    killable_thieves: KillableThieves
+    bush_shuffle: BushShuffle
+    shop_item_slots: ShopItemSlots
+    randomize_shop_inventories: RandomizeShopInventories
+    shuffle_shop_inventories: ShuffleShopInventories
+    include_witch_hut: IncludeWitchHut
+    randomize_shop_prices: RandomizeShopPrices
+    randomize_cost_types: RandomizeCostTypes
+    shop_price_modifier: ShopPriceModifier
+    shuffle_capacity_upgrades: ShuffleCapacityUpgrades
+    bombless_start: BomblessStart
+    shuffle_prizes: ShufflePrizes
+    tile_shuffle: TileShuffle
+    misery_mire_medallion: MiseryMireMedallion
+    turtle_rock_medallion: TurtleRockMedallion
+    glitch_boots: GlitchBoots
+    beemizer_total_chance: BeemizerTotalChance
+    beemizer_trap_chance: BeemizerTrapChance
+    timer: Timer
+    countdown_start_time: CountdownStartTime
+    red_clock_time: RedClockTime
+    blue_clock_time: BlueClockTime
+    green_clock_time: GreenClockTime
+    death_link: DeathLink
+    allow_collect: AllowCollect
+    ow_palettes: OWPalette
+    uw_palettes: UWPalette
+    hud_palettes: HUDPalette
+    sword_palettes: SwordPalette
+    shield_palettes: ShieldPalette
+    # link_palettes: LinkPalette
+    heartbeep: HeartBeep
+    heartcolor: HeartColor
+    quickswap: QuickSwap
+    menuspeed: MenuSpeed
+    music: Music
+    reduceflashing: ReduceFlashing
+    triforcehud: TriforceHud
 
     # removed:
-    "goals": Removed,
-    "smallkey_shuffle": Removed,
-    "bigkey_shuffle": Removed,
-}
+    goals: Removed
+    smallkey_shuffle: Removed
+    bigkey_shuffle: Removed
