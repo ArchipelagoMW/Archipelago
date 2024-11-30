@@ -1,9 +1,15 @@
-from .base_adjustment_classes import AddedItem, DisabledEntity, AddedEvent, RequirementChange, RemoveItem, \
-    AddToStartInventory, AddedConnection
 from . import static_items as static_witness_items
 from . import static_logic as static_witness_logic
-from .special_disablings import \
-    LONGBOX_POSTGAME_EXCEPT_PATH_TO_CHALLENGE, UNRANDOMIZED_ENTITIES
+from .base_adjustment_classes import (
+    AddedConnection,
+    AddedEvent,
+    AddedItem,
+    AddToStartInventory,
+    DisabledEntity,
+    RemoveItem,
+    RequirementChange,
+)
+from .special_disablings import LONGBOX_POSTGAME_EXCEPT_PATH_TO_CHALLENGE, UNRANDOMIZED_ENTITIES
 
 
 def build_added_item_adjustment(source_list: list[str]) -> list[AddedItem]:
@@ -64,11 +70,31 @@ DISABLE_OBELISK_SIDES = build_disabled_locations_adjustment(
 
 DISABLE_NON_RANDOMIZED_ENTITIES = ([
     *build_disabled_locations_adjustment(UNRANDOMIZED_ENTITIES),
-    AddedEvent("Monastery Laser Activation", "Monastery Laser", ["Symmetry Island Laser Yellow 3", "Desert Discard", "Treehouse Green Bridge Discard"]),
-    AddedEvent("Bunker Laser Activation", "Bunker Laser", ["Outside Tutorial Shed Row 5", "Town Cargo Box Discard", "Mountainside Discard"]),
-    AddedEvent("Shadows Laser Activation", "Shadows Laser", ["Outside Tutorial Tree Row 9", "Shipwreck Discard", "Town Rooftop Discard"]),
-    AddedEvent("Town Tower 4th Door Opens", "Town Tower Fourth Door", ["Outside Tutorial Outpost Discard", "Glass Factory Discard", "Theater Discard"]),
-    AddedEvent("Jungle Popup Wall Lifts", "Jungle Popup Wall", ["Treehouse Laser Discard", "Keep Discard", "Jungle Discard", "Jungle Popup Wall Control"]),
+    AddedEvent(
+        "Monastery Laser Activation",
+        "Monastery Laser",
+        ["Symmetry Island Laser Yellow 3", "Desert Discard", "Treehouse Green Bridge Discard"],
+    ),
+    AddedEvent(
+        "Bunker Laser Activation",
+        "Bunker Laser",
+        ["Outside Tutorial Shed Row 5", "Town Cargo Box Discard", "Mountainside Discard"],
+    ),
+    AddedEvent(
+        "Shadows Laser Activation",
+        "Shadows Laser",
+        ["Outside Tutorial Tree Row 9", "Shipwreck Discard", "Town Rooftop Discard"],
+    ),
+    AddedEvent(
+        "Town Tower 4th Door Opens",
+        "Town Tower Fourth Door",
+        ["Outside Tutorial Outpost Discard", "Glass Factory Discard", "Theater Discard"],
+    ),
+    AddedEvent(
+        "Jungle Popup Wall Lifts",
+        "Jungle Popup Wall",
+        ["Treehouse Laser Discard", "Keep Discard", "Jungle Discard", "Jungle Popup Wall Control"]
+    ),
     RequirementChange("0x17C65", "0x00A5B | 0x17CE7 | 0x17FA9", None),
     RequirementChange("0x0C2B2", "0x00061 | 0x17D01 | 0x17C42", None),
     RequirementChange("0x181B3",  "0x00021 | 0x17D28 | 0x17C71", None),

@@ -19,13 +19,28 @@ import copy
 from collections import defaultdict
 from typing import TYPE_CHECKING, Dict, List, Set, Tuple, cast
 
-from .data import static_logic as static_witness_logic
-from .data.base_adjustment_classes import DisabledEntity, OptionAdjustment, AddedItem, RemoveItem, AddToStartInventory, \
-    AddedEvent, RequirementChange, RegionDefinitionChange, AddedConnection
-from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 from .data import options_adjustments
+from .data import static_logic as static_witness_logic
+from .data.base_adjustment_classes import (
+    AddedConnection,
+    AddedEvent,
+    AddedItem,
+    AddToStartInventory,
+    DisabledEntity,
+    OptionAdjustment,
+    RegionDefinitionChange,
+    RemoveItem,
+    RequirementChange,
+)
+from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 from .data.static_logic import StaticWitnessLogicObj
-from .data.utils import WitnessRule, define_new_region, logical_and_witness_rules, logical_or_witness_rules, parse_lambda
+from .data.utils import (
+    WitnessRule,
+    define_new_region,
+    logical_and_witness_rules,
+    logical_or_witness_rules,
+    parse_lambda,
+)
 from .entity_hunt import EntityHuntPicker
 
 if TYPE_CHECKING:

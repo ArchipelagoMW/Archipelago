@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 
-from worlds.witness.data.utils import WitnessRule
-
 
 @dataclass(frozen=True)
 class OptionAdjustment:
