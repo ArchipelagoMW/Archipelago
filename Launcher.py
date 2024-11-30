@@ -246,9 +246,8 @@ refresh_components: Optional[Callable[[], None]] = None
 
 
 def run_gui():
-    from kvui import App, ContainerLayout, GridLayout, Button, Label, ScrollBox, Widget
+    from kvui import App, ContainerLayout, GridLayout, Button, Label, ScrollBox, Widget, ApAsyncImage
     from kivy.core.window import Window
-    from kivy.uix.image import AsyncImage
     from kivy.uix.relativelayout import RelativeLayout
 
     class Launcher(App):
@@ -281,8 +280,8 @@ def run_gui():
                 button.component = component
                 button.bind(on_release=self.component_action)
                 if component.icon != "icon":
-                    image = AsyncImage(source=icon_paths[component.icon],
-                                       size=(38, 38), size_hint=(None, 1), pos=(5, 0))
+                    image = ApAsyncImage(source=icon_paths[component.icon],
+                                         size=(38, 38), size_hint=(None, 1), pos=(5, 0))
                     box_layout = RelativeLayout(size_hint_y=None, height=40)
                     box_layout.add_widget(button)
                     box_layout.add_widget(image)
