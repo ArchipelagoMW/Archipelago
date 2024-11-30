@@ -17,7 +17,7 @@ def _encode(s):
     return result
 
 
-def setRomInfo(rom, data, ladxr_settings, player, player_name):
+def setRomInfo(rom, data, ladxr_settings):
     seed_name = data["seed_name"]
     try:
         seednr = int(data["seed"], 16)
@@ -37,7 +37,7 @@ def setRomInfo(rom, data, ladxr_settings, player, player_name):
     #line_2_hex = _encode(seed[16:])
     BASE_DRAWING_AREA = 0x98a0
     LINE_WIDTH = 0x20
-    player_id_text = f"Player {player}:"
+    player_id_text = f"Player {data['player']}:"
     for n in (3, 4):
         be = BackgroundEditor(rom, n)
         ba = BackgroundEditor(rom, n, attributes=True)
@@ -45,9 +45,9 @@ def setRomInfo(rom, data, ladxr_settings, player, player_name):
         for n, v in enumerate(_encode(player_id_text)):
             be.tiles[BASE_DRAWING_AREA + LINE_WIDTH * 5 + 2 + n] = v
             ba.tiles[BASE_DRAWING_AREA + LINE_WIDTH * 5 + 2 + n] = 0x00
-        for n, v in enumerate(_encode(player_name)):
-            be.tiles[BASE_DRAWING_AREA + LINE_WIDTH * 6 + 0x13 - len(player_name) + n] = v
-            ba.tiles[BASE_DRAWING_AREA + LINE_WIDTH * 6 + 0x13 - len(player_name) + n] = 0x00
+        for n, v in enumerate(_encode(data['player_name'])):
+            be.tiles[BASE_DRAWING_AREA + LINE_WIDTH * 6 + 0x13 - len(data['player_name']) + n] = v
+            ba.tiles[BASE_DRAWING_AREA + LINE_WIDTH * 6 + 0x13 - len(data['player_name']) + n] = 0x00
         for n, v in enumerate(line_1_hex):
             be.tiles[0x9a20 + n] = v
             ba.tiles[0x9a20 + n] = 0x00

@@ -9,7 +9,6 @@ from typing import Dict
 
 from .romTables import ROMWithTables
 from . import assembler
-from . import mapgen
 from . import patches
 from .patches import overworld as _
 from .patches import dungeon as _
@@ -58,27 +57,23 @@ from .patches import tradeSequence as _
 from . import hints
 
 from .patches import bank34
-from .utils import formatText
 from ..Options import TrendyGame, Palette
 from .roomEditor import RoomEditor, Object
 from .patches.aesthetics import rgb_to_bin, bin_to_rgb
 
-from .locations.keyLocation import KeyLocation
-
-from BaseClasses import ItemClassification
-from ..Locations import LinksAwakeningLocation
-from ..Options import TrendyGame, Palette, MusicChangeCondition, BootsControls
+from ..Options import TrendyGame, Palette, MusicChangeCondition
 
 
 # Function to generate a final rom, this patches the rom with all required patches
-def generateRom(base_rom: bytes, args, data: Dict, player, player_name):
-    random.seed(data["seed"] + player)
+def generateRom(base_rom: bytes, args, data: Dict):
+    random.seed(data["seed"] + data["player"])
     multi_key = binascii.unhexlify(data["multi_key"].encode())
     item_list = pickle.loads(binascii.unhexlify(data["item_list"].encode()))
     ladxr_settings = {x["key"]: x["value"] for x in data["ladxr_settings"]}
+    ap_options = data["ap_options"]
     rom_patches = []
     rom = ROMWithTables(base_rom, rom_patches)
-    rom.player_names = data["player_names"]
+    rom.player_names = data["other_player_names"]
     pymods = []
     if args.pymod:
         for pymod in args.pymod:
@@ -133,7 +128,7 @@ def generateRom(base_rom: bytes, args, data: Dict, player, player_name):
     patches.core.easyColorDungeonAccess(rom)
     patches.owl.removeOwlEvents(rom)
     patches.enemies.fixArmosKnightAsMiniboss(rom)
-    patches.bank3e.addBank3E(rom, multi_key, player, data["player_names"])
+    patches.bank3e.addBank3E(rom, multi_key, data["player"], data["other_player_names"])
     patches.bank3f.addBank3F(rom)
     patches.bank34.addBank34(rom, item_list)
     patches.core.removeGhost(rom)
@@ -143,9 +138,8 @@ def generateRom(base_rom: bytes, args, data: Dict, player, player_name):
     patches.core.injectMainLoop(rom)
 
     from ..Options import ShuffleSmallKeys, ShuffleNightmareKeys
-    # TODO probably cant compare this way
-    if data["ap_options"]["shuffle_small_keys"] != ShuffleSmallKeys.option_original_dungeon or\
-            data["ap_options"]["shuffle_nightmare_keys"] != ShuffleNightmareKeys.option_original_dungeon:
+    if ap_options["shuffle_small_keys"] != ShuffleSmallKeys.option_original_dungeon or\
+            ap_options["shuffle_nightmare_keys"] != ShuffleNightmareKeys.option_original_dungeon:
         patches.inventory.advancedInventorySubscreen(rom)
     patches.inventory.moreSlots(rom)
     if ladxr_settings["witch"]:
@@ -196,7 +190,7 @@ def generateRom(base_rom: bytes, args, data: Dict, player, player_name):
     # patches.reduceRNG.slowdownThreeOfAKind(rom)
     patches.reduceRNG.fixHorseHeads(rom)
     patches.bomb.onlyDropBombsWhenHaveBombs(rom)
-    if data["ap_options"]["music_change_condition"] == MusicChangeCondition.option_always:
+    if ap_options["music_change_condition"] == MusicChangeCondition.option_always:
         patches.aesthetics.noSwordMusic(rom)
     patches.aesthetics.reduceMessageLengths(rom, random)
     patches.aesthetics.allowColorDungeonSpritesEverywhere(rom)
@@ -248,7 +242,7 @@ def generateRom(base_rom: bytes, args, data: Dict, player, player_name):
     elif ladxr_settings["quickswap"] == 'b':
         patches.core.quickswap(rom, 0)
     
-    patches.core.addBootsControls(rom, data["ap_options"]["boots_controls"])
+    patches.core.addBootsControls(rom, ap_options["boots_controls"])
 
     hints.addHints(rom, random, data["hint_texts"])
 
@@ -282,15 +276,15 @@ def generateRom(base_rom: bytes, args, data: Dict, player, player_name):
         patches.core.addFrameCounter(rom, len(item_list))
 
     patches.core.warpHome(rom)  # Needs to be done after setting the start location.
-    patches.titleScreen.setRomInfo(rom, data, ladxr_settings, player, player_name)
-    if data["ap_options"]["ap_title_screen"]:
+    patches.titleScreen.setRomInfo(rom, data, ladxr_settings)
+    if ap_options["ap_title_screen"]:
         patches.titleScreen.setTitleGraphics(rom)
     patches.endscreen.updateEndScreen(rom)
     patches.aesthetics.updateSpriteData(rom)
     if args.doubletrouble:
         patches.enemies.doubleTrouble(rom)
 
-    if data["ap_options"]["text_shuffle"]:
+    if ap_options["text_shuffle"]:
         buckets = defaultdict(list)
         # For each ROM bank, shuffle text within the bank
         for n, data in enumerate(rom.texts._PointerTable__data):
@@ -306,14 +300,14 @@ def generateRom(base_rom: bytes, args, data: Dict, player, player_name):
                 rom.texts[shuffled[bucket_idx][0]] = data
     
 
-    if data["ap_options"]["trendy_game"] != TrendyGame.option_normal:
+    if ap_options["trendy_game"] != TrendyGame.option_normal:
 
         # TODO: if 0 or 4, 5, remove inaccurate conveyor tiles
 
 
         room_editor = RoomEditor(rom, 0x2A0)
 
-        if data["ap_options"]["trendy_game"] == TrendyGame.option_easy:
+        if ap_options["trendy_game"] == TrendyGame.option_easy:
             # Set physics flag on all objects
             for i in range(0, 6):
                 rom.banks[0x4][0x6F1E + i -0x4000] = 0x4
@@ -324,7 +318,7 @@ def generateRom(base_rom: bytes, args, data: Dict, player, player_name):
             # Add new conveyor to "push" yoshi (it's only a visual)
             room_editor.objects.append(Object(5, 3, 0xD0))
 
-            if data["ap_options"]["trendy_game"] >= TrendyGame.option_harder:
+            if ap_options["trendy_game"] >= TrendyGame.option_harder:
                 """
                 Data_004_76A0::
                     db   $FC, $00, $04, $00, $00
@@ -338,12 +332,12 @@ def generateRom(base_rom: bytes, args, data: Dict, player, player_name):
                     TrendyGame.option_impossible: (3, 16),
                 }
                 def speed():
-                    return random.randint(*speeds[data["ap_options"]["trendy_game"]])
+                    return random.randint(*speeds[ap_options["trendy_game"]])
                 rom.banks[0x4][0x76A0-0x4000] = 0xFF - speed()
                 rom.banks[0x4][0x76A2-0x4000] = speed()
                 rom.banks[0x4][0x76A6-0x4000] = speed()
                 rom.banks[0x4][0x76A8-0x4000] = 0xFF - speed()
-                if data["ap_options"]["trendy_game"] >= TrendyGame.option_hardest:
+                if ap_options["trendy_game"] >= TrendyGame.option_hardest:
                     rom.banks[0x4][0x76A1-0x4000] = 0xFF - speed()
                     rom.banks[0x4][0x76A3-0x4000] = speed()
                     rom.banks[0x4][0x76A5-0x4000] = speed()
@@ -367,10 +361,10 @@ def generateRom(base_rom: bytes, args, data: Dict, player, player_name):
             for channel in range(3):
                 color[channel] = color[channel] * 31 // 0xbc
 
-    if data["ap_options"]["warp_improvements"]:
-        patches.core.addWarpImprovements(rom, data["ap_options"]["additional_warp_points"])
+    if ap_options["warp_improvements"]:
+        patches.core.addWarpImprovements(rom, ap_options["additional_warp_points"])
 
-    palette = data["ap_options"]["palette"]
+    palette = ap_options["palette"]
     if palette != Palette.option_normal:
         ranges = {
             # Object palettes

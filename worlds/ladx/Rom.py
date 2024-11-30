@@ -31,7 +31,7 @@ class LADXPatchExtensions(worlds.Files.APPatchExtension):
         out_name = f"{data['out_base']}{caller.result_file_ending}"
         parser = get_parser()
         args = parser.parse_args([rom_name, "-o", out_name, "--dump"])
-        return generator.generateRom(rom, args, data, caller.player, caller.player_name)
+        return generator.generateRom(rom, args, data)
 
     @staticmethod
     def patch_title_screen(caller: worlds.Files.APProcedurePatch, rom: bytes, data_file: str) -> bytes:
@@ -63,7 +63,9 @@ def write_patch_data(world: "LinksAwakeningWorld", patch: LADXProcedurePatch):
         "seed": world.multiworld.seed,
         "seed_name": world.multiworld.seed_name,
         "multi_key": binascii.hexlify(world.multi_key).decode(),
-        "player_names": list(world.multiworld.player_name.values()),
+        "player": patch.player,
+        "player_name": patch.player_name,
+        "other_player_names": list(world.multiworld.player_name.values()),
         "item_list": binascii.hexlify(item_list).decode(),
         "hint_texts": generate_hint_texts(world),
         "world_setup": {

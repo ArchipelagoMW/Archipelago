@@ -19,7 +19,7 @@ from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
                         create_regions_from_ladxr, get_locations_to_id)
 from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptions, ladx_option_groups
-from .Rom import LADXProcedurePatch, write_patch_data, LADX_HASH
+from .Rom import LADXProcedurePatch, write_patch_data
 
 DEVELOPER_MODE = False
 
@@ -29,7 +29,7 @@ class LinksAwakeningSettings(settings.Group):
         """File name of the Link's Awakening DX rom"""
         copy_to = "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"
         description = "LADX ROM File"
-        md5s = [LADX_HASH]
+        md5s = [LADXProcedurePatch.hash]
 
     class RomStart(str):
         """
