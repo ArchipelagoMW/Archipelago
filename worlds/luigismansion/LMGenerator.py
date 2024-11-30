@@ -181,14 +181,14 @@ class LuigisMansionRandomizer:
         self.dol.data.write(struct.pack(">B", *scare_val))
 
     # Updates all jmp tables in the map2.szp file.
-    def update_maptwo_jmp_tables(self):
+    def update_maptwo_jmp_tables(self, boo_checks: bool):
         # Updates all data entries for each jmp table in memory first.
         update_character_info(self.jmp_character_info_table, self.output_data)
         update_item_info_table(self.jmp_item_info_table, self.output_data)
         update_item_appear_table(self.jmp_item_appear_table, self.output_data)
         update_treasure_table(self.jmp_treasure_table, self.jmp_character_info_table, self.output_data)
         update_furniture_info(self.jmp_furniture_info_table, self.jmp_item_appear_table, self.output_data)
-        update_event_info(self.jmp_event_info_table)
+        update_event_info(self.jmp_event_info_table, boo_checks)
         update_observer_info(self.jmp_observer_info_table)
         update_key_info(self.jmp_key_info_table, self.output_data)
         update_obj_info(self.jmp_obj_info_table)
@@ -211,7 +211,7 @@ class LuigisMansionRandomizer:
     def save_randomized_iso(self):
         seed(self.output_data["Seed"])
 
-        self.update_maptwo_jmp_tables()
+        self.update_maptwo_jmp_tables(True if self.output_data["Options"]["boo_gates"] == 1 else False)
 
         # Save the map two file changes
         # As mentioned before, these szp files need to be compressed again in order to be properly read by Dolphin/GC.
@@ -225,6 +225,8 @@ class LuigisMansionRandomizer:
         self.gcm.changed_files["sys/main.dol"] = self.dol.data
 
         # Update all custom events
+        # TODO Add custom events for 16, 47, and 96 (custom boo events) Add a function to pass and overwrite
+        # TODO placeholders, like we do below in event 48.
         list_events = ["03", "04", "12", "17", "22", "29", "32", "38", "44", "45", "50",
                        "61", "63", "64", "65", "66", "67", "82"]
         for custom_event in list_events:
