@@ -64,10 +64,10 @@ DISABLE_OBELISK_SIDES = build_disabled_locations_adjustment(
 
 DISABLE_NON_RANDOMIZED_ENTITIES = ([
     *build_disabled_locations_adjustment(UNRANDOMIZED_ENTITIES),
-    AddedEvent("Monastery Laser Activation", "Monastery Laser", ["Symmetry Island Laser Yellow", "Desert Discard", "Treehouse Green Bridge Discard"]),
+    AddedEvent("Monastery Laser Activation", "Monastery Laser", ["Symmetry Island Laser Yellow 3", "Desert Discard", "Treehouse Green Bridge Discard"]),
     AddedEvent("Bunker Laser Activation", "Bunker Laser", ["Outside Tutorial Shed Row 5", "Town Cargo Box Discard", "Mountainside Discard"]),
     AddedEvent("Shadows Laser Activation", "Shadows Laser", ["Outside Tutorial Tree Row 9", "Shipwreck Discard", "Town Rooftop Discard"]),
-    AddedEvent("Town Tower 4th Door Opens", "Town Tower 4th Door", ["Outside Tutorial Outpost Discard", "Glass Factory Discard", "Theater Discard"]),
+    AddedEvent("Town Tower 4th Door Opens", "Town Tower Fourth Door", ["Outside Tutorial Outpost Discard", "Glass Factory Discard", "Theater Discard"]),
     AddedEvent("Jungle Popup Wall Lifts", "Jungle Popup Wall", ["Treehouse Laser Discard", "Keep Discard", "Jungle Discard", "Jungle Popup Wall Control"]),
     RequirementChange("0x17C65", "0x00A5B | 0x17CE7 | 0x17FA9", None),
     RequirementChange("0x0C2B2", "0x00061 | 0x17D01 | 0x17C42", None),
@@ -84,8 +84,11 @@ DISABLE_REGULAR_DISCARDS = build_disabled_locations_adjustment([
 ])
 DISABLE_MOUNTAIN_BOTTOM_FLOOR_DISCARD = build_disabled_locations_adjustment(["Mountain Bottom Floor Discard"])
 
-DISABLE_VAULTS = build_disabled_locations_adjustment([
-    *[name for name, entity in static_witness_logic.ENTITIES_BY_NAME.items() if entity["locationType"] == "Vault"],
+DISABLE_VAULTS_EXCEPT_CHALLENGE = build_disabled_locations_adjustment([
+    *[
+        name for name, entity in static_witness_logic.ENTITIES_BY_NAME.items()
+        if entity["locationType"] == "Vault" and entity["checkName"] != "Challenge Vault Box"
+    ],
     "Theater Video Input"
 ])
 
@@ -105,16 +108,17 @@ EARLY_CAVES_START_INVENTORY = [
 ENTITY_HUNT = [
     RequirementChange("0x03629", "Entity Hunt", "True"),
     RequirementChange("0x03505", "0x03629", "True"),
-    AddedConnection("Tutorial", "Outside Tutorial", "True"),
+    AddedConnection("Tutorial", "Outside Tutorial", "TrueOneWay"),
+    AddedConnection("Outside Tutorial", "Tutorial", "TrueOneWay"),
 ]
 
 ROTATED_BOX = [
-    RequirementChange("0xFFF00", "11 Lasers", "True"),
+    RequirementChange("0xFFF00", "11 Lasers + Redirect", "True"),
 ]
 
 QUARRY_ELEVATOR_COMES_TO_YOU = [
     AddedConnection("Quarry", "Quarry Elevator", "TrueOneWay"),
-    AddedConnection("Outside Quarry", "Quarry Elevator", "TruoeOneWay"),
+    AddedConnection("Outside Quarry", "Quarry Elevator", "TrueOneWay"),
 ]
 
 BUNKER_ELEVATOR_COMES_TO_YOU = [
@@ -124,7 +128,7 @@ BUNKER_ELEVATOR_COMES_TO_YOU = [
 SWAMP_LONG_BRIDGE_COMES_TO_YOU = [
     AddedConnection("Outside Swamp", "Swamp Long Bridge", "TrueOneWay"),
     AddedConnection("Swamp Near Boat", "Swamp Long Bridge", "TrueOneWay"),
-    RequirementChange("0x035DE", "0x17E2B", "True"), # Swamp Purple Sand Bottom EP
+    RequirementChange("0x035DE", "0x17E2B", "True"),  # Swamp Purple Sand Bottom EP
 ]
 
 TOWN_MAZE_BRIDGE_COMES_TO_YOU = [

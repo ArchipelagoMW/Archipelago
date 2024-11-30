@@ -307,8 +307,10 @@ class WitnessPlayerLogic:
             return
 
         if isinstance(adjustment, AddedEvent):
-            for trigger_entity in adjustment.trigger_entities:
-                self.CONDITIONAL_EVENTS[(adjustment.target_entity, trigger_entity)] = adjustment.event_item_name
+            target_entity_hex = static_witness_logic.ENTITIES_BY_NAME[adjustment.target_entity]["entity_hex"]
+            for trigger_entity_name in adjustment.trigger_entities:
+                trigger_entity_hex = static_witness_logic.ENTITIES_BY_NAME[trigger_entity_name]["entity_hex"]
+                self.CONDITIONAL_EVENTS[(target_entity_hex, trigger_entity_hex)] = adjustment.event_item_name
             return
 
         if isinstance(adjustment, RequirementChange):
@@ -363,6 +365,9 @@ class WitnessPlayerLogic:
             else:
                 new_conn = (target_region, parse_lambda(panel_set_string))
                 self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].add(new_conn)
+            return
+
+        raise ValueError(f"Unrecognized option adjustment: {adjustment}")
 
     def handle_regular_postgame(self, world: "WitnessWorld") -> List[OptionAdjustment]:
         """
@@ -397,16 +402,16 @@ class WitnessPlayerLogic:
         # to open Mountain Entry (Stars 2). However, since there is a very easy sphere 1 snipe, this is not considered.
 
         if victory == "mountain_box_long":
-            postgame_adjustments.append(DisabledEntity("Challenge Timer Start"))
+            postgame_adjustments.append(DisabledEntity("Challenge Start Timer"))
 
         # If we have a proper short box goal, anything based on challenge lasers will never have something required.
         if proper_shortbox_goal:
-            postgame_adjustments.append(DisabledEntity("Mountain Box Long"))
-            postgame_adjustments.append(DisabledEntity("Challenge Timer Start"))
+            postgame_adjustments.append(DisabledEntity("Mountaintop Box Long"))
+            postgame_adjustments.append(DisabledEntity("Challenge Start Timer"))
 
         # In a case where long box can be activated before short box, short box is postgame.
         if reverse_longbox_goal:
-            postgame_adjustments.append(DisabledEntity("Mountain Box Short"))
+            postgame_adjustments.append(DisabledEntity("Mountaintop Box Short"))
 
         # ||| Section 2: "Fun" considerations |||
         # These are cases in which it was deemed "unfun" to have an "oops, all lasers" situation, especially when
@@ -421,7 +426,7 @@ class WitnessPlayerLogic:
         )
 
         if mbfd_extra_exclusions:
-            postgame_adjustments.append(DisabledEntity("Mountain Box Long"))
+            postgame_adjustments.append(DisabledEntity("Mountaintop Box Long"))
 
         # Another big postgame case that is missed is "Desert Laser Redirect (Panel)".
         # An 11 lasers longbox seed could technically have this item on Challenge Vault Box.
@@ -464,7 +469,7 @@ class WitnessPlayerLogic:
 
             # If mountain lasers are disabled, and challenge lasers > 7, the box will need to be rotated
             if chal_lasers > 7:
-                postgame_adjustments.append(options_adjustments.ROTATED_BOX)
+                postgame_adjustments += options_adjustments.ROTATED_BOX
 
         if disable_challenge_lasers:
             self.DISABLE_EVERYTHING_BEHIND.add("0xFFF00")  # Long box
@@ -514,10 +519,10 @@ class WitnessPlayerLogic:
                 adjustments_to_make += options_adjustments.DISABLE_REGULAR_DISCARDS
 
             if remote_doors:
-                adjustments_to_make.append(options_adjustments.DISABLE_MOUNTAIN_BOTTOM_FLOOR_DISCARD)
+                adjustments_to_make += options_adjustments.DISABLE_MOUNTAIN_BOTTOM_FLOOR_DISCARD
 
         if not world.options.shuffle_vault_boxes:
-            adjustments_to_make += options_adjustments.DISABLE_VAULTS
+            adjustments_to_make += options_adjustments.DISABLE_VAULTS_EXCEPT_CHALLENGE
             if not victory == "challenge":
                 adjustments_to_make.append(DisabledEntity("Challenge Start Timer"))
 

@@ -12,7 +12,7 @@ GENERAL_LOCATIONS = {
     "Tutorial Gate Open",
 
     "Outside Tutorial Vault Box",
-    "Outside Tutorial Discard",
+    "Outside Tutorial Outpost Discard",
     "Outside Tutorial Shed Row 5",
     "Outside Tutorial Tree Row 9",
     "Outside Tutorial Outpost Entry Panel",
