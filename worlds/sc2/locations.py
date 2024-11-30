@@ -5182,6 +5182,84 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_Z.mission_name, "North Xel'Naga Vessel", SC2_RACESWAP_LOC_ID_OFFSET + 12608, LocationType.VANILLA,
                            logic.zerg_harbinger_of_oblivion_requirement
                            ),
+        make_location_data(SC2Mission.UNSEALING_THE_PAST_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 12700, LocationType.VICTORY,
+                           logic.terran_unsealing_the_past_requirement
+                           ),
+        make_location_data(SC2Mission.UNSEALING_THE_PAST_T.mission_name, "Zerg Cleared", SC2_RACESWAP_LOC_ID_OFFSET + 12701, LocationType.EXTRA),
+        make_location_data(SC2Mission.UNSEALING_THE_PAST_T.mission_name, "First Stasis Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12702, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.advanced_tactics
+                                   or logic.terran_unsealing_the_past_requirement
+                           )),
+        make_location_data(SC2Mission.UNSEALING_THE_PAST_T.mission_name, "Second Stasis Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12703, LocationType.EXTRA,
+                           logic.terran_unsealing_the_past_requirement
+                           ),
+        make_location_data(SC2Mission.UNSEALING_THE_PAST_T.mission_name, "Third Stasis Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12704, LocationType.EXTRA,
+                           logic.terran_unsealing_the_past_requirement
+                           ),
+        make_location_data(SC2Mission.UNSEALING_THE_PAST_T.mission_name, "Fourth Stasis Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12705, LocationType.EXTRA,
+                           logic.terran_unsealing_the_past_requirement
+                           ),
+        make_location_data(SC2Mission.UNSEALING_THE_PAST_T.mission_name, "South Power Core", SC2_RACESWAP_LOC_ID_OFFSET + 12706, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_unsealing_the_past_requirement(state)
+                                   and (
+                                           adv_tactics
+                                           or logic.terran_air(state)
+                                           or state.has_all({item_names.GOLIATH, item_names.GOLIATH_JUMP_JETS}, player)
+                                   )
+                           )),
+        make_location_data(SC2Mission.UNSEALING_THE_PAST_T.mission_name, "East Power Core", SC2_RACESWAP_LOC_ID_OFFSET + 12707, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.terran_unsealing_the_past_requirement(state)
+                                   and (
+                                           adv_tactics
+                                           or logic.terran_air(state)
+                                           or state.has_all({item_names.GOLIATH, item_names.GOLIATH_JUMP_JETS}, player)
+                                   )
+                           )),
+        make_location_data(SC2Mission.UNSEALING_THE_PAST_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 12800, LocationType.VICTORY,
+                           logic.zerg_unsealing_the_past_requirement
+                           ),
+        make_location_data(SC2Mission.UNSEALING_THE_PAST_Z.mission_name, "Zerg Cleared", SC2_RACESWAP_LOC_ID_OFFSET + 12801, LocationType.EXTRA),
+        make_location_data(SC2Mission.UNSEALING_THE_PAST_Z.mission_name, "First Stasis Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12802, LocationType.EXTRA,
+                           lambda state: (
+                                   logic.advanced_tactics
+                                   or logic.zerg_unsealing_the_past_requirement
+                           )),
+        make_location_data(SC2Mission.UNSEALING_THE_PAST_Z.mission_name, "Second Stasis Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12803, LocationType.EXTRA,
+                           logic.zerg_unsealing_the_past_requirement
+                           ),
+        make_location_data(SC2Mission.UNSEALING_THE_PAST_Z.mission_name, "Third Stasis Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12804, LocationType.EXTRA,
+                           logic.zerg_unsealing_the_past_requirement
+                           ),
+        make_location_data(SC2Mission.UNSEALING_THE_PAST_Z.mission_name, "Fourth Stasis Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12805, LocationType.EXTRA,
+                           logic.zerg_unsealing_the_past_requirement
+                           ),
+        make_location_data(SC2Mission.UNSEALING_THE_PAST_Z.mission_name, "South Power Core", SC2_RACESWAP_LOC_ID_OFFSET + 12806, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.zerg_unsealing_the_past_requirement(state)
+                                   and (
+                                           adv_tactics
+                                           or (
+                                                   state.has(item_names.MUTALISK, player)
+                                                   or logic.morph_brood_lord(state)
+                                                   or logic.morph_guardian(state)
+                                           )
+                                   )
+                           )),
+        make_location_data(SC2Mission.UNSEALING_THE_PAST_Z.mission_name, "East Power Core", SC2_RACESWAP_LOC_ID_OFFSET + 12807, LocationType.VANILLA,
+                           lambda state: (
+                                   logic.zerg_unsealing_the_past_requirement(state)
+                                   and (
+                                           adv_tactics
+                                           or (
+                                                   state.has(item_names.MUTALISK, player)
+                                                   or logic.morph_brood_lord(state)
+                                                   or logic.morph_guardian(state)
+                                           )
+                                   )
+                           )),
     ]
 
     beat_events = []

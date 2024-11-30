@@ -474,7 +474,7 @@ item_table = {
                  important_for_filtering=True),
     item_names.SIEGE_TANK_SMART_SERVOS:
         ItemData(270 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_3, 5, SC2Race.TERRAN,
-                 classification=ItemClassification.filler, parent_item=item_names.SIEGE_TANK),
+                 classification=ItemClassification.progression, parent_item=item_names.SIEGE_TANK),
     item_names.SIEGE_TANK_GRADUATING_RANGE:
         ItemData(271 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_3, 6, SC2Race.TERRAN,
                  classification=ItemClassification.progression, parent_item=item_names.SIEGE_TANK),
@@ -813,7 +813,7 @@ item_table = {
                  classification=ItemClassification.filler, parent_item=item_names.CYCLONE),
     item_names.LIBERATOR_SMART_SERVOS:
         ItemData(384 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 3, SC2Race.TERRAN,
-                 classification=ItemClassification.filler, parent_item=item_names.LIBERATOR),
+                 classification=ItemClassification.progression, parent_item=item_names.LIBERATOR),
     item_names.LIBERATOR_RESOURCE_EFFICIENCY:
         ItemData(385 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 4, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=item_names.LIBERATOR),
@@ -843,7 +843,7 @@ item_table = {
                  parent_item=item_names.BATTLECRUISER),
     item_names.BATTLECRUISER_COVERT_OPS_ENGINES:
         ItemData(394 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 12, SC2Race.TERRAN,
-                 parent_item=item_names.BATTLECRUISER),
+                 classification=ItemClassification.progression, parent_item=item_names.BATTLECRUISER),
     item_names.PLANETARY_FORTRESS_ORBITAL_MODULE:
         ItemData(395 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_4, 1, SC2Race.TERRAN,
                  parent_item=item_names.PLANETARY_FORTRESS),

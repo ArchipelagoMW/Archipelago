@@ -1726,6 +1726,58 @@ class SC2Logic:
                 )
         )
 
+    def terran_unsealing_the_past_requirement(self, state: CollectionState) -> bool:
+        return (
+                self.terran_competent_anti_air(state)
+                and self.terran_competent_comp(state)
+                and (
+                        state.has_all({item_names.SIEGE_TANK, item_names.SIEGE_TANK_JUMP_JETS}, self.player)
+                        or state.has_all({item_names.VIKING, item_names.VIKING_SHREDDER_ROUNDS}, self.player)
+                        or state.has(item_names.BANSHEE, self.player)
+                        or state.has_all({item_names.BATTLECRUISER, item_names.BATTLECRUISER_ATX_LASER_BATTERY,
+                                          item_names.BATTLECRUISER_COVERT_OPS_ENGINES}, self.player)
+                        or (
+                                self.advanced_tactics
+                                and (
+                                        state.has_all({item_names.SIEGE_TANK, item_names.SIEGE_TANK_SMART_SERVOS},
+                                                      self.player)
+                                        or (
+                                                state.has_all({item_names.LIBERATOR, item_names.LIBERATOR_SMART_SERVOS},
+                                                              self.player)
+                                                and (
+                                                        state.has_all(
+                                                            {item_names.HELLION, item_names.HELLION_HELLBAT_ASPECT},
+                                                            self.player)
+                                                        or state.has(item_names.FIREBAT, self.player)
+                                                )
+                                                and self.terran_bio_heal(state)
+                                        )
+                                )
+                        )
+                )
+        )
+
+    def zerg_unsealing_the_past_requirement(self, state: CollectionState) -> bool:
+        return (
+            self.zerg_competent_comp(state)
+            and self.zerg_competent_anti_air(state)
+            and (
+                self.morph_brood_lord(state)
+                or self.zerg_big_monsters(state)
+                or state.has_all({item_names.MUTALISK, item_names.MUTALISK_SEVERING_GLAIVE, item_names.MUTALISK_VICIOUS_GLAIVE}, self.player)
+                or (
+                    self.advanced_tactics
+                    and (
+                        self.morph_igniter(state)
+                        or (
+                            self.morph_lurker(state)
+                            and state.has(item_names.LURKER_SEISMIC_SPINES, self.player)
+                        )
+                    )
+                )
+            )
+        )
+
     def protoss_competent_comp(self, state: CollectionState) -> bool:
         return (
                 self.protoss_common_unit(state)
