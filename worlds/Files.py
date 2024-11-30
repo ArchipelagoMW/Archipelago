@@ -4,6 +4,7 @@ import abc
 import json
 import zipfile
 from enum import IntEnum
+import logging
 import os
 import threading
 
@@ -33,6 +34,23 @@ class AutoPatchRegister(abc.ABCMeta):
 
     @staticmethod
     def get_handler(file: str) -> Optional[AutoPatchRegister]:
+        import worlds
+        try:
+            with zipfile.ZipFile(file) as zf:
+                meta_file = zf.read("archipelago.json")
+                meta = json.loads(meta_file)
+                game = meta.get("game")
+        except (FileNotFoundError, zipfile.BadZipFile, KeyError) as ex:
+            # KeyError may be raised by either zf.read() if the json file is not present, or by meta.get().
+            logging.warning(f"Could not determine game due to \"%s\". Loading all games to determine handler for"
+                            f" patch %s", ex, file)
+            game = None
+
+        if game:
+            worlds.ensure_all_worlds_loaded(game)
+        else:
+            worlds.ensure_all_worlds_loaded()
+
         for file_ending, handler in AutoPatchRegister.file_endings.items():
             if file.endswith(file_ending):
                 return handler
@@ -54,6 +72,8 @@ class AutoPatchExtensionRegister(abc.ABCMeta):
     def get_handler(game: Optional[str]) -> Union[AutoPatchExtensionRegister, List[AutoPatchExtensionRegister]]:
         if not game:
             return APPatchExtension
+        import worlds
+        worlds.ensure_all_worlds_loaded(game)
         handler = AutoPatchExtensionRegister.extension_types.get(game, APPatchExtension)
         if handler.required_extensions:
             handlers = [handler]
