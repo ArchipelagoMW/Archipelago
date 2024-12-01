@@ -13,7 +13,7 @@ def create_content(player_options: options.StardewValleyOptions) -> StardewConte
 
 
 def choose_content_packs(player_options: options.StardewValleyOptions):
-    active_packs = [content_packs.pelican_town, content_packs.the_desert, content_packs.the_farm, content_packs.the_mines, content_packs.marnies_ranch]
+    active_packs = [content_packs.pelican_town, content_packs.the_desert, content_packs.the_farm, content_packs.the_mines]
 
     if player_options.exclude_ginger_island == options.ExcludeGingerIsland.option_false:
         active_packs.append(content_packs.ginger_island_content_pack)
