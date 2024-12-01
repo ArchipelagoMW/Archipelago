@@ -1,6 +1,6 @@
 from typing import List
 
-from worlds.civ_6.ItemData import TechPrereqData
+from ..ItemData import TechPrereqData
 
 
 new_tech_prereqs: List[TechPrereqData] = [

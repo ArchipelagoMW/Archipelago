@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, List
 
 if TYPE_CHECKING:
-    from worlds.civ_6.Data import ExistingItemData
+    from ..Data import ExistingItemData
 
 
 existing_civics: List["ExistingItemData"] = [

@@ -65,7 +65,9 @@ def get_new_civic_prereqs_data() -> List[CivicPrereqData]:
 
 
 def get_new_civics_data() -> List[NewItemData]:
-    return _get_data("new_civics")
+    from .data.new_civics import new_civics
+
+    return new_civics
 
 
 def get_new_tech_prereqs_data() -> List[TechPrereqData]:
@@ -75,8 +77,12 @@ def get_new_tech_prereqs_data() -> List[TechPrereqData]:
 
 
 def get_new_techs_data() -> List[NewItemData]:
-    return _get_data("new_tech")
+    from .data.new_tech import new_tech
+
+    return new_tech
 
 
 def get_progressive_districts_data() -> Dict[str, List[str]]:
-    return _get_data("progressive_districts")
+    from .data.progressive_districts import progressive_districts
+
+    return progressive_districts

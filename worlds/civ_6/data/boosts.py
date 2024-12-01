@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from worlds.civ_6.ItemData import CivVIBoostData
+from ..ItemData import CivVIBoostData
 
 
 boosts: List[CivVIBoostData] = [

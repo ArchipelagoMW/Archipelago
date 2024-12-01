@@ -1,5 +1,5 @@
 from typing import List
-from worlds.civ_6.ItemData import GoodyHutRewardData
+from ..ItemData import GoodyHutRewardData
 
 
 reward_data: List[GoodyHutRewardData] = [

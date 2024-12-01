@@ -1,6 +1,6 @@
 from typing import List
 
-from worlds.civ_6.ItemData import CivicPrereqData
+from ..ItemData import CivicPrereqData
 
 
 new_civic_prereqs: List[CivicPrereqData] = [
