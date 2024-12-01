@@ -1,10 +1,6 @@
-from dataclasses import dataclass
-import json
-import os
-import pkgutil
-from typing import Any, Dict, List, TypedDict
+from typing import Dict, List
 
-from worlds.civ_6.ItemData import (
+from .ItemData import (
     CivVIBoostData,
     CivicPrereqData,
     ExistingItemData,
@@ -12,20 +8,6 @@ from worlds.civ_6.ItemData import (
     NewItemData,
     TechPrereqData,
 )
-
-
-_cache: Dict[Any, Any] = {}
-
-
-def _get_data(key: str) -> Any:
-    global _cache
-    if key not in _cache:
-        path = os.path.join("data", f"{key}.json")
-        data = pkgutil.get_data(__name__, path)
-        if data is None:
-            raise FileNotFoundError(f"Data file not found: {path}")
-        _cache[key] = json.loads(data.decode())
-    return _cache[key]
 
 
 def get_boosts_data() -> List[CivVIBoostData]:
