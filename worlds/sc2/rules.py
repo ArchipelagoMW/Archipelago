@@ -1747,8 +1747,6 @@ class SC2Logic:
                 and self.terran_competent_comp(state)
                 and (
                         state.has_all({item_names.SIEGE_TANK, item_names.SIEGE_TANK_JUMP_JETS}, self.player)
-                        or state.has_all({item_names.VIKING, item_names.VIKING_SHREDDER_ROUNDS}, self.player)
-                        or state.has(item_names.BANSHEE, self.player)
                         or state.has_all({item_names.BATTLECRUISER, item_names.BATTLECRUISER_ATX_LASER_BATTERY,
                                           item_names.BATTLECRUISER_COVERT_OPS_ENGINES}, self.player)
                         or (
@@ -1760,12 +1758,18 @@ class SC2Logic:
                                                 state.has_all({item_names.LIBERATOR, item_names.LIBERATOR_SMART_SERVOS},
                                                               self.player)
                                                 and (
-                                                        state.has_all(
-                                                            {item_names.HELLION, item_names.HELLION_HELLBAT_ASPECT},
-                                                            self.player)
-                                                        or state.has(item_names.FIREBAT, self.player)
+                                                        (
+                                                                state.has_all(
+                                                                    {item_names.HELLION,
+                                                                     item_names.HELLION_HELLBAT_ASPECT},
+                                                                    self.player)
+                                                                or state.has(item_names.FIREBAT, self.player)
+                                                        )
+                                                        and self.terran_bio_heal(state)
                                                 )
-                                                and self.terran_bio_heal(state)
+                                                or state.has_all({item_names.VIKING, item_names.VIKING_SHREDDER_ROUNDS},
+                                                                 self.player)
+                                                or state.has(item_names.BANSHEE, self.player)
                                         )
                                 )
                         )
