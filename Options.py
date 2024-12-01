@@ -828,7 +828,10 @@ class VerifyKeys(metaclass=FreezeValidKeys):
                                     f"is not a valid location name from {world.game}. "
                                     f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
 
+    def __iter__(self) -> typing.Iterator[typing.Any]:
+        return self.value.__iter__()
 
+    
 class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mapping[str, typing.Any]):
     default = {}
     supports_weighting = False
@@ -1460,22 +1463,26 @@ it.
 def get_option_groups(world: typing.Type[World], visibility_level: Visibility = Visibility.template) -> typing.Dict[
         str, typing.Dict[str, typing.Type[Option[typing.Any]]]]:
     """Generates and returns a dictionary for the option groups of a specified world."""
-    option_groups = {option: option_group.name
-                     for option_group in world.web.option_groups
-                     for option in option_group.options}
+    option_to_name = {option: option_name for option_name, option in world.options_dataclass.type_hints.items()}
+
+    ordered_groups = {group.name: group.options for group in world.web.option_groups}
+
     # add a default option group for uncategorized options to get thrown into
-    ordered_groups = ["Game Options"]
-    [ordered_groups.append(group) for group in option_groups.values() if group not in ordered_groups]
-    grouped_options = {group: {} for group in ordered_groups}
-    for option_name, option in world.options_dataclass.type_hints.items():
-        if visibility_level & option.visibility:
-            grouped_options[option_groups.get(option, "Game Options")][option_name] = option
+    if "Game Options" not in ordered_groups:
+        grouped_options = set(option for group in ordered_groups.values() for option in group)
+        ungrouped_options = [option for option in option_to_name if option not in grouped_options]
+        # only add the game options group if we have ungrouped options
+        if ungrouped_options:
+            ordered_groups = {**{"Game Options": ungrouped_options}, **ordered_groups}
 
-    # if the world doesn't have any ungrouped options, this group will be empty so just remove it
-    if not grouped_options["Game Options"]:
-        del grouped_options["Game Options"]
-
-    return grouped_options
+    return {
+        group: {
+            option_to_name[option]: option
+            for option in group_options
+            if (visibility_level in option.visibility and option in option_to_name)
+        }
+        for group, group_options in ordered_groups.items()
+    }
 
 
 def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True) -> None:
