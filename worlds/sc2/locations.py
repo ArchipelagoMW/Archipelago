@@ -1947,19 +1947,19 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.protoss_competent_comp
         ),
         make_location_data(SC2Mission.TEMPLAR_S_CHARGE.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 1900, LocationType.VICTORY,
-            logic.templars_charge_requirement
+            logic.protoss_templars_charge_requirement
         ),
         make_location_data(SC2Mission.TEMPLAR_S_CHARGE.mission_name, "Northwest Power Core", SC2LOTV_LOC_ID_OFFSET + 1901, LocationType.EXTRA,
-            logic.templars_charge_requirement
+            logic.protoss_templars_charge_requirement
         ),
         make_location_data(SC2Mission.TEMPLAR_S_CHARGE.mission_name, "Northeast Power Core", SC2LOTV_LOC_ID_OFFSET + 1902, LocationType.EXTRA,
-            logic.templars_charge_requirement
+            logic.protoss_templars_charge_requirement
         ),
         make_location_data(SC2Mission.TEMPLAR_S_CHARGE.mission_name, "Southeast Power Core", SC2LOTV_LOC_ID_OFFSET + 1903, LocationType.EXTRA,
-            logic.templars_charge_requirement
+            logic.protoss_templars_charge_requirement
         ),
         make_location_data(SC2Mission.TEMPLAR_S_CHARGE.mission_name, "West Hybrid Stasis Chamber", SC2LOTV_LOC_ID_OFFSET + 1904, LocationType.VANILLA,
-            logic.templars_charge_requirement
+            logic.protoss_templars_charge_requirement
         ),
         make_location_data(SC2Mission.TEMPLAR_S_CHARGE.mission_name, "Southeast Hybrid Stasis Chamber", SC2LOTV_LOC_ID_OFFSET + 1905, LocationType.VANILLA,
             logic.protoss_fleet
@@ -5415,6 +5415,44 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            ),
         make_location_data(SC2Mission.RAK_SHIR_Z.mission_name, "East Slayn Elemental", SC2_RACESWAP_LOC_ID_OFFSET + 13403, LocationType.VANILLA,
                            logic.zerg_rak_shir_requirement
+                           ),
+        make_location_data(SC2Mission.TEMPLAR_S_CHARGE_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 13500, LocationType.VICTORY,
+                           logic.terran_templars_charge_requirement
+                           ),
+        make_location_data(SC2Mission.TEMPLAR_S_CHARGE_T.mission_name, "Northwest Power Core", SC2_RACESWAP_LOC_ID_OFFSET + 13501, LocationType.EXTRA,
+                           logic.terran_templars_charge_requirement
+                           ),
+        make_location_data(SC2Mission.TEMPLAR_S_CHARGE_T.mission_name, "Northeast Power Core", SC2_RACESWAP_LOC_ID_OFFSET + 13502, LocationType.EXTRA,
+                           logic.terran_templars_charge_requirement
+                           ),
+        make_location_data(SC2Mission.TEMPLAR_S_CHARGE_T.mission_name, "Southeast Power Core", SC2_RACESWAP_LOC_ID_OFFSET + 13503, LocationType.EXTRA,
+                           logic.terran_templars_charge_requirement
+                           ),
+        make_location_data(SC2Mission.TEMPLAR_S_CHARGE_T.mission_name, "West Hybrid Stasis Chamber", SC2_RACESWAP_LOC_ID_OFFSET + 13504, LocationType.VANILLA,
+                           logic.terran_templars_charge_requirement
+                           ),
+        make_location_data(SC2Mission.TEMPLAR_S_CHARGE_T.mission_name, "Southeast Hybrid Stasis Chamber", SC2_RACESWAP_LOC_ID_OFFSET + 13505, LocationType.VANILLA,
+                           lambda state: (
+                               logic.terran_templars_charge_requirement(state)
+                               and logic.terran_air(state)
+                           )),
+        make_location_data(SC2Mission.TEMPLAR_S_CHARGE_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 13600, LocationType.VICTORY,
+                           logic.zerg_templars_charge_requirement
+                           ),
+        make_location_data(SC2Mission.TEMPLAR_S_CHARGE_Z.mission_name, "Northwest Power Core", SC2_RACESWAP_LOC_ID_OFFSET + 13601, LocationType.EXTRA,
+                           logic.zerg_templars_charge_requirement
+                           ),
+        make_location_data(SC2Mission.TEMPLAR_S_CHARGE_Z.mission_name, "Northeast Power Core", SC2_RACESWAP_LOC_ID_OFFSET + 13602, LocationType.EXTRA,
+                           logic.zerg_templars_charge_requirement
+                           ),
+        make_location_data(SC2Mission.TEMPLAR_S_CHARGE_Z.mission_name, "Southeast Power Core", SC2_RACESWAP_LOC_ID_OFFSET + 13603, LocationType.EXTRA,
+                           logic.zerg_templars_charge_requirement
+                           ),
+        make_location_data(SC2Mission.TEMPLAR_S_CHARGE_Z.mission_name, "West Hybrid Stasis Chamber", SC2_RACESWAP_LOC_ID_OFFSET + 13604, LocationType.VANILLA,
+                           logic.zerg_templars_charge_requirement
+                           ),
+        make_location_data(SC2Mission.TEMPLAR_S_CHARGE_Z.mission_name, "Southeast Hybrid Stasis Chamber", SC2_RACESWAP_LOC_ID_OFFSET + 13605, LocationType.VANILLA,
+                           logic.zerg_templars_charge_requirement
                            ),
     ]
 

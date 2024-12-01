@@ -621,7 +621,7 @@ item_table = {
                  parent_item=item_names.BATTLECRUISER, quantity=2),
     item_names.BATTLECRUISER_PROGRESSIVE_DEFENSIVE_MATRIX:
         ItemData(319 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Progressive, 20, SC2Race.TERRAN,
-                 parent_item=item_names.BATTLECRUISER, quantity=2),
+                 classification=ItemClassification.progression, parent_item=item_names.BATTLECRUISER, quantity=2),
     item_names.GHOST_OCULAR_IMPLANTS:
         ItemData(320 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_4, 2, SC2Race.TERRAN,
                  parent_item=item_names.GHOST),
@@ -1295,7 +1295,7 @@ item_table = {
     item_names.MUTALISK_SEVERING_GLAIVE:
         ItemData(234 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 4, SC2Race.ZERG, parent_item=item_names.MUTALISK, classification=ItemClassification.progression),
     item_names.MUTALISK_AERODYNAMIC_GLAIVE_SHAPE:
-        ItemData(235 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 5, SC2Race.ZERG, parent_item=item_names.MUTALISK),
+        ItemData(235 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 5, SC2Race.ZERG, parent_item=item_names.MUTALISK, classification=ItemClassification.progression),
     item_names.SWARM_HOST_LOCUST_METABOLIC_BOOST:
         ItemData(236 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 6, SC2Race.ZERG, parent_item=item_names.SWARM_HOST, classification=ItemClassification.filler),
     item_names.SWARM_HOST_ENDURING_LOCUSTS:

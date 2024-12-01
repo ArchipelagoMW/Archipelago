@@ -1923,7 +1923,7 @@ class SC2Logic:
             )
         )
 
-    def templars_charge_requirement(self, state: CollectionState) -> bool:
+    def protoss_templars_charge_requirement(self, state: CollectionState) -> bool:
         return (
             self.protoss_heal(state)
             and self.protoss_anti_armor_anti_air(state)
@@ -1933,6 +1933,61 @@ class SC2Logic:
                     and self.protoss_competent_comp(state)
                 )
             )
+        )
+
+    def terran_templars_charge_requirement(self, state: CollectionState) -> bool:
+        return (
+                self.terran_very_hard_mission_weapon_armor_level(state)
+                and (
+                        (
+                                state.has_all({item_names.BATTLECRUISER, item_names.BATTLECRUISER_ATX_LASER_BATTERY},
+                                              self.player)
+                                and state.count(item_names.BATTLECRUISER_PROGRESSIVE_DEFENSIVE_MATRIX, self.player) >= 2
+                        ) or (
+                                self.terran_air_anti_air(state)
+                                and self.terran_sustainable_mech_heal(state)
+                                and (
+                                        state.has_any({item_names.BANSHEE, item_names.BATTLECRUISER}, self.player)
+                                        or state.has_all({item_names.LIBERATOR, item_names.LIBERATOR_RAID_ARTILLERY},
+                                                         self.player)
+                                        or (
+                                                self.advanced_tactics
+                                                and (
+                                                        state.has_all({
+                                                            item_names.WRAITH,
+                                                            item_names.WRAITH_ADVANCED_LASER_TECHNOLOGY
+                                                        },
+                                                            self.player)
+                                                        or state.has_all({item_names.SIEGE_TANK, item_names.SIEGE_TANK_JUMP_JETS},
+                                                    self.player)
+                                                )
+                                        )
+                                )
+                        )
+                )
+        )
+
+    def zerg_templars_charge_requirement(self, state: CollectionState) -> bool:
+        return (
+                self.zerg_competent_comp(state)
+                and self.zerg_competent_anti_air(state)
+                and state.has(item_names.SWARM_QUEEN, self.player)
+                and (
+                        self.morph_guardian(state)
+                        or self.morph_brood_lord(state)
+                        or state.has(item_names.INFESTED_BANSHEE, self.player)
+                        or (
+                                self.advanced_tactics
+                                and state.has_all({item_names.MUTALISK, item_names.MUTALISK_SEVERING_GLAIVE, item_names.MUTALISK_VICIOUS_GLAIVE, item_names.MUTALISK_AERODYNAMIC_GLAIVE_SHAPE}, self.player)
+                        )
+                ) and (
+                        state.has_all({item_names.INFESTED_LIBERATOR, item_names.INFESTED_LIBERATOR_CLOUD_DISPERSAL}, self.player)
+                        or (
+                                self.morph_devourer(state)
+                                and state.has(item_names.MUTALISK, self.player)
+                        )
+                        or state.has_all({item_names.MUTALISK, item_names.MUTALISK_SUNDERING_GLAIVE}, self.player)
+                )
         )
 
     def the_host_requirement(self, state: CollectionState) -> bool:
