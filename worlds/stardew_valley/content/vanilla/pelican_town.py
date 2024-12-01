@@ -564,6 +564,7 @@ pelican_town = ContentPack(
                     items_price=((450, Material.wood),)
                 ),
             ),
+            upgrade_from=BuildingNames.farm_house,
         ),
         Building(
             BuildingNames.kids_room,
@@ -574,6 +575,7 @@ pelican_town = ContentPack(
                     items_price=((100, Material.hardwood),)
                 ),
             ),
+            upgrade_from=BuildingNames.kitchen,
         ),
         Building(
             BuildingNames.cellar,
@@ -583,6 +585,7 @@ pelican_town = ContentPack(
                     money_price=100_000,
                 ),
             ),
+            upgrade_from=BuildingNames.kids_room,
         ),
     )
 )
