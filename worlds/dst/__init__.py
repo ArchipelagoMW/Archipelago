@@ -2,7 +2,7 @@ from typing import Dict, Set
 
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
-from .Options import DSTOptions
+from .Options import DSTOptions, dontstarvetogether_option_groups
 from . import Regions, Rules, ItemPool, Constants
 from .Locations import location_data_table, location_name_to_id
 from .Items import item_data_table, item_name_to_id
@@ -26,6 +26,7 @@ class DSTWeb(WebWorld):
         "setup/en",
         ["Dragon Wolf Leo"]
     )]
+    option_groups = dontstarvetogether_option_groups
 
 class DSTWorld(World):
     """

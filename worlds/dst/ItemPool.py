@@ -26,7 +26,6 @@ class DSTItemPool:
         self.locked_items_local_id = set()
         self.locked_items = set()
         start_inventory:FrozenSet = frozenset(options.start_inventory.value.keys())
-        nonshuffled:FrozenSet = frozenset() # TODO: Support for nonshuffled options
         region_valid = {
             # Caves
             "cave":         options.cave_regions.value >= options.cave_regions.option_light,
@@ -42,7 +41,7 @@ class DSTItemPool:
         for name, item in item_data_table.items():
             # Don't shuffle nonshuffled items
             if (
-                name in nonshuffled
+                name in options.nonshuffled_items.value
                 or "nonshuffled" in item.tags
                 or "progressive" in item.tags # Add these somewhere else
             ):

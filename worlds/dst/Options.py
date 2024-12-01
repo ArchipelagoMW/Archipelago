@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from Options import Toggle, DefaultOnToggle, Range, NamedRange, Choice, OptionSet, DeathLink, PerGameCommonOptions
+from Options import Toggle, DefaultOnToggle, Range, NamedRange, Choice, OptionSet, DeathLink, PerGameCommonOptions, OptionGroup
+from .Items import item_data_table
 
 class Goal(Choice):
     """
@@ -245,7 +246,7 @@ class PlayerSkillLevel(Choice):
 
     Easier difficulties may make generation more restrictive.
     """
-    display_name = "Player Skill Level"
+    display_name = "Logic Difficulty"
     default = 0
     option_easy = 0
     option_advanced = 1
@@ -354,6 +355,33 @@ class SeasonTrapItems(NamedRange):
         "always": 100,
     }
 
+class NonshuffledItems(OptionSet):
+    """
+    Items that will not be shuffled. 
+    This differs from adding these as starting items since these will only be available at their respective prototype station, etc.
+    """
+    display_name = "Nonshuffled Items"
+    valid_keys = {name for name, item in item_data_table.items() if not len(item.tags.intersection({
+        "nonshuffled",
+        "progressive",
+        "deprecated"
+    }))}
+
+dontstarvetogether_option_groups = [
+    OptionGroup("Logic Options", [
+        PlayerSkillLevel,
+        LightingLogic,
+        WeaponLogic,
+        SeasonGearLogic,
+        BaseMakingLogic,
+        BackpackLogic,
+        HealingLogic,
+    ]),
+    OptionGroup("Item & Location Options", [
+        NonshuffledItems,
+    ]),
+]
+
 @dataclass
 class DSTOptions(PerGameCommonOptions):
     goal: Goal
@@ -383,4 +411,5 @@ class DSTOptions(PerGameCommonOptions):
     junk_item_amount: JunkItemAmount
     trap_items: TrapItems
     season_trap_items: SeasonTrapItems
+    nonshuffled_items: NonshuffledItems
     death_link: DeathLink
