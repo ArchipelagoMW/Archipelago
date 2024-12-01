@@ -148,7 +148,7 @@ class StardewValleyWorld(World):
             region.exits = [Entrance(self.player, exit_name, region) for exit_name in exits]
             return region
 
-        world_regions, world_entrances, self.randomized_entrances = create_regions(create_region, self.random, self.options)
+        world_regions, world_entrances, self.randomized_entrances = create_regions(create_region, self.random, self.options, self.content)
 
         self.logic = StardewLogic(self.player, self.options, self.content, world_regions.keys())
         self.modified_bundles = get_all_bundles(self.random,
@@ -184,7 +184,7 @@ class StardewValleyWorld(World):
 
         self.multiworld.itempool += created_items
 
-        setup_early_items(self.multiworld, self.options, self.player, self.random)
+        setup_early_items(self.multiworld, self.options, self.content, self.player, self.random)
         self.setup_player_events()
         self.setup_victory()
 

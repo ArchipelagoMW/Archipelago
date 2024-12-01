@@ -4,6 +4,7 @@ from typing import Set
 
 from BaseClasses import get_seed
 from . import SVTestCase, complete_options_with_default
+from .. import create_content
 from ..options import EntranceRandomization, ExcludeGingerIsland, SkillProgression
 from ..regions import vanilla_regions, vanilla_connections, randomize_connections, RandomizationFlag, create_final_connections_and_regions
 from ..strings.entrance_names import Entrance as EntranceName
@@ -63,11 +64,12 @@ class TestEntranceRando(SVTestCase):
                 ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
                 SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
             })
+            content = create_content(sv_options)
             seed = get_seed()
             rand = random.Random(seed)
             with self.subTest(flag=flag, msg=f"Seed: {seed}"):
                 entrances, regions = create_final_connections_and_regions(sv_options)
-                _, randomized_connections = randomize_connections(rand, sv_options, regions, entrances)
+                _, randomized_connections = randomize_connections(rand, sv_options, content, regions, entrances)
 
                 for connection in vanilla_connections:
                     if flag in connection.flag:
@@ -90,11 +92,12 @@ class TestEntranceRando(SVTestCase):
                 ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
                 SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
             })
+            content = create_content(sv_options)
             seed = get_seed()
             rand = random.Random(seed)
             with self.subTest(option=option, flag=flag, seed=seed):
                 entrances, regions = create_final_connections_and_regions(sv_options)
-                _, randomized_connections = randomize_connections(rand, sv_options, regions, entrances)
+                _, randomized_connections = randomize_connections(rand, sv_options, content, regions, entrances)
 
                 for connection in vanilla_connections:
                     if flag in connection.flag:
@@ -118,13 +121,14 @@ class TestEntranceRando(SVTestCase):
             ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
             SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
         })
+        content = create_content(sv_options)
 
         for i in range(0, 100 if self.skip_long_tests else 10000):
             seed = get_seed()
             rand = random.Random(seed)
             with self.subTest(msg=f"Seed: {seed}"):
                 entrances, regions = create_final_connections_and_regions(sv_options)
-                randomized_connections, randomized_data = randomize_connections(rand, sv_options, regions, entrances)
+                randomized_connections, randomized_data = randomize_connections(rand, sv_options, content, regions, entrances)
                 connections_by_name = {connection.name: connection for connection in randomized_connections}
 
                 blocked_entrances = {EntranceName.use_island_obelisk, EntranceName.boat_to_ginger_island}
