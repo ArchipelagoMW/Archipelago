@@ -28,7 +28,9 @@ def get_boosts_data() -> List[CivVIBoostData]:
 
 
 def get_era_required_items_data() -> Dict[str, List[str]]:
-    return _get_data("era_required_items")
+    from .data.era_required_items import era_required_items
+
+    return era_required_items
 
 
 class NewItemData(TypedDict):
