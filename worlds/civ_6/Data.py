@@ -4,6 +4,7 @@ import os
 import pkgutil
 from typing import Any, Dict, List, TypedDict
 
+from worlds.civ_6.ItemData import ExistingItemData, NewItemData
 from worlds.civ_6.data.boosts import CivVIBoostData
 
 
@@ -33,19 +34,10 @@ def get_era_required_items_data() -> Dict[str, List[str]]:
     return era_required_items
 
 
-class NewItemData(TypedDict):
-    Type: str
-    Cost: int
-    UITreeRow: int
-    EraType: str
-
-
-class ExistingItemData(NewItemData):
-    Name: str
-
-
 def get_existing_civics_data() -> List[ExistingItemData]:
-    return _get_data("existing_civics")
+    from .data.existing_civics import existing_civics
+
+    return existing_civics
 
 
 def get_existing_techs_data() -> List[ExistingItemData]:
