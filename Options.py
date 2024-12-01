@@ -689,9 +689,9 @@ class Range(NumericOption):
     @classmethod
     def weighted_range(cls, text) -> Range:
         if text == "random-low":
-            return cls(cls.triangular(cls.range_start, cls.range_end, cls.range_start))
+            return cls(cls.triangular(cls.range_start, cls.range_end, 0.0))
         elif text == "random-high":
-            return cls(cls.triangular(cls.range_start, cls.range_end, cls.range_end))
+            return cls(cls.triangular(cls.range_start, cls.range_end, 1.0))
         elif text == "random-middle":
             return cls(cls.triangular(cls.range_start, cls.range_end))
         elif text.startswith("random-range-"):
@@ -717,11 +717,11 @@ class Range(NumericOption):
                 f"{random_range[0]}-{random_range[1]} is outside allowed range "
                 f"{cls.range_start}-{cls.range_end} for option {cls.__name__}")
         if text.startswith("random-range-low"):
-            return cls(cls.triangular(random_range[0], random_range[1], random_range[0]))
+            return cls(cls.triangular(random_range[0], random_range[1], 0.0))
         elif text.startswith("random-range-middle"):
             return cls(cls.triangular(random_range[0], random_range[1]))
         elif text.startswith("random-range-high"):
-            return cls(cls.triangular(random_range[0], random_range[1], random_range[1]))
+            return cls(cls.triangular(random_range[0], random_range[1], 1.0))
         else:
             return cls(random.randint(random_range[0], random_range[1]))
 
@@ -739,52 +739,16 @@ class Range(NumericOption):
         return str(self.value)
 
     @staticmethod
-    def triangular(lower: int, end: int, tri: typing.Optional[int] = None) -> int:
-        if lower == end:
-            return lower
+    def triangular(lower: int, end: int, tri: float = 0.5) -> int:
+        """
+        Integer triangular distribution for `lower` inclusive to `end` inclusive.
 
-        if lower > end:
-            # Swap the two so that `lower` is always smaller. This simplifies later code.
-            lower, end = end, lower
-
-        if tri is not None and (tri < lower or tri > end):
-            # random.triangular allows this for performance reasons, but it is not well-defined/documented behaviour, so
-            # we'll reject this scenario for simplicity.
-            raise Exception(f"Triangular distribution mode {tri} is outside the allowed range {lower}-{end}")
-
-        # To produce integers from [a, b] from a continuous distribution, it is easier to start with a continuous
-        # distribution that is [a, b+1). For example, for lower=0 and end=2, the continuous distribution of [0, 3) can
-        # be split into 3 groups: 0 <= x < 1, 1 <= x < 2 and 2 <= x < 3.
-        new_end = end + 1
-        if tri is not None:
-            # `tri` needs to be remapped from the original [lower, end) range to the new [lower, new_end) range.
-            # Normalize to the range [0, 1).
-            # '[lower, end)' - lower = '[0, end - lower)'
-            # '[0, end - lower)' / (end - lower) = '[0, 1)'
-            tri_normalized = (tri - lower) / (end - lower)
-            # Scale up to fit the new range and then offset back by lower.
-            # '[0, 1)' * (new_end - lower) = '[0, new_end - lower)'
-            # '[0, new_end - lower)' + lower = '[lower, new_end)'
-            tri_rescaled = tri_normalized * (new_end - lower) + lower
-        else:
-            tri_rescaled = None
-
-        # To produce integers from these floats, truncate towards `lower` by using `math.floor`.
-        # Truncating with `int(my_float)` truncates towards `0`, so would not work correctly with `lower < 0`.
-        # Given the previous example for a continuous distribution of [0, 3):
-        # 0 <= x < 1 -> 0
-        # 1 <= x < 2 -> 1
-        # 2 <= x < 3 -> 2
-        r_int = math.floor(random.triangular(lower, new_end, tri_rescaled))
-
-        # Unlike, `random.random()` which is a-inclusive to b-exclusive, [a, b), `random.triangular()` is a-inclusive to
-        # b-inclusive, [a, b], so there is a chance of getting exactly b.
-        # With 1 million calls of `random.triangular(0.9999999999, 1, 1)` might return `1` a single time. `lower` and
-        # `end` are integers so are always at least 1 apart, so the chance of getting exactly `end` should be very
-        # small.
-        # Because `tri` has been limited to `lower <= tri <= end` and `lower` and `end` have been swapped if `lower`
-        # was greater than `end`, `r_int` only needs to be checked for being larger than `end`.
-        return min(end, r_int)
+        Expects `lower <= end` and `0.0 <= tri <= 1.0`. The result of other inputs is undefined.
+        """
+        # Use the continuous range [lower, end + 1) to produce an integer result in [lower, end].
+        # random.triangular is actually [a, b] and not [a, b), so there is a very small chance of getting exactly b even
+        # when `lower != end`, so ensure the result is never more than `end`.
+        return min(end, math.floor(random.triangular(0.0, 1.0, tri) * (end - lower + 1) + lower))
 
 
 class NamedRange(Range):
