@@ -1,47 +1,59 @@
-from BaseClasses import Item
+from typing import Dict, NamedTuple, Optional
+
+from BaseClasses import Item, ItemClassification
+
+sm64ex_base_id: int = 3626000
 
 
 class SM64Item(Item):
     game: str = "Super Mario 64"
 
+class SM64ItemData(NamedTuple):
+    code: Optional[int] = None
+    classification: ItemClassification = ItemClassification.filler
 
-generic_item_table = {
-    "Power Star": 3626000,
-    "Basement Key": 3626178,
-    "Second Floor Key": 3626179,
-    "Progressive Key": 3626180,
-    "Wing Cap": 3626181,
-    "Metal Cap": 3626182,
-    "Vanish Cap": 3626183,
-    "1Up Mushroom": 3626184
+generic_item_data_table: Dict[str, SM64ItemData] = {
+    "Power Star": SM64ItemData(sm64ex_base_id + 0, ItemClassification.progression_skip_balancing),
+    "Basement Key": SM64ItemData(sm64ex_base_id + 178, ItemClassification.progression),
+    "Second Floor Key": SM64ItemData(sm64ex_base_id + 179, ItemClassification.progression),
+    "Progressive Key": SM64ItemData(sm64ex_base_id + 180, ItemClassification.progression),
+    "Wing Cap": SM64ItemData(sm64ex_base_id + 181, ItemClassification.progression),
+    "Metal Cap": SM64ItemData(sm64ex_base_id + 182, ItemClassification.progression),
+    "Vanish Cap": SM64ItemData(sm64ex_base_id + 183, ItemClassification.progression),
+    "1Up Mushroom": SM64ItemData(sm64ex_base_id + 184, ItemClassification.filler),
 }
 
-action_item_table = {
-    "Double Jump": 3626185,
-    "Triple Jump": 3626186,
-    "Long Jump": 3626187,
-    "Backflip": 3626188,
-    "Side Flip": 3626189,
-    "Wall Kick": 3626190,
-    "Dive": 3626191,
-    "Ground Pound": 3626192,
-    "Kick": 3626193,
-    "Climb": 3626194,
-    "Ledge Grab": 3626195
+action_item_data_table: Dict[str, SM64ItemData] = {
+    "Double Jump": SM64ItemData(sm64ex_base_id + 185, ItemClassification.progression),
+    "Triple Jump": SM64ItemData(sm64ex_base_id + 186, ItemClassification.progression),
+    "Long Jump": SM64ItemData(sm64ex_base_id + 187, ItemClassification.progression),
+    "Backflip": SM64ItemData(sm64ex_base_id + 188, ItemClassification.progression),
+    "Side Flip": SM64ItemData(sm64ex_base_id + 189, ItemClassification.progression),
+    "Wall Kick": SM64ItemData(sm64ex_base_id + 190, ItemClassification.progression),
+    "Dive": SM64ItemData(sm64ex_base_id + 191, ItemClassification.progression),
+    "Ground Pound": SM64ItemData(sm64ex_base_id + 192, ItemClassification.progression),
+    "Kick": SM64ItemData(sm64ex_base_id + 193, ItemClassification.progression),
+    "Climb": SM64ItemData(sm64ex_base_id + 194, ItemClassification.progression),
+    "Ledge Grab": SM64ItemData(sm64ex_base_id + 195, ItemClassification.progression),
 }
 
-
-cannon_item_table = {
-    "Cannon Unlock BoB": 3626200,
-    "Cannon Unlock WF": 3626201,
-    "Cannon Unlock JRB": 3626202,
-    "Cannon Unlock CCM": 3626203,
-    "Cannon Unlock SSL": 3626207,
-    "Cannon Unlock SL": 3626209,
-    "Cannon Unlock WDW": 3626210,
-    "Cannon Unlock TTM": 3626211,
-    "Cannon Unlock THI": 3626212,
-    "Cannon Unlock RR": 3626214
+cannon_item_data_table: Dict[str, SM64ItemData] = {
+    "Cannon Unlock BoB": SM64ItemData(sm64ex_base_id + 200, ItemClassification.progression),
+    "Cannon Unlock WF": SM64ItemData(sm64ex_base_id + 201, ItemClassification.progression),
+    "Cannon Unlock JRB": SM64ItemData(sm64ex_base_id + 202, ItemClassification.progression),
+    "Cannon Unlock CCM": SM64ItemData(sm64ex_base_id + 203, ItemClassification.progression),
+    "Cannon Unlock SSL": SM64ItemData(sm64ex_base_id + 207, ItemClassification.progression),
+    "Cannon Unlock SL": SM64ItemData(sm64ex_base_id + 209, ItemClassification.progression),
+    "Cannon Unlock WDW": SM64ItemData(sm64ex_base_id + 210, ItemClassification.progression),
+    "Cannon Unlock TTM": SM64ItemData(sm64ex_base_id + 211, ItemClassification.progression),
+    "Cannon Unlock THI": SM64ItemData(sm64ex_base_id + 212, ItemClassification.progression),
+    "Cannon Unlock RR": SM64ItemData(sm64ex_base_id + 214, ItemClassification.progression),
 }
 
-item_table = {**generic_item_table, **action_item_table, **cannon_item_table}
+item_data_table = {
+    **generic_item_data_table,
+    **action_item_data_table,
+    **cannon_item_data_table
+}
+
+item_table = {name: data.code for name, data in item_data_table.items() if data.code is not None}

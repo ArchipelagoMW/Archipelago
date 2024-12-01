@@ -1,7 +1,7 @@
 import typing
 from dataclasses import dataclass
 from Options import DefaultOnToggle, Range, Toggle, DeathLink, Choice, PerGameCommonOptions, OptionSet, OptionGroup
-from .Items import action_item_table
+from .Items import action_item_data_table
 
 class EnableCoinStars(DefaultOnToggle):
     """Disable to Ignore 100 Coin Stars. You can still collect them, but they don't do anything.
@@ -124,7 +124,7 @@ class MoveRandomizerActions(OptionSet):
     """Which actions to randomize when Move Randomizer is enabled"""
     display_name = "Randomized Moves"
     # HACK: Disable randomization for double jump
-    valid_keys = [action for action in action_item_table if action != 'Double Jump']
+    valid_keys = [action for action in action_item_data_table if action != 'Double Jump']
     default = valid_keys
 
 sm64_options_groups = [
