@@ -67,7 +67,6 @@ def register_pack(content: StardewContent, pack: ContentPack):
 
     for animal in pack.animals:
         content.animals[animal.name] = animal
-        content.game_items[animal.name] = GameItem(animal.name, sources=list(animal.sources))
     pack.animal_hook(content)
 
     for skill in pack.skills:

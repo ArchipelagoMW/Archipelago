@@ -1,12 +1,11 @@
 from .pelican_town import pelican_town as pelican_town_content_pack
 from ..game_content import ContentPack, StardewContent
 from ...data import villagers_data, fish_data
-from ...data.animal import Animal, OstrichIncubatorSource
-from ...data.game_item import ItemTag, Tag
+from ...data.animal import Animal, AnimalName, OstrichIncubatorSource
+from ...data.game_item import ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, HarvestFruitTreeSource, HarvestCropSource
 from ...data.requirement import WalnutRequirement
 from ...data.shop import ShopSource
-from ...strings.animal_names import Animal as AnimalNames
 from ...strings.animal_product_names import AnimalProduct
 from ...strings.book_names import Book
 from ...strings.building_names import Building
@@ -14,6 +13,7 @@ from ...strings.crop_names import Fruit, Vegetable
 from ...strings.fish_names import Fish
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
+from ...strings.generic_names import Generic
 from ...strings.metal_names import Fossil, Mineral
 from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
@@ -55,6 +55,13 @@ ginger_island_content_pack = GingerIslandContentPack(
         Vegetable.taro_root: (HarvestCropSource(seed=Seed.taro, seasons=(Season.summer,)),),
         Fruit.pineapple: (HarvestCropSource(seed=Seed.pineapple, seasons=(Season.summer,)),),
 
+        # Temporary animal stuff, will be moved once animal products are properly content-packed
+        AnimalProduct.ostrich_egg_starter: (CustomRuleSource(lambda logic: logic.tool.can_forage(Generic.any, Region.island_north, True)
+                                                                           & logic.has(Forageable.journal_scrap)
+                                                                           & logic.region.can_reach(Region.volcano_floor_5)),),
+        AnimalProduct.ostrich_egg: (CustomRuleSource(lambda logic: logic.has(AnimalProduct.ostrich_egg_starter)
+                                                                   | logic.animal.has_animal(AnimalName.ostrich)),),
+
     },
     shop_sources={
         Seed.taro: (ShopSource(items_price=((2, Fossil.bone_fragment),), shop_region=Region.island_trader),),
@@ -87,7 +94,7 @@ ginger_island_content_pack = GingerIslandContentPack(
         villagers_data.leo,
     ),
     animals=(
-        Animal(AnimalNames.ostrich,
+        Animal(AnimalName.ostrich,
                required_building=Building.barn,
                sources=(
                    OstrichIncubatorSource(AnimalProduct.ostrich_egg_starter),
