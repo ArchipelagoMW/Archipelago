@@ -12,6 +12,7 @@
 *These instructions have only been tested on Windows and Ubuntu.*
 
 Once everything is set up, it is recommended to continue launching the game through this method, as it will check for any updates to the mod and automatically apply them.
+This is also the method used by the Automatic Connection described further below.
 
 1. Purchase and download [Saving Princess](https://brainos.itch.io/savingprincess)
 2. Download and install the latest [Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
@@ -76,7 +77,17 @@ validator page: [YAML Validation page](/check).
 
 ## Joining a MultiWorld Game
 
-### Set up the connection details
+### Automatic Connection on archipelago.gg
+
+1. Go to the room page of the MultiWorld you are going to join.
+2. Click on your slot name on the left side.
+3. Click the "Saving Princess Client" button in the prompt.
+   * This launches the same client described in the Automated Installation section.
+4. Upon reaching the title screen, a connection attempt will automatically be started.
+
+Note that this updates your Saving Princess saved connection details, which are described in the Manual Connection section.
+
+### Manual Connection
 
 After launching the game, enter the Archipelago options menu through the in-game button with the Archipelago icon.
 From here, enter the different menus and type in the following details in their respective fields:
@@ -89,9 +100,7 @@ From here, enter the different menus and type in the following details in their 
 
 This configuration persists through launches and even updates.
 
-### Connect to the Archipelago Server
-
-To start a connection attempt, simply press on "CONNECT!".
+With your settings filled, start a connection attempt by pressing on the title screen's "CONNECT!" button.
 
 Once connected, the button will become one of either "NEW GAME" or "CONTINUE".
 The game automatically keeps a save file for each seed and slot combination, so you do not need to manually move or delete save files.
