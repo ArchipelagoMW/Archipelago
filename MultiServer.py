@@ -1986,8 +1986,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                                     [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'UpdateHint: No Permission',
                                       "original_cmd": cmd}])
                 return
-            new_hint = hint
-            new_hint = new_hint.re_prioritize(ctx, status)
+            new_hint = hint.re_prioritize(ctx, status)
             if hint == new_hint:
                 return
             ctx.replace_hint(client.team, hint.finding_player, hint, new_hint)
