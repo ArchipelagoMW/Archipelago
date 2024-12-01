@@ -114,13 +114,13 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
                 os.path.join(args.player_files_path, fname) not in {args.meta_file_path, args.weights_file_path}:
             path = os.path.join(args.player_files_path, fname)
             try:
-                wcache = []
+                weights_for_file = []
                 for doc_idx, yaml in enumerate(read_weights_yamls(path)):
                     if yaml is None:
                         logging.warning(f"Ignoring empty yaml document #{doc_idx + 1} in {fname}")
                     else:
-                        wcache.append(yaml)
-                weights_cache[fname] = tuple(wcache)
+                        weights_for_file.append(yaml)
+                weights_cache[fname] = tuple(weights_for_file)
                         
             except Exception as e:
                 raise ValueError(f"File {fname} is invalid. Please fix your yaml.") from e
