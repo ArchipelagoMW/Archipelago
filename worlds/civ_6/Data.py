@@ -41,7 +41,9 @@ def get_existing_civics_data() -> List[ExistingItemData]:
 
 
 def get_existing_techs_data() -> List[ExistingItemData]:
-    return _get_data("existing_tech")
+    from .data.existing_tech import existing_tech
+
+    return existing_tech
 
 
 class GoodyHutRewardData(TypedDict):
