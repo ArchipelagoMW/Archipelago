@@ -1901,7 +1901,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 ctx.save()
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
 
-        elif cmd == 'CreateHint':
+        elif cmd == 'CreateHints':
             location_player = args.get("player", client.slot)
             locations = args["locations"]
             status = args.get("status", HintStatus.HINT_UNSPECIFIED)
@@ -1911,7 +1911,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             for location in locations:
                 if location_player != client.slot and location not in ctx.locations[location_player]:
                     error_text = (
-                        "UpdateHint: One or more of the locations do not exist for the specified off-world player. "
+                        "CreateHints: One or more of the locations do not exist for the specified off-world player. "
                         "Please refrain from hinting other slot's locations that you don't know contain your items."
                     )
                     await ctx.send_msgs(client, [{"cmd": "InvalidPacket", "type": "arguments",
@@ -1922,13 +1922,13 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
                 if client.slot not in ctx.slot_set(item_player):
                     if status != HintStatus.HINT_UNSPECIFIED:
-                        error_text = 'UpdateHint: Must use "unspecified"/None status for items for other players.'
+                        error_text = 'CreateHints: Must use "unspecified"/None status for items for other players.'
                         await ctx.send_msgs(client, [{"cmd": "InvalidPacket", "type": "arguments",
                                                       "text": error_text, "original_cmd": cmd}])
                         return
 
                     if client.slot != location_player:
-                        error_text = "UpdateHint: Can only create hints for own items or own locations."
+                        error_text = "CreateHints: Can only create hints for own items or own locations."
                         await ctx.send_msgs(client, [{"cmd": "InvalidPacket", "type": "arguments",
                                                       "text": error_text, "original_cmd": cmd}])
                         return
