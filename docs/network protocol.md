@@ -345,6 +345,7 @@ This is useful in cases where an item appears in the game world, such as 'ledge 
 
 ### UpdateHint
 Sent to the server to update the status of a Hint. The client must be the 'receiving_player' of the Hint, or the update fails.
+Alternatively, if `create_if_not_exists` is set to true, the client can also be the 'finding_player' of the hint. In this case, the `status` must be `None` or 1 (unspecified).
 
 ### Arguments
 | Name | Type | Notes |
@@ -352,6 +353,7 @@ Sent to the server to update the status of a Hint. The client must be the 'recei
 | player | int | The ID of the player whose location is being hinted for. |
 | location | int | The ID of the location to update the hint for. If no hint exists for this location, the packet is ignored. |
 | status | [HintStatus](#HintStatus) | Optional. If included, sets the status of the hint to this status. |
+| create_if_not_exists | bool | If true, a new hint will be created if the hint doesn't already exist. Defaults to false. |
 
 #### HintStatus
 An enumeration containing the possible hint states.
