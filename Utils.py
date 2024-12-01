@@ -485,9 +485,9 @@ def get_text_after(text: str, start: str) -> str:
 loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}
 
 
-def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
-                 log_format: str = "[%(name)s at %(asctime)s]: %(message)s",
-                 exception_logger: typing.Optional[str] = None):
+def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
+                 write_mode: str = "w", log_format: str = "[%(name)s at %(asctime)s]: %(message)s",
+                 add_timestamp: bool = False, exception_logger: typing.Optional[str] = None):
     import datetime
     loglevel: int = loglevel_mapping.get(loglevel, loglevel)
     log_folder = user_path("logs")
@@ -521,7 +521,8 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         formatter = logging.Formatter(fmt='[%(asctime)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
         stream_handler = logging.StreamHandler(sys.stdout)
         stream_handler.addFilter(Filter("NoFile", lambda record: not getattr(record, "NoStream", False)))
-        stream_handler.setFormatter(formatter)
+        if add_timestamp:
+            stream_handler.setFormatter(formatter)
         root_logger.addHandler(stream_handler)
 
     # Relay unhandled exceptions to logger.
@@ -858,11 +859,10 @@ def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = Non
     task.add_done_callback(_faf_tasks.discard)
 
 
-def deprecate(message: str):
+def deprecate(message: str, add_stacklevels: int = 0):
     if __debug__:
         raise Exception(message)
-    import warnings
-    warnings.warn(message)
+    warnings.warn(message, stacklevel=2 + add_stacklevels)
 
 
 class DeprecateDict(dict):
@@ -876,10 +876,9 @@ class DeprecateDict(dict):
 
     def __getitem__(self, item: Any) -> Any:
         if self.should_error:
-            deprecate(self.log_message)
+            deprecate(self.log_message, add_stacklevels=1)
         elif __debug__:
-            import warnings
-            warnings.warn(self.log_message)
+            warnings.warn(self.log_message, stacklevel=2)
         return super().__getitem__(item)
 
 
