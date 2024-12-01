@@ -1911,28 +1911,28 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.protoss_competent_comp
         ),
         make_location_data(SC2Mission.STEPS_OF_THE_RITE.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 1700, LocationType.VICTORY,
-            logic.steps_of_the_rite_requirement
+            logic.protoss_steps_of_the_rite_requirement
         ),
         make_location_data(SC2Mission.STEPS_OF_THE_RITE.mission_name, "First Terrazine Fog", SC2LOTV_LOC_ID_OFFSET + 1701, LocationType.EXTRA,
-            logic.steps_of_the_rite_requirement
+            logic.protoss_steps_of_the_rite_requirement
         ),
         make_location_data(SC2Mission.STEPS_OF_THE_RITE.mission_name, "Southwest Guardian", SC2LOTV_LOC_ID_OFFSET + 1702, LocationType.EXTRA,
-            logic.steps_of_the_rite_requirement
+            logic.protoss_steps_of_the_rite_requirement
         ),
         make_location_data(SC2Mission.STEPS_OF_THE_RITE.mission_name, "West Guardian", SC2LOTV_LOC_ID_OFFSET + 1703, LocationType.EXTRA,
-            logic.steps_of_the_rite_requirement
+            logic.protoss_steps_of_the_rite_requirement
         ),
         make_location_data(SC2Mission.STEPS_OF_THE_RITE.mission_name, "Northwest Guardian", SC2LOTV_LOC_ID_OFFSET + 1704, LocationType.EXTRA,
-            logic.steps_of_the_rite_requirement
+            logic.protoss_steps_of_the_rite_requirement
         ),
         make_location_data(SC2Mission.STEPS_OF_THE_RITE.mission_name, "Northeast Guardian", SC2LOTV_LOC_ID_OFFSET + 1705, LocationType.EXTRA,
-            logic.steps_of_the_rite_requirement
+            logic.protoss_steps_of_the_rite_requirement
         ),
         make_location_data(SC2Mission.STEPS_OF_THE_RITE.mission_name, "North Mothership", SC2LOTV_LOC_ID_OFFSET + 1706, LocationType.VANILLA,
-            logic.steps_of_the_rite_requirement
+            logic.protoss_steps_of_the_rite_requirement
         ),
         make_location_data(SC2Mission.STEPS_OF_THE_RITE.mission_name, "South Mothership", SC2LOTV_LOC_ID_OFFSET + 1707, LocationType.VANILLA,
-            logic.steps_of_the_rite_requirement
+            logic.protoss_steps_of_the_rite_requirement
         ),
         make_location_data(SC2Mission.RAK_SHIR.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 1800, LocationType.VICTORY,
             logic.protoss_competent_comp
@@ -5343,6 +5343,54 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            ),
         make_location_data(SC2Mission.PURIFICATION_Z.mission_name, "Purifier Warden", SC2_RACESWAP_LOC_ID_OFFSET + 13013, LocationType.VANILLA,
                            logic.zerg_purification_requirement
+                           ),
+        make_location_data(SC2Mission.STEPS_OF_THE_RITE_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 13100, LocationType.VICTORY,
+                           logic.terran_steps_of_the_rite_requirement
+                           ),
+        make_location_data(SC2Mission.STEPS_OF_THE_RITE_T.mission_name, "First Terrazine Fog", SC2_RACESWAP_LOC_ID_OFFSET + 13101, LocationType.EXTRA,
+                           logic.terran_steps_of_the_rite_requirement
+                           ),
+        make_location_data(SC2Mission.STEPS_OF_THE_RITE_T.mission_name, "Southwest Guardian", SC2_RACESWAP_LOC_ID_OFFSET + 13102, LocationType.EXTRA,
+                           logic.terran_steps_of_the_rite_requirement
+                           ),
+        make_location_data(SC2Mission.STEPS_OF_THE_RITE_T.mission_name, "West Guardian", SC2_RACESWAP_LOC_ID_OFFSET + 13103, LocationType.EXTRA,
+                           logic.terran_steps_of_the_rite_requirement
+                           ),
+        make_location_data(SC2Mission.STEPS_OF_THE_RITE_T.mission_name, "Northwest Guardian", SC2_RACESWAP_LOC_ID_OFFSET + 13104, LocationType.EXTRA,
+                           logic.terran_steps_of_the_rite_requirement
+                           ),
+        make_location_data(SC2Mission.STEPS_OF_THE_RITE_T.mission_name, "Northeast Guardian", SC2_RACESWAP_LOC_ID_OFFSET + 13105, LocationType.EXTRA,
+                           logic.terran_steps_of_the_rite_requirement
+                           ),
+        make_location_data(SC2Mission.STEPS_OF_THE_RITE_T.mission_name, "North Mothership", SC2_RACESWAP_LOC_ID_OFFSET + 13106, LocationType.VANILLA,
+                           logic.terran_steps_of_the_rite_requirement
+                           ),
+        make_location_data(SC2Mission.STEPS_OF_THE_RITE_T.mission_name, "South Mothership", SC2_RACESWAP_LOC_ID_OFFSET + 13107, LocationType.VANILLA,
+                           logic.terran_steps_of_the_rite_requirement
+                           ),
+        make_location_data(SC2Mission.STEPS_OF_THE_RITE_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 13200, LocationType.VICTORY,
+                           logic.zerg_steps_of_the_rite_requirement
+                           ),
+        make_location_data(SC2Mission.STEPS_OF_THE_RITE_Z.mission_name, "First Terrazine Fog", SC2_RACESWAP_LOC_ID_OFFSET + 13201, LocationType.EXTRA,
+                           logic.zerg_steps_of_the_rite_requirement
+                           ),
+        make_location_data(SC2Mission.STEPS_OF_THE_RITE_Z.mission_name, "Southwest Guardian", SC2_RACESWAP_LOC_ID_OFFSET + 13202, LocationType.EXTRA,
+                           logic.zerg_steps_of_the_rite_requirement
+                           ),
+        make_location_data(SC2Mission.STEPS_OF_THE_RITE_Z.mission_name, "West Guardian", SC2_RACESWAP_LOC_ID_OFFSET + 13203, LocationType.EXTRA,
+                           logic.zerg_steps_of_the_rite_requirement
+                           ),
+        make_location_data(SC2Mission.STEPS_OF_THE_RITE_Z.mission_name, "Northwest Guardian", SC2_RACESWAP_LOC_ID_OFFSET + 13204, LocationType.EXTRA,
+                           logic.zerg_steps_of_the_rite_requirement
+                           ),
+        make_location_data(SC2Mission.STEPS_OF_THE_RITE_Z.mission_name, "Northeast Guardian", SC2_RACESWAP_LOC_ID_OFFSET + 13205, LocationType.EXTRA,
+                           logic.zerg_steps_of_the_rite_requirement
+                           ),
+        make_location_data(SC2Mission.STEPS_OF_THE_RITE_Z.mission_name, "North Mothership", SC2_RACESWAP_LOC_ID_OFFSET + 13206, LocationType.VANILLA,
+                           logic.zerg_steps_of_the_rite_requirement
+                           ),
+        make_location_data(SC2Mission.STEPS_OF_THE_RITE_Z.mission_name, "South Mothership", SC2_RACESWAP_LOC_ID_OFFSET + 13207, LocationType.VANILLA,
+                           logic.zerg_steps_of_the_rite_requirement
                            ),
     ]
 

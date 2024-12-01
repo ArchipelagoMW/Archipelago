@@ -1838,13 +1838,50 @@ class SC2Logic:
             )
         )
 
-    def steps_of_the_rite_requirement(self, state: CollectionState) -> bool:
+    def protoss_steps_of_the_rite_requirement(self, state: CollectionState) -> bool:
         return (
             self.protoss_competent_comp(state)
             or (
                 self.protoss_common_unit(state)
                 and self.protoss_competent_anti_air(state)
                 and self.protoss_static_defense(state)
+            )
+        )
+
+    def terran_steps_of_the_rite_requirement(self, state: CollectionState) -> bool:
+        return (
+            self.terran_beats_protoss_deathball(state)
+            and (
+                state.has_any({item_names.SIEGE_TANK, item_names.LIBERATOR}, self.player)
+                or state.has_all({item_names.BATTLECRUISER, item_names.BATTLECRUISER_ATX_LASER_BATTERY}, self.player)
+            )
+            and (
+                state.has_all({item_names.BATTLECRUISER, item_names.BATTLECRUISER_ATX_LASER_BATTERY}, self.player)
+                or state.has(item_names.VALKYRIE, self.player)
+            )
+            and self.terran_very_hard_mission_weapon_armor_level(state)
+        )
+
+    def zerg_steps_of_the_rite_requirement(self, state: CollectionState) -> bool:
+        return (
+            self.zerg_competent_comp(state)
+            and self.zerg_competent_anti_air(state)
+            and (
+                self.morph_lurker(state)
+                or self.zerg_infested_siege_tanks_with_ammo(state)
+                or state.has_all({item_names.INFESTED_LIBERATOR, item_names.INFESTED_LIBERATOR_DEFENDER_MODE}, self.player)
+                or (
+                    state.has(item_names.SWARM_QUEEN, self.player)
+                    and self.zerg_big_monsters(state)
+                )
+            )
+            and (
+                state.has(item_names.INFESTED_LIBERATOR, self.player)
+                or state.has_all({item_names.MUTALISK, item_names.MUTALISK_SEVERING_GLAIVE, item_names.MUTALISK_VICIOUS_GLAIVE}, self.player)
+                or (
+                    state.has(item_names.MUTALISK, self.player)
+                    and self.morph_devourer(state)
+                )
             )
         )
 
