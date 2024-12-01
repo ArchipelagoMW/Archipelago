@@ -4,8 +4,7 @@ import os
 import pkgutil
 from typing import Any, Dict, List, TypedDict
 
-from worlds.civ_6.ItemData import ExistingItemData, NewItemData
-from worlds.civ_6.data.boosts import CivVIBoostData
+from worlds.civ_6.ItemData import CivVIBoostData, ExistingItemData, NewItemData
 
 
 _cache: Dict[Any, Any] = {}

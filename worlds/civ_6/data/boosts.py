@@ -1,14 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
-
-@dataclass
-class CivVIBoostData:
-    Type: str
-    EraType: str
-    Prereq: List[str]
-    PrereqRequiredCount: int
-    Classification: str
+from worlds.civ_6.ItemData import CivVIBoostData
 
 
 boosts: List[CivVIBoostData] = [

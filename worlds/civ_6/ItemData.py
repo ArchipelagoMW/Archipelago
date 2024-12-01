@@ -1,4 +1,5 @@
-from typing import TypedDict
+from dataclasses import dataclass
+from typing import List, TypedDict
 
 
 class NewItemData(TypedDict):
@@ -10,3 +11,12 @@ class NewItemData(TypedDict):
 
 class ExistingItemData(NewItemData):
     Name: str
+
+
+@dataclass
+class CivVIBoostData:
+    Type: str
+    EraType: str
+    Prereq: List[str]
+    PrereqRequiredCount: int
+    Classification: str
