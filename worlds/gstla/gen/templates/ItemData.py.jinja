@@ -126,6 +126,15 @@ other_progression: List[ItemData] = [
 
 {% endfor %}
 
+{% for other_name, item_ids in other_groups.items() -%}
+{{other_name}} = [
+    {% for item_id in item_ids -%}{% set item = other_items[item_id] %}
+        ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
+{%- endfor %}
+]
+
+{% endfor %}
+
 useful_remainder = [
     {% for id in useful_remainder -%}{% set item = other_useful[id] %}
         ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),

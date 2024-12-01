@@ -271,16 +271,6 @@ useful_consumables = [
         ItemData(183, "Potion", ItemClassification.useful, 738008, ItemType.Consumable, False),
 ]
 
-stat_boosters = [
-    
-        ItemData(192, "Cookie", ItemClassification.useful, 738404, ItemType.Consumable, False),
-        ItemData(193, "Apple", ItemClassification.useful, 738448, ItemType.Consumable, False),
-        ItemData(194, "Hard Nut", ItemClassification.useful, 738492, ItemType.Consumable, False),
-        ItemData(195, "Mint", ItemClassification.useful, 738536, ItemType.Consumable, False),
-        ItemData(196, "Lucky Pepper", ItemClassification.useful, 738580, ItemType.Consumable, False),
-        ItemData(191, "Power Bread", ItemClassification.useful, 738360, ItemType.Consumable, False),
-]
-
 rusty_items = [
     
         ItemData(417, "Rusty Sword - Robber's Blade", ItemClassification.useful, 748304, ItemType.Weapon, False),
@@ -314,6 +304,18 @@ class_change_items = [
         ItemData(443, "Mysterious Card", ItemClassification.useful, 749448, ItemType.Class, False),
         ItemData(444, "Trainer's Whip", ItemClassification.useful, 749492, ItemType.Class, False),
         ItemData(445, "Tomegathericon", ItemClassification.useful, 749536, ItemType.Class, False),
+]
+
+
+
+stat_boosters = [
+    
+        ItemData(192, "Cookie", ItemClassification.filler, 738404, ItemType.Consumable, False),
+        ItemData(193, "Apple", ItemClassification.filler, 738448, ItemType.Consumable, False),
+        ItemData(194, "Hard Nut", ItemClassification.filler, 738492, ItemType.Consumable, False),
+        ItemData(195, "Mint", ItemClassification.filler, 738536, ItemType.Consumable, False),
+        ItemData(196, "Lucky Pepper", ItemClassification.filler, 738580, ItemType.Consumable, False),
+        ItemData(191, "Power Bread", ItemClassification.filler, 738360, ItemType.Consumable, False),
 ]
 
 
@@ -357,7 +359,7 @@ useful_remainder = [
         ItemData(383, "Nurse's Cap", ItemClassification.useful, 746808, ItemType.Helm, False),
 ]
 
-other_useful: List[ItemData] = useful_remainder  + useful_consumables  + stat_boosters  + rusty_items  + forge_materials  + class_change_items 
+other_useful: List[ItemData] = useful_remainder  + useful_consumables  + rusty_items  + forge_materials  + class_change_items 
 
 
 
@@ -649,7 +651,7 @@ remainder: List[ItemData] = [
     ItemData(188, "Elixir", ItemClassification.filler, 738228, ItemType.Consumable, False),
     ItemData(226, "Smoke Bomb", ItemClassification.filler, 739900, ItemType.Consumable, False),
     ItemData(227, "Sleep Bomb", ItemClassification.filler, 739944, ItemType.Consumable, False),
-    ItemData(229, "Lucky Medal", ItemClassification.progression_skip_balancing, 740032, ItemType.Consumable, False),
+    ItemData(229, "Lucky Medal", ItemClassification.filler, 740032, ItemType.Consumable, False),
     ItemData(233, "Corn", ItemClassification.filler, 740208, ItemType.Consumable, False),
     ItemData(236, "Sacred Feather", ItemClassification.filler, 740340, ItemType.Consumable, False),
     ItemData(238, "Oil Drop", ItemClassification.filler, 740428, ItemType.Consumable, False),

@@ -32,7 +32,7 @@ SPECIAL_PROGRESSIONS: defaultdict[int, str] = defaultdict(lambda: 'filler', {
 243:'progression',#    ItemName.Red_Key
 222:'progression',#    ItemName.Mythril_Bag_Mars
 459:'progression',#    ItemName.Ruin_Key
-229:'progression_skip_balancing', # ItemName.Lucky_Medal
+# 229:'progression_skip_balancing', # ItemName.Lucky_Medal
 443:     'useful',#     ItemName.Mysterious_Card
 444:     'useful',#    ItemName.Trainers_Whip
 445:     'useful',#    ItemName.Tomegathericon
@@ -87,16 +87,16 @@ SPECIAL_PROGRESSIONS: defaultdict[int, str] = defaultdict(lambda: 'filler', {
 10:'useful', # Sol_Blade
 336:'useful', # Valkyrie_Mail
 
-186:'useful', #Psy_Crystal
-195:'useful', #Mint
-193:'useful', #Apple
-190:'useful', #Mist_Potion
-194:'useful', #Hard_Nut
-191:'useful', #Power_Bread
 183:'useful', #Potion
-192:'useful', #Cookie
+186:'useful', #Psy_Crystal
+190:'useful', #Mist_Potion
+# 191:'useful', #Power_Bread
+# 192:'useful', #Cookie
+# 193:'useful', #Apple
+# 194:'useful', #Hard_Nut
+# 195:'useful', #Mint
+# 196:'useful', #Lucky_Pepper
 429:'useful', #Tear_Stone
-196:'useful', #Lucky_Pepper
 189:'useful', #Water_of_Life
 437:'useful', #Orihalcon
 435:'useful', #Mythril_Silver
@@ -116,9 +116,6 @@ USEFUL_ITEM_GROUPS: Dict[str, Set[int]] = {
         189, # Water of Life
         190, # Mist Potion
     },
-    "stat_boosters": {
-        x for x in range(191, 197) # Power Bread through Lucky Pepper
-    },
     "rusty_items": {
         x for x in range(417, 428) # Rusty Sword - Robber's Blade through Goblin's Rod
     },
@@ -129,6 +126,13 @@ USEFUL_ITEM_GROUPS: Dict[str, Set[int]] = {
         x for x in range(443, 446) # Mysterious Card, Trainer's Whip, Tomagathericon
     }
 }
+
+OTHER_ITEM_GROUPS: Dict[str, Set[int]] = {
+    "stat_boosters": {
+        x for x in range(191, 197)  # Power Bread through Lucky Pepper
+    },
+}
+
 
 # Items that should not be part of the item data at all
 EXCLUDED_ITEMS = {
@@ -259,6 +263,7 @@ def generate_item_data(env: Environment, data: GameData):
         mimics = []
         other_prog = []
         other_useful = dict()
+        other_items = dict()
         shop_only = []
         forge_only = []
         lucky_only = []
@@ -299,6 +304,8 @@ def generate_item_data(env: Environment, data: GameData):
                 other_prog.append(datum)
             elif SPECIAL_PROGRESSIONS[item.id] == 'useful':
                 other_useful[item.id] = datum
+            elif any(item.id in keys for keys in OTHER_ITEM_GROUPS.values()):
+                other_items[item.id] = datum
             elif item.id in shop_only_ids:
                 shop_only.append(datum)
             elif item.id in forge_only_ids:
@@ -329,6 +336,8 @@ def generate_item_data(env: Environment, data: GameData):
             other_useful=other_useful,
             useful_groups=USEFUL_ITEM_GROUPS,
             useful_remainder=useful_remainder_ids,
+            other_items=other_items,
+            other_groups=OTHER_ITEM_GROUPS,
             non_vanilla=non_vanilla,
             shop_only=shop_only,
             forge_only=forge_only,
