@@ -23,7 +23,6 @@ class AnimalLogicMixin(BaseLogicMixin):
 
 class AnimalLogic(BaseLogic[Union[AnimalLogicMixin, HasLogicMixin, BuildingLogicMixin, 'SourceLogicMixin']]):
 
-    # TODO test speed with @cache_self1
     def can_incubate(self, egg_item: str) -> StardewRule:
         return self.logic.building.has_building(Building.coop) & self.logic.has(egg_item)
 
