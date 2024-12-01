@@ -4,6 +4,8 @@ import os
 import pkgutil
 from typing import Any, Dict, List, TypedDict
 
+from worlds.civ_6.data.boosts import CivVIBoostData
+
 
 _cache: Dict[Any, Any] = {}
 
@@ -19,26 +21,8 @@ def _get_data(key: str) -> Any:
     return _cache[key]
 
 
-@dataclass
-class CivVIBoostData:
-    Type: str
-    EraType: str
-    Prereq: List[str]
-    PrereqRequiredCount: int
-    Classification: str
-
-
 def get_boosts_data() -> List[CivVIBoostData]:
-    boosts_json = _get_data("boosts")
-    boosts: List[CivVIBoostData] = []
-    for boost in boosts_json:
-        boosts.append(CivVIBoostData(
-            Type=boost["Type"],
-            EraType=boost["EraType"],
-            Prereq=boost["Prereq"],
-            PrereqRequiredCount=boost["PrereqRequiredCount"],
-            Classification=boost["Classification"]
-        ))
+    from .data.boosts import boosts
 
     return boosts
 
