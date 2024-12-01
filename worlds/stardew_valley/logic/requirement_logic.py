@@ -39,10 +39,6 @@ SeasonLogicMixin, TimeLogicMixin, CombatLogicMixin, QuestLogicMixin, Relationshi
         raise ValueError(f"Requirements of type{type(requirement)} have no rule registered.")
 
     @meet_requirement.register
-    def _(self, requirement: BookRequirement):
-        return self.logic.book.has_book_power(requirement.book)
-
-    @meet_requirement.register
     def _(self, requirement: ToolRequirement):
         return self.logic.tool.has_tool(requirement.tool, requirement.tier)
 
@@ -53,6 +49,10 @@ SeasonLogicMixin, TimeLogicMixin, CombatLogicMixin, QuestLogicMixin, Relationshi
     @meet_requirement.register
     def _(self, requirement: RegionRequirement):
         return self.logic.region.can_reach(requirement.region)
+
+    @meet_requirement.register
+    def _(self, requirement: BookRequirement):
+        return self.logic.book.has_book_power(requirement.book)
 
     @meet_requirement.register
     def _(self, requirement: SeasonRequirement):
