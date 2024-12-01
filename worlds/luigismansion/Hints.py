@@ -2,7 +2,8 @@ from typing import Dict, Any, List
 
 from BaseClasses import CollectionState, Location,  MultiWorld
 
-ALWAYS_HINT = ["Madame Clairvoya", "Foyer Toad", "Wardrobe Balcony Toad", "1F Washroom Toad", "Courtyard Toad"]
+ALWAYS_HINT = ["Madame Clairvoya", "Foyer Toad", "Wardrobe Balcony Toad", "1F Washroom Toad", "Courtyard Toad",
+               "Left Telephone", "Center Telephone", "Right Telephone"]
 
 PORTRAIT_HINTS = ["Neville", "Lydia", "Chauncey", "Male Whirlinda", "Female Whirlinda", "Shivers", "Melody", "Luggs",
                   "Spooky", "Atlas", "Bankshot", "Petunia", "Nana", "Sue Pea", "Henry", "Orville", "Grimmly", "Jarvis",
