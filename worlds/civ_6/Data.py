@@ -4,7 +4,7 @@ import os
 import pkgutil
 from typing import Any, Dict, List, TypedDict
 
-from worlds.civ_6.ItemData import CivVIBoostData, ExistingItemData, NewItemData
+from worlds.civ_6.ItemData import CivVIBoostData, ExistingItemData, GoodyHutRewardData, NewItemData
 
 
 _cache: Dict[Any, Any] = {}
@@ -45,14 +45,9 @@ def get_existing_techs_data() -> List[ExistingItemData]:
     return existing_tech
 
 
-class GoodyHutRewardData(TypedDict):
-    Type: str
-    Name: str
-    Rarity: str
-
-
 def get_goody_hut_rewards_data() -> List[GoodyHutRewardData]:
-    return _get_data("goody_hut_rewards")
+    from .data.goody_hut_rewards import reward_data
+    return reward_data
 
 
 class CivicPrereqData(TypedDict):

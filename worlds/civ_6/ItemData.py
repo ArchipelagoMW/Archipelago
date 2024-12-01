@@ -20,3 +20,9 @@ class CivVIBoostData:
     Prereq: List[str]
     PrereqRequiredCount: int
     Classification: str
+
+
+class GoodyHutRewardData(TypedDict):
+    Type: str
+    Name: str
+    Rarity: str

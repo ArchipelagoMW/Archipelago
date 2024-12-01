@@ -1,4 +1,8 @@
-[
+from typing import List
+from worlds.civ_6.ItemData import GoodyHutRewardData
+
+
+reward_data: List[GoodyHutRewardData] = [
   {
     "Type": "GOODY_GOLD_SMALL_MODIFIER",
     "Rarity": "COMMON",
