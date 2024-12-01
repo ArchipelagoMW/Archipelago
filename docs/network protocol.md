@@ -355,6 +355,7 @@ When creating hints for your own slot's locations, non-existing locations will s
 | ---- | ---- | ----- |
 | locations | list\[int\] | The ids of the locations to create hints for. |
 | player | int | The ID of the player whose locations are being hinted for. Defaults to the requesting slot. |
+| status | [HintStatus](#HintStatus) | If included, sets the status of the hint to this status. Defaults to `HINT_UNSPECIFIED`. Cannot set `HINT_FOUND`. |
 
 ### UpdateHint
 Sent to the server to update the status of a Hint. The client must be the 'receiving_player' of the Hint, or the update fails.
