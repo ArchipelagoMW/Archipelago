@@ -747,7 +747,7 @@ class Range(NumericOption):
         """
         # Use the continuous range [lower, end + 1) to produce an integer result in [lower, end].
         # random.triangular is actually [a, b] and not [a, b), so there is a very small chance of getting exactly b even
-        # when `lower != end`, so ensure the result is never more than `end`.
+        # when a != b, so ensure the result is never more than `end`.
         return min(end, math.floor(random.triangular(0.0, 1.0, tri) * (end - lower + 1) + lower))
 
 
