@@ -124,13 +124,13 @@ class SavingPrincessWorld(World):
         for item_name, item_data in item_dict.items():
             # create count copies of the item
             for i in range(item_data.count):
-                self.multiworld.itempool.extend([self.create_item(item_name)])
+                self.multiworld.itempool.append(self.create_item(item_name))
             items_made += item_data.count
             # and create count_extra useful copies of the item
             original_item_class: ItemClass = item_data.item_class
             item_data.item_class = ItemClass.useful
             for i in range(item_data.count_extra):
-                self.multiworld.itempool.extend([self.create_item(item_name)])
+                self.multiworld.itempool.append(self.create_item(item_name))
             item_data.item_class = original_item_class
             items_made += item_data.count_extra
 
@@ -142,7 +142,7 @@ class SavingPrincessWorld(World):
 
         # and generate as many junk items as unfilled locations
         for i in range(junk_count):
-            self.multiworld.itempool.extend([self.create_item(self.get_filler_item_name())])
+            self.multiworld.itempool.append(self.create_item(self.get_filler_item_name()))
 
     def create_item(self, name: str) -> Items.SavingPrincessItem:
         return Items.item_dict[name].create_item(self.player)
