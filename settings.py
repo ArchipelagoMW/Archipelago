@@ -678,6 +678,8 @@ class GeneratorOptions(Group):
     race: Race = Race(0)
     plando_options: PlandoOptions = PlandoOptions("bosses, connections, texts")
     panic_method: PanicMethod = PanicMethod("swap")
+    loglevel: str = "info"
+    logtime: bool = False
 
 
 class SNIOptions(Group):
