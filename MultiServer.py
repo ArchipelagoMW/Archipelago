@@ -1934,6 +1934,15 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
             if hint is None:
                 if not create_if_not_exists:
+                    await ctx.send_msgs(client,
+                        [{
+                            "cmd": "InvalidPacket",
+                            "type": "arguments",
+                            "text": 'UpdateHint: Desired hint does not already exist. '
+                                    'Use with create_if_not_exists = True if the hint should be created.',
+                            "original_cmd": cmd
+                        }],
+                    )
                     return
 
                 # UpdateHint can be used as an "Upsert", creating a new hint.
