@@ -153,11 +153,32 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         BOSS_COMPLETION_GOALS[event] = dst_rule.event
         return dst_rule
 
-    def add_farming_event(veggie_name:str, unshuffled_req:str, or_rule:Optional[Callable[[CollectionState], bool]] = None):
-        assert unshuffled_req
+    FARMPLANT_SEASON_RULES:Dict[str, Callable[[CollectionState], bool]] = {
+        "Asparagus":     lambda state: state.has_any([winter.event, spring.event], player),
+        "Garlic":        ALWAYS_TRUE,
+        "Pumpkin":       lambda state: state.has_any([autumn.event, winter.event], player),
+        "Corn":          lambda state: state.has_any([autumn.event, spring.event, summer.event], player),
+        "Onion":         lambda state: state.has_any([autumn.event, spring.event, summer.event], player),
+        "Potato":        lambda state: state.has_any([autumn.event, winter.event, spring.event], player),
+        "Dragon Fruit":  lambda state: state.has_any([spring.event, summer.event], player),
+        "Pomegranate":   lambda state: state.has_any([spring.event, summer.event], player),
+        "Eggplant":      lambda state: state.has_any([autumn.event, spring.event], player),
+        "Toma Root":     lambda state: state.has_any([autumn.event, spring.event, summer.event], player),
+        "Watermelon":    lambda state: state.has_any([spring.event, summer.event], player),
+        "Pepper":        lambda state: state.has_any([autumn.event, summer.event], player),
+        "Durian":        lambda state: state.has(spring.event, player),
+        "Carrot":        lambda state: state.has_any([autumn.event, winter.event, spring.event], player),
+    }
+    def add_farming_event(veggie_name:str, or_rule:Optional[Callable[[CollectionState], bool]] = None):
         return add_event(f"{veggie_name} Farming", REGION.FOREST,
             either_rule(
-                (lambda state: state.has_all([basic_farming.event, f"{veggie_name} Seeds" if is_locked(f"{veggie_name} Seeds") else unshuffled_req], player)),
+                combine_rules(
+                    (lambda state: state.has_all([basic_farming.event], player)),
+                    (
+                        (lambda state: state.has(f"{veggie_name} Seeds", player)) if is_locked(f"{veggie_name} Seeds") 
+                        else (lambda state: state.has(seasons_passed_1.event, player) and FARMPLANT_SEASON_RULES.get(veggie_name, ALWAYS_TRUE)(state))
+                    )
+                ),
                 or_rule if or_rule != None else ALWAYS_FALSE
             )
         )
@@ -190,7 +211,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     summer = add_event("Summer", REGION.FOREST, lambda state: state.has_all([spring.event, summer_survival.event, moosegoose.event], player))
     autumn = add_event("Autumn", REGION.FOREST, lambda state: state.has_all([summer.event, autumn_survival.event, antlion.event], player))
     late_game = add_event("Late Game", REGION.FOREST, lambda state: state.has_all([autumn.event, late_game_survival.event], player))
-
+    
 
     ##### SEASONS #####
     # TODO: Seasons as items
@@ -199,6 +220,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     seasons_passed_3 = summer
     seasons_passed_4 = autumn
     seasons_passed_5 = late_game
+
 
     ##### TOOLS #####
     mining = add_event("Mining", REGION.FOREST, lambda state: state.has_any(["Pickaxe", "Opulent Pickaxe", "Woodie"], player))
@@ -266,7 +288,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
 
     ##### RESOURCES #####
     nightmare_fuel = add_event("Nightmare Fuel", REGION.FOREST,
-        ALWAYS_TRUE if CRAFT_WITH_LOCKED_RECIPES or not is_locked("Nightmare Fuel")
+        (lambda state: state.has_all([basic_combat.event, basic_sanity_management.event], player)) if CRAFT_WITH_LOCKED_RECIPES or not is_locked("Nightmare Fuel")
         else (lambda state: state.has("Nightmare Fuel", player))
     )
     gem_digging = add_event("Gem Digging", REGION.FOREST, lambda state: state.has_all([digging.event, basic_sanity_management.event], player))
@@ -324,7 +346,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     leafy_meat = add_event("Leafy Meat", REGION.FOREST,
         either_rule(
             either_rule(
-                (lambda state: state.has(spring.event, player)), # Lureplants, Carrats
+                (lambda state: state.has(spring.event, player)), # Lureplants
                 (
                     (lambda state: state.has(lunar_island.event, player)) if REGION.OCEAN in REGION_WHITELIST # Carrats
                     else ALWAYS_FALSE
@@ -746,7 +768,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         )
     )
     lunar_island = can_reach_islands
-    hermit_island = add_event("Hermit Island", REGION.OCEAN, lambda state: state.has_all([cooking.event, base_making.event, can_reach_islands.event], player))
+    hermit_island = add_event("Hermit Island", REGION.OCEAN, lambda state: state.has_all([base_making.event, can_reach_islands.event], player))
     hermit_sea_quests = add_event("Hermit Sea Quests", REGION.OCEAN,
         (lambda state: state.has(sea_fishing.event, player)) if ADVANCED_PLAYER_BIAS
         else lambda state: state.has_all([sea_fishing.event, advanced_boating.event], player)
@@ -796,30 +818,32 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         and state.has_all(["Garden Digamajig", "Empty Watering Can", base_making.event, digging.event], player)
          # TODO: Wes can't talk to plants 
     )
-    asparagus_farming = add_farming_event("Asparagus", winter.event)
-    garlic_farming = add_farming_event("Garlic", winter.event)
-    pumpkin_farming = add_farming_event("Pumpkin", winter.event)
-    corn_farming = add_farming_event("Corn", spring.event,
+    asparagus_farming = add_farming_event("Asparagus")
+    garlic_farming = add_farming_event("Garlic")
+    pumpkin_farming = add_farming_event("Pumpkin")
+    corn_farming = add_farming_event("Corn",
         (lambda state: state.has_all([basic_farming.event, bird_caging.event], player)) if EXPERT_PLAYER_BIAS # Catcoons
         else (lambda state: state.has_all([basic_farming.event, bird_caging.event, sea_fishing.event], player)) if ADVANCED_PLAYER_BIAS # Corn cod
         else None
     )
-    onion_farming = add_farming_event("Onion", spring.event)
-    potato_farming = add_farming_event("Potato", winter.event,
+    onion_farming = add_farming_event("Onion")
+    potato_farming = add_farming_event("Potato",
         (lambda state: state.has_all([basic_farming.event, bird_caging.event], player)) if ADVANCED_PLAYER_BIAS else None # Junk pile
     )
-    dragonfruit_farming = add_farming_event("Dragon Fruit", spring.event,
+    dragonfruit_farming = add_farming_event("Dragon Fruit",
         (lambda state: state.has_all([basic_farming.event, dragonfruit_from_saladmander.event, bird_caging.event], player)) if ADVANCED_PLAYER_BIAS else None # Saladmander
     )
-    pomegranate_farming = add_farming_event("Pomegranate", spring.event)
-    eggplant_farming = add_farming_event("Eggplant", spring.event)
-    tomaroot_farming = add_farming_event("Toma Root", spring.event,
+    pomegranate_farming = add_farming_event("Pomegranate")
+    eggplant_farming = add_farming_event("Eggplant")
+    tomaroot_farming = add_farming_event("Toma Root",
         (lambda state: state.has(basic_farming.event, player)) if EXPERT_PLAYER_BIAS else None # Catcoons
     )
-    watermelon_farming = add_farming_event("Watermelon", spring.event)
-    pepper_farming = add_farming_event("Pepper", summer.event)
-    durian_farming = add_farming_event("Durian", spring.event)
-    carrot_farming = add_farming_event("Carrot", bird_caging.event)
+    watermelon_farming = add_farming_event("Watermelon")
+    pepper_farming = add_farming_event("Pepper")
+    durian_farming = add_farming_event("Durian")
+    carrot_farming = add_farming_event("Carrot",                      
+        (lambda state: state.has_all([basic_farming.event, bird_caging.event], player))
+    )
     honey_farming = add_event("Honey Farming", REGION.FOREST,
         (lambda state: state.has_all(["Bee Box", "Boards", bug_catching.event], player)) if BASE_MAKING_LOGIC
         else ALWAYS_TRUE
@@ -944,7 +968,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         )
         and state.has(summer.event, player)
     )
-    bearger = add_boss_event("Bearger", REGION.FOREST, lambda state: state.has_all([basic_combat.event, autumn.event, seasons_passed_1.event], player)) # TODO: Verify bearger's spawn conditions
+    bearger = add_boss_event("Bearger", REGION.FOREST, lambda state: state.has_all([basic_combat.event, autumn.event, seasons_passed_2.event], player))
     dragonfly = add_boss_event("Dragonfly", REGION.FOREST, lambda state: state.has_all([advanced_boss_combat.event, wall_building.event], player))
     bee_queen = add_boss_event("Bee Queen", REGION.FOREST, lambda state: state.has_all([epic_combat.event, hammering.event, beekeeper_hat.event], player))
     klaus = add_boss_event("Klaus", REGION.FOREST, lambda state: state.has_all([advanced_boss_combat.event, winter.event], player))
@@ -1006,7 +1030,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     add_hermit_event("Hermit Island Build Wooden Chair",                lambda state: state.has_all([hermit_island.event, "Sawhorse"], player))
     add_hermit_event("Give Crabby Hermit Umbrella",                     lambda state: state.has_all([hermit_island.event, spring.event], player) and state.has_any(["Umbrella", "Pretty Parasol"], player))
     add_hermit_event("Give Crabby Hermit Warm Clothing",                lambda state: state.has_all([hermit_island.event, winter.event], player) and state.has_any(["Breezy Vest", "Puffy Vest"], player))
-    add_hermit_event("Give Crabby Hermit Flower Salad",                 lambda state: state.has_all([hermit_island.event, summer.event], player))
+    add_hermit_event("Give Crabby Hermit Flower Salad",                 lambda state: state.has_all([hermit_island.event, summer.event, cooking.event], player))
     add_hermit_event("Give Crabby Hermit Fallounder",                   lambda state: state.has_all([hermit_sea_quests.event, autumn.event], player))
     add_hermit_event("Give Crabby Hermit Bloomfin Tuna",                lambda state: state.has_all([hermit_sea_quests.event, spring.event], player))
     add_hermit_event("Give Crabby Hermit Scorching Sunfish",            lambda state: state.has_all([hermit_sea_quests.event, summer.event], player))
@@ -1223,7 +1247,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             "Tall Scotch Eggs":                 basic_combat.rule,
             "Steamed Twigs":                    ALWAYS_TRUE,
             "Beefalo Treats":                   basic_farming.rule,
-            "Milkmade Hat":                     lambda state: state.has_all([cave_exploration.event, pre_basic_boating.event, dairy.event], player),
+            "Milkmade Hat":                     lambda state: state.has_all([cave_exploration.event, pre_basic_boating.event, dairy.event, basic_combat.event], player),
             "Amberosia":                        lambda state: state.has_all([salt_crystals.event, "Collected Dust"], player),
             "Stuffed Night Cap":                cave_exploration.rule,
             # Warly Dishes
@@ -1239,20 +1263,20 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             "Bone Bouillon":                    lambda state: state.has_all([hammering.event, onion_farming.event], player),
             "Moqueca":                          lambda state: state.has_all([sea_fishing.event, tomaroot_farming.event], player),
             # Farming
-            "Grow Giant Asparagus":             lambda state: state.has_all([asparagus_farming.event, spring.event], player),
-            "Grow Giant Garlic":                lambda state: state.has_all([garlic_farming.event, winter.event], player),
-            "Grow Giant Pumpkin":               lambda state: state.has_all([pumpkin_farming.event, winter.event], player),
-            "Grow Giant Corn":                  lambda state: state.has_all([corn_farming.event, spring.event], player),
-            "Grow Giant Onion":                 lambda state: state.has_all([onion_farming.event, spring.event], player),
-            "Grow Giant Potato":                lambda state: state.has_all([potato_farming.event, winter.event], player),
-            "Grow Giant Dragon Fruit":          lambda state: state.has_all([dragonfruit_farming.event, spring.event], player),
-            "Grow Giant Pomegranate":           lambda state: state.has_all([pomegranate_farming.event, spring.event], player),
-            "Grow Giant Eggplant":              lambda state: state.has_all([eggplant_farming.event, spring.event], player),
-            "Grow Giant Toma Root":             lambda state: state.has_all([tomaroot_farming.event, spring.event], player),
-            "Grow Giant Watermelon":            lambda state: state.has_all([watermelon_farming.event, spring.event], player),
-            "Grow Giant Pepper":                lambda state: state.has_all([pepper_farming.event, summer.event], player),
-            "Grow Giant Durian":                lambda state: state.has_all([durian_farming.event, spring.event], player),
-            "Grow Giant Carrot":                lambda state: state.has_all([carrot_farming.event, winter.event], player),
+            "Grow Giant Asparagus":             lambda state: FARMPLANT_SEASON_RULES["Asparagus"](state) and asparagus_farming.rule(state), 
+            "Grow Giant Garlic":                lambda state: FARMPLANT_SEASON_RULES["Garlic"](state) and garlic_farming.rule(state), 
+            "Grow Giant Pumpkin":               lambda state: FARMPLANT_SEASON_RULES["Pumpkin"](state) and pumpkin_farming.rule(state), 
+            "Grow Giant Corn":                  lambda state: FARMPLANT_SEASON_RULES["Corn"](state) and corn_farming.rule(state), 
+            "Grow Giant Onion":                 lambda state: FARMPLANT_SEASON_RULES["Onion"](state) and onion_farming.rule(state), 
+            "Grow Giant Potato":                lambda state: FARMPLANT_SEASON_RULES["Potato"](state) and potato_farming.rule(state), 
+            "Grow Giant Dragon Fruit":          lambda state: FARMPLANT_SEASON_RULES["Dragon Fruit"](state) and dragonfruit_farming.rule(state), 
+            "Grow Giant Pomegranate":           lambda state: FARMPLANT_SEASON_RULES["Pomegranate"](state) and pomegranate_farming.rule(state), 
+            "Grow Giant Eggplant":              lambda state: FARMPLANT_SEASON_RULES["Eggplant"](state) and eggplant_farming.rule(state), 
+            "Grow Giant Toma Root":             lambda state: FARMPLANT_SEASON_RULES["Toma Root"](state) and tomaroot_farming.rule(state), 
+            "Grow Giant Watermelon":            lambda state: FARMPLANT_SEASON_RULES["Watermelon"](state) and watermelon_farming.rule(state), 
+            "Grow Giant Pepper":                lambda state: FARMPLANT_SEASON_RULES["Pepper"](state) and pepper_farming.rule(state), 
+            "Grow Giant Durian":                lambda state: FARMPLANT_SEASON_RULES["Durian"](state) and durian_farming.rule(state), 
+            "Grow Giant Carrot":                lambda state: FARMPLANT_SEASON_RULES["Carrot"](state) and carrot_farming.rule(state), 
             # Research
             "Science (Nitre)":                  mining.rule,
             "Science (Salt Crystals)":          salt_crystals.rule,
@@ -1517,7 +1541,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
                         add_rule(location, ancient_altar.rule)
 
                 elif "farming" in location_data.tags:
-                    add_rule(location, advanced_farming.rule)
+                    add_rule(location, lambda state: state.has_all([advanced_farming.event, seasons_passed_1.event], player))
 
                 elif "cooking" in location_data.tags:
                     add_rule(location, cooking.rule)
