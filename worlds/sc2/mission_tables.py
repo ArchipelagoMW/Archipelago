@@ -174,7 +174,7 @@ class SC2Mission(Enum):
     UNSEALING_THE_PAST = 64, "Unsealing the Past (Protoss)", SC2Campaign.LOTV, "Purifier", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_unsealing_the_past", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.AutoScroller|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     PURIFICATION = 65, "Purification (Protoss)", SC2Campaign.LOTV, "Purifier", SC2Race.PROTOSS, MissionPools.HARD, "ap_purification", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     STEPS_OF_THE_RITE = 66, "Steps of the Rite (Protoss)", SC2Campaign.LOTV, "Tal'darim", SC2Race.PROTOSS, MissionPools.HARD, "ap_steps_of_the_rite", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.VsProtoss|MissionFlag.HasRaceSwap
-    RAK_SHIR = 67, "Rak'Shir", SC2Campaign.LOTV, "Tal'darim", SC2Race.PROTOSS, MissionPools.HARD, "ap_rak_shir", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.VsProtoss
+    RAK_SHIR = 67, "Rak'Shir (Protoss)", SC2Campaign.LOTV, "Tal'darim", SC2Race.PROTOSS, MissionPools.HARD, "ap_rak_shir", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.VsProtoss|MissionFlag.HasRaceSwap
     TEMPLAR_S_CHARGE = 68, "Templar's Charge", SC2Campaign.LOTV, "Moebius", SC2Race.PROTOSS, MissionPools.HARD, "ap_templar_s_charge", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.VsTerran
     TEMPLAR_S_RETURN = 69, "Templar's Return", SC2Campaign.LOTV, "Return to Aiur", SC2Race.PROTOSS, MissionPools.EASY, "ap_templar_s_return", MissionFlag.Protoss|MissionFlag.NoBuild|MissionFlag.VsPZ
     THE_HOST = 70, "The Host", SC2Campaign.LOTV, "Return to Aiur", SC2Race.PROTOSS, MissionPools.HARD, "ap_the_host", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.VsAll
@@ -311,7 +311,8 @@ class SC2Mission(Enum):
     PURIFICATION_Z = 213, "Purification (Zerg)", SC2Campaign.LOTV, "Purifier", SC2Race.ZERG, MissionPools.HARD, "ap_purification", MissionFlag.Zerg|MissionFlag.VsZerg|MissionFlag.RaceSwap
     STEPS_OF_THE_RITE_T = 214, "Steps of the Rite (Terran)", SC2Campaign.LOTV, "Tal'darim", SC2Race.TERRAN, MissionPools.HARD, "ap_steps_of_the_rite", MissionFlag.Terran|MissionFlag.VsProtoss|MissionFlag.RaceSwap
     STEPS_OF_THE_RITE_Z = 215, "Steps of the Rite (Zerg)", SC2Campaign.LOTV, "Tal'darim", SC2Race.ZERG, MissionPools.HARD, "ap_steps_of_the_rite", MissionFlag.Zerg|MissionFlag.VsProtoss|MissionFlag.RaceSwap
-    # 216/217 - Rak'Shir
+    RAK_SHIR_T = 216, "Rak'Shir (Terran)", SC2Campaign.LOTV, "Tal'darim", SC2Race.TERRAN, MissionPools.HARD, "ap_rak_shir", MissionFlag.Terran|MissionFlag.VsProtoss|MissionFlag.RaceSwap
+    RAK_SHIR_Z = 217, "Rak'Shir (Zerg)", SC2Campaign.LOTV, "Tal'darim", SC2Race.ZERG, MissionPools.HARD, "ap_rak_shir", MissionFlag.Zerg|MissionFlag.VsProtoss|MissionFlag.RaceSwap
     # 218/219 - Templar's Charge
     # 220/221 - Templar's Return
     # 222/223 - The Host

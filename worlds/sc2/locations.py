@@ -5392,6 +5392,30 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.STEPS_OF_THE_RITE_Z.mission_name, "South Mothership", SC2_RACESWAP_LOC_ID_OFFSET + 13207, LocationType.VANILLA,
                            logic.zerg_steps_of_the_rite_requirement
                            ),
+        make_location_data(SC2Mission.RAK_SHIR_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 13300, LocationType.VICTORY,
+                           logic.terran_rak_shir_requirement
+                           ),
+        make_location_data(SC2Mission.RAK_SHIR_T.mission_name, "North Slayn Elemental", SC2_RACESWAP_LOC_ID_OFFSET + 13301, LocationType.VANILLA,
+                           logic.terran_rak_shir_requirement
+                           ),
+        make_location_data(SC2Mission.RAK_SHIR_T.mission_name, "Southwest Slayn Elemental", SC2_RACESWAP_LOC_ID_OFFSET + 13302, LocationType.VANILLA,
+                           logic.terran_rak_shir_requirement
+                           ),
+        make_location_data(SC2Mission.RAK_SHIR_T.mission_name, "East Slayn Elemental", SC2_RACESWAP_LOC_ID_OFFSET + 13303, LocationType.VANILLA,
+                           logic.terran_rak_shir_requirement
+                           ),
+        make_location_data(SC2Mission.RAK_SHIR_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 13400, LocationType.VICTORY,
+                           logic.zerg_rak_shir_requirement
+                           ),
+        make_location_data(SC2Mission.RAK_SHIR_Z.mission_name, "North Slayn Elemental", SC2_RACESWAP_LOC_ID_OFFSET + 13401, LocationType.VANILLA,
+                           logic.zerg_rak_shir_requirement
+                           ),
+        make_location_data(SC2Mission.RAK_SHIR_Z.mission_name, "Southwest Slayn Elemental", SC2_RACESWAP_LOC_ID_OFFSET + 13402, LocationType.VANILLA,
+                           logic.zerg_rak_shir_requirement
+                           ),
+        make_location_data(SC2Mission.RAK_SHIR_Z.mission_name, "East Slayn Elemental", SC2_RACESWAP_LOC_ID_OFFSET + 13403, LocationType.VANILLA,
+                           logic.zerg_rak_shir_requirement
+                           ),
     ]
 
     beat_events = []

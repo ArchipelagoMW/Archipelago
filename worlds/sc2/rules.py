@@ -1885,6 +1885,44 @@ class SC2Logic:
             )
         )
 
+    def terran_rak_shir_requirement(self, state: CollectionState) -> bool:
+        return (
+            self.terran_beats_protoss_deathball(state)
+            and self.terran_very_hard_mission_weapon_armor_level(state)
+            and (
+                state.has_any({item_names.SIEGE_TANK, item_names.LIBERATOR}, self.player)
+                or state.has_all({item_names.BATTLECRUISER, item_names.BATTLECRUISER_ATX_LASER_BATTERY}, self.player)
+            )
+            and (
+                self.terran_air_anti_air(state)
+                or state.has(item_names.SKY_FURY, self.player)
+            )
+        )
+
+    def zerg_rak_shir_requirement(self, state: CollectionState) -> bool:
+        return (
+            self.zerg_competent_comp(state)
+            and self.zerg_competent_anti_air(state)
+            and (
+                self.zerg_big_monsters(state)
+                or state.has_all({item_names.INFESTED_LIBERATOR, item_names.INFESTED_LIBERATOR_DEFENDER_MODE}, self.player)
+                or self.morph_impaler_or_lurker(state)
+            )
+            and (
+                state.has_all({item_names.INFESTED_LIBERATOR, item_names.INFESTED_LIBERATOR_CLOUD_DISPERSAL}, self.player)
+                or (
+                    state.has(item_names.MUTALISK, self.player)
+                    and (
+                        state.has(item_names.MUTALISK_SUNDERING_GLAIVE, self.player)
+                        or self.morph_devourer(state)
+                    )
+                )
+                or (
+                    self.advanced_tactics and state.has(item_names.INFESTOR, self.player)
+                )
+            )
+        )
+
     def templars_charge_requirement(self, state: CollectionState) -> bool:
         return (
             self.protoss_heal(state)

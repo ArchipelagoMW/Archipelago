@@ -1521,7 +1521,7 @@ item_table = {
     item_names.INFESTED_BANSHEE_RAPID_HIBERNATION:
         ItemData(365 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 22, SC2Race.ZERG, parent_item=item_names.INFESTED_BANSHEE),
     item_names.INFESTED_LIBERATOR_CLOUD_DISPERSAL:
-        ItemData(366 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 23, SC2Race.ZERG, parent_item=item_names.INFESTED_LIBERATOR),
+        ItemData(366 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 23, SC2Race.ZERG, parent_item=item_names.INFESTED_LIBERATOR, classification=ItemClassification.progression),
     item_names.INFESTED_LIBERATOR_VIRAL_CONTAMINATION:
         ItemData(367 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 24, SC2Race.ZERG, parent_item=item_names.INFESTED_LIBERATOR),
     item_names.GUARDIAN_PROPELLANT_SACS:
