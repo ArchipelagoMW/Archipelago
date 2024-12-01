@@ -15,6 +15,7 @@ import subprocess
 from tkinter import messagebox
 from typing import Any, Dict, Set
 import urllib
+import urllib.parse
 
 import Utils
 from .Constants import *
@@ -206,12 +207,25 @@ def install() -> None:
 
 def launch(*args: str) -> Any:
     """Check args, then the mod installation, then launch the game"""
-    url: str = ""
+    name: str = ""
+    password: str = ""
+    server: str = ""
     if args:
         parser = argparse.ArgumentParser(description=f"{GAME_NAME} Client Launcher")
         parser.add_argument("url", type=str, nargs="?", help="Archipelago Webhost uri to auto connect to.")
         args = parser.parse_args(args)
-        url = args.url
+
+        # handle if text client is launched using the "archipelago://name:pass@host:port" url from webhost
+        if args.url:
+            url = urllib.parse.urlparse(args.url)
+            if url.scheme == "archipelago":
+                server = f'--server="{url.hostname}:{url.port}"'
+                if url.username:
+                    name = f'--name="{urllib.parse.unquote(url.username)}"'
+                if url.password:
+                    password = f'--password="{urllib.parse.unquote(url.password)}"'
+            else:
+                parser.error(f"bad url, found {args.url}, expected url in form of archipelago://archipelago.gg:38281")
 
     Utils.init_logging(CLIENT_NAME, exception_logger="Client")
 
@@ -236,7 +250,7 @@ def launch(*args: str) -> Any:
     if SavingPrincessWorld.settings.launch_game:
         logging.info("Launching game.")
         try:
-            subprocess.run(f"{SavingPrincessWorld.settings.launch_command} {url}")
+            subprocess.run(f"{SavingPrincessWorld.settings.launch_command} {name} {password} {server}")
         except FileNotFoundError:
             error = ("Could not run the game!\n\n"
                      "Please check that launch_command in options.yaml or host.yaml is set up correctly.")
