@@ -28,9 +28,9 @@ class BuildingLogicMixin(BaseLogicMixin):
 class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin, 'SourceLogicMixin']]):
 
     @cache_self1
-    def can_build(self, building: str) -> StardewRule:
-        building = self.content.farm_buildings.get(building)
-        assert building is not None, f"Building {building} not found."
+    def can_build(self, building_name: str) -> StardewRule:
+        building = self.content.farm_buildings.get(building_name)
+        assert building is not None, f"Building {building_name} not found."
 
         source_rule = self.logic.source.has_access_to_any(building.sources)
         if not building.is_upgrade:
@@ -40,21 +40,21 @@ class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, RegionLogicMixin, Receiv
         return self.logic.and_(upgrade_rule, source_rule)
 
     @cache_self1
-    def has_building(self, building: str) -> StardewRule:
+    def has_building(self, building_name: str) -> StardewRule:
         building_progression = self.content.features.building_progression
 
-        if building in building_progression.starting_buildings:
+        if building_name in building_progression.starting_buildings:
             return true_
 
         if not building_progression.is_progressive:
-            return self.logic.building.can_build(building)
+            return self.logic.building.can_build(building_name)
 
         # Shipping bin is special. The mod auto-builds it when received, no need to go to Robin.
-        if building == Building.shipping_bin:
+        if building_name == Building.shipping_bin:
             return self.logic.received(Building.shipping_bin)
 
         carpenter_rule = self.logic.building.can_construct_buildings
-        item, count = building_progression.to_progressive_item(building)
+        item, count = building_progression.to_progressive_item(building_name)
         return self.logic.received(item, count) & carpenter_rule
 
     @cached_property
