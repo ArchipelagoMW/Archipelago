@@ -10,9 +10,9 @@ from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from worlds.AutoWorld import call_all
 from .assertion import RuleAssertMixin
-from .options.utils import fill_namespace_with_default
+from .options.utils import fill_namespace_with_default, parse_class_option_keys, fill_dataclass_with_default
 from .. import StardewValleyWorld, options, StardewItem
-from ..options import StardewValleyOptions, StardewValleyOption
+from ..options import StardewValleyOption
 
 logger = logging.getLogger(__name__)
 
@@ -392,16 +392,6 @@ def search_world_cache(cache: Dict[frozenset, MultiWorld], frozen_options: froze
 def add_to_world_cache(cache: Dict[frozenset, MultiWorld], frozen_options: frozenset, multi_world: MultiWorld) -> None:
     # We could complete the key with all the default options, but that does not seem to improve performances.
     cache[frozen_options] = multi_world
-
-
-def complete_options_with_default(options_to_complete=None) -> StardewValleyOptions:
-    if options_to_complete is None:
-        options_to_complete = {}
-
-    for name, option in StardewValleyOptions.type_hints.items():
-        options_to_complete[name] = option.from_any(options_to_complete.get(name, option.default))
-
-    return StardewValleyOptions(**options_to_complete)
 
 
 def setup_multiworld(test_options: Iterable[Dict[str, int]] = None, seed=None) -> MultiWorld:  # noqa

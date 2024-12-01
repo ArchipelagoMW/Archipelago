@@ -25,9 +25,9 @@ def parse_class_option_keys(test_options: dict[str | StardewValleyOption, Any] |
     return parsed_options
 
 
-def fill_dataclass_with_default(test_options: dict[str | StardewValleyOption, Any]) -> StardewValleyOptions:
+def fill_dataclass_with_default(test_options: dict[str | StardewValleyOption, Any] | None) -> StardewValleyOptions:
     test_options = parse_class_option_keys(test_options)
-    
+
     filled_options = {}
     for option_name, option_class in StardewValleyOptions.type_hints.items():
 
