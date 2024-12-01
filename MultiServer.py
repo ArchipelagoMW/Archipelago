@@ -1904,6 +1904,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         elif cmd == 'UpdateHint':
             location = args["location"]
             location_player = args["player"]
+            create_if_not_exists = args.get("create_if_not_exists", False)
             status_int = args.get("status")
 
             if not isinstance(location_player, int) or not isinstance(location, int) \
@@ -1932,6 +1933,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 return
 
             if hint is None:
+                if not create_if_not_exists:
+                    return
+
                 # UpdateHint can be used as an "Upsert", creating a new hint.
                 # The newly created hint must either be for a location in the requesting slot's world,
                 # or a location containing an item for the requesting slot (including item links).
