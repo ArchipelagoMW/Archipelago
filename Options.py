@@ -1387,6 +1387,7 @@ class ItemLinks(OptionList):
         super(ItemLinks, self).verify(world, player_name, plando_options)
         existing_links = set()
         for link in self.value:
+            link["name"] = link["name"].strip()[:16].strip()
             if link["name"] in existing_links:
                 raise Exception(f"You cannot have more than one link named {link['name']}.")
             existing_links.add(link["name"])
