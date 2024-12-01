@@ -1001,7 +1001,7 @@ regions:
         - seal_of_fortune
 
     after_stalled_rocket_get_out_and_push:
-      name_template: 'After Stalled Rocket! (Get Out and Push) #{n}'
+      name_template: 'After Stalled Rocket! #{n}'
       unrandomized_items:
         filler: 4
         useful_nonprogression: 3
@@ -1020,7 +1020,7 @@ regions:
         - homeless_mummy
 
     before_stalled_rocket_get_out_and_push:
-      name_template: 'Before Stalled Rocket! (Get Out and Push) #{n}'
+      name_template: 'Before Stalled Rocket! #{n}'
       unrandomized_items:
         filler: 4
         useful_nonprogression: 2
