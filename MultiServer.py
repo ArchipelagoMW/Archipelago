@@ -280,6 +280,8 @@ class Context:
     # Data package retrieval
     def _load_game_data(self, games: set[str]):
         import worlds
+        # Archipelago is always required because its items and locations are added to each data package.
+        games = games | {"Archipelago"}
         worlds.ensure_all_worlds_loaded(games)
         self.gamespackage = worlds.network_data_package["games"]
 
