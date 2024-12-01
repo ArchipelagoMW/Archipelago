@@ -16,8 +16,6 @@ if typing.TYPE_CHECKING:
 
     assert SourceLogicMixin
 
-has_group = "building"
-
 
 class BuildingLogicMixin(BaseLogicMixin):
     def __init__(self, *args, **kwargs):
