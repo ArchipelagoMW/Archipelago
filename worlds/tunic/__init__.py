@@ -83,6 +83,11 @@ class TunicWorld(World):
     shop_num: int = 1  # need to make it so that you can walk out of shops, but also that they aren't all connected
     er_regions: Dict[str, RegionInfo]  # absolutely needed so outlet regions work
 
+    # so we only loop the multiworld locations once
+    # if these are locations instead of their info, it gives a memory leak error
+    item_link_locations: Dict[int, Dict[str, List[Tuple[int, str]]]] = {}
+    player_item_link_locations: Dict[str, List[Location]]
+
     def generate_early(self) -> None:
         if self.options.logic_rules >= LogicRules.option_no_major_glitches:
             self.options.laurels_zips.value = LaurelsZips.option_true
@@ -387,6 +392,18 @@ class TunicWorld(World):
                 if hint_text:
                     hint_data[self.player][location.address] = hint_text
 
+    def get_real_location(self, location: Location) -> Tuple[str, int]:
+        # if it's not in a group, it's not in an item link
+        if location.player not in self.multiworld.groups or not location.item:
+            return location.name, location.player
+        try:
+            loc = self.player_item_link_locations[location.item.name].pop()
+            return loc.name, loc.player
+        except IndexError:
+            warning(f"TUNIC: Failed to parse item location for in-game hints for {self.player_name}. "
+                    f"Using a potentially incorrect location name instead.")
+            return location.name, location.player
+
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
             "seed": self.random.randint(0, 2147483647),
@@ -412,12 +429,35 @@ class TunicWorld(World):
             "disable_local_spoiler": int(self.settings.disable_local_spoiler or self.multiworld.is_race),
         }
 
+        # this would be in a stage if there was an appropriate stage for it
+        self.player_item_link_locations = {}
+        groups = self.multiworld.get_player_groups(self.player)
+        # checking if groups so that this doesn't run if the player isn't in a group
+        if groups:
+            if not self.item_link_locations:
+                tunic_worlds: Tuple[TunicWorld] = self.multiworld.get_game_worlds("TUNIC")
+                # figure out our groups and the items in them
+                for tunic in tunic_worlds:
+                    for group in self.multiworld.get_player_groups(tunic.player):
+                        self.item_link_locations.setdefault(group, {})
+                for location in self.multiworld.get_locations():
+                    if location.item and location.item.player in self.item_link_locations.keys():
+                        (self.item_link_locations[location.item.player].setdefault(location.item.name, [])
+                         .append((location.player, location.name)))
+
+            # if item links are on, set up the player's personal item link locations, so we can pop them as needed
+            for group, item_links in self.item_link_locations.items():
+                if group in groups:
+                    for item_name, locs in item_links.items():
+                        self.player_item_link_locations[item_name] = \
+                            [self.multiworld.get_location(location_name, player) for player, location_name in locs]
+
         for tunic_item in filter(lambda item: item.location is not None and item.code is not None, self.slot_data_items):
             if tunic_item.name not in slot_data:
                 slot_data[tunic_item.name] = []
             if tunic_item.name == gold_hexagon and len(slot_data[gold_hexagon]) >= 6:
                 continue
-            slot_data[tunic_item.name].extend([tunic_item.location.name, tunic_item.location.player])
+            slot_data[tunic_item.name].extend(self.get_real_location(tunic_item.location))
 
         for start_item in self.options.start_inventory_from_pool:
             if start_item in slot_data_item_names:
@@ -436,7 +476,7 @@ class TunicWorld(World):
                     if item in slot_data_item_names:
                         slot_data[item] = []
                         for item_location in self.multiworld.find_item_locations(item, self.player):
-                            slot_data[item].extend([item_location.name, item_location.player])
+                            slot_data[item].extend(self.get_real_location(item_location))
 
         return slot_data
 
