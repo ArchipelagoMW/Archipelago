@@ -61,13 +61,17 @@ class WebHostContext(Context):
     room_id: int
 
     def __init__(self, static_server_data: dict, logger: logging.Logger):
-        # static server data is used during _load_game_data to load required data,
-        # without needing to import worlds system, which takes quite a bit of memory
-        self.static_server_data = static_server_data
+        # static server data is used to load required data, without needing to import worlds system, which takes quite a
+        # bit of memory
         super(WebHostContext, self).__init__("", 0, "", "", 1,
                                              40, True, "enabled", "enabled",
                                              "enabled", 0, 2, logger=logger)
-        del self.static_server_data
+
+        for key, value in static_server_data.items():
+            # NOTE: attributes are mutable and shared, so they will have to be copied before being modified
+            setattr(self, key, value)
+        self.non_hintable_names = collections.defaultdict(frozenset, self.non_hintable_names)
+
         self.main_loop = asyncio.get_running_loop()
         self.video = {}
         self.tags = ["AP", "WebHost"]
@@ -80,11 +84,9 @@ class WebHostContext(Context):
         except ImportError:
             self.logger.debug("Context destroyed")
 
-    def _load_game_data(self):
-        for key, value in self.static_server_data.items():
-            # NOTE: attributes are mutable and shared, so they will have to be copied before being modified
-            setattr(self, key, value)
-        self.non_hintable_names = collections.defaultdict(frozenset, self.non_hintable_names)
+    def _load_game_data(self, games: set[str]):
+        # Static server data is used, so there is nothing to load.
+        pass
 
     def listen_to_db_commands(self):
         cmdprocessor = DBCommandProcessor(self)
@@ -175,6 +177,7 @@ def get_random_port():
 @cache_argsless
 def get_static_server_data() -> dict:
     import worlds
+    worlds.ensure_all_worlds_loaded()
     data = {
         "non_hintable_names": {
             world_name: world.hint_blacklist

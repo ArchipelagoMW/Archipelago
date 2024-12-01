@@ -282,6 +282,7 @@ class Context:
         import worlds
         # Archipelago is always required because its items and locations are added to each data package.
         games = games | {"Archipelago"}
+        self.logger.info(f"Loading local game data for worlds {sorted(games)}")
         worlds.ensure_all_worlds_loaded(games)
         self.gamespackage = worlds.network_data_package["games"]
 
@@ -507,7 +508,6 @@ class Context:
         embedded_data_package = decoded_obj.get("datapackage", {})
         # Use the games present in the embedded data package to determine the worlds to load.
         games = set(embedded_data_package.keys())
-        self.logger.info(f"Loading local game data for worlds {sorted(games)}")
         self._load_game_data(games)
 
         for game_name, data in decoded_obj.get("datapackage", {}).items():
