@@ -37,11 +37,11 @@ CLASSIFICATION_OVERRIDES: defaultdict[int, str] = defaultdict(lambda: 'filler', 
 444:     'useful',#    ItemName.Trainers_Whip
 445:     'useful',#    ItemName.Tomegathericon
 # 449:     'filler',#    ItemName.Laughing_Fungus
-333:     'useful',#    ItemName.Ixion_Mail
-290:     'useful',#    ItemName.Hypnos_Sword
-394:     'useful',#    ItemName.Clarity_Circlet
-358:     'useful',#    ItemName.Fujin_Shield
-279:     'useful',#    ItemName.Storm_Brand
+# 333:     'useful',#    ItemName.Ixion_Mail
+# 290:     'useful',#    ItemName.Hypnos_Sword
+# 394:     'useful',#    ItemName.Clarity_Circlet
+# 358:     'useful',#    ItemName.Fujin_Shield
+# 279:     'useful',#    ItemName.Storm_Brand
 # 231:     'filler',#    ItemName.Bone
 
 # 425:'useful', # Rusty_Staff_Dracomace

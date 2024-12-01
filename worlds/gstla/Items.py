@@ -186,6 +186,7 @@ def create_items(world: 'GSTLAWorld', player: int):
 
     # Adding one progressive lucky medal
     world.multiworld.itempool.append(create_item_direct(items_by_id[229], player, False, ItemClassification.progression))
+    sum_locations -= 1
 
     for item in class_change_items:
         ap_item = create_item_direct(item, player)
