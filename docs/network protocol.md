@@ -351,7 +351,7 @@ Sent to the server to update the status of a Hint. The client must be the 'recei
 | ---- | ---- | ----- |
 | player | int | The ID of the player whose location is being hinted for. |
 | location | int | The ID of the location to update the hint for. If no hint exists for this location, the packet is ignored. |
-| status | [HintStatus](#HintStatus) | Optional. If included, sets the status of the hint to this status. Fails if the status is already `Found`. |
+| status | [HintStatus](#HintStatus) | Optional. If included, sets the status of the hint to this status. Cannot set `HINT_FOUND`, or change the status from `HINT_FOUND`. |
 
 #### HintStatus
 An enumeration containing the possible hint states.
