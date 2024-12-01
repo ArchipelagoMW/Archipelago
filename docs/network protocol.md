@@ -365,6 +365,7 @@ class HintStatus(enum.IntEnum):
     HINT_AVOID = 20       # The receiving player has specified that the item is detrimental
     HINT_PRIORITY = 30    # The receiving player has specified that the item is needed
 ```
+- Hints for items with `ItemClassification.trap` default to `HINT_AVOID`.
 - Hints created with `LocationScouts`, `!hint_location`, or similar (hinting a location) default to `HINT_UNSPECIFIED`.
 - Hints created with `!hint` or similar (hinting an item for yourself) default to `HINT_PRIORITY`.
 - Once a hint is collected, its' status is updated to `HINT_FOUND` automatically, and can no longer be changed.
