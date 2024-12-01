@@ -5,7 +5,6 @@ from typing import Union
 from Utils import cache_self1
 from .base_logic import BaseLogic, BaseLogicMixin
 from .has_logic import HasLogicMixin
-from .money_logic import MoneyLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from ..stardew_rule import StardewRule, true_
@@ -26,7 +25,7 @@ class BuildingLogicMixin(BaseLogicMixin):
         self.building = BuildingLogic(*args, **kwargs)
 
 
-class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, MoneyLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin, 'SourceLogicMixin']]):
+class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin, 'SourceLogicMixin']]):
 
     @cache_self1
     def can_build(self, building: str) -> StardewRule:
