@@ -21,13 +21,12 @@ from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, Walnutsanity
 from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
-    Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, SkillProgression
+    Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity
 from .stardew_rule import And, StardewRule, true_
 from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
 from .strings.ap_names.ap_option_names import OptionName
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
-from .strings.ap_names.event_names import Event
 from .strings.ap_names.mods.mod_items import SVEQuestItem, SVERunes
 from .strings.ap_names.transport_names import Transportation
 from .strings.artisan_good_names import ArtisanGood
@@ -48,7 +47,7 @@ from .strings.performance_names import Performance
 from .strings.quest_names import Quest
 from .strings.region_names import Region
 from .strings.season_names import Season
-from .strings.skill_names import ModSkill, Skill
+from .strings.skill_names import Skill
 from .strings.tool_names import Tool, ToolMaterial
 from .strings.tv_channel_names import Channel
 from .strings.villager_names import NPC, ModNPC
@@ -71,7 +70,7 @@ def set_rules(world):
     set_ginger_island_rules(logic, multiworld, player, world_options)
 
     set_tool_rules(logic, multiworld, player, world_options)
-    set_skills_rules(logic, multiworld, player, world_options)
+    set_skills_rules(logic, multiworld, player, world_content)
     set_bundle_rules(bundle_rooms, logic, multiworld, player, world_options)
     set_building_rules(logic, multiworld, player, world_options)
     set_cropsanity_rules(logic, multiworld, player, world_content)
@@ -165,58 +164,21 @@ def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiw
         MultiWorldRules.add_rule(multiworld.get_location(room_location, player), And(*room_rules))
 
 
-def set_skills_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
-    mods = world_options.mods
-    if world_options.skill_progression == SkillProgression.option_vanilla:
+def set_skills_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, content: StardewContent):
+    skill_progression = content.features.skill_progression
+    if not skill_progression.is_progressive:
         return
 
-    for i in range(1, 11):
-        set_vanilla_skill_rule_for_level(logic, multiworld, player, i)
-        set_modded_skill_rule_for_level(logic, multiworld, player, mods, i)
+    for skill in content.skills.values():
+        for level, level_name in skill_progression.get_randomized_level_names_by_level(skill):
+            rule = logic.skill.can_earn_level(skill.name, level)
+            location = multiworld.get_location(level_name, player)
+            MultiWorldRules.set_rule(location, rule)
 
-    if world_options.skill_progression == SkillProgression.option_progressive:
-        return
-
-    for skill in [Skill.farming, Skill.fishing, Skill.foraging, Skill.mining, Skill.combat]:
-        MultiWorldRules.set_rule(multiworld.get_location(f"{skill} Mastery", player), logic.skill.can_earn_mastery(skill))
-
-
-def set_vanilla_skill_rule_for_level(logic: StardewLogic, multiworld, player, level: int):
-    set_vanilla_skill_rule(logic, multiworld, player, Skill.farming, level)
-    set_vanilla_skill_rule(logic, multiworld, player, Skill.fishing, level)
-    set_vanilla_skill_rule(logic, multiworld, player, Skill.foraging, level)
-    set_vanilla_skill_rule(logic, multiworld, player, Skill.mining, level)
-    set_vanilla_skill_rule(logic, multiworld, player, Skill.combat, level)
-
-
-def set_modded_skill_rule_for_level(logic: StardewLogic, multiworld, player, mods, level: int):
-    if ModNames.luck_skill in mods:
-        set_modded_skill_rule(logic, multiworld, player, ModSkill.luck, level)
-    if ModNames.magic in mods:
-        set_modded_skill_rule(logic, multiworld, player, ModSkill.magic, level)
-    if ModNames.binning_skill in mods:
-        set_modded_skill_rule(logic, multiworld, player, ModSkill.binning, level)
-    if ModNames.cooking_skill in mods:
-        set_modded_skill_rule(logic, multiworld, player, ModSkill.cooking, level)
-    if ModNames.socializing_skill in mods:
-        set_modded_skill_rule(logic, multiworld, player, ModSkill.socializing, level)
-    if ModNames.archaeology in mods:
-        set_modded_skill_rule(logic, multiworld, player, ModSkill.archaeology, level)
-
-
-def get_skill_level_location(multiworld, player, skill: str, level: int):
-    location_name = f"Level {level} {skill}"
-    return multiworld.get_location(location_name, player)
-
-
-def set_vanilla_skill_rule(logic: StardewLogic, multiworld, player, skill: str, level: int):
-    rule = logic.skill.can_earn_level(skill, level)
-    MultiWorldRules.set_rule(get_skill_level_location(multiworld, player, skill, level), rule)
-
-
-def set_modded_skill_rule(logic: StardewLogic, multiworld, player, skill: str, level: int):
-    rule = logic.skill.can_earn_level(skill, level)
-    MultiWorldRules.set_rule(get_skill_level_location(multiworld, player, skill, level), rule)
+        if skill_progression.is_mastery_randomized(skill):
+            rule = logic.skill.can_earn_mastery(skill.name)
+            location = multiworld.get_location(skill.mastery_name, player)
+            MultiWorldRules.set_rule(location, rule)
 
 
 def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
@@ -251,7 +213,8 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, Entrance.enter_witch_warp_cave, logic.quest.has_dark_talisman() | (logic.mod.magic.can_blink()))
     set_entrance_rule(multiworld, player, Entrance.enter_witch_hut, (logic.has(ArtisanGood.void_mayonnaise) | logic.mod.magic.can_blink()))
     set_entrance_rule(multiworld, player, Entrance.enter_mutant_bug_lair,
-                      (logic.received(Event.start_dark_talisman_quest) & logic.relationship.can_meet(NPC.krobus)) | logic.mod.magic.can_blink())
+                      (logic.wallet.has_rusty_key() & logic.region.can_reach(Region.railroad) & logic.relationship.can_meet(
+                          NPC.krobus)) | logic.mod.magic.can_blink())
     set_entrance_rule(multiworld, player, Entrance.enter_casino, logic.quest.has_club_card())
 
     set_bedroom_entrance_rules(logic, multiworld, player, world_options)
@@ -307,8 +270,7 @@ def set_mines_floor_entrance_rules(logic, multiworld, player):
         rule = logic.mine.has_mine_elevator_to_floor(floor - 10)
         if floor == 5 or floor == 45 or floor == 85:
             rule = rule & logic.mine.can_progress_in_the_mines_from_floor(floor)
-        entrance = multiworld.get_entrance(dig_to_mines_floor(floor), player)
-        MultiWorldRules.set_rule(entrance, rule)
+        set_entrance_rule(multiworld, player, dig_to_mines_floor(floor), rule)
 
 
 def set_skull_cavern_floor_entrance_rules(logic, multiworld, player):
@@ -316,8 +278,7 @@ def set_skull_cavern_floor_entrance_rules(logic, multiworld, player):
         rule = logic.mod.elevator.has_skull_cavern_elevator_to_floor(floor - 25)
         if floor == 25 or floor == 75 or floor == 125:
             rule = rule & logic.mine.can_progress_in_the_skull_cavern_from_floor(floor)
-        entrance = multiworld.get_entrance(dig_to_skull_floor(floor), player)
-        MultiWorldRules.set_rule(entrance, rule)
+        set_entrance_rule(multiworld, player, dig_to_skull_floor(floor), rule)
 
 
 def set_blacksmith_entrance_rules(logic, multiworld, player):
@@ -346,9 +307,8 @@ def set_skill_entrance_rules(logic, multiworld, player, world_options: StardewVa
 
 
 def set_blacksmith_upgrade_rule(logic, multiworld, player, entrance_name: str, item_name: str, tool_material: str):
-    material_entrance = multiworld.get_entrance(entrance_name, player)
     upgrade_rule = logic.has(item_name) & logic.money.can_spend(tool_upgrade_prices[tool_material])
-    MultiWorldRules.set_rule(material_entrance, upgrade_rule)
+    set_entrance_rule(multiworld, player, entrance_name, upgrade_rule)
 
 
 def set_festival_entrance_rules(logic, multiworld, player):
@@ -880,25 +840,19 @@ def set_traveling_merchant_day_rules(logic: StardewLogic, multiworld: MultiWorld
 
 
 def set_arcade_machine_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
-    MultiWorldRules.add_rule(multiworld.get_entrance(Entrance.play_junimo_kart, player),
-                             logic.received(Wallet.skull_key))
+    play_junimo_kart_rule = logic.received(Wallet.skull_key)
+
     if world_options.arcade_machine_locations != ArcadeMachineLocations.option_full_shuffling:
+        set_entrance_rule(multiworld, player, Entrance.play_junimo_kart, play_junimo_kart_rule)
         return
 
-    MultiWorldRules.add_rule(multiworld.get_entrance(Entrance.play_junimo_kart, player),
-                             logic.has("Junimo Kart Small Buff"))
-    MultiWorldRules.add_rule(multiworld.get_entrance(Entrance.reach_junimo_kart_2, player),
-                             logic.has("Junimo Kart Medium Buff"))
-    MultiWorldRules.add_rule(multiworld.get_entrance(Entrance.reach_junimo_kart_3, player),
-                             logic.has("Junimo Kart Big Buff"))
-    MultiWorldRules.add_rule(multiworld.get_entrance(Entrance.reach_junimo_kart_4, player),
-                             logic.has("Junimo Kart Max Buff"))
-    MultiWorldRules.add_rule(multiworld.get_entrance(Entrance.play_journey_of_the_prairie_king, player),
-                             logic.has("JotPK Small Buff"))
-    MultiWorldRules.add_rule(multiworld.get_entrance(Entrance.reach_jotpk_world_2, player),
-                             logic.has("JotPK Medium Buff"))
-    MultiWorldRules.add_rule(multiworld.get_entrance(Entrance.reach_jotpk_world_3, player),
-                             logic.has("JotPK Big Buff"))
+    set_entrance_rule(multiworld, player, Entrance.play_junimo_kart, play_junimo_kart_rule & logic.has("Junimo Kart Small Buff"))
+    set_entrance_rule(multiworld, player, Entrance.reach_junimo_kart_2, logic.has("Junimo Kart Medium Buff"))
+    set_entrance_rule(multiworld, player, Entrance.reach_junimo_kart_3, logic.has("Junimo Kart Big Buff"))
+    set_entrance_rule(multiworld, player, Entrance.reach_junimo_kart_4, logic.has("Junimo Kart Max Buff"))
+    set_entrance_rule(multiworld, player, Entrance.play_journey_of_the_prairie_king, logic.has("JotPK Small Buff"))
+    set_entrance_rule(multiworld, player, Entrance.reach_jotpk_world_2, logic.has("JotPK Medium Buff"))
+    set_entrance_rule(multiworld, player, Entrance.reach_jotpk_world_3, logic.has("JotPK Big Buff"))
     MultiWorldRules.add_rule(multiworld.get_location("Journey of the Prairie King Victory", player),
                              logic.has("JotPK Max Buff"))
 
@@ -1049,6 +1003,7 @@ def set_entrance_rule(multiworld, player, entrance: str, rule: StardewRule):
         potentially_required_regions = look_for_indirect_connection(rule)
         if potentially_required_regions:
             for region in potentially_required_regions:
+                logger.debug(f"Registering indirect condition for {region} -> {entrance}")
                 multiworld.register_indirect_condition(multiworld.get_region(region, player), multiworld.get_entrance(entrance, player))
 
         MultiWorldRules.set_rule(multiworld.get_entrance(entrance, player), rule)

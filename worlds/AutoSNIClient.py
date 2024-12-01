@@ -1,9 +1,8 @@
 
 from __future__ import annotations
 import abc
-from typing import TYPE_CHECKING, ClassVar, Dict, Iterable, Tuple, Any, Optional, Union
-
-from typing_extensions import TypeGuard
+import logging
+from typing import TYPE_CHECKING, ClassVar, Dict, Iterable, Tuple, Any, Optional, Union, TypeGuard
 
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components
 
@@ -60,8 +59,12 @@ class AutoSNIClientRegister(abc.ABCMeta):
     @staticmethod
     async def get_handler(ctx: SNIContext) -> Optional[SNIClient]:
         for _game, handler in AutoSNIClientRegister.game_handlers.items():
-            if await handler.validate_rom(ctx):
-                return handler
+            try:
+                if await handler.validate_rom(ctx):
+                    return handler
+            except Exception as e:
+                text_file_logger = logging.getLogger()
+                text_file_logger.exception(e)
         return None
 
 
