@@ -17,8 +17,8 @@ from ..strings.region_names import Region, LogicRegion
 
 if typing.TYPE_CHECKING:
     from .shipping_logic import ShippingLogicMixin
-
-    assert ShippingLogicMixin
+else:
+    ShippingLogicMixin = object
 
 qi_gem_rewards = ("100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "35 Qi Gems", "25 Qi Gems",
                   "20 Qi Gems", "15 Qi Gems", "10 Qi Gems")
@@ -31,7 +31,7 @@ class MoneyLogicMixin(BaseLogicMixin):
 
 
 class MoneyLogic(BaseLogic[Union[RegionLogicMixin, MoneyLogicMixin, TimeLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin, SeasonLogicMixin,
-GrindLogicMixin, 'ShippingLogicMixin']]):
+GrindLogicMixin, ShippingLogicMixin]]):
 
     @cache_self1
     def can_have_earned_total(self, amount: int) -> StardewRule:
@@ -80,7 +80,7 @@ GrindLogicMixin, 'ShippingLogicMixin']]):
         item_rules = []
         if source.items_price is not None:
             for price, item in source.items_price:
-                item_rules.append(self.logic.has(item) & self.logic.grind.can_grind_item(price))
+                item_rules.append(self.logic.has(item) & self.logic.grind.can_grind_item(price, item))
 
         region_rule = self.logic.region.can_reach(source.shop_region)
 

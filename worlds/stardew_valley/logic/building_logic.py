@@ -13,8 +13,8 @@ from ..strings.region_names import Region
 
 if typing.TYPE_CHECKING:
     from .source_logic import SourceLogicMixin
-
-    assert SourceLogicMixin
+else:
+    SourceLogicMixin = object
 
 
 class BuildingLogicMixin(BaseLogicMixin):
@@ -23,7 +23,7 @@ class BuildingLogicMixin(BaseLogicMixin):
         self.building = BuildingLogic(*args, **kwargs)
 
 
-class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin, 'SourceLogicMixin']]):
+class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin, SourceLogicMixin]]):
 
     @cache_self1
     def can_build(self, building_name: str) -> StardewRule:
