@@ -109,6 +109,8 @@ def set_rules(world: "SavingPrincessWorld"):
     # brainos requires all weapons, cannot destroy the cannons otherwise
     if world.is_pool_expanded:
         set_rule(get_location(EP_LOCATION_ELECTRICAL_FINAL_BOSS), lambda state: all_weapons(state))
+    # and we need to beat brainos to beat the game
+    set_rule(get_location(EVENT_LOCATION_VICTORY), lambda state: all_weapons(state))
 
     # if not expanded pool, place the events for the boss kills and generator
     if not world.is_pool_expanded:
