@@ -26,3 +26,13 @@ class GoodyHutRewardData(TypedDict):
     Type: str
     Name: str
     Rarity: str
+
+
+class CivicPrereqData(TypedDict):
+    Civic: str
+    PrereqTech: str
+
+
+class TechPrereqData(TypedDict):
+    Technology: str
+    PrereqTech: str
