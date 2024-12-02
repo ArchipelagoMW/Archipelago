@@ -3576,6 +3576,78 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 and logic.protoss_repair_odin(state))
         ),
         make_location_data(SC2Mission.MEDIA_BLITZ_P.mission_name, "Surprise Attack Ends", SC2_RACESWAP_LOC_ID_OFFSET + 4009, LocationType.EXTRA),
+        make_location_data(SC2Mission.GATES_OF_HELL_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 5100, LocationType.VICTORY,
+            logic.zerg_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_Z.mission_name, "Large Army", SC2_RACESWAP_LOC_ID_OFFSET + 5101, LocationType.VANILLA,
+            logic.zerg_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_Z.mission_name, "2 Drop Pods", SC2_RACESWAP_LOC_ID_OFFSET + 5102, LocationType.VANILLA,
+            logic.zerg_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_Z.mission_name, "4 Drop Pods", SC2_RACESWAP_LOC_ID_OFFSET + 5103, LocationType.VANILLA,
+            logic.zerg_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_Z.mission_name, "6 Drop Pods", SC2_RACESWAP_LOC_ID_OFFSET + 5104, LocationType.EXTRA,
+            logic.zerg_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_Z.mission_name, "8 Drop Pods", SC2_RACESWAP_LOC_ID_OFFSET + 5105, LocationType.CHALLENGE,
+            logic.zerg_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_Z.mission_name, "Southwest Spore Cannon", SC2_RACESWAP_LOC_ID_OFFSET + 5106, LocationType.EXTRA,
+            logic.zerg_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_Z.mission_name, "Northwest Spore Cannon", SC2_RACESWAP_LOC_ID_OFFSET + 5107, LocationType.EXTRA,
+            logic.zerg_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_Z.mission_name, "Northeast Spore Cannon", SC2_RACESWAP_LOC_ID_OFFSET + 5108, LocationType.EXTRA,
+            logic.zerg_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_Z.mission_name, "East Spore Cannon", SC2_RACESWAP_LOC_ID_OFFSET + 5109, LocationType.EXTRA,
+            logic.zerg_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_Z.mission_name, "Southeast Spore Cannon", SC2_RACESWAP_LOC_ID_OFFSET + 5110, LocationType.EXTRA,
+            logic.zerg_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_Z.mission_name, "Expansion Spore Cannon", SC2_RACESWAP_LOC_ID_OFFSET + 5111, LocationType.EXTRA,
+            logic.zerg_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 5200, LocationType.VICTORY,
+            logic.protoss_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_P.mission_name, "Large Army", SC2_RACESWAP_LOC_ID_OFFSET + 5201, LocationType.VANILLA,
+            logic.protoss_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_P.mission_name, "2 Drop Pods", SC2_RACESWAP_LOC_ID_OFFSET + 5202, LocationType.VANILLA,
+            logic.protoss_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_P.mission_name, "4 Drop Pods", SC2_RACESWAP_LOC_ID_OFFSET + 5203, LocationType.VANILLA,
+            logic.protoss_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_P.mission_name, "6 Drop Pods", SC2_RACESWAP_LOC_ID_OFFSET + 5204, LocationType.EXTRA,
+            logic.protoss_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_P.mission_name, "8 Drop Pods", SC2_RACESWAP_LOC_ID_OFFSET + 5205, LocationType.CHALLENGE,
+            logic.protoss_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_P.mission_name, "Southwest Spore Cannon", SC2_RACESWAP_LOC_ID_OFFSET + 5206, LocationType.EXTRA,
+            logic.protoss_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_P.mission_name, "Northwest Spore Cannon", SC2_RACESWAP_LOC_ID_OFFSET + 5207, LocationType.EXTRA,
+            logic.protoss_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_P.mission_name, "Northeast Spore Cannon", SC2_RACESWAP_LOC_ID_OFFSET + 5208, LocationType.EXTRA,
+            logic.protoss_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_P.mission_name, "East Spore Cannon", SC2_RACESWAP_LOC_ID_OFFSET + 5209, LocationType.EXTRA,
+            logic.protoss_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_P.mission_name, "Southeast Spore Cannon", SC2_RACESWAP_LOC_ID_OFFSET + 5210, LocationType.EXTRA,
+            logic.protoss_gates_of_hell_requirement
+        ),
+        make_location_data(SC2Mission.GATES_OF_HELL_P.mission_name, "Expansion Spore Cannon", SC2_RACESWAP_LOC_ID_OFFSET + 5211, LocationType.EXTRA,
+            logic.protoss_gates_of_hell_requirement
+        ),
         make_location_data(SC2Mission.SHATTER_THE_SKY_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 5500, LocationType.VICTORY,
             logic.zerg_competent_comp
         ),
