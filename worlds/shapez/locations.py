@@ -274,7 +274,7 @@ def addupgrades(finaltier: int, logictype: str,
             f(f"Belt Upgrade Tier {roman(x)}", "Upgrades with 5 Buildings")
             f(f"Miner Upgrade Tier {roman(x)}", "Upgrades with 5 Buildings")
         f("Processors Upgrade Tier II", "Upgrades with 1 Building")
-        f("Processors Upgrade Tier III", "Upgrades with 2 Building")
+        f("Processors Upgrade Tier III", "Upgrades with 2 Buildings")
         f("Processors Upgrade Tier IV", "Upgrades with 2 Buildings")
         f("Processors Upgrade Tier V", "Upgrades with 3 Buildings")
         f("Processors Upgrade Tier VI", "Upgrades with 3 Buildings")
