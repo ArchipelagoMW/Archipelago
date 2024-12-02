@@ -508,6 +508,15 @@ class CastlevaniaCotMClient(BizHawkClient):
                     if ctx.locations_info:
                         self.sent_message_queue += [loc for loc in locs_to_send if loc in ctx.missing_locations and
                                                     ctx.locations_info[loc].player != ctx.slot]
+                    # If we still don't have the locations info at this point, send another LocationScout packet just
+                    # in case something went wrong, and we never received the initial LocationInfo packet.
+                    else:
+                        await ctx.send_msgs([{
+                            "cmd": "LocationScouts",
+                            "locations": [code for name, code in get_location_names_to_ids().items()
+                                          if code in ctx.server_locations],
+                            "create_as_hint": 0
+                        }])
 
                     await ctx.send_msgs([{
                         "cmd": "LocationChecks",
