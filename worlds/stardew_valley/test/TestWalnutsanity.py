@@ -49,7 +49,7 @@ class TestWalnutsanityNone(SVTestBase):
 class TestWalnutsanityPuzzles(SVTestBase):
     options = {
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
-        Walnutsanity: frozenset({WalnutsanityOptionName.walnutsanity_puzzles}),
+        Walnutsanity: frozenset({WalnutsanityOptionName.puzzles}),
     }
 
     def test_only_puzzle_walnut_locations(self):
@@ -90,7 +90,7 @@ class TestWalnutsanityPuzzles(SVTestBase):
 class TestWalnutsanityBushes(SVTestBase):
     options = {
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
-        Walnutsanity: frozenset({WalnutsanityOptionName.walnutsanity_bushes}),
+        Walnutsanity: frozenset({WalnutsanityOptionName.bushes}),
     }
 
     def test_only_bush_walnut_locations(self):
@@ -108,7 +108,7 @@ class TestWalnutsanityBushes(SVTestBase):
 class TestWalnutsanityPuzzlesAndBushes(SVTestBase):
     options = {
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
-        Walnutsanity: frozenset({WalnutsanityOptionName.walnutsanity_puzzles, WalnutsanityOptionName.walnutsanity_bushes}),
+        Walnutsanity: frozenset({WalnutsanityOptionName.puzzles, WalnutsanityOptionName.bushes}),
     }
 
     def test_only_bush_walnut_locations(self):
@@ -136,7 +136,7 @@ class TestWalnutsanityPuzzlesAndBushes(SVTestBase):
 class TestWalnutsanityDigSpots(SVTestBase):
     options = {
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
-        Walnutsanity: frozenset({WalnutsanityOptionName.walnutsanity_dig_spots}),
+        Walnutsanity: frozenset({WalnutsanityOptionName.dig_spots}),
     }
 
     def test_only_dig_spots_walnut_locations(self):
@@ -154,7 +154,7 @@ class TestWalnutsanityDigSpots(SVTestBase):
 class TestWalnutsanityRepeatables(SVTestBase):
     options = {
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
-        Walnutsanity: frozenset({WalnutsanityOptionName.walnutsanity_repeatables}),
+        Walnutsanity: frozenset({WalnutsanityOptionName.repeatables}),
     }
 
     def test_only_repeatable_walnut_locations(self):

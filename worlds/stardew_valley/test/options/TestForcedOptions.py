@@ -7,9 +7,9 @@ from ... import options
 from ...options.forced_options import force_change_options_if_incompatible
 
 
-class TestBigGoalsOverrideAccessibility(unittest.TestCase):
+class TestGoalsRequiringAllLocationsOverrideAccessibility(unittest.TestCase):
 
-    def test_given_goal_when_generate_then_accessibility_is_forced_to_full(self):
+    def test_given_goal_requiring_all_locations_when_generate_then_accessibility_is_forced_to_full(self):
         """There is a bug with the current victory condition of the perfection goal that can create unwinnable seeds if the accessibility is set to minimal and
         the world gets flooded with progression items through plando. This will increase the amount of collected progression items pass the total amount
         calculated for the world when creating the item pool. This will cause the victory condition to be met before all locations are collected, so some could

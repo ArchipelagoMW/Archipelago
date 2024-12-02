@@ -44,22 +44,22 @@ AbilityLogicMixin]]):
         total_walnuts = puzzle_walnuts + bush_walnuts + dig_walnuts + repeatable_walnuts
         walnuts_to_receive = 0
         walnuts_to_collect = number
-        if WalnutsanityOptionName.walnutsanity_puzzles in self.options.walnutsanity:
+        if WalnutsanityOptionName.puzzles in self.options.walnutsanity:
             puzzle_walnut_rate = puzzle_walnuts / total_walnuts
             puzzle_walnuts_required = round(puzzle_walnut_rate * number)
             walnuts_to_receive += puzzle_walnuts_required
             walnuts_to_collect -= puzzle_walnuts_required
-        if WalnutsanityOptionName.walnutsanity_bushes in self.options.walnutsanity:
+        if WalnutsanityOptionName.bushes in self.options.walnutsanity:
             bush_walnuts_rate = bush_walnuts / total_walnuts
             bush_walnuts_required = round(bush_walnuts_rate * number)
             walnuts_to_receive += bush_walnuts_required
             walnuts_to_collect -= bush_walnuts_required
-        if WalnutsanityOptionName.walnutsanity_dig_spots in self.options.walnutsanity:
+        if WalnutsanityOptionName.dig_spots in self.options.walnutsanity:
             dig_walnuts_rate = dig_walnuts / total_walnuts
             dig_walnuts_required = round(dig_walnuts_rate * number)
             walnuts_to_receive += dig_walnuts_required
             walnuts_to_collect -= dig_walnuts_required
-        if WalnutsanityOptionName.walnutsanity_repeatables in self.options.walnutsanity:
+        if WalnutsanityOptionName.repeatables in self.options.walnutsanity:
             repeatable_walnuts_rate = repeatable_walnuts / total_walnuts
             repeatable_walnuts_required = round(repeatable_walnuts_rate * number)
             walnuts_to_receive += repeatable_walnuts_required

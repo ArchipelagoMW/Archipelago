@@ -583,8 +583,8 @@ class Walnutsanity(OptionSet):
     internal_name = "walnutsanity"
     display_name = "Walnutsanity"
     valid_keys = frozenset({
-        WalnutsanityOptionName.walnutsanity_puzzles, WalnutsanityOptionName.walnutsanity_bushes, WalnutsanityOptionName.walnutsanity_dig_spots,
-        WalnutsanityOptionName.walnutsanity_repeatables,
+        WalnutsanityOptionName.puzzles, WalnutsanityOptionName.bushes, WalnutsanityOptionName.dig_spots,
+        WalnutsanityOptionName.repeatables,
     })
     preset_none = frozenset()
     preset_all = valid_keys
@@ -625,13 +625,13 @@ class EnabledFillerBuffs(OptionSet):
     internal_name = "enabled_filler_buffs"
     display_name = "Enabled Filler Buffs"
     valid_keys = frozenset({
-        BuffOptionName.buff_luck, BuffOptionName.buff_damage, BuffOptionName.buff_defense, BuffOptionName.buff_immunity, BuffOptionName.buff_health,
-        BuffOptionName.buff_energy, BuffOptionName.buff_bite, BuffOptionName.buff_fish_trap, BuffOptionName.buff_fishing_bar,
+        BuffOptionName.luck, BuffOptionName.damage, BuffOptionName.defense, BuffOptionName.immunity, BuffOptionName.health,
+        BuffOptionName.energy, BuffOptionName.bite, BuffOptionName.fish_trap, BuffOptionName.fishing_bar,
     })
     # OptionName.buff_quality, OptionName.buff_glow}) # Disabled these two buffs because they are too hard to make on the mod side
     preset_none = frozenset()
     preset_all = valid_keys
-    default = frozenset({BuffOptionName.buff_luck, BuffOptionName.buff_defense, BuffOptionName.buff_bite})
+    default = frozenset({BuffOptionName.luck, BuffOptionName.defense, BuffOptionName.bite})
 
 
 class ExcludeGingerIsland(Toggle):
