@@ -663,7 +663,9 @@ remainder: List[ItemData] = [
 
 
 
-all_items: List[ItemData] = djinn_items + psyenergy_as_item_list + psyenergy_list + summon_list + events + characters + mimics + other_progression + other_useful + shop_only + forge_only + lucky_only + non_vanilla + vanilla_coins + misc + remainder 
+all_items: List[ItemData] = djinn_items + psyenergy_as_item_list + psyenergy_list + summon_list + events + characters + \
+    mimics + other_progression + other_useful + shop_only + forge_only + lucky_only + non_vanilla + vanilla_coins + \
+    misc  + rusty_items  + stat_boosters  + remainder 
 assert len(all_items) == len({x.id for x in all_items})
 item_table: Dict[str, ItemData] = {item.name: item for item in all_items}
 items_by_id: Dict[int, ItemData] = {item.id: item for item in all_items}

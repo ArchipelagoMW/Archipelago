@@ -31,6 +31,9 @@ from .BizClient import GSTLAClient
 
 import logging
 
+from ..Files import APTokenTypes
+
+
 class GSTLAWeb(WebWorld):
     theme = "jungle"
     option_groups = gstla_option_groups
@@ -213,6 +216,12 @@ class GSTLAWorld(World):
                                 player_name=self.player_name,
                                 path=os.path.join(output_directory, self.multiworld.get_out_file_name_base(self.player)+GSTLADeltaPatch.patch_file_ending))
         patch.add_settings(ap_settings.getvalue(), ap_settings_debug.getvalue().encode("utf-8"))
+        if self.options.auto_run:
+            patch.write_token(APTokenTypes.XOR_8, 0x26361, 0x01)
+            patch.write_token(APTokenTypes.XOR_8, 0x270A5, 0x01)
+            patch.write_token(APTokenTypes.XOR_8, 0x279DD, 0x01)
+            patch.write_token(APTokenTypes.XOR_8, 0x1007900, 0x01)
+        patch.write_file("token_data.bin", patch.get_token_binary())
         patch.write()
 
     def _generate_rando_data(self, rando_file: BinaryIO, debug_file: TextIO):

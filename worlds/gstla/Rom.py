@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import List, Optional
 
-from worlds.Files import APPatchExtension, APProcedurePatch
+from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin
 
 import Utils
 import os
@@ -11,13 +11,14 @@ SCRIPT_DIR = os.path.join(os.path.dirname(__file__))
 
 CHECKSUM_GSTLA = "8efe8b2aaed97149e897570cd123ff6e"
 
-class GSTLADeltaPatch(APProcedurePatch):
+class GSTLADeltaPatch(APProcedurePatch, APTokenMixin):
     hash = CHECKSUM_GSTLA
     game = "Golden Sun: The Lost Age"
     patch_file_ending = ".apgstla"
     result_file_ending = ".gba"
     procedure = [
-        ("apply_gstla_rando", ["ap_settings.gstlarando"])
+        ("apply_gstla_rando", ["ap_settings.gstlarando"]),
+        ("apply_tokens", ["token_data.bin"]),
     ]
 
     @classmethod

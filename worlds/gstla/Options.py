@@ -583,6 +583,12 @@ class CommonConsumablesFillerWeight(Range):
     range_end = 100
     default = 50
 
+class AutoRun(Toggle):
+    """Swaps the behavior of holding B when moving (default is now run instead of walk)"""
+    internal_name = "auto_run"
+    display_name = "Auto Run"
+    default = 1
+
 @dataclass
 class GSTLAOptions(PerGameCommonOptions):
     #Pool and Logic settings
@@ -660,6 +666,7 @@ class GSTLAOptions(PerGameCommonOptions):
     manual_retreat_glitch: ManualRetreatGlitch
     shuffle_music: MusicShuffle
     teleport_to_dungeons_and_towns: TelportEverywhere
+    auto_run: AutoRun
     
     start_inventory_from_pool: StartInventoryPool
 
