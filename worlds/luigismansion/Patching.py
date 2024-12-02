@@ -377,7 +377,7 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
     for x in furniture_info.info_file_field_entries:
         # If this is a book/bookshelf, set it to just shake, no book interaction.
         # Make sure to exclude Nana's knit ball bowl so they can drop on the floor properly.
-        if x["move"] == 16 and x["name"] is not "o_tuku1":
+        if x["move"] == 16 and x["dmd_name"] != "o_tuku1":
             x["move"] = 0
 
         # If one of Vincent's painting, update the flag to disable zoom instead.
