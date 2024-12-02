@@ -1906,6 +1906,10 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             locations = args["locations"]
             status = args.get("status", HintStatus.HINT_UNSPECIFIED)
 
+            if not locations:
+                await ctx.send_msgs(client, [{"cmd": "InvalidPacket", "type": "arguments",
+                                              "text": "CreateHints: No locations specified.", "original_cmd": cmd}])
+
             hints = []
 
             for location in locations:
