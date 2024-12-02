@@ -207,6 +207,7 @@ components: List[Component] = [
 ]
 
 
+# if registering an icon from within an apworld, the format "ap:module.name/path/to/file.png" can be used
 icon_paths = {
     'icon': local_path('data', 'icon.png'),
     'mcicon': local_path('data', 'mcicon.png'),

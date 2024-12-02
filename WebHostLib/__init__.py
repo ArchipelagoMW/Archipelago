@@ -85,6 +85,6 @@ def register():
 
     from WebHostLib.customserver import run_server_process
     # to trigger app routing picking up on it
-    from . import tracker, upload, landing, check, generate, downloads, api, stats, misc, robots, options
+    from . import tracker, upload, landing, check, generate, downloads, api, stats, misc, robots, options, session
 
     app.register_blueprint(api.api_endpoints)
