@@ -20,9 +20,9 @@ def force_ginger_island_inclusion_when_goal_is_ginger_island_related(world_optio
 
     if goal_is_island_related and ginger_island_is_excluded:
         world_options.exclude_ginger_island.value = options.ExcludeGingerIsland.option_false
-        goal_name = world_options.goal.current_key
+        goal_name = world_options.goal.current_option_name
         logger.warning(f"Goal '{goal_name}' requires Ginger Island. "
-                       f"Exclude Ginger Island setting forced to 'False' for player {player} ({player_name})")
+                       f"Exclude Ginger Island option forced to 'False' for player {player} ({player_name})")
 
 
 def force_walnutsanity_deactivation_when_ginger_island_is_excluded(world_options: options.StardewValleyOptions, player: int, player_name: str):
@@ -43,6 +43,6 @@ def force_accessibility_to_full_when_goal_requires_all_locations(player, player_
 
     if goal_requires_all_locations and accessibility_is_minimal:
         world_options.accessibility.value = ap_options.Accessibility.option_full
-        goal_name = world_options.goal.current_key
+        goal_name = world_options.goal.current_option_name
         logger.warning(f"Goal '{goal_name}' requires full accessibility. "
-                       f"Accessibility setting forced to 'Full' for player {player} ({player_name})")
+                       f"Accessibility option forced to 'Full' for player {player} ({player_name})")
