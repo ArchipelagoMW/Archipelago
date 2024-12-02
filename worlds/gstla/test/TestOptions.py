@@ -3,9 +3,9 @@ import base64
 from encodings.base64_codec import base64_encode
 from io import BytesIO, StringIO
 
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, ItemClassification
 from . import GSTestBase
-from .. import LocationName, ItemName, LocationType, location_type_to_data, loc_names_by_id, ItemType
+from .. import LocationName, ItemName, LocationType, location_type_to_data, loc_names_by_id, ItemType, create_item
 
 OPTION_OFFSET = 17
 
@@ -73,19 +73,39 @@ class TestRandoFormat(TestFormatBase):
         self.assertEqual(self.world.player_name, name)
 
 class TestMostItemShuffle(TestFormatBase):
+    options = {
+        "item_shuffle": 2,
+        "lemurian_ship": 2
+    }
 
     def test_item_shuffle(self):
         data = self._get_option_byte()
         self.assertEqual(0x80, 0xC0 & data)
 
+    def test_ensure_eclipse_needs_no_lucky(self):
+        world = self.get_world()
+        self.collect_by_name([ItemName.Grindstone])
+        loc = world.get_location(LocationName.Lemuria_Eclipse)
+        self.assertTrue(loc.can_reach(self.multiworld.state))
+
 class TestAllItemShuffle(TestFormatBase):
     options = {
-        "item_shuffle": 3
+        "item_shuffle": 3,
+        "lemurian_ship": 2
     }
 
     def test_item_shuffle(self):
         data = self._get_option_byte()
         self.assertEqual(0xC0, 0xC0 & data)
+
+    def test_ensure_eclipse_needs_lucky(self):
+        world = self.get_world()
+        self.collect_by_name([ItemName.Grindstone])
+        loc = world.get_location(LocationName.Lemuria_Eclipse)
+        self.assertFalse(loc.can_reach(self.multiworld.state))
+        item = create_item(ItemName.Lucky_Medal, self.player, False, ItemClassification.progression)
+        self.collect(item)
+        self.assertTrue(loc.can_reach(self.multiworld.state))
 
 class TestOmitAll(TestFormatBase):
     options = {

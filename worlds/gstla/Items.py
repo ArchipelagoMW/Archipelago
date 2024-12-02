@@ -180,13 +180,17 @@ def create_items(world: 'GSTLAWorld', player: int):
         sum_locations -= 1
         
     for item in other_progression:
+        if world.options.lemurian_ship == 2 and item.name == ItemName.Black_Crystal:
+            # The black crystal is unnecessary when starting with the ship
+            continue
         ap_item = create_item_direct(item, player)
         world.multiworld.itempool.append(ap_item)
         sum_locations -= 1
 
-    # Adding one progressive lucky medal
-    world.multiworld.itempool.append(create_item_direct(items_by_id[229], player, False, ItemClassification.progression))
-    sum_locations -= 1
+    if world.options.item_shuffle == 3:
+        # Adding one progressive lucky medal
+        world.multiworld.itempool.append(create_item_direct(items_by_id[229], player, False, ItemClassification.progression))
+        sum_locations -= 1
 
     for item in class_change_items:
         ap_item = create_item_direct(item, player)

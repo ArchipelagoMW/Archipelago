@@ -542,9 +542,10 @@ def set_access_rules(world: 'GSTLAWorld'):
     #Lemuria
     add_rule(world.get_location(LocationName.Rime),
              lambda state: state.has(ItemName.Grindstone, player) and state.has(ItemName.Cyclone_Chip, player) and state.has(ItemName.Tremor_Bit, player))
-    
-    add_rule(world.get_location(LocationName.Lemuria_Eclipse),
-             lambda state: state.has(ItemName.Lucky_Medal, player))
+
+    if world.options.item_shuffle == 3:
+        add_rule(world.get_location(LocationName.Lemuria_Eclipse),
+                 lambda state: state.has(ItemName.Lucky_Medal, player))
 
     #Western Sea
 
