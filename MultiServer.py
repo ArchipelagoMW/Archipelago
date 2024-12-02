@@ -1926,7 +1926,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
                 if client.slot not in ctx.slot_set(item_player):
                     if status != HintStatus.HINT_UNSPECIFIED:
-                        error_text = 'CreateHints: Must use "unspecified"/None status for items for other players.'
+                        error_text = 'CreateHints: Must use "unspecified"/None status for items from other players.'
                         await ctx.send_msgs(client, [{"cmd": "InvalidPacket", "type": "arguments",
                                                       "text": error_text, "original_cmd": cmd}])
                         return
