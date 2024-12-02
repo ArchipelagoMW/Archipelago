@@ -197,7 +197,7 @@ MID_ITEMS = [
     52,  # Heart High
 
     19,  # Stylish Suit
-    20,  # Nightsuit
+    20,  # Night Suit
     13,  # Silk Robe
     14,  # Rainbow Robe
     4,  # Chainmail
@@ -658,10 +658,10 @@ def select_drop(world: "CVCotMWorld", drop_list: List[int], drops_placed: List[i
     Calling this with exclusive_drop param being True will force the number of the chosen item really high to ensure it
     will never be picked again."""
 
-    eligible_items = [0] * NUMBER_ITEMS
+    # Take the list of placed item drops beginning from the starting index.
+    drops_from_start_index = drops_placed[start_index:]
 
-    drops_from_start_index = drops_placed[start_index:]  # Cut list from start_index
-
+    # Determine the lowest drop counts and the indices with that drop count.
     lowest_number = min(drops_from_start_index)
     indices_with_lowest_number = [index for index, placed in enumerate(drops_from_start_index) if
                                   placed == lowest_number]
@@ -676,8 +676,8 @@ def select_drop(world: "CVCotMWorld", drop_list: List[int], drops_placed: List[i
     else:
         drops_placed[random_index] += 1
 
-    # Return the item ID
-    return drop_list[eligible_items[random_index]]
+    # Return the in-game item ID of the chosen item.
+    return drop_list[random_index]
 
 
 def get_start_inventory_data(world: "CVCotMWorld") -> Tuple[Dict[int, bytes], bool]:
