@@ -386,12 +386,8 @@ class LinksAwakeningWorld(World):
                 assert name in self.name_cache, name
                 assert name in CHEST_ITEMS, name
             self.name_cache.update(ItemIconGuessing.SYNONYMS)
-            pluralizations = {}
-            for k in self.name_cache.keys():
-                ks = k + 'S'
-                if ks not in self.name_cache:
-                    pluralizations[ks] = self.name_cache[k]
-            self.name_cache.update(pluralizations)
+            pluralizations = {k + "S": v for k, v in self.name_cache.items()}
+            self.name_cache = pluralizations | self.name_cache
 
         uppered = foreign_item.name.upper()
         foreign_game = self.multiworld.game[foreign_item.player]
@@ -399,9 +395,9 @@ class LinksAwakeningWorld(World):
         if foreign_game in ItemIconGuessing.GAME_SPECIFIC_PHRASES:
             phrases.update(ItemIconGuessing.GAME_SPECIFIC_PHRASES[foreign_game])
 
-        for phrase in phrases.keys():
+        for phrase, icon in phrases.items():
             if phrase in uppered:
-                return phrases[phrase]
+                return icon
         # pattern for breaking down camelCase, also separates out digits
         pattern = re.compile(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=\d)")
         possibles = pattern.sub(' ', foreign_item.name).upper()

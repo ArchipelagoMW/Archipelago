@@ -511,6 +511,7 @@ class ForeignItemIcons(Choice):
     display_name = "Foreign Item Icons"
     option_guess_by_name = 0
     option_indicate_progression = 1
+    default = option_guess_by_name
 
 
 ladx_option_groups = [
