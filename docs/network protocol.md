@@ -346,9 +346,11 @@ This is useful in cases where an item appears in the game world, such as 'ledge 
 
 ### CreateHints
 
-Sent to the server to create hints for a specified list of locations.
-When creating hints for another slot's locations, the packet will fail if any of those locations don't contain items for the requesting slot.
-When creating hints for your own slot's locations, non-existing locations will silently be skipped.
+Sent to the server to create hints for a specified list of locations.  
+Hints that already exist will be silently skipped and their status will not be updated.
+
+When creating hints for another slot's locations, the packet will fail if any of those locations don't contain items for the requesting slot.  
+When creating hints for your own slot's locations, non-existing locations will silently be skipped.  
 
 #### Arguments
 | Name | Type | Notes |
