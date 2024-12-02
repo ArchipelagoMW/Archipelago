@@ -80,7 +80,7 @@ class SA2BWorld(World):
 
     def fill_slot_data(self) -> dict:
         return {
-            "ModVersion": 203,
+            "ModVersion": 204,
             "Goal": self.options.goal.value,
             "MusicMap": self.generate_music_data(),
             "VoiceMap": self.generate_voice_data(),
@@ -193,8 +193,8 @@ class SA2BWorld(World):
             self.gate_bosses = {}
             self.boss_rush_map = {}
         else:
-            self.gate_bosses   = get_gate_bosses(self.multiworld, self)
-            self.boss_rush_map = get_boss_rush_bosses(self.multiworld, self)
+            self.gate_bosses   = get_gate_bosses(self)
+            self.boss_rush_map = get_boss_rush_bosses(self)
 
     def create_regions(self):
         self.mission_map       = get_mission_table(self.multiworld, self, self.player)
@@ -499,7 +499,7 @@ class SA2BWorld(World):
     def stage_fill_hook(cls, multiworld: MultiWorld, progitempool, usefulitempool, filleritempool, fill_locations):
         if multiworld.get_game_players("Sonic Adventure 2 Battle"):
             progitempool.sort(
-                key=lambda item: 0 if ("Chaos Emerald" not in item.name) else 1)
+                key=lambda item: 1 if ("Chaos Emerald" in item.name and item.game == "Sonic Adventure 2 Battle") else 0)
 
     def get_levels_per_gate(self) -> list:
         levels_per_gate = list()

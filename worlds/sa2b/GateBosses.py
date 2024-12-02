@@ -77,12 +77,11 @@ def boss_has_requirement(boss: int):
     return boss >= len(gate_bosses_no_requirements_table)
 
 
-def get_gate_bosses(multiworld: MultiWorld, world: World):
+def get_gate_bosses(world: World):
     selected_bosses: typing.List[int] = []
     boss_gates: typing.List[int] = []
     available_bosses: typing.List[str] = list(gate_bosses_no_requirements_table.keys())
-    multiworld.random.shuffle(available_bosses)
-    halfway = False
+    world.random.shuffle(available_bosses)
 
     gate_boss_plando: Union[int, str] = world.options.gate_boss_plando.value
     plando_bosses = ["None", "None", "None", "None", "None"]
@@ -94,18 +93,29 @@ def get_gate_bosses(multiworld: MultiWorld, world: World):
             if "-" in option:
                 loc, boss = option.split("-")
                 boss_num = LocationName.boss_gate_names[loc]
+
+                if boss_num >= world.options.number_of_level_gates.value:
+                    # Don't reject bosses plando'd into gate bosses that won't exist
+                    pass
+
+                if boss in plando_bosses:
+                    # TODO: Raise error here. Duplicates not allowed
+                    pass
+
                 plando_bosses[boss_num] = boss
 
+                if boss in available_bosses:
+                    available_bosses.remove(boss)
+
     for x in range(world.options.number_of_level_gates):
-        if (not halfway) and ((x + 1) / world.options.number_of_level_gates) > 0.5:
+        if ("king boom boo" not in selected_bosses) and ("king boom boo" not in available_bosses) and ((x + 1) / world.options.number_of_level_gates) > 0.5:
             available_bosses.extend(gate_bosses_with_requirements_table)
-            multiworld.random.shuffle(available_bosses)
-            halfway = True
+            world.random.shuffle(available_bosses)
 
         chosen_boss = available_bosses[0]
         if plando_bosses[x] != "None":
-            if plando_bosses[x] in available_bosses:
-                chosen_boss = plando_bosses[x]
+            available_bosses.append(plando_bosses[x])
+            chosen_boss = plando_bosses[x]
 
         selected_bosses.append(all_gate_bosses_table[chosen_boss])
         boss_gates.append(x + 1)
@@ -116,7 +126,7 @@ def get_gate_bosses(multiworld: MultiWorld, world: World):
     return bosses
 
 
-def get_boss_rush_bosses(multiworld: MultiWorld, world: World):
+def get_boss_rush_bosses(world: World):
 
     if world.options.boss_rush_shuffle == 0:
         boss_list_o = list(range(0, 16))
@@ -126,21 +136,21 @@ def get_boss_rush_bosses(multiworld: MultiWorld, world: World):
     elif world.options.boss_rush_shuffle == 1:
         boss_list_o = list(range(0, 16))
         boss_list_s = boss_list_o.copy()
-        multiworld.random.shuffle(boss_list_s)
+        world.random.shuffle(boss_list_s)
 
         return dict(zip(boss_list_o, boss_list_s))
     elif world.options.boss_rush_shuffle == 2:
         boss_list_o = list(range(0, 16))
-        boss_list_s = [multiworld.random.choice(boss_list_o) for i in range(0, 16)]
+        boss_list_s = [world.random.choice(boss_list_o) for i in range(0, 16)]
         if 10 not in boss_list_s:
-            boss_list_s[multiworld.random.randint(0, 15)] = 10
+            boss_list_s[world.random.randint(0, 15)] = 10
 
         return dict(zip(boss_list_o, boss_list_s))
     elif world.options.boss_rush_shuffle == 3:
         boss_list_o = list(range(0, 16))
-        boss_list_s = [multiworld.random.choice(boss_list_o)] * len(boss_list_o)
+        boss_list_s = [world.random.choice(boss_list_o)] * len(boss_list_o)
         if 10 not in boss_list_s:
-            boss_list_s[multiworld.random.randint(0, 15)] = 10
+            boss_list_s[world.random.randint(0, 15)] = 10
 
         return dict(zip(boss_list_o, boss_list_s))
     else:

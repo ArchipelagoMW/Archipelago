@@ -14,6 +14,7 @@
 
 ### Bug Fixes:
 - Added missing `Dry Lagoon - 12 Animals` location
+- Flying Dog boss should no longer crash when you have done at least 3 Intermediate Kart Races
 - Chaos Emeralds should no longer disproportionately end up in Cannon's Core or the final Level Gate
 - Going into submenus from the pause menu should no longer reset traps
 - Chao Garden:
