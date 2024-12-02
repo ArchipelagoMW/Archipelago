@@ -391,7 +391,7 @@ class LinksAwakeningClient():
             from_player = 100
 
         next_index += 1
-        if location <= 0 or from_player != self.slot: # items rom server or other slots
+        if location <= 0 or from_player != self.slot: # items from server or other slots
             self.gameboy.write_memory(LAClientConstants.wLinkGiveItem, [
                                     item_id, from_player])
             status |= 1
@@ -436,13 +436,13 @@ class LinksAwakeningClient():
         trade2 = 0
         for i, item in enumerate(trade_items):
             item_id = [x.item_id for x in links_awakening_items if x.ladxr_id == item['name']][0] + LABaseID
-            got_item = [x for x in self.recvd_checks.values() if x.item == item_id]
-            if not got_item:
+            item_has_been_received = [x for x in self.recvd_checks.values() if x.item == item_id]
+            if not item_has_been_received:
                 continue
-            checked_destination = [x for x in self.tracker.all_checks if x.value and x.id == item['destination']]
-            if checked_destination:
+            destination_has_been_checked = [x for x in self.tracker.all_checks if x.value and x.id == item['destination']]
+            if destination_has_been_checked:
                 continue
-            if i <= 7: # trade items are tracked by bits across 2 addresses
+            if i <= 7: # trade item inventory is tracked by bits across 2 addresses
                 trade1 += 2**i
             else:
                 trade2 += 2**(i-8)
@@ -460,7 +460,7 @@ class LinksAwakeningClient():
         if self.deathlink_status == 'pending':
             self.gameboy.write_memory(LAClientConstants.wAddHealthBuffer, [0]) # Stop any health gain
             self.gameboy.write_memory(LAClientConstants.wLinkHealth, [1]) #  Almost dead
-            self.gameboy.write_memory(LAClientConstants.wSubtractHealthBuffer, [1]) # Deal remaining health this way to trigger medicine
+            self.gameboy.write_memory(LAClientConstants.wSubtractHealthBuffer, [1]) # Deal remaining damage this way to trigger medicine
             self.deathlink_status = 'in_progress'
         elif self.deathlink_status == 'in_progress':
             if not current_health: # Died from deathlink
