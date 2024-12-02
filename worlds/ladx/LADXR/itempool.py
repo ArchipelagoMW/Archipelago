@@ -68,7 +68,7 @@ DEFAULT_ITEM_POOL = {
 
 
 class ItemPool:
-    def __init__(self, logic, settings, rnd, stabilize_item_pool):
+    def __init__(self, logic, settings, rnd, stabilize_item_pool: bool):
         self.__pool = {}
         self.__setup(logic, settings)
 
