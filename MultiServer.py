@@ -1939,7 +1939,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
                 hints += collect_hint_location_id(ctx, client.team, location_player, location, status)
 
-            # As of writing this code, only_new=True does not update status, so existing hints will always be skipped
+            # As of writing this code, only_new=True does not update status for existing hints
             ctx.notify_hints(client.team, hints, only_new=True)
             ctx.save()
         
