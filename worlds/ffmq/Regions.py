@@ -213,7 +213,7 @@ def stage_set_rules(multiworld):
                           if multiworld.worlds[player].options.enemies_density == "none"]
     if (len([item for item in multiworld.itempool if item.excludable
             ]) > len([player for player in no_enemies_players if
-                                              multiworld.worlds[player].options.accessibility == "minimal"]) * 3):
+                                              multiworld.worlds[player].options.accessibility != "minimal"]) * 3):
         for player in no_enemies_players:
             for location in vendor_locations:
                 if multiworld.worlds[player].options.accessibility == "full":
