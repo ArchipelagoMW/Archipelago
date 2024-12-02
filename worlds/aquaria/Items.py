@@ -377,7 +377,7 @@ item_table = {
 
 four_gods_excludes = [ItemNames.ANEMONE, ItemNames.ARNASSI_STATUE, ItemNames.BIG_SEED, ItemNames.GLOWING_SEED,
                       ItemNames.BLACK_PEARL, ItemNames.TOOTH, ItemNames.ENERGY_STATUE, ItemNames.KROTITE_ARMOR,
-                      ItemNames.GOLDEN_STARFISH, ItemNames.GOLDEN_GEAR, ItemNames.JELLY_BEACON, ItemNames.JELLY_COSTUME,
+                      ItemNames.GOLDEN_STARFISH, ItemNames.GOLDEN_GEAR, ItemNames.JELLY_BEACON,
                       ItemNames.JELLY_PLANT, ItemNames.MITHALAS_DOLL, ItemNames.MITHALAN_DRESS,
                       ItemNames.MITHALAS_BANNER, ItemNames.MITHALAS_POT, ItemNames.MUTANT_COSTUME, ItemNames.SEED_BAG,
                       ItemNames.KING_S_SKULL, ItemNames.SONG_PLANT_SPORE, ItemNames.STONE_HEAD, ItemNames.SUN_KEY,
@@ -387,4 +387,4 @@ four_gods_excludes = [ItemNames.ANEMONE, ItemNames.ARNASSI_STATUE, ItemNames.BIG
                       ItemNames.LEAF_POULTICE, ItemNames.LEAF_POULTICE, ItemNames.LEAF_POULTICE,
                       ItemNames.LEECHING_POULTICE, ItemNames.LEECHING_POULTICE, ItemNames.ARCANE_POULTICE,
                       ItemNames.ROTTEN_MEAT, ItemNames.ROTTEN_MEAT, ItemNames.ROTTEN_MEAT, ItemNames.ROTTEN_MEAT,
-                      ItemNames.SEA_LOAF_X_2]
+                      ItemNames.SEA_LOAF_X_2, ItemNames.SMALL_EGG]
