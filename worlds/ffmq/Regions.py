@@ -221,7 +221,7 @@ def stage_set_rules(multiworld):
                 else:
                     multiworld.get_location(location, player).access_rule = lambda state: False
     else:
-        raise Exception(f"Not enough filler/trap items for full and items accessibility players. "
+        raise Exception(f"Not enough filler/trap items for FFMQ players with full and items accessibility. "
                         f"Add more items or change the 'Enemies Density' option to something besides 'none'")
 
 
