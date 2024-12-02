@@ -293,7 +293,7 @@ links_awakening_items = [
     TradeItemData(ItemName.TRADING_ITEM_FISHING_HOOK, "TRADING_ITEM_FISHING_HOOK", trade_item_prog, "Grandma (Animal Village)"),
     TradeItemData(ItemName.TRADING_ITEM_NECKLACE, "TRADING_ITEM_NECKLACE", trade_item_prog, "Fisher (Martha's Bay)"),
     TradeItemData(ItemName.TRADING_ITEM_SCALE, "TRADING_ITEM_SCALE", trade_item_prog, "Mermaid (Martha's Bay)"),
-    TradeItemData(ItemName.TRADING_ITEM_MAGNIFYING_GLASS, "TRADING_ITEM_MAGNIFYING_GLASS", ItemClassification.filler, "Mermaid Statue (Martha's Bay)")
+    TradeItemData(ItemName.TRADING_ITEM_MAGNIFYING_GLASS, "TRADING_ITEM_MAGNIFYING_GLASS", trade_item_prog, "Mermaid Statue (Martha's Bay)")
 ]
 
 ladxr_item_to_la_item_name = {
