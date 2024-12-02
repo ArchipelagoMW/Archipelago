@@ -1418,7 +1418,8 @@ class ItemLinks(OptionList):
             link["item_pool"] = list(pool)
 
 
-class PlandoItem(typing.NamedTuple):
+@dataclass(frozen=True)
+class PlandoItem:
     items: list[str] | dict[str, typing.Any]
     locations: list[str]
     world: int | str | bool | None | typing.Iterable[str] | set[int] = False
