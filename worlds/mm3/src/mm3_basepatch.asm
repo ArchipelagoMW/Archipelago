@@ -7,6 +7,7 @@ norom
 !current_state = $60
 !completed_rbm_stages = $61
 !completed_doc_stages = $62
+!current_wily = $75
 !received_rbm_stages = $680
 !received_doc_stages = $681
 ; !deathlink = $30, set to $0E
@@ -169,7 +170,6 @@ db $21, $A1, $0C, "PLACEHOLDER 1"
 db $21, $C1, $0C, "PLACEHOLDER 2"
 db $21, $E1, $0C, "PLACEHOLDER 3"
 db $22, $01, $0C, "PLACEHOLDER P"
-db $22, $21, $0C, "     AND     "
 db $22, $41, $0C, "PLACEHOLDER 1"
 db $22, $61, $0C, "PLACEHOLDER 2"
 db $22, $81, $0C, "PLACEHOLDER 3"
@@ -202,7 +202,6 @@ db $21, $A1, $0C, "PLACEHOLDER 1"
 db $21, $C1, $0C, "PLACEHOLDER 2"
 db $21, $E1, $0C, "PLACEHOLDER 3"
 db $22, $01, $0C, "PLACEHOLDER P"
-db $22, $21, $0C, "     AND     "
 db $22, $41, $0C, "PLACEHOLDER 1"
 db $22, $61, $0C, "PLACEHOLDER 2"
 db $22, $81, $0C, "PLACEHOLDER 3"
@@ -266,7 +265,7 @@ HookMidDoc:
 
 %org($DBB0, $3E)
 HoodEndDoc:
-  JSR SetEndDocAndWily
+  JSR SetEndDoc
   NOP
 
 %org($DC57, $3E)
@@ -284,6 +283,12 @@ RerouteRushMarine:
 RerouteRushJet:
   JMP SetRushJet
   NOP
+
+%org($DC78, $3E)
+RerouteWilyComplete:
+  JMP SetEndWily
+  NOP
+  EndWilyReturn:
 
 %org($DF81, $3E)
 NullBreak:
@@ -530,7 +535,7 @@ ApplyLastWily:
   RTS
 
 SetMidDoc:
-  LDA $22
+  LDA !current_stage
   SEC
   SBC #$08
   ASL
@@ -550,28 +555,8 @@ SetMidDoc:
   STA $30
   RTS
 
-SetEndDocAndWily:
+SetEndDoc:
   LDA !current_stage
-  CMP #$0C
-  BCC .NonWily
-  STA !last_wily
-  SEC
-  SBC #$0C
-  TAX
-  LDA #$01
-  .WLoop:
-  CPX #$00
-  BEQ .WContinue
-  DEX
-  ASL A
-  SEC
-  BCS .WLoop
-  .WContinue:
-  ORA !wily_stage_completion
-  STA !wily_stage_completion
-  SEC
-  BCS .Return
-  .NonWily:
   SEC
   SBC #$08
   ASL
@@ -592,6 +577,30 @@ SetEndDocAndWily:
   LDA #$0D
   STA $30
   RTS
+
+SetEndWily:
+  LDA !current_wily
+  PHA
+  CLC
+  ADC #$0C
+  STA !last_wily
+  PLA
+  TAX
+  LDA #$01
+  .WLoop:
+  CPX #$00
+  BEQ .WContinue
+  DEX
+  ASL A
+  SEC
+  BCS .WLoop
+  .WContinue:
+  ORA !wily_stage_completion
+  STA !wily_stage_completion
+  INC !current_wily
+  LDA #$9C
+  JMP EndWilyReturn
+
 
 SetBreakMan:
   LDA #$80

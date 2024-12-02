@@ -54,7 +54,7 @@ id,name,classification,groups,mod_name
 68,Progressive Watering Can,progression,PROGRESSIVE_TOOLS,
 69,Progressive Trash Can,progression,PROGRESSIVE_TOOLS,
 70,Progressive Fishing Rod,progression,PROGRESSIVE_TOOLS,
-71,Golden Scythe,useful,,
+71,Golden Scythe,useful,DEPRECATED,
 72,Progressive Mine Elevator,progression,,
 73,Farming Level,progression,SKILL_LEVEL_UP,
 74,Fishing Level,progression,SKILL_LEVEL_UP,
@@ -92,8 +92,8 @@ id,name,classification,groups,mod_name
 106,Galaxy Sword,filler,"WEAPON,DEPRECATED",
 107,Galaxy Dagger,filler,"WEAPON,DEPRECATED",
 108,Galaxy Hammer,filler,"WEAPON,DEPRECATED",
-109,Movement Speed Bonus,progression,,
-110,Luck Bonus,progression,,
+109,Movement Speed Bonus,useful,,
+110,Luck Bonus,filler,PLAYER_BUFF,
 111,Lava Katana,filler,"WEAPON,DEPRECATED",
 112,Progressive House,progression,,
 113,Traveling Merchant: Sunday,progression,TRAVELING_MERCHANT_DAY,
@@ -104,7 +104,7 @@ id,name,classification,groups,mod_name
 118,Traveling Merchant: Friday,progression,TRAVELING_MERCHANT_DAY,
 119,Traveling Merchant: Saturday,progression,TRAVELING_MERCHANT_DAY,
 120,Traveling Merchant Stock Size,useful,,
-121,Traveling Merchant Discount,useful,,
+121,Traveling Merchant Discount,useful,DEPRECATED,
 122,Return Scepter,useful,,
 123,Progressive Season,progression,,
 124,Spring,progression,SEASON,
@@ -307,7 +307,7 @@ id,name,classification,groups,mod_name
 322,Phoenix Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
 323,Immunity Band,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
 324,Glowstone Ring,useful,"RING,RESOURCE_PACK,MAXIMUM_ONE",
-325,Fairy Dust Recipe,progression,,
+325,Fairy Dust Recipe,progression,"GINGER_ISLAND",
 326,Heavy Tapper Recipe,progression,"QI_CRAFTING_RECIPE,GINGER_ISLAND",
 327,Hyper Speed-Gro Recipe,progression,"QI_CRAFTING_RECIPE,GINGER_ISLAND",
 328,Deluxe Fertilizer Recipe,progression,QI_CRAFTING_RECIPE,
@@ -398,6 +398,7 @@ id,name,classification,groups,mod_name
 417,Tropical Curry Recipe,progression,"CHEFSANITY,GINGER_ISLAND,CHEFSANITY_PURCHASE",
 418,Trout Soup Recipe,progression,"CHEFSANITY,CHEFSANITY_QOS",
 419,Vegetable Medley Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+420,Moss Soup Recipe,progression,"CHEFSANITY,CHEFSANITY_SKILL",
 425,Gate Recipe,progression,CRAFTSANITY,
 426,Wood Fence Recipe,progression,CRAFTSANITY,
 427,Deluxe Retaining Soil Recipe,progression,"CRAFTSANITY,GINGER_ISLAND",
@@ -430,7 +431,7 @@ id,name,classification,groups,mod_name
 454,Marble Brazier Recipe,progression,CRAFTSANITY,
 455,Wood Lamp-post Recipe,progression,CRAFTSANITY,
 456,Iron Lamp-post Recipe,progression,CRAFTSANITY,
-457,Furnace Recipe,progression,CRAFTSANITY,
+457,Furnace Recipe,progression,"CRAFTSANITY",
 458,Wicked Statue Recipe,progression,CRAFTSANITY,
 459,Chest Recipe,progression,CRAFTSANITY,
 460,Wood Sign Recipe,progression,CRAFTSANITY,
@@ -439,6 +440,75 @@ id,name,classification,groups,mod_name
 470,Fruit Bats,progression,,
 471,Mushroom Boxes,progression,,
 475,The Gateway Gazette,progression,TV_CHANNEL,
+476,Carrot Seeds,progression,CROPSANITY,
+477,Summer Squash Seeds,progression,CROPSANITY,
+478,Broccoli Seeds,progression,CROPSANITY,
+479,Powdermelon Seeds,progression,CROPSANITY,
+480,Progressive Raccoon,progression,,
+481,Farming Mastery,progression,SKILL_MASTERY,
+482,Mining Mastery,progression,SKILL_MASTERY,
+483,Foraging Mastery,progression,SKILL_MASTERY,
+484,Fishing Mastery,progression,SKILL_MASTERY,
+485,Combat Mastery,progression,SKILL_MASTERY,
+486,Fish Smoker Recipe,progression,CRAFTSANITY,
+487,Dehydrator Recipe,progression,CRAFTSANITY,
+488,Big Chest Recipe,progression,CRAFTSANITY,
+489,Big Stone Chest Recipe,progression,CRAFTSANITY,
+490,Text Sign Recipe,progression,CRAFTSANITY,
+491,Blue Grass Starter Recipe,progression,"QI_CRAFTING_RECIPE,GINGER_ISLAND",
+492,Mastery Of The Five Ways,progression,SKILL_MASTERY,
+493,Progressive Scythe,useful,,
+494,Progressive Pan,progression,PROGRESSIVE_TOOLS,
+495,Calico Statue,filler,FESTIVAL,
+496,Mummy Mask,filler,FESTIVAL,
+497,Free Cactis,filler,FESTIVAL,
+498,Gil's Hat,filler,FESTIVAL,
+499,Bucket Hat,filler,FESTIVAL,
+500,Mounted Trout,filler,FESTIVAL,
+501,'Squid Kid',filler,FESTIVAL,
+502,Squid Hat,filler,FESTIVAL,
+503,Resource Pack: 200 Calico Egg,useful,"FESTIVAL",
+504,Resource Pack: 120 Calico Egg,useful,"FESTIVAL",
+505,Resource Pack: 100 Calico Egg,useful,"FESTIVAL",
+506,Resource Pack: 50 Calico Egg,useful,"FESTIVAL",
+507,Resource Pack: 40 Calico Egg,useful,"FESTIVAL",
+508,Resource Pack: 35 Calico Egg,useful,"FESTIVAL",
+509,Resource Pack: 30 Calico Egg,useful,"FESTIVAL",
+510,Book: The Art O' Crabbing,progression,"FESTIVAL",
+511,Mr Qi's Plane Ride,progression,,
+521,Power: Price Catalogue,useful,"BOOK_POWER",
+522,Power: Mapping Cave Systems,useful,"BOOK_POWER",
+523,Power: Way Of The Wind pt. 1,progression,"BOOK_POWER",
+524,Power: Way Of The Wind pt. 2,useful,"BOOK_POWER",
+525,Power: Monster Compendium,useful,"BOOK_POWER",
+526,Power: Friendship 101,useful,"BOOK_POWER",
+527,"Power: Jack Be Nimble, Jack Be Thick",useful,"BOOK_POWER",
+528,Power: Woody's Secret,useful,"BOOK_POWER",
+529,Power: Raccoon Journal,useful,"BOOK_POWER",
+530,Power: Jewels Of The Sea,useful,"BOOK_POWER",
+531,Power: Dwarvish Safety Manual,useful,"BOOK_POWER",
+532,Power: The Art O' Crabbing,useful,"BOOK_POWER",
+533,Power: The Alleyway Buffet,useful,"BOOK_POWER",
+534,Power: The Diamond Hunter,useful,"BOOK_POWER",
+535,Power: Book of Mysteries,progression,"BOOK_POWER",
+536,Power: Horse: The Book,useful,"BOOK_POWER",
+537,Power: Treasure Appraisal Guide,useful,"BOOK_POWER",
+538,Power: Ol' Slitherlegs,useful,"BOOK_POWER",
+539,Power: Animal Catalogue,useful,"BOOK_POWER",
+541,Progressive Lost Book,progression,"LOST_BOOK",
+551,Golden Walnut,progression,"RESOURCE_PACK,GINGER_ISLAND",
+552,3 Golden Walnuts,progression,"GINGER_ISLAND",
+553,5 Golden Walnuts,progression,"GINGER_ISLAND",
+554,Damage Bonus,filler,PLAYER_BUFF,
+555,Defense Bonus,filler,PLAYER_BUFF,
+556,Immunity Bonus,filler,PLAYER_BUFF,
+557,Health Bonus,filler,PLAYER_BUFF,
+558,Energy Bonus,filler,PLAYER_BUFF,
+559,Bite Rate Bonus,filler,PLAYER_BUFF,
+560,Fish Trap Bonus,filler,PLAYER_BUFF,
+561,Fishing Bar Size Bonus,filler,PLAYER_BUFF,
+562,Quality Bonus,filler,PLAYER_BUFF,
+563,Glow Bonus,filler,PLAYER_BUFF,
 4001,Burnt Trap,trap,TRAP,
 4002,Darkness Trap,trap,TRAP,
 4003,Frozen Trap,trap,TRAP,
@@ -464,6 +534,8 @@ id,name,classification,groups,mod_name
 4023,Benjamin Budton Trap,trap,TRAP,
 4024,Inflation Trap,trap,TRAP,
 4025,Bomb Trap,trap,TRAP,
+4026,Nudge Trap,trap,TRAP,
+4501,Deflation Bonus,filler,,
 5000,Resource Pack: 500 Money,useful,"BASE_RESOURCE,RESOURCE_PACK",
 5001,Resource Pack: 1000 Money,useful,"BASE_RESOURCE,RESOURCE_PACK",
 5002,Resource Pack: 1500 Money,useful,"BASE_RESOURCE,RESOURCE_PACK",
@@ -701,9 +773,9 @@ id,name,classification,groups,mod_name
 5234,Resource Pack: 10 Qi Seasoning,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5235,Mr. Qi's Hat,filler,"MAXIMUM_ONE,RESOURCE_PACK",
 5236,Aquatic Sanctuary,filler,RESOURCE_PACK,
+5237,Leprechaun Hat,filler,"MAXIMUM_ONE,RESOURCE_PACK",
 5242,Exotic Double Bed,filler,RESOURCE_PACK,
 5243,Resource Pack: 2 Qi Gem,filler,"GINGER_ISLAND,RESOURCE_PACK,DEPRECATED",
-5245,Golden Walnut,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL,GINGER_ISLAND",
 5247,Fairy Dust,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5248,Seed Maker,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5249,Keg,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
@@ -726,6 +798,28 @@ id,name,classification,groups,mod_name
 5266,Resource Pack: 5 Staircase,filler,"RESOURCE_PACK",
 5267,Auto-Petter,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5268,Auto-Grabber,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
+5269,Resource Pack: 10 Calico Egg,filler,"RESOURCE_PACK",
+5270,Resource Pack: 20 Calico Egg,filler,"RESOURCE_PACK",
+5272,Tent Kit,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
+5273,Resource Pack: 4 Mystery Box,filler,"RESOURCE_PACK",
+5274,Prize Ticket,filler,"RESOURCE_PACK",
+5275,Resource Pack: 20 Deluxe Bait,filler,"RESOURCE_PACK",
+5276,Resource Pack: 2 Triple Shot Espresso,filler,"RESOURCE_PACK",
+5277,Dish O' The Sea,filler,"RESOURCE_PACK",
+5278,Seafoam Pudding,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
+5279,Trap Bobber,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
+5280,Treasure Chest,filler,"RESOURCE_PACK",
+5281,Resource Pack: 15 Mixed Seeds,filler,"RESOURCE_PACK",
+5282,Resource Pack: 15 Mixed Flower Seeds,filler,"RESOURCE_PACK",
+5283,Resource Pack: 5 Cherry Bomb,filler,"RESOURCE_PACK",
+5284,Resource Pack: 3 Bomb,filler,"RESOURCE_PACK",
+5285,Resource Pack: 2 Mega Bomb,filler,"RESOURCE_PACK",
+5286,Resource Pack: 2 Life Elixir,filler,"RESOURCE_PACK",
+5287,Resource Pack: 5 Coffee,filler,"RESOURCE_PACK",
+5289,Prismatic Shard,filler,"RESOURCE_PACK",
+5290,Stardrop Tea,filler,"RESOURCE_PACK",
+5291,Resource Pack: 2 Artifact Trove,filler,"RESOURCE_PACK",
+5292,Resource Pack: 20 Cinder Shard,filler,"GINGER_ISLAND,RESOURCE_PACK",
 10001,Luck Level,progression,SKILL_LEVEL_UP,Luck Skill
 10002,Magic Level,progression,SKILL_LEVEL_UP,Magic
 10003,Socializing Level,progression,SKILL_LEVEL_UP,Socializing Skill
@@ -802,11 +896,16 @@ id,name,classification,groups,mod_name
 10409,Void Delight Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 10410,Void Salmon Sushi Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 10411,Mushroom Kebab Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
-10412,Crayfish Soup Recipe,progression,,Distant Lands - Witch Swamp Overhaul
+10412,Crayfish Soup Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
 10413,Pemmican Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
 10414,Void Mint Tea Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
-10415,Ginger Tincture Recipe,progression,GINGER_ISLAND,Distant Lands - Witch Swamp Overhaul
-10416,Special Pumpkin Soup Recipe,progression,,Boarding House and Bus Stop Extension
+10415,Ginger Tincture Recipe,progression,"GINGER_ISLAND,CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
+10416,Special Pumpkin Soup Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Boarding House and Bus Stop Extension
+10417,Rocky Root Coffee Recipe,progression,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
+10418,Digger's Delight Recipe,progression,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
+10419,Ancient Jello Recipe,progression,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
+10420,Grilled Cheese Recipe,progression,"CHEFSANITY,CHEFSANITY_SKILL",Binning Skill
+10421,Fish Casserole Recipe,progression,"CHEFSANITY,CHEFSANITY_SKILL",Binning Skill
 10450,Void Mint Seeds,progression,DEPRECATED,Distant Lands - Witch Swamp Overhaul
 10451,Vile Ancient Fruit Seeds,progression,DEPRECATED,Distant Lands - Witch Swamp Overhaul
 10501,Marlon's Boat Paddle,progression,GINGER_ISLAND,Stardew Valley Expanded
@@ -850,10 +949,15 @@ id,name,classification,groups,mod_name
 10707,Resource Pack: 5 Wooden Display,filler,RESOURCE_PACK,Archaeology
 10708,Grinder,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Archaeology
 10709,Ancient Battery Production Station,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Archaeology
-10710,Hero Elixir,filler,RESOURCE_PACK,Starde Valley Expanded
+10710,Hero Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded
 10711,Aegis Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded
 10712,Haste Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded
 10713,Lightning Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded
 10714,Armor Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded
 10715,Gravity Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded
 10716,Barbarian Elixir,filler,RESOURCE_PACK,Stardew Valley Expanded
+10717,Restoration Table,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Archaeology
+10718,Trash Bin,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Binning Skill
+10719,Composter,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Binning Skill
+10720,Recycling Bin,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Binning Skill
+10721,Advanced Recycling Machine,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Binning Skill

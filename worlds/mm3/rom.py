@@ -113,7 +113,7 @@ enemy_addresses: Dict[str, int] = {
 
 # addresses printed when assembling basepatch
 # consumables_ptr: int = 0x3F2FE
-wily_4_ptr: int = 0x7F578
+wily_4_ptr: int = 0x7F57C
 # energylink_ptr: int = 0x3F46B
 
 
@@ -177,7 +177,7 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
         0x195,
         0x1D6,
         0x217,
-        0x268
+        0x257
     ], [
                                        names.get_needle_cannon,
                                        names.get_rush_jet,

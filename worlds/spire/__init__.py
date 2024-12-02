@@ -3,7 +3,7 @@ import string
 from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
 from .Items import event_item_pairs, item_pool, item_table
 from .Locations import location_table
-from .Options import spire_options
+from .Options import SpireOptions
 from .Regions import create_regions
 from .Rules import set_rules
 from ..AutoWorld import WebWorld, World
@@ -27,7 +27,8 @@ class SpireWorld(World):
     immense power, and Slay the Spire!
     """
 
-    option_definitions = spire_options
+    options_dataclass = SpireOptions
+    options: SpireOptions
     game = "Slay the Spire"
     topology_present = False
     web = SpireWeb()
@@ -63,15 +64,13 @@ class SpireWorld(World):
 
     def fill_slot_data(self) -> dict:
         slot_data = {
-            'seed': "".join(self.multiworld.per_slot_randoms[self.player].choice(string.ascii_letters) for i in range(16))
+            'seed': "".join(self.random.choice(string.ascii_letters) for i in range(16))
         }
-        for option_name in spire_options:
-            option = getattr(self.multiworld, option_name)[self.player]
-            slot_data[option_name] = option.value
+        slot_data.update(self.options.as_dict("character", "ascension", "final_act", "downfall", "death_link"))
         return slot_data
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice(["Card Draw", "Card Draw", "Card Draw", "Relic", "Relic"])
+        return self.random.choice(["Card Draw", "Card Draw", "Card Draw", "Relic", "Relic"])
 
 
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):

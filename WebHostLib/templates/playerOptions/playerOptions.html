@@ -1,5 +1,5 @@
 {% extends 'pageWrapper.html' %}
-{% import 'playerOptions/macros.html' as inputs %}
+{% import 'playerOptions/macros.html' as inputs with context %}
 
 {% block head %}
     <title>{{ world_name }} Options</title>
@@ -11,7 +11,7 @@
     <noscript>
         <style>
             .js-required{
-                display: none;
+                display: none !important;
             }
         </style>
     </noscript>
@@ -42,7 +42,7 @@
             A list of all games you have generated can be found on the <a href="/user-content">User Content Page</a>.
             <br />
             You may also download the
-            <a href="/static/generated/configs/{{ world_name }}.yaml">template file for this game</a>.
+            <a href="/static/generated/configs/{{ world_name | get_file_safe_name }}.yaml">template file for this game</a>.
         </p>
 
         <form id="options-form" method="post" enctype="application/x-www-form-urlencoded" action="generate-yaml">
@@ -94,16 +94,16 @@
                                             {{ inputs.FreeText(option_name, option) }}
 
                                         {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
-                                            {{ inputs.ItemDict(option_name, option, world) }}
+                                            {{ inputs.ItemDict(option_name, option) }}
 
                                         {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
                                             {{ inputs.OptionList(option_name, option) }}
 
                                         {% elif issubclass(option, Options.LocationSet) and option.verify_location_name %}
-                                            {{ inputs.LocationSet(option_name, option, world) }}
+                                            {{ inputs.LocationSet(option_name, option) }}
 
                                         {% elif issubclass(option, Options.ItemSet) and option.verify_item_name %}
-                                            {{ inputs.ItemSet(option_name, option, world) }}
+                                            {{ inputs.ItemSet(option_name, option) }}
 
                                         {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}
                                             {{ inputs.OptionSet(option_name, option) }}
@@ -134,16 +134,16 @@
                                             {{ inputs.FreeText(option_name, option) }}
 
                                         {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
-                                            {{ inputs.ItemDict(option_name, option, world) }}
+                                            {{ inputs.ItemDict(option_name, option) }}
 
                                         {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
                                             {{ inputs.OptionList(option_name, option) }}
 
                                         {% elif issubclass(option, Options.LocationSet) and option.verify_location_name %}
-                                            {{ inputs.LocationSet(option_name, option, world) }}
+                                            {{ inputs.LocationSet(option_name, option) }}
 
                                         {% elif issubclass(option, Options.ItemSet) and option.verify_item_name %}
-                                            {{ inputs.ItemSet(option_name, option, world) }}
+                                            {{ inputs.ItemSet(option_name, option) }}
 
                                         {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}
                                             {{ inputs.OptionSet(option_name, option) }}
