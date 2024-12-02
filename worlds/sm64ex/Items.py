@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, Optional
+from typing import NamedTuple, Optional
 
 from BaseClasses import Item, ItemClassification
 
@@ -12,7 +12,7 @@ class SM64ItemData(NamedTuple):
     code: Optional[int] = None
     classification: ItemClassification = ItemClassification.filler
 
-generic_item_data_table: Dict[str, SM64ItemData] = {
+generic_item_data_table: dict[str, SM64ItemData] = {
     "Power Star": SM64ItemData(sm64ex_base_id + 0, ItemClassification.progression_skip_balancing),
     "Basement Key": SM64ItemData(sm64ex_base_id + 178, ItemClassification.progression),
     "Second Floor Key": SM64ItemData(sm64ex_base_id + 179, ItemClassification.progression),
@@ -23,7 +23,7 @@ generic_item_data_table: Dict[str, SM64ItemData] = {
     "1Up Mushroom": SM64ItemData(sm64ex_base_id + 184, ItemClassification.filler),
 }
 
-action_item_data_table: Dict[str, SM64ItemData] = {
+action_item_data_table: dict[str, SM64ItemData] = {
     "Double Jump": SM64ItemData(sm64ex_base_id + 185, ItemClassification.progression),
     "Triple Jump": SM64ItemData(sm64ex_base_id + 186, ItemClassification.progression),
     "Long Jump": SM64ItemData(sm64ex_base_id + 187, ItemClassification.progression),
@@ -37,7 +37,7 @@ action_item_data_table: Dict[str, SM64ItemData] = {
     "Ledge Grab": SM64ItemData(sm64ex_base_id + 195, ItemClassification.progression),
 }
 
-cannon_item_data_table: Dict[str, SM64ItemData] = {
+cannon_item_data_table: dict[str, SM64ItemData] = {
     "Cannon Unlock BoB": SM64ItemData(sm64ex_base_id + 200, ItemClassification.progression),
     "Cannon Unlock WF": SM64ItemData(sm64ex_base_id + 201, ItemClassification.progression),
     "Cannon Unlock JRB": SM64ItemData(sm64ex_base_id + 202, ItemClassification.progression),
