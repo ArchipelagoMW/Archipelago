@@ -267,22 +267,22 @@ def addupgrades(finaltier: int, logictype: str,
                 f(f"{cat} Upgrade Tier {roman(x)}", "Upgrades with 5 Buildings")
 
     elif logictype == "category":
-        for x in range(2, 6):
+        for x in range(2, 7):
             f(f"Belt Upgrade Tier {roman(x)}", "Main")
             f(f"Miner Upgrade Tier {roman(x)}", "Main")
-        for x in range(6, finaltier + 1):
+        for x in range(7, finaltier + 1):
             f(f"Belt Upgrade Tier {roman(x)}", "Upgrades with 5 Buildings")
             f(f"Miner Upgrade Tier {roman(x)}", "Upgrades with 5 Buildings")
         f("Processors Upgrade Tier II", "Upgrades with 1 Building")
-        f("Processors Upgrade Tier III", "Upgrades with 1 Building")
+        f("Processors Upgrade Tier III", "Upgrades with 2 Building")
         f("Processors Upgrade Tier IV", "Upgrades with 2 Buildings")
-        f("Processors Upgrade Tier V", "Upgrades with 2 Buildings")
+        f("Processors Upgrade Tier V", "Upgrades with 3 Buildings")
         f("Processors Upgrade Tier VI", "Upgrades with 3 Buildings")
         for x in range(7, finaltier+1):
             f(f"Processors Upgrade Tier {roman(x)}", "Upgrades with 5 Buildings")
-        for x in range(2, 5):
+        for x in range(2, 4):
             f(f"Painting Upgrade Tier {roman(x)}", "Upgrades with 4 Buildings")
-        for x in range(5, finaltier+1):
+        for x in range(4, finaltier+1):
             f(f"Painting Upgrade Tier {roman(x)}", "Upgrades with 5 Buildings")
 
     elif logictype == "category_random":
