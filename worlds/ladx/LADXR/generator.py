@@ -383,7 +383,7 @@ def generateRom(args, world: "LinksAwakeningWorld"):
             0x0DC, # Mamu
             0x0F0, # Raft ride
         ]
-        excluded_texts = [ rom.texts[b_id] for b_id in excluded_ids]
+        excluded_texts = [ rom.texts[excluded_id] for excluded_id in excluded_ids]
         buckets = defaultdict(list)
         # For each ROM bank, shuffle text within the bank
         for n, data in enumerate(rom.texts._PointerTable__data):
