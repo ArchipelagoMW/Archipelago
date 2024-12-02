@@ -221,11 +221,8 @@ def stage_set_rules(multiworld):
                 else:
                     multiworld.get_location(location, player).access_rule = lambda state: False
     else:
-        # There are not enough junk items to fill non-minimal players' vendors. Just set an item rule not allowing
-        # advancement items so that useful items can be placed.
-        for player in no_enemies_players:
-            for location in vendor_locations:
-                multiworld.get_location(location, player).item_rule = lambda item: item.excludable
+        raise Exception(f"Not enough filler/trap items for full and items accessibility players. "
+                        f"Add more items or change the 'Enemies Density' option to something besides 'none'")
 
 
 class FFMQLocation(Location):
