@@ -211,8 +211,8 @@ def stage_set_rules(multiworld):
     # If there's no enemies, there's no repeatable income sources
     no_enemies_players = [player for player in multiworld.get_game_players("Final Fantasy Mystic Quest")
                           if multiworld.worlds[player].options.enemies_density == "none"]
-    if (len([item for item in multiworld.itempool if item.classification in (ItemClassification.filler,
-            ItemClassification.trap)]) > len([player for player in no_enemies_players if
+    if (len([item for item in multiworld.itempool if item.excludable
+            ]) > len([player for player in no_enemies_players if
                                               multiworld.worlds[player].options.accessibility == "minimal"]) * 3):
         for player in no_enemies_players:
             for location in vendor_locations:
@@ -225,7 +225,7 @@ def stage_set_rules(multiworld):
         # advancement items so that useful items can be placed.
         for player in no_enemies_players:
             for location in vendor_locations:
-                multiworld.get_location(location, player).item_rule = lambda item: not item.advancement
+                multiworld.get_location(location, player).item_rule = lambda item: item.excludable
 
 
 class FFMQLocation(Location):
