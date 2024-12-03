@@ -4,9 +4,9 @@ from dataclasses import dataclass, make_dataclass
 
 from .ExtractedData import logic_options, starts, pool_options
 from .Rules import cost_terms
-from schema import And, Schema, Optional
+from schema import And, Or, Schema, Optional
 
-from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, NamedRange, DeathLink, PerGameCommonOptions
+from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, NamedRange, DeathLink, PerGameCommonOptions, OptionError
 from .Charms import vanilla_costs, names as charm_names
 
 if typing.TYPE_CHECKING:
@@ -293,6 +293,9 @@ class RandomCharmCosts(NamedRange):
                 charms[index] += 1
             return charms
 
+class CharmCost(Range):
+    range_end = 6
+
 
 class PlandoCharmCosts(OptionDict):
     """Allows setting a Charm's Notch costs directly, mapping {name: cost}.
@@ -300,8 +303,23 @@ class PlandoCharmCosts(OptionDict):
     display_name = "Charm Notch Cost Plando"
     valid_keys = frozenset(charm_names)
     schema = Schema({
-        Optional(name): And(int, lambda n: 6 >= n >= 0, error="Charm costs must be integers in the range 0-6.") for name in charm_names
+        Optional(name): Or(
+            And(str, lambda n: n.startswith("random")),
+            And(int, lambda n: 6 >= n >= 0),
+            error="Charm costs must be integers in the range 0-6 or use a random prefixed string."
+            )
+        for name in charm_names
         })
+
+    def __init__(self, value):
+        self.value = {}
+        for key, data in value.items():
+            try:
+                self.value[key] = CharmCost.from_any(data).value
+            except ValueError as ex:
+                # will fail schema afterwords
+                self.value[key] = data
+
 
     def get_costs(self, charm_costs: typing.List[int]) -> typing.List[int]:
         for name, cost in self.value.items():
