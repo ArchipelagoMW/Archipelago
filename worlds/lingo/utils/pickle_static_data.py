@@ -11,7 +11,6 @@ from datatypes import Door, DoorType, EntranceType, Painting, Panel, PanelDoor, 
 
 import hashlib
 import pickle
-import sys
 import Utils
 
 
