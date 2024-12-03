@@ -36,7 +36,7 @@ class LADXPatchExtensions(worlds.Files.APPatchExtension):
     @staticmethod
     def patch_title_screen(caller: worlds.Files.APProcedurePatch, rom: bytes, data_file: str) -> bytes:
         data = json.loads(caller.get_file(data_file).decode("utf-8"))
-        if data["ap_options"]["ap_title_screen"]:
+        if data["options"]["ap_title_screen"]:
             return bsdiff4.patch(rom, pkgutil.get_data(__name__, "LADXR/patches/title_screen.bdiff4"))
         return rom
 
@@ -60,6 +60,7 @@ def write_patch_data(world: "LinksAwakeningWorld", patch: LADXProcedurePatch):
     item_list = pickle.dumps([item for item in world.ladxr_logic.iteminfo_list if not isinstance(item, KeyLocation)])
     data_dict = {
         "out_base": world.multiworld.get_out_file_name_base(patch.player),
+        "is_race": world.multiworld.is_race,
         "seed": world.multiworld.seed,
         "seed_name": world.multiworld.seed_name,
         "multi_key": binascii.hexlify(world.multi_key).decode(),
@@ -76,17 +77,26 @@ def write_patch_data(world: "LinksAwakeningWorld", patch: LADXProcedurePatch):
             "boss_mapping": world.ladxr_logic.world_setup.boss_mapping,
             "miniboss_mapping": world.ladxr_logic.world_setup.miniboss_mapping,
         },
-        "ladxr_settings": world.ladxr_settings.toJson(),
-        "ap_options": world.options.as_dict(
-            "shuffle_small_keys",
-            "shuffle_nightmare_keys",
-            "music_change_condition",
-            "ap_title_screen",
-            "text_shuffle",
-            "trendy_game",
+        "options": world.options.as_dict(
+            "tradequest",
+            "rooster",
+            "experimental_dungeon_shuffle",
+            "experimental_entrance_shuffle",
+            "goal",
+            "instrument_count",
+            "link_palette",
             "warp_improvements",
             "additional_warp_points",
+            "trendy_game",
+            "gfxmod",
             "palette",
+            "text_shuffle",
+            "shuffle_nightmare_keys",
+            "shuffle_small_keys",
+            "music",
+            "music_change_condition",
+            "nag_messages",
+            "ap_title_screen",
             "boots_controls",
         ),
     }

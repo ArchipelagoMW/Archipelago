@@ -17,7 +17,7 @@ def _encode(s):
     return result
 
 
-def setRomInfo(rom, data, ladxr_settings):
+def setRomInfo(rom, data):
     seed_name = data["seed_name"]
     try:
         seednr = int(data["seed"], 16)
@@ -25,10 +25,10 @@ def setRomInfo(rom, data, ladxr_settings):
         import hashlib
         seednr = int(hashlib.md5(str(data["seed"]).encode()).hexdigest(), 16)
 
-    if ladxr_settings["race"]:
+    if data["is_race"]:
         seed_name = "Race"
-        if isinstance(ladxr_settings["race"], str):
-            seed_name += " " + ladxr_settings["race"]
+        if isinstance(data["is_race"], str):
+            seed_name += " " + data["is_race"]
         rom.patch(0x00, 0x07, "00", "01")
     else:
         rom.patch(0x00, 0x07, "00", "52")
