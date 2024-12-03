@@ -6,7 +6,7 @@ from .ExtractedData import logic_options, starts, pool_options
 from .Rules import cost_terms
 from schema import And, Or, Schema, Optional
 
-from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, NamedRange, DeathLink, PerGameCommonOptions, OptionError
+from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, NamedRange, DeathLink, PerGameCommonOptions
 from .Charms import vanilla_costs, names as charm_names
 
 if typing.TYPE_CHECKING:
