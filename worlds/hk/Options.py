@@ -293,6 +293,7 @@ class RandomCharmCosts(NamedRange):
                 charms[index] += 1
             return charms
 
+
 class CharmCost(Range):
     range_end = 6
 
@@ -319,7 +320,6 @@ class PlandoCharmCosts(OptionDict):
             except ValueError as ex:
                 # will fail schema afterwords
                 self.value[key] = data
-
 
     def get_costs(self, charm_costs: typing.List[int]) -> typing.List[int]:
         for name, cost in self.value.items():
