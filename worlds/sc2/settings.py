@@ -9,16 +9,16 @@ class Starcraft2Settings(settings.Group):
         """The starting height the client window in pixels"""
     class GameWindowedMode(settings.Bool):
         """Controls whether the game should start in windowed mode"""
-    class TerranButtonColour(list):
+    class TerranButtonColor(list):
         """Defines the colour of terran mission buttons in the launcher in rgb format (3 elements ranging from 0 to 1)"""
-    class ZergButtonColour(list):
+    class ZergButtonColor(list):
         """Defines the colour of zerg mission buttons in the launcher in rgb format (3 elements ranging from 0 to 1)"""
-    class ProtossButtonColour(list):
+    class ProtossButtonColor(list):
         """Defines the colour of protoss mission buttons in the launcher in rgb format (3 elements ranging from 0 to 1)"""
 
     window_width = WindowWidth(1080)
     window_height = WindowHeight(720)
     game_windowed_mode: Union[GameWindowedMode, bool] = False
-    terran_button_colour = TerranButtonColour([0.0838, 0.2898, 0.2346])
-    zerg_button_colour = ZergButtonColour([0.345, 0.22425, 0.12765])
-    protoss_button_colour = ProtossButtonColour([0.18975, 0.2415, 0.345])
+    terran_button_color = TerranButtonColor([0.0838, 0.2898, 0.2346])
+    zerg_button_color = ZergButtonColor([0.345, 0.22425, 0.12765])
+    protoss_button_color = ProtossButtonColor([0.18975, 0.2415, 0.345])
