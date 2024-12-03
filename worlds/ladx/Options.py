@@ -489,7 +489,7 @@ class Music(Choice, LADXROption):
 class Warps(Choice):
     """
     [Improved] Adds remake style warp screen to the game. Choose your warp destination on the map after jumping in a portal and press B to select.
-    [Improved Additonal] Improved warps, and adds a warp point at Crazy Tracy's house (the Mambo teleport spot) and Eagle's Tower.
+    [Improved Additional] Improved warps, and adds a warp point at Crazy Tracy's house (the Mambo teleport spot) and Eagle's Tower.
     """
     display_name = "Warps"
     option_vanilla = 0
