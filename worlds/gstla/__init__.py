@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import base64
 import hashlib
+from bisect import bisect
+from collections import defaultdict
 from io import BytesIO, StringIO
 
 import settings
@@ -16,11 +18,12 @@ from .Options import GSTLAOptions
 from BaseClasses import Item, ItemClassification, Tutorial
 from .Items import GSTLAItem, item_table, all_items, ItemType, create_events, create_items, create_item, \
     AP_PLACEHOLDER_ITEM, items_by_id, get_filler_item, AP_PROG_PLACEHOLDER_ITEM, create_filler_pool_weights, \
-    create_trap_pool_weights, AP_USEFUL_PLACEHOLDER_ITEM
+    create_trap_pool_weights, AP_USEFUL_PLACEHOLDER_ITEM, create_item_direct
 from .Locations import GSTLALocation, all_locations, location_name_to_id, location_type_to_data
 from .Rules import set_access_rules, set_item_rules, set_entrance_rules
 from .Regions import create_regions
 from .Connections import create_connections
+from .gen.ItemData import mimics
 from .gen.LocationData import LocationType, location_name_to_data
 from .gen.ItemNames import ItemName, item_id_by_name
 from .gen.LocationNames import LocationName, ids_by_loc_name, loc_names_by_id
@@ -33,6 +36,7 @@ import logging
 
 from ..Files import APTokenTypes
 
+logger = logging.getLogger()
 
 class GSTLAWeb(WebWorld):
     theme = "jungle"
@@ -208,6 +212,8 @@ class GSTLAWorld(World):
         return ret
 
     def generate_output(self, output_directory: str):
+        if self.options.scale_mimics:
+            self._scale_mimics_by_sphere()
         ap_settings = BytesIO()
         ap_settings_debug = StringIO()
         self._generate_rando_data(ap_settings, ap_settings_debug)
@@ -223,6 +229,50 @@ class GSTLAWorld(World):
             patch.write_token(APTokenTypes.XOR_8, 0x1007900, 0x01)
         patch.write_file("token_data.bin", patch.get_token_binary())
         patch.write()
+
+    def _scale_mimics_by_sphere(self):
+        mimic_map: defaultdict[int, List[GSTLALocation]]  = defaultdict(lambda: [])
+        spheres = self.multiworld.get_spheres()
+        max_sphere = -1
+        for i, sphere in enumerate(spheres):
+            for loc in sphere:
+                if loc.player != self.player:
+                    continue
+                if loc.item.name == ItemName.Victory:
+                    max_sphere = i
+                    continue
+                if loc.address is None:
+                    continue
+                if cast(GSTLAItem, loc.item).item_data.is_mimic:
+                    mimic_map[i].append(cast(GSTLALocation, loc))
+
+        if max_sphere == -1:
+            logger.warning("Could not find max sphere for GSTLA; cannot balance mimics")
+            return
+        # logger.info("Max sphere is %d", max_sphere)
+
+        mimic_lists = []
+        for i in range(1, len(mimics) - 1):
+            mimic_lists.append(mimics[i-1:i+2])
+
+        breakpoints = [(max_sphere+1)/7 * i for i in range(1,8)]
+
+        for sphere, mimic_locs in mimic_map.items():
+            breakpoint_index = bisect(breakpoints, sphere)
+            if breakpoint_index >= len(mimic_lists):
+                breakpoint_index = len(mimic_lists) - 1
+            mimic_list = mimic_lists[breakpoint_index]
+            for mimic_loc in mimic_locs:
+                if mimic_loc.locked:
+                    # Guess someone really wanted this mimic here
+                    continue
+                current_item = mimic_loc.item
+                current_item.location = None
+                new_mimic = create_item_direct(self.random.choice(mimic_list), self.player)
+                # logger.info("Replacing mimic %s with mimic %s in sphere %d", current_item.name, new_mimic.name, sphere)
+                mimic_loc.item = new_mimic
+
+
 
     def _generate_rando_data(self, rando_file: BinaryIO, debug_file: TextIO):
         rando_file.write(0x1.to_bytes(length=1, byteorder='little'))

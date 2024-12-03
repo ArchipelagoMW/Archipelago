@@ -91,7 +91,7 @@ class OmitLocations(Choice):
     option_no_omission = 0
     option_omit_anemos_inner_sanctum = 1
     option_omit_superbosses_and_inner_sanctum = 2
-    default = 2
+    default = 3
 
 class AddGs1Items(Toggle):
     """Adds the Elven Shirt and Cleric's Ring from Golden Sun to the item pool.
@@ -501,6 +501,12 @@ class MimicTrapWeight(Range):
     range_end = 100
     default = 5
 
+class ScaleMimics(Toggle):
+    """Whether the strength of mimics should be scaled based on the sphere they are in.  Increases generation time"""
+    internal_name = "scale_mimics"
+    display_name = "Scale Mimics"
+    default = 1
+
 class ForgeMaterialsFillerWeight(Range):
     """The weight for a filler item to be a forge material. These will be forged into any of their regular results.
     Note that forging results are RNG based in the game and the randomizer does not alter this behaviour.
@@ -673,6 +679,7 @@ class GSTLAOptions(PerGameCommonOptions):
     #traps
     trap_chance: TrapChance
     mimic_trap_weight: MimicTrapWeight
+    scale_mimics: ScaleMimics
 
     #filler
     forge_material_filler_weight: ForgeMaterialsFillerWeight

@@ -14,7 +14,7 @@ from .Options import (ItemShuffle, MajorMinorSplit, RevealHiddenItem, OmitLocati
                       TelportEverywhere, TrapChance, MimicTrapWeight, ForgeMaterialsFillerWeight,
                       RustyMaterialsFillerWeight, StatBoostFillerWeight, UncommonConsumableFillerWeight,
                       ForgedEquipmentFillerWeight, LuckyFountainEquipmentFillerWeight, ShopEquipmentFillerWeight,
-                      CoinsFillerWeight, CommonConsumablesFillerWeight, AutoRun)
+                      CoinsFillerWeight, CommonConsumablesFillerWeight, AutoRun, ScaleMimics)
 
 from Options import OptionGroup
 
@@ -96,6 +96,7 @@ gstla_option_groups = [
     OptionGroup("Trap and Filler Distribution", [
         TrapChance, 
         MimicTrapWeight,
+        ScaleMimics,
         ForgeMaterialsFillerWeight,
         RustyMaterialsFillerWeight,
         StatBoostFillerWeight,
