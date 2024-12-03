@@ -69,7 +69,6 @@ class ItemName:
     BOMB = "Bomb"
     SWORD = "Progressive Sword"
     FLIPPERS = "Flippers"
-    MAGNIFYING_LENS = "Magnifying Lens"
     MEDICINE = "Medicine"
     TAIL_KEY = "Tail Key"
     ANGLER_KEY = "Angler Key"
@@ -191,7 +190,6 @@ links_awakening_items = [
     ItemData(ItemName.BOMB, "BOMB", ItemClassification.progression),
     ItemData(ItemName.SWORD, "SWORD", ItemClassification.progression),
     ItemData(ItemName.FLIPPERS, "FLIPPERS", ItemClassification.progression),
-    ItemData(ItemName.MAGNIFYING_LENS, "MAGNIFYING_LENS", ItemClassification.progression),
     ItemData(ItemName.MEDICINE, "MEDICINE", ItemClassification.useful),
     ItemData(ItemName.TAIL_KEY, "TAIL_KEY", ItemClassification.progression),
     ItemData(ItemName.ANGLER_KEY, "ANGLER_KEY", ItemClassification.progression),
