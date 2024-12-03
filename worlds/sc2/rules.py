@@ -234,7 +234,7 @@ class SC2Logic:
     def zerg_gates_of_hell_requirement(self, state: CollectionState) -> bool:
         """Gates of Hell mission requirement"""
         return (
-            self.zerg_competent_comp(state)
+            self.zerg_competent_comp_competent_aa(state)
             and (self.zerg_defense_rating(state, True) > 8)
         )
 
