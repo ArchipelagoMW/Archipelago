@@ -290,7 +290,7 @@ class PokemonEmeraldWorld(World):
                 ])
 
             # Sacred ash is on Navel Rock, which is locked behind the event tickets
-            if not self.options.event_tickets.value:
+            if not self.options.event_tickets:
                 exclude_locations([
                     "Navel Rock Top - Hidden Item Sacred Ash",
                 ])
