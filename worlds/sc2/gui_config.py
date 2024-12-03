@@ -82,7 +82,6 @@ def validate_colour(colour: Any, default: Tuple[float, float, float]) -> Tuple[T
 def get_button_colour(race: str) -> Tuple[Tuple[str, ...], Tuple[float, float, float]]:
     from . import SC2World
     baseline_colour = 0.345  # the button graphic is grey, with this value in each colour channel
-    # user_colour = [0.24, 0.84, 0.68]
     if race == 'TERRAN':
         user_colour = SC2World.settings.terran_button_colour
     elif race == 'PROTOSS':
