@@ -37,15 +37,17 @@ def validate_colour(colour: Any, default: Tuple[float, float, float]) -> Tuple[T
             ((colour >> 4) & 0xff) / 255,
             ((colour >> 0) & 0xff) / 255,
         )
-    elif  colour == 'white':
+    elif colour == 'default':
+        return (), default
+    elif colour == 'white':
         return (), (0.9, 0.9, 0.9)
-    elif  colour == 'black':
+    elif colour == 'black':
         return (), (0.0, 0.0, 0.0)
-    elif  colour == 'grey':
+    elif colour == 'grey':
         return (), (0.345, 0.345, 0.345)
-    elif  colour == 'red':
+    elif colour == 'red':
         return (), (0.85, 0.2, 0.1)
-    elif  colour == 'orange':
+    elif colour == 'orange':
         return (), (1.0, 0.65, 0.37)
     elif colour == 'green':
         return (), (0.24, 0.84, 0.55)
