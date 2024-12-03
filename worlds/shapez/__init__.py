@@ -110,6 +110,8 @@ class ShapezWorld(World):
                 self.random_logic_phase_length = [self.passthrough[f"Phase {i} length"] for i in range(5)]
                 self.category_random_logic_amounts = {cat: self.passthrough[f"{cat} category buildings amount"]
                                                       for cat in ["belt", "miner", "processors", "painting"]}
+                # Forces balancers, tunnel, and trash to not appear in regen to make UT more accurate
+                self.options.early_balancer_tunnel_and_trash.value = 0
                 return
 
         # "MAM" goal is supposed to be longer than vanilla, but to not have more options than necessary,
