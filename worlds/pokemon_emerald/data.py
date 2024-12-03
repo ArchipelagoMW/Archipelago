@@ -117,6 +117,21 @@ class ItemData(NamedTuple):
     tags: FrozenSet[str]
 
 
+class LocationCategory(IntEnum):
+    BADGE = 0
+    HM = 1
+    KEY = 2
+    ROD = 3
+    BIKE = 4
+    TICKET = 5
+    OVERWORLD_ITEM = 6
+    HIDDEN_ITEM = 7
+    GIFT = 8
+    BERRY_TREE = 9
+    TRAINER = 10
+    POKEDEX = 11
+
+
 class LocationData(NamedTuple):
     name: str
     label: str
@@ -124,6 +139,7 @@ class LocationData(NamedTuple):
     default_item: int
     address: Union[int, List[int]]
     flag: int
+    category: LocationCategory
     tags: FrozenSet[str]
 
 
@@ -406,6 +422,7 @@ def _init() -> None:
                     location_json["default_item"],
                     [location_json["address"]] + [j["address"] for j in alternate_rival_jsons],
                     location_json["flag"],
+                    LocationCategory[location_attributes_json[location_name]["category"]],
                     frozenset(location_attributes_json[location_name]["tags"])
                 )
             else:
@@ -416,6 +433,7 @@ def _init() -> None:
                     location_json["default_item"],
                     location_json["address"],
                     location_json["flag"],
+                    LocationCategory[location_attributes_json[location_name]["category"]],
                     frozenset(location_attributes_json[location_name]["tags"])
                 )
             new_region.locations.append(location_name)
@@ -933,6 +951,7 @@ def _init() -> None:
             default_item,
             data.locations[dex_location_name].address,
             data.locations[dex_location_name].flag,
+            data.locations[dex_location_name].category,
             data.locations[dex_location_name].tags
         )
 
