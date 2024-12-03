@@ -1579,6 +1579,8 @@ def create_regions(world):
                     world.item_pool.append(item)
 
     world.random.shuffle(world.item_pool)
+    if not world.options.key_items_only:
+        world.pc_item = world.item_pool.pop()
     advancement_items = [item.name for item in world.item_pool if item.advancement] \
                         + [item.name for item in world.multiworld.precollected_items[world.player] if
                            item.advancement]
