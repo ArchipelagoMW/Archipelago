@@ -140,6 +140,7 @@ def set_rules(kh1world):
         lambda state: (
             state.has("Green Trinity", player)
             or state.has("High Jump", player, 3)
+            or (options.advanced_logic and state.has("High Jump", player, 2))
         ))
     add_rule(kh1world.get_location("Traverse Town 1st District Blue Trinity Balcony Chest"),
         lambda state: (
@@ -174,6 +175,7 @@ def set_rules(kh1world):
         lambda state: (
             state.has("Green Trinity", player)
             or state.has("High Jump", player, 3)
+            or (options.advanced_logic and state.has("High Jump", player, 2))
         ))
     add_rule(kh1world.get_location("Wonderland Rabbit Hole Green Trinity Chest"),
         lambda state: state.has("Green Trinity", player))
@@ -280,10 +282,11 @@ def set_rules(kh1world):
             or
             (
                 options.advanced_logic
-                and state.has_all({
-                    "High Jump",
-                    "Footprints",
-                    "Combo Master"}, player)
+                and 
+                (
+                    state.has_all({"High Jump", "Footprints", "Combo Master"}, player)
+                    or (state.has("High Jump", player, 2) and state.has("Footprints", player))
+                )
             )
         ))
     add_rule(kh1world.get_location("Wonderland Lotus Forest Through the Painting White Trinity Chest"),
@@ -294,7 +297,6 @@ def set_rules(kh1world):
         ))
     add_rule(kh1world.get_location("Deep Jungle Hippo's Lagoon Right Chest"),
         lambda state: (
-        
            state.has("High Jump", player)
            or state.has("Progressive Glide", player)
            or options.advanced_logic
@@ -335,22 +337,21 @@ def set_rules(kh1world):
         ))
     add_rule(kh1world.get_location("Agrabah Palace Gates High Close to Palace Chest"),
         lambda state: (
+            state.has_all({
+                "High Jump",
+                "Progressive Glide"}, player)
+            or
             (
-                state.has_all({
-                    "High Jump",
-                    "Progressive Glide"}, player)
-                or
+                options.advanced_logic
+                and
                 (
-                    options.advanced_logic
-                    and
-                    (
-                        state.has("Combo Master", player)
-                        or can_dumbo_skip(state, player)
-                    )
+                    state.has("Combo Master", player)
+                    or can_dumbo_skip(state, player)
+                    or state.has("High Jump", player, 2)
+                    or state.has("Progressive Glide", player)
                 )
             )
             or state.has("High Jump", player, 3)
-            or (options.advanced_logic and state.has("Progressive Glide", player))
         ))
     add_rule(kh1world.get_location("Agrabah Storage Green Trinity Chest"),
         lambda state: state.has("Green Trinity", player))
@@ -385,7 +386,8 @@ def set_rules(kh1world):
         lambda state: state.has("White Trinity", player))
     add_rule(kh1world.get_location("Monstro Chamber 6 Other Platform Chest"),
         lambda state: (
-            state.has_all(("High Jump", "Progressive Glide"), player)
+            state.has("High Jump", player)
+            and state.has("Progressive Glide", player)
             or (options.advanced_logic and state.has("Combo Master", player))
         ))
     add_rule(kh1world.get_location("Monstro Chamber 6 Platform Near Chamber 5 Entrance Chest"),
@@ -395,7 +397,8 @@ def set_rules(kh1world):
         ))
     add_rule(kh1world.get_location("Monstro Chamber 6 Raised Area Near Chamber 1 Entrance Chest"),
         lambda state: (
-            state.has_all(("High Jump", "Progressive Glide"), player)
+            state.has("High Jump", player)
+            and state.has("Progressive Glide", player)
             or (options.advanced_logic and state.has("Combo Master", player))
         ))
     add_rule(kh1world.get_location("Halloween Town Moonlight Hill White Trinity Chest"),
@@ -721,6 +724,7 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("End of the World Giant Crevasse 5th Chest"),
         lambda state: (
             state.has("Progressive Glide", player)
+            or options.advanced_logic
         ))
     add_rule(kh1world.get_location("End of the World Giant Crevasse 1st Chest"),
         lambda state: (
@@ -731,8 +735,11 @@ def set_rules(kh1world):
         lambda state: (
             (
                 options.advanced_logic
-                and state.has("High Jump", player)
-                and state.has("Combo Master", player)
+                and 
+                (
+                    state.has_all({"High Jump", "Combo Master"}, player)
+                    or state.has("High Jump", player, 2)
+                )
             )
             or state.has("Progressive Glide", player)
         ))
@@ -1013,6 +1020,7 @@ def set_rules(kh1world):
             (
                 state.has("Green Trinity", player)
                 or state.has("High Jump", player, 3)
+                or (options.advanced_logic and state.has("High Jump", player, 2))
             )
         ))
     add_rule(kh1world.get_location("Traverse Town Synth Cloth"),
@@ -1022,6 +1030,7 @@ def set_rules(kh1world):
             (
                 state.has("Green Trinity", player)
                 or state.has("High Jump", player, 3)
+                or (options.advanced_logic and state.has("High Jump", player, 2))
             )
         ))
     add_rule(kh1world.get_location("Traverse Town Synth Rope"),
@@ -1031,6 +1040,7 @@ def set_rules(kh1world):
             (
                 state.has("Green Trinity", player)
                 or state.has("High Jump", player, 3)
+                or (options.advanced_logic and state.has("High Jump", player, 2))
             )
         ))
     add_rule(kh1world.get_location("Traverse Town Synth Seagull Egg"),
@@ -1040,6 +1050,7 @@ def set_rules(kh1world):
             (
                 state.has("Green Trinity", player)
                 or state.has("High Jump", player, 3)
+                or (options.advanced_logic and state.has("High Jump", player, 2))
             )
         ))
     add_rule(kh1world.get_location("Traverse Town Synth Fish"),
@@ -1049,6 +1060,7 @@ def set_rules(kh1world):
             (
                 state.has("Green Trinity", player)
                 or state.has("High Jump", player, 3)
+                or (options.advanced_logic and state.has("High Jump", player, 2))
             )
         ))
     add_rule(kh1world.get_location("Traverse Town Synth Mushroom"),
@@ -1058,6 +1070,7 @@ def set_rules(kh1world):
             (
                 state.has("Green Trinity", player)
                 or state.has("High Jump", player, 3)
+                or (options.advanced_logic and state.has("High Jump", player, 2))
             )
         ))
     add_rule(kh1world.get_location("Traverse Town Gizmo Shop Postcard 1"),
@@ -1068,6 +1081,7 @@ def set_rules(kh1world):
         lambda state: (
             state.has("Green Trinity", player)
             or state.has("High Jump", player, 3)
+            or (options.advanced_logic and state.has("High Jump", player, 2))
         ))
     add_rule(kh1world.get_location("Traverse Town Geppetto's House Postcard"),
         lambda state: (
@@ -1085,6 +1099,7 @@ def set_rules(kh1world):
                 state.has("Theon Vol. 6", player)
                 or state.has("High Jump", player, 3)
                 or has_emblems(state, player, options.keyblades_unlock_chests)
+                or (options.advanced_logic and state.has("High Jump", player, 2))
             )
             and state.has("Progressive Fire", player)
             and
@@ -1100,6 +1115,7 @@ def set_rules(kh1world):
             state.has("Theon Vol. 6", player)
             or state.has("High Jump", player, 3)
             or has_emblems(state, player, options.keyblades_unlock_chests)
+            or (options.advanced_logic and state.has("High Jump", player, 2))
         ))
     add_rule(kh1world.get_location("Hollow Bastion Entrance Hall Emblem Piece (Statue)"),
         lambda state: (
@@ -1107,6 +1123,7 @@ def set_rules(kh1world):
                 state.has("Theon Vol. 6", player)
                 or state.has("High Jump", player, 3)
                 or has_emblems(state, player, options.keyblades_unlock_chests)
+                or (options.advanced_logic and state.has("High Jump", player, 2))
             )
             and state.has("Red Trinity", player)
         ))
@@ -1115,6 +1132,7 @@ def set_rules(kh1world):
             state.has("Theon Vol. 6", player)
             or state.has("High Jump", player, 3)
             or has_emblems(state, player, options.keyblades_unlock_chests)
+            or (options.advanced_logic and state.has("High Jump", player, 2))
         ))
     add_rule(kh1world.get_location("Hollow Bastion Library Speak to Belle Divine Rose"),
         lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
@@ -1873,23 +1891,23 @@ def set_rules(kh1world):
         add_rule(kh1world.get_location("End of the World Final Dimension 1st Chest"),
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("End of the World Final Dimension 2nd Chest"),
-            lambda state: state.has("Oblivion", player))
+            lambda state: state.has("Oblivion", player) or options.advanced_logic)
         add_rule(kh1world.get_location("End of the World Final Dimension 3rd Chest"),
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("End of the World Final Dimension 4th Chest"),
-            lambda state: state.has("Oblivion", player))
+            lambda state: state.has("Oblivion", player) or options.advanced_logic)
         add_rule(kh1world.get_location("End of the World Final Dimension 5th Chest"),
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("End of the World Final Dimension 6th Chest"),
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("End of the World Final Dimension 10th Chest"),
-            lambda state: state.has("Oblivion", player))
+            lambda state: state.has("Oblivion", player) or options.advanced_logic)
         add_rule(kh1world.get_location("End of the World Final Dimension 9th Chest"),
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("End of the World Final Dimension 8th Chest"),
-            lambda state: state.has("Oblivion", player))
+            lambda state: state.has("Oblivion", player) or options.advanced_logic)
         add_rule(kh1world.get_location("End of the World Final Dimension 7th Chest"),
-            lambda state: state.has("Oblivion", player))
+            lambda state: state.has("Oblivion", player) or options.advanced_logic)
         add_rule(kh1world.get_location("End of the World Giant Crevasse 3rd Chest"),
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("End of the World Giant Crevasse 5th Chest"),
@@ -1919,7 +1937,19 @@ def set_rules(kh1world):
         add_rule(kh1world.get_location("End of the World Final Rest Chest"),
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("Monstro Chamber 6 White Trinity Chest"),
-            lambda state: state.has("Oblivion", player))
+            lambda state: state.has("Wishing Star", player))
+        add_rule(kh1world.get_location("Neverland Hold Aero Chest"),
+            lambda state: state.has("Fairy Harp", player) or options.advanced_logic)
+        add_rule(kh1world.get_location("Hollow Bastion Library 1st Floor Turn the Carousel Chest"),
+            lambda state: state.has("Divine Rose", player) or options.advanced_logic)
+        add_rule(kh1world.get_location("Hollow Bastion Library Top of Bookshelf Turn the Carousel Chest"),
+            lambda state: state.has("Divine Rose", player) or options.advanced_logic)
+        add_rule(kh1world.get_location("Hollow Bastion Library 2nd Floor Turn the Carousel 1st Chest"),
+            lambda state: state.has("Divine Rose", player) or options.advanced_logic)
+        add_rule(kh1world.get_location("Hollow Bastion Library 2nd Floor Turn the Carousel 2nd Chest"),
+            lambda state: state.has("Divine Rose", player) or options.advanced_logic)
+        add_rule(kh1world.get_location("Hollow Bastion Entrance Hall Emblem Piece (Chest)"),
+            lambda state: state.has("Divine Rose", player) or options.advanced_logic)
         if options.hundred_acre_wood:
             add_rule(kh1world.get_location("100 Acre Wood Meadow Inside Log Chest"),
                 lambda state: state.has("Oathkeeper", player))
