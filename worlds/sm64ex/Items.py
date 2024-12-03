@@ -1,15 +1,14 @@
-from typing import NamedTuple, Optional
+from typing import NamedTuple
 
 from BaseClasses import Item, ItemClassification
 
 sm64ex_base_id: int = 3626000
 
-
 class SM64Item(Item):
     game: str = "Super Mario 64"
 
 class SM64ItemData(NamedTuple):
-    code: Optional[int] = None
+    code: int | None = None
     classification: ItemClassification = ItemClassification.filler
 
 generic_item_data_table: dict[str, SM64ItemData] = {
