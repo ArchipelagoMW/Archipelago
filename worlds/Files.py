@@ -157,11 +157,12 @@ class APPlayerContainer(APContainer):
         self.player_name = player_name
         self.server = server
 
-    def read_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
+    def read_contents(self, opened_zipfile: zipfile.ZipFile) -> Dict[str, Any]:
         manifest = super().read_contents(opened_zipfile)
         self.player = manifest["player"]
         self.server = manifest["server"]
         self.player_name = manifest["player_name"]
+        return manifest
 
     def get_manifest(self) -> Dict[str, Any]:
         manifest = super().get_manifest()
