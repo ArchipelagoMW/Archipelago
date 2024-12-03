@@ -56,7 +56,7 @@ class YachtDiceWorld(World):
 
     item_name_groups = item_groups
 
-    ap_world_version = "2.1.3"
+    ap_world_version = "2.1.4"
 
     def _get_yachtdice_data(self):
         return {
@@ -468,7 +468,7 @@ class YachtDiceWorld(World):
         menu.exits.append(connection)
         connection.connect(board)
         self.multiworld.regions += [menu, board]
-        
+
     def get_filler_item_name(self) -> str:
         return "Good RNG"
 
