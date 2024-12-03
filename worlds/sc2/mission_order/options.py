@@ -12,7 +12,7 @@ from ..mission_groups import mission_groups
 from ..item.item_tables import item_table
 from ..item.item_groups import item_name_groups
 from .structs import Difficulty, LayoutType, GENERIC_KEY_NAME
-from .layout_types import Column, Grid, Hopscotch, Gauntlet, Blitz
+from .layout_types import Column, Grid, Hopscotch, Gauntlet, Blitz, Canvas
 from .presets_static import (
     static_preset, preset_mini_wol_with_prophecy, preset_mini_wol, preset_mini_hots, preset_mini_prophecy,
     preset_mini_lotv_prologue, preset_mini_lotv, preset_mini_lotv_epilogue, preset_mini_nco,
@@ -21,9 +21,10 @@ from .presets_static import (
 )
 from .presets_scripted import make_golden_path
 
-STR_OPTION_VALUES = {
+STR_OPTION_VALUES: Dict[str, Dict[str, Any]] = {
     "type": {
         "column": Column, "grid": Grid, "hopscotch": Hopscotch, "gauntlet": Gauntlet, "blitz": Blitz,
+        "canvas": Canvas,
     },
     "difficulty": {
         "relative": Difficulty.RELATIVE, "starter": Difficulty.STARTER, "easy": Difficulty.EASY,
@@ -251,6 +252,13 @@ def _resolve_special_options(data: Dict[str, Any]):
         new_value = _resolve_special_option(option, option_value)
         data[option] = new_value
 
+    # Special case for canvas layouts determining their own size
+    if "type" in data and data["type"] == Canvas:
+        canvas: List[str] = data["canvas"]
+        longest_line = max(len(line) for line in canvas)
+        data["size"] = len(canvas) * longest_line
+        data["width"] = longest_line
+
 def _resolve_special_option(option: str, option_value: Any) -> Any:
     # Option values can be string representations of values
     if option in STR_OPTION_VALUES:
@@ -290,7 +298,13 @@ def _resolve_special_option(option: str, option_value: Any) -> Any:
     return _resolve_potential_range(option_value)
 
 def _resolve_string_option_single(option: str, option_value: str) -> Any:
-    return STR_OPTION_VALUES[option][option_value.lower().replace("_", " ")]
+    formatted_value = option_value.lower().replace("_", " ")
+    if not formatted_value in STR_OPTION_VALUES[option]:
+        raise ValueError(
+            f"Option \"{option}\" received unknown value \"{option_value}\".\n"
+            f"Allowed values are: {list(STR_OPTION_VALUES[option].keys())}"
+        )
+    return STR_OPTION_VALUES[option][formatted_value]
 
 def _resolve_string_option(option: str, option_value: Union[List[str], str]) -> Any:
     if type(option_value) == list:

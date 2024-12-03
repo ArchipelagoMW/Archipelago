@@ -38,9 +38,19 @@
       - [Grid Index Functions](#grid-index-functions)
         - [point(x, y)](#pointx-y)
         - [rect(x, y, width, height)](#rectx-y-width-height)
+    - [Canvas](#canvas)
+      - [Canvas Index Functions](#canvas-index-functions)
+        - [group(character)](#groupcharacter)
     - [Hopscotch](#hopscotch)
+      - [Hopscotch Index Functions](#hopscotch-index-functions)
+        - [top](#top)
+        - [bottom](#bottom)
+        - [middle](#middle)
+        - [corner(index)](#cornerindex)
     - [Gauntlet](#gauntlet)
     - [Blitz](#blitz)
+      - [Blitz Index Functions](#blitz-index-functions)
+        - [row(height)](#rowheight)
 </details>
 
 ## What is this?
@@ -209,9 +219,9 @@ This section is meant to offer some guidance when making your own mission order 
 
 To begin making your own mission order, think about how you visually want your missions laid out. This should inform the layout `type`s you want to use, and give you some idea about the overall structure of your mission order.
 
-For example, if you want to make a custom campaign like the vanilla ones, you will want a lot of layouts of `type: column`. If you want a Hopscotch layout with certain missions or races, a single layout with `type: hopscotch` will suffice. If you want to play through a funny shape, a single large `type: grid` will be your best starting point. If you just want to make a minor change to a vanilla campaign, you will want to start with a `preset` campaign.
+For example, if you want to make a custom campaign like the vanilla ones, you will want a lot of layouts of [`type: column`](#column). If you want a Hopscotch layout with certain missions or races, a single layout with [`type: hopscotch`](#hopscotch) will suffice. If you want to play through a funny shape, you will want to draw with a [`type: canvas`](#canvas). If you just want to make a minor change to a vanilla campaign, you will want to start with a [`preset` campaign](#preset).
 
-The natural flow of a mission order is defined by the types of its layouts. It makes sense for a mission to unlock its neighbors, it makes sense for a Hopscotch layout to wrap around the sides, and it makes sense for a Column's final mission to be at the bottom. Layout types create their flow by setting `next`, `entrance`, `exit`, and `entry_rules` on missions. More on these in a little bit.
+The natural flow of a mission order is defined by the types of its layouts. It makes sense for a mission to unlock its neighbors, it makes sense for a Hopscotch layout to wrap around the sides, and it makes sense for a Column's final mission to be at the bottom. Layout types create their flow by setting [`next`](#next), [`entrance`](#entrance), [`exit`](#exit), and [`entry_rules`](#entry-rules) on missions. More on these in a little bit.
 
 Layout types dictate their own visual structure, and will only rarely make mission slots with `empty: true`. If you want a certain shape that's not exactly like an existing type, make sure you pick a type that has missions in **more** spots than you want, not less, and then get rid of the spots you don't want by setting `empty: true` on them.
 
@@ -232,9 +242,9 @@ Using `entry_rules`, you can make a mission require beating things other than th
 
 Note that `entry_rules` are an addition to the `next` behavior. If you want a mission to completely ignore the natural flow and only use your `entry_rules`, simply set `entrance: true` on it.
 
-Please see the `entry_rules` section below for available rules and examples.
+Please see the [`entry_rules`](#entry-rules) section below for available rules and examples.
 
-With your playthrough sufficiently complicated, it only remains to add flavor to your mission order by changing `mission_pool` and `difficulty` options as you like them. These options are also explained below.
+With your playthrough sufficiently complicated, it only remains to add flavor to your mission order by changing [`mission_pool`](#mission-pool) and [`difficulty`](#difficulty) options as you like them. These options are also explained below.
 
 To summarize:
 - Start by setting up campaigns and layouts with appropriate layout `type`s and `size`s
@@ -843,6 +853,99 @@ Grid supports the following index functions:
 `rect(x, y, width, height)` returns the indices within the rectangle defined by the starting point at the X and Y coordinates and the width and height arguments. In the above example, `rect(1, 2, 3, 2)` returns the indices `11, 12, 13, 16, 17, 18`.
 
 ---
+### Canvas
+```yaml
+type: canvas
+canvas: # No default
+jump_distance_orthogonal: 1 # Accepts numbers >= 1
+jump_distance_diagonal: 1 # Accepts numbers >= 0
+```
+
+This is a special type of grid that is created from a drawn canvas. For this type of layout `size` may be omitted, but `canvas` is required.
+
+`canvas` is a list of strings that form a rectangular grid, from which the layout's size is determined automatically. Every space in the canvas creates an empty slot, while every character that is not a space creates a filled mission slot. The resulting grid determines its indices like [Grid](#Grid).
+
+```yaml
+type: canvas
+canvas:
+- '     ggg     ' # 0
+- '    ggggg    ' # 1
+- '    ggggg    ' # 2
+- ' bbb ggg rrr ' # 3
+- 'bbbbb g rrrrr' # 4
+- 'bbbbb   rrrrr' # 5
+- ' ggg     bbb ' # 6
+- 'ggggg   bbbbb' # 7
+- 'gggg     bbbb' # 8
+- 'ggg  rrr  bbb' # 9
+- ' gg rrrrr bb ' # 10
+- '    rrrrr    ' # 11
+- '    rrrrr    ' # 12
+- '     rrr     ' # 13
+jump_distance_orthogonal: 2
+jump_distance_diagonal: 1
+missions:
+- index: group(g)
+  mission_pool: Terran Missions
+- index: group(b)
+  mission_pool: Protoss Missions
+- index: group(r)
+  mission_pool: Zerg Missions
+```
+This example draws the Archipelago logo using missions of different races as its colors. Note that while this example fits into 13 lines, there is no set limit for how many lines you may use, and likewise lines may be as long as you need them to be. Short lines are padded with spaces to match the longest line in the canvas, so lines are left-aligned in this case.
+
+You may have noticed that the above example has gaps between missions. Canvas layouts support jumping over gaps via `jump_distance_orthogonal` and `jump_distance_diagonal`, which determine the maximum distance over which two missions may be connected, in orthogonal and diagonal directions respectively. Missions at higher distances will only connect if there is no other mission in front of them.
+
+```yaml
+type: canvas
+canvas:
+- 'A  A'
+- 'B XB'
+jump_distance_orthogonal: 3
+jump_distance_diagonal: 0
+```
+In this example the two `A`s will connect because they are less than 3 missions apart, but the two `B`s will not connect because `X` is between them, and both `B`s will connect to `X` instead. Both sets of `AB`s will also connect because they are neighbors.
+
+Diagonal jumps function identically, with one exception:
+```yaml
+type: canvas
+canvas:
+- 'A  '
+- ' B '
+- ' XC'
+jump_distance_orthogonal: 1
+jump_distance_diagonal: 1
+```
+Missions that are diagonal neighbors only connect if they do not already share an orthogonal neighbor. In this example `A` and `B` connect, but `B` and `C` don't because `X` already connects them. No such restriction exists for higher-distance diagonal jumps, so it is recommended to keep `jump_distance_diagonal` low.
+
+Finally, the default entrance and exit on a canvas are dynamically set to be the non-empty slots that are closest to the top left and bottom right corner respectively. It is highly recommended to disable the defaults and set your own entrance and exit, for example like this:
+```yaml
+type: canvas
+canvas:
+- '  E  '
+- ' OOO '
+- ' O O '
+- ' OXO '
+missions:
+# Disable the defaults
+- index: entrances
+  entrance: false
+- index: exits
+  exit: false
+# Set our own
+- index: group(E)
+  entrance: true
+- index: group(X)
+  exit: true
+```
+
+#### Canvas Index Functions
+Canvas supports all of [Grid's index functions](#grid-index-functions), as well as the following:
+
+##### group(character)
+`group(character)` returns the indices which match the given character on the canvas. In the Archipelago logo example, `group(g)` gives the indices of all the `g`s on the canvas. Note that there is no group for spaces, so `group(" ")` does not work.
+
+---
 ### Hopscotch
 ```yaml
 type: hopscotch
@@ -870,11 +973,20 @@ A `size: 23`, `width: 4` Hopscotch layout has the following indices:
 ```
 The top left corner (index `0`) is the default entrance. The bottom-most mission of the lowest column (index `size - 1`) is the default exit.
 
+#### Hopscotch Index Functions
 Hopscotch supports the following index functions:
-- `top()` (or `top`) returns the indices of all the top-right corners. In the above example, it returns the indices `2, 5, 8, 11, 14, 17, 20`.
-- `bottom()` (or `bottom`) returns the indices of all the bottom-left corners. In the above example, it returns the indices `1, 4, 7, 10, 13, 16, 19, 22`.
-- `middle()` (or `middle`) returns the indices of all the middle slots. In the above example, it returns the indices `0, 3, 6, 9, 12, 15, 18, 21`.
-- `corner(index)` returns the indices within the given corner. A corner is a slot in the middle and the slots to the bottom and right of it. `corner(0)` would return `0, 1, 2`, `corner(1)` would return `3, 4, 5`, and so on. In the above example, `corner(7)` will only return `21, 22` because it does not have a right mission.
+
+##### top
+`top()` (or `top`) returns the indices of all the top-right corners. In the above example, it returns the indices `2, 5, 8, 11, 14, 17, 20`.
+
+##### bottom
+`bottom()` (or `bottom`) returns the indices of all the bottom-left corners. In the above example, it returns the indices `1, 4, 7, 10, 13, 16, 19, 22`.
+
+##### middle
+`middle()` (or `middle`) returns the indices of all the middle slots. In the above example, it returns the indices `0, 3, 6, 9, 12, 15, 18, 21`.
+
+##### corner(index)
+`corner(index)` returns the indices within the given corner. A corner is a slot in the middle and the slots to the bottom and right of it. `corner(0)` would return `0, 1, 2`, `corner(1)` would return `3, 4, 5`, and so on. In the above example, `corner(7)` will only return `21, 22` because it does not have a right mission.
 
 ---
 ### Gauntlet
@@ -915,5 +1027,8 @@ A `size: 20`, `width: 5` Blitz layout has the following indices:
 ```
 The top left corner (index `0`) is the default entrance. The right-most mission on the bottom row (index `size - 1`) is the default exit.
 
+#### Blitz Index Functions
 Blitz supports the following index function:
-- `row(height)` returns the indices of the row at the given zero-based height. In the above example, `row(1)` would return `5, 6, 7, 8, 9`.
+
+##### row(height)
+`row(height)` returns the indices of the row at the given zero-based height. In the above example, `row(1)` would return `5, 6, 7, 8, 9`.
