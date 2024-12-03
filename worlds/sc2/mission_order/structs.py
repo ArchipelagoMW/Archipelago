@@ -343,7 +343,7 @@ class SC2MissionOrder(MissionOrderNode):
             objects: List[Tuple[MissionOrderNode, str]] = []
             for address in data["scope"]:
                 resolved = self.resolve_address(address, start_node)
-                objects.append((resolved, address))
+                objects.extend((obj, address) for obj in resolved)
             visual_reqs = [obj.get_visual_requirement(start_node) for (obj, _) in objects]
             if "amount" in data:
                 missions = [mission for (obj, _) in objects for mission in obj.get_missions() if not mission.option_empty]
@@ -362,7 +362,7 @@ class SC2MissionOrder(MissionOrderNode):
                 missions.extend(exits)
             return BeatMissionsEntryRule(missions, visual_reqs)
 
-    def resolve_address(self, address: str, start_node: MissionOrderNode) -> MissionOrderNode:
+    def resolve_address(self, address: str, start_node: MissionOrderNode) -> List[MissionOrderNode]:
         if address.startswith("../") or address == "..":
             # Relative address, starts from searching object
             cursor = start_node
@@ -383,14 +383,17 @@ class SC2MissionOrder(MissionOrderNode):
                 if len(result) == 0:
                     raise ValueError(f"Address \"{address_so_far}\" (from \"{address}\") could not find a {cursor.child_type_name()}.")
                 if len(result) > 1:
-                    raise ValueError((f"Address \"{address_so_far}\" (from \"{address}\") found more than one {cursor.child_type_name()}s."))
+                    # Layouts are allowed to end with multiple missions via an index function
+                    if type(result[0]) == SC2MOGenMission and address_so_far == address:
+                        return result
+                    raise ValueError((f"Address \"{address_so_far}\" (from \"{address}\") found more than one {cursor.child_type_name()}."))
                 cursor = result[0]
             if cursor == start_node:
                 raise ValueError(
                     f"Address \"{address_so_far}\" (from \"{address}\") returned to original object. " + 
                     "This is not allowed to avoid circular requirements."
                 )
-        return cursor
+        return [cursor]
 
     def fill_missions(
             self, world: World, locked_missions: List[str],
@@ -682,19 +685,8 @@ class SC2MOGenLayout(MissionOrderNode):
             indices: Set[int] = set()
             index_terms: List[Union[int, str]] = mission_data["index"]
             for term in index_terms:
-                if type(term) == int:
-                    indices.add(term)
-                elif term == "entrances":
-                    indices.update(idx for idx in range(len(self.missions)) if self.missions[idx].option_entrance)
-                elif term == "exits":
-                    indices.update(idx for idx in range(len(self.missions)) if self.missions[idx].option_exit)
-                elif term == "all":
-                    indices.update(idx for idx in range(len(self.missions)))
-                else:
-                    result = self.layout_type.parse_index(term)
-                    if result is None:
-                        raise ValueError(f"Layout \"{self.option_name}\" could not resolve mission index term \"{term}\".")
-                    indices.update(result)
+                result = self.resolve_index_term(term)
+                indices.update(result)
             for idx in indices:
                 self.missions[idx].update_with_data(mission_data)
 
@@ -704,7 +696,7 @@ class SC2MOGenLayout(MissionOrderNode):
             if mission.option_exit:
                 self.exits.append(mission)
             if mission.option_next is not None:
-                mission.next = [self.missions[idx] for idx in mission.option_next]
+                mission.next = [self.missions[idx] for term in mission.option_next for idx in sorted(self.resolve_index_term(term))]
         
         # Set up missions' prev data
         for mission in self.missions:
@@ -809,6 +801,24 @@ class SC2MOGenLayout(MissionOrderNode):
             sorted_missions[mission.option_difficulty].append(mission)
         return (sorted_missions, fixed_missions)
 
+    def resolve_index_term(self, term: Union[str, int], *, ignore_out_of_bounds: bool = True, reject_none: bool = True) -> Union[Set[int], None]:
+        try:
+            result = {int(term)}
+        except ValueError:
+            if term == "entrances":
+                result = {idx for idx in range(len(self.missions)) if self.missions[idx].option_entrance}
+            elif term == "exits":
+                result = {idx for idx in range(len(self.missions)) if self.missions[idx].option_exit}
+            elif term == "all":
+                result = {idx for idx in range(len(self.missions))}
+            else:
+                result = self.layout_type.parse_index(term)
+                if result is None and reject_none:
+                    raise ValueError(f"Layout \"{self.option_name}\" could not resolve mission index term \"{term}\".")
+        if ignore_out_of_bounds:
+            result = [index for index in result if index >= 0 and index < len(self.missions)]
+        return result
+
     def get_parent(self, _address_so_far: str, _full_address: str) -> MissionOrderNode:
         if self.parent().option_single_layout_campaign:
             parent = self.parent().parent
@@ -817,13 +827,12 @@ class SC2MOGenLayout(MissionOrderNode):
         return parent()
 
     def search(self, term: str) -> Union[List[MissionOrderNode], None]:
-        try:
-            index = int(term)
-        except ValueError:
+        indices = self.resolve_index_term(term, reject_none=False)
+        if indices is None:
+            # Let the address parser handle the fail case
             return []
-        if index < 0 or index >= len(self.missions):
-            return []
-        return [self.missions[index]]
+        missions = [self.missions[index] for index in sorted(indices)]
+        return missions
     
     def child_type_name(self) -> str:
         return "Mission"
@@ -871,7 +880,7 @@ class SC2MOGenMission(MissionOrderNode):
     option_entrance: bool # whether this mission is unlocked when the layout is unlocked
     option_exit: bool # whether this mission is required to beat its parent layout
     option_empty: bool # whether this slot contains a mission at all
-    option_next: Union[None, List[int]] # indices of internally connected missions
+    option_next: Union[None, List[Union[int, str]]] # indices of internally connected missions
     option_entry_rules: List[Dict[str, Any]]
     option_difficulty: Difficulty # difficulty pool this mission pulls from
     option_mission_pool: Set[int] # Allowed mission IDs for this slot
