@@ -391,9 +391,9 @@ class RandomizePostcards(Choice):
     option_chests = 1
     option_vanilla = 2
 
-class VanillaPuppies(DefaultOnToggle):
+class VanillaPuppies(Toggle):
     """
-    If on and Puppies are set to Triplets, the Puppies are in their vanilla locations.
+    If on and Puppies is set to Triplets, the Puppies are in their vanilla locations.
     """
     display_name = "Vanilla Puppies"
 
