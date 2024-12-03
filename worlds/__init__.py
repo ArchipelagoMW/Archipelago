@@ -206,8 +206,6 @@ class ZipWorldLoader(zipimport.zipimporter, importlib.abc.Loader):
     # zipimporter implements `exec_module` as of Python 3.10, replacing the deprecated `load_module`.
     def exec_module(self, module):
         start = time.perf_counter()
-        # The package in the zip is *not* prefixed by "worlds.", but somehow the module name and __package__ end up
-        # correctly prefixed with "worlds". I do not understand, but it works.
         super().exec_module(module)
         loaded_modules.add(module.__name__)
         self.world_source.time_taken = time.perf_counter() - start
@@ -251,7 +249,7 @@ class WorldFinder(importlib.abc.MetaPathFinder):
             loader: importlib.abc.Loader
             if world_source.is_zip:
                 loader = ZipWorldLoader(world_source)
-                spec = importlib.util.spec_from_loader(world_source.module_name, loader)
+                spec = importlib.util.spec_from_loader(fullname, loader)
                 if spec is None:
                     raise RuntimeError(f"{world_source.path} is not a loadable module")
                 return spec
