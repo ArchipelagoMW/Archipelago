@@ -58,7 +58,7 @@ from . import hints
 
 from .patches import bank34
 from .utils import formatText
-from ..Options import TrendyGame, Palette
+from ..Options import TrendyGame, Palette, Warps
 from .roomEditor import RoomEditor, Object
 from .patches.aesthetics import rgb_to_bin, bin_to_rgb
 
@@ -417,8 +417,8 @@ def generateRom(args, world: "LinksAwakeningWorld"):
             for channel in range(3):
                 color[channel] = color[channel] * 31 // 0xbc
 
-    if world.options.warp_improvements:
-        patches.core.addWarpImprovements(rom, world.options.additional_warp_points)
+    if world.options.warps != Warps.option_vanilla:
+        patches.core.addWarpImprovements(rom, world.options.warps == Warps.option_improved_additional)
 
     palette = world.options.palette
     if palette != Palette.option_normal:
