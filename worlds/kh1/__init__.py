@@ -285,8 +285,6 @@ class KH1World(World):
                     self.get_location(location).place_locked_item(self.create_item("Puppies 0"+str(1+(i*3))+"-0"+str(3+(i*3))))
                 else:
                     self.get_location(location).place_locked_item(self.create_item("Puppies "+str(1+(i*3))+"-"+str(3+(i*3))))
-            #self.get_location("Traverse Town Mystical House Glide Chest").place_locked_item(self.create_item("Puppies 01-03"))
-            #self.get_location("Traverse Town Alleyway Behind Crates Chest").place_locked_item(self.create_item("Puppies 04-06"))
 
     def get_filler_item_name(self) -> str:
         weights = [data.weight for data in self.fillers.values()]
