@@ -953,7 +953,7 @@ class RingLoss(Choice):
 
     Modern: You lose 20 rings when hit
 
-    OHKO: You die immediately when hit (NOTE: Some Hard Logic tricks may require damage boosts!)
+    OHKO: You die immediately when hit (NOTE: Some Hard or Expert Logic tricks may require damage boosts!)
     """
     display_name = "Ring Loss"
     option_classic = 0
@@ -1077,11 +1077,14 @@ class LogicDifficulty(Choice):
 
     Standard: The logic assumes the "intended" usage of Upgrades to progress through levels
 
-    Hard: Some simple skips or sequence breaks may be required
+    Hard: Some simple skips or sequence breaks may be required, but no out-of-bounds
+
+    Expert: If it is humanly possible, it may be required
     """
     display_name = "Logic Difficulty"
     option_standard = 0
     option_hard = 1
+    option_expert = 2
     default = 0
 
 

@@ -2866,22 +2866,44 @@ def connect_regions(multiworld: MultiWorld, world: World, player: int, gates: ty
             connect(multiworld, player, names, LocationName.cannon_core_region, LocationName.animal_phoenix,
                     lambda state: (state.has(ItemName.tails_booster, player)))
 
-        if world.options.keysanity:
-            connect(multiworld, player, names, LocationName.wild_canyon_region, LocationName.animal_dragon,
-                    lambda state: (state.has(ItemName.knuckles_shovel_claws, player)))
+        elif world.options.logic_difficulty.value == 2:
+            connect(multiworld, player, names, LocationName.metal_harbor_region, LocationName.animal_phoenix)
 
+            connect(multiworld, player, names, LocationName.crazy_gadget_region, LocationName.animal_skunk)
+            connect(multiworld, player, names, LocationName.crazy_gadget_region, LocationName.animal_phoenix)
+
+            connect(multiworld, player, names, LocationName.weapons_bed_region, LocationName.animal_phoenix,
+                    lambda state: (state.has(ItemName.eggman_jet_engine, player)))
+
+            connect(multiworld, player, names, LocationName.mad_space_region, LocationName.animal_gorilla)
+            connect(multiworld, player, names, LocationName.mad_space_region, LocationName.animal_raccoon)
+            connect(multiworld, player, names, LocationName.mad_space_region, LocationName.animal_halffish)
+
+            connect(multiworld, player, names, LocationName.cannon_core_region, LocationName.animal_otter)
+            connect(multiworld, player, names, LocationName.cannon_core_region, LocationName.animal_rabbit)
+            connect(multiworld, player, names, LocationName.cannon_core_region, LocationName.animal_cheetah)
+            connect(multiworld, player, names, LocationName.cannon_core_region, LocationName.animal_warthog)
+            connect(multiworld, player, names, LocationName.cannon_core_region, LocationName.animal_parrot)
+            connect(multiworld, player, names, LocationName.cannon_core_region, LocationName.animal_condor)
+            connect(multiworld, player, names, LocationName.cannon_core_region, LocationName.animal_raccoon)
+            connect(multiworld, player, names, LocationName.cannon_core_region, LocationName.animal_phoenix)
+
+        if world.options.keysanity:
             connect(multiworld, player, names, LocationName.mission_street_region, LocationName.animal_phoenix,
                     lambda state: (state.has(ItemName.tails_booster, player) and
                                    state.has(ItemName.tails_bazooka, player)))
-
-            connect(multiworld, player, names, LocationName.pyramid_cave_region, LocationName.animal_skeleton_dog,
-                    lambda state: (state.has(ItemName.sonic_light_shoes, player) and
-                                   state.has(ItemName.sonic_flame_ring, player)))
 
             connect(multiworld, player, names, LocationName.lost_colony_region, LocationName.animal_raccoon,
                     lambda state: (state.has(ItemName.eggman_jet_engine, player)))
 
             if world.options.logic_difficulty.value == 0:
+                connect(multiworld, player, names, LocationName.wild_canyon_region, LocationName.animal_dragon,
+                        lambda state: (state.has(ItemName.knuckles_shovel_claws, player)))
+
+                connect(multiworld, player, names, LocationName.pyramid_cave_region, LocationName.animal_skeleton_dog,
+                        lambda state: (state.has(ItemName.sonic_light_shoes, player) and
+                                       state.has(ItemName.sonic_flame_ring, player)))
+
                 connect(multiworld, player, names, LocationName.iron_gate_region, LocationName.animal_dragon,
                         lambda state: (state.has(ItemName.eggman_jet_engine, player) and
                                        state.has(ItemName.eggman_large_cannon, player)))
@@ -2890,6 +2912,23 @@ def connect_regions(multiworld: MultiWorld, world: World, player: int, gates: ty
                         lambda state: (state.has(ItemName.eggman_jet_engine, player) and
                                        state.has(ItemName.eggman_large_cannon, player)))
             if world.options.logic_difficulty.value == 1:
+                connect(multiworld, player, names, LocationName.wild_canyon_region, LocationName.animal_dragon,
+                        lambda state: (state.has(ItemName.knuckles_shovel_claws, player)))
+
+                connect(multiworld, player, names, LocationName.pyramid_cave_region, LocationName.animal_skeleton_dog,
+                        lambda state: (state.has(ItemName.sonic_light_shoes, player) and
+                                       state.has(ItemName.sonic_flame_ring, player)))
+
+                connect(multiworld, player, names, LocationName.iron_gate_region, LocationName.animal_dragon,
+                        lambda state: (state.has(ItemName.eggman_jet_engine, player)))
+
+                connect(multiworld, player, names, LocationName.sand_ocean_region, LocationName.animal_skeleton_dog,
+                        lambda state: (state.has(ItemName.eggman_jet_engine, player)))
+            if world.options.logic_difficulty.value == 2:
+                connect(multiworld, player, names, LocationName.wild_canyon_region, LocationName.animal_dragon)
+
+                connect(multiworld, player, names, LocationName.pyramid_cave_region, LocationName.animal_skeleton_dog)
+
                 connect(multiworld, player, names, LocationName.iron_gate_region, LocationName.animal_dragon,
                         lambda state: (state.has(ItemName.eggman_jet_engine, player)))
 
@@ -2906,10 +2945,6 @@ def connect_regions(multiworld: MultiWorld, world: World, player: int, gates: ty
             connect(multiworld, player, names, LocationName.mission_street_region, LocationName.animal_phoenix,
                     lambda state: (state.has(ItemName.tails_booster, player)))
 
-            connect(multiworld, player, names, LocationName.death_chamber_region, LocationName.animal_skeleton_dog,
-                    lambda state: (state.has(ItemName.knuckles_shovel_claws, player) and
-                                   state.has(ItemName.knuckles_hammer_gloves, player)))
-
             connect(multiworld, player, names, LocationName.eternal_engine_region, LocationName.animal_halffish,
                     lambda state: (state.has(ItemName.tails_booster, player) and
                                    state.has(ItemName.tails_bazooka, player)))
@@ -2923,9 +2958,6 @@ def connect_regions(multiworld: MultiWorld, world: World, player: int, gates: ty
             connect(multiworld, player, names, LocationName.lost_colony_region, LocationName.animal_raccoon)
             connect(multiworld, player, names, LocationName.lost_colony_region, LocationName.animal_skeleton_dog)
 
-            connect(multiworld, player, names, LocationName.security_hall_region, LocationName.animal_phoenix,
-                    lambda state: (state.has(ItemName.rouge_pick_nails, player)))
-
             connect(multiworld, player, names, LocationName.sky_rail_region, LocationName.animal_phoenix)
 
             if world.options.logic_difficulty.value == 0:
@@ -2933,6 +2965,13 @@ def connect_regions(multiworld: MultiWorld, world: World, player: int, gates: ty
                         lambda state: (state.has(ItemName.sonic_light_shoes, player) and
                                        state.has(ItemName.sonic_bounce_bracelet, player) and
                                        state.has(ItemName.sonic_mystic_melody, player)))
+
+                connect(multiworld, player, names, LocationName.death_chamber_region, LocationName.animal_skeleton_dog,
+                        lambda state: (state.has(ItemName.knuckles_shovel_claws, player) and
+                                       state.has(ItemName.knuckles_hammer_gloves, player)))
+
+                connect(multiworld, player, names, LocationName.security_hall_region, LocationName.animal_phoenix,
+                        lambda state: (state.has(ItemName.rouge_pick_nails, player)))
 
                 connect(multiworld, player, names, LocationName.white_jungle_region, LocationName.animal_dragon,
                         lambda state: (state.has(ItemName.shadow_air_shoes, player)))
@@ -2945,11 +2984,28 @@ def connect_regions(multiworld: MultiWorld, world: World, player: int, gates: ty
             elif world.options.logic_difficulty.value == 1:
                 connect(multiworld, player, names, LocationName.pyramid_cave_region, LocationName.animal_skeleton_dog)
 
+                connect(multiworld, player, names, LocationName.death_chamber_region, LocationName.animal_skeleton_dog,
+                        lambda state: (state.has(ItemName.knuckles_shovel_claws, player) and
+                                       state.has(ItemName.knuckles_hammer_gloves, player)))
+
+                connect(multiworld, player, names, LocationName.security_hall_region, LocationName.animal_phoenix,
+                        lambda state: (state.has(ItemName.rouge_pick_nails, player)))
+
                 connect(multiworld, player, names, LocationName.white_jungle_region, LocationName.animal_dragon)
 
                 connect(multiworld, player, names, LocationName.cannon_core_region, LocationName.animal_dragon,
                         lambda state: (state.has(ItemName.tails_booster, player) and
                                        state.has(ItemName.knuckles_hammer_gloves, player)))
+            elif world.options.logic_difficulty.value == 2:
+                connect(multiworld, player, names, LocationName.pyramid_cave_region, LocationName.animal_skeleton_dog)
+
+                connect(multiworld, player, names, LocationName.death_chamber_region, LocationName.animal_skeleton_dog)
+
+                connect(multiworld, player, names, LocationName.security_hall_region, LocationName.animal_phoenix)
+
+                connect(multiworld, player, names, LocationName.white_jungle_region, LocationName.animal_dragon)
+
+                connect(multiworld, player, names, LocationName.cannon_core_region, LocationName.animal_dragon)
 
     if world.options.black_market_slots.value > 0:
         connect(multiworld, player, names, LocationName.gate_0_region, LocationName.black_market_region)

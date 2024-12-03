@@ -4,6 +4,8 @@
 ## v2.4 - WIP
 
 ### Features:
+- Expert Logic Difficulty
+	- Use at your own risk. This difficulty requires complete mastery of SA2.
 - Missions can now be enabled and disabled per-character, instead of just per-style
 - Minigame Difficulty can now be set to "Chaos", which selects a new difficulty randomly per-trap received
 
@@ -27,6 +29,8 @@
 	- Prevent Chao Karate progress icon overflow
 	- Prevent changing Chao Timescale while paused or while a Minigame is active
 - Logic Fixes:
+	- `Mission Street - Chao Key 1` (Hard Logic) now requires no upgrades
+	- `Mission Street - Chao Key 2` (Hard Logic) now requires no upgrades
 	- `Crazy Gadget - Hidden 1` (Standard Logic) now requires `Sonic - Bounce Bracelet` instead of `Sonic - Light Shoes`
 	- `Lost Colony - Hidden 1` (Standard Logic) now requires `Eggman - Jet Engine`
 	- `Mad Space - Gold Beetle` (Standard Logic) now only requires `Rouge - Iron Boots`
