@@ -77,7 +77,7 @@ option_docstrings = {
     "RandomizeLoreTablets": "Randomize Lore items into the itempool, one per Lore Tablet, and place randomized item "
                             "grants on the tablets themselves.\n    You must still read the tablet to get the item.",
     "PreciseMovement": "Places skips into logic which require extremely precise player movement, possibly without "
-                       "movement skills such as\n    dash or hook.",
+                       "movement skills such as\n    dash or claw.",
     "ProficientCombat": "Places skips into logic which require proficient combat, possibly with limited items.",
     "BackgroundObjectPogos": "Places skips into logic for locations which are reachable via pogoing off of "
                              "background objects.",
@@ -300,7 +300,7 @@ class PlandoCharmCosts(OptionDict):
     display_name = "Charm Notch Cost Plando"
     valid_keys = frozenset(charm_names)
     schema = Schema({
-        Optional(name): And(int, lambda n: 6 >= n >= 0) for name in charm_names
+        Optional(name): And(int, lambda n: 6 >= n >= 0, error="Charm costs must be integers in the range 0-6.") for name in charm_names
         })
 
     def get_costs(self, charm_costs: typing.List[int]) -> typing.List[int]:

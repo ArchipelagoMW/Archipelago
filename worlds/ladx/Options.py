@@ -58,7 +58,7 @@ class TextShuffle(DefaultOffToggle):
 class Rooster(DefaultOnToggle, LADXROption):
     """
     [On] Adds the rooster to the item pool. 
-    [Off] The rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.
+    [Off] The rooster spot is still a check giving an item. But you will never find the rooster. In that case, any rooster spot is accessible without rooster by other means.
     """
     display_name = "Rooster"
     ladxr_name = "rooster"
