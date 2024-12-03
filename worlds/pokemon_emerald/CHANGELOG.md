@@ -4,8 +4,6 @@
 
 - Added many new item and location groups.
 - Added a Swedish translation of the setup guide.
-- Dexsanity locations for species that evolve via item contribute their evolution item to the item pool instead of a
-great/ultra ball.
 - The client communicates map transitions to any trackers connected to the slot.
 - Added the player's Normalize Encounter Rates option to slot data for trackers.
 
