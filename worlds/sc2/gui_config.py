@@ -84,16 +84,15 @@ def get_button_colour(race: str) -> Tuple[Tuple[str, ...], Tuple[float, float, f
     baseline_colour = 0.345  # the button graphic is grey, with this value in each colour channel
     if race == 'TERRAN':
         user_colour = SC2World.settings.terran_button_colour
+        default_colour = (0.0838, 0.2898, 0.2346)
     elif race == 'PROTOSS':
         user_colour = SC2World.settings.protoss_button_colour
+        default_colour = (0.345, 0.22425, 0.12765)
     elif race == 'ZERG':
         user_colour = SC2World.settings.zerg_button_colour
+        default_colour = (0.18975, 0.2415, 0.345)
     else:
         user_colour = [baseline_colour, baseline_colour, baseline_colour]
-    default_colours = {
-        'TERRAN': (0.0838, 0.2898, 0.2346),
-        'ZERG': (0.345, 0.22425, 0.12765),
-        'PROTOSS': (0.18975, 0.2415, 0.345),
-    }
-    errors, colour = validate_colour(user_colour, default_colours.get(race, (baseline_colour, baseline_colour, baseline_colour)))
+        default_colour = (baseline_colour, baseline_colour, baseline_colour)
+    errors, colour = validate_colour(user_colour, default_colour)
     return errors, tuple(x / baseline_colour for x in colour)
