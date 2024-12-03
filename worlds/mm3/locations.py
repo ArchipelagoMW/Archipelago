@@ -146,7 +146,44 @@ etank_1ups: Dict[str, Dict[str, Optional[int]]] = {
         names.snake_man_c3: 0x890225,
         names.snake_man_c4: 0x890226,
     },
-    "Wily Stage 2": {}
+    "Doc Robot (Needle) - Air": {
+        names.doc_needle_c2: 0x890233,
+        names.doc_needle_c3: 0x890234,
+    },
+    "Doc Robot (Gemini) - Flash": {
+        names.doc_gemini_c1: 0x89023D,
+        names.doc_gemini_c2: 0x89023E,
+    },
+    "Wily Stage 1": {
+        names.wily_1_c1: 0x890248,
+        names.wily_1_c2: 0x890249,
+        names.wily_1_c4: 0x89024B,
+        names.wily_1_c8: 0x89024F,
+    },
+    "Wily Stage 2": {
+        names.wily_2_c3: 0x890256,
+        names.wily_2_c9: 0x89025C,
+        names.wily_2_c11: 0x89025E,
+    },
+    "Wily Stage 3": {
+        names.wily_3_c3: 0x890263,
+        names.wily_3_c4: 0x890264,
+        names.wily_3_c9: 0x890269,
+        names.wily_3_c10: 0x89026A
+    },
+    "Wily Stage 4": {
+        names.wily_4_c13: 0x890277,
+    },
+    "Wily Stage 5": {
+        names.wily_5_c3: 0x89027A,
+        names.wily_5_c4: 0x89027B,
+    },
+    "Wily Stage 6": {
+        names.wily_6_c1: 0x89027C,
+        names.wily_6_c2: 0x89027D,
+        names.wily_6_c5: 0x890280,
+        names.wily_6_c6: 0x890281,
+    }
 }
 
 energy_pickups: Dict[str, Dict[str, Optional[int]]] = {
@@ -206,7 +243,89 @@ energy_pickups: Dict[str, Dict[str, Optional[int]]] = {
         names.shadow_man_c3: 0x890230,
         names.shadow_man_c4: 0x890231,
     },
-    "Wily Stage 2": {}
+    "Doc Robot (Needle) - Air": {
+        names.doc_needle_c1: 0x890232
+    },
+    "Doc Robot (Needle) - Crash": {
+        names.doc_needle_c4: 0x890235,
+        names.doc_needle_c5: 0x890236,
+        names.doc_needle_c6: 0x890237,
+        names.doc_needle_c7: 0x890238,
+        names.doc_needle_c8: 0x890239,
+        names.doc_needle_c9: 0x89023A,
+        names.doc_needle_c10: 0x89023B,
+        names.doc_needle_c11: 0x89023C,
+    },
+    "Doc Robot (Gemini) - Bubble": {
+        names.doc_gemini_c3: 0x89023F,
+        names.doc_gemini_c4: 0x890240,
+    },
+    "Doc Robot (Spark) - Metal": {
+        names.doc_spark_c1: 0x890241
+    },
+    "Doc Robot (Spark) - Quick": {
+        names.doc_spark_c2: 0x890242
+    },
+    "Doc Robot (Shadow) - Heat": {
+        names.doc_shadow_c1: 0x890243,
+        names.doc_shadow_c2: 0x890244,
+        names.doc_shadow_c3: 0x890245,
+        names.doc_shadow_c4: 0x890246,
+        names.doc_shadow_c5: 0x890247,
+    },
+    "Wily Stage 1": {
+        names.wily_1_c3: 0x89024A,
+        names.wily_1_c5: 0x89024C,
+        names.wily_1_c6: 0x89024D,
+        names.wily_1_c7: 0x89024E,
+        names.wily_1_c9: 0x890250,
+        names.wily_1_c10: 0x890251,
+        names.wily_1_c11: 0x890252,
+        names.wily_1_c12: 0x890253,
+    },
+    "Wily Stage 2": {
+        names.wily_2_c1: 0x890254,
+        names.wily_2_c2: 0x890255,
+        names.wily_2_c4: 0x890257,
+        names.wily_2_c5: 0x890258,
+        names.wily_2_c6: 0x890259,
+        names.wily_2_c7: 0x89025A,
+        names.wily_2_c8: 0x89025B,
+        names.wily_2_c10: 0x89025D,
+        names.wily_2_c12: 0x89025F,
+        names.wily_2_c13: 0x890260,
+    },
+    "Wily Stage 3": {
+        names.wily_3_c1: 0x890261,
+        names.wily_3_c2: 0x890262,
+        names.wily_3_c5: 0x890265,
+        names.wily_3_c6: 0x890266,
+        names.wily_3_c7: 0x890267,
+        names.wily_3_c8: 0x890268,
+    },
+    "Wily Stage 4": {
+        names.wily_4_c1: 0x89026B,
+        names.wily_4_c2: 0x89026C,
+        names.wily_4_c3: 0x89026D,
+        names.wily_4_c4: 0x89026E,
+        names.wily_4_c5: 0x89026F,
+        names.wily_4_c6: 0x890270,
+        names.wily_4_c7: 0x890271,
+        names.wily_4_c8: 0x890272,
+        names.wily_4_c9: 0x890273,
+        names.wily_4_c10: 0x890274,
+        names.wily_4_c11: 0x890275,
+        names.wily_4_c12: 0x890276,
+    },
+    "Wily Stage 5": {
+        names.wily_5_c1: 0x890278,
+        names.wily_5_c2: 0x890279,
+    },
+    "Wily Stage 6": {
+        names.wily_6_c3: 0x89027E,
+        names.wily_6_c4: 0x89027F,
+        names.wily_6_c7: 0x890282,
+    }
 }
 
 mm3_regions: Dict[str, Tuple[Tuple[str, ...], Dict[str, Optional[int]], Optional[str]]] = {

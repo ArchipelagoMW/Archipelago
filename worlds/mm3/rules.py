@@ -322,9 +322,17 @@ def set_rules(world: "MM3World") -> None:
         add_rule(world.get_location(names.gemini_man_c1), lambda state: has_rush_jet(state, world.player))
         add_rule(world.get_location(names.gemini_man_c3),
                  lambda state: has_rush_vertical(state, world.player)
-                               or state.has_any([names.gemini_laser, names.shadow_blade]))
+                               or state.has_any([names.gemini_laser, names.shadow_blade], world.player))
         for location in etank_1ups["Hard Man Stage"]:
             add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
+        add_rule(world.get_location(names.top_man_c6), lambda state: has_rush_vertical(state, world.player))
+        add_rule(world.get_location(names.doc_needle_c2), lambda state: has_rush_jet(state, world.player))
+        add_rule(world.get_location(names.doc_needle_c3), lambda state: has_rush_jet(state, world.player))
+        add_rule(world.get_location(names.doc_gemini_c1), lambda state: has_rush_vertical(state, world.player))
+        add_rule(world.get_location(names.doc_gemini_c2), lambda state: has_rush_vertical(state, world.player))
+        add_rule(world.get_location(names.wily_1_c8), lambda state: has_rush_vertical(state, world.player))
+        for location in [names.wily_1_c4, names.wily_1_c8]:
+            add_rule(world.get_location(location), lambda state: state.has(names.hard_knuckle, world.player))
         for location in etank_1ups["Wily Stage 2"]:
             if location == names.wily_2_c3:
                 continue
@@ -338,7 +346,11 @@ def set_rules(world: "MM3World") -> None:
             if location == names.hard_man_c1:
                 continue
             add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
-        for location in [names.top_man_c2, names.top_man_c3, names.top_man_c4, names.top_man_c6, names.top_man_c7]:
+        for location in [names.top_man_c2, names.top_man_c3, names.top_man_c4, names.top_man_c7]:
+            add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
+        for location in [names.wily_1_c5, names.wily_1_c6, names.wily_1_c7]:
+            add_rule(world.get_location(location), lambda state: state.has(names.hard_knuckle, world.player))
+        for location in [names.wily_1_c6, names.wily_1_c7, names.wily_1_c11, names.wily_1_c12]:
             add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
         for location in energy_pickups["Wily Stage 2"]:
             if location in (names.wily_2_c1, names.wily_2_c2, names.wily_2_c4):

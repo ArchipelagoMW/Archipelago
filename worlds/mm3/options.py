@@ -53,7 +53,6 @@ class Consumables(Choice):
         elif value == 2:
             return "Weapon/Health Energy"
         return super().get_option_name(value)
-    visibility = Visibility.none
 
 
 class PaletteShuffle(TextChoice):
