@@ -147,50 +147,57 @@ class WorldSource:
 
 # find potential world containers, currently folders and zip-importable .apworld's
 world_sources: List[WorldSource] = []
-for folder in (folder for folder in (user_folder, local_folder) if folder):
-    relative = folder == local_folder
-    for entry in os.scandir(folder):
-        # prevent loading of __pycache__ and allow _* for non-world folders, disable files/folders starting with "."
-        if not entry.name.startswith(("_", ".")):
-            file_name = entry.name if relative else os.path.join(folder, entry.name)
-            source = None
-            try:
-                if entry.is_dir():
-                    if os.path.isfile(os.path.join(entry.path, '__init__.py')):
-                        source = WorldSource(file_name, relative=relative, type="py")
-                    elif os.path.isfile(os.path.join(entry.path, '__init__.pyc')):
-                        source = WorldSource(file_name, relative=relative, type="pyc")
-                    else:
-                        logging.warning(f"excluding {entry.name} from world sources because it has no __init__.py")
-                elif entry.is_file() and entry.name.endswith(".apworld"):
-                    source = WorldSource(file_name, relative=relative, type="zip")
 
-                if source is not None:
-                    module_name = source.module_name
-                    if module_name in world_sources_by_module:
-                        raise RuntimeError(f"World container for {module_name} already exists."
-                                           f"\nAlready found: {world_sources_by_module[module_name]}"
-                                           f"\nDuplicate: {source}")
 
-                    world_sources.append(source)
+def scan_for_worlds_on_module_load():
+    for folder in (folder for folder in (user_folder, local_folder) if folder):
+        relative = folder == local_folder
+        for entry in os.scandir(folder):
+            # prevent loading of __pycache__ and allow _* for non-world folders, disable files/folders starting with "."
+            if not entry.name.startswith(("_", ".")):
+                file_name = entry.name if relative else os.path.join(folder, entry.name)
+                source = None
+                try:
+                    if entry.is_dir():
+                        if os.path.isfile(os.path.join(entry.path, '__init__.py')):
+                            source = WorldSource(file_name, relative=relative, type="py")
+                        elif os.path.isfile(os.path.join(entry.path, '__init__.pyc')):
+                            source = WorldSource(file_name, relative=relative, type="pyc")
+                        else:
+                            logging.warning(f"excluding {entry.name} from world sources because it has no __init__.py")
+                    elif entry.is_file() and entry.name.endswith(".apworld"):
+                        source = WorldSource(file_name, relative=relative, type="zip")
 
-                    if source.game is not None:
-                        world_sources_by_game[source.game] = source
-                    else:
-                        gameless_world_sources.append(source)
+                    if source is not None:
+                        module_name = source.module_name
+                        if module_name in world_sources_by_module:
+                            raise RuntimeError(f"World container for {module_name} already exists."
+                                               f"\nAlready found: {world_sources_by_module[module_name]}"
+                                               f"\nDuplicate: {source}")
 
-                    world_sources_by_module[source.module_name] = source
-            except Exception:
-                # A single world failing can still mean enough is working for the user, log and carry on
-                import traceback
-                import io
+                        world_sources.append(source)
 
-                file_like = io.StringIO()
-                print(f"Could not load world {file_name}:", file=file_like)
-                traceback.print_exc(file=file_like)
-                file_like.seek(0)
-                logging.exception(file_like.read())
-                failed_world_loads.append(os.path.basename(file_name).rsplit(".", 1)[0])
+                        if source.game is not None:
+                            world_sources_by_game[source.game] = source
+                        else:
+                            gameless_world_sources.append(source)
+
+                        world_sources_by_module[source.module_name] = source
+                except Exception:
+                    # A single world failing can still mean enough is working for the user, log and carry on
+                    import traceback
+                    import io
+
+                    file_like = io.StringIO()
+                    print(f"Could not load world {file_name}:", file=file_like)
+                    traceback.print_exc(file=file_like)
+                    file_like.seek(0)
+                    logging.exception(file_like.read())
+                    failed_world_loads.append(os.path.basename(file_name).rsplit(".", 1)[0])
+
+
+scan_for_worlds_on_module_load()
+del scan_for_worlds_on_module_load
 
 
 # `zipimport.zipimporter` implements `create_module`, `exec_module`, `is_package` and `load_module` (deprecated), so it
