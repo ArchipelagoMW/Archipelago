@@ -149,7 +149,7 @@ class CustomMissionOrder(OptionDict):
                     Optional("exit"): bool,
                     Optional("goal"): bool,
                     Optional("empty"): bool,
-                    Optional("next"): [int],
+                    Optional("next"): [Or(int, str)],
                     Optional("entry_rules"): [EntryRule],
                     Optional("mission_pool"): {int},
                     Optional("difficulty"): Difficulty,
@@ -282,7 +282,7 @@ def _resolve_special_option(option: str, option_value: Any) -> Any:
         else:
             return [str(option_value)]
         
-    if option == "index":
+    if option in ["index", "next"]:
         # All index values could be ranges
         if type(option_value) == list:
             # Flatten any nested lists
@@ -401,20 +401,20 @@ def _get_target_missions(term: str) -> Set[int]:
 
 # Class-agnostic version of AP Options.Range.custom_range
 def _custom_range(text: str) -> int:
-        textsplit = text.split("-")
-        try:
-            random_range = [int(textsplit[len(textsplit) - 2]), int(textsplit[len(textsplit) - 1])]
-        except ValueError:
-            raise ValueError(f"Invalid random range {text} for option {CustomMissionOrder.__name__}")
-        random_range.sort()
-        if text.startswith("random-range-low"):
-            return _triangular(random_range[0], random_range[1], random_range[0])
-        elif text.startswith("random-range-middle"):
-            return _triangular(random_range[0], random_range[1])
-        elif text.startswith("random-range-high"):
-            return _triangular(random_range[0], random_range[1], random_range[1])
-        else:
-            return random.randint(random_range[0], random_range[1])
+    textsplit = text.split("-")
+    try:
+        random_range = [int(textsplit[len(textsplit) - 2]), int(textsplit[len(textsplit) - 1])]
+    except ValueError:
+        raise ValueError(f"Invalid random range {text} for option {CustomMissionOrder.__name__}")
+    random_range.sort()
+    if text.startswith("random-range-low"):
+        return _triangular(random_range[0], random_range[1], random_range[0])
+    elif text.startswith("random-range-middle"):
+        return _triangular(random_range[0], random_range[1])
+    elif text.startswith("random-range-high"):
+        return _triangular(random_range[0], random_range[1], random_range[1])
+    else:
+        return random.randint(random_range[0], random_range[1])
 
 def _triangular(lower: int, end: int, tri: typing.Optional[int] = None) -> int:
     return int(round(random.triangular(lower, end, tri), 0))

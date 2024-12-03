@@ -392,7 +392,7 @@ These keys will never be used by the generator unless you specify them yourself.
 
 The Beat and Count rules both require a list of scopes. This list accepts addresses towards other parts of the mission order.
 
-The basic form of an address is `<Campaign>/<Layout>/<Mission>`, where `<Campaign>` and `<Layout>` are the definition names (not `display_names`!) of a campaign and a layout within that campaign, and `<Mission>` is the index of a mission slot in that layout. The indices of mission slots are determined by the layout's type.
+The basic form of an address is `<Campaign>/<Layout>/<Mission>`, where `<Campaign>` and `<Layout>` are the definition names (not `display_names`!) of a campaign and a layout within that campaign, and `<Mission>` is the index of a mission slot in that layout or an index function for the layout's type. See the section on your layout's type to find valid indices and functions.
 
 If you don't want to point all the way down to a mission slot, you can omit the later parts. `<Campaign>` and `<Campaign>/<Layout>` are valid addresses, and will point to the entire specified campaign or layout.
 
@@ -716,8 +716,9 @@ The following example shows ways to access and modify missions:
         # This sets the mission at index 1 to be an exit
         - index: 1
           exit: true
-        # Indices can be special terms
-        # Valid terms are 'exits', 'entrances', and 'all'
+        # Indices can be special index functions
+        # Valid functions are 'exits', 'entrances', and 'all'
+        # These are available for all types of layouts
         # This takes all exits, including the one set above,
         # and turns them into non-exits
         - index: exits
@@ -766,7 +767,7 @@ Layout types have their own means of creating blank spaces in the client, and so
 ```yaml
 next: []
 ```
-Valid values are indices of other missions within the same layout. Note that this does not accept addresses.
+Valid values are indices of other missions within the same layout and index functions for the layout's type. Note that this does not accept addresses.
 
 This is the mechanism layout types use to establish mission flow. Overriding this will break the intended order of missions within a type. If you wish to add on to the type's flow rather than replace it, you must manually include the indices intended by the type.
 

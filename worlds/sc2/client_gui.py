@@ -133,6 +133,7 @@ class SC2Manager(GameManager):
     refresh_from_launching = True
     first_check = True
     first_mission = ""
+    button_colors: Dict[SC2Race, Tuple[float, float, float]] = {}
     ctx: SC2Context
 
     def __init__(self, ctx: SC2Context) -> None:
@@ -147,6 +148,11 @@ class SC2Manager(GameManager):
         Window.size = window_width, window_height
         for startup_warning in warnings:
             logging.getLogger("Starcraft2").warning(f"Startup WARNING: {startup_warning}")
+        for race in (SC2Race.TERRAN, SC2Race.PROTOSS, SC2Race.ZERG):
+            errors, color = gui_config.get_button_color(race.name)
+            self.button_colors[race] = color
+            for error in errors:
+                logging.getLogger("Starcraft2").warning(f"{race.name.title()} button color setting: {error}")
 
     def clear_tooltip(self) -> None:
         if self.ctx.current_tooltip:
@@ -272,13 +278,8 @@ class SC2Manager(GameManager):
                         if mission_race == SC2Race.ANY:
                             mission_race = mission_obj.campaign.race
                         race = campaign_race_exceptions.get(mission_obj, mission_race)
-                        racial_colors = {
-                            SC2Race.TERRAN: (0.24, 0.84, 0.68),
-                            SC2Race.ZERG: (1, 0.65, 0.37),
-                            SC2Race.PROTOSS: (0.55, 0.7, 1)
-                        }
-                        if race in racial_colors:
-                            mission_button.background_color = racial_colors[race]
+                        if race in self.button_colors:
+                            mission_button.background_color = self.button_colors[race]
                         mission_button.tooltip_text = tooltip
                         mission_button.bind(on_press=self.mission_callback)
                         self.mission_id_to_button[mission_id] = mission_button
