@@ -260,6 +260,14 @@ class InfiniteHotSoup(DefaultOnToggle):
     display_name = "Infinite Hot Soup"
 
 
+class SaveHealing(DefaultOnToggle):
+    """
+    When you save, Naija is healed back to full health. If disabled, saving won't heal Naija. Note that Naija
+    can still heal by sleeping in some place in the game (including in her home).
+    """
+    display_name = "Save heal Naija"
+
+
 class OpenBodyTongue(Toggle):
     """
     Remove the body tongue making the body accessible without going in the sunken city
@@ -337,3 +345,4 @@ class AquariaOptions(PerGameCommonOptions):
     open_body_tongue: OpenBodyTongue
     maximum_ingredient_amount: MaximumIngredientAmount
     skip_final_boss_3rd_form: SkipFinalBoss3rdForm
+    save_healing: SaveHealing

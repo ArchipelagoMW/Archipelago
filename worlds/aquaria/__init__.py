@@ -271,4 +271,5 @@ class AquariaWorld(World):
                 "no_progression_sunken_city": bool(self.options.no_progression_sunken_city),
                 "no_progression_body": bool(self.options.no_progression_body),
                 "required_client_version": CLIENT_MINIMAL_COMPATIBILITY,
+                "save_healing": bool(self.options.save_healing),
                 }
