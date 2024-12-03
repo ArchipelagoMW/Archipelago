@@ -372,11 +372,11 @@ class EXPZeroInPool(Toggle):
     """
     display_name = "EXP Zero in Pool"
 
-class RandomizeEmblemPieces(Toggle):
+class VanillaEmblemPieces(DefaultOnToggle):
     """
-    If off, the Hollow Bastion emblem pieces are in their vanilla locations.
+    If on, the Hollow Bastion emblem pieces are in their vanilla locations.
     """
-    display_name = "Randomize Emblem Pieces"
+    display_name = "Vanilla Emblem Pieces"
 
 class RandomizePostcards(Choice):
     """
@@ -391,11 +391,11 @@ class RandomizePostcards(Choice):
     option_chests = 1
     option_vanilla = 2
 
-class JungleSlider(Toggle):
+class VanillaPuppies(DefaultOnToggle):
     """
-    Detmines if checks are behind the Jungle Slider minigame.
+    If on and Puppies are set to Triplets, the Puppies are in their vanilla locations.
     """
-    display_name = "Jungle Slider"
+    display_name = "Vanilla Puppies"
 
 class StartingWorlds(Range):
     """
@@ -405,12 +405,6 @@ class StartingWorlds(Range):
     default = 0
     range_start = 0
     range_end = 10
-    
-class StartingTools(DefaultOnToggle):
-    """
-    Detmines if you start with Scan and Dodge Roll.
-    """
-    display_name = "Starting Tools"
 
 @dataclass
 class KH1Options(PerGameCommonOptions):
@@ -434,8 +428,9 @@ class KH1Options(PerGameCommonOptions):
     advanced_logic: AdvancedLogic
     extra_shared_abilities: ExtraSharedAbilities
     exp_zero_in_pool: EXPZeroInPool
-    randomize_emblem_pieces: RandomizeEmblemPieces
+    vanilla_emblem_pieces: VanillaEmblemPieces
     randomize_postcards: RandomizePostcards
+    vanilla_puppies: VanillaPuppies
     donald_death_link: DonaldDeathLink
     goofy_death_link: GoofyDeathLink
     keyblade_stats: KeybladeStats
@@ -454,8 +449,6 @@ class KH1Options(PerGameCommonOptions):
     accessory_slot_increase: AccessorySlotIncrease
     item_slot_increase: ItemSlotIncrease
     start_inventory_from_pool: StartInventoryPool
-    jungle_slider: JungleSlider
-    starting_tools: StartingTools
 
 kh1_option_groups = [
     OptionGroup("Goal", [
@@ -473,9 +466,9 @@ kh1_option_groups = [
         Atlantica,
         Cups,
         HundredAcreWood,
-        JungleSlider,
-        RandomizeEmblemPieces,
+        VanillaEmblemPieces,
         RandomizePostcards,
+        VanillaPuppies,
     ]),
     OptionGroup("Levels", [
         EXPMultiplier,
@@ -500,7 +493,6 @@ kh1_option_groups = [
     ]),
     OptionGroup("Misc", [
         StartingWorlds,
-        StartingTools,
         Puppies,
         InteractInBattle,
         AdvancedLogic,
