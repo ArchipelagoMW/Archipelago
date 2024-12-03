@@ -1446,7 +1446,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     set_rule(world.get_location("West Garden Fuse"),
              lambda state: has_ability(prayer, state, world))
     set_rule(world.get_location("Library Fuse"),
-             lambda state: has_ability(prayer, state, world))
+             lambda state: has_ability(prayer, state, world) and has_ladder("Ladders in Library", state, world))
 
     # Bombable Walls
     for location_name in bomb_walls:
