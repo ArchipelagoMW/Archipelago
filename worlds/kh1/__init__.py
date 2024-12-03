@@ -185,8 +185,6 @@ class KH1World(World):
                     item_pool += [self.create_item(name) for _ in range(0, 3)]
                 if self.options.randomize_postcards.current_key == "all":
                     item_pool += [self.create_item(name) for _ in range(0, quantity)]
-            elif name == "Postcard" and self.options.randomize_postcards.current_key == "vanilla":
-                continue
             elif name not in prefilled_items:
                 item_pool += [self.create_item(name) for _ in range(0, quantity)]
         
