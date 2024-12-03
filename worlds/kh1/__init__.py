@@ -186,11 +186,8 @@ class KH1World(World):
             if name in starting_worlds or name in starting_tools:
                 continue
             if data.category == "Puppies":
-                if self.options.puppies == "triplets" and "-" in name:
-                    if self.options.vanilla_puppies:
-                        prefilled_items += name
-                    else:
-                        item_pool += [self.create_item(name) for _ in range(quantity)]
+                if self.options.puppies == "triplets" and "-" in name and not self.options.vanilla_puppies:
+                    item_pool += [self.create_item(name) for _ in range(quantity)]
                 if self.options.puppies == "individual" and "Puppy" in name:
                     item_pool += [self.create_item(name) for _ in range(0, quantity)]
                 if self.options.puppies == "full" and name == "All Puppies":
