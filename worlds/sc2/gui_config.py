@@ -30,6 +30,8 @@ def get_window_defaults() -> Tuple[List[str], int, int]:
 
 def validate_colour(colour: Any, default: Tuple[float, float, float]) -> Tuple[Tuple[str, ...], Tuple[float, float, float]]:
     if isinstance(colour, int):
+        if colour < 0:
+            return ('Integer colour was negative; expected a value from 0 to 0xffffff',), default
         return (), (
             ((colour >> 8) & 0xff) / 255,
             ((colour >> 4) & 0xff) / 255,
@@ -49,6 +51,8 @@ def validate_colour(colour: Any, default: Tuple[float, float, float]) -> Tuple[T
         return (), (0.24, 0.84, 0.55)
     elif colour == 'blue':
         return (), (0.3, 0.4, 1.0)
+    elif colour == 'pink':
+        return (), (0.886, 0.176, 0.843)
     elif not isinstance(colour, list):
         return (f'Invalid type {type(colour)}; expected 3-element list or integer',), default
     elif len(colour) != 3:
