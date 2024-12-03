@@ -117,9 +117,9 @@ class Goal(Choice):
     
     Sephiroth: Defeat Sephiroth
     Unknown: Defeat Unknown
-    Postcards: Turn in all 10 postcards in Traverse Town
+    Postcards: Turn in an amount of postcards in Traverse Town
     Final Ansem: Enter End of the World and defeat Ansem as normal
-    Puppies: Rescue and return all 99 puppies in Traverse Town
+    Puppies: Rescue and return an amount of puppies in Traverse Town
     Final Rest: Open the chest in End of the World Final Rest
     """
     display_name = "Goal"
@@ -154,6 +154,32 @@ class FinalRestDoor(Choice):
     option_puppies = 1
     option_postcards = 2
     option_superbosses = 3
+
+class RequiredPostcards(Range):
+    """
+    If your goal is set to "Postcards", defines how many postcards are needed to achieve victory.
+    """
+    display_name = "Required Postcards"
+    default = 10
+    range_start = 1
+    range_end = 10
+
+class RequiredPuppies(Choice):
+    """
+    If your goal is set to "Puppies", defines how many puppies are needed to achieve victory.
+    """
+    display_name = "Required Puppies"
+    default = 99
+    option_10 = 10
+    option_20 = 20
+    option_30 = 30
+    option_40 = 40
+    option_50 = 50
+    option_60 = 60
+    option_70 = 70
+    option_80 = 80
+    option_90 = 90
+    option_99 = 99
 
 class Puppies(Choice):
     """
@@ -213,11 +239,17 @@ class ReportsInPool(Range):
     range_start = 0
     range_end = 13
 
-class RandomizeKeybladeStats(DefaultOnToggle):
+class KeybladeStats(Choice):
     """
     Determines whether Keyblade stats should be randomized.
+    Randomize: Randomly generates STR and MP bonuses for each keyblade between the defined minimums and maximums
+    Shuffle: Shuffles the stats of the vanilla keyblade amongst each other.
+    Vanilla: Keyblade stats are unchanged.
     """
-    display_name = "Randomize Keyblade Stats"
+    display_name = "Keyblade Stats"
+    option_randomize = 0
+    option_shuffle = 1
+    option_vanilla = 2
 
 class KeybladeMinStrength(Range):
     """
@@ -281,7 +313,7 @@ class ForceStatsOnLevels(NamedRange):
 
 class BadStartingWeapons(Toggle):
     """
-    Forces Kingdom Key, Dream Sword, Dream Shield, and Dream Staff to have bad stats.
+    Forces Kingdom Key, Dream Sword, Dream Shield, and Dream Staff to have vanilla stats.
     """
     display_name = "Bad Starting Weapons"
 
@@ -346,6 +378,19 @@ class VanillaEmblemPieces(DefaultOnToggle):
     """
     display_name = "Vanilla Emblem Pieces"
 
+class RandomizePostcards(Choice):
+    """
+    Determines how Postcards are randomized
+
+    All: All Postcards are randomized
+    Chests: Only the 3 Postcards in chests are randomized
+    Vanilla: Postcards are in their original location
+    """
+    display_name = "Randomize Postcards"
+    option_all = 0
+    option_chests = 1
+    option_vanilla = 2
+
 class StartingWorlds(Range):
     """
     Number of random worlds to start with in addition to Traverse Town, which is always available.  Will only consider Atlantica if toggled, and will only consider End of the World if its unlock is set to "Item".
@@ -363,6 +408,8 @@ class KH1Options(PerGameCommonOptions):
     required_reports_eotw: RequiredReportsEotW
     required_reports_door: RequiredReportsDoor
     reports_in_pool: ReportsInPool
+    required_postcards: RequiredPostcards
+    required_puppies: RequiredPuppies
     super_bosses: SuperBosses
     atlantica: Atlantica
     hundred_acre_wood: HundredAcreWood
@@ -376,9 +423,10 @@ class KH1Options(PerGameCommonOptions):
     extra_shared_abilities: ExtraSharedAbilities
     exp_zero_in_pool: EXPZeroInPool
     vanilla_emblem_pieces: VanillaEmblemPieces
+    randomize_postcards: RandomizePostcards
     donald_death_link: DonaldDeathLink
     goofy_death_link: GoofyDeathLink
-    randomize_keyblade_stats: RandomizeKeybladeStats
+    keyblade_stats: KeybladeStats
     bad_starting_weapons: BadStartingWeapons
     keyblade_min_str: KeybladeMinStrength
     keyblade_max_str: KeybladeMaxStrength
@@ -403,6 +451,8 @@ kh1_option_groups = [
         RequiredReportsDoor,
         RequiredReportsEotW,
         ReportsInPool,
+        RequiredPostcards,
+        RequiredPuppies,
     ]),
     OptionGroup("Locations", [
         SuperBosses,
@@ -410,6 +460,7 @@ kh1_option_groups = [
         Cups,
         HundredAcreWood,
         VanillaEmblemPieces,
+        RandomizePostcards,
     ]),
     OptionGroup("Levels", [
         EXPMultiplier,
@@ -425,7 +476,7 @@ kh1_option_groups = [
     ]),
     OptionGroup("Keyblades", [
         KeybladesUnlockChests,
-        RandomizeKeybladeStats,
+        KeybladeStats,
         BadStartingWeapons,
         KeybladeMaxStrength,
         KeybladeMinStrength,
