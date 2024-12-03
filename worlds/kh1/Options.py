@@ -391,6 +391,12 @@ class RandomizePostcards(Choice):
     option_chests = 1
     option_vanilla = 2
 
+class VanillaPuppies(DefaultOnToggle):
+    """
+    If on and Puppies are set to Triplets, the Puppies are in their vanilla locations.
+    """
+    display_name = "Vanilla Puppies"
+
 class StartingWorlds(Range):
     """
     Number of random worlds to start with in addition to Traverse Town, which is always available.  Will only consider Atlantica if toggled, and will only consider End of the World if its unlock is set to "Item".
@@ -424,6 +430,7 @@ class KH1Options(PerGameCommonOptions):
     exp_zero_in_pool: EXPZeroInPool
     vanilla_emblem_pieces: VanillaEmblemPieces
     randomize_postcards: RandomizePostcards
+    vanilla_puppies: VanillaPuppies
     donald_death_link: DonaldDeathLink
     goofy_death_link: GoofyDeathLink
     keyblade_stats: KeybladeStats
@@ -461,6 +468,7 @@ kh1_option_groups = [
         HundredAcreWood,
         VanillaEmblemPieces,
         RandomizePostcards,
+        VanillaPuppies,
     ]),
     OptionGroup("Levels", [
         EXPMultiplier,
