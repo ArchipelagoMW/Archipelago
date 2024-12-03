@@ -215,34 +215,9 @@ class EvolutionMethodEnum(IntEnum):
     FRIENDSHIP_NIGHT = 11
 
 
-def _str_to_evolution_method(string: str) -> EvolutionMethodEnum:
-    if string == "LEVEL":
-        return EvolutionMethodEnum.LEVEL
-    if string == "LEVEL_ATK_LT_DEF":
-        return EvolutionMethodEnum.LEVEL_ATK_LT_DEF
-    if string == "LEVEL_ATK_EQ_DEF":
-        return EvolutionMethodEnum.LEVEL_ATK_EQ_DEF
-    if string == "LEVEL_ATK_GT_DEF":
-        return EvolutionMethodEnum.LEVEL_ATK_GT_DEF
-    if string == "LEVEL_SILCOON":
-        return EvolutionMethodEnum.LEVEL_SILCOON
-    if string == "LEVEL_CASCOON":
-        return EvolutionMethodEnum.LEVEL_CASCOON
-    if string == "LEVEL_NINJASK":
-        return EvolutionMethodEnum.LEVEL_NINJASK
-    if string == "LEVEL_SHEDINJA":
-        return EvolutionMethodEnum.LEVEL_SHEDINJA
-    if string == "FRIENDSHIP":
-        return EvolutionMethodEnum.FRIENDSHIP
-    if string == "FRIENDSHIP_DAY":
-        return EvolutionMethodEnum.FRIENDSHIP_DAY
-    if string == "FRIENDSHIP_NIGHT":
-        return EvolutionMethodEnum.FRIENDSHIP_NIGHT
-
-
 class EvolutionData(NamedTuple):
     method: EvolutionMethodEnum
-    param: int
+    param: int  # Level/item id/friendship/etc.; depends on method
     species_id: int
 
 
@@ -959,7 +934,7 @@ def _init() -> None:
             (species_data["types"][0], species_data["types"][1]),
             (species_data["abilities"][0], species_data["abilities"][1]),
             [EvolutionData(
-                _str_to_evolution_method(evolution_json["method"]),
+                EvolutionMethodEnum[evolution_json["method"]],
                 evolution_json["param"],
                 evolution_json["species"],
             ) for evolution_json in species_data["evolutions"]],
@@ -977,24 +952,34 @@ def _init() -> None:
             data.species[evolution.species_id].pre_evolution = species.species_id
 
     # Replace default item for dex entry locations based on evo stage of species
-    evo_stage_to_ball_map = {
+    evo_stage_to_ball_map: Dict[int, int] = {
         0: data.constants["ITEM_POKE_BALL"],
         1: data.constants["ITEM_GREAT_BALL"],
         2: data.constants["ITEM_ULTRA_BALL"],
     }
+
     for species in data.species.values():
-        evo_stage = 0
+        default_item: Optional[int] = None
         pre_evolution = species.pre_evolution
-        while pre_evolution is not None:
-            evo_stage += 1
-            pre_evolution = data.species[pre_evolution].pre_evolution
+
+        if pre_evolution is not None:
+            evo_data = next(evo for evo in data.species[pre_evolution].evolutions if evo.species_id == species.species_id)
+            if evo_data.method == EvolutionMethodEnum.ITEM:
+                default_item = evo_data.param
+
+        evo_stage = 0
+        if default_item is None:
+            while pre_evolution is not None:
+                evo_stage += 1
+                pre_evolution = data.species[pre_evolution].pre_evolution
+            default_item = evo_stage_to_ball_map[evo_stage]
 
         dex_location_name = f"POKEDEX_REWARD_{str(species.national_dex_number).zfill(3)}"
         data.locations[dex_location_name] = LocationData(
             data.locations[dex_location_name].name,
             data.locations[dex_location_name].label,
             data.locations[dex_location_name].parent_region,
-            evo_stage_to_ball_map[evo_stage],
+            default_item,
             data.locations[dex_location_name].address,
             data.locations[dex_location_name].flag,
             data.locations[dex_location_name].category,
