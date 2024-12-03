@@ -412,7 +412,7 @@ class LingoPlayerLogic:
             required_painting_rooms += REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS
             req_exits = [painting_id for painting_id, painting in PAINTINGS.items() if painting.required_when_no_doors]
 
-        def is_req_enterable(painting_id: str, painting: Painting) -> bool:
+        def is_req_enterable(painting: Painting) -> bool:
             if painting.exit_only or painting.disable or painting.req_blocked\
                     or painting.room in required_painting_rooms:
                 return False
@@ -433,7 +433,7 @@ class LingoPlayerLogic:
             return True
 
         req_enterable = [painting_id for painting_id, painting in PAINTINGS.items()
-                         if is_req_enterable(painting_id, painting)]
+                         if is_req_enterable(painting)]
         req_exits += [painting_id for painting_id, painting in PAINTINGS.items()
                       if painting.exit_only and painting.required]
         req_entrances = world.random.sample(req_enterable, len(req_exits))
