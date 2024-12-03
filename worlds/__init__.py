@@ -280,9 +280,11 @@ def ensure_all_worlds_loaded(games: set[str] | str | None = None):
     if isinstance(games, str):
         games = {games}
 
-    if not games:
+    if games is None:
         # Ensure all worlds are loaded.
         sources = world_sources
+    elif len(games) == 0:
+        return
     else:
         # Load everything by game name, and then load everything that has not specified a game name. It's possible that
         # there is a world that provides a game to be loaded, but does not provide the meta file used to determine game
