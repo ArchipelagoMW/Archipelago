@@ -278,10 +278,7 @@ class KH1World(World):
             self.get_location("Traverse Town 1st District Blue Trinity Balcony Chest").place_locked_item(self.create_item("Postcard"))
         if self.options.vanilla_puppies and self.options.puppies == "triplets":
             for i, location in enumerate(VANILLA_PUPPY_LOCATIONS):
-                if i < 3:
-                    self.get_location(location).place_locked_item(self.create_item("Puppies 0"+str(1+(i*3))+"-0"+str(3+(i*3))))
-                else:
-                    self.get_location(location).place_locked_item(self.create_item("Puppies "+str(1+(i*3))+"-"+str(3+(i*3))))
+                self.get_location(location).place_locked_item(self.create_item("Puppies "+str(1+(i*3)).zfill(2)+"-"+str(3+(i*3)).zfill(2)))
 
     def get_filler_item_name(self) -> str:
         weights = [data.weight for data in self.fillers.values()]
