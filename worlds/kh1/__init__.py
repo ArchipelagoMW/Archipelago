@@ -35,6 +35,41 @@ VANILLA_KEYBLADE_STATS = [
     "8,-2",
     "14,2"
     ]
+VANILLA_PUPPY_LOCATIONS = [
+    "Traverse Town Mystical House Glide Chest",
+    "Traverse Town Alleyway Behind Crates Chest",
+    "Traverse Town Item Workshop Left Chest",
+    "Traverse Town Secret Waterway Near Stairs Chest",
+    "Wonderland Queen's Castle Hedge Right Blue Chest",
+    "Wonderland Lotus Forest Nut Chest",
+    "Wonderland Tea Party Garden Above Lotus Forest Entrance 1st Chest",
+    "Olympus Coliseum Coliseum Gates Right Blue Trinity Chest",
+    "Deep Jungle Hippo's Lagoon Center Chest",
+    "Deep Jungle Vines 2 Chest",
+    "Deep Jungle Waterfall Cavern Middle Chest",
+    "Deep Jungle Camp Blue Trinity Chest",
+    "Agrabah Cave of Wonders Treasure Room Across Platforms Chest",
+    "Halloween Town Oogie's Manor Hollow Chest",
+    "Neverland Pirate Ship Deck White Trinity Chest",
+    "Agrabah Cave of Wonders Hidden Room Left Chest",
+    "Agrabah Cave of Wonders Entrance Tall Tower Chest",
+    "Agrabah Palace Gates High Opposite Palace Chest",
+    "Monstro Chamber 3 Platform Above Chamber 2 Entrance Chest",
+    "Wonderland Lotus Forest Through the Painting Thunder Plant Chest",
+    "Hollow Bastion Grand Hall Left of Gate Chest",
+    "Halloween Town Cemetery Between Graves Chest",
+    "Halloween Town Moonlight Hill White Trinity Chest",
+    "Halloween Town Guillotine Square Pumpkin Structure Right Chest",
+    "Monstro Mouth High Platform Across from Boat Chest",
+    "Monstro Chamber 6 Low Chest",
+    "Monstro Chamber 5 Atop Barrel Chest",
+    "Neverland Hold Flight 1st Chest",
+    "Neverland Hold Yellow Trinity Green Chest",
+    "Neverland Captain's Cabin Chest",
+    "Hollow Bastion Rising Falls Floating Platform Near Save Chest",
+    "Hollow Bastion Castle Gates Gravity Chest",
+    "Hollow Bastion Lift Stop Outside Library Gravity Chest"
+    ]
 
 def launch_client():
     from .Client import launch
@@ -152,7 +187,10 @@ class KH1World(World):
                 continue
             if data.category == "Puppies":
                 if self.options.puppies == "triplets" and "-" in name:
-                    item_pool += [self.create_item(name) for _ in range(quantity)]
+                    if self.options.vanilla_puppies:
+                        prefilled_items += name
+                    else:
+                        item_pool += [self.create_item(name) for _ in range(quantity)]
                 if self.options.puppies == "individual" and "Puppy" in name:
                     item_pool += [self.create_item(name) for _ in range(0, quantity)]
                 if self.options.puppies == "full" and name == "All Puppies":
@@ -241,6 +279,14 @@ class KH1World(World):
             self.get_location("Traverse Town 1st District Accessory Shop Roof Chest").place_locked_item(self.create_item("Postcard"))
             self.get_location("Traverse Town 2nd District Boots and Shoes Awning Chest").place_locked_item(self.create_item("Postcard"))
             self.get_location("Traverse Town 1st District Blue Trinity Balcony Chest").place_locked_item(self.create_item("Postcard"))
+        if self.options.vanilla_puppies and self.options.puppies == "triplets":
+            for i, location in enumerate(VANILLA_PUPPY_LOCATIONS):
+                if i < 3:
+                    self.get_location(location).place_locked_item(self.create_item("Puppies 0"+str(1+(i*3))+"-0"+str(3+(i*3))))
+                else:
+                    self.get_location(location).place_locked_item(self.create_item("Puppies "+str(1+(i*3))+"-"+str(3+(i*3))))
+            #self.get_location("Traverse Town Mystical House Glide Chest").place_locked_item(self.create_item("Puppies 01-03"))
+            #self.get_location("Traverse Town Alleyway Behind Crates Chest").place_locked_item(self.create_item("Puppies 04-06"))
 
     def get_filler_item_name(self) -> str:
         weights = [data.weight for data in self.fillers.values()]
