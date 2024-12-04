@@ -6,6 +6,7 @@ import zipfile
 from enum import IntEnum
 import os
 import threading
+from io import BytesIO
 
 from typing import ClassVar, Dict, List, Literal, Tuple, Any, Optional, Union, BinaryIO, overload, Sequence
 
@@ -68,6 +69,16 @@ class AutoPatchExtensionRegister(abc.ABCMeta):
 
 
 container_version: int = 6
+
+
+def is_ap_player_container(data: bytes, game: str):
+    with zipfile.ZipFile(BytesIO(data), mode='r') as zf:
+        if "archipelago.json" in zf.namelist():
+            manifest = json.loads(zf.read("archipelago.json"))
+            if "game" in manifest:
+                if game == manifest["game"]:
+                    return True
+    return False
 
 
 class InvalidDataError(Exception):
