@@ -82,7 +82,7 @@ def generateRom(base_rom: bytes, args, data: Dict):
         pymod.prePatch(rom)
 
     if options["gfxmod"] != "Link":
-        patches.aesthetics.gfxMod(rom, os.path.join("data", "sprites", "ladx", options["gfxmod"]))
+        patches.aesthetics.gfxMod(rom, os.path.join("data", "sprites", "ladx", options["gfxmod"] + ".bdiff"))
 
     assembler.resetConsts()
     assembler.const("INV_SIZE", 16)
@@ -141,7 +141,7 @@ def generateRom(base_rom: bytes, args, data: Dict):
     # if ladxr_settings["witch"]:
     #    patches.witch.updateWitch(rom)
     patches.softlock.fixAll(rom)
-    if not world.ladxr_settings.rooster:
+    if not options["rooster"]:
         patches.maptweaks.tweakMap(rom)
         patches.maptweaks.tweakBirdKeyRoom(rom)
     patches.chest.fixChests(rom)
