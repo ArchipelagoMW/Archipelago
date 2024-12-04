@@ -11,17 +11,16 @@ from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogicMixin
 from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
-from .. import options
 from ..data.harvest import HarvestCropSource
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_skills_levels import get_mod_skill_levels
-from ..stardew_rule import StardewRule, True_, False_, true_, And
+from ..stardew_rule import StardewRule, true_, True_, False_
 from ..strings.craftable_names import Fishing
 from ..strings.machine_names import Machine
 from ..strings.performance_names import Performance
 from ..strings.quality_names import ForageQuality
 from ..strings.region_names import Region
-from ..strings.skill_names import Skill, all_mod_skills
+from ..strings.skill_names import Skill, all_mod_skills, all_vanilla_skills
 from ..strings.tool_names import ToolMaterial, Tool
 from ..strings.wallet_item_names import Wallet
 
@@ -43,22 +42,17 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
         if level <= 0:
             return True_()
 
-        tool_level = (level - 1) // 2
+        tool_level = min(4, (level - 1) // 2)
         tool_material = ToolMaterial.tiers[tool_level]
-        months = max(1, level - 1)
-        months_rule = self.logic.time.has_lived_months(months)
 
-        if self.options.skill_progression != options.SkillProgression.option_vanilla:
-            previous_level_rule = self.logic.skill.has_level(skill, level - 1)
-        else:
-            previous_level_rule = true_
+        previous_level_rule = self.logic.skill.has_previous_level(skill, level)
 
         if skill == Skill.fishing:
             xp_rule = self.logic.tool.has_fishing_rod(max(tool_level, 3))
         elif skill == Skill.farming:
             xp_rule = self.can_get_farming_xp & self.logic.tool.has_tool(Tool.hoe, tool_material) & self.logic.tool.can_water(tool_level)
         elif skill == Skill.foraging:
-            xp_rule = (self.can_get_foraging_xp & self.logic.tool.has_tool(Tool.axe, tool_material)) |\
+            xp_rule = (self.can_get_foraging_xp & self.logic.tool.has_tool(Tool.axe, tool_material)) | \
                       self.logic.magic.can_use_clear_debris_instead_of_tool_level(tool_level)
         elif skill == Skill.mining:
             xp_rule = self.logic.tool.has_tool(Tool.pickaxe, tool_material) | \
@@ -70,21 +64,33 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
             xp_rule = xp_rule & self.logic.region.can_reach(Region.mines_floor_5)
         elif skill in all_mod_skills:
             # Ideal solution would be to add a logic registry, but I'm too lazy.
-            return previous_level_rule & months_rule & self.logic.mod.skill.can_earn_mod_skill_level(skill, level)
+            return previous_level_rule & self.logic.mod.skill.can_earn_mod_skill_level(skill, level)
         else:
             raise Exception(f"Unknown skill: {skill}")
 
-        return previous_level_rule & months_rule & xp_rule
+        return previous_level_rule & xp_rule
 
     # Should be cached
     def has_level(self, skill: str, level: int) -> StardewRule:
-        if level <= 0:
-            return True_()
+        assert level >= 0, f"There is no level before level 0."
+        if level == 0:
+            return true_
 
-        if self.options.skill_progression == options.SkillProgression.option_vanilla:
-            return self.logic.skill.can_earn_level(skill, level)
+        if self.content.features.skill_progression.is_progressive:
+            return self.logic.received(f"{skill} Level", level)
 
-        return self.logic.received(f"{skill} Level", level)
+        return self.logic.skill.can_earn_level(skill, level)
+
+    def has_previous_level(self, skill: str, level: int) -> StardewRule:
+        assert level > 0, f"There is no level before level 0."
+        if level == 1:
+            return true_
+
+        if self.content.features.skill_progression.is_progressive:
+            return self.logic.received(f"{skill} Level", level - 1)
+
+        months = max(1, level - 1)
+        return self.logic.time.has_lived_months(months)
 
     @cache_self1
     def has_farming_level(self, level: int) -> StardewRule:
@@ -95,7 +101,7 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
         if level <= 0:
             return True_()
 
-        if self.options.skill_progression >= options.SkillProgression.option_progressive:
+        if self.content.features.skill_progression.is_progressive:
             skills_items = vanilla_skill_items
             if allow_modded_skills:
                 skills_items += get_mod_skill_levels(self.options.mods)
@@ -108,18 +114,9 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
             return rule_with_fishing
         return self.logic.time.has_lived_months(months_with_4_skills) | rule_with_fishing
 
-    def has_all_skills_maxed(self, included_modded_skills: bool = True) -> StardewRule:
-        if self.options.skill_progression == options.SkillProgression.option_vanilla:
-            return self.has_total_level(50)
-        skills_items = vanilla_skill_items
-        if included_modded_skills:
-            skills_items += get_mod_skill_levels(self.options.mods)
-        return And(*[self.logic.received(skill, 10) for skill in skills_items])
-
-    def can_enter_mastery_cave(self) -> StardewRule:
-        if self.options.skill_progression == options.SkillProgression.option_progressive_with_masteries:
-            return self.logic.received(Wallet.mastery_of_the_five_ways)
-        return self.has_all_skills_maxed()
+    def has_any_skills_maxed(self, included_modded_skills: bool = True) -> StardewRule:
+        skills = self.content.skills.keys() if included_modded_skills else sorted(all_vanilla_skills)
+        return self.logic.or_(*(self.logic.skill.has_level(skill, 10) for skill in skills))
 
     @cached_property
     def can_get_farming_xp(self) -> StardewRule:
@@ -150,7 +147,7 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
 
     @cached_property
     def can_get_fishing_xp(self) -> StardewRule:
-        if self.options.skill_progression >= options.SkillProgression.option_progressive:
+        if self.content.features.skill_progression.is_progressive:
             return self.logic.skill.can_fish() | self.logic.skill.can_crab_pot
 
         return self.logic.skill.can_fish()
@@ -180,7 +177,9 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
     @cached_property
     def can_crab_pot(self) -> StardewRule:
         crab_pot_rule = self.logic.has(Fishing.bait)
-        if self.options.skill_progression >= options.SkillProgression.option_progressive:
+
+        # We can't use the same rule if skills are vanilla, because fishing levels are required to crab pot, which is required to get fishing levels...
+        if self.content.features.skill_progression.is_progressive:
             crab_pot_rule = crab_pot_rule & self.logic.has(Machine.crab_pot)
         else:
             crab_pot_rule = crab_pot_rule & self.logic.skill.can_get_fishing_xp
@@ -197,13 +196,19 @@ CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
             return self.has_level(Skill.foraging, 9)
         return False_()
 
-    @cached_property
-    def can_earn_mastery_experience(self) -> StardewRule:
-        if self.options.skill_progression != options.SkillProgression.option_progressive_with_masteries:
-            return self.has_all_skills_maxed() & self.logic.time.has_lived_max_months
-        return self.logic.time.has_lived_max_months
+    def can_earn_mastery(self, skill: str) -> StardewRule:
+        # Checking for level 11, so it includes having level 10 and being able to earn xp.
+        return self.logic.skill.can_earn_level(skill, 11) & self.logic.region.can_reach(Region.mastery_cave)
 
     def has_mastery(self, skill: str) -> StardewRule:
-        if self.options.skill_progression != options.SkillProgression.option_progressive_with_masteries:
-            return self.can_earn_mastery_experience and self.logic.region.can_reach(Region.mastery_cave)
-        return self.logic.received(f"{skill} Mastery")
+        if self.content.features.skill_progression.are_masteries_shuffled:
+            return self.logic.received(f"{skill} Mastery")
+
+        return self.logic.skill.can_earn_mastery(skill)
+
+    @cached_property
+    def can_enter_mastery_cave(self) -> StardewRule:
+        if self.content.features.skill_progression.are_masteries_shuffled:
+            return self.logic.received(Wallet.mastery_of_the_five_ways)
+
+        return self.has_any_skills_maxed(included_modded_skills=False)

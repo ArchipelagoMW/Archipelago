@@ -3,52 +3,73 @@
 ## Required Software
 
 - [Dark Souls III](https://store.steampowered.com/app/374320/DARK_SOULS_III/)
-- [Dark Souls III AP Client](https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases)
+- [Dark Souls III AP Client](https://github.com/nex3/Dark-Souls-III-Archipelago-client/releases/latest)
 
 ## Optional Software
 
-- [Dark Souls III Maptracker Pack](https://github.com/Br00ty/DS3_AP_Maptracker/releases/latest), for use with [Poptracker](https://github.com/black-sliver/PopTracker/releases)
+- Map tracker not yet updated for 3.0.0
 
-## General Concept
+## Setting Up
 
-<span style="color:#ff7800">
-**This mod can ban you permanently from the FromSoftware servers if used online.** 
-</span>
-The Dark Souls III AP Client is a dinput8.dll triggered when launching Dark Souls III. This .dll file will launch a command 
-prompt where you can read information about your run and write any command to interact with the Archipelago server.
+First, download the client from the link above (`DS3.Archipelago.*.zip`). It doesn't need to go
+into any particular directory; it'll automatically locate _Dark Souls III_ in your Steam
+installation folder.
 
-This client has only been tested with the Official Steam version of the game at version 1.15. It does not matter which DLCs are installed. However, you will have to downpatch your Dark Souls III installation from current patch.
+Version 3.0.0 of the randomizer _only_ supports the latest version of _Dark Souls III_, 1.15.2. This
+is the latest version, so you don't need to do any downpatching! However, if you've already
+downpatched your game to use an older version of the randomizer, you'll need to reinstall the latest
+version before using this version. You should also delete the `dinput8.dll` file if you still have
+one from an older randomizer version.
 
-## Downpatching Dark Souls III
+### One-Time Setup
 
-To downpatch DS3 for use with Archipelago, use the following instructions from the speedsouls wiki database. 
+Before you first connect to a multiworld, you need to generate the local data files for your world's
+randomized item and (optionally) enemy locations. You only need to do this once per multiworld.
 
-1. Launch Steam (in online mode).
-2. Press the Windows Key + R. This will open the Run window.
-3. Open the Steam console by typing the following string: `steam://open/console`. Steam should now open in Console Mode.
-4. Insert the string of the depot you wish to download. For the AP-supported v1.15, you will want to use: `download_depot 374320 374321 4471176929659548333`.
-5. Steam will now download the depot. Note: There is no progress bar for the download in Steam, but it is still downloading in the background.
-6. Back up your existing game executable (`DarkSoulsIII.exe`) found in `\Steam\steamapps\common\DARK SOULS III\Game`. Easiest way to do this is to move it to another directory. If you have file extensions enabled, you can instead rename the executable to `DarkSoulsIII.exe.bak`.
-7. Return to the Steam console. Once the download is complete, it should say so along with the temporary local directory in which the depot has been stored. This is usually something like `\Steam\steamapps\content\app_XXXXXX\depot_XXXXXX`.
-8. Take the `DarkSoulsIII.exe` from that folder and place it in `\Steam\steamapps\common\DARK SOULS III\Game`.
-9. Back up and delete your save file (`DS30000.sl2`) in AppData. AppData is hidden by default. To locate it, press Windows Key + R, type `%appdata%` and hit enter. Alternatively: open File Explorer > View > Hidden Items and follow `C:\Users\<your_username>\AppData\Roaming\DarkSoulsIII\<numbers>`.
-10. If you did all these steps correctly, you should be able to confirm your game version in the upper-left corner after launching Dark Souls III.
+1. Before you first connect to a multiworld, run `randomizer\DS3Randomizer.exe`.
 
+2. Put in your Archipelago room address (usually something like `archipelago.gg:12345`), your player
+   name (also known as your "slot name"), and your password if you have one.
 
-## Installing the Archipelago mod
+3. Click "Load" and wait a minute or two.
 
-Get the `dinput8.dll` from the [Dark Souls III AP Client](https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases) and 
-add it at the root folder of your game (e.g. `SteamLibrary\steamapps\common\DARK SOULS III\Game`)
+### Running and Connecting the Game
 
-## Joining a MultiWorld Game
+To run _Dark Souls III_ in Archipelago mode:
 
-1. Run Steam in offline mode to avoid being banned.
-2. Launch Dark Souls III.
-3. Type in `/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME} password:{PASSWORD}` in the "Windows Command Prompt" that opened. For example: `/connect archipelago.gg:38281 "Example Name" password:"Example Password"`. The password parameter is only necessary if your game requires one.
-4. Once connected, create a new game, choose a class and wait for the others before starting.
-5. You can quit and launch at anytime during a game.
+1. Start Steam. **Do not run in offline mode.** Running Steam in offline mode will make certain
+   scripted invaders fail to spawn. Instead, change the game itself to offline mode on the menu
+   screen.
 
-## Where do I get a config file?
+2. Run `launchmod_darksouls3.bat`. This will start _Dark Souls III_ as well as a command prompt that
+   you can use to interact with the Archipelago server.
+
+3. Type `/connect {SERVER_IP}:{SERVER_PORT} {SLOT_NAME}` into the command prompt, with the
+   appropriate values filled in. For example: `/connect archipelago.gg:24242 PlayerName`.
+
+4. Start playing as normal. An "Archipelago connected" message will appear onscreen once you have
+   control of your character and the connection is established.
+
+## Frequently Asked Questions
+
+### Where do I get a config file?
 
 The [Player Options](/games/Dark%20Souls%20III/player-options) page on the website allows you to
-configure your personal options and export them into a config file.
+configure your personal options and export them into a config file. The [AP client archive] also
+includes an options template.
+
+[AP client archive]: https://github.com/nex3/Dark-Souls-III-Archipelago-client/releases/latest
+
+### Does this work with Proton?
+
+The *Dark Souls III* Archipelago randomizer supports running on Linux under Proton. There are a few
+things to keep in mind:
+
+* Because `DS3Randomizer.exe` relies on the .NET runtime, you'll need to install
+  the [.NET Runtime] under **plain [WINE]**, then run `DS3Randomizer.exe` under
+  plain WINE as well. It won't work as a Proton app!
+
+* To run the game itself, just run `launchmod_darksouls3.bat` under Proton.
+
+[.NET Runtime]: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
+[WINE]: https://www.winehq.org/

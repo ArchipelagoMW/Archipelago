@@ -1,6 +1,6 @@
 import typing
 from dataclasses import dataclass
-from Options import DefaultOnToggle, Range, Toggle, DeathLink, Choice, PerGameCommonOptions, OptionSet
+from Options import DefaultOnToggle, Range, Toggle, DeathLink, Choice, PerGameCommonOptions, OptionSet, OptionGroup
 from .Items import action_item_table
 
 class EnableCoinStars(DefaultOnToggle):
@@ -91,12 +91,11 @@ class BuddyChecks(Toggle):
     display_name = "Bob-omb Buddy Checks"
 
 
-class ExclamationBoxes(Choice):
+class ExclamationBoxes(Toggle):
     """Include 1Up Exclamation Boxes during randomization.
     Adds 29 locations to the pool."""
     display_name = "Randomize 1Up !-Blocks"
-    option_Off = 0
-    option_1Ups_Only = 1
+    alias_1Ups_Only = 1
 
 
 class CompletionType(Choice):
@@ -127,6 +126,32 @@ class MoveRandomizerActions(OptionSet):
     # HACK: Disable randomization for double jump
     valid_keys = [action for action in action_item_table if action != 'Double Jump']
     default = valid_keys
+
+sm64_options_groups = [
+    OptionGroup("Logic Options", [
+        AreaRandomizer,
+        BuddyChecks,
+        ExclamationBoxes,
+        ProgressiveKeys,
+        EnableCoinStars,
+        StrictCapRequirements,
+        StrictCannonRequirements,
+    ]),
+    OptionGroup("Ability Options", [
+        EnableMoveRandomizer,
+        MoveRandomizerActions,
+        StrictMoveRequirements,
+    ]),
+    OptionGroup("Star Options", [
+        AmountOfStars,
+        FirstBowserStarDoorCost,
+        BasementStarDoorCost,
+        SecondFloorStarDoorCost,
+        MIPS1Cost,
+        MIPS2Cost,
+        StarsToFinish,
+    ]),
+]
 
 @dataclass
 class SM64Options(PerGameCommonOptions):

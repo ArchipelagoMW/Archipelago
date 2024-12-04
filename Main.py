@@ -11,7 +11,8 @@ from typing import Dict, List, Optional, Set, Tuple, Union
 
 import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
-from Fill import balance_multiworld_progression, distribute_items_restrictive, distribute_planned, flood_items
+from Fill import FillError, balance_multiworld_progression, distribute_items_restrictive, distribute_planned, \
+    flood_items
 from Options import StartInventoryPool
 from Utils import __version__, output_path, version_tuple, get_settings
 from settings import get_settings
@@ -45,6 +46,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     multiworld.sprite_pool = args.sprite_pool.copy()
 
     multiworld.set_options(args)
+    if args.csv_output:
+        from Options import dump_player_options
+        dump_player_options(multiworld)
     multiworld.set_item_links()
     multiworld.state = CollectionState(multiworld)
     logger.info('Archipelago Version %s  -  Seed: %s\n', __version__, multiworld.seed)
@@ -100,7 +104,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 multiworld.early_items[player][item_name] = max(0, early-count)
                 remaining_count = count-early
                 if remaining_count > 0:
-                    local_early = multiworld.early_local_items[player].get(item_name, 0)
+                    local_early = multiworld.local_early_items[player].get(item_name, 0)
                     if local_early:
                         multiworld.early_items[player][item_name] = max(0, local_early - remaining_count)
                     del local_early
@@ -149,40 +153,38 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     # remove starting inventory from pool items.
     # Because some worlds don't actually create items during create_items this has to be as late as possible.
-    if any(getattr(multiworld.worlds[player].options, "start_inventory_from_pool", None) for player in multiworld.player_ids):
-        new_items: List[Item] = []
-        depletion_pool: Dict[int, Dict[str, int]] = {
-            player: getattr(multiworld.worlds[player].options,
-                            "start_inventory_from_pool",
-                            StartInventoryPool({})).value.copy()
-            for player in multiworld.player_ids
-        }
-        for player, items in depletion_pool.items():
-            player_world: AutoWorld.World = multiworld.worlds[player]
-            for count in items.values():
-                for _ in range(count):
-                    new_items.append(player_world.create_filler())
-        target: int = sum(sum(items.values()) for items in depletion_pool.values())
-        for i, item in enumerate(multiworld.itempool):
-            if depletion_pool[item.player].get(item.name, 0):
-                target -= 1
-                depletion_pool[item.player][item.name] -= 1
-                # quick abort if we have found all items
-                if not target:
-                    new_items.extend(multiworld.itempool[i+1:])
-                    break
-            else:
-                new_items.append(item)
+    fallback_inventory = StartInventoryPool({})
+    depletion_pool: Dict[int, Dict[str, int]] = {
+        player: getattr(multiworld.worlds[player].options, "start_inventory_from_pool", fallback_inventory).value.copy()
+        for player in multiworld.player_ids
+    }
+    target_per_player = {
+        player: sum(target_items.values()) for player, target_items in depletion_pool.items() if target_items
+    }
 
-        # leftovers?
-        if target:
-            for player, remaining_items in depletion_pool.items():
-                remaining_items = {name: count for name, count in remaining_items.items() if count}
-                if remaining_items:
-                    raise Exception(f"{multiworld.get_player_name(player)}"
-                                    f" is trying to remove items from their pool that don't exist: {remaining_items}")
-        assert len(multiworld.itempool) == len(new_items), "Item Pool amounts should not change."
-        multiworld.itempool[:] = new_items
+    if target_per_player:
+        new_itempool: List[Item] = []
+
+        # Make new itempool with start_inventory_from_pool items removed
+        for item in multiworld.itempool:
+            if depletion_pool[item.player].get(item.name, 0):
+                depletion_pool[item.player][item.name] -= 1
+            else:
+                new_itempool.append(item)
+
+        # Create filler in place of the removed items, warn if any items couldn't be found in the multiworld itempool
+        for player, target in target_per_player.items():
+            unfound_items = {item: count for item, count in depletion_pool[player].items() if count}
+
+            if unfound_items:
+                player_name = multiworld.get_player_name(player)
+                logger.warning(f"{player_name} tried to remove items from their pool that don't exist: {unfound_items}")
+
+            needed_items = target_per_player[player] - sum(unfound_items.values())
+            new_itempool += [multiworld.worlds[player].create_filler() for _ in range(needed_items)]
+
+        assert len(multiworld.itempool) == len(new_itempool), "Item Pool amounts should not change."
+        multiworld.itempool[:] = new_itempool
 
     multiworld.link_items()
 
@@ -240,6 +242,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
             def write_multidata():
                 import NetUtils
+                from NetUtils import HintStatus
                 slot_data = {}
                 client_versions = {}
                 games = {}
@@ -264,10 +267,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 for slot in multiworld.player_ids:
                     slot_data[slot] = multiworld.worlds[slot].fill_slot_data()
 
-                def precollect_hint(location):
+                def precollect_hint(location: Location, auto_status: HintStatus):
                     entrance = er_hint_data.get(location.player, {}).get(location.address, "")
                     hint = NetUtils.Hint(location.item.player, location.player, location.address,
-                                         location.item.code, False, entrance, location.item.flags)
+                                         location.item.code, False, entrance, location.item.flags, auto_status)
                     precollected_hints[location.player].add(hint)
                     if location.item.player not in multiworld.groups:
                         precollected_hints[location.item.player].add(hint)
@@ -280,19 +283,22 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     if type(location.address) == int:
                         assert location.item.code is not None, "item code None should be event, " \
                                                                "location.address should then also be None. Location: " \
-                                                               f" {location}"
+                                                               f" {location}, Item: {location.item}"
                         assert location.address not in locations_data[location.player], (
                             f"Locations with duplicate address. {location} and "
                             f"{locations_data[location.player][location.address]}")
                         locations_data[location.player][location.address] = \
                             location.item.code, location.item.player, location.item.flags
+                        auto_status = HintStatus.HINT_AVOID if location.item.trap else HintStatus.HINT_PRIORITY
                         if location.name in multiworld.worlds[location.player].options.start_location_hints:
-                            precollect_hint(location)
+                            if not location.item.trap:  # Unspecified status for location hints, except traps
+                                auto_status = HintStatus.HINT_UNSPECIFIED
+                            precollect_hint(location, auto_status)
                         elif location.item.name in multiworld.worlds[location.item.player].options.start_hints:
-                            precollect_hint(location)
+                            precollect_hint(location, auto_status)
                         elif any([location.item.name in multiworld.worlds[player].options.start_hints
                                   for player in multiworld.groups.get(location.item.player, {}).get("players", [])]):
-                            precollect_hint(location)
+                            precollect_hint(location, auto_status)
 
                 # embedded data package
                 data_package = {
@@ -304,11 +310,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
                 # get spheres -> filter address==None -> skip empty
                 spheres: List[Dict[int, Set[int]]] = []
-                for sphere in multiworld.get_spheres():
+                for sphere in multiworld.get_sendable_spheres():
                     current_sphere: Dict[int, Set[int]] = collections.defaultdict(set)
                     for sphere_location in sphere:
-                        if type(sphere_location.address) is int:
-                            current_sphere[sphere_location.player].add(sphere_location.address)
+                        current_sphere[sphere_location.player].add(sphere_location.address)
 
                     if current_sphere:
                         spheres.append(dict(current_sphere))
@@ -329,6 +334,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     "seed_name": multiworld.seed_name,
                     "spheres": spheres,
                     "datapackage": data_package,
+                    "race_mode": int(multiworld.is_race),
                 }
                 AutoWorld.call_all(multiworld, "modify_multidata", multidata)
 
@@ -341,7 +347,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             output_file_futures.append(pool.submit(write_multidata))
             if not check_accessibility_task.result():
                 if not multiworld.can_beat_game():
-                    raise Exception("Game appears as unbeatable. Aborting.")
+                    raise FillError("Game appears as unbeatable. Aborting.", multiworld=multiworld)
                 else:
                     logger.warning("Location Accessibility requirements not fulfilled.")
 
