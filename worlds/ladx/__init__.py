@@ -50,25 +50,10 @@ class LinksAwakeningSettings(settings.Group):
         """
         Provided options will be used as overrides when patching.
         Pass the options as you would in an options yaml.
-        Always available option overrides:
-            gfxmod
-            link_palette
-            music
-            music_change_condition
-            palette
-        Non-race option overrides:
-            ap_title_screen
-            boots_controls
-            nag_messages
-            text_shuffle
-            trendy_game
-            warps
+        Always available option overrides: gfxmod, link_palette, music, music_change_condition, palette
+        Non-race option overrides: ap_title_screen, boots_controls, nag_messages, text_shuffle, trendy_game, warps
         Example:
-            option_overrides:
-                palette:
-                    normal: 50
-                    inverted: 50
-                boots_controls: bracelet
+        option_overrides: { palette: { normal: 50, inverted: 50}, boots_controls: bracelet }
         """
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
