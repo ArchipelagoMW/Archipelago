@@ -26,8 +26,7 @@ class LADXPatchExtensions(worlds.Files.APPatchExtension):
     @staticmethod
     def generate_rom(caller: worlds.Files.APProcedurePatch, rom: bytes, data_file: str) -> bytes:
         data = json.loads(caller.get_file(data_file).decode("utf-8"))
-        if not data["is_race"]:
-            apply_overrides(data["options"])
+        apply_overrides(data)
         rom_name = get_base_rom_path()
         out_name = f"{data['out_base']}{caller.result_file_ending}"
         parser = get_parser()
@@ -37,8 +36,7 @@ class LADXPatchExtensions(worlds.Files.APPatchExtension):
     @staticmethod
     def patch_title_screen(caller: worlds.Files.APProcedurePatch, rom: bytes, data_file: str) -> bytes:
         data = json.loads(caller.get_file(data_file).decode("utf-8"))
-        if not data["is_race"]:
-            apply_overrides(data["options"])
+        apply_overrides(data)
         if data["options"]["ap_title_screen"]:
             return bsdiff4.patch(rom, pkgutil.get_data(__name__, "LADXR/patches/title_screen.bdiff4"))
         return rom
@@ -129,7 +127,7 @@ def get_base_rom_path(file_name: str = "") -> str:
     return file_name
 
 
-def apply_overrides(options: dict) -> None:
+def apply_overrides(data: dict) -> None:
     host_settings = settings.get_settings()
     option_overrides = host_settings["ladx_options"].get("option_overrides")
     if not option_overrides:
@@ -145,8 +143,25 @@ def apply_overrides(options: dict) -> None:
         logger = logging.getLogger("Link's Awakening Logger")
         logger.warning("Failed to apply option overrides, check that they are formatted correctly.")
         return
+
+    overridable_options = {
+        "gfxmod",
+        "link_palette",
+        "music",
+        "music_change_condition",
+        "palette",
+    }
+    if not data["is_race"]:
+        overridable_options.update([
+            "ap_title_screen",
+            "boots_controls",
+            "nag_messages",
+            "text_shuffle",
+            "trendy_game",
+            "warps",
+        ])
     for option_name in option_overrides.keys():
-        if option_name not in options:
+        if (option_name not in data["options"]) or (option_name not in overridable_options):
             continue
-        options[option_name] = getattr(rolled_settings, option_name).value
+        data["options"][option_name] = getattr(rolled_settings, option_name).value
 
