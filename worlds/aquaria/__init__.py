@@ -187,6 +187,9 @@ class AquariaWorld(World):
                                  precollected, ItemClassification.progression)
             self.__pre_fill_item(ItemNames.TRANSTURTLE_ARNASSI_RUINS, AquariaLocationNames.SIMON_SAYS_AREA_TRANSTURTLE,
                                  precollected)
+        if not self.options.throne_as_location:
+            self.__pre_fill_item(ItemNames.DOOR_TO_CATHEDRAL, AquariaLocationNames.SITTING_ON_THRONE,
+                                 precollected, ItemClassification.progression)
         for name, data in item_table.items():
             for i in range(data.count):
                 if name in self.exclude:
@@ -267,6 +270,7 @@ class AquariaWorld(World):
                 "no_progression_abyss": bool(self.options.no_progression_abyss),
                 "no_progression_sunken_city": bool(self.options.no_progression_sunken_city),
                 "no_progression_body": bool(self.options.no_progression_body),
-                "required_client_version": CLIENT_MINIMAL_COMPATIBILITY,
                 "save_healing": bool(self.options.save_healing),
+                "throne_as_location": bool(self.options.throne_as_location),
+                "required_client_version": CLIENT_MINIMAL_COMPATIBILITY,
                 }

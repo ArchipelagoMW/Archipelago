@@ -306,6 +306,7 @@ class AquariaLocationNames:
     BEATING_CRABBIUS_MAXIMUS = "Beating Crabbius Maximus"
     BEATING_MANTIS_SHRIMP_PRIME = "Beating Mantis Shrimp Prime"
     BEATING_KING_JELLYFISH_GOD_PRIME = "Beating King Jellyfish God Prime"
+    SITTING_ON_THRONE = "Mithalas City Castle, sitting on the sealed throne"
     FIRST_SECRET = "First Secret"
     SECOND_SECRET = "Second Secret"
     THIRD_SECRET = "Third Secret"
@@ -497,6 +498,7 @@ class AquariaLocations:
     locations_mithalas_castle = {
         AquariaLocationNames.MITHALAS_CITY_CASTLE_BULB_IN_THE_FLESH_HOLE: 698042,
         AquariaLocationNames.MITHALAS_CITY_CASTLE_BLUE_BANNER: 698165,
+        AquariaLocationNames.SITTING_ON_THRONE: 698218,
     }
 
     locations_mithalas_castle_urns = {

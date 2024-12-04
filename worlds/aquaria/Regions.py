@@ -137,6 +137,12 @@ def _has_secrets(state: CollectionState, player: int) -> bool:
     return state.has_all({ItemNames.FIRST_SECRET_OBTAINED, ItemNames.SECOND_SECRET_OBTAINED,
                           ItemNames.THIRD_SECRET_OBTAINED}, player)
 
+
+def _is_cathedral_door_opened(state: CollectionState, player: int) -> bool:
+    """The door to Mithalas Cathedral has been opened in the `state` of the `player`"""
+    return state.has(ItemNames.DOOR_TO_CATHEDRAL, player)
+
+
 def _item_not_advancement(item: Item):
     """The `item` is not an advancement item"""
     return not item.advancement
@@ -655,8 +661,8 @@ class AquariaRegions:
                                        lambda state: _has_beast_form(state, self.player))
         self.__connect_regions(self.mithalas_castle, self.cathedral_underground,
                                lambda state: _has_beast_form(state, self.player))
-        self.__connect_one_way_regions(self.mithalas_castle, self.cathedral_top_start,
-                                       lambda state: _has_bind_song(state, self.player))
+        self.__connect_regions(self.mithalas_castle, self.cathedral_top_start,
+                               lambda state: _is_cathedral_door_opened(state, self.player))
         self.__connect_one_way_regions(self.cathedral_top_start, self.cathedral_top_start_urns,
                                        lambda state: _has_damaging_item(state, self.player))
         self.__connect_regions(self.cathedral_top_start, self.cathedral_top_end,
@@ -1053,6 +1059,9 @@ class AquariaRegions:
                                                   self.player), lambda state: _has_bind_song(state, self.player))
 
     def __adjusting_light_in_dark_place_rules(self, light_option: LightNeededToGetToDarkPlaces) -> None:
+        """
+        Modify rules implying that the player needs a light to go in dark places
+        """
         if light_option == LightNeededToGetToDarkPlaces.option_sun_form:
             light_lambda = _has_sun_form
         else:
@@ -1129,6 +1138,8 @@ class AquariaRegions:
             AquariaLocationNames.OPEN_WATERS_TOP_RIGHT_AREA_BULB_IN_THE_SMALL_PATH_BEFORE_MITHALAS,
             self.player), lambda state: _has_bind_song(state, self.player)
         )
+        add_rule(self.multiworld.get_location(AquariaLocationNames.SITTING_ON_THRONE, self.player),
+                 lambda state: _has_bind_song(state, self.player))
         if (options.objective.value != Objective.option_killing_the_four_gods and
             options.objective.value != Objective.option_gods_and_creator):
             add_rule(self.multiworld.get_location(AquariaLocationNames.ABYSS_LEFT_AREA_BULB_IN_THE_BOTTOM_FISH_PASS,

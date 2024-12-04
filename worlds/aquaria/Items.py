@@ -29,6 +29,7 @@ class ItemGroup(Enum):
     UTILITY = 4
     SONG = 5
     TURTLE = 6
+    DOOR = 7
 
 
 class AquariaItem(Item):
@@ -211,6 +212,7 @@ class ItemNames:
     TRANSTURTLE_BODY = "Transturtle Final Boss"
     TRANSTURTLE_SIMON_SAYS = "Transturtle Simon Says"
     TRANSTURTLE_ARNASSI_RUINS = "Transturtle Arnassi Ruins"
+    DOOR_TO_CATHEDRAL = "Door to the Cathedral openned"
     # Events name
     BODY_TONGUE_CLEARED = "Body Tongue cleared"
     HAS_SUN_CRYSTAL = "Has Sun Crystal"
@@ -372,6 +374,7 @@ item_table = {
     ItemNames.TRANSTURTLE_BODY: ItemData(698131, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_finalboss
     ItemNames.TRANSTURTLE_SIMON_SAYS: ItemData(698132, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_forest05
     ItemNames.TRANSTURTLE_ARNASSI_RUINS: ItemData(698133, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_seahorse
+    ItemNames.DOOR_TO_CATHEDRAL: ItemData(698133, 1, ItemType.PROGRESSION, ItemGroup.DOOR),  # door_to_cathedral
 }
 
 

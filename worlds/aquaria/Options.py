@@ -310,6 +310,13 @@ class UnconfineHomeWater(Choice):
     default = 0
 
 
+class ThroneAsLocation(DefaultOnToggle):
+    """
+    If enabled, sitting on the Mithalas City Castle throne (with the seal on it) will be a location and opening the
+    door to the Mithalas Cathedral will be an item.
+    """
+    display_name = "Throne as a location"
+
 @dataclass
 class AquariaOptions(PerGameCommonOptions):
     """
@@ -346,3 +353,4 @@ class AquariaOptions(PerGameCommonOptions):
     maximum_ingredient_amount: MaximumIngredientAmount
     skip_final_boss_3rd_form: SkipFinalBoss3rdForm
     save_healing: SaveHealing
+    throne_as_location: ThroneAsLocation
