@@ -130,20 +130,24 @@ def get_base_rom_path(file_name: str = "") -> str:
     return file_name
 
 
-def apply_overrides(data: hash) -> None:
+def apply_overrides(options: dict) -> None:
     host_settings = settings.get_settings()
     option_overrides = host_settings["ladx_options"].get("option_overrides")
     if not option_overrides:
         return
+    wrapped_overrides = {
+        "game": LINKS_AWAKENING,
+        LINKS_AWAKENING: option_overrides,
+    }
+    from Generate import roll_settings
     try:
-        wrapped_overrides = {
-            "game": LINKS_AWAKENING,
-            LINKS_AWAKENING: option_overrides,
-        }
-        from Generate import roll_settings
         rolled_settings = roll_settings(wrapped_overrides)
-        for option_name in option_overrides.keys():
-            data["options"][option_name] = getattr(rolled_settings, option_name).value
     except:
         logger = logging.getLogger("Link's Awakening Logger")
         logger.warning("Failed to apply option overrides, check that they are formatted correctly.")
+        return
+    for option_name in option_overrides.keys():
+        if option_name not in options:
+            continue
+        options[option_name] = getattr(rolled_settings, option_name).value
+
