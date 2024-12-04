@@ -2,8 +2,7 @@ import typing
 from BaseClasses import MultiWorld, CollectionState
 from Options import OptionError
 from . import JakAndDaxterWorld
-from .Options import (JakAndDaxterOptions,
-                      EnableOrbsanity,
+from .Options import (EnableOrbsanity,
                       GlobalOrbsanityBundleSize,
                       PerLevelOrbsanityBundleSize,
                       FireCanyonCellCount,
