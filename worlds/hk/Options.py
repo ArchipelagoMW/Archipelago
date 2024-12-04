@@ -1,6 +1,6 @@
 import typing
 import re
-from dataclasses import dataclass, make_dataclass
+from dataclasses import make_dataclass
 
 from .ExtractedData import logic_options, starts, pool_options
 from .Rules import cost_terms
