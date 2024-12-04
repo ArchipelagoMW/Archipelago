@@ -76,6 +76,7 @@ class ROM:
                 file.write(bank)
 
     def export(self):
+        self.fixHeader()
         return b"".join(self.banks)
 
     def readHexSeed(self):
