@@ -82,7 +82,7 @@ def generateRom(base_rom: bytes, args, data: Dict):
         pymod.prePatch(rom)
 
     if options["gfxmod"] != "Link":
-        patches.aesthetics.gfxMod(rom, os.path.join("data", "sprites", "ladx", options["gfxmod"]))
+        patches.aesthetics.gfxMod(rom, os.path.join("data", "sprites", "ladx", options["gfxmod"] + ".bdiff"))
 
     assembler.resetConsts()
     assembler.const("INV_SIZE", 16)
@@ -141,7 +141,9 @@ def generateRom(base_rom: bytes, args, data: Dict):
     # if ladxr_settings["witch"]:
     #    patches.witch.updateWitch(rom)
     patches.softlock.fixAll(rom)
-    patches.maptweaks.tweakMap(rom)
+    if not options["rooster"]:
+        patches.maptweaks.tweakMap(rom)
+        patches.maptweaks.tweakBirdKeyRoom(rom)
     patches.chest.fixChests(rom)
     patches.shop.fixShop(rom)
     patches.rooster.patchRooster(rom)
@@ -164,11 +166,10 @@ def generateRom(base_rom: bytes, args, data: Dict):
     patches.songs.upgradeMarin(rom)
     patches.songs.upgradeManbo(rom)
     patches.songs.upgradeMamu(rom)
-    if options["tradequest"]:
-        patches.tradeSequence.patchTradeSequence(rom, "gift")
-    else:
-        # Monkey bridge patch, always have the bridge there.
-        rom.patch(0x00, 0x333D, assembler.ASM("bit 4, e\njr Z, $05"), b"", fill_nop=True)
+
+    patches.tradeSequence.patchTradeSequence(rom, options)
+    # Monkey bridge patch, always have the bridge there.
+    rom.patch(0x00, 0x333D, assembler.ASM("bit 4, e\njr Z, $05"), b"", fill_nop=True)
     patches.bowwow.fixBowwow(rom, everywhere=False)
     # if ladxr_settings["bowwow"] != 'normal':
     #    patches.bowwow.bowwowMapPatches(rom)
@@ -357,8 +358,8 @@ def generateRom(base_rom: bytes, args, data: Dict):
             for channel in range(3):
                 color[channel] = color[channel] * 31 // 0xbc
 
-    if options["warp_improvements"]:
-        patches.core.addWarpImprovements(rom, options["additional_warp_points"])
+    if options["warps"] != Options.Warps.option_vanilla:
+        patches.core.addWarpImprovements(rom, options["warps"] == Options.Warps.option_improved_additional)
 
     palette = options["palette"]
     if palette != Options.Palette.option_normal:
