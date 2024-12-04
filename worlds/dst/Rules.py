@@ -1135,7 +1135,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             "Powder Monkey":                    lambda state: state.has_all([can_defend_against_pirates.event, moon_quay_exploration.event], player),
             "Prime Mate":                       pirate_map.rule,
             "Puffin":                           lambda state: state.has_all([can_get_feathers.event, pre_basic_boating.event], player),
-            "Rabbit":                           lambda state: state.has_any([early_autumn.event, winter.event, summer.event, digging.event], player),
+            "Rabbit":                           lambda state: state.has_any([early_autumn.event, winter.event, summer.event, digging.event, cave_exploration.event], player),
             "Redbird":                          can_get_feathers.rule,
             "Snowbird":                         lambda state: state.has_all([can_get_feathers.event, winter.event], player),
             "Rock Lobster":                     cave_exploration.rule,
@@ -1370,7 +1370,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             "Magic (Bunny Puff)":               lambda state: state.has_all([cave_exploration.event, basic_combat.event], player),
             "Magic (Mosquito Sack)":            swamp_exploration.rule,
             "Magic (Spider Gland)":             ALWAYS_TRUE,
-            "Magic (Monster Jerky)":            lambda state: state.has_all(["Drying Rack", "Rope", charcoal.event], player),
+            "Magic (Monster Jerky)":            lambda state: state.has_all(["Drying Rack", "Rope", charcoal.event], player), # Excluded
             "Magic (Pig Skin)":                 basic_combat.rule,
             "Magic (Batilisk Wing)":            mining.rule,
             "Magic (Stinger)":                  ALWAYS_TRUE,
@@ -1390,7 +1390,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             "Magic (Moleworm)":                 hammering.rule,
             "Magic (Fireflies)":                bug_catching.rule,
             "Magic (Bulbous Lightbug)":         lambda state: state.has_all([cave_exploration.event, bug_catching.event], player),
-            "Magic (Rabbit)":                   lambda state: state.has("Trap", player) and state.has_any([early_autumn.event, winter.event, summer.event, digging.event], player),
+            "Magic (Rabbit)":                   lambda state: state.has("Trap", player) and state.has_any([early_autumn.event, winter.event, summer.event, digging.event, cave_exploration.event], player),
             "Magic (Butterfly)":                bug_catching.rule,
             "Magic (Mosquito)":                 lambda state: state.has_all([bug_catching.event, swamp_exploration.event], player),
             "Magic (Bee)":                      bug_catching.rule,
@@ -1523,28 +1523,27 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             ):
                 excluded.add(location_name)
 
-            else:
-                # Set the rule as long as it's not excluded
-                set_rule(location, rule)
+            # Set the rule
+            set_rule(location, rule)
 
-                # Add respective research station rule to research locations
-                if "research" in location_data.tags:
-                    if "science" in location_data.tags:
-                        add_rule(location, alchemy_engine.rule if "tier_2" in location_data.tags else science_machine.rule)
-                    elif "magic" in location_data.tags:
-                        add_rule(location, shadow_manipulator.rule if "tier_2" in location_data.tags else prestihatitor.rule)
-                    elif "celestial" in location_data.tags:
-                        add_rule(location, celestial_altar.rule if "tier_2" in location_data.tags else (lambda state: state.has_any([celestial_orb.event, celestial_altar.event], player)))
-                    elif "seafaring" in location_data.tags:
-                        add_rule(location, think_tank.rule)
-                    elif "ancient" in location_data.tags:
-                        add_rule(location, ancient_altar.rule)
+            # Add respective research station rule to research locations
+            if "research" in location_data.tags:
+                if "science" in location_data.tags:
+                    add_rule(location, alchemy_engine.rule if "tier_2" in location_data.tags else science_machine.rule)
+                elif "magic" in location_data.tags:
+                    add_rule(location, shadow_manipulator.rule if "tier_2" in location_data.tags else prestihatitor.rule)
+                elif "celestial" in location_data.tags:
+                    add_rule(location, celestial_altar.rule if "tier_2" in location_data.tags else (lambda state: state.has_any([celestial_orb.event, celestial_altar.event], player)))
+                elif "seafaring" in location_data.tags:
+                    add_rule(location, think_tank.rule)
+                elif "ancient" in location_data.tags:
+                    add_rule(location, ancient_altar.rule)
 
-                elif "farming" in location_data.tags:
-                    add_rule(location, lambda state: state.has_all([advanced_farming.event, seasons_passed_1.event], player))
+            elif "farming" in location_data.tags:
+                add_rule(location, lambda state: state.has_all([advanced_farming.event, seasons_passed_1.event], player))
 
-                elif "cooking" in location_data.tags:
-                    add_rule(location, cooking.rule)
+            elif "cooking" in location_data.tags:
+                add_rule(location, cooking.rule)
 
             # Forbid season helpers in seasonal locations
             if "seasonal" in location_data.tags:
