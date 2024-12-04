@@ -2008,7 +2008,7 @@ class SC2Logic:
                 )
         )
 
-    def the_host_requirement(self, state: CollectionState) -> bool:
+    def protoss_the_host_requirement(self, state: CollectionState) -> bool:
         return (
             (
                     self.protoss_fleet(state)
@@ -2018,6 +2018,27 @@ class SC2Logic:
             or (
                 self.protoss_competent_comp(state)
                 and state.has(item_names.SOA_TIME_STOP, self.player)
+            )
+        )
+
+    def terran_the_host_requirement(self, state: CollectionState) -> bool:
+        return (
+            self.terran_beats_protoss_deathball(state)
+            and self.terran_very_hard_mission_weapon_armor_level(state)
+            and self.terran_air_anti_air(state)
+            and state.has_any({item_names.THOR, item_names.SIEGE_TANK, item_names.BATTLECRUISER, item_names.BANSHEE, item_names.LIBERATOR}, self.player)
+            and (self.advanced_tactics or self.terran_sustainable_mech_heal(state))
+        )
+
+    def zerg_the_host_requirement(self, state: CollectionState) -> bool:
+        return (
+            self.zerg_competent_comp(state)
+            and self.zerg_competent_anti_air(state)
+            and self.zerg_very_hard_mission_weapon_armor_level(state)
+            and self.zerg_base_buster(state)
+            and self.zerg_big_monsters(state)
+            and (
+                self.advanced_tactics or self.zerg_versatile_air(state)
             )
         )
 

@@ -1983,31 +1983,31 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.templars_return_phase_3_reach_dts_requirement
         ),
         make_location_data(SC2Mission.THE_HOST.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 2100, LocationType.VICTORY,
-            logic.the_host_requirement
+            logic.protoss_the_host_requirement
         ),
         make_location_data(SC2Mission.THE_HOST.mission_name, "Southeast Void Shard", SC2LOTV_LOC_ID_OFFSET + 2101, LocationType.EXTRA,
-            logic.the_host_requirement
+            logic.protoss_the_host_requirement
         ),
         make_location_data(SC2Mission.THE_HOST.mission_name, "South Void Shard", SC2LOTV_LOC_ID_OFFSET + 2102, LocationType.EXTRA,
-            logic.the_host_requirement
+            logic.protoss_the_host_requirement
         ),
         make_location_data(SC2Mission.THE_HOST.mission_name, "Southwest Void Shard", SC2LOTV_LOC_ID_OFFSET + 2103, LocationType.EXTRA,
-            logic.the_host_requirement
+            logic.protoss_the_host_requirement
         ),
         make_location_data(SC2Mission.THE_HOST.mission_name, "North Void Shard", SC2LOTV_LOC_ID_OFFSET + 2104, LocationType.EXTRA,
-            logic.the_host_requirement
+            logic.protoss_the_host_requirement
         ),
         make_location_data(SC2Mission.THE_HOST.mission_name, "Northwest Void Shard", SC2LOTV_LOC_ID_OFFSET + 2105, LocationType.EXTRA,
-            logic.the_host_requirement
+            logic.protoss_the_host_requirement
         ),
         make_location_data(SC2Mission.THE_HOST.mission_name, "Nerazim Warp in Zone", SC2LOTV_LOC_ID_OFFSET + 2106, LocationType.VANILLA,
-            logic.the_host_requirement
+            logic.protoss_the_host_requirement
         ),
         make_location_data(SC2Mission.THE_HOST.mission_name, "Tal'darim Warp in Zone", SC2LOTV_LOC_ID_OFFSET + 2107, LocationType.VANILLA,
-            logic.the_host_requirement
+            logic.protoss_the_host_requirement
         ),
         make_location_data(SC2Mission.THE_HOST.mission_name, "Purifier Warp in Zone", SC2LOTV_LOC_ID_OFFSET + 2108, LocationType.VANILLA,
-            logic.the_host_requirement
+            logic.protoss_the_host_requirement
         ),
         make_location_data(SC2Mission.SALVATION.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 2200, LocationType.VICTORY,
             logic.salvation_requirement
@@ -5525,6 +5525,60 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            ),
         make_location_data(SC2Mission.TEMPLAR_S_CHARGE_Z.mission_name, "Southeast Hybrid Stasis Chamber", SC2_RACESWAP_LOC_ID_OFFSET + 13605, LocationType.VANILLA,
                            logic.zerg_templars_charge_requirement
+                           ),
+        make_location_data(SC2Mission.THE_HOST_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 13900, LocationType.VICTORY,
+                           logic.terran_the_host_requirement
+                           ),
+        make_location_data(SC2Mission.THE_HOST_T.mission_name, "Southeast Void Shard", SC2_RACESWAP_LOC_ID_OFFSET + 13901, LocationType.EXTRA,
+                           logic.terran_the_host_requirement
+                           ),
+        make_location_data(SC2Mission.THE_HOST_T.mission_name, "South Void Shard", SC2_RACESWAP_LOC_ID_OFFSET + 13902, LocationType.EXTRA,
+                           logic.terran_the_host_requirement
+                           ),
+        make_location_data(SC2Mission.THE_HOST_T.mission_name, "Southwest Void Shard", SC2_RACESWAP_LOC_ID_OFFSET + 13903, LocationType.EXTRA,
+                           logic.terran_the_host_requirement
+                           ),
+        make_location_data(SC2Mission.THE_HOST_T.mission_name, "North Void Shard", SC2_RACESWAP_LOC_ID_OFFSET + 13904, LocationType.EXTRA,
+                           logic.terran_the_host_requirement
+                           ),
+        make_location_data(SC2Mission.THE_HOST_T.mission_name, "Northwest Void Shard", SC2_RACESWAP_LOC_ID_OFFSET + 13905, LocationType.EXTRA,
+                           logic.terran_the_host_requirement
+                           ),
+        make_location_data(SC2Mission.THE_HOST_T.mission_name, "Nerazim Warp in Zone", SC2_RACESWAP_LOC_ID_OFFSET + 13906, LocationType.VANILLA,
+                           logic.terran_the_host_requirement
+                           ),
+        make_location_data(SC2Mission.THE_HOST_T.mission_name, "Tal'darim Warp in Zone", SC2_RACESWAP_LOC_ID_OFFSET + 13907, LocationType.VANILLA,
+                           logic.terran_the_host_requirement
+                           ),
+        make_location_data(SC2Mission.THE_HOST_T.mission_name, "Purifier Warp in Zone", SC2_RACESWAP_LOC_ID_OFFSET + 13908, LocationType.VANILLA,
+                           logic.terran_the_host_requirement
+                           ),
+        make_location_data(SC2Mission.THE_HOST_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 14000, LocationType.VICTORY,
+                           logic.zerg_the_host_requirement
+                           ),
+        make_location_data(SC2Mission.THE_HOST_Z.mission_name, "Southeast Void Shard", SC2_RACESWAP_LOC_ID_OFFSET + 14001, LocationType.EXTRA,
+                           logic.zerg_the_host_requirement
+                           ),
+        make_location_data(SC2Mission.THE_HOST_Z.mission_name, "South Void Shard", SC2_RACESWAP_LOC_ID_OFFSET + 14002, LocationType.EXTRA,
+                           logic.zerg_the_host_requirement
+                           ),
+        make_location_data(SC2Mission.THE_HOST_Z.mission_name, "Southwest Void Shard", SC2_RACESWAP_LOC_ID_OFFSET + 14003, LocationType.EXTRA,
+                           logic.zerg_the_host_requirement
+                           ),
+        make_location_data(SC2Mission.THE_HOST_Z.mission_name, "North Void Shard", SC2_RACESWAP_LOC_ID_OFFSET + 14004, LocationType.EXTRA,
+                           logic.zerg_the_host_requirement
+                           ),
+        make_location_data(SC2Mission.THE_HOST_Z.mission_name, "Northwest Void Shard", SC2_RACESWAP_LOC_ID_OFFSET + 14005, LocationType.EXTRA,
+                           logic.zerg_the_host_requirement
+                           ),
+        make_location_data(SC2Mission.THE_HOST_Z.mission_name, "Nerazim Warp in Zone", SC2_RACESWAP_LOC_ID_OFFSET + 14006, LocationType.VANILLA,
+                           logic.zerg_the_host_requirement
+                           ),
+        make_location_data(SC2Mission.THE_HOST_Z.mission_name, "Tal'darim Warp in Zone", SC2_RACESWAP_LOC_ID_OFFSET + 14007, LocationType.VANILLA,
+                           logic.zerg_the_host_requirement
+                           ),
+        make_location_data(SC2Mission.THE_HOST_Z.mission_name, "Purifier Warp in Zone", SC2_RACESWAP_LOC_ID_OFFSET + 14008, LocationType.VANILLA,
+                           logic.zerg_the_host_requirement
                            ),
     ]
 
