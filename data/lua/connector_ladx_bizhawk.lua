@@ -50,7 +50,7 @@ require('common')
 -- We'll start from 55354 and go down looking for an open port, allowing for multiple concurrent instances
 
 port = 55355
-LOWEST_PORT = 55344
+LOWEST_PORT = 55350
 isbound = nil
 while not isbound and port > LOWEST_PORT do
     port = port - 1
