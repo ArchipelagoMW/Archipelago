@@ -862,9 +862,9 @@ jump_distance_orthogonal: 1 # Accepts numbers >= 1
 jump_distance_diagonal: 1 # Accepts numbers >= 0
 ```
 
-This is a special type of grid that is created from a drawn canvas. For this type of layout `size` may be omitted, but `canvas` is required.
+This is a special type of grid that is created from a drawn canvas. For this type of layout `canvas` is required and `size` is ignored if specified.
 
-`canvas` is a list of strings that form a rectangular grid, from which the layout's size is determined automatically. Every space in the canvas creates an empty slot, while every character that is not a space creates a filled mission slot. The resulting grid determines its indices like [Grid](#Grid).
+`canvas` is a list of strings that form a rectangular grid, from which the layout's `size` is determined automatically. Every space in the canvas creates an empty slot, while every character that is not a space creates a filled mission slot. The resulting grid determines its indices like [Grid](#Grid).
 
 ```yaml
 type: canvas
@@ -919,26 +919,7 @@ jump_distance_diagonal: 1
 ```
 Missions that are diagonal neighbors only connect if they do not already share an orthogonal neighbor. In this example `A` and `B` connect, but `B` and `C` don't because `X` already connects them. No such restriction exists for higher-distance diagonal jumps, so it is recommended to keep `jump_distance_diagonal` low.
 
-Finally, the default entrance and exit on a canvas are dynamically set to be the non-empty slots that are closest to the top left and bottom right corner respectively. It is highly recommended to disable the defaults and set your own entrance and exit, for example like this:
-```yaml
-type: canvas
-canvas:
-- '  E  '
-- ' OOO '
-- ' O O '
-- ' OXO '
-missions:
-# Disable the defaults
-- index: entrances
-  entrance: false
-- index: exits
-  exit: false
-# Set our own
-- index: group(E)
-  entrance: true
-- index: group(X)
-  exit: true
-```
+Finally, the default entrance and exit on a canvas are dynamically set to be the non-empty slots that are closest to the top left and bottom right corner respectively, but only if you don't set any entrances or exits yourself. It is highly recommended to set your own entrance and exit.
 
 #### Canvas Index Functions
 Canvas supports all of [Grid's index functions](#grid-index-functions), as well as the following:

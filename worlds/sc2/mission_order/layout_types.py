@@ -25,6 +25,12 @@ class LayoutType(ABC):
         This should include at least one entrance and exit."""
         return []
     
+    def final_setup(self, missions: List[SC2MOGenMission]):
+        """Called after user changes to the layout are applied to make any final checks and changes.
+
+        This function should be used with caution, since it allows going against a user's explicit commands."""
+        return
+
     def parse_index(self, term: str) -> Union[Set[int], None]:
         """From the given term, determine a list of desired target indices. The term is guaranteed to not be "entrances", "exits", or "all".
 
@@ -151,7 +157,7 @@ class Grid(LayoutType):
         return math.sqrt(Grid.euclidean_distance_squared(point1, point2))
 
     def get_grid_coordinates(self, idx: int) -> Tuple[int, int]:
-        return (idx % self.width), math.floor(idx / self.width)
+        return (idx % self.width), (idx // self.width)
     
     def get_grid_index(self, x: int, y: int) -> int:
         return y * self.width + x
@@ -349,25 +355,29 @@ class Canvas(Grid):
                         else:
                             mission.next.append(target_mission)
 
-        # Pick missions near the original start and end to set as default entrance/exit
-        top_left = self.get_grid_coordinates(0)
-        bottom_right = self.get_grid_coordinates(len(missions) - 1)
+        return missions
 
+    def final_setup(self, missions: List[SC2MOGenMission]):
+        # Pick missions near the original start and end to set as default entrance/exit
+        # if the user didn't set one themselves
         def distance_lambda(point: Tuple[int, int]) -> Callable[[Tuple[int, SC2MOGenMission]], int]:
             return lambda idx_mission: Grid.euclidean_distance_squared(self.get_grid_coordinates(idx_mission[0]), point)
         
-        closest_to_top_left = sorted(
-            ((idx, mission) for (idx, mission) in enumerate(missions) if not mission.option_empty),
-            key = distance_lambda(top_left)
-        )
-        closest_to_top_left[0][1].option_entrance = True
-        closest_to_bottom_right = sorted(
-            ((idx, mission) for (idx, mission) in enumerate(missions) if not mission.option_empty),
-            key = distance_lambda(bottom_right)
-        )
-        closest_to_bottom_right[0][1].option_exit = True
+        if not any(mission.option_entrance for mission in missions):
+            top_left = self.get_grid_coordinates(0)
+            closest_to_top_left = sorted(
+                ((idx, mission) for (idx, mission) in enumerate(missions) if not mission.option_empty),
+                key = distance_lambda(top_left)
+            )
+            closest_to_top_left[0][1].option_entrance = True
 
-        return missions
+        if not any(mission.option_exit for mission in missions):
+            bottom_right = self.get_grid_coordinates(len(missions) - 1)
+            closest_to_bottom_right = sorted(
+                ((idx, mission) for (idx, mission) in enumerate(missions) if not mission.option_empty),
+                key = distance_lambda(bottom_right)
+            )
+            closest_to_bottom_right[0][1].option_exit = True
 
     def idx_group(self, group: str) -> Union[Set[int], None]:
         if not group in self.groups:
