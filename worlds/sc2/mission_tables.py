@@ -121,7 +121,7 @@ class SC2Mission(Enum):
     ENGINE_OF_DESTRUCTION = 19, "Engine of Destruction (Terran)", SC2Campaign.WOL, "Rebellion", SC2Race.TERRAN, MissionPools.HARD, "ap_engine_of_destruction", MissionFlag.Terran|MissionFlag.AutoScroller|MissionFlag.VsTerran|MissionFlag.HasRaceSwap
     MEDIA_BLITZ = 20, "Media Blitz (Terran)", SC2Campaign.WOL, "Rebellion", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_media_blitz", MissionFlag.Terran|MissionFlag.VsTerran|MissionFlag.HasRaceSwap
     PIERCING_OF_THE_SHROUD = 21, "Piercing the Shroud", SC2Campaign.WOL, "Rebellion", SC2Race.TERRAN, MissionPools.STARTER, "ap_piercing_the_shroud", MissionFlag.Terran|MissionFlag.NoBuild|MissionFlag.VsAll
-    GATES_OF_HELL = 26, "Gates of Hell", SC2Campaign.WOL, "Char", SC2Race.TERRAN, MissionPools.HARD, "ap_gates_of_hell", MissionFlag.Terran|MissionFlag.VsZerg
+    GATES_OF_HELL = 26, "Gates of Hell (Terran)", SC2Campaign.WOL, "Char", SC2Race.TERRAN, MissionPools.HARD, "ap_gates_of_hell", MissionFlag.Terran|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     BELLY_OF_THE_BEAST = 27, "Belly of the Beast", SC2Campaign.WOL, "Char", SC2Race.ANY, MissionPools.STARTER, "ap_belly_of_the_beast", MissionFlag.Terran|MissionFlag.NoBuild|MissionFlag.VsZerg
     SHATTER_THE_SKY = 28, "Shatter the Sky (Terran)", SC2Campaign.WOL, "Char", SC2Race.TERRAN, MissionPools.HARD, "ap_shatter_the_sky", MissionFlag.Terran|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     ALL_IN = 29, "All-In (Terran)", SC2Campaign.WOL, "Char", SC2Race.TERRAN, MissionPools.VERY_HARD, "ap_all_in", MissionFlag.Terran|MissionFlag.TimedDefense|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
@@ -239,7 +239,8 @@ class SC2Mission(Enum):
     # 128/129 - A Sinister Turn
     # 130/131 - Echoes of the Future
     # 132/133 - In Utter Darkness
-    # 134/135 - Gates of Hell
+    GATES_OF_HELL_Z = 134, "Gates of Hell (Zerg)", SC2Campaign.WOL, "Char", SC2Race.ZERG, MissionPools.HARD, "ap_gates_of_hell", MissionFlag.Zerg|MissionFlag.VsZerg|MissionFlag.RaceSwap
+    GATES_OF_HELL_P = 135, "Gates of Hell (Protoss)", SC2Campaign.WOL, "Char", SC2Race.PROTOSS, MissionPools.HARD, "ap_gates_of_hell", MissionFlag.Protoss|MissionFlag.VsZerg|MissionFlag.RaceSwap
     # 136/137 - Belly of the Beast
     SHATTER_THE_SKY_Z = 138, "Shatter the Sky (Zerg)", SC2Campaign.WOL, "Char", SC2Race.ZERG, MissionPools.HARD, "ap_shatter_the_sky", MissionFlag.Zerg|MissionFlag.VsZerg|MissionFlag.RaceSwap
     SHATTER_THE_SKY_P = 139, "Shatter the Sky (Protoss)", SC2Campaign.WOL, "Char", SC2Race.PROTOSS, MissionPools.HARD, "ap_shatter_the_sky", MissionFlag.Protoss|MissionFlag.VsZerg|MissionFlag.RaceSwap

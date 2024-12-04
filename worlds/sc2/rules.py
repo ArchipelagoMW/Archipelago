@@ -231,6 +231,21 @@ class SC2Logic:
             and (self.terran_defense_rating(state, True) > 6)
         )
 
+    def zerg_gates_of_hell_requirement(self, state: CollectionState) -> bool:
+        """Gates of Hell mission requirement"""
+        return (
+            self.zerg_competent_comp_competent_aa(state)
+            and (self.zerg_defense_rating(state, True) > 8)
+        )
+
+    def protoss_gates_of_hell_requirement(self, state: CollectionState) -> bool:
+        """Gates of Hell mission requirement"""
+        return (
+            self.protoss_competent_comp(state)
+            and (self.protoss_defense_rating(state, True) > 6)
+            and (self.advanced_tactics or state.has(item_names.PROGRESSIVE_WARP_RELOCATE, self.player))
+        )
+
     def welcome_to_the_jungle_requirement(self, state: CollectionState) -> bool:
         """
         Welcome to the Jungle requirements - able to deal with Scouts, Void Rays, Zealots and Stalkers
@@ -879,6 +894,9 @@ class SC2Logic:
         # General enemy-based rules
         if air_enemy:
             defense_score += sum((zvx_air_defense_ratings[item] for item in zvx_air_defense_ratings if state.has(item, self.player)))
+            # spore and missile turret should not stack for defense rating
+            if state.has_all({item_names.SPORE_CRAWLER, item_names.INFESTED_MISSILE_TURRET}, self.player):
+                defense_score -= 2
         # Advanced Tactics bumps defense rating requirements down by 2
         if self.advanced_tactics:
             defense_score += 2
