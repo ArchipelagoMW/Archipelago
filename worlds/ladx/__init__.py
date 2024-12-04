@@ -46,6 +46,9 @@ class LinksAwakeningSettings(settings.Group):
     class DisplayMsgs(settings.Bool):
         """Display message inside of Bizhawk"""
 
+    class OptionOverrides(str):
+        """Provided options will be used as overrides when patching. This is disabled for race seeds."""
+
     rom_file: RomFile = RomFile(RomFile.copy_to)
     rom_start: typing.Union[RomStart, bool] = True
 
