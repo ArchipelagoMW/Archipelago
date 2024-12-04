@@ -28,7 +28,7 @@ class LayoutType(ABC):
     def final_setup(self, missions: List[SC2MOGenMission]):
         """Called after user changes to the layout are applied to make any final checks and changes.
 
-        This function should be used with caution, since it allows going against a user's explicit commands."""
+        Implementers should make changes with caution, since it runs after a user's explicit commands are implemented."""
         return
 
     def parse_index(self, term: str) -> Union[Set[int], None]:
