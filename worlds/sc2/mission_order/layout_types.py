@@ -25,6 +25,12 @@ class LayoutType(ABC):
         This should include at least one entrance and exit."""
         return []
     
+    def final_setup(self, missions: List[SC2MOGenMission]):
+        """Called after user changes to the layout are applied to make any final checks and changes.
+
+        Implementers should make changes with caution, since it runs after a user's explicit commands are implemented."""
+        return
+
     def parse_index(self, term: str) -> Union[Set[int], None]:
         """From the given term, determine a list of desired target indices. The term is guaranteed to not be "entrances", "exits", or "all".
 
@@ -138,8 +144,20 @@ class Grid(LayoutType):
         best_dimension = min(dimension_candidates, key=sum)
         return best_dimension
 
+    @staticmethod
+    def manhattan_distance(point1: Tuple[int, int], point2: Tuple[int, int]) -> int:
+        return abs(point1[0] - point2[0]) + abs(point1[1] - point2[1])
+    
+    @staticmethod
+    def euclidean_distance_squared(point1: Tuple[int, int], point2: Tuple[int, int]) -> int:
+        return (point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2
+    
+    @staticmethod
+    def euclidean_distance(point1: Tuple[int, int], point2: Tuple[int, int]) -> float:
+        return math.sqrt(Grid.euclidean_distance_squared(point1, point2))
+
     def get_grid_coordinates(self, idx: int) -> Tuple[int, int]:
-        return math.floor(idx / self.width), (idx % self.width)
+        return (idx % self.width), (idx // self.width)
     
     def get_grid_index(self, x: int, y: int) -> int:
         return y * self.width + x
@@ -243,7 +261,130 @@ class Grid(LayoutType):
         }
         return indices
     
-    
+
+class Canvas(Grid):
+    """Rectangular grid that determines size and filled slots based on special canvas option."""
+    canvas: List[str]
+    groups: Dict[str, List[int]]
+    jump_distance_orthogonal: int
+    jump_distance_diagonal: int
+
+    jumps_orthogonal = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+    jumps_diagonal = [(-1, -1), (-1, 1), (1, 1), (1, -1)]
+
+    index_functions = Grid.index_functions + ["group"]
+
+    def set_options(self, options: Dict[str, Any]) -> Dict[str, Any]:
+        self.width = options.pop("width") # Should be guaranteed by the option parser
+        self.height = math.ceil(self.size / self.width)
+        self.num_corners_to_remove = 0
+        self.two_start_positions = False
+        self.jump_distance_orthogonal = max(options.pop("jump_distance_orthogonal", 1), 1)
+        self.jump_distance_diagonal = max(options.pop("jump_distance_diagonal", 1), 0)
+
+        if not "canvas" in options:
+            raise KeyError("Canvas layout is missing required canvas option. Either create it or change type to Grid.")
+        self.canvas = options.pop("canvas")
+        # Pad short lines with spaces
+        longest_line = max(len(line) for line in self.canvas)
+        for idx in range(len(self.canvas)):
+            padding = ' ' * (longest_line - len(self.canvas[idx]))
+            self.canvas[idx] += padding
+
+        self.groups = {}
+        for (line_idx, line) in enumerate(self.canvas):
+            for (char_idx, char) in enumerate(line):
+                self.groups.setdefault(char, []).append(self.get_grid_index(char_idx, line_idx))
+        
+        return options
+
+    def make_slots(self, mission_factory: Callable[[], SC2MOGenMission]) -> List[SC2MOGenMission]:
+        missions = super().make_slots(mission_factory)
+        missions[0].option_entrance = False
+        missions[-1].option_exit = False
+
+        # Canvas spaces become empty slots
+        for idx in self.groups[" "]:
+            missions[idx].option_empty = True
+
+        # Raycast into jump directions to find nearest empty space
+        def jump(point: Tuple[int, int], direction: Tuple[int, int], distance: int) -> Tuple[int, int]:
+            return (
+                point[0] + direction[0] * distance,
+                point[1] + direction[1] * distance
+            )
+        
+        def raycast(point: Tuple[int, int], direction: Tuple[int, int], max_distance: int) -> Union[Tuple[int, SC2MOGenMission], None]:
+            for distance in range(1, max_distance + 1):
+                target = jump(point, direction, distance)
+                if self.is_valid_coordinates(*target):
+                    target_mission = missions[self.get_grid_index(*target)]
+                    if not target_mission.option_empty:
+                        return (distance, target_mission)
+                else:
+                    # Out of bounds
+                    return None
+            return None
+
+        for (idx, mission) in enumerate(missions):
+            if mission.option_empty:
+                continue
+            point = self.get_grid_coordinates(idx)
+            if self.jump_distance_orthogonal > 1:
+                for direction in Canvas.jumps_orthogonal:
+                    target = raycast(point, direction, self.jump_distance_orthogonal)
+                    if target is not None:
+                        (distance, target_mission) = target
+                        if distance > 1:
+                            # Distance 1 orthogonal jumps already come from the base grid
+                            mission.next.append(target[1])
+            if self.jump_distance_diagonal > 0:
+                for direction in Canvas.jumps_diagonal:
+                    target = raycast(point, direction, self.jump_distance_diagonal)
+                    if target is not None:
+                        (distance, target_mission) = target
+                        if distance == 1:
+                            # Keep distance 1 diagonal slots only if the orthogonal neighbours are empty
+                            x_neighbour = jump(point, (direction[0], 0), 1)
+                            y_neighbour = jump(point, (0, direction[1]), 1)
+                            if (
+                                missions[self.get_grid_index(*x_neighbour)].option_empty and
+                                missions[self.get_grid_index(*y_neighbour)].option_empty
+                            ):
+                                mission.next.append(target_mission)
+                        else:
+                            mission.next.append(target_mission)
+
+        return missions
+
+    def final_setup(self, missions: List[SC2MOGenMission]):
+        # Pick missions near the original start and end to set as default entrance/exit
+        # if the user didn't set one themselves
+        def distance_lambda(point: Tuple[int, int]) -> Callable[[Tuple[int, SC2MOGenMission]], int]:
+            return lambda idx_mission: Grid.euclidean_distance_squared(self.get_grid_coordinates(idx_mission[0]), point)
+        
+        if not any(mission.option_entrance for mission in missions):
+            top_left = self.get_grid_coordinates(0)
+            closest_to_top_left = sorted(
+                ((idx, mission) for (idx, mission) in enumerate(missions) if not mission.option_empty),
+                key = distance_lambda(top_left)
+            )
+            closest_to_top_left[0][1].option_entrance = True
+
+        if not any(mission.option_exit for mission in missions):
+            bottom_right = self.get_grid_coordinates(len(missions) - 1)
+            closest_to_bottom_right = sorted(
+                ((idx, mission) for (idx, mission) in enumerate(missions) if not mission.option_empty),
+                key = distance_lambda(bottom_right)
+            )
+            closest_to_bottom_right[0][1].option_exit = True
+
+    def idx_group(self, group: str) -> Union[Set[int], None]:
+        if not group in self.groups:
+            return None
+        return set(self.groups[group])
+
+
 class Hopscotch(LayoutType):
     """Alternating between one and two available missions.
     Default entrance is index 0 in the top left, default exit is index `size - 1` in the bottom right."""
