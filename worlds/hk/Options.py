@@ -138,7 +138,7 @@ for option_name, option_data in pool_options.items():
         else:
             count = len([loc for loc in option_data[1] if loc != "Start"])
         extra_data["__doc__"] = option_docstrings[option_name] + \
-            f"\n    This option adds {count} location{'s' if count != 1 else ''}."
+            f"\n    This option adds approximately {count} location{'s' if count != 1 else ''}."
     if option_name in default_on:
         option = type(option_name, (DefaultOnToggle,), extra_data)
     else:
