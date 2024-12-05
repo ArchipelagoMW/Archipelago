@@ -935,6 +935,12 @@ class HintLog(MDRecycleView):
     def hint_sorter(element: dict) -> str:
         return element["status"]["hint"]["status"]  # By status by default
 
+    def fix_heights(self):
+        """Workaround fix for divergent texture and layout heights"""
+        for element in self.children[0].children:
+            max_height = max(child.texture_size[1] for child in element.children)
+            element.height = max_height
+
 
 class ApAsyncImage(AsyncImage):
     def is_uri(self, filename: str) -> bool:
@@ -968,12 +974,6 @@ def load_override(filename: str, default_load=_original_image_loader_load, **kwa
 
 
 ImageLoader.load = load_override
-
-    def fix_heights(self):
-        """Workaround fix for divergent texture and layout heights"""
-        for element in self.children[0].children:
-            max_height = max(child.texture_size[1] for child in element.children)
-            element.height = max_height
 
 
 class E(ExceptionHandler):
