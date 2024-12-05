@@ -678,7 +678,8 @@ class LemurianShipVanilla(TestFormatBase):
 
 class LemurianShipFast(TestFormatBase):
     options = {
-        "lemurian_ship": 1
+        "lemurian_ship": 1,
+        "djinn_logic": 0
     }
 
     def test_ship_fast(self):
@@ -689,9 +690,18 @@ class LemurianShipFast(TestFormatBase):
         world = self.get_world()
         self.assertFalse(world.multiworld.state.has(ItemName.Ship, world.player, 1))
 
+    def test_ship_no_piers_or_crystal(self):
+        world = self.get_world()
+        state = self.multiworld.state
+        for item in [ItemName.Douse_Drop, ItemName.Isaac, ItemName.Frost_Jewel, ItemName.Aqua_Hydra_defeated]:
+            state.collect(world.create_item(item), True)
+        ship = world.get_location(LocationName.Lemurian_Ship_Engine_Room)
+        self.assertTrue(ship.can_reach(state))
+
 class LemurianShipStart(TestFormatBase):
     options = {
-        "lemurian_ship": 2
+        "lemurian_ship": 2,
+        "djinn_logic": 0
     }
 
     def test_ship_start(self):

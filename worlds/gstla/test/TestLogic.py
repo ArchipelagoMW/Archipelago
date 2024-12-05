@@ -320,6 +320,7 @@ class TestTreasureLogic(GSTestBase):
         'reveal_hidden_item': 0,
         'djinn_logic': 1,
         'character_shuffle': 2,
+        'lemurian_ship': 0
     }
 
     skip_missing_reqs: defaultdict[int, Set[str]] = defaultdict(lambda: set())

@@ -120,10 +120,11 @@ def set_entrance_rules(world: 'GSTLAWorld'):
     
     if world.options.lemurian_ship == 0:
         add_rule(world.get_entrance(EntranceName.MadraToLemurianShip),
-             lambda state: state.has(ItemName.Black_Crystal, player))
-    if world.options.lemurian_ship < 2:
-        add_rule(world.get_entrance(EntranceName.MadraToLemurianShip),
-             lambda state: state.has(ItemName.Gabomba_Statue_Completed, player) and state.has(ItemName.Piers, player))
+             lambda state: state.has(ItemName.Black_Crystal, player) and state.has(ItemName.Gabomba_Statue_Completed, player)
+                    and state.has(ItemName.Piers, player))
+    # if world.options.lemurian_ship < 2:
+    #     add_rule(world.get_entrance(EntranceName.MadraToLemurianShip),
+    #          lambda state: state.has(ItemName.Gabomba_Statue_Completed, player) and state.has(ItemName.Piers, player))
 
 def set_access_rules(world: 'GSTLAWorld'):
     player = world.player
@@ -383,7 +384,7 @@ def set_access_rules(world: 'GSTLAWorld'):
     #Lemurian Ship
     if world.options.lemurian_ship < 2:
         add_rule(world.get_location(LocationName.Lemurian_Ship_Engine_Room),
-                        lambda state: state.has(ItemName.Aqua_Hydra_defeated, player) and state.has(ItemName.Douse_Drop, player) and state.has(ItemName.Black_Crystal, player))
+                        lambda state: state.has(ItemName.Aqua_Hydra_defeated, player) and state.has(ItemName.Douse_Drop, player))
 
     add_rule(world.get_location(LocationName.Lemurian_Ship_Potion),
              lambda state: state.has(ItemName.Frost_Jewel, player))

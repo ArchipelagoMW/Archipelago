@@ -180,8 +180,8 @@ def create_items(world: 'GSTLAWorld', player: int):
         sum_locations -= 1
         
     for item in other_progression:
-        if world.options.lemurian_ship == 2 and item.name == ItemName.Black_Crystal:
-            # The black crystal is unnecessary when starting with the ship
+        if world.options.lemurian_ship != 0 and item.name == ItemName.Black_Crystal:
+            # The black crystal is unnecessary when the ship door is not closed
             continue
         ap_item = create_item_direct(item, player)
         world.multiworld.itempool.append(ap_item)
