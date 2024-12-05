@@ -2,6 +2,7 @@
 <MENUOFF>
 <FLAGOFF>(15)
 <BGM>(35)
+<WAIT>(30)
 <HSAVE>
 <BGMSTOP>
 <BGM>(7)
