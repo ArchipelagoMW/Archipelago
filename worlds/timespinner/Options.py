@@ -180,9 +180,16 @@ class DamageRandoOverrides(OptionDict):
     }
 
 class HpCap(Range):
-    "Sets the number that Lunais's HP maxes out at."
+    """Sets the number that Lunais's HP maxes out at."""
     display_name = "HP Cap"
     range_start = 1
+    range_end = 999
+    default = 999
+
+class AuraCap(Range):
+    """Sets the maximum Aura Lunais is allowed to have. Level 1 is 80. Djinn Inferno costs 45."""
+    display_name = "Aura Cap"
+    range_start = 45
     range_end = 999
     default = 999
 
@@ -359,12 +366,17 @@ class TrapChance(Range):
 class Traps(OptionList):
     """List of traps that may be in the item pool to find"""
     display_name = "Traps Types"
-    valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" }
-    default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" ]
+    valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap", "Throw Stun Trap" }
+    default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap", "Throw Stun Trap" ]
 
 class PresentAccessWithWheelAndSpindle(Toggle):
     """When inverted, allows using the refugee camp warp when both the Timespinner Wheel and Spindle is acquired."""
     display_name = "Back to the future"
+
+class PrismBreak(Toggle):
+    """Adds 3 Laser Access items to the item pool to remove the lasers blocking the military hangar area
+    instead of needing to beat the Golden Idol, Aelana, and The Maw."""
+    display_name = "Prism Break"
 
 @dataclass
 class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
@@ -383,6 +395,7 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     damage_rando: DamageRando
     damage_rando_overrides: DamageRandoOverrides
     hp_cap: HpCap
+    aura_cap: AuraCap
     level_cap: LevelCap
     extra_earrings_xp: ExtraEarringsXP
     boss_healing: BossHealing
@@ -401,6 +414,7 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     rising_tides_overrides: RisingTidesOverrides
     unchained_keys: UnchainedKeys
     back_to_the_future: PresentAccessWithWheelAndSpindle
+    prism_break: PrismBreak
     trap_chance: TrapChance
     traps: Traps
 
