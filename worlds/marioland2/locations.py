@@ -1,4 +1,4 @@
-START_IDS = 7770000
+START_IDS = 1
 
 locations = {
     "Mushroom Zone - Normal Exit": {"id": 0x00, "ram_index": 0, "type": "level"},
