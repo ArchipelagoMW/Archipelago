@@ -6,7 +6,7 @@ import typing
 from schema import Schema, Optional, And, Or
 
 from Options import Choice, OptionDict, OptionSet, DefaultOnToggle, Range, DeathLink, Toggle, \
-    StartInventoryPool, PerGameCommonOptions
+    StartInventoryPool, PerGameCommonOptions, OptionGroup
 
 # schema helpers
 FloatRange = lambda low, high: And(Or(int, float), lambda f: low <= f <= high)
@@ -272,6 +272,12 @@ class AtomicRocketTrapCount(TrapCount):
     display_name = "Atomic Rocket Traps"
 
 
+class AtomicCliffRemoverTrapCount(TrapCount):
+    """Trap items that when received trigger an atomic rocket explosion on a random cliff.
+    Warning: there is no warning. The launch is instantaneous."""
+    display_name = "Atomic Cliff Remover Traps"
+
+
 class EvolutionTrapCount(TrapCount):
     """Trap items that when received increase the enemy evolution."""
     display_name = "Evolution Traps"
@@ -293,7 +299,7 @@ class FactorioWorldGen(OptionDict):
     with in-depth documentation at https://lua-api.factorio.com/latest/Concepts.html#MapGenSettings"""
     display_name = "World Generation"
     # FIXME: do we want default be a rando-optimized default or in-game DS?
-    value: typing.Dict[str, typing.Dict[str, typing.Any]]
+    value: dict[str, dict[str, typing.Any]]
     default = {
         "autoplace_controls": {
             # terrain
@@ -402,7 +408,7 @@ class FactorioWorldGen(OptionDict):
         }
     })
 
-    def __init__(self, value: typing.Dict[str, typing.Any]):
+    def __init__(self, value: dict[str, typing.Any]):
         advanced = {"pollution", "enemy_evolution", "enemy_expansion"}
         self.value = {
             "basic": {k: v for k, v in value.items() if k not in advanced},
@@ -421,7 +427,7 @@ class FactorioWorldGen(OptionDict):
         optional_min_lte_max(enemy_expansion, "min_expansion_cooldown", "max_expansion_cooldown")
 
     @classmethod
-    def from_any(cls, data: typing.Dict[str, typing.Any]) -> FactorioWorldGen:
+    def from_any(cls, data: dict[str, typing.Any]) -> FactorioWorldGen:
         if type(data) == dict:
             return cls(data)
         else:
@@ -435,7 +441,7 @@ class ImportedBlueprint(DefaultOnToggle):
 
 class EnergyLink(Toggle):
     """Allow sending energy to other worlds. 25% of the energy is lost in the transfer."""
-    display_name = "EnergyLink"
+    display_name = "Energy Link"
 
 
 @dataclass
@@ -467,9 +473,42 @@ class FactorioOptions(PerGameCommonOptions):
     cluster_grenade_traps: ClusterGrenadeTrapCount
     artillery_traps: ArtilleryTrapCount
     atomic_rocket_traps: AtomicRocketTrapCount
+    atomic_cliff_remover_traps: AtomicCliffRemoverTrapCount
     attack_traps: AttackTrapCount
     evolution_traps: EvolutionTrapCount
     evolution_trap_increase: EvolutionTrapIncrease
     death_link: DeathLink
     energy_link: EnergyLink
     start_inventory_from_pool: StartInventoryPool
+
+
+option_groups: list[OptionGroup] = [
+    OptionGroup(
+        "Technologies",
+        [
+            TechTreeLayout,
+            Progressive,
+            MinTechCost,
+            MaxTechCost,
+            TechCostDistribution,
+            TechCostMix,
+            RampingTechCosts,
+            TechTreeInformation,
+        ]
+    ),
+    OptionGroup(
+        "Traps",
+        [
+            AttackTrapCount,
+            EvolutionTrapCount,
+            EvolutionTrapIncrease,
+            TeleportTrapCount,
+            GrenadeTrapCount,
+            ClusterGrenadeTrapCount,
+            ArtilleryTrapCount,
+            AtomicRocketTrapCount,
+            AtomicCliffRemoverTrapCount,
+        ],
+        start_collapsed=True
+    ),
+]
