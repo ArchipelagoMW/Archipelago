@@ -34,7 +34,6 @@ from .data.utils import (
     get_discard_exclusion_list,
     get_early_caves_list,
     get_early_caves_start_list,
-    get_elevators_come_to_you,
     get_entity_hunt,
     get_ep_all_individual,
     get_ep_easy,
@@ -75,13 +74,15 @@ class WitnessPlayerLogic:
 
         self.UNREACHABLE_REGIONS: Set[str] = set()
 
+        self.THEORETICAL_BASE_ITEMS: Set[str] = set()
         self.THEORETICAL_ITEMS: Set[str] = set()
-        self.THEORETICAL_ITEMS_NO_MULTI: Set[str] = set()
-        self.MULTI_AMOUNTS: Dict[str, int] = defaultdict(lambda: 1)
-        self.MULTI_LISTS: Dict[str, List[str]] = {}
-        self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI: Set[str] = set()
-        self.PROG_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
+        self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
+        self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME: Set[str] = set()
+
+        self.PARENT_ITEM_COUNT_PER_BASE_ITEM: Dict[str, int] = defaultdict(lambda: 1)
+        self.PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
         self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
+
         self.STARTING_INVENTORY: Set[str] = set()
 
         self.DIFFICULTY = world.options.puzzle_randomization
@@ -183,13 +184,13 @@ class WitnessPlayerLogic:
 
         # Remove any items that don't actually exist in the settings (e.g. Symbol Shuffle turned off)
         these_items = frozenset({
-            subset.intersection(self.THEORETICAL_ITEMS_NO_MULTI)
+            subset.intersection(self.THEORETICAL_BASE_ITEMS)
             for subset in these_items
         })
 
         # Update the list of "items that are actually being used by any entity"
         for subset in these_items:
-            self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(subset)
+            self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME.update(subset)
 
         # Handle door entities (door shuffle)
         if entity_hex in self.DOOR_ITEMS_BY_ID:
@@ -197,7 +198,7 @@ class WitnessPlayerLogic:
             door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[entity_hex]})
 
             for dependent_item in door_items:
-                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(dependent_item)
+                self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME.update(dependent_item)
 
             these_items = logical_and_witness_rules([door_items, these_items])
 
@@ -299,10 +300,10 @@ class WitnessPlayerLogic:
 
             self.THEORETICAL_ITEMS.add(item_name)
             if isinstance(static_witness_logic.ALL_ITEMS[item_name], ProgressiveItemDefinition):
-                self.THEORETICAL_ITEMS_NO_MULTI.update(cast(ProgressiveItemDefinition,
-                                                            static_witness_logic.ALL_ITEMS[item_name]).child_item_names)
+                self.THEORETICAL_BASE_ITEMS.update(cast(ProgressiveItemDefinition,
+                                                        static_witness_logic.ALL_ITEMS[item_name]).child_item_names)
             else:
-                self.THEORETICAL_ITEMS_NO_MULTI.add(item_name)
+                self.THEORETICAL_BASE_ITEMS.add(item_name)
 
             if static_witness_logic.ALL_ITEMS[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
                 entity_hexes = cast(DoorItemDefinition, static_witness_logic.ALL_ITEMS[item_name]).panel_id_hexes
@@ -316,11 +317,11 @@ class WitnessPlayerLogic:
 
             self.THEORETICAL_ITEMS.discard(item_name)
             if isinstance(static_witness_logic.ALL_ITEMS[item_name], ProgressiveItemDefinition):
-                self.THEORETICAL_ITEMS_NO_MULTI.difference_update(
+                self.THEORETICAL_BASE_ITEMS.difference_update(
                     cast(ProgressiveItemDefinition, static_witness_logic.ALL_ITEMS[item_name]).child_item_names
                 )
             else:
-                self.THEORETICAL_ITEMS_NO_MULTI.discard(item_name)
+                self.THEORETICAL_BASE_ITEMS.discard(item_name)
 
             if static_witness_logic.ALL_ITEMS[item_name].category in [ItemCategory.DOOR, ItemCategory.LASER]:
                 entity_hexes = cast(DoorItemDefinition, static_witness_logic.ALL_ITEMS[item_name]).panel_id_hexes
@@ -624,8 +625,29 @@ class WitnessPlayerLogic:
         if world.options.early_caves == "add_to_pool" and not remote_doors:
             adjustment_linesets_in_order.append(get_early_caves_list())
 
-        if world.options.elevators_come_to_you:
-            adjustment_linesets_in_order.append(get_elevators_come_to_you())
+        if "Quarry Elevator" in world.options.elevators_come_to_you:
+            adjustment_linesets_in_order.append([
+                "New Connections:",
+                "Quarry - Quarry Elevator - TrueOneWay",
+                "Outside Quarry - Quarry Elevator - TrueOneWay",
+            ])
+        if "Bunker Elevator" in world.options.elevators_come_to_you:
+            adjustment_linesets_in_order.append([
+                "New Connections:",
+                "Outside Bunker - Bunker Elevator - TrueOneWay",
+            ])
+        if "Swamp Long Bridge" in world.options.elevators_come_to_you:
+            adjustment_linesets_in_order.append([
+                "New Connections:",
+                "Outside Swamp - Swamp Long Bridge - TrueOneWay",
+                "Swamp Near Boat - Swamp Long Bridge - TrueOneWay",
+                "Requirement Changes:",
+                "0x035DE - 0x17E2B - True",  # Swamp Purple Sand Bottom EP
+            ])
+        # if "Town Maze Rooftop Bridge" in world.options.elevators_come_to_you:
+        #     adjustment_linesets_in_order.append([
+        #         "New Connections:"
+        #         "Town Red Rooftop - Town Maze Rooftop - TrueOneWay"
 
         if world.options.victory_condition == "panel_hunt":
             adjustment_linesets_in_order.append(get_entity_hunt())
@@ -843,7 +865,7 @@ class WitnessPlayerLogic:
         self.REQUIREMENTS_BY_HEX = {}
         self.USED_EVENT_NAMES_BY_HEX = defaultdict(list)
         self.CONNECTIONS_BY_REGION_NAME = {}
-        self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI = set()
+        self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME = set()
 
         # Make independent requirements for entities
         for entity_hex in self.DEPENDENT_REQUIREMENTS_BY_HEX.keys():
@@ -868,18 +890,18 @@ class WitnessPlayerLogic:
         """
         Finalise which items are used in the world, and handle their progressive versions.
         """
-        for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI:
+        for item in self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME:
             if item not in self.THEORETICAL_ITEMS:
                 progressive_item_name = static_witness_logic.get_parent_progressive_item(item)
-                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item_name)
+                self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item_name)
                 child_items = cast(ProgressiveItemDefinition,
                                    static_witness_logic.ALL_ITEMS[progressive_item_name]).child_item_names
-                multi_list = [child_item for child_item in child_items
-                              if child_item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI]
-                self.MULTI_AMOUNTS[item] = multi_list.index(item) + 1
-                self.MULTI_LISTS[progressive_item_name] = multi_list
+                progressive_list = [child_item for child_item in child_items
+                              if child_item in self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME]
+                self.PARENT_ITEM_COUNT_PER_BASE_ITEM[item] = progressive_list.index(item) + 1
+                self.PROGRESSIVE_LISTS[progressive_item_name] = progressive_list
             else:
-                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(item)
+                self.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME.add(item)
 
     def solvability_guaranteed(self, entity_hex: str) -> bool:
         return not (
@@ -962,7 +984,7 @@ class WitnessPlayerLogic:
         Makes event-item pairs for entities with associated events, unless these entities are disabled.
         """
 
-        self.ALWAYS_EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION] = "Victory"
+        self.USED_EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION].append("Victory")
 
         for event_hex, event_name in self.ALWAYS_EVENT_NAMES_BY_HEX.items():
             self.USED_EVENT_NAMES_BY_HEX[event_hex].append(event_name)

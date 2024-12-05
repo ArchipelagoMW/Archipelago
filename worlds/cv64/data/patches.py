@@ -197,6 +197,23 @@ deathlink_nitro_edition = [
     0xA168FFFD,  # SB    T0, 0xFFFD (T3)
 ]
 
+deathlink_nitro_state_checker = [
+    # Checks to see if the player is in an alright state before exploding them. If not, then the Nitro explosion spawn
+    # code will be aborted, and they should eventually explode after getting out of that state.
+    #
+    # Invalid states so far include: interacting/going through a door, being grabbed by a vampire.
+    0x90880009,  # LBU   T0, 0x0009 (A0)
+    0x24090005,  # ADDIU T1, R0, 0x0005
+    0x11090005,  # BEQ   T0, T1, [forward 0x05]
+    0x24090002,  # ADDIU T1, R0, 0x0002
+    0x11090003,  # BEQ   T0, T1, [forward 0x03]
+    0x00000000,  # NOP
+    0x08000660,  # J     0x80001980
+    0x00000000,  # NOP
+    0x03E00008,  # JR    RA
+    0xAC400048   # SW    R0, 0x0048 (V0)
+]
+
 launch_fall_killer = [
     # Custom code to force the instant fall death if at a high enough falling speed after getting killed by something
     # that launches you (whether it be the Nitro explosion or a Big Toss hit). The game doesn't normally run the check

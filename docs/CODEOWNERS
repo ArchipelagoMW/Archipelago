@@ -55,19 +55,22 @@
 /worlds/dlcquest/ @axe-y @agilbert1412
 
 # DOOM 1993
-/worlds/doom_1993/ @Daivuk
+/worlds/doom_1993/ @Daivuk @KScl
 
 # DOOM II
-/worlds/doom_ii/ @Daivuk
+/worlds/doom_ii/ @Daivuk @KScl
 
 # Factorio
 /worlds/factorio/ @Berserker66
+
+# Faxanadu
+/worlds/faxanadu/ @Daivuk
 
 # Final Fantasy Mystic Quest
 /worlds/ffmq/ @Alchav @wildham0
 
 # Heretic
-/worlds/heretic/ @Daivuk
+/worlds/heretic/ @Daivuk @KScl
 
 # Hollow Knight
 /worlds/hk/ @BadMagic100 @qwint
@@ -143,7 +146,7 @@
 /worlds/shivers/ @GodlFire
 
 # A Short Hike
-/worlds/shorthike/ @chandler05
+/worlds/shorthike/ @chandler05 @BrandenEK
 
 # Sonic Adventure 2 Battle
 /worlds/sa2b/ @PoryGone @RaspberrySpace
