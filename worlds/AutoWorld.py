@@ -10,7 +10,7 @@ from dataclasses import make_dataclass
 from typing import (Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping, Optional, Set, TextIO, Tuple,
                     TYPE_CHECKING, Type, Union)
 
-from Options import item_and_loc_options, OptionGroup, PerGameCommonOptions
+from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
@@ -33,7 +33,10 @@ class AutoWorldRegister(type):
         # lazy loading + caching to minimize runtime cost
         if cls.__settings is None:
             from settings import get_settings
-            cls.__settings = get_settings()[cls.settings_key]
+            try:
+                cls.__settings = get_settings()[cls.settings_key]
+            except AttributeError:
+                return None
         return cls.__settings
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
@@ -480,6 +483,7 @@ class World(metaclass=AutoWorldRegister):
         group = cls(multiworld, new_player_id)
         group.options = cls.options_dataclass(**{option_key: option.from_any(option.default)
                                                  for option_key, option in cls.options_dataclass.type_hints.items()})
+        group.options.accessibility = ItemsAccessibility(ItemsAccessibility.option_items)
 
         return group
 
