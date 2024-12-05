@@ -59,6 +59,8 @@ from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.tab.tab import MDTabsPrimary, MDTabsItem, MDTabsItemText, MDTabsCarousel
+from kivymd.uix.menu import MDDropdownMenu
+from kivymd.uix.dropdownitem import MDDropDownItem, MDDropDownItemText
 from kivymd.uix.button import MDButton, MDButtonText, MDButtonIcon, MDIconButton
 from kivymd.uix.label import MDLabel, MDIcon
 from kivymd.uix.recycleview import MDRecycleView
@@ -368,13 +370,17 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
         """ Respond to the selection of items in the view. """
         self.selected = is_selected
 
-
+status_icons = {
+    HintStatus.HINT_NO_PRIORITY: "information",
+    HintStatus.HINT_PRIORITY: "exclamation-thick",
+    HintStatus.HINT_AVOID: "alert"
+}
 
 class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
     selected = BooleanProperty(False)
     striped = BooleanProperty(False)
     index = None
-    dropdown: DropDown
+    dropdown: MDDropdownMenu
 
     def __init__(self):
         super(HintLabel, self).__init__()
@@ -385,29 +391,28 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
         self.entrance_text = ""
         self.status_text = ""
         self.hint = {}
-        for child in self.children:
-            child.bind(texture_size=self.set_height)
-
 
         ctx = MDApp.get_running_app().ctx
-        self.dropdown = DropDown()
+        menu_items = []
 
-        def set_value(button):
-            self.dropdown.select(button.status)
+        for status in (HintStatus.HINT_NO_PRIORITY, HintStatus.HINT_PRIORITY, HintStatus.HINT_AVOID):
+            name = status_names[status]
+            status_button = MDDropDownItem(MDDropDownItemText(text=name), size_hint_y=None, height=dp(50))
+            status_button.status = status
+            menu_items.append({
+                "text": name,
+                "leading_icon": status_icons[status],
+                "on_release": lambda x=status: select(self, x)
+            })
+
+        self.dropdown = MDDropdownMenu(caller=self.ids["status"], items=menu_items)
 
         def select(instance, data):
             ctx.update_hint(self.hint["location"],
                             self.hint["finding_player"],
                             data)
 
-        for status in (HintStatus.HINT_NO_PRIORITY, HintStatus.HINT_PRIORITY, HintStatus.HINT_AVOID):
-            name = status_names[status]
-            status_button = Button(text=name, size_hint_y=None, height=dp(50))
-            status_button.status = status
-            status_button.bind(on_release=set_value)
-            self.dropdown.add_widget(status_button)
-
-        self.dropdown.bind(on_select=select)
+        self.dropdown.bind(on_release=self.dropdown.dismiss)
 
     def set_height(self, instance, value):
         self.height = max([child.texture_size[1] for child in self.children])
@@ -426,7 +431,6 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
 
     def refresh_view_layout(self, rv, index, layout, viewport):
         super(HintLabel, self).refresh_view_layout(rv, index, layout, viewport)
-        self.set_height(self, 0)
 
     def on_touch_down(self, touch):
         """ Add selection on touch down """
@@ -441,7 +445,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
                     ctx = MDApp.get_running_app().ctx
                     if ctx.slot == self.hint["receiving_player"]:  # If this player owns this hint
                         # open a dropdown
-                        self.dropdown.open(self.ids["status"])
+                        self.dropdown.open()
                 elif self.selected:
                     self.parent.clear_selection()
                 else:
