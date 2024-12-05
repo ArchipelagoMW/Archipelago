@@ -57,7 +57,7 @@ VANILLA_PUPPY_LOCATIONS = [
     "Monstro Chamber 3 Platform Above Chamber 2 Entrance Chest",
     "Wonderland Lotus Forest Through the Painting Thunder Plant Chest",
     "Hollow Bastion Grand Hall Left of Gate Chest",
-    "Halloween Town Cemetery Between Graves Chest",
+    "Halloween Town Cemetery By Cat Shape Chest",
     "Halloween Town Moonlight Hill White Trinity Chest",
     "Halloween Town Guillotine Square Pumpkin Structure Right Chest",
     "Monstro Mouth High Platform Across from Boat Chest",
