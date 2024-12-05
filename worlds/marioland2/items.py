@@ -1,5 +1,6 @@
 from BaseClasses import ItemClassification
 from .locations import level_name_to_id
+from .options import CoinsanityChecks
 
 items = {
     "Space Zone Progression": ItemClassification.progression,
@@ -70,7 +71,7 @@ items = {
     "Turtle Zone 3 Midway Bell": ItemClassification.filler,
     "Mario's Castle Midway Bell": ItemClassification.progression_skip_balancing,
     "1 Coin": ItemClassification.filler,
-    **{f"{i} Coins": ItemClassification.filler for i in range(2, 200)}
+    **{f"{i} Coins": ItemClassification.filler for i in range(2, CoinsanityChecks.range_end)}
 }
 
 for level in {"Turtle Zone Secret Course", "Macro Zone Secret Course", "Turtle Zone 3", "Scenic Course",
