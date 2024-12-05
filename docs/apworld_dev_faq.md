@@ -60,9 +60,9 @@ The entrance *would* now be determined to be traversable if it were rechecked, b
 To account for this case, AP would have to recheck all entrances every time a new region is reached until no new regions are reached.
 
 However, there is a way to **manually** define that a *specific* entrance needs to be rechecked during region sweep if a *specific* region is reached during it. This is what an indirect condition is.
-This keeps almost all of the performance upsides. Even a game making heavy use of indirect conditions (See: The Witness) is still significantly faster than if it just blanket "rechecked all entrances until nothing new is found".
+This keeps most of the performance upsides. Even in a game making heavy use of indirect conditions (ex: The Witness), using them is significantly faster than just "rechecking each entrance until nothing new is found".
 The reason entrance access rules using `location.can_reach` and `entrance.can_reach` are also affected is because they call `region.can_reach` on their respective parent/source region.
 
 We recognize it can feel like a trap since it will not alert you when you are missing an indirect condition, and that some games have very complex access rules.
-As of [PR #3682 (Core: Region handling customization)](https://github.com/ArchipelagoMW/Archipelago/pull/3682) being merged, it is also possible for a world to opt out of indirect conditions entirely, although it does come at a flat performance cost.
+As of [PR #3682 (Core: Region handling customization)](https://github.com/ArchipelagoMW/Archipelago/pull/3682) being merged, it is possible for a world to opt out of indirect conditions entirely, instead using the system of checking each entrance whenever a region has been reached, although this does come with a performance cost.
 Opting out of using indirect conditions should only be used by games that *really* need it. For most games, it should be reasonable to know all entrance &rarr; region dependencies, making indirect conditions preferred because they are much faster.
