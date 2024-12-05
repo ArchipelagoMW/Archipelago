@@ -266,6 +266,8 @@ def generateRom(args, world: "LinksAwakeningWorld"):
     our_useful_items = [item for item in our_items if ItemClassification.progression in item.classification]
 
     def gen_hint():
+        if not world.options.in_game_hints:
+            return 'Hints are disabled!'
         chance = world.random.uniform(0, 1)
         if chance < JUNK_HINT:
             return None
@@ -286,7 +288,7 @@ def generateRom(args, world: "LinksAwakeningWorld"):
         else:
             location_name = location.name
 
-        hint = f"{name} {location.item} is at {location_name}"
+        hint = f"{name} {location.item.name} is at {location_name}"
         if location.player != world.player:
             # filter out { and } since they cause issues with string.format later on
             player_name = world.multiworld.player_name[location.player].replace("{", "").replace("}", "")
