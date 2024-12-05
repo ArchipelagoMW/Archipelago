@@ -1,13 +1,11 @@
 flask>=3.0.3
-werkzeug>=3.0.4
+werkzeug>=3.0.6
 pony>=0.7.19
 waitress>=3.0.0
 Flask-Caching>=2.3.0
 Flask-Compress>=1.15
 Flask-Limiter>=3.8.0
-bokeh>=3.1.1; python_version <= '3.8'
-bokeh>=3.4.3; python_version == '3.9'
-bokeh>=3.5.2; python_version >= '3.10'
+bokeh>=3.5.2
 markupsafe>=2.1.5
 Markdown>=3.7
 mdx-breakless-lists>=1.0.1
