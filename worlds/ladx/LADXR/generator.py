@@ -63,14 +63,14 @@ from .patches.aesthetics import rgb_to_bin, bin_to_rgb
 from .. import Options
 
 # Function to generate a final rom, this patches the rom with all required patches
-def generateRom(base_rom: bytes, args, data: Dict):
-    random.seed(data["seed"] + data["player"])
-    multi_key = binascii.unhexlify(data["multi_key"].encode())
-    item_list = pickle.loads(binascii.unhexlify(data["item_list"].encode()))
-    options = data["options"]
+def generateRom(base_rom: bytes, args, patch_data: Dict):
+    random.seed(patch_data["seed"] + patch_data["player"])
+    multi_key = binascii.unhexlify(patch_data["multi_key"].encode())
+    item_list = pickle.loads(binascii.unhexlify(patch_data["item_list"].encode()))
+    options = patch_data["options"]
     rom_patches = []
     rom = ROMWithTables(base_rom, rom_patches)
-    rom.player_names = data["other_player_names"]
+    rom.player_names = patch_data["other_player_names"]
     pymods = []
     if args.pymod:
         for pymod in args.pymod:
@@ -125,7 +125,7 @@ def generateRom(base_rom: bytes, args, data: Dict):
     patches.core.easyColorDungeonAccess(rom)
     patches.owl.removeOwlEvents(rom)
     patches.enemies.fixArmosKnightAsMiniboss(rom)
-    patches.bank3e.addBank3E(rom, multi_key, data["player"], data["other_player_names"])
+    patches.bank3e.addBank3E(rom, multi_key, patch_data["player"], patch_data["other_player_names"])
     patches.bank3f.addBank3F(rom)
     patches.bank34.addBank34(rom, item_list)
     patches.core.removeGhost(rom)
@@ -241,21 +241,22 @@ def generateRom(base_rom: bytes, args, data: Dict):
 
     patches.core.addBootsControls(rom, options["boots_controls"])
 
-    hints.addHints(rom, random, data["hint_texts"])
+    random.seed(patch_data["seed"] + patch_data["player"])
+    hints.addHints(rom, random, patch_data["hint_texts"])
 
-    if data["world_setup"]["goal"] == "raft":
+    if patch_data["world_setup"]["goal"] == "raft":
         patches.goal.setRaftGoal(rom)
-    elif data["world_setup"]["goal"] in ("bingo", "bingo-full"):
-        patches.bingo.setBingoGoal(rom, data["world_setup"]["bingo_goals"], data["world_setup"]["goal"])
-    elif data["world_setup"]["goal"] == "seashells":
+    elif patch_data["world_setup"]["goal"] in ("bingo", "bingo-full"):
+        patches.bingo.setBingoGoal(rom, patch_data["world_setup"]["bingo_goals"], patch_data["world_setup"]["goal"])
+    elif patch_data["world_setup"]["goal"] == "seashells":
         patches.goal.setSeashellGoal(rom, 20)
     else:
-        patches.goal.setRequiredInstrumentCount(rom, data["world_setup"]["goal"])
+        patches.goal.setRequiredInstrumentCount(rom, patch_data["world_setup"]["goal"])
 
     # Patch the generated logic into the rom
-    patches.chest.setMultiChest(rom, data["world_setup"]["multichest"])
+    patches.chest.setMultiChest(rom, patch_data["world_setup"]["multichest"])
     #if ladxr_settings["overworld"] not in {"dungeondive", "random"}:
-    patches.entrances.changeEntrances(rom, data["world_setup"]["entrance_mapping"])
+    patches.entrances.changeEntrances(rom, patch_data["world_setup"]["entrance_mapping"])
     for spot in item_list:
         if spot.item and spot.item.startswith("*"):
             spot.item = spot.item[1:]
@@ -266,14 +267,14 @@ def generateRom(base_rom: bytes, args, data: Dict):
                 # There are only 101 player name slots (99 + "The Server" + "another world"), so don't use more than that
                 mw = 100
         spot.patch(rom, spot.item, multiworld=mw)
-    #patches.enemies.changeBosses(rom, data["world_setup"]["boss_mapping"])
-    #patches.enemies.changeMiniBosses(rom, data["world_setup"]["miniboss_mapping"])
+    #patches.enemies.changeBosses(rom, patch_data["world_setup"]["boss_mapping"])
+    #patches.enemies.changeMiniBosses(rom, patch_data["world_setup"]["miniboss_mapping"])
 
     if not args.romdebugmode:
         patches.core.addFrameCounter(rom, len(item_list))
 
     patches.core.warpHome(rom)  # Needs to be done after setting the start location.
-    patches.titleScreen.setRomInfo(rom, data)
+    patches.titleScreen.setRomInfo(rom, patch_data)
     if options["ap_title_screen"]:
         patches.titleScreen.setTitleGraphics(rom)
     patches.endscreen.updateEndScreen(rom)
@@ -282,11 +283,54 @@ def generateRom(base_rom: bytes, args, data: Dict):
         patches.enemies.doubleTrouble(rom)
 
     if options["text_shuffle"]:
+        excluded_ids = [
+            # Overworld owl statues
+            0x1B6, 0x1B7, 0x1B8, 0x1B9, 0x1BA, 0x1BB, 0x1BC, 0x1BD, 0x1BE, 0x22D,
+
+            # Dungeon owls
+            0x288, 0x280,  # D1
+            0x28A, 0x289, 0x281,  # D2
+            0x282, 0x28C, 0x28B,  # D3
+            0x283,  # D4
+            0x28D, 0x284,  # D5
+            0x285, 0x28F, 0x28E,  # D6
+            0x291, 0x290, 0x286,  # D7
+            0x293, 0x287, 0x292,  # D8
+            0x263,  # D0
+
+            # Hint books
+            0x267,  # color dungeon
+            0x200, 0x201,
+            0x202, 0x203,
+            0x204, 0x205,
+            0x206, 0x207,
+            0x208, 0x209,
+            0x20A, 0x20B,
+            0x20C,
+            0x20D, 0x20E,
+            0x217, 0x218, 0x219, 0x21A,
+
+            # Goal sign
+            0x1A3,
+
+            # Signpost maze
+            0x1A9, 0x1AA, 0x1AB, 0x1AC, 0x1AD,
+
+            # Prices
+            0x02C, 0x02D, 0x030, 0x031, 0x032, 0x033, # Shop items
+            0x03B, # Trendy Game
+            0x045, # Fisherman
+            0x018, 0x019, # Crazy Tracy
+            0x0DC, # Mamu
+            0x0F0, # Raft ride
+        ]
+        excluded_texts = [ rom.texts[excluded_id] for excluded_id in excluded_ids]
         buckets = defaultdict(list)
         # For each ROM bank, shuffle text within the bank
+        random.seed(patch_data["seed"] + patch_data["player"])
         for n, data in enumerate(rom.texts._PointerTable__data):
             # Don't muck up which text boxes are questions and which are statements
-            if type(data) != int and data and data != b'\xFF':
+            if type(data) != int and data and data != b'\xFF' and data not in excluded_texts:
                 buckets[(rom.texts._PointerTable__banks[n], data[len(data) - 1] == 0xfe)].append((n, data))
         for bucket in buckets.values():
             # For each bucket, make a copy and shuffle
@@ -329,6 +373,7 @@ def generateRom(base_rom: bytes, args, data: Dict):
                     Options.TrendyGame.option_impossible: (3, 16),
                 }
                 def speed():
+                    random.seed(patch_data["seed"] + patch_data["player"])
                     return random.randint(*speeds[options["trendy_game"]])
                 rom.banks[0x4][0x76A0-0x4000] = 0xFF - speed()
                 rom.banks[0x4][0x76A2-0x4000] = speed()
@@ -433,4 +478,4 @@ def generateRom(base_rom: bytes, args, data: Dict):
     for pymod in pymods:
         pymod.postPatch(rom)
 
-    return rom.export()
+    return rom.save()

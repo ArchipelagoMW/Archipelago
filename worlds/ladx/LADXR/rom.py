@@ -62,20 +62,8 @@ class ROM:
         self.banks[0][0x14E] = checksum >> 8
         self.banks[0][0x14F] = checksum & 0xFF
 
-    def save(self, file, *, name=None):
+    def save(self):
         # don't pass the name to fixHeader
-        self.fixHeader()
-        if isinstance(file, str):
-            f = open(file, "wb")
-            for bank in self.banks:
-                f.write(bank)
-            f.close()
-            print("Saved:", file)
-        else:
-            for bank in self.banks:
-                file.write(bank)
-
-    def export(self):
         self.fixHeader()
         return b"".join(self.banks)
 
