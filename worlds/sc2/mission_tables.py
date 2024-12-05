@@ -178,7 +178,7 @@ class SC2Mission(Enum):
     TEMPLAR_S_CHARGE = 68, "Templar's Charge (Protoss)", SC2Campaign.LOTV, "Moebius", SC2Race.PROTOSS, MissionPools.HARD, "ap_templar_s_charge", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.VsTerran|MissionFlag.HasRaceSwap
     TEMPLAR_S_RETURN = 69, "Templar's Return", SC2Campaign.LOTV, "Return to Aiur", SC2Race.PROTOSS, MissionPools.EASY, "ap_templar_s_return", MissionFlag.Protoss|MissionFlag.NoBuild|MissionFlag.VsPZ
     THE_HOST = 70, "The Host (Protoss)", SC2Campaign.LOTV, "Return to Aiur", SC2Race.PROTOSS, MissionPools.HARD, "ap_the_host", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.VsAll|MissionFlag.HasRaceSwap
-    SALVATION = 71, "Salvation", SC2Campaign.LOTV, "Return to Aiur", SC2Race.PROTOSS, MissionPools.VERY_HARD, "ap_salvation", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.TimedDefense|MissionFlag.VsPZ|MissionFlag.AiProtossAlly
+    SALVATION = 71, "Salvation (Protoss)", SC2Campaign.LOTV, "Return to Aiur", SC2Race.PROTOSS, MissionPools.VERY_HARD, "ap_salvation", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.TimedDefense|MissionFlag.VsPZ|MissionFlag.AiProtossAlly|MissionFlag.HasRaceSwap
 
     # Epilogue
     INTO_THE_VOID = 72, "Into the Void", SC2Campaign.EPILOGUE, "_1", SC2Race.PROTOSS, MissionPools.VERY_HARD, "ap_into_the_void", MissionFlag.Protoss|MissionFlag.VanillaSoa|MissionFlag.VsAll|MissionFlag.AiTerranAlly|MissionFlag.AiZergAlly
@@ -319,7 +319,8 @@ class SC2Mission(Enum):
     # 220/221 - Templar's Return
     THE_HOST_T = 222, "The Host (Terran)", SC2Campaign.LOTV, "Return to Aiur", SC2Race.TERRAN, MissionPools.HARD, "ap_the_host", MissionFlag.Terran|MissionFlag.VsAll|MissionFlag.RaceSwap
     THE_HOST_Z = 223, "The Host (Zerg)", SC2Campaign.LOTV, "Return to Aiur", SC2Race.ZERG, MissionPools.HARD, "ap_the_host", MissionFlag.Zerg|MissionFlag.VsAll|MissionFlag.RaceSwap
-    # 224/225 - Salvation
+    SALVATION_T = 224, "Salvation (Terran)", SC2Campaign.LOTV, "Return to Aiur", SC2Race.TERRAN, MissionPools.VERY_HARD, "ap_salvation", MissionFlag.Terran|MissionFlag.TimedDefense|MissionFlag.VsPZ|MissionFlag.AiProtossAlly|MissionFlag.RaceSwap
+    SALVATION_Z = 225, "Salvation (Zerg)", SC2Campaign.LOTV, "Return to Aiur", SC2Race.ZERG, MissionPools.VERY_HARD, "ap_salvation", MissionFlag.Zerg|MissionFlag.TimedDefense|MissionFlag.VsPZ|MissionFlag.AiProtossAlly|MissionFlag.RaceSwap
     # 226/227 - Into the Void
     # 228/229 - The Essence of Eternity
     # 230/231 - Amon's Fall

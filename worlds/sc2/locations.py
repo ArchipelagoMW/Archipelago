@@ -2010,19 +2010,19 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.protoss_the_host_requirement
         ),
         make_location_data(SC2Mission.SALVATION.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 2200, LocationType.VICTORY,
-            logic.salvation_requirement
+            logic.protoss_salvation_requirement
         ),
         make_location_data(SC2Mission.SALVATION.mission_name, "Fabrication Matrix", SC2LOTV_LOC_ID_OFFSET + 2201, LocationType.EXTRA,
-            logic.salvation_requirement
+            logic.protoss_salvation_requirement
         ),
         make_location_data(SC2Mission.SALVATION.mission_name, "Assault Cluster", SC2LOTV_LOC_ID_OFFSET + 2202, LocationType.EXTRA,
-            logic.salvation_requirement
+            logic.protoss_salvation_requirement
         ),
         make_location_data(SC2Mission.SALVATION.mission_name, "Hull Breach", SC2LOTV_LOC_ID_OFFSET + 2203, LocationType.EXTRA,
-            logic.salvation_requirement
+            logic.protoss_salvation_requirement
         ),
         make_location_data(SC2Mission.SALVATION.mission_name, "Core Critical", SC2LOTV_LOC_ID_OFFSET + 2204, LocationType.EXTRA,
-            logic.salvation_requirement
+            logic.protoss_salvation_requirement
         ),
 
         # Epilogue
@@ -5579,6 +5579,36 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            ),
         make_location_data(SC2Mission.THE_HOST_Z.mission_name, "Purifier Warp in Zone", SC2_RACESWAP_LOC_ID_OFFSET + 14008, LocationType.VANILLA,
                            logic.zerg_the_host_requirement
+                           ),
+        make_location_data(SC2Mission.SALVATION_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 14100, LocationType.VICTORY,
+                           logic.terran_salvation_requirement
+                           ),
+        make_location_data(SC2Mission.SALVATION_T.mission_name, "Fabrication Matrix", SC2_RACESWAP_LOC_ID_OFFSET + 14101, LocationType.EXTRA,
+                           logic.terran_salvation_requirement
+                           ),
+        make_location_data(SC2Mission.SALVATION_T.mission_name, "Assault Cluster", SC2_RACESWAP_LOC_ID_OFFSET + 14102, LocationType.EXTRA,
+                           logic.terran_salvation_requirement
+                           ),
+        make_location_data(SC2Mission.SALVATION_T.mission_name, "Hull Breach", SC2_RACESWAP_LOC_ID_OFFSET + 14103, LocationType.EXTRA,
+                           logic.terran_salvation_requirement
+                           ),
+        make_location_data(SC2Mission.SALVATION_T.mission_name, "Core Critical", SC2_RACESWAP_LOC_ID_OFFSET + 14104, LocationType.EXTRA,
+                           logic.terran_salvation_requirement
+                           ),
+        make_location_data(SC2Mission.SALVATION_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 14200, LocationType.VICTORY,
+                           logic.zerg_salvation_requirement
+                           ),
+        make_location_data(SC2Mission.SALVATION_Z.mission_name, "Fabrication Matrix", SC2_RACESWAP_LOC_ID_OFFSET + 14201, LocationType.EXTRA,
+                           logic.zerg_salvation_requirement
+                           ),
+        make_location_data(SC2Mission.SALVATION_Z.mission_name, "Assault Cluster", SC2_RACESWAP_LOC_ID_OFFSET + 14202, LocationType.EXTRA,
+                           logic.zerg_salvation_requirement
+                           ),
+        make_location_data(SC2Mission.SALVATION_Z.mission_name, "Hull Breach", SC2_RACESWAP_LOC_ID_OFFSET + 14203, LocationType.EXTRA,
+                           logic.zerg_salvation_requirement
+                           ),
+        make_location_data(SC2Mission.SALVATION_Z.mission_name, "Core Critical", SC2_RACESWAP_LOC_ID_OFFSET + 14204, LocationType.EXTRA,
+                           logic.zerg_salvation_requirement
                            ),
     ]
 

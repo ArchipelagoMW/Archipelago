@@ -2042,7 +2042,7 @@ class SC2Logic:
             )
         )
 
-    def salvation_requirement(self, state: CollectionState) -> bool:
+    def protoss_salvation_requirement(self, state: CollectionState) -> bool:
         return (
                 [
                     self.protoss_competent_comp(state),
@@ -2050,6 +2050,35 @@ class SC2Logic:
                     self.protoss_static_defense(state)
                 ].count(True) >= 2
         ) and self.protoss_very_hard_mission_weapon_armor_level(state)
+
+    def terran_salvation_requirement(self, state: CollectionState) -> bool:
+        return (
+            self.terran_beats_protoss_deathball(state)
+            and self.terran_very_hard_mission_weapon_armor_level(state)
+            and self.terran_air_anti_air(state)
+            and state.has_any({item_names.SIEGE_TANK, item_names.LIBERATOR}, self.player)
+            and state.has_any({item_names.PERDITION_TURRET, item_names.DEVASTATOR_TURRET, item_names.PLANETARY_FORTRESS}, self.player)
+        )
+
+    def zerg_salvation_requirement(self, state: CollectionState) -> bool:
+        return (
+            self.zerg_competent_comp(state)
+            and self.zerg_competent_anti_air(state)
+            and self.zerg_very_hard_mission_weapon_armor_level(state)
+            and (
+                self.morph_impaler_or_lurker(state)
+                or state.has_all({item_names.INFESTED_LIBERATOR, item_names.INFESTED_LIBERATOR_DEFENDER_MODE}, self.player)
+                or state.has_all({item_names.MUTALISK, item_names.MUTALISK_SEVERING_GLAIVE, item_names.MUTALISK_VICIOUS_GLAIVE}, self.player)
+            )
+            and (
+                state.has_all({item_names.INFESTED_LIBERATOR, item_names.INFESTED_LIBERATOR_CLOUD_DISPERSAL}, self.player)
+                or (
+                    self.morph_devourer(state)
+                    and state.has(item_names.MUTALISK, self.player)
+                )
+                or state.has_all({item_names.MUTALISK, item_names.MUTALISK_SUNDERING_GLAIVE}, self.player)
+            )
+        )
 
     def into_the_void_requirement(self, state: CollectionState) -> bool:
         if not self.protoss_very_hard_mission_weapon_armor_level(state):
