@@ -4,7 +4,7 @@ from dataclasses import dataclass, make_dataclass
 
 from .ExtractedData import logic_options, starts, pool_options
 from .Rules import cost_terms
-from schema import And, Or, Schema, Optional
+from schema import And, Schema, Optional
 
 from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, NamedRange, DeathLink, PerGameCommonOptions
 from .Charms import vanilla_costs, names as charm_names
@@ -304,12 +304,7 @@ class PlandoCharmCosts(OptionDict):
     display_name = "Charm Notch Cost Plando"
     valid_keys = frozenset(charm_names)
     schema = Schema({
-        Optional(name): Or(
-            And(str, lambda n: n.startswith("random")),
-            And(int, lambda n: 6 >= n >= 0),
-            error="Charm costs must be integers in the range 0-6 or use a random prefixed string."
-            )
-        for name in charm_names
+        Optional(name): And(int, lambda n: 6 >= n >= 0, error="Charm costs must be integers in the range 0-6.") for name in charm_names
         })
 
     def __init__(self, value):
