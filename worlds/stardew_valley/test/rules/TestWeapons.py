@@ -10,40 +10,40 @@ class TestWeaponsLogic(SVTestBase):
     }
 
     def test_mine(self):
-        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"), prevent_sweep=True)
-        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"), prevent_sweep=True)
-        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"), prevent_sweep=True)
-        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"), prevent_sweep=True)
-        self.multiworld.state.collect(self.create_item("Progressive House"), prevent_sweep=True)
+        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"))
+        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"))
+        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"))
+        self.multiworld.state.collect(self.create_item("Progressive Pickaxe"))
+        self.multiworld.state.collect(self.create_item("Progressive House"))
         self.collect([self.create_item("Combat Level")] * 10)
         self.collect([self.create_item("Mining Level")] * 10)
         self.collect([self.create_item("Progressive Mine Elevator")] * 24)
-        self.multiworld.state.collect(self.create_item("Bus Repair"), prevent_sweep=True)
-        self.multiworld.state.collect(self.create_item("Skull Key"), prevent_sweep=True)
+        self.multiworld.state.collect(self.create_item("Bus Repair"))
+        self.multiworld.state.collect(self.create_item("Skull Key"))
 
-        self.GiveItemAndCheckReachableMine("Progressive Sword", 1)
-        self.GiveItemAndCheckReachableMine("Progressive Dagger", 1)
-        self.GiveItemAndCheckReachableMine("Progressive Club", 1)
+        self.give_item_and_check_reachable_mine("Progressive Sword", 1)
+        self.give_item_and_check_reachable_mine("Progressive Dagger", 1)
+        self.give_item_and_check_reachable_mine("Progressive Club", 1)
 
-        self.GiveItemAndCheckReachableMine("Progressive Sword", 2)
-        self.GiveItemAndCheckReachableMine("Progressive Dagger", 2)
-        self.GiveItemAndCheckReachableMine("Progressive Club", 2)
+        self.give_item_and_check_reachable_mine("Progressive Sword", 2)
+        self.give_item_and_check_reachable_mine("Progressive Dagger", 2)
+        self.give_item_and_check_reachable_mine("Progressive Club", 2)
 
-        self.GiveItemAndCheckReachableMine("Progressive Sword", 3)
-        self.GiveItemAndCheckReachableMine("Progressive Dagger", 3)
-        self.GiveItemAndCheckReachableMine("Progressive Club", 3)
+        self.give_item_and_check_reachable_mine("Progressive Sword", 3)
+        self.give_item_and_check_reachable_mine("Progressive Dagger", 3)
+        self.give_item_and_check_reachable_mine("Progressive Club", 3)
 
-        self.GiveItemAndCheckReachableMine("Progressive Sword", 4)
-        self.GiveItemAndCheckReachableMine("Progressive Dagger", 4)
-        self.GiveItemAndCheckReachableMine("Progressive Club", 4)
+        self.give_item_and_check_reachable_mine("Progressive Sword", 4)
+        self.give_item_and_check_reachable_mine("Progressive Dagger", 4)
+        self.give_item_and_check_reachable_mine("Progressive Club", 4)
 
-        self.GiveItemAndCheckReachableMine("Progressive Sword", 5)
-        self.GiveItemAndCheckReachableMine("Progressive Dagger", 5)
-        self.GiveItemAndCheckReachableMine("Progressive Club", 5)
+        self.give_item_and_check_reachable_mine("Progressive Sword", 5)
+        self.give_item_and_check_reachable_mine("Progressive Dagger", 5)
+        self.give_item_and_check_reachable_mine("Progressive Club", 5)
 
-    def GiveItemAndCheckReachableMine(self, item_name: str, reachable_level: int):
+    def give_item_and_check_reachable_mine(self, item_name: str, reachable_level: int):
         item = self.multiworld.create_item(item_name, self.player)
-        self.multiworld.state.collect(item, prevent_sweep=True)
+        self.multiworld.state.collect(item)
         rule = self.world.logic.mine.can_mine_in_the_mines_floor_1_40()
         if reachable_level > 0:
             self.assert_rule_true(rule, self.multiworld.state)

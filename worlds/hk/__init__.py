@@ -231,7 +231,7 @@ class HKWorld(World):
             all_event_names.update(set(godhome_event_names))
 
         # Link regions
-        for event_name in all_event_names:
+        for event_name in sorted(all_event_names):
             #if event_name in wp_exclusions:
             #    continue
             loc = HKLocation(self.player, event_name, None, menu_region)
@@ -340,7 +340,7 @@ class HKWorld(World):
 
         for shop, locations in self.created_multi_locations.items():
             for _ in range(len(locations), getattr(self.options, shop_to_option[shop]).value):
-                loc = self.create_location(shop)
+                self.create_location(shop)
                 unfilled_locations += 1
 
         # Balance the pool
@@ -356,7 +356,7 @@ class HKWorld(World):
             if shops:
                 for _ in range(additional_shop_items):
                     shop = self.random.choice(shops)
-                    loc = self.create_location(shop)
+                    self.create_location(shop)
                     unfilled_locations += 1
                     if len(self.created_multi_locations[shop]) >= 16:
                         shops.remove(shop)
