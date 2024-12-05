@@ -2,7 +2,7 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
-from typing import TYPE_CHECKING, Dict, List, Set, cast
+from typing import TYPE_CHECKING, Dict, List, Set
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 
@@ -15,7 +15,7 @@ from .data.item_definition_classes import (
     ProgressiveItemDefinition,
     WeightedItemDefinition,
 )
-from .data.utils import build_weighted_int_list
+from .data.utils import build_weighted_int_list, cast_not_none
 from .locations import WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
 
@@ -55,7 +55,7 @@ class WitnessPlayerItems:
             name: data for (name, data) in self.item_data.items()
             if data.classification not in
                {ItemClassification.progression, ItemClassification.progression_skip_balancing}
-               or name in player_logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME
+               or name in player_logic.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME
         }
 
         # Downgrade door items
@@ -76,7 +76,7 @@ class WitnessPlayerItems:
         }
         for item_name, item_data in progression_dict.items():
             if isinstance(item_data.definition, ProgressiveItemDefinition):
-                num_progression = len(self._logic.MULTI_LISTS[item_name])
+                num_progression = len(self._logic.PROGRESSIVE_LISTS[item_name])
                 self._mandatory_items[item_name] = num_progression
             else:
                 self._mandatory_items[item_name] = 1
@@ -200,7 +200,7 @@ class WitnessPlayerItems:
         """
         return [
             # data.ap_code is guaranteed for a symbol definition
-            cast(int, data.ap_code) for name, data in static_witness_items.ITEM_DATA.items()
+            cast_not_none(data.ap_code) for name, data in static_witness_items.ITEM_DATA.items()
             if name not in self.item_data.keys() and data.definition.category is ItemCategory.SYMBOL
         ]
 
@@ -211,8 +211,8 @@ class WitnessPlayerItems:
             if isinstance(item.definition, ProgressiveItemDefinition):
                 # Note: we need to reference the static table here rather than the player-specific one because the child
                 # items were removed from the pool when we pruned out all progression items not in the options.
-                output[cast(int, item.ap_code)] = [cast(int, static_witness_items.ITEM_DATA[child_item].ap_code)
-                                                   for child_item in item.definition.child_item_names]
+                output[cast_not_none(item.ap_code)] = [cast_not_none(static_witness_items.ITEM_DATA[child_item].ap_code)
+                                                       for child_item in item.definition.child_item_names]
         return output
 
 
