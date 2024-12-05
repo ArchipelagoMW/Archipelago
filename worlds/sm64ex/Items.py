@@ -10,16 +10,17 @@ class SM64Item(Item):
 class SM64ItemData(NamedTuple):
     code: int | None = None
     classification: ItemClassification = ItemClassification.filler
+    description: str = ""
 
 generic_item_data_table: dict[str, SM64ItemData] = {
-    "Power Star": SM64ItemData(sm64ex_base_id + 0, ItemClassification.progression_skip_balancing),
-    "Basement Key": SM64ItemData(sm64ex_base_id + 178, ItemClassification.progression),
-    "Second Floor Key": SM64ItemData(sm64ex_base_id + 179, ItemClassification.progression),
-    "Progressive Key": SM64ItemData(sm64ex_base_id + 180, ItemClassification.progression),
-    "Wing Cap": SM64ItemData(sm64ex_base_id + 181, ItemClassification.progression),
-    "Metal Cap": SM64ItemData(sm64ex_base_id + 182, ItemClassification.progression),
-    "Vanish Cap": SM64ItemData(sm64ex_base_id + 183, ItemClassification.progression),
-    "1Up Mushroom": SM64ItemData(sm64ex_base_id + 184, ItemClassification.filler),
+    "Power Star": SM64ItemData(sm64ex_base_id + 0, ItemClassification.progression_skip_balancing, "Collectable reward for course objectives and secrets. Needed to unlock parts of the castle."),
+    "Basement Key": SM64ItemData(sm64ex_base_id + 178, ItemClassification.progression, "The key to the basement."),
+    "Second Floor Key": SM64ItemData(sm64ex_base_id + 179, ItemClassification.progression, "The key to the second floor. Also necessary to reach the third floor."),
+    "Progressive Key": SM64ItemData(sm64ex_base_id + 180, ItemClassification.progression, "A key to another floor of the castle."),
+    "Wing Cap": SM64ItemData(sm64ex_base_id + 181, ItemClassification.progression, "A powerup for Mario. Grants flight."),
+    "Metal Cap": SM64ItemData(sm64ex_base_id + 182, ItemClassification.progression, "A powerup for Mario. Grants passage through certain walls."),
+    "Vanish Cap": SM64ItemData(sm64ex_base_id + 183, ItemClassification.progression, "A powerup for Mario. Grants increased strength and weight."),
+    "1Up Mushroom": SM64ItemData(sm64ex_base_id + 184, ItemClassification.filler, "An extra life."),
 }
 
 action_item_data_table: dict[str, SM64ItemData] = {
