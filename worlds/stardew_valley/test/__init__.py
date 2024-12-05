@@ -6,7 +6,7 @@ from argparse import Namespace
 from contextlib import contextmanager
 from typing import Dict, ClassVar, Iterable, Tuple, Optional, List, Union, Any
 
-from BaseClasses import MultiWorld, CollectionState, PlandoOptions, get_seed, Location, Item, ItemClassification
+from BaseClasses import MultiWorld, CollectionState, PlandoOptions, get_seed, Location, Item
 from Options import VerifyKeys
 from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
@@ -236,7 +236,6 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
 
         self.original_state = self.multiworld.state.copy()
         self.original_itempool = self.multiworld.itempool.copy()
-        self.original_prog_item_count = world.total_progression_items
         self.unfilled_locations = self.multiworld.get_unfilled_locations(1)
         if self.constructed:
             self.world = world  # noqa
@@ -246,7 +245,6 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         self.multiworld.itempool = self.original_itempool
         for location in self.unfilled_locations:
             location.item = None
-        self.world.total_progression_items = self.original_prog_item_count
 
         self.multiworld.lock.release()
 
@@ -257,20 +255,13 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         return super().run_default_tests
 
     def collect_lots_of_money(self, percent: float = 0.25):
-        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), prevent_sweep=False)
-        real_total_prog_items = self.multiworld.worlds[self.player].total_progression_items
+        self.collect("Shipping Bin")
+        real_total_prog_items = self.world.total_progression_items
         required_prog_items = int(round(real_total_prog_items * percent))
-        for i in range(required_prog_items):
-            self.multiworld.state.collect(self.world.create_item("Stardrop"), prevent_sweep=False)
-        self.multiworld.worlds[self.player].total_progression_items = real_total_prog_items
+        self.collect("Stardrop", required_prog_items)
 
     def collect_all_the_money(self):
-        self.multiworld.state.collect(self.world.create_item("Shipping Bin"), prevent_sweep=False)
-        real_total_prog_items = self.multiworld.worlds[self.player].total_progression_items
-        required_prog_items = int(round(real_total_prog_items * 0.95))
-        for i in range(required_prog_items):
-            self.multiworld.state.collect(self.world.create_item("Stardrop"), prevent_sweep=False)
-        self.multiworld.worlds[self.player].total_progression_items = real_total_prog_items
+        self.collect_lots_of_money(0.95)
 
     def collect_everything(self):
         non_event_items = [item for item in self.multiworld.get_items() if item.code]
@@ -278,7 +269,8 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
             self.multiworld.state.collect(item)
 
     def collect_all_except(self, item_to_not_collect: str):
-        for item in self.multiworld.get_items():
+        non_event_items = [item for item in self.multiworld.get_items() if item.code]
+        for item in non_event_items:
             if item.name != item_to_not_collect:
                 self.multiworld.state.collect(item)
 
@@ -290,25 +282,26 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
 
     def collect(self, item: Union[str, Item, Iterable[Item]], count: int = 1) -> Union[None, Item, List[Item]]:
         assert count > 0
+
         if not isinstance(item, str):
             super().collect(item)
             return
+
         if count == 1:
             item = self.create_item(item)
             self.multiworld.state.collect(item)
             return item
+
         items = []
         for i in range(count):
             item = self.create_item(item)
             self.multiworld.state.collect(item)
             items.append(item)
+
         return items
 
     def create_item(self, item: str) -> StardewItem:
-        created_item = self.world.create_item(item)
-        if created_item.classification == ItemClassification.progression:
-            self.multiworld.worlds[self.player].total_progression_items -= 1
-        return created_item
+        return self.world.create_item(item)
 
     def remove_one_by_name(self, item: str) -> None:
         self.remove(self.create_item(item))
@@ -336,7 +329,6 @@ def solo_multiworld(world_options: Optional[Dict[Union[str, StardewValleyOption]
         original_state = multiworld.state.copy()
         original_itempool = multiworld.itempool.copy()
         unfilled_locations = multiworld.get_unfilled_locations(1)
-        original_prog_item_count = world.total_progression_items
 
         yield multiworld, world
 
@@ -344,7 +336,6 @@ def solo_multiworld(world_options: Optional[Dict[Union[str, StardewValleyOption]
         multiworld.itempool = original_itempool
         for location in unfilled_locations:
             location.item = None
-        multiworld.total_progression_items = original_prog_item_count
 
         multiworld.lock.release()
 
