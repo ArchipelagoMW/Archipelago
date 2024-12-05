@@ -4,6 +4,7 @@
 <BGM>(35)
 <HSAVE>
 <BGMSTOP>
+<BGM>(7)
 <MENUON>
 <FRAMEEND>
 <END>

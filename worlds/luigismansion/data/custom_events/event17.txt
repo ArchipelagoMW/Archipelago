@@ -2,6 +2,7 @@
 <BGM>(11)
 <SAVE>
 <BGMSTOP>
+<BGM>(7)
 <MENUON>
 <FLAGON>(91)
 <END>

@@ -2,5 +2,6 @@
 <BGM>(11)
 <SAVE>
 <BGMSTOP>
+<BGM>(7)
 <MENUON>
 <END>
