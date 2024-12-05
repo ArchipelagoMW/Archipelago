@@ -690,6 +690,9 @@ class SC2MOGenLayout(MissionOrderNode):
             for idx in indices:
                 self.missions[idx].update_with_data(mission_data)
 
+        # Let layout respond to user changes
+        self.layout_type.final_setup(self.missions)
+
         for mission in self.missions:
             if mission.option_entrance:
                 self.entrances.append(mission)
@@ -697,7 +700,7 @@ class SC2MOGenLayout(MissionOrderNode):
                 self.exits.append(mission)
             if mission.option_next is not None:
                 mission.next = [self.missions[idx] for term in mission.option_next for idx in sorted(self.resolve_index_term(term))]
-        
+
         # Set up missions' prev data
         for mission in self.missions:
             for next_mission in mission.next:
