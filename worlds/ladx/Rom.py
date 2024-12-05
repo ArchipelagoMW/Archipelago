@@ -26,7 +26,7 @@ class LADXPatchExtensions(worlds.Files.APPatchExtension):
     @staticmethod
     def generate_rom(caller: worlds.Files.APProcedurePatch, rom: bytes, data_file: str) -> bytes:
         patch_data = json.loads(caller.get_file(data_file).decode("utf-8"))
-        apply_overrides(data)
+        apply_overrides(patch_data)
         rom_name = get_base_rom_path()
         out_name = f"{patch_data['out_base']}{caller.result_file_ending}"
         parser = get_parser()
@@ -127,7 +127,7 @@ def get_base_rom_path(file_name: str = "") -> str:
     return file_name
 
 
-def apply_overrides(data: dict) -> None:
+def apply_overrides(patch_data: dict) -> None:
     host_settings = settings.get_settings()
     option_overrides = host_settings["ladx_options"].get("option_overrides")
     if not option_overrides:
@@ -151,7 +151,7 @@ def apply_overrides(data: dict) -> None:
         "music_change_condition",
         "palette",
     }
-    if not data["is_race"]:
+    if not patch_data["is_race"]:
         overridable_options.update([
             "ap_title_screen",
             "boots_controls",
@@ -161,7 +161,7 @@ def apply_overrides(data: dict) -> None:
             "warps",
         ])
     for option_name in option_overrides.keys():
-        if (option_name not in data["options"]) or (option_name not in overridable_options):
+        if (option_name not in patch_data["options"]) or (option_name not in overridable_options):
             continue
-        data["options"][option_name] = getattr(rolled_settings, option_name).value
+        patch_data["options"][option_name] = getattr(rolled_settings, option_name).value
 
