@@ -14,7 +14,8 @@ from .Options import (ItemShuffle, MajorMinorSplit, RevealHiddenItem, OmitLocati
                       TelportEverywhere, TrapChance, MimicTrapWeight, ForgeMaterialsFillerWeight,
                       RustyMaterialsFillerWeight, StatBoostFillerWeight, UncommonConsumableFillerWeight,
                       ForgedEquipmentFillerWeight, LuckyFountainEquipmentFillerWeight, ShopEquipmentFillerWeight,
-                      CoinsFillerWeight, CommonConsumablesFillerWeight, AutoRun, ScaleMimics)
+                      CoinsFillerWeight, CommonConsumablesFillerWeight, AutoRun, ScaleMimics, ScaleCharacters,
+                      MaxScaledLevel)
 
 from Options import OptionGroup
 
@@ -38,6 +39,8 @@ gstla_option_groups = [
     OptionGroup("Character Changes", [
         CharacterShuffle,
         SecondStartingCharacter,
+        ScaleCharacters,
+        MaxScaledLevel,
         CharStatShuffle,
         CharEleShuffle,
         RandomizeClassStatBoosts

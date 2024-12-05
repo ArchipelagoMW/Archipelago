@@ -61,7 +61,7 @@ class TestRandoFormat(TestFormatBase):
                 else:
                     loc_count += 1
         encoded_name = base64.b64encode(self.world.player_name.encode('utf-8'))
-        expected_length = 1 + 16 + 16 + len(encoded_name) + 1 + loc_count * 4 + 4 + djinn_count * 2
+        expected_length = 1 + 16 + 16 + len(encoded_name) + 1 + loc_count * 4 + 4 + djinn_count * 2 + 2 + 7*2
         self.assertEqual(expected_length, len(self.rando_content.getvalue()))
 
         self.rando_content.seek(0)
@@ -1222,3 +1222,4 @@ class TestFullPCShuffle(TestFormatBase):
         world = self.get_world()
         jenna_loc = world.get_location(LocationName.Idejima_Jenna)
         self.assertEqual(ItemType.Character, jenna_loc.item.item_data.type)
+

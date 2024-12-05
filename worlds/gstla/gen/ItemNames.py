@@ -539,7 +539,7 @@ class ItemName(str, Enum):
     Piers = "Piers"
     
 
-item_id_by_name: Dict[int, ItemName] = {
+item_id_by_name: Dict[ItemName, int] = {
     "???": 0,
     "Milquetoast Mimic": 2561,
     "Clumsy Mimic": 2562,
@@ -1054,7 +1054,7 @@ item_id_by_name: Dict[int, ItemName] = {
     
 }
 
-name_by_item_id: Dict[ItemName, int] = {
+name_by_item_id: Dict[int, ItemName] = {
     2561: "Milquetoast Mimic",
     2562: "Clumsy Mimic",
     2563: "Mimic",

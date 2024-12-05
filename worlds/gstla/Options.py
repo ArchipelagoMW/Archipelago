@@ -44,6 +44,20 @@ class SecondStartingCharacter(Choice):
     option_mia = 6
     default = "random"
 
+class ScaleCharacters(Toggle):
+    """Whether to scale character levels by spheres.  Increases generation time."""
+    internal_name = "scale_characters"
+    display_name = "Scale Characters"
+    default = 1
+
+class MaxScaledLevel(Range):
+    """The maximum level a scaled character should have.  Only valid if scale_characters is true."""
+    internal_name = "max_scaled_level"
+    display_name = "Max Scaled Level"
+    range_start = 5
+    range_end = 99
+    default = 24
+
 class DjinnLogic(NamedRange):
     """How much do Djinn affect logic for being able to defeat bosses?
     Assuming this is set to 100 (Normal) beating Briggs expects 6 djinn, Poseidon 24 djinn and Doom Dragon 56 djinn.
@@ -91,7 +105,7 @@ class OmitLocations(Choice):
     option_no_omission = 0
     option_omit_anemos_inner_sanctum = 1
     option_omit_superbosses_and_inner_sanctum = 2
-    default = 3
+    default = 2
 
 class AddGs1Items(Toggle):
     """Adds the Elven Shirt and Cleric's Ring from Golden Sun to the item pool.
@@ -612,6 +626,8 @@ class GSTLAOptions(PerGameCommonOptions):
     second_starting_character: SecondStartingCharacter
 
     #Char And Class Settings
+    scale_characters: ScaleCharacters
+    max_scaled_level: MaxScaledLevel
     character_stats: CharStatShuffle
     character_elements: CharEleShuffle
 
