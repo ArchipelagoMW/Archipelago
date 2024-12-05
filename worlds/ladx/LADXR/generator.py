@@ -475,4 +475,4 @@ def generateRom(base_rom: bytes, args, data: Dict):
     for pymod in pymods:
         pymod.postPatch(rom)
 
-    return rom.export()
+    return rom.save()

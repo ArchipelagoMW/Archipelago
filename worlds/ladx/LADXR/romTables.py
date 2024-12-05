@@ -203,7 +203,7 @@ class ROMWithTables(ROM):
 
         self.itemNames = {}
 
-    def save(self, filename, *, name=None):
+    def save(self):
         # Assert special handling of bank 9 expansion is fine
         for i in range(0x3d42, 0x4000):
             assert self.banks[9][i] == 0, self.banks[9][i]
@@ -221,4 +221,4 @@ class ROMWithTables(ROM):
         self.room_sprite_data_indoor.store(self)
         self.background_tiles.store(self)
         self.background_attributes.store(self)
-        super().save(filename, name=name)
+        return super().save()
