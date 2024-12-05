@@ -127,31 +127,13 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
         elif component.display_name == "Text Client":
             text_client_component = component
 
-    from kvui import MDApp, MDButton, MDButtonText, Clock, Window
+    from kvui import MDButton, MDButtonText
     from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogContentContainer, MDDialogSupportingText
     from kivymd.uix.divider import MDDivider
 
-    if not client_component:
-        popup_text = MDDialogSupportingText(text=f"A game client able to parse URIs was not detected for {game}.\n"
-                              f"Launching Text Client in 7 seconds...")
-        popup_text.remaining_time = 7
-
-        def update_label(dt):
-            if popup_text.remaining_time > 1:
-                # countdown the timer and string replace the number
-                popup_text.remaining_time -= 1
-                popup_text.text = f"A game client able to parse URIs was not detected for {game}.\n"\
-                              f"Launching Text Client in {popup_text.remaining_time} seconds..."
-            else:
-                # our timer is finished so launch text client and close down
-                run_component(text_client_component, *launch_args)
-                Clock.unschedule(update_label)
-                MDApp.get_running_app().stop()
-                Window.close()
-
-        Clock.schedule_interval(update_label, 1)
-
-        component_buttons = []
+    if client_component is None:
+        run_component(text_client_component, *launch_args)
+        return
     else:
         popup_text = MDDialogSupportingText(text="Select client to open and connect with.")
         component_buttons = [MDDivider()]
@@ -245,7 +227,7 @@ refresh_components: Optional[Callable[[], None]] = None
 
 def run_gui(path: str, args: Any):
     from kvui import (MDApp, MDFloatLayout, MDGridLayout, MDButton, MDLabel, MDButtonText, MDButtonIcon, ScrollBox,
-                      ContainerLayout, Widget, MDBoxLayout)
+                      ContainerLayout, Widget, MDBoxLayout, ApAsyncImage)
     from kivy.core.window import Window
     from kivy.metrics import dp
     from kivy.uix.image import AsyncImage
@@ -298,7 +280,7 @@ def run_gui(path: str, args: Any):
                 button_card.add_widget(button_layout)
 
                 source = icon_paths[component.icon]
-                image = AsyncImage(source=source, size=(40, 40), size_hint_y=None,
+                image = ApAsyncImage(source=source, size=(40, 40), size_hint_y=None,
                                    pos_hint={"center_x": 0.1, "center_y": 0.5})
 
                 button_layout.add_widget(image)
