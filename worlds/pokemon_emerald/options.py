@@ -123,6 +123,8 @@ class Dexsanity(Toggle):
     Defeating gym leaders provides dex info, allowing you to see where on the map you can catch species you need.
 
     Each pokedex entry adds a Poke Ball, Great Ball, or Ultra Ball to the pool.
+
+    Warning: This adds a lot of locations and will slow you down significantly.
     """
     display_name = "Dexsanity"
 
@@ -132,6 +134,8 @@ class Trainersanity(Toggle):
     Defeating a trainer gives you an item.
 
     Trainers are no longer missable. Trainers no longer give you money for winning. Each trainer adds a valuable item (Nugget, Stardust, etc.) to the pool.
+
+    Warning: This adds a lot of locations and will slow you down significantly.
     """
     display_name = "Trainersanity"
 
@@ -265,6 +269,8 @@ class RandomizeWildPokemon(Choice):
     """
     Randomizes wild pokemon encounters (grass, caves, water, fishing).
 
+    Warning: Matching both base stats and type may severely limit the variety for certain pokemon.
+
     - Vanilla: Wild encounters are unchanged
     - Match Base Stats: Wild pokemon are replaced with species with approximately the same bst
     - Match Type: Wild pokemon are replaced with species that share a type with the original
@@ -327,6 +333,8 @@ class RandomizeTrainerParties(Choice):
     """
     Randomizes the parties of all trainers.
 
+    Warning: Matching both base stats and type may severely limit the variety for certain pokemon.
+
     - Vanilla: Parties are unchanged
     - Match Base Stats: Trainer pokemon are replaced with species with approximately the same bst
     - Match Type: Trainer pokemon are replaced with species that share a type with the original
@@ -357,6 +365,10 @@ class TrainerPartyBlacklist(OptionSet):
 class ForceFullyEvolved(Range):
     """
     When an opponent uses a pokemon of the specified level or higher, restricts the species to only fully evolved pokemon.
+
+    Only applies when trainer parties are randomized.
+
+    Warning: Combining a low value with matched base stats may severely limit the variety for certain pokemon.
     """
     display_name = "Force Fully Evolved"
     range_start = 1

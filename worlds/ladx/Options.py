@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import os.path
 import typing
 import logging
-from Options import Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions, OptionGroup
+from Options import Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions, OptionGroup, Removed
 from collections import defaultdict
 import Utils
 
@@ -58,7 +58,7 @@ class TextShuffle(DefaultOffToggle):
 class Rooster(DefaultOnToggle, LADXROption):
     """
     [On] Adds the rooster to the item pool. 
-    [Off] The rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.
+    [Off] The rooster spot is still a check giving an item. But you will never find the rooster. In that case, any rooster spot is accessible without rooster by other means.
     """
     display_name = "Rooster"
     ladxr_name = "rooster"
@@ -511,20 +511,24 @@ class Music(Choice, LADXROption):
         return self.ladxr_name, s
 
 
-class WarpImprovements(DefaultOffToggle):
+class Warps(Choice):
     """
-    [On] Adds remake style warp screen to the game. Choose your warp destination on the map after jumping in a portal and press B to select.
-    [Off] No change
+    [Improved] Adds remake style warp screen to the game. Choose your warp destination on the map after jumping in a portal and press B to select.
+    [Improved Additional] Improved warps, and adds a warp point at Crazy Tracy's house (the Mambo teleport spot) and Eagle's Tower.
     """
-    display_name = "Warp Improvements"
+    display_name = "Warps"
+    option_vanilla = 0
+    option_improved = 1
+    option_improved_additional = 2
+    default = option_vanilla
 
 
-class AdditionalWarpPoints(DefaultOffToggle):
+class InGameHints(DefaultOnToggle):
     """
-    [On] (requires warp improvements) Adds a warp point at Crazy Tracy's house (the Mambo teleport spot) and Eagle's Tower
-    [Off] No change
+    When enabled, owl statues and library books may indicate the location of your items in the multiworld.
     """
-    display_name = "Additional Warp Points"
+    display_name = "In-game Hints"
+
 
 ladx_option_groups = [
     OptionGroup("Goal Options", [
@@ -540,13 +544,13 @@ ladx_option_groups = [
         ShuffleStoneBeaks
     ]),
     OptionGroup("Warp Points", [
-        WarpImprovements,
-        AdditionalWarpPoints,
+        Warps,
     ]),
     OptionGroup("Miscellaneous", [
         TradeQuest,
         Rooster,
         TrendyGame,
+        InGameHints,
         NagMessages,
         Quickswap,
         HardMode,
@@ -590,8 +594,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     # 'bowwow': Bowwow,
     # 'overworld': Overworld,
     link_palette: LinkPalette
-    warp_improvements: WarpImprovements
-    additional_warp_points: AdditionalWarpPoints
+    warps: Warps
     trendy_game: TrendyGame
     gfxmod: GfxMod
     palette: Palette
@@ -612,3 +615,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     low_hp_beep: LowHpBeep
     text_mode: TextMode
     no_flash: NoFlash
+    in_game_hints: InGameHints
+
+    warp_improvements: Removed
+    additional_warp_points: Removed

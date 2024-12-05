@@ -13,7 +13,8 @@ from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from .Common import *
 from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningItem, TradeItemData,
-                    ladxr_item_to_la_item_name, links_awakening_items, links_awakening_items_by_name)
+                    ladxr_item_to_la_item_name, links_awakening_items, links_awakening_items_by_name,
+                    links_awakening_item_name_groups)
 from .LADXR import generator
 from .LADXR.itempool import ItemPool as LADXRItemPool
 from .LADXR.locations.constants import CHEST_ITEMS
@@ -23,7 +24,8 @@ from .LADXR.main import get_parser
 from .LADXR.settings import Settings as LADXRSettings
 from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
-                        create_regions_from_ladxr, get_locations_to_id)
+                        create_regions_from_ladxr, get_locations_to_id,
+                        links_awakening_location_name_groups)
 from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptions, ladx_option_groups
 from .Rom import LADXDeltaPatch, get_base_rom_path
 
@@ -66,6 +68,15 @@ class LinksAwakeningWebWorld(WebWorld):
     )]
     theme = "dirt"
     option_groups = ladx_option_groups
+    options_presets: typing.Dict[str, typing.Dict[str, typing.Any]] = {
+        "Keysanity": {
+            "shuffle_nightmare_keys": "any_world",
+            "shuffle_small_keys": "any_world",
+            "shuffle_maps": "any_world",
+            "shuffle_compasses": "any_world",
+            "shuffle_stone_beaks": "any_world",
+        }
+    }
 
 class LinksAwakeningWorld(World):
     """
@@ -98,12 +109,9 @@ class LinksAwakeningWorld(World):
 
     # Items can be grouped using their names to allow easy checking if any item
     # from that group has been collected. Group names can also be used for !hint
-    item_name_groups = {
-        "Instruments": {
-            "Full Moon Cello", "Conch Horn", "Sea Lily's Bell", "Surf Harp",
-            "Wind Marimba", "Coral Triangle", "Organ of Evening Calm", "Thunder Drum"
-        },
-    }
+    item_name_groups = links_awakening_item_name_groups
+
+    location_name_groups = links_awakening_location_name_groups
 
     prefill_dungeon_items = None
 

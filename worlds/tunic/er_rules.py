@@ -344,9 +344,10 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Overworld"],
         rule=lambda state: state.has_any({grapple, laurels}, player))
 
-    regions["Overworld"].connect(
+    cube_entrance = regions["Overworld"].connect(
         connecting_region=regions["Cube Cave Entrance Region"],
         rule=lambda state: state.has(gun, player) or can_shop(state, world))
+    world.multiworld.register_indirect_condition(regions["Shop"], cube_entrance)
     regions["Cube Cave Entrance Region"].connect(
         connecting_region=regions["Overworld"])
 
@@ -500,9 +501,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Dark Tomb Upper"].connect(
         connecting_region=regions["Dark Tomb Entry Point"])
 
+    # ice grapple through the wall, get the little secret sound to trigger
     regions["Dark Tomb Upper"].connect(
         connecting_region=regions["Dark Tomb Main"],
-        rule=lambda state: has_ladder("Ladder in Dark Tomb", state, world))
+        rule=lambda state: has_ladder("Ladder in Dark Tomb", state, world)
+        or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
     regions["Dark Tomb Main"].connect(
         connecting_region=regions["Dark Tomb Upper"],
         rule=lambda state: has_ladder("Ladder in Dark Tomb", state, world))
@@ -778,12 +781,10 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Fortress East Shortcut Upper"].connect(
         connecting_region=regions["Fortress East Shortcut Lower"])
-    # nmg: can ice grapple upwards
     regions["Fortress East Shortcut Lower"].connect(
         connecting_region=regions["Fortress East Shortcut Upper"],
         rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
 
-    # nmg: ice grapple through the big gold door, can do it both ways
     regions["Eastern Vault Fortress"].connect(
         connecting_region=regions["Eastern Vault Fortress Gold Door"],
         rule=lambda state: state.has_all({"Activate Eastern Vault West Fuses",
@@ -806,7 +807,6 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Fortress Hero's Grave Region"].connect(
         connecting_region=regions["Fortress Grave Path"])
 
-    # nmg: ice grapple from upper grave path to lower
     regions["Fortress Grave Path Upper"].connect(
         connecting_region=regions["Fortress Grave Path"],
         rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
@@ -1138,6 +1138,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
             for portal_dest in region_info.portals:
                 ls_connect(ladder_region, "Overworld Redux, " + portal_dest)
 
+        # convenient staircase means this one is easy difficulty, even though there's an elevation change
+        ls_connect("LS Elev 0", "Overworld Redux, Furnace_gyro_west")
+
         # connect ls elevation regions to regions where you can get an enemy to knock you down, also well rail
         if options.ladder_storage >= LadderStorage.option_medium:
             for ladder_region, region_info in ow_ladder_groups.items():
@@ -1153,6 +1156,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         if options.ladder_storage >= LadderStorage.option_hard:
             ls_connect("LS Elev 1", "Overworld Redux, EastFiligreeCache_")
             ls_connect("LS Elev 2", "Overworld Redux, Town_FiligreeRoom_")
+            ls_connect("LS Elev 2", "Overworld Redux, Ruins Passage_west")
             ls_connect("LS Elev 3", "Overworld Redux, Overworld Interiors_house")
             ls_connect("LS Elev 5", "Overworld Redux, Temple_main")
 
@@ -1442,7 +1446,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     set_rule(world.get_location("West Garden Fuse"),
              lambda state: has_ability(prayer, state, world))
     set_rule(world.get_location("Library Fuse"),
-             lambda state: has_ability(prayer, state, world))
+             lambda state: has_ability(prayer, state, world) and has_ladder("Ladders in Library", state, world))
 
     # Bombable Walls
     for location_name in bomb_walls:
