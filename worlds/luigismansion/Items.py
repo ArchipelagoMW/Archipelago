@@ -78,7 +78,6 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Poltergust 4000": LMItemData("Upgrade", 40, IC.useful),
     "Gold Diamond": LMItemData("Money", 49, IC.progression, 5),
     "Wardrobe Balcony Key": LMItemData("Door Key", 54, IC.progression, doorid=41),
-    "2F Front Hallway Key": LMItemData("Door Key", 55, IC.progression, doorid=33),
     "Study Key": LMItemData("Door Key", 57, IC.progression, doorid=32),
     "Basement Stairwell Key": LMItemData("Door Key", 61, IC.progression, doorid=9),
     "1F Bathroom Key": LMItemData("Door Key", 64, IC.progression, doorid=23),
