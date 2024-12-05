@@ -77,6 +77,20 @@ class KH1ClientCommandProcessor(ClientCommandProcessor):
             self.output(str(self.ctx.slot_data["advanced_logic"]))
         else:
             self.output("Unknown")
+    
+    def _cmd_required_postcards(self):
+        """Prints the number of postcards required if goal is set to postcards"""
+        if "required_postcards" in self.ctx.slot_data.keys():
+            self.output(str(self.ctx.slot_data["required_postcards"]))
+        else:
+            self.output("Unknown")
+    
+    def _cmd_required_puppies(self):
+        """Prints the number of puppies required if goal is set to puppies"""
+        if "required_puppies" in self.ctx.slot_data.keys():
+            self.output(str(self.ctx.slot_data["required_puppies"]))
+        else:
+            self.output("Unknown")
 
 class KH1Context(CommonContext):
     command_processor: int = KH1ClientCommandProcessor
