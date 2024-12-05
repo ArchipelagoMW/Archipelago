@@ -410,7 +410,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
 
         self.dropdown.bind(on_release=self.dropdown.dismiss)
 
-    def set_height(self, instance, value):
+    def set_height(self, _, _2):
         self.height = max([child.texture_size[1] for child in self.children])
 
     def refresh_view_attrs(self, rv, index, data):
@@ -423,7 +423,6 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
         self.entrance_text = data["entrance"]["text"]
         self.status_text = data["status"]["text"]
         self.hint = data["status"]["hint"]
-        self.height = self.minimum_height
         return super(HintLabel, self).refresh_view_attrs(rv, index, data)
 
     def on_touch_down(self, touch):
@@ -711,9 +710,9 @@ class GameManager(MDApp):
         return new_tab
 
     def update_texts(self, dt):
-        if hasattr(self.tabs.carousel.slides[0], "fix_heights"):
-            self.tabs.carousel.slides[0].fix_heights()  # TODO: remove this when Kivy fixes this upstream
-        # KIVYMDTODO: see if this bug exists in KivyMD
+        for slide in self.tabs.carousel.slides:
+            if hasattr(slide, "fix_heights"):
+                slide.fix_heights()  # TODO: remove this when Kivy fixes this upstream
         if self.ctx.server:
             self.title = self.base_title + " " + Utils.__version__ + \
                          f" | Connected to: {self.ctx.server_address} " \
