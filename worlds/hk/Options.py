@@ -310,6 +310,14 @@ class PlandoCharmCosts(OptionDict):
     def __init__(self, value):
         self.value = {}
         for key, data in value.items():
+            if isinstance(data, str):
+                if data.lower() == "vanilla" and key in self.valid_keys:
+                    self.value[key] = vanilla_costs[charm_names.index(key)]
+                    continue
+                elif data.lower() == "default":
+                    # default is too easily confused with vanilla but actually 0
+                    self.value[key] = data
+                    continue
             try:
                 self.value[key] = CharmCost.from_any(data).value
             except ValueError as ex:
