@@ -3,6 +3,8 @@ import logging
 import sys
 import typing
 import re
+import io
+import pkgutil
 from collections import deque
 
 assert "kivy" not in sys.modules, "kvui should be imported before kivy for frozen compatibility"
@@ -12,10 +14,7 @@ if sys.platform == "win32":
 
     # kivy 2.2.0 introduced DPI awareness on Windows, but it makes the UI enter an infinitely recursive re-layout
     # by setting the application to not DPI Aware, Windows handles scaling the entire window on its own, ignoring kivy's
-    try:
-        ctypes.windll.shcore.SetProcessDpiAwareness(0)
-    except FileNotFoundError:  # shcore may not be found on <= Windows 7
-        pass  # TODO: remove silent except when Python 3.8 is phased out.
+    ctypes.windll.shcore.SetProcessDpiAwareness(0)
 
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
@@ -37,6 +36,7 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.core.clipboard import Clipboard
 from kivy.core.text.markup import MarkupLabel
+from kivy.core.image import ImageLoader, ImageLoaderBase, ImageData
 from kivy.base import ExceptionHandler, ExceptionManager
 from kivy.clock import Clock
 from kivy.factory import Factory
@@ -55,6 +55,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.progressbar import ProgressBar
+from kivy.uix.dropdown import DropDown
 from kivy.utils import escape_markup
 from kivy.lang import Builder
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
@@ -63,10 +64,11 @@ from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.animation import Animation
 from kivy.uix.popup import Popup
+from kivy.uix.image import AsyncImage
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
-from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType
+from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType, HintStatus
 from Utils import async_start, get_input_text_from_response
 
 if typing.TYPE_CHECKING:
@@ -303,11 +305,11 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
         """ Respond to the selection of items in the view. """
         self.selected = is_selected
 
-
 class HintLabel(RecycleDataViewBehavior, BoxLayout):
     selected = BooleanProperty(False)
     striped = BooleanProperty(False)
     index = None
+    dropdown: DropDown
 
     def __init__(self):
         super(HintLabel, self).__init__()
@@ -316,9 +318,31 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         self.finding_text = ""
         self.location_text = ""
         self.entrance_text = ""
-        self.found_text = ""
+        self.status_text = ""
+        self.hint = {}
         for child in self.children:
             child.bind(texture_size=self.set_height)
+
+
+        ctx = App.get_running_app().ctx
+        self.dropdown = DropDown()
+
+        def set_value(button):
+            self.dropdown.select(button.status)
+
+        def select(instance, data):
+            ctx.update_hint(self.hint["location"],
+                            self.hint["finding_player"],
+                            data)
+
+        for status in (HintStatus.HINT_NO_PRIORITY, HintStatus.HINT_PRIORITY, HintStatus.HINT_AVOID):
+            name = status_names[status]
+            status_button = Button(text=name, size_hint_y=None, height=dp(50))
+            status_button.status = status
+            status_button.bind(on_release=set_value)
+            self.dropdown.add_widget(status_button)
+
+        self.dropdown.bind(on_select=select)
 
     def set_height(self, instance, value):
         self.height = max([child.texture_size[1] for child in self.children])
@@ -331,7 +355,8 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         self.finding_text = data["finding"]["text"]
         self.location_text = data["location"]["text"]
         self.entrance_text = data["entrance"]["text"]
-        self.found_text = data["found"]["text"]
+        self.status_text = data["status"]["text"]
+        self.hint = data["status"]["hint"]
         self.height = self.minimum_height
         return super(HintLabel, self).refresh_view_attrs(rv, index, data)
 
@@ -341,13 +366,21 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
             return True
         if self.index:  # skip header
             if self.collide_point(*touch.pos):
-                if self.selected:
+                status_label = self.ids["status"]
+                if status_label.collide_point(*touch.pos):
+                    if self.hint["status"] == HintStatus.HINT_FOUND:
+                        return
+                    ctx = App.get_running_app().ctx
+                    if ctx.slot == self.hint["receiving_player"]:  # If this player owns this hint
+                        # open a dropdown
+                        self.dropdown.open(self.ids["status"])
+                elif self.selected:
                     self.parent.clear_selection()
                 else:
                     text = "".join((self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
                                     self.finding_text, "\'s World", (" at " + self.entrance_text)
                                     if self.entrance_text != "Vanilla"
-                                    else "", ". (", self.found_text.lower(), ")"))
+                                    else "", ". (", self.status_text.lower(), ")"))
                     temp = MarkupLabel(text).markup
                     text = "".join(
                         part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
@@ -361,18 +394,16 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
             for child in self.children:
                 if child.collide_point(*touch.pos):
                     key = child.sort_key
-                    parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
+                    if key == "status":
+                        parent.hint_sorter = lambda element: element["status"]["hint"]["status"]
+                    else: parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
                     if key == parent.sort_key:
                         # second click reverses order
                         parent.reversed = not parent.reversed
                     else:
                         parent.sort_key = key
                         parent.reversed = False
-                    break
-            else:
-                logging.warning("Did not find clicked header for sorting.")
-
-            App.get_running_app().update_hints()
+                    App.get_running_app().update_hints()
 
     def apply_selection(self, rv, index, is_selected):
         """ Respond to the selection of items in the view. """
@@ -666,7 +697,7 @@ class GameManager(App):
             self.energy_link_label.text = f"EL: {Utils.format_SI_prefix(self.ctx.current_energy_link_value)}J"
 
     def update_hints(self):
-        hints = self.ctx.stored_data[f"_read_hints_{self.ctx.team}_{self.ctx.slot}"]
+        hints = self.ctx.stored_data.get(f"_read_hints_{self.ctx.team}_{self.ctx.slot}", [])
         self.log_panels["Hints"].refresh_hints(hints)
 
     # default F1 keybind, opens a settings menu, that seems to break the layout engine once closed
@@ -722,6 +753,22 @@ class UILog(RecycleView):
                 element.height = element.texture_size[1]
 
 
+status_names: typing.Dict[HintStatus, str] = {
+    HintStatus.HINT_FOUND: "Found",
+    HintStatus.HINT_UNSPECIFIED: "Unspecified",
+    HintStatus.HINT_NO_PRIORITY: "No Priority",
+    HintStatus.HINT_AVOID: "Avoid",
+    HintStatus.HINT_PRIORITY: "Priority",
+}
+status_colors: typing.Dict[HintStatus, str] = {
+    HintStatus.HINT_FOUND: "green",
+    HintStatus.HINT_UNSPECIFIED: "white",
+    HintStatus.HINT_NO_PRIORITY: "cyan",
+    HintStatus.HINT_AVOID: "salmon",
+    HintStatus.HINT_PRIORITY: "plum",
+}
+
+
 class HintLog(RecycleView):
     header = {
         "receiving": {"text": "[u]Receiving Player[/u]"},
@@ -729,12 +776,13 @@ class HintLog(RecycleView):
         "finding": {"text": "[u]Finding Player[/u]"},
         "location": {"text": "[u]Location[/u]"},
         "entrance": {"text": "[u]Entrance[/u]"},
-        "found": {"text": "[u]Status[/u]"},
+        "status": {"text": "[u]Status[/u]",
+                   "hint": {"receiving_player": -1, "location": -1, "finding_player": -1, "status": ""}},
         "striped": True,
     }
 
     sort_key: str = ""
-    reversed: bool = False
+    reversed: bool = True
 
     def __init__(self, parser):
         super(HintLog, self).__init__()
@@ -742,8 +790,18 @@ class HintLog(RecycleView):
         self.parser = parser
 
     def refresh_hints(self, hints):
+        if not hints:  # Fix the scrolling looking visually wrong in some edge cases
+            self.scroll_y = 1.0
         data = []
+        ctx = App.get_running_app().ctx
         for hint in hints:
+            if not hint.get("status"): # Allows connecting to old servers
+                hint["status"] = HintStatus.HINT_FOUND if hint["found"] else HintStatus.HINT_UNSPECIFIED
+            hint_status_node = self.parser.handle_node({"type": "color",
+                                                        "color": status_colors.get(hint["status"], "red"),
+                                                        "text": status_names.get(hint["status"], "Unknown")})
+            if hint["status"] != HintStatus.HINT_FOUND and hint["receiving_player"] == ctx.slot:
+                hint_status_node = f"[u]{hint_status_node}[/u]"
             data.append({
                 "receiving": {"text": self.parser.handle_node({"type": "player_id", "text": hint["receiving_player"]})},
                 "item": {"text": self.parser.handle_node({
@@ -761,9 +819,10 @@ class HintLog(RecycleView):
                 "entrance": {"text": self.parser.handle_node({"type": "color" if hint["entrance"] else "text",
                                                               "color": "blue", "text": hint["entrance"]
                                                               if hint["entrance"] else "Vanilla"})},
-                "found": {
-                    "text": self.parser.handle_node({"type": "color", "color": "green" if hint["found"] else "red",
-                                                     "text": "Found" if hint["found"] else "Not Found"})},
+                "status": {
+                    "text": hint_status_node,
+                    "hint": hint,
+                },
             })
 
         data.sort(key=self.hint_sorter, reverse=self.reversed)
@@ -774,13 +833,47 @@ class HintLog(RecycleView):
 
     @staticmethod
     def hint_sorter(element: dict) -> str:
-        return ""
+        return element["status"]["hint"]["status"]  # By status by default
 
     def fix_heights(self):
         """Workaround fix for divergent texture and layout heights"""
         for element in self.children[0].children:
             max_height = max(child.texture_size[1] for child in element.children)
             element.height = max_height
+
+
+class ApAsyncImage(AsyncImage):
+    def is_uri(self, filename: str) -> bool:
+        if filename.startswith("ap:"):
+            return True
+        else:
+            return super().is_uri(filename)
+
+
+class ImageLoaderPkgutil(ImageLoaderBase):
+    def load(self, filename: str) -> typing.List[ImageData]:
+        # take off the "ap:" prefix
+        module, path = filename[3:].split("/", 1)
+        data = pkgutil.get_data(module, path)
+        return self._bytes_to_data(data)
+
+    def _bytes_to_data(self, data: typing.Union[bytes, bytearray]) -> typing.List[ImageData]:
+        loader = next(loader for loader in ImageLoader.loaders if loader.can_load_memory())
+        return loader.load(loader, io.BytesIO(data))
+
+
+# grab the default loader method so we can override it but use it as a fallback
+_original_image_loader_load = ImageLoader.load
+
+
+def load_override(filename: str, default_load=_original_image_loader_load, **kwargs):
+    if filename.startswith("ap:"):
+        return ImageLoaderPkgutil(filename)
+    else:
+        return default_load(filename, **kwargs)
+
+
+ImageLoader.load = load_override
 
 
 class E(ExceptionHandler):

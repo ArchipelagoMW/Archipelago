@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions, OptionGroup
+from Options import Choice, Toggle, DefaultOnToggle, DeathLink, PerGameCommonOptions, StartInventoryPool, OptionGroup
 import random
 
 
@@ -213,6 +213,7 @@ class BlasphemousDeathLink(DeathLink):
 
 @dataclass
 class BlasphemousOptions(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
     prie_dieu_warp: PrieDieuWarp
     skip_cutscenes: SkipCutscenes
     corpse_hints: CorpseHints
