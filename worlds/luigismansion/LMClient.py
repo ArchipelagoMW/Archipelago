@@ -5,7 +5,6 @@ import traceback
 from typing import Any, Optional
 
 import dolphin_memory_engine
-from dolphin_memory_engine import read_bytes
 
 import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
