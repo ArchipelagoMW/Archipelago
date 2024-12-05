@@ -25,18 +25,18 @@ class LADXPatchExtensions(worlds.Files.APPatchExtension):
 
     @staticmethod
     def generate_rom(caller: worlds.Files.APProcedurePatch, rom: bytes, data_file: str) -> bytes:
-        data = json.loads(caller.get_file(data_file).decode("utf-8"))
+        patch_data = json.loads(caller.get_file(data_file).decode("utf-8"))
         # TODO local option overrides
         rom_name = get_base_rom_path()
-        out_name = f"{data['out_base']}{caller.result_file_ending}"
+        out_name = f"{patch_data['out_base']}{caller.result_file_ending}"
         parser = get_parser()
         args = parser.parse_args([rom_name, "-o", out_name, "--dump"])
-        return generator.generateRom(rom, args, data)
+        return generator.generateRom(rom, args, patch_data)
 
     @staticmethod
     def patch_title_screen(caller: worlds.Files.APProcedurePatch, rom: bytes, data_file: str) -> bytes:
-        data = json.loads(caller.get_file(data_file).decode("utf-8"))
-        if data["options"]["ap_title_screen"]:
+        patch_data = json.loads(caller.get_file(data_file).decode("utf-8"))
+        if patch_data["options"]["ap_title_screen"]:
             return bsdiff4.patch(rom, pkgutil.get_data(__name__, "LADXR/patches/title_screen.bdiff4"))
         return rom
 
