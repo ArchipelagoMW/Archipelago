@@ -165,10 +165,10 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
     patch.write_file("mm3_basepatch.bsdiff4", pkgutil.get_data(__name__, os.path.join("data", "mm3_basepatch.bsdiff4")))
     # text writing
 
-    base_address = 0x3C010
+    base_address = 0x3C000
     color_address = 0x31BC7
     for i, offset, location in zip([0, 8, 1, 2, 3, 4, 5, 6, 7, 9], [
-        0x0,
+        0x10,
         0x50,
         0x91,
         0xD2,
@@ -212,10 +212,10 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
             player_str = world.multiworld.get_player_name(item.player)
             if len(player_str) > 13:
                 player_str = player_str[:13]
-            y_coords = 0xA2
+            y_coords = 0xA1
             row = 0x21
             if location in [names.get_rush_marine, names.get_rush_jet]:
-                y_coords = 0x42
+                y_coords = 0x41
                 row = 0x22
             patch.write_bytes(base_address + offset, MM3TextEntry(first_str, y_coords, row).resolve())
             patch.write_bytes(base_address + 16 + offset, MM3TextEntry(second_str, y_coords + 0x20, row).resolve())
