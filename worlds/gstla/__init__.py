@@ -122,7 +122,7 @@ class GSTLAWorld(World):
         "Burst": {ItemName.Burst_Brooch.value},
         "Grind": {ItemName.Grindstone.value},
         "Teleport": {ItemName.Teleport_Lapis.value},
-        "Hover": {ItemName.Hover_Jade},
+        "Hover": {ItemName.Hover_Jade.value},
         "Shamans Rod": {ItemName.Shamans_Rod.value},
         "Sea Gods Tear": {ItemName.Sea_Gods_Tear.value},
         "Lil Turtle": {ItemName.Lil_Turtle.value}
