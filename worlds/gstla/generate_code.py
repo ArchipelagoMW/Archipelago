@@ -161,6 +161,7 @@ def main():
         loader=PackageLoader("gen"),
         autoescape=select_autoescape()
     )
+    env.filters['bitwise_and'] = lambda x, y: x & y > 0
     data = GameData()
     generate_location_names(env, data)
     generate_item_names(env, data)

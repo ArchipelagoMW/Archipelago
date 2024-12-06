@@ -66,6 +66,16 @@ def create_item(name: str, player :int, event: bool = False, classification: Opt
 def create_item_direct(item: ItemData, player: int, event: bool = False, classification: Optional[ItemClassification] = None):
     return GSTLAItem(item, player, event, classification)
 
+filler_gear_types = {ItemType.Shield, ItemType.Armor, ItemType.Weapon, ItemType.Helm}
+filler_forge_mats = {item.id for item in forge_materials}
+def create_filler(world: 'GSTLAWorld', item: ItemData):
+    if world.options.artifacts_are_filler and item.is_rare and item.type in filler_gear_types:
+        return create_item_direct(item, world.player, False, ItemClassification.filler)
+    elif world.options.forge_materials_are_filler and item.id in filler_forge_mats:
+        return create_item_direct(item, world.player, False, ItemClassification.filler)
+    else:
+        return create_item_direct(item, world.player)
+
 def create_events(world: 'GSTLAWorld'):
     """Creates all the event items and populates their vanilla locations with them.
     If the option to begin with the starter ship was selected this will be granted to the player
@@ -198,7 +208,7 @@ def create_items(world: 'GSTLAWorld', player: int):
         sum_locations -= 1
 
     for item in useful_remainder:
-        ap_item = create_item_direct(item, player)
+        ap_item = create_filler(world, item)
         world.multiworld.itempool.append(ap_item)
         sum_locations -= 1
         
@@ -276,7 +286,7 @@ def create_items(world: 'GSTLAWorld', player: int):
 
     for i in range(sum_locations):
         item = get_filler_item(world)
-        ap_item = create_item_direct(item, player)
+        ap_item = create_filler(world, item)
         world.multiworld.itempool.append(ap_item)
 
 

@@ -531,6 +531,12 @@ class ForgeMaterialsFillerWeight(Range):
     range_end = 100
     default = 25
 
+class ForgeMaterialsAreFiller(Toggle):
+    """Whether Forge Materials should be marked as filler instead of useful"""
+    internal_name = "forge_materials_are_filler"
+    display_name = "Forge Materials are Filler"
+    default = 0
+
 class RustyMaterialsFillerWeight(Range):
     """The weight for a filler item to be a rusty weapon. These weapons will forge into their counterparts as per usual.
     E.g. you can find a Rusty Sword which when forged turns into the Soul Brand or a Rusty Staff for a Glower Staff."""
@@ -584,6 +590,13 @@ class ShopEquipmentFillerWeight(Range):
     range_start = 0
     range_end = 100
     default = 10
+
+class ArtifactsAreFiller(Toggle):
+    """Whether "Rare" Equipment should be considered filler instead of useful.  Rings, Shirts, and Boots are
+    not reclassified by this option."""
+    internal_name = "artifacts_are_filler"
+    display_name = "Artifacts are Filler"
+    default = 0
 
 class CoinsFillerWeight(Range):
     """The weight for a filler item to be coins.
@@ -699,11 +712,13 @@ class GSTLAOptions(PerGameCommonOptions):
 
     #filler
     forge_material_filler_weight: ForgeMaterialsFillerWeight
+    forge_materials_are_filler: ForgeMaterialsAreFiller
     rusty_material_filler_weight: RustyMaterialsFillerWeight
     stat_boost_filler_weight: StatBoostFillerWeight
     uncommon_consumable_filler_weight: UncommonConsumableFillerWeight
     forged_equipment_filler_weight: ForgedEquipmentFillerWeight
     lucky_equipment_filler_weight: LuckyFountainEquipmentFillerWeight
+    artifacts_are_filler: ArtifactsAreFiller
     shop_equipment_filler_weight: ShopEquipmentFillerWeight
     coins_filler_weight: CoinsFillerWeight
     common_consumable_filler_weight: CommonConsumablesFillerWeight
