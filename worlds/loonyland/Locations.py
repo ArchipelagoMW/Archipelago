@@ -21,110 +21,110 @@ class LoonylandLocationData(NamedTuple):
     name: str
     
 location_table = {
-    LoonylandLocationData(0, "Halloween Hill", "Swamp Mud Path"
-    "Halloween Hill", "Bog Beast Home"
-    "Halloween Hill", "Rocky Cliffs below Upper Caverns"
-    "Halloween Hill", "Sapling Shrine"
-    "Halloween Hill", "Terror Glade"
-    "Halloween Hill", "Rocky Cliffs Vine"
-    "Halloween Hill", "Rocky Cliffs Grand Pharoh"
-    "Halloween Hill", "Rocky Cliffs Rock Corner"
-    "Halloween Hill", "Mushroom outside town"
-    "Halloween Hill", "North of UG Passage"
-    "Halloween Hill", "Top left mushroom spot"
-    "Halloween Hill", "NE of UG Passage"
-    "Halloween Hill", "East Woods"
-    "Halloween Hill", "Rocky Cliffs Ledge"
-    "Halloween Hill", "Rocky Cliffs Peak"
-    "Halloween Hill", "Cat Tree"
-    "The Witch's Cabin", "Bedroom"
-    "The Witch's Cabin", "Backroom"
-    "Bonita's Cabin", "Barrel Maze"
-    "The Bog Pit", "Top Door"
-    "The Bog Pit", "Post Room"
-    "The Bog Pit", "Window Drip"
-    "The Bog Pit", "Green room"
-    "The Bog Pit", "Arena"
-    "The Bog Pit", "Kill Wall"
-    "Underground Tunnel", "Swampdog Door"
-    "Underground Tunnel", "Scribble Wall"
-    "Underground Tunnel", "Tiny Passage"
-    "Underground Tunnel", "fire frogs"
-    "Underground Tunnel", "Torch Island"
-    "Underground Tunnel", "Small Room"
-    "Swamp Gas Cavern", "Scratch Wall"
-    "Swamp Gas Cavern", "Bat Mound"
-    "Swamp Gas Cavern", "Stair room"
-    "Swamp Gas Cavern", "Rock Prison"
-    "A Tiny Cabin", "Tiny Cabin"
-    "A Cabin", "Bedside "
-    "Dusty Crypt", "Pumpkin Door"
-    "Dusty Crypt", "Maze"
-    "Musty Crypt", "Big Closed Room"
-    "Rusty Crypt", "Spike Vine"
-    "Rusty Crypt", "Boulders"
-    "A Messy Cabin", "Barrel Mess"
-    "Under the Lake", "Lightning Rod Secret"
-    "Under the Lake", "Bat Door"
-    "Deeper Under the Lake", "SE corner"
-    "Deeper Under the Lake", "Rhombus"
-    "Frankenjulie's Laboratory", "Boss Reward"
-    "Haunted Tower", "Barracks"
-    "Haunted Tower, Floor 2", "Top Left"
-    "Haunted Tower Roof", "Boss Reward"
-    "Haunted Basement", "DoorDoorDoorDoorDoorDoor"
-    "Abandoned Mines", "Shaft"
-    "The Shrine of Bombulus", "Bombulus"
-    "A Gloomy Cavern", "Lockpick"
-    "Happy Stick Woods", "Happy Stick Hidden"
-    "Happy Stick Woods", "Happy Stick Reward"
-    "The Wolf Den", "Wolf Top Left"
-    "The Wolf Den", "Pumpkin Door"
-    "The Wolf Den", "Grow Room"
-    "Upper Creepy Cavern", "The Three ombres"
-    "Under the Ravine", "Left Vine"
-    "Under the Ravine", "Right Vine"
-    "Creepy Caverns", "M Pharoh bat Room"
-    "Creepy Caverns", "E 2 blue Pharos"
-    "Creepy Caverns", "M GARGOYLE ROOM"
-    "Castle Vampy", "Vampire Guard"
-    "Castle Vampy", "maze top left"
-    "Castle Vampy", "Top Right Gauntlet"
-    "Castle Vampy", "Bat Closet"
-    "Castle Vampy II", "Candle Room"
-    "Castle Vampy II", "Top Right Top"
-    "Castle Vampy II", "Bottom Right Middle"
-    "Castle Vampy II", "Bat room"
-    "Cabin in the woods", "Gold Skull"
-    "Castle Vampy III", "Middle"
-    "Castle Vampy III", "Behind the Pews"
-    "Castle Vampy III", "AMBUSH!"
-    "Castle Vampy III", "Halloween"
-    "Castle Vampy III", "So many bats"
-    "Castle Vampy IV", "Right Path"
-    "Castle Vampy IV", "Left Path"
-    "Castle Vampy IV", "Ballroom Right"
-    "Castle Vampy IV", "Right Secret Wall"
-    "Castle Vampy IV", "Ballroom Left"
-    "Castle Vampy Roof", "Gutsy the Elder"
-    "Castle Vampy Roof", "Stoney the Elder"
-    "Castle Vampy Roof", "Drippy the Elder"
-    "Castle Vampy Roof", "Toasty the Elder"
-    "Heart of Terror", "Bonkula"
-    "A Hidey Hole", "Bat Door"
-    "A Hidey Hole", "Pebbles"
-    "Swampdog Lair", "Entrance"
-    "Swampdog Lair", "End"
-    "The Witch's Cabin", "Ghostbusting"
-    "A Cabin3", "Hairy Larry"
-    "Halloween Hill", "Scaredy Cat"
-    "Halloween Hill", "Silver Bullet"
-    "Halloween Hill", "Smashing Pumpkins"
-    "Halloween Hill", "Sticky Shoes"
-    "A Cabin4", "The Collection"
-    "A Gloomy Cavern", "The Rescue"
-    "A Cabin", "Tree Trimming"
-    "The Witch's Cabin", "Witch Mushrooms"
-    "Halloween Hill", "Zombie Stomp"
-    #todo the 40 badge checks
+    LoonylandLocationData(0, LocationCategory.PICKUP, "Halloween Hill", "Swamp Mud Path"),
+    LoonylandLocationData(1, LocationCategory.PICKUP, "Halloween Hill", "Bog Beast Home"),
+    LoonylandLocationData(2, LocationCategory.PICKUP, "Halloween Hill", "Rocky Cliffs below Upper Caverns"),
+    LoonylandLocationData(3, LocationCategory.PICKUP, "Halloween Hill", "Sapling Shrine"),
+    LoonylandLocationData(4, LocationCategory.PICKUP, "Halloween Hill", "Terror Glade"),
+    LoonylandLocationData(5, LocationCategory.PICKUP, "Halloween Hill", "Rocky Cliffs Vine"),
+    LoonylandLocationData(6, LocationCategory.PICKUP, "Halloween Hill", "Rocky Cliffs Grand Pharoh"),
+    LoonylandLocationData(7, LocationCategory.PICKUP, "Halloween Hill", "Rocky Cliffs Rock Corner"),
+    LoonylandLocationData(8, LocationCategory.PICKUP, "Halloween Hill", "Mushroom outside town"),
+    LoonylandLocationData(9, LocationCategory.PICKUP, "Halloween Hill", "North of UG Passage"),
+    LoonylandLocationData(10, LocationCategory.PICKUP, "Halloween Hill", "Top left mushroom spot"),
+    LoonylandLocationData(11, LocationCategory.PICKUP, "Halloween Hill", "NE of UG Passage"),
+    LoonylandLocationData(12, LocationCategory.PICKUP, "Halloween Hill", "East Woods"),
+    LoonylandLocationData(13, LocationCategory.PICKUP, "Halloween Hill", "Rocky Cliffs Ledge"),
+    LoonylandLocationData(14, LocationCategory.PICKUP, "Halloween Hill", "Rocky Cliffs Peak"),
+    LoonylandLocationData(15, LocationCategory.PICKUP, "Halloween Hill", "Cat Tree"),
+    LoonylandLocationData(16, LocationCategory.PICKUP, "The Witch's Cabin", "Bedroom"),
+    LoonylandLocationData(17, LocationCategory.PICKUP, "The Witch's Cabin", "Backroom"),
+    LoonylandLocationData(18, LocationCategory.PICKUP, "Bonita's Cabin", "Barrel Maze"),
+    LoonylandLocationData(19, LocationCategory.PICKUP, "The Bog Pit", "Top Door"),
+    LoonylandLocationData(20, LocationCategory.PICKUP, "The Bog Pit", "Post Room"),
+    LoonylandLocationData(21, LocationCategory.PICKUP, "The Bog Pit", "Window Drip"),
+    LoonylandLocationData(22, LocationCategory.PICKUP, "The Bog Pit", "Green room"),
+    LoonylandLocationData(23, LocationCategory.PICKUP, "The Bog Pit", "Arena"),
+    LoonylandLocationData(24, LocationCategory.PICKUP, "The Bog Pit", "Kill Wall"),
+    LoonylandLocationData(25, LocationCategory.PICKUP, "Underground Tunnel", "Swampdog Door"),
+    LoonylandLocationData(26, LocationCategory.PICKUP, "Underground Tunnel", "Scribble Wall"),
+    LoonylandLocationData(27, LocationCategory.PICKUP, "Underground Tunnel", "Tiny Passage"),
+    LoonylandLocationData(28, LocationCategory.PICKUP, "Underground Tunnel", "fire frogs"),
+    LoonylandLocationData(29, LocationCategory.PICKUP, "Underground Tunnel", "Torch Island"),
+    LoonylandLocationData(30, LocationCategory.PICKUP, "Underground Tunnel", "Small Room"),
+    LoonylandLocationData(31, LocationCategory.PICKUP, "Swamp Gas Cavern", "Scratch Wall"),
+    LoonylandLocationData(32, LocationCategory.PICKUP, "Swamp Gas Cavern", "Bat Mound"),
+    LoonylandLocationData(33, LocationCategory.PICKUP, "Swamp Gas Cavern", "Stair room"),
+    LoonylandLocationData(34, LocationCategory.PICKUP, "Swamp Gas Cavern", "Rock Prison"),
+    LoonylandLocationData(35, LocationCategory.PICKUP, "A Tiny Cabin", "Tiny Cabin"),
+    LoonylandLocationData(36, LocationCategory.PICKUP, "A Cabin", "Bedside "),
+    LoonylandLocationData(37, LocationCategory.PICKUP, "Dusty Crypt", "Pumpkin Door"),
+    LoonylandLocationData(38, LocationCategory.PICKUP, "Dusty Crypt", "Maze"),
+    LoonylandLocationData(39, LocationCategory.PICKUP, "Musty Crypt", "Big Closed Room"),
+    LoonylandLocationData(40, LocationCategory.PICKUP, "Rusty Crypt", "Spike Vine"),
+    LoonylandLocationData(41, LocationCategory.PICKUP, "Rusty Crypt", "Boulders"),
+    LoonylandLocationData(42, LocationCategory.PICKUP, "A Messy Cabin", "Barrel Mess"),
+    LoonylandLocationData(43, LocationCategory.PICKUP, "Under the Lake", "Lightning Rod Secret"),
+    LoonylandLocationData(44, LocationCategory.PICKUP, "Under the Lake", "Bat Door"),
+    LoonylandLocationData(45, LocationCategory.PICKUP, "Deeper Under the Lake", "SE corner"),
+    LoonylandLocationData(46, LocationCategory.PICKUP, "Deeper Under the Lake", "Rhombus"),
+    LoonylandLocationData(47, LocationCategory.PICKUP, "Frankenjulie's Laboratory", "Boss Reward"),
+    LoonylandLocationData(48, LocationCategory.PICKUP, "Haunted Tower", "Barracks"),
+    LoonylandLocationData(49, LocationCategory.PICKUP, "Haunted Tower, Floor 2", "Top Left"),
+    LoonylandLocationData(50, LocationCategory.PICKUP, "Haunted Tower Roof", "Boss Reward"),
+    LoonylandLocationData(51, LocationCategory.PICKUP, "Haunted Basement", "DoorDoorDoorDoorDoorDoor"),
+    LoonylandLocationData(52, LocationCategory.PICKUP, "Abandoned Mines", "Shaft"),
+    LoonylandLocationData(53, LocationCategory.PICKUP, "The Shrine of Bombulus", "Bombulus"),
+    LoonylandLocationData(54, LocationCategory.PICKUP, "A Gloomy Cavern", "Lockpick"),
+    LoonylandLocationData(55, LocationCategory.PICKUP, "Happy Stick Woods", "Happy Stick Hidden"),
+    LoonylandLocationData(56, LocationCategory.PICKUP, "Happy Stick Woods", "Happy Stick Reward"),
+    LoonylandLocationData(57, LocationCategory.PICKUP, "The Wolf Den", "Wolf Top Left"),
+    LoonylandLocationData(58, LocationCategory.PICKUP, "The Wolf Den", "Pumpkin Door"),
+    LoonylandLocationData(59, LocationCategory.PICKUP, "The Wolf Den", "Grow Room"),
+    LoonylandLocationData(60, LocationCategory.PICKUP, "Upper Creepy Cavern", "The Three ombres"),
+    LoonylandLocationData(61, LocationCategory.PICKUP, "Under the Ravine", "Left Vine"),
+    LoonylandLocationData(62, LocationCategory.PICKUP, "Under the Ravine", "Right Vine"),
+    LoonylandLocationData(63, LocationCategory.PICKUP, "Creepy Caverns", "M Pharoh bat Room"),
+    LoonylandLocationData(64, LocationCategory.PICKUP, "Creepy Caverns", "E 2 blue Pharos"),
+    LoonylandLocationData(65, LocationCategory.PICKUP, "Creepy Caverns", "M GARGOYLE ROOM"),
+    LoonylandLocationData(66, LocationCategory.PICKUP, "Castle Vampy", "Vampire Guard"),
+    LoonylandLocationData(67, LocationCategory.PICKUP, "Castle Vampy", "maze top left"),
+    LoonylandLocationData(68, LocationCategory.PICKUP, "Castle Vampy", "Top Right Gauntlet"),
+    LoonylandLocationData(69, LocationCategory.PICKUP, "Castle Vampy", "Bat Closet"),
+    LoonylandLocationData(70, LocationCategory.PICKUP, "Castle Vampy II", "Candle Room"),
+    LoonylandLocationData(71, LocationCategory.PICKUP, "Castle Vampy II", "Top Right Top"),
+    LoonylandLocationData(72, LocationCategory.PICKUP, "Castle Vampy II", "Bottom Right Middle"),
+    LoonylandLocationData(73, LocationCategory.PICKUP, "Castle Vampy II", "Bat room"),
+    LoonylandLocationData(74, LocationCategory.PICKUP, "Cabin in the woods", "Gold Skull"),
+    LoonylandLocationData(75, LocationCategory.PICKUP, "Castle Vampy III", "Middle"),
+    LoonylandLocationData(76, LocationCategory.PICKUP, "Castle Vampy III", "Behind the Pews"),
+    LoonylandLocationData(77, LocationCategory.PICKUP, "Castle Vampy III", "AMBUSH!"),
+    LoonylandLocationData(78, LocationCategory.PICKUP, "Castle Vampy III", "Halloween"),
+    LoonylandLocationData(79, LocationCategory.PICKUP, "Castle Vampy III", "So many bats"),
+    LoonylandLocationData(80, LocationCategory.PICKUP, "Castle Vampy IV", "Right Path"),
+    LoonylandLocationData(81, LocationCategory.PICKUP, "Castle Vampy IV", "Left Path"),
+    LoonylandLocationData(82, LocationCategory.PICKUP, "Castle Vampy IV", "Ballroom Right"),
+    LoonylandLocationData(83, LocationCategory.PICKUP, "Castle Vampy IV", "Right Secret Wall"),
+    LoonylandLocationData(84, LocationCategory.PICKUP, "Castle Vampy IV", "Ballroom Left"),
+    LoonylandLocationData(85, LocationCategory.PICKUP, "Castle Vampy Roof", "Gutsy the Elder"),
+    LoonylandLocationData(86, LocationCategory.PICKUP, "Castle Vampy Roof", "Stoney the Elder"),
+    LoonylandLocationData(87, LocationCategory.PICKUP, "Castle Vampy Roof", "Drippy the Elder"),
+    LoonylandLocationData(88, LocationCategory.PICKUP, "Castle Vampy Roof", "Toasty the Elder"),
+    LoonylandLocationData(89, LocationCategory.PICKUP, "Heart of Terror", "Bonkula"),
+    LoonylandLocationData(90, LocationCategory.PICKUP, "A Hidey Hole", "Bat Door"),
+    LoonylandLocationData(91, LocationCategory.PICKUP, "A Hidey Hole", "Pebbles"),
+    LoonylandLocationData(92, LocationCategory.PICKUP, "Swampdog Lair", "Entrance"),
+    LoonylandLocationData(93, LocationCategory.PICKUP, "Swampdog Lair", "End"),
+    LoonylandLocationData(94, LocationCategory.QUEST, "The Witch's Cabin", "Ghostbusting"),
+    LoonylandLocationData(95, LocationCategory.QUEST, "A Cabin3", "Hairy Larry"),
+    LoonylandLocationData(96, LocationCategory.QUEST, "Halloween Hill", "Scaredy Cat"),
+    LoonylandLocationData(97, LocationCategory.QUEST, "Halloween Hill", "Silver Bullet"),
+    LoonylandLocationData(98, LocationCategory.QUEST, "Halloween Hill", "Smashing Pumpkins"),
+    LoonylandLocationData(99, LocationCategory.QUEST, "Halloween Hill", "Sticky Shoes"),
+    LoonylandLocationData(100, LocationCategory.QUEST, "A Cabin4", "The Collection"),
+    LoonylandLocationData(101, LocationCategory.QUEST, "A Gloomy Cavern", "The Rescue"),
+    LoonylandLocationData(102, LocationCategory.QUEST, "A Cabin", "Tree Trimming"),
+    LoonylandLocationData(103, LocationCategory.QUEST, "The Witch's Cabin", "Witch Mushrooms"),
+    LoonylandLocationData(104, LocationCategory.QUEST, "Halloween Hill", "Zombie Stomp"),
+    #todo the 40 badge locations
     "
