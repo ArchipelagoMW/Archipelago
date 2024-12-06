@@ -217,3 +217,11 @@ class SM64World(World):
                     for location in region.locations:
                         er_hint_data[location.address] = entrance_name
             hint_data[self.player] = er_hint_data
+
+    def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
+        # Write calculated star costs to spoiler.
+        star_cost_spoiler_header = '\n\n' + self.player_name + ' Star Costs for Super Mario 64:\n\n'
+        spoiler_handle.write(star_cost_spoiler_header)
+        star_cost_key_maxlen = len(max(self.star_costs, key=len))
+        for star, cost in self.star_costs.items():
+            spoiler_handle.write(f"{star:{star_cost_key_maxlen}s} = {cost}\n")
