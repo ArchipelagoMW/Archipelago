@@ -59,7 +59,7 @@ For performance reasons, AP only checks every entrance once. However, if an entr
 This entrance *would* be in logic if it were rechecked, but it won't be rechecked this cycle.
 To account for this case, AP would have to recheck all entrances every time a new region is reached until no new regions are reached.
 
-However, there is a way to **manually** define that a *specific* entrance needs to be rechecked during region sweep if a *specific* region is reached during it. This is what an indirect condition is.
+An indirect condition is how you can manually define that a specific entrance needs to be rechecked during region sweep if a specific region is reached during it.
 This keeps most of the performance upsides. Even in a game making heavy use of indirect conditions (ex: The Witness), using them is significantly faster than just "rechecking each entrance until nothing new is found".
 The reason entrance access rules using `location.can_reach` and `entrance.can_reach` are also affected is because they call `region.can_reach` on their respective parent/source region.
 
