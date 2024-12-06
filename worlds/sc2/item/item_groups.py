@@ -437,12 +437,13 @@ zerg_ground_units = [
     item_names.SWARM_HOST, item_names.INFESTOR, item_names.ULTRALISK, item_names.ZERGLING_BANELING_ASPECT,
     item_names.HYDRALISK_LURKER_ASPECT, item_names.HYDRALISK_IMPALER_ASPECT, item_names.ULTRALISK_TYRANNOZOR_ASPECT,
     item_names.ROACH_RAVAGER_ASPECT, item_names.DEFILER, item_names.ROACH_PRIMAL_IGNITER_ASPECT,
+    item_names.PYGALISK,
     item_names.INFESTED_MARINE, item_names.INFESTED_BUNKER, item_names.INFESTED_DIAMONDBACK,
     item_names.INFESTED_SIEGE_TANK,
 ]
 zerg_melee_wa = [
     item_names.ZERGLING, item_names.ABERRATION, item_names.ULTRALISK, item_names.ZERGLING_BANELING_ASPECT,
-    item_names.ULTRALISK_TYRANNOZOR_ASPECT, item_names.INFESTED_BUNKER,
+    item_names.ULTRALISK_TYRANNOZOR_ASPECT, item_names.INFESTED_BUNKER, item_names.PYGALISK,
 ]
 zerg_ranged_wa = [
     item_names.SWARM_QUEEN, item_names.ROACH, item_names.HYDRALISK, item_names.SWARM_HOST,

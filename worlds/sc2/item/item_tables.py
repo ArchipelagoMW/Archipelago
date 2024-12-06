@@ -2053,6 +2053,7 @@ advanced_basic_units = {
         item_names.CYCLONE
     }),
     SC2Race.ZERG: basic_units[SC2Race.ZERG].union({
+        item_names.PYGALISK,
         item_names.INFESTOR,
         item_names.ABERRATION,
     }),

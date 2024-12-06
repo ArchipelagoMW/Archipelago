@@ -595,7 +595,7 @@ item_descriptions = {
     item_names.SWARM_HOST: "Siege unit that attacks by rooting in place and continually spawning Locusts.",
     item_names.INFESTOR: "Support caster that can move while burrowed. Can use the Fungal Growth, Parasitic Domination, and Consumption abilities.",
     item_names.ULTRALISK: "Massive melee attacker. Has an area-damage cleave attack.",
-    item_names.PYGALISK: "Miniature melee attacker. Summoned from the predator nest in large quantities and low cooldown.",
+    item_names.PYGALISK: "Miniature melee attacker.",
     item_names.SPORE_CRAWLER: "Anti-air defensive structure that can detect cloaked units.",
     item_names.SPINE_CRAWLER: "Anti-ground defensive structure.",
     item_names.CORRUPTOR: "Anti-air flying attacker specializing in taking down enemy capital ships.",
