@@ -36,7 +36,7 @@ item_frequencies = {
     "Bat Statue": 4
 }    
     
-item_table: Dict[str, ItemData] = {
+Loonyland_items: Dict[str, ItemData] = {
     "Heart":        ItemData(loonyland_base_id + 0, ItemCategory.ITEM, ItemClassification.useful),
     "Lightning":    ItemData(loonyland_base_id + 1, ItemCategory.ITEM, ItemClassification.useful),
     "Arrow":        ItemData(loonyland_base_id + 2, ItemCategory.ITEM, ItemClassification.useful),
@@ -45,7 +45,7 @@ item_table: Dict[str, ItemData] = {
     "Orb":          ItemData(loonyland_base_id + 5, ItemCategory.ITEM, ItemClassification.progression),
     "Bombs":        ItemData(loonyland_base_id + 6, ItemCategory.ITEM, ItemClassification.progression),
     "Shock Wand":   ItemData(loonyland_base_id + 7, ItemCategory.ITEM, ItemClassification.progression),
-    "Ice spear":    ItemData(loonyland_base_id + 8, ItemCategory.ITEM, ItemClassification.progression),
+    "Ice Spear":    ItemData(loonyland_base_id + 8, ItemCategory.ITEM, ItemClassification.progression),
     "Cactus":       ItemData(loonyland_base_id + 9, ItemCategory.ITEM, ItemClassification.progression),
     "Boomerang":    ItemData(loonyland_base_id + 10, ItemCategory.ITEM, ItemClassification.progression),
     "Whoopee":      ItemData(loonyland_base_id + 11, ItemCategory.ITEM, ItemClassification.progression),
