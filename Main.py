@@ -32,6 +32,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     games = set(args.game.values())
     worlds.ensure_all_worlds_loaded(games)
+    # Prevent additional world loading as a safeguard.
+    # Additional worlds must not be loaded after a CollectionState has been created because worlds may add init_mixins
+    # and copy_mixins to the CollectionState class.
+    worlds.world_loading_enabled = False
 
     start = time.perf_counter()
     # initialize the multiworld

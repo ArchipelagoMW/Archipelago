@@ -42,6 +42,8 @@ world_sources_by_game: Dict[str, "WorldSource"] = {}
 gameless_world_sources: List["WorldSource"] = []
 world_sources_by_module: Dict[str, "WorldSource"] = {}
 loaded_modules: set[str] = set()
+world_loading_enabled = True
+"""Set to False to disable world loading"""
 
 
 class GamesPackage(TypedDict, total=False):
@@ -250,6 +252,9 @@ class WorldFinder(importlib.abc.MetaPathFinder):
     def find_spec(self, fullname: str, path: typing.Sequence[str] | None, target: types.ModuleType | None = None
                   ) -> importlib.machinery.ModuleSpec | None:
         if fullname.startswith("worlds.") and fullname in world_sources_by_module:
+            if not world_loading_enabled:
+                raise RuntimeError(f"Could not load world {fullname}, world loading is not allowed at this time.")
+
             logging.debug("Attempting to find spec with name '%s', path '%s' and target_module '%s'",
                           fullname, path, target)
             world_source = world_sources_by_module[fullname]
