@@ -1,4 +1,5 @@
-region_table: Dict[str, List[str]] = {
+region_table: [str] = {
+    #
     "Menu",
     "Halloween Hill",
     "A Cabin",
@@ -48,6 +49,11 @@ region_table: Dict[str, List[str]] = {
     "Swampdog Lair",
     "Larry's Lair",
     
+    #logical regions
+    "Rocky Cliffs"
+    "Zombiton"
+    
+    #gamemodes
     "Bowling"
     "Survival",
     "Boss Bash",

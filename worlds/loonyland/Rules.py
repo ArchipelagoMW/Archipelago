@@ -188,8 +188,8 @@ def CanEnterZombiton(state: CollectionState, player: int) -> bool:
 	return state.has("Boots", player)
 
 def CanEnterRockyCliffs(state: CollectionState, player: int) -> bool:
-	return HaveAnyBigGem(state, player)
-
+	return state.has("Big Gem", player)
+    
 def CanEnterVampy(state: CollectionState, player: int) -> bool:
 	return CanEnterRockyCliffs(state, player) and HaveLightSource(state, player)
 
@@ -201,6 +201,3 @@ def CanEnterVampyIII(state: CollectionState, player: int) -> bool:
 
 def CanEnterVampyIV(state: CollectionState, player: int) -> bool:
 	return CanEnterVampyIII(inv) && state.has("Pumpkin Key", player)
-        
-def CanEnterRockyCliffs(state: CollectionState, player: int) -> bool:
-    return state.has("Big Gem", player)
