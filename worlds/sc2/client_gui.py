@@ -4,7 +4,7 @@ import logging
 
 from BaseClasses import ItemClassification
 from NetUtils import JSONMessagePart
-from kvui import GameManager, HoverBehavior, ServerToolTip, KivyJSONtoTextParser
+from kvui import GameManager, HoverBehavior, ServerToolTip, KivyJSONtoTextParser, LogtoUI
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.uix.gridlayout import GridLayout
@@ -118,10 +118,6 @@ class SC2JSONtoKivyParser(KivyJSONtoTextParser):
 
 
 class SC2Manager(GameManager):
-    logging_pairs = [
-        ("Client", "Archipelago"),
-        ("Starcraft2", "Starcraft2"),
-    ]
     base_title = "Archipelago Starcraft 2 Client"
 
     campaign_panel: Optional[MultiCampaignLayout] = None
@@ -146,6 +142,8 @@ class SC2Manager(GameManager):
         warnings, window_width, window_height = gui_config.get_window_defaults()
         from kivy.core.window import Window
         Window.size = window_width, window_height
+        # Add the logging handler manually here instead of using `logging_pairs` to avoid adding 2 unnecessary tabs
+        logging.getLogger("Starcraft2").addHandler(LogtoUI(self.log_panels["All"].on_log))
         for startup_warning in warnings:
             logging.getLogger("Starcraft2").warning(f"Startup WARNING: {startup_warning}")
         for race in (SC2Race.TERRAN, SC2Race.PROTOSS, SC2Race.ZERG):
