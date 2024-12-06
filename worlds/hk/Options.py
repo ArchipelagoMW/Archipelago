@@ -308,6 +308,9 @@ class PlandoCharmCosts(OptionDict):
         })
 
     def __init__(self, value):
+        # To handle keys of random like other options, create an option instance from their values
+        # Additionally a vanilla keyword is added to plando individual charms to vanilla costs
+        # and default is disabled so as to not cause confusion
         self.value = {}
         for key, data in value.items():
             if isinstance(data, str):
@@ -316,6 +319,7 @@ class PlandoCharmCosts(OptionDict):
                     continue
                 elif data.lower() == "default":
                     # default is too easily confused with vanilla but actually 0
+                    # skip CharmCost resolution to fail schema afterwords
                     self.value[key] = data
                     continue
             try:
