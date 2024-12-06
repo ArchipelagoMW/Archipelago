@@ -109,39 +109,28 @@ class LoonylandRules:
         }
         
         
-def  HaveLightSource(state: CollectionState, player: int)
-{
+def  HaveLightSource(state: CollectionState, player: int) -> bool:
 	return (state.has("Lantern", player) or (state.has("Stick", player) and state.has("Boots", player)))
-}
 
-def HaveBombs(state: CollectionState, player: int)
-{
+
+def HaveBombs(state: CollectionState, player: int) -> bool:
 	return state.has("Bombs", player)
     #or werewolf badge when badges are added
-}
 
-def HaveAnyBigGem(state: CollectionState, player: int)
-{
+
+def HaveAnyBigGem(state: CollectionState, player: int) -> bool:
 	return state.has("Big Gem", player)
-}
 
-def HaveAllOrbs(state: CollectionState, player: int)
-{
+def HaveAllOrbs(state: CollectionState, player: int) -> bool:
 	return (state.count("Orb", player) >= 4)
-}
 
-def HaveAllBats(state: CollectionState, player: int)
-{
+def HaveAllBats(state: CollectionState, player: int) -> bool:
 	return (state.count("Bat Statue", player) >= 4)
-}
 
-def HaveAllVamps(state: CollectionState, player: int)
-{
+def HaveAllVamps(state: CollectionState, player: int) -> bool:
 	return (state.count("Vampire Statue", player) >= 8)
-}
 
-def HaveSpecialWeaponDamage(state: CollectionState, player: int)
-{
+def HaveSpecialWeaponDamage(state: CollectionState, player: int) -> bool:
 	return (
             state.has("Bombs", player) or
             state.has("Shock Wand", player) or
@@ -151,10 +140,8 @@ def HaveSpecialWeaponDamage(state: CollectionState, player: int)
             state.has("Whoopee", player) or
             state.has("Hot Pants", player)
     )
-}
 
-def HaveSpecialWeaponBullet(state: CollectionState, player: int)
-{
+def HaveSpecialWeaponBullet(state: CollectionState, player: int) -> bool:
     return (
             state.has("Bombs", player) or
             #state.has("Shock Wand") or shock wand isn't bullet
@@ -165,11 +152,8 @@ def HaveSpecialWeaponBullet(state: CollectionState, player: int)
             state.has("Hot Pants", player)
     )
 	#return true slingshot counts
-	
-}
 
-def HaveSpecialWeaponRangeDamage(state: CollectionState, player: int)
-{
+def HaveSpecialWeaponRangeDamage(state: CollectionState, player: int) -> bool:
     return (
             state.has("Bombs", player) or
             state.has("Shock Wand", player) or 
@@ -180,10 +164,8 @@ def HaveSpecialWeaponRangeDamage(state: CollectionState, player: int)
             #state.has("Hot Pants") hot pants not ranged
     )
     #return true slingshot counts
-}
 
-def HaveSpecialWeaponThroughWalls(state: CollectionState, player: int)
-{
+def HaveSpecialWeaponThroughWalls(state: CollectionState, player: int) -> bool:
     return (
             state.has("Bombs", player) or
             state.has("Shock Wand", player) or 
@@ -194,50 +176,31 @@ def HaveSpecialWeaponThroughWalls(state: CollectionState, player: int)
             #state.has("Hot Pants") 
             )
     )
-}
 
-def HaveAllMushrooms(state: CollectionState, player: int)
-{
+def HaveAllMushrooms(state: CollectionState, player: int) -> bool:
 	return state.count("Mushroom", player) >= 10
-}
 
-def CanCleanseCrypts(state: CollectionState, player: int)
-{
+def CanCleanseCrypts(state: CollectionState, player: int) -> bool:
 	return (HaveLightSource(state, player) and CanEnterZombiton(state, player) and HaveSpecialWeaponRangeDamage(state, player))
-}
 
 #these will get removed in favor of region access reqs eventually
-def CanEnterZombiton(state: CollectionState, player: int)
-{
+def CanEnterZombiton(state: CollectionState, player: int) -> bool:
 	return state.has("Boots", player)
-}
 
-def CanEnterRockyCliffs(state: CollectionState, player: int)
-{
+def CanEnterRockyCliffs(state: CollectionState, player: int) -> bool:
 	return HaveAnyBigGem(state, player)
-}
 
-def CanEnterVampy(state: CollectionState, player: int)
-{
+def CanEnterVampy(state: CollectionState, player: int) -> bool:
 	return CanEnterRockyCliffs(state, player) and HaveLightSource(state, player)
-}
 
-def CanEnterVampyII(state: CollectionState, player: int)
-{
+def CanEnterVampyII(state: CollectionState, player: int) -> bool:
 	return CanEnterVampy(state, player) && state.has("Skull Key", player)
-}
 
-def CanEnterVampyIII(state: CollectionState, player: int)
-{
+def CanEnterVampyIII(state: CollectionState, player: int) -> bool:
 	return CanEnterVampyII(state, player) && state.has("Bat Key", player)
-}
 
-def CanEnterVampyIV(state: CollectionState, player: int)
-{
+def CanEnterVampyIV(state: CollectionState, player: int) -> bool:
 	return CanEnterVampyIII(inv) && state.has("Pumpkin Key", player)
-}
         
-def CanEnterRockyCliffs(state: CollectionState, player: int)
-{
+def CanEnterRockyCliffs(state: CollectionState, player: int) -> bool:
     return state.has("Big Gem", player)
-}
