@@ -56,7 +56,7 @@ For performance reasons, AP only checks every entrance once. However, if an entr
 1. The entrance is checked and determined to be nontraversable because the region in its access_rule hasn't been reached yet during the graph search.
 2. Then, the region in its access_rule is determined to be reachable.
 
-The entrance *would* now be determined to be traversable if it were rechecked, but it is not.
+This entrance *would* be called reachable if it were rechecked, but it won't be rechecked this cycle.
 To account for this case, AP would have to recheck all entrances every time a new region is reached until no new regions are reached.
 
 However, there is a way to **manually** define that a *specific* entrance needs to be rechecked during region sweep if a *specific* region is reached during it. This is what an indirect condition is.
