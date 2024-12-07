@@ -1031,10 +1031,14 @@ def get_base_parser(description: typing.Optional[str] = None):
 
 def handle_url_arg(args: "argparse.Namespace",
                    parser: "typing.Optional[argparse.ArgumentParser]" = None) -> "argparse.Namespace":
-    """ handle if text client is launched using the "archipelago://name:pass@host:port" url from webhost """
+    """
+    Parse the url arg "archipelago://name:pass@host:port" from launcher into correct launch args for CommonClient
+    If alternate data is required the urlparse response is saved back to args.url if valid
+    """
     if args.url:
         url = urllib.parse.urlparse(args.url)
         if url.scheme == "archipelago":
+            args.url = url
             args.connect = url.netloc
             if url.username:
                 args.name = urllib.parse.unquote(url.username)
