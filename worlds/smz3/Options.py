@@ -55,8 +55,8 @@ class Goal(Choice):
                                          Ganon's Tower and Ganon can be defeat as soon you have the required 
                                          crystals to make Ganon vulnerable. For keysanity, this mode also removes 
                                          the Crateria Boss Key requirement from Tourian to allow faster access.
-    All Dungeons and Defeat Mother Brain -  Similar to "Defeat Ganon and Mother Brain", but also requires all dungeons 
-                                            to be beaten including Castle Tower and Agahnim."""
+    All Dungeons and Defeat Mother Brain -  Similar to "Defeat Ganon and Mother Brain", but also requires all dungeons to be beaten 
+                                            including Castle Tower, Agahnim, and all Super Metroid bosses."""
     display_name = "Goal"
     option_DefeatBoth = 0
     option_FastGanonDefeatMotherBrain = 1
