@@ -250,7 +250,7 @@ def launch(*args: str) -> Any:
     if SavingPrincessWorld.settings.launch_game:
         logging.info("Launching game.")
         try:
-            subprocess.run(f"{SavingPrincessWorld.settings.launch_command} {name} {password} {server}")
+            subprocess.Popen(f"{SavingPrincessWorld.settings.launch_command} {name} {password} {server}")
         except FileNotFoundError:
             error = ("Could not run the game!\n\n"
                      "Please check that launch_command in options.yaml or host.yaml is set up correctly.")
