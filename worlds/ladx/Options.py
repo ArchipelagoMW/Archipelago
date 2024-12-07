@@ -57,7 +57,7 @@ class TextShuffle(DefaultOffToggle):
 
 class Rooster(DefaultOnToggle, LADXROption):
     """
-    [On] Adds the rooster to the item pool. 
+    [On] Adds the rooster to the item pool.
     [Off] The rooster spot is still a check giving an item. But you will never find the rooster. In that case, any rooster spot is accessible without rooster by other means.
     """
     display_name = "Rooster"
@@ -70,7 +70,7 @@ class Boomerang(Choice):
     [Gift] The boomerang salesman will give you a random item, and the boomerang is shuffled.
     """
     display_name = "Boomerang"
-    
+
     normal = 0
     gift = 1
     default = gift
@@ -156,7 +156,7 @@ class ShuffleSmallKeys(DungeonItemShuffle):
     [Own Dungeons] The item will be within a dungeon in your world
     [Own World] The item will be somewhere in your world
     [Any World] The item could be anywhere
-    [Different World] The item will be somewhere in another world 
+    [Different World] The item will be somewhere in another world
     """
     display_name = "Shuffle Small Keys"
     ladxr_item = "KEY"
@@ -223,7 +223,7 @@ class Goal(Choice, LADXROption):
     The Goal of the game
     [Instruments] The Wind Fish's Egg will only open if you have the required number of Instruments of the Sirens, and play the Ballad of the Wind Fish.
     [Seashells] The Egg will open when you bring 20 seashells. The Ballad and Ocarina are not needed.
-    [Open] The Egg will start pre-opened.  
+    [Open] The Egg will start pre-opened.
     """
     display_name = "Goal"
     ladxr_name = "goal"
@@ -284,12 +284,15 @@ class MusicChangeCondition(Choice):
 # [Hero] Switch version hero mode, double damage, no heart/fairy drops.
 # [One hit KO] You die on a single hit, always."""),
 
-#             Setting('steal', 'Gameplay', 't', 'Stealing from the shop',
-#                 options=[('always', 'a', 'Always'), ('never', 'n', 'Never'), ('default', '', 'Normal')], default='default',
-#                 description="""Effects when you can steal from the shop. Stealing is bad and never in logic.
-# [Normal] requires the sword before you can steal.
-# [Always] you can always steal from the shop
-# [Never] you can never steal from the shop."""),
+
+class StealingInLogic(DefaultOffToggle, LADXROption):
+    """
+    Puts stealing from the shop in logic if the player has a sword.
+    """
+    display_name = "Stealing in Logic"
+    ladxr_name = "steal"
+
+
 class Bowwow(Choice):
     """Allows BowWow to be taken into any area.  Certain enemies and bosses are given a new weakness to BowWow.
     [Normal] BowWow is in the item pool, but can be logically expected as a damage source.
@@ -447,7 +450,7 @@ class GfxMod(FreeText, LADXROption):
 
 class Palette(Choice):
     """
-    Sets the palette for the game. 
+    Sets the palette for the game.
     Note: A few places aren't patched, such as the menu and a few color dungeon tiles.
     [Normal] The vanilla palette
     [1-Bit] One bit of color per channel
@@ -524,6 +527,7 @@ ladx_option_groups = [
     OptionGroup("Miscellaneous", [
         TradeQuest,
         Rooster,
+        StealingInLogic,
         TrendyGame,
         InGameHints,
         NagMessages,
@@ -547,12 +551,12 @@ ladx_option_groups = [
 @dataclass
 class LinksAwakeningOptions(PerGameCommonOptions):
     logic: Logic
-    # 'heartpiece': DefaultOnToggle, # description='Includes heart pieces in the item pool'),                
-    # 'seashells': DefaultOnToggle, # description='Randomizes the secret sea shells hiding in the ground/trees. (chest are always randomized)'),                
-    # 'heartcontainers': DefaultOnToggle, # description='Includes boss heart container drops in the item pool'),                
-    # 'instruments': DefaultOffToggle, # description='Instruments are placed on random locations, dungeon goal will just contain a random item.'),                
+    # 'heartpiece': DefaultOnToggle, # description='Includes heart pieces in the item pool'),
+    # 'seashells': DefaultOnToggle, # description='Randomizes the secret sea shells hiding in the ground/trees. (chest are always randomized)'),
+    # 'heartcontainers': DefaultOnToggle, # description='Includes boss heart container drops in the item pool'),
+    # 'instruments': DefaultOffToggle, # description='Instruments are placed on random locations, dungeon goal will just contain a random item.'),
     tradequest: TradeQuest  # description='Trade quest items are randomized, each NPC takes its normal trade quest item, but gives a random item'),
-    # 'witch': DefaultOnToggle, # description='Adds both the toadstool and the reward for giving the toadstool to the witch to the item pool'),                
+    # 'witch': DefaultOnToggle, # description='Adds both the toadstool and the reward for giving the toadstool to the witch to the item pool'),
     rooster: Rooster  # description='Adds the rooster to the item pool. Without this option, the rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.'),
     # 'boomerang': Boomerang,
     # 'randomstartlocation': DefaultOffToggle, # 'Randomize where your starting house is located'),
@@ -582,6 +586,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     nag_messages: NagMessages
     ap_title_screen: APTitleScreen
     boots_controls: BootsControls
+    stealing_in_logic: StealingInLogic
     in_game_hints: InGameHints
 
     warp_improvements: Removed
