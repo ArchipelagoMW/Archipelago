@@ -1,7 +1,7 @@
 import typing
 from typing import NamedTuple, Dict, List
 
-from BaseClasses import Entrance, CollectionState
+from BaseClasses import Entrance, CollectionState, Region
 from worlds.generic.Rules import CollectionRule
 from worlds.loonyland import LoonylandWorld
 
@@ -221,3 +221,5 @@ def set_entrances(multiworld, world, player):
         # "Castle Vampy IV Main -> Castle Vampy IV NW": EntranceData("Castle Vampy IV Main", "Castle Vampy IV NW", False),
         # "Castle Vampy IV NW -> Castle Vampy IV Main": EntranceData("Castle Vampy IV NW", "Castle Vampy IV Main", False),
     ]
+    for region in world.get_regions():
+        region.addExits()

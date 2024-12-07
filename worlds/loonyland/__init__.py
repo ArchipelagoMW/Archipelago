@@ -61,7 +61,8 @@ class LoonylandWorld(World):
                 location_name: location_data.id for location_name, location_data in loonyland_location_table.items()
                 if location_data.region == region_name # and location_data.can_create(self)
             }, LoonylandLocation)
-            region.add_exits()
+            #region.add_exits()
+
 
 
         # Place locked locations.
