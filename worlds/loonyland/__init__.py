@@ -5,7 +5,8 @@ from worlds.AutoWorld import WebWorld, World
 from .Items import LoonylandItem, item_frequencies, loony_item_table
 from .Locations import LoonylandLocation, LoonylandLocationData, loonyland_location_table #, locked_locations
 from .Options import LoonylandOptions
-from .Regions import region_table
+from .Regions import loonyland_region_table
+from .Entrances import loonyland_entrance_table, LoonylandEntrance
 from .Rules import set_rules
 
 
@@ -40,24 +41,28 @@ class LoonylandWorld(World):
         item_pool: List[LoonylandItem] = []
         for name, item in loony_item_table.items():
             if item.id: #and item.can_create(self):
-                item_pool.append(self.create_item(name))
+                for i in range(item_frequencies.get(name, 1)):
+                    item_pool.append(self.create_item(name))
 
         self.multiworld.itempool += item_pool
 
     def create_regions(self) -> None:
         # Create regions.
-        for region_name in region_table:
+        for region_name in loonyland_region_table:
             region = Region(region_name, self.player, self.multiworld)
             self.multiworld.regions.append(region)
 
+        #connect regions
+
         # Create locations.
-        for region_name in region_table:
+        for region_name in loonyland_region_table:
             region = self.get_region(region_name)
             region.add_locations({
                 location_name: location_data.id for location_name, location_data in loonyland_location_table.items()
                 if location_data.region == region_name # and location_data.can_create(self)
             }, LoonylandLocation)
-            #region.add_exits(region_table[region_name].connecting_regions)
+            region.add_exits()
+
 
         # Place locked locations.
         #for location_name, location_data in locked_locations.items():
@@ -78,7 +83,7 @@ class LoonylandWorld(World):
         set_rules(self.multiworld, self, self.player)
 
         # Completion condition.
-        self.multiworld.completion_condition[self.player] = lambda state: state.can_reach_location("Save Halloween Hill", self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.can_reach_location("The Evilizer - Save Halloween Hill", self.player)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {

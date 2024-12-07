@@ -12,15 +12,15 @@ def have_bombs(state: CollectionState, player: int) -> bool:
 
 
 def have_all_orbs(state: CollectionState, player: int) -> bool:
-    return state.count("Orb", player) >= 4
+    return state.has("Orb", player, 4)
 
 
 def have_all_bats(state: CollectionState, player: int) -> bool:
-    return state.count("Bat Statue", player) >= 4
+    return state.has("Bat Statue", player, 4)
 
 
 def have_all_vamps(state: CollectionState, player: int) -> bool:
-    return state.count("Vampire Statue", player) >= 8
+    return state.has("Vampire Statue", player, 8)
 
 
 def have_special_weapon_damage(state: CollectionState, player: int) -> bool:
@@ -35,13 +35,13 @@ def have_special_weapon_bullet(state: CollectionState, player: int) -> bool:
     )
 
 
-# return true slingshot counts
+# return lambda state: True slingshot counts
 
 def have_special_weapon_range_damage(state: CollectionState, player: int) -> bool:
     return (
         state.has_any(("Bombs", "Shock Wand", "Cactus", "Boomerang"), player)
     )
-    # return true slingshot counts
+    # return lambda state: True slingshot counts
 
 
 def have_special_weapon_through_walls(state: CollectionState, player: int) -> bool:
@@ -84,36 +84,36 @@ def set_rules(multiworld, world, player):
 
     access_rules = {
         "Halloween Hill - Swamp Mud Path": lambda state: state.has("Boots", player),
-        "Halloween Hill - Bog Beast Home": True,
+        #"Halloween Hill - Bog Beast Home": lambda state: True,
         "Halloween Hill - Rocky Cliffs below Upper Caverns": lambda state: can_enter_rocky_cliffs(state, player),
         "Halloween Hill - Sapling Shrine": lambda state: state.has("Boots", player),
-        "Halloween Hill - Terror Glade": True,
+        #"Halloween Hill - Terror Glade": lambda state: True,
         "Halloween Hill - Rocky Cliffs Vine": lambda state: state.has("Fertilizer", player),
         "Halloween Hill - Rocky Cliffs Grand Pharoh": lambda state: can_enter_rocky_cliffs(state, player),
         "Halloween Hill - Rocky Cliffs Rock Corner": lambda state: can_enter_rocky_cliffs(state, player) and have_bombs(state, player),
-        "Halloween Hill - Mushroom outside town": True,
-        "Halloween Hill - North of UG Passage": True,
-        "Halloween Hill - Top left mushroom spot": True,
-        "Halloween Hill - NE of UG Passage": True,
-        "Halloween Hill - East Woods": True,
+        #"Halloween Hill - Mushroom outside town": lambda state: True,
+        #"Halloween Hill - North of UG Passage": lambda state: True,
+        #"Halloween Hill - Top left mushroom spot": lambda state: True,
+        #"Halloween Hill - NE of UG Passage": lambda state: True,
+        #"Halloween Hill - East Woods": lambda state: True,
         "Halloween Hill - Rocky Cliffs Ledge": lambda state: can_enter_rocky_cliffs(state, player),
         "Halloween Hill - Rocky Cliffs Peak": lambda state: can_enter_rocky_cliffs(state, player),
-        "Halloween Hill - Cat Tree": True,
+        #"Halloween Hill - Cat Tree": lambda state: True,
         "The Witch's Cabin - Bedroom": lambda state: have_light_source(state, player),
-        "The Witch's Cabin - Backroom": True,
-        "Bonita's Cabin - Barrel Maze": True,
+        #"The Witch's Cabin - Backroom": lambda state: True,
+        #"Bonita's Cabin - Barrel Maze": lambda state: True,
         "The Bog Pit - Top Door": lambda state: state.has("Skull Key", player),
-        "The Bog Pit - Post Room": True,
-        "The Bog Pit - Window Drip": True,
-        "The Bog Pit - Green room": True,
-        "The Bog Pit - Arena": True,
-        "The Bog Pit - Kill Wall": True,
+        #"The Bog Pit - Post Room": lambda state: True,
+        #"The Bog Pit - Window Drip": lambda state: True,
+        #"The Bog Pit - Green room": lambda state: True,
+        "The Bog Pit - Arena": lambda state: True,
+        "The Bog Pit - Kill Wall": lambda state: True,
         "Underground Tunnel - Swampdog Door": lambda state: state.has("Pumpkin Key", player),
         "Underground Tunnel - Scribble Wall": lambda state: have_special_weapon_bullet(state, player),
-        "Underground Tunnel - Tiny Passage": True,
-        "Underground Tunnel - fire frogs": True,
+        "Underground Tunnel - Tiny Passage": lambda state: True,
+        "Underground Tunnel - fire frogs": lambda state: True,
         "Underground Tunnel - Torch Island": lambda state: state.has("Boots", player),
-        "Underground Tunnel - Small Room": True,
+        "Underground Tunnel - Small Room": lambda state: True,
         "Swamp Gas Cavern - Scratch Wall": lambda state: state.has("Boots", player) and have_special_weapon_bullet(state, player),
         "Swamp Gas Cavern - Bat Mound": lambda state: state.has("Boots", player) and state.has("Bat Key", player),
         "Swamp Gas Cavern - Stair room": lambda state: state.has("Boots", player),
@@ -138,8 +138,8 @@ def set_rules(multiworld, world, player):
         "Abandoned Mines - Shaft": lambda state: have_light_source(state, player) and can_enter_rocky_cliffs(state, player),
         "The Shrine of Bombulus - Bombulus": lambda state: can_enter_rocky_cliffs(state, player),
         "A Gloomy Cavern - Lockpick": lambda state: have_light_source(state, player) and can_enter_rocky_cliffs(state, player),
-        "Happy Stick Woods - Happy Stick Hidden": lambda state: state.has("Talisman", player),
-        "Happy Stick Woods - Happy Stick Reward": lambda state: state.has("Talisman", player),
+        "Happy Stick Woods - Happy Stick Hidden": lambda state: state.has("Happy Stick", player),
+        "Happy Stick Woods - Happy Stick Reward": lambda state: state.has("Happy Stick", player),
         "The Wolf Den - Wolf Top Left": lambda state: have_light_source(state, player) and state.has("Silver Sling", player),
         "The Wolf Den - Pumpkin Door": lambda state: have_light_source(state, player) and state.has("Silver Sling", player) and state.has("Pumpkin Key", player),
         "The Wolf Den - Grow Room": lambda state: have_light_source(state, player) and state.has("Silver Sling", player) and state.has("Fertilizer", player),
@@ -157,7 +157,7 @@ def set_rules(multiworld, world, player):
         "Castle Vampy II - Top Right Top": lambda state: can_enter_vampy_ii(state, player),
         "Castle Vampy II - Bottom Right Middle": lambda state: can_enter_vampy_ii(state, player),
         "Castle Vampy II - Bat room": lambda state: can_enter_vampy_ii(state, player) and have_special_weapon_bullet(state, player),
-        "Cabin in the woods - Gold Skull": True,
+        "Cabin in the woods - Gold Skull": lambda state: True,
         "Castle Vampy III - Middle": lambda state: can_enter_vampy_iii(state, player),
         "Castle Vampy III - Behind the Pews": lambda state: can_enter_vampy_iii(state, player),
         "Castle Vampy III - AMBUSH!": lambda state: can_enter_vampy_iii(state, player),
@@ -174,7 +174,7 @@ def set_rules(multiworld, world, player):
         "Castle Vampy Roof - Toasty the Elder": lambda state: can_enter_vampy(state, player) and have_all_bats(state, player),
         "Heart of Terror - Bonkula": lambda state: can_enter_vampy_iv(state, player) and have_all_vamps(state, player),
         "A Hidey Hole - Bat Door": lambda state: state.has("Bat Key", player),
-        "A Hidey Hole - Pebbles": True,
+        #"A Hidey Hole - Pebbles": lambda state: True,
         "Swampdog Lair - Entrance": lambda state: state.has("Boots", player),
         "Swampdog Lair - End": lambda state: state.has("Boots", player) and have_light_source(state, player) and state.has("Fertilizer", player),
         "The Witch's Cabin - Ghostbusting": lambda state: state.has("Big Gem", player) and state.has("Daisy", player) and state.has("Mushroom", player, 10),
@@ -182,10 +182,10 @@ def set_rules(multiworld, world, player):
         "Halloween Hill - Scaredy Cat": lambda state: state.has("Cat", player),
         "Halloween Hill - Silver Bullet": lambda state: state.has("Silver", player) and can_cleanse_crypts(state, player),
         "Halloween Hill - Smashing Pumpkins": lambda state: can_cleanse_crypts(state, player),
-        "Halloween Hill - Sticky Shoes": True,
+        "Halloween Hill - Sticky Shoes": lambda state: True,
         "A Cabin4 - The Collection": lambda state: state.has("Silver Sling", player) and state.has("Ghost Potion", player) and can_enter_vampy(state, player),
         "A Gloomy Cavern - The Rescue": lambda state: have_light_source(state, player) and can_enter_rocky_cliffs(state, player),
-        "A Cabin - Tree Trimming": True,
+        "A Cabin - Tree Trimming": lambda state: True,
         "The Witch's Cabin - Witch Mushrooms": lambda state: state.has("Mushroom", player, 10),
         "Halloween Hill - Zombie Stomp": lambda state: can_cleanse_crypts(state, player)
         }

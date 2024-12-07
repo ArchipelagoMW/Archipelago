@@ -129,4 +129,9 @@ loonyland_location_table: Dict[str, LoonylandLocationData] = {
     "Witch Mushrooms":     LoonylandLocationData(104, LocationCategory.QUEST, "The Witch's Cabin"),
     "Zombie Stomp":     LoonylandLocationData(105, LocationCategory.QUEST, "Halloween Hill")
     #todo the 40 badge locations
+    }
+
+loonyland_location_table = {
+    f"{data.region} - {name}": data
+    for name, data in loonyland_location_table.items()
 }
