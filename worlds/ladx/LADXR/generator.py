@@ -308,6 +308,8 @@ def generateRom(args, world: "LinksAwakeningWorld"):
         patches.bingo.setBingoGoal(rom, world_setup.bingo_goals, world_setup.goal)
     elif world_setup.goal == "seashells":
         patches.goal.setSeashellGoal(rom, 20)
+    elif isinstance(world_setup.goal, str) and world_setup.goal.startswith("="):
+        patches.goal.setSpecificInstruments(rom, [int(c) for c in world_setup.goal[1:]])
     else:
         patches.goal.setRequiredInstrumentCount(rom, world_setup.goal)
 
