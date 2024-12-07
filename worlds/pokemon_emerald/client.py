@@ -117,11 +117,17 @@ LEGENDARY_NAMES = {k.lower(): v for k, v in {
 DEFEATED_LEGENDARY_FLAG_MAP = {data.constants[f"FLAG_DEFEATED_{name}"]: name for name in LEGENDARY_NAMES.values()}
 CAUGHT_LEGENDARY_FLAG_MAP = {data.constants[f"FLAG_CAUGHT_{name}"]: name for name in LEGENDARY_NAMES.values()}
 
+SHOAL_CAVE_MAPS = tuple(data.constants[map_name] for map_name in [
+    "MAP_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM",
+    "MAP_SHOAL_CAVE_LOW_TIDE_INNER_ROOM",
+])
+
 
 class PokemonEmeraldClient(BizHawkClient):
     game = "Pokemon Emerald"
     system = "GBA"
     patch_suffix = ".apemerald"
+
     local_checked_locations: Set[int]
     local_set_events: Dict[str, bool]
     local_found_key_items: Dict[str, bool]
@@ -132,6 +138,7 @@ class PokemonEmeraldClient(BizHawkClient):
     latest_wonder_trade_reply: dict
     wonder_trade_cooldown: int
     wonder_trade_cooldown_timer: int
+    queued_received_trade: Optional[str]
 
     death_counter: Optional[int]
     previous_death_link: float
@@ -139,8 +146,7 @@ class PokemonEmeraldClient(BizHawkClient):
 
     current_map: Optional[int]
 
-    def __init__(self) -> None:
-        super().__init__()
+    def initialize_client(self):
         self.local_checked_locations = set()
         self.local_set_events = {}
         self.local_found_key_items = {}
@@ -153,6 +159,7 @@ class PokemonEmeraldClient(BizHawkClient):
         self.previous_death_link = 0
         self.ignore_next_death_link = False
         self.current_map = None
+        self.queued_received_trade = None
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
@@ -182,9 +189,7 @@ class PokemonEmeraldClient(BizHawkClient):
         ctx.want_slot_data = True
         ctx.watcher_timeout = 0.125
 
-        self.death_counter = None
-        self.previous_death_link = 0
-        self.ignore_next_death_link = False
+        self.initialize_client()
 
         return True
 
@@ -352,6 +357,7 @@ class PokemonEmeraldClient(BizHawkClient):
 
             # Send game clear
             if not ctx.finished_game and game_clear:
+                ctx.finished_game = True
                 await ctx.send_msgs([{
                     "cmd": "StatusUpdate",
                     "status": ClientStatus.CLIENT_GOAL,
@@ -413,13 +419,17 @@ class PokemonEmeraldClient(BizHawkClient):
 
         read_result = await bizhawk.guarded_read(
             ctx.bizhawk_ctx,
-            [(sb1_address + 0x4, 2, "System Bus")],
-            [guards["SAVE BLOCK 1"]]
+            [
+                (sb1_address + 0x4, 2, "System Bus"),  # Current map
+                (sb1_address + 0x1450 + (data.constants["FLAG_SYS_SHOAL_TIDE"] // 8), 1, "System Bus"),
+            ],
+            [guards["IN OVERWORLD"], guards["SAVE BLOCK 1"]]
         )
         if read_result is None:  # Save block moved
             return
 
         current_map = int.from_bytes(read_result[0], "big")
+        shoal_cave = int(read_result[1][0] & (1 << (data.constants["FLAG_SYS_SHOAL_TIDE"] % 8)) > 0)
         if current_map != self.current_map:
             self.current_map = current_map
             await ctx.send_msgs([{
@@ -428,6 +438,7 @@ class PokemonEmeraldClient(BizHawkClient):
                 "data": {
                     "type": "MapUpdate",
                     "mapId": current_map,
+                    **({"tide": shoal_cave} if current_map in SHOAL_CAVE_MAPS else {}),
                 },
             }])
 
@@ -544,28 +555,36 @@ class PokemonEmeraldClient(BizHawkClient):
             if trade_is_sent == 0 and wonder_trade_pokemon_data[19] == 2:
                 # Game has wonder trade data to send. Send it to data storage, remove it from the game's memory,
                 # and mark that the game is waiting on receiving a trade
-                Utils.async_start(self.wonder_trade_send(ctx, pokemon_data_to_json(wonder_trade_pokemon_data)))
-                await bizhawk.write(ctx.bizhawk_ctx, [
+                success = await bizhawk.guarded_write(ctx.bizhawk_ctx, [
                     (sb1_address + 0x377C, bytes(0x50), "System Bus"),
                     (sb1_address + 0x37CC, [1], "System Bus"),
-                ])
+                ], [guards["SAVE BLOCK 1"]])
+                if success:
+                    Utils.async_start(self.wonder_trade_send(ctx, pokemon_data_to_json(wonder_trade_pokemon_data)))
             elif trade_is_sent != 0 and wonder_trade_pokemon_data[19] != 2:
-                # Game is waiting on receiving a trade. See if there are any available trades that were not
-                # sent by this player, and if so, try to receive one.
-                if self.wonder_trade_cooldown_timer <= 0 and f"pokemon_wonder_trades_{ctx.team}" in ctx.stored_data:
+                # Game is waiting on receiving a trade.
+                if self.queued_received_trade is not None:
+                    # Client is holding a trade, ready to write it into the game
+                    success = await bizhawk.guarded_write(ctx.bizhawk_ctx, [
+                        (sb1_address + 0x377C, json_to_pokemon_data(self.queued_received_trade), "System Bus"),
+                    ], [guards["SAVE BLOCK 1"]])
+
+                    # Notify the player if it was written, otherwise hold it for the next loop
+                    if success:
+                        logger.info("Wonder trade received!")
+                        self.queued_received_trade = None
+
+                elif self.wonder_trade_cooldown_timer <= 0 and f"pokemon_wonder_trades_{ctx.team}" in ctx.stored_data:
+                    # See if there are any available trades that were not sent by this player. If so, try to receive one.
                     if any(item[0] != ctx.slot
                             for key, item in ctx.stored_data.get(f"pokemon_wonder_trades_{ctx.team}", {}).items()
                             if key != "_lock" and orjson.loads(item[1])["species"] <= 386):
-                        received_trade = await self.wonder_trade_receive(ctx)
-                        if received_trade is None:
+                        self.queued_received_trade = await self.wonder_trade_receive(ctx)
+                        if self.queued_received_trade is None:
                             self.wonder_trade_cooldown_timer = self.wonder_trade_cooldown
                             self.wonder_trade_cooldown *= 2
                             self.wonder_trade_cooldown += random.randrange(0, 500)
                         else:
-                            await bizhawk.write(ctx.bizhawk_ctx, [
-                                (sb1_address + 0x377C, json_to_pokemon_data(received_trade), "System Bus"),
-                            ])
-                            logger.info("Wonder trade received!")
                             self.wonder_trade_cooldown = 5000
 
                 else:

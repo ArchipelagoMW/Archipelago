@@ -219,7 +219,8 @@ class ShiversWorld(World):
             "ElevatorsStaySolved": self.options.elevators_stay_solved.value,
             "EarlyBeth": self.options.early_beth.value,
             "EarlyLightning": self.options.early_lightning.value,
-            "FrontDoorUsable": self.options.front_door_usable.value
+            "FrontDoorUsable": self.options.front_door_usable.value,
+            "PuzzleCollectBehavior": self.options.puzzle_collect_behavior.value,
         }
 
 
