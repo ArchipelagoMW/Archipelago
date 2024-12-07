@@ -6,7 +6,7 @@ from .Items import LoonylandItem, item_frequencies, loony_item_table
 from .Locations import LoonylandLocation, LoonylandLocationData, loonyland_location_table #, locked_locations
 from .Options import LoonylandOptions
 from .Regions import loonyland_region_table
-from .Entrances import loonyland_entrance_table, LoonylandEntrance
+from .Entrances import set_entrances, LoonylandEntrance
 from .Rules import set_rules
 
 
@@ -62,7 +62,7 @@ class LoonylandWorld(World):
                 if location_data.region == region_name # and location_data.can_create(self)
             }, LoonylandLocation)
             #region.add_exits()
-
+        set_entrances(self.multiworld, self, self.player)
 
 
         # Place locked locations.

@@ -3,7 +3,6 @@ from typing import NamedTuple, Dict, List
 
 from BaseClasses import Entrance, CollectionState, Region
 from worlds.generic.Rules import CollectionRule
-from worlds.loonyland import LoonylandWorld
 
 
 class LoonylandEntrance(Entrance):
@@ -165,8 +164,8 @@ def set_entrances(multiworld, world, player):
 
         #logical zone connections, cant be randomized
 
-        EntranceData("Halloween Hill", "Slurpy Swamp Mud", False, lambda state: state.has("Boots")),
-        EntranceData("Slurpy Swamp Mud", "Halloween Hill", False, lambda state: state.has("Boots")),
+        #EntranceData("Halloween Hill", "Slurpy Swamp Mud", False, lambda state: state.has("Boots")),
+        #EntranceData("Slurpy Swamp Mud", "Halloween Hill", False, lambda state: state.has("Boots")),
 
         EntranceData("Zombiton", "Halloween Hill", False, lambda state: True), #one way
         #EntranceData("Halloween Hill", "Zombiton ", False), todo possible with badges
@@ -221,5 +220,7 @@ def set_entrances(multiworld, world, player):
         # "Castle Vampy IV Main -> Castle Vampy IV NW": EntranceData("Castle Vampy IV Main", "Castle Vampy IV NW", False),
         # "Castle Vampy IV NW -> Castle Vampy IV Main": EntranceData("Castle Vampy IV NW", "Castle Vampy IV Main", False),
     ]
-    for region in world.get_regions():
-        region.addExits()
+    for region in multiworld.get_regions(player):
+        for entry in loonyland_entrance_table:
+            if entry.source_region == region.name:
+                region.connect(region, world.get_region(entry.target_region), rule= entry.rule)
