@@ -885,9 +885,7 @@ class OptionCounter(OptionDict):
                 for key, value in self.value.items() if value < self.min
             ]
 
-        if len(range_errors) == 1:
-            raise OptionError(range_errors[0][:-1] + f" for option {getattr(self, 'display_name', self)}.")
-        elif range_errors:
+        if range_errors:
             range_errors = [f"For option {getattr(self, 'display_name', self)}:"] + range_errors
             raise OptionError("\n".join(range_errors))
 
