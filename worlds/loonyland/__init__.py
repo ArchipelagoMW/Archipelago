@@ -9,7 +9,7 @@ from .Regions import region_table
 from .Rules import set_rules
 
 
-class LoonylandWebWorld(World):
+class LoonylandWebWorld(WebWorld):
     theme = "partyTime"
 
     setup_en = Tutorial(
@@ -18,7 +18,7 @@ class LoonylandWebWorld(World):
         language="English",
         file_name="guide_en.md",
         link="guide/en",
-        authors=["Phar"]
+        authors=["AutomaticFrenzy"]
     )
 
     tutorials = [setup_en]
@@ -27,11 +27,11 @@ class LoonylandWorld(World):
     """The greatest game of all time."""
 
     game = "Loonyland"
-    web = LoonylandWebWorld(World)
+    web = LoonylandWebWorld()
     options: LoonylandOptions
     options_dataclass = LoonylandOptions
-    #location_name_to_id = location_table
-    #item_name_to_id = item_table
+    location_name_to_id = {name: data.id for name, data in loonyland_location_table.items()}
+    item_name_to_id = {name: data.id for name, data in loony_item_table.items()}
 
     def create_item(self, name: str) -> LoonylandItem:
         return LoonylandItem(name, loony_item_table[name].classification, loony_item_table[name].id, self.player)

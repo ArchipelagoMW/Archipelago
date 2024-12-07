@@ -59,8 +59,3 @@ region_table: [str] = {
     "Loony Ball",
     "Remix"
 }
-
-region_data_table: Dict[str, CliqueRegionData] = {
-    "Menu": CliqueRegionData(["The Button Realm"]),
-    "The Button Realm": CliqueRegionData(),
-}
