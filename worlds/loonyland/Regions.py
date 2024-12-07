@@ -1,5 +1,4 @@
 region_table: [str] = {
-    #
     "Menu",
     "Halloween Hill",
     "A Cabin",
@@ -50,13 +49,18 @@ region_table: [str] = {
     "Larry's Lair",
     
     #logical regions
-    "Rocky Cliffs"
-    "Zombiton"
+    "Rocky Cliffs",
+    "Zombiton",
     
     #gamemodes
-    "Bowling"
+    "Bowling",
     "Survival",
     "Boss Bash",
     "Loony Ball",
     "Remix"
+}
+
+region_data_table: Dict[str, CliqueRegionData] = {
+    "Menu": CliqueRegionData(["The Button Realm"]),
+    "The Button Realm": CliqueRegionData(),
 }
