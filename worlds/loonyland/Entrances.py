@@ -24,6 +24,11 @@ def set_entrances(multiworld, world, player):
     loonyland_entrance_table: List[EntranceData] = [
         #base
         EntranceData("Menu", "Halloween Hill", False, lambda state: True ),
+        EntranceData("Menu", "Bowling", False, lambda state: True),
+        EntranceData("Menu", "Survival", False, lambda state: True),
+        EntranceData("Menu", "Boss Bash", False, lambda state: True),
+        EntranceData("Menu", "Loony Ball", False, lambda state: True),
+        EntranceData("Menu", "Remix", False, lambda state: True),
 
         # loading zones, can be randomized
         EntranceData("Halloween Hill", "A Cabin Trees", True, lambda state: True ),
@@ -157,6 +162,7 @@ def set_entrances(multiworld, world, player):
         EntranceData("Castle Vampy Roof NW", "Castle Vampy IV NW", True, lambda state: True),
         EntranceData("The Evilizer", "Halloween Hill", True, lambda state: True),
         EntranceData("The Heart Of Terror", "The Evilizer", True, lambda state: True),
+        EntranceData("The Heart Of Terror", "Empty Rooftop", True, lambda state: state.can_reach_location("The Evilizer - Save Halloween Hill", player)),
         EntranceData("A Hidey-Hole", "Halloween Hill", True, lambda state: True),
         EntranceData("Empty Rooftop", "Halloween Hill", True, lambda state: True),
         EntranceData("Swampdog Lair", "Halloween Hill", True, lambda state: True),

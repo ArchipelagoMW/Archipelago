@@ -10,6 +10,8 @@ from .Entrances import set_entrances, LoonylandEntrance
 from .Rules import set_rules
 
 
+loonyland_base_id: int = 2876900
+
 class LoonylandWebWorld(WebWorld):
     theme = "partyTime"
 
@@ -31,7 +33,7 @@ class LoonylandWorld(World):
     web = LoonylandWebWorld()
     options: LoonylandOptions
     options_dataclass = LoonylandOptions
-    location_name_to_id = {name: data.id for name, data in loonyland_location_table.items()}
+    location_name_to_id = {name: data.id + loonyland_base_id for name, data in loonyland_location_table.items()}
     item_name_to_id = {name: data.id for name, data in loony_item_table.items()}
 
     def create_item(self, name: str) -> LoonylandItem:
@@ -62,7 +64,7 @@ class LoonylandWorld(World):
         for region_name in loonyland_region_table:
             region = self.get_region(region_name)
             region.add_locations({
-                location_name: location_data.id for location_name, location_data in loonyland_location_table.items()
+                location_name: location_data.id + loonyland_base_id for location_name, location_data in loonyland_location_table.items()
                 if location_data.region == region_name # and location_data.can_create(self)
             }, LoonylandLocation)
             #region.add_exits()
@@ -87,7 +89,7 @@ class LoonylandWorld(World):
     def set_rules(self):
         # Completion condition.
        # self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
-        final_loc = self.multiworld.get_location("The Evilizer - Save Halloween Hill", self.player)
+        final_loc = self.get_location("The Evilizer - Save Halloween Hill")
         final_loc.address = None
         final_loc.place_locked_item(self.create_event("Victory"))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
