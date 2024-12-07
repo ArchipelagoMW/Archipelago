@@ -127,7 +127,7 @@ loonyland_location_table: Dict[str, LoonylandLocationData] = {
     "The Rescue":     LoonylandLocationData(102, LocationCategory.QUEST, "A Gloomy Cavern"),
     "Tree Trimming":     LoonylandLocationData(103, LocationCategory.QUEST, "A Cabin Trees"),
     "Witch Mushrooms":     LoonylandLocationData(104, LocationCategory.QUEST, "The Witch's Cabin Front"),
-    "Zombie Stomp":     LoonylandLocationData(105, LocationCategory.QUEST, "Halloween Hill")
+    "Zombie Stomp":     LoonylandLocationData(105, LocationCategory.QUEST, "Zombiton")
     #todo the 40 badge locations
     }
 
