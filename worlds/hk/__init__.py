@@ -190,10 +190,6 @@ class HKWorld(World):
         self.created_shop_items = 0
         self.vanilla_shop_costs = deepcopy(vanilla_shop_costs)
 
-        # defaulting so completion condition isn't incorrect before pre_fill
-        self.grub_count = 46
-        self.grub_player_count = {player: 46}
-
     def generate_early(self):
         options = self.options
         charm_costs = options.RandomCharmCosts.get_costs(self.random)
@@ -206,7 +202,14 @@ class HKWorld(World):
             mini.value = min(mini.value, maxi.value)
             self.ranges[term] = mini.value, maxi.value
         self.multiworld.push_precollected(HKItem(starts[options.StartLocation.current_key],
-                                       True, None, "Event", self.player))
+                                          True, None, "Event", self.player))
+
+        # defaulting so completion condition isn't incorrect before pre_fill
+        self.grub_count = (
+            46 if options.GrubHuntGoal == GrubHuntGoal.special_range_names["all"]
+            else options.GrubHuntGoal
+            )
+        self.grub_player_count = {self.player: self.grub_count}
 
     def white_palace_exclusions(self):
         exclusions = set()
