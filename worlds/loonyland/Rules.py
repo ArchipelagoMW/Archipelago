@@ -20,7 +20,7 @@ def have_all_bats(state: CollectionState, player: int) -> bool:
 
 
 def have_all_vamps(state: CollectionState, player: int) -> bool:
-    return state.has("Vampire Statue", player, 8)
+    return state.has("Vamp Statue", player, 8)
 
 
 def have_special_weapon_damage(state: CollectionState, player: int) -> bool:
@@ -116,7 +116,7 @@ def set_rules(multiworld, world, player):
         "Underground Tunnel Top - Small Room": lambda state: True,
         "Swamp Gas Cavern Front - Scratch Wall": lambda state: state.has("Boots", player) and have_special_weapon_bullet(state, player),
         "Swamp Gas Cavern Front - Bat Mound": lambda state: state.has("Boots", player) and state.has("Bat Key", player),
-        "Swamp Gas Cavern Back- Stair room": lambda state: state.has("Boots", player),
+        "Swamp Gas Cavern Back - Stair room": lambda state: state.has("Boots", player),
         "Swamp Gas Cavern Front - Rock Prison": lambda state: state.has("Boots", player) and have_bombs(state, player),
         "A Tiny Cabin - Tiny Cabin": lambda state: state.has("Skull Key", player),
         "A Cabin Seer - Bedside ": lambda state: can_enter_zombiton(state, player),
@@ -177,7 +177,7 @@ def set_rules(multiworld, world, player):
         #"A Hidey-Hole - Pebbles": lambda state: True,
         "Swampdog Lair - Entrance": lambda state: state.has("Boots", player),
         "Swampdog Lair - End": lambda state: state.has("Boots", player) and have_light_source(state, player) and state.has("Fertilizer", player),
-        "The Witch's Cabin Front - Ghostbusting": lambda state: state.has("Big Gem", player) and state.has("Daisy", player) and state.has("Mushroom", player, 10),
+        "The Witch's Cabin Front - Ghostbusting": lambda state: state.has("Big Gem", player) and state.has("Doom Daisy", player) and state.has("Mushroom", player, 10),
         "A Cabin Larry - Hairy Larry": lambda state: have_light_source(state, player) and state.has("Silver Sling", player) and state.has("Boots", player) ,
         "Halloween Hill - Scaredy Cat": lambda state: state.has("Cat", player),
         "Halloween Hill - Silver Bullet": lambda state: state.has("Silver", player) and can_cleanse_crypts(state, player),

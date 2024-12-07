@@ -81,10 +81,10 @@ class LoonylandWorld(World):
         return "A Cool Filler Item (No Satisfaction Guaranteed)"
 
     def set_rules(self):
-        set_rules(self.multiworld, self, self.player)
-
         # Completion condition.
         self.multiworld.completion_condition[self.player] = lambda state: state.can_reach_location("The Evilizer - Save Halloween Hill", self.player)
+
+        set_rules(self.multiworld, self, self.player)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {

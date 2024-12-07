@@ -164,8 +164,8 @@ def set_entrances(multiworld, world, player):
 
         #logical zone connections, cant be randomized
 
-        #EntranceData("Halloween Hill", "Slurpy Swamp Mud", False, lambda state: state.has("Boots")),
-        #EntranceData("Slurpy Swamp Mud", "Halloween Hill", False, lambda state: state.has("Boots")),
+        EntranceData("Halloween Hill", "Slurpy Swamp Mud", False, lambda state: state.has("Boots", player)),
+        EntranceData("Slurpy Swamp Mud", "Halloween Hill", False, lambda state: state.has("Boots", player)),
 
         EntranceData("Zombiton", "Halloween Hill", False, lambda state: True), #one way
         #EntranceData("Halloween Hill", "Zombiton ", False), todo possible with badges
