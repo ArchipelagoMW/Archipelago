@@ -187,7 +187,8 @@ def set_rules(multiworld, world, player):
         "A Gloomy Cavern - The Rescue": lambda state: have_light_source(state, player) and can_enter_rocky_cliffs(state, player),
         "A Cabin Trees - Tree Trimming": lambda state: True,
         "The Witch's Cabin Front - Witch Mushrooms": lambda state: state.has("Mushroom", player, 10),
-        "Halloween Hill - Zombie Stomp": lambda state: can_cleanse_crypts(state, player)
+        "Halloween Hill - Zombie Stomp": lambda state: can_cleanse_crypts(state, player),
+        "The Evilizer - Save Halloween Hill": lambda state: True
         }
     for loc in multiworld.get_locations(player):
         if loc.name in access_rules:

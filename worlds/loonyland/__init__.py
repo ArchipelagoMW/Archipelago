@@ -1,6 +1,6 @@
 from typing import List, Dict, Any
 
-from BaseClasses import Region, Tutorial
+from BaseClasses import Region, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
 from .Items import LoonylandItem, item_frequencies, loony_item_table
 from .Locations import LoonylandLocation, LoonylandLocationData, loonyland_location_table #, locked_locations
@@ -46,6 +46,10 @@ class LoonylandWorld(World):
 
         self.multiworld.itempool += item_pool
 
+    def create_event(self, event: str) -> LoonylandItem:
+        # while we are at it, we can also add a helper to create events
+        return LoonylandItem(event, ItemClassification.progression, None, self.player)
+
     def create_regions(self) -> None:
         # Create regions.
         for region_name in loonyland_region_table:
@@ -82,7 +86,11 @@ class LoonylandWorld(World):
 
     def set_rules(self):
         # Completion condition.
-        self.multiworld.completion_condition[self.player] = lambda state: state.can_reach_location("The Evilizer - Save Halloween Hill", self.player)
+       # self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+        final_loc = self.multiworld.get_location("The Evilizer - Save Halloween Hill", self.player)
+        final_loc.address = None
+        final_loc.place_locked_item(self.create_event("Victory"))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
         set_rules(self.multiworld, self, self.player)
 
