@@ -180,7 +180,7 @@ class APPlayerContainer(APContainer):
 
 class APPatch(APPlayerContainer):
     """
-    An `APContainer` that represents a patch file.
+    An `APPlayerContainer` that represents a patch file.
     It includes the `procedure` key in the manifest to indicate that it is a patch.
 
     Your implementation should inherit from this if your output file
