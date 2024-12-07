@@ -1,0 +1,59 @@
+
+//-----------------------------------------------------------------
+// make treasure chests not actually give you the Hook item
+msfpatch {
+    .addr $00981f
+        jml $=ItemDeliveryChanges
+
+        // some code below the jump is moved into the hook, so reclaim the space
+    ItemDeliverChanges__ReturnPoint__Deliver99:
+        lda #$63
+        bra $02
+    ItemDeliverChanges__ReturnPoint__Deliver10:
+        lda #$0a
+        sta $06
+    ItemDeliverChanges__ReturnPoint__Deliver1:
+        // intentionally blank; this label points to where normal code resumes
+
+    .new
+    ItemDeliveryChanges:
+        // A contains item being delivered
+
+        // Never give the hook item
+        cmp #$fc
+        beq $+DoNothing
+
+        // %custom weapon enabled%
+        cmp #$.CustomWeapon__ItemID
+        bne $+NoSubstitution
+        lda $=CustomWeapon__ProxyIDAddr
+    %NoSubstitution:
+        // %end%
+
+        // %if wacky_unstackable%
+        jml $=ItemDeliverChanges__ReturnPoint__Deliver1
+        // %end%
+
+        // check if item is arrow
+        cmp #$60
+        bcs $+IsNotArrow
+        cmp #$54
+        bcc $+IsNotArrow
+
+        // %custom weapon enabled%
+        lda $08fb // reload original item ID to see if this is the special arrow
+        cmp #$.CustomWeapon__ItemID
+        bne $+IsNormalArrow
+        jml $=ItemDeliverChanges__ReturnPoint__Deliver99
+    %IsNormalArrow:
+        // %end%
+
+        jml $=ItemDeliverChanges__ReturnPoint__Deliver10
+    %IsNotArrow:
+        jml $=ItemDeliverChanges__ReturnPoint__Deliver1
+
+    %DoNothing:
+        // jump to return statement, having delivered nothing
+        jml $0098a9
+
+}

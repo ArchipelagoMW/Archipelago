@@ -1,0 +1,6365 @@
+trigger(#BaronTown 0)
+{
+    position 8 2
+    treasure #Heal
+}
+
+trigger(#BaronTown 1)
+{
+    position 3 6
+    treasure #Life
+}
+
+trigger(#BaronTown 2)
+{
+    position 12 10
+    treasure #Heal
+}
+
+trigger(#BaronTown 3)
+{
+    position 18 19
+    treasure #Cure1
+}
+
+trigger(#BaronTown 4)
+{
+    position 24 27
+    treasure #Cure1
+}
+
+trigger(#BaronTown 5)
+{
+    position 27 26
+    treasure #Tent
+}
+
+trigger(#BaronTown 6)
+{
+    position 29 29
+    treasure #Tent
+}
+
+trigger(#BaronTown 7)
+{
+    position 20 26
+    teleport #BaronInn at 14 17 facing up
+}
+
+trigger(#BaronTown 8)
+{
+    position 9 26
+    teleport #BaronTownItems at 5 7 facing up
+}
+
+trigger(#BaronTown 9)
+{
+    position 14 16
+    teleport #BaronEquipment at 7 9 facing up
+}
+
+trigger(#BaronTown 10)
+{
+    position 6 11
+    teleport #CidHouse at 10 8 facing up
+}
+
+trigger(#BaronTown 11)
+{
+    position 20 20
+    teleport #RosaHouse at 9 7 facing up
+}
+
+trigger(#BaronTown 12)
+{
+    position 3 19
+    teleport #RoomToSewer at 2 6 facing up
+}
+
+trigger(#BaronTown 13)
+{
+    position 14 24
+    teleport #TrainingRoomMain at 7 14 facing up
+}
+
+trigger(#BaronTown 14)
+{
+    position 4 26
+    teleport #BaronSerpentRoad at 5 11 facing up
+}
+
+trigger(#BaronTown 15)
+{
+    position 15 31
+    teleport #Overworld at 102 158 
+}
+
+trigger(#BaronTown 16)
+{
+    position 16 31
+    teleport #Overworld at 102 158 
+}
+
+trigger(#BaronTown 17)
+{
+    position 17 31
+    teleport #Overworld at 102 158 
+}
+
+trigger(#BaronTown 18)
+{
+    position 6 0
+    teleport #Overworld at 102 158 
+}
+
+trigger(#BaronTown 19)
+{
+    position 31 7
+    teleport #Overworld at 102 158 
+}
+
+trigger(#Mist 0)
+{
+    position 21 8
+    treasure 100 gp
+}
+
+trigger(#Mist 1)
+{
+    position 28 20
+    treasure #Cure1
+}
+
+trigger(#Mist 2)
+{
+    position 29 20
+    treasure #Heal
+}
+
+trigger(#Mist 3)
+{
+    position 15 13
+    teleport #MistInn at 14 7 facing up
+}
+
+trigger(#Mist 4)
+{
+    position 14 25
+    teleport #MistWeapon at 4 7 facing up
+}
+
+trigger(#Mist 5)
+{
+    position 16 25
+    teleport #MistArmor at 4 7 facing up
+}
+
+trigger(#Mist 6)
+{
+    position 11 7
+    teleport #RydiaHouse at 4 13 facing up
+}
+
+trigger(#Mist 7)
+{
+    position 2 16
+    teleport #Overworld at 95 119 
+}
+
+trigger(#Mist 8)
+{
+    position 29 16
+    teleport #Overworld at 95 119 
+}
+
+trigger(#Mist 9)
+{
+    position 8 16
+    event call $0C
+}
+
+trigger(#Kaipo 0)
+{
+    position 24 18
+    treasure #Ether1
+}
+
+trigger(#Kaipo 1)
+{
+    position 14 17
+    teleport #KaipoInn at 20 14 facing up
+}
+
+trigger(#Kaipo 2)
+{
+    position 28 13
+    teleport #KaipoHospital at 4 15 facing up
+}
+
+trigger(#Kaipo 3)
+{
+    position 23 23
+    teleport #KaipoWeapon at 4 7 facing up
+}
+
+trigger(#Kaipo 4)
+{
+    position 9 18
+    teleport #KaipoArmor at 4 7 facing up
+}
+
+trigger(#Kaipo 5)
+{
+    position 9 25
+    teleport #TrainingRoomMain at 7 14 facing up
+}
+
+trigger(#Kaipo 6)
+{
+    position 14 31
+    teleport #Overworld at 124 104 
+}
+
+trigger(#Kaipo 7)
+{
+    position 15 31
+    teleport #Overworld at 125 105 
+}
+
+trigger(#Kaipo 8)
+{
+    position 16 31
+    teleport #Overworld at 126 104 
+}
+
+trigger(#Kaipo 9)
+{
+    position 15 26
+    event call $0D
+}
+
+trigger(#Mysidia 0)
+{
+    position 16 8
+    teleport #HouseOfWishes at 14 9 facing up
+}
+
+trigger(#Mysidia 1)
+{
+    position 23 24
+    teleport #MysidiaCafe at 15 9 facing up
+}
+
+trigger(#Mysidia 2)
+{
+    position 7 23
+    teleport #MysidiaWeapon at 4 7 facing up
+}
+
+trigger(#Mysidia 3)
+{
+    position 9 23
+    teleport #MysidiaArmor at 4 7 facing up
+}
+
+trigger(#Mysidia 4)
+{
+    position 27 26
+    teleport #MysidiaItem at 5 7 facing up
+}
+
+trigger(#Mysidia 5)
+{
+    position 25 17
+    teleport #MysidiaSerpentRoad at 4 7 facing up
+}
+
+trigger(#Mysidia 6)
+{
+    position 2 24
+    teleport #TrainingRoomMain at 7 14 facing up
+}
+
+trigger(#Mysidia 7)
+{
+    position 15 31
+    teleport #Overworld at 154 200 
+}
+
+trigger(#Mysidia 8)
+{
+    position 16 31
+    teleport #Overworld at 154 200 
+}
+
+trigger(#Mysidia 9)
+{
+    position 17 31
+    teleport #Overworld at 154 200 
+}
+
+trigger(#Mysidia 10)
+{
+    position 16 28
+    event call $49
+}
+
+trigger(#Silvera 0)
+{
+    position 13 8
+    treasure 5000 gp
+}
+
+trigger(#Silvera 1)
+{
+    position 23 8
+    treasure #SilverDagger
+}
+
+trigger(#Silvera 2)
+{
+    position 30 17
+    treasure #SilverStaff
+}
+
+trigger(#Silvera 3)
+{
+    position 12 24
+    teleport #SilveraInn at 14 7 facing up
+}
+
+trigger(#Silvera 4)
+{
+    position 12 13
+    teleport #SilveraWeapons at 4 7 facing up
+}
+
+trigger(#Silvera 5)
+{
+    position 16 13
+    teleport #SilveraArmor at 4 7 facing up
+}
+
+trigger(#Silvera 6)
+{
+    position 5 14
+    teleport #SilveraItems at 5 7 facing up
+}
+
+trigger(#ToroiaTown 0)
+{
+    position 4 3
+    treasure 1000 gp
+}
+
+trigger(#ToroiaTown 1)
+{
+    position 1 5
+    treasure #Cure2
+}
+
+trigger(#ToroiaTown 2)
+{
+    position 1 7
+    treasure #Ether1
+}
+
+trigger(#ToroiaTown 3)
+{
+    position 4 7
+    treasure #Ether2
+}
+
+trigger(#ToroiaTown 4)
+{
+    position 22 19
+    teleport #ToroiaInn at 14 7 facing up
+}
+
+trigger(#ToroiaTown 5)
+{
+    position 5 22
+    teleport #ToroiaWeapon at 4 7 facing up
+}
+
+trigger(#ToroiaTown 6)
+{
+    position 8 24
+    teleport #ToroiaArmor at 4 7 facing up
+}
+
+trigger(#ToroiaTown 7)
+{
+    position 17 17
+    teleport #ToroiaItem at 5 7 facing up
+}
+
+trigger(#ToroiaTown 8)
+{
+    position 26 4
+    teleport #ToroiaStable at 2 9 facing up
+}
+
+trigger(#ToroiaTown 9)
+{
+    position 12 13
+    teleport #ToroiaCafe at 12 12 facing up
+}
+
+trigger(#ToroiaTown 10)
+{
+    position 28 17
+    teleport #TrainingRoomMain at 7 14 facing up
+}
+
+trigger(#Agart 0)
+{
+    position 9 15
+    treasure #Cure2
+}
+
+trigger(#Agart 1)
+{
+    position 23 8
+    teleport #AgartWeapon at 4 7 facing up
+}
+
+trigger(#Agart 2)
+{
+    position 25 8
+    teleport #AgartArmor at 4 7 facing up
+}
+
+trigger(#Agart 3)
+{
+    position 5 25
+    teleport #AstroTower at 16 5 facing up
+}
+
+trigger(#Agart 4)
+{
+    position 23 19
+    teleport #AgartInn at 14 15 facing up
+}
+
+trigger(#Agart 5)
+{
+    position 15 21
+    teleport #AgartWell at 9 11 facing up
+}
+
+trigger(#Agart 6)
+{
+    position 15 31
+    teleport #Overworld at 104 216 
+}
+
+trigger(#Agart 7)
+{
+    position 16 31
+    teleport #Overworld at 104 216 
+}
+
+trigger(#Agart 8)
+{
+    position 17 31
+    teleport #Overworld at 104 216 
+}
+
+trigger(#BaronInn 0)
+{
+    position 16 3
+    treasure #Tent
+}
+
+trigger(#BaronInn 1)
+{
+    position 17 3
+    treasure #Heal
+}
+
+trigger(#BaronInn 2)
+{
+    position 19 3
+    treasure #Cure1
+}
+
+trigger(#BaronInn 3)
+{
+    position 10 17
+    treasure #Cure1
+}
+
+trigger(#BaronInn 4)
+{
+    position 18 5
+    event call $01
+}
+
+trigger(#BaronEquipment 0)
+{
+    position 5 4
+    treasure #ThunderClaw
+}
+
+trigger(#BaronEquipment 1)
+{
+    position 9 4
+    treasure 2000 gp
+}
+
+trigger(#RosaHouse 0)
+{
+    position 1 3
+    treasure #Tent
+}
+
+trigger(#RosaHouse 1)
+{
+    position 5 3
+    treasure #Ether1
+}
+
+trigger(#RydiaHouse 0)
+{
+    position 22 5
+    treasure #Tiara
+}
+
+trigger(#RydiaHouse 1)
+{
+    position 23 5
+    treasure #Cloth
+}
+
+trigger(#RydiaHouse 2)
+{
+    position 23 7
+    treasure #RubyRing
+}
+
+trigger(#RydiaHouse 3)
+{
+    position 22 25
+    treasure #Change
+}
+
+trigger(#KaipoInn 0)
+{
+    position 20 9
+    teleport #KaipoCafe at 15 11 facing up
+}
+
+trigger(#KaipoHospital 0)
+{
+    position 4 18
+    teleport #Kaipo at 28 14 facing down
+}
+
+trigger(#KaipoHospital 1)
+{
+    position 4 6
+    event call $29
+}
+
+trigger(#MysidiaCafe 0)
+{
+    position 15 3
+    teleport #MysidiaInn at 14 9 facing up
+}
+
+trigger(#HouseOfWishes 0)
+{
+    position 14 12
+    teleport #Mysidia at 16 9 facing down
+}
+
+trigger(#HouseOfWishes 1)
+{
+    position 14 0
+    teleport #MysidiaCrystalRoom at 11 18 facing up
+}
+
+trigger(#RoomOfWishes 0)
+{
+    position 5 12
+    teleport #MysidiaCrystalRoom at 11 5 facing down
+}
+
+trigger(#ToroiaCafe 0)
+{
+    position 1 1
+    teleport #ToroiaCafeUpstairs at 1 11 facing up
+}
+
+trigger(#ToroiaCafe 1)
+{
+    position 25 6
+    teleport #ToroiaDancers at 3 2 facing left
+}
+
+trigger(#ToroiaCafe 2)
+{
+    position 12 1
+    event call $01
+}
+
+trigger(#ToroiaDancers 0)
+{
+    position 7 10
+    event call $50
+}
+
+trigger(#ToroiaDancers 1)
+{
+    position 20 3
+    event call $01
+}
+
+trigger(#ToroiaDancers 2)
+{
+    position 20 0
+    event call $01
+}
+
+trigger(#ToroiaStable 0)
+{
+    position 2 2
+    teleport #ToroiaStableDownstairs at 3 5 facing left
+}
+
+trigger(#ToroiaStable 1)
+{
+    position 8 3
+    event call $01
+}
+
+trigger(#ToroiaStableDownstairs 0)
+{
+    position 6 1
+    event call $01
+}
+
+trigger(#AstroTower 0)
+{
+    position 1 3
+    teleport #AstroTowerObservatory at 3 12 facing up
+}
+
+trigger(#BlackChocoboForest 0)
+{
+    position 31 8
+    treasure #Carrot
+}
+
+trigger(#BlackChocoboForest 1)
+{
+    position 31 9
+    treasure #Carrot
+}
+
+trigger(#BlackChocoboForest 2)
+{
+    position 20 29
+    treasure #Carrot
+}
+
+trigger(#BaronCastle 0)
+{
+    position 15 31
+    teleport #Overworld at 102 158 
+}
+
+trigger(#BaronCastle 1)
+{
+    position 16 31
+    teleport #Overworld at 102 158 
+}
+
+trigger(#BaronCastle 2)
+{
+    position 14 31
+    teleport #Overworld at 102 158 
+}
+
+trigger(#BaronCastle 3)
+{
+    position 17 31
+    teleport #Overworld at 102 158 
+}
+
+trigger(#BaronCastle 4)
+{
+    position 15 15
+    teleport #BaronCastleLobby at 8 12 facing up
+}
+
+trigger(#BaronCastle 5)
+{
+    position 16 15
+    teleport #BaronCastleLobby at 8 12 facing up
+}
+
+trigger(#BaronCastle 6)
+{
+    position 12 13
+    teleport #BaronCastleLobby at 1 6 facing down
+}
+
+trigger(#BaronCastle 7)
+{
+    position 8 13
+    teleport #BaronCastleWestHall at 2 2 facing down
+}
+
+trigger(#BaronCastle 8)
+{
+    position 8 17
+    teleport #BaronCastleWestHall at 2 8 facing up
+}
+
+trigger(#BaronCastle 9)
+{
+    position 19 13
+    teleport #BaronCastleLobby at 16 10 facing left
+}
+
+trigger(#BaronCastle 10)
+{
+    position 28 14
+    teleport #BaronCastleEastHall at 18 2 facing down
+}
+
+trigger(#BaronCastle 11)
+{
+    position 28 18
+    teleport #BaronCastleEastHall at 18 8 facing up
+}
+
+trigger(#BaronCastle 12)
+{
+    position 4 18
+    teleport #BaronCastlePrisonEntrance at 2 5 facing up
+}
+
+trigger(#BaronCastle 13)
+{
+    position 10 9
+    teleport #BaronCastleSoldiersQuarters at 1 5 facing up
+}
+
+trigger(#BaronCastle 14)
+{
+    position 6 9
+    teleport #BaronCastleWestTower1F at 5 6 facing up
+}
+
+trigger(#BaronCastle 15)
+{
+    position 25 9
+    teleport #BaronCastleEastTower1F at 5 6 facing up
+}
+
+trigger(#BaronCastle 16)
+{
+    position 15 26
+    event call $01
+}
+
+trigger(#BaronCastle 17)
+{
+    position 16 26
+    event call $01
+}
+
+trigger(#BaronCastle 18)
+{
+    position 6 13
+    event call $16
+}
+
+trigger(#BaronCastle 19)
+{
+    position 10 0
+    event call $2E
+}
+
+trigger(#Damcyan 0)
+{
+    position 16 11
+    teleport #Damcyan1F at 8 15 facing up
+}
+
+trigger(#Damcyan 1)
+{
+    position 29 12
+    teleport #DamcyanTreasuryEntrance at 13 8 facing up
+}
+
+trigger(#Fabul 0)
+{
+    position 15 14
+    teleport #FabulLobby at 11 11 facing up
+}
+
+trigger(#Fabul 1)
+{
+    position 13 7
+    teleport #FabulWestTower1F at 8 7 facing up
+}
+
+trigger(#Fabul 2)
+{
+    position 17 7
+    teleport #FabulEastTower1F at 2 7 facing up
+}
+
+trigger(#Fabul 3)
+{
+    position 15 31
+    teleport #Overworld at 215 59 
+}
+
+trigger(#Fabul 4)
+{
+    position 15 10
+    teleport #FabulSecondFloor at 4 13 facing up
+}
+
+trigger(#ToroiaCastle 0)
+{
+    position 16 10
+    teleport #ToroiaCastleLobby at 9 15 facing up
+}
+
+trigger(#ToroiaCastle 1)
+{
+    position 9 11
+    teleport #ToroiaCastleHospital at 2 5 facing up
+}
+
+trigger(#ToroiaCastle 2)
+{
+    position 23 11
+    teleport #ToroiaCastleStairs at 4 6 facing up
+}
+
+trigger(#ToroiaCastle 3)
+{
+    position 7 4
+    teleport #ToroiaCastleLobby at 2 7 facing up
+}
+
+trigger(#ToroiaCastle 4)
+{
+    position 25 4
+    teleport #ToroiaCastleLobby at 16 7 facing up
+}
+
+trigger(#ToroiaCastle 5)
+{
+    position 15 30
+    teleport #Overworld at 35 82 
+}
+
+trigger(#ToroiaCastle 6)
+{
+    position 16 30
+    teleport #Overworld at 35 82 
+}
+
+trigger(#ToroiaCastle 7)
+{
+    position 17 30
+    teleport #Overworld at 35 82 
+}
+
+trigger(#Eblan 0)
+{
+    position 15 11
+    teleport #Eblan1F at 7 12 facing up
+}
+
+trigger(#Eblan 1)
+{
+    position 16 11
+    teleport #Eblan1F at 7 12 facing up
+}
+
+trigger(#Eblan 2)
+{
+    position 10 12
+    teleport #EblanWestTower1F at 6 8 facing up
+}
+
+trigger(#Eblan 3)
+{
+    position 21 12
+    teleport #EblanEastTower1F at 7 8 facing up
+}
+
+trigger(#BaronCastleLobby 0)
+{
+    position 13 3
+    treasure 300 gp
+}
+
+trigger(#BaronCastleLobby 1)
+{
+    position 14 3
+    treasure #Cure1
+}
+
+trigger(#BaronCastleLobby 2)
+{
+    position 15 3
+    treasure #Tent
+}
+
+trigger(#BaronCastleLobby 3)
+{
+    position 8 0
+    teleport #BaronCastleOuterCourt at 14 7 facing up
+}
+
+trigger(#BaronCastleLobby 4)
+{
+    position 1 5
+    teleport #BaronCastle at 12 13 facing left
+}
+
+trigger(#BaronCastleLobby 5)
+{
+    position 8 15
+    teleport #BaronCastle at 15 18 facing down
+}
+
+trigger(#BaronCastleLobby 6)
+{
+    position 16 10
+    teleport #BaronCastle at 19 13 facing right
+}
+
+trigger(#BaronCastleLobby 7)
+{
+    position 5 5
+    teleport #BaronCastleBlackMagicSchool at 4 8 facing up
+}
+
+trigger(#BaronCastleLobby 8)
+{
+    position 11 5
+    teleport #BaronCastleWhiteMagicSchool at 4 8 facing up
+}
+
+trigger(#BaronCastleLobby 9)
+{
+    position 6 10
+    event call $03
+}
+
+trigger(#BaronCastleLobby 10)
+{
+    position 14 5
+    event call $01
+}
+
+trigger(#BaronCastleOuterCourt 0)
+{
+    position 14 9
+    teleport #BaronCastleLobby at 8 1 facing down
+}
+
+trigger(#BaronCastleOuterCourt 1)
+{
+    position 14 2
+    event call $22
+}
+
+trigger(#BaronCastleThroneRoom 0)
+{
+    position 30 29
+    teleport #DockedAirship at 25 8 facing left
+}
+
+trigger(#BaronCastleThroneRoom 1)
+{
+    position 8 13
+    event call $23
+}
+
+trigger(#BaronCastleWestHall 0)
+{
+    position 2 2
+    teleport #BaronCastle at 8 13 facing right
+}
+
+trigger(#BaronCastleWestHall 1)
+{
+    position 2 12
+    teleport #BaronCastle at 8 18 facing down
+}
+
+trigger(#BaronCastleWestHall 2)
+{
+    position 2 6
+    event call $04
+}
+
+trigger(#BaronCastleEastHall 0)
+{
+    position 2 15
+    treasure #Ether1
+}
+
+trigger(#BaronCastleEastHall 1)
+{
+    position 3 15
+    treasure #Ether1
+}
+
+trigger(#BaronCastleEastHall 2)
+{
+    position 4 15
+    treasure #Cure2
+}
+
+trigger(#BaronCastleEastHall 3)
+{
+    position 2 16
+    treasure #Cure2
+}
+
+trigger(#BaronCastleEastHall 4)
+{
+    position 3 16
+    treasure #Life
+}
+
+trigger(#BaronCastleEastHall 5)
+{
+    position 4 16
+    treasure #Life
+}
+
+trigger(#BaronCastleEastHall 6)
+{
+    position 18 12
+    teleport #BaronCastle at 28 19 facing down
+}
+
+trigger(#BaronCastleEastHall 7)
+{
+    position 18 2
+    teleport #BaronCastle at 28 14 facing left
+}
+
+trigger(#BaronCastleEastHall 8)
+{
+    position 14 4
+    event call $01
+}
+
+trigger(#BaronCastlePrisonEntrance 0)
+{
+    position 1 3
+    teleport #BaronCastlePrison at 1 1 facing down
+}
+
+trigger(#BaronCastleSoldiersQuarters 0)
+{
+    position 11 7
+    teleport #BaronCastle at 12 8 facing right
+}
+
+trigger(#BaronCastleWestTower1F 0)
+{
+    position 5 9
+    teleport #BaronCastle at 6 10 facing down
+}
+
+trigger(#BaronCastleWestTower1F 1)
+{
+    position 5 4
+    teleport #BaronCastleWestTower2F at 5 4 facing up
+}
+
+trigger(#BaronCastleWestTower2F 0)
+{
+    position 5 4
+    teleport #BaronCastleWestTower1F at 5 4 facing down
+}
+
+trigger(#BaronCastleWestTower2F 1)
+{
+    position 9 4
+    teleport #BaronCastleCecilRoom at 9 4 facing left
+}
+
+trigger(#BaronCastleCecilRoom 0)
+{
+    position 9 4
+    teleport #BaronCastleWestTower2F at 9 4 facing left
+}
+
+trigger(#BaronCastleCecilRoom 1)
+{
+    position 3 4
+    event call $05
+}
+
+trigger(#BaronCastleEastTower1F 0)
+{
+    position 3 3
+    treasure #Cure1
+}
+
+trigger(#BaronCastleEastTower1F 1)
+{
+    position 1 4
+    treasure #Cure1
+}
+
+trigger(#BaronCastleEastTower1F 2)
+{
+    position 2 4
+    treasure #Heal
+}
+
+trigger(#BaronCastleEastTower1F 3)
+{
+    position 8 4
+    treasure #Tent
+}
+
+trigger(#BaronCastleEastTower1F 4)
+{
+    position 9 4
+    teleport #BaronCastleEastTower2F at 9 4 facing left
+}
+
+trigger(#BaronCastleEastTower1F 5)
+{
+    position 1 5
+    teleport #BaronCastleEastTowerB1 at 1 5 facing up
+}
+
+trigger(#BaronCastleEastTower2F 0)
+{
+    position 1 4
+    treasure #Life
+}
+
+trigger(#BaronCastleEastTower2F 1)
+{
+    position 1 5
+    treasure #Cure2
+}
+
+trigger(#BaronCastleEastTower2F 2)
+{
+    position 7 3
+    teleport #BaronCastleEastTower3F at 7 3 facing down
+}
+
+trigger(#BaronCastleEastTower3F 0)
+{
+    position 5 3
+    treasure #Cure3
+}
+
+trigger(#BaronCastleEastTower3F 1)
+{
+    position 7 4
+    treasure #Ether1
+}
+
+trigger(#BaronCastleEastTower3F 2)
+{
+    position 4 5
+    treasure #Ether1
+}
+
+trigger(#BaronCastleEastTower3F 3)
+{
+    position 5 5
+    treasure #Tent
+}
+
+trigger(#BaronCastleEastTower3F 4)
+{
+    position 6 5
+    treasure #Tent
+}
+
+trigger(#BaronCastleEastTowerB1 0)
+{
+    position 4 3
+    treasure #Elixir
+}
+
+trigger(#BaronCastleEastTowerB1 1)
+{
+    position 24 5
+    teleport #BaronCastleOdinRoom at 1 1 facing down
+}
+
+trigger(#BaronCastleEastTowerB1 2)
+{
+    position 22 5
+    event call $07
+}
+
+trigger(#BaronCastleOdinRoom 0)
+{
+    position 8 7
+    event call $08
+}
+
+trigger(#SewerEntrance 0)
+{
+    position 13 29
+    treasure #Cure2
+}
+
+trigger(#SewerEntrance 1)
+{
+    position 16 29
+    treasure #Ether1
+}
+
+trigger(#SewerEntrance 2)
+{
+    position 19 29
+    treasure #Life
+}
+
+trigger(#SewerEntrance 3)
+{
+    position 27 7
+    teleport #SewerB3 at 1 5 facing up
+}
+
+trigger(#SewerEntrance 4)
+{
+    position 3 3
+    teleport #RoomToSewer at 2 4 facing down
+}
+
+trigger(#SewerB3 0)
+{
+    position 1 12
+    treasure 500 gp
+}
+
+trigger(#SewerB3 1)
+{
+    position 7 19
+    treasure #Life
+}
+
+trigger(#SewerB3 2)
+{
+    position 20 17
+    treasure #Life
+}
+
+trigger(#SewerB3 3)
+{
+    position 30 3
+    teleport #SewerB2 at 2 26 facing up
+}
+
+trigger(#SewerB3 4)
+{
+    position 1 6
+    teleport #SewerEntrance at 27 8 facing down
+}
+
+trigger(#SewerB1 0)
+{
+    position 2 9
+    teleport #SewerSaveRoom at 4 11 facing up
+}
+
+trigger(#SewerB1 1)
+{
+    position 14 2
+    teleport #BaronCastle at 10 0 facing down
+}
+
+trigger(#SewerB1 2)
+{
+    position 6 17
+    teleport #SewerB2 at 8 6 facing down
+}
+
+trigger(#SewerSaveRoom 0)
+{
+    position 17 5
+    treasure #Ancient
+}
+
+trigger(#SewerB2 0)
+{
+    position 2 7
+    treasure #Ether1
+}
+
+trigger(#SewerB2 1)
+{
+    position 2 27
+    teleport #SewerB3 at 30 4 facing down
+}
+
+trigger(#SewerB2 2)
+{
+    position 8 5
+    teleport #SewerB1 at 6 16 facing up
+}
+
+trigger(#Damcyan1F 0)
+{
+    position 8 7
+    teleport #Damcyan2F at 8 8 facing up
+}
+
+trigger(#Damcyan2F 0)
+{
+    position 11 4
+    treasure #Tent
+}
+
+trigger(#Damcyan2F 1)
+{
+    position 8 13
+    teleport #Damcyan3F at 13 13 facing up
+}
+
+trigger(#Damcyan3F 0)
+{
+    position 13 11
+    event call $11
+}
+
+trigger(#DamcyanTreasuryEntrance 0)
+{
+    position 1 3
+    treasure #RubyRing
+}
+
+trigger(#DamcyanTreasuryEntrance 1)
+{
+    position 4 3
+    treasure #LeatherHat
+}
+
+trigger(#DamcyanTreasuryEntrance 2)
+{
+    position 5 3
+    treasure #CrossBow
+}
+
+trigger(#DamcyanTreasuryEntrance 3)
+{
+    position 1 9
+    teleport #DamcyanTreasuryDownstairs at 4 1 facing down
+}
+
+trigger(#DamcyanTreasuryEntrance 4)
+{
+    position 13 4
+    event call $01
+}
+
+trigger(#DamcyanTreasuryDownstairs 0)
+{
+    position 3 4
+    treasure #Cure1
+}
+
+trigger(#DamcyanTreasuryDownstairs 1)
+{
+    position 4 4
+    treasure #Cure1
+}
+
+trigger(#DamcyanTreasuryDownstairs 2)
+{
+    position 5 4
+    treasure 300 gp
+}
+
+trigger(#DamcyanTreasuryDownstairs 3)
+{
+    position 7 4
+    treasure #IronArrow
+}
+
+trigger(#DamcyanTreasuryDownstairs 4)
+{
+    position 1 5
+    treasure #WhiteArrow
+}
+
+trigger(#DamcyanTreasuryDownstairs 5)
+{
+    position 3 5
+    treasure #Ether1
+}
+
+trigger(#DamcyanTreasuryDownstairs 6)
+{
+    position 4 5
+    treasure #Life
+}
+
+trigger(#DamcyanTreasuryDownstairs 7)
+{
+    position 5 5
+    treasure 200 gp
+}
+
+trigger(#DamcyanTreasuryDownstairs 8)
+{
+    position 7 5
+    treasure #WhiteArrow
+}
+
+trigger(#RoomToSewer 0)
+{
+    position 14 5
+    treasure 1000 gp
+}
+
+trigger(#RoomToSewer 1)
+{
+    position 2 4
+    teleport #SewerEntrance at 3 4 facing down
+}
+
+trigger(#RoomToSewer 2)
+{
+    position 2 10
+    teleport #BaronTown at 3 20 facing down
+}
+
+trigger(#FabulLobby 0)
+{
+    position 11 15
+    teleport #Fabul at 15 15 facing down
+}
+
+trigger(#FabulLobby 1)
+{
+    position 11 3
+    teleport #FabulSecondFloor at 4 8 facing up
+}
+
+trigger(#FabulLobby 2)
+{
+    position 5 7
+    teleport #FabulInn at 20 7 facing up
+}
+
+trigger(#FabulLobby 3)
+{
+    position 17 7
+    teleport #FabulEquipment at 4 7 facing up
+}
+
+trigger(#FabulSecondFloor 0)
+{
+    position 4 0
+    teleport #FabulThroneRoom at 8 13 facing up
+}
+
+trigger(#FabulSecondFloor 1)
+{
+    position 4 9
+    teleport #FabulLobby at 11 4 facing down
+}
+
+trigger(#FabulSecondFloor 2)
+{
+    position 4 16
+    teleport #Fabul at 15 10 facing down
+}
+
+trigger(#FabulThroneRoom 0)
+{
+    position 1 7
+    treasure #Cure1
+}
+
+trigger(#FabulThroneRoom 1)
+{
+    position 28 7
+    treasure #Cure1
+}
+
+trigger(#FabulThroneRoom 2)
+{
+    position 28 8
+    treasure #BlackShield
+}
+
+trigger(#FabulThroneRoom 3)
+{
+    position 28 9
+    treasure #Ether1
+}
+
+trigger(#FabulThroneRoom 4)
+{
+    position 8 14
+    teleport #FabulSecondFloor at 4 1 facing down
+}
+
+trigger(#FabulThroneRoom 5)
+{
+    position 4 2
+    teleport #FabulCrystalRoom at 11 25 facing up
+}
+
+trigger(#FabulThroneRoom 6)
+{
+    position 15 7
+    event call $18
+}
+
+trigger(#FabulThroneRoom 7)
+{
+    position 14 2
+    event call $01
+}
+
+trigger(#FabulThroneRoom 8)
+{
+    position 8 12
+    event call $15
+}
+
+trigger(#FabulInn 0)
+{
+    position 17 5
+    event call $19
+}
+
+trigger(#FabulEastTower1F 0)
+{
+    position 2 10
+    teleport #Fabul at 17 8 facing down
+}
+
+trigger(#FabulEastTower1F 1)
+{
+    position 1 4
+    teleport #FabulEastTower2F at 1 6 facing up
+}
+
+trigger(#FabulEastTower2F 0)
+{
+    position 9 6
+    treasure 500 gp
+}
+
+trigger(#FabulEastTower2F 1)
+{
+    position 1 6
+    teleport #FabulEastTower1F at 1 4 facing down
+}
+
+trigger(#FabulEastTower2F 2)
+{
+    position 1 4
+    teleport #FabulKingRoom at 1 6 facing up
+}
+
+trigger(#FabulKingRoom 0)
+{
+    position 3 7
+    treasure #Tent
+}
+
+trigger(#FabulKingRoom 1)
+{
+    position 1 6
+    teleport #FabulEastTower2F at 1 4 facing down
+}
+
+trigger(#FabulKingRoom 2)
+{
+    position 6 3
+    event call $32
+}
+
+trigger(#FabulWestTower1F 0)
+{
+    position 2 3
+    treasure #Cure1
+}
+
+trigger(#FabulWestTower1F 1)
+{
+    position 6 3
+    treasure #Cure1
+}
+
+trigger(#FabulWestTower1F 2)
+{
+    position 1 4
+    treasure #Heal
+}
+
+trigger(#FabulWestTower1F 3)
+{
+    position 1 5
+    treasure #Tent
+}
+
+trigger(#FabulWestTower1F 4)
+{
+    position 9 4
+    teleport #FabulHospital at 9 6 facing up
+}
+
+trigger(#FabulHospital 0)
+{
+    position 9 4
+    teleport #FabulYangRoom at 9 6 facing up
+}
+
+trigger(#WateryPassSaveRoom 0)
+{
+    position 4 12
+    teleport #WateryPass2F at 2 18 facing down
+}
+
+trigger(#WateryPassSaveRoom 1)
+{
+    position 4 2
+    teleport #WateryPass2F at 2 11 facing up
+}
+
+trigger(#WateryPassSaveRoom 2)
+{
+    position 4 10
+    event call $17
+}
+
+trigger(#ToroiaCastleLobby 0)
+{
+    position 9 0
+    teleport #ToroiaCastleClericRoom at 5 18 facing up
+}
+
+trigger(#ToroiaCastleLobby 1)
+{
+    position 9 18
+    teleport #ToroiaCastle at 16 11 facing down
+}
+
+trigger(#ToroiaCastleLobby 2)
+{
+    position 2 10
+    teleport #ToroiaCastle at 7 5 facing down
+}
+
+trigger(#ToroiaCastleLobby 3)
+{
+    position 16 10
+    teleport #ToroiaCastle at 25 5 facing down
+}
+
+trigger(#ToroiaCastleClericRoom 0)
+{
+    position 5 6
+    teleport #ToroiaCastleCrystalRoom at 11 25 facing up
+}
+
+trigger(#ToroiaCastleClericRoom 1)
+{
+    position 5 19
+    teleport #ToroiaCastleLobby at 9 2 facing down
+}
+
+trigger(#ToroiaCastleClericRoom 2)
+{
+    position 5 16
+    event call $2C
+}
+
+trigger(#ToroiaCastleHospital 0)
+{
+    position 8 4
+    event call $24
+}
+
+trigger(#ToroiaCastleStairs 0)
+{
+    position 2 3
+    teleport #ToroiaCastleHall at 1 4 facing down
+}
+
+trigger(#ToroiaCastleStairs 1)
+{
+    position 4 3
+    teleport #ToroiaCastlePotRoom at 3 5 facing down
+}
+
+trigger(#ToroiaCastleStairs 2)
+{
+    position 6 3
+    teleport #ToroiaCastleChestRoom at 11 10 facing up
+}
+
+trigger(#ToroiaCastleHall 0)
+{
+    position 12 4
+    teleport #ToroiaCastleTreasury at 1 3 facing down
+}
+
+trigger(#ToroiaCastleHall 1)
+{
+    position 7 1
+    event call $01
+}
+
+trigger(#ToroiaCastlePotRoom 0)
+{
+    position 5 6
+    treasure #Ether1
+}
+
+trigger(#ToroiaCastleChestRoom 0)
+{
+    position 1 3
+    treasure #Tent
+}
+
+trigger(#ToroiaCastleChestRoom 1)
+{
+    position 2 3
+    treasure #Tent
+}
+
+trigger(#ToroiaCastleChestRoom 2)
+{
+    position 4 3
+    treasure #Cure2
+}
+
+trigger(#ToroiaCastleChestRoom 3)
+{
+    position 5 3
+    treasure #Cure2
+}
+
+trigger(#ToroiaCastleChestRoom 4)
+{
+    position 7 3
+    treasure #Ether1
+}
+
+trigger(#ToroiaCastleChestRoom 5)
+{
+    position 8 3
+    treasure #Ether1
+}
+
+trigger(#ToroiaCastleChestRoom 6)
+{
+    position 10 3
+    treasure #RubyRing
+}
+
+trigger(#ToroiaCastleChestRoom 7)
+{
+    position 11 3
+    treasure #RubyRing
+}
+
+trigger(#ToroiaCastleChestRoom 8)
+{
+    position 6 9
+    event call $01
+}
+
+trigger(#ToroiaCastleChestRoom 9)
+{
+    position 1 5
+    event call $01
+}
+
+trigger(#ToroiaCastleChestRoom 10)
+{
+    position 4 5
+    event call $01
+}
+
+trigger(#ToroiaCastleChestRoom 11)
+{
+    position 7 5
+    event call $01
+}
+
+trigger(#ToroiaCastleChestRoom 12)
+{
+    position 10 5
+    event call $01
+}
+
+trigger(#ToroiaCastleTreasury 0)
+{
+    position 3 5
+    treasure #Cure2
+}
+
+trigger(#ToroiaCastleTreasury 1)
+{
+    position 4 5
+    treasure #Heal
+}
+
+trigger(#ToroiaCastleTreasury 2)
+{
+    position 5 5
+    treasure #Ether1
+}
+
+trigger(#ToroiaCastleTreasury 3)
+{
+    position 6 5
+    treasure #Ether2
+}
+
+trigger(#ToroiaCastleTreasury 4)
+{
+    position 7 5
+    treasure #Elixir
+}
+
+trigger(#ToroiaCastleTreasury 5)
+{
+    position 8 5
+    treasure 1000 gp
+}
+
+trigger(#ToroiaCastleTreasury 6)
+{
+    position 9 5
+    treasure #GreatBow
+}
+
+trigger(#ToroiaCastleTreasury 7)
+{
+    position 10 5
+    treasure #FireArrow
+}
+
+trigger(#ToroiaCastleTreasury 8)
+{
+    position 11 5
+    treasure #FireArrow
+}
+
+trigger(#ToroiaCastleTreasury 9)
+{
+    position 3 6
+    treasure #Cure2
+}
+
+trigger(#ToroiaCastleTreasury 10)
+{
+    position 4 6
+    treasure #Heal
+}
+
+trigger(#ToroiaCastleTreasury 11)
+{
+    position 5 6
+    treasure #Ether1
+}
+
+trigger(#ToroiaCastleTreasury 12)
+{
+    position 6 6
+    treasure #Ether2
+}
+
+trigger(#ToroiaCastleTreasury 13)
+{
+    position 7 6
+    treasure #Elixir
+}
+
+trigger(#ToroiaCastleTreasury 14)
+{
+    position 8 6
+    treasure 1000 gp
+}
+
+trigger(#ToroiaCastleTreasury 15)
+{
+    position 9 6
+    treasure #IceArrow
+}
+
+trigger(#ToroiaCastleTreasury 16)
+{
+    position 10 6
+    treasure #IceArrow
+}
+
+trigger(#ToroiaCastleTreasury 17)
+{
+    position 11 6
+    treasure #LitArrow
+}
+
+trigger(#Eblan1F 0)
+{
+    position 13 4
+    treasure #Cure2
+}
+
+trigger(#Eblan1F 1)
+{
+    position 7 0
+    teleport #Eblan2F at 9 7 facing up
+}
+
+trigger(#Eblan2F 0)
+{
+    position 4 3
+    treasure #Heal
+}
+
+trigger(#Eblan2F 1)
+{
+    position 4 4
+    treasure #Cure2
+}
+
+trigger(#Eblan2F 2)
+{
+    position 14 3
+    treasure #Cure2
+}
+
+trigger(#Eblan2F 3)
+{
+    position 14 4
+    treasure #Cabin
+}
+
+trigger(#Eblan2F 4)
+{
+    position 15 4
+    treasure #Life
+}
+
+trigger(#Eblan2F 5)
+{
+    position 9 0
+    teleport #EblanThroneRoom at 13 12 facing up
+}
+
+trigger(#EblanThroneRoom 0)
+{
+    position 0 4
+    teleport #Eblan2F at 1 3 facing down
+}
+
+trigger(#EblanThroneRoom 1)
+{
+    position 26 4
+    teleport #Eblan2F at 17 3 facing down
+}
+
+trigger(#EblanWestTower1F 0)
+{
+    position 1 5
+    treasure #Ether1
+}
+
+trigger(#EblanWestTower1F 1)
+{
+    position 11 5
+    treasure #Sleep fight $00
+}
+
+trigger(#EblanWestTower1F 2)
+{
+    position 6 5
+    teleport #EblanWestTower2F at 6 5 facing up
+}
+
+trigger(#EblanWestTower2F 0)
+{
+    position 4 4
+    treasure #Cure2
+}
+
+trigger(#EblanWestTower2F 1)
+{
+    position 8 8
+    treasure #Cure2
+}
+
+trigger(#EblanWestTower2F 2)
+{
+    position 10 5
+    treasure 2000 gp
+}
+
+trigger(#EblanWestTower2F 3)
+{
+    position 11 5
+    treasure #MuteArrow
+}
+
+trigger(#EblanWestTower2F 4)
+{
+    position 1 7
+    teleport #EblanWestTower1F at 1 6 facing up
+}
+
+trigger(#EblanEastTower1F 0)
+{
+    position 2 5
+    treasure 600 gp
+}
+
+trigger(#EblanEastTower1F 1)
+{
+    position 12 5
+    treasure 800 gp
+}
+
+trigger(#EblanEastTower1F 2)
+{
+    position 6 8
+    teleport #EblanEastTower2F at 5 8 facing up
+}
+
+trigger(#EblanEastTower1F 3)
+{
+    position 11 7
+    teleport #EblanBasement at 8 3 facing left
+}
+
+trigger(#EblanEastTower2F 0)
+{
+    position 1 5
+    treasure #Cure2
+}
+
+trigger(#EblanEastTower2F 1)
+{
+    position 1 6
+    treasure #Ether1
+}
+
+trigger(#EblanEastTower2F 2)
+{
+    position 6 3
+    treasure #Life
+}
+
+trigger(#EblanEastTower2F 3)
+{
+    position 11 5
+    treasure #DrainSpear fight $01
+}
+
+trigger(#EblanEastTower2F 4)
+{
+    position 11 6
+    treasure #Cabin
+}
+
+trigger(#EblanEastTower2F 5)
+{
+    position 10 5
+    teleport #EblanEastTower1F at 11 5 facing down
+}
+
+trigger(#EblanEastTower2F 6)
+{
+    position 4 5
+    event call $01
+}
+
+trigger(#EblanBasement 0)
+{
+    position 2 11
+    treasure #Ether1
+}
+
+trigger(#EblanBasement 1)
+{
+    position 3 11
+    treasure #Ether1
+}
+
+trigger(#EblanBasement 2)
+{
+    position 8 12
+    treasure #Elixir fight $02
+}
+
+trigger(#EblanBasement 3)
+{
+    position 16 17
+    teleport #Overworld at 45 237 
+}
+
+trigger(#MistCave 0)
+{
+    position 6 3
+    treasure #Cure1
+}
+
+trigger(#MistCave 1)
+{
+    position 24 3
+    treasure #Heal
+}
+
+trigger(#MistCave 2)
+{
+    position 13 12
+    treasure #Tent
+}
+
+trigger(#MistCave 3)
+{
+    position 30 18
+    treasure #Cure1
+}
+
+trigger(#MistCave 4)
+{
+    position 2 29
+    teleport #Overworld at 76 133 
+}
+
+trigger(#MistCave 5)
+{
+    position 27 2
+    teleport #Overworld at 84 120 
+}
+
+trigger(#MistCave 6)
+{
+    position 4 9
+    event call $09
+}
+
+trigger(#MistCave 7)
+{
+    position 27 10
+    event call $0A
+}
+
+trigger(#MistCave 8)
+{
+    position 27 4
+    event call $0B
+}
+
+trigger(#WateryPass1F 0)
+{
+    position 29 14
+    treasure #Heal
+}
+
+trigger(#WateryPass1F 1)
+{
+    position 22 16
+    treasure #Cure1
+}
+
+trigger(#WateryPass1F 2)
+{
+    position 4 28
+    treasure #Tent
+}
+
+trigger(#WateryPass1F 3)
+{
+    position 13 14
+    treasure 120 gp
+}
+
+trigger(#WateryPass1F 4)
+{
+    position 25 3
+    treasure #IronRing
+}
+
+trigger(#WateryPass1F 5)
+{
+    position 26 30
+    teleport #Overworld at 138 84 
+}
+
+trigger(#WateryPass1F 6)
+{
+    position 2 2
+    teleport #WateryPass2F at 26 28 facing up
+}
+
+trigger(#WateryPass1F 7)
+{
+    position 10 17
+    teleport #WateryPassWaterfallRoom at 5 9 facing up
+}
+
+trigger(#WateryPass2F 0)
+{
+    position 21 5
+    treasure #Cure1
+}
+
+trigger(#WateryPass2F 1)
+{
+    position 9 18
+    treasure #Ether1
+}
+
+trigger(#WateryPass2F 2)
+{
+    position 13 3
+    treasure #IceRod
+}
+
+trigger(#WateryPass2F 3)
+{
+    position 26 29
+    teleport #WateryPass1F at 2 3 facing down
+}
+
+trigger(#WateryPass2F 4)
+{
+    position 2 17
+    teleport #WateryPassSaveRoom at 4 11 facing up
+}
+
+trigger(#WateryPass2F 5)
+{
+    position 2 12
+    teleport #WateryPassSaveRoom at 4 3 facing down
+}
+
+trigger(#WateryPass2F 6)
+{
+    position 16 7
+    teleport #WateryPass3F at 23 9 facing down
+}
+
+trigger(#WateryPass3F 0)
+{
+    position 22 24
+    treasure 200 gp
+}
+
+trigger(#WateryPass3F 1)
+{
+    position 12 24
+    treasure #Cure1
+}
+
+trigger(#WateryPass3F 2)
+{
+    position 23 8
+    teleport #WateryPass2F at 16 8 facing down
+}
+
+trigger(#WateryPass3F 3)
+{
+    position 6 9
+    teleport #WateryPass4F at 13 26 facing up
+}
+
+trigger(#WateryPass4F 0)
+{
+    position 5 17
+    treasure #Cure1
+}
+
+trigger(#WateryPass4F 1)
+{
+    position 19 22
+    treasure #LeatherHat
+}
+
+trigger(#WateryPass4F 2)
+{
+    position 13 27
+    teleport #WateryPass3F at 6 10 facing down
+}
+
+trigger(#WateryPass4F 3)
+{
+    position 7 10
+    teleport #WateryPass5F at 10 22 facing up
+}
+
+trigger(#WateryPass5F 0)
+{
+    position 3 15
+    treasure #Ether1
+}
+
+trigger(#WateryPass5F 1)
+{
+    position 5 10
+    treasure #Ether1
+}
+
+trigger(#WateryPass5F 2)
+{
+    position 17 17
+    treasure #DarknessSword
+}
+
+trigger(#WateryPass5F 3)
+{
+    position 20 20
+    treasure #Heal
+}
+
+trigger(#WateryPass5F 4)
+{
+    position 10 23
+    teleport #WateryPass4F at 7 11 facing down
+}
+
+trigger(#WateryPass5F 5)
+{
+    position 24 8
+    teleport #Overworld at 138 78 
+}
+
+trigger(#WateryPass5F 6)
+{
+    position 24 10
+    event call $25
+}
+
+trigger(#WaterfallEntrance 0)
+{
+    position 16 11
+    event call $0E
+}
+
+trigger(#Waterfall1F 0)
+{
+    position 12 27
+    treasure #DarknessHelm
+}
+
+trigger(#Waterfall1F 1)
+{
+    position 16 27
+    treasure #DarknessGauntlet
+}
+
+trigger(#Waterfall1F 2)
+{
+    position 10 11
+    teleport #Waterfall2F at 5 23 facing down
+}
+
+trigger(#Waterfall2F 0)
+{
+    position 25 22
+    treasure #DarknessArmor
+}
+
+trigger(#Waterfall2F 1)
+{
+    position 24 23
+    treasure #Ether1
+}
+
+trigger(#Waterfall2F 2)
+{
+    position 5 22
+    teleport #Waterfall1F at 10 12 facing down
+}
+
+trigger(#Waterfall2F 3)
+{
+    position 16 10
+    teleport #Overworld at 125 67 
+}
+
+trigger(#Waterfall2F 4)
+{
+    position 16 12
+    event call $0F
+}
+
+trigger(#AntlionCave1F 0)
+{
+    position 3 7
+    treasure 190 gp
+}
+
+trigger(#AntlionCave1F 1)
+{
+    position 10 4
+    treasure #Cure1
+}
+
+trigger(#AntlionCave1F 2)
+{
+    position 2 23
+    treasure #Tent
+}
+
+trigger(#AntlionCave1F 3)
+{
+    position 6 17
+    treasure #Cure1
+}
+
+trigger(#AntlionCave1F 4)
+{
+    position 27 4
+    treasure 210 gp
+}
+
+trigger(#AntlionCave1F 5)
+{
+    position 23 9
+    treasure #Cure1
+}
+
+trigger(#AntlionCave1F 6)
+{
+    position 15 3
+    teleport #Overworld at 136 57 
+}
+
+trigger(#AntlionCave1F 7)
+{
+    position 27 23
+    teleport #AntlionCave2F at 27 3 facing down
+}
+
+trigger(#AntlionCave1F 8)
+{
+    position 21 28
+    teleport #AntlionCave2F at 21 8 facing down
+}
+
+trigger(#AntlionCave1F 9)
+{
+    position 14 26
+    teleport #AntlionCaveSaveRoom at 5 12 facing up
+}
+
+trigger(#AntlionCave2F 0)
+{
+    position 23 4
+    treasure #Heal
+}
+
+trigger(#AntlionCave2F 1)
+{
+    position 29 23
+    treasure #Life
+}
+
+trigger(#AntlionCave2F 2)
+{
+    position 8 5
+    treasure 250 gp
+}
+
+trigger(#AntlionCave2F 3)
+{
+    position 27 2
+    teleport #AntlionCave1F at 27 22 facing up
+}
+
+trigger(#AntlionCave2F 4)
+{
+    position 21 7
+    teleport #AntlionCave1F at 21 27 facing up
+}
+
+trigger(#AntlionCave2F 5)
+{
+    position 14 29
+    teleport #AntlionCaveNest at 14 4 facing down
+}
+
+trigger(#AntlionCave2F 6)
+{
+    position 25 23
+    teleport #AntlionCaveTreasureRoom at 4 12 facing up
+}
+
+trigger(#AntlionCaveNest 0)
+{
+    position 14 3
+    teleport #AntlionCave2F at 14 28 facing up
+}
+
+trigger(#AntlionCaveNest 1)
+{
+    position 14 19
+    event call $12
+}
+
+trigger(#AntlionCaveSaveRoom 0)
+{
+    position 8 7
+    treasure #Life
+}
+
+trigger(#AntlionCaveSaveRoom 1)
+{
+    position 6 3
+    treasure #Ether1
+}
+
+trigger(#AntlionCaveSaveRoom 2)
+{
+    position 1 4
+    treasure #Tent
+}
+
+trigger(#AntlionCaveTreasureRoom 0)
+{
+    position 3 4
+    treasure #CharmHarp
+}
+
+trigger(#MountHobsWest 0)
+{
+    position 15 30
+    teleport #Overworld at 152 50 
+}
+
+trigger(#MountHobsWest 1)
+{
+    position 8 9
+    teleport #MountHobsSave at 20 10 facing left
+}
+
+trigger(#MountHobsWest 2)
+{
+    position 22 7
+    teleport #MountHobsSummit at 8 22 facing down
+}
+
+trigger(#MountHobsWest 3)
+{
+    position 15 26
+    event call $13
+}
+
+trigger(#MountHobsSummit 0)
+{
+    position 20 24
+    treasure #WhiteArrow
+}
+
+trigger(#MountHobsSummit 1)
+{
+    position 8 21
+    teleport #MountHobsWest at 22 8 facing down
+}
+
+trigger(#MountHobsSummit 2)
+{
+    position 19 9
+    teleport #MountHobsEast at 7 10 facing down
+}
+
+trigger(#MountHobsSummit 3)
+{
+    position 20 20
+    event call $14
+}
+
+trigger(#MountHobsEast 0)
+{
+    position 7 9
+    teleport $17F at 19 10 facing down
+}
+
+trigger(#MountHobsEast 1)
+{
+    position 21 31
+    teleport #Overworld at 160 50 
+}
+
+trigger(#MountHobsSave 0)
+{
+    position 11 19
+    treasure #Tent
+}
+
+trigger(#MountHobsSave 1)
+{
+    position 16 17
+    treasure #Cure1
+}
+
+trigger(#MountHobsSave 2)
+{
+    position 18 18
+    treasure #Heal
+}
+
+trigger(#MountHobsSave 3)
+{
+    position 22 18
+    treasure 350 gp
+}
+
+trigger(#MountHobsSave 4)
+{
+    position 20 9
+    teleport $17E at 8 10 facing down
+}
+
+trigger(#WateryPassWaterfallRoom 0)
+{
+    position 1 7
+    treasure #Cure2
+}
+
+trigger(#WateryPassWaterfallRoom 1)
+{
+    position 2 8
+    treasure #Elixir
+}
+
+trigger(#WateryPassWaterfallRoom 2)
+{
+    position 7 6
+    treasure 1000 gp
+}
+
+trigger(#MountOrdeals1F 0)
+{
+    position 23 19
+    treasure #Cure1
+}
+
+trigger(#MountOrdeals1F 1)
+{
+    position 22 15
+    treasure #Cure1
+}
+
+trigger(#MountOrdeals1F 2)
+{
+    position 19 9
+    teleport #MountOrdeals2F at 10 24 facing down
+}
+
+trigger(#MountOrdeals1F 3)
+{
+    position 20 31
+    teleport #Overworld at 218 200 
+}
+
+trigger(#MountOrdeals1F 4)
+{
+    position 21 31
+    teleport #Overworld at 218 200 
+}
+
+trigger(#MountOrdeals1F 5)
+{
+    position 11 28
+    event call $1A
+}
+
+trigger(#MountOrdeals2F 0)
+{
+    position 10 23
+    teleport #MountOrdeals1F at 19 10 facing down
+}
+
+trigger(#MountOrdeals2F 1)
+{
+    position 21 7
+    teleport #MountOrdeals3F at 23 23 facing down
+}
+
+trigger(#MountOrdeals2F 2)
+{
+    position 18 12
+    event call $1B
+}
+
+trigger(#MountOrdeals3F 0)
+{
+    position 9 17
+    treasure #Ether1
+}
+
+trigger(#MountOrdeals3F 1)
+{
+    position 16 13
+    treasure #Ether1
+}
+
+trigger(#MountOrdeals3F 2)
+{
+    position 23 22
+    teleport #MountOrdeals2F at 21 8 facing down
+}
+
+trigger(#MountOrdeals3F 3)
+{
+    position 11 7
+    teleport #MountOrdealsSummit at 15 22 facing down
+}
+
+trigger(#MountOrdealsSummit 0)
+{
+    position 15 21
+    teleport #MountOrdeals3F at 11 8 facing down
+}
+
+trigger(#MountOrdealsSummit 1)
+{
+    position 15 23
+    event call $1C
+}
+
+trigger(#MountOrdealsSummit 2)
+{
+    position 16 16
+    event call $1D
+}
+
+trigger(#MountOrdealsSummit 3)
+{
+    position 17 16
+    event call $1D
+}
+
+trigger(#MountOrdealsSummit 4)
+{
+    position 14 10
+    event call $1E
+}
+
+trigger(#MountOrdealsSummit 5)
+{
+    position 6 10
+    event call $1F
+}
+
+trigger(#MountOrdealsSummit 6)
+{
+    position 9 10
+    event call $21
+}
+
+trigger(#MysidiaCrystalRoom 0)
+{
+    position 11 19
+    teleport #BabilBlizzardRoom at 14 1 facing down
+}
+
+trigger(#MysidiaCrystalRoom 1)
+{
+    position 11 4
+    event call $3C
+}
+
+trigger(#MysidiaSerpentRoad 0)
+{
+    position 4 11
+    teleport #SmithyRoom at 25 18 facing down
+}
+
+trigger(#MysidiaSerpentRoad 1)
+{
+    position 4 5
+    event call $20
+}
+
+trigger(#BaronCastleAntechamber 0)
+{
+    position 7 9
+    teleport $12B at 14 3 facing down
+}
+
+trigger(#BaronCastleAntechamber 1)
+{
+    position 23 9
+    teleport $12B at 14 3 facing down
+}
+
+trigger(#BaronCastleAntechamber 2)
+{
+    position 7 2
+    teleport #BigWhale at 8 10 facing up
+}
+
+trigger(#BaronCastleAntechamber 3)
+{
+    position 23 2
+    teleport #BigWhale at 8 10 facing up
+}
+
+trigger(#CaveMagnes1F 0)
+{
+    position 27 7
+    treasure #Cure2
+}
+
+trigger(#CaveMagnes1F 1)
+{
+    position 2 20
+    treasure #Heal
+}
+
+trigger(#CaveMagnes1F 2)
+{
+    position 6 19
+    teleport #CaveMagnes2F at 27 26 facing down
+}
+
+trigger(#CaveMagnes1F 3)
+{
+    position 5 8
+    event call $2A
+}
+
+trigger(#CaveMagnes2F 0)
+{
+    position 4 19
+    treasure #Ether1
+}
+
+trigger(#CaveMagnes2F 1)
+{
+    position 26 8
+    teleport #CaveMagnesPitTreasureRoom at 8 14 facing up
+}
+
+trigger(#CaveMagnes2F 2)
+{
+    position 5 10
+    teleport #CaveMagnes3F at 27 6 facing down
+}
+
+trigger(#CaveMagnesPitTreasureRoom 0)
+{
+    position 2 5
+    treasure 500 gp
+}
+
+trigger(#CaveMagnesPitTreasureRoom 1)
+{
+    position 11 7
+    treasure #Ether1
+}
+
+trigger(#CaveMagnes3F 0)
+{
+    position 21 9
+    teleport #CaveMagnesSaveRoom at 6 12 facing up
+}
+
+trigger(#CaveMagnes3F 1)
+{
+    position 24 28
+    teleport #CaveMagnesTorchTreasureRoom at 8 13 facing up
+}
+
+trigger(#CaveMagnes3F 2)
+{
+    position 8 5
+    teleport #CaveMagnes4F at 14 13 facing up
+}
+
+trigger(#CaveMagnesTorchTreasureRoom 0)
+{
+    position 4 6
+    treasure #Cure2
+}
+
+trigger(#CaveMagnesTorchTreasureRoom 1)
+{
+    position 8 5
+    treasure #Cure3
+}
+
+trigger(#CaveMagnesTorchTreasureRoom 2)
+{
+    position 12 6
+    treasure #Life
+}
+
+trigger(#CaveMagnes4F 0)
+{
+    position 14 5
+    treasure #CharmClaw
+}
+
+trigger(#CaveMagnes4F 1)
+{
+    position 5 14
+    teleport #CaveMagnes5F at 22 27 facing down
+}
+
+trigger(#CaveMagnes5F 0)
+{
+    position 7 8
+    treasure #Ether2
+}
+
+trigger(#CaveMagnes5F 1)
+{
+    position 27 15
+    teleport #CaveMagnesSaveRoom2 at 6 12 facing up
+}
+
+trigger(#CaveMagnes5F 2)
+{
+    position 13 7
+    teleport #CaveMagnesCrystalRoom at 11 25 facing up
+}
+
+trigger(#BaronSerpentRoad 0)
+{
+    position 5 14
+    teleport #SmithyHouse at 4 27 facing down
+}
+
+trigger(#BaronSerpentRoad 1)
+{
+    position 5 5
+    event call $06
+}
+
+trigger(#BaronSerpentRoad 2)
+{
+    position 5 7
+    event call $01
+}
+
+trigger(#Zot1F 0)
+{
+    position 3 4
+    treasure #FireArmor
+}
+
+trigger(#Zot1F 1)
+{
+    position 26 4
+    teleport #Zot2F at 26 5 facing down
+}
+
+trigger(#Zot1F 2)
+{
+    position 8 26
+    event call $31
+}
+
+trigger(#Zot2F 0)
+{
+    position 7 15
+    treasure #FireBrand fight $03
+}
+
+trigger(#Zot2F 1)
+{
+    position 2 13
+    teleport #Zot3F at 2 14 facing down
+}
+
+trigger(#Zot3F 0)
+{
+    position 2 7
+    teleport #Zot4F at 5 5 facing down
+}
+
+trigger(#Zot4F 0)
+{
+    position 8 10
+    teleport #Zot5F at 8 9 facing down
+}
+
+trigger(#Zot4F 1)
+{
+    position 16 7
+    teleport #Zot5F at 16 10 facing down
+}
+
+trigger(#Zot4F 2)
+{
+    position 22 4
+    teleport #Zot5F at 22 7 facing down
+}
+
+trigger(#Zot4F 3)
+{
+    position 24 15
+    teleport #Zot5F at 24 14 facing down
+}
+
+trigger(#Zot5F 0)
+{
+    position 11 9
+    treasure #PoisonClaw
+}
+
+trigger(#Zot5F 1)
+{
+    position 11 10
+    treasure #EarthHammer
+}
+
+trigger(#Zot5F 2)
+{
+    position 10 23
+    treasure #FireShield
+}
+
+trigger(#Zot5F 3)
+{
+    position 19 14
+    treasure #WizardArmor
+}
+
+trigger(#Zot5F 4)
+{
+    position 22 21
+    teleport #ZotSaveRoom at 4 10 facing up
+}
+
+trigger(#Zot5F 5)
+{
+    position 15 15
+    teleport #Zot6F at 7 16 facing down
+}
+
+trigger(#Zot5F 6)
+{
+    position 15 17
+    event call $26
+}
+
+trigger(#Zot6F 0)
+{
+    position 7 4
+    teleport #ZotCommandCenter at 7 18 facing up
+}
+
+trigger(#Zot6F 1)
+{
+    position 7 9
+    event call $27
+}
+
+trigger(#ZotCommandCenter 0)
+{
+    position 7 10
+    event call $28
+}
+
+trigger(#BabilB1 0)
+{
+    position 18 4
+    treasure #Cure3
+}
+
+trigger(#BabilB1 1)
+{
+    position 26 12
+    treasure #Cure3
+}
+
+trigger(#BabilB1 2)
+{
+    position 21 19
+    teleport #BabilB2 at 21 20 facing down
+}
+
+trigger(#BabilB1 3)
+{
+    position 28 18
+    teleport #CaveEblanExit at 22 3 facing down
+}
+
+trigger(#BabilB1 4)
+{
+    position 25 6
+    event call $39
+}
+
+trigger(#BabilB1 5)
+{
+    position 28 6
+    event call $38
+}
+
+trigger(#BabilB2 0)
+{
+    position 14 20
+    treasure #Ogre fight $04
+}
+
+trigger(#BabilB2 1)
+{
+    position 21 19
+    teleport #BabilB1 at 21 20 facing down
+}
+
+trigger(#BabilB2 2)
+{
+    position 7 19
+    teleport #BabilB3 at 6 20 facing down
+}
+
+trigger(#BabilB3 0)
+{
+    position 20 21
+    treasure 2000 gp
+}
+
+trigger(#BabilB3 1)
+{
+    position 2 7
+    teleport #BabilB4 at 3 8 facing up
+}
+
+trigger(#BabilB3 2)
+{
+    position 20 9
+    teleport #BabilSaveRoom2 at 4 10 facing up
+}
+
+trigger(#BabilB3 3)
+{
+    position 24 7
+    teleport #BabilB4 at 23 8 facing down
+}
+
+trigger(#BabilB3 4)
+{
+    position 6 19
+    teleport #BabilB2 at 7 20 facing down
+}
+
+trigger(#BabilB3 5)
+{
+    position 13 25
+    teleport #BabilB4 at 14 26 facing down
+}
+
+trigger(#BabilB4 0)
+{
+    position 12 18
+    treasure #Middle
+}
+
+trigger(#BabilB4 1)
+{
+    position 14 25
+    teleport #BabilB3 at 13 26 facing down
+}
+
+trigger(#BabilB4 2)
+{
+    position 3 7
+    teleport #BabilB3 at 2 8 facing down
+}
+
+trigger(#BabilB4 3)
+{
+    position 23 7
+    teleport #BabilB3 at 24 8 facing down
+}
+
+trigger(#BabilB4 4)
+{
+    position 20 7
+    teleport #BabilB5 at 22 8 facing down
+}
+
+trigger(#BabilCrystalRoom 0)
+{
+    position 16 23
+    teleport #BabilB5 at 14 16 facing down
+}
+
+trigger(#BabilCrystalRoom 1)
+{
+    position 16 3
+    teleport #BabilB5 at 14 4 facing up
+}
+
+trigger(#BabilCrystalRoom 2)
+{
+    position 16 20
+    event call $3B
+}
+
+trigger(#BabilB5 0)
+{
+    position 5 15
+    treasure 82000 gp
+}
+
+trigger(#BabilB5 1)
+{
+    position 22 7
+    teleport #BabilB4 at 20 8 facing down
+}
+
+trigger(#BabilB5 2)
+{
+    position 14 15
+    teleport #BabilCrystalRoom at 16 22 facing up
+}
+
+trigger(#BabilB5 3)
+{
+    position 6 7
+    event call $00
+}
+
+trigger(#BabilB5 4)
+{
+    position 14 20
+    event call $3A
+}
+
+trigger(#TrainingRoomMain 0)
+{
+    position 14 0
+    teleport #TrainingRoomUpstairs at 15 5 facing up
+}
+
+trigger(#GiantMouth 0)
+{
+    position 9 7
+    teleport #GiantNeck at 7 4 facing down
+}
+
+trigger(#GiantNeck 0)
+{
+    position 7 4
+    teleport #GiantMouth at 9 7 facing up
+}
+
+trigger(#GiantNeck 1)
+{
+    position 7 7
+    teleport #GiantChest at 14 3 facing down
+}
+
+trigger(#GiantChest 0)
+{
+    position 9 8
+    treasure #Shuriken
+}
+
+trigger(#GiantChest 1)
+{
+    position 11 19
+    treasure #Cure2
+}
+
+trigger(#GiantChest 2)
+{
+    position 21 20
+    treasure #Ether1
+}
+
+trigger(#GiantChest 3)
+{
+    position 27 6
+    treasure #SamuraiArrow
+}
+
+trigger(#GiantChest 4)
+{
+    position 14 18
+    treasure #Cabin
+}
+
+trigger(#GiantChest 5)
+{
+    position 14 3
+    teleport #GiantNeck at 7 7 facing up
+}
+
+trigger(#GiantChest 6)
+{
+    position 18 9
+    teleport #GiantStomach at 17 20 facing up
+}
+
+trigger(#GiantStomach 0)
+{
+    position 19 9
+    treasure #Life
+}
+
+trigger(#GiantStomach 1)
+{
+    position 26 6
+    treasure #Life
+}
+
+trigger(#GiantStomach 2)
+{
+    position 17 20
+    teleport #GiantChest at 18 9 facing down
+}
+
+trigger(#GiantStomach 3)
+{
+    position 3 4
+    teleport #GiantPassage at 3 4 facing down
+}
+
+trigger(#GiantPassage 0)
+{
+    position 14 21
+    treasure #Elixir fight $07
+}
+
+trigger(#GiantPassage 1)
+{
+    position 3 4
+    teleport #GiantStomach at 3 4 facing down
+}
+
+trigger(#GiantPassage 2)
+{
+    position 21 4
+    teleport #GiantLung at 15 24 facing up
+}
+
+trigger(#GiantLung 0)
+{
+    position 15 24
+    teleport #GiantPassage at 21 4 facing up
+}
+
+trigger(#GiantLung 1)
+{
+    position 15 4
+    teleport #GiantCPU at 8 18 facing up
+}
+
+trigger(#GiantLung 2)
+{
+    position 15 15
+    event call $4F
+}
+
+trigger(#GiantCPU 0)
+{
+    position 8 18
+    teleport #GiantLung at 15 4 facing down
+}
+
+trigger(#GiantCPU 1)
+{
+    position 9 13
+    event call $51
+}
+
+trigger(#CaveEblanEntrance 0)
+{
+    position 18 4
+    treasure #Shuriken
+}
+
+trigger(#CaveEblanEntrance 1)
+{
+    position 22 3
+    treasure #Heal
+}
+
+trigger(#CaveEblanEntrance 2)
+{
+    position 26 25
+    treasure 1200 gp
+}
+
+trigger(#CaveEblanEntrance 3)
+{
+    position 10 3
+    teleport #Overworld at 24 232 
+}
+
+trigger(#CaveEblanEntrance 4)
+{
+    position 3 30
+    teleport #CaveEblanSettlement at 27 3 facing down
+}
+
+trigger(#CaveEblanSettlement 0)
+{
+    position 27 2
+    teleport #CaveEblanEntrance at 3 29 facing up
+}
+
+trigger(#CaveEblanSettlement 1)
+{
+    position 9 3
+    teleport #CaveEblanPass at 7 29 facing up
+}
+
+trigger(#CaveEblanSettlement 2)
+{
+    position 22 9
+    teleport #CaveEblanInn at 17 10 facing up
+}
+
+trigger(#CaveEblanSettlement 3)
+{
+    position 17 7
+    teleport #CaveEblanEquipment at 9 11 facing up
+}
+
+trigger(#CaveEblanSettlement 4)
+{
+    position 4 12
+    teleport #CaveEblanHospital at 13 11 facing up
+}
+
+trigger(#CaveEblanPass 0)
+{
+    position 8 28
+    treasure #Ether1
+}
+
+trigger(#CaveEblanPass 1)
+{
+    position 4 10
+    treasure #Tent
+}
+
+trigger(#CaveEblanPass 2)
+{
+    position 12 11
+    treasure #Cure2
+}
+
+trigger(#CaveEblanPass 3)
+{
+    position 16 11
+    treasure #Cabin
+}
+
+trigger(#CaveEblanPass 4)
+{
+    position 16 12
+    treasure #Cure2
+}
+
+trigger(#CaveEblanPass 5)
+{
+    position 20 12
+    treasure #Elixir
+}
+
+trigger(#CaveEblanPass 6)
+{
+    position 20 14
+    treasure #Elixir
+}
+
+trigger(#CaveEblanPass 7)
+{
+    position 10 26
+    treasure #Cure2
+}
+
+trigger(#CaveEblanPass 8)
+{
+    position 15 28
+    treasure 800 gp
+}
+
+trigger(#CaveEblanPass 9)
+{
+    position 27 27
+    treasure 850 gp
+}
+
+trigger(#CaveEblanPass 10)
+{
+    position 28 27
+    treasure #Life
+}
+
+trigger(#CaveEblanPass 11)
+{
+    position 29 27
+    treasure #Life
+}
+
+trigger(#CaveEblanPass 12)
+{
+    position 7 30
+    teleport #CaveEblanSettlement at 9 4 facing down
+}
+
+trigger(#CaveEblanPass 13)
+{
+    position 6 8
+    teleport #CaveEblanExit at 3 27 facing up
+}
+
+trigger(#CaveEblanPass 14)
+{
+    position 15 7
+    teleport #CaveEblanExit at 11 26 facing up
+}
+
+trigger(#CaveEblanPass 15)
+{
+    position 25 3
+    teleport #CaveEblanExit at 26 25 facing up
+}
+
+trigger(#CaveEblanExit 0)
+{
+    position 14 8
+    treasure #Cure3
+}
+
+trigger(#CaveEblanExit 1)
+{
+    position 17 9
+    treasure #Ether2
+}
+
+trigger(#CaveEblanExit 2)
+{
+    position 18 16
+    treasure #Life
+}
+
+trigger(#CaveEblanExit 3)
+{
+    position 18 22
+    treasure #Shuriken
+}
+
+trigger(#CaveEblanExit 4)
+{
+    position 22 2
+    teleport #BabilB1 at 28 17 facing up
+}
+
+trigger(#CaveEblanExit 5)
+{
+    position 3 28
+    teleport #CaveEblanPass at 6 9 facing down
+}
+
+trigger(#CaveEblanExit 6)
+{
+    position 11 27
+    teleport #CaveEblanPass at 15 8 facing down
+}
+
+trigger(#CaveEblanExit 7)
+{
+    position 26 26
+    teleport #CaveEblanPass at 25 4 facing down
+}
+
+trigger(#CaveEblanExit 8)
+{
+    position 29 23
+    teleport #CaveEblanSaveRoom at 4 11 facing up
+}
+
+trigger(#CaveEblanExit 9)
+{
+    position 24 8
+    event call $37
+}
+
+trigger(#CaveEblanSaveRoom 0)
+{
+    position 17 5
+    treasure #DrainSword fight $06
+}
+
+trigger(#CaveEblanHospital 0)
+{
+    position 2 5
+    treasure #Cure1
+}
+
+trigger(#CaveEblanHospital 1)
+{
+    position 14 7
+    treasure #Cure1
+}
+
+trigger(#FabulChocoboForest 0)
+{
+    position 9 7
+    treasure #Carrot
+}
+
+trigger(#MountOrdealsChocoboForest 0)
+{
+    position 9 7
+    treasure #Carrot
+}
+
+trigger(#BaronChocoboForest 0)
+{
+    position 9 7
+    treasure #Carrot
+}
+
+trigger(#TroiaChocoboForest 0)
+{
+    position 9 7
+    treasure #Carrot
+}
+
+trigger(#IslandChocoboForest 0)
+{
+    position 9 7
+    treasure #Carrot
+}
+
+trigger(#Overworld 0)
+{
+    position 101 156
+    teleport #BaronCastle at 16 30 facing up
+}
+
+trigger(#Overworld 1)
+{
+    position 102 156
+    teleport #BaronCastle at 16 30 facing up
+}
+
+trigger(#Overworld 2)
+{
+    position 101 157
+    teleport #BaronCastle at 16 30 facing up
+}
+
+trigger(#Overworld 3)
+{
+    position 102 157
+    teleport #BaronCastle at 16 30 facing up
+}
+
+trigger(#Overworld 4)
+{
+    position 100 157
+    teleport #BaronTown at 16 30 facing up
+}
+
+trigger(#Overworld 5)
+{
+    position 100 158
+    teleport #BaronTown at 16 30 facing up
+}
+
+trigger(#Overworld 6)
+{
+    position 103 157
+    teleport #BaronTown at 16 30 facing up
+}
+
+trigger(#Overworld 7)
+{
+    position 103 158
+    teleport #BaronTown at 16 30 facing up
+}
+
+trigger(#Overworld 8)
+{
+    position 76 132
+    teleport #MistCave at 2 28 facing up
+}
+
+trigger(#Overworld 9)
+{
+    position 84 119
+    teleport #MistCave at 27 3 facing down
+}
+
+trigger(#Overworld 10)
+{
+    position 96 119
+    teleport #Mist at 3 16 facing right
+}
+
+trigger(#Overworld 11)
+{
+    position 97 119
+    teleport #Mist at 28 16 facing left
+}
+
+trigger(#Overworld 12)
+{
+    position 125 104
+    teleport #Kaipo at 15 30 facing up
+}
+
+trigger(#Overworld 13)
+{
+    position 138 83
+    teleport #WateryPass1F at 26 29 facing up
+}
+
+trigger(#Overworld 14)
+{
+    position 138 77
+    teleport #WateryPass5F at 24 9 facing down
+}
+
+trigger(#Overworld 15)
+{
+    position 134 72
+    teleport #WaterfallEntrance at 16 9 facing down
+}
+
+trigger(#Overworld 16)
+{
+    position 125 66
+    teleport #Waterfall2F at 16 11 facing down
+}
+
+trigger(#Overworld 17)
+{
+    position 119 62
+    event call $10
+}
+
+trigger(#Overworld 18)
+{
+    position 118 58
+    teleport #Damcyan at 16 30 facing up
+}
+
+trigger(#Overworld 19)
+{
+    position 119 58
+    teleport #Damcyan at 16 30 facing up
+}
+
+trigger(#Overworld 20)
+{
+    position 118 57
+    teleport #Damcyan at 16 30 facing up
+}
+
+trigger(#Overworld 21)
+{
+    position 119 57
+    teleport #Damcyan at 16 30 facing up
+}
+
+trigger(#Overworld 22)
+{
+    position 136 56
+    teleport #AntlionCave1F at 15 4 facing down
+}
+
+trigger(#Overworld 23)
+{
+    position 152 49
+    teleport #MountHobsWest at 15 28 facing up
+}
+
+trigger(#Overworld 24)
+{
+    position 160 49
+    teleport #MountHobsEast at 21 30 facing up
+}
+
+trigger(#Overworld 25)
+{
+    position 214 58
+    teleport #Fabul at 15 29 facing up
+}
+
+trigger(#Overworld 26)
+{
+    position 215 58
+    teleport #Fabul at 15 29 facing up
+}
+
+trigger(#Overworld 27)
+{
+    position 214 57
+    teleport #Fabul at 15 29 facing up
+}
+
+trigger(#Overworld 28)
+{
+    position 215 57
+    teleport #Fabul at 15 29 facing up
+}
+
+trigger(#Overworld 29)
+{
+    position 221 56
+    event call $2B
+}
+
+trigger(#Overworld 30)
+{
+    position 154 199
+    teleport #Mysidia at 16 31 facing up
+}
+
+trigger(#Overworld 31)
+{
+    position 155 199
+    teleport #Mysidia at 16 31 facing up
+}
+
+trigger(#Overworld 32)
+{
+    position 218 199
+    teleport #MountOrdeals1F at 20 31 facing up
+}
+
+trigger(#Overworld 33)
+{
+    position 34 82
+    teleport #ToroiaCastle at 16 29 facing up
+}
+
+trigger(#Overworld 34)
+{
+    position 35 82
+    teleport #ToroiaCastle at 16 29 facing up
+}
+
+trigger(#Overworld 35)
+{
+    position 34 81
+    teleport #ToroiaCastle at 16 29 facing up
+}
+
+trigger(#Overworld 36)
+{
+    position 35 81
+    teleport #ToroiaCastle at 16 29 facing up
+}
+
+trigger(#Overworld 37)
+{
+    position 35 83
+    teleport #ToroiaTown at 16 28 facing up
+}
+
+trigger(#Overworld 38)
+{
+    position 35 84
+    teleport #ToroiaTown at 16 28 facing up
+}
+
+trigger(#Overworld 39)
+{
+    position 36 84
+    teleport #ToroiaTown at 16 28 facing up
+}
+
+trigger(#Overworld 40)
+{
+    position 74 53
+    teleport #CaveMagnes1F at 5 7 facing down
+}
+
+trigger(#Overworld 41)
+{
+    position 45 235
+    teleport #Eblan at 16 31 facing up
+}
+
+trigger(#Overworld 42)
+{
+    position 46 235
+    teleport #Eblan at 16 31 facing up
+}
+
+trigger(#Overworld 43)
+{
+    position 45 236
+    teleport #Eblan at 16 31 facing up
+}
+
+trigger(#Overworld 44)
+{
+    position 46 236
+    teleport #Eblan at 16 31 facing up
+}
+
+trigger(#Overworld 45)
+{
+    position 24 231
+    teleport #CaveEblanEntrance at 10 4 facing down
+}
+
+trigger(#Overworld 46)
+{
+    position 104 215
+    teleport #Agart at 16 31 facing up
+}
+
+trigger(#Overworld 47)
+{
+    position 105 216
+    teleport #Agart at 16 31 facing up
+}
+
+trigger(#Overworld 48)
+{
+    position 210 130
+    teleport #Silvera at 17 30 facing up
+}
+
+trigger(#Overworld 49)
+{
+    position 219 136
+    teleport #AdamantGrotto at 7 20 facing up
+}
+
+trigger(#Overworld 50)
+{
+    position 33 219
+    teleport #GiantMouth at 12 5 facing up
+}
+
+trigger(#Overworld 51)
+{
+    position 34 219
+    teleport #SoldierAirship at 12 17 facing down
+}
+
+trigger(#Overworld 52)
+{
+    position 228 47
+    teleport #FabulChocoboForest at 8 11 facing up
+}
+
+trigger(#Overworld 53)
+{
+    position 213 209
+    teleport #MountOrdealsChocoboForest at 8 11 facing up
+}
+
+trigger(#Overworld 54)
+{
+    position 89 163
+    teleport #BaronChocoboForest at 8 11 facing up
+}
+
+trigger(#Overworld 55)
+{
+    position 34 101
+    teleport #TroiaChocoboForest at 8 11 facing up
+}
+
+trigger(#Overworld 56)
+{
+    position 86 79
+    teleport #IslandChocoboForest at 8 11 facing up
+}
+
+trigger(#Overworld 57)
+{
+    position 41 53
+    teleport #BlackChocoboForest at 8 30 facing up
+}
+
+trigger(#Underworld 0)
+{
+    position 99 82
+    teleport #DwarfCastle at 15 30 facing up
+}
+
+trigger(#Underworld 1)
+{
+    position 100 82
+    teleport #DwarfCastle at 15 30 facing up
+}
+
+trigger(#Underworld 2)
+{
+    position 99 81
+    teleport #DwarfCastle at 15 30 facing up
+}
+
+trigger(#Underworld 3)
+{
+    position 100 81
+    teleport #DwarfCastle at 15 30 facing up
+}
+
+trigger(#Underworld 4)
+{
+    position 91 83
+    teleport #DwarfCastleBasement at 3 14 facing up
+}
+
+trigger(#Underworld 5)
+{
+    position 48 15
+    event call $58
+}
+
+trigger(#Underworld 6)
+{
+    position 49 15
+    event call $58
+}
+
+trigger(#Underworld 7)
+{
+    position 104 123
+    teleport #SmithyHouse at 6 11 facing up
+}
+
+trigger(#Underworld 8)
+{
+    position 62 121
+    teleport #Tomra at 17 27 facing up
+}
+
+trigger(#Underworld 9)
+{
+    position 63 121
+    teleport #Tomra at 17 27 facing up
+}
+
+trigger(#Underworld 10)
+{
+    position 63 122
+    teleport #Tomra at 17 27 facing up
+}
+
+trigger(#Underworld 11)
+{
+    position 13 14
+    teleport #SylvanCave1F at 16 2 facing down
+}
+
+trigger(#Underworld 12)
+{
+    position 46 109
+    teleport #SealedCaveEntrance at 4 10 facing up
+}
+
+trigger(#Underworld 13)
+{
+    position 27 86
+    teleport #CaveOfSummons1F at 17 10 facing down
+}
+
+trigger(#Underworld 14)
+{
+    position 55 20
+    event call $36
+}
+
+trigger(#Underworld 15)
+{
+    position 54 17
+    event call $36
+}
+
+trigger(#Underworld 16)
+{
+    position 51 16
+    event call $36
+}
+
+trigger(#Moon 0)
+{
+    position 61 23
+    teleport #Bahamut1F at 8 7 facing down
+}
+
+trigger(#Moon 1)
+{
+    position 28 25
+    teleport #LunarPalaceLobby at 16 28 facing up
+}
+
+trigger(#Moon 2)
+{
+    position 18 20
+    teleport #LunarPassage1 at 12 30 facing up
+}
+
+trigger(#Moon 3)
+{
+    position 18 14
+    teleport #LunarPassage1 at 19 5 facing down
+}
+
+trigger(#Moon 4)
+{
+    position 41 24
+    teleport #LunarPassage2 at 21 6 facing down
+}
+
+trigger(#Moon 5)
+{
+    position 40 28
+    teleport #LunarPassage2 at 9 25 facing up
+}
+
+trigger(#Moon 6)
+{
+    position 33 39
+    teleport #Hummingway at 10 16 facing up
+}
+
+trigger(#SmithyHouse 0)
+{
+    position 6 6
+    teleport #SmithyHouseMainFloor at 7 14 facing up
+}
+
+trigger(#Tomra 0)
+{
+    position 24 19
+    teleport #TomraInn at 10 7 facing up
+}
+
+trigger(#Tomra 1)
+{
+    position 8 21
+    teleport #TomraItem at 4 7 facing up
+}
+
+trigger(#Tomra 2)
+{
+    position 19 10
+    teleport #TomraEquipment at 6 9 facing up
+}
+
+trigger(#Tomra 3)
+{
+    position 23 10
+    teleport #TomraEquipment at 25 9 facing up
+}
+
+trigger(#Tomra 4)
+{
+    position 6 5
+    teleport #TomraTreasury at 7 7 facing up
+}
+
+trigger(#Tomra 5)
+{
+    position 16 28
+    teleport #Underworld at 62 122 
+}
+
+trigger(#Tomra 6)
+{
+    position 17 28
+    teleport #Underworld at 62 122 
+}
+
+trigger(#SmithyHouseMainFloor 0)
+{
+    position 10 3
+    treasure #Cure2
+}
+
+trigger(#SmithyHouseMainFloor 1)
+{
+    position 2 10
+    treasure #Heal
+}
+
+trigger(#SmithyHouseMainFloor 2)
+{
+    position 25 5
+    treasure 1000 gp
+}
+
+trigger(#SmithyHouseMainFloor 3)
+{
+    position 14 5
+    teleport #SmithyRoom at 9 4 facing left
+}
+
+trigger(#SmithyRoom 0)
+{
+    position 5 3
+    treasure #Elixir
+}
+
+trigger(#TomraEquipment 0)
+{
+    position 6 12
+    teleport #Tomra at 19 10 facing down
+}
+
+trigger(#TomraEquipment 1)
+{
+    position 25 12
+    teleport #Tomra at 23 10 facing down
+}
+
+trigger(#TomraTreasury 0)
+{
+    position 3 5
+    treasure 490 gp
+}
+
+trigger(#TomraTreasury 1)
+{
+    position 3 6
+    treasure 470 gp
+}
+
+trigger(#TomraTreasury 2)
+{
+    position 4 6
+    treasure #Cure2
+}
+
+trigger(#TomraTreasury 3)
+{
+    position 10 4
+    treasure #Cure2
+}
+
+trigger(#TomraTreasury 4)
+{
+    position 11 5
+    treasure #Cabin
+}
+
+trigger(#TomraTreasury 5)
+{
+    position 11 6
+    treasure 480 gp
+}
+
+trigger(#DwarfCastle 0)
+{
+    position 15 19
+    teleport #DwarfCastleLobby at 11 11 facing up
+}
+
+trigger(#DwarfCastle 1)
+{
+    position 7 8
+    teleport #DwarfCastleWestTower1F at 6 11 facing up
+}
+
+trigger(#DwarfCastle 2)
+{
+    position 23 8
+    teleport #DwarfCastleEastTower1F at 6 11 facing up
+}
+
+trigger(#DwarfCastle 3)
+{
+    position 14 31
+    teleport #Underworld at 100 83 
+}
+
+trigger(#DwarfCastle 4)
+{
+    position 15 31
+    teleport #Underworld at 100 83 
+}
+
+trigger(#DwarfCastle 5)
+{
+    position 16 31
+    teleport #Underworld at 100 83 
+}
+
+trigger(#DwarfCastleLobby 0)
+{
+    position 11 15
+    teleport #DwarfCastle at 15 20 facing down
+}
+
+trigger(#DwarfCastleLobby 1)
+{
+    position 11 1
+    teleport #DwarfCastleThroneRoom at 10 13 facing up
+}
+
+trigger(#DwarfCastleLobby 2)
+{
+    position 1 6
+    teleport #DwarfCastleInn at 16 12 facing up
+}
+
+trigger(#DwarfCastleLobby 3)
+{
+    position 21 6
+    teleport #DwarfCastleEquipment at 1 13 facing up
+}
+
+trigger(#DwarfCastleThroneRoom 0)
+{
+    position 10 15
+    teleport #DwarfCastleLobby at 11 3 facing down
+}
+
+trigger(#DwarfCastleThroneRoom 1)
+{
+    position 10 1
+    teleport #DwarfCastleCrystalRoom at 9 19 facing up
+}
+
+trigger(#DwarfCastleThroneRoom 2)
+{
+    position 8 1
+    event call $01
+}
+
+trigger(#DwarfCastleThroneRoom 3)
+{
+    position 10 11
+    event call $30
+}
+
+trigger(#DwarfCastleFatChocobo 0)
+{
+    position 23 4
+    treasure #Carrot
+}
+
+trigger(#DwarfCastleFatChocobo 1)
+{
+    position 24 3
+    treasure #Carrot
+}
+
+trigger(#DwarfCastleFatChocobo 2)
+{
+    position 26 4
+    treasure #Carrot
+}
+
+trigger(#DwarfCastleFatChocobo 3)
+{
+    position 1 8
+    teleport #DwarfCastleInn at 16 3 facing down
+}
+
+trigger(#DwarfCastleFatChocobo 4)
+{
+    position 26 8
+    teleport #DwarfCastleEquipment at 1 4 facing down
+}
+
+trigger(#DwarfCastleFatChocobo 5)
+{
+    position 6 7
+    teleport #DwarfCastleHospital at 9 7 facing up
+}
+
+trigger(#DwarfCastleFatChocobo 6)
+{
+    position 11 0
+    teleport #DwarfCastleTunnel at 29 9 facing up
+}
+
+trigger(#DwarfCastleFatChocobo 7)
+{
+    position 14 1
+    event call $01
+}
+
+trigger(#DwarfCastleTunnel 0)
+{
+    position 27 18
+    treasure #Cabin
+}
+
+trigger(#DwarfCastleTunnel 1)
+{
+    position 28 18
+    treasure #Cabin
+}
+
+trigger(#DwarfCastleTunnel 2)
+{
+    position 29 19
+    treasure #Cabin
+}
+
+trigger(#DwarfCastleTunnel 3)
+{
+    position 29 9
+    teleport #DwarfCastleFatChocobo at 11 0 facing down
+}
+
+trigger(#DwarfCastleTunnel 4)
+{
+    position 2 27
+    teleport #DwarfCastleBasement at 29 5 facing left
+}
+
+trigger(#DwarfCastleCrystalRoom 0)
+{
+    position 9 20
+    teleport #DwarfCastleThroneRoom at 10 1 facing down
+}
+
+trigger(#DwarfCastleEquipment 0)
+{
+    position 1 13
+    teleport #DwarfCastleLobby at 21 6 facing down
+}
+
+trigger(#DwarfCastleEquipment 1)
+{
+    position 1 4
+    teleport #DwarfCastleFatChocobo at 26 8 facing up
+}
+
+trigger(#DwarfCastleEquipment 2)
+{
+    position 13 4
+    teleport #DwarfCastleEastTower1F at 10 10 facing up
+}
+
+trigger(#DwarfCastleEquipment 3)
+{
+    position 8 0
+    teleport #DwarfCastleCafe at 5 9 facing up
+}
+
+trigger(#DwarfCastleBasement 0)
+{
+    position 29 5
+    teleport #DwarfCastleTunnel at 2 27 facing right
+}
+
+trigger(#DwarfCastleBasement 1)
+{
+    position 3 14
+    teleport #Underworld at 91 84 
+}
+
+trigger(#DwarfCastleEastTower1F 0)
+{
+    position 6 3
+    treasure #Dwarf
+}
+
+trigger(#DwarfCastleEastTower1F 1)
+{
+    position 6 14
+    teleport #DwarfCastle at 23 9 facing down
+}
+
+trigger(#DwarfCastleEastTower1F 2)
+{
+    position 6 5
+    teleport #DwarfCastleTower2F at 24 21 facing up
+}
+
+trigger(#DwarfCastleEastTower1F 3)
+{
+    position 10 10
+    teleport #DwarfCastleEquipment at 13 4 facing down
+}
+
+trigger(#DwarfCastleInn 0)
+{
+    position 8 3
+    treasure 1000 gp
+}
+
+trigger(#DwarfCastleInn 1)
+{
+    position 16 12
+    teleport #DwarfCastleLobby at 1 6 facing down
+}
+
+trigger(#DwarfCastleInn 2)
+{
+    position 16 3
+    teleport #DwarfCastleFatChocobo at 1 8 facing right
+}
+
+trigger(#DwarfCastleInn 3)
+{
+    position 1 12
+    teleport #DwarfCastleWestTower1F at 2 10 facing up
+}
+
+trigger(#DwarfCastleHospital 0)
+{
+    position 9 10
+    teleport #DwarfCastleFatChocobo at 6 8 facing down
+}
+
+trigger(#DwarfCastleHospital 1)
+{
+    position 5 5
+    event call $3F
+}
+
+trigger(#DwarfCastleWestTower1F 0)
+{
+    position 6 14
+    teleport #DwarfCastle at 7 9 facing down
+}
+
+trigger(#DwarfCastleWestTower1F 1)
+{
+    position 6 5
+    teleport #DwarfCastleTower2F at 6 5 facing up
+}
+
+trigger(#DwarfCastleWestTower1F 2)
+{
+    position 2 10
+    teleport #DwarfCastleInn at 1 12 facing right
+}
+
+trigger(#BabilIcebrandRoom 0)
+{
+    position 5 4
+    treasure #IceBrand fight $00
+}
+
+trigger(#BabilBlizzardRoom 0)
+{
+    position 5 4
+    treasure #BlizzardSpear fight $01
+}
+
+trigger(#BabilIceShieldRoom 0)
+{
+    position 5 4
+    treasure #IceShield fight $02
+}
+
+trigger(#BabilIceMailRoom 0)
+{
+    position 5 4
+    treasure #IceArmor fight $03
+}
+
+trigger(#DwarfCastleEastTower3F 0)
+{
+    position 6 3
+    treasure #Strength
+}
+
+trigger(#DwarfCastleEastTower3F 1)
+{
+    position 1 7
+    treasure #Ether1
+}
+
+trigger(#DwarfCastleEastTower3F 2)
+{
+    position 11 7
+    treasure #Ether2
+}
+
+trigger(#DwarfCastleEastTower3F 3)
+{
+    position 6 11
+    treasure #Elixir
+}
+
+trigger(#DwarfCastleWestTower3F 0)
+{
+    position 6 3
+    treasure #Elixir
+}
+
+trigger(#DwarfCastleWestTower3F 1)
+{
+    position 1 7
+    treasure #Cure2
+}
+
+trigger(#DwarfCastleWestTower3F 2)
+{
+    position 11 7
+    treasure #Ether1
+}
+
+trigger(#DwarfCastleWestTower3F 3)
+{
+    position 6 11
+    treasure #BlBelt
+}
+
+trigger(#DwarfCastleTower2F 0)
+{
+    position 8 10
+    treasure 500 gp
+}
+
+trigger(#DwarfCastleTower2F 1)
+{
+    position 21 24
+    treasure 500 gp
+}
+
+trigger(#DwarfCastleTower2F 2)
+{
+    position 6 7
+    teleport #DwarfCastleWestTower3F at 6 7 facing down
+}
+
+trigger(#DwarfCastleTower2F 3)
+{
+    position 24 23
+    teleport #DwarfCastleEastTower3F at 6 7 facing down
+}
+
+trigger(#BabilFloorLugae 0)
+{
+    position 6 3
+    treasure #Cure2
+}
+
+trigger(#BabilFloorLugae 1)
+{
+    position 2 20
+    teleport #BabilFloorIceMail at 2 21 facing down
+}
+
+trigger(#BabilFloorLugae 2)
+{
+    position 3 7
+    event call $3D
+}
+
+trigger(#BabilFloorIceMail 0)
+{
+    position 10 4
+    teleport #BabilFloorAirship at 10 5 facing down
+}
+
+trigger(#BabilFloorAirship 0)
+{
+    position 28 11
+    treasure #Cure2
+}
+
+trigger(#BabilFloorAirship 1)
+{
+    position 9 21
+    event call $3E
+}
+
+trigger(#Babil1F 0)
+{
+    position 5 10
+    treasure #IceArrow
+}
+
+trigger(#Babil1F 1)
+{
+    position 6 20
+    treasure #IceArrow
+}
+
+trigger(#Babil1F 2)
+{
+    position 26 12
+    treasure #Ether1
+}
+
+trigger(#Babil1F 3)
+{
+    position 15 4
+    teleport #Babil2F at 15 5 facing down
+}
+
+trigger(#Babil1F 4)
+{
+    position 15 25
+    teleport #Underworld at 48 16 
+}
+
+trigger(#Babil1F 5)
+{
+    position 15 21
+    event call $35
+}
+
+trigger(#Babil2F 0)
+{
+    position 8 7
+    treasure #Bandanna
+}
+
+trigger(#Babil2F 1)
+{
+    position 16 13
+    teleport #Babil3F at 16 14 facing down
+}
+
+trigger(#Babil2F 2)
+{
+    position 15 22
+    teleport #BabilBlizzardRoom at 5 7 facing up
+}
+
+trigger(#Babil2F 3)
+{
+    position 23 16
+    teleport #BabilIcebrandRoom at 5 7 facing up
+}
+
+trigger(#Babil2F 4)
+{
+    position 15 4
+    teleport #Babil1F at 15 5 facing down
+}
+
+trigger(#Babil3F 0)
+{
+    position 13 11
+    treasure #CatClaw
+}
+
+trigger(#Babil3F 1)
+{
+    position 26 19
+    treasure #Cure2
+}
+
+trigger(#Babil3F 2)
+{
+    position 15 25
+    treasure #Life
+}
+
+trigger(#Babil3F 3)
+{
+    position 20 19
+    teleport #Babil4F at 20 20 facing down
+}
+
+trigger(#Babil3F 4)
+{
+    position 12 19
+    teleport #Babil4F at 12 20 facing down
+}
+
+trigger(#Babil3F 5)
+{
+    position 16 13
+    teleport #Babil2F at 16 14 facing down
+}
+
+trigger(#Babil4F 0)
+{
+    position 16 19
+    treasure #Archer
+}
+
+trigger(#Babil4F 1)
+{
+    position 29 23
+    treasure #Life
+}
+
+trigger(#Babil4F 2)
+{
+    position 3 8
+    teleport #Babil5F at 3 9 facing down
+}
+
+trigger(#Babil4F 3)
+{
+    position 6 19
+    teleport #BabilSaveRoom at 4 7 facing up
+}
+
+trigger(#Babil4F 4)
+{
+    position 27 8
+    teleport #BabilIceMailRoom at 5 7 facing up
+}
+
+trigger(#Babil4F 5)
+{
+    position 26 17
+    teleport #BabilIceShieldRoom at 5 7 facing up
+}
+
+trigger(#Babil4F 6)
+{
+    position 29 17
+    teleport #BabilSaveRoom at 27 7 facing up
+}
+
+trigger(#Babil4F 7)
+{
+    position 12 19
+    teleport #Babil3F at 12 20 facing down
+}
+
+trigger(#Babil5F 0)
+{
+    position 6 12
+    treasure 2000 gp
+}
+
+trigger(#Babil5F 1)
+{
+    position 29 22
+    treasure #Cure2
+}
+
+trigger(#Babil5F 2)
+{
+    position 25 5
+    teleport #BabilFloorAirship2 at 25 6 facing down
+}
+
+trigger(#Babil5F 3)
+{
+    position 3 8
+    teleport #Babil4F at 3 9 facing down
+}
+
+trigger(#Babil5F 4)
+{
+    position 16 9
+    teleport #BabilCannon at 5 11 facing up
+}
+
+trigger(#BabilFloorAirship2 0)
+{
+    position 28 11
+    treasure #Cure2
+}
+
+trigger(#BabilFloorAirship2 1)
+{
+    position 14 4
+    teleport #BabilFloorIceMail2 at 14 5 facing down
+}
+
+trigger(#BabilFloorIceMail2 0)
+{
+    position 16 24
+    treasure #Ether2
+}
+
+trigger(#BabilFloorIceMail2 1)
+{
+    position 29 16
+    teleport #BabilFloorLugae2 at 29 17 facing down
+}
+
+trigger(#BabilFloorIceMail2 2)
+{
+    position 27 8
+    teleport #BabilSaveRoom at 4 7 facing up
+}
+
+trigger(#BabilFloorLugae2 0)
+{
+    position 6 3
+    treasure #PoisonArrow
+}
+
+trigger(#BabilFloorLugae2 1)
+{
+    position 16 20
+    event call $33
+}
+
+trigger(#BigWhale 0)
+{
+    position 4 21
+    event call $53
+}
+
+trigger(#BigWhale 1)
+{
+    position 4 24
+    event call $53
+}
+
+trigger(#BigWhale 2)
+{
+    position 6 23
+    event call $53
+}
+
+trigger(#BigWhale 3)
+{
+    position 8 23
+    event call $53
+}
+
+trigger(#BigWhale 4)
+{
+    position 10 21
+    event call $53
+}
+
+trigger(#BigWhale 5)
+{
+    position 10 24
+    event call $53
+}
+
+trigger(#BabilCannon 0)
+{
+    position 5 10
+    event call $34
+}
+
+trigger(#BigWhale2 0)
+{
+    position 4 21
+    event call $53
+}
+
+trigger(#BigWhale2 1)
+{
+    position 4 24
+    event call $53
+}
+
+trigger(#BigWhale2 2)
+{
+    position 6 23
+    event call $53
+}
+
+trigger(#BigWhale2 3)
+{
+    position 8 23
+    event call $53
+}
+
+trigger(#BigWhale2 4)
+{
+    position 10 21
+    event call $53
+}
+
+trigger(#BigWhale2 5)
+{
+    position 10 24
+    event call $53
+}
+
+trigger(#TowerOfWishesAfterGiant 0)
+{
+    position 5 12
+    event call $3D
+}
+
+trigger(#CaveOfSummons1F 0)
+{
+    position 8 6
+    treasure #Ether1
+}
+
+trigger(#CaveOfSummons1F 1)
+{
+    position 26 6
+    treasure #Life
+}
+
+trigger(#CaveOfSummons1F 2)
+{
+    position 25 21
+    treasure #Cure2
+}
+
+trigger(#CaveOfSummons1F 3)
+{
+    position 3 17
+    teleport #CaveOfSummons2F at 4 19 facing down
+}
+
+trigger(#CaveOfSummons1F 4)
+{
+    position 17 12
+    event call $40
+}
+
+trigger(#CaveOfSummons2F 0)
+{
+    position 9 5
+    treasure #Cabin
+}
+
+trigger(#CaveOfSummons2F 1)
+{
+    position 24 25
+    treasure #Cure2
+}
+
+trigger(#CaveOfSummons2F 2)
+{
+    position 28 16
+    teleport #CaveOfSummons3F at 11 2 facing down
+}
+
+trigger(#CaveOfSummons3F 0)
+{
+    position 18 6
+    treasure #Defense fight $04
+}
+
+trigger(#CaveOfSummons3F 1)
+{
+    position 3 21
+    treasure #Cure2
+}
+
+trigger(#CaveOfSummons3F 2)
+{
+    position 4 21
+    treasure #PoisonAxe
+}
+
+trigger(#CaveOfSummons3F 3)
+{
+    position 5 21
+    treasure #NinjaSword
+}
+
+trigger(#CaveOfSummons3F 4)
+{
+    position 11 23
+    treasure #Life
+}
+
+trigger(#CaveOfSummons3F 5)
+{
+    position 25 21
+    treasure #Cure3
+}
+
+trigger(#CaveOfSummons3F 6)
+{
+    position 18 14
+    teleport #Feymarch1F at 12 14 facing up
+}
+
+trigger(#Feymarch1F 0)
+{
+    position 6 3
+    treasure 2000 gp
+}
+
+trigger(#Feymarch1F 1)
+{
+    position 5 10
+    treasure #Ether1
+}
+
+trigger(#Feymarch1F 2)
+{
+    position 20 8
+    treasure #Rat
+}
+
+trigger(#Feymarch1F 3)
+{
+    position 25 12
+    treasure 2000 gp
+}
+
+trigger(#Feymarch1F 4)
+{
+    position 18 21
+    treasure 3000 gp
+}
+
+trigger(#Feymarch1F 5)
+{
+    position 14 4
+    teleport #Feymarch2F at 28 11 facing up
+}
+
+trigger(#Feymarch1F 6)
+{
+    position 19 15
+    teleport #FeymarchTreasury at 16 21 facing up
+}
+
+trigger(#FeymarchTreasury 0)
+{
+    position 15 9
+    treasure #SamuraiBow
+}
+
+trigger(#FeymarchTreasury 1)
+{
+    position 15 10
+    treasure #SamuraiArrow
+}
+
+trigger(#FeymarchTreasury 2)
+{
+    position 16 9
+    treasure #Ether2
+}
+
+trigger(#FeymarchTreasury 3)
+{
+    position 16 10
+    treasure #Elixir
+}
+
+trigger(#FeymarchTreasury 4)
+{
+    position 16 24
+    teleport #Underworld at 27 87 
+}
+
+trigger(#Feymarch2F 0)
+{
+    position 11 5
+    teleport #FeymarchSaveRoom at 5 10 facing up
+}
+
+trigger(#Feymarch2F 1)
+{
+    position 12 12
+    teleport #FeymarchLibrary1F at 6 8 facing up
+}
+
+trigger(#Feymarch2F 2)
+{
+    position 8 20
+    teleport #FeymarchWeapon at 6 9 facing up
+}
+
+trigger(#Feymarch2F 3)
+{
+    position 19 24
+    teleport #FeymarchArmor at 5 6 facing up
+}
+
+trigger(#Feymarch2F 4)
+{
+    position 22 5
+    teleport #FeymarchInn at 14 10 facing up
+}
+
+trigger(#FeymarchSaveRoom 0)
+{
+    position 1 6
+    treasure #Heal
+}
+
+trigger(#FeymarchSaveRoom 1)
+{
+    position 9 6
+    treasure #Life
+}
+
+trigger(#FeymarchSaveRoom 2)
+{
+    position 5 9
+    event call $02
+}
+
+trigger(#FeymarchSaveRoom 3)
+{
+    position 4 10
+    event call $02
+}
+
+trigger(#FeymarchSaveRoom 4)
+{
+    position 6 10
+    event call $02
+}
+
+trigger(#FeymarchLibrary1F 0)
+{
+    position 1 8
+    teleport #FeymarchLibrary2F at 7 9 facing up
+}
+
+trigger(#FeymarchLibrary2F 0)
+{
+    position 2 5
+    teleport #FeymarchLeviathanRoom at 6 9 facing up
+}
+
+trigger(#SealedCaveEntrance 0)
+{
+    position 4 2
+    teleport #SealedCave1F at 24 1 facing up
+}
+
+trigger(#SealedCaveEntrance 1)
+{
+    position 4 4
+    event call $48
+}
+
+trigger(#SylvanCave1F 0)
+{
+    position 5 4
+    treasure #FireArrow
+}
+
+trigger(#SylvanCave1F 1)
+{
+    position 6 4
+    treasure #IceArrow
+}
+
+trigger(#SylvanCave1F 2)
+{
+    position 7 4
+    treasure #LitArrow
+}
+
+trigger(#SylvanCave1F 3)
+{
+    position 10 5
+    treasure #Ether1
+}
+
+trigger(#SylvanCave1F 4)
+{
+    position 10 6
+    treasure #Cure2
+}
+
+trigger(#SylvanCave1F 5)
+{
+    position 3 18
+    treasure #Cabin
+}
+
+trigger(#SylvanCave1F 6)
+{
+    position 4 18
+    treasure 1000 gp
+}
+
+trigger(#SylvanCave1F 7)
+{
+    position 28 5
+    treasure #CharmArrow
+}
+
+trigger(#SylvanCave1F 8)
+{
+    position 28 6
+    treasure #Cure2
+}
+
+trigger(#SylvanCave1F 9)
+{
+    position 29 5
+    treasure #ElvenBow
+}
+
+trigger(#SylvanCave1F 10)
+{
+    position 16 19
+    teleport #SylvanCave2F at 17 18 facing down
+}
+
+trigger(#SylvanCave1F 11)
+{
+    position 7 29
+    teleport #SylvanCave2F at 6 27 facing down
+}
+
+trigger(#SylvanCave2F 0)
+{
+    position 29 29
+    treasure #Cure3
+}
+
+trigger(#SylvanCave2F 1)
+{
+    position 23 29
+    treasure #Ether1
+}
+
+trigger(#SylvanCave2F 2)
+{
+    position 29 28
+    treasure #Cure2
+}
+
+trigger(#SylvanCave2F 3)
+{
+    position 25 28
+    treasure #Heal
+}
+
+trigger(#SylvanCave2F 4)
+{
+    position 23 27
+    treasure #Heal
+}
+
+trigger(#SylvanCave2F 5)
+{
+    position 23 13
+    treasure #Heal
+}
+
+trigger(#SylvanCave2F 6)
+{
+    position 25 13
+    treasure #Cure2
+}
+
+trigger(#SylvanCave2F 7)
+{
+    position 23 15
+    treasure 2000 gp
+}
+
+trigger(#SylvanCave2F 8)
+{
+    position 25 15
+    treasure 3000 gp
+}
+
+trigger(#SylvanCave2F 9)
+{
+    position 11 6
+    treasure #MuteDagger fight $05
+}
+
+trigger(#SylvanCave2F 10)
+{
+    position 11 15
+    teleport #SylvanCave3F at 13 12 facing down
+}
+
+trigger(#SylvanCave2F 11)
+{
+    position 14 25
+    teleport #SylvanCave1F at 16 26 facing up
+}
+
+trigger(#SylvanCave2F 12)
+{
+    position 4 17
+    teleport #SylvanCave1F at 7 18 facing up
+}
+
+trigger(#SylvanCave2F 13)
+{
+    position 4 8
+    teleport #SylvanCave3F at 5 7 facing down
+}
+
+trigger(#SylvanCave2F 14)
+{
+    position 28 29
+    teleport #SylvanCave3F at 29 28 facing right
+}
+
+trigger(#SylvanCave3F 0)
+{
+    position 10 4
+    treasure #Cure2
+}
+
+trigger(#SylvanCave3F 1)
+{
+    position 11 4
+    treasure #CharmRod
+}
+
+trigger(#SylvanCave3F 2)
+{
+    position 11 5
+    treasure #Heal
+}
+
+trigger(#SylvanCave3F 3)
+{
+    position 1 9
+    treasure #Elixir
+}
+
+trigger(#SylvanCave3F 4)
+{
+    position 21 19
+    teleport #SylvanCaveYangRoom at 11 7 facing up
+}
+
+trigger(#SylvanCave3F 5)
+{
+    position 19 8
+    teleport #SylvanCaveTreasury at 2 6 facing right
+}
+
+trigger(#SylvanCave3F 6)
+{
+    position 19 1
+    teleport #SylvanCave2F at 18 7 facing up
+}
+
+trigger(#SylvanCaveTreasury 0)
+{
+    position 7 5
+    treasure #Elixir fight $06
+}
+
+trigger(#SylvanCaveTreasury 1)
+{
+    position 9 5
+    treasure #Elixir fight $06
+}
+
+trigger(#SylvanCaveTreasury 2)
+{
+    position 11 5
+    treasure #Elixir fight $06
+}
+
+trigger(#SylvanCaveTreasury 3)
+{
+    position 7 7
+    treasure #FullMoon fight $07
+}
+
+trigger(#SylvanCaveTreasury 4)
+{
+    position 9 7
+    treasure #Avenger fight $08
+}
+
+trigger(#SylvanCaveTreasury 5)
+{
+    position 11 7
+    treasure #MedusaArrow fight $09
+}
+
+trigger(#SylvanCaveTreasury 6)
+{
+    position 16 6
+    teleport #Underworld at 13 15 
+}
+
+trigger(#SylvanCaveYangRoom 0)
+{
+    position 13 3
+    treasure #PoisonClaw
+}
+
+trigger(#SylvanCaveYangRoom 1)
+{
+    position 13 5
+    treasure #CatClaw
+}
+
+trigger(#SylvanCaveYangRoom 2)
+{
+    position 9 4
+    teleport #SylvanCaveYangRoom at 27 8 facing up
+}
+
+trigger(#SylvanCaveYangRoom 3)
+{
+    position 27 4
+    teleport #Underworld at 13 15 
+}
+
+trigger(#SealedCave1F 0)
+{
+    position 18 28
+    treasure #Life
+}
+
+trigger(#SealedCave1F 1)
+{
+    position 25 22
+    teleport #SealedCaveRoomKatanaEther at 9 13 facing up
+}
+
+trigger(#SealedCave1F 2)
+{
+    position 8 7
+    teleport #SealedCave2F at 5 13 facing up
+}
+
+trigger(#SealedCave1F 3)
+{
+    position 26 9
+    event call $41
+}
+
+trigger(#SealedCave1F 4)
+{
+    position 26 15
+    event call $42
+}
+
+trigger(#SealedCave1F 5)
+{
+    position 9 15
+    event call $42
+}
+
+trigger(#SealedCave1F 6)
+{
+    position 9 9
+    event call $41
+}
+
+trigger(#SealedCaveRoomKatanaEther 0)
+{
+    position 2 5
+    treasure #Long
+}
+
+trigger(#SealedCaveRoomKatanaEther 1)
+{
+    position 14 5
+    treasure #Ether1
+}
+
+trigger(#SealedCave2F 0)
+{
+    position 2 6
+    treasure #Cure2
+}
+
+trigger(#SealedCave2F 1)
+{
+    position 16 7
+    treasure #Ether1
+}
+
+trigger(#SealedCave2F 2)
+{
+    position 14 13
+    teleport #SealedCave3F at 20 21 facing down
+}
+
+trigger(#SealedCave2F 3)
+{
+    position 6 3
+    teleport #SealedCaveEmptyRoom at 5 8 facing up
+}
+
+trigger(#SealedCave2F 4)
+{
+    position 12 4
+    teleport #SealedCaveEmptyRoom at 5 8 facing up
+}
+
+trigger(#SealedCave3F 0)
+{
+    position 30 19
+    treasure #Life
+}
+
+trigger(#SealedCave3F 1)
+{
+    position 29 26
+    treasure #Life
+}
+
+trigger(#SealedCave3F 2)
+{
+    position 23 6
+    teleport #SealedCaveRoomLightSword at 6 11 facing up
+}
+
+trigger(#SealedCave3F 3)
+{
+    position 18 3
+    teleport #SealedCaveRoomNinjaStarElixir at 7 17 facing up
+}
+
+trigger(#SealedCave3F 4)
+{
+    position 5 3
+    teleport #SealedCaveRoomKatanaNinjaHat at 6 11 facing up
+}
+
+trigger(#SealedCave3F 5)
+{
+    position 4 26
+    teleport #SealedCave4F at 11 12 facing up
+}
+
+trigger(#SealedCave3F 6)
+{
+    position 29 6
+    teleport #SealedCaveEmptyRoom at 5 8 facing up
+}
+
+trigger(#SealedCave3F 7)
+{
+    position 14 4
+    teleport #SealedCaveEmptyRoom at 5 8 facing up
+}
+
+trigger(#SealedCave3F 8)
+{
+    position 9 6
+    teleport #SealedCaveEmptyRoom at 26 9 facing up
+}
+
+trigger(#SealedCave3F 9)
+{
+    position 22 23
+    event call $46
+}
+
+trigger(#SealedCave3F 10)
+{
+    position 20 23
+    event call $41
+}
+
+trigger(#SealedCave3F 11)
+{
+    position 20 29
+    event call $42
+}
+
+trigger(#SealedCave3F 12)
+{
+    position 12 12
+    event call $43
+}
+
+trigger(#SealedCaveRoomKatanaNinjaHat 0)
+{
+    position 3 5
+    treasure #Long
+}
+
+trigger(#SealedCaveRoomKatanaNinjaHat 1)
+{
+    position 9 5
+    treasure #NinjaHelm
+}
+
+trigger(#SealedCaveRoomNinjaStarElixir 0)
+{
+    position 3 5
+    treasure #Elixir
+}
+
+trigger(#SealedCaveRoomNinjaStarElixir 1)
+{
+    position 4 7
+    treasure #NinjaStar
+}
+
+trigger(#SealedCaveRoomNinjaStarElixir 2)
+{
+    position 19 9
+    treasure 5000 gp
+}
+
+trigger(#SealedCaveRoomLightSword 0)
+{
+    position 6 3
+    treasure #Light
+}
+
+trigger(#SealedCave4F 0)
+{
+    position 9 5
+    treasure #Ether1
+}
+
+trigger(#SealedCave4F 1)
+{
+    position 2 14
+    teleport #SealedCave6F at 7 4 facing down
+}
+
+trigger(#SealedCave5F 0)
+{
+    position 25 9
+    treasure #Life
+}
+
+trigger(#SealedCave5F 1)
+{
+    position 25 25
+    teleport #SealedCaveRoomBoxes at 6 11 facing up
+}
+
+trigger(#SealedCave5F 2)
+{
+    position 7 21
+    teleport #SealedCaveSaveRoom at 6 4 facing down
+}
+
+trigger(#SealedCave5F 3)
+{
+    position 22 11
+    teleport #SealedCaveEmptyRoom at 5 8 facing up
+}
+
+trigger(#SealedCave5F 4)
+{
+    position 16 8
+    event call $44
+}
+
+trigger(#SealedCave5F 5)
+{
+    position 16 28
+    event call $45
+}
+
+trigger(#SealedCave6F 0)
+{
+    position 12 8
+    treasure #Cure2
+}
+
+trigger(#SealedCave6F 1)
+{
+    position 10 10
+    treasure #Life
+}
+
+trigger(#SealedCave6F 2)
+{
+    position 6 13
+    teleport #SealedCave5F at 4 7 facing down
+}
+
+trigger(#SealedCave6F 3)
+{
+    position 3 5
+    teleport #SealedCaveEmptyRoom at 5 8 facing up
+}
+
+trigger(#SealedCaveRoomBoxes 0)
+{
+    position 9 5
+    treasure #Cure3
+}
+
+trigger(#SealedCaveRoomBoxes 1)
+{
+    position 3 10
+    treasure #Ether2
+}
+
+trigger(#SealedCave7F 0)
+{
+    position 15 11
+    teleport #SealedCaveDemonWallRoom at 15 22 facing down
+}
+
+trigger(#SealedCave7F 1)
+{
+    position 9 8
+    event call $46
+}
+
+trigger(#SealedCave7F 2)
+{
+    position 21 8
+    event call $46
+}
+
+trigger(#SealedCaveSaveRoom 0)
+{
+    position 6 18
+    teleport #SealedCave7F at 15 4 facing down
+}
+
+trigger(#SealedCaveDemonWallRoom 0)
+{
+    position 15 3
+    teleport #SealedCaveCrystalRoom at 9 19 facing up
+}
+
+trigger(#SealedCaveDemonWallRoom 1)
+{
+    position 15 6
+    event call $47
+}
+
+trigger(#SealedCaveCrystalRoom 0)
+{
+    position 9 20
+    teleport #SealedCaveDemonWallRoom at 15 4 facing down
+}
+
+trigger(#Bahamut1F 0)
+{
+    position 28 11
+    treasure #SamuraiShield
+}
+
+trigger(#Bahamut1F 1)
+{
+    position 8 24
+    treasure #SamuraiGauntlet
+}
+
+trigger(#Bahamut1F 2)
+{
+    position 23 26
+    teleport #Bahamut2F at 25 28 facing down
+}
+
+trigger(#Bahamut2F 0)
+{
+    position 6 11
+    treasure #Genji
+}
+
+trigger(#Bahamut2F 1)
+{
+    position 26 13
+    treasure #SamuraiHelm
+}
+
+trigger(#Bahamut2F 2)
+{
+    position 20 6
+    teleport #BahamutFloor at 25 11 facing down
+}
+
+trigger(#Bahamut2F 3)
+{
+    position 17 12
+    event call $56
+}
+
+trigger(#BahamutFloor 0)
+{
+    position 8 26
+    event call $57
+}
+
+trigger(#BahamutFloor 1)
+{
+    position 25 16
+    event call $59
+}
+
+trigger(#LunarPalaceLobby 0)
+{
+    position 16 5
+    teleport #LunarPalaceCrystalRoom at 16 28 facing up
+}
+
+trigger(#LunarPalaceLobby 1)
+{
+    position 4 17
+    event call $4B
+}
+
+trigger(#LunarPalaceLobby 2)
+{
+    position 28 17
+    event call $4C
+}
+
+trigger(#LunarPalaceLobby 3)
+{
+    position 16 21
+    event call $4A
+}
+
+trigger(#LunarPalaceCrystalRoom 0)
+{
+    position 16 16
+    event call $4D
+}
+
+trigger(#LunarPassage1 0)
+{
+    position 26 22
+    treasure #Elixir fight $0A
+}
+
+trigger(#LunarPassage1 1)
+{
+    position 28 6
+    treasure #Cure2
+}
+
+trigger(#LunarPassage1 2)
+{
+    position 29 7
+    treasure #Heal
+}
+
+trigger(#LunarPassage1 3)
+{
+    position 19 4
+    teleport #Moon at 18 15 
+}
+
+trigger(#LunarPassage1 4)
+{
+    position 12 31
+    teleport #Moon at 18 21 
+}
+
+trigger(#LunarPassage2 0)
+{
+    position 21 5
+    teleport #Moon at 41 25 
+}
+
+trigger(#LunarPassage2 1)
+{
+    position 9 26
+    teleport #Moon at 40 29 
+}
+
+trigger(#LunarSubterran1F 0)
+{
+    position 6 24
+    treasure #NinjaArmor fight $0B
+}
+
+trigger(#LunarSubterran1F 1)
+{
+    position 6 18
+    teleport #LunarSubterran1F at 24 20 facing up
+}
+
+trigger(#LunarSubterran1F 2)
+{
+    position 24 17
+    teleport #LunarSubterran2F at 26 20 facing down
+}
+
+trigger(#LunarSubterran1F 3)
+{
+    position 16 24
+    teleport #LunarSubterran2F at 19 25 facing down
+}
+
+trigger(#LunarSubterran2F 0)
+{
+    position 10 4
+    treasure #DragoonShield
+}
+
+trigger(#LunarSubterran2F 1)
+{
+    position 26 12
+    treasure #LifeStaff fight $0C
+}
+
+trigger(#LunarSubterran2F 2)
+{
+    position 25 23
+    treasure #FlameWhip
+}
+
+trigger(#LunarSubterran2F 3)
+{
+    position 22 19
+    teleport #LunarSubterran2F at 14 15 facing left
+}
+
+trigger(#LunarSubterran2F 4)
+{
+    position 4 26
+    teleport #LunarSubterran3F at 4 27 facing down
+}
+
+trigger(#LunarSubterran2F 5)
+{
+    position 15 4
+    teleport #LunarSubterran3F at 15 5 facing down
+}
+
+trigger(#LunarSubterran3F 0)
+{
+    position 25 16
+    treasure #DragoonHelm
+}
+
+trigger(#LunarSubterran3F 1)
+{
+    position 23 24
+    treasure #DragonArmor
+}
+
+trigger(#LunarSubterran3F 2)
+{
+    position 14 28
+    treasure #DragoonGauntlet
+}
+
+trigger(#LunarSubterran3F 3)
+{
+    position 16 15
+    teleport #LunarSubterran4F at 9 7 facing down
+}
+
+trigger(#LunarSubterran4F 0)
+{
+    position 28 7
+    treasure #ArtemisArrow
+}
+
+trigger(#LunarSubterran4F 1)
+{
+    position 6 24
+    treasure #StardustRod fight $13
+}
+
+trigger(#LunarSubterran4F 2)
+{
+    position 25 8
+    teleport $17E at 9 8 facing up
+}
+
+trigger(#LunarSubterran4F 3)
+{
+    position 8 13
+    teleport #LunarSubterranRoomElixir at 3 9 facing up
+}
+
+trigger(#LunarSubterran4F 4)
+{
+    position 25 24
+    teleport #LunarSubterranTunnelCure3 at 24 19 facing up
+}
+
+trigger(#LunarSubterran4F 5)
+{
+    position 16 31
+    teleport #LunarSubterran5F at 16 2 facing down
+}
+
+trigger(#LunarSubterran5F 0)
+{
+    position 7 9
+    treasure #CrystalShield fight $0E
+}
+
+trigger(#LunarSubterran5F 1)
+{
+    position 1 15
+    treasure #Protect fight $14
+}
+
+trigger(#LunarSubterran5F 2)
+{
+    position 26 11
+    treasure #CrystalArmor fight $10
+}
+
+trigger(#LunarSubterran5F 3)
+{
+    position 27 16
+    treasure #CrystalGauntlet fight $11
+}
+
+trigger(#LunarSubterran5F 4)
+{
+    position 5 20
+    treasure #CrystalHelm fight $12
+}
+
+trigger(#LunarSubterran5F 5)
+{
+    position 11 13
+    teleport #LunarSubterranTunnelProtectRing at 5 15 facing up
+}
+
+trigger(#LunarSubterran5F 6)
+{
+    position 14 20
+    teleport #LunarSubterranTunnelWhiteRobe at 9 15 facing up
+}
+
+trigger(#LunarSubterran5F 7)
+{
+    position 23 27
+    teleport #LunarSubterranPinkpuff at 2 9 facing up
+}
+
+trigger(#LunarSubterran5F 8)
+{
+    position 3 6
+    teleport #LunarSubterranSaveRoom1 at 3 4 facing down
+}
+
+trigger(#LunarSubterran5F 9)
+{
+    position 20 31
+    teleport #LunarSubterran6F at 20 1 facing down
+}
+
+trigger(#LunarSubterran6F 0)
+{
+    position 15 5
+    treasure #ArtemisArrow
+}
+
+trigger(#LunarSubterran6F 1)
+{
+    position 25 5
+    treasure #NinjaStar
+}
+
+trigger(#LunarSubterran6F 2)
+{
+    position 18 17
+    treasure #Cabin
+}
+
+trigger(#LunarSubterran6F 3)
+{
+    position 6 27
+    treasure #Life
+}
+
+trigger(#LunarSubterran6F 4)
+{
+    position 22 21
+    teleport #LunarSubterranTunnelMinerva at 5 13 facing up
+}
+
+trigger(#LunarSubterran6F 5)
+{
+    position 8 8
+    teleport #LunarSubterran6F at 8 20 facing down
+}
+
+trigger(#LunarSubterran6F 6)
+{
+    position 30 23
+    teleport #LunarSubterran6F at 1 17 facing up
+}
+
+trigger(#LunarSubterran6F 7)
+{
+    position 1 4
+    teleport #LunarSubterran5F at 1 28 facing up
+}
+
+trigger(#LunarSubterran7F 0)
+{
+    position 13 20
+    teleport #LunarSubterranSaveRoom2 at 3 14 facing up
+}
+
+trigger(#LunarSubterran7F 1)
+{
+    position 19 20
+    teleport #LunarSubterranRoomHolyLance at 3 10 facing up
+}
+
+trigger(#LunarSubterran7F 2)
+{
+    position 25 20
+    teleport #LunarSubterranRoomRibbons at 3 10 facing up
+}
+
+trigger(#LunarSubterran7F 3)
+{
+    position 17 7
+    teleport #LunarCore1F at 17 8 facing down
+}
+
+trigger(#LunarCore1F 0)
+{
+    position 7 11
+    treasure #NinjaStar
+}
+
+trigger(#LunarCore1F 1)
+{
+    position 23 19
+    treasure #Elixir
+}
+
+trigger(#LunarCore1F 2)
+{
+    position 17 19
+    teleport #LunarCore2F at 15 8 facing down
+}
+
+trigger(#LunarCore2F 0)
+{
+    position 21 10
+    treasure #Elixir
+}
+
+trigger(#LunarCore2F 1)
+{
+    position 13 24
+    treasure #Whistle
+}
+
+trigger(#LunarCore2F 2)
+{
+    position 22 23
+    teleport #LunarCore3F at 21 7 facing down
+}
+
+trigger(#LunarCore3F 0)
+{
+    position 7 15
+    treasure #NinjaStar
+}
+
+trigger(#LunarCore3F 1)
+{
+    position 24 14
+    treasure #NinjaStar
+}
+
+trigger(#LunarCore3F 2)
+{
+    position 23 24
+    teleport #LunarCore4F at 25 8 facing left
+}
+
+trigger(#LunarCore4F 0)
+{
+    position 6 20
+    teleport #LunarCoreZemusRoom at 15 23 facing up
+}
+
+trigger(#LunarCoreZemusRoom 0)
+{
+    position 15 15
+    event call $55
+}
+
+trigger(#LunarSubterranRoomElixir 0)
+{
+    position 3 6
+    treasure #Elixir
+}
+
+trigger(#LunarSubterranTunnelCure3 0)
+{
+    position 23 5
+    treasure #Cure3
+}
+
+trigger(#LunarSubterranTunnelCure3 1)
+{
+    position 2 14
+    treasure #Cure3
+}
+
+trigger(#LunarSubterranTunnelCure3 2)
+{
+    position 6 13
+    teleport #LunarSubterran4F at 10 21 facing down
+}
+
+trigger(#LunarSubterranTunnelProtectRing 0)
+{
+    position 13 4
+    treasure #Protect
+}
+
+trigger(#LunarSubterranTunnelProtectRing 1)
+{
+    position 20 21
+    teleport #LunarSubterran5F at 20 15 facing down
+}
+
+trigger(#LunarSubterranTunnelProtectRing 2)
+{
+    position 22 7
+    teleport #LunarSubterran5F at 22 22 facing down
+}
+
+trigger(#LunarSubterranTunnelWhiteRobe 0)
+{
+    position 3 14
+    treasure #WhiteRobe
+}
+
+trigger(#LunarSubterranTunnelWhiteRobe 1)
+{
+    position 6 3
+    teleport #LunarSubterran5F at 14 28 facing down
+}
+
+trigger(#LunarSubterranPinkpuff 0)
+{
+    position 7 5
+    treasure #Cabin
+}
+
+trigger(#LunarSubterranSaveRoom1 0)
+{
+    position 3 11
+    teleport #LunarSubterran5F at 19 9 facing down
+}
+
+trigger(#LunarSubterranTunnelMinerva 0)
+{
+    position 2 4
+    treasure #Heroine fight $0D
+}
+
+trigger(#LunarSubterranTunnelMinerva 1)
+{
+    position 10 4
+    teleport #LunarSubterran7F at 3 8 facing down
+}
+
+trigger(#LunarSubterranRoomRibbons 0)
+{
+    position 2 5
+    treasure #Ribbon
+}
+
+trigger(#LunarSubterranRoomRibbons 1)
+{
+    position 4 5
+    treasure #Ribbon
+}
+
+trigger(#LunarSubterranRoomRibbons 2)
+{
+    position 3 8
+    event call $50
+}

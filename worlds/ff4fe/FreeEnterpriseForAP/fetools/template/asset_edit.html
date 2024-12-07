@@ -1,0 +1,329 @@
+<html>
+    <head>
+        <title>Edit Asset</title>
+
+        <style type="text/css">
+            body {
+                font-family: monospace;
+            }
+
+            #preview {
+                border: 1px dotted #888;
+            }
+
+            div {
+                margin-bottom: 1em;
+            }
+
+            #error {
+                white-space: pre-wrap;
+                color: #f00;
+            }
+
+            #info {
+                white-space: pre-wrap;
+                color: #22c;
+            }
+
+            td.label {
+                font-weight: bold;
+                vertical-align: top;
+            }
+
+            td.field_bytes {
+                background-color: #eee;
+            }
+
+            input[type="text"] {
+                width: 100%;
+            }
+
+            div.binaryLabel {
+                /* cursor: pointer; */
+            }
+        </style>
+
+    </head>
+    <body>
+        <script>
+            var binaryFieldValues = new Map();
+            var hasUnsavedChanges = false;
+
+            var listeners = {};
+            function subscribeToField(name, callback)
+            {
+                if (listeners[name] === undefined)
+                {
+                    listeners[name] = new Array();
+                }
+
+                listeners[name].push(callback);
+            }
+
+            function handleFieldChanged(name, payload)
+            {
+                hasUnsavedChanges = true;
+                notifySubscribers(name, payload);
+            }
+
+            function notifySubscribers(name, payload)
+            {
+                if (payload === undefined)
+                {
+                    let elem = document.getElementById(`assetfield__${name}`);
+                    payload = elem.value;
+                }
+
+                if (listeners[name] !== undefined)
+                {
+                    listeners[name].forEach((callback) => callback(payload));
+                }
+            }
+
+            function createBinaryField(name, mimetype, defaultValueBase64)
+            {
+                let container = document.getElementById(`container_${name}`);
+
+                let defaultValue = atob(defaultValueBase64);
+
+                let label = document.createElement("div");
+                label.className = 'binaryLabel';
+                container.appendChild(label);
+
+                let fileContainer = document.createElement("div");
+                //fileContainer.style.display = 'none';
+                let fileInput = document.createElement("input");
+                fileInput.type = "file";
+                fileInput.name = `assetfield__${name}`;
+                fileInput.id = `assetfield__${name}`;
+                if (mimetype != "")
+                {
+                    fileInput.accept = mimetype;
+                }
+                // TODO: prepopulate with default data
+                fileContainer.appendChild(fileInput);
+
+                let revertButton = document.createElement("button");
+                revertButton.innerText = "revert";
+                revertButton.type = "button";
+                fileContainer.appendChild(revertButton);
+                container.appendChild(fileContainer);
+
+                let setValue = (value) => {
+                    binaryFieldValues.set(name, value);
+                    label.innerText = `${mimetype} (${value.length} bytes)`; 
+                };
+                setValue(defaultValue);
+
+                //label.onclick = () => { fileContainer.style.display = 'block'; };
+
+                revertButton.onclick = () => {
+                    fileInput.value = null;
+                    //fileContainer.style.display = 'none';
+                    setValue(defaultValue);
+                    handleFieldChanged(name, value);
+                };
+
+                fileInput.onchange = () => {
+                    if (fileInput.files.length > 0)
+                    {
+                        let reader = new FileReader();
+                        reader.onload = (e) => { 
+                            let value = e.target.result; 
+                            setValue(value);
+                            handleFieldChanged(name, value);
+                            fileInput.value = null;
+                        };
+                        reader.readAsBinaryString(fileInput.files[0]);
+                    }
+                };
+            }
+
+            function buildFormData()
+            {
+                let formData = new FormData();
+                {% for field in fields %}
+                {% if field['name'] == 'id' %}
+                formData.append("assetfield__id", "{{ field['default'] }}");
+                {% elif field['type'] == 'bytes' %}
+                {
+                    let value = binaryFieldValues.get("{{ field['name'] }}");
+                    let fileData = new Uint8Array(value.length);
+                    for (let i = 0; i < value.length; i++)
+                    {
+                        fileData[i] = value.charCodeAt(i);
+                    }
+                    let file = new File([fileData], "binary_{{ field['name'] }}");
+                    formData.append("assetfield__{{ field['name'] }}", file);
+                }
+                {% else %}
+                formData.append("assetfield__{{ field['name'] }}", document.getElementById("assetfield__{{ field['name'] }}").value);
+                {% endif %}
+                {% endfor %}
+
+                return formData;
+            }
+
+            async function doActionWithPageState(action)
+            {
+                clearAlertTexts();
+
+                let formData = buildFormData();
+
+                let result = await doActionWithFormDataAsset(action, formData);
+                if (result)
+                {
+                    if (result.error)
+                    {
+                        setErrorText(result.error);
+                    }
+                    else if (result.action == 'text')
+                    {
+                        setInfoText(result.text);
+                    }
+                }
+            }
+
+            async function doSave()
+            {
+                clearAlertTexts();
+                
+                let formData = buildFormData();
+                let response = await fetch('save', {
+                    method: 'POST',
+                    body: formData
+                    });
+
+                if (response.ok)
+                {
+                    hasUnsavedChanges = false;
+                    setInfoText('Asset saved. (' + (new Date()).toLocaleString() + ')');
+                }
+                else
+                {
+                    setErrorText(`${response.status} : ${response.statusText}`);
+                }
+            }
+
+            async function doDelete()
+            {
+                if (window.confirm("Are you sure you want to delete this asset?"))
+                {
+                    clearAlertTexts();
+                    let response = await fetch('delete?assetId={{ asset.id }}', { method: 'POST' });
+                    if (response.ok)
+                    {
+                        hasUnsavedChanges = false;
+                        window.location = '.';
+                    }
+                    else
+                    {
+                        setErrorText(`${response.status} : ${response.statusText}`);
+                    }
+                }
+            }
+
+            function setInfoText(text)
+            {
+                document.getElementById("info").innerText = text;
+            }
+
+            function setErrorText(text)
+            {
+                document.getElementById("error").innerText = text;
+            }
+
+            function clearAlertTexts()
+            {
+                setInfoText('');
+                setErrorText('');
+            }
+
+
+
+            window.addEventListener("load", () => {
+                for (let entry of binaryFieldValues)
+                {
+                    notifySubscribers(...entry);
+                }
+            });
+
+            window.addEventListener("beforeunload", (e) => {
+                if (hasUnsavedChanges)
+                {
+                    e.preventDefault();
+                    e.returnValue = '';
+                }
+                else
+                {
+                    delete e['returnValue'];
+                }
+            });
+
+        </script>
+
+        <h1>Edit Asset</h1>
+
+        <form id="mainForm" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="assetId" value="{{ asset.id }}">
+
+            <table>
+                {% for field in fields %}
+                <tr id="assetfieldrow__{{ field['name'] }}">
+                    <td class="label">
+                        <label for="{{ field['name'] }}">{{ field['name'] }}</label>
+                    </td>
+                    <td class="field_{{ field['type'] }}" id="container_{{ field['name'] }}">
+                        {% set assetFieldName = 'assetfield__' + field['name'] %}
+                        {% if field['name'] == 'id' %}
+                        {{ field['default'] }}
+                        {% elif field['type'] == 'bytes' %}
+                        <script>createBinaryField("{{ field['name'] }}", "{{ field['mimetype'] }}", "{{ field['default'] }}");</script>
+                        {% elif field['options'] %}
+                        <select id="{{ assetFieldName }}" name="{{ assetFieldName }}" onchange="handleFieldChanged('{{ field['name'] }}');">
+                            {% for option in field['options'] %}
+                            <option value="{{ option }}"
+                                {% if field['default'] == option %}
+                                selected
+                                {% endif %}
+                            >{{ option }}</option>
+                            {% endfor %}
+                        </select>
+                        {% else %}
+                        <input type="text" id="{{ assetFieldName }}" name="{{ assetFieldName }}" value="{{ field['default'] }}" oninput="handleFieldChanged('{{ field['name'] }}');">
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <hr>
+
+            <div>
+                {% for action in detail_actions %}
+                <button type="button" onclick="doActionWithPageState('{{ action.slug }}');">{{ action.title }}</button>
+                {% endfor %}
+            </div>
+
+            <hr>
+
+            <div>
+                <input type="button" value="Save" onclick="doSave();";>
+                <input type="button" value="Delete" onclick="doDelete();">
+            </div>
+
+            <div id="error">
+            </div>
+
+            <div id="info">
+            </div>
+        </form>
+
+        <script src="/static/assetActions.js"></script>
+
+        {% for script in scripts %}
+        <script src="/static/{{ script }}"></script>
+        {% endfor %}
+
+    </body>
+</html>

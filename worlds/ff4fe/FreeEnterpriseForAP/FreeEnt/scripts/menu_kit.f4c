@@ -1,0 +1,282 @@
+// Utility functions for building custom menus.
+
+
+msfpatch {
+    // generalized external interface for long calls into this bank
+    .addr $01FFF8
+        // force a return address onto the stack
+        pea $fffe
+    MK_LongCall_InternalJumpPoint:
+        jmp ($0ffb)
+
+    .addr $01FFFF
+        rtl
+
+    .def MK_LongCall $01fff8
+}
+
+
+msfpatch {
+    MK_DoLongCallX:
+        stx $0ffb
+        jsl $=MK_LongCall
+        rts    
+
+    MK_DoLongCallY:
+        sty $0ffb
+        jsl $=MK_LongCall
+        rts    
+
+    //-----------------------------------
+
+    MK_Setup:
+        phb
+        pla
+        sta $0ff7
+
+        phd
+        plx
+        stx $0ff8
+
+        ldx #$873a
+        jsr $_MK_DoLongCallX
+        ldx #$8c7f
+        jsr $_MK_DoLongCallX
+        lda #$7e
+        pha
+        plb
+
+        rts
+
+    MK_Teardown:
+        ldx #$873f
+        jsr $_MK_DoLongCallX
+
+        lda $0ff7
+        pha
+        plb
+
+        ldx $0ff8
+        phx
+        pld
+
+        rts
+
+    MK_PushCGRAM:
+        ldx #$80B2
+        jmp $_MK_DoLongCallX
+
+    MK_DrawWindow:
+        // $2B/2C = offset into tile map
+        // $2D/2E = interior width/height
+        // $2F = palette
+        ldx #$80f5
+        jmp $_MK_DoLongCallX
+
+    MK_VBlank:
+        jsl $018186
+        rts
+
+    MK_DMA:
+        ldx #$8078
+        jmp $_MK_DoLongCallX
+
+    MK_PushOAM:
+        ldx #$824f
+        jmp $_MK_DoLongCallX
+
+    MK_VBlank_PushOAM:
+        ldx #$824c
+        jmp $_MK_DoLongCallX
+
+    MK_UpdateGamepad:
+        jsl $14fd03
+        rts
+
+    MK_UpdateGamepadWithSound:
+        ldx #$82c0
+        jmp $_MK_DoLongCallX
+
+    MK_WaitForInput:
+        ldx #$8336
+        jmp $_MK_DoLongCallX
+
+    MK_ClearSetBG1:
+        ldx #$849f
+        jmp $_MK_DoLongCallX
+
+    MK_SetBG1:
+        ldx #$84a2
+        jmp $_MK_DoLongCallX
+
+    MK_ClearSetBG2:
+        ldx #$84b7
+        jmp $_MK_DoLongCallX
+
+    MK_SetBG2:
+        ldx #$84ba
+        jmp $_MK_DoLongCallX
+
+    MK_ClearSetBG3:
+        ldx #$846d
+        jmp $_MK_DoLongCallX
+
+    MK_SetBG3:
+        ldx #$8470
+        jmp $_MK_DoLongCallX
+
+    MK_ClearSetBG4:
+        ldx #$8485
+        jmp $_MK_DoLongCallX
+
+    MK_SetBG4:
+        ldx #$8488
+        jmp $_MK_DoLongCallX
+
+    MK_PlayCursorSound:
+        ldx #$874e
+        jmp $_MK_DoLongCallX
+
+    MK_PlayInvalidSound:
+        ldx #$8760
+        jmp $_MK_DoLongCallX
+
+    MK_ClearAllBGs:
+        ldx #$8d2f
+        jmp $_MK_DoLongCallX
+
+    MK_ClearBG1:
+        ldx #$8d3d
+        jmp $_MK_DoLongCallX
+
+    MK_ClearBG2:
+        ldx #$8d38
+        jmp $_MK_DoLongCallX
+
+    MK_ClearBG3:
+        ldx #$8d47
+        jmp $_MK_DoLongCallX
+
+    MK_ClearBG4:
+        ldx #$8d42
+        jmp $_MK_DoLongCallX
+
+    MK_InitializeCursor:
+        ldx #$8d6c
+        jmp $_MK_DoLongCallX
+
+    MK_LoadPartySprites:
+        ldx #$8da2
+        jmp $_MK_DoLongCallX
+
+    MK_UpdatePartySprites:
+        ldy #$9368
+        jmp $_MK_DoLongCallY
+
+    MK_PushAllBGs:
+        ldx #$9417
+        jmp $_MK_DoLongCallX
+
+    MK_VBlank_PushBG1:
+        ldx #$9433
+        jmp $_MK_DoLongCallX
+
+    MK_PushBG1:
+        ldx #$9436
+        jmp $_MK_DoLongCallX
+
+    MK_VBlank_PushBG2:
+        ldx #$9426
+        jmp $_MK_DoLongCallX
+
+    MK_PushBG2:
+        ldx #$9429
+        jmp $_MK_DoLongCallX
+
+    MK_VBlank_PushBG3:
+        ldx #$944D
+        jmp $_MK_DoLongCallX
+
+    MK_PushBG3:
+        ldx #$9450
+        jmp $_MK_DoLongCallX
+
+    MK_VBlank_PushBG4:
+        ldx #$9440
+        jmp $_MK_DoLongCallX
+
+    MK_PushBG4:
+        ldx #$9443
+        jmp $_MK_DoLongCallX
+
+    MK_FadeIn:
+        ldx #$946a
+        jmp $_MK_DoLongCallX
+
+    MK_FadeOut:
+        ldx #$9484
+        jmp $_MK_DoLongCallX
+
+    MK_LoadPartySpritePalettes:
+        ldx #$98b9
+        jmp $_MK_DoLongCallX
+
+    MK_UpdateCursor:
+        phx
+        ldx #$8286
+        stx $0ffb
+        plx
+        ldy #$0300
+        jsl $=MK_LongCall
+        rts
+
+    MK_UpdateScrollValues:
+        jsl $14fd0c
+        rts
+}
+
+msfpatch {
+    //--------------------------------------------------
+
+    // X = tilemap offset to draw to, Y = address of data, A = bank of data
+    // (copied from 01:8798, in order to work with data defined in this bank)
+    MK_DrawText:
+        pha
+        phy
+
+        phb
+        pha
+        plb
+        rep #$20
+        .mx 0x00
+        txa
+        clc
+        adc $29
+        tax
+        sep #$20
+        .mx 0x20
+    %LoopStart:
+        lda $0000,y
+        beq $+Done
+        sta $7e0000,x
+        inx
+        inx
+        iny
+        bra $-LoopStart
+    %Done:
+        rep #$20
+        .mx 0x00
+        txa
+        sec
+        sbc $29
+        tax
+        sep #$20
+        .mx 0x20
+
+        plb
+        ply
+        pla
+
+        rts
+}
+

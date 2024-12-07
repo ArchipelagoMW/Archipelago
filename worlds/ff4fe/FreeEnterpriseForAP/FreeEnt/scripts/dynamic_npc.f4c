@@ -1,0 +1,49 @@
+npc(#fe_DynamicNPC)
+{
+    sprite #fe_DynamicSprite
+    default inactive
+    eventcall {}
+}
+
+npc(#fe_DynamicNPCU)
+{
+    sprite #fe_DynamicSprite
+    default inactive
+    eventcall {}
+}
+
+msfpatch {
+    // the actual NPC sprite loading hook is in dynamic_party.f4c,
+    // which we also return to when we're done
+
+    DynamicNPC__Start:
+        ldx #$0000
+
+    DynamicNPC__LoopStart:
+        lda $219000,x
+        cmp #$ff
+        bne $03
+        jmp $_DynamicSprites__ReturnInvalid
+
+        cmp $1702
+        bne $+DynamicNPC__LoopNext
+
+        lda $219001,x
+        cmp $1701
+        bne $+DynamicNPC__LoopNext
+
+        lda $219002,x
+        cmp $ae  // contains current placement index
+        bne $+DynamicNPC__LoopNext
+
+        // Found correct entry for placement; get sprite from table
+        lda $219003,x
+        rtl
+
+    DynamicNPC__LoopNext:
+        inx
+        inx
+        inx
+        inx
+        bra $-DynamicNPC__LoopStart
+}

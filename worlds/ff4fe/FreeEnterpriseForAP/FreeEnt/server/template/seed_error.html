@@ -1,0 +1,69 @@
+<html>
+    <head>
+        <title>
+            {% if title is defined %}
+                {{ title }}
+            {% else %}
+                Not Found: {{ seed_id }}
+            {% endif %}
+        </title>
+
+        <style type="text/css">
+            @import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Lato');
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+
+                background-color: #442828;
+
+                font-family: 'Lato', sans-serif;
+            }
+
+            #main {
+                background-color: #f0f0e8;
+                border: 1rem solid #ddc;
+                max-width: 35rem;
+                padding: 2em;
+            }
+
+            #explanation {
+                font-size: 0.9em;
+                font-weight: italic;
+                color: #666;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <div id="main">
+            <p>
+                {% if message is defined %}
+                    {{ message }}
+                {% else %}
+                        Sorry! We couldn't find a generated seed with the
+                        given ID.
+                    </p>
+                    <p id="explanation">
+                        (Please note that seeds must be 
+                        <a href="/make">generated</a>
+                        before they can be accessed; just providing
+                        a desired combination of flags and seed to this
+                        URL will not work. It is also possible your
+                        desired seed has expired; generated seeds
+                        on this server are removed if not accessed
+                        for a period of time. Please download seed
+                        pages that you wish to keep long-term.)
+                {% endif %}
+            </p>
+        </div>
+
+    </body>
+</html>

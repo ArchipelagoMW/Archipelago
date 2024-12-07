@@ -1,0 +1,96 @@
+consts(rando) {
+    $00     dmist_slot
+    $01     officer_slot
+    $02     octomamm_slot
+    $03     antlion_slot
+    $04     mombomb_slot
+    $05     fabulgauntlet_slot
+    $06     milon_slot
+    $07     milonz_slot
+    $08     mirrorcecil_slot
+    $09     karate_slot
+    $0A     guard_slot
+    $0B     baigan_slot
+    $0C     kainazzo_slot
+    $0D     darkelf_slot
+    $0E     magus_slot
+    $0F     valvalis_slot
+    $10     calbrena_slot
+    $11     golbez_slot
+    $12     lugae_slot
+    $13     darkimp_slot
+    $14     kingqueen_slot
+    $15     rubicant_slot
+    $16     evilwall_slot
+    $17     asura_slot
+    $18     leviatan_slot
+    $19     odin_slot
+    $1A     bahamut_slot
+    $1B     elements_slot
+    $1C     cpu_slot
+    $1D     paledim_slot
+    $1E     wyvern_slot
+    $1F     plague_slot
+    $20     dlunar_slot
+    $21     ogopogo_slot
+}
+
+consts(randoflag)
+{
+    $00     objective_mode_classicforge
+    $01     objective_mode_classicgiant
+    $02     japanese_spells
+    $03     pass_in_shop
+    $04     bosses
+    $05     no_free_characters
+    $06     no_free_key_item
+    $07     vanilla_fusoya  
+    $08     characters_no_duplicates
+    $09     vanilla_agility 
+    $0A     characters_irretrievable
+    $0B     objective_zeromus
+    $0C     no_earned_characters
+}
+
+msfpatch {
+    .def  Rando__KeyItemTotal  $21f0fe
+}
+
+msfpatch {
+    .def  RandoFlag_objective_mode_classicforge    $21f0d0
+    .def  RandoFlag_objective_mode_classicgiant    $21f0d1
+    .def  RandoFlag_japanese_spells                $21f0d2
+    .def  RandoFlag_pass_in_shop                   $21f0d3
+    .def  RandoFlag_bosses                         $21f0d4
+    .def  RandoFlag_no_free_characters             $21f0d5
+    .def  RandoFlag_no_free_key_item               $21f0d6
+    .def  RandoFlag_vanilla_fusoya                 $21f0d7
+    .def  RandoFlag_characters_no_duplicates       $21f0d8
+    .def  RandoFlag_vanilla_agility                $21f0d9
+    .def  RandoFlag_characters_irretrievable       $21f0da
+    .def  RandoFlag_objective_zeromus              $21f0db
+}
+
+// these definitions are still used when Fashion
+// is off so need to keep them outside fashion.f4c
+msfpatch {
+    .def Fashion__LookupTable        $21f770
+    .def Fashion__Bank1              $28
+    .def Fashion__PreloadedCode      $7e1617
+    .def Fashion__Memo               $7e1618
+    .def Fashion__ScratchLo          $7e161a
+    .def Fashion__ScratchHi          $7e161b
+    .def Fashion__PaletteDataOffset  $fd00
+}
+
+patch($21f0fd bus) {
+    // %randomizer character count%
+    12
+    // %end%
+}
+
+patch($21f0fe bus) {
+    // %randomizer key item count%
+    0E
+    // %end%
+}

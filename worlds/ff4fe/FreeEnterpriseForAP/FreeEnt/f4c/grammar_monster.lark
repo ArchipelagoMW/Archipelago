@@ -1,0 +1,37 @@
+monster_block_params : value
+
+monster_block_body : monster_block_item*
+
+monster_block_item : not? "boss"            -> boss
+    | "level" number                        -> level
+    | "hp" number                           -> hp
+    | "gp" number                           -> gp
+    | "xp" number                           -> xp
+    | stat "index" number                   -> stat_index
+    | "drop" "index" number                 -> drop_index
+    | "drop" "rate" number                  -> drop_rate
+    | "attack" "sequence" number            -> attack_sequence
+    | attack_resist_weak "element" element_value* ["none"]   -> element
+    | attack_resist "status" status_value* ["none"]          -> status
+    | "spell" "power" number                -> spell_power
+    | "spell" "power" "none"                -> spell_power
+    | "race" race_value* ["none"]           -> race
+    | "reaction" "sequence" number          -> reaction_sequence
+    | "reaction" "sequence" "none"          -> reaction_sequence
+    | "gfx" _block_start gfx_item* _block_end
+
+!not : "not"
+
+!stat : "attack"
+      | "defense"
+      | "magic" "defense"
+      | "speed"
+
+?attack_resist_weak : attack_resist 
+                    | "weak"          -> weak
+?attack_resist      : "attack"        -> attack
+                    | "resist"        -> resist
+
+gfx_item : "size" value     -> gfx_size
+         | "palette" value  -> gfx_palette
+         | "pointer" value  -> gfx_pointer

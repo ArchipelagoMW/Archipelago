@@ -1,0 +1,368 @@
+actor(#DKCecil)
+{
+    name $00
+    load from stats $00
+    discard
+    commands {
+        #Fight
+        #Item
+    }
+    right hand #ShadowSword 
+    left hand #ShadowShield 
+    head #ShadowHelm
+    body #ShadowArmor
+    arms #ShadowGauntlet
+}
+
+actor(#Kain1)
+{
+    name $01
+    load from stats $01
+    save to slot 0
+    commands {
+        #Fight
+        #Jump
+        #Item
+    }
+    right hand #IronShield 
+    left hand #Spear 
+    head #IronHelm
+    body #IronArmor
+    arms #IronGauntlet
+}
+
+actor(#CRydia)
+{
+    name $02
+    load from stats $02
+    save to slot 4
+    commands {
+        #Fight
+        #White
+        #Black
+        #Call
+        #Item
+    }
+    right hand #Rod 
+    left hand #NoWeapon 
+    head #Cap
+    body #LeatherArmor
+    arms #IronRing
+}
+
+actor(#Tellah1)
+{
+    name $03
+    load from stats $03
+    save to slot 1
+    commands {
+        #Fight
+        #White
+        #Black
+        #Item
+    }
+    right hand #Staff 
+    left hand #NoWeapon 
+    head #NoWeapon
+    body #LeatherArmor
+    arms #NoWeapon
+}
+
+actor(#Edward)
+{
+    name $04
+    load from stats $04
+    discard
+    commands {
+        #Fight
+        #Sing
+        #Hide
+        #Item
+    }
+    right hand #Dreamer 
+    left hand #NoWeapon 
+    head #LeatherHat
+    body #Bard
+    arms #RubyRing
+}
+
+actor(#Rosa1)
+{
+    name $05
+    load from stats $05
+    save to slot 2
+    commands {
+        #Fight
+        #White
+        #Aim
+        #Item
+    }
+    right hand #IronArrow 50
+    left hand #ShortBow 
+    head #Cap
+    body #LeatherArmor
+    arms #IronRing
+}
+
+actor(#Yang1)
+{
+    name $06
+    load from stats $06
+    save to slot 3
+    commands {
+        #Fight
+        #Kick
+        #Item
+    }
+    right hand #FireClaw 
+    left hand #NoWeapon 
+    head #NoWeapon
+    body #LeatherArmor
+    arms #NoWeapon
+}
+
+actor(#Palom)
+{
+    name $07
+    load from stats $07
+    discard
+    commands {
+        #Fight
+        #Black
+        #Twin
+        #Item
+    }
+    right hand #NoWeapon 
+    left hand #Rod 
+    head #LeatherHat
+    body #LeatherArmor
+    arms #IronRing
+}
+
+actor(#Porom)
+{
+    name $08
+    load from stats $08
+    discard
+    commands {
+        #Fight
+        #White
+        #Twin
+        #Item
+    }
+    right hand #Staff 
+    left hand #NoWeapon 
+    head #LeatherHat
+    body #LeatherArmor
+    arms #IronRing
+}
+
+actor(#Tellah2)
+{
+    name $03
+    load from slot 1
+    save to slot 1
+    commands {
+        #Fight
+        #White
+        #Black
+        #Item
+    }
+    right hand #Staff 
+    left hand #NoWeapon 
+    head #NoWeapon
+    body #GaeaArmor
+    arms #IronRing
+}
+
+actor(#PCecil)
+{
+    name $00
+    load from stats $09
+    discard
+    commands {
+        #Fight
+        #White
+        #Cover
+        #Item
+    }
+    right hand #Legend 
+    left hand #NoWeapon 
+    head #NoWeapon
+    body #Cloth
+    arms #NoWeapon
+}
+
+actor(#Tellah3)
+{
+    name $03
+    load from slot 1
+    discard
+    commands {
+        #Fight
+        #White
+        #Black
+        #Item
+    }
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+    head #NoWeapon
+    body #NoWeapon
+    arms #NoWeapon
+}
+
+actor(#Yang2)
+{
+    name $06
+    load from slot 3
+    discard
+    commands {
+        #Fight
+        #Kick
+        #Item
+    }
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+    head #NoWeapon
+    body #LeatherArmor
+    arms #NoWeapon
+}
+
+actor(#Cid)
+{
+    name $09
+    load from stats $0A
+    save to slot 1
+    commands {
+        #Fight
+        #Peep
+        #Item
+    }
+    right hand #Wooden 
+    left hand #NoWeapon 
+    head #NoWeapon
+    body #Prisoner
+    arms #NoWeapon
+}
+
+actor(#Kain2)
+{
+    name $01
+    load from slot 0
+    save to slot 0
+    commands {
+        #Fight
+        #Jump
+        #Item
+    }
+    right hand #SilverShield 
+    left hand #Wind 
+    head #SilverHelm
+    body #SilverArmor
+    arms #SilverGauntlet
+}
+
+actor(#Rosa2)
+{
+    name $05
+    load from slot 2
+    discard
+    commands {
+        #Fight
+        #White
+        #Aim
+        #Item
+    }
+    right hand #NoWeapon 
+    left hand #NoWeapon 
+    head #NoWeapon
+    body #Prisoner
+    arms #NoWeapon
+}
+
+actor(#ARydia)
+{
+    name $02
+    load from slot 4
+    discard
+    commands {
+        #Fight
+        #Black
+        #Call
+        #Item
+    }
+    right hand #Whip 
+    left hand #NoWeapon 
+    head #NoWeapon
+    body #GaeaArmor
+    arms #SilverRing
+}
+
+actor(#Edge)
+{
+    name $0A
+    load from stats $0B
+    discard
+    commands {
+        #Fight
+        #Dart
+        #Sneak
+        #Ninja
+        #Item
+    }
+    right hand #Short 
+    left hand #Short 
+    head #Bandanna
+    body #BlBelt
+    arms #SilverGauntlet
+}
+
+actor(#Fusoya)
+{
+    name $0B
+    load from stats $0C
+    save to slot 1
+    commands {
+        #Fight
+        #White
+        #Black
+        #Item
+    }
+    right hand #Lunar 
+    left hand #NoWeapon 
+    head #WizardHat
+    body #Sorcerer
+    arms #DiamondRing
+}
+
+actor(#Kain3)
+{
+    name $01
+    load from slot 0
+    discard
+    commands {
+        #Fight
+        #Jump
+        #Item
+    }
+    right hand #SamuraiShield 
+    left hand #Gungnir 
+    head #SamuraiHelm
+    body #Genji
+    arms #SamuraiGauntlet
+}
+
+actor(#Golbez)
+{
+    name $0C
+    load from stats $0D
+    discard
+    commands {
+        #Fight
+    }
+    right hand #Lunar 
+    left hand #NoWeapon 255
+    head #WizardHat
+    body #Sorcerer
+    arms #DiamondRing
+}

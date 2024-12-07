@@ -1,0 +1,186 @@
+
+
+//----------------------------------------------------
+
+
+
+npc(#TrainingRoomSoldierOutside)
+{
+    sprite #FlameTop
+    eventcall {
+        $F8
+    }
+}
+
+event($F8) {
+    load map #Zot6F at 7 10 facing up
+    
+    /*
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.mist_character]
+    set #CecilBecamePaladin
+    set #RydiaRejoined
+    [#B #Rando_PaladinizeCecil]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.dwarf_castle_character]
+    */
+}
+
+
+
+
+
+/*
+ai_script(moon $4B)
+{
+    use #InvincibleOff
+
+    pass
+    
+    condition 3
+}
+
+ai_script(moon $4C)
+{
+    pass
+}
+*/
+
+// test hack special code into Mysidian Legend
+patch($9e9cb) { 03 04 } 
+
+// npc(#BaronMan)          { sprite $8A }
+// npc(#BaronOldMan)       { sprite $8B }
+// npc(#BaronToroiaWoman)  { sprite $82 }
+// npc(#BaronBoy)          { sprite $83 }
+// npc(#BaronOldWoman)     { sprite $84 }
+
+
+trigger(#BaronTown 4)
+{
+    position 24 27
+    treasure $3C fight $03
+}
+
+
+/************************************* CHEAT SHEET
+
+MILONZ
+    load map #MountOrdealsSummit at 10 10 facing left
+
+TWINHARP
+    give item #TwinHarp
+    load map #CaveMagnesCrystalRoom at 12 13 facing up
+
+ZOT EARTH CRYSTAL EXCHANGE
+    load map #Zot6F at 7 10 facing up
+
+CALBRENA/GOLBEZ
+    load map #DwarfCastleThroneRoom at 10 12 facing up
+
+CPU BATTLE
+    load map #GiantLung at 15 5 facing up
+    load map #GiantCPU at 9 18 facing up
+
+PRE-ZEROMUS ROOM
+    load map #LunarCore4F at 7 20 facing left
+
+ZEROMUS ROOM
+    give item #Crystal
+    load map #LunarCoreZemusRoom at 15 22 facing up
+
+**************************************/
+
+
+
+/********************************************* SCRATCHPAD
+
+Golbez and Shadow aigroups data at: 0e:e42e - 0e:e443
+
+
+Palette data for treasure chest sprite:
+08 21 77 4e 90 31 18 00 12 00 bd 6f dd 00 00 00
+
+CHR data for treasure chest sprite (3bit packed):
+
+// closed top
+FF FF 9B FF 92 F6 DF BB F6 9B FF 9B D6 B2 FF 80 FF 9B 9B 92 9B D6 9B 80 
+FF FF D9 FF 11 37 BD 9B 77 D9 BF 99 35 13 FD 03 FF D9 D9 51 99 75 D9 01
+
+// open top
+FF FF 9B FF D6 B2 FF 9B FF 80 FF FF FF FF BF FF FF 9B 9B D6 80 FF FF BF 
+FF FF D9 FF 35 13 BF 99 FF 01 FF FF FF FF FD FF FF D9 D9 75 01 FF FF FD 
+
+// bottom
+FF FF FF 82 FF BF E7 A5 EA AB FF BF 80 FF FF FF FF C3 BF BD B6 BF 80 FF 
+FF FF FD 43 FD FF E5 A7 55 D7 FD FF 01 FF FF FF FF 61 FD BD 6D FD 01 FF
+
+*/
+
+
+shop($13) {
+    #RuneAxe
+    #Cursed
+    #Elixir
+}
+
+map(#BaronTown)
+{
+    battle background $00
+}
+
+// patch($008958 bus) { 08 }
+
+/*
+
+msfpatch {
+    ReduceRandomEncounters__Common:
+        cmp #$01
+        beq $01
+        lsr a
+        rts
+
+    ReduceRandomEncounters__Overworld:
+        jsr $_ReduceRandomEncounters__Common
+        sta $06
+        phx
+        ply
+        jml $008980
+
+    ReduceRandomEncounters__Indoor:
+        jsr $_ReduceRandomEncounters__Common
+        sta $06
+        lda $c0
+        jml $008a4f
+
+    .addr $008a4b
+        jml $=ReduceRandomEncounters
+
+}
+*/
+
+
+
+// CONDITIONAL TESTS
+
+// %flag characters_relaxed on%
+// characters are relaxing
+// %end%
+
+// %flag no_free_characters off%
+// free characters yo
+// %end%
+
+// %flags: Chero ~Cpermadeath%
+// Chero but no permadeath
+// %end%
+
+// %test_setting open%
+// open world y'all
+// %end%
+
+// %if flags: -vintage%
+// it's vintage
+// %elif flags: -spoon%
+// it's not vintage but spoon!
+// %else%
+// why no vintage or spoon
+// %end%

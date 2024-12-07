@@ -1,0 +1,117 @@
+
+// remove "damaged by poison" messages
+msfpatch {
+    .addr $03A951
+        jmp $a960
+}
+
+msfpatch {
+    Wacky__StatusEnforcement_Calculate_BattleInit:
+        phx
+
+        // determine battle seed based on formation number
+        lda #$00
+        xba
+        lda $1800
+        eor $1801
+        tax
+        lda $14ee00,x
+        
+        // use battle seed + axtor to determine status index
+        clc
+        adc $_Wacky__StatusEnforcement_InputAxtor
+        tax
+        lda $=(Wacky__ROMData + 0x100),x
+        asl a
+        asl a
+        tax
+
+        // use status index to apply bytes
+        lda $=Wacky__ROMData,x
+        sta $_Wacky__StatusEnforcement_OutputByte0
+        lda $=(Wacky__ROMData + 1),x
+        sta $_Wacky__StatusEnforcement_OutputByte1
+        lda $=(Wacky__ROMData + 2),x
+        sta $_Wacky__StatusEnforcement_OutputByte2
+        lda $=(Wacky__ROMData + 3),x
+        sta $_Wacky__StatusEnforcement_OutputByte3
+
+        plx
+        rtl
+}
+
+
+msfpatch {
+    Wacky__StatusEnforcement_Calculate:
+        // effects only apply at battle init
+        stz $_Wacky__StatusEnforcement_OutputByte0
+        stz $_Wacky__StatusEnforcement_OutputByte1
+        stz $_Wacky__StatusEnforcement_OutputByte2
+        stz $_Wacky__StatusEnforcement_OutputByte3
+        rtl
+}
+
+// prevent learning Heal spell
+msfpatch {
+    Wacky__SpellFilterHook:
+        cmp #$12
+        bne $+NotHealSpell
+        clc
+        rtl
+    %NotHealSpell:
+        sec
+        rtl
+}
+
+// clean out bad statuses after battle
+msfpatch {
+    Wacky__PostBattleHook:
+        ldx #$0000
+    %LoopStart:
+        lda $1000,x
+        beq $+LoopNext
+        lda $1003,x
+        and #$C0 // keep swoon + stone
+        sta $1003,x
+        lda $1004,x
+        and #$40 // keep float
+        sta $1004,x
+        stz $1005,x
+        lda $1006,x
+        and #$01 // keep critical
+        sta $1006,x
+    %LoopNext:
+        jsr $_Util__XPlus40
+        cpx #$0140
+        bcc $-LoopStart
+    
+        rtl
+}
+
+
+/******** LEGACY VERSION:
+msfpatch {
+    Wacky__StatusEnforcement_Calculate:
+        phx
+        lda #$00
+        xba
+        lda $_Wacky__StatusEnforcement_InputAxtor
+        asl a
+        asl a
+        tax
+
+        lda $=Wacky__ROMData,x
+        sta $_Wacky__StatusEnforcement_OutputByte0
+        inx
+        lda $=Wacky__ROMData,x
+        sta $_Wacky__StatusEnforcement_OutputByte1
+        inx
+        lda $=Wacky__ROMData,x
+        sta $_Wacky__StatusEnforcement_OutputByte2
+        inx
+        lda $=Wacky__ROMData,x
+        sta $_Wacky__StatusEnforcement_OutputByte3
+        plx
+        rtl
+}
+*/

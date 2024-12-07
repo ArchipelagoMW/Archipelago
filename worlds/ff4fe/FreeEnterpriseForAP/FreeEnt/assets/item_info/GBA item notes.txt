@@ -1,0 +1,207 @@
+WEAPONS:
+
+* Excalipoor / Caliburn (lightsword)
+ATK: 1
+ACC: 49
+EQP: PCecil
+Metallic, throwable
+
+* Index Finger / Flandango (lightsword)
+ATK: 60
+ACC: 49
+EQP: PCecil
+Metallic, strong vs. Flan
+
+* Lightbringer (lightsword)
+ATK: 255
+ACC: 49
+EQP: PCecil
+Holy elemental
+Metallic
+STR,VIT,AGL+15
+Casts holy when attacking
+Strong vs ghoul, undead
+Long range
+
+* Hog Call / Piggy's Stick (sword)
+ATK: 150
+ACC: 49
+EQP: PCecil, Kain
+Inflicts Piggy
+
+* Abel's Lance (spear)
+ATK: 230
+ACC: 35
+EQP: Kain
+Lightning elemental
+Metallic
+STR,VIT,AGL+15
+Casts Tornado when attacking
+Throw-elemental
+
+* Gigant Axe (axe)
+ATK: 200
+ACC: 25
+EQP: PCecil, Kain, Cid
+Metallic
+STR+15
+Inflicts poison
+Two-handed
+
+* Perseus Bow (bow)
+ATK: 110
+ACC: 85
+EQP: Rosa
+WIL+15
+Long range
+Throw-elemental
+
+* Perseus Arrow (arrow)
+ATK: 95
+ACC: 0
+EQP: Rosa
+Strong vs giants
+Inflicts charm
+Long range
+
+* Mystic Whip (whip)
+ATK: 100
+ACC: 25
+EQP: CRydia, ARydia
+Holy elemental
+WIS+15
+Inflicts stun
+Long range
+
+* Triton's Dagger (dagger)
+ATK: 62
+ACC: 40
+EQP: Palom
+Metallic
+WIS+15
+Casts flood
+Throwable
+
+* Sasuke's Katana (katana)
+ATK: 95
+ACC: 49
+EQP: Edge
+Metallic
+AGL,VIT+10
+Throwable
+
+* Mutsunokami (katana)
+ATK: 100
+ACC: 49
+EQP: Edge
+Metallic
+STR,WIL+10
+Casts Blink
+Throwable
+
+* Scrap Metal (shuriken)
+ATK: 4
+ACC: 99
+EQP: (none)
+Metallic
+Throw-elemental
+
+* Rising Sun (boomerang)
+ATK: 85
+ACC: 45
+EQP: Edge
+AGL+10
+Long range
+Throw-elemental
+
+* Tiger Fangs (claw)
+ATK: 0
+ACC: 40
+EQP: Yang
+VIT,AGL+10
+Inflicts stun
+
+* Dragon Claws (claw)
+ATK: 0
+ACC: 40
+EQP: Yang
+Holy elemental
+STR,WIL+10
+Strong vs dragons
+
+* Godhand / Hand of the Gods (claw)
+ATK: 0
+ACC: 40
+EQP: Yang
+STR,VIT,AGL+15
+
+* Thor's Hammer (hammer)
+ATK: 190
+ACC: 30
+EQP: Cid
+Two-handed
+Lightning elemental
+Metallic
+STR+15
+Strong vs machines
+Casts Blitz
+
+* Flare Sledgehammer / Fiery Hammer (hammer)
+ATK: 241
+ACC: 35
+EQP: Cid
+Two-handed
+Fire elemental
+STR,VIT,WIS,WIL+15
+Strong vs machines
+Casts Flare when attacking
+
+* Asura's Rod (rod)
+ATK: 75
+ACC: 25
+EQP: Palom
+Holy elemental
+WIS,WIL+15
+Casts holy
+
+* Seraphim's Mace (staff)
+ATK: 50
+ACC: 20
+EQP: Porom
+WIL+15
+Casts Heal
+
+* Nirvana (staff)
+ATK: 80
+ACC: 40
+EQP: Porom
+VIT,WIL+15
+Casts Wall
+
+* Apollo's Harp (harp)
+ATK: 98
+ACC: 40
+EQP: Edward
+Two-handed
+Long range
+Fire elemental
+STR,AGL,WIL+15
+Strong vs dragons
+
+* Requiem Harp (harp)
+ATK: 130
+ACC: 35
+EQP: Edward
+Two-handed
+Long range
+STR,AGL,VIT,WIL,WIS-5
+
+* Loki's Lute (harp)
+ATK: 150
+ACC: 49
+EQP: Edward
+Two-handed
+Long range
+STR,AGL,VIT+15
+Strong vs dragons, machines, beasts, ghouls, giants, magse, and undead
+

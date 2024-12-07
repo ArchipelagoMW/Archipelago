@@ -1,0 +1,1417 @@
+msfpatch {
+    .def  Tracker__KeyItemFoundFlags    $7e1500
+    .def  Tracker__KeyItemUsedFlags     $7e1503
+    .def  Tracker__RewardSlotFlags      $7e1510
+
+    .def  Tracker__KeyItemLocations     $707080
+}
+
+consts(tracker_key_item_index) {
+    $00     package
+    $01     sandruby
+    $02     legend_sword
+    $03     baron_key
+    $04     twinharp
+    $05     earth_crystal
+    $06     magma_key
+    $07     tower_key
+    $08     hook
+    $09     luca_key
+    $0A     dark_crystal
+    $0B     rat_tail
+    $0C     adamant
+    $0D     pan
+    $0E     spoon
+    $0F     pink_tail
+    $10     crystal
+}
+
+//------------------------------------------------------------
+// alter main menu to add "Track" option
+
+// expand commands window
+patch($01d82d bus) { 13 }
+
+// shrink "Time" window and move down
+patch($01d826 bus) { 6C 05 07 01 }
+
+// don't draw "Time" text
+msfpatch {
+    .addr $0187c5
+        jmp $87ce
+}
+
+// move "Custom" text down
+patch($01d85e bus) { F0 }
+// move "Save" text down
+patch($01d867 bus) { 70 04 }
+
+// change addresses where the "Save" text is dimmed
+msfpatch {
+    .addr $01893b
+        sta $cab1
+        sta $cab3
+        sta $cab5
+        sta $cab7
+}
+
+// move game time draw addresses down a row
+patch($018bc6 bus) { B6 }
+patch($018bca bus) { B8 }
+patch($018bd8 bus) { AE }
+patch($018bdd bus) { B0 }
+patch($018be2 bus) { B2 }
+patch($018be7 bus) { B4 }
+
+// change menu wraparound logic to account for added item
+patch($018841 bus) { 08 }
+patch($018850 bus) { 09 }
+
+// hook into code that executes the selected main menu
+// command to account for added item
+msfpatch {
+    .addr $01886e
+        jml $=TrackerMenu__MainMenuExecuteHook
+
+    .new
+    TrackerMenu__MainMenuExecuteHook:
+        // displaced
+        sta $1a77
+
+        // if we are the inserted option 0x06, use
+        // our own handler
+        cmp #$06
+        beq $+TrackSelected
+
+        // map options > 0x06 down by one entry in function table
+        bcc $+HaveFunctionIndex
+        dec a
+    %HaveFunctionIndex:
+        // return to original flow using lookup table
+        ldx #$8887
+        jml $018874
+
+    %TrackSelected:
+        // use our own function
+        jml $=TrackerMenu__Start
+
+}
+
+// hook into code that draws command list and add new command to draw
+msfpatch {
+    .addr $01892e
+        jsl $=TrackerMenu__MainMenuCommandDraw
+        nop nop
+
+    .new
+    TrackerMenu__MainMenuCommandDraw:
+        // displaced
+        ldy #$d82a
+        ldx #$82fb
+        jsr $_MK_DoLongCallX
+
+        // draw Track text
+        ldy #$_MenuData__TrackCommand
+        ldx #$8301
+        jsr $_MK_DoLongCallX
+
+        rtl
+}
+
+msfpatch {
+    TrackerMenu__Start:
+        // init sequence largely simulates the init sequence
+        // for the Custom menu
+        lda #$30
+        sta $3f
+        ldx #$94af
+        jsr $_MK_DoLongCallX
+
+        jsr $_MK_FadeOut
+
+        lda #$13
+        sta $00212c
+        ldx #$4040
+        stx $1d
+        ldx #$fe89
+        stx $1f
+        lda #$1e
+        sta $0121
+        ldx #$0020
+        stx $0122
+        jsr $_MK_DMA
+        jsr $_MK_InitializeCursor
+        jsr $_MK_PushOAM
+
+        ldx #$0000
+        stx $8a
+        stx $8d
+        jsr $_MK_UpdateScrollValues
+
+        // note: original code does $0182bb here but we may not need it?
+        jsl $=TrackerMenu__Main
+
+        // force a return address onto the stack so we can use the
+        // Custom menu's teardown routine, which ends with an RTS
+        pea $8876
+        jml $01d155
+}
+
+// ---------------------------------------------------------
+msfpatch {
+    TrackerMenu__Main:
+        jsr $_MK_SetBG2
+
+        jsl $=TrackerMenu__DrawKeyItemMenu
+
+        jsr $_MK_VBlank_PushOAM
+        jsr $_MK_PushBG2
+        jsr $_MK_FadeIn
+
+        stz $1ba9
+
+    %MenuLoop:
+        // set cursor
+        ldx #$0e02
+        jsr $_MK_UpdateCursor
+
+        jsr $_MK_VBlank_PushOAM
+
+        jsr $_MK_UpdateGamepadWithSound
+
+        lda $01
+        and #$80
+        beq $+CheckConfirm
+        rtl
+    %CheckConfirm:
+        lda $00
+        and #$80
+        beq $+CheckLeftArrow
+
+        lda $1ba9
+        beq $+DoKeyItemMenu
+        cmp #$01
+        beq $+DoObjectiveMenu
+        jmp $_MenuLoop
+
+    %DoKeyItemMenu:
+        jsl $=TrackerMenu__DoKeyItemMenu
+        jmp $_MenuLoop
+
+    %DoObjectiveMenu:
+        lda $=Objectives__Count
+        cmp #$07
+        bcc $+CantScrollObjectiveMenu
+        jsr $=TrackerMenu__DoObjectiveMenu
+    %CantScrollObjectiveMenu:
+        jmp $_MenuLoop
+
+    %CheckLeftArrow:
+        lda $01
+        and #$02
+        beq $+CheckRightArrow
+        dec $1ba9
+        bpl $+NoUnderflow
+        lda #$01
+        sta $1ba9
+    %NoUnderflow:
+        jmp $_ChangeScreen
+
+    %CheckRightArrow:
+        lda $01
+        and #$01
+        beq $+DoneArrows
+        inc $1ba9
+        lda $1ba9
+        cmp #$02
+        bcc $+NoOverflow
+        stz $1ba9
+    %NoOverflow:
+        jmp $_ChangeScreen
+    
+    %DoneArrows:
+        jmp $_MenuLoop
+
+
+    %ChangeScreen:
+        jsr $_MK_FadeOut
+        jsr $_MK_ClearBG2
+        jsr $_MK_ClearBG1
+        jsr $_CleanupSprites
+        lda $1ba9
+        beq $+ChangeToKeyItemScreen
+        cmp #$01
+        beq $+ChangeToObjectiveScreen
+    %FinishChangeScreen:
+        jsr $_MK_VBlank_PushOAM
+        jsr $_MK_PushBG2
+        jsr $_MK_VBlank_PushBG1
+        jsr $_MK_UpdateScrollValues
+        stz $1ba7
+        stz $1ba8
+        jsr $_MK_FadeIn
+        jmp $_MenuLoop
+
+    %ChangeToKeyItemScreen:
+        jsl $=TrackerMenu__DrawKeyItemMenu
+        jmp $_FinishChangeScreen
+
+    %ChangeToObjectiveScreen:
+        jsl $=TrackerMenu__DrawObjectiveMenu
+        jmp $_FinishChangeScreen
+
+    %CleanupSprites:
+        ldx #$f0ff
+        stx $0320
+        stx $0324
+        stx $0328
+        stx $032c
+        ldx #$3000
+        stx $0322
+        stx $0326
+        stx $032a
+        stx $032e
+        rts
+}
+
+msfpatch {
+    TrackerMenu__DrawTitleWindow:
+        ldx #$0042
+        stx $2b
+        ldx #$010a
+        stx $2d
+        lda #$20
+        sta $2f
+        jsr $_MK_DrawWindow
+        rtl
+
+    TrackerMenu__DrawCountWindow:
+        ldx #$0070
+        stx $2b
+        ldx #$0105
+        stx $2d
+        lda #$20
+        sta $2f
+        jsr $_MK_DrawWindow
+        rtl
+}
+
+msfpatch {
+    TrackerMenu__DrawKeyItemMenu:
+        jsr $_MK_SetBG2
+
+        jsl $=TrackerMenu__DrawTitleWindow
+        jsl $=TrackerMenu__DrawCountWindow
+
+        ldy #$_Text__KeyItemsCaption
+        phk
+        pla
+        ldx #$0084
+        jsr $_MK_DrawText
+
+        // current key item count
+        lda $_Stats_KeyItems
+        sta $_Util__NumberToText_Input0
+        stz $_Util__NumberToText_Input1
+        stz $_Util__NumberToText_Input2
+        lda #$ff
+        sta $_Util__NumberToText_Pad
+        jsr $_Util__NumberToText
+
+        lda $167a
+        sta $a6b2
+        lda $167b
+        sta $a6b4
+
+        // total key item count
+        lda $=Rando__KeyItemTotal
+        sta $_Util__NumberToText_Input0
+        jsr $_Util__NumberToText
+
+        lda $167a
+        sta $a6b8
+        lda $167b
+        sta $a6ba
+
+        // slash
+        lda #$c7
+        sta $a6b6
+
+        jsl $=TrackerMenu__DrawKeyItemList
+
+        jsl $=TrackerMenu__DrawKeyItemInfoPaneEmpty
+
+        rtl
+
+
+    TrackerMenu__DoKeyItemMenu:
+        jsl $=TrackerMenu__DrawKeyItemInfoPane
+
+        // init cursor
+        jsr $_UpdateCursorPosition
+
+    %MenuLoop:
+        jsr $_MK_VBlank_PushOAM
+        jsr $_MK_PushBG2
+        jsr $_MK_UpdateGamepadWithSound
+
+        lda $01
+        and #$0f
+        beq $+NoArrows
+
+        and #$08
+        beq $+CheckDown
+        dec $1ba7
+        bpl $+CheckDown
+        lda #$05
+        sta $1ba7
+    %CheckDown:
+        lda $01
+        and #$04
+        beq $+CheckLeft
+        inc $1ba7
+        lda $1ba7
+        cmp #$06
+        bcc $+CheckLeft
+        stz $1ba7
+    %CheckLeft:
+        lda $01
+        and #$02
+        beq $+CheckRight
+        dec $1ba8
+        bpl $+CheckRight
+        lda #$02
+        sta $1ba8
+    %CheckRight:
+        lda $01
+        and #$01
+        beq $+CheckedAllArrows
+        inc $1ba8
+        lda $1ba8
+        cmp #$03
+        bcc $+CheckedAllArrows
+        stz $1ba8
+    %CheckedAllArrows:
+        jsr $_UpdateCursorPosition
+        jsl $=TrackerMenu__DrawKeyItemInfoPane
+    %NoArrows:
+        lda $01
+        and #$80
+        beq $+NoCancel
+        // cancelled
+        rtl
+    %NoCancel:
+        jmp $_MenuLoop
+
+
+
+    %UpdateCursorPosition:
+        lda #$00
+        xba
+        lda $1ba8
+        tax
+        lda $=CursorColumnPositions,x
+        sta $1680
+
+        lda $1ba7
+        asl a
+        asl a
+        asl a
+        asl a
+        clc
+        adc #$2f
+        sta $1681
+
+        ldx $1680
+        jsr $_MK_UpdateCursor
+        rts
+
+    %CursorColumnPositions:
+        [[ 02 4A A2 ]]
+
+    %Text__KeyItemsCaption: "Key Items" [[ 00 ]]
+}
+
+msfpatch {
+    TrackerMenu__DrawKeyItemList:
+        phk
+        pla
+        ldx #$_PaletteCallback
+        ldy #$0102
+        jml $=TrackerUtil__DrawKeyItemList
+
+    %PaletteCallback:
+        ldx #$_Tracker__KeyItemUsedFlags
+        jsl $=Tracker__CheckBit
+        bcs $+SetUsedPalette
+        ldx #$_Tracker__KeyItemFoundFlags
+        jsl $=Tracker__CheckBit
+        bcs $+SetFoundPalette
+        lda #$24
+        bra $+HavePalette
+    %SetUsedPalette:
+        lda #$20
+        bra $+HavePalette
+    %SetFoundPalette:
+        lda #$28
+    %HavePalette:
+        rtl
+}
+
+msfpatch {
+    // params: 
+    //   Y = draw target offset
+    //   A = bank of coloring callback function
+    //   X = address of coloring callback function
+    //       (input A = tracker index of key item,
+    //        output A = palette byte for key item,
+    //        returns via RTL)
+    TrackerUtil__DrawKeyItemList:
+        sta $1689  // callback bank
+        dex
+        stx $168a  // callback addr
+        sty $168c  // draw offset
+
+        sty $168e  // draw offset + 0x82
+        lda #$82
+        clc
+        adc $168e
+        sta $168e
+        bcc $03
+        inc $168f
+
+        // draw main key item pane
+        ldx $168c
+        stx $2b
+        ldx #$0d1c
+        stx $2d
+        jsr $_MK_DrawWindow
+
+        // draw key item text names
+        ldy $168e
+        sty $1680
+        ldx #$0000
+    %ListDrawLoop:
+        lda $=TrackerMenu__KeyItemText,x
+        beq $+DoneListDraw
+        cmp #$01
+        beq $+NextLine
+        sta ($29),y
+        iny
+        iny
+        inx
+        bra $-ListDrawLoop
+    %NextLine:
+        lda #$80
+        clc
+        adc $1680
+        sta $1680
+        bcc $+NoOverflow
+        inc $1681
+    %NoOverflow:
+        ldy $1680
+        inx
+        bra $-ListDrawLoop
+    %DoneListDraw:
+
+        // assign palettes on item names
+        //  according to callback function
+        stz $1680
+    %ListColorLoop:
+        jsl $=InvokePaletteCallback
+        sta $1681
+        // get tilemap coordinates
+        ldx #$0000
+        ldy #$0000
+        lda $1680
+    %FindRowLoop:
+        cmp #$03
+        bcc $+HaveRow
+        sec
+        sbc #$03
+        iny
+        bra $-FindRowLoop
+    %HaveRow:
+        tax
+
+        rep #$20
+        .mx 0x00
+        lda #$0000
+    %AddRowLoop:
+        cpy #$0000
+        beq $+AddColumnLoop
+        dey
+        clc
+        adc #$0080
+        bra $-AddRowLoop
+    %AddColumnLoop:
+        cpx #$0000
+        beq $+HavePosition
+        dex
+        clc
+        adc #$0012
+        bra $-AddColumnLoop
+
+    %HavePosition:
+        sec  // this is just a shortcut to +1 without having to clc + inc a
+        adc $168e
+        tay
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        // write palette
+        ldx #$0009
+    %NotLastColumn:
+        lda $1681
+    %WritePaletteLoop:
+        sta ($29),y
+        iny
+        iny
+        dex
+        bne $-WritePaletteLoop
+
+        inc $1680
+        lda $1680
+        cmp #$12
+        bcs $+ListColorDone
+        jmp $_ListColorLoop
+
+    %ListColorDone:
+        rtl
+
+    %InvokePaletteCallback:
+        // push callback address on stack
+        lda $1689
+        pha
+        ldx $168a
+        phx
+
+        // load parameter and invoke callback
+        lda $1680
+        rtl
+}
+
+msfpatch {
+    TrackerMenu__DrawKeyItemInfoPaneEmpty:
+        // draw info box
+        ldx #$04c2
+        stx $2b
+        ldx #$061c
+        stx $2d
+        jsr $_MK_DrawWindow
+        rtl
+
+    TrackerMenu__DrawKeyItemInfoPane:
+        jsl $=TrackerMenu__DrawKeyItemInfoPaneEmpty
+
+        // get highlighted index
+        lda $1ba7
+        asl a
+        clc
+        adc $1ba7
+        adc $1ba8
+        sta $1680
+
+        // skip last slot for now
+        cmp #$11
+        bne $+IsNotBlankSlot
+        rtl
+
+    %IsNotBlankSlot:
+        // draw "found"/"not found" status
+        stz $168f
+        ldx #$_Tracker__KeyItemFoundFlags
+        jsl $=Tracker__CheckBit
+        bcs $+ItemIsFound
+
+        lda #$24
+        ldx #$_Text__NotFound
+        bra $+HaveStatusText
+
+    %ItemIsFound:
+        inc $168f // remember for later
+        lda #$2c
+        ldx #$_Text__Location
+
+    %HaveStatusText:
+        sta $1681
+        ldy #$0000
+    %StatusTextLoop:
+        lda $200000,x  // hacky, won't survive move to another bank
+        beq $+StatusTextDone
+        sta $ac04,y
+        lda $1681
+        sta $ac05,y
+        iny
+        iny
+        inx
+        bra $-StatusTextLoop
+    %StatusTextDone:
+
+        // skip Unused label if item is not found
+        lda $168f
+        beq $+UnusedLabelDone
+
+        lda $1680
+        ldx #$_Tracker__KeyItemUsedFlags
+        jsl $=Tracker__CheckBit
+        bcs $+UnusedLabelDone
+
+        // draw "unused" label
+        ldx #$0000
+        ldy #$0000
+    %DrawUnusedLabelLoop:
+        lda $=Text__Unused,x
+        beq $+UnusedLabelDone
+        sta $abec,y
+        lda #$28
+        sta $abed,y
+        iny
+        iny
+        inx
+        bra $-DrawUnusedLabelLoop
+    %UnusedLabelDone:
+
+        stz $1681
+        ldx $1680
+        lda $=Tracker__KeyItemCodes,x
+        
+        // get info text from item description windows
+        sta $1682
+        stz $1681
+        rep #$20
+        .mx 0x00
+        lda $1681
+        lsr a
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        ldy #$0000
+    %DescriptionLoop:
+        lda $248022,x   // [hardcoded]
+        sta $ab04,y
+        lda $248042,x   // [hardcoded]
+        sta $ab44,y
+        lda $248062,x   // [hardcoded]
+        sta $ab84,y
+        inx
+        iny
+        iny
+        cpy #$0036
+        bcc $-DescriptionLoop
+
+        // if we have a location in global tracker,
+        // write that text to the window
+        lda $1680
+        asl a
+        sta $1681
+        stz $1682
+        ldx $1681
+        lda $=Tracker__KeyItemLocations,x
+        sta $1681
+        inx
+        lda $=Tracker__KeyItemLocations,x
+        sta $1682
+        
+        ldx $1681
+        beq $+NoLocation
+        cpx #$ffff
+        beq $+NoLocation
+
+        // for now, assume location code is a reward slot
+        rep #$20
+        .mx 0x00
+        lda $1681
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        ldy #$0000
+    %LocationLoop:
+        lda $=Rewards__SlotNames,x
+        sta $ac44,y
+        lda #$2c
+        sta $ac45,y
+        inx
+        iny
+        iny
+        cpy #$0038
+        bcc $-LocationLoop
+
+        ldy #$_Text__Location
+        phk
+        pla
+        ldx #$0604
+        jsr $_MK_DrawText
+
+    %NoLocation:
+        rtl
+
+    %Text__NotFound: "[$cc]not yet found[$cd]" [[ 00 ]]
+    %Text__Unused:   "[$cc]unused[$cd]" [[ 00 ]]
+
+    %Text__Location: "Received from:" [[ 00 ]]  // whitespace for laziness in copy loop
+}
+
+
+msfpatch {
+    TrackerMenu__KeyItemText:
+        // %tracker layout%
+        "Package  SandRuby   [lightsword]Legend"      [[ 01 ]]
+        "[key]Baron   [harp]TwinHarp  [crystal]Earth" [[ 01 ]]
+        "[key]Magma   [key]Tower     Hook"            [[ 01 ]]
+        "[key]Luca    [crystal]Darkness  [tail]Rat"   [[ 01 ]]
+        "Adamant  Pan        [knife]Spoon"            [[ 01 ]]
+        "[tail]Pink    [crystal]Crystal"              [[ 00 ]]
+        // %end%
+
+    Tracker__KeyItemCodes:
+        [[ EE ]] // Package
+        [[ F0 ]] // SandRuby
+        [[ 19 ]] // Legend
+        [[ EF ]] // Baron
+        [[ F4 ]] // TwinHarp
+        [[ F1 ]] // Earth
+        [[ F2 ]] // Magma
+        [[ FA ]] // Tower
+        [[ FC ]] // Hook
+        [[ F3 ]] // Luca
+        [[ F5 ]] // Darkness
+        [[ F6 ]] // Rat
+        [[ F7 ]] // Adamant
+        [[ F8 ]] // Pan
+        [[ 3E ]] // Spoon
+        [[ F9 ]] // Pink
+        [[ C8 ]] // Crystal
+        [[ 00 ]]
+
+    Tracker__GetKeyItemIndexFromItemCode:
+        // param: A = item code
+        sta $1680
+        ldx #$0000
+    %CheckLoop:
+        lda $=Tracker__KeyItemCodes,x
+        beq $+Done
+        cmp $1680
+        beq $+Done
+        inx
+        bra $-CheckLoop
+    %Done:
+        txa  // will be 00 if we reached end of list without finding a match
+        rtl
+
+    Tracker__GetKeyItemCodeFromIndex:
+        xba
+        lda #$00
+        xba
+        tax
+        lda $=Tracker__KeyItemCodes,x
+        rtl
+}
+
+//-------------------------------------------------------------------------------------
+
+msfpatch {
+    TrackerMenu__DrawObjectiveMenu:
+        jsr $_MK_SetBG2
+
+        // init scroll values
+        stz $93
+        stz $94
+
+        // create black bars to block scrolling
+        // (hardcoded to BG2)
+        ldx #$0000
+    %BlackBarLoop:
+        lda #$ff
+        sta $a600,x
+        sta $ac40,x
+        lda #$3c
+        sta $a601,x
+        sta $ac41,x
+        inx
+        inx
+        cpx #$0100
+        bcc $-BlackBarLoop
+
+        jsl $=TrackerMenu__DrawTitleWindow
+        jsl $=TrackerMenu__DrawCountWindow
+
+        ldy #$_Text__ObjectivesCaption
+        phk
+        pla
+        ldx #$0084
+        jsr $_MK_DrawText
+
+        lda $=Objectives__Count
+        bne $+CountObjectives
+
+        // draw "N/A"
+        lda #$4f
+        sta $a6b4
+        lda #$c7
+        sta $a6b6
+        lda #$42
+        sta $a6b8
+
+        jmp $_SkipObjectiveCounts
+
+    %CountObjectives:
+        // count completed objectives
+        stz $1680
+        ldx #$0000
+
+    %CountLoop:
+        lda $=Objectives__IDs,x
+        beq $+CountLoopNext
+        lda $=Objectives__Thresholds,x
+        cmp $_Objectives__Progress,x
+        beq $+ObjectiveCompleted
+        bcc $+ObjectiveCompleted
+        bra $+CountLoopNext
+    %ObjectiveCompleted:
+        inc $1680
+    %CountLoopNext:
+        inx
+        cpx #$_Objectives__MaxCount
+        bcc $-CountLoop
+
+        // completed objective count
+        lda $1680
+        sta $_Util__NumberToText_Input0
+        stz $_Util__NumberToText_Input1
+        stz $_Util__NumberToText_Input2
+        lda #$ff
+        sta $_Util__NumberToText_Pad
+        jsr $_Util__NumberToText
+
+        lda $167a
+        sta $a6b2
+        lda $167b
+        sta $a6b4
+
+        // total objective count
+        lda $=Objectives__RequiredCount
+        sta $_Util__NumberToText_Input0
+        jsr $_Util__NumberToText
+
+        // %flags hidden%
+        // overwrite max value with ??
+        lda #$c5
+        sta $167a
+        sta $167b
+        // %end%
+
+        lda $167a
+        sta $a6b8
+        lda $167b
+        sta $a6ba
+
+        // slash
+        lda #$c7
+        sta $a6b6
+
+    %SkipObjectiveCounts:
+
+        jsl $=TrackerMenu__DrawObjectiveList
+        jsl $=TrackerMenu__DrawObjectiveInfoPane
+
+        // setup scroll arrow sprites
+        ldx #$0000
+    %SpriteArrowLoop:
+        lda $=ScrollArrowSpriteData,x
+        sta $0320,x
+        inx
+        cpx #$0010
+        bcc $-SpriteArrowLoop
+
+        jsl $=TrackerMenu__UpdateObjectiveScrollArrows
+
+        rtl
+
+    %Text__ObjectivesCaption:   "Objectives" [[ 00 ]]
+    %ScrollArrowSpriteData: [[ 
+        FF 20 0F F0 
+        FF 28 0E F0
+        FF A8 0E 70
+        FF B0 0F 70
+        ]]
+}
+
+msfpatch {
+    TrackerMenu__DrawObjectiveList:
+        jsr $_MK_SetBG2
+        ldx #$0102
+        stx $2b
+        ldx #$111c
+        stx $2d
+        jsr $_MK_DrawWindow
+
+        // clear priority bits from middle of list so that
+        // BG1 text can scroll
+        rep #$20
+        .mx 0x00
+        lda $29
+        clc
+        adc #$0140
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        ldy #$0220
+    %ClearPriorityBitLoop:
+        lda $0001,x
+        and #$df
+        sta $0001,x
+        inx
+        inx
+        dey
+        bne $-ClearPriorityBitLoop
+
+        lda $=Objectives__Count
+        beq $+Done
+        // draw currently-visible objectives
+        lda #$00
+    %DrawObjectiveTextLoop:
+        pha
+        jsl $=TrackerMenu__DrawObjectiveText
+        pla
+        inc a
+        cmp $=Objectives__Count
+        bcs $+Done
+        cmp #$06
+        bcc $-DrawObjectiveTextLoop
+    %Done:
+        
+        rtl
+}
+
+
+msfpatch {
+    TrackerMenu__DrawObjectiveText:
+        // param: A = index of objective to draw
+        sta $1680
+        stz $1681
+
+        // calculate output offset = 0x0100 + (index * 0xC0)
+        // and source address
+        rep #$20
+        .mx 0x00
+        lda $1680
+        xba
+        lsr a
+        sta $1682
+        lsr a
+        sta $1684  // remember offset to source text
+        clc
+        adc $1682
+        clc
+        adc #$0100
+        and #$0fff // wrap around to top of buffer
+        sta $1682  // remember output offset
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        // check if objective is completed
+        lda #$04   // grey palette
+        sta $1686
+        ldx $1680
+        lda $=Objectives__Thresholds,x
+        cmp $_Objectives__Progress,x
+        beq $+ObjectiveCompleted
+        bcc $+ObjectiveCompleted
+        lda #$00   // white palette
+        sta $1686  
+    %ObjectiveCompleted:
+
+        // blank line 0
+        jsr $_BlankLine
+        jsr $_NextLine
+
+        // line 1
+        jsr $_BlankLine
+        // draw index number
+        ldy $1682
+        lda #$ff
+        sta $1688
+        lda $1680
+        inc a
+        cmp #$0a
+        bcc $+HaveDigits
+        stz $1688
+    %TensDigitLoop:
+        sec
+        sbc #$0a
+        inc $1688
+        cmp #$0a
+        bcs $-TensDigitLoop
+    %HaveDigits:
+        ora #$80
+        sta $b606,y
+        lda $1688
+        ora #$80
+        sta $b604,y
+        // period
+        lda #$c1
+        sta $b608,y
+
+        // copy text line 1
+        ldx $1684
+        ldy $1682
+        lda $23c000,x  // [hardcoded]
+        sta $1687
+        beq $+TextLine1Done
+        inx
+    %TextLine1Loop:
+        lda $23c000,x  // [hardcoded]
+        sta $b60c,y
+        inx
+        iny
+        iny
+        dec $1687
+        bne $-TextLine1Loop
+    %TextLine1Done:
+        jsr $_NextLine
+
+        // line 2
+        jsr $_BlankLine
+        // copy text
+        ldx $1684
+        ldy $1682
+        lda $23c020,x  // [hardcoded]
+        sta $1687
+        beq $+TextLine2Done
+        inx
+    %TextLine2Loop:
+        lda $23c020,x  // [hardcoded]
+        sta $b60c,y
+        inx
+        iny
+        iny
+        dec $1687
+        bne $-TextLine2Loop
+    %TextLine2Done:
+        jsr $_NextLine
+
+        // line 3
+        jsr $_BlankLine
+
+        // we're done!
+        rtl
+
+    %NextLine:
+        rep #$20
+        .mx 0x00
+        lda $1682
+        clc
+        adc #$0040
+        and #$0fff
+        sta $1682
+        sep #$20
+        .mx 0x20
+        rts
+
+    %BlankLine:
+        ldx $1682
+        ldy #$0020
+        lda $1686
+    %BlankLineLoop:
+        stz $b600,x
+        sta $b601,x
+        inx
+        inx
+        dey
+        bne $-BlankLineLoop
+        rts
+}
+
+msfpatch {
+    TrackerMenu__DrawObjectiveInfoPane:
+        jsr $_MK_SetBG2
+
+        // window
+        ldx #$05c2
+        stx $2b
+        ldx #$021c
+        stx $2d     
+        jsr $_MK_DrawWindow
+
+        lda $=Objectives__Count
+        beq $+ObjectivesDisabled
+
+        phk
+        pla
+        ldx #$0604
+        ldy #$_Text_Enabled0
+        jsr $_MK_DrawText
+
+        lda $=RandoFlag_objective_zeromus
+        beq $+ObjectivesWin
+        ldy #$_Text_Enabled1Crystal
+        bra $+HaveLine1
+    %ObjectivesWin:
+        ldy #$_Text_Enabled1Win
+        bra $+HaveLine1
+
+    %ObjectivesDisabled:
+        phk
+        pla
+        ldx #$0604
+        ldy #$_Text_NotEnabled0
+        jsr $_MK_DrawText
+        ldy #$_Text_NotEnabled1
+    %HaveLine1:
+        ldx #$0644
+        phk
+        pla
+        jsr $_MK_DrawText
+        
+        rtl
+
+    %Text_NotEnabled0: "Objectives are not enabled" [[ 00 ]]
+    %Text_NotEnabled1: "in this randomization." [[ 00 ]]
+
+    %Text_Enabled0:        "Complete {% required objective count text : all objectives %} in"             [[ 00 ]]
+    %Text_Enabled1Win:     "any order to win the game."             [[ 00 ]]
+    %Text_Enabled1Crystal: "any order for the [crystal]Crystal." [[ 00 ]]
+}
+
+msfpatch {
+    TrackerMenu__DoObjectiveMenu:
+        ldx #$f0ff
+        stx $0300
+
+    %MenuLoop:
+        jsl $=TrackerMenu__UpdateObjectiveScrollArrows
+        jsr $_MK_VBlank_PushOAM
+        jsr $_MK_UpdateScrollValues
+        jsr $_MK_UpdateGamepadWithSound
+
+        // check for cancel
+        lda $01
+        and #$80
+        beq $+CheckUpArrow
+        rtl
+
+    %CheckUpArrow:
+        lda $01
+        and #$08
+        beq $+CheckDownArrow
+        lda $1ba7
+        beq $+CheckDownArrow
+        dec $1ba7
+        jsr $_DrawNewObjectiveText
+        jmp $_ScrollUp
+
+    %CheckDownArrow:
+        lda $01
+        and #$04
+        beq $+DoneInputChecks
+        lda $1ba7
+        clc
+        adc #$06
+        cmp $=Objectives__Count
+        bcs $+DoneInputChecks
+        inc $1ba7
+        jsr $_DrawNewObjectiveText
+        jmp $_ScrollDown
+
+    %DoneInputChecks:
+        jmp $_MenuLoop
+
+    %DrawNewObjectiveText:
+        lda $1ba7
+        jsl $=TrackerMenu__DrawObjectiveText
+        lda $1ba7
+        clc
+        adc #$05
+        cmp $=Objectives__Count
+        bcs $+SkipDownDraw
+        jsl $=TrackerMenu__DrawObjectiveText
+    %SkipDownDraw:
+        rts
+
+    %ScrollUp:
+        lda #$04
+        sta $1680
+        jsr $_MK_VBlank_PushBG1
+    %ScrollUpLoop:
+        ldx $93
+        dex
+        dex
+        dex
+        dex
+        dex
+        dex
+        stx $93
+        dec $1680
+        beq $+ScrollUpDone
+        jsr $_MK_UpdateScrollValues
+        jsr $_MK_VBlank
+        bra $-ScrollUpLoop
+    %ScrollUpDone:
+        jmp $_MenuLoop
+
+
+    %ScrollDown:
+        lda #$04
+        sta $1680
+        jsr $_MK_VBlank_PushBG1
+    %ScrollDownLoop:
+        ldx $93
+        inx
+        inx
+        inx
+        inx
+        inx
+        inx
+        stx $93
+        dec $1680
+        beq $+ScrollDownDone
+        jsr $_MK_UpdateScrollValues
+        jsr $_MK_VBlank
+        bra $-ScrollDownLoop
+    %ScrollDownDone:
+        jmp $_MenuLoop
+
+}
+
+msfpatch {
+    TrackerMenu__UpdateObjectiveScrollArrows:
+        lda $1ba7
+        beq $+UpInvisible
+        lda #$ea
+        bra $+UpdateUp
+    %UpInvisible:
+        lda #$ff
+    %UpdateUp:
+        sta $0320
+        sta $0324
+
+        lda $1ba7
+        clc
+        adc #$06
+        cmp $=Objectives__Count
+        bcs $+DownInvisible
+        lda #$ea
+        bra $+UpdateDown
+    %DownInvisible:
+        lda #$ff
+    %UpdateDown:
+        sta $0328
+        sta $032c
+        rtl
+}
+
+
+//-------------------------------------------------------------------------------------
+
+msfpatch {
+    // common helper function for get/set bit functions
+    // A = index of bit to check
+    // X = starting address to check
+    // returns: A shifted into bit position to check in byte X
+    Tracker__LocateBit:
+        pha
+        lsr a
+        lsr a
+        lsr a
+    %FindByteLoop:
+        beq $+FoundByte
+        inx
+        dea
+        bra $-FindByteLoop
+    %FoundByte:
+        pla
+        and #$07
+        xba
+        lda #$00
+        xba
+        tay
+        lda #$01
+    %FindBitLoop:
+        cpy #$0000
+        beq $+FoundBit
+        asl a
+        dey
+        bra $-FindBitLoop
+    %FoundBit:
+        rtl
+}
+
+msfpatch {
+    // utility function for checking if a bit is set
+    // A = index of bit to check
+    // X = starting address to check
+    // function preserves A and X afterward
+    Tracker__CheckBit:
+        pha
+        phx
+
+        jsl $=Tracker__LocateBit
+        and $0000,x
+        beq $+BitNotSet
+
+        sec
+        bra $+Done
+
+    %BitNotSet:
+        clc
+
+    %Done:
+        plx
+        pla
+        rtl
+}
+
+msfpatch {
+    // common utility function for setting a bit
+    // A = index of bit to check
+    // X = starting address to check
+    Tracker__SetBit:
+        jsl $=Tracker__LocateBit
+        ora $0000,x
+        sta $0000,x
+        rtl
+}
+
+msfpatch {
+    EvEx__Tracker_SetKeyItemUsed:
+        jsr $_EvEx__ReadParameters_1
+        lda $_EvEx__Param1
+        ldx #$_Tracker__KeyItemUsedFlags
+        jsl $=Tracker__SetBit
+        jmp $_EvEx__End
+}
+
+
+
+// hook into hook-deployment code to track use of hook
+msfpatch {
+    .addr $00a514
+        jsl $=Tracker__UseHook
+
+    .new
+    Tracker__UseHook:
+        // displaced
+        stz $7a
+        stz $79
+
+        lda #$08  // index for hook key item
+        ldx #$_Tracker__KeyItemUsedFlags
+        jsl $=Tracker__SetBit
+
+        rtl
+}
+
