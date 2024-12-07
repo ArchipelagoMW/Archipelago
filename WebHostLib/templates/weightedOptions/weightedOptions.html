@@ -83,7 +83,9 @@
                                 {% elif issubclass(option, Options.FreeText) %}
                                     {{ inputs.FreeText(option_name, option) }}
 
-                                {% elif issubclass(option, Options.OptionCounter) and option.valid_keys %}
+                                {% elif issubclass(option, Options.OptionCounter) and (
+                                    option.valid_keys or option.verify_item_name or option.verify_location_name
+                                ) %}
                                     {{ inputs.OptionCounter(option_name, option, world) }}
 
                                 {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
