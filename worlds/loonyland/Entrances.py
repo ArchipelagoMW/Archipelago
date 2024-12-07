@@ -55,7 +55,7 @@ def set_entrances(multiworld, world, player):
         EntranceData("Halloween Hill", "Cabin In The Woods", True, lambda state: True),
         EntranceData("Halloween Hill", "A Cabin Collector", True, lambda state: True),
         EntranceData("Halloween Hill", "A Hidey-Hole", True, lambda state: True),
-        EntranceData("Vampy Land", "Creepy Caverns", True, lambda state: True),
+        EntranceData("Vampy Land", "Creepy Caverns Right", True, lambda state: True),
         EntranceData("Halloween Hill", "Swampdog Lair", True, lambda state: True),
         EntranceData("A Cabin Trees", "Halloween Hill", True,lambda state: True),
         EntranceData("The Witch's Cabin Front", "Halloween Hill", True, lambda state: True),
@@ -97,9 +97,9 @@ def set_entrances(multiworld, world, player):
         EntranceData("A Gloomy Cavern", "Rocky Cliffs", True, lambda state: True),
         EntranceData("Happy Stick Woods", "Halloween Hill", True, lambda state: True),
         EntranceData("The Wolf Den", "Halloween Hill", True, lambda state: True),
-        EntranceData("The Wolf Den", "Larry's Lair", True, lambda state: state.has("Silver Sling")),
+        EntranceData("The Wolf Den", "Larry's Lair", True, lambda state: state.has("Silver Sling", player)),
         EntranceData("A Cabin Larry", "Zombiton", True, lambda state: True),
-        EntranceData("Upper Creepy Caverns", "Rocky Cliffs", True, lambda state: state.has("Bombs")),
+        EntranceData("Upper Creepy Caverns", "Rocky Cliffs", True, lambda state: state.has("Bombs", player)),
         EntranceData("Upper Creepy Caverns", "Creepy Caverns Left", True, lambda state: True),
         EntranceData("Upper Creepy Caverns", "Creepy Caverns Middle", True, lambda state: True),
         EntranceData("Under The Ravine", "Creepy Caverns Middle", True, lambda state: True),
@@ -111,15 +111,15 @@ def set_entrances(multiworld, world, player):
         EntranceData("Creepy Caverns Right", "Under The Ravine", True, lambda state: True),
         EntranceData("Creepy Caverns Right", "Vampy Land", True, lambda state: True),
         EntranceData("Castle Vampy", "Halloween Hill", True, lambda state: True),
-        EntranceData("Castle Vampy", "Castle Vampy Skull Jail", False, lambda state: state.has("Skull Key")),
-        EntranceData("Castle Vampy Skull Jail", "Castle Vampy II", True, lambda state: state.has("Skull Key")),
-        EntranceData("Castle Vampy", "Castle Vampy II NE", True, lambda state: state.has("Bat Statue", 4)),
-        EntranceData("Castle Vampy", "Castle Vampy II SE", True, lambda state: state.has("Bat Statue", 4)),
-        EntranceData("Castle Vampy", "Castle Vampy II SW", True, lambda state: state.has("Bat Statue", 4)),
-        EntranceData("Castle Vampy", "Castle Vampy II NW", True, lambda state: state.has("Bat Statue", 4)),
-        EntranceData("Castle Vampy II", "Castle Vampy Skull Jail", True, lambda state: True),
-        EntranceData("Castle Vampy II Main", "Castle Vampy II Bat Jail", True, lambda state: state.has("Bat Key")),
-        EntranceData("Castle Vampy II Bat Jail", "Castle Vampy III Main", True, lambda state: state.has("Bat Key")),
+        EntranceData("Castle Vampy", "Castle Vampy Skull Jail", False, lambda state: state.has("Skull Key", player)),
+        EntranceData("Castle Vampy Skull Jail", "Castle Vampy II Main", True, lambda state: state.has("Skull Key", player)),
+        EntranceData("Castle Vampy", "Castle Vampy II NE", True, lambda state: state.has("Bat Statue", player, 4)),
+        EntranceData("Castle Vampy", "Castle Vampy II SE", True, lambda state: state.has("Bat Statue", player,4)),
+        EntranceData("Castle Vampy", "Castle Vampy II SW", True, lambda state: state.has("Bat Statue", player,4)),
+        EntranceData("Castle Vampy", "Castle Vampy II NW", True, lambda state: state.has("Bat Statue", player,4)),
+        EntranceData("Castle Vampy II Main", "Castle Vampy Skull Jail", True, lambda state: True),
+        EntranceData("Castle Vampy II Main", "Castle Vampy II Bat Jail", True, lambda state: state.has("Bat Key", player)),
+        EntranceData("Castle Vampy II Bat Jail", "Castle Vampy III Main", True, lambda state: state.has("Bat Key", player)),
         EntranceData("Castle Vampy II NE", "Castle Vampy", True, lambda state: True),
         EntranceData("Castle Vampy II NE", "Castle Vampy III NE", True, lambda state: True),
         EntranceData("Castle Vampy II SE", "Castle Vampy", True, lambda state: True),
@@ -130,8 +130,8 @@ def set_entrances(multiworld, world, player):
         EntranceData("Castle Vampy II NW", "Castle Vampy III NW", True, lambda state: True),
         EntranceData("Cabin In The Woods", "Halloween Hill", True, lambda state: True),
         EntranceData("Castle Vampy III Main", "Castle Vampy II Bat Jail", True, lambda state: True),
-        EntranceData("Castle Vampy III Main", "Castle Vampy III Pumpkin Jail", True, lambda state: state.has("Pumpkin Key")),
-        EntranceData("Castle Vampy III Pumpkin Jail", "Castle Vampy IV", True, lambda state: state.has("Pumpkin Key")),
+        EntranceData("Castle Vampy III Main", "Castle Vampy III Pumpkin Jail", True, lambda state: state.has("Pumpkin Key", player)),
+        EntranceData("Castle Vampy III Pumpkin Jail", "Castle Vampy IV Main", True, lambda state: state.has("Pumpkin Key", player)),
         EntranceData("Castle Vampy III NE", "Castle Vampy II NE", True, lambda state: True),
         EntranceData("Castle Vampy III NE", "Castle Vampy IV NE", True, lambda state: True),
         EntranceData("Castle Vampy III SE", "Castle Vampy II SE", True, lambda state: True),
@@ -140,8 +140,8 @@ def set_entrances(multiworld, world, player):
         EntranceData("Castle Vampy III SW", "Castle Vampy IV SW", True, lambda state: True),
         EntranceData("Castle Vampy III NW", "Castle Vampy II NW", True, lambda state: True),
         EntranceData("Castle Vampy III NW", "Castle Vampy IV NW", True, lambda state: True),
-        EntranceData("Castle Vampy IV", "Castle Vampy III Pumpkin Jail", True, lambda state: True),
-        EntranceData("Castle Vampy IV", "The Heart Of Terror", True, lambda state: state.has("Vamp Statue", player, 8)),
+        EntranceData("Castle Vampy IV Main", "Castle Vampy III Pumpkin Jail", True, lambda state: True),
+        EntranceData("Castle Vampy IV Main", "The Heart Of Terror", True, lambda state: state.has("Vamp Statue", player, 8)),
         EntranceData("Castle Vampy IV NE", "Castle Vampy III NE", True, lambda state: True),
         EntranceData("Castle Vampy IV NE", "Castle Vampy Roof NE", True, lambda state: True),
         EntranceData("Castle Vampy IV SE", "Castle Vampy III SE", True, lambda state: True),
@@ -170,18 +170,18 @@ def set_entrances(multiworld, world, player):
         EntranceData("Zombiton", "Halloween Hill", False, lambda state: True), #one way
         #EntranceData("Halloween Hill", "Zombiton ", False), todo possible with badges
 
-        EntranceData("Halloween Hill", "Rocky Cliffs", False, lambda state: state.has("Big Gem")),
-        EntranceData("Rocky Cliffs", "Halloween Hill", False, lambda state: state.has("Big Gem")),
+        EntranceData("Halloween Hill", "Rocky Cliffs", False, lambda state: state.has("Big Gem", player)),
+        EntranceData("Rocky Cliffs", "Halloween Hill", False, lambda state: state.has("Big Gem", player)),
 
         EntranceData("Vampy Land", "Halloween Hill", False, lambda state: True), #one way
         #EntranceData("Halloween Hill", "Vampy Land", False), TODO possible with badges/rando
 
-        EntranceData("Underground Tunnel Top", "Underground Tunnel Mud", False,  lambda state: state.has("Boots")),
-        EntranceData("Underground Tunnel Mud", "Underground Tunnel Top", False,  lambda state: state.has("Boots")),
-        EntranceData("Underground Tunnel Mud", "Underground Tunnel Zombie", False,  lambda state: state.has("Boots")), #one way
+        EntranceData("Underground Tunnel Top", "Underground Tunnel Mud", False,  lambda state: state.has("Boots", player)),
+        EntranceData("Underground Tunnel Mud", "Underground Tunnel Top", False,  lambda state: state.has("Boots", player)),
+        EntranceData("Underground Tunnel Mud", "Underground Tunnel Zombie", False,  lambda state: state.has("Boots", player)), #one way
         #EntranceData("Underground Tunnel Zombie", "Underground Tunnel Mud", False),  # TODO possible with badges/bridge rando
 
-        EntranceData("Swamp Gas Cavern Front", "Swamp Gas Cavern Back", False, lambda state: state.has("Boots"))  # one way
+        EntranceData("Swamp Gas Cavern Front", "Swamp Gas Cavern Back", False, lambda state: state.has("Boots", player)),  # one way
         #EntranceData("Swamp Gas Cavern Back", "Swamp Gas Cavern Front", False),  # TODO possible with badges
 
 
@@ -223,4 +223,4 @@ def set_entrances(multiworld, world, player):
     for region in multiworld.get_regions(player):
         for entry in loonyland_entrance_table:
             if entry.source_region == region.name:
-                region.connect(region, world.get_region(entry.target_region), rule= entry.rule)
+                region.connect(connecting_region= world.get_region(entry.target_region), rule= entry.rule)
