@@ -737,6 +737,13 @@ end,
 ["Atomic Rocket Trap"] = function ()
     fire_entity_at_players("atomic-rocket", 0.1)
 end,
+["Atomic Cliff Remover Trap"] = function ()
+    local cliffs = game.surfaces["nauvis"].find_entities_filtered{type = "cliff"}
+
+    if #cliffs > 0 then
+        fire_entity_at_entities("atomic-rocket", {cliffs[math.random(#cliffs)]}, 0.1)
+    end
+end,
 }
 
 commands.add_command("ap-get-technology", "Grant a technology, used by the Archipelago Client.", function(call)

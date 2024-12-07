@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import List, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState, PlandoOptions
 from Options import PlandoConnection
@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from . import MessengerWorld
 
 
-PORTALS = [
+PORTALS: list[str] = [
     "Autumn Hills",
     "Riviere Turquoise",
     "Howling Grotto",
@@ -18,7 +18,7 @@ PORTALS = [
 ]
 
 
-SHOP_POINTS = {
+SHOP_POINTS: dict[str, list[str]] = {
     "Autumn Hills": [
         "Climbing Claws",
         "Hope Path",
@@ -113,7 +113,7 @@ SHOP_POINTS = {
 }
 
 
-CHECKPOINTS = {
+CHECKPOINTS: dict[str, list[str]] = {
     "Autumn Hills": [
         "Hope Latch",
         "Key of Hope",
@@ -186,7 +186,7 @@ CHECKPOINTS = {
 }
 
 
-REGION_ORDER = [
+REGION_ORDER: list[str] = [
     "Autumn Hills",
     "Forlorn Temple",
     "Catacombs",
@@ -228,7 +228,7 @@ def shuffle_portals(world: "MessengerWorld") -> None:
 
         return parent
 
-    def handle_planned_portals(plando_connections: List[PlandoConnection]) -> None:
+    def handle_planned_portals(plando_connections: list[PlandoConnection]) -> None:
         """checks the provided plando connections for portals and connects them"""
         nonlocal available_portals
 
