@@ -604,6 +604,49 @@ class MultiWorld():
                 state.collect(location.item, True, location)
             locations -= sphere
 
+    def get_sendable_spheres(self) -> Iterator[Set[Location]]:
+        """
+        yields a set of multiserver sendable locations (location.item.code: int) for each logical sphere
+
+        If there are unreachable locations, the last sphere of reachable locations is followed by an empty set,
+        and then a set of all of the unreachable locations.
+        """
+        state = CollectionState(self)
+        locations: Set[Location] = set()
+        events: Set[Location] = set()
+        for location in self.get_filled_locations():
+            if type(location.item.code) is int:
+                locations.add(location)
+            else:
+                events.add(location)
+
+        while locations:
+            sphere: Set[Location] = set()
+
+            # cull events out
+            done_events: Set[Union[Location, None]] = {None}
+            while done_events:
+                done_events = set()
+                for event in events:
+                    if event.can_reach(state):
+                        state.collect(event.item, True, event)
+                        done_events.add(event)
+                events -= done_events
+
+            for location in locations:
+                if location.can_reach(state):
+                    sphere.add(location)
+
+            yield sphere
+            if not sphere:
+                if locations:
+                    yield locations  # unreachable locations
+                break
+
+            for location in sphere:
+                state.collect(location.item, True, location)
+            locations -= sphere
+
     def fulfills_accessibility(self, state: Optional[CollectionState] = None):
         """Check if accessibility rules are fulfilled with current or supplied state."""
         if not state:
@@ -1110,7 +1153,7 @@ class Region:
         return exit_
 
     def add_exits(self, exits: Union[Iterable[str], Dict[str, Optional[str]]],
-                  rules: Dict[str, Callable[[CollectionState], bool]] = None) -> None:
+                  rules: Dict[str, Callable[[CollectionState], bool]] = None) -> List[Entrance]:
         """
         Connects current region to regions in exit dictionary. Passed region names must exist first.
 
@@ -1120,10 +1163,14 @@ class Region:
         """
         if not isinstance(exits, Dict):
             exits = dict.fromkeys(exits)
-        for connecting_region, name in exits.items():
-            self.connect(self.multiworld.get_region(connecting_region, self.player),
-                         name,
-                         rules[connecting_region] if rules and connecting_region in rules else None)
+        return [
+            self.connect(
+                self.multiworld.get_region(connecting_region, self.player),
+                name,
+                rules[connecting_region] if rules and connecting_region in rules else None,
+            )
+            for connecting_region, name in exits.items()
+        ]
 
     def __repr__(self):
         return self.multiworld.get_name_string_for_object(self) if self.multiworld else f'{self.name} (Player {self.player})'
@@ -1263,6 +1310,10 @@ class Item:
         return ItemClassification.trap in self.classification
 
     @property
+    def filler(self) -> bool:
+        return not (self.advancement or self.useful or self.trap)
+
+    @property
     def excludable(self) -> bool:
         return not (self.advancement or self.useful)
 
@@ -1384,14 +1435,21 @@ class Spoiler:
 
         # second phase, sphere 0
         removed_precollected: List[Item] = []
-        for item in (i for i in chain.from_iterable(multiworld.precollected_items.values()) if i.advancement):
-            logging.debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
-            multiworld.precollected_items[item.player].remove(item)
-            multiworld.state.remove(item)
-            if not multiworld.can_beat_game():
-                multiworld.push_precollected(item)
-            else:
-                removed_precollected.append(item)
+
+        for precollected_items in multiworld.precollected_items.values():
+            # The list of items is mutated by removing one item at a time to determine if each item is required to beat
+            # the game, and re-adding that item if it was required, so a copy needs to be made before iterating.
+            for item in precollected_items.copy():
+                if not item.advancement:
+                    continue
+                logging.debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
+                precollected_items.remove(item)
+                multiworld.state.remove(item)
+                if not multiworld.can_beat_game():
+                    # Add the item back into `precollected_items` and collect it into `multiworld.state`.
+                    multiworld.push_precollected(item)
+                else:
+                    removed_precollected.append(item)
 
         # we are now down to just the required progress items in collection_spheres. Unfortunately
         # the previous pruning stage could potentially have made certain items dependant on others
@@ -1530,7 +1588,7 @@ class Spoiler:
                 [f"  {location}: {item}" for (location, item) in sphere.items()] if isinstance(sphere, dict) else
                 [f"  {item}" for item in sphere])) for (sphere_nr, sphere) in self.playthrough.items()]))
             if self.unreachables:
-                outfile.write('\n\nUnreachable Items:\n\n')
+                outfile.write('\n\nUnreachable Progression Items:\n\n')
                 outfile.write(
                     '\n'.join(['%s: %s' % (unreachable.item, unreachable) for unreachable in self.unreachables]))
 
