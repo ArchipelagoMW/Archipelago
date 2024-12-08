@@ -213,6 +213,11 @@ WORLD_PATHS_JSON = [
     },
     {
         "fromId": "greenmaze_post_whistle",
+        "toId": "greenmaze_post_whistle_tree",
+        "twoWay": True
+    },
+    {
+        "fromId": "greenmaze_post_whistle",
         "toId": "route_massan_gumi"
     },
     {

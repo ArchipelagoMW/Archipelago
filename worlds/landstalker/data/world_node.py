@@ -223,6 +223,13 @@ WORLD_NODES_JSON = {
             "in the infamous Greenmaze"
         ]
     },
+    "greenmaze_post_whistle_tree": {
+        "name": "Greenmaze (post-whistle tree)",
+        "hints": [
+            "among the trees",
+            "in the infamous Greenmaze"
+        ]
+    },
     "verla_shore": {
         "name": "Verla shore",
         "hints": [

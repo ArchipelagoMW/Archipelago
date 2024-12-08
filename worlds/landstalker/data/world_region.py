@@ -157,7 +157,8 @@ WORLD_REGIONS_JSON = [
         "hintName": "in Greenmaze",
         "nodeIds": [
             "greenmaze_pre_whistle",
-            "greenmaze_post_whistle"
+            "greenmaze_post_whistle",
+            "greenmaze_post_whistle_tree"
         ]
     },
     {

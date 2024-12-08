@@ -56,7 +56,7 @@ WORLD_TELEPORT_TREES_JSON = [
         {
             "name": "Greenmaze end tree",
             "treeMapId": 511,
-            "nodeId": "greenmaze_post_whistle"
+            "nodeId": "greenmaze_post_whistle_tree"
         }
     ]
 ]
