@@ -3,7 +3,7 @@ import logging
 from typing import Iterator, Set
 
 from Options import ItemsAccessibility
-from BaseClasses import Entrance, MultiWorld
+from BaseClasses import MultiWorld
 from worlds.generic.Rules import (add_item_rule, add_rule, forbid_item,
                                   item_name_in_location_names, location_item_name, set_rule, allow_self_locking_items)
 
@@ -1071,9 +1071,8 @@ def swordless_rules(world, player):
 def add_connection(parent_name, target_name, entrance_name, world, player):
     parent = world.get_region(parent_name, player)
     target = world.get_region(target_name, player)
-    connection = Entrance(player, entrance_name, parent)
-    parent.exits.append(connection)
-    connection.connect(target)
+    parent.connect(target, entrance_name)
+
 
 
 def standard_rules(world, player):
@@ -1107,6 +1106,7 @@ def standard_rules(world, player):
     else:
         set_rule(world.get_location('Hyrule Castle - Zelda\'s Chest', player),
                  lambda state: state.has('Big Key (Hyrule Castle)', player))
+
 
 def toss_junk_item(world, player):
     items = ['Rupees (20)', 'Bombs (3)', 'Arrows (10)', 'Rupees (5)', 'Rupee (1)', 'Bombs (10)',
