@@ -591,6 +591,9 @@ class Overcooked2World(World):
             kitchen_name = world.level_mapping[overworld_id].shortname
             spoiler_handle.write(f'{overworld_name} | {kitchen_name}\n')
 
+    def get_filler_item_name(self) -> str:
+        return "Bonus Star"
+
 
 def level_unlock_requirement_factory(stars_to_win: int) -> Dict[int, int]:
     level_unlock_counts = dict()
