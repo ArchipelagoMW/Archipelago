@@ -5,6 +5,7 @@ import logging
 import pathlib
 import sys
 import time
+from abc import abstractmethod
 from random import Random
 from dataclasses import make_dataclass
 from typing import (Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping, Optional, Set, TextIO, Tuple,
@@ -466,9 +467,9 @@ class World(metaclass=AutoWorldRegister):
         """
         raise NotImplementedError
 
+    @abstractmethod
     def get_filler_item_name(self) -> str:
         """Called when the item pool needs to be filled with additional items to match location count."""
-        logging.warning(f"World {self} is generating a filler item without custom filler pool.")
         return self.multiworld.random.choice(tuple(self.item_name_to_id.keys()))
 
     @classmethod
