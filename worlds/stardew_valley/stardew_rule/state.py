@@ -76,7 +76,7 @@ class Reach(BaseStardewRule):
     player: int
 
     def __call__(self, state: CollectionState) -> bool:
-        if self.resolution_hint == 'Region' and self.spot not in state.multiworld.regions.region_cache[self.player]:
+        if self.resolution_hint == 'Region' and self.spot not in state.multiworld.worlds[self.player].regions.region_cache:
             return False
         return state.can_reach(self.spot, self.resolution_hint, self.player)
 
