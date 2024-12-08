@@ -2,6 +2,7 @@ from typing import ClassVar, Set
 
 from BaseClasses import LocationProgressType, Tutorial
 from worlds.AutoWorld import WebWorld, World
+from .Constants import *
 from .Hints import *
 from .Items import *
 from .Locations import *
@@ -87,7 +88,8 @@ class LandstalkerWorld(World):
 
     def create_regions(self):
         self.regions_table = Regions.create_regions(self)
-        Locations.create_locations(self.player, self.regions_table, self.location_name_to_id)
+        Locations.create_locations(self.player, self.regions_table, self.location_name_to_id,
+                                   self.options.goal == "reach_kazalt")
         self.create_teleportation_trees()
 
     def create_item(self, name: str, classification_override: Optional[ItemClassification] = None) -> LandstalkerItem:
@@ -109,7 +111,16 @@ class LandstalkerWorld(World):
             # If item is an armor and progressive armors are enabled, transform it into a progressive armor item
             if self.options.progressive_armors and "Breast" in name:
                 name = "Progressive Armor"
-            item_pool += [self.create_item(name) for _ in range(data.quantity)]
+
+            qty = data.quantity
+            if self.options.goal == "reach_kazalt":
+                # In "Reach Kazalt" goal, remove all endgame progression items that would be useless anyway
+                if name in ENDGAME_PROGRESSION_ITEMS:
+                    continue
+                # Also reduce quantities for most filler items to let space for more EkeEke (see end of function)
+                if data.classification == ItemClassification.filler:
+                    qty = int(qty * 0.8)
+            item_pool += [self.create_item(name) for _ in range(qty)]
 
         # If the appropriate setting is on, place one EkeEke in one shop in every town in the game
         if self.options.ensure_ekeeke_in_shops:
@@ -120,9 +131,10 @@ class LandstalkerWorld(World):
                 "Mercator: Shop item #1",
                 "Verla: Shop item #1",
                 "Destel: Inn item",
-                "Route to Lake Shrine: Greedly's shop item #1",
-                "Kazalt: Shop item #1"
+                "Route to Lake Shrine: Greedly's shop item #1"
             ]
+            if self.options.goal != "reach_kazalt":
+                shops_to_fill.append("Kazalt: Shop item #1")
             for location_name in shops_to_fill:
                 self.multiworld.get_location(location_name, self.player).place_locked_item(self.create_item("EkeEke"))
 
