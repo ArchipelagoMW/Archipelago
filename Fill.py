@@ -114,6 +114,13 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
             else:
                 # we filled all reachable spots.
                 if swap:
+                    # Keep a cache of previous safe swap states that might be usable to sweep from to produce the next
+                    # swap state, instead of sweeping from `base_state` each time.
+                    previous_safe_swap_state_cache: typing.Deque[CollectionState] = deque()
+                    # Almost never are more than 2 states needed. The rare cases that do are usually highly restrictive
+                    # single_player_placement=True pre-fills which can go through more than 10 states in some seeds.
+                    max_swap_base_state_cache_length = 3
+
                     # try swapping this item with previously placed items in a safe way then in an unsafe way
                     swap_attempts = ((i, location, unsafe)
                                      for unsafe in (False, True)
@@ -128,9 +135,30 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
 
                         location.item = None
                         placed_item.location = None
-                        swap_state = sweep_from_pool(base_state, [placed_item, *item_pool] if unsafe else item_pool,
-                                                     multiworld.get_filled_locations(item.player)
-                                                     if single_player_placement else None)
+
+                        for previous_safe_swap_state in previous_safe_swap_state_cache:
+                            # If a state has already checked the location of the swap, then it cannot be used.
+                            if location not in previous_safe_swap_state.advancements:
+                                # Previous swap states will have collected all items in `item_pool`, so the new
+                                # `swap_state` can skip having to collect them again.
+                                # Previous swap states will also have already checked many locations, making the sweep
+                                # faster.
+                                swap_state = sweep_from_pool(previous_safe_swap_state, (placed_item,) if unsafe else (),
+                                                             multiworld.get_filled_locations(item.player)
+                                                             if single_player_placement else None)
+                                break
+                        else:
+                            # No previous swap_state was usable as a base state to sweep from, so create a new one.
+                            swap_state = sweep_from_pool(base_state, [placed_item, *item_pool] if unsafe else item_pool,
+                                                         multiworld.get_filled_locations(item.player)
+                                                         if single_player_placement else None)
+                            # Unsafe states should not be added to the cache because they have collected `placed_item`.
+                            if not unsafe:
+                                if len(previous_safe_swap_state_cache) >= max_swap_base_state_cache_length:
+                                    # Remove the oldest cached state.
+                                    previous_safe_swap_state_cache.pop()
+                                # Add the new state to the start of the cache.
+                                previous_safe_swap_state_cache.appendleft(swap_state)
                         # unsafe means swap_state assumes we can somehow collect placed_item before item_to_place
                         # by continuing to swap, which is not guaranteed. This is unsafe because there is no mechanic
                         # to clean that up later, so there is a chance generation fails.
