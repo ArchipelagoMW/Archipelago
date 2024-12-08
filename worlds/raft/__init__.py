@@ -224,10 +224,6 @@ class RaftWorld(World):
             "DeathLink": bool(self.options.death_link)
         }
 
-    def get_filler_item_name(self) -> str:
-        return super().get_filler_item_name()
-
-
 def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None):
     ret = Region(name, player, world)
     if locations:
