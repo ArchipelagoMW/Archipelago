@@ -13,14 +13,18 @@ import argparse
 import itertools
 import logging
 import multiprocessing
+import os
+import platform
 import shlex
 import subprocess
 import sys
+
 import urllib.parse
+import urllib.request
 import webbrowser
 from os.path import isfile
 from shutil import which
-from typing import Callable, Optional, Sequence, Tuple, Union
+from typing import Any, Callable, Dict, Optional, Sequence, Tuple, Union
 
 if __name__ == "__main__":
     import ModuleUpdate
@@ -312,6 +316,10 @@ def run_gui():
 
             return self.container
 
+        def on_start(self):
+            if settings.get_settings().general_options.AutoUpdate:
+                check_for_update()
+
         @staticmethod
         def component_action(button):
             if button.component.func:
@@ -379,6 +387,81 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
         run_component(args["component"], *args["args"])
     elif not args["update_settings"]:
         run_gui()
+
+
+def check_for_update() -> None:
+    """Checks if an update is available, and prompts the user if they'd like to update."""
+    # no mac release and dropping windows 7
+    if is_macos or (is_windows and platform.release() == "NT"):
+        return
+    update, version = Utils.available_update()
+    logging.info(f"Update available: {update}. New version: {version.as_simple_string()}")
+    if not update:
+        return
+    if settings.get_settings().general_options.skip_update == version.as_simple_string():
+        return
+
+    from kvui import ButtonsPrompt
+
+    def handle_user_update(answer: str) -> None:
+        if answer == "No":
+            return
+        elif answer == "Skip Version":
+            settings.get_settings().general_options.skip_update = version.as_simple_string()
+            update_settings()
+            return
+        # download and install the latest Archipelago release
+        release_url = "https://api.github.com/repos/ArchipelagoMW/Archipelago/releases"
+        latest_release = Utils.request_remote_json_data(release_url)[0]["assets"]
+        latest_files: Dict[str, Any] = {
+            asset["name"]: asset["browser_download_url"] for asset in latest_release
+        }
+        linux_name = None
+        windows_name = None
+        for name in latest_files:
+            if name.endswith(".AppImage") and "APPIMAGE" in os.environ:
+                linux_name = name
+            elif name.endswith(".tar.gz") and linux_name is None:
+                linux_name = name
+            elif name.endswith(".exe") and windows_name is None:
+                windows_name = name
+
+        if is_windows:
+            to_download = windows_name
+        else:
+            to_download = linux_name
+
+        def download_selection(asset: str) -> None:
+            import os
+            nonlocal latest_files
+
+            download_url = latest_files[asset]
+            response = urllib.request.urlopen(download_url)
+            content = response.read()
+            response.close()
+            if os.path.exists(asset):
+                os.remove(asset)
+            with open(asset, "wb") as f:
+                f.write(content)
+            if is_windows:
+                launch([asset], True)
+            else:
+                exe = which('sensible-editor') or which('gedit') or \
+                      which('xdg-open') or which('gnome-open') or which('kde-open')
+                subprocess.Popen([exe, os.getcwd()])
+
+            messagebox("Update Downloaded Successfully", f"{asset} has been downloaded successfully!")
+
+        download_selection(to_download)
+
+    ButtonsPrompt(
+        "Update Available",
+        f"Update available: {version.as_simple_string()}.\n"
+        f"Currently installed: {Utils.version_tuple.as_simple_string()}.\n"
+        f"Would you like to update?",
+        handle_user_update,
+        "Yes", "No", "Skip Version"
+    ).open()
 
 
 if __name__ == '__main__':
