@@ -19,33 +19,24 @@ import copy
 from collections import defaultdict
 from typing import TYPE_CHECKING, Dict, List, Set, Tuple, cast
 
+from .data import options_adjustments
 from .data import static_logic as static_witness_logic
+from .data.base_adjustment_classes import (
+    AddedConnection,
+    AddedEvent,
+    AddedItem,
+    AddToStartInventory,
+    DisabledEntity,
+    OptionAdjustment,
+    RegionDefinitionChange,
+    RemoveItem,
+    RequirementChange,
+)
 from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 from .data.static_logic import StaticWitnessLogicObj
 from .data.utils import (
     WitnessRule,
     define_new_region,
-    get_boat,
-    get_caves_except_path_to_challenge_exclusion_list,
-    get_complex_additional_panels,
-    get_complex_door_panels,
-    get_complex_doors,
-    get_disable_unrandomized_list,
-    get_discard_exclusion_list,
-    get_early_caves_list,
-    get_early_caves_start_list,
-    get_entity_hunt,
-    get_ep_all_individual,
-    get_ep_easy,
-    get_ep_no_eclipse,
-    get_ep_obelisks,
-    get_laser_shuffle,
-    get_obelisk_keys,
-    get_simple_additional_panels,
-    get_simple_doors,
-    get_simple_panels,
-    get_symbol_shuffle_list,
-    get_vault_exclusion_list,
     logical_and_witness_rules,
     logical_or_witness_rules,
     parse_lambda,
@@ -67,8 +58,6 @@ class WitnessPlayerLogic:
 
         self.EVENT_PANELS_FROM_PANELS: Set[str] = set()
         self.EVENT_PANELS_FROM_REGIONS: Set[str] = set()
-
-        self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES: Set[str] = set()
 
         self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY: Set[str] = set()
 
@@ -112,7 +101,6 @@ class WitnessPlayerLogic:
         self.COMPLETELY_DISABLED_ENTITIES: Set[str] = set()
         self.DISABLE_EVERYTHING_BEHIND: Set[str] = set()
         self.EXCLUDED_ENTITIES: Set[str] = set()
-        self.ADDED_CHECKS: Set[str] = set()
         self.VICTORY_LOCATION = "0x0356B"
 
         self.PRE_PICKED_HUNT_ENTITIES: Set[str] = set()
@@ -287,14 +275,12 @@ class WitnessPlayerLogic:
 
         return requirement
 
-    def make_single_adjustment(self, adj_type: str, line: str) -> None:
+    def make_single_adjustment(self, adjustment: OptionAdjustment) -> None:
         from .data import static_items as static_witness_items
         """Makes a single logic adjustment based on additional logic file"""
 
-        if adj_type == "Items":
-            line_split = line.split(" - ")
-            item_name = line_split[0]
-
+        if isinstance(adjustment, AddedItem):
+            item_name = adjustment.item_name
             if item_name not in static_witness_items.ITEM_DATA:
                 raise RuntimeError(f'Item "{item_name}" does not exist.')
 
@@ -312,8 +298,8 @@ class WitnessPlayerLogic:
 
             return
 
-        if adj_type == "Remove Items":
-            item_name = line
+        if isinstance(adjustment, RemoveItem):
+            item_name = adjustment.item_name
 
             self.THEORETICAL_ITEMS.discard(item_name)
             if isinstance(static_witness_logic.ALL_ITEMS[item_name], ProgressiveItemDefinition):
@@ -329,29 +315,27 @@ class WitnessPlayerLogic:
                     if entity_hex in self.DOOR_ITEMS_BY_ID and item_name in self.DOOR_ITEMS_BY_ID[entity_hex]:
                         self.DOOR_ITEMS_BY_ID[entity_hex].remove(item_name)
 
-        if adj_type == "Starting Inventory":
-            self.STARTING_INVENTORY.add(line)
-
-        if adj_type == "Event Items":
-            line_split = line.split(" - ")
-            new_event_name = line_split[0]
-            entity_hex = line_split[1]
-            dependent_hex_set = line_split[2].split(",")
-
-            for dependent_hex in dependent_hex_set:
-                self.CONDITIONAL_EVENTS[(entity_hex, dependent_hex)] = new_event_name
-
             return
 
-        if adj_type == "Requirement Changes":
-            line_split = line.split(" - ")
+        if isinstance(adjustment, AddToStartInventory):
+            self.STARTING_INVENTORY.add(adjustment.item_name)
+            return
 
-            requirement = {
-                "entities": parse_lambda(line_split[1]),
-            }
+        if isinstance(adjustment, AddedEvent):
+            target_entity_hex = static_witness_logic.ENTITIES_BY_NAME[adjustment.target_entity]["entity_hex"]
+            for trigger_entity_name in adjustment.trigger_entities:
+                trigger_entity_hex = static_witness_logic.ENTITIES_BY_NAME[trigger_entity_name]["entity_hex"]
+                self.CONDITIONAL_EVENTS[(target_entity_hex, trigger_entity_hex)] = adjustment.event_item_name
+            return
 
-            if len(line_split) > 2:
-                required_items = parse_lambda(line_split[2])
+        if isinstance(adjustment, RequirementChange):
+            requirement = {}
+
+            if adjustment.new_required_entities is not None:
+                requirement["entities"] = parse_lambda(adjustment.new_required_entities)
+
+            if adjustment.new_required_symbols is not None:
+                required_items = parse_lambda(adjustment.new_required_symbols)
                 items_actually_in_the_game = [
                     item_name for item_name, item_definition in static_witness_logic.ALL_ITEMS.items()
                     if item_definition.category is ItemCategory.SYMBOL
@@ -363,66 +347,51 @@ class WitnessPlayerLogic:
 
                 requirement["items"] = required_items
 
-            self.DEPENDENT_REQUIREMENTS_BY_HEX[line_split[0]] = requirement
+            self.DEPENDENT_REQUIREMENTS_BY_HEX[adjustment.entity_hex] = requirement
 
             return
 
-        if adj_type == "Disabled Locations":
-            entity_hex = line[:7]
-
+        if isinstance(adjustment, DisabledEntity):
+            entity_hex = static_witness_logic.ENTITIES_BY_NAME[adjustment.entity_name]["entity_hex"]
             self.COMPLETELY_DISABLED_ENTITIES.add(entity_hex)
-
             return
 
-        if adj_type == "Irrelevant Locations":
-            entity_hex = line[:7]
-
-            self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES.add(entity_hex)
-
-            return
-
-        if adj_type == "Region Changes":
-            new_region_and_options = define_new_region(line + ":")
-
+        if isinstance(adjustment, RegionDefinitionChange):
+            new_region_and_options = define_new_region(adjustment.region_definition_string + ":")
             self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[new_region_and_options[0]["name"]] = new_region_and_options[1]
-
             return
 
-        if adj_type == "New Connections":
-            line_split = line.split(" - ")
-            source_region = line_split[0]
-            target_region = line_split[1]
-            panel_set_string = line_split[2]
+        if isinstance(adjustment, AddedConnection):
+            source_region = adjustment.source_region
+            target_region = adjustment.target_region
+            panel_set_string = adjustment.entity_requirement
 
             for connection in self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region]:
                 if connection[0] == target_region:
                     self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].remove(connection)
 
-                    if panel_set_string == "TrueOneWay":
-                        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].add(
-                            (target_region, frozenset({frozenset(["TrueOneWay"])}))
-                        )
+                    new_rule = parse_lambda(panel_set_string)
+                    if new_rule == frozenset({frozenset(["TrueOneWay"])}):
+                        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].add((target_region, new_rule))
                     else:
-                        new_lambda = logical_or_witness_rules([connection[1], parse_lambda(panel_set_string)])
+                        new_lambda = logical_or_witness_rules([connection[1], ])
                         self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].add((target_region, new_lambda))
                     break
             else:
                 new_conn = (target_region, parse_lambda(panel_set_string))
                 self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].add(new_conn)
+            return
 
-        if adj_type == "Added Locations":
-            if "0x" in line:
-                line = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[line]["checkName"]
-            self.ADDED_CHECKS.add(line)
+        raise ValueError(f"Unrecognized option adjustment: {adjustment}")
 
-    def handle_regular_postgame(self, world: "WitnessWorld") -> List[List[str]]:
+    def handle_regular_postgame(self, world: "WitnessWorld") -> List[OptionAdjustment]:
         """
         In shuffle_postgame, panels that become accessible "after or at the same time as the goal" are disabled.
         This mostly involves the disabling of key panels (e.g. long box when the goal is short box).
         These will then hava a cascading effect on other entities that are locked "behind" them.
         """
 
-        postgame_adjustments = []
+        postgame_adjustments: list[OptionAdjustment] = []
 
         # Make some quick references to some options
         remote_doors = world.options.shuffle_doors >= 2  # "Panels" mode has no region accessibility implications.
@@ -448,16 +417,16 @@ class WitnessPlayerLogic:
         # to open Mountain Entry (Stars 2). However, since there is a very easy sphere 1 snipe, this is not considered.
 
         if victory == "mountain_box_long":
-            postgame_adjustments.append(["Disabled Locations:", "0x0A332 (Challenge Timer Start)"])
+            postgame_adjustments.append(DisabledEntity("Challenge Start Timer"))
 
         # If we have a proper short box goal, anything based on challenge lasers will never have something required.
         if proper_shortbox_goal:
-            postgame_adjustments.append(["Disabled Locations:", "0xFFF00 (Mountain Box Long)"])
-            postgame_adjustments.append(["Disabled Locations:", "0x0A332 (Challenge Timer Start)"])
+            postgame_adjustments.append(DisabledEntity("Mountaintop Box Long"))
+            postgame_adjustments.append(DisabledEntity("Challenge Start Timer"))
 
         # In a case where long box can be activated before short box, short box is postgame.
         if reverse_longbox_goal:
-            postgame_adjustments.append(["Disabled Locations:", "0x09F7F (Mountain Box Short)"])
+            postgame_adjustments.append(DisabledEntity("Mountaintop Box Short"))
 
         # ||| Section 2: "Fun" considerations |||
         # These are cases in which it was deemed "unfun" to have an "oops, all lasers" situation, especially when
@@ -472,7 +441,7 @@ class WitnessPlayerLogic:
         )
 
         if mbfd_extra_exclusions:
-            postgame_adjustments.append(["Disabled Locations:", "0xFFF00 (Mountain Box Long)"])
+            postgame_adjustments.append(DisabledEntity("Mountaintop Box Long"))
 
         # Another big postgame case that is missed is "Desert Laser Redirect (Panel)".
         # An 11 lasers longbox seed could technically have this item on Challenge Vault Box.
@@ -487,12 +456,12 @@ class WitnessPlayerLogic:
         # that can show up in the Caves that aren't also needed on the descent through Mountain.
         # So, we should disable all entities in the Caves and Tunnels *except* for those that are required to enter.
         if not (early_caves or remote_doors) and victory == "challenge":
-            postgame_adjustments.append(get_caves_except_path_to_challenge_exclusion_list())
+            postgame_adjustments += options_adjustments.DISABLE_CAVES_EXCEPT_PATH_TO_CHALLENGE
 
         return postgame_adjustments
 
-    def handle_panelhunt_postgame(self, world: "WitnessWorld") -> List[List[str]]:
-        postgame_adjustments = []
+    def handle_panelhunt_postgame(self, world: "WitnessWorld") -> List[OptionAdjustment]:
+        postgame_adjustments: list[OptionAdjustment] = []
 
         # Make some quick references to some options
         panel_hunt_postgame = world.options.panel_hunt_postgame
@@ -515,10 +484,7 @@ class WitnessPlayerLogic:
 
             # If mountain lasers are disabled, and challenge lasers > 7, the box will need to be rotated
             if chal_lasers > 7:
-                postgame_adjustments.append([
-                    "Requirement Changes:",
-                    "0xFFF00 - 11 Lasers - True",
-                ])
+                postgame_adjustments += options_adjustments.ROTATED_BOX
 
         if disable_challenge_lasers:
             self.DISABLE_EVERYTHING_BEHIND.add("0xFFF00")  # Long box
@@ -529,7 +495,7 @@ class WitnessPlayerLogic:
 
     def make_options_adjustments(self, world: "WitnessWorld") -> None:
         """Makes logic adjustments based on options"""
-        adjustment_linesets_in_order = []
+        adjustments_to_make = []
 
         # Make condensed references to some options
 
@@ -554,112 +520,88 @@ class WitnessPlayerLogic:
 
         # Exclude panels from the post-game if shuffle_postgame is false.
         if not world.options.shuffle_postgame and victory != "panel_hunt":
-            adjustment_linesets_in_order += self.handle_regular_postgame(world)
+            adjustments_to_make += self.handle_regular_postgame(world)
 
         # Exclude panels from the post-game if shuffle_postgame is false.
         if victory == "panel_hunt" and world.options.panel_hunt_postgame:
-            adjustment_linesets_in_order += self.handle_panelhunt_postgame(world)
+            adjustments_to_make += self.handle_panelhunt_postgame(world)
 
         # Exclude Discards / Vaults
         if not world.options.shuffle_discarded_panels:
             # In disable_non_randomized, the discards are needed for alternate activation triggers, UNLESS both
             # (remote) doors and lasers are shuffled.
             if not world.options.disable_non_randomized_puzzles or (remote_doors and lasers):
-                adjustment_linesets_in_order.append(get_discard_exclusion_list())
+                adjustments_to_make += options_adjustments.DISABLE_REGULAR_DISCARDS
 
             if remote_doors:
-                adjustment_linesets_in_order.append(["Disabled Locations:", "0x17FA2"])
+                adjustments_to_make += options_adjustments.DISABLE_MOUNTAIN_BOTTOM_FLOOR_DISCARD
 
         if not world.options.shuffle_vault_boxes:
-            adjustment_linesets_in_order.append(get_vault_exclusion_list())
+            adjustments_to_make += options_adjustments.DISABLE_VAULTS_EXCEPT_CHALLENGE
             if not victory == "challenge":
-                adjustment_linesets_in_order.append(["Disabled Locations:", "0x0A332"])
+                adjustments_to_make.append(DisabledEntity("Challenge Start Timer"))
 
         # Long box can usually only be solved by opening Mountain Entry. However, if it requires 7 lasers or less
         # (challenge_lasers <= 7), you can now solve it without opening Mountain Entry first.
         # Furthermore, if the user sets mountain_lasers > 7, the box is rotated to not require Mountain Entry either.
         if chal_lasers <= 7 or mnt_lasers > 7:
-            adjustment_linesets_in_order.append([
-                "Requirement Changes:",
-                "0xFFF00 - 11 Lasers - True",
-            ])
+            adjustments_to_make += options_adjustments.ROTATED_BOX
 
         if world.options.disable_non_randomized_puzzles:
-            adjustment_linesets_in_order.append(get_disable_unrandomized_list())
+            adjustments_to_make += options_adjustments.DISABLE_NON_RANDOMIZED_ENTITIES
 
         if world.options.shuffle_symbols:
-            adjustment_linesets_in_order.append(get_symbol_shuffle_list())
+            adjustments_to_make += options_adjustments.SYMBOL_SHUFFLE
 
         if world.options.EP_difficulty == "normal":
-            adjustment_linesets_in_order.append(get_ep_easy())
+            adjustments_to_make += options_adjustments.DISABLE_TEDIOUS_EPS
         elif world.options.EP_difficulty == "tedious":
-            adjustment_linesets_in_order.append(get_ep_no_eclipse())
+            adjustments_to_make += options_adjustments.DISABLE_ECLIPSE
 
         if world.options.door_groupings == "regional":
             if world.options.shuffle_doors == "panels":
-                adjustment_linesets_in_order.append(get_simple_panels())
+                adjustments_to_make += options_adjustments.REGIONAL_PANEL_SHUFFLE
             elif world.options.shuffle_doors == "doors":
-                adjustment_linesets_in_order.append(get_simple_doors())
+                adjustments_to_make += options_adjustments.REGIONAL_DOOR_SHUFFLE
             elif world.options.shuffle_doors == "mixed":
-                adjustment_linesets_in_order.append(get_simple_doors())
-                adjustment_linesets_in_order.append(get_simple_additional_panels())
+                adjustments_to_make += options_adjustments.REGIONAL_MIXED_SHUFFLE
         else:
             if world.options.shuffle_doors == "panels":
-                adjustment_linesets_in_order.append(get_complex_door_panels())
-                adjustment_linesets_in_order.append(get_complex_additional_panels())
+                adjustments_to_make += options_adjustments.INDIVIDUAL_PANEL_SHUFFLE
             elif world.options.shuffle_doors == "doors":
-                adjustment_linesets_in_order.append(get_complex_doors())
+                adjustments_to_make += options_adjustments.INDIVIDUAL_DOOR_SHUFFLE
             elif world.options.shuffle_doors == "mixed":
-                adjustment_linesets_in_order.append(get_complex_doors())
-                adjustment_linesets_in_order.append(get_complex_additional_panels())
+                adjustments_to_make += options_adjustments.INDIVIDUAL_MIXED_SHUFFLE
 
         if not world.options.shuffle_dog:
-            adjustment_linesets_in_order.append(["Disabled Locations:", "0xFFF80 (Town Pet the Dog)"])
+            adjustments_to_make.append(DisabledEntity("Town Pet the Dog"))
 
         if world.options.shuffle_boat:
-            adjustment_linesets_in_order.append(get_boat())
+            adjustments_to_make += options_adjustments.SHUFFLE_BOAT
 
         if world.options.early_caves == "starting_inventory":
-            adjustment_linesets_in_order.append(get_early_caves_start_list())
+            adjustments_to_make += options_adjustments.EARLY_CAVES_START_INVENTORY
 
         if world.options.early_caves == "add_to_pool" and not remote_doors:
-            adjustment_linesets_in_order.append(get_early_caves_list())
+            adjustments_to_make += options_adjustments.EARLY_CAVES_ADD_TO_POOL
 
         if "Quarry Elevator" in world.options.elevators_come_to_you:
-            adjustment_linesets_in_order.append([
-                "New Connections:",
-                "Quarry - Quarry Elevator - TrueOneWay",
-                "Outside Quarry - Quarry Elevator - TrueOneWay",
-            ])
+            adjustments_to_make += options_adjustments.QUARRY_ELEVATOR_COMES_TO_YOU
         if "Bunker Elevator" in world.options.elevators_come_to_you:
-            adjustment_linesets_in_order.append([
-                "New Connections:",
-                "Outside Bunker - Bunker Elevator - TrueOneWay",
-            ])
+            adjustments_to_make += options_adjustments.BUNKER_ELEVATOR_COMES_TO_YOU
         if "Swamp Long Bridge" in world.options.elevators_come_to_you:
-            adjustment_linesets_in_order.append([
-                "New Connections:",
-                "Outside Swamp - Swamp Long Bridge - TrueOneWay",
-                "Swamp Near Boat - Swamp Long Bridge - TrueOneWay",
-                "Requirement Changes:",
-                "0x035DE - 0x17E2B - True",  # Swamp Purple Sand Bottom EP
-            ])
-        # if "Town Maze Rooftop Bridge" in world.options.elevators_come_to_you:
-        #     adjustment_linesets_in_order.append([
-        #         "New Connections:"
-        #         "Town Red Rooftop - Town Maze Rooftop - TrueOneWay"
+            adjustments_to_make += options_adjustments.SWAMP_LONG_BRIDGE_COMES_TO_YOU
 
         if world.options.victory_condition == "panel_hunt":
-            adjustment_linesets_in_order.append(get_entity_hunt())
+            adjustments_to_make += options_adjustments.ENTITY_HUNT
 
-        for item in self.YAML_ADDED_ITEMS:
-            adjustment_linesets_in_order.append(["Items:", item])
+        adjustments_to_make += options_adjustments.build_added_item_adjustment(list(self.YAML_ADDED_ITEMS))
 
         if lasers:
-            adjustment_linesets_in_order.append(get_laser_shuffle())
+            adjustments_to_make += options_adjustments.LASER_SHUFFLE
 
         if world.options.shuffle_EPs and world.options.obelisk_keys:
-            adjustment_linesets_in_order.append(get_obelisk_keys())
+            adjustments_to_make += options_adjustments.OBELISK_KEY_SHUFFLE
 
         if world.options.shuffle_EPs == "obelisk_sides":
             ep_gen = ((ep_hex, ep_obj) for (ep_hex, ep_obj) in self.REFERENCE_LOGIC.ENTITIES_BY_HEX.items()
@@ -671,10 +613,10 @@ class WitnessPlayerLogic:
                 ep_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[ep_hex]["checkName"]
                 self.ALWAYS_EVENT_NAMES_BY_HEX[ep_hex] = f"{obelisk_name} - {ep_name}"
         else:
-            adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
+            adjustments_to_make += options_adjustments.DISABLE_OBELISK_SIDES
 
         if not world.options.shuffle_EPs:
-            adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_all_individual()[1:])
+            adjustments_to_make += options_adjustments.DISABLE_ALL_EPS
 
         for yaml_disabled_location in self.YAML_DISABLED_LOCATIONS:
             if yaml_disabled_location not in self.REFERENCE_LOGIC.ENTITIES_BY_NAME:
@@ -688,21 +630,8 @@ class WitnessPlayerLogic:
             elif loc_obj["entityType"] == "Panel":
                 self.EXCLUDED_ENTITIES.add(loc_obj["entity_hex"])
 
-        for adjustment_lineset in adjustment_linesets_in_order:
-            current_adjustment_type = None
-
-            for line in adjustment_lineset:
-                if len(line) == 0:
-                    continue
-
-                if line[-1] == ":":
-                    current_adjustment_type = line[:-1]
-                    continue
-
-                if current_adjustment_type is None:
-                    raise ValueError(f"Adjustment lineset {adjustment_lineset} is malformed")
-
-                self.make_single_adjustment(current_adjustment_type, line)
+        for adjustment in adjustments_to_make:
+            self.make_single_adjustment(adjustment)
 
         for entity_id in self.COMPLETELY_DISABLED_ENTITIES:
             if entity_id in self.DOOR_ITEMS_BY_ID:
@@ -907,14 +836,10 @@ class WitnessPlayerLogic:
         return not (
             entity_hex in self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY
             or entity_hex in self.COMPLETELY_DISABLED_ENTITIES
-            or entity_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES
         )
 
     def is_disabled(self, entity_hex: str) -> bool:
-        return (
-            entity_hex in self.COMPLETELY_DISABLED_ENTITIES
-            or entity_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES
-        )
+        return entity_hex in self.COMPLETELY_DISABLED_ENTITIES
 
     def determine_unrequired_entities(self, world: "WitnessWorld") -> None:
         """Figure out which major items are actually useless in this world's options"""
