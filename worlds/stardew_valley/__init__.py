@@ -438,6 +438,7 @@ class StardewValleyWorld(World):
         received_progression_count = player_state[Event.received_progression_item]
         received_progression_count += 1
         if self.total_progression_items:
+            # Total progression items is not set until all items are created, but collect will be called during the item creation when an item is precollected.
             # We can't update the percentage if we don't know the total progression items, can't divide by 0.
             player_state[Event.received_progression_percent] = received_progression_count * 100 // self.total_progression_items
         player_state[Event.received_progression_item] = received_progression_count
