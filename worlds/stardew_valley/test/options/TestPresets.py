@@ -1,9 +1,7 @@
-import builtins
-import inspect
-
 from Options import PerGameCommonOptions, OptionSet
-from . import SVTestCase
-from .. import sv_options_presets, StardewValleyOptions
+from .. import SVTestCase
+from ...options import StardewValleyOptions
+from ...options.presets import sv_options_presets
 
 
 class TestPresets(SVTestCase):

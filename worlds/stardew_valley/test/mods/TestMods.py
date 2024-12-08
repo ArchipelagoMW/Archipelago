@@ -1,7 +1,8 @@
 import random
 
 from BaseClasses import get_seed
-from .. import SVTestBase, SVTestCase, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x, complete_options_with_default, solo_multiworld
+from .. import SVTestBase, SVTestCase, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x, solo_multiworld, \
+    fill_dataclass_with_default
 from ..assertion import ModAssertMixin, WorldAssertMixin
 from ... import items, Group, ItemClassification, create_content
 from ... import options
@@ -122,7 +123,7 @@ class TestModEntranceRando(SVTestCase):
                              (options.EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
                              (options.EntranceRandomization.option_buildings_without_house, RandomizationFlag.BUILDINGS),
                              (options.EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
-            sv_options = complete_options_with_default({
+            sv_options = fill_dataclass_with_default({
                 options.EntranceRandomization.internal_name: option,
                 options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
                 SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,

@@ -17,7 +17,7 @@ from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
     BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
     Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, EnabledFillerBuffs
-from .strings.ap_names.ap_option_names import OptionName
+from .strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.buff_names import Buff
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
@@ -538,16 +538,16 @@ def create_walnuts(item_factory: StardewItemFactory, options: StardewValleyOptio
     num_penta_walnuts = 1
     # https://stardewvalleywiki.com/Golden_Walnut
     # Totals should be accurate, but distribution is slightly offset to make room for baseline walnuts
-    if OptionName.walnutsanity_puzzles in walnutsanity:  # 61
+    if WalnutsanityOptionName.puzzles in walnutsanity:  # 61
         num_single_walnuts += 6  # 6
         num_triple_walnuts += 5  # 15
         num_penta_walnuts += 8  # 40
-    if OptionName.walnutsanity_bushes in walnutsanity:  # 25
+    if WalnutsanityOptionName.bushes in walnutsanity:  # 25
         num_single_walnuts += 16  # 16
         num_triple_walnuts += 3  # 9
-    if OptionName.walnutsanity_dig_spots in walnutsanity:  # 18
+    if WalnutsanityOptionName.dig_spots in walnutsanity:  # 18
         num_single_walnuts += 18  # 18
-    if OptionName.walnutsanity_repeatables in walnutsanity:  # 33
+    if WalnutsanityOptionName.repeatables in walnutsanity:  # 33
         num_single_walnuts += 30  # 30
         num_triple_walnuts += 1  # 3
 
@@ -833,27 +833,27 @@ def get_all_filler_items(include_traps: bool, exclude_ginger_island: bool) -> Li
 
 def get_allowed_player_buffs(buff_option: EnabledFillerBuffs) -> List[ItemData]:
     allowed_buffs = []
-    if OptionName.buff_luck in buff_option:
+    if BuffOptionName.luck in buff_option:
         allowed_buffs.append(item_table[Buff.luck])
-    if OptionName.buff_damage in buff_option:
+    if BuffOptionName.damage in buff_option:
         allowed_buffs.append(item_table[Buff.damage])
-    if OptionName.buff_defense in buff_option:
+    if BuffOptionName.defense in buff_option:
         allowed_buffs.append(item_table[Buff.defense])
-    if OptionName.buff_immunity in buff_option:
+    if BuffOptionName.immunity in buff_option:
         allowed_buffs.append(item_table[Buff.immunity])
-    if OptionName.buff_health in buff_option:
+    if BuffOptionName.health in buff_option:
         allowed_buffs.append(item_table[Buff.health])
-    if OptionName.buff_energy in buff_option:
+    if BuffOptionName.energy in buff_option:
         allowed_buffs.append(item_table[Buff.energy])
-    if OptionName.buff_bite in buff_option:
+    if BuffOptionName.bite in buff_option:
         allowed_buffs.append(item_table[Buff.bite_rate])
-    if OptionName.buff_fish_trap in buff_option:
+    if BuffOptionName.fish_trap in buff_option:
         allowed_buffs.append(item_table[Buff.fish_trap])
-    if OptionName.buff_fishing_bar in buff_option:
+    if BuffOptionName.fishing_bar in buff_option:
         allowed_buffs.append(item_table[Buff.fishing_bar])
-    if OptionName.buff_quality in buff_option:
+    if BuffOptionName.quality in buff_option:
         allowed_buffs.append(item_table[Buff.quality])
-    if OptionName.buff_glow in buff_option:
+    if BuffOptionName.glow in buff_option:
         allowed_buffs.append(item_table[Buff.glow])
     return allowed_buffs
 
