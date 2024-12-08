@@ -298,12 +298,6 @@ def handle_name(name: str, player: int, name_counter: Counter):
     return new_name
 
 
-def roll_percentage(percentage: Union[int, float]) -> bool:
-    """Roll a percentage chance.
-    percentage is expected to be in range [0, 100]"""
-    return random.random() < (float(percentage) / 100)
-
-
 def update_weights(weights: dict, new_weights: dict, update_type: str, name: str) -> dict:
     logging.debug(f'Applying {new_weights}')
     cleaned_weights = {}
@@ -369,7 +363,7 @@ def roll_linked_options(weights: dict) -> dict:
         if "name" not in option_set:
             raise ValueError("One of your linked options does not have a name.")
         try:
-            if roll_percentage(option_set["percentage"]):
+            if Options.roll_percentage(option_set["percentage"]):
                 logging.debug(f"Linked option {option_set['name']} triggered.")
                 new_options = option_set["options"]
                 for category_name, category_options in new_options.items():
@@ -402,7 +396,7 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
             trigger_result = get_choice("option_result", option_set)
             result = get_choice(key, currently_targeted_weights)
             currently_targeted_weights[key] = result
-            if result == trigger_result and roll_percentage(get_choice("percentage", option_set, 100)):
+            if result == trigger_result and Options.roll_percentage(get_choice("percentage", option_set, 100)):
                 for category_name, category_options in option_set["options"].items():
                     currently_targeted_weights = weights
                     if category_name:
@@ -501,8 +495,6 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         if option_key in {"triggers", *valid_keys}:
             continue
         logging.warning(f"{option_key} is not a valid option name for {ret.game} and is not present in triggers.")
-    if PlandoOptions.items in plando_options:
-        ret.plando_items = copy.deepcopy(game_weights.get("plando_items", []))
     if ret.game == "A Link to the Past":
         roll_alttp_settings(ret, game_weights)
 
