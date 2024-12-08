@@ -2,7 +2,7 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
-from typing import TYPE_CHECKING, Dict, List, Set, cast
+from typing import TYPE_CHECKING, Dict, List, Set
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 
@@ -55,7 +55,7 @@ class WitnessPlayerItems:
             name: data for (name, data) in self.item_data.items()
             if data.classification not in
                {ItemClassification.progression, ItemClassification.progression_skip_balancing}
-               or name in player_logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME
+               or name in player_logic.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME
         }
 
         # Downgrade door items
@@ -76,7 +76,7 @@ class WitnessPlayerItems:
         }
         for item_name, item_data in progression_dict.items():
             if isinstance(item_data.definition, ProgressiveItemDefinition):
-                num_progression = len(self._logic.MULTI_LISTS[item_name])
+                num_progression = len(self._logic.PROGRESSIVE_LISTS[item_name])
                 self._mandatory_items[item_name] = num_progression
             else:
                 self._mandatory_items[item_name] = 1

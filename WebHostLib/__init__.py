@@ -9,7 +9,7 @@ from flask_compress import Compress
 from pony.flask import Pony
 from werkzeug.routing import BaseConverter
 
-from Utils import title_sorted
+from Utils import title_sorted, get_file_safe_name
 
 UPLOAD_FOLDER = os.path.relpath('uploads')
 LOGS_FOLDER = os.path.relpath('logs')
@@ -20,6 +20,7 @@ Pony(app)
 
 app.jinja_env.filters['any'] = any
 app.jinja_env.filters['all'] = all
+app.jinja_env.filters['get_file_safe_name'] = get_file_safe_name
 
 app.config["SELFHOST"] = True  # application process is in charge of running the websites
 app.config["GENERATORS"] = 8  # maximum concurrent world gens
@@ -84,6 +85,6 @@ def register():
 
     from WebHostLib.customserver import run_server_process
     # to trigger app routing picking up on it
-    from . import tracker, upload, landing, check, generate, downloads, api, stats, misc, robots, options
+    from . import tracker, upload, landing, check, generate, downloads, api, stats, misc, robots, options, session
 
     app.register_blueprint(api.api_endpoints)

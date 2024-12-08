@@ -3,7 +3,7 @@ from random import Random
 from typing import Dict, Any, Iterable, Optional, Union, List, TextIO
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
-from Options import PerGameCommonOptions
+from Options import PerGameCommonOptions, Accessibility
 from worlds.AutoWorld import World, WebWorld
 from . import rules
 from .bundles.bundle_room import BundleRoom
@@ -91,15 +91,14 @@ class StardewValleyWorld(World):
     web = StardewWebWorld()
     modified_bundles: List[BundleRoom]
     randomized_entrances: Dict[str, str]
-    total_progression_items: int
 
-    # all_progression_items: Dict[str, int] # If you need to debug total_progression_items, uncommenting this will help tremendously
+    total_progression_items: int
+    excluded_from_total_progression_items: List[str] = [Event.received_walnuts]
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
         self.filler_item_pool_names = []
         self.total_progression_items = 0
-        # self.all_progression_items = dict()
 
         # Taking the seed specified in slot data for UT, otherwise just generating the seed.
         self.seed = getattr(multiworld, "re_gen_passthrough", {}).get(STARDEW_VALLEY, self.random.getrandbits(64))
@@ -121,17 +120,27 @@ class StardewValleyWorld(World):
         goal_is_perfection = self.options.goal == Goal.option_perfection
         goal_is_island_related = goal_is_walnut_hunter or goal_is_perfection
         exclude_ginger_island = self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
+
         if goal_is_island_related and exclude_ginger_island:
             self.options.exclude_ginger_island.value = ExcludeGingerIsland.option_false
             goal_name = self.options.goal.current_key
-            player_name = self.multiworld.player_name[self.player]
             logger.warning(
-                f"Goal '{goal_name}' requires Ginger Island. Exclude Ginger Island setting forced to 'False' for player {self.player} ({player_name})")
+                f"Goal '{goal_name}' requires Ginger Island. Exclude Ginger Island setting forced to 'False' for player {self.player} ({self.player_name})")
+
         if exclude_ginger_island and self.options.walnutsanity != Walnutsanity.preset_none:
             self.options.walnutsanity.value = Walnutsanity.preset_none
-            player_name = self.multiworld.player_name[self.player]
             logger.warning(
-                f"Walnutsanity requires Ginger Island. Ginger Island was excluded from {self.player} ({player_name})'s world, so walnutsanity was force disabled")
+                f"Walnutsanity requires Ginger Island. Ginger Island was excluded from {self.player} ({self.player_name})'s world, so walnutsanity was force disabled")
+
+        if goal_is_perfection and self.options.accessibility == Accessibility.option_minimal:
+            self.options.accessibility.value = Accessibility.option_full
+            logger.warning(
+                f"Goal 'Perfection' requires full accessibility. Accessibility setting forced to 'Full' for player {self.player} ({self.player_name})")
+
+        elif self.options.goal == Goal.option_allsanity and self.options.accessibility == Accessibility.option_minimal:
+            self.options.accessibility.value = Accessibility.option_full
+            logger.warning(
+                f"Goal 'Allsanity' requires full accessibility. Accessibility setting forced to 'Full' for player {self.player} ({self.player_name})")
 
     def create_regions(self):
         def create_region(name: str, exits: Iterable[str]) -> Region:
@@ -139,7 +148,7 @@ class StardewValleyWorld(World):
             region.exits = [Entrance(self.player, exit_name, region) for exit_name in exits]
             return region
 
-        world_regions, world_entrances, self.randomized_entrances = create_regions(create_region, self.random, self.options)
+        world_regions, world_entrances, self.randomized_entrances = create_regions(create_region, self.random, self.options, self.content)
 
         self.logic = StardewLogic(self.player, self.options, self.content, world_regions.keys())
         self.modified_bundles = get_all_bundles(self.random,
@@ -171,14 +180,25 @@ class StardewValleyWorld(World):
                                for location in self.multiworld.get_locations(self.player)
                                if location.address is not None])
 
-        created_items = create_items(self.create_item, self.delete_item, locations_count, items_to_exclude, self.options, self.content,
-                                     self.random)
+        created_items = create_items(self.create_item, locations_count, items_to_exclude, self.options, self.content, self.random)
 
         self.multiworld.itempool += created_items
 
-        setup_early_items(self.multiworld, self.options, self.player, self.random)
+        setup_early_items(self.multiworld, self.options, self.content, self.player, self.random)
         self.setup_player_events()
         self.setup_victory()
+
+        # This is really a best-effort to get the total progression items count. It is mostly used to spread grinds across spheres are push back locations that
+        # only become available after months or years in game. In most cases, not having the exact count will not impact the logic.
+        #
+        # The actual total can be impacted by the start_inventory_from_pool, when items are removed from the pool but not from the total. The is also a bug
+        # with plando where additional progression items can be created without being accounted for, which impact the real amount of progression items. This can
+        # ultimately create unwinnable seeds where some items (like Blueberry seeds) are locked in Shipsanity: Blueberry, but world is deemed winnable as the
+        # winning rule only check the count of collected progression items.
+        self.total_progression_items += sum(1 for i in self.multiworld.precollected_items[self.player] if i.advancement)
+        self.total_progression_items += sum(1 for i in self.multiworld.get_filled_locations(self.player) if i.advancement)
+        self.total_progression_items += sum(1 for i in created_items if i.advancement)
+        self.total_progression_items -= 1  # -1 for the victory event
 
     def precollect_starting_season(self):
         if self.options.season_randomization == SeasonRandomization.option_progressive:
@@ -206,25 +226,10 @@ class StardewValleyWorld(World):
             self.multiworld.push_precollected(self.create_starting_item("Progressive Coop"))
 
     def setup_player_events(self):
-        self.setup_construction_events()
-        self.setup_quest_events()
         self.setup_action_events()
         self.setup_logic_events()
 
-    def setup_construction_events(self):
-        can_construct_buildings = LocationData(None, RegionName.carpenter, Event.can_construct_buildings)
-        self.create_event_location(can_construct_buildings, True_(), Event.can_construct_buildings)
-
-    def setup_quest_events(self):
-        start_dark_talisman_quest = LocationData(None, RegionName.railroad, Event.start_dark_talisman_quest)
-        self.create_event_location(start_dark_talisman_quest, self.logic.wallet.has_rusty_key(), Event.start_dark_talisman_quest)
-
     def setup_action_events(self):
-        can_ship_event = LocationData(None, LogicRegion.shipping, Event.can_ship_items)
-        self.create_event_location(can_ship_event, true_, Event.can_ship_items)
-        can_shop_pierre_event = LocationData(None, RegionName.pierre_store, Event.can_shop_at_pierre)
-        self.create_event_location(can_shop_pierre_event, true_, Event.can_shop_at_pierre)
-
         spring_farming = LocationData(None, LogicRegion.spring_farming, Event.spring_farming)
         self.create_event_location(spring_farming, true_, Event.spring_farming)
         summer_farming = LocationData(None, LogicRegion.summer_farming, Event.summer_farming)
@@ -319,13 +324,7 @@ class StardewValleyWorld(World):
         if override_classification is None:
             override_classification = item.classification
 
-        if override_classification == ItemClassification.progression:
-            self.total_progression_items += 1
         return StardewItem(item.name, override_classification, item.code, self.player)
-
-    def delete_item(self, item: Item):
-        if item.classification & ItemClassification.progression:
-            self.total_progression_items -= 1
 
     def create_starting_item(self, item: Union[str, ItemData]) -> StardewItem:
         if isinstance(item, str):
@@ -344,10 +343,6 @@ class StardewValleyWorld(World):
         location.access_rule = rule
         region.locations.append(location)
         location.place_locked_item(StardewItem(item, ItemClassification.progression, None, self.player))
-
-        # This is not ideal, but the rule count them so...
-        if item != Event.victory:
-            self.total_progression_items += 1
 
     def set_rules(self):
         set_rules(self)
@@ -441,15 +436,25 @@ class StardewValleyWorld(World):
 
     def collect(self, state: CollectionState, item: StardewItem) -> bool:
         change = super().collect(state, item)
-        if change:
-            state.prog_items[self.player][Event.received_walnuts] += self.get_walnut_amount(item.name)
-        return change
+        if not change:
+            return False
+
+        walnut_amount = self.get_walnut_amount(item.name)
+        if walnut_amount:
+            state.prog_items[self.player][Event.received_walnuts] += walnut_amount
+
+        return True
 
     def remove(self, state: CollectionState, item: StardewItem) -> bool:
         change = super().remove(state, item)
-        if change:
-            state.prog_items[self.player][Event.received_walnuts] -= self.get_walnut_amount(item.name)
-        return change
+        if not change:
+            return False
+
+        walnut_amount = self.get_walnut_amount(item.name)
+        if walnut_amount:
+            state.prog_items[self.player][Event.received_walnuts] -= walnut_amount
+
+        return True
 
     @staticmethod
     def get_walnut_amount(item_name: str) -> int:

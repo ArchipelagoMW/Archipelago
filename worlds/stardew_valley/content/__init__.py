@@ -1,5 +1,5 @@
 from . import content_packs
-from .feature import cropsanity, friendsanity, fishsanity, booksanity
+from .feature import cropsanity, friendsanity, fishsanity, booksanity, skill_progression
 from .game_content import ContentPack, StardewContent, StardewFeatures
 from .unpacking import unpack_content
 from .. import options
@@ -31,7 +31,8 @@ def choose_features(player_options: options.StardewValleyOptions) -> StardewFeat
         choose_booksanity(player_options.booksanity),
         choose_cropsanity(player_options.cropsanity),
         choose_fishsanity(player_options.fishsanity),
-        choose_friendsanity(player_options.friendsanity, player_options.friendsanity_heart_size)
+        choose_friendsanity(player_options.friendsanity, player_options.friendsanity_heart_size),
+        choose_skill_progression(player_options.skill_progression),
     )
 
 
@@ -105,3 +106,19 @@ def choose_friendsanity(friendsanity_option: options.Friendsanity, heart_size: o
         return friendsanity.FriendsanityAllWithMarriage(heart_size.value)
 
     raise ValueError(f"No friendsanity feature mapped to {str(friendsanity_option.value)}")
+
+
+skill_progression_by_option = {
+    options.SkillProgression.option_vanilla: skill_progression.SkillProgressionVanilla(),
+    options.SkillProgression.option_progressive: skill_progression.SkillProgressionProgressive(),
+    options.SkillProgression.option_progressive_with_masteries: skill_progression.SkillProgressionProgressiveWithMasteries(),
+}
+
+
+def choose_skill_progression(skill_progression_option: options.SkillProgression) -> skill_progression.SkillProgressionFeature:
+    skill_progression_feature = skill_progression_by_option.get(skill_progression_option)
+
+    if skill_progression_feature is None:
+        raise ValueError(f"No skill progression feature mapped to {str(skill_progression_option.value)}")
+
+    return skill_progression_feature
