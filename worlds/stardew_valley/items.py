@@ -15,7 +15,7 @@ from .data.game_item import ItemTag
 from .logic.logic_event import all_events
 from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
-    BuildingProgression, SkillProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
+    BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
     Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, EnabledFillerBuffs
 from .strings.ap_names.ap_option_names import OptionName
 from .strings.ap_names.ap_weapon_names import APWeapon
@@ -226,8 +226,8 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_weapons(item_factory, options, items)
     items.append(item_factory("Skull Key"))
     create_elevators(item_factory, options, items)
-    create_tools(item_factory, options, items)
-    create_skills(item_factory, options, items)
+    create_tools(item_factory, options, content, items)
+    create_skills(item_factory, content, items)
     create_wizard_buildings(item_factory, options, items)
     create_carpenter_buildings(item_factory, options, items)
     items.append(item_factory("Railroad Boulder Removed"))
@@ -316,7 +316,7 @@ def create_elevators(item_factory: StardewItemFactory, options: StardewValleyOpt
         items.extend([item_factory(item) for item in ["Progressive Skull Cavern Elevator"] * 8])
 
 
-def create_tools(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+def create_tools(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
     if options.tool_progression & ToolProgression.option_progressive:
         for item_data in items_by_group[Group.PROGRESSIVE_TOOLS]:
             name = item_data.name
@@ -325,28 +325,29 @@ def create_tools(item_factory: StardewItemFactory, options: StardewValleyOptions
                 items.append(item_factory(item_data, ItemClassification.useful))
             else:
                 items.extend([item_factory(item) for item in [item_data] * 4])
-        if options.skill_progression == SkillProgression.option_progressive_with_masteries:
+
+        if content.features.skill_progression.are_masteries_shuffled:
+            # Masteries add another tier to the scythe and the fishing rod
             items.append(item_factory("Progressive Scythe"))
             items.append(item_factory("Progressive Fishing Rod"))
+
+    # The golden scythe is always randomized
     items.append(item_factory("Progressive Scythe"))
 
 
-def create_skills(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if options.skill_progression == SkillProgression.option_vanilla:
+def create_skills(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
+    skill_progression = content.features.skill_progression
+    if not skill_progression.is_progressive:
         return
 
-    for item in items_by_group[Group.SKILL_LEVEL_UP]:
-        if item.mod_name not in options.mods and item.mod_name is not None:
-            continue
-        items.extend(item_factory(item) for item in [item.name] * 10)
+    for skill in content.skills.values():
+        items.extend(item_factory(skill.level_name) for _ in skill_progression.get_randomized_level_names_by_level(skill))
 
-    if options.skill_progression != SkillProgression.option_progressive_with_masteries:
-        return
+        if skill_progression.is_mastery_randomized(skill):
+            items.append(item_factory(skill.mastery_name))
 
-    for item in items_by_group[Group.SKILL_MASTERY]:
-        if item.mod_name not in options.mods and item.mod_name is not None:
-            continue
-        items.append(item_factory(item))
+    if skill_progression.are_masteries_shuffled:
+        items.append(item_factory(Wallet.mastery_of_the_five_ways))
 
 
 def create_wizard_buildings(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):

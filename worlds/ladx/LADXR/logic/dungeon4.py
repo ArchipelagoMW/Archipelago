@@ -42,32 +42,36 @@ class Dungeon4:
         boss = Location(dungeon=4).add(HeartContainer(0x166), Instrument(0x162)).connect(before_boss, AND(NIGHTMARE_KEY4, r.boss_requirements[world_setup.boss_mapping[3]]))
 
         if options.logic == 'hard' or options.logic == 'glitched' or options.logic == 'hell':
-            sidescroller_key.connect(before_miniboss, AND(FEATHER, BOOMERANG)) # grab the key jumping over the water and boomerang downwards
-            sidescroller_key.connect(before_miniboss, AND(POWER_BRACELET, FLIPPERS)) # kill the zols with the pots in the room to spawn the key
-            rightside_crossroads.connect(entrance, FEATHER) # jump across the corners
-            puddle_crack_block_chest.connect(rightside_crossroads, FEATHER) # jump around the bombable block
-            north_crossroads.connect(entrance, FEATHER) # jump across the corners
-            after_double_lock.connect(entrance, FEATHER) # jump across the corners
-            dungeon4_puddle_before_crossroads.connect(after_double_lock, FEATHER) # With a tight jump feather is enough to cross the puddle without flippers
-            center_puddle_chest.connect(before_miniboss, FEATHER) # With a tight jump feather is enough to cross the puddle without flippers
+            sidescroller_key.connect(before_miniboss, BOOMERANG) # fall off the bridge and boomerang downwards before hitting the water to grab the item
+            sidescroller_key.connect(before_miniboss, AND(r.throw_pot, FLIPPERS)) # kill the zols with the pots in the room to spawn the key
+            rightside_crossroads.connect(entrance, r.tight_jump) # jump across the corners
+            puddle_crack_block_chest.connect(rightside_crossroads, r.tight_jump) # jump around the bombable block
+            north_crossroads.connect(entrance, r.tight_jump) # jump across the corners
+            after_double_lock.connect(entrance, r.tight_jump) # jump across the corners
+            dungeon4_puddle_before_crossroads.connect(after_double_lock, r.tight_jump) # With a tight jump feather is enough to cross the puddle without flippers
+            center_puddle_chest.connect(before_miniboss, r.tight_jump) # With a tight jump feather is enough to cross the puddle without flippers
             miniboss = Location(dungeon=4).connect(terrace_zols_chest, None, one_way=True) # reach flippers chest through the miniboss room without pulling the lever
-            to_the_nightmare_key.connect(left_water_area, FEATHER) # With a tight jump feather is enough to reach the top left switch without flippers, or use flippers for puzzle and boots to get through 2d section
-            before_boss.connect(left_water_area, FEATHER) # jump to the bottom right corner of boss door room
+            to_the_nightmare_key.connect(left_water_area, r.tight_jump) # With a tight jump feather is enough to reach the top left switch without flippers, or use flippers for puzzle and boots to get through 2d section
+            before_boss.connect(left_water_area, r.tight_jump) # jump to the bottom right corner of boss door room
             
         if options.logic == 'glitched' or options.logic == 'hell':    
-            pushable_block_chest.connect(rightside_crossroads, FLIPPERS) # sideways block push to skip bombs
-            sidescroller_key.connect(before_miniboss, AND(FEATHER, OR(r.attack_hookshot_powder, POWER_BRACELET))) # superjump into the hole to grab the key while falling into the water
-            miniboss.connect(before_miniboss, FEATHER) # use jesus jump to transition over the water left of miniboss
+            pushable_block_chest.connect(rightside_crossroads, AND(r.sideways_block_push, FLIPPERS)) # sideways block push to skip bombs
+            sidescroller_key.connect(before_miniboss, AND(r.super_jump_feather, OR(r.attack_hookshot_powder, r.throw_pot))) # superjump into the hole to grab the key while falling into the water
+            miniboss.connect(before_miniboss, r.jesus_jump) # use jesus jump to transition over the water left of miniboss
         
         if options.logic == 'hell':
-            rightside_crossroads.connect(entrance, AND(PEGASUS_BOOTS, HOOKSHOT)) # pit buffer into the wall of the first pit, then boots bonk across the center, hookshot to get to the rightmost pit to a second villa buffer on the rightmost pit
-            pushable_block_chest.connect(rightside_crossroads, OR(PEGASUS_BOOTS, FEATHER)) # use feather to water clip into the top right corner of the bombable block, and sideways block push to gain access. Can boots bonk of top right wall, then water buffer to top of chest and boots bonk to water buffer next to chest
-            after_double_lock.connect(double_locked_room, AND(FOUND(KEY4, 4), PEGASUS_BOOTS), one_way=True) # use boots bonks to cross the water gaps
+            rightside_crossroads.connect(entrance, AND(r.pit_buffer_boots, r.hookshot_spam_pit)) # pit buffer into the wall of the first pit, then boots bonk across the center, hookshot to get to the rightmost pit to a second villa buffer on the rightmost pit
+            rightside_crossroads.connect(after_double_lock, AND(OR(BOMB, BOW), r.hookshot_clip_block)) # split zols for more entities, and clip through the block against the right wall
+            pushable_block_chest.connect(rightside_crossroads, AND(r.sideways_block_push, OR(r.jesus_buffer, r.jesus_jump))) # use feather to water clip into the top right corner of the bombable block, and sideways block push to gain access. Can boots bonk of top right wall, then water buffer to top of chest and boots bonk to water buffer next to chest
+            after_double_lock.connect(double_locked_room, AND(FOUND(KEY4, 4), r.pit_buffer_boots), one_way=True) # use boots bonks to cross the water gaps
+            after_double_lock.connect(entrance, r.pit_buffer_boots) # boots bonk + pit buffer to the bottom
+            after_double_lock.connect(entrance, AND(r.pit_buffer, r.hookshot_spam_pit)) # hookshot spam over the first pit of crossroads, then buffer down
+            dungeon4_puddle_before_crossroads.connect(after_double_lock, AND(r.pit_buffer_boots, HOOKSHOT)) # boots bonk across the water bottom wall to the bottom left corner, then hookshot up
             north_crossroads.connect(entrance, AND(PEGASUS_BOOTS, HOOKSHOT)) # pit buffer into wall of the first pit, then boots bonk towards the top and hookshot spam to get across (easier with Piece of Power)
-            after_double_lock.connect(entrance, PEGASUS_BOOTS) # boots bonk + pit buffer to the bottom
-            dungeon4_puddle_before_crossroads.connect(after_double_lock, AND(PEGASUS_BOOTS, HOOKSHOT)) # boots bonk across the water bottom wall to the bottom left corner, then hookshot up
-            to_the_nightmare_key.connect(left_water_area, AND(FLIPPERS, PEGASUS_BOOTS)) #  Use flippers for puzzle and boots bonk to get through 2d section
-            before_boss.connect(left_water_area, PEGASUS_BOOTS) # boots bonk across bottom wall then boots bonk to the platform before boss door
+            before_miniboss.connect(north_crossroads, AND(r.shaq_jump, r.hookshot_clip_block)) # push block left of keyblock up, then shaq jump off the left wall and pause buffer to land on keyblock. 
+            before_miniboss.connect(north_crossroads, AND(OR(BOMB, BOW), r.hookshot_clip_block)) # split zol for more entities, and clip through the block left of keyblock by hookshot spam
+            to_the_nightmare_key.connect(left_water_area, AND(FLIPPERS, r.boots_bonk)) # use flippers for puzzle and boots bonk to get through 2d section
+            before_boss.connect(left_water_area, r.pit_buffer_boots) # boots bonk across bottom wall then boots bonk to the platform before boss door
             
         self.entrance = entrance
 
