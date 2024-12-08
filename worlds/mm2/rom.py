@@ -126,7 +126,7 @@ class MM2ProcedurePatch(APProcedurePatch, APTokenMixin):
 
 
 def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
-    patch.write_file("mm2_basepatch.bsdiff4", pkgutil.get_data(__name__, os.path.join("data", "mm2_basepatch.bsdiff4")))
+    patch.write_file("mm2_basepatch.bsdiff4", pkgutil.get_data(__name__, "data/mm2_basepatch.bsdiff4"))
     # text writing
     patch.write_bytes(0x37E2A, MM2TextEntry("FOR           ", 0xCB).resolve())
     patch.write_bytes(0x37EAA, MM2TextEntry("GET EQUIPPED  ", 0x0B).resolve())
