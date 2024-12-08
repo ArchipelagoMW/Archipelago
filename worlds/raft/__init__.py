@@ -57,10 +57,6 @@ class RaftWorld(World):
                 frequencyItems.append(raft_item)
             else:
                 pool.append(raft_item)
-        if isFillingFrequencies:
-            if not hasattr(self.multiworld, "raft_frequencyItemsPerPlayer"):
-                self.multiworld.raft_frequencyItemsPerPlayer = {}
-            self.multiworld.raft_frequencyItemsPerPlayer[self.player] = frequencyItems
 
         extraItemNamePool = []
         extras = len(location_table) - len(item_table) - 1 # Victory takes up 1 unaccounted-for slot
@@ -109,16 +105,14 @@ class RaftWorld(World):
         self.multiworld.get_location("Utopia Complete", self.player).place_locked_item(
             RaftItem("Victory", ItemClassification.progression, None, player=self.player))
 
+        if frequencyItems:
+            self.place_frequencyItems(frequencyItems)
+
     def set_rules(self):
         set_rules(self.multiworld, self.player)
 
     def create_regions(self):
         create_regions(self.multiworld, self.player)
-    
-    def get_pre_fill_items(self):
-        if self.options.island_frequency_locations.is_filling_frequencies_in_world():
-            return [loc.item for loc in self.multiworld.get_filled_locations()]
-        return []
     
     def create_item_replaceAsNecessary(self, name: str) -> Item:
         isFrequency = "Frequency" in name
@@ -152,23 +146,34 @@ class RaftWorld(World):
 
         return super(RaftWorld, self).collect_item(state, item, remove)
 
-    def pre_fill(self):
+    def place_frequencyItems(self, frequencyItems):
+        def setLocationItem(location: str, itemName: str):
+            itemToUse = next(filter(lambda itm: itm.name == itemName, frequencyItems))
+            frequencyItems.remove(itemToUse)
+            self.get_location(location).place_locked_item(itemToUse)
+
+        def setLocationItemFromRegion(region: str, itemName: str):
+            itemToUse = next(filter(lambda itm: itm.name == itemName, frequencyItems))
+            frequencyItems.remove(itemToUse)
+            location = self.random.choice(list(loc for loc in location_table if loc["region"] == region))
+            self.get_location(location["name"]).place_locked_item(itemToUse)
+
         if self.options.island_frequency_locations == self.options.island_frequency_locations.option_vanilla:
-            self.setLocationItem("Radio Tower Frequency to Vasagatan", "Vasagatan Frequency")
-            self.setLocationItem("Vasagatan Frequency to Balboa", "Balboa Island Frequency")
-            self.setLocationItem("Relay Station quest", "Caravan Island Frequency")
-            self.setLocationItem("Caravan Island Frequency to Tangaroa", "Tangaroa Frequency")
-            self.setLocationItem("Tangaroa Frequency to Varuna Point", "Varuna Point Frequency")
-            self.setLocationItem("Varuna Point Frequency to Temperance", "Temperance Frequency")
-            self.setLocationItem("Temperance Frequency to Utopia", "Utopia Frequency")
+            setLocationItem("Radio Tower Frequency to Vasagatan", "Vasagatan Frequency")
+            setLocationItem("Vasagatan Frequency to Balboa", "Balboa Island Frequency")
+            setLocationItem("Relay Station quest", "Caravan Island Frequency")
+            setLocationItem("Caravan Island Frequency to Tangaroa", "Tangaroa Frequency")
+            setLocationItem("Tangaroa Frequency to Varuna Point", "Varuna Point Frequency")
+            setLocationItem("Varuna Point Frequency to Temperance", "Temperance Frequency")
+            setLocationItem("Temperance Frequency to Utopia", "Utopia Frequency")
         elif self.options.island_frequency_locations == self.options.island_frequency_locations.option_random_on_island:
-            self.setLocationItemFromRegion("RadioTower", "Vasagatan Frequency")
-            self.setLocationItemFromRegion("Vasagatan", "Balboa Island Frequency")
-            self.setLocationItemFromRegion("BalboaIsland", "Caravan Island Frequency")
-            self.setLocationItemFromRegion("CaravanIsland", "Tangaroa Frequency")
-            self.setLocationItemFromRegion("Tangaroa", "Varuna Point Frequency")
-            self.setLocationItemFromRegion("Varuna Point", "Temperance Frequency")
-            self.setLocationItemFromRegion("Temperance", "Utopia Frequency")
+            setLocationItemFromRegion("RadioTower", "Vasagatan Frequency")
+            setLocationItemFromRegion("Vasagatan", "Balboa Island Frequency")
+            setLocationItemFromRegion("BalboaIsland", "Caravan Island Frequency")
+            setLocationItemFromRegion("CaravanIsland", "Tangaroa Frequency")
+            setLocationItemFromRegion("Tangaroa", "Varuna Point Frequency")
+            setLocationItemFromRegion("Varuna Point", "Temperance Frequency")
+            setLocationItemFromRegion("Temperance", "Utopia Frequency")
         elif self.options.island_frequency_locations in [
             self.options.island_frequency_locations.option_random_island_order,
             self.options.island_frequency_locations.option_random_on_island_random_order
@@ -201,21 +206,10 @@ class RaftWorld(World):
                     currentLocation = availableLocationList[0] # Utopia (only one left in list)
                 availableLocationList.remove(currentLocation)
                 if self.options.island_frequency_locations == self.options.island_frequency_locations.option_random_island_order:
-                    self.setLocationItem(locationToVanillaFrequencyLocationMap[previousLocation], locationToFrequencyItemMap[currentLocation])
+                    setLocationItem(locationToVanillaFrequencyLocationMap[previousLocation], locationToFrequencyItemMap[currentLocation])
                 elif self.options.island_frequency_locations == self.options.island_frequency_locations.option_random_on_island_random_order:
-                    self.setLocationItemFromRegion(previousLocation, locationToFrequencyItemMap[currentLocation])
+                    setLocationItemFromRegion(previousLocation, locationToFrequencyItemMap[currentLocation])
                 previousLocation = currentLocation
-    
-    def setLocationItem(self, location: str, itemName: str):
-        itemToUse = next(filter(lambda itm: itm.name == itemName, self.multiworld.raft_frequencyItemsPerPlayer[self.player]))
-        self.multiworld.raft_frequencyItemsPerPlayer[self.player].remove(itemToUse)
-        self.multiworld.get_location(location, self.player).place_locked_item(itemToUse)
-    
-    def setLocationItemFromRegion(self, region: str, itemName: str):
-        itemToUse = next(filter(lambda itm: itm.name == itemName, self.multiworld.raft_frequencyItemsPerPlayer[self.player]))
-        self.multiworld.raft_frequencyItemsPerPlayer[self.player].remove(itemToUse)
-        location = self.random.choice(list(loc for loc in location_table if loc["region"] == region))
-        self.multiworld.get_location(location["name"], self.player).place_locked_item(itemToUse)
     
     def fill_slot_data(self):
         return {
