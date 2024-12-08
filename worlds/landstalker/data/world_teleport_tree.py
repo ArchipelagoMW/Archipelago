@@ -8,19 +8,19 @@ WORLD_TELEPORT_TREES_JSON = [
         {
             "name": "Tibor tree",
             "treeMapId": 534,
-            "nodeId": "route_gumi_ryuma"
+            "nodeId": "tibor_tree"
         }
     ],
     [
         {
             "name": "Mercator front gate tree",
             "treeMapId": 539,
-            "nodeId": "route_gumi_ryuma"
+            "nodeId": "mercator_gate_tree"
         },
         {
             "name": "Verla shore tree",
             "treeMapId": 537,
-            "nodeId": "verla_shore"
+            "nodeId": "verla_shore_tree"
         }
     ],
     [
@@ -44,7 +44,7 @@ WORLD_TELEPORT_TREES_JSON = [
         {
             "name": "Mountainous area tree",
             "treeMapId": 535,
-            "nodeId": "mountainous_area"
+            "nodeId": "mountainous_area_tree"
         }
     ],
     [

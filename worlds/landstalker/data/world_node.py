@@ -73,6 +73,22 @@ WORLD_NODES_JSON = {
             "between Gumi and Ryuma"
         ]
     },
+    "tibor_tree": {
+        "name": "Route from Gumi to Ryuma (Tibor tree)",
+        "hints": [
+            "on a route",
+            "in a region inhabited by bears",
+            "between Gumi and Ryuma"
+        ]
+    },
+    "mercator_gate_tree": {
+        "name": "Route from Gumi to Ryuma (Mercator gate tree)",
+        "hints": [
+            "on a route",
+            "in a region inhabited by bears",
+            "between Gumi and Ryuma"
+        ]
+    },
     "tibor": {
         "name": "Tibor",
         "hints": [
@@ -237,6 +253,13 @@ WORLD_NODES_JSON = {
             "near the town of Verla"
         ]
     },
+    "verla_shore_tree": {
+        "name": "Verla shore tree",
+        "hints": [
+            "on a route",
+            "near the town of Verla"
+        ]
+    },
     "verla_shore_cliff": {
         "name": "Verla shore cliff (accessible from Verla Mines)",
         "hints": [
@@ -329,6 +352,12 @@ WORLD_NODES_JSON = {
     },
     "mountainous_area": {
         "name": "Mountainous Area",
+        "hints": [
+            "in a mountainous area"
+        ]
+    },
+    "mountainous_area_tree": {
+        "name": "Mountainous Area tree",
         "hints": [
             "in a mountainous area"
         ]

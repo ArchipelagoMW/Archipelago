@@ -57,7 +57,9 @@ WORLD_REGIONS_JSON = [
         "name": "Route between Gumi and Ryuma",
         "canBeHintedAsRequired": False,
         "nodeIds": [
-            "route_gumi_ryuma"
+            "route_gumi_ryuma",
+            "tibor_tree",
+            "mercator_gate_tree"
         ]
     },
     {
@@ -166,7 +168,8 @@ WORLD_REGIONS_JSON = [
         "canBeHintedAsRequired": False,
         "nodeIds": [
             "verla_shore",
-            "verla_shore_cliff"
+            "verla_shore_cliff",
+            "verla_shore_tree"
         ]
     },
     {
@@ -245,7 +248,8 @@ WORLD_REGIONS_JSON = [
         "name": "Mountainous Area",
         "hintName": "in the mountainous area",
         "nodeIds": [
-            "mountainous_area"
+            "mountainous_area",
+            "mountainous_area_tree"
         ]
     },
     {

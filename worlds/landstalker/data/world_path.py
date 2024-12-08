@@ -55,6 +55,16 @@ WORLD_PATHS_JSON = [
         "twoWay": True
     },
     {
+        "fromId": "route_gumi_ryuma",
+        "toId": "tibor_tree",
+        "twoWay": True
+    },
+    {
+        "fromId": "route_gumi_ryuma",
+        "toId": "mercator_gate_tree",
+        "twoWay": True
+    },
+    {
         "fromId": "ryuma",
         "toId": "ryuma_after_thieves_hideout",
         "requiredNodes": [
@@ -260,6 +270,11 @@ WORLD_PATHS_JSON = [
     },
     {
         "fromId": "verla_shore",
+        "toId": "verla_shore_tree",
+        "twoWay": True
+    },
+    {
+        "fromId": "verla_shore",
         "toId": "mir_tower_sector",
         "requiredNodes": [
             "verla_mines"
@@ -320,6 +335,11 @@ WORLD_PATHS_JSON = [
         "requiredItems": [
             "Axe Magic"
         ]
+    },
+    {
+        "fromId": "mountainous_area",
+        "toId": "mountainous_area_tree",
+        "twoWay": True
     },
     {
         "fromId": "mountainous_area",
