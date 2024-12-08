@@ -297,6 +297,12 @@ class PokemonEmeraldWorld(World):
                     "Safari Zone SE - Hidden Item in South Grass 2",
                     "Safari Zone SE - Item in Grass",
                 ])
+
+            # Sacred ash is on Navel Rock, which is locked behind the event tickets
+            if not self.options.event_tickets:
+                exclude_locations([
+                    "Navel Rock Top - Hidden Item Sacred Ash",
+                ])
         elif self.options.goal == Goal.option_steven:
             exclude_locations([
                 "Meteor Falls 1F - Rival Steven",
@@ -629,21 +635,34 @@ class PokemonEmeraldWorld(World):
 
             spoiler_handle.write(f"\n\nWild Pokemon ({self.player_name}):\n\n")
 
+            slot_to_rod_suffix = {
+                0: " (Old Rod)",
+                1: " (Old Rod)",
+                2: " (Good Rod)",
+                3: " (Good Rod)",
+                4: " (Good Rod)",
+                5: " (Super Rod)",
+                6: " (Super Rod)",
+                7: " (Super Rod)",
+                8: " (Super Rod)",
+                9: " (Super Rod)",
+            }
+
             species_maps = defaultdict(set)
             for map in self.modified_maps.values():
                 if map.land_encounters is not None:
                     for encounter in map.land_encounters.slots:
-                        species_maps[encounter].add(map.name[4:])
+                        species_maps[encounter].add(map.label + " (Land)")
 
                 if map.water_encounters is not None:
                     for encounter in map.water_encounters.slots:
-                        species_maps[encounter].add(map.name[4:])
+                        species_maps[encounter].add(map.label + " (Water)")
 
                 if map.fishing_encounters is not None:
-                    for encounter in map.fishing_encounters.slots:
-                        species_maps[encounter].add(map.name[4:])
+                    for slot, encounter in enumerate(map.fishing_encounters.slots):
+                        species_maps[encounter].add(map.label + slot_to_rod_suffix[slot])
 
-            lines = [f"{emerald_data.species[species].label}: {', '.join(maps)}\n"
+            lines = [f"{emerald_data.species[species].label}: {', '.join(sorted(maps))}\n"
                      for species, maps in species_maps.items()]
             lines.sort()
             for line in lines:
@@ -655,35 +674,35 @@ class PokemonEmeraldWorld(World):
         if self.options.dexsanity:
             from collections import defaultdict
 
-            slot_to_rod = {
-                0: "_OLD_ROD",
-                1: "_OLD_ROD",
-                2: "_GOOD_ROD",
-                3: "_GOOD_ROD",
-                4: "_GOOD_ROD",
-                5: "_SUPER_ROD",
-                6: "_SUPER_ROD",
-                7: "_SUPER_ROD",
-                8: "_SUPER_ROD",
-                9: "_SUPER_ROD",
+            slot_to_rod_suffix = {
+                0: " (Old Rod)",
+                1: " (Old Rod)",
+                2: " (Good Rod)",
+                3: " (Good Rod)",
+                4: " (Good Rod)",
+                5: " (Super Rod)",
+                6: " (Super Rod)",
+                7: " (Super Rod)",
+                8: " (Super Rod)",
+                9: " (Super Rod)",
             }
 
             species_maps = defaultdict(set)
             for map in self.modified_maps.values():
                 if map.land_encounters is not None:
                     for encounter in map.land_encounters.slots:
-                        species_maps[encounter].add(map.name[4:] + "_GRASS")
+                        species_maps[encounter].add(map.label + " (Land)")
 
                 if map.water_encounters is not None:
                     for encounter in map.water_encounters.slots:
-                        species_maps[encounter].add(map.name[4:] + "_WATER")
+                        species_maps[encounter].add(map.label + " (Water)")
 
                 if map.fishing_encounters is not None:
                     for slot, encounter in enumerate(map.fishing_encounters.slots):
-                        species_maps[encounter].add(map.name[4:] + slot_to_rod[slot])
+                        species_maps[encounter].add(map.label + slot_to_rod_suffix[slot])
 
             hint_data[self.player] = {
-                self.location_name_to_id[f"Pokedex - {emerald_data.species[species].label}"]: ", ".join(maps)
+                self.location_name_to_id[f"Pokedex - {emerald_data.species[species].label}"]: ", ".join(sorted(maps))
                 for species, maps in species_maps.items()
             }
 
