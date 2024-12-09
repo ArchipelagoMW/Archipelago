@@ -149,7 +149,7 @@ class MagpieBridge:
     item_tracker = None
     ws = None
     features = []
-    slot_data = {}
+    has_sent_slot_data = False
 
     async def handler(self, websocket):
         self.ws = websocket
@@ -165,8 +165,6 @@ class MagpieBridge:
                     await self.send_all_inventory()
                 if "checks" in self.features:
                     await self.send_all_checks()
-                if "slot_data" in self.features:
-                    await self.send_slot_data(self.slot_data)
 
     # Translate renamed IDs back to LADXR IDs
     @staticmethod
@@ -236,8 +234,8 @@ class MagpieBridge:
             "type": "slot_data",
             "slot_data": slot_data
         }
-
         await self.ws.send(json.dumps(message))
+        self.has_sent_slot_data = True
 
     async def serve(self):
         async with websockets.serve(lambda w: self.handler(w), "", 17026, logger=logger):
