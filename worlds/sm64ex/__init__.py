@@ -10,7 +10,6 @@ from BaseClasses import Item, Tutorial, ItemClassification, Region
 from ..AutoWorld import World, WebWorld
 
 
-item_descriptions = {name: data.description for name, data in item_data_table.items()}
 
 class SM64Web(WebWorld):
     tutorials = [Tutorial(
@@ -23,7 +22,6 @@ class SM64Web(WebWorld):
     )]
 
     option_groups = sm64_options_groups
-    item_descriptions = item_descriptions
 
 class SM64World(World):
     """ 
@@ -44,7 +42,6 @@ class SM64World(World):
     area_connections: typing.Dict[int, int]
 
     options_dataclass = SM64Options
-    item_descriptions = item_descriptions
 
     number_of_stars: int
     move_rando_bitvec: int
