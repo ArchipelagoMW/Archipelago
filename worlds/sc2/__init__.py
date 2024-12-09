@@ -475,7 +475,7 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
             soa_missions = [m for m in soa_missions if MissionFlag.NoBuild not in m.flags]
         if world.options.spear_of_adun_presence == SpearOfAdunPresence.option_lotv_protoss:
             soa_missions = [m for m in soa_missions if m.campaign == SC2Campaign.LOTV]
-        elif world.options.spear_of_adun_presence == SpearOfAdunPresence.option_protoss:
+        if world.options.spear_of_adun_presence in [SpearOfAdunPresence.option_lotv_protoss, SpearOfAdunPresence.option_protoss]:
             soa_missions = [m for m in soa_missions if MissionFlag.Protoss in m.flags]
         
         soa_presence = len(soa_missions) > 0
@@ -489,7 +489,7 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
             soa_missions = [m for m in soa_missions if MissionFlag.NoBuild not in m.flags]
         if world.options.spear_of_adun_autonomously_cast_ability_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_lotv_protoss:
             soa_missions = [m for m in soa_missions if m.campaign == SC2Campaign.LOTV]
-        elif world.options.spear_of_adun_autonomously_cast_ability_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_protoss:
+        if world.options.spear_of_adun_autonomously_cast_ability_presence in [SpearOfAdunAutonomouslyCastAbilityPresence.option_protoss, SpearOfAdunAutonomouslyCastAbilityPresence.option_lotv_protoss]:
             soa_missions = [m for m in soa_missions if MissionFlag.Protoss in m.flags]
         
         soa_passive_presence = len(soa_missions) > 0
