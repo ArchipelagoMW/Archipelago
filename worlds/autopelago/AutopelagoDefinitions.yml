@@ -260,12 +260,20 @@ items:
       flavor_text: 'We all know what happens when you give a MOUSE a cookie...'
 
     - game_specific:
+        'DLCQuest':
+          - ['Armor for Your Rat Pack', [stylish]]
+
         'Pokemon Red and Blue':
           - ['Very Common Candy', [well_fed]]
           - ['Icy Blue Feather', [lucky]]
           - ['Burning Orange Feather', [lucky]]
           - ['Charged Yellow Feather', [lucky]]
           - ['Vermilion City Truck Keys', [confident]]
+
+        'Kingdom Hearts 2':
+          - name: 'One-Winged Rat'
+            rat_count: 1
+          - ['Lucky Rat Emblem', [lucky]]
 
         'Ocarina of Time':
           - ['Silver Skulltula Token', [lucky]]
@@ -276,6 +284,11 @@ items:
 
         'Minecraft':
           - ['Pie of Ender', [well_fed]]
+          - ['Structure Compass (Cheese Wheel)', [smart]]
+
+        'Pokemon Emerald':
+          - ['Aqua Branded Water Bottle', [well_fed]]
+          - ['Magma Branded Hot Sauce', [well_fed]]
 
         'Stardew Valley':
           - ['Prismatic Chard', [well_fed]]
@@ -286,6 +299,7 @@ items:
         'Super Mario 64':
           - ['Lucky MIPS Foot', [lucky]]
           - ['Metal Moustache', [stylish]]
+          - ['Rat Cap', [stylish]]
 
         'A Link to the Past':
           - ['Pendant of Dim Sum', [well_fed]]
@@ -295,9 +309,17 @@ items:
         'Factorio':
           - ['Cheese Science Pack', [well_fed]]
 
+        'Super Mario World':
+          - ['Charging Chuck''s Helmet', [confident]]
+          - ['Koopa Soup', [well_fed]]
+          - ['Pea Switch', [well_fed]]
+
         'Dark Souls III':
           - ['Severely Scorched Sword', [confident]]
           - ['Siegward''s Jar of Pickled Onions', [well_fed]]
+
+        'Yacht Dice':
+          - ['Block of Swiss Carved Like A Die', [well_fed]]
 
   trap:
     - ['Half of a Worm', [upset_tummy]]
@@ -381,8 +403,14 @@ items:
           - ['Item-Hider', [distracted]]
           - ['Team Rocket Membership Card', [conspiratorial]]
 
+        'Minecraft':
+          - ['Villager''s Birthday Party Invitation', [distracted]]
+
         'Ocarina of Time':
           - ['Overly-Talkative Fairy in a Bottle', [distracted]]
+
+        'Pokemon Emerald':
+          - ['Rabid Zigzagoon', [startled]]
 
         'Stardew Valley':
           - ['Rotten Parsnip', [upset_tummy]]
@@ -398,6 +426,11 @@ items:
         'Dark Souls III':
           - ['Asbestos Flask', [upset_tummy]]
 
+        'Super Mario World':
+          - ['Goomba Goo', [sluggish]]
+
+        'Yacht Dice':
+          - ['Words of Discouragement', [sluggish]]
 
   filler:
     - ['Empty Snail Shell', []]
@@ -488,7 +521,7 @@ items:
     - ['The Krebs Cycle', []]
     - ['Ring of Visibility', []]
     - ['Handful of Glitter', []]
-    - ['Forklift Driver Certification', []]
+    - ['Signed Air Guitar', []]
     - ['Neat Rock', []]
     - ['Dijkstra''s Algorithm', []]
     - ['Fire Distinguisher', []]
@@ -515,13 +548,36 @@ items:
     - ['Updog', []]
     - ['Just a regular ol'' chest, trust me', []]
     - ['Blown Fuse', []]
+    - ['Cheese Strats', []]
+    - ['Cosmic Ray Bit Flip', []]
 
     - game_specific:
+        'DLCQuest':
+          - ['Autopelago: Coin Bundle', []]
+
         'Pokemon Red and Blue':
           - ['Oak''s Other Parcel', []]
           - ['Silph Scoop', []]
           - ['Mustard Ball', []]
           - ['HM02.5 Walk', []]
+          - ['Rat Fossil', []]
+
+        'Pokemon Emerald':
+          - ['Kevin Scope', []]
+          - ['Ash-Filled Backpack', []]
+          - ['Peeko''s Boating License', []]
+
+        'Kingdom Hearts 2':
+          - ['Proof of Cheese', []]
+
+        'Minecraft':
+          - ['Gnawing III Book', []]
+          - ['Progressive Cheesecrafting', []]
+          - ['Netherite Bed', []]
+
+        'Super Mario World':
+          - ['Dinosaur Land Travel Brochure', []]
+          - ['Reznor Nail Clippings', []]
 
         'Ocarina of Time':
           - ['Broken Boss Key', []]
@@ -534,6 +590,7 @@ items:
         'Super Mario 64':
           - ['Ninth Red Coin', []]
           - ['Key to the Castle''s Bathroom', []]
+          - ['0.5x A Presses', []]
 
         'A Link to the Past':
           - ['The Spoon Pearl', []]
@@ -543,6 +600,11 @@ items:
           - ['Bottleneck', []]
           - ['Chain of Daisies', []]
           - ['Cuddly Little Biter', []]
+
+        'Yacht Dice':
+          - ['Preposterously Small Straight', []]
+          - ['Two Yachts', []]
+          - ['Brand New Hats for Dice', []]
 
         'Dark Souls III':
           - ['Soul of a Cinder Block', []]
