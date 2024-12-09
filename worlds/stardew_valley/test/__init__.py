@@ -2,18 +2,17 @@ import logging
 import os
 import threading
 import unittest
-from argparse import Namespace
 from contextlib import contextmanager
 from typing import Dict, ClassVar, Iterable, Tuple, Optional, List, Union, Any
 
-from BaseClasses import MultiWorld, CollectionState, PlandoOptions, get_seed, Location, Item
-from Options import VerifyKeys
+from BaseClasses import MultiWorld, CollectionState, get_seed, Location, Item
 from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from worlds.AutoWorld import call_all
 from .assertion import RuleAssertMixin
+from .options.utils import fill_namespace_with_default, parse_class_option_keys, fill_dataclass_with_default
 from .. import StardewValleyWorld, options, StardewItem
-from ..options import StardewValleyOptions, StardewValleyOption
+from ..options import StardewValleyOption
 
 logger = logging.getLogger(__name__)
 
@@ -360,15 +359,7 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
     multiworld = setup_base_solo_multiworld(StardewValleyWorld, (), seed=seed)
     # print(f"Seed: {multiworld.seed}") # Uncomment to print the seed for every test
 
-    args = Namespace()
-    for name, option in StardewValleyWorld.options_dataclass.type_hints.items():
-        value = option.from_any(test_options.get(name, option.default))
-
-        if issubclass(option, VerifyKeys):
-            # Values should already be verified, but just in case...
-            value.verify(StardewValleyWorld, "Tester", PlandoOptions.bosses)
-
-        setattr(args, name, {1: value})
+    args = fill_namespace_with_default(test_options)
     multiworld.set_options(args)
 
     if "start_inventory" in test_options:
@@ -388,24 +379,6 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
     return multiworld
 
 
-def parse_class_option_keys(test_options: Optional[Dict]) -> dict:
-    """ Now the option class is allowed as key. """
-    if test_options is None:
-        return {}
-    parsed_options = {}
-
-    for option, value in test_options.items():
-        if hasattr(option, "internal_name"):
-            assert option.internal_name not in test_options, "Defined two times by class and internal_name"
-            parsed_options[option.internal_name] = value
-        else:
-            assert option in StardewValleyOptions.type_hints, \
-                f"All keys of world_options must be a possible Stardew Valley option, {option} is not."
-            parsed_options[option] = value
-
-    return parsed_options
-
-
 def search_world_cache(cache: Dict[frozenset, MultiWorld], frozen_options: frozenset) -> Optional[MultiWorld]:
     try:
         return cache[frozen_options]
@@ -421,16 +394,6 @@ def add_to_world_cache(cache: Dict[frozenset, MultiWorld], frozen_options: froze
     cache[frozen_options] = multi_world
 
 
-def complete_options_with_default(options_to_complete=None) -> StardewValleyOptions:
-    if options_to_complete is None:
-        options_to_complete = {}
-
-    for name, option in StardewValleyOptions.type_hints.items():
-        options_to_complete[name] = option.from_any(options_to_complete.get(name, option.default))
-
-    return StardewValleyOptions(**options_to_complete)
-
-
 def setup_multiworld(test_options: Iterable[Dict[str, int]] = None, seed=None) -> MultiWorld:  # noqa
     if test_options is None:
         test_options = []
@@ -442,22 +405,10 @@ def setup_multiworld(test_options: Iterable[Dict[str, int]] = None, seed=None) -
     for i in range(1, len(test_options) + 1):
         multiworld.game[i] = StardewValleyWorld.game
         multiworld.player_name.update({i: f"Tester{i}"})
-    args = create_args(test_options)
+    args = fill_namespace_with_default(test_options)
     multiworld.set_options(args)
 
     for step in gen_steps:
         call_all(multiworld, step)
 
     return multiworld
-
-
-def create_args(test_options):
-    args = Namespace()
-    for name, option in StardewValleyWorld.options_dataclass.type_hints.items():
-        options = {}
-        for i in range(1, len(test_options) + 1):
-            player_options = test_options[i - 1]
-            value = option(player_options[name]) if name in player_options else option.from_any(option.default)
-            options.update({i: value})
-        setattr(args, name, options)
-    return args
