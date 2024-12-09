@@ -1,8 +1,9 @@
 import argparse
 import json
 
+from .. import setup_solo_multiworld
+from ..options.presets import allsanity_mods_6_x_x
 from ...options import FarmType, EntranceRandomization
-from ...test import setup_solo_multiworld, allsanity_mods_6_x_x
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
