@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict, Any
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
-                     PerGameCommonOptions, OptionGroup, Visibility)
+                     PerGameCommonOptions, OptionGroup, Removed, Visibility)
 from .er_data import portal_mapping
 
 
@@ -121,12 +121,40 @@ class EntranceRando(TextChoice):
 
 class FixedShop(Toggle):
     """
-    Forces the Windmill entrance to lead to a shop, and removes the remaining shops from the pool.
-    Adds another entrance in Rooted Ziggurat Lower to keep an even number of entrances.
-    Has no effect if Entrance Rando is not enabled.
+    This option has been superseded by the Entrance Layout option.
+    If enabled, it will override the Entrance Layout option.
+    This is kept to keep older yamls working, and will be removed at a later date.
     """
+    visibility = Visibility.none
     internal_name = "fixed_shop"
     display_name = "Fewer Shops in Entrance Rando"
+
+
+class EntranceLayout(Choice):
+    """
+    Decide how the Entrance Randomizer chooses how to pair the entrances.
+    Standard: Entrances are randomly connected. There are 6 shops in the pool with this option.
+    Fixed Shop: Forces the Windmill entrance to lead to a shop, and removes the other shops from the pool.
+    Adds another entrance in Rooted Ziggurat Lower to keep an even number of entrances.
+    Direction Pairs: Entrances facing opposite directions are paired together. There are 8 shops in the pool with this option.
+    Note: For seed groups, if one player in a group chooses Fixed Shop and another chooses Direction Pairs, it will error out.
+    Either of these options will override Standard within a seed group.
+    """
+    internal_name = "entrance_layout"
+    display_name = "Entrance Layout"
+    option_standard = 0
+    option_fixed_shop = 1
+    option_direction_pairs = 2
+    default = 0
+
+
+class Decoupled(Toggle):
+    """
+    Decouple the entrances, so that when you go from one entrance to another, the return trip won't necessarily bring you back to the same place.
+    Note: For seed groups, all players in the group must have this option enabled or disabled.
+    """
+    internal_name = "decoupled"
+    display_name = "Decoupled Entrances"
 
 
 class LaurelsLocation(Choice):
@@ -157,15 +185,39 @@ class ShuffleLadders(Toggle):
 class TunicPlandoConnections(PlandoConnections):
     """
     Generic connection plando. Format is:
-    - entrance: "Entrance Name"
-      exit: "Exit Name"
+    - entrance: Entrance Name
+      exit: Exit Name
+      direction: Direction
       percentage: 100
+    Direction must be one of entrance, exit, or both, and defaults to both if omitted.
+    Direction entrance means the entrance leads to the exit. Direction exit means the exit leads to the entrance.
+    If you do not have Decoupled enabled, you do not need the direction line, as it will only use both.
     Percentage is an integer from 0 to 100 which determines whether that connection will be made. Defaults to 100 if omitted.
+    If the Entrance Layout option is set to Standard or Fixed Shop, you can plando multiple shops.
+    If the Entrance Layout option is set to Direction Pairs, your plando connections must be facing opposite directions.
+    Shop Portal 1-6 are South portals, and Shop Portal 7-8 are West portals.
     """
-    entrances = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
-    exits = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
+    shops = {f"Shop Portal {i + 1}" for i in range(500)}
+    entrances = {portal.name for portal in portal_mapping}.union(shops)
+    exits = {portal.name for portal in portal_mapping}.union(shops)
 
     duplicate_exits = True
+
+
+class CombatLogic(Choice):
+    """
+    If enabled, the player will logically require a combination of stat upgrade items and equipment to get some checks or navigate to some areas, with a goal of matching the vanilla combat difficulty.
+    The player may still be expected to run past enemies, reset aggro (by using a checkpoint or doing a scene transition), or find sneaky paths to checks.
+    This option marks many more items as progression and may force weapons much earlier than normal.
+    Bosses Only makes it so that additional combat logic is only added to the boss fights and the Gauntlet.
+    If disabled, the standard, looser logic is used. The standard logic does not include stat upgrades, just minimal weapon requirements, such as requiring a Sword or Magic Wand for Quarry, or not requiring a weapon for Swamp.
+    """
+    internal_name = "combat_logic"
+    display_name = "More Combat Logic"
+    option_off = 0
+    option_bosses_only = 1
+    option_on = 2
+    default = 0
 
 
 class LaurelsZips(Toggle):
@@ -253,32 +305,42 @@ class TunicOptions(PerGameCommonOptions):
     ability_shuffling: AbilityShuffling
     shuffle_ladders: ShuffleLadders
     entrance_rando: EntranceRando
-    fixed_shop: FixedShop
+    entrance_layout: EntranceLayout
+    decoupled: Decoupled
+    plando_connections: TunicPlandoConnections
     fool_traps: FoolTraps
     hexagon_quest: HexagonQuest
     hexagon_goal: HexagonGoal
     extra_hexagon_percentage: ExtraHexagonPercentage
     laurels_location: LaurelsLocation
+    combat_logic: CombatLogic
     lanternless: Lanternless
     maskless: Maskless
     laurels_zips: LaurelsZips
     ice_grappling: IceGrappling
     ladder_storage: LadderStorage
     ladder_storage_without_items: LadderStorageWithoutItems
-    plando_connections: TunicPlandoConnections
 
-    logic_rules: LogicRules
+    fixed_shop: FixedShop  # will be removed at a later date
+    logic_rules: Removed  # fully removed in the direction pairs update
       
 
 tunic_option_groups = [
     OptionGroup("Logic Options", [
+        CombatLogic,
         Lanternless,
         Maskless,
         LaurelsZips,
         IceGrappling,
         LadderStorage,
-        LadderStorageWithoutItems
-    ])
+        LadderStorageWithoutItems,
+    ]),
+    OptionGroup("Entrance Randomizer", [
+        EntranceRando,
+        EntranceLayout,
+        Decoupled,
+        TunicPlandoConnections,
+    ]),
 ]
 
 tunic_option_presets: Dict[str, Dict[str, Any]] = {
