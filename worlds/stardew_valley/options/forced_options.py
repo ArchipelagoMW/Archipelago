@@ -41,9 +41,10 @@ def force_qi_special_orders_deactivation_when_ginger_island_is_excluded(world_op
     qi_board_is_active = world_options.special_order_locations.value & options.SpecialOrderLocations.value_qi
 
     if ginger_island_is_excluded and qi_board_is_active:
+        original_option_name = world_options.special_order_locations.current_option_name
         world_options.special_order_locations.value -= options.SpecialOrderLocations.value_qi
         logger.warning(f"Mr. Qi's Special Orders requires Ginger Island. "
-                       f"Ginger Island was excluded from {player} ({player_name})'s world, so Mr. Qi's Special Orders were force disabled")
+                       f"Ginger Island was excluded from {player} ({player_name})'s world, so Special Order Locations was changed from {original_option_name} to {world_options.special_order_locations.current_option_name}")
 
 
 def force_accessibility_to_full_when_goal_requires_all_locations(player, player_name, world_options):
