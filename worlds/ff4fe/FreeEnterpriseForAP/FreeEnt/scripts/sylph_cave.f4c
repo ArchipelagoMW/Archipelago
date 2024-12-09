@@ -46,8 +46,13 @@ event($E5)  //Rydia learning Sylph using the Pan
     pause 4
 
     [#B #Text_LoadRewardNameFromSlot #reward_slot.sylph_item 0]
+    // %if ap_sylph_item%
+    music #DummyFanfare
+    message #ap_reward_slot.sylph_item
+    // %else%
+    message #msg.fe_ReceivedFanfare
+    // %end%
     sound #GetItem
-    message #msg.fe_Received
     [#B #Objectives_TickRewardSlot #reward_slot.sylph_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.sylph_item]
     player face up

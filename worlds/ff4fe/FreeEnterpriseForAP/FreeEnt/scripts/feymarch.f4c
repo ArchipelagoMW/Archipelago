@@ -60,7 +60,12 @@ event($C9)  //Asura battle
     toggle tint $00
 
     [#B #Text_LoadRewardNameFromSlot #reward_slot.feymarch_queen_item 0]
+    // %if ap_feymarch_queen_item%
+    music #DummyFanfare
+    message #ap_reward_slot.feymarch_queen_item
+    // %else%
     message #msg.fe_ReceivedFanfare
+    // %end%
     [#B #Objectives_TickRewardSlot #reward_slot.feymarch_queen_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.feymarch_queen_item]
     set #AsuraBattle
@@ -91,7 +96,12 @@ event($CA)  //Leviathan battle
     [#B #Rando_PostBossBattle #rando.leviatan_slot]
     toggle tint $00
     [#B #Text_LoadRewardNameFromSlot #reward_slot.feymarch_king_item 0]
+    // %if ap_feymarch_king_item%
+    music #DummyFanfare
+    message #ap_reward_slot.feymarch_king_item
+    // %else%
     message #msg.fe_ReceivedFanfare
+    // %end%
     [#B #Objectives_TickRewardSlot #reward_slot.feymarch_king_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.feymarch_king_item]
     set #LeviatanBattle

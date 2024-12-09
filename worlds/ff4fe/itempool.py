@@ -61,7 +61,6 @@ def create_character_pool(world: World, chosen_character: str) -> List[str]:
 
 
 def get_chosen_character(world: World):
-    chosen_character = "None"
     if world.options.HeroChallenge.current_key != "none":
         option_value = str(world.options.HeroChallenge.current_key)
         if option_value == "random_character":

@@ -35,8 +35,13 @@ event($09)  //Receiving the pan
     p #FabulWoman2 face down
     pause 4
     [#B #Text_LoadRewardNameFromSlot #reward_slot.found_yang_item 0]
+    // %if ap_found_yang_item%
+    music #DummyFanfare
+    message #ap_reward_slot.found_yang_item
+    // %else%
+    message #msg.fe_ReceivedFanfare
+    // %end%
     sound #GetItem
-    message #msg.fe_Received
     [#B #Objectives_TickRewardSlot #reward_slot.found_yang_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.found_yang_item]
     set #GotPan
@@ -57,8 +62,13 @@ event($F9)  //Trading the Pan for the Spoon
     [#B #Objectives_Tick #objective.quest_tradepan]
     map message 8  // Sorry!
     [#B #Text_LoadRewardNameFromSlot #reward_slot.pan_trade_item 0]
-    sound #GetItem
+    // %if ap_pan_trade_item%
+    music #DummyFanfare
+    message #ap_reward_slot.pan_trade_item
+    // %else%
     message #msg.fe_Received
+    // %end%
+    sound #GetItem
     [#B #Objectives_TickRewardSlot #reward_slot.pan_trade_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.pan_trade_item]
     set #GotSpoon

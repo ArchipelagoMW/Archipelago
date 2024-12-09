@@ -5,6 +5,7 @@ for randomizer flags and interactions between them. The actual
 effects of these assignments are dealt with in keyitem_rando 
 and boss_rando.
 '''
+import unicodedata
 
 from .rewards import EmptyReward, KeyItemReward, ItemReward, AxtorReward, RewardSlot, RewardsAssignment, REWARD_SLOT_SPOILER_NAMES
 from . import databases
@@ -17,6 +18,8 @@ from .address import *
 
 
 import math
+import re
+import string
 
 DEBUG = 0
 MAX_RANDOMIZATION_ATTEMPTS = 100
@@ -521,7 +524,11 @@ def apply(env):
                 pointer = script_text[20:24]
                 pointer = pointer[1:] if pointer[3] != ")" else pointer[1:3]
                 env.add_script(f"consts(ap_reward_slot) {{${pointer} {slot.name}}} ")
-                env.add_script(f'{script_text} {{Found {ap_item["player_name"]}\'s \n{ap_item["item_name"]}. }}')
+                safe_item_name = unicodedata.normalize("NFKD", ap_item["item_name"])
+                safe_item_name = re.sub(r"[^a-zA-Z0-9`\'.\-_!?%/:,\s]", "-", safe_item_name)
+                safe_player_name = unicodedata.normalize("NFKD", ap_item["player_name"])
+                safe_player_name = re.sub(r"[^a-zA-Z0-9`\'.\-_!?%/:,\s]", "-", safe_player_name)
+                env.add_script(f'{script_text} {{Found {safe_player_name}\'s \n{safe_item_name}. }}')
                 rewards_assignment[slot] = reward
             found_valid_assignment = True
         elif env.options.flags.has('key_items_vanilla'):
@@ -663,27 +670,6 @@ def apply(env):
 
         found_valid_assignment = True
         break
-        for test in tests:
-            if type(test) is list:
-                if len(test) == 3:
-                    qualification, without, force = test
-                else:    
-                    qualification, without = test
-            else:
-                qualification = test
-                without = []
-                force = None
-
-            result, path = checker.check(qualification, without=without, force=force)
-            if not result:
-                # item is unreachable, assignment fails
-                if DEBUG:
-                    print('  FAILED: no path to {}'.format(qualification))
-                found_valid_assignment = False
-                break
-            else:
-                if DEBUG:
-                    print('  {} : {}'.format(qualification, ', '.join(path)))
 
         attempts += 1
 

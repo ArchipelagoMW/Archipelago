@@ -267,7 +267,12 @@ event($74)  //Obtaining the Earth Crystal
     [#B #Text_LoadRewardNameFromSlot #reward_slot.magnes_item 0]
     p #CaveMagnesCrystal toggle visible
     deactivate #CaveMagnesCrystal
+    // %if ap_magnes_item%
+    music #DummyFanfare
+    message #ap_reward_slot.magnes_item
+    // %else%
     message #msg.fe_ReceivedFanfare
+    // %end%
     music #Prelude
     [#B #Objectives_TickRewardSlot #reward_slot.magnes_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.magnes_item]

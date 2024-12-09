@@ -52,8 +52,13 @@ event($A6)  //Obtaining the Luca Key
 
     [#B #Text_LoadRewardNameFromSlot #reward_slot.luca_item 0]
     player wave out
-    sound #GetItem
+    // %if ap_luca_item%
+    music #DummyFanfare
+    message #ap_reward_slot.luca_item
+    // %else%
     message #msg.fe_Received
+    // %end%
+    sound #GetItem
     [#B #Objectives_TickRewardSlot #reward_slot.luca_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.luca_item]
     set #SpokeToGiottAfterBabil

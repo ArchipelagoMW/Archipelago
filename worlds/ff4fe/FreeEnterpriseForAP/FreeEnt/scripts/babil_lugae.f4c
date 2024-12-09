@@ -96,9 +96,15 @@ event($94)  //Dr. Lugae battles
     [#B #Objectives_TickBossSlot #rando.lugae_slot]
     [#B #Rando_PostBossBattle #rando.lugae_slot]
 
-    sound #GetItem
+
     [#B #Text_LoadRewardNameFromSlot #reward_slot.babil_boss_item 0]
+    // %if ap_babil_boss_item%
+    music #DummyFanfare
+    message #ap_reward_slot.babil_boss_item
+    // %else%
     message #msg.fe_Received
+    // %end%
+    sound #GetItem
     [#B #Objectives_TickRewardSlot #reward_slot.babil_boss_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.babil_boss_item]
     player face up

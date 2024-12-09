@@ -1,0 +1,99 @@
+start : item*
+
+?item : label
+      | directive
+      | command
+      | direct_patch
+      | raw_data
+      | string
+
+label : identifier ":"
+      | "%" identifier ":"   -> local_label
+
+directive : /\.[a-z]+/ [[identifier] hex_number]
+
+command : operation [address]
+
+?operation : /[a-z]{3}/
+
+address : "#" immediate_value                -> immediate
+        | addr                               -> addr
+        | addr "," "x"                       -> addr_x
+        | addr "," "y"                       -> addr_y
+        | "(" addr ")"                       -> addr_indirect
+        | "(" addr "," "x" ")"               -> addr_x_indirect
+        | "(" addr ")" "," "y"               -> addr_indirect_y
+        | "[" addr "]"                       -> addr_indirect_long
+        | "[" addr "]" "," "y"               -> addr_indirect_long_y
+        | hex_byte "," "s"                   -> sr
+        | "(" hex_byte "," "s" ")" "," "y"   -> sr_indirect_y
+        | byte "," byte                      -> block
+        | "$+" identifier                    -> branch_label
+        | "$-" identifier                    -> branch_label
+        | "a"                                -> a
+
+?byte : hex_byte
+      | address_expression
+
+?addr : hex_address
+      | address_expression
+
+?immediate_value : number
+                 | address_expression
+
+address_expression : address_part expression_value
+
+?address_part : "$." -> address_part_byte
+              | "$_" -> address_part_short
+              | "$=" -> address_part_long
+              | "$`" -> address_part_high
+              | "$^" -> address_part_bank
+
+?expression_value : identifier
+                  | "(" expr_p0 ")"
+
+!expr_p0 : expr_p0 "|" expr_p1   -> expr_binary_op
+         | expr_p1               -> expr_passthrough
+!expr_p1 : expr_p1 "^" expr_p2   -> expr_binary_op
+         | expr_p2               -> expr_passthrough
+!expr_p2 : expr_p2 "&" expr_p3   -> expr_binary_op
+         | expr_p3               -> expr_passthrough
+!expr_p3 : expr_p3 "<<" expr_p4  -> expr_binary_op
+         | expr_p3 ">>" expr_p4  -> expr_binary_op
+         | expr_p4               -> expr_passthrough
+!expr_p4 : expr_p4 "+" expr_p5   -> expr_binary_op
+         | expr_p4 "-" expr_p5   -> expr_binary_op
+         | expr_p5               -> expr_passthrough
+!expr_p5 : expr_p5 "*" expr_p6   -> expr_binary_op
+         | expr_p5 "/" expr_p6   -> expr_binary_op
+         | expr_p5 "%" expr_p6   -> expr_binary_op
+         | expr_p6               -> expr_passthrough
+expr_p6  : "(" expr_p0 ")"       -> expr_passthrough
+         | number                -> expr_passthrough
+         | identifier            -> expr_identifier
+
+direct_patch : "[" direct_patch_address "]" "=" number
+
+raw_data : "[[" raw_data_item* "]]"
+
+?raw_data_item : /[0-9A-Fa-f]{2}/     -> raw_byte
+               | address_expression
+
+?number : decimal_number
+        | hex_number
+
+decimal_number : /[0-9]+/
+
+hex_number : /(\$|0x)[0-9A-Fa-f]+/
+
+direct_patch_address : /[0-9A-Fa-f]{6}/
+
+hex_address  : /\$(0x)?[0-9A-Fa-f]{1,6}/
+hex_byte  : /\$(0x)?[0-9A-Fa-f]{2}/
+
+?identifier : /[A-Z][A-Za-z0-9_]*/
+
+string : /"[^"]*"/
+
+%import common.WS
+%ignore WS

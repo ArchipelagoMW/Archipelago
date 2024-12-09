@@ -1,0 +1,48 @@
+mapgrid_block_params : map_value [position]
+
+position : number number
+
+mapgrid_block_body : mapgrid_element*
+
+mapgrid_element : /[0-9A-Fa-f]{2}/  -> tile
+                | "\\"               -> eol
+
+
+map_block_params : map_value
+
+map_block_body : map_info_element*
+
+map_info_element : "battle" "background" number      -> battle_background
+                 | "battle" "background" number "alternate" -> battle_background_alternate
+                 | "warp" enabled_disabled           -> warp
+                 | "exit" enabled_disabled           -> exit
+                 | "magnetic" enabled_disabled       -> magnetic
+                 | "grid" number                     -> grid
+                 | "tileset" number                  -> tileset
+                 | "placement" "group" number        -> placements
+                 | "border" "tile" number            -> border_tile
+                 | "palette" number                  -> palette
+                 | "npc" "palettes" number number    -> npc_palettes
+                 | "music" music_value               -> music
+                 | "background" [grid_specifier] [translucent_specifier] [scroll_specifier] [direction_specifier] [speed_specifier]  -> background
+                 | "name" "index" number             -> name
+                 | "underground" "npcs"              -> underground_npcs
+                 | "underground" "map" "grid"        -> underground_map_grid
+
+enabled_disabled        : "enabled"                  -> enabled
+                        | "disabled"                 -> disabled
+
+grid_specifier          : "grid" number              -> bg_grid
+
+translucent_specifier   : "translucent"              -> bg_translucent
+                        | "opaque"                   -> bg_opaque
+
+scroll_specifier        : "scroll" "both"            -> bg_scroll_both
+                        | "scroll" "horizontal"      -> bg_scroll_horizontal
+                        | "scroll" "vertical"        -> bg_scroll_vertical
+                        | "scroll" "none"            -> bg_scroll_none
+
+direction_specifier     : "direction" direction      -> bg_direction
+
+speed_specifier         : "speed" number             -> bg_speed
+

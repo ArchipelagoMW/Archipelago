@@ -549,7 +549,12 @@ event($AF)  //Obtaining the Dark Crystal
     p #Crystal1 toggle visible
     deactivate #Crystal1
     [#B #Text_LoadRewardNameFromSlot #reward_slot.sealed_cave_item 0]
+    // %if ap_sealed_cave_item%
+    music #DummyFanfare
+    message #ap_reward_slot.sealed_cave_item
+    // %else%
     message #msg.fe_ReceivedFanfare
+    // %end%
     [#B #Objectives_TickRewardSlot #reward_slot.sealed_cave_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.sealed_cave_item]
     set #GotDarkCrystal

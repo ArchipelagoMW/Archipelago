@@ -8,8 +8,8 @@ def create_flags_from_options(options: FF4FEOptions):
              f"{build_characters_flags(options)} "
              f"Twild/junk "
              f"{build_shops_flags(options)} "
-             f"Bstandard/alt:gauntlet/whichburn "
-             f"Etoggle/keep:doors,behemoths "
+             f"{build_bosses_flags(options)} "
+             f"{build_encounters_flags(options)} "
              f"Gdupe/mp/warp/life/sylph/backrow "
              f"{build_misc_flags(options)}"
              f"{build_starter_kit_flags(options)}")
@@ -104,10 +104,16 @@ def build_shops_flags(options: FF4FEOptions):
     return shops_flags
 
 def build_bosses_flags(options: FF4FEOptions):
-    pass
+    bosses_flags = "Bstandard/alt:gauntlet/whichburn"
+    if options.NoFreeBosses:
+        bosses_flags += "/nofree"
+    return bosses_flags
 
 def build_encounters_flags(options: FF4FEOptions):
-    pass
+    encounters_flags = "Etoggle"
+    if options.KeepDoorsBehemoths:
+        encounters_flags += "/keep:doors,behemoths"
+    return encounters_flags
 
 def build_glitches_flags(options: FF4FEOptions):
     pass

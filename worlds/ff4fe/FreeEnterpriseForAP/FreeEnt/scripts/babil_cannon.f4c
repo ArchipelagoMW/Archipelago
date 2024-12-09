@@ -359,10 +359,15 @@ event($96)  //Jump from Tower of Bab-il, airship escape
 
     pause 6    
 
-    sound #GetItem
     player wave out
     [#B #Text_LoadRewardNameFromSlot #reward_slot.cannon_item 0]
+    // %if ap_cannon_item%
+    music #DummyFanfare
+    message #ap_reward_slot.cannon_item
+    // %else%
     message #msg.fe_Received
+    // %end%
+    sound #GetItem
     [#B #Objectives_TickRewardSlot #reward_slot.cannon_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.cannon_item]
     batch {

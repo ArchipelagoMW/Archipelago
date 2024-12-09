@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 
-from Options import Toggle, Range, Choice, PerGameCommonOptions, ItemSet, DefaultOnToggle, StartInventoryPool
+from Options import Toggle, Range, Choice, PerGameCommonOptions, ItemSet, DefaultOnToggle, StartInventoryPool, \
+    OptionGroup, OptionSet
+
 
 class ForgeTheCrystal(Toggle):
     """Bring the Adamant and Legend Sword to clear this objective.
@@ -42,11 +44,10 @@ class ItemPlacement(Choice):
     Setting this to Full Shuffle will allow any items to be anywhere.
     Setting this to Major Minor Split will force all non-major locations to never have progression.
     In either case, major locations can only have useful or progression items.
-    Major locations are any non-treasure chest locations"""
+    Major locations are any MIAB or event locations"""
     display_name = "Item Placement"
     option_full_shuffle = 0
     option_major_minor_split = 1
-    option_majors_only = 2
     default = 0
 
 class NoFreeCharacters(Toggle):
@@ -91,9 +92,10 @@ class PassInShops(Toggle):
     """Can the pass show up in shops? This is a convenience feature and will never be required by the logic."""
     display_name = "Enable Pass in Shops"
 
-class AllowedCharacters(ItemSet):
+class AllowedCharacters(OptionSet):
     """Pool of characters allowed to show up. Note that if Hero Challenge is enabled, your hero will still appear."""
     display_name = "Allowed Characters"
+    valid_keys = ["Cecil", "Kain", "Rydia", "Tellah", "Edward", "Rosa", "Yang", "Palom", "Porom", "Cid", "Edge", "Fusoya"]
     default = ["Cecil", "Kain", "Rydia", "Tellah", "Edward", "Rosa", "Yang", "Palom", "Porom", "Cid", "Edge", "Fusoya"]
 
 class EnsureAllCharacters(DefaultOnToggle):
@@ -104,9 +106,10 @@ class AllowDuplicateCharacters(DefaultOnToggle):
     """Allows multiple instances of the same character to join your party."""
     display_name = "Allow Duplicate Characters"
 
-class RestrictedCharacters(ItemSet):
+class RestrictedCharacters(OptionSet):
     """List of characters that can't appear in the easiest to access locations if possible."""
     display_name = "Restricted Characters"
+    valid_keys = ["Cecil", "Kain", "Rydia", "Tellah", "Edward", "Rosa", "Yang", "Palom", "Porom", "Cid", "Edge", "Fusoya"]
     default = ["Edge", "Fusoya"]
 
 class PartySize(Range):
@@ -168,6 +171,12 @@ class FreeShops(Toggle):
 class NoAdamantArmors(Toggle):
     """Remove Adamant Armor from the item and shop pool."""
     display_name = "No Adamant Armor"
+
+class KeepDoorsBehemoths(Toggle):
+    display_name = "Keep TrapDoor and Behemoth Fights"
+
+class NoFreeBosses(Toggle):
+    display_name = "No Free Bosses"
 
 class WackyChallenge(Choice):
     """Wacky challenges are not fair, balanced, stable, or even necessarily interesting.
@@ -333,8 +342,55 @@ class FF4FEOptions(PerGameCommonOptions):
     ShopRandomization: ShopRandomization
     FreeShops: FreeShops
     NoAdamantArmors: NoAdamantArmors
+    KeepDoorsBehemoths: KeepDoorsBehemoths
+    NoFreeBosses: NoFreeBosses
     WackyChallenge: WackyChallenge
     StarterKitOne: StarterKitOne
     StarterKitTwo: StarterKitTwo
     StarterKitThree: StarterKitThree
     start_inventory_from_pool: StartInventoryPool
+
+ff4fe_option_groups = [
+    OptionGroup("Objective Options", [
+        ForgeTheCrystal,
+        ConquerTheGiant,
+        DefeatTheFiends,
+        FindTheDarkMatter,
+        AdditionalObjectives,
+        ObjectiveReward
+    ]),
+    OptionGroup("Character Options", [
+        NoFreeCharacters,
+        NoEarnedCharacters,
+        AllowedCharacters,
+        EnsureAllCharacters,
+        AllowDuplicateCharacters,
+        RestrictedCharacters
+    ]),
+    OptionGroup("Item Options", [
+        ItemPlacement,
+        UsefulPercentage,
+        PassInShops,
+        MinTier,
+        MaxTier,
+        JunkTier
+    ]),
+    OptionGroup("Challenge Flags", [
+        HeroChallenge,
+        PartySize,
+        CharactersPermajoin,
+        CharactersPermadie,
+        UnsafeKeyItemPlacement,
+        NoAdamantArmors,
+        KeepDoorsBehemoths,
+        NoFreeBosses,
+        WackyChallenge
+    ]),
+    OptionGroup("Miscellaneous Flags", [
+        ShopRandomization,
+        FreeShops,
+        StarterKitOne,
+        StarterKitTwo,
+        StarterKitThree
+    ])
+]

@@ -583,8 +583,13 @@ event($7C)  //Valvalis battle
 
     [#B #Text_LoadRewardNameFromSlot #reward_slot.zot_item 0]
     player wave out
-    sound #GetItem
+    // %if ap_zot_item%
+    music #DummyFanfare
+    message #ap_reward_slot.zot_item
+    // %else%
     message #msg.fe_Received
+    // %end%
+    sound #GetItem
     [#B #Objectives_TickRewardSlot #reward_slot.zot_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.zot_item]
     player move up

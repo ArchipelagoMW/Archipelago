@@ -1,3 +1,7 @@
+import re
+import string
+import unicodedata
+
 from worlds.ff4fe.FreeEnterpriseForAP.FreeEnt.generate_wiki_tables import items_dbview
 from . import core_rando
 from .crosspolinate import crosspolinate
@@ -140,7 +144,7 @@ def apply(env):
             ap_item = env.options.ap_data[str(id)]
             placement = items_dbview.find_one(lambda i: i.code == ap_item["item_data"]["fe_id"])
             if placement is None:
-                treasure_assignment.assign(t, "#item.Cure1")
+                treasure_assignment.assign(t, '{} gp'.format(0))
             elif placement.tier <= env.options.ap_data["junk_tier"] and placement.flag != "K":
                 multiplier = (10 if placement.subtype == 'arrow' else 1)
                 divisor = (4 if env.options.flags.has('shops_sell_quarter') else 2)
@@ -158,8 +162,17 @@ def apply(env):
             high_byte = pointer % 256
             low_byte = pointer // 256
             env.add_script(f"patch({entry_location}) {{ {bank:X} {high_byte:02X} {low_byte:02X} }}")
-            env.add_script(f'{script_text} {{Found {ap_item["player_name"]}\'s \n{ap_item["item_name"]}. }}')
-
+            if ap_item["item_data"]["name"] == "Archipelago Item":
+                safe_item_name = unicodedata.normalize("NFKD",ap_item["item_name"])
+                safe_item_name = re.sub(r"[^a-zA-Z0-9`\'.\-_!?%/:,\s]", "-", safe_item_name)
+                safe_player_name = unicodedata.normalize("NFKD",ap_item["player_name"])
+                safe_player_name = re.sub(r"[^a-zA-Z0-9`\'.\-_!?%/:,\s]", "-", safe_player_name)
+                env.add_script(f'{script_text} {{Found {safe_player_name}\'s \n{safe_item_name}. }}')
+            else:
+                if placement.tier <= env.options.ap_data["junk_tier"] and placement.flag != "K":
+                    env.add_script(f'{script_text} {{Found your own\n{placement.name}.\nAutomatically converted\nto {price} GP.}}')
+                else:
+                    env.add_script(f'{script_text} {{Found your own\n{placement.name}.}}')
     fight_chest_locations = ['{} {}'.format(*env.meta['miab_locations'][slot]) for slot in env.meta['miab_locations']]
     fight_treasure_areas = list(set([t.area for t in treasure_dbview.find_all(lambda t: t.fight is not None)]))
     for area in fight_treasure_areas:

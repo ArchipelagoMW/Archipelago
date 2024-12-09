@@ -61,7 +61,12 @@ event($19)  //Odin battle
     [#B #Rando_PostBossBattle #rando.odin_slot]
     pause 4
     [#B #Text_LoadRewardNameFromSlot #reward_slot.baron_throne_item 0]
+    // %if ap_baron_throne_item%
+    music #DummyFanfare
+    message #ap_reward_slot.baron_throne_item
+    // %else%
     message #msg.fe_ReceivedFanfare
+    // %end%
     batch 10 {
         p #KingBaron toggle visible
     }

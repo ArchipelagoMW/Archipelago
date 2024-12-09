@@ -29,7 +29,12 @@ event($CF)  //Bahamut battle
     [#B #Rando_PostBossBattle #rando.bahamut_slot]
     toggle tint $00
     [#B #Text_LoadRewardNameFromSlot #reward_slot.bahamut_item 0]
+    // %if ap_bahamut_item%
+    music #DummyFanfare
+    message #ap_reward_slot.bahamut_item
+    // %else%
     message #msg.fe_ReceivedFanfare
+    // %end%
     set #BahamutBattle
     [#B #Objectives_TickRewardSlot #reward_slot.bahamut_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.bahamut_item]

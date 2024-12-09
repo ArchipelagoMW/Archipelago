@@ -65,7 +65,12 @@ event($72)
     player wave out
 
     [#B #Text_LoadRewardNameFromSlot #reward_slot.rydias_mom_item 0]
+    // %if ap_rydias_mom_item%
+    music #DummyFanfare
+    message #ap_reward_slot.rydias_mom_item
+    // %else%
     message #msg.fe_ReceivedFanfare
+    // %end%
     [#B #Objectives_TickRewardSlot #reward_slot.rydias_mom_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.rydias_mom_item]
     player face down

@@ -51,7 +51,12 @@ event($E2)  //Trading the Rat Tail for Adamant
         p #GrottoAdamantMiniWantsTails wave in
         take item #Rat
         [#B #Objectives_TickRewardSlot #reward_slot.rat_trade_item]
+        // %if ap_rat_trade_item%
+        music #DummyFanfare
+        message #ap_reward_slot.rat_trade_item
+        // %else%
         [#B #Rando_DeliverRewardFromSlot #reward_slot.rat_trade_item]
+        // %end%
         [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.rat_tail]
         music #Cave
     }
@@ -66,7 +71,12 @@ event($E2)  //Trading the Rat Tail for Adamant
         map message 3  // "Oh! Oh! Oh! Legendary Pink Tail!!"
         take item #Pink
         [#B #Objectives_TickRewardSlot #reward_slot.pink_trade_item]
+        // %if ap_pink_trade_item%
+        music #DummyFanfare
+        message #ap_reward_slot.pink_trade_item
+        // %else%
         [#B #Rando_DeliverRewardFromSlot #reward_slot.pink_trade_item]
+        // %end%
         [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.pink_tail]
         music #Cave
     }
@@ -82,7 +92,15 @@ npc(#GrottoAdamantMiniWantsTails)
         $E2   //Trading the Rat Tail for Adamant
     }
 }
+// %if ap_rat_trade_item%
+text(map #AdamantGrotto message $02) {
+It's a Rat Tail I have
+been looking for!
+Okay! Take this!
 
+Received Archipelago Item.
+}
+// %else%
 text(map #AdamantGrotto message $02) {
 It's a Rat Tail I have
 been looking for!
@@ -90,7 +108,17 @@ Okay! Take this!
 
 Received [name $e0]![music $29][pause 40]
 }
+// %end%
 
+// %if ap_rat_trade_item%
+text(map #AdamantGrotto message $02) {
+Oh! Oh! Oh!
+Legendary Pink Tail!!
+Great!
+Take this!
+Received Archipelago Item.
+}
+// %else%
 text(map #AdamantGrotto message $03) {
 Oh! Oh! Oh!
 Legendary Pink Tail!!
@@ -98,6 +126,7 @@ Great!
 Take this!
 Received [name $e0]![music $29][pause 40]
 }
+// %end%
 
 // GotAdamant flag is now unused
 // event $E3 is now unused
@@ -210,6 +239,13 @@ event($E1)  //Obtaining "Excalibur"
     [#B #Rando_CheckFlag #randoflag.objective_mode_classicforge]
     [#B #If #not_Flag #flag.Result] {
         [#B #Objectives_TickRewardSlot #reward_slot.forge_item]
+        // %if ap_forge_item%
+        music #DummyFanfare
+        message #ap_reward_slot.forge_item
+        // %else%
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.forge_item 0]
+        message #msg.fe_ReceivedFanfare
+        // %end%
         [#B #Rando_DeliverRewardFromSlot #reward_slot.forge_item]
     }
     [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.legend_sword]
@@ -224,9 +260,6 @@ event($E1)  //Obtaining "Excalibur"
 text(map #SmithyHouseMainFloor message $05) {
 It's done!
 
-
-
-Received [name $e0]![music $29][pause 40]
 }
 //%end%
 

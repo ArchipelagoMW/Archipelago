@@ -243,9 +243,6 @@ class FF4FEClient(SNIClient):
                     ctx.location_names[item_received.location]))
                 return
         if item_received.player == ctx.slot and item_received.location >= 0:
-            if item_received_name in items.sellable_item_names and item_received.location >= 0:
-                if item_received_game_data.tier <= junk_tier_data[0]:
-                    snes_logger.info(f"{item_received_name} automatically converted to GP per junk settings.")
             if "Monster in a Box" not in item_received_location_name:
                 self.increment_items_received(ctx, items_received_amount)
                 return

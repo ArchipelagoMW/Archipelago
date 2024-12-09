@@ -37,9 +37,14 @@ event($71)  //Meeting Edward in Toroia, receiving TwinHarp
     pause 4
     message $1bd // take this    
 
+    // %if ap_toroia_hospital_item%
+    music #DummyFanfare
+    message #ap_reward_slot.toroia_hospital_item
+    // %else%
     [#B #Text_LoadRewardNameFromSlot #reward_slot.toroia_hospital_item 0]
-    sound #GetItem
     message #msg.fe_Received
+    sound #GetItem
+    // %end%
     [#B #Objectives_TickRewardSlot #reward_slot.toroia_hospital_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.toroia_hospital_item]
     set #SpokeToEdwardInToroia

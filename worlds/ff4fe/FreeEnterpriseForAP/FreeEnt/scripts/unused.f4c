@@ -120,14 +120,7 @@ event($B6) // Kain stealing dark crystal
 event($DA) // Elder praying
 { } // Erase for space
 
-event($DB) // Smut
-{ } // Erase for space
 
-event($DC)  // Sealed with unknown power (lunar palace)
-{ } // Erase for space
-
-event($DE)  // Acquire Smut
-{ } // Erase for space
 
 event($DF)  // Get Grimoire
 { } // Erase for space

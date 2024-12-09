@@ -22,7 +22,12 @@ event($A3)  //Winning the Murasame
     [#B #Objectives_TickBossSlot #rando.paledim_slot]
     [#B #Rando_PostBossBattle #rando.paledim_slot]
     [#B #Text_LoadRewardNameFromSlot #reward_slot.lunar_boss_1_item 0]
+    // %if ap_lunar_boss_1_item%
+    music #DummyFanfare
+    message #ap_reward_slot.lunar_boss_1_item
+    // %else%
     message #msg.fe_ReceivedFanfare
+    // %end%
     [#B #Objectives_TickRewardSlot #reward_slot.lunar_boss_1_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.lunar_boss_1_item]
     deactivate #Murasame
@@ -65,7 +70,12 @@ event($58)  //Winning the Crystal Sword
     [#B #Rando_PostBossBattle #rando.wyvern_slot]
     toggle tint $00
     [#B #Text_LoadRewardNameFromSlot #reward_slot.lunar_boss_2_item 0]
+    // %if ap_lunar_boss_2_item%
+    music #DummyFanfare
+    message #ap_reward_slot.lunar_boss_2_item
+    // %else%
     message #msg.fe_ReceivedFanfare
+    // %end%
     [#B #Objectives_TickRewardSlot #reward_slot.lunar_boss_2_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.lunar_boss_2_item]
     [#B #Objectives_Tick #objective.quest_crystalaltar]
@@ -107,7 +117,12 @@ event($A4)  //Winning the Holy Lance
     [#B #Objectives_TickBossSlot #rando.plague_slot]
     [#B #Rando_PostBossBattle #rando.plague_slot]
     [#B #Text_LoadRewardNameFromSlot #reward_slot.lunar_boss_3_item 0]
+    // %if ap_lunar_boss_3_item%
+    music #DummyFanfare
+    message #ap_reward_slot.lunar_boss_3_item
+    // %else%
     message #msg.fe_ReceivedFanfare
+    // %end%
     [#B #Objectives_TickRewardSlot #reward_slot.lunar_boss_3_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.lunar_boss_3_item]
     [#B #Objectives_Tick #objective.quest_whitealtar]
@@ -180,7 +195,12 @@ event($59)  //Winning the Masamune
     [#B #Objectives_TickBossSlot #rando.ogopogo_slot]
     [#B #Rando_PostBossBattle #rando.ogopogo_slot]
     [#B #Text_LoadRewardNameFromSlot #reward_slot.lunar_boss_5_item 0]
+    // %if ap_lunar_boss_5_item%
+    music #DummyFanfare
+    message #ap_reward_slot.lunar_boss_5_item
+    // %else%
     message #msg.fe_ReceivedFanfare
+    // %end%
     [#B #Objectives_TickRewardSlot #reward_slot.lunar_boss_5_item]
     [#B #Rando_DeliverRewardFromSlot #reward_slot.lunar_boss_5_item]
     deactivate #Masamune

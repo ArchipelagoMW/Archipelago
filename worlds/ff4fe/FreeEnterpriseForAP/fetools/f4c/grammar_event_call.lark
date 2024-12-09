@@ -1,0 +1,13 @@
+
+eventcall_block_params : number
+
+eventcall_block_body : [case* default_case [messages]]
+
+case : "if" condition ("," condition)* ":" value
+
+condition : flag_value
+          | "not" flag_value   -> not_condition
+
+default_case: ["else" ":"] value
+
+messages: "messages" ":" value+

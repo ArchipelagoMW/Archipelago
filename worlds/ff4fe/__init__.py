@@ -6,7 +6,7 @@ from typing import Mapping, Any
 
 import Utils
 import settings
-from BaseClasses import Region, ItemClassification, MultiWorld
+from BaseClasses import Region, ItemClassification, MultiWorld, Tutorial
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 from . import events, items
@@ -14,15 +14,28 @@ from . import rules as FERules
 from .Client import FF4FEClient
 from .FreeEnterpriseForAP.FreeEnt.cmd_make import MakeCommand
 from .itempool import create_itempool
-from .items import FF4FEItem, all_items, ItemData  # data used below to add items to the World
-from .locations import FF4FELocation, all_locations, LocationData  # same as above
-from .options import FF4FEOptions  # the options we defined earlier
+from .items import FF4FEItem, all_items, ItemData
+from .locations import FF4FELocation, all_locations, LocationData
+from .options import FF4FEOptions, ff4fe_option_groups
 from . import topology, flags
 from .rom import FF4FEProcedurePatch
 
 
 class FF4FEWebWorld(WebWorld):
-    theme = "partyTime"
+    theme = "grassFlowers"
+
+    setup_en = Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up the Final Fantasy IV: Free Enterprise randomizer connected to an Archipelago Multiworld.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Rosalie"]
+    )
+
+    tutorials = [setup_en]
+
+    option_groups = ff4fe_option_groups
 
 
 class FF4FESettings(settings.Group):
@@ -58,11 +71,6 @@ class FF4FEWorld(World):
         super().__init__(multiworld, player)
         self.rom_name_available_event = threading.Event()
         self.chosen_character = "None"
-
-    def generate_early(self) -> None:
-        self.options.local_items.value.update(
-            ["Cecil", "Kain", "Rydia", "Tellah", "Edward", "Rosa",
-             "Yang", "Palom", "Porom", "Cid", "Edge", "Fusoya", "None"])
 
     def is_vanilla_game(self):
         return self.get_objective_count() == 0
@@ -168,7 +176,11 @@ class FF4FEWorld(World):
                 character_locations.remove(location)
                 self.get_location(location).place_locked_item(self.create_item("None"))
                 item_pool.remove("None")
-        self.multiworld.random.shuffle(character_locations)
+
+        restricted_character_allow_locations = list(set(character_locations) - set(locations.restricted_character_locations)).copy()
+        restricted_character_forbid_locations = list(set(character_locations) - set(restricted_character_allow_locations)).copy()
+        self.multiworld.random.shuffle(restricted_character_allow_locations)
+        self.multiworld.random.shuffle(restricted_character_forbid_locations)
 
         for item in map(self.create_item, item_pool):
             if item.name == self.chosen_character and not chosen_character_placed:
@@ -177,7 +189,16 @@ class FF4FEWorld(World):
                 chosen_character_placed = True
                 continue
             elif item.name in items.characters:
-                self.get_location(character_locations.pop()).place_locked_item(self.create_item(item.name))
+                if item.name in self.options.RestrictedCharacters.value:
+                    if len(restricted_character_allow_locations) > 0:
+                        self.get_location(restricted_character_allow_locations.pop()).place_locked_item(self.create_item(item.name))
+                    else:
+                        self.get_location(restricted_character_forbid_locations.pop()).place_locked_item(self.create_item(item.name))
+                else:
+                    if len(restricted_character_forbid_locations) > 0:
+                        self.get_location(restricted_character_forbid_locations.pop()).place_locked_item(self.create_item(item.name))
+                    else:
+                        self.get_location(restricted_character_allow_locations.pop()).place_locked_item(self.create_item(item.name))
                 continue
             if item.name == "Crystal":
                 if not self.is_vanilla_game():
