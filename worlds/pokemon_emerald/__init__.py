@@ -297,6 +297,12 @@ class PokemonEmeraldWorld(World):
                     "Safari Zone SE - Hidden Item in South Grass 2",
                     "Safari Zone SE - Item in Grass",
                 ])
+
+            # Sacred ash is on Navel Rock, which is locked behind the event tickets
+            if not self.options.event_tickets:
+                exclude_locations([
+                    "Navel Rock Top - Hidden Item Sacred Ash",
+                ])
         elif self.options.goal == Goal.option_steven:
             exclude_locations([
                 "Meteor Falls 1F - Rival Steven",
