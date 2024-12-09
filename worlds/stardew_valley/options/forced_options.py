@@ -41,7 +41,7 @@ def force_qi_special_orders_deactivation_when_ginger_island_is_excluded(world_op
     qi_board_is_active = world_options.special_order_locations.value & options.SpecialOrderLocations.value_qi
 
     if ginger_island_is_excluded and qi_board_is_active:
-        world_options.special_order_locations.value = world_options.special_order_locations.value ^ options.SpecialOrderLocations.value_qi
+        world_options.special_order_locations.value -= options.SpecialOrderLocations.value_qi
         logger.warning(f"Mr. Qi's Special Orders requires Ginger Island. "
                        f"Ginger Island was excluded from {player} ({player_name})'s world, so Mr. Qi's Special Orders were force disabled")
 
