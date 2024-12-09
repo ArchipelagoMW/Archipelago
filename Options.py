@@ -1260,7 +1260,7 @@ class CommonOptions(metaclass=OptionsMetaProperty):
                 value = getattr(self, option_name).value
                 if isinstance(value, set):
                     value = sorted(value)
-                if toggles_as_bools and issubclass(type(self).type_hints[option_name], Toggle):
+                elif toggles_as_bools and issubclass(type(self).type_hints[option_name], Toggle):
                     value = bool(value)
                 option_results[display_name] = value
             else:
