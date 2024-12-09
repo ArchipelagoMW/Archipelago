@@ -21,6 +21,16 @@ from .Charms import names as charm_names
 from BaseClasses import Region, Location, MultiWorld, Item, LocationProgressType, Tutorial, ItemClassification, CollectionState
 from worlds.AutoWorld import World, LogicMixin, WebWorld
 
+from settings import Group, Bool
+
+
+class HollowKnightSettings(Group):
+    class DisableMapModSpoilers(Bool):
+        """Disallows the APMapMod from showing spoiler placements."""
+
+    disable_spoilers: typing.Union[DisableMapModSpoilers, bool] = False
+
+
 path_of_pain_locations = {
     "Soul_Totem-Path_of_Pain_Below_Thornskip",
     "Lore_Tablet-Path_of_Pain_Entrance",
@@ -124,14 +134,25 @@ shop_cost_types: typing.Dict[str, typing.Tuple[str, ...]] = {
 
 
 class HKWeb(WebWorld):
-    tutorials = [Tutorial(
+    setup_en  = Tutorial(
         "Mod Setup and Use Guide",
         "A guide to playing Hollow Knight with Archipelago.",
         "English",
         "setup_en.md",
         "setup/en",
         ["Ijwu"]
-    )]
+    )
+
+    setup_pt_br  = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Português Brasileiro",
+        "setup_pt_br.md",
+        "setup/pt_br",
+        ["JoaoVictor-FA"]
+    )
+
+    tutorials = [setup_en, setup_pt_br]
 
     bug_report_page = "https://github.com/Ijwu/Archipelago.HollowKnight/issues/new?assignees=&labels=bug%2C+needs+investigation&template=bug_report.md&title="
 
@@ -145,6 +166,7 @@ class HKWorld(World):
     game: str = "Hollow Knight"
     options_dataclass = HKOptions
     options: HKOptions
+    settings: typing.ClassVar[HollowKnightSettings]
 
     web = HKWeb()
 
@@ -209,7 +231,7 @@ class HKWorld(World):
             all_event_names.update(set(godhome_event_names))
 
         # Link regions
-        for event_name in all_event_names:
+        for event_name in sorted(all_event_names):
             #if event_name in wp_exclusions:
             #    continue
             loc = HKLocation(self.player, event_name, None, menu_region)
@@ -318,7 +340,7 @@ class HKWorld(World):
 
         for shop, locations in self.created_multi_locations.items():
             for _ in range(len(locations), getattr(self.options, shop_to_option[shop]).value):
-                loc = self.create_location(shop)
+                self.create_location(shop)
                 unfilled_locations += 1
 
         # Balance the pool
@@ -334,7 +356,7 @@ class HKWorld(World):
             if shops:
                 for _ in range(additional_shop_items):
                     shop = self.random.choice(shops)
-                    loc = self.create_location(shop)
+                    self.create_location(shop)
                     unfilled_locations += 1
                     if len(self.created_multi_locations[shop]) >= 16:
                         shops.remove(shop)
@@ -487,9 +509,13 @@ class HKWorld(World):
                     per_player_grubs_per_player[player][player] += 1
 
                 if grub.location and grub.location.player in group_lookup.keys():
-                    for real_player in group_lookup[grub.location.player]:
+                    # will count the item linked grub instead
+                    pass
+                elif player in group_lookup:
+                    for real_player in group_lookup[player]:
                         grub_count_per_player[real_player] += 1
                 else:
+                    # for non-linked grubs
                     grub_count_per_player[player] += 1
 
             for player, count in grub_count_per_player.items():
@@ -512,25 +538,15 @@ class HKWorld(World):
         for option_name in hollow_knight_options:
             option = getattr(self.options, option_name)
             try:
+                # exclude more complex types - we only care about int, bool, enum for player options; the client
+                # can get them back to the necessary type.
                 optionvalue = int(option.value)
-            except TypeError:
-                pass  # C# side is currently typed as dict[str, int], drop what doesn't fit
-            else:
                 options[option_name] = optionvalue
+            except TypeError:
+                pass
 
         # 32 bit int
         slot_data["seed"] = self.random.randint(-2147483647, 2147483646)
-
-        # Backwards compatibility for shop cost data (HKAP < 0.1.0)
-        if not self.options.CostSanity:
-            for shop, terms in shop_cost_types.items():
-                unit = cost_terms[next(iter(terms))].option
-                if unit == "Geo":
-                    continue
-                slot_data[f"{unit}_costs"] = {
-                    loc.name: next(iter(loc.costs.values()))
-                    for loc in self.created_multi_locations[shop]
-                }
 
         # HKAP 0.1.0 and later cost data.
         location_costs = {}
@@ -543,6 +559,8 @@ class HKWorld(World):
         slot_data["notch_costs"] = self.charm_costs
 
         slot_data["grub_count"] = self.grub_count
+
+        slot_data["is_race"] = self.settings.disable_spoilers or self.multiworld.is_race
 
         return slot_data
 
@@ -601,11 +619,11 @@ class HKWorld(World):
         if change:
             for effect_name, effect_value in item_effects.get(item.name, {}).items():
                 state.prog_items[item.player][effect_name] += effect_value
-        if item.name in {"Left_Mothwing_Cloak", "Right_Mothwing_Cloak"}:
-            if state.prog_items[item.player].get('RIGHTDASH', 0) and \
-                    state.prog_items[item.player].get('LEFTDASH', 0):
-                (state.prog_items[item.player]["RIGHTDASH"], state.prog_items[item.player]["LEFTDASH"]) = \
-                    ([max(state.prog_items[item.player]["RIGHTDASH"], state.prog_items[item.player]["LEFTDASH"])] * 2)
+            if item.name in {"Left_Mothwing_Cloak", "Right_Mothwing_Cloak"}:
+                if state.prog_items[item.player].get('RIGHTDASH', 0) and \
+                        state.prog_items[item.player].get('LEFTDASH', 0):
+                    (state.prog_items[item.player]["RIGHTDASH"], state.prog_items[item.player]["LEFTDASH"]) = \
+                        ([max(state.prog_items[item.player]["RIGHTDASH"], state.prog_items[item.player]["LEFTDASH"])] * 2)
         return change
 
     def remove(self, state, item: HKItem) -> bool:

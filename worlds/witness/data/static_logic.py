@@ -17,6 +17,7 @@ from .utils import (
     get_items,
     get_sigma_expert_logic,
     get_sigma_normal_logic,
+    get_umbra_variety_logic,
     get_vanilla_logic,
     logical_or_witness_rules,
     parse_lambda,
@@ -103,6 +104,7 @@ class StaticWitnessLogicObj:
                     "region": None,
                     "id": None,
                     "entityType": location_id,
+                    "locationType": None,
                     "area": current_area,
                 }
 
@@ -127,19 +129,33 @@ class StaticWitnessLogicObj:
                 "Laser Hedges",
                 "Laser Pressure Plates",
             }
-            is_vault_or_video = "Vault" in entity_name or "Video" in entity_name
 
             if "Discard" in entity_name:
+                entity_type = "Panel"
                 location_type = "Discard"
-            elif is_vault_or_video or entity_name == "Tutorial Gate Close":
+            elif "Vault" in entity_name:
+                entity_type = "Panel"
                 location_type = "Vault"
             elif entity_name in laser_names:
-                location_type = "Laser"
+                entity_type = "Laser"
+                location_type = None
             elif "Obelisk Side" in entity_name:
+                entity_type = "Obelisk Side"
                 location_type = "Obelisk Side"
+            elif "Obelisk" in entity_name:
+                entity_type = "Obelisk"
+                location_type = None
             elif "EP" in entity_name:
+                entity_type = "EP"
                 location_type = "EP"
+            elif "Pet the Dog" in entity_name:
+                entity_type = "Event"
+                location_type = "Good Boi"
+            elif entity_hex.startswith("0xFF"):
+                entity_type = "Event"
+                location_type = None
             else:
+                entity_type = "Panel"
                 location_type = "General"
 
             required_items = parse_lambda(required_item_lambda)
@@ -152,7 +168,7 @@ class StaticWitnessLogicObj:
                 "items": required_items
             }
 
-            if location_type == "Obelisk Side":
+            if entity_type == "Obelisk Side":
                 eps = set(next(iter(required_panels)))
                 eps -= {"Theater to Tunnels"}
 
@@ -167,7 +183,8 @@ class StaticWitnessLogicObj:
                 "entity_hex": entity_hex,
                 "region": current_region,
                 "id": int(location_id),
-                "entityType": location_type,
+                "entityType": entity_type,
+                "locationType": location_type,
                 "area": current_area,
             }
 
@@ -276,6 +293,11 @@ def get_sigma_expert() -> StaticWitnessLogicObj:
     return StaticWitnessLogicObj(get_sigma_expert_logic())
 
 
+@cache_argsless
+def get_umbra_variety() -> StaticWitnessLogicObj:
+    return StaticWitnessLogicObj(get_umbra_variety_logic())
+
+
 def __getattr__(name: str) -> StaticWitnessLogicObj:
     if name == "vanilla":
         return get_vanilla()
@@ -283,6 +305,8 @@ def __getattr__(name: str) -> StaticWitnessLogicObj:
         return get_sigma_normal()
     if name == "sigma_expert":
         return get_sigma_expert()
+    if name == "umbra_variety":
+        return get_umbra_variety()
     raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
 
 
