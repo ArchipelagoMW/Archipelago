@@ -38,7 +38,7 @@ def force_walnutsanity_deactivation_when_ginger_island_is_excluded(world_options
 
 def force_qi_special_orders_deactivation_when_ginger_island_is_excluded(world_options: options.StardewValleyOptions, player: int, player_name: str):
     ginger_island_is_excluded = world_options.exclude_ginger_island == options.ExcludeGingerIsland.option_true
-    qi_board_is_active = options.SpecialOrderLocations.value_qi & world_options.special_order_locations.value == options.SpecialOrderLocations.value_qi
+    qi_board_is_active = world_options.special_order_locations.value & options.SpecialOrderLocations.value_qi
 
     if ginger_island_is_excluded and qi_board_is_active:
         world_options.special_order_locations.value = world_options.special_order_locations.value ^ options.SpecialOrderLocations.value_qi
