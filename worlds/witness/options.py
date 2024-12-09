@@ -406,6 +406,7 @@ class PuzzleRandomizationSeed(Range):
     Sigma Rando, which is the basis for all puzzle randomization in this randomizer, uses a seed from 1 to 9999999 for the puzzle randomization.
     This option lets you set this seed yourself.
     """
+    display_name = "Puzzle Randomization Seed"
     range_start = 1
     range_end = 9999999
     default = "random"
