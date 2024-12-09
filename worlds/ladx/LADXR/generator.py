@@ -58,7 +58,7 @@ from . import hints
 
 from .patches import bank34
 from .utils import formatText
-from ..Options import TrendyGame, Palette
+from ..Options import TrendyGame, Palette, Warps
 from .roomEditor import RoomEditor, Object
 from .patches.aesthetics import rgb_to_bin, bin_to_rgb
 
@@ -153,7 +153,9 @@ def generateRom(args, world: "LinksAwakeningWorld"):
     if world.ladxr_settings.witch:
         patches.witch.updateWitch(rom)
     patches.softlock.fixAll(rom)
-    patches.maptweaks.tweakMap(rom)
+    if not world.ladxr_settings.rooster:
+        patches.maptweaks.tweakMap(rom)
+        patches.maptweaks.tweakBirdKeyRoom(rom)
     patches.chest.fixChests(rom)
     patches.shop.fixShop(rom)
     patches.rooster.patchRooster(rom)
@@ -176,11 +178,7 @@ def generateRom(args, world: "LinksAwakeningWorld"):
     patches.songs.upgradeMarin(rom)
     patches.songs.upgradeManbo(rom)
     patches.songs.upgradeMamu(rom)
-    if world.ladxr_settings.tradequest:
-        patches.tradeSequence.patchTradeSequence(rom, world.ladxr_settings.boomerang)
-    else:
-        # Monkey bridge patch, always have the bridge there.
-        rom.patch(0x00, 0x333D, assembler.ASM("bit 4, e\njr Z, $05"), b"", fill_nop=True)
+    patches.tradeSequence.patchTradeSequence(rom, world.ladxr_settings)
     patches.bowwow.fixBowwow(rom, everywhere=world.ladxr_settings.bowwow != 'normal')
     if world.ladxr_settings.bowwow != 'normal':
         patches.bowwow.bowwowMapPatches(rom)
@@ -268,6 +266,8 @@ def generateRom(args, world: "LinksAwakeningWorld"):
     our_useful_items = [item for item in our_items if ItemClassification.progression in item.classification]
 
     def gen_hint():
+        if not world.options.in_game_hints:
+            return 'Hints are disabled!'
         chance = world.random.uniform(0, 1)
         if chance < JUNK_HINT:
             return None
@@ -288,7 +288,7 @@ def generateRom(args, world: "LinksAwakeningWorld"):
         else:
             location_name = location.name
 
-        hint = f"{name} {location.item} is at {location_name}"
+        hint = f"{name} {location.item.name} is at {location_name}"
         if location.player != world.player:
             # filter out { and } since they cause issues with string.format later on
             player_name = world.multiworld.player_name[location.player].replace("{", "").replace("}", "")
@@ -342,11 +342,53 @@ def generateRom(args, world: "LinksAwakeningWorld"):
         patches.enemies.doubleTrouble(rom)
 
     if world.options.text_shuffle:
+        excluded_ids = [
+            # Overworld owl statues
+            0x1B6, 0x1B7, 0x1B8, 0x1B9, 0x1BA, 0x1BB, 0x1BC, 0x1BD, 0x1BE, 0x22D,
+
+            # Dungeon owls
+            0x288, 0x280,  # D1
+            0x28A, 0x289, 0x281,  # D2
+            0x282, 0x28C, 0x28B,  # D3
+            0x283,  # D4
+            0x28D, 0x284,  # D5
+            0x285, 0x28F, 0x28E,  # D6
+            0x291, 0x290, 0x286,  # D7
+            0x293, 0x287, 0x292,  # D8
+            0x263,  # D0
+
+            # Hint books
+            0x267,  # color dungeon
+            0x200, 0x201,
+            0x202, 0x203,
+            0x204, 0x205,
+            0x206, 0x207,
+            0x208, 0x209,
+            0x20A, 0x20B,
+            0x20C,
+            0x20D, 0x20E,
+            0x217, 0x218, 0x219, 0x21A,
+
+            # Goal sign
+            0x1A3,
+
+            # Signpost maze
+            0x1A9, 0x1AA, 0x1AB, 0x1AC, 0x1AD,
+
+            # Prices
+            0x02C, 0x02D, 0x030, 0x031, 0x032, 0x033, # Shop items
+            0x03B, # Trendy Game
+            0x045, # Fisherman
+            0x018, 0x019, # Crazy Tracy
+            0x0DC, # Mamu
+            0x0F0, # Raft ride
+        ]
+        excluded_texts = [ rom.texts[excluded_id] for excluded_id in excluded_ids]
         buckets = defaultdict(list)
         # For each ROM bank, shuffle text within the bank
         for n, data in enumerate(rom.texts._PointerTable__data):
             # Don't muck up which text boxes are questions and which are statements
-            if type(data) != int and data and data != b'\xFF':
+            if type(data) != int and data and data != b'\xFF' and data not in excluded_texts:
                 buckets[(rom.texts._PointerTable__banks[n], data[len(data) - 1] == 0xfe)].append((n, data))
         for bucket in buckets.values():
             # For each bucket, make a copy and shuffle
@@ -418,8 +460,8 @@ def generateRom(args, world: "LinksAwakeningWorld"):
             for channel in range(3):
                 color[channel] = color[channel] * 31 // 0xbc
 
-    if world.options.warp_improvements:
-        patches.core.addWarpImprovements(rom, world.options.additional_warp_points)
+    if world.options.warps != Warps.option_vanilla:
+        patches.core.addWarpImprovements(rom, world.options.warps == Warps.option_improved_additional)
 
     palette = world.options.palette
     if palette != Palette.option_normal:

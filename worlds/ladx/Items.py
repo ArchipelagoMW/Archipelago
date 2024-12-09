@@ -26,7 +26,7 @@ class DungeonItemData(ItemData):
     @property
     def dungeon_index(self):
         return int(self.ladxr_id[-1])
-    
+
     @property
     def dungeon_item_type(self):
         s = self.ladxr_id[:-1]
@@ -69,7 +69,6 @@ class ItemName:
     BOMB = "Bomb"
     SWORD = "Progressive Sword"
     FLIPPERS = "Flippers"
-    MAGNIFYING_LENS = "Magnifying Lens"
     MEDICINE = "Medicine"
     TAIL_KEY = "Tail Key"
     ANGLER_KEY = "Angler Key"
@@ -175,7 +174,7 @@ class ItemName:
     TRADING_ITEM_SCALE = "Scale"
     TRADING_ITEM_MAGNIFYING_GLASS = "Magnifying Glass"
 
-trade_item_prog = ItemClassification.progression 
+trade_item_prog = ItemClassification.progression
 
 links_awakening_items = [
     ItemData(ItemName.POWER_BRACELET, "POWER_BRACELET", ItemClassification.progression),
@@ -191,7 +190,6 @@ links_awakening_items = [
     ItemData(ItemName.BOMB, "BOMB", ItemClassification.progression),
     ItemData(ItemName.SWORD, "SWORD", ItemClassification.progression),
     ItemData(ItemName.FLIPPERS, "FLIPPERS", ItemClassification.progression),
-    ItemData(ItemName.MAGNIFYING_LENS, "MAGNIFYING_LENS", ItemClassification.progression),
     ItemData(ItemName.MEDICINE, "MEDICINE", ItemClassification.useful),
     ItemData(ItemName.TAIL_KEY, "TAIL_KEY", ItemClassification.progression),
     ItemData(ItemName.ANGLER_KEY, "ANGLER_KEY", ItemClassification.progression),
@@ -304,4 +302,136 @@ ladxr_item_to_la_item_name = {
 
 links_awakening_items_by_name = {
     item.item_name : item for item in links_awakening_items
+}
+
+links_awakening_item_name_groups: typing.Dict[str, typing.Set[str]] = {
+    "Instruments": {
+        "Full Moon Cello",
+        "Conch Horn",
+        "Sea Lily's Bell",
+        "Surf Harp",
+        "Wind Marimba",
+        "Coral Triangle",
+        "Organ of Evening Calm",
+        "Thunder Drum",
+    },
+    "Entrance Keys": {
+        "Tail Key",
+        "Angler Key",
+        "Face Key",
+        "Bird Key",
+        "Slime Key",
+    },
+    "Nightmare Keys": {
+        "Nightmare Key (Angler's Tunnel)",
+        "Nightmare Key (Bottle Grotto)",
+        "Nightmare Key (Catfish's Maw)",
+        "Nightmare Key (Color Dungeon)",
+        "Nightmare Key (Eagle's Tower)",
+        "Nightmare Key (Face Shrine)",
+        "Nightmare Key (Key Cavern)",
+        "Nightmare Key (Tail Cave)",
+        "Nightmare Key (Turtle Rock)",
+    },
+    "Small Keys": {
+        "Small Key (Angler's Tunnel)",
+        "Small Key (Bottle Grotto)",
+        "Small Key (Catfish's Maw)",
+        "Small Key (Color Dungeon)",
+        "Small Key (Eagle's Tower)",
+        "Small Key (Face Shrine)",
+        "Small Key (Key Cavern)",
+        "Small Key (Tail Cave)",
+        "Small Key (Turtle Rock)",
+    },
+    "Compasses": {
+        "Compass (Angler's Tunnel)",
+        "Compass (Bottle Grotto)",
+        "Compass (Catfish's Maw)",
+        "Compass (Color Dungeon)",
+        "Compass (Eagle's Tower)",
+        "Compass (Face Shrine)",
+        "Compass (Key Cavern)",
+        "Compass (Tail Cave)",
+        "Compass (Turtle Rock)",
+    },
+    "Maps": {
+        "Dungeon Map (Angler's Tunnel)",
+        "Dungeon Map (Bottle Grotto)",
+        "Dungeon Map (Catfish's Maw)",
+        "Dungeon Map (Color Dungeon)",
+        "Dungeon Map (Eagle's Tower)",
+        "Dungeon Map (Face Shrine)",
+        "Dungeon Map (Key Cavern)",
+        "Dungeon Map (Tail Cave)",
+        "Dungeon Map (Turtle Rock)",
+    },
+    "Stone Beaks": {
+        "Stone Beak (Angler's Tunnel)",
+        "Stone Beak (Bottle Grotto)",
+        "Stone Beak (Catfish's Maw)",
+        "Stone Beak (Color Dungeon)",
+        "Stone Beak (Eagle's Tower)",
+        "Stone Beak (Face Shrine)",
+        "Stone Beak (Key Cavern)",
+        "Stone Beak (Tail Cave)",
+        "Stone Beak (Turtle Rock)",
+    },
+    "Trading Items": {
+        "Yoshi Doll",
+        "Ribbon",
+        "Dog Food",
+        "Bananas",
+        "Stick",
+        "Honeycomb",
+        "Pineapple",
+        "Hibiscus",
+        "Letter",
+        "Broom",
+        "Fishing Hook",
+        "Necklace",
+        "Scale",
+        "Magnifying Glass",
+    },
+    "Rupees": {
+        "20 Rupees",
+        "50 Rupees",
+        "100 Rupees",
+        "200 Rupees",
+        "500 Rupees",
+    },
+    "Upgrades": {
+        "Max Powder Upgrade",
+        "Max Bombs Upgrade",
+        "Max Arrows Upgrade",
+    },
+    "Songs": {
+        "Ballad of the Wind Fish",
+        "Manbo's Mambo",
+        "Frog's Song of Soul",
+    },
+    "Tunics": {
+        "Red Tunic",
+        "Blue Tunic",
+    },
+    "Bush Breakers": {
+        "Progressive Power Bracelet",
+        "Magic Rod",
+        "Magic Powder",
+        "Bomb",
+        "Progressive Sword",
+        "Boomerang",
+    },
+    "Sword": {
+        "Progressive Sword",
+    },
+    "Shield": {
+        "Progressive Shield",
+    },
+    "Power Bracelet": {
+        "Progressive Power Bracelet",
+    },
+    "Bracelet": {
+        "Progressive Power Bracelet",
+    },
 }

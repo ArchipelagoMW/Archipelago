@@ -446,7 +446,7 @@ class AdventureWorld(World):
     # end of ordered Main.py calls
 
     def create_item(self, name: str) -> Item:
-        item_data: ItemData = item_table.get(name)
+        item_data: ItemData = item_table[name]
         return AdventureItem(name, item_data.classification, item_data.id, self.player)
 
     def create_event(self, name: str, classification: ItemClassification) -> Item:

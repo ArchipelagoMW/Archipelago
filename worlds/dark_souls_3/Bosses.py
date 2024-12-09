@@ -253,10 +253,10 @@ all_bosses = [
     }),
     DS3BossInfo("Lords of Cinder", 4100800, locations = {
         "KFF: Soul of the Lords",
-        "FS: Billed Mask - Yuria after killing KFF boss",
-        "FS: Black Dress - Yuria after killing KFF boss",
-        "FS: Black Gauntlets - Yuria after killing KFF boss",
-        "FS: Black Leggings - Yuria after killing KFF boss"
+        "FS: Billed Mask - shop after killing Yuria",
+        "FS: Black Dress - shop after killing Yuria",
+        "FS: Black Gauntlets - shop after killing Yuria",
+        "FS: Black Leggings - shop after killing Yuria"
     }),
 ]
 
