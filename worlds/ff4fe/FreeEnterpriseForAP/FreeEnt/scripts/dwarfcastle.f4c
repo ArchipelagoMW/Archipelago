@@ -1,0 +1,517 @@
+// -------------------------------------------------
+// remove the dwarf that blocks access around castle
+npc(#Dwarf13) { default inactive }
+
+// -------------------------------------------------
+// allow immediate access through back door
+npc(#Dwarf12)
+{
+    eventcall {
+        $91   //Dwarf in castle basement opens the door
+    }
+}
+
+
+// -------------------------------------------------
+// fix Giott throne room event trigger to only do
+// stuff we want it to
+
+eventcall($30)
+{
+    if not #RydiaRejoined:
+        $8C   //Meeting Giott, Calbrena battle, rejoining Rydia
+    if not #SpokeToGiottAfterBabil:
+        $A6   //Getting Luca key
+    else:
+        $00   //(no event)
+}
+
+
+// -------------------------------------------------
+// receiving Luca key
+
+event($A6)  //Obtaining the Luca Key
+{
+    consts(placement) {
+        1   Luca1
+    }
+    message $165   // "Giott:How did it go? "
+    // autodetected map #DwarfCastleThroneRoom
+    batch 4 {
+        player move up
+    }
+    pause 4
+    p #Luca1 face left
+    pause 4
+    message $16C   // "Luca:What is it, father? Giott:Give me your"
+    pause 8
+    p #Luca1 face down
+    pause 4
+    player move up
+    pause 4
+
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.luca_item 0]
+    player wave out
+    // %if ap_luca_item%
+    music #DummyFanfare
+    message #ap_reward_slot.luca_item
+    // %else%
+    message #msg.fe_Received
+    // %end%
+    sound #GetItem
+    [#B #Objectives_TickRewardSlot #reward_slot.luca_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.luca_item]
+    set #SpokeToGiottAfterBabil
+    player face down
+}
+
+text(bank 1 message $165) {
+Giott:Oh, we have
+ something for you.
+ Luca!
+}
+
+text(bank 1 message $16C) {
+Luca:What is it, father?
+Giott:Give me your
+ necklace.
+Luca:This one?
+}
+
+// -------------------------------------------------
+// delete event trigger from dwarf castle hospital
+
+trigger(#DwarfCastleHospital 1) { delete }
+mapgrid($112 5 5) { 25 }
+
+
+
+// -------------------------------------------------
+// big honking Calbrena/Golbez event
+
+npc(#Calbrena) {
+    sprite $fe  // dynamic sprite
+}
+
+placement($109 11) {
+    // %calbrena_slot alt1 sprite down palette%
+    // %end%
+}
+
+placement($10d 8) {
+    // %calbrena_slot sprite up palette%
+    // %end%
+}
+placement($10d 9) {
+    // %calbrena_slot sprite right palette%
+    // %end%
+}
+placement($10d 10) {
+    // %calbrena_slot sprite left palette%
+    // %end%
+}
+placement($10d 11) {
+    // %calbrena_slot sprite down palette%
+    // %end%
+}
+
+placement($10d 5) {
+    npc #fe_DynamicNPCU
+    // %golbez_slot sprite main palette%
+    // %end%
+}
+
+// Golbez's hand is also that color
+placement($10d 6) {
+    // %golbez_slot sprite main palette%
+    // %end%
+}
+
+// Golbez's body is his hand but faster
+placement($10d 7) {
+    npc #GolbezHand
+    // %golbez_slot sprite main palette%
+    // %end%
+    position 9 13
+    walking off
+    tangible
+    face down
+    turning off
+    marching off
+    speed 3
+}
+
+// Adult Rydia
+placement($10d 4) {
+    // %arydia_slot npc2%
+    npc #fe_DynamicNPCU
+    // %end%
+    position 9 20
+    speed 2
+    face up
+}
+
+event($8C)  //Meeting Giott, Calbrena battle, rejoining Rydia
+{
+    consts(placement) {
+        0   KingGiott1
+        2   Dwarf19
+        3   Dwarf20
+        4   Dwarf21
+        5   Dwarf22
+        6   Rosa2
+        7   Yang3
+        8   Kain2
+        9   Cid4
+        11   Calbrena
+    }
+    // autodetected map #DwarfCastleThroneRoom
+    batch 4 {
+        player move up
+    }
+    music #None
+    p #Calbrena spin jump
+    p #Calbrena face right
+    p #Calbrena jump sideways
+    p #Calbrena toggle visible
+    p #Dwarf19 move down
+    p #Dwarf19 spin
+    p #Dwarf20 move down
+    p #Dwarf20 spin
+    p #Dwarf21 move down
+    p #Dwarf21 spin
+    p #Dwarf22 move down
+    p #Dwarf22 spin
+    batch 1 {
+        p #Dwarf19 spin
+        p #Dwarf20 spin
+        p #Dwarf21 spin
+        p #Dwarf22 spin
+    }
+    batch 1 {
+        p #Dwarf19 face down
+        p #Dwarf20 face left
+        p #Dwarf21 face up
+        p #Dwarf22 face right
+    }
+    pause 4
+    batch 1 {
+        p #Dwarf19 spin
+        p #Dwarf20 spin
+        p #Dwarf21 spin
+        p #Dwarf22 spin
+    }
+    batch 1 {
+        p #Dwarf19 face up
+        p #Dwarf20 face up
+        p #Dwarf21 face up
+        p #Dwarf22 face up
+    }
+    p #KingGiott1 spin
+    p #KingGiott1 face left
+    pause 4
+    batch 1 {
+        p #Dwarf21 face right
+        p #Dwarf19 face right
+        p #Dwarf20 face left
+        p #Dwarf22 face left
+    }
+    p #Dwarf19 move up
+    p #Dwarf19 face down
+    p #Dwarf19 spin jump
+    p #Dwarf19 face up
+    pause 4
+    open door
+    pause 4
+    batch 2 {
+        player move left
+    }
+    batch 6 {
+        player move up
+    }
+    batch 1 {
+        player move right
+    }
+    consts(placement) {
+        0   Crystal1
+        1   Rosa2
+        2   Yang3
+        3   Kain2
+        4   AdultRydia2
+        5   Golbez3
+        6   GolbezHand
+        7   GolbezFallen
+        8   Calbrena_A
+        9   Calbrena_B
+        10   Calbrena_C
+        11   Calbrena_D
+    }
+    load map #DwarfCastleCrystalRoom at 9 17 
+    [#B #Rando_CheckFlag #randoflag.bosses]
+    [#B #If #Flag #flag.Result] {
+        [#B #LoadExtraNPCPalette #rando.calbrena_slot]
+    }
+    [#B #PlacementSetVisible 0]  // force crystal to be visible for these events
+    player face up
+    player move up
+    player move up
+    music #None
+    sound #HeavyDoor
+    player face down
+    pause 4
+    player move down
+    pause 4
+    player face up
+    music #Calbrena
+    toggle tint $57
+    batch 1 {
+        p #Calbrena_A spin
+        p #Calbrena_B spin
+        p #Calbrena_C spin
+        p #Calbrena_D spin
+    }
+    batch 1 {
+        p #Calbrena_A spin jump
+        p #Calbrena_B spin jump
+        p #Calbrena_C spin jump
+        p #Calbrena_D spin jump
+    }
+    batch 1 {
+        p #Calbrena_A spin
+        p #Calbrena_B spin
+        p #Calbrena_C spin
+        p #Calbrena_D spin
+    }
+    batch 1 {
+        p #Calbrena_A face right
+        p #Calbrena_B face left
+        p #Calbrena_C face right
+        p #Calbrena_D face left
+    }
+    player toggle turning
+    batch 1 {
+        p #Calbrena_A move up
+        p #Calbrena_C move up
+    }
+    player toggle turning
+    batch 1 {
+        p #Calbrena_A jump sideways
+        p #Calbrena_B jump sideways
+        p #Calbrena_C jump sideways
+        p #Calbrena_D jump sideways
+    }
+    batch 1 {
+        p #Calbrena_A face down
+        p #Calbrena_B face down
+        p #Calbrena_C face down
+        p #Calbrena_D face down
+    }
+    batch 1 {
+        p #Calbrena_A spin jump
+        p #Calbrena_B spin jump
+        p #Calbrena_C spin jump
+        p #Calbrena_D spin jump
+    }
+    pause 4
+    player move up
+
+    [#B #Rando_BossBattle #rando.calbrena_slot]
+
+    player face up
+    [#B #Objectives_TickBossSlot #rando.calbrena_slot]
+    [#B #Rando_PostBossBattle #rando.calbrena_slot]
+    toggle music fade
+    toggle tint $00
+    batch 1 {
+        p #Calbrena_A spin jump
+        p #Calbrena_B spin jump
+        p #Calbrena_C spin jump
+        p #Calbrena_D spin jump
+    }
+    sound $7E
+    batch 10 {
+        screen flash
+    }
+    batch 1 {
+        p #Calbrena_A toggle visible
+        p #Calbrena_B toggle visible
+        p #Calbrena_C toggle visible
+        p #Calbrena_D toggle visible
+    }
+    [#B #ResetNPCPalette]
+    pause 4
+    music #Golbez
+    toggle tint $7A
+    batch 10 {
+        screen flash
+    }
+    p #Golbez3 toggle visible
+    toggle tint $00
+    batch 4 {
+        p #Golbez3 move down
+    }
+    pause 4
+    clear #Temp
+    [#B #Rando_CheckFlag #randoflag.no_earned_characters]
+    [#B #If #not_Flag #flag.Result] {
+        set #Temp
+        sound #HeavyDoor
+        player face down
+        p #AdultRydia2 toggle visible
+        batch 5 {
+            p #AdultRydia2 move up
+        }
+        p #AdultRydia2 toggle visible
+
+        player face up
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.dwarf_castle_character 0]
+        message #msg.fe_Joined
+        [#B #Objectives_TickRewardSlot #reward_slot.dwarf_castle_character]
+        [#B #Rando_DeliverRewardFromSlot #reward_slot.dwarf_castle_character]
+    }
+    
+    [#B #If #not_Flag #flag.Temp] {
+        player face down
+        pause 4
+        player face up
+    }
+
+    player face up
+
+    [#B #AgeRydia]
+
+    sound #BlackMagic
+    [#B #If #Character #character.Rydia] {
+        message $116
+    }
+    [#B #If #not_Character #character.Rydia] {
+        message $117
+    }
+
+    give spell #RydiaWhite #Cure2
+    give spell #RydiaBlack #Fire2
+    give spell #RydiaBlack #Ice2
+    give spell #RydiaBlack #Lit2
+
+    // %dwarf summon rando%
+    give spell #RydiaCall #Mist
+    give spell #RydiaCall #Titan
+    give spell #RydiaCall #Shiva
+    give spell #RydiaCall #Indra
+    give spell #RydiaCall #Jinn
+    // %end%
+
+    p #Golbez3 toggle visible
+    [#B #Rando_BossBattle #rando.golbez_slot]
+
+    music #None
+    player face down
+    [#B #Objectives_TickBossSlot #rando.golbez_slot]
+    [#B #Rando_PostBossBattle #rando.golbez_slot]
+    pause 5
+    player move down
+    player move down
+    toggle tint $C4
+    sound $7E
+    batch 4 {
+        screen flash
+    }
+    pause 4
+    player face up
+    pause 4
+    batch 3 {
+        player move up
+    }
+    music #Suspicions
+    batch 11 {
+        p #GolbezFallen toggle visible
+    }
+    p #GolbezHand toggle visible
+    p #GolbezFallen toggle visible
+    
+    player toggle turning
+    batch 1 {
+        p #GolbezHand move down
+        player move down
+    }
+    player toggle turning
+    p #GolbezHand move left
+    p #GolbezHand move up
+    p #GolbezHand move right
+    p #GolbezHand move right
+    p #GolbezHand move up
+    p #GolbezHand move left
+    batch 4 {
+        p #GolbezHand move up
+    }
+    batch 5 {
+        player move up
+    }
+    batch 1 {
+        p #Crystal1 toggle visible
+        p #GolbezHand move up
+    }
+    sound $7E
+    batch 10 {
+        screen flash
+    }
+    p #GolbezHand toggle visible
+    toggle tint $00
+    player move up
+    pause 4
+    
+    deactivate #Calbrena
+    deactivate #Luca2
+    activate #Luca1
+
+    toggle music fade
+    toggle screen fade
+    music #Dwarf fade in
+    consts(placement) {
+        6   Rosa2
+        7   Yang3
+        8   Kain2
+        10   AdultRydia2
+    }
+    load map #DwarfCastleThroneRoom at 10 7 
+    player bow head
+    toggle screen fade
+    pause 4
+    player face down
+    set #RydiaRejoined
+    [#B #Objectives_Tick #objective.quest_dwarfcastle]
+}
+
+// %flag characters_no_duplicates on%
+text(bank 1 message $116) {
+[Rydia] grew up!
+}
+
+text(bank 1 message $117) {
+[Rydia] grew up, wherever
+she is!
+}
+// %end%
+
+// %flag characters_no_duplicates off%
+text(bank 1 message $116) {
+All [Rydia]s grew up!
+}
+
+text(bank 1 message $117) {
+All [Rydia]s grew up,
+wherever they are!
+}
+// %end%
+
+text(bank 1 message $11D) {
+All [Rydia]s learned 
+[name $e0], [name $e1],
+[name $e2], [name $e3],
+and [name $e4]!
+}
+
+text(map #DwarfCastleThroneRoom message 4) {
+Giott:My daughter has
+ something for you.
+}

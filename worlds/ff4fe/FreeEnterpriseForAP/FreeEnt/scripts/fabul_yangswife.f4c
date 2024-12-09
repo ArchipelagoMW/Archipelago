@@ -1,0 +1,90 @@
+npc(#FabulWoman2)
+{
+    eventcall {
+        if #FoundSleepingYang, not #GotPan:
+            $09   //Receiving the pan
+        if not #GotSpoon:
+            $F9   //Trading the Pan for the Spoon
+        if not #FoundSleepingYang:
+            $02   //Show second message
+        else:
+            $01   //Show first message
+        messages:
+            $0A   // "Don't worry about me! Tell [Yang] to get well"
+            $02   // how to get Pan
+    }
+}
+
+event($09)  //Receiving the pan
+{
+    consts(placement) {
+        0   FabulWoman2
+    }
+    // autodetected map #FabulYangRoom
+    player face up
+    music #None
+    map message 7  // "What? He is in the underground?"
+    pause 2
+    p #FabulWoman2 spin
+    p #FabulWoman2 face up
+    pause 12
+    music #Town
+    map message 4  // "Come on! _Ooops! This onion makes my eyes"
+    pause 4    
+    p #FabulWoman2 spin
+    p #FabulWoman2 face down
+    pause 4
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.found_yang_item 0]
+    // %if ap_found_yang_item%
+    music #DummyFanfare
+    message #ap_reward_slot.found_yang_item
+    // %else%
+    message #msg.fe_ReceivedFanfare
+    // %end%
+    sound #GetItem
+    [#B #Objectives_TickRewardSlot #reward_slot.found_yang_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.found_yang_item]
+    set #GotPan
+    music #Fabul
+}
+
+text(map #FabulYangRoom message $06) {X}
+
+event($F9)  //Trading the Pan for the Spoon
+{
+    // autodetected map #FabulYangRoom
+    select item #Pan
+    [#B #If #not_Flag #flag.UsedPan] {
+        map message 0 // can't give back yet
+        [#B #EndEvent]
+    }
+    take item #Pan
+    [#B #Objectives_Tick #objective.quest_tradepan]
+    map message 8  // Sorry!
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.pan_trade_item 0]
+    // %if ap_pan_trade_item%
+    music #DummyFanfare
+    message #ap_reward_slot.pan_trade_item
+    // %else%
+    message #msg.fe_Received
+    // %end%
+    sound #GetItem
+    [#B #Objectives_TickRewardSlot #reward_slot.pan_trade_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.pan_trade_item]
+    set #GotSpoon
+    [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.pan]
+}
+
+text(map #FabulYangRoom message $00) {
+[Yang]'s wife:Give [Yang]
+ a good one with that pan!
+}
+
+text(map #FabulYangRoom message $01) {X}
+
+text(map #FabulYangRoom message $02) {
+[Yang]'s wife:Please visit
+ my husband underground. I
+ will give you something
+ when you get back!
+}

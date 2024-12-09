@@ -1,0 +1,97 @@
+map(#MountHobsWest) {
+    npc palettes $00 $05
+}
+
+placement($7E 0) { speed 3 }
+placement($7E 1) { speed 3 }
+placement($7E 2) { speed 3 }
+placement($7E 3) { speed 3 }
+placement($7E 4) { speed 3 }
+placement($7E 5) { speed 3 }
+placement($7E 6) { speed 3 }
+placement($7E 7) { speed 3 }
+
+placement($7E 8) {
+    palette 1
+    face up
+    position 15 25
+    marching off
+}
+
+placement($7E 9) {
+    palette 2
+    position 15 20
+    marching on
+    speed 3
+}
+
+placement($7E 10) {
+    palette 2
+    position 15 21
+    marching on
+    speed 3
+}
+
+placement($7E 11) {
+    palette 2
+    position 15 22
+    marching on
+    speed 3
+}
+
+event($51)
+{
+    // %hobs intro%
+    // (provided by randomizer)
+    // %end%
+
+    consts(placement) {
+        8  Indra
+        9  Bolt1
+        10  Bolt2
+        11  Bolt3
+    }
+
+    p #Indra toggle visible
+    pause 6
+    sound #Thunder
+    screen flash
+    p #Bolt1 toggle visible
+    [#B #LoadNPCPalette $12 $06]
+    screen flash
+    p #Bolt2 toggle visible
+    screen flash
+    p #Bolt3 toggle visible
+
+    batch {
+        p 0 toggle visible
+        p 2 toggle visible
+    }
+
+    batch {
+        p 1 toggle visible
+        p 3 toggle visible
+        p 5 toggle visible
+        p 6 toggle visible
+    }
+
+    batch {
+        p 4 toggle visible
+        p 7 toggle visible
+    }
+
+    p #Bolt1 toggle visible
+    p #Bolt2 toggle visible
+    p #Bolt3 toggle visible
+
+    batch {
+        p #Indra toggle visible
+    }
+
+    // %hobs outro%
+    // (provided by randomizer)
+    // %end%
+
+    [#B #Return]
+}
+

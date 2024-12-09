@@ -1,0 +1,261 @@
+npc(#KaipoInnMysidiaAirshipSoldier) { default inactive }
+
+// make sleeping child that can oink
+npc(#ChildRydia)
+{
+    sprite #fe_DynamicSprite
+    eventcall {
+        $27 // map message 0
+    }
+}
+
+// separate Kaipo Inn captain from Yang's captains
+placement($10 2)
+{
+    npc #fe_DynamicNPC
+    // %officer_slot sprite left palette%
+    // %end%
+}
+placement($10 3) { 
+    npc #fe_DynamicNPC 
+    // %officer_slot sprite up palette%
+    // %end%
+}
+placement($10 4) {
+    npc #fe_DynamicNPC 
+    // %officer_slot sprite down palette%
+    // %end%
+}
+placement($10 5) {
+    npc #fe_DynamicNPC 
+    // %officer_slot sprite right palette%
+    // %end%
+}
+
+// create a wandering pig NPC for no-earned-characters mode
+npc(#fe_KaipoInnPig)
+{
+    sprite #Pig
+    default inactive
+    eventcall {
+        $28 // map message 1
+    }
+}
+placement($10 8)  //#KaipoInn
+{
+    npc #fe_KaipoInnPig
+    position 13 13
+    walking on
+    tangible
+    face down
+    palette 0
+    turning on
+    marching off
+    speed 2
+}
+text(map #KaipoInn message 0) {- sleepy oinking noises -}
+text(map #KaipoInn message 1) {- happy oinking noises -}
+
+
+
+eventcall($0D)
+{
+    if #CarryingAroundChildRydia:
+        $39   //Kaipo Events, Rydia Joining
+    else:
+        $00   //(no event)
+}
+
+event($39)  //Kaipo Events, Rydia Joining
+{
+    pause 2
+    player face left
+    pause 4
+    player face up
+    pause 4
+    player face right
+    pause 4
+    player face up
+    pause 4
+    player move up
+    player move right
+    batch 7 {
+        player move up
+    }
+    batch 2 {
+        player move left
+    }
+    player move up
+    sound #Door
+    consts(placement) {
+        2   Captain
+        3   KaipoInnMysidiaAirshipSoldier_A
+        4   KaipoInnMysidiaAirshipSoldier_B
+        5   KaipoInnMysidiaAirshipSoldier_C
+        6   ChildRydia
+    }
+    load map #KaipoInn at 20 14 facing down
+    batch 2 {
+        player move left
+    }
+    batch 2 {
+        player move up
+    }
+    batch 4 {
+        player move left
+    }
+    player face up
+    pause 4
+    batch 12 {
+        player move left
+    }
+    player move down
+    player face left
+    toggle music fade
+    p #ChildRydia bow head
+    p #ChildRydia toggle visible
+    pause 16
+    toggle music fade
+    music #None
+    pause 4
+    player move right
+    player face left
+    pause 8
+    player bow head
+    pause 10
+    toggle tint $77
+    pause 12
+    clear status 
+    restore hp
+    restore mp
+    sound #HeavyDoor
+    batch 1 {
+        player face right
+        p #ChildRydia face right
+    }
+    pause 6
+    music #Baron
+    [#B #LoadExtraNPCPalette #rando.officer_slot]
+    batch 1 {
+        p #Captain toggle visible
+        p #KaipoInnMysidiaAirshipSoldier_A toggle visible
+        p #KaipoInnMysidiaAirshipSoldier_B toggle visible
+        p #KaipoInnMysidiaAirshipSoldier_C toggle visible
+    }
+    batch 13 {
+        p #Captain move left
+        p #KaipoInnMysidiaAirshipSoldier_A move left
+        p #KaipoInnMysidiaAirshipSoldier_B move left
+        p #KaipoInnMysidiaAirshipSoldier_C move left
+    }
+    batch 1 {
+        p #Captain move left
+        p #KaipoInnMysidiaAirshipSoldier_A move left
+        p #KaipoInnMysidiaAirshipSoldier_B move left
+        p #KaipoInnMysidiaAirshipSoldier_C move left
+    }
+    player move left
+    player move up
+    player face right
+    batch 1 {
+        p #KaipoInnMysidiaAirshipSoldier_A move up
+        p #KaipoInnMysidiaAirshipSoldier_B move left
+        p #KaipoInnMysidiaAirshipSoldier_C move left
+    }
+    batch 1 {
+        p #KaipoInnMysidiaAirshipSoldier_A face left
+        p #KaipoInnMysidiaAirshipSoldier_B move down
+        p #KaipoInnMysidiaAirshipSoldier_C move left
+    }
+    p #KaipoInnMysidiaAirshipSoldier_B face left
+    batch 1 {
+        p #Captain toggle visible
+        p #KaipoInnMysidiaAirshipSoldier_A toggle visible
+        p #KaipoInnMysidiaAirshipSoldier_B toggle visible
+        p #KaipoInnMysidiaAirshipSoldier_C toggle visible
+    }
+    [#B #Rando_BossBattle #rando.officer_slot]
+    music #None
+    [#B #ResetNPCPalette]
+    [#B #Objectives_TickBossSlot #rando.officer_slot]
+    [#B #Rando_PostBossBattle #rando.officer_slot]
+    pause 12
+    player face left
+    pause 2
+    p #ChildRydia bow head
+    pause 4
+    player move down
+    player face left
+    pause 12
+    p #ChildRydia face right
+    pause 5
+    toggle music fade
+    toggle screen fade
+    clear status 
+    restore hp
+    restore mp
+    player move right
+    player bow head
+    p #ChildRydia bow head
+    toggle tint $00
+    music #Town
+    toggle screen fade
+
+    clear #Temp
+    [#B #Rando_CheckFlag #randoflag.no_earned_characters]
+    [#B #If #not_Flag #flag.Result] {
+        set #Temp
+        p #ChildRydia face down
+        pause 2
+        p #ChildRydia face right
+        pause 4
+        p #ChildRydia move right
+        pause 6
+        player face down
+        player face left
+        pause 4
+        player move left
+        p #ChildRydia toggle visible
+        sound #GetItem
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.mist_character 0]
+        message #msg.fe_Joined
+        [#B #Objectives_TickRewardSlot #reward_slot.mist_character]
+        [#B #Rando_DeliverRewardFromSlot #reward_slot.mist_character]
+
+        player face left
+        player move up
+        batch 12 {
+            player move right
+        }
+    }
+
+    [#B #If #not_Flag #flag.Temp]{
+        player face down
+        player face left
+        pause 4
+        player move left
+        player face left
+        player move up
+        batch 4 {
+            player move right
+        }
+        pause 2
+        player face left
+        pause 8
+        player face right
+        batch 8 {
+            player move right
+        }
+
+        activate #fe_KaipoInnPig
+    }
+
+    player wave in
+    message $08   // "Let's go!"
+    pause 4
+
+    [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.package]
+    clear #CarryingAroundChildRydia
+}
+
+

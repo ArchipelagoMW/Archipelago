@@ -1,0 +1,9 @@
+spellset_block_params : spellset_value
+
+spellset_block_body : initial_block? learned_block?
+
+initial_block : "initial" _block_start spell_value* _block_end
+
+learned_block : "learned" _block_start learned_pair* _block_end
+
+learned_pair : value spell_value

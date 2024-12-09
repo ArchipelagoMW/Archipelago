@@ -1,0 +1,22 @@
+// character_expansion.f4c handles the spell filter hook call
+// when giving spells directly to spell set
+
+// this file adds the hook needed for post-battle spell learning
+
+msfpatch {
+    .addr $03F130
+        jsl $=Wacky__PostBattleLearnSpell
+        nop
+
+    .new
+    Wacky__PostBattleLearnSpell:
+        jsl $=Wacky__SpellFilterHook
+        bcc $+SkipSpell
+
+        // displaced
+        sta $291c,y
+        inc $9a
+
+    %SkipSpell:
+        rtl
+}

@@ -1,0 +1,34 @@
+formation_block_params : number
+
+formation_block_body : formation_block_item*
+
+formation_block_item : not? "back" "attack"       -> back_attack
+                     | not? "boss" "death"        -> boss_death
+                     | "eggs" yesno yesno yesno   -> eggs
+                     | "monsters" _block_start [monster [monster [monster]]] _block_end  -> monsters
+                     | not? "calling"             -> calling
+                     | not? "transforming"        -> transforming
+                     | "arrangement" value        -> arrangement
+                     | "can" "run"                -> can_run
+                     | "can't" "run"              -> cant_run
+                     | "can" "gameover"           -> can_gameover
+                     | "no" "gameover"            -> no_gameover
+                     | music_type "music"         -> music
+                     | not? "character" "battle"  -> character_battle
+                     | not? "auto" "battle"       -> auto_battle
+                     | not? "floating" "enemies"  -> floating_enemies
+                     | not? "transparent"         -> transparent
+                     | "cursor" "graph" value     -> cursor_graph_index
+                     | "gfx" "bits" value         -> gfx_bits
+
+monster : value "x" number
+
+yesno : "yes" -> yes
+      | "no"  -> no
+
+!not : "not"
+
+!music_type : "regular"
+            | "boss"
+            | "fiend"
+            | "continue"

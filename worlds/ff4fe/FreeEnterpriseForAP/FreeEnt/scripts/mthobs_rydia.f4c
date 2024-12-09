@@ -1,0 +1,128 @@
+eventcall($13)
+{
+    if not #RydiaLearnedFire:
+        $46   //Rydia melting Mt. Hobs ice, learning Fire
+    else:
+        $00   //(no event)
+}
+
+// Change other NPC placements to dynamic NPCs to support randomized spell anims
+placement($7E 8) { npc #fe_DynamicNPC }
+placement($7E 9) { npc #fe_DynamicNPC }
+placement($7E 10) { npc #fe_DynamicNPC }
+placement($7E 11) { npc #fe_DynamicNPC }
+
+event($46)  //Rydia melting Mt. Hobs ice, learning Fire
+{
+    consts(placement) {
+        0   IceWall_A
+        1   IceWall_B
+        2   IceWall_C
+        3   IceWall_D
+        4   IceWall_E
+        5   IceWall_F
+        6   IceWall_G
+        7   IceWall_H
+        8   FireMagic
+        9   ChildRydia
+        10   Edward1
+        11   Rosa1
+    }
+
+    [#B #If #not_Character #character.Rydia] {
+        [#B #EndEvent]
+    }
+
+    // autodetected map #MountHobsWest
+    toggle music fade
+
+    [#B #PartyLeaderCharacter #character.Rydia]
+
+    pause 2
+    player bow head
+    pause 6
+    player move up
+
+    //----------------------------------------------------
+    // %flag vanilla_hobs off%
+    [#B #GoSubEvent $51]
+    // %end%
+
+    //----------------------------------------------------
+    // %flag vanilla_hobs on%
+    sound #BlackMagic
+    batch 10 {
+        screen flash
+    }
+    toggle tint $D7
+    sound #Fire
+    p #FireMagic toggle visible
+    p #FireMagic move up
+    p #FireMagic move up
+    batch 1 {
+        p #FireMagic move up
+        p #IceWall_A toggle visible
+    }
+    p #FireMagic move down
+    p #FireMagic move left
+    batch 1 {
+        p #FireMagic move right
+        p #IceWall_B toggle visible
+    }
+    batch 1 {
+        p #FireMagic move right
+        p #IceWall_C toggle visible
+    }
+    batch 1 {
+        p #FireMagic move down
+        p #IceWall_D toggle visible
+    }
+    p #FireMagic move right
+    batch 1 {
+        p #FireMagic move left
+        p #IceWall_H toggle visible
+    }
+    batch 1 {
+        p #FireMagic move left
+        p #IceWall_G toggle visible
+    }
+    p #FireMagic move left
+    p #FireMagic move left
+    batch 1 {
+        p #IceWall_F toggle visible
+        p #FireMagic move left
+    }
+    batch 1 {
+        p #IceWall_E toggle visible
+        p #FireMagic toggle visible
+    }
+
+    toggle tint $00
+    pause 8
+
+    [#B #Text_LoadSpellName 0 #spell.Fire1]
+    music #CharacterJoined
+    map message 5  // "[Rydia] learned [blackmagic]Fire1![pause 40]"
+    give spell #RydiaBlack #Fire1
+    // %end%
+
+    //----------------------------------------------------
+
+    music #Mountain
+    deactivate #IceWall
+    set #RydiaLearnedFire
+    player face down
+}
+
+// %flag characters_no_duplicates on%
+text(map #MountHobsWest message 5) {
+[Rydia] learned [name $e0]![pause 40]
+}
+// %end%
+
+// %flag characters_no_duplicates off%
+text(map #MountHobsWest message 5) {
+All [Rydia]s learned
+[name $e0]![pause 40]
+}
+// %end%

@@ -1,0 +1,120 @@
+// delete entry message trigger
+trigger(#CaveOfSummons1F 4)
+{
+    delete
+}
+mapgrid($136 17 12) { 7D }
+
+//---------------------------------------------------------------
+
+// set Rat Tail chest to deliver reward
+trigger(#Feymarch1F 2)
+{
+    treasure #reward_slot.feymarch_item fight $3f
+}
+
+//---------------------------------------------------------------
+
+npc(#Queen2) {
+    sprite
+        // %asura_slot sprite main%
+        #sprite.Queen
+        // %end%
+}
+
+npc(#OldMan1) {
+    sprite
+        // %leviatan_slot sprite main%
+        #sprite.OldMan
+        // %end%
+
+    // make so AsuraBattle is not required
+    eventcall {
+        if #LeviatanBattle:
+            $2A   //Map message 3
+        else:
+            $CA   //Leviathan battle
+    }
+}
+
+placement($140 0) {
+    // %leviatan_slot sprite main palette%
+    // %end%
+}
+
+placement($140 1) {
+    // %asura_slot sprite main palette%
+    // %end%
+}
+
+event($C9)  //Asura battle
+{
+    // hinted map #FeymarchLeviathanRoom
+    confirm message $151
+    map message 5  // "Then shall we test!"
+    toggle music fade
+    toggle tint $B7
+    [#B #Rando_BossBattle #rando.asura_slot]
+    [#B #Objectives_TickBossSlot #rando.asura_slot]
+    [#B #Rando_PostBossBattle #rando.asura_slot]
+    toggle tint $00
+
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.feymarch_queen_item 0]
+    // %if ap_feymarch_queen_item%
+    music #DummyFanfare
+    message #ap_reward_slot.feymarch_queen_item
+    // %else%
+    message #msg.fe_ReceivedFanfare
+    // %end%
+    [#B #Objectives_TickRewardSlot #reward_slot.feymarch_queen_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.feymarch_queen_item]
+    set #AsuraBattle
+    music #None
+    [#B #Objectives_Tick #objective.quest_monsterqueen]
+    music #Feymarch fade in
+cancel:
+    map message 6  // "I cannot help you yet."
+}
+
+text(bank 1 message $151) {
+Do you have enough
+courage and power to
+challenge me?[next]
+}
+
+
+event($CA)  //Leviathan battle
+{
+    // hinted map #FeymarchLeviathanRoom
+    confirm message $152
+    toggle music fade
+    sound #Whirlpool
+    toggle tint $37
+    pause 4
+    [#B #Rando_BossBattle #rando.leviatan_slot]
+    [#B #Objectives_TickBossSlot #rando.leviatan_slot]
+    [#B #Rando_PostBossBattle #rando.leviatan_slot]
+    toggle tint $00
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.feymarch_king_item 0]
+    // %if ap_feymarch_king_item%
+    music #DummyFanfare
+    message #ap_reward_slot.feymarch_king_item
+    // %else%
+    message #msg.fe_ReceivedFanfare
+    // %end%
+    [#B #Objectives_TickRewardSlot #reward_slot.feymarch_king_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.feymarch_king_item]
+    set #LeviatanBattle
+    music #None
+    [#B #Objectives_Tick #objective.quest_monsterking]
+    music #Feymarch fade in
+cancel:
+    map message 7  // "I shall test you anytime!"
+}
+
+text(bank 1 message $152) {
+Will you contest me so
+that I may ascertain the
+strength of your will?[next]
+}
+

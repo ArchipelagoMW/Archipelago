@@ -1,0 +1,12 @@
+// setup alternate crystal NPC for use with
+// glitchless mode
+npc(#fe_DwarfCastleCrystal) {
+    sprite #Crystal
+    default inactive
+    eventcall {
+    }    
+}
+
+placement($10d 0) {
+    npc #fe_DwarfCastleCrystal
+}
