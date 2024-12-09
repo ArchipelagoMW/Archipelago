@@ -286,6 +286,11 @@ class TunicWorld(World):
                 tunic_items.append(self.create_item(page, ItemClassification.progression | ItemClassification.useful))
                 items_to_create[page] = 0
 
+        # logically relevant if you have ladder storage enabled
+        if self.options.ladder_storage and not self.options.ladder_storage_without_items:
+            tunic_items.append(self.create_item("Shield", ItemClassification.progression))
+            items_to_create["Shield"] = 0
+
         if self.options.maskless:
             tunic_items.append(self.create_item("Scavenger Mask", ItemClassification.useful))
             items_to_create["Scavenger Mask"] = 0
