@@ -231,12 +231,14 @@ async def _run_game(rom: str):
         )
 
 
-async def _patch_and_run_game(patch_file: str):
+def _patch_and_run_game(patch_file: str):
     try:
         metadata, output_file = Patch.create_rom_file(patch_file)
         Utils.async_start(_run_game(output_file))
+        return metadata
     except Exception as exc:
         logger.exception(exc)
+        return {}
 
 
 def launch(*launch_args) -> None:
@@ -245,15 +247,17 @@ def launch(*launch_args) -> None:
         parser.add_argument("patch_file", default="", type=str, nargs="?", help="Path to an Archipelago patch file")
         args = parser.parse_args(launch_args)
 
+        if args.patch_file != "":
+            metadata = _patch_and_run_game(args.patch_file)
+            if "server" in metadata:
+                args.connect = metadata["server"]
+
         ctx = BizHawkClientContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
 
         if gui_enabled:
             ctx.run_gui()
         ctx.run_cli()
-
-        if args.patch_file != "":
-            Utils.async_start(_patch_and_run_game(args.patch_file))
 
         watcher_task = asyncio.create_task(_game_watcher(ctx), name="GameWatcher")
 
