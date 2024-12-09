@@ -1859,6 +1859,10 @@ item_table = {
     item_names.STALWART_STRUT_ENHANCEMENTS: ItemData(388 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 28, SC2Race.PROTOSS, parent_item=item_names.STALWART),
     item_names.STALWART_STABILIZED_ELECTRODES: ItemData(389 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 29, SC2Race.PROTOSS, parent_item=item_names.STALWART),
     item_names.STALWART_LATTICED_SHIELDING: ItemData(390 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_4, 0, SC2Race.PROTOSS, parent_item=item_names.STALWART),
+    item_names.ARCHON_FLOAT: ItemData(391 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_4, 1, SC2Race.PROTOSS),
+    item_names.ARCHON_SIPHON: ItemData(392 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_4, 2, SC2Race.PROTOSS),
+    item_names.ARCHON_SUICIDE: ItemData(393 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_4, 3, SC2Race.PROTOSS),
+    item_names.ARCHON_WEAPON_UPGRADE: ItemData(394 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_4, 4, SC2Race.PROTOSS),
 
     # War Council
     item_names.ZEALOT_WHIRLWIND: ItemData(500 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 0, SC2Race.PROTOSS, classification=ItemClassification.progression, parent_item=item_names.ZEALOT),
