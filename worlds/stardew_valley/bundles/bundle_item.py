@@ -3,8 +3,8 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-from ..content import StardewContent
-from ..options import StardewValleyOptions, ExcludeGingerIsland, FestivalLocations, SkillProgression
+from ..content import StardewContent, content_packs
+from ..options import StardewValleyOptions, FestivalLocations
 from ..strings.crop_names import Fruit
 from ..strings.currency_names import Currency
 from ..strings.quality_names import CropQuality, FishQuality, ForageQuality
@@ -12,34 +12,35 @@ from ..strings.quality_names import CropQuality, FishQuality, ForageQuality
 
 class BundleItemSource(ABC):
     @abstractmethod
-    def can_appear(self, options: StardewValleyOptions) -> bool:
+    def can_appear(self, content: StardewContent, options: StardewValleyOptions) -> bool:
         ...
 
 
 class VanillaItemSource(BundleItemSource):
-    def can_appear(self, options: StardewValleyOptions) -> bool:
+    def can_appear(self, content: StardewContent, options: StardewValleyOptions) -> bool:
         return True
 
 
 class IslandItemSource(BundleItemSource):
-    def can_appear(self, options: StardewValleyOptions) -> bool:
-        return options.exclude_ginger_island == ExcludeGingerIsland.option_false
+    def can_appear(self, content: StardewContent, options: StardewValleyOptions) -> bool:
+        return content_packs.ginger_island_content_pack.name in content.registered_packs
 
 
 class FestivalItemSource(BundleItemSource):
-    def can_appear(self, options: StardewValleyOptions) -> bool:
+    def can_appear(self, content: StardewContent, options: StardewValleyOptions) -> bool:
         return options.festival_locations != FestivalLocations.option_disabled
 
 
+# FIXME remove this once recipes are in content packs
 class MasteryItemSource(BundleItemSource):
-    def can_appear(self, options: StardewValleyOptions) -> bool:
-        return options.skill_progression == SkillProgression.option_progressive_with_masteries
+    def can_appear(self, content: StardewContent, options: StardewValleyOptions) -> bool:
+        return content.features.skill_progression.are_masteries_shuffled
 
 
 class ContentItemSource(BundleItemSource):
     """This is meant to be used for items that are managed by the content packs."""
 
-    def can_appear(self, options: StardewValleyOptions) -> bool:
+    def can_appear(self, content: StardewContent, options: StardewValleyOptions) -> bool:
         raise ValueError("This should not be called, check if the item is in the content instead.")
 
 
@@ -97,5 +98,4 @@ class BundleItem:
         if isinstance(self.source, ContentItemSource):
             return self.get_item() in content.game_items
 
-        return self.source.can_appear(options)
-
+        return self.source.can_appear(content, options)
