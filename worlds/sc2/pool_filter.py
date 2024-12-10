@@ -302,14 +302,14 @@ class ValidInventory:
             return False
 
         def item_included(item: StarcraftItem) -> bool:
-            return (
+            return bool(
                 ItemFilterFlags.Removed not in item.filter_flags
                 or (ItemFilterFlags.Unexcludable & item.filter_flags)
                 or (not (ItemFilterFlags.Excluded & item.filter_flags)
                     and (ItemFilterFlags.Requested & item.filter_flags)
                 )
                 or not (ItemFilterFlags.Culled & item.filter_flags)
-            ) != 0
+            )
 
         # Part 1: Remove items that are not requested
         start_inventory_size = len([item for item in inventory if ItemFilterFlags.StartInventory in item.filter_flags])
