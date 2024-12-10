@@ -615,9 +615,17 @@ class TestItemFiltering(Sc2SetupTestBase):
         itempool = [item.name for item in self.multiworld.itempool]
         world_items = starting_inventory + itempool
         vehicle_weapon_items = [x for x in world_items if x == item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON]
+        other_bundle_items = [
+            x for x in world_items if x in (
+                item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE,
+                item_names.PROGRESSIVE_TERRAN_WEAPON_UPGRADE,
+                item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE,
+            )
+        ]
 
         # Under standard tactics you need to place L3 upgrades for available unit classes
         self.assertGreaterEqual(len(vehicle_weapon_items), 3)
+        self.assertEqual(len(other_bundle_items), 0)
 
     def test_weapon_armor_upgrades_with_bundles(self):
         world_options = {
@@ -648,9 +656,17 @@ class TestItemFiltering(Sc2SetupTestBase):
         itempool = [item.name for item in self.multiworld.itempool]
         world_items = starting_inventory + itempool
         vehicle_upgrade_items = [x for x in world_items if x == item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE]
+        other_bundle_items = [
+            x for x in world_items if x in (
+                item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE,
+                item_names.PROGRESSIVE_TERRAN_WEAPON_UPGRADE,
+                item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON,
+            )
+        ]
 
         # Under standard tactics you need to place L3 upgrades for available unit classes
         self.assertGreaterEqual(len(vehicle_upgrade_items), 3)
+        self.assertEqual(len(other_bundle_items), 0)
 
     def test_weapon_armor_upgrades_all_in_air(self):
         world_options = {
