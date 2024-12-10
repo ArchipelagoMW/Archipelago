@@ -45,7 +45,7 @@ def generate_lithograph_hint(world: "LandstalkerWorld"):
             words.append(item.name.split(" ")[0].upper())
         if item.location.player != world.player:
             # Add player name if it's not in our own world
-            player_name = world.multiworld.get_player_name(world.player)
+            player_name = world.multiworld.get_player_name(item.location.player)
             words.append(player_name.upper())
         world.random.shuffle(words)
         hint_text += " ".join(words) + "\n"
