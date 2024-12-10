@@ -218,8 +218,8 @@ class Context:
         self.allow_releases = {}
         self.host = host
         self.port = port
-        self.server_password = server_password
-        self.password = password
+        self.server_password = server_password.strip()
+        self.password = password.strip()
         self.server = None
         self.countdown_timer = 0
         self.received_items = {}
@@ -2320,7 +2320,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 return input_text.lower() not in {"off", "0", "false", "none", "null", "no"}
         elif value_type == str and option_name.endswith("password"):
             def value_type(input_text: str):
-                return None if input_text.lower() in {"null", "none", '""', "''"} else input_text
+                return None if input_text.lower().strip() in {"null", "none", '""', "''"} else input_text.strip()
         elif value_type == str and option_name.endswith("mode"):
             valid_values = {"goal", "enabled", "disabled"}
             valid_values.update(("auto", "auto_enabled") if option_name != "remaining_mode" else [])
