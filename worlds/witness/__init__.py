@@ -151,7 +151,8 @@ class WitnessWorld(World):
         )
         self.player_regions: WitnessPlayerRegions = WitnessPlayerRegions(self.player_locations, self)
 
-        self.log_ids_to_hints = {}
+        self.log_ids_to_hints: Dict[int, CompactHintData] = {}
+        self.laser_ids_to_hints: Dict[int, CompactHintData] = {}
 
         self.determine_sufficient_progression()
 
@@ -326,9 +327,6 @@ class WitnessWorld(World):
                 self.options.local_items.value.add(item_name)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        self.log_ids_to_hints: Dict[int, CompactHintData] = {}
-        self.laser_ids_to_hints: Dict[int, CompactHintData] = {}
-
         already_hinted_locations = set()
 
         # Laser hints
