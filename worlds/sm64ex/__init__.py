@@ -10,7 +10,6 @@ from BaseClasses import Item, Tutorial, ItemClassification, Region
 from ..AutoWorld import World, WebWorld
 
 
-
 class SM64Web(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
@@ -22,6 +21,7 @@ class SM64Web(WebWorld):
     )]
 
     option_groups = sm64_options_groups
+
 
 class SM64World(World):
     """ 
