@@ -31,7 +31,7 @@
 #JOB_THRESHOLD: 1
 
 # After what time in seconds should generation be aborted, freeing the queue slot. Can be set to None to disable.
-#JOB_TIME = 600
+#JOB_TIME: 600
 
 # Memory limit for Generator processes in bytes, -1 for unlimited. Currently only works on Linux.
 #GENERATOR_MEMORY_LIMIT: 4294967296
