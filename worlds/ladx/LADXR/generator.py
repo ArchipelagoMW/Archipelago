@@ -81,7 +81,7 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
     for pymod in pymods:
         pymod.prePatch(rom)
 
-    if options["gfxmod"] != "Link":
+    if options["gfxmod"]:
         patches.aesthetics.gfxMod(rom, os.path.join("data", "sprites", "ladx", options["gfxmod"]))
 
     assembler.resetConsts()
