@@ -336,9 +336,9 @@ class TunicWorld(World):
         self.local_filler = []
         if self.options.grass_randomizer and self.options.local_fill > 0 and self.multiworld.players > 1:
             # skip items marked local or non-local, let fill deal with them in its own way
-            # remove grass from non_local if it's meant to be limited
+            # discard grass from non_local if it's meant to be limited
             if self.settings.limit_grass_rando:
-                self.options.non_local_items.value.remove("Grass")
+                self.options.non_local_items.value.discard("Grass")
             all_filler = []
             non_filler = []
             amount_to_local_fill = int(self.options.local_fill.value * len(all_filler) / 100)
