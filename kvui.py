@@ -371,7 +371,7 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
                     if self.hint["status"] == HintStatus.HINT_FOUND:
                         return
                     ctx = App.get_running_app().ctx
-                    if ctx.slot == self.hint["receiving_player"]:  # If this player owns this hint
+                    if ctx.slot_concerns_self(self.hint["receiving_player"]):  # If this player owns this hint
                         # open a dropdown
                         self.dropdown.open(self.ids["status"])
                 elif self.selected:
@@ -800,7 +800,7 @@ class HintLog(RecycleView):
             hint_status_node = self.parser.handle_node({"type": "color",
                                                         "color": status_colors.get(hint["status"], "red"),
                                                         "text": status_names.get(hint["status"], "Unknown")})
-            if hint["status"] != HintStatus.HINT_FOUND and hint["receiving_player"] == ctx.slot:
+            if hint["status"] != HintStatus.HINT_FOUND and ctx.slot_concerns_self(hint["receiving_player"]):
                 hint_status_node = f"[u]{hint_status_node}[/u]"
             data.append({
                 "receiving": {"text": self.parser.handle_node({"type": "player_id", "text": hint["receiving_player"]})},
