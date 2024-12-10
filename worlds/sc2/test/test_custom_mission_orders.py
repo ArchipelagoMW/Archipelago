@@ -102,7 +102,7 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
         self.assertEqual(flags.get(MissionFlag.Zerg, 0), 0)
         sc2_regions = set(self.multiworld.regions.region_cache[self.player]) - {"Menu"}
         self.assertEqual(len(self.world.custom_mission_order.get_used_missions()), len(sc2_regions))
-    
+
     def test_locked_and_necessary_item_appears_once(self):
         # This is a filler upgrade with a parent
         test_item = item_names.ZERGLING_METABOLIC_BOOST
@@ -127,7 +127,6 @@ class TestCustomMissionOrders(Sc2SetupTestBase):
         self.assertNotEqual(item_tables.item_table[test_item].classification, ItemClassification.progression, f"Test item {test_item} won't change classification")
 
         self.generate_world(world_options)
-        print(self.multiworld.seed)
         test_items_in_pool = [item for item in self.multiworld.itempool if item.name == test_item]
         test_items_in_pool += [item for item in self.multiworld.precollected_items[self.player] if item.name == test_item]
         self.assertEqual(len(test_items_in_pool), 1)
