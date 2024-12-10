@@ -1,0 +1,170 @@
+{# Original icons located at https://github.com/PoryGone/Celeste-64-AP-Tracker/tree/main/images #}
+{% set icons = {
+    "Strawberry"            : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/strawberry.png?raw=true",
+    
+    "Air Dash"              : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/AirDash.png?raw=true",
+    "Breakable Blocks"      : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Breakables_Filled.PNG?raw=true",
+    "Cassettes"             : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Cassettes_Filled.PNG?raw=true",
+    "Climb"                 : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Climb.png?raw=true",
+    "Coins"                 : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Coins_Filled.PNG?raw=true",
+    "Dash Refills"          : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Dash_Filled.png?raw=true",
+    "Double Dash Refills"   : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/DoubleDash_Filled.png?raw=true",
+    "Feathers"              : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Feather_Filled.png?raw=true",
+    "Ground Dash"           : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/GroundDash.png?raw=true",
+    "Skid Jump"             : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/SkidJump.png?raw=true",
+    "Springs"               : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Springs_Filled.png?raw=true",
+    "Traffic Blocks"        : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Traffic_Filled.png?raw=true"
+} %}
+
+{% set inventory_order = [
+    "Strawberry",
+    "Empty",
+    "Empty",
+    "Empty",
+
+    "Climb",
+    "Skid Jump",
+    "Air Dash",
+    "Ground Dash",
+    
+    "Cassettes",
+    "Dash Refills",
+    "Double Dash Refills",
+    "Feathers",
+    
+    "Coins",
+    "Breakable Blocks",
+    "Springs",
+    "Traffic Blocks"
+] %}
+
+{% set multi_items = [
+    "Strawberry"
+] %}
+
+{# Most have a duplicated 0th entry for when we have none of that item to still load the correct icon/name. #}
+{% set progressive_order = {
+    
+} %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ player_name }}&apos;s Tracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/globalStyles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/tracker.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/themes/dirt.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/themes/base.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/tracker__Celeste64.css') }}">
+</head>
+
+<body>
+    <header id="base-header">
+        <div id="base-header-left">
+            <a id="site-title" href="#">{{ player_name }}'s Tracker</a>
+        </div>
+    </header>
+
+    <div id="tracker-navigation">
+        <div class="tracker-navigation-bar">
+            <a class="tracker-navigation-button" href="{{ url_for("get_generic_game_tracker", tracker=room.tracker, tracked_team=team, tracked_player=player) }}"> 🡸 Switch To Generic Tracker </a>
+        </div>
+    </div>
+
+    <div class="tracker-container">
+        {# Inventory Grid #}
+        <div class="inventory-grid">
+            {% for item in inventory_order %}
+                {% if item in progressive_order %}
+                    {% set non_prog_item = progressive_order[item][inventory[item]] %}
+                    <div class="item">
+                        <img
+                            src="{{ icons[non_prog_item] }}"
+                            alt="{{ non_prog_item }}"
+                            title="{{ non_prog_item }}"
+                            class="{{ 'missing' if (item not in inventory or inventory[item] == 0) }}"
+                        />
+                    </div>
+                {% else %}
+                    <div class="item">
+                        {% if item != "Empty" %}
+                            <img
+                                src="{{ icons[item] }}"
+                                alt="{{ item }}"
+                                title="{{ item }}"
+                                class="{{ 'missing' if item not in inventory or inventory[item] == 0 }}"
+                            />
+
+                            {% if item in multi_items %}
+                                <div class="quantity">{{ inventory[item] }}</div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="regions-list">
+            {% for region_name in known_regions %}
+                {% set region_data = regions[region_name] %}
+                {% if region_data["locations"] | length > 0 %}
+                    <details class="region-details">
+                        <summary>
+                            <div class="region">
+                                    <span>{{ region_name }}</span>
+                                    <span>{{ region_data["checked"] }} / {{ region_data["locations"] | length }}</span>
+                                    <span>
+                                        {% if region_data["checked"] == (region_data["locations"] | length) %}
+                                            ✔
+                                        {% else %}
+                                            &mdash;
+                                        {% endif %}
+                                    </span>
+                                </div>
+                        </summary>
+
+                        <div class="location-rows">
+                            {% for location, checked in region_data["locations"] %}
+                                <div>{{ location }}</div>
+                                <div>{% if checked %}✔{% endif %}</div>
+                            {% endfor %}
+                        </div>
+                    </details>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        const parser = new DOMParser();
+        const interval = 15_000;
+
+        window.addEventListener("load", () => {
+            setInterval(() => updateTracker()
+                .then(() => console.log("Refreshed tracker."))
+                .catch(console.error), interval);
+        });
+
+        async function updateTracker() {
+            const response = await fetch(`${window.location}`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch tracker update from ${window.location}. Received response: ${response.statusText}`);
+            }
+
+            const fakeDOM = parser.parseFromString(await response.text(), "text/html");
+            document.querySelector(".inventory-grid").innerHTML = fakeDOM.querySelector(".inventory-grid").innerHTML;
+
+            const regionDetailElements = document.querySelectorAll(".region-details");
+            const fakeDetailElements = fakeDOM.querySelectorAll(".region-details");
+
+            for (let i = 0; i < regionDetailElements.length; ++i) {
+                const isOpen = regionDetailElements[i].open;
+                regionDetailElements[i].innerHTML = fakeDetailElements[i].innerHTML;
+                regionDetailElements[i].open = isOpen;
+            }
+        }
+    </script>
+</body>
+</html>
