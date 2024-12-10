@@ -41,7 +41,7 @@ class HereticWorld(World):
     options: HereticOptions
     game = "Heretic"
     web = HereticWeb()
-    required_client_version = (0, 3, 9)
+    required_client_version = (0, 5, 0)  # 1.2.0-prerelease or higher
 
     item_name_to_id = {data["name"]: item_id for item_id, data in Items.item_table.items()}
     item_name_groups = Items.item_name_groups
