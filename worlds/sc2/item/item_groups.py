@@ -64,9 +64,9 @@ for item, data in item_tables.get_full_item_list().items():
             # Short-name groups are unlisted
             unlisted_item_name_groups.add(short_name)
     # Items with a parent get assigned to their parent's group
-    if data.parent_item:
+    if data.parent:
         # The parent groups need a special name, otherwise they are ambiguous with the parent
-        parent_group = f"{data.parent_item} Items"
+        parent_group = f"{data.parent} Items"
         item_name_groups.setdefault(parent_group, []).append(item)
         # Parent groups are unlisted
         unlisted_item_name_groups.add(parent_group)

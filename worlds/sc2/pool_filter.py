@@ -192,7 +192,7 @@ class ValidInventory:
             for child_item in child_items:
                 if (ItemFilterFlags.AllowedOrphan|ItemFilterFlags.Unexcludable) & child_item.filter_flags:
                     continue
-                parent_id = item_table[child_item.name].parent_item
+                parent_id = item_table[child_item.name].parent
                 assert parent_id is not None
                 if item_parents.parent_present[parent_id](self.logical_inventory, self.world.options):
                     continue
@@ -267,7 +267,7 @@ class ValidInventory:
         # Make an index from child to parent
         child_to_main_parent: Dict[str, StarcraftItem] = {}
         for item in inventory:
-            parent_id = item_table[item.name].parent_item
+            parent_id = item_table[item.name].parent
             if parent_id is None:
                 continue
             parent_item_name = item_parents.parent_present[parent_id].main_item

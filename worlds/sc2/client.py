@@ -273,8 +273,8 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             items_received.setdefault(item.item, []).append(item)
         items_received_set = set(items_received)
         for item_data in items.values():
-            if item_data.parent_item:
-                parent_to_child.setdefault(items[item_data.parent_item].code, []).append(item_data.code)
+            if item_data.parent:
+                parent_to_child.setdefault(items[item_data.parent].code, []).append(item_data.code)
             else:
                 categorized_items.setdefault(item_data.race, []).append(item_data.code)
         for faction in SC2Race:

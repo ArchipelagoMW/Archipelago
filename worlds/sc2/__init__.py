@@ -781,10 +781,10 @@ def prune_item_pool(world: SC2World, item_list: List[FilterItem]) -> List[Starcr
 
 
 def item_list_contains_parent(world: SC2World, item_data: ItemData, item_name_list: List[str]) -> bool:
-    if item_data.parent_item is None:
+    if item_data.parent is None:
         # The item has no associated parent, the item is valid
         return True
-    return item_parents.parent_present[item_data.parent_item](item_name_list, world.options)
+    return item_parents.parent_present[item_data.parent](item_name_list, world.options)
 
 
 def pad_item_pool_with_filler(self: SC2World, num_items: int, pool: List[Item]):

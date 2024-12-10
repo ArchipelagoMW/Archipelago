@@ -215,10 +215,10 @@ parent_id_to_children: Dict[str, Sequence[str]] = {}
 """Parent identifier to child items. Only contains parent rules with children."""
 child_item_to_parent_items: Dict[str, Sequence[str]] = {}
 for _item_name, _item_data in item_tables.item_table.items():
-    if _item_data.parent_item is None:
+    if _item_data.parent is None:
         continue
-    parent_id_to_children.setdefault(_item_data.parent_item, []).append(_item_name)
-    child_item_to_parent_items[_item_name] = parent_present[_item_data.parent_item].parent_items()
+    parent_id_to_children.setdefault(_item_data.parent, []).append(_item_name)
+    child_item_to_parent_items[_item_name] = parent_present[_item_data.parent].parent_items()
 
 
 parent_item_to_ids: Dict[str, Sequence[str]] = {}
