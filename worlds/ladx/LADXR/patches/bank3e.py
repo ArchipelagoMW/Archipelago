@@ -96,7 +96,9 @@ StartGameMarinMessage:
         ldi  [hl], a ;hour counter
 
         ld   hl, $B010
+        ld   a, $01  ;tarin's gift gets skipped for some reason, so inflate count by 1
         ldi  [hl], a ;check counter low
+        xor  a
         ldi  [hl], a ;check counter high
 
         ; Show the normal message
