@@ -417,7 +417,6 @@ class LinksAwakeningClient():
         looks at items collected and compares against locations checked to
         give unused trade items back to the player.
         """
-        logger.info('fixing trade items')
         trade_items = (
             { 'destination': '0x2A6-Trade', 'name': 'TRADING_ITEM_YOSHI_DOLL' },
             { 'destination': '0x2B2-Trade', 'name': 'TRADING_ITEM_RIBBON' },
