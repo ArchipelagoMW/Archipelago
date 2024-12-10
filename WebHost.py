@@ -38,7 +38,7 @@ def get_app() -> "Flask":
     parser.add_argument('--config_override', default=None,
                         help="Path to yaml config file that overrules config.yaml.")
     args = parser.parse_known_args()[0]
-    if args.config_override:
+    if args.config_override and args.config_override.endswith(".yaml"):
         import yaml
         app.config.from_file(os.path.abspath(args.config_override), yaml.safe_load)
         logging.info(f"Updated config from {args.config_override}")
