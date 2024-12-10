@@ -169,7 +169,8 @@ class SA2BWorld(World):
                                  self.options.pokemon_count_trap_weight.value + \
                                  self.options.number_sequence_trap_weight.value + \
                                  self.options.light_up_path_trap_weight.value + \
-                                 self.options.pinball_trap_weight.value
+                                 self.options.pinball_trap_weight.value + \
+                                 self.options.math_quiz_trap_weight.value
 
             if valid_trap_weights == 0:
                 self.options.exposition_trap_weight.value = 4
@@ -186,6 +187,7 @@ class SA2BWorld(World):
                 self.options.number_sequence_trap_weight.value = 4
                 self.options.light_up_path_trap_weight.value = 4
                 self.options.pinball_trap_weight.value = 4
+                self.options.math_quiz_trap_weight.value = 4
 
             if self.options.kart_race_checks.value == 0:
                 self.options.kart_race_checks.value = 2
@@ -337,6 +339,7 @@ class SA2BWorld(World):
         trap_weights += ([ItemName.number_sequence_trap] * self.options.number_sequence_trap_weight.value)
         trap_weights += ([ItemName.light_up_path_trap] * self.options.light_up_path_trap_weight.value)
         trap_weights += ([ItemName.pinball_trap] * self.options.pinball_trap_weight.value)
+        trap_weights += ([ItemName.math_quiz_trap] * self.options.math_quiz_trap_weight.value)
 
         junk_count += extra_junk_count
         trap_count = 0 if (len(trap_weights) == 0) else math.ceil(junk_count * (self.options.trap_fill_percentage.value / 100.0))
@@ -563,6 +566,7 @@ class SA2BWorld(World):
         trap_data[0x56] = self.options.number_sequence_trap_weight.value
         trap_data[0x57] = self.options.light_up_path_trap_weight.value
         trap_data[0x58] = self.options.pinball_trap_weight.value
+        trap_data[0x59] = self.options.math_quiz_trap_weight.value
 
         return trap_data
 

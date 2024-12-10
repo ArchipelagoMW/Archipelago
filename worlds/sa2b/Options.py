@@ -284,6 +284,13 @@ class PinballTrapWeight(BaseTrapWeight):
     display_name = "Pinball Trap Weight"
 
 
+class MathQuizTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to solve a math problem
+    """
+    display_name = "Math Quiz Trap Weight"
+
+
 class MinigameTrapDifficulty(Choice):
     """
     How difficult any Minigame-style traps are
@@ -1158,6 +1165,7 @@ sa2b_option_groups = [
         NumberSequenceTrapWeight,
         LightUpPathTrapWeight,
         PinballTrapWeight,
+        MathQuizTrapWeight,
         MinigameTrapDifficulty,
     ]),
     OptionGroup("Sonic Missions", [
@@ -1290,6 +1298,7 @@ class SA2BOptions(PerGameCommonOptions):
     number_sequence_trap_weight: NumberSequenceTrapWeight
     light_up_path_trap_weight: LightUpPathTrapWeight
     pinball_trap_weight: PinballTrapWeight
+    math_quiz_trap_weight: MathQuizTrapWeight
     minigame_trap_difficulty: MinigameTrapDifficulty
 
     sadx_music: SADXMusic
