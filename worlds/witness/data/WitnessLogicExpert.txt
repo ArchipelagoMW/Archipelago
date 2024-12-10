@@ -58,7 +58,7 @@ Door - 0x0A170 (Outpost Entry) - 0x0A171
 Outside Tutorial Outpost (Outside Tutorial) - Outside Tutorial - 0x04CA3:
 158012 - 0x04CA4 (Outpost Exit Panel) - True - Dots & Full Dots & Shapers & Rotated Shapers
 Door - 0x04CA3 (Outpost Exit) - 0x04CA4
-158600 - 0x17CFB (Discard) - True - Arrows
+158600 - 0x17CFB (Outpost Discard) - True - Arrows
 
 Orchard (Orchard) - Main Island - True - Orchard Beyond First Gate - 0x03307:
 158071 - 0x00143 (Apple Tree 1) - True - True

@@ -110,7 +110,7 @@ def parse_lambda(lambda_string: str) -> WitnessRule:
 _adjustment_file_cache = {}
 
 
-def get_adjustment_file(adjustment_file: str) -> List[str]:
+def get_definitions_file(adjustment_file: str) -> List[str]:
     if adjustment_file not in _adjustment_file_cache:
         data = get_data(__name__, adjustment_file)
         if data is None:
@@ -120,112 +120,28 @@ def get_adjustment_file(adjustment_file: str) -> List[str]:
     return _adjustment_file_cache[adjustment_file]
 
 
-def get_disable_unrandomized_list() -> List[str]:
-    return get_adjustment_file("settings/Exclusions/Disable_Unrandomized.txt")
-
-
-def get_early_caves_list() -> List[str]:
-    return get_adjustment_file("settings/Early_Caves.txt")
-
-
-def get_early_caves_start_list() -> List[str]:
-    return get_adjustment_file("settings/Early_Caves_Start.txt")
-
-
-def get_symbol_shuffle_list() -> List[str]:
-    return get_adjustment_file("settings/Symbol_Shuffle.txt")
-
-
-def get_complex_doors() -> List[str]:
-    return get_adjustment_file("settings/Door_Shuffle/Complex_Doors.txt")
-
-
-def get_simple_doors() -> List[str]:
-    return get_adjustment_file("settings/Door_Shuffle/Simple_Doors.txt")
-
-
-def get_complex_door_panels() -> List[str]:
-    return get_adjustment_file("settings/Door_Shuffle/Complex_Door_Panels.txt")
-
-
-def get_complex_additional_panels() -> List[str]:
-    return get_adjustment_file("settings/Door_Shuffle/Complex_Additional_Panels.txt")
-
-
-def get_simple_panels() -> List[str]:
-    return get_adjustment_file("settings/Door_Shuffle/Simple_Panels.txt")
-
-
-def get_simple_additional_panels() -> List[str]:
-    return get_adjustment_file("settings/Door_Shuffle/Simple_Additional_Panels.txt")
-
-
-def get_boat() -> List[str]:
-    return get_adjustment_file("settings/Door_Shuffle/Boat.txt")
-
-
-def get_laser_shuffle() -> List[str]:
-    return get_adjustment_file("settings/Laser_Shuffle.txt")
-
-
 def get_audio_logs() -> List[str]:
-    return get_adjustment_file("settings/Audio_Logs.txt")
-
-
-def get_ep_all_individual() -> List[str]:
-    return get_adjustment_file("settings/EP_Shuffle/EP_All.txt")
-
-
-def get_ep_obelisks() -> List[str]:
-    return get_adjustment_file("settings/EP_Shuffle/EP_Sides.txt")
-
-
-def get_obelisk_keys() -> List[str]:
-    return get_adjustment_file("settings/Door_Shuffle/Obelisk_Keys.txt")
-
-
-def get_ep_easy() -> List[str]:
-    return get_adjustment_file("settings/EP_Shuffle/EP_Easy.txt")
-
-
-def get_ep_no_eclipse() -> List[str]:
-    return get_adjustment_file("settings/EP_Shuffle/EP_NoEclipse.txt")
-
-
-def get_vault_exclusion_list() -> List[str]:
-    return get_adjustment_file("settings/Exclusions/Vaults.txt")
-
-
-def get_discard_exclusion_list() -> List[str]:
-    return get_adjustment_file("settings/Exclusions/Discards.txt")
-
-
-def get_caves_except_path_to_challenge_exclusion_list() -> List[str]:
-    return get_adjustment_file("settings/Exclusions/Caves_Except_Path_To_Challenge.txt")
-
-
-def get_entity_hunt() -> List[str]:
-    return get_adjustment_file("settings/Entity_Hunt.txt")
+    return get_definitions_file("Audio_Logs.txt")
 
 
 def get_sigma_normal_logic() -> List[str]:
-    return get_adjustment_file("WitnessLogic.txt")
+    return get_definitions_file("WitnessLogic.txt")
 
 
 def get_sigma_expert_logic() -> List[str]:
-    return get_adjustment_file("WitnessLogicExpert.txt")
+    return get_definitions_file("WitnessLogicExpert.txt")
 
 
 def get_umbra_variety_logic() -> List[str]:
-    return get_adjustment_file("WitnessLogicVariety.txt")
+    return get_definitions_file("WitnessLogicVariety.txt")
 
 
 def get_vanilla_logic() -> List[str]:
-    return get_adjustment_file("WitnessLogicVanilla.txt")
+    return get_definitions_file("WitnessLogicVanilla.txt")
 
 
 def get_items() -> List[str]:
-    return get_adjustment_file("WitnessItems.txt")
+    return get_definitions_file("WitnessItems.txt")
 
 
 def optimize_witness_rule(witness_rule: WitnessRule) -> WitnessRule:

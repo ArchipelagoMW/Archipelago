@@ -12,7 +12,7 @@ GENERAL_LOCATIONS = {
     "Tutorial Gate Open",
 
     "Outside Tutorial Vault Box",
-    "Outside Tutorial Discard",
+    "Outside Tutorial Outpost Discard",
     "Outside Tutorial Shed Row 5",
     "Outside Tutorial Tree Row 9",
     "Outside Tutorial Outpost Entry Panel",
@@ -408,8 +408,31 @@ GENERAL_LOCATIONS = {
     "Mountain Bottom Floor Discard",
 }
 
-GENERAL_LOCATION_HEXES = {
-    static_witness_logic.ENTITIES_BY_NAME[entity_name]["entity_hex"] for entity_name in GENERAL_LOCATIONS
+ADDITIONAL_DOOR_SHUFFLE_LOCATIONS = {
+    "Glass Factory Entry Panel",
+    "Orchard Apple Tree 3",
+    "Desert Light Room Entry Panel",
+    "Desert Flood Room Entry Panel",
+    "Quarry Stoneworks Side Exit Panel",
+    "Quarry Stoneworks Roof Exit Panel",
+    "Quarry Boathouse Second Barrier Panel",
+    "Shadows Door Timer Inside",
+    "Shadows Door Timer Outside",
+    "Shadows Intro 3",
+    "Shadows Intro 5",
+    "Keep Shadows Shortcut Panel",
+    "Keep Tower Shortcut Panel",
+    "Monastery Laser Shortcut Panel",
+    "Monastery Entry Left",
+    "Monastery Entry Right",
+    "Jungle Laser Shortcut Panel",
+    "Jungle Popup Wall Control",
+    "Bunker Tinted Glass Door Panel",
+    "Treehouse Laser House Door Timer Outside",
+    "Treehouse Laser House Door Timer Inside",
+    "Mountain Bottom Floor Rock Control",
+    "Tunnels Theater Shortcut Panel",
+    "Tunnels Desert Shortcut Panel",
 }
 
 OBELISK_SIDES = {

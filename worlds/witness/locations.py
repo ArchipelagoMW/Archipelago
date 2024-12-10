@@ -38,7 +38,8 @@ class WitnessPlayerLocations:
                 if player_logic.REQUIREMENTS_BY_HEX[obelisk_loc_hex] == frozenset({frozenset()}):
                     self.CHECK_LOCATIONS.discard(obelisk_loc)
 
-        self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | player_logic.ADDED_CHECKS
+        if world.options.shuffle_doors >= 2:
+            self.CHECK_LOCATIONS = self.CHECK_LOCATIONS | static_witness_locations.ADDITIONAL_DOOR_SHUFFLE_LOCATIONS
 
         self.CHECK_LOCATIONS.discard(static_witness_logic.ENTITIES_BY_HEX[player_logic.VICTORY_LOCATION]["checkName"])
 
