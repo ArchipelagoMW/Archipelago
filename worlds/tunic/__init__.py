@@ -244,7 +244,7 @@ class TunicWorld(World):
             tunic_items.append(self.create_item("Glass Cannon", ItemClassification.progression))
             items_to_create["Glass Cannon"] = 0
             for grass_location in excluded_grass_locations:
-                self.multiworld.get_location(grass_location, self.player).place_locked_item(self.create_item("Grass"))
+                self.get_location(grass_location).place_locked_item(self.create_item("Grass"))
             items_to_create["Grass"] -= len(excluded_grass_locations)
 
         if self.options.keys_behind_bosses:
@@ -336,6 +336,9 @@ class TunicWorld(World):
         self.local_filler = []
         if self.options.grass_randomizer and self.options.grass_fill > 0 and self.multiworld.players > 1:
             # skip items marked local or non-local, let fill deal with them in its own way
+            # remove grass from non_local if it's meant to be limited
+            if self.settings.limit_grass_rando:
+                self.options.non_local_items.value.remove("Grass")
             all_filler = []
             non_filler = []
             amount_to_local_fill = int(self.options.grass_fill.value * len(all_filler) / 100)
