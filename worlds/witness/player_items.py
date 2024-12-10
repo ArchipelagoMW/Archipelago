@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, Dict, List, Set
 from BaseClasses import Item, ItemClassification, MultiWorld
 
 from .data import static_items as static_witness_items
+from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import (
     DoorItemDefinition,
     ItemCategory,
@@ -53,9 +54,8 @@ class WitnessPlayerItems:
         # Remove all progression items that aren't actually in the game.
         self.item_data = {
             name: data for (name, data) in self.item_data.items()
-            if data.classification not in
-               {ItemClassification.progression, ItemClassification.progression_skip_balancing}
-               or name in player_logic.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME
+            if ItemClassification.progression not in data.classification
+            or name in player_logic.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME
         }
 
         # Downgrade door items
@@ -72,7 +72,7 @@ class WitnessPlayerItems:
         # Add progression items to the mandatory item list.
         progression_dict = {
             name: data for (name, data) in self.item_data.items()
-            if data.classification in {ItemClassification.progression, ItemClassification.progression_skip_balancing}
+            if ItemClassification.progression in data.classification
         }
         for item_name, item_data in progression_dict.items():
             if isinstance(item_data.definition, ProgressiveItemDefinition):
@@ -99,6 +99,46 @@ class WitnessPlayerItems:
             location_name = player_logic.EVENT_ITEM_PAIRS[event_location][0]
             self.item_data[location_name] = ItemData(None, ItemDefinition(0, ItemCategory.EVENT),
                                                      ItemClassification.progression, False)
+
+        # Determine which items should be progression + useful, if they exist in some capacity.
+        # Note: Some of these may need to be updated for the "independent symbols" PR.
+        self._proguseful_items = {
+            "Dots", "Stars", "Shapers", "Black/White Squares",
+            "Caves Shortcuts", "Caves Mountain Shortcut (Door)", "Caves Swamp Shortcut (Door)",
+            "Boat",
+        }
+
+        if self._world.options.shuffle_EPs == "individual":
+            self._proguseful_items |= {
+                "Town Obelisk Key",  # Most checks
+                "Monastery Obelisk Key",  # Most sphere 1 checks, and also super dense ("Jackpot" vibes)}
+            }
+
+        if self._world.options.shuffle_discarded_panels:
+            # Discards only give a moderate amount of checks, but are very spread out and a lot of them are in sphere 1.
+            # Thus, you really want to have the discard-unlocking item as quickly as possible.
+
+            if self._world.options.puzzle_randomization in ("none", "sigma_normal"):
+                self._proguseful_items.add("Triangles")
+            elif self._world.options.puzzle_randomization == "sigma_expert":
+                self._proguseful_items.add("Arrows")
+            # Discards require two symbols in Variety, so the "sphere 1 unlocking power" of Arrows is not there.
+        if self._world.options.puzzle_randomization == "sigma_expert":
+            self._proguseful_items.add("Triangles")
+            self._proguseful_items.add("Full Dots")
+            self._proguseful_items.add("Stars + Same Colored Symbol")
+            self._proguseful_items.discard("Stars")  # Stars are not that useful on their own.
+        if self._world.options.puzzle_randomization == "umbra_variety":
+            self._proguseful_items.add("Triangles")
+
+        # This needs to be improved when the improved independent&progressive symbols PR is merged
+        for item in list(self._proguseful_items):
+            self._proguseful_items.add(static_witness_logic.get_parent_progressive_item(item))
+
+        for item_name, item_data in self.item_data.items():
+            if item_name in self._proguseful_items:
+                item_data.classification |= ItemClassification.useful
+
 
     def get_mandatory_items(self) -> Dict[str, int]:
         """
