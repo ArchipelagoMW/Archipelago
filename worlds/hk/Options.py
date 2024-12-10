@@ -1,6 +1,6 @@
 import typing
 import re
-from dataclasses import dataclass, make_dataclass
+from dataclasses import make_dataclass
 
 from .ExtractedData import logic_options, starts, pool_options
 from .Rules import cost_terms
@@ -300,7 +300,7 @@ class PlandoCharmCosts(OptionDict):
     display_name = "Charm Notch Cost Plando"
     valid_keys = frozenset(charm_names)
     schema = Schema({
-        Optional(name): And(int, lambda n: 6 >= n >= 0) for name in charm_names
+        Optional(name): And(int, lambda n: 6 >= n >= 0, error="Charm costs must be integers in the range 0-6.") for name in charm_names
         })
 
     def get_costs(self, charm_costs: typing.List[int]) -> typing.List[int]:

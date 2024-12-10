@@ -46,30 +46,6 @@ class RLWorld(World):
         return self.options.as_dict(*[name for name in self.options_dataclass.type_hints.keys()])
 
     def generate_early(self):
-        location_ids_used_per_game = {
-            world.game: set(world.location_id_to_name) for world in self.multiworld.worlds.values()
-        }
-        item_ids_used_per_game = {
-            world.game: set(world.item_id_to_name) for world in self.multiworld.worlds.values()
-        }
-        overlapping_games = set()
-
-        for id_lookup in (location_ids_used_per_game, item_ids_used_per_game):
-            for game_1, ids_1 in id_lookup.items():
-                for game_2, ids_2 in id_lookup.items():
-                    if game_1 == game_2:
-                        continue
-
-                    if ids_1 & ids_2:
-                        overlapping_games.add(tuple(sorted([game_1, game_2])))
-
-        if overlapping_games:
-            raise RuntimeError(
-                "In this multiworld, there are games with overlapping item/location IDs.\n"
-                "The current Rogue Legacy does not support these and a fix is not currently planned.\n"
-                f"The overlapping games are: {overlapping_games}"
-            )
-        
         # Check validation of names.
         additional_lady_names = len(self.options.additional_lady_names.value)
         additional_sir_names = len(self.options.additional_sir_names.value)

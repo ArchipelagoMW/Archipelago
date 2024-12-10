@@ -1,4 +1,4 @@
-from typing import Dict, List, Set, Tuple, TextIO
+from typing import Dict, List, Set, Tuple, TextIO, Any, Optional
 from BaseClasses import Item, Tutorial, ItemClassification
 from .Items import get_item_names_per_category
 from .Items import item_table, starter_melee_weapons, starter_spells, filler_items, starter_progression_items
@@ -55,12 +55,17 @@ class TimespinnerWorld(World):
         self.precalculated_weights = PreCalculatedWeights(self.options, self.random)
 
         # in generate_early the start_inventory isnt copied over to precollected_items yet, so we can still modify the options directly
-        if self.options.start_inventory.value.pop('Meyef', 0) > 0:
+        if self.options.start_inventory.value.pop("Meyef", 0) > 0:
             self.options.start_with_meyef.value = Toggle.option_true
-        if self.options.start_inventory.value.pop('Talaria Attachment', 0) > 0:
+        if self.options.start_inventory.value.pop("Talaria Attachment", 0) > 0:
             self.options.quick_seed.value = Toggle.option_true
-        if self.options.start_inventory.value.pop('Jewelry Box', 0) > 0:
+        if self.options.start_inventory.value.pop("Jewelry Box", 0) > 0:
             self.options.start_with_jewelry_box.value = Toggle.option_true
+
+        self.interpret_slot_data(None)
+
+        if self.options.quick_seed:
+            self.multiworld.push_precollected(self.create_item("Talaria Attachment"))
 
     def create_regions(self) -> None: 
         create_regions_and_locations(self.multiworld, self.player, self.options, self.precalculated_weights)
@@ -98,9 +103,11 @@ class TimespinnerWorld(World):
             "Cantoran": self.options.cantoran.value,
             "LoreChecks": self.options.lore_checks.value,
             "BossRando": self.options.boss_rando.value,
+            "EnemyRando": self.options.enemy_rando.value,
             "DamageRando": self.options.damage_rando.value,
             "DamageRandoOverrides": self.options.damage_rando_overrides.value,
             "HpCap": self.options.hp_cap.value,
+            "AuraCap": self.options.aura_cap.value,
             "LevelCap": self.options.level_cap.value,
             "ExtraEarringsXP": self.options.extra_earrings_xp.value,
             "BossHealing": self.options.boss_healing.value,
@@ -118,6 +125,7 @@ class TimespinnerWorld(World):
             "RisingTides": self.options.rising_tides.value,
             "UnchainedKeys": self.options.unchained_keys.value,
             "PresentAccessWithWheelAndSpindle": self.options.back_to_the_future.value,
+            "PrismBreak": self.options.prism_break.value,
             "Traps": self.options.traps.value,
             "DeathLink": self.options.death_link.value,
             "StinkyMaw": True,
@@ -141,6 +149,76 @@ class TimespinnerWorld(World):
             "LakeSereneBridge": self.precalculated_weights.flood_lake_serene_bridge,
             "Lab": self.precalculated_weights.flood_lab
         }
+    
+    def interpret_slot_data(self, slot_data: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+        """Used by Universal Tracker to correctly rebuild state"""
+
+        if not slot_data \
+            and hasattr(self.multiworld, "re_gen_passthrough") \
+            and isinstance(self.multiworld.re_gen_passthrough, dict) \
+            and "Timespinner" in self.multiworld.re_gen_passthrough:
+                slot_data = self.multiworld.re_gen_passthrough["Timespinner"]
+
+        if not slot_data:
+            return None
+        
+        self.options.start_with_jewelry_box.value = slot_data["StartWithJewelryBox"]
+        self.options.downloadable_items.value = slot_data["DownloadableItems"]
+        self.options.eye_spy.value = slot_data["EyeSpy"]
+        self.options.start_with_meyef.value = slot_data["StartWithMeyef"]
+        self.options.quick_seed.value = slot_data["QuickSeed"]
+        self.options.specific_keycards.value = slot_data["SpecificKeycards"]
+        self.options.inverted.value = slot_data["Inverted"]
+        self.options.gyre_archives.value = slot_data["GyreArchives"]
+        self.options.cantoran.value = slot_data["Cantoran"]
+        self.options.lore_checks.value = slot_data["LoreChecks"]
+        self.options.boss_rando.value = slot_data["BossRando"]
+        self.options.damage_rando.value = slot_data["DamageRando"]
+        self.options.damage_rando_overrides.value = slot_data["DamageRandoOverrides"]
+        self.options.hp_cap.value = slot_data["HpCap"]
+        self.options.level_cap.value = slot_data["LevelCap"]
+        self.options.extra_earrings_xp.value = slot_data["ExtraEarringsXP"]
+        self.options.boss_healing.value = slot_data["BossHealing"]
+        self.options.shop_fill.value = slot_data["ShopFill"]
+        self.options.shop_warp_shards.value = slot_data["ShopWarpShards"]
+        self.options.shop_multiplier.value = slot_data["ShopMultiplier"]
+        self.options.loot_pool.value = slot_data["LootPool"]
+        self.options.drop_rate_category.value = slot_data["DropRateCategory"]
+        self.options.fixed_drop_rate.value = slot_data["FixedDropRate"]
+        self.options.loot_tier_distro.value = slot_data["LootTierDistro"]
+        self.options.show_bestiary.value = slot_data["ShowBestiary"]
+        self.options.show_drops.value = slot_data["ShowDrops"]
+        self.options.enter_sandman.value = slot_data["EnterSandman"]
+        self.options.dad_percent.value = slot_data["DadPercent"]
+        self.options.rising_tides.value = slot_data["RisingTides"]
+        self.options.unchained_keys.value = slot_data["UnchainedKeys"]
+        self.options.back_to_the_future.value = slot_data["PresentAccessWithWheelAndSpindle"]
+        self.options.traps.value = slot_data["Traps"]
+        self.options.death_link.value = slot_data["DeathLink"]
+        # Readonly slot_data["StinkyMaw"]
+        # data
+        # Readonly slot_data["PersonalItems"]
+        self.precalculated_weights.pyramid_keys_unlock = slot_data["PyramidKeysGate"]
+        self.precalculated_weights.present_key_unlock = slot_data["PresentGate"]
+        self.precalculated_weights.past_key_unlock = slot_data["PastGate"]
+        self.precalculated_weights.time_key_unlock = slot_data["TimeGate"]
+        # rising tides
+        if (slot_data["Basement"] > 1):
+            self.precalculated_weights.flood_basement = True
+        if (slot_data["Basement"] == 2):
+            self.precalculated_weights.flood_basement_high = True
+        self.precalculated_weights.flood_xarion = slot_data["Xarion"]
+        self.precalculated_weights.flood_maw = slot_data["Maw"]
+        self.precalculated_weights.flood_pyramid_shaft = slot_data["PyramidShaft"]
+        self.precalculated_weights.flood_pyramid_back = slot_data["BackPyramid"]
+        self.precalculated_weights.flood_moat = slot_data["CastleMoat"]
+        self.precalculated_weights.flood_courtyard = slot_data["CastleCourtyard"]
+        self.precalculated_weights.flood_lake_desolation = slot_data["LakeDesolation"]
+        self.precalculated_weights.flood_lake_serene = not slot_data["DryLakeSerene"]
+        self.precalculated_weights.flood_lake_serene_bridge = slot_data["LakeSereneBridge"]
+        self.precalculated_weights.flood_lab = slot_data["Lab"]
+
+        return slot_data
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         if self.options.unchained_keys:
@@ -223,6 +301,9 @@ class TimespinnerWorld(World):
         elif name in {"Timeworn Warp Beacon", "Modern Warp Beacon", "Mysterious Warp Beacon"} \
                 and not self.options.unchained_keys:
             item.classification = ItemClassification.filler
+        elif name in {"Laser Access A", "Laser Access I", "Laser Access M"} \
+                and not self.options.prism_break:
+            item.classification = ItemClassification.filler
 
         return item
 
@@ -254,6 +335,11 @@ class TimespinnerWorld(World):
             excluded_items.add('Timeworn Warp Beacon')
             excluded_items.add('Modern Warp Beacon')
             excluded_items.add('Mysterious Warp Beacon')
+
+        if not self.options.prism_break:
+            excluded_items.add('Laser Access A')
+            excluded_items.add('Laser Access I')
+            excluded_items.add('Laser Access M')
 
         for item in self.multiworld.precollected_items[self.player]:
             if item.name not in self.item_name_groups['UseItem']:
