@@ -231,7 +231,7 @@ class HKWorld(World):
             all_event_names.update(set(godhome_event_names))
 
         # Link regions
-        for event_name in all_event_names:
+        for event_name in sorted(all_event_names):
             #if event_name in wp_exclusions:
             #    continue
             loc = HKLocation(self.player, event_name, None, menu_region)
@@ -340,7 +340,7 @@ class HKWorld(World):
 
         for shop, locations in self.created_multi_locations.items():
             for _ in range(len(locations), getattr(self.options, shop_to_option[shop]).value):
-                loc = self.create_location(shop)
+                self.create_location(shop)
                 unfilled_locations += 1
 
         # Balance the pool
@@ -356,7 +356,7 @@ class HKWorld(World):
             if shops:
                 for _ in range(additional_shop_items):
                     shop = self.random.choice(shops)
-                    loc = self.create_location(shop)
+                    self.create_location(shop)
                     unfilled_locations += 1
                     if len(self.created_multi_locations[shop]) >= 16:
                         shops.remove(shop)
@@ -509,9 +509,13 @@ class HKWorld(World):
                     per_player_grubs_per_player[player][player] += 1
 
                 if grub.location and grub.location.player in group_lookup.keys():
-                    for real_player in group_lookup[grub.location.player]:
+                    # will count the item linked grub instead
+                    pass
+                elif player in group_lookup:
+                    for real_player in group_lookup[player]:
                         grub_count_per_player[real_player] += 1
                 else:
+                    # for non-linked grubs
                     grub_count_per_player[player] += 1
 
             for player, count in grub_count_per_player.items():
@@ -534,25 +538,15 @@ class HKWorld(World):
         for option_name in hollow_knight_options:
             option = getattr(self.options, option_name)
             try:
+                # exclude more complex types - we only care about int, bool, enum for player options; the client
+                # can get them back to the necessary type.
                 optionvalue = int(option.value)
-            except TypeError:
-                pass  # C# side is currently typed as dict[str, int], drop what doesn't fit
-            else:
                 options[option_name] = optionvalue
+            except TypeError:
+                pass
 
         # 32 bit int
         slot_data["seed"] = self.random.randint(-2147483647, 2147483646)
-
-        # Backwards compatibility for shop cost data (HKAP < 0.1.0)
-        if not self.options.CostSanity:
-            for shop, terms in shop_cost_types.items():
-                unit = cost_terms[next(iter(terms))].option
-                if unit == "Geo":
-                    continue
-                slot_data[f"{unit}_costs"] = {
-                    loc.name: next(iter(loc.costs.values()))
-                    for loc in self.created_multi_locations[shop]
-                }
 
         # HKAP 0.1.0 and later cost data.
         location_costs = {}
@@ -566,7 +560,7 @@ class HKWorld(World):
 
         slot_data["grub_count"] = self.grub_count
 
-        slot_data["is_race"] = int(self.settings.disable_spoilers or self.multiworld.is_race)
+        slot_data["is_race"] = self.settings.disable_spoilers or self.multiworld.is_race
 
         return slot_data
 

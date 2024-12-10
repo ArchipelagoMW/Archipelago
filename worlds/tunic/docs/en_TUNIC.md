@@ -56,6 +56,7 @@ In general:
 - Bushes are not considered in logic. It is assumed that the player will find a way past them, whether it is with a sword, a bomb, fire, luring an enemy, etc. There is also an option in the in-game randomizer settings menu to clear some of the early bushes.
 - The Cathedral is accessible during the day by using the Hero's Laurels to reach the Overworld fuse near the Swamp entrance.
 - The Secret Legend chest at the Cathedral can be obtained during the day by opening the Holy Cross door from the outside.
+- For the Ice Grappling, Ladder Storage, and Laurels Zips options, there is [this document](https://docs.google.com/document/d/1SFZBfsqZWH1_EAV9zyZobvrBcvCd3_54JP3iVnJ8rUg/edit?usp=sharing) that shows the individual applications of these tricks in logic.
 
 For the Entrance Randomizer:
 - Activating a fuse to turn on a yellow teleporter pad also activates its counterpart in the Far Shore.
