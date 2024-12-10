@@ -36,7 +36,7 @@ class ItemFilterTests(Sc2SetupTestBase):
         self.assertNotIn(item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR, itempool)
         self.assertNotIn(item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON, itempool)
         self.assertNotIn(item_names.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE, itempool)
-    
+
     def test_excluding_one_item_of_multi_parent_doesnt_filter_children(self) -> None:
         world_options = {
             'locked_items': {
@@ -45,6 +45,12 @@ class ItemFilterTests(Sc2SetupTestBase):
             },
             'excluded_items': {
                 item_names.ZEALOT: 1,
+                # Exclude more items to make space
+                item_names.WRATHWALKER: 1,
+                item_names.SENTRY: 1,
+                item_names.ENERGIZER: 1,
+                item_names.AVENGER: 1,
+                item_names.ARBITER: 1,
             },
             'min_number_of_upgrades': 2,
             'required_tactics': 'standard',
