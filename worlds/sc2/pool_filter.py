@@ -356,8 +356,9 @@ class ValidInventory:
         if item_names.MEDIVAC not in self.logical_inventory:
             # Don't allow L2 Siege Tank Transport Hook without Medivac
             inventory_transport_hooks = [item for item in inventory if item.name == item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
-            if len(inventory_transport_hooks) > 1:
-                inventory.remove(inventory_transport_hooks[0])
+            removable_transport_hooks = [item for item in inventory_transport_hooks if not (ItemFilterFlags.Unexcludable & item.flags)]
+            if len(inventory_transport_hooks) > 1 and removable_transport_hooks:
+                inventory.remove(removable_transport_hooks[0])
 
         return inventory
 
