@@ -410,6 +410,8 @@ class _LocationStore(dict, typing.MutableMapping[int, typing.Dict[int, typing.Tu
         checked = state[team, slot]
         if not checked:
             # This optimizes the case where everyone connects to a fresh game at the same time.
+            if slot not in self:
+                raise KeyError(slot)
             return []
         return [location_id for
                 location_id in self[slot] if
