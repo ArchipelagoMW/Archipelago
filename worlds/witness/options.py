@@ -7,7 +7,9 @@ from Options import (
     DefaultOnToggle,
     LocationSet,
     OptionDict,
+    OptionError,
     OptionGroup,
+    OptionSet,
     PerGameCommonOptions,
     Range,
     Toggle,
@@ -175,6 +177,16 @@ class ObeliskKeys(DefaultOnToggle):
     display_name = "Obelisk Keys"
 
 
+class UnlockableWarps(Toggle):
+    """
+    Adds unlockable fast travel points to the game.
+    These warp points are represented by spheres in game. You walk up to one, you unlock it for warping.
+
+    The warp points are: Entry, Symmetry Island, Desert, Quarry, Keep, Shipwreck, Town, Jungle, Bunker, Treehouse, Mountaintop, Caves.
+    """
+    display_name = "Unlockable Fast Travel Points"
+
+
 class ShufflePostgame(Toggle):
     """
     Adds locations into the pool that are guaranteed to become accessible after or at the same time as your goal.
@@ -271,10 +283,15 @@ class PanelHuntPlando(LocationSet):
 class PuzzleRandomization(Choice):
     """
     Puzzles in this randomizer are randomly generated. This option changes the difficulty/types of puzzles.
+    "Sigma Normal" randomizes puzzles close to their original mechanics and difficulty.
+    "Sigma Expert" is an entirely new experience with extremely difficult random puzzles. Do not underestimate this mode, it is brutal.
+    "Umbra Variety" focuses on unique symbol combinations not featured in the original game. It is harder than Sigma Normal, but easier than Sigma Expert.
+    "None" means that the puzzles are unchanged from the original game.
     """
     display_name = "Puzzle Randomization"
     option_sigma_normal = 0
     option_sigma_expert = 1
+    option_umbra_variety = 3
     option_none = 2
 
 
@@ -300,12 +317,33 @@ class ChallengeLasers(Range):
     default = 11
 
 
-class ElevatorsComeToYou(Toggle):
+class ElevatorsComeToYou(OptionSet):
     """
-    If on, the Quarry Elevator, Bunker Elevator and Swamp Long Bridge will "come to you" if you approach them.
-    This does actually affect logic as it allows unintended backwards / early access into these areas.
+    In vanilla, some bridges/elevators come to you if you walk up to them when they are not currently there.
+    However, there are some that don't. Notably, this prevents Quarry Elevator from being a logical access method into Quarry, because you can send it away without riding ot and then permanently be locked out of using it.
+
+    This option allows you to change specific elevators/bridges to "come to you" as well.
+
+    - Quarry Elevator: Makes the Quarry Elevator come down when you approach it from lower Quarry and back up when you approach it from above
+    - Swamp Long Bridge: Rotates the side you approach it from towards you, but also rotates the other side away
+    - Bunker Elevator: Makes the Bunker Elevator come to any floor that you approach it from, meaning it can be accessed from the roof immediately
     """
-    display_name = "All Bridges & Elevators come to you"
+
+    # Used to be a toggle
+    @classmethod
+    def from_text(cls, text: str):
+        if text.lower() in {"off", "0", "false", "none", "null", "no"}:
+            raise OptionError('elevators_come_to_you is an OptionSet now. The equivalent of "false" is {}')
+        if text.lower() in {"on", "1", "true", "yes"}:
+            raise OptionError(
+                f'elevators_come_to_you is an OptionSet now. The equivalent of "true" is {set(cls.valid_keys)}'
+            )
+        return super().from_text(text)
+
+    display_name = "Elevators come to you"
+
+    valid_keys = frozenset({"Quarry Elevator", "Swamp Long Bridge", "Bunker Elevator"})
+    default = frozenset({"Quarry Elevator"})
 
 
 class TrapPercentage(Range):
@@ -417,6 +455,17 @@ class DeathLinkAmnesty(Range):
     default = 1
 
 
+class PuzzleRandomizationSeed(Range):
+    """
+    Sigma Rando, which is the basis for all puzzle randomization in this randomizer, uses a seed from 1 to 9999999 for the puzzle randomization.
+    This option lets you set this seed yourself.
+    """
+    display_name = "Puzzle Randomization Seed"
+    range_start = 1
+    range_end = 9999999
+    default = "random"
+
+
 @dataclass
 class TheWitnessOptions(PerGameCommonOptions):
     puzzle_randomization: PuzzleRandomization
@@ -429,6 +478,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     shuffle_discarded_panels: ShuffleDiscardedPanels
     shuffle_vault_boxes: ShuffleVaultBoxes
     obelisk_keys: ObeliskKeys
+    unlockable_warps: UnlockableWarps
     shuffle_EPs: ShuffleEnvironmentalPuzzles  # noqa: N815
     EP_difficulty: EnvironmentalPuzzlesDifficulty
     shuffle_postgame: ShufflePostgame
@@ -452,6 +502,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     laser_hints: LaserHints
     death_link: DeathLink
     death_link_amnesty: DeathLinkAmnesty
+    puzzle_randomization_seed: PuzzleRandomizationSeed
     shuffle_dog: ShuffleDog
 
 
@@ -462,7 +513,7 @@ witness_option_groups = [
         MountainLasers,
         ChallengeLasers,
     ]),
-    OptionGroup("Panel Hunt Settings", [
+    OptionGroup("Panel Hunt Options", [
         PanelHuntRequiredPercentage,
         PanelHuntTotal,
         PanelHuntPostgame,
@@ -485,6 +536,9 @@ witness_option_groups = [
         ShuffleBoat,
         ObeliskKeys,
     ]),
+    OptionGroup("Warps", [
+       UnlockableWarps,
+    ]),
     OptionGroup("Filler Items", [
         PuzzleSkipAmount,
         TrapPercentage,
@@ -501,6 +555,7 @@ witness_option_groups = [
         ElevatorsComeToYou,
         DeathLink,
         DeathLinkAmnesty,
+        PuzzleRandomizationSeed,
     ]),
     OptionGroup("Silly Options", [
         ShuffleDog,
