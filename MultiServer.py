@@ -218,8 +218,8 @@ class Context:
         self.allow_releases = {}
         self.host = host
         self.port = port
-        self.server_password = server_password.strip()
-        self.password = password.strip()
+        self.server_password = server_password and server_password.strip()
+        self.password = password and password.strip()
         self.server = None
         self.countdown_timer = 0
         self.received_items = {}
