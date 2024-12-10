@@ -80,3 +80,21 @@ class TestBase(unittest.TestCase):
                         call_all(multiworld, step)
                         self.assertEqual(created_items, multiworld.itempool,
                                          f"{game_name} modified the itempool during {step}")
+
+    def test_locality_not_modified(self):
+        """Test that worlds don't modify the locality of items after duplicates are resolved"""
+        gen_steps = ("generate_early", "create_regions", "create_items")
+        additional_steps = ("set_rules", "generate_basic", "pre_fill")
+        worlds_to_test = {game: world for game, world in AutoWorldRegister.world_types.items()}
+        for game_name, world_type in worlds_to_test.items():
+            with self.subTest("Game", game=game_name):
+                multiworld = setup_solo_multiworld(world_type, gen_steps)
+                local_items = multiworld.worlds[1].options.local_items.value.copy()
+                non_local_items = multiworld.worlds[1].options.non_local_items.value.copy()
+                for step in additional_steps:
+                    with self.subTest("step", step=step):
+                        call_all(multiworld, step)
+                        self.assertEqual(local_items, multiworld.worlds[1].options.local_items.value,
+                                         f"{game_name} modified local_items during {step}")
+                        self.assertEqual(non_local_items, multiworld.worlds[1].options.non_local_items.value,
+                                         f"{game_name} modified non_local_items during {step}")

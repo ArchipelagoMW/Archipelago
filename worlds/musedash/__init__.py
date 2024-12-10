@@ -183,7 +183,7 @@ class MuseDashWorld(World):
         if album:
             return MuseDashSongItem(name, self.player, album)
 
-        song = self.md_collection.song_items.get(name)
+        song = self.md_collection.song_items[name]
         return MuseDashSongItem(name, self.player, song)
 
     def get_filler_item_name(self) -> str:
