@@ -139,7 +139,7 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
         patches.inventory.advancedInventorySubscreen(rom)
     patches.inventory.moreSlots(rom)
     # if ladxr_settings["witch"]:
-    #    patches.witch.updateWitch(rom)
+    patches.witch.updateWitch(rom)
     patches.softlock.fixAll(rom)
     if not options["rooster"]:
         patches.maptweaks.tweakMap(rom)
