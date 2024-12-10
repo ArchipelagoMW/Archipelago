@@ -221,6 +221,8 @@ for resource_name, resource_data in resources_future.result().items():
         "energy": resource_data["mining_time"],
         "category": resource_data["category"]
     }
+    if "required_fluid" in resource_data:
+        recipe_sources.setdefault(f"mining-{resource_name}", set()).add("uranium-mining")
 del resources_future
 
 for recipe_name, recipe_data in raw_recipes.items():
