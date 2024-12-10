@@ -111,6 +111,16 @@ def load_static_data(ll1_path, ids_path):
     with open(ll1_path, "r") as file:
         config = Utils.parse_yaml(file)
 
+        # We have to process all panel doors first so that panels can see what panel doors they're in even if they're
+        # defined earlier in the file than the panel door.
+        for room_name, room_data in config.items():
+            if "panel_doors" in room_data:
+                PANEL_DOORS_BY_ROOM[room_name] = dict()
+
+                for panel_door_name, panel_door_data in room_data["panel_doors"].items():
+                    process_panel_door(room_name, panel_door_name, panel_door_data)
+
+        # Process the rest of the room.
         for room_name, room_data in config.items():
             process_room(room_name, room_data)
 
@@ -514,12 +524,6 @@ def process_room(room_name, room_data):
     if "entrances" in room_data:
         for source_room, doors in room_data["entrances"].items():
             process_entrance(source_room, doors, room_obj)
-
-    if "panel_doors" in room_data:
-        PANEL_DOORS_BY_ROOM[room_name] = dict()
-
-        for panel_door_name, panel_door_data in room_data["panel_doors"].items():
-            process_panel_door(room_name, panel_door_name, panel_door_data)
 
     if "panels" in room_data:
         PANELS_BY_ROOM[room_name] = dict()
