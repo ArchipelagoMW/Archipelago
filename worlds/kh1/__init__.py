@@ -11,6 +11,30 @@ from .Rules import set_rules
 from .Presets import kh1_option_presets
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 
+VANILLA_KEYBLADE_STATS = [
+    "3,0",
+    "1,0",
+    "1,0",
+    "1,0",
+    "0,0",
+    "5,0",
+    "6,0",
+    "6,1",
+    "7,0",
+    "8,1",
+    "5,0",
+    "4,2",
+    "9,-1",
+    "10,0",
+    "10,1",
+    "7,2",
+    "13,0",
+    "9,1",
+    "11,-1",
+    "3,3",
+    "8,-2",
+    "14,2"
+    ]
 
 def launch_client():
     from .Client import launch
@@ -170,15 +194,24 @@ class KH1World(World):
         self.multiworld.itempool += item_pool
 
     def place_predetermined_items(self) -> None:
-        goal_dict = {
-            "sephiroth":       "Olympus Coliseum Defeat Sephiroth Ansem's Report 12",
-            "unknown":         "Hollow Bastion Defeat Unknown Ansem's Report 13",
-            "postcards":       "Traverse Town Mail Postcard 10 Event",
-            "final_ansem":     "Final Ansem",
-            "puppies":         "Traverse Town Piano Room Return 99 Puppies Reward 2",
-            "final_rest":      "End of the World Final Rest Chest"
-        }
-        self.get_location(goal_dict[self.options.goal.current_key]).place_locked_item(self.create_item("Victory"))
+        if self.options.goal.current_key not in ["puppies", "postcards"]:
+            goal_dict = {
+                "sephiroth":       "Olympus Coliseum Defeat Sephiroth Ansem's Report 12",
+                "unknown":         "Hollow Bastion Defeat Unknown Ansem's Report 13",
+                "final_ansem":     "Final Ansem",
+                "final_rest":      "End of the World Final Rest Chest"
+            }
+            goal_location_name = goal_dict[self.options.goal.current_key]
+        elif self.options.goal.current_key == "postcards":
+            lpad_number = str(self.options.required_postcards).rjust(2, "0")
+            goal_location_name = "Traverse Town Mail Postcard " + lpad_number + " Event"
+        elif self.options.goal.current_key == "puppies":
+            required_puppies = self.options.required_puppies.value
+            goal_location_name = "Traverse Town Piano Room Return " + str(required_puppies) + " Puppies"
+            if required_puppies == 50 or required_puppies == 99:
+                goal_location_name = goal_location_name + " Reward 2"
+        self.get_location(goal_location_name).place_locked_item(self.create_item("Victory"))
+                
         if self.options.vanilla_emblem_pieces:
             self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Flame)").place_locked_item(self.create_item("Emblem Piece (Flame)"))
             self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Statue)").place_locked_item(self.create_item("Emblem Piece (Statue)"))
@@ -199,7 +232,13 @@ class KH1World(World):
                     "hundred_acre_wood": bool(self.options.hundred_acre_wood),
                     "atlantica": bool(self.options.atlantica),
                     "goal": str(self.options.goal.current_key)}
-        if self.options.randomize_keyblade_stats:
+        
+        # Handle shuffling keyblade stats
+        if self.options.keyblade_stats != "vanilla":
+            # Create keyblade stat array from vanilla
+            keyblade_stats = VANILLA_KEYBLADE_STATS.copy()
+            
+            # Fix any minimum and max values from settings
             min_str_bonus = min(self.options.keyblade_min_str.value, self.options.keyblade_max_str.value)
             max_str_bonus = max(self.options.keyblade_min_str.value, self.options.keyblade_max_str.value)
             self.options.keyblade_min_str.value = min_str_bonus
@@ -208,15 +247,29 @@ class KH1World(World):
             max_mp_bonus = max(self.options.keyblade_min_mp.value, self.options.keyblade_max_mp.value)
             self.options.keyblade_min_mp.value = min_mp_bonus
             self.options.keyblade_max_mp.value = max_mp_bonus
+            
+            # Create initial slot data string
             slot_data["keyblade_stats"] = ""
-            for i in range(22):
-                if i < 4 and self.options.bad_starting_weapons:
-                    slot_data["keyblade_stats"] = slot_data["keyblade_stats"] + "1,0,"
-                else:
+            
+            # Handle bad starting weapons setting
+            if self.options.bad_starting_weapons:
+                keyblade_stats = keyblade_stats[4:]
+                slot_data["keyblade_stats"] = "3,0,1,0,1,0,1,0,"
+            
+            # Handle random keyblade stats
+            if self.options.keyblade_stats == "randomize":
+                for i in range(len(keyblade_stats)):
                     str_bonus = int(self.random.randint(min_str_bonus, max_str_bonus))
                     mp_bonus = int(self.random.randint(min_mp_bonus, max_mp_bonus))
-                    slot_data["keyblade_stats"] = slot_data["keyblade_stats"] + str(str_bonus) + "," + str(mp_bonus) + ","
+                    keyblade_stats[i] = str(str_bonus) + "," + str(mp_bonus)
+            elif self.options.keyblade_stats == "shuffle":
+                self.random.shuffle(keyblade_stats)
+            
+            # Complete slot data string
+            for i in range(len(keyblade_stats)):
+                slot_data["keyblade_stats"] = slot_data["keyblade_stats"] + keyblade_stats[i] + ","
             slot_data["keyblade_stats"] = slot_data["keyblade_stats"][:-1]
+
         if self.options.donald_death_link:
             slot_data["donalddl"] = ""
         if self.options.goofy_death_link:
@@ -227,6 +280,8 @@ class KH1World(World):
             slot_data["chestsunlocked"] = ""
         if self.options.interact_in_battle:
             slot_data["interactinbattle"] = ""
+        slot_data["required_postcards"] = self.options.required_postcards.value
+        slot_data["required_puppies"] = self.options.required_puppies.value
         return slot_data
     
     def create_item(self, name: str) -> KH1Item:
