@@ -5,6 +5,7 @@ from typing import Any, IO, Dict, Iterator, List, Tuple, Union
 import jinja2.exceptions
 from flask import request, redirect, url_for, render_template, Response, session, abort, send_from_directory
 from pony.orm import count, commit, db_session
+from werkzeug.utils import secure_filename
 
 from worlds.AutoWorld import AutoWorldRegister
 from . import app, cache
@@ -15,13 +16,6 @@ def get_world_theme(game_name: str):
     if game_name in AutoWorldRegister.world_types:
         return AutoWorldRegister.world_types[game_name].web.theme
     return 'grass'
-
-
-@app.before_request
-def register_session():
-    session.permanent = True  # technically 31 days after the last visit
-    if not session.get("_id", None):
-        session["_id"] = uuid4()  # uniquely identify each session without needing a login
 
 
 @app.errorhandler(404)
@@ -69,14 +63,40 @@ def tutorial_landing():
 
 @app.route('/faq/<string:lang>/')
 @cache.cached()
-def faq(lang):
-    return render_template("faq.html", lang=lang)
+def faq(lang: str):
+    import markdown
+    with open(os.path.join(app.static_folder, "assets", "faq", secure_filename(lang)+".md")) as f:
+        document = f.read()
+    return render_template(
+        "markdown_document.html",
+        title="Frequently Asked Questions",
+        html_from_markdown=markdown.markdown(
+            document,
+            extensions=["toc", "mdx_breakless_lists"],
+            extension_configs={
+                "toc": {"anchorlink": True}
+            }
+        ),
+    )
 
 
 @app.route('/glossary/<string:lang>/')
 @cache.cached()
-def terms(lang):
-    return render_template("glossary.html", lang=lang)
+def glossary(lang: str):
+    import markdown
+    with open(os.path.join(app.static_folder, "assets", "glossary", secure_filename(lang)+".md")) as f:
+        document = f.read()
+    return render_template(
+        "markdown_document.html",
+        title="Glossary",
+        html_from_markdown=markdown.markdown(
+            document,
+            extensions=["toc", "mdx_breakless_lists"],
+            extension_configs={
+                "toc": {"anchorlink": True}
+            }
+        ),
+    )
 
 
 @app.route('/seed/<suuid:seed>')
@@ -132,26 +152,41 @@ def display_log(room: UUID) -> Union[str, Response, Tuple[str, int]]:
     return "Access Denied", 403
 
 
-@app.route('/room/<suuid:room>', methods=['GET', 'POST'])
+@app.post("/room/<suuid:room>")
+def host_room_command(room: UUID):
+    room: Room = Room.get(id=room)
+    if room is None:
+        return abort(404)
+
+    if room.owner == session["_id"]:
+        cmd = request.form["cmd"]
+        if cmd:
+            Command(room=room, commandtext=cmd)
+            commit()
+    return redirect(url_for("host_room", room=room.id))
+
+
+@app.get("/room/<suuid:room>")
 def host_room(room: UUID):
     room: Room = Room.get(id=room)
     if room is None:
         return abort(404)
-    if request.method == "POST":
-        if room.owner == session["_id"]:
-            cmd = request.form["cmd"]
-            if cmd:
-                Command(room=room, commandtext=cmd)
-                commit()
-        return redirect(url_for("host_room", room=room.id))
 
     now = datetime.datetime.utcnow()
     # indicate that the page should reload to get the assigned port
-    should_refresh = not room.last_port and now - room.creation_time < datetime.timedelta(seconds=3)
+    should_refresh = ((not room.last_port and now - room.creation_time < datetime.timedelta(seconds=3))
+                      or room.last_activity < now - datetime.timedelta(seconds=room.timeout))
     with db_session:
         room.last_activity = now  # will trigger a spinup, if it's not already running
 
-    def get_log(max_size: int = 1024000) -> str:
+    browser_tokens = "Mozilla", "Chrome", "Safari"
+    automated = ("update" in request.args
+                 or "Discordbot" in request.user_agent.string
+                 or not any(browser_token in request.user_agent.string for browser_token in browser_tokens))
+
+    def get_log(max_size: int = 0 if automated else 1024000) -> str:
+        if max_size == 0:
+            return "…"
         try:
             with open(os.path.join("logs", str(room.id) + ".txt"), "rb") as log:
                 raw_size = 0
