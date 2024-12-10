@@ -46,8 +46,16 @@ local socket = require("socket")
 udp = socket.socket.udp()
 require('common')
 
-udp:setsockname('127.0.0.1', 55355)
-udp:settimeout(0)
+-- SNI interacts poorly with this connector and looks for ports 55355+
+-- We'll start from 55354 and go down looking for an open port, allowing for multiple concurrent instances
+
+port = 55355
+LOWEST_PORT = 55350
+isbound = nil
+while not isbound and port > LOWEST_PORT do
+    port = port - 1
+    isbound = udp:setsockname('127.0.0.1', port)
+end
 
 function on_vblank()
     -- Attempt to lessen the CPU load by only polling the UDP socket every x frames.
@@ -68,9 +76,8 @@ function on_vblank()
         -- "data" format is "COMMAND [PARAMETERS] [...]"
         local command = string.match(data, "%S+")
         if command == "VERSION" then
-            -- 1.14 is the latest RetroArch release at the time of writing this, no other reason
-            -- for choosing this here.
-            udp:sendto("1.14.0\n", msg_or_ip, port_or_nil)
+            -- Invalid retroarch version string but its probably better not to pretend this is normal retroarch
+            udp:sendto("bizhawk connector\n", msg_or_ip, port_or_nil)
         elseif command == "GET_STATUS" then
             local status = "PLAYING"
             if client.ispaused() then
@@ -138,7 +145,13 @@ function on_vblank()
     end
 end
 
-event.onmemoryexecute(on_vblank, 0x40, "ap_connector_vblank")
+if isbound then
+    udp:settimeout(0)
+    console.log(string.format("Connector is running on port %s", port))
+    event.onmemoryexecute(on_vblank, 0x40, "ap_connector_vblank")
+else
+    console.log("No available port was found")
+end
 
 while true do
     emu.yield()
