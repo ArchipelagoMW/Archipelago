@@ -428,7 +428,7 @@ class TunicWorld(World):
             set_location_rules(self)
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice([item for item in filler_items if item != "Grass"])
+        return self.random.choice(filler_items)
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
         if self.options.entrance_rando:

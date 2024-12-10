@@ -209,7 +209,7 @@ slot_data_item_names = [
 
 item_name_to_id: Dict[str, int] = {name: item_base_id + data.item_id_offset for name, data in item_table.items()}
 
-filler_items: List[str] = [name for name, data in item_table.items() if data.classification == IC.filler]
+filler_items: List[str] = [name for name, data in item_table.items() if data.classification == IC.filler and name != "Grass"]
 
 
 def get_item_group(item_name: str) -> str:
