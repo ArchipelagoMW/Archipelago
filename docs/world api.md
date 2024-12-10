@@ -754,7 +754,7 @@ your world by returning a `dict` with `str` keys that can be serialized with jso
 However, to not waste resources, it should be limited to data that is absolutely necessary. Slot data is sent to your client once it has successfully [connected](network%20protocol.md#connected).
 If you need to know information about locations in your world, instead of propagating the slot data, it is preferable
 to use [LocationScouts](network%20protocol.md#locationscouts), since that data already exists on the server. Adding item/location pairs is unnecessary 
-since the AP server already retains and freely gives that info to clients that request it. The most
+since the AP server already retains and freely gives that information to clients that request it. The most
 common usage of slot data is sending option results that the client needs to be aware of.
 
 ```python
