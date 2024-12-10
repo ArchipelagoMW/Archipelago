@@ -569,7 +569,7 @@ class LinksAwakeningContext(CommonContext):
             self.slot_data = args.get("slot_data", {})
             self.slot_data.update({
                 "server_address": self.server_address,
-                "slot_name": self.slot_name,
+                "slot_name": self.player_names[self.slot],
                 "password": self.password,
             })
 
