@@ -145,9 +145,15 @@ cdef class LocationStore:
             warnings.warn("Game has no locations")
 
         # allocate the arrays and invalidate index (0xff...)
-        self.entries = <LocationEntry*>self._mem.alloc(count, sizeof(LocationEntry))
+        if count:
+            # leaving entries as NULL if there are none, makes potential memory errors more visible
+            self.entries = <LocationEntry*>self._mem.alloc(count, sizeof(LocationEntry))
         self.sender_index = <IndexEntry*>self._mem.alloc(max_sender + 1, sizeof(IndexEntry))
         self._raw_proxies = <PyObject**>self._mem.alloc(max_sender + 1, sizeof(PyObject*))
+
+        assert (not self.entries) == (not count)
+        assert self.sender_index
+        assert self._raw_proxies
 
         # build entries and index
         cdef size_t i = 0
