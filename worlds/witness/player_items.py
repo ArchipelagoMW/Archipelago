@@ -106,9 +106,13 @@ class WitnessPlayerItems:
             "Dots", "Stars", "Shapers", "Black/White Squares",
             "Caves Shortcuts", "Caves Mountain Shortcut (Door)", "Caves Swamp Shortcut (Door)",
             "Boat",
-            "Town Obelisk Key",  # Most checks
-            "Monastery Obelisk Key",  # Most sphere 1 checks, and also super dense ("Jackpot" vibes)
         }
+
+        if self._world.options.shuffle_EPs == "individual":
+            self._proguseful_items |= {
+                "Town Obelisk Key",  # Most checks
+                "Monastery Obelisk Key",  # Most sphere 1 checks, and also super dense ("Jackpot" vibes)}
+            }
 
         if self._world.options.shuffle_discarded_panels:
             # Discards only give a moderate amount of checks, but are very spread out and a lot of them are in sphere 1.
