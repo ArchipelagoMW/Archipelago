@@ -1,31 +1,104 @@
 import copy
+import logging
 from typing import Callable, Dict, List, Set, Union, Tuple, TYPE_CHECKING, Iterable
 
 from BaseClasses import Item, Location
-from worlds.sc2.item.item_tables import (
-    get_full_item_list, spider_mine_sources, second_pass_placeable_items,
-)
-from .item import StarcraftItem, ItemFilterFlags, item_groups, item_names
-from .options import get_option_value, EnableMorphling, RequiredTactics
+from .item import StarcraftItem, ItemFilterFlags, item_names, item_parents
+from .item.item_tables import item_table, TerranItemType, ZergItemType, ProtossItemType
+from .options import get_option_value, RequiredTactics
 
 if TYPE_CHECKING:
     from . import SC2World
 
 
-# Items with associated upgrades
-UPGRADABLE_ITEMS = {item.parent_item for item in get_full_item_list().values() if item.parent_item}
-BARRACKS_UNITS = set(item_groups.barracks_units)
-FACTORY_UNITS = set(item_groups.factory_units)
-STARPORT_UNITS = set(item_groups.starport_units)
-INF_TERRAN_UNITS = set(item_groups.infterr_units)
-
-
-def get_item_upgrades(inventory: List[StarcraftItem], parent_item: Union[Item, str]) -> List[StarcraftItem]:
-    item_name = parent_item.name if isinstance(parent_item, StarcraftItem) else parent_item
-    return [
-        inv_item for inv_item in inventory
-        if get_full_item_list()[inv_item.name].parent_item == item_name
-    ]
+# Items that can be placed before resources if not already in
+# General upgrades and Mercs
+second_pass_placeable_items: Tuple[str, ...] = (
+    # Global weapon/armor upgrades
+    item_names.PROGRESSIVE_TERRAN_ARMOR_UPGRADE,
+    item_names.PROGRESSIVE_TERRAN_WEAPON_UPGRADE,
+    item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE,
+    item_names.PROGRESSIVE_ZERG_ARMOR_UPGRADE,
+    item_names.PROGRESSIVE_ZERG_WEAPON_UPGRADE,
+    item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE,
+    item_names.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE,
+    item_names.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE,
+    item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE,
+    item_names.PROGRESSIVE_PROTOSS_SHIELDS,
+    # Terran Buildings without upgrades
+    item_names.SENSOR_TOWER,
+    item_names.HIVE_MIND_EMULATOR,
+    item_names.PSI_DISRUPTER,
+    item_names.PERDITION_TURRET,
+    # General Terran upgrades without any dependencies
+    item_names.SCV_ADVANCED_CONSTRUCTION,
+    item_names.SCV_DUAL_FUSION_WELDERS,
+    item_names.SCV_CONSTRUCTION_JUMP_JETS,
+    item_names.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM,
+    item_names.PROGRESSIVE_ORBITAL_COMMAND,
+    item_names.ULTRA_CAPACITORS,
+    item_names.VANADIUM_PLATING,
+    item_names.ORBITAL_DEPOTS,
+    item_names.MICRO_FILTERING,
+    item_names.AUTOMATED_REFINERY,
+    item_names.COMMAND_CENTER_COMMAND_CENTER_REACTOR,
+    item_names.COMMAND_CENTER_SCANNER_SWEEP,
+    item_names.COMMAND_CENTER_MULE,
+    item_names.COMMAND_CENTER_EXTRA_SUPPLIES,
+    item_names.TECH_REACTOR,
+    item_names.CELLULAR_REACTOR,
+    item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL,  # Place only L1
+    item_names.STRUCTURE_ARMOR,
+    item_names.HI_SEC_AUTO_TRACKING,
+    item_names.ADVANCED_OPTICS,
+    item_names.ROGUE_FORCES,
+    # Mercenaries (All races)
+    *[item_name for item_name, item_data in item_table.items()
+      if item_data.type in (TerranItemType.Mercenary, ZergItemType.Mercenary)],
+    # Kerrigan and Nova levels, abilities and generally useful stuff
+    *[item_name for item_name, item_data in item_table.items()
+      if item_data.type in (
+        ZergItemType.Level,
+        ZergItemType.Ability,
+        ZergItemType.Evolution_Pit,
+        TerranItemType.Nova_Gear
+        )],
+    item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE,
+    # Zerg static defenses
+    item_names.SPORE_CRAWLER,
+    item_names.SPINE_CRAWLER,
+    # Overseer
+    item_names.OVERLORD_OVERSEER_ASPECT,
+    # Spear of Adun Abilities
+    item_names.SOA_CHRONO_SURGE,
+    item_names.SOA_PROGRESSIVE_PROXY_PYLON,
+    item_names.SOA_PYLON_OVERCHARGE,
+    item_names.SOA_ORBITAL_STRIKE,
+    item_names.SOA_TEMPORAL_FIELD,
+    item_names.SOA_SOLAR_LANCE,
+    item_names.SOA_MASS_RECALL,
+    item_names.SOA_SHIELD_OVERCHARGE,
+    item_names.SOA_DEPLOY_FENIX,
+    item_names.SOA_PURIFIER_BEAM,
+    item_names.SOA_TIME_STOP,
+    item_names.SOA_SOLAR_BOMBARDMENT,
+    # Protoss generic upgrades
+    item_names.MATRIX_OVERLOAD,
+    item_names.QUATRO,
+    item_names.NEXUS_OVERCHARGE,
+    item_names.ORBITAL_ASSIMILATORS,
+    item_names.WARP_HARMONIZATION,
+    item_names.GUARDIAN_SHELL,
+    item_names.RECONSTRUCTION_BEAM,
+    item_names.OVERWATCH,
+    item_names.SUPERIOR_WARP_GATES,
+    item_names.KHALAI_INGENUITY,
+    item_names.AMPLIFIED_ASSIMILATORS,
+    # Protoss static defenses
+    item_names.PHOTON_CANNON,
+    item_names.KHAYDARIN_MONOLITH,
+    item_names.SHIELD_BATTERY,
+)
 
 
 def copy_item(item: StarcraftItem) -> StarcraftItem:
@@ -33,6 +106,22 @@ def copy_item(item: StarcraftItem) -> StarcraftItem:
 
 
 class ValidInventory:
+    def __init__(self, world: 'SC2World', item_pool: List[StarcraftItem]) -> None:
+        self.multiworld = world.multiworld
+        self.player = world.player
+        self.world: 'SC2World' = world
+        # Track all Progression items and those with complex rules for filtering
+        self.logical_inventory: List[str] = [
+            item.name for item in item_pool
+            if item_table[item.name].is_important_for_filtering()
+        ]
+        self.item_pool = item_pool
+        self.item_name_to_item: Dict[str, List[StarcraftItem]] = {}
+        self.item_name_to_child_items: Dict[str, List[StarcraftItem]] = {}
+        for item in item_pool:
+            self.item_name_to_item.setdefault(item.name, []).append(item)
+            for parent_item in item_parents.child_item_to_parent_items.get(item.name, []):
+                self.item_name_to_child_items.setdefault(parent_item, []).append(item)
 
     def has(self, item: str, player: int):
         return item in self.logical_inventory
@@ -55,29 +144,30 @@ class ValidInventory:
     def count_from_list(self, items: Iterable[str], player: int) -> int:
         return sum(self.count(item_name, player) for item_name in items)
 
-    def has_units_per_structure(self) -> bool:
-        return len(BARRACKS_UNITS.intersection(self.logical_inventory)) > self.min_units_per_structure and \
-            len(FACTORY_UNITS.intersection(self.logical_inventory)) > self.min_units_per_structure and \
-            len(STARPORT_UNITS.intersection(self.logical_inventory)) > self.min_units_per_structure
-
-    def generate_reduced_inventory(self, inventory_size: int, mission_requirements: List[Tuple[str, Callable]]) -> List[Item]:
+    def generate_reduced_inventory(self, inventory_size: int, mission_requirements: List[Tuple[str, Callable]]) -> List[StarcraftItem]:
         """Attempts to generate a reduced inventory that can fulfill the mission requirements."""
         inventory: List[StarcraftItem] = list(self.item_pool)
-        locked_items: List[StarcraftItem] = list(self.locked_items)
-        necessary_items: List[StarcraftItem] = list(self.necessary_items)
-        enable_morphling = self.world.options.enable_morphling == EnableMorphling.option_true
-        item_list = get_full_item_list()
-        self.logical_inventory = [
-            item.name for item in inventory + locked_items + self.existing_items + necessary_items
-            if item_list[item.name].is_important_for_filtering()  # Track all Progression items and those with complex rules for filtering
-        ]
+        # locked_items: List[StarcraftItem] = list(self.locked_items)
+        # necessary_items: List[StarcraftItem] = list(self.necessary_items)
         requirements = mission_requirements
-        parent_items = self.item_children.keys()
-        parent_lookup: Dict[StarcraftItem, StarcraftItem] = {child: parent for parent, children in self.item_children.items() for child in children}
-        minimum_upgrades = get_option_value(self.world, "min_number_of_upgrades")
+        min_upgrades_per_unit = self.world.options.min_number_of_upgrades.value
+        max_upgrades_per_unit = self.world.options.max_number_of_upgrades.value
+        if max_upgrades_per_unit > -1 and min_upgrades_per_unit > max_upgrades_per_unit:
+            logging.getLogger("Starcraft 2").warning(
+                f"min upgrades per unit is greater than max upgrades per unit ({min_upgrades_per_unit} > {max_upgrades_per_unit}). "
+                f"Setting both to minimum value ({min_upgrades_per_unit})"
+            )
+            max_upgrades_per_unit = min_upgrades_per_unit
 
-        def attempt_removal(item: StarcraftItem) -> bool:
-            removed_item = inventory.pop(inventory.index(item))
+        def attempt_removal(
+            item: StarcraftItem,
+            remove_flag: ItemFilterFlags = ItemFilterFlags.FilterExcluded,
+            lock_flag: ItemFilterFlags = ItemFilterFlags.Locked
+        ) -> bool:
+            """
+            Returns true and applies `remove_flag` if the item is removable,
+            else returns false and applies `lock_flag`
+            """
             # Only run logic checks when removing logic items
             if item.name in self.logical_inventory:
                 self.logical_inventory.remove(item.name)
@@ -88,397 +178,191 @@ class ValidInventory:
                     # Removing from `inventory` searches based on == checks, but AutoWorld.py
                     # checks using `is` to make sure there are no duplicate item objects in the pool.
                     # Hence, appending `item` could cause sporadic generation failures.
-                    locked_items.append(removed_item)
+                    item.filter_flags |= lock_flag
                     return False
+            item.filter_flags |= remove_flag
             return True
+        
+        def remove_child_items(
+            parent_item: StarcraftItem,
+            remove_flag: ItemFilterFlags = ItemFilterFlags.FilterExcluded,
+            lock_flag: ItemFilterFlags = ItemFilterFlags.Locked
+        ) -> None:
+            child_items = self.item_name_to_child_items.get(parent_item.name, [])
+            for child_item in child_items:
+                if (ItemFilterFlags.AllowedOrphan|ItemFilterFlags.Unexcludable) & child_item.filter_flags:
+                    continue
+                parent_id = item_table[child_item.name].parent_item
+                assert parent_id is not None
+                if item_parents.parent_present[parent_id](self.logical_inventory, self.world.options):
+                    continue
+                if attempt_removal(child_item, remove_flag, lock_flag):
+                    remove_child_items(child_item, remove_flag, lock_flag)
 
         # Process Excluded items, validate if the item can get actually excluded
-        excluded_items: List[StarcraftItem] = [starcraft_item for starcraft_item in inventory if ItemFilterFlags.Excluded in starcraft_item.filter_flags]
+        excluded_items: List[StarcraftItem] = [starcraft_item for starcraft_item in inventory if ItemFilterFlags.Excluded & starcraft_item.filter_flags]
         self.world.random.shuffle(excluded_items)
         for excluded_item in excluded_items:
-            logical_inventory_copy = copy.copy(self.logical_inventory)
-            if (
-                    excluded_item in inventory
-                    and attempt_removal(excluded_item)
-                    and excluded_item in parent_items
-            ):
-                for child in self.item_children[excluded_item]:
-                    if (
-                            child in inventory
-                            and not attempt_removal(child)
-                            and ItemFilterFlags.AllowedOrphan not in child.filter_flags
-                    ):
-                        if excluded_item.name in logical_inventory_copy:
-                            self.logical_inventory.append(excluded_item.name)
-                            if excluded_item not in self.logical_inventory:
-                                self.logical_inventory.append(excluded_item.name)
-                            if not excluded_item in locked_items:
-                                self.locked_items.append(excluded_item)
+            if ItemFilterFlags.Unexcludable & excluded_item.filter_flags:
+                continue
+            if not attempt_removal(excluded_item, remove_flag=ItemFilterFlags.Removed):
+                if ItemFilterFlags.UserExcluded in excluded_item.filter_flags:
+                    logging.getLogger("Starcraft 2").warning(
+                        f"Cannot exclude item {excluded_item.name} as it would break a logic rule"
+                    )
+                else:
+                    assert False, f"Item filtering excluded an item which is logically required: {excluded_item.name}"
+                continue
+            remove_child_items(excluded_item, remove_flag=ItemFilterFlags.Removed)
+        inventory = [item for item in inventory if ItemFilterFlags.Removed not in item.filter_flags]
+
+        # Clear excluded flags; all existing ones should be implemented or out-of-logic
+        for item in inventory:
+            item.filter_flags &= ~ItemFilterFlags.Excluded
+
+        # Determine item groups to be constrained by min/max upgrades per unit
+        group_to_item: Dict[str, List[StarcraftItem]] = {}
+        for group, group_member_names in item_parents.item_upgrade_groups.items():
+            group_to_item[group] = []
+            for item_name in group_member_names:
+                inventory_items = self.item_name_to_item.get(item_name, [])
+                group_to_item[group].extend(item for item in inventory_items if ItemFilterFlags.Removed not in item.filter_flags)
+            self.world.random.shuffle(group_to_item[group])
 
         # Limit the maximum number of upgrades
-        maxNbUpgrade = get_option_value(self.world, "max_number_of_upgrades")
-        if maxNbUpgrade != -1:
-            unit_avail_upgrades = {}
-            # Needed to take into account locked/existing/necessary items
-            unit_nb_upgrades = {}
-            for item in inventory:
-                cItem = item_list[item.name]
-                if item.name in UPGRADABLE_ITEMS and item.name not in unit_avail_upgrades:
-                    unit_avail_upgrades[item.name] = []
-                    unit_nb_upgrades[item.name] = 0
-                elif cItem.parent_item is not None:
-                    if cItem.parent_item not in unit_avail_upgrades:
-                        unit_avail_upgrades[cItem.parent_item] = [item]
-                        unit_nb_upgrades[cItem.parent_item] = 1
-                    else:
-                        unit_avail_upgrades[cItem.parent_item].append(item)
-                        unit_nb_upgrades[cItem.parent_item] += 1
-            # For those categories, we count them but dont include them in removal
-            for item in locked_items + self.existing_items + necessary_items:
-                cItem = item_list[item.name]
-                if item.name in UPGRADABLE_ITEMS and item.name not in unit_avail_upgrades:
-                    unit_avail_upgrades[item.name] = []
-                    unit_nb_upgrades[item.name] = 0
-                elif cItem.parent_item is not None:
-                    if cItem.parent_item not in unit_avail_upgrades:
-                        unit_nb_upgrades[cItem.parent_item] = 1
-                    else:
-                        unit_nb_upgrades[cItem.parent_item] += 1
-            # Making sure that the upgrades being removed is random
-            shuffled_unit_upgrade_list = list(unit_avail_upgrades.keys())
-            self.world.random.shuffle(shuffled_unit_upgrade_list)
-            for unit in shuffled_unit_upgrade_list:
-                while (unit_nb_upgrades[unit] > maxNbUpgrade) \
-                         and (len(unit_avail_upgrades[unit]) > 0):
-                    itemCandidate = self.world.random.choice(unit_avail_upgrades[unit])
-                    success = attempt_removal(itemCandidate)
-                    # Whatever it succeed to remove the iventory or it fails and thus
-                    # lock it, the upgrade is no longer available for removal
-                    unit_avail_upgrades[unit].remove(itemCandidate)
-                    if success:
-                        unit_nb_upgrades[unit] -= 1
-
-        # Locking minimum upgrades for items that have already been locked/placed when minimum required
-        if minimum_upgrades > 0:
-            known_items = self.existing_items + locked_items + necessary_items
-            known_parents = [item for item in known_items if item in parent_items]
-            for parent in known_parents:
-                child_items = self.item_children[parent]
-                removable_upgrades = [starcraft_item for starcraft_item in inventory if starcraft_item in child_items]
-                locked_upgrade_count = sum(1 if item in child_items else 0 for item in known_items)
-                self.world.random.shuffle(removable_upgrades)
-                while len(removable_upgrades) > 0 and locked_upgrade_count < minimum_upgrades:
-                    item_to_lock = removable_upgrades.pop()
-                    inventory.remove(item_to_lock)
-                    locked_items.append(copy_item(item_to_lock))
-                    locked_upgrade_count += 1
-
-        if self.min_units_per_structure > 0 and self.has_units_per_structure():
-            requirements.append(("Minimum units per structure", lambda state: state.has_units_per_structure()))
+        if max_upgrades_per_unit != -1:
+            for group_name, group_items in group_to_item.items():
+                for item in group_items:
+                    if len([x for x in group_items if ItemFilterFlags.Culled not in x.filter_flags]) <= max_upgrades_per_unit:
+                        break
+                    if ItemFilterFlags.Uncullable & item.filter_flags:
+                        continue
+                    attempt_removal(item, remove_flag=ItemFilterFlags.Culled)
+                self.world.random.shuffle(group_items)
+        
+        # Requesting minimum upgrades for items that have already been locked/placed when minimum required
+        if min_upgrades_per_unit != -1:
+            for group_name, group_items in group_to_item.items():
+                for item in group_items:
+                    if len([x for x in group_items if ItemFilterFlags.RequestedOrBetter & x.filter_flags]) >= min_upgrades_per_unit:
+                        break
+                    if ItemFilterFlags.Culled & item.filter_flags:
+                        continue
+                    item.filter_flags |= ItemFilterFlags.Requested
 
         # Determining if the full-size inventory can complete campaign
+        # Note(mm): Now that user excludes are checked against logic, this can probably never fail unless there's a bug.
         failed_locations: List[str] = [location for (location, requirement) in requirements if not requirement(self)]
         if len(failed_locations) > 0:
             raise Exception(f"Too many items excluded - couldn't satisfy access rules for the following locations:\n{failed_locations}")
 
         # Optionally locking generic items
         generic_items: List[StarcraftItem] = [starcraft_item for starcraft_item in inventory if starcraft_item.name in second_pass_placeable_items]
-        reserved_generic_percent = get_option_value(self.world, "ensure_generic_items") / 100
+        reserved_generic_percent = self.world.options.ensure_generic_items.value / 100
         reserved_generic_amount = int(len(generic_items) * reserved_generic_percent)
-        removable_generic_items = []
         self.world.random.shuffle(generic_items)
         for starcraft_item in generic_items[:reserved_generic_amount]:
-            locked_items.append(copy_item(starcraft_item))
-            inventory.remove(starcraft_item)
-            if starcraft_item.name not in self.logical_inventory:
-                removable_generic_items.append(starcraft_item)
+            starcraft_item.filter_flags |= ItemFilterFlags.Requested
+
+        # Make an index from child to parent
+        child_to_main_parent: Dict[str, StarcraftItem] = {}
+        for item in inventory:
+            parent_id = item_table[item.name].parent_item
+            if parent_id is None:
+                continue
+            parent_item_name = item_parents.parent_present[parent_id].main_item
+            if parent_item_name is None:
+                continue
+            parent_item = self.item_name_to_item.get(parent_item_name)
+            if parent_item:
+                child_to_main_parent[item.name] = parent_item[0]
 
         # Main cull process
-        unused_items: List[str] = []  # Reusable items for the second pass
-        while len(inventory) + len(locked_items) + len(necessary_items) > inventory_size:
-            if len(inventory) == 0:
-                # There are more items than locations and all of them are already locked due to YAML or logic.
-                # First, drop non-logic generic items to free up space
-                while len(removable_generic_items) > 0 and len(locked_items) + len(necessary_items) > inventory_size:
-                    removed_item = removable_generic_items.pop()
-                    locked_items.remove(removed_item)
-                # If there still isn't enough space, push locked items into start inventory
-                self.world.random.shuffle(locked_items)
-                while len(locked_items) > 0 and len(locked_items) + len(necessary_items) > inventory_size:
-                    item: StarcraftItem = locked_items.pop()
-                    self.multiworld.push_precollected(item)
-                # If locked items weren't enough either, push necessary items into start inventory too
-                self.world.random.shuffle(necessary_items)
-                while len(necessary_items) > inventory_size:
-                    item: StarcraftItem = necessary_items.pop()
-                    self.multiworld.push_precollected(item)
-                break
-            # Select random item from removable items
-            item = self.world.random.choice(inventory)
+        def remove_random_item(removable: List[StarcraftItem], remove_flag: ItemFilterFlags = ItemFilterFlags.Removed) -> bool:
+            item = self.world.random.choice(removable)
             # Do not remove item if it would drop upgrades below minimum
-            if minimum_upgrades > 0:
-                parent_item = parent_lookup.get(item, None)
-                if parent_item:
-                    count = sum(1 if item in self.item_children[parent_item] else 0 for item in inventory + locked_items + necessary_items)
-                    if count <= minimum_upgrades:
-                        if parent_item in inventory:
+            if min_upgrades_per_unit > 0:
+                parent_item = child_to_main_parent.get(item.name)
+                if parent_item is not None:
+                    children = self.item_name_to_child_items.get(parent_item.name, [])
+                    children = [x for x in children if not (ItemFilterFlags.CulledOrBetter & x.filter_flags)]
+                    count = len(children)
+                    if count <= min_upgrades_per_unit:
+                        if parent_item in removable:
                             # Attempt to remove parent instead, if possible
                             item = parent_item
                         else:
                             # Lock remaining upgrades
-                            for item in self.item_children[parent_item]:
-                                if item in inventory:
-                                    inventory.remove(item)
-                                    locked_items.append(copy_item(item))
-                            continue
+                            for item in children:
+                                item.filter_flags |= ItemFilterFlags.Locked
+                            return False
+            if attempt_removal(item, remove_flag):
+                remove_child_items(item, remove_flag)
+                return True
+            return False
 
-            # Drop child items when removing a parent
-            if item in parent_items:
-                items_to_remove = [item for item in self.item_children[item] if item in inventory]
-                success = attempt_removal(item)
-                if success:
-                    while len(items_to_remove) > 0:
-                        item_to_remove = items_to_remove.pop()
-                        if item_to_remove not in inventory:
-                            continue
-                        attempt_removal(item_to_remove)
-            else:
-                # Unimportant upgrades may be added again in the second pass
-                if attempt_removal(item):
-                    unused_items.append(item.name)
+        def item_included(item: StarcraftItem) -> bool:
+            return (
+                ItemFilterFlags.Removed not in item.filter_flags
+                or (ItemFilterFlags.Unexcludable & item.filter_flags)
+                or (not (ItemFilterFlags.Excluded & item.filter_flags)
+                    and (ItemFilterFlags.Requested & item.filter_flags)
+                )
+                or not (ItemFilterFlags.Culled & item.filter_flags)
+            ) != 0
 
-        pool_items: List[str] = [item.name for item in (inventory + locked_items + self.existing_items + necessary_items)]
-        unused_items = [
-            unused_item for unused_item in unused_items
-            if item_list[unused_item].parent_item is None
-               or item_list[unused_item].parent_item in pool_items
-        ]
+        # Part 1: Remove items that are not requested
+        start_inventory_size = len([item for item in inventory if ItemFilterFlags.StartInventory in item.filter_flags])
+        current_inventory_size = len([item for item in inventory if item_included(item)])
+        while current_inventory_size - start_inventory_size > inventory_size:
+            cullable_items = [item for item in inventory if not (ItemFilterFlags.Uncullable & item.filter_flags)]
+            if len(cullable_items) == 0:
+                break
+            if remove_random_item(cullable_items):
+                inventory = [item for item in inventory if ItemFilterFlags.Removed not in item.filter_flags]
+                current_inventory_size = len([item for item in inventory if item_included(item)])
+        
+        # Handle too many requested
+        if current_inventory_size - start_inventory_size > inventory_size:
+            for item in inventory:
+                item.filter_flags &= ~ItemFilterFlags.Requested
+
+        # Part 2: If we need to remove more, allow removing requested items
+        while current_inventory_size - start_inventory_size > inventory_size:
+            excludable_items = [item for item in inventory if not (ItemFilterFlags.Unexcludable & item.filter_flags)]
+            if len(excludable_items) == 0:
+                break
+            if remove_random_item(excludable_items):
+                inventory = [item for item in inventory if ItemFilterFlags.Removed not in item.filter_flags]
+                current_inventory_size = len([item for item in inventory if item_included(item)])
+
+        # Part 3: If it still doesn't fit, move locked items to start inventory until it fits
+        precollect_items = current_inventory_size - inventory_size - start_inventory_size
+        if precollect_items > 0:
+            items_to_start_inventory = self.world.random.choices(inventory, k=precollect_items, weights=[
+                ItemFilterFlags.StartInventory not in item.filter_flags
+                and ItemFilterFlags.Locked in item.filter_flags
+                for item in inventory
+            ])
+            for item in items_to_start_inventory:
+                item.filter_flags |= ItemFilterFlags.StartInventory
+                start_inventory_size += 1
+
+        assert current_inventory_size - start_inventory_size <= inventory_size
+        inventory = [item for item in inventory if item_included(item)]
 
         # Removing extra dependencies
-        # WoL
-        logical_inventory_set = set(self.logical_inventory)
-        if not spider_mine_sources & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.endswith("(Spider Mine)")]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Spider Mine)")]
-        if not BARRACKS_UNITS & logical_inventory_set:
-            inventory = [
-                item for item in inventory
-                if not (item.name.startswith(item_names.TERRAN_INFANTRY_UPGRADE_PREFIX)
-                        or item.name == item_names.ORBITAL_STRIKE)]
-            unused_items = [
-                item_name for item_name in unused_items
-                if not (item_name.startswith(
-                    item_names.TERRAN_INFANTRY_UPGRADE_PREFIX)
-                        or item_name == item_names.ORBITAL_STRIKE)]
-        if not FACTORY_UNITS & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.startswith(
-                item_names.TERRAN_VEHICLE_UPGRADE_PREFIX)]
-            unused_items = [item_name for item_name in unused_items if not item_name.startswith(
-                item_names.TERRAN_VEHICLE_UPGRADE_PREFIX)]
-        if not STARPORT_UNITS & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.startswith(item_names.TERRAN_SHIP_UPGRADE_PREFIX)]
-            unused_items = [item_name for item_name in unused_items if not item_name.startswith(
-                item_names.TERRAN_SHIP_UPGRADE_PREFIX)]
-        if not {item_names.MEDIVAC, item_names.HERCULES} & logical_inventory_set:
-            inventory = [item for item in inventory if item.name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
-            unused_items = [item_name for item_name in unused_items if item_name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
-            locked_items = [item for item in locked_items if item.name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
-        if item_names.MEDIVAC not in logical_inventory_set:
+        # Transport Hook
+        if item_names.MEDIVAC not in self.logical_inventory:
             # Don't allow L2 Siege Tank Transport Hook without Medivac
             inventory_transport_hooks = [item for item in inventory if item.name == item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
-            locked_transport_hooks = [item for item in locked_items if item.name == item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
-            if len(inventory_transport_hooks) + len(locked_transport_hooks) > 1:
-                if len(inventory_transport_hooks) > 1:
-                    inventory.remove(inventory_transport_hooks[0])
-                else:
-                    locked_items.remove(locked_transport_hooks[0])
-            if len(inventory_transport_hooks) + len(locked_transport_hooks) > 0:
-                # Transport Hook is in inventory, remove from unused_items
-                unused_items = [item_name for item_name in unused_items if item_name != item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
-            else:
-                unused_transport_hooks = [item_name for item_name in unused_items if item_name == item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
-                if len(unused_transport_hooks) > 1:
-                    # Not in inventory, allow only one in unused_items
-                    unused_items.remove(item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK)
-        if not {item_names.COMMAND_CENTER_SCANNER_SWEEP, item_names.COMMAND_CENTER_MULE, item_names.COMMAND_CENTER_EXTRA_SUPPLIES} & logical_inventory_set:
-            # No orbital Command Spells
-            inventory = [item for item in inventory if item.name != item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
-            unused_items = [item_name for item_name in unused_items if item_name != item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
-            locked_items = [item for item in locked_items if item.name != item_names.PLANETARY_FORTRESS_ORBITAL_MODULE]
-        # No weapon upgrades for Dominion Trooper -> drop weapon is useless
-        if not {
-            item_names.DOMINION_TROOPER_B2_HIGH_CAL_LMG,
-            item_names.DOMINION_TROOPER_HAILSTORM_LAUNCHER,
-            item_names.DOMINION_TROOPER_CPO7_SALAMANDER_FLAMETHROWER
-        } & logical_inventory_set:
-            inventory = [item for item in inventory if item.name != item_names.DOMINION_TROOPER_ADVANCED_ALLOYS]
-            unused_items = [item_name for item_name in unused_items if item_name != item_names.DOMINION_TROOPER_ADVANCED_ALLOYS]
-            locked_items = [item for item in locked_items if item.name != item_names.DOMINION_TROOPER_ADVANCED_ALLOYS]
-
-        # HotS
-        # Baneling without sources => remove Baneling and upgrades
-        if (item_names.ZERGLING_BANELING_ASPECT in self.logical_inventory
-                and item_names.ZERGLING not in self.logical_inventory
-                and item_names.KERRIGAN_SPAWN_BANELINGS not in self.logical_inventory
-                and not enable_morphling
-        ):
-            inventory = [item for item in inventory if item.name != item_names.ZERGLING_BANELING_ASPECT]
-            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.ZERGLING_BANELING_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_name != item_names.ZERGLING_BANELING_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.ZERGLING_BANELING_ASPECT]
-        # Spawn Banelings without Zergling/Morphling => remove Baneling unit, keep upgrades except macro ones
-        if (item_names.ZERGLING_BANELING_ASPECT in self.logical_inventory
-                and item_names.ZERGLING not in self.logical_inventory
-                and item_names.KERRIGAN_SPAWN_BANELINGS in self.logical_inventory
-                and not enable_morphling
-        ):
-            inventory = [item for item in inventory if item.name != item_names.ZERGLING_BANELING_ASPECT]
-            inventory = [item for item in inventory if item.name != item_names.BANELING_RAPID_METAMORPH]
-            unused_items = [item_name for item_name in unused_items if item_name != item_names.ZERGLING_BANELING_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_name != item_names.BANELING_RAPID_METAMORPH]
-        if not set(item_groups.zerg_air_units) & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.startswith(item_names.ZERG_FLYER_UPGRADE_PREFIX)]
-            locked_items = [item for item in locked_items if not item.name.startswith(
-                item_names.ZERG_FLYER_UPGRADE_PREFIX)]
-            unused_items = [item_name for item_name in unused_items if not item_name.startswith(
-                item_names.ZERG_FLYER_UPGRADE_PREFIX)]
-        # T3 items removal rules - remove morph and its upgrades if the basic unit isn't in and morphling is unavailable
-        if not {item_names.MUTALISK, item_names.CORRUPTOR} & logical_inventory_set and not enable_morphling:
-            inventory = [item for item in inventory if not item.name.endswith("(Mutalisk/Corruptor)")]
-            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT]
-            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.MUTALISK_CORRUPTOR_DEVOURER_ASPECT]
-            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT]
-            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Mutalisk/Corruptor)")]
-            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.MUTALISK_CORRUPTOR_DEVOURER_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT]
-        if item_names.ROACH not in logical_inventory_set and not enable_morphling:
-            inventory = [item for item in inventory if item.name != item_names.ROACH_RAVAGER_ASPECT]
-            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.ROACH_RAVAGER_ASPECT]
-            inventory = [item for item in inventory if item.name != item_names.ROACH_PRIMAL_IGNITER_ASPECT]
-            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.ROACH_PRIMAL_IGNITER_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_name != item_names.ROACH_RAVAGER_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.ROACH_RAVAGER_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_name != item_names.ROACH_PRIMAL_IGNITER_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.ROACH_PRIMAL_IGNITER_ASPECT]
-        if item_names.HYDRALISK not in logical_inventory_set and not enable_morphling:
-            inventory = [item for item in inventory if not item.name.endswith("(Hydralisk)")]
-            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.HYDRALISK_LURKER_ASPECT]
-            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.HYDRALISK_IMPALER_ASPECT]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Hydralisk)")]
-            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.HYDRALISK_LURKER_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.HYDRALISK_IMPALER_ASPECT]
-        # Remove Infested Terran generic upgrades if no InfTerran units are available
-        if not INF_TERRAN_UNITS & logical_inventory_set:
-            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.INFESTED_SCV_BUILD_CHARGES]
-            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.INFESTED_SCV_BUILD_CHARGES]
-        if item_names.ULTRALISK not in logical_inventory_set and not enable_morphling:
-            inventory = [item for item in inventory if item.name != item_names.ULTRALISK_TYRANNOZOR_ASPECT]
-            inventory = [item for item in inventory if item_list[item.name].parent_item != item_names.ULTRALISK_TYRANNOZOR_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_name != item_names.ULTRALISK_TYRANNOZOR_ASPECT]
-            unused_items = [item_name for item_name in unused_items if item_list[item_name].parent_item != item_names.ULTRALISK_TYRANNOZOR_ASPECT]
-        # LotV
-        # Shared unit upgrades between several units
-        if not {item_names.STALKER, item_names.INSTIGATOR, item_names.SLAYER} & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.endswith("(Stalker/Instigator/Slayer)")]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Stalker/Instigator/Slayer)")]
-        if not {item_names.PHOENIX, item_names.MIRAGE, item_names.SKIRMISHER} & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.endswith("(Phoenix/Mirage/Skirmisher)")]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Phoenix/Mirage/Skirmisher)")]
-        if not {item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY, item_names.DAWNBRINGER} & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.endswith("(Void Ray/Destroyer/Warp Ray/Dawnbringer)")]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Void Ray/Destroyer/Warp Ray/Dawnbringer)")]
-        if not {item_names.CARRIER, item_names.SKYLORD, item_names.TRIREME} & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.endswith("(Carrier/Skylord/Trireme)")]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Carrier/Skylord/Trireme)")]
-        if not {item_names.CARRIER, item_names.TRIREME} & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.endswith("(Carrier/Trireme)")]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Carrier/Trireme)")]
-        if not {item_names.IMMORTAL, item_names.ANNIHILATOR} & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.endswith("(Immortal/Annihilator)")]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Immortal/Annihilator)")]
-        if not {item_names.DARK_TEMPLAR, item_names.AVENGER, item_names.BLOOD_HUNTER} & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.endswith("(Dark Templar/Avenger/Blood Hunter)")]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Dark Templar/Avenger/Blood Hunter)")]
-        if not {item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT, item_names.DARK_TEMPLAR} & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.endswith("(Archon)")]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Archon)")]
-            logical_inventory_set.difference_update([item_name for item_name in logical_inventory_set if item_name.endswith("(Archon)")])
-        if not {item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ARCHON_HIGH_ARCHON} & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.endswith("(High Templar/Signifier)")]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(High Templar/Signifier)")]
-        if item_names.SUPPLICANT not in logical_inventory_set:
-            inventory = [item for item in inventory if item.name != item_names.ASCENDANT_POWER_OVERWHELMING]
-            unused_items = [item_name for item_name in unused_items if item_name != item_names.ASCENDANT_POWER_OVERWHELMING]
-        if not {item_names.DARK_ARCHON, item_names.DARK_TEMPLAR_DARK_ARCHON_MELD} & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.endswith("(Dark Archon)")]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Dark Archon)")]
-        if not {item_names.SENTRY, item_names.ENERGIZER, item_names.HAVOC} & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.endswith("(Sentry/Energizer/Havoc)")]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Sentry/Energizer/Havoc)")]
-        if not {item_names.SENTRY, item_names.ENERGIZER, item_names.HAVOC, item_names.SHIELD_BATTERY} & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.endswith("(Sentry/Energizer/Havoc/Shield Battery)")]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Sentry/Energizer/Havoc/Shield Battery)")]
-        if not {item_names.ZEALOT, item_names.CENTURION, item_names.SENTINEL} & logical_inventory_set:
-            inventory = [item for item in inventory if not item.name.endswith("(Zealot/Sentinel/Centurion)")]
-            unused_items = [item_name for item_name in unused_items if not item_name.endswith("(Zealot/Sentinel/Centurion)")]
-        # Static defense upgrades only if static defense present
-        if not {item_names.PHOTON_CANNON, item_names.KHAYDARIN_MONOLITH, item_names.NEXUS_OVERCHARGE, item_names.SHIELD_BATTERY} & logical_inventory_set:
-            inventory = [item for item in inventory if item.name != item_names.ENHANCED_TARGETING]
-            unused_items = [item_name for item_name in unused_items if item_name != item_names.ENHANCED_TARGETING]
-        if not {item_names.PHOTON_CANNON, item_names.KHAYDARIN_MONOLITH, item_names.NEXUS_OVERCHARGE} & logical_inventory_set:
-            inventory = [item for item in inventory if item.name != item_names.OPTIMIZED_ORDNANCE]
-            unused_items = [item_name for item_name in unused_items if item_name != item_names.OPTIMIZED_ORDNANCE]
-
-        # Cull finished, adding locked items back into inventory
-        inventory += locked_items
-        inventory += necessary_items
-
-        # Replacing empty space with generically useful items
-        replacement_items = [
-            item for item in self.item_pool
-            if (
-                    item not in inventory
-                    and item not in self.locked_items
-                    and item not in excluded_items
-                    and (
-                            item.name in second_pass_placeable_items
-                            or item.name in unused_items
-                    )
-            )
-        ]
-        self.world.random.shuffle(replacement_items)
-        while len(inventory) < inventory_size and len(replacement_items) > 0:
-            item = replacement_items.pop()
-            inventory.append(item)
+            if len(inventory_transport_hooks) > 1:
+                inventory.remove(inventory_transport_hooks[0])
 
         return inventory
 
-    def __init__(self, world: 'SC2World',
-                 item_pool: List[StarcraftItem], existing_items: List[StarcraftItem], locked_items: List[StarcraftItem], necessary_items: List[StarcraftItem]
-    ):
-        self.multiworld = world.multiworld
-        self.player = world.player
-        self.world: 'SC2World' = world
-        self.logical_inventory = list()
-        self.locked_items = locked_items[:]
-        self.necessary_items = necessary_items[:]
-        self.existing_items = existing_items
-        # Initial filter of item pool
-        self.item_pool = item_pool
-        # Inventory restrictiveness based on number of missions with checks
-        mission_count = world.custom_mission_order.get_mission_count()
-        self.min_units_per_structure = int(mission_count / 7)
-        self.item_children: Dict[StarcraftItem, List[StarcraftItem]] = dict()
-        for item in self.item_pool + locked_items + existing_items:
-            if item.name in UPGRADABLE_ITEMS:
-                self.item_children[item] = get_item_upgrades(self.item_pool, item)
 
-
-def filter_items(world: 'SC2World', location_cache: List[Location],
-                 item_pool: List[StarcraftItem], existing_items: List[StarcraftItem], locked_items: List[StarcraftItem], necessary_items: List[StarcraftItem]) -> List[Item]:
+def filter_items(world: 'SC2World', location_cache: List[Location], item_pool: List[StarcraftItem]) -> List[StarcraftItem]:
     """
     Returns a semi-randomly pruned set of items based on number of available locations.
     The returned inventory must be capable of logically accessing every location in the world.
@@ -489,7 +373,7 @@ def filter_items(world: 'SC2World', location_cache: List[Location],
         mission_requirements = []
     else:
         mission_requirements = [(location.name, location.access_rule) for location in location_cache]
-    valid_inventory = ValidInventory(world, item_pool, existing_items, locked_items, necessary_items)
+    valid_inventory = ValidInventory(world, item_pool)
 
     valid_items = valid_inventory.generate_reduced_inventory(inventory_size, mission_requirements)
     return valid_items

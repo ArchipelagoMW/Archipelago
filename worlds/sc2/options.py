@@ -440,7 +440,7 @@ class VanillaItemsOnly(Toggle):
 
 
 # Current maximum number of upgrades for a unit
-MAX_UPGRADES_OPTION = 14
+MAX_UPGRADES_OPTION = 13
 
 
 class EnsureGenericItems(Range):

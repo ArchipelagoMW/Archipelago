@@ -2,26 +2,18 @@ import unittest
 from typing import Set, Dict, List
 
 from .. import options
-from ..item import item_tables
+from ..item import item_tables, item_parents
 
 
 class TestOptions(unittest.TestCase):
 
     def test_unit_max_upgrades_matching_items(self) -> None:
-        base_items: Set[str] = {
-            item_tables.get_full_item_list()[item].parent_item for item in item_tables.get_full_item_list()
-            if item_tables.get_full_item_list()[item].parent_item is not None
-        }
+        upgrade_group_to_count: Dict[str, int] = {}
+        for parent_id, child_list in item_parents.parent_id_to_children.items():
+            main_parent = item_parents.parent_present[parent_id].main_item
+            if main_parent is None:
+                continue
+            upgrade_group_to_count.setdefault(main_parent, 0)
+            upgrade_group_to_count[main_parent] += len(child_list)
 
-        upgrade_items: Dict[str, List[str]] = dict()
-        for item in base_items:
-            upgrade_items[item] = [
-                upgrade_item for upgrade_item in item_tables.get_full_item_list()
-                if item_tables.get_full_item_list()[upgrade_item].parent_item == item
-            ]
-        upgrade_counter: List[int] = list()
-        for item in base_items:
-            quantities: List[int] = [item_tables.get_full_item_list()[upgrade_item].quantity for upgrade_item in upgrade_items[item]]
-            upgrade_counter.append(sum(quantities))
-
-        self.assertEqual(options.MAX_UPGRADES_OPTION, max(upgrade_counter))
+        self.assertEqual(options.MAX_UPGRADES_OPTION, max(upgrade_group_to_count.values()))

@@ -7,22 +7,33 @@ from .item_tables import ItemData
 
 
 class ItemFilterFlags(enum.IntFlag):
+    """Removed > Start Inventory > Locked > Excluded > Requested > Culled"""
     Available = 0
-    Locked = enum.auto()
     StartInventory = enum.auto()
-    NonLocal = enum.auto()
+    Locked = enum.auto()
+    """Used to flag items that are never allowed to be culled."""
+    Requested = enum.auto()
+    """Soft-locked items by item count checks during item culling; may be re-added"""
     Removed = enum.auto()
+    """Marked for immediate removal"""
+    UserExcluded = enum.auto()
+    """Excluded by the user; display an error message if failing to exclude"""
+    FilterExcluded = enum.auto()
+    """Excluded by item filtering"""
+    Culled = enum.auto()
+    """Soft-removed by the item culling"""
+    NonLocal = enum.auto()
     Plando = enum.auto()
-    Excluded = enum.auto()
     AllowedOrphan = enum.auto()
     """Used to flag items that shouldn't be filtered out with their parents"""
     ForceProgression = enum.auto()
     """Used to flag items that aren't classified as progression by default"""
-    Necessary = enum.auto()
-    """Used to flag items that are never allowed to be culled.
-    This differs from `Locked` in that locked items may still be culled if there's space issues or in some circumstances when a parent item is culled."""
 
-    Unremovable = Locked|StartInventory|Plando|Necessary
+    Unexcludable = StartInventory|Plando|Locked
+    Uncullable = StartInventory|Plando|Locked|Requested
+    Excluded = UserExcluded|FilterExcluded
+    RequestedOrBetter = StartInventory|Locked|Requested
+    CulledOrBetter = Removed|Excluded|Culled
 
 
 @dataclass
