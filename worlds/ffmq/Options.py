@@ -1,4 +1,4 @@
-from Options import Choice, FreeText, Toggle, Range, PerGameCommonOptions
+from Options import Choice, FreeText, ItemsAccessibility, Toggle, Range, PerGameCommonOptions
 from dataclasses import dataclass
 
 
@@ -324,6 +324,7 @@ class KaelisMomFightsMinotaur(Toggle):
 
 @dataclass
 class FFMQOptions(PerGameCommonOptions):
+    accessibility: ItemsAccessibility
     logic: Logic
     brown_boxes: BrownBoxes
     sky_coin_mode: SkyCoinMode
