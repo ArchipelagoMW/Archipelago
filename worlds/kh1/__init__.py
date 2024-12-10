@@ -129,7 +129,7 @@ class KH1World(World):
         
         # Calculate prefilled locations and items
         prefilled_items = []
-        if self.options.vanilla_emblem_pieces:
+        if not self.options.randomize_emblem_pieces:
             prefilled_items = prefilled_items + ["Emblem Piece (Flame)", "Emblem Piece (Chest)", "Emblem Piece (Fountain)", "Emblem Piece (Statue)"]
         if self.options.randomize_postcards.current_key not in ["all"]:
             prefilled_items = prefilled_items + ["Postcard"]
@@ -219,7 +219,7 @@ class KH1World(World):
                 goal_location_name = goal_location_name + " Reward 2"
         self.get_location(goal_location_name).place_locked_item(self.create_item("Victory"))
                 
-        if self.options.vanilla_emblem_pieces:
+        if not self.options.randomize_emblem_pieces:
             self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Flame)").place_locked_item(self.create_item("Emblem Piece (Flame)"))
             self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Statue)").place_locked_item(self.create_item("Emblem Piece (Statue)"))
             self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Fountain)").place_locked_item(self.create_item("Emblem Piece (Fountain)"))

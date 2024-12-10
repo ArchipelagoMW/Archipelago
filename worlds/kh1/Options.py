@@ -372,11 +372,11 @@ class EXPZeroInPool(Toggle):
     """
     display_name = "EXP Zero in Pool"
 
-class VanillaEmblemPieces(DefaultOnToggle):
+class RandomizeEmblemPieces(Toggle):
     """
-    If on, the Hollow Bastion emblem pieces are in their vanilla locations.
+    If off, the Hollow Bastion emblem pieces are in their vanilla locations.
     """
-    display_name = "Vanilla Emblem Pieces"
+    display_name = "Randomize Emblem Pieces"
 
 class RandomizePostcards(Choice):
     """
@@ -422,7 +422,7 @@ class KH1Options(PerGameCommonOptions):
     advanced_logic: AdvancedLogic
     extra_shared_abilities: ExtraSharedAbilities
     exp_zero_in_pool: EXPZeroInPool
-    vanilla_emblem_pieces: VanillaEmblemPieces
+    randomize_emblem_pieces: RandomizeEmblemPieces
     randomize_postcards: RandomizePostcards
     donald_death_link: DonaldDeathLink
     goofy_death_link: GoofyDeathLink
@@ -459,7 +459,7 @@ kh1_option_groups = [
         Atlantica,
         Cups,
         HundredAcreWood,
-        VanillaEmblemPieces,
+        RandomizeEmblemPieces,
         RandomizePostcards,
     ]),
     OptionGroup("Levels", [
