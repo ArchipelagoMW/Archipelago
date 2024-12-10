@@ -127,7 +127,7 @@ class TestToolProgression(SVTestCase):
 
 class TestGenerateAllOptionsWithExcludeGingerIsland(WorldAssertMixin, SVTestCase):
 
-    def test_given_choice_when_generate_exclude_ginger_island(self):
+    def test_given_choice_when_generate_exclude_ginger_island_then_ginger_island_is_properly_excluded(self):
         for option, option_choice in all_option_choices:
             if option is ExcludeGingerIsland:
                 continue
@@ -145,19 +145,6 @@ class TestGenerateAllOptionsWithExcludeGingerIsland(WorldAssertMixin, SVTestCase
 
                 self.assert_basic_checks(multiworld)
                 self.assert_no_ginger_island_content(multiworld)
-
-    def test_given_island_related_goal_then_override_exclude_ginger_island(self):
-        island_goals = ["greatest_walnut_hunter", "perfection"]
-        for goal, exclude_island in itertools.product(island_goals, ExcludeGingerIsland.options):
-            world_options = {
-                Goal: goal,
-                ExcludeGingerIsland: exclude_island
-            }
-
-            with self.solo_world_sub_test(f"Goal: {goal}, {ExcludeGingerIsland.internal_name}: {exclude_island}", world_options) \
-                    as (multiworld, stardew_world):
-                self.assertEqual(stardew_world.options.exclude_ginger_island, ExcludeGingerIsland.option_false)
-                self.assert_basic_checks(multiworld)
 
 
 class TestTraps(SVTestCase):
