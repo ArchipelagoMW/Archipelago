@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 import json
-from typing import Dict, Tuple
 
 from zilliandomizer.game import Game as ZzGame
 
@@ -9,7 +8,7 @@ from zilliandomizer.game import Game as ZzGame
 class GenData:
     """ data passed from generation to patcher """
 
-    multi_items: Dict[str, Tuple[str, str]]
+    multi_items: dict[str, tuple[str, str]]
     """ zz_loc_name to (item_name, player_name) """
     zz_game: ZzGame
     game_id: bytes
@@ -28,6 +27,13 @@ class GenData:
     def from_json(gen_data_str: str) -> "GenData":
         """ the reverse of `to_json` """
         from_json = json.loads(gen_data_str)
+
+        # backwards compatibility for seeds generated before new map_gen options
+        room_gen = from_json["zz_game"]["options"].get("room_gen", None)
+        if room_gen is not None:
+            from_json["zz_game"]["options"]["map_gen"] = {False: "none", True: "rooms"}.get(room_gen, "none")
+            del from_json["zz_game"]["options"]["room_gen"]
+
         return GenData(
             from_json["multi_items"],
             ZzGame.from_jsonable(from_json["zz_game"]),

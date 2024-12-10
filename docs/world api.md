@@ -288,8 +288,8 @@ like entrance randomization in logic.
 
 Regions have a list called `exits`, containing `Entrance` objects representing transitions to other regions.
 
-There must be one special region, "Menu", from which the logic unfolds. AP assumes that a player will always be able to
-return to the "Menu" region by resetting the game ("Save and quit").
+There must be one special region (Called "Menu" by default, but configurable using [origin_region_name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L295-L296)),
+from which the logic unfolds. AP assumes that a player will always be able to return to this starting region by resetting the game ("Save and quit").
 
 ### Entrances
 
@@ -302,6 +302,34 @@ generation (entrance randomization).
 
 An access rule is a function that returns `True` or `False` for a `Location` or `Entrance` based on the current `state`
 (items that have been collected).
+
+The two possible ways to make a [CollectionRule](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/generic/Rules.py#L10) are:
+- `def rule(state: CollectionState) -> bool:`
+- `lambda state: ... boolean expression ...`
+
+An access rule can be assigned through `set_rule(location, rule)`.
+
+Access rules usually check for one of two things.
+- Items that have been collected (e.g. `state.has("Sword", player)`)
+- Locations, Regions or Entrances that have been reached (e.g. `state.can_reach_region("Boss Room")`)
+
+Keep in mind that entrances and locations implicitly check for the accessibility of their parent region, so you do not need to check explicitly for it.
+
+#### An important note on Entrance access rules:
+When using `state.can_reach` within an entrance access condition, you must also use `multiworld.register_indirect_condition`.
+
+For efficiency reasons, every time reachable regions are searched, every entrance is only checked once in a somewhat non-deterministic order.
+This is fine when checking for items using `state.has`, because items do not change during a region sweep.
+However, `state.can_reach` checks for the very same thing we are updating: Regions.
+This can lead to non-deterministic behavior and, in the worst case, even generation failures.
+Even doing `state.can_reach_location` or `state.can_reach_entrance` is problematic, as these functions call `state.can_reach_region` on the respective parent region.
+
+**Therefore, it is considered unsafe to perform `state.can_reach` from within an access condition for an entrance**, unless you are checking for something that sits in the source region of the entrance.
+You can use `multiworld.register_indirect_condition(region, entrance)` to explicitly tell the generator that, when a given region becomes accessible, it is necessary to re-check a specific entrance.
+You **must** use `multiworld.register_indirect_condition` if you perform this kind of `can_reach` from an entrance access rule, unless you have a **very** good technical understanding of the relevant code and can reason why it will never lead to problems in your case.
+
+Alternatively, you can set [world.explicit_indirect_conditions = False](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L298-L301),
+avoiding the need for indirect conditions at the expense of performance.
 
 ### Item Rules
 
@@ -438,7 +466,7 @@ The world has to provide the following things for generation:
 
 * the properties mentioned above
 * additions to the item pool
-* additions to the regions list: at least one called "Menu"
+* additions to the regions list: at least one named after the world class's origin_region_name ("Menu" by default)
 * locations placed inside those regions
 * a `def create_item(self, item: str) -> MyGameItem` to create any item on demand
 * applying `self.multiworld.push_precollected` for world-defined start inventory
@@ -491,7 +519,7 @@ def generate_early(self) -> None:
 
 ```python
 def create_regions(self) -> None:
-    # Add regions to the multiworld. "Menu" is the required starting point.
+    # Add regions to the multiworld. One of them must use the origin_region_name as its name ("Menu" by default).
     # Arguments to Region() are name, player, multiworld, and optionally hint_text
     menu_region = Region("Menu", self.player, self.multiworld)
     self.multiworld.regions.append(menu_region)  # or use += [menu_region...]
@@ -630,7 +658,7 @@ def set_rules(self) -> None:
 
 Custom methods can be defined for your logic rules. The access rule that ultimately gets assigned to the Location or
 Entrance should be
-a [`CollectionRule`](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/generic/Rules.py#L9).
+a [`CollectionRule`](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/generic/Rules.py#L10).
 Typically, this is done by defining a lambda expression on demand at the relevant bit, typically calling other
 functions, but this can also be achieved by defining a method with the appropriate format and assigning it directly.
 For an example, see [The Messenger](/worlds/messenger/rules.py).
