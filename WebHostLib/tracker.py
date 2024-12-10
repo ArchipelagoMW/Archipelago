@@ -2471,3 +2471,309 @@ if "Starcraft 2" in network_data_package["games"]:
         )
 
     _player_trackers["Starcraft 2"] = render_Starcraft2_tracker
+
+if "Hollow Knight" in network_data_package["games"]:
+    # Mapping from non-progressive item to progressive name and max level.
+    non_progressive_charms = {
+        "Fragile_Heart"         : ("Progressive Heart", 1),
+        "Unbreakable_Heart"     : ("Progressive Heart", 2),
+
+        "Fragile_Greed"         : ("Progressive Greed", 1),
+        "Unbreakable_Greed"     : ("Progressive Greed", 2),
+
+        "Fragile_Strength"      : ("Progressive Strength", 1),
+        "Unbreakable_Strength"  : ("Progressive Strength", 2),
+
+        "Grimmchild1"           : ("Progressive Grimmchild", 1),
+        "Grimmchild2"           : ("Progressive Grimmchild", 2),
+        "Grimmchild3"           : ("Progressive Grimmchild", 3),
+        "Grimmchild4"           : ("Progressive Grimmchild", 4),
+
+        "Queen_Fragment"        : ("Progressive Void Heart", 1),
+        "King_Fragment"         : ("Progressive Void Heart", 2),
+        "Kingsoul"              : ("Progressive Void Heart", 3),
+        "Void_Heart"            : ("Progressive Void Heart", 4)
+    }
+
+    non_progressive_items = {
+        "Mothwing_Cloak"        : ("Progressive Cloak", 1),
+        "Shade_Cloak"           : ("Progressive Cloak", 2),
+
+        "Left_Mothwing_Cloak"   : ("Progressive Left Cloak", 1),
+        "Left_Shade_Cloak"      : ("Progressive Left Cloak", 2) ,
+
+        "Right_Mothwing_Cloak"  : ("Progressive Right Cloak", 1),
+        "Right_Shade_Cloak"     : ("Progressive Right Cloak", 2),
+
+        "Left_Mantis_Claw"      : ("Progressive Claw", 1),
+        "Right_Mantis_Claw"     : ("Progressive Claw", 2),
+        "Mantis_Claw"           : ("Progressive Claw", 3),
+
+        "Left_Crystal_Heart"    : ("Progressive Crystal Heart", 1),
+        "Right_Crystal_Heart"   : ("Progressive Crystal Heart", 2),
+        "Crystal_Heart"         : ("Progressive Crystal Heart", 3),
+
+        "Vengeful_Spirit"       : ("Progressive Fireball", 1),
+        "Shade_Soul"            : ("Progressive Fireball", 2),
+
+        "Desolate_Dive"         : ("Progressive Dive", 1),
+        "Descending_Dark"       : ("Progressive Dive", 2),
+
+        "Howling_Wraiths"       : ("Progressive Shriek", 1),
+        "Abyss_Shriek"          : ("Progressive Shriek", 2)
+    }
+
+    non_progressive_items_ordering = {
+        "Dream_Nail"            : ("Progressive Dreamnail", 1),
+        "Dream_Gate"            : ("Progressive Dreamnail", 2),
+        "Awoken_Dream_Nail"     : ("Progressive Dreamnail", 3)
+    }
+
+    progressive_item_max = {
+        "Progressive Heart"         : 2,
+        "Progressive Greed"         : 2,
+        "Progressive Strength"      : 2,
+        "Progressive Grimmchild"    : 4,
+        "Progressive Void Heart"    : 4,
+        "Progressive Cloak"         : 2,
+        "Progressive Left Cloak"    : 2,
+        "Progressive Right Cloak"   : 2,
+        "Progressive Claw"          : 3,
+        "Progressive Crystal Heart" : 3,
+        "Progressive Fireball"      : 2,
+        "Progressive Dive"          : 2,
+        "Progressive Shriek"        : 2,
+        "Progressive Dreamnail"     : 3
+    }
+
+    essences = {
+        "Boss_Essence-Elder_Hu"             : 100,
+        "Boss_Essence-Galien"               : 200,
+        "Boss_Essence-Gorb"                 : 100,
+        "Boss_Essence-Markoth"              : 250,
+        "Boss_Essence-Marmu"                : 150,
+        "Boss_Essence-No_Eyes"              : 200,
+        "Boss_Essence-Xero"                 : 100,
+        "Boss_Essence-Failed_Champion"      : 300,
+        "Boss_Essence-Grey_Prince_Zote"     : 300,
+        "Boss_Essence-Lost_Kin"             : 400,
+        "Boss_Essence-White_Defender"       : 300,
+        "Boss_Essence-Soul_Tyrant"          : 300,
+
+        "Whispering_Root-Ancestral_Mound"   : 42,
+        "Whispering_Root-City"              : 28,
+        "Whispering_Root-Crystal_Peak"      : 21,
+        "Whispering_Root-Deepnest"          : 45,
+        "Whispering_Root-Crossroads"        : 29,
+        "Whispering_Root-Leg_Eater"         : 20,
+        "Whispering_Root-Mantis_Village"    : 18,
+        "Whispering_Root-Greenpath"         : 44,
+        "Whispering_Root-Hive"              : 20,
+        "Whispering_Root-Howling_Cliffs"    : 46,
+        "Whispering_Root-Kingdoms_Edge"     : 51,
+        "Whispering_Root-Queens_Gardens"    : 29,
+        "Whispering_Root-Resting_Grounds"   : 20,
+        "Whispering_Root-Waterways"         : 35,
+        "Whispering_Root-Spirits_Glade"     : 34
+    }
+
+    stags = {
+        "Dirtmouth_Stag"        : "DM",
+        "Crossroads_Stag"       : "CR",
+        "Greenpath_Stag"        : "GP",
+        "Queen's_Station_Stag"  : "QS",
+        "Queen's_Gardens_Stag"  : "QG",
+        "City_Storerooms_Stag"  : "CS",
+        "King's_Station_Stag"   : "KS",
+        "Resting_Grounds_Stag"  : "RG",
+        "Distant_Village_Stag"  : "DV",
+        "Hidden_Station_Stag"   : "HS",
+        "Stag_Nest_Stag"        : "SN"
+    }
+
+    def prepare_inventories(team: int, player: int, inventory: Counter[str], tracker_data: TrackerData):
+        randomizeElevatorPass = bool(tracker_data.get_slot_data(team, player)["options"]["RandomizeElevatorPass"])
+
+        if not randomizeElevatorPass:
+            inventory["Elevator_Pass"] = 1
+
+        # Creating logic for splittet cloak
+        #         Right 0                 1                  2
+        # Left 0  no dash                 right dash        right shade, no left
+        # 1       left dash               left right        shade both
+        # 2       shade left, no right    shade both        -
+        if inventory["Left_Mothwing_Cloak"] >= 1 and inventory["Right_Mothwing_Cloak"] >= 1:
+            inventory["Mothwing_Cloak"] = 1
+
+        if inventory["Left_Mothwing_Cloak"] == 2:
+            inventory["Left_Shade_Cloak"] = 1
+
+        if inventory["Right_Mothwing_Cloak"] == 2:
+            inventory["Right_Shade_Cloak"] = 1
+
+        if inventory["Left_Mothwing_Cloak"] + inventory["Right_Mothwing_Cloak"] == 3:
+            inventory["Shade_Cloak"] = 1
+
+        inventory["ShowCloakSplitted"] = not (
+                inventory["Left_Mothwing_Cloak"] == 0 and inventory["Right_Mothwing_Cloak"] == 0 or
+                inventory["Mothwing_Cloak"] == 1 or
+                inventory["Shade_Cloak"] == 1
+            ) or (
+                inventory["Mothwing_Cloak"] == 0 and
+                inventory["Shade_Cloak"] == 0 and
+                inventory["Left_Mothwing_Cloak"] != inventory["Right_Mothwing_Cloak"] and
+                tracker_data.get_slot_data(team, player)["options"]["SplitMothwingCloak"] == 1
+            )
+        # End cloak logic
+            
+        # Handling logic for splittet claw and Crystal Heart
+        if inventory["Left_Mantis_Claw"] == 1 and inventory["Right_Mantis_Claw"] == 1:
+            inventory["Mantis_Claw"] = 1
+
+        if inventory["Left_Crystal_Heart"] == 1 and inventory["Right_Crystal_Heart"] == 1:
+            inventory["Crystal_Heart"] = 1
+        # End claw / cdash logic
+
+        # Sum essence and count stags
+        for source, essence in essences.items():
+            if source in inventory:
+                inventory["Essence"] += essence
+
+        for stag in stags:
+            if stag in inventory:
+                inventory["Stag"] += 1
+        # End essence / stags
+
+        # Naildirections (bit based)
+        inventory["Nail"] = 1 * inventory["Downslash"] + 2 * inventory["Leftslash"] + 4 * inventory["Upslash"] + 8 * inventory["Rightslash"]
+
+        # add progressive items
+        for item, (prog_item, level) in non_progressive_items.items():
+            if item in inventory:
+                inventory[prog_item] = min(max(inventory[prog_item], level), progressive_item_max[prog_item])
+
+        # add progressive items
+        # Some items are progressing in order and not by the received one
+        for item, (prog_item, level) in non_progressive_items_ordering.items():
+            if item in inventory:
+                inventory[prog_item] += 1
+                
+        # add progressive charms
+        # Charms are progressing in order, not by the one which was actually got.
+        for item, (prog_item, level) in non_progressive_charms.items():
+            if item in inventory:
+                inventory[prog_item] += 1
+
+        # Completed item if we meet goal.
+        if tracker_data.get_room_client_statuses()[team, player] == ClientStatus.CLIENT_GOAL:
+            inventory["IsCompleted"] = 1
+
+    def render_HK_multiworld_tracker(tracker_data: TrackerData, enabled_trackers: List[str]):
+        inventories: Dict[Tuple[int, int], Counter[str]] = {
+            (team, player): collections.Counter({
+                tracker_data.item_id_to_name["Hollow Knight"][code]: count
+                for code, count in tracker_data.get_player_inventory_counts(team, player).items()
+            })
+            for team, players in tracker_data.get_all_players().items()
+            for player in players if tracker_data.get_slot_info(team, player).game == "Hollow Knight"
+        }
+
+        # Translate non-progression items to progression items for tracker simplicity.
+        for (team, player), inventory in inventories.items():
+            prepare_inventories(team, player, inventory, tracker_data)
+
+        options: Dict[Tuple[int, int], Dict[str, int]] = {
+            (team, player): {
+                option: value
+                for (option, value) in tracker_data.get_slot_data(team, player)["options"].items()
+            }
+            for team, players in tracker_data.get_all_players().items()
+            for player in players if tracker_data.get_slot_info(team, player).game == "Hollow Knight"
+        }
+
+        # To handle both options as one on the page
+        for (team, player), randoOptions in options.copy().items():
+            randomizeEssence = 0
+
+            for option, value in randoOptions.items():
+                if(option in ('RandomizeBossEssence', 'RandomizeWhisperingRoots')):
+                    randomizeEssence = randomizeEssence or value
+
+            options[(team, player)]["RandomizeEssence"] = randomizeEssence
+
+        return render_template(
+            "multitracker__HK.html",
+            enabled_trackers=enabled_trackers,
+            current_tracker="Hollow Knight",
+            room=tracker_data.room,
+            get_slot_info=tracker_data.get_slot_info,
+            all_slots=tracker_data.get_all_slots(),
+            room_players=tracker_data.get_all_players(),
+            locations=tracker_data.get_room_locations(),
+            locations_complete=tracker_data.get_room_locations_complete(),
+            total_team_locations=tracker_data.get_team_locations_total_count(),
+            total_team_locations_complete=tracker_data.get_team_locations_checked_count(),
+            player_names_with_alias=tracker_data.get_room_long_player_names(),
+            completed_worlds=tracker_data.get_team_completed_worlds_count(),
+            games=tracker_data.get_room_games(),
+            states=tracker_data.get_room_client_statuses(),
+            hints=tracker_data.get_team_hints(),
+            activity_timers=tracker_data.get_room_last_activity(),
+            videos=tracker_data.get_room_videos(),
+            item_id_to_name=tracker_data.item_id_to_name,
+            location_id_to_name=tracker_data.location_id_to_name,
+            inventories=inventories,
+            options=options,
+            progressive_item_max=progressive_item_max
+        )
+
+    def render_HK_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
+        # Remap rando options for visualization
+        options = tracker_data.get_slot_data(team, player)["options"]
+        options["RandomizeDreamers_WorldSense"] = options["RandomizeDreamers"]
+        options["RandomizeEssence"] = options["RandomizeBossEssence"] or options["RandomizeWhisperingRoots"]
+
+        # Creating the content for the grid placeholders
+        inventory_order_template = {
+            "Dreamers": { "content": ["RandomizeDreamers"] },
+            "Skills":   { "content": ["RandomizeSkills", "RandomizeSwim", "RandomizeFocus"] },
+            "Keys":     { "content": ["RandomizeKeys", "RandomizeElevatorPass"], "cssClass": "keys" },
+            "Charms":   { "content": ["RandomizeCharms"], "cssClass": "charms" },
+            "Counter":  { "content": ["RandomizeEssence", "RandomizeMaskShards", "RandomizeVesselFragments", "RandomizeCharmNotches", "RandomizePaleOre", "RandomizeRancidEggs", "RandomizeGrubs", "RandomizeGrimmkinFlames"] },
+            "Relics":   { "content": ["RandomizeRelics"] },
+            "Misc":     { "content": ["RandomizeDreamers_WorldSense"] },
+            "Nail":     { "content": ["RandomizeNail"] },
+            "Stags":    { "content": ["RandomizeStags"], "cssClass": "stags" }
+        }
+
+        inventory_order = {}
+
+        for (name, value) in inventory_order_template.items():
+            groupToAdd = [item for item in value["content"] if tracker_data.get_slot_data(team, player)["options"][item] == 1]
+            
+            if groupToAdd != []:
+                value["content"] = groupToAdd
+                inventory_order[name] = value
+            
+        inventory = collections.Counter({
+            tracker_data.item_id_to_name["Hollow Knight"][code]: count
+            for code, count in tracker_data.get_player_inventory_counts(team, player).items()
+        })
+        
+        # Translate non-progression items to progression items for tracker simplicity.
+        prepare_inventories(team, player, inventory, tracker_data)
+
+        return render_template(
+            template_name_or_list="tracker__HK.html",
+            room=tracker_data.room,
+            team=team,
+            player=player,
+            inventory=inventory,
+            player_name=tracker_data.get_player_name(team, player),
+            options=options,
+            inventory_order=inventory_order,
+            stags=stags
+        )
+
+    _multiworld_trackers["Hollow Knight"] = render_HK_multiworld_tracker
+    _player_trackers["Hollow Knight"] = render_HK_tracker
