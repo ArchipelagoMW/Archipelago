@@ -285,7 +285,7 @@ class TunicOptions(PerGameCommonOptions):
     lanternless: Lanternless
     maskless: Maskless
     grass_randomizer: GrassRandomizer
-    grass_fill: GrassFill
+    local_fill: LocalFill
     laurels_zips: LaurelsZips
     ice_grappling: IceGrappling
     ladder_storage: LadderStorage

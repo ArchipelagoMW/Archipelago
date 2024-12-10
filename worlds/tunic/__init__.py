@@ -22,7 +22,7 @@ class TunicSettings(Group):
         """Disallows the TUNIC client from creating a local spoiler log."""
 
     class LimitGrassRando(Bool):
-        """Limits the impact of Grass Randomizer on the multiworld by disallowing grass_fill percentages below 95."""
+        """Limits the impact of Grass Randomizer on the multiworld by disallowing local_fill percentages below 95."""
 
     disable_local_spoiler: Union[DisableLocalSpoiler, bool] = False
     limit_grass_rando: Union[LimitGrassRando, bool] = True
@@ -140,7 +140,7 @@ class TunicWorld(World):
         self.player_location_table = standard_location_name_to_id.copy()
 
         if self.options.grass_randomizer:
-            if self.settings.limit_grass_rando and self.options.grass_fill < 95 and self.multiworld.players > 1:
+            if self.settings.limit_grass_rando and self.options.local_fill < 95 and self.multiworld.players > 1:
                 raise OptionError(f"TUNIC: Player {self.player_name} has their Grass Fill option set too low. "
                                   f"They must either bring it above 95% or the host needs to disable limit_grass_rando "
                                   f"in their host.yaml settings")
@@ -334,14 +334,14 @@ class TunicWorld(World):
 
         # pull out the filler so that we can place it manually during pre_fill
         self.local_filler = []
-        if self.options.grass_randomizer and self.options.grass_fill > 0 and self.multiworld.players > 1:
+        if self.options.grass_randomizer and self.options.local_fill > 0 and self.multiworld.players > 1:
             # skip items marked local or non-local, let fill deal with them in its own way
             # remove grass from non_local if it's meant to be limited
             if self.settings.limit_grass_rando:
                 self.options.non_local_items.value.remove("Grass")
             all_filler = []
             non_filler = []
-            amount_to_local_fill = int(self.options.grass_fill.value * len(all_filler) / 100)
+            amount_to_local_fill = int(self.options.local_fill.value * len(all_filler) / 100)
             for item in tunic_items:
                 if item.classification in [ItemClassification.filler, ItemClassification.trap] and item.name not in self.options.local_items and item.name not in self.options.non_local_items:
                     if len(self.local_filler) < amount_to_local_fill:
@@ -365,11 +365,11 @@ class TunicWorld(World):
         unfilled_locations = [loc for loc in multiworld.get_unfilled_locations_for_players(
             location_names=[], players=tunic_players_with_grass) if loc.progress_type != LocationProgressType.PRIORITY
                               and loc.name not in reserved_locations]
-        grass_fill: List[TunicItem] = []
+        grass_filler_items: List[TunicItem] = []
         for world in tunic_grass_worlds:
-            grass_fill.extend(world.local_filler)
+            grass_filler_items.extend(world.local_filler)
 
-        grass_filler_count = len(grass_fill)
+        grass_filler_count = len(grass_filler_items)
         # in case you plando or priority a bunch of locations
         if len(unfilled_locations) < grass_filler_count:
             raise Exception("Not enough locations for TUNIC grass randomizer players to place grass fill into TUNIC "
@@ -377,7 +377,7 @@ class TunicWorld(World):
 
         locations_to_grass_fill = multiworld.random.sample(unfilled_locations, grass_filler_count)
         for loc in locations_to_grass_fill:
-            multiworld.push_item(loc, grass_fill.pop(), collect=False)
+            multiworld.push_item(loc, grass_filler_items.pop(), collect=False)
 
     def create_regions(self) -> None:
         self.tunic_portal_pairs = {}
