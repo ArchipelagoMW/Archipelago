@@ -218,6 +218,7 @@ class Context:
         self.allow_releases = {}
         self.host = host
         self.port = port
+        # None if None else str.strip()
         self.server_password = server_password and server_password.strip()
         self.password = password and password.strip()
         self.server = None

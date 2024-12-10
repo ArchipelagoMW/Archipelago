@@ -35,6 +35,7 @@ def get_meta(options_source: dict, race: bool = False) -> Dict[str, Union[List[s
         "remaining_mode": options_source.get("remaining_mode", ServerOptions.remaining_mode),
         "collect_mode": options_source.get("collect_mode", ServerOptions.collect_mode),
         "item_cheat": bool(int(options_source.get("item_cheat", not ServerOptions.disable_item_cheat))),
+        # None if None else str.strip()
         "server_password": options_source.get("server_password") and options_source["server_password"].strip(),
     }
     generator_options = {
