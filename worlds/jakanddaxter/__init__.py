@@ -4,7 +4,6 @@ import Utils
 import settings
 from Options import OptionGroup
 
-from Utils import local_path
 from BaseClasses import (Item,
                          ItemClassification as ItemClass,
                          Tutorial,
@@ -43,9 +42,9 @@ def launch_client():
 components.append(Component("Jak and Daxter Client",
                             func=launch_client,
                             component_type=Type.CLIENT,
-                            icon="egg"))
+                            icon="precursor_orb"))
 
-icon_paths["egg"] = local_path("worlds", "jakanddaxter", "icons", "egg.png")
+icon_paths["precursor_orb"] = f"ap:{__name__}/icons/precursor_orb.png"
 
 
 class JakAndDaxterSettings(settings.Group):
@@ -82,6 +81,7 @@ class JakAndDaxterWebWorld(WebWorld):
     )
 
     tutorials = [setup_en]
+    bug_report_page = "https://github.com/ArchipelaGOAL/Archipelago/issues"
 
     option_groups = [
         OptionGroup("Orbsanity", [
@@ -410,16 +410,6 @@ class JakAndDaxterWorld(World):
             # Ditto everything else.
             else:
                 state.prog_items[self.player]["Reachable Orbs Fresh"] = False
-
-            # TODO - Python 3.8 compatibility, remove this block when no longer required.
-            if state.prog_items[self.player]["Tradeable Orbs"] < 1:
-                del state.prog_items[self.player]["Tradeable Orbs"]
-            if state.prog_items[self.player]["Reachable Orbs"] < 1:
-                del state.prog_items[self.player]["Reachable Orbs"]
-            for level in level_table:
-                if state.prog_items[self.player][f"{level} Reachable Orbs".strip()] < 1:
-                    del state.prog_items[self.player][f"{level} Reachable Orbs".strip()]
-
         return change
 
     def fill_slot_data(self) -> Dict[str, Any]:
