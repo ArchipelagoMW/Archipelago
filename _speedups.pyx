@@ -69,6 +69,14 @@ cdef struct IndexEntry:
     size_t count
 
 
+if TYPE_CHECKING:
+    State = Dict[Tuple[int, int], Set[int]]
+else:
+    State = Union[Tuple[int, int], Set[int], defaultdict]
+
+T = TypeVar('T')
+
+
 @cython.auto_pickle(False)
 cdef class LocationStore:
     """Compact store for locations and their items in a MultiServer"""
@@ -190,8 +198,6 @@ cdef class LocationStore:
             raise KeyError(key)
         return <object>self._raw_proxies[key]
 
-    T = TypeVar('T')
-
     def get(self, key: int, default: T) -> Union[PlayerLocationProxy, T]:
         # calling into self.__getitem__ here is slow, but this is not used in MultiServer
         try:
@@ -245,11 +251,6 @@ cdef class LocationStore:
                             all_locations[sender] = set()
                         all_locations[sender].add(entry.location)
         return all_locations
-
-    if TYPE_CHECKING:
-        State = Dict[Tuple[int, int], Set[int]]
-    else:
-        State = Union[Tuple[int, int], Set[int], defaultdict]
 
     def get_checked(self, state: State, team: int, slot: int) -> List[int]:
         # This used to validate checks actually exist. A remnant from the past.
@@ -348,8 +349,6 @@ cdef class PlayerLocationProxy:
         if entry:
             return entry.item, entry.receiver, entry.flags
         raise KeyError(f"No location {key} for player {self._player}")
-
-    T = TypeVar('T')
 
     def get(self, key: int, default: T) -> Union[Tuple[int, int, int], T]:
         cdef LocationEntry* entry = self._get(key)
