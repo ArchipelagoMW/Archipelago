@@ -253,6 +253,10 @@ cdef class LocationStore:
         return all_locations
 
     def get_checked(self, state: State, team: int, slot: int) -> List[int]:
+        cdef ap_player_t sender = slot
+        if sender < 0 or sender >= self.sender_index_size:
+            raise KeyError(slot)
+
         # This used to validate checks actually exist. A remnant from the past.
         # If the order of locations becomes relevant at some point, we could not do sorted(set), so leaving it.
         cdef set checked = state[team, slot]
@@ -264,7 +268,6 @@ cdef class LocationStore:
 
         # Unless the set is close to empty, it's cheaper to use the python set directly, so we do that.
         cdef LocationEntry* entry
-        cdef ap_player_t sender = slot
         cdef size_t start = self.sender_index[sender].start
         cdef size_t count = self.sender_index[sender].count
         return [entry.location for
@@ -274,9 +277,11 @@ cdef class LocationStore:
     def get_missing(self, state: State, team: int, slot: int) -> List[int]:
         cdef LocationEntry* entry
         cdef ap_player_t sender = slot
+        if sender < 0 or sender >= self.sender_index_size:
+            raise KeyError(slot)
+        cdef set checked = state[team, slot]
         cdef size_t start = self.sender_index[sender].start
         cdef size_t count = self.sender_index[sender].count
-        cdef set checked = state[team, slot]
         if not len(checked):
             # Skip `in` if none have been checked.
             # This optimizes the case where everyone connects to a fresh game at the same time.
@@ -291,9 +296,11 @@ cdef class LocationStore:
     def get_remaining(self, state: State, team: int, slot: int) -> List[Tuple[int, int]]:
         cdef LocationEntry* entry
         cdef ap_player_t sender = slot
+        if sender < 0 or sender >= self.sender_index_size:
+            raise KeyError(slot)
+        cdef set checked = state[team, slot]
         cdef size_t start = self.sender_index[sender].start
         cdef size_t count = self.sender_index[sender].count
-        cdef set checked = state[team, slot]
         return sorted([(entry.receiver, entry.item) for
                         entry in self.entries[start:start+count] if
                         entry.location not in checked])
@@ -329,7 +336,8 @@ cdef class PlayerLocationProxy:
         cdef LocationEntry* entry = NULL
         # binary search
         cdef size_t l = self._store.sender_index[self._player].start
-        cdef size_t r = l + self._store.sender_index[self._player].count
+        cdef size_t e = l + self._store.sender_index[self._player].count
+        cdef size_t r = e
         cdef size_t m
         while l < r:
             m = (l + r) // 2
@@ -338,7 +346,7 @@ cdef class PlayerLocationProxy:
                 l = m + 1
             else:
                 r = m
-        if entry:  # count != 0
+        if l < e:
             entry = self._store.entries + l
             if entry.location == loc:
                 return entry
