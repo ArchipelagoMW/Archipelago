@@ -186,7 +186,7 @@ class KH1World(World):
             if name in starting_worlds or name in starting_tools:
                 continue
             if data.category == "Puppies":
-                if self.options.puppies == "triplets" and "-" in name and not self.options.vanilla_puppies:
+                if self.options.puppies == "triplets" and "-" in name and self.options.randomize_puppies:
                     item_pool += [self.create_item(name) for _ in range(quantity)]
                 if self.options.puppies == "individual" and "Puppy" in name:
                     item_pool += [self.create_item(name) for _ in range(0, quantity)]
@@ -276,7 +276,7 @@ class KH1World(World):
             self.get_location("Traverse Town 1st District Accessory Shop Roof Chest").place_locked_item(self.create_item("Postcard"))
             self.get_location("Traverse Town 2nd District Boots and Shoes Awning Chest").place_locked_item(self.create_item("Postcard"))
             self.get_location("Traverse Town 1st District Blue Trinity Balcony Chest").place_locked_item(self.create_item("Postcard"))
-        if self.options.vanilla_puppies and self.options.puppies == "triplets":
+        if not self.options.randomize_puppies and self.options.puppies == "triplets":
             for i, location in enumerate(VANILLA_PUPPY_LOCATIONS):
                 self.get_location(location).place_locked_item(self.create_item("Puppies " + str(1+(i*3)).zfill(2) + "-" + str(3+(i*3)).zfill(2)))
 
