@@ -255,33 +255,33 @@ class ValidInventory:
         for starcraft_item in generic_items[:reserved_generic_amount]:
             starcraft_item.filter_flags |= ItemFilterFlags.Requested
 
-        # Make an index from child to parent
-        child_to_main_parent: Dict[str, StarcraftItem] = {}
-        for item in inventory:
-            parent_id = item_table[item.name].parent
-            if parent_id is None:
-                continue
-            parent_item_name = item_parents.parent_present[parent_id].main_item
-            if parent_item_name is None:
-                continue
-            parent_item = self.item_name_to_item.get(parent_item_name)
-            if parent_item:
-                child_to_main_parent[item.name] = parent_item[0]
-
         # Main cull process
-        def remove_random_item(removable: List[StarcraftItem], remove_flag: ItemFilterFlags = ItemFilterFlags.Removed) -> bool:
+        def remove_random_item(
+            removable: List[StarcraftItem],
+            dont_remove_flags: ItemFilterFlags,
+            remove_flag: ItemFilterFlags = ItemFilterFlags.Removed,
+        ) -> bool:
             item = self.world.random.choice(removable)
             # Do not remove item if it would drop upgrades below minimum
             if min_upgrades_per_unit > 0:
-                parent_item = child_to_main_parent.get(item.name)
-                if parent_item is not None:
-                    children = self.item_name_to_child_items.get(parent_item.name, [])
+                group_name = None
+                parent = item_table[item.name].parent
+                if parent is not None:
+                    group_name = item_parents.parent_present[parent].main_item
+                if group_name is not None:
+                    children = group_to_item.get(group_name, [])
                     children = [x for x in children if not (ItemFilterFlags.CulledOrBetter & x.filter_flags)]
-                    count = len(children)
-                    if count <= min_upgrades_per_unit:
-                        if parent_item in removable:
-                            # Attempt to remove parent instead, if possible
-                            item = parent_item
+                    if len(children) <= min_upgrades_per_unit:
+                        # Attempt to remove a parent instead, if possible
+                        dont_remove = ItemFilterFlags.Removed|dont_remove_flags
+                        parent_items = [
+                            parent_item
+                            for parent_name in item_parents.child_item_to_parent_items[item.name]
+                            for parent_item in self.item_name_to_item.get(parent_name, [])
+                            if not (dont_remove & parent_item.filter_flags)
+                        ]
+                        if parent_items:
+                            item = self.world.random.choice(parent_items)
                         else:
                             # Lock remaining upgrades
                             for item in children:
@@ -311,7 +311,7 @@ class ValidInventory:
         while current_inventory_size - start_inventory_size > inventory_size:
             if len(cullable_items) == 0:
                 break
-            if remove_random_item(cullable_items):
+            if remove_random_item(cullable_items, ItemFilterFlags.Uncullable):
                 inventory = [item for item in inventory if ItemFilterFlags.Removed not in item.filter_flags]
                 current_inventory_size = len([item for item in inventory if item_included(item)])
             cullable_items = [
@@ -329,7 +329,7 @@ class ValidInventory:
         while current_inventory_size - start_inventory_size > inventory_size:
             if len(excludable_items) == 0:
                 break
-            if remove_random_item(excludable_items):
+            if remove_random_item(excludable_items, ItemFilterFlags.Unexcludable):
                 inventory = [item for item in inventory if ItemFilterFlags.Removed not in item.filter_flags]
                 current_inventory_size = len([item for item in inventory if item_included(item)])
             excludable_items = [
