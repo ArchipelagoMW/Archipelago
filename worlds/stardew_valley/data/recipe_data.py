@@ -197,8 +197,8 @@ mixed_berry_pie = shop_recipe(SVEMeal.mixed_berry_pie, Region.saloon, 3500, {Fru
                                                                              SVEForage.bearberry: 6, Ingredient.sugar: 1, Ingredient.wheat_flour: 1},
                               ModNames.sve)
 mushroom_berry_rice = friendship_and_shop_recipe(SVEMeal.mushroom_berry_rice, ModNPC.marlon, 6, Region.adventurer_guild, 1500,
-                                                 {SVEForage.poison_mushroom: 3, SVEForage.red_baneberry: 10, Ingredient.rice: 1, Ingredient.sugar: 2},
-                                                 ModNames.sve)
+                                                 {SVEForage.poison_mushroom: 3, SVEForage.red_baneberry: 10,
+                                                  Ingredient.rice: 1, Ingredient.sugar: 2}, ModNames.sve)
 seaweed_salad = shop_recipe(SVEMeal.seaweed_salad, Region.fish_shop, 1250, {SVEWaterItem.dulse_seaweed: 2, WaterItem.seaweed: 2, Ingredient.oil: 1},
                             ModNames.sve)
 void_delight = friendship_and_shop_recipe(SVEMeal.void_delight, NPC.krobus, 10, Region.sewer, 5000,
