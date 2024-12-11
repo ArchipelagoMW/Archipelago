@@ -36,7 +36,7 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
 
         "early_caves": EarlyCaves.option_off,
         "early_good_items": {"Door / Door Panel"},
-        "elevators_come_to_you": False,
+        "elevators_come_to_you": ElevatorsComeToYou.default,
 
         "trap_percentage": TrapPercentage.default,
         "puzzle_skip_amount": PuzzleSkipAmount.default,
@@ -75,7 +75,7 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
 
         "early_caves": EarlyCaves.option_off,
         "early_good_items": {"Symbol", "Door / Door Panel"},  # Not Obelisk Key bc I want EPs to open slowly in this one
-        "elevators_come_to_you": False,
+        "elevators_come_to_you": ElevatorsComeToYou.default,
 
         "trap_percentage": TrapPercentage.default,
         "puzzle_skip_amount": 15,
@@ -114,7 +114,7 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
 
         "early_caves": EarlyCaves.option_off,
         "early_good_items": {"Symbol", "Door / Door Panel", "Obelisk Key"},
-        "elevators_come_to_you": True,
+        "elevators_come_to_you": ElevatorsComeToYou.valid_keys,
 
         "trap_percentage": TrapPercentage.default,
         "puzzle_skip_amount": 15,
