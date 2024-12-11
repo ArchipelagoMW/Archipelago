@@ -25,7 +25,7 @@ from pathlib import Path
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
-from .item import item_names
+from .item import item_names, item_parents
 from .item.item_groups import item_name_groups, unlisted_item_name_groups
 from . import options
 from .options import (
@@ -265,71 +265,92 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             return False
 
         items = get_full_item_list()
-        categorized_items: typing.Dict[SC2Race, typing.List[int]] = {}
-        parent_to_child: typing.Dict[int, typing.List[int]] = {}
+        categorized_items: typing.Dict[SC2Race, typing.List[typing.Union[int, str]]] = {}
+        parent_to_child: typing.Dict[typing.Union[int, str], typing.List[int]] = {}
         items_received: typing.Dict[int, typing.List[NetworkItem]] = {}
-        filter_match_count = 0
         for item in self.ctx.items_received:
             items_received.setdefault(item.item, []).append(item)
         items_received_set = set(items_received)
         for item_data in items.values():
-            if item_data.parent_item:
-                parent_to_child.setdefault(items[item_data.parent_item].code, []).append(item_data.code)
+            if item_data.parent:
+                parent_rule = item_parents.parent_present[item_data.parent]
+                if parent_rule.constraint_group is not None and parent_rule.constraint_group in items:
+                    parent_to_child.setdefault(items[parent_rule.constraint_group].code, []).append(item_data.code)
+                    continue
+                race = items[parent_rule.parent_items()[0]].race
+                categorized_items.setdefault(race, [])
+                if parent_rule.display_string not in categorized_items[race]:
+                    categorized_items[race].append(parent_rule.display_string)
+                parent_to_child.setdefault(parent_rule.display_string, []).append(item_data.code)
             else:
                 categorized_items.setdefault(item_data.race, []).append(item_data.code)
-        for faction in SC2Race:
-            has_printed_faction_title = False
-            def print_faction_title():
-                if not has_printed_faction_title:
-                    self.formatted_print(f" [u]{faction.name}[/u] ")
-            
-            for item_id in categorized_items[faction]:
-                item_name = self.ctx.item_names.lookup_in_game(item_id)
-                received_child_items = items_received_set.intersection(parent_to_child.get(item_id, []))
-                matching_children = [child for child in received_child_items
-                                     if item_matches_filter(self.ctx.item_names.lookup_in_game(child))]
-                received_items_of_this_type = items_received.get(item_id, [])
-                item_is_match = item_matches_filter(item_name)
-                if item_is_match or len(matching_children) > 0:
-                    # Print found item if it or its children match the filter
-                    if item_is_match:
-                        filter_match_count += len(received_items_of_this_type)
-                    for item in received_items_of_this_type:
-                        print_faction_title()
-                        has_printed_faction_title = True
-                        (ColouredMessage('* ').item(item.item, self.ctx.slot, flags=item.flags)
-                            (" from ").location(item.location, item.player)
-                            (" by ").player(item.player)
-                        ).send(self.ctx)
-                
-                if received_child_items:
-                    # We have this item's children
-                    if len(matching_children) == 0:
-                        # ...but none of them match the filter
-                        continue
 
-                    if not received_items_of_this_type:
-                        # We didn't receive the item itself
-                        print_faction_title()
-                        has_printed_faction_title = True
-                        ColouredMessage("- ").coloured(item_name, "black")(" - not obtained").send(self.ctx)
-                    
-                    for child_item in matching_children:
-                        received_items_of_this_type = items_received.get(child_item, [])
-                        for item in received_items_of_this_type:
-                            filter_match_count += len(received_items_of_this_type)
-                            (ColouredMessage('  * ').item(item.item, self.ctx.slot, flags=item.flags)
-                                (" from ").location(item.location, item.player)
-                                (" by ").player(item.player)
-                            ).send(self.ctx)
-                    
-                    non_matching_children = len(received_child_items) - len(matching_children)
-                    if non_matching_children > 0:
-                        self.formatted_print(f"  + {non_matching_children} child items that don't match the filter")
+        def display_info(element: typing.Union[SC2Race, str, int]) -> tuple:
+            """Return (should display, name, type, children, sum(obtained), sum(matching filter))"""
+            have_item = isinstance(element, int) and element in items_received_set
+            if isinstance(element, SC2Race):
+                children: typing.Sequence[typing.Union[str, int]] = categorized_items[faction]
+                name = element.name
+            elif isinstance(element, int):
+                children = parent_to_child.get(element, [])
+                name = self.ctx.item_names.lookup_in_game(element)
+            else:
+                assert isinstance(element, str)
+                children = parent_to_child[element]
+                name = element
+            matches_filter = item_matches_filter(name)
+            child_states = [display_info(child) for child in children]
+            return (
+                (have_item and matches_filter) or any(child_state[0] for child_state in child_states),
+                name,
+                element,
+                child_states,
+                sum(child_state[4] for child_state in child_states) + have_item,
+                sum(child_state[5] for child_state in child_states) + (have_item and matches_filter),
+            )
+
+        def display_tree(
+            should_display: bool, name: str, element: typing.Union[SC2Race, str, int], child_states: tuple, indent: int = 0
+        ) -> None:
+            if not should_display:
+                return
+            indent_str = " " * indent
+            if isinstance(element, SC2Race):
+                self.formatted_print(f" [u]{name}[/u] ")
+                for child in child_states:
+                    display_tree(*child[:4])
+            elif isinstance(element, str):
+                ColouredMessage(indent_str)("- ").coloured(name, "white").send(self.ctx)
+                for child in child_states:
+                    display_tree(*child[:4], indent=indent+2)
+            elif isinstance(element, int):
+                items = items_received.get(element, [])
+                if not items:
+                    ColouredMessage(indent_str)("- ").coloured(name, "black")(" - not obtained").send(self.ctx)
+                for item in items:
+                    (ColouredMessage(indent_str)('- ')
+                        .item(item.item, self.ctx.slot, flags=item.flags)
+                        (" from ").location(item.location, item.player)
+                        (" by ").player(item.player)
+                    ).send(self.ctx)
+                for child in child_states:
+                    display_tree(*child[:4], indent=indent+2)
+            non_matching_descendents = sum(child[5] - child[4] for child in children)
+            if non_matching_descendents > 0:
+                self.formatted_print(f"{indent_str}  + {non_matching_descendents} child items that don't match the filter")
+
+
+        item_types_obtained = 0
+        items_obtained_matching_filter = 0
+        for faction in SC2Race:
+            should_display, name, element, children, faction_items_obtained, faction_items_matching_filter = display_info(faction)
+            item_types_obtained += faction_items_obtained
+            items_obtained_matching_filter += faction_items_matching_filter
+            display_tree(should_display, name, element, children)
         if filter_search == "":
-            self.formatted_print(f"[b]Obtained: {len(self.ctx.items_received)} items[/b]")
+            self.formatted_print(f"[b]Obtained: {len(self.ctx.items_received)} items ({item_types_obtained} types)[/b]")
         else:
-            self.formatted_print(f"[b]Filter \"{filter_search}\" found {filter_match_count} out of {len(self.ctx.items_received)} obtained items[/b]")
+            self.formatted_print(f"[b]Filter \"{filter_search}\" found {items_obtained_matching_filter} out of {item_types_obtained} obtained item types[/b]")
         return True
 
     def _received_recent(self, amount: str) -> None:

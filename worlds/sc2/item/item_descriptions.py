@@ -760,8 +760,7 @@ item_descriptions = {
     item_names.INFESTED_LIBERATOR_VIRAL_CONTAMINATION: "Increases the damage Infested Liberators deal to their primary target by 100%.",
     item_names.INFESTED_LIBERATOR_DEFENDER_MODE: "Allows Infested Liberators to deploy into Defender Mode to attack ground units.",
     item_names.FRIGHTFUL_FLESHWELDER_INFESTED_SIEGE_TANK: _get_resource_efficiency_desc(item_names.INFESTED_SIEGE_TANK),
-    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_DIAMONDBACK: _get_resource_efficiency_desc(
-        item_names.INFESTED_DIAMONDBACK),
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_DIAMONDBACK: _get_resource_efficiency_desc(item_names.INFESTED_DIAMONDBACK),
     item_names.FRIGHTFUL_FLESHWELDER_INFESTED_BANSHEE: _get_resource_efficiency_desc(item_names.INFESTED_BANSHEE),
     item_names.FRIGHTFUL_FLESHWELDER_INFESTED_LIBERATOR: _get_resource_efficiency_desc(item_names.INFESTED_LIBERATOR),
     item_names.ZERG_EXCAVATING_CLAWS: "Increases movement speed of uprooted Zerg structures, especially off creep. Also increases root speed.",

@@ -444,7 +444,7 @@ class VanillaItemsOnly(Toggle):
 
 
 # Current maximum number of upgrades for a unit
-MAX_UPGRADES_OPTION = 14
+MAX_UPGRADES_OPTION = 13
 
 
 class EnsureGenericItems(Range):
@@ -824,6 +824,11 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         return self.value.__len__()
 
 
+class Sc2StartInventory(Sc2ItemDict):
+    """Start with these items."""
+    display_name = StartInventory.display_name
+
+
 class LockedItems(Sc2ItemDict):
     """Guarantees that these items will be unlockable, in the amount specified.
     Specify an amount of 0 to lock all copies of an item."""
@@ -1011,6 +1016,7 @@ class StartingSupplyPerItem(Range):
 
 @dataclass
 class Starcraft2Options(PerGameCommonOptions):
+    start_inventory: Sc2StartInventory
     game_difficulty: GameDifficulty
     game_speed: GameSpeed
     disable_forced_camera: DisableForcedCamera

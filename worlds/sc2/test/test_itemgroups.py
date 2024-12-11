@@ -1,5 +1,5 @@
 """
-Unit tests for ItemGroups.py
+Unit tests for item_groups.py
 """
 
 import unittest

@@ -64,9 +64,9 @@ for item, data in item_tables.get_full_item_list().items():
             # Short-name groups are unlisted
             unlisted_item_name_groups.add(short_name)
     # Items with a parent get assigned to their parent's group
-    if data.parent_item:
+    if data.parent:
         # The parent groups need a special name, otherwise they are ambiguous with the parent
-        parent_group = f"{data.parent_item} Items"
+        parent_group = f"{data.parent} Items"
         item_name_groups.setdefault(parent_group, []).append(item)
         # Parent groups are unlisted
         unlisted_item_name_groups.add(parent_group)
@@ -108,7 +108,8 @@ class ItemGroupNames:
     TERRAN_ORIGINAL_PROGRESSIVE_UPGRADES = "Terran Original Progressive Upgrades"
     """Progressive items where level 1 appeared in WoL"""
     MENGSK_UNITS = "Mengsk Units"
-    TERRAN_VETERANCY_UNITS= "Terran Veterancy Units"
+    TERRAN_VETERANCY_UNITS = "Terran Veterancy Units"
+    ORBITAL_COMMAND_ABILITIES = "Orbital Command Abilities"
 
     ZERG_ITEMS = "Zerg Items"
     ZERG_UNITS = "Zerg Units"
@@ -270,6 +271,17 @@ item_name_groups[ItemGroupNames.TERRAN_VETERANCY_UNITS] = [
     item_names.AEGIS_GUARD, item_names.EMPERORS_SHADOW, item_names.SHOCK_DIVISION, item_names.BLACKHAMMER,
     item_names.PRIDE_OF_AUGUSTRGRAD, item_names.SKY_FURY, item_names.SON_OF_KORHAL, item_names.FIELD_RESPONSE_THETA,
     item_names.BULWARK_COMPANY, item_names.NIGHT_HAWK, item_names.EMPERORS_GUARDIAN, item_names.NIGHT_WOLF,
+]
+item_name_groups[ItemGroupNames.ORBITAL_COMMAND_ABILITIES] = orbital_command_abilities = [
+    item_names.COMMAND_CENTER_SCANNER_SWEEP,
+    item_names.COMMAND_CENTER_MULE,
+    item_names.COMMAND_CENTER_EXTRA_SUPPLIES,
+]
+spider_mine_sources = [
+    item_names.VULTURE,
+    item_names.REAPER_SPIDER_MINES,
+    item_names.SIEGE_TANK_SPIDER_MINES,
+    item_names.RAVEN_SPIDER_MINES,
 ]
 
 # Terran Upgrades
@@ -564,14 +576,38 @@ item_name_groups[ItemGroupNames.HOTS_ITEMS] = vanilla_hots_items = (
 # Zerg - Infested Terran (Stukov Co-op)
 item_name_groups[ItemGroupNames.INF_TERRAN_UNITS] = infterr_units = [
     item_names.INFESTED_MARINE,
-    item_names.INFESTED_BUNKER]
+    item_names.INFESTED_BUNKER,
+    item_names.INFESTED_DIAMONDBACK,
+    item_names.INFESTED_SIEGE_TANK,
+    item_names.INFESTED_LIBERATOR,
+    item_names.INFESTED_BANSHEE,
+]
 item_name_groups[ItemGroupNames.INF_TERRAN_UPGRADES] = infterr_upgrades = [
     item_names.INFESTED_SCV_BUILD_CHARGES,
     item_names.INFESTED_MARINE_PLAGUED_MUNITIONS,
     item_names.INFESTED_MARINE_RETINAL_AUGMENTATION,
     item_names.INFESTED_BUNKER_CALCIFIED_ARMOR,
     item_names.INFESTED_BUNKER_REGENERATIVE_PLATING,
-    item_names.INFESTED_BUNKER_ENGORGED_BUNKERS
+    item_names.INFESTED_BUNKER_ENGORGED_BUNKERS,
+    item_names.INFESTED_DIAMONDBACK_CAUSTIC_MUCUS,
+    item_names.INFESTED_DIAMONDBACK_CONCENTRATED_SPEW,
+    item_names.INFESTED_DIAMONDBACK_PROGRESSIVE_FUNGAL_SNARE,
+    item_names.INFESTED_DIAMONDBACK_VIOLENT_ENZYMES,
+    item_names.INFESTED_SIEGE_TANK_ACIDIC_ENZYMES,
+    item_names.INFESTED_SIEGE_TANK_BALANCED_ROOTS,
+    item_names.INFESTED_SIEGE_TANK_DEEP_TUNNEL,
+    item_names.INFESTED_SIEGE_TANK_PROGRESSIVE_AUTOMATED_MITOSIS,
+    item_names.INFESTED_SIEGE_TANK_SEISMIC_SONAR,
+    item_names.INFESTED_LIBERATOR_CLOUD_DISPERSAL,
+    item_names.INFESTED_LIBERATOR_DEFENDER_MODE,
+    item_names.INFESTED_LIBERATOR_VIRAL_CONTAMINATION,
+    item_names.INFESTED_BANSHEE_ADVANCED_TARGETING_OPTICS,
+    item_names.INFESTED_BANSHEE_BRACED_EXOSKELETON,
+    item_names.INFESTED_BANSHEE_RAPID_HIBERNATION,
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_DIAMONDBACK,
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_SIEGE_TANK,
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_LIBERATOR,
+    item_names.FRIGHTFUL_FLESHWELDER_INFESTED_BANSHEE,
 ]
 item_name_groups[ItemGroupNames.INF_TERRAN_ITEMS] = (
     infterr_units

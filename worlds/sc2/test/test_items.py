@@ -8,7 +8,6 @@ class TestItems(unittest.TestCase):
     def test_grouped_upgrades_number(self) -> None:
         """
         Tests if grouped upgrades have set number correctly
-        :return:
         """
         bundled_items = item_tables.upgrade_bundles.keys()
         bundled_item_data = [item_tables.get_full_item_list()[item_name] for item_name in bundled_items]
@@ -21,7 +20,6 @@ class TestItems(unittest.TestCase):
     def test_non_grouped_upgrades_number(self) -> None:
         """
         Checks if non-grouped upgrades number is set correctly thus can be sent into the game.
-        :return:
         """
         check_modulo = 4
         bundled_items = item_tables.upgrade_bundles.keys()
@@ -40,7 +38,6 @@ class TestItems(unittest.TestCase):
     def test_bundles_contain_only_basic_elements(self) -> None:
         """
         Checks if there are no bundles within bundles.
-        :return:
         """
         bundled_items = item_tables.upgrade_bundles.keys()
         bundle_elements: List[str] = [item_name for values in item_tables.upgrade_bundles.values() for item_name in values]
@@ -51,7 +48,6 @@ class TestItems(unittest.TestCase):
     def test_weapon_armor_level(self) -> None:
         """
         Checks if Weapon/Armor upgrade level is correctly set to all Weapon/Armor upgrade items.
-        :return:
         """
         weapon_armor_upgrades = [item for item in item_tables.get_full_item_list() if item_tables.get_item_table()[item].type in item_tables.upgrade_item_types]
 
@@ -61,7 +57,6 @@ class TestItems(unittest.TestCase):
     def test_item_ids_distinct(self) -> None:
         """
         Verifies if there are no duplicates of item ID.
-        :return:
         """
         item_ids: Set[int] = {item_tables.get_full_item_list()[item_name].code for item_name in item_tables.get_full_item_list()}
 
@@ -70,7 +65,6 @@ class TestItems(unittest.TestCase):
     def test_number_distinct_in_item_type(self) -> None:
         """
         Tests if each item is distinct for sending into the mod.
-        :return:
         """
         item_types: List[item_tables.ItemTypeEnum] = [
             *[item.value for item in item_tables.TerranItemType],
@@ -93,7 +87,6 @@ class TestItems(unittest.TestCase):
 
     def test_progressive_has_quantity(self) -> None:
         """
-        Checks if the quantity attribute has been set for progressive items.
         :return:
         """
         progressive_groups: List[item_tables.ItemTypeEnum] = [
@@ -113,7 +106,6 @@ class TestItems(unittest.TestCase):
     def test_non_progressive_quantity(self) -> None:
         """
         Check if non-progressive items have quantity at most 1.
-        :return:
         """
         non_progressive_single_entity_groups: List[item_tables.ItemTypeEnum] = [
             # Terran
@@ -163,7 +155,6 @@ class TestItems(unittest.TestCase):
     def test_item_number_less_than_30(self) -> None:
         """
         Checks if all item numbers are within bounds supported by game mod.
-        :return:
         """
         not_checked_item_types: List[item_tables.ItemTypeEnum] = [
             item_tables.ZergItemType.Level
