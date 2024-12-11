@@ -16,8 +16,8 @@ class GSTLALocation(Location):
     item: 'GSTLAItem'
 
     def __init__(self, player: int, name: str, location: LocationData, region: Region):
-        super(GSTLALocation, self).__init__(player, name, location.ap_id, region)
-        # TODO: locations ids cannot be flags, since for us multiple locations can have the same flag
+        # Yes, calling str(name) because it's secretly an enum, and pickling does terrible things in MultiServer
+        super(GSTLALocation, self).__init__(player, str(name), location.ap_id, region)
         self.location_data = location
 
     @staticmethod

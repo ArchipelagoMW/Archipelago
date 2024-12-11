@@ -348,7 +348,7 @@ class GSTLAWorld(World):
                     rando_file.write(location_data.rando_flag.to_bytes(length=2, byteorder='little'))
                     rando_file.write(item_id.to_bytes(length=2, byteorder='little'))
                     debug_file.write(
-                        f"{index} \n\tLocation: {location.name.value} \n\tLocation Flag: {hex(location_data.rando_flag)} \n\tItem: {location.item.name} \n\tItem ID: {item_id}\n\n")
+                        f"{index} \n\tLocation: {location.name} \n\tLocation Flag: {hex(location_data.rando_flag)} \n\tItem: {location.item.name} \n\tItem ID: {item_id}\n\n")
                 index += 1
                 # debug_file.write()
                 # TODO: Questions
