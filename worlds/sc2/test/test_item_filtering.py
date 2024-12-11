@@ -8,12 +8,6 @@ from ..mission_tables import SC2Race
 
 class ItemFilterTests(Sc2SetupTestBase):
     def test_excluding_all_barracks_units_excludes_infantry_upgrades(self) -> None:
-        return
-        # Note(mm): This test currently fails because of the circular logic around has_barracks_unit
-        # For an item to be filtered, logic must be satisfied without the item
-        # Terran logic includes (has_barracks_unit => infantry ups required)
-        # has_barracks_unit is only set to false after the items are culled
-        # Therefore, upgrades are always required by logic and will never be culled
         world_options = {
             'excluded_items': {
                 item_groups.ItemGroupNames.BARRACKS_UNITS: 0
@@ -33,8 +27,8 @@ class ItemFilterTests(Sc2SetupTestBase):
         self.assertNotIn(item_names.MARINE, itempool)
         self.assertNotIn(item_names.MARAUDER, itempool)
 
-        self.assertNotIn(item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR, itempool)
         self.assertNotIn(item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON, itempool)
+        self.assertNotIn(item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR, itempool)
         self.assertNotIn(item_names.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE, itempool)
 
     def test_excluding_one_item_of_multi_parent_doesnt_filter_children(self) -> None:
@@ -80,4 +74,4 @@ class ItemFilterTests(Sc2SetupTestBase):
         itempool = [item.name for item in self.multiworld.itempool]
         self.assertNotIn(item_names.ZEALOT_SENTINEL_CENTURION_SHIELD_CAPACITY, itempool)
         self.assertNotIn(item_names.ZEALOT_SENTINEL_CENTURION_LEG_ENHANCEMENTS, itempool)
-    
+

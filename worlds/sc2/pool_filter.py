@@ -1,11 +1,10 @@
-import copy
 import logging
 from typing import Callable, Dict, List, Set, Union, Tuple, TYPE_CHECKING, Iterable
 
-from BaseClasses import Item, Location
-from .item import StarcraftItem, ItemFilterFlags, item_names, item_parents
+from BaseClasses import Location
+from .item import StarcraftItem, ItemFilterFlags, item_names, item_parents, item_groups
 from .item.item_tables import item_table, TerranItemType, ZergItemType, ProtossItemType
-from .options import get_option_value, RequiredTactics
+from .options import RequiredTactics
 
 if TYPE_CHECKING:
     from . import SC2World
@@ -147,8 +146,6 @@ class ValidInventory:
     def generate_reduced_inventory(self, inventory_size: int, mission_requirements: List[Tuple[str, Callable]]) -> List[StarcraftItem]:
         """Attempts to generate a reduced inventory that can fulfill the mission requirements."""
         inventory: List[StarcraftItem] = list(self.item_pool)
-        # locked_items: List[StarcraftItem] = list(self.locked_items)
-        # necessary_items: List[StarcraftItem] = list(self.necessary_items)
         requirements = mission_requirements
         min_upgrades_per_unit = self.world.options.min_number_of_upgrades.value
         max_upgrades_per_unit = self.world.options.max_number_of_upgrades.value
@@ -162,7 +159,6 @@ class ValidInventory:
         def attempt_removal(
             item: StarcraftItem,
             remove_flag: ItemFilterFlags = ItemFilterFlags.FilterExcluded,
-            lock_flag: ItemFilterFlags = ItemFilterFlags.Locked
         ) -> bool:
             """
             Returns true and applies `remove_flag` if the item is removable,
@@ -172,13 +168,9 @@ class ValidInventory:
             if item.name in self.logical_inventory:
                 self.logical_inventory.remove(item.name)
                 if not all(requirement(self) for (_, requirement) in mission_requirements):
-                    # If item cannot be removed, lock or revert
+                    # If item cannot be removed, lock and revert
                     self.logical_inventory.append(item.name)
-                    # Note(mm): Be sure to re-add the _exact_ item we removed.
-                    # Removing from `inventory` searches based on == checks, but AutoWorld.py
-                    # checks using `is` to make sure there are no duplicate item objects in the pool.
-                    # Hence, appending `item` could cause sporadic generation failures.
-                    item.filter_flags |= lock_flag
+                    item.filter_flags |= ItemFilterFlags.LogicLocked
                     return False
             item.filter_flags |= remove_flag
             return True
@@ -186,7 +178,6 @@ class ValidInventory:
         def remove_child_items(
             parent_item: StarcraftItem,
             remove_flag: ItemFilterFlags = ItemFilterFlags.FilterExcluded,
-            lock_flag: ItemFilterFlags = ItemFilterFlags.Locked
         ) -> None:
             child_items = self.item_name_to_child_items.get(parent_item.name, [])
             for child_item in child_items:
@@ -196,8 +187,8 @@ class ValidInventory:
                 assert parent_id is not None
                 if item_parents.parent_present[parent_id](self.logical_inventory, self.world.options):
                     continue
-                if attempt_removal(child_item, remove_flag, lock_flag):
-                    remove_child_items(child_item, remove_flag, lock_flag)
+                if attempt_removal(child_item, remove_flag):
+                    remove_child_items(child_item, remove_flag)
 
         # Process Excluded items, validate if the item can get actually excluded
         excluded_items: List[StarcraftItem] = [starcraft_item for starcraft_item in inventory if ItemFilterFlags.Excluded & starcraft_item.filter_flags]
@@ -356,9 +347,34 @@ class ValidInventory:
         if item_names.MEDIVAC not in self.logical_inventory:
             # Don't allow L2 Siege Tank Transport Hook without Medivac
             inventory_transport_hooks = [item for item in inventory if item.name == item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
-            removable_transport_hooks = [item for item in inventory_transport_hooks if not (ItemFilterFlags.Unexcludable & item.flags)]
+            removable_transport_hooks = [item for item in inventory_transport_hooks if not (ItemFilterFlags.Unexcludable & item.filter_flags)]
             if len(inventory_transport_hooks) > 1 and removable_transport_hooks:
                 inventory.remove(removable_transport_hooks[0])
+        
+        # Weapon/Armour upgrades
+        def exclude_wa(prefix: str) -> List[StarcraftItem]:
+            return [
+                item for item in inventory
+                if (ItemFilterFlags.UnexcludableUpgrade & item.filter_flags)
+                or not item.name.startswith(prefix)
+            ]
+        used_item_names: Set[str] = {item.name for item in inventory}
+        if used_item_names.isdisjoint(item_groups.barracks_wa_group):
+            inventory = exclude_wa(item_names.TERRAN_INFANTRY_UPGRADE_PREFIX)
+        if used_item_names.isdisjoint(item_groups.factory_wa_group):
+            inventory = exclude_wa(item_names.TERRAN_VEHICLE_UPGRADE_PREFIX)
+        if used_item_names.isdisjoint(item_groups.starport_wa_group):
+            inventory = exclude_wa(item_names.TERRAN_SHIP_UPGRADE_PREFIX)
+        if used_item_names.isdisjoint(item_groups.zerg_melee_wa):
+            inventory = exclude_wa(item_names.PROGRESSIVE_ZERG_MELEE_ATTACK)
+        if used_item_names.isdisjoint(item_groups.zerg_ranged_wa):
+            inventory = exclude_wa(item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK)
+        if used_item_names.isdisjoint(item_groups.zerg_air_units):
+            inventory = exclude_wa(item_names.ZERG_FLYER_UPGRADE_PREFIX)
+        if used_item_names.isdisjoint(item_groups.protoss_ground_wa):
+            inventory = exclude_wa(item_names.PROTOSS_GROUND_UPGRADE_PREFIX)
+        if used_item_names.isdisjoint(item_groups.protoss_air_wa):
+            inventory = exclude_wa(item_names.PROTOSS_AIR_UPGRADE_PREFIX)
 
         return inventory
 

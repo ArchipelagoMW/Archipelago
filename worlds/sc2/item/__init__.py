@@ -12,6 +12,8 @@ class ItemFilterFlags(enum.IntFlag):
     StartInventory = enum.auto()
     Locked = enum.auto()
     """Used to flag items that are never allowed to be culled."""
+    LogicLocked = enum.auto()
+    """Locked by item cull logic checks; logic-locked w/a upgrades may be removed if all parents are removed"""
     Requested = enum.auto()
     """Soft-locked items by item count checks during item culling; may be re-added"""
     Removed = enum.auto()
@@ -29,10 +31,11 @@ class ItemFilterFlags(enum.IntFlag):
     ForceProgression = enum.auto()
     """Used to flag items that aren't classified as progression by default"""
 
-    Unexcludable = StartInventory|Plando|Locked
-    Uncullable = StartInventory|Plando|Locked|Requested
+    Unexcludable = StartInventory|Plando|Locked|LogicLocked
+    UnexcludableUpgrade = StartInventory|Plando|Locked
+    Uncullable = StartInventory|Plando|Locked|LogicLocked|Requested
     Excluded = UserExcluded|FilterExcluded
-    RequestedOrBetter = StartInventory|Locked|Requested
+    RequestedOrBetter = StartInventory|Locked|LogicLocked|Requested
     CulledOrBetter = Removed|Excluded|Culled
 
 
