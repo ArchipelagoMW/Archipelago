@@ -267,8 +267,8 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
                 # There are only 101 player name slots (99 + "The Server" + "another world"), so don't use more than that
                 mw = 100
         spot.patch(rom, spot.item, multiworld=mw)
-    #patches.enemies.changeBosses(rom, patch_data["world_setup"]["boss_mapping"])
-    #patches.enemies.changeMiniBosses(rom, patch_data["world_setup"]["miniboss_mapping"])
+    patches.enemies.changeBosses(rom, patch_data["world_setup"]["boss_mapping"])
+    patches.enemies.changeMiniBosses(rom, patch_data["world_setup"]["miniboss_mapping"])
 
     if not args.romdebugmode:
         patches.core.addFrameCounter(rom, len(item_list))

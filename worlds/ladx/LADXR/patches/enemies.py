@@ -42,7 +42,7 @@ MINIBOSS_ENTITIES = {
     "ARMOS_KNIGHT":     [(4, 3, 0x88)],
 }
 MINIBOSS_ROOMS = {
-    0: 0x111, 1: 0x128, 2: 0x145, 3: 0x164, 4: 0x193, 5: 0x1C5, 6: 0x228, 7: 0x23F,
+    "0": 0x111, "1": 0x128, "2": 0x145, "3": 0x164, "4": 0x193, "5": 0x1C5, "6": 0x228, "7": 0x23F,
     "c1": 0x30C, "c2": 0x303,
     "moblin_cave": 0x2E1,
     "armos_temple": 0x27F,
@@ -268,7 +268,7 @@ def changeMiniBosses(rom, mapping):
     """), ASM("""
         ld  a, [hl]
         sub $08
-        ld  [hl], a    
+        ld  [hl], a
         ld  hl, $C2D0
         add hl, bc
         ld  [hl], b ; b is always zero here
