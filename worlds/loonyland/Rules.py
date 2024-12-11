@@ -80,8 +80,8 @@ def can_enter_vampy_iii(state: CollectionState, player: int) -> bool:
 def can_enter_vampy_iv(state: CollectionState, player: int) -> bool:
     return can_enter_vampy_iii(state, player) and state.has("Pumpkin Key", player)
 
-def set_rules(multiworld, world, player):
 
+def set_rules(multiworld, world, player):
     access_rules = {
         "Swamp: Mud Path": lambda state: state.has("Boots", player),
         # "Swamp: Bog Beast": lambda state: True,
@@ -99,7 +99,7 @@ def set_rules(multiworld, world, player):
         # "Rocky Cliffs: Entrance Ledge": lambda state: True,
         # "Rocky Cliffs: Peak": lambda state: True,
         # "Woods: SW of Cabin": lambda state: True,
-                                   "Witch's Cabin: Bedroom": lambda state: have_light_source(state, player),
+        "Witch's Cabin: Bedroom": lambda state: have_light_source(state, player),
         # "Witch's Cabin: Backroom" lambda state: True,
         # "Bonita's Cabin: Barrel Maze": lambda state: True,
         "Bog Pit: Top Door": lambda state: state.has("Skull Key", player),
@@ -134,8 +134,9 @@ def set_rules(multiworld, world, player):
         "Tower: Barracks": lambda state: state.has("Ghost Potion", player) and state.has("Bat Key", player),
         "Tower F2: Skull Puzzle": lambda state: state.has("Ghost Potion", player),
         # "PolterGuy's Reward": lambda state: True,
-        "Tower Basement: DoorDoorDoorDoorDoorDoor": lambda state: state.has("Bat Key", player) and state.has("Skull Key",
-                                                                                                             player) and state.has(
+        "Tower Basement: DoorDoorDoorDoorDoorDoor": lambda state: state.has("Bat Key", player) and state.has(
+            "Skull Key",
+            player) and state.has(
             "Pumpkin Key", player),
         # "Abandoned Mine: Shaft": lambda state: True,
         # "Shrine of Bombulus: Prize": lambda state: True,
@@ -180,7 +181,8 @@ def set_rules(multiworld, world, player):
         "Hidey-Hole: Bat Door": lambda state: state.has("Bat Key", player),
         # "Hidey-Hole: Pebbles":: lambda state: True,
         "Swampdog Lair: Entrance": lambda state: state.has("Boots", player),
-        "Swampdog Lair: End": lambda state: state.has("Boots", player) and have_light_source(state, player) and state.has(
+        "Swampdog Lair: End": lambda state: state.has("Boots", player) and have_light_source(state,
+                                                                                             player) and state.has(
             "Fertilizer", player),
         "Q: Ghostbusting": lambda state: state.has("Big Gem", player) and state.has("Doom Daisy", player) and state.has(
             "Mushroom", player, 10),
@@ -199,8 +201,7 @@ def set_rules(multiworld, world, player):
         "Q: Witch Mushrooms": lambda state: state.has("Mushroom", player, 10),
         "Q: Zombie Stomp": lambda state: can_cleanse_crypts(state, player),
         # "The Evilizer - Save Halloween Hill": lambda state: True
-        }
+    }
     for loc in multiworld.get_locations(player):
         if loc.name in access_rules:
             add_rule(loc, access_rules[loc.name])
-
