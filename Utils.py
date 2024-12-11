@@ -17,6 +17,8 @@ import logging
 import warnings
 
 from argparse import Namespace
+from operator import attrgetter
+
 from settings import Settings, get_settings
 from time import sleep
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
@@ -414,6 +416,7 @@ class RestrictedUnpickler(pickle.Unpickler):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(RestrictedUnpickler, self).__init__(*args, **kwargs)
         self.options_module = importlib.import_module("Options")
+        self.settings_module = importlib.import_module("settings")
         self.net_utils_module = importlib.import_module("NetUtils")
         self.generic_properties_module = None
 
@@ -438,6 +441,9 @@ class RestrictedUnpickler(pickle.Unpickler):
             obj = getattr(mod, name)
             if issubclass(obj, (self.options_module.Option, self.options_module.PlandoConnection)):
                 return obj
+        if module == "settings":
+            return attrgetter(name)(self.settings_module)
+
         # Forbid everything else.
         raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
 
