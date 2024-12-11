@@ -339,17 +339,19 @@ class TunicWorld(World):
             # discard grass from non_local if it's meant to be limited
             if self.settings.limit_grass_rando:
                 self.options.non_local_items.value.discard("Grass")
-            all_filler = []
-            non_filler = []
+            all_filler: List[TunicItem] = []
+            non_filler: List[TunicItem] = []
             amount_to_local_fill = int(self.options.local_fill.value * len(all_filler) / 100)
-            for item in tunic_items:
-                if item.classification in [ItemClassification.filler, ItemClassification.trap] and item.name not in self.options.local_items and item.name not in self.options.non_local_items:
+            for tunic_item in tunic_items:
+                if (tunic_item.classification in [ItemClassification.filler, ItemClassification.trap]
+                        and tunic_item.name not in self.options.local_items
+                        and tunic_item.name not in self.options.non_local_items):
                     if len(self.local_filler) < amount_to_local_fill:
-                        self.local_filler.append(item)
+                        self.local_filler.append(tunic_item)
                     else:
-                        all_filler.append(item)
+                        all_filler.append(tunic_item)
                 else:
-                    non_filler.append(item)
+                    non_filler.append(tunic_item)
 
             tunic_items = all_filler + non_filler
 
