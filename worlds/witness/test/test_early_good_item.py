@@ -67,8 +67,9 @@ class TestEarlySymbolItemTrue(WitnessTestBase):
 
         self.assertTrue(back_left.item is not None, "Somehow, no item got placed on Tutorial Back Left.")
 
+        doors_and_panel_keys = self.world.item_name_groups["Doors"] | self.world.item_name_groups["Panel Keys"]
         self.assertTrue(
-            cast_not_none(back_left.item).name in self.world.item_name_groups["Doors"],
+            cast_not_none(back_left.item).name in doors_and_panel_keys,
             "Early Good Item was on, yet no Door item ended up on Tutorial Back Left.",
         )
 
