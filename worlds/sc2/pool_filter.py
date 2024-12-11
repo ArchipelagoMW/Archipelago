@@ -110,10 +110,12 @@ class ValidInventory:
         self.player = world.player
         self.world: 'SC2World' = world
         # Track all Progression items and those with complex rules for filtering
-        self.logical_inventory: List[str] = [
-            item.name for item in item_pool
-            if item_table[item.name].is_important_for_filtering()
-        ]
+        self.logical_inventory: Dict[str, int] = {}
+        for item in item_pool:
+            if not item_table[item.name].is_important_for_filtering():
+                continue
+            self.logical_inventory.setdefault(item.name, 0)
+            self.logical_inventory[item.name] += 1
         self.item_pool = item_pool
         self.item_name_to_item: Dict[str, List[StarcraftItem]] = {}
         self.item_name_to_child_items: Dict[str, List[StarcraftItem]] = {}
@@ -122,26 +124,26 @@ class ValidInventory:
             for parent_item in item_parents.child_item_to_parent_items.get(item.name, []):
                 self.item_name_to_child_items.setdefault(parent_item, []).append(item)
 
-    def has(self, item: str, player: int):
-        return item in self.logical_inventory
+    def has(self, item: str, player: int) -> bool:
+        return self.logical_inventory.get(item, 0) > 0
 
-    def has_any(self, items: Set[str], player: int):
-        return any(item in self.logical_inventory for item in items)
+    def has_any(self, items: Set[str], player: int) -> bool:
+        return any(self.logical_inventory.get(item) for item in items)
 
-    def has_all(self, items: Set[str], player: int):
-        return all(item in self.logical_inventory for item in items)
+    def has_all(self, items: Set[str], player: int) -> bool:
+        return all(self.logical_inventory.get(item) for item in items)
 
-    def has_group(self, item_group: str, player: int, count: int = 1):
+    def has_group(self, item_group: str, player: int, count: int = 1) -> bool:
         return False  # Deliberately fails here, as item pooling is not aware about mission layout
 
     def count_group(self, item_name_group: str, player: int) -> int:
         return 0  # For item filtering assume no missions are beaten
 
     def count(self, item: str, player: int) -> int:
-        return len([inventory_item for inventory_item in self.logical_inventory if inventory_item == item])
+        return self.logical_inventory.get(item, 0)
 
     def count_from_list(self, items: Iterable[str], player: int) -> int:
-        return sum(self.count(item_name, player) for item_name in items)
+        return sum(self.logical_inventory.get(item, 0) for item in items)
 
     def generate_reduced_inventory(self, inventory_size: int, mission_requirements: List[Tuple[str, Callable]]) -> List[StarcraftItem]:
         """Attempts to generate a reduced inventory that can fulfill the mission requirements."""
@@ -165,13 +167,15 @@ class ValidInventory:
             else returns false and applies `lock_flag`
             """
             # Only run logic checks when removing logic items
-            if item.name in self.logical_inventory:
-                self.logical_inventory.remove(item.name)
+            if self.logical_inventory.get(item.name, 0) > 0:
+                self.logical_inventory[item.name] -= 1
                 if not all(requirement(self) for (_, requirement) in mission_requirements):
                     # If item cannot be removed, lock and revert
-                    self.logical_inventory.append(item.name)
+                    self.logical_inventory[item.name] += 1
                     item.filter_flags |= ItemFilterFlags.LogicLocked
                     return False
+                if not self.logical_inventory[item.name]:
+                    del self.logical_inventory[item.name]
             item.filter_flags |= remove_flag
             return True
         
@@ -353,7 +357,7 @@ class ValidInventory:
 
         # Removing extra dependencies
         # Transport Hook
-        if item_names.MEDIVAC not in self.logical_inventory:
+        if self.logical_inventory.get(item_names.MEDIVAC):
             # Don't allow L2 Siege Tank Transport Hook without Medivac
             inventory_transport_hooks = [item for item in inventory if item.name == item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK]
             removable_transport_hooks = [item for item in inventory_transport_hooks if not (ItemFilterFlags.Unexcludable & item.filter_flags)]
