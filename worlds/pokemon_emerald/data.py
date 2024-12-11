@@ -1459,9 +1459,6 @@ def _init() -> None:
     for warp, destination in extracted_data["warps"].items():
         data.warp_map[warp] = None if destination == "" else destination
 
-        if encoded_warp not in data.warp_map:
-            data.warp_map[encoded_warp] = None
-
     # Create trainer data
     for i, trainer_json in enumerate(extracted_data["trainers"]):
         party_json = trainer_json["party"]
