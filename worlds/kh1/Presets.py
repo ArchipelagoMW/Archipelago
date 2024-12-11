@@ -21,6 +21,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "jungle_slider": False,
         "randomize_emblem_pieces": False,
         "randomize_postcards": RandomizePostcards.option_all,
+        "randomize_puppies": True,
         
         "exp_multiplier": 48,
         "level_checks": 100,
@@ -69,6 +70,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "jungle_slider": False,
         "randomize_emblem_pieces": False,
         "randomize_postcards": RandomizePostcards.option_all,
+        "randomize_puppies": True,
         
         "exp_multiplier": 48,
         "level_checks": 100,
@@ -117,6 +119,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "jungle_slider": True,
         "randomize_emblem_pieces": True,
         "randomize_postcards": RandomizePostcards.option_all,
+        "randomize_puppies": True,
         
         "exp_multiplier": 48,
         "level_checks": 100,
@@ -165,6 +168,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "jungle_slider": False,
         "randomize_emblem_pieces": False,
         "randomize_postcards": RandomizePostcards.option_all,
+        "randomize_puppies": True,
         
         "exp_multiplier": 16,
         "level_checks": 0,
