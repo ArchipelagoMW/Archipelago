@@ -123,7 +123,7 @@ class TestUniversalTracker(MetroidPrimeUniversalTrackerTestBase):
         assert world.starting_room_data.selected_loadout
         self.assertEqual(world.starting_room_data.name, slot_data["starting_room_name"])
         self.assertEqual(
-            SuitUpgrade(self.options["starting_beam"]),
+            SuitUpgrade(self.world.starting_beam),
             world.starting_room_data.selected_loadout.starting_beam,
         )
 
@@ -136,7 +136,7 @@ class TestUniversalTracker(MetroidPrimeUniversalTrackerTestBase):
         assert world.starting_room_data.selected_loadout
         self.assertEqual(world.starting_room_data.name, slot_data["starting_room_name"])
         self.assertEqual(
-            SuitUpgrade(self.options["starting_beam"]),
+            SuitUpgrade(self.world.starting_beam),
             world.starting_room_data.selected_loadout.starting_beam,
         )
 

@@ -133,6 +133,7 @@ class MetroidPrimeWorld(World):
     game_region_data: Dict[MetroidPrimeArea, AreaData]
     has_generated_bomb_doors: bool = False
     starting_room_name: Optional[str] = None
+    starting_beam: Optional[str] = None
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -192,6 +193,8 @@ class MetroidPrimeWorld(World):
                     )
                 if key == "starting_room_name":
                     self.starting_room_name = value
+                if key == "starting_beam":
+                    self.starting_beam = value
 
     def generate_early(self) -> None:
         if hasattr(self.multiworld, "re_gen_passthrough"):
@@ -338,6 +341,8 @@ class MetroidPrimeWorld(World):
             )
         if self.starting_room_name:
             slot_data["starting_room_name"] = self.starting_room_name
+        if self.starting_beam:
+            slot_data["starting_beam"] = self.starting_beam
 
         return slot_data
 
@@ -351,6 +356,15 @@ class MetroidPrimeWorld(World):
 
     def write_spoiler(self, spoiler_handle: TextIO):
         player_name = self.player_name
+
+        spoiler_handle.write(
+            f"Starting Room({player_name}): {self.starting_room_name}\n"
+        )
+
+        if self.options.randomize_starting_beam:
+            spoiler_handle.write(
+                f"Starting Beam({player_name}): {self.starting_beam}\n"
+            )
 
         if self.options.elevator_randomization:
             spoiler_handle.write(f"\n\nElevator Mapping({player_name}):\n")

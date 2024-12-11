@@ -452,14 +452,11 @@ def init_starting_beam(world: "MetroidPrimeWorld"):
                 world.starting_room_data and world.starting_room_data.selected_loadout
             )
             world.starting_room_data.selected_loadout.starting_beam = new_beam
-        world.options.starting_beam.value = new_beam.value
+        world.starting_beam = new_beam.value
 
     # Use the starting beam if it was set in the options (or for UT)
-    if (
-        world.options.starting_beam.value
-        and world.options.starting_beam.value != "none"
-    ):
-        new_beam = SuitUpgrade(str(world.options.starting_beam.value))
+    if world.starting_beam:
+        new_beam = SuitUpgrade(str(world.starting_beam))
         if new_beam:
             replace_starting_beam(new_beam)
 

@@ -3,13 +3,11 @@ from Options import (
     DeathLink,
     DefaultOnToggle,
     OptionList,
-    TextChoice,
     Toggle,
     Range,
     StartInventoryPool,
     Choice,
     PerGameCommonOptions,
-    Visibility,
     OptionGroup,
 )
 from dataclasses import dataclass
@@ -309,14 +307,6 @@ class RandomizeStartingBeam(Toggle):
     display_name = "Randomize Starting Beam"
 
 
-class StartingBeam(TextChoice):
-    """Used to override the starting beam if Randomize Starting Beam is disabled, or to display the starting beam if it is enabled."""
-
-    visibility = Visibility.spoiler
-    display_name = "Starting Beam"
-    default = "none"
-
-
 class PreScanElevators(DefaultOnToggle):
     """Pre scans the elevators in the game, allowing for faster transitions between regions. Makes for more interesting gameplay if disabled when the scan visor is shuffled."""
 
@@ -440,7 +430,6 @@ class MetroidPrimeOptions(PerGameCommonOptions):
     include_power_beam_doors: IncludePowerBeamDoors
     include_morph_ball_bomb_doors: IncludeMorphBallBombDoors
     randomize_starting_beam: RandomizeStartingBeam
-    starting_beam: StartingBeam
     starting_room: StartingRoom
     disable_starting_room_bk_prevention: DisableStartingRoomBKPrevention
     progressive_beam_upgrades: ProgressiveBeamUpgrades
