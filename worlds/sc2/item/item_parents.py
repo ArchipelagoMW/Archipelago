@@ -5,7 +5,7 @@ Rules have a `parent_items()` method which links rule -> parent items.
 Rules may be more complex than all or any items being present. Call them to determine if they are satisfied.
 """
 
-from typing import Dict, List, Iterable, Sequence, Optional, TYPE_CHECKING
+from typing import Dict, List, Iterable, Sequence, Optional, cast, TYPE_CHECKING
 import abc
 from . import item_names, parent_names, item_tables, item_groups
 
@@ -16,6 +16,7 @@ if TYPE_CHECKING:
 class PresenceRule(abc.ABC):
     """Contract for a parent presence rule. This should be a protocol in Python 3.10+"""
     main_item: Optional[str]
+    """Identifies the group this item rule is a part of, subject to min/max upgrades per unit"""
     display_string: str
     """Main item to count as the parent for min/max upgrades per unit purposes"""
     @abc.abstractmethod
@@ -221,12 +222,7 @@ parent_present[parent_names.PROTOSS_ATTACKING_BUILDING] = AnyOf(
 parent_id_to_children: Dict[str, Sequence[str]] = {}
 """Parent identifier to child items. Only contains parent rules with children."""
 child_item_to_parent_items: Dict[str, Sequence[str]] = {}
-for _item_name, _item_data in item_tables.item_table.items():
-    if _item_data.parent is None:
-        continue
-    parent_id_to_children.setdefault(_item_data.parent, []).append(_item_name)
-    child_item_to_parent_items[_item_name] = parent_present[_item_data.parent].parent_items()
-
+"""Child item name to all parent items that can possibly affect its presence rule. Populated for all item names."""
 
 parent_item_to_ids: Dict[str, Sequence[str]] = {}
 """Parent item to parent identifiers it affects. Populated for all items and parent IDs."""
@@ -235,10 +231,19 @@ parent_item_to_children: Dict[str, Sequence[str]] = {}
 item_upgrade_groups: Dict[str, Sequence[str]] = {}
 """Mapping of upgradable item group -> child items. Only populated for groups with child items."""
 # Note(mm): "All items" promise satisfied by the basic ItemPresent auto-generated rules
-for _parent_id, _presence_func in parent_present.items():
-    for parent_item in _presence_func.parent_items():
-        parent_item_to_ids.setdefault(parent_item, []).append(_parent_id)
-        parent_item_to_children.setdefault(parent_item, []).extend(parent_id_to_children.get(_parent_id, []))
-    if _presence_func.main_item is not None and parent_id_to_children.get(_parent_id):
-        item_upgrade_groups.setdefault(_presence_func.main_item, []).extend(parent_id_to_children[_parent_id])
 
+def _init() -> None:
+    for item_name, item_data in item_tables.item_table.items():
+        if item_data.parent is None:
+            continue
+        parent_id_to_children.setdefault(item_data.parent, []).append(item_name)  # type: ignore
+        child_item_to_parent_items[item_name] = parent_present[item_data.parent].parent_items()
+
+    for parent_id, presence_func in parent_present.items():
+        for parent_item in presence_func.parent_items():
+            parent_item_to_ids.setdefault(parent_item, []).append(parent_id)  # type: ignore
+            parent_item_to_children.setdefault(parent_item, []).extend(parent_id_to_children.get(parent_id, []))  # type: ignore
+        if presence_func.main_item is not None and parent_id_to_children.get(parent_id):
+            item_upgrade_groups.setdefault(presence_func.main_item, []).extend(parent_id_to_children[parent_id])  # type: ignore
+
+_init()
