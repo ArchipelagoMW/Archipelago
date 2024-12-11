@@ -36,9 +36,9 @@ def create_mission_order(
     adjust_mission_pools(world, mission_pools)
     setup_mission_pool_balancing(world, mission_pools)
 
-    mission_order_type = get_option_value(world, "mission_order")
+    mission_order_type = world.options.mission_order
     if mission_order_type == MissionOrder.option_custom:
-        mission_order_dict = get_option_value(world, "custom_mission_order")
+        mission_order_dict = world.options.custom_mission_order.value
     else:
         mission_order_option = create_regular_mission_order(world, mission_pools)
         if mission_order_type in static_mission_orders:
@@ -157,7 +157,7 @@ def setup_mission_pool_balancing(world: 'SC2World', pools: SC2MOGenMissionPools)
     pools.set_flag_balances(flag_ratios, flag_weights)
 
 def create_regular_mission_order(world: 'SC2World', mission_pools: SC2MOGenMissionPools) -> Dict[str, Dict[str, Any]]:
-    mission_order_type = get_option_value(world, "mission_order")
+    mission_order_type = world.options.mission_order.value
 
     if mission_order_type in static_mission_orders:
         return create_static_mission_order(world, mission_order_type, mission_pools)
@@ -422,7 +422,7 @@ def make_hopscotch(world: 'SC2World', size: int) -> Dict[str, Dict[str, Any]]:
     return mission_order
 
 def create_dynamic_mission_order(world: 'SC2World', mission_order_type: int, mission_pools: SC2MOGenMissionPools) -> Dict[str, Dict[str, Any]]:
-    num_missions = min(mission_pools.get_allowed_mission_count(), get_option_value(world, "maximum_campaign_size"))
+    num_missions = min(mission_pools.get_allowed_mission_count(), world.options.maximum_campaign_size.value)
     num_missions = max(1, num_missions)
     if mission_order_type == MissionOrder.option_golden_path:
         return make_golden_path(world, num_missions)

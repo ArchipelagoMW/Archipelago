@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import TYPE_CHECKING, Dict, Set, List
+from typing import TYPE_CHECKING, Dict, Set, List, Iterable
 
 from ..mission_tables import SC2Mission, lookup_id_to_mission, MissionFlag, SC2Campaign
 from worlds.AutoWorld import World
@@ -63,7 +63,7 @@ class SC2MOGenMissionPools:
         self._flag_ratios = {}
         self._flag_weights = {}
 
-    def set_exclusions(self, excluded: List[SC2Mission], unexcluded: List[SC2Mission]) -> None:
+    def set_exclusions(self, excluded: Iterable[SC2Mission], unexcluded: Iterable[SC2Mission]) -> None:
         """Prevents all the missions that appear in the `excluded` list, but not in the `unexcluded` list,
         from appearing in the mission order."""
         total_exclusions = [mission.id for mission in excluded if mission not in unexcluded]

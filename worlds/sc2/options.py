@@ -1,7 +1,11 @@
-from dataclasses import fields, Field
+from dataclasses import fields, Field, dataclass
 from typing import *
 
-from Options import *
+from Options import (
+    Choice, Toggle, DefaultOnToggle, OptionSet, Range,
+    PerGameCommonOptions, Option, VerifyKeys,
+    is_iterable_except_str,
+)
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
 from .mission_tables import (
@@ -1077,12 +1081,18 @@ class Starcraft2Options(PerGameCommonOptions):
 
     custom_mission_order: CustomMissionOrder
 
-def get_option_value(world: Union['SC2World', None], name: str) -> Union[int, FrozenSet]:
+def get_option_value(world: Union['SC2World', None], name: str) -> int:
+    """
+    You should basically never use this unless `world` can be `None`.
+    Use `world.options.<option_name>.value` instead for better typing, autocomplete, and error messages.
+    """
     if world is None:
         field: Field = [class_field for class_field in fields(Starcraft2Options) if class_field.name == name][0]
         if isinstance(field.type, str):
             if field.type in globals():
                 return globals()[field.type].default
+            import Options
+            return Options.__dict__[field.type].default
         return field.type.default
 
     player_option = getattr(world.options, name)
@@ -1090,8 +1100,8 @@ def get_option_value(world: Union['SC2World', None], name: str) -> Union[int, Fr
     return player_option.value
 
 
-def get_enabled_races(world: 'SC2World') -> Set[SC2Race]:
-    selection = get_option_value(world, 'selected_races')
+def get_enabled_races(world: Optional['SC2World']) -> Set[SC2Race]:
+    selection: int = world.options.selected_races.value if world else SelectRaces.default
     if selection == SelectRaces.option_all:
         return set(SC2Race)
     enabled = {SC2Race.ANY}
@@ -1104,7 +1114,7 @@ def get_enabled_races(world: 'SC2World') -> Set[SC2Race]:
     return enabled
 
 
-def get_enabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
+def get_enabled_campaigns(world: Optional['SC2World']) -> Set[SC2Campaign]:
     enabled_campaigns = set()
     if get_option_value(world, "enable_wol_missions"):
         enabled_campaigns.add(SC2Campaign.WOL)
@@ -1192,7 +1202,7 @@ def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
 static_mission_orders = [
     MissionOrder.option_vanilla,
     MissionOrder.option_vanilla_shuffled,
-    MissionOrder.option_mini_campaign
+    MissionOrder.option_mini_campaign,
 ]
 
 dynamic_mission_orders = [
@@ -1200,7 +1210,7 @@ dynamic_mission_orders = [
     MissionOrder.option_grid,
     MissionOrder.option_gauntlet,
     MissionOrder.option_blitz,
-    MissionOrder.option_hopscotch
+    MissionOrder.option_hopscotch,
 ]
 
 LEGACY_GRID_ORDERS = {3, 4, 8}  # Medium Grid, Mini Grid, and Tiny Grid respectively
@@ -1210,7 +1220,7 @@ kerrigan_unit_available = [
 ]
 
 # Names of upgrades to be included for different options
-upgrade_included_names: Dict[GenericUpgradeItems, Set[str]] = {
+upgrade_included_names: Dict[int, Set[str]] = {
     GenericUpgradeItems.option_individual_items: {
         item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON,
         item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR,

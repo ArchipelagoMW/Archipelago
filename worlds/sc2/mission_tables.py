@@ -450,7 +450,7 @@ campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] =
         SC2Mission.GATES_OF_HELL: f'{SC2Mission.GATES_OF_HELL.mission_name}: Victory',
         SC2Mission.SHATTER_THE_SKY: f'{SC2Mission.SHATTER_THE_SKY.mission_name}: Victory'
     },
-    SC2Campaign.PROPHECY: None,
+    SC2Campaign.PROPHECY: {},
     SC2Campaign.HOTS: {
         SC2Mission.THE_CRUCIBLE: f'{SC2Mission.THE_CRUCIBLE.mission_name}: Victory',
         SC2Mission.HAND_OF_DARKNESS: f'{SC2Mission.HAND_OF_DARKNESS.mission_name}: Victory',
@@ -496,7 +496,7 @@ def get_goal_location(mission: SC2Mission) -> Union[str, None]:
             return primary_campaign_goal.location
 
     campaign_alt_goals = campaign_alt_final_mission_locations[campaign]
-    if campaign_alt_goals is not None and mission in campaign_alt_goals:
+    if mission in campaign_alt_goals:
         return campaign_alt_goals.get(mission)
 
     return mission.mission_name + ": Victory"
@@ -513,7 +513,7 @@ def get_campaign_potential_goal_missions(campaign: SC2Campaign) -> List[SC2Missi
     if primary_goal_mission is not None:
         missions.append(primary_goal_mission.mission)
     alt_goal_locations = campaign_alt_final_mission_locations[campaign]
-    if alt_goal_locations is not None:
+    if alt_goal_locations:
         for mission in alt_goal_locations.keys():
             missions.append(mission)
 

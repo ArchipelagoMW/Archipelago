@@ -1,5 +1,5 @@
 from math import floor
-from typing import TYPE_CHECKING, Set
+from typing import TYPE_CHECKING, Set, Optional
 
 from BaseClasses import  CollectionState
 from .options import (
@@ -21,10 +21,9 @@ if TYPE_CHECKING:
 
 class SC2Logic:
 
-    def is_item_placement(self, state):
+    def is_item_placement(self, state: CollectionState):
         """
         Tells if it's item placement or item pool filter
-        :param state:
         :return: True for item placement, False for pool filter
         """
         # has_group with count = 0 is always true for item placement and always false for SC2 item filtering
@@ -96,8 +95,6 @@ class SC2Logic:
     def terran_army_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
         """
         Minimum W/A upgrade level for unit classes present in the world
-        :param state:
-        :return:
         """
         count: int = WEAPON_ARMOR_UPGRADE_MAX_LEVEL
         if self.world_has_barracks_unit():
@@ -144,8 +141,6 @@ class SC2Logic:
     def terran_air(self, state: CollectionState) -> bool:
         """
         Air units or drops on advanced tactics
-        :param state:
-        :return:
         """
         return (
                 state.has_any({
@@ -161,8 +156,6 @@ class SC2Logic:
     def terran_air_anti_air(self, state: CollectionState) -> bool:
         """
         Air-to-air
-        :param state:
-        :return:
         """
         return (
             state.has(item_names.VIKING, self.player)
@@ -186,8 +179,6 @@ class SC2Logic:
     def terran_competent_ground_to_air(self, state: CollectionState) -> bool:
         """
         Ground-to-air
-        :param state:
-        :return:
         """
         return (
             state.has(item_names.GOLIATH, self.player)
@@ -202,8 +193,6 @@ class SC2Logic:
     def terran_competent_anti_air(self, state: CollectionState) -> bool:
         """
         Good AA unit
-        :param state:
-        :return:
         """
         return (
             self.terran_competent_ground_to_air(state)
@@ -249,8 +238,6 @@ class SC2Logic:
     def welcome_to_the_jungle_requirement(self, state: CollectionState) -> bool:
         """
         Welcome to the Jungle requirements - able to deal with Scouts, Void Rays, Zealots and Stalkers
-        :param state:
-        :return:
         """
         return (
             self.terran_common_unit(state)
@@ -264,8 +251,6 @@ class SC2Logic:
     def welcome_to_the_jungle_z_requirement(self, state: CollectionState) -> bool:
         """
         Welcome to the Jungle requirements - able to deal with Scouts, Void Rays, Zealots and Stalkers
-        :param state:
-        :return:
         """
         return (
                 self.zerg_competent_comp(state) and state.has_any({item_names.HYDRALISK, item_names.MUTALISK}, self.player)
@@ -282,8 +267,6 @@ class SC2Logic:
     def welcome_to_the_jungle_p_requirement(self, state: CollectionState) -> bool:
         """
         Welcome to the Jungle requirements - able to deal with Scouts, Void Rays, Zealots and Stalkers
-        :param state:
-        :return:
         """
         return (
             self.protoss_common_unit(state) and self.protoss_competent_anti_air(state)
@@ -300,8 +283,6 @@ class SC2Logic:
     def terran_basic_anti_air(self, state: CollectionState) -> bool:
         """
         Basic AA to deal with few air units
-        :param state:
-        :return:
         """
         return (
             state.has_any((
@@ -329,8 +310,8 @@ class SC2Logic:
         """
         Ability to handle defensive missions
         :param state:
-        :param zerg_enemy:
-        :param air_enemy:
+        :param zerg_enemy: Whether the enemy is zerg
+        :param air_enemy: Whether the enemy attacks with air
         :return:
         """
         defense_score = sum((tvx_defense_ratings[item] for item in tvx_defense_ratings if state.has(item, self.player)))
@@ -368,8 +349,6 @@ class SC2Logic:
     def terran_competent_comp(self, state: CollectionState) -> bool:
         """
         Ability to deal with most of hard missions
-        :param state:
-        :return:
         """
         return (
             (
@@ -394,8 +373,6 @@ class SC2Logic:
     def terran_mineral_dump(self, state: CollectionState) -> bool:
         """
         Can build something using only minerals
-        :param state:
-        :return:
         """
         return (
                 state.has_any({item_names.MARINE, item_names.VULTURE, item_names.HELLION, item_names.SON_OF_KORHAL},
@@ -410,8 +387,6 @@ class SC2Logic:
     def terran_can_grab_ghosts_in_the_fog_east_rock_formation(self, state: CollectionState) -> bool:
         """
         Able to shoot by a long range or from air to claim the rock formation separated by a chasm
-        :param state:
-        :return:
         """
         return (
                 state.has_any({
@@ -439,8 +414,6 @@ class SC2Logic:
     def terran_great_train_robbery_train_stopper(self, state: CollectionState) -> bool:
         """
         Ability to deal with trains (moving target with a lot of HP)
-        :param state:
-        :return:
         """
         return (
             state.has_any({item_names.SIEGE_TANK, item_names.DIAMONDBACK, item_names.MARAUDER, item_names.CYCLONE, item_names.BANSHEE}, self.player)
@@ -456,8 +429,6 @@ class SC2Logic:
     def zerg_great_train_robbery_train_stopper(self, state: CollectionState) -> bool:
         """
         Ability to deal with trains (moving target with a lot of HP)
-        :param state:
-        :return:
         """
         return (
             self.morph_impaler_or_lurker(state)
@@ -474,8 +445,6 @@ class SC2Logic:
     def protoss_great_train_robbery_train_stopper(self, state: CollectionState) -> bool:
         """
         Ability to deal with trains (moving target with a lot of HP)
-        :param state:
-        :return:
         """
         return (
             state.has_any({item_names.ANNIHILATOR, item_names.INSTIGATOR, item_names.STALKER}, self.player)
@@ -495,16 +464,12 @@ class SC2Logic:
     def terran_can_rescue(self, state) -> bool:
         """
         Rescuing in The Moebius Factor
-        :param state:
-        :return:
         """
         return state.has_any({item_names.MEDIVAC, item_names.HERCULES, item_names.RAVEN, item_names.VIKING}, self.player) or self.advanced_tactics
 
     def terran_beats_protoss_deathball(self, state: CollectionState) -> bool:
         """
         Ability to deal with Immortals, Colossi with some air support
-        :param state:
-        :return:
         """
         return (
             (
@@ -517,8 +482,6 @@ class SC2Logic:
     def marine_medic_upgrade(self, state: CollectionState) -> bool:
         """
         Infantry upgrade to infantry-only no-build segments
-        :param state:
-        :return:
         """
         return (
             state.has_any({
@@ -532,8 +495,6 @@ class SC2Logic:
     def terran_survives_rip_field(self, state: CollectionState) -> bool:
         """
         Ability to deal with large areas with environment damage
-        :param state:
-        :return:
         """
         return (
                 (
@@ -611,8 +572,6 @@ class SC2Logic:
     def terran_bio_heal(self, state: CollectionState) -> bool:
         """
         Ability to heal bio units
-        :param state:
-        :return:
         """
         return (
             state.has_any({item_names.MEDIC, item_names.MEDIVAC, item_names.FIELD_RESPONSE_THETA}, self.player)
@@ -624,8 +583,6 @@ class SC2Logic:
     def terran_base_trasher(self, state: CollectionState) -> bool:
         """
         Can attack heavily defended bases
-        :param state:
-        :return:
         """
         return (
             state.has(item_names.SIEGE_TANK, self.player)
@@ -649,8 +606,6 @@ class SC2Logic:
     def can_nuke(self, state: CollectionState) -> bool:
         """
         Ability to launch nukes
-        :param state:
-        :return:
         """
         return (self.advanced_tactics
                 and (state.has_any({item_names.GHOST, item_names.SPECTRE}, self.player)
@@ -659,8 +614,6 @@ class SC2Logic:
     def terran_respond_to_colony_infestations(self, state: CollectionState) -> bool:
         """
         Can deal quickly with Brood Lords and Mutas in Haven's Fall and being able to progress the mission
-        :param state:
-        :return:
         """
         return (
             self.terran_common_unit(state)
@@ -727,8 +680,6 @@ class SC2Logic:
     def zergling_hydra_roach_start(self, state: CollectionState):
         """
         Created mainly for engine of destruction start, but works for other missions with no-build starts.
-        :param state:
-        :return:
         """
         return (
             state.has_any({item_names.ZERGLING_ADRENAL_OVERLOAD, item_names.HYDRALISK_FRENZY, item_names.ROACH_HYDRIODIC_BILE}, self.player)
@@ -737,8 +688,6 @@ class SC2Logic:
     def zealot_sentry_slayer_start(self, state: CollectionState):
         """
         Created mainly for engine of destruction start, but works for other missions with no-build starts.
-        :param state:
-        :return:
         """
         return (
             state.has_any({item_names.ZEALOT_WHIRLWIND, item_names.SENTRY_DOUBLE_SHIELD_RECHARGE, item_names.SLAYER_PHASE_BLINK}, self.player)
@@ -747,8 +696,6 @@ class SC2Logic:
     def all_in_requirement(self, state: CollectionState):
         """
         All-in
-        :param state:
-        :return:
         """
         if not self.terran_very_hard_mission_weapon_armor_level(state):
             return False
@@ -775,8 +722,6 @@ class SC2Logic:
     def all_in_z_requirement(self, state: CollectionState):
         """
         All-in (Zerg)
-        :param state:
-        :return:
         """
         if not self.zerg_very_hard_mission_weapon_armor_level(state):
             return False
@@ -804,8 +749,6 @@ class SC2Logic:
     def all_in_p_requirement(self, state: CollectionState):
         """
         All-in (Protoss)
-        :param state:
-        :return:
         """
         if not self.protoss_very_hard_mission_weapon_armor_level(state):
             return False
@@ -843,9 +786,8 @@ class SC2Logic:
         """
         Ability to handle defensive missions
         :param state:
-        :param zerg_enemy:
-        :param air_enemy:
-        :return:
+        :param zerg_enemy: Whether the enemy is zerg
+        :param air_enemy: Whether the enemy attacks with air
         """
         defense_score = sum((zvx_defense_ratings[item] for item in zvx_defense_ratings if state.has(item, self.player)))
         # Twin Drones
@@ -1196,8 +1138,6 @@ class SC2Logic:
     def zerg_respond_to_colony_infestations(self, state: CollectionState) -> bool:
         """
         Can deal quickly with Brood Lords and Mutas in Haven's Fall and being able to progress the mission
-        :param state:
-        :return:
         """
         return (
             self.zerg_common_unit(state)
@@ -1377,8 +1317,7 @@ class SC2Logic:
         """
         Ability to handle defensive missions
         :param state:
-        :param zerg_enemy:
-        :return:
+        :param zerg_enemy: Whether the enemy is zerg
         """
         defense_score = sum((pvx_defense_ratings[item] for item in pvx_defense_ratings if state.has(item, self.player)))
 
@@ -1486,8 +1425,6 @@ class SC2Logic:
     def protoss_respond_to_colony_infestations(self, state: CollectionState) -> bool:
         """
         Can deal quickly with Brood Lords and Mutas in Haven's Fall and being able to progress the mission
-        :param state:
-        :return:
         """
         return (
             self.protoss_common_unit(state)
@@ -2255,8 +2192,6 @@ class SC2Logic:
     def enemy_intelligence_garrisonable_unit(self, state: CollectionState) -> bool:
         """
         Has unit usable as a Garrison in Enemy Intelligence
-        :param state:
-        :return:
         """
         return state.has_any({
             item_names.MARINE, item_names.REAPER, item_names.MARAUDER, item_names.GHOST, item_names.SPECTRE,
@@ -2439,12 +2374,12 @@ class SC2Logic:
             and self.terran_very_hard_mission_weapon_armor_level(state)
         )
 
-    def __init__(self, world: 'SC2World'):
-        self.world: 'SC2World' = world
-        self.player = None if world is None else world.player
-        self.logic_level = get_option_value(world, 'required_tactics')
+    def __init__(self, world: Optional['SC2World']):
+        self.world = world
+        self.player = -1 if world is None else world.player
+        self.logic_level: int = world.options.required_tactics.value if world else RequiredTactics.default
         self.advanced_tactics = self.logic_level != RequiredTactics.option_standard
-        self.take_over_ai_allies = get_option_value(world, "take_over_ai_allies") == TakeOverAIAllies.option_true
+        self.take_over_ai_allies = bool(world and world.options.take_over_ai_allies)
         self.kerrigan_unit_available = (
             get_option_value(world, 'kerrigan_presence') in kerrigan_unit_available
             and SC2Campaign.HOTS in get_enabled_campaigns(world)
@@ -2456,16 +2391,15 @@ class SC2Logic:
         self.morphling_enabled = get_option_value(world, "enable_morphling") == EnableMorphling.option_true
         self.story_tech_granted = get_option_value(world, "grant_story_tech") == GrantStoryTech.option_true
         self.story_levels_granted = get_option_value(world, "grant_story_levels") != GrantStoryLevels.option_disabled
-        self.basic_terran_units = get_basic_units(world, SC2Race.TERRAN)
-        self.basic_zerg_units = get_basic_units(world, SC2Race.ZERG)
-        self.basic_protoss_units = get_basic_units(world, SC2Race.PROTOSS)
+        self.basic_terran_units = get_basic_units(self.logic_level, SC2Race.TERRAN)
+        self.basic_zerg_units = get_basic_units(self.logic_level, SC2Race.ZERG)
+        self.basic_protoss_units = get_basic_units(self.logic_level, SC2Race.PROTOSS)
         self.spear_of_adun_autonomously_cast_presence = get_option_value(world, "spear_of_adun_autonomously_cast_ability_presence")
         self.enabled_campaigns = get_enabled_campaigns(world)
         self.mission_order = get_option_value(world, "mission_order")
         self.generic_upgrade_missions = get_option_value(world, "generic_upgrade_missions")
 
-def get_basic_units(world: 'SC2World', race: SC2Race) -> Set[str]:
-    logic_level = get_option_value(world, 'required_tactics')
+def get_basic_units(logic_level: int, race: SC2Race) -> Set[str]:
     if logic_level == RequiredTactics.option_no_logic:
         return no_logic_basic_units[race]
     elif logic_level == RequiredTactics.option_advanced:
