@@ -185,7 +185,8 @@ def set_free_fly(world: "PokemonEmeraldWorld") -> None:
     # If not enabled, set it to Littleroot Town by default
     fly_location_name = "EVENT_VISITED_LITTLEROOT_TOWN"
     if world.options.free_fly_location:
-        free_fly_locations = sorted(map(lambda city: BLACKLIST_OPTION_TO_VISITED_EVENT[city], world.options.free_fly_blacklist.value))
+        blacklisted_locations = set(BLACKLIST_OPTION_TO_VISITED_EVENT[city] for city in world.options.free_fly_blacklist.value)
+        free_fly_locations = sorted(set(BLACKLIST_OPTION_TO_VISITED_EVENT.values()) - blacklisted_locations)
         if free_fly_locations:
             fly_location_name = world.random.choice(free_fly_locations)
 
