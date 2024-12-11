@@ -330,17 +330,17 @@ class ValidInventory:
         # Part 3: If it still doesn't fit, move locked items to start inventory until it fits
         precollect_items = current_inventory_size - inventory_size - start_inventory_size
         if precollect_items > 0:
-            items_to_start_inventory = self.world.random.choices(inventory, k=precollect_items, weights=[
-                ItemFilterFlags.StartInventory not in item.filter_flags
-                and ItemFilterFlags.Locked in item.filter_flags
+            promotable = [
+                item
                 for item in inventory
-            ])
-            for item in items_to_start_inventory:
+                if ItemFilterFlags.StartInventory not in item.filter_flags
+                and ItemFilterFlags.Locked in item.filter_flags
+            ]
+            self.world.random.shuffle(promotable)
+            for item in promotable[:precollect_items]:
                 item.filter_flags |= ItemFilterFlags.StartInventory
                 start_inventory_size += 1
 
-        assert current_inventory_size - start_inventory_size <= inventory_size
-        inventory = [item for item in inventory if item_included(item)]
 
         # Removing extra dependencies
         # Transport Hook
@@ -375,6 +375,24 @@ class ValidInventory:
             inventory = exclude_wa(item_names.PROTOSS_GROUND_UPGRADE_PREFIX)
         if used_item_names.isdisjoint(item_groups.protoss_air_wa):
             inventory = exclude_wa(item_names.PROTOSS_AIR_UPGRADE_PREFIX)
+        
+        # Part 4: Last-ditch effort to reduce inventory size; upgrades can go in start inventory
+        current_inventory_size = len(inventory)
+        if current_inventory_size - start_inventory_size > inventory_size:
+            promotable = [
+                item
+                for item in inventory
+                if ItemFilterFlags.StartInventory not in item.filter_flags
+            ]
+            self.world.random.shuffle(promotable)
+            for item in promotable[:precollect_items]:
+                item.filter_flags |= ItemFilterFlags.StartInventory
+                start_inventory_size += 1
+        
+        assert current_inventory_size - start_inventory_size <= inventory_size, (
+            f"Couldn't reduce inventory to fit. target={inventory_size}, poolsize={current_inventory_size}, "
+            f"start_inventory={starcraft_item}"
+        )
 
         return inventory
 
