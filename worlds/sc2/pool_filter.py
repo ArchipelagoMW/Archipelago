@@ -267,7 +267,7 @@ class ValidInventory:
                 group_name = None
                 parent = item_table[item.name].parent
                 if parent is not None:
-                    group_name = item_parents.parent_present[parent].main_item
+                    group_name = item_parents.parent_present[parent].constraint_group
                 if group_name is not None:
                     children = group_to_item.get(group_name, [])
                     children = [x for x in children if not (ItemFilterFlags.CulledOrBetter & x.filter_flags)]

@@ -274,8 +274,8 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         for item_data in items.values():
             if item_data.parent:
                 parent_rule = item_parents.parent_present[item_data.parent]
-                if parent_rule.main_item is not None and parent_rule.main_item in items:
-                    parent_to_child.setdefault(items[parent_rule.main_item].code, []).append(item_data.code)
+                if parent_rule.constraint_group is not None and parent_rule.constraint_group in items:
+                    parent_to_child.setdefault(items[parent_rule.constraint_group].code, []).append(item_data.code)
                     continue
                 race = items[parent_rule.parent_items()[0]].race
                 categorized_items.setdefault(race, [])

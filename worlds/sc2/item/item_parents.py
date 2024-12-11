@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 class PresenceRule(abc.ABC):
     """Contract for a parent presence rule. This should be a protocol in Python 3.10+"""
-    main_item: Optional[str]
+    constraint_group: Optional[str]
     """Identifies the group this item rule is a part of, subject to min/max upgrades per unit"""
     display_string: str
     """Main item to count as the parent for min/max upgrades per unit purposes"""
@@ -28,7 +28,7 @@ class PresenceRule(abc.ABC):
 class ItemPresent(PresenceRule):
     def __init__(self, item_name: str) -> None:
         self.item_name = item_name
-        self.main_item = item_name
+        self.constraint_group = item_name
         self.display_string = item_name
 
     def __call__(self, inventory: List[str], options: 'Starcraft2Options') -> bool:
@@ -41,7 +41,7 @@ class ItemPresent(PresenceRule):
 class AnyOf(PresenceRule):
     def __init__(self, group: Iterable[str], main_item: Optional[str] = None, display_string: Optional[str] = None) -> None:
         self.group = set(group)
-        self.main_item = main_item
+        self.constraint_group = main_item
         self.display_string = display_string or main_item or ' | '.join(group)
 
     def __call__(self, inventory: List[str], options: 'Starcraft2Options') -> bool:
@@ -54,7 +54,7 @@ class AnyOf(PresenceRule):
 class AllOf(PresenceRule):
     def __init__(self, group: Iterable[str], main_item: Optional[str] = None) -> None:
         self.group = set(group)
-        self.main_item = main_item
+        self.constraint_group = main_item
         self.display_string = main_item or ' & '.join(group)
 
     def __call__(self, inventory: List[str], options: 'Starcraft2Options') -> bool:
@@ -68,7 +68,7 @@ class AnyOfGroupAndOneOtherItem(PresenceRule):
     def __init__(self, group: Iterable[str], item_name: str) -> None:
         self.group = set(group)
         self.item_name = item_name
-        self.main_item = item_name
+        self.constraint_group = item_name
         self.display_string = item_name
 
     def __call__(self, inventory: List[str], options: 'Starcraft2Options') -> bool:
@@ -81,7 +81,7 @@ class AnyOfGroupAndOneOtherItem(PresenceRule):
 class MorphlingOrItem(PresenceRule):
     def __init__(self, item_name: str, has_parent: bool = True) -> None:
         self.item_name = item_name
-        self.main_item = None  # Keep morphs from counting towards the parent unit's upgrade count
+        self.constraint_group = None  # Keep morphs from counting towards the parent unit's upgrade count
         self.display_string = f'{item_name} Morphs'
 
     def __call__(self, inventory: List[str], options: 'Starcraft2Options') -> bool:
@@ -94,7 +94,7 @@ class MorphlingOrItem(PresenceRule):
 class MorphlingOrAnyOf(PresenceRule):
     def __init__(self, group: Iterable[str], display_string: str, main_item: Optional[str] = None) -> None:
         self.group = set(group)
-        self.main_item = main_item
+        self.constraint_group = main_item
         self.display_string = display_string
 
     def __call__(self, inventory: List[str], options: 'Starcraft2Options') -> bool:
@@ -243,7 +243,7 @@ def _init() -> None:
         for parent_item in presence_func.parent_items():
             parent_item_to_ids.setdefault(parent_item, []).append(parent_id)  # type: ignore
             parent_item_to_children.setdefault(parent_item, []).extend(parent_id_to_children.get(parent_id, []))  # type: ignore
-        if presence_func.main_item is not None and parent_id_to_children.get(parent_id):
-            item_upgrade_groups.setdefault(presence_func.main_item, []).extend(parent_id_to_children[parent_id])  # type: ignore
+        if presence_func.constraint_group is not None and parent_id_to_children.get(parent_id):
+            item_upgrade_groups.setdefault(presence_func.constraint_group, []).extend(parent_id_to_children[parent_id])  # type: ignore
 
 _init()
