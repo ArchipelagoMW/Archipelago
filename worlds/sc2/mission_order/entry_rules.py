@@ -262,6 +262,7 @@ class SubRuleRuleData(RuleData):
     rule_id: int
     sub_rules: List[RuleData]
     amount: int
+    buffer_accessible: bool = False
 
     @staticmethod
     def parse_from_dict(data: Dict[str, Any]) -> SubRuleRuleData:
