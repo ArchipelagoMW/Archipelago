@@ -79,7 +79,7 @@ class SC2World(World):
     options_dataclass = Starcraft2Options
     options: Starcraft2Options
 
-    item_name_groups = item_groups.item_name_groups
+    item_name_groups = item_groups.item_name_groups  # type: ignore
     location_name_groups = location_groups.get_location_groups()
     locked_locations: List[str]
     """Locations locked to contain specific items, such as victory events or forced resources"""
@@ -568,7 +568,7 @@ def flag_start_inventory(world: SC2World, item_list: List[FilterItem]) -> None:
 
 
 def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: int) -> None:
-    first_mission = get_first_mission(world, world.custom_mission_order)
+    first_mission = get_random_first_mission(world, world.custom_mission_order)
     first_race = first_mission.race
 
     if first_race == SC2Race.ANY:
@@ -585,7 +585,7 @@ def flag_start_unit(world: SC2World, item_list: List[FilterItem], starter_unit: 
         }
 
         # The race of the early unit has been chosen
-        basic_units = get_basic_units(world, first_race)
+        basic_units = get_basic_units(world.options.required_tactics.value, first_race)
         if starter_unit == StarterUnit.option_balanced:
             basic_units = basic_units.difference(not_balanced_starting_units)
         if first_mission == SC2Mission.DARK_WHISPERS:
@@ -678,7 +678,7 @@ def flag_start_abilities(world: SC2World, item_list: List[FilterItem]) -> None:
 def flag_unused_upgrade_types(world: SC2World, item_list: List[FilterItem]) -> None:
     """Excludes +armour/attack upgrades based on generic upgrade strategy."""
     include_upgrades = world.options.generic_upgrade_missions == 0
-    upgrade_items: GenericUpgradeItems = world.options.generic_upgrade_items
+    upgrade_items = world.options.generic_upgrade_items.value
     for item in item_list:
         if item.data.type in item_tables.upgrade_item_types:
             if not include_upgrades or (item.name not in upgrade_included_names[upgrade_items]):
@@ -801,14 +801,18 @@ def pad_item_pool_with_filler(self: SC2World, num_items: int, pool: List[Item]):
         pool.append(item)
 
 
-def get_first_mission(world: SC2World, mission_order: SC2MissionOrder) -> SC2Mission:
+def get_random_first_mission(world: SC2World, mission_order: SC2MissionOrder) -> SC2Mission:
     # Pick an arbitrary lowest-difficulty starer mission
-    missions = mission_order.get_starting_missions()
-    missions = [(mission_order.mission_pools.get_modified_mission_difficulty(mission), mission) for mission in missions]
-    missions.sort(key = lambda difficulty_mission_tuple: difficulty_mission_tuple[0])
-    (lowest_difficulty, _) = missions[0]
-    missions = [mission for (difficulty, mission) in missions if difficulty == lowest_difficulty]
-    return world.random.choice(missions)
+    starting_missions = mission_order.get_starting_missions()
+    mission_difficulties = [
+        (mission_order.mission_pools.get_modified_mission_difficulty(mission), mission)
+        for mission in starting_missions
+    ]
+    mission_difficulties.sort(key = lambda difficulty_mission_tuple: difficulty_mission_tuple[0])
+    (lowest_difficulty, _) = mission_difficulties[0]
+    first_mission_candidates = [mission for (difficulty, mission) in mission_difficulties if difficulty == lowest_difficulty]
+    return world.random.choice(first_mission_candidates)
+
 
 def get_all_missions(mission_order: SC2MissionOrder) -> List[SC2Mission]:
     return mission_order.get_used_missions()

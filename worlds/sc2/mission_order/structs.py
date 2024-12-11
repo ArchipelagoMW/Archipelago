@@ -361,6 +361,7 @@ class SC2MissionOrder(MissionOrderNode):
                     )
                 missions.extend(exits)
             return BeatMissionsEntryRule(missions, visual_reqs)
+        raise ValueError(f"Invalid data for entry rule: {data}")
 
     def resolve_address(self, address: str, start_node: MissionOrderNode) -> List[MissionOrderNode]:
         if address.startswith("../") or address == "..":

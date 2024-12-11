@@ -6,7 +6,7 @@ from .test_base import Sc2SetupTestBase
 
 from .. import mission_groups, mission_tables, options, locations, SC2Mission
 from ..item import item_groups, item_tables, item_names
-from .. import get_all_missions, get_first_mission
+from .. import get_all_missions, get_random_first_mission
 
 
 class TestItemFiltering(Sc2SetupTestBase):
@@ -540,7 +540,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'enable_epilogue_missions': False,
         }
         self.generate_world(world_options)
-        self.assertEqual(get_first_mission(self.world, self.world.custom_mission_order), mission_tables.SC2Mission.LIBERATION_DAY)
+        self.assertEqual(get_random_first_mission(self.world, self.world.custom_mission_order), mission_tables.SC2Mission.LIBERATION_DAY)
 
     def test_excluding_mission_short_name_excludes_all_variants_of_mission(self):
         world_options = {

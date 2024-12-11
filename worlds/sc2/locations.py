@@ -3530,7 +3530,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "Science Facility", SC2_RACESWAP_LOC_ID_OFFSET + 3904, LocationType.VANILLA,
             lambda state: (
                 logic.advanced_tactics
-                or logic.zerg_competent_comp_competent_aa
+                or logic.zerg_competent_comp_competent_aa(state)
             )
         ),
         make_location_data(SC2Mission.MEDIA_BLITZ_Z.mission_name, "All Barracks", SC2_RACESWAP_LOC_ID_OFFSET + 3905, LocationType.EXTRA,
@@ -5261,7 +5261,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.UNSEALING_THE_PAST_T.mission_name, "First Stasis Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12702, LocationType.EXTRA,
                            lambda state: (
                                    logic.advanced_tactics
-                                   or logic.terran_unsealing_the_past_requirement
+                                   or logic.terran_unsealing_the_past_requirement(state)
                            )),
         make_location_data(SC2Mission.UNSEALING_THE_PAST_T.mission_name, "Second Stasis Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12703, LocationType.EXTRA,
                            logic.terran_unsealing_the_past_requirement
@@ -5297,7 +5297,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.UNSEALING_THE_PAST_Z.mission_name, "First Stasis Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12802, LocationType.EXTRA,
                            lambda state: (
                                    logic.advanced_tactics
-                                   or logic.zerg_unsealing_the_past_requirement
+                                   or logic.zerg_unsealing_the_past_requirement(state)
                            )),
         make_location_data(SC2Mission.UNSEALING_THE_PAST_Z.mission_name, "Second Stasis Lock", SC2_RACESWAP_LOC_ID_OFFSET + 12803, LocationType.EXTRA,
                            logic.zerg_unsealing_the_past_requirement
