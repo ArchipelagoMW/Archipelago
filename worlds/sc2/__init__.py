@@ -685,7 +685,7 @@ def flag_unused_upgrade_types(world: SC2World, item_list: List[FilterItem]) -> N
     for item in item_list:
         if item.data.type in item_tables.upgrade_item_types:
             if not include_upgrades or (item.name not in upgrade_included_names[upgrade_items]):
-                item.flags |= ItemFilterFlags.FilterExcluded
+                item.flags |= ItemFilterFlags.Removed
 
 
 def flag_user_excluded_item_sets(world: SC2World, item_list: List[FilterItem]) -> None:
@@ -756,7 +756,11 @@ def flag_mission_order_required_items(world: SC2World, item_list: List[FilterIte
 def prune_item_pool(world: SC2World, item_list: List[FilterItem]) -> List[StarcraftItem]:
     """Prunes the item pool size to be less than the number of available locations"""
 
-    item_list = [item for item in item_list if ItemFilterFlags.Unexcludable & item.flags or ItemFilterFlags.FilterExcluded not in item.flags]
+    item_list = [
+        item for item in item_list
+        if (ItemFilterFlags.Removed not in item.flags)
+        and (ItemFilterFlags.Unexcludable & item.flags or ItemFilterFlags.FilterExcluded not in item.flags)
+    ]
     num_items = len(item_list)
     last_num_items = -1
     while num_items != last_num_items:
@@ -859,15 +863,14 @@ def fill_pool_with_kerrigan_levels(world: SC2World, item_pool: List[StarcraftIte
         add_kerrigan_level_items(size, round_func(float(total_levels) / size))
 
 def push_precollected_items_to_multiworld(world: SC2World, item_list: List[StarcraftItem]) -> None:
-    # world.multiworld.push_precollected() has side-effects, so we can't just clear
-    # world.multiworld.precollected_items[world.player]
-    precollected_amounts: Dict[str, int] = {}
-    for ap_item in world.multiworld.precollected_items[world.player]:
-        precollected_amounts[ap_item.name] = precollected_amounts.get(ap_item.name, 0) + 1
+    # Clear the pre-collected items, as AP will try to do this for us,
+    # and we want to be able to filer out precollected items in the case of upgrade packages.
+    auto_precollected_items = world.multiworld.precollected_items[world.player].copy()
+    world.multiworld.precollected_items[world.player].clear()
+    for item in auto_precollected_items:
+        world.multiworld.state.remove(item)
+
     for item in item_list:
         if ItemFilterFlags.StartInventory not in item.filter_flags:
             continue
-        if precollected_amounts.get(item.name, 0) <= 0:
-            world.multiworld.push_precollected(create_item_with_correct_settings(world.player, item.name))
-        else:
-            precollected_amounts[item.name] -= 1
+        world.multiworld.push_precollected(create_item_with_correct_settings(world.player, item.name))

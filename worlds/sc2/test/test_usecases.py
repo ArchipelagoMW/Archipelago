@@ -287,3 +287,54 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         self.assertEqual(len(world_regions), NUM_WOL_MISSIONS)
         races = set(mission_tables.lookup_name_to_mission[mission].race for mission in world_regions)
         self.assertTrue(SC2Race.ZERG in races or SC2Race.PROTOSS in races)
+
+    def test_start_inventory_upgrade_level_includes_only_correct_bundle(self) -> None:
+        world_options = {
+            'start_inventory': {
+                item_groups.ItemGroupNames.TERRAN_GENERIC_UPGRADES: 1,
+            },
+            'locked_items': {
+                # One unit of each class to guarantee upgrades are available
+                item_names.MARINE: 1,
+                item_names.VULTURE: 1,
+                item_names.BANSHEE: 1,
+            },
+            'generic_upgrade_items': options.GenericUpgradeItems.option_bundle_unit_class,
+            'selected_races': options.SelectRaces.option_terran,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_disabled,
+            'enable_wol_missions': True,
+            'enable_nco_missions': False,
+            'enable_prophecy_missions': False,
+            'enable_hots_missions': False,
+            'enable_lotv_prologue_missions': False,
+            'enable_lotv_missions': False,
+            'enable_epilogue_missions': False,
+            'mission_order': options.MissionOrder.option_grid,
+        }
+        self.generate_world(world_options)
+        self.assertTrue(self.multiworld.itempool)
+        world_item_names = [item.name for item in self.multiworld.itempool]
+        start_inventory = [item.name for item in self.multiworld.precollected_items[self.player]]
+        # Start inventory
+        self.assertIn(item_names.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE, start_inventory)
+        self.assertIn(item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE, start_inventory)
+        self.assertIn(item_names.PROGRESSIVE_TERRAN_SHIP_UPGRADE, start_inventory)
+        self.assertNotIn(item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON, start_inventory)
+        self.assertNotIn(item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR, start_inventory)
+        self.assertNotIn(item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON, start_inventory)
+        self.assertNotIn(item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR, start_inventory)
+        self.assertNotIn(item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, start_inventory)
+        self.assertNotIn(item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR, start_inventory)
+        self.assertNotIn(item_names.PROGRESSIVE_TERRAN_ARMOR_UPGRADE, start_inventory)
+
+        # Additional items in pool -- standard tactics will require additional levels
+        self.assertIn(item_names.PROGRESSIVE_TERRAN_INFANTRY_UPGRADE, world_item_names)
+        self.assertIn(item_names.PROGRESSIVE_TERRAN_VEHICLE_UPGRADE, world_item_names)
+        self.assertIn(item_names.PROGRESSIVE_TERRAN_SHIP_UPGRADE, world_item_names)
+        self.assertNotIn(item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON, world_item_names)
+        self.assertNotIn(item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR, world_item_names)
+        self.assertNotIn(item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON, world_item_names)
+        self.assertNotIn(item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR, world_item_names)
+        self.assertNotIn(item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, world_item_names)
+        self.assertNotIn(item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR, world_item_names)
+        self.assertNotIn(item_names.PROGRESSIVE_TERRAN_ARMOR_UPGRADE, world_item_names)
