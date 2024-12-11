@@ -1,0 +1,21 @@
+// wrapper for the game's normal "cycle to next party leader" routine
+// that will bypass if the party is empty, to avoid softlocking
+
+msfpatch {
+    .addr $00dfa5
+        jsl $=CyclePartyLeader
+
+    .addr $00882d
+        jsl $=CyclePartyLeader
+
+    .new
+    CyclePartyLeader:
+        jsr $_Util__GetPartySize
+        cmp #$00
+        beq $+PartyIsEmpty
+        // thunk to original cycle routine
+        jml $15c864
+
+    %PartyIsEmpty:
+        rtl
+}

@@ -1,0 +1,3 @@
+shop_block_params : number
+
+shop_block_body : item_value*

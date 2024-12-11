@@ -1,0 +1,382 @@
+// make unlock always accessible
+npc(#Invisible2)
+{
+    eventcall {
+        if #YangDestroyedCannon:
+            $27   //Map message 0
+        else:
+            $FA   //Using the Tower Key
+    }
+}
+
+event($FA)  //Using the Tower Key
+{
+    consts(placement) {
+        0   Invisible2
+    }
+    // hinted map #Babil5F
+    message $05   // "Locked."
+    select item #Tower
+    sound #Unlock
+    message $06   // "Opened!"
+    deactivate #Invisible2
+    take item #Tower
+    p #Invisible2 toggle visible
+}
+
+
+npc(#HoodedMonster2) {
+    sprite #fe_DynamicSprite
+}
+
+placement($12d 0) {
+    // %darkimp_slot sprite left palette%
+    // %end%
+}
+placement($12d 1) {
+    // %darkimp_slot sprite up palette%
+    // %end%
+}
+placement($12d 2) {
+    // %darkimp_slot sprite right palette%
+    // %end%
+}
+
+event($95)  //Super Cannon destruction, Yang leaves
+{
+    consts(placement) {
+        0   HoodedMonster2_A
+        1   HoodedMonster2_B
+        2   HoodedMonster2_C
+        3   Yang3
+        4   Teleportation_A
+        5   Teleportation_B
+        6   Teleportation_C
+    }
+    // autodetected map #BabilCannon
+    music #Destruction
+    player move up
+    pause 2
+    batch 1 {
+        p #HoodedMonster2_A face down
+        p #HoodedMonster2_B face down
+        p #HoodedMonster2_C face down
+    }
+    pause 2
+    batch 2 {
+        p #HoodedMonster2_A move down
+        p #HoodedMonster2_B move down
+        p #HoodedMonster2_C move down
+    }
+    batch 1 {
+        p #HoodedMonster2_A move right
+        p #HoodedMonster2_C move left
+    }
+    batch 1 {
+        p #HoodedMonster2_A face down
+        p #HoodedMonster2_C face down
+    }
+    [#B #Rando_BossBattle #rando.darkimp_slot]
+    
+    player face up
+    music #None
+    [#B #Objectives_TickBossSlot #rando.darkimp_slot]
+    [#B #Rando_PostBossBattle #rando.darkimp_slot]
+    pause 6
+    batch 1 {
+        p #HoodedMonster2_A move left
+        p #HoodedMonster2_B move up
+        p #HoodedMonster2_C move right
+    }
+    batch 1 {
+        p #HoodedMonster2_A move up
+        p #HoodedMonster2_B move up
+        p #HoodedMonster2_C move up
+    }
+    batch 1 {
+        p #HoodedMonster2_A move up
+        p #HoodedMonster2_C move up
+    }
+    sound #Explosion
+    batch 1 {
+        p #Teleportation_A toggle visible
+        p #Teleportation_B toggle visible
+        p #Teleportation_C toggle visible
+    }
+    pause 8
+    sound #Earthquake
+    toggle screen shake
+    batch 1 {
+        p #Teleportation_B toggle visible
+        p #Teleportation_C toggle visible
+        p #Teleportation_A toggle visible
+    }
+    batch 1 {
+        p #HoodedMonster2_A face down
+        p #HoodedMonster2_B face down
+        p #HoodedMonster2_C face down
+    }
+    pause 4
+    music #Hurry
+    sound #EnemyDefeat
+    batch 20 {
+        screen flash
+    }
+    batch 1 {
+        p #HoodedMonster2_A toggle visible
+        p #HoodedMonster2_B toggle visible
+        p #HoodedMonster2_C toggle visible
+    }
+    sound #Earthquake
+    pause 4
+    player face left
+    pause 2
+    player face up
+    pause 2
+    player face right
+    pause 2
+    player face up
+    pause 4
+    toggle run
+    batch 5 {
+        player move down
+    }
+    toggle run
+    activate #Invisible2
+    sound #HeavyDoor
+    toggle screen shake
+    consts(placement) {
+    }
+    load map #Babil5F at 16 9 
+    toggle run
+    player move down
+    player move down
+    player face up
+    toggle music fade
+    vfx #PopWarpStack
+    vfx #ScreenShakeAndExplosion
+    toggle music fade
+    pause 16
+    player wave in
+    pause 8
+    player face down
+    [#B #Objectives_Tick #objective.quest_supercannon]
+    music #Babil
+    deactivate #HoodedMonster2
+    set #YangDestroyedCannon
+    clear #ReinforcedEnterprise
+    [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.tower_key]
+}
+
+//------------------------------------------------
+
+// setup engineers for cutscene
+placement($D6 9) {
+    position 12 14
+    face down
+}
+
+event($96)  //Jump from Tower of Bab-il, airship escape
+{
+    consts(placement) {
+        0   Mist_A
+        1   Mist_B
+        2   Mist_C
+        3   Mist_D
+        4   Mist_E
+        5   Mist_F
+        6   Mist_G
+        7   Mist_H
+        8   Mist_I
+        9   Mist_J
+        10   Teleportation
+    }
+    player face down
+    music #Golbez
+    toggle tint $7A
+    pause 4
+    player face up
+    toggle tint $00
+    sound #Earthquake
+    toggle screen shake
+    pause 16
+    toggle screen shake
+    sound #Airship
+    p #Teleportation toggle visible
+    pause 4
+    sound #Airship
+    batch 1 {
+        p #Mist_A toggle visible
+        p #Teleportation move down
+    }
+    pause 3
+    sound #Airship
+    batch 1 {
+        p #Mist_B toggle visible
+        p #Teleportation move down
+    }
+    pause 2
+    sound #Airship
+    batch 1 {
+        p #Mist_C toggle visible
+        p #Teleportation move down
+    }
+    pause 1
+    sound $5E
+    batch 1 {
+        p #Mist_D toggle visible
+        p #Teleportation move down
+        player move down
+    }
+    batch 1 {
+        p #Mist_E toggle visible
+        p #Teleportation move down
+        player move down
+    }
+    batch 1 {
+        p #Mist_F toggle visible
+        p #Teleportation move down
+        player move down
+    }
+    batch 1 {
+        p #Mist_G toggle visible
+        p #Teleportation move down
+        player move down
+    }
+    batch 1 {
+        p #Mist_H toggle visible
+        p #Teleportation move down
+        player move down
+    }
+    batch 1 {
+        p #Mist_I toggle visible
+        p #Teleportation toggle visible
+        player move down
+    }
+    batch 1 {
+        p #Mist_J toggle visible
+        player move down
+    }
+    music #None
+    load map #Black at 16 16 facing down no transition
+    player face down
+    sound #Falling
+    toggle run
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    toggle run
+    //clear #FirstVisitToUnderworld
+    music #None
+    activate #AirshipEngineer
+    load map #Underworld at 99 16 no transition on enterprise no launch
+    sound #Propellers
+    vfx #EnterpriseCatchBabilFall
+    consts(placement) {
+        9 Driver
+        8 Engineer
+    }
+    load map #UnderworldAirship at 12 7 facing down no transition
+    player face down
+    toggle run
+    batch 5 {
+        player move down
+    }
+    toggle run
+    sound #Door
+    player face down
+    pause 8
+    p #Driver face up
+    p #Engineer face down
+    pause 8
+
+    p #Driver face down
+    p #Engineer move down
+    p #Engineer move down
+    p #Engineer face right
+    player face left
+
+    pause 6    
+
+    player wave out
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.cannon_item 0]
+    // %if ap_cannon_item%
+    music #DummyFanfare
+    message #ap_reward_slot.cannon_item
+    // %else%
+    message #msg.fe_Received
+    // %end%
+    sound #GetItem
+    [#B #Objectives_TickRewardSlot #reward_slot.cannon_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.cannon_item]
+    batch {
+        player face down
+        p #Engineer face down
+    }
+
+    music #LunarSubterrane
+    set #ReinforcedEnterprise
+    deactivate #AirshipEngineer
+    load map #Underworld at 49 16 no transition on enterprise no launch
+}

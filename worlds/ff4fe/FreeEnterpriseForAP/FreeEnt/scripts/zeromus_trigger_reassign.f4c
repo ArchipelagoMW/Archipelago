@@ -1,0 +1,51 @@
+mapgrid($172 15 15) { 27 }   // delete trigger tile for Zeromus event
+
+trigger(#LunarCoreZemusRoom 0)
+{
+    delete
+}
+
+//---------------------------------------------------------------------
+// Golbez delivers Crystal when spoken to in K0 + objectives without Z
+npc(#GolbezFallen) {
+    eventcall {
+        $F7
+    }
+}
+
+event($F7) {
+    consts(placement) {
+        10  GolbezFallen
+    }
+
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.fallen_golbez_item 0]
+    sound #Crystal
+    message #msg.fe_Received
+    [#B #Objectives_TickRewardSlot #reward_slot.fallen_golbez_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.fallen_golbez_item]
+
+    batch 5 {
+        p #GolbezFallen toggle visible
+    }    
+    deactivate #GolbezFallen
+}
+
+//---------------------------------------------------------------------
+// make dude in the Pass path block your way
+
+placement($1A 1)
+{
+    position 5 10
+}
+
+text(map #ToroiaDancers message $03) {
+This path leads to the 
+heart of the moon, where
+the great evil waits.
+
+But you can't fight
+Zeromus in this alternate
+objective setup, so this
+would just softlock you.
+}
+

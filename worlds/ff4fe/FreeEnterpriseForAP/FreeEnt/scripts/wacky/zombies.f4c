@@ -1,0 +1,250 @@
+
+// make charm look like petrification if zombie
+msfpatch {
+    .addr $02df85
+        jsl $=Wacky__Zombies_Appearance
+        nop
+
+    .new
+    Wacky__Zombies_Appearance:
+        phx
+        lda $47 // current slot
+        tax
+        lda $_Wacky__StatusEnforcement_WorkRAM,x
+        plx
+        cmp #$00
+        bne $+IsZombie
+
+    %IsCharm:
+        lda #$07
+        sta $f078
+        rtl
+    %IsZombie:
+        lda #$03
+        sta $efcc,x
+        rtl
+}
+
+msfpatch {
+    Wacky__StatusEnforcement_Calculate:
+        // only in-battle stuff matters
+        rtl
+}
+
+msfpatch {
+    Wacky__StatusEnforcement_Calculate_BattleInit:
+        phx
+        tdc
+        lda $_Wacky__StatusEnforcement_InputSlot
+        tax
+        stz $_Wacky__StatusEnforcement_WorkRAM,x
+        plx
+        stz $_Wacky__StatusEnforcement_OutputByte0
+        stz $_Wacky__StatusEnforcement_OutputByte1
+        stz $_Wacky__StatusEnforcement_OutputByte2
+        stz $_Wacky__StatusEnforcement_OutputByte3
+        rtl
+}
+
+msfpatch {
+    Wacky__StatusEnforcement_Calculate_Battle:
+        lda $2000,x
+        beq $+Done
+
+        // NOTE: in battle context, incoming X contains slot * 0x80
+        phx
+
+        tdc
+        lda $_Wacky__StatusEnforcement_InputSlot
+        tax
+        stx $1670
+        lda $_Wacky__StatusEnforcement_WorkRAM,x
+        plx
+        
+        cmp #$00
+        beq $+PreZombieState
+        cmp #$01
+        beq $+ZombieState
+
+        // in post-zombie state, transition to state 0 if no longer swooned
+        lda $2003,x
+        ora $338e,y
+        bit #$80
+        bne $+Done
+
+        lda #$00
+        jsr $_StateTransition
+    %Done:
+        stz $_Wacky__StatusEnforcement_OutputByte1
+        rtl
+
+    %StateTransition:
+        phx
+        ldx $1670
+        sta $_Wacky__StatusEnforcement_WorkRAM,x
+        plx
+        rts
+
+    %ZombieState:
+        // in zombie state, transition to state 2 if swooned
+        lda $2003,x
+        ora $338e,y
+        bit #$80
+        beq $+ApplyCharm
+
+        // remove undead bit
+        // lda $2040,x
+        // and #$7f
+        // sta $2040,x
+
+        // clear out auto-action flag before transition
+        phx
+        ldx $1670
+        stz $3560,x
+        plx
+
+        lda #$02
+        jsr $_StateTransition
+        bra $-Done
+
+    %ApplyCharm:        
+        // apply charm
+        lda #$08
+        sta $_Wacky__StatusEnforcement_OutputByte1
+        rtl
+
+    %PreZombieState:
+        // in pre-zombie state, apply zombiness if already dead
+        lda $2003,x
+        and #$80
+        beq $-Done
+
+        phx
+        // clear timer flags
+        lda $=TimerFlagsOffsets,x
+        tax
+        stz $2a06,x
+        // reenable timer
+        lda $_Wacky__StatusEnforcement_InputSlot
+        asl a
+        tax
+        lda #$40
+        sta $29eb,x
+        plx
+
+        // set HP to half max
+        lda $200a,x
+        clc
+        ror a
+        sta $2008,x
+        lda $2009,x
+        ror a
+        sta $2007,x
+        // remove swoon
+        lda $2003,x
+        and #$7f
+        sta $2003,x
+        // set undead bit
+        // lda $2040,x
+        // ora #$80
+        // sta $2040,x
+
+        // also need to remove swoon from current working context data
+        lda $338e,y
+        and #$7f
+        sta $338e,y
+
+        // apply charm
+        lda #$08
+        sta $_Wacky__StatusEnforcement_OutputByte1
+        lda #$01
+        jsr $_StateTransition
+        jmp $_ApplyCharm
+
+    %TimerFlagsOffsets:
+        [[ 03 18 2D 42 57 ]]
+}
+
+
+// kill zombies after battle
+msfpatch {
+    Wacky__PostBattleHook:
+        ldx #$0000
+        ldy #$0000
+    %LoopStart:
+        lda $_Wacky__StatusEnforcement_WorkRAM,y
+        beq $+LoopNext
+        // character is zombie, make them dead
+        lda #$80
+        sta $1003,x
+        stz $1007,x
+        stz $1008,x
+    %LoopNext:
+        iny
+        jsr $_Util__XPlus40
+        cpx #$0140
+        bcc $-LoopStart
+    
+        rtl
+}
+
+// make zombies display a Zombie status text
+text (status $12) {Zombie}  // this is the field for "Egg" which is both filtered out and not applicable to party
+
+msfpatch {
+    .addr $02a2f7
+        jsl $=Wacky__Zombies_StatusText_Prepare
+
+    .new
+    Wacky__Zombies_StatusText_Prepare:
+        tay // displaced
+
+        lda $_Wacky__StatusEnforcement_WorkRAM,y
+        sta $_(Wacky__StatusEnforcement_WorkRAM + 5)
+
+        lda $29c5,y // displaced
+        rtl
+}
+
+msfpatch {
+    .addr $02a332
+        jsl $=Wacky__Zombies_StatusText_Replace
+
+    .new
+    Wacky__Zombies_StatusText_Replace:
+        cpx #$0018  // charm * 2
+        beq $+IsCharm
+    %Return:
+        lda $0fb400,x
+        rtl
+
+    %IsCharm:
+        // check previously-stored zombie state
+        lda $_(Wacky__StatusEnforcement_WorkRAM + 5)
+        cmp #$01
+        bne $-Return
+
+        // is zombie
+        ldx #$0024  // egg * 2
+        bra $-Return
+}
+
+// Count zombie state when calculating if battle is over
+msfpatch {
+    .addr $03a02b
+        jml $=Wacky__Zombies_GameOverCheck
+
+    .new
+    Wacky__Zombies_GameOverCheck:
+        // displaced
+        lda $3540,x
+        bne $+SkipSlot
+
+        lda $_Wacky__StatusEnforcement_WorkRAM,x
+        bne $+SkipSlot
+
+        jml $03a030
+
+    %SkipSlot:
+        jml $03a043
+}

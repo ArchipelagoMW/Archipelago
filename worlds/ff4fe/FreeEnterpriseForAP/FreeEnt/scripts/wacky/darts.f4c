@@ -1,0 +1,198 @@
+// force all weapons to be dartable
+msfpatch {
+    .addr $038AC7
+        jsl $=Wacky__DartableCheck
+
+    .addr $038AD8
+        nop nop // blank out the operations that normally store dart bit
+
+    .new
+    Wacky__DartableCheck:
+        // A still contains item ID
+        cmp #$19  // Legend Sword
+        beq $+NotDartable
+
+        // force dart
+        lda #$08
+        sta $c7
+
+    %NotDartable:
+        // displaced instructions
+        lda #$0F
+        sta $82
+        rtl
+}
+
+//----------------------------------
+// Give everyone Dart in place of Fight
+
+actor(#DKCecil)
+{
+    commands {
+        #Dart
+        // %flag japanese_abilities on%
+        #DarkWave
+        // %end%
+        #Item
+    }
+}
+
+actor(#Kain1)
+{
+    commands {
+        #Dart
+        #Jump
+        #Item
+    }
+}
+
+actor(#CRydia)
+{
+    commands {
+        #Dart
+        #White
+        #Black
+        #Call
+        #Item
+    }
+}
+
+actor(#Tellah1)
+{
+    commands {
+        #Dart
+        #White
+        #Black
+        // %flag japanese_abilities on%
+        #Recall
+        // %end%
+        #Item
+    }
+}
+
+actor(#Edward)
+{
+    commands {
+        #Dart
+        #Sing
+        #Hide
+        // %flag japanese_abilities on%
+        #Medicine
+        // %end%
+        #Item
+    }
+}
+
+actor(#Rosa1)
+{
+    commands {
+        #Dart
+        #White
+        #Aim
+        // %flag japanese_abilities on%
+        #Pray
+        // %end%
+        #Item
+    }
+}
+
+actor(#Yang1)
+{
+    commands {
+        #Dart
+        #Kick
+        // %flag japanese_abilities on%
+        #Focus
+        #Fortify
+        // %end%
+        #Item
+    }
+}
+
+actor(#Palom)
+{
+    commands {
+        #Dart
+        #Black
+        #Twin
+        // %flag japanese_abilities on%
+        #Bluff
+        // %end%
+       #Item
+    }
+}
+
+actor(#Porom)
+{
+    commands {
+        #Dart
+        #White
+        #Twin
+        // %flag japanese_abilities on%
+        #Cry
+        // %end%
+        #Item
+    }
+}
+
+actor(#PCecil)
+{
+    commands {
+        #Dart
+        #White
+        #Cover
+        #Item
+    }
+}
+
+actor(#Tellah3)
+{
+    commands {
+        #Dart
+        #White
+        #Black
+        #Item
+    }
+}
+
+actor(#Cid)
+{
+    commands {
+        #Dart
+        #Peep
+        #Item
+    }
+}
+
+actor(#ARydia)
+{
+    commands {
+        #Dart
+        #Black
+        #Call
+        #Item
+    }
+}
+
+actor(#Edge)
+{
+    commands {
+        #Dart
+        #Sneak
+        #Ninja
+        #Item
+    }
+}
+
+actor(#Fusoya)
+{
+    commands {
+        #Dart
+        #White
+        #Black
+        // %flag japanese_abilities on%
+        #Regen
+        // %end%
+        #Item
+    }
+}

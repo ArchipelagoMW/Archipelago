@@ -1,0 +1,225 @@
+// code that supports allocating an extra 0x2000 bytes
+// to every save file.
+
+msfpatch {
+    .def SRAMExpansion__Size         $1000
+    .def SRAMExpansion__LiveBank     $70
+    .def SRAMExpansion__LiveAddr     $702000
+    .def SRAMExpansion__SaveBank     $70
+    .def SRAMExpansion__SaveAddr     $703000
+
+    .def SRAMExpansion__CopySize     0x0fff
+}
+
+// Patch header to indicate SRAM size is 0x8000 bytes
+patch($07fd8) { 05 }
+
+// Hook into save game code to also store expanded data
+msfpatch {
+    .addr $01cbbe
+        jml $=SRAMExpansion__SaveHook
+}
+
+msfpatch {
+    SRAMExpansion__SaveHook:
+        // at this point A contains the slot index to save to,
+        // indexed from 0
+        inc a    // [hardcoded] : convert slot 0-3 to address 3000-6FFF range
+        inc a    // [hardcoded]
+        inc a    // [hardcoded]
+        asl a
+        asl a
+        asl a
+        asl a
+        sta $46
+        stz $45
+        ldy $45   // Y = (A + 3) * 0x1000
+        ldx #$_SRAMExpansion__LiveAddr
+        phb
+        rep #$20
+        .mx 0x00
+        lda #$_SRAMExpansion__CopySize
+        mvn $.SRAMExpansion__LiveBank, $.SRAMExpansion__SaveBank
+        lda #$0000
+        sep #$20
+        .mx 0x20
+        plb
+
+        // UGLY: set the indicator to not show pregame menu anymore
+        lda #$00
+        sta $=Pregame__ShowPregameMenuIndicator
+
+        // perform displaced instructions and return
+        lda $1a3c
+        dec a
+        asl a
+        asl a
+        asl a
+        sta $46
+        stz $45
+        jml $01cbc5
+}
+
+
+// Hook into load game confirm prompt to load expanded SRAM data
+msfpatch {
+    .addr $019650
+        jml $=SRAMExpansion__LoadHook
+
+    .new
+    SRAMExpansion__LoadHook:
+        lda $1a3c
+        inc a  // [hardcoded] : convert slot 1-4 to address 3000-6FFF range
+        inc a  // [hardcoded]
+        asl a
+        asl a
+        asl a
+        asl a
+        sta $46
+        stz $45
+        ldx $45  // X = ((slot number - 1) + 3) * 0x2000
+        ldy #$_SRAMExpansion__LiveAddr
+        phb
+        rep #$20
+        .mx 0x00
+        lda #$_SRAMExpansion__CopySize
+        mvn $.SRAMExpansion__SaveBank, $.SRAMExpansion__LiveBank
+        lda #$0000
+        sep #$20
+        .mx 0x20
+        plb
+
+        // [awkward] Need a place to init staged objective progress
+        //  on Load Game, so do it here
+        jsl $=Objectives__InitStagedProgress        
+
+        // [awkward] bugfix for getting a Cecil if loading a game with an
+        // empty party leader slot
+        jsl $15c881  // X = party leader slot * 0x40
+        lda $1000,x
+        bne $+PartyLeaderIsOkay
+        jsl $=CyclePartyLeader
+    %PartyLeaderIsOkay:
+
+        // perform displaced instructions and return
+        // (displaced code is JSRs so need a longcall)
+        lda #$01
+        ldy #$d434
+        jsl $=LongCall
+
+        lda #$01
+        ldy #$d39b
+        jsl $=LongCall
+
+        jml $019656
+}
+
+
+// Hook into save file initialization to also initialize the extension area
+msfpatch {
+    .mx 0x00  // this routine happens in 16-bit accumulator mode
+
+    .addr $019999
+        jml $=SRAMExpansion__InitializeHook
+
+    .new
+    SRAMExpansion__InitializeHook:
+        phb
+
+        // copy expanded ROM area
+        lda $48
+        inc a  // [hardcoded] : convert slot 0-3 to 3000-6FFF range
+        inc a  //   ...
+        inc a  //   ...
+        xba
+        asl a
+        asl a
+        asl a 
+        asl a
+        tay
+        ldx #$_SRAMExpansion__LiveAddr
+        lda #$_SRAMExpansion__CopySize
+        mvn $.SRAMExpansion__LiveBank, $.SRAMExpansion__SaveBank
+
+        plb
+
+        // do own copy of save data copy routine at
+        // 01:9999 so that we can erase magic value 
+        // at the end afterward
+
+        lda $48
+        xba
+        asl a
+        asl a
+        asl a
+        tay
+        phy
+        ldx #$1000
+        lda #$07ff
+        mvn $7e,$70
+        plx
+
+        // erase magic number
+        lda #$0000
+        sta $07fe,x
+
+        // return
+        jml $0199ab
+}
+
+// Hook into new game data initialization to also initialize expansion area
+msfpatch {
+    .addr $019b1d
+        jml $=SRAMExpansion__NewGameHook
+
+    .new
+    SRAMExpansion__NewGameHook:
+        // replicate original loop that blanks out SRAM
+        ldx #$1040
+    %LoopStart:
+        lda #$00
+        sta $0000,x
+        inx
+        cpx #$1800
+        bne $-LoopStart
+
+        // also loop over and blank the expansion area
+        ldx #$0000
+    %ExLoopStart:
+        lda #$00
+        sta $=SRAMExpansion__LiveAddr,x
+        inx
+        cpx #$_SRAMExpansion__Size
+        bne $-ExLoopStart
+
+        // return to code after original blanking loop
+        jml $019b2b
+}
+
+// Hook into RAM init area to also initialize SRAM area
+msfpatch {
+    .addr $15ca12
+        jml $=SRAMExpansion__RAMInitHook
+
+    .new
+    SRAMExpansion__RAMInitHook:
+        ldx #$0000
+        lda #$00
+    %LoopStart:
+        sta $=SRAMExpansion__LiveAddr,x
+        inx
+        cpx #$_SRAMExpansion__Size
+        bcc $-LoopStart
+
+        // replicate displaced RNG table copy routine
+        ldx #$0000
+    %RNGLoopStart:
+        lda $14ee00,x
+        sta $1900,x
+        inx
+        cpx #$0100
+        bne $-RNGLoopStart
+
+        // return
+        jml $15ca22
+}

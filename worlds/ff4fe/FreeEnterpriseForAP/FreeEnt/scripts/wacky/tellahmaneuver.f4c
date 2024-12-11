@@ -1,0 +1,291 @@
+// utility MP load function
+msfpatch {
+    Wacky__TellahManeuver_LoadCost:
+        phx
+        tax
+        lda $=Wacky__ROMData,x
+        sta $_Wacky__RAM
+        lda $=(Wacky__ROMData + 0x100),x
+        sta $_(Wacky__RAM+1)
+        plx
+        rtl
+}
+
+// hide MP displays in menu screen
+msfpatch {
+    .addr $0189E4
+        nop nop nop
+        nop nop
+        nop nop nop
+    .addr $0189F1
+        nop nop nop
+    .addr $018A17
+        jmp $8a29
+    .addr $01A4DC
+        nop nop nop
+        nop nop
+        nop nop nop
+    .addr $01A4E9
+        nop nop nop
+    .addr $01A504
+        jmp $a516
+    .addr $01AA50
+        jmp $aa66
+    .addr $01ABCD
+        nop nop nop
+    .addr $01DA3C
+        [[ FF FF ]]        
+}
+
+
+// display HP cost of spells in menu screen
+msfpatch {
+    .addr $01D98D
+        "Need HP"
+
+    .addr $01B0C4
+        jsl $=Wacky__TellahManeuver_SpellListAppend0
+        nop nop
+
+    .new
+    Wacky__TellahManeuver_SpellListAppend0:
+        lda #$80
+        sta $c81e
+        // displaced
+        ldx #$020a
+        ldy #$d98d
+        rtl
+
+    .addr $01B49C
+        jsl $=Wacky__TellahManeuver_SpellTargetAppend0
+        nop nop
+    
+    .new
+    Wacky__TellahManeuver_SpellTargetAppend0:
+        lda #$80
+        sta $b7ce
+        // displaced
+        ldx #$02e0
+        ldy #$1000
+        rtl
+
+}
+
+
+// change menu spells to consume HP instead of MP
+msfpatch {
+    .addr $01B413
+        jml $=Wacky__TellahManeuver_MenuLoadMPCost_Prepare
+
+    .addr $01B426
+        jsl $=Wacky__TellahManeuver_MenuLoadMPCost
+        nop
+
+    .new 
+    Wacky__TellahManeuver_MenuLoadMPCost_Prepare:
+        sta $_(Wacky__RAM+2)
+        // displaced
+        xba
+        lda #$00
+        xba
+        jml $01b417
+
+    .new
+    Wacky__TellahManeuver_MenuLoadMPCost:
+        // displaced
+        and #$7f
+        sta $1b93
+
+        // also load the HP cost into Wacky RAM
+        lda #$00
+        xba
+        lda $_(Wacky__RAM+2)
+        jml $=Wacky__TellahManeuver_LoadCost // this will RTL
+}
+
+msfpatch {
+    // change sufficient MP check to sufficient HP check
+    .addr $01B29C
+        .mx 0x00
+        lda $0007,x
+        cmp $_Wacky__RAM
+}
+
+msfpatch {
+    // change theoretical MP calculation to HP
+    .addr $01B9E1
+        rep #$20
+        .mx 0x00
+        lda $0007,x
+        sec
+        sbc $_Wacky__RAM
+        sep #$20
+        .mx 0x20
+        rts
+}
+
+msfpatch {
+    // spend HP rather than MP
+    .addr $01B6F3
+        sta $0007,x
+
+    .addr $01B9AF
+        sta $0007,x
+}
+
+msfpatch  {
+    // refund HP instead of MP if Life fails
+    .addr $01B8CB
+        rep #$20
+        .mx 0x00
+        lda $0007,x
+        clc
+        adc $_Wacky__RAM
+        sta $0007,x
+        sep #$20
+        .mx 0x20
+        rts
+}
+
+// replace MP displays in battle with HP displays
+patch ($b7b87) { 77 }  // replace short M in "MP" on BG2 with H
+patch ($b7b8e) { 49 }  // replace M in "Need MP" on BG2 with H
+
+msfpatch {
+    // render HP instead of MP
+    .addr $02A70E
+        lda #$07  // HP data offset
+
+    .addr $02A70A
+        lda #$00  // 4 digits instead of 3
+
+    // abort instead of drawing max MP
+    //.addr $02A717
+    //    rts
+
+    // rewrite MP drawing opcodes
+    .addr $16FFA8 [[ FF FF 07 03 FF 01 ]]
+    .addr $16FFAE [[ FF FF 08 03 FF 01 ]]
+    .addr $16FFB4 [[ FF FF 09 03 FF 01 ]]
+    .addr $16FFBA [[ FF FF 0A 03 FF 01 ]]
+    .addr $16FFC0 [[ FF FF 0B 03 FF 01 ]]
+}
+
+// display HP cost of spells in battle screen
+msfpatch {
+    .addr $02B869
+        jsl $=Wacky__TellahManeuver_BattleLoadMPCost
+
+    .new
+    Wacky__TellahManeuver_BattleLoadMPCost:
+        lda $2c7b,x // get spell ID
+        jsl $=Wacky__TellahManeuver_LoadCost
+        ldx $_Wacky__RAM
+        rtl
+}
+
+
+
+
+// change battle spells to consume HP instead of MP
+msfpatch {
+    // relocate temporary "current MP" value to 16-bit and use HP
+    .addr $03A1D5
+        lda $2007,x
+        sta $_(Wacky__RAM+4)
+        lda $2008,x
+        sta $_(Wacky__RAM+5)
+        nop nop
+
+    .addr $03A259
+        jml $=Wacky__TellahManeuver_BattleMPCheck
+
+    .new
+    Wacky__TellahManeuver_BattleMPCheck:
+        lda $2c7b,x  // get spell id
+        jsl $=Wacky__TellahManeuver_LoadCost
+        lda $_(Wacky__RAM+5)
+        cmp $_(Wacky__RAM+1)
+        bcc $+NotEnoughHP
+        bne $+EnoughHP
+        lda $_(Wacky__RAM+4)
+        cmp $_Wacky__RAM
+        bcc $+NotEnoughHP
+    %EnoughHP:
+        jml $03a26a
+    %NotEnoughHP:
+        jml $03a262
+}
+
+msfpatch {
+    .addr $03CE4E
+        jml $=Wacky__TellahManeuver_BattleLoadCostForUse
+    
+    .new
+    Wacky__TellahManeuver_BattleLoadCostForUse:
+        and #$7F
+
+        // load HP cost using the n -> 10n tables
+        phx
+        tax
+        lda $=(Wacky__ROMData + 0x200),x
+        sta $_Wacky__RAM
+        lda $=(Wacky__ROMData + 0x300),x
+        sta $_(Wacky__RAM+1)
+        plx
+
+        // continue to apply modified HP
+        rep #$20
+        .mx 0x00
+        lda $2687
+        sec
+        sbc $_Wacky__RAM
+        sta $A9
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        jml $03ce61
+
+    // apply updated HP value
+    .addr $03ce73
+        sta $2687
+    .addr $03ce78
+        sta $2688
+
+    .addr $03d1b1
+        lda $2687
+        sta $2707
+        lda $2688
+        sta $2708
+}
+
+text(alert message $01) {Not enough HP.}
+
+// Neutralize Psych
+msfpatch {
+    .addr $03D4A2
+        jsl $=Wacky__TellahManeuver_NullifyPsych
+    
+    .new
+    Wacky__TellahManeuver_NullifyPsych:
+        ldx #$0000
+        stx $a2
+        stx $a4
+        rtl
+}
+
+// Neutralize MP gain in battle
+msfpatch {
+    .addr $03D9FF
+        jsl $=Wacky__TellahManeuver_NullifyMPGain
+        nop
+    
+    .new
+    Wacky__TellahManeuver_NullifyMPGain:
+        .mx 0x00
+        lda #$0000
+        sta $a4
+        adc $270b
+        rtl
+}

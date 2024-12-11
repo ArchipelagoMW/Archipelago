@@ -1,0 +1,72 @@
+placement($7E 0) { speed 1 }
+placement($7E 1) { speed 1 }
+placement($7E 2) { speed 1 }
+placement($7E 3) { speed 1 }
+placement($7E 4) { speed 1 }
+placement($7E 5) { speed 1 }
+placement($7E 6) { speed 1 }
+placement($7E 7) { speed 1 }
+
+placement($7E 8) {
+    palette 0
+    face up
+    position 15 25
+    marching off
+    speed 3
+}
+
+
+event($51)
+{
+    // %hobs intro%
+    // (provided by randomizer)
+    // %end%
+
+    consts(placement) {
+        8  Odin
+    }
+
+    p #Odin toggle visible
+    pause 4
+    
+    sound #Odin
+
+    p #Odin move up
+    p #Odin move up
+    p #Odin move up
+    p #Odin move up
+    p #Odin move up
+    p #Odin move up
+
+    batch 1 {
+        p 0 move right
+        p 1 move left
+        p 2 move left
+        p 3 move left
+        p 4 move right
+        p 5 move right
+        p 6 move right
+        p 7 move right
+    }
+
+    batch 3 {
+        p 0 toggle visible
+        p 1 toggle visible
+        p 2 toggle visible
+        p 3 toggle visible
+        p 4 toggle visible
+        p 5 toggle visible
+        p 6 toggle visible
+        p 7 toggle visible
+    }
+
+    p #Odin toggle visible
+
+
+    // %hobs outro%
+    // (provided by randomizer)
+    // %end%
+
+    [#B #Return]
+}
+

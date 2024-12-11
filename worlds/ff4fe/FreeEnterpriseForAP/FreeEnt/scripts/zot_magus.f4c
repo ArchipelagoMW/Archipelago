@@ -1,0 +1,88 @@
+placement($9D 0) {
+    npc #fe_DynamicNPC
+    // %magus_slot sprite up palette%
+    // %end%
+}
+
+placement($9D 1) {
+    npc #fe_DynamicNPC
+    // %magus_slot sprite left palette%
+    // %end%
+}
+
+placement($9D 2) {
+    npc #fe_DynamicNPC
+    // %magus_slot sprite right palette%
+    // %end%
+}
+
+event($79)  //Magus Sisters battle
+{
+    consts(placement) {
+        0   MagusSister_A
+        1   MagusSister_B
+        2   MagusSister_C
+        3   Teleporter_A
+        4   Teleporter_B
+        5   Teleporter_C
+    }
+    // autodetected map #Zot5F
+    toggle music fade
+    sound #Glow
+    toggle tint $57
+    pause 8
+    sound #Smoke
+    p #Teleporter_A toggle visible
+    pause 4
+    batch 1 {
+        p #Teleporter_A toggle visible
+        p #MagusSister_A toggle visible
+    }
+    pause 4
+    sound #Smoke
+    p #Teleporter_B toggle visible
+    pause 4
+    batch 1 {
+        p #Teleporter_B toggle visible
+        p #MagusSister_B toggle visible
+    }
+    pause 4
+    sound #Smoke
+    p #Teleporter_C toggle visible
+    pause 4
+    batch 1 {
+        p #Teleporter_C toggle visible
+        p #MagusSister_C toggle visible
+    }
+    pause 4
+    [#B #Rando_BossBattle #rando.magus_slot]
+    player face up
+    music #None
+    [#B #Objectives_TickBossSlot #rando.magus_slot]
+    [#B #Rando_PostBossBattle #rando.magus_slot]
+    pause 6
+    sound #EnemyDefeat
+    batch 5 {
+        p #MagusSister_C toggle visible
+    }
+    batch 4 {
+        screen flash
+    }
+    sound #EnemyDefeat
+    batch 5 {
+        p #MagusSister_B toggle visible
+    }
+    batch 4 {
+        screen flash
+    }
+    sound #EnemyDefeat
+    batch 5 {
+        p #MagusSister_A toggle visible
+    }
+    batch 4 {
+        screen flash
+    }
+    music #Zot fade in
+    toggle tint $00
+    set #FoughtMagusSisters
+}

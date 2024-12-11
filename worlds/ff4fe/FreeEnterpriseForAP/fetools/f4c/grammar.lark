@@ -1,0 +1,17 @@
+// Next steps:
+//   - annotate value fields with the const type
+//   - update decompile script according to changed commands
+//   - write test suite that individually decompiles/recompiles events
+
+start   :  top_level_block*
+
+top_level_block : block_type  block_parameters  _block_start block_body _block_end 
+
+block_type : identifier
+
+block_parameters : ["(" /[^)]*/ ")"]
+
+block_body : block_body_item*
+
+!block_body_item : /[^{}\n\t\f\r ]*/
+                 | block_start block_body_item* block_end

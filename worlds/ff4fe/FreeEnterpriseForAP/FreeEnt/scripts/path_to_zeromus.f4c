@@ -1,0 +1,264 @@
+event($F0)  //Do you have a pass?
+{
+    consts(placement) {
+        9   PassReceiver
+    }
+    // autodetected map #ToroiaCafe
+    message $1ED   // "Do you have a Pass?"
+    select item #Pass
+    message $1EE   // "Have a good time!"
+    p #PassReceiver face up
+    open door
+    pause 4
+    p #PassReceiver face down
+    set #UsedPass
+    [#B #Objectives_Tick #objective.quest_pass]
+}
+
+event($11) // was talking to Cid in Baron, reappropriate for our uses
+{
+    consts(placement) {
+        9   PassReceiver
+    }
+    message $1EE   // "Have a good time!"
+    p #PassReceiver face up
+    open door
+    pause 4
+    p #PassReceiver face down    
+}
+
+npc(#PassReceiver)
+{
+    eventcall {
+        if #UsedPass:
+            $11
+        else:
+            $F0   //Do you have a pass?
+    }
+}
+
+trigger(#ToroiaCafe 1)
+{
+    teleport #ToroiaDancers at 5 20 facing up
+}
+
+map(#ToroiaDancers)
+{
+    music #LunarPath
+}
+
+mapgrid($1A) // #ToroiaDancers
+{
+ //  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31
+ //------------------------------------------------------------------------------------------------
+    41 41 41 41 41 41 41 41 41 41 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //|  0
+    41 40 41 40 40 40 40 40 41 40 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //|  1
+    41 40 41 40 40 40 40 40 41 40 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //|  2
+    41 01 41 3A 01 01 01 3A 41 01 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //|  3
+    41 01 41 3B 01 01 01 3B 41 01 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //|  4
+    41 01 41 3A 01 27 01 3A 41 01 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //|  5
+    41 01 41 3B 01 01 01 3B 41 01 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //|  6
+    41 01 41 41 41 5E 41 41 41 01 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //|  7
+    41 01 40 40 40 60 61 40 40 01 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //|  8
+    41 01 40 40 28 62 63 40 40 01 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //|  9
+    41 01 01 01 01 01 01 01 01 01 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 10
+    41 01 01 01 01 01 01 01 01 01 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 11
+    41 41 41 41 41 01 41 41 41 41 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 12
+    40 40 40 40 41 01 41 40 40 40 40 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 13
+    40 40 40 40 41 01 41 40 40 40 40 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 14
+    00 00 00 00 41 01 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 15
+    00 00 00 00 41 01 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 16
+    00 00 00 00 41 01 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 17
+    00 00 00 00 41 01 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 18
+    00 00 00 00 41 01 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 19
+    00 00 00 00 41 69 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 20
+    00 00 00 00 41 41 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 21
+    00 00 00 00 40 40 40 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 22
+    00 00 00 00 40 40 40 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 23
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 24
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 25
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 26
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 27
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 28
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 29
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 30
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   //| 31
+}
+
+placement($1A 0)
+{
+    npc #DoorOpener
+    position 4 9
+    walking off
+    tangible
+    face down
+    palette 0
+    turning off
+    marching off
+    speed 0
+}
+
+placement($1A 1)
+{
+    npc #SaloonKingMan
+    position 3 10
+    face down
+}
+
+npc(#SaloonKingMan)
+{
+    sprite #OldMan
+    default active
+    eventcall {
+        $2A   //Map message $03
+    }
+}
+
+// disable random stray old man
+placement($1A 2)  //#ToroiaDancers
+{
+    npc #fe_None
+    position 0 0
+    intangible
+}
+
+
+trigger(#ToroiaDancers 0)
+{
+    position 5 5
+    eventcall $04
+}
+
+trigger(#ToroiaDancers 1)
+{
+    delete
+}
+
+trigger(#ToroiaDancers 2)
+{
+    delete
+}
+
+
+eventcall($04)
+{
+    $D8
+}
+
+event($D8)  //Toroia Dance Troupe's dance
+{
+    toggle music fade
+    sound $5C
+    toggle tint $BC
+    batch 16 {
+        screen flash
+    }
+    toggle run
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    toggle run
+    screen blur
+
+    sound $60
+    load map #Overworld at 35 83 on $0c
+    moon travel
+
+    // the $0A below is a sentinel value meaning "don't fade back in";
+    // see map_transitions.f4c for details
+    load map #LunarCoreZemusRoom at 15 23 facing down on $0a
+
+    player face up
+    toggle run
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    player invisible
+    player visible
+    toggle run
+    toggle tint $00    
+    [#B #PlacementSetVisible 1]  // block the return warp
+    music #Giant fade in
+}
+
+npc(#Invisible18)
+{
+    sprite #Transparent
+    default inactive
+    eventcall {
+        $27   //Map message 1
+    }
+}
+
+placement($172 1)
+{
+    npc #Invisible18
+    position 15 23
+    walking off
+    tangible
+    face down
+    palette 1
+    turning off
+    marching off
+    speed 3
+}
+
+text(map name $56) {
+Path to Zeromus
+}
+
+text(map #ToroiaDancers message $03) {
+This path leads to the 
+heart of the moon, where
+the great evil waits.
+
+Proceed only when ready.
+There is no return.
+}
+
+text(map #LunarCoreZemusRoom message $00) {
+Sealed.
+}
+

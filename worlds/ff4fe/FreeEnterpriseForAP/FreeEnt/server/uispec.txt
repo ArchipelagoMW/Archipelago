@@ -1,0 +1,481 @@
+== OBJECTIVES
+[@O] Alternate objectives
+.[] Objective modes
+..[Omode:classicforge] Classic Forge-the-Crystal
+..[Omode:classicgiant] Classic Giant%
+..[Omode:fiends] Fiends%
+..[Omode:dkmatter] Dark Matter Hunt
+.[@Ocustom] Custom objectives
+..<> Custom objective #1
+...(O1:*)
+..<> Custom objective #2
+...(O2:*)
+..<> Custom objective #3
+...(O3:*)
+..<> Custom objective #4
+...(O4:*)
+..<> Custom objective #5
+...(O5:*)
+..<> Custom objective #6
+...(O6:*)
+..<> Custom objective #7
+...(O7:*)
+..<> Custom objective #8
+...(O8:*)
+.[] Random objectives
+..<> Set number of random objectives
+...(Orandom:1) Add 1 random objective
+...(Orandom:2) Add 2 random objectives
+...(Orandom:3) Add 3 random objectives
+...(Orandom:4) Add 4 random objectives
+...(Orandom:5) Add 5 random objectives
+...(Orandom:6) Add 6 random objectives
+...(Orandom:7) Add 7 random objectives
+...(Orandom:8) Add 8 random objectives
+..[@Orandomtypes] Restrict allowed random objective types
+...<> Quests allowed
+....(Orandom:quest) Any quests allowed
+....(Orandom:tough_quest) Tough quests allowed
+...[Orandom:boss] Boss hunts allowed
+...[Orandom:char] Character hunts allowed
+.<> Set number of objectives required to earn reward
+..(Oreq:all) Complete all objectives for reward
+..(Oreq:1) Complete 1 objectives for reward
+..(Oreq:2) Complete 2 objectives for reward
+..(Oreq:3) Complete 3 objectives for reward
+..(Oreq:4) Complete 4 objectives for reward
+..(Oreq:5) Complete 5 objectives for reward
+..(Oreq:6) Complete 6 objectives for reward
+..(Oreq:7) Complete 7 objectives for reward
+..(Oreq:8) Complete 8 objectives for reward
+..(Oreq:9) Complete 9 objectives for reward
+..(Oreq:10) Complete 10 objectives for reward
+.<>* Reward
+..(Owin:game) Completing objectives wins the game
+..(Owin:crystal) Completing objectives awards the Crystal
+
+== KEY ITEMS
+<>* Key Items
+.[Kvanilla]- No key item randomization
+..[Knofree]! No free key item in Toroia
+.[Kmain] Randomize key items
+..[Ksummon]! Mix with summon quest rewards
+..[Kmoon]! Mix with moon boss rewards
+..[Kmiab]! Mix with monster-in-a-box chests
+..[Knofree]! No free key item in Toroia
+..<> Underworld access
+...(Kforce:magma) Guarantee underworld access via Magma Key
+...(Kforce:hook)! Force underworld access via Hook route
+..[Kunsafe]! No safety checks
+
+== PASS
+[Pshop] Include Pass in a shop
+[Pkey] Include Pass in potential key item locations
+[Pchests] Include Pass in treasure chests
+
+== CHARACTERS
+<>* Characters
+.[Cvanilla]- No character randomization
+.[Cstandard] Randomize characters
+..[Cmaybe] Characters not guaranteed to appear
+..<>!- Limit number of distinct characters
+...[Cdistinct:1]! 1 distinct character
+...[Cdistinct:2]! 2 distinct characters
+...[Cdistinct:3]! 3 distinct characters
+...[Cdistinct:4]! 4 distinct characters
+...[Cdistinct:5]! 5 distinct characters
+...[Cdistinct:6]! 6 distinct characters
+...[Cdistinct:7]! 7 distinct characters
+...[Cdistinct:8]! 8 distinct characters
+...[Cdistinct:9] 9 distinct characters
+...[Cdistinct:10] 10 distinct characters
+...[Cdistinct:11] 11 distinct characters
+..<> Specify available characters
+...()# Only include specific characters
+....[Conly:cecil]  Include Cecil
+....[Conly:kain]   Include Kain
+....[Conly:rydia]  Include Rydia
+....[Conly:tellah] Include Tellah
+....[Conly:edward] Include Edward
+....[Conly:rosa]   Include Rosa
+....[Conly:yang]   Include Yang
+....[Conly:palom]  Include Palom
+....[Conly:porom]  Include Porom
+....[Conly:cid]    Include Cid
+....[Conly:edge]   Include Edge
+....[Conly:fusoya] Include Fusoya
+...()# Exclude specific characters
+....[Cno:cecil]  Exclude Cecil
+....[Cno:kain]   Exclude Kain
+....[Cno:rydia]  Exclude Rydia
+....[Cno:tellah] Exclude Tellah
+....[Cno:edward] Exclude Edward
+....[Cno:rosa]   Exclude Rosa
+....[Cno:yang]   Exclude Yang
+....[Cno:palom]  Exclude Palom
+....[Cno:porom]  Exclude Porom
+....[Cno:cid]    Exclude Cid
+....[Cno:edge]   Exclude Edge
+....[Cno:fusoya] Exclude Fusoya
+..(@CrestrictDefine)# Specify restricted characters
+...[Crestrict:cecil]  Restrict Cecil
+...[Crestrict:kain]   Restrict Kain
+...[Crestrict:rydia]  Restrict Rydia
+...[Crestrict:tellah] Restrict Tellah
+...[Crestrict:edward] Restrict Edward
+...[Crestrict:rosa]   Restrict Rosa
+...[Crestrict:yang]   Restrict Yang
+...[Crestrict:palom]  Restrict Palom
+...[Crestrict:porom]  Restrict Porom
+...[Crestrict:cid]    Restrict Cid
+...[Crestrict:edge]   Restrict Edge
+...[Crestrict:fusoya] Restrict Fusoya
+.[Crelaxed] Randomize characters (relaxed)
+..[Cmaybe] Characters not guaranteed to appear
+..<>!- Limit number of distinct characters
+...[Cdistinct:1]! 1 distinct character
+...[Cdistinct:2]! 2 distinct characters
+...[Cdistinct:3]! 3 distinct characters
+...[Cdistinct:4]! 4 distinct characters
+...[Cdistinct:5]! 5 distinct characters
+...[Cdistinct:6]! 6 distinct characters
+...[Cdistinct:7]! 7 distinct characters
+...[Cdistinct:8]! 8 distinct characters
+...[Cdistinct:9] 9 distinct characters
+...[Cdistinct:10] 10 distinct characters
+...[Cdistinct:11] 11 distinct characters
+..<> Specify available characters
+...()# Only include specific characters
+....[Conly:cecil]  Include Cecil
+....[Conly:kain]   Include Kain
+....[Conly:rydia]  Include Rydia
+....[Conly:tellah] Include Tellah
+....[Conly:edward] Include Edward
+....[Conly:rosa]   Include Rosa
+....[Conly:yang]   Include Yang
+....[Conly:palom]  Include Palom
+....[Conly:porom]  Include Porom
+....[Conly:cid]    Include Cid
+....[Conly:edge]   Include Edge
+....[Conly:fusoya] Include Fusoya
+...()# Exclude specific characters
+....[Cno:cecil]  Exclude Cecil
+....[Cno:kain]   Exclude Kain
+....[Cno:rydia]  Exclude Rydia
+....[Cno:tellah] Exclude Tellah
+....[Cno:edward] Exclude Edward
+....[Cno:rosa]   Exclude Rosa
+....[Cno:yang]   Exclude Yang
+....[Cno:palom]  Exclude Palom
+....[Cno:porom]  Exclude Porom
+....[Cno:cid]    Exclude Cid
+....[Cno:edge]   Exclude Edge
+....[Cno:fusoya] Exclude Fusoya
+[Cnofree]! No free characters
+[Cnoearned]! No earned characters
+<>- Specify possible starting characters
+.(@CstartDefine)# Define starting character pool
+..[Cstart:cecil]  May start with Cecil
+..[Cstart:kain]   May start with Kain
+..[Cstart:rydia]  May start with Rydia
+..[Cstart:tellah] May start with Tellah
+..[Cstart:edward] May start with Edward
+..[Cstart:rosa]   May start with Rosa
+..[Cstart:yang]   May start with Yang
+..[Cstart:palom]  May start with Palom
+..[Cstart:porom]  May start with Porom
+..[Cstart:cid]    May start with Cid
+..[Cstart:edge]   May start with Edge
+..[Cstart:fusoya] May start with Fusoya
+..[Cstart:any]    May start with any of the 12 characters
+.(@CstartModify)# Modify starting character pool
+..[Cstart:not_cecil]  Cannot start with Cecil
+..[Cstart:not_kain]   Cannot start with Kain
+..[Cstart:not_rydia]  Cannot start with Rydia
+..[Cstart:not_tellah] Cannot start with Tellah
+..[Cstart:not_edward] Cannot start with Edward
+..[Cstart:not_rosa]   Cannot start with Rosa
+..[Cstart:not_yang]   Cannot start with Yang
+..[Cstart:not_palom]  Cannot start with Palom
+..[Cstart:not_porom]  Cannot start with Porom
+..[Cstart:not_cid]    Cannot start with Cid
+..[Cstart:not_edge]   Cannot start with Edge
+..[Cstart:not_fusoya] Cannot start with Fusoya
+[Cj:spells] Characters learn J-spells
+[Cj:abilities] Characters have J-commands
+[Cnekkie] Characters start with limited gear
+[Cnodupes] Duplicate characters not allowed
+[Cbye] Dismissed characters are irretrievable
+<> Limit maximum party size
+.(Cparty:1) Maximum party size 1
+.(Cparty:2) Maximum party size 2
+.(Cparty:3) Maximum party size 3
+.(Cparty:4) Maximum party size 4
+[Cpermajoin] Characters can't be dismissed
+<> Permadeath options
+.[Cpermadeath]! Permadeath
+.[Cpermadeader]! Permadeader
+[Chero]! Hero challenge
+
+== TREASURES
+<>* Treasure chests (other than MIABs)
+.(Tvanilla)- No chest randomization
+..<> Sparse options
+...(Tsparse:10) Only 10% of chests are filled
+...(Tsparse:20) Only 20% of chests are filled
+...(Tsparse:30) Only 30% of chests are filled
+...(Tsparse:40) Only 40% of chests are filled
+...(Tsparse:50) Only 50% of chests are filled
+...(Tsparse:60) Only 60% of chests are filled
+...(Tsparse:70) Only 70% of chests are filled
+...(Tsparse:80) Only 80% of chests are filled
+...(Tsparse:90) Only 90% of chests are filled
+.(Tshuffle) Shuffle chests
+..[ECHO:Tvanilla]
+.(Tstandard) Standard chest randomization
+..[ECHO:Tvanilla]
+..<> Restrict item quality
+...(Tmaxtier:7) Chests contain tier 7 items at best
+...(Tmaxtier:6) Chests contain tier 6 items at best
+...(Tmaxtier:5) Chests contain tier 5 items at best
+...(Tmaxtier:4)! Chests contain tier 4 items at best
+...(Tmaxtier:3)! Chests contain tier 3 items at best
+.(Tpro) Pro chest randomization
+..[ECHO:Tstandard]
+.(Twild) Wild chest randomization
+..[ECHO:Tstandard]
+.(Twildish) Wild-ish chest randomization
+..[ECHO:Tstandard]
+.(Tempty)! Chests are empty
+[Tno:j] No J-items in chests
+<> Junk management
+.[Tjunk] Keep junk
+.[Tmoney] Everything is junk
+
+== SHOPS
+<>* Shops
+.(Svanilla)- No shop randomization
+.(Sshuffle) Shuffle shops
+.(Sstandard) Standard shop randomization
+..[Sunsafe]! No safety checks
+.(Spro) Pro shop randomization
+..[ECHO:Sstandard]
+.(Swild) Wild shop randomization
+..[ECHO:Sstandard]
+.(Scabins)! Shops sell only cabins
+.(Sempty)! Shops sell nothing
+[Sfree] Shop items are free
+<> Sell prices
+.(Ssell:quarter) Items sell for 1/4 price
+.(Ssell:0) Items sell for 0 GP
+[Sno:j] No J-items in shops
+[Sno:apples] No Apples/Soma Drops in shops
+[Sno:sirens] No Sirens in shops
+[Sno:life] No Life potions in shops
+
+== BOSSES
+<>* Bosses
+.(Bvanilla)- No boss randomization
+.(Bstandard) Randomize bosses
+..[Bunsafe]! No safety checks
+[Bnofree]! No free bosses
+[Balt:gauntlet] Alt Gauntlet
+<> Change Wyvern's opening MegaNuke
+.(Bwhyburn) Disable Wyvern's opening MegaNuke
+.(Bwhichburn) Replace Wyvern's opening MegaNuke with random attack
+
+== ENCOUNTERS
+<>* Random encounter rate
+.(Evanilla)- Original encounter rate
+.(Etoggle) Random encounters can be toggled
+..[Ekeep:doors] Preserve TrapDoor fights
+..[Ekeep:behemoths] Preserve forced Behemoth fights
+..[Edanger] Keep dangerous encounters
+.(Ereduce) Random encounters reduced by 50%
+..[Ekeep:doors] Preserve TrapDoor fights
+..[Ekeep:behemoths] Preserve forced Behemoth fights
+.(Enoencounters)! No random encounters
+..[Ekeep:doors] Preserve TrapDoor fights
+..[Ekeep:behemoths] Preserve forced Behemoth fights
+..[Edanger] Keep dangerous encounters
+<> Drop tables
+.(Eno:sirens) Remove Sirens from drop/sneak tables
+.(Eno:jdrops) Use US version drop/sneak tables
+[Ecantrun]! Can't run from battles
+[Enoexp]! No EXP for random encounters
+
+== GLITCHES
+[@G] Enable major glitches
+.[Gdupe] Allow item duplication
+.[Gmp] Allow MP underflow
+.[Gwarp] Allow Dwarf Castle warp
+.[Glife] Allow Life glitch 
+.[Gsylph] Allow Sylph MP glitch
+.[Gbackrow] Allow backrow glitch
+.[G64] Allow 64-floor glitch
+
+== OTHER
+[@kit] Starter kits
+.<> Kit 1
+..(-kit:basic)        Basic kit
+..(-kit:better)       Better kit
+..(-kit:loaded)       Loaded kit
+..(-kit:cata)         Cata kit
+..(-kit:freedom)      Freedom kit
+..(-kit:cid)          Cid kit
+..(-kit:yang)         Yang kit
+..(-kit:money)        Money kit
+..(-kit:grabbag)      Grab Bag kit
+..(-kit:miab)         Monster-in-a-box kit
+..(-kit:archer)       Archer kit
+..(-kit:fabul)        Fabul kit
+..(-kit:castlevania)  Castlevania kit
+..(-kit:summon)       Summon kit
+..(-kit:notdeme)      "NotDeme" kit
+..(-kit:meme)         Meme kit
+..(-kit:defense)      Defense kit
+..(-kit:mist)         Mist kit
+..(-kit:mysidia)      Mysidia kit
+..(-kit:baron)        Baron kit
+..(-kit:dwarf)        Dwarf kit
+..(-kit:eblan)        Eblan kit
+..(-kit:libra)        Libra kit
+..(-kit:99)           99 kit
+..(-kit:green)        Green Names kit
+..(-kit:random)       Select a random kit
+.<> Kit 2
+..(-kit2:basic)        Basic kit
+..(-kit2:better)       Better kit
+..(-kit2:loaded)       Loaded kit
+..(-kit2:cata)         Cata kit
+..(-kit2:freedom)      Freedom kit
+..(-kit2:cid)          Cid kit
+..(-kit2:yang)         Yang kit
+..(-kit2:money)        Money kit
+..(-kit2:grabbag)      Grab Bag kit
+..(-kit2:miab)         Monster-in-a-box kit
+..(-kit2:archer)       Archer kit
+..(-kit2:fabul)        Fabul kit
+..(-kit2:castlevania)  Castlevania kit
+..(-kit2:summon)       Summon kit
+..(-kit2:notdeme)      "NotDeme" kit
+..(-kit2:meme)         Meme kit
+..(-kit2:defense)      Defense kit
+..(-kit2:mist)         Mist kit
+..(-kit2:mysidia)      Mysidia kit
+..(-kit2:baron)        Baron kit
+..(-kit2:dwarf)        Dwarf kit
+..(-kit2:eblan)        Eblan kit
+..(-kit2:libra)        Libra kit
+..(-kit2:99)           99 kit
+..(-kit2:green)        Green Names kit
+..(-kit2:random)       Select a random kit
+.<> Kit 3
+..(-kit3:basic)        Basic kit
+..(-kit3:better)       Better kit
+..(-kit3:loaded)       Loaded kit
+..(-kit3:cata)         Cata kit
+..(-kit3:freedom)      Freedom kit
+..(-kit3:cid)          Cid kit
+..(-kit3:yang)         Yang kit
+..(-kit3:money)        Money kit
+..(-kit3:grabbag)      Grab Bag kit
+..(-kit3:miab)         Monster-in-a-box kit
+..(-kit3:archer)       Archer kit
+..(-kit3:fabul)        Fabul kit
+..(-kit3:castlevania)  Castlevania kit
+..(-kit3:summon)       Summon kit
+..(-kit3:notdeme)      "NotDeme" kit
+..(-kit3:meme)         Meme kit
+..(-kit3:defense)      Defense kit
+..(-kit3:mist)         Mist kit
+..(-kit3:mysidia)      Mysidia kit
+..(-kit3:baron)        Baron kit
+..(-kit3:dwarf)        Dwarf kit
+..(-kit3:eblan)        Eblan kit
+..(-kit3:libra)        Libra kit
+..(-kit3:99)           99 kit
+..(-kit3:green)        Green Names kit
+..(-kit3:random)       Select a random kit
+[-noadamants] No Adamant Armors
+[-nocursed] No Cursed Rings
+[-spoon] Edward can equip the Spoon
+<> Smithy reward
+.(-smith:alt) Kokkol crafts a random tier 7/8 item
+.(-smith:super) Kokkol crafts a weapon from FF4 Advance
+[@exp] Restore vanilla EXP distribution
+.[-exp:split] Split EXP distribution
+.[-exp:noboost] No low-level EXP boost
+.[-exp:nokeybonus] No EXP bonus after 10 key items
+[] Restore vanilla behaviors
+.[-vanilla:fusoya] Vanilla FuSoYa
+.[-vanilla:agility] Vanilla agility anchoring
+.[-vanilla:hobs] Vanilla Hobs spell
+.[-vanilla:growup] Vanilla Dwarf Castle summons
+.[-vanilla:fashion] Vanilla fashion
+.[-vanilla:miabs] Vanilla monster-in-a-box locations
+.[-vanilla:giant] Vanilla Giant
+.[-vanilla:z] Vanilla Z sprite
+[-vintage] Vintage Battlefield
+[-pushbtojump] Push B to Jump
+[@wacky] Wacky challenge
+.<> Select challenge
+..(-wacky:random)!           Random wacky challenge
+..(-wacky:afflicted)!        "Afflicted"
+..(-wacky:battlescars)!      "Battle Scars"
+..(-wacky:bodyguard)         "The Bodyguard"
+..(-wacky:enemyunknown)!     "Enemy Unknown"
+..(-wacky:musical)!          "Final Fantasy IV: The Musical"
+..(-wacky:fistfight)!        "Fist Fight"
+..(-wacky:floorislava)       "The Floor Is Made Of Lava"
+..(-wacky:forwardisback)!    "Forward is the New Back"
+..(-wacky:friendlyfire)      "Friendly Fire"
+..(-wacky:gottagofast)!      "Gotta Go Fast"
+..(-wacky:batman)!           "Holy Onomatopoeias, Batman!"
+..(-wacky:imaginarynumbers)! "Imaginary Numbers"
+..(-wacky:isthisrandomized)  "Is This Even Randomized?"
+..(-wacky:kleptomania)       "Kleptomania"
+..(-wacky:menarepigs)!       "Men Are Pigs"
+..(-wacky:misspelled)        "Misspelled"
+..(-wacky:biggermagnet)!     "A Much Bigger Magnet"
+..(-wacky:mysteryjuice)      "Mystery Juice"
+..(-wacky:neatfreak)!        "Neat Freak"
+..(-wacky:nightmode)!        "Night Mode"
+..(-wacky:omnidextrous)      "Omnidextrous"
+..(-wacky:payablegolbez)     "Payable Golbez"
+..(-wacky:saveusbigchocobo)! "Save Us, Big Chocobo!"
+..(-wacky:sixleggedrace)     "Six-Legged Race"
+..(-wacky:skywarriors)       "The Sky Warriors"
+..(-wacky:worthfighting)!    "Something Worth Fighting For"
+..(-wacky:tellahmaneuver)    "The Tellah Maneuver"
+..(-wacky:3point)            "The 3-Point System"
+..(-wacky:timeismoney)       "Time is Money"
+..(-wacky:darts)             "World Championship of Darts"
+..(-wacky:unstackable)!      "Unstackable"
+..(-wacky:zombies)           "Zombies!!!"
+
+== SPOILERS
+<> No spoiler log
+.(-spoil:all) Full spoiler log
+..<@spoilsparse> Replace random lines in log with "????"
+...(-spoil:sparse90) Keep 90% of spoilers visible
+...(-spoil:sparse80) Keep 80% of spoilers visible
+...(-spoil:sparse70) Keep 70% of spoilers visible
+...(-spoil:sparse60) Keep 60% of spoilers visible
+...(-spoil:sparse50) Keep 50% of spoilers visible
+...(-spoil:sparse40) Keep 40% of spoilers visible
+...(-spoil:sparse30) Keep 30% of spoilers visible
+...(-spoil:sparse20) Keep 20% of spoilers visible
+...(-spoil:sparse10) Keep 10% of spoilers visible
+.() Partial spoiler log
+..[-spoil:keyitems] Spoil key items
+..[-spoil:rewards] Spoil quest rewards
+..[-spoil:chars] Spoil characters
+..<> Spoil treasure chests
+...(-spoil:treasure) Spoil all treasure chests
+...(-spoil:miabs) Spoil monster-in-a-box chests
+..[-spoil:shops] Spoil shops
+..[-spoil:bosses] Spoil bosses
+..[-spoil:misc] Include misc spoilers
+..[ECHO:-spoil:all]
+

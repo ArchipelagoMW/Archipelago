@@ -1,0 +1,65 @@
+// ------------------------------------------------------------------------------------
+// reused data structures
+
+event_call_body : event_call_case* event_call_default_case [event_call_parameters]
+event_call_case : "if" event_call_clause ("," event_call_clause)* ":" event_value
+event_call_clause : flag_value        -> event_call_true_clause
+                  | "not" flag_value  -> event_call_false_clause
+event_call_default_case : ["else" ":"] event_value
+event_call_parameters : number+
+
+// ------------------------------------------------------------------------------------
+// const-resolved elements
+
+?actor_value      : value  -> value_actor
+?flag_value       : value  -> value_flag
+?item_value       : value  -> value_item
+?map_value        : value  -> value_map
+?music_value      : value  -> value_music
+?npc_value        : value  -> value_npc
+?sound_value      : value  -> value_sound
+?spell_value      : value  -> value_spell
+?spellset_value   : value  -> value_spellset
+?status_value     : value  -> value_status
+?vfx_value        : value  -> value_vfx
+?command_value    : value  -> value_command
+?race_value       : value  -> value_race
+?element_value    : value  -> value_element
+?eventext_value   : value  -> value_eventext
+?sprite_value     : value  -> value_sprite
+
+// currently doesn't have a const family but may want to add one in the future
+?event_value      : number
+
+// ------------------------------------------------------------------------------------
+// common elements
+
+direction : "up"     -> direction_up
+          | "right"  -> direction_right
+          | "down"   -> direction_down
+          | "left"   -> direction_left
+
+?value : number
+       | "#" const_name    -> const
+
+?number : hex_number
+        | decimal_number
+
+hex_number     : /\$[A-Fa-f0-9]+/
+decimal_number : /[0-9]+/
+
+?identifier  : /[A-Za-z_][A-Za-z0-9_]*/
+?word        : /[^\s\{\}\(\)]+/
+?const_name  : /([A-Za-z_][A-Za-z0-9_]*\.)?[A-Za-z_][A-Za-z0-9_]*/
+
+_block_start : "{"
+_block_end   : "}"
+!block_start : "{"
+!block_end   : "}"
+
+rom_address : hex_number ["unheadered"]     -> unheadered_rom_address
+            | hex_number "headered"         -> headered_rom_address
+            | hex_number "bus"              -> bus_address
+
+%import common.WS
+%ignore WS

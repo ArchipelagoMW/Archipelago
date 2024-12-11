@@ -1,0 +1,79 @@
+npc(#RydiaMom)
+{
+    eventcall {
+        $72
+    }
+}
+
+placement($01 5) // rydia's mom flicker fast
+{
+    speed 3
+}
+
+placement($01 6)  //Kain -> sparkle
+{
+    npc #Sparkle1
+    position 14 8
+    walking off
+    tangible
+    face down
+    palette 0
+    turning off
+    marching on
+    speed 2
+}
+
+
+event($72)
+{
+    consts(placement) {
+        5  RydiaMom
+        6  Sparkle
+    }
+    toggle music fade
+    pause 4
+    toggle tint $87
+    sound #Crystal
+    batch 30 {
+        screen flash
+    }
+    p #Sparkle toggle visible
+    pause 8
+    batch 11 {
+        p #RydiaMom toggle visible
+    }
+    pause 8
+    [#B #If #XPosition 13] {
+        p #Sparkle move left
+    }
+    [#B #If #XPosition 15] {
+        p #Sparkle move right
+    }
+    [#B #If #YPosition 7] {
+        p #Sparkle move up
+    }
+    [#B #If #YPosition 9] {
+        p #Sparkle move down
+    }
+
+    batch {
+        p #Sparkle toggle visible
+        player bow head
+    }
+    toggle tint $00
+    pause 4
+    player wave out
+
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.rydias_mom_item 0]
+    // %if ap_rydias_mom_item%
+    music #DummyFanfare
+    message #ap_reward_slot.rydias_mom_item
+    // %else%
+    message #msg.fe_ReceivedFanfare
+    // %end%
+    [#B #Objectives_TickRewardSlot #reward_slot.rydias_mom_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.rydias_mom_item]
+    player face down
+    music #Town fade in
+    deactivate #RydiaMom
+}

@@ -1,0 +1,124 @@
+placement($7E 0) { speed 3 }
+placement($7E 1) { speed 3 }
+placement($7E 2) { speed 3 }
+placement($7E 3) { speed 3 }
+placement($7E 4) { speed 3 }
+placement($7E 5) { speed 3 }
+placement($7E 6) { speed 3 }
+placement($7E 7) { speed 3 }
+
+placement($7E 8) {
+    palette 1
+    face up
+    position 15 25
+    marching off
+    speed 3
+}
+
+placement($7E 9) {
+    palette 0
+    position 15 25
+    speed 3
+}
+
+placement($7E 10) {
+    palette 0
+    position 14 25
+    speed 3
+}
+
+placement($7E 11) {
+    palette 0
+    position 16 25
+    speed 3
+}
+
+event($51)
+{
+    // %hobs intro%
+    // (provided by randomizer)
+    // %end%
+
+    consts(placement) {
+        8  Jinn
+        9  Fire1
+        10  Fire2
+        11  Fire3
+    }
+
+    [#B #LoadNPCPalette $1a $05]
+    p #Jinn toggle visible
+    pause 4
+    
+    sound #Burning
+    [#B #LoadNPCPalette $1f $06]
+
+    batch {
+        p #Jinn move up
+        p #Fire1 toggle visible
+    }
+
+    batch {
+        p #Jinn move up
+        p #Fire1 move up
+        p #Fire2 toggle visible
+        p #Fire3 toggle visible
+    }
+
+    batch {
+        p #Jinn move up
+        p #Fire1 move up
+        p #Fire2 move up
+        p #Fire3 move up
+    }
+
+    batch {
+        p #Jinn move up
+        p #Fire1 move up
+        p #Fire2 move up
+        p #Fire3 move up
+    }
+
+    batch {
+        p #Jinn move up
+        p #Fire1 move up
+        p #Fire2 move up
+        p #Fire3 move up
+        p 2 toggle visible
+        p 4 toggle visible
+        p 5 toggle visible
+        p 6 toggle visible
+        p 7 toggle visible
+    }
+
+    batch {
+        p #Jinn move up
+        p #Fire1 move up
+        p #Fire2 move up
+        p #Fire3 move up
+        p 0 toggle visible
+        p 1 toggle visible
+        p 3 toggle visible
+    }
+
+    batch 4 {
+        p #Jinn move up
+        p #Fire1 move up
+        p #Fire2 move up
+        p #Fire3 move up
+    }
+
+    batch {
+        p #Jinn toggle visible
+        p #Fire1 toggle visible
+        p #Fire2 toggle visible
+        p #Fire3 toggle visible
+    }
+
+    // %hobs outro%
+    // (provided by randomizer)
+    // %end%
+
+    [#B #Return]
+}
+

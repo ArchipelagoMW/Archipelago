@@ -1,0 +1,1587 @@
+// general utility function -- hook into code that loads menu
+// palette colors to also black out the unused palette colors
+// for our later purposes
+msfpatch {
+    .addr $018ce5
+        jsr $=MenuPalettes__BlankUnused
+
+    .new
+    MenuPalettes__BlankUnused:
+        ldx #$0000
+    %LoopStart:
+        stz $a020,x
+        stz $a060,x
+        stz $a0a0,x
+        stz $a0e0,x
+        inx
+        cpx #$0020
+        bcc $-LoopStart
+
+        // defer to displaced function call
+        jml $1efd1a
+}
+
+// remove "Nothing here." message in item menu
+msfpatch {
+    .addr $01a2cf
+        jmp $a353
+}
+
+// fix an incorrect redraw of the "Item" title window
+msfpatch {
+    .addr $01a359
+        ldy #$d906
+}
+
+// assign an unused input code to select button so that
+// it can be used in menus
+patch ($14fe8a bus) { 00 20 }
+
+msfpatch {
+    .def ExtraItemDescriptions__Data            $248000
+    .def ExtraItemDescriptions__HeaderPalette   $7e161e
+
+    .def ExtraItemDescriptions__ScrollMemo      $7e161c
+    .def ExtraItemDescriptions__Dirty           $7e161f
+    .def ExtraItemDescriptions__Enabled         $7e1620
+
+    ExtraItemDescriptions__ToggleEnabled:
+        lda $_ExtraItemDescriptions__Enabled
+        eor #$01
+        sta $_ExtraItemDescriptions__Enabled
+        rtl
+}
+
+// hook into inventory screen draw to add instruction message
+msfpatch {
+    .addr $019f22
+        // weird place to hook in, but everything around it is
+        // 3-byte JSR instructions and we need to do something
+        // before we push CGRAM
+        jsl $=ExtraItemDescriptions__ItemMenu_InitPalette
+        nop nop
+
+    .new
+    ExtraItemDescriptions__ItemMenu_InitPalette:
+        // write a grey text color to palette 5 in BG1
+        ldx #$3def
+        stx $a02e
+
+        // displaced
+        ldy #$d82a
+        ldx #$d8e4
+        rtl
+
+    .addr $019f4d
+        jsl $=ExtraItemDescriptions__ItemMenu_InitInstruction
+        nop nop
+
+    .new
+    ExtraItemDescriptions__ItemMenu_InitInstruction:
+        // displaced
+        stx $1b1d
+        jsr $_MK_ClearSetBG1
+
+        // draw instruction text
+        ldx #$0000
+        ldy #$0000
+    %DrawLoop:
+        lda $=InstructionTextLine1,x
+        beq $+Done
+        sta $c558,y
+        lda $=InstructionTextLine2,x
+        sta $c598,y
+        lda #$14  // palette 5
+        sta $c559,y
+        sta $c599,y
+        iny
+        iny
+        inx
+        bra $-DrawLoop
+    %Done:
+        rtl
+
+    %InstructionTextLine1: "Press SELECT for" [[ 00 ]]
+    %InstructionTextLine2: "item information" [[ 00 ]]
+}
+
+// hook into item menu exit to push erased instruction text to VRAM
+msfpatch {
+    .addr $019f79
+        jsl $=ExtraItemDescriptions__ItemMenu_ExitHook
+        nop nop
+
+    .new
+    ExtraItemDescriptions__ItemMenu_ExitHook:
+        // push erasure
+        ldx #$67a0
+        stx $1d
+        ldx #$c540
+        stx $1f
+        lda #$7e
+        sta $21
+        ldx #$0080
+        stx $22
+        jsr $_Util__MenuDMA
+
+        // displaced
+        jsr $_MK_PushCGRAM
+        jsr $_MK_SetBG4
+        rtl
+}
+
+msfpatch {
+    .addr $01a7b2
+        jml $=ExtraItemDescriptions__ItemMenu
+
+    .new
+    ExtraItemDescriptions__ItemMenu:
+        lda $_ExtraItemDescriptions__Enabled
+        beq $+Disabled
+
+        // prep palette byte
+        lda #$28
+        sta $_ExtraItemDescriptions__HeaderPalette
+        lda $1440,x
+
+        cmp #$fc
+        bcc $+HasNewDescription
+
+        // is regular item, defer to normal code
+        pha
+        ldy #$d8e8
+        jml $01a7b6
+
+    %Disabled:
+        jml $01a7e9
+
+    %HasNewDescription:
+        cmp #$00
+        beq $+IsNothing
+        cmp #$60
+        beq $+IsNothing
+
+        ldy #$a600
+        jsl $=ExtraItemDescriptions__Draw
+
+    %Done:
+        // Done, return after all the old description code
+        jml $01a7e8
+
+    %IsNothing:
+        ldy #$a600
+        jsl $=ExtraItemDescriptions__DrawBlank
+        bra $-Done
+
+
+    // patch the amount of tiles being copied in this operation
+    .addr $019fb6
+        ldx #$0180
+}
+
+// hook into item menu before cursor checks to add a toggle
+msfpatch {
+    .addr $019fca
+        jsl $=ExtraItemDescriptions__Inventory_PreArrowHook
+
+    .new
+    ExtraItemDescriptions__Inventory_PreArrowHook:
+        lda $01
+        and #$20
+        beq $+DidNotToggle
+        jsl $=ExtraItemDescriptions__ToggleEnabled
+
+    %DidNotToggle:
+        // displaced
+        lda $01
+        and #$02
+        rtl
+}
+
+msfpatch {
+    // params:
+    //  A = item number
+    //  Y = target address (first tile on row where box begins)
+    ExtraItemDescriptions__Draw:
+        sta $1680
+        sty $1681
+
+        cmp #$00
+        beq $+IsNothing
+        cmp #$60
+        beq $+IsNothing
+        cmp #$fc
+        bcc $+Proceed
+
+    %IsNothing:
+        clc
+        rtl
+
+    %Proceed:
+        // box corners
+        lda #$f7
+        sta $0002,y
+        lda #$f9
+        sta $003a,y
+        lda #$fc
+        sta $0142,y
+        lda #$fe
+        sta $017a,y
+
+        ldx #$0000
+    %TopBottomLineLoopStart:
+        lda #$f8
+        sta $0004,y
+        lda #$fd
+        sta $0144,y
+
+        // prep the second line's palette
+        lda $_ExtraItemDescriptions__HeaderPalette
+        sta $0045,y
+
+        /*
+        lda #$20
+        sta $0005,y
+        // do all other lines' palettes now for speed
+        sta $0081,y
+        sta $00c5,y
+        sta $0105,y
+        sta $0145,y
+        */
+
+        iny
+        iny
+        inx
+        cpx #$001b
+        bcc $-TopBottomLineLoopStart
+
+        // get offset of description text
+        lda $1680
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        xba
+        lsr a
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        ldy $1681
+        lda #$80
+        sta $1683
+    %CopyLoopStart:
+        lda $=ExtraItemDescriptions__Data,x
+        sta $0040,y
+        iny
+        iny
+        inx
+        clc
+        dec $1683
+        bne $-CopyLoopStart
+
+        lda $1680
+        cmp #$b0
+        bcc $+DoEquipIcons
+        sec
+        rtl
+
+    %DoEquipIcons:
+        stz $1686
+        // get equip table index for item
+        rep #$20
+        .mx 0x00
+        asl a
+        asl a
+        asl a
+        tax
+        lda $0f9106,x
+
+        // %if wacky_omnidextrous%
+        lda #$00
+        // %end%
+
+        // get equip flags for item
+        and #$001f
+        asl a
+        tax
+        lda $0fa550,x
+
+        // shift off top two bits, those are irrelevant jobs
+        asl a
+        asl a
+        sta $1684
+        cmp #$fffc
+        bne $+NotEveryone        
+        inc $1686
+    %NotEveryone:
+
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        lda #$0e
+        sta $1683
+        ldy $1681
+
+        lda $1686
+        beq $+JobLoopStart
+
+        // if we need to fit everyone, start by jamming Fusoya
+        // into the corner with his special tiles
+        lda #$aa
+        sta $0138,y
+        lda #$ac
+        sta $013a,y
+        lda #$ea
+        sta $0178,y
+        lda #$ec
+        sta $017a,y
+        dey
+        dey
+        dec $1683
+        asl $1684
+        rol $1685
+
+    %JobLoopStart:
+        dec $1683
+        asl $1684
+        rol $1685
+        bcc $+JobLoopNext
+
+        lda $1683
+        asl a
+        clc
+        adc #$90
+        sta $0136,y
+        inc a
+        sta $0138,y
+        ora #$40
+        sta $0178,y
+        dec a
+        sta $0176,y
+        dey
+        dey
+        dey
+        dey
+
+    %JobLoopNext:
+        lda $1683
+        bne $-JobLoopStart
+
+        // done!
+        sec
+        rtl
+}
+
+msfpatch {
+    // param: Y = address of first tile on row
+    ExtraItemDescriptions__DrawBlank:
+
+        // box corners
+        lda #$f7
+        sta $0002,y
+        lda #$f9
+        sta $003a,y
+        lda #$fc
+        sta $0142,y
+        lda #$fe
+        sta $017a,y
+
+        // box sides
+        lda #$fa
+        sta $0042,y
+        sta $0082,y
+        sta $00c2,y
+        sta $0102,y
+        lda #$fb
+        sta $007a,y
+        sta $00ba,y
+        sta $00fa,y
+        sta $013a,y
+
+        ldx #$0000
+    %LoopStart:
+        lda #$f8
+        sta $0004,y
+        lda #$ff
+        sta $0044,y
+        sta $0084,y
+        sta $00c4,y
+        sta $0104,y
+        lda #$fd
+        sta $0144,y
+        iny
+        iny
+        inx
+        cpx #$001b
+        bcc $-LoopStart
+        rtl
+
+}
+
+msfpatch {
+    // param: Y = address of first tile on row
+    ExtraItemDescriptions__Erase:
+        ldx #$0000
+        lda #$00
+    %LoopStart:
+        sta $0000,y
+        iny
+        iny
+        inx
+        cpx #$00c0
+        bcc $-LoopStart
+        rtl
+}
+
+msfpatch {
+    .addr $01bdc5
+        jsl $=ExtraItemDescriptions__EquipMenu_Setup
+
+    .new
+    ExtraItemDescriptions__EquipMenu_Setup:
+        // displaced
+        stz $96
+        stz $97
+
+        // save previous BG3 scroll
+        ldx $9f
+        stx $_ExtraItemDescriptions__ScrollMemo
+
+        // set scroll on BG3 to working area
+        ldx #$0110
+        stx $9f
+
+        lda #$10
+        sta $002112
+        lda #$01
+        sta $002112
+
+        rtl
+}
+
+msfpatch {
+    // param: Y = address of first tile on relevant row
+    ExtraItemDescriptions__PushToVRAM:
+        sty $1f
+        // calculate target address from source address
+        rep #$20
+        .mx 0x00
+        lda $1f
+        cmp #$d600
+        bcs $+BG3
+        cmp #$c600
+        bcs $+BG4
+        cmp #$b600
+        bcs $+BG1
+    %BG2:
+        sec
+        sbc #$a600
+        lsr a
+        ora #$6800
+        bra $+HaveAddress
+    %BG1:
+        sec
+        sbc #$b600
+        lsr a
+        ora #$6000
+        bra $+HaveAddress
+    %BG4:
+        sec
+        sbc #$c600
+        lsr a
+        ora #$7800
+        bra $+HaveAddress
+    %BG3:
+        sec
+        sbc #$d600
+        lsr a
+        ora #$7000
+    %HaveAddress:
+        sta $1d
+
+        lda #$007e
+        sep #$20
+        .mx 0x20
+        sta $21
+        ldx #$0180
+        stx $22
+        jsr $_Util__MenuDMA
+        rtl
+}
+
+msfpatch {
+    // Hook into end of routine that draws item names
+    // and draw info for the highlighted item
+    .addr $01bd92
+        jml $=ExtraItemDescriptions__EquipMenu_DrawHook
+
+    .new
+    ExtraItemDescriptions__EquipMenu_DrawHook:
+        jsl $=ExtraItemDescriptions__EquipMenu_DrawEquipped
+
+        // make a copy of the first 6 rows of equip pane tile data on BG2
+        // so that it can be overwritten with item desc boxes
+        ldx #$0000
+        stx $8d  // set scroll on BG2 to top while we're here
+    %CopyLoop:
+        lda $a600,x
+        sta $ae00,x
+        inx
+        cpx #$0180
+        bcc $-CopyLoop
+
+        // displaced logic
+        lda $1bad
+        bne $+ReturnLater
+        jml $01bd97
+    %ReturnLater:
+        jml $01bdce
+}
+
+// replace up/down arrow routines in equip menu to
+// also redraw item info
+msfpatch {
+    .addr $01bdfc
+        jsr $824c // vblank, push OAM
+        jsr $9429 // push BG2
+        
+        // time is tight; don't do full scroll push, just BG2's vals
+        lda $8d
+        sta $002110
+        lda $8e
+        sta $002110
+
+        ldy #$_ExtraItemDescriptions__EquipMenu_DrawAddress
+        jsl $=ExtraItemDescriptions__PushToVRAM
+        jsr $82c0 // displaced gamepad update
+        jml $=ExtraItemDescriptions__EquipMenu_EquipCursorHook
+}
+
+msfpatch {
+    ExtraItemDescriptions__EquipMenu_EquipCursorHook:
+        // insert item desc toggle check here
+        lda $01
+        and #$20
+        beq $+DidNotToggle
+
+        jsl $=ExtraItemDescriptions__ToggleEnabled
+        jsl $=ExtraItemDescriptions__EquipMenu_DrawEquipped
+
+    %DidNotToggle:
+        lda $01
+        and #$08
+        beq $+CheckDownArrow
+
+        lda $1b37
+        dec a
+        bpl $+NoUnderflow
+        lda #$04
+    %NoUnderflow:
+        sta $1b37
+        jsl $=ExtraItemDescriptions__EquipMenu_DrawEquipped
+
+    %CheckDownArrow:
+        lda $01
+        and #$04
+        beq $+Done
+
+        lda $1b37
+        inc a
+        cmp #$05
+        bne $+NoOverflow
+        lda #$00
+    %NoOverflow:
+        sta $1b37
+        jsl $=ExtraItemDescriptions__EquipMenu_DrawEquipped
+
+    %Done:
+        jml $01be29
+}
+
+// hook into menu exit routine to clear item box
+msfpatch {
+    .addr $01bc4f
+        jsl $=ExtraItemDescriptions__EquipMenu_ExitHook
+
+    .new
+    ExtraItemDescriptions__EquipMenu_ExitHook:
+        // displaced
+        jsl $038006
+
+        ldy #$_ExtraItemDescriptions__EquipMenu_DrawAddress
+        jsl $=ExtraItemDescriptions__Erase
+        jsr $_MK_VBlank_PushBG3
+
+        // also restore previous scroll position
+        ldx $_ExtraItemDescriptions__ScrollMemo
+        stx $9f
+
+        rtl
+}
+
+msfpatch {
+    .def ExtraItemDescriptions__EquipMenu_DrawAddress $7ee1c0
+
+    ExtraItemDescriptions__EquipMenu_GetSelectedEquippedItem:
+        lda #$00
+        xba
+        lda $1b37
+        tax
+        lda $=EquippedItemOffsets,x
+        tay
+        lda ($60),y
+        rtl
+
+    ExtraItemDescriptions__EquipMenu_DrawEquipped:
+        lda $_ExtraItemDescriptions__Enabled
+        beq $+Disabled
+
+        lda #$08
+        sta $_ExtraItemDescriptions__HeaderPalette
+        jsl $=ExtraItemDescriptions__EquipMenu_GetSelectedEquippedItem
+        ldy #$_ExtraItemDescriptions__EquipMenu_DrawAddress
+        jsl $=ExtraItemDescriptions__Draw
+        bcs $+Continue
+        // if item was nothing, draw a blank
+        ldy #$_ExtraItemDescriptions__EquipMenu_DrawAddress
+        jsl $=ExtraItemDescriptions__DrawBlank
+        bra $+Continue
+    %Disabled:
+        ldy #$_ExtraItemDescriptions__EquipMenu_DrawAddress
+        jsl $=ExtraItemDescriptions__Erase
+        
+    %Continue:
+        rtl
+
+    %EquippedItemOffsets: [[ 33 35 30 31 32 ]]
+}
+
+// hook into equip screen item submenu startup to draw
+// starting info panes
+msfpatch {
+    .addr $01be60
+        jml $=ExtraItemDescriptions__EquipItemMenu_Setup
+
+    .def ExtraItemDescriptions__EquipItemMenu_PreviousItemDrawAddress  $7eaf80
+    .def ExtraItemDescriptions__EquipItemMenu_CandidateItemDrawAddress $7eb000
+
+    .new
+    ExtraItemDescriptions__EquipItemMenu_Setup:
+        // clear info box from BG3
+        ldy #$_ExtraItemDescriptions__EquipMenu_DrawAddress
+        jsl $=ExtraItemDescriptions__Erase
+
+        lda #$20
+        sta $_ExtraItemDescriptions__HeaderPalette
+        jsl $=ExtraItemDescriptions__EquipMenu_GetSelectedEquippedItem
+        ldy #$_ExtraItemDescriptions__EquipItemMenu_PreviousItemDrawAddress
+        jsl $=ExtraItemDescriptions__Draw
+        bcs $+DrawCandidateItemBox
+    %NoPreviousItem:
+        ldy #$_ExtraItemDescriptions__EquipItemMenu_PreviousItemDrawAddress
+        jsl $=ExtraItemDescriptions__DrawBlank
+
+        // add position name on empty boxes
+        lda #$00
+        xba
+        lda $1b37
+        asl a
+        asl a
+        tax
+        ldy #$0000
+    %DrawSlotNameLoopStart:
+        lda $=EquipPositionNames,x
+        sta $afc4,y  // [hardcoded]
+        iny
+        iny
+        inx
+        cmp #$69  // did we just draw "n"
+        bne $+SkipMagicN
+        lda #$5f  // "d"
+        sta $afc4,y  // [hardcoded]
+    %SkipMagicN:
+        cpy #$0008
+        bcc $-DrawSlotNameLoopStart
+
+    %DrawCandidateItemBox:
+        ldy #$_ExtraItemDescriptions__EquipItemMenu_CandidateItemDrawAddress
+        jsl $=ExtraItemDescriptions__DrawBlank
+
+        // init need-update value
+        inc $_ExtraItemDescriptions__Dirty
+
+        jsr $_MK_VBlank_PushOAM
+        jsr $_MK_PushBG3
+        ldy #$_ExtraItemDescriptions__EquipItemMenu_PreviousItemDrawAddress
+        jsl $=ExtraItemDescriptions__PushToVRAM
+        ldy #$_ExtraItemDescriptions__EquipItemMenu_CandidateItemDrawAddress
+        jsl $=ExtraItemDescriptions__PushToVRAM
+
+        // displaced
+        lda #$00
+        xba
+        lda ($57)
+        jml $01be65
+
+    %EquipPositionNames:
+        "RHan" // we have an ugly hack to draw the last "d" and save space
+        "LHan"
+        "Head"
+        "Body"
+        "Arms"
+}
+
+// insert code in equip screen item menu to update item description
+msfpatch {
+    .addr $01beaa
+        jsl $=ExtraItemDescriptions__EquipItemMenu_PreArrowHook
+
+    .new
+    ExtraItemDescriptions__EquipItemMenu_PreArrowHook:
+        // insert item desc toggle code here
+        lda $01
+        and #$20
+        beq $+DidNotToggle
+
+        jsl $=ExtraItemDescriptions__ToggleEnabled
+        inc $_ExtraItemDescriptions__Dirty
+
+    %DidNotToggle:
+        lda $01
+        and #$0f
+        beq $+NoArrows
+
+        // any arrow pressed, set "needs update" flag
+        inc $_ExtraItemDescriptions__Dirty
+
+    %NoArrows:
+        // displaced
+        lda $01
+        and #$01
+        rtl
+}
+
+// add item desc update to equip item list loop
+msfpatch {
+    .addr $01bea4
+        jml $=ExtraItemDescriptions__EquipItemMenu_CheckUpdateHook
+
+    .new
+    ExtraItemDescriptions__EquipItemMenu_CheckUpdateHook:
+        jsl $=ExtraItemDescriptions__EquipItemMenu_UpdateItemDesc
+        // displaced
+        jsr $_MK_VBlank_PushOAM
+        ldy #$_ExtraItemDescriptions__EquipItemMenu_CandidateItemDrawAddress
+        jsl $=ExtraItemDescriptions__PushToVRAM
+        jsr $_MK_UpdateScrollValues
+        jsr $_MK_UpdateGamepadWithSound
+        jml $01beaa
+}
+
+msfpatch {
+    ExtraItemDescriptions__EquipItemMenu_UpdateItemDesc:
+        lda $_ExtraItemDescriptions__Dirty
+        beq $+Done
+        stz $_ExtraItemDescriptions__Dirty
+
+        // draw highlighted item description
+        lda #$28
+        sta $_ExtraItemDescriptions__HeaderPalette
+
+        lda #$00
+        xba
+        lda ($51)
+        clc
+        adc ($57)
+        asl a
+        adc ($54)
+        asl a
+        tax
+        lda $1440,x
+
+        ldy #$_ExtraItemDescriptions__EquipItemMenu_CandidateItemDrawAddress
+        jsl $=ExtraItemDescriptions__Draw
+        bcs $+DoneDrawing
+        ldy #$_ExtraItemDescriptions__EquipItemMenu_CandidateItemDrawAddress
+        jsl $=ExtraItemDescriptions__DrawBlank
+    %DoneDrawing:
+
+        ldx #$0000
+        lda $_ExtraItemDescriptions__Enabled
+        beq $+Disabled
+
+        // item desc enabled -> set scroll position to lower copy
+        // and hide top cursor
+        ldx #$0100
+        stx $8d
+        ldx #$f0ff
+        stx $0300
+        bra $+Done
+
+    %Disabled:
+        // item desc disabled -> set scroll position to top
+        // and set coordinates of top cursor
+        ldx #$0000
+        stx $8d
+
+        lda $1b37
+        asl a
+        asl a
+        asl a
+        asl a
+        clc
+        adc #$10
+        sta $0301
+        lda #$58
+        sta $0300
+
+    %Done:
+        rtl
+}
+
+// hook into scrolling routines to also update item desc
+msfpatch {
+    .addr $01bee4
+        jsl $=ExtraItemDescriptions__EquipItemMenu_ScrollHook
+
+    .addr $01bf13
+        jsl $=ExtraItemDescriptions__EquipItemMenu_ScrollHook
+
+    .new
+    ExtraItemDescriptions__EquipItemMenu_ScrollHook:
+        pha
+        jsl $=ExtraItemDescriptions__EquipItemMenu_UpdateItemDesc
+        // displaced
+        jsr $_MK_VBlank
+        jsr $_MK_UpdateScrollValues
+        ldy #$_ExtraItemDescriptions__EquipItemMenu_CandidateItemDrawAddress
+        jsl $=ExtraItemDescriptions__PushToVRAM
+        pla
+        dec a
+        rtl
+}
+
+//------------------------------------------
+
+msfpatch {
+    .addr $01c325
+        jml $=ExtraItemDescriptions__ShopSetup_Scroll
+
+    .new
+    ExtraItemDescriptions__ShopSetup_Scroll:
+        // set scroll values on BG1 and BG4 to shift entire shop menu
+        // down by 8 pixels to make space for item desc
+        ldy #$01f8
+        sty $93
+        sty $99
+        jsr $_MK_UpdateScrollValues
+
+        // initialize palette 
+
+        // displaced
+        ldy #$daf5
+        jml $018301
+
+    // move cursor positions down
+    .addr $01c361
+        lda #$38
+    // (buy list cursor position updated in ExtraItemDescriptions__BuyMenu_LoopStartRewrite below)
+    .addr $01cae7
+        ldx #$3858
+    .addr $01caec
+        ldx #$3840
+    .addr $01c7e0
+        ldx #$3858
+    .addr $01c7e5
+        ldx #$3840
+
+    // move character sprites down
+    .addr $019211 [[ 24 ]]
+    .addr $019213 [[ 08 ]]
+    .addr $019215 [[ 40 ]]
+    .addr $019217 [[ 14 ]]
+    .addr $019219 [[ 34 ]]
+    .addr $01921b [[ 24 ]]
+    .addr $01921d [[ 08 ]]
+    .addr $01921f [[ 40 ]]
+    .addr $019221 [[ 14 ]]
+    .addr $019223 [[ 34 ]]
+    
+    // Original version commented out below; changed so that
+    // a wacky challenge can change the X positions
+    // .addr $019210 [[
+    //     00 24 00 08 00 40 18 14 18 34   // 3:2 formation
+    //     18 24 18 08 18 40 00 14 00 34   // 2:3 formation
+    // ]]
+}
+
+// create row of opaque black tiles at bottom of BG4 so that
+// the scrolling sell menu doesn't peek under it
+msfpatch {
+    .addr $01c2e6
+        jml $=ExtraItemDescriptions__ShopSetup_BlackRow
+
+    .new
+    ExtraItemDescriptions__ShopSetup_BlackRow:
+        // draw row of black tiles
+    %DrawLoop:
+        lda #$ff
+        sta $d5c0,x
+        lda #$34        // palette 5 should be black
+        sta $d5c1,x
+        inx
+        inx
+        cpx #$0040
+        bcc $-DrawLoop
+
+        // displaced
+        ldx #$48c0
+        stx $1a71
+        jml $01c2ec
+}
+
+
+// call to update item description on buy menu entry
+// is in extra_shop_manifests.f4c
+
+// shop menu up/down arrow hooks are in items.f4c
+msfpatch {
+    .def ExtraItemDescriptions__ShopDrawAddress $7ea600
+
+    ExtraItemDescriptions__BuyMenuUpdate:
+        lda $_ExtraItemDescriptions__Enabled
+        beq $+Disabled
+
+        lda #$28
+        sta $_ExtraItemDescriptions__HeaderPalette
+
+        lda #$00
+        xba
+        lda $1b7b
+        asl a
+        asl a
+        tax
+        lda $1b55,x
+        ldy #$_ExtraItemDescriptions__ShopDrawAddress
+        jsl $=ExtraItemDescriptions__Draw
+        rtl
+
+    %Disabled:
+        ldy #$_ExtraItemDescriptions__ShopDrawAddress
+        jsl $=ExtraItemDescriptions__Erase
+        rtl
+}
+
+// rewrite top of buy list loop to make space to push item description to VRAM
+msfpatch {
+    .addr $01c58d
+        jml $=ExtraItemDescriptions__BuyMenu_LoopStartRewrite
+
+    .addr $01c592
+        jsr $8281   // moved
+        jsr $c747   // moved
+        jsr $9224   // moved
+        jsr $824c   // moved
+
+        ldy #$_ExtraItemDescriptions__ShopDrawAddress
+        jsl $=ExtraItemDescriptions__PushToVRAM
+
+    .new
+    ExtraItemDescriptions__BuyMenu_LoopStartRewrite:
+        // displaced logic
+        asl a
+        asl a
+        asl a
+        asl a
+        adc #$58  // (normally #$50 but we are also shifting menu down)
+        sta $46
+        lda #$10
+        sta $45
+        jml $01c592
+}
+
+// hook into code exiting buy list to erase item description
+msfpatch {
+    .addr $01c5a8
+        jml $=ExtraItemDescriptions__BuyMenu_ExitHook
+
+    .new
+    ExtraItemDescriptions__BuyMenu_ExitHook:
+        // we need a space to check for the item description toggle,
+        // might as well make it here
+        lda $01
+        and #$20
+        beq $+DidNotToggle
+
+        jsl $=ExtraItemDescriptions__ToggleEnabled
+        jsl $=ExtraItemDescriptions__BuyMenuUpdate
+
+    %DidNotToggle:
+        // displaced
+        lda $01
+        and #$80
+        beq $+DidNotCancel
+
+        ldy #$_ExtraItemDescriptions__ShopDrawAddress
+        jsl $=ExtraItemDescriptions__Erase
+        jml $01c5ae
+
+    %DidNotCancel:
+        jml $01c5af
+}
+
+// hook into base level shop menu to push (erased) item desc
+msfpatch {
+    .addr $01c351
+        jsl $=ExtraItemDescriptions__ShopEraseCommon
+
+    .new
+    ExtraItemDescriptions__ShopEraseCommon:
+        ldy #$_ExtraItemDescriptions__ShopDrawAddress
+        jsl $=ExtraItemDescriptions__PushToVRAM
+
+        // displaced
+        lda $1b79
+        asl a
+        rtl
+}
+
+// rewrite start of sell menu loop to update item desc
+// if needed
+msfpatch {
+    .addr $01c81e
+        jsl $=ExtraItemDescriptions__SellMenu_InitRedrawFlag
+    // new loop point is here
+        jsl $=ExtraItemDescriptions__SellMenu_LoopStartRewrite
+
+        //relocated
+        jsr $8281
+        jsr $824c
+
+        // inserted VRAM update for item desc
+        ldy #$_ExtraItemDescriptions__ShopDrawAddress
+        jsl $=ExtraItemDescriptions__PushToVRAM
+
+        // return to natural flow
+        jmp $c840
+
+    // change loop point
+    .addr $01c908
+        jmp $c822
+
+    .new
+    ExtraItemDescriptions__SellMenu_InitRedrawFlag:
+        lda #$01
+        sta $_ExtraItemDescriptions__Dirty
+        rtl
+
+    ExtraItemDescriptions__SellMenu_LoopStartRewrite:
+        // these instructions are from before where we hooked
+        // into the menu, but we reclamed that space for
+        // instructions that only happen on the first loop
+        // iteration
+        lda #$20
+        sta $3f
+
+        // replicate cursor calculations
+        lda $1b94
+        asl a
+        asl a
+        asl a
+        asl a
+        adc #$58
+        sta $46
+        lda $1b95
+        beq $+LeftColumn
+        lda #$78
+        bra $+HaveColumn
+    %LeftColumn:
+        lda #$08
+    %HaveColumn:
+        sta $45
+
+        // update item desc if needed
+        jsl $=ExtraItemDescriptions__SellMenu_UpdateItemDesc
+
+        rtl
+}
+
+msfpatch {
+    ExtraItemDescriptions__SellMenu_UpdateItemDesc:
+        lda $_ExtraItemDescriptions__Dirty
+        bne $+UpdateItemDesc
+        jmp $_Return
+
+    %UpdateItemDesc:
+        stz $_ExtraItemDescriptions__Dirty
+
+        lda $_ExtraItemDescriptions__Enabled
+        beq $+Disabled
+
+        lda #$28
+        sta $_ExtraItemDescriptions__HeaderPalette
+        // get code of selected item
+        lda #$00
+        xba
+        lda $1b94
+        clc
+        adc $1b96
+        asl a
+        asl a
+        adc $1b95
+        adc $1b95
+        tax
+        lda $1440,x
+        ldy #$_ExtraItemDescriptions__ShopDrawAddress
+        jsl $=ExtraItemDescriptions__Draw
+        bcs $+Return
+        ldy #$_ExtraItemDescriptions__ShopDrawAddress
+        jsl $=ExtraItemDescriptions__DrawBlank
+        bra $+Return
+    %Disabled:
+        ldy #$_ExtraItemDescriptions__ShopDrawAddress
+        jsl $=ExtraItemDescriptions__Erase    
+    %Return:
+        rtl
+    
+}
+
+// hook into cancel button in sell menu to erase item desc
+msfpatch {
+    .addr $01c843
+        jml $=ExtraItemDescriptions__SellMenu_CancelHook
+
+    .new
+    ExtraItemDescriptions__SellMenu_CancelHook:
+        // relocated cancel button check
+        lda $01
+        and #$80
+        beq $+SkipCancel
+
+        // when cancelling, need to clear item desc
+        ldy #$_ExtraItemDescriptions__ShopDrawAddress
+        jsl $=ExtraItemDescriptions__Erase
+
+        // return
+        jml $01c84a
+
+    %SkipCancel:
+        jml $01c84b
+}
+
+// add a check before arrow checks to see if any have been
+// pressed, and if so set a flag to indicate the item desc
+// needs to be updated
+// also use this space for toggle
+msfpatch {
+    .addr $01c878
+        jml $=ExtraItemDescriptions__SellMenu_PreArrowHook
+
+    .new
+    ExtraItemDescriptions__SellMenu_PreArrowHook:
+        stz $_ExtraItemDescriptions__Dirty
+        lda $01
+        and #$0f
+        beq $+CheckToggle
+        inc $_ExtraItemDescriptions__Dirty
+    %CheckToggle:
+        lda $01
+        and #$20
+        beq $+Return
+        jsl $=ExtraItemDescriptions__ToggleEnabled
+        inc $_ExtraItemDescriptions__Dirty
+    %Return:
+        // displaced
+        lda $01
+        and #$01
+        jml $01c87c
+}
+
+// hook into the list scrolling up/down sections to also
+// update item desc if needed
+msfpatch {
+    .addr $01c8c0
+        jsl $=ExtraItemDescriptions__SellMenu_ScrollHook
+        nop
+
+    .addr $01c8f9
+        jsl $=ExtraItemDescriptions__SellMenu_ScrollHook
+        nop
+
+    .new 
+    ExtraItemDescriptions__SellMenu_ScrollHook:
+        jsl $=ExtraItemDescriptions__SellMenu_UpdateItemDesc
+        jsr $_MK_VBlank
+        jsr $_MK_UpdateScrollValues
+        ldy #$_ExtraItemDescriptions__ShopDrawAddress
+        jsl $=ExtraItemDescriptions__PushToVRAM
+
+        // displaced
+        dec $45
+        rtl
+}
+
+// Before drawing confirm sell prompt, change clear+set BG2 -> set BG2
+msfpatch {
+    .addr $01c934
+        jsr $84ba
+}
+
+// Hook into confirm sell prompt cancel routine to redraw item desc,
+// as well as post-sell area
+msfpatch {
+    .addr $01ca0d
+        jsl $=ExtraItemDescriptions__SellMenu_ConfirmDismissHookCLC
+    .addr $01ca1c
+        jsl $=ExtraItemDescriptions__SellMenu_ConfirmDismissHookCLC
+    .addr $01ca5c
+        jsl $=ExtraItemDescriptions__SellMenu_ConfirmDismissHookSEC
+
+    .addr $01c865
+        jsl $=ExtraItemDescriptions__SellMenu_PostSellHook
+        nop nop
+
+    .new
+    ExtraItemDescriptions__SellMenu_ConfirmDismissHookCLC:
+        jsr $_Common
+        clc
+        rtl
+
+    ExtraItemDescriptions__SellMenu_ConfirmDismissHookSEC:
+        jsr $_Common
+        sec
+        rtl
+
+    ExtraItemDescriptions__SellMenu_PostSellHook:
+        jsr $_Common
+        // displaced
+        lda #$20
+        rtl
+
+    %Common:
+        jsr $_MK_ClearBG2
+        lda #$01
+        sta $_ExtraItemDescriptions__Dirty
+        jsl $=ExtraItemDescriptions__SellMenu_UpdateItemDesc
+        jsr $_MK_VBlank_PushBG4
+        jsr $_MK_VBlank_PushBG2
+        rts
+}
+
+
+//------------------------------------------------------------
+
+msfpatch {
+    .def ExtraItemDescriptions__TreasureMenu_DrawAddress $7eae00
+}
+
+// hook into treasure menu initial draw
+msfpatch {
+    .addr $01d4c2
+        jsr $=ExtraItemDescriptions__TreasureMenu_InitHook
+        nop nop
+
+    .new
+    ExtraItemDescriptions__TreasureMenu_InitHook:
+        jsl $=ExtraItemDescriptions__TreasureMenu_DrawBlankingRow
+        // displaced
+        ldx #$ed00
+        stx $1b1d
+        rtl
+}
+
+msfpatch {
+    ExtraItemDescriptions__TreasureMenu_DrawBlankingRow:
+        // draw two lines of black tiles in BG1 to cover
+        // the scrolling item list under it and to serve
+        // as a backdrop for item desc
+        ldx #$0002
+    %DrawLoopStart:
+        lda #$ff
+        sta $c500,x
+        sta $c4c0,x
+        lda #$14     // palette 5 should be black
+        sta $c501,x
+        sta $c4c1,x
+        inx
+        inx
+        cpx #$003c
+        bcc $-DrawLoopStart
+
+        rtl
+}
+
+// restore blanking row when top pane items are redrawn
+msfpatch {
+    .addr $01d5e6
+        jml $=ExtraItemDescriptions__TreasureMenu_RedrawItemNamesHook
+
+    .new
+    ExtraItemDescriptions__TreasureMenu_RedrawItemNamesHook:
+        pha
+        jsr $_MK_ClearSetBG1
+        jsl $=ExtraItemDescriptions__TreasureMenu_DrawBlankingRow
+
+        // y'know, while we're here update the redraw flag because
+        // we'll need it
+        inc $_ExtraItemDescriptions__Dirty
+
+        jml $01d5ea
+}
+
+// move treasure top menu and keep pane down one tile to make room 
+// for desc box at top
+msfpatch {
+    // move top windows down
+    [01ddc9] = 0x50
+    [01ddd1] = 0x42
+
+    // move top window texts down
+    [01ddd5] = 0x84
+    [01dde0] = 0xb2
+    [01dde7] = 0x9a
+    [01ddf2] = 0x9a
+
+    // move top item pane down
+    .addr $01ddcd
+        [[ 02 01 ]]
+
+    // move top bar cursors down
+    [01d551] = 0x16
+
+    // move top pane cursor down
+    [01d62c] = 0x38
+
+    // set scroll on BG1
+    .addr $01d4af
+        ldx #$ffd8
+}
+
+// hook into start of treasure menu top pane routine to init flag
+msfpatch {
+    .addr $01d618
+        jml $=ExtraItemDescriptions__TreasureMenu_BottomPaneInitHook
+
+    .new
+    ExtraItemDescriptions__TreasureMenu_BottomPaneInitHook:    
+        // set "item desc needs redraw"
+        lda #$01
+        sta $_ExtraItemDescriptions__Dirty
+
+        // also clear top cursor
+        ldx #$f0ff
+        stx $0300
+
+        // displaced draw of "exchange" text
+        jsr $_MK_SetBG2
+        ldy #$ddf2
+        jml $01d61e
+}
+
+// hook into treasure menu top pane to update item desc
+msfpatch {
+    .addr $01d645
+        jsl $=ExtraItemDescriptions__TreasureMenu_TopPaneUpdate
+        nop nop
+
+    .new
+    ExtraItemDescriptions__TreasureMenu_TopPaneUpdate:
+        jsl $=ExtraItemDescriptions__TreasureMenu_UpdateTopItemDesc
+        jsr $_MK_VBlank_PushOAM
+        ldy #$_ExtraItemDescriptions__TreasureMenu_DrawAddress
+        jsl $=ExtraItemDescriptions__PushToVRAM
+        jsl $=ExtraItemDescriptions__TreasureMenu_UpdateScrollPosition
+
+        jsr $_MK_UpdateGamepadWithSound
+        rtl
+}
+
+msfpatch {
+    ExtraItemDescriptions__TreasureMenu_UpdateScrollPosition:
+        ldx #$0000
+        lda $_ExtraItemDescriptions__Enabled
+        beq $+HaveScrollPosition
+        ldx #$0100
+    %HaveScrollPosition:
+        stx $8d
+        jsr $_MK_UpdateScrollValues
+        rtl    
+}
+
+// hook into top pane cancel to reset scroll
+msfpatch {
+    .addr $01d64b
+        jml $=ExtraItemDescriptions__TreasureMenu_TopPaneCancelHook
+
+    .new
+    ExtraItemDescriptions__TreasureMenu_TopPaneCancelHook:
+        lda $01
+        and #$80
+        beq $+DidNotCancel
+
+        jsr $_MK_SetBG2
+        ldx #$0000
+        stx $8d
+        jsr $_MK_UpdateScrollValues
+
+        // displaced
+        stz $60
+        ldy #$0304
+        jml $01a2b7
+
+    %DidNotCancel:
+        jml $01d659
+
+}
+
+msfpatch {
+    ExtraItemDescriptions__TreasureMenu_UpdateTopItemDesc:
+        lda $_ExtraItemDescriptions__Dirty
+        beq $+Done
+        stz $_ExtraItemDescriptions__Dirty
+
+        lda #$00
+        xba
+        lda $1bb3
+        asl a
+        clc
+        adc $1bb4
+        asl a
+        tax
+        lda $ff28,x
+        jmp $_Draw
+
+    ExtraItemDescriptions__TreasureMenu_UpdateBottomItemDesc:
+        lda $_ExtraItemDescriptions__Dirty
+        beq $+Done
+        stz $_ExtraItemDescriptions__Dirty
+
+        lda #$00
+        xba
+        lda $1bb5
+        clc
+        adc $1bb7
+        asl a
+        adc $1bb6
+        asl a
+        tax
+        lda $1440,x
+
+    %Draw:
+        pha
+        lda #$28
+        sta $_ExtraItemDescriptions__HeaderPalette
+        pla
+        ldy #$_ExtraItemDescriptions__TreasureMenu_DrawAddress
+        jsl $=ExtraItemDescriptions__Draw
+        bcs $+Done
+        ldy #$_ExtraItemDescriptions__TreasureMenu_DrawAddress
+        jsl $=ExtraItemDescriptions__DrawBlank
+
+    %Done:
+        rtl
+}
+
+// hook into arrow updates to redraw item desc
+msfpatch {
+    .addr $01d662
+        jsl $=ExtraItemDescriptions__TreasureMenu_PreArrowHook
+
+    .addr $01d6dd
+        jsl $=ExtraItemDescriptions__TreasureMenu_PreArrowHook
+
+    .new
+    ExtraItemDescriptions__TreasureMenu_PreArrowHook:
+        // also need a spot to toggle item desc, so do here
+        lda $01
+        and #$20
+        beq $+DidNotToggle
+
+        jsl $=ExtraItemDescriptions__ToggleEnabled
+        inc $_ExtraItemDescriptions__Dirty
+
+    %DidNotToggle:
+        lda $01
+        and #$0f
+        beq $+Done
+        inc $_ExtraItemDescriptions__Dirty
+    %Done:
+        lda $01
+        and #$01
+        rtl
+}
+
+// hook into top pane confirm button to set update flag
+msfpatch {
+    .addr $01d65b
+        jml $=ExtraItemDescriptions__TreasureMenu_TopPaneConfirmHook
+
+    .new
+    ExtraItemDescriptions__TreasureMenu_TopPaneConfirmHook:
+        and #$80
+        beq $+DidNotConfirm
+
+        // set update flag
+        inc $_ExtraItemDescriptions__Dirty
+        jml $01d65f
+
+    %DidNotConfirm:
+        jml $01d662
+}
+
+// add update check to bottom list routine
+msfpatch {
+    .addr $01d6c2
+        jsl $=ExtraItemDescriptions__TreasureMenu_BottomPaneUpdate
+        nop nop
+
+    .new
+    ExtraItemDescriptions__TreasureMenu_BottomPaneUpdate:
+        jsl $=ExtraItemDescriptions__TreasureMenu_UpdateBottomItemDesc
+        // displaced
+        jsr $_MK_VBlank_PushOAM
+        ldy #$_ExtraItemDescriptions__TreasureMenu_DrawAddress
+        jsl $=ExtraItemDescriptions__PushToVRAM
+        jsl $=ExtraItemDescriptions__TreasureMenu_UpdateScrollPosition
+        jsr $_MK_UpdateGamepadWithSound
+        rtl
+}
+
+// hook into bottom pane scrolls to update item desc
+msfpatch {
+    .addr $01d71e
+        jsl $=ExtraItemDescriptions__TreasureMenu_ScrollHook
+    .addr $01d753
+        jsl $=ExtraItemDescriptions__TreasureMenu_ScrollHook
+
+    .new
+    ExtraItemDescriptions__TreasureMenu_ScrollHook:
+        pha
+        jsl $=ExtraItemDescriptions__TreasureMenu_UpdateBottomItemDesc
+        jsr $_MK_VBlank
+        jsr $_MK_UpdateScrollValues
+        ldy #$_ExtraItemDescriptions__TreasureMenu_DrawAddress
+        jsl $=ExtraItemDescriptions__PushToVRAM
+        pla
+        dec a
+        rtl
+}
+
+// hook into bottom pane cancel to set update flag
+msfpatch {
+    .addr $01d6ca
+        jml $=ExtraItemDescriptions__TreasureMenu_BottomPaneCancelHook
+
+    .new
+    ExtraItemDescriptions__TreasureMenu_BottomPaneCancelHook:
+        and #$80
+        beq $+DidNotCancel
+
+        inc $_ExtraItemDescriptions__Dirty
+        jml $01d6ce
+
+    %DidNotCancel:
+        jml $01d6d1
+}

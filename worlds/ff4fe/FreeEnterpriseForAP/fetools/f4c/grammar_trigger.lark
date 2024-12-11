@@ -1,0 +1,13 @@
+trigger_block_parameters : map_value number
+
+trigger_block_body : [position] [function]
+                   | "delete"                -> delete
+
+position : "position" number number
+
+function : "treasure" content ["fight" number]                          -> treasure
+         | "teleport" map_value "at" number number ["facing" direction] -> teleport
+         | "event" "call" number                                        -> event_call
+
+content : item_value           -> item
+        | decimal_number "gp"  -> gp
