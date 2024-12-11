@@ -10,7 +10,7 @@ from .data.RoomNames import RoomName
 from .Items import SuitUpgrade
 
 from .data.AreaNames import MetroidPrimeArea
-from typing import TYPE_CHECKING, Callable, Dict, List
+from typing import TYPE_CHECKING, Any, Callable, Dict, List
 
 
 if TYPE_CHECKING:
@@ -53,9 +53,7 @@ class AreaDoorColorMapping(AreaMapping[DoorColorMapping]):
 
 class WorldDoorColorMapping(WorldMapping[DoorColorMapping]):
     @classmethod
-    def from_option_value(
-        cls, data: Dict[str, Dict[str, str]]
-    ) -> "WorldDoorColorMapping":
+    def from_option_value(cls, data: Dict[str, Any]) -> "WorldDoorColorMapping":
         return WorldDoorColorMapping(
             super().from_option_value_generic(data, AreaDoorColorMapping)
         )
