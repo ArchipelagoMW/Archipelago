@@ -218,22 +218,22 @@ class ValidInventory:
             for item_name in group_member_names:
                 inventory_items = self.item_name_to_item.get(item_name, [])
                 group_to_item[group].extend(item for item in inventory_items if ItemFilterFlags.Removed not in item.filter_flags)
-            self.world.random.shuffle(group_to_item[group])
 
         # Limit the maximum number of upgrades
         if max_upgrades_per_unit != -1:
             for group_name, group_items in group_to_item.items():
+                self.world.random.shuffle(group_to_item[group])
                 for item in group_items:
                     if len([x for x in group_items if ItemFilterFlags.Culled not in x.filter_flags]) <= max_upgrades_per_unit:
                         break
                     if ItemFilterFlags.Uncullable & item.filter_flags:
                         continue
                     attempt_removal(item, remove_flag=ItemFilterFlags.Culled)
-                self.world.random.shuffle(group_items)
         
         # Requesting minimum upgrades for items that have already been locked/placed when minimum required
         if min_upgrades_per_unit != -1:
             for group_name, group_items in group_to_item.items():
+                self.world.random.shuffle(group_items)
                 for item in group_items:
                     if len([x for x in group_items if ItemFilterFlags.RequestedOrBetter & x.filter_flags]) >= min_upgrades_per_unit:
                         break
@@ -295,23 +295,29 @@ class ValidInventory:
         def item_included(item: StarcraftItem) -> bool:
             return bool(
                 ItemFilterFlags.Removed not in item.filter_flags
-                or (ItemFilterFlags.Unexcludable & item.filter_flags)
-                or (not (ItemFilterFlags.Excluded & item.filter_flags)
-                    and (ItemFilterFlags.Requested & item.filter_flags)
-                )
-                or not (ItemFilterFlags.Culled & item.filter_flags)
+                and ((ItemFilterFlags.Unexcludable|ItemFilterFlags.Excluded) & item.filter_flags) != ItemFilterFlags.Excluded
             )
+        
+        # Actually remove culled items; we won't re-add them
+        inventory = [
+            item for item in inventory
+            if (((ItemFilterFlags.Uncullable|ItemFilterFlags.Culled) & item.filter_flags) != ItemFilterFlags.Culled)
+        ]
 
         # Part 1: Remove items that are not requested
         start_inventory_size = len([item for item in inventory if ItemFilterFlags.StartInventory in item.filter_flags])
         current_inventory_size = len([item for item in inventory if item_included(item)])
+        cullable_items = [item for item in inventory if not (ItemFilterFlags.Uncullable & item.filter_flags)]
         while current_inventory_size - start_inventory_size > inventory_size:
-            cullable_items = [item for item in inventory if not (ItemFilterFlags.Uncullable & item.filter_flags)]
             if len(cullable_items) == 0:
                 break
             if remove_random_item(cullable_items):
                 inventory = [item for item in inventory if ItemFilterFlags.Removed not in item.filter_flags]
                 current_inventory_size = len([item for item in inventory if item_included(item)])
+            cullable_items = [
+                item for item in cullable_items
+                if not ((ItemFilterFlags.Removed|ItemFilterFlags.Uncullable) & item.filter_flags)
+            ]
         
         # Handle too many requested
         if current_inventory_size - start_inventory_size > inventory_size:
@@ -319,13 +325,17 @@ class ValidInventory:
                 item.filter_flags &= ~ItemFilterFlags.Requested
 
         # Part 2: If we need to remove more, allow removing requested items
+        excludable_items = [item for item in inventory if not (ItemFilterFlags.Unexcludable & item.filter_flags)]
         while current_inventory_size - start_inventory_size > inventory_size:
-            excludable_items = [item for item in inventory if not (ItemFilterFlags.Unexcludable & item.filter_flags)]
             if len(excludable_items) == 0:
                 break
             if remove_random_item(excludable_items):
                 inventory = [item for item in inventory if ItemFilterFlags.Removed not in item.filter_flags]
                 current_inventory_size = len([item for item in inventory if item_included(item)])
+            excludable_items = [
+                item for item in inventory
+                if not ((ItemFilterFlags.Removed|ItemFilterFlags.Unexcludable) & item.filter_flags)
+            ]
 
         # Part 3: If it still doesn't fit, move locked items to start inventory until it fits
         precollect_items = current_inventory_size - inventory_size - start_inventory_size
@@ -340,7 +350,6 @@ class ValidInventory:
             for item in promotable[:precollect_items]:
                 item.filter_flags |= ItemFilterFlags.StartInventory
                 start_inventory_size += 1
-
 
         # Removing extra dependencies
         # Transport Hook
