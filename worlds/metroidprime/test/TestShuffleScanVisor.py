@@ -1,4 +1,3 @@
-from ..PrimeOptions import MetroidPrimeOptions
 from ..data.RoomNames import RoomName
 from ..Items import SuitUpgrade
 from ..data.Tricks import TrickDifficulty
@@ -51,10 +50,7 @@ class TestScanVisorRequiredForNonPreScannedElevators(MetroidPrimeTestBase):
     options = {"pre_scan_elevators": False, "shuffle_scan_visor": True}
 
     def test_starting_room_switches_to_save_1(self):
-        options: MetroidPrimeOptions = self.world.options
-        self.assertTrue(
-            options.starting_room_name.value == RoomName.Save_Station_1.value
-        )
+        self.assertTrue(self.world.starting_room_name == RoomName.Save_Station_1.value)
 
     def test_scan_visor_required_for_elevator(self):
         state = self.multiworld.state
@@ -69,8 +65,7 @@ class TestScanVisorNotRequiredForPreScannedElevators(MetroidPrimeTestBase):
     options = {"pre_scan_elevators": True, "shuffle_scan_visor": True}
 
     def test_starting_room_is_landing_site(self):
-        options: MetroidPrimeOptions = self.world.options
-        self.assertTrue(options.starting_room_name.value == RoomName.Landing_Site.value)
+        self.assertTrue(self.world.starting_room_name == RoomName.Landing_Site.value)
 
     def test_scan_visor_not_required_for_elevator(self):
         state = self.multiworld.state

@@ -73,7 +73,7 @@ class MagmoorCavernsAreaData(AreaData):
                         and can_bomb(world, state)
                         and (
                             can_warp_to_start(world, state)
-                            if world.options.starting_room_name
+                            if world.starting_room_name
                             == RoomName.Warrior_Shrine.value
                             else state.can_reach(
                                 RoomName.Warrior_Shrine.value, None, world.player

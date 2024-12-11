@@ -132,6 +132,7 @@ class MetroidPrimeWorld(World):
     blast_shield_mapping: Optional[WorldBlastShieldMapping] = None
     game_region_data: Dict[MetroidPrimeArea, AreaData]
     has_generated_bomb_doors: bool = False
+    starting_room_name: Optional[str] = None
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -189,6 +190,8 @@ class MetroidPrimeWorld(World):
                     self.blast_shield_mapping = (
                         WorldBlastShieldMapping.from_option_value(value)
                     )
+                if key == "starting_room_name":
+                    self.starting_room_name = value
 
     def generate_early(self) -> None:
         if hasattr(self.multiworld, "re_gen_passthrough"):
@@ -333,6 +336,8 @@ class MetroidPrimeWorld(World):
             slot_data["blast_shield_mapping"] = (
                 self.blast_shield_mapping.to_option_value()
             )
+        if self.starting_room_name:
+            slot_data["starting_room_name"] = self.starting_room_name
 
         return slot_data
 

@@ -365,17 +365,16 @@ def get_area_by_room_name(
 
 def init_starting_room_data(world: "MetroidPrimeWorld"):
     difficulty = world.options.starting_room.value
-    yaml_name = world.options.starting_room_name.value
     world.prefilled_item_map = {}
-    if yaml_name:
-        if yaml_name in all_start_rooms:
-            world.starting_room_data = get_starting_room_by_name(world, yaml_name)
+    if world.starting_room_name:
+        if world.starting_room_name in all_start_rooms:
+            world.starting_room_data = get_starting_room_by_name(
+                world, world.starting_room_name
+            )
         else:
             world.starting_room_data = StartRoomData(
-                name=world.options.starting_room_name.current_key,
-                area=get_area_by_room_name(
-                    world, world.options.starting_room_name.current_key
-                ),
+                name=world.starting_room_name,
+                area=get_area_by_room_name(world, world.starting_room_name),
             )
             world.starting_room_data.loadouts = [
                 StartRoomLoadout(loadout=[SuitUpgrade.Power_Beam])
@@ -403,7 +402,7 @@ def init_starting_room_data(world: "MetroidPrimeWorld"):
                 world, difficulty
             )
         assert world.starting_room_data and world.starting_room_data.name
-        world.options.starting_room_name.value = world.starting_room_data.name
+        world.starting_room_name = world.starting_room_data.name
 
 
 def init_starting_loadout(world: "MetroidPrimeWorld"):

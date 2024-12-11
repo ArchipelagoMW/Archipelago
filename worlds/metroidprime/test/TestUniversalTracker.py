@@ -117,12 +117,11 @@ class TestUniversalTracker(MetroidPrimeUniversalTrackerTestBase):
 
     def test_starting_room_info_is_preserved(self):
         self.world_setup()  # type: ignore
+        self.init_passhthrough(slot_data)
         world: "MetroidPrimeWorld" = self.world
-        assert world.starting_room_data.selected_loadout
         self.world.generate_early()
-        self.assertEqual(
-            world.starting_room_data.name, self.options["starting_room_name"]
-        )
+        assert world.starting_room_data.selected_loadout
+        self.assertEqual(world.starting_room_data.name, slot_data["starting_room_name"])
         self.assertEqual(
             SuitUpgrade(self.options["starting_beam"]),
             world.starting_room_data.selected_loadout.starting_beam,
@@ -131,12 +130,11 @@ class TestUniversalTracker(MetroidPrimeUniversalTrackerTestBase):
     def test_starting_room_info_is_preserved_with_progressive_beams(self):
         self.options["progressive_beam_upgrades"] = 1
         self.world_setup()  # type: ignore
+        self.init_passhthrough(slot_data)
         world: "MetroidPrimeWorld" = self.world
-        assert world.starting_room_data.selected_loadout
         self.world.generate_early()
-        self.assertEqual(
-            world.starting_room_data.name, self.options["starting_room_name"]
-        )
+        assert world.starting_room_data.selected_loadout
+        self.assertEqual(world.starting_room_data.name, slot_data["starting_room_name"])
         self.assertEqual(
             SuitUpgrade(self.options["starting_beam"]),
             world.starting_room_data.selected_loadout.starting_beam,

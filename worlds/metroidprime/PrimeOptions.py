@@ -208,14 +208,6 @@ class DisableStartingRoomBKPrevention(Toggle):
     display_name = "Disable Starting Room BK Prevention"
 
 
-class StartingRoomName(TextChoice):
-    """Should not be shown in ui, can be used to override the starting room."""
-
-    display_name = "Starting Room Name"
-    default = ""
-    visibility = Visibility.spoiler
-
-
 class CombatLogicDifficultyOption(Choice):
     """When enabled, the game will include energy tanks and the charge beam as requirements for certain combat heavy rooms."""
 
@@ -450,7 +442,6 @@ class MetroidPrimeOptions(PerGameCommonOptions):
     randomize_starting_beam: RandomizeStartingBeam
     starting_beam: StartingBeam
     starting_room: StartingRoom
-    starting_room_name: StartingRoomName
     disable_starting_room_bk_prevention: DisableStartingRoomBKPrevention
     progressive_beam_upgrades: ProgressiveBeamUpgrades
     non_varia_heat_damage: NonVariaHeatDamage

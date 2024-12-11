@@ -6,7 +6,7 @@ from ..DoorRando import DoorLockType
 from ..Config import make_config
 from ..data.AreaNames import MetroidPrimeArea
 from ..data.RoomNames import RoomName
-from . import MetroidPrimeTestBase
+from . import MetroidPrimeTestBase, MetroidPrimeWithOverridesTestBase
 from typing import List, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -129,9 +129,13 @@ class TestRegionalDoorRando(MetroidPrimeTestBase):
         )
 
 
-class TestDoorRandoWithDifferentStartRoomNonRequiredBeam(MetroidPrimeTestBase):
+class TestDoorRandoWithDifferentStartRoomNonRequiredBeam(
+    MetroidPrimeWithOverridesTestBase
+):
     options = {
         "door_color_randomization": DoorColorRandomization.option_global,
+    }
+    overrides = {
         "starting_room_name": RoomName.Tower_Chamber.value,
     }
 
@@ -148,9 +152,11 @@ class TestDoorRandoWithDifferentStartRoomNonRequiredBeam(MetroidPrimeTestBase):
         )
 
 
-class TestDoorRandoWithDifferentStartRoomWithRequiredBeam(MetroidPrimeTestBase):
+class TestDoorRandoWithDifferentStartRoomWithRequiredBeam(MetroidPrimeWithOverridesTestBase):
     options = {
         "door_color_randomization": DoorColorRandomization.option_global,
+    }
+    overrides={
         "starting_room_name": RoomName.Save_Station_B.value,
     }
 
