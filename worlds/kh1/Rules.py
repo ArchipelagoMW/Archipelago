@@ -993,16 +993,6 @@ def set_rules(kh1world):
         lambda state: state.has("Slides", player))
     add_rule(kh1world.get_location("Deep Jungle Climbing Trees Save Gorillas"),
         lambda state: state.has("Slides", player))
-    add_rule(kh1world.get_location("Deep Jungle Jungle Slider 10 Fruits"),
-        lambda state: state.has("Slides", player))
-    add_rule(kh1world.get_location("Deep Jungle Jungle Slider 20 Fruits"),
-        lambda state: state.has("Slides", player))
-    add_rule(kh1world.get_location("Deep Jungle Jungle Slider 30 Fruits"),
-        lambda state: state.has("Slides", player))
-    add_rule(kh1world.get_location("Deep Jungle Jungle Slider 40 Fruits"),
-        lambda state: state.has("Slides", player))
-    add_rule(kh1world.get_location("Deep Jungle Jungle Slider 50 Fruits"),
-        lambda state: state.has("Slides", player))
     add_rule(kh1world.get_location("Wonderland Bizarre Room Read Book"),
         lambda state: state.has("Footprints", player))
     add_rule(kh1world.get_location("Olympus Coliseum Coliseum Gates Green Trinity"),
@@ -1507,6 +1497,17 @@ def set_rules(kh1world):
                 has_emblems(state, player, options.keyblades_unlock_chests) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
             ))
+    if options.jungle_slider:
+        add_rule(kh1world.get_location("Deep Jungle Jungle Slider 10 Fruits"),
+            lambda state: state.has("Slides", player))
+        add_rule(kh1world.get_location("Deep Jungle Jungle Slider 20 Fruits"),
+            lambda state: state.has("Slides", player))
+        add_rule(kh1world.get_location("Deep Jungle Jungle Slider 30 Fruits"),
+            lambda state: state.has("Slides", player))
+        add_rule(kh1world.get_location("Deep Jungle Jungle Slider 40 Fruits"),
+            lambda state: state.has("Slides", player))
+        add_rule(kh1world.get_location("Deep Jungle Jungle Slider 50 Fruits"),
+            lambda state: state.has("Slides", player))
     for i in range(options.level_checks):
         add_rule(kh1world.get_location("Level " + str(i+1).rjust(3,'0')),
             lambda state, level_num=i: (
