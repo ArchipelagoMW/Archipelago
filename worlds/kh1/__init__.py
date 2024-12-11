@@ -93,6 +93,13 @@ class KH1World(World):
             for starting_world in starting_worlds:
                 self.multiworld.push_precollected(self.create_item(starting_world))
         
+        # Handle starting tools
+        starting_tools = []
+        if self.options.starting_tools:
+            starting_tools = ["Scan", "Dodge Roll"]
+            self.multiworld.push_precollected(self.create_item("Scan"))
+            self.multiworld.push_precollected(self.create_item("Dodge Roll"))
+        
         item_pool: List[KH1Item] = []
         possible_level_up_item_pool = []
         level_up_item_pool = []
@@ -143,7 +150,7 @@ class KH1World(World):
             quantity = data.max_quantity
             if data.category not in non_filler_item_categories:
                 continue
-            if name in starting_worlds:
+            if name in starting_worlds or name in starting_tools:
                 continue
             if data.category == "Puppies":
                 if self.options.puppies == "triplets" and "-" in name:
