@@ -46,9 +46,7 @@ beam_combo_items = [
 
 
 class TestNoBlastShieldRando(MetroidPrimeTestBase):
-    options = {
-        "blast_shield_randomization": BlastShieldRandomization.option_none
-    }
+    options = {"blast_shield_randomization": BlastShieldRandomization.option_none}
 
     def test_all_blast_shields_are_not_randomized(self):
         """Verify that the blast shield to ruined shrine access is still there and not randomized"""
@@ -90,7 +88,9 @@ class TestNoBlastShieldRando(MetroidPrimeTestBase):
 
 
 class TestReplaceBlastShieldRando(MetroidPrimeTestBase):
-    options = {"blast_shield_randomization": BlastShieldRandomization.option_replace_existing}
+    options = {
+        "blast_shield_randomization": BlastShieldRandomization.option_replace_existing
+    }
 
     def test_blast_shield_mapping_is_generated_for_each_vanilla_door(self):
         world: "MetroidPrimeWorld" = self.world
@@ -168,6 +168,7 @@ class TestBlastShieldMapping(MetroidPrimeTestBase):
     }
 
     def test_blast_shield_mapping_passed_as_option_applies_to_logic(self):
+        NEED TO FIGURE OUT HOW TO SET THE BLAST SHIELD MAPPING IN THE TEST
         test_region = RoomName.Canyon_Cavern.value
         world: "MetroidPrimeWorld" = self.world
         assert world.blast_shield_mapping

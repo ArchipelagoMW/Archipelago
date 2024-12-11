@@ -2,7 +2,6 @@ from enum import Enum
 from Options import (
     DeathLink,
     DefaultOnToggle,
-    OptionDict,
     OptionList,
     TextChoice,
     Toggle,
@@ -261,14 +260,6 @@ class BlastShieldRandomization(Choice):
     default = 0
 
 
-class BlastShieldMapping(OptionDict):
-    """Which blast shield types go to which colors."""
-
-    display_name = "Door Color Mapping"
-    visibility = Visibility.none
-    default = {}
-
-
 class BlastShieldAvailableTypes(Choice):
     """Which blast shield types are available for randomization.
     All: All blast shield types are available, including beam combos, bomb, power bomb, charge beam, and super missiles
@@ -451,7 +442,6 @@ class MetroidPrimeOptions(PerGameCommonOptions):
     elevator_randomization: ElevatorRandomization
     door_color_randomization: DoorColorRandomization
     blast_shield_randomization: BlastShieldRandomization
-    blast_shield_mapping: BlastShieldMapping
     blast_shield_frequency: BlastShieldFrequency
     blast_shield_available_types: BlastShieldAvailableTypes
     locked_door_count: LockedDoorCount

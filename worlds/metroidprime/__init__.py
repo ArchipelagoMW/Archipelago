@@ -185,6 +185,10 @@ class MetroidPrimeWorld(World):
                     self.door_color_mapping = WorldDoorColorMapping.from_option_value(
                         value
                     )
+                if key == "blast_shield_mapping":
+                    self.blast_shield_mapping = (
+                        WorldBlastShieldMapping.from_option_value(value)
+                    )
 
     def generate_early(self) -> None:
         if hasattr(self.multiworld, "re_gen_passthrough"):
@@ -209,19 +213,12 @@ class MetroidPrimeWorld(World):
         init_starting_loadout(self)
 
         # Randomize Blast Shields
-        if self.options.blast_shield_mapping:
-            self.blast_shield_mapping = WorldBlastShieldMapping.from_option_value(
-                self.options.blast_shield_mapping.value
-            )
-        elif (
+        if (
             self.options.blast_shield_randomization.value
             != BlastShieldRandomization.option_none
             or self.options.locked_door_count > 0
-        ):
+        ) and not self.blast_shield_mapping:
             self.blast_shield_mapping = get_world_blast_shield_mapping(self)
-            self.options.blast_shield_mapping.value = (
-                self.blast_shield_mapping.to_option_value()
-            )
 
         if self.blast_shield_mapping:
             apply_blast_shield_mapping(self)
@@ -332,6 +329,10 @@ class MetroidPrimeWorld(World):
         slot_data["elevator_mapping"] = self.elevator_mapping
         if self.door_color_mapping:
             slot_data["door_color_mapping"] = self.door_color_mapping.to_option_value()
+        if self.blast_shield_mapping:
+            slot_data["blast_shield_mapping"] = (
+                self.blast_shield_mapping.to_option_value()
+            )
 
         return slot_data
 
