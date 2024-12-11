@@ -1,5 +1,4 @@
-from ...options import SeasonRandomization, Friendsanity, FriendsanityHeartSize, Fishsanity, ExcludeGingerIsland, SkillProgression, ToolProgression, \
-    ElevatorProgression, SpecialOrderLocations
+from ...options import SeasonRandomization, Fishsanity, ExcludeGingerIsland, SkillProgression, ToolProgression, ElevatorProgression, SpecialOrderLocations
 from ...strings.fish_names import Fish
 from ...test import SVTestBase
 
