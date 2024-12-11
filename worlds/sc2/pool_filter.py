@@ -387,7 +387,8 @@ class ValidInventory:
         
         # Part 4: Last-ditch effort to reduce inventory size; upgrades can go in start inventory
         current_inventory_size = len(inventory)
-        if current_inventory_size - start_inventory_size > inventory_size:
+        precollect_items = current_inventory_size - inventory_size - start_inventory_size
+        if precollect_items > 0:
             promotable = [
                 item
                 for item in inventory
