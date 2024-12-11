@@ -1,5 +1,6 @@
 """Outputs a Factorio Mod to facilitate integration with Archipelago"""
 
+import dataclasses
 import json
 import os
 import shutil
@@ -34,9 +35,11 @@ base_info = {
     "author": "Berserker",
     "homepage": "https://archipelago.gg",
     "description": "Integration client for the Archipelago Randomizer",
-    "factorio_version": "1.1",
+    "factorio_version": "2.0",
     "dependencies": [
-        "base >= 1.1.0",
+        "base >= 2.0.15",
+        "? quality >= 2.0.15",
+        "! space-age",
         "? science-not-invited",
         "? factory-levels"
     ]
@@ -88,6 +91,8 @@ class FactorioModFile(worlds.Files.APContainer):
 def generate_mod(world: "Factorio", output_directory: str):
     player = world.player
     multiworld = world.multiworld
+    random = world.random
+
     global data_final_template, locale_template, control_template, data_template, settings_template
     with template_load_lock:
         if not data_final_template:
@@ -110,8 +115,6 @@ def generate_mod(world: "Factorio", output_directory: str):
     mod_name = f"AP-{multiworld.seed_name}-P{player}-{multiworld.get_file_safe_player_name(player)}"
     versioned_mod_name = mod_name + "_" + Utils.__version__
 
-    random = multiworld.per_slot_randoms[player]
-
     def flop_random(low, high, base=None):
         """Guarantees 50% below base and 50% above base, uniform distribution in each direction."""
         if base:
@@ -129,43 +132,43 @@ def generate_mod(world: "Factorio", output_directory: str):
         "base_tech_table": base_tech_table,
         "tech_to_progressive_lookup": tech_to_progressive_lookup,
         "mod_name": mod_name,
-        "allowed_science_packs": multiworld.max_science_pack[player].get_allowed_packs(),
-        "custom_technologies": multiworld.worlds[player].custom_technologies,
+        "allowed_science_packs": world.options.max_science_pack.get_allowed_packs(),
+        "custom_technologies": world.custom_technologies,
         "tech_tree_layout_prerequisites": world.tech_tree_layout_prerequisites,
-        "slot_name": multiworld.player_name[player], "seed_name": multiworld.seed_name,
+        "slot_name": world.player_name,
+        "seed_name": multiworld.seed_name,
         "slot_player": player,
-        "starting_items": multiworld.starting_items[player], "recipes": recipes,
-        "random": random, "flop_random": flop_random,
-        "recipe_time_scale": recipe_time_scales.get(multiworld.recipe_time[player].value, None),
-        "recipe_time_range": recipe_time_ranges.get(multiworld.recipe_time[player].value, None),
+        "recipes": recipes,
+        "random": random,
+        "flop_random": flop_random,
+        "recipe_time_scale": recipe_time_scales.get(world.options.recipe_time.value, None),
+        "recipe_time_range": recipe_time_ranges.get(world.options.recipe_time.value, None),
         "free_sample_blacklist": {item: 1 for item in free_sample_exclusions},
+        "free_sample_quality_name": world.options.free_samples_quality.current_key,
         "progressive_technology_table": {tech.name: tech.progressive for tech in
                                          progressive_technology_table.values()},
         "custom_recipes": world.custom_recipes,
-        "max_science_pack": multiworld.max_science_pack[player].value,
         "liquids": fluids,
-        "goal": multiworld.goal[player].value,
-        "energy_link": multiworld.energy_link[player].value,
-        "useless_technologies": useless_technologies,
-        "chunk_shuffle": multiworld.chunk_shuffle[player].value if hasattr(multiworld, "chunk_shuffle") else 0,
+        "removed_technologies": world.removed_technologies,
+        "chunk_shuffle": 0,
     }
 
-    for factorio_option in Options.factorio_options:
+    for factorio_option, factorio_option_instance in dataclasses.asdict(world.options).items():
         if factorio_option in ["free_sample_blacklist", "free_sample_whitelist"]:
             continue
-        template_data[factorio_option] = getattr(multiworld, factorio_option)[player].value
+        template_data[factorio_option] = factorio_option_instance.value
 
-    if getattr(multiworld, "silo")[player].value == Options.Silo.option_randomize_recipe:
+    if world.options.silo == Options.Silo.option_randomize_recipe:
         template_data["free_sample_blacklist"]["rocket-silo"] = 1
 
-    if getattr(multiworld, "satellite")[player].value == Options.Satellite.option_randomize_recipe:
+    if world.options.satellite == Options.Satellite.option_randomize_recipe:
         template_data["free_sample_blacklist"]["satellite"] = 1
 
-    template_data["free_sample_blacklist"].update({item: 1 for item in multiworld.free_sample_blacklist[player].value})
-    template_data["free_sample_blacklist"].update({item: 0 for item in multiworld.free_sample_whitelist[player].value})
+    template_data["free_sample_blacklist"].update({item: 1 for item in world.options.free_sample_blacklist.value})
+    template_data["free_sample_blacklist"].update({item: 0 for item in world.options.free_sample_whitelist.value})
 
     zf_path = os.path.join(output_directory, versioned_mod_name + ".zip")
-    mod = FactorioModFile(zf_path, player=player, player_name=multiworld.player_name[player])
+    mod = FactorioModFile(zf_path, player=player, player_name=world.player_name)
 
     if world.zip_path:
         with zipfile.ZipFile(world.zip_path) as zf:

@@ -19,28 +19,30 @@
 {% block body %}
     {% include 'header/grassHeader.html' %}
     <div id="host-room">
-        {% if room.owner == session["_id"] %}
-            Room created from <a href="{{ url_for("view_seed", seed=room.seed.id) }}">Seed #{{ room.seed.id|suuid }}</a>
-            <br />
-        {% endif %}
-        {% if room.tracker %}
-            This room has a <a href="{{ url_for("get_multiworld_tracker", tracker=room.tracker) }}">Multiworld Tracker</a>
-            and a <a href="{{ url_for("get_multiworld_sphere_tracker", tracker=room.tracker) }}">Sphere Tracker</a> enabled.
-            <br />
-        {% endif %}
-        The server for this room will be paused after {{ room.timeout//60//60 }} hours of inactivity.
-        Should you wish to continue later,
-        anyone can simply refresh this page and the server will resume.<br>
-        {% if room.last_port == -1 %}
-            There was an error hosting this Room. Another attempt will be made on refreshing this page.
-            The most likely failure reason is that the multiworld is too old to be loaded now.
-        {% elif room.last_port %}
-            You can connect to this room by using <span class="interactive"
-            data-tooltip="This means address/ip is {{ config['HOST_ADDRESS'] }} and port is {{ room.last_port }}.">
-            '/connect {{ config['HOST_ADDRESS'] }}:{{ room.last_port }}'
-            </span>
-            in the <a href="{{ url_for("tutorial_landing")}}">client</a>.<br>
-        {% endif %}
+        <span id="host-room-info">
+            {% if room.owner == session["_id"] %}
+                Room created from <a href="{{ url_for("view_seed", seed=room.seed.id) }}">Seed #{{ room.seed.id|suuid }}</a>
+                <br />
+            {% endif %}
+            {% if room.tracker %}
+                This room has a <a href="{{ url_for("get_multiworld_tracker", tracker=room.tracker) }}">Multiworld Tracker</a>
+                and a <a href="{{ url_for("get_multiworld_sphere_tracker", tracker=room.tracker) }}">Sphere Tracker</a> enabled.
+                <br />
+            {% endif %}
+            The server for this room will be paused after {{ room.timeout//60//60 }} hours of inactivity.
+            Should you wish to continue later,
+            anyone can simply refresh this page and the server will resume.<br>
+            {% if room.last_port == -1 %}
+                There was an error hosting this Room. Another attempt will be made on refreshing this page.
+                The most likely failure reason is that the multiworld is too old to be loaded now.
+            {% elif room.last_port %}
+                You can connect to this room by using <span class="interactive"
+                data-tooltip="This means address/ip is {{ config['HOST_ADDRESS'] }} and port is {{ room.last_port }}.">
+                '/connect {{ config['HOST_ADDRESS'] }}:{{ room.last_port }}'
+                </span>
+                in the <a href="{{ url_for("tutorial_landing")}}">client</a>.<br>
+            {% endif %}
+        </span>
         {{ macros.list_patches_room(room) }}
         {% if room.owner == session["_id"] %}
             <div style="display: flex; align-items: center;">
@@ -49,6 +51,7 @@
                         <label for="cmd"></label>
                         <input class="form-control" type="text" id="cmd" name="cmd"
                                placeholder="Server Command. /help to list them, list gets appended to log.">
+                        <span class="loader"></span>
                     </div>
                 </form>
                 <a href="{{ url_for("display_log", room=room.id) }}">
@@ -62,6 +65,7 @@
           let url = '{{ url_for('display_log', room = room.id) }}';
           let bytesReceived = {{ log_len }};
           let updateLogTimeout;
+          let updateLogImmediately = false;
           let awaitingCommandResponse = false;
           let logger = document.getElementById("logger");
 
@@ -78,29 +82,36 @@
 
           async function updateLog() {
             try {
-              let res = await fetch(url, {
-                headers: {
-                  'Range': `bytes=${bytesReceived}-`,
+              if (!document.hidden) {
+                updateLogImmediately = false;
+                let res = await fetch(url, {
+                  headers: {
+                    'Range': `bytes=${bytesReceived}-`,
+                  }
+                });
+                if (res.ok) {
+                  let text = await res.text();
+                  if (text.length > 0) {
+                    awaitingCommandResponse = false;
+                    if (bytesReceived === 0 || res.status !== 206) {
+                      logger.innerHTML = '';
+                    }
+                    if (res.status !== 206) {
+                      bytesReceived = 0;
+                    } else {
+                      bytesReceived += new Blob([text]).size;
+                    }
+                    if (logger.innerHTML.endsWith('…')) {
+                      logger.innerHTML = logger.innerHTML.substring(0, logger.innerHTML.length - 1);
+                    }
+                    logger.appendChild(document.createTextNode(text));
+                    scrollToBottom(logger);
+                    let loader = document.getElementById("command-form").getElementsByClassName("loader")[0];
+                    loader.classList.remove("loading");
+                  }
                 }
-              });
-              if (res.ok) {
-                let text = await res.text();
-                if (text.length > 0) {
-                  awaitingCommandResponse = false;
-                  if (bytesReceived === 0 || res.status !== 206) {
-                    logger.innerHTML = '';
-                  }
-                  if (res.status !== 206) {
-                    bytesReceived = 0;
-                  } else {
-                    bytesReceived += new Blob([text]).size;
-                  }
-                  if (logger.innerHTML.endsWith('…')) {
-                    logger.innerHTML = logger.innerHTML.substring(0, logger.innerHTML.length - 1);
-                  }
-                  logger.appendChild(document.createTextNode(text));
-                  scrollToBottom(logger);
-                }
+              } else {
+                updateLogImmediately = true;
               }
             }
             finally {
@@ -125,20 +136,69 @@
             });
             ev.preventDefault(); // has to happen before first await
             form.reset();
-            let res = await req;
-            if (res.ok || res.type === 'opaqueredirect') {
-              awaitingCommandResponse = true;
-              window.clearTimeout(updateLogTimeout);
-              updateLogTimeout = window.setTimeout(updateLog, 100);
-            } else {
-              window.alert(res.statusText);
+            let loader = form.getElementsByClassName("loader")[0];
+            loader.classList.add("loading");
+            try {
+              let res = await req;
+              if (res.ok || res.type === 'opaqueredirect') {
+                awaitingCommandResponse = true;
+                window.clearTimeout(updateLogTimeout);
+                updateLogTimeout = window.setTimeout(updateLog, 100);
+              } else {
+                loader.classList.remove("loading");
+                window.alert(res.statusText);
+              }
+            } catch (e) {
+                console.error(e);
+                loader.classList.remove("loading");
+                window.alert(e.message);
             }
           }
 
           document.getElementById("command-form").addEventListener("submit", postForm);
           updateLogTimeout = window.setTimeout(updateLog, 1000);
           logger.scrollTop = logger.scrollHeight;
+          document.addEventListener("visibilitychange", () => {
+            if (!document.hidden && updateLogImmediately) {
+              updateLog();
+            }
+          })
         </script>
         {% endif %}
+        <script>
+          function updateInfo() {
+            let url = new URL(window.location.href);
+            url.search = "?update";
+            fetch(url)
+              .then(res => {
+                if (!res.ok) {
+                  throw new Error(`HTTP error ${res.status}`);
+                }
+                return res.text()
+              })
+              .then(text => new DOMParser().parseFromString(text, 'text/html'))
+              .then(newDocument => {
+                ["host-room-info", "slots-table"].forEach(function(id) {
+                  const newEl = newDocument.getElementById(id);
+                  const oldEl = document.getElementById(id);
+                  if (oldEl && newEl) {
+                    oldEl.innerHTML = newEl.innerHTML;
+                  } else if (newEl) {
+                    console.warn(`Did not find element to replace for ${id}`)
+                  }
+                });
+            });
+          }
+
+          if (document.querySelector("meta[http-equiv='refresh']")) {
+            console.log("Refresh!");
+            window.addEventListener('load', function () {
+              for (let i=0; i<3; i++) {
+                window.setTimeout(updateInfo, Math.pow(2, i) * 2000); // 2, 4, 8s
+              }
+              window.stop(); // cancel meta refresh
+            })
+          }
+        </script>
     </div>
 {% endblock %}

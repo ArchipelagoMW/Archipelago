@@ -253,7 +253,8 @@ class HatInTimeWorld(World):
             else:
                 item_name = loc.item.name
 
-            shop_item_names.setdefault(str(loc.address), item_name)
+            shop_item_names.setdefault(str(loc.address),
+                                       f"{item_name} ({self.multiworld.get_player_name(loc.item.player)})")
 
         slot_data["ShopItemNames"] = shop_item_names
 

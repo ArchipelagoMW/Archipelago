@@ -63,6 +63,9 @@ all_bosses = [
     DS3BossInfo("Deacons of the Deep", 3500800, locations = {
         "CD: Soul of the Deacons of the Deep",
         "CD: Small Doll - boss drop",
+        "CD: Archdeacon White Crown - boss room after killing boss",
+        "CD: Archdeacon Holy Garb - boss room after killing boss",
+        "CD: Archdeacon Skirt - boss room after killing boss",
         "FS: Hawkwood's Shield - gravestone after Hawkwood leaves",
     }),
     DS3BossInfo("Abyss Watchers", 3300801, before_storm_ruler = True, locations = {
@@ -250,10 +253,10 @@ all_bosses = [
     }),
     DS3BossInfo("Lords of Cinder", 4100800, locations = {
         "KFF: Soul of the Lords",
-        "FS: Billed Mask - Yuria after killing KFF boss",
-        "FS: Black Dress - Yuria after killing KFF boss",
-        "FS: Black Gauntlets - Yuria after killing KFF boss",
-        "FS: Black Leggings - Yuria after killing KFF boss"
+        "FS: Billed Mask - shop after killing Yuria",
+        "FS: Black Dress - shop after killing Yuria",
+        "FS: Black Gauntlets - shop after killing Yuria",
+        "FS: Black Leggings - shop after killing Yuria"
     }),
 ]
 
