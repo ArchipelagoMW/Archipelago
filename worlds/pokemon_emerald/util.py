@@ -1,7 +1,7 @@
 import orjson
 from typing import Any, Dict, List, Optional, Tuple, Iterable
 
-from .data import NATIONAL_ID_TO_SPECIES_ID, data
+from .data import NATIONAL_ID_TO_SPECIES_ID, EncounterType, data
 
 
 CHARACTER_DECODING_MAP = {
@@ -84,6 +84,28 @@ def decode_string(string_data: Iterable[int]) -> str:
             raise KeyError(f"The following value does not correspond to a character in Pokemon Emerald: {code}")
 
     return string
+
+
+def get_encounter_type_label(encounter_type: EncounterType, slot: int) -> str:
+    if encounter_type == EncounterType.FISHING:
+        return {
+            0: "Old Rod",
+            1: "Old Rod",
+            2: "Good Rod",
+            3: "Good Rod",
+            4: "Good Rod",
+            5: "Super Rod",
+            6: "Super Rod",
+            7: "Super Rod",
+            8: "Super Rod",
+            9: "Super Rod",
+        }[slot]
+    
+    return {
+        EncounterType.LAND: 'Land',
+        EncounterType.WATER: 'Water',
+        EncounterType.ROCK_SMASH: 'Rock Smash',
+    }[encounter_type]
 
 
 def get_easter_egg(easter_egg: str) -> Tuple[int, int]:
