@@ -89,7 +89,7 @@ class LoonylandWorld(World):
     def set_rules(self):
         # Completion condition.
        # self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
-        final_loc = self.get_location("The Evilizer - Save Halloween Hill")
+        final_loc = self.get_location("Q: Save Halloween Hill")
         final_loc.address = None
         final_loc.place_locked_item(self.create_event("Victory"))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
