@@ -20,7 +20,7 @@ class PresenceRule(abc.ABC):
     display_string: str
     """Main item to count as the parent for min/max upgrades per unit purposes"""
     @abc.abstractmethod
-    def __call__(self, inventory: List[str], options: 'Starcraft2Options') -> bool: ...
+    def __call__(self, inventory: Iterable[str], options: 'Starcraft2Options') -> bool: ...
     @abc.abstractmethod
     def parent_items(self) -> Sequence[str]: ...
 
@@ -31,7 +31,7 @@ class ItemPresent(PresenceRule):
         self.constraint_group = item_name
         self.display_string = item_name
 
-    def __call__(self, inventory: List[str], options: 'Starcraft2Options') -> bool:
+    def __call__(self, inventory: Iterable[str], options: 'Starcraft2Options') -> bool:
         return self.item_name in inventory
 
     def parent_items(self) -> List[str]:
@@ -44,7 +44,7 @@ class AnyOf(PresenceRule):
         self.constraint_group = main_item
         self.display_string = display_string or main_item or ' | '.join(group)
 
-    def __call__(self, inventory: List[str], options: 'Starcraft2Options') -> bool:
+    def __call__(self, inventory: Iterable[str], options: 'Starcraft2Options') -> bool:
         return len(self.group.intersection(inventory)) > 0
 
     def parent_items(self) -> List[str]:
@@ -57,7 +57,7 @@ class AllOf(PresenceRule):
         self.constraint_group = main_item
         self.display_string = main_item or ' & '.join(group)
 
-    def __call__(self, inventory: List[str], options: 'Starcraft2Options') -> bool:
+    def __call__(self, inventory: Iterable[str], options: 'Starcraft2Options') -> bool:
         return len(self.group.intersection(inventory)) == len(self.group)
 
     def parent_items(self) -> List[str]:
@@ -71,7 +71,7 @@ class AnyOfGroupAndOneOtherItem(PresenceRule):
         self.constraint_group = item_name
         self.display_string = item_name
 
-    def __call__(self, inventory: List[str], options: 'Starcraft2Options') -> bool:
+    def __call__(self, inventory: Iterable[str], options: 'Starcraft2Options') -> bool:
         return (len(self.group.intersection(inventory)) > 0) and self.item_name in inventory
 
     def parent_items(self) -> List[str]:
@@ -84,7 +84,7 @@ class MorphlingOrItem(PresenceRule):
         self.constraint_group = None  # Keep morphs from counting towards the parent unit's upgrade count
         self.display_string = f'{item_name} Morphs'
 
-    def __call__(self, inventory: List[str], options: 'Starcraft2Options') -> bool:
+    def __call__(self, inventory: Iterable[str], options: 'Starcraft2Options') -> bool:
         return (options.enable_morphling.value != 0) or self.item_name in inventory
 
     def parent_items(self) -> List[str]:
@@ -97,7 +97,7 @@ class MorphlingOrAnyOf(PresenceRule):
         self.constraint_group = main_item
         self.display_string = display_string
 
-    def __call__(self, inventory: List[str], options: 'Starcraft2Options') -> bool:
+    def __call__(self, inventory: Iterable[str], options: 'Starcraft2Options') -> bool:
         return (options.enable_morphling.value != 0) or (len(self.group.intersection(inventory)) > 0)
 
     def parent_items(self) -> List[str]:
