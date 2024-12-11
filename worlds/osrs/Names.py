@@ -31,7 +31,7 @@ class RegionNames(str, Enum):
     Mudskipper_Point = "Mudskipper Point"
     Karamja = "Karamja"
     Corsair_Cove = "Corsair Cove"
-    Wilderness = "The Wilderness"
+    Wilderness = "Wilderness"
     Crandor = "Crandor"
     # Resource Regions
     Egg = "Egg"

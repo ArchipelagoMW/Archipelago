@@ -401,6 +401,17 @@ class DeathLinkAmnesty(Range):
     default = 1
 
 
+class PuzzleRandomizationSeed(Range):
+    """
+    Sigma Rando, which is the basis for all puzzle randomization in this randomizer, uses a seed from 1 to 9999999 for the puzzle randomization.
+    This option lets you set this seed yourself.
+    """
+    display_name = "Puzzle Randomization Seed"
+    range_start = 1
+    range_end = 9999999
+    default = "random"
+
+
 @dataclass
 class TheWitnessOptions(PerGameCommonOptions):
     puzzle_randomization: PuzzleRandomization
@@ -435,6 +446,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     laser_hints: LaserHints
     death_link: DeathLink
     death_link_amnesty: DeathLinkAmnesty
+    puzzle_randomization_seed: PuzzleRandomizationSeed
     shuffle_dog: ShuffleDog
 
 
@@ -445,7 +457,7 @@ witness_option_groups = [
         MountainLasers,
         ChallengeLasers,
     ]),
-    OptionGroup("Panel Hunt Settings", [
+    OptionGroup("Panel Hunt Options", [
         PanelHuntRequiredPercentage,
         PanelHuntTotal,
         PanelHuntPostgame,
@@ -483,6 +495,7 @@ witness_option_groups = [
         ElevatorsComeToYou,
         DeathLink,
         DeathLinkAmnesty,
+        PuzzleRandomizationSeed,
     ]),
     OptionGroup("Silly Options", [
         ShuffleDog,
