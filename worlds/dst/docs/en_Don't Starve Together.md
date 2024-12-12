@@ -70,7 +70,7 @@ or whether to only count meat or veggie meals.
 Additionally, you can control how much of the game is randomized, with the cave_regions and ocean_regions options in the yaml to toggle Caves and
 Oceans respectively.
 
-## What about grindy checks, like trying to spawn a Tree Guard? Do I still have to go for those?
+## What about grindy checks, like trying to spawn a Treeguard? Do I still have to go for those?
 
 Some grindier checks have been set to not be allowed progression items.
 
@@ -112,5 +112,5 @@ If you want an easier experience:
 - Set Extra Damage Against Bosses to the highest setting in your YAML.
 - Set your server playstyle to Relaxed.
 - Play with mods.
-- Use the wiki. Especially for Crock Pot recipes. https://dontstarve.fandom.com/wiki/Don%27t_Starve_Wiki
+- Use the [Don't Starve Wiki](https://dontstarve.wiki.gg). Especially for Crock Pot recipes.
 - Ask for advice.
