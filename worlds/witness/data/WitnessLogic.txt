@@ -1138,7 +1138,7 @@ Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x01
 158482 - 0x17FB9 (Left Upstairs Single) - True - Shapers & Negative Shapers & Full Dots
 158483 - 0x0A16B (Left Upstairs Left Row 1) - True - Full Dots
 158484 - 0x0A2CE (Left Upstairs Left Row 2) - 0x0A16B - Stars & Full Dots
-158485 - 0x0A2D7 (Left Upstairs Left Row 3) - 0x0A2CE - Black/White Squares & Stars + Same Colored Symbol & Stars & Full Dots
+158485 - 0x0A2D7 (Left Upstairs Left Row 3) - 0x0A2CE - Black/White Squares & Stars + Same Colored Symbol & Full Dots
 158486 - 0x0A2DD (Left Upstairs Left Row 4) - 0x0A2D7 - Shapers & Full Dots
 158487 - 0x0A2EA (Left Upstairs Left Row 5) - 0x0A2DD - Rotated Shapers & Full Dots
 158488 - 0x0008F (Right Upstairs Left Row 1) - True - Dots
