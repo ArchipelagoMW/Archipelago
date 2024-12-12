@@ -1,8 +1,9 @@
 from enum import Enum
+from typing import List
 from Options import (
     DeathLink,
     DefaultOnToggle,
-    OptionList,
+    OptionSet,
     Toggle,
     Range,
     StartInventoryPool,
@@ -14,6 +15,7 @@ from dataclasses import dataclass
 
 from .Enum import StartRoomDifficulty
 from .LogicCombat import CombatLogicDifficulty
+from .data.Tricks import TrickInfo, Tricks
 
 
 class HudColor(Enum):
@@ -126,18 +128,27 @@ class TrickDifficulty(Choice):
     default = -1
 
 
-class TrickAllowList(OptionList):
+class TrickAllowList(OptionSet):
     """A list of trick names to explicitly allow in logic, regardless of selected difficulty. For example, "Crashed Frigate Scan Dash" or "Alcove Escape"."""
 
     display_name = "Trick Allow List"
     default = []
+    valid_keys: List[str] = [  # type: ignore
+        getattr(Tricks, trick).name
+        for trick in vars(Tricks)
+        if isinstance(getattr(Tricks, trick), TrickInfo)
+    ]
 
 
-class TrickDenyList(OptionList):
+class TrickDenyList(OptionSet):
     """A list of trick names to explicitly deny in logic, regardless of selected difficulty.  For example, "Crashed Frigate Scan Dash" or "Alcove Escape"."""
 
     display_name = "Trick Deny List"
-    default = []
+    valid_keys: List[str] = [  # type: ignore
+        getattr(Tricks, trick).name
+        for trick in vars(Tricks)
+        if isinstance(getattr(Tricks, trick), TrickInfo)
+    ]
 
 
 class BackwardsLowerMines(Toggle):
