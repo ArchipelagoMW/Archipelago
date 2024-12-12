@@ -35,7 +35,7 @@ from .options import (
     VanillaLocations,
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
-    SpearOfAdunAutonomouslyCastPresentInNoBuild, EnableVoidTrade
+    SpearOfAdunAutonomouslyCastPresentInNoBuild, EnableVoidTrade, DifficultyDamageModifier
 )
 from .mission_order.structs import CampaignSlotData, LayoutSlotData, MissionSlotData, MissionEntryRules
 from .mission_order.entry_rules import SubRuleRuleData, CountMissionsRuleData
@@ -394,12 +394,13 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             ConfigurableOptionInfo('no_forced_camera', 'disable_forced_camera', options.DisableForcedCamera),
             ConfigurableOptionInfo('skip_cutscenes', 'skip_cutscenes', options.SkipCutscenes),
             ConfigurableOptionInfo('enable_morphling', 'enable_morphling', options.EnableMorphling, can_break_logic=True),
+            ConfigurableOptionInfo('difficulty_damage_modifier', 'difficulty_damage_modifier', options.DifficultyDamageModifier),
         )
 
         WARNING_COLOUR = "salmon"
         CMD_COLOUR = "slateblue"
         boolean_option_map = {
-            'y': 'true', 'yes': 'true', 'n': 'false', 'no': 'false',
+            'y': 'true', 'yes': 'true', 'n': 'false', 'no': 'false', 'true': 'true', 'false': 'false',
         }
 
         help_message = ColouredMessage(inspect.cleandoc("""
@@ -419,7 +420,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             return
         for option in configurable_options:
             if option_name == option.name:
-                option_value = boolean_option_map.get(option_value, option_value)
+                option_value = boolean_option_map.get(option_value.lower(), option_value)
                 if not option_value:
                     pass
                 elif option.option_type == ConfigurableOptionType.ENUM and option_value in option.option_class.options:
@@ -630,6 +631,7 @@ class SC2Context(CommonContext):
         self.trade_lock_wait: int = 0
         self.trade_lock_start: typing.Optional[int] = None
         self.trade_response: typing.Optional[str] = None
+        self.difficulty_damage_modifier: int = DifficultyDamageModifier.default
 
     async def server_auth(self, password_requested: bool = False) -> None:
         self.game = STARCRAFT2
@@ -781,6 +783,7 @@ class SC2Context(CommonContext):
             self.maximum_supply_per_item = args["slot_data"].get("maximum_supply_per_item", 2)
             self.nova_covert_ops_only = args["slot_data"].get("nova_covert_ops_only", False)
             self.trade_enabled = args["slot_data"].get("enable_void_trade", EnableVoidTrade.option_false)
+            self.difficulty_damage_modifier = args["slot_data"].get("difficulty_damage_modifier", DifficultyDamageModifier.option_true)
 
             if self.required_tactics == RequiredTactics.option_no_logic:
                 # Locking Grant Story Tech/Levels if no logic
@@ -1542,6 +1545,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 f" {self.ctx.enable_morphling}"
                 f" {mission_variant}"
                 f" {self.ctx.trade_enabled}"
+                f" {self.ctx.difficulty_damage_modifier}"
             )
             await self.update_resources(start_items)
             await self.update_terran_tech(start_items)

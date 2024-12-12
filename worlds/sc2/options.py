@@ -91,6 +91,14 @@ class GameDifficulty(Choice):
     default = 1
 
 
+class DifficultyDamageModifier(DefaultOnToggle):
+    """
+    Enables or disables vanilla difficulty-based damage received modifier
+    Handles the 1.25 Brutal damage modifier in HotS and Prologue and 0.5 Casual damage modifier outside WoL and Prophecy
+    """
+    display_name = "Difficulty Damage Modifier"
+
+
 class GameSpeed(Choice):
     """Optional setting to override difficulty-based game speed."""
     display_name = "Game Speed"
@@ -1029,6 +1037,7 @@ class MaximumSupplyPerItem(Range):
 class Starcraft2Options(PerGameCommonOptions):
     start_inventory: Sc2StartInventory
     game_difficulty: GameDifficulty
+    difficulty_damage_modifier: DifficultyDamageModifier
     game_speed: GameSpeed
     disable_forced_camera: DisableForcedCamera
     skip_cutscenes: SkipCutscenes
