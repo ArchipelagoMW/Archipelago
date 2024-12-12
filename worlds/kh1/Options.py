@@ -187,11 +187,13 @@ class Puppies(Choice):
     Full: All puppies are in one location
     Triplets: Puppies are found in triplets just as they are in the base game
     Individual: One puppy can be found per location
+    Vanilla: Puppies appear in triplets in the same location as the vanilla game
     """
     display_name = "Puppies"
     option_full = 0
     option_triplets = 1
     option_individual = 2
+    option_vanilla = 3
     default = 1
 
 class EXPMultiplier(NamedRange):
@@ -391,12 +393,6 @@ class RandomizePostcards(Choice):
     option_chests = 1
     option_vanilla = 2
 
-class RandomizePuppies(DefaultOnToggle):
-    """
-    If off and Puppies is set to Triplets, the Puppies are in their vanilla locations.
-    """
-    display_name = "Randomize Puppies"
-
 class StartingWorlds(Range):
     """
     Number of random worlds to start with in addition to Traverse Town, which is always available.  Will only consider Atlantica if toggled, and will only consider End of the World if its unlock is set to "Item".
@@ -430,7 +426,6 @@ class KH1Options(PerGameCommonOptions):
     exp_zero_in_pool: EXPZeroInPool
     vanilla_emblem_pieces: VanillaEmblemPieces
     randomize_postcards: RandomizePostcards
-    randomize_puppies: RandomizePuppies
     donald_death_link: DonaldDeathLink
     goofy_death_link: GoofyDeathLink
     keyblade_stats: KeybladeStats
@@ -468,7 +463,6 @@ kh1_option_groups = [
         HundredAcreWood,
         VanillaEmblemPieces,
         RandomizePostcards,
-        RandomizePuppies,
     ]),
     OptionGroup("Levels", [
         EXPMultiplier,
