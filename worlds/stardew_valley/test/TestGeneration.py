@@ -35,7 +35,7 @@ class TestBaseItemGeneration(SVTestBase):
         items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
         items_to_ignore.extend(resource_pack.name for resource_pack in items.items_by_group[Group.RESOURCE_PACK])
         items_to_ignore.append("The Gateway Gazette")
-        progression_items = [item for item in items.all_items if item.classification is ItemClassification.progression and item.name not in items_to_ignore]
+        progression_items = [item for item in items.all_items if item.classification & ItemClassification.progression and item.name not in items_to_ignore]
         for progression_item in progression_items:
             with self.subTest(f"{progression_item.name}"):
                 self.assertIn(progression_item.name, all_created_items)
@@ -86,7 +86,7 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
         items_to_ignore.extend(season.name for season in items.items_by_group[Group.WEAPON])
         items_to_ignore.extend(baby.name for baby in items.items_by_group[Group.BABY])
         items_to_ignore.append("The Gateway Gazette")
-        progression_items = [item for item in items.all_items if item.classification is ItemClassification.progression and item.name not in items_to_ignore]
+        progression_items = [item for item in items.all_items if item.classification & ItemClassification.progression and item.name not in items_to_ignore]
         for progression_item in progression_items:
             with self.subTest(f"{progression_item.name}"):
                 if Group.GINGER_ISLAND in progression_item.groups:

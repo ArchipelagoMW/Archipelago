@@ -18,6 +18,7 @@ coins = "Golden Coin"
 prayer = "Pages 24-25 (Prayer)"
 holy_cross = "Pages 42-43 (Holy Cross)"
 icebolt = "Pages 52-53 (Icebolt)"
+shield = "Shield"
 key = "Key"
 house_key = "Old House Key"
 vault_key = "Fortress Vault Key"
@@ -82,7 +83,7 @@ def can_ladder_storage(state: CollectionState, world: "TunicWorld") -> bool:
         return False
     if world.options.ladder_storage_without_items:
         return True
-    return has_stick(state, world.player) or state.has(grapple, world.player)
+    return has_stick(state, world.player) or state.has_any((grapple, shield), world.player)
 
 
 def has_mask(state: CollectionState, world: "TunicWorld") -> bool:

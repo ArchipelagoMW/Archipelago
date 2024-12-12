@@ -216,7 +216,7 @@ class LadderStorage(Choice):
 
 class LadderStorageWithoutItems(Toggle):
     """
-    If disabled, you logically require Stick, Sword, or Magic Orb to perform Ladder Storage.
+    If disabled, you logically require Stick, Sword, Magic Orb, or Shield to perform Ladder Storage.
     If enabled, you will be expected to perform Ladder Storage without progression items.
     This can be done with the plushie code, a Golden Coin, Prayer, and many other options.
 

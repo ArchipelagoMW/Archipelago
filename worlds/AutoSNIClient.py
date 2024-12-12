@@ -2,9 +2,7 @@
 from __future__ import annotations
 import abc
 import logging
-from typing import TYPE_CHECKING, ClassVar, Dict, Iterable, Tuple, Any, Optional, Union
-
-from typing_extensions import TypeGuard
+from typing import TYPE_CHECKING, ClassVar, Dict, Iterable, Tuple, Any, Optional, Union, TypeGuard
 
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components
 
