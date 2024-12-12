@@ -65,7 +65,7 @@ def has_final_rest_door(state: CollectionState, player: int, final_rest_door_req
     if final_rest_door_requirement == "puppies":
         if puppies_choice == "individual":
             return has_puppies_individual(state, player, 99)
-        if puppies_choice == "triplets":
+        if puppies_choice == "triplets" or puppies_choice == "vanilla":
             return has_puppies_triplets(state, player, 99)
         return has_puppies_all(state, player, 99)
     if final_rest_door_requirement == "postcards":
@@ -107,7 +107,7 @@ def set_rules(kh1world):
     final_rest_door_requirement      = kh1world.options.final_rest_door.current_key
     
     has_puppies = has_puppies_individual
-    if kh1world.options.puppies == "triplets":
+    if kh1world.options.puppies == "triplets" or kh1world.options.puppies == "vanilla":
         has_puppies = has_puppies_triplets
     elif kh1world.options.puppies == "full":
         has_puppies = has_puppies_all

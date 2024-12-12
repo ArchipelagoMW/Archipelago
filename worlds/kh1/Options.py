@@ -187,11 +187,13 @@ class Puppies(Choice):
     Full: All puppies are in one location
     Triplets: Puppies are found in triplets just as they are in the base game
     Individual: One puppy can be found per location
+    Vanilla: Puppies appear in triplets in the same location as the vanilla game
     """
     display_name = "Puppies"
     option_full = 0
     option_triplets = 1
     option_individual = 2
+    option_vanilla = 3
     default = 1
 
 class EXPMultiplier(NamedRange):
