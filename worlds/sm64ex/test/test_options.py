@@ -45,6 +45,32 @@ class VanillaCoinStarsTestBase(SM64TestBase):
             assert item_in_loc.name == "Power Star"
             assert item_in_loc.player == self.world.player
 
+
+# Exclamation Boxes
+class ExclamationBoxesOnTestBase(SM64TestBase):
+    options = {
+        "exclamation_boxes": Options.ExclamationBoxes.option_true,
+    }
+
+class ExclamationBoxesOffTestBase(SM64TestBase):
+    options = {
+        "exclamation_boxes": Options.ExclamationBoxes.option_false,
+    }
+
+    # Should populate the boxes with the players own 1Up Mushrooms
+    def test_items_in_exclamation_box_locations(self):
+        # Get 1Up Block locations
+        loc1ups_table = []
+        for loc in self.world.location_names:
+             if "1Up Block"  in loc:
+                 loc1ups_table.append(loc)
+
+        for loc in loc1ups_table:
+            item_in_loc = self.world.get_location(loc).item
+            assert item_in_loc.name == "1Up Mushroom"
+            assert item_in_loc.player == self.world.player
+
+
 # Entrance Randomizer
 class EntranceRandoOffTestBase(SM64TestBase):
     options = {
@@ -104,6 +130,7 @@ class EntranceRandoAllTestBase(SM64TestBase):
         # BitFS does not go to DDD
         assert self.world.area_connections[bitfs_level_id] != sm64_entrances_to_level["Dire, Dire Docks"]
 
+
 # Completion Type
 class CompletionLastBowserTestBase(SM64TestBase):
     options = {
@@ -115,8 +142,12 @@ class CompletionAllBowserTestBase(SM64TestBase):
         "completion_type": Options.CompletionType.option_All_Bowser_Stages
     }
 
+
+
 # Combinations
 
+
+# Smallest Power Star count possible
 class MinimumStarsPossibleTestBase(SM64TestBase):
     options = {
         "amount_of_stars": Options.AmountOfStars.range_start,
@@ -130,6 +161,7 @@ class MinimumStarsPossibleTestBase(SM64TestBase):
         filler_count = len(self.get_items_by_name("1Up Mushroom"))
         star_count = len(self.get_items_by_name("Power Star"))
         self.assertGreater(filler_count, star_count)
+
 
 # Entrance + Move Rando
 class CourseEntrancesMoveTestBase(SM64TestBase):
