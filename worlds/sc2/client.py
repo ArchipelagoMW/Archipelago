@@ -1265,6 +1265,7 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
                     # Switch from level 2 to level 3 for compatibility
                     accumulators[item_data.race][flaggroup] += 1 << item_data.number
         # sum
+        # Fillers, deprecated items
         else:
             if name == item_names.PROGRESSIVE_ORBITAL_COMMAND:
                 orbital_command_count += 1

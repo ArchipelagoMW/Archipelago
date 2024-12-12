@@ -134,11 +134,6 @@ class SC2World(World):
 
         start_inventory = [item for item in pruned_items if ItemFilterFlags.StartInventory in item.filter_flags]
         pool = [item for item in pruned_items if ItemFilterFlags.StartInventory not in item.filter_flags]
-        pad_item_pool_with_filler(self, len(self.location_cache) - len(self.locked_locations) - len(pool), pool)
-
-        push_precollected_items_to_multiworld(self, start_inventory)
-
-        self.multiworld.itempool += pool
 
         # Tell the logic which unit classes are used for required W/A upgrades
         used_item_names: Set[str] = {item.name for item in pruned_items}
@@ -160,6 +155,12 @@ class SC2World(World):
         if used_item_names.isdisjoint(item_groups.protoss_air_wa):
             self.has_protoss_air_unit = False
 
+        pad_item_pool_with_filler(self, len(self.location_cache) - len(self.locked_locations) - len(pool), pool)
+
+        push_precollected_items_to_multiworld(self, start_inventory)
+
+        self.multiworld.itempool += pool
+
     def set_rules(self) -> None:
         if self.options.required_tactics == RequiredTactics.option_no_logic:
             # Forcing completed goal and minimal accessibility on no logic
@@ -172,7 +173,11 @@ class SC2World(World):
             self.multiworld.completion_condition[self.player] = self.custom_mission_order.get_completion_condition(self.player)
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(filler_items)
+        available_filler_items: list[str] = list(filler_items)
+        if self.has_protoss_ground_unit or self.has_protoss_air_unit:
+            available_filler_items.append(item_names.SHIELD_REGENERATION)
+        available_filler_items.sort()
+        return self.random.choice(available_filler_items)
 
     def fill_slot_data(self):
         slot_data = {}

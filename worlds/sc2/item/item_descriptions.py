@@ -564,6 +564,7 @@ item_descriptions = {
     item_names.STARTING_SUPPLY: "Increases the starting supply for all missions.",
     item_names.NOTHING: "Does nothing. Used to remove a location from the game.",
     item_names.MAX_SUPPLY: "Increases the maximum supply for all missions.",
+    item_names.SHIELD_REGENERATION: "Increases shield regeneration of all own units.",
     item_names.NOVA_GHOST_VISOR: "Reveals the locations of enemy units in the fog of war around Nova. Can detect cloaked units.",
     item_names.NOVA_RANGEFINDER_OCULUS: "Increases Nova's vision range and non-melee weapon attack range by 2. Also increases range of melee weapons by 1.",
     item_names.NOVA_DOMINATION: "Gives Nova the ability to mind-control a target enemy unit.",

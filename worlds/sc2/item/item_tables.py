@@ -81,15 +81,16 @@ class ProtossItemType(ItemTypeEnum):
     """General Protoss unit upgrades"""
     War_Council = "War Council", 11
     War_Council_2 = "War Council", 12
+    ShieldRegeneration = "Shield Regeneration Group", 13
 
 
 class FactionlessItemType(ItemTypeEnum):
     Minerals = "Minerals", 0
     Vespene = "Vespene", 1
     Supply = "Supply", 2
+    MaxSupply = "Max Supply", 3
     Nothing = "Nothing Group", 4
     Deprecated = "Deprecated", 5
-    MaxSupply = "Max Supply", 6
     Keys = "Keys", -1
 
 
@@ -1074,6 +1075,9 @@ item_table = {
                  classification=ItemClassification.trap),
     item_names.MAX_SUPPLY:
         ItemData(804 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.MaxSupply, -1, SC2Race.ANY, quantity=0,
+                 classification=ItemClassification.filler),
+    item_names.SHIELD_REGENERATION:
+        ItemData(805 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.ShieldRegeneration, -1, SC2Race.PROTOSS, quantity=0,
                  classification=ItemClassification.filler),
 
     # Nova gear
