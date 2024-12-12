@@ -1079,7 +1079,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Spirit Arena Victory"],
         rule=lambda state: (state.has(gold_hexagon, player, world.options.hexagon_goal.value) if
                             world.options.hexagon_quest else
-                            (state.has_all({red_hexagon, green_hexagon, blue_hexagon, "Unseal the Heir"}, player)
+                            (state.has("Unseal the Heir", player)
                              and state.has_group_unique("Hero Relics", player, 6)
                              and has_sword(state, player))))
 
@@ -1447,6 +1447,9 @@ def set_er_location_rules(world: "TunicWorld") -> None:
              lambda state: has_ability(prayer, state, world))
     set_rule(world.get_location("Library Fuse"),
              lambda state: has_ability(prayer, state, world) and has_ladder("Ladders in Library", state, world))
+    if not world.options.hexagon_quest:
+        set_rule(world.get_location("Place Questagons"),
+                 lambda state: state.has_all((red_hexagon, blue_hexagon, green_hexagon), player))
 
     # Bombable Walls
     for location_name in bomb_walls:
