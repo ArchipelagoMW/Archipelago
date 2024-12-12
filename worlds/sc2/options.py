@@ -3,7 +3,7 @@ from typing import *
 
 from Options import (
     Choice, Toggle, DefaultOnToggle, OptionSet, Range,
-    PerGameCommonOptions, Option, VerifyKeys,
+    PerGameCommonOptions, Option, VerifyKeys, StartInventory,
     is_iterable_except_str,
 )
 from Utils import get_fuzzy_results
