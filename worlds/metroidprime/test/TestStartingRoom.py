@@ -86,6 +86,47 @@ class TestStartRoomBKPreventionDisabled(MetroidPrimeWithOverridesTestBase):
         )
 
 
+class TestPrePlacedItemsWithStartFromPool(MetroidPrimeWithOverridesTestBase):
+    options = {"start_inventory_from_pool": {SuitUpgrade.Morph_Ball.value: 1}}
+    overrides = {"starting_room_name": RoomName.Save_Station_1.value}
+
+    def test_bk_prevention_should_not_add_items_when_in_start_inventory(
+        self,
+    ):
+        self.assertNotIn(
+            SuitUpgrade.Morph_Ball.value,
+            self.world.prefilled_item_map.values(),
+        )
+
+
+class TestPreCollectedItemsWithStartFromPool(MetroidPrimeWithOverridesTestBase):
+    run_default_tests = False  # type: ignore
+    options = {"start_inventory_from_pool": {SuitUpgrade.Missile_Expansion.value: 1}}
+    overrides = {"starting_room_name": RoomName.Arboretum.value}
+
+    def test_should_not_double_collect_items_when_using_start_from_pool(
+        self,
+    ):
+        self.assertNotIn(
+            SuitUpgrade.Missile_Expansion.value,
+            [item.name for item in self.multiworld.precollected_items[1]],
+        )
+
+
+class TestPreCollectedItemsWithStartInventory(MetroidPrimeWithOverridesTestBase):
+    run_default_tests = False  # type: ignore
+    options = {"start_inventory": {SuitUpgrade.Missile_Expansion.value: 1}}
+    overrides = {"starting_room_name": RoomName.Arboretum.value}
+
+    def test_should_not_double_collect_items_when_using_start_items(
+        self,
+    ):
+        self.assertNotIn(
+            SuitUpgrade.Missile_Expansion.value,
+            [item.name for item in self.multiworld.precollected_items[1]],
+        )
+
+
 class TestStartRoomBKPreventionEnabled(MetroidPrimeWithOverridesTestBase):
     run_default_tests = False  # type: ignore
     options = {
@@ -130,9 +171,7 @@ class TestNormalStartingRoom(MetroidPrimeTestBase):
         self.assertTrue(self.world.starting_room_name == RoomName.Landing_Site.value)
 
 
-class TestNormalStartingRoomWithBlastShieldRandoMixItUp(
-   MetroidPrimeTestBase
-):
+class TestNormalStartingRoomWithBlastShieldRandoMixItUp(MetroidPrimeTestBase):
     run_default_tests = False  # type: ignore
     options = {
         "starting_room": StartRoomDifficulty.Normal.value,

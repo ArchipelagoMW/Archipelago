@@ -30,7 +30,15 @@ def generate_start_inventory(world: "MetroidPrimeWorld") -> List[str]:
     if not world.options.shuffle_scan_visor:
         starting_items.append(SuitUpgrade.Scan_Visor.value)
 
-    return starting_items
+    already_collected_items = [
+        item
+        for item in [
+            *world.multiworld.start_inventory_from_pool[world.player],
+            *world.multiworld.start_inventory[world.player],
+        ]
+    ]
+
+    return [item for item in starting_items if item not in already_collected_items]
 
 
 def generate_item_pool(world: "MetroidPrimeWorld") -> List[MetroidPrimeItem]:

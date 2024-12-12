@@ -432,6 +432,14 @@ def init_starting_room_data(world: "MetroidPrimeWorld"):
 def init_starting_loadout(world: "MetroidPrimeWorld"):
     disable_bk_prevention = world.options.disable_starting_room_bk_prevention.value
     assert world.starting_room_data and world.starting_room_data.selected_loadout
+
+    option_collected_items = [item for item in world.options.start_inventory_from_pool]
+
+    if len(option_collected_items) and world.starting_room_data.local_early_items:
+        for item in world.starting_room_data.local_early_items:
+            if item.value in option_collected_items:
+                world.starting_room_data.local_early_items.remove(item)
+
     # Clear non starting beam upgrades out of loadout
     if disable_bk_prevention:
         world.starting_room_data.selected_loadout.loadout = []
@@ -449,7 +457,11 @@ def init_starting_loadout(world: "MetroidPrimeWorld"):
                 required_item = get_item_for_options(
                     world, world.random.choice(potential_items)
                 )
-                world.prefilled_item_map[location_name] = required_item.value
+                if (
+                    required_item.value
+                    not in world.options.start_inventory_from_pool.value.keys()
+                ):
+                    world.prefilled_item_map[location_name] = required_item.value
         if world.starting_room_data.local_early_items:
             for item in world.starting_room_data.local_early_items:
                 options_item = get_item_for_options(world, item)
