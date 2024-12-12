@@ -33,8 +33,8 @@ def generate_start_inventory(world: "MetroidPrimeWorld") -> List[str]:
     already_collected_items = [
         item
         for item in [
-            *world.multiworld.start_inventory_from_pool[world.player],
-            *world.multiworld.start_inventory[world.player],
+            *world.options.start_inventory_from_pool.value.keys(),
+            *world.options.start_inventory.value.keys(),
         ]
     ]
 
