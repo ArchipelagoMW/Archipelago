@@ -31,12 +31,12 @@ def get_meta(options_source: dict, race: bool = False) -> Dict[str, Union[List[s
 
     server_options = {
         "hint_cost": int(options_source.get("hint_cost", ServerOptions.hint_cost)),
-        "release_mode": options_source.get("release_mode", ServerOptions.release_mode),
-        "remaining_mode": options_source.get("remaining_mode", ServerOptions.remaining_mode),
-        "collect_mode": options_source.get("collect_mode", ServerOptions.collect_mode),
+        "release_mode": str(options_source.get("release_mode", ServerOptions.release_mode)),
+        "remaining_mode": str(options_source.get("remaining_mode", ServerOptions.remaining_mode)),
+        "collect_mode": str(options_source.get("collect_mode", ServerOptions.collect_mode)),
         "item_cheat": bool(int(options_source.get("item_cheat", not ServerOptions.disable_item_cheat))),
         # None if None else str.strip()
-        "server_password": options_source.get("server_password") and options_source["server_password"].strip(),
+        "server_password": str(options_source.get("server_password") and options_source["server_password"].strip()),
     }
     generator_options = {
         "spoiler": int(options_source.get("spoiler", GeneratorOptions.spoiler)),
