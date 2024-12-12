@@ -201,10 +201,10 @@ def _has_item(item: str, world: "WitnessWorld",
     if item == "Theater to Tunnels":
         return lambda state: _can_do_theater_to_tunnels(state, world)
 
-    prog_item = static_witness_logic.get_parent_progressive_item(item)
-    needed_amount = player_logic.MULTI_AMOUNTS[item]
+    actual_item = static_witness_logic.get_parent_progressive_item(item)
+    needed_amount = player_logic.PARENT_ITEM_COUNT_PER_BASE_ITEM[item]
 
-    simple_rule: SimpleItemRepresentation = SimpleItemRepresentation(prog_item, needed_amount)
+    simple_rule: SimpleItemRepresentation = SimpleItemRepresentation(actual_item, needed_amount)
     return simple_rule
 
 
@@ -214,7 +214,7 @@ def optimize_requirement_option(requirement_option: List[Union[CollectionRule, S
     This optimises out a requirement like [("Progressive Dots": 1), ("Progressive Dots": 2)] to only the "2" version.
     """
 
-    direct_items = [rule for rule in requirement_option if isinstance(rule, tuple)]
+    direct_items = [rule for rule in requirement_option if isinstance(rule, SimpleItemRepresentation)]
     if not direct_items:
         return requirement_option
 
@@ -224,7 +224,7 @@ def optimize_requirement_option(requirement_option: List[Union[CollectionRule, S
 
     return [
         rule for rule in requirement_option
-        if not (isinstance(rule, tuple) and rule[1] < max_per_item[rule[0]])
+        if not (isinstance(rule, SimpleItemRepresentation) and rule[1] < max_per_item[rule[0]])
     ]
 
 
@@ -234,12 +234,6 @@ def convert_requirement_option(requirement: List[Union[CollectionRule, SimpleIte
     Converts a list of CollectionRules and SimpleItemRepresentations to just a list of CollectionRules.
     If the list is ONLY SimpleItemRepresentations, we can just return a CollectionRule based on state.has_all_counts()
     """
-    converted_sublist = []
-
-    for rule in requirement:
-        if not isinstance(rule, tuple):
-            converted_sublist.append(rule)
-            continue
 
     collection_rules = [rule for rule in requirement if not isinstance(rule, SimpleItemRepresentation)]
     item_rules = [rule for rule in requirement if isinstance(rule, SimpleItemRepresentation)]
@@ -252,7 +246,22 @@ def convert_requirement_option(requirement: List[Union[CollectionRule, SimpleIte
         item_rules_converted = [lambda state: state.has(item, player, count)]
     else:
         item_counts = {item_rule.item_name: item_rule.item_count for item_rule in item_rules}
-        item_rules_converted = [lambda state: state.has_all_counts(item_counts, player)]
+        # Sort the list by which item you are least likely to have (E.g. last stage of progressive item chains)
+        sorted_item_list = sorted(
+            item_counts.keys(),
+            key=lambda item_name: item_counts[item_name] if ("Progressive" in item_name) else 1.5,
+            reverse=True
+            # 1.5 because you are less likely to have a single stage item than one copy of a 2-stage chain
+            # I did some testing and every part of this genuinely gives a tiiiiny performance boost over not having it!
+        )
+
+        if all(item_count == 1 for item_count in item_counts.values()):
+            # If all counts are one, just use state.has_all
+            item_rules_converted = [lambda state: state.has_all(sorted_item_list, player)]
+        else:
+            # If any count is higher than 1, use state.has_all_counts
+            sorted_item_counts = {item_name: item_counts[item_name] for item_name in sorted_item_list}
+            item_rules_converted = [lambda state: state.has_all_counts(sorted_item_counts, player)]
 
     return collection_rules + item_rules_converted
 

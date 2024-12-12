@@ -18,6 +18,7 @@ coins = "Golden Coin"
 prayer = "Pages 24-25 (Prayer)"
 holy_cross = "Pages 42-43 (Holy Cross)"
 icebolt = "Pages 52-53 (Icebolt)"
+shield = "Shield"
 key = "Key"
 house_key = "Old House Key"
 vault_key = "Fortress Vault Key"
@@ -82,7 +83,7 @@ def can_ladder_storage(state: CollectionState, world: "TunicWorld") -> bool:
         return False
     if world.options.ladder_storage_without_items:
         return True
-    return has_stick(state, world.player) or state.has(grapple, world.player)
+    return has_stick(state, world.player) or state.has_any((grapple, shield), world.player)
 
 
 def has_mask(state: CollectionState, world: "TunicWorld") -> bool:
@@ -114,7 +115,9 @@ def set_region_rules(world: "TunicWorld") -> None:
         or can_ladder_storage(state, world)
     # using laurels or ls to get in is covered by the -> Eastern Vault Fortress rules
     world.get_entrance("Overworld -> Beneath the Vault").access_rule = \
-        lambda state: has_lantern(state, world) and has_ability(prayer, state, world)
+        lambda state: (has_lantern(state, world) and has_ability(prayer, state, world)
+                       # there's some boxes in the way
+                       and (has_stick(state, player) or state.has_any((gun, grapple, fire_wand), player)))
     world.get_entrance("Ruined Atoll -> Library").access_rule = \
         lambda state: state.has_any({grapple, laurels}, player) and has_ability(prayer, state, world)
     world.get_entrance("Overworld -> Quarry").access_rule = \
