@@ -436,7 +436,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
                     if self.hint["status"] == HintStatus.HINT_FOUND:
                         return
                     ctx = MDApp.get_running_app().ctx
-                    if ctx.slot == self.hint["receiving_player"]:  # If this player owns this hint
+                    if ctx.slot_concerns_self(self.hint["receiving_player"]):  # If this player owns this hint
                         # open a dropdown
                         self.dropdown.open()
                 elif self.selected:
@@ -899,7 +899,7 @@ class HintLog(MDRecycleView):
             hint_status_node = self.parser.handle_node({"type": "color",
                                                         "color": status_colors.get(hint["status"], "red"),
                                                         "text": status_names.get(hint["status"], "Unknown")})
-            if hint["status"] != HintStatus.HINT_FOUND and hint["receiving_player"] == ctx.slot:
+            if hint["status"] != HintStatus.HINT_FOUND and ctx.slot_concerns_self(hint["receiving_player"]):
                 hint_status_node = f"[u]{hint_status_node}[/u]"
             data.append({
                 "receiving": {"text": self.parser.handle_node({"type": "player_id", "text": hint["receiving_player"]})},
