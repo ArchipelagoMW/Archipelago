@@ -1,13 +1,14 @@
-from typing import Dict, Set
+from typing import Dict, Set, List, Iterable
 
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 from .Options import DSTOptions, dontstarvetogether_option_groups
-from . import Regions, Rules, ItemPool, Constants
+from . import Regions, Rules, ItemPool, Util
+from .Constants import VERSION, PHASE, SEASON, SEASONS_PASSED, SPECIAL_TAGS
 from .Locations import location_data_table, location_name_to_id
 from .Items import item_data_table, item_name_to_id
 
-from BaseClasses import Item, Tutorial
+from BaseClasses import Item, Tutorial, ItemClassification
 
 def launch_client():
     from .Client import launch
@@ -27,6 +28,7 @@ class DSTWeb(WebWorld):
         ["Dragon Wolf Leo"]
     )]
     option_groups = dontstarvetogether_option_groups
+    theme = "ice"
 
 class DSTWorld(World):
     """
@@ -60,28 +62,103 @@ class DSTWorld(World):
             print(f"{self.multiworld.get_player_name(self.player)} (Don't Starve Together): Warning! Shuffle Starting Recipes without Creature Locations. "\
                 "Player will potentially have no reachable checks in Sphere 1!"
             )
-        
+
         # Get regions bosses are in
-        _regions = set()
+        _auto_regions = set()
         if _IS_BOSS_GOAL:
-            for bossname in self.options.required_bosses.value:
-                _regions.add(Constants.BOSS_REGIONS.get(bossname,""))
+            self.options.days_to_survive.value = 0
+            # Build boss regions
+            _BOSS_REGIONS:Dict[str, Set[str]] = {}
+            for region_tag in ["cave", "ruins", "archive", "ocean", "moonquay", "moonstorm"]:
+                _BOSS_REGIONS[region_tag] = set()
+                for bossname in [k for k in self.options.required_bosses.valid_keys if k != "Random"]:
+                    if region_tag in location_data_table.get(bossname).tags:
+                        _BOSS_REGIONS[region_tag].add(bossname)
+            # Merge into the groups that are used by the settings
+            _BOSS_REGIONS["ruins"].update(_BOSS_REGIONS["archive"])
+            _BOSS_REGIONS["ocean"].update(_BOSS_REGIONS["moonquay"])
+
+            # Compile valid bosses for random choice
+            def build_boss_pool(possible_bosses:Iterable[str]) -> List[str]:
+                _boss_pool:Set[str] = set(possible_bosses)
+
+                # Filter the random boss pool based on region options
+                if self.options.cave_regions.value == self.options.cave_regions.option_none:
+                    _boss_pool.difference_update(_BOSS_REGIONS["cave"], _BOSS_REGIONS["ruins"])
+                elif self.options.cave_regions.value == self.options.cave_regions.option_light:
+                    _boss_pool.difference_update(_BOSS_REGIONS["ruins"])
+
+                if self.options.ocean_regions.value == self.options.ocean_regions.option_none:
+                    _boss_pool.difference_update(_BOSS_REGIONS["ocean"], _BOSS_REGIONS["moonstorm"])
+                elif self.options.ocean_regions.value == self.options.ocean_regions.option_light:
+                    _boss_pool.difference_update(_BOSS_REGIONS["moonstorm"])
+
+                # Filter the random boss pool based on day phase and season
+                is_enabled_in_tag_group = Util.create_tag_group_validation_fn(self.options)
+                for bossname in _boss_pool.copy():
+                    if "seasonal" in location_data_table[bossname].tags:
+                        _boss_pool.discard(bossname)
+                    else:
+                        for _type in [SEASON, PHASE, SEASONS_PASSED, SPECIAL_TAGS]:
+                            if not is_enabled_in_tag_group(_type, location_data_table[bossname].tags):
+                                _boss_pool.discard(bossname)
+
+                # Sort to make choice deterministic
+                _boss_pool_as_sorted_list = list(_boss_pool)
+                _boss_pool_as_sorted_list.sort()
+                return _boss_pool_as_sorted_list
+
+            # Choose a random boss if random is selected
+            if "Random" in self.options.required_bosses.value:
+                self.options.required_bosses.value.remove("Random")
+                boss_pool = build_boss_pool(
+                    self.options.required_bosses.value.copy() if len(self.options.required_bosses.value)
+                    else {k for k in self.options.required_bosses.valid_keys if k != "Random"}
+                )
+                if not len(boss_pool):
+                    # May be an invalid selection for settings; choose from everything
+                    boss_pool = build_boss_pool({k for k in self.options.required_bosses.valid_keys if k != "Random"})
+
+                assert len(boss_pool), f"{self.multiworld.get_player_name(self.player)} (Don't Starve Together): "\
+                "No valid boss can be selected from player settings."
+
+                # Pick random boss from the boss pool
+                self.options.required_bosses.value.clear()
+                self.options.required_bosses.value.add(self.multiworld.random.choice(boss_pool))
+
+            
+            # Set valid auto regions for selected bosses
+            for regionname, group in _BOSS_REGIONS.items():
+                for bossname in group:
+                    if bossname in self.options.required_bosses:
+                        _auto_regions.add(regionname)
+
+        # Force ocean regions to light if Crab King is not a check
+        if (
+            self.options.ocean_regions.value == self.options.ocean_regions.option_full
+            and self.options.boss_locations.value < self.options.boss_locations.option_all
+            and not (
+                _IS_BOSS_GOAL
+                and len(self.options.required_bosses.value.intersection({"Celestial Champion", "Crab King"}))
+            )
+        ):
+            self.options.ocean_regions.value = self.options.ocean_regions.option_light
 
         # Set auto regions
         if self.options.cave_regions.value == self.options.cave_regions.option_auto:
             self.options.cave_regions.value = self.options.cave_regions.option_none
             if _IS_BOSS_GOAL:
-                if "ruins" in _regions:
+                if "ruins" in _auto_regions:
                     self.options.cave_regions.value = self.options.cave_regions.option_full
-                elif "cave" in _regions:
+                elif "cave" in _auto_regions:
                     self.options.cave_regions.value = self.options.cave_regions.option_light
         
         if self.options.ocean_regions.value == self.options.ocean_regions.option_auto:
             self.options.ocean_regions.value = self.options.ocean_regions.option_none
             if _IS_BOSS_GOAL:
-                if "moonstorm" in _regions:
+                if "moonstorm" in _auto_regions:
                     self.options.ocean_regions.value = self.options.ocean_regions.option_full
-                elif "ocean" in _regions:
+                elif "ocean" in _auto_regions:
                     self.options.ocean_regions.value = self.options.ocean_regions.option_light
 
         # Auto set logic options
@@ -148,12 +225,19 @@ class DSTWorld(World):
 
     def fill_slot_data(self):
         slot_data = {
-            "generator_version": Constants.VERSION,
-            "death_link": bool(self.options.death_link.value),
-            "goal": self.options.goal.current_key,
+            "generator_version": VERSION,
+            "death_link":       bool(self.options.death_link.value),
+            "goal":             self.options.goal.current_key,
             # "craft_with_locked_items": self.options.craft_with_locked_items.value,
             "locked_items_local_id": list(self.dst_itempool.locked_items_local_id),
+            # World settings
             "is_caves_enabled": bool(self.options.cave_regions.value != self.options.cave_regions.option_none),
+            "seasons":          list(self.options.seasons.value),
+            "starting_season":  self.options.starting_season.current_key,
+            "season_flow":      self.options.season_flow.current_key,
+            "day_phases":       list(self.options.day_phases.value),
+            "character":        "Warly" if self.options.cooking_locations.value == self.options.cooking_locations.option_warly_enabled
+                                else "Any",
         }
         if slot_data["goal"] == "survival":
             slot_data["days_to_survive"] = self.options.days_to_survive.value

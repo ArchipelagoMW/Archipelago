@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from Options import Toggle, DefaultOnToggle, Range, NamedRange, Choice, OptionSet, DeathLink, PerGameCommonOptions, OptionGroup
-from .Items import item_data_table
+from .Constants import PHASE, SEASON
 
 class Goal(Choice):
     """
@@ -36,33 +36,37 @@ class DaysToSurvive(NamedRange):
 class RequiredBosses(OptionSet):
     """
     Only applies for boss goal types. Which boss(es) are required to be defeated to beat the game?
+    If "Random" is chosen and nothing else, a random valid boss is selected.
+    If "Random" is chosen with bosses, it chooses a single boss within the selection.
 
-    Valid Bosses:             Difficulty                Regions
-        "Deerclops"           - Easy / Seasonal
-        "Moose/Goose"         - Easy / Seasonal
-        "Bearger"             - Easy / Seasonal
-        "Ancient Guardian"    - Medium                  Cave, Ruins
-        "Antlion"             - Easy / Seasonal
+    Valid Bosses:             Difficulty        Regions
+        "Random"
+        "Deerclops"           - Easy            Winter
+        "Moose/Goose"         - Easy            Spring
+        "Bearger"             - Easy            Autumn
+        "Ancient Guardian"    - Medium          Cave, Ruins
+        "Antlion"             - Easy            Summer
         "Dragonfly"           - Medium
         "Bee Queen"           - Hard
-        "Klaus"               - Medium / Seasonal
-        "Toadstool"           - Hard                    Cave
-        "Malbatross"          - Medium                  Ocean
-        "Crab King"           - Hard                    Ocean
-        "Frostjaw"            - Medium                  Ocean
-        "Eye Of Terror"       - Easy
-        "Retinazor"           - Hard
-        "Spazmatism"          - Hard
-        "Nightmare Werepig"   - Medium                  Cave
-        "Scrappy Werepig"     - Medium                  Cave
-        "Ancient Fuelweaver"  - Hard                    Cave, Ruins
-        "Celestial Champion"  - Hard                    Ocean, Moonstorm
+        "Klaus"               - Medium          Winter
+        "Toadstool"           - Hard            Cave
+        "Malbatross"          - Medium          Ocean
+        "Crab King"           - Hard            Ocean
+        "Frostjaw"            - Medium          Ocean
+        "Eye Of Terror"       - Easy            Night
+        "Retinazor"           - Hard            Night
+        "Spazmatism"          - Hard            Night
+        "Nightmare Werepig"   - Medium          Cave
+        "Scrappy Werepig"     - Medium          Cave
+        "Ancient Fuelweaver"  - Hard            Cave, Ruins, Night
+        "Celestial Champion"  - Hard            Ocean, Moonstorm
 
     Example: ['Deerclops', 'Moose/Goose', 'Bearger']
     """
     display_name = "Boss Defeat Requirement"
     default = {"Ancient Guardian"}
     valid_keys = {
+        "Random",
         "Deerclops",
         "Moose/Goose",
         "Bearger",
@@ -83,6 +87,12 @@ class RequiredBosses(OptionSet):
         "Ancient Fuelweaver",
         "Celestial Champion",
     }
+
+# class CraftWithLockedItems(DefaultOnToggle):
+#     """
+#     Should you be able to craft if any of the ingredients are one of your missing items?
+#     """
+#     display_name = "Craft With Locked Items"
 
 class CaveRegions(Choice):
     """
@@ -116,24 +126,60 @@ class OceanRegions(Choice):
     option_light = 2
     option_full = 3
 
-class CreatureLocations(DefaultOnToggle):
+class Seasons(OptionSet):
+    """
+    Which seasons will be enabled in your world?
+    (This is not automatic. If changed from default, seasons will need to be set manually in your world settings!)
+    """
+    display_name = "Seasons"
+    default =    {SEASON.AUTUMN, SEASON.WINTER, SEASON.SPRING, SEASON.SUMMER}
+    valid_keys = {SEASON.AUTUMN, SEASON.WINTER, SEASON.SPRING, SEASON.SUMMER}
+    
+class StartingSeason(Choice):
+    """
+    Which season do you start with in your world?
+    (This is not automatic. If not autumn, starting season will need to be set manually in your world settings!)
+    """
+    display_name = "Starting Season"
+    default = 0
+    option_autumn = 0
+    option_winter = 1
+    option_spring = 2
+    option_summer = 3
+    
+class DayPhases(OptionSet):
+    """
+    Which day phases will be enabled in your world?
+    (This is not automatic. If changed from default, day phases will need to be set manually in your world settings!)
+    Set to Night only if you plan to play on a Lights Out world.
+    """
+    display_name = "Day Phases"
+    default =    {PHASE.DAY, PHASE.DUSK, PHASE.NIGHT}
+    valid_keys = {PHASE.DAY, PHASE.DUSK, PHASE.NIGHT}
+
+class CreatureLocations(Choice):
     """
     Are non-boss creatures item locations, by killing or non-violent interactions?
-    (Disabling will remove a lot of locations. Excess items will be moved into your start inventory.)
+    None: Creatures are not checks. (Disabling will remove a lot of locations. Excess items will be moved into your start inventory.)
+    All: All creatures are checks.
+    Peaceful: Only creatures that have a peaceful interaction are checks. Killing still also grants the check.
     """
     display_name = "Creature Locations"
-
+    default = 1
+    option_none = 0
+    option_all = 1
+    option_peaceful = 2
 
 class BossLocations(Choice):
     """
-    Decide what type of items bosses may have.
+    Are boss defeats item locations, other than ones listed in your goal condition?
 
-    None: Bosses only drop filler items.
-    Easy: Easier bosses may have useful items. Raid bosses will only have filler items except when required by your goal.
-    All: All bosses may have useful items.
-    Prioritized: All bosses are more likely to have progression items.
+    None: No boss checks other than ones on your goal path.
+    Easy: Only easier bosses. These can be defeated even if playing solo with default difficulty. 
+    All: Includes raid bosses. These are intended for multiplayer sessions, but can still be soloed with Extra Damage Against Bosses or creative strategies.
+    Prioritized: All bosses will have either useful or progression items.
     """
-    display_name = "Boss Kill Locations"
+    display_name = "Boss Locations"
     default = 1
     option_none = 0
     option_easy = 1
@@ -143,7 +189,7 @@ class BossLocations(Choice):
 class CookingLocations(Choice):
     """
     Find items when cooking different foods in the crock pot?
-    There's a good chance you'll need the wiki to get all of these: https://dontstarve.fandom.com/wiki/Crock_Pot
+    There's a good chance you'll need the wiki to get all of these: https://dontstarve.wiki.gg/wiki/Dishes
 
     None: No items from cooking. (This will remove a lot of locations. Excess items will be moved into your start inventory.)
     Regular: Get items for cooking in the crock pot, excluding Warly's exclusives.
@@ -164,22 +210,6 @@ class FarmingLocations(Toggle):
     Find items when you harvest giant crops?
     """
     display_name = "Farming Locations"
-
-class SeasonalLocations(Toggle):
-    """
-    Should season-specific locations have important items?
-
-    False: Season-specific locations will only have filler items.
-    True: Season-specific locations may have useful items.
-    """
-    display_name = "Seasonal Locations"
-
-class SeasonChangeHelperItems(Toggle):
-    """
-    Include a way to change seasons and moon phases to help with location checks?
-    These will be added as Archipelago items, and cost sanity and purple gems to use.
-    """
-    display_name = "Season Change Helper Items"
 
 class ChessPieceSketchItems(DefaultOnToggle):
     """
@@ -206,6 +236,14 @@ class ExtraDamageAgainstBosses(NamedRange):
         "high": 10,
     }
 
+# class ExtraDamageAgainstBossesWhenDefeatingBosses(Toggle):
+#     """
+#     This adds "Extra Damage Against Bosses" as rewards for defeating bosses. Recommended if playing solo.
+#     This requires Boss Locations to be enabled. Does not apply to bosses that count for your victory condition.
+#     Can also be functionally used to make boss items local-only and not required in logic.
+#     """
+#     display_name = "Extra Damage Against Bosses When Defeating Bosses"
+
 class ShuffleStartingRecipes(Toggle):
     """
     Turn your basic starting recipes into Archipelago items?
@@ -219,7 +257,7 @@ class ShuffleStartingRecipes(Toggle):
 
 class ShuffleNoUnlockRecipes(Toggle):
     """
-    Turn crafting recipes in the Ancient Pseudoscience Station and Celestial Altars into Archipelago items?
+    Turn crafting recipes from the Ancient Pseudoscience Station and Celestial Altars into Archipelago items?
     """
     display_name = "Shuffle Ancient and Celestial Recipes"
 
@@ -230,19 +268,29 @@ class SeedItems(Toggle):
     """
     display_name = "Farm Plant Seed Items"
 
-# class CraftWithLockedItems(DefaultOnToggle):
-#     """
-#     Should you be able to craft if any of the ingredients are one of your missing items?
-#     """
-#     display_name = "Craft With Locked Items"
+class SeasonFlow(Choice):
+    """
+    How do seasons progress in your world?
+    
+    Normal: Seasons progress as default. Logic attempts to prepare you for seasons, but not guaranteed. Seasonal checks may not have progression items.
+    Normal With Helpers: Same as normal, but season-changing items are added to the item pool as useful items not part of logic.
+    Unlockable: Season-changing items are progression. Seasonal checks may have progresion items. Can optionally play with permanent seasons.
+    Unlockable Shuffled: Same as unlockable, except seasons are logically shuffled within the spheres. Can optionally play with permanent seasons.
+    """
+    display_name = "Season Flow"
+    default = 2
+    option_normal = 0
+    option_normal_with_helpers = 1
+    option_unlockable = 2
+    option_unlockable_shuffled = 3
 
 class PlayerSkillLevel(Choice):
     """
     What skill level should be considered for randomizer logic?
 
-    Easy: Ensure items that would be helpful for progression are accessible
-    Advanced: Expects you to know the game well. Season gear logic defaults to none.
-    Expert: Expects you to survive in riskier conditions, have minimal items, and know advanced tricks. All helpful logic defaults to none.
+    Easy: Adds useful items in logic and avoids harder solutions.
+    Advanced: Expects the player to be familiar with game mechanics.
+    Expert: Expects the player survive in riskier conditions, have minimal items, and know advanced tricks.
 
     Easier difficulties may make generation more restrictive.
     """
@@ -315,6 +363,8 @@ class HealingLogic(Choice):
 class JunkItemAmount(Range):
     """
     Number of junk (stat change) and trap items to add to the item pool
+    
+    If set too high, junk will leave no space for regular items, and overflow them into your starting inventory.
     """
     display_name = "Junk Item Amount"
     default = 20
@@ -340,7 +390,7 @@ class TrapItems(NamedRange):
 
 class SeasonTrapItems(NamedRange):
     """
-    Chance percentage junk items can be season-changing traps. If combined with Traps Items, the percentage is split.
+    Chance percentage junk items can be season-changing traps. These can only be seasons that are enabled. If combined with Traps Items, the percentage is split.
     """
     display_name = "Season Trap Item Chance (Percentage)"
     default = 0
@@ -355,20 +405,31 @@ class SeasonTrapItems(NamedRange):
         "always": 100,
     }
 
-class NonshuffledItems(OptionSet):
-    """
-    Items that will not be shuffled. 
-    This differs from adding these as starting items since these will only be available at their respective prototype station, etc.
-    """
-    display_name = "Nonshuffled Items"
-    valid_keys = {name for name, item in item_data_table.items() if not len(item.tags.intersection({
-        "nonshuffled",
-        "progressive",
-        "deprecated"
-    }))}
-
 dontstarvetogether_option_groups = [
+    OptionGroup("Location Options", [
+        CaveRegions,
+        OceanRegions,
+        Seasons,
+        StartingSeason,
+        DayPhases,
+        CreatureLocations,
+        BossLocations,
+        CookingLocations,
+        FarmingLocations,
+        # SeasonalLocations,
+    ]),
+    OptionGroup("Item Options", [
+        ShuffleStartingRecipes,
+        ShuffleNoUnlockRecipes,
+        ChessPieceSketchItems,
+        SeedItems,
+        ExtraDamageAgainstBosses,
+        JunkItemAmount,
+        TrapItems,
+        SeasonTrapItems,
+    ]),
     OptionGroup("Logic Options", [
+        SeasonFlow,
         PlayerSkillLevel,
         LightingLogic,
         WeaponLogic,
@@ -377,9 +438,6 @@ dontstarvetogether_option_groups = [
         BackpackLogic,
         HealingLogic,
     ]),
-    OptionGroup("Item & Location Options", [
-        NonshuffledItems,
-    ]),
 ]
 
 @dataclass
@@ -387,20 +445,34 @@ class DSTOptions(PerGameCommonOptions):
     goal: Goal
     days_to_survive: DaysToSurvive
     required_bosses: RequiredBosses
+    # craft_with_locked_items: CraftWithLockedItems
+    death_link: DeathLink
+
+    # Shuffling options
     cave_regions: CaveRegions
     ocean_regions: OceanRegions
+    seasons: Seasons
+    starting_season: StartingSeason
+    day_phases: DayPhases
     creature_locations: CreatureLocations
     boss_locations: BossLocations
     cooking_locations: CookingLocations
     farming_locations: FarmingLocations
-    seasonal_locations: SeasonalLocations
-    season_change_helper_items: SeasonChangeHelperItems
-    chesspiece_sketch_items: ChessPieceSketchItems
-    extra_damage_against_bosses: ExtraDamageAgainstBosses
+    # seasonal_locations: SeasonalLocations
+    # season_change_helper_items: SeasonChangeHelperItems
+
+    # Item options
     shuffle_starting_recipes: ShuffleStartingRecipes
     shuffle_no_unlock_recipes: ShuffleNoUnlockRecipes
+    chesspiece_sketch_items: ChessPieceSketchItems
     seed_items: SeedItems
-    # craft_with_locked_items: CraftWithLockedItems
+    extra_damage_against_bosses: ExtraDamageAgainstBosses
+    junk_item_amount: JunkItemAmount
+    trap_items: TrapItems
+    season_trap_items: SeasonTrapItems
+
+    # Logic options
+    season_flow: SeasonFlow
     skill_level: PlayerSkillLevel
     lighting_logic: LightingLogic
     weapon_logic: WeaponLogic
@@ -408,8 +480,3 @@ class DSTOptions(PerGameCommonOptions):
     base_making_logic: BaseMakingLogic
     backpack_logic: BackpackLogic
     healing_logic: HealingLogic
-    junk_item_amount: JunkItemAmount
-    trap_items: TrapItems
-    season_trap_items: SeasonTrapItems
-    nonshuffled_items: NonshuffledItems
-    death_link: DeathLink

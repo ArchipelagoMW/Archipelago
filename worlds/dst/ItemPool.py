@@ -1,9 +1,10 @@
-from typing import Dict, List, Set, FrozenSet
+from typing import Dict, List, Set, FrozenSet, Callable
 from worlds.AutoWorld import World
 from BaseClasses import ItemClassification as IC, LocationProgressType
 from .Items import item_data_table, item_name_to_id, DSTItem
 from .Options import DSTOptions
-from .Constants import ITEM_ID_OFFSET
+from .Constants import ITEM_ID_OFFSET, REGION, SEASON, PHASE
+from . import Util
 
 class DSTItemPool:
     nonfiller_itempool:List[str] # All items enabled by the options except junk
@@ -13,8 +14,10 @@ class DSTItemPool:
     locked_items_local_id:Set
     locked_items:Set[str]
     # These are to be set by rules, using set_progression_items
-    progression_items:FrozenSet[str] = frozenset() 
+    progression_items:FrozenSet[str] = frozenset()
     prioritized_useful_items:FrozenSet[str] = frozenset() # For items that would be progression under different logic settings
+    precollected_progression_items:Set[str] = set()
+    on_finalize_itempool:Callable = lambda: None
 
     def decide_itempools(self, world:World) -> None:
         "Before generating, decide what items go in itempool categories"
@@ -25,24 +28,36 @@ class DSTItemPool:
         self.seasontrap_items = list()
         self.locked_items_local_id = set()
         self.locked_items = set()
-        start_inventory:FrozenSet = frozenset(options.start_inventory.value.keys())
-        region_valid = {
-            # Caves
-            "cave":         options.cave_regions.value >= options.cave_regions.option_light,
-            "ruins":        options.cave_regions.value >= options.cave_regions.option_full,
-            "archive":      options.cave_regions.value >= options.cave_regions.option_full,
+        self.precollected_progression_items = set()
 
-            # Ocean
-            "ocean":        options.ocean_regions.value >= options.ocean_regions.option_light,
-            "moonquay":     options.ocean_regions.value >= options.ocean_regions.option_light,
-            "moonstorm":    options.ocean_regions.value >= options.ocean_regions.option_full,
-        }
+        is_enabled_in_tag_group = Util.create_tag_group_validation_fn(options)
+
+        # Add at least torch for Lights Out
+        if (
+            options.shuffle_starting_recipes.value
+            and (not PHASE.DAY in options.day_phases.value or PHASE.DUSK in options.day_phases.value)
+        ):
+            options.start_inventory.value["Torch"] = 1
+
+        # Start with season changer with unlockable mode
+        if (
+            options.season_flow.value == options.season_flow.option_unlockable
+            or options.season_flow.value == options.season_flow.option_unlockable_shuffled
+        ):
+            options.start_inventory.value[
+                     "Winter" if options.starting_season.value == options.starting_season.option_winter
+                else "Spring" if options.starting_season.value == options.starting_season.option_spring
+                else "Summer" if options.starting_season.value == options.starting_season.option_summer
+                else "Autumn"
+            ] = 1
+
+
+        start_inventory:FrozenSet = frozenset(options.start_inventory.value.keys())
 
         for name, item in item_data_table.items():
             # Don't shuffle nonshuffled items
             if (
-                name in options.nonshuffled_items.value
-                or "nonshuffled" in item.tags
+                "nonshuffled" in item.tags
                 or "progressive" in item.tags # Add these somewhere else
             ):
                 continue
@@ -53,28 +68,19 @@ class DSTItemPool:
                     not item.code
                     or "deprecated" in item.tags
                     or (not options.shuffle_no_unlock_recipes.value and "nounlock" in item.tags)
-                    or (not options.season_change_helper_items.value and "seasonhelper" in item.tags)
+                    or (options.season_flow.value == options.season_flow.option_normal and "seasonhelper" in item.tags)
                     or (not options.seed_items.value and "seeds" in item.tags)
                     or (not options.chesspiece_sketch_items.value and "chesspiecesketch" in item.tags)
+                    or not is_enabled_in_tag_group(REGION, item.tags)
+                    or not is_enabled_in_tag_group(SEASON, item.tags)
                 ):
-                    continue
-
-                # Add items that are in our regions
-                _enabled = True
-                for regiontag, istrue in region_valid.items():
-                    if regiontag in item.tags:
-                        _enabled = False
-                        if istrue:
-                            _enabled = True
-                            break
-
-                if not _enabled: 
                     continue
 
                 # Add basic items as dummy event items so we can do logic with them
                 if not options.shuffle_starting_recipes.value and "basic" in item.tags:
                     if item.type == IC.progression:
                         world.multiworld.push_precollected(DSTItem(name, IC.progression, None, world.player))
+                        self.precollected_progression_items.add(name)
                     continue
 
             # Put junk items in the filler pool
@@ -95,21 +101,21 @@ class DSTItemPool:
             # Add into the nonfiller pool
             if not name in start_inventory:
                 self.nonfiller_itempool.append(name)
-        
+
         # Handle progressive items here
         for _ in range(options.extra_damage_against_bosses.value):
             self.nonfiller_itempool.append("Extra Damage Against Bosses")
-    
+
     def create_item(self, world:World, name: str) -> DSTItem:
         itemtype = (
             IC.progression if name in self.progression_items
-            else item_data_table[name].type if name in item_name_to_id 
+            else item_data_table[name].type if name in item_name_to_id
             else IC.progression
         )
         return DSTItem(
-            name, 
-            itemtype, 
-            item_data_table[name].code if name in item_name_to_id else None, 
+            name,
+            itemtype,
+            item_data_table[name].code if name in item_name_to_id else None,
             world.player
         )
 
@@ -140,7 +146,7 @@ class DSTItemPool:
                     items_by_classification["useful"].append(item)
                 else:
                     items_by_classification["filler"].append(item)
-        
+
         for _list in items_by_classification.values():
             world.multiworld.random.shuffle(_list) # In case of overflow, shuffle so our overflows are random
 
@@ -173,12 +179,15 @@ class DSTItemPool:
                 item_pool.append(_list.pop())
             else:
                 break
-        
+
         # If we ran out of locations to put things, then remaining items will be added into starting inventory
         for _list in items_by_classification.values():
             while len(_list):
-                world.multiworld.push_precollected(_list.pop())
-        
+                _p = _list.pop()
+                world.multiworld.push_precollected(_p)
+                if _list == items_by_classification["progression"]:
+                    self.precollected_progression_items.add(_p)
+
         # Fill up with junk items
         while len(item_pool) < len(world.multiworld.get_unfilled_locations(world.player)):
             item_pool.append(world.create_item(world.get_filler_item_name()))
@@ -187,6 +196,7 @@ class DSTItemPool:
             print(f"{world.multiworld.get_player_name(world.player)} (Don't Starve Together): Warning! More items than locations!")
 
         world.multiworld.itempool += item_pool
+        self.on_finalize_itempool()
 
     def get_filler_item_name(self, world: World) -> str:
         options:DSTOptions = world.options
@@ -201,9 +211,15 @@ class DSTItemPool:
             else self.seasontrap_items
         )
         if len(target_pool) > 0:
-            return world.multiworld.random.choice(list(target_pool))
+            return world.multiworld.random.choice(target_pool)
         return "20 Health"
 
     def set_progression_items(self, progression_dict:Dict[str, bool]):
         self.progression_items = frozenset([name for name, is_true in progression_dict.items() if is_true])
         self.prioritized_useful_items = frozenset([name for name, is_true in progression_dict.items() if not is_true])
+
+    def get_num_progression_items_in_pool(self) -> int:
+        return len(self.progression_items.intersection(self.nonfiller_itempool))
+
+    def get_num_precollected_progression_items(self) -> int:
+        return len(self.precollected_progression_items)

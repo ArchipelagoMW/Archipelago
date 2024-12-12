@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, Optional, FrozenSet
+from typing import Dict, NamedTuple, Optional, Set
 
 from BaseClasses import Location
 
@@ -9,7 +9,7 @@ class DSTLocation(Location):
 
 class DSTLocationData(NamedTuple):
    address: Optional[int] = None
-   tags: FrozenSet[str] = frozenset()
+   tags: Set[str] = set()
    name: str = ""
 
 def generate_location_data() -> Dict[str, DSTLocationData]:
@@ -18,12 +18,20 @@ def generate_location_data() -> Dict[str, DSTLocationData]:
    for v in DSTAP_LOCATIONS:
       address:int = v[0] + LOCATION_ID_OFFSET
       name:str = v[1]
-      tags:FrozenSet = frozenset(v[3])
+      tags:Set = set(v[3])
+      
+      if "nonwinter" in tags:
+         tags.update(["autumn", "spring", "summer"])
+      if "nonspring" in tags:
+         tags.update(["autumn", "winter", "summer"])	
+      if "nonsummer" in tags:
+         tags.update(["autumn", "winter", "spring"])
+
       ret.setdefault(name, DSTLocationData(address, tags, name))
    # Add dynamic locations - Experimental; Will probably won't keep at all
    # for i in range(1, 100):
    #    name:str = f"Survive {i} Days"
-   #    ret.setdefault(name, DSTLocationData(i+LOCATION_DAY_OFFSET, frozenset(["survivedays"]), name))
+   #    ret.setdefault(name, DSTLocationData(i+LOCATION_DAY_OFFSET, set(["survivedays"]), name))
    return ret
 
 location_data_table: Dict[str, DSTLocationData] = generate_location_data()

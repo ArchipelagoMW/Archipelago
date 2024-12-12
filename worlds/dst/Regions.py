@@ -3,7 +3,8 @@ from BaseClasses import MultiWorld, Region, Entrance, ItemClassification
 from .Locations import location_data_table, DSTLocation
 from .ItemPool import DSTItemPool
 from .Options import DSTOptions
-from .Constants import REGION
+from .Constants import REGION, PHASE, SEASON, SEASONS_PASSED, SPECIAL_TAGS, BOSS_PREREQUISITES
+from . import Util
 
 class DSTRegionData(NamedTuple):
    connecting_regions: List[str] = []
@@ -28,21 +29,8 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
       else []
    )
 
-   # Locations to omit if condition is true TODO: Change these when mcguffin items are added
-   OMITTED:Dict[str, bool] = {
-      "Ancient Fuelweaver": "Ancient Guardian" in options.required_bosses.value,
-      "Celestial Champion": "Crab King" in options.required_bosses.value,
-      "Scrappy Werepig": "Nightmare Werepig" in options.required_bosses.value,
-   } if options.goal.value == options.goal.option_bosses_any else {}
-
-   # Build region whitelist
-   REGION_WHITELIST = set([REGION.MENU, REGION.FOREST])
-   if options.cave_regions.value >= options.cave_regions.option_light: REGION_WHITELIST.update([REGION.CAVE])
-   if options.cave_regions.value >= options.cave_regions.option_full: REGION_WHITELIST.update([REGION.RUINS, REGION.ARCHIVE])
-   if options.ocean_regions.value >= options.ocean_regions.option_light: REGION_WHITELIST.update([REGION.OCEAN, REGION.MOONQUAY])
-   if options.ocean_regions.value >= options.ocean_regions.option_full: REGION_WHITELIST.update([REGION.MOONSTORM])
-   if REGION.CAVE in REGION_WHITELIST or REGION.OCEAN in REGION_WHITELIST: REGION_WHITELIST.update([REGION.DUALREGION])
-   if REGION.CAVE in REGION_WHITELIST and REGION.OCEAN in REGION_WHITELIST: REGION_WHITELIST.update([REGION.BOTHREGIONS])
+   # Build whitelists
+   WHITELIST = Util.build_whitelist(options)
 
    def get_region_name_from_tags(tags: Set[str]):
       return (
@@ -57,22 +45,52 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
          else REGION.CAVE if "cave" in tags
          else REGION.FOREST
       )
-   
+
    # Get number of items that need to be placed
    location_num_left_to_place:int = len(itempool.nonfiller_itempool) + NUM_JUNK_ITEMS + len(BOSS_DEFEAT_LOCATIONS)
+   
+   # Locations to omit if condition is true
+   OMITTED:Dict[str, bool] = {}
+         
+   # Omit later bosses on bosses_any goal
+   if options.goal.value == options.goal.option_bosses_any:
+      for dependent_location, prerequisites in BOSS_PREREQUISITES.items():
+         if len(prerequisites.intersection(options.required_bosses.value)):
+            OMITTED[dependent_location] = True
+
+   _progression_required_bosses = set()
+   if options.goal.value == options.goal.option_bosses_any or options.goal.value == options.goal.option_bosses_all:
+      _progression_required_bosses.update(options.required_bosses.value)
+      for bossname in options.required_bosses.value:
+         _progression_required_bosses.update(BOSS_PREREQUISITES.get(bossname, set()))
+
+   is_enabled_in_tag_group = Util.create_tag_group_validation_fn(options)
 
    # Check if locations are disabled by options
    filtered_location_data_table = {name: data for name, data in location_data_table.items() if not(
       "deprecated" in data.tags # Don't add deprecated locations
       or (not options.creature_locations.value and "creature" in data.tags)
+      or (options.creature_locations.value == options.creature_locations.option_peaceful and "creature" in data.tags and not "peaceful" in data.tags)
       or (not options.farming_locations.value and "farming" in data.tags)
       or (options.cooking_locations.current_key == "none" and "cooking" in data.tags)
       or (options.cooking_locations.current_key != "warly_enabled" and "warly" in data.tags)
       or (options.cooking_locations.current_key == "veggie_only" and "meat" in data.tags)
       or (options.cooking_locations.current_key == "meat_only" and "veggie" in data.tags)
+      or (
+         not name in _progression_required_bosses
+         and not (options.creature_locations.value == options.creature_locations.option_peaceful and name == "Antlion")
+         and (
+            (options.boss_locations.value == options.boss_locations.option_none and "boss" in data.tags)
+            or (options.boss_locations.value <= options.boss_locations.option_easy and "raidboss" in data.tags)
+         )
+      )
+      or not is_enabled_in_tag_group(SEASON, data.tags)
+      or not is_enabled_in_tag_group(PHASE, data.tags)
+      or not is_enabled_in_tag_group(SEASONS_PASSED, data.tags)
+      or not is_enabled_in_tag_group(SPECIAL_TAGS, data.tags)
       or (OMITTED.get(name, False))
    )}
-   
+
    # Categories
    RESEARCH_GROUPS = {
       "veggie_locations": [],
@@ -88,7 +106,7 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
    # Fill categories with locations
    for name, data in filtered_location_data_table.items():
       region_name = get_region_name_from_tags(data.tags)
-      if region_name in REGION_WHITELIST:
+      if region_name in WHITELIST:
          if ("research" in data.tags
             and not (
                # These won't be randomized
@@ -145,14 +163,14 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
 
    # Create regions
    for region_name in REGION_DATA_TABLE.keys():
-      if region_name in REGION_WHITELIST:
+      if region_name in WHITELIST:
          new_region = Region(region_name, player, multiworld)
          multiworld.regions.append(new_region)
       
    # Create locations and entrances.
    for region_name, region_data in REGION_DATA_TABLE.items():
       # Check if region is allowed
-      if not region_name in REGION_WHITELIST:
+      if not region_name in WHITELIST:
          continue
       # Fill the region with locations
       region = multiworld.get_region(region_name, player)
@@ -161,7 +179,7 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
       }, DSTLocation)
       if region_data.connecting_regions:
          for exit_name in region_data.connecting_regions:
-            if exit_name in REGION_WHITELIST:
+            if exit_name in WHITELIST:
                entrance = Entrance(player, exit_name, region)
                entrance.connect(multiworld.get_region(exit_name, player))
                region.exits.append(entrance)

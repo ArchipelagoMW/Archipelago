@@ -143,7 +143,7 @@ class DSTContext(CommonContext):
                         self.logger.info("Waiting for Don't Starve Together server.")
                     async_start(dst_connect_hint())
                 
-                # Remind player of their goal
+                # Remind player of their goal and world settings
                 async def goal_hint():
                     await asyncio.sleep(0.5)
                     _goal = self.slotdata.get("goal")
@@ -154,9 +154,22 @@ class DSTContext(CommonContext):
                     elif _goal == "bosses_all" or _goal == "bosses_any":
                         _bosses = [self.location_names.lookup_in_game(loc_id) for loc_id in self.slotdata.get("goal_locations", [])]
                         self.logger.info(f"Bosses: {_bosses}")
-                    _is_caves_enabled = self.slotdata.get("is_caves_enabled", None)
-                    if _is_caves_enabled != None:
-                        self.logger.info(f"Has Caves: {'Yes' if _is_caves_enabled else 'No'}")
+                    self.logger.info("The following settings need to be manually set in your world (if not default)!")
+                    self.logger.info(f"Caves Required: {'Yes' if self.slotdata.get('is_caves_enabled', True) else 'No'}")
+                    _seasons = self.slotdata.get("seasons", ["Autumn", "Winter", "Spring", "Summer"])
+                    _starting_season = str(self.slotdata.get("starting_season", "Autumn")).capitalize()
+                    _season_flow = self.slotdata.get("season_flow", "normal")
+                    _is_unlockable_seasons = _season_flow == "unlockable" or _season_flow == "unlockable_shuffled"
+                    self.logger.info(f"Starting Season: {_starting_season}" + (" (Default)" if _starting_season == "Autumn" else ""))
+                    self.logger.info(f"Enabled Seasons: {'All (Default)' if len(_seasons) == 4 else _seasons}"
+                                        # + (f" (Unlockable) Can optionally set to permanent {_starting_season}" if _is_unlockable_seasons else "") # TODO: Figure out a better way to do this
+                                    )
+                    _day_phases = self.slotdata.get('day_phases', ["Day", "Dusk", "Night"])
+                    self.logger.info(f"Day Phases: {'All (Default)' if len(_day_phases) == 3 else _day_phases}"
+                                        + (f" (Lights Out)" if len(_day_phases) == 1 and _day_phases[0] == "Night" else "")
+                                    )
+                    self.logger.info(f"Character Selection: {self.slotdata.get('character', 'Any')}")
+
                 async_start(goal_hint())
 
             elif cmd == "ReceivedItems":
