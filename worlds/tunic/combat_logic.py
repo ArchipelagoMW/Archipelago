@@ -63,13 +63,13 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool
     # we're caching whether you've met the combat reqs before if the state didn't change first
     # if the combat state is stale, mark each area's combat state as stale
     if state.tunic_need_to_reset_combat_from_collect[player]:
-        state.tunic_need_to_reset_combat_from_collect[player] = 0
+        state.tunic_need_to_reset_combat_from_collect[player] = False
         for name in area_data.keys():
             if state.tunic_area_combat_state[player][name] == CombatState.failed:
                 state.tunic_area_combat_state[player][name] = CombatState.unchecked
 
     if state.tunic_need_to_reset_combat_from_remove[player]:
-        state.tunic_need_to_reset_combat_from_remove[player] = 0
+        state.tunic_need_to_reset_combat_from_remove[player] = False
         for name in area_data.keys():
             if state.tunic_area_combat_state[player][name] == CombatState.succeeded:
                 state.tunic_area_combat_state[player][name] = CombatState.unchecked
