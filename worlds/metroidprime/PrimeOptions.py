@@ -325,7 +325,7 @@ class PreScanElevators(DefaultOnToggle):
 
 
 class ProgressiveBeamUpgrades(Toggle):
-    """If enabled, 3 progressive beam items will be added into the item pool per beam. The first unlocks the beam, the second unlocks the ability to charge the beam, and the third unlocks the missile combo for it. Progressive items share the same model as the associated beam combo model (all progressive wave beams will look like the wavebuster)."""
+    """If enabled, 3 progressive beam items will be added into the item pool per beam. These unlock the beam itself, charging capabilities, and the associated missile combo."""
 
     display_name = "Progressive Beam Upgrades"
 
