@@ -138,8 +138,6 @@ class KH1World(World):
         prefilled_items = []
         if not self.options.randomize_emblem_pieces:
             prefilled_items = prefilled_items + ["Emblem Piece (Flame)", "Emblem Piece (Chest)", "Emblem Piece (Fountain)", "Emblem Piece (Statue)"]
-        if self.options.randomize_postcards.current_key not in ["all"]:
-            prefilled_items = prefilled_items + ["Postcard"]
         
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
         
