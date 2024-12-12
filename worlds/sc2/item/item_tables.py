@@ -1077,7 +1077,7 @@ item_table = {
         ItemData(804 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.MaxSupply, -1, SC2Race.ANY, quantity=0,
                  classification=ItemClassification.filler),
     item_names.SHIELD_REGENERATION:
-        ItemData(805 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.ShieldRegeneration, -1, SC2Race.PROTOSS, quantity=0,
+        ItemData(805 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.ShieldRegeneration, 1, SC2Race.PROTOSS, quantity=0,
                  classification=ItemClassification.filler),
 
     # Nova gear
