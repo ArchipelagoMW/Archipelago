@@ -242,6 +242,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
             def write_multidata():
                 import NetUtils
+                from NetUtils import HintStatus
                 slot_data = {}
                 client_versions = {}
                 games = {}
@@ -266,10 +267,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                 for slot in multiworld.player_ids:
                     slot_data[slot] = multiworld.worlds[slot].fill_slot_data()
 
-                def precollect_hint(location):
+                def precollect_hint(location: Location, auto_status: HintStatus):
                     entrance = er_hint_data.get(location.player, {}).get(location.address, "")
                     hint = NetUtils.Hint(location.item.player, location.player, location.address,
-                                         location.item.code, False, entrance, location.item.flags, False)
+                                         location.item.code, False, entrance, location.item.flags, auto_status)
                     precollected_hints[location.player].add(hint)
                     if location.item.player not in multiworld.groups:
                         precollected_hints[location.item.player].add(hint)
@@ -288,13 +289,16 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                             f"{locations_data[location.player][location.address]}")
                         locations_data[location.player][location.address] = \
                             location.item.code, location.item.player, location.item.flags
+                        auto_status = HintStatus.HINT_AVOID if location.item.trap else HintStatus.HINT_PRIORITY
                         if location.name in multiworld.worlds[location.player].options.start_location_hints:
-                            precollect_hint(location)
+                            if not location.item.trap:  # Unspecified status for location hints, except traps
+                                auto_status = HintStatus.HINT_UNSPECIFIED
+                            precollect_hint(location, auto_status)
                         elif location.item.name in multiworld.worlds[location.item.player].options.start_hints:
-                            precollect_hint(location)
+                            precollect_hint(location, auto_status)
                         elif any([location.item.name in multiworld.worlds[player].options.start_hints
                                   for player in multiworld.groups.get(location.item.player, {}).get("players", [])]):
-                            precollect_hint(location)
+                            precollect_hint(location, auto_status)
 
                 # embedded data package
                 data_package = {

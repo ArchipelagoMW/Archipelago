@@ -351,7 +351,7 @@ Sent to the server to update the status of a Hint. The client must be the 'recei
 | ---- | ---- | ----- |
 | player | int | The ID of the player whose location is being hinted for. |
 | location | int | The ID of the location to update the hint for. If no hint exists for this location, the packet is ignored. |
-| status | [HintStatus](#HintStatus) | Optional. If included, sets the status of the hint to this status. |
+| status | [HintStatus](#HintStatus) | Optional. If included, sets the status of the hint to this status. Cannot set `HINT_FOUND`, or change the status from `HINT_FOUND`. |
 
 #### HintStatus
 An enumeration containing the possible hint states.
@@ -359,12 +359,16 @@ An enumeration containing the possible hint states.
 ```python
 import enum
 class HintStatus(enum.IntEnum):
-    HINT_FOUND = 0
-    HINT_UNSPECIFIED = 1
-    HINT_NO_PRIORITY = 10
-    HINT_AVOID = 20
-    HINT_PRIORITY = 30
+    HINT_FOUND = 0        # The location has been collected. Status cannot be changed once found.
+    HINT_UNSPECIFIED = 1  # The receiving player has not specified any status
+    HINT_NO_PRIORITY = 10 # The receiving player has specified that the item is unneeded
+    HINT_AVOID = 20       # The receiving player has specified that the item is detrimental
+    HINT_PRIORITY = 30    # The receiving player has specified that the item is needed
 ```
+- Hints for items with `ItemClassification.trap` default to `HINT_AVOID`.
+- Hints created with `LocationScouts`, `!hint_location`, or similar (hinting a location) default to `HINT_UNSPECIFIED`.
+- Hints created with `!hint` or similar (hinting an item for yourself) default to `HINT_PRIORITY`.
+- Once a hint is collected, its' status is updated to `HINT_FOUND` automatically, and can no longer be changed.
 
 ### StatusUpdate
 Sent to the server to update on the sender's status. Examples include readiness or goal completion. (Example: defeated Ganon in A Link to the Past)
@@ -668,6 +672,7 @@ class Hint(typing.NamedTuple):
     found: bool
     entrance: str = ""
     item_flags: int = 0
+    status: HintStatus = HintStatus.HINT_UNSPECIFIED
 ```
 
 ### Data Package Contents
