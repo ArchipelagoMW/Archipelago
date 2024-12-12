@@ -89,8 +89,9 @@ class FactionlessItemType(ItemTypeEnum):
     Vespene = "Vespene", 1
     Supply = "Supply", 2
     MaxSupply = "Max Supply", 3
-    Nothing = "Nothing Group", 4
-    Deprecated = "Deprecated", 5
+    BuildingSpeed = "Building Speed", 4
+    Nothing = "Nothing Group", 5
+    Deprecated = "Deprecated", 6
     Keys = "Keys", -1
 
 
@@ -1079,6 +1080,10 @@ item_table = {
     item_names.SHIELD_REGENERATION:
         ItemData(805 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.ShieldRegeneration, 1, SC2Race.PROTOSS, quantity=0,
                  classification=ItemClassification.filler),
+    item_names.BUILDING_CONSTRUCTION_SPEED:
+        ItemData(806 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.BuildingSpeed, 1, SC2Race.ANY, quantity=0,
+                 classification=ItemClassification.filler),
+
 
     # Nova gear
     item_names.NOVA_GHOST_VISOR:

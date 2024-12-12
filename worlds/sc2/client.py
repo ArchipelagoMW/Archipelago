@@ -1547,6 +1547,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             await self.update_terran_tech(start_items)
             await self.update_zerg_tech(start_items, kerrigan_level)
             await self.update_protoss_tech(start_items)
+            await self.update_misc_tech(start_items)
             await self.update_colors()
             if uncollected_objectives:
                 await self.chat_send("?UncollectedLocations {}".format(
@@ -1632,6 +1633,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 await self.update_terran_tech(current_items)
                 await self.update_zerg_tech(current_items, kerrigan_level)
                 await self.update_protoss_tech(current_items)
+                await self.update_misc_tech(current_items)
                 self.last_received_update = len(self.ctx.items_received)
 
             if game_state & 1:
@@ -1720,6 +1722,11 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
     async def update_protoss_tech(self, current_items):
         protoss_items = current_items[SC2Race.PROTOSS]
         await self.chat_send("?GiveProtossTech " + " ".join(map(str, protoss_items)))
+
+    async def update_misc_tech(self, current_items):
+        await self.chat_send("?GiveMiscTech {}".format(
+            current_items[SC2Race.ANY][get_item_flag_word(item_names.BUILDING_CONSTRUCTION_SPEED)],
+        ))
 
 def calc_unfinished_nodes(
         ctx: SC2Context
