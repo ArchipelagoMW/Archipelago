@@ -620,6 +620,7 @@ class SC2Context(CommonContext):
         self.minerals_per_item: int = 15  # For backwards compat with games generated pre-0.4.5
         self.vespene_per_item: int =  15  # For backwards compat with games generated pre-0.4.5
         self.starting_supply_per_item: int = 2  # For backwards compat with games generated pre-0.4.5
+        self.maximum_supply_per_item: int = 2
         self.nova_covert_ops_only = False
         self.kerrigan_levels_per_mission_completed = 0
         self.trade_enabled: int = EnableVoidTrade.default
@@ -777,6 +778,7 @@ class SC2Context(CommonContext):
             self.minerals_per_item = args["slot_data"].get("minerals_per_item", 15)
             self.vespene_per_item = args["slot_data"].get("vespene_per_item", 15)
             self.starting_supply_per_item = args["slot_data"].get("starting_supply_per_item", 2)
+            self.maximum_supply_per_item = args["slot_data"].get("maximum_supply_per_item", 2)
             self.nova_covert_ops_only = args["slot_data"].get("nova_covert_ops_only", False)
             self.trade_enabled = args["slot_data"].get("enable_void_trade", EnableVoidTrade.option_false)
 
@@ -1272,6 +1274,8 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
                 accumulators[item_data.race][item_data.type.flag_word] += ctx.vespene_per_item
             elif name == item_names.STARTING_SUPPLY:
                 accumulators[item_data.race][item_data.type.flag_word] += ctx.starting_supply_per_item
+            elif name == item_names.MAX_SUPPLY:
+                accumulators[item_data.race][item_data.type.flag_word] += ctx.maximum_supply_per_item
             else:
                 accumulators[item_data.race][item_data.type.flag_word] += item_data.number
 
@@ -1694,10 +1698,11 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         self.ctx.pending_color_update = False
 
     async def update_resources(self, current_items):
-        await self.chat_send("?GiveResources {} {} {}".format(
+        await self.chat_send("?GiveResources {} {} {} {}".format(
             current_items[SC2Race.ANY][get_item_flag_word(item_names.STARTING_MINERALS)],
             current_items[SC2Race.ANY][get_item_flag_word(item_names.STARTING_VESPENE)],
-            current_items[SC2Race.ANY][get_item_flag_word(item_names.STARTING_SUPPLY)]
+            current_items[SC2Race.ANY][get_item_flag_word(item_names.STARTING_SUPPLY)],
+            current_items[SC2Race.ANY][get_item_flag_word(item_names.MAX_SUPPLY)]
         ))
 
     async def update_terran_tech(self, current_items):

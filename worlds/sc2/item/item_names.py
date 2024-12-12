@@ -873,6 +873,7 @@ PROGRESSIVE_WARP_RELOCATE   = "Progressive Warp Relocate (Protoss)"
 STARTING_MINERALS = "Additional Starting Minerals"
 STARTING_VESPENE  = "Additional Starting Vespene"
 STARTING_SUPPLY   = "Additional Starting Supply"
+MAX_SUPPLY        = "Additional Maximum Supply"
 NOTHING           = "Nothing"
 
 # Deprecated

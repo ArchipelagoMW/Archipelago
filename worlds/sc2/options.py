@@ -1014,6 +1014,17 @@ class StartingSupplyPerItem(Range):
     default = 2
 
 
+class MaximumSupplyPerItem(Range):
+    """
+    Configures how much maximum supply per is given per item.
+    """
+    display_name = "Maximum Supply Per Item"
+    range_start = 0
+    range_end = 16
+    default = 2
+
+
+
 @dataclass
 class Starcraft2Options(PerGameCommonOptions):
     start_inventory: Sc2StartInventory
@@ -1084,6 +1095,7 @@ class Starcraft2Options(PerGameCommonOptions):
     minerals_per_item: MineralsPerItem
     vespene_per_item: VespenePerItem
     starting_supply_per_item: StartingSupplyPerItem
+    maximum_supply_per_item: MaximumSupplyPerItem
 
     custom_mission_order: CustomMissionOrder
 

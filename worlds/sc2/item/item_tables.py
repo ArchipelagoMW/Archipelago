@@ -89,6 +89,7 @@ class FactionlessItemType(ItemTypeEnum):
     Supply = "Supply", 2
     Nothing = "Nothing Group", 4
     Deprecated = "Deprecated", 5
+    MaxSupply = "Max Supply", 6
     Keys = "Keys", -1
 
 
@@ -1071,6 +1072,9 @@ item_table = {
     item_names.NOTHING:
         ItemData(803 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.Nothing, -1, SC2Race.ANY, quantity=0,
                  classification=ItemClassification.trap),
+    item_names.MAX_SUPPLY:
+        ItemData(804 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.MaxSupply, -1, SC2Race.ANY, quantity=0,
+                 classification=ItemClassification.filler),
 
     # Nova gear
     item_names.NOVA_GHOST_VISOR:
@@ -2128,6 +2132,7 @@ filler_items: typing.Tuple[str, ...] = (
     item_names.STARTING_MINERALS,
     item_names.STARTING_VESPENE,
     item_names.STARTING_SUPPLY,
+    item_names.MAX_SUPPLY,
 )
 
 # Defense rating table
