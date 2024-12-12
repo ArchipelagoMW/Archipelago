@@ -157,7 +157,7 @@ Desert Obelisk (Desert) - Entry - True:
 159709 - 0x00359 (Obelisk) - True - True
 
 Desert Outside (Desert) - Main Island - True - Desert Light Room - 0x09FEE - Desert Vault - 0x03444:
-158652 - 0x0CC7B (Vault Panel) - True - Dots & Shapers & Rotated Shapers & Negative Shapers & Full Dots
+158652 - 0x0CC7B (Vault Panel) - True - Shapers & Rotated Shapers & Negative Shapers & Full Dots
 Door - 0x03444 (Vault Door) - 0x0CC7B
 158602 - 0x17CE7 (Discard) - True - Triangles
 158076 - 0x00698 (Surface 1) - True - True
@@ -571,7 +571,7 @@ Town Red Rooftop (Town):
 158224 - 0x28B39 (Tall Hexagonal) - 0x079DF - True
 
 Town Wooden Rooftop (Town):
-158240 - 0x28AD9 (Wooden Rooftop) - 0x28AC1 - Rotated Shapers & Dots & Eraser & Full Dots
+158240 - 0x28AD9 (Wooden Rooftop) - 0x28AC1 - Rotated Shapers & Eraser & Full Dots
 
 Town Church (Town):
 158227 - 0x28A69 (Church Lattice) - 0x03BB0 - True
@@ -1109,10 +1109,10 @@ Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x01
 158451 - 0x335AB (Elevator Inside Control) - True - Dots & Black/White Squares
 158452 - 0x335AC (Elevator Upper Outside Control) - 0x335AB - Black/White Squares
 158453 - 0x3369D (Elevator Lower Outside Control) - 0x335AB - Black/White Squares & Dots
-158454 - 0x00190 (Blue Tunnel Right First 1) - True - Dots & Triangles & Full Dots
-158455 - 0x00558 (Blue Tunnel Right First 2) - 0x00190 - Dots & Triangles & Full Dots
-158456 - 0x00567 (Blue Tunnel Right First 3) - 0x00558 - Dots & Triangles & Full Dots
-158457 - 0x006FE (Blue Tunnel Right First 4) - 0x00567 - Dots & Triangles & Full Dots
+158454 - 0x00190 (Blue Tunnel Right First 1) - True - Triangles & Full Dots
+158455 - 0x00558 (Blue Tunnel Right First 2) - 0x00190 - Triangles & Full Dots
+158456 - 0x00567 (Blue Tunnel Right First 3) - 0x00558 - Triangles & Full Dots
+158457 - 0x006FE (Blue Tunnel Right First 4) - 0x00567 - Triangles & Full Dots
 158458 - 0x01A0D (Blue Tunnel Left First 1) - True - Symmetry & Triangles
 158459 - 0x008B8 (Blue Tunnel Left Second 1) - True - Black/White Squares & Triangles
 158460 - 0x00973 (Blue Tunnel Left Second 2) - 0x008B8 - Stars & Triangles
@@ -1135,10 +1135,10 @@ Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x01
 158479 - 0x288FC (Second Wooden Beam) - True - Black/White Squares & Shapers & Rotated Shapers
 158480 - 0x289E7 (Third Wooden Beam) - True - Stars & Black/White Squares
 158481 - 0x288AA (Fourth Wooden Beam) - True - Stars & Shapers
-158482 - 0x17FB9 (Left Upstairs Single) - True - Shapers & Dots & Negative Shapers & Full Dots
+158482 - 0x17FB9 (Left Upstairs Single) - True - Shapers & Negative Shapers & Full Dots
 158483 - 0x0A16B (Left Upstairs Left Row 1) - True - Full Dots
 158484 - 0x0A2CE (Left Upstairs Left Row 2) - 0x0A16B - Stars & Full Dots
-158485 - 0x0A2D7 (Left Upstairs Left Row 3) - 0x0A2CE - Dots & Black/White Squares & Stars + Same Colored Symbol & Stars & Full Dots
+158485 - 0x0A2D7 (Left Upstairs Left Row 3) - 0x0A2CE - Black/White Squares & Stars + Same Colored Symbol & Stars & Full Dots
 158486 - 0x0A2DD (Left Upstairs Left Row 4) - 0x0A2D7 - Shapers & Full Dots
 158487 - 0x0A2EA (Left Upstairs Left Row 5) - 0x0A2DD - Rotated Shapers & Full Dots
 158488 - 0x0008F (Right Upstairs Left Row 1) - True - Dots

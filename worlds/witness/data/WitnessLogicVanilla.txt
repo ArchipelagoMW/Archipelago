@@ -157,7 +157,7 @@ Desert Obelisk (Desert) - Entry - True:
 159709 - 0x00359 (Obelisk) - True - True
 
 Desert Outside (Desert) - Main Island - True - Desert Light Room - 0x09FEE - Desert Vault - 0x03444:
-158652 - 0x0CC7B (Vault Panel) - True - Dots & Shapers & Rotated Shapers & Negative Shapers & Full Dots
+158652 - 0x0CC7B (Vault Panel) - True - Shapers & Rotated Shapers & Negative Shapers & Full Dots
 Door - 0x03444 (Vault Door) - 0x0CC7B
 158602 - 0x17CE7 (Discard) - True - Triangles
 158076 - 0x00698 (Surface 1) - True - True
@@ -571,7 +571,7 @@ Town Red Rooftop (Town):
 158224 - 0x28B39 (Tall Hexagonal) - 0x079DF - True
 
 Town Wooden Rooftop (Town):
-158240 - 0x28AD9 (Wooden Rooftop) - 0x28AC1 - Shapers & Dots & Eraser & Full Dots
+158240 - 0x28AD9 (Wooden Rooftop) - 0x28AC1 - Shapers & Eraser & Full Dots
 
 Town Church (Town):
 158227 - 0x28A69 (Church Lattice) - 0x03BB0 - True
