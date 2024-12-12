@@ -14,6 +14,7 @@ from .data import static_items as static_witness_items
 from .data import static_locations as static_witness_locations
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import DoorItemDefinition, ItemData
+from .data.static_locations import POSSIBLE_LOCATIONS
 from .data.utils import cast_not_none, get_audio_logs
 from .hints import CompactHintData, create_all_hints, make_compact_hint_data, make_laser_hints
 from .locations import WitnessPlayerLocations
@@ -257,6 +258,12 @@ class WitnessWorld(World):
                 f"""Location "{loc}" had to be added to {self.player_name}'s world
                 due to insufficient sphere 1 size."""
             )
+
+        assert all(
+            location.name in POSSIBLE_LOCATIONS
+            for location in self.multiworld.get_locations(self.player)
+            if not location.is_event
+        )
 
     def create_items(self) -> None:
         # Determine pool size.
