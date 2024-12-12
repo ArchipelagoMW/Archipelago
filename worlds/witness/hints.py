@@ -42,26 +42,26 @@ class WitnessWordedHint:
 
 
 def get_always_hint_items(world: "WitnessWorld") -> List[str]:
-    always = sorted(world.options.always_hint_items.value)
+    always = world.options.always_hint_items.value.copy()
 
     difficulty = world.options.puzzle_randomization
     discards = world.options.shuffle_discarded_panels
     wincon = world.options.victory_condition
 
     if discards and world.options.discard_symbol_hint == "always_hint":
-        if difficulty == "sigma_expert" or difficulty == "umbra_variety":
-            always.append("Arrows")
-        else:
-            always.append("Triangles")
+        if difficulty in ("sigma_expert", "umbra_variety"):
+            always.add("Arrows")
+        if difficulty in ("none", "sigma_normal", "umbra_variety"):
+            always.add("Triangles")
 
-    if world.options.final_door_hint == "always_hint":
+    if world.options.final_door_hint == "priority_hint":
         if wincon == "elevator":
-            always += ["Mountain Bottom Floor Pillars Room Entry (Door)", "Mountain Bottom Floor Doors"]
+            always |= {"Mountain Bottom Floor Pillars Room Entry (Door)", "Mountain Bottom Floor Doors"}
 
         if wincon == "challenge":
-            always += ["Challenge Entry (Panel)", "Caves Panels", "Challenge Entry (Door)", "Caves Doors"]
+            always |= {"Challenge Entry (Panel)", "Caves Panels", "Challenge Entry (Door)", "Caves Doors"}
 
-    return always
+    return sorted(always)
 
 
 def get_always_hint_locations(world: "WitnessWorld") -> List[str]:
@@ -82,7 +82,7 @@ def get_always_hint_locations(world: "WitnessWorld") -> List[str]:
 
 
 def get_priority_hint_items(world: "WitnessWorld") -> List[str]:
-    priority = world.options.priority_hint_items.value
+    priority = world.options.priority_hint_items.value.copy()
 
     difficulty = world.options.puzzle_randomization
     discards = world.options.shuffle_discarded_panels
@@ -90,10 +90,10 @@ def get_priority_hint_items(world: "WitnessWorld") -> List[str]:
 
     existing_items_lookup = {item.name for item in world.own_itempool}
 
-    if discards and world.options.discard_symbol_hint == "priority_hint":
-        if difficulty == "sigma_expert":
+    if discards and world.options.discard_symbol_hint == "always_hint":
+        if difficulty in ("sigma_expert", "umbra_variety"):
             priority.add("Arrows")
-        else:
+        if difficulty in ("none", "sigma_normal", "umbra_variety"):
             priority.add("Triangles")
 
     if world.options.final_door_hint == "priority_hint":

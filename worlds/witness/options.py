@@ -471,7 +471,10 @@ class PuzzleRandomizationSeed(Range):
 
 class DiscardSymbolHint(Choice):
     """
-    Controls whether the symbol required to solve Discarded Panels (Triangles / Arrows) has elevated priority for Audio Log hints.
+    Controls whether the symbol(s) required to solve Discarded Panels have elevated priority for Audio Log hints.
+    In vanilla and sigma_normal, this is Triangles.
+    In sigma_expert, this is Arrows.
+    In umbra_variety, this is both Triangles and Arrows.
     """
     display_name = "Discarded Panel Symbol Hint"
 
