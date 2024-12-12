@@ -10,7 +10,7 @@ class DefaultTestBase(SM64TestBase):
 # Enable Coin Stars
 class EnableCoinStarsTestBase(SM64TestBase):
     options = {
-        "enable_coin_stars": Options.EnableCoinStars.option_true
+        "enable_coin_stars": Options.EnableCoinStars.option_on
     }
 
     # Ensure Coin Star locations are created
@@ -20,13 +20,30 @@ class EnableCoinStarsTestBase(SM64TestBase):
 
 class DisableCoinStarsTestBase(SM64TestBase):
     options = {
-        "enable_coin_stars": Options.EnableCoinStars.option_false
+        "enable_coin_stars": Options.EnableCoinStars.option_off
     }
 
     # Ensure Coin Star locations are not created
     def test_coin_star_locations(self):
         for loc in self.multiworld.get_locations():
             assert loc not in loc100Coin_table
+
+class VanillaCoinStarsTestBase(SM64TestBase):
+    options = {
+        "enable_coin_stars": Options.EnableCoinStars.option_vanilla
+    }
+
+    # Ensure Coin Star locations are created
+    def test_coin_star_locations(self):
+        for loc in loc100Coin_table:
+            assert loc in self.world.location_names
+
+    # Vanilla Coin Stars should give the player their own Power Stars
+    def test_items_in_coin_star_locations(self):
+        for loc in loc100Coin_table:
+            item_in_loc = self.world.get_location(loc).item
+            assert item_in_loc.name == "Power Star"
+            assert item_in_loc.player == self.world.player
 
 # Entrance Randomizer
 class EntranceRandoOffTestBase(SM64TestBase):
@@ -105,7 +122,7 @@ class MinimumStarsPossibleTestBase(SM64TestBase):
         "amount_of_stars": Options.AmountOfStars.range_start,
         "enable_move_rando": Options.EnableMoveRandomizer.option_true,
         "exclamation_boxes": Options.ExclamationBoxes.option_false,
-        "enable_coin_stars": Options.EnableCoinStars.option_false
+        "enable_coin_stars": Options.EnableCoinStars.option_off
     }
 
     # There will be less Power Stars than filler with this low of a star count
