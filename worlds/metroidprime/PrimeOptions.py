@@ -311,9 +311,7 @@ class IncludeMorphBallBombDoors(Toggle):
 
 
 class RandomizeStartingBeam(Toggle):
-    """If enabled, the starting beam will be randomized to a random beam that is not the Power Beam. Note that if vanilla start is used, the hive mecha boss will be disabled.
-    Note that if you don't randomize door colors, this can lead to you getting BK'd immediately.
-    """
+    """If enabled, the starting beam will be randomized to a random beam that is not the Power Beam."""
 
     display_name = "Randomize Starting Beam"
 

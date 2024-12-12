@@ -12,7 +12,7 @@ from .. import MetroidPrimeWorld
 class TestStartingRoomsGenerate(MetroidPrimeWithOverridesTestBase):
     auto_construct = False
 
-    def test_starting_room_rando(self):
+    def test_starting_room_rando_bulk(self):
         for room_name in all_start_rooms:
             with self.subTest(f"Starting Room: {room_name}", room_name=room_name):
                 self.options = {

@@ -307,16 +307,40 @@ all_start_rooms: Dict[str, StartRoomData] = {
 }
 
 
+def get_available_start_rooms(world: "MetroidPrimeWorld", difficulty: int) -> List[str]:
+    """Returns a list of start rooms that are eligible for the current world"""
+
+    def meets_starting_beam_requirements(
+        world: "MetroidPrimeWorld",
+        room: StartRoomData,
+    ) -> bool:
+        """Rooms with a different starting beam are ineligible if door color randomization is not on"""
+        if (
+            world.options.door_color_randomization.value
+            != DoorColorRandomization.option_none
+            or not world.options.randomize_starting_beam
+        ):
+            return True
+        return (
+            world.options.randomize_starting_beam
+            and room.loadouts[0].starting_beam == SuitUpgrade.Power_Beam
+        ) == True
+
+    return [
+        name
+        for name, room in all_start_rooms.items()
+        if room.difficulty.value == difficulty
+        and room.is_eligible(world)
+        and meets_starting_beam_requirements(world, room)
+    ]
+
+
 def get_random_start_room_by_difficulty(
     world: "MetroidPrimeWorld", difficulty: int
 ) -> StartRoomData:
     """Returns a random start room based on difficulty as well as a random loadout from that room"""
-    available_room_names = [
-        name
-        for name, room in all_start_rooms.items()
-        if room.difficulty.value == difficulty and room.is_eligible(world)
-    ]
-    room_name = world.random.choice(available_room_names)
+
+    room_name = world.random.choice(get_available_start_rooms(world, difficulty))
     return get_starting_room_by_name(world, room_name)
 
 
