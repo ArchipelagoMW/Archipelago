@@ -119,16 +119,19 @@ loonyland_location_table: Dict[str, LoonylandLocationData] = {
     "Swampdog Lair: Entrance": LoonylandLocationData(92, LocationCategory.PICKUP, "Swampdog Lair"),
     "Swampdog Lair: End": LoonylandLocationData(93, LocationCategory.PICKUP, "Swampdog Lair"),
     "Q: Save Halloween Hill": LoonylandLocationData(94, LocationCategory.QUEST, "The Evilizer"),
-    "Q: Ghostbusting": LoonylandLocationData(95, LocationCategory.QUEST, "The Witch's Cabin Front"),
-    "Q: Hairy Larry": LoonylandLocationData(96, LocationCategory.QUEST, "A Cabin Larry"),
-    "Q: Scaredy Cat": LoonylandLocationData(97, LocationCategory.QUEST, "Halloween Hill"),
-    "Q: Silver Bullet": LoonylandLocationData(98, LocationCategory.QUEST, "Halloween Hill"),
-    "Q: Smashing Pumpkins": LoonylandLocationData(99, LocationCategory.QUEST, "Halloween Hill"),
-    "Q: Sticky Shoes": LoonylandLocationData(100, LocationCategory.QUEST, "Halloween Hill"),
-    "Q: The Collection": LoonylandLocationData(101, LocationCategory.QUEST, "A Cabin Collector"),
-    "Q: The Rescue": LoonylandLocationData(102, LocationCategory.QUEST, "A Gloomy Cavern"),
-    "Q: Tree Trimming": LoonylandLocationData(103, LocationCategory.QUEST, "A Cabin Trees"),
-    "Q: Witch Mushrooms": LoonylandLocationData(104, LocationCategory.QUEST, "The Witch's Cabin Front"),
-    "Q: Zombie Stomp": LoonylandLocationData(105, LocationCategory.QUEST, "Zombiton")
+    "Q: Tree Trimming": LoonylandLocationData(95, LocationCategory.QUEST, "A Cabin Trees"),
+    "Q: Scaredy Cat": LoonylandLocationData(96, LocationCategory.QUEST, "Halloween Hill"),
+    "Q: Sticky Shoes": LoonylandLocationData(97, LocationCategory.QUEST, "Halloween Hill"),
+    "Q: Mushroom Hunt": LoonylandLocationData(98, LocationCategory.QUEST, "The Witch's Cabin Front"),
+    "Q: Zombie Stomp": LoonylandLocationData(99, LocationCategory.QUEST, "Zombiton"),
+    "Q: Smashing Pumpkins": LoonylandLocationData(100, LocationCategory.QUEST, "Halloween Hill"),
+    "Q: Silver Bullet": LoonylandLocationData(101, LocationCategory.QUEST, "Halloween Hill"),
+    "Q: Hairy Larry": LoonylandLocationData(102, LocationCategory.QUEST, "A Cabin Larry"),
+    "Q: Ghostbusting": LoonylandLocationData(103, LocationCategory.QUEST, "The Witch's Cabin Front"),
+    "Q: The Rescue": LoonylandLocationData(104, LocationCategory.QUEST, "A Gloomy Cavern"),
+    "Q: The Collection": LoonylandLocationData(105, LocationCategory.QUEST, "A Cabin Collector")
+
+
+
     # todo the 40 badge locations
 }
