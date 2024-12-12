@@ -259,11 +259,12 @@ class WitnessWorld(World):
                 due to insufficient sphere 1 size."""
             )
 
+        # Ensure that POSSIBLE_LOCATIONS is exhaustive by failing on dev if any locations aren't in it
         assert all(
             location.name in POSSIBLE_LOCATIONS
             for location in self.multiworld.get_locations(self.player)
             if not location.is_event
-        )
+        ), "POSSIBLE_LOCATIONS is not exhaustive."
 
     def create_items(self) -> None:
         # Determine pool size.
