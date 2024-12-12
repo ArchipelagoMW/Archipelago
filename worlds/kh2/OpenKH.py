@@ -7,6 +7,7 @@ import zipfile
 
 from .Items import item_dictionary_table
 from .Locations import all_locations, SoraLevels, exclusion_table
+from .Names import ItemName, LocationName
 from .XPValues import lvlStats, formExp, soraExp
 from worlds.Files import APContainer
 
@@ -54,7 +55,28 @@ def patch_kh2(self, output_directory):
     formName = None
     levelsetting = list()
 
+    # formDict = {1: "Valor", 2: "Wisdom", 3: "Limit", 4: "Master", 5: "Final"}
+    formDictExp = {
+        "Valor":  self.multiworld.Valor_Form_EXP[self.player].value,
+        "Wisdom": self.multiworld.Wisdom_Form_EXP[self.player].value,
+        "Limit":  self.multiworld.Limit_Form_EXP[self.player].value,
+        "Master": self.multiworld.Master_Form_EXP[self.player].value,
+        "Final":  self.multiworld.Final_Form_EXP[self.player].value
+    }
+    for form_name, form_exp in formDictExp.items():
+        data = all_locations[LocationName.Valorlvl2]
+        self.formattedFmlv[form_name] = []
+        self.formattedFmlv[form_name].append({
+            "Ability":            1,
+            "Experience":         int(formExp[form_name][1] / form_exp),
+            "FormId":             data.charName,
+            "FormLevel":          1,
+            "GrowthAbilityLevel": 0,
+        })
+
+
     if self.options.Keyblade_Minimum.value > self.options.Keyblade_Maximum.value:
+
         logging.info(
                 f"{self.multiworld.get_file_safe_player_name(self.player)} has Keyblade Minimum greater than Keyblade Maximum")
         keyblademin = self.options.Keyblade_Maximum.value
@@ -140,29 +162,10 @@ def patch_kh2(self, output_directory):
         elif data.yml == "Forms":
             # loc id is form lvl
             # char name is the form name number :)
-            if data.locid == 2:
-                formDict = {1: "Valor", 2: "Wisdom", 3: "Limit", 4: "Master", 5: "Final"}
-                formDictExp = {
-                    1: self.options.Valor_Form_EXP.value,
-                    2: self.options.Wisdom_Form_EXP.value,
-                    3: self.options.Limit_Form_EXP.value,
-                    4: self.options.Master_Form_EXP.value,
-                    5: self.options.Final_Form_EXP.value
-                }
-                formexp = formDictExp[data.charName]
-                formName = formDict[data.charName]
-                self.formattedFmlv[formName] = []
-                self.formattedFmlv[formName].append({
-                    "Ability":            1,
-                    "Experience":         int(formExp[data.charName][data.locid] / formexp),
-                    "FormId":             data.charName,
-                    "FormLevel":          1,
-                    "GrowthAbilityLevel": 0,
-                })
             # row is form column is lvl
-            self.formattedFmlv[formName].append({
+            self.formattedFmlv[data.charName].append({
                 "Ability":            itemcode,
-                "Experience":         int(formExp[data.charName][data.locid] / formexp),
+                "Experience":         int(formExp[data.charName][data.locid] / formDictExp[data.charName]),
                 "FormId":             data.charName,
                 "FormLevel":          data.locid,
                 "GrowthAbilityLevel": 0,
@@ -368,6 +371,37 @@ def patch_kh2(self, output_directory):
                     }
                 ]
             },
+            {
+                'name':   'msg/us/he.bar',
+                'multi':  [
+                    {
+                        'name': 'msg/fr/he.bar'
+                    },
+                    {
+                        'name': 'msg/gr/he.bar'
+                    },
+                    {
+                        'name': 'msg/it/he.bar'
+                    },
+                    {
+                        'name': 'msg/sp/he.bar'
+                    }
+                ],
+                'method': 'binarc',
+                'source': [
+                    {
+                        'name':   'he',
+                        'type':   'list',
+                        'method': 'kh2msg',
+                        'source': [
+                            {
+                                'name':     'he.yml',
+                                'language': 'en'
+                            }
+                        ]
+                    }
+                ]
+            },
         ],
         'title':  'Randomizer Seed'
     }
@@ -411,6 +445,34 @@ def patch_kh2(self, output_directory):
             'en': f"Your Level Depth is {self.options.LevelDepth.current_option_name}"
         }
     ]
+    self.fight_and_form_text = [
+        {
+            'id': 15121,  # poster name
+            'en': f"Game Options"
+        },
+        {
+            'id': 15122,
+            'en': f"Fight Logic is {self.options.FightLogic.current_option_name}\n"
+                  f"Auto Form Logic is {self.options.AutoFormLogic.current_option_name}\n"
+                  f"Final Form Logic is {self.options.FinalFormLogic.current_option_name}"
+        }
+
+    ]
+    self.cups_text = [
+        {
+            'id': 4043,
+            'en': f"CupsToggle: {self.options.Cups.current_option_name}"
+        },
+        {
+            'id': 4044,
+            'en': f"CupsToggle: {self.options.Cups.current_option_name}"
+        },
+        {
+            'id': 4045,
+            'en': f"CupsToggle: {self.options.Cups.current_option_name}"
+        },
+    ]
+
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
 
     self.mod_yml["title"] = f"Randomizer Seed {mod_name}"
@@ -423,7 +485,8 @@ def patch_kh2(self, output_directory):
         "FmlvList.yml": yaml.dump(self.formattedFmlv, line_break="\n"),
         "mod.yml":      yaml.dump(self.mod_yml, line_break="\n"),
         "po.yml":       yaml.dump(self.pooh_text, line_break="\n"),
-        "sys.yml":      yaml.dump(self.level_depth_text, line_break="\n"),
+        "sys.yml":      yaml.dump(self.level_depth_text + self.fight_and_form_text, line_break="\n"),
+        "he.yml":       yaml.dump(self.cups_text, line_break="\n")
     }
 
     mod = KH2Container(openkhmod, mod_dir, output_directory, self.player,

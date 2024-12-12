@@ -1,6 +1,5 @@
 import typing
 
-from BaseClasses import Location
 from .Names import LocationName, ItemName, RegionName
 from .Subclasses import LocationData
 from .Regions import KH2REGIONS
@@ -636,48 +635,48 @@ SoraLevels = {
     LocationName.Lvl99: LocationData(99, "Levels"),
 }
 Form_Checks = {
-    LocationName.Valorlvl2:  LocationData(2, "Forms", 1),
-    LocationName.Valorlvl3:  LocationData(3, "Forms", 1),
-    LocationName.Valorlvl4:  LocationData(4, "Forms", 1),
-    LocationName.Valorlvl5:  LocationData(5, "Forms", 1),
-    LocationName.Valorlvl6:  LocationData(6, "Forms", 1),
-    LocationName.Valorlvl7:  LocationData(7, "Forms", 1),
+    LocationName.Valorlvl2:  LocationData(2, "Forms", "Valor"),
+    LocationName.Valorlvl3:  LocationData(3, "Forms", "Valor"),
+    LocationName.Valorlvl4:  LocationData(4, "Forms", "Valor"),
+    LocationName.Valorlvl5:  LocationData(5, "Forms", "Valor"),
+    LocationName.Valorlvl6:  LocationData(6, "Forms", "Valor"),
+    LocationName.Valorlvl7:  LocationData(7, "Forms", "Valor"),
 
-    LocationName.Wisdomlvl2: LocationData(2, "Forms", 2),
-    LocationName.Wisdomlvl3: LocationData(3, "Forms", 2),
-    LocationName.Wisdomlvl4: LocationData(4, "Forms", 2),
-    LocationName.Wisdomlvl5: LocationData(5, "Forms", 2),
-    LocationName.Wisdomlvl6: LocationData(6, "Forms", 2),
-    LocationName.Wisdomlvl7: LocationData(7, "Forms", 2),
+    LocationName.Wisdomlvl2: LocationData(2, "Forms", "Wisdom"),
+    LocationName.Wisdomlvl3: LocationData(3, "Forms", "Wisdom"),
+    LocationName.Wisdomlvl4: LocationData(4, "Forms", "Wisdom"),
+    LocationName.Wisdomlvl5: LocationData(5, "Forms", "Wisdom"),
+    LocationName.Wisdomlvl6: LocationData(6, "Forms", "Wisdom"),
+    LocationName.Wisdomlvl7: LocationData(7, "Forms", "Wisdom"),
 
-    LocationName.Limitlvl2:  LocationData(2, "Forms", 3),
-    LocationName.Limitlvl3:  LocationData(3, "Forms", 3),
-    LocationName.Limitlvl4:  LocationData(4, "Forms", 3),
-    LocationName.Limitlvl5:  LocationData(5, "Forms", 3),
-    LocationName.Limitlvl6:  LocationData(6, "Forms", 3),
-    LocationName.Limitlvl7:  LocationData(7, "Forms", 3),
+    LocationName.Limitlvl2:  LocationData(2, "Forms", "Limit"),
+    LocationName.Limitlvl3:  LocationData(3, "Forms", "Limit"),
+    LocationName.Limitlvl4:  LocationData(4, "Forms", "Limit"),
+    LocationName.Limitlvl5:  LocationData(5, "Forms", "Limit"),
+    LocationName.Limitlvl6:  LocationData(6, "Forms", "Limit"),
+    LocationName.Limitlvl7:  LocationData(7, "Forms", "Limit"),
 
-    LocationName.Masterlvl2: LocationData(2, "Forms", 4),
-    LocationName.Masterlvl3: LocationData(3, "Forms", 4),
-    LocationName.Masterlvl4: LocationData(4, "Forms", 4),
-    LocationName.Masterlvl5: LocationData(5, "Forms", 4),
-    LocationName.Masterlvl6: LocationData(6, "Forms", 4),
-    LocationName.Masterlvl7: LocationData(7, "Forms", 4),
+    LocationName.Masterlvl2: LocationData(2, "Forms", "Master"),
+    LocationName.Masterlvl3: LocationData(3, "Forms", "Master"),
+    LocationName.Masterlvl4: LocationData(4, "Forms", "Master"),
+    LocationName.Masterlvl5: LocationData(5, "Forms", "Master"),
+    LocationName.Masterlvl6: LocationData(6, "Forms", "Master"),
+    LocationName.Masterlvl7: LocationData(7, "Forms", "Master"),
 
-    LocationName.Finallvl2:  LocationData(2, "Forms", 5),
-    LocationName.Finallvl3:  LocationData(3, "Forms", 5),
-    LocationName.Finallvl4:  LocationData(4, "Forms", 5),
-    LocationName.Finallvl5:  LocationData(5, "Forms", 5),
-    LocationName.Finallvl6:  LocationData(6, "Forms", 5),
-    LocationName.Finallvl7:  LocationData(7, "Forms", 5),
+    LocationName.Finallvl2:  LocationData(2, "Forms", "Final"),
+    LocationName.Finallvl3:  LocationData(3, "Forms", "Final"),
+    LocationName.Finallvl4:  LocationData(4, "Forms", "Final"),
+    LocationName.Finallvl5:  LocationData(5, "Forms", "Final"),
+    LocationName.Finallvl6:  LocationData(6, "Forms", "Final"),
+    LocationName.Finallvl7:  LocationData(7, "Forms", "Final"),
 }
 Summon_Checks = {
-    LocationName.Summonlvl2: LocationData(2, "Summons"),
-    LocationName.Summonlvl3: LocationData(3, "Summons"),
-    LocationName.Summonlvl4: LocationData(4, "Summons"),
-    LocationName.Summonlvl5: LocationData(5, "Summons"),
-    LocationName.Summonlvl6: LocationData(6, "Summons"),
-    LocationName.Summonlvl7: LocationData(7, "Summons"),
+    LocationName.Summonlvl2: LocationData(2, "Summons", "Summon"),
+    LocationName.Summonlvl3: LocationData(3, "Summons", "Summon"),
+    LocationName.Summonlvl4: LocationData(4, "Summons", "Summon"),
+    LocationName.Summonlvl5: LocationData(5, "Summons", "Summon"),
+    LocationName.Summonlvl6: LocationData(6, "Summons", "Summon"),
+    LocationName.Summonlvl7: LocationData(7, "Summons", "Summon"),
 }
 GoA_Checks = {
     LocationName.GardenofAssemblageMap: LocationData(585, "Chest"),
@@ -794,7 +793,170 @@ Atlantica_Checks = {
     LocationName.MusicalBlizzardElement: LocationData(279, "Chest"),  # 2 magnets all thunders
     LocationName.MusicalOrichalcumPlus:  LocationData(538, "Chest"),  # 2 magnets all thunders
 }
-
+Awakening_Checks = {
+    LocationName.AwakeningPuzzleTT1Tower:            LocationData(1, "PuzzlePiece"),
+    LocationName.AwakeningPuzzleHB1MarketplaceArmor: LocationData(2, "PuzzlePiece"),
+    LocationName.AwakeningPuzzleHB1Borough:          LocationData(3, "PuzzlePiece"),
+    LocationName.AwakeningPuzzleHB1MerlinHouse:      LocationData(4, "PuzzlePiece"),
+    LocationName.AwakeningPuzzleVillageHayPile:      LocationData(5, "PuzzlePiece"),
+    LocationName.AwakeningPuzzleRidgeOne:            LocationData(6, "PuzzlePiece"),
+    LocationName.AwakeningPuzzleRidgeTwo:            LocationData(7, "PuzzlePiece"),
+    LocationName.AwakeningPuzzleUnderCroftOne:       LocationData(8, "PuzzlePiece"),
+    LocationName.AwakeningPuzzleUnderCroftTwo:       LocationData(9, "PuzzlePiece"),
+    LocationName.AwakeningPuzzleSecretPassageOne:    LocationData(10, "PuzzlePiece"),
+    LocationName.AwakeningPuzzleSecretPassageTwo:    LocationData(11, "PuzzlePiece"),
+    LocationName.AwakeningPuzzleBeastRoom:           LocationData(12, "PuzzlePiece"),
+}
+Heart_Checks = {
+    LocationName.HeartPuzzleHB1MarketplaceItem:  LocationData(1, "PuzzlePiece"),
+    LocationName.HeartPuzzleEncampmentNearStand: LocationData(2, "PuzzlePiece"),
+    LocationName.HeartPuzzleVillageHome:         LocationData(3, "PuzzlePiece"),
+    LocationName.HeartPuzzleWestWing:            LocationData(4, "PuzzlePiece"),
+    LocationName.HeartPuzzleCaveDeadEntrance:    LocationData(5, "PuzzlePiece"),
+    LocationName.HeartPuzzleUnderworldEntrance:  LocationData(6, "PuzzlePiece"),
+    LocationName.HeartPuzzleAtrium:              LocationData(7, "PuzzlePiece"),
+    LocationName.HeartPuzzleCourtyardOne:        LocationData(8, "PuzzlePiece"),
+    LocationName.HeartPuzzleCourtyardTwo:        LocationData(9, "PuzzlePiece"),
+    LocationName.HeartPuzzleWaterway:            LocationData(10, "PuzzlePiece"),
+    LocationName.HeartPuzzleRampart:             LocationData(11, "PuzzlePiece"),
+    LocationName.HeartPuzzlePowderStore:         LocationData(12, "PuzzlePiece"),
+}
+Duality_Checks = {
+    LocationName.DualityPuzzleHB1Bailey:           LocationData(1, "PuzzlePiece"),
+    LocationName.DualityPuzzleLostRoadThree:       LocationData(2, "PuzzlePiece"),
+    LocationName.DualityPuzzleTheLock:             LocationData(3, "PuzzlePiece"),
+    LocationName.DualityPuzzleGummiHangar:         LocationData(4, "PuzzlePiece"),
+    LocationName.DualityPuzzleCourtyard:           LocationData(5, "PuzzlePiece"),
+    LocationName.DualityPuzzlePierTree:            LocationData(6, "PuzzlePiece"),
+    LocationName.DualityPuzzleTown:                LocationData(7, "PuzzlePiece"),
+    LocationName.DualityPuzzlePowderStore:         LocationData(8, "PuzzlePiece"),
+    LocationName.DualityPuzzleAgrabah:             LocationData(9, "PuzzlePiece"),
+    LocationName.DualityPuzzleHalloweenTownSquare: LocationData(10, "PuzzlePiece"),
+    LocationName.DualityPuzzleHinterlands:         LocationData(11, "PuzzlePiece"),
+    LocationName.DualityPuzzleUndersea:            LocationData(12, "PuzzlePiece"),
+}
+Frontier_Checks = {
+    LocationName.FrontierPuzzleTT2TramCommon:     LocationData(1, "PuzzlePiece"),
+    LocationName.FrontierPuzzleTT2StationPlaza:   LocationData(2, "PuzzlePiece"),
+    LocationName.FrontierPuzzleHB2PosternDoorway: LocationData(3, "PuzzlePiece"),
+    LocationName.FrontierPuzzleMountainTrail:     LocationData(4, "PuzzlePiece"),
+    LocationName.FrontierPuzzlePierBoat:          LocationData(5, "PuzzlePiece"),
+    LocationName.FrontierPuzzleTown:              LocationData(6, "PuzzlePiece"),
+    LocationName.FrontierPuzzleAgrabah:           LocationData(7, "PuzzlePiece"),
+    LocationName.FrontierPuzzleBazaar:            LocationData(8, "PuzzlePiece"),
+    LocationName.FrontierPuzzleValleyOfStone:     LocationData(9, "PuzzlePiece"),
+    LocationName.FrontierPuzzleSantaHouse:        LocationData(10, "PuzzlePiece"),
+    LocationName.FrontierPuzzleTritonOne:         LocationData(11, "PuzzlePiece"),
+    LocationName.FrontierPuzzleTritonTwo:         LocationData(12, "PuzzlePiece"),
+}
+Daylight_Checks = {
+    LocationName.DaylightPuzzleTT2TramCommon:          LocationData(1, "PuzzlePiece"),
+    LocationName.DaylightPuzzleTT2MarketStreet:        LocationData(2, "PuzzlePiece"),
+    LocationName.DaylightPuzzleTT3MansionFoyer1:       LocationData(3, "PuzzlePiece"),
+    LocationName.DaylightPuzzleTT3MansionFoyer2:       LocationData(4, "PuzzlePiece"),
+    LocationName.DaylightPuzzleTT3PodRoom:             LocationData(5, "PuzzlePiece"),
+    LocationName.DaylightPuzzleTT3SttComputerRoom:     LocationData(6, "PuzzlePiece"),
+    LocationName.DaylightPuzzleHB2PosternAerith:       LocationData(7, "PuzzlePiece"),
+    LocationName.DaylightPuzzlePostHB2Heartless:       LocationData(8, "PuzzlePiece"),
+    LocationName.DaylightPuzzleVillageBell:            LocationData(9, "PuzzlePiece"),
+    LocationName.DaylightPuzzleThroneRoomClose:        LocationData(10, "PuzzlePiece"),
+    LocationName.DaylightPuzzleRoomFar:                LocationData(11, "PuzzlePiece"),
+    LocationName.DaylightPuzzleWestHall:               LocationData(12, "PuzzlePiece"),
+    LocationName.DaylightPuzzleCaveDeadPassage:        LocationData(13, "PuzzlePiece"),
+    LocationName.DaylightPuzzleUnderworldEntrance:     LocationData(14, "PuzzlePiece"),
+    LocationName.DaylightPuzzleLostRoadOne:            LocationData(15, "PuzzlePiece"),
+    LocationName.DaylightPuzzleLostRoadTwo:            LocationData(16, "PuzzlePiece"),
+    LocationName.DaylightPuzzleCollannade:             LocationData(17, "PuzzlePiece"),
+    LocationName.DaylightPuzzleBlackPearlBack:         LocationData(18, "PuzzlePiece"),
+    LocationName.DaylightPuzzleBlackPearlFlags:        LocationData(19, "PuzzlePiece"),
+    LocationName.DaylightPuzzleBlackPearlInside:       LocationData(20, "PuzzlePiece"),
+    LocationName.DaylightPuzzleSeaDriftKeepAnchor:     LocationData(21, "PuzzlePiece"),
+    LocationName.DaylightPuzzleCaveOfWonders:          LocationData(22, "PuzzlePiece"),
+    LocationName.DaylightPuzzleTreasureRooms:          LocationData(23, "PuzzlePiece"),
+    LocationName.DaylightPuzzleChasmOfChallengesOne:   LocationData(24, "PuzzlePiece"),
+    LocationName.DaylightPuzzleChasmOfChallengesTwo:   LocationData(25, "PuzzlePiece"),
+    LocationName.DaylightPuzzleChasmOfChallengesThree: LocationData(26, "PuzzlePiece"),
+    LocationName.DaylightPuzzleSandSweptOne:           LocationData(27, "PuzzlePiece"),
+    LocationName.DaylightPuzzleSandSweptTwo:           LocationData(28, "PuzzlePiece"),
+    LocationName.DaylightPuzzleSantaHouse:             LocationData(29, "PuzzlePiece"),
+    LocationName.DaylightPuzzleYuletide:               LocationData(30, "PuzzlePiece"),
+    LocationName.DaylightPuzzleToyFactory:             LocationData(31, "PuzzlePiece"),
+    LocationName.DaylightPuzzleElephantOne:            LocationData(32, "PuzzlePiece"),
+    LocationName.DaylightPuzzleElephantTwo:            LocationData(33, "PuzzlePiece"),
+    LocationName.DaylightPuzzleWildebeestOne:          LocationData(34, "PuzzlePiece"),
+    LocationName.DaylightPuzzleWildebeestTwo:          LocationData(35, "PuzzlePiece"),
+    LocationName.DaylightPuzzleWastelandsOne:          LocationData(36, "PuzzlePiece"),
+    LocationName.DaylightPuzzleWastelandsTwo:          LocationData(37, "PuzzlePiece"),
+    LocationName.DaylightPuzzleJungle:                 LocationData(38, "PuzzlePiece"),
+    LocationName.DaylightPuzzleOasis:                  LocationData(39, "PuzzlePiece"),
+    LocationName.DaylightPuzzleKingsDen:               LocationData(40, "PuzzlePiece"),
+    LocationName.DaylightPuzzleCanyon:                 LocationData(41, "PuzzlePiece"),
+    LocationName.DaylightPuzzleNaughts:                LocationData(42, "PuzzlePiece"),
+    LocationName.DaylightPuzzlePooh:                   LocationData(43, "PuzzlePiece"),
+    LocationName.DaylightPuzzlePiglet:                 LocationData(44, "PuzzlePiece"),
+    LocationName.DaylightPuzzleRabbit:                 LocationData(45, "PuzzlePiece"),
+    LocationName.DaylightPuzzleKanga:                  LocationData(46, "PuzzlePiece"),
+    LocationName.DaylightPuzzleSpookyCave:             LocationData(47, "PuzzlePiece"),
+    LocationName.DaylightPuzzleStarryHill:             LocationData(48, "PuzzlePiece"),
+}
+Sunset_Checks = {
+    LocationName.SunsetPuzzleTT3UndergroundConcourse1: LocationData(1, "PuzzlePiece"),
+    LocationName.SunsetPuzzleTT3UndergroundConcourse2: LocationData(2, "PuzzlePiece"),
+    LocationName.SunsetPuzzleTT3Tunnelway:             LocationData(3, "PuzzlePiece"),
+    LocationName.SunsetPuzzleTT3TSunsetTerrace1:       LocationData(4, "PuzzlePiece"),
+    LocationName.SunsetPuzzleTT3TSunsetTerrace2:       LocationData(5, "PuzzlePiece"),
+    LocationName.SunsetPuzzleTT3TSunsetHill1:          LocationData(6, "PuzzlePiece"),
+    LocationName.SunsetPuzzleTT3TSunsetHill2:          LocationData(7, "PuzzlePiece"),
+    LocationName.SunsetPuzzleTT3OldMansion:            LocationData(8, "PuzzlePiece"),
+    LocationName.SunsetPuzzleTT3TheWhiteRoom:          LocationData(9, "PuzzlePiece"),
+    LocationName.SunsetPuzzlePostTT3Tower:             LocationData(10, "PuzzlePiece"),
+    LocationName.SunsetPuzzlePostTT3TowerWardrobe:     LocationData(11, "PuzzlePiece"),
+    LocationName.SunsetPuzzleHB1Borough:               LocationData(12, "PuzzlePiece"),
+    LocationName.SunsetPuzzleHB2Corridors:             LocationData(13, "PuzzlePiece"),
+    LocationName.SunsetPuzzleHB2BaileyDancers:         LocationData(14, "PuzzlePiece"),
+    LocationName.SunsetPuzzlePostHB2Ansems:            LocationData(15, "PuzzlePiece"),
+    LocationName.SunsetPuzzleCoRDepths1:               LocationData(16, "PuzzlePiece"),
+    LocationName.SunsetPuzzleCoRDepths2:               LocationData(17, "PuzzlePiece"),
+    LocationName.SunsetPuzzleCoRMineshaftLower:        LocationData(18, "PuzzlePiece"),
+    LocationName.SunsetPuzzleCoRMiningArea1:           LocationData(19, "PuzzlePiece"),
+    LocationName.SunsetPuzzleCoRMiningArea2:           LocationData(20, "PuzzlePiece"),
+    LocationName.SunsetPuzzleCoRMiningArea3:           LocationData(21, "PuzzlePiece"),
+    LocationName.SunsetPuzzleCoRMiningArea4:           LocationData(22, "PuzzlePiece"),
+    LocationName.SunsetPuzzleCoRMineshaftMiddle:       LocationData(23, "PuzzlePiece"),
+    LocationName.SunsetPuzzleCoRMineshaftUpper1:       LocationData(24, "PuzzlePiece"),
+    LocationName.SunsetPuzzleCoRMineshaftUpper2:       LocationData(25, "PuzzlePiece"),
+    LocationName.SunsetPuzzleCoRMineshaftUpper3:       LocationData(26, "PuzzlePiece"),
+    LocationName.SunsetPuzzleEncampmentAwayFromStand:  LocationData(27, "PuzzlePiece"),
+    LocationName.SunsetPuzzleEntranceHall:             LocationData(28, "PuzzlePiece"),
+    LocationName.SunsetPuzzlePostXaldin:               LocationData(29, "PuzzlePiece"),
+    LocationName.SunsetPuzzleHarbor:                   LocationData(30, "PuzzlePiece"),
+    LocationName.SunsetPuzzleInterceptor:              LocationData(31, "PuzzlePiece"),
+    LocationName.SunsetPuzzleSeaDriftRowOne:           LocationData(32, "PuzzlePiece"),
+    LocationName.SunsetPuzzleSeaDriftKeepWindow:       LocationData(33, "PuzzlePiece"),
+    LocationName.SunsetPuzzleBazaar:                   LocationData(34, "PuzzlePiece"),
+    LocationName.SunsetPuzzleTreasureRooms:            LocationData(35, "PuzzlePiece"),
+    LocationName.SunsetPuzzleSandSwept:                LocationData(36, "PuzzlePiece"),
+    LocationName.SunsetPuzzleCurlyHill:                LocationData(37, "PuzzlePiece"),
+    LocationName.SunsetPuzzleToyFactory:               LocationData(38, "PuzzlePiece"),
+    LocationName.SunsetPuzzlePrideRock:                LocationData(39, "PuzzlePiece"),
+    LocationName.SunsetPuzzleCanyon:                   LocationData(40, "PuzzlePiece"),
+    LocationName.SunsetPuzzleSolarSailor:              LocationData(41, "PuzzlePiece"),
+    LocationName.SunsetPuzzleMCP:                      LocationData(42, "PuzzlePiece"),
+    LocationName.SunsetPuzzleMemorysSkyscraper:        LocationData(43, "PuzzlePiece"),
+    LocationName.SunsetPuzzleCrooked:                  LocationData(44, "PuzzlePiece"),
+    LocationName.SunsetPuzzleTwilightView:             LocationData(45, "PuzzlePiece"),
+    LocationName.SunsetPuzzleProofExistence:           LocationData(46, "PuzzlePiece"),
+    LocationName.SunsetPuzzleRuinPassageOne:           LocationData(47, "PuzzlePiece"),
+    LocationName.SunsetPuzzleRuinPassageTwo:           LocationData(48, "PuzzlePiece")
+}
+# Puzzle_Checks = {
+#    LocationName.AwakeningPuzzle: LocationData(1, "Puzzle"),
+#    LocationName.HeartPuzzle:     LocationData(2, "Puzzle"),
+#    LocationName.FrontierPuzzle:  LocationData(3, "Puzzle"),
+#    LocationName.DualityPuzzle:   LocationData(4, "Puzzle"),
+#    LocationName.DaylightPuzzle:  LocationData(5, "Puzzle"),
+#    LocationName.SunsetPuzzle:    LocationData(6, "Puzzle"),
+# }
 event_location_to_item = {
     LocationName.HostileProgramEventLocation:    ItemName.HostileProgramEvent,
     LocationName.McpEventLocation:               ItemName.McpEvent,
@@ -952,6 +1114,12 @@ all_locations = {
     **Goofy_Checks,
     **Atlantica_Checks,
     **Summon_Checks,
+    **Awakening_Checks,
+    **Heart_Checks,
+    **Duality_Checks,
+    **Frontier_Checks,
+    **Sunset_Checks,
+    **Daylight_Checks,
 }
 
 popups_set = {
@@ -1353,8 +1521,30 @@ exclusion_table = {
     }
 }
 
+
 location_groups: typing.Dict[str, list]
 location_groups = {
     Region_Name: [loc for loc in Region_Locs if "Event" not in loc]
     for Region_Name, Region_Locs in KH2REGIONS.items() if Region_Locs and "Event" not in Region_Locs[0]
 }
+
+#location_groups: typing.Dict[str, list]
+#
+#location_group_temp = {
+#    Region_Name: [loc for loc in Region_Locs if "Event" not in loc]
+#    for Region_Name, Region_Locs in KH2REGIONS.items() if Region_Locs and Region_Name not in ['Armored Xemnas', 'Armored Xemnas 2', 'Final Xemnas']
+#}
+#location_list = []
+#world_groups: typing.Dict[str, list]
+#
+#for location_group in [RegionName.Sp, RegionName.Mcp]:
+#    for location in location_group_temp[location_group]:
+#        location_list.append(location)
+#print()
+#world_group = {
+#    "Space Paranoids": [location for location_group in [location_group_temp[location_group] for location_group in [RegionName.Sp, RegionName.HostileProgram, RegionName.Sp2, RegionName.Mcp, RegionName.DataLarxene]] for location in location_group]
+#}
+#print(world_group)
+#location_group_temp.update(world_group)
+#location_groups = location_group_temp
+
