@@ -433,7 +433,9 @@ item_name_groups[ItemGroupNames.ZERG_ITEMS] = zerg_items = [
 item_name_groups[ItemGroupNames.ZERG_BUILDINGS] = zerg_buildings = [
     item_names.SPINE_CRAWLER,
     item_names.SPORE_CRAWLER,
+    item_names.BILE_LAUNCHER,
     item_names.INFESTED_BUNKER,
+    item_names.INFESTED_MISSILE_TURRET,
     item_names.NYDUS_WORM,
     item_names.ECHIDNA_WORM]
 item_name_groups[ItemGroupNames.ZERG_UNITS] = zerg_units = [

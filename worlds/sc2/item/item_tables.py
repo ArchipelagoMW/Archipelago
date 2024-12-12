@@ -1207,6 +1207,9 @@ item_table = {
     item_names.PYGALISK:
         ItemData(25 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 24, SC2Race.ZERG,
                  classification=ItemClassification.progression),
+    item_names.BILE_LAUNCHER:
+        ItemData(26 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Unit, 25, SC2Race.ZERG,
+                 classification=ItemClassification.progression),
 
     item_names.PROGRESSIVE_ZERG_MELEE_ATTACK: ItemData(100 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 0, SC2Race.ZERG, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL, parent=parent_names.ZERG_MELEE_ATTACKER),
     item_names.PROGRESSIVE_ZERG_MISSILE_ATTACK: ItemData(101 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Upgrade, 4, SC2Race.ZERG, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL, parent=parent_names.ZERG_MISSILE_ATTACKER),
@@ -1562,6 +1565,10 @@ item_table = {
         ItemData(383 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 10, SC2Race.ZERG, parent=item_names.PYGALISK),
     item_names.PYGALISK_COMBAT_CARAPACE:
         ItemData(384 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 11, SC2Race.ZERG, parent=item_names.PYGALISK),
+    item_names.BILE_LAUNCHER_ARTILLERY_DUCTS:
+        ItemData(385 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 12, SC2Race.ZERG, parent=item_names.BILE_LAUNCHER),
+    item_names.BILE_LAUNCHER_RAPID_BOMBARMENT:
+        ItemData(386 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 13, SC2Race.ZERG, parent=item_names.BILE_LAUNCHER),
 
     item_names.KERRIGAN_KINETIC_BLAST: ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 0, SC2Race.ZERG, classification=ItemClassification.progression),
     item_names.KERRIGAN_HEROIC_FORTITUDE: ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Ability, 1, SC2Race.ZERG, classification=ItemClassification.progression),
