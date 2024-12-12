@@ -1454,6 +1454,10 @@ def get_mission_variant(mission_id: int) -> int:
     return 0
 
 
+def get_item_flag_word(item_name: str) -> int:
+    return get_full_item_list()[item_name].type.flag_word
+
+
 async def starcraft_launch(ctx: SC2Context, mission_id: int):
     sc2_logger.info(f"Launching {lookup_id_to_mission[mission_id].mission_name}. If game does not launch check log file for errors.")
 
@@ -1539,15 +1543,11 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 f" {mission_variant}"
                 f" {self.ctx.trade_enabled}"
             )
-            await self.chat_send("?GiveResources {} {} {}".format(
-                start_items[SC2Race.ANY][0],
-                start_items[SC2Race.ANY][1],
-                start_items[SC2Race.ANY][2]
-            ))
-            await self.updateTerranTech(start_items)
-            await self.updateZergTech(start_items, kerrigan_level)
-            await self.updateProtossTech(start_items)
-            await self.updateColors()
+            await self.update_resources(start_items)
+            await self.update_terran_tech(start_items)
+            await self.update_zerg_tech(start_items, kerrigan_level)
+            await self.update_protoss_tech(start_items)
+            await self.update_colors()
             if uncollected_objectives:
                 await self.chat_send("?UncollectedLocations {}".format(
                     functools.reduce(lambda a, b: a + " " + b, [str(x) for x in uncollected_objectives])
@@ -1557,7 +1557,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
         else:
             if self.ctx.pending_color_update:
-                await self.updateColors()
+                await self.update_colors()
 
             if not self.ctx.announcements.empty():
                 message = self.ctx.announcements.get(timeout=1)
@@ -1628,9 +1628,10 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 current_items = calculate_items(self.ctx)
                 missions_beaten = self.missions_beaten_count()
                 kerrigan_level = get_kerrigan_level(self.ctx, current_items, missions_beaten)
-                await self.updateTerranTech(current_items)
-                await self.updateZergTech(current_items, kerrigan_level)
-                await self.updateProtossTech(current_items)
+                await self.update_resources(current_items)
+                await self.update_terran_tech(current_items)
+                await self.update_zerg_tech(current_items, kerrigan_level)
+                await self.update_protoss_tech(current_items)
                 self.last_received_update = len(self.ctx.items_received)
 
             if game_state & 1:
@@ -1689,7 +1690,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
     def missions_beaten_count(self):
         return len([location for location in self.ctx.checked_locations if location % VICTORY_MODULO == 0])
 
-    async def updateColors(self):
+    async def update_colors(self):
         await self.chat_send("?SetColor rr " + str(self.ctx.player_color_raynor))
         await self.chat_send("?SetColor ks " + str(self.ctx.player_color_zerg))
         await self.chat_send("?SetColor pz " + str(self.ctx.player_color_zerg_primal))
@@ -1697,18 +1698,25 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         await self.chat_send("?SetColor nova " + str(self.ctx.player_color_nova))
         self.ctx.pending_color_update = False
 
-    async def updateTerranTech(self, current_items):
+    async def update_resources(self, current_items):
+        await self.chat_send("?GiveResources {} {} {}".format(
+            current_items[SC2Race.ANY][get_item_flag_word(item_names.STARTING_MINERALS)],
+            current_items[SC2Race.ANY][get_item_flag_word(item_names.STARTING_VESPENE)],
+            current_items[SC2Race.ANY][get_item_flag_word(item_names.STARTING_SUPPLY)]
+        ))
+
+    async def update_terran_tech(self, current_items):
         terran_items = current_items[SC2Race.TERRAN]
         await self.chat_send("?GiveTerranTech " + " ".join(map(str, terran_items)))
 
-    async def updateZergTech(self, current_items, kerrigan_level):
+    async def update_zerg_tech(self, current_items, kerrigan_level):
         zerg_items = current_items[SC2Race.ZERG]
         zerg_items = [value for index, value in enumerate(zerg_items) if index not in [ZergItemType.Level.flag_word, ZergItemType.Primal_Form.flag_word]]
         kerrigan_primal_by_items = kerrigan_primal(self.ctx, kerrigan_level)
         kerrigan_primal_bot_value = 1 if kerrigan_primal_by_items else 0
         await self.chat_send(f"?GiveZergTech {kerrigan_level} {kerrigan_primal_bot_value} " + ' '.join(map(str, zerg_items)))
 
-    async def updateProtossTech(self, current_items):
+    async def update_protoss_tech(self, current_items):
         protoss_items = current_items[SC2Race.PROTOSS]
         await self.chat_send("?GiveProtossTech " + " ".join(map(str, protoss_items)))
 
