@@ -1189,11 +1189,6 @@ API2_TO_API3_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
     CompatItemHolder(item_names.PHOTON_CANNON),
     CompatItemHolder(item_names.OBSERVER),
     CompatItemHolder(item_names.WARP_HARMONIZATION),
-    CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON, 3),
-    CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR, 3),
-    CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_SHIELDS, 3),
-    CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON, 3),
-    CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR, 3),
     CompatItemHolder(item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE, 3)
 }
 API3_TO_API4_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
