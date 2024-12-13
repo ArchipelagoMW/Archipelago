@@ -693,7 +693,8 @@ class WitnessPlayerLogic:
             adjustment_linesets_in_order.append([
                 "New Connections:",
                 "Outside Bunker - Bunker Elevator - TrueOneWay",
-                "Bunker Elevator Section - Bunker Under Elevator - 0x0A079 | Bunker Green Room | Bunker Cyan Room | "
+                "Bunker Elevator Section - Bunker Under Elevator - "
+                "0x0A079 | Bunker Green Room | Bunker Cyan Room | Bunker Laser Platform | Outside Bunker",
             ])
         if "Swamp Long Bridge" in world.options.elevators_come_to_you:
             adjustment_linesets_in_order.append([
