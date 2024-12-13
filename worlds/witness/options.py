@@ -144,6 +144,20 @@ class ShuffleEnvironmentalPuzzles(Choice):
 
 
 class EasterEggHunt(Choice):
+    """
+    Adds up to 100 Easter Eggs to the game, placed by NewSoupVi, Exempt-Medic, hatkirby, Scipio, and Rever.
+    These can simply be collected by clicking on them.
+
+    Each consecutive check will logically expect 5 Easter Eggs to be collected.
+    However, the amount that you need to collect to actually trigger the next location check differs by option choice:
+    - Easy: For every 2 Easter Eggs collected, an item is sent
+    - Normal: For every 3 Easter Eggs collected, an item is sent
+    - Hard: For every 4 Easter Eggs collected, an item is sent
+    - Very Hard: For every 5 Easter Eggs collected, an item is sent
+
+    On Easy, there will still be a location check for "100 Eggs Collected" (provided there aren't any unreachable eggs due to options like shuffle_postgame: False), but all checks after 40 Eggs will be excluded.
+    """
+
     visibility = Visibility.all if datetime.now().month == 4 else Visibility.none
 
     display_name = "Easter Egg Hunt"
