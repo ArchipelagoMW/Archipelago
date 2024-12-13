@@ -146,28 +146,37 @@ class DSTContext(CommonContext):
                 # Remind player of their goal and world settings
                 async def goal_hint():
                     await asyncio.sleep(0.5)
+                    # Announce goal type
                     _goal = self.slotdata.get("goal")
                     self.logger.info(f"Goal type: {_goal}")
                     if _goal == "survival":
+                        # Announce survival day goal
                         _days_to_survive = self.slotdata.get("days_to_survive", "Unknown")
                         self.logger.info(f"Days to survive: {_days_to_survive}")
                     elif _goal == "bosses_all" or _goal == "bosses_any":
+                        # List goal bosses
                         _bosses = [self.location_names.lookup_in_game(loc_id) for loc_id in self.slotdata.get("goal_locations", [])]
                         self.logger.info(f"Bosses: {_bosses}")
+
                     self.logger.info("The following settings need to be manually set in your world (if not default)!")
+                    # Announce cave settings
                     self.logger.info(f"Caves Required: {'Yes' if self.slotdata.get('is_caves_enabled', True) else 'No'}")
+                    # Announce season settings
                     _seasons = self.slotdata.get("seasons", ["Autumn", "Winter", "Spring", "Summer"])
                     _starting_season = str(self.slotdata.get("starting_season", "Autumn")).capitalize()
-                    _season_flow = self.slotdata.get("season_flow", "normal")
-                    _is_unlockable_seasons = _season_flow == "unlockable" or _season_flow == "unlockable_shuffled"
                     self.logger.info(f"Starting Season: {_starting_season}" + (" (Default)" if _starting_season == "Autumn" else ""))
-                    self.logger.info(f"Enabled Seasons: {'All (Default)' if len(_seasons) == 4 else _seasons}"
-                                        # + (f" (Unlockable) Can optionally set to permanent {_starting_season}" if _is_unlockable_seasons else "") # TODO: Figure out a better way to do this
-                                    )
+                    self.logger.info(f"Enabled Seasons: {'All (Default)' if len(_seasons) == 4 else _seasons}")
                     _day_phases = self.slotdata.get('day_phases', ["Day", "Dusk", "Night"])
                     self.logger.info(f"Day Phases: {'All (Default)' if len(_day_phases) == 3 else _day_phases}"
                                         + (f" (Lights Out)" if len(_day_phases) == 1 and _day_phases[0] == "Night" else "")
                                     )
+                    # Announce season flow
+                    _season_flow = self.slotdata.get("season_flow", "normal")
+                    _is_unlockable_seasons = _season_flow == "unlockable" or _season_flow == "unlockable_shuffled"
+                    _season_flow = _season_flow.capitalize()
+                    self.logger.info(f"Season Flow: {_season_flow}")
+                    if _is_unlockable_seasons: self.logger.info("Optionally, you may set your season lengths to their longest value.")
+                    # Announce intended character
                     self.logger.info(f"Character Selection: {self.slotdata.get('character', 'Any')}")
 
                 async_start(goal_hint())

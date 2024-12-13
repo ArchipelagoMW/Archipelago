@@ -273,14 +273,12 @@ class SeasonFlow(Choice):
     How do seasons progress in your world?
     
     Normal: Seasons progress as default. Logic attempts to prepare you for seasons, but not guaranteed. Seasonal checks may not have progression items.
-    Normal With Helpers: Same as normal, but season-changing items are added to the item pool as useful items not part of logic.
-    Unlockable: Season-changing items are progression. Seasonal checks may have progresion items. Can optionally play with permanent seasons.
-    Unlockable Shuffled: Same as unlockable, except seasons are logically shuffled within the spheres. Can optionally play with permanent seasons.
+    Unlockable: Season-changing items are progression. Seasonal checks may have progresion items. Can optionally play with long seasons.
+    Unlockable Shuffled: Same as unlockable, except seasons are logically shuffled within the spheres. Can optionally play with long seasons.
     """
     display_name = "Season Flow"
     default = 2
     option_normal = 0
-    option_normal_with_helpers = 1
     option_unlockable = 2
     option_unlockable_shuffled = 3
 
@@ -391,6 +389,7 @@ class TrapItems(NamedRange):
 class SeasonTrapItems(NamedRange):
     """
     Chance percentage junk items can be season-changing traps. These can only be seasons that are enabled. If combined with Traps Items, the percentage is split.
+    Can present a challenge when playing with normal season flow, otherwise can act as an annoyance or out-of-logic opportunity for unlockable season flow.
     """
     display_name = "Season Trap Item Chance (Percentage)"
     default = 0
