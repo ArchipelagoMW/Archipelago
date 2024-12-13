@@ -823,7 +823,7 @@ def create_item_with_correct_settings(player: int, name: str, filter_flags: Item
     data = item_tables.item_table[name]
 
     item = StarcraftItem(name, data.classification, data.code, player, filter_flags)
-    if ItemFilterFlags.ForceProgression:
+    if ItemFilterFlags.ForceProgression & filter_flags:
         item.classification = ItemClassification.progression
 
     return item
