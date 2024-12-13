@@ -145,7 +145,7 @@ class ValidInventory:
     def count_from_list(self, items: Iterable[str], player: int) -> int:
         return sum(self.logical_inventory.get(item, 0) for item in items)
 
-    def generate_reduced_inventory(self, inventory_size: int, mission_requirements: List[Tuple[str, Callable]]) -> List[StarcraftItem]:
+    def generate_reduced_inventory(self, inventory_size: int, soft_inventory_space: int, mission_requirements: List[Tuple[str, Callable]]) -> List[StarcraftItem]:
         """Attempts to generate a reduced inventory that can fulfill the mission requirements."""
         inventory: List[StarcraftItem] = list(self.item_pool)
         requirements = mission_requirements
@@ -314,7 +314,10 @@ class ValidInventory:
         cullable_items = [item for item in inventory if not (ItemFilterFlags.Uncullable & item.filter_flags)]
         while current_inventory_size - start_inventory_size > inventory_size:
             if len(cullable_items) == 0:
-                break
+                if soft_inventory_space > inventory_size:
+                    inventory_size += 1
+                else:
+                    break
             if remove_random_item(cullable_items, ItemFilterFlags.Uncullable):
                 inventory = [item for item in inventory if ItemFilterFlags.Removed not in item.filter_flags]
                 current_inventory_size = len([item for item in inventory if item_included(item)])
@@ -418,11 +421,13 @@ def filter_items(world: 'SC2World', location_cache: List[Location], item_pool: L
     """
     open_locations = [location for location in location_cache if location.item is None]
     inventory_size = len(open_locations)
+    soft_inventory_space = (inventory_size * world.options.filler_percentage) // 100
+    inventory_size -= soft_inventory_space
     if world.options.required_tactics.value == RequiredTactics.option_no_logic:
         mission_requirements = []
     else:
         mission_requirements = [(location.name, location.access_rule) for location in location_cache]
     valid_inventory = ValidInventory(world, item_pool)
 
-    valid_items = valid_inventory.generate_reduced_inventory(inventory_size, mission_requirements)
+    valid_items = valid_inventory.generate_reduced_inventory(inventory_size, soft_inventory_space, mission_requirements)
     return valid_items

@@ -994,6 +994,16 @@ class PreventativeLocations(LocationInclusion):
     display_name = "Preventative Locations"
 
 
+class FillerPercentage(Range):
+    """
+    Percentage of the item pool filled with filler items.
+    If the world has more locations than items, filler items will still be generated.
+    """
+    display_name = "Filler Percentage"
+    range_start = 0
+    range_end = 70
+    default = 0
+
 class MineralsPerItem(Range):
     """
     Configures how many minerals are given per resource item.
@@ -1103,6 +1113,7 @@ class Starcraft2Options(PerGameCommonOptions):
     mastery_locations: MasteryLocations
     speedrun_locations: SpeedrunLocations
     preventative_locations: PreventativeLocations
+    filler_percentage: FillerPercentage
     minerals_per_item: MineralsPerItem
     vespene_per_item: VespenePerItem
     starting_supply_per_item: StartingSupplyPerItem
