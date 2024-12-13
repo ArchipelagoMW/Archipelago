@@ -687,7 +687,6 @@ class WitnessPlayerLogic:
                 "New Connections:",
                 "Quarry - Quarry Elevator - TrueOneWay",
                 "Outside Quarry - Quarry Elevator - TrueOneWay",
-                "Bunker Elevator Section - Bunker Under Elevator - Outside Bunker"
             ])
         if "Bunker Elevator" in world.options.elevators_come_to_you:
             adjustment_linesets_in_order.append([

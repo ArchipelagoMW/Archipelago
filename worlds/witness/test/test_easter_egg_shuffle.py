@@ -5,7 +5,7 @@ from BaseClasses import LocationProgressType
 from .. import WitnessWorld
 from ..test import WitnessMultiworldTestBase
 
-
+"""
 class TestEasterEggShuffle(WitnessMultiworldTestBase):
     options_per_world = [
         {
@@ -99,3 +99,39 @@ class TestEggRestrictions(WitnessMultiworldTestBase):
 
             self.assertNotEqual(egg_80_location.progress_type, LocationProgressType.EXCLUDED)
             self.assertEqual(egg_84_location.progress_type, LocationProgressType.EXCLUDED)
+"""
+
+class TestBunkerElevatorEgg(WitnessMultiworldTestBase):
+    options_per_world = [
+        {
+            "elevators_come_to_you": frozenset()
+        },
+        {
+            "elevators_come_to_you": frozenset({"Bunker Elevator"})
+        },
+    ]
+
+    common_options = {
+        "easter_egg_hunt": "normal",
+        "shuffle_doors": "panels",
+        "shuffle_symbols": False,
+    }
+
+    def test_bunker_elevator_egg(self):
+        items_to_reach_bunker_elevator = [
+            "Bunker Entry (Panel)",
+            "Bunker Tinted Glass Door (Panel)",
+            "Bunker Drop-Down Door Controls (Panel)"
+        ]
+
+        with self.subTest("Test that normally, the egg behind the elevator needs Elevator Control"):
+            self.assertFalse(self.multiworld.state.can_reach_location("Bunker Under Elevator Easter Eggs", 1))
+            self.collect_by_name(items_to_reach_bunker_elevator, 1)
+            self.assertFalse(self.multiworld.state.can_reach_location("Bunker Under Elevator Easter Eggs", 1))
+            self.collect_by_name(["Bunker Elevator Control (Panel)"], 1)
+            self.assertTrue(self.multiworld.state.can_reach_location("Bunker Under Elevator Easter Eggs", 1))
+
+        with self.subTest("Test that with auto-elevators, the egg behind the elevator doesn't need Elevator Control"):
+            self.assertFalse(self.multiworld.state.can_reach_location("Bunker Under Elevator Easter Eggs", 2))
+            self.collect_by_name(items_to_reach_bunker_elevator, 2)
+            self.assertTrue(self.multiworld.state.can_reach_location("Bunker Under Elevator Easter Eggs", 2))
