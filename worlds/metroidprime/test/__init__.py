@@ -25,25 +25,12 @@ class MetroidPrimeTestBase(WorldTestBase):
             self.world = self.multiworld.worlds[self.player]  # type: ignore
 
 
-class MetroidPrimeUniversalTrackerTestBase(WorldTestBase):
-    game = "Metroid Prime"
-    player: ClassVar[int] = 1
-    world: "MetroidPrimeWorld"
-
-    seed = DEFAULT_TEST_SEED
-
-    def world_setup(self, *args, **kwargs):  # type: ignore
-        super().world_setup(seed=self.seed)
-        if self.constructed:
-            self.world = self.multiworld.worlds[self.player]  # type: ignore
-            self.tracker_multiworld = cast(MultiworldWithPassthrough, self.multiworld)
-
-    def init_passhthrough(self, slot_data: Dict[Any, str]):
-        self.tracker_multiworld.re_gen_passthrough = {self.game: slot_data}
-
-
 class MetroidPrimeWithOverridesTestBase(MetroidPrimeTestBase):
     overrides: Dict[str, Any] = {}
+
+    def pre_steps(self):
+        for key, value in self.overrides.items():
+            setattr(self.world, key, value)
 
     # Copied from bases.py, overriden at the end to manually set some values before generate_early
     def world_setup(self, seed: typing.Optional[int] = None) -> None:
@@ -67,9 +54,7 @@ class MetroidPrimeWithOverridesTestBase(MetroidPrimeTestBase):
             )
         self.multiworld.set_options(args)
         self.world = self.multiworld.worlds[self.player]  # type: ignore
-
-        for key, value in self.overrides.items():
-            setattr(self.world, key, value)
+        self.pre_steps()
 
         gen_steps = (
             "generate_early",
@@ -82,3 +67,23 @@ class MetroidPrimeWithOverridesTestBase(MetroidPrimeTestBase):
 
         for step in gen_steps:
             AutoWorld.call_all(self.multiworld, step)
+
+
+class MetroidPrimeUniversalTrackerTestBase(MetroidPrimeWithOverridesTestBase):
+    game = "Metroid Prime"
+    player: ClassVar[int] = 1
+    world: "MetroidPrimeWorld"
+
+    seed = DEFAULT_TEST_SEED
+
+    def pre_steps(self):
+        super().pre_steps()
+        setattr(self.multiworld, "generation_is_fake", True)
+
+    def world_setup(self, *args, **kwargs):  # type: ignore
+        super().world_setup(seed=self.seed)
+        if self.constructed:
+            self.tracker_multiworld = cast(MultiworldWithPassthrough, self.multiworld)
+
+    def init_passhthrough(self, slot_data: Dict[Any, str]):
+        self.tracker_multiworld.re_gen_passthrough = {self.game: slot_data}

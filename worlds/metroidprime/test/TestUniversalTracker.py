@@ -1,9 +1,10 @@
+from ..BlastShieldRando import WorldBlastShieldMapping
 from ..Enum import StartRoomDifficulty
 from ..PrimeOptions import DoorColorRandomization
 from ..Items import SuitUpgrade
 from ..data.RoomNames import RoomName
 from typing import Any, TYPE_CHECKING, Dict
-from . import MetroidPrimeUniversalTrackerTestBase
+from . import MetroidPrimeTestBase, MetroidPrimeUniversalTrackerTestBase
 
 if TYPE_CHECKING:
     from .. import MetroidPrimeWorld
@@ -95,6 +96,17 @@ slot_data: Dict[str, Any] = {
             "Phazon Mines: Transport to Tallon Overworld South": "Transport to Phazon Mines West",
         },
     },
+    "blast_shield_mapping": {
+        "Tallon Overworld": {
+            "area": "Tallon Overworld",
+            "type_mapping": {
+                "Landing Site": {
+                    1: "Bomb",
+                    2: "Flamethrower",
+                }
+            },
+        }
+    },
 }
 
 
@@ -146,3 +158,16 @@ class TestUniversalTracker(MetroidPrimeUniversalTrackerTestBase):
         self.init_passhthrough(slot_data)
         self.world.generate_early()
         self.assertEqual(world.elevator_mapping, slot_data["elevator_mapping"])
+
+    def test_blast_shield_mapping_is_preserved(self):
+        self.world_setup()  # type: ignore
+        world: "MetroidPrimeWorld" = self.world
+        self.init_passhthrough(slot_data)
+        self.world.generate_early()
+        assert world.blast_shield_mapping
+        self.assertEqual(
+            world.blast_shield_mapping,
+            WorldBlastShieldMapping.from_option_value(
+                slot_data["blast_shield_mapping"]
+            ),
+        )

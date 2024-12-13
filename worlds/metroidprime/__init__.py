@@ -248,6 +248,10 @@ class MetroidPrimeWorld(World):
         self, name: str, override: Optional[ItemClassification] = None
     ) -> "MetroidPrimeItem":
         createdthing = item_table[name]
+
+        if hasattr(self.multiworld, "generation_is_fake"):
+            # All items should be progression for the Universal Tracker
+            override = ItemClassification.progression
         if override:
             return MetroidPrimeItem(name, override, createdthing.code, self.player)
         return MetroidPrimeItem(
