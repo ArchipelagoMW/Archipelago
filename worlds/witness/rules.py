@@ -308,6 +308,11 @@ def make_lambda(entity_hex: str, world: "WitnessWorld") -> Optional[CollectionRu
     return _meets_item_requirements(entity_req, world)
 
 
+def make_region_lambda(region_name: str, world: "WitnessWorld") -> CollectionRule:
+    region = world.get_region(region_name)
+    return lambda state: region.can_reach(state)
+
+
 def set_rules(world: "WitnessWorld") -> None:
     """
     Sets all rules for all locations
@@ -319,8 +324,7 @@ def set_rules(world: "WitnessWorld") -> None:
         if location in world.player_locations.EVENT_LOCATION_TABLE:
             entity_hex_or_region_name = world.player_logic.EVENT_ITEM_PAIRS[location][1]
             if entity_hex_or_region_name in static_witness_logic.ALL_REGIONS_BY_NAME:
-                region_obj = world.get_region(entity_hex_or_region_name)
-                set_rule(world.get_location(location), lambda state, region=region_obj: region.can_reach(state))
+                set_rule(world.get_location(location), make_region_lambda(entity_hex_or_region_name, world))
                 continue
 
             real_location = static_witness_logic.ENTITIES_BY_HEX[entity_hex_or_region_name]["checkName"]

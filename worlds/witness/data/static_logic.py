@@ -50,9 +50,9 @@ class StaticWitnessLogicObj:
         self.reverse_connections()
         self.combine_connections()
 
-    def add_easter_eggs(self):
+    def add_easter_eggs(self) -> None:
         egg_counter = 0
-        area_counts = Counter()
+        area_counts: Dict[str, int] = Counter()
         for region_name, entity_amount in EASTER_EGGS.items():
             region_object = self.ALL_REGIONS_BY_NAME[region_name]
             correct_area = region_object["area"]
