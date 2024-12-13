@@ -4,6 +4,7 @@ import os
 import pkgutil
 import tempfile
 import typing
+import re
 
 import bsdiff4
 
@@ -12,6 +13,7 @@ from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial, 
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
 from .Common import *
+from . import ItemIconGuessing
 from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningItem, TradeItemData,
                     ladxr_item_to_la_item_name, links_awakening_items, links_awakening_items_by_name,
                     links_awakening_item_name_groups)
@@ -380,66 +382,36 @@ class LinksAwakeningWorld(World):
 
     name_cache = {}
     # Tries to associate an icon from another game with an icon we have
-    def guess_icon_for_other_world(self, other):
+    def guess_icon_for_other_world(self, foreign_item):
         if not self.name_cache:
-            forbidden = [
-                "TRADING",
-                "ITEM",
-                "BAD",
-                "SINGLE",
-                "UPGRADE",
-                "BLUE",
-                "RED",
-                "NOTHING",
-                "MESSAGE",
-            ]
             for item in ladxr_item_to_la_item_name.keys():
                 self.name_cache[item] = item
                 splits = item.split("_")
-                self.name_cache["".join(splits)] = item
-                if 'RUPEES' in splits:
-                    self.name_cache["".join(reversed(splits))] = item
-                    
                 for word in item.split("_"):
-                    if word not in forbidden and not word.isnumeric():
+                    if word not in ItemIconGuessing.BLOCKED_ASSOCIATIONS and not word.isnumeric():
                         self.name_cache[word] = item
-            others = {
-                'KEY': 'KEY',
-                'COMPASS': 'COMPASS',
-                'BIGKEY': 'NIGHTMARE_KEY',
-                'MAP': 'MAP',
-                'FLUTE': 'OCARINA',
-                'SONG': 'OCARINA',
-                'MUSHROOM': 'TOADSTOOL',
-                'GLOVE': 'POWER_BRACELET',
-                'BOOT': 'PEGASUS_BOOTS',
-                'SHOE': 'PEGASUS_BOOTS',
-                'SHOES': 'PEGASUS_BOOTS',
-                'SANCTUARYHEARTCONTAINER': 'HEART_CONTAINER',
-                'BOSSHEARTCONTAINER': 'HEART_CONTAINER',
-                'HEARTCONTAINER': 'HEART_CONTAINER',
-                'ENERGYTANK': 'HEART_CONTAINER',
-                'MISSILE': 'SINGLE_ARROW',
-                'BOMBS': 'BOMB',
-                'BLUEBOOMERANG': 'BOOMERANG',
-                'MAGICMIRROR': 'TRADING_ITEM_MAGNIFYING_GLASS',
-                'MIRROR': 'TRADING_ITEM_MAGNIFYING_GLASS',
-                'MESSAGE': 'TRADING_ITEM_LETTER',
-                # TODO: Also use AP item name
-            }
-            for name in others.values():
+            for name in ItemIconGuessing.SYNONYMS.values():
                 assert name in self.name_cache, name
                 assert name in CHEST_ITEMS, name
-            self.name_cache.update(others)
-            
-        
-        uppered = other.upper()
-        if "BIG KEY" in uppered:
-            return 'NIGHTMARE_KEY'
-        possibles = other.upper().split(" ")
-        rejoined = "".join(possibles)
-        if rejoined in self.name_cache:
-            return self.name_cache[rejoined]
+            self.name_cache.update(ItemIconGuessing.SYNONYMS)
+            pluralizations = {k + "S": v for k, v in self.name_cache.items()}
+            self.name_cache = pluralizations | self.name_cache
+
+        uppered = foreign_item.name.upper()
+        foreign_game = self.multiworld.game[foreign_item.player]
+        phrases = ItemIconGuessing.PHRASES.copy()
+        if foreign_game in ItemIconGuessing.GAME_SPECIFIC_PHRASES:
+            phrases.update(ItemIconGuessing.GAME_SPECIFIC_PHRASES[foreign_game])
+
+        for phrase, icon in phrases.items():
+            if phrase in uppered:
+                return icon
+        # pattern for breaking down camelCase, also separates out digits
+        pattern = re.compile(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=\d)")
+        possibles = pattern.sub(' ', foreign_item.name).upper()
+        for ch in "[]()_":
+            possibles = possibles.replace(ch, " ")
+        possibles = possibles.split()
         for name in possibles:
             if name in self.name_cache:
                 return self.name_cache[name]
@@ -465,8 +437,15 @@ class LinksAwakeningWorld(World):
 
                     # If the item name contains "sword", use a sword icon, etc
                     # Otherwise, use a cute letter as the icon
+                    elif self.options.foreign_item_icons == 'guess_by_name':
+                        loc.ladxr_item.item = self.guess_icon_for_other_world(loc.item)
+                        loc.ladxr_item.custom_item_name = loc.item.name
+
                     else:
-                        loc.ladxr_item.item = self.guess_icon_for_other_world(loc.item.name)
+                        if loc.item.advancement:
+                            loc.ladxr_item.item = 'PIECE_OF_POWER'
+                        else:
+                            loc.ladxr_item.item = 'GUARDIAN_ACORN'
                         loc.ladxr_item.custom_item_name = loc.item.name
 
                     if loc.item:
