@@ -81,8 +81,7 @@ def build_whitelist(options: DSTOptions) -> FrozenSet[str]:
         season_order.append(season_order.pop(0))
 
     # Build the season whitelist
-    if (options.season_flow.value == options.season_flow.option_normal
-        or options.season_flow.value == options.season_flow.option_normal_with_helpers):
+    if options.season_flow.value != options.season_flow.option_unlockable_shuffled:
         # In normal season flow, seasons line up with seasons passed
         for _ in range(0, _num_seasons):
             if not len(season_order): break
@@ -118,7 +117,7 @@ def build_whitelist(options: DSTOptions) -> FrozenSet[str]:
         SPECIAL_TAGS.MOOSEGOOSE:        _whitelist.issuperset({SEASON.SPRING, SEASON.NONSPRING}),
         SPECIAL_TAGS.BUTTER_MUFFIN:     REGION.OCEAN in _whitelist or _whitelist.issuperset({PHASE.DAY, SEASON.NONWINTER}),
         SPECIAL_TAGS.LOBSTER_DINNER:    _whitelist.issuperset({REGION.OCEAN, PHASE.DAY, PHASE.DUSK_OR_NIGHT}),
-        SPECIAL_TAGS.LEAFY_MEAT:        (len(_whitelist.intersection({SEASON.SPRING, REGION.DUALREGION})) > 0)
+        SPECIAL_TAGS.LEAFY_MEAT:        REGION.DUALREGION in _whitelist
                                         or _whitelist.issuperset({SEASON.NONWINTER, SEASONS_PASSED.SEASONS_2}),
         SPECIAL_TAGS.FRUITS:            (
                                             (options.cooking_locations.value != options.cooking_locations.option_none)
