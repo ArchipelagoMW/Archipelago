@@ -5,7 +5,7 @@ from BaseClasses import LocationProgressType
 from .. import WitnessWorld
 from ..test import WitnessMultiworldTestBase
 
-"""
+
 class TestEasterEggShuffle(WitnessMultiworldTestBase):
     options_per_world = [
         {
@@ -99,7 +99,7 @@ class TestEggRestrictions(WitnessMultiworldTestBase):
 
             self.assertNotEqual(egg_80_location.progress_type, LocationProgressType.EXCLUDED)
             self.assertEqual(egg_84_location.progress_type, LocationProgressType.EXCLUDED)
-"""
+
 
 class TestBunkerElevatorEgg(WitnessMultiworldTestBase):
     options_per_world = [
