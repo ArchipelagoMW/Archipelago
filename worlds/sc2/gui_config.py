@@ -59,7 +59,7 @@ def validate_color(color: Any, default: Tuple[float, float, float]) -> Tuple[Tup
         return (f'Invalid type {type(color)}; expected 3-element list or integer',), default
     elif len(color) != 3:
         return (f'Wrong number of elements in color; expected 3, got {len(color)}',), default
-    result: list[float] = [0.0, 0.0, 0.0]
+    result: List[float] = [0.0, 0.0, 0.0]
     errors: List[str] = []
     expected = 'expected a number from 0 to 1'
     for index, element in enumerate(color):
@@ -83,7 +83,7 @@ def get_button_color(race: str) -> Tuple[Tuple[str, ...], Tuple[float, float, fl
     from . import SC2World
     baseline_color = 0.345  # the button graphic is grey, with this value in each color channel
     if race == 'TERRAN':
-        user_color = SC2World.settings.terran_button_color
+        user_color: list = SC2World.settings.terran_button_color
         default_color = (0.0838, 0.2898, 0.2346)
     elif race == 'PROTOSS':
         user_color = SC2World.settings.protoss_button_color

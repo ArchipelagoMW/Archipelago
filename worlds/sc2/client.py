@@ -1499,7 +1499,8 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         'last_supply_used'
     ]
     ctx: SC2Context
-    supply_used: float
+    # defined in bot_ai_internal.py; seems to be mis-annotated as a float and later re-annotated as an int
+    supply_used: int
 
     def __init__(self, ctx: SC2Context, mission_id: int):
         self.game_running = False
@@ -1508,7 +1509,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         self.can_read_game = False
         self.last_received_update: int = 0
         self.last_trade_cargo: set = set()
-        self.last_supply_used: float = 0.0
+        self.last_supply_used: int = 0
         self.setup_done = False
         self.ctx = ctx
         self.ctx.last_bot = self
