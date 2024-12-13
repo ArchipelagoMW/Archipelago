@@ -9,19 +9,19 @@ from ..test import WitnessMultiworldTestBase
 class TestEasterEggShuffle(WitnessMultiworldTestBase):
     options_per_world = [
         {
-            "easter_egg_hunt": "off"
+            "easter_egg_hunt": "off",
         },
         {
-            "easter_egg_hunt": "easy"
+            "easter_egg_hunt": "easy",
         },
         {
-            "easter_egg_hunt": "normal"
+            "easter_egg_hunt": "normal",
         },
         {
-            "easter_egg_hunt": "hard"
+            "easter_egg_hunt": "hard",
         },
         {
-            "easter_egg_hunt": "very_hard"
+            "easter_egg_hunt": "very_hard",
         },
     ]
 
@@ -60,18 +60,24 @@ class TestEasterEggShuffle(WitnessMultiworldTestBase):
 
 
 class TestEggRestrictions(WitnessMultiworldTestBase):
-    options_per_world = [{
-        "shuffle_postgame": False
-    },
-    {
-        "shuffle_postgame": True
-    }]
+    options_per_world = [
+        {
+            "shuffle_postgame": False,
+        },
+        {
+            "shuffle_postgame": True,
+        },
+        {
+            "shuffle_postgame": True,
+            "exclude_locations": frozenset({"Bunker Easter Egg 3"}),
+        }
+    ]
 
     common_options = {
         "victory_condition": "mountain_box_short",
         "shuffle_doors": "off",
         "easter_egg_hunt": "hard",
-        "shuffle_vault_boxes": True
+        "shuffle_vault_boxes": True,
     }
 
     def test_egg_restrictions(self) -> None:
@@ -99,6 +105,10 @@ class TestEggRestrictions(WitnessMultiworldTestBase):
 
             self.assertNotEqual(egg_80_location.progress_type, LocationProgressType.EXCLUDED)
             self.assertEqual(egg_84_location.progress_type, LocationProgressType.EXCLUDED)
+
+        with self.subTest("Test that you can exclude and egg to disable it"):
+            self.assert_location_exists("96 Easter Eggs Collected", 3)
+            self.assert_location_does_not_exist("100 Easter Eggs Collected", 3)
 
 
 class TestBunkerElevatorEgg(WitnessMultiworldTestBase):

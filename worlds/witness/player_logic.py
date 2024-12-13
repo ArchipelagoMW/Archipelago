@@ -752,6 +752,9 @@ class WitnessPlayerLogic:
             if loc_obj["entityType"] == "EP":
                 self.COMPLETELY_DISABLED_ENTITIES.add(loc_obj["entity_hex"])
 
+            if loc_obj["entityType"] == "Easter Egg":
+                self.COMPLETELY_DISABLED_ENTITIES.add(loc_obj["entity_hex"])
+
             elif loc_obj["entityType"] == "Panel":
                 self.EXCLUDED_ENTITIES.add(loc_obj["entity_hex"])
 
