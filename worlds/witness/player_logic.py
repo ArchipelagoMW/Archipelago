@@ -713,7 +713,7 @@ class WitnessPlayerLogic:
         else:
             self.COMPLETELY_DISABLED_ENTITIES.update({
                 entity_hex for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
-                if entity_obj["entityType"].contains("Easter Egg")
+                if "Easter Egg" in entity_obj["entityType"]
             })
 
         if world.options.victory_condition == "panel_hunt":
@@ -999,6 +999,7 @@ class WitnessPlayerLogic:
         doors = world.options.shuffle_doors
         shortbox_req = world.options.mountain_lasers
         longbox_req = world.options.challenge_lasers
+        eggs_exist = world.options.easter_egg_hunt
 
         # Make some helper booleans so it is easier to follow what's going on
         mountain_upper_is_in_postgame = (
@@ -1012,17 +1013,17 @@ class WitnessPlayerLogic:
         # It is easier to think about when these items *are* required, so we make that dict first
         # If the entity is disabled anyway, we don't need to consider that case
         is_item_required_dict = {
-            "0x03750": eps_shuffled,  # Monastery Garden Entry Door
+            "0x03750": eps_shuffled or eggs_exist,  # Monastery Garden Entry Door
             "0x275FA": eps_shuffled,  # Boathouse Hook Control
             "0x17D02": eps_shuffled,  # Windmill Turn Control
             "0x0368A": symbols_shuffled or door_panels,  # Quarry Stoneworks Stairs Door
             "0x3865F": symbols_shuffled or door_panels or eps_shuffled,  # Quarry Boathouse 2nd Barrier
             "0x17CC4": come_to_you or eps_shuffled,  # Quarry Elevator Panel
             "0x17E2B": come_to_you and boat_shuffled or eps_shuffled,  # Swamp Long Bridge
-            "0x0CF2A": False,  # Jungle Monastery Garden Shortcut
+            "0x0CF2A": eggs_exist,  # Jungle Monastery Garden Shortcut
             "0x0364E": False,  # Monastery Laser Shortcut Door
             "0x03713": remote_doors,  # Monastery Laser Shortcut Panel
-            "0x03313": False,  # Orchard Second Gate
+            "0x03313": eggs_exist,  # Orchard Second Gate
             "0x337FA": remote_doors,  # Jungle Bamboo Laser Shortcut Panel
             "0x3873B": False,  # Jungle Bamboo Laser Shortcut Door
             "0x335AB": False,  # Caves Elevator Controls

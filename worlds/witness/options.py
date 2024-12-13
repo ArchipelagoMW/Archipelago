@@ -150,7 +150,7 @@ class EasterEggHunt(Choice):
     option_off = 0
     # Number represents the amount of eggs needed per check
     option_easy = 2
-    option_medium = 3
+    option_normal = 3
     option_hard = 4
     option_very_hard = 5
     default = 3 if datetime.now().month == 4 else 0
