@@ -137,6 +137,9 @@ def _has_secrets(state: CollectionState, player: int) -> bool:
     return state.has_all({ItemNames.FIRST_SECRET_OBTAINED, ItemNames.SECOND_SECRET_OBTAINED,
                           ItemNames.THIRD_SECRET_OBTAINED}, player)
 
+def _item_not_advancement(item: Item):
+    """The `item` is not an advancement item"""
+    return not item.advancement
 
 def _is_cathedral_door_opened(state: CollectionState, player: int) -> bool:
     """The door to Mithalas Cathedral has been opened in the `state` of the `player`"""
@@ -482,6 +485,7 @@ class AquariaRegions:
                                                      if add_locations else None)
         self.whale = self.__add_region("Inside the whale",
                                        AquariaLocations.locations_whale if add_locations else None)
+
         self.first_secret = self.__add_region("First Secret area", None)
 
     def __create_sunken_city(self, add_locations: bool) -> None:
@@ -528,6 +532,7 @@ class AquariaRegions:
 
     @staticmethod
     def get_entrance_name(from_region: Region, to_region: Region):
+
         """
         Return the name of an entrance between `from_region` and `to_region`
         """

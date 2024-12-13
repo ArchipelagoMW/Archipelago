@@ -234,7 +234,6 @@ class ItemNames:
     SECOND_SECRET_OBTAINED = "Second Secret obtained"
     THIRD_SECRET_OBTAINED = "Third Secret obtained"
 
-
 """Information data for every (not event) item."""
 item_table = {
     #       name:           ID,    Nb,   Item Type,        Item Group

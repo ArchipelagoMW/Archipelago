@@ -498,6 +498,26 @@ class Warps(Choice):
     default = option_vanilla
 
 
+class InGameHints(DefaultOnToggle):
+    """
+    When enabled, owl statues and library books may indicate the location of your items in the multiworld.
+    """
+    display_name = "In-game Hints"
+
+
+
+class ForeignItemIcons(Choice):
+    """
+    Choose how to display foreign items.
+    [Guess By Name] Foreign items can look like any Link's Awakening item.
+    [Indicate Progression] Foreign items are either a Piece of Power (progression) or Guardian Acorn (non-progression).
+    """
+    display_name = "Foreign Item Icons"
+    option_guess_by_name = 0
+    option_indicate_progression = 1
+    default = option_guess_by_name
+
+
 ladx_option_groups = [
     OptionGroup("Goal Options", [
         Goal,
@@ -518,6 +538,7 @@ ladx_option_groups = [
         TradeQuest,
         Rooster,
         TrendyGame,
+        InGameHints,
         NagMessages,
         BootsControls
     ]),
@@ -529,6 +550,7 @@ ladx_option_groups = [
         LinkPalette,
         Palette,
         TextShuffle,
+        ForeignItemIcons,
         APTitleScreen,
         GfxMod,
         Music,
@@ -563,6 +585,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     gfxmod: GfxMod
     palette: Palette
     text_shuffle: TextShuffle
+    foreign_item_icons: ForeignItemIcons
     shuffle_nightmare_keys: ShuffleNightmareKeys
     shuffle_small_keys: ShuffleSmallKeys
     shuffle_maps: ShuffleMaps
@@ -574,6 +597,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     nag_messages: NagMessages
     ap_title_screen: APTitleScreen
     boots_controls: BootsControls
+    in_game_hints: InGameHints
 
     warp_improvements: Removed
     additional_warp_points: Removed
