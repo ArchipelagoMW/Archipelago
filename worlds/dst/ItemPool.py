@@ -35,7 +35,7 @@ class DSTItemPool:
         # Add at least torch for Lights Out
         if (
             options.shuffle_starting_recipes.value
-            and (not PHASE.DAY in options.day_phases.value or PHASE.DUSK in options.day_phases.value)
+            and not(PHASE.DAY in options.day_phases.value or PHASE.DUSK in options.day_phases.value)
         ):
             options.start_inventory.value["Torch"] = 1
 
