@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 
 from schema import And, Schema
 
@@ -140,6 +141,19 @@ class ShuffleEnvironmentalPuzzles(Choice):
     option_off = 0
     option_individual = 1
     option_obelisk_sides = 2
+
+
+class EasterEggHunt(Choice):
+    visibility = Visibility.all if datetime.now().month == 4 else Visibility.none
+
+    display_name = "Easter Egg Hunt"
+    option_off = 0
+    # Number represents the amount of eggs needed per check
+    option_easy = 2
+    option_medium = 3
+    option_hard = 4
+    option_very_hard = 5
+    default = 3 if datetime.now().month == 4 else 0
 
 
 class ShuffleDog(Choice):
@@ -504,6 +518,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     death_link_amnesty: DeathLinkAmnesty
     puzzle_randomization_seed: PuzzleRandomizationSeed
     shuffle_dog: ShuffleDog
+    easter_egg_hunt: EasterEggHunt
 
 
 witness_option_groups = [
@@ -559,5 +574,6 @@ witness_option_groups = [
     ]),
     OptionGroup("Silly Options", [
         ShuffleDog,
+        EasterEggHunt,
     ])
 ]

@@ -24,7 +24,6 @@ from .data.item_definition_classes import DoorItemDefinition, ItemCategory, Prog
 from .data.static_logic import StaticWitnessLogicObj
 from .data.utils import (
     WitnessRule,
-    define_new_region,
     get_boat,
     get_caves_except_path_to_challenge_exclusion_list,
     get_complex_additional_panels,
@@ -119,6 +118,8 @@ class WitnessPlayerLogic:
         self.PRE_PICKED_HUNT_ENTITIES: Set[str] = set()
         self.HUNT_ENTITIES: Set[str] = set()
 
+        self.AVAILABLE_EASTER_EGGS: Set[str] = set()
+        self.AVAILABLE_EASTER_EGGS_PER_REGION: Dict[str, int] = {}
         self.ALWAYS_EVENT_NAMES_BY_HEX = {
             "0x00509": "+1 Laser",
             "0x012FB": "+1 Laser (Unredirected)",
@@ -153,6 +154,9 @@ class WitnessPlayerLogic:
         if world.options.victory_condition == "panel_hunt":
             picker = EntityHuntPicker(self, world, self.PRE_PICKED_HUNT_ENTITIES)
             self.HUNT_ENTITIES = picker.pick_panel_hunt_panels(world.options.panel_hunt_total.value)
+
+        if world.options.easter_egg_hunt:
+            self.restrict_eggs(world)
 
         # Finalize which items actually exist in the MultiWorld and which get grouped into progressive items.
         self.finalize_items()
@@ -240,6 +244,8 @@ class WitnessPlayerLogic:
 
                 if option_entity in {"7 Lasers", "11 Lasers", "7 Lasers + Redirect", "11 Lasers + Redirect",
                                      "PP2 Weirdness", "Theater to Tunnels", "Entity Hunt"}:
+                    new_items = frozenset({frozenset([option_entity])})
+                elif "Eggs" in option_entity:
                     new_items = frozenset({frozenset([option_entity])})
                 elif option_entity in self.DISABLE_EVERYTHING_BEHIND:
                     new_items = frozenset()
@@ -387,13 +393,6 @@ class WitnessPlayerLogic:
 
             return
 
-        if adj_type == "Region Changes":
-            new_region_and_options = define_new_region(line + ":")
-
-            self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[new_region_and_options[0]["name"]] = new_region_and_options[1]
-
-            return
-
         if adj_type == "New Connections":
             line_split = line.split(" - ")
             source_region = line_split[0]
@@ -533,6 +532,58 @@ class WitnessPlayerLogic:
 
         return postgame_adjustments
 
+    def set_easter_egg_requirements(self, world: "WitnessWorld") -> None:
+        required_eggs_per_check = world.options.easter_egg_hunt.value
+        logically_required_eggs_per_check = 5
+
+        for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items():
+            if entity_obj["entityType"] != "Easter Egg Total":
+                continue
+
+            total = int(entity_obj["checkName"].split(" ")[0])
+
+            if total % required_eggs_per_check:
+                self.COMPLETELY_DISABLED_ENTITIES.add(entity_hex)
+
+            requirement = total // required_eggs_per_check * logically_required_eggs_per_check
+            self.DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex] = {
+                "entities": frozenset({frozenset({f"{requirement} Eggs"})})
+            }
+
+    def restrict_eggs(self, world: "WitnessWorld"):
+        self.AVAILABLE_EASTER_EGGS = {
+            entity_hex for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
+            if entity_obj["entityType"] == "Easter Egg" and self.solvability_guaranteed(entity_hex)
+        }
+        max_eggs = len(self.AVAILABLE_EASTER_EGGS)
+
+        self.AVAILABLE_EASTER_EGGS_PER_REGION = defaultdict(int)
+        for entity_hex in self.AVAILABLE_EASTER_EGGS:
+            region_name = static_witness_logic.ENTITIES_BY_HEX[entity_hex]["region"]["name"]
+            self.AVAILABLE_EASTER_EGGS_PER_REGION[region_name] += 1
+
+        # This is what makes "easy" easier than "very hard" - 2 required, 5 logically required
+        needed_eggs_per_check = world.options.easter_egg_hunt.value
+        logically_needed_eggs_per_check = 5
+
+        for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items():
+            if entity_obj["entityType"] != "Easter Egg Total":
+                continue
+            if entity_hex in self.COMPLETELY_DISABLED_ENTITIES:
+                continue
+
+            total = int(entity_obj["checkName"].split(" ")[0])
+            logical_total = total // needed_eggs_per_check * logically_needed_eggs_per_check
+            if total > max_eggs:
+                self.COMPLETELY_DISABLED_ENTITIES.add(entity_hex)
+                continue
+
+            self.ADDED_CHECKS.add(entity_obj["checkName"])
+            if logical_total > max_eggs:
+                # Exclude and set logic to require every egg
+                self.EXCLUDED_ENTITIES.add(entity_hex)
+                self.REQUIREMENTS_BY_HEX[entity_hex] = frozenset({frozenset({f"{max_eggs} Eggs"})})
+
     def make_options_adjustments(self, world: "WitnessWorld") -> None:
         """Makes logic adjustments based on options"""
         adjustment_linesets_in_order = []
@@ -636,11 +687,13 @@ class WitnessPlayerLogic:
                 "New Connections:",
                 "Quarry - Quarry Elevator - TrueOneWay",
                 "Outside Quarry - Quarry Elevator - TrueOneWay",
+                "Bunker Elevator Section - Bunker Under Elevator - Outside Bunker"
             ])
         if "Bunker Elevator" in world.options.elevators_come_to_you:
             adjustment_linesets_in_order.append([
                 "New Connections:",
                 "Outside Bunker - Bunker Elevator - TrueOneWay",
+                "Bunker Elevator Section - Bunker Under Elevator - 0x0A079 | Bunker Green Room | Bunker Cyan Room | "
             ])
         if "Swamp Long Bridge" in world.options.elevators_come_to_you:
             adjustment_linesets_in_order.append([
@@ -654,6 +707,14 @@ class WitnessPlayerLogic:
         #     adjustment_linesets_in_order.append([
         #         "New Connections:"
         #         "Town Red Rooftop - Town Maze Rooftop - TrueOneWay"
+
+        if world.options.easter_egg_hunt:
+            self.set_easter_egg_requirements(world)
+        else:
+            self.COMPLETELY_DISABLED_ENTITIES.update({
+                entity_hex for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
+                if entity_obj["entityType"].contains("Easter Egg")
+            })
 
         if world.options.victory_condition == "panel_hunt":
             adjustment_linesets_in_order.append(get_entity_hunt())
@@ -1023,5 +1084,8 @@ class WitnessPlayerLogic:
             entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]
             entity_name = entity_obj["checkName"]
             self.EVENT_ITEM_PAIRS[entity_name + " (Panel Hunt)"] = ("+1 Panel Hunt", entity_hex)
+
+        for region_name, easter_egg_count in self.AVAILABLE_EASTER_EGGS_PER_REGION.items():
+            self.EVENT_ITEM_PAIRS[f"{region_name} Easter Eggs"] = (f"+{easter_egg_count} Easter Eggs", region_name)
 
         return

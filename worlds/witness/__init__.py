@@ -388,7 +388,22 @@ class WitnessWorld(World):
         else:
             item_data = static_witness_items.ITEM_DATA[item_name]
 
-        return WitnessItem(item_name, item_data.classification, item_data.ap_code, player=self.player)
+        item = WitnessItem(item_name, item_data.classification, item_data.ap_code, player=self.player)
+        if item_name.startswith("+") and "Easter Egg" in item_name:
+            item.eggs = int(item_name[1])  # Always single digit
+        return item
+
+    def collect(self, state: "CollectionState", item: WitnessItem) -> bool:
+        changed = super().collect(state, item)
+        if changed and item.eggs:
+            state.prog_items[self.player]["Egg"] += item.eggs
+        return changed
+
+    def remove(self, state: "CollectionState", item: WitnessItem) -> bool:
+        changed = super().remove(state, item)
+        if changed and item.eggs:
+            state.prog_items[self.player]["Egg"] -= item.eggs
+        return changed
 
     def get_filler_item_name(self) -> str:
         return "Speed Boost"

@@ -31,6 +31,7 @@ class WitnessItem(Item):
     Item from the game The Witness
     """
     game: str = "The Witness"
+    eggs: int = 0
 
 
 class WitnessPlayerItems:

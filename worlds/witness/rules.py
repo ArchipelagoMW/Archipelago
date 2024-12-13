@@ -196,6 +196,8 @@ def _has_item(item: str, world: "WitnessWorld",
     if item == "Entity Hunt":
         # Right now, panel hunt is the only type of entity hunt. This may need to be changed later
         return _can_do_panel_hunt(world)
+    if "Eggs" in item:
+        return SimpleItemRepresentation("Egg", int(item.split(" ")[0]))
     if item == "PP2 Weirdness":
         return lambda state: _can_do_expert_pp2(state, world)
     if item == "Theater to Tunnels":
@@ -300,6 +302,9 @@ def make_lambda(entity_hex: str, world: "WitnessWorld") -> Optional[CollectionRu
     """
     entity_req = world.player_logic.REQUIREMENTS_BY_HEX[entity_hex]
 
+    if entity_hex.startswith("0xEE1"):
+        pass
+
     return _meets_item_requirements(entity_req, world)
 
 
@@ -312,8 +317,13 @@ def set_rules(world: "WitnessWorld") -> None:
         real_location = location
 
         if location in world.player_locations.EVENT_LOCATION_TABLE:
-            entity_hex = world.player_logic.EVENT_ITEM_PAIRS[location][1]
-            real_location = static_witness_logic.ENTITIES_BY_HEX[entity_hex]["checkName"]
+            entity_hex_or_region_name = world.player_logic.EVENT_ITEM_PAIRS[location][1]
+            if entity_hex_or_region_name in static_witness_logic.ALL_REGIONS_BY_NAME:
+                region_obj = world.get_region(entity_hex_or_region_name)
+                set_rule(world.get_location(location), lambda state, region=region_obj: region.can_reach(state))
+                continue
+
+            real_location = static_witness_logic.ENTITIES_BY_HEX[entity_hex_or_region_name]["checkName"]
 
         associated_entity = world.player_logic.REFERENCE_LOGIC.ENTITIES_BY_NAME[real_location]
         entity_hex = associated_entity["entity_hex"]
