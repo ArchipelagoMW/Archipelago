@@ -7,7 +7,7 @@ from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from Options import Accessibility
 from worlds.AutoWorld import WebWorld, World
 from .item.item_tables import (
-    filler_items, get_full_item_list, ProtossItemType,
+    get_full_item_list, ProtossItemType,
     ItemData, kerrigan_actives, kerrigan_passives,
     not_balanced_starting_units, WEAPON_ARMOR_UPGRADE_MAX_LEVEL, ZergItemType,
 )
@@ -19,8 +19,8 @@ from .options import (
     get_option_value, LocationInclusion, KerriganLevelItemDistribution,
     KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
     get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options,
-    GrantStoryTech, GenericUpgradeResearch, GenericUpgradeItems, RequiredTactics,
-    upgrade_included_names, EnableVoidTrade
+    GrantStoryTech, GenericUpgradeResearch, RequiredTactics,
+    upgrade_included_names, EnableVoidTrade, FillerRatio,
 )
 from .rules import get_basic_units
 from . import settings
@@ -95,11 +95,13 @@ class SC2World(World):
     has_zerg_air_unit: bool = True
     has_protoss_ground_unit: bool = True
     has_protoss_air_unit: bool = True
+    filler_ratio: Dict[str, int]
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super(SC2World, self).__init__(multiworld, player)
         self.location_cache = []
         self.locked_locations = []
+        self.filler_ratio = FillerRatio.default
 
     def create_item(self, name: str) -> Item:
         data = get_full_item_list()[name]
@@ -119,6 +121,7 @@ class SC2World(World):
         # * If the item pool is less than the location count, add some filler items
 
         setup_events(self.player, self.locked_locations, self.location_cache)
+        set_up_filler_ratio(self)
 
         item_list: List[FilterItem] = create_and_flag_explicit_item_locks_and_excludes(self)
         flag_excludes_by_faction_presence(self, item_list)
@@ -166,21 +169,18 @@ class SC2World(World):
             # Forcing completed goal and minimal accessibility on no logic
             self.options.accessibility.value = Accessibility.option_minimal
             required_items = self.custom_mission_order.get_items_to_lock()
-            self.multiworld.completion_condition[self.player] = lambda state, required_items=required_items: all(
+            self.multiworld.completion_condition[self.player] = lambda state, required_items=required_items: all(  # type: ignore
                 state.has(item, self.player, amount) for (item, amount) in required_items.items()
             )
         else:
             self.multiworld.completion_condition[self.player] = self.custom_mission_order.get_completion_condition(self.player)
 
     def get_filler_item_name(self) -> str:
-        available_filler_items: list[str] = list(filler_items)
-        if self.has_protoss_ground_unit or self.has_protoss_air_unit:
-            available_filler_items.append(item_names.SHIELD_REGENERATION)
-        available_filler_items.sort()
-        return self.random.choice(available_filler_items)
+        # Assume `self.filler_ratio` is validated and has at least one non-zero entry
+        return self.random.choices(tuple(self.filler_ratio), weights=self.filler_ratio.values())[0]  # type: ignore
 
-    def fill_slot_data(self):
-        slot_data = {}
+    def fill_slot_data(self) -> Mapping[str, Any]:
+        slot_data: Dict[str, Any] = {}
         for option_name in [field.name for field in fields(Starcraft2Options)]:
             option = get_option_value(self, option_name)
             if type(option) in {str, int}:
@@ -232,11 +232,10 @@ class SC2World(World):
                         item = self.multiworld.create_item(item_name, self.player)
                         self.multiworld.push_precollected(item)
 
-    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
+    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
         """
-        Generate information to hints where each mission is actually located in the mission order
+        Generate information to hint where each mission is actually located in the mission order
         :param hint_data:
-        :return:
         """
         hint_data[self.player] = {}
         for campaign in self.custom_mission_order.campaigns:
@@ -269,7 +268,7 @@ class SC2World(World):
                                         hint_data[self.player][location.address] = mission_position_name
 
 
-def _get_column_display(index, single_row_layout):
+def _get_column_display(index: int, single_row_layout: bool) -> str:
     """
     Helper function to display column name
     :param index:
@@ -280,11 +279,11 @@ def _get_column_display(index, single_row_layout):
         return str(index + 1)
     else:
         # Convert column name to a letter, from Z continue with AA and so on
-        f = lambda x: "" if x == 0 else f((x - 1) // 26) + chr((x - 1) % 26 + ord("A"))
+        f: Callable[[int], str] = lambda x: "" if x == 0 else f((x - 1) // 26) + chr((x - 1) % 26 + ord("A"))
         return f(index + 1)
 
 
-def setup_events(player: int, locked_locations: List[str], location_cache: List[Location]):
+def setup_events(player: int, locked_locations: List[str], location_cache: List[Location]) -> None:
     for location in location_cache:
         if location.address is None:
             item = Item(location.name, ItemClassification.progression, None, player)
@@ -741,7 +740,7 @@ def flag_and_add_resource_locations(world: SC2World, item_list: List[FilterItem]
             if (sc2_location.type in resource_location_types
                 or (sc2_location.flags & resource_location_flags)
             ):
-                item_name = world.random.choice(filler_items)
+                item_name = world.get_filler_item_name()
                 item = create_item_with_correct_settings(world.player, item_name)
                 location.place_locked_item(item)
                 world.locked_locations.append(location.name)
@@ -796,10 +795,25 @@ def item_list_contains_parent(world: SC2World, item_data: ItemData, item_name_li
     return item_parents.parent_present[item_data.parent](item_name_list, world.options)
 
 
-def pad_item_pool_with_filler(self: SC2World, num_items: int, pool: List[Item]):
+def pad_item_pool_with_filler(world: SC2World, num_items: int, pool: List[Item]):
     for _ in range(num_items):
-        item = create_item_with_correct_settings(self.player, self.get_filler_item_name())
+        item = create_item_with_correct_settings(world.player, world.get_filler_item_name())
         pool.append(item)
+
+
+def set_up_filler_ratio(world: SC2World) -> None:
+    world.filler_ratio = world.options.filler_ratio.value.copy()
+    mission_flags = world.custom_mission_order.get_used_flags()
+    include_protoss = (
+        MissionFlag.Protoss in mission_flags
+        or (world.options.take_over_ai_allies and (MissionFlag.AiProtossAlly in mission_flags))
+    )
+    if not include_protoss:
+        world.filler_ratio.pop(item_names.SHIELD_REGENERATION, 0)
+    if sum(world.filler_ratio.values()) == 0:
+        world.filler_ratio = FillerRatio.default.copy()
+    if not include_protoss:
+        world.filler_ratio.pop(item_names.SHIELD_REGENERATION, 0)
 
 
 def get_random_first_mission(world: SC2World, mission_order: SC2MissionOrder) -> SC2Mission:
