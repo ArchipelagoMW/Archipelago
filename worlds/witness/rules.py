@@ -302,9 +302,6 @@ def make_lambda(entity_hex: str, world: "WitnessWorld") -> Optional[CollectionRu
     """
     entity_req = world.player_logic.REQUIREMENTS_BY_HEX[entity_hex]
 
-    if entity_hex.startswith("0xEE1"):
-        pass
-
     return _meets_item_requirements(entity_req, world)
 
 
