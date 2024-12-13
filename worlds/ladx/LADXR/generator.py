@@ -82,7 +82,10 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
         pymod.prePatch(rom)
 
     if options["gfxmod"]:
-        patches.aesthetics.gfxMod(rom, os.path.join("data", "sprites", "ladx", options["gfxmod"]))
+        try:
+            patches.aesthetics.gfxMod(rom, os.path.join("data", "sprites", "ladx", options["gfxmod"]))
+        except:
+            pass # can fail for missing file or invalid, gfx just won't be modded in that case
 
     assembler.resetConsts()
     assembler.const("INV_SIZE", 16)
