@@ -398,6 +398,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             ConfigurableOptionInfo('supply_per_item', 'starting_supply_per_item', options.StartingSupplyPerItem, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('max_supply_per_item', 'maximum_supply_per_item', options.MaximumSupplyPerItem, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('reduced_supply_per_item', 'maximum_supply_reduction_per_item', options.MaximumSupplyReductionPerItem, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo('lowest_max_supply', 'lowest_maximum_supply', options.LowestMaximumSupply, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('no_forced_camera', 'disable_forced_camera', options.DisableForcedCamera),
             ConfigurableOptionInfo('skip_cutscenes', 'skip_cutscenes', options.SkipCutscenes),
             ConfigurableOptionInfo('enable_morphling', 'enable_morphling', options.EnableMorphling, can_break_logic=True),
@@ -1292,7 +1293,7 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
             elif name == item_names.STARTING_SUPPLY:
                 accumulators[item_data.race][item_data.type.flag_word] += ctx.starting_supply_per_item
             else:
-                accumulators[item_data.race][item_data.type.flag_word] += item_data.number
+                accumulators[item_data.race][item_data.type.flag_word] += 1
 
     # Fix Shields from generic upgrades by unit class (Maximum of ground/air upgrades)
     if shields_from_ground_upgrade > 0 or shields_from_air_upgrade > 0:
