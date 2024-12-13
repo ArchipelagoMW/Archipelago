@@ -896,4 +896,4 @@ def push_precollected_items_to_multiworld(world: SC2World, item_list: List[Starc
     for item in item_list:
         if ItemFilterFlags.StartInventory not in item.filter_flags:
             continue
-        world.multiworld.push_precollected(create_item_with_correct_settings(world.player, item.name))
+        world.multiworld.push_precollected(create_item_with_correct_settings(world.player, item.name, item.filter_flags))
