@@ -540,12 +540,12 @@ class WitnessPlayerLogic:
             if entity_obj["entityType"] != "Easter Egg Total":
                 continue
 
-            total = int(entity_obj["checkName"].split(" ")[0])
+            direct_egg_count = int(entity_obj["checkName"].split(" ")[0])
 
-            if total % required_eggs_per_check:
+            if direct_egg_count % required_eggs_per_check:
                 self.COMPLETELY_DISABLED_ENTITIES.add(entity_hex)
 
-            requirement = total // required_eggs_per_check * logically_required_eggs_per_check
+            requirement = direct_egg_count // required_eggs_per_check * logically_required_eggs_per_check
             self.DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex] = {
                 "entities": frozenset({frozenset({f"{requirement} Eggs"})})
             }
@@ -572,14 +572,14 @@ class WitnessPlayerLogic:
             if entity_hex in self.COMPLETELY_DISABLED_ENTITIES:
                 continue
 
-            total = int(entity_obj["checkName"].split(" ")[0])
-            logical_total = total // needed_eggs_per_check * logically_needed_eggs_per_check
-            if total > max_eggs:
+            direct_egg_count = int(entity_obj["checkName"].split(" ")[0])
+            logically_required_egg_count = direct_egg_count // needed_eggs_per_check * logically_needed_eggs_per_check
+            if direct_egg_count > max_eggs:
                 self.COMPLETELY_DISABLED_ENTITIES.add(entity_hex)
                 continue
 
             self.ADDED_CHECKS.add(entity_obj["checkName"])
-            if logical_total > max_eggs:
+            if logically_required_egg_count > max_eggs:
                 # Exclude and set logic to require every egg
                 self.EXCLUDED_ENTITIES.add(entity_hex)
                 self.REQUIREMENTS_BY_HEX[entity_hex] = frozenset({frozenset({f"{max_eggs} Eggs"})})
