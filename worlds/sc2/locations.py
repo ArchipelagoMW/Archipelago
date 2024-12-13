@@ -19,6 +19,7 @@ SC2HOTS_LOC_ID_OFFSET = 20000000  # Avoid clashes with The Legend of Zelda
 SC2LOTV_LOC_ID_OFFSET = SC2HOTS_LOC_ID_OFFSET + 2000
 SC2NCO_LOC_ID_OFFSET = SC2LOTV_LOC_ID_OFFSET + 2500
 SC2_RACESWAP_LOC_ID_OFFSET = SC2NCO_LOC_ID_OFFSET + 900
+VICTORY_CACHE_OFFSET = 91
 
 
 class SC2Location(Location):
@@ -5626,13 +5627,23 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 and not (location.flags & excluded_location_flags)
             or location.name in plando_locations
         ]
-    for i, location_data in enumerate(location_table):
-        # Generating Beat event locations
-        if location_data.name.endswith((": Victory", ": Defeat")):
+    victory_caches = []
+    if world is None:
+        victory_cache_size = 9
+    else:
+        victory_cache_size = world.options.victory_checks.value - 1
+    for location_data in location_table:
+        # Generating Beat event and Victory Cache locations
+        if location_data.type == LocationType.VICTORY:
             beat_events.append(
-                location_data._replace(name="Beat " + location_data.name.rsplit(": ", 1)[0], code=None)
+                location_data._replace(name="Beat " + location_data.region, code=None)
             )
-    return tuple(location_table + beat_events)
+            for v in range(victory_cache_size):
+                victory_caches.append(
+                    location_data._replace(name=location_data.name + f' Cache ({v + 1})', code=location_data.code + VICTORY_CACHE_OFFSET + v)
+                )
+
+    return tuple(location_table + beat_events + victory_caches)
 
 
 DEFAULT_LOCATION_LIST = get_locations(None)
