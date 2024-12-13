@@ -58,7 +58,7 @@ class StaticWitnessLogicObj:
             correct_area = region_object["area"]
 
             for _ in range(entity_amount):
-                location_id = 159600 + egg_counter
+                location_id = 160100 + egg_counter
                 entity_hex = hex(0xEE000 + egg_counter)
                 egg_counter += 1
 
@@ -86,7 +86,7 @@ class StaticWitnessLogicObj:
         easter_egg_region = self.ALL_REGIONS_BY_NAME["Easter Eggs"]
         easter_egg_area = easter_egg_region["area"]
         for i in range(sum(EASTER_EGGS.values())):
-            location_id = 159700 + i
+            location_id = 160000 + i
             entity_hex = hex(0xEE200 + i)
 
             if i == 0:
