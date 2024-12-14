@@ -160,7 +160,7 @@ class RequiredPostcards(Range):
     If your goal is set to "Postcards", defines how many postcards are needed to achieve victory.
     """
     display_name = "Required Postcards"
-    default = 10
+    default = 8
     range_start = 1
     range_end = 10
 
@@ -169,7 +169,7 @@ class RequiredPuppies(Choice):
     If your goal is set to "Puppies", defines how many puppies are needed to achieve victory.
     """
     display_name = "Required Puppies"
-    default = 99
+    default = 80
     option_10 = 10
     option_20 = 20
     option_30 = 30
