@@ -175,7 +175,7 @@ portal_mapping: List[Portal] = [
     Portal(name="Temple Door Exit", region="Sealed Temple",
            destination="Overworld Redux", tag="_main"),
 
-    Portal(name="Forest Belltower to Fortress", region="Forest Belltower Main",
+    Portal(name="Forest Belltower to Fortress", region="Forest Belltower Main behind bushes",
            destination="Fortress Courtyard", tag="_"),
     Portal(name="Forest Belltower to Forest", region="Forest Belltower Lower",
            destination="East Forest Redux", tag="_"),
@@ -600,6 +600,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Sealed Temple Rafters": RegionInfo("Temple"),
     "Forest Belltower Upper": RegionInfo("Forest Belltower"),
     "Forest Belltower Main": RegionInfo("Forest Belltower"),
+    "Forest Belltower Main behind bushes": RegionInfo("Forest Belltower"),
     "Forest Belltower Lower": RegionInfo("Forest Belltower"),
     "East Forest": RegionInfo("East Forest Redux"),
     "East Forest Dance Fox Spot": RegionInfo("East Forest Redux"),
@@ -995,6 +996,12 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     },
     "Forest Belltower Main": {
         "Forest Belltower Lower":
+            [],
+        "Forest Belltower Main behind bushes":
+            [],
+    },
+    "Forest Belltower Main behind bushes": {
+        "Forest Belltower Main":
             [],
     },
     "East Forest": {
