@@ -825,7 +825,7 @@ def generate_filler_choice_pool(options: StardewValleyOptions) -> list[str]:
     available_filler = get_all_filler_items(include_traps, exclude_island)
     available_filler = remove_limited_amount_packs(available_filler)
 
-    return available_filler
+    return [item.name for item in available_filler]
 
 
 def remove_limited_amount_packs(packs):
