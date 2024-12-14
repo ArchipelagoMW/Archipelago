@@ -60,7 +60,8 @@ class ToolProgressionFeature(ABC):
 @dataclass(frozen=True)
 class ToolProgressionVanilla(ToolProgressionFeature):
     is_progressive = False
-    tool_distribution: Mapping[str, int] = field(default=VANILLA_TOOL_DISTRIBUTION)
+    # FIXME change the default_factory to a simple default when python 3.11 is no longer supported
+    tool_distribution: Mapping[str, int] = field(default_factory=lambda: VANILLA_TOOL_DISTRIBUTION)
 
 
 class ToolProgressionProgressive(ToolProgressionFeature):
