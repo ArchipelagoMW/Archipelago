@@ -1,7 +1,7 @@
 import logging
 import typing
 from random import Random
-from typing import Dict, Any, Iterable, Optional, Union, List, TextIO, Set
+from typing import Dict, Any, Iterable, Optional, Union, List, TextIO
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from Options import PerGameCommonOptions
@@ -99,7 +99,7 @@ class StardewValleyWorld(World):
     excluded_from_total_progression_items: List[str] = [Event.received_walnuts]
 
     @classmethod
-    def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: Set[int]) -> World:
+    def create_group(cls, multiworld: MultiWorld, new_player_id: int, players: set[int]) -> World:
         world_group = super().create_group(multiworld, new_player_id, players)
 
         group_options = typing.cast(StardewValleyOptions, world_group.options)
