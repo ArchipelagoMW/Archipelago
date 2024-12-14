@@ -110,22 +110,6 @@ def choose_friendsanity(friendsanity_option: options.Friendsanity, heart_size: o
     raise ValueError(f"No friendsanity feature mapped to {str(friendsanity_option.value)}")
 
 
-skill_progression_by_option = {
-    options.SkillProgression.option_vanilla: skill_progression.SkillProgressionVanilla(),
-    options.SkillProgression.option_progressive: skill_progression.SkillProgressionProgressive(),
-    options.SkillProgression.option_progressive_with_masteries: skill_progression.SkillProgressionProgressiveWithMasteries(),
-}
-
-
-def choose_skill_progression(skill_progression_option: options.SkillProgression) -> skill_progression.SkillProgressionFeature:
-    skill_progression_feature = skill_progression_by_option.get(skill_progression_option)
-
-    if skill_progression_feature is None:
-        raise ValueError(f"No skill progression feature mapped to {str(skill_progression_option.value)}")
-
-    return skill_progression_feature
-
-
 def choose_building_progression(building_option: options.BuildingProgression,
                                 farm_type_option: options.FarmType) -> building_progression.BuildingProgressionFeature:
     starting_buildings = {Building.farm_house, Building.pet_bowl, Building.shipping_bin}
@@ -170,3 +154,19 @@ def choose_building_progression(building_option: options.BuildingProgression,
         )
 
     raise ValueError(f"No building progression feature mapped to {str(building_option.value)}")
+
+
+skill_progression_by_option = {
+    options.SkillProgression.option_vanilla: skill_progression.SkillProgressionVanilla(),
+    options.SkillProgression.option_progressive: skill_progression.SkillProgressionProgressive(),
+    options.SkillProgression.option_progressive_with_masteries: skill_progression.SkillProgressionProgressiveWithMasteries(),
+}
+
+
+def choose_skill_progression(skill_progression_option: options.SkillProgression) -> skill_progression.SkillProgressionFeature:
+    skill_progression_feature = skill_progression_by_option.get(skill_progression_option)
+
+    if skill_progression_feature is None:
+        raise ValueError(f"No skill progression feature mapped to {str(skill_progression_option.value)}")
+
+    return skill_progression_feature
