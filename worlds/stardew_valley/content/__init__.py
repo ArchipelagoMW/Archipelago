@@ -117,40 +117,20 @@ def choose_building_progression(building_option: options.BuildingProgression,
     if farm_type_option == options.FarmType.option_meadowlands:
         starting_buildings.add(Building.coop)
 
-    if building_option == options.BuildingProgression.option_vanilla:
+    if (building_option == options.BuildingProgression.option_vanilla
+            or building_option == options.BuildingProgression.option_vanilla_cheap
+            or building_option == options.BuildingProgression.option_vanilla_very_cheap):
         return building_progression.BuildingProgressionVanilla(
             starting_buildings=starting_buildings,
-        )
-
-    if building_option == options.BuildingProgression.option_vanilla_cheap:
-        return building_progression.BuildingProgressionVanilla(
-            starting_buildings=starting_buildings,
-            price_multiplier=1 / 2,
-        )
-
-    if building_option == options.BuildingProgression.option_vanilla_very_cheap:
-        return building_progression.BuildingProgressionVanilla(
-            starting_buildings=starting_buildings,
-            price_multiplier=1 / 5,
         )
 
     starting_buildings.remove(Building.shipping_bin)
 
-    if building_option == options.BuildingProgression.option_progressive:
+    if (building_option == options.BuildingProgression.option_progressive
+            or building_option == options.BuildingProgression.option_progressive_cheap
+            or building_option == options.BuildingProgression.option_progressive_very_cheap):
         return building_progression.BuildingProgressionProgressive(
             starting_buildings=starting_buildings,
-        )
-
-    if building_option == options.BuildingProgression.option_progressive_cheap:
-        return building_progression.BuildingProgressionProgressive(
-            starting_buildings=starting_buildings,
-            price_multiplier=1 / 2,
-        )
-
-    if building_option == options.BuildingProgression.option_progressive_very_cheap:
-        return building_progression.BuildingProgressionProgressive(
-            starting_buildings=starting_buildings,
-            price_multiplier=1 / 5,
         )
 
     raise ValueError(f"No building progression feature mapped to {str(building_option.value)}")

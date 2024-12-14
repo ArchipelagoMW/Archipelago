@@ -38,7 +38,6 @@ def to_location_name(building: str) -> str:
 class BuildingProgressionFeature(ABC):
     is_progressive: ClassVar[bool]
     starting_buildings: Set[str]
-    price_multiplier: float = 1.0
 
     to_progressive_item = staticmethod(to_progressive_item)
     progressive_house = progressive_house
