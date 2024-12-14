@@ -15,7 +15,7 @@ from .data.game_item import ItemTag
 from .logic.logic_event import all_events
 from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
-    BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
+    BuildingProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
     Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, EnabledFillerBuffs
 from .strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName
 from .strings.ap_names.ap_weapon_names import APWeapon
@@ -226,7 +226,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_weapons(item_factory, options, items)
     items.append(item_factory("Skull Key"))
     create_elevators(item_factory, options, items)
-    create_tools(item_factory, options, content, items)
+    create_tools(item_factory, content, items)
     create_skills(item_factory, content, items)
     create_wizard_buildings(item_factory, options, items)
     create_carpenter_buildings(item_factory, options, items)
@@ -316,8 +316,9 @@ def create_elevators(item_factory: StardewItemFactory, options: StardewValleyOpt
         items.extend([item_factory(item) for item in ["Progressive Skull Cavern Elevator"] * 8])
 
 
-def create_tools(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
-    if options.tool_progression & ToolProgression.option_progressive:
+def create_tools(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
+    if content.features.tool_progression.is_progressive:
+        # TODO distribution of the tools should be moved in the tool progression feature
         for item_data in items_by_group[Group.PROGRESSIVE_TOOLS]:
             name = item_data.name
             if "Trash Can" in name:

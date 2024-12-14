@@ -10,17 +10,6 @@ class PriceMultipliers:
     VERY_CHEAP = 1 / 5
 
 
-progressive_house = "Progressive House"
-
-# This assumes that the farm house is always available, which might not be true forever...
-progressive_house_by_upgrade_name = {
-    Tool.farm_house: 0,
-    Tool.kitchen: 1,
-    Tool.kids_room: 2,
-    Tool.cellar: 3
-}
-
-
 def to_progressive_item(tool: str) -> Tuple[str, int]:
     """Return the name of the progressive item and its quantity required to unlock the tool.
     """

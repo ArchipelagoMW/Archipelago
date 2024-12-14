@@ -5,8 +5,8 @@ from . import SVTestBase
 from .. import items, location_table, options
 from ..items import Group
 from ..locations import LocationTags
-from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, ToolProgression, \
-    SkillProgression, Booksanity, Walnutsanity
+from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, SkillProgression, \
+    Booksanity, Walnutsanity
 from ..strings.region_names import Region
 
 
@@ -320,7 +320,7 @@ class TestProgressiveElevator(SVTestBase):
 class TestSkullCavernLogic(SVTestBase):
     options = {
         options.ElevatorProgression.internal_name: options.ElevatorProgression.option_vanilla,
-        ToolProgression.internal_name: ToolProgression.option_progressive,
+        options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
     }
 
