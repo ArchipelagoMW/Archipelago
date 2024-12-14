@@ -17,6 +17,7 @@ class DSTRule:
     optional_rule:Callable[[CollectionState], bool]
     optional_event:Callable[[CollectionState], bool]
     is_progression:bool = True
+    is_rule:bool = True
     def __init__(self, event:str, player:int):
         self.event = f"(EVENT) {event}"
         self.optional_event = self.event
@@ -127,6 +128,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
                 add_rule(loc, rule)
         else:
             dst_rule.is_progression = False
+            dst_rule.is_rule = False
             dst_rule.optional_rule = ALWAYS_TRUE
             dst_rule.optional_event = spawn.event
         return dst_rule
@@ -208,8 +210,8 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             )
         )
 
-    def add_hermit_event(event:str, rule:Callable[[CollectionState], bool], is_progression:bool = True):
-        return add_event(event, REGION.OCEAN if is_progression else REGION.NONE, rule, "Crabby Hermit Friendship")
+    def add_hermit_event(event:str, rule:Callable[[CollectionState], bool], is_rule:bool = True):
+        return add_event(event, REGION.OCEAN if is_rule else REGION.NONE, rule, "Crabby Hermit Friendship")
 
     # Misc rules
     def has_survived_num_days (day_goal:int, state: CollectionState) -> bool:
@@ -302,10 +304,12 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
 
     # In normal season flow logic, season events will be combined with season-passed events, otherwise they'll be separate
     EQUIVALENT_SEASONS:Dict[DSTRule, str] = {}
-    def add_season_passed_event(event:str, rule:Callable[[CollectionState], bool], merge_with_season:bool = True) -> DSTRule:
+    def add_season_passed_event(event:str, time_tag:str, rule:Callable[[CollectionState], bool], merge_with_season:bool = True) -> DSTRule:
         _regionname = REGION.FOREST
         if not NORMAL_SEASON_FLOW_LOGIC:
-            return add_event(event, _regionname, rule)
+            dst_rule = add_event(event, _regionname, rule)
+            dst_rule.is_progression = time_tag in WHITELIST
+            return dst_rule
         else:
             _season = shift_season()
             _is_season_in_cache = _season_event_cache[_season] != None
@@ -321,13 +325,14 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
                     else ALWAYS_TRUE
                 )
             )
+            dst_rule.is_progression = time_tag in WHITELIST
             if not _is_season_in_cache:
                 _season_event_cache[_season] = dst_rule if merge_with_season else spawn
             if not UNLOCKABLE_SEASON_LOGIC:
                 EQUIVALENT_SEASONS[dst_rule] = _season
             return dst_rule
 
-    seasons_passed_half =   add_season_passed_event("Day 11",
+    seasons_passed_half =   add_season_passed_event("Day 11", SEASONS_PASSED.SEASONS_HALF,
                                 combine_rules(
                                     fraction_of_prog_items_rule(.5/6),
                                     # Get you the rest of seasonal gear at this point in a non-autumn start
@@ -337,27 +342,27 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
                                     else ALWAYS_TRUE
                                 ),
                                 merge_with_season = False)
-    seasons_passed_1 =      add_season_passed_event("Day 21",
+    seasons_passed_1 =      add_season_passed_event("Day 21", SEASONS_PASSED.SEASONS_1,
                                 combine_rules(
                                     fraction_of_prog_items_rule(1/6),
                                     lambda state: state.has(seasons_passed_half.event, player)
                                 ))
-    seasons_passed_2 =      add_season_passed_event("Day 36",
+    seasons_passed_2 =      add_season_passed_event("Day 36", SEASONS_PASSED.SEASONS_2,
                                 combine_rules(
                                     fraction_of_prog_items_rule(2/6),
                                     lambda state: state.has(seasons_passed_1.event, player)
                                 ))
-    seasons_passed_3 =      add_season_passed_event("Day 56",
+    seasons_passed_3 =      add_season_passed_event("Day 56", SEASONS_PASSED.SEASONS_3,
                                 combine_rules(
                                     fraction_of_prog_items_rule(3/6),
                                     lambda state: state.has(seasons_passed_2.event, player)
                                 ))
-    seasons_passed_4 =      add_season_passed_event("Day 71",
+    seasons_passed_4 =      add_season_passed_event("Day 71", SEASONS_PASSED.SEASONS_4,
                                 combine_rules(
                                     fraction_of_prog_items_rule(4/6),
                                     lambda state: state.has(seasons_passed_3.event, player)
                                 ))
-    seasons_passed_5 =      add_season_passed_event("Day 91",
+    seasons_passed_5 =      add_season_passed_event("Day 91", SEASONS_PASSED.SEASONS_5,
                                 combine_rules(
                                     fraction_of_prog_items_rule(5/6),
                                     lambda state: state.has(seasons_passed_4.event, player)
@@ -406,10 +411,14 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         hide_in_spoiler = True
     )
     bird_caging = add_event("Bird Caging", REGION.FOREST if PHASE.DAY_OR_DUSK in WHITELIST else REGION.NONE,
-        lambda state: state.has_all({"Bird Trap", "Birdcage", "Papyrus"}, player)
+        lambda state: state.has_all({"Bird Trap", "Birdcage", "Papyrus", seeds.event}, player)
     )
-    ice_staff = add_event("Ice Staff", REGION.FOREST if WEAPON_LOGIC else REGION.NONE, lambda state: state.has_all({"Spear", "Rope", "Ice Staff", gem_digging.event}, player))
-    fire_staff = add_event("Fire Staff", REGION.FOREST if WEAPON_LOGIC else REGION.NONE, lambda state: state.has_all({"Spear", "Rope", "Fire Staff", gem_digging.event, nightmare_fuel.event}, player))
+    ice_staff = add_event("Ice Staff", REGION.FOREST if WEAPON_LOGIC else REGION.NONE, 
+        lambda state: state.has_all({"Spear", "Rope", "Ice Staff", gem_digging.event}, player)
+    )
+    fire_staff = add_event("Fire Staff", REGION.FOREST if WEAPON_LOGIC else REGION.NONE,
+        lambda state: state.has_all({"Spear", "Rope", "Fire Staff", gem_digging.event, nightmare_fuel.event}, player)
+    )
     firestarting = add_event("Firestarting", REGION.FOREST,
         lambda state: (
             state.has_any({"Torch", "Willow", fire_staff.event}, player)
@@ -600,6 +609,14 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         (lambda state: state.has(bird_caging.event, player)) if PHASE.DAY_OR_DUSK in WHITELIST
         else (lambda state: state.has(winter.event, player))
     )
+    seeds = add_event("Seeds", REGION.FOREST,
+        # From tumbleweeds in a world we can't have birds
+        (lambda state: state.has(desert_exploration.event, player)) if not PHASE.DAY_OR_DUSK in WHITELIST or not SEASON.NONWINTER in WHITELIST
+        else lambda state: (
+            state.has_any({day.event, dusk.event}, player)
+            and state.has_any({autumn.event, spring.event, summer.event}, player)
+        )
+    )
 
 
     ##### LOCATIONS WITH SPECIAL RULES #####
@@ -684,7 +701,13 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     )
     epic_combat = add_event("Epic Combat", REGION.FOREST,
         (lambda state: state.has(advanced_boss_combat.event, player)) if EXPERT_PLAYER_BIAS
-        else lambda state: state.has_all({advanced_boss_combat.event, speed_boost.optional_event, arena_building.optional_event, character_switching.optional_event, resurrecting.optional_event}, player)
+        else lambda state: state.has_all({
+            advanced_boss_combat.event,
+            speed_boost.optional_event,
+            arena_building.optional_event,
+            character_switching.optional_event,
+            resurrecting.optional_event
+        }, player)
     )
     ranged_combat = add_event("Ranged Combat",
         (
@@ -979,7 +1002,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     )
     wall_building = add_event("Wall Building", REGION.FOREST,
         either_rule(
-            (lambda state: state.has_all({base_making.event, "Stone Wall", "Potter's Wheel"}, player)), # Sculptures are specifically pretty good for messing with mob pathfinding during moon stone event
+            (lambda state: state.has_all({base_making.event, "Stone Wall", "Potter's Wheel"}, player)), # Sculptures can make good walls
             (
                 ALWAYS_FALSE if not ADVANCED_PLAYER_BIAS
                 else (lambda state: state.has_all({"Thulecite Wall", thulecite.event}, player)) if is_locked("Thulecite Wall")
@@ -992,7 +1015,16 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     ##### EXPLORATION #####
     basic_exploration = add_event("Basic Exploration", REGION.FOREST,
         ALWAYS_TRUE if EXPERT_PLAYER_BIAS
-        else lambda state: state.has_all({"Telltale Heart", "Torch", "Campfire", basic_survival.event, backpack.event, chopping.event, mining.event, seasons_passed_half.event}, player)
+        else lambda state: state.has_all({
+            "Telltale Heart",
+            "Torch",
+            "Campfire",
+            basic_survival.event,
+            backpack.event,
+            chopping.event,
+            mining.event,
+            seasons_passed_half.event
+        }, player)
     )
     desert_exploration = add_event("Desert Exploration", REGION.FOREST,
         ALWAYS_TRUE if ADVANCED_PLAYER_BIAS
@@ -1145,7 +1177,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     ##### FARMING #####
     basic_farming = add_event("Basic Farming", REGION.FOREST,
         lambda state: (
-            state.has(seasons_passed_1.event, player) and (
+            state.has_all({seasons_passed_1.event, seeds.event}, player) and (
                 state.has("Wormwood", player) or ( # Wormwood can plant directly on the ground
                     state.has_any({"Garden Hoe", "Splendid Garden Hoe"}, player)
                     and state.has_all({"Garden Digamajig", "Rope", "Boards", chopping.event, digging.event}, player)
@@ -1156,7 +1188,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     advanced_farming = add_event("Advanced Farming", REGION.FOREST, lambda state:
         # Implied you have chopping, rope, and boards already
         state.has_any({"Wormwood", "Garden Hoe", "Splendid Garden Hoe"}, player)
-        and state.has_all({"Garden Digamajig", "Empty Watering Can", base_making.event, digging.event, seasons_passed_1.event}, player)
+        and state.has_all({"Garden Digamajig", "Empty Watering Can", base_making.event, digging.event, seasons_passed_1.event, seeds.event}, player)
          # TODO: Wes can't talk to plants
     )
     asparagus_farming = add_farming_event("Asparagus")
@@ -1192,8 +1224,13 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         else (lambda state: state.has_all({basic_farming.event, bird_caging.event}, player))
     )
     honey_farming = add_event("Honey Farming", REGION.FOREST,
-        (lambda state: state.has_all({"Bee Box", "Boards", bug_catching.event, day.event}, player)) if BASE_MAKING_LOGIC and PHASE.DAY in WHITELIST
-        else ALWAYS_TRUE
+        (
+            lambda state: (
+                state.has_all({"Bee Box", "Boards", bug_catching.event, day.event}, player)
+                and state.has_any({autumn.event, spring.event, summer.event}, player)
+            )
+        ) if BASE_MAKING_LOGIC and PHASE.DAY in WHITELIST and SEASON.NONWINTER in WHITELIST
+        else ALWAYS_TRUE # Getting honey directly from beehives
     )
 
 
@@ -1387,34 +1424,45 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     eye_of_terror = add_boss_event("Eye Of Terror", REGION.FOREST, lambda state: state.has(advanced_boss_combat.event, player))
     retinazor = add_boss_event("Retinazor", REGION.FOREST, lambda state: state.has(epic_combat.event, player))
     spazmatism = add_boss_event("Spazmatism", REGION.FOREST, lambda state: state.has(epic_combat.event, player))
-    nightmare_werepig = add_boss_event("Nightmare Werepig", REGION.RUINS, lambda state: state.has_all({advanced_boss_combat.event, pick_axe.event, speed_boost.optional_event}, player))
+    nightmare_werepig = add_boss_event("Nightmare Werepig", REGION.RUINS,
+        lambda state: state.has_all({advanced_boss_combat.event, pick_axe.event, speed_boost.optional_event}, player)
+    )
     scrappy_werepig = add_boss_event("Scrappy Werepig", REGION.RUINS, lambda state: state.has_all({nightmare_werepig.event, arena_building.event}, player))
     frostjaw = add_boss_event("Frostjaw", REGION.OCEAN, lambda state: state.has_all({advanced_boating.event, advanced_boss_combat.event, "Sea Fishing Rod"}, player))
 
 
     # Events
-    hermit_home_upgrade_1 = add_hermit_event("Hermit Home Upgrade (1)", lambda state: state.has_all({hermit_island.event, bug_catching.event}, player)) # Cookie cutters, boards, fireflies
-    hermit_home_upgrade_2 = add_hermit_event("Hermit Home Upgrade (2)", lambda state: state.can_reach_location(hermit_home_upgrade_1.event, player)) # Marble, cut stone, light bulb
-    add_hermit_event("Hermit Home Upgrade (3)",                         lambda state: state.has("Floorings", player) and state.can_reach_location(hermit_home_upgrade_2.event, player)) # Moonrock, rope, carpet
+    hermit_home_upgrade_1 = add_hermit_event("Hermit Home Upgrade (1)", lambda state: state.has_all({hermit_island.event, bug_catching.event, night.event}, player), 
+                                                                        night.is_rule) # Cookie cutters, boards, fireflies
+    hermit_home_upgrade_2 = add_hermit_event("Hermit Home Upgrade (2)", combine_rules(
+                                                                            lambda state: state.can_reach_location(hermit_home_upgrade_1.event, player),
+                                                                            sea_fishing.rule if not REGION.CAVE in WHITELIST else ALWAYS_TRUE # Lightbulbs from skittersquids
+                                                                        ),
+                                                                        hermit_home_upgrade_1.is_rule) # Marble, cut stone, light bulb
+    add_hermit_event("Hermit Home Upgrade (3)",                         lambda state: state.has("Floorings", player) 
+                                                                            and state.can_reach_location(hermit_home_upgrade_2.event, player),
+                                                                        hermit_home_upgrade_2.is_rule) # Moonrock, rope, carpet
     add_hermit_event("Hermit Island Drying Racks",                      hermit_island.rule)
-    add_hermit_event("Hermit Island Plant 10 Flowers",                  lambda state: state.has_all({hermit_island.event, bug_catching.event}, player), butterfly.is_progression)
+    add_hermit_event("Hermit Island Plant 10 Flowers",                  lambda state: state.has_all({hermit_island.event, bug_catching.event}, player), butterfly.is_rule)
     add_hermit_event("Hermit Island Plant 8 Berry Bushes",              lambda state: state.has_all({hermit_island.event, digging.event}, player))
     add_hermit_event("Hermit Island Clear Underwater Salvageables",     lambda state: state.has_all({hermit_sea_quests.event, "Pinchin' Winch"}, player))
-    add_hermit_event("Hermit Island Kill Lure Plant",                   lambda state: state.has_all({hermit_island.event, seasons_passed_2.event}, player), seasons_passed_2.is_progression)
+    add_hermit_event("Hermit Island Kill Lure Plant",                   lambda state: state.has_all({hermit_island.event, seasons_passed_2.event}, player),
+                                                                        seasons_passed_2.is_progression)
     add_hermit_event("Hermit Island Build Wooden Chair",                lambda state: state.has_all({hermit_island.event, "Sawhorse"}, player))
     add_hermit_event("Give Crabby Hermit Umbrella",                     combine_rules(
                                                                             lambda state: state.has_any({"Umbrella", "Pretty Parasol"}, player),
                                                                             hermit_island.rule,
-                                                                            spring.rule if spring.is_progression else autumn.rule
-                                                                        ), spring.is_progression or autumn.is_progression)
+                                                                            spring.rule if spring.is_rule else autumn.rule
+                                                                        ), spring.is_rule or autumn.is_rule)
     add_hermit_event("Give Crabby Hermit Warm Clothing",                lambda state: state.has_all({hermit_island.event, winter.event}, player)
                                                                             and state.has_any({"Breezy Vest", "Puffy Vest", "Rain Coat"}, player),
-                                                                        winter.is_progression)
-    add_hermit_event("Give Crabby Hermit Flower Salad",                 lambda state: state.has_all({hermit_island.event, summer.event, cooking.event}, player), summer.is_progression)
-    add_hermit_event("Give Crabby Hermit Fallounder",                   lambda state: state.has_all({hermit_sea_quests.event, autumn.event}, player), autumn.is_progression)
-    add_hermit_event("Give Crabby Hermit Bloomfin Tuna",                lambda state: state.has_all({hermit_sea_quests.event, spring.event}, player), spring.is_progression)
-    add_hermit_event("Give Crabby Hermit Scorching Sunfish",            lambda state: state.has_all({hermit_sea_quests.event, summer.event}, player), summer.is_progression)
-    add_hermit_event("Give Crabby Hermit Ice Bream",                    lambda state: state.has_all({hermit_sea_quests.event, winter.event}, player), winter.is_progression)
+                                                                        winter.is_rule)
+    add_hermit_event("Give Crabby Hermit Flower Salad",                 lambda state: state.has_all({hermit_island.event, summer.event, cooking.event}, player),
+                                                                        summer.is_rule)
+    add_hermit_event("Give Crabby Hermit Fallounder",                   lambda state: state.has_all({hermit_sea_quests.event, autumn.event}, player), autumn.is_rule)
+    add_hermit_event("Give Crabby Hermit Bloomfin Tuna",                lambda state: state.has_all({hermit_sea_quests.event, spring.event}, player), spring.is_rule)
+    add_hermit_event("Give Crabby Hermit Scorching Sunfish",            lambda state: state.has_all({hermit_sea_quests.event, summer.event}, player), summer.is_rule)
+    add_hermit_event("Give Crabby Hermit Ice Bream",                    lambda state: state.has_all({hermit_sea_quests.event, winter.event}, player), winter.is_rule)
     add_hermit_event("Give Crabby Hermit 5 Heavy Fish",                 hermit_sea_quests.rule)
 
     survival_goal = add_event("Survival Goal", REGION.FOREST if options.goal.value == options.goal.option_survival else REGION.NONE,
@@ -1984,11 +2032,11 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
                     return _season_passed_event
 
                 _next_rule_lookup:Dict[DSTRule, Optional[DSTRule]] = {
-                    seasons_passed_half: seasons_passed_1 if seasons_passed_1.is_progression else None,
-                    seasons_passed_1:    seasons_passed_2 if seasons_passed_2.is_progression else None,
-                    seasons_passed_2:    seasons_passed_3 if seasons_passed_3.is_progression else None,
-                    seasons_passed_3:    seasons_passed_4 if seasons_passed_4.is_progression else None,
-                    seasons_passed_4:    seasons_passed_5 if seasons_passed_5.is_progression else None,
+                    seasons_passed_half: seasons_passed_1 if seasons_passed_1.is_rule else None,
+                    seasons_passed_1:    seasons_passed_2 if seasons_passed_2.is_rule else None,
+                    seasons_passed_2:    seasons_passed_3 if seasons_passed_3.is_rule else None,
+                    seasons_passed_3:    seasons_passed_4 if seasons_passed_4.is_rule else None,
+                    seasons_passed_4:    seasons_passed_5 if seasons_passed_5.is_rule else None,
                     seasons_passed_5:    None,
                 }
 
@@ -2175,7 +2223,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         "Garden Hoe":               True,
         "Splendid Garden Hoe":      True,
         "Garden Digamajig":         True,
-        "Bee Box":                  BASE_MAKING_LOGIC,
+        "Bee Box":                  honey_farming.is_progression,
         "Crock Pot":                True,
         "Pinchin' Winch":           True,
         "Freshwater Fishing Rod":   True,
