@@ -1039,7 +1039,7 @@ item_descriptions = {
     # Scout
     item_names.ARBITER_ABILITY_EFFICIENCY: "Arbiter War Council upgrade. Reduces the energy cost of Recall by 50 and Stasis Field by 100.",
     # Oracle
-    # Mothership
+    item_names.MOTHERSHIP_INTEGRATED_POWER: "Mothership War Council upgrade. Allows Motherships to move at full speed outside pylon power.",
     item_names.SOA_CHRONO_SURGE: "The Spear of Adun increases a target structure's unit warp in and research speeds by +1000% for 20 seconds.",
     item_names.SOA_PROGRESSIVE_PROXY_PYLON: inspect.cleandoc("""
         Level 1: The Spear of Adun quickly warps in a Pylon to a target location.

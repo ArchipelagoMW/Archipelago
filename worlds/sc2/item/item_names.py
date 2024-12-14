@@ -837,7 +837,7 @@ TEMPEST_DISINTEGRATION                                  = "Disintegration (Tempe
 # Scout
 ARBITER_ABILITY_EFFICIENCY                              = "Ability Efficiency (Arbiter)"
 # Oracle
-# Mothership
+MOTHERSHIP_INTEGRATED_POWER                             = "Integrated Power (Mothership)"
 
 # Spear Of Adun
 SOA_CHRONO_SURGE            = "Chrono Surge (Spear of Adun Calldown)"
