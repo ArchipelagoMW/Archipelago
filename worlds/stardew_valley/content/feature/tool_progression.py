@@ -24,7 +24,6 @@ VANILLA_TOOL_DISTRIBUTION = MappingProxyType({
     Tool.scythe: 1,
 })
 
-# Masteries add another tier to the scythe and the fishing rod
 PROGRESSIVE_TOOL_DISTRIBUTION = MappingProxyType({
     Tool.axe: 4,
     Tool.hoe: 4,
@@ -35,6 +34,7 @@ PROGRESSIVE_TOOL_DISTRIBUTION = MappingProxyType({
     Tool.fishing_rod: 4,
 })
 
+# Masteries add another tier to the scythe and the fishing rod
 SKILL_MASTERIES_TOOL_DISTRIBUTION = MappingProxyType({
     Tool.scythe: 1,
     Tool.fishing_rod: 1,
@@ -61,8 +61,6 @@ class ToolProgressionFeature(ABC):
     price_multiplier: float = 1.0
 
     to_progressive_item = staticmethod(to_progressive_item)
-
-    # to_location_name = staticmethod(to_location_name)
 
 
 @dataclass(frozen=True)

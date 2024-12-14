@@ -131,12 +131,12 @@ def choose_tool_progression(tool_option: options.ToolProgression, skill_option: 
 
     if tool_option == options.ToolProgression.option_vanilla_cheap:
         return tool_progression.ToolProgressionVanilla(
-            price_multiplier=tool_progression.PriceMultipliers.CHEAP
+            price_multiplier=tool_progression.PriceMultipliers.CHEAP,
         )
 
     if tool_option == options.ToolProgression.option_vanilla_very_cheap:
         return tool_progression.ToolProgressionVanilla(
-            price_multiplier=tool_progression.PriceMultipliers.VERY_CHEAP
+            price_multiplier=tool_progression.PriceMultipliers.VERY_CHEAP,
         )
 
     tools_distribution = tool_progression.get_tools_distribution(
@@ -150,13 +150,13 @@ def choose_tool_progression(tool_option: options.ToolProgression, skill_option: 
     if tool_option == options.ToolProgression.option_progressive_cheap:
         return tool_progression.ToolProgressionProgressive(
             tools_distribution,
-            price_multiplier=tool_progression.PriceMultipliers.CHEAP
+            price_multiplier=tool_progression.PriceMultipliers.CHEAP,
         )
 
     if tool_option == options.ToolProgression.option_progressive_very_cheap:
         return tool_progression.ToolProgressionProgressive(
             tools_distribution,
-            price_multiplier=tool_progression.PriceMultipliers.VERY_CHEAP
+            price_multiplier=tool_progression.PriceMultipliers.VERY_CHEAP,
         )
 
     raise ValueError(f"No tool progression feature mapped to {str(tool_option.value)}")

@@ -20,8 +20,7 @@ from .logic.time_logic import MAX_MONTHS
 from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
 from .options import BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
-    Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity
-from .options import StardewValleyOptions, Walnutsanity
+    Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, StardewValleyOptions, Walnutsanity
 from .stardew_rule import And, StardewRule, true_
 from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
