@@ -1,15 +1,20 @@
+from .Data.entrance_data import set_entrances
+from .Data.location_data import loonyland_location_table
+from .Data.region_data import loonyland_region_table
+
+loonyland_base_id: int = 2876900
+
 from typing import List, Dict, Any
 
 from BaseClasses import Region, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
-from .Items import LoonylandItem, item_frequencies, loony_item_table
-from .Locations import LoonylandLocation, LoonylandLocationData, loonyland_location_table  # , locked_locations
+from .Data.item_data import loony_item_table
+from .Items import LoonylandItem
+from .Locations import LoonylandLocation, LL_Location  # , locked_locations
 from .Options import LoonylandOptions
-from .Regions import loonyland_region_table
-from .Entrances import set_entrances, LoonylandEntrance
-from .Rules import set_rules
+from .Entrances import LoonylandEntrance
+from .Data.rules_data import set_rules
 
-loonyland_base_id: int = 2876900
 
 
 class LoonylandWebWorld(WebWorld):
@@ -44,7 +49,7 @@ class LoonylandWorld(World):
         item_pool: List[LoonylandItem] = []
         for name, item in loony_item_table.items():
             if item.id:  # and item.can_create(self):
-                for i in range(item_frequencies.get(name, 1)):
+                for i in range(item.frequency):
                     item_pool.append(self.create_item(name))
 
         self.multiworld.itempool += item_pool
