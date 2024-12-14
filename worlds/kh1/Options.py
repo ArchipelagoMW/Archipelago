@@ -374,11 +374,11 @@ class EXPZeroInPool(Toggle):
     """
     display_name = "EXP Zero in Pool"
 
-class VanillaEmblemPieces(DefaultOnToggle):
+class RandomizeEmblemPieces(Toggle):
     """
-    If on, the Hollow Bastion emblem pieces are in their vanilla locations.
+    If off, the Hollow Bastion emblem pieces are in their vanilla locations.
     """
-    display_name = "Vanilla Emblem Pieces"
+    display_name = "Randomize Emblem Pieces"
 
 class RandomizePostcards(Choice):
     """
@@ -393,6 +393,12 @@ class RandomizePostcards(Choice):
     option_chests = 1
     option_vanilla = 2
 
+class JungleSlider(Toggle):
+    """
+    Detmines if checks are behind the Jungle Slider minigame.
+    """
+    display_name = "Jungle Slider"
+
 class StartingWorlds(Range):
     """
     Number of random worlds to start with in addition to Traverse Town, which is always available.  Will only consider Atlantica if toggled, and will only consider End of the World if its unlock is set to "Item".
@@ -401,6 +407,12 @@ class StartingWorlds(Range):
     default = 0
     range_start = 0
     range_end = 10
+    
+class StartingTools(DefaultOnToggle):
+    """
+    Determines whether you start with Scan and Dodge Roll.
+    """
+    display_name = "Starting Tools"
 
 @dataclass
 class KH1Options(PerGameCommonOptions):
@@ -424,7 +436,7 @@ class KH1Options(PerGameCommonOptions):
     advanced_logic: AdvancedLogic
     extra_shared_abilities: ExtraSharedAbilities
     exp_zero_in_pool: EXPZeroInPool
-    vanilla_emblem_pieces: VanillaEmblemPieces
+    randomize_emblem_pieces: RandomizeEmblemPieces
     randomize_postcards: RandomizePostcards
     donald_death_link: DonaldDeathLink
     goofy_death_link: GoofyDeathLink
@@ -444,6 +456,8 @@ class KH1Options(PerGameCommonOptions):
     accessory_slot_increase: AccessorySlotIncrease
     item_slot_increase: ItemSlotIncrease
     start_inventory_from_pool: StartInventoryPool
+    jungle_slider: JungleSlider
+    starting_tools: StartingTools
 
 kh1_option_groups = [
     OptionGroup("Goal", [
@@ -461,7 +475,8 @@ kh1_option_groups = [
         Atlantica,
         Cups,
         HundredAcreWood,
-        VanillaEmblemPieces,
+        JungleSlider,
+        RandomizeEmblemPieces,
         RandomizePostcards,
     ]),
     OptionGroup("Levels", [
@@ -487,6 +502,7 @@ kh1_option_groups = [
     ]),
     OptionGroup("Misc", [
         StartingWorlds,
+        StartingTools,
         Puppies,
         InteractInBattle,
         AdvancedLogic,
