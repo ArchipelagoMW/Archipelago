@@ -16,18 +16,47 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
       REGION.FOREST:       DSTRegionData([REGION.CAVE, REGION.OCEAN], []),
       REGION.CAVE:         DSTRegionData([REGION.ARCHIVE, REGION.RUINS, REGION.DUALREGION], []),
       REGION.ARCHIVE:      DSTRegionData([], []),
-      REGION.RUINS:        DSTRegionData([], []), 
+      REGION.RUINS:        DSTRegionData([], []),
       REGION.OCEAN:        DSTRegionData([REGION.MOONQUAY, REGION.MOONSTORM, REGION.DUALREGION], []),
       REGION.MOONQUAY:     DSTRegionData([], []),
       REGION.MOONSTORM:    DSTRegionData([], []),
       REGION.DUALREGION:   DSTRegionData([REGION.BOTHREGIONS], []),
       REGION.BOTHREGIONS:  DSTRegionData([], []),
-   }   
+   }
    NUM_JUNK_ITEMS:int = options.junk_item_amount.value
-   BOSS_DEFEAT_LOCATIONS:Set = set(
+
+   # Locations to omit if condition is true
+   OMITTED:Dict[str, bool] = {}
+
+   # Omit later bosses on bosses_any goal
+   if options.goal.value == options.goal.option_bosses_any:
+      for dependent_location, prerequisites in BOSS_PREREQUISITES.items():
+         if len(prerequisites.intersection(options.required_bosses.value)):
+            OMITTED[dependent_location] = True
+
+      # Change the setting to reflect the change
+      options.required_bosses.value.difference_update({bossname for bossname, isomitted in OMITTED.items() if isomitted})
+
+   BOSS_DEFEAT_LOCATIONS:Set[str] = set(
       options.required_bosses.value if (options.goal.value == options.goal.option_bosses_any or options.goal.value == options.goal.option_bosses_all)
       else []
    )
+   _DUMMY_FILL_ITEM = "Boss Defeat"
+   _boss_fill_item:str = (
+      "Extra Damage Against Bosses" if options.boss_fill_items.value == options.boss_fill_items.option_extra_damage_against_bosses
+      else _DUMMY_FILL_ITEM
+   )
+   BOSS_PREFILLS:Dict[str, str] = {
+      # Bosses_any goals get dummy item always; Anything else gets selected fill item
+      bossname: _DUMMY_FILL_ITEM if (
+         options.goal.value == options.goal.option_bosses_any and bossname in options.required_bosses.value
+      ) else _boss_fill_item
+      for bossname in (
+         # If a fill item is selected, give it to all bosses, just give goal bosses dummies
+         BOSS_DEFEAT_LOCATIONS if _boss_fill_item == _DUMMY_FILL_ITEM
+         else set(options.required_bosses.valid_keys).difference({"Random"})
+      )
+   }
 
    # Build whitelists
    WHITELIST = Util.build_whitelist(options)
@@ -47,17 +76,9 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
       )
 
    # Get number of items that need to be placed
-   location_num_left_to_place:int = len(itempool.nonfiller_itempool) + NUM_JUNK_ITEMS + len(BOSS_DEFEAT_LOCATIONS)
-   
-   # Locations to omit if condition is true
-   OMITTED:Dict[str, bool] = {}
-         
-   # Omit later bosses on bosses_any goal
-   if options.goal.value == options.goal.option_bosses_any:
-      for dependent_location, prerequisites in BOSS_PREREQUISITES.items():
-         if len(prerequisites.intersection(options.required_bosses.value)):
-            OMITTED[dependent_location] = True
+   location_num_left_to_place:int = len(itempool.nonfiller_itempool) + NUM_JUNK_ITEMS
 
+   # Decide which bosses are required in progression
    _progression_required_bosses = set()
    if options.goal.value == options.goal.option_bosses_any or options.goal.value == options.goal.option_bosses_all:
       _progression_required_bosses.update(options.required_bosses.value)
@@ -110,7 +131,7 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
          if ("research" in data.tags
             and not (
                # These won't be randomized
-               "ancient" in data.tags 
+               "ancient" in data.tags
                or "celestial" in data.tags
                or "hermitcrab" in data.tags
             )
@@ -122,17 +143,20 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
                else RESEARCH_GROUPS["science_2_locations"] if "science" in data.tags and "tier_2" in data.tags
                else RESEARCH_GROUPS["magic_1_locations"] if "magic" in data.tags and "tier_1" in data.tags
                else RESEARCH_GROUPS["magic_2_locations"] if "magic" in data.tags and "tier_2" in data.tags
-               else RESEARCH_GROUPS["seafaring_locations"] if "seafaring" in data.tags 
+               else RESEARCH_GROUPS["seafaring_locations"] if "seafaring" in data.tags
                else RESEARCH_GROUPS["other_locations"] # There shouldn't be anything here, but just to be safe
             ).append(name)
 
          else:
             # Add all other locations to regions
             REGION_DATA_TABLE[region_name].locations.append(name)
-            location_num_left_to_place -= 1
+
+            if not name in BOSS_PREFILLS:
+               # Only lower the counter if it won't be prefilled
+               location_num_left_to_place -= 1
 
    assert len(RESEARCH_GROUPS["other_locations"]) == 0
-   
+
    for _, group in RESEARCH_GROUPS.items():
       # Shuffle groups!
       multiworld.random.shuffle(group)
@@ -166,7 +190,7 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
       if region_name in WHITELIST:
          new_region = Region(region_name, player, multiworld)
          multiworld.regions.append(new_region)
-      
+
    # Create locations and entrances.
    for region_name, region_data in REGION_DATA_TABLE.items():
       # Check if region is allowed
@@ -184,11 +208,15 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
                entrance.connect(multiworld.get_region(exit_name, player))
                region.exits.append(entrance)
 
-   # Fill boss locations with "Boss Defeat" items
+
    EXISTING_LOCATIONS = [location.name for location in multiworld.get_locations(player)]
+   # Verify goal boss is added
    for bossname in BOSS_DEFEAT_LOCATIONS:
       assert bossname in EXISTING_LOCATIONS, \
          f"{multiworld.get_player_name(player)} (Don't Starve Together): {bossname} does not exist in the regions selected in your yaml! " \
          "Make sure you select the correct regions for your goal, or choose auto or full!"
-      multiworld.get_location(bossname, player).place_locked_item(multiworld.create_item("Boss Defeat", player))
-   
+
+   # Fill boss locations with prefill items
+   for bossname, fillitem in BOSS_PREFILLS.items():
+      if bossname in EXISTING_LOCATIONS:
+         multiworld.get_location(bossname, player).place_locked_item(multiworld.create_item(fillitem, player))

@@ -88,11 +88,23 @@ class RequiredBosses(OptionSet):
         "Celestial Champion",
     }
 
-# class CraftWithLockedItems(DefaultOnToggle):
-#     """
-#     Should you be able to craft if any of the ingredients are one of your missing items?
-#     """
-#     display_name = "Craft With Locked Items"
+class CraftingMode(Choice):
+    """
+    Change the crafting behavior?
+
+    Vanilla: Crafting behavior is vanilla.
+    Journey: Once you craft an item once, you can craft it again freely.
+    Free Samples: Once you unlock a recipe, you can craft one for free.
+    Free-build: Once you unlock a recipe, you can always craft it.
+    Locked Ingredients: You cannot craft items that use one of your missing items as an ingredient.
+    """
+    display_name = "Crafting Mode"
+    default = 2
+    option_vanilla = 0
+    option_journey = 1
+    option_free_samples = 2
+    option_free_build = 3
+    option_locked_ingredients = 3
 
 class CaveRegions(Choice):
     """
@@ -178,13 +190,13 @@ class BossLocations(Choice):
     Easy: Only easier bosses. These can be defeated even if playing solo with default difficulty. 
     All: Includes raid bosses. These are intended for multiplayer sessions, but can still be soloed with Extra Damage Against Bosses or creative strategies.
     Prioritized: All bosses will have either useful or progression items.
+    Extra Damage Against Bosses: All bosses are item locations, and grant an exponential +10% and +25% damage bonus against easy and hard bosses respectively.
     """
     display_name = "Boss Locations"
     default = 1
     option_none = 0
     option_easy = 1
     option_all = 2
-    option_prioritized = 3
 
 class CookingLocations(Choice):
     """
@@ -223,6 +235,7 @@ class ExtraDamageAgainstBosses(NamedRange):
     This adds "Extra Damage Against Bosses" buffs as Archipelago items. Recommended if playing solo.
     Each stack of this buff gives the player a permanent +10% damage against easier bosses and +25% damage against tougher ones.
     This is exponential. With 10 stacks, this turns into x2.6 and x9.3 damage multipiers respectively.
+    This amount is separate from any prefilled through "Boss Fill Items" setting
     """
     display_name = "Extra Damage Against Bosses"
     range_start = 0
@@ -236,13 +249,16 @@ class ExtraDamageAgainstBosses(NamedRange):
         "high": 10,
     }
 
-# class ExtraDamageAgainstBossesWhenDefeatingBosses(Toggle):
-#     """
-#     This adds "Extra Damage Against Bosses" as rewards for defeating bosses. Recommended if playing solo.
-#     This requires Boss Locations to be enabled. Does not apply to bosses that count for your victory condition.
-#     Can also be functionally used to make boss items local-only and not required in logic.
-#     """
-#     display_name = "Extra Damage Against Bosses When Defeating Bosses"
+class BossFillItems(Choice):
+    """
+    Choose what type of items a boss location can grant. Requires Boss Locations to be enabled.
+    """
+    display_name = "Boss Fill Items"
+    default = 0
+    option_normal = 0
+    option_filler = 1
+    option_priority = 2
+    option_extra_damage_against_bosses = 11
 
 class ShuffleStartingRecipes(Toggle):
     """
@@ -415,7 +431,6 @@ dontstarvetogether_option_groups = [
         BossLocations,
         CookingLocations,
         FarmingLocations,
-        # SeasonalLocations,
     ]),
     OptionGroup("Item Options", [
         ShuffleStartingRecipes,
@@ -444,7 +459,7 @@ class DSTOptions(PerGameCommonOptions):
     goal: Goal
     days_to_survive: DaysToSurvive
     required_bosses: RequiredBosses
-    # craft_with_locked_items: CraftWithLockedItems
+    crafting_mode: CraftingMode
     death_link: DeathLink
 
     # Shuffling options
@@ -457,8 +472,6 @@ class DSTOptions(PerGameCommonOptions):
     boss_locations: BossLocations
     cooking_locations: CookingLocations
     farming_locations: FarmingLocations
-    # seasonal_locations: SeasonalLocations
-    # season_change_helper_items: SeasonChangeHelperItems
 
     # Item options
     shuffle_starting_recipes: ShuffleStartingRecipes
@@ -466,6 +479,7 @@ class DSTOptions(PerGameCommonOptions):
     chesspiece_sketch_items: ChessPieceSketchItems
     seed_items: SeedItems
     extra_damage_against_bosses: ExtraDamageAgainstBosses
+    boss_fill_items: BossFillItems
     junk_item_amount: JunkItemAmount
     trap_items: TrapItems
     season_trap_items: SeasonTrapItems

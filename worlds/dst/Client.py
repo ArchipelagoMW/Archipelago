@@ -70,8 +70,11 @@ class DSTContext(CommonContext):
             "days_to_survive": self.slotdata.get("days_to_survive"),
             "required_bosses": self.slotdata.get("required_bosses"), # Legacy
             "goal_locations": self.slotdata.get("goal_locations"),
-            "craft_with_locked_items": self.slotdata.get("craft_with_locked_items", True),
+            "crafting_mode": self.slotdata.get("crafting_mode"),
+            "starting_season": self.slotdata.get("starting_season"),
+            "seasons": self.slotdata.get("seasons"),
             "finished_game": self.finished_game,
+            "death_link": "DeathLink" in self.tags,
         })
         
         self.dst_handler.enqueue({
@@ -133,7 +136,7 @@ class DSTContext(CommonContext):
             elif cmd == "Connected":
                 self.connected_to_ap = True
                 self.slotdata = args.get('slot_data', {})
-                async_start(self.update_death_link(self.slotdata.get("death_link", False)))
+                async_start(self.update_death_link(self.slotdata.get("death_link", False))) # TODO: Do death link on the DST side
                 if self.dst_handler.connected:
                     print("Connected to AP!")
                     self.on_dst_connect_to_ap()
@@ -166,16 +169,14 @@ class DSTContext(CommonContext):
                     _starting_season = str(self.slotdata.get("starting_season", "Autumn")).capitalize()
                     self.logger.info(f"Starting Season: {_starting_season}" + (" (Default)" if _starting_season == "Autumn" else ""))
                     self.logger.info(f"Enabled Seasons: {'All (Default)' if len(_seasons) == 4 else _seasons}")
+                    # Announce season flow
+                    if self.slotdata.get("unlockable_seasons", False):
+                        self.logger.info("Unlockable seasons - Optionally, you may set your season lengths to their longest value.")
+                    # Announce day phases
                     _day_phases = self.slotdata.get('day_phases', ["Day", "Dusk", "Night"])
                     self.logger.info(f"Day Phases: {'All (Default)' if len(_day_phases) == 3 else _day_phases}"
                                         + (f" (Lights Out)" if len(_day_phases) == 1 and _day_phases[0] == "Night" else "")
                                     )
-                    # Announce season flow
-                    _season_flow = self.slotdata.get("season_flow", "normal")
-                    _is_unlockable_seasons = _season_flow == "unlockable" or _season_flow == "unlockable_shuffled"
-                    _season_flow = _season_flow.capitalize()
-                    self.logger.info(f"Season Flow: {_season_flow}")
-                    if _is_unlockable_seasons: self.logger.info("Optionally, you may set your season lengths to their longest value.")
                     # Announce intended character
                     self.logger.info(f"Character Selection: {self.slotdata.get('character', 'Any')}")
 
@@ -334,6 +335,10 @@ class DSTContext(CommonContext):
             elif eventtype == "Disconnect":
                 print("Disconnecting")
                 await self.disconnect(False)
+
+            elif eventtype == "DeathLink":
+                print("Updating Death Link")
+                await async_start(self.update_death_link(event.get("enabled", False)))
 
         except Exception as e:
             self.logger.error(f"Manage event error ({eventtype}): {e}")

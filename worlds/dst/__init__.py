@@ -225,19 +225,18 @@ class DSTWorld(World):
 
     def fill_slot_data(self):
         slot_data = {
-            "generator_version": VERSION,
-            "death_link":       bool(self.options.death_link.value),
-            "goal":             self.options.goal.current_key,
-            # "craft_with_locked_items": self.options.craft_with_locked_items.value,
-            "locked_items_local_id": list(self.dst_itempool.locked_items_local_id),
+            "generator_version":    VERSION,
+            "death_link":           bool(self.options.death_link.value),
+            "goal":                 self.options.goal.current_key,
+            "crafting_mode":        self.options.crafting_mode.current_key,
+            "locked_items_local_id":list(self.dst_itempool.locked_items_local_id),
             # World settings
-            "is_caves_enabled": bool(self.options.cave_regions.value != self.options.cave_regions.option_none),
-            "seasons":          list(self.options.seasons.value),
-            "starting_season":  self.options.starting_season.current_key,
-            "season_flow":      self.options.season_flow.current_key,
-            "day_phases":       list(self.options.day_phases.value),
-            "character":        "Warly" if self.options.cooking_locations.value == self.options.cooking_locations.option_warly_enabled
-                                else "Any",
+            "is_caves_enabled":     bool(self.options.cave_regions.value != self.options.cave_regions.option_none),
+            "seasons":              list(self.options.seasons.value),
+            "starting_season":      self.options.starting_season.current_key,
+            "unlockable_seasons":   bool(self.options.season_flow.current_key.startswith("unlockable")),
+            "day_phases":           list(self.options.day_phases.value),
+            "character":            "Warly" if self.options.cooking_locations.value == self.options.cooking_locations.option_warly_enabled else "Any",
         }
         if slot_data["goal"] == "survival":
             slot_data["days_to_survive"] = self.options.days_to_survive.value

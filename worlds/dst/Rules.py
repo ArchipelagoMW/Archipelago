@@ -73,13 +73,11 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     TRAP_ITEMS = {name for name, data in item_data_table.items() if "trap" in data.tags}
     ADVANCED_PLAYER_BIAS = options.skill_level.value != options.skill_level.option_easy
     EXPERT_PLAYER_BIAS = options.skill_level.value == options.skill_level.option_expert
-    BOSS_LOOT_LOGIC = options.boss_locations.value != options.boss_locations.option_none
-    RAIDBOSS_LOOT_LOGIC = options.boss_locations.value == options.boss_locations.option_all
     CREATURE_LOCATIONS_ENABLED = bool(options.creature_locations.value)
     PEACEFUL_LOGIC = options.creature_locations.value == options.creature_locations.option_peaceful
     WARLY_DISHES_ENABLED = options.cooking_locations.value == options.cooking_locations.option_warly_enabled
     CHESSPIECE_ITEMS_SHUFFLED = bool(options.chesspiece_sketch_items.value)
-    CRAFT_WITH_LOCKED_RECIPES = True # TODO: Replace with CRAFT_WITH_LOCKED_RECIPES option
+    LOCKED_INGREDIENTS_LOGIC = bool(options.crafting_mode.value == options.crafting_mode.option_locked_ingredients)
     LIGHTING_LOGIC = bool(options.lighting_logic.value)
     WEAPON_LOGIC = bool(options.weapon_logic.value)
     SEASON_GEAR_LOGIC = bool(options.season_gear_logic.value)
@@ -88,14 +86,14 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     HEALING_LOGIC = bool(options.healing_logic.value)
     CHARACTER_SWITCHING_LOGIC = True
     NORMAL_SEASON_FLOW_LOGIC = options.season_flow.value != options.season_flow.option_unlockable_shuffled
-    UNLOCKABLE_SEASON_LOGIC = (options.season_flow.value == options.season_flow.option_unlockable
-                                or options.season_flow.value == options.season_flow.option_unlockable_shuffled)
+    UNLOCKABLE_SEASON_LOGIC = options.season_flow.current_key.startswith("unlockable")
     STARTING_SEASON = (
         SEASON.WINTER      if options.starting_season.value == options.starting_season.option_winter
         else SEASON.SPRING if options.starting_season.value == options.starting_season.option_spring
         else SEASON.SUMMER if options.starting_season.value == options.starting_season.option_summer
         else SEASON.AUTUMN
     )
+    DAMAGE_BONUSES_IN_WORLD = False # TODO
 
 
     # Easy way to check if items are locked
@@ -217,6 +215,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     def has_survived_num_days (day_goal:int, state: CollectionState) -> bool:
         conditions = {basic_survival.event}
         if day_goal > 7: conditions.add(basic_exploration.event)
+        if day_goal > 11: conditions.add(seasons_passed_half.event)
         if day_goal > 14: conditions.add(base_making.event)
         if day_goal > 20: conditions.add(seasons_passed_1.event)
         if day_goal > 35: conditions.add(seasons_passed_2.event)
@@ -483,19 +482,20 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         hide_in_spoiler = True
     )
     beekeeper_hat = add_event("Beekeeper Hat", REGION.FOREST,
-        (lambda state: state.has("Beekeeper Hat", player)) if WEAPON_LOGIC and (
-            RAIDBOSS_LOOT_LOGIC
-            or ((options.goal.value != options.goal.option_survival) and "Bee Queen" in options.required_bosses.value)
-        ) else ALWAYS_TRUE,
+        (lambda state: state.has("Beekeeper Hat", player)) if WEAPON_LOGIC and "Bee Queen" in EXISTING_LOCATIONS
+        else ALWAYS_TRUE,
         hide_in_spoiler = True
     )
 
 
     ##### RESOURCES #####
     nightmare_fuel = add_event("Nightmare Fuel", REGION.FOREST,
-        ALWAYS_TRUE if not WEAPON_LOGIC and not HEALING_LOGIC
-        else (lambda state: state.has_all({basic_combat.event, basic_sanity_management.event}, player)) if CRAFT_WITH_LOCKED_RECIPES or not is_locked("Nightmare Fuel")
-        else (lambda state: state.has("Nightmare Fuel", player)),
+        combine_rules(
+            ALWAYS_TRUE if not WEAPON_LOGIC and not HEALING_LOGIC
+            else (lambda state: state.has_all({basic_combat.event, basic_sanity_management.event}, player)),
+            (lambda state: state.has("Nightmare Fuel", player)) if LOCKED_INGREDIENTS_LOGIC and is_locked("Nightmare Fuel")
+            else ALWAYS_TRUE
+        ),
         hide_in_spoiler = True
     )
     gem_digging = add_event("Gem Digging", REGION.FOREST,
@@ -543,8 +543,8 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     purple_gem = add_event("Purple Gem", REGION.FOREST,
         combine_rules(
             (
-                ALWAYS_TRUE if CRAFT_WITH_LOCKED_RECIPES
-                else (lambda state: state.has("Purple Gem", player))
+                (lambda state: state.has("Purple Gem", player)) if LOCKED_INGREDIENTS_LOGIC
+                else ALWAYS_TRUE
             ),
             lambda state: (
                 state.has_all({gem_digging.event, "Purple Gem"}, player)
@@ -560,7 +560,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     thulecite = add_event("Thulecite", REGION.DUALREGION,
         combine_rules(
             (
-                (lambda state: state.has("Thulecite", player)) if is_locked("Thulecite") and not CRAFT_WITH_LOCKED_RECIPES
+                (lambda state: state.has("Thulecite", player)) if LOCKED_INGREDIENTS_LOGIC and is_locked("Thulecite")
                 else ALWAYS_TRUE
             ),
             (
@@ -592,7 +592,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     electrical_doodad = add_event("Electrical Doodad", REGION.FOREST,
         either_rule(
             (lambda state: state.has_all({"Cut Stone", "Electrical Doodad", mining.event}, player)),
-            (lambda state: state.has_any({retinazor.event, spazmatism.event}, player)) if RAIDBOSS_LOOT_LOGIC and EXPERT_PLAYER_BIAS
+            (lambda state: state.has_any({retinazor.event, spazmatism.event}, player)) if EXPERT_PLAYER_BIAS
             else ALWAYS_FALSE
         )
     )
@@ -602,13 +602,13 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     )
 
 
-    ##### SPECIFIC LOCATIONS #####
+    ##### LOCATIONS WITH SPECIAL RULES #####
     butterfly = add_parent_event("Butterfly",
         (
             REGION.FOREST if PHASE.DAY in WHITELIST and SEASON.NONWINTER in WHITELIST
             else REGION.NONE
         ),
-        ALWAYS_TRUE
+        ALWAYS_TRUE # Butterfly already has day tag
     )
     batilisk = add_parent_event("Batilisk", REGION.CAVE,
         lambda state: (
@@ -617,12 +617,14 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         )
     )
     moleworm = add_parent_event("Moleworm", REGION.FOREST,
-        lambda state: (
-            state.has(digging.event, player) or (
+        (
+            lambda state: (
                 state.has_any({dusk.event, night.event}, player)
                 and state.has(hammering.event, player)
             )
-        )
+        ) if PHASE.DUSK_OR_NIGHT in WHITELIST and not DAMAGE_BONUSES_IN_WORLD # Hammers will kill moles if player has a damage bonus
+        else (lambda state: state.has_all({digging.event, day.event}, player)) if PHASE.DAY in WHITELIST
+        else (lambda state: state.has(basic_survival.event, player)) # Can otherwise come from catcoons, tumbleweeds, and caves
     )
     rabbit = add_parent_event("Rabbit", REGION.FOREST,
         lambda state: (
@@ -1042,7 +1044,8 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             (lambda state: state.has_all({mining.event, light_source.event}, player)) if EXPERT_PLAYER_BIAS # Expert players just get a torch and pickaxe
             else (lambda state: state.has_all({light_source.event, basic_exploration.event, base_making.event}, player)), # Have a base, backpack, and tools at this point
             # Have either good weather or rain protection
-            (lambda state: state.has_any({autumn.event, summer.event, "Umbrella", electric_insulation.event}, player)) if SEASON_GEAR_LOGIC
+            (lambda state: state.has_any({autumn.event, summer.event, "Umbrella", electric_insulation.event}, player)) 
+            if SEASON_GEAR_LOGIC and (SEASON.WINTER in WHITELIST or SEASON.SPRING in WHITELIST)
             else ALWAYS_TRUE
         )
     )
@@ -1885,15 +1888,15 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             if required:
                 multiworld.priority_locations[player].value.add(location_name)
             elif ("priority" in location_data.tags
-            or (options.boss_locations.value == options.boss_locations.option_prioritized and "boss" in location_data.tags and not "excluded" in location_data.tags)
+            or (options.boss_locations.value == options.boss_fill_items.option_priority and "boss" in location_data.tags and not "excluded" in location_data.tags)
             ):
                 # Prioritize generic priority tag
                 multiworld.priority_locations[player].value.add(location_name)
 
             # Exclude from having progression items if it meets the conditions
             if not required and ("excluded" in location_data.tags
-            or (not BOSS_LOOT_LOGIC and "boss" in location_data.tags)
-            or (not RAIDBOSS_LOOT_LOGIC and "raidboss" in location_data.tags)
+            or (options.boss_fill_items.value == options.boss_fill_items.option_filler and "boss" in location_data.tags)
+            or (options.boss_fill_items.value == options.boss_fill_items.option_filler and "raidboss" in location_data.tags)
             or (not ADVANCED_PLAYER_BIAS and "advanced" in location_data.tags)
             or (not EXPERT_PLAYER_BIAS and "expert" in location_data.tags)
             ):
