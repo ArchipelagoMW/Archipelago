@@ -213,8 +213,13 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
    # Verify goal boss is added
    for bossname in BOSS_DEFEAT_LOCATIONS:
       assert bossname in EXISTING_LOCATIONS, \
-         f"{multiworld.get_player_name(player)} (Don't Starve Together): {bossname} does not exist in the regions selected in your yaml! " \
-         "Make sure you select the correct regions for your goal, or choose auto or full!"
+         f"{multiworld.get_player_name(player)} (Don't Starve Together): {bossname} does not exist in the regions selected in your yaml! " +\
+         (
+            "Not enough conditions possible to befriend Crabby Hermit. Add more seasons and day phases!" if (
+               (bossname == "Crab King" or bossname == "Celestial Champion") 
+               and REGION.OCEAN in WHITELIST and not SPECIAL_TAGS.HERMIT_10 in WHITELIST
+            ) else "Make sure you select the correct regions for your goal, or choose auto or full!"
+         )
 
    # Fill boss locations with prefill items
    for bossname, fillitem in BOSS_PREFILLS.items():
