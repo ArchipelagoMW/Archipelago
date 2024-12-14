@@ -40,10 +40,7 @@ class DSTItemPool:
             options.start_inventory.value["Torch"] = 1
 
         # Start with season changer with unlockable mode
-        if (
-            options.season_flow.value == options.season_flow.option_unlockable
-            or options.season_flow.value == options.season_flow.option_unlockable_shuffled
-        ):
+        if options.season_flow.current_key.startswith("unlockable"):
             options.start_inventory.value[
                      "Winter" if options.starting_season.value == options.starting_season.option_winter
                 else "Spring" if options.starting_season.value == options.starting_season.option_spring
