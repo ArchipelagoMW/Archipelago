@@ -171,7 +171,7 @@ class DSTContext(CommonContext):
                     self.logger.info(f"Enabled Seasons: {'All (Default)' if len(_seasons) == 4 else _seasons}")
                     # Announce season flow
                     if self.slotdata.get("unlockable_seasons", False):
-                        self.logger.info("Unlockable seasons - Optionally, you may set your season lengths to their longest value.")
+                        self.logger.info("Unlockable seasons - Optionally, you may set all season lengths to their longest value.")
                     # Announce day phases
                     _day_phases = self.slotdata.get('day_phases', ["Day", "Dusk", "Night"])
                     self.logger.info(f"Day Phases: {'All (Default)' if len(_day_phases) == 3 else _day_phases}"
