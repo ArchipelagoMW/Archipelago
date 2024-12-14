@@ -576,7 +576,7 @@ HUNTER_KILLERS       = "Hunter Killers"
 TORRASQUE_MERC       = "Torrasque"
 HUNTERLING           = "Hunterling"
 YGGDRASIL            = "Yggdrasil"
-MERC_ROACH           = "Thornshells"
+THORNSHELL           = "Thornshells"
 
     
 # Kerrigan Upgrades
@@ -870,12 +870,16 @@ AMPLIFIED_ASSIMILATORS      = "Amplified Assimilators (Protoss)"
 PROGRESSIVE_WARP_RELOCATE   = "Progressive Warp Relocate (Protoss)"
 
 # Filler items
-STARTING_MINERALS   = "Additional Starting Minerals"
-STARTING_VESPENE    = "Additional Starting Vespene"
-STARTING_SUPPLY     = "Additional Starting Supply"
-MAX_SUPPLY          = "Additional Maximum Supply"
-SHIELD_REGENERATION = "Increased Shield Regeneration"
-NOTHING             = "Nothing"
+STARTING_MINERALS           = "Additional Starting Minerals"
+STARTING_VESPENE            = "Additional Starting Vespene"
+STARTING_SUPPLY             = "Additional Starting Supply"
+MAX_SUPPLY                  = "Additional Maximum Supply"
+SHIELD_REGENERATION         = "Increased Shield Regeneration"
+BUILDING_CONSTRUCTION_SPEED = "Increased Building Construction Speed"
+
+# Trap
+REDUCED_MAX_SUPPLY          = "Decreased Maximum Supply"
+NOTHING                     = "Nothing"
 
 # Deprecated
 PROGRESSIVE_ORBITAL_COMMAND         = "Progressive Orbital Command (Deprecated)"

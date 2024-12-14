@@ -89,8 +89,10 @@ class FactionlessItemType(ItemTypeEnum):
     Vespene = "Vespene", 1
     Supply = "Supply", 2
     MaxSupply = "Max Supply", 3
-    Nothing = "Nothing Group", 4
-    Deprecated = "Deprecated", 5
+    BuildingSpeed = "Building Speed", 4
+    Nothing = "Nothing Group", 5
+    Deprecated = "Deprecated", 6
+    MaxSupplyTrap = "Max Supply Trap", 7
     Keys = "Keys", -1
 
 
@@ -1079,6 +1081,15 @@ item_table = {
     item_names.SHIELD_REGENERATION:
         ItemData(805 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.ShieldRegeneration, 1, SC2Race.PROTOSS, quantity=0,
                  classification=ItemClassification.filler),
+    item_names.BUILDING_CONSTRUCTION_SPEED:
+        ItemData(806 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.BuildingSpeed, 1, SC2Race.ANY, quantity=0,
+                 classification=ItemClassification.filler),
+
+    # Trap Filler
+    item_names.REDUCED_MAX_SUPPLY:
+        ItemData(850 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.MaxSupplyTrap, -1, SC2Race.ANY, quantity=0,
+                 classification=ItemClassification.trap),
+
 
     # Nova gear
     item_names.NOVA_GHOST_VISOR:
@@ -1627,7 +1638,7 @@ item_table = {
     item_names.TORRASQUE_MERC: ItemData(605 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 5, SC2Race.ZERG),
     item_names.HUNTERLING: ItemData(606 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 6, SC2Race.ZERG, classification=ItemClassification.progression),
     item_names.YGGDRASIL: ItemData(607 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 7, SC2Race.ZERG, classification=ItemClassification.progression),
-    item_names.MERC_ROACH: ItemData(608 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 8, SC2Race.ZERG),
+    item_names.THORNSHELL: ItemData(608 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 8, SC2Race.ZERG),
 
 
     # Misc Upgrades
@@ -2131,13 +2142,6 @@ not_balanced_starting_units = {
     item_names.TEMPEST,
 }
 
-
-filler_items: typing.Tuple[str, ...] = (
-    item_names.STARTING_MINERALS,
-    item_names.STARTING_VESPENE,
-    item_names.STARTING_SUPPLY,
-    item_names.MAX_SUPPLY,
-)
 
 # Defense rating table
 # Commented defense ratings are handled in LogicMixin

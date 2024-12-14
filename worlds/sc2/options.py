@@ -91,6 +91,14 @@ class GameDifficulty(Choice):
     default = 1
 
 
+class DifficultyDamageModifier(DefaultOnToggle):
+    """
+    Enables or disables vanilla difficulty-based damage received modifier
+    Handles the 1.25 Brutal damage modifier in HotS and Prologue and 0.5 Casual damage modifier outside WoL and Prophecy
+    """
+    display_name = "Difficulty Damage Modifier"
+
+
 class GameSpeed(Choice):
     """Optional setting to override difficulty-based game speed."""
     display_name = "Game Speed"
@@ -1036,19 +1044,112 @@ class StartingSupplyPerItem(Range):
 
 class MaximumSupplyPerItem(Range):
     """
-    Configures how much maximum supply per is given per item.
+    Configures how much the maximum supply limit increases per item.
     """
     display_name = "Maximum Supply Per Item"
     range_start = 0
-    range_end = 16
-    default = 2
+    range_end = 10
+    default = 1
 
+
+class MaximumSupplyReductionPerItem(Range):
+    """
+    Configures how much maximum supply is reduced per trap item.
+    """
+    display_name = "Maximum Supply Reduction Per Item"
+    range_start = 1
+    range_end = 10
+    default = 1
+
+
+class LowestMaximumSupply(Range):
+    """Controls how far max supply reduction traps can reduce maximum supply."""
+    display_name = "Lowest Maximum Supply"
+    range_start = 100
+    range_end = 200
+    default = 180
+
+
+class FillerRatio(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
+    """Controls the relative probability of each filler item being generated over others."""
+    default = {
+        item_names.STARTING_MINERALS: 1,
+        item_names.STARTING_VESPENE: 1,
+        item_names.STARTING_SUPPLY: 1,
+        item_names.MAX_SUPPLY: 1,
+        item_names.SHIELD_REGENERATION: 1,
+        item_names.BUILDING_CONSTRUCTION_SPEED: 1,
+        item_names.REDUCED_MAX_SUPPLY: 0,
+    }
+    simple_names = {
+        "minerals": item_names.STARTING_MINERALS,
+        "gas": item_names.STARTING_VESPENE,
+        "vespene": item_names.STARTING_VESPENE,
+        "supply": item_names.STARTING_SUPPLY,
+        "max supply": item_names.MAX_SUPPLY,
+        "maximum supply": item_names.MAX_SUPPLY,
+        "shields": item_names.SHIELD_REGENERATION,
+        "shield regen": item_names.SHIELD_REGENERATION,
+        "shield regeneration": item_names.SHIELD_REGENERATION,
+        "build speed": item_names.BUILDING_CONSTRUCTION_SPEED,
+        "construction speed": item_names.BUILDING_CONSTRUCTION_SPEED,
+        "supply trap": item_names.REDUCED_MAX_SUPPLY,
+        "reduced max supply": item_names.REDUCED_MAX_SUPPLY,
+    }
+    supports_weighting = False
+    display_name = "Filler Item Ratios"
+    minimum_value: int = 0
+
+    def __init__(self, value: Dict[str, int]) -> None:
+        self.value = {key: val for key, val in value.items()}
+
+    @classmethod
+    def from_any(cls, data: Union[List[str], Dict[str, int]]) -> 'FillerRatio':
+        if isinstance(data, dict):
+            for key, value in data.items():
+                if not isinstance(value, int):
+                    raise ValueError(f"Invalid type in '{cls.display_name}': element '{key}' maps to '{value}', expected an integer")
+                if value < cls.minimum_value:
+                    raise ValueError(f"Invalid value for '{cls.display_name}': element '{key}' maps to {value}, which is less than the minimum ({cls.minimum_value})")
+            return cls(data)
+        else:
+            raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
+
+    def verify(self, world: Type['World'], player_name: str, plando_options: PlandoOptions) -> None:
+        """Overridden version of function from Options.VerifyKeys for a better error message"""
+        new_value: dict[str, int] = {}
+        name_mapping = {
+            item_name.casefold(): item_name for item_name in self.default
+        }
+        name_mapping.update(self.simple_names)
+        for key_name in self.value:
+            item_name = name_mapping.get(key_name.casefold())
+            if item_name is None:
+                raise ValueError(
+                    f"Unknown key {key_name} in option filler_ratio. "
+                    f"Valid names are ({', '.join(list(self.default) + list(self.simple_names))})"
+                )
+            new_value[item_name] = new_value.get(item_name, 0) + self.value[key_name]
+        self.value = new_value
+
+    def get_option_name(self, value):
+        return ", ".join(f"{key}: {v}" for key, v in value.items())
+
+    def __getitem__(self, item: str) -> int:
+        return self.value.__getitem__(item)
+
+    def __iter__(self) -> Iterator[str]:
+        return self.value.__iter__()
+
+    def __len__(self) -> int:
+        return self.value.__len__()
 
 
 @dataclass
 class Starcraft2Options(PerGameCommonOptions):
-    start_inventory: Sc2StartInventory
+    start_inventory: Sc2StartInventory  # type: ignore
     game_difficulty: GameDifficulty
+    difficulty_damage_modifier: DifficultyDamageModifier
     game_speed: GameSpeed
     disable_forced_camera: DisableForcedCamera
     skip_cutscenes: SkipCutscenes
@@ -1118,6 +1219,9 @@ class Starcraft2Options(PerGameCommonOptions):
     vespene_per_item: VespenePerItem
     starting_supply_per_item: StartingSupplyPerItem
     maximum_supply_per_item: MaximumSupplyPerItem
+    maximum_supply_reduction_per_item: MaximumSupplyReductionPerItem
+    lowest_maximum_supply: LowestMaximumSupply
+    filler_ratio: FillerRatio
 
     custom_mission_order: CustomMissionOrder
 
@@ -1302,3 +1406,4 @@ upgrade_included_names: Dict[int, Set[str]] = {
         item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE,
     }
 }
+
