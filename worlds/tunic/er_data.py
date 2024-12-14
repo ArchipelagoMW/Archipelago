@@ -1026,7 +1026,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [["Hyperdash"], ["LS1"]],
     },
     "Guard House 2 Upper before bushes": {
-        "Guard House 2 after bushes":
+        "Guard House 2 Upper after bushes":
             [],
     },
     "Guard House 2 Upper after bushes": {
