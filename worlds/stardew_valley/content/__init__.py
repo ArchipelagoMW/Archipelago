@@ -33,7 +33,7 @@ def choose_features(player_options: options.StardewValleyOptions) -> StardewFeat
         choose_fishsanity(player_options.fishsanity),
         choose_friendsanity(player_options.friendsanity, player_options.friendsanity_heart_size),
         choose_skill_progression(player_options.skill_progression),
-        choose_tool_progression(player_options.tool_progression),
+        choose_tool_progression(player_options.tool_progression, player_options.skill_progression),
     )
 
 
@@ -125,7 +125,7 @@ def choose_skill_progression(skill_progression_option: options.SkillProgression)
     return skill_progression_feature
 
 
-def choose_tool_progression(tool_option: options.ToolProgression) -> tool_progression.ToolProgressionFeature:
+def choose_tool_progression(tool_option: options.ToolProgression, skill_option: options.SkillProgression) -> tool_progression.ToolProgressionFeature:
     if tool_option == options.ToolProgression.option_vanilla:
         return tool_progression.ToolProgressionVanilla()
 
@@ -139,16 +139,23 @@ def choose_tool_progression(tool_option: options.ToolProgression) -> tool_progre
             price_multiplier=tool_progression.PriceMultipliers.VERY_CHEAP
         )
 
+    tools_distribution = tool_progression.get_tools_distribution(
+        progressive_tools_enabled=True,
+        skill_masteries_enabled=skill_option == options.SkillProgression.option_progressive_with_masteries,
+    )
+
     if tool_option == options.ToolProgression.option_progressive:
-        return tool_progression.ToolProgressionProgressive()
+        return tool_progression.ToolProgressionProgressive(tools_distribution)
 
     if tool_option == options.ToolProgression.option_progressive_cheap:
         return tool_progression.ToolProgressionProgressive(
+            tools_distribution,
             price_multiplier=tool_progression.PriceMultipliers.CHEAP
         )
 
     if tool_option == options.ToolProgression.option_progressive_very_cheap:
         return tool_progression.ToolProgressionProgressive(
+            tools_distribution,
             price_multiplier=tool_progression.PriceMultipliers.VERY_CHEAP
         )
 

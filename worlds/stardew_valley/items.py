@@ -23,6 +23,7 @@ from .strings.ap_names.buff_names import Buff
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
 from .strings.ap_names.mods.mod_items import SVEQuestItem
 from .strings.currency_names import Currency
+from .strings.tool_names import Tool
 from .strings.wallet_item_names import Wallet
 
 ITEM_CODE_OFFSET = 717000
@@ -116,11 +117,6 @@ class ItemData:
 
 class StardewItemFactory(Protocol):
     def __call__(self, name: Union[str, ItemData], override_classification: ItemClassification = None) -> Item:
-        raise NotImplementedError
-
-
-class StardewItemDeleter(Protocol):
-    def __call__(self, item: Item):
         raise NotImplementedError
 
 
@@ -317,23 +313,16 @@ def create_elevators(item_factory: StardewItemFactory, options: StardewValleyOpt
 
 
 def create_tools(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
-    if content.features.tool_progression.is_progressive:
-        # TODO distribution of the tools should be moved in the tool progression feature
-        for item_data in items_by_group[Group.PROGRESSIVE_TOOLS]:
-            name = item_data.name
-            if "Trash Can" in name:
-                items.extend([item_factory(item) for item in [item_data] * 3])
-                items.append(item_factory(item_data, ItemClassification.useful))
-            else:
-                items.extend([item_factory(item) for item in [item_data] * 4])
+    tool_progression = content.features.tool_progression
+    for tool, count in tool_progression.tool_distribution.items():
+        item = item_table[tool_progression.to_progressive_item(tool)]
 
-        if content.features.skill_progression.are_masteries_shuffled:
-            # Masteries add another tier to the scythe and the fishing rod
-            items.append(item_factory("Progressive Scythe"))
-            items.append(item_factory("Progressive Fishing Rod"))
+        # Trash can is only used in tool upgrade logic, so the last trash can is not progression because it basically does not unlock anything.
+        if tool == Tool.trash_can:
+            count -= 1
+            items.append(item_factory(item, ItemClassification.useful))
 
-    # The golden scythe is always randomized
-    items.append(item_factory("Progressive Scythe"))
+        items.extend([item_factory(item) for _ in range(count)])
 
 
 def create_skills(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
