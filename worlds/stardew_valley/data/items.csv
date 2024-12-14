@@ -457,7 +457,7 @@ id,name,classification,groups,content_packs
 490,Text Sign Recipe,progression,CRAFTSANITY,
 491,Blue Grass Starter Recipe,progression,"QI_CRAFTING_RECIPE,GINGER_ISLAND",
 492,Mastery Of The Five Ways,progression,SKILL_MASTERY,
-493,Progressive Scythe,useful,,
+493,Progressive Scythe,progression,,
 494,Progressive Pan,progression,PROGRESSIVE_TOOLS,
 495,Calico Statue,filler,FESTIVAL,
 496,Mummy Mask,filler,FESTIVAL,

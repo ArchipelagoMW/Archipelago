@@ -13,6 +13,7 @@ from ..strings.machine_names import Machine
 from ..strings.quality_names import FishQuality
 from ..strings.region_names import Region
 from ..strings.skill_names import Skill
+from ..strings.tool_names import FishingRod
 
 fishing_regions = (Region.beach, Region.town, Region.forest, Region.mountain, Region.island_south, Region.island_west)
 
@@ -33,11 +34,12 @@ class FishingLogic(BaseLogic):
 
     @cached_property
     def has_max_fishing(self) -> StardewRule:
-        return self.logic.tool.has_fishing_rod(4) & self.logic.skill.has_level(Skill.fishing, 10)
+        # Advanced Iridium is not necessary for max fishing
+        return self.logic.tool.has_fishing_rod(FishingRod.iridium) & self.logic.skill.has_level(Skill.fishing, 10)
 
     @cached_property
     def can_fish_chests(self) -> StardewRule:
-        return self.logic.tool.has_fishing_rod(4) & self.logic.skill.has_level(Skill.fishing, 6)
+        return self.logic.tool.has_fishing_rod(FishingRod.iridium) & self.logic.skill.has_level(Skill.fishing, 6)
 
     @cache_self1
     def can_fish_at(self, region: str) -> StardewRule:
@@ -51,8 +53,13 @@ class FishingLogic(BaseLogic):
 
         skill_rule = self.logic.skill.has_level(Skill.fishing, skill_required)
         # Training rod only works with fish < 50. Fiberglass does not help you to catch higher difficulty fish, so it's skipped in logic.
-        number_fishing_rod_required = 1 if difficulty < 50 else (2 if difficulty < 80 else 4)
-        return self.logic.tool.has_fishing_rod(number_fishing_rod_required) & skill_rule
+        if difficulty < 50:
+            fishing_rod_required = FishingRod.training
+        elif difficulty < 80:
+            fishing_rod_required = FishingRod.bamboo
+        else:
+            fishing_rod_required = FishingRod.iridium
+        return self.logic.tool.has_fishing_rod(fishing_rod_required) & skill_rule
 
     @cache_self1
     def can_catch_fish(self, fish: FishItem) -> StardewRule:
@@ -88,9 +95,9 @@ class FishingLogic(BaseLogic):
 
     def can_catch_quality_fish(self, fish_quality: str) -> StardewRule:
         if fish_quality == FishQuality.basic:
-            return True_()
+            return self.logic.true_
         if fish_quality == FishQuality.silver:
-            return self.logic.tool.has_fishing_rod(2)
+            return self.logic.tool.has_fishing_rod(FishingRod.bamboo)
         if fish_quality == FishQuality.gold:
             return self.logic.skill.has_level(Skill.fishing, 4) & self.can_use_tackle(Fishing.quality_bobber)
         if fish_quality == FishQuality.iridium:
@@ -99,7 +106,7 @@ class FishingLogic(BaseLogic):
         raise ValueError(f"Quality {fish_quality} is unknown.")
 
     def can_use_tackle(self, tackle: str) -> StardewRule:
-        return self.logic.tool.has_fishing_rod(4) & self.logic.has(tackle)
+        return self.logic.tool.has_fishing_rod(FishingRod.iridium) & self.logic.has(tackle)
 
     def can_catch_every_fish(self) -> StardewRule:
         rules = [self.has_max_fishing]

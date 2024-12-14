@@ -5,7 +5,7 @@ from ... import options
 from ...options import ToolProgression, SeasonRandomization, Secretsanity
 from ...strings.entrance_names import Entrance
 from ...strings.region_names import Region
-from ...strings.tool_names import Tool, ToolMaterial
+from ...strings.tool_names import Tool, ToolMaterial, FishingRod
 
 
 class TestProgressiveToolsLogic(SVTestBase):
@@ -120,13 +120,13 @@ class TestToolVanillaRequiresBlacksmith(SVTestBase):
         place_region_at_entrance(self.multiworld, self.player, Region.fish_shop, Entrance.enter_bathhouse_entrance)
         self.collect_all_except(railroad_item)
 
-        for fishing_rod_level in [3, 4]:
-            self.assert_rule_false(self.world.logic.tool.has_fishing_rod(fishing_rod_level))
+        for fishing_rod in [FishingRod.fiberglass, FishingRod.iridium]:
+            self.assert_rule_false(self.world.logic.tool.has_fishing_rod(fishing_rod))
 
         self.multiworld.state.collect(self.create_item(railroad_item))
 
-        for fishing_rod_level in [3, 4]:
-            self.assert_rule_true(self.world.logic.tool.has_fishing_rod(fishing_rod_level))
+        for fishing_rod in [FishingRod.fiberglass, FishingRod.iridium]:
+            self.assert_rule_true(self.world.logic.tool.has_fishing_rod(fishing_rod))
 
 
 def place_region_at_entrance(multiworld, player, region, entrance):

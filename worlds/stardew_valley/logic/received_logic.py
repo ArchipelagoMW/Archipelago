@@ -2,7 +2,6 @@ from typing import Optional
 
 from BaseClasses import ItemClassification
 from .base_logic import BaseLogic, BaseLogicMixin
-from .has_logic import HasLogicMixin
 from .logic_event import all_events
 from ..items import item_table
 from ..stardew_rule import StardewRule, Received, TotalReceived

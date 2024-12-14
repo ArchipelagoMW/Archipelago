@@ -260,12 +260,24 @@ class ToolProgression(Choice):
     internal_name = "tool_progression"
     display_name = "Tool Progression"
     default = 1
-    option_vanilla = 0b000  # 0
-    option_progressive = 0b001  # 1
-    option_vanilla_cheap = 0b010  # 2
-    option_vanilla_very_cheap = 0b100  # 4
-    option_progressive_cheap = 0b011  # 3
-    option_progressive_very_cheap = 0b101  # 5
+    option_vanilla = 0b0000  # 0
+    option_progressive = 0b0001  # 1
+    option_vanilla_cheap = 0b0010  # 2
+    option_vanilla_very_cheap = 0b0100  # 4
+    option_progressive_cheap = 0b0011  # 3
+    option_progressive_very_cheap = 0b0101  # 5
+    value_no_starting_tools = 0b1000  # 8
+    option_progressive_no_tool_start = option_progressive | value_no_starting_tools  # 9
+    option_progressive_cheap_no_tool_start = option_progressive_cheap | value_no_starting_tools  # 11
+    option_progressive_very_cheap_no_tool_start = option_progressive_very_cheap | value_no_starting_tools  # 13
+
+    @property
+    def is_vanilla(self):
+        return not self.is_progressive
+    
+    @property
+    def is_progressive(self):
+        return bool(self.value & 0b001)
 
     @property
     def is_vanilla(self):

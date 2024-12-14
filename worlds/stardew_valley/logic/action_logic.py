@@ -5,7 +5,6 @@ from ..strings.generic_names import Generic
 from ..strings.geode_names import Geode
 from ..strings.metal_names import Mineral
 from ..strings.region_names import Region
-from ..strings.tool_names import Tool
 from ..strings.tv_channel_names import Channel
 
 
@@ -27,7 +26,7 @@ class ActionLogic(BaseLogic):
         return self.logic.received(channel) & tv_rule
 
     def can_pan_at(self, region: str, material: str) -> StardewRule:
-        return self.logic.region.can_reach(region) & self.logic.tool.has_tool(Tool.pan, material)
+        return self.logic.region.can_reach(region) & self.logic.tool.has_pan(material)
 
     @cache_self1
     def can_open_geode(self, geode: str) -> StardewRule:

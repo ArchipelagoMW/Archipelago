@@ -7,7 +7,6 @@ class Tool:
     pan = "Pan"
     fishing_rod = "Fishing Rod"
     scythe = "Scythe"
-    golden_scythe = "Golden Scythe"
 
 
 class ToolMaterial:
@@ -16,11 +15,36 @@ class ToolMaterial:
     iron = "Iron"
     gold = "Gold"
     iridium = "Iridium"
-    tiers = {0: basic,
-             1: copper,
-             2: iron,
-             3: gold,
-             4: iridium}
+    materials = [basic, copper, iron, gold, iridium]
+    tiers = {
+        1: basic,
+        2: copper,
+        3: iron,
+        4: gold,
+        5: iridium
+    }
+
+
+class FishingRod:
+    training = "Training"
+    bamboo = "Bamboo"
+    fiberglass = "Fiberglass"
+    iridium = "Iridium"
+    advanced_iridium = "Advanced Iridium"
+    tiers = {
+        1: training,
+        2: bamboo,
+        3: fiberglass,
+        4: iridium,
+        5: advanced_iridium
+    }
+    material_to_tier = {
+        training: 1,
+        bamboo: 2,
+        fiberglass: 3,
+        iridium: 4,
+        advanced_iridium: 5
+    }
 
 
 class APTool:

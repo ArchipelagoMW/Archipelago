@@ -83,7 +83,7 @@ from ..strings.season_names import Season
 from ..strings.seed_names import Seed, TreeSeed
 from ..strings.skill_names import Skill
 from ..strings.special_item_names import SpecialItem
-from ..strings.tool_names import Tool, ToolMaterial
+from ..strings.tool_names import Tool, ToolMaterial, FishingRod
 from ..strings.villager_names import NPC
 from ..strings.wallet_item_names import Wallet
 
@@ -233,7 +233,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Fish.snail: self.fishing.can_crab_pot_at(Region.town),
             Fishing.curiosity_lure: self.monster.can_kill(self.monster.all_monsters_by_name[Monster.mummy]),
             Fishing.lead_bobber: self.skill.has_level(Skill.fishing, 6) & self.money.can_spend_at(Region.fish_shop, 200),
-            Forageable.hay: self.building.has_building(Building.silo) & self.tool.has_tool(Tool.scythe), #
+            Forageable.hay: self.building.has_building(Building.silo) & self.tool.has_scythe(), #
             Forageable.journal_scrap: self.region.can_reach_all((Region.island_west, Region.island_north, Region.island_south, Region.volcano_floor_10)) & (self.ability.can_chop_trees() | self.mine.can_mine_in_the_mines_floor_1_40()),#
             Forageable.secret_note: self.region.can_reach(LogicRegion.secret_notes), #
             Fossil.bone_fragment: (self.region.can_reach(Region.dig_site) & self.tool.has_tool(Tool.pickaxe)) | self.monster.can_kill(Monster.skeleton),
@@ -243,7 +243,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Fossil.fossilized_spine: self.fishing.can_fish_at(Region.dig_site),
             Fossil.fossilized_tail: self.action.can_pan_at(Region.dig_site, ToolMaterial.copper),
             Fossil.mummified_bat: self.region.can_reach(Region.volcano_floor_10),
-            Fossil.mummified_frog: self.region.can_reach(Region.island_east) & self.tool.has_tool(Tool.scythe),
+            Fossil.mummified_frog: self.region.can_reach(Region.island_east) & self.tool.has_scythe(),
             Fossil.snake_skull: self.region.can_reach(Region.dig_site) & self.tool.has_tool(Tool.hoe),
             Fossil.snake_vertebrae: self.region.can_reach(Region.island_west) & self.tool.has_tool(Tool.hoe),
             Geode.artifact_trove: self.has(Geode.omni) & self.region.can_reach(Region.desert),
@@ -251,7 +251,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Geode.geode: self.mine.can_mine_in_the_mines_floor_1_40(),
             Geode.golden_coconut: self.region.can_reach(Region.island_north),
             Geode.magma: self.mine.can_mine_in_the_mines_floor_81_120() | (self.has(Fish.lava_eel) & self.building.has_building(Building.fish_pond)),
-            Geode.omni: self.mine.can_mine_in_the_mines_floor_41_80() | self.region.can_reach(Region.desert) | self.tool.has_tool(Tool.pan, ToolMaterial.iron) | self.received(Wallet.rusty_key) | (self.has(Fish.octopus) & self.building.has_building(Building.fish_pond)) | self.region.can_reach(Region.volcano_floor_10),
+            Geode.omni: self.mine.can_mine_in_the_mines_floor_41_80() | self.region.can_reach(Region.desert) | self.tool.has_pan(ToolMaterial.iron) | self.received(Wallet.rusty_key) | (self.has(Fish.octopus) & self.building.has_building(Building.fish_pond)) | self.region.can_reach(Region.volcano_floor_10),
             Gift.bouquet: self.relationship.has_hearts_with_any_bachelor(8) & self.money.can_spend_at(Region.pierre_store, 100),
             Gift.golden_pumpkin: self.season.has(Season.fall) | self.action.can_open_geode(Geode.artifact_trove),
             Gift.mermaid_pendant: self.region.can_reach(Region.tide_pools) & self.relationship.has_hearts_with_any_bachelor(10) & self.building.has_building(Building.kitchen) & self.has(Consumable.rain_totem),
@@ -278,10 +278,10 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Machine.sewing_machine: (self.region.can_reach(Region.haley_house) & self.has(ArtisanGood.cloth)) | (self.received(Machine.sewing_machine) & self.region.can_reach(Region.secret_woods)),
             Material.cinder_shard: self.region.can_reach(Region.volcano_floor_5),
             Material.clay: self.region.can_reach_any((Region.farm, Region.beach, Region.quarry)) & self.tool.has_tool(Tool.hoe),
-            Material.coal: self.mine.can_mine_in_the_mines_floor_41_80() | self.tool.has_tool(Tool.pan),
+            Material.coal: self.mine.can_mine_in_the_mines_floor_41_80() | self.tool.has_pan(),
             Material.fiber: True_(),
             Material.hardwood: self.tool.has_tool(Tool.axe, ToolMaterial.copper) & (self.region.can_reach(Region.secret_woods) | self.region.can_reach(Region.island_west)),
-            Material.moss: self.season.has_any_not_winter() & (self.tool.has_tool(Tool.scythe) | self.combat.has_any_weapon) & self.region.can_reach(Region.forest),
+            Material.moss: self.season.has_any_not_winter() & (self.tool.has_scythe() | self.combat.has_any_weapon) & self.region.can_reach(Region.forest),
             Material.sap: self.ability.can_chop_trees(),
             Material.stone: self.tool.has_tool(Tool.pickaxe),
             Material.wood: self.tool.has_tool(Tool.axe),
@@ -294,10 +294,10 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             MetalBar.quartz: self.can_smelt(Mineral.quartz) | self.can_smelt("Fire Quartz") | (self.has(Machine.recycling_machine) & (self.has(Trash.broken_cd) | self.has(Trash.broken_glasses))),
             MetalBar.radioactive: self.can_smelt(Ore.radioactive),
             Mineral.any_gem: self.museum.has_any_gem(),
-            Ore.copper: self.mine.can_mine_in_the_mines_floor_1_40() | self.mine.can_mine_in_the_skull_cavern() | self.tool.has_tool(Tool.pan, ToolMaterial.copper),
-            Ore.gold: self.mine.can_mine_in_the_mines_floor_81_120() | self.mine.can_mine_in_the_skull_cavern() | self.tool.has_tool(Tool.pan, ToolMaterial.gold),
-            Ore.iridium: self.count(2, *(self.mine.can_mine_in_the_skull_cavern(), self.can_fish_pond(Fish.super_cucumber), self.tool.has_tool(Tool.pan, ToolMaterial.iridium))),
-            Ore.iron: self.mine.can_mine_in_the_mines_floor_41_80() | self.mine.can_mine_in_the_skull_cavern() | self.tool.has_tool(Tool.pan, ToolMaterial.iron),
+            Ore.copper: self.mine.can_mine_in_the_mines_floor_1_40() | self.mine.can_mine_in_the_skull_cavern() | self.tool.has_pan(),
+            Ore.gold: self.mine.can_mine_in_the_mines_floor_81_120() | self.mine.can_mine_in_the_skull_cavern() | self.tool.has_pan(ToolMaterial.gold),
+            Ore.iridium: self.count(2, *(self.mine.can_mine_in_the_skull_cavern(), self.can_fish_pond(Fish.super_cucumber), self.tool.has_pan(ToolMaterial.iridium))),
+            Ore.iron: self.mine.can_mine_in_the_mines_floor_41_80() | self.mine.can_mine_in_the_skull_cavern() | self.tool.has_pan(ToolMaterial.iron),
             Ore.radioactive: self.ability.can_mine_perfectly() & self.region.can_reach(Region.qi_walnut_room),
             RetainingSoil.basic: self.money.can_spend_at(Region.pierre_store, 100),
             RetainingSoil.quality: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
@@ -322,9 +322,9 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Fish.clam: self.tool.can_forage(Generic.any, Region.beach),
             Fish.cockle: self.tool.can_forage(Generic.any, Region.beach),
             WaterItem.green_algae: self.fishing.can_fish_in_freshwater(),
-            WaterItem.cave_jelly: self.fishing.can_fish_at(Region.mines_floor_100) & self.tool.has_fishing_rod(2),
-            WaterItem.river_jelly: self.fishing.can_fish_at(Region.town) & self.tool.has_fishing_rod(2),
-            WaterItem.sea_jelly: self.fishing.can_fish_at(Region.beach) & self.tool.has_fishing_rod(2),
+            WaterItem.cave_jelly: self.fishing.can_fish_at(Region.mines_floor_100) & self.tool.has_fishing_rod(FishingRod.bamboo),
+            WaterItem.river_jelly: self.fishing.can_fish_at(Region.town) & self.tool.has_fishing_rod(FishingRod.bamboo),
+            WaterItem.sea_jelly: self.fishing.can_fish_at(Region.beach) & self.tool.has_fishing_rod(FishingRod.bamboo),
             WaterItem.seaweed: self.fishing.can_fish_at(Region.tide_pools),
             WaterItem.white_algae: self.fishing.can_fish_at(Region.mines_floor_20),
             WildSeeds.grass_starter: self.money.can_spend_at(Region.pierre_store, 100),

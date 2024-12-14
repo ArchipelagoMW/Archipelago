@@ -183,7 +183,7 @@ def create_elevators(item_factory: StardewItemFactory, options: StardewValleyOpt
 def create_tools(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
     tool_progression = content.features.tool_progression
     for tool, count in tool_progression.tool_distribution.items():
-        item = item_table[tool_progression.to_progressive_item(tool)]
+        item = item_table[tool_progression.to_progressive_item_name(tool)]
 
         # Trash can is only used in tool upgrade logic, so the last trash can is not progression because it basically does not unlock anything.
         if tool == Tool.trash_can:

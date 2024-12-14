@@ -36,7 +36,7 @@ class PetLogic(BaseLogic):
         points_per_month = 12 * 14
         points_per_water_month = 18 * 14
         farm_rule = self.logic.region.can_reach(Region.farm)
-        time_with_water_rule = self.logic.tool.can_water(0) & self.logic.time.has_lived_months(points // points_per_water_month)
+        time_with_water_rule = self.logic.tool.can_water() & self.logic.time.has_lived_months(points // points_per_water_month)
         time_without_water_rule = self.logic.time.has_lived_months(points // points_per_month)
         time_rule = time_with_water_rule | time_without_water_rule
         return farm_rule & time_rule

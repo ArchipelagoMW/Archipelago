@@ -35,4 +35,3 @@ class SpecialItemsLogic(BaseLogic):
         if SecretsanityOptionName.secret_notes in self.options.secretsanity:
             return self.logic.received(SpecialItem.solid_gold_lewis) & self.logic.region.can_reach(Region.town)
         return self.logic.has(Forageable.secret_note) & self.logic.region.can_reach(Region.town)
-

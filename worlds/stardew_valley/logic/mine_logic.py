@@ -43,23 +43,22 @@ class MineLogic(BaseLogic):
 
     @cache_self1
     def can_progress_in_the_mines_from_floor(self, floor: int) -> StardewRule:
-        tier = floor // 40
+        assert floor >= 0
+        # 0-39, 40-79, 80-119
+        mine_tier = floor // 40
         rules = []
 
-        weapon_rule = self.logic.mine.get_weapon_rule_for_floor_tier(tier)
+        weapon_rule = self.logic.mine.get_weapon_rule_for_floor_tier(mine_tier)
         rules.append(weapon_rule)
 
-        tool_rule = self.logic.tool.can_mine_using(ToolMaterial.tiers[tier])
+        tool_rule = self.logic.tool.can_mine_using(ToolMaterial.tiers[mine_tier + 1])
         rules.append(tool_rule)
 
         # No alternative for vanilla because we assume that you will grind the levels in the mines.
         if self.content.features.skill_progression.is_progressive:
-            skill_level = min(10, max(0, tier * 2))
+            skill_level = min(10, max(0, mine_tier * 2))
             rules.append(self.logic.skill.has_level(Skill.combat, skill_level))
             rules.append(self.logic.skill.has_level(Skill.mining, skill_level))
-
-        if tier >= 4:
-            rules.append(self.logic.cooking.can_cook())
 
         return self.logic.and_(*rules)
 
@@ -73,19 +72,23 @@ class MineLogic(BaseLogic):
 
     @cache_self1
     def can_progress_in_the_skull_cavern_from_floor(self, floor: int) -> StardewRule:
-        tier = floor // 50
+        assert floor >= 0
+        # 0-49, 50-99, 100-149, 150-199, 200-249
+        cavern_tier = floor // 50
         rules = []
 
         weapon_rule = self.logic.combat.has_great_weapon
         rules.append(weapon_rule)
 
-        tool_rule = self.logic.tool.can_mine_using(ToolMaterial.tiers[min(4, max(0, tier + 2))])
+        tool_rule = self.logic.tool.can_mine_using(ToolMaterial.tiers[min(4, max(0, cavern_tier + 2))])
         rules.append(tool_rule)
 
         # No alternative for vanilla because we assume that you will grind the levels in the mines.
         if self.content.features.skill_progression.is_progressive:
-            skill_level = min(10, max(0, tier * 2 + 6))
-            rules.extend((self.logic.skill.has_level(Skill.combat, skill_level),
-                          self.logic.skill.has_level(Skill.mining, skill_level)))
+            skill_level = min(10, max(0, cavern_tier * 2 + 6))
+            rules.append(self.logic.skill.has_level(Skill.combat, skill_level))
+            rules.append(self.logic.skill.has_level(Skill.mining, skill_level))
+
+        rules.append(self.logic.cooking.can_cook())
 
         return self.logic.and_(*rules)
