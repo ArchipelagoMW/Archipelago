@@ -110,6 +110,27 @@ def build_whitelist(options: DSTOptions) -> FrozenSet[str]:
     if REGION.CAVE in _whitelist or REGION.OCEAN in _whitelist: _whitelist.add(REGION.DUALREGION)
     if REGION.CAVE in _whitelist and REGION.OCEAN in _whitelist: _whitelist.add(REGION.BOTHREGIONS)
 
+    # Hermit Crab Friendship (Min reachable 7)
+    _HERMIT_FRIENDSHIP_CONDITIONS = [
+        PHASE.NIGHT in _whitelist, # Hermit Home 1 
+        PHASE.NIGHT in _whitelist, # Hermit Home 2
+        PHASE.NIGHT in _whitelist, # Hermit Home 3
+        True, # Drying Racks
+        _whitelist.issuperset({PHASE.DAY, SEASON.NONWINTER}), # Plant flowers
+        True, # Berry bushes
+        True, # Clear underwater salvageables
+        SEASONS_PASSED.SEASONS_2 in _whitelist, # Lure plant
+        True, # Wooden chair
+        len(_whitelist.intersection({SEASON.AUTUMN, SEASON.SPRING})) > 0, # Umbrella
+        SEASON.WINTER in _whitelist, # Warm clothing
+        SEASON.SUMMER in _whitelist, # Flower Salad
+        SEASON.AUTUMN in _whitelist, # Fallounder
+        SEASON.SPRING in _whitelist, # Bloomfin Tuna
+        SEASON.SUMMER in _whitelist, # Scorching Sunfish
+        SEASON.WINTER in _whitelist, # Ice Bream
+        True, # 5 heavy fish
+    ]
+    
     # Special tags
     _whitelist.update({tag for tag, istrue in {
         SPECIAL_TAGS.RUINS_GEMS:        (options.boss_locations.value >= options.boss_locations.option_all) 
@@ -137,6 +158,8 @@ def build_whitelist(options: DSTOptions) -> FrozenSet[str]:
                                             or bool(options.seed_items.value)
                                             or _whitelist.issuperset({SEASONS_PASSED.SEASONS_1, SEASON.NONWINTER})
                                         ),
+        SPECIAL_TAGS.HERMIT_8:          _HERMIT_FRIENDSHIP_CONDITIONS.count(True) >= 8,
+        SPECIAL_TAGS.HERMIT_10:         _HERMIT_FRIENDSHIP_CONDITIONS.count(True) >= 10,
     }.items() if istrue})
 
     return frozenset(_whitelist)

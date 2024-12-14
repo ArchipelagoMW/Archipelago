@@ -77,13 +77,15 @@ class SEASONS_PASSED:
 
 class SPECIAL_TAGS:
     RUINS_GEMS = "Ruins Gems"
-    MOOSEGOOSE = "Moosegoose"
+    MOOSEGOOSE = "Moose/Goose"
     BUTTER_MUFFIN = "Butter Muffin"
     LOBSTER_DINNER = "Lobster Dinner"
     LEAFY_MEAT = "Leafy Meat"
     FRUITS = "Fruits"
     BANANA = "Banana"
     CORN = "Corn"
+    HERMIT_8 = "Hermit Friendship 8"
+    HERMIT_10 = "Hermit Friendship 10"
 
     tag_lookup = {
         "special_ruinsgems":     RUINS_GEMS,
@@ -94,6 +96,8 @@ class SPECIAL_TAGS:
         "special_fruits":        FRUITS,
         "special_banana":        BANANA,
         "special_corn":          CORN,
+        "special_hermit_8":      HERMIT_8,
+        "special_hermit_10":     HERMIT_10,
     }
 
 
@@ -577,7 +581,7 @@ DSTAP_LOCATIONS = [
     [273,   "Spazmatism",               "twinofterror2",            [ "boss", "raidboss", "night" ] ],
     [274,   "Toadstool",                "toadstool",                [ "boss", "raidboss", "cave"] ],
     [275,   "Ancient Guardian",         "minotaur",                 [ "boss", "ruins", "priority_fuelweaver_boss" ] ],
-    [276,   "Crab King",                "crabking",                 [ "boss", "raidboss", "ocean", "priority_celestial_boss" ] ],
+    [276,   "Crab King",                "crabking",                 [ "boss", "raidboss", "ocean", "priority_celestial_boss", "special_hermit_10" ] ],
 
     # Creatures (301-450)
     [301,   "Batilisk",                 "bat",                  [ "creature", "cave" ] ],
@@ -856,7 +860,7 @@ DSTAP_LOCATIONS = [
     [855,   "Bottle Exchange (5)",              "messagebottleempty",       [ "research", "hermitcrab", "tier_2", "ocean" ] ],
     [856,   "Bottle Exchange (6)",              "messagebottleempty",       [ "research", "hermitcrab", "tier_3", "ocean" ] ],
     [857,   "Bottle Exchange (7)",              "messagebottleempty",       [ "research", "hermitcrab", "tier_3", "ocean" ] ],
-    [858,   "Bottle Exchange (8)",              "messagebottleempty",       [ "research", "hermitcrab", "tier_4", "ocean" ] ],
-    [859,   "Bottle Exchange (9)",              "messagebottleempty",       [ "research", "hermitcrab", "tier_4", "ocean" ] ],
-    [860,   "Bottle Exchange (10)",             "messagebottleempty",       [ "research", "hermitcrab", "tier_4", "ocean", "priority_crabking_boss" ] ],
+    [858,   "Bottle Exchange (8)",              "messagebottleempty",       [ "research", "hermitcrab", "tier_4", "ocean", "special_hermit_8" ] ],
+    [859,   "Bottle Exchange (9)",              "messagebottleempty",       [ "research", "hermitcrab", "tier_4", "ocean", "special_hermit_8" ] ],
+    [860,   "Bottle Exchange (10)",             "messagebottleempty",       [ "research", "hermitcrab", "tier_4", "ocean", "special_hermit_8", "priority_crabking_boss" ] ],
 ]
