@@ -411,7 +411,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Forest Belltower Main behind bushes"].connect(
         connecting_region=regions["Forest Belltower Main"],
-        rule=lambda state: can_get_past_bushes(state, world))
+        rule=lambda state: can_get_past_bushes(state, world)
+        or has_ice_grapple_logic(False, IceGrappling.option_easy, state, world))
     # you can use the slimes to break the bushes
     regions["Forest Belltower Main"].connect(
         connecting_region=regions["Forest Belltower Main behind bushes"])
