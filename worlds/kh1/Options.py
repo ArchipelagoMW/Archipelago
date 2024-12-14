@@ -395,7 +395,7 @@ class RandomizePostcards(Choice):
 
 class JungleSlider(Toggle):
     """
-    Detmines if checks are behind the Jungle Slider minigame.
+    Determines whether checks are behind the Jungle Slider minigame.
     """
     display_name = "Jungle Slider"
 
