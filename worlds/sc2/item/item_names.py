@@ -576,7 +576,7 @@ HUNTER_KILLERS       = "Hunter Killers"
 TORRASQUE_MERC       = "Torrasque"
 HUNTERLING           = "Hunterling"
 YGGDRASIL            = "Yggdrasil"
-MERC_ROACH           = "Thornshells"
+THORNSHELL           = "Thornshells"
 
     
 # Kerrigan Upgrades
