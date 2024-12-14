@@ -593,7 +593,7 @@ class Booksanity(Choice):
 
 
 class Walnutsanity(RandomizableOptionSet):
-    """Shuffle walnuts?
+    """Shuffle walnuts? When randomized, odds will be fairly distributed between disabled, puzzles only and all walnuts.
     Puzzles: Walnuts obtained from solving a special puzzle or winning a minigame
     Bushes: Walnuts that are in a bush and can be collected by clicking it
     Dig spots: Walnuts that are underground and must be digged up. Includes Journal scrap walnuts
@@ -627,7 +627,7 @@ class NumberOfMovementBuffs(Range):
 
 
 class EnabledFillerBuffs(RandomizableOptionSet):
-    """Enable various permanent player buffs to roll as filler items
+    """Enable various permanent player buffs to roll as filler items. When randomized, each buff has a 50% chance of being enabled.
     Luck: Increase daily luck
     Damage: Increased Damage %
     Defense: Increased Defense
