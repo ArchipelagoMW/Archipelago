@@ -410,7 +410,7 @@ class StartingWorlds(Range):
     
 class StartingTools(DefaultOnToggle):
     """
-    Detmines if you start with Scan and Dodge Roll.
+    Determines whether you start with Scan and Dodge Roll.
     """
     display_name = "Starting Tools"
 
