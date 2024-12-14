@@ -54,6 +54,7 @@ class StardewFeatures:
     fishsanity: fishsanity.FishsanityFeature
     friendsanity: friendsanity.FriendsanityFeature
     skill_progression: skill_progression.SkillProgressionFeature
+    tool_progression: tool_progression.ToolProgressionFeature
 
 
 @dataclass(frozen=True)
