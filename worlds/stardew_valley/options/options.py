@@ -1,9 +1,9 @@
+import random
 import sys
-import typing
 from dataclasses import dataclass
 from typing import Protocol, ClassVar
 
-from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, Visibility
+from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, Visibility
 from ..mods.mod_data import ModNames
 from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName
 from ..strings.bundle_names import all_cc_bundle_names
@@ -11,6 +11,25 @@ from ..strings.bundle_names import all_cc_bundle_names
 
 class StardewValleyOption(Protocol):
     internal_name: ClassVar[str]
+
+
+class RandomizableOptionSet(OptionSet):
+
+    @classmethod
+    def from_text(cls, text: str):
+        if text == "random":
+            return cls.roll_random()
+        return super().from_text(text)
+
+    @classmethod
+    def roll_random(cls):
+        """By default, each possible option has a 50% chance of being enabled"""
+        enabled_options = []
+        for key in cls.valid_keys:
+            if random.randint(0, 1):
+                enabled_options.append(key)
+
+        raise cls(enabled_options)
 
 
 class Goal(Choice):
@@ -573,7 +592,7 @@ class Booksanity(Choice):
     option_all = 3
 
 
-class Walnutsanity(OptionSet):
+class Walnutsanity(RandomizableOptionSet):
     """Shuffle walnuts?
     Puzzles: Walnuts obtained from solving a special puzzle or winning a minigame
     Bushes: Walnuts that are in a bush and can be collected by clicking it
@@ -590,13 +609,10 @@ class Walnutsanity(OptionSet):
     preset_all = valid_keys
     default = preset_none
 
-    def __eq__(self, other: typing.Any) -> bool:
-        if isinstance(other, OptionSet):
-            return set(self.value) == other.value
-        if isinstance(other, OptionList):
-            return set(self.value) == set(other.value)
-        else:
-            return typing.cast(bool, self.value == other)
+    @classmethod
+    def roll_random(cls):
+        choice = random.choice([[], [WalnutsanityOptionName.puzzles], cls.valid_keys])
+        return cls(choice)
 
 
 class NumberOfMovementBuffs(Range):
@@ -610,7 +626,7 @@ class NumberOfMovementBuffs(Range):
     # step = 1
 
 
-class EnabledFillerBuffs(OptionSet):
+class EnabledFillerBuffs(RandomizableOptionSet):
     """Enable various permanent player buffs to roll as filler items
     Luck: Increase daily luck
     Damage: Increased Damage %
