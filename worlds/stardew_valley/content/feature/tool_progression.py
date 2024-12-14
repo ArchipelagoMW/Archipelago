@@ -9,11 +9,6 @@ from typing import ClassVar
 from ...strings.tool_names import Tool
 
 
-class PriceMultipliers:
-    CHEAP = 2 / 5
-    VERY_CHEAP = 1 / 5
-
-
 def to_progressive_item(tool: str) -> str:
     """Return the name of the progressive item."""
     return f"Progressive {tool}"
@@ -58,7 +53,6 @@ def get_tools_distribution(progressive_tools_enabled: bool, skill_masteries_enab
 class ToolProgressionFeature(ABC):
     is_progressive: ClassVar[bool]
     tool_distribution: Mapping[str, int]
-    price_multiplier: float = 1.0
 
     to_progressive_item = staticmethod(to_progressive_item)
 
