@@ -58,6 +58,7 @@ SkillLogicMixin, CookingLogicMixin]]):
         weapon_rule = self.logic.mine.get_weapon_rule_for_floor_tier(tier)
         rules.append(weapon_rule)
 
+        # No alternative for vanilla because we assume you will get ores to upgrade your tools in the mines.
         if self.content.features.tool_progression.is_progressive:
             rules.append(self.logic.tool.has_tool(Tool.pickaxe, ToolMaterial.tiers[tier]))
 
@@ -87,7 +88,9 @@ SkillLogicMixin, CookingLogicMixin]]):
         weapon_rule = self.logic.combat.has_great_weapon
         rules.append(weapon_rule)
 
+        # No alternative for vanilla because we assume you will get ores to upgrade your tools in the mines.
         if self.content.features.tool_progression.is_progressive:
+            # TODO move that in tool logic somehow
             rules.append(self.logic.received("Progressive Pickaxe", min(4, max(0, tier + 2))))
 
         # No alternative for vanilla because we assume that you will grind the levels in the mines.
