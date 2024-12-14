@@ -11,7 +11,7 @@ from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles
 from .content import content_packs, StardewContent, unpack_content, create_content
 from .early_items import setup_early_items
-from .items import item_table, create_items, ItemData, Group, items_by_group, get_all_filler_items, remove_limited_amount_packs, generate_filler_choice_pool
+from .items import item_table, create_items, ItemData, Group, items_by_group, generate_filler_choice_pool
 from .locations import location_table, create_locations, LocationData, locations_by_tag
 from .logic.bundle_logic import BundleLogic
 from .logic.logic import StardewLogic
