@@ -92,6 +92,7 @@ class FactionlessItemType(ItemTypeEnum):
     BuildingSpeed = "Building Speed", 4
     Nothing = "Nothing Group", 5
     Deprecated = "Deprecated", 6
+    MaxSupplyTrap = "Max Supply Trap", 7
     Keys = "Keys", -1
 
 
@@ -1083,6 +1084,11 @@ item_table = {
     item_names.BUILDING_CONSTRUCTION_SPEED:
         ItemData(806 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.BuildingSpeed, 1, SC2Race.ANY, quantity=0,
                  classification=ItemClassification.filler),
+
+    # Trap Filler
+    item_names.REDUCED_MAX_SUPPLY:
+        ItemData(850 + SC2WOL_ITEM_ID_OFFSET, FactionlessItemType.MaxSupplyTrap, -1, SC2Race.ANY, quantity=0,
+                 classification=ItemClassification.trap),
 
 
     # Nova gear
@@ -2136,13 +2142,6 @@ not_balanced_starting_units = {
     item_names.TEMPEST,
 }
 
-
-filler_items: typing.Tuple[str, ...] = (
-    item_names.STARTING_MINERALS,
-    item_names.STARTING_VESPENE,
-    item_names.STARTING_SUPPLY,
-    item_names.MAX_SUPPLY,
-)
 
 # Defense rating table
 # Commented defense ratings are handled in LogicMixin

@@ -876,6 +876,9 @@ STARTING_SUPPLY             = "Additional Starting Supply"
 MAX_SUPPLY                  = "Additional Maximum Supply"
 SHIELD_REGENERATION         = "Increased Shield Regeneration"
 BUILDING_CONSTRUCTION_SPEED = "Increased Building Construction Speed"
+
+# Trap
+REDUCED_MAX_SUPPLY          = "Decreased Maximum Supply"
 NOTHING                     = "Nothing"
 
 # Deprecated

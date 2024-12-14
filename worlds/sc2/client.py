@@ -241,6 +241,9 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         """List received items.
         Pass in a parameter to filter the search by partial item name or exact item group.
         Use '/received recent <number>' to list the last 'number' items received (default 20)."""
+        if self.ctx.slot is None:
+            self.formatted_print("Connect to a slot to view what items are received.")
+            return True
         if filter_search.casefold().startswith('recent'):
             return self._received_recent(filter_search[len('recent'):].strip())
         # Groups must be matched case-sensitively, so we properly capitalize the search term
@@ -314,6 +317,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         ) -> None:
             if not should_display:
                 return
+            assert self.ctx.slot is not None
             indent_str = " " * indent
             if isinstance(element, SC2Race):
                 self.formatted_print(f" [u]{name}[/u] ")
@@ -353,7 +357,8 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             self.formatted_print(f"[b]Filter \"{filter_search}\" found {items_obtained_matching_filter} out of {item_types_obtained} obtained item types[/b]")
         return True
 
-    def _received_recent(self, amount: str) -> None:
+    def _received_recent(self, amount: str) -> bool:
+        assert self.ctx.slot is not None
         try:
             display_amount = int(amount)
         except ValueError:
@@ -391,6 +396,9 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             ConfigurableOptionInfo('minerals_per_item', 'minerals_per_item', options.MineralsPerItem, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('gas_per_item', 'vespene_per_item', options.VespenePerItem, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('supply_per_item', 'starting_supply_per_item', options.StartingSupplyPerItem, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo('max_supply_per_item', 'maximum_supply_per_item', options.MaximumSupplyPerItem, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo('reduced_supply_per_item', 'maximum_supply_reduction_per_item', options.MaximumSupplyReductionPerItem, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo('lowest_max_supply', 'lowest_maximum_supply', options.LowestMaximumSupply, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('no_forced_camera', 'disable_forced_camera', options.DisableForcedCamera),
             ConfigurableOptionInfo('skip_cutscenes', 'skip_cutscenes', options.SkipCutscenes),
             ConfigurableOptionInfo('enable_morphling', 'enable_morphling', options.EnableMorphling, can_break_logic=True),
@@ -622,6 +630,8 @@ class SC2Context(CommonContext):
         self.vespene_per_item: int =  15  # For backwards compat with games generated pre-0.4.5
         self.starting_supply_per_item: int = 2  # For backwards compat with games generated pre-0.4.5
         self.maximum_supply_per_item: int = 2
+        self.maximum_supply_reduction_per_item: int = options.MaximumSupplyReductionPerItem.default
+        self.lowest_maximum_supply: int = options.LowestMaximumSupply.default
         self.nova_covert_ops_only = False
         self.kerrigan_levels_per_mission_completed = 0
         self.trade_enabled: int = EnableVoidTrade.default
@@ -629,7 +639,7 @@ class SC2Context(CommonContext):
         self.trade_latest_reply: typing.Optional[dict] = None
         self.trade_reply_event = asyncio.Event()
         self.trade_lock_wait: int = 0
-        self.trade_lock_start: typing.Optional[int] = None
+        self.trade_lock_start: typing.Optional[float] = None
         self.trade_response: typing.Optional[str] = None
         self.difficulty_damage_modifier: int = DifficultyDamageModifier.default
 
@@ -780,7 +790,9 @@ class SC2Context(CommonContext):
             self.minerals_per_item = args["slot_data"].get("minerals_per_item", 15)
             self.vespene_per_item = args["slot_data"].get("vespene_per_item", 15)
             self.starting_supply_per_item = args["slot_data"].get("starting_supply_per_item", 2)
-            self.maximum_supply_per_item = args["slot_data"].get("maximum_supply_per_item", 2)
+            self.maximum_supply_per_item = args["slot_data"].get("maximum_supply_per_item", options.MaximumSupplyPerItem.default)
+            self.maximum_supply_reduction_per_item = args["slot_data"].get("maximum_supply_reduction_per_item", options.MaximumSupplyReductionPerItem.default)
+            self.lowest_maximum_supply = args["slot_data"].get("lowest_maximum_supply", options.LowestMaximumSupply.default)
             self.nova_covert_ops_only = args["slot_data"].get("nova_covert_ops_only", False)
             self.trade_enabled = args["slot_data"].get("enable_void_trade", EnableVoidTrade.option_false)
             self.difficulty_damage_modifier = args["slot_data"].get("difficulty_damage_modifier", DifficultyDamageModifier.option_true)
@@ -861,6 +873,7 @@ class SC2Context(CommonContext):
                     categories[mission.category] = []
                 mission_id = mission.mission.id
                 sub_rules: typing.List[CountMissionsRuleData] = []
+                missions: typing.List[int]
                 if mission.number:
                     amount = mission.number
                     missions = [
@@ -870,7 +883,7 @@ class SC2Context(CommonContext):
                     sub_rules.append(CountMissionsRuleData(missions, amount, [campaign_name]))
                 prev_missions: typing.List[int] = []
                 if len(mission.required_world) > 0:
-                    missions: typing.List[int] = []
+                    missions = []
                     for connection in mission.required_world:
                         if isinstance(connection, dict):
                             required_campaign = {}
@@ -1025,7 +1038,8 @@ class SC2Context(CommonContext):
                 if not keep_trying:
                     return None
                 continue
-
+            
+            assert self.trade_latest_reply is not None
             reply = copy.deepcopy(self.trade_latest_reply)
 
             # Make sure the most recently received update was triggered by our lock attempt
@@ -1278,10 +1292,8 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
                 accumulators[item_data.race][item_data.type.flag_word] += ctx.vespene_per_item
             elif name == item_names.STARTING_SUPPLY:
                 accumulators[item_data.race][item_data.type.flag_word] += ctx.starting_supply_per_item
-            elif name == item_names.MAX_SUPPLY:
-                accumulators[item_data.race][item_data.type.flag_word] += ctx.maximum_supply_per_item
             else:
-                accumulators[item_data.race][item_data.type.flag_word] += item_data.number
+                accumulators[item_data.race][item_data.type.flag_word] += 1
 
     # Fix Shields from generic upgrades by unit class (Maximum of ground/air upgrades)
     if shields_from_ground_upgrade > 0 or shields_from_air_upgrade > 0:
@@ -1487,6 +1499,8 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         'last_supply_used'
     ]
     ctx: SC2Context
+    # defined in bot_ai_internal.py; seems to be mis-annotated as a float and later re-annotated as an int
+    supply_used: int
 
     def __init__(self, ctx: SC2Context, mission_id: int):
         self.game_running = False
@@ -1693,7 +1707,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             result.append(0)
         return result
 
-    def missions_beaten_count(self):
+    def missions_beaten_count(self) -> int:
         return len([location for location in self.ctx.checked_locations if location % VICTORY_MODULO == 0])
 
     async def update_colors(self):
@@ -1704,30 +1718,43 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         await self.chat_send("?SetColor nova " + str(self.ctx.player_color_nova))
         self.ctx.pending_color_update = False
 
-    async def update_resources(self, current_items):
+    async def update_resources(self, current_items: typing.Dict[SC2Race, typing.List[int]]):
+        DEFAULT_MAX_SUPPLY = 200
+        max_supply_amount = max(
+            DEFAULT_MAX_SUPPLY
+            + (
+                current_items[SC2Race.ANY][get_item_flag_word(item_names.MAX_SUPPLY)]
+                * self.ctx.maximum_supply_per_item
+            )
+            - (
+                current_items[SC2Race.ANY][get_item_flag_word(item_names.REDUCED_MAX_SUPPLY)]
+                * self.ctx.maximum_supply_reduction_per_item
+            ),
+            self.ctx.lowest_maximum_supply,
+        )
         await self.chat_send("?GiveResources {} {} {} {}".format(
             current_items[SC2Race.ANY][get_item_flag_word(item_names.STARTING_MINERALS)],
             current_items[SC2Race.ANY][get_item_flag_word(item_names.STARTING_VESPENE)],
             current_items[SC2Race.ANY][get_item_flag_word(item_names.STARTING_SUPPLY)],
-            current_items[SC2Race.ANY][get_item_flag_word(item_names.MAX_SUPPLY)]
+            max_supply_amount - DEFAULT_MAX_SUPPLY,
         ))
 
-    async def update_terran_tech(self, current_items):
+    async def update_terran_tech(self, current_items: typing.Dict[SC2Race, typing.List[int]]):
         terran_items = current_items[SC2Race.TERRAN]
         await self.chat_send("?GiveTerranTech " + " ".join(map(str, terran_items)))
 
-    async def update_zerg_tech(self, current_items, kerrigan_level):
+    async def update_zerg_tech(self, current_items: typing.Dict[SC2Race, typing.List[int]], kerrigan_level: int):
         zerg_items = current_items[SC2Race.ZERG]
         zerg_items = [value for index, value in enumerate(zerg_items) if index not in [ZergItemType.Level.flag_word, ZergItemType.Primal_Form.flag_word]]
         kerrigan_primal_by_items = kerrigan_primal(self.ctx, kerrigan_level)
         kerrigan_primal_bot_value = 1 if kerrigan_primal_by_items else 0
         await self.chat_send(f"?GiveZergTech {kerrigan_level} {kerrigan_primal_bot_value} " + ' '.join(map(str, zerg_items)))
 
-    async def update_protoss_tech(self, current_items):
+    async def update_protoss_tech(self, current_items: typing.Dict[SC2Race, typing.List[int]]):
         protoss_items = current_items[SC2Race.PROTOSS]
         await self.chat_send("?GiveProtossTech " + " ".join(map(str, protoss_items)))
 
-    async def update_misc_tech(self, current_items):
+    async def update_misc_tech(self, current_items: typing.Dict[SC2Race, typing.List[int]]):
         await self.chat_send("?GiveMiscTech {}".format(
             current_items[SC2Race.ANY][get_item_flag_word(item_names.BUILDING_CONSTRUCTION_SPEED)],
         ))
