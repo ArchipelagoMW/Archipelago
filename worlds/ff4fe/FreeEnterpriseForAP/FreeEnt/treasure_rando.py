@@ -143,6 +143,7 @@ def apply(env):
             id = t.flag
             ap_item = env.options.ap_data[str(id)]
             placement = items_dbview.find_one(lambda i: i.code == ap_item["item_data"]["fe_id"])
+            # If we don't have an FF4 item to place, it's an AP item, so we make the chest secretly a 0 GP box.
             if placement is None:
                 treasure_assignment.assign(t, '{} gp'.format(0))
             elif placement.tier <= env.options.ap_data["junk_tier"] and placement.flag != "K":

@@ -151,6 +151,7 @@ event($48)  //Fabul battle
     deactivate #Monk    
     deactivate #FabulMonk2
     deactivate #fe_KingFabulThroneRoom
+    music #Fabul fade in
 
     [#B #Objectives_Tick #objective.quest_fabul]
 

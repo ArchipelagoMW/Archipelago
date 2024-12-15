@@ -17,8 +17,8 @@ if TYPE_CHECKING:
     from . import FF4FEWorld
 
 ROM_NAME = 0x007FC0
-sentinel_addresses = [
-    0xF506B1, 0xF506D9, 0xF50650, 0xF50140, 0xF50685, 0xE070FD
+sentinel_addresses = [ # A list of memory addresses that amounts to "are we in a cutscene or battle or menu".
+    0xF506B1, 0xF506D9, 0xF50650, 0xF50140, 0xF50685, 0xE070FD, 0xF5FF28
 ]
 inventory_start_location = 0xF51440
 inventory_size = 96
@@ -36,7 +36,8 @@ objective_threshold_start_location = 0x21F820
 objective_threshold_size = 32
 objective_progress_start_location = 0xF51520
 objective_progress_size = 32
-objective_count_location = 0x10F0F9
+objective_count_location = 0x10F0FC
+objectives_needed_count_location = 0x10F0F9
 
 key_items_found_location = 0xF51578
 gp_byte_location = 0xF516A0

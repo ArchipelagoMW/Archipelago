@@ -39,11 +39,13 @@ itemscsv = csvdb.CsvDb(pkgutil.get_data(__name__, "FreeEnterpriseForAP/FreeEnt/a
 for item in itemscsv.create_view():
     item_tier = int(item.tier) if item.tier.isdecimal() else -1
     item_classification = ItemClassification.filler
-    if item.spoilername == "" or item.spoilername == "Medusa Sword":
+    if item.spoilername == "" or item.spoilername == "Medusa Sword": # Medusa Sword is bugged, so we don't include it.
         continue
+    # Legend Sword isn't flagged as a key item, weirdly.
     if item.subtype == "key" or item.spoilername == "Legend Sword":
         item_classification = ItemClassification.progression if item.spoilername != "DkMatter" \
             else ItemClassification.progression_skip_balancing
+    # Spoon is, though...but it doesn't unlock anything.
     elif item.spoilername == "Spoon" or ((int(item.tier) > 4) if item.tier.isdecimal() else False):
         item_classification = ItemClassification.useful
     item_price = int(item.price, 10) if item.price != '' else 0
@@ -53,7 +55,7 @@ for item in itemscsv.create_view():
 
 useful_items = [item for item in all_items if item.classification == ItemClassification.useful and item.name != "Spoon"]
 filler_items = [item for item in all_items if item.classification == ItemClassification.filler and item.name != "Spoon"]
-# 0x46,#item.fe_CustomWeapon,,,,,,D,,,,,yes,,yes,
+
 all_items.append(ItemData("Advance Weapon", ItemClassification.useful, 8, 0x46, 100000))
 
 useful_item_names = [item.name for item in [*useful_items]]

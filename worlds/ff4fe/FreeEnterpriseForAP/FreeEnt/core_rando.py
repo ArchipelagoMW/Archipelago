@@ -492,7 +492,10 @@ def apply(env):
         # assign key items
         if env.options.ap_data is not None:
             for slot in RewardSlot:
+                # 0x5A and 0x5D aren't applicable to AP games.
+                # Rewards go up to 0x60, but the last two aren't used yet.
                 skip_list = [0x5A, 0x5D, 0x5F, 0x60]
+                # These three are treasure chests, so we use the treasure chest ID.
                 if slot == RewardSlot.feymarch_item:
                     id = 0x13D
                 elif slot == RewardSlot.lunar_boss_4_item_1:
@@ -506,12 +509,16 @@ def apply(env):
                         lambda t: t.map == CHEST_NUMBERS[slot][0] and
                                   t.index == CHEST_NUMBERS[slot][1]).flag
                 else:
-                    id = slot + 0x200
+                    id = slot + 0x200 # Reward location IDs are ingame index plus 0x200.
                 if int(id) == 0x25B and env.options.flags.has('objective_mode_classicforge'):
+                    # We skip Kokkol if we're on Forge the Crystal.
                     continue
+                # We attempt to find the FF4 item in the slot...
                 try:
                     ap_item = env.options.ap_data[str(id)]
                     placement = items_dbview.find_one(lambda i: i.code == ap_item["item_data"]["fe_id"])
+                # ...and if there is none, it's a remote item, so we place a Cure1 as a placeholder
+                # and let the scripting know to use the AP version of the event scripting for that slot.
                 except KeyError:
                     placement = None
                 if placement is None:
@@ -520,17 +527,18 @@ def apply(env):
                 else:
                     reward = ItemReward(placement.const)
                 script_text = env.meta["text_pointers"].pop()
-                bank = int(script_text[10], 16)
                 pointer = script_text[20:24]
                 pointer = pointer[1:] if pointer[3] != ")" else pointer[1:3]
                 env.add_script(f"consts(ap_reward_slot) {{${pointer} {slot.name}}} ")
-                safe_item_name = unicodedata.normalize("NFKD", ap_item["item_name"])
-                safe_item_name = re.sub(r"[^a-zA-Z0-9`\'.\-_!?%/:,\s]", "-", safe_item_name)
-                safe_player_name = unicodedata.normalize("NFKD", ap_item["player_name"])
-                safe_player_name = re.sub(r"[^a-zA-Z0-9`\'.\-_!?%/:,\s]", "-", safe_player_name)
-                env.add_script(f'{script_text} {{Found {safe_player_name}\'s \n{safe_item_name}. }}')
+                if ap_item["item_data"]["name"] == "Archipelago Item":
+                    safe_item_name = unicodedata.normalize("NFKD", ap_item["item_name"])
+                    safe_item_name = re.sub(r"[^a-zA-Z0-9`\'.\-_!?%/:,\s]", "-", safe_item_name)
+                    safe_player_name = unicodedata.normalize("NFKD", ap_item["player_name"])
+                    safe_player_name = re.sub(r"[^a-zA-Z0-9`\'.\-_!?%/:,\s]", "-", safe_player_name)
+                    env.add_script(f'{script_text} {{Found {safe_player_name}\'s \n{safe_item_name}. }}')
+                else:
+                    env.add_script(f'{script_text} {{Found your own\n{placement.name}. }}')
                 rewards_assignment[slot] = reward
-            found_valid_assignment = True
         elif env.options.flags.has('key_items_vanilla'):
             # vanilla assignment
             rewards_assignment[RewardSlot.fabul_item] = ItemReward('#item.BlackSword')
@@ -669,7 +677,7 @@ def apply(env):
         tests.extend(env.meta.get('objective_required_bosses', []))
 
         found_valid_assignment = True
-        break
+        break # We skip validation, because AP handles that for us.
 
         attempts += 1
 

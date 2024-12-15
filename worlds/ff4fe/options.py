@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from Options import Toggle, Range, Choice, PerGameCommonOptions, ItemSet, DefaultOnToggle, StartInventoryPool, \
-    OptionGroup, OptionSet
+from Options import (Toggle, Range, Choice, PerGameCommonOptions, DefaultOnToggle, StartInventoryPool, OptionGroup,
+                     OptionSet)
 
 
 class ForgeTheCrystal(Toggle):
@@ -25,15 +25,25 @@ class FindTheDarkMatter(Toggle):
     display_name = "Find The Dark Matter"
 
 class AdditionalObjectives(Range):
-    """The number of additional objectives on top of the primary one."""
+    """The number of additional random objectives. Can be quests, boss fights, or character recruitments. Note that
+    no matter what this is set to, no more than thirty-two objectives will be set."""
     display_name = "Additional Objectives"
     range_start = 0
     range_end = 32
     default = 0
 
+class RequiredObjectiveCount(Range):
+    """The number of objectives required for victory. Note that this is ignored when no objectives are set. If this
+    count is greater than the total number of objectives available, then it will be reduced to match the number of
+    available objectives."""
+    display_name = "Max Number of Required Objectives"
+    range_start = 1
+    range_end = 32
+    default = 32
+
 class ObjectiveReward(Choice):
     """The reward for clearing all objectives. Note that this is ignored when no objectives are set,
-    and Forge the Crystal forces this to the Crystal setting"""
+    and Forge the Crystal forces this to the Crystal setting."""
     display_name = "Objective Reward"
     option_crystal = 0
     option_win = 1
@@ -44,19 +54,26 @@ class ItemPlacement(Choice):
     Setting this to Full Shuffle will allow any items to be anywhere.
     Setting this to Major Minor Split will force all non-major locations to never have progression.
     In either case, major locations can only have useful or progression items.
-    Major locations are any MIAB or event locations"""
+    Major locations are any MIAB or event locations."""
     display_name = "Item Placement"
     option_full_shuffle = 0
     option_major_minor_split = 1
     default = 0
 
 class NoFreeCharacters(Toggle):
+    """If set, characters will not be available at locations with no requirements or bosses. These locations are
+    Mysidia, Damcyan Watery Pass, and Mt. Ordeals."""
     display_name = "No Free Characters"
 
 class NoEarnedCharacters(Toggle):
+    """If set, characters will not be available at locations with requirements or bosses. These locations are Mist,
+    Kaipo, Mt. Hobs, Baron, the Tower of Zot, Cave Eblana, Lunar Palace, and the Giant of Bab-il."""
     display_name = "No Earned Characters"
 
 class HeroChallenge(Choice):
+    """Enable the Hero Challenge. In Hero Challenge, your starting character is your main character and cannot be
+    dismissed. They will face the top of Mt. Ordeals on their own, and Kokkol will forge a weapon from FFIV Advance
+    for them (unless Forge the Crystal is set)."""
     display_name = "Hero Challenge"
     option_none = 0
     option_cecil = 1
@@ -75,9 +92,11 @@ class HeroChallenge(Choice):
     default = 0
 
 class PassEnabled(Toggle):
+    """Will the Pass be included in the Key Item Pool?"""
     display_name = "Pass In Key Item Pool"
 
 class UsefulPercentage(Range):
+    """The percentage of useful high tier items in the pool as opposed to filler low tier items."""
     display_name = "Useful Item Percentage"
     range_start = 25
     range_end = 100
@@ -173,14 +192,16 @@ class NoAdamantArmors(Toggle):
     display_name = "No Adamant Armor"
 
 class KeepDoorsBehemoths(Toggle):
+    """Should Trap Door and Behemoth Fights be enabled even when encounters are off?"""
     display_name = "Keep TrapDoor and Behemoth Fights"
 
 class NoFreeBosses(Toggle):
+    """Removes alternate win conditions for bosses other than good old fashioned violence."""
     display_name = "No Free Bosses"
 
 class WackyChallenge(Choice):
     """Wacky challenges are not fair, balanced, stable, or even necessarily interesting.
-    They are, however, quite wacky. See FE documentation for more info."""
+    They are, however, quite wacky. See FE documentation for more info, or pick one for a fun surprise!"""
     display_name = "Wacky Challenge"
     option_none = 0
     option_afflicted = 1
@@ -218,7 +239,7 @@ class WackyChallenge(Choice):
     option_random_challenge = 33
 
 class StarterKitOne(Choice):
-    """FE Starter Kit 1"""
+    """FE Starter Kit 1. See FE Documentation for details. Or just pick one, they can't hurt you."""
     display_name = "Starter Kit One"
     option_none = 0
     option_basic = 1
@@ -250,7 +271,7 @@ class StarterKitOne(Choice):
     default = 0
 
 class StarterKitTwo(Choice):
-    """FE Starter Kit 2"""
+    """FE Starter Kit 2. See FE Documentation for details. Or just pick one, they can't hurt you."""
     display_name = "Starter Kit Two"
     option_none = 0
     option_basic = 1
@@ -282,7 +303,7 @@ class StarterKitTwo(Choice):
     default = 0
 
 class StarterKitThree(Choice):
-    """FE Starter Kit 3"""
+    """FE Starter Kit 3. See FE Documentation for details. Or just pick one, they can't hurt you."""
     display_name = "Starter Kit Three"
     option_none = 0
     option_basic = 1
@@ -320,6 +341,7 @@ class FF4FEOptions(PerGameCommonOptions):
     DefeatTheFiends: DefeatTheFiends
     FindTheDarkMatter: FindTheDarkMatter
     AdditionalObjectives: AdditionalObjectives
+    RequiredObjectiveCount: RequiredObjectiveCount
     ObjectiveReward: ObjectiveReward
     ItemPlacement: ItemPlacement
     NoFreeCharacters: NoFreeCharacters
@@ -357,6 +379,7 @@ ff4fe_option_groups = [
         DefeatTheFiends,
         FindTheDarkMatter,
         AdditionalObjectives,
+        RequiredObjectiveCount,
         ObjectiveReward
     ]),
     OptionGroup("Character Options", [

@@ -406,7 +406,20 @@ msfpatch {
         jsl $=Rewards__LoadNameFromSlot
 
         // overwrite message code
-        lda #$1f
+        lda $08FC
+        cmp #$3D
+        bne $+Ribbons
+        lda #$8D
+        bra $+Finish
+    %Ribbons:
+        lda $08FC
+        cmp #$9F
+        beq $+Ribbon1
+        lda #$9A
+        bra $+Finish
+    %Ribbon1:
+        lda #$99
+    %Finish:
         sta $b2
 
         // display messages

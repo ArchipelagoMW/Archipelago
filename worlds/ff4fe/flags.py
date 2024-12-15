@@ -1,8 +1,8 @@
 from . import FF4FEOptions
+# This file just translates our AP options into FE flagsets.
 
-
-def create_flags_from_options(options: FF4FEOptions):
-    flags = (f"{build_objective_flags(options)} "
+def create_flags_from_options(options: FF4FEOptions, objective_count: int):
+    flags = (f"{build_objective_flags(options, objective_count)} "
              f"Kmain/summon/moon/unsafe/miab "
              f"{build_pass_flags(options)} "
              f"{build_characters_flags(options)} "
@@ -15,7 +15,7 @@ def create_flags_from_options(options: FF4FEOptions):
              f"{build_starter_kit_flags(options)}")
     return flags
 
-def build_objective_flags(options: FF4FEOptions):
+def build_objective_flags(options: FF4FEOptions, objective_count: int):
     objective_flags = "Omode:"
     primary_objectives = []
     if options.ForgeTheCrystal:
@@ -32,9 +32,10 @@ def build_objective_flags(options: FF4FEOptions):
     if options.AdditionalObjectives.value != 0:
         objective_flags += f"/random:{options.AdditionalObjectives.value}"
     if options.ObjectiveReward.current_key == "crystal" or options.ForgeTheCrystal:
-        objective_flags += "/win:crystal/req:all"
+        objective_flags += "/win:crystal"
     else:
-        objective_flags += "/win:game/req:all"
+        objective_flags += "/win:game"
+    objective_flags += f"/req:{min(objective_count, options.RequiredObjectiveCount.value)}"
     return objective_flags
 
 def build_key_items_flags(options: FF4FEOptions):

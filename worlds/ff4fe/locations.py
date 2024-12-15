@@ -41,6 +41,8 @@ miab_count = 0
 for location in locationscsv.create_view():
     if location.exclude != "":
         if location.exclude == "key":
+            # Rat Tail and Ribbon chests are a little special in FE, as they're treasure chests but are considered
+            # major reward locations.
             new_location = LocationData("", location.world, location.area, int(location.flag, 16), True)
             if location.world == "Underworld":  # Rat Tail location
                 new_location.name = f"Town of Monsters -- B4F (first area) -- Rat Tail"
@@ -58,9 +60,11 @@ for location in locationscsv.create_view():
                          f" -- {location.spoilerdetail}")
     all_locations.append(new_location)
 
+# This is actually a custom data table for the reward locations, mimicking the format of the treasure locations.
 locationscsv = csvdb.CsvDb(pkgutil.get_data(__name__, "FreeEnterpriseForAP/FreeEnt/assets/db/rewardslots.csvdb").decode().splitlines())
 
 for location in locationscsv.create_view():
+    # All reward locations are given their ID plus 512 so we can't confuse them with regular chests.
     new_location = LocationData("", location.world, location.area, int(location.fecode, 16) + 0x200, True)
     subname = f"{((' -- ' + location.spoilersubarea) if location.spoilersubarea != '' else '')}"
     new_location.name = (f"{location.spoilerarea}"
@@ -113,6 +117,7 @@ earned_character_locations = [
     "Giant of Bab-il Character"
 ]
 
+# The name's a little unintuitive, I admit: this is the list of spots a restricted character _can't_ be.
 restricted_character_locations = [
     "Starting Character 1",
     "Starting Character 2",
@@ -122,16 +127,11 @@ restricted_character_locations = [
 ]
 
 for location in character_slots:
+    # Just like event reward locations, character locations get a constant added to separate them from treasures.
     all_locations.append(LocationData(location[0], location[1], location[2], location[3] + 0x200, True))
 
 all_locations.append(LocationData("Objectives Status", "Overworld", "BaronTown", 0xEEEE, False))
 all_locations.append(LocationData("Objective Reward", "Overworld", "BaronTown", 0xEEEF, False))
-
-mutually_exclusive_slots = [
-    ["Starting Character 1", "Starting Character 2"],
-    ["Mysidia Character 1", "Mysidia Character 2"],
-    ["Tower of Zot Character 1", "Tower of Zot Character 2"]
-]
 
 areas = []
 

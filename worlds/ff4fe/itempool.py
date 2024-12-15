@@ -5,9 +5,10 @@ from .locations import LocationData, free_character_locations, earned_character_
 from ..AutoWorld import World
 
 
-def create_itempool(locations: List[LocationData], world: World) -> Tuple[List[str], str]:
+def create_itempool(locations: List[LocationData], world: World) -> Tuple[List[str], str, str]:
     chosen_character = get_chosen_character(world)
     character_pool = create_character_pool(world, chosen_character)
+    second_starter = get_second_character(world, chosen_character, character_pool)
     key_item_pool = create_key_item_pool(world)
     location_count = len(locations) - len(character_pool) - len(key_item_pool) - 33  # Objective Status locations hack
     if world.is_vanilla_game():
@@ -29,12 +30,14 @@ def create_itempool(locations: List[LocationData], world: World) -> Tuple[List[s
     result_pool.extend(world.random.choices([item.name for item in items.filler_items
                                              if item.tier >= world.options.MinTier.value],
                                             k=location_count - useful_count))
-    return (result_pool, chosen_character)
+    return (result_pool, chosen_character, second_starter)
 
 
 def create_character_pool(world: World, chosen_character: str) -> List[str]:
+    # Create the pool of characters to place.
     character_pool = []
     allowed_characters = sorted([character for character in world.options.AllowedCharacters.value if character != "None"])
+    # If we have a Hero, we only get the one unless there's no other choice.
     if chosen_character != "None" and world.options.HeroChallenge.current_key != "none":
         if chosen_character in allowed_characters and len(allowed_characters) > 1:
             allowed_characters.remove(chosen_character)
@@ -61,6 +64,7 @@ def create_character_pool(world: World, chosen_character: str) -> List[str]:
 
 
 def get_chosen_character(world: World):
+    # Get a starting character. A Hero if applicable, otherwise random from the list of unrestricted characters.
     if world.options.HeroChallenge.current_key != "none":
         option_value = str(world.options.HeroChallenge.current_key)
         if option_value == "random_character":
@@ -74,6 +78,16 @@ def get_chosen_character(world: World):
         else:
             chosen_character = world.random.choice(sorted(world.options.AllowedCharacters.value))
     return chosen_character
+
+def get_second_character(world: World, chosen_character: str, character_pool: str):
+    pruned_pool = [character for character in character_pool if character != "None"]
+    if world.options.AllowDuplicateCharacters.value == True:
+        pruned_pool = [character for character in pruned_pool if character != chosen_character]
+    if len(pruned_pool) > 0:
+        return world.random.choice(sorted(pruned_pool))
+    else:
+        return chosen_character
+
 
 
 def create_key_item_pool(world: World) -> List[str]:

@@ -46,17 +46,18 @@ event($E2)  //Trading the Rat Tail for Adamant
         p #GrottoAdamantMiniWantsTails spin
         p #GrottoAdamantMiniWantsTails face down
         [#B #Objectives_Tick #objective.quest_traderat]
-        [#B #Text_LoadRewardNameFromSlot #reward_slot.rat_trade_item 0]
-        map message 2  // "It's a Rat Tail I have been looking for!"
         p #GrottoAdamantMiniWantsTails wave in
         take item #Rat
-        [#B #Objectives_TickRewardSlot #reward_slot.rat_trade_item]
         // %if ap_rat_trade_item%
+        map message 2
         music #DummyFanfare
         message #ap_reward_slot.rat_trade_item
         // %else%
-        [#B #Rando_DeliverRewardFromSlot #reward_slot.rat_trade_item]
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.rat_trade_item 0]
+        map message 2  // "It's a Rat Tail I have been looking for!"
         // %end%
+        [#B #Objectives_TickRewardSlot #reward_slot.rat_trade_item]
+        [#B #Rando_DeliverRewardFromSlot #reward_slot.rat_trade_item]
         [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.rat_tail]
         music #Cave
     }
@@ -65,18 +66,19 @@ event($E2)  //Trading the Rat Tail for Adamant
         pause 4
         p #GrottoAdamantMiniWantsTails spin
         p #GrottoAdamantMiniWantsTails spin jump
+        take item #Pink
         pause 4
         [#B #Objectives_Tick #objective.quest_tradepink]
-        [#B #Text_LoadRewardNameFromSlot #reward_slot.pink_trade_item 0]
-        map message 3  // "Oh! Oh! Oh! Legendary Pink Tail!!"
-        take item #Pink
-        [#B #Objectives_TickRewardSlot #reward_slot.pink_trade_item]
         // %if ap_pink_trade_item%
+        map message 3
         music #DummyFanfare
         message #ap_reward_slot.pink_trade_item
         // %else%
-        [#B #Rando_DeliverRewardFromSlot #reward_slot.pink_trade_item]
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.pink_trade_item 0]
+        map message 3  // "Oh! Oh! Oh! Legendary Pink Tail!!"
         // %end%
+        [#B #Rando_DeliverRewardFromSlot #reward_slot.pink_trade_item]
+        [#B #Objectives_TickRewardSlot #reward_slot.pink_trade_item]
         [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.pink_tail]
         music #Cave
     }
@@ -97,8 +99,6 @@ text(map #AdamantGrotto message $02) {
 It's a Rat Tail I have
 been looking for!
 Okay! Take this!
-
-Received Archipelago Item.
 }
 // %else%
 text(map #AdamantGrotto message $02) {
@@ -110,13 +110,12 @@ Received [name $e0]![music $29][pause 40]
 }
 // %end%
 
-// %if ap_rat_trade_item%
-text(map #AdamantGrotto message $02) {
+// %if ap_pink_trade_item%
+text(map #AdamantGrotto message $03) {
 Oh! Oh! Oh!
 Legendary Pink Tail!!
 Great!
 Take this!
-Received Archipelago Item.
 }
 // %else%
 text(map #AdamantGrotto message $03) {

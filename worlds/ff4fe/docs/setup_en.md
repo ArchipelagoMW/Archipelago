@@ -1,4 +1,4 @@
-# Super Mario World Randomizer Setup Guide
+# Final Fantasy IV: Free Enterprise Randomizer Setup Guide
 
 ## Required Software
 
@@ -11,12 +11,14 @@
         - RetroArch 1.10.3 or newer from: [RetroArch Website](https://retroarch.com?page=platforms). Or,
     - An SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), or other
       compatible hardware
-- Your legally obtained Super Mario World ROM file, probably named `Super Mario World (USA).sfc`
+- Your legally obtained Final Fantasy IV 1.1 ROM file, probably named ` 	
+Final Fantasy II (USA) (Rev 1).sfc `
 
 ## Optional Software
-- Super Mario World Tracker
+- Final Fantasy IV: Free Enterprise Tracker
 	- PopTracker from: [PopTracker Releases Page](https://github.com/black-sliver/PopTracker/releases/)
-	- Super Mario World Archipelago PopTracker pack from: [SMW AP Tracker Releases Page](https://github.com/PoryGone/SMW_AP_Tracker/releases/)
+	- Final Fantasy IV: Free Enterprise Archipelago PopTracker pack from: 
+  [FFIV FE AP Tracker Releases Page](https://github.com/seto10987/Final-Fantasy-4-Free-Enterprise-AP-Poptracker-Pack/releases)
 
 ## Installation Procedures
 
@@ -25,7 +27,7 @@
 1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer 
    file is located in the assets section at the bottom of the version information.**
 2. The first time you do local generation or patch your game, you will be asked to locate your base ROM file. 
-   This is your Super Mario World ROM file. This only needs to be done once.
+   This is yourFinal Fantasy IV ROM file. This only needs to be done once.
 3. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
    files.
     1. Extract your emulator's folder to your Desktop, or somewhere you will remember.
@@ -45,7 +47,8 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 ### Where do I get a config file?
 
 The Player Options page on the website allows you to configure your personal options and export a config file from
-them. Player options page: [Super Mario World Player Options Page](/games/Super%20Mario%20World/player-options)
+them. Player options page:
+[Final Fantasy IV: Free Enterprise Player Options Page](/games/Final%20Fantasy%20IV%20Free%20Enterprise/player-options)
 
 ### Verifying your config file
 
@@ -58,7 +61,7 @@ validator page: [YAML Validation page](/check)
 
 When you join a multiworld game, you will be asked to provide your config file to whomever is hosting. Once that is done,
 the host will provide you with either a link to download your patch file, or with a zip file containing everyone's patch
-files. Your patch file should have a `.apsmw` extension.
+files. Your patch file should have a `.apff4fe` extension.
 
 Put your patch file on your desktop or somewhere convenient, and double click it. This should automatically launch the
 client, and will also create your ROM in the same place as your patch file.
@@ -150,3 +153,13 @@ The recommended way to host a game is to use our hosting service. The process is
 7. Note that a link to a MultiWorld Tracker is at the top of the room page. The tracker shows the progress of all
    players in the game. Any observers may also be given the link to this page.
 8. Once all players have joined, you may begin playing.
+
+## Frequently Asked Questions
+
+- I defeated a Monster in a Box (MIAB) and received a Cure1 potion but the client says I sent something else. 
+Did I break something?
+- - For technical reasons, MIAB chests have to hand out an actual item. A Cure1 was chosen as the placeholder.
+Everything is as it should be.
+- Why are there dashes in my name?
+- - Final Fantasy IV has a limited font and not every character can be displayed. These characters are replaced with 
+dashes.

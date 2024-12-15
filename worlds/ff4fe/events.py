@@ -1,40 +1,40 @@
 from .locations import LocationData
-boss_names = {
-     'D. Mist': 'D. Mist',
-     'Officer': 'Officer',
-     'Octomamm': 'Octomamm',
-     'Antlion': 'Antlion',
-     'MomBomb': 'MomBomb',
-     'Fabul Gauntlet': 'Fabul Gauntlet',
-     'Milon': 'Milon',
-     'Milon Z.': 'Milon Z.',
-     'Mirror Cecil': 'Mirror Cecil',
-     'Guards': 'Guards',
-     'Karate': 'Karate',
-     'Baigan': 'Baigan',
-     'Kainazzo': 'Kainazzo',
-     'Dark Elf': 'Dark Elf',
-     'Magus Sisters': 'Magus Sisters',
-     'Valvalis': 'Valvalis',
-     'Calbrena': 'Calbrena',
-     'Golbez': 'Golbez',
-     'Lugae': 'Lugae',
-     'Dark Imps': 'Dark Imps',
-     'King and Queen': 'King and Queen',
-     'Rubicant': 'Rubicant',
-     'EvilWall': 'EvilWall',
-     'Asura': 'Asura',
-     'Leviatan': 'Leviatan',
-     'Odin': 'Odin',
-     'Bahamut': 'Bahamut',
-     'Elements': 'Elements',
-     'CPU': 'CPU',
-     'Pale Dim': 'Pale Dim',
-     'Wyvern': 'Wyvern',
-     'Plague': 'Plague',
-     'D. Lunars': 'D. Lunars',
-     'Ogopogo': 'Ogopogo',
-}
+boss_names = [
+     'D. Mist',
+     'Officer',
+     'Octomamm',
+     'Antlion',
+     'MomBomb',
+     'Fabul Gauntlet',
+     'Milon',
+     'Milon Z.',
+     'Mirror Cecil',
+     'Guards',
+     'Karate',
+     'Baigan',
+     'Kainazzo',
+     'Dark Elf',
+     'Magus Sisters',
+     'Valvalis',
+     'Calbrena',
+     'Golbez',
+     'Lugae',
+     'Dark Imps',
+     'King and Queen',
+     'Rubicant',
+     'EvilWall',
+     'Asura',
+     'Leviatan',
+     'Odin',
+     'Bahamut',
+     'Elements',
+     'CPU',
+     'Pale Dim',
+     'Wyvern',
+     'Plague',
+     'D. Lunars',
+     'Ogopogo'
+]
 
 boss_event_data = [
      ("Overworld", "MistCave", "D. Mist Slot"),
@@ -75,10 +75,8 @@ boss_event_data = [
 ]
 
 boss_events = []
-boss_status_events = {k: (f"{boss} Defeated") for k, boss in boss_names.items()}
-boss_slots = [(f"{boss} Slot Defeated") for k, boss in boss_names.items()]
-
-boss_slot_keys = [boss for boss in boss_names.keys()]
+boss_status_events = {boss: (f"{boss} Defeated") for boss in boss_names}
+boss_slots = [(f"{boss} Slot Defeated") for boss in boss_names]
 
 for event in boss_event_data:
     boss_events.append(LocationData(event[2], event[0], event[1], 0xFFFF, True))
