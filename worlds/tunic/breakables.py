@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, NamedTuple
 
-from BaseClasses import CollectionState
-from worlds.generic.Rules import set_rule, add_rule
+from BaseClasses import CollectionState, Region
+from worlds.generic.Rules import set_rule
 from .rules import has_sword, has_stick
 if TYPE_CHECKING:
     from . import TunicWorld
@@ -126,24 +126,24 @@ breakable_location_table: dict[str, TunicLocationData] = {
     "Magic Dagger House - Pot 1": TunicLocationData("Magic Dagger House", breakable="Pot"),
     "Magic Dagger House - Pot 2": TunicLocationData("Magic Dagger House", breakable="Pot"),
     "Magic Dagger House - Pot 3": TunicLocationData("Magic Dagger House", breakable="Pot"),
-    "Fortress Courtyard - Fire Pot 1": TunicLocationData("Fortress Courtyard", breakable="Fire Pot"),
-    "Fortress Courtyard - Fire Pot 2": TunicLocationData("Fortress Courtyard", breakable="Fire Pot"),
-    "Fortress Courtyard - Fire Pot 3": TunicLocationData("Fortress Courtyard", breakable="Fire Pot"),
-    "Fortress Courtyard - Fire Pot 4": TunicLocationData("Fortress Courtyard", breakable="Fire Pot"),
+    "Fortress Courtyard - Fire Pot 1": TunicLocationData("Fortress Courtyard westmost pots", breakable="Fire Pot"),
+    "Fortress Courtyard - Fire Pot 2": TunicLocationData("Fortress Courtyard westmost pots", breakable="Fire Pot"),
+    "Fortress Courtyard - Fire Pot 3": TunicLocationData("Fortress Courtyard west pots", breakable="Fire Pot"),
+    "Fortress Courtyard - Fire Pot 4": TunicLocationData("Fortress Courtyard west pots", breakable="Fire Pot"),
     "Fortress Courtyard - Fire Pot 5": TunicLocationData("Fortress Courtyard", breakable="Fire Pot"),
     "Fortress Courtyard - Fire Pot 6": TunicLocationData("Fortress Courtyard", breakable="Fire Pot"),
     "Fortress Courtyard - Fire Pot 7": TunicLocationData("Fortress Courtyard", breakable="Fire Pot"),
     "Fortress Courtyard - Fire Pot 8": TunicLocationData("Fortress Courtyard", breakable="Fire Pot"),
-    "Fortress Courtyard Upper - Fire Pot": TunicLocationData("Fortress Courtyard Upper", breakable="Fire Pot"),
+    "Fortress Courtyard Upper - Fire Pot": TunicLocationData("Fortress Courtyard Upper pot", breakable="Fire Pot"),
     "Fortress Grave Path - Pot 1": TunicLocationData("Fortress Grave Path", breakable="Pot"),
     "Fortress Grave Path - Pot 2": TunicLocationData("Fortress Grave Path", breakable="Pot"),
-    "Fortress Grave Path by Grave - Pot 1": TunicLocationData("Fortress Grave Path", breakable="Pot"),
-    "Fortress Grave Path by Grave - Pot 2": TunicLocationData("Fortress Grave Path", breakable="Pot"),
-    "Fortress Grave Path by Grave - Pot 3": TunicLocationData("Fortress Grave Path", breakable="Pot"),
-    "Fortress Grave Path by Grave - Pot 4": TunicLocationData("Fortress Grave Path", breakable="Pot"),
-    "Fortress Grave Path by Grave - Pot 5": TunicLocationData("Fortress Grave Path", breakable="Pot"),
-    "Fortress Grave Path by Grave - Pot 6": TunicLocationData("Fortress Grave Path", breakable="Pot"),
-    "Fortress Grave Path - Fire Pot 1": TunicLocationData("Fortress Grave Path", breakable="Fire Pot"),
+    "Fortress Grave Path by Grave - Pot 1": TunicLocationData("Fortress Grave Path pots", breakable="Pot"),
+    "Fortress Grave Path by Grave - Pot 2": TunicLocationData("Fortress Grave Path pots", breakable="Pot"),
+    "Fortress Grave Path by Grave - Pot 3": TunicLocationData("Fortress Grave Path pots", breakable="Pot"),
+    "Fortress Grave Path by Grave - Pot 4": TunicLocationData("Fortress Grave Path pots", breakable="Pot"),
+    "Fortress Grave Path by Grave - Pot 5": TunicLocationData("Fortress Grave Path pots", breakable="Pot"),
+    "Fortress Grave Path by Grave - Pot 6": TunicLocationData("Fortress Grave Path pots", breakable="Pot"),
+    "Fortress Grave Path - Fire Pot 1": TunicLocationData("Fortress Grave Path westmost pot", breakable="Fire Pot"),
     "Fortress Grave Path - Fire Pot 2": TunicLocationData("Fortress Grave Path", breakable="Fire Pot"),
     "Eastern Vault Fortress by Door - Pot 1": TunicLocationData("Eastern Vault Fortress", breakable="Pot"),
     "Eastern Vault Fortress by Door - Pot 2": TunicLocationData("Eastern Vault Fortress", breakable="Pot"),
@@ -254,8 +254,8 @@ breakable_location_table: dict[str, TunicLocationData] = {
     "Quarry near Shortcut Ladder - Crate 3": TunicLocationData("Quarry Back", breakable="Crate"),
     "Quarry near Shortcut Ladder - Crate 4": TunicLocationData("Quarry Back", breakable="Crate"),
     "Quarry near Shortcut Ladder - Crate 5": TunicLocationData("Quarry Back", breakable="Crate"),
-    "Lower Quarry - Explosive Pot 1": TunicLocationData("Lower Quarry", breakable="Explosive Pot"),
-    "Lower Quarry - Explosive Pot 2": TunicLocationData("Lower Quarry", breakable="Explosive Pot"),
+    "Lower Quarry - Explosive Pot 1": TunicLocationData("Lower Quarry upper pots", breakable="Explosive Pot"),
+    "Lower Quarry - Explosive Pot 2": TunicLocationData("Lower Quarry upper pots", breakable="Explosive Pot"),
     "Lower Quarry - Explosive Pot 3": TunicLocationData("Lower Quarry", breakable="Explosive Pot"),
     "Lower Quarry on Scaffolding - Explosive Pot 1": TunicLocationData("Lower Quarry", breakable="Explosive Pot"),
     "Lower Quarry on Scaffolding - Explosive Pot 2": TunicLocationData("Lower Quarry", breakable="Explosive Pot"),
@@ -335,16 +335,56 @@ def can_break_leaf_piles(state: CollectionState, world: "TunicWorld") -> bool:
     return has_stick(state, world.player) or state.has_any(("Magic Dagger", "Gun"), world.player)
 
 
-def set_breakable_location_rules(world: "TunicWorld") -> None:
+def create_breakable_exclusive_regions(world: "TunicWorld") -> None:
     player = world.player
-    # if you start with a sword, you can break all breakables already
-    if not world.options.start_with_sword:
-        for loc_name, loc_data in breakable_location_table.items():
-            location = world.get_location(loc_name)
-            if loc_data.breakable == "Leaf Pile":
-                set_rule(location, lambda state: can_break_leaf_piles(state, world))
-            elif loc_data.breakable in ("Sign", "Table"):
-                set_rule(location, lambda state: can_break_signs(state, world))
-            else:
-                set_rule(location, lambda state: can_break_breakables(state, world))
+    new_regions: list[Region] = []
 
+    region = Region("Fortress Courtyard westmost Pots", world.player, world.multiworld)
+    new_regions.append(region)
+    world.get_region("Fortress Courtyard").connect(region)
+    world.get_region("Fortress Exterior near cave").connect(
+        region, rule=lambda state: state.has_any(("Magic Wand", "Gun"), player))
+
+    region = Region("Fortress Courtyard west Pots", world.player, world.multiworld)
+    new_regions.append(region)
+    world.get_region("Fortress Courtyard").connect(region)
+    world.get_region("Fortress Exterior near cave").connect(
+        region, rule=lambda state: state.has("Magic Wand", player))
+
+    region = Region("Fortress Courtyard Upper pot", world.player, world.multiworld)
+    new_regions.append(region)
+    world.get_region("Fortress Courtyard Upper").connect(region)
+    world.get_region("Fortress Courtyard").connect(
+        region, rule=lambda state: state.has("Magic Wand", player))
+
+    region = Region("Fortress Grave Path westmost pot", world.player, world.multiworld)
+    new_regions.append(region)
+    world.get_region("Fortress Grave Path").connect(region)
+    world.get_region("Fortress Grave Path Upper").connect(
+        region, rule=lambda state: state.has_any(("Magic Wand", "Gun"), player))
+
+    region = Region("Fortress Grave Path pots", world.player, world.multiworld)
+    new_regions.append(region)
+    world.get_region("Fortress Grave Path").connect(region)
+    world.get_region("Fortress Grave Path Dusty Entrance Region").connect(
+        region, rule=lambda state: state.has("Magic Wand", player))
+
+    region = Region("Lower Quarry upper pots", world.player, world.multiworld)
+    new_regions.append(region)
+    world.get_region("Lower Quarry").connect(region)
+    world.get_region("Quarry Back").connect(
+        region, rule=lambda state: state.has_any(("Magic Wand", "Gun"), player))
+
+    for region in new_regions:
+        world.multiworld.regions.append(region)
+
+
+def set_breakable_location_rules(world: "TunicWorld") -> None:
+    for loc_name, loc_data in breakable_location_table.items():
+        location = world.get_location(loc_name)
+        if loc_data.breakable == "Leaf Pile":
+            set_rule(location, lambda state: can_break_leaf_piles(state, world))
+        elif loc_data.breakable in ("Sign", "Table"):
+            set_rule(location, lambda state: can_break_signs(state, world))
+        else:
+            set_rule(location, lambda state: can_break_breakables(state, world))
