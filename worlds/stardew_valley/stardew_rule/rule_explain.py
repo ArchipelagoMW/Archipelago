@@ -95,6 +95,9 @@ class RuleExplanation:
                 if isinstance(sub_rule, Reach) and sub_rule.resolution_hint == 'Entrance':
                     sub_explanations.append(MoreExplanation(sub_rule, self.state, len(self.more_explanations), self.mode))
                     self.more_explanations.append(sub_rule)
+                elif isinstance(sub_rule, Reach) and sub_rule.resolution_hint == 'Location':
+                    sub_explanations.append(MoreExplanation(sub_rule, self.state, len(self.more_explanations), self.mode))
+                    self.more_explanations.append(sub_rule)
                 else:
                     sub_explanations.append(_explain(sub_rule, self.state, self.expected, self.mode, self.more_explanations, self.explored_rules_key))
 
