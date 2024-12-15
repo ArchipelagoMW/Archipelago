@@ -146,7 +146,7 @@ class ShuffleEnvironmentalPuzzles(Choice):
 class EasterEggHunt(Choice):
     """
     Adds up to 100 Easter Eggs to the game, placed by NewSoupVi, Exempt-Medic, hatkirby, Scipio, and Rever.
-    These can simply be collected by clicking on them.
+    These can be collected by simply clicking on them.
 
     Each consecutive check will logically expect 5 Easter Eggs to be collected.
     However, the amount that you need to collect to actually trigger the next location check differs by option choice:
