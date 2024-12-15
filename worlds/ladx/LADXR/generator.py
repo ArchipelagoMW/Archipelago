@@ -83,7 +83,7 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
         pymod.prePatch(rom)
 
     if options["gfxmod"]:
-        gfxmod_file = Utils.local_path("data", "sprites", "ladx", options["gfxmod"])
+        gfxmod_file = Utils.user_path("data", "sprites", "ladx", options["gfxmod"])
         if not os.path.isfile(gfxmod_file):
             raise FileNotFoundError(gfxmod_file)
         patches.aesthetics.gfxMod(rom, gfxmod_file)
