@@ -5,8 +5,8 @@ import asyncio
 from BaseClasses import MultiWorld
 from CommonClient import logger, get_base_parser, gui_enabled
 from MultiServer import mark_raw
-from . import StardewLogic
-from .stardew_rule.rule_explain import explain
+from .logic.logic import StardewLogic
+from .stardew_rule.rule_explain import explain, ExplainMode, RuleExplanation
 
 try:
     from worlds.tracker.TrackerClient import TrackerGameContext as BaseContext, TrackerCommandProcessor as ClientCommandProcessor  # noqa
@@ -49,8 +49,11 @@ class StardewCommandProcessor(ClientCommandProcessor):
             return
 
         rule = self.ctx.logic.region.can_reach_location(location)
-        expl = explain(rule, self.ctx.multiworld.state)
-        logger.info(expl)
+
+        expl = explain(rule, self.ctx.multiworld.state, mode=ExplainMode.CLIENT)
+        self.ctx.previous_explanation = expl
+
+        logger.info(str(expl).strip())
 
     @mark_raw
     def _cmd_explain_item(self, item: str = ""):
@@ -60,8 +63,11 @@ class StardewCommandProcessor(ClientCommandProcessor):
             return
 
         rule = self.ctx.logic.has(item)
-        expl = explain(rule, self.ctx.multiworld.state)
-        logger.info(expl)
+
+        expl = explain(rule, self.ctx.multiworld.state, mode=ExplainMode.CLIENT)
+        self.ctx.previous_explanation = expl
+
+        logger.info(str(expl).strip())
 
     @mark_raw
     def _cmd_explain_missing(self, location: str = ""):
@@ -73,8 +79,31 @@ class StardewCommandProcessor(ClientCommandProcessor):
         rule = self.ctx.logic.region.can_reach_location(location)
         state = self.ctx.multiworld.state
         simplified, _ = rule.evaluate_while_simplifying(state)
-        expl = explain(simplified, state)
-        logger.info(expl)
+
+        expl = explain(simplified, state, mode=ExplainMode.CLIENT)
+        self.ctx.previous_explanation = expl
+
+        logger.info(str(expl).strip())
+
+    @mark_raw
+    def _cmd_more(self, index: str = ""):
+        """Will tell you what's missing to consider a location in logic."""
+        if self.ctx.logic is None:
+            logger.warning("Internal logic was not able to load, check your yamls and relaunch.")
+            return
+
+        if self.ctx.previous_explanation is None:
+            logger.warning("No previous explanation found.")
+            return
+
+        if not index or not index.isdigit():
+            logger.warning("Which previous rule do you want to explained?")
+            return
+
+        expl = self.ctx.previous_explanation.more(int(index))
+        self.ctx.previous_explanation = expl
+
+        logger.info(str(expl).strip())
 
     if not tracker_loaded:
         del _cmd_explain
@@ -84,7 +113,8 @@ class StardewCommandProcessor(ClientCommandProcessor):
 class StardewClientContext(BaseContext):
     game = "Stardew Valley"
     command_processor = StardewCommandProcessor
-    logic: StardewLogic = None
+    logic: StardewLogic | None = None
+    previous_explanation: RuleExplanation | None = None
 
     def run_gui(self):
         from kvui import GameManager
