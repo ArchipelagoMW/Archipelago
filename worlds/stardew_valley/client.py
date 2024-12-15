@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import asyncio
+from collections import Counter
 
-from BaseClasses import MultiWorld
+from BaseClasses import MultiWorld, CollectionState, ItemClassification
 from CommonClient import logger, get_base_parser, gui_enabled
 from MultiServer import mark_raw
 from .logic.logic import StardewLogic
@@ -50,7 +51,7 @@ class StardewCommandProcessor(ClientCommandProcessor):
 
         rule = self.ctx.logic.region.can_reach_location(location)
 
-        expl = explain(rule, self.ctx.multiworld.state, expected=None, mode=ExplainMode.CLIENT)
+        expl = explain(rule, get_updated_state(self.ctx), expected=None, mode=ExplainMode.CLIENT)
         self.ctx.previous_explanation = expl
 
         logger.info(str(expl).strip())
@@ -64,7 +65,7 @@ class StardewCommandProcessor(ClientCommandProcessor):
 
         rule = self.ctx.logic.has(item)
 
-        expl = explain(rule, self.ctx.multiworld.state, expected=None, mode=ExplainMode.CLIENT)
+        expl = explain(rule, get_updated_state(self.ctx), expected=None, mode=ExplainMode.CLIENT)
         self.ctx.previous_explanation = expl
 
         logger.info(str(expl).strip())
@@ -77,7 +78,7 @@ class StardewCommandProcessor(ClientCommandProcessor):
             return
 
         rule = self.ctx.logic.region.can_reach_location(location)
-        state = self.ctx.multiworld.state
+        state = get_updated_state(self.ctx)
         simplified, _ = rule.evaluate_while_simplifying(state)
 
         expl = explain(simplified, state, mode=ExplainMode.CLIENT)
@@ -88,10 +89,6 @@ class StardewCommandProcessor(ClientCommandProcessor):
     @mark_raw
     def _cmd_more(self, index: str = ""):
         """Will tell you what's missing to consider a location in logic."""
-        if self.ctx.logic is None:
-            logger.warning("Internal logic was not able to load, check your yamls and relaunch.")
-            return
-
         if self.ctx.previous_explanation is None:
             logger.warning("No previous explanation found.")
             return
@@ -146,7 +143,7 @@ class StardewClientContext(BaseContext):
 
     def setup_logic(self):
         if self.multiworld is not None:
-            self.logic = self.multiworld.worlds[self.player_id].logic
+            self.logic = self.multiworld.worlds[1].logic
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -165,9 +162,6 @@ def launch():
 
         if tracker_loaded:
             ctx.run_generator()
-            # FIXME that's probably not legit, but it works when there is only one player
-            if ctx.player_id is None:
-                ctx.player_id = 1
             ctx.setup_logic()
         else:
             logger.warning("Could not find Universal Tracker.")
@@ -183,3 +177,34 @@ def launch():
     colorama.init()
     asyncio.run(main())
     colorama.deinit()
+
+
+# Don't mind me I just copy-pasted that from UT because it was too complicated to access their updated state.
+def get_updated_state(ctx: StardewClientContext) -> CollectionState:
+    if ctx.player_id is None or ctx.multiworld is None:
+        logger.error("Player YAML not installed or Generator failed")
+        ctx.log_to_tab("Check Player YAMLs for error", False)
+        ctx.tracker_failed = True
+        raise ValueError("Player YAML not installed or Generator failed")
+
+    state = CollectionState(ctx.multiworld)
+    state.sweep_for_advancements(
+        locations=(location for location in ctx.multiworld.get_locations() if (not location.address)))
+    prog_items = Counter()
+    all_items = Counter()
+
+    item_id_to_name = ctx.multiworld.worlds[ctx.player_id].item_id_to_name
+    for item_name in [item_id_to_name[item[0]] for item in ctx.items_received] + ctx.manual_items:
+        try:
+            world_item = ctx.multiworld.create_item(item_name, ctx.player_id)
+            state.collect(world_item, True)
+            if world_item.classification == ItemClassification.progression or world_item.classification == ItemClassification.progression_skip_balancing:
+                prog_items[world_item.name] += 1
+            if world_item.code is not None:
+                all_items[world_item.name] += 1
+        except:
+            ctx.log_to_tab("Item id " + str(item_name) + " not able to be created", False)
+    state.sweep_for_advancements(
+        locations=(location for location in ctx.multiworld.get_locations() if (not location.address)))
+
+    return state
