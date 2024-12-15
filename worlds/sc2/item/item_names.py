@@ -698,6 +698,7 @@ SHIELD_BATTERY      = "Shield Battery"
 SUPPLICANT_BLOOD_SHIELD                                 = "Blood Shield (Supplicant)"
 SUPPLICANT_SOUL_AUGMENTATION                            = "Soul Augmentation (Supplicant)"
 SUPPLICANT_SHIELD_REGENERATION                          = "Shield Regeneration (Supplicant)"
+SUPPLICANT_ZENITH_PITCH                                 = "Zenith Pitch (Supplicant)"
 ADEPT_SHOCKWAVE                                         = "Shockwave (Adept)"
 ADEPT_RESONATING_GLAIVES                                = "Resonating Glaives (Adept)"
 ADEPT_PHASE_BULWARK                                     = "Phase Bulwark (Adept)"
@@ -837,7 +838,7 @@ TEMPEST_DISINTEGRATION                                  = "Disintegration (Tempe
 # Scout
 ARBITER_ABILITY_EFFICIENCY                              = "Ability Efficiency (Arbiter)"
 # Oracle
-# Mothership
+MOTHERSHIP_INTEGRATED_POWER                             = "Integrated Power (Mothership)"
 
 # Spear Of Adun
 SOA_CHRONO_SURGE            = "Chrono Surge (Spear of Adun Calldown)"
