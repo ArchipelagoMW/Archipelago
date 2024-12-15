@@ -4,7 +4,6 @@ from typing import Dict, Any, Iterable, Optional, Union, List, TextIO
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from Options import PerGameCommonOptions
-from Utils import local_path
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import launch_subprocess, components, Component, icon_paths, Type
 from . import rules
@@ -83,7 +82,7 @@ if TRACKER_ENABLED:
             icon='stardew'
         ))
 
-        icon_paths['stardew'] = local_path('data', 'stardew.png')
+        icon_paths['stardew'] = f"ap:{__name__}/stardew.png"
 
 
 class StardewValleyWorld(World):
