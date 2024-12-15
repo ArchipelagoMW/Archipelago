@@ -10,7 +10,7 @@ from .logic.logic import StardewLogic
 from .stardew_rule.rule_explain import explain, ExplainMode, RuleExplanation
 
 try:
-    from worlds.tracker.TrackerClient import TrackerGameContext as BaseContext, TrackerCommandProcessor as ClientCommandProcessor  # noqa
+    from worlds.tracker.TrackerClient import TrackerGameContext, TrackerCommandProcessor as ClientCommandProcessor  # noqa
 
     tracker_loaded = True
 except ImportError:
@@ -32,7 +32,7 @@ except ImportError:
             ...
 
 
-    class BaseContext(CommonContext, TrackerGameContextMixin):
+    class TrackerGameContext(CommonContext, TrackerGameContextMixin):
         pass
 
 
@@ -110,7 +110,7 @@ class StardewCommandProcessor(ClientCommandProcessor):
         del _cmd_explain_missing
 
 
-class StardewClientContext(BaseContext):
+class StardewClientContext(TrackerGameContext):
     game = "Stardew Valley"
     command_processor = StardewCommandProcessor
     logic: StardewLogic | None = None
@@ -180,7 +180,7 @@ def launch():
 
 
 # Don't mind me I just copy-pasted that from UT because it was too complicated to access their updated state.
-def get_updated_state(ctx: StardewClientContext) -> CollectionState:
+def get_updated_state(ctx: TrackerGameContext) -> CollectionState:
     if ctx.player_id is None or ctx.multiworld is None:
         logger.error("Player YAML not installed or Generator failed")
         ctx.log_to_tab("Check Player YAMLs for error", False)
