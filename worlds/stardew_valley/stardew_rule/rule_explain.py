@@ -128,6 +128,9 @@ class CountExplanation(RuleExplanation):
 
     @cached_property
     def explained_sub_rules(self) -> List[RuleExplanation]:
+        if all(value == 1 for value in self.rule.counter.values()):
+            return super().explained_sub_rules
+
         return [
             CountSubRuleExplanation.from_explanation(_explain(rule, self.state, self.expected, self.mode, self.more_explanations, self.explored_rules_key),
                                                      count)

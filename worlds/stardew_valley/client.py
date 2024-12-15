@@ -168,7 +168,7 @@ class StardewClientContext(TrackerGameContext):
 
 
 def parse_explanation(explanation: RuleExplanation) -> list[JSONMessagePart]:
-    result_regex = r"(\(|\)| & | -> | \| | \[.*\]\s*| \(\w+\)|\n\s*)"
+    result_regex = r"(\(|\)| & | -> | \| | \[.*\](?: ->)?\s*| \(\w+\)|\n\s*)"
     splits = re.split(result_regex, str(explanation))
 
     messages = []
@@ -194,12 +194,17 @@ def parse_explanation(explanation: RuleExplanation) -> list[JSONMessagePart]:
             messages.append({"type": "item_name", "text": s[15:]})
         elif s.startswith("Received "):
             messages.append({"type": "text", "text": "Received "})
-            messages.append({"type": "item_name", "text": s[9:]})
-        elif s.startswith(" ["):
-            if len(s) <= 50:
-                messages.append({"type": "text", "text": s})
+            messages.append({"type": "item_name", "flags": 0b001, "text": s[9:]})
+        elif s.startswith("Has "):
+            if s[4].isdigit():
+                messages.append({"type": "text", "text": "Has "})
+                digit_end = re.search(r"\D", s[4:])
+                digit = s[4:4 + digit_end.start()]
+                messages.append({"type": "color", "color": "cyan", "text": digit})
+                messages.append({"type": "text", "text": s[4 + digit_end.start():]})
+
             else:
-                messages.append({"type": "text", "text": " [ ... ] "})
+                messages.append({"text": s, "type": "text"})
         else:
             messages.append({"text": s, "type": "text"})
 
