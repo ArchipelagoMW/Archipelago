@@ -167,7 +167,7 @@ class StardewClientContext(TrackerGameContext):
 
 
 def parse_explanation(explanation: RuleExplanation) -> list[JSONMessagePart]:
-    result_regex = r"(\(|\)| & | -> | \| | \[.*\](?: ->)?\s*| \(\w+\)|\n\s*)"
+    result_regex = r"(\(|\)| & | -> | \| | \[|\](?: ->)?\s*| \(\w+\)|\n\s*)"
     splits = re.split(result_regex, str(explanation).strip())
 
     messages = []
