@@ -4,6 +4,7 @@ import importlib.machinery
 import os
 import random
 import pickle
+import Utils
 from collections import defaultdict
 from typing import Dict
 
@@ -82,10 +83,10 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
         pymod.prePatch(rom)
 
     if options["gfxmod"]:
-        try:
-            patches.aesthetics.gfxMod(rom, os.path.join("data", "sprites", "ladx", options["gfxmod"]))
-        except:
-            pass # can fail for missing file or invalid, gfx just won't be modded in that case
+        gfxmod_file = Utils.local_path("data", "sprites", "ladx", options["gfxmod"])
+        if not os.path.isfile(gfxmod_file):
+            raise FileNotFoundError(gfxmod_file)
+        patches.aesthetics.gfxMod(rom, gfxmod_file)
 
     assembler.resetConsts()
     assembler.const("INV_SIZE", 16)
