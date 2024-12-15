@@ -60,7 +60,7 @@ from worlds.sc2.item.item_tables import (
     race_to_item_type, ZergItemType, ProtossItemType, upgrade_bundles,
     WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
 )
-from .locations import SC2WOL_LOC_ID_OFFSET, LocationType, LocationFlag, SC2HOTS_LOC_ID_OFFSET
+from .locations import SC2WOL_LOC_ID_OFFSET, LocationType, LocationFlag, SC2HOTS_LOC_ID_OFFSET, VICTORY_CACHE_OFFSET
 from .mission_tables import (
     lookup_id_to_mission, SC2Campaign, MissionInfo,
     lookup_id_to_campaign, SC2Mission, campaign_mission_table, SC2Race
@@ -609,6 +609,7 @@ class SC2Context(CommonContext):
         self.generic_upgrade_missions = 0
         self.generic_upgrade_research = 0
         self.generic_upgrade_items = 0
+        self.victory_checks = 1
         self.location_inclusions: typing.Dict[LocationType, int] = {}
         self.location_inclusions_by_flag: typing.Dict[LocationFlag, int] = {}
         self.plando_locations: typing.List[str] = []
@@ -796,6 +797,7 @@ class SC2Context(CommonContext):
             self.nova_covert_ops_only = args["slot_data"].get("nova_covert_ops_only", False)
             self.trade_enabled = args["slot_data"].get("enable_void_trade", EnableVoidTrade.option_false)
             self.difficulty_damage_modifier = args["slot_data"].get("difficulty_damage_modifier", DifficultyDamageModifier.option_true)
+            self.victory_checks = args["slot_data"].get("victory_checks", 1)
 
             if self.required_tactics == RequiredTactics.option_no_logic:
                 # Locking Grant Story Tech/Levels if no logic
@@ -1038,7 +1040,7 @@ class SC2Context(CommonContext):
                 if not keep_trying:
                     return None
                 continue
-            
+
             assert self.trade_latest_reply is not None
             reply = copy.deepcopy(self.trade_latest_reply)
 
@@ -1661,18 +1663,20 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
                 if self.can_read_game:
                     if game_state & (1 << 1) and not self.mission_completed:
-                        victory_location = get_location_id(self.mission_id, 0)
+                        victory_locations = [get_location_id(self.mission_id, 0)]
                         send_victory = (
                             self.mission_id in self.ctx.final_mission_ids and
-                            len(self.ctx.final_locations) == len(self.ctx.checked_locations.union([victory_location]).intersection(self.ctx.final_locations))
+                            len(self.ctx.final_locations) == len(self.ctx.checked_locations.union(victory_locations).intersection(self.ctx.final_locations))
                         )
                         
-                        # Old slots don't have a location on victory
+                        # Old slots don't have locations on goal
                         if not send_victory or self.ctx.slot_data_version >= 4:
                             print("Mission Completed")
+                            if self.ctx.victory_checks > 1:
+                                victory_locations += [victory_locations[0] + VICTORY_CACHE_OFFSET + v for v in range(self.ctx.victory_checks - 1)]
                             await self.ctx.send_msgs(
                                 [{"cmd": 'LocationChecks',
-                                    "locations": [victory_location]}])
+                                    "locations": victory_locations}])
                             self.mission_completed = True
 
                         if send_victory:

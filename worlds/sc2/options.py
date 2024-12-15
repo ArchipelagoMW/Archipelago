@@ -885,6 +885,16 @@ class ExcludeVeryHardMissions(Choice):
         return ["Default", "Yes", "No"][int(value)]
 
 
+class VictoryChecks(Range):
+    """
+    How many checks are awarded for completing a mission.
+    """
+    display_name = "Victory Checks"
+    range_start = 1
+    range_end = 10
+    default = 1
+
+
 class LocationInclusion(Choice):
     option_enabled = 0
     option_resources = 1
@@ -991,6 +1001,16 @@ class PreventativeLocations(LocationInclusion):
     """
     display_name = "Preventative Locations"
 
+
+class FillerPercentage(Range):
+    """
+    Percentage of the item pool filled with filler items.
+    If the world has more locations than items, filler items will still be generated.
+    """
+    display_name = "Filler Percentage"
+    range_start = 0
+    range_end = 70
+    default = 0
 
 class MineralsPerItem(Range):
     """
@@ -1187,12 +1207,14 @@ class Starcraft2Options(PerGameCommonOptions):
     excluded_missions: ExcludedMissions
     exclude_very_hard_missions: ExcludeVeryHardMissions
     vanilla_items_only: VanillaItemsOnly
+    victory_checks: VictoryChecks
     vanilla_locations: VanillaLocations
     extra_locations: ExtraLocations
     challenge_locations: ChallengeLocations
     mastery_locations: MasteryLocations
     speedrun_locations: SpeedrunLocations
     preventative_locations: PreventativeLocations
+    filler_percentage: FillerPercentage
     minerals_per_item: MineralsPerItem
     vespene_per_item: VespenePerItem
     starting_supply_per_item: StartingSupplyPerItem
