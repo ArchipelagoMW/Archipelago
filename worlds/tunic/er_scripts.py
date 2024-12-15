@@ -329,7 +329,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     non_dead_end_regions = set()
     for region_name, region_info in world.er_regions.items():
         # these are not real regions, they are just here to be descriptive
-        if region_name == "Shop":
+        if region_info.is_fake_region or region_name == "Shop":
             continue
         # dead ends aren't real in decoupled
         if decoupled:
