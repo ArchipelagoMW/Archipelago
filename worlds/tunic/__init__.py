@@ -1,7 +1,8 @@
 from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set
 from logging import warning
-from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, LocationProgressType
-from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
+from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState, LocationProgressType
+from .items import (item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names,
+                    combat_items)
 from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations, sphere_one
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
 from .er_rules import set_er_location_rules
@@ -11,6 +12,7 @@ from .grass import grass_location_table, grass_location_name_to_id, grass_locati
 from .er_data import portal_mapping, RegionInfo, tunic_er_regions
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
                       LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage)
+from .combat_logic import area_data, CombatState
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection, OptionError
 from decimal import Decimal, ROUND_HALF_UP
@@ -136,6 +138,7 @@ class TunicWorld(World):
                 self.options.grass_randomizer.value = passthrough["grass_randomizer"]
                 self.options.fixed_shop.value = self.options.fixed_shop.option_false
                 self.options.laurels_location.value = self.options.laurels_location.option_anywhere
+                self.options.combat_logic.value = passthrough["combat_logic"]
 
         self.player_location_table = standard_location_name_to_id.copy()
 
@@ -150,6 +153,15 @@ class TunicWorld(World):
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
         tunic_worlds: Tuple[TunicWorld] = multiworld.get_game_worlds("TUNIC")
         for tunic in tunic_worlds:
+            # setting up state combat logic stuff, see has_combat_reqs for its use
+            # and this is magic so pycharm doesn't like it, unfortunately
+            if tunic.options.combat_logic:
+                multiworld.state.tunic_need_to_reset_combat_from_collect[tunic.player] = False
+                multiworld.state.tunic_need_to_reset_combat_from_remove[tunic.player] = False
+                multiworld.state.tunic_area_combat_state[tunic.player] = {}
+                for area_name in area_data.keys():
+                    multiworld.state.tunic_area_combat_state[tunic.player][area_name] = CombatState.unchecked
+
             # if it's one of the options, then it isn't a custom seed group
             if tunic.options.entrance_rando.value in EntranceRando.options.values():
                 continue
@@ -208,7 +220,10 @@ class TunicWorld(World):
 
     def create_item(self, name: str, classification: ItemClassification = None) -> TunicItem:
         item_data = item_table[name]
-        return TunicItem(name, classification or item_data.classification, self.item_name_to_id[name], self.player)
+        # if item_data.combat_ic is None, it'll take item_data.classification instead
+        itemclass: ItemClassification = ((item_data.combat_ic if self.options.combat_logic else None)
+                                         or item_data.classification)
+        return TunicItem(name, classification or itemclass, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
         tunic_items: List[TunicItem] = []
@@ -394,15 +409,16 @@ class TunicWorld(World):
                 self.ability_unlocks["Pages 42-43 (Holy Cross)"] = passthrough["Hexagon Quest Holy Cross"]
                 self.ability_unlocks["Pages 52-53 (Icebolt)"] = passthrough["Hexagon Quest Icebolt"]
 
-        # ladder rando uses ER with vanilla connections, so that we're not managing more rules files
-        if self.options.entrance_rando or self.options.shuffle_ladders or self.options.grass_randomizer:
+        # Ladders and Combat Logic uses ER rules with vanilla connections for easier maintenance
+        if (self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic
+                or self.options.grass_randomizer):
             portal_pairs = create_er_regions(self)
             if self.options.entrance_rando:
                 # these get interpreted by the game to tell it which entrances to connect
                 for portal1, portal2 in portal_pairs.items():
                     self.tunic_portal_pairs[portal1.scene_destination()] = portal2.scene_destination()
         else:
-            # for non-ER, non-ladders
+            # uses the original rules, easier to navigate and reference
             for region_name in tunic_regions:
                 region = Region(region_name, self.player, self.multiworld)
                 self.multiworld.regions.append(region)
@@ -423,7 +439,9 @@ class TunicWorld(World):
             victory_region.locations.append(victory_location)
 
     def set_rules(self) -> None:
-        if self.options.entrance_rando or self.options.shuffle_ladders or self.options.grass_randomizer:
+        # same reason as in create_regions, could probably be put into create_regions
+        if (self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic
+                or self.options.grass_randomizer):
             set_er_location_rules(self)
         else:
             set_region_rules(self)
@@ -431,6 +449,19 @@ class TunicWorld(World):
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)
+
+    # cache whether you can get through combat logic areas
+    def collect(self, state: CollectionState, item: Item) -> bool:
+        change = super().collect(state, item)
+        if change and self.options.combat_logic and item.name in combat_items:
+            state.tunic_need_to_reset_combat_from_collect[self.player] = True
+        return change
+
+    def remove(self, state: CollectionState, item: Item) -> bool:
+        change = super().remove(state, item)
+        if change and self.options.combat_logic and item.name in combat_items:
+            state.tunic_need_to_reset_combat_from_remove[self.player] = True
+        return change
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
         if self.options.entrance_rando:
@@ -499,6 +530,7 @@ class TunicWorld(World):
             "entrance_rando": int(bool(self.options.entrance_rando.value)),
             "shuffle_ladders": self.options.shuffle_ladders.value,
             "grass_randomizer": self.options.grass_randomizer.value,
+            "combat_logic": self.options.combat_logic.value,
             "Hexagon Quest Prayer": self.ability_unlocks["Pages 24-25 (Prayer)"],
             "Hexagon Quest Holy Cross": self.ability_unlocks["Pages 42-43 (Holy Cross)"],
             "Hexagon Quest Icebolt": self.ability_unlocks["Pages 52-53 (Icebolt)"],
