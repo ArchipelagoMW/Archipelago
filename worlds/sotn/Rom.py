@@ -1,11 +1,16 @@
+import json
+import struct
+
 import Utils
 import random
 import logging
 from sys import platform
+from typing import TYPE_CHECKING
 from worlds.Files import APDeltaPatch
 from Utils import home_path, open_filename, messagebox
 from settings import get_settings
 from worlds.AutoWorld import World
+from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
 from BaseClasses import ItemClassification, Item
 from .Items import (ItemData, item_table, IType, get_item_data_shop, tile_id_offset, hand_type_table, chest_type_table,
                     helmet_type_table, cloak_type_table, acc_type_table, SotnItem)
@@ -17,6 +22,9 @@ import hashlib
 import os
 import subprocess
 import bsdiff4
+
+if TYPE_CHECKING:
+    from . import SotnWorld
 
 USHASH = "acbb3a2e4a8f865f363dc06df147afa2"
 AUDIOHASH = "8f4b1df20c0173f7c2e6a30bd3109ac8"
@@ -96,251 +104,287 @@ limited_locations = ["NO4 - Crystal cloak", "CAT - Mormegil", "RNO4 - Dark Blade
                      "RNZ1 - Darkwing bat kill"]
 
 
-class SOTNDeltaPatch(APDeltaPatch):
-    hash = USHASH
+# Thanks lil David from AP discord for the info on APProcedurePatch
+class SotnProcedurePatch(APProcedurePatch, APTokenMixin):
     game = "Symphony of the Night"
+    hash = USHASH
     patch_file_ending = ".apsotn"
-    result_file_ending: str = ".cue"
+    result_file_ending = ".cue"
+
+    procedure = [
+        ("apply_mods", ["options.json"]),
+        ("apply_tokens", ["token_data.bin"]),
+    ]
 
     @classmethod
     def get_source_data(cls) -> bytes:
-        return get_base_rom_bytes()
+        with open(get_settings().sotn_settings.rom_file, "rb") as infile:
+            return bytes(infile.read())
 
-    def patch(self, target: str):
-        """Base + Delta -> Patched"""
+    def patch(self, target: str) -> None:
         file_name = target[:-4]
-        patch_path = file_name + ".apsotn"
+        if os.path.exists(file_name + ".bin") and os.path.exists(file_name + ".cue"):
+            logger.info("Patched ROM + CUE already exist!")
+            return
+
+        super().patch(target)
+
+        os.rename(target, target[:-4] + ".bin")
 
         audio_name = target[0:target.rfind('/') + 1]
         audio_name += "Castlevania - Symphony of the Night (USA) (Track 2).bin"
-
         if os.path.exists(audio_name):
             logger.info("Track 2 already exist")
         else:
             logger.info("Copying track 2")
-            audio_rom = bytearray(get_base_rom_bytes(True))
+            audio_rom = bytearray(get_base_rom_bytes(audio=True))
             with open(audio_name, "wb") as stream:
                 stream.write(audio_rom)
 
-        if not (os.path.exists(file_name + ".bin") and os.path.exists(file_name + ".cue")):
-            logger.info("Patched ROM doesn't exist")
+        track1_name = target[target.rfind('/') + 1:-4]
 
-            with open(patch_path, "rb") as infile:
-                diff_patch = bytes(infile.read())
+        cue_file = f'FILE "{track1_name}.bin" BINARY\n  TRACK 01 MODE2/2352\n\tINDEX 01 00:00:00\n'
+        cue_file += f'FILE "Castlevania - Symphony of the Night (USA) (Track 2).bin" BINARY\n  TRACK 02 AUDIO\n'
+        cue_file += f'\tINDEX 00 00:00:00\n\tINDEX 01 00:02:00'
 
-            original_rom = bytearray(get_base_rom_bytes())
+        with open(target[:-4] + ".cue", 'wb') as outfile:
+            outfile.write(bytes(cue_file, 'utf-8'))
 
-            patched_rom = original_rom.copy()
-            music_slice = original_rom[0x000affd0:0x000b9ea5]  # Size 0x9ed5 / 40661
-            original_slice = music_slice + original_rom[0x04389c6c:0x06a868a4]
-
-            patched_slice = bsdiff4.patch(bytes(original_slice), diff_patch)
-
-            patched_rom[0x000affd0:0x000b9ea5] = patched_slice[0:0x9ed5]
-            patched_rom[0x04389c6c:0x06a868a4] = patched_slice[0x9ed5:]
-
-            # Duplicate Seed options
-            patched_rom[0xf4ce4:0xf4d50] = patched_rom[0x438d47c:0x438d4e8]
-
-            seed_options = patched_rom[0x438d487]
-
-            if seed_options & (1 << 2):
-                # Wing smash timer
-                # Thanks Forat Negre for the info on that
-                write_word(patched_rom, 0x00134990, 0x00000000)
-
-            if patched_rom[0x438d48a] >= 4:
-                # Talisman farm on, remove item quantity limitation
-                write_char(patched_rom, 0x1171f4, 0xff)
-
-            # Acessibility Patches researched by MottZilla.
-            # Patch Clock Room cutscene
-            write_char(patched_rom, 0x0aeaa0, 0x00)
-            write_char(patched_rom, 0x119af4, 0x00)
-            # Power of Sire flashing
-            write_word(patched_rom, 0x00136580, 0x03e00008)
-            # Clock Tower puzzle gate
-            write_char(patched_rom, 0x05574dee, 0x80)
-            write_char(patched_rom, 0x055a110c, 0xe0)
-            # Olrox death
-            write_char(patched_rom, 0x05fe6914, 0x80)
-            # Scylla door
-            write_char(patched_rom, 0x061ce8ec, 0xce)
-            write_word(patched_rom, 0x061cb734, 0x304200fe)
-            # Minotaur & Werewolf
-            offset = 0x0613a640
-            write_word(patched_rom, 0x061294dc, 0x0806d732)
-            offset = write_word(patched_rom, offset, 0x3c028007)
-            offset = write_word(patched_rom, offset, 0x34423404)
-            offset = write_word(patched_rom, offset, 0x34030005)
-            offset = write_word(patched_rom, offset, 0x90420000)
-            offset = write_word(patched_rom, offset, 0x00000000)
-            offset = write_word(patched_rom, offset, 0x1043000b)
-            offset = write_word(patched_rom, offset, 0x34030018)
-            offset = write_word(patched_rom, offset, 0x00000000)
-            offset = write_word(patched_rom, offset, 0x10430008)
-            offset = write_word(patched_rom, offset, 0x34030009)
-            offset = write_word(patched_rom, offset, 0x00000000)
-            offset = write_word(patched_rom, offset, 0x10430005)
-            offset = write_word(patched_rom, offset, 0x34030019)
-            offset = write_word(patched_rom, offset, 0x00000000)
-            offset = write_word(patched_rom, offset, 0x10430002)
-            offset = write_word(patched_rom, offset, 0x00000000)
-            offset = write_word(patched_rom, offset, 0x0806d747)
-            offset = write_word(patched_rom, offset, 0x34020001)
-            offset = write_word(patched_rom, offset, 0x00000000)
-            offset = write_word(patched_rom, offset, 0xac82002c)
-            offset = write_word(patched_rom, offset, 0x00000000)
-            offset = write_word(patched_rom, offset, 0x3c028007)
-            offset = write_word(patched_rom, offset, 0x944233da)
-            write_word(patched_rom, offset, 0x08069bc3)
-            # Softlock when using gold & silver ring
-            offset = 0x492df64
-            offset = write_word(patched_rom, offset, 0xa0202ee8)
-            offset = write_word(patched_rom, offset, 0x080735cc)
-            write_word(patched_rom, offset, 0x00000000)
-            write_word(patched_rom, 0x4952454, 0x0806b647)
-            write_word(patched_rom, 0x4952474, 0x0806b647)
-
-            with open(target[:-4] + ".bin", "wb") as stream:
-                stream.write(patched_rom)
-
-            target_bin = target[:-4] + ".bin"
-            track1_name = target[target.rfind('/') + 1:-4]
-
-            cue_file = f'FILE "{track1_name}.bin" BINARY\n  TRACK 01 MODE2/2352\n\tINDEX 01 00:00:00\n'
-            cue_file += f'FILE "Castlevania - Symphony of the Night (USA) (Track 2).bin" BINARY\n  TRACK 02 AUDIO\n'
-            cue_file += f'\tINDEX 00 00:00:00\n\tINDEX 01 00:02:00'
-            with open(target[:-4] + ".cue", 'wb') as outfile:
-                outfile.write(bytes(cue_file, 'utf-8'))
-
-            error_recalc_path = ""
-            if platform == "win32":
-                if os.path.exists("error_recalc.exe"):
-                    error_recalc_path = "error_recalc.exe"
-                elif os.path.exists(f"{home_path('lib')}\\error_recalc.exe"):
-                    error_recalc_path = f"{home_path('lib')}\\error_recalc.exe"
-            elif platform.startswith("linux") or platform.startswith("darwin"):
-                if os.path.exists("error_recalc"):
-                    error_recalc_path = "./error_recalc"
-                elif os.path.exists(f"{home_path('lib')}/error_recalc"):
-                    error_recalc_path = f"{home_path('lib')}/error_recalc"
-            else:
-                logger.info("Error_recalc not find on /lib folder !!!")
-
-            if error_recalc_path == "":
-                try:
-                    error_recalc_path = open_filename("Error recalc binary", (("All", "*.*"),))
-                except Exception as e:
-                    messagebox("Error", str(e), error=True)
-
-            if error_recalc_path != "":
-                subprocess.call([error_recalc_path, target_bin])
-            else:
-                messagebox("Error", "Could not find Error_recalc binary", error=True)
+        # Apply Error Recalculation
+        error_recalc_path = ""
+        if platform == "win32":
+            if os.path.exists("error_recalc.exe"):
+                error_recalc_path = "error_recalc.exe"
+            elif os.path.exists(f"{home_path('lib')}\\error_recalc.exe"):
+                error_recalc_path = f"{home_path('lib')}\\error_recalc.exe"
+        elif platform.startswith("linux") or platform.startswith("darwin"):
+            if os.path.exists("error_recalc"):
+                error_recalc_path = "./error_recalc"
+            elif os.path.exists(f"{home_path('lib')}/error_recalc"):
+                error_recalc_path = f"{home_path('lib')}/error_recalc"
         else:
-            logger.info("Patched ROM already exist")
+            logger.info("Error_recalc not find on /lib folder !!!")
 
+        if error_recalc_path == "":
+            try:
+                error_recalc_path = open_filename("Error recalc binary", (("All", "*.*"),))
+            except Exception as e:
+                messagebox("Error", str(e), error=True)
 
-def get_base_rom_bytes(audio: bool = False) -> bytes:
-    if not audio:
-        file_name = get_settings().sotn_settings.rom_file
-        with open(file_name, "rb") as infile:
-            base_rom_bytes = bytes(infile.read())
-
-        basemd5 = hashlib.md5()
-        basemd5.update(base_rom_bytes)
-        if USHASH != basemd5.hexdigest():
-            raise Exception('Supplied Track 1 Base Rom does not match known MD5 for SLU067 release. '
-                            'Get the correct game and version, then dump it')
-    else:
-        file_name = get_settings().sotn_settings.audio_file
-        with open(file_name, "rb") as infile:
-            base_rom_bytes = bytes(infile.read())
-
-        basemd5 = hashlib.md5()
-        basemd5.update(base_rom_bytes)
-        if AUDIOHASH != basemd5.hexdigest():
-            raise Exception('Supplied Track 2 Audio Rom does not match known MD5 for SLU067 release. '
-                            'Get the correct game and version, then dump it')
-
-    return base_rom_bytes
-
-
-def get_base_rom_path(file_name: str = "") -> str:
-    options = get_settings()
-    if not file_name:
-        file_name = options["sotn_settings"]["rom_file"]
-    if not os.path.exists(file_name):
-        file_name = Utils.user_path(file_name)
-    return file_name
-
-
-def write_char(buffer, address: int, value: int):
-    buffer[address] = (value & 0xFF)
-
-
-def write_short(buffer, address: int, value: int):
-    x1, x2 = (value & 0xFFFF).to_bytes(2, 'little')
-    buffer[address] = x1
-    buffer[address + 1] = x2
-
-
-def write_word(buffer, address: int, value):
-    x1, x2, x3, x4 = (value & 0xFFFFFFFF).to_bytes(4, 'little')
-    buffer[address] = x1
-    buffer[address + 1] = x2
-    buffer[address + 2] = x3
-    buffer[address + 3] = x4
-    return address + 4
-
-
-def replace_shop_text(buffer, new_text):
-    start_address = 0x047d5650
-
-    for c in new_text:
-        if c == " ":
-            write_char(buffer, start_address, 0x00)
+        if error_recalc_path != "":
+            subprocess.call([error_recalc_path, target[:-4] + ".bin"])
         else:
-            write_char(buffer, start_address, ord(c) - 0x20)
-        start_address += 1
-
-    write_char(buffer, start_address, 0xff)
-    write_char(buffer, start_address + 1, 0x00)
+            messagebox("Error", "Could not find Error_recalc binary", error=True)
 
 
-# ALWAYS REMEMBER that the slice will change if more addresses are added Slice: 0x04389c6c:0x06a868a4
-# Music extra slice 0x000affd0:0x000b0c2c changed max to 0x000b9ea5 for enemy drop
+class RomData:
+    orig_buffer: None
+    buffer: bytearray
 
-def patch_rom(world: World, output_directory: str) -> None:
-    original_rom = bytearray(get_base_rom_bytes())
-    patched_rom = original_rom.copy()
-    no4 = world.options.opened_no4
-    are = world.options.opened_are
-    no2 = world.options.opened_no2
-    songs = world.options.rng_songs
-    shop = world.options.rng_shop
-    shop_prog = world.options.prog_shop
-    shop_lib = world.options.lib_shop
-    prices = world.options.rng_prices
-    bosses = world.options.bosses_need
-    exp = world.options.exp_need
-    candles = world.options.rng_candles
-    candles_prog = world.options.prog_candles
-    drops = world.options.rng_drops
-    drops_prog = world.options.prog_drops
-    esanity = world.options.enemysanity
-    dsanity = world.options.dropsanity
-    difficult = world.options.difficult
-    player_xp = world.options.xp_mod
-    player_att = world.options.att_mod
-    player_hp = world.options.hp_mod
-    player_drp = world.options.drop_mod
-    goal = world.options.goal
-    wing_smash = world.options.infinite_wing
-    rules = world.options.rand_rules
-    auto_heal = world.options.auto_heal
-    multiple_trap = world.options.multiple_trap
+    def __init__(self, file: bytes) -> None:
+        self.file = bytearray(file)
+
+    def write_char(self, address: int, value: int):
+        self.file[address] = (value & 0xFF)
+
+    def write_short(self, address: int, value: int):
+        x1, x2 = (value & 0xFFFF).to_bytes(2, "little")
+        self.file[address] = x1
+        self.file[address + 1] = x2
+
+    def read_short(self, address: int) -> int:
+        return int.from_bytes(self.file[address:address+2], byteorder="little")
+
+    def get_bytes(self) -> bytes:
+        return bytes(self.file)
+
+
+class SotnPatchExtension(APPatchExtension):
+    game = "Symphony of the Night"
+
+    @staticmethod
+    def apply_mods(caller: APProcedurePatch, original_rom: bytes, options_file: str) -> bytes:
+        rom = RomData(original_rom)
+        options = json.loads(caller.get_file(options_file).decode("utf-8"))
+        xp_mod, mon_atk, mon_hp, mon_drp = 1, 1, 1, 1
+        difficult = options["difficult"]
+        if difficult == 0:
+            xp_mod = 1.5
+            mon_atk = 0.7
+            mon_hp = 0.7
+            mon_drp = 2
+        elif difficult == 2:
+            xp_mod = 0.8
+            mon_atk = 1.3
+            mon_hp = 1.3
+            mon_drp = 0
+        elif difficult == 3:
+            xp_mod = 0.5
+            mon_atk = 1.5
+            mon_hp = 2
+            mon_drp = 0
+        if options["xp_mod"] != 0:
+            xp_mod = options["xp_mod"] / 100
+        if options["att_mod"] != 0:
+            mon_atk = options["att_mod"] / 100
+        if options["hp_mod"] != 0:
+            mon_hp = options["hp_mod"] / 100
+
+        for k, v in Enemy_dict.items():
+            if k in ["Stone skull", "Slime", "Large slime", "Poltergeist", "Puppet sword", "Shield", "Spear", "Ball"]:
+                continue
+            # Monster data
+            # XP
+            cur_value = rom.read_short(v.drop_addresses[0] - 2)
+            new_value = int(xp_mod * cur_value)
+            new_value = clamp(new_value, 1, 65535)
+            rom.write_short(v.drop_addresses[0] - 2, new_value)
+            # Monster attack
+            cur_value = rom.read_short(v.drop_addresses[0] - 20)
+            new_value = int(mon_atk * cur_value)
+            new_value = clamp(new_value, 1, 65535)
+            if k != "Galamoth":
+                rom.write_short(v.drop_addresses[0] - 20, new_value)
+            # Moster HP
+            cur_value = rom.read_short(v.drop_addresses[0] - 22)
+            new_value = int(mon_hp * cur_value)
+            new_value = clamp(new_value, 1, 65535)
+            if k != "Galamoth":
+                rom.write_short(v.drop_addresses[0] - 22, new_value)
+
+            for i, drop in enumerate(v.vanilla_drop):
+                # Drop increase
+                if mon_drp != 0:
+                    if mon_drp == 1 or mon_drp == 2:
+                        rom.write_char(v.drop_addresses[i] + 5, int(mon_drp))
+                    else:
+                        cur_value = rom.read_short(v.drop_addresses[i] + 4)
+                        new_value = int(mon_drp * cur_value)
+                        new_value = clamp(new_value, 2, 65535)
+                        rom.write_short(v.drop_addresses[i] + 4, new_value)
+
+        return rom.get_bytes()
+
+
+def apply_acessibility_patches(patch: SotnProcedurePatch):
+    # Researched by MottZilla.
+    # Patch Clock Room cutscene
+    patch.write_token(APTokenTypes.WRITE, 0x0aeaa0, struct.pack("<B", 0x00))
+    patch.write_token(APTokenTypes.WRITE, 0x119af4, struct.pack("<B", 0x00))
+    # Patch Alchemy Laboratory cutscene
+    patch.write_token(APTokenTypes.WRITE, 0x054f0f44 + 2, (0x1000).to_bytes(2, "little"))
+    # Power of Sire flashing
+    patch.write_token(APTokenTypes.WRITE, 0x00136580, (0x03e00008).to_bytes(4, "little"))
+    # Clock Tower puzzle gate
+    patch.write_token(APTokenTypes.WRITE, 0x05574dee, struct.pack("<B", 0x80))
+    patch.write_token(APTokenTypes.WRITE, 0x055a110c, struct.pack("<B", 0xe0))
+    # Olrox death
+    patch.write_token(APTokenTypes.WRITE, 0x05fe6914, struct.pack("<B", 0x80))
+    # Scylla door
+    patch.write_token(APTokenTypes.WRITE, 0x061ce8ec, struct.pack("<B", 0xce))
+    patch.write_token(APTokenTypes.WRITE, 0x061cb734, (0x304200fe).to_bytes(4, "little"))
+    # Minotaur & Werewolf
+    offset = 0x0613a640
+    patch.write_token(APTokenTypes.WRITE, 0x061294dc, (0x0806d732).to_bytes(4, "little"))
+    patch.write_token(APTokenTypes.WRITE, offset, (0x3c028007).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x34423404).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x34030005).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x90420000).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x00000000).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x1043000b).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x34030018).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x00000000).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x10430008).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x34030009).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x00000000).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x10430005).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x34030019).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x00000000).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x10430002).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x00000000).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x0806d747).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x34020001).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x00000000).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0xac82002c).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x00000000).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x3c028007).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x944233da).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x08069bc3).to_bytes(4, "little"))
+    # Softlock when using gold & silver ring
+    offset = 0x492df64
+    patch.write_token(APTokenTypes.WRITE, offset, (0xa0202ee8).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x080735cc).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x00000000).to_bytes(4, "little"))
+    patch.write_token(APTokenTypes.WRITE, 0x4952454, (0x0806b647).to_bytes(4, "little"))
+    patch.write_token(APTokenTypes.WRITE, 0x4952474, (0x0806b647).to_bytes(4, "little"))
+
+
+def write_tokens(world: "SotnWorld", patch: SotnProcedurePatch):
+    apply_acessibility_patches(patch)
+
+    options_dict = {
+        "difficult": world.options.difficult.value,
+        "xp_mod": world.options.xp_mod.value,
+        "att_mod": world.options.att_mod.value,
+        "hp_mod": world.options.hp_mod.value,
+        "drop_mod": world.options.drop_mod.value,
+        "opened_no4": world.options.opened_no4.value,
+        "opened_are": world.options.opened_are.value,
+        "opened_no2": world.options.opened_no2.value,
+        "goal": world.options.goal.value,
+        "num_talisman": world.options.num_talisman.value,
+        "per_talisman": world.options.per_talisman.value,
+        "bosses_need": world.options.bosses_need.value,
+        "rng_songs": world.options.rng_songs.value,
+        "rng_shop": world.options.rng_shop.value,
+        "prog_shop": world.options.prog_shop.value,
+        "lib_shop": world.options.lib_shop.value,
+        "rng_prices": world.options.rng_prices.value,
+        "exp_need": world.options.exp_need.value,
+        "rng_candles": world.options.rng_candles.value,
+        "prog_candles": world.options.prog_candles.value,
+        "rng_drops": world.options.rng_drops.value,
+        "prog_drops": world.options.prog_drops.value,
+        "enemysanity": world.options.enemysanity.value,
+        "dropsanity": world.options.dropsanity.value,
+        "boostqty": world.options.boostqty.value,
+        "boostweight": world.options.boostweight.value,
+        "trapqty": world.options.trapqty.value,
+        "trapweight": world.options.trapweight.value,
+        "rand_rules": world.options.rand_rules.value,
+        "infinite_wing": world.options.infinite_wing.value,
+        "auto_heal": world.options.auto_heal.value,
+        "multiple_trap": world.options.multiple_trap.value,
+        "extra_pool": world.options.extra_pool.value,
+        "seed": int(world.multiworld.seed_name),
+        "player": patch.player,
+        "player_name": patch.player_name,
+    }
 
     relics_vlad = ["Heart of Vlad", "Tooth of Vlad", "Rib of Vlad", "Ring of Vlad", "Eye of Vlad"]
 
@@ -355,76 +399,85 @@ def patch_rom(world: World, output_directory: str) -> None:
                 for address in loc_data.rom_address:
                     if loc_data.no_offset:
                         if item_data.type in [IType.RELIC, IType.TRAP, IType.BOOST]:
-                            write_short(patched_rom, address, 0x0000)
+                            patch.write_token(APTokenTypes.WRITE, address, (0x0000).to_bytes(2, "little"))
                         else:
-                            write_short(patched_rom, address, item_data.get_item_id_no_offset())
+                            patch.write_token(APTokenTypes.WRITE,
+                                              address,
+                                              (item_data.get_item_id_no_offset()).to_bytes(2, "little"))
                     else:
                         if loc_data.can_be_relic:
                             if item_data.type == IType.RELIC:
-                                write_short(patched_rom, address, item_data.get_item_id())
+                                patch.write_token(APTokenTypes.WRITE,
+                                                  address,
+                                                  (item_data.get_item_id()).to_bytes(2, "little"))
                                 if loc.name == "Jewel of Open":
-                                    replace_shop_text(patched_rom, loc.item.name)
+                                    replace_shop_text(patch, loc.item.name)
                                     # Fix shop menu check
-                                    write_char(patched_rom, 0x047dbde0, item_data.get_item_id() + 0x64)
+                                    patch.write_token(APTokenTypes.WRITE,
+                                                      0x047dbde0,
+                                                      struct.pack("<B", item_data.get_item_id() + 0x64))
                             else:
                                 # Skill of wolf, bat card can't be item. Replace with ghost card instead
                                 if loc.name == "Skill of Wolf" or loc.name == "Bat Card":
-                                    write_short(patched_rom, address, 0x0013)
+                                    patch.write_token(APTokenTypes.WRITE, address, (0x0013).to_bytes(2, "little"))
                                 elif loc.name == "Jewel of Open":
-                                    replace_shop_text(patched_rom, "Ghost Card")
-                                    write_short(patched_rom, address, 0x0013)
-                                    write_char(patched_rom, 0x047dbde0, 0x77)
+                                    replace_shop_text(patch, "Ghost Card")
+                                    patch.write_token(APTokenTypes.WRITE, address, (0x0013).to_bytes(2, "little"))
+                                    patch.write_token(APTokenTypes.WRITE,0x047dbde0, struct.pack("<B",  0x77))
                                 elif loc.name in relics_vlad:
-                                    write_short(patched_rom, address, 0x0013)
+                                    patch.write_token(APTokenTypes.WRITE, address, (0x0013).to_bytes(2, "little"))
                                 else:
-                                    write_short(patched_rom, address, loc_data.relic_index)
-                                    write_short(patched_rom, address - 4, 0x000c)
+                                    patch.write_token(APTokenTypes.WRITE,
+                                                      address,
+                                                      loc_data.relic_index.to_bytes(2, "little"))
+                                    patch.write_token(APTokenTypes.WRITE, address - 4, (0x000c).to_bytes(2, "little"))
                                     for a in loc_data.item_address:
                                         if loc.item.name == "Life Vessel":
-                                            write_short(patched_rom, a, 0x0017)
+                                            patch.write_token(APTokenTypes.WRITE, a, (0x0017).to_bytes(2, "little"))
                                         elif loc.item.name == "Heart Vessel":
-                                            write_short(patched_rom, a, 0x000c)
+                                            patch.write_token(APTokenTypes.WRITE, a, (0x000c).to_bytes(2, "little"))
                                         else:
-                                            write_short(patched_rom, a, item_data.get_item_id())
+                                            patch.write_token(APTokenTypes.WRITE, a,
+                                                              item_data.get_item_id().to_bytes(2, "little"))
                         else:
                             if item_data.type == IType.RELIC:
-                                write_short(patched_rom, address, 0x0007)
+                                patch.write_token(APTokenTypes.WRITE, address, (0x0007).to_bytes(2, "little"))
                             else:
-                                write_short(patched_rom, address, item_data.get_item_id())
+                                patch.write_token(APTokenTypes.WRITE, address,
+                                                  item_data.get_item_id().to_bytes(2, "little"))
         elif loc.item and loc.item.player != world.player:
             loc_data = location_table[loc.name]
             if loc_data.rom_address:
                 for address in loc_data.rom_address:
                     if loc_data.no_offset:
-                        write_short(patched_rom, address, 0x0000)
+                        patch.write_token(APTokenTypes.WRITE, address, (0x0000).to_bytes(2, "little"))
                     else:
                         if loc_data.can_be_relic:
                             if loc.name == "Skill of Wolf" or loc.name == "Bat Card":
-                                write_short(patched_rom, address, 0x0013)
+                                patch.write_token(APTokenTypes.WRITE, address, (0x0013).to_bytes(2, "little"))
                             elif loc.name == "Jewel of Open":
-                                write_short(patched_rom, address, 0x0013)
-                                replace_shop_text(patched_rom, "Ghost Card")
-                                write_char(patched_rom, 0x047dbde0, 0x77)
+                                patch.write_token(APTokenTypes.WRITE, address, (0x0013).to_bytes(2, "little"))
+                                replace_shop_text(patch, "Ghost Card")
+                                patch.write_token(APTokenTypes.WRITE, 0x047dbde0, struct.pack("<B", 0x77))
                             elif loc.name in relics_vlad:
-                                write_short(patched_rom, address, 0x0013)
+                                patch.write_token(APTokenTypes.WRITE, address, (0x0013).to_bytes(2, "little"))
                             else:
-                                write_short(patched_rom, address, loc_data.relic_index)
-                                write_short(patched_rom, address - 4, 0x000c)
+                                patch.write_token(APTokenTypes.WRITE, address, loc_data.relic_index.to_bytes(2, "little"))
+                                patch.write_token(APTokenTypes.WRITE, address - 4, (0x000c).to_bytes(2, "little"))
                                 if (loc.item.classification == ItemClassification.filler or
                                         loc.item.classification == ItemClassification.trap):
                                     for a in loc_data.item_address:
-                                        write_short(patched_rom, a, 0x0004)
+                                        patch.write_token(APTokenTypes.WRITE, a, (0x0004).to_bytes(2, "little"))
                                 else:
                                     for a in loc_data.item_address:
-                                        write_short(patched_rom, a, 0x0003)
+                                        patch.write_token(APTokenTypes.WRITE, a, (0x0003).to_bytes(2, "little"))
                         else:
                             if loc.item.classification == ItemClassification.filler:
-                                write_short(patched_rom, address, 0x0004)
+                                patch.write_token(APTokenTypes.WRITE, address, (0x0004).to_bytes(2, "little"))
                             else:
-                                write_short(patched_rom, address, 0x0003)
+                                patch.write_token(APTokenTypes.WRITE, address, (0x0003).to_bytes(2, "little"))
 
-    # 285 Castle locations to be randomized
-    if rules > 0:
+    if options_dict["rand_rules"] > 0:
         # Randomize the game items
         weapon_list = ['Shield rod', 'Sword of dawn', 'Basilard', 'Short sword', 'Combat knife', 'Nunchaku',
                        'Were bane', 'Rapier', 'Red rust', 'Takemitsu', 'Shotel', 'Tyrfing', 'Namakura',
@@ -474,7 +527,7 @@ def patch_rom(world: World, output_directory: str) -> None:
         added_item = 0
         items_to_add = []
 
-        if goal >= 4:
+        if options_dict["goal"] >= 4:
             accessory_list.remove("Talisman")
 
         if len(world.not_added_items) > 0:
@@ -491,17 +544,17 @@ def patch_rom(world: World, output_directory: str) -> None:
         world.random.shuffle(salable_list)
         world.random.shuffle(usable_list)
 
-        if difficult == 0:
+        if options_dict["difficult"] == 0:
             items_to_add += [create_item("Life Vessel") for _ in range(40)]
             items_to_add += [create_item("Heart Vessel") for _ in range(40)]
             added_item += 80
             remove_offset = 0
-        elif difficult == 1:
+        elif options_dict["difficult"] == 1:
             items_to_add += [create_item("Life Vessel") for _ in range(32)]
             items_to_add += [create_item("Heart Vessel") for _ in range(33)]
             added_item += 65
             remove_offset = 20
-        elif difficult == 2:
+        elif options_dict["difficult"] == 2:
             items_to_add += [create_item("Life Vessel") for _ in range(17)]
             items_to_add += [create_item("Heart Vessel") for _ in range(17)]
             added_item += 34
@@ -596,20 +649,21 @@ def patch_rom(world: World, output_directory: str) -> None:
                     item = items_to_add.pop()
                     item_data = item_table[item.name]
                 for address in loc_data.rom_address:
-                    write_short(patched_rom, address, item_data.get_item_id_no_offset())
+                    patch.write_token(APTokenTypes.WRITE, address,
+                                      item_data.get_item_id_no_offset().to_bytes(2, "little"))
             else:
                 for address in loc_data.rom_address:
-                    write_short(patched_rom, address, item_data.get_item_id())
+                    patch.write_token(APTokenTypes.WRITE, address,
+                                      item_data.get_item_id().to_bytes(2, "little"))
 
     offset = 0x0492df64
-    offset = write_word(patched_rom, offset, 0xa0202ee8)
-    offset = write_word(patched_rom, offset, 0x080735cc)
-    offset = write_word(patched_rom, offset, 0x00000000)
-    write_word(patched_rom, 0x4952454, 0x0806b647)
-    write_word(patched_rom, 0x4952474, 0x0806b647)
-
-    # Patch Alchemy Laboratory cutscene
-    write_short(patched_rom, 0x054f0f44 + 2, 0x1000)
+    patch.write_token(APTokenTypes.WRITE, offset, (0xa0202ee8).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x080735cc).to_bytes(4, "little"))
+    offset += 4
+    patch.write_token(APTokenTypes.WRITE, offset, (0x00000000).to_bytes(4, "little"))
+    patch.write_token(APTokenTypes.WRITE, 0x4952454, (0x0806b647).to_bytes(4, "little"))
+    patch.write_token(APTokenTypes.WRITE, 0x4952474, (0x0806b647).to_bytes(4, "little"))
 
     """
     The flag that get set on NO4 switch: 0x03be1c and the instruction is jz, r2, 80181230 on 0x5430404 we patched
@@ -622,82 +676,54 @@ def patch_rom(world: World, output_directory: str) -> None:
     to jne r0, r0 so it never branch.
     """
     #  NO3 and NP3 doesn't share instruction.
-    if no4:
+    if options_dict["opened_no4"]:
         # Open NO4 too soon, make death skippable. Keep close till visit Alchemy Laboratory
         # write_word(patched_rom, 0x4ba8798, 0x14000005)
-        write_word(patched_rom, 0x05430404, 0x14000005)
+        patch.write_token(APTokenTypes.WRITE, 0x05430404, (0x14000005).to_bytes(4, "little"))
 
-    if are:
-        write_word(patched_rom, 0x0440110c, 0x14000066)
+    if options_dict["opened_are"]:
+        patch.write_token(APTokenTypes.WRITE, 0x0440110c, (0x14000066).to_bytes(4, "little"))
 
-    if no2:
-        write_word(patched_rom, 0x046c0968, 0x1400000b)
+    if options_dict["opened_no2"]:
+        patch.write_token(APTokenTypes.WRITE, 0x046c0968, (0x1400000b).to_bytes(4, "little"))
 
     """
     The instruction that check relics of Vlad is jnz r2, 801c1790 we gonna change to je r0, r0 so it's always 
     branch. ROM is @ 0x4fcf7b4 and RAM is @ 0x801c132c
     """
-    if goal == 3 or goal == 5:
-        write_word(patched_rom, 0x04fcf7b4, 0x10000118)
+    if options_dict["goal"] == 3 or options_dict["goal"] == 5:
+        patch.write_token(APTokenTypes.WRITE, 0x04fcf7b4, (0x10000118).to_bytes(4, "little"))
 
-    if songs:
-        randomize_music(patched_rom)
+    if options_dict["rng_songs"]:
+        randomize_music(patch)
 
-    if shop:
-        randomize_shop(patched_rom, shop_prog, shop_lib, goal)
+    if options_dict["rng_shop"]:
+        randomize_shop(patch, options_dict["prog_shop"], options_dict["lib_shop"], options_dict["goal"])
 
-    if prices != 0 and prices <= 3:
-        randomize_prices(patched_rom, prices)
+    if options_dict["rng_prices"] != 0 and options_dict["rng_prices"] <= 3:
+        randomize_prices(patch, options_dict["rng_prices"])
 
-    randomize_candles(patched_rom, candles, candles_prog, goal)
-
-    xp_mod, mon_atk, mon_hp, mon_drp = 1, 1, 1, 1
-    if difficult == 0:
-        xp_mod = 1.5
-        mon_atk = 0.7
-        mon_hp = 0.7
-        mon_drp = 2
-    elif difficult == 2:
-        xp_mod = 0.8
-        mon_atk = 1.3
-        mon_hp = 1.3
-        mon_drp = 0
-    elif difficult == 3:
-        xp_mod = 0.5
-        mon_atk = 1.5
-        mon_hp = 2
-        mon_drp = 0
-    if player_xp != 0:
-        xp_mod = player_xp / 100
-    if player_att != 0:
-        mon_atk = player_att / 100
-    if player_hp != 0:
-        mon_hp = player_hp / 100
-
-    if player_drp != 0:
-        mon_drp = player_drp
-    else:
-        if not dsanity:
-            mon_drp = 0
+    randomize_candles(patch, options_dict["rng_candles"], options_dict["prog_candles"], options_dict["goal"])
 
     # Replace talisman from Bone Musket on talisman farm mode and rng_drops off for a Magic missile
-    if 4 <= goal <= 5 and drops == 0:
+    if 4 <= options_dict["goal"] <= 5 and options_dict["rng_drops"] == 0:
         enemy = Enemy_dict["Bone musket"]
-        write_short(patched_rom, enemy.drop_addresses[0], item_value(25, 1))
+        patch.write_token(APTokenTypes.WRITE, enemy.drop_addresses[0],
+                          item_value(25, 1).to_bytes(2, "little"))
 
-    randomize_enemy(patched_rom, drops, drops_prog, xp_mod, mon_atk, mon_hp, mon_drp, goal)
+    randomize_enemy(patch, options_dict["rng_drops"], options_dict["prog_drops"], options_dict["goal"])
 
     sanity = 0
 
-    if esanity and rules != 1:
+    if options_dict["enemysanity"] and options_dict["rand_rules"] != 1:
         sanity |= (1 << 0)
-    if dsanity and rules != 1:
+    if options_dict["dropsanity"] and options_dict["rand_rules"] != 1:
         sanity |= (1 << 1)
-    if wing_smash:
+    if options_dict["infinite_wing"]:
         sanity |= (1 << 2)
-    if auto_heal:
+    if options_dict["auto_heal"]:
         sanity |= (1 << 3)
-    if multiple_trap:
+    if options_dict["multiple_trap"]:
         sanity |= (1 << 4)
 
     player_name = world.multiworld.get_player_name(world.player)
@@ -706,28 +732,78 @@ def patch_rom(world: World, output_directory: str) -> None:
     seed_num = world.multiworld.seed_name
     tt = world.total_talisman
     talisman = world.required_talisman
-    write_seed(patched_rom, seed_num, player_num, player_name, sanity, 0xffff, goal, bosses, exp, tt, talisman)
+    options_dict["game_tt"] = tt.value
+    options_dict["game_reqtt"] = talisman
 
-    music_slice = original_rom[0x000affd0:0x000b9ea5]
-    music_patched = patched_rom[0x000affd0:0x000b9ea5]
+    write_seed(patch, seed_num, player_num, player_name, sanity, 0xffff, options_dict["goal"],
+               options_dict["bosses_need"], options_dict["exp_need"], tt, talisman)
 
-    original_slice = music_slice + original_rom[0x04389c6c:0x06a868a4]
-    patched_slice = music_patched + patched_rom[0x04389c6c:0x06a868a4]
+    if options_dict["infinite_wing"]:
+        # Wing smash timer
+        # Thanks Forat Negre for the info on that
+        patch.write_token(APTokenTypes.WRITE, 0x00134990, (0x00000000).to_bytes(4, "little"))
 
-    print("Generating patch. Please wait!")
+    if options_dict["goal"] >= 4:
+        # Talisman farm on, remove item quantity limitation
+        patch.write_token(APTokenTypes.WRITE, 0x1171f4, struct.pack("<B", 0xff))
 
-    patch = bsdiff4.diff(bytes(original_slice), bytes(patched_slice))
-
-    patch_path = os.path.join(output_directory, f"{world.multiworld.get_out_file_name_base(world.player)}.apsotn")
-
-    with open(patch_path, 'wb') as outfile:
-        outfile.write(patch)
+    patch.write_file("options.json", json.dumps(options_dict).encode("utf-8"))
+    patch.write_file("token_data.bin", patch.get_token_binary())
 
 
-def write_seed(buffer, seed, player_number, player_name, sanity_options, bonus_luck, goal, bosses, exp, tt,
+def get_base_rom_bytes(audio: bool = False) -> bytes:
+    if not audio:
+        file_name = get_settings().sotn_settings.rom_file
+        with open(file_name, "rb") as infile:
+            base_rom_bytes = bytes(infile.read())
+
+        basemd5 = hashlib.md5()
+        basemd5.update(base_rom_bytes)
+        if USHASH != basemd5.hexdigest():
+            raise Exception('Supplied Track 1 Base Rom does not match known MD5 for SLU067 release. '
+                            'Get the correct game and version, then dump it')
+    else:
+        file_name = get_settings().sotn_settings.audio_file
+        with open(file_name, "rb") as infile:
+            base_rom_bytes = bytes(infile.read())
+
+        basemd5 = hashlib.md5()
+        basemd5.update(base_rom_bytes)
+        if AUDIOHASH != basemd5.hexdigest():
+            raise Exception('Supplied Track 2 Audio Rom does not match known MD5 for SLU067 release. '
+                            'Get the correct game and version, then dump it')
+
+    return base_rom_bytes
+
+
+def get_base_rom_path(file_name: str = "") -> str:
+    options = get_settings()
+    if not file_name:
+        file_name = options["sotn_settings"]["rom_file"]
+    if not os.path.exists(file_name):
+        file_name = Utils.user_path(file_name)
+    return file_name
+
+
+def replace_shop_text(patch: SotnProcedurePatch, new_text):
+    start_address = 0x047d5650
+
+    for c in new_text:
+        if c == " ":
+            patch.write_token(APTokenTypes.WRITE, start_address, struct.pack("<B", 0x00))
+        else:
+            patch.write_token(APTokenTypes.WRITE, start_address, struct.pack("<B", ord(c) - 0x20))
+        start_address += 1
+
+    patch.write_token(APTokenTypes.WRITE, start_address, struct.pack("<B", 0xff))
+    patch.write_token(APTokenTypes.WRITE, start_address + 1, struct.pack("<B", 0x00))
+
+
+def write_seed(patch: SotnProcedurePatch, seed, player_number, player_name, sanity_options, bonus_luck, goal, bosses, exp, tt,
                talisman) -> None:
     byte = 0
     start_address = 0x0438d47c
+    duplicate_offset = 0x4298798
     seed_text = []
 
     # Seed number occupies 10 bytes total line have 22 + 0xFF 0x00 at end
@@ -761,7 +837,8 @@ def write_seed(buffer, seed, player_number, player_name, sanity_options, bonus_l
     seed_text.append(0x00)
 
     for b in seed_text:
-        write_char(buffer, start_address, b)
+        patch.write_token(APTokenTypes.WRITE, start_address, struct.pack("<B", b))
+        patch.write_token(APTokenTypes.WRITE, start_address - duplicate_offset, struct.pack("<B", b))
         start_address += 1
 
     utf_name = player_name.encode("utf8")
@@ -807,21 +884,24 @@ def write_seed(buffer, seed, player_number, player_name, sanity_options, bonus_l
     # Write to file
     start_address = 0x438d494
     for b in first_line:
-        write_char(buffer, start_address, b)
+        patch.write_token(APTokenTypes.WRITE, start_address, struct.pack("<B", b))
+        patch.write_token(APTokenTypes.WRITE, start_address - duplicate_offset, struct.pack("<B", b))
         start_address += 1
 
     start_address = 0x438d4b4
     for b in second_line:
-        write_char(buffer, start_address, b)
+        patch.write_token(APTokenTypes.WRITE, start_address, struct.pack("<B", b))
+        patch.write_token(APTokenTypes.WRITE, start_address - duplicate_offset, struct.pack("<B", b))
         start_address += 1
 
     start_address = 0x438d4d4
     for b in third_line:
-        write_char(buffer, start_address, b)
+        patch.write_token(APTokenTypes.WRITE, start_address, struct.pack("<B", b))
+        patch.write_token(APTokenTypes.WRITE, start_address - duplicate_offset, struct.pack("<B", b))
         start_address += 1
 
 
-def randomize_music(buffer):
+def randomize_music(patch: SotnProcedurePatch):
     music = {
         "Lost Painting": 0x01,
         "Curse Zone": 0x03,
@@ -875,11 +955,11 @@ def randomize_music(buffer):
     for key, value in music_addresses.items():
         rng_song, rng_value = random.choice(list(music.items()))
         for address in value:
-            write_char(buffer, address, rng_value)
+            patch.write_token(APTokenTypes.WRITE, address, struct.pack("<B", rng_value))
         music.pop(rng_song)
 
 
-def randomize_shop(buffer, prog, lib, goal):
+def randomize_shop(patch: SotnProcedurePatch, prog, lib, goal):
     forbid_items = [169, 183, 195, 203, 217, 226, 241, 242]
 
     if prog:
@@ -908,11 +988,11 @@ def randomize_shop(buffer, prog, lib, goal):
             type_value = 0x04
         else:
             offset = 0x00
-        write_char(buffer, value, type_value)
-        write_short(buffer, value + 2, rng_item + offset)
+        patch.write_token(APTokenTypes.WRITE, value, struct.pack("<B", type_value))
+        patch.write_token(APTokenTypes.WRITE, value + 2, (rng_item + offset).to_bytes(2, "little"))
 
 
-def randomize_prices(buffer, prices):
+def randomize_prices(patch: SotnProcedurePatch, prices):
     min_prices = 1
     max_prices = 100
 
@@ -925,10 +1005,10 @@ def randomize_prices(buffer, prices):
 
     for key, value in shop_stock.items():
         rng_price = random.randrange(min_prices, max_prices)
-        write_word(buffer, value + 4, rng_price)
+        patch.write_token(APTokenTypes.WRITE, value + 4, rng_price.to_bytes(4, "little"))
 
 
-def randomize_candles(buffer, rng_choice, prog, goal):
+def randomize_candles(patch: SotnProcedurePatch, rng_choice, prog, goal):
     if rng_choice == 0:
         return
 
@@ -975,10 +1055,10 @@ def randomize_candles(buffer, rng_choice, prog, goal):
                 item_id += tile_id_offset
 
         for a in candle.addresses:
-            write_short(buffer, a, item_id)
+            patch.write_token(APTokenTypes.WRITE, a, item_id.to_bytes(2, "little"))
 
 
-def randomize_enemy(buffer, rng_choice, prog, xp_mod, mon_atk, mon_hp, mon_drp, goal):
+def randomize_enemy(patch: SotnProcedurePatch, rng_choice, prog, goal):
     forbid_items = [169, 183, 195, 203, 217, 226, 241, 242]
 
     if prog:
@@ -1004,7 +1084,7 @@ def randomize_enemy(buffer, rng_choice, prog, xp_mod, mon_atk, mon_hp, mon_drp, 
 
             item_id = item_value(rng_item, rng_type)
             for address in drop.drop_addresses:
-                write_short(buffer, address, item_id)
+                patch.write_token(APTokenTypes.WRITE, address, item_id.to_bytes(2, "little"))
         elif rng_choice == 2:
             rng_type = random.randrange(0, 2)
 
@@ -1015,42 +1095,13 @@ def randomize_enemy(buffer, rng_choice, prog, xp_mod, mon_atk, mon_hp, mon_drp, 
 
             item_id = item_value(rng_item, rng_type)
             for address in drop.drop_addresses:
-                write_short(buffer, address, item_id)
+                patch.write_token(APTokenTypes.WRITE, address, item_id.to_bytes(2, "little"))
 
     for k, v in Enemy_dict.items():
         if k in ["Stone skull", "Slime", "Large slime", "Poltergeist", "Puppet sword", "Shield", "Spear", "Ball"]:
             continue
-        # Monster data
-        # XP
-        cur_value = int.from_bytes(buffer[v.drop_addresses[0] - 2:v.drop_addresses[0]], byteorder='little')
-        new_value = int(xp_mod * cur_value)
-        new_value = clamp(new_value, 1, 65535)
-        write_short(buffer, v.drop_addresses[0] - 2, new_value)
-        # Monster attack
-        cur_value = int.from_bytes(buffer[v.drop_addresses[0] - 20:v.drop_addresses[0] - 18], byteorder='little')
-        new_value = int(mon_atk * cur_value)
-        new_value = clamp(new_value, 1, 65535)
-        if k != "Galamoth":
-            write_short(buffer, v.drop_addresses[0] - 20, new_value)
-        # Moster HP
-        cur_value = int.from_bytes(buffer[v.drop_addresses[0] - 22:v.drop_addresses[0] - 20], byteorder='little')
-        new_value = int(mon_hp * cur_value)
-        new_value = clamp(new_value, 1, 65535)
-        if k != "Galamoth":
-            write_short(buffer, v.drop_addresses[0] - 22, new_value)
 
         for i, drop in enumerate(v.vanilla_drop):
-            # Drop increase
-            if mon_drp != 0:
-                if mon_drp == 1 or mon_drp == 2:
-                    write_char(buffer, v.drop_addresses[0] + 5, mon_drp)
-                else:
-                    cur_value = int.from_bytes(buffer[v.drop_addresses[0] + 4:v.drop_addresses[0] + 6],
-                                               byteorder='little')
-                    new_value = int(mon_drp * cur_value)
-                    new_value = clamp(new_value, 2, 65535)
-                    write_short(buffer, v.drop_addresses[0] + 4, new_value)
-
             if rng_choice == 1:
                 if drop == "Axe":
                     continue
@@ -1078,9 +1129,9 @@ def randomize_enemy(buffer, rng_choice, prog, xp_mod, mon_atk, mon_hp, mon_drp, 
                     print(f"DEBUG: Item {drop} not found")
 
                 item_id = item_value(rng_item, rng_type)
-                write_short(buffer, v.drop_addresses[i], item_id)
+                patch.write_token(APTokenTypes.WRITE, v.drop_addresses[i], item_id.to_bytes(2, "little"))
                 if k == "Blue venus weed":
-                    write_short(buffer, v.drop_addresses[i+2], item_id)
+                    patch.write_token(APTokenTypes.WRITE, v.drop_addresses[i + 2], item_id.to_bytes(2, "little"))
             if rng_choice == 2:
                 if drop == "Axe":
                     continue
@@ -1093,7 +1144,7 @@ def randomize_enemy(buffer, rng_choice, prog, xp_mod, mon_atk, mon_hp, mon_drp, 
                     rng_item = random.choice([i for i in range(1, 259) if i not in forbid_items])
 
                 item_id = item_value(rng_item, rng_type)
-                write_short(buffer, v.drop_addresses[i], item_id)
+                patch.write_token(APTokenTypes.WRITE, v.drop_addresses[i], item_id.to_bytes(2, "little"))
 
 
 def item_value(rng_item: int, rng_type: int) -> int:
@@ -1120,3 +1171,4 @@ def clamp(n, minn, maxn):
         return maxn
     else:
         return n
+
