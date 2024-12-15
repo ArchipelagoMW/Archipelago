@@ -14,7 +14,6 @@ subparsers = parser.add_subparsers()
 
 subcommands = {
     'make'       : MakeCommand,
-    'server'     : ServerCommand,
     'rescript'   : RescriptCommand,
 }
 

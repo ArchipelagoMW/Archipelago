@@ -6,6 +6,7 @@ from typing import Mapping, Any
 
 import Utils
 import settings
+import locations
 from BaseClasses import Region, ItemClassification, MultiWorld, Tutorial
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule
