@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 from collections import Counter
 
+import Utils
 from BaseClasses import MultiWorld, CollectionState, ItemClassification
 from CommonClient import logger, get_base_parser, gui_enabled
 from MultiServer import mark_raw
@@ -49,11 +50,20 @@ class StardewCommandProcessor(ClientCommandProcessor):
             logger.warning("Internal logic was not able to load, check your yamls and relaunch.")
             return
 
-        rule = self.ctx.logic.region.can_reach_location(location)
+        try:
+            rule = self.ctx.logic.region.can_reach_location(location)
+            expl = explain(rule, get_updated_state(self.ctx), expected=None, mode=ExplainMode.CLIENT)
+        except KeyError:
 
-        expl = explain(rule, get_updated_state(self.ctx), expected=None, mode=ExplainMode.CLIENT)
+            result, usable, response = Utils.get_intended_text(location, [loc.name for loc in self.ctx.multiworld.get_locations(1)])
+            if usable:
+                rule = self.ctx.logic.region.can_reach_location(result)
+                expl = explain(rule, get_updated_state(self.ctx), expected=None, mode=ExplainMode.CLIENT)
+            else:
+                logger.warning(response)
+                return
+
         self.ctx.previous_explanation = expl
-
         logger.info(str(expl).strip())
 
     @mark_raw
@@ -63,11 +73,15 @@ class StardewCommandProcessor(ClientCommandProcessor):
             logger.warning("Internal logic was not able to load, check your yamls and relaunch.")
             return
 
-        rule = self.ctx.logic.has(item)
+        result, usable, response = Utils.get_intended_text(item, self.ctx.logic.registry.item_rules.keys())
+        if usable:
+            rule = self.ctx.logic.has(result)
+            expl = explain(rule, get_updated_state(self.ctx), expected=None, mode=ExplainMode.CLIENT)
+        else:
+            logger.warning(response)
+            return
 
-        expl = explain(rule, get_updated_state(self.ctx), expected=None, mode=ExplainMode.CLIENT)
         self.ctx.previous_explanation = expl
-
         logger.info(str(expl).strip())
 
     @mark_raw
@@ -77,13 +91,24 @@ class StardewCommandProcessor(ClientCommandProcessor):
             logger.warning("Internal logic was not able to load, check your yamls and relaunch.")
             return
 
-        rule = self.ctx.logic.region.can_reach_location(location)
-        state = get_updated_state(self.ctx)
-        simplified, _ = rule.evaluate_while_simplifying(state)
+        try:
+            rule = self.ctx.logic.region.can_reach_location(location)
+            state = get_updated_state(self.ctx)
+            simplified, _ = rule.evaluate_while_simplifying(state)
+            expl = explain(simplified, state, mode=ExplainMode.CLIENT)
+        except KeyError:
 
-        expl = explain(simplified, state, mode=ExplainMode.CLIENT)
+            result, usable, response = Utils.get_intended_text(location, [loc.name for loc in self.ctx.multiworld.get_locations(1)])
+            if usable:
+                rule = self.ctx.logic.region.can_reach_location(result)
+                state = get_updated_state(self.ctx)
+                simplified, _ = rule.evaluate_while_simplifying(state)
+                expl = explain(simplified, state, mode=ExplainMode.CLIENT)
+            else:
+                logger.warning(response)
+                return
+
         self.ctx.previous_explanation = expl
-
         logger.info(str(expl).strip())
 
     @mark_raw
