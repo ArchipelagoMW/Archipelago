@@ -536,7 +536,6 @@ class RegionInfo(NamedTuple):
     game_scene: str  # the name of the scene in the actual game
     dead_end: int = 0  # if a region has only one exit
     outlet_region: Optional[str] = None
-    is_fake_region: bool = False
 
 
 # gets the outlet region name if it exists, the region if it doesn't
@@ -731,7 +730,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Rooted Ziggurat Lower Front": RegionInfo("ziggurat2020_3"),  # the front for combat logic
     "Rooted Ziggurat Lower Mid Checkpoint": RegionInfo("ziggurat2020_3"),  # the mid-checkpoint before double admin
     "Rooted Ziggurat Lower Back": RegionInfo("ziggurat2020_3"),  # the boss side
-    "Zig Skip Exit": RegionInfo("ziggurat2020_3", dead_end=DeadEnd.special, outlet_region="Rooted Ziggurat Lower Entry", is_fake_region=True),  # for use with fixed shop on
+    "Zig Skip Exit": RegionInfo("ziggurat2020_3", dead_end=DeadEnd.special, outlet_region="Rooted Ziggurat Lower Entry"),  # for use with fixed shop on
     "Rooted Ziggurat Portal Room Entrance": RegionInfo("ziggurat2020_3", outlet_region="Rooted Ziggurat Lower Back"),  # the door itself on the zig 3 side
     "Rooted Ziggurat Portal": RegionInfo("ziggurat2020_FTRoom", outlet_region="Rooted Ziggurat Portal Room"),
     "Rooted Ziggurat Portal Room": RegionInfo("ziggurat2020_FTRoom"),
@@ -767,7 +766,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Purgatory": RegionInfo("Purgatory"),
     "Shop": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
     "Spirit Arena": RegionInfo("Spirit Arena", dead_end=DeadEnd.all_cats),
-    "Spirit Arena Victory": RegionInfo("Spirit Arena", dead_end=DeadEnd.all_cats, is_fake_region=True),
+    "Spirit Arena Victory": RegionInfo("Spirit Arena", dead_end=DeadEnd.all_cats),
 }
 
 
@@ -1295,6 +1294,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
             [],
     },
 
+    # cannot get from frogs back to front
     "Library Exterior Ladder Region": {
         "Library Exterior by Tree":
             [],
