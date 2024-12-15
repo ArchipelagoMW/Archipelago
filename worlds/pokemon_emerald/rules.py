@@ -416,13 +416,16 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
 
     # Dewford Town
+    entrance = get_entrance("REGION_DEWFORD_TOWN/MAIN -> REGION_ROUTE109/BEACH")
     set_rule(
-        get_entrance("REGION_DEWFORD_TOWN/MAIN -> REGION_ROUTE109/BEACH"),
+        entrance,
         lambda state:
             state.can_reach("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN", "Entrance", world.player)
             and state.has("EVENT_TALK_TO_MR_STONE", world.player)
             and state.has("EVENT_DELIVER_LETTER", world.player)
     )
+    world.multiworld.register_indirect_condition(
+        get_entrance("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN").parent_region, entrance)
     set_rule(
         get_entrance("REGION_DEWFORD_TOWN/MAIN -> REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN"),
         lambda state:
@@ -451,14 +454,17 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
 
     # Route 109
+    entrance = get_entrance("REGION_ROUTE109/BEACH -> REGION_DEWFORD_TOWN/MAIN")
     set_rule(
-        get_entrance("REGION_ROUTE109/BEACH -> REGION_DEWFORD_TOWN/MAIN"),
+        entrance,
         lambda state:
             state.can_reach("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN", "Entrance", world.player)
             and state.can_reach("REGION_DEWFORD_TOWN/MAIN -> REGION_ROUTE109/BEACH", "Entrance", world.player)
             and state.has("EVENT_TALK_TO_MR_STONE", world.player)
             and state.has("EVENT_DELIVER_LETTER", world.player)
     )
+    world.multiworld.register_indirect_condition(
+        get_entrance("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN").parent_region, entrance)
     set_rule(
         get_entrance("REGION_ROUTE109/BEACH -> REGION_ROUTE109/SEA"),
         hm_rules["HM03 Surf"]
