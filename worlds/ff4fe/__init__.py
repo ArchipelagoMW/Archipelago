@@ -6,11 +6,10 @@ from typing import Mapping, Any
 
 import Utils
 import settings
-import locations
 from BaseClasses import Region, ItemClassification, MultiWorld, Tutorial
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule, add_item_rule
-from . import events, items
+from . import events, items, locations
 from . import rules as FERules
 from .Client import FF4FEClient
 from .FreeEnterpriseForAP.FreeEnt.cmd_make import MakeCommand
