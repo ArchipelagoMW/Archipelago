@@ -66,19 +66,24 @@ class StardewWebWorld(WebWorld):
 
 
 if TRACKER_ENABLED:
-    def launch_client():
-        from .client import launch
-        launch_subprocess(launch, name="Stardew Valley Tracker")
+    from .. import user_folder
+    import os
+
+    # Best effort to detect if universal tracker is installed
+    if any("tracker" in f.name for f in os.scandir(user_folder)):
+        def launch_client():
+            from .client import launch
+            launch_subprocess(launch, name="Stardew Valley Tracker")
 
 
-    components.append(Component(
-        "Stardew Valley Tracker",
-        func=launch_client,
-        component_type=Type.CLIENT,
-        icon='stardew'
-    ))
+        components.append(Component(
+            "Stardew Valley Tracker",
+            func=launch_client,
+            component_type=Type.CLIENT,
+            icon='stardew'
+        ))
 
-    icon_paths['stardew'] = local_path('data', 'stardew.png')
+        icon_paths['stardew'] = local_path('data', 'stardew.png')
 
 
 class StardewValleyWorld(World):
