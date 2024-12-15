@@ -1,17 +1,19 @@
 from __future__ import annotations
 
 import asyncio
+# webserver imports
+import urllib.parse
 from collections import Counter
 
 import Utils
 from BaseClasses import MultiWorld, CollectionState, ItemClassification
-from CommonClient import logger, get_base_parser, gui_enabled
+from CommonClient import logger, get_base_parser, gui_enabled, server_loop
 from MultiServer import mark_raw
 from .logic.logic import StardewLogic
 from .stardew_rule.rule_explain import explain, ExplainMode, RuleExplanation
 
 try:
-    from worlds.tracker.TrackerClient import TrackerGameContext, TrackerCommandProcessor as ClientCommandProcessor  # noqa
+    from worlds.tracker.TrackerClient import TrackerGameContext, TrackerCommandProcessor as ClientCommandProcessor, UT_VERSION  # noqa
 
     tracker_loaded = True
 except ImportError:
@@ -38,6 +40,7 @@ except ImportError:
 
 
     tracker_loaded = False
+    UT_VERSION = "Not found"
 
 
 class StardewCommandProcessor(ClientCommandProcessor):
@@ -141,67 +144,25 @@ class StardewClientContext(TrackerGameContext):
     logic: StardewLogic | None = None
     previous_explanation: RuleExplanation | None = None
 
-    def run_gui(self):
-        from kvui import GameManager
+    def make_gui(self):
+        ui = super().make_gui()  # before the kivy imports so kvui gets loaded first
 
-        class StardewManager(GameManager):
-            logging_pairs = [
-                ("Client", "Archipelago")
-            ]
-            base_title = "Stardew Valley Archipelago Tracker"
+        class StardewManager(ui):
+            base_title = f"Stardew Valley Tracker with UT {UT_VERSION} for AP version"  # core appends ap version so this works
             ctx: StardewClientContext
 
             def build(self):
                 container = super().build()
-                if tracker_loaded:
-                    self.ctx.build_gui(self)
-                else:
+                if not tracker_loaded:
                     logger.info("To enable the tracker page, install Universal Tracker.")
 
                 return container
 
-        self.ui = StardewManager(self)
-        if tracker_loaded:
-            self.load_kv()
-
-        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+        return StardewManager
 
     def setup_logic(self):
         if self.multiworld is not None:
             self.logic = self.multiworld.worlds[1].logic
-
-    async def server_auth(self, password_requested: bool = False):
-        if password_requested and not self.password:
-            await super(StardewClientContext, self).server_auth(password_requested)
-
-        await self.get_username()
-        await self.send_connect()
-
-
-def launch():
-    async def main():
-        parser = get_base_parser(description="Stardew Valley Archipelago Tracker")
-        args = parser.parse_args()
-
-        ctx = StardewClientContext(args.connect, args.password)
-
-        if tracker_loaded:
-            ctx.run_generator()
-            ctx.setup_logic()
-        else:
-            logger.warning("Could not find Universal Tracker.")
-
-        if gui_enabled:
-            ctx.run_gui()
-        ctx.run_cli()
-
-        await ctx.exit_event.wait()
-        await ctx.shutdown()
-
-    import colorama
-    colorama.init()
-    asyncio.run(main())
-    colorama.deinit()
 
 
 # Don't mind me I just copy-pasted that from UT because it was too complicated to access their updated state.
@@ -233,3 +194,40 @@ def get_updated_state(ctx: TrackerGameContext) -> CollectionState:
         locations=(location for location in ctx.multiworld.get_locations() if (not location.address)))
 
     return state
+
+
+async def main(args):
+    ctx = StardewClientContext(args.connect, args.password)
+
+    ctx.auth = args.name
+    ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
+
+    if tracker_loaded:
+        ctx.run_generator()
+        ctx.setup_logic()
+    else:
+        logger.warning("Could not find Universal Tracker.")
+
+    if gui_enabled:
+        ctx.run_gui()
+    ctx.run_cli()
+
+    await ctx.exit_event.wait()
+    await ctx.shutdown()
+
+
+def launch(*args):
+    parser = get_base_parser(description="Gameless Archipelago Client, for text interfacing.")
+    parser.add_argument('--name', default=None, help="Slot Name to connect as.")
+    parser.add_argument("url", nargs="?", help="Archipelago connection url")
+    args = parser.parse_args(args)
+
+    if args.url:
+        url = urllib.parse.urlparse(args.url)
+        args.connect = url.netloc
+        if url.username:
+            args.name = urllib.parse.unquote(url.username)
+        if url.password:
+            args.password = urllib.parse.unquote(url.password)
+
+    asyncio.run(main(args))
