@@ -1,9 +1,12 @@
 from dataclasses import dataclass
-from typing import Iterable, Union, List, Tuple, Hashable
+from typing import Iterable, Union, List, Tuple, Hashable, TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from .base import BaseStardewRule, CombinableStardewRule
 from .protocol import StardewRule
+
+if TYPE_CHECKING:
+    from .. import StardewValleyWorld
 
 
 class TotalReceived(BaseStardewRule):
@@ -102,16 +105,19 @@ class HasProgressionPercent(CombinableStardewRule):
         return self.percent
 
     def __call__(self, state: CollectionState) -> bool:
-        stardew_world = state.multiworld.worlds[self.player]
+        stardew_world: "StardewValleyWorld" = state.multiworld.worlds[self.player]
         total_count = stardew_world.total_progression_items
         needed_count = (total_count * self.percent) // 100
         player_state = state.prog_items[self.player]
 
-        if needed_count <= len(player_state):
+        if needed_count <= len(player_state) - len(stardew_world.excluded_from_total_progression_items):
             return True
 
         total_count = 0
         for item, item_count in player_state.items():
+            if item in stardew_world.excluded_from_total_progression_items:
+                continue
+
             total_count += item_count
             if total_count >= needed_count:
                 return True
