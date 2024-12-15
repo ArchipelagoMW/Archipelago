@@ -1090,6 +1090,7 @@ class WitnessPlayerLogic:
             self.EVENT_ITEM_PAIRS[entity_name + " (Panel Hunt)"] = ("+1 Panel Hunt", entity_hex)
 
         for region_name, easter_egg_count in self.AVAILABLE_EASTER_EGGS_PER_REGION.items():
-            self.EVENT_ITEM_PAIRS[f"{region_name} Easter Eggs"] = (f"+{easter_egg_count} Easter Eggs", region_name)
+            plural = "s" if easter_egg_count != 1 else ""
+            self.EVENT_ITEM_PAIRS[f"{region_name} Easter Egg{plural}"] = (f"+{easter_egg_count} Easter Egg{plural}", region_name)
 
         return
