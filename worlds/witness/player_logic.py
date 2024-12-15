@@ -572,7 +572,7 @@ class WitnessPlayerLogic:
             if entity_hex in self.COMPLETELY_DISABLED_ENTITIES:
                 continue
 
-            direct_egg_count = int(entity_obj["checkName"].split(" ")[0])
+            direct_egg_count = int(entity_obj["checkName"].split(" ", 1)[0])
             logically_required_egg_count = direct_egg_count // needed_eggs_per_check * logically_needed_eggs_per_check
             if direct_egg_count > max_eggs:
                 self.COMPLETELY_DISABLED_ENTITIES.add(entity_hex)
