@@ -70,7 +70,7 @@ if TRACKER_ENABLED:
     import os
 
     # Best effort to detect if universal tracker is installed
-    if any("tracker" in f.name for f in os.scandir(user_folder)):
+    if any("tracker.apworld" in f.name for f in os.scandir(user_folder)):
         def launch_client():
             from .client import launch
             launch_subprocess(launch, name="Stardew Valley Tracker")
