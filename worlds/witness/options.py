@@ -155,7 +155,7 @@ class EasterEggHunt(Choice):
     - Hard: For every 4 Easter Eggs collected, an item is sent
     - Very Hard: For every 5 Easter Eggs collected, an item is sent (You are expected to find every Easter Egg)
 
-    On Easy, there will still be a location check for "100 Eggs Collected" (provided there aren't any unreachable eggs due to options like shuffle_postgame: False), but all checks after 40 Eggs will be excluded.
+    On Easy, there will still be a location check for "100 Easter Eggs Collected" (provided there aren't any unreachable eggs due to options like shuffle_postgame: false), but all checks after 40 Eggs will be excluded.
     """
 
     visibility = Visibility.all if datetime.now().month == 4 else Visibility.none
