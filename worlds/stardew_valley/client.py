@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import re
 # webserver imports
 import urllib.parse
 from collections import Counter
@@ -9,6 +10,7 @@ import Utils
 from BaseClasses import MultiWorld, CollectionState, ItemClassification
 from CommonClient import logger, get_base_parser, gui_enabled, server_loop
 from MultiServer import mark_raw
+from NetUtils import JSONMessagePart
 from .logic.logic import StardewLogic
 from .stardew_rule.rule_explain import explain, ExplainMode, RuleExplanation
 
@@ -112,7 +114,7 @@ class StardewCommandProcessor(ClientCommandProcessor):
                 return
 
         self.ctx.previous_explanation = expl
-        logger.info(str(expl).strip())
+        self.ctx.ui.print_json(parse_explanation(expl))
 
     @mark_raw
     def _cmd_more(self, index: str = ""):
@@ -163,6 +165,22 @@ class StardewClientContext(TrackerGameContext):
     def setup_logic(self):
         if self.multiworld is not None:
             self.logic = self.multiworld.worlds[1].logic
+
+
+def parse_explanation(explanation: RuleExplanation) -> list[JSONMessagePart]:
+    result_regex = f"(True|False)"
+    splits = re.split(result_regex, str(explanation))
+
+    messages = []
+    for s in splits:
+        if s == "True":
+            messages.append({"text": s, "type": "color", "color": "green"})
+        elif s == "False":
+            messages.append({"text": s, "type": "color", "color": "salmon"})
+        else:
+            messages.append({"text": s, "type": "text"})
+
+    return messages
 
 
 # Don't mind me I just copy-pasted that from UT because it was too complicated to access their updated state.
