@@ -553,9 +553,9 @@ class DeadEnd(IntEnum):
 
 # key is the AP region name. "Fake" in region info just means the mod won't receive that info at all
 tunic_er_regions: Dict[str, RegionInfo] = {
-    "Menu": RegionInfo("Fake", dead_end=DeadEnd.all_cats, is_fake_region=True),
+    "Menu": RegionInfo("Fake", dead_end=DeadEnd.all_cats),
     "Overworld": RegionInfo("Overworld Redux"),  # main overworld, the central area
-    "Overworld Holy Cross": RegionInfo("Fake", dead_end=DeadEnd.all_cats, is_fake_region=True),  # main overworld holy cross checks
+    "Overworld Holy Cross": RegionInfo("Fake", dead_end=DeadEnd.all_cats),  # main overworld holy cross checks
     "Overworld Belltower": RegionInfo("Overworld Redux"),  # the area with the belltower and chest
     "Overworld Belltower at Bell": RegionInfo("Overworld Redux"),  # being able to ring the belltower, basically
     "Overworld Swamp Upper Entry": RegionInfo("Overworld Redux"),  # upper swamp entry spot
