@@ -853,27 +853,6 @@ def _test_check_opcodes():
         if c not in codes:
             print("Could not find opcode {:2X}".format(c))
 
-def _test_original_myself_patches():
-    # this needs to be updated for the new CompileEnvironment paradigm
-    filenames = [
-        '../reference/myselfpatches/Indoor_Dash.txt',
-        '../reference/myselfpatches/PatchIndoor.txt',
-        '../reference/myselfpatches/FastMenu.txt',
-        '../reference/myselfpatches/PatchFastMenu.txt',
-        '../reference/myselfpatches/LongCall.txt',
-    ]
-
-    for filename in filenames:
-        lines = []
-        with open(filename, 'r') as infile:
-            for line in infile:
-                lines.append(re.sub(r'//.*$', '', line.rstrip()))
-
-        block = { 'body' : '\n'.join(lines) }
-        process_msfpatch_block(block, None,)
-
-    compile_postprocess.apply_registered_processes(None)
-
 if __name__ == '__main__':
     test_script = '''
             AddressingTestBlock:

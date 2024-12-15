@@ -933,26 +933,3 @@ def apply(env):
     for boss in missing_bosses:
         boss_spoilers.append( SpoilerRow("(not available)", BOSS_SPOILER_NAMES[boss], obscurable=True) )
     env.spoilers.add_table("BOSSES", boss_spoilers, public=env.options.flags.has_any('-spoil:all', '-spoil:bosses'))
-
-if __name__ == '__main__':
-    from .FreeEnt import FreeEntOptions
-    import random
-
-    CSV_OUTPUT = True
-    bosses = list(core_rando.BOSSES)
-
-    options = FreeEntOptions()
-    options.flags.load('B')
-
-    rnd = random.Random()
-
-    for i in range(len(bosses)):
-        assignment = dict(zip(core_rando.BOSS_SLOTS, bosses))
-        result = randomize(rnd, options, assignment)
-        bosses.append(bosses.pop(0))
-    
-    #print(result['script'])
-    #for k in result['substitutions']:
-    #    print('{} -> {}'.format(k, result['substitutions'][k]))
-
-

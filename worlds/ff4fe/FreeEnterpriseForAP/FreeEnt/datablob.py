@@ -55,10 +55,6 @@ class DataBlob:
             address_groups.setdefault(subblob['root'], {})[subblob['name']] = address
 
         blob.extend(paddings.pop(0))
-        if len(blob) != size:
-            raise Error("Generated data blob length is incorrect")
-        elif paddings:
-            raise Error("Leftover paddings, somehow?")
 
         for name in self._datas:
             item = self._datas[name]

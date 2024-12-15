@@ -221,7 +221,7 @@ class ApplyCallbacks(Transformer_NoRecurse):
         if callback:
             return callback(children)
         else:
-            return Tree(rule.origin, children)
+            return Tree(tree.rule.origin, children)
 
 def _compare_rules(rule1, rule2):
     if rule1.origin != rule2.origin:

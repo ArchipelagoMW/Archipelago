@@ -298,9 +298,6 @@ def crush(palette, transparent=False, keep_indices=[], keep_colors=[], use_kept_
         keep_indices = [i - 1 for i in keep_indices]
 
     for color in keep_colors:
-        if type(color) is int:
-            color = decode_snes_palette([color & 0xFF, (color >> 8) & 0xFF])[0]
-
         if color in palette:
             idx = palette.index(color)
             if idx not in keep_indices:

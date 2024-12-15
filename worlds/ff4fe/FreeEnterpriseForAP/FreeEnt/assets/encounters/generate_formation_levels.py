@@ -1,4 +1,4 @@
-import f4c
+from ... import f4c
 
 rom = f4c.ff4bin.Rom('PATH-TO-ROM')
 

@@ -4,7 +4,7 @@ import os.path
 import sys
 
 
-from lark import Lark, InlineTransformer, Transformer
+from ...lark import Lark, InlineTransformer, Transformer
 
 nearley_grammar = r"""
     start: (ruledef|directive)+

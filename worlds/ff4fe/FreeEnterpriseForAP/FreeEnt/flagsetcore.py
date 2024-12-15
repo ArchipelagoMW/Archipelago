@@ -36,10 +36,7 @@ class FlagSetCore:
         self._embedded_version = None
 
     def load(self, flag_string):
-        if len(flag_string) > 0 and flag_string[0] == 'b':
-            self._load_binary(flag_string)
-        else:
-            self._load_text(flag_string)
+        self._load_text(flag_string)
 
     def _load_text(self, flag_string):
         self._flags = {}
@@ -76,42 +73,6 @@ class FlagSetCore:
 
             raise Exception(f"Parse error around '{flag_string}'")
 
-
-    def _load_binary(self, binary_string):
-        binary_string = binary_string[1:] # remove starting 'b'
-        byte_list = self._lib.b64decode(binary_string)
-        if len(byte_list) < 3:
-            raise Exception("Binary flag string too short")
-        self._embedded_version = byte_list[:3]
-        for i in range(3):
-            if self._embedded_version[i] != self._flagspec['version'][i]:
-                embedded_version_string = self._lib.join([str(v) for v in embedded_version_string], '.')
-                spec_version_string = self._lib.join([str(v) for v in self._flagspec['version']], '.')
-                raise Exception(f"Version mismatch: flag string is v{embedded_version_string}, expected v{spec_version_string}")
-
-        byte_list = byte_list[3:]
-        
-        self._flags = {}
-        for i in range(len(self._flagspec['binary'])):
-            flag_binary_info = self._flagspec['binary'][i]
-
-            field_size = flag_binary_info['size']
-            byte_index = (flag_binary_info['offset'] >> 3)
-            bit_index = (flag_binary_info['offset'] & 0x7)
-
-            value = 0
-            value_bit_index = 0
-            while (field_size > 0):
-                subfield_size = self._lib.min(field_size, 8 - bit_index)
-                src_byte = (byte_list[byte_index] if byte_index < len(byte_list) else 0)
-                value = value | (((src_byte >> bit_index) & ((1 << subfield_size) - 1)) << value_bit_index)
-                value_bit_index += subfield_size
-                field_size -= subfield_size
-                byte_index += 1
-                bit_index = 0
-
-            if value == flag_binary_info['value']:
-                self.set(flag_binary_info['flag'])
 
     def get_list(self, regex=None):
         flags = []

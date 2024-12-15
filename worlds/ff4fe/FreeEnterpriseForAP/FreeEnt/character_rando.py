@@ -639,36 +639,3 @@ REFERENCE_ACTORS_TO_SPOILER_NAMES = {
 }
 
 
-
-if __name__ == '__main__':
-    import FreeEnt
-    import random
-    import argparse
-
-    _DEBUG = True
-
-    parser = argparse.ArgumentParser();
-    parser.add_argument('flags', nargs='?')
-    args = parser.parse_args();
-
-    options = FreeEnt.FreeEntOptions()
-    options.flags.load(args.flags if args.flags else 'C')
-
-    rnd = random.Random()
-    env = FreeEnt.Environment(options)
-
-    result = randomize(env)
-    subs = result['assignments']
-
-    print()
-    print('ASSIGNMENTS:')
-    width = max([len(k) for k in subs])
-    for k in SLOTS:
-        if k in subs:
-            print(f'{k:{width}} <- {subs[k]}')
-
-    print()
-    print('CHARACTER COUNTS:')
-    for ch in CHARACTERS:
-        char_count = len([k for k in subs if subs[k] == ch])
-        print(f'{ch:6} : {char_count}')

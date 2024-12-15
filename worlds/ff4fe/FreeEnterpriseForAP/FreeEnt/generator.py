@@ -14,7 +14,7 @@ import datetime
 import uuid
 import enum
 
-from .. import pyaes
+import pyaes
 
 from .. import f4c
 

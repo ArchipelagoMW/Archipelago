@@ -3,8 +3,8 @@ import os
 import sys
 sys.path.insert(0, '../..')
 
-import f4c
-import databases
+from ... import f4c
+from ... import databases
 
 def ff4strlen(text):
     shrunken_text = re.sub(r'\[.*?\]', '*', text)

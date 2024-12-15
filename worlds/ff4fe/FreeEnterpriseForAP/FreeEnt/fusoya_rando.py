@@ -161,21 +161,3 @@ def apply(env):
             level_spells = learned_spells[i:i+3]
             spoilers.append( (f"Boss {boss_number}", ', '.join([databases.get_spell_spoiler_name(s) for s in level_spells])) )
         env.spoilers.add_table("FUSOYA SPELLS", spoilers, public=env.options.flags.has_any('-spoil:all', '-spoil:misc'), ditto_depth=1)
-
-if __name__ == '__main__':
-    from .FreeEnt import FreeEntOptions
-    import random
-    import argparse
-
-    parser = argparse.ArgumentParser();
-    parser.add_argument('flags', nargs='?')
-    args = parser.parse_args();
-
-    options = FreeEntOptions()
-    options.flags.load(args.flags if args.flags else 'F')
-
-    rnd = random.Random()
-    result = randomize(rnd, options, {})
-
-    print('\n'.join(result['scripts']))
-    print(result['substitutions']['fusoya challenge spells'])

@@ -3,10 +3,7 @@
 from ..utils import classify
 from ..common import ParseError, UnexpectedToken
 
-try:
-    xrange
-except NameError:
-    xrange = range
+xrange = range
 
 class MatchFailed(object):
     pass
