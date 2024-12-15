@@ -14,7 +14,6 @@ import bsdiff4
 semaphore = threading.Semaphore(os.cpu_count() or 4)
 
 del threading
-del os
 
 
 class AutoPatchRegister(abc.ABCMeta):
@@ -33,6 +32,9 @@ class AutoPatchRegister(abc.ABCMeta):
 
     @staticmethod
     def get_handler(file: str) -> Optional[AutoPatchRegister]:
+        _, suffix = os.path.splitext(file)
+        if suffix in AutoPatchRegister.file_endings:
+            return AutoPatchRegister.file_endings[suffix]
         for file_ending, handler in AutoPatchRegister.file_endings.items():
             if file.endswith(file_ending):
                 return handler
