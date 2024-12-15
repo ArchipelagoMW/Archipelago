@@ -170,6 +170,11 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
 def identify(path: Union[None, str]) -> Tuple[Union[None, str], Union[None, Component]]:
     if path is None:
         return None, None
+    else:
+        suffix = "." + path.split(".")[-1]
+        from worlds.LauncherComponents import component_by_suffix
+        if suffix in component_by_suffix:
+            return path, component_by_suffix[suffix]
     for component in components:
         if component.handles_file(path):
             return path, component

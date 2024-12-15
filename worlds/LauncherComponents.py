@@ -8,6 +8,9 @@ from typing import Optional, Callable, List, Iterable, Tuple
 from Utils import local_path, open_filename
 
 
+component_by_suffix = {}
+
+
 class Type(Enum):
     TOOL = auto()
     MISC = auto()
@@ -48,6 +51,12 @@ class Component:
             Type.ADJUSTER if "Adjuster" in display_name else Type.MISC)
         self.func = func
         self.file_identifier = file_identifier
+        if isinstance(file_identifier, SuffixIdentifier):
+            for suffix in file_identifier.suffixes:
+                if suffix in component_by_suffix:
+                    raise Exception("TODO")
+                else:
+                    component_by_suffix[suffix] = self
         self.game_name = game_name
         self.supports_uri = supports_uri
 
