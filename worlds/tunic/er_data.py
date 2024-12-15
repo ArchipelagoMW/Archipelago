@@ -1154,8 +1154,10 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     "West Garden after Terry": {
         "West Garden before Terry":
             [],
-        "West Garden South Checkpoint":
+        "West Garden West Combat":
             [],
+        "West Garden South Checkpoint":
+            [["Hyperdash"]],
         "West Garden Laurels Exit Region":
             [["LS1"]],
     },
@@ -1165,6 +1167,8 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "West Garden at Dagger House":
             [],
         "West Garden after Terry":
+            [["Hyperdash"]],
+        "West Garden West Combat":
             [],
     },
     "West Garden before Boss": {
