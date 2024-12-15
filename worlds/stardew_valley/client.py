@@ -168,15 +168,38 @@ class StardewClientContext(TrackerGameContext):
 
 
 def parse_explanation(explanation: RuleExplanation) -> list[JSONMessagePart]:
-    result_regex = f"(True|False)"
+    result_regex = r"(\(|\)| & | -> | \| | \[.*\]\s*| \(\w+\)|\n\s*)"
     splits = re.split(result_regex, str(explanation))
 
     messages = []
     for s in splits:
+        if len(s) == 0:
+            continue
+
         if s == "True":
-            messages.append({"text": s, "type": "color", "color": "green"})
+            messages.append({"type": "color", "color": "green", "text": s})
         elif s == "False":
-            messages.append({"text": s, "type": "color", "color": "salmon"})
+            messages.append({"type": "color", "color": "salmon", "text": s})
+        elif s.startswith("Reach Location "):
+            messages.append({"type": "text", "text": "Reach Location "})
+            messages.append({"type": "location_name", "text": s[15:]})
+        elif s.startswith("Reach Entrance "):
+            messages.append({"type": "text", "text": "Reach Entrance "})
+            messages.append({"type": "entrance_name", "text": s[15:]})
+        elif s.startswith("Reach Region "):
+            messages.append({"type": "text", "text": "Reach Region "})
+            messages.append({"type": "color", "color": "yellow", "text": s[13:]})
+        elif s.startswith("Received event "):
+            messages.append({"type": "text", "text": "Received event "})
+            messages.append({"type": "item_name", "text": s[15:]})
+        elif s.startswith("Received "):
+            messages.append({"type": "text", "text": "Received "})
+            messages.append({"type": "item_name", "text": s[9:]})
+        elif s.startswith(" ["):
+            if len(s) <= 50:
+                messages.append({"type": "text", "text": s})
+            else:
+                messages.append({"type": "text", "text": " [ ... ] "})
         else:
             messages.append({"text": s, "type": "text"})
 

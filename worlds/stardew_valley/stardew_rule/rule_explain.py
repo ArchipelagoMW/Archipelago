@@ -113,6 +113,9 @@ class CountSubRuleExplanation(RuleExplanation):
                                        explored_rules_key=expl.explored_rules_key, current_rule_explored=expl.current_rule_explored, count=count)
 
     def summary(self, depth=0) -> str:
+        if self.mode is ExplainMode.CLIENT:
+            depth *= 2
+
         summary = "  " * depth + f"{self.count}x {str(self.rule)} -> {self.result}"
         if self.current_rule_explored:
             summary += " [Already explained]"
