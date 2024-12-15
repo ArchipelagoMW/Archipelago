@@ -822,7 +822,7 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Overworld Southeast Cross Door":
             [],
         "Overworld Fountain Cross Door":
-            [], 
+            [],
         "Overworld Town Portal":
             [],
         "Overworld Spawn Portal":
