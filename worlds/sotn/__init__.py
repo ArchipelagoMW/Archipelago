@@ -1,3 +1,4 @@
+import pkgutil
 from typing import ClassVar, Dict, Tuple, Any
 
 import settings, typing, os
@@ -12,7 +13,7 @@ from .Locations import location_table, SotnLocation, exp_locations_token
 from .Regions import create_regions
 from .Rules import set_rules, set_rules_limited
 from .Options import sotn_option_definitions
-from .Rom import SOTNDeltaPatch, patch_rom, get_base_rom_path
+from .Rom import get_base_rom_path, SotnProcedurePatch, write_tokens
 from .client import SotNClient
 #from .test_client import SotNTestClient
 
@@ -29,7 +30,7 @@ class SotnSettings(settings.Group):
         """File name of the SOTN US rom"""
         description = "Symphony of the Night (SLU067) ROM File"
         copy_to = "Castlevania - Symphony of the Night (USA) (Track 1).bin"
-        md5s = [SOTNDeltaPatch.hash]
+        md5s = [SotnProcedurePatch.hash]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
 
@@ -78,12 +79,14 @@ class SotnWorld(World):
 
     @classmethod
     def stage_assert_generate(cls, _multiworld: MultiWorld) -> None:
-        rom_file = get_base_rom_path()
+        pass
+        # Using APProcedurePatch now
+        """rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
-            raise FileNotFoundError(rom_file)
+            raise FileNotFoundError(rom_file)"""
 
     def generate_early(self) -> None:
-        difficult = self.options.difficult
+        difficult = self.options.difficult.value
 
         if difficult == 0:
             self.multiworld.early_items[self.player]["Soul of bat"] = 1
@@ -603,7 +606,12 @@ class SotnWorld(World):
         return self.options.as_dict(*self.option_definitions.keys())
 
     def generate_output(self, output_directory: str) -> None:
-        patch_rom(self, output_directory)
+        patch = SotnProcedurePatch(player=self.player, player_name=self.player_name)
+
+        write_tokens(self, patch)
+
+        out_file_name = self.multiworld.get_out_file_name_base(self.player)
+        patch.write(os.path.join(output_directory, f"{out_file_name}{patch.patch_file_ending}"))
 
     def get_max_talisman(self) -> int:
         esanity = self.options.enemysanity
