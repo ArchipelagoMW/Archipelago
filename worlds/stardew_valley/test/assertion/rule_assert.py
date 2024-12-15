@@ -1,3 +1,4 @@
+from typing import List
 from unittest import TestCase
 
 from BaseClasses import CollectionState, Location
@@ -14,6 +15,10 @@ class RuleAssertMixin(TestCase):
             raise AssertionError(f"Error while checking rule {rule}: {e}"
                                  f"\nExplanation: {expl}")
 
+    def assert_rules_true(self, rules: List[StardewRule], state: CollectionState):
+        for rule in rules:
+            self.assert_rule_true(rule, state)
+
     def assert_rule_false(self, rule: StardewRule, state: CollectionState):
         expl = explain(rule, state, expected=False)
         try:
@@ -21,6 +26,10 @@ class RuleAssertMixin(TestCase):
         except KeyError as e:
             raise AssertionError(f"Error while checking rule {rule}: {e}"
                                  f"\nExplanation: {expl}")
+
+    def assert_rules_false(self, rules: List[StardewRule], state: CollectionState):
+        for rule in rules:
+            self.assert_rule_false(rule, state)
 
     def assert_rule_can_be_resolved(self, rule: StardewRule, complete_state: CollectionState):
         expl = explain(rule, complete_state)
