@@ -261,7 +261,8 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
             non_dead_end_regions.add(region_name)
         # secret gathering place and zig skip get weird, special handling
         elif region_info.dead_end == DeadEnd.special:
-            if region_name == "Secret Gathering Place" and laurels_location == "10_fairies":
+            if ((region_name == "Secret Gathering Place" and laurels_location == "10_fairies")
+                    or (region_name == "Zig Skip Exit" and fixed_shop)):
                 non_dead_end_regions.add(region_name)
 
     if plando_connections:
@@ -418,7 +419,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
             for portal in two_plus:
                 # we care about the outlet region here -- the region we get if we connect this portal in
                 portal_region = get_portal_outlet_region(portal, world)
-                if portal_region not in connected_regions:
+                if portal.region not in connected_regions:
                     # if secret gathering place happens to get paired really late, you can end up running out
                     if not has_laurels and len(two_plus) < 80:
                         # if you plando'd secret gathering place with laurels at 10 fairies, you're the reason for this
@@ -431,6 +432,8 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                             continue
                     portal2 = portal
                     connected_regions.add(portal_region)
+                    if portal.region == "Zig Skip Exit":
+                        connected_regions.add(portal.region)
                     two_plus.remove(portal)
                     check_success = 2
                     break
