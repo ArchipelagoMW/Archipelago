@@ -50,7 +50,7 @@ class StardewCommandProcessor(ClientCommandProcessor):
 
         rule = self.ctx.logic.region.can_reach_location(location)
 
-        expl = explain(rule, self.ctx.multiworld.state, mode=ExplainMode.CLIENT)
+        expl = explain(rule, self.ctx.multiworld.state, expected=None, mode=ExplainMode.CLIENT)
         self.ctx.previous_explanation = expl
 
         logger.info(str(expl).strip())
@@ -64,14 +64,14 @@ class StardewCommandProcessor(ClientCommandProcessor):
 
         rule = self.ctx.logic.has(item)
 
-        expl = explain(rule, self.ctx.multiworld.state, mode=ExplainMode.CLIENT)
+        expl = explain(rule, self.ctx.multiworld.state, expected=None, mode=ExplainMode.CLIENT)
         self.ctx.previous_explanation = expl
 
         logger.info(str(expl).strip())
 
     @mark_raw
     def _cmd_explain_missing(self, location: str = ""):
-        """Will tell you what's missing to consider a location in logic."""
+        """Explain the logic behind a location, while skipping the rules that are already satisfied."""
         if self.ctx.logic is None:
             logger.warning("Internal logic was not able to load, check your yamls and relaunch.")
             return
@@ -96,11 +96,14 @@ class StardewCommandProcessor(ClientCommandProcessor):
             logger.warning("No previous explanation found.")
             return
 
-        if not index or not index.isdigit():
-            logger.warning("Which previous rule do you want to explained?")
+        try:
+            expl = self.ctx.previous_explanation.more(int(index))
+        except (ValueError, IndexError):
+            logger.info("Which previous rule do you want to explained?")
+            for i, rule in enumerate(self.ctx.previous_explanation.more_explanations):
+                logger.info(f"/more {i} -> {str(rule)})")
             return
 
-        expl = self.ctx.previous_explanation.more(int(index))
         self.ctx.previous_explanation = expl
 
         logger.info(str(expl).strip())

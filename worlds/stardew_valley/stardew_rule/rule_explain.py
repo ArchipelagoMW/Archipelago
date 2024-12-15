@@ -20,6 +20,7 @@ class MoreExplanation:
     rule: StardewRule
     state: CollectionState
     more_index: int
+    mode: ExplainMode
 
     @cached_property
     def result(self) -> bool:
@@ -29,8 +30,12 @@ class MoreExplanation:
             return False
 
     def __str__(self, depth=0):
+        if self.mode is ExplainMode.CLIENT:
+            depth *= 2
+
         summary = "  " * depth + f"{str(self.rule)} -> {self.result}"
-        summary += f" [ use `/more {self.more_index}` to explain ]"
+        summary += f" [use `/more {self.more_index}` to explain]"
+
         return summary
 
 
@@ -38,7 +43,7 @@ class MoreExplanation:
 class RuleExplanation:
     rule: StardewRule
     state: CollectionState = field(repr=False, hash=False)
-    expected: bool
+    expected: bool | None
     mode: ExplainMode
     sub_rules: Iterable[StardewRule] = field(default_factory=list)
     more_explanations: List[StardewRule] = field(default_factory=list, repr=False, hash=False)
@@ -52,23 +57,23 @@ class RuleExplanation:
             self.sub_rules = []
 
     def summary(self, depth=0) -> str:
+        if self.mode is ExplainMode.CLIENT:
+            depth *= 2
+
         summary = "  " * depth + f"{str(self.rule)} -> {self.result}"
         if self.current_rule_explored:
             summary += " [Already explained]"
+
         return summary
 
     def __str__(self, depth=0):
         if not self.sub_rules:
             return self.summary(depth)
 
-        return self.summary(depth) + "\n" + "\n".join(i.__str__(depth + 1)
-                                                      if i.result is not self.expected else i.summary(depth + 1)
+        return self.summary(depth) + "\n" + "\n".join(i.__str__(depth + 1) if self.expected is None or i.result is not self.expected else i.summary(depth + 1)
                                                       for i in sorted(self.explained_sub_rules, key=lambda x: x.result))
 
     def more(self, more_index: int) -> RuleExplanation:
-        if more_index >= len(self.more_explanations):
-            return self
-
         return explain(self.more_explanations[more_index], self.state, self.expected, self.mode)
 
     @cached_property
@@ -88,7 +93,7 @@ class RuleExplanation:
             sub_explanations = []
             for sub_rule in self.sub_rules:
                 if isinstance(sub_rule, Reach) and sub_rule.resolution_hint == 'Entrance':
-                    sub_explanations.append(MoreExplanation(sub_rule, self.state, len(self.more_explanations)))
+                    sub_explanations.append(MoreExplanation(sub_rule, self.state, len(self.more_explanations), self.mode))
                     self.more_explanations.append(sub_rule)
                 else:
                     sub_explanations.append(_explain(sub_rule, self.state, self.expected, self.mode, self.more_explanations, self.explored_rules_key))
@@ -127,7 +132,7 @@ class CountExplanation(RuleExplanation):
         ]
 
 
-def explain(rule: CollectionRule, state: CollectionState, expected: bool = True, mode: ExplainMode = ExplainMode.VERBOSE) -> RuleExplanation:
+def explain(rule: CollectionRule, state: CollectionState, expected: bool | None = True, mode: ExplainMode = ExplainMode.VERBOSE) -> RuleExplanation:
     if isinstance(rule, StardewRule):
         return _explain(rule, state, expected, mode, more_explanations=list(), explored_spots=set())
     else:
@@ -135,25 +140,25 @@ def explain(rule: CollectionRule, state: CollectionState, expected: bool = True,
 
 
 @singledispatch
-def _explain(rule: StardewRule, state: CollectionState, expected: bool, mode: ExplainMode, more_explanations: list[StardewRule],
+def _explain(rule: StardewRule, state: CollectionState, expected: bool | None, mode: ExplainMode, more_explanations: list[StardewRule],
              explored_spots: Set[Tuple[str, str]]) -> RuleExplanation:
     return RuleExplanation(rule, state, expected, mode, more_explanations=more_explanations, explored_rules_key=explored_spots)
 
 
 @_explain.register
-def _(rule: AggregatingStardewRule, state: CollectionState, expected: bool, mode: ExplainMode, more_explanations: list[StardewRule],
+def _(rule: AggregatingStardewRule, state: CollectionState, expected: bool | None, mode: ExplainMode, more_explanations: list[StardewRule],
       explored_spots: Set[Tuple[str, str]]) -> RuleExplanation:
     return RuleExplanation(rule, state, expected, mode, rule.original_rules, more_explanations=more_explanations, explored_rules_key=explored_spots)
 
 
 @_explain.register
-def _(rule: Count, state: CollectionState, expected: bool, mode: ExplainMode, more_explanations: list[StardewRule],
+def _(rule: Count, state: CollectionState, expected: bool | None, mode: ExplainMode, more_explanations: list[StardewRule],
       explored_spots: Set[Tuple[str, str]]) -> RuleExplanation:
     return CountExplanation(rule, state, expected, mode, rule.rules, more_explanations=more_explanations, explored_rules_key=explored_spots)
 
 
 @_explain.register
-def _(rule: Has, state: CollectionState, expected: bool, mode: ExplainMode, more_explanations: list[StardewRule],
+def _(rule: Has, state: CollectionState, expected: bool | None, mode: ExplainMode, more_explanations: list[StardewRule],
       explored_spots: Set[Tuple[str, str]]) -> RuleExplanation:
     try:
         return RuleExplanation(rule, state, expected, mode, [rule.other_rules[rule.item]], more_explanations=more_explanations,
@@ -163,14 +168,14 @@ def _(rule: Has, state: CollectionState, expected: bool, mode: ExplainMode, more
 
 
 @_explain.register
-def _(rule: TotalReceived, state: CollectionState, expected: bool, mode: ExplainMode, more_explanations: list[StardewRule],
+def _(rule: TotalReceived, state: CollectionState, expected: bool | None, mode: ExplainMode, more_explanations: list[StardewRule],
       explored_spots: Set[Tuple[str, str]]) -> RuleExplanation:
     return RuleExplanation(rule, state, expected, mode, [Received(i, rule.player, 1) for i in rule.items], more_explanations=more_explanations,
                            explored_rules_key=explored_spots)
 
 
 @_explain.register
-def _(rule: Reach, state: CollectionState, expected: bool, mode: ExplainMode, more_explanations: list[StardewRule],
+def _(rule: Reach, state: CollectionState, expected: bool | None, mode: ExplainMode, more_explanations: list[StardewRule],
       explored_spots: Set[Tuple[str, str]]) -> RuleExplanation:
     access_rules = None
     if rule.resolution_hint == 'Location':
@@ -213,7 +218,7 @@ def _(rule: Reach, state: CollectionState, expected: bool, mode: ExplainMode, mo
 
 
 @_explain.register
-def _(rule: Received, state: CollectionState, expected: bool, mode: ExplainMode, more_explanations: list[StardewRule],
+def _(rule: Received, state: CollectionState, expected: bool | None, mode: ExplainMode, more_explanations: list[StardewRule],
       explored_spots: Set[Tuple[str, str]]) -> RuleExplanation:
     access_rules = None
     if rule.event:
