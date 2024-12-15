@@ -261,8 +261,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
             non_dead_end_regions.add(region_name)
         # secret gathering place and zig skip get weird, special handling
         elif region_info.dead_end == DeadEnd.special:
-            if (region_name == "Secret Gathering Place" and laurels_location == "10_fairies") \
-                    or (region_name == "Zig Skip Exit" and fixed_shop):
+            if region_name == "Secret Gathering Place" and laurels_location == "10_fairies":
                 non_dead_end_regions.add(region_name)
 
     if plando_connections:
