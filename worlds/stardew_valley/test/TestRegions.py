@@ -3,8 +3,7 @@ import unittest
 from typing import Set
 
 from BaseClasses import get_seed
-from . import SVTestCase
-from .options.utils import fill_dataclass_with_default
+from . import SVTestCase, complete_options_with_default
 from .. import create_content
 from ..options import EntranceRandomization, ExcludeGingerIsland, SkillProgression
 from ..regions import vanilla_regions, vanilla_connections, randomize_connections, RandomizationFlag, create_final_connections_and_regions
@@ -60,7 +59,7 @@ class TestEntranceRando(SVTestCase):
                              (EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
                              (EntranceRandomization.option_buildings_without_house, RandomizationFlag.BUILDINGS),
                              (EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
-            sv_options = fill_dataclass_with_default({
+            sv_options = complete_options_with_default({
                 EntranceRandomization.internal_name: option,
                 ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
                 SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
@@ -88,7 +87,7 @@ class TestEntranceRando(SVTestCase):
                              (EntranceRandomization.option_buildings_without_house, RandomizationFlag.BUILDINGS),
                              (EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
 
-            sv_options = fill_dataclass_with_default({
+            sv_options = complete_options_with_default({
                 EntranceRandomization.internal_name: option,
                 ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
                 SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
@@ -117,7 +116,7 @@ class TestEntranceRando(SVTestCase):
                                  f"Connections are duplicated in randomization.")
 
     def test_cannot_put_island_access_on_island(self):
-        sv_options = fill_dataclass_with_default({
+        sv_options = complete_options_with_default({
             EntranceRandomization.internal_name: EntranceRandomization.option_buildings,
             ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
             SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
