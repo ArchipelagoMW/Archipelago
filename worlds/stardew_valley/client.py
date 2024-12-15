@@ -69,7 +69,7 @@ class StardewCommandProcessor(ClientCommandProcessor):
                 return
 
         self.ctx.previous_explanation = expl
-        logger.info(str(expl).strip())
+        self.ctx.ui.print_json(parse_explanation(expl))
 
     @mark_raw
     def _cmd_explain_item(self, item: str = ""):
@@ -87,7 +87,7 @@ class StardewCommandProcessor(ClientCommandProcessor):
             return
 
         self.ctx.previous_explanation = expl
-        logger.info(str(expl).strip())
+        self.ctx.ui.print_json(parse_explanation(expl))
 
     @mark_raw
     def _cmd_explain_missing(self, location: str = ""):
@@ -132,8 +132,7 @@ class StardewCommandProcessor(ClientCommandProcessor):
             return
 
         self.ctx.previous_explanation = expl
-
-        logger.info(str(expl).strip())
+        self.ctx.ui.print_json(parse_explanation(expl))
 
     if not tracker_loaded:
         del _cmd_explain
@@ -169,7 +168,7 @@ class StardewClientContext(TrackerGameContext):
 
 def parse_explanation(explanation: RuleExplanation) -> list[JSONMessagePart]:
     result_regex = r"(\(|\)| & | -> | \| | \[.*\](?: ->)?\s*| \(\w+\)|\n\s*)"
-    splits = re.split(result_regex, str(explanation))
+    splits = re.split(result_regex, str(explanation).strip())
 
     messages = []
     for s in splits:
