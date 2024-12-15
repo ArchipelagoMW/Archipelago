@@ -2,7 +2,7 @@ from typing import Dict, NamedTuple, Optional, TYPE_CHECKING, Set
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule, add_rule
-from .rules import has_sword, has_stick
+from .rules import has_sword, has_melee
 if TYPE_CHECKING:
     from . import TunicWorld
 
@@ -6271,7 +6271,7 @@ def can_break_grass(state: CollectionState, world: "TunicWorld") -> bool:
     player = world.player
     # no gun or wand because they're extremely tedious
     return (has_sword(state, player)
-            or (has_stick(state, player) and state.has("Glass Cannon", player)))
+            or (has_melee(state, player) and state.has("Glass Cannon", player)))
 
 
 def set_grass_location_rules(world: "TunicWorld") -> None:
