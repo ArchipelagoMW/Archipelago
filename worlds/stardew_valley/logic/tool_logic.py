@@ -8,7 +8,6 @@ from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogicMixin
 from ..mods.logic.magic_logic import MagicLogicMixin
-from ..options import ToolProgression
 from ..stardew_rule import StardewRule, True_, False_
 from ..strings.ap_names.skill_level_names import ModSkillLevel
 from ..strings.region_names import Region
@@ -57,7 +56,7 @@ class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixi
         if material == ToolMaterial.basic or tool == Tool.scythe:
             return True_()
 
-        if self.options.tool_progression & ToolProgression.option_progressive:
+        if self.content.features.tool_progression.is_progressive:
             return self.logic.received(f"Progressive {tool}", tool_materials[material])
 
         can_upgrade_rule = self.logic.has(f"{material} Bar") & self.logic.money.can_spend_at(Region.blacksmith, tool_upgrade_prices[material])
@@ -76,7 +75,7 @@ class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixi
     def has_fishing_rod(self, level: int) -> StardewRule:
         assert 1 <= level <= 4, "Fishing rod 0 isn't real, it can't hurt you. Training is 1, Bamboo is 2, Fiberglass is 3 and Iridium is 4."
 
-        if self.options.tool_progression & ToolProgression.option_progressive:
+        if self.content.features.tool_progression.is_progressive:
             return self.logic.received(f"Progressive {Tool.fishing_rod}", level)
 
         if level <= 2:
