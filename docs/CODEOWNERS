@@ -45,6 +45,9 @@
 # ChecksFinder
 /worlds/checksfinder/ @SunCatMC
 
+# ChecksMate Chess
+/worlds/checksmate/ @chesslogic
+
 # Clique
 /worlds/clique/ @ThePhar
 

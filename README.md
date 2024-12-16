@@ -76,6 +76,7 @@ Currently, the following games are supported:
 * Kingdom Hearts 1
 * Mega Man 2
 * Yacht Dice
+* ChecksMate
 * Faxanadu
 * Saving Princess
 * Castlevania: Circle of the Moon
