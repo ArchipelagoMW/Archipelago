@@ -30,7 +30,6 @@
 *.archipelago
 *.apsave
 *.puml
-*.BIN
 
 setups
 build
