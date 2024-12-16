@@ -728,11 +728,13 @@ class Context:
         else:
             return self.player_names[team, slot]
 
-    def notify_hints(self, team: int, hints: typing.List[Hint], only_new: bool = False,
+    def notify_hints(self, team: int, hints: typing.List[Hint], only_new: bool = False, only_unfound: bool = False,
                      recipients: typing.Sequence[int] = None):
         """Send and remember hints."""
         if only_new:
             hints = [hint for hint in hints if hint not in self.hints[team, hint.finding_player]]
+        if only_unfound:
+            hints = [hint for hint in hints if not hint.found]
         if not hints:
             return
         new_hint_events: typing.Set[int] = set()
@@ -1896,7 +1898,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                     hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location,
                                                           HintStatus.HINT_UNSPECIFIED))
                 locs.append(NetworkItem(target_item, location, target_player, flags))
-            ctx.notify_hints(client.team, hints, only_new=create_as_hint == 2)
+            ctx.notify_hints(client.team, hints, only_new=create_as_hint == 2, only_unfound=create_as_hint == 2)
             if locs and create_as_hint:
                 ctx.save()
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
