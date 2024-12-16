@@ -145,7 +145,7 @@ class ValidInventory:
     def count_from_list(self, items: Iterable[str], player: int) -> int:
         return sum(self.logical_inventory.get(item, 0) for item in items)
 
-    def generate_reduced_inventory(self, inventory_size: int, soft_inventory_space: int, mission_requirements: List[Tuple[str, Callable]]) -> List[StarcraftItem]:
+    def generate_reduced_inventory(self, inventory_size: int, filler_amount: int, mission_requirements: List[Tuple[str, Callable]]) -> List[StarcraftItem]:
         """Attempts to generate a reduced inventory that can fulfill the mission requirements."""
         inventory: List[StarcraftItem] = list(self.item_pool)
         requirements = mission_requirements
@@ -312,10 +312,10 @@ class ValidInventory:
         start_inventory_size = len([item for item in inventory if ItemFilterFlags.StartInventory in item.filter_flags])
         current_inventory_size = len([item for item in inventory if item_included(item)])
         cullable_items = [item for item in inventory if not (ItemFilterFlags.Uncullable & item.filter_flags)]
-        while current_inventory_size - start_inventory_size > inventory_size:
+        while current_inventory_size - start_inventory_size > inventory_size - filler_amount:
             if len(cullable_items) == 0:
-                if soft_inventory_space > inventory_size:
-                    inventory_size += 1
+                if filler_amount > 0:
+                    filler_amount -= 1
                 else:
                     break
             if remove_random_item(cullable_items, ItemFilterFlags.Uncullable):
@@ -327,13 +327,13 @@ class ValidInventory:
             ]
         
         # Handle too many requested
-        if current_inventory_size - start_inventory_size > inventory_size:
+        if current_inventory_size - start_inventory_size > inventory_size - filler_amount:
             for item in inventory:
                 item.filter_flags &= ~ItemFilterFlags.Requested
 
         # Part 2: If we need to remove more, allow removing requested items
         excludable_items = [item for item in inventory if not (ItemFilterFlags.Unexcludable & item.filter_flags)]
-        while current_inventory_size - start_inventory_size > inventory_size:
+        while current_inventory_size - start_inventory_size > inventory_size - filler_amount:
             if len(excludable_items) == 0:
                 break
             if remove_random_item(excludable_items, ItemFilterFlags.Unexcludable):
@@ -345,7 +345,7 @@ class ValidInventory:
             ]
 
         # Part 3: If it still doesn't fit, move locked items to start inventory until it fits
-        precollect_items = current_inventory_size - inventory_size - start_inventory_size
+        precollect_items = current_inventory_size - inventory_size - start_inventory_size - filler_amount
         if precollect_items > 0:
             promotable = [
                 item
@@ -394,7 +394,7 @@ class ValidInventory:
         
         # Part 4: Last-ditch effort to reduce inventory size; upgrades can go in start inventory
         current_inventory_size = len(inventory)
-        precollect_items = current_inventory_size - inventory_size - start_inventory_size
+        precollect_items = current_inventory_size - inventory_size - start_inventory_size - filler_amount
         if precollect_items > 0:
             promotable = [
                 item
@@ -406,9 +406,9 @@ class ValidInventory:
                 item.filter_flags |= ItemFilterFlags.StartInventory
                 start_inventory_size += 1
         
-        assert current_inventory_size - start_inventory_size <= inventory_size, (
+        assert current_inventory_size - start_inventory_size <= inventory_size - filler_amount, (
             f"Couldn't reduce inventory to fit. target={inventory_size}, poolsize={current_inventory_size}, "
-            f"start_inventory={starcraft_item}"
+            f"start_inventory={starcraft_item}, filler_amount={filler_amount}"
         )
 
         return inventory
@@ -421,13 +421,12 @@ def filter_items(world: 'SC2World', location_cache: List[Location], item_pool: L
     """
     open_locations = [location for location in location_cache if location.item is None]
     inventory_size = len(open_locations)
-    soft_inventory_space = (inventory_size * world.options.filler_percentage) // 100
-    inventory_size -= soft_inventory_space
+    filler_amount = (inventory_size * world.options.filler_percentage) // 100
     if world.options.required_tactics.value == RequiredTactics.option_no_logic:
         mission_requirements = []
     else:
         mission_requirements = [(location.name, location.access_rule) for location in location_cache]
     valid_inventory = ValidInventory(world, item_pool)
 
-    valid_items = valid_inventory.generate_reduced_inventory(inventory_size, soft_inventory_space, mission_requirements)
+    valid_items = valid_inventory.generate_reduced_inventory(inventory_size, filler_amount, mission_requirements)
     return valid_items
