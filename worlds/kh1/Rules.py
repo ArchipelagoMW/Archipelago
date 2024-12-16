@@ -267,7 +267,6 @@ def set_rules(kh1world):
         ))
     add_rule(kh1world.get_location("Wonderland Tea Party Garden Bear and Clock Puzzle Chest"),
         lambda state: (
-        
            state.has("Footprints", player)
            or state.has("Progressive Glide", player)
         ))
@@ -704,7 +703,6 @@ def set_rules(kh1world):
                 or (options.advanced_logic and state.has("High Jump", player, 2) and state.has("Progressive Glide", player))
                 or (options.advanced_logic and can_dumbo_skip(state, player) and state.has("Progressive Glide", player))
             )
-            
         ))
     add_rule(kh1world.get_location("Hollow Bastion Waterway Blizzard on Bubble Chest"),
         lambda state: (
@@ -1970,9 +1968,9 @@ def set_rules(kh1world):
                 lambda state: state.has("Oathkeeper", player))
             add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Under Giant Pot Chest"),
                 lambda state: state.has("Oathkeeper", player))
-        add_rule(kh1world.get_location("Final Ansem"),
-            lambda state: has_defensive_tools(state, player))
-    
+        
+    add_rule(kh1world.get_location("Final Ansem"),
+        lambda state: has_defensive_tools(state, player))
     
     add_rule(kh1world.get_entrance("Wonderland"),
         lambda state: state.has("Wonderland", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests))
