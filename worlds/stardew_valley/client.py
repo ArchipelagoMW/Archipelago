@@ -4,10 +4,9 @@ import asyncio
 import re
 # webserver imports
 import urllib.parse
-from collections import Counter
 
 import Utils
-from BaseClasses import MultiWorld, CollectionState, ItemClassification
+from BaseClasses import MultiWorld, CollectionState
 from CommonClient import logger, get_base_parser, gui_enabled, server_loop
 from MultiServer import mark_raw
 from NetUtils import JSONMessagePart
@@ -15,7 +14,7 @@ from .logic.logic import StardewLogic
 from .stardew_rule.rule_explain import explain, ExplainMode, RuleExplanation
 
 try:
-    from worlds.tracker.TrackerClient import TrackerGameContext, TrackerCommandProcessor as ClientCommandProcessor, UT_VERSION  # noqa
+    from worlds.tracker.TrackerClient import TrackerGameContext, TrackerCommandProcessor as ClientCommandProcessor, UT_VERSION, updateTracker  # noqa
 
     tracker_loaded = True
 except ImportError:
@@ -210,35 +209,8 @@ def parse_explanation(explanation: RuleExplanation) -> list[JSONMessagePart]:
     return messages
 
 
-# Don't mind me I just copy-pasted that from UT because it was too complicated to access their updated state.
 def get_updated_state(ctx: TrackerGameContext) -> CollectionState:
-    if ctx.player_id is None or ctx.multiworld is None:
-        logger.error("Player YAML not installed or Generator failed")
-        ctx.log_to_tab("Check Player YAMLs for error", False)
-        ctx.tracker_failed = True
-        raise ValueError("Player YAML not installed or Generator failed")
-
-    state = CollectionState(ctx.multiworld)
-    state.sweep_for_advancements(
-        locations=(location for location in ctx.multiworld.get_locations() if (not location.address)))
-    prog_items = Counter()
-    all_items = Counter()
-
-    item_id_to_name = ctx.multiworld.worlds[ctx.player_id].item_id_to_name
-    for item_name in [item_id_to_name[item[0]] for item in ctx.items_received] + ctx.manual_items:
-        try:
-            world_item = ctx.multiworld.create_item(item_name, ctx.player_id)
-            state.collect(world_item, True)
-            if world_item.classification == ItemClassification.progression or world_item.classification == ItemClassification.progression_skip_balancing:
-                prog_items[world_item.name] += 1
-            if world_item.code is not None:
-                all_items[world_item.name] += 1
-        except:
-            ctx.log_to_tab("Item id " + str(item_name) + " not able to be created", False)
-    state.sweep_for_advancements(
-        locations=(location for location in ctx.multiworld.get_locations() if (not location.address)))
-
-    return state
+    return updateTracker(ctx)[3]
 
 
 async def main(args):
