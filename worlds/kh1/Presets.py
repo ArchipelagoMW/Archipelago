@@ -18,7 +18,8 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "atlantica": False,
         "hundred_acre_wood": False,
         "cups": False,
-        "vanilla_emblem_pieces": True,
+        "jungle_slider": False,
+        "randomize_emblem_pieces": False,
         "randomize_postcards": RandomizePostcards.option_all,
         
         "exp_multiplier": 48,
@@ -42,6 +43,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         
         "puppies": Puppies.option_triplets,
         "starting_worlds": 0,
+        "starting_tools": True,
         "interact_in_battle": False,
         "advanced_logic": False,
         "extra_shared_abilities": False,
@@ -64,7 +66,8 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "atlantica": False,
         "hundred_acre_wood": False,
         "cups": False,
-        "vanilla_emblem_pieces": True,
+        "jungle_slider": False,
+        "randomize_emblem_pieces": False,
         "randomize_postcards": RandomizePostcards.option_all,
         
         "exp_multiplier": 48,
@@ -88,6 +91,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         
         "puppies": Puppies.option_individual,
         "starting_worlds": 0,
+        "starting_tools": True,
         "interact_in_battle": False,
         "advanced_logic": False,
         "extra_shared_abilities": False,
@@ -110,7 +114,8 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "atlantica": True,
         "hundred_acre_wood": True,
         "cups": True,
-        "vanilla_emblem_pieces": False,
+        "jungle_slider": True,
+        "randomize_emblem_pieces": True,
         "randomize_postcards": RandomizePostcards.option_all,
         
         "exp_multiplier": 48,
@@ -134,6 +139,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         
         "puppies": Puppies.option_triplets,
         "starting_worlds": 0,
+        "starting_tools": True,
         "interact_in_battle": True,
         "advanced_logic": True,
         "extra_shared_abilities": True,
@@ -156,7 +162,8 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "atlantica": False,
         "hundred_acre_wood": False,
         "cups": False,
-        "vanilla_emblem_pieces": True,
+        "jungle_slider": False,
+        "randomize_emblem_pieces": False,
         "randomize_postcards": RandomizePostcards.option_all,
         
         "exp_multiplier": 16,
@@ -179,6 +186,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         
         "puppies": Puppies.option_triplets,
         "starting_worlds": 0,
+        "starting_tools": True,
         "interact_in_battle": False,
         "advanced_logic": False,
         "extra_shared_abilities": False,

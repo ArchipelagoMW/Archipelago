@@ -65,7 +65,7 @@ def has_final_rest_door(state: CollectionState, player: int, final_rest_door_req
     if final_rest_door_requirement == "puppies":
         if puppies_choice == "individual":
             return has_puppies_individual(state, player, 99)
-        if puppies_choice == "triplets":
+        if puppies_choice == "triplets" or puppies_choice == "vanilla":
             return has_puppies_triplets(state, player, 99)
         return has_puppies_all(state, player, 99)
     if final_rest_door_requirement == "postcards":
@@ -107,7 +107,7 @@ def set_rules(kh1world):
     final_rest_door_requirement      = kh1world.options.final_rest_door.current_key
     
     has_puppies = has_puppies_individual
-    if kh1world.options.puppies == "triplets":
+    if kh1world.options.puppies == "triplets" or kh1world.options.puppies == "vanilla":
         has_puppies = has_puppies_triplets
     elif kh1world.options.puppies == "full":
         has_puppies = has_puppies_all
@@ -386,8 +386,9 @@ def set_rules(kh1world):
         lambda state: state.has("White Trinity", player))
     add_rule(kh1world.get_location("Monstro Chamber 6 Other Platform Chest"),
         lambda state: (
-            state.has("High Jump", player)
-            and state.has("Progressive Glide", player)
+            state.has_all({
+                "High Jump",
+                "Progressive Glide"}, player)
             or (options.advanced_logic and state.has("Combo Master", player))
         ))
     add_rule(kh1world.get_location("Monstro Chamber 6 Platform Near Chamber 5 Entrance Chest"),
@@ -397,8 +398,9 @@ def set_rules(kh1world):
         ))
     add_rule(kh1world.get_location("Monstro Chamber 6 Raised Area Near Chamber 1 Entrance Chest"),
         lambda state: (
-            state.has("High Jump", player)
-            and state.has("Progressive Glide", player)
+            state.has_all({
+                "High Jump",
+                "Progressive Glide"}, player)
             or (options.advanced_logic and state.has("Combo Master", player))
         ))
     add_rule(kh1world.get_location("Halloween Town Moonlight Hill White Trinity Chest"),
@@ -999,16 +1001,6 @@ def set_rules(kh1world):
         lambda state: state.has("Slides", player))
     add_rule(kh1world.get_location("Deep Jungle Climbing Trees Save Gorillas"),
         lambda state: state.has("Slides", player))
-    add_rule(kh1world.get_location("Deep Jungle Jungle Slider 10 Fruits"),
-        lambda state: state.has("Slides", player))
-    add_rule(kh1world.get_location("Deep Jungle Jungle Slider 20 Fruits"),
-        lambda state: state.has("Slides", player))
-    add_rule(kh1world.get_location("Deep Jungle Jungle Slider 30 Fruits"),
-        lambda state: state.has("Slides", player))
-    add_rule(kh1world.get_location("Deep Jungle Jungle Slider 40 Fruits"),
-        lambda state: state.has("Slides", player))
-    add_rule(kh1world.get_location("Deep Jungle Jungle Slider 50 Fruits"),
-        lambda state: state.has("Slides", player))
     add_rule(kh1world.get_location("Wonderland Bizarre Room Read Book"),
         lambda state: state.has("Footprints", player))
     add_rule(kh1world.get_location("Olympus Coliseum Coliseum Gates Green Trinity"),
@@ -1513,6 +1505,17 @@ def set_rules(kh1world):
                 has_emblems(state, player, options.keyblades_unlock_chests) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
             ))
+    if options.jungle_slider:
+        add_rule(kh1world.get_location("Deep Jungle Jungle Slider 10 Fruits"),
+            lambda state: state.has("Slides", player))
+        add_rule(kh1world.get_location("Deep Jungle Jungle Slider 20 Fruits"),
+            lambda state: state.has("Slides", player))
+        add_rule(kh1world.get_location("Deep Jungle Jungle Slider 30 Fruits"),
+            lambda state: state.has("Slides", player))
+        add_rule(kh1world.get_location("Deep Jungle Jungle Slider 40 Fruits"),
+            lambda state: state.has("Slides", player))
+        add_rule(kh1world.get_location("Deep Jungle Jungle Slider 50 Fruits"),
+            lambda state: state.has("Slides", player))
     for i in range(options.level_checks):
         add_rule(kh1world.get_location("Level " + str(i+1).rjust(3,'0')),
             lambda state, level_num=i: (

@@ -160,7 +160,7 @@ class RequiredPostcards(Range):
     If your goal is set to "Postcards", defines how many postcards are needed to achieve victory.
     """
     display_name = "Required Postcards"
-    default = 10
+    default = 8
     range_start = 1
     range_end = 10
 
@@ -169,7 +169,7 @@ class RequiredPuppies(Choice):
     If your goal is set to "Puppies", defines how many puppies are needed to achieve victory.
     """
     display_name = "Required Puppies"
-    default = 99
+    default = 80
     option_10 = 10
     option_20 = 20
     option_30 = 30
@@ -187,11 +187,13 @@ class Puppies(Choice):
     Full: All puppies are in one location
     Triplets: Puppies are found in triplets just as they are in the base game
     Individual: One puppy can be found per location
+    Vanilla: Puppies appear in triplets in the same location as the vanilla game
     """
     display_name = "Puppies"
     option_full = 0
     option_triplets = 1
     option_individual = 2
+    option_vanilla = 3
     default = 1
 
 class EXPMultiplier(NamedRange):
@@ -372,11 +374,11 @@ class EXPZeroInPool(Toggle):
     """
     display_name = "EXP Zero in Pool"
 
-class VanillaEmblemPieces(DefaultOnToggle):
+class RandomizeEmblemPieces(Toggle):
     """
-    If on, the Hollow Bastion emblem pieces are in their vanilla locations.
+    If off, the Hollow Bastion emblem pieces are in their vanilla locations.
     """
-    display_name = "Vanilla Emblem Pieces"
+    display_name = "Randomize Emblem Pieces"
 
 class RandomizePostcards(Choice):
     """
@@ -391,6 +393,12 @@ class RandomizePostcards(Choice):
     option_chests = 1
     option_vanilla = 2
 
+class JungleSlider(Toggle):
+    """
+    Determines whether checks are behind the Jungle Slider minigame.
+    """
+    display_name = "Jungle Slider"
+
 class StartingWorlds(Range):
     """
     Number of random worlds to start with in addition to Traverse Town, which is always available.  Will only consider Atlantica if toggled, and will only consider End of the World if its unlock is set to "Item".
@@ -399,6 +407,12 @@ class StartingWorlds(Range):
     default = 0
     range_start = 0
     range_end = 10
+    
+class StartingTools(DefaultOnToggle):
+    """
+    Determines whether you start with Scan and Dodge Roll.
+    """
+    display_name = "Starting Tools"
 
 @dataclass
 class KH1Options(PerGameCommonOptions):
@@ -422,7 +436,7 @@ class KH1Options(PerGameCommonOptions):
     advanced_logic: AdvancedLogic
     extra_shared_abilities: ExtraSharedAbilities
     exp_zero_in_pool: EXPZeroInPool
-    vanilla_emblem_pieces: VanillaEmblemPieces
+    randomize_emblem_pieces: RandomizeEmblemPieces
     randomize_postcards: RandomizePostcards
     donald_death_link: DonaldDeathLink
     goofy_death_link: GoofyDeathLink
@@ -442,6 +456,8 @@ class KH1Options(PerGameCommonOptions):
     accessory_slot_increase: AccessorySlotIncrease
     item_slot_increase: ItemSlotIncrease
     start_inventory_from_pool: StartInventoryPool
+    jungle_slider: JungleSlider
+    starting_tools: StartingTools
 
 kh1_option_groups = [
     OptionGroup("Goal", [
@@ -459,7 +475,8 @@ kh1_option_groups = [
         Atlantica,
         Cups,
         HundredAcreWood,
-        VanillaEmblemPieces,
+        JungleSlider,
+        RandomizeEmblemPieces,
         RandomizePostcards,
     ]),
     OptionGroup("Levels", [
@@ -485,6 +502,7 @@ kh1_option_groups = [
     ]),
     OptionGroup("Misc", [
         StartingWorlds,
+        StartingTools,
         Puppies,
         InteractInBattle,
         AdvancedLogic,
