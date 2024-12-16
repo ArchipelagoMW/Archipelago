@@ -61,7 +61,7 @@ def build_weighted_int_list(inputs: Collection[float], total: int) -> List[int]:
     return rounded_output
 
 
-def define_new_region(region_string: str) -> Tuple[Dict[str, Any], Set[Tuple[str, WitnessRule]]]:
+def define_new_region(region_string: str, area: dict[str, Any]) -> Tuple[Dict[str, Any], Set[Tuple[str, WitnessRule]]]:
     """
     Returns a region object by parsing a line in the logic file
     """
@@ -91,6 +91,7 @@ def define_new_region(region_string: str) -> Tuple[Dict[str, Any], Set[Tuple[str
         "shortName": region_name_simple,
         "entities": [],
         "physical_entities": [],
+        "area": area,
     }
     return region_obj, options
 
