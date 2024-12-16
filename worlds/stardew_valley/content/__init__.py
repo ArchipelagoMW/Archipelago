@@ -1,8 +1,9 @@
 from . import content_packs
-from .feature import cropsanity, friendsanity, fishsanity, booksanity, skill_progression
+from .feature import cropsanity, friendsanity, fishsanity, booksanity, building_progression, skill_progression
 from .game_content import ContentPack, StardewContent, StardewFeatures
 from .unpacking import unpack_content
 from .. import options
+from ..strings.building_names import Building
 
 
 def create_content(player_options: options.StardewValleyOptions) -> StardewContent:
@@ -29,6 +30,7 @@ def choose_content_packs(player_options: options.StardewValleyOptions):
 def choose_features(player_options: options.StardewValleyOptions) -> StardewFeatures:
     return StardewFeatures(
         choose_booksanity(player_options.booksanity),
+        choose_building_progression(player_options.building_progression, player_options.farm_type),
         choose_cropsanity(player_options.cropsanity),
         choose_fishsanity(player_options.fishsanity),
         choose_friendsanity(player_options.friendsanity, player_options.friendsanity_heart_size),
@@ -122,3 +124,49 @@ def choose_skill_progression(skill_progression_option: options.SkillProgression)
         raise ValueError(f"No skill progression feature mapped to {str(skill_progression_option.value)}")
 
     return skill_progression_feature
+
+
+def choose_building_progression(building_option: options.BuildingProgression,
+                                farm_type_option: options.FarmType) -> building_progression.BuildingProgressionFeature:
+    starting_buildings = {Building.farm_house, Building.pet_bowl, Building.shipping_bin}
+
+    if farm_type_option == options.FarmType.option_meadowlands:
+        starting_buildings.add(Building.coop)
+
+    if building_option == options.BuildingProgression.option_vanilla:
+        return building_progression.BuildingProgressionVanilla(
+            starting_buildings=starting_buildings,
+        )
+
+    if building_option == options.BuildingProgression.option_vanilla_cheap:
+        return building_progression.BuildingProgressionVanilla(
+            starting_buildings=starting_buildings,
+            price_multiplier=1 / 2,
+        )
+
+    if building_option == options.BuildingProgression.option_vanilla_very_cheap:
+        return building_progression.BuildingProgressionVanilla(
+            starting_buildings=starting_buildings,
+            price_multiplier=1 / 5,
+        )
+
+    starting_buildings.remove(Building.shipping_bin)
+
+    if building_option == options.BuildingProgression.option_progressive:
+        return building_progression.BuildingProgressionProgressive(
+            starting_buildings=starting_buildings,
+        )
+
+    if building_option == options.BuildingProgression.option_progressive_cheap:
+        return building_progression.BuildingProgressionProgressive(
+            starting_buildings=starting_buildings,
+            price_multiplier=1 / 2,
+        )
+
+    if building_option == options.BuildingProgression.option_progressive_very_cheap:
+        return building_progression.BuildingProgressionProgressive(
+            starting_buildings=starting_buildings,
+            price_multiplier=1 / 5,
+        )
+
+    raise ValueError(f"No building progression feature mapped to {str(building_option.value)}")
