@@ -135,13 +135,13 @@ class TestBunkerElevatorEgg(WitnessMultiworldTestBase):
         ]
 
         with self.subTest("Test that normally, the egg behind the elevator needs Elevator Control"):
-            self.assertFalse(self.multiworld.state.can_reach_location("Bunker Under Elevator Easter Eggs", 1))
+            self.assertFalse(self.multiworld.state.can_reach_location("Bunker Under Elevator Easter Egg", 1))
             self.collect_by_name(items_to_reach_bunker_elevator, 1)
-            self.assertFalse(self.multiworld.state.can_reach_location("Bunker Under Elevator Easter Eggs", 1))
+            self.assertFalse(self.multiworld.state.can_reach_location("Bunker Under Elevator Easter Egg", 1))
             self.collect_by_name(["Bunker Elevator Control (Panel)"], 1)
-            self.assertTrue(self.multiworld.state.can_reach_location("Bunker Under Elevator Easter Eggs", 1))
+            self.assertTrue(self.multiworld.state.can_reach_location("Bunker Under Elevator Easter Egg", 1))
 
         with self.subTest("Test that with auto-elevators, the egg behind the elevator doesn't need Elevator Control"):
-            self.assertFalse(self.multiworld.state.can_reach_location("Bunker Under Elevator Easter Eggs", 2))
+            self.assertFalse(self.multiworld.state.can_reach_location("Bunker Under Elevator Easter Egg", 2))
             self.collect_by_name(items_to_reach_bunker_elevator, 2)
-            self.assertTrue(self.multiworld.state.can_reach_location("Bunker Under Elevator Easter Eggs", 2))
+            self.assertTrue(self.multiworld.state.can_reach_location("Bunker Under Elevator Easter Egg", 2))
