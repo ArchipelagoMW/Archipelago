@@ -175,7 +175,7 @@ portal_mapping: List[Portal] = [
     Portal(name="Temple Door Exit", region="Sealed Temple",
            destination="Overworld Redux", tag="_main"),
 
-    Portal(name="Forest Belltower to Fortress", region="Forest Belltower Main",
+    Portal(name="Forest Belltower to Fortress", region="Forest Belltower Main behind bushes",
            destination="Fortress Courtyard", tag="_"),
     Portal(name="Forest Belltower to Forest", region="Forest Belltower Lower",
            destination="East Forest Redux", tag="_"),
@@ -221,7 +221,7 @@ portal_mapping: List[Portal] = [
 
     Portal(name="Guard House 2 Lower Exit", region="Guard House 2 Lower",
            destination="East Forest Redux", tag="_lower"),
-    Portal(name="Guard House 2 Upper Exit", region="Guard House 2 Upper",
+    Portal(name="Guard House 2 Upper Exit", region="Guard House 2 Upper before bushes",
            destination="East Forest Redux", tag="_upper"),
 
     Portal(name="Guard Captain Room Non-Gate Exit", region="Forest Boss Room",
@@ -601,6 +601,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Sealed Temple Rafters": RegionInfo("Temple"),
     "Forest Belltower Upper": RegionInfo("Forest Belltower"),
     "Forest Belltower Main": RegionInfo("Forest Belltower"),
+    "Forest Belltower Main behind bushes": RegionInfo("Forest Belltower"),
     "Forest Belltower Lower": RegionInfo("Forest Belltower"),
     "East Forest": RegionInfo("East Forest Redux"),
     "East Forest Dance Fox Spot": RegionInfo("East Forest Redux"),
@@ -608,7 +609,8 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Lower Forest": RegionInfo("East Forest Redux"),  # bottom of the forest
     "Guard House 1 East": RegionInfo("East Forest Redux Laddercave"),
     "Guard House 1 West": RegionInfo("East Forest Redux Laddercave"),
-    "Guard House 2 Upper": RegionInfo("East Forest Redux Interior"),
+    "Guard House 2 Upper before bushes": RegionInfo("East Forest Redux Interior"),
+    "Guard House 2 Upper after bushes": RegionInfo("East Forest Redux Interior"),
     "Guard House 2 Lower": RegionInfo("East Forest Redux Interior"),
     "Forest Boss Room": RegionInfo("Forest Boss Room"),
     "Forest Grave Path Main": RegionInfo("Sword Access"),
@@ -1026,6 +1028,12 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
     "Forest Belltower Main": {
         "Forest Belltower Lower":
             [],
+        "Forest Belltower Main behind bushes":
+            [],
+    },
+    "Forest Belltower Main behind bushes": {
+        "Forest Belltower Main":
+            [],
     },
 
     "East Forest": {
@@ -1057,13 +1065,18 @@ traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
         "Guard House 1 East":
             [["Hyperdash"], ["LS1"]],
     },
-
-    "Guard House 2 Upper": {
+    "Guard House 2 Upper before bushes": {
+        "Guard House 2 Upper after bushes":
+            [],
+    },
+    "Guard House 2 Upper after bushes": {
         "Guard House 2 Lower":
+            [],
+        "Guard House 2 Upper before bushes":
             [],
     },
     "Guard House 2 Lower": {
-        "Guard House 2 Upper":
+        "Guard House 2 Upper after bushes":
             [],
     },
 
