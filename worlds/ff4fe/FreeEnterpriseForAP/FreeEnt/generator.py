@@ -247,15 +247,15 @@ class Environment:
         self._rewards = rewards.RewardsAssignment()
         self._spoilers = spoilers.SpoilerLog()
 
-        numeric_seed = int(hashlib.sha1(options.seed.encode('utf-8')).hexdigest(), 16)
-        numeric_seed += int(hashlib.sha1(options.flags.to_string().encode('utf-8')).hexdigest(), 16)
-        numeric_seed += int(hashlib.sha1(options.get_version_str().encode('utf-8')).hexdigest(), 16)
+        numeric_seed = int(hashlib.sha256(options.seed.encode('utf-8')).hexdigest(), 16)
+        numeric_seed += int(hashlib.sha256(options.flags.to_string().encode('utf-8')).hexdigest(), 16)
+        numeric_seed += int(hashlib.sha256(options.get_version_str().encode('utf-8')).hexdigest(), 16)
         if (options.test_settings or options.hide_flags) and not (options.debug):
-            numeric_seed += int(hashlib.sha1(str(uuid.uuid4()).encode('utf-8')).hexdigest(), 16)
+            numeric_seed += int(hashlib.sha256(str(uuid.uuid4()).encode('utf-8')).hexdigest(), 16)
         elif options.flags.get_list(r'^-spoil:'):
-            numeric_seed += int(hashlib.sha1(os.getenv('FE_SPOILER_SALT').encode('utf-8')).hexdigest(), 16)
+            numeric_seed += int(hashlib.sha256(os.getenv('FE_SPOILER_SALT').encode('utf-8')).hexdigest(), 16)
         else:
-            numeric_seed += int(hashlib.sha1('FE_SALT'.encode("utf-8")).hexdigest(), 16)
+            numeric_seed += int(hashlib.sha256('FE_SALT'.encode("utf-8")).hexdigest(), 16)
 
         self._rnd_seed = numeric_seed
         
