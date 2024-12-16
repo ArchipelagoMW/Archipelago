@@ -1005,12 +1005,13 @@ class PreventativeLocations(LocationInclusion):
 class FillerPercentage(Range):
     """
     Percentage of the item pool filled with filler items.
-    If the world has more locations than items, filler items will still be generated.
+    If the world has more locations than items, additional filler items may be generated.
     """
     display_name = "Filler Percentage"
     range_start = 0
     range_end = 70
     default = 0
+
 
 class MineralsPerItem(Range):
     """
