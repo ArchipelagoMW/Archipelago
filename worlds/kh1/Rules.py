@@ -1971,7 +1971,7 @@ def set_rules(kh1world):
             add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Under Giant Pot Chest"),
                 lambda state: state.has("Oathkeeper", player))
         add_rule(kh1world.get_location("Final Ansem"),
-                lambda state: has_defensive_tools(state, player))
+            lambda state: has_defensive_tools(state, player))
     
     
     add_rule(kh1world.get_entrance("Wonderland"),
