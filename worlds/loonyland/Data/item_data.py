@@ -2,7 +2,7 @@ from typing import Dict
 
 from BaseClasses import ItemClassification as IC
 from worlds.loonyland import loonyland_base_id as ll_base_id
-from worlds.loonyland.Data.defines import *
+from worlds.loonyland.Data.Defines import *
 from worlds.loonyland.Items import LL_Item, LL_ItemCat
 
 loony_item_table: Dict[str, LL_Item] = {
