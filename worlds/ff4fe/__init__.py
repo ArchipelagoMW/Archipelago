@@ -184,8 +184,8 @@ class FF4FEWorld(World):
 
         restricted_character_allow_locations = list(set(character_locations) - set(locations.restricted_character_locations)).copy()
         restricted_character_forbid_locations = list(set(character_locations) - set(restricted_character_allow_locations)).copy()
-        self.multiworld.random.shuffle(restricted_character_allow_locations)
-        self.multiworld.random.shuffle(restricted_character_forbid_locations)
+        self.random.shuffle(restricted_character_allow_locations)
+        self.random.shuffle(restricted_character_forbid_locations)
 
         for item in map(self.create_item, item_pool):
             # If we've specifically chosen a startinc character, we place them directly even though we're not normally
