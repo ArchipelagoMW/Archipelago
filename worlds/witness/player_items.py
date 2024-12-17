@@ -222,20 +222,15 @@ class WitnessPlayerItems:
         # Sort the output for consistency across versions if the implementation changes but the logic does not.
         return sorted(output)
 
-    def get_door_ids_in_pool(self) -> List[int]:
+    def get_door_item_ids_in_pool(self) -> List[int]:
         """
-        Returns the total set of all door IDs that are controlled by items in the pool.
+        Returns the ids of all door items that exist in the pool.
         """
-        output: List[int] = []
 
-        for item_name, item_data in self.item_data.items():
-            if not isinstance(item_data.definition, DoorItemDefinition):
-                continue
-
-            output += [int(hex_string, 16) for hex_string in item_data.definition.panel_id_hexes
-                       if hex_string not in self._logic.FORBIDDEN_DOORS]
-
-        return output
+        return [
+            cast_not_none(item_data.ap_code) for item_data in self.item_data.values()
+            if isinstance(item_data.definition, DoorItemDefinition)
+        ]
 
     def get_symbol_ids_not_in_pool(self) -> List[int]:
         """
@@ -257,5 +252,3 @@ class WitnessPlayerItems:
                 output[cast_not_none(item.ap_code)] = [cast_not_none(static_witness_items.ITEM_DATA[child_item].ap_code)
                                                        for child_item in item.definition.child_item_names]
         return output
-
-

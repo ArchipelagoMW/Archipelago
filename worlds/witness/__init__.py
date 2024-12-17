@@ -84,7 +84,8 @@ class WitnessWorld(World):
             "victory_location": int(self.player_logic.VICTORY_LOCATION, 16),
             "panelhex_to_id": self.player_locations.CHECK_PANELHEX_TO_ID,
             "item_id_to_door_hexes": static_witness_items.get_item_to_door_mappings(),
-            "door_hexes_in_the_pool": self.player_items.get_door_ids_in_pool(),
+            "door_items_in_the_pool": self.player_items.get_door_item_ids_in_pool(),
+            "doors_that_shouldnt_be_locked": [int(h, 16) for h in self.player_logic.FORBIDDEN_DOORS],
             "symbols_not_in_the_game": self.player_items.get_symbol_ids_not_in_pool(),
             "disabled_entities": [int(h, 16) for h in self.player_logic.COMPLETELY_DISABLED_ENTITIES],
             "hunt_entities": [int(h, 16) for h in self.player_logic.HUNT_ENTITIES],
@@ -150,7 +151,8 @@ class WitnessWorld(World):
         )
         self.player_regions: WitnessPlayerRegions = WitnessPlayerRegions(self.player_locations, self)
 
-        self.log_ids_to_hints = {}
+        self.log_ids_to_hints: Dict[int, CompactHintData] = {}
+        self.laser_ids_to_hints: Dict[int, CompactHintData] = {}
 
         self.determine_sufficient_progression()
 
@@ -325,9 +327,6 @@ class WitnessWorld(World):
                 self.options.local_items.value.add(item_name)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        self.log_ids_to_hints: Dict[int, CompactHintData] = {}
-        self.laser_ids_to_hints: Dict[int, CompactHintData] = {}
-
         already_hinted_locations = set()
 
         # Laser hints
