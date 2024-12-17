@@ -305,8 +305,6 @@ class LinksAwakeningWorld(World):
 
         # Set up filter rules
 
-        # The list of items we will pass to fill_restrictive, contains at first the items that go to all dungeons
-        all_dungeon_items_to_fill = list(self.prefill_own_dungeons)
         # set containing the list of all possible dungeon locations for the player
         all_dungeon_locs = set()
         
@@ -316,9 +314,6 @@ class LinksAwakeningWorld(World):
             locs = set(loc for loc in self.dungeon_locations_by_dungeon[dungeon_index] if not loc.item)
             for item in self.prefill_original_dungeon[dungeon_index]:
                 allowed_locations_by_item[item] = locs
-
-            # put the items for this dungeon in the list to fill
-            all_dungeon_items_to_fill.extend(self.prefill_original_dungeon[dungeon_index])
 
             # ...and gather the list of all dungeon locations
             all_dungeon_locs |= locs
@@ -359,6 +354,7 @@ class LinksAwakeningWorld(World):
             if allowed_locations_by_item[item] is all_dungeon_locs:
                 i += 3
             return i
+        all_dungeon_items_to_fill = self.get_pre_fill_items()
         all_dungeon_items_to_fill.sort(key=priority)
 
         # Set up state
