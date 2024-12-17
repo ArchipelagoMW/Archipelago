@@ -16,7 +16,7 @@ import enum
 
 import pyaes
 
-from .. import f4c
+from . import f4c
 
 from .flags import FlagSet, FlagLogic
 from .address import *
