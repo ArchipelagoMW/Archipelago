@@ -50,18 +50,18 @@ class StardewCommandProcessor(ClientCommandProcessor):
     @mark_raw
     def _cmd_explain(self, location: str = ""):
         """Explain the logic behind a location."""
-        if self.ctx.logic is None:
-            logger.warning("Internal logic was not able to load, check your yamls and relaunch.")
+        logic = self.ctx.get_logic()
+        if logic is None:
             return
 
         try:
-            rule = self.ctx.logic.region.can_reach_location(location)
+            rule = logic.region.can_reach_location(location)
             expl = explain(rule, get_updated_state(self.ctx), expected=None, mode=ExplainMode.CLIENT)
         except KeyError:
 
             result, usable, response = Utils.get_intended_text(location, [loc.name for loc in self.ctx.multiworld.get_locations(1)])
             if usable:
-                rule = self.ctx.logic.region.can_reach_location(result)
+                rule = logic.region.can_reach_location(result)
                 expl = explain(rule, get_updated_state(self.ctx), expected=None, mode=ExplainMode.CLIENT)
             else:
                 logger.warning(response)
@@ -73,13 +73,13 @@ class StardewCommandProcessor(ClientCommandProcessor):
     @mark_raw
     def _cmd_explain_item(self, item: str = ""):
         """Explain the logic behind a game item."""
-        if self.ctx.logic is None:
-            logger.warning("Internal logic was not able to load, check your yamls and relaunch.")
+        logic = self.ctx.get_logic()
+        if logic is None:
             return
 
-        result, usable, response = Utils.get_intended_text(item, self.ctx.logic.registry.item_rules.keys())
+        result, usable, response = Utils.get_intended_text(item, logic.registry.item_rules.keys())
         if usable:
-            rule = self.ctx.logic.has(result)
+            rule = logic.has(result)
             expl = explain(rule, get_updated_state(self.ctx), expected=None, mode=ExplainMode.CLIENT)
         else:
             logger.warning(response)
@@ -91,12 +91,11 @@ class StardewCommandProcessor(ClientCommandProcessor):
     @mark_raw
     def _cmd_explain_missing(self, location: str = ""):
         """Explain the logic behind a location, while skipping the rules that are already satisfied."""
-        if self.ctx.logic is None:
-            logger.warning("Internal logic was not able to load, check your yamls and relaunch.")
+        logic = self.ctx.get_logic()
+        if logic is None:
             return
-
         try:
-            rule = self.ctx.logic.region.can_reach_location(location)
+            rule = logic.region.can_reach_location(location)
             state = get_updated_state(self.ctx)
             simplified, _ = rule.evaluate_while_simplifying(state)
             expl = explain(simplified, state, mode=ExplainMode.CLIENT)
@@ -104,7 +103,7 @@ class StardewCommandProcessor(ClientCommandProcessor):
 
             result, usable, response = Utils.get_intended_text(location, [loc.name for loc in self.ctx.multiworld.get_locations(1)])
             if usable:
-                rule = self.ctx.logic.region.can_reach_location(result)
+                rule = logic.region.can_reach_location(result)
                 state = get_updated_state(self.ctx)
                 simplified, _ = rule.evaluate_while_simplifying(state)
                 expl = explain(simplified, state, mode=ExplainMode.CLIENT)
@@ -141,7 +140,6 @@ class StardewCommandProcessor(ClientCommandProcessor):
 class StardewClientContext(TrackerGameContext):
     game = "Stardew Valley"
     command_processor = StardewCommandProcessor
-    logic: StardewLogic | None = None
     previous_explanation: RuleExplanation | None = None
 
     def make_gui(self):
@@ -160,9 +158,16 @@ class StardewClientContext(TrackerGameContext):
 
         return StardewManager
 
-    def setup_logic(self):
-        if self.multiworld is not None:
-            self.logic = self.multiworld.worlds[1].logic
+    def get_logic(self) -> StardewLogic | None:
+        if self.player_id is None:
+            logger.warning("Internal logic was not able to load, check your yamls and relaunch.")
+            return
+
+        if self.game != "Stardew Valley":
+            logger.warning(f"Please connect to a slot with explainable logic (not {self.game}).")
+            return
+
+        return self.multiworld.worlds[self.player_id].logic
 
 
 def parse_explanation(explanation: RuleExplanation) -> list[JSONMessagePart]:
@@ -221,7 +226,6 @@ async def main(args):
 
     if tracker_loaded:
         ctx.run_generator()
-        ctx.setup_logic()
     else:
         logger.warning("Could not find Universal Tracker.")
 
