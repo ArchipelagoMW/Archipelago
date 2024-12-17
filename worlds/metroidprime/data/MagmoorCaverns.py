@@ -73,8 +73,7 @@ class MagmoorCavernsAreaData(AreaData):
                         and can_bomb(world, state)
                         and (
                             can_warp_to_start(world, state)
-                            if world.starting_room_name
-                            == RoomName.Warrior_Shrine.value
+                            if world.starting_room_name == RoomName.Warrior_Shrine.value
                             else state.can_reach(
                                 RoomName.Warrior_Shrine.value, None, world.player
                             )
@@ -134,8 +133,9 @@ class MagmoorCavernsAreaData(AreaData):
                         "Magmoor Caverns: Lava Lake",
                         rule_func=lambda world, state: can_missile(world, state)
                         and can_space_jump(world, state)
+                        and can_heat(world, state)
                         and state.can_reach(
-                            "Magmoor Caverns: " + RoomName.Lake_Tunnel.value,
+                            RoomName.Burning_Trail.value,
                             None,
                             world.player,
                         ),
