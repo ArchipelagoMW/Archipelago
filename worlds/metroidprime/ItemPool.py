@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from . import MetroidPrimeWorld
 
 
-def generate_start_inventory(world: "MetroidPrimeWorld") -> List[str]:
+def generate_base_start_inventory(world: "MetroidPrimeWorld") -> List[str]:
     assert world.starting_room_data.selected_loadout
     starting_items = [
         get_item_for_options(
@@ -30,15 +30,7 @@ def generate_start_inventory(world: "MetroidPrimeWorld") -> List[str]:
     if not world.options.shuffle_scan_visor:
         starting_items.append(SuitUpgrade.Scan_Visor.value)
 
-    already_collected_items = [
-        item
-        for item in [
-            *world.options.start_inventory_from_pool.value.keys(),
-            *world.options.start_inventory.value.keys(),
-        ]
-    ]
-
-    return [item for item in starting_items if item not in already_collected_items]
+    return starting_items
 
 
 def generate_item_pool(world: "MetroidPrimeWorld") -> List[MetroidPrimeItem]:
@@ -137,11 +129,10 @@ def generate_item_pool(world: "MetroidPrimeWorld") -> List[MetroidPrimeItem]:
         )
 
     assert world.starting_room_data.selected_loadout
-    items_to_remove: List[str] = [
-        # starting items
-        *[item for item in generate_start_inventory(world)],
-        # prefilled items
-        *[item for item in world.prefilled_item_map.values()],
+
+    items_to_remove = [
+        *world.prefilled_item_map.values(),
+        *generate_base_start_inventory(world),
     ]
 
     for item in items_to_remove:

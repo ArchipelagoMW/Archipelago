@@ -56,8 +56,17 @@ class MetroidPrimeWithOverridesTestBase(MetroidPrimeTestBase):
         self.world = self.multiworld.worlds[self.player]  # type: ignore
         self.pre_steps()
 
+        self.world.generate_early()
+
+        # A couple tests rely on this being set, it does not happen in the test base for some reason
+        if self.world.options.start_inventory_from_pool.value:
+            for item in self.world.options.start_inventory_from_pool.value.keys():
+                self.multiworld.push_precollected(self.world.create_item(item))
+        if self.world.options.start_inventory.value:
+            for item in self.world.options.start_inventory.value.keys():
+                self.multiworld.push_precollected(self.world.create_item(item))
+
         gen_steps = (
-            "generate_early",
             "create_regions",
             "create_items",
             "set_rules",

@@ -33,7 +33,7 @@ from .data.Transports import (
 from .Config import make_config
 from .Regions import create_regions
 from .Locations import every_location
-from .ItemPool import generate_item_pool, generate_start_inventory
+from .ItemPool import generate_item_pool, generate_base_start_inventory
 from .PrimeOptions import (
     BlastShieldRandomization,
     DoorColorRandomization,
@@ -234,8 +234,15 @@ class MetroidPrimeWorld(World):
             self.elevator_mapping = get_random_elevator_mapping(self)
 
         # Init starting inventory
-        starting_items = generate_start_inventory(self)
-        for item in starting_items:
+        starting_items = generate_base_start_inventory(self)
+        option_filled_items = [
+            *[item for item in self.options.start_inventory.value.keys()],
+            *[item for item in self.options.start_inventory_from_pool.value.keys()],
+        ]
+
+        for item in [
+            item for item in starting_items if item not in option_filled_items
+        ]:
             self.multiworld.push_precollected(
                 self.create_item(item, ItemClassification.progression)
             )
@@ -259,6 +266,18 @@ class MetroidPrimeWorld(World):
         )
 
     def create_items(self) -> None:
+        precollected_item_names = [
+            item.name for item in self.multiworld.precollected_items[self.player]
+        ]
+        new_map: Dict[str, str] = {}
+
+        for location, item in self.prefilled_item_map.items():
+            if item not in precollected_item_names:
+                # Prefilled items affect what goes into the item pool. If we already have collected something, we won't need to prefill it
+                new_map[location] = item
+
+        self.prefilled_item_map = new_map
+
         item_pool = generate_item_pool(self)
         self.multiworld.itempool += item_pool
 

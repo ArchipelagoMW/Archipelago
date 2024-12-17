@@ -19,7 +19,7 @@ class TestScanVisorShuffled(MetroidPrimeTestBase):
             item.name for item in self.multiworld.precollected_items[self.player]
         ]
 
-    def test_scan_visor_not_in_item_pool(self):
+    def test_scan_visor_in_item_pool(self):
         assert SuitUpgrade.Scan_Visor.value in [
             item.name for item in self.multiworld.itempool
         ]
@@ -40,7 +40,7 @@ class TestScanVisorNotShuffled(MetroidPrimeTestBase):
             item.name for item in self.multiworld.precollected_items[self.player]
         ]
 
-    def test_scan_visor_in_item_pool(self):
+    def test_scan_visor_not_in_item_pool(self):
         assert SuitUpgrade.Scan_Visor.value not in [
             item.name for item in self.multiworld.itempool
         ]

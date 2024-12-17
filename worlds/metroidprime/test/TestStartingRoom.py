@@ -99,18 +99,24 @@ class TestPrePlacedItemsWithStartFromPool(MetroidPrimeWithOverridesTestBase):
         )
 
 
-class TestPreCollectedItemsWithStartFromPool(MetroidPrimeWithOverridesTestBase):
+class TestPreCollectedItemsWithStartInventoryFromPool(
+    MetroidPrimeWithOverridesTestBase
+):
     run_default_tests = False  # type: ignore
-    options = {"start_inventory_from_pool": {SuitUpgrade.Missile_Expansion.value: 1}}
+    options = {"start_inventory": {SuitUpgrade.Missile_Expansion.value: 1}}
     overrides = {"starting_room_name": RoomName.Arboretum.value}
 
-    def test_should_not_double_collect_items_when_using_start_from_pool(
+    def test_should_not_double_collect_items_when_using_start_items(
         self,
     ):
-        self.assertNotIn(
-            SuitUpgrade.Missile_Expansion.value,
-            [item.name for item in self.multiworld.precollected_items[1]],
+        count = len(
+            [
+                item
+                for item in self.multiworld.precollected_items[self.player]
+                if item.name == SuitUpgrade.Missile_Expansion.value
+            ]
         )
+        self.assertEqual(count, 1, "Should only be one missile in precolelcted items")
 
 
 class TestPreCollectedItemsWithStartInventory(MetroidPrimeWithOverridesTestBase):
@@ -121,10 +127,14 @@ class TestPreCollectedItemsWithStartInventory(MetroidPrimeWithOverridesTestBase)
     def test_should_not_double_collect_items_when_using_start_items(
         self,
     ):
-        self.assertNotIn(
-            SuitUpgrade.Missile_Expansion.value,
-            [item.name for item in self.multiworld.precollected_items[1]],
+        count = len(
+            [
+                item
+                for item in self.multiworld.precollected_items[self.player]
+                if item.name == SuitUpgrade.Missile_Expansion.value
+            ]
         )
+        self.assertEqual(count, 1, "Should only be one missile in precolelcted items")
 
 
 class TestStartRoomBKPreventionEnabled(MetroidPrimeWithOverridesTestBase):
@@ -200,4 +210,22 @@ class TestStartRoomArboretum(MetroidPrimeWithOverridesTestBase):
         self.assertBeatable(True)
         self.assertTrue(
             self.can_reach_location("Chozo Ruins: Watery Hall - Scan Puzzle")
+        )
+
+
+class TestPrefilledItemsNotPlaced(MetroidPrimeWithOverridesTestBase):
+    run_default_tests = False  # type: ignore
+    options = {"start_inventory_from_pool": {SuitUpgrade.Morph_Ball.value: 1}}
+    overrides = {"starting_room_name": RoomName.Save_Station_1.value}
+
+    def test_prefilled_items_should_not_be_placed_when_in_start_inventory(
+        self,
+    ):
+        self.assertNotIn(
+            SuitUpgrade.Morph_Ball.value,
+            self.world.prefilled_item_map.values(),
+        )
+        self.assertIn(
+            SuitUpgrade.Missile_Expansion.value,
+            self.world.prefilled_item_map.values(),
         )

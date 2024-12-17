@@ -274,11 +274,7 @@
               "showIcon": true
             }
           ],
-          "doors": {
-            "0": {
-              "blastShieldType": "Power Bomb"
-            }
-          }
+          "doors": {}
         },
         "Arbor Chamber": {
           "pickups": [
@@ -321,7 +317,11 @@
         },
         "Canyon Cavern": {
           "pickups": [],
-          "doors": {}
+          "doors": {
+            "1": {
+              "blastShieldType": "Bomb"
+            }
+          }
         },
         "Cargo Freight Lift to Deck Gamma": {
           "pickups": [
@@ -384,7 +384,8 @@
           "pickups": [],
           "doors": {
             "2": {
-              "shieldType": "Wave Beam"
+              "shieldType": "Blue",
+              "blastShieldType": "Power Bomb"
             },
             "3": {
               "shieldType": "Wave Beam"
@@ -423,14 +424,14 @@
             }
           ],
           "doors": {
-            "2": {
-              "blastShieldType": "Charge Beam"
+            "1": {
+              "blastShieldType": "Bomb"
             },
-            "3": {
-              "blastShieldType": "Power Bomb"
+            "2": {
+              "blastShieldType": "Super Missile"
             },
             "4": {
-              "blastShieldType": "Power Bomb"
+              "blastShieldType": "Charge Beam"
             }
           }
         },
@@ -496,10 +497,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Power Bomb Expansion",
-              "hudmemoText": "Power Bomb Expansion Acquired!",
+              "scanText": "Charge Beam",
+              "hudmemoText": "Charge Beam Acquired!",
               "currIncrease": 0,
-              "model": "Power Bomb Expansion",
+              "model": "Charge Beam",
               "showIcon": true
             }
           ],
@@ -517,25 +518,18 @@
           "doors": {
             "0": {
               "blastShieldType": "None"
-            },
-            "1": {
-              "blastShieldType": "Charge Beam"
             }
           }
         },
         "Tallon Canyon": {
           "pickups": [],
-          "doors": {
-            "3": {
-              "blastShieldType": "Charge Beam"
-            }
-          }
+          "doors": {}
         },
         "Temple Hall": {
           "pickups": [],
           "doors": {
             "1": {
-              "blastShieldType": "Charge Beam"
+              "blastShieldType": "Super Missile"
             }
           }
         },
@@ -619,7 +613,8 @@
           "pickups": [],
           "doors": {
             "0": {
-              "shieldType": "Wave Beam"
+              "shieldType": "Blue",
+              "blastShieldType": "Power Bomb"
             },
             "1": {
               "shieldType": "Wave Beam"
@@ -641,7 +636,7 @@
           "pickups": [],
           "doors": {
             "0": {
-              "blastShieldType": "Power Bomb"
+              "blastShieldType": "Charge Beam"
             },
             "1": {
               "blastShieldType": "None"
@@ -913,9 +908,6 @@
             }
           ],
           "doors": {
-            "0": {
-              "blastShieldType": "Missile"
-            },
             "2": {
               "shieldType": "Plasma Beam"
             },
@@ -957,8 +949,7 @@
           ],
           "doors": {
             "0": {
-              "shieldType": "Blue",
-              "blastShieldType": "Super Missile"
+              "shieldType": "Ice Beam"
             }
           }
         },
@@ -1029,17 +1020,13 @@
         },
         "Reflecting Pool Access": {
           "pickups": [],
-          "doors": {
-            "1": {
-              "blastShieldType": "Missile"
-            }
-          }
+          "doors": {}
         },
         "Reflecting Pool": {
           "pickups": [],
           "doors": {
             "0": {
-              "blastShieldType": "None"
+              "blastShieldType": "Super Missile"
             },
             "1": {
               "shieldType": "Plasma Beam"
@@ -1137,7 +1124,8 @@
           ],
           "doors": {
             "0": {
-              "shieldType": "Ice Beam"
+              "shieldType": "Blue",
+              "blastShieldType": "Missile"
             }
           }
         },
@@ -1161,7 +1149,7 @@
           "pickups": [],
           "doors": {
             "0": {
-              "blastShieldType": "None"
+              "blastShieldType": "Super Missile"
             }
           }
         },
@@ -1189,10 +1177,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Charge Beam",
-              "hudmemoText": "Charge Beam Acquired!",
+              "scanText": "Super Missile",
+              "hudmemoText": "Super Missile Acquired!",
               "currIncrease": 0,
-              "model": "Charge Beam",
+              "model": "Super Missile",
               "showIcon": true
             },
             {
@@ -1232,6 +1220,9 @@
           "doors": {
             "0": {
               "shieldType": "Ice Beam"
+            },
+            "1": {
+              "blastShieldType": "Missile"
             }
           }
         },
@@ -1268,8 +1259,7 @@
           ],
           "doors": {
             "0": {
-              "shieldType": "Blue",
-              "blastShieldType": "Super Missile"
+              "shieldType": "Ice Beam"
             },
             "1": {
               "shieldType": "Ice Beam"
@@ -2049,10 +2039,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Energy Tank",
-              "hudmemoText": "Energy Tank Acquired!",
+              "scanText": "Power Bomb Expansion",
+              "hudmemoText": "Power Bomb Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Energy Tank",
+              "model": "Power Bomb Expansion",
               "showIcon": true
             }
           ],
@@ -2464,10 +2454,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Super Missile",
-              "hudmemoText": "Super Missile Acquired!",
+              "scanText": "Energy Tank",
+              "hudmemoText": "Energy Tank Acquired!",
               "currIncrease": 0,
-              "model": "Super Missile",
+              "model": "Energy Tank",
               "showIcon": true
             }
           ],

@@ -237,18 +237,18 @@
     "removeMineSecurityStationLocks": false,
     "powerBombArboretumSandstone": false,
     "artifactHints": {
-      "Artifact of Chozo": "The &push;&main-color=#c300ff;Artifact of Chozo&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Magmoor Caverns: Shore Tunnel&pop;.",
-      "Artifact of Nature": "The &push;&main-color=#c300ff;Artifact of Nature&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Phendrana Drifts: Quarantine Cave&pop;.",
+      "Artifact of Chozo": "The &push;&main-color=#c300ff;Artifact of Chozo&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Magmoor Caverns: Storage Cavern&pop;.",
+      "Artifact of Nature": "The &push;&main-color=#c300ff;Artifact of Nature&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Chozo Ruins: Watery Hall Access&pop;.",
       "Artifact of Sun": "The &push;&main-color=#c300ff;Artifact of Sun&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Chozo Ruins: Hall of the Elders&pop;.",
-      "Artifact of World": "The &push;&main-color=#c300ff;Artifact of World&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Magmoor Caverns: Fiery Shores - Morph Track&pop;.",
-      "Artifact of Spirit": "The &push;&main-color=#c300ff;Artifact of Spirit&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Tallon Overworld: Landing Site&pop;.",
-      "Artifact of Newborn": "The &push;&main-color=#c300ff;Artifact of Newborn&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Phendrana Drifts: Gravity Chamber - Grapple Ledge&pop;.",
-      "Artifact of Truth": "The &push;&main-color=#c300ff;Artifact of Truth&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Phendrana Drifts: Ruined Courtyard&pop;.",
-      "Artifact of Strength": "The &push;&main-color=#c300ff;Artifact of Strength&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Chozo Ruins: Tower of Light&pop;.",
-      "Artifact of Elder": "The &push;&main-color=#c300ff;Artifact of Elder&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Magmoor Caverns: Plasma Processing&pop;.",
-      "Artifact of Wild": "The &push;&main-color=#c300ff;Artifact of Wild&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Tallon Overworld: Life Grove Tunnel&pop;.",
-      "Artifact of Lifegiver": "The &push;&main-color=#c300ff;Artifact of Lifegiver&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Chozo Ruins: Ruined Gallery - Missile Wall&pop;.",
-      "Artifact of Warrior": "The &push;&main-color=#c300ff;Artifact of Warrior&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Magmoor Caverns: Storage Cavern&pop;."
+      "Artifact of World": "The &push;&main-color=#c300ff;Artifact of World&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Chozo Ruins: Tower of Light&pop;.",
+      "Artifact of Spirit": "The &push;&main-color=#c300ff;Artifact of Spirit&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Chozo Ruins: Ruined Gallery - Tunnel&pop;.",
+      "Artifact of Newborn": "The &push;&main-color=#c300ff;Artifact of Newborn&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Chozo Ruins: Dynamo - Spider Track&pop;.",
+      "Artifact of Truth": "The &push;&main-color=#c300ff;Artifact of Truth&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Chozo Ruins: Tower Chamber&pop;.",
+      "Artifact of Strength": "The &push;&main-color=#c300ff;Artifact of Strength&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Chozo Ruins: Training Chamber&pop;.",
+      "Artifact of Elder": "The &push;&main-color=#c300ff;Artifact of Elder&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Phendrana Drifts: Ice Ruins East - Behind Ice&pop;.",
+      "Artifact of Wild": "The &push;&main-color=#c300ff;Artifact of Wild&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Chozo Ruins: Watery Hall - Underwater&pop;.",
+      "Artifact of Lifegiver": "The &push;&main-color=#c300ff;Artifact of Lifegiver&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Phendrana Drifts: Gravity Chamber - Underwater&pop;.",
+      "Artifact of Warrior": "The &push;&main-color=#c300ff;Artifact of Warrior&pop; can be found in &push;&main-color=#d4cc33;your&pop; &push;&main-color=#89a1ff;Phendrana Drifts: Security Cave&pop;."
     },
     "requiredArtifactCount": 12
   },
@@ -267,10 +267,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Missile Expansion",
-              "hudmemoText": "Missile Expansion Acquired!",
+              "scanText": "Power Bomb Expansion",
+              "hudmemoText": "Power Bomb Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Missile",
+              "model": "Power Bomb Expansion",
               "showIcon": true
             }
           ],
@@ -293,10 +293,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Missile Expansion",
-              "hudmemoText": "Missile Expansion Acquired!",
+              "scanText": "Plasma Beam",
+              "hudmemoText": "Plasma Beam Acquired!",
               "currIncrease": 0,
-              "model": "Missile",
+              "model": "Plasma Beam",
               "showIcon": true
             }
           ],
@@ -306,10 +306,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Energy Tank",
-              "hudmemoText": "Energy Tank Acquired!",
+              "scanText": "Missile Expansion",
+              "hudmemoText": "Missile Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Energy Tank",
+              "model": "Missile",
               "showIcon": true
             }
           ],
@@ -340,10 +340,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Power Bomb Expansion",
-              "hudmemoText": "Power Bomb Expansion Acquired!",
+              "scanText": "Boost Ball",
+              "hudmemoText": "Boost Ball Acquired!",
               "currIncrease": 0,
-              "model": "Power Bomb Expansion",
+              "model": "Boost Ball",
               "showIcon": true
             }
           ],
@@ -357,10 +357,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Missile Expansion",
-              "hudmemoText": "Missile Expansion Acquired!",
+              "scanText": "Power Bomb Expansion",
+              "hudmemoText": "Power Bomb Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Missile",
+              "model": "Power Bomb Expansion",
               "showIcon": true
             }
           ],
@@ -378,10 +378,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "X-Ray Visor",
-              "hudmemoText": "X-Ray Visor Acquired!",
+              "scanText": "Missile Expansion",
+              "hudmemoText": "Missile Expansion Acquired!",
               "currIncrease": 0,
-              "model": "X-Ray Visor",
+              "model": "Missile",
               "showIcon": true
             }
           ],
@@ -391,10 +391,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Artifact of Spirit",
-              "hudmemoText": "Artifact of Spirit Acquired!",
+              "scanText": "Space Jump Boots",
+              "hudmemoText": "Space Jump Boots Acquired!",
               "currIncrease": 0,
-              "model": "Artifact of Spirit",
+              "model": "Space Jump Boots",
               "showIcon": true
             }
           ],
@@ -404,10 +404,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Artifact of Wild",
-              "hudmemoText": "Artifact of Wild Acquired!",
+              "scanText": "Missile Expansion",
+              "hudmemoText": "Missile Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Artifact of Wild",
+              "model": "Missile",
               "showIcon": true
             }
           ],
@@ -451,10 +451,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Missile Expansion",
-              "hudmemoText": "Missile Expansion Acquired!",
+              "scanText": "Charge Beam",
+              "hudmemoText": "Charge Beam Acquired!",
               "currIncrease": 0,
-              "model": "Missile",
+              "model": "Charge Beam",
               "showIcon": true
             }
           ],
@@ -524,10 +524,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Missile Expansion",
-              "hudmemoText": "Missile Expansion Acquired!",
+              "scanText": "X-Ray Visor",
+              "hudmemoText": "X-Ray Visor Acquired!",
               "currIncrease": 0,
-              "model": "Missile",
+              "model": "X-Ray Visor",
               "showIcon": true
             }
           ],
@@ -673,10 +673,10 @@
             },
             {
               "type": "Unknown Item 1",
-              "scanText": "Energy Tank",
-              "hudmemoText": "Energy Tank Acquired!",
+              "scanText": "Artifact of Newborn",
+              "hudmemoText": "Artifact of Newborn Acquired!",
               "currIncrease": 0,
-              "model": "Energy Tank",
+              "model": "Artifact of Newborn",
               "showIcon": true
             }
           ],
@@ -809,10 +809,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Power Bomb Expansion",
-              "hudmemoText": "Power Bomb Expansion Acquired!",
+              "scanText": "Energy Tank",
+              "hudmemoText": "Energy Tank Acquired!",
               "currIncrease": 0,
-              "model": "Power Bomb Expansion",
+              "model": "Energy Tank",
               "showIcon": true
             }
           ],
@@ -919,18 +919,18 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Artifact of Lifegiver",
-              "hudmemoText": "Artifact of Lifegiver Acquired!",
+              "scanText": "Morph Ball Bomb",
+              "hudmemoText": "Morph Ball Bomb Acquired!",
               "currIncrease": 0,
-              "model": "Artifact of Lifegiver",
+              "model": "Morph Ball Bomb",
               "showIcon": true
             },
             {
               "type": "Unknown Item 1",
-              "scanText": "Energy Tank",
-              "hudmemoText": "Energy Tank Acquired!",
+              "scanText": "Artifact of Spirit",
+              "hudmemoText": "Artifact of Spirit Acquired!",
               "currIncrease": 0,
-              "model": "Energy Tank",
+              "model": "Artifact of Spirit",
               "showIcon": true
             }
           ],
@@ -940,10 +940,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Plasma Beam",
-              "hudmemoText": "Plasma Beam Acquired!",
+              "scanText": "Energy Tank",
+              "hudmemoText": "Energy Tank Acquired!",
               "currIncrease": 0,
-              "model": "Plasma Beam",
+              "model": "Energy Tank",
               "showIcon": true
             }
           ],
@@ -969,18 +969,18 @@
             },
             {
               "type": "Unknown Item 1",
-              "scanText": "Spider Ball",
-              "hudmemoText": "Spider Ball Acquired!",
+              "scanText": "Energy Tank",
+              "hudmemoText": "Energy Tank Acquired!",
               "currIncrease": 0,
-              "model": "Spider Ball",
+              "model": "Energy Tank",
               "showIcon": true
             },
             {
               "type": "Unknown Item 1",
-              "scanText": "Boost Ball",
-              "hudmemoText": "Boost Ball Acquired!",
+              "scanText": "Spider Ball",
+              "hudmemoText": "Spider Ball Acquired!",
               "currIncrease": 0,
-              "model": "Boost Ball",
+              "model": "Spider Ball",
               "showIcon": true
             }
           ],
@@ -1034,18 +1034,18 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Missile Expansion",
-              "hudmemoText": "Missile Expansion Acquired!",
+              "scanText": "Power Bomb Expansion",
+              "hudmemoText": "Power Bomb Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Missile",
+              "model": "Power Bomb Expansion",
               "showIcon": true
             },
             {
               "type": "Unknown Item 1",
-              "scanText": "Energy Tank",
-              "hudmemoText": "Energy Tank Acquired!",
+              "scanText": "Missile Expansion",
+              "hudmemoText": "Missile Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Energy Tank",
+              "model": "Missile",
               "showIcon": true
             }
           ],
@@ -1059,10 +1059,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Missile Expansion",
-              "hudmemoText": "Missile Expansion Acquired!",
+              "scanText": "Artifact of Truth",
+              "hudmemoText": "Artifact of Truth Acquired!",
               "currIncrease": 0,
-              "model": "Missile",
+              "model": "Artifact of Truth",
               "showIcon": true
             }
           ],
@@ -1076,10 +1076,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Artifact of Strength",
-              "hudmemoText": "Artifact of Strength Acquired!",
+              "scanText": "Artifact of World",
+              "hudmemoText": "Artifact of World Acquired!",
               "currIncrease": 0,
-              "model": "Artifact of Strength",
+              "model": "Artifact of World",
               "showIcon": true
             }
           ],
@@ -1102,10 +1102,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Missile Expansion",
-              "hudmemoText": "Missile Expansion Acquired!",
+              "scanText": "Artifact of Strength",
+              "hudmemoText": "Artifact of Strength Acquired!",
               "currIncrease": 0,
-              "model": "Missile",
+              "model": "Artifact of Strength",
               "showIcon": true
             }
           ],
@@ -1169,10 +1169,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Missile Expansion",
-              "hudmemoText": "Missile Expansion Acquired!",
+              "scanText": "Artifact of Nature",
+              "hudmemoText": "Artifact of Nature Acquired!",
               "currIncrease": 0,
-              "model": "Missile",
+              "model": "Artifact of Nature",
               "showIcon": true
             }
           ],
@@ -1186,18 +1186,18 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Morph Ball Bomb",
-              "hudmemoText": "Morph Ball Bomb Acquired!",
+              "scanText": "Missile Expansion",
+              "hudmemoText": "Missile Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Morph Ball Bomb",
+              "model": "Missile",
               "showIcon": true
             },
             {
               "type": "Unknown Item 1",
-              "scanText": "Charge Beam",
-              "hudmemoText": "Charge Beam Acquired!",
+              "scanText": "Artifact of Wild",
+              "hudmemoText": "Artifact of Wild Acquired!",
               "currIncrease": 0,
-              "model": "Charge Beam",
+              "model": "Artifact of Wild",
               "showIcon": true
             }
           ],
@@ -1237,10 +1237,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Artifact of World",
-              "hudmemoText": "Artifact of World Acquired!",
+              "scanText": "Missile Expansion",
+              "hudmemoText": "Missile Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Artifact of World",
+              "model": "Missile",
               "showIcon": true
             },
             {
@@ -1308,10 +1308,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Artifact of Elder",
-              "hudmemoText": "Artifact of Elder Acquired!",
+              "scanText": "Missile Expansion",
+              "hudmemoText": "Missile Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Artifact of Elder",
+              "model": "Missile",
               "showIcon": true
             }
           ],
@@ -1341,10 +1341,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Artifact of Chozo",
-              "hudmemoText": "Artifact of Chozo Acquired!",
+              "scanText": "Grapple Beam",
+              "hudmemoText": "Grapple Beam Acquired!",
               "currIncrease": 0,
-              "model": "Artifact of Chozo",
+              "model": "Grapple Beam",
               "showIcon": true
             }
           ],
@@ -1358,10 +1358,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Artifact of Warrior",
-              "hudmemoText": "Artifact of Warrior Acquired!",
+              "scanText": "Artifact of Chozo",
+              "hudmemoText": "Artifact of Chozo Acquired!",
               "currIncrease": 0,
-              "model": "Artifact of Warrior",
+              "model": "Artifact of Chozo",
               "showIcon": true
             }
           ],
@@ -1395,10 +1395,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Missile Expansion",
-              "hudmemoText": "Missile Expansion Acquired!",
+              "scanText": "Ice Beam",
+              "hudmemoText": "Ice Beam Acquired!",
               "currIncrease": 0,
-              "model": "Missile",
+              "model": "Ice Beam",
               "showIcon": true
             }
           ],
@@ -1416,10 +1416,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Flamethrower",
-              "hudmemoText": "Flamethrower Acquired!",
+              "scanText": "Missile Expansion",
+              "hudmemoText": "Missile Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Flamethrower",
+              "model": "Missile",
               "showIcon": true
             }
           ],
@@ -1437,10 +1437,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Gravity Suit",
-              "hudmemoText": "Gravity Suit Acquired!",
+              "scanText": "Flamethrower",
+              "hudmemoText": "Flamethrower Acquired!",
               "currIncrease": 0,
-              "model": "Gravity Suit",
+              "model": "Flamethrower",
               "showIcon": true
             }
           ],
@@ -1554,18 +1554,18 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Grapple Beam",
-              "hudmemoText": "Grapple Beam Acquired!",
+              "scanText": "Artifact of Lifegiver",
+              "hudmemoText": "Artifact of Lifegiver Acquired!",
               "currIncrease": 0,
-              "model": "Grapple Beam",
+              "model": "Artifact of Lifegiver",
               "showIcon": true
             },
             {
               "type": "Unknown Item 1",
-              "scanText": "Artifact of Newborn",
-              "hudmemoText": "Artifact of Newborn Acquired!",
+              "scanText": "Missile Expansion",
+              "hudmemoText": "Missile Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Artifact of Newborn",
+              "model": "Missile",
               "showIcon": true
             }
           ],
@@ -1591,10 +1591,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Space Jump Boots",
-              "hudmemoText": "Space Jump Boots Acquired!",
+              "scanText": "Artifact of Elder",
+              "hudmemoText": "Artifact of Elder Acquired!",
               "currIncrease": 0,
-              "model": "Space Jump Boots",
+              "model": "Artifact of Elder",
               "showIcon": true
             },
             {
@@ -1612,10 +1612,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Ice Beam",
-              "hudmemoText": "Ice Beam Acquired!",
+              "scanText": "Energy Tank",
+              "hudmemoText": "Energy Tank Acquired!",
               "currIncrease": 0,
-              "model": "Ice Beam",
+              "model": "Energy Tank",
               "showIcon": true
             }
           ],
@@ -1649,10 +1649,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Missile Expansion",
-              "hudmemoText": "Missile Expansion Acquired!",
+              "scanText": "Energy Tank",
+              "hudmemoText": "Energy Tank Acquired!",
               "currIncrease": 0,
-              "model": "Missile",
+              "model": "Energy Tank",
               "showIcon": true
             }
           ],
@@ -1666,10 +1666,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Energy Tank",
-              "hudmemoText": "Energy Tank Acquired!",
+              "scanText": "Missile Expansion",
+              "hudmemoText": "Missile Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Energy Tank",
+              "model": "Missile",
               "showIcon": true
             }
           ],
@@ -1716,10 +1716,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Artifact of Nature",
-              "hudmemoText": "Artifact of Nature Acquired!",
+              "scanText": "Missile Expansion",
+              "hudmemoText": "Missile Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Artifact of Nature",
+              "model": "Missile",
               "showIcon": true
             }
           ],
@@ -1763,10 +1763,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Missile Expansion",
-              "hudmemoText": "Missile Expansion Acquired!",
+              "scanText": "Energy Tank",
+              "hudmemoText": "Energy Tank Acquired!",
               "currIncrease": 0,
-              "model": "Missile",
+              "model": "Energy Tank",
               "showIcon": true
             },
             {
@@ -1784,10 +1784,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Ice Spreader",
-              "hudmemoText": "Ice Spreader Acquired!",
+              "scanText": "Missile Expansion",
+              "hudmemoText": "Missile Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Ice Spreader",
+              "model": "Missile",
               "showIcon": true
             }
           ],
@@ -1797,10 +1797,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Artifact of Truth",
-              "hudmemoText": "Artifact of Truth Acquired!",
+              "scanText": "Ice Spreader",
+              "hudmemoText": "Ice Spreader Acquired!",
               "currIncrease": 0,
-              "model": "Artifact of Truth",
+              "model": "Ice Spreader",
               "showIcon": true
             }
           ],
@@ -1842,10 +1842,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Power Bomb Expansion",
-              "hudmemoText": "Power Bomb Expansion Acquired!",
+              "scanText": "Artifact of Warrior",
+              "hudmemoText": "Artifact of Warrior Acquired!",
               "currIncrease": 0,
-              "model": "Power Bomb Expansion",
+              "model": "Artifact of Warrior",
               "showIcon": true
             }
           ],
@@ -1867,10 +1867,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Thermal Visor",
-              "hudmemoText": "Thermal Visor Acquired!",
+              "scanText": "Energy Tank",
+              "hudmemoText": "Energy Tank Acquired!",
               "currIncrease": 0,
-              "model": "Thermal Visor",
+              "model": "Energy Tank",
               "showIcon": true
             }
           ],
@@ -1884,10 +1884,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Wavebuster",
-              "hudmemoText": "Wavebuster Acquired!",
+              "scanText": "Thermal Visor",
+              "hudmemoText": "Thermal Visor Acquired!",
               "currIncrease": 0,
-              "model": "Wavebuster",
+              "model": "Thermal Visor",
               "showIcon": true
             }
           ],
@@ -1966,10 +1966,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Phazon Suit",
-              "hudmemoText": "Phazon Suit Acquired!",
+              "scanText": "Missile Expansion",
+              "hudmemoText": "Missile Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Phazon Suit",
+              "model": "Missile",
               "showIcon": true
             }
           ],
@@ -1987,10 +1987,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Missile Expansion",
-              "hudmemoText": "Missile Expansion Acquired!",
+              "scanText": "Phazon Suit",
+              "hudmemoText": "Phazon Suit Acquired!",
               "currIncrease": 0,
-              "model": "Missile",
+              "model": "Phazon Suit",
               "showIcon": true
             }
           ],
@@ -2000,18 +2000,18 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Super Missile",
-              "hudmemoText": "Super Missile Acquired!",
+              "scanText": "Wavebuster",
+              "hudmemoText": "Wavebuster Acquired!",
               "currIncrease": 0,
-              "model": "Super Missile",
+              "model": "Wavebuster",
               "showIcon": true
             },
             {
               "type": "Unknown Item 1",
-              "scanText": "Energy Tank",
-              "hudmemoText": "Energy Tank Acquired!",
+              "scanText": "Super Missile",
+              "hudmemoText": "Super Missile Acquired!",
               "currIncrease": 0,
-              "model": "Energy Tank",
+              "model": "Super Missile",
               "showIcon": true
             }
           ],
@@ -2025,10 +2025,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Missile Expansion",
-              "hudmemoText": "Missile Expansion Acquired!",
+              "scanText": "Gravity Suit",
+              "hudmemoText": "Gravity Suit Acquired!",
               "currIncrease": 0,
-              "model": "Missile",
+              "model": "Gravity Suit",
               "showIcon": true
             }
           ],
@@ -2051,10 +2051,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Energy Tank",
-              "hudmemoText": "Energy Tank Acquired!",
+              "scanText": "Missile Expansion",
+              "hudmemoText": "Missile Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Energy Tank",
+              "model": "Missile",
               "showIcon": true
             }
           ],
@@ -2114,10 +2114,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Energy Tank",
-              "hudmemoText": "Energy Tank Acquired!",
+              "scanText": "Missile Expansion",
+              "hudmemoText": "Missile Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Energy Tank",
+              "model": "Missile",
               "showIcon": true
             }
           ],
@@ -2127,10 +2127,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Missile Expansion",
-              "hudmemoText": "Missile Expansion Acquired!",
+              "scanText": "Energy Tank",
+              "hudmemoText": "Energy Tank Acquired!",
               "currIncrease": 0,
-              "model": "Missile",
+              "model": "Energy Tank",
               "showIcon": true
             }
           ],
@@ -2211,10 +2211,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Energy Tank",
-              "hudmemoText": "Energy Tank Acquired!",
+              "scanText": "Missile Expansion",
+              "hudmemoText": "Missile Expansion Acquired!",
               "currIncrease": 0,
-              "model": "Energy Tank",
+              "model": "Missile",
               "showIcon": true
             }
           ],
@@ -2236,10 +2236,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Missile Expansion",
-              "hudmemoText": "Missile Expansion Acquired!",
+              "scanText": "Energy Tank",
+              "hudmemoText": "Energy Tank Acquired!",
               "currIncrease": 0,
-              "model": "Missile",
+              "model": "Energy Tank",
               "showIcon": true
             }
           ],

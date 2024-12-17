@@ -919,10 +919,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Morph Ball",
-              "hudmemoText": "Morph Ball Acquired!",
+              "scanText": "Morph Ball Bomb",
+              "hudmemoText": "Morph Ball Bomb Acquired!",
               "currIncrease": 0,
-              "model": "Morph Ball",
+              "model": "Morph Ball Bomb",
               "showIcon": true
             },
             {
@@ -961,10 +961,10 @@
           "pickups": [
             {
               "type": "Unknown Item 1",
-              "scanText": "Morph Ball Bomb",
-              "hudmemoText": "Morph Ball Bomb Acquired!",
+              "scanText": "Morph Ball",
+              "hudmemoText": "Morph Ball Acquired!",
               "currIncrease": 0,
-              "model": "Morph Ball Bomb",
+              "model": "Morph Ball",
               "showIcon": true
             },
             {

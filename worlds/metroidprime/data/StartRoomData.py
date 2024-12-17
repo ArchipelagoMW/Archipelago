@@ -476,16 +476,17 @@ def init_starting_loadout(world: "MetroidPrimeWorld"):
 
     # If we are preventing bk then set a few items for prefill if available
     if not disable_bk_prevention:
-        for mapping in world.starting_room_data.selected_loadout.item_rules:
+        if len(world.starting_room_data.selected_loadout.item_rules):
+            mapping = world.random.choice(
+                world.starting_room_data.selected_loadout.item_rules
+            )
+
             for location_name, potential_items in mapping.items():
                 required_item = get_item_for_options(
                     world, world.random.choice(potential_items)
                 )
-                if (
-                    required_item.value
-                    not in world.options.start_inventory_from_pool.value.keys()
-                ):
-                    world.prefilled_item_map[location_name] = required_item.value
+                world.prefilled_item_map[location_name] = required_item.value
+
         if world.starting_room_data.local_early_items:
             for item in world.starting_room_data.local_early_items:
                 options_item = get_item_for_options(world, item)
