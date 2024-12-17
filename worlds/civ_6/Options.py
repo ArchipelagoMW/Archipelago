@@ -1,5 +1,13 @@
 from dataclasses import dataclass
-from Options import Choice, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions, Range, StartInventoryPool, Toggle
+from Options import (
+    Choice,
+    DefaultOnToggle,
+    OptionSet,
+    PerGameCommonOptions,
+    Range,
+    StartInventoryPool,
+    Toggle,
+)
 from .Enum import CivVIHintClassification
 
 
@@ -13,6 +21,7 @@ class ProgressionStyle(Choice):
 
     **None**: No progressive items will be included. This means you can get district upgrades that won't be usable until the relevant district is unlocked.
     """
+
     rich_text_doc = True
     display_name = "Progression Style"
     option_districts_only = 0
@@ -23,7 +32,9 @@ class ProgressionStyle(Choice):
 
 class ShuffleGoodyHuts(DefaultOnToggle):
     """Shuffles the goody hut rewards.
-    Goody huts will only contain junk items and locations are checked sequentially (First goody hut gives GOODY_HUT_1, second gives GOODY_HUT_2, etc.)."""
+    Goody huts will only contain junk items and locations are checked sequentially (First goody hut gives GOODY_HUT_1, second gives GOODY_HUT_2, etc.).
+    """
+
     display_name = "Shuffle Goody Hut Rewards"
 
 
@@ -33,12 +44,14 @@ class BoostSanity(Toggle):
 
     **Note**: If a boost is dependent upon a unit that is now obsolete, you can click to toggle on/off the relevant tech in
     the tech tree."""
+
     rich_text_doc = True
     display_name = "Boostsanity"
 
 
 class ResearchCostMultiplier(Range):
     """Multiplier for research cost of techs and civics, higher values make research more expensive."""
+
     display_name = "Tech/Civic Cost Multiplier"
     range_start = 50
     range_end = 150
@@ -51,6 +64,7 @@ class PreHintItems(OptionSet):
     **Useful**: Include Useful items in hints
     **Filler**: Include Filler items in hints
     """
+
     display_name = "Tech/Civic Tree pre-hinted Items"
     valid_keys = [classificaiton.value for classificaiton in CivVIHintClassification]  # type: ignore
 
@@ -58,12 +72,20 @@ class PreHintItems(OptionSet):
 class HideItemNames(Toggle):
     """Each Tech and Civic Location will have a title of 'Unrevealed' until its prereqs have been researched. Note that
     hints will still be precollected if that option is enabled."""
+
     display_name = "Hide Item Names"
 
 
 class InGameFlagProgressionItems(DefaultOnToggle):
     """If enabled, an advisor icon will be added to any location that contains a progression item."""
+
     display_name = "Advisor Indicates Progression Items"
+
+
+class CivDeathLink(Toggle):
+    """If enabled, losing a unit will trigger a death link effect on other players in the multiworld. When a death link is received, the player will receive the effect specified in 'Death Link Effect'."""
+
+    display_name = "Death Link"
 
 
 class DeathLinkEffect(OptionSet):
@@ -77,6 +99,7 @@ class DeathLinkEffect(OptionSet):
 
     **Era Score**: Era score is decreased by 1.
     """
+
     rich_text_doc = True
     display_name = "Death Link Effect"
     valid_keys = ["Unit Killed", "Faith", "Gold", "Era Score"]  # type: ignore
@@ -85,6 +108,7 @@ class DeathLinkEffect(OptionSet):
 
 class DeathLinkEffectPercent(Range):
     """The percentage of the effect that will be applied. Only applicable for Gold and Faith effects."""
+
     display_name = "Death Link Effect Percent"
     default = 20
     range_start = 1
@@ -101,6 +125,6 @@ class CivVIOptions(PerGameCommonOptions):
     pre_hint_items: PreHintItems
     hide_item_names: HideItemNames
     advisor_show_progression_items: InGameFlagProgressionItems
-    death_link: DeathLink
+    death_link: CivDeathLink
     death_link_effect: DeathLinkEffect
     death_link_effect_percent: DeathLinkEffectPercent
