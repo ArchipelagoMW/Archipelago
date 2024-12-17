@@ -8,7 +8,6 @@ from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, Mu
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import launch_subprocess, components, Component, icon_paths, Type
-from . import rules
 from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles
 from .content import StardewContent, create_content
