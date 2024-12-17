@@ -301,11 +301,17 @@ class AreaData:
                 target_region = world.get_region(
                     door_data.get_destination_region_name()
                 )
-                region.connect(
+                entrance = region.connect(
                     target_region,
                     get_connection_name(door_data),
                     lambda state, w=world, dd=door_data: _can_access_door(w, state, dd),
                 )
+
+                if door_data.indirect_condition_rooms:
+                    for indirect_condition_room in door_data.indirect_condition_rooms:
+                        world.multiworld.register_indirect_condition(
+                            world.get_region(indirect_condition_room.value), entrance
+                        )
 
                 if door_data.sub_region_door_index is not None:
                     assert room_data.area

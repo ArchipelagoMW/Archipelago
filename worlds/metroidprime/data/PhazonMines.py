@@ -521,6 +521,7 @@ class PhazonMinesAreaData(AreaData):
                             and can_grapple(world, state)
                         ),
                         tricks=[Tricks.ore_processing_to_storage_depot_b_no_spider],
+                        indirect_condition_rooms=[RoomName.Waste_Disposal],
                     ),
                     2: DoorData(
                         RoomName.Waste_Disposal,

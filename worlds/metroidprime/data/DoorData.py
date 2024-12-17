@@ -31,6 +31,7 @@ class DoorData:
     sub_region_access_override: Optional[
         Callable[["MetroidPrimeWorld", CollectionState], bool]
     ] = None  # Used to override the access check for reaching this door, if necessary when connecting it to a sub region
+    indirect_condition_rooms: Optional[List[RoomName]] = None
 
     def get_destination_region_name(self) -> str:
         assert self.default_destination is not None
