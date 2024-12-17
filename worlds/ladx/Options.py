@@ -366,7 +366,7 @@ class LowHpBeep(Choice, LADXROption):
 
 class NoFlash(DefaultOnToggle, LADXROption):
     """
-    Remove the flashing light effects from Mamu, shopkeeper and MadBatter. Useful for capture cards and people that are sensitive for these things.
+    Remove the flashing light effects from Mamu, shopkeeper and MadBatter. Useful for capture cards and people that are sensitive to these things.
     """
     display_name = "No Flash"
     ladxr_name = "noflash"
