@@ -374,25 +374,29 @@ class TunicWorld(World):
     def stage_pre_fill(cls, multiworld: MultiWorld) -> None:
         tunic_grass_worlds: List[TunicWorld] = [world for world in multiworld.get_game_worlds("TUNIC")
                                                 if world.options.grass_randomizer]
-        tunic_players_with_grass: List[int] = [world.player for world in tunic_grass_worlds]
-        # we need to reserve a couple locations so that we don't fill up every sphere 1 location
-        reserved_locations: Set[str] = set(multiworld.random.sample(sphere_one, 2))
-        unfilled_locations = [loc for loc in multiworld.get_unfilled_locations_for_players(
-            location_names=[], players=tunic_players_with_grass) if loc.progress_type != LocationProgressType.PRIORITY
-                              and loc.name not in reserved_locations]
-        grass_filler_items: List[TunicItem] = []
-        for world in tunic_grass_worlds:
-            grass_filler_items.extend(world.local_filler)
+        if tunic_grass_worlds:
+            tunic_players_with_grass: List[int] = [world.player for world in tunic_grass_worlds]
 
-        grass_filler_count = len(grass_filler_items)
-        # in case you plando or priority a bunch of locations
-        if len(unfilled_locations) < grass_filler_count:
-            raise Exception("Not enough locations for TUNIC grass randomizer players to place grass fill into TUNIC "
-                            "locations. This is likely due to excessive priority locations or plando.")
+            grass_filler_items: List[TunicItem] = []
+            for world in tunic_grass_worlds:
+                grass_filler_items.extend(world.local_filler)
 
-        locations_to_grass_fill = multiworld.random.sample(unfilled_locations, grass_filler_count)
-        for loc in locations_to_grass_fill:
-            multiworld.push_item(loc, grass_filler_items.pop(), collect=False)
+            if grass_filler_items:
+                # we need to reserve a couple locations so that we don't fill up every sphere 1 location
+                reserved_locations: Set[str] = set(multiworld.random.sample(sphere_one, 2))
+                unfilled_locations = [loc for loc in multiworld.get_unfilled_locations_for_players(
+                    location_names=[], players=tunic_players_with_grass) if loc.progress_type != LocationProgressType.PRIORITY
+                                      and loc.name not in reserved_locations]
+
+                grass_filler_count = len(grass_filler_items)
+                # in case you plando or priority a bunch of locations
+                if len(unfilled_locations) < grass_filler_count:
+                    raise Exception("Not enough locations for TUNIC grass randomizer players to place grass fill into TUNIC "
+                                    "locations. This is likely due to excessive priority locations or plando.")
+
+                locations_to_grass_fill = multiworld.random.sample(unfilled_locations, grass_filler_count)
+                for loc in locations_to_grass_fill:
+                    multiworld.push_item(loc, grass_filler_items.pop(), collect=False)
 
     def create_regions(self) -> None:
         self.tunic_portal_pairs = {}
