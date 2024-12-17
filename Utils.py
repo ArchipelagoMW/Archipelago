@@ -151,8 +151,11 @@ def home_path(*path: str) -> str:
     """Returns path to a file in the user home's Archipelago directory."""
     if hasattr(home_path, 'cached_path'):
         pass
-    elif sys.platform.startswith('linux') or sys.platform == 'darwin':
+    elif sys.platform.startswith('linux'):
         home_path.cached_path = os.path.expanduser('~/Archipelago')
+        os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
+    elif sys.platform == 'darwin':
+        home_path.cached_path = os.path.expanduser('~/Library/Application Support/Archipelago')
         os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
     else:
         # not implemented
