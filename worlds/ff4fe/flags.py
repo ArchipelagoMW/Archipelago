@@ -74,9 +74,9 @@ def build_characters_flags(options: FF4FEOptions):
     if options.CharactersPermajoin:
         permajoin_flags = "permajoin/"
     permadeath_flags = ""
-    if options.CharactersPermajoin.current_key == "yes":
+    if options.CharactersPermadie.current_key == "yes":
         permadeath_flags = "permadeath/"
-    if options.CharactersPermajoin.current_key == "extreme":
+    if options.CharactersPermadie.current_key == "extreme":
         permadeath_flags = "permadeader/"
     flags = (f"{party_size_flags}{hero_challenge_flags}"
              f"{free_character_flags}{duplicate_character_flags}"

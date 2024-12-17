@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 ROM_NAME = 0x007FC0
 sentinel_addresses = [ # A list of memory addresses that amounts to "are we in a cutscene or battle or menu".
-    0xF506B1, 0xF506D9, 0xF50650, 0xF50140, 0xF50685, 0xE070FD, 0xF5FF28
+    0xF506B1, 0xF506D9, 0xF50650, 0xF50140, 0xF50685, 0xE070FD
 ]
 inventory_start_location = 0xF51440
 inventory_size = 96

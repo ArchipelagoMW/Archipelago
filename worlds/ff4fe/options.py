@@ -224,7 +224,7 @@ class WackyChallenge(Choice):
     option_mystery_juice = 18
     option_neat_freak = 19
     option_night_mode = 20
-    option_omnidexterous = 21
+    option_omnidextrous = 21
     option_payable_golbez = 22
     option_save_us_big_chocobo = 23
     option_six_legged_race = 24
@@ -393,6 +393,7 @@ ff4fe_option_groups = [
     OptionGroup("Item Options", [
         ItemPlacement,
         UsefulPercentage,
+        PassEnabled,
         PassInShops,
         MinTier,
         MaxTier,
