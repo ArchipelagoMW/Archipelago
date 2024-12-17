@@ -356,18 +356,16 @@ class TunicWorld(World):
                 self.options.non_local_items.value.discard("Grass")
             all_filler: List[TunicItem] = []
             non_filler: List[TunicItem] = []
-            amount_to_local_fill = int(self.options.local_fill.value * len(all_filler) / 100)
             for tunic_item in tunic_items:
                 if (tunic_item.classification in [ItemClassification.filler, ItemClassification.trap]
                         and tunic_item.name not in self.options.local_items
                         and tunic_item.name not in self.options.non_local_items):
-                    if len(self.local_filler) < amount_to_local_fill:
-                        self.local_filler.append(tunic_item)
-                    else:
-                        all_filler.append(tunic_item)
+                    all_filler.append(tunic_item)
                 else:
                     non_filler.append(tunic_item)
-
+            amount_to_local_fill = int(self.options.local_fill.value * len(all_filler) / 100)
+            self.local_filler = all_filler[:amount_to_local_fill]
+            del all_filler[:amount_to_local_fill]
             tunic_items = all_filler + non_filler
 
         self.multiworld.itempool += tunic_items
