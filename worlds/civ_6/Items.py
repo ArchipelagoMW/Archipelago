@@ -1,20 +1,25 @@
 from enum import Enum
 from typing import Dict, Optional, TYPE_CHECKING, List
 from BaseClasses import Item, ItemClassification
-from .Data import GoodyHutRewardData, get_era_required_items_data, get_existing_civics_data, get_existing_techs_data, get_goody_hut_rewards_data, get_progressive_districts_data
+from .Data import (
+    GoodyHutRewardData,
+    get_era_required_items_data,
+    get_existing_civics_data,
+    get_existing_techs_data,
+    get_goody_hut_rewards_data,
+    get_progressive_districts_data,
+)
 from .Enum import CivVICheckType, EraType
 from .ProgressiveDistricts import get_flat_progressive_districts
+
 if TYPE_CHECKING:
     from . import CivVIWorld
 
-_items_by_civ_name: Dict[str, 'CivVIItemData'] = {}
+_items_by_civ_name: Dict[str, "CivVIItemData"] = {}
 
 CIV_VI_AP_ITEM_ID_BASE = 5041000
 
-NON_PROGRESSION_DISTRICTS = [
-    "PROGRESSIVE_PRESERVE",
-    "PROGRESSIVE_NEIGHBORHOOD"
-]
+NON_PROGRESSION_DISTRICTS = ["PROGRESSIVE_PRESERVE", "PROGRESSIVE_NEIGHBORHOOD"]
 
 
 # Items required as progression for boostsanity mode
@@ -48,7 +53,7 @@ BOOSTSANITY_PROGRESSION_ITEMS = [
     "CIVIC_NATIONALISM",
     "CIVIC_MOBILIZATION",
     "PROGRESSIVE_NEIGHBORHOOD",
-    "PROGRESSIVE_PRESERVE"
+    "PROGRESSIVE_PRESERVE",
 ]
 
 
@@ -77,7 +82,9 @@ class FillerItemData:
         self.civ_name = data["Type"]
 
 
-filler_data: Dict[str, FillerItemData] = {item["Name"]: FillerItemData(item) for item in get_goody_hut_rewards_data()}
+filler_data: Dict[str, FillerItemData] = {
+    item["Name"]: FillerItemData(item) for item in get_goody_hut_rewards_data()
+}
 
 
 class CivVIItemData:
@@ -91,7 +98,18 @@ class CivVIItemData:
     civ_name: Optional[str]
     era: Optional[EraType]
 
-    def __init__(self, name: str, civ_vi_id: int, cost: int, item_type: CivVICheckType, id_offset: int, classification: ItemClassification, progression_name: Optional[str], civ_name: Optional[str] = None, era: Optional[EraType] = None):
+    def __init__(
+        self,
+        name: str,
+        civ_vi_id: int,
+        cost: int,
+        item_type: CivVICheckType,
+        id_offset: int,
+        classification: ItemClassification,
+        progression_name: Optional[str],
+        civ_name: Optional[str] = None,
+        era: Optional[EraType] = None,
+    ):
         self.classification = classification
         self.civ_vi_id = civ_vi_id
         self.name = name
@@ -112,8 +130,15 @@ class CivVIItem(Item):
     civ_vi_id: int
     item_type: CivVICheckType
 
-    def __init__(self, item: CivVIItemData, player: int, classification: Optional[ItemClassification] = None):
-        super().__init__(item.name, classification or item.classification, item.code, player)
+    def __init__(
+        self,
+        item: CivVIItemData,
+        player: int,
+        classification: Optional[ItemClassification] = None,
+    ):
+        super().__init__(
+            item.name, classification or item.classification, item.code, player
+        )
         self.civ_vi_id = item.civ_vi_id
         self.item_type = item.item_type
 
@@ -123,11 +148,15 @@ def format_item_name(name: str) -> str:
     return " ".join([part.capitalize() for part in name_parts])
 
 
-def get_item_by_civ_name(item_name: str, item_table: Dict[str, 'CivVIItemData']) -> 'CivVIItemData':
+def get_item_by_civ_name(
+    item_name: str, item_table: Dict[str, "CivVIItemData"]
+) -> "CivVIItemData":
     """Gets the names of the items in the item_table"""
     global _items_by_civ_name
     if not _items_by_civ_name:
-        _items_by_civ_name = {item.civ_name: item for item in item_table.values() if item.civ_name}
+        _items_by_civ_name = {
+            item.civ_name: item for item in item_table.values() if item.civ_name
+        }
 
     item = _items_by_civ_name.get(item_name, None)
     if not item:
@@ -135,7 +164,9 @@ def get_item_by_civ_name(item_name: str, item_table: Dict[str, 'CivVIItemData'])
     return item
 
 
-def _generate_tech_items(id_base: int, required_items: List[str], progressive_items: Dict[str, str]) -> Dict[str, CivVIItemData]:
+def _generate_tech_items(
+    id_base: int, required_items: List[str], progressive_items: Dict[str, str]
+) -> Dict[str, CivVIItemData]:
     # Generate Techs
     existing_techs = get_existing_techs_data()
     tech_table: Dict[str, CivVIItemData] = {}
@@ -161,7 +192,7 @@ def _generate_tech_items(id_base: int, required_items: List[str], progressive_it
             classification=classification,
             progression_name=progression_name,
             civ_name=civ_name,
-            era=EraType(tech["EraType"])
+            era=EraType(tech["EraType"]),
         )
 
         tech_id += 1
@@ -169,7 +200,9 @@ def _generate_tech_items(id_base: int, required_items: List[str], progressive_it
     return tech_table
 
 
-def _generate_civics_items(id_base: int, required_items: List[str], progressive_items: Dict[str, str]) -> Dict[str, CivVIItemData]:
+def _generate_civics_items(
+    id_base: int, required_items: List[str], progressive_items: Dict[str, str]
+) -> Dict[str, CivVIItemData]:
     civic_id = 0
     civic_table: Dict[str, CivVIItemData] = {}
     existing_civics = get_existing_civics_data()
@@ -196,7 +229,7 @@ def _generate_civics_items(id_base: int, required_items: List[str], progressive_
             classification=classification,
             progression_name=progression_name,
             civ_name=civ_name,
-            era=EraType(civic["EraType"])
+            era=EraType(civic["EraType"]),
         )
 
         civic_id += 1
@@ -209,7 +242,11 @@ def _generate_progressive_district_items(id_base: int) -> Dict[str, CivVIItemDat
     progressive_id_base = 0
     progressive_items = get_progressive_districts_data()
     for item_name in progressive_items.keys():
-        classification = ItemClassification.useful if item_name in NON_PROGRESSION_DISTRICTS else ItemClassification.progression
+        classification = (
+            ItemClassification.useful
+            if item_name in NON_PROGRESSION_DISTRICTS
+            else ItemClassification.progression
+        )
         name = format_item_name(item_name)
         progressive_table[name] = CivVIItemData(
             name=name,
@@ -219,7 +256,7 @@ def _generate_progressive_district_items(id_base: int) -> Dict[str, CivVIItemDat
             id_offset=id_base,
             classification=classification,
             progression_name=None,
-            civ_name=item_name
+            civ_name=item_name,
         )
         progressive_id_base += 1
     return progressive_table
@@ -238,14 +275,16 @@ def _generate_progressive_era_items(id_base: int) -> Dict[str, CivVIItemData]:
         id_offset=id_base,
         classification=ItemClassification.progression,
         progression_name=None,
-        civ_name="PROGRESSIVE_ERA"
+        civ_name="PROGRESSIVE_ERA",
     )
     return era_table
 
 
 def _generate_goody_hut_items(id_base: int) -> Dict[str, CivVIItemData]:
     # Generate goody hut items
-    goody_huts = {item["Name"]: FillerItemData(item) for item in get_goody_hut_rewards_data()}
+    goody_huts = {
+        item["Name"]: FillerItemData(item) for item in get_goody_hut_rewards_data()
+    }
     goody_table: Dict[str, CivVIItemData] = {}
     goody_base = 0
     for value in goody_huts.values():
@@ -257,7 +296,7 @@ def _generate_goody_hut_items(id_base: int) -> Dict[str, CivVIItemData]:
             id_offset=id_base,
             classification=ItemClassification.filler,
             progression_name=None,
-            civ_name=value.civ_name
+            civ_name=value.civ_name,
         )
         goody_base += 1
     return goody_table
@@ -276,8 +315,12 @@ def generate_item_table() -> Dict[str, CivVIItemData]:
     def get_id_base():
         return len(item_table.keys())
 
-    item_table.update(**_generate_tech_items(get_id_base(), required_items, progressive_items))
-    item_table.update(**_generate_civics_items(get_id_base(), required_items, progressive_items))
+    item_table.update(
+        **_generate_tech_items(get_id_base(), required_items, progressive_items)
+    )
+    item_table.update(
+        **_generate_civics_items(get_id_base(), required_items, progressive_items)
+    )
     item_table.update(**_generate_progressive_district_items(get_id_base()))
     item_table.update(**_generate_progressive_era_items(get_id_base()))
     item_table.update(**_generate_goody_hut_items(get_id_base()))
@@ -285,16 +328,25 @@ def generate_item_table() -> Dict[str, CivVIItemData]:
     return item_table
 
 
-def get_items_by_type(item_type: CivVICheckType, item_table: Dict[str, CivVIItemData]) -> List[CivVIItemData]:
+def get_items_by_type(
+    item_type: CivVICheckType, item_table: Dict[str, CivVIItemData]
+) -> List[CivVIItemData]:
     """
     Returns a list of items that match the given item type
     """
     return [item for item in item_table.values() if item.item_type == item_type]
 
 
-def get_random_filler_by_rarity(world: 'CivVIWorld', rarity: FillerItemRarity) -> FillerItemData:
+fillers_by_rarity: Dict[FillerItemRarity, List[FillerItemData]] = {
+    rarity: [item for item in filler_data.values() if item.rarity == rarity]
+    for rarity in FillerItemRarity
+}
+
+
+def get_random_filler_by_rarity(
+    world: "CivVIWorld", rarity: FillerItemRarity
+) -> FillerItemData:
     """
     Returns a random filler item by rarity
     """
-    items = [item for item in filler_data.values() if item.rarity == rarity]
-    return world.random.choice(items)
+    return world.random.choice(fillers_by_rarity[rarity])
