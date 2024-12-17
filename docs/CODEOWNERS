@@ -45,6 +45,9 @@
 # ChecksFinder
 /worlds/checksfinder/ @SunCatMC
 
+# Civilization VI
+/worlds/civ6/ @hesto2
+
 # Clique
 /worlds/clique/ @ThePhar
 
