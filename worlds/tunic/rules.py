@@ -56,9 +56,8 @@ def has_ability(ability: str, state: CollectionState, world: "TunicWorld") -> bo
 
 
 # a check to see if you can whack things in melee at all
-def has_stick(state: CollectionState, player: int) -> bool:
-    return (state.has("Stick", player) or state.has("Sword Upgrade", player, 1)
-            or state.has("Sword", player))
+def has_melee(state: CollectionState, player: int) -> bool:
+    return state.has_any({"Stick", "Sword", "Sword Upgrade"}, player)
 
 
 def has_sword(state: CollectionState, player: int) -> bool:
@@ -83,7 +82,7 @@ def can_ladder_storage(state: CollectionState, world: "TunicWorld") -> bool:
         return False
     if world.options.ladder_storage_without_items:
         return True
-    return has_stick(state, world.player) or state.has_any((grapple, shield), world.player)
+    return has_melee(state, world.player) or state.has_any((grapple, shield), world.player)
 
 
 def has_mask(state: CollectionState, world: "TunicWorld") -> bool:
@@ -101,7 +100,7 @@ def set_region_rules(world: "TunicWorld") -> None:
     world.get_entrance("Overworld -> Overworld Holy Cross").access_rule = \
         lambda state: has_ability(holy_cross, state, world)
     world.get_entrance("Overworld -> Beneath the Well").access_rule = \
-        lambda state: has_stick(state, player) or state.has(fire_wand, player)
+        lambda state: has_melee(state, player) or state.has(fire_wand, player)
     world.get_entrance("Overworld -> Dark Tomb").access_rule = \
         lambda state: has_lantern(state, world)
     # laurels in, ladder storage in through the furnace, or ice grapple down the belltower
@@ -117,7 +116,7 @@ def set_region_rules(world: "TunicWorld") -> None:
     world.get_entrance("Overworld -> Beneath the Vault").access_rule = \
         lambda state: (has_lantern(state, world) and has_ability(prayer, state, world)
                        # there's some boxes in the way
-                       and (has_stick(state, player) or state.has_any((gun, grapple, fire_wand), player)))
+                       and (has_melee(state, player) or state.has_any((gun, grapple, fire_wand), player)))
     world.get_entrance("Ruined Atoll -> Library").access_rule = \
         lambda state: state.has_any({grapple, laurels}, player) and has_ability(prayer, state, world)
     world.get_entrance("Overworld -> Quarry").access_rule = \
@@ -237,7 +236,7 @@ def set_location_rules(world: "TunicWorld") -> None:
              or (has_lantern(state, world) and (has_sword(state, player) or state.has(fire_wand, player)))
              or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
     set_rule(world.get_location("West Furnace - Lantern Pickup"),
-             lambda state: has_stick(state, player) or state.has_any({fire_wand, laurels}, player))
+             lambda state: has_melee(state, player) or state.has_any({fire_wand, laurels}, player))
 
     set_rule(world.get_location("Secret Gathering Place - 10 Fairy Reward"),
              lambda state: state.has(fairies, player, 10))
@@ -301,18 +300,18 @@ def set_location_rules(world: "TunicWorld") -> None:
 
     # Library Lab
     set_rule(world.get_location("Library Lab - Page 1"),
-             lambda state: has_stick(state, player) or state.has_any((fire_wand, gun), player))
+             lambda state: has_melee(state, player) or state.has_any((fire_wand, gun), player))
     set_rule(world.get_location("Library Lab - Page 2"),
-             lambda state: has_stick(state, player) or state.has_any((fire_wand, gun), player))
+             lambda state: has_melee(state, player) or state.has_any((fire_wand, gun), player))
     set_rule(world.get_location("Library Lab - Page 3"),
-             lambda state: has_stick(state, player) or state.has_any((fire_wand, gun), player))
+             lambda state: has_melee(state, player) or state.has_any((fire_wand, gun), player))
 
     # Eastern Vault Fortress
     # yes, you can clear the leaves with dagger
     # gun isn't included since it can only break one leaf pile at a time, and we don't check how much mana you have
     # but really, I expect the player to just throw a bomb at them if they don't have melee
     set_rule(world.get_location("Fortress Leaf Piles - Secret Chest"),
-             lambda state: state.has(laurels, player) and (has_stick(state, player) or state.has(ice_dagger, player)))
+             lambda state: state.has(laurels, player) and (has_melee(state, player) or state.has(ice_dagger, player)))
     set_rule(world.get_location("Fortress Arena - Siege Engine/Vault Key Pickup"),
              lambda state: has_sword(state, player)
              and (has_ability(prayer, state, world)
@@ -324,9 +323,9 @@ def set_location_rules(world: "TunicWorld") -> None:
 
     # Beneath the Vault
     set_rule(world.get_location("Beneath the Fortress - Bridge"),
-             lambda state: has_stick(state, player) or state.has_any({laurels, fire_wand}, player))
+             lambda state: has_melee(state, player) or state.has_any({laurels, fire_wand}, player))
     set_rule(world.get_location("Beneath the Fortress - Obscured Behind Waterfall"),
-             lambda state: has_stick(state, player) and has_lantern(state, world))
+             lambda state: has_melee(state, player) and has_lantern(state, world))
 
     # Quarry
     set_rule(world.get_location("Quarry - [Central] Above Ladder Dash Chest"),
