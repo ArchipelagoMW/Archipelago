@@ -210,7 +210,7 @@ def parse_explanation(explanation: RuleExplanation) -> list[JSONMessagePart]:
 
 
 def get_updated_state(ctx: TrackerGameContext) -> CollectionState:
-    return updateTracker(ctx)[3]
+    return updateTracker(ctx).state
 
 
 async def main(args):
