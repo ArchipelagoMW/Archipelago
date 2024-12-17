@@ -76,6 +76,7 @@ number_sequence_trap = "Number Sequence Trap"
 light_up_path_trap   = "Light Up Path Trap"
 pinball_trap         = "Pinball Trap"
 math_quiz_trap       = "Math Quiz Trap"
+snake_trap           = "Snake Trap"
 
 
 # Chaos Emeralds

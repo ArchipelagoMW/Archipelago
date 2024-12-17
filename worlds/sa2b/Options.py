@@ -291,6 +291,13 @@ class MathQuizTrapWeight(BaseTrapWeight):
     display_name = "Math Quiz Trap Weight"
 
 
+class SnakeTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Snake minigame
+    """
+    display_name = "Snake Trap Weight"
+
+
 class MinigameTrapDifficulty(Choice):
     """
     How difficult any Minigame-style traps are
@@ -1166,6 +1173,7 @@ sa2b_option_groups = [
         LightUpPathTrapWeight,
         PinballTrapWeight,
         MathQuizTrapWeight,
+        SnakeTrapWeight,
         MinigameTrapDifficulty,
     ]),
     OptionGroup("Sonic Missions", [
@@ -1299,6 +1307,7 @@ class SA2BOptions(PerGameCommonOptions):
     light_up_path_trap_weight: LightUpPathTrapWeight
     pinball_trap_weight: PinballTrapWeight
     math_quiz_trap_weight: MathQuizTrapWeight
+    snake_trap_weight: SnakeTrapWeight
     minigame_trap_difficulty: MinigameTrapDifficulty
 
     sadx_music: SADXMusic
