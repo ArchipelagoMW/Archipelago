@@ -1,0 +1,92 @@
+
+msfpatch {
+    .addr $00a66b
+        jsl $=MistClipFix
+
+    .new
+    MistClipFix:
+        // replicate check that normally turns off
+        // menu access at 009B21
+        // conveniently at this point we already have done 
+        // lda $ac, tax
+        lda $7b
+        and $aaf0,x
+        beq $+NotMoving
+
+    %DisableMenu:
+        stz $d5 // disable menu
+        bra $+Done
+
+    %NotMoving:
+        lda #$81 // enable menu, but with a sentinel value
+                 // that means "reached tile this frame"
+        sta $d5
+
+    %Done:
+        // displaced
+        lda $ab
+        cmp #$01
+        rtl
+}
+
+// hook into menu activation to prevent menu opening on
+// first frame when stepping onto a save point or trigger
+// tile
+msfpatch {
+    .addr $008209
+        jml $=MistClipFix__MenuActivationCheck
+
+    .new
+    MistClipFix__MenuActivationCheck:
+        // check for "just stopped walking" sentinel value
+        lda $d5
+        bmi $+CheckTriggers
+
+    %Allow:
+        // displaced
+        lda #$01
+        sta $50
+        jml $00820d
+
+    %CheckTriggers:
+        // check if we are on a save tile or a trigger tile,
+        // or off the edge of the map
+        // if so, don't open menu
+
+        // get properties of current tile
+        ldx $1706
+        stx $1a     
+        ldx #$9da2
+        stx $_Bank00LongCallAddr
+        jsl $=Bank00LongCall
+
+        // check if trigger tile
+        lda $1f
+        bmi $+Prevent
+
+        // check if indoors
+        lda $1700
+        cmp #$03
+        bne $-Allow
+
+        // check if on save tile
+        lda $1e
+        and #$08
+        bne $+Prevent
+
+        // check if off edge of map
+        lda $1706
+        bmi $+Prevent
+        cmp #$20
+        bcs $+Prevent
+        lda $1707
+        bmi $+Prevent
+        cmp #$20
+        bcs $+Prevent
+
+        jmp $_Allow
+
+    %Prevent:
+        jml $00828f
+}
+

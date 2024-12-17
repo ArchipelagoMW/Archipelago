@@ -1,0 +1,216 @@
+//----------------------------------------
+// Paledim / Murasame
+
+npc(#Murasame) {
+    sprite #Sparkle
+}
+
+event($A3)  //Winning the Murasame
+{
+    consts(placement) {
+        0   Murasame
+    }
+    // autodetected map #LunarSubterran3F
+    toggle music fade
+    pause 8
+    message $1FE   // "Go to the eternal gloom of Dark World before you can"
+    [#B #Rando_LoadWackySprite 6 1]
+    sound #Whirl
+    vfx #HealingPot
+    p #Murasame toggle visible
+    [#B #Rando_BossBattle #rando.paledim_slot]
+    [#B #Objectives_TickBossSlot #rando.paledim_slot]
+    [#B #Rando_PostBossBattle #rando.paledim_slot]
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.lunar_boss_1_item 0]
+    // %if ap_lunar_boss_1_item%
+    music #DummyFanfare
+    message #ap_reward_slot.lunar_boss_1_item
+    // %else%
+    message #msg.fe_ReceivedFanfare
+    // %end%
+    [#B #Objectives_TickRewardSlot #reward_slot.lunar_boss_1_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.lunar_boss_1_item]
+    deactivate #Murasame
+    [#B #Objectives_Tick #objective.quest_murasamealtar]
+    music #LunarSubterrane
+}
+
+text(bank 1 message $1FE) {
+Go to the eternal gloom of
+Dark World before you can
+touch this treasure_!
+}
+
+//----------------------------------------
+// Wyvern / Crystal Sword
+
+npc(#CrystalSword) {
+    sprite #Sparkle
+}
+
+placement($16B 0)  //#LunarSubterran5F
+{
+    marching on
+}
+
+event($58)  //Winning the Crystal Sword
+{
+    consts(placement) {
+        0   CrystalSword
+    }
+    // autodetected map #LunarSubterran5F
+    music #None
+    sound #Glow
+    toggle tint $FA
+    message $1FC   // "The power of this sword which Master Zemus detests"
+    p #CrystalSword toggle visible
+    [#B #Rando_BossBattle #rando.wyvern_slot]
+    deactivate #CrystalSword
+    [#B #Objectives_TickBossSlot #rando.wyvern_slot]
+    [#B #Rando_PostBossBattle #rando.wyvern_slot]
+    toggle tint $00
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.lunar_boss_2_item 0]
+    // %if ap_lunar_boss_2_item%
+    music #DummyFanfare
+    message #ap_reward_slot.lunar_boss_2_item
+    // %else%
+    message #msg.fe_ReceivedFanfare
+    // %end%
+    [#B #Objectives_TickRewardSlot #reward_slot.lunar_boss_2_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.lunar_boss_2_item]
+    [#B #Objectives_Tick #objective.quest_crystalaltar]
+    music #LunarSubterrane
+}
+
+text(bank 1 message $1FC) {
+The power of this treasure
+which Master Zemus detests
+shall not be released_!
+}
+
+//----------------------------------------
+// Plague / White Spear
+
+npc(#WhiteSpear) {
+    sprite #Sparkle
+}
+
+placement($17A 0)  //#LunarSubterranRoomHolyLance
+{
+    marching on
+}
+
+event($A4)  //Winning the Holy Lance
+{
+    consts(placement) {
+        0   WhiteSpear
+    }
+    // autodetected map #LunarSubterranRoomHolyLance
+    music $42 fade in
+    toggle screen shake
+    pause 32
+    message $1FA   // "Woe to those who seek to gain the Lance of White!"
+    toggle screen shake
+    sound #None
+    p #WhiteSpear toggle visible
+    [#B #Rando_BossBattle #rando.plague_slot]
+    [#B #Objectives_TickBossSlot #rando.plague_slot]
+    [#B #Rando_PostBossBattle #rando.plague_slot]
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.lunar_boss_3_item 0]
+    // %if ap_lunar_boss_3_item%
+    music #DummyFanfare
+    message #ap_reward_slot.lunar_boss_3_item
+    // %else%
+    message #msg.fe_ReceivedFanfare
+    // %end%
+    [#B #Objectives_TickRewardSlot #reward_slot.lunar_boss_3_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.lunar_boss_3_item]
+    [#B #Objectives_Tick #objective.quest_whitealtar]
+    music #LunarSubterrane
+    deactivate #WhiteSpear
+}
+
+text(bank 1 message $1FA) {
+Woe to those who seek to
+gain the treasure!
+}
+
+//----------------------------------------
+// D.Lunar / Ribbons
+
+event($FC)  //Obtaining the Ribbon
+{
+    music #None
+    sound $7E
+    batch 30 {
+        screen flash
+    }
+    message $1FB   // "These sacred treasures shall not be within your hands_!"
+    [#B #Rando_BossBattle #rando.dlunar_slot]
+    [#B #Objectives_TickBossSlot #rando.dlunar_slot]
+    [#B #Rando_PostBossBattle #rando.dlunar_slot]
+    [#B #Objectives_Tick #objective.quest_ribbonaltar]
+    music #LunarSubterrane
+    set #GotRibbons
+}
+
+text(bank 1 message $1FB) {
+This sacred treasure shall
+not be within your hands_!
+}
+
+trigger(#LunarSubterranRoomRibbons 0)
+{
+    position 2 5
+    treasure #reward_slot.lunar_boss_4_item_1 fight $3f
+}
+
+trigger(#LunarSubterranRoomRibbons 1)
+{
+    position 4 5
+    treasure #reward_slot.lunar_boss_4_item_2 fight $3f
+}
+
+//----------------------------------------
+// Ogopogo / Masamune
+
+npc(#Masamune) {
+    sprite #Sparkle
+}
+
+event($59)  //Winning the Masamune
+{
+    consts(placement) {
+        0   Masamune
+    }
+    // autodetected map #LunarCore1F
+    toggle music fade
+    pause 8
+    message $AF from bank 3   // "You think that you, the ones from the Blue Planet,"
+    sound #Whirlpool
+    vfx #MistGathering
+    sound #None
+    p #Masamune toggle visible
+    [#B #Rando_BossBattle #rando.ogopogo_slot]
+    [#B #Objectives_TickBossSlot #rando.ogopogo_slot]
+    [#B #Rando_PostBossBattle #rando.ogopogo_slot]
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.lunar_boss_5_item 0]
+    // %if ap_lunar_boss_5_item%
+    music #DummyFanfare
+    message #ap_reward_slot.lunar_boss_5_item
+    // %else%
+    message #msg.fe_ReceivedFanfare
+    // %end%
+    [#B #Objectives_TickRewardSlot #reward_slot.lunar_boss_5_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.lunar_boss_5_item]
+    deactivate #Masamune
+    [#B #Objectives_Tick #objective.quest_masamunealtar]
+    music #Giant
+}
+
+text(bank 3 message $AF) {
+You think that you, the
+ones from the Blue Planet,
+can handle this treasure!
+}
+

@@ -1,0 +1,58 @@
+fecode,world,area,spoilerarea,spoilersubarea,spoilerdetail
+0x20,Overworld,BaronTown,Baron Castle,1F, Starting item
+0x21,Overworld,AntlionCave,Antlion Cave,B3F,Antlion Nest item
+0x22,Overworld,Fabul,Fabul,East tower 3F (king's bedroom),Defend Fabul reward item
+0x23,Overworld,MountOrdeals,Mt. Ordeals,Mirror Room,item
+0x24,Overworld,BaronTown,Baron Town,Inn,item
+0x25,Overworld,BaronCastle,Baron Castle,Throne Room,item
+0x26,Overworld,ToroiaCastle,Toroia Castle,Hospital,Edward/Toroia item
+0x27,Overworld,CaveMagnes,Cave Magnes,Crystal Room,item
+0x28,Overworld,Zot,Tower of Zot,6F,item
+0x29,Underworld,LowerBabil,Tower of Bab-il (lower),8F,item (Tower Key slot)
+0x2A,Underworld,LowerBabil,Tower of Bab-il (lower),5F,item (Super Cannon destruction)
+0x2B,Underworld,DwarfCastle,Dwarf Castle,Throne Room,Luca item
+0x2C,Underworld,SealedCave,Sealed Cave,Crystal Room, item
+0x5B,Underworld,Smithy,Kokkol's House 2F,Kokkol,forge item
+0x2F,Overworld,Fabul,Fabul,West tower 3F (Yang's room),Found Yang item
+0x30,Overworld,Fabul,Fabul,West tower 3F (Yang's room),Pan Trade item
+0x2E,Overworld,Adamant,Adamant,Cave,Rat Tail Trade item
+0x5C,Overworld,Adamant,Adamant,Cave,Pink Tail Trade item
+0x59,Overworld,Mist,Mist,Exterior,Rydia's Mom item
+0x34,Underworld,SylvanCave,Sylvan Cave,B3F,Sylph item
+0x31,Underworld,Feymarch,Town of Monsters,Throne Room,Asura item
+0x32,Underworld,Feymarch,Town of Monsters,Throne Room,Levia item
+0x33,Overworld,BaronCastle,Baron Castle,Basement,Odin item
+0x35,Moon,BahamutCave,Cave Bahamut,B3F,Baham item
+0x36,Moon,LunarCore,Lunar Subterrane,B2 (route to altar),Altar 1 (Murasame slot)
+0x37,Moon,LunarCore,Lunar Subterrane,B5 (hidden altar),Altar 2 (Crystal slot)
+0x38,Moon,LunarCore,Lunar Subterrane,B7 (middle room),Altar 3 (White Spear slot)
+0x3B,Moon,LunarCore,Lunar Subterrane,B8,Altar 4 (Masamune slot)
+0x3C,Overworld,Zot,Tower of Zot,,Monster in a Box
+0x3D,Overworld,Eblan,Eblan Castle,,Monster in a Box 1
+0x3E,Overworld,Eblan,Eblan Castle,,Monster in a Box 2
+0x3F,Overworld,Eblan,Eblan Castle,,Monster in a Box 3
+0x40,Overworld,LowerBabil,Lower Bab-il,,Monster in a Box 1
+0x41,Overworld,LowerBabil,Lower Bab-il,,Monster in a Box 2
+0x42,Overworld,LowerBabil,Lower Bab-il,,Monster in a Box 3
+0x43,Overworld,LowerBabil,Lower Bab-il,,Monster in a Box 4
+0x44,Overworld,CaveEblan,Cave Eblan,,Monster in a Box
+0x45,Underworld,UpperBabil,Upper Bab-il,,Monster in a Box
+0x46,Underworld,CaveOfSummons,Cave of Summons,,Monster in a Box
+0x47,Underworld,SylvanCave,Sylph Cave,,Monster in a Box 1
+0x48,Underworld,SylvanCave,Sylph Cave,,Monster in a Box 2
+0x49,Underworld,SylvanCave,Sylph Cave,,Monster in a Box 3
+0x4A,Underworld,SylvanCave,Sylph Cave,,Monster in a Box 4
+0x4B,Underworld,SylvanCave,Sylph Cave,,Monster in a Box 5
+0x4C,Underworld,SylvanCave,Sylph Cave,,Monster in a Box 6
+0x4D,Underworld,SylvanCave,Sylph Cave,,Monster in a Box 7
+0x4E,Moon,Giant,Giant of Bab-il,,Monster in a Box
+0x4F,Moon,LunarPath,Lunar Path,,Monster in a Box
+0x50,Moon,LunarCore,Lunar Core,,Monster in a Box 1
+0x51,Moon,LunarCore,Lunar Core,,Monster in a Box 2
+0x52,Moon,LunarCore,Lunar Core,,Monster in a Box 3
+0x53,Moon,LunarCore,Lunar Core,,Monster in a Box 4
+0x54,Moon,LunarCore,Lunar Core,,Monster in a Box 5
+0x55,Moon,LunarCore,Lunar Core,,Monster in a Box 6
+0x56,Moon,LunarCore,Lunar Core,,Monster in a Box 7
+0x57,Moon,LunarCore,Lunar Core,,Monster in a Box 8
+0x58,Moon,LunarCore,Lunar Core,,Monster in a Box 9

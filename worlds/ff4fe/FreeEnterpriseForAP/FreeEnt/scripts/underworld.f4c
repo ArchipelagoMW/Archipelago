@@ -1,0 +1,10 @@
+// Disable the event call that happens when you first enter the underworld
+eventcall($2F)
+{
+    $00   //(no event)
+}
+
+
+// if not #RydiaRejoined, not #FirstVisitToUnderworld:
+// theory: is event($E8) now unused?
+

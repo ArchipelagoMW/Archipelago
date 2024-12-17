@@ -1,0 +1,561 @@
+consts(reward_slot)
+{
+    $00     none
+
+    // for convenience, by convention rewards range 0x00 to 0x17
+    // exactly correspond to axtor codes
+    $01     starting_character
+    $02     starting_partner_character
+    $03     mist_character
+    $04     watery_pass_character
+    $05     damcyan_character
+    $06     kaipo_character
+    $07     hobs_character
+    $08     mysidia_character_1
+    $09     mysidia_character_2
+    $0A     ordeals_character
+    // $0B reserved (PCecil)
+    // $0C reserved (Tellah3)
+    $0D     baron_inn_character
+    $0E     baron_castle_character
+    $0F     zot_character_1
+    $10     zot_character_2
+    $11     dwarf_castle_character
+    $12     cave_eblan_character
+    $13     lunar_palace_character
+    $14     giant_character
+    // $15 reserved (axtor extra space)
+    // $16 reserved (axtor extra space)
+    // $17 reserved (axtor extra space)
+
+    $20     starting_item
+    $21     antlion_item
+    $22     fabul_item
+    $23     ordeals_item
+    $24     baron_inn_item
+    $25     baron_castle_item
+    $26     toroia_hospital_item
+    $27     magnes_item
+    $28     zot_item
+    $29     babil_boss_item
+    $2A     cannon_item
+    $2B     luca_item
+    $2C     sealed_cave_item
+    $2D     feymarch_item
+    $2E     rat_trade_item
+    $2F     found_yang_item
+    $30     pan_trade_item
+    $31     feymarch_queen_item
+    $32     feymarch_king_item
+    $33     baron_throne_item
+    $34     sylph_item
+    $35     bahamut_item
+    $36     lunar_boss_1_item
+    $37     lunar_boss_2_item
+    $38     lunar_boss_3_item
+    $39     lunar_boss_4_item_1
+    $3A     lunar_boss_4_item_2
+    $3B     lunar_boss_5_item
+    $3C     zot_chest
+    $3D     eblan_chest_1
+    $3E     eblan_chest_2
+    $3F     eblan_chest_3
+    $40     lower_babil_chest_1
+    $41     lower_babil_chest_2
+    $42     lower_babil_chest_3
+    $43     lower_babil_chest_4
+    $44     cave_eblan_chest
+    $45     upper_babil_chest
+    $46     cave_of_summons_chest
+    $47     sylph_cave_chest_1
+    $48     sylph_cave_chest_2
+    $49     sylph_cave_chest_3
+    $4A     sylph_cave_chest_4
+    $4B     sylph_cave_chest_5
+    $4C     sylph_cave_chest_6
+    $4D     sylph_cave_chest_7
+    $4E     giant_chest
+    $4F     lunar_path_chest
+    $50     lunar_core_chest_1
+    $51     lunar_core_chest_2
+    $52     lunar_core_chest_3
+    $53     lunar_core_chest_4
+    $54     lunar_core_chest_5
+    $55     lunar_core_chest_6
+    $56     lunar_core_chest_7
+    $57     lunar_core_chest_8
+    $58     lunar_core_chest_9
+    $59     rydias_mom_item
+    $5A     fallen_golbez_item
+    $5B     forge_item
+    $5C     pink_trade_item
+    $5D     fixed_crystal
+
+    // current maximum: 0x60 reward slots
+}
+
+msfpatch {
+    .def  Rewards__MaxSlotCount  $60
+}
+
+msfpatch {
+    .addr $22e000
+    Rewards__SlotNames:
+        //----------------|
+        "                                "   // $00     none
+        "Starting character              "   // $01     starting_character
+        "Starting partner character      "   // $02     starting_partner_character
+        "Mist character                  "   // $03     mist_character
+        "Watery Pass character           "   // $04     watery_pass_character
+        "Damcyan character               "   // $05     damcyan_character
+        "Kaipo character                 "   // $06     kaipo_character
+        "Mt. Hobs character              "   // $07     hobs_character
+        "Mysidia character[$cc]1[$cd]            "   // $08     mysidia_character_1
+        "Mysidia character[$cc]2[$cd]            "   // $09     mysidia_character_2
+        "Mt. Ordeals character           "   // $0A     ordeals_character
+        "                                "   // // $0B reserved (PCecil)
+        "                                "   // // $0C reserved (Tellah3)
+        "Baron Inn character             "   // $0D     baron_inn_character
+        "Baron Castle character          "   // $0E     baron_castle_character
+        "Tower of Zot character[$cc]1[$cd]       "   // $0F     zot_character_1
+        "Tower of Zot character[$cc]2[$cd]       "   // $10     zot_character_2
+        "Dwarf Castle character          "   // $11     dwarf_castle_character
+        "Cave Eblan character            "   // $12     cave_eblan_character
+        "Lunar Palace character          "   // $13     lunar_palace_character
+        "Giant of Bab-il character       "   // $14     giant_character
+        "                                "   // // $15 reserved
+        "                                "   // // $16 reserved
+        "                                "   // // $17 reserved
+        "                                "   // // $18 reserved
+        "                                "   // // $19 reserved
+        "                                "   // // $1A reserved
+        "                                "   // // $1B reserved
+        "                                "   // // $1C reserved
+        "                                "   // // $1D reserved
+        "                                "   // // $1E reserved
+        "                                "   // // $1F reserved
+        "Starting item                   "   // $20     starting_item
+        "Antlion Nest                    "   // $21     antlion_item
+        "Fabul                           "   // $22     fabul_item
+        "Mt. Ordeals                     "   // $23     ordeals_item
+        "Baron Inn                       "   // $24     baron_inn_item
+        "Baron Castle                    "   // $25     baron_castle_item
+        "Toroia                          "   // $26     toroia_hospital_item
+        "Cave Magnes                     "   // $27     magnes_item
+        "Tower of Zot                    "   // $28     zot_item
+        "Lower Bab-il boss               "   // $29     babil_boss_item
+        "Super Cannon                    "   // $2A     cannon_item
+        "Luca                            "   // $2B     luca_item
+        "Sealed Cave                     "   // $2C     sealed_cave_item
+        "Feymarch                        "   // $2D     feymarch_item
+        "Adamant Grotto[$cc][tail]Rat trade[$cd]      "   // $2E     rat_trade_item
+        "Yang's wife[$cc]found Yang[$cd]         "   // $2F     found_yang_item
+        "Yang's wife[$cc]Pan trade[$cd]          "   // $30     pan_trade_item
+        "Feymarch queen                  "   // $31     feymarch_queen_item
+        "Feymarch king                   "   // $32     feymarch_king_item
+        "Baron Castle secret throne      "   // $33     baron_throne_item
+        "Sylphs                          "   // $34     sylph_item
+        "Cave Bahamut                    "   // $35     bahamut_item
+        "Lunar Subterrane B3 altar       "   // $36     lunar_boss_1_item
+        "Lunar Subterrane B5 altar       "   // $37     lunar_boss_2_item
+        "Lunar Subterrane B7 altar       "   // $38     lunar_boss_3_item
+        "Lunar Subt. pillar chest[$cc]1[$cd]     "   // $39     lunar_boss_4_item_1
+        "Lunar Subt. pillar chest[$cc]2[$cd]     "   // $3A     lunar_boss_4_item_2
+        "Lunar Subterrane B8 altar       "   // $3B     lunar_boss_5_item
+        "Tower of Zot MIAB               "   // $3C     zot_chest
+        "Eblan MIAB[$cc]1[$cd]                   "   // $3D     eblan_chest_1
+        "Eblan MIAB[$cc]2[$cd]                   "   // $3E     eblan_chest_2
+        "Eblan MIAB[$cc]3[$cd]                   "   // $3F     eblan_chest_3
+        "Lower Bab-il MIAB[$cc]1[$cd]            "   // $40     lower_babil_chest_1
+        "Lower Bab-il MIAB[$cc]2[$cd]            "   // $41     lower_babil_chest_2
+        "Lower Bab-il MIAB[$cc]3[$cd]            "   // $42     lower_babil_chest_3
+        "Lower Bab-il MIAB[$cc]4[$cd]            "   // $43     lower_babil_chest_4
+        "Cave Eblan MIAB                 "   // $44     cave_eblan_chest
+        "Upper Bab-il MIAB               "   // $45     upper_babil_chest
+        "Cave of Summons MIAB            "   // $46     cave_of_summons_chest
+        "Sylph Cave MIAB[$cc]1[$cd]              "   // $47     sylph_cave_chest_1
+        "Sylph Cave MIAB[$cc]2[$cd]              "   // $48     sylph_cave_chest_2
+        "Sylph Cave MIAB[$cc]3[$cd]              "   // $49     sylph_cave_chest_3
+        "Sylph Cave MIAB[$cc]4[$cd]              "   // $4A     sylph_cave_chest_4
+        "Sylph Cave MIAB[$cc]5[$cd]              "   // $4B     sylph_cave_chest_5
+        "Sylph Cave MIAB[$cc]6[$cd]              "   // $4C     sylph_cave_chest_6
+        "Sylph Cave MIAB[$cc]7[$cd]              "   // $4D     sylph_cave_chest_7
+        "Giant of Bab-il MIAB            "   // $4E     giant_chest
+        "Lunar Path MIAB                 "   // $4F     lunar_path_chest
+        "Lunar Subt. MIAB[$cc]1[$cd]             "   // $50     lunar_core_chest_1
+        "Lunar Subt. MIAB[$cc]2[$cd]             "   // $51     lunar_core_chest_2
+        "Lunar Subt. MIAB[$cc]3[$cd]             "   // $52     lunar_core_chest_3
+        "Lunar Subt. MIAB[$cc]4[$cd]             "   // $53     lunar_core_chest_4
+        "Lunar Subt. MIAB[$cc]5[$cd]             "   // $54     lunar_core_chest_5
+        "Lunar Subt. MIAB[$cc]6[$cd]             "   // $55     lunar_core_chest_6
+        "Lunar Subt. MIAB[$cc]7[$cd]             "   // $56     lunar_core_chest_7
+        "Lunar Subt. MIAB[$cc]8[$cd]             "   // $57     lunar_core_chest_8
+        "Lunar Subt. MIAB[$cc]9[$cd]             "   // $58     lunar_core_chest_9
+        "Rydia's mom                     "   // $59     rydias_mom_item
+        "Fallen Golbez                   "   // $5A     fallen_golbez_item
+        "Forged by Kokkol                "   // $5B     forge_item
+        "Adamant Grotto[$cc][tail]Pink trade[$cd]     "   // $5C     pink_trade_item
+        "Objective completion            "   // $5D     fixed_crystal
+}
+
+msfpatch {
+    .def Rewards__CurrentSlot     $7e1621
+    .def Rewards__CurrentValueLo  $7e1622
+    .def Rewards__CurrentValueHi  $7e1623
+    .def Rewards__PendingDeliverySlot  $7e1626
+
+    // sub: given reward code A, return in
+    //   X the reward code
+    // TODO: better obfuscation
+    Rewards__GetFromSlot:
+        php
+        rep #$20
+        .mx 0x00
+        and #$00ff
+        asl a
+        tax
+
+        lda $=Rewards__Table,x
+        sta $_Rewards__CurrentValueLo
+        tax
+        lda #$0000
+        plp
+
+        rtl
+}
+
+msfpatch {
+    // param 1 = reward slot 
+    EvEx__Rewards_DeliverFromSlot:
+        jsr $_EvEx__ReadParameters_1
+        lda $_EvEx__Param1
+        jsl $=Rewards__DeliverFromSlot
+        jmp $_EvEx__End
+}
+
+msfpatch {
+    // A = reward slot
+    Rewards__DeliverFromSlot:
+        sta $_Rewards__CurrentSlot
+
+        ldx #$_Tracker__RewardSlotFlags
+        jsl $=Tracker__SetBit
+
+        lda $_Rewards__CurrentSlot
+        jsl $=Rewards__GetFromSlot
+        stx $_Rewards__CurrentValueLo
+
+        lda $_Rewards__CurrentValueHi
+        cmp #$04
+        bcc $+DeliverItem
+        beq $+DeliverAxtor
+        
+        // other reward types currently unsupported
+        jmp $_EvEx__End
+
+    %DeliverItem:
+        lda $_Rewards__CurrentValueHi
+        beq $+DeliverNormalItem
+
+        // this is a key item, execute required additional steps:
+        // set corresponding plot flags
+        jsl $=Rewards__DeliverKeyItemSideEffects
+
+    %DeliverNormalItem:
+        // get item code back and do "give item" handler
+        lda $_Rewards__CurrentValueLo
+        sta $08fb
+        ldx #$9818
+        stx $_Bank00LongCallAddr
+        jml $=Bank00LongCall
+
+    %DeliverAxtor:
+        lda $_Rewards__CurrentValueLo
+        jsr $_CharEx__SimplifyAxtorCode
+        sta $_Rewards__CurrentValueLo
+
+        inc $_Stats_Characters
+
+        // clear the Result flag
+        lda $129f
+        and #$bf
+        sta $129f
+
+        // check if axtor is already in party
+        ldy #$0000
+    %PartyCheckLoop:
+        lda $1000,y
+        and #$1f
+        cmp $_Rewards__CurrentValueLo
+        beq $+AlreadyInParty
+        jsr $_EvEx__YPlus40
+        cpy #$0140
+        bcc $-PartyCheckLoop
+
+        lda $_Rewards__CurrentValueLo
+        jml $=CharEx__GiveAxtor
+
+    %AlreadyInParty:
+        rtl
+}
+
+msfpatch {
+    // prerequisites: Rewards__CurrentSlot
+    //   and Rewards__CurrentValue are populated
+    //   with the relevant slot/reward
+    Rewards__DeliverKeyItemSideEffects:
+        lda $_Rewards__CurrentValueLo
+        jsr $_KeyItemEx__SetFlagForItem
+
+        // increase stats count
+        inc $_Stats_KeyItems
+
+        // update tracker info
+        lda $_Rewards__CurrentValueLo
+        jsl $=Tracker__GetKeyItemIndexFromItemCode
+        sta $1680
+        ldx #$_Tracker__KeyItemFoundFlags
+        jsl $=Tracker__SetBit
+        lda $_Rewards__CurrentValueLo
+        cmp #$3e // check if spoon
+        bne $+ItemNotYetUsed
+        // for items like spoon, mark as already "used"
+        lda $1680
+        ldx #$_Tracker__KeyItemUsedFlags
+        jsl $=Tracker__SetBit
+    %ItemNotYetUsed:
+    
+        lda $1680
+        asl a
+        tax
+        lda $_Rewards__CurrentSlot
+        sta $=Tracker__KeyItemLocations,x
+        inx
+        lda #$00
+        sta $=Tracker__KeyItemLocations,x
+
+        rtl
+}
+
+msfpatch {
+    // params: A = reward slot, X = target text buffer
+    Rewards__LoadNameFromSlot:
+        stx $1692
+        jsl $=Rewards__GetFromSlot
+        stx $_Rewards__CurrentValueLo
+
+        lda $_Rewards__CurrentValueHi
+        cmp #$04
+        bcc $+IsItem
+        beq $+IsAxtor
+
+        // other formats not supported; dummy the buffer to be safe
+        lda #$00
+        xba
+        lda $_EvEx__Param2
+        asl a
+        asl a
+        asl a
+        asl a
+        asl a
+        tax
+        lda #$80
+        sta $=TextBuffer__BufferRootAddr,x
+        inx
+        lda #$00
+        sta $=TextBuffer__BufferRootAddr,x
+        rtl
+
+    %IsItem:
+        lda $_Rewards__CurrentValueLo
+        ldx $1692
+        jsl $=TextBuffer__LoadItemName
+        rtl
+
+    %IsAxtor:
+        lda $_Rewards__CurrentValueLo
+        ldx $1692
+        jsl $=TextBuffer__LoadAxtorName
+        rtl
+}
+
+
+// set treasure chest formation code 0x3F to mean "this is a non-MIAB
+// chest that contains the given reward slot"
+msfpatch {
+    .addr $009748
+        jml $=Rewards__TreasureChestHook
+
+    .new
+    Rewards__TreasureChestHook:
+        lda $09
+        and #$3f
+        cmp #$3f
+        beq $+IsRewardChest
+
+        // is normal fight chest, perform displaced instructions
+        // and return
+        lda $08
+        sta $c6
+        jml $00974c
+
+    %IsRewardChest:
+        // load reward name into text buffer
+        lda $08
+        ldx #$0000
+        jsl $=Rewards__LoadNameFromSlot
+
+        // overwrite message code
+        lda $08FC
+        cmp #$3D
+        bne $+Ribbons
+        lda #$8D
+        bra $+Finish
+    %Ribbons:
+        lda $08FC
+        cmp #$9F
+        beq $+Ribbon1
+        lda #$9A
+        bra $+Finish
+    %Ribbon1:
+        lda #$99
+    %Finish:
+        sta $b2
+
+        // display messages
+        ldx #$b1c8
+        stx $_Bank00LongCallAddr
+        jsl $=Bank00LongCall
+        ldx #$b0d1
+        stx $_Bank00LongCallAddr
+        jsl $=Bank00LongCall
+        ldx #$b164
+        stx $_Bank00LongCallAddr
+        jsl $=Bank00LongCall
+
+        lda $08
+        jsl $=Rewards__DeliverFromSlot
+
+        jml $009794
+}
+
+text(bank 1 message $1F) {
+Found [name $e0]!
+}
+
+//-------------------------------------------------------------------
+// Extend the functionality of MIABs to
+// support the giving of rewards
+
+msfpatch {
+    .addr $008796
+        jsl $=Rewards__MIABContents
+        nop
+}
+
+msfpatch {
+    Rewards__MIABContents:
+        // A contains reward slot
+        sta $_Rewards__CurrentSlot
+        jsl $=Rewards__GetFromSlot
+        stx $_Rewards__CurrentValueLo
+
+        // blank all other slots for safety
+        stz $1805
+        stz $1806
+        stz $1807
+        stz $1808
+        stz $1809
+        stz $180a
+        stz $180b
+
+        lda $_Rewards__CurrentValueHi
+        cmp #$04
+        bcs $+ExternalReward
+
+        // mark slot as delivered
+        lda $_Rewards__CurrentSlot
+        ldx #$_Tracker__RewardSlotFlags
+        jsl $=Tracker__SetBit
+
+        and #$02
+        beq $+IsRegularItem
+
+        lda $_Rewards__CurrentValueLo
+        cmp #$fc // hook
+        beq $+ExternalReward
+
+        // key item reward that can be given as inventory item
+        jsl $=Rewards__DeliverKeyItemSideEffects
+
+
+    %IsRegularItem:
+        lda $_Rewards__CurrentValueLo
+        sta $1804
+        stz $c6
+        rtl
+
+    %ExternalReward:
+        // set a special item code to display the reward without
+        // giving it
+        lda #$fe
+        sta $1804
+        
+        lda $c6
+        // (preserve slot so that after the item menu we can deliver the reward)
+        sta $_Rewards__PendingDeliverySlot
+        stz $c6
+
+        rtl
+}
+
+
+//-------------------------------------------
+// edit treasure menu to display reward name
+// if given item code FE (which means: a "treasure"
+// which is only displayed in the menu but whose
+// delivery is handled externally)
+
+msfpatch {
+    .addr $01d4c8
+        jsl $=Rewards__TreasureMenuDisplay
+        nop nop
+
+    .new
+    Rewards__TreasureMenuDisplay:
+        // displaced
+        inc $1bc6
+
+        lda $ff28
+        cmp #$fe
+        beq $+DisplayRewardName
+
+        // normal treasure menu, draw item names as usual
+        ldx #$a134
+        jsr $_MK_DoLongCallX
+        rtl
+
+    %DisplayRewardName:
+        lda $_Rewards__CurrentSlot
+        ldx #$0000
+        jsl $=Rewards__LoadNameFromSlot
+
+        ldx #$0000
+        ldy #$0000
+    %CopyNameLoop:
+        lda $=TextBuffer__BufferRootAddr,x
+        beq $+CopyDone
+        sta $b686,y
+        inx
+        iny
+        iny
+        bra $-CopyNameLoop
+    %CopyDone:
+        rtl
+}
+
+
+msfpatch {
+    .addr $00834b
+        jmp $_Bank00__PostMIABCheck
+}

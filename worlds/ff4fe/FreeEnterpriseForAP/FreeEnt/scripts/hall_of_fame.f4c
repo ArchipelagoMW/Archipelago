@@ -1,0 +1,211 @@
+npc(#ElderPraying)              
+{ 
+    eventcall { $64 } 
+}
+
+event($64)
+{
+    consts(placement) {
+        2  ElderPraying
+        5  ElderStanding
+    }
+
+    batch 1 {
+        p #ElderPraying toggle visible
+        p #ElderStanding toggle visible
+    }
+
+    confirm message $10c
+    toggle music fade
+    toggle screen fade
+    music #Prelude
+    vfx #MysidianLegend
+    player face up
+    p #ElderPraying toggle visible
+    p #ElderStanding toggle visible
+
+    toggle music fade
+    toggle screen fade
+    music #LongWayToGo fade in
+cancel:
+}
+
+text(bank 1 message $10C) {
+Would you like to view the
+Free Enterprise record of
+tournament champions?[next]
+}
+
+
+text(bank 1 message $16A) {
+    FINAL FANTASY IV:
+     FREE ENTERPRISE
+   TOURNAMENT CHAMPIONS
+
+ Highway to the Zemus Zone
+           2018
+         eLmaGus
+
+      World Series of
+      Free Enterprise
+           2019
+        Dustygriff
+    2v2 Twinvitational
+           2019
+     The Mighty Quaks
+   moonblazewolf / Simbu
+
+ Highway 2 the Zemus Zone
+           2019
+        penguin8r
+
+      Hummingway Open
+           2019
+      It's a Starman
+      Fabul Gauntlet
+           2020
+       Invenerable
+
+ Highway to the 3mus Zone
+           2020
+        Dustygriff
+
+      Lali-Ho League
+           2021
+         xPankraz
+
+ Highw4y to the Zemus Zone
+           2021
+        DekarSMASH
+
+}
+
+
+msfpatch {
+    .addr $00c4fc
+        // init needed vars and use our custom text load code
+        stz $de
+        stz $1691
+        jsl $=MysidianLegend__LoadNextScreen
+        jmp $c51c
+    // reclaim the spare space here for
+    // utility subroutines
+    MysidianLegend__Load4Lines:
+        jsr $b21f
+        rtl
+    MysidianLegend__Draw4Lines:
+        jsr $b564 // using this address bypasses
+                  // the check against $ed
+        rtl
+
+    .addr $00c51c
+        // don't reset bank number yet
+        nop nop
+
+    .addr $00c5db
+        jml $=MysidianLegend__Extension
+
+    .new
+    MysidianLegend__Extension:
+        cmp $1690
+        beq $+NextPage
+        jml $00c55c
+    %NextPage:
+        lda $de // check if we hit end of text
+        bne $+DialogComplete
+
+        // display last line for a few frames
+        ldx #$00c0
+    %WaitBeforeNextPage:
+        jsr $_VBlankHijack__WaitForVBlank  // borrow this routine from another file; mimics $008f0f
+        dex
+        bne $-WaitBeforeNextPage
+
+        // edit palette to "blank" onscreen text
+        // while we manually rewrite it
+        ldx #$4000
+        stx $0cf1
+        
+        inc $1691
+        jsr $_ResetDialogPalettes
+        jsl $=MysidianLegend__LoadNextScreen
+
+        // restore palette
+        ldx #$7fff
+        stx $0cf1
+
+        jml $00c558
+
+    %DialogComplete:
+        // NOW reset bank number
+        stz $dd
+        jml $00c5e2
+
+    MysidianLegend__LoadNextScreen:
+        stz $ba   // reset scroll position
+        stz $1690 // reset line count
+
+        jsr $_LoadChunk
+        bcs $+FinishedLoading
+        jsr $_LoadChunk
+        bcs $+FinishedLoading
+        jsr $_LoadChunk
+    %FinishedLoading:
+        rtl
+
+    %LoadChunk:
+        jsl $=MysidianLegend__Load4Lines
+        jsr $_VBlankIfNeeded
+        jsl $=MysidianLegend__Draw4Lines
+
+        lda $1690
+        clc
+        adc #$04
+        sta $1690
+        lda $de
+        beq $+ChunkIsNotLastChunk
+        sec
+        rts
+    %ChunkIsNotLastChunk:
+        clc
+        rts
+
+    %VBlankIfNeeded:
+        lda $1691
+        beq $04
+        jsl $=NoFlash__LongCall8F1E
+        rts
+
+    %ResetDialogPalettes:
+        // similar to the routine at C4D8-C4F2, except
+        // we only do one line at a time and then wait for VBlank :S
+        ldx #$2c00
+        stx $1692
+    %OuterLoopStart:
+        jsr $_VBlankIfNeeded
+        lda #$80
+        sta $2115
+        ldx $1692
+        stx $2116
+        ldy #$0040
+    %InnerLoopStart:
+        lda #$ff
+        sta $2118
+        lda #$20
+        sta $2119
+        dey
+        bne $-InnerLoopStart
+
+        lda $1692
+        clc
+        adc #$40
+        sta $1692
+        lda $1693
+        adc #$00
+        cmp #$30
+        bcs $-ResetPalettesDone
+        sta $1693
+        bra $-OuterLoopStart
+    %ResetPalettesDone:
+        rts
+}

@@ -1,0 +1,55 @@
+map(#MountHobsWest) {
+    npc palettes $02 $05
+}
+
+placement($7E 0) { speed 3 }
+placement($7E 2) { speed 3 }
+
+placement($7E 8) {
+    palette 1
+    face up
+    position 15 25
+    marching off
+}
+
+event($51)
+{
+    // %hobs intro%
+    // (provided by randomizer)
+    // %end%
+
+    consts(placement) {
+        8  Cocka
+    }
+
+    p #Cocka toggle visible
+    pause 2
+    sound #Petrify
+    batch 12 {
+        screen flash
+    }
+
+    [#B #LoadNPCPalette $1c $06]
+    pause 4
+    sound #EnemyDefeat
+
+    p 2 move down
+    batch {
+        p 2 toggle visible
+        p 0 move down
+    }
+    p 0 toggle visible
+
+    pause 8
+
+
+
+    p #Cocka toggle visible
+    
+    // %hobs outro%
+    // (provided by randomizer)
+    // %end%
+
+    [#B #Return]
+}
+

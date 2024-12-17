@@ -1,0 +1,9 @@
+// %flag no_cursed_rings on%
+droptable($14) {
+    mythic #Cure1
+}
+
+droptable($33) {
+    mythic #Cure1
+}
+// %end%

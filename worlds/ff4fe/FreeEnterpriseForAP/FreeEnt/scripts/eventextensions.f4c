@@ -1,0 +1,269 @@
+consts(eventext) {
+    // magic code
+    $E6    B
+
+    // extension commands
+    $00    EndEvent
+    $01    GotoEvent
+    $02    If
+    $03    AgeRydia
+    $04    PlacementSetVisible
+    $05    PlacementSetInvisible
+    $06    PutEnterprise
+    $07    PartyLeaderCecil
+    $08    ActivateNPC
+    $09    DeactivateNPC
+    $0A    PartyLeaderCharacter
+    $0B    RememberizeTellah
+    $0C    ClearShadowPartySlot
+    $0D    SaveVehiclesFromMist
+    $0E    LoadExtraNPCPalette
+    $0F    ResetNPCPalette
+    $10    DebugBuff
+    $11    PlacementSetVisibleByPartyLeader
+    $12    ReloadPlacementSprite
+    $13    SetPlacementSpeed
+    $14    GiveFloat
+    $15    ClearParty
+    $16    DebugFillShadowParty
+    $17    GoSubEvent
+    $18    Return
+    $19    LoadNPCPalette
+    $1A    TestMode_Startup
+    $1B    SaveMusic
+    $1C    RestoreMusic
+    $1D    TakeAll
+    $1E    TintOff
+    $1F    GiveStarterKit
+
+    $20    Rando_KeyItemLocationHint
+    // REMOVED: $21    Rando_GiveCharacter
+    $22    Rando_PaladinizeCecil
+    $23    Rando_CheckCharacterAltVersion
+    $24    Rando_BossBattle
+    $25    Rando_CheckFlag
+    // REMOVED: $26    Rando_GiveItemSideEffects
+    $27    Rando_InitAxtorName
+    $28    Rando_DeliverRewardFromSlot
+    // REMOVED: $29    Rando_CheckFlagEquals
+    $2A    Rando_PostBossBattle
+    // REMOVED: $2B    Rando_IncreaseKeyItemCount
+    $2C    Rando_RetrieveCharacter
+    $2D    Rando_LoadWackySprite
+    $2E    Rando_LoadAxtorFashionCode
+    // REMOVED: $2F    Rando_GivePinkTailItem
+
+    $30    Ending_InitVignetteLoop
+    $31    Ending_CheckVignettesDone
+    $32    Ending_LoadVignetteMap
+    $33    Ending_DrawVignetteWindow
+    $34    Ending_NextVignette
+    $35    Ending_FinalizeStats
+    $36    Ending_SaveEndgameTime
+
+    $38    Tracker_SetKeyItemUsed
+
+    $40    Text_LoadSpellName
+    $41    Text_LoadRewardNameFromSlot
+    $42    Text_LoadObjectiveNameForIndex
+
+    $50    ObjectivesImpl_ApplyStaged
+    $51    ObjectivesImpl_ShowStagedCompletionMessages
+    $52    Objectives_Tick
+    $53    Objectives_TickBossSlot
+    $54    Objectives_TickRewardSlot
+    $55    Objectives_ListInDialog
+
+}
+
+// replace old 0xE6 event handler with jump to new code
+msfpatch {
+    .addr $00e97e
+    jsl $=EvEx__Main
+    jmp $E0D3
+}
+
+
+// $09D3 contains offset within event block
+// $b3 is a counter through the parameter data
+msfpatch {
+
+    EvEx__Handlers:
+        [[ 
+            $_EvEx__EndEvent
+            $_EvEx__GotoEvent
+            $_EvEx__If
+            $_EvEx__AgeRydia
+            $_EvEx__PlacementSetVisible
+            $_EvEx__PlacementSetInvisible
+            $_EvEx__PutEnterprise
+            $_EvEx__PartyLeaderCecil
+            $_EvEx__ActivateNPC
+            $_EvEx__DeactivateNPC
+            $_EvEx__PartyLeaderCharacter
+            $_EvEx__RememberizeTellah
+            $_EvEx__ClearShadowPartySlot
+            $_EvEx__SaveVehiclesFromMist
+            $_EvEx__LoadExtraNPCPalette
+            $_EvEx__ResetNPCPalette
+            $_EvEx__DebugBuff
+            $_EvEx__PlacementSetVisibleByPartyLeader
+            $_EvEx__ReloadPlacementSprite
+            $_EvEx__SetPlacementSpeed
+            $_EvEx__GiveFloat
+            $_EvEx__ClearParty
+            $_EvEx__DebugFillShadowParty
+            $_EvEx__GoSubEvent
+            $_EvEx__Return
+            $_EvEx__LoadNPCPalette
+            $_EvEx__TestMode_Startup
+            $_EvEx__SaveMusic
+            $_EvEx__RestoreMusic
+            $_EvEx__TakeAll
+            $_EvEx__TintOff
+            $_EvEx__GiveStarterKit
+
+            $_EvEx__Rando_KeyItemLocationHint
+            FF FF // REMOVED: $_EvEx__Rando_GiveCharacter
+            $_EvEx__Rando_PaladinizeCecil
+            $_EvEx__Rando_CheckCharacterAltVersion
+            $_EvEx__Rando_BossBattle
+            $_EvEx__Rando_CheckFlag
+            FF FF // REMOVED: $_EvEx__Rando_GiveItemSideEffects
+            $_EvEx__Rando_InitAxtorName
+            $_EvEx__Rewards_DeliverFromSlot
+            FF FF // REMOVED: $_EvEx__Rando_CheckFlagEquals
+            $_EvEx__Rando_PostBossBattle
+            FF FF // REMOVED: $_EvEx__Rando_IncreaseKeyItemCount
+            $_EvEx__Rando_RetrieveCharacter
+            $_EvEx__Rando_LoadWackySprite
+            $_EvEx__Rando_LoadAxtorFashionCode
+            FF FF // REMOVED: $_EvEx__Rando_GivePinkTailItem
+            $_EvEx__Ending_InitVignetteLoop
+            $_EvEx__Ending_CheckVignettesDone
+            $_EvEx__Ending_LoadVignetteMap
+            $_EvEx__Ending_DrawVignetteWindow
+            $_EvEx__Ending_NextVignette
+            $_EvEx__Ending_FinalizeStats
+            $_EvEx__Ending_SaveEndgameTime
+            FF FF
+            $_EvEx__Tracker_SetKeyItemUsed
+            FF FF
+            FF FF
+            FF FF
+            FF FF
+            FF FF
+            FF FF
+            FF FF
+
+            $_EvEx__Text_LoadSpellName
+            $_EvEx__Text_LoadRewardNameFromSlot
+            $_EvEx__Text_LoadObjectiveNameForIndex
+            FF FF
+            FF FF
+            FF FF
+            FF FF
+            FF FF
+            FF FF
+            FF FF
+            FF FF
+            FF FF
+            FF FF
+            FF FF
+            FF FF
+            FF FF
+
+            $_EvEx__ObjectivesImpl_ApplyStaged
+            $_EvEx__ObjectivesImpl_ShowStagedCompletionMessages
+            $_EvEx__Objectives_Tick
+            $_EvEx__Objectives_TickBossSlot
+            $_EvEx__Objectives_TickRewardSlot
+            $_EvEx__Objectives_ListInDialog
+        ]]
+    
+    EvEx__Main:
+        // load single param -- this is the command code
+        inx
+        stx $b3
+        lda $09d5,x
+
+        // load pointer to handler
+        asl a
+        tax
+        lda $=EvEx__Handlers,x
+        sta $063d
+        inx
+        lda $=EvEx__Handlers,x
+        sta $063e
+
+        // prep accumulators for parameter loading
+        ldx $09d3
+        ldy #$0000
+
+        // jump to handler for new command
+        jmp ($063d)
+
+    EvEx__End:
+        rtl        
+
+    .def EvEx__Param1 0x09d7
+    .def EvEx__Param2 0x09d8
+    .def EvEx__Param3 0x09d9
+    .def EvEx__Param4 0x09da
+
+    EvEx__ReadParameters_3:
+        lda $128200,x
+        sta $09d7,y
+        inc $b3
+        inx
+        iny
+    EvEx__ReadParameters_2:
+        lda $128200,x
+        sta $09d7,y
+        inc $b3
+        inx
+        iny
+    EvEx__ReadParameters_1:
+        lda $128200,x
+        sta $09d7,y
+        inc $b3
+        inx
+        iny
+
+        stx $09d3       // save updated event command pointer
+        lda #$ff        // write new FF at end of event parameters
+        sta $09d7,y
+        rts
+
+    EvEx__XPlus40:
+        pha
+        php
+        rep #$20
+        .mx 0x00
+        txa
+        clc
+        adc #$0040
+        tax
+        lda #$0000
+        plp
+        .mx 0x20
+        pla
+        rts
+
+    EvEx__YPlus40:
+        pha
+        php
+        rep #$20
+        .mx 0x00
+        tya
+        clc
+        adc #$0040
+        tay
+        lda #$0000
+        plp
+        .mx 0x20
+        pla
+        rts
+
+}
+

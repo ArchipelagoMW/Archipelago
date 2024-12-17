@@ -1,0 +1,441 @@
+// hook into fat chocobo menu setup to init cursor
+msfpatch {
+    .addr $01ccd9
+        jsr $=FatHint__InitCursor
+        nop
+
+    .new
+    FatHint__InitCursor:
+        lda #$80
+        sta $1baf
+
+        // displaced
+        lda #$01
+        sta $1a73
+        rtl
+}
+
+// change initial menu draw to draw either Give/Take
+// or Item/Hint based on cursor value
+msfpatch {
+    .addr $01cd55
+        jml $=FatHint__InitWindow
+
+    .new
+    FatHint__InitWindow:
+        lda $1baf
+        bmi $+TopLevel
+
+        ldy #$dcbe  // give/take
+        bra $+HavePointer
+
+    %TopLevel:
+        ldy #$_MenuData__FatChocoboItemHint
+
+    %HavePointer:
+        jml $0182fb
+}
+
+//-------------------------------------------------------
+// alter top level menu code to use 80/81 for
+// "Item/Hint" select and 00/01 for "Give/Take"
+// select
+
+// change cursor position logic to only consider
+// low bit
+msfpatch {
+    .addr $01cd83
+        jml $=FatHint__TopLevelCursorPos
+
+    .new
+    FatHint__TopLevelCursorPos:
+        lda $1baf
+        and #$01
+        beq $+Left
+
+        jml $01cd88
+
+    %Left:
+        jml $01cd8d
+}
+
+// change left/right arrow to toggle low bit
+// without worrying about high bit
+msfpatch {
+    .addr $01cdae
+        eor #$01
+        nop
+}
+
+// change cancel button to return to top level
+// menu if in Give/Take menu
+msfpatch {
+    .addr $01cdb6
+        jml $=FatHint__TopLevelCancel
+
+    .new
+    FatHint__TopLevelCancel:
+        and #$80
+        beq $+DidNotCancel
+
+        lda $1baf
+        bmi $+Cancel
+
+        // returning to top level menu
+        ldx #$82fb
+        ldy #$_MenuData__FatChocoboItemHint
+        jsr $_MK_DoLongCallX
+        jsr $_MK_VBlank_PushBG3
+        lda #$80
+        sta $1baf
+        jml $01cdfa
+
+    %DidNotCancel:
+        jml $01cdbb
+
+    %Cancel:
+        jml $01cdba
+}
+
+
+// change confirm button to go to second level
+// menu if in top menu
+msfpatch {
+    .addr $01cdc1
+        jml $=FatHint__TopLevelConfirm
+
+    .new
+    FatHint__TopLevelConfirm:
+        lda $1baf
+        bmi $+IsTopLevel
+
+        // displaced
+        stz $1bb2
+        stz $1bb0
+        jml $01cdc7
+
+    %IsTopLevel:
+        cmp #$80
+        beq $+DoGiveTakeMenu
+
+        jsl $=FatHint__HintMenu
+        lda #$80
+        sta $1baf
+
+        // return to code in post-give/take menu region
+        // to borrow that logic for resetting menu
+        jml $01cddf
+
+    %DoGiveTakeMenu:
+        ldy #$dcbe  // pointer to Give/Take window
+        ldx #$82fb
+        jsr $_MK_DoLongCallX
+        jsr $_MK_VBlank_PushBG3
+
+        stz $1baf
+        jml $01cdfa
+}
+
+//----------------------------------------------------
+
+msfpatch {
+    FatHint__HintMenu:
+        stz $1bb0
+        stz $1bb1
+
+        ldy #$_MenuData__FatChocoboWhichHint
+        ldx #$8301
+        jsr $_MK_DoLongCallX
+
+        jsl $=FatHint__DrawKeyItemList
+
+        jsr $_MK_VBlank_PushBG3
+
+    %InteractionLoop:
+        jsr $_MK_UpdateGamepadWithSound
+        jsr $_UpdateCursorPosition
+        jsr $_MK_VBlank_PushOAM
+
+        lda $01
+        and #$80
+        beq $+CheckRightArrow
+        rtl
+
+    %CheckRightArrow:
+
+        lda $01
+        and #$01
+        beq $+CheckLeftArrow
+
+        inc $1bb1
+        lda $1bb1
+        cmp #$03
+        bcc $+CheckLeftArrow
+        stz $1bb1
+        
+    %CheckLeftArrow:
+        lda $01
+        and #$02
+        beq $+CheckDownArrow
+
+        dec $1bb1
+        bpl $+CheckDownArrow
+        lda #$02
+        sta $1bb1
+
+    %CheckDownArrow:
+        lda $01
+        and #$04
+        beq $+CheckUpArrow
+
+        inc $1bb0
+        lda $1bb0
+        cmp #$06
+        bcc $+CheckUpArrow
+        stz $1bb0
+
+    %CheckUpArrow:
+        lda $01
+        and #$08
+        beq $+CheckConfirmButton
+
+        dec $1bb0
+        bpl $+CheckConfirmButton
+        lda #$05
+        sta $1bb0
+
+    %CheckConfirmButton:
+        lda $00
+        and #$80
+        bne $+ConfirmPressed
+        jmp $_InteractionLoop
+
+    %UpdateCursorPosition:
+        lda #$00
+        xba
+        lda $1bb1
+        tax
+        lda $=CursorColumnPositions,x
+        sta $1680
+
+        lda $1bb0
+        asl a
+        asl a
+        asl a
+        asl a
+        clc
+        adc #$5f
+        sta $1681
+
+        ldx $1680
+        jsr $_MK_UpdateCursor
+        rts
+
+    %CursorColumnPositions:
+        [[ 02 4A A2 ]]
+
+    %ConfirmPressed:
+        // get selected index
+        lda $1bb0
+        asl a
+        clc
+        adc $1bb0
+        adc $1bb1
+        sta $1680
+
+        cmp #$11
+        bcs $+OutOfRange
+
+        ldx #$_Tracker__KeyItemFoundFlags
+        jsl $=Tracker__CheckBit
+        bcs $+AlreadyFound
+
+        lda $=RandoFlag_objective_mode_classicforge
+        beq $+SkipForgeChecks
+
+        lda $1680
+        cmp #$02 // legend
+        beq $+NotAllowed
+        cmp #$0c // adamant
+        beq $+NotAllowed
+
+    %SkipForgeChecks:
+        lda $1680
+        cmp #$10 // crystal
+        beq $+NotAllowed
+        
+        // allowed
+        jmp $_ConfirmHint
+
+    %AlreadyFound:
+        ldy #$_MenuData__FatChocoboHintNotNeeded
+        bra $+ShowErrorMessage
+    %NotAllowed:
+        ldy #$_MenuData__FatChocoboHintNotAllowed
+    %ShowErrorMessage:
+        ldx #$8301
+        jsr $_MK_DoLongCallX
+        ldx #$ffff
+        jsr $_MK_UpdateCursor
+        jsr $_MK_VBlank_PushOAM
+        jsr $_MK_PushBG3
+        
+        // play error sound
+        lda #$12
+        sta $1e00
+        jsl $048004 
+
+        jsr $_MK_WaitForInput
+
+        ldy #$_MenuData__FatChocoboWhichHint
+        ldx #$8301
+        jsr $_MK_DoLongCallX
+        jsr $_MK_VBlank_PushBG3
+    %OutOfRange:
+        jmp $_InteractionLoop
+
+    %ConfirmHint:
+        jsl $=FatHint__Confirm
+        bcs $+Confirmed
+        jmp $_InteractionLoop
+    %Confirmed:
+        jsl $=FatHint__Reveal
+        rtl
+}
+
+msfpatch {
+    FatHint__DrawKeyItemList:
+        jsr $_MK_SetBG3
+
+        phk
+        pla
+        ldx #$_PaletteCallback
+        ldy #$0282
+        jsl $=TrackerUtil__DrawKeyItemList
+        rtl
+
+    %PaletteCallback:
+        cmp #$10 // crystal
+        beq $+Disable
+        cmp #$02 // legend
+        beq $+DisableIfForge
+        cmp #$0c // adamant
+        beq $+DisableIfForge
+
+        ldx #$_Tracker__KeyItemFoundFlags
+        jsl $=Tracker__CheckBit
+        bcs $+Disable
+
+    %Enable:
+        lda #$20
+        rtl
+
+    %DisableIfForge:
+        lda $=RandoFlag_objective_mode_classicgiant
+        beq $-Enable
+
+    %Disable:
+        lda #$24
+        rtl
+}
+
+msfpatch {
+    FatHint__Confirm:
+        jsr $_MK_SetBG2
+        ldy #$_MenuData__FatChocoboHintConfirm
+        ldx #$82fb
+        jsr $_MK_DoLongCallX
+
+        lda $1680
+        jsl $=Tracker__GetKeyItemCodeFromIndex
+        ldx #$0000
+        jsl $=TextBuffer__LoadItemName
+
+        // count length
+        ldx #$0000
+    %CountLoop:
+        lda $=TextBuffer__BufferRootAddr,x
+        beq $+CountDone
+        inx
+        bra $-CountLoop
+    %CountDone:
+
+        inx
+        ldy #$0362
+    %CenterLoop:
+        dey
+        dey
+        dex
+        dex
+        bpl $-CenterLoop
+
+        ldx #$0000
+    %DrawLoop:
+        lda $=TextBuffer__BufferRootAddr,x
+        beq $+DrawDone
+        sta ($29),y
+        inx
+        iny
+        lda #$28
+        sta ($29),y
+        iny
+        bra $-DrawLoop
+    %DrawDone:
+
+        lda #$01
+        sta $1bb2
+
+        jsr $_MK_VBlank_PushBG2
+
+    %InteractionLoop:
+        lda $1bb2
+        beq $+YesHighlighted
+        ldx #$b781
+        bra $+HaveCursorPosition
+    %YesHighlighted:
+        ldx #$b749
+    %HaveCursorPosition:
+        jsr $_MK_UpdateCursor
+        jsr $_MK_VBlank_PushOAM
+        jsr $_MK_UpdateGamepadWithSound
+
+        lda $01
+        and #$03
+        beq $+CheckCancelButton
+        lda $1bb2
+        eor #$01
+        sta $1bb2
+    %CheckCancelButton:
+        lda $01
+        and #$80
+        beq $+CheckConfirmButton
+
+        lda #$01
+        sta $1bb2
+        jmp $_Done
+
+    %CheckConfirmButton:
+        lda $00
+        and #$80
+        beq $-InteractionLoop
+
+    %Done:
+        jsr $_MK_ClearBG2
+        jsr $_MK_VBlank_PushBG2
+        jsr $_MK_SetBG3
+
+        lda $1bb2
+        beq $+ReturnTrue
+
+        clc
+        rtl
+
+    %ReturnTrue:
+        sec
+        rtl
+}
+
+msfpatch {
+    FatHint__Reveal:
+        rtl
+}

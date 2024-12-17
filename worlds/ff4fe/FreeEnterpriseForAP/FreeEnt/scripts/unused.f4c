@@ -1,0 +1,337 @@
+consts(flag_unused) {
+    $04    PrologueComplete
+    $17    CampedInWateryPass
+    $4A    GotAdamant
+    $57    ExitedWateryPass
+}
+
+// ignore most messages before $20, they are system messages
+text(bank 1 message $0E) {X}
+text(bank 1 message $12) {X}
+
+// bank 1 messages in the range $20-7F are reserved for Kory Hints
+
+// 100 and 101 are namingway messages
+
+
+// message $11C is the harp song text
+
+// 16A is the Mysidian Legend -- don't want to screw with that
+
+// 197, 198, 199 are Fabul dancer
+
+
+// 1A3, 1A4, 1A5 is Mysidia dancer
+
+// 1C2 is "Meanwhile", has utility
+
+
+// 1D0 is prologue text, maybe avoid messing with it
+
+
+// 1D7 is "That Night", has utility
+
+
+// bank 3 message 0 is save point info
+
+// bank 3 message $45 is "Wait!" and has no event reference; avoid touching
+
+
+// event($08) // was Rydia learning Sylph, now used for objectives
+
+// event($11) // was talking to Cid in Baron, now used for path to Zeromus
+
+// event($12)  //was Speaking to Kain in Baron, now used for Feymarch chest
+
+// event($13)  //was Cecil's maid, now used for jumping up Babil
+
+// event($14)  //was Rosa greeting Cecil, now used for exiting Giant
+
+// event($15)  //was Cecil sleeping, Prologue, now used for Mist east side exit
+
+event($16) // Using soft potion on stone twins
+{ } // Erase for space
+
+// event($1C)  //was Devil's Road is sealed, now used for Ending
+
+// event($1D)  //was Attaching hook to Enterprise, now used for Ending
+
+// event($31)  //was Watery Cave camping, now used for Ending
+
+// event($40) // was Open the door!, now used for Guidingway introduction
+
+event($42) // Bombing Damcyan
+{ } // Erase for space
+
+event($4A) // Toroia clerics after Magnes
+{ } // Erase for space
+
+// event($4B) // was "WA!", now used for Kory hints
+
+// event($4C) // was We were also hypnotized, now Dark Matter Hunt
+
+// event($51)  //was Finding Rosa in Kaipo, now used for Rydia @ Hobs subroutine
+
+// event($52) // was discussion about rescuing Rosa, now used for post-game harp music
+
+event($5F) // putting out Ordeals fire
+{ } // Erase for space
+
+// event($64) // was talking to Elder after Ordeals, now FE Hall of Fame
+
+// event($72)  //was Edward in Toroia after defeating the Dark Elf, now used for Rydia's Mom key item slot
+
+event($80) // doomed Dark Elf battle
+{ } // Erase for space
+
+event($83) // sailing from Fabul
+{ } // Erase for space
+
+// event($88) // was praying elder, now used for wacky challenges
+
+event($89) // praying elder
+{ } // Erase for space
+
+event($8A) // praying elder
+{ } // Erase for space
+
+event($8B) // first entry to underworld
+{ } // Erase for space
+
+event($92) // authorized dwarves only
+{ } // Erase for space
+
+event($93) // sewer teleport
+{ } // Erase for space
+
+// event($9D)  // was returning from moon to the giant of babil, now used in giant valet
+
+event($A7) // reinforcing Falcon
+{ } // Erase for space
+
+event($A9) // entering Feymarch
+{ } // Erase for space
+
+event($B6) // Kain stealing dark crystal
+{ } // Erase for space
+
+// event($C5)  // was Talking to Giott, attaching the airship drill, now used for giant exit
+
+event($DA) // Elder praying
+{ } // Erase for space
+
+
+
+event($DF)  // Get Grimoire
+{ } // Erase for space
+
+event($E0)  // Get Grimoire
+{ }
+
+// event($E3)  // was Trading the Pink Tail for Adamant Armor, now used for Upt Co Surprise
+
+// event($F2)  // was Watery Pass - North exiting message, now used for Ribbon Chest 2
+
+// event($F4)  //was Load Room of Wishes, play 'Long Way to Go', now used for Lunarian room
+
+// event($F5)  //was Load Room of Wishes, Yang/Cid/Edward, play 'Long Way to Go' -- now character retrieval
+
+// event($F7) // was Speaking to Sylph, now used for Golbez item delivery in K0 + Objectives
+
+// event($F8)  // was Grimoire, now used for sandbox event testing
+
+
+
+// places to try future events:
+//  the "..." event
+//  $41 (terrible bombardments)
+//  consolidate shop events
+//  consolidate inn events
+//  consolidate chocobo events
+//  save point message
+//  trap doors! christ
+//  dances?
+//  event $F6 (from eventcall $3D) seems... weird (loads Mysidia crystal room, from babil???)
+//  event $06 just enters tower of babil -- change overworld triggers to be teleports
+//  event $FE is underworld tank attack effect, but not easy to remove those triggers -- but could repurpose them to null event calls
+
+
+// eventcall($07)  was "Sealed with unknown power", now used for Giant exit
+
+// eventcall($10) // DamcyanBombing
+// {
+//     if not #DamcyanBombed:
+//         $42   //Red Wings bombing Damcyan
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($17) // Camping in Watery Cave
+// {
+//     if not #CampedInWateryPass:
+//         $31   //Watery Cave camping
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($19)
+// {
+//     if #FabulBattle, not #SpokeAboutRescuingRosa:
+//         $52   //Discussion about rescuing Rosa
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($1A)
+// {
+//     if #TwinsJoined, not #PalomExtinguishedFire:
+//         $5F   //Mt. Ordeals fire put out by Palom
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($1C)
+// {
+//     if not #DefeatedMilon1:
+//         $27   //Map message 0
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($1D)
+// {
+//     if not #DefeatedMilon1:
+//         $28   //Map message 1
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($25) // Tellah speaks while exiting first part of Watery Pass
+// {
+//     if not #ExitedWateryPass:
+//         $F2   //Watery Pass - North exiting message
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($29)
+// {
+//     if not #RosaSick:
+//         $51   //Rosa getting captured
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($2B)
+// {
+//     if #SpokeAboutRescuingRosa, not #LeviathanAttacked:
+//         $83   //Depart Fabul, Leviathan Attack
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($2C)
+// {
+//     if not #SpokeToToroiaClericsAfterCrystal, #GotEarthCrystal:
+//         $4A   //Toroia Clerics after Earth Crystal
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($3C)
+// {
+//     if #CPUBattle:
+//         $F5   //Load Room of Wishes, Yang/Cid/Edward, play 'Long Way to Go'
+//     else:
+//         $F4   //Load Room of Wishes, play 'Long Way to Go'
+// }
+// eventcall($3F)
+// {
+//     if #FoundFalcon, not #ReinforcedFalcon:
+//         $A7   //Cid meeting Edge, adding the heat shield to the Falcon
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($40)
+// {
+//     if not #EnteredFeymarch:
+//         $A9   //Feymarch entrance
+//     else:
+//         $00   //(no event)
+// }
+// 
+// eventcall($48)
+// {
+//     if #GotDarkCrystal, not #KainStoleDarkCrystal2:
+//         $B6   //Kain stealing the Dark Crystal and leaving
+//     else:
+//         $00   //(no event)
+// }
+
+
+// npc(#KainNormal)             // used for generic Cecil NPC in overworld
+// {
+//     sprite #Transparent
+//     default inactive
+//     eventcall {
+//     }
+// }
+
+
+
+// formation($82)
+// formation($83)
+// formation($84)
+// formation($85)
+// formation($86)
+// formation($87)
+// formation($B7)
+// formation($CB)
+// formation($CF)
+// formation($D7)
+// formation($D8)
+// formation($D9)           -> regular yang fight (F2, original original Yang fight, used in boss rando)
+// formation($DA)           -> used as final formation in Fabul gauntlet for rando
+// formation($DB)           -> alt Rydia fight
+// formation($F4)           -> alt Yang fight
+// formation($126)
+// formation($127)
+// formation($17F)
+// formation($1A0)
+// formation($1A4)
+// formation($1A5)
+// formation($1A6)
+// formation($1BB)
+// formation($1C8)
+// formation($1C9)
+// formation($1CA)
+// formation($1CB)
+// formation($1CC)
+// formation($1CD)
+// formation($1CE)
+// formation($1CF)
+// formation($1D0)
+// formation($1D1)
+// formation($1D2)
+// formation($1D3)
+// formation($1D4)
+// formation($1D5)
+// formation($1D6)
+// formation($1D7)
+// formation($1F5)
+// formation($1F6)
+// formation($1F7)
+// formation($1F8)
+// formation($1F9)
+// formation($1FF)
+
+// monster($53)   // Dummy      -> used for Lunarian weirdness
+// monster($D6)   // Dummy      -> used for boss randomizer
+// monster($D7)   // Dummy      -> used for boss randomizer
+// monster($D9)   // Dummy      -> used for boss randomizer
+// monster($DA)   // Dummy      -> used for boss randomizer
+// monster($DB)   // Dummy      -> used for boss randomizer
+// monster($DC)   // Dummy      -> used for boss randomizer
+// monster($DD)   // Dummy      -> used for boss randomizer
+// monster($DE)   // Dummy      -> used for boss randomizer

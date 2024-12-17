@@ -1,0 +1,158 @@
+//---------------------------------------------
+// Fusoya
+
+placement($160 0) {
+    // %fusoya_slot npc2%
+    npc #fe_DynamicNPCU
+    // %end%
+}
+
+event($D0)  //Meeting FuSoYa and having him join
+{
+    consts(placement) {
+        0   FuSoYa2
+        1   Rosa2
+        2   Edge3
+        3   AdultRydia2
+        4   Sparkle2
+    }
+    // autodetected map #LunarPalaceLobby
+    batch 3 {
+        player move up
+    }
+    toggle tint $E9
+    toggle tint $00
+    toggle tint $C9
+    toggle tint $00
+    toggle tint $A9
+    toggle tint $00
+    toggle tint $89
+    toggle tint $00
+    toggle tint $69
+    toggle tint $00
+    toggle tint $49
+    toggle tint $00
+    toggle tint $39
+    p #Sparkle2 toggle visible
+    batch 8 {
+        p #Sparkle2 move down
+    }
+    sound #Crystal
+    batch 30 {
+        screen flash
+    }
+    p #FuSoYa2 wave in
+    batch 7 {
+        p #FuSoYa2 toggle visible
+        p #Sparkle2 toggle visible
+    }
+    toggle tint $00
+    p #FuSoYa2 face down
+    pause 2
+    player move up
+    player move up
+    player move up
+    p #FuSoYa2 move down
+    p #FuSoYa2 move down
+    p #FuSoYa2 toggle visible
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.lunar_palace_character 0]
+    message #msg.fe_JoinedFanfare
+    [#B #Objectives_TickRewardSlot #reward_slot.lunar_palace_character]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.lunar_palace_character]
+    player face up
+    set #FusoyaJoined
+    music #Prelude
+}
+
+
+//---------------------------------------------
+// entrance to the core
+
+eventcall($4D)
+{
+    $DD   //Entering the Lunar Subterrane
+}
+
+
+event($DD)  //Entering the Lunar Subterrane
+{
+    consts(placement) {
+        0   Crystal3
+        1   Crystal4
+        2   Crystal5
+        3   Crystal6
+        4   Crystal7
+        5   Crystal8
+        6   Crystal9
+        7   Crystal10
+        8   Rosa2
+        9   Edge3
+        10   Kain2
+        11   AdultRydia2
+    }
+    // autodetected map #LunarPalaceCrystalRoom
+    player face down
+    pause 4
+    player wave in
+    toggle music fade
+    toggle tint $4A
+    batch 1 {
+        p #Crystal4 toggle visible
+        p #Crystal5 toggle visible
+        p #Crystal6 toggle visible
+        p #Crystal7 toggle visible
+        p #Crystal8 toggle visible
+        p #Crystal9 toggle visible
+        p #Crystal10 toggle visible
+    }
+    sound #Crystal
+    batch 5 {
+        screen flash
+    }
+    batch 1 {
+        p #Crystal4 toggle visible
+        p #Crystal5 toggle visible
+        p #Crystal6 toggle visible
+        p #Crystal7 toggle visible
+        p #Crystal8 toggle visible
+        p #Crystal9 toggle visible
+        p #Crystal10 toggle visible
+    }
+    toggle tint $00
+    toggle tint $2A
+    batch 1 {
+        p #Crystal3 toggle visible
+        p #Crystal5 toggle visible
+        p #Crystal6 toggle visible
+        p #Crystal7 toggle visible
+        p #Crystal8 toggle visible
+        p #Crystal9 toggle visible
+        p #Crystal10 toggle visible
+    }
+    sound $7E
+    batch 5 {
+        screen flash
+    }
+    batch 1 {
+        p #Crystal3 toggle visible
+        p #Crystal5 toggle visible
+        p #Crystal6 toggle visible
+        p #Crystal7 toggle visible
+        p #Crystal8 toggle visible
+        p #Crystal9 toggle visible
+        p #Crystal10 toggle visible
+    }
+    pause 4
+    [#B #Rando_LoadWackySprite 7 1]
+    sound #HealingPot
+    vfx #HealingPot
+    load map #LunarSubterran1F at 13 13 facing down
+    player wave in
+    sound #Electric
+    batch 20 {
+        screen flash
+    }
+    music #LunarSubterrane
+    toggle tint $00
+    player face down
+}

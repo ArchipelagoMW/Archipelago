@@ -1,0 +1,86 @@
+
+eventcall($24)
+{
+    if not #SpokeToEdwardInToroia:
+        $71   //Meeting Edward in Toroia, receiving TwinHarp
+    else:
+        $00   //(no event)
+}
+
+
+npc(#Edward4)
+{
+    sprite #Edward
+    default active
+    eventcall {
+        $29   //Map message 2 - Something is wet
+    }
+}
+
+
+event($71)  //Meeting Edward in Toroia, receiving TwinHarp
+{
+    consts(placement) {
+        0   Edward4
+        5   Tellah2
+        6   Yang3
+        7   Cid3
+    }
+    // autodetected map #ToroiaCastleHospital
+    p #Edward4 bow head
+    player move down
+    player move down
+    player move down
+    player face right
+    p #Edward4 face left
+
+    pause 4
+    message $1bd // take this    
+
+    // %if ap_toroia_hospital_item%
+    music #DummyFanfare
+    message #ap_reward_slot.toroia_hospital_item
+    // %else%
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.toroia_hospital_item 0]
+    message #msg.fe_Received
+    sound #GetItem
+    // %end%
+    [#B #Objectives_TickRewardSlot #reward_slot.toroia_hospital_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.toroia_hospital_item]
+    set #SpokeToEdwardInToroia
+
+    p #Edward4 bow head
+}
+
+
+text(map #ToroiaCastleHospital message $02) {
+[Edward]:Something in here
+ is wet, but I'm afraid
+ to ask about it.
+}
+
+text(bank 1 message $1BD) {
+[Edward]:[name $f0], take this_
+ It may help_
+}
+
+//-----------------------------------
+// Allow harp in Toroia to play music
+// after game has been completed
+
+npc(#Invisible17)
+{
+    eventcall {
+        $52
+    }
+}
+
+event($52)
+{
+    [#B #If #not_HasEverCompletedSeed 0] {
+        map message 8
+        [#B #EndEvent]
+    }
+
+    message $11c  // TwinHarp music message
+}

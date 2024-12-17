@@ -1,0 +1,329 @@
+// Set up "party recruit" special npc
+
+npc(#fe_ShadowParty)
+{
+    sprite #fe_DynamicSprite
+    default active
+    eventcall { $F5 }
+}
+
+// Put character placements in Mysidia crystal room and tower of wishes
+
+placement($88 0)  //#MysidiaCrystalRoom
+{
+    npc #fe_ShadowParty
+    position 9 17
+    walking off
+    tangible
+    face down
+    palette 1
+    turning off
+    marching on
+    speed 3
+}
+
+placement($88 1)  //#MysidiaCrystalRoom
+{
+    npc #fe_ShadowParty
+    position 6 16
+    walking off
+    tangible
+    face down
+    palette 0
+    turning off
+    marching on
+    speed 3
+}
+
+placement($88 2)  //#MysidiaCrystalRoom
+{
+    npc #fe_ShadowParty
+    position 6 10
+    walking off
+    tangible
+    face down
+    palette 1
+    turning off
+    marching on
+    speed 3
+}
+
+placement($88 3)  //#MysidiaCrystalRoom
+{
+    npc #fe_ShadowParty
+    position 6 5
+    walking off
+    tangible
+    face down
+    palette 1
+    turning off
+    marching on
+    speed 3
+}
+
+placement($88 4)  //#MysidiaCrystalRoom
+{
+    npc #fe_ShadowParty
+    position 16 5
+    walking off
+    tangible
+    face down
+    palette 2
+    turning off
+    marching on
+    speed 3
+}
+
+placement($88 5)  //#MysidiaCrystalRoom
+{
+    npc #fe_ShadowParty
+    position 16 10
+    walking off
+    tangible
+    face down
+    palette 0
+    turning off
+    marching on
+    speed 2
+}
+
+placement($88 6)  //#MysidiaCrystalRoom
+{
+    npc #fe_ShadowParty
+    position 16 16
+    walking off
+    tangible
+    face down
+    palette 0
+    turning off
+    marching on
+    speed 3
+}
+
+placement($88 7)  //#MysidiaCrystalRoom
+{
+    npc #fe_ShadowParty
+    position 13 17
+    walking off
+    tangible
+    face down
+    palette 0
+    turning off
+    marching on
+    speed 2
+}
+
+placement($88 8)  //#MysidiaCrystalRoom
+{
+    npc #fe_ShadowParty
+    position 8 13
+    walking off
+    tangible
+    face down
+    palette 0
+    turning off
+    marching on
+    speed 2
+}
+
+placement($88 9)  //#MysidiaCrystalRoom
+{
+    npc #fe_ShadowParty
+    position 10 12
+    walking off
+    tangible
+    face down
+    palette 0
+    turning off
+    marching on
+    speed 2
+}
+
+placement($88 10)  //#MysidiaCrystalRoom
+{
+    npc #fe_ShadowParty
+    position 12 12
+    walking off
+    tangible
+    face down
+    palette 0
+    turning off
+    marching on
+    speed 2
+}
+
+placement($88 11)  //#MysidiaCrystalRoom
+{
+    npc #fe_ShadowParty
+    position 14 13
+    walking off
+    tangible
+    face down
+    palette 0
+    turning off
+    marching on
+    speed 2
+}
+
+placement($17 3)  //#RoomOfWishes
+{
+    npc #fe_ShadowParty
+    position 1 10
+    walking off
+    tangible
+    face down
+    palette 1
+    turning on
+    marching on
+    speed 2
+}
+
+placement($17 4)  //#RoomOfWishes
+{
+    npc #fe_ShadowParty
+    position 2 10
+    walking off
+    tangible
+    face down
+    palette 0
+    turning on
+    marching on
+    speed 2
+}
+
+placement($17 6)  //#RoomOfWishes
+{
+    npc #fe_ShadowParty
+    position 8 10
+    walking off
+    tangible
+    face down
+    palette 1
+    turning on
+    marching on
+    speed 2
+}
+
+placement($17 7)  //#RoomOfWishes
+{
+    npc #fe_ShadowParty
+    position 9 10
+    walking off
+    tangible
+    face down
+    palette 0
+    turning on
+    marching on
+    speed 2
+}
+
+placement($17 8)  //#RoomOfWishes
+{
+    npc #fe_ShadowParty
+    position 2 12
+    walking off
+    tangible
+    face down
+    palette 1
+    turning on
+    marching on
+    speed 2
+}
+
+placement($17 9)  //#RoomOfWishes
+{
+    npc #fe_ShadowParty
+    position 8 12
+    walking off
+    tangible
+    face down
+    palette 0
+    turning on
+    marching on
+    speed 2
+}
+
+msfpatch {
+    CharacterRetrieval__CrystalRoomAxtors:
+        [[ 01 0E 03 10 0F 06 11 02 07 12 13 0D ]]
+
+    CharacterRetrieval__TowerAxtors:
+        [[ 00 00 00 0A 05 00 04 14 08 09 00 00 ]]
+}
+
+
+//---------------------------------------------------------
+
+event($F5)
+{
+// %flag characters_commitment on%
+    [#B #If #PartyFull 0] {
+        message $10b
+        [#B #EndEvent]
+    }
+// %end%
+
+    [#B #Rando_RetrieveCharacter]
+}
+
+text(bank 1 message $10b) {
+I'm stuck here forever!
+}
+
+//---------------------------------------------------------
+// Hook into placement visibility initialization
+
+msfpatch {
+    .addr $00c137
+        jml $=CharacterRetrieval__VisibilityInit
+
+    .new
+    CharacterRetrieval__VisibilityInit:
+        // check for shadow party NPC
+        cmp #$fe
+        beq $+IsShadowPartyNPC
+
+        // otherwise return to normal flow
+        phy
+        pha
+        and #$07
+        jml $00c13b
+
+    %IsShadowPartyNPC:
+        // if characters are irretrievable, it's just not visible
+        lda $=RandoFlag_characters_irretrievable
+        beq $+CharactersRetrievable
+        jmp $_ReturnFalse
+
+    %CharactersRetrievable:
+        // determine which axtor to check availability for
+        lda #$00
+        xba
+        lda $ae  // placement number
+        tax
+
+        lda $1702
+        cmp #$17 // room of wishes
+        beq $+RoomOfWishes
+
+        lda $=CharacterRetrieval__CrystalRoomAxtors,x
+        bra $+CheckShadowParty
+
+    %RoomOfWishes:
+        lda $=CharacterRetrieval__TowerAxtors,x
+
+    %CheckShadowParty:
+        jsr $_CharEx__LoadShadowPartySlotAddrX
+        lda $700000,x  // [hardcoded]
+        beq $+ReturnFalse
+
+        // shadow party slot is occupied, show NPC
+        lda #$01
+        bra $+Return
+    %ReturnFalse:
+        lda #$00
+    %Return:
+        jml $00c16f
+
+}
+

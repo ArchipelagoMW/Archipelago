@@ -1,0 +1,271 @@
+//---------------------------------------------------------------
+// make Baron Key unlock prompts always available
+npc(#LockedDoorWaterway)
+{
+    eventcall {
+        $1F   //Unlock the Waterway door
+    }
+}
+
+npc(#LockedDoorWeaponArmorShop)
+{
+    eventcall {
+        $20   //Unlock the Weapon/Armor shop
+    }
+}
+
+event($1F)  //Unlock the Waterway door
+{
+    consts(placement) {
+        0   LockedDoorWaterway
+    }
+    message $05   // "Locked."
+    select item #Baron
+    sound #Unlock
+    message $06   // "Opened!"
+    p #LockedDoorWaterway toggle visible
+    deactivate #LockedDoorWaterway
+    [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.baron_key]
+    [#B #Objectives_Tick #objective.quest_unlocksewer]
+    set #fe_UnlockedSewer
+
+    // in pushbtojump, it may be possible for Baron Castle to
+    // be cleared before unlocking this door; in that case, take
+    // the key now
+    [#B #If #Flag #flag.TwinsStone] {
+        take item #Baron
+    }
+}
+
+
+//---------------------------------------------------------------
+// Yang in Baron
+
+npc(#fe_BaronYang) {
+    // %yang2_slot sprite%
+    sprite #dyn.AxYang2
+    // %end%
+    default active
+    eventcall {
+        $21   //Cecil/Yang fight
+    }    
+}
+
+// change Tellah to replacement NPC for boss rando
+placement($0B 1)
+{
+    npc #fe_DynamicNPC
+    position 14 4
+    walking off
+    tangible
+    face down
+    // %karate_slot sprite main palette%
+    // %end%
+    turning on
+    marching off
+    speed 2    
+}
+
+placement($0B 10) {
+    npc #fe_BaronYang
+}
+
+npc(#Captain) {
+    default active
+    sprite $fe
+}
+
+placement($0B 0) {
+    // %guard_slot sprite 1 palette%
+    npc #fe_None    // will be compiled out if this NPC exists
+    position 0 0    
+    // %end%
+}
+
+placement($0B 8) {
+    // %guard_slot sprite 2 palette%
+    npc #fe_None    // will be compiled out if this NPC exists
+    position 0 0    
+    // %end%
+}
+
+event($21)  //Cecil/Yang fight
+{
+    consts(placement) {
+        0   Captain_A
+        8   Captain_B
+        1   Boss
+        9   Palom1
+        10   Yang1
+        11   Porom1
+    }
+    // hinted map #BaronInn
+    p #Boss face left
+    music #BossBattle
+    batch 1 {
+        p #Captain_B face up
+        p #Captain_A move left
+    }
+    batch 1 {
+        player face down
+        p #Captain_A move left
+    }
+    p #Captain_A move up
+    batch 1 {
+        p #Captain_A move up
+        player face left
+    }
+    p #Captain_A face right
+    batch 1 {
+        p #Captain_A toggle visible
+        p #Captain_B toggle visible
+    }
+    [#B #Rando_BossBattle #rando.guard_slot]
+    player face right
+    [#B #Objectives_TickBossSlot #rando.guard_slot]
+    [#B #Rando_PostBossBattle #rando.guard_slot]
+
+    [#B #LoadExtraNPCPalette #rando.karate_slot]
+    sound #BlackMagic
+    batch 5 {
+        p #Yang1 toggle visible
+        p #Boss toggle visible
+    }
+
+    player toggle turning
+    player move left
+    batch {
+        p #Yang1 move left
+        p #Boss move left
+    }
+    player toggle turning
+
+    [#B #Rando_BossBattle #rando.karate_slot]
+
+    music #None
+    clear #Temp
+    [#B #Rando_CheckFlag #randoflag.no_earned_characters]
+    [#B #If #not_Flag #flag.Result] {
+        set #Temp
+        p #Yang1 lie down
+        batch 5 {
+            p #Yang1 toggle visible
+            p #Boss toggle visible
+        }    
+    }
+    [#B #If #not_Flag #flag.Temp] {
+        batch 5 {
+            p #Boss toggle visible
+        }
+    }
+
+    [#B #Objectives_TickBossSlot #rando.karate_slot]
+    [#B #Rando_PostBossBattle #rando.karate_slot]
+    pause 16
+
+    [#B #ResetNPCPalette]
+
+    // %if ap_baron_inn_item%
+    music #DummyFanfare
+    message #ap_reward_slot.baron_inn_item
+    // %else%
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.baron_inn_item 0]
+    message #msg.fe_ReceivedFanfare
+    // %end%
+    [#B #Objectives_TickRewardSlot #reward_slot.baron_inn_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.baron_inn_item]
+
+    pause 4
+
+    [#B #If #Flag #flag.Temp] {
+        p #Yang1 bow head
+        pause 4
+        p #Yang1 face down
+        pause 4
+        p #Yang1 face left
+        pause 8
+        p #Yang1 move left
+        p #Yang1 toggle visible
+
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.baron_inn_character 0]
+        sound #GetItem
+        message #msg.fe_Joined
+        [#B #Objectives_TickRewardSlot #reward_slot.baron_inn_character]
+        [#B #Rando_DeliverRewardFromSlot #reward_slot.baron_inn_character 0]
+
+        player face right
+    }
+    
+    [#B #If #not_Flag #flag.Temp] {
+        player lie down
+    }
+
+    music #Town fade in
+    toggle screen fade
+
+    deactivate #fe_BaronYang
+    deactivate #Captain
+
+    load map #BaronInn at 5 13 facing down
+    vfx #PopWarpStack
+
+    set #CecilFoughtYang
+    clear status 
+    restore hp
+    restore mp
+    player bow head
+    toggle screen fade
+    player face down
+    player move left
+
+    batch 2 {
+        player move down
+    }
+    batch 10 {
+        player move right
+    }
+    player wave in
+    message $08   // "Let's go!"
+    [#B #Objectives_Tick #objective.quest_baroninn]
+    pause 4
+    player face down
+}
+
+// for some reason, the game shifts the battle enemy position two
+// tiles to the left specifically in formation F4... let's change that
+// in a way that also benefits the weird Lunarian room
+patch($01eb3f bus) { B9 01 }
+patch($01eb44 bus) { 10 }
+
+// fix Yang battle AI script
+ai_script($BA)
+{
+    fight
+    
+    use command #Kick
+    
+    fight
+    
+    use command #Kick
+    condition 1
+}
+
+text(battle message $12) {
+Ouch!
+}
+
+// %no free boss%
+ai_script($BB)
+{
+    pass
+}
+// %end%
+
+// %free boss%
+ai_script($BB)
+{
+    message $12 next action   // "[Yang]:Ouch!"
+    target self
+    use #Enemy_Vanish
+}
+// %end%

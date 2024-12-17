@@ -1,0 +1,86 @@
+// delete "sealed with unknown power" trigger
+trigger(#BaronCastleEastTowerB1 2)
+{
+    delete
+}
+mapgrid($38 22 5) { 01 }
+
+
+// remove Feymarch requirement
+eventcall($08)
+{
+    if not #LearnedOdin:
+        $19   //Odin battle
+    else:
+        $00   //(no event)
+}
+
+npc(#fe_Odin)
+{
+    sprite 
+        // %odin_slot sprite main%
+        #sprite.King
+        // %end%
+    default inactive
+    eventcall {
+    }
+}
+
+placement($39 0) {
+    npc #fe_Odin
+    // %odin_slot sprite main palette%
+    // %end%
+}
+
+
+event($19)  //Odin battle
+{
+    consts(placement) {
+        0   KingBaron
+    }
+    // autodetected map #BaronCastleOdinRoom
+    toggle music fade
+    toggle tint $97
+    sound #Crystal
+    batch 20 {
+        screen flash
+    }
+    batch 3 {
+        player move right
+    }
+    player face up
+    batch 11 {
+        p #KingBaron toggle visible
+    }
+    batch 2 {
+        player move up
+    }
+    pause 6
+    [#B #Rando_BossBattle #rando.odin_slot]
+    [#B #Objectives_TickBossSlot #rando.odin_slot]
+    [#B #Rando_PostBossBattle #rando.odin_slot]
+    pause 4
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.baron_throne_item 0]
+    // %if ap_baron_throne_item%
+    music #DummyFanfare
+    message #ap_reward_slot.baron_throne_item
+    // %else%
+    message #msg.fe_ReceivedFanfare
+    // %end%
+    batch 10 {
+        p #KingBaron toggle visible
+    }
+    batch 10 {
+        screen flash
+    }
+    p #KingBaron toggle visible
+    [#B #Objectives_TickRewardSlot #reward_slot.baron_throne_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.baron_throne_item]
+    player face up
+    music #None
+    [#B #Objectives_Tick #objective.quest_baronbasement]
+    music #Baron fade in
+    toggle tint $00
+    set #LearnedOdin
+    set #FindingOdinBeforeFeymarch
+}

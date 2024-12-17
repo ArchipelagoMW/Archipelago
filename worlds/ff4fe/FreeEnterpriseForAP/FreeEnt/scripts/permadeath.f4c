@@ -1,0 +1,115 @@
+msfpatch {
+    Permadeath:
+        // %flag characters_permadeader off%
+        // don't do anything for "no gameover" battles
+        lda $38e5
+        and #$02
+        beq $+DoPermadeath
+        rtl
+    %DoPermadeath:
+        // %end%
+
+        tdc
+        tax
+    %LoopStart:
+        lda $1003,x
+
+        // %flag characters_permadeader on%
+        and #$C0  // check for swoon + stone
+        // %end%
+        // %flag characters_permadeader off%
+        and #$80  // check for swoon
+        // %end%
+
+        beq $+Next
+        // %flag hero_challenge on%
+        //  the Hero is exempt from permadeath
+        lda $1000,x
+        and #$1f
+        cmp #$01
+        beq $+Next
+        // %end%
+        stz $1000,x
+        jsr $_CheckForLegendSword
+    %Next:
+        jsr $_Util__XPlus40
+        cpx #$0140
+        bcc $-LoopStart
+
+        // change party leader if previous party leader permadied
+        // switch D bank so we can borrow some bank 15 routines
+        phd
+        ldy #$0600
+        phy
+        pld
+
+        jsl $15c881     // X = party leader slot * 0x40
+        lda $1000,x
+        bne $+PartyLeaderAlive
+
+        jsl $=CyclePartyLeader
+    %PartyLeaderAlive:
+        pld
+        rtl
+
+    %CheckForLegendSword:
+        lda $1034,x
+        beq $+CheckLeftHand
+        lda $1033,x
+        cmp #$19
+        beq $+HasLegend
+    %CheckLeftHand:
+        lda $1036,x
+        beq $+NoLegend
+        lda $1035,x
+        cmp #$19
+        bne $+NoLegend
+    %HasLegend:
+        phx
+        jsr $_KeepLegendSword
+        plx
+    %NoLegend:
+        rts
+
+    %KeepLegendSword:
+        // blank dead character's hand slots to prevent double-trigger later
+        stz $1033,x
+        stz $1035,x
+        // try to stuff Legend Sword in the inventory
+        ldx #$0000
+    %InventoryLoop:
+        lda $1440,x
+        bne $+InventoryNext
+        lda #$19
+        sta $1440,x
+        lda #$01
+        sta $1441,x
+        rts
+    %InventoryNext:
+        inx
+        inx
+        cpx #$0060
+        bcc $-InventoryLoop
+
+        // if it didn't make it to the inventory, try to deliver as a battle item
+        lda $c6
+        bne $+SpoilsUnavailable
+        ldx #$0000
+    %SpoilsLoop:
+        lda $1804,x
+        bne $+SpoilsNext
+    %FoundEmptySpoilsSlot:
+        lda #$19
+        sta $1804,x
+        rts
+    %SpoilsNext:
+        inx
+        cpx #$0007
+        bcc $-SpoilsLoop
+        // Override eighth item with Legend, it's important
+        bra $-FoundEmptySpoilsSlot
+
+    %SpoilsUnavailable:
+        // this is extremely rare, so lose the sword and rely on the flag
+        rts
+}

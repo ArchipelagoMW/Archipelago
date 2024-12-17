@@ -1,0 +1,3 @@
+// remove critical-health check when determining whether to cover
+patch ($03AF8F bus) { EA EA }
+
