@@ -154,6 +154,9 @@ def home_path(*path: str) -> str:
     elif sys.platform.startswith('linux'):
         home_path.cached_path = os.path.expanduser('~/Archipelago')
         os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
+    elif sys.platform == 'darwin':
+        home_path.cached_path = os.path.expanduser('~/Library/Application Support/Archipelago')
+        os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
     else:
         # not implemented
         home_path.cached_path = local_path()  # this will generate the same exceptions we got previously
@@ -165,7 +168,7 @@ def user_path(*path: str) -> str:
     """Returns either local_path or home_path based on write permissions."""
     if hasattr(user_path, "cached_path"):
         pass
-    elif os.access(local_path(), os.W_OK):
+    elif os.access(local_path(), os.W_OK) and not (is_frozen() and is_macos):
         user_path.cached_path = local_path()
     else:
         user_path.cached_path = home_path()
