@@ -1,6 +1,5 @@
 .idea
 .vscode
-.lastseed
 
 *_Spoiler.txt
 *.bmbp
@@ -204,4 +203,3 @@ Thumbs.db
 # FF4 Free Enterprise
 /worlds/ff4fe/FreeEnterpriseForAP/FreeEnt/.build/
 !/worlds/ff4fe/FreeEnterpriseForAP/FreeEnt/*.bin
-/worlds/ff4fe/FreeEnterpriseForAP/fetools/assets/
