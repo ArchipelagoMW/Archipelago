@@ -278,14 +278,12 @@ class BlastShieldFrequency(Choice):
     Low: 10%
     Medium: 30%
     High: 50%
-    A Whole Lotta Blast Shields: 80% (This may have a hard time generating in solo worlds)
     """
 
     display_name = "Blast Shield Frequency"
     option_low = 1
     option_medium = 4
     option_high = 6
-    option_a_whole_lotta_blast_shields = 10
     default = 4
 
 
@@ -294,7 +292,7 @@ class LockedDoorCount(Range):
 
     display_name = "Number of Locked Doors to Include"
     range_start = 0
-    range_end = 3
+    range_end = 2
     default = 0
 
 
