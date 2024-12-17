@@ -104,11 +104,13 @@ class MagmoorCavernsAreaData(AreaData):
                         RoomName.Lava_Lake,
                         rule_func=can_heat,
                         tricks=[Tricks.lava_lake_item_suitless],
+                        indirect_condition_rooms=[RoomName.Burning_Trail],
                     ),
                     1: DoorData(
                         RoomName.Burning_Trail,
                         rule_func=can_heat,
                         tricks=[Tricks.lava_lake_item_suitless],
+                        indirect_condition_rooms=[RoomName.Burning_Trail],
                     ),
                 },
             ),
@@ -120,12 +122,14 @@ class MagmoorCavernsAreaData(AreaData):
                         rule_func=lambda world, state: can_heat(world, state)
                         and (can_bomb(world, state) or can_power_bomb(world, state)),
                         tricks=[Tricks.lava_lake_item_suitless],
+                        indirect_condition_rooms=[RoomName.Burning_Trail],
                     ),
                     1: DoorData(
                         RoomName.Pit_Tunnel,
                         rule_func=lambda world, state: can_heat(world, state)
                         and (can_bomb(world, state) or can_power_bomb(world, state)),
                         tricks=[Tricks.lava_lake_item_suitless],
+                        indirect_condition_rooms=[RoomName.Burning_Trail],
                     ),
                 },
                 pickups=[

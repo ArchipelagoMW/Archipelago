@@ -428,18 +428,15 @@ class Tricks:
         lambda world, state: can_missile(world, state)
         and can_space_jump(world, state)
         and has_energy_tanks(world, state, 4)
-        and state.can_reach(
-            "Magmoor Caverns: " + RoomName.Lake_Tunnel.value, None, world.player
-        ),
+        and can_heat(world, state)
+        and state.can_reach(RoomName.Burning_Trail.value, None, world.player),
     )
     lava_lake_item_missiles_only = TrickInfo(
         "Lava Lake Item Missiles Only",
         "Reach lava lake item without space jump by jumping on base of column",
         TrickDifficulty.Easy,
         lambda world, state: can_missile(world, state)
-        and state.can_reach(
-            "Magmoor Caverns: " + RoomName.Lake_Tunnel.value, None, world.player
-        ),
+        and state.can_reach(RoomName.Burning_Trail.value, None, world.player),
     )
 
     triclops_pit_item_no_sj = TrickInfo(
