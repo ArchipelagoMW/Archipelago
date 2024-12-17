@@ -61,7 +61,19 @@ all_start_rooms: Dict[str, StartRoomData] = {
                         "Chozo Ruins: Ruined Shrine - Plated Beetle": [
                             SuitUpgrade.Morph_Ball
                         ],
-                    }
+                        "Chozo Ruins: Ruined Gallery - Missile Wall": [
+                            SuitUpgrade.Morph_Ball_Bomb
+                        ],
+                    },
+                    {
+                        "Chozo Ruins: Hive Totem": [SuitUpgrade.Missile_Launcher],
+                        "Chozo Ruins: Ruined Shrine - Plated Beetle": [
+                            SuitUpgrade.Morph_Ball_Bomb
+                        ],
+                        "Chozo Ruins: Ruined Gallery - Missile Wall": [
+                            SuitUpgrade.Morph_Ball
+                        ],
+                    },
                 ],
                 starting_beam=SuitUpgrade.Power_Beam,
             ),
@@ -123,7 +135,19 @@ all_start_rooms: Dict[str, StartRoomData] = {
                         "Chozo Ruins: Ruined Shrine - Plated Beetle": [
                             SuitUpgrade.Morph_Ball
                         ],
-                    }
+                        "Chozo Ruins: Ruined Gallery - Missile Wall": [
+                            SuitUpgrade.Morph_Ball_Bomb
+                        ],
+                    },
+                    {
+                        "Chozo Ruins: Hive Totem": [SuitUpgrade.Missile_Launcher],
+                        "Chozo Ruins: Ruined Shrine - Plated Beetle": [
+                            SuitUpgrade.Morph_Ball_Bomb
+                        ],
+                        "Chozo Ruins: Ruined Gallery - Missile Wall": [
+                            SuitUpgrade.Morph_Ball
+                        ],
+                    },
                 ],
                 starting_beam=SuitUpgrade.Power_Beam,
             ),
