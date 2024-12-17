@@ -363,18 +363,16 @@ class LinksAwakeningWorld(World):
 
         # Set up state
         partial_all_state = CollectionState(self.multiworld)
-        # Collect every item from the item pool and every pre-fill item like MultiWorld.get_all_state, but don't sweep.
+        # Collect every item from the item pool and every pre-fill item like MultiWorld.get_all_state, except not our own pre-fill items.
         for item in self.multiworld.itempool:
             partial_all_state.collect(item, prevent_sweep=True)
         for player in self.multiworld.player_ids:
+            if player == self.player:
+                # Don't collect the items we're about to place.
+                continue
             subworld = self.multiworld.worlds[player]
             for item in subworld.get_pre_fill_items():
                 partial_all_state.collect(item, prevent_sweep=True)
-        # get_all_state would normally sweep here, but we need to remove our dungeon items first.
-        
-        # Remove dungeon items we are about to put in from the state so that we don't double count
-        for item in all_dungeon_items_to_fill:
-            partial_all_state.remove(item)
 
         # Sweep to pick up already placed items that are reachable with everything but the dungeon items.
         partial_all_state.sweep_for_advancements()
