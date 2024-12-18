@@ -32,7 +32,7 @@ def set_rules(world: "MLSSWorld", excluded):
             if "Badge" in location.name or "Pants" in location.name:
                 add_rule(
                     world.get_location(location.name),
-                    lambda state: StateLogic.brooch(state, world.player) or StateLogic.rose(state, world.player),
+                    lambda state: (StateLogic.brooch(state, world.player) and StateLogic.fruits(state, world.player)) or StateLogic.rose(state, world.player),
                 )
         if location.itemType != 0 and location.name not in excluded:
             if "Bowser" in location.name and world.options.castle_skip:

@@ -186,5 +186,12 @@ item_frequencies: typing.Dict[str, int] = {
     "Hammers": 3,
 }
 
+mlss_item_name_groups = {
+    "Beanstar Piece": { "Beanstar Piece 1", "Beanstar Piece 2", "Beanstar Piece 3", "Beanstar Piece 4"},
+    "Beanfruit": { "Bean Fruit 1", "Bean Fruit 2", "Bean Fruit 3", "Bean Fruit 4", "Bean Fruit 5", "Bean Fruit 6", "Bean Fruit 7"},
+    "Neon Egg": { "Blue Neon Egg", "Red Neon Egg", "Green Neon Egg", "Yellow Neon Egg", "Purple Neon Egg", "Orange Neon Egg", "Azure Neon Egg"},
+    "Chuckola Fruit": { "Red Chuckola Fruit", "Purple Chuckola Fruit", "White Chuckola Fruit"}
+}
+
 item_table: typing.Dict[str, ItemData] = {item.itemName: item for item in itemList}
 items_by_id: typing.Dict[int, ItemData] = {item.code: item for item in itemList}

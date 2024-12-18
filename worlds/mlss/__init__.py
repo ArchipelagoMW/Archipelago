@@ -7,7 +7,7 @@ from worlds.AutoWorld import WebWorld, World
 from typing import Set, Dict, Any
 from .Locations import all_locations, location_table, bowsers, bowsersMini, hidden, coins
 from .Options import MLSSOptions
-from .Items import MLSSItem, itemList, item_frequencies, item_table
+from .Items import MLSSItem, itemList, item_frequencies, item_table, mlss_item_name_groups
 from .Names.LocationName import LocationName
 from .Client import MLSSClient
 from .Regions import create_regions, connect_regions
@@ -53,9 +53,9 @@ class MLSSWorld(World):
     options_dataclass = MLSSOptions
     options: MLSSOptions
     settings: typing.ClassVar[MLSSSettings]
+    item_name_groups = mlss_item_name_groups
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
-    required_client_version = (0, 5, 0)
 
     disabled_locations: Set[str]
 

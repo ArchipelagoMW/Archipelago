@@ -234,7 +234,7 @@ class MLSSPatchExtension(APPatchExtension):
                 stream.seek(pos)
                 temp = stream.read(1)
                 stream.seek(pos)
-                stream.write(bytes([temp[0] | 0x8]))
+                stream.write(bytes([temp[0] | 0x80]))
             stream.seek(pos + 1)
             stream.write(groups.pop())
 

@@ -251,9 +251,9 @@ coins: typing.List[LocationData] = [
     LocationData("Hoohoo Village North Cave Room 1 Coin Block", 0x39DAA0, 0),
     LocationData("Hoohoo Village South Cave Coin Block 1", 0x39DAC5, 0),
     LocationData("Hoohoo Village South Cave Coin Block 2", 0x39DAD5, 0),
-    LocationData("Hoohoo Mountain Base Boo Statue Cave Coin Block 1", 0x39DAE2, 0),
-    LocationData("Hoohoo Mountain Base Boo Statue Cave Coin Block 2", 0x39DAF2, 0),
-    LocationData("Hoohoo Mountain Base Boo Statue Cave Coin Block 3", 0x39DAFA, 0),
+    LocationData("Hoohoo Mountain Base Boostatue Cave Coin Block 1", 0x39DAE2, 0),
+    LocationData("Hoohoo Mountain Base Boostatue Cave Coin Block 2", 0x39DAF2, 0),
+    LocationData("Hoohoo Mountain Base Boostatue Cave Coin Block 3", 0x39DAFA, 0),
     LocationData("Beanbean Outskirts NW Coin Block", 0x39DB8F, 0),
     LocationData("Beanbean Outskirts S Room 1 Coin Block", 0x39DC18, 0),
     LocationData("Beanbean Outskirts S Room 2 Coin Block", 0x39DC3D, 0),
@@ -298,7 +298,7 @@ booStatue: typing.List[LocationData] = [
     LocationData("Beanbean Outskirts Before Harhall Digspot 1", 0x39E951, 0),
     LocationData("Beanbean Outskirts Before Harhall Digspot 2", 0x39E959, 0),
     LocationData("Beanstar Piece Harhall", 0x1E9441, 2),
-    LocationData("Beanbean Outskirts Boo Statue Mole", 0x1E9434, 2),
+    LocationData("Beanbean Outskirts Boostatue Mole", 0x1E9434, 2),
     LocationData("Harhall's Pants", 0x1E9444, 2),
     LocationData("Beanbean Outskirts S Room 2 Digspot 1", 0x39DC65, 0),
     LocationData("Beanbean Outskirts S Room 2 Digspot 2", 0x39DC5D, 0),
@@ -786,7 +786,7 @@ nonBlock = [
     (0x4373, 0x10, 0x277A45),  # Teehee Valley Mole
     (0x434D, 0x8, 0x1E9444),  # Harhall's Pants
     (0x432E, 0x10, 0x1E9441),  # Harhall Beanstar Piece
-    (0x434B, 0x8, 0x1E9434),  # Outskirts Boo Statue Mole
+    (0x434B, 0x8, 0x1E9434),  # Outskirts Boostatue Mole
     (0x42FE, 0x2, 0x1E943E),  # Red Goblet
     (0x42FE, 0x4, 0x24E628),  # Green Goblet
     (0x4301, 0x10, 0x250621),  # Red Chuckola Fruit
