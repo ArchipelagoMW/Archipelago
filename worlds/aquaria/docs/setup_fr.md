@@ -3,12 +3,11 @@
 ## Logiciels nécessaires
 
 - Une copie du jeu Aquaria non-modifiée (disponible sur la majorité des sites de ventes de jeux vidéos en ligne)
-- Le client du Randomizer d'Aquaria [Aquaria randomizer]
-(https://github.com/tioui/Aquaria_Randomizer/releases)
+- Le client du Randomizer d'Aquaria [Aquaria randomizer](https://github.com/tioui/Aquaria_Randomizer/releases/latest)
 
 ## Logiciels optionnels
 
-- De manière optionnel, pour pouvoir envoyer des [commandes](/tutorial/Archipelago/commands/en) comme `!hint`: utilisez le client texte de [la version la plus récente d'Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
+- De manière optionnel, pour pouvoir envoyer des [commandes](/tutorial/Archipelago/commands/en) comme `!hint`: utilisez le client texte de [la version la plus récente d'Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
 - [Aquaria AP Tracker](https://github.com/palex00/aquaria-ap-tracker/releases/latest), pour utiliser avec [PopTracker](https://github.com/black-sliver/PopTracker/releases/latest)
 
 ## Procédures d'installation et d'exécution
