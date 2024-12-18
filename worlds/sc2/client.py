@@ -948,6 +948,10 @@ class SC2Context(CommonContext):
         if self.sc2_run_task:
             self.sc2_run_task.cancel()
 
+    async def disconnect(self, allow_autoreconnect: bool = False):
+        self.finished_game = False
+        await super(SC2Context, self).disconnect(allow_autoreconnect=allow_autoreconnect)
+
     def play_mission(self, mission_id: int) -> bool:
         if self.missions_unlocked or is_mission_available(self, mission_id):
             if self.sc2_run_task:
