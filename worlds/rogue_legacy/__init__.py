@@ -4,7 +4,7 @@ from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .Items import RLItem, RLItemData, event_item_table, get_items_by_category, item_table
 from .Locations import RLLocation, location_table
-from .Options import rl_options
+from .Options import RLOptions
 from .Presets import rl_options_presets
 from .Regions import create_regions
 from .Rules import set_rules
@@ -33,35 +33,32 @@ class RLWorld(World):
     But that's OK, because no one is perfect, and you don't have to be to succeed.
     """
     game = "Rogue Legacy"
-    option_definitions = rl_options
+    options_dataclass = RLOptions
+    options: RLOptions
     topology_present = True
     required_client_version = (0, 3, 5)
     web = RLWeb()
 
-    item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = {name: data.code for name, data in location_table.items()}
-
-    # TODO: Replace calls to this function with "options-dict", once that PR is completed and merged.
-    def get_setting(self, name: str):
-        return getattr(self.multiworld, name)[self.player]
+    item_name_to_id = {name: data.code for name, data in item_table.items() if data.code is not None}
+    location_name_to_id = {name: data.code for name, data in location_table.items() if data.code is not None}
 
     def fill_slot_data(self) -> dict:
-        return {option_name: self.get_setting(option_name).value for option_name in rl_options}
+        return self.options.as_dict(*[name for name in self.options_dataclass.type_hints.keys()])
 
     def generate_early(self):
         # Check validation of names.
-        additional_lady_names = len(self.get_setting("additional_lady_names").value)
-        additional_sir_names = len(self.get_setting("additional_sir_names").value)
-        if not self.get_setting("allow_default_names"):
-            if additional_lady_names < int(self.get_setting("number_of_children")):
+        additional_lady_names = len(self.options.additional_lady_names.value)
+        additional_sir_names = len(self.options.additional_sir_names.value)
+        if not self.options.allow_default_names:
+            if additional_lady_names < int(self.options.number_of_children):
                 raise Exception(
                     f"allow_default_names is off, but not enough names are defined in additional_lady_names. "
-                    f"Expected {int(self.get_setting('number_of_children'))}, Got {additional_lady_names}")
+                    f"Expected {int(self.options.number_of_children)}, Got {additional_lady_names}")
 
-            if additional_sir_names < int(self.get_setting("number_of_children")):
+            if additional_sir_names < int(self.options.number_of_children):
                 raise Exception(
                     f"allow_default_names is off, but not enough names are defined in additional_sir_names. "
-                    f"Expected {int(self.get_setting('number_of_children'))}, Got {additional_sir_names}")
+                    f"Expected {int(self.options.number_of_children)}, Got {additional_sir_names}")
 
     def create_items(self):
         item_pool: List[RLItem] = []
@@ -71,110 +68,110 @@ class RLWorld(World):
 
             # Architect
             if name == "Architect":
-                if self.get_setting("architect") == "disabled":
+                if self.options.architect == "disabled":
                     continue
-                if self.get_setting("architect") == "start_unlocked":
+                if self.options.architect == "start_unlocked":
                     self.multiworld.push_precollected(self.create_item(name))
                     continue
-                if self.get_setting("architect") == "early":
+                if self.options.architect == "early":
                     self.multiworld.local_early_items[self.player]["Architect"] = 1
 
             # Blacksmith and Enchantress
             if name == "Blacksmith" or name == "Enchantress":
-                if self.get_setting("vendors") == "start_unlocked":
+                if self.options.vendors == "start_unlocked":
                     self.multiworld.push_precollected(self.create_item(name))
                     continue
-                if self.get_setting("vendors") == "early":
+                if self.options.vendors == "early":
                     self.multiworld.local_early_items[self.player]["Blacksmith"] = 1
                     self.multiworld.local_early_items[self.player]["Enchantress"] = 1
 
             # Haggling
-            if name == "Haggling" and self.get_setting("disable_charon"):
+            if name == "Haggling" and self.options.disable_charon:
                 continue
 
             # Blueprints
             if data.category == "Blueprints":
                 # No progressive blueprints if progressive_blueprints are disabled.
-                if name == "Progressive Blueprints" and not self.get_setting("progressive_blueprints"):
+                if name == "Progressive Blueprints" and not self.options.progressive_blueprints:
                     continue
                 # No distinct blueprints if progressive_blueprints are enabled.
-                elif name != "Progressive Blueprints" and self.get_setting("progressive_blueprints"):
+                elif name != "Progressive Blueprints" and self.options.progressive_blueprints:
                     continue
 
             # Classes
             if data.category == "Classes":
                 if name == "Progressive Knights":
-                    if "Knight" not in self.get_setting("available_classes"):
+                    if "Knight" not in self.options.available_classes:
                         continue
 
-                    if self.get_setting("starting_class") == "knight":
+                    if self.options.starting_class == "knight":
                         quantity = 1
                 if name == "Progressive Mages":
-                    if "Mage" not in self.get_setting("available_classes"):
+                    if "Mage" not in self.options.available_classes:
                         continue
 
-                    if self.get_setting("starting_class") == "mage":
+                    if self.options.starting_class == "mage":
                         quantity = 1
                 if name == "Progressive Barbarians":
-                    if "Barbarian" not in self.get_setting("available_classes"):
+                    if "Barbarian" not in self.options.available_classes:
                         continue
 
-                    if self.get_setting("starting_class") == "barbarian":
+                    if self.options.starting_class == "barbarian":
                         quantity = 1
                 if name == "Progressive Knaves":
-                    if "Knave" not in self.get_setting("available_classes"):
+                    if "Knave" not in self.options.available_classes:
                         continue
 
-                    if self.get_setting("starting_class") == "knave":
+                    if self.options.starting_class == "knave":
                         quantity = 1
                 if name == "Progressive Miners":
-                    if "Miner" not in self.get_setting("available_classes"):
+                    if "Miner" not in self.options.available_classes:
                         continue
 
-                    if self.get_setting("starting_class") == "miner":
+                    if self.options.starting_class == "miner":
                         quantity = 1
                 if name == "Progressive Shinobis":
-                    if "Shinobi" not in self.get_setting("available_classes"):
+                    if "Shinobi" not in self.options.available_classes:
                         continue
 
-                    if self.get_setting("starting_class") == "shinobi":
+                    if self.options.starting_class == "shinobi":
                         quantity = 1
                 if name == "Progressive Liches":
-                    if "Lich" not in self.get_setting("available_classes"):
+                    if "Lich" not in self.options.available_classes:
                         continue
 
-                    if self.get_setting("starting_class") == "lich":
+                    if self.options.starting_class == "lich":
                         quantity = 1
                 if name == "Progressive Spellthieves":
-                    if "Spellthief" not in self.get_setting("available_classes"):
+                    if "Spellthief" not in self.options.available_classes:
                         continue
 
-                    if self.get_setting("starting_class") == "spellthief":
+                    if self.options.starting_class == "spellthief":
                         quantity = 1
                 if name == "Dragons":
-                    if "Dragon" not in self.get_setting("available_classes"):
+                    if "Dragon" not in self.options.available_classes:
                         continue
                 if name == "Traitors":
-                    if "Traitor" not in self.get_setting("available_classes"):
+                    if "Traitor" not in self.options.available_classes:
                         continue
 
             # Skills
             if name == "Health Up":
-                quantity = self.get_setting("health_pool")
+                quantity = self.options.health_pool.value
             elif name == "Mana Up":
-                quantity = self.get_setting("mana_pool")
+                quantity = self.options.mana_pool.value
             elif name == "Attack Up":
-                quantity = self.get_setting("attack_pool")
+                quantity = self.options.attack_pool.value
             elif name == "Magic Damage Up":
-                quantity = self.get_setting("magic_damage_pool")
+                quantity = self.options.magic_damage_pool.value
             elif name == "Armor Up":
-                quantity = self.get_setting("armor_pool")
+                quantity = self.options.armor_pool.value
             elif name == "Equip Up":
-                quantity = self.get_setting("equip_pool")
+                quantity = self.options.equip_pool.value
             elif name == "Crit Chance Up":
-                quantity = self.get_setting("crit_chance_pool")
+                quantity = self.options.crit_chance_pool.value
             elif name == "Crit Damage Up":
-                quantity = self.get_setting("crit_damage_pool")
+                quantity = self.options.crit_damage_pool.value
 
             # Ignore filler, it will be added in a later stage.
             if data.category == "Filler":
@@ -191,7 +188,7 @@ class RLWorld(World):
     def get_filler_item_name(self) -> str:
         fillers = get_items_by_category("Filler")
         weights = [data.weight for data in fillers.values()]
-        return self.multiworld.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
+        return self.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
 
     def create_item(self, name: str) -> RLItem:
         data = item_table[name]
@@ -202,10 +199,10 @@ class RLWorld(World):
         return RLItem(name, data.classification, data.code, self.player)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player)
+        set_rules(self, self.player)
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player)
+        create_regions(self)
         self._place_events()
 
     def _place_events(self):
@@ -214,7 +211,7 @@ class RLWorld(World):
             self.create_event("Defeat The Fountain"))
 
         # Khidr / Neo Khidr
-        if self.get_setting("khidr") == "vanilla":
+        if self.options.khidr == "vanilla":
             self.multiworld.get_location("Castle Hamson Boss Room", self.player).place_locked_item(
                 self.create_event("Defeat Khidr"))
         else:
@@ -222,7 +219,7 @@ class RLWorld(World):
                 self.create_event("Defeat Neo Khidr"))
 
         # Alexander / Alexander IV
-        if self.get_setting("alexander") == "vanilla":
+        if self.options.alexander == "vanilla":
             self.multiworld.get_location("Forest Abkhazia Boss Room", self.player).place_locked_item(
                 self.create_event("Defeat Alexander"))
         else:
@@ -230,7 +227,7 @@ class RLWorld(World):
                 self.create_event("Defeat Alexander IV"))
 
         # Ponce de Leon / Ponce de Freon
-        if self.get_setting("leon") == "vanilla":
+        if self.options.leon == "vanilla":
             self.multiworld.get_location("The Maya Boss Room", self.player).place_locked_item(
                 self.create_event("Defeat Ponce de Leon"))
         else:
@@ -238,7 +235,7 @@ class RLWorld(World):
                 self.create_event("Defeat Ponce de Freon"))
 
         # Herodotus / Astrodotus
-        if self.get_setting("herodotus") == "vanilla":
+        if self.options.herodotus == "vanilla":
             self.multiworld.get_location("Land of Darkness Boss Room", self.player).place_locked_item(
                 self.create_event("Defeat Herodotus"))
         else:

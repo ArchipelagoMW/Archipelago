@@ -16,7 +16,7 @@ class UNoProgressionHardHiddenTest(AquariaTestBase):
 
     unfillable_locations = [
         "Energy Temple boss area, Fallen God Tooth",
-        "Cathedral boss area, beating Mithalan God",
+        "Mithalas boss area, beating Mithalan God",
         "Kelp Forest boss area, beating Drunian God",
         "Sun Temple boss area, beating Sun God",
         "Sunken City, bulb on top of the boss area",
@@ -35,7 +35,7 @@ class UNoProgressionHardHiddenTest(AquariaTestBase):
         "Bubble Cave, bulb in the right cave wall (behind the ice crystal)",
         "Bubble Cave, Verse Egg",
         "Kelp Forest bottom left area, bulb close to the spirit crystals",
-        "Kelp Forest bottom left area, Walker baby",
+        "Kelp Forest bottom left area, Walker Baby",
         "Sun Temple, Sun Key",
         "The Body bottom area, Mutant Costume",
         "Sun Temple, bulb in the hidden room of the right part",
@@ -49,7 +49,7 @@ class UNoProgressionHardHiddenTest(AquariaTestBase):
         for location in self.unfillable_locations:
             for item_name in self.world.item_names:
                 item = self.get_item_by_name(item_name)
-                if item.classification == ItemClassification.progression:
+                if item.advancement:
                     self.assertFalse(
                         self.world.get_location(location).can_fill(self.multiworld.state, item, False),
                         "The location \"" + location + "\" can be filled with \"" + item_name + "\"")

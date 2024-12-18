@@ -1,7 +1,5 @@
 ==Tutorial (Inside)==
 
-Menu (Menu) - Entry - True:
-
 Entry (Entry):
 
 Tutorial First Hallway (Tutorial First Hallway) - Entry - True - Tutorial First Hallway Room - 0x00064:
@@ -176,6 +174,7 @@ Door - 0x03444 (Vault Door) - 0x0CC7B
 Door - 0x09FEE (Light Room Entry) - 0x0C339
 158701 - 0x03608 (Laser Panel) - 0x012D7 & 0x0A15F - True
 Laser - 0x012FB (Laser) - 0x03608
+159804 - 0xFFD03 (Laser Activated + Redirected) - 0x09F98 & 0x012FB - True
 159020 - 0x3351D (Sand Snake EP) - True - True
 159030 - 0x0053C (Facade Right EP) - True - True
 159031 - 0x00771 (Facade Left EP) - True - True
@@ -805,7 +804,7 @@ Swamp Rotating Bridge (Swamp) - Swamp Between Bridges Far - 0x181F5 - Swamp Near
 159334 - 0x036CE (Rotating Bridge CW EP) - 0x181F5 - True
 
 Swamp Near Boat (Swamp) - Swamp Rotating Bridge - TrueOneWay - Swamp Blue Underwater - 0x18482 - Swamp Long Bridge - 0xFFD00 & 0xFFD02 - The Ocean - 0x09DB8:
-158903 - 0xFFD02 (Beyond Rotating Bridge Reached Independently) - True - True
+159803 - 0xFFD02 (Beyond Rotating Bridge Reached Independently) - True - True
 158328 - 0x09DB8 (Boat Spawn) - True - Boat
 158329 - 0x003B2 (Beyond Rotating Bridge 1) - 0x0000A - Rotated Shapers
 158330 - 0x00A1E (Beyond Rotating Bridge 2) - 0x003B2 - Rotated Shapers
@@ -980,7 +979,7 @@ Mountainside Obelisk (Mountainside) - Entry - True:
 159739 - 0x00367 (Obelisk) - True - True
 
 Mountainside (Mountainside) - Main Island - True - Mountaintop - True - Mountainside Vault - 0x00085:
-159550 - 0x28B91 (Thundercloud EP) - 0x09F98 & 0x012FB - True
+159550 - 0x28B91 (Thundercloud EP) - 0xFFD03 - True
 158612 - 0x17C42 (Discard) - True - Triangles
 158665 - 0x002A6 (Vault Panel) - True - Symmetry & Colored Dots & Black/White Squares & Dots
 Door - 0x00085 (Vault Door) - 0x002A6
@@ -1088,7 +1087,7 @@ Mountain Bottom Floor Pillars Room (Mountain Bottom Floor) - Elevator - 0x339BB 
 158529 - 0x339BB (Left Pillar 4) - 0x03859 - Black/White Squares & Stars & Symmetry
 
 Elevator (Mountain Bottom Floor):
-158530 - 0x3D9A6 (Elevator Door Closer Left) - True - True
+158530 - 0x3D9A6 (Elevator Door Close Left) - True - True
 158531 - 0x3D9A7 (Elevator Door Close Right) - True - True
 158532 - 0x3C113 (Elevator Entry Left) - 0x3D9A6 | 0x3D9A7 - True
 158533 - 0x3C114 (Elevator Entry Right) - 0x3D9A6 | 0x3D9A7 - True

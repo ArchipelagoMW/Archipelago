@@ -8,8 +8,7 @@ import typing
 import Utils
 from BaseClasses import Item, CollectionState, Tutorial, MultiWorld
 from .Dungeons import create_dungeons, Dungeon
-from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect, \
-    indirect_connections, indirect_connections_inverted, indirect_connections_not_inverted
+from .EntranceShuffle import link_entrances, link_inverted_entrances, plando_connect
 from .InvertedRegions import create_inverted_regions, mark_dark_world_regions
 from .ItemPool import generate_itempool, difficulties
 from .Items import item_init_table, item_name_groups, item_table, GetBeemizerItem
@@ -137,6 +136,7 @@ class ALTTPWorld(World):
     settings_key = "lttp_options"
     settings: typing.ClassVar[ALTTPSettings]
     topology_present = True
+    explicit_indirect_conditions = False
     item_name_groups = item_name_groups
     location_name_groups = {
         "Blind's Hideout": {"Blind's Hideout - Top", "Blind's Hideout - Left", "Blind's Hideout - Right",
@@ -356,6 +356,8 @@ class ALTTPWorld(World):
                 self.dungeon_local_item_names |= self.item_name_groups[option.item_name_group]
                 if option == "original_dungeon":
                     self.dungeon_specific_item_names |= self.item_name_groups[option.item_name_group]
+                else:
+                    self.options.local_items.value |= self.dungeon_local_item_names
 
         self.difficulty_requirements = difficulties[multiworld.item_pool[player].current_key]
 
@@ -392,22 +394,12 @@ class ALTTPWorld(World):
         if multiworld.mode[player] != 'inverted':
             link_entrances(multiworld, player)
             mark_light_world_regions(multiworld, player)
-            for region_name, entrance_name in indirect_connections_not_inverted.items():
-                multiworld.register_indirect_condition(multiworld.get_region(region_name, player),
-                                                  multiworld.get_entrance(entrance_name, player))
         else:
             link_inverted_entrances(multiworld, player)
             mark_dark_world_regions(multiworld, player)
-            for region_name, entrance_name in indirect_connections_inverted.items():
-                multiworld.register_indirect_condition(multiworld.get_region(region_name, player),
-                                                  multiworld.get_entrance(entrance_name, player))
 
         multiworld.random = old_random
         plando_connect(multiworld, player)
-
-        for region_name, entrance_name in indirect_connections.items():
-            multiworld.register_indirect_condition(multiworld.get_region(region_name, player),
-                                              multiworld.get_entrance(entrance_name, player))
 
     def collect_item(self, state: CollectionState, item: Item, remove=False):
         item_name = item.name
