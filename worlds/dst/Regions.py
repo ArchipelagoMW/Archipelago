@@ -225,4 +225,4 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
    # Fill boss locations with prefill items
    for bossname, fillitem in BOSS_PREFILLS.items():
       if bossname in EXISTING_LOCATIONS:
-         multiworld.get_location(bossname, player).place_locked_item(multiworld.create_item(fillitem, player))
+         multiworld.get_location(bossname, player).place_locked_item(itempool.create_item(multiworld.worlds[player], fillitem))

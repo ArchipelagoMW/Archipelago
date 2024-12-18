@@ -187,7 +187,9 @@ class DSTWorld(World):
         self.dst_itempool.decide_itempools(self)
 
     def create_item(self, name: str) -> Item:
-        return self.dst_itempool.create_item(self, name)
+        item = self.dst_itempool.create_item(self, name)
+        item.classification = ItemClassification.progression # Force spawned items to be progression so they could be in logic
+        return item
     
     def create_items(self) -> None:
         self.dst_itempool.create_items(self)

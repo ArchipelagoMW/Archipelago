@@ -131,7 +131,7 @@ class DSTItemPool:
         }
 
         for name in self.nonfiller_itempool:
-            item = world.create_item(name)
+            item = self.create_item(world, name)
             if not name in self.locked_items:
                 # Add physical items always
                 item_pool.append(item)
