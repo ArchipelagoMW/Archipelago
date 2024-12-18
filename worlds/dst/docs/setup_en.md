@@ -29,6 +29,7 @@
     * It's also fine to always add Caves, even if your logic doesn't include it.
 - Click on the Mods tab. Enable Archipelago Randomizer, from the Server Mods category.
     * If you don't see it, make sure you subscribe to it on the Steam Workshop. Don't worry, you don't have to restart Don't Starve Together.
+    * You may also click on the Configure Mod icon to customize settings such as damage multipliers, and crafting mode and death link overrides.
     * You may also install other mods if you like.
 - If you chose a starting season other than Autumn in your YAML, make sure to change it in your World Generation settings.
     * Click on the Forest tab.
