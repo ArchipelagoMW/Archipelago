@@ -3,8 +3,7 @@
 ## Logiciels nécessaires
 
 - Une copie du jeu Aquaria non-modifiée (disponible sur la majorité des sites de ventes de jeux vidéos en ligne)
-- Le client du Randomizer d'Aquaria [Aquaria randomizer]
-(https://github.com/tioui/Aquaria_Randomizer/releases/latest)
+- Le client du Randomizer d'Aquaria [Aquaria randomizer](https://github.com/tioui/Aquaria_Randomizer/releases/latest)
 
 ## Logiciels optionnels
 
