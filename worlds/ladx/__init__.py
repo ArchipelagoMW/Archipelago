@@ -514,10 +514,22 @@ class LinksAwakeningWorld(World):
             slot_options = ["instrument_count"]
 
             slot_options_display_name = [
-                "goal", "logic", "tradequest", "rooster",
-                "experimental_dungeon_shuffle", "experimental_entrance_shuffle", "trendy_game", "gfxmod",
-                "shuffle_nightmare_keys", "shuffle_small_keys", "shuffle_maps",
-                "shuffle_compasses", "shuffle_stone_beaks", "shuffle_instruments", "nag_messages"
+                "goal",
+                "logic",
+                "tradequest",
+                "rooster",
+                "experimental_dungeon_shuffle",
+                "experimental_entrance_shuffle",
+                "trendy_game",
+                "gfxmod",
+                "shuffle_nightmare_keys",
+                "shuffle_small_keys",
+                "shuffle_maps",
+                "shuffle_compasses",
+                "shuffle_stone_beaks",
+                "shuffle_instruments",
+                "nag_messages",
+                "hard_mode",
             ]
 
             # use the default behaviour to grab options
