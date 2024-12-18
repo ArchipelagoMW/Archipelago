@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, Literal, Optional, Union
+from typing import Dict, Literal, Optional
 
 from .AutopelagoDefinitions import GAME_NAME, AutopelagoGameRequirement, AutopelagoAllRequirement, \
     AutopelagoAnyRequirement, AutopelagoAnyTwoRequirement, AutopelagoItemRequirement, item_key_to_name, \
@@ -113,10 +113,9 @@ class AutopelagoWorld(World):
     # - location_descriptions
     # - hint_blacklist (should it include the goal item?)
 
-    def create_item(self, name: str, classification: Union[ItemClassification, None] = None):
-        item_id = item_name_to_id[name] if name in item_name_to_id else None
-        if classification is None:
-            classification = item_name_to_classification[name]
+    def create_item(self, name: str):
+        item_id = item_name_to_id[name]
+        classification = item_name_to_classification[name]
         item = AutopelagoItem(name, classification, item_id, self.player)
         return item
 
@@ -176,8 +175,6 @@ class AutopelagoWorld(World):
             self.multiworld.regions.append(r)
             req = r.autopelago_definition.requires
             for next_exit in r.autopelago_definition.exits:
-                if next_exit == 'moon_comma_the':
-                    continue
                 rule = (lambda req_: lambda state: _is_satisfied(self.player, req_, state))(req)
                 r.connect(new_regions[next_exit], rule=None if _is_trivial(req) else rule)
             for loc in r.locations:
@@ -186,7 +183,7 @@ class AutopelagoWorld(World):
                     loc.place_locked_item(self.create_item(item_name))
 
         self.multiworld.completion_condition[self.player] =\
-            lambda state: state.has('Lockheed SR-71 Blackbird', self.player)
+            lambda state: state.has('Victory', self.player)
 
     def get_filler_item_name(self):
         return "Monkey's Paw"
