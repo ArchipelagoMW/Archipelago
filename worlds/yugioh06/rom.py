@@ -9,6 +9,7 @@ import Utils
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 
 from worlds.AutoWorld import World
+from . import Theme_Duels, Limited_Duels
 from .items import item_to_index
 from .rom_values import banlist_ids, function_addresses, structure_deck_selection
 
@@ -130,6 +131,20 @@ def write_tokens(world: World, patch: YGO06ProcedurePatch):
         patch.write_token(APTokenTypes.WRITE, 0x10 + j, struct.pack("<B", b))
     for j, b in enumerate(world.playerName):
         patch.write_token(APTokenTypes.WRITE, 0x30 + j, struct.pack("<B", b))
+    # set up goal in status screen
+    patch.write_token(APTokenTypes.WRITE, 0xec7b6,
+                      struct.pack("<B", world.options.final_campaign_boss_challenges.value))
+    # set up total limited and theme duels in status screen
+    limited = 0
+    theme = 0
+    for l in world.multiworld.get_locations(world.player):
+        if l.name in Limited_Duels:
+            theme = theme + 1
+        if l.name in Theme_Duels:
+            limited = limited + 1
+
+    patch.write_token(APTokenTypes.WRITE, 0xec968, struct.pack("<B", limited))
+    patch.write_token(APTokenTypes.WRITE, 0xeca4e, struct.pack("<B", theme))
 
     patch.write_file("token_data.bin", patch.get_token_binary())
 

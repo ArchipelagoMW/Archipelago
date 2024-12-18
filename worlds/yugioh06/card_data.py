@@ -4381,7 +4381,7 @@ def import_data():
     with open("Yugioh 2006 Card Data.tsv") as file:
         data = csv.reader(file, delimiter="\t")
         for card in data:
-            print(" \"" + card[2] + "\": CardData(" + card[0] + ", " + card[1] + ", \"" + card[2] + "\", \"" + card[3] + "\", "
+            print(" \"" + card[2] + ("" if card[4] == "0" else " Alt " + card[4]) + "\": CardData(" + card[0] + ", " + card[1] + ", \"" + card[2] + "\", " + card[3] + ", "
                   + card[4] + ", " + ('True' if card[5] == "TRUE" else 'False') + ", " + card[6] + ", " + card[7] + ", " + card[8]
                   + ",\n            \"" + card[9] +
                   "\", \"" + card[10] + "\", \"" + card[11] + "\", \"" + card[12] + "\", " + card[13] + ", " + card[14]+"),")
