@@ -74,7 +74,7 @@ class DSTContext(CommonContext):
             "starting_season": self.slotdata.get("starting_season"),
             "seasons": self.slotdata.get("seasons"),
             "finished_game": self.finished_game,
-            "death_link": "DeathLink" in self.tags,
+            "death_link": self.slotdata.get("death_link"), # Game decides whether to use slot data or override
         })
         
         self.dst_handler.enqueue({
@@ -136,7 +136,6 @@ class DSTContext(CommonContext):
             elif cmd == "Connected":
                 self.connected_to_ap = True
                 self.slotdata = args.get('slot_data', {})
-                async_start(self.update_death_link(self.slotdata.get("death_link", False))) # TODO: Do death link on the DST side
                 if self.dst_handler.connected:
                     print("Connected to AP!")
                     self.on_dst_connect_to_ap()
@@ -293,10 +292,12 @@ class DSTContext(CommonContext):
                         await self.send_msgs([{"cmd": "LocationScouts", "locations": [hint], "create_as_hint": 2}])
                         
             elif eventtype == "ScoutLocation":
-                await self.send_msgs([{
-                    "cmd": "LocationScouts",
-                    "locations": [event.get("id")],
-                }])
+                loc_id = event.get("id")
+                if loc_id and (loc_id in self.missing_locations or loc_id in self.locations_checked):
+                    await self.send_msgs([{
+                        "cmd": "LocationScouts",
+                        "locations": [loc_id],
+                    }])
 
             elif eventtype == "Victory":
                 await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
@@ -337,8 +338,7 @@ class DSTContext(CommonContext):
                 await self.disconnect(False)
 
             elif eventtype == "DeathLink":
-                print("Updating Death Link")
-                await async_start(self.update_death_link(event.get("enabled", False)))
+                await self.update_death_link(event.get("enabled", False))
 
         except Exception as e:
             self.logger.error(f"Manage event error ({eventtype}): {e}")
@@ -421,7 +421,7 @@ class DSTHandler():
                     # No data to send. Delay next ping
                     await asyncio.sleep(1.0)
 
-            elif datatype in {"Chat", "Join", "Leave", "Death", "Connect", "Disconnect"}:
+            elif datatype in {"Chat", "Join", "Leave", "Death", "Connect", "Disconnect", "DeathLink"}:
                  # Instant event
                 await self.ctx.manage_event(data)
 
