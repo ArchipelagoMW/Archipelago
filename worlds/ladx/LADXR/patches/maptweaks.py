@@ -25,3 +25,16 @@ def addBetaRoom(rom):
     re.store(rom)
 
     rom.room_sprite_data_indoor[0x0FC] = rom.room_sprite_data_indoor[0x1A1]
+
+
+def tweakBirdKeyRoom(rom):
+    # Make the bird key accessible without the rooster
+    re = RoomEditor(rom, 0x27A)
+    re.removeObject(1, 6)
+    re.removeObject(2, 6)
+    re.removeObject(3, 5)
+    re.removeObject(3, 6)
+    re.moveObject(1, 5, 2, 6)
+    re.moveObject(2, 5, 3, 6)
+    re.addEntity(3, 5, 0x9D)
+    re.store(rom)
