@@ -129,7 +129,7 @@ class SC2Mission(Enum):
     # Prophecy
     WHISPERS_OF_DOOM = 22, "Whispers of Doom", SC2Campaign.PROPHECY, "_1", SC2Race.ANY, MissionPools.STARTER, "ap_whispers_of_doom", MissionFlag.Protoss|MissionFlag.NoBuild|MissionFlag.VsZerg
     A_SINISTER_TURN = 23, "A Sinister Turn (Protoss)", SC2Campaign.PROPHECY, "_2", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_a_sinister_turn", MissionFlag.Protoss|MissionFlag.VsProtoss|MissionFlag.HasRaceSwap
-    ECHOES_OF_THE_FUTURE = 24, "Echoes of the Future", SC2Campaign.PROPHECY, "_3", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_echoes_of_the_future", MissionFlag.Protoss|MissionFlag.VsZerg
+    ECHOES_OF_THE_FUTURE = 24, "Echoes of the Future (Protoss)", SC2Campaign.PROPHECY, "_3", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_echoes_of_the_future", MissionFlag.Protoss|MissionFlag.VsZerg|MissionFlag.HasRaceSwap
     IN_UTTER_DARKNESS = 25, "In Utter Darkness", SC2Campaign.PROPHECY, "_4", SC2Race.PROTOSS, MissionPools.HARD, "ap_in_utter_darkness", MissionFlag.Protoss|MissionFlag.TimedDefense|MissionFlag.VsZerg
 
     # Heart of the Swarm
@@ -238,7 +238,8 @@ class SC2Mission(Enum):
     # 126/127 - Whispers of Doom
     A_SINISTER_TURN_T = 128, "A Sinister Turn (Terran)", SC2Campaign.PROPHECY, "_2", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_a_sinister_turn", MissionFlag.Terran|MissionFlag.VsProtoss|MissionFlag.RaceSwap
     A_SINISTER_TURN_Z = 129, "A Sinister Turn (Zerg)", SC2Campaign.PROPHECY, "_2", SC2Race.ZERG, MissionPools.MEDIUM, "ap_a_sinister_turn", MissionFlag.Zerg|MissionFlag.VsProtoss|MissionFlag.RaceSwap
-    # 130/131 - Echoes of the Future
+    ECHOES_OF_THE_FUTURE_T = 130, "Echoes of the Future (Terran)", SC2Campaign.PROPHECY, "_3", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_echoes_of_the_future", MissionFlag.Terran|MissionFlag.VsZerg|MissionFlag.RaceSwap
+    ECHOES_OF_THE_FUTURE_Z = 131, "Echoes of the Future (Zerg)", SC2Campaign.PROPHECY, "_3", SC2Race.ZERG, MissionPools.MEDIUM, "ap_echoes_of_the_future", MissionFlag.Zerg|MissionFlag.VsZerg|MissionFlag.RaceSwap
     # 132/133 - In Utter Darkness
     GATES_OF_HELL_Z = 134, "Gates of Hell (Zerg)", SC2Campaign.WOL, "Char", SC2Race.ZERG, MissionPools.HARD, "ap_gates_of_hell", MissionFlag.Zerg|MissionFlag.VsZerg|MissionFlag.RaceSwap
     GATES_OF_HELL_P = 135, "Gates of Hell (Protoss)", SC2Campaign.WOL, "Char", SC2Race.PROTOSS, MissionPools.HARD, "ap_gates_of_hell", MissionFlag.Protoss|MissionFlag.VsZerg|MissionFlag.RaceSwap
