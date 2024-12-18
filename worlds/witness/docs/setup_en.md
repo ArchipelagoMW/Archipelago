@@ -43,4 +43,4 @@ The Witness has a fully functional map tracker that supports auto-tracking.
 3. Click on the "AP" symbol at the top.
 4. Enter the AP address, slot name and password. 
 
-The rest should take care of itself! Items and checks will be marked automatically, and it even knows your settings - It will hide checks & adjust logic accordingly.
+The rest should take care of itself! Items and checks will be marked automatically, and it even knows your options - It will hide checks & adjust logic accordingly.

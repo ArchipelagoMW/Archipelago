@@ -14,9 +14,12 @@ class ALttPLocation(Location):
     crystal: bool
     player_address: Optional[int]
     _hint_text: Optional[str]
+    shop: None
     shop_slot: Optional[int] = None
     """If given as integer, shop_slot is the shop's inventory index."""
     shop_slot_disabled: bool = False
+    shop_price = 0
+    shop_price_type = None
     parent_region: "LTTPRegion"
 
     def __init__(self, player: int, name: str, address: Optional[int] = None, crystal: bool = False,
@@ -25,6 +28,13 @@ class ALttPLocation(Location):
         self.crystal = crystal
         self.player_address = player_address
         self._hint_text = hint_text
+
+    @property
+    def hint_text(self) -> str:
+        hint_text = getattr(self, "_hint_text", None)
+        if hint_text:
+            return hint_text
+        return "at " + self.name.replace("_", " ").replace("-", " ")
 
 
 class ALttPItem(Item):
@@ -65,10 +75,6 @@ class ALttPItem(Item):
     def dungeon_item(self) -> Optional[str]:
         if self.type in {"SmallKey", "BigKey", "Map", "Compass"}:
             return self.type
-
-    @property
-    def locked_dungeon_item(self):
-        return self.location.locked and self.dungeon_item
 
 
 class LTTPRegionType(IntEnum):

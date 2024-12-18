@@ -16,25 +16,27 @@ import multiprocessing
 import shlex
 import subprocess
 import sys
+import urllib.parse
 import webbrowser
 from os.path import isfile
 from shutil import which
-from typing import Sequence, Union, Optional
-
-import Utils
-import settings
-from worlds.LauncherComponents import Component, components, Type, SuffixIdentifier, icon_paths
+from typing import Callable, Optional, Sequence, Tuple, Union
 
 if __name__ == "__main__":
     import ModuleUpdate
     ModuleUpdate.update()
 
-from Utils import is_frozen, user_path, local_path, init_logging, open_filename, messagebox, \
-    is_windows, is_macos, is_linux
+import settings
+import Utils
+from Utils import (init_logging, is_frozen, is_linux, is_macos, is_windows, local_path, messagebox, open_filename,
+                   user_path)
+from worlds.LauncherComponents import Component, components, icon_paths, SuffixIdentifier, Type
 
 
 def open_host_yaml():
-    file = settings.get_settings().filename
+    s = settings.get_settings()
+    file = s.filename
+    s.save()
     assert file, "host.yaml missing"
     if is_linux:
         exe = which('sensible-editor') or which('gedit') or \
@@ -100,14 +102,72 @@ components.extend([
     # Functions
     Component("Open host.yaml", func=open_host_yaml),
     Component("Open Patch", func=open_patch),
-    Component("Generate Template Settings", func=generate_yamls),
+    Component("Generate Template Options", func=generate_yamls),
+    Component("Archipelago Website", func=lambda: webbrowser.open("https://archipelago.gg/")),
     Component("Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/8Z65BR2")),
-    Component("18+ Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
+    Component("Unrated/18+ Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4")),
     Component("Browse Files", func=browse_files),
 ])
 
 
-def identify(path: Union[None, str]):
+def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
+    url = urllib.parse.urlparse(path)
+    queries = urllib.parse.parse_qs(url.query)
+    launch_args = (path, *launch_args)
+    client_component = None
+    text_client_component = None
+    if "game" in queries:
+        game = queries["game"][0]
+    else:  # TODO around 0.6.0 - this is for pre this change webhost uri's
+        game = "Archipelago"
+    for component in components:
+        if component.supports_uri and component.game_name == game:
+            client_component = component
+        elif component.display_name == "Text Client":
+            text_client_component = component
+
+    if client_component is None:
+        run_component(text_client_component, *launch_args)
+        return
+
+    from kvui import App, Button, BoxLayout, Label, Window
+
+    class Popup(App):
+        def __init__(self):
+            self.title = "Connect to Multiworld"
+            self.icon = r"data/icon.png"
+            super().__init__()
+
+        def build(self):
+            layout = BoxLayout(orientation="vertical")
+            layout.add_widget(Label(text="Select client to open and connect with."))
+            button_row = BoxLayout(orientation="horizontal", size_hint=(1, 0.4))
+
+            text_client_button = Button(
+                text=text_client_component.display_name,
+                on_release=lambda *args: run_component(text_client_component, *launch_args)
+            )
+            button_row.add_widget(text_client_button)
+
+            game_client_button = Button(
+                text=client_component.display_name,
+                on_release=lambda *args: run_component(client_component, *launch_args)
+            )
+            button_row.add_widget(game_client_button)
+
+            layout.add_widget(button_row)
+
+            return layout
+
+        def _stop(self, *largs):
+            # see run_gui Launcher _stop comment for details
+            self.root_window.close()
+            super()._stop(*largs)
+
+    Popup().run()
+
+
+def identify(path: Union[None, str]) -> Tuple[Union[None, str], Union[None, Component]]:
     if path is None:
         return None, None
     for component in components:
@@ -160,36 +220,30 @@ def launch(exe, in_terminal=False):
     subprocess.Popen(exe)
 
 
+refresh_components: Optional[Callable[[], None]] = None
+
+
 def run_gui():
-    from kvui import App, ContainerLayout, GridLayout, Button, Label
-    from kivy.uix.image import AsyncImage
+    from kvui import App, ContainerLayout, GridLayout, Button, Label, ScrollBox, Widget, ApAsyncImage
+    from kivy.core.window import Window
     from kivy.uix.relativelayout import RelativeLayout
 
     class Launcher(App):
         base_title: str = "Archipelago Launcher"
         container: ContainerLayout
         grid: GridLayout
-
-        _tools = {c.display_name: c for c in components if c.type == Type.TOOL}
-        _clients = {c.display_name: c for c in components if c.type == Type.CLIENT}
-        _adjusters = {c.display_name: c for c in components if c.type == Type.ADJUSTER}
-        _miscs = {c.display_name: c for c in components if c.type == Type.MISC}
+        _tool_layout: Optional[ScrollBox] = None
+        _client_layout: Optional[ScrollBox] = None
 
         def __init__(self, ctx=None):
-            self.title = self.base_title
+            self.title = self.base_title + " " + Utils.__version__
             self.ctx = ctx
             self.icon = r"data/icon.png"
             super().__init__()
 
-        def build(self):
-            self.container = ContainerLayout()
-            self.grid = GridLayout(cols=2)
-            self.container.add_widget(self.grid)
-            self.grid.add_widget(Label(text="General"))
-            self.grid.add_widget(Label(text="Clients"))
-            button_layout = self.grid  # make buttons fill the window
+        def _refresh_components(self) -> None:
 
-            def build_button(component: Component):
+            def build_button(component: Component) -> Widget:
                 """
                 Builds a button widget for a given component.
 
@@ -200,31 +254,61 @@ def run_gui():
                     None. The button is added to the parent grid layout.
 
                 """
-                button = Button(text=component.display_name)
+                button = Button(text=component.display_name, size_hint_y=None, height=40)
                 button.component = component
                 button.bind(on_release=self.component_action)
                 if component.icon != "icon":
-                    image = AsyncImage(source=icon_paths[component.icon],
-                                       size=(38, 38), size_hint=(None, 1), pos=(5, 0))
-                    box_layout = RelativeLayout()
+                    image = ApAsyncImage(source=icon_paths[component.icon],
+                                         size=(38, 38), size_hint=(None, 1), pos=(5, 0))
+                    box_layout = RelativeLayout(size_hint_y=None, height=40)
                     box_layout.add_widget(button)
                     box_layout.add_widget(image)
-                    button_layout.add_widget(box_layout)
-                else:
-                    button_layout.add_widget(button)
+                    return box_layout
+                return button
+
+            # clear before repopulating
+            assert self._tool_layout and self._client_layout, "must call `build` first"
+            tool_children = reversed(self._tool_layout.layout.children)
+            for child in tool_children:
+                self._tool_layout.layout.remove_widget(child)
+            client_children = reversed(self._client_layout.layout.children)
+            for child in client_children:
+                self._client_layout.layout.remove_widget(child)
+
+            _tools = {c.display_name: c for c in components if c.type == Type.TOOL}
+            _clients = {c.display_name: c for c in components if c.type == Type.CLIENT}
+            _adjusters = {c.display_name: c for c in components if c.type == Type.ADJUSTER}
+            _miscs = {c.display_name: c for c in components if c.type == Type.MISC}
 
             for (tool, client) in itertools.zip_longest(itertools.chain(
-                    self._tools.items(), self._miscs.items(), self._adjusters.items()), self._clients.items()):
+                _tools.items(), _miscs.items(), _adjusters.items()
+            ), _clients.items()):
                 # column 1
                 if tool:
-                    build_button(tool[1])
-                else:
-                    button_layout.add_widget(Label())
+                    self._tool_layout.layout.add_widget(build_button(tool[1]))
                 # column 2
                 if client:
-                    build_button(client[1])
-                else:
-                    button_layout.add_widget(Label())
+                    self._client_layout.layout.add_widget(build_button(client[1]))
+
+        def build(self):
+            self.container = ContainerLayout()
+            self.grid = GridLayout(cols=2)
+            self.container.add_widget(self.grid)
+            self.grid.add_widget(Label(text="General", size_hint_y=None, height=40))
+            self.grid.add_widget(Label(text="Clients", size_hint_y=None, height=40))
+            self._tool_layout = ScrollBox()
+            self._tool_layout.layout.orientation = "vertical"
+            self.grid.add_widget(self._tool_layout)
+            self._client_layout = ScrollBox()
+            self._client_layout.layout.orientation = "vertical"
+            self.grid.add_widget(self._client_layout)
+
+            self._refresh_components()
+
+            global refresh_components
+            refresh_components = self._refresh_components
+
+            Window.bind(on_drop_file=self._on_drop_file)
 
             return self.container
 
@@ -235,6 +319,14 @@ def run_gui():
             else:
                 launch(get_exe(button.component), button.component.cli)
 
+        def _on_drop_file(self, window: Window, filename: bytes, x: int, y: int) -> None:
+            """ When a patch file is dropped into the window, run the associated component. """
+            file, component = identify(filename.decode())
+            if file and component:
+                run_component(component, file)
+            else:
+                logging.warning(f"unable to identify component for {file}")
+
         def _stop(self, *largs):
             # ran into what appears to be https://groups.google.com/g/kivy-users/c/saWDLoYCSZ4 with PyCharm.
             # Closing the window explicitly cleans it up.
@@ -243,10 +335,17 @@ def run_gui():
 
     Launcher().run()
 
+    # avoiding Launcher reference leak
+    # and don't try to do something with widgets after window closed
+    global refresh_components
+    refresh_components = None
+
 
 def run_component(component: Component, *args):
     if component.func:
         component.func(*args)
+        if refresh_components:
+            refresh_components()
     elif component.script_name:
         subprocess.run([*get_exe(component.script_name), *args])
     else:
@@ -259,20 +358,24 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
     elif not args:
         args = {}
 
-    if "Patch|Game|Component" in args:
-        file, component = identify(args["Patch|Game|Component"])
+    path = args.get("Patch|Game|Component|url", None)
+    if path is not None:
+        if path.startswith("archipelago://"):
+            handle_uri(path, args.get("args", ()))
+            return
+        file, component = identify(path)
         if file:
             args['file'] = file
         if component:
             args['component'] = component
         if not component:
-            logging.warning(f"Could not identify Component responsible for {args['Patch|Game|Component']}")
+            logging.warning(f"Could not identify Component responsible for {path}")
 
     if args["update_settings"]:
         update_settings()
-    if 'file' in args:
+    if "file" in args:
         run_component(args["component"], args["file"], *args["args"])
-    elif 'component' in args:
+    elif "component" in args:
         run_component(args["component"], *args["args"])
     elif not args["update_settings"]:
         run_gui()
@@ -282,12 +385,16 @@ if __name__ == '__main__':
     init_logging('Launcher')
     Utils.freeze_support()
     multiprocessing.set_start_method("spawn")  # if launched process uses kivy, fork won't work
-    parser = argparse.ArgumentParser(description='Archipelago Launcher')
+    parser = argparse.ArgumentParser(
+        description='Archipelago Launcher',
+        usage="[-h] [--update_settings] [Patch|Game|Component] [-- component args here]"
+    )
     run_group = parser.add_argument_group("Run")
     run_group.add_argument("--update_settings", action="store_true",
                            help="Update host.yaml and exit.")
-    run_group.add_argument("Patch|Game|Component", type=str, nargs="?",
-                           help="Pass either a patch file, a generated game or the name of a component to run.")
+    run_group.add_argument("Patch|Game|Component|url", type=str, nargs="?",
+                           help="Pass either a patch file, a generated game, the component name to run, or a url to "
+                                "connect with.")
     run_group.add_argument("args", nargs="*",
                            help="Arguments to pass to component.")
     main(parser.parse_args())

@@ -5,15 +5,16 @@ class TestDarkWorld(TestInvertedOWG):
 
     def testSouthDarkWorld(self):
         self.run_location_tests([
-            ["Hype Cave - Top", True, []],
-
-            ["Hype Cave - Middle Right", True, []],
-
-            ["Hype Cave - Middle Left", True, []],
-
-            ["Hype Cave - Bottom", True, []],
-
-            ["Hype Cave - Generous Guy", True, []],
+            ["Hype Cave - Top", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Hype Cave - Middle Right", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Hype Cave - Middle Left", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Hype Cave - Bottom", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Hype Cave - Generous Guy", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Hype Cave - Top", True, ['Bomb Upgrade (+5)']],
+            ["Hype Cave - Middle Right", True, ['Bomb Upgrade (+5)']],
+            ["Hype Cave - Middle Left", True, ['Bomb Upgrade (+5)']],
+            ["Hype Cave - Bottom", True, ['Bomb Upgrade (+5)']],
+            ["Hype Cave - Generous Guy", True, ['Bomb Upgrade (+5)']],
 
             ["Stumpy", True, []],
 
@@ -22,7 +23,8 @@ class TestDarkWorld(TestInvertedOWG):
 
     def testWestDarkWorld(self):
         self.run_location_tests([
-            ["Brewery", True, []],
+            ["Brewery", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Brewery", True, ['Bomb Upgrade (+5)']],
 
             ["C-Shaped House", True, []],
 

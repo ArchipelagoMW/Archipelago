@@ -11,13 +11,12 @@ Al usar BizHawk, esta guía solo es aplicable en los sistemas de Windows y Linux
   - Instrucciones de instalación detalladas para BizHawk se pueden encontrar en el enlace de arriba.
   - Los usuarios de Windows deben ejecutar el instalador de prerrequisitos (prereq installer) primero, que también se 
     encuentra en el enlace de arriba.
-- El cliente incorporado de Archipelago, que se puede encontrar [aquí](https://github.com/ArchipelagoMW/Archipelago/releases)
-  (selecciona `Pokemon Client` durante la instalación).
+- El cliente incorporado de Archipelago, que se puede encontrar [aquí](https://github.com/ArchipelagoMW/Archipelago/releases).
 - Los ROMs originales de Pokémon Red y/o Blue. La comunidad de Archipelago no puede proveerlos.
 
 ## Software Opcional
 
-- [Tracker de mapa para Pokémon Red and Blue Archipelago](https://github.com/j-imbo/pkmnrb_jim/releases/latest), para usar con [PopTracker](https://github.com/black-sliver/PopTracker/releases)
+- [Tracker de mapa para Pokémon Red and Blue Archipelago](https://github.com/coveleski/rb_tracker/releases/latest), para usar con [PopTracker](https://github.com/black-sliver/PopTracker/releases)
 
 
 ## Configurando BizHawk
@@ -51,7 +50,7 @@ opciones.
 
 ### ¿Dónde puedo obtener un archivo YAML?
 
-Puedes generar un archivo YAML or descargar su plantilla en la [página de configuración de jugador de Pokémon Red and Blue](/games/Pokemon%20Red%20and%20Blue/player-settings)
+Puedes generar un archivo YAML or descargar su plantilla en la [página de configuración de jugador de Pokémon Red and Blue](/games/Pokemon%20Red%20and%20Blue/player-options)
 
 Es importante tener en cuenta que la opción `game_version` determina el ROM que será parcheado.
 Tanto el jugador como la persona que genera (si está generando localmente) necesitarán el archivo del ROM
@@ -75,33 +74,47 @@ Y los siguientes caracteres especiales (cada uno ocupa un carácter):
 
 ## Unirse a un juego MultiWorld
 
-### Obtener tu parche de Pokémon
+### Generar y parchar un juego
 
-Cuando te unes a un juego multiworld, se te pedirá que entregues tu archivo YAML a quien lo esté organizando.
-Una vez que la generación acabe, el anfitrión te dará un enlace a tu archivo, o un .zip con los archivos de
-todos. Tu archivo tiene una extensión `.apred` o `.apblue`.
+1. Crea tu archivo de opciones (YAML).
+2. Sigue las instrucciones generales de Archipelago para [generar un juego](../../Archipelago/setup/en#generating-a-game).
+Haciendo esto se generará un archivo de salida. Tu parche tendrá la extensión de archivo `.apred` o `.apblue`.
+3. Abre `ArchipelagoLauncher.exe`
+4. Selecciona "Open Patch" en el lado izquierdo y selecciona tu parche.
+5. Si es tu primera vez parchando, se te pedirá que selecciones tu ROM original.
+6. Un archivo `.gb` parchado será creado en el mismo lugar donde está el parche.
+7. La primera vez que abras un parche con BizHawk Client, también se te pedira ubicar `EmuHawk.exe` en tu
+instalación de BizHawk.
 
-Haz doble clic en tu archivo `.apred` o `.apblue` para que se ejecute el cliente y realice el parcheado del ROM.
-Una vez acabe ese proceso (esto puede tardar un poco), el cliente y el emulador se abrirán automáticamente (si es que se
-ha asociado la extensión al emulador tal como fue recomendado)
+Si estás jugando una semilla single-player y no te importa tener seguimiento ni pistas, puedes terminar aqui, cerrar el
+cliente, y cargar el ROM parchado en cualquier emulador. Sin embargo, para multiworlds y otras funciones de Archipelago,
+continúa con los pasos abajo, usando el emulador BizHawk.
 
 ### Conectarse al multiserver
 
-Una vez ejecutado tanto el cliente como el emulador, hay que conectarlos. Abre la carpeta de instalación de Archipelago,
-luego abre `data/lua`, y simplemente arrastra el archivo `connector_pkmn_rb.lua` a la ventana principal de Emuhawk.
-(Alternativamente, puedes abrir la consola de Lua manualmente. En Emuhawk ir a Tools > Lua Console, luego ir al menú
-`Script` 〉 `Open Script`, navegar a la ubicación de `connector_pkmn_rb.lua` y seleccionarlo.)
+Por defecto, abrir un parche hará los pasos del 1 al 5 automáticamente. Incluso asi, es bueno memorizarlos en caso de
+que tengas que cerrar y volver a abrir el juego por alguna razón.
 
-Para conectar el cliente con el servidor, simplemente pon `<dirección>:<puerto>` en la caja de texto superior y presiona
-enter (si el servidor tiene contraseña, en la caja de texto inferior escribir `/connect <dirección>:<puerto> [contraseña]`)
+1. Pokémon Red/Blue usa el BizHawk Client de Archipelago. Si el cliente no está abierto desde cuando parchaste tu juego,
+puedes volverlo a abrir desde el Launcher.
+2. Asegúrate que EmuHawk esta cargando el ROM parchado.
+3. En EmuHawk, ir a `Tools > Lua Console`. Esta ventana debe quedarse abierta mientras se juega.
+4. En la ventana de Lua Console, ir a `Script > Open Script…`.
+5. Navegar a tu carpeta de instalación de Archipelago y abrir `data/lua/connector_bizhawk_generic.lua`.
+6. El emulador se puede congelar por unos segundos hasta que logre conectarse al cliente. Esto es normal. La ventana del
+BizHawk Client debería indicar que se logro conectar y reconocer Pokémon Red/Blue.
+7. Para conectar el cliente al servidor, ingresa la dirección y el puerto (por ejemplo, `archipelago.gg:38281`) en el
+campo de texto superior del cliente y y haz clic en Connect.
 
-Ahora ya estás listo para tu aventura en Kanto.
+Para conectar el cliente al multiserver simplemente escribe `<dirección>:<puerto>` en el campo de texto superior y
+presiona enter (si el servidor usa contraseña, escribe en el campo de texto inferior
+`/connect <dirección>:<puerto>[contraseña]`)
 
 ## Auto-Tracking
 
 Pokémon Red and Blue tiene un mapa completamente funcional que soporta seguimiento automático. 
 
-1. Descarga el [Tracker de mapa para Pokémon Red and Blue Archipelago](https://github.com/j-imbo/pkmnrb_jim/releases/latest) y [PopTracker](https://github.com/black-sliver/PopTracker/releases). 
+1. Descarga el [Tracker de mapa para Pokémon Red and Blue Archipelago](https://github.com/coveleski/rb_tracker/releases/latest) y [PopTracker](https://github.com/black-sliver/PopTracker/releases). 
 2. Abre PopTracker, y carga el pack de Pokémon Red and Blue.
 3. Haz clic en el símbolo "AP" en la parte superior.
 4. Ingresa la dirección de AP, nombre del slot y contraseña (si es que hay).

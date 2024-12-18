@@ -8,7 +8,7 @@ def get_encounter_slots(self):
 
     for location in encounter_slots:
         if isinstance(location.original_item, list):
-            location.original_item = location.original_item[not self.multiworld.game_version[self.player].value]
+            location.original_item = location.original_item[not self.options.game_version.value]
     return encounter_slots
 
 
@@ -39,16 +39,16 @@ def randomize_pokemon(self, mon, mons_list, randomize_type, random):
     return mon
 
 
-def process_trainer_data(self):
+def process_trainer_data(world):
     mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon
-                 or self.multiworld.trainer_legendaries[self.player].value]
+                 or world.options.trainer_legendaries.value]
     unevolved_mons = [pokemon for pokemon in poke_data.first_stage_pokemon if pokemon not in poke_data.legendary_pokemon
-                      or self.multiworld.randomize_legendary_pokemon[self.player].value == 3]
+                      or world.options.randomize_legendary_pokemon.value == 3]
     evolved_mons = [mon for mon in mons_list if mon not in unevolved_mons]
     rival_map = {
-        "Charmander": self.multiworld.get_location("Oak's Lab - Starter 1", self.player).item.name[9:],  # strip the
-        "Squirtle": self.multiworld.get_location("Oak's Lab - Starter 2", self.player).item.name[9:],    # 'Missable'
-        "Bulbasaur": self.multiworld.get_location("Oak's Lab - Starter 3", self.player).item.name[9:],   # from the name
+        "Charmander": world.multiworld.get_location("Oak's Lab - Starter 1", world.player).item.name[9:],  # strip the
+        "Squirtle": world.multiworld.get_location("Oak's Lab - Starter 2", world.player).item.name[9:],  # 'Missable'
+        "Bulbasaur": world.multiworld.get_location("Oak's Lab - Starter 3", world.player).item.name[9:],  # from the name
     }
 
     def add_evolutions():
@@ -60,7 +60,7 @@ def process_trainer_data(self):
                     rival_map[poke_data.evolves_to[a]] = b
     add_evolutions()
     add_evolutions()
-    parties_objs = [location for location in self.multiworld.get_locations(self.player)
+    parties_objs = [location for location in world.multiworld.get_locations(world.player)
                     if location.type == "Trainer Parties"]
     # Process Rival parties in order                                     "Route 22 " is not a typo
     parties_objs.sort(key=lambda i: 0 if "Oak's Lab" in i.name else 1 if "Route 22 " in i.name else 2 if "Cerulean City"
@@ -75,25 +75,25 @@ def process_trainer_data(self):
                     for i, mon in enumerate(rival_party):
                         if mon in ("Bulbasaur", "Ivysaur", "Venusaur", "Charmander", "Charmeleon", "Charizard",
                                    "Squirtle", "Wartortle", "Blastoise"):
-                            if self.multiworld.randomize_starter_pokemon[self.player]:
+                            if world.options.randomize_starter_pokemon:
                                 rival_party[i] = rival_map[mon]
-                        elif self.multiworld.randomize_trainer_parties[self.player]:
+                        elif world.options.randomize_trainer_parties:
                             if mon in rival_map:
                                 rival_party[i] = rival_map[mon]
                             else:
-                                new_mon = randomize_pokemon(self, mon,
+                                new_mon = randomize_pokemon(world, mon,
                                                             unevolved_mons if mon in unevolved_mons else evolved_mons,
-                                                            self.multiworld.randomize_trainer_parties[self.player].value,
-                                                            self.multiworld.random)
+                                                            world.options.randomize_trainer_parties.value,
+                                                            world.random)
                                 rival_map[mon] = new_mon
                                 rival_party[i] = new_mon
                             add_evolutions()
             else:
-                if self.multiworld.randomize_trainer_parties[self.player]:
+                if world.options.randomize_trainer_parties:
                     for i, mon in enumerate(party["party"]):
-                        party["party"][i] = randomize_pokemon(self, mon, mons_list,
-                                                              self.multiworld.randomize_trainer_parties[self.player].value,
-                                                              self.multiworld.random)
+                        party["party"][i] = randomize_pokemon(world, mon, mons_list,
+                                                              world.options.randomize_trainer_parties.value,
+                                                              world.random)
 
 
 def process_pokemon_locations(self):
@@ -106,21 +106,21 @@ def process_pokemon_locations(self):
     placed_mons = {pokemon: 0 for pokemon in poke_data.pokemon_data.keys()}
 
     mons_list = [pokemon for pokemon in poke_data.first_stage_pokemon if pokemon not in poke_data.legendary_pokemon
-                 or self.multiworld.randomize_legendary_pokemon[self.player].value == 3]
-    if self.multiworld.randomize_legendary_pokemon[self.player] == "vanilla":
+                 or self.options.randomize_legendary_pokemon.value == 3]
+    if self.options.randomize_legendary_pokemon == "vanilla":
         for slot in legendary_slots:
             location = self.multiworld.get_location(slot.name, self.player)
             location.place_locked_item(self.create_item("Static " + slot.original_item))
-    elif self.multiworld.randomize_legendary_pokemon[self.player] == "shuffle":
-        self.multiworld.random.shuffle(legendary_mons)
+    elif self.options.randomize_legendary_pokemon == "shuffle":
+        self.random.shuffle(legendary_mons)
         for slot in legendary_slots:
             location = self.multiworld.get_location(slot.name, self.player)
             mon = legendary_mons.pop()
             location.place_locked_item(self.create_item("Static " + mon))
             placed_mons[mon] += 1
-    elif self.multiworld.randomize_legendary_pokemon[self.player] == "static":
+    elif self.options.randomize_legendary_pokemon == "static":
         static_slots = static_slots + legendary_slots
-        self.multiworld.random.shuffle(static_slots)
+        self.random.shuffle(static_slots)
         static_slots.sort(key=lambda s: s.name != "Pokemon Tower 6F - Restless Soul")
         while legendary_slots:
             swap_slot = legendary_slots.pop()
@@ -131,12 +131,12 @@ def process_pokemon_locations(self):
             location = self.multiworld.get_location(slot.name, self.player)
             location.place_locked_item(self.create_item(slot_type + " " + swap_slot.original_item))
             swap_slot.original_item = slot.original_item
-    elif self.multiworld.randomize_legendary_pokemon[self.player] == "any":
+    elif self.options.randomize_legendary_pokemon == "any":
         static_slots = static_slots + legendary_slots
 
     for slot in static_slots:
         location = self.multiworld.get_location(slot.name, self.player)
-        randomize_type = self.multiworld.randomize_static_pokemon[self.player].value
+        randomize_type = self.options.randomize_static_pokemon.value
         slot_type = slot.type.split()[0]
         if slot_type == "Legendary":
             slot_type = "Static"
@@ -145,7 +145,7 @@ def process_pokemon_locations(self):
         else:
             mon = self.create_item(slot_type + " " +
                                    randomize_pokemon(self, slot.original_item, mons_list, randomize_type,
-                                                     self.multiworld.random))
+                                                     self.random))
             location.place_locked_item(mon)
             if slot_type != "Missable":
                 placed_mons[mon.name.replace("Static ", "")] += 1
@@ -153,16 +153,16 @@ def process_pokemon_locations(self):
     chosen_mons = set()
     for slot in starter_slots:
         location = self.multiworld.get_location(slot.name, self.player)
-        randomize_type = self.multiworld.randomize_starter_pokemon[self.player].value
+        randomize_type = self.options.randomize_starter_pokemon.value
         slot_type = "Missable"
         if not randomize_type:
             location.place_locked_item(self.create_item(slot_type + " " + slot.original_item))
         else:
             mon = self.create_item(slot_type + " " + randomize_pokemon(self, slot.original_item, mons_list,
-                                                                       randomize_type, self.multiworld.random))
+                                                                       randomize_type, self.random))
             while mon.name in chosen_mons:
                 mon = self.create_item(slot_type + " " + randomize_pokemon(self, slot.original_item, mons_list,
-                                                                           randomize_type, self.multiworld.random))
+                                                                           randomize_type, self.random))
             chosen_mons.add(mon.name)
             location.place_locked_item(mon)
 
@@ -170,22 +170,26 @@ def process_pokemon_locations(self):
     encounter_slots = encounter_slots_master.copy()
 
     zone_mapping = {}
-    if self.multiworld.randomize_wild_pokemon[self.player]:
+    zone_placed_mons = {}
+    
+    if self.options.randomize_wild_pokemon:
         mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon
-                     or self.multiworld.randomize_legendary_pokemon[self.player].value == 3]
-        self.multiworld.random.shuffle(encounter_slots)
+                     or self.options.randomize_legendary_pokemon.value == 3]
+        self.random.shuffle(encounter_slots)
         locations = []
         for slot in encounter_slots:
             location = self.multiworld.get_location(slot.name, self.player)
             zone = " - ".join(location.name.split(" - ")[:-1])
             if zone not in zone_mapping:
                 zone_mapping[zone] = {}
+            if zone not in zone_placed_mons:
+                zone_placed_mons[zone] = []
             original_mon = slot.original_item
-            if self.multiworld.area_1_to_1_mapping[self.player] and original_mon in zone_mapping[zone]:
+            if self.options.area_1_to_1_mapping and original_mon in zone_mapping[zone]:
                 mon = zone_mapping[zone][original_mon]
             else:
-                mon = randomize_pokemon(self, original_mon, mons_list,
-                                        self.multiworld.randomize_wild_pokemon[self.player].value, self.multiworld.random)
+                mon = randomize_pokemon(self, original_mon, [m for m in mons_list if m not in zone_placed_mons[zone]],
+                                        self.options.randomize_wild_pokemon.value, self.random)
             #
             while ("Pokemon Tower 6F" in slot.name and
                    self.multiworld.get_location("Pokemon Tower 6F - Restless Soul", self.player).item.name
@@ -194,39 +198,39 @@ def process_pokemon_locations(self):
                 # the battle is treates as the Restless Soul battle and you cannot catch it. So, prevent any wild mons
                 # from being the same species as the Restless Soul.
                 # to account for the possibility that only one ground type Pokemon exists, match only stats for this fix
-                mon = randomize_pokemon(self, original_mon, mons_list, 2, self.multiworld.random)
+                mon = randomize_pokemon(self, original_mon, mons_list, 2, self.random)
             placed_mons[mon] += 1
             location.item = self.create_item(mon)
-            location.event = True
             location.locked = True
             location.item.location = location
             locations.append(location)
             zone_mapping[zone][original_mon] = mon
+            zone_placed_mons[zone].append(mon)
 
         mons_to_add = []
         remaining_pokemon = [pokemon for pokemon in poke_data.pokemon_data.keys() if placed_mons[pokemon] == 0 and
-                             (pokemon not in poke_data.legendary_pokemon or self.multiworld.randomize_legendary_pokemon[self.player].value == 3)]
-        if self.multiworld.catch_em_all[self.player] == "first_stage":
+                             (pokemon not in poke_data.legendary_pokemon or self.options.randomize_legendary_pokemon.value == 3)]
+        if self.options.catch_em_all == "first_stage":
             mons_to_add = [pokemon for pokemon in poke_data.first_stage_pokemon if placed_mons[pokemon] == 0 and
-                           (pokemon not in poke_data.legendary_pokemon or self.multiworld.randomize_legendary_pokemon[self.player].value == 3)]
-        elif self.multiworld.catch_em_all[self.player] == "all_pokemon":
+                           (pokemon not in poke_data.legendary_pokemon or self.options.randomize_legendary_pokemon.value == 3)]
+        elif self.options.catch_em_all == "all_pokemon":
             mons_to_add = remaining_pokemon.copy()
-        logic_needed_mons = max(self.multiworld.oaks_aide_rt_2[self.player].value,
-                                self.multiworld.oaks_aide_rt_11[self.player].value,
-                                self.multiworld.oaks_aide_rt_15[self.player].value)
-        if self.multiworld.accessibility[self.player] == "minimal":
+        logic_needed_mons = max(self.options.oaks_aide_rt_2.value,
+                                self.options.oaks_aide_rt_11.value,
+                                self.options.oaks_aide_rt_15.value)
+        if self.options.accessibility == "minimal":
             logic_needed_mons = 0
 
-        self.multiworld.random.shuffle(remaining_pokemon)
+        self.random.shuffle(remaining_pokemon)
         while (len([pokemon for pokemon in placed_mons if placed_mons[pokemon] > 0])
                + len(mons_to_add) < logic_needed_mons):
             mons_to_add.append(remaining_pokemon.pop())
         for mon in mons_to_add:
             stat_base = get_base_stat_total(mon)
             candidate_locations = encounter_slots_master.copy()
-            if self.multiworld.randomize_wild_pokemon[self.player].current_key in ["match_base_stats", "match_types_and_base_stats"]:
+            if self.options.randomize_wild_pokemon.current_key in ["match_base_stats", "match_types_and_base_stats"]:
                 candidate_locations.sort(key=lambda slot: abs(get_base_stat_total(slot.original_item) - stat_base))
-            if self.multiworld.randomize_wild_pokemon[self.player].current_key in ["match_types", "match_types_and_base_stats"]:
+            if self.options.randomize_wild_pokemon.current_key in ["match_types", "match_types_and_base_stats"]:
                 candidate_locations.sort(key=lambda slot: not any([poke_data.pokemon_data[slot.original_item]["type1"] in
                      [self.local_poke_data[mon]["type1"], self.local_poke_data[mon]["type2"]],
                      poke_data.pokemon_data[slot.original_item]["type2"] in
@@ -234,12 +238,12 @@ def process_pokemon_locations(self):
             candidate_locations = [self.multiworld.get_location(location.name, self.player) for location in candidate_locations]
             for location in candidate_locations:
                 zone = " - ".join(location.name.split(" - ")[:-1])
-                if self.multiworld.catch_em_all[self.player] == "all_pokemon" and self.multiworld.area_1_to_1_mapping[self.player]:
+                if self.options.catch_em_all == "all_pokemon" and self.options.area_1_to_1_mapping:
                     if not [self.multiworld.get_location(l.name, self.player) for l in encounter_slots_master
                             if (not l.name.startswith(zone)) and
                                self.multiworld.get_location(l.name, self.player).item.name == location.item.name]:
                         continue
-                if self.multiworld.catch_em_all[self.player] == "first_stage" and self.multiworld.area_1_to_1_mapping[self.player]:
+                if self.options.catch_em_all == "first_stage" and self.options.area_1_to_1_mapping:
                     if not [self.multiworld.get_location(l.name, self.player) for l in encounter_slots_master
                             if (not l.name.startswith(zone)) and
                                self.multiworld.get_location(l.name, self.player).item.name == location.item.name and l.name
@@ -247,10 +251,10 @@ def process_pokemon_locations(self):
                         continue
 
                 if placed_mons[location.item.name] < 2 and (location.item.name in poke_data.first_stage_pokemon
-                                                            or self.multiworld.catch_em_all[self.player]):
+                                                            or self.options.catch_em_all):
                     continue
 
-                if self.multiworld.area_1_to_1_mapping[self.player]:
+                if self.options.area_1_to_1_mapping:
                     place_locations = [place_location for place_location in candidate_locations if
                         place_location.name.startswith(zone) and
                         place_location.item.name == location.item.name]
@@ -269,7 +273,6 @@ def process_pokemon_locations(self):
         for slot in encounter_slots:
             location = self.multiworld.get_location(slot.name, self.player)
             location.item = self.create_item(slot.original_item)
-            location.event = True
             location.locked = True
             location.item.location = location
             placed_mons[location.item.name] += 1

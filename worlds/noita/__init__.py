@@ -1,6 +1,8 @@
 from BaseClasses import Item, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from . import Events, Items, Locations, Options, Regions, Rules
+from typing import Dict, Any
+from . import events, items, locations, regions, rules
+from .options import NoitaOptions
 
 
 class NoitaWeb(WebWorld):
@@ -24,33 +26,37 @@ class NoitaWorld(World):
     """
 
     game = "Noita"
-    option_definitions = Options.noita_options
+    options: NoitaOptions
+    options_dataclass = NoitaOptions
 
-    item_name_to_id = Items.item_name_to_id
-    location_name_to_id = Locations.location_name_to_id
+    item_name_to_id = items.item_name_to_id
+    location_name_to_id = locations.location_name_to_id
 
-    item_name_groups = Items.item_name_groups
-    location_name_groups = Locations.location_name_groups
-    data_version = 2
+    item_name_groups = items.item_name_groups
+    location_name_groups = locations.location_name_groups
 
     web = NoitaWeb()
 
+    def generate_early(self) -> None:
+        if not self.multiworld.get_player_name(self.player).isascii():
+            raise Exception("Noita yaml's slot name has invalid character(s).")
+
     # Returned items will be sent over to the client
-    def fill_slot_data(self):
-        return {name: getattr(self.multiworld, name)[self.player].value for name in self.option_definitions}
+    def fill_slot_data(self) -> Dict[str, Any]:
+        return self.options.as_dict("death_link", "victory_condition", "path_option", "hidden_chests",
+                                    "pedestal_checks", "orbs_as_checks", "bosses_as_checks", "extra_orbs", "shop_price")
 
     def create_regions(self) -> None:
-        Regions.create_all_regions_and_connections(self.multiworld, self.player)
-        Events.create_all_events(self.multiworld, self.player)
+        regions.create_all_regions_and_connections(self)
 
     def create_item(self, name: str) -> Item:
-        return Items.create_item(self.player, name)
+        return items.create_item(self.player, name)
 
     def create_items(self) -> None:
-        Items.create_all_items(self.multiworld, self.player)
+        items.create_all_items(self)
 
     def set_rules(self) -> None:
-        Rules.create_all_rules(self.multiworld, self.player)
+        rules.create_all_rules(self)
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice(Items.filler_items)
+        return self.random.choice(items.filler_items)

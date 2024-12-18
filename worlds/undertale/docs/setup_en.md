@@ -4,7 +4,6 @@
 
 - Undertale from the [Steam page](https://store.steampowered.com/app/391540)
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
-    - (select `Undertale Client` during installation.)
 
 ### First time setup
 
@@ -62,4 +61,4 @@ gameplay differences at the bottom.
 
 ### Where do I get a YAML file?
 
-You can customize your settings by visiting the [Undertale Player Settings Page](/games/Undertale/player-settings)
+You can customize your options by visiting the [Undertale Player Options Page](/games/Undertale/player-options)

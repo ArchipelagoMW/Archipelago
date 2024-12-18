@@ -1,4 +1,5 @@
 import collections
+import logging
 import typing
 
 from BaseClasses import LocationProgressType, MultiWorld, Location, Region, Entrance
@@ -13,16 +14,16 @@ else:
     ItemRule = typing.Callable[[object], bool]
 
 
-def locality_needed(world: MultiWorld) -> bool:
-    for player in world.player_ids:
-        if world.local_items[player].value:
+def locality_needed(multiworld: MultiWorld) -> bool:
+    for player in multiworld.player_ids:
+        if multiworld.worlds[player].options.local_items.value:
             return True
-        if world.non_local_items[player].value:
+        if multiworld.worlds[player].options.non_local_items.value:
             return True
 
     # Group
-    for group_id, group in world.groups.items():
-        if set(world.player_ids) == set(group["players"]):
+    for group_id, group in multiworld.groups.items():
+        if set(multiworld.player_ids) == set(group["players"]):
             continue
         if group["local_items"]:
             return True
@@ -30,8 +31,8 @@ def locality_needed(world: MultiWorld) -> bool:
             return True
 
 
-def locality_rules(world: MultiWorld):
-    if locality_needed(world):
+def locality_rules(multiworld: MultiWorld):
+    if locality_needed(multiworld):
 
         forbid_data: typing.Dict[int, typing.Dict[int, typing.Set[str]]] = \
             collections.defaultdict(lambda: collections.defaultdict(set))
@@ -39,36 +40,36 @@ def locality_rules(world: MultiWorld):
         def forbid(sender: int, receiver: int, items: typing.Set[str]):
             forbid_data[sender][receiver].update(items)
 
-        for receiving_player in world.player_ids:
-            local_items: typing.Set[str] = world.local_items[receiving_player].value
+        for receiving_player in multiworld.player_ids:
+            local_items: typing.Set[str] = multiworld.worlds[receiving_player].options.local_items.value
             if local_items:
-                for sending_player in world.player_ids:
+                for sending_player in multiworld.player_ids:
                     if receiving_player != sending_player:
                         forbid(sending_player, receiving_player, local_items)
-            non_local_items: typing.Set[str] = world.non_local_items[receiving_player].value
+            non_local_items: typing.Set[str] = multiworld.worlds[receiving_player].options.non_local_items.value
             if non_local_items:
                 forbid(receiving_player, receiving_player, non_local_items)
 
         # Group
-        for receiving_group_id, receiving_group in world.groups.items():
-            if set(world.player_ids) == set(receiving_group["players"]):
+        for receiving_group_id, receiving_group in multiworld.groups.items():
+            if set(multiworld.player_ids) == set(receiving_group["players"]):
                 continue
             if receiving_group["local_items"]:
-                for sending_player in world.player_ids:
+                for sending_player in multiworld.player_ids:
                     if sending_player not in receiving_group["players"]:
                         forbid(sending_player, receiving_group_id, receiving_group["local_items"])
             if receiving_group["non_local_items"]:
-                for sending_player in world.player_ids:
+                for sending_player in multiworld.player_ids:
                     if sending_player in receiving_group["players"]:
                         forbid(sending_player, receiving_group_id, receiving_group["non_local_items"])
 
         # create fewer lambda's to save memory and cache misses
         func_cache = {}
-        for location in world.get_locations():
+        for location in multiworld.get_locations():
             if (location.player, location.item_rule) in func_cache:
                 location.item_rule = func_cache[location.player, location.item_rule]
             # empty rule that just returns True, overwrite
-            elif location.item_rule is location.__class__.item_rule:
+            elif location.item_rule is Location.item_rule:
                 func_cache[location.player, location.item_rule] = location.item_rule = \
                     lambda i, sending_blockers = forbid_data[location.player], \
                                             old_rule = location.item_rule: \
@@ -81,15 +82,18 @@ def locality_rules(world: MultiWorld):
                     i.name not in sending_blockers[i.player] and old_rule(i)
 
 
-def exclusion_rules(world: MultiWorld, player: int, exclude_locations: typing.Set[str]) -> None:
+def exclusion_rules(multiworld: MultiWorld, player: int, exclude_locations: typing.Set[str]) -> None:
     for loc_name in exclude_locations:
         try:
-            location = world.get_location(loc_name, player)
+            location = multiworld.get_location(loc_name, player)
         except KeyError as e:  # failed to find the given location. Check if it's a legitimate location
-            if loc_name not in world.worlds[player].location_name_to_id:
+            if loc_name not in multiworld.worlds[player].location_name_to_id:
                 raise Exception(f"Unable to exclude location {loc_name} in player {player}'s world.") from e
         else:
-            location.progress_type = LocationProgressType.EXCLUDED
+            if not location.advancement:
+                location.progress_type = LocationProgressType.EXCLUDED
+            else:
+                logging.warning(f"Unable to exclude location {loc_name} in player {player}'s world.")
 
 
 def set_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"], rule: CollectionRule):
@@ -99,7 +103,7 @@ def set_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"],
 def add_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"], rule: CollectionRule, combine="and"):
     old_rule = spot.access_rule
     # empty rule, replace instead of add
-    if old_rule is spot.__class__.access_rule:
+    if old_rule is Location.access_rule or old_rule is Entrance.access_rule:
         spot.access_rule = rule if combine == "and" else old_rule
     else:
         if combine == "and":
@@ -111,7 +115,7 @@ def add_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"],
 def forbid_item(location: "BaseClasses.Location", item: str, player: int):
     old_rule = location.item_rule
     # empty rule
-    if old_rule is location.__class__.item_rule:
+    if old_rule is Location.item_rule:
         location.item_rule = lambda i: i.name != item or i.player != player
     else:
         location.item_rule = lambda i: (i.name != item or i.player != player) and old_rule(i)
@@ -131,7 +135,7 @@ def forbid_items(location: "BaseClasses.Location", items: typing.Set[str]):
 def add_item_rule(location: "BaseClasses.Location", rule: ItemRule, combine: str = "and"):
     old_rule = location.item_rule
     # empty rule, replace instead of add
-    if old_rule is location.__class__.item_rule:
+    if old_rule is Location.item_rule:
         location.item_rule = rule if combine == "and" else old_rule
     else:
         if combine == "and":

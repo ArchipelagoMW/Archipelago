@@ -1,0 +1,65 @@
+name: Native Code Static Analysis
+
+on:
+  push:
+    paths:
+      - '**.c'
+      - '**.cc'
+      - '**.cpp'
+      - '**.cxx'
+      - '**.h'
+      - '**.hh'
+      - '**.hpp'
+      - '**.pyx'
+      - 'setup.py'
+      - 'requirements.txt'
+      - '.github/workflows/scan-build.yml'
+  pull_request:
+    paths:
+      - '**.c'
+      - '**.cc'
+      - '**.cpp'
+      - '**.cxx'
+      - '**.h'
+      - '**.hh'
+      - '**.hpp'
+      - '**.pyx'
+      - 'setup.py'
+      - 'requirements.txt'
+      - '.github/workflows/scan-build.yml'
+
+jobs:
+  scan-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Install newer Clang
+      run: |
+        wget https://apt.llvm.org/llvm.sh
+        chmod +x ./llvm.sh
+        sudo ./llvm.sh 19
+    - name: Install scan-build command
+      run: |
+        sudo apt install clang-tools-19
+    - name: Get a recent python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        python -m pip install --upgrade pip -r requirements.txt
+    - name: scan-build
+      run: |
+        source venv/bin/activate
+        scan-build-19 --status-bugs -o scan-build-reports -disable-checker deadcode.DeadStores python setup.py build -y
+    - name: Store report
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: scan-build-reports
+        path: scan-build-reports

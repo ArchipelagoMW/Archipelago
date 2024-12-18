@@ -3,7 +3,7 @@ from .items import item_groups
 from . import logic
 
 
-def set_rules(multiworld, player):
+def set_rules(multiworld, world, player):
 
     item_rules = {
         # Some items do special things when they are passed into the GiveItem function in the game, but
@@ -15,54 +15,46 @@ def set_rules(multiworld, player):
                                             not in i.name)
     }
 
-    if multiworld.prizesanity[player]:
+    if world.options.prizesanity:
         def prize_rule(i):
             return i.player != player or i.name in item_groups["Unique"]
         item_rules["Celadon Prize Corner - Item Prize 1"] = prize_rule
         item_rules["Celadon Prize Corner - Item Prize 2"] = prize_rule
         item_rules["Celadon Prize Corner - Item Prize 3"] = prize_rule
 
-    if multiworld.accessibility[player] != "locations":
-        multiworld.get_location("Cerulean Bicycle Shop", player).always_allow = (lambda state, item:
-                                                                                   item.name == "Bike Voucher"
-                                                                                   and item.player == player)
-        multiworld.get_location("Fuchsia Warden's House - Safari Zone Warden", player).always_allow = (lambda state, item:
-                                                                                        item.name == "Gold Teeth" and
-                                                                                        item.player == player)
-
     access_rules = {
         "Rival's House - Rival's Sister": lambda state: state.has("Oak's Parcel", player),
         "Oak's Lab - Oak's Post-Route-22-Rival Gift": lambda state: state.has("Oak's Parcel", player),
-        "Viridian City - Sleepy Guy": lambda state: logic.can_cut(state, player) or logic.can_surf(state, player),
-        "Route 2 Gate - Oak's Aide": lambda state: logic.oaks_aide(state, state.multiworld.oaks_aide_rt_2[player].value + 5, player),
+        "Viridian City - Sleepy Guy": lambda state: logic.can_cut(state, world, player) or logic.can_surf(state, world, player),
+        "Route 2 Gate - Oak's Aide": lambda state: logic.oaks_aide(state, world, world.options.oaks_aide_rt_2.value + 5, player),
         "Cerulean Bicycle Shop": lambda state: state.has("Bike Voucher", player)
             or location_item_name(state, "Cerulean Bicycle Shop", player) == ("Bike Voucher", player),
         "Lavender Mr. Fuji's House - Mr. Fuji": lambda state: state.has("Fuji Saved", player),
-        "Route 11 Gate 2F - Oak's Aide": lambda state: logic.oaks_aide(state, state.multiworld.oaks_aide_rt_11[player].value + 5, player),
-        "Celadon City - Stranded Man": lambda state: logic.can_surf(state, player),
+        "Route 11 Gate 2F - Oak's Aide": lambda state: logic.oaks_aide(state, world, world.options.oaks_aide_rt_11.value + 5, player),
+        "Celadon City - Stranded Man": lambda state: logic.can_surf(state, world, player),
         "Fuchsia Warden's House - Safari Zone Warden": lambda state: state.has("Gold Teeth", player)
             or location_item_name(state, "Fuchsia Warden's House - Safari Zone Warden", player) == ("Gold Teeth", player),
-        "Route 12 - Island Item": lambda state: logic.can_surf(state, player),
-        "Route 15 Gate 2F - Oak's Aide": lambda state: logic.oaks_aide(state, state.multiworld.oaks_aide_rt_15[player].value + 5, player),
-        "Route 25 - Item": lambda state: logic.can_cut(state, player),
-        "Fuchsia Warden's House - Behind Boulder Item": lambda state: logic.can_strength(state, player),
-        "Safari Zone Center - Island Item": lambda state: logic.can_surf(state, player),
+        "Route 12 - Island Item": lambda state: logic.can_surf(state, world, player),
+        "Route 15 Gate 2F - Oak's Aide": lambda state: logic.oaks_aide(state, world, world.options.oaks_aide_rt_15.value + 5, player),
+        "Route 25 - Item": lambda state: logic.can_cut(state, world, player),
+        "Fuchsia Warden's House - Behind Boulder Item": lambda state: logic.can_strength(state, world, player),
+        "Safari Zone Center - Island Item": lambda state: logic.can_surf(state, world, player),
         "Saffron Copycat's House 2F - Copycat": lambda state: state.has("Buy Poke Doll", player),
 
         "Celadon Game Corner - West Gambler's Gift": lambda state: state.has("Coin Case", player),
         "Celadon Game Corner - Center Gambler's Gift": lambda state: state.has("Coin Case", player),
         "Celadon Game Corner - East Gambler's Gift": lambda state: state.has("Coin Case", player),
-        "Celadon Game Corner - Hidden Item Northwest By Counter": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, player),
-        "Celadon Game Corner - Hidden Item Southwest Corner": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, player),
-        "Celadon Game Corner - Hidden Item Near Rumor Man": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, player),
-        "Celadon Game Corner - Hidden Item Near Speculating Woman": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, player),
-        "Celadon Game Corner - Hidden Item Near West Gifting Gambler": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, player),
-        "Celadon Game Corner - Hidden Item Near Wonderful Time Woman": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, player),
-        "Celadon Game Corner - Hidden Item Near Failing Gym Information Guy": lambda state: state.has( "Coin Case", player) and logic.can_get_hidden_items(state, player),
-        "Celadon Game Corner - Hidden Item Near East Gifting Gambler": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, player),
-        "Celadon Game Corner - Hidden Item Near Hooked Guy": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, player),
-        "Celadon Game Corner - Hidden Item at End of Horizontal Machine Row": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, player),
-        "Celadon Game Corner - Hidden Item in Front of Horizontal Machine Row": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, player),
+        "Celadon Game Corner - Hidden Item Northwest By Counter": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, world, player),
+        "Celadon Game Corner - Hidden Item Southwest Corner": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, world, player),
+        "Celadon Game Corner - Hidden Item Near Rumor Man": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, world, player),
+        "Celadon Game Corner - Hidden Item Near Speculating Woman": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, world, player),
+        "Celadon Game Corner - Hidden Item Near West Gifting Gambler": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, world, player),
+        "Celadon Game Corner - Hidden Item Near Wonderful Time Woman": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, world, player),
+        "Celadon Game Corner - Hidden Item Near Failing Gym Information Guy": lambda state: state.has( "Coin Case", player) and logic.can_get_hidden_items(state, world, player),
+        "Celadon Game Corner - Hidden Item Near East Gifting Gambler": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, world, player),
+        "Celadon Game Corner - Hidden Item Near Hooked Guy": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, world, player),
+        "Celadon Game Corner - Hidden Item at End of Horizontal Machine Row": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, world, player),
+        "Celadon Game Corner - Hidden Item in Front of Horizontal Machine Row": lambda state: state.has("Coin Case", player) and logic.can_get_hidden_items(state, world, player),
 
         "Celadon Prize Corner - Item Prize 1": lambda state: state.has("Coin Case", player) and state.has("Game Corner", player),
         "Celadon Prize Corner - Item Prize 2": lambda state: state.has("Coin Case", player) and state.has("Game Corner", player),
@@ -79,9 +71,9 @@ def set_rules(multiworld, player):
         "Cinnabar Lab Fossil Room - Dome Fossil Pokemon": lambda state: state.has("Dome Fossil", player) and state.has("Cinnabar Island", player),
         "Route 12 - Sleeping Pokemon": lambda state: state.has("Poke Flute", player),
         "Route 16 - Sleeping Pokemon": lambda state: state.has("Poke Flute", player),
-        "Seafoam Islands B4F - Legendary Pokemon": lambda state: logic.can_strength(state, player) and state.has("Seafoam Boss Boulders", player),
-        "Vermilion Dock - Legendary Pokemon": lambda state: logic.can_surf(state, player),
-        "Cerulean Cave B1F - Legendary Pokemon": lambda state: logic.can_surf(state, player),
+        "Seafoam Islands B4F - Legendary Pokemon": lambda state: logic.can_strength(state, world, player) and state.has("Seafoam Boss Boulders", player),
+        "Vermilion Dock - Legendary Pokemon": lambda state: logic.can_surf(state, world, player),
+        "Cerulean Cave B1F - Legendary Pokemon": lambda state: logic.can_surf(state, world, player),
 
         **{f"Pokemon Tower {floor}F - Wild Pokemon - {slot}": lambda state: state.has("Silph Scope", player) for floor in range(3, 8) for slot in range(1, 11)},
         "Pokemon Tower 6F - Restless Soul": lambda state: state.has("Silph Scope", player),  # just for level scaling
@@ -102,102 +94,105 @@ def set_rules(multiworld, player):
 
         "Route 22 - Trainer Parties": lambda state: state.has("Oak's Parcel", player),
 
+        "Victory Road 1F - Top Item": lambda state: logic.can_strength(state, world, player),
+        "Victory Road 1F - Left Item": lambda state: logic.can_strength(state, world, player),
+
         # # Rock Tunnel
-        "Rock Tunnel 1F - PokeManiac": lambda state: logic.rock_tunnel(state, player),
-        "Rock Tunnel 1F - Hiker 1": lambda state: logic.rock_tunnel(state, player),
-        "Rock Tunnel 1F - Hiker 2": lambda state: logic.rock_tunnel(state, player),
-        "Rock Tunnel 1F - Hiker 3": lambda state: logic.rock_tunnel(state, player),
-        "Rock Tunnel 1F - Jr. Trainer F 1": lambda state: logic.rock_tunnel(state, player),
-        "Rock Tunnel 1F - Jr. Trainer F 2": lambda state: logic.rock_tunnel(state, player),
-        "Rock Tunnel 1F - Jr. Trainer F 3": lambda state: logic.rock_tunnel(state, player),
-        "Rock Tunnel B1F - PokeManiac 1": lambda state: logic.rock_tunnel(state, player),
-        "Rock Tunnel B1F - PokeManiac 2": lambda state: logic.rock_tunnel(state, player),
-        "Rock Tunnel B1F - PokeManiac 3": lambda state: logic.rock_tunnel(state, player),
-        "Rock Tunnel B1F - Jr. Trainer F 1": lambda state: logic.rock_tunnel(state, player),
-        "Rock Tunnel B1F - Jr. Trainer F 2": lambda state: logic.rock_tunnel(state, player),
-        "Rock Tunnel B1F - Hiker 1": lambda state: logic.rock_tunnel(state, player),
-        "Rock Tunnel B1F - Hiker 2": lambda state: logic.rock_tunnel(state, player),
-        "Rock Tunnel B1F - Hiker 3": lambda state: logic.rock_tunnel(state, player),
-        "Rock Tunnel B1F - North Item": lambda state: logic.rock_tunnel(state, player),
-        "Rock Tunnel B1F - Northwest Item": lambda state: logic.rock_tunnel(state, player),
-        "Rock Tunnel B1F - Southwest Item": lambda state: logic.rock_tunnel(state, player),
-        "Rock Tunnel B1F - West Item": lambda state: logic.rock_tunnel(state, player),
+        "Rock Tunnel 1F - PokeManiac": lambda state: logic.rock_tunnel(state, world, player),
+        "Rock Tunnel 1F - Hiker 1": lambda state: logic.rock_tunnel(state, world, player),
+        "Rock Tunnel 1F - Hiker 2": lambda state: logic.rock_tunnel(state, world, player),
+        "Rock Tunnel 1F - Hiker 3": lambda state: logic.rock_tunnel(state, world, player),
+        "Rock Tunnel 1F - Jr. Trainer F 1": lambda state: logic.rock_tunnel(state, world, player),
+        "Rock Tunnel 1F - Jr. Trainer F 2": lambda state: logic.rock_tunnel(state, world, player),
+        "Rock Tunnel 1F - Jr. Trainer F 3": lambda state: logic.rock_tunnel(state, world, player),
+        "Rock Tunnel B1F - PokeManiac 1": lambda state: logic.rock_tunnel(state, world, player),
+        "Rock Tunnel B1F - PokeManiac 2": lambda state: logic.rock_tunnel(state, world, player),
+        "Rock Tunnel B1F - PokeManiac 3": lambda state: logic.rock_tunnel(state, world, player),
+        "Rock Tunnel B1F - Jr. Trainer F 1": lambda state: logic.rock_tunnel(state, world, player),
+        "Rock Tunnel B1F - Jr. Trainer F 2": lambda state: logic.rock_tunnel(state, world, player),
+        "Rock Tunnel B1F - Hiker 1": lambda state: logic.rock_tunnel(state, world, player),
+        "Rock Tunnel B1F - Hiker 2": lambda state: logic.rock_tunnel(state, world, player),
+        "Rock Tunnel B1F - Hiker 3": lambda state: logic.rock_tunnel(state, world, player),
+        "Rock Tunnel B1F - North Item": lambda state: logic.rock_tunnel(state, world, player),
+        "Rock Tunnel B1F - Northwest Item": lambda state: logic.rock_tunnel(state, world, player),
+        "Rock Tunnel B1F - Southwest Item": lambda state: logic.rock_tunnel(state, world, player),
+        "Rock Tunnel B1F - West Item": lambda state: logic.rock_tunnel(state, world, player),
 
         # Pokédex check
         "Oak's Lab - Oak's Parcel Reward": lambda state: state.has("Oak's Parcel", player),
 
         # Hidden items
-        "Viridian Forest - Hidden Item Northwest by Trainer": lambda state: logic.can_get_hidden_items(state, 
+        "Viridian Forest - Hidden Item Northwest by Trainer": lambda state: logic.can_get_hidden_items(state, world, 
             player),
-        "Viridian Forest - Hidden Item Entrance Tree": lambda state: logic.can_get_hidden_items(state, player),
-        "Mt Moon B2F - Hidden Item Dead End Before Fossils": lambda state: logic.can_get_hidden_items(state, 
+        "Viridian Forest - Hidden Item Entrance Tree": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Mt Moon B2F - Hidden Item Dead End Before Fossils": lambda state: logic.can_get_hidden_items(state, world, 
             player),
-        "Route 25 - Hidden Item Fence Outside Bill's House": lambda state: logic.can_get_hidden_items(state, 
+        "Route 25 - Hidden Item Fence Outside Bill's House": lambda state: logic.can_get_hidden_items(state, world, 
             player),
-        "Route 9 - Hidden Item Bush By Grass": lambda state: logic.can_get_hidden_items(state, player),
-        "S.S. Anne Kitchen - Hidden Item Kitchen Trash": lambda state: logic.can_get_hidden_items(state, player),
-        "S.S. Anne B1F Rooms - Hidden Item Under Pillow": lambda state: logic.can_get_hidden_items(state, player),
+        "Route 9 - Hidden Item Bush By Grass": lambda state: logic.can_get_hidden_items(state, world, player),
+        "S.S. Anne Kitchen - Hidden Item Kitchen Trash": lambda state: logic.can_get_hidden_items(state, world, player),
+        "S.S. Anne B1F Rooms - Hidden Item Under Pillow": lambda state: logic.can_get_hidden_items(state, world, player),
         "Route 10 - Hidden Item Behind Rock Tunnel Entrance Cuttable Tree": lambda
-            state: logic.can_get_hidden_items(state, player) and logic.can_cut(state, player),
-        "Route 10 - Hidden Item Bush": lambda state: logic.can_get_hidden_items(state, player),
-        "Rocket Hideout B1F - Hidden Item Pot Plant": lambda state: logic.can_get_hidden_items(state, player),
-        "Rocket Hideout B3F - Hidden Item Near East Item": lambda state: logic.can_get_hidden_items(state, player),
+            state: logic.can_get_hidden_items(state, world, player) and logic.can_cut(state, world, player),
+        "Route 10 - Hidden Item Bush": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Rocket Hideout B1F - Hidden Item Pot Plant": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Rocket Hideout B3F - Hidden Item Near East Item": lambda state: logic.can_get_hidden_items(state, world, player),
         "Rocket Hideout B4F - Hidden Item Behind Giovanni": lambda state:
-            logic.can_get_hidden_items(state, player),
-        "Pokemon Tower 5F - Hidden Item Near West Staircase": lambda state: logic.can_get_hidden_items(state, 
+            logic.can_get_hidden_items(state, world, player),
+        "Pokemon Tower 5F - Hidden Item Near West Staircase": lambda state: logic.can_get_hidden_items(state, world, 
             player),
-        "Route 13 - Hidden Item Dead End Bush": lambda state: logic.can_get_hidden_items(state, player),
-        "Route 13 - Hidden Item Dead End By Water Corner": lambda state: logic.can_get_hidden_items(state, player),
-        "Pokemon Mansion B1F - Hidden Item Secret Key Room Corner": lambda state: logic.can_get_hidden_items(state, 
+        "Route 13 - Hidden Item Dead End Bush": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Route 13 - Hidden Item Dead End By Water Corner": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Pokemon Mansion B1F - Hidden Item Secret Key Room Corner": lambda state: logic.can_get_hidden_items(state, world, 
             player),
-        "Safari Zone West - Hidden Item Secret House Statue": lambda state: logic.can_get_hidden_items(state, 
+        "Safari Zone West - Hidden Item Secret House Statue": lambda state: logic.can_get_hidden_items(state, world, 
             player),
-        "Silph Co 5F - Hidden Item Pot Plant": lambda state: logic.can_get_hidden_items(state, player),
-        "Silph Co 9F - Hidden Item Nurse Bed": lambda state: logic.can_get_hidden_items(state, player),
-        "Saffron Copycat's House 2F - Hidden Item Desk": lambda state: logic.can_get_hidden_items(state, player),
-        "Cerulean Cave 1F - Hidden Item Center Rocks": lambda state: logic.can_get_hidden_items(state, player),
-        "Cerulean Cave B1F - Hidden Item Northeast Rocks": lambda state: logic.can_get_hidden_items(state, player),
-        "Power Plant - Hidden Item Central Dead End": lambda state: logic.can_get_hidden_items(state, player),
-        "Power Plant - Hidden Item Before Zapdos": lambda state: logic.can_get_hidden_items(state, player),
-        "Seafoam Islands B2F - Hidden Item Rock": lambda state: logic.can_get_hidden_items(state, player),
-        "Seafoam Islands B3F - Hidden Item Rock": lambda state: logic.can_get_hidden_items(state, player),
+        "Silph Co 5F - Hidden Item Pot Plant": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Silph Co 9F - Hidden Item Nurse Bed": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Saffron Copycat's House 2F - Hidden Item Desk": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Cerulean Cave 1F - Hidden Item Center Rocks": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Cerulean Cave B1F - Hidden Item Northeast Rocks": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Power Plant - Hidden Item Central Dead End": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Power Plant - Hidden Item Before Zapdos": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Seafoam Islands B2F - Hidden Item Rock": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Seafoam Islands B3F - Hidden Item Rock": lambda state: logic.can_get_hidden_items(state, world, player),
         # if you can reach any exit boulders, that means you can drop into the water tunnel and auto-surf
-        "Seafoam Islands B4F - Hidden Item Corner Island": lambda state: logic.can_get_hidden_items(state, player),
+        "Seafoam Islands B4F - Hidden Item Corner Island": lambda state: logic.can_get_hidden_items(state, world, player),
         "Pokemon Mansion 1F - Hidden Item Block Near Entrance Carpet": lambda
-            state: logic.can_get_hidden_items(state, player),
-        "Pokemon Mansion 3F - Hidden Item Behind Burglar": lambda state: logic.can_get_hidden_items(state, player),
-        "Route 23 - Hidden Item Rocks Before Victory Road": lambda state: logic.can_get_hidden_items(state, 
+            state: logic.can_get_hidden_items(state, world, player),
+        "Pokemon Mansion 3F - Hidden Item Behind Burglar": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Route 23 - Hidden Item Rocks Before Victory Road": lambda state: logic.can_get_hidden_items(state, world, 
             player),
-        "Route 23 - Hidden Item East Bush After Water": lambda state: logic.can_get_hidden_items(state, 
+        "Route 23 - Hidden Item East Bush After Water": lambda state: logic.can_get_hidden_items(state, world, 
             player),
-        "Route 23 - Hidden Item On Island": lambda state: logic.can_get_hidden_items(state, 
-            player) and logic.can_surf(state, player),
-        "Victory Road 2F - Hidden Item Rock Before Moltres": lambda state: logic.can_get_hidden_items(state, 
+        "Route 23 - Hidden Item On Island": lambda state: logic.can_get_hidden_items(state, world, 
+            player) and logic.can_surf(state, world, player),
+        "Victory Road 2F - Hidden Item Rock Before Moltres": lambda state: logic.can_get_hidden_items(state, world, 
             player),
-        "Victory Road 2F - Hidden Item Rock In Final Room": lambda state: logic.can_get_hidden_items(state, player),
-        "Viridian City - Hidden Item Cuttable Tree": lambda state: logic.can_get_hidden_items(state, player),
-        "Route 11 - Hidden Item Isolated Bush Near Gate": lambda state: logic.can_get_hidden_items(state, player),
-        "Route 12 - Hidden Item Bush Near Gate": lambda state: logic.can_get_hidden_items(state, player),
-        "Route 17 - Hidden Item In Grass": lambda state: logic.can_get_hidden_items(state, player),
-        "Route 17 - Hidden Item Near Northernmost Sign": lambda state: logic.can_get_hidden_items(state, player),
-        "Route 17 - Hidden Item East Center": lambda state: logic.can_get_hidden_items(state, player),
-        "Route 17 - Hidden Item West Center": lambda state: logic.can_get_hidden_items(state, player),
-        "Route 17 - Hidden Item Before Final Bridge": lambda state: logic.can_get_hidden_items(state, player),
+        "Victory Road 2F - Hidden Item Rock In Final Room": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Viridian City - Hidden Item Cuttable Tree": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Route 11 - Hidden Item Isolated Bush Near Gate": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Route 12 - Hidden Item Bush Near Gate": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Route 17 - Hidden Item In Grass": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Route 17 - Hidden Item Near Northernmost Sign": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Route 17 - Hidden Item East Center": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Route 17 - Hidden Item West Center": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Route 17 - Hidden Item Before Final Bridge": lambda state: logic.can_get_hidden_items(state, world, player),
         "Underground Path North South - Hidden Item Near Northern Stairs": lambda
-            state: logic.can_get_hidden_items(state, player),
+            state: logic.can_get_hidden_items(state, world, player),
         "Underground Path North South - Hidden Item Near Southern Stairs": lambda
-            state: logic.can_get_hidden_items(state, player),
-        "Underground Path West East - Hidden Item West": lambda state: logic.can_get_hidden_items(state, player),
-        "Underground Path West East - Hidden Item East": lambda state: logic.can_get_hidden_items(state, player),
-        "Celadon City - Hidden Item Dead End Near Cuttable Tree": lambda state: logic.can_get_hidden_items(state, 
+            state: logic.can_get_hidden_items(state, world, player),
+        "Underground Path West East - Hidden Item West": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Underground Path West East - Hidden Item East": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Celadon City - Hidden Item Dead End Near Cuttable Tree": lambda state: logic.can_get_hidden_items(state, world, 
             player),
-        "Route 25 - Hidden Item Northeast Of Grass": lambda state: logic.can_get_hidden_items(state, player),
-        "Mt Moon B2F - Hidden Item Lone Rock": lambda state: logic.can_get_hidden_items(state, player),
-        "Vermilion City - Hidden Item In Water Near Fan Club": lambda state: logic.can_get_hidden_items(state, 
-            player) and logic.can_surf(state, player),
-        "Cerulean City - Hidden Item Gym Badge Guy's Backyard": lambda state: logic.can_get_hidden_items(state, 
+        "Route 25 - Hidden Item Northeast Of Grass": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Mt Moon B2F - Hidden Item Lone Rock": lambda state: logic.can_get_hidden_items(state, world, player),
+        "Vermilion City - Hidden Item In Water Near Fan Club": lambda state: logic.can_get_hidden_items(state, world, 
+            player) and logic.can_surf(state, world, player),
+        "Cerulean City - Hidden Item Gym Badge Guy's Backyard": lambda state: logic.can_get_hidden_items(state, world, 
             player),
-        "Route 4 - Hidden Item Plateau East Of Mt Moon": lambda state: logic.can_get_hidden_items(state, player),
+        "Route 4 - Hidden Item Plateau East Of Mt Moon": lambda state: logic.can_get_hidden_items(state, world, player),
 
         # Evolutions
         "Evolution - Ivysaur": lambda state: state.has("Bulbasaur", player) and logic.evolve_level(state, 16, player),
@@ -281,5 +276,4 @@ def set_rules(multiworld, player):
         if loc.name.startswith("Pokedex"):
             mon = loc.name.split(" - ")[1]
             add_rule(loc, lambda state, i=mon: (state.has("Pokedex", player) or not
-                     state.multiworld.require_pokedex[player]) and (state.has(i, player)
-                                                                    or state.has(f"Static {i}", player)))
+                     world.options.require_pokedex) and (state.has(i, player) or state.has(f"Static {i}", player)))

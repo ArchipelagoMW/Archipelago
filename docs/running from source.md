@@ -7,8 +7,10 @@ use that version. These steps are for developers or platforms without compiled r
 ## General
 
 What you'll need:
- * [Python 3.8.7 or newer](https://www.python.org/downloads/), not the Windows Store version
-   * **Python 3.12 is currently unsupported**
+ * [Python 3.10.11 or newer](https://www.python.org/downloads/), not the Windows Store version
+   * On Windows, please consider only using the latest supported version in production environments since security
+     updates for older versions are not easily available.
+   * Python 3.12.x is currently the newest supported version
  * pip: included in downloads from python.org, separate in many Linux distributions
  * Matching C compiler
    * possibly optional, read operating system specific sections
@@ -17,32 +19,33 @@ Then run any of the starting point scripts, like Generate.py, and the included M
 required modules and after pressing enter proceed to install everything automatically.
 After this, you should be able to run the programs.
 
+ * `Launcher.py` gives access to many components, including clients registered in `worlds/LauncherComponents.py`.
+    * The Launcher button "Generate Template Options" will generate default yamls for all worlds.
  * With yaml(s) in the `Players` folder, `Generate.py` will generate the multiworld archive.
  * `MultiServer.py`, with the filename of the generated archive as a command line parameter, will host the multiworld locally.
     * `--log_network` is a command line parameter useful for debugging.
  * `WebHost.py` will host the website on your computer.
     * You can copy `docs/webhost configuration sample.yaml` to `config.yaml`
     to change WebHost options (like the web hosting port number).
-    * As a side effect, `WebHost.py` creates the template yamls for all the games in `WebHostLib/static/generated`.
 
 
 ## Windows
 
 Recommended steps
  * Download and install a "Windows installer (64-bit)" from the [Python download page](https://www.python.org/downloads)
-   * **Python 3.12 is currently unsupported**
+   * [read above](#General) which versions are supported
 
  * **Optional**: Download and install Visual Studio Build Tools from
    [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
    * Refer to [Windows Compilers on the python wiki](https://wiki.python.org/moin/WindowsCompilers) for details. 
      Generally, selecting the box for "Desktop Development with C++" will provide what you need.
    * Build tools are not required if all modules are installed pre-compiled. Pre-compiled modules are pinned on
-     [Discord in #archipelago-dev](https://discord.com/channels/731205301247803413/731214280439103580/905154456377757808)
+     [Discord in #ap-core-dev](https://discord.com/channels/731205301247803413/731214280439103580/905154456377757808)
 
  * It is recommended to use [PyCharm IDE](https://www.jetbrains.com/pycharm/)
- * Run Generate.py which will prompt installation of missing modules, press enter to confirm
-   * In PyCharm: right-click Generate.py and select `Run 'Generate'`
-   * Without PyCharm: open a command prompt in the source folder and type `py Generate.py`
+ * Run ModuleUpdate.py which will prompt installation of missing modules, press enter to confirm
+   * In PyCharm: right-click ModuleUpdate.py and select `Run 'ModuleUpdate'`
+   * Without PyCharm: open a command prompt in the source folder and type `py ModuleUpdate.py`
 
 
 ## macOS
@@ -84,4 +87,4 @@ PyCharm has a built-in version control integration that supports Git.
 
 ## Running tests
 
-Run `pip install pytest pytest-subtests`, then use your IDE to run tests or run `pytest` from the source folder.
+Information about running tests can be found in [tests.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/tests.md#running-tests)

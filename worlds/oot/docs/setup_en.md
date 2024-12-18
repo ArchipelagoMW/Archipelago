@@ -10,8 +10,7 @@ As we are using BizHawk, this guide is only applicable to Windows and Linux syst
   - Version 2.3.1 and later are supported. Version 2.7 is recommended for stability.
   - Detailed installation instructions for BizHawk can be found at the above link.
   - Windows users must run the prereq installer first, which can also be found at the above link.
-- The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
-  (select `Ocarina of Time Client` during installation).
+- The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases).
 - An Ocarina of Time v1.0 ROM.
 
 ## Configuring BizHawk
@@ -51,8 +50,8 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The Player Settings page on the website allows you to configure your personal settings and export a config file from
-them. Player settings page: [Ocarina of Time Player Settings Page](/games/Ocarina%20of%20Time/player-settings)
+The Player Options page on the website allows you to configure your personal options and export a config file from
+them. Player options page: [Ocarina of Time Player Options Page](/games/Ocarina%20of%20Time/player-options)
 
 ### Verifying your config file
 

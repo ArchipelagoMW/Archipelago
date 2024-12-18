@@ -1,15 +1,15 @@
 # Pokémon Emerald
 
-## Where is the settings page?
+## Where is the options page?
 
-You can read through all the settings and generate a YAML [here](../player-settings).
+You can read through all the options and generate a YAML [here](../player-options).
 
 ## What does randomization do to this game?
 
 This randomizer handles both item randomization and pokémon randomization. Badges, HMs, gifts from NPCs, and items on
 the ground can all be randomized. There are also many options for randomizing wild pokémon, starters, opponent pokémon,
 abilities, types, etc… You can even change a percentage of single battles into double battles. Check the
-[settings page](../player-settings) for a more comprehensive list of what can be changed.
+[options page](../player-options) for a more comprehensive list of what can be changed.
 
 ## What items and locations get randomized?
 
@@ -28,9 +28,9 @@ randomizer. Here are some of the more important ones:
 - You can have both bikes simultaneously
 - You can run or bike (almost) anywhere
 - The Wally catching tutorial is skipped
-- All text is instant, and with a setting it can be automatically progressed by holding A
+- All text is instant and, with an option, can be automatically progressed by holding A
 - When a Repel runs out, you will be prompted to use another
-- Many more minor improvements…
+- [Many more minor improvements…](/tutorial/Pokemon%20Emerald/rom_changes/en)
 
 ## Where is my starting inventory?
 
@@ -38,13 +38,13 @@ Except for badges, your starting inventory will be in the PC.
 
 ## What does another world's item look like in Pokémon Emerald?
 
-When you find an item that is not your own, you will instead receive an "ARCHIPELAGO ITEM" which will *not* be added to
-your inventory.
+When you find an item that is not your own, you will see the item's name and its owner while the item received jingle
+plays.
 
 ## When the player receives an item, what happens?
 
 You will only receive items while in the overworld and not during battles. Depending on your `Receive Item Messages`
-setting, the received item will either be silently added to your bag or you will be shown a text box with the item's
+option, the received item will either be silently added to your bag or you will be shown a text box with the item's
 name and the item will be added to your bag while a fanfare plays.
 
 ## Can I play offline?
@@ -55,9 +55,9 @@ you're playing a multiworld game, the client will sync your game with the server
 
 ## Will battle mechanics be updated?
 
-This is something we'd love to see, but it's unlikely. We don't want to force new mechanics on players who would prefer
-to play with the classic mechanics, but trying to switch between old and new mechanics based on an option would be a
-monumental task, and is probably best solved some other way.
+Unfortunately, no. We don't want to force new mechanics on players who would prefer to play with the classic mechanics,
+but updating would require such drastic changes to the underlying code that it would be unreasonable to toggle between
+them.
 
 ## Is this randomizer compatible with other mods?
 
@@ -68,11 +68,21 @@ suggestion or contribute.
 
 ## Can I use tools like the Universal Pokémon Randomizer?
 
-No, those tools expect data to be in certain locations and in a certain format, but this randomizer has to shift it
+No, tools like UPR expect data to be in certain locations and in a certain format, but this randomizer has to shift it
 around. Using tools to try to modify the game would only corrupt the ROM.
 
 We realize this means breaking from established habits when it comes to randomizing Pokémon games, but this randomizer
 would be many times more complex to develop if it were constrained by something like UPR.
 
-The one exception might be PKHeX. You may be able to extract pokémon from your save using PKHeX, but this isn't a
-guarantee, and we make no effort to keep our saves compatible with PKHeX.
+### There are two possible exceptions
+
+#### PKHex
+
+You may be able to extract pokémon from your save using PKHeX, but this isn't a guarantee, and we make no effort to keep
+our saves compatible with PKHeX. Box and party pokémon are the only aspects of your save file likely to work.
+
+#### PokéFinder/RNG Reporter
+
+In the spirit of randomization, Emerald's broken RNG is fixed in Archipelago. More specifically, it's reverted to work
+as it did in Ruby/Sapphire. So while you can't make the assumption that the RNG is seeded at 0, you can set the battery
+to dry, which will seed it in the same way that Ruby/Sapphire are seeded when the battery is dry.

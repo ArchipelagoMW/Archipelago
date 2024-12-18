@@ -94,7 +94,7 @@ def create_regions(world, player):
         create_cave_region(world, player, 'Kakariko Gamble Game', 'a game of chance'),
         create_cave_region(world, player, 'Potion Shop', 'the potion shop', ['Potion Shop']),
         create_lw_region(world, player, 'Lake Hylia Island', ['Lake Hylia Island']),
-        create_cave_region(world, player, 'Capacity Upgrade', 'the queen of fairies'),
+        create_cave_region(world, player, 'Capacity Upgrade', 'the queen of fairies', ['Capacity Upgrade Shop']),
         create_cave_region(world, player, 'Two Brothers House', 'a connector', None, ['Two Brothers House Exit (East)', 'Two Brothers House Exit (West)']),
         create_lw_region(world, player, 'Maze Race Ledge', ['Maze Race'], ['Two Brothers House (West)']),
         create_cave_region(world, player, '50 Rupee Cave', 'a cave with some cash'),
@@ -121,8 +121,9 @@ def create_regions(world, player):
                               ['Hyrule Castle Exit (East)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (South)', 'Throne Room']),
         create_dungeon_region(world, player, 'Sewer Drop', 'a drop\'s exit', None, ['Sewer Drop']),  # This exists only to be referenced for access checks
         create_dungeon_region(world, player, 'Sewers (Dark)', 'a drop\'s exit', ['Sewers - Dark Cross', 'Sewers - Key Rat Key Drop'], ['Sewers Door']),
-        create_dungeon_region(world, player, 'Sewers', 'a drop\'s exit', ['Sewers - Secret Room - Left', 'Sewers - Secret Room - Middle',
-                                         'Sewers - Secret Room - Right'], ['Sanctuary Push Door', 'Sewers Back Door']),
+        create_dungeon_region(world, player, 'Sewers', 'a drop\'s exit', None, ['Sanctuary Push Door', 'Sewers Back Door', 'Sewers Secret Room']),
+        create_dungeon_region(world, player, 'Sewers Secret Room', 'a drop\'s exit', ['Sewers - Secret Room - Left', 'Sewers - Secret Room - Middle',
+                                         'Sewers - Secret Room - Right']),
         create_dungeon_region(world, player, 'Sanctuary', 'a drop\'s exit', ['Sanctuary'], ['Sanctuary Exit']),
         create_dungeon_region(world, player, 'Agahnims Tower', 'Castle Tower', ['Castle Tower - Room 03', 'Castle Tower - Dark Maze',  'Castle Tower - Dark Archer Key Drop', 'Castle Tower - Circle of Pots Key Drop'], ['Agahnim 1', 'Agahnims Tower Exit']),
         create_dungeon_region(world, player, 'Agahnim 1', 'Castle Tower', ['Agahnim 1'], None),
@@ -275,7 +276,9 @@ def create_regions(world, player):
         create_cave_region(world, player, 'Hookshot Cave', 'a connector',
                            ['Hookshot Cave - Top Right', 'Hookshot Cave - Top Left', 'Hookshot Cave - Bottom Right',
                             'Hookshot Cave - Bottom Left'],
-                           ['Hookshot Cave Exit (South)', 'Hookshot Cave Exit (North)']),
+                           ['Hookshot Cave Exit (South)', 'Hookshot Cave Bomb Wall (South)']),
+        create_cave_region(world, player, 'Hookshot Cave (Upper)', 'a connector', None, ['Hookshot Cave Exit (North)',
+                                                                                         'Hookshot Cave Bomb Wall (North)']),
         create_dw_region(world, player, 'Death Mountain Floating Island (Dark World)', None,
                          ['Floating Island Drop', 'Hookshot Cave Back Entrance', 'Floating Island Mirror Spot']),
         create_lw_region(world, player, 'Death Mountain Floating Island (Light World)', ['Floating Island']),
@@ -311,8 +314,8 @@ def create_regions(world, player):
         create_dungeon_region(world, player, 'Skull Woods Second Section', 'Skull Woods', ['Skull Woods - Big Key Chest', 'Skull Woods - West Lobby Pot Key'], ['Skull Woods Second Section Exit (East)', 'Skull Woods Second Section Exit (West)']),
         create_dungeon_region(world, player, 'Skull Woods Final Section (Entrance)', 'Skull Woods', ['Skull Woods - Bridge Room'], ['Skull Woods Torch Room', 'Skull Woods Final Section Exit']),
         create_dungeon_region(world, player, 'Skull Woods Final Section (Mothula)', 'Skull Woods', ['Skull Woods - Spike Corner Key Drop', 'Skull Woods - Boss', 'Skull Woods - Prize']),
-        create_dungeon_region(world, player, 'Ice Palace (Entrance)', 'Ice Palace', ['Ice Palace - Jelly Key Drop'], ['Ice Palace (Second Section)', 'Ice Palace Exit']),
-        create_dungeon_region(world, player, 'Ice Palace (Second Section)', 'Ice Palace', ['Ice Palace - Conveyor Key Drop', 'Ice Palace - Compass Chest'], ['Ice Palace (Main)']),
+        create_dungeon_region(world, player, 'Ice Palace (Entrance)', 'Ice Palace', ['Ice Palace - Jelly Key Drop', 'Ice Palace - Compass Chest'], ['Ice Palace (Second Section)', 'Ice Palace Exit']),
+        create_dungeon_region(world, player, 'Ice Palace (Second Section)', 'Ice Palace', ['Ice Palace - Conveyor Key Drop'], ['Ice Palace (Main)']),
         create_dungeon_region(world, player, 'Ice Palace (Main)', 'Ice Palace', ['Ice Palace - Freezor Chest',
                                                                           'Ice Palace - Many Pots Pot Key',
                                                                   'Ice Palace - Big Chest', 'Ice Palace - Iced T Room'], ['Ice Palace (East)', 'Ice Palace (Kholdstare)']),
@@ -333,13 +336,15 @@ def create_regions(world, player):
                                                                              ['Turtle Rock Entrance to Pokey Room', 'Turtle Rock Entrance Gap Reverse']),
         create_dungeon_region(world, player, 'Turtle Rock (Pokey Room)', 'Turtle Rock', ['Turtle Rock - Pokey 1 Key Drop'], ['Turtle Rock (Pokey Room) (North)', 'Turtle Rock (Pokey Room) (South)']),
         create_dungeon_region(world, player, 'Turtle Rock (Chain Chomp Room)', 'Turtle Rock', ['Turtle Rock - Chain Chomps'], ['Turtle Rock (Chain Chomp Room) (North)', 'Turtle Rock (Chain Chomp Room) (South)']),
-        create_dungeon_region(world, player, 'Turtle Rock (Second Section)', 'Turtle Rock', ['Turtle Rock - Big Key Chest',  'Turtle Rock - Pokey 2 Key Drop'], ['Turtle Rock Ledge Exit (West)', 'Turtle Rock Chain Chomp Staircase', 'Turtle Rock Big Key Door']),
+        create_dungeon_region(world, player, 'Turtle Rock (Second Section)', 'Turtle Rock', ['Turtle Rock - Big Key Chest', 'Turtle Rock - Pokey 2 Key Drop'], ['Turtle Rock Chain Chomp Staircase', 'Turtle Rock Big Key Door', 'Turtle Rock Second Section Bomb Wall']),
+        create_dungeon_region(world, player, 'Turtle Rock (Second Section Bomb Wall)', 'Turtle Rock', None, ['Turtle Rock Ledge Exit (West)', 'Turtle Rock Second Section from Bomb Wall']),
         create_dungeon_region(world, player, 'Turtle Rock (Big Chest)', 'Turtle Rock', ['Turtle Rock - Big Chest'], ['Turtle Rock (Big Chest) (North)', 'Turtle Rock Ledge Exit (East)']),
         create_dungeon_region(world, player, 'Turtle Rock (Crystaroller Room)', 'Turtle Rock', ['Turtle Rock - Crystaroller Room'], ['Turtle Rock Dark Room Staircase', 'Turtle Rock Big Key Door Reverse']),
         create_dungeon_region(world, player, 'Turtle Rock (Dark Room)', 'Turtle Rock', None, ['Turtle Rock (Dark Room) (North)', 'Turtle Rock (Dark Room) (South)']),
+        create_dungeon_region(world, player, 'Turtle Rock (Eye Bridge Bomb Wall)', 'Turtle Rock', None, ['Turtle Rock Isolated Ledge Exit', 'Turtle Rock Eye Bridge from Bomb Wall']),
         create_dungeon_region(world, player, 'Turtle Rock (Eye Bridge)', 'Turtle Rock', ['Turtle Rock - Eye Bridge - Bottom Left', 'Turtle Rock - Eye Bridge - Bottom Right',
                                                                           'Turtle Rock - Eye Bridge - Top Left', 'Turtle Rock - Eye Bridge - Top Right'],
-                              ['Turtle Rock Dark Room (South)', 'Turtle Rock (Trinexx)', 'Turtle Rock Isolated Ledge Exit']),
+                              ['Turtle Rock Dark Room (South)', 'Turtle Rock (Trinexx)', 'Turtle Rock Eye Bridge Bomb Wall']),
         create_dungeon_region(world, player, 'Turtle Rock (Trinexx)', 'Turtle Rock', ['Turtle Rock - Boss', 'Turtle Rock - Prize']),
         create_dungeon_region(world, player, 'Palace of Darkness (Entrance)', 'Palace of Darkness', ['Palace of Darkness - Shooter Room'], ['Palace of Darkness Bridge Room', 'Palace of Darkness Bonk Wall', 'Palace of Darkness Exit']),
         create_dungeon_region(world, player, 'Palace of Darkness (Center)', 'Palace of Darkness', ['Palace of Darkness - The Arena - Bridge', 'Palace of Darkness - Stalfos Basement'],
@@ -401,7 +406,7 @@ def create_dungeon_region(world: MultiWorld, player: int, name: str, hint: str, 
 
 def _create_region(world: MultiWorld, player: int, name: str, type: LTTPRegionType, hint: str, locations=None,
                    exits=None):
-    from worlds.alttp.SubClasses import ALttPLocation
+    from .SubClasses import ALttPLocation
     ret = LTTPRegion(name, type, hint, player, world)
     if exits:
         for exit in exits:
@@ -735,6 +740,7 @@ location_table: typing.Dict[str,
      'Missing Smith': (None, None, False, None),
      'Dark Blacksmith Ruins': (None, None, False, None),
      'Flute Activation Spot': (None, None, False, None),
+     'Capacity Upgrade Shop': (None, None, False, None),
      'Eastern Palace - Prize': ([0x1209D, 0x53EF8, 0x53EF9, 0x180052, 0x18007C, 0xC6FE], None, True, 'Eastern Palace'),
      'Desert Palace - Prize': ([0x1209E, 0x53F1C, 0x53F1D, 0x180053, 0x180078, 0xC6FF], None, True, 'Desert Palace'),
      'Tower of Hera - Prize': (
@@ -754,7 +760,7 @@ location_table: typing.Dict[str,
      'Turtle Rock - Prize': (
          [0x120A7, 0x53F24, 0x53F25, 0x18005C, 0x180079, 0xC708], None, True, 'Turtle Rock')}
 
-from worlds.alttp.Shops import shop_table_by_location_id, shop_table_by_location
+from .Shops import shop_table_by_location_id, shop_table_by_location
 lookup_id_to_name = {data[0]: name for name, data in location_table.items() if type(data[0]) == int}
 lookup_id_to_name = {**lookup_id_to_name, **{data[1]: name for name, data in key_drop_data.items()}}
 lookup_id_to_name.update(shop_table_by_location_id)

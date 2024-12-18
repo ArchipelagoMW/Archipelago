@@ -1,9 +1,9 @@
 # Final Fantasy 1 (NES)
 
-## Where is the settings page?
+## Where is the options page?
 
-Unlike most games on Archipelago.gg, Final Fantasy 1's settings are controlled entirely by the original randomzier. You
-can find an exhaustive list of documented settings on the FFR
+Unlike most games on Archipelago.gg, Final Fantasy 1's options are controlled entirely by the original randomzier. You
+can find an exhaustive list of documented options on the FFR
 website: [FF1R Website](https://finalfantasyrandomizer.com/)
 
 ## What does randomization do to this game?
