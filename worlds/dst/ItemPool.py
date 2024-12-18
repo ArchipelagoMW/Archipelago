@@ -102,6 +102,8 @@ class DSTItemPool:
         # Handle progressive items here
         for _ in range(options.extra_damage_against_bosses.value):
             self.nonfiller_itempool.append("Extra Damage Against Bosses")
+        for _ in range(options.damage_bonuses.value):
+            self.nonfiller_itempool.append("Damage Bonus")
 
     def create_item(self, world:World, name: str) -> DSTItem:
         itemtype = (

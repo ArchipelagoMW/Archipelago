@@ -2,7 +2,7 @@ from typing import Dict, Set, List, Iterable
 
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
-from .Options import DSTOptions, dontstarvetogether_option_groups
+from .Options import DSTOptions, dontstarvetogether_option_groups, dontstarvetogether_option_presets
 from . import Regions, Rules, ItemPool, Util
 from .Constants import VERSION, PHASE, SEASON, SEASONS_PASSED, SPECIAL_TAGS
 from .Locations import location_data_table, location_name_to_id
@@ -28,13 +28,14 @@ class DSTWeb(WebWorld):
         ["Dragon Wolf Leo"]
     )]
     option_groups = dontstarvetogether_option_groups
+    options_presets = dontstarvetogether_option_presets
     theme = "ice"
 
 class DSTWorld(World):
     """
     Don't Starve Together is a game where you are thrown into a strange and unexplored world full of odd creatures, 
     hidden dangers, and ancient secrets known as "The Constant". You must gather resources to craft items and build 
-    strucutres and farms to help you protect yourself, survive, and most importantly, not starve.
+    structures and farms to help you protect yourself, survive, and most importantly, not starve.
     """
     game = "Don't Starve Together"
 
@@ -130,8 +131,13 @@ class DSTWorld(World):
             # Set valid auto regions for selected bosses
             for regionname, group in _BOSS_REGIONS.items():
                 for bossname in group:
-                    if bossname in self.options.required_bosses:
+                    if bossname in self.options.required_bosses.value:
                         _auto_regions.add(regionname)
+
+
+            # If bosses_all is chosen with only one boss chosen, change goal to bosses_any
+            if self.options.goal.value == self.options.goal.option_bosses_all and len(self.options.required_bosses.value) == 1:
+                self.options.goal.value = self.options.goal.option_bosses_any
 
         # Force ocean regions to light if Crab King is not a check
         if (

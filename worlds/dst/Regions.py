@@ -44,6 +44,7 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
    _DUMMY_FILL_ITEM = "Boss Defeat"
    _boss_fill_item:str = (
       "Extra Damage Against Bosses" if options.boss_fill_items.value == options.boss_fill_items.option_extra_damage_against_bosses
+      else "Damage Bonus" if options.boss_fill_items.value == options.boss_fill_items.option_damage_bonus
       else _DUMMY_FILL_ITEM
    )
    BOSS_PREFILLS:Dict[str, str] = {

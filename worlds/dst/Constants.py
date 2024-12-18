@@ -1,4 +1,4 @@
-VERSION:str = "1.2.1.beta"
+VERSION:str = "1.2.1"
 ITEM_ID_OFFSET:int = 264000
 LOCATION_ID_OFFSET:int = 264000
 LOCATION_DAY_OFFSET = 266000
@@ -399,7 +399,7 @@ DSTAP_ITEMS = [
     [507, "Down Feather",                "goose_feather",                         [ "physical", "filler" ], 5],
     [508, "Eye Mask",                    "eyemaskhat",                            [ "physical", "filler" ] ],
     [509, "Shield of Terror",            "shieldofterror",                        [ "physical", "filler" ] ],
-    [510, "Iridescent Gem",              "opalpreciousgem",                       [ "physical", "useful" ] ],
+    [510, "Iridescent Gem",              "opalpreciousgem",                       [ "physical", "useful", "archive" ] ],
     [511, "Krampus Sack",                "krampus_sack",                          [ "physical", "useful" ] ],
     [512, "Bishop Figure Sketch",        "chesspiece_bishop_sketch",              [ "physical", "chesspiecesketch", "useful", "abstract" ] ],
     [513, "Rook Figure Sketch",          "chesspiece_rook_sketch",                [ "physical", "chesspiecesketch", "useful", "abstract" ] ],
@@ -434,6 +434,7 @@ DSTAP_ITEMS = [
     [706, "New Moon Phase Change",       "dstap_moonphasechange_new",             [ "seasonhelper", "useful", "night" ] ],
     [707, "Extra Damage Against Bosses", "extrabossdamage",                       [ "abstract", "useful", "progressive" ] ],
     [708, "Boss Defeat",                 "bossdefeat",                            [ "dummy", "nonshuffled" ] ],
+    [709, "Damage Bonus",                "damagebonus",                           [ "abstract", "useful", "progressive" ] ],
 
     # Seeds (751-800)
     [751,   "Asparagus Seeds",           "dstap_asparagus_seeds",             [ "seeds", "useful" ] ],
@@ -753,7 +754,7 @@ DSTAP_LOCATIONS = [
     [563,   "Science (Twigs)",                  "twigs",                    [ "research", "science", "tier_1" ] ],
     [564,   "Science (Log)",                    "log",                      [ "research", "science", "tier_1" ] ],
     [565,   "Science (Rocks)",                  "rocks",                    [ "research", "science", "tier_1" ] ],
-    # [566,   "Science (Light Bulb)",             "lightbulb",                [ "research", "science", "tier_2", "dualregion", "rng" ] ],
+    [566,   "Science (Light Bulb)",             "lightbulb",                [ "research", "science", "tier_2", "dualregion", "rng" ] ],
 
     # Magic (601-700)
     [601,   "Magic (Blue Gem)",                 "bluegem",                  [ "research", "magic", "tier_1" ] ],

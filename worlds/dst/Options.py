@@ -10,7 +10,7 @@ class Goal(Choice):
     Bosses (All): Defeat all bosses selected in "Boss Defeat Requirement" to win.
     """
     display_name = "Goal Type"
-    default = 1
+    default = 0
     option_survival = 0
     option_bosses_any = 1
     option_bosses_all = 2
@@ -95,7 +95,7 @@ class CraftingMode(Choice):
     Vanilla: Crafting behavior is vanilla.
     Journey: Once you craft an item once, you can craft it again freely.
     Free Samples: Once you unlock a recipe, you can craft one for free.
-    Free-build: Once you unlock a recipe, you can always craft it.
+    Free-Build: Once you unlock a recipe, you can always craft it.
     Locked Ingredients: You cannot craft items that use one of your missing items as an ingredient.
     """
     display_name = "Crafting Mode"
@@ -104,7 +104,7 @@ class CraftingMode(Choice):
     option_journey = 1
     option_free_samples = 2
     option_free_build = 3
-    option_locked_ingredients = 3
+    option_locked_ingredients = 4
 
 class CaveRegions(Choice):
     """
@@ -189,8 +189,6 @@ class BossLocations(Choice):
     None: No boss checks other than ones on your goal path.
     Easy: Only easier bosses. These can be defeated even if playing solo with default difficulty. 
     All: Includes raid bosses. These are intended for multiplayer sessions, but can still be soloed with Extra Damage Against Bosses or creative strategies.
-    Prioritized: All bosses will have either useful or progression items.
-    Extra Damage Against Bosses: All bosses are item locations, and grant an exponential +10% and +25% damage bonus against easy and hard bosses respectively.
     """
     display_name = "Boss Locations"
     default = 1
@@ -235,7 +233,8 @@ class ExtraDamageAgainstBosses(NamedRange):
     This adds "Extra Damage Against Bosses" buffs as Archipelago items. Recommended if playing solo.
     Each stack of this buff gives the player a permanent +10% damage against easier bosses and +25% damage against tougher ones.
     This is exponential. With 10 stacks, this turns into x2.6 and x9.3 damage multipiers respectively.
-    This amount is separate from any prefilled through "Boss Fill Items" setting
+    Multipliers can be configured in the mod configuration in the game's menu.
+    This amount is separate from any prefilled through "Boss Fill Items" setting.
     """
     display_name = "Extra Damage Against Bosses"
     range_start = 0
@@ -247,6 +246,28 @@ class ExtraDamageAgainstBosses(NamedRange):
         "low": 3,
         "medium": 6,
         "high": 10,
+        "overkill": 20,
+    }
+
+class DamageBonuses(NamedRange):
+    """
+    This adds "Damage Bonus" buffs as Archipelago items.
+    Each stack of this buff gives the player a permanent +10% damage against all mobs.
+    This is exponential. With 10 stacks, this turns into a x2.6 multipier.
+    Multiplier can be configured in the mod configuration in the game's menu.
+    This amount is separate from any prefilled through "Boss Fill Items" setting.
+    """
+    display_name = "Damage Bonuses"
+    range_start = 0
+    range_end = 20
+    default = 6
+
+    special_range_names = {
+        "none": 0,
+        "low": 3,
+        "medium": 6,
+        "high": 10,
+        "overkill": 20,
     }
 
 class BossFillItems(Choice):
@@ -259,6 +280,7 @@ class BossFillItems(Choice):
     option_filler = 1
     option_priority = 2
     option_extra_damage_against_bosses = 11
+    option_damage_bonus = 12
 
 class ShuffleStartingRecipes(Toggle):
     """
@@ -277,7 +299,7 @@ class ShuffleNoUnlockRecipes(Toggle):
     """
     display_name = "Shuffle Ancient and Celestial Recipes"
 
-class SeedItems(Toggle):
+class SeedItems(DefaultOnToggle):
     """
     Turn farm plant seeds into Archipelago items?
     When enabled, generic seeds can only grow weeds.
@@ -288,7 +310,7 @@ class SeasonFlow(Choice):
     """
     How do seasons progress in your world?
     
-    Normal: Seasons progress as default. Logic attempts to prepare you for seasons, but not guaranteed. Seasonal checks may not have progression items.
+    Normal: Seasons progress as default. Logic attempts to prepare you for seasons in time, but not guaranteed. Seasonal checks may not have progression items.
     Unlockable: Season-changing items are progression. Seasonal checks may have progresion items. Can optionally play with long seasons.
     Unlockable Shuffled: Same as unlockable, except seasons are logically shuffled within the spheres. Can optionally play with long seasons.
     """
@@ -305,8 +327,6 @@ class PlayerSkillLevel(Choice):
     Easy: Adds useful items in logic and avoids harder solutions.
     Advanced: Expects the player to be familiar with game mechanics.
     Expert: Expects the player survive in riskier conditions, have minimal items, and know advanced tricks.
-
-    Easier difficulties may make generation more restrictive.
     """
     display_name = "Logic Difficulty"
     default = 0
@@ -420,40 +440,6 @@ class SeasonTrapItems(NamedRange):
         "always": 100,
     }
 
-dontstarvetogether_option_groups = [
-    OptionGroup("Location Options", [
-        CaveRegions,
-        OceanRegions,
-        Seasons,
-        StartingSeason,
-        DayPhases,
-        CreatureLocations,
-        BossLocations,
-        CookingLocations,
-        FarmingLocations,
-    ]),
-    OptionGroup("Item Options", [
-        ShuffleStartingRecipes,
-        ShuffleNoUnlockRecipes,
-        ChessPieceSketchItems,
-        SeedItems,
-        ExtraDamageAgainstBosses,
-        JunkItemAmount,
-        TrapItems,
-        SeasonTrapItems,
-    ]),
-    OptionGroup("Logic Options", [
-        SeasonFlow,
-        PlayerSkillLevel,
-        LightingLogic,
-        WeaponLogic,
-        SeasonGearLogic,
-        BaseMakingLogic,
-        BackpackLogic,
-        HealingLogic,
-    ]),
-]
-
 @dataclass
 class DSTOptions(PerGameCommonOptions):
     goal: Goal
@@ -479,6 +465,7 @@ class DSTOptions(PerGameCommonOptions):
     chesspiece_sketch_items: ChessPieceSketchItems
     seed_items: SeedItems
     extra_damage_against_bosses: ExtraDamageAgainstBosses
+    damage_bonuses: DamageBonuses
     boss_fill_items: BossFillItems
     junk_item_amount: JunkItemAmount
     trap_items: TrapItems
@@ -493,3 +480,78 @@ class DSTOptions(PerGameCommonOptions):
     base_making_logic: BaseMakingLogic
     backpack_logic: BackpackLogic
     healing_logic: HealingLogic
+
+dontstarvetogether_option_groups = [
+    OptionGroup("Location Options", [
+        CaveRegions,
+        OceanRegions,
+        Seasons,
+        StartingSeason,
+        DayPhases,
+        CreatureLocations,
+        BossLocations,
+        CookingLocations,
+        FarmingLocations,
+    ]),
+    OptionGroup("Item Options", [
+        ShuffleStartingRecipes,
+        ShuffleNoUnlockRecipes,
+        ChessPieceSketchItems,
+        SeedItems,
+        ExtraDamageAgainstBosses,
+        DamageBonuses,
+        JunkItemAmount,
+        TrapItems,
+        SeasonTrapItems,
+    ]),
+    OptionGroup("Logic Options", [
+        SeasonFlow,
+        PlayerSkillLevel,
+        LightingLogic,
+        WeaponLogic,
+        SeasonGearLogic,
+        BaseMakingLogic,
+        BackpackLogic,
+        HealingLogic,
+    ]),
+]
+
+dontstarvetogether_option_presets = {
+    "Year Survival (Easy)": {
+        "goal": "survival",
+        "days_to_survive": 70,
+        "season_flow": "normal",
+        "season_gear_logic": "enabled",
+    },
+    "Season Giants (Easy)": {
+        "goal": "bosses_all",
+        "required_bosses": {"Deerclops", "Moose/Goose", "Antlion", "Bearger"},
+        "season_flow": "unlockable_shuffled",
+    },
+    "Ancient Guardian (Easy)": {
+        "goal": "bosses_any",
+        "required_bosses": {"Ancient Guardian"},
+        "cave_regions": "full",
+        "season_flow": "unlockable",
+    },
+    "RPG Mode (Advanced)": {
+        "goal": "bosses_any",
+        "required_bosses": {"Random", "Ancient Fuelweaver", "Celestial Champion"},
+        "cave_regions": "full",
+        "ocean_regions": "full",
+        "boss_locations": "all",
+        "starting_season": "random",
+        "season_flow": "unlockable_shuffled",
+        "crafting_mode": "journey",
+        "boss_fill_items": "extra_damage_against_bosses",
+        "shuffle_starting_recipes": True,
+        "shuffle_no_unlock_recipes": True,
+        "chesspiece_sketch_items": True,
+        "extra_damage_against_bosses": 0,
+        "damage_bonuses": 20,
+        "skill_level": "advanced",
+        "weapon_logic": "none",
+        "healing_logic": "none",
+        "start_inventory": {"Torch": 1, "Booster Shot": 1}
+    },
+}
