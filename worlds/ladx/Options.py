@@ -331,7 +331,7 @@ class Overworld(Choice, LADXROption):
 
 class Quickswap(Choice, LADXROption):
     """
-    Adds that the select buttons swaps with either A or B. The item is swapped with the top inventory slot. The map is not available when quickswap is enabled.
+    Adds that the SELECT button swaps with either A or B. The item is swapped with the top inventory slot. The map is not available when quickswap is enabled.
     """
     display_name = "Quickswap"
     ladxr_name = "quickswap"
@@ -554,7 +554,6 @@ ladx_option_groups = [
         NagMessages,
         Quickswap,
         HardMode,
-        LowHpBeep,
         BootsControls
     ]),
     OptionGroup("Experimental", [
@@ -568,7 +567,10 @@ ladx_option_groups = [
         APTitleScreen,
         GfxMod,
         Music,
-        MusicChangeCondition
+        MusicChangeCondition,
+        LowHpBeep,
+        TextMode,
+        NoFlash,
     ])
 ]
 
