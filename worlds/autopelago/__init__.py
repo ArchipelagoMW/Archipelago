@@ -1,7 +1,7 @@
 import logging
 from typing import Dict, Literal, Optional
 
-from .AutopelagoDefinitions import GAME_NAME, AutopelagoGameRequirement, AutopelagoAllRequirement, \
+from .AutopelagoDefinitions import GAME_NAME, version_stamp, AutopelagoGameRequirement, AutopelagoAllRequirement, \
     AutopelagoAnyRequirement, AutopelagoAnyTwoRequirement, AutopelagoItemRequirement, item_key_to_name, \
     AutopelagoRatCountRequirement, item_name_to_rat_count, location_name_to_id, location_name_to_requirement, \
     AutopelagoRegionDefinition, item_name_to_id, ItemClassification, item_name_to_classification, \
@@ -187,3 +187,8 @@ class AutopelagoWorld(World):
 
     def get_filler_item_name(self):
         return "Monkey's Paw"
+
+    def fill_slot_data(self):
+        return {
+            'version_stamp': version_stamp,
+        }

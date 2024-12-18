@@ -120,6 +120,7 @@ class AutopelagoRegionDefinitions(TypedDict):
 
 
 class AutopelagoDefinitions(TypedDict):
+    version_stamp: str
     items: AutopelagoItemDefinitions
     regions: AutopelagoRegionDefinitions
 
@@ -141,6 +142,8 @@ class AutopelagoRegionDefinition:
 
 
 _defs: AutopelagoDefinitions = parse_yaml(pkgutil.get_data(__name__, 'AutopelagoDefinitions.yml'))
+
+version_stamp = _defs['version_stamp']
 
 def _gen_ids():
     next_id = BASE_ID
