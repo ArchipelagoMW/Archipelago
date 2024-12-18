@@ -1788,7 +1788,8 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             "Magic (Broken Shell)":             cave_exploration.rule,
             "Magic (Leafy Meat)":               leafy_meat.rule,
             "Magic (Canary (Volatile))":        lambda state: state.has_all({canary.event, cave_exploration.event, bird_caging.event}, player),
-            "Magic (Life Giving Amulet)":       lambda state: state.has_all({"Life Giving Amulet", gem_digging.event, nightmare_fuel.event}, player),
+            "Magic (Life Giving Amulet)":       (lambda state: state.has_all({"Life Giving Amulet", gem_digging.event, nightmare_fuel.event}, player)) if resurrecting.is_progression
+                                                else gem_digging.rule,
             "Magic (Nightmare Fuel)":           lambda state: state.has_all({basic_combat.event, nightmare_fuel.event}, player),
             "Magic (Cut Reeds)":                swamp_exploration.rule,
             "Magic (Volt Goat Horn)":           basic_combat.rule,
@@ -1804,7 +1805,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
                                                 and state.has_any({dusk.event, night.event, hammering.event, deconstruction_staff.event}, player)),
             "Magic (Mosquito Sack)":            swamp_exploration.rule,
             "Magic (Spider Gland)":             ALWAYS_TRUE,
-            "Magic (Monster Jerky)":            lambda state: state.has_all({"Drying Rack", "Rope", charcoal.event}, player), # Excluded
+            "Magic (Monster Jerky)":            (lambda state: state.has_all({"Drying Rack", "Rope", charcoal.event}, player)) if BASE_MAKING_LOGIC else charcoal.rule, # Excluded
             "Magic (Pig Skin)":                 lambda state: state.has_any({hammering.event, deconstruction_staff.event}, player) or state.has_all({day.event, basic_combat.event}, player),
             "Magic (Batilisk Wing)":            batilisk.rule,
             "Magic (Stinger)":                  ALWAYS_TRUE,
