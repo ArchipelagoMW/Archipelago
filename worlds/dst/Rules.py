@@ -94,7 +94,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         else SEASON.SUMMER if options.starting_season.value == options.starting_season.option_summer
         else SEASON.AUTUMN
     )
-    DAMAGE_BONUSES_IN_WORLD = False # TODO
+    DAMAGE_BONUSES_IN_WORLD = "Damage Bonus" in itempool.nonfiller_itempool or "Damage Bonus" in options.start_inventory.value.keys()
 
 
     # Easy way to check if items are locked
@@ -1432,8 +1432,8 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
 
 
     # Events
-    hermit_home_upgrade_1 = add_hermit_event("Hermit Home Upgrade (1)", lambda state: state.has_all({hermit_island.event, bug_catching.event, night.event}, player), 
-                                                                        night.is_rule) # Cookie cutters, boards, fireflies
+    hermit_home_upgrade_1 = add_hermit_event("Hermit Home Upgrade (1)", combine_rules(hermit_island.rule, bug_catching.rule, night.rule if night.is_rule else cave_exploration.rule), 
+                                                                        night.is_rule or cave_exploration.is_rule) # Cookie cutters, boards, fireflies
     hermit_home_upgrade_2 = add_hermit_event("Hermit Home Upgrade (2)", combine_rules(
                                                                             lambda state: state.can_reach_location(hermit_home_upgrade_1.event, player),
                                                                             sea_fishing.rule if not REGION.CAVE in WHITELIST else ALWAYS_TRUE # Lightbulbs from skittersquids
@@ -1777,7 +1777,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             "Science (Rocks)":                  mining.rule,
             "Science (Light Bulb)":             mining.rule if REGION.CAVE in WHITELIST else sea_fishing.rule,
             "Magic (Blue Gem)":                 gem_digging.rule,
-            "Magic (Living Log)":               lambda state: state.has_any({chopping.event, "Wormwood"}, player),
+            "Magic (Living Log)":               chopping.rule,
             "Magic (Glommer's Goop)":           full_moon.rule,
             "Magic (Dark Petals)":              ALWAYS_TRUE,
             "Magic (Red Gem)":                  gem_digging.rule,
@@ -1936,7 +1936,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             if required:
                 multiworld.priority_locations[player].value.add(location_name)
             elif ("priority" in location_data.tags
-            or (options.boss_locations.value == options.boss_fill_items.option_priority and "boss" in location_data.tags and not "excluded" in location_data.tags)
+            or (options.boss_fill_items.value == options.boss_fill_items.option_priority and "boss" in location_data.tags and not "excluded" in location_data.tags)
             ):
                 # Prioritize generic priority tag
                 multiworld.priority_locations[player].value.add(location_name)

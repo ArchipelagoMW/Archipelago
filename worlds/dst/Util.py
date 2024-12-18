@@ -112,16 +112,16 @@ def build_whitelist(options: DSTOptions) -> FrozenSet[str]:
 
     # Hermit Crab Friendship (Min reachable 7)
     _HERMIT_FRIENDSHIP_CONDITIONS = [
-        PHASE.NIGHT in _whitelist, # Hermit Home 1 
-        PHASE.NIGHT in _whitelist, # Hermit Home 2
-        PHASE.NIGHT in _whitelist, # Hermit Home 3
+        PHASE.NIGHT in _whitelist or REGION.CAVE in _whitelist, # Hermit Home 1 
+        PHASE.NIGHT in _whitelist or REGION.CAVE in _whitelist, # Hermit Home 2
+        PHASE.NIGHT in _whitelist or REGION.CAVE in _whitelist, # Hermit Home 3
         True, # Drying Racks
-        _whitelist.issuperset({PHASE.DAY, SEASON.NONWINTER}), # Plant flowers
+        PHASE.DAY in _whitelist and SEASON.NONWINTER in _whitelist, # Plant flowers
         True, # Berry bushes
         True, # Clear underwater salvageables
         SEASONS_PASSED.SEASONS_2 in _whitelist, # Lure plant
         True, # Wooden chair
-        len(_whitelist.intersection({SEASON.AUTUMN, SEASON.SPRING})) > 0, # Umbrella
+        SEASON.AUTUMN in _whitelist and SEASON.SPRING in _whitelist, # Umbrella
         SEASON.WINTER in _whitelist, # Warm clothing
         SEASON.SUMMER in _whitelist, # Flower Salad
         SEASON.AUTUMN in _whitelist, # Fallounder
