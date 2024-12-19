@@ -804,6 +804,7 @@ class SC2Context(CommonContext):
 
             self.location_inclusions = {
                 LocationType.VICTORY: LocationInclusion.option_enabled, # Victory checks are always enabled
+                LocationType.VICTORY_CACHE: LocationInclusion.option_enabled, # Victory checks are always enabled
                 LocationType.VANILLA: args["slot_data"].get("vanilla_locations", VanillaLocations.default),
                 LocationType.EXTRA: args["slot_data"].get("extra_locations", ExtraLocations.default),
                 LocationType.CHALLENGE: args["slot_data"].get("challenge_locations", ChallengeLocations.default),
@@ -1677,7 +1678,11 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                         if not send_victory or self.ctx.slot_data_version >= 4:
                             print("Mission Completed")
                             location_ids = self.ctx.mission_id_to_location_ids[self.mission_id]
-                            victory_locations += [location_id for location_id in location_ids if (location_id % VICTORY_MODULO) >= VICTORY_CACHE_OFFSET]
+                            victory_locations += [
+                                get_location_id(self.mission_id, location_id)
+                                for location_id in location_ids
+                                if (location_id % VICTORY_MODULO) >= VICTORY_CACHE_OFFSET
+                            ]
                             await self.ctx.send_msgs(
                                 [{"cmd": 'LocationChecks',
                                     "locations": victory_locations}])
