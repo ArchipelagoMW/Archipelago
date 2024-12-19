@@ -117,7 +117,7 @@ class LocationTracker:
                 self.start_check = check
             self.all_checks.append(check)
         self.remaining_checks = [check for check in self.all_checks]
-        self.gameboy.set_cache_limits(
+        self.gameboy.set_checks_range(
             lowest_check, highest_check - lowest_check + 1)
 
     def has_start_item(self):

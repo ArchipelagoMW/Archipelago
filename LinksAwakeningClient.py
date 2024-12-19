@@ -100,19 +100,23 @@ class LAClientConstants:
     WRamCheckSize = 0x4
     WRamSafetyValue = bytearray([0]*WRamCheckSize)
 
+    wRamStart = 0xC000
+    hRamStart = 0xFF80
+    hRamSize = 0x80
+
     MinGameplayValue = 0x06
     MaxGameplayValue = 0x1A
     VictoryGameplayAndSub = 0x0102
 
-
 class RAGameboy():
     cache = []
-    cache_start = 0
-    cache_size = 0
     last_cache_read = None
     socket = None
 
     def __init__(self, address, port) -> None:
+        self.cache_start = LAClientConstants.wRamStart
+        self.cache_size = LAClientConstants.hRamStart + LAClientConstants.hRamSize - LAClientConstants.wRamStart
+
         self.address = address
         self.port = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -131,9 +135,14 @@ class RAGameboy():
     async def get_retroarch_status(self):
         return await self.send_command("GET_STATUS")
 
-    def set_cache_limits(self, cache_start, cache_size):
-        self.cache_start = cache_start
-        self.cache_size = cache_size
+    def set_checks_range(self, checks_start, checks_size):
+        self.checks_start = checks_start
+        self.checks_size = checks_size
+    
+    def set_location_range(self, location_start, location_size, critical_addresses):
+        self.location_start = location_start
+        self.location_size = location_size
+        self.critical_location_addresses = critical_addresses
 
     def send(self, b):
         if type(b) is str:
@@ -188,18 +197,55 @@ class RAGameboy():
         if not await self.check_safe_gameplay():
             return
 
-        cache = []
-        remaining_size = self.cache_size
-        while remaining_size:
-            block = await self.async_read_memory(self.cache_start + len(cache), remaining_size)
-            remaining_size -= len(block)
-            cache += block
+        attempts = 0
+        while True:
+            # RA doesn't let us do an atomic read of a large enough block of RAM
+            # Some bytes can't change in between reading location_block and hram_block
+            location_block = await self.read_memory_block(self.location_start, self.location_size)
+            hram_block = await self.read_memory_block(LAClientConstants.hRamStart, LAClientConstants.hRamSize)
+            verification_block = await self.read_memory_block(self.location_start, self.location_size)
+
+            valid = True
+            for address in self.critical_location_addresses:
+                if location_block[address - self.location_start] != verification_block[address - self.location_start]:
+                    valid = False
+
+            if valid:
+                break
+
+            attempts += 1
+
+            # Shouldn't really happen, but keep it from choking
+            if attempts > 5:
+                return
+
+        checks_block = await self.read_memory_block(self.checks_start, self.checks_size)
 
         if not await self.check_safe_gameplay():
             return
 
-        self.cache = cache
+        self.cache = bytearray(self.cache_size)
+
+        start = self.checks_start - self.cache_start
+        self.cache[start:start + len(checks_block)] = checks_block
+
+        start = self.location_start - self.cache_start
+        self.cache[start:start + len(location_block)] = location_block
+
+        start = LAClientConstants.hRamStart - self.cache_start
+        self.cache[start:start + len(hram_block)] = hram_block
+
         self.last_cache_read = time.time()
+    
+    async def read_memory_block(self, address, size):
+        block = bytearray()
+        remaining_size = size
+        while remaining_size:
+            chunk = await self.async_read_memory(address + len(block), remaining_size)
+            remaining_size -= len(chunk)
+            block += chunk
+        
+        return block
 
     async def read_memory_cache(self, addresses):
         # TODO: can we just update once per frame?
