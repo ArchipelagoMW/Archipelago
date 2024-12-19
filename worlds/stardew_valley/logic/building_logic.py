@@ -16,6 +16,8 @@ if typing.TYPE_CHECKING:
 else:
     SourceLogicMixin = object
 
+AUTO_BUILDING_BUILDINGS = {Building.shipping_bin, Building.pet_bowl, Building.farm_house}
+
 
 class BuildingLogicMixin(BaseLogicMixin):
     def __init__(self, *args, **kwargs):
@@ -47,8 +49,8 @@ class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, RegionLogicMixin, Receiv
         if not building_progression.is_progressive:
             return self.logic.building.can_build(building_name)
 
-        # Shipping bin is special. The mod auto-builds it when received, no need to go to Robin.
-        if building_name == Building.shipping_bin:
+        # Those buildings are special. The mod auto-builds them when received, no need to go to Robin.
+        if building_name in AUTO_BUILDING_BUILDINGS:
             return self.logic.received(Building.shipping_bin)
 
         carpenter_rule = self.logic.building.can_construct_buildings
