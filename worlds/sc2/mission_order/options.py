@@ -81,6 +81,7 @@ ItemEntryRule = {
 }
 EntryRule = Or(SubRuleEntryRule, MissionCountEntryRule, BeatMissionsEntryRule, ItemEntryRule)
 
+
 class CustomMissionOrder(OptionDict):
     """
     Used to generate a custom mission order. Please see documentation to understand usage.
@@ -158,7 +159,7 @@ class CustomMissionOrder(OptionDict):
         }
     })
     
-    def __init__(self, yaml_value: Dict[str, Dict[str, Any]]):
+    def __init__(self, yaml_value: Dict[str, Dict[str, Any]]) -> None:
         # This function constructs self.value by parts,
         # so the parent constructor isn't called
         self.value: Dict[str, Dict[str, Any]] = {}
@@ -245,6 +246,7 @@ class CustomMissionOrder(OptionDict):
         else:
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
 
+
 def _resolve_special_options(data: Dict[str, Any]):
     # Handle range values & string-to-value conversions
     for option in data:
@@ -258,6 +260,7 @@ def _resolve_special_options(data: Dict[str, Any]):
         longest_line = max(len(line) for line in canvas)
         data["size"] = len(canvas) * longest_line
         data["width"] = longest_line
+
 
 def _resolve_special_option(option: str, option_value: Any) -> Any:
     # Option values can be string representations of values
@@ -297,6 +300,7 @@ def _resolve_special_option(option: str, option_value: Any) -> Any:
     # Option values can be ranges
     return _resolve_potential_range(option_value)
 
+
 def _resolve_string_option_single(option: str, option_value: str) -> Any:
     formatted_value = option_value.lower().replace("_", " ")
     if not formatted_value in STR_OPTION_VALUES[option]:
@@ -306,11 +310,13 @@ def _resolve_string_option_single(option: str, option_value: str) -> Any:
         )
     return STR_OPTION_VALUES[option][formatted_value]
 
+
 def _resolve_string_option(option: str, option_value: Union[List[str], str]) -> Any:
     if type(option_value) == list:
         return [_resolve_string_option_single(option, val) for val in option_value]
     else:
         return _resolve_string_option_single(option, option_value)
+
 
 def _resolve_entry_rule(option_value: Dict[str, Any]) -> Dict[str, Any]:
     resolved: Dict[str, Any] = {}
@@ -349,6 +355,7 @@ def _resolve_entry_rule(option_value: Dict[str, Any]) -> Dict[str, Any]:
             resolved["items"][item] = final_amount
     return resolved
 
+
 def _resolve_potential_range(option_value: Union[Any, str]) -> Union[Any, int]:
     # An option value may be a range
     if type(option_value) == str and option_value.startswith("random-range-"):
@@ -359,6 +366,7 @@ def _resolve_potential_range(option_value: Union[Any, str]) -> Union[Any, int]:
         # assume non-range option values are handled elsewhere
         # or intended to fall through
         return option_value
+
 
 def _resolve_mission_pool(option_value: Union[str, List[str]]) -> Set[int]:
     if type(option_value) == str:
@@ -389,6 +397,7 @@ def _resolve_mission_pool(option_value: Union[str, List[str]]) -> Set[int]:
         raise ValueError(f"Mission pool evaluated to zero missions: {option_value}")
     return pool
 
+
 def _get_target_missions(term: str) -> Set[int]:
     if term in lookup_name_to_mission:
         return {lookup_name_to_mission[term].id}
@@ -398,6 +407,7 @@ def _get_target_missions(term: str) -> Set[int]:
             return {lookup_name_to_mission[mission].id for mission in groups[0]}
         else:
             raise ValueError(f"Mission pool term \"{term}\" did not resolve to any specific mission or mission group.")
+
 
 # Class-agnostic version of AP Options.Range.custom_range
 def _custom_range(text: str) -> int:
@@ -416,8 +426,10 @@ def _custom_range(text: str) -> int:
     else:
         return random.randint(random_range[0], random_range[1])
 
+
 def _triangular(lower: int, end: int, tri: typing.Optional[int] = None) -> int:
     return int(round(random.triangular(lower, end, tri), 0))
+
 
 # Version of options.Sc2ItemDict.verify without World
 def _resolve_item_names(value: Dict[str, int]) -> Dict[str, int]:

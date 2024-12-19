@@ -46,6 +46,7 @@ class MissionFlag(IntFlag):
     VsPZ          = VsProtoss|VsZerg
     VsAll         = VsTerran|VsProtoss|VsZerg
 
+
 class SC2CampaignGoalPriority(IntEnum):
     """
     Campaign's priority to goal election

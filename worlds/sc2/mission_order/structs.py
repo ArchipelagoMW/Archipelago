@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 GENERIC_KEY_NAME = "Key".casefold()
 
 class MissionOrderNode(ABC):
-    parent: ReferenceType[MissionOrderNode]
+    parent: Optional[ReferenceType[MissionOrderNode]]
     important_beat_event: bool
 
     def get_parent(self, address_so_far: str, full_address: str) -> MissionOrderNode:
@@ -54,6 +54,7 @@ class MissionOrderNode(ABC):
     @abstractmethod
     def get_key_name(self) -> str:
         raise NotImplementedError
+
 
 class SC2MissionOrder(MissionOrderNode):
     """
@@ -184,7 +185,7 @@ class SC2MissionOrder(MissionOrderNode):
         return "All Missions"
 
     def get_key_name(self) -> str:
-        return super().get_key_name()
+        return super().get_key_name()  # type: ignore
 
     def make_connections(self, world: World):
         names: Dict[str, int] = {}
@@ -345,12 +346,13 @@ class SC2MissionOrder(MissionOrderNode):
                 resolved = self.resolve_address(address, start_node)
                 objects.extend((obj, address) for obj in resolved)
             visual_reqs = [obj.get_visual_requirement(start_node) for (obj, _) in objects]
+            missions: List[SC2MOGenMission]
             if "amount" in data:
                 missions = [mission for (obj, _) in objects for mission in obj.get_missions() if not mission.option_empty]
                 if len(missions) == 0:
                     raise ValueError(f"Count rule did not find any missions at scopes: {data['scope']}")
                 return CountMissionsEntryRule(missions, data["amount"], visual_reqs)
-            missions: List[SC2MOGenMission] = []
+            missions = []
             for (obj, address) in objects:
                 obj.important_beat_event = True
                 exits = obj.get_exits()
@@ -399,7 +401,7 @@ class SC2MissionOrder(MissionOrderNode):
     def fill_missions(
             self, world: World, locked_missions: List[str],
             locations: Tuple['LocationData', ...], location_cache: List[Location]
-    ):
+    ) -> None:
         locations_per_region = get_locations_per_region(locations)
         regions: List[Region] = [create_region(world, locations_per_region, location_cache, "Menu")]
         locked_ids = [lookup_name_to_mission[mission].id for mission in locked_missions]
@@ -479,7 +481,7 @@ class SC2MissionOrder(MissionOrderNode):
 
         world.multiworld.regions += regions
 
-    def resolve_generic_keys(self):
+    def resolve_generic_keys(self) -> None:
         layout_numbered_keys = 1
         campaign_numbered_keys = 1
         for (node, item_rules) in self.keys_to_resolve.items():
@@ -880,14 +882,14 @@ class SC2MOGenLayout(MissionOrderNode):
         )
 
 class SC2MOGenMission(MissionOrderNode):
-    option_goal: bool # whether this mission is required to beat the game
-    option_entrance: bool # whether this mission is unlocked when the layout is unlocked
-    option_exit: bool # whether this mission is required to beat its parent layout
-    option_empty: bool # whether this slot contains a mission at all
-    option_next: Union[None, List[Union[int, str]]] # indices of internally connected missions
+    option_goal: bool  # whether this mission is required to beat the game
+    option_entrance: bool  # whether this mission is unlocked when the layout is unlocked
+    option_exit: bool  # whether this mission is required to beat its parent layout
+    option_empty: bool  # whether this slot contains a mission at all
+    option_next: Union[None, List[Union[int, str]]]  # indices of internally connected missions
     option_entry_rules: List[Dict[str, Any]]
-    option_difficulty: Difficulty # difficulty pool this mission pulls from
-    option_mission_pool: Set[int] # Allowed mission IDs for this slot
+    option_difficulty: Difficulty  # difficulty pool this mission pulls from
+    option_mission_pool: Set[int]  # Allowed mission IDs for this slot
 
     entry_rule: SubRuleEntryRule
     min_depth: int # Smallest amount of missions to beat before this slot is accessible
@@ -963,6 +965,7 @@ class SC2MOGenMission(MissionOrderNode):
     
     def get_address_to_mission(self) -> str:
         layout = self.parent()
+        assert layout is not None
         index = layout.missions.index(self)
         campaign = layout.parent()
         if campaign.option_single_layout_campaign:
@@ -995,6 +998,7 @@ class SC2MOGenMission(MissionOrderNode):
             self.entry_rule.to_slot_data()
         )
 
+
 @dataclass
 class CampaignSlotData:
     name: str
@@ -1006,6 +1010,7 @@ class CampaignSlotData:
     def legacy(name: str, layouts: List[LayoutSlotData]) -> CampaignSlotData:
         return CampaignSlotData(name, SubRuleRuleData.empty(), [], layouts)
 
+
 @dataclass
 class LayoutSlotData:
     name: str
@@ -1016,6 +1021,7 @@ class LayoutSlotData:
     @staticmethod
     def legacy(name: str, missions: List[List[MissionSlotData]]) -> LayoutSlotData:
         return LayoutSlotData(name, SubRuleRuleData.empty(), [], missions)
+
 
 @dataclass
 class MissionSlotData:
@@ -1030,6 +1036,7 @@ class MissionSlotData:
     @staticmethod
     def legacy(mission_id: int, prev_mission_ids: List[int], entry_rule: SubRuleRuleData) -> MissionSlotData:
         return MissionSlotData(mission_id, prev_mission_ids, entry_rule)
+
 
 class MissionEntryRules(NamedTuple):
     mission_rule: SubRuleRuleData
