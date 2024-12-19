@@ -1837,7 +1837,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             "Magic (Canary)":                   lambda state: state.has_all({"Bird Trap", canary.event}, player),
             "Magic (Puffin)":                   lambda state: state.has_all({"Bird Trap", pre_basic_boating.event}, player),
             "Magic (Fossil Fragments)":         lambda state: state.has_all({cave_exploration.event, mining.event}, player),
-            "Think Tank (Freshwater Fish)":     freshwater_fishing.optional_rule, # Can be obtained from merms
+            "Think Tank (Freshwater Fish)":     freshwater_fishing.rule if freshwater_fishing.is_progression else combine_rules(basic_combat.rule, swamp_exploration.rule), # Merms
             "Think Tank (Live Eel)":            lambda state: state.has_all({cave_exploration.event, "Freshwater Fishing Rod"}, player),
             "Think Tank (Runty Guppy)":         sea_fishing.rule,
             "Think Tank (Needlenosed Squirt)":  sea_fishing.rule,
