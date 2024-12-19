@@ -1,33 +1,21 @@
+import typing
+
 from .base_logic import BaseLogic, BaseLogicMixin
-from .building_logic import BuildingLogicMixin
-from .bundle_logic import BundleLogicMixin
-from .cooking_logic import CookingLogicMixin
-from .crafting_logic import CraftingLogicMixin
-from .fishing_logic import FishingLogicMixin
-from .has_logic import HasLogicMixin
-from .money_logic import MoneyLogicMixin
-from .monster_logic import MonsterLogicMixin
-from .museum_logic import MuseumLogicMixin
-from .pet_logic import PetLogicMixin
-from .quest_logic import QuestLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .relationship_logic import RelationshipLogicMixin
-from .season_logic import SeasonLogicMixin
-from .shipping_logic import ShippingLogicMixin
-from .skill_logic import SkillLogicMixin
-from .wallet_logic import WalletLogicMixin
-from .walnut_logic import WalnutLogicMixin
 from ..data.craftable_data import all_crafting_recipes_by_name
 from ..data.recipe_data import all_cooking_recipes_by_name
 from ..locations import LocationTags, locations_by_tag
 from ..mods.mod_data import ModNames
 from ..options import options
-from ..stardew_rule import StardewRule, HasProgressionPercent, true_
+from ..stardew_rule import StardewRule
 from ..strings.building_names import Building
 from ..strings.quest_names import Quest
 from ..strings.season_names import Season
 from ..strings.wallet_item_names import Wallet
+
+if typing.TYPE_CHECKING:
+    from .logic import StardewLogic
+else:
+    StardewLogic = object
 
 
 class GoalLogicMixin(BaseLogicMixin):
@@ -36,10 +24,7 @@ class GoalLogicMixin(BaseLogicMixin):
         self.goal = GoalLogic(*args, **kwargs)
 
 
-class GoalLogic(BaseLogic[MoneyLogicMixin | SkillLogicMixin | MuseumLogicMixin | RelationshipLogicMixin | PetLogicMixin | BundleLogicMixin |
-                          BuildingLogicMixin | ReceivedLogicMixin | WalletLogicMixin | HasLogicMixin | FishingLogicMixin | WalnutLogicMixin |
-                          MonsterLogicMixin | ShippingLogicMixin | RegionLogicMixin | CookingLogicMixin | CraftingLogicMixin | SeasonLogicMixin |
-                          QuestLogicMixin]):
+class GoalLogic(BaseLogic[StardewLogic]):
 
     def can_complete_community_center(self) -> StardewRule:
         return self.logic.bundle.can_complete_community_center
@@ -47,13 +32,13 @@ class GoalLogic(BaseLogic[MoneyLogicMixin | SkillLogicMixin | MuseumLogicMixin |
     def can_finish_grandpa_evaluation(self) -> StardewRule:
         # https://stardewvalleywiki.com/Grandpa
         rules_worth_a_point = [
-            self.logic.money.can_have_earned_total(50000),  # 50 000g
-            self.logic.money.can_have_earned_total(100000),  # 100 000g
-            self.logic.money.can_have_earned_total(200000),  # 200 000g
-            self.logic.money.can_have_earned_total(300000),  # 300 000g
-            self.logic.money.can_have_earned_total(500000),  # 500 000g
-            self.logic.money.can_have_earned_total(1000000),  # 1 000 000g first point
-            self.logic.money.can_have_earned_total(1000000),  # 1 000 000g second point
+            self.logic.money.can_have_earned_total(50_000),  # 50 000g
+            self.logic.money.can_have_earned_total(100_000),  # 100 000g
+            self.logic.money.can_have_earned_total(200_000),  # 200 000g
+            self.logic.money.can_have_earned_total(300_000),  # 300 000g
+            self.logic.money.can_have_earned_total(500_000),  # 500 000g
+            self.logic.money.can_have_earned_total(1_000_000),  # 1 000 000g first point
+            self.logic.money.can_have_earned_total(1_000_000),  # 1 000 000g second point
             self.logic.skill.has_total_level(30),  # Total Skills: 30
             self.logic.skill.has_total_level(50),  # Total Skills: 50
             self.logic.museum.can_complete_museum(),  # Completing the museum for a point
@@ -71,10 +56,9 @@ class GoalLogic(BaseLogic[MoneyLogicMixin | SkillLogicMixin | MuseumLogicMixin |
         ]
         return self.logic.count(12, *rules_worth_a_point)
 
-    @staticmethod
-    def can_complete_bottom_of_the_mines() -> StardewRule:
+    def can_complete_bottom_of_the_mines(self) -> StardewRule:
         # The location is in the bottom of the mines region, so no actual rule is required
-        return true_
+        return self.logic.true_
 
     def can_complete_cryptic_note(self) -> StardewRule:
         return self.logic.quest.can_complete_quest(Quest.cryptic_note)
@@ -186,7 +170,7 @@ class GoalLogic(BaseLogic[MoneyLogicMixin | SkillLogicMixin | MuseumLogicMixin |
         return self.logic.received("Stardrop", number_of_stardrops_to_receive) & self.logic.and_(*other_rules)
 
     def can_complete_allsanity(self) -> StardewRule:
-        return HasProgressionPercent(self.player, 100)
+        return self.logic.has_progress_percent(100)
 
     def can_complete_perfection(self) -> StardewRule:
-        return HasProgressionPercent(self.player, 100)
+        return self.logic.has_progress_percent(100)
