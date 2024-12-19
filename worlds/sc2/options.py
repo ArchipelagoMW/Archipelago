@@ -892,7 +892,7 @@ class VictoryChecks(Range):
     """
     display_name = "Victory Checks"
     range_start = 0
-    range_end = 9
+    range_end = 10
     default = 0
 
 

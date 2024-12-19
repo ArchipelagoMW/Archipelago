@@ -19,7 +19,7 @@ SC2HOTS_LOC_ID_OFFSET = 20000000  # Avoid clashes with The Legend of Zelda
 SC2LOTV_LOC_ID_OFFSET = SC2HOTS_LOC_ID_OFFSET + 2000
 SC2NCO_LOC_ID_OFFSET = SC2LOTV_LOC_ID_OFFSET + 2500
 SC2_RACESWAP_LOC_ID_OFFSET = SC2NCO_LOC_ID_OFFSET + 900
-VICTORY_CACHE_OFFSET = 91
+VICTORY_CACHE_OFFSET = 90
 
 
 class SC2Location(Location):
@@ -5750,7 +5750,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         ]
     beat_events: List[LocationData] = []
     victory_caches: List[LocationData] = []
-    VICTORY_CACHE_SIZE = 9
+    VICTORY_CACHE_SIZE = 10
     for location_data in location_table:
         # Generating Beat event and Victory Cache locations
         if location_data.type == LocationType.VICTORY:

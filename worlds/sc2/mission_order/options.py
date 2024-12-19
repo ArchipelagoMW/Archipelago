@@ -64,7 +64,7 @@ IntNegOne = And(int, lambda val: val >= -1)
 IntZero = And(int, lambda val: val >= 0)
 IntOne = And(int, lambda val: val >= 1)
 IntPercent = And(int, lambda val: 0 <= val <= 100)
-IntZeroToNine = And(int, lambda val: 0 <= val <= 9)
+IntZeroToTen = And(int, lambda val: 0 <= val <= 10)
 
 SubRuleEntryRule = {
     "rules": [{str: object}], # recursive schema checking is too hard
@@ -155,7 +155,7 @@ class CustomMissionOrder(OptionDict):
                     Optional("entry_rules"): [EntryRule],
                     Optional("mission_pool"): {int},
                     Optional("difficulty"): Difficulty,
-                    Optional("victory_checks"): IntZeroToNine,
+                    Optional("victory_checks"): IntZeroToTen,
                 }],
             },
         }
