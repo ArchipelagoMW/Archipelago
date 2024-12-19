@@ -609,7 +609,6 @@ class SC2Context(CommonContext):
         self.generic_upgrade_missions = 0
         self.generic_upgrade_research = 0
         self.generic_upgrade_items = 0
-        self.victory_checks = 1
         self.location_inclusions: typing.Dict[LocationType, int] = {}
         self.location_inclusions_by_flag: typing.Dict[LocationFlag, int] = {}
         self.plando_locations: typing.List[str] = []
@@ -797,7 +796,6 @@ class SC2Context(CommonContext):
             self.nova_covert_ops_only = args["slot_data"].get("nova_covert_ops_only", False)
             self.trade_enabled = args["slot_data"].get("enable_void_trade", EnableVoidTrade.option_false)
             self.difficulty_damage_modifier = args["slot_data"].get("difficulty_damage_modifier", DifficultyDamageModifier.option_true)
-            self.victory_checks = args["slot_data"].get("victory_checks", 1)
 
             if self.required_tactics == RequiredTactics.option_no_logic:
                 # Locking Grant Story Tech/Levels if no logic
@@ -1678,8 +1676,8 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                         # Old slots don't have locations on goal
                         if not send_victory or self.ctx.slot_data_version >= 4:
                             print("Mission Completed")
-                            if self.ctx.victory_checks > 1:
-                                victory_locations += [victory_locations[0] + VICTORY_CACHE_OFFSET + v for v in range(self.ctx.victory_checks - 1)]
+                            location_ids = self.ctx.mission_id_to_location_ids[self.mission_id]
+                            victory_locations += [location_id for location_id in location_ids if (location_id % VICTORY_MODULO) >= VICTORY_CACHE_OFFSET]
                             await self.ctx.send_msgs(
                                 [{"cmd": 'LocationChecks',
                                     "locations": victory_locations}])

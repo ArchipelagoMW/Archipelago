@@ -386,13 +386,13 @@ class SC2Manager(GameManager):
             last_location_type = LocationType.VICTORY
             victory_printed = False
             for location_type, location_name, _ in remaining_locations:
-                if location_type == LocationType.VICTORY and victory_printed:
+                if location_type in (LocationType.VICTORY, LocationType.VICTORY_CACHE) and victory_printed:
                     continue
                 if location_type != last_location_type:
                     tooltip += f"\n[color={COLOR_MISSION_IMPORTANT}]{self.get_location_type_title(location_type)}:[/color]"
                     last_location_type = location_type
                 if location_type == LocationType.VICTORY:
-                    victory_count = len([loc for loc in remaining_locations if loc[0] == LocationType.VICTORY])
+                    victory_count = len([loc for loc in remaining_locations if loc[0] in (LocationType.VICTORY, LocationType.VICTORY_CACHE)])
                     victory_loc = location_name.replace(":", f":[color={COLOR_VICTORY_LOCATION}]")
                     if victory_count > 1:
                         victory_loc += f' ({victory_count})'

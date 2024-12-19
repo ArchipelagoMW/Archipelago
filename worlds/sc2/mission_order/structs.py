@@ -12,10 +12,10 @@ from ..item import item_names
 from .layout_types import LayoutType
 from .entry_rules import EntryRule, SubRuleEntryRule, CountMissionsEntryRule, BeatMissionsEntryRule, SubRuleRuleData, ItemEntryRule
 from .mission_pools import SC2MOGenMissionPools, Difficulty, modified_difficulty_thresholds
-from worlds.AutoWorld import World
 
 if TYPE_CHECKING:
     from ..locations import LocationData
+    from .. import SC2World
 
 GENERIC_KEY_NAME = "Key".casefold()
 
@@ -69,7 +69,7 @@ class SC2MissionOrder(MissionOrderNode):
     goal_missions: List[SC2MOGenMission]
     max_depth: int
 
-    def __init__(self, world: World, mission_pools: SC2MOGenMissionPools, data: Dict[str, Any]):
+    def __init__(self, world: 'SC2World', mission_pools: SC2MOGenMissionPools, data: Dict[str, Any]):
         self.campaigns = []
         self.sorted_missions = {diff: [] for diff in Difficulty if diff != Difficulty.RELATIVE}
         self.fixed_missions = []
@@ -102,6 +102,16 @@ class SC2MissionOrder(MissionOrderNode):
         if len(self.goal_missions) == 0:
             self.campaigns[-1].option_goal = True
             self.goal_missions.extend(mission for mission in self.campaigns[-1].exits)
+        
+        # Apply victory cache option wherever the value has not yet been defined; must happen after goal missions are decided
+        for mission in self.get_missions():
+            if mission.option_victory_checks != -1:
+                # Already set
+                continue
+            if mission in self.goal_missions:
+                mission.option_victory_checks = 0
+            else:
+                mission.option_victory_checks = world.options.victory_checks.value - 1
 
         # Resolve names
         used_names: Set[str] = set()
@@ -187,7 +197,7 @@ class SC2MissionOrder(MissionOrderNode):
     def get_key_name(self) -> str:
         return super().get_key_name()  # type: ignore
 
-    def make_connections(self, world: World):
+    def make_connections(self, world: 'SC2World'):
         names: Dict[str, int] = {}
         for campaign in self.campaigns:
             for layout in campaign.layouts:
@@ -399,7 +409,7 @@ class SC2MissionOrder(MissionOrderNode):
         return [cursor]
 
     def fill_missions(
-            self, world: World, locked_missions: List[str],
+            self, world: 'SC2World', locked_missions: List[str],
             locations: Tuple['LocationData', ...], location_cache: List[Location]
     ) -> None:
         locations_per_region = get_locations_per_region(locations)
@@ -525,7 +535,7 @@ class SC2MOGenCampaign(MissionOrderNode):
     min_depth: int
     max_depth: int
 
-    def __init__(self, world: World, parent: ReferenceType[SC2MissionOrder], name: str, data: Dict[str, Any]):
+    def __init__(self, world: 'SC2World', parent: ReferenceType[SC2MissionOrder], name: str, data: Dict[str, Any]):
         self.parent = parent
         self.important_beat_event = False
         self.option_name = name
@@ -652,7 +662,7 @@ class SC2MOGenLayout(MissionOrderNode):
     min_depth: int
     max_depth: int
 
-    def __init__(self, world: World, parent: ReferenceType[SC2MOGenCampaign], name: str, data: Dict):
+    def __init__(self, world: 'SC2World', parent: ReferenceType[SC2MOGenCampaign], name: str, data: Dict):
         self.parent: ReferenceType[SC2MOGenCampaign] = parent
         self.important_beat_event = False
         self.option_name = name
@@ -890,6 +900,7 @@ class SC2MOGenMission(MissionOrderNode):
     option_entry_rules: List[Dict[str, Any]]
     option_difficulty: Difficulty  # difficulty pool this mission pulls from
     option_mission_pool: Set[int]  # Allowed mission IDs for this slot
+    option_victory_checks: int  # Number of victory cache locations tied to the mission name
 
     entry_rule: SubRuleEntryRule
     min_depth: int # Smallest amount of missions to beat before this slot is accessible
@@ -914,6 +925,7 @@ class SC2MOGenMission(MissionOrderNode):
         self.next = []
         self.prev = []
         self.min_depth = -1
+        self.option_victory_checks = -1
 
     def update_with_data(self, data: Dict):
         self.option_goal = data.get("goal", self.option_goal)
@@ -924,14 +936,15 @@ class SC2MOGenMission(MissionOrderNode):
         self.option_entry_rules = data.get("entry_rules", self.option_entry_rules)
         self.option_difficulty = data.get("difficulty", self.option_difficulty)
         self.option_mission_pool = data.get("mission_pool", self.option_mission_pool)
+        self.option_victory_checks = data.get("victory_checks", -1)
     
     def set_mission(
-            self, world: World, mission: SC2Mission,
+            self, world: 'SC2World', mission: SC2Mission,
             locations_per_region: Dict[str, List['LocationData']], location_cache: List[Location]
     ):
         self.mission = mission
         self.region = create_region(world, locations_per_region, location_cache,
-                                    mission.mission_name)
+                                    mission.mission_name, self)
 
     def is_always_unlocked(self) -> bool:
         return self.entry_rule.is_always_fulfilled()
@@ -972,7 +985,7 @@ class SC2MOGenMission(MissionOrderNode):
             return f"{layout.option_name}/{index}"
         return f"{campaign.option_name}/{layout.option_name}/{index}"
     
-    def make_connections(self, world: World, used_names: Dict[str, int]):
+    def make_connections(self, world: 'SC2World', used_names: Dict[str, int]):
         player = world.player
         self_rule = self.entry_rule.to_lambda(player)
         # Only layout entrances need to consider campaign & layout prerequisites
@@ -1028,6 +1041,7 @@ class MissionSlotData:
     mission_id: int
     prev_mission_ids: List[int]
     entry_rule: SubRuleRuleData
+    victory_cache_size: int = 0
 
     @staticmethod
     def empty() -> MissionSlotData:
@@ -1043,6 +1057,7 @@ class MissionEntryRules(NamedTuple):
     layout_rule: SubRuleRuleData
     campaign_rule: SubRuleRuleData
 
+
 def create_location(player: int, location_data: 'LocationData', region: Region,
                     location_cache: List[Location]) -> Location:
     location = Location(player, location_data.name, location_data.code, region)
@@ -1053,19 +1068,34 @@ def create_location(player: int, location_data: 'LocationData', region: Region,
     return location
 
 
-def create_region(world: World, locations_per_region: Dict[str, List['LocationData']],
-                  location_cache: List[Location], name: str) -> Region:
+def create_region(
+    world: 'SC2World',
+    locations_per_region: Dict[str, List['LocationData']],
+    location_cache: List[Location],
+    name: str,
+    slot: Optional[SC2MOGenMission] = None,
+) -> Region:
     region = Region(name, world.player, world.multiworld)
 
-    if name in locations_per_region:
-        for location_data in locations_per_region[name]:
-            location = create_location(world.player, location_data, region, location_cache)
-            region.locations.append(location)
+    from ..locations import LocationType
+    if slot is None:
+        target_victory_cache_locations = 0
+    else:
+        target_victory_cache_locations = slot.option_victory_checks
+    victory_cache_locations = 0
+
+    for location_data in locations_per_region.get(name, ()):
+        if location_data.type == LocationType.VICTORY_CACHE:
+            if victory_cache_locations >= target_victory_cache_locations:
+                continue
+            victory_cache_locations += 1
+        location = create_location(world.player, location_data, region, location_cache)
+        region.locations.append(location)
 
     return region
 
 
-def connect(world: World, used_names: Dict[str, int], source: str, target: str,
+def connect(world: 'SC2World', used_names: Dict[str, int], source: str, target: str,
             rule: Optional[Callable] = None):
     source_region = world.get_region(source)
     target_region = world.get_region(target)
