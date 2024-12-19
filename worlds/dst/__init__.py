@@ -110,8 +110,8 @@ class DSTWorld(World):
                 return _boss_pool_as_sorted_list
 
             # Choose a random boss if random is selected
-            if "Random" in self.options.required_bosses.value:
-                self.options.required_bosses.value.remove("Random")
+            if "Random" in self.options.required_bosses.value or not len(self.options.required_bosses.value):
+                self.options.required_bosses.value.discard("Random")
                 boss_pool = build_boss_pool(
                     self.options.required_bosses.value.copy() if len(self.options.required_bosses.value)
                     else {k for k in self.options.required_bosses.valid_keys if k != "Random"}
@@ -138,6 +138,11 @@ class DSTWorld(World):
             # If bosses_all is chosen with only one boss chosen, change goal to bosses_any
             if self.options.goal.value == self.options.goal.option_bosses_all and len(self.options.required_bosses.value) == 1:
                 self.options.goal.value = self.options.goal.option_bosses_any
+
+        else: # if not _IS_BOSS_GOAL
+            # Clear the goal bosses. There isn't a "None" option, but "Random" will have to do.
+            self.options.required_bosses.value.clear()
+            self.options.required_bosses.value.add("Random")
 
         # Force ocean regions to light if Crab King is not a check
         if (
