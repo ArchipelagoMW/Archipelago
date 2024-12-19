@@ -887,13 +887,13 @@ class ExcludeVeryHardMissions(Choice):
 
 class VictoryChecks(Range):
     """
-    Controls how many checks are awarded for completing a mission.
+    Controls how many additional checks are awarded for completing a mission.
     Goal missions are unaffected by this option.
     """
     display_name = "Victory Checks"
-    range_start = 1
-    range_end = 10
-    default = 1
+    range_start = 0
+    range_end = 9
+    default = 0
 
 
 class LocationInclusion(Choice):

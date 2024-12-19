@@ -111,7 +111,7 @@ class SC2MissionOrder(MissionOrderNode):
             if mission in self.goal_missions:
                 mission.option_victory_checks = 0
             else:
-                mission.option_victory_checks = world.options.victory_checks.value - 1
+                mission.option_victory_checks = world.options.victory_checks.value
 
         # Resolve names
         used_names: Set[str] = set()
