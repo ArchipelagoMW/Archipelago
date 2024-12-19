@@ -234,7 +234,8 @@ pelican_town = ContentPack(
         Book.mapping_cave_systems: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             GenericSource(regions=(Region.adventurer_guild_bedroom,)),
-            ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),
+            # Disabling the shop source for better game design.
+            # ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),
         ),
         Book.monster_compendium: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
