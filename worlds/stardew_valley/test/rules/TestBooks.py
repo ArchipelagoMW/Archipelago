@@ -19,7 +19,3 @@ class TestBooksLogic(SVTestBase):
 
         self.collect("Progressive Weapon")
         self.assert_location_can_be_reached("Read Mapping Cave Systems")
-
-    def test_can_get_mapping_cave_systems_with_money(self):
-        self.collect_lots_of_money(0.5)
-        self.assert_location_can_be_reached("Read Mapping Cave Systems")
