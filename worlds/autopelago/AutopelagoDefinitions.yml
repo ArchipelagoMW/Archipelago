@@ -1,7 +1,7 @@
 # This file exists in both the client and the server projects.
 # Please make sure that it matches in both places.
 
-version_stamp: '20241218'
+version_stamp: '0.6.0'
 
 items:
   blackbird: 'Lockheed SR-71 Blackbird'
