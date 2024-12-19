@@ -102,8 +102,7 @@ class LoonylandWorld(World):
 
         set_rules(self.multiworld, self, self.player)
 
-    def fill_slot_data(self) -> Dict[str, Any]:
+    def fill_slot_data(self):
         return {
-
-            "sampledata": "plerp"
+            "DeathLink": self.options.death_link.value
         }

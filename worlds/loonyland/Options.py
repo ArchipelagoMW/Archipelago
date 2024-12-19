@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, PerGameCommonOptions
+from Options import Choice, PerGameCommonOptions, DeathLink
 
 
 class WinCondition(Choice):
@@ -30,4 +30,5 @@ class Difficulty(Choice):
 class LoonylandOptions(PerGameCommonOptions):
     win_condition: WinCondition
     difficulty: Difficulty
+    death_link: DeathLink
 
