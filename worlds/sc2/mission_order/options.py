@@ -155,7 +155,7 @@ class CustomMissionOrder(OptionDict):
                     Optional("entry_rules"): [EntryRule],
                     Optional("mission_pool"): {int},
                     Optional("difficulty"): Difficulty,
-                    Optional("victory_checks"): IntZeroToTen,
+                    Optional("victory_cache"): IntZeroToTen,
                 }],
             },
         }

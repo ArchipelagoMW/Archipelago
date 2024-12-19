@@ -32,7 +32,7 @@
     - [Entrance](#entrance)
     - [Empty](#empty)
     - [Next](#next)
-    - [Victory Checks](#victory-checks)
+    - [Victory Cache](#victory-cache)
   - [Layout Types](#layout-types)
     - [Column](#column)
     - [Grid](#grid)
@@ -799,13 +799,13 @@ Mechanically, a mission is unlocked when any other mission that contains the for
 This example creates the branching path within `Char` in the Vanilla mission order.
 
 ---
-### Victory Checks
+### Victory Cache
 ```yaml
-victory_checks: 0
+victory_cache: 0
 ```
-Valid values are integers in the range 0 to 9. Sets the number of extra locations given for victory on a mission.
+Valid values are integers in the range 0 to 10. Sets the number of extra locations given for victory on a mission.
 
-By default, when this value is not set, the option is set to 0 for goal missions and to the global `victory_checks` option for all other missions.
+By default, when this value is not set, the option is set to 0 for goal missions and to the global `victory_cache` option for all other missions.
 
 ## Layout Types
 

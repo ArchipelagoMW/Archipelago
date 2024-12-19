@@ -105,13 +105,13 @@ class SC2MissionOrder(MissionOrderNode):
         
         # Apply victory cache option wherever the value has not yet been defined; must happen after goal missions are decided
         for mission in self.get_missions():
-            if mission.option_victory_checks != -1:
+            if mission.option_victory_cache != -1:
                 # Already set
                 continue
             if mission in self.goal_missions:
-                mission.option_victory_checks = 0
+                mission.option_victory_cache = 0
             else:
-                mission.option_victory_checks = world.options.victory_checks.value
+                mission.option_victory_cache = world.options.victory_cache.value
 
         # Resolve names
         used_names: Set[str] = set()
@@ -900,7 +900,7 @@ class SC2MOGenMission(MissionOrderNode):
     option_entry_rules: List[Dict[str, Any]]
     option_difficulty: Difficulty  # difficulty pool this mission pulls from
     option_mission_pool: Set[int]  # Allowed mission IDs for this slot
-    option_victory_checks: int  # Number of victory cache locations tied to the mission name
+    option_victory_cache: int  # Number of victory cache locations tied to the mission name
 
     entry_rule: SubRuleEntryRule
     min_depth: int # Smallest amount of missions to beat before this slot is accessible
@@ -925,7 +925,7 @@ class SC2MOGenMission(MissionOrderNode):
         self.next = []
         self.prev = []
         self.min_depth = -1
-        self.option_victory_checks = -1
+        self.option_victory_cache = -1
 
     def update_with_data(self, data: Dict):
         self.option_goal = data.get("goal", self.option_goal)
@@ -936,7 +936,7 @@ class SC2MOGenMission(MissionOrderNode):
         self.option_entry_rules = data.get("entry_rules", self.option_entry_rules)
         self.option_difficulty = data.get("difficulty", self.option_difficulty)
         self.option_mission_pool = data.get("mission_pool", self.option_mission_pool)
-        self.option_victory_checks = data.get("victory_checks", -1)
+        self.option_victory_cache = data.get("victory_cache", -1)
     
     def set_mission(
             self, world: 'SC2World', mission: SC2Mission,
@@ -1081,7 +1081,7 @@ def create_region(
     if slot is None:
         target_victory_cache_locations = 0
     else:
-        target_victory_cache_locations = slot.option_victory_checks
+        target_victory_cache_locations = slot.option_victory_cache
     victory_cache_locations = 0
 
     for location_data in locations_per_region.get(name, ()):
