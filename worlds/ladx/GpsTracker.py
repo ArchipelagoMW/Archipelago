@@ -1,4 +1,3 @@
-import time
 import json
 
 class Consts:
@@ -75,20 +74,14 @@ class GpsTracker:
 
         self.gameboy.set_location_range(
             Consts.linkMotionState,
-            Consts.transitionSequence - Consts.linkMotionState,
+            Consts.transitionSequence - Consts.linkMotionState + 1,
             [Consts.transitionState]
         )
 
     async def read_byte(self, b):
-        return (await self.gameboy.async_read_memory(b))[0]
+        return (await self.gameboy.read_memory_cache([b]))[b]
 
-    lastTime = time.time()
     async def read_location(self):
-        now = time.time()
-        print(f"reading location after {now - self.lastTime}")
-
-        self.lastTime = now
-
         transitionState = await self.read_byte(Consts.transitionState)
         transitionTargetX = await self.read_byte(Consts.transitionTargetX)
         transitionTargetY = await self.read_byte(Consts.transitionTargetY)
@@ -157,28 +150,6 @@ class GpsTracker:
                 or oldX != self.screen_x
                 or oldY != self.screen_y):
                 self.location_changed = True
-        # indoors = await self.read_byte(Consts.indoorFlag)
-
-        # if indoors != self.indoors and self.indoors != None:
-        #     self.indoorsChanged = True
-        
-        # self.indoors = indoors
-
-        # mapId = await self.read_byte(Consts.mapId)
-        # if mapId not in mapMap:
-        #     print(f'Unknown map ID {hex(mapId)}')
-        #     return
-
-        # mapDigit = mapMap[mapId] << 8 if indoors else 0
-        # last_room = self.room
-        # self.room = await self.read_byte(Consts.room) + mapDigit
-
-        # coords = await self.read_byte(Consts.screenCoord)
-        # self.screenX = coords & 0x0F
-        # self.screenY = (coords & 0xF0) >> 4
-
-        # if (self.room != last_room):
-        #     self.location_changed = True
     
     last_message = {}
     async def send_location(self, socket, diff=False):
