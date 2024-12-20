@@ -34,7 +34,7 @@ def create_locations(player: int, regions_table: Dict[str, LandstalkerRegion], n
     for data in WORLD_PATHS_JSON:
         if "requiredNodes" in data:
             regions_with_entrance_checks.extend([region_id for region_id in data["requiredNodes"]])
-    regions_with_entrance_checks = list(set(regions_with_entrance_checks))
+    regions_with_entrance_checks = sorted(set(regions_with_entrance_checks))
     for region_id in regions_with_entrance_checks:
         region = regions_table[region_id]
         location = LandstalkerLocation(player, 'event_visited_' + region_id, None, region, "event")
