@@ -10,6 +10,7 @@ from BaseClasses import CollectionState
 if TYPE_CHECKING:
     from .structs import SC2MOGenMission, MissionEntryRules
 
+
 class EntryRule(ABC):
     buffer_fulfilled: bool
     buffer_depth: int
@@ -54,7 +55,8 @@ class EntryRule(ABC):
     @abstractmethod
     def to_slot_data(self) -> RuleData:
         """Used in the client to determine accessibility while playing and to populate tooltips."""
-        return {}
+        pass
+
 
 @dataclass
 class RuleData(ABC):
@@ -73,6 +75,7 @@ class RuleData(ABC):
         accessible_rules: Set[int], seen_rules: List[int]
     ) -> bool:
         return False
+
 
 class BeatMissionsEntryRule(EntryRule):
     missions_to_beat: List[SC2MOGenMission]
@@ -93,12 +96,13 @@ class BeatMissionsEntryRule(EntryRule):
         return lambda state: state.has_all([mission.beat_item() for mission in self.missions_to_beat], player)
     
     def to_slot_data(self) -> RuleData:
-        resolved_reqs: List[Union[str, int]] = [req if type(req) == str else req.mission.id for req in self.visual_reqs]
+        resolved_reqs: List[Union[str, int]] = [req if isinstance(req, str) else req.mission.id for req in self.visual_reqs]
         mission_ids = [mission.mission.id for mission in self.missions_to_beat]
         return BeatMissionsRuleData(
             mission_ids,
             resolved_reqs
         )
+
 
 @dataclass
 class BeatMissionsRuleData(RuleData):
@@ -109,9 +113,9 @@ class BeatMissionsRuleData(RuleData):
         indent = " ".join("" for _ in range(indents))
         if len(self.visual_reqs) == 1:
             req = self.visual_reqs[0]
-            return f"Beat {missions[req].mission_name if type(req) == int else req}"
+            return f"Beat {missions[req].mission_name if isinstance(req, int) else req}"
         tooltip = f"Beat all of these:\n{indent}- "
-        reqs = [missions[req].mission_name if type(req) == int else req for req in self.visual_reqs]
+        reqs = [missions[req].mission_name if isinstance(req, int) else req for req in self.visual_reqs]
         tooltip += f"\n{indent}- ".join(req for req in reqs)
         return tooltip
     
@@ -131,7 +135,8 @@ class BeatMissionsRuleData(RuleData):
                 if not rule.is_accessible(beaten_missions, received_items, mission_id_to_entry_rules, accessible_rules, seen_rules):
                     return False
         return True
-    
+
+
 class CountMissionsEntryRule(EntryRule):
     missions_to_count: List[SC2MOGenMission]
     target_amount: int
@@ -158,13 +163,14 @@ class CountMissionsEntryRule(EntryRule):
         return lambda state: self.target_amount <= sum(state.has(mission.beat_item(), player) for mission in self.missions_to_count)
     
     def to_slot_data(self) -> RuleData:
-        resolved_reqs: List[Union[str, int]] = [req if type(req) == str else req.mission.id for req in self.visual_reqs]
+        resolved_reqs: List[Union[str, int]] = [req if isinstance(req, str) else req.mission.id for req in self.visual_reqs]
         mission_ids = [mission.mission.id for mission in sorted(self.missions_to_count, key = lambda mission: mission.min_depth)]
         return CountMissionsRuleData(
             mission_ids,
             self.target_amount,
             resolved_reqs
         )
+
 
 @dataclass
 class CountMissionsRuleData(RuleData):
@@ -180,7 +186,7 @@ class CountMissionsRuleData(RuleData):
             amount = str(self.amount)
         if len(self.visual_reqs) == 1:
             req = self.visual_reqs[0]
-            req_str = missions[req].mission_name if type(req) == int else req
+            req_str = missions[req].mission_name if isinstance(req, int) else req
             if self.amount == 1:
                 if type(req) == int:
                     return f"Beat {req_str}"
@@ -190,7 +196,7 @@ class CountMissionsRuleData(RuleData):
             tooltip = f"Beat any mission from:\n{indent}- "
         else:
             tooltip = f"Beat {amount} missions from:\n{indent}- "
-        reqs = [missions[req].mission_name if type(req) == int else req for req in self.visual_reqs]
+        reqs = [missions[req].mission_name if isinstance(req, int) else req for req in self.visual_reqs]
         tooltip += f"\n{indent}- ".join(req for req in reqs)
         return tooltip
     
@@ -216,6 +222,7 @@ class CountMissionsRuleData(RuleData):
                         success = True
                         break
         return success
+
 
 class SubRuleEntryRule(EntryRule):
     rule_id: int
@@ -257,6 +264,7 @@ class SubRuleEntryRule(EntryRule):
             self.target_amount
         )
 
+
 @dataclass
 class SubRuleRuleData(RuleData):
     rule_id: int
@@ -271,7 +279,7 @@ class SubRuleRuleData(RuleData):
         sub_rules: List[RuleData] = []
         for rule_data in data["sub_rules"]:
             if "sub_rules" in rule_data:
-                rule = SubRuleRuleData.parse_from_dict(rule_data)
+                rule: RuleData = SubRuleRuleData.parse_from_dict(rule_data)
             elif "item_ids" in rule_data:
                 # Slot data converts Dict[int, int] to Dict[str, int] for some reason
                 item_ids = {int(item): item_amount for (item, item_amount) in rule_data["item_ids"].items()}
@@ -355,6 +363,7 @@ class SubRuleRuleData(RuleData):
             seen_rules.remove(self.rule_id)
         return success
 
+
 class ItemEntryRule(EntryRule):
     items_to_check: Dict[str, int]
 
@@ -381,6 +390,7 @@ class ItemEntryRule(EntryRule):
             visual_reqs
         )
 
+
 @dataclass
 class ItemRuleData(RuleData):
     item_ids: Dict[int, int]
@@ -406,5 +416,3 @@ class ItemRuleData(RuleData):
             item in received_items and received_items[item] >= amount
             for (item, amount) in self.item_ids.items()
         )
-    
-

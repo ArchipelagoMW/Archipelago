@@ -35,8 +35,8 @@ def modified_difficulty_thresholds(min_difficulty: Difficulty, max_difficulty: D
     total_thresh = DEFAULT_DIFFICULTY_THRESHOLDS[max_difficulty + 1] - min_thresh
     for difficulty in range(min_difficulty, max_difficulty + 1):
         threshold = DEFAULT_DIFFICULTY_THRESHOLDS[difficulty] - min_thresh
-        threshold *= 100 / total_thresh
-        thresholds[int(threshold)] = Difficulty(difficulty)
+        threshold *= 100 // total_thresh
+        thresholds[threshold] = Difficulty(difficulty)
     return thresholds
 
 class SC2MOGenMissionPools:
@@ -139,7 +139,7 @@ class SC2MOGenMissionPools:
             best_score = max(mission_scores)
             balanced_pool = [mission for idx, mission in enumerate(balanced_pool) if mission_scores[idx] == best_score]
         
-        balanced_weights = [1 for _ in balanced_pool]
+        balanced_weights = [1.0 for _ in balanced_pool]
         if len(self._flag_weights) > 0:
             relevant_used_flag_count = max(sum(self._used_flags.get(flag, 0) for flag in self._flag_weights), 1)
             # Higher usage rate of relevant flags means lower desirability

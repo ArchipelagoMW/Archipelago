@@ -19,7 +19,7 @@ SC2HOTS_LOC_ID_OFFSET = 20000000  # Avoid clashes with The Legend of Zelda
 SC2LOTV_LOC_ID_OFFSET = SC2HOTS_LOC_ID_OFFSET + 2000
 SC2NCO_LOC_ID_OFFSET = SC2LOTV_LOC_ID_OFFSET + 2500
 SC2_RACESWAP_LOC_ID_OFFSET = SC2NCO_LOC_ID_OFFSET + 900
-VICTORY_CACHE_OFFSET = 91
+VICTORY_CACHE_OFFSET = 90
 
 
 class SC2Location(Location):
@@ -32,6 +32,7 @@ class LocationType(enum.IntEnum):
     EXTRA = 2  # Additional locations based on mission progression, collecting in-mission rewards, etc. that do not significantly increase the challenge.
     CHALLENGE = 3  # Challenging objectives, often harder than just completing a mission, and often associated with Achievements
     MASTERY = 4  # Extremely challenging objectives often associated with Masteries and Feats of Strength in the original campaign
+    VICTORY_CACHE = 5  # Bonus locations for beating a mission
 
 
 class LocationFlag(enum.IntFlag):
@@ -5734,7 +5735,6 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            ),
     ]
 
-    beat_events = []
     # Filtering out excluded locations
     if world is not None:
         excluded_location_types = get_location_types(world, LocationInclusion.option_disabled)
@@ -5748,20 +5748,22 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 and not (location.flags & excluded_location_flags)
             or location.name in plando_locations
         ]
-    victory_caches = []
-    if world is None:
-        victory_cache_size = 9
-    else:
-        victory_cache_size = world.options.victory_checks.value - 1
+    beat_events: List[LocationData] = []
+    victory_caches: List[LocationData] = []
+    VICTORY_CACHE_SIZE = 10
     for location_data in location_table:
         # Generating Beat event and Victory Cache locations
         if location_data.type == LocationType.VICTORY:
             beat_events.append(
                 location_data._replace(name="Beat " + location_data.region, code=None)
             )
-            for v in range(victory_cache_size):
+            for v in range(VICTORY_CACHE_SIZE):
                 victory_caches.append(
-                    location_data._replace(name=location_data.name + f' Cache ({v + 1})', code=location_data.code + VICTORY_CACHE_OFFSET + v)
+                    location_data._replace(
+                        name=location_data.name + f' Cache ({v + 1})',
+                        code=location_data.code + VICTORY_CACHE_OFFSET + v,
+                        type=LocationType.VICTORY_CACHE,
+                    )
                 )
 
     return tuple(location_table + beat_events + victory_caches)

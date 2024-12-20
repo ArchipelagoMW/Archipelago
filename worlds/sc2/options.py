@@ -885,14 +885,15 @@ class ExcludeVeryHardMissions(Choice):
         return ["Default", "Yes", "No"][int(value)]
 
 
-class VictoryChecks(Range):
+class VictoryCache(Range):
     """
-    How many checks are awarded for completing a mission.
+    Controls how many additional checks are awarded for completing a mission.
+    Goal missions are unaffected by this option.
     """
     display_name = "Victory Checks"
-    range_start = 1
+    range_start = 0
     range_end = 10
-    default = 1
+    default = 0
 
 
 class LocationInclusion(Choice):
@@ -1208,7 +1209,7 @@ class Starcraft2Options(PerGameCommonOptions):
     excluded_missions: ExcludedMissions
     exclude_very_hard_missions: ExcludeVeryHardMissions
     vanilla_items_only: VanillaItemsOnly
-    victory_checks: VictoryChecks
+    victory_cache: VictoryCache
     vanilla_locations: VanillaLocations
     extra_locations: ExtraLocations
     challenge_locations: ChallengeLocations
