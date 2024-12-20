@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 import orjson
 
-from Options import Range, Toggle, Choice, PerGameCommonOptions
+from Options import Range, Toggle, Choice, PerGameCommonOptions, FreeText
 
 datapackage_options = orjson.loads(pkgutil.get_data(__name__, "data/options.json"))
 max_levels_and_upgrades = datapackage_options["max_levels_and_upgrades"]
@@ -138,6 +138,28 @@ class ThroughputLevelsRatio(Range):
     default = 0
 
 
+class ComplexityGrowthGradient(FreeText):
+    """If level requirements are randomized, this determines how fast complexity will grow each level. In other words:
+    The higher you set this value, the more difficult lategame shapes will be. Allowed values are floating numbers
+    ranging from 0.0 to 10.0."""
+    display_name = "Complexity growth gradient"
+    rich_text_doc = True
+    default = "0.5"
+
+    def __init__(self, value: str):
+        super().__init__(value)
+        try:
+            self.float_value = float(value)
+        except ValueError:
+            raise Exception(f"complexity_growth_gradient expected a python floating number, but got {value}")
+        except OverflowError:
+            raise Exception(f"{value} for complexity_growth_gradient is outside the range of a python floating number")
+        if self.float_value < 0.0:
+            raise Exception(f"{value} is lower than minimum 0.0 for option {self.__class__.__name__}")
+        if self.float_value > 10.0:
+            raise Exception(f"{value} is higher than maximum 10.0 for option {self.__class__.__name__}")
+
+
 class SameLateUpgradeRequirements(Toggle):
     """If upgrade requirements are randomized, should the last 3 shapes for each category be the same,
     as in vanilla?"""
@@ -235,6 +257,7 @@ class ShapezOptions(PerGameCommonOptions):
     randomize_level_logic: RandomizeLevelLogic
     randomize_upgrade_logic: RandomizeUpgradeLogic
     throughput_levels_ratio: ThroughputLevelsRatio
+    complexity_growth_gradient: ComplexityGrowthGradient
     same_late_upgrade_requirements: SameLateUpgradeRequirements
     early_balancer_tunnel_and_trash: EarlyBalancerTunnelAndTrash
     lock_belt_and_extractor: LockBeltAndExtractor

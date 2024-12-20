@@ -81,7 +81,7 @@ class TestGlobalOptionsImport(TestCase):
                                                        f"{max_levels_and_upgrades} instead.")
         self.assertTrue(isinstance(max_shapesanity, int), f"The global option max_shapesanity is not an integer, but " +
                                                           f"instead a {type(max_levels_and_upgrades)}.")
-        self.assertTrue(max_shapesanity >= 4, f"max_shapesanity must be at least 27, but is " +
+        self.assertTrue(max_shapesanity >= 4, f"max_shapesanity must be at least 4, but is " +
                                               f"{max_levels_and_upgrades} instead.")
 
 
@@ -102,6 +102,7 @@ class TestAllRelevantOptions1(ShapezTestBase):
         "goal": "vanilla",
         "randomize_level_requirements": False,
         "randomize_upgrade_requirements": False,
+        "complexity_growth_gradient": "0.1234",
         "early_balancer_tunnel_and_trash": "none",
         "lock_belt_and_extractor": True,
         "include_achievements": True,
@@ -121,6 +122,7 @@ class TestAllRelevantOptions2(ShapezTestBase):
         "randomize_upgrade_requirements": True,
         "randomize_level_logic": "random_steps",
         "randomize_upgrade_logic": "vanilla_like",
+        "complexity_growth_gradient": "2",
         "early_balancer_tunnel_and_trash": "5_buildings",
         "lock_belt_and_extractor": False,
         "include_achievements": True,
@@ -140,6 +142,7 @@ class TestAllRelevantOptions3(ShapezTestBase):
         "randomize_upgrade_requirements": True,
         "randomize_level_logic": "vanilla_shuffled",
         "randomize_upgrade_logic": "linear",
+        "complexity_growth_gradient": "1e-003",
         "early_balancer_tunnel_and_trash": "3_buildings",
         "lock_belt_and_extractor": False,
         "include_achievements": True,
