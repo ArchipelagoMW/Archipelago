@@ -39,6 +39,8 @@ app.config["SECRET_KEY"] = bytes(socket.gethostname(), encoding="utf-8")
 app.config["JOB_THRESHOLD"] = 1
 # after what time in seconds should generation be aborted, freeing the queue slot. Can be set to None to disable.
 app.config["JOB_TIME"] = 600
+# memory limit for generator processes in bytes
+app.config["GENERATOR_MEMORY_LIMIT"] = 4294967296
 app.config['SESSION_PERMANENT'] = True
 
 # waitress uses one thread for I/O, these are for processing of views that then get sent

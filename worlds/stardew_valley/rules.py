@@ -25,7 +25,7 @@ from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, 
 from .stardew_rule import And, StardewRule, true_
 from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
-from .strings.ap_names.ap_option_names import OptionName
+from .strings.ap_names.ap_option_names import WalnutsanityOptionName
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
 from .strings.ap_names.mods.mod_items import SVEQuestItem, SVERunes
 from .strings.ap_names.transport_names import Transportation
@@ -436,7 +436,7 @@ def set_walnut_rules(logic: StardewLogic, multiworld, player, world_options: Sta
 
 
 def set_walnut_puzzle_rules(logic: StardewLogic, multiworld, player, world_options):
-    if OptionName.walnutsanity_puzzles not in world_options.walnutsanity:
+    if WalnutsanityOptionName.puzzles not in world_options.walnutsanity:
         return
 
     MultiWorldRules.add_rule(multiworld.get_location("Open Golden Coconut", player), logic.has(Geode.golden_coconut))
@@ -463,14 +463,14 @@ def set_walnut_puzzle_rules(logic: StardewLogic, multiworld, player, world_optio
 
 
 def set_walnut_bushes_rules(logic, multiworld, player, world_options):
-    if OptionName.walnutsanity_bushes not in world_options.walnutsanity:
+    if WalnutsanityOptionName.bushes not in world_options.walnutsanity:
         return
     # I don't think any of the bushes require something special, but that might change with ER
     return
 
 
 def set_walnut_dig_spot_rules(logic, multiworld, player, world_options):
-    if OptionName.walnutsanity_dig_spots not in world_options.walnutsanity:
+    if WalnutsanityOptionName.dig_spots not in world_options.walnutsanity:
         return
 
     for dig_spot_walnut in locations.locations_by_tag[LocationTags.WALNUTSANITY_DIG]:
@@ -483,7 +483,7 @@ def set_walnut_dig_spot_rules(logic, multiworld, player, world_options):
 
 
 def set_walnut_repeatable_rules(logic, multiworld, player, world_options):
-    if OptionName.walnutsanity_repeatables not in world_options.walnutsanity:
+    if WalnutsanityOptionName.repeatables not in world_options.walnutsanity:
         return
     for i in range(1, 6):
         MultiWorldRules.set_rule(multiworld.get_location(f"Fishing Walnut {i}", player), logic.tool.has_fishing_rod(1))
