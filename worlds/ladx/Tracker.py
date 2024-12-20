@@ -226,6 +226,7 @@ class MagpieBridge:
         if not self.ws:
             return
         await gps.send_location(self.ws)
+        await gps.send_entrances(self.ws)
 
     async def send_slot_data(self, slot_data):
         if not self.ws:

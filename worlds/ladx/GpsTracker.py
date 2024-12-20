@@ -69,7 +69,7 @@ class GpsTracker:
     spawn_same_for = 0
     entrance_mapping = None
 
-    def __init__(self, gameboy) -> None:
+    def __init__(self, gameboy, slot_data=None) -> None:
         self.gameboy = gameboy
 
         self.gameboy.set_location_range(
@@ -77,6 +77,9 @@ class GpsTracker:
             Consts.transition_sequence - Consts.link_motion_state + 1,
             [Consts.transition_state]
         )
+
+        if slot_data:
+            self.load_slot_data(slot_data)
     
     def load_slot_data(self, slot_data):
         if 'entrance_mapping' not in slot_data:
@@ -92,17 +95,14 @@ class GpsTracker:
 
         self.reverse_entrance_mapping = {value: key for key, value in self.entrance_mapping.items()}
 
-        self.entrances_by_target = {} 
         self.entrances_by_name = {} 
 
         for name, info in ENTRANCE_INFO.items():
             alternate_address = entrance_address_overrides[info.target] if info.target in entrance_address_overrides else None
             entrance = Entrance(info.room, info.target, name, alternate_address)
-            self.entrances_by_target[info.room] = entrance
             self.entrances_by_name[name] = entrance
 
             inside_entrance = Entrance(info.target, info.room, f"{name}:inside", alternate_address)
-            self.entrances_by_target[info.target] = inside_entrance
             self.entrances_by_name[f"{name}:inside"] = inside_entrance
 
     async def read_byte(self, b):
@@ -217,8 +217,8 @@ class GpsTracker:
             
             self.room_changed = False
 
-    last_message = {}
-    async def send_location(self, socket, diff=False):
+    last_location_message = {}
+    async def send_location(self, socket):
         if self.room is None: 
             return
 
@@ -231,9 +231,31 @@ class GpsTracker:
             "drawFine": True,
         }
 
-        if message != self.last_message:
-            self.last_message = message
+        if message != self.last_location_message:
+            self.last_location_message = message
             await socket.send(json.dumps(message))
+
+    async def send_entrances(self, socket):
+        if not self.entrance_mapping:
+            return
+        
+        new_entrances = [x for x in self.entrances_by_name.values() if x.changed]
+
+        if not new_entrances:
+            return
+
+        message = {
+            "type":"entrance",
+            "refresh": True,
+            "diff": True,
+            "entranceMap": {},
+        }
+
+        for entrance in new_entrances:
+            message['entranceMap'][entrance.name] = entrance.mapped_indoor
+            entrance.changed = False
+
+        await socket.send(json.dumps(message))
 
 entrance_address_overrides = {
     0x312: 0xDDF2,

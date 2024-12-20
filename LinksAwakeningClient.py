@@ -405,11 +405,11 @@ class LinksAwakeningClient():
         auth = binascii.hexlify(await self.gameboy.async_read_memory(0x0134, 12)).decode()
         self.auth = auth
 
-    async def wait_and_init_tracker(self):
+    async def wait_and_init_tracker(self, slot_data):
         await self.wait_for_game_ready()
         self.tracker = LocationTracker(self.gameboy)
         self.item_tracker = ItemTracker(self.gameboy)
-        self.gps_tracker = GpsTracker(self.gameboy)
+        self.gps_tracker = GpsTracker(self.gameboy, slot_data)
 
     async def recved_item_from_ap(self, item_id, from_player, next_index):
         # Don't allow getting an item until you've got your first check
@@ -667,7 +667,7 @@ class LinksAwakeningContext(CommonContext):
                 if not self.client.recvd_checks:
                     await self.sync()
 
-                await self.client.wait_and_init_tracker()
+                await self.client.wait_and_init_tracker(self.slot_data)
 
                 min_tick_duration = 0.1
                 last_tick = time.time()
