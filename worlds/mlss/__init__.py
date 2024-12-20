@@ -111,6 +111,8 @@ class MLSSWorld(World):
         for item in itemList:
             if item.classification != ItemClassification.filler and item.classification != ItemClassification.skip_balancing:
                 freq = item_frequencies.get(item.itemName, 1)
+                if item.itemName == "Beanstar Emblem":
+                    freq = (0 if self.options.goal != 1 else self.options.emblems_amount)
                 if item in precollected:
                     freq = max(freq - precollected.count(item), 0)
                 if self.options.disable_harhalls_pants and "Harhall's" in item.itemName:
@@ -138,7 +140,6 @@ class MLSSWorld(World):
 
         # And finally take as many fillers as we need to have the same amount of items and locations.
         remaining = len(all_locations) - len(required_items) - len(self.disabled_locations) - 5
-
         self.multiworld.itempool += [
             self.create_item(filler_item_name) for filler_item_name in self.random.sample(filler_items, remaining)
         ]
