@@ -3699,6 +3699,40 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.ECHOES_OF_THE_FUTURE_Z.mission_name, "Northwest Tendril", SC2_RACESWAP_LOC_ID_OFFSET + 4807, LocationType.EXTRA,
                            lambda state: logic.zerg_common_unit(state) and logic.zerg_competent_anti_air(state)
                            ),
+        make_location_data(SC2Mission.IN_UTTER_DARKNESS_T.mission_name, "Defeat", SC2_RACESWAP_LOC_ID_OFFSET + 4900, LocationType.VICTORY),
+        make_location_data(SC2Mission.IN_UTTER_DARKNESS_T.mission_name, "Protoss Archive", SC2_RACESWAP_LOC_ID_OFFSET + 4901, LocationType.VANILLA,
+                           logic.terran_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.IN_UTTER_DARKNESS_T.mission_name, "Kills", SC2_RACESWAP_LOC_ID_OFFSET + 4902, LocationType.VANILLA,
+                           logic.terran_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.IN_UTTER_DARKNESS_T.mission_name, "Urun", SC2_RACESWAP_LOC_ID_OFFSET + 4903, LocationType.EXTRA),
+        make_location_data(SC2Mission.IN_UTTER_DARKNESS_T.mission_name, "Mohandar", SC2_RACESWAP_LOC_ID_OFFSET + 4904, LocationType.EXTRA,
+                           logic.terran_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.IN_UTTER_DARKNESS_T.mission_name, "Selendis", SC2_RACESWAP_LOC_ID_OFFSET + 4905, LocationType.EXTRA,
+                           logic.terran_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.IN_UTTER_DARKNESS_T.mission_name, "Artanis", SC2_RACESWAP_LOC_ID_OFFSET + 4906, LocationType.EXTRA,
+                           logic.terran_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.IN_UTTER_DARKNESS_Z.mission_name, "Defeat", SC2_RACESWAP_LOC_ID_OFFSET + 5000, LocationType.VICTORY),
+        make_location_data(SC2Mission.IN_UTTER_DARKNESS_Z.mission_name, "Protoss Archive", SC2_RACESWAP_LOC_ID_OFFSET + 5001, LocationType.VANILLA,
+                           logic.zerg_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.IN_UTTER_DARKNESS_Z.mission_name, "Kills", SC2_RACESWAP_LOC_ID_OFFSET + 5002, LocationType.VANILLA,
+                           logic.zerg_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.IN_UTTER_DARKNESS_Z.mission_name, "Urun", SC2_RACESWAP_LOC_ID_OFFSET + 5003, LocationType.EXTRA),
+        make_location_data(SC2Mission.IN_UTTER_DARKNESS_Z.mission_name, "Mohandar", SC2_RACESWAP_LOC_ID_OFFSET + 5004, LocationType.EXTRA,
+                           logic.zerg_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.IN_UTTER_DARKNESS_Z.mission_name, "Selendis", SC2_RACESWAP_LOC_ID_OFFSET + 5005, LocationType.EXTRA,
+                           logic.zerg_last_stand_requirement
+                           ),
+        make_location_data(SC2Mission.IN_UTTER_DARKNESS_Z.mission_name, "Artanis", SC2_RACESWAP_LOC_ID_OFFSET + 5006, LocationType.EXTRA,
+                           logic.zerg_last_stand_requirement
+                           ),
         make_location_data(SC2Mission.GATES_OF_HELL_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 5100, LocationType.VICTORY,
             logic.zerg_gates_of_hell_requirement
         ),
