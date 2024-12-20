@@ -451,9 +451,11 @@ class LinksAwakeningClient():
         return (await self.gameboy.read_memory_cache([LAClientConstants.wGameplayType]))[LAClientConstants.wGameplayType] == 1
 
     async def main_tick(self, item_get_cb, win_cb, deathlink_cb):
+        await self.gameboy.update_cache()
         await self.tracker.readChecks(item_get_cb)
         await self.item_tracker.readItems()
         await self.gps_tracker.read_location()
+        await self.gps_tracker.read_entrances()
 
         current_health = (await self.gameboy.read_memory_cache([LAClientConstants.wLinkHealth]))[LAClientConstants.wLinkHealth]
         if self.deathlink_debounce and current_health != 0:
@@ -497,7 +499,7 @@ def create_task_log_exception(awaitable) -> asyncio.Task:
 
 class LinksAwakeningContext(CommonContext):
     tags = {"AP"}
-    game = "Links Awakening DX"
+    game = "Links Awakening DX Beta"
     items_handling = 0b101
     want_slot_data = True
     la_task = None
@@ -613,6 +615,7 @@ class LinksAwakeningContext(CommonContext):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
             self.slot_data = args.get("slot_data", {})
+            self.client.gps_tracker.load_slot_data(self.slot_data)
             
         # TODO - use watcher_event
         if cmd == "ReceivedItems":
@@ -666,10 +669,18 @@ class LinksAwakeningContext(CommonContext):
 
                 await self.client.wait_and_init_tracker()
 
+                min_tick_duration = 0.1
+                last_tick = time.time()
                 while True:
                     await self.client.main_tick(on_item_get, victory, deathlink)
-                    await asyncio.sleep(0.1)
+
                     now = time.time()
+                    tick_duration = now - last_tick
+                    sleep_duration = max(min_tick_duration - tick_duration, 0)
+                    await asyncio.sleep(sleep_duration)
+
+                    last_tick = now
+
                     if self.last_resend + 5.0 < now:
                         self.last_resend = now
                         await self.send_checks()
