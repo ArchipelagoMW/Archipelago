@@ -14,4 +14,4 @@ class LL_Entrance(NamedTuple):
     target_region: str
     is_real_loading_zone: bool
     # rule: typing.Callable[[player, state], bool]
-    rule: CollectionRule
+    rule: CollectionRule = lambda state: True

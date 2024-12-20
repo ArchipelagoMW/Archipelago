@@ -39,7 +39,7 @@ def set_rules(multiworld, world, player):
         "Q: Smashing Pumpkins": lambda state: can_cleanse_crypts(state, player),
         "Q: Silver Bullet": lambda state: can_cleanse_crypts(state, player) and state.has("Silver", player),
         "Q: Hairy Larry": lambda state: have_light_source(state, player) and state.has("Silver Sling", player) and state.has("Boots", player),
-        "Q: Ghostbusting": lambda state: state.has("Big Gem", player) and state.has("Doom Daisy", player) and state.has("Mushroom", player, 10),
+        "Q: Ghostbusting": lambda state: state.has("Doom Daisy", player) and state.has("Mushroom", player, 10),
         "Q: The Collection": lambda state: state.has("Silver Sling", player) and state.has("Ghost Potion", player) and can_enter_vampy(state, player),
     }
     for loc in multiworld.get_locations(player):
