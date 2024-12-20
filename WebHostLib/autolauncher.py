@@ -6,6 +6,7 @@ import multiprocessing
 import typing
 from datetime import timedelta, datetime
 from threading import Event, Thread
+from typing import Any
 from uuid import UUID
 
 from pony.orm import db_session, select, commit
@@ -53,7 +54,21 @@ def launch_generator(pool: multiprocessing.pool.Pool, generation: Generation):
         generation.state = STATE_STARTED
 
 
-def init_db(pony_config: dict):
+def init_generator(config: dict[str, Any]) -> None:
+    try:
+        import resource
+    except ModuleNotFoundError:
+        pass  # unix only module
+    else:
+        # set soft limit for memory to from config (default 4GiB)
+        soft_limit = config["GENERATOR_MEMORY_LIMIT"]
+        old_limit, hard_limit = resource.getrlimit(resource.RLIMIT_AS)
+        if soft_limit != old_limit:
+            resource.setrlimit(resource.RLIMIT_AS, (soft_limit, hard_limit))
+            logging.debug(f"Changed AS mem limit {old_limit} -> {soft_limit}")
+        del resource, soft_limit, hard_limit
+
+    pony_config = config["PONY"]
     db.bind(**pony_config)
     db.generate_mapping()
 
@@ -105,8 +120,8 @@ def autogen(config: dict):
         try:
             with Locker("autogen"):
 
-                with multiprocessing.Pool(config["GENERATORS"], initializer=init_db,
-                                          initargs=(config["PONY"],), maxtasksperchild=10) as generator_pool:
+                with multiprocessing.Pool(config["GENERATORS"], initializer=init_generator,
+                                          initargs=(config,), maxtasksperchild=10) as generator_pool:
                     with db_session:
                         to_start = select(generation for generation in Generation if generation.state == STATE_STARTED)
 
