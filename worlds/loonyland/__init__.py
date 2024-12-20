@@ -59,7 +59,7 @@ class LoonylandWorld(World):
             if not loc_data.can_create(self.multiworld, self.player):
                 continue
             region = self.multiworld.get_region(loc_data.region, self.player)
-            new_loc = LoonylandLocation(self.player, loc_name, loc_data.id, region)
+            new_loc = LoonylandLocation(self.player, loc_name, loc_data.id + loonyland_base_id, region)
             region.locations.append(new_loc)
 
     def get_filler_item_name(self) -> str:
