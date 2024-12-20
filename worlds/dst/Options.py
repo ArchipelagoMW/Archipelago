@@ -93,7 +93,7 @@ class CraftingMode(Choice):
     Change the crafting behavior?
 
     Vanilla: Crafting behavior is vanilla.
-    
+
     Journey: Once you craft an item once, you can craft it again freely.
 
     Free Samples: Once you unlock a recipe, you can craft one for free.
@@ -129,7 +129,7 @@ class CaveRegions(Choice):
     option_auto = 1
     option_light = 2
     option_full = 3
-    
+
 class OceanRegions(Choice):
     """
     How far into the ocean will your items and locations be shuffled?
@@ -158,7 +158,7 @@ class Seasons(OptionSet):
     display_name = "Seasons"
     default =    {SEASON.AUTUMN, SEASON.WINTER, SEASON.SPRING, SEASON.SUMMER}
     valid_keys = {SEASON.AUTUMN, SEASON.WINTER, SEASON.SPRING, SEASON.SUMMER}
-    
+
 class StartingSeason(Choice):
     """
     Which season do you start with in your world?
@@ -171,7 +171,7 @@ class StartingSeason(Choice):
     option_winter = 1
     option_spring = 2
     option_summer = 3
-    
+
 class DayPhases(OptionSet):
     """
     Which day phases will be enabled in your world?
@@ -206,7 +206,7 @@ class BossLocations(Choice):
 
     None: No boss checks other than ones on your goal path.
 
-    Easy: Only easier bosses. These can be defeated even if playing solo with default difficulty. 
+    Easy: Only easier bosses. These can be defeated even if playing solo with default difficulty.
 
     All: Includes raid bosses. These are intended for multiplayer sessions, but can still be soloed with enough damage bonuses or creative strategies.
     """
@@ -257,7 +257,7 @@ class ExtraDamageAgainstBosses(NamedRange):
     This adds "Extra Damage Against Bosses" buffs as Archipelago items. Recommended if playing solo.
 
     Each stack of this buff gives the player a permanent +10% damage against easier bosses and +25% damage against tougher ones.
-    
+
     This is exponential. With 10 stacks, this turns into x2.6 and x9.3 damage multipiers respectively. Multipliers can be configured in the mod configuration in the game's menu.
 
     This amount is separate from any prefilled through "Boss Fill Items" setting.
@@ -335,7 +335,7 @@ class SeedItems(DefaultOnToggle):
 class SeasonFlow(Choice):
     """
     How do seasons progress in your world?
-    
+
     Normal: Seasons progress as default. Logic attempts to prepare you for seasons in time, but not guaranteed. Seasonal checks may not have progression items.
 
     Unlockable: Season-changing items are progression. Seasonal checks may have progression items. Can optionally play with long seasons.
@@ -427,7 +427,7 @@ class HealingLogic(Choice):
 class JunkItemAmount(Range):
     """
     Number of junk (stat change) and trap items to add to the item pool
-    
+
     If set too high, junk will leave no space for regular items, and overflow them into your starting inventory.
     """
     display_name = "Junk Item Amount"
@@ -443,7 +443,7 @@ class TrapItems(NamedRange):
     default = 20
     range_start = 0
     range_end = 100
-    
+
     special_range_names = {
         "none": 0,
         "low": 20,

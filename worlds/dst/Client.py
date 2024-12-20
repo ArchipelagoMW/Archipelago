@@ -76,7 +76,7 @@ class DSTContext(CommonContext):
             "finished_game": self.finished_game,
             "death_link": self.slotdata.get("death_link"), # Game decides whether to use slot data or override
         })
-        
+
         self.dst_handler.enqueue({
             "datatype": "Locations",
             "resync": True,
@@ -97,7 +97,7 @@ class DSTContext(CommonContext):
         # Scout research locations
         async_start(self.send_msgs([{
             "cmd": "LocationScouts",
-            "locations": [id for id in self.missing_locations 
+            "locations": [id for id in self.missing_locations
                 if (id >= LOCATION_RESEARCH_RANGE["start"] and id <= LOCATION_RESEARCH_RANGE["end"])
                 or (id >= LOCATION_BOSS_RANGE["start"] and id <= LOCATION_BOSS_RANGE["end"])
             ],
@@ -105,7 +105,7 @@ class DSTContext(CommonContext):
 
     def send_hints_to_dst(self):
         for hint in self.stored_data.get(f"_read_hints_{self.team}_{self.slot}", []):
-            if hint["found"]: 
+            if hint["found"]:
                 continue
             self.dst_handler.enqueue({
                 "datatype": "HintInfo",
@@ -144,7 +144,7 @@ class DSTContext(CommonContext):
                         await asyncio.sleep(1.0)
                         self.logger.info("Waiting for Don't Starve Together server.")
                     async_start(dst_connect_hint())
-                
+
                 # Remind player of their goal and world settings
                 async def goal_hint():
                     await asyncio.sleep(0.5)
@@ -219,7 +219,7 @@ class DSTContext(CommonContext):
                 # Send hints to DST
                 if f"_read_hints_{self.team}_{self.slot}" in args.get("keys"):
                     self.send_hints_to_dst()
-                    
+
             elif cmd == "SetReply":
                 # Send hints to DST
                 if f"_read_hints_{self.team}_{self.slot}" == args.get("key"):
@@ -290,7 +290,7 @@ class DSTContext(CommonContext):
                                             "key": self.username + "_locations_scouted",
                                             "operations": [{"operation": "replace", "value": self.locations_scouted}]}])
                         await self.send_msgs([{"cmd": "LocationScouts", "locations": [hint], "create_as_hint": 2}])
-                        
+
             elif eventtype == "ScoutLocation":
                 loc_id = event.get("id")
                 if loc_id and (loc_id in self.missing_locations or loc_id in self.locations_checked):

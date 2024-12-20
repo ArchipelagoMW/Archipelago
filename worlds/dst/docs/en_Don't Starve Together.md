@@ -17,7 +17,7 @@ The generator will ensure progression logic to be able to reach your goal, which
 
 ## When the player receives an item, what happens?
 
-New recipes will appear in your crafting menu, and will appear as prototypable if you have the materials, without the need 
+New recipes will appear in your crafting menu, and will appear as prototypable if you have the materials, without the need
 to be near a crafting station.
 
 ## Which items can be in another player's world?
@@ -39,7 +39,7 @@ Anything not shuffled will be craftable at their respective crafting station as 
 ## What does another world's item look like in Don't Starve Together?
 
 When near a crafting station, you will see "Interdimensional Research" items with the Archipelago icon, along with information
-what the item is and its recipient. However 95% of the the time a trap item will have a randomly generated name, so keep an eye
+what the item is and its recipient. However 95% of the time a trap item will have a randomly generated name, so keep an eye
 out for fakes!
 
 Items can also appear as blueprint labelled with its containing item and recipient, which can then be activated to award your check.
@@ -52,7 +52,7 @@ The player is able to choose their victory condition in their config file:
 - Survival: The player must live for a target number of days. This is based on the survivor's time alive and not the world age.
 Being a ghost will not progress your timer.
 - Bosses: The player can choose which bosses they need to defeat in order to meet their victory condition. You can choose
-between defeating any one of a selection of bosses, or all of them. Boss and location checks that happen to be part of your progression 
+between defeating any one of a selection of bosses, or all of them. Boss and location checks that happen to be part of your progression
 path will be prioritized for having progression items.
 
 ## What are location checks in Don't Starve Together?
@@ -80,7 +80,7 @@ As of Version 1.2, worlds without caves are supported. Make sure in your yaml th
 
 ## What happens if I choose Survival or Wilderness as my server playstyle or otherwise regenerate my world?
 
-If the world regenerates, or starting on a new world, your checks and items will sync from the Archipelago server, giving back your AP 
+If the world regenerates, or starting on a new world, your checks and items will sync from the Archipelago server, giving back your AP
 items when you first spawn in. Trap items will not be given again, except your last season trap received, if any. If you haven't connected
 to Archipelago when restarting your world, progress since you've last connected will be lost.
 

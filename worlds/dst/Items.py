@@ -21,10 +21,10 @@ def generate_item_map() -> Dict[str, DSTItemData]:
         if "nonwinter" in tags:
             tags.update(["autumn", "spring", "summer"])
         if "nonspring" in tags:
-            tags.update(["autumn", "winter", "summer"])	
+            tags.update(["autumn", "winter", "summer"])
         if "nonsummer" in tags:
             tags.update(["autumn", "winter", "spring"])
-        
+
         classification:IC = (
             IC.progression if "progression" in tags else
             IC.progression_skip_balancing if "progression_skip_balancing" in tags else

@@ -413,7 +413,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     bird_caging = add_event("Bird Caging", REGION.FOREST if PHASE.DAY_OR_DUSK in WHITELIST else REGION.NONE,
         lambda state: state.has_all({"Bird Trap", "Birdcage", "Papyrus", seeds.event}, player)
     )
-    ice_staff = add_event("Ice Staff", REGION.FOREST if WEAPON_LOGIC else REGION.NONE, 
+    ice_staff = add_event("Ice Staff", REGION.FOREST if WEAPON_LOGIC else REGION.NONE,
         lambda state: state.has_all({"Spear", "Rope", "Ice Staff", gem_digging.event}, player)
     )
     fire_staff = add_event("Fire Staff", REGION.FOREST if WEAPON_LOGIC else REGION.NONE,
@@ -1076,7 +1076,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             (lambda state: state.has_all({mining.event, light_source.event}, player)) if EXPERT_PLAYER_BIAS # Expert players just get a torch and pickaxe
             else (lambda state: state.has_all({light_source.event, basic_exploration.event, base_making.event}, player)), # Have a base, backpack, and tools at this point
             # Have either good weather or rain protection
-            (lambda state: state.has_any({autumn.event, summer.event, "Umbrella", electric_insulation.event}, player)) 
+            (lambda state: state.has_any({autumn.event, summer.event, "Umbrella", electric_insulation.event}, player))
             if SEASON_GEAR_LOGIC and (SEASON.WINTER in WHITELIST or SEASON.SPRING in WHITELIST)
             else ALWAYS_TRUE
         )
@@ -1432,14 +1432,14 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
 
 
     # Events
-    hermit_home_upgrade_1 = add_hermit_event("Hermit Home Upgrade (1)", combine_rules(hermit_island.rule, bug_catching.rule, night.rule if night.is_rule else cave_exploration.rule), 
+    hermit_home_upgrade_1 = add_hermit_event("Hermit Home Upgrade (1)", combine_rules(hermit_island.rule, bug_catching.rule, night.rule if night.is_rule else cave_exploration.rule),
                                                                         night.is_rule or cave_exploration.is_rule) # Cookie cutters, boards, fireflies
     hermit_home_upgrade_2 = add_hermit_event("Hermit Home Upgrade (2)", combine_rules(
                                                                             lambda state: state.can_reach_location(hermit_home_upgrade_1.event, player),
                                                                             sea_fishing.rule if not REGION.CAVE in WHITELIST else ALWAYS_TRUE # Lightbulbs from skittersquids
                                                                         ),
                                                                         hermit_home_upgrade_1.is_rule) # Marble, cut stone, light bulb
-    add_hermit_event("Hermit Home Upgrade (3)",                         lambda state: state.has("Floorings", player) 
+    add_hermit_event("Hermit Home Upgrade (3)",                         lambda state: state.has("Floorings", player)
                                                                             and state.can_reach_location(hermit_home_upgrade_2.event, player),
                                                                         hermit_home_upgrade_2.is_rule) # Moonrock, rope, carpet
     add_hermit_event("Hermit Island Drying Racks",                      hermit_island.rule)

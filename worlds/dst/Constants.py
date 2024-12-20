@@ -50,7 +50,7 @@ class SEASON:
     NONWINTER = "Nonwinter"
     NONSPRING = "Nonspring"
     NONSUMMER = "Nonsummer"
-    
+
     tag_lookup = {
         "autumn": AUTUMN,
         "winter": WINTER,

@@ -9,7 +9,7 @@ class AssertionState(CollectionState):
         assert len(item)
         assert type(player) is int, player
         return super().has(item, player, count)
-    
+
     def has_all(self, items, player):
         assert type(items) is set, items
         for item in items:
@@ -17,7 +17,7 @@ class AssertionState(CollectionState):
             assert len(item)
         assert type(player) is int, player
         return super().has_all(items, player)
-    
+
     def has_any(self, items, player):
         assert type(items) is set, items
         for item in items:
@@ -31,7 +31,7 @@ def assert_rule(rule: Callable[[CollectionState], bool], multiworld:MultiWorld):
     assert callable(rule), rule
     true_or_false = rule(state)
     assert true_or_false == True or true_or_false == False
-    
+
 def build_whitelist(options: DSTOptions) -> FrozenSet[str]:
     _whitelist:Set[str] = set()
     # Day phase
@@ -112,7 +112,7 @@ def build_whitelist(options: DSTOptions) -> FrozenSet[str]:
 
     # Hermit Crab Friendship (Min reachable 7)
     _HERMIT_FRIENDSHIP_CONDITIONS = [
-        PHASE.NIGHT in _whitelist or REGION.CAVE in _whitelist, # Hermit Home 1 
+        PHASE.NIGHT in _whitelist or REGION.CAVE in _whitelist, # Hermit Home 1
         PHASE.NIGHT in _whitelist or REGION.CAVE in _whitelist, # Hermit Home 2
         PHASE.NIGHT in _whitelist or REGION.CAVE in _whitelist, # Hermit Home 3
         True, # Drying Racks
@@ -130,10 +130,10 @@ def build_whitelist(options: DSTOptions) -> FrozenSet[str]:
         SEASON.WINTER in _whitelist, # Ice Bream
         True, # 5 heavy fish
     ]
-    
+
     # Special tags
     _whitelist.update({tag for tag, istrue in {
-        SPECIAL_TAGS.RUINS_GEMS:        (options.boss_locations.value >= options.boss_locations.option_all) 
+        SPECIAL_TAGS.RUINS_GEMS:        (options.boss_locations.value >= options.boss_locations.option_all)
                                         or (len(_whitelist.intersection({REGION.RUINS, REGION.OCEAN})) > 0),
         SPECIAL_TAGS.MOOSEGOOSE:        _whitelist.issuperset({SEASON.SPRING, SEASON.NONSPRING}),
         SPECIAL_TAGS.BUTTER_MUFFIN:     REGION.OCEAN in _whitelist or _whitelist.issuperset({PHASE.DAY, SEASON.NONWINTER}),

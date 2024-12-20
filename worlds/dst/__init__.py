@@ -15,7 +15,7 @@ def launch_client():
     launch_subprocess(launch, name="DontStarveTogetherClient")
 
 
-components.append(Component("Don't Starve Together Client", func=launch_client, 
+components.append(Component("Don't Starve Together Client", func=launch_client,
                             component_type=Type.CLIENT))
 
 class DSTWeb(WebWorld):
@@ -33,8 +33,8 @@ class DSTWeb(WebWorld):
 
 class DSTWorld(World):
     """
-    Don't Starve Together is a game where you are thrown into a strange and unexplored world full of odd creatures, 
-    hidden dangers, and ancient secrets known as "The Constant". You must gather resources to craft items and build 
+    Don't Starve Together is a game where you are thrown into a strange and unexplored world full of odd creatures,
+    hidden dangers, and ancient secrets known as "The Constant". You must gather resources to craft items and build
     structures and farms to help you protect yourself, survive, and most importantly, not starve.
     """
     game = "Don't Starve Together"
@@ -127,7 +127,7 @@ class DSTWorld(World):
                 self.options.required_bosses.value.clear()
                 self.options.required_bosses.value.add(self.multiworld.random.choice(boss_pool))
 
-            
+
             # Set valid auto regions for selected bosses
             for regionname, group in _BOSS_REGIONS.items():
                 for bossname in group:
@@ -163,7 +163,7 @@ class DSTWorld(World):
                     self.options.cave_regions.value = self.options.cave_regions.option_full
                 elif "cave" in _auto_regions:
                     self.options.cave_regions.value = self.options.cave_regions.option_light
-        
+
         if self.options.ocean_regions.value == self.options.ocean_regions.option_auto:
             self.options.ocean_regions.value = self.options.ocean_regions.option_none
             if _IS_BOSS_GOAL:
@@ -195,10 +195,10 @@ class DSTWorld(World):
         item = self.dst_itempool.create_item(self, name)
         item.classification = ItemClassification.progression # Force spawned items to be progression so they could be in logic
         return item
-    
+
     def create_items(self) -> None:
         self.dst_itempool.create_items(self)
-    
+
     def get_filler_item_name(self) -> str:
         return self.dst_itempool.get_filler_item_name(self)
 
