@@ -82,3 +82,34 @@ class TestGingerIslandExclusionOverridesWalnutsanity(unittest.TestCase):
                     force_change_options_if_incompatible(world_options, 1, "Tester")
 
                     self.assertEqual(world_options.walnutsanity.value, original_walnutsanity_choice)
+
+
+class TestGingerIslandExclusionOverridesQisSpecialOrders(unittest.TestCase):
+
+    def test_given_ginger_island_excluded_when_generate_then_qis_special_orders_are_forced_disabled(self):
+        special_order_options = options.SpecialOrderLocations.options
+        for special_order in special_order_options.keys():
+            with self.subTest(f"Special order: {special_order}"):
+                world_options = fill_dataclass_with_default({
+                    options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_true,
+                    options.SpecialOrderLocations: special_order
+                })
+
+                force_change_options_if_incompatible(world_options, 1, "Tester")
+
+                self.assertEqual(world_options.special_order_locations.value & options.SpecialOrderLocations.value_qi, 0)
+
+    def test_given_ginger_island_related_goal_and_ginger_island_excluded_when_generate_then_special_orders_is_not_changed(self):
+        for goal in [options.Goal.option_greatest_walnut_hunter, options.Goal.option_perfection]:
+            special_order_options = options.SpecialOrderLocations.options
+            for special_order, original_special_order_value in special_order_options.items():
+                with self.subTest(f"Special order: {special_order}"):
+                    world_options = fill_dataclass_with_default({
+                        options.Goal: goal,
+                        options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_true,
+                        options.SpecialOrderLocations: special_order
+                    })
+
+                    force_change_options_if_incompatible(world_options, 1, "Tester")
+
+                    self.assertEqual(world_options.special_order_locations.value, original_special_order_value)

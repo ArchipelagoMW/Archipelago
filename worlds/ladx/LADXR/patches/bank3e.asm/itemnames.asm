@@ -170,7 +170,7 @@ ItemNamePointers:
     dw ItemNameNightmareKey8
     dw ItemNameNightmareKey9
     dw ItemNameToadstool
-    dw ItemNameNone ; 0x51
+    dw ItemNameGuardianAcorn
     dw ItemNameNone ; 0x52
     dw ItemNameNone ; 0x53
     dw ItemNameNone ; 0x54
@@ -254,6 +254,7 @@ ItemNamePointers:
     dw ItemTradeQuest12
     dw ItemTradeQuest13
     dw ItemTradeQuest14
+    dw ItemPieceOfPower
 
 ItemNameNone:
     db m"NONE", $ff
@@ -418,6 +419,8 @@ ItemNameNightmareKey9:
     db m"Got the {NIGHTMARE_KEY9}", $ff
 ItemNameToadstool:
     db m"Got the {TOADSTOOL}", $ff
+ItemNameGuardianAcorn:
+    db m"Got a Guardian Acorn", $ff
 
 ItemNameHeartPiece:
     db m"Got the {HEART_PIECE}", $ff
@@ -496,5 +499,8 @@ ItemTradeQuest13:
     db m"You've got the Scale", $ff
 ItemTradeQuest14:
     db m"You've got the Magnifying Lens", $ff
+ 
+ItemPieceOfPower:
+    db m"You've got a Piece of Power", $ff
 
 MultiNamePointers:
