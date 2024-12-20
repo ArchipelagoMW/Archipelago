@@ -305,26 +305,26 @@ class LinksAwakeningWorld(World):
             """
             Find an item that forces progression or a bush breaker for the player, depending on settings.
             """
-            if self.options.tarins_gift == "local_progression":
-                base_collection_state = CollectionState(self.multiworld)
-                base_collection_state.update_reachable_regions(self.player)
-                reachable_count = len(base_collection_state.reachable_regions[self.player])
-
             def is_possible_start_item(item):
                 return item.advancement and item.name not in self.options.non_local_items
 
-            def adheres_to_options(item):
-                if self.options.tarins_gift == "local_progression":
-                    collection_state = base_collection_state.copy()
-                    collection_state.collect(item)
-                    return len(collection_state.reachable_regions[self.player]) > reachable_count
-                # bush breaker
-                return item.name in self.item_name_groups["Bush Breakers"]
+            def opens_new_regions(item):
+                collection_state = base_collection_state.copy()
+                collection_state.collect(item)
+                return len(collection_state.reachable_regions[self.player]) > reachable_count
 
-            possible_start_items = [item for item in itempool if is_possible_start_item(item)]
-            self.random.shuffle(possible_start_items)
+            start_loc = self.get_location("Tarin's Gift (Mabe Village)")
+            start_items = [item for item in itempool if is_possible_start_item(item)]
+            self.random.shuffle(start_items)
 
-            start_item = next((item for item in possible_start_items if adheres_to_options(item)), None)
+            if self.options.tarins_gift == "bush_breaker":
+                start_item = next((item for item in start_items if item.name in links_awakening_item_name_groups["Bush Breakers"]), None)
+
+            else:  # local_progression
+                base_collection_state = CollectionState(self.multiworld)
+                base_collection_state.update_reachable_regions(self.player)
+                reachable_count = len(base_collection_state.reachable_regions[self.player])
+                start_item = next((item for item in start_items if opens_new_regions(item)), None)
 
             if start_item:
                 itempool.remove(start_item)
