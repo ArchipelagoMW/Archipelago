@@ -1,6 +1,6 @@
-from typing import NamedTuple
+from typing import NamedTuple, Callable
 
-from BaseClasses import Item, ItemClassification
+from BaseClasses import Item, ItemClassification, MultiWorld
 from enum import Enum
 
 class LoonylandItem(Item):
@@ -22,3 +22,4 @@ class LL_Item(NamedTuple):
     category: LL_ItemCat
     classification: ItemClassification
     frequency: int = 1
+    can_create: Callable[[MultiWorld, int], bool] = lambda multiworld, player: True

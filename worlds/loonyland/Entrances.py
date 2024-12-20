@@ -1,7 +1,7 @@
 import typing
-from typing import NamedTuple, Dict, List
+from typing import NamedTuple
 
-from BaseClasses import Entrance, CollectionState, Region
+from BaseClasses import Entrance
 from worlds.generic.Rules import CollectionRule
 
 

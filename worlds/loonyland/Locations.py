@@ -1,7 +1,7 @@
 from enum import Enum
-from typing import NamedTuple, Dict
+from typing import NamedTuple, Callable
 
-from BaseClasses import Location
+from BaseClasses import Location, MultiWorld
 
 loonyland_base_id: int = 2876900
 
@@ -21,5 +21,6 @@ class LL_Location(NamedTuple):
     id: int
     category: LL_LocCat
     region: str
+    can_create: Callable[[MultiWorld, int], bool] = lambda multiworld, player: True
 
 

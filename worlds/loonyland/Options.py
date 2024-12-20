@@ -23,12 +23,12 @@ class Difficulty(Choice):
     option_challenge = 3
     option_mad = 4
     option_loony = 5
-    default = 2
+    default = 1
 
 
 @dataclass
 class LoonylandOptions(PerGameCommonOptions):
-    win_condition: WinCondition
+    #win_condition: WinCondition
     difficulty: Difficulty
     death_link: DeathLink
 
