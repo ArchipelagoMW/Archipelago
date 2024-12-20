@@ -313,15 +313,12 @@ class Bowwow(Choice):
 
 class Overworld(Choice, LADXROption):
     """
-    [Dungeon Dive] Create a different overworld where all the dungeons are directly accessible and almost no chests are located in the overworld.
-    [Tiny dungeons] All dungeons only consist of a boss fight and a instrument reward. Rest of the dungeon is removed.
+    [Open Mabe] Replaces rock on the east side of Mabe Village with bushes, allowing access to Ukuku Prairie without Power Bracelet.
     """
     display_name = "Overworld"
     ladxr_name = "overworld"
     option_normal = 0
-    option_dungeon_dive = 1
-    option_tiny_dungeons = 2
-    # option_shuffled = 3
+    option_open_mabe = 1
     default = option_normal
 
 
@@ -576,6 +573,7 @@ ladx_option_groups = [
         TradeQuest,
         Rooster,
         TarinsGift,
+        Overworld,
         TrendyGame,
         InGameHints,
         NagMessages,
@@ -648,6 +646,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     no_flash: NoFlash
     in_game_hints: InGameHints
     tarins_gift: TarinsGift
+    overworld: Overworld
 
     warp_improvements: Removed
     additional_warp_points: Removed
