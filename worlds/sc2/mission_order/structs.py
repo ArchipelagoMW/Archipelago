@@ -1008,7 +1008,8 @@ class SC2MOGenMission(MissionOrderNode):
         return MissionSlotData(
             self.mission.id,
             [mission.mission.id for mission in self.prev],
-            self.entry_rule.to_slot_data()
+            self.entry_rule.to_slot_data(),
+            self.option_victory_cache,
         )
 
 
