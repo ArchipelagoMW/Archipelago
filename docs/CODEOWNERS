@@ -36,6 +36,9 @@
 # Castlevania 64
 /worlds/cv64/ @LiquidCat64
 
+# Castlevania: Circle of the Moon
+/worlds/cvcotm/ @LiquidCat64
+
 # Celeste 64
 /worlds/celeste64/ @PoryGone
 
@@ -141,6 +144,9 @@
 
 # Risk of Rain 2
 /worlds/ror2/ @kindasneaki
+
+# Saving Princess
+/worlds/saving_princess/ @LeonarthCG
 
 # Shivers
 /worlds/shivers/ @GodlFire

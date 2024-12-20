@@ -294,6 +294,10 @@ class RandomCharmCosts(NamedRange):
             return charms
 
 
+class CharmCost(Range):
+    range_end = 6
+
+
 class PlandoCharmCosts(OptionDict):
     """Allows setting a Charm's Notch costs directly, mapping {name: cost}.
     This is set after any random Charm Notch costs, if applicable."""
@@ -302,6 +306,27 @@ class PlandoCharmCosts(OptionDict):
     schema = Schema({
         Optional(name): And(int, lambda n: 6 >= n >= 0, error="Charm costs must be integers in the range 0-6.") for name in charm_names
         })
+
+    def __init__(self, value):
+        # To handle keys of random like other options, create an option instance from their values
+        # Additionally a vanilla keyword is added to plando individual charms to vanilla costs
+        # and default is disabled so as to not cause confusion
+        self.value = {}
+        for key, data in value.items():
+            if isinstance(data, str):
+                if data.lower() == "vanilla" and key in self.valid_keys:
+                    self.value[key] = vanilla_costs[charm_names.index(key)]
+                    continue
+                elif data.lower() == "default":
+                    # default is too easily confused with vanilla but actually 0
+                    # skip CharmCost resolution to fail schema afterwords
+                    self.value[key] = data
+                    continue
+            try:
+                self.value[key] = CharmCost.from_any(data).value
+            except ValueError as ex:
+                # will fail schema afterwords
+                self.value[key] = data
 
     def get_costs(self, charm_costs: typing.List[int]) -> typing.List[int]:
         for name, cost in self.value.items():
