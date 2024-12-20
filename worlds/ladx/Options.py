@@ -57,7 +57,7 @@ class TextShuffle(DefaultOffToggle):
 
 class Rooster(DefaultOnToggle, LADXROption):
     """
-    [On] Adds the rooster to the item pool. 
+    [On] Adds the rooster to the item pool.
     [Off] The rooster spot is still a check giving an item. But you will never find the rooster. In that case, any rooster spot is accessible without rooster by other means.
     """
     display_name = "Rooster"
@@ -70,7 +70,7 @@ class Boomerang(Choice):
     [Gift] The boomerang salesman will give you a random item, and the boomerang is shuffled.
     """
     display_name = "Boomerang"
-    
+
     normal = 0
     gift = 1
     default = gift
@@ -156,7 +156,7 @@ class ShuffleSmallKeys(DungeonItemShuffle):
     [Own Dungeons] The item will be within a dungeon in your world
     [Own World] The item will be somewhere in your world
     [Any World] The item could be anywhere
-    [Different World] The item will be somewhere in another world 
+    [Different World] The item will be somewhere in another world
     """
     display_name = "Shuffle Small Keys"
     ladxr_item = "KEY"
@@ -223,7 +223,7 @@ class Goal(Choice, LADXROption):
     The Goal of the game
     [Instruments] The Wind Fish's Egg will only open if you have the required number of Instruments of the Sirens, and play the Ballad of the Wind Fish.
     [Seashells] The Egg will open when you bring 20 seashells. The Ballad and Ocarina are not needed.
-    [Open] The Egg will start pre-opened.  
+    [Open] The Egg will start pre-opened.
     """
     display_name = "Goal"
     ladxr_name = "goal"
@@ -313,15 +313,12 @@ class Bowwow(Choice):
 
 class Overworld(Choice, LADXROption):
     """
-    [Dungeon Dive] Create a different overworld where all the dungeons are directly accessible and almost no chests are located in the overworld.
-    [Tiny dungeons] All dungeons only consist of a boss fight and a instrument reward. Rest of the dungeon is removed.
+    [Open Mabe] Replaces rock on the east side of Mabe Village with bushes, allowing access to Ukuku Prairie without Power Bracelet.
     """
     display_name = "Overworld"
     ladxr_name = "overworld"
     option_normal = 0
-    option_dungeon_dive = 1
-    option_tiny_dungeons = 2
-    # option_shuffled = 3
+    option_open_mabe = 1
     default = option_normal
 
 
@@ -472,7 +469,7 @@ class GfxMod(FreeText, LADXROption):
 
 class Palette(Choice):
     """
-    Sets the palette for the game. 
+    Sets the palette for the game.
     Note: A few places aren't patched, such as the menu and a few color dungeon tiles.
     [Normal] The vanilla palette
     [1-Bit] One bit of color per channel
@@ -530,7 +527,6 @@ class InGameHints(DefaultOnToggle):
     display_name = "In-game Hints"
 
 
-
 class ForeignItemIcons(Choice):
     """
     Choose how to display foreign items.
@@ -562,6 +558,7 @@ ladx_option_groups = [
     OptionGroup("Miscellaneous", [
         TradeQuest,
         Rooster,
+        Overworld,
         TrendyGame,
         InGameHints,
         NagMessages,
@@ -591,12 +588,12 @@ ladx_option_groups = [
 @dataclass
 class LinksAwakeningOptions(PerGameCommonOptions):
     logic: Logic
-    # 'heartpiece': DefaultOnToggle, # description='Includes heart pieces in the item pool'),                
-    # 'seashells': DefaultOnToggle, # description='Randomizes the secret sea shells hiding in the ground/trees. (chest are always randomized)'),                
-    # 'heartcontainers': DefaultOnToggle, # description='Includes boss heart container drops in the item pool'),                
-    # 'instruments': DefaultOffToggle, # description='Instruments are placed on random locations, dungeon goal will just contain a random item.'),                
+    # 'heartpiece': DefaultOnToggle, # description='Includes heart pieces in the item pool'),
+    # 'seashells': DefaultOnToggle, # description='Randomizes the secret sea shells hiding in the ground/trees. (chest are always randomized)'),
+    # 'heartcontainers': DefaultOnToggle, # description='Includes boss heart container drops in the item pool'),
+    # 'instruments': DefaultOffToggle, # description='Instruments are placed on random locations, dungeon goal will just contain a random item.'),
     tradequest: TradeQuest  # description='Trade quest items are randomized, each NPC takes its normal trade quest item, but gives a random item'),
-    # 'witch': DefaultOnToggle, # description='Adds both the toadstool and the reward for giving the toadstool to the witch to the item pool'),                
+    # 'witch': DefaultOnToggle, # description='Adds both the toadstool and the reward for giving the toadstool to the witch to the item pool'),
     rooster: Rooster  # description='Adds the rooster to the item pool. Without this option, the rooster spot is still a check giving an item. But you will never find the rooster. Any rooster spot is accessible without rooster by other means.'),
     # 'boomerang': Boomerang,
     # 'randomstartlocation': DefaultOffToggle, # 'Randomize where your starting house is located'),
@@ -633,6 +630,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     text_mode: TextMode
     no_flash: NoFlash
     in_game_hints: InGameHints
+    overworld: Overworld
 
     warp_improvements: Removed
     additional_warp_points: Removed
