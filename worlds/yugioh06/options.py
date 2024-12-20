@@ -13,9 +13,22 @@ class StructureDeck(Choice):
     option_fury_from_the_deep = 3
     option_warriors_triumph = 4
     option_spellcasters_judgement = 5
-    option_none = 6
+    option_worst = 6
     option_random_deck = 7
+    option_random_singles = 8
+    option_random_playsets = 9
     default = 7
+
+
+class StarterDeck(Choice):
+    """What are the cards you start with in the Trunk"""
+    display_name = "Starter Deck"
+    option_vanilla = 0
+    option_remove = 1
+    option_random_singles = 2
+    option_random_playsets = 3
+    default = 0
+
 
 
 class Banlist(Choice):
@@ -175,6 +188,7 @@ class OCGArts(Toggle):
 @dataclass
 class Yugioh06Options(PerGameCommonOptions):
     structure_deck: StructureDeck
+    starter_deck: StarterDeck
     banlist: Banlist
     final_campaign_boss_unlock_condition: FinalCampaignBossUnlockCondition
     fourth_tier_5_campaign_boss_unlock_condition: FourthTier5UnlockCondition

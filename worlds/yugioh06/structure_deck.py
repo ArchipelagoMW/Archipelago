@@ -76,7 +76,7 @@ structure_contents: Dict[str, List[str]] = {
         "Dust Tornado",
         "Mystical Space Typhoon"
     ],
-    "none": [],
+    "worst": [],
 }
 
 
@@ -85,3 +85,21 @@ def get_deck_content_locations(deck: str) -> Dict[str, str]:
         f"{deck} {i}": content
         for i, content in enumerate(structure_contents[deck], 1)
     }
+
+
+worst_deck = {
+    "Dark Gray": 3,
+    "Djinn the Watcher of the Wind": 3,
+    "Flying Fish": 1,
+    "Gate Deeg": 3,
+    "Genin": 3,
+    "Graveyard and the Hand of Invitation": 3,
+    "Kanikabuto": 3,
+    "Lightning Conger": 3,
+    "Necrolancer the Timelord": 3,
+    "Nemuriko": 3,
+    "Obese Marmot of Nefariousness": 3,
+    "The Drdek": 3,
+    "The Shadow Who Controls the Dark": 3,
+    "Turtle Raccoon": 3,
+}

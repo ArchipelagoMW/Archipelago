@@ -10,6 +10,7 @@ from worlds.AutoWorld import WebWorld, World
 
 from .boosterpacks import booster_contents as booster_contents
 from .boosterpacks import get_booster_locations
+from .card_data import CardData, cards, empty_card_data
 from .items import (
     Banlist_Items,
     booster_packs,
@@ -45,7 +46,7 @@ from .rom_values import banlist_ids as banlist_ids
 from .rom_values import function_addresses as function_addresses
 from .rom_values import structure_deck_selection as structure_deck_selection
 from .rules import set_rules
-from .structure_deck import get_deck_content_locations
+from .structure_deck import get_deck_content_locations, worst_deck
 from .client_bh import YuGiOh2006Client
 
 
@@ -128,6 +129,8 @@ class Yugioh06World(World):
     starting_booster: str
     starting_opponent: str
     campaign_opponents: List[OpponentData]
+    starter_deck: List[CardData]
+    structure_deck: Dict[CardData, int]
     is_draft_mode: bool
 
     def __init__(self, world: MultiWorld, player: int):
@@ -137,6 +140,8 @@ class Yugioh06World(World):
         self.starting_opponent = ""
         self.starting_booster = ""
         self.removed_challenges = []
+        self.starter_deck = []
+        self.structure_deck = {}
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "Yu-Gi-Oh! 2006" in self.multiworld.re_gen_passthrough:
@@ -174,7 +179,8 @@ class Yugioh06World(World):
                 self.starting_booster = slot_data["starting_booster"]
                 self.starting_opponent = slot_data["starting_opponent"]
 
-        if self.options.structure_deck.current_key == "none":
+        # set possible starting booster and opponent
+        if self.options.structure_deck.value == self.options.structure_deck.option_worst:
             self.is_draft_mode = True
             boosters = draft_boosters
             if self.options.campaign_opponents_shuffle.value:
@@ -186,8 +192,43 @@ class Yugioh06World(World):
             boosters = booster_packs
             opponents = tier_1_opponents
 
+        # clone to prevent duplicates
+        card_list = list(cards.values())
+        # set starter deck
+        if self.options.starter_deck.value == self.options.starter_deck.option_random_singles:
+            for i in range(0, 40):
+                card = self.random.choice(card_list)
+                card_list.remove(card)
+                self.starter_deck.append(card)
+        elif self.options.starter_deck.value == self.options.starter_deck.option_random_playsets:
+            for i in range(0, 13):
+                card = self.random.choice(card_list)
+                card_list.remove(card)
+                self.starter_deck.append(card)
+                self.starter_deck.append(card)
+                self.starter_deck.append(card)
+            self.starter_deck.append(empty_card_data)
+
+        # set structure deck
         if self.options.structure_deck.current_key == "random_deck":
             self.options.structure_deck.value = self.random.randint(0, 5)
+        if self.options.structure_deck.value == self.options.structure_deck.option_random_singles:
+            for i in range(0, 40):
+                card = self.random.choice(card_list)
+                card_list.remove(card)
+                self.structure_deck[card] = 1
+            self.options.structure_deck.value = self.options.structure_deck.option_worst
+        elif self.options.structure_deck.value == self.options.structure_deck.option_random_playsets:
+            for i in range(0, 14):
+                card = self.random.choice(card_list)
+                card_list.remove(card)
+                self.structure_deck[card] = 3
+            self.options.structure_deck.value = self.options.structure_deck.option_worst
+        elif self.options.structure_deck.value == self.options.structure_deck.option_worst:
+            for card_name, amount in worst_deck.items():
+                card = cards[card_name]
+                self.structure_deck[card] = amount
+        # set starting booster and opponent
         for item in self.options.start_inventory:
             if item in opponents:
                 self.starting_opponent = item
@@ -227,6 +268,7 @@ class Yugioh06World(World):
         self.campaign_opponents = get_opponents(
             self.multiworld, self.player, self.options.campaign_opponents_shuffle.value
         )
+
 
     def create_region(self, name: str, locations=None, exits=None):
         region = Region(name, self.player, self.multiworld)
@@ -410,9 +452,6 @@ class Yugioh06World(World):
         patch = YGO06ProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
         patch.write_file("base_patch.bsdiff4", pkgutil.get_data(__name__, "patch.bsdiff4"))
         procedure = [("apply_bsdiff4", ["base_patch.bsdiff4"]), ("apply_tokens", ["token_data.bin"])]
-        if self.is_draft_mode:
-            procedure.insert(1, ("apply_bsdiff4", ["draft_patch.bsdiff4"]))
-            patch.write_file("draft_patch.bsdiff4", pkgutil.get_data(__name__, "patches/draft.bsdiff4"))
         if self.options.ocg_arts:
             procedure.insert(1, ("apply_bsdiff4", ["ocg_patch.bsdiff4"]))
             patch.write_file("ocg_patch.bsdiff4", pkgutil.get_data(__name__, "patches/ocg.bsdiff4"))

@@ -32,6 +32,35 @@ def write_tokens(world: World, patch: YGO06ProcedurePatch):
     structure_deck = structure_deck_selection.get(world.options.structure_deck.value)
     # set structure deck
     patch.write_token(APTokenTypes.WRITE, 0x000FD0AA, struct.pack("<B", structure_deck))
+
+    # override Starter Deck
+    if world.options.starter_deck.value == world.options.starter_deck.option_remove:
+        for i in range(0, 40):
+            patch.write_token(APTokenTypes.WRITE, 0x01e5f884 + (i * 2),
+                              struct.pack("<H", 0x0))
+    elif world.starter_deck:
+        for i in range(0, len(world.starter_deck)):
+            patch.write_token(APTokenTypes.WRITE, 0x01e5f884 + (i * 2),
+                              struct.pack("<H", world.starter_deck[i].starter_id))
+
+    # override Structure Deck
+    if world.structure_deck:
+        pointer = 0
+        for card, amount in world.structure_deck.items():
+            patch.write_token(APTokenTypes.WRITE, 0x1e5fa58 + pointer,
+                              struct.pack("<H", card.structure_id + amount))
+            pointer = pointer + 4
+        patch.write_token(APTokenTypes.WRITE, 0x1e5fd58, struct.pack("<B", len(world.structure_deck)))
+        deck_name = "\x00"
+        if world.is_draft_mode:
+            deck_name = "Worst Deck\x00"
+        else:
+            deck_name = "Random Deck\x00"
+        for j, b in enumerate(deck_name.encode("ascii")):
+            patch.write_token(APTokenTypes.WRITE, 0x1dc9f56 + j, struct.pack("<B", b))
+
+
+
     # set banlist
     banlist = world.options.banlist
     patch.write_token(APTokenTypes.WRITE, 0xF4496, struct.pack("<B", banlist_ids.get(banlist.value)))
