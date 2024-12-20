@@ -181,7 +181,7 @@ Note, some entrances can lead into water, use the warp-to-home from the save&qui
             Setting('quickswap', 'User options', 'Q', 'Quickswap', options=[('none', '', 'Disabled'), ('a', 'a', 'Swap A button'), ('b', 'b', 'Swap B button')], default='none',
                 description='Adds that the select button swaps with either A or B. The item is swapped with the top inventory slot. The map is not available when quickswap is enabled.',
                 aesthetic=True),
-            Setting('textmode', 'User options', 'f', 'Text mode', options=[('fast', '', 'Fast'), ('default', 'd', 'Normal'), ('none', 'n', 'No-text')], default='fast',
+            Setting('textmode', 'User options', 'f', 'Text mode', options=[('fast', '', 'Fast'), ('normal', 'd', 'Normal'), ('none', 'n', 'No-text')], default='fast',
                 description="""[Fast] makes text appear twice as fast.
 [No-Text] removes all text from the game""", aesthetic=True),
             Setting('lowhpbeep', 'User options', 'p', 'Low HP beeps', options=[('none', 'D', 'Disabled'), ('slow', 'S', 'Slow'), ('default', 'N', 'Normal')], default='slow',
