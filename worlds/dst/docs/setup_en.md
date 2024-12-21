@@ -4,12 +4,10 @@
 
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
 - [Don't Starve Together](https://store.steampowered.com/app/322330/Dont_Starve_Together/)
-- The most recent [dontstarvetogether.apworld](https://github.com/DragonWolfLeo/Archipelago-DST/releases)
 - [Archipelago Randomizer Steam Workshop mod for Don't Starve Together](https://steamcommunity.com/sharedfiles/filedetails/?id=3218471273)
 
 ## Installation
 - Install Archipelago.
-- Add dontstarvetogether.apworld to custom_worlds folder of your Archipelago install, or double click the .apworld to do so automatically.
 - Follow Archipelago's basic tutorial on how to generate a game. [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
     * Only a single YAML is needed for a Don't Starve Together server regardless of how many players will play on it.
 
