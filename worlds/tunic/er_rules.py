@@ -1,8 +1,11 @@
-from typing import Dict, Set, List, Tuple, TYPE_CHECKING
-from worlds.generic.Rules import set_rule, forbid_item
-from .rules import (has_ability, has_sword, has_stick, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
-                    bomb_walls)
-from .er_data import Portal
+from typing import Dict, FrozenSet, Tuple, TYPE_CHECKING
+from worlds.generic.Rules import set_rule, add_rule, forbid_item
+from .options import IceGrappling, LadderStorage, CombatLogic
+from .rules import (has_ability, has_sword, has_melee, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
+                    laurels_zip, bomb_walls)
+from .er_data import Portal, get_portal_outlet_region
+from .ladder_storage_data import ow_ladder_groups, region_ladders, easy_ls, medium_ls, hard_ls
+from .combat_logic import has_combat_reqs
 from BaseClasses import Region, CollectionState
 
 if TYPE_CHECKING:
@@ -37,9 +40,33 @@ def can_shop(state: CollectionState, world: "TunicWorld") -> bool:
     return has_sword(state, world.player) and state.can_reach_region("Shop", world.player)
 
 
+# for the ones that are not early bushes where ER can screw you over a bit
+def can_get_past_bushes(state: CollectionState, world: "TunicWorld") -> bool:
+    # add in glass cannon + stick for grass rando
+    return has_sword(state, world.player) or state.has_any((fire_wand, laurels, gun), world.player)
+
+
 def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_pairs: Dict[Portal, Portal]) -> None:
     player = world.player
     options = world.options
+
+    # input scene destination tag, returns portal's name and paired portal's outlet region or region
+    def get_portal_info(portal_sd: str) -> Tuple[str, str]:
+        for portal1, portal2 in portal_pairs.items():
+            if portal1.scene_destination() == portal_sd:
+                return portal1.name, get_portal_outlet_region(portal2, world)
+            if portal2.scene_destination() == portal_sd:
+                return portal2.name, get_portal_outlet_region(portal1, world)
+        raise Exception("No matches found in get_portal_info")
+
+    # input scene destination tag, returns paired portal's name and region
+    def get_paired_portal(portal_sd: str) -> Tuple[str, str]:
+        for portal1, portal2 in portal_pairs.items():
+            if portal1.scene_destination() == portal_sd:
+                return portal2.name, portal2.region
+            if portal2.scene_destination() == portal_sd:
+                return portal1.name, portal1.region
+        raise Exception("no matches found in get_paired_portal")
 
     regions["Menu"].connect(
         connecting_region=regions["Overworld"])
@@ -54,10 +81,18 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Overworld Beach"],
         rule=lambda state: has_ladder("Ladders in Overworld Town", state, world)
         or state.has_any({laurels, grapple}, player))
+    # regions["Overworld Beach"].connect(
+    #     connecting_region=regions["Overworld"],
+    #     rule=lambda state: has_ladder("Ladders in Overworld Town", state, world)
+    #     or state.has_any({laurels, grapple}, player))
+
+    # region for combat logic, no need to connect it to beach since it would be the same as the ow -> beach cxn
+    ow_tunnel_beach = regions["Overworld"].connect(
+        connecting_region=regions["Overworld Tunnel to Beach"])
+
     regions["Overworld Beach"].connect(
-        connecting_region=regions["Overworld"],
-        rule=lambda state: has_ladder("Ladders in Overworld Town", state, world)
-        or state.has_any({laurels, grapple}, player))
+        connecting_region=regions["Overworld Tunnel to Beach"],
+        rule=lambda state: state.has(laurels, player) or has_ladder("Ladders in Overworld Town", state, world))
 
     regions["Overworld Beach"].connect(
         connecting_region=regions["Overworld West Garden Laurels Entry"],
@@ -82,13 +117,16 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Belltower"],
-        rule=lambda state: state.has(laurels, player))
+        rule=lambda state: state.has(laurels, player)
+        or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
     regions["Overworld Belltower"].connect(
         connecting_region=regions["Overworld"])
 
+    # ice grapple rudeling across rubble, drop bridge, ice grapple rudeling down
     regions["Overworld Belltower"].connect(
         connecting_region=regions["Overworld to West Garden Upper"],
-        rule=lambda state: has_ladder("Ladders to West Bell", state, world))
+        rule=lambda state: has_ladder("Ladders to West Bell", state, world)
+        or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
     regions["Overworld to West Garden Upper"].connect(
         connecting_region=regions["Overworld Belltower"],
         rule=lambda state: has_ladder("Ladders to West Bell", state, world))
@@ -97,32 +135,35 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Overworld Belltower at Bell"],
         rule=lambda state: has_ladder("Ladders to West Bell", state, world))
 
-    # long dong, do not make a reverse connection here or to belltower
-    regions["Overworld above Patrol Cave"].connect(
-        connecting_region=regions["Overworld Belltower at Bell"],
-        rule=lambda state: options.logic_rules and state.has(fire_wand, player))
+    # long dong, do not make a reverse connection here or to belltower, maybe readd later
+    # regions["Overworld above Patrol Cave"].connect(
+    #     connecting_region=regions["Overworld Belltower at Bell"],
+    #     rule=lambda state: options.logic_rules and state.has(fire_wand, player))
 
-    # nmg: can laurels through the ruined passage door
+    # can laurels through the ruined passage door at either corner
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Ruined Passage Door"],
         rule=lambda state: state.has(key, player, 2)
-        or (state.has(laurels, player) and options.logic_rules))
+        or laurels_zip(state, world))
     regions["Overworld Ruined Passage Door"].connect(
         connecting_region=regions["Overworld"],
-        rule=lambda state: state.has(laurels, player) and options.logic_rules)
+        rule=lambda state: laurels_zip(state, world))
 
     regions["Overworld"].connect(
         connecting_region=regions["After Ruined Passage"],
         rule=lambda state: has_ladder("Ladders near Weathervane", state, world)
-        or has_ice_grapple_logic(True, state, world))
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
     regions["After Ruined Passage"].connect(
         connecting_region=regions["Overworld"],
         rule=lambda state: has_ladder("Ladders near Weathervane", state, world))
 
+    # for the hard ice grapple, get to the chest after the bomb wall, grab a slime, and grapple push down
+    # you can ice grapple through the bomb wall, so no need for shop logic checking
     regions["Overworld"].connect(
         connecting_region=regions["Above Ruined Passage"],
         rule=lambda state: has_ladder("Ladders near Weathervane", state, world)
-        or state.has(laurels, player))
+        or state.has(laurels, player)
+        or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
     regions["Above Ruined Passage"].connect(
         connecting_region=regions["Overworld"],
         rule=lambda state: has_ladder("Ladders near Weathervane", state, world)
@@ -138,7 +179,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Above Ruined Passage"].connect(
         connecting_region=regions["East Overworld"],
         rule=lambda state: has_ladder("Ladders near Weathervane", state, world)
-        or has_ice_grapple_logic(True, state, world))
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
     regions["East Overworld"].connect(
         connecting_region=regions["Above Ruined Passage"],
         rule=lambda state: has_ladder("Ladders near Weathervane", state, world)
@@ -147,15 +188,15 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     # nmg: ice grapple the slimes, works both ways consistently
     regions["East Overworld"].connect(
         connecting_region=regions["After Ruined Passage"],
-        rule=lambda state: has_ice_grapple_logic(True, state, world))
+        rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
     regions["After Ruined Passage"].connect(
         connecting_region=regions["East Overworld"],
-        rule=lambda state: has_ice_grapple_logic(True, state, world))
+        rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
 
     regions["Overworld"].connect(
         connecting_region=regions["East Overworld"],
         rule=lambda state: has_ladder("Ladders near Overworld Checkpoint", state, world)
-        or has_ice_grapple_logic(True, state, world))
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
     regions["East Overworld"].connect(
         connecting_region=regions["Overworld"],
         rule=lambda state: has_ladder("Ladders near Overworld Checkpoint", state, world))
@@ -169,7 +210,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Overworld at Patrol Cave"].connect(
         connecting_region=regions["Overworld above Patrol Cave"],
         rule=lambda state: has_ladder("Ladders near Patrol Cave", state, world)
-        or has_ice_grapple_logic(True, state, world))
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
     regions["Overworld above Patrol Cave"].connect(
         connecting_region=regions["Overworld at Patrol Cave"],
         rule=lambda state: has_ladder("Ladders near Patrol Cave", state, world))
@@ -185,7 +226,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["East Overworld"].connect(
         connecting_region=regions["Overworld above Patrol Cave"],
         rule=lambda state: has_ladder("Ladders near Overworld Checkpoint", state, world)
-        or has_ice_grapple_logic(True, state, world))
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
     regions["Overworld above Patrol Cave"].connect(
         connecting_region=regions["East Overworld"],
         rule=lambda state: has_ladder("Ladders near Overworld Checkpoint", state, world))
@@ -193,7 +234,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Overworld above Patrol Cave"].connect(
         connecting_region=regions["Upper Overworld"],
         rule=lambda state: has_ladder("Ladders near Patrol Cave", state, world)
-        or has_ice_grapple_logic(True, state, world))
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
     regions["Upper Overworld"].connect(
         connecting_region=regions["Overworld above Patrol Cave"],
         rule=lambda state: has_ladder("Ladders near Patrol Cave", state, world)
@@ -206,13 +247,15 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Upper Overworld"],
         rule=lambda state: state.has_any({grapple, laurels}, player))
 
+    # ice grapple push guard captain down the ledge
     regions["Upper Overworld"].connect(
         connecting_region=regions["Overworld after Temple Rafters"],
-        rule=lambda state: has_ladder("Ladder near Temple Rafters", state, world))
+        rule=lambda state: has_ladder("Ladder near Temple Rafters", state, world)
+        or has_ice_grapple_logic(True, IceGrappling.option_medium, state, world))
     regions["Overworld after Temple Rafters"].connect(
         connecting_region=regions["Upper Overworld"],
         rule=lambda state: has_ladder("Ladder near Temple Rafters", state, world)
-        or has_ice_grapple_logic(True, state, world))
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
 
     regions["Overworld above Quarry Entrance"].connect(
         connecting_region=regions["Overworld"],
@@ -224,13 +267,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Overworld"].connect(
         connecting_region=regions["Overworld after Envoy"],
         rule=lambda state: state.has_any({laurels, grapple, gun}, player)
-        or state.has("Sword Upgrade", player, 4)
-        or options.logic_rules)
+        or state.has("Sword Upgrade", player, 4))
     regions["Overworld after Envoy"].connect(
         connecting_region=regions["Overworld"],
         rule=lambda state: state.has_any({laurels, grapple, gun}, player)
-        or state.has("Sword Upgrade", player, 4)
-        or options.logic_rules)
+        or state.has("Sword Upgrade", player, 4))
 
     regions["Overworld after Envoy"].connect(
         connecting_region=regions["Overworld Quarry Entry"],
@@ -242,10 +283,10 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     # ice grapple through the gate
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Quarry Entry"],
-        rule=lambda state: has_ice_grapple_logic(False, state, world))
+        rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
     regions["Overworld Quarry Entry"].connect(
         connecting_region=regions["Overworld"],
-        rule=lambda state: has_ice_grapple_logic(False, state, world))
+        rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_easy, state, world))
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Swamp Upper Entry"],
@@ -256,7 +297,8 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Swamp Lower Entry"],
-        rule=lambda state: has_ladder("Ladder to Swamp", state, world))
+        rule=lambda state: has_ladder("Ladder to Swamp", state, world)
+        or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
     regions["Overworld Swamp Lower Entry"].connect(
         connecting_region=regions["Overworld"],
         rule=lambda state: has_ladder("Ladder to Swamp", state, world))
@@ -268,35 +310,42 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["East Overworld"],
         rule=lambda state: state.has(laurels, player))
 
-    regions["Overworld"].connect(
+    # region made for combat logic
+    ow_to_well_entry = regions["Overworld"].connect(
+        connecting_region=regions["Overworld Well Entry Area"])
+    regions["Overworld Well Entry Area"].connect(
+        connecting_region=regions["Overworld"])
+
+    regions["Overworld Well Entry Area"].connect(
         connecting_region=regions["Overworld Well Ladder"],
         rule=lambda state: has_ladder("Ladders in Well", state, world))
     regions["Overworld Well Ladder"].connect(
-        connecting_region=regions["Overworld"],
+        connecting_region=regions["Overworld Well Entry Area"],
         rule=lambda state: has_ladder("Ladders in Well", state, world))
 
     # nmg: can ice grapple through the door
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Old House Door"],
         rule=lambda state: state.has(house_key, player)
-        or has_ice_grapple_logic(False, state, world))
+        or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
-    # not including ice grapple through this because it's very tedious to get an enemy here
+    # lure enemy over and ice grapple through
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Southeast Cross Door"],
-        rule=lambda state: has_ability(holy_cross, state, world))
+        rule=lambda state: has_ability(holy_cross, state, world)
+        or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
     regions["Overworld Southeast Cross Door"].connect(
         connecting_region=regions["Overworld"],
         rule=lambda state: has_ability(holy_cross, state, world))
 
-    # not including ice grapple through this because we're not including it on the other door
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Fountain Cross Door"],
-        rule=lambda state: has_ability(holy_cross, state, world))
+        rule=lambda state: has_ability(holy_cross, state, world)
+        or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
     regions["Overworld Fountain Cross Door"].connect(
         connecting_region=regions["Overworld"])
 
-    regions["Overworld"].connect(
+    ow_to_town_portal = regions["Overworld"].connect(
         connecting_region=regions["Overworld Town Portal"],
         rule=lambda state: has_ability(prayer, state, world))
     regions["Overworld Town Portal"].connect(
@@ -312,7 +361,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Temple Door"],
         rule=lambda state: state.has_all({"Ring Eastern Bell", "Ring Western Bell"}, player)
-        or has_ice_grapple_logic(False, state, world))
+        or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
     regions["Overworld Temple Door"].connect(
         connecting_region=regions["Overworld above Patrol Cave"],
@@ -325,29 +374,35 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Overworld Beach"].connect(
         connecting_region=regions["Overworld Tunnel Turret"],
         rule=lambda state: has_ladder("Ladders in Overworld Town", state, world)
-        or has_ice_grapple_logic(True, state, world))
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
 
+    # don't need the ice grapple rule since you can go from ow -> beach -> tunnel
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Tunnel Turret"],
-        rule=lambda state: state.has(laurels, player)
-        or has_ice_grapple_logic(True, state, world))
+        rule=lambda state: state.has(laurels, player))
     regions["Overworld Tunnel Turret"].connect(
         connecting_region=regions["Overworld"],
         rule=lambda state: state.has_any({grapple, laurels}, player))
 
-    regions["Overworld"].connect(
+    cube_entrance = regions["Overworld"].connect(
         connecting_region=regions["Cube Cave Entrance Region"],
         rule=lambda state: state.has(gun, player) or can_shop(state, world))
+    world.multiworld.register_indirect_condition(regions["Shop"], cube_entrance)
     regions["Cube Cave Entrance Region"].connect(
         connecting_region=regions["Overworld"])
+
+    # drop a rudeling down, icebolt or ice bomb
+    regions["Overworld"].connect(
+        connecting_region=regions["Overworld to West Garden from Furnace"],
+        rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_hard, state, world))
 
     # Overworld side areas
     regions["Old House Front"].connect(
         connecting_region=regions["Old House Back"])
-    # nmg: laurels through the gate
+    # laurels through the gate, use left wall to space yourself
     regions["Old House Back"].connect(
         connecting_region=regions["Old House Front"],
-        rule=lambda state: state.has(laurels, player) and options.logic_rules)
+        rule=lambda state: laurels_zip(state, world))
 
     regions["Sealed Temple"].connect(
         connecting_region=regions["Sealed Temple Rafters"])
@@ -388,15 +443,23 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Forest Belltower Lower"],
         rule=lambda state: has_ladder("Ladder to East Forest", state, world))
 
-    # nmg: ice grapple up to dance fox spot, and vice versa
+    regions["Forest Belltower Main behind bushes"].connect(
+        connecting_region=regions["Forest Belltower Main"],
+        rule=lambda state: can_get_past_bushes(state, world)
+        or has_ice_grapple_logic(False, IceGrappling.option_easy, state, world))
+    # you can use the slimes to break the bushes
+    regions["Forest Belltower Main"].connect(
+        connecting_region=regions["Forest Belltower Main behind bushes"])
+
+    # ice grapple up to dance fox spot, and vice versa
     regions["East Forest"].connect(
         connecting_region=regions["East Forest Dance Fox Spot"],
         rule=lambda state: state.has(laurels, player)
-        or has_ice_grapple_logic(True, state, world))
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
     regions["East Forest Dance Fox Spot"].connect(
         connecting_region=regions["East Forest"],
         rule=lambda state: state.has(laurels, player)
-        or has_ice_grapple_logic(True, state, world))
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
 
     regions["East Forest"].connect(
         connecting_region=regions["East Forest Portal"],
@@ -407,7 +470,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["East Forest"].connect(
         connecting_region=regions["Lower Forest"],
         rule=lambda state: has_ladder("Ladders to Lower Forest", state, world)
-        or (state.has_all({grapple, fire_wand, ice_dagger}, player) and has_ability(icebolt, state, world)))
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
     regions["Lower Forest"].connect(
         connecting_region=regions["East Forest"],
         rule=lambda state: has_ladder("Ladders to Lower Forest", state, world))
@@ -418,29 +481,38 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Guard House 1 East"],
         rule=lambda state: state.has(laurels, player))
 
-    regions["Guard House 2 Upper"].connect(
+    regions["Guard House 2 Upper before bushes"].connect(
+        connecting_region=regions["Guard House 2 Upper after bushes"],
+        rule=lambda state: can_get_past_bushes(state, world))
+    regions["Guard House 2 Upper after bushes"].connect(
+        connecting_region=regions["Guard House 2 Upper before bushes"],
+        rule=lambda state: can_get_past_bushes(state, world))
+
+    regions["Guard House 2 Upper after bushes"].connect(
         connecting_region=regions["Guard House 2 Lower"],
         rule=lambda state: has_ladder("Ladders to Lower Forest", state, world))
     regions["Guard House 2 Lower"].connect(
-        connecting_region=regions["Guard House 2 Upper"],
+        connecting_region=regions["Guard House 2 Upper after bushes"],
         rule=lambda state: has_ladder("Ladders to Lower Forest", state, world))
 
-    # nmg: ice grapple from upper grave path exit to the rest of it
+    # ice grapple from upper grave path exit to the rest of it
     regions["Forest Grave Path Upper"].connect(
         connecting_region=regions["Forest Grave Path Main"],
         rule=lambda state: state.has(laurels, player)
-        or has_ice_grapple_logic(True, state, world))
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
+    # for the ice grapple, lure a rudeling up top, then grapple push it across
     regions["Forest Grave Path Main"].connect(
         connecting_region=regions["Forest Grave Path Upper"],
-        rule=lambda state: state.has(laurels, player))
+        rule=lambda state: state.has(laurels, player)
+        or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
 
     regions["Forest Grave Path Main"].connect(
         connecting_region=regions["Forest Grave Path by Grave"])
-    # nmg: ice grapple or laurels through the gate
+    # ice grapple or laurels through the gate
     regions["Forest Grave Path by Grave"].connect(
         connecting_region=regions["Forest Grave Path Main"],
-        rule=lambda state: has_ice_grapple_logic(False, state, world)
-        or (state.has(laurels, player) and options.logic_rules))
+        rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_easy, state, world)
+        or laurels_zip(state, world))
 
     regions["Forest Grave Path by Grave"].connect(
         connecting_region=regions["Forest Hero's Grave"],
@@ -456,89 +528,123 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Beneath the Well Ladder Exit"],
         rule=lambda state: has_ladder("Ladders in Well", state, world))
 
-    regions["Beneath the Well Front"].connect(
+    btw_front_main = regions["Beneath the Well Front"].connect(
         connecting_region=regions["Beneath the Well Main"],
-        rule=lambda state: has_stick(state, player) or state.has(fire_wand, player))
+        rule=lambda state: has_melee(state, player) or state.has(fire_wand, player))
     regions["Beneath the Well Main"].connect(
-        connecting_region=regions["Beneath the Well Front"],
-        rule=lambda state: has_stick(state, player) or state.has(fire_wand, player))
+        connecting_region=regions["Beneath the Well Front"])
 
     regions["Beneath the Well Main"].connect(
         connecting_region=regions["Beneath the Well Back"],
         rule=lambda state: has_ladder("Ladders in Well", state, world))
-    regions["Beneath the Well Back"].connect(
+    btw_back_main = regions["Beneath the Well Back"].connect(
         connecting_region=regions["Beneath the Well Main"],
         rule=lambda state: has_ladder("Ladders in Well", state, world)
-        and (has_stick(state, player) or state.has(fire_wand, player)))
+        and (has_melee(state, player) or state.has(fire_wand, player)))
 
-    regions["Well Boss"].connect(
+    well_boss_to_dt = regions["Well Boss"].connect(
         connecting_region=regions["Dark Tomb Checkpoint"])
-    # nmg: can laurels through the gate
+    # can laurels through the gate, no setup needed
     regions["Dark Tomb Checkpoint"].connect(
         connecting_region=regions["Well Boss"],
-        rule=lambda state: state.has(laurels, player) and options.logic_rules)
+        rule=lambda state: laurels_zip(state, world))
 
-    regions["Dark Tomb Entry Point"].connect(
+    dt_entry_to_upper = regions["Dark Tomb Entry Point"].connect(
         connecting_region=regions["Dark Tomb Upper"],
         rule=lambda state: has_lantern(state, world))
     regions["Dark Tomb Upper"].connect(
         connecting_region=regions["Dark Tomb Entry Point"])
 
+    # ice grapple through the wall, get the little secret sound to trigger
     regions["Dark Tomb Upper"].connect(
         connecting_region=regions["Dark Tomb Main"],
-        rule=lambda state: has_ladder("Ladder in Dark Tomb", state, world))
+        rule=lambda state: has_ladder("Ladder in Dark Tomb", state, world)
+        or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
     regions["Dark Tomb Main"].connect(
         connecting_region=regions["Dark Tomb Upper"],
         rule=lambda state: has_ladder("Ladder in Dark Tomb", state, world))
 
     regions["Dark Tomb Main"].connect(
         connecting_region=regions["Dark Tomb Dark Exit"])
-    regions["Dark Tomb Dark Exit"].connect(
+    dt_exit_to_main = regions["Dark Tomb Dark Exit"].connect(
         connecting_region=regions["Dark Tomb Main"],
         rule=lambda state: has_lantern(state, world))
 
     # West Garden
+    # combat logic regions
+    wg_before_to_after_terry = regions["West Garden before Terry"].connect(
+        connecting_region=regions["West Garden after Terry"])
+    wg_after_to_before_terry = regions["West Garden after Terry"].connect(
+        connecting_region=regions["West Garden before Terry"])
+
+    regions["West Garden after Terry"].connect(
+        connecting_region=regions["West Garden South Checkpoint"])
+    wg_checkpoint_to_after_terry = regions["West Garden South Checkpoint"].connect(
+        connecting_region=regions["West Garden after Terry"])
+
+    wg_checkpoint_to_dagger = regions["West Garden South Checkpoint"].connect(
+        connecting_region=regions["West Garden at Dagger House"])
+    regions["West Garden at Dagger House"].connect(
+        connecting_region=regions["West Garden South Checkpoint"])
+
+    wg_checkpoint_to_before_boss = regions["West Garden South Checkpoint"].connect(
+        connecting_region=regions["West Garden before Boss"])
+    regions["West Garden before Boss"].connect(
+        connecting_region=regions["West Garden South Checkpoint"])
+
     regions["West Garden Laurels Exit Region"].connect(
-        connecting_region=regions["West Garden"],
+        connecting_region=regions["West Garden at Dagger House"],
         rule=lambda state: state.has(laurels, player))
-    regions["West Garden"].connect(
+    regions["West Garden at Dagger House"].connect(
         connecting_region=regions["West Garden Laurels Exit Region"],
         rule=lambda state: state.has(laurels, player))
 
-    regions["West Garden after Boss"].connect(
-        connecting_region=regions["West Garden"],
-        rule=lambda state: state.has(laurels, player))
-    regions["West Garden"].connect(
+    # laurels past, or ice grapple it off, or ice grapple to it then fight
+    after_gk_to_wg = regions["West Garden after Boss"].connect(
+        connecting_region=regions["West Garden before Boss"],
+        rule=lambda state: state.has(laurels, player)
+        or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
+        or (has_ice_grapple_logic(False, IceGrappling.option_easy, state, world)
+            and has_sword(state, player)))
+    # ice grapple push Garden Knight off the side
+    wg_to_after_gk = regions["West Garden before Boss"].connect(
         connecting_region=regions["West Garden after Boss"],
-        rule=lambda state: state.has(laurels, player) or has_sword(state, player))
+        rule=lambda state: state.has(laurels, player) or has_sword(state, player)
+        or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
-    regions["West Garden"].connect(
+    regions["West Garden before Terry"].connect(
         connecting_region=regions["West Garden Hero's Grave Region"],
         rule=lambda state: has_ability(prayer, state, world))
     regions["West Garden Hero's Grave Region"].connect(
-        connecting_region=regions["West Garden"])
+        connecting_region=regions["West Garden before Terry"])
 
     regions["West Garden Portal"].connect(
+        connecting_region=regions["West Garden by Portal"])
+    regions["West Garden by Portal"].connect(
+        connecting_region=regions["West Garden Portal"],
+        rule=lambda state: has_ability(prayer, state, world) and state.has("Activate West Garden Fuse", player))
+
+    regions["West Garden by Portal"].connect(
         connecting_region=regions["West Garden Portal Item"],
         rule=lambda state: state.has(laurels, player))
     regions["West Garden Portal Item"].connect(
-        connecting_region=regions["West Garden Portal"],
-        rule=lambda state: state.has(laurels, player) and has_ability(prayer, state, world))
+        connecting_region=regions["West Garden by Portal"],
+        rule=lambda state: state.has(laurels, player))
 
-    # nmg: can ice grapple to and from the item behind the magic dagger house
+    # can ice grapple to and from the item behind the magic dagger house
     regions["West Garden Portal Item"].connect(
-        connecting_region=regions["West Garden"],
-        rule=lambda state: has_ice_grapple_logic(True, state, world))
-    regions["West Garden"].connect(
+        connecting_region=regions["West Garden at Dagger House"],
+        rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
+    regions["West Garden at Dagger House"].connect(
         connecting_region=regions["West Garden Portal Item"],
-        rule=lambda state: has_ice_grapple_logic(True, state, world))
+        rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_medium, state, world))
 
     # Atoll and Frog's Domain
-    # nmg: ice grapple the bird below the portal
+    # ice grapple the bird below the portal
     regions["Ruined Atoll"].connect(
         connecting_region=regions["Ruined Atoll Lower Entry Area"],
         rule=lambda state: state.has(laurels, player)
-        or has_ice_grapple_logic(True, state, world))
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
     regions["Ruined Atoll Lower Entry Area"].connect(
         connecting_region=regions["Ruined Atoll"],
         rule=lambda state: state.has(laurels, player) or state.has(grapple, player))
@@ -567,16 +673,20 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Ruined Atoll Portal"].connect(
         connecting_region=regions["Ruined Atoll"])
 
-    regions["Ruined Atoll"].connect(
+    atoll_statue = regions["Ruined Atoll"].connect(
         connecting_region=regions["Ruined Atoll Statue"],
         rule=lambda state: has_ability(prayer, state, world)
-        and has_ladder("Ladders in South Atoll", state, world))
+        and (has_ladder("Ladders in South Atoll", state, world)
+             # shoot fuse and have the shot hit you mid-LS
+             or (can_ladder_storage(state, world) and state.has(fire_wand, player)
+                 and options.ladder_storage >= LadderStorage.option_hard)))
     regions["Ruined Atoll Statue"].connect(
         connecting_region=regions["Ruined Atoll"])
 
     regions["Frog Stairs Eye Exit"].connect(
         connecting_region=regions["Frog Stairs Upper"],
-        rule=lambda state: has_ladder("Ladders to Frog's Domain", state, world))
+        rule=lambda state: has_ladder("Ladders to Frog's Domain", state, world)
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
     regions["Frog Stairs Upper"].connect(
         connecting_region=regions["Frog Stairs Eye Exit"],
         rule=lambda state: has_ladder("Ladders to Frog's Domain", state, world))
@@ -596,23 +706,31 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: has_ladder("Ladders to Frog's Domain", state, world))
 
     regions["Frog's Domain Entry"].connect(
-        connecting_region=regions["Frog's Domain"],
+        connecting_region=regions["Frog's Domain Front"],
         rule=lambda state: has_ladder("Ladders to Frog's Domain", state, world))
 
-    regions["Frog's Domain"].connect(
+    frogs_front_to_main = regions["Frog's Domain Front"].connect(
+        connecting_region=regions["Frog's Domain Main"])
+
+    regions["Frog's Domain Main"].connect(
         connecting_region=regions["Frog's Domain Back"],
         rule=lambda state: state.has(grapple, player))
 
     # Library
     regions["Library Exterior Tree Region"].connect(
+        connecting_region=regions["Library Exterior by Tree"])
+    regions["Library Exterior by Tree"].connect(
+        connecting_region=regions["Library Exterior Tree Region"],
+        rule=lambda state: has_ability(prayer, state, world))
+
+    regions["Library Exterior by Tree"].connect(
         connecting_region=regions["Library Exterior Ladder Region"],
         rule=lambda state: state.has_any({grapple, laurels}, player)
         and has_ladder("Ladders in Library", state, world))
     regions["Library Exterior Ladder Region"].connect(
-        connecting_region=regions["Library Exterior Tree Region"],
-        rule=lambda state: has_ability(prayer, state, world)
-        and ((state.has(laurels, player) and has_ladder("Ladders in Library", state, world))
-             or state.has(grapple, player)))
+        connecting_region=regions["Library Exterior by Tree"],
+        rule=lambda state: state.has(grapple, player)
+        or (state.has(laurels, player) and has_ladder("Ladders in Library", state, world)))
 
     regions["Library Hall Bookshelf"].connect(
         connecting_region=regions["Library Hall"],
@@ -658,13 +776,18 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         and has_ladder("Ladders in Library", state, world))
 
     regions["Library Lab"].connect(
-        connecting_region=regions["Library Portal"],
-        rule=lambda state: has_ability(prayer, state, world)
-        and has_ladder("Ladders in Library", state, world))
-    regions["Library Portal"].connect(
+        connecting_region=regions["Library Lab on Portal Pad"],
+        rule=lambda state: has_ladder("Ladders in Library", state, world))
+    regions["Library Lab on Portal Pad"].connect(
         connecting_region=regions["Library Lab"],
         rule=lambda state: has_ladder("Ladders in Library", state, world)
         or state.has(laurels, player))
+
+    regions["Library Lab on Portal Pad"].connect(
+        connecting_region=regions["Library Portal"],
+        rule=lambda state: has_ability(prayer, state, world))
+    regions["Library Portal"].connect(
+        connecting_region=regions["Library Lab on Portal Pad"])
 
     regions["Library Lab"].connect(
         connecting_region=regions["Library Lab to Librarian"],
@@ -688,6 +811,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Fortress Exterior near cave"],
         rule=lambda state: state.has(laurels, player) or has_ability(prayer, state, world))
 
+    # shoot far fire pot, enemy gets aggro'd
+    regions["Fortress Exterior near cave"].connect(
+        connecting_region=regions["Fortress Courtyard"],
+        rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_hard, state, world))
+
     regions["Fortress Exterior near cave"].connect(
         connecting_region=regions["Beneath the Vault Entry"],
         rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world))
@@ -702,66 +830,76 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Fortress Exterior from Overworld"].connect(
         connecting_region=regions["Fortress Courtyard"],
         rule=lambda state: state.has(laurels, player)
-        or has_ice_grapple_logic(True, state, world))
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
 
-    regions["Fortress Courtyard Upper"].connect(
+    fort_upper_lower = regions["Fortress Courtyard Upper"].connect(
         connecting_region=regions["Fortress Courtyard"])
     # nmg: can ice grapple to the upper ledge
     regions["Fortress Courtyard"].connect(
         connecting_region=regions["Fortress Courtyard Upper"],
-        rule=lambda state: has_ice_grapple_logic(True, state, world))
+        rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
 
     regions["Fortress Courtyard Upper"].connect(
         connecting_region=regions["Fortress Exterior from Overworld"])
 
-    regions["Beneath the Vault Ladder Exit"].connect(
+    btv_front_to_main = regions["Beneath the Vault Ladder Exit"].connect(
         connecting_region=regions["Beneath the Vault Main"],
         rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world)
-        and has_lantern(state, world))
+        and has_lantern(state, world)
+        # there's some boxes in the way
+        and (has_melee(state, player) or state.has_any((gun, grapple, fire_wand, laurels), player)))
+    # on the reverse trip, you can lure an enemy over to break the boxes if needed
     regions["Beneath the Vault Main"].connect(
         connecting_region=regions["Beneath the Vault Ladder Exit"],
         rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world))
 
     regions["Beneath the Vault Main"].connect(
         connecting_region=regions["Beneath the Vault Back"])
-    regions["Beneath the Vault Back"].connect(
+    btv_back_to_main = regions["Beneath the Vault Back"].connect(
         connecting_region=regions["Beneath the Vault Main"],
         rule=lambda state: has_lantern(state, world))
 
-    regions["Fortress East Shortcut Upper"].connect(
+    fort_east_upper_lower = regions["Fortress East Shortcut Upper"].connect(
         connecting_region=regions["Fortress East Shortcut Lower"])
-    # nmg: can ice grapple upwards
     regions["Fortress East Shortcut Lower"].connect(
         connecting_region=regions["Fortress East Shortcut Upper"],
-        rule=lambda state: has_ice_grapple_logic(True, state, world))
+        rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
 
-    # nmg: ice grapple through the big gold door, can do it both ways
     regions["Eastern Vault Fortress"].connect(
         connecting_region=regions["Eastern Vault Fortress Gold Door"],
         rule=lambda state: state.has_all({"Activate Eastern Vault West Fuses",
                                           "Activate Eastern Vault East Fuse"}, player)
-        or has_ice_grapple_logic(False, state, world))
+        or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
     regions["Eastern Vault Fortress Gold Door"].connect(
         connecting_region=regions["Eastern Vault Fortress"],
-        rule=lambda state: has_ice_grapple_logic(True, state, world))
+        rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_easy, state, world))
 
-    regions["Fortress Grave Path"].connect(
-        connecting_region=regions["Fortress Grave Path Dusty Entrance Region"],
-        rule=lambda state: state.has(laurels, player))
-    regions["Fortress Grave Path Dusty Entrance Region"].connect(
-        connecting_region=regions["Fortress Grave Path"],
-        rule=lambda state: state.has(laurels, player))
+    fort_grave_entry_to_combat = regions["Fortress Grave Path Entry"].connect(
+        connecting_region=regions["Fortress Grave Path Combat"])
+    regions["Fortress Grave Path Combat"].connect(
+        connecting_region=regions["Fortress Grave Path Entry"])
 
-    regions["Fortress Grave Path"].connect(
+    regions["Fortress Grave Path Combat"].connect(
+        connecting_region=regions["Fortress Grave Path by Grave"])
+
+    # run past the enemies
+    regions["Fortress Grave Path by Grave"].connect(
+        connecting_region=regions["Fortress Grave Path Entry"])
+
+    regions["Fortress Grave Path by Grave"].connect(
         connecting_region=regions["Fortress Hero's Grave Region"],
         rule=lambda state: has_ability(prayer, state, world))
     regions["Fortress Hero's Grave Region"].connect(
-        connecting_region=regions["Fortress Grave Path"])
+        connecting_region=regions["Fortress Grave Path by Grave"])
 
-    # nmg: ice grapple from upper grave path to lower
+    regions["Fortress Grave Path by Grave"].connect(
+        connecting_region=regions["Fortress Grave Path Dusty Entrance Region"],
+        rule=lambda state: state.has(laurels, player))
+    # reverse connection is conditionally made later, depending on whether combat logic is on, and the details of ER
+
     regions["Fortress Grave Path Upper"].connect(
-        connecting_region=regions["Fortress Grave Path"],
-        rule=lambda state: has_ice_grapple_logic(True, state, world))
+        connecting_region=regions["Fortress Grave Path Entry"],
+        rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
 
     regions["Fortress Arena"].connect(
         connecting_region=regions["Fortress Arena Portal"],
@@ -783,19 +921,19 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Quarry Portal"].connect(
         connecting_region=regions["Quarry Entry"])
 
-    regions["Quarry Entry"].connect(
+    quarry_entry_to_main = regions["Quarry Entry"].connect(
         connecting_region=regions["Quarry"],
         rule=lambda state: state.has(fire_wand, player) or has_sword(state, player))
     regions["Quarry"].connect(
         connecting_region=regions["Quarry Entry"])
 
-    regions["Quarry Back"].connect(
+    quarry_back_to_main = regions["Quarry Back"].connect(
         connecting_region=regions["Quarry"],
         rule=lambda state: state.has(fire_wand, player) or has_sword(state, player))
     regions["Quarry"].connect(
         connecting_region=regions["Quarry Back"])
 
-    regions["Quarry Monastery Entry"].connect(
+    monastery_to_quarry_main = regions["Quarry Monastery Entry"].connect(
         connecting_region=regions["Quarry"],
         rule=lambda state: state.has(fire_wand, player) or has_sword(state, player))
     regions["Quarry"].connect(
@@ -819,25 +957,31 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Lower Quarry"].connect(
         connecting_region=regions["Even Lower Quarry"],
         rule=lambda state: has_ladder("Ladders in Lower Quarry", state, world)
-        or has_ice_grapple_logic(True, state, world))
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
 
-    # nmg: bring a scav over, then ice grapple through the door, only with ER on to avoid soft lock
     regions["Even Lower Quarry"].connect(
+        connecting_region=regions["Even Lower Quarry Isolated Chest"])
+    # you grappled down, might as well loot the rest too
+    lower_quarry_empty_to_combat = regions["Even Lower Quarry Isolated Chest"].connect(
+        connecting_region=regions["Even Lower Quarry"],
+        rule=lambda state: has_mask(state, world))
+
+    regions["Even Lower Quarry Isolated Chest"].connect(
         connecting_region=regions["Lower Quarry Zig Door"],
         rule=lambda state: state.has("Activate Quarry Fuse", player)
-        or (has_ice_grapple_logic(False, state, world) and options.entrance_rando))
+        or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
 
-    # nmg: use ice grapple to get from the beginning of Quarry to the door without really needing mask only with ER on
+    # don't need the mask for this either, please don't complain about not needing a mask here, you know what you did
     regions["Quarry"].connect(
-        connecting_region=regions["Lower Quarry Zig Door"],
-        rule=lambda state: has_ice_grapple_logic(True, state, world) and options.entrance_rando)
+        connecting_region=regions["Even Lower Quarry Isolated Chest"],
+        rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_hard, state, world))
 
-    regions["Monastery Front"].connect(
+    monastery_front_to_back = regions["Monastery Front"].connect(
         connecting_region=regions["Monastery Back"])
-    # nmg: can laurels through the gate
+    # laurels through the gate, no setup needed
     regions["Monastery Back"].connect(
         connecting_region=regions["Monastery Front"],
-        rule=lambda state: state.has(laurels, player) and options.logic_rules)
+        rule=lambda state: laurels_zip(state, world))
 
     regions["Monastery Back"].connect(
         connecting_region=regions["Monastery Hero's Grave Region"],
@@ -849,7 +993,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Rooted Ziggurat Upper Entry"].connect(
         connecting_region=regions["Rooted Ziggurat Upper Front"])
 
-    regions["Rooted Ziggurat Upper Front"].connect(
+    zig_upper_front_back = regions["Rooted Ziggurat Upper Front"].connect(
         connecting_region=regions["Rooted Ziggurat Upper Back"],
         rule=lambda state: state.has(laurels, player) or has_sword(state, player))
     regions["Rooted Ziggurat Upper Back"].connect(
@@ -859,18 +1003,27 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Rooted Ziggurat Middle Top"].connect(
         connecting_region=regions["Rooted Ziggurat Middle Bottom"])
 
+    zig_low_entry_to_front = regions["Rooted Ziggurat Lower Entry"].connect(
+        connecting_region=regions["Rooted Ziggurat Lower Front"])
     regions["Rooted Ziggurat Lower Front"].connect(
+        connecting_region=regions["Rooted Ziggurat Lower Entry"])
+
+    regions["Rooted Ziggurat Lower Front"].connect(
+        connecting_region=regions["Rooted Ziggurat Lower Mid Checkpoint"])
+    zig_low_mid_to_front = regions["Rooted Ziggurat Lower Mid Checkpoint"].connect(
+        connecting_region=regions["Rooted Ziggurat Lower Front"])
+
+    zig_low_mid_to_back = regions["Rooted Ziggurat Lower Mid Checkpoint"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Back"],
         rule=lambda state: state.has(laurels, player)
         or (has_sword(state, player) and has_ability(prayer, state, world)))
-    # unrestricted: use ladder storage to get to the front, get hit by one of the many enemies
-    # nmg: can ice grapple on the voidlings to the double admin fight, still need to pray at the fuse
-    regions["Rooted Ziggurat Lower Back"].connect(
-        connecting_region=regions["Rooted Ziggurat Lower Front"],
-        rule=lambda state: ((state.has(laurels, player) or has_ice_grapple_logic(True, state, world))
-                            and has_ability(prayer, state, world)
-                            and has_sword(state, player))
-        or can_ladder_storage(state, world))
+    # can ice grapple to the voidlings to get to the double admin fight, still need to pray at the fuse
+    zig_low_back_to_mid = regions["Rooted Ziggurat Lower Back"].connect(
+        connecting_region=regions["Rooted Ziggurat Lower Mid Checkpoint"],
+        rule=lambda state: (state.has(laurels, player)
+                            or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
+        and has_ability(prayer, state, world)
+        and has_sword(state, player))
 
     regions["Rooted Ziggurat Lower Back"].connect(
         connecting_region=regions["Rooted Ziggurat Portal Room Entrance"],
@@ -878,44 +1031,69 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Rooted Ziggurat Portal Room Entrance"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Back"])
 
-    regions["Zig Skip Exit"].connect(
-        connecting_region=regions["Rooted Ziggurat Lower Front"])
+    # zig skip region only gets made if entrance rando and fewer shops are on
+    if options.entrance_rando and options.fixed_shop:
+        regions["Zig Skip Exit"].connect(
+            connecting_region=regions["Rooted Ziggurat Lower Front"])
 
     regions["Rooted Ziggurat Portal"].connect(
+        connecting_region=regions["Rooted Ziggurat Portal Room"])
+    regions["Rooted Ziggurat Portal Room"].connect(
+        connecting_region=regions["Rooted Ziggurat Portal"],
+        rule=lambda state: has_ability(prayer, state, world))
+
+    regions["Rooted Ziggurat Portal Room"].connect(
         connecting_region=regions["Rooted Ziggurat Portal Room Exit"],
         rule=lambda state: state.has("Activate Ziggurat Fuse", player))
     regions["Rooted Ziggurat Portal Room Exit"].connect(
-        connecting_region=regions["Rooted Ziggurat Portal"],
-        rule=lambda state: has_ability(prayer, state, world))
+        connecting_region=regions["Rooted Ziggurat Portal Room"])
 
     # Swamp and Cathedral
     regions["Swamp Front"].connect(
         connecting_region=regions["Swamp Mid"],
         rule=lambda state: has_ladder("Ladders in Swamp", state, world)
         or state.has(laurels, player)
-        or has_ice_grapple_logic(False, state, world))  # nmg: ice grapple through gate
+        or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
     regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp Front"],
         rule=lambda state: has_ladder("Ladders in Swamp", state, world)
         or state.has(laurels, player)
-        or has_ice_grapple_logic(False, state, world))  # nmg: ice grapple through gate
+        or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
 
-    # nmg: ice grapple through cathedral door, can do it both ways
-    regions["Swamp Mid"].connect(
+    swamp_mid_to_cath = regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp to Cathedral Main Entrance Region"],
-        rule=lambda state: (has_ability(prayer, state, world) and state.has(laurels, player))
-        or has_ice_grapple_logic(False, state, world))
+        rule=lambda state: (has_ability(prayer, state, world)
+                            and (state.has(laurels, player)
+                                 # blam yourself in the face with a wand shot off the fuse
+                                 or (can_ladder_storage(state, world) and state.has(fire_wand, player)
+                                     and options.ladder_storage >= LadderStorage.option_hard
+                                     and (not options.shuffle_ladders
+                                          or state.has_any({"Ladders in Overworld Town",
+                                                            "Ladder to Swamp",
+                                                            "Ladders near Weathervane"}, player)
+                                          or (state.has("Ladder to Ruined Atoll", player)
+                                              and state.can_reach_region("Overworld Beach", player)))))
+                            and (not options.combat_logic
+                                 or has_combat_reqs("Swamp", state, player)))
+        or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
+
+    if options.ladder_storage >= LadderStorage.option_hard and options.shuffle_ladders:
+        world.multiworld.register_indirect_condition(regions["Overworld Beach"], swamp_mid_to_cath)
+
     regions["Swamp to Cathedral Main Entrance Region"].connect(
         connecting_region=regions["Swamp Mid"],
-        rule=lambda state: has_ice_grapple_logic(False, state, world))
+        rule=lambda state: has_ice_grapple_logic(False, IceGrappling.option_easy, state, world))
 
+    # grapple push the enemy by the door down, then grapple to it. Really jank
     regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp Ledge under Cathedral Door"],
-        rule=lambda state: has_ladder("Ladders in Swamp", state, world))
+        rule=lambda state: has_ladder("Ladders in Swamp", state, world)
+        or has_ice_grapple_logic(True, IceGrappling.option_hard, state, world))
+    # ice grapple enemy standing at the door
     regions["Swamp Ledge under Cathedral Door"].connect(
         connecting_region=regions["Swamp Mid"],
         rule=lambda state: has_ladder("Ladders in Swamp", state, world)
-        or has_ice_grapple_logic(True, state, world))  # nmg: ice grapple the enemy at door
+        or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
 
     regions["Swamp Ledge under Cathedral Door"].connect(
         connecting_region=regions["Swamp to Cathedral Treasure Room"],
@@ -930,17 +1108,41 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Back of Swamp"],
         rule=lambda state: state.has(laurels, player))
 
-    # nmg: can ice grapple down while you're on the pillars
+    # ice grapple down from the pillar, or do that really annoying laurels zip
+    # the zip goes to front or mid, just doing mid since mid -> front can be done with laurels alone
     regions["Back of Swamp Laurels Area"].connect(
         connecting_region=regions["Swamp Mid"],
-        rule=lambda state: state.has(laurels, player)
-        and has_ice_grapple_logic(True, state, world))
+        rule=lambda state: laurels_zip(state, world)
+        or (state.has(laurels, player)
+            and has_ice_grapple_logic(True, IceGrappling.option_easy, state, world)))
+    # get one pillar from the gate, then dash onto the gate, very tricky
+    regions["Swamp Front"].connect(
+        connecting_region=regions["Back of Swamp Laurels Area"],
+        rule=lambda state: laurels_zip(state, world))
 
     regions["Back of Swamp"].connect(
         connecting_region=regions["Swamp Hero's Grave Region"],
         rule=lambda state: has_ability(prayer, state, world))
     regions["Swamp Hero's Grave Region"].connect(
         connecting_region=regions["Back of Swamp"])
+
+    cath_entry_to_elev = regions["Cathedral Entry"].connect(
+        connecting_region=regions["Cathedral to Gauntlet"],
+        rule=lambda state: (has_ability(prayer, state, world)
+                            or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
+        or options.entrance_rando)  # elevator is always there in ER
+    regions["Cathedral to Gauntlet"].connect(
+        connecting_region=regions["Cathedral Entry"])
+
+    cath_entry_to_main = regions["Cathedral Entry"].connect(
+        connecting_region=regions["Cathedral Main"])
+    regions["Cathedral Main"].connect(
+        connecting_region=regions["Cathedral Entry"])
+
+    cath_elev_to_main = regions["Cathedral to Gauntlet"].connect(
+        connecting_region=regions["Cathedral Main"])
+    regions["Cathedral Main"].connect(
+        connecting_region=regions["Cathedral to Gauntlet"])
 
     regions["Cathedral Gauntlet Checkpoint"].connect(
         connecting_region=regions["Cathedral Gauntlet"])
@@ -992,345 +1194,339 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Far Shore"])
 
     # Misc
-    regions["Spirit Arena"].connect(
+    heir_fight = regions["Spirit Arena"].connect(
         connecting_region=regions["Spirit Arena Victory"],
         rule=lambda state: (state.has(gold_hexagon, player, world.options.hexagon_goal.value) if
                             world.options.hexagon_quest else
-                            (state.has_all({red_hexagon, green_hexagon, blue_hexagon, "Unseal the Heir"}, player)
+                            (state.has("Unseal the Heir", player)
                              and state.has_group_unique("Hero Relics", player, 6)
                              and has_sword(state, player))))
 
-    # connecting the regions portals are in to other portals you can access via ladder storage
-    # using has_stick instead of can_ladder_storage since it's already checking the logic rules
-    if options.logic_rules == "unrestricted":
+    if options.ladder_storage:
         def get_portal_info(portal_sd: str) -> Tuple[str, str]:
             for portal1, portal2 in portal_pairs.items():
                 if portal1.scene_destination() == portal_sd:
-                    return portal1.name, portal2.region
+                    return portal1.name, get_portal_outlet_region(portal2, world)
                 if portal2.scene_destination() == portal_sd:
-                    return portal2.name, portal1.region
+                    return portal2.name, get_portal_outlet_region(portal1, world)
             raise Exception("no matches found in get_paired_region")
 
-        ladder_storages: List[Tuple[str, str, Set[str]]] = [
-            # LS from Overworld main
-            # The upper Swamp entrance
-            ("Overworld", "Overworld Redux, Swamp Redux 2_wall",
-             {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town"}),
-            # Upper atoll entrance
-            ("Overworld", "Overworld Redux, Atoll Redux_upper",
-             {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town"}),
-            # Furnace entrance, next to the sign that leads to West Garden
-            ("Overworld", "Overworld Redux, Furnace_gyro_west",
-             {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town"}),
-            # Upper West Garden entry, by the belltower
-            ("Overworld", "Overworld Redux, Archipelagos Redux_upper",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town"}),
-            # Ruined Passage
-            ("Overworld", "Overworld Redux, Ruins Passage_east",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town"}),
-            # Well rail, west side. Can ls in town, get extra height by going over the portal pad
-            ("Overworld", "Overworld Redux, Sewer_west_aqueduct",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladder to Quarry"}),
-            # Well rail, east side. Need some height from the temple stairs
-            ("Overworld", "Overworld Redux, Furnace_gyro_upper_north",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladder to Quarry"}),
-            # Quarry entry
-            ("Overworld", "Overworld Redux, Darkwoods Tunnel_",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladders in Well"}),
-            # East Forest entry
-            ("Overworld", "Overworld Redux, Forest Belltower_",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladders in Well",
-                 "Ladders near Patrol Cave", "Ladder to Quarry", "Ladders near Dark Tomb"}),
-            # Fortress entry
-            ("Overworld", "Overworld Redux, Fortress Courtyard_",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladders in Well",
-                 "Ladders near Patrol Cave", "Ladder to Quarry", "Ladders near Dark Tomb"}),
-            # Patrol Cave entry
-            ("Overworld", "Overworld Redux, PatrolCave_",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladders in Well",
-                 "Ladders near Overworld Checkpoint", "Ladder to Quarry", "Ladders near Dark Tomb"}),
-            # Special Shop entry, excluded in non-ER due to soft lock potential
-            ("Overworld", "Overworld Redux, ShopSpecial_",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladders in Well",
-                 "Ladders near Overworld Checkpoint", "Ladders near Patrol Cave", "Ladder to Quarry",
-                 "Ladders near Dark Tomb"}),
-            # Temple Rafters, excluded in non-ER + ladder rando due to soft lock potential
-            ("Overworld", "Overworld Redux, Temple_rafters",
-                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladders in Well",
-                 "Ladders near Overworld Checkpoint", "Ladders near Patrol Cave", "Ladder to Quarry",
-                 "Ladders near Dark Tomb"}),
-            # Spot above the Quarry entrance,
-            # only gets you to the mountain stairs
-            ("Overworld above Quarry Entrance", "Overworld Redux, Mountain_",
-                {"Ladders near Dark Tomb"}),
+        # connect ls elevation regions to their destinations
+        def ls_connect(origin_name: str, portal_sdt: str) -> None:
+            p_name, paired_region_name = get_portal_info(portal_sdt)
+            ladder_regions[origin_name].connect(
+                regions[paired_region_name],
+                name=p_name + " (LS) " + origin_name)
 
-            # LS from the Overworld Beach
-            # West Garden entry by the Furnace
-            ("Overworld Beach", "Overworld Redux, Archipelagos Redux_lower",
-                {"Ladders in Overworld Town", "Ladder to Ruined Atoll"}),
-            # West Garden laurels entry
-            ("Overworld Beach", "Overworld Redux, Archipelagos Redux_lowest",
-                {"Ladders in Overworld Town", "Ladder to Ruined Atoll"}),
-            # Swamp lower entrance
-            ("Overworld Beach", "Overworld Redux, Swamp Redux 2_conduit",
-                {"Ladders in Overworld Town", "Ladder to Ruined Atoll"}),
-            # Rotating Lights entrance
-            ("Overworld Beach", "Overworld Redux, Overworld Cave_",
-                {"Ladders in Overworld Town", "Ladder to Ruined Atoll"}),
-            # Swamp upper entrance
-            ("Overworld Beach", "Overworld Redux, Swamp Redux 2_wall",
-                {"Ladder to Ruined Atoll"}),
-            # Furnace entrance, next to the sign that leads to West Garden
-            ("Overworld Beach", "Overworld Redux, Furnace_gyro_west",
-                {"Ladder to Ruined Atoll"}),
-            # Upper West Garden entry, by the belltower
-            ("Overworld Beach", "Overworld Redux, Archipelagos Redux_upper",
-                {"Ladder to Ruined Atoll"}),
-            # Ruined Passage
-            ("Overworld Beach", "Overworld Redux, Ruins Passage_east",
-                {"Ladder to Ruined Atoll"}),
-            # Well rail, west side. Can ls in town, get extra height by going over the portal pad
-            ("Overworld Beach", "Overworld Redux, Sewer_west_aqueduct",
-                {"Ladder to Ruined Atoll"}),
-            # Well rail, east side. Need some height from the temple stairs
-            ("Overworld Beach", "Overworld Redux, Furnace_gyro_upper_north",
-                {"Ladder to Ruined Atoll"}),
-            # Quarry entry
-            ("Overworld Beach", "Overworld Redux, Darkwoods Tunnel_",
-                {"Ladder to Ruined Atoll"}),
+        # get what non-overworld ladder storage connections we want together
+        non_ow_ls_list = []
+        non_ow_ls_list.extend(easy_ls)
+        if options.ladder_storage >= LadderStorage.option_medium:
+            non_ow_ls_list.extend(medium_ls)
+            if options.ladder_storage >= LadderStorage.option_hard:
+                non_ow_ls_list.extend(hard_ls)
 
-            # LS from that low spot where you normally walk to swamp
-            # Only has low ones you can't get to from main Overworld
-            # West Garden main entry from swamp ladder
-            ("Overworld Swamp Lower Entry", "Overworld Redux, Archipelagos Redux_lower",
-                {"Ladder to Swamp"}),
-            # Maze Cave entry from swamp ladder
-            ("Overworld Swamp Lower Entry", "Overworld Redux, Maze Room_",
-                {"Ladder to Swamp"}),
-            # Hourglass Cave entry from swamp ladder
-            ("Overworld Swamp Lower Entry", "Overworld Redux, Town Basement_beach",
-                {"Ladder to Swamp"}),
-            # Lower Atoll entry from swamp ladder
-            ("Overworld Swamp Lower Entry", "Overworld Redux, Atoll Redux_lower",
-                {"Ladder to Swamp"}),
-            # Lowest West Garden entry from swamp ladder
-            ("Overworld Swamp Lower Entry", "Overworld Redux, Archipelagos Redux_lowest",
-                {"Ladder to Swamp"}),
+        # create the ls elevation regions
+        ladder_regions: Dict[str, Region] = {}
+        for name in ow_ladder_groups.keys():
+            ladder_regions[name] = Region(name, player, world.multiworld)
 
-            # from the ladders by the belltower
-            # Ruined Passage
-            ("Overworld to West Garden Upper", "Overworld Redux, Ruins Passage_east",
-                {"Ladders to West Bell"}),
-            # Well rail, west side. Can ls in town, get extra height by going over the portal pad
-            ("Overworld to West Garden Upper", "Overworld Redux, Sewer_west_aqueduct",
-                {"Ladders to West Bell"}),
-            # Well rail, east side. Need some height from the temple stairs
-            ("Overworld to West Garden Upper", "Overworld Redux, Furnace_gyro_upper_north",
-                {"Ladders to West Bell"}),
-            # Quarry entry
-            ("Overworld to West Garden Upper", "Overworld Redux, Darkwoods Tunnel_",
-                {"Ladders to West Bell"}),
-            # East Forest entry
-            ("Overworld to West Garden Upper", "Overworld Redux, Forest Belltower_",
-                {"Ladders to West Bell"}),
-            # Fortress entry
-            ("Overworld to West Garden Upper", "Overworld Redux, Fortress Courtyard_",
-                {"Ladders to West Bell"}),
-            # Patrol Cave entry
-            ("Overworld to West Garden Upper", "Overworld Redux, PatrolCave_",
-                {"Ladders to West Bell"}),
-            # Special Shop entry, excluded in non-ER due to soft lock potential
-            ("Overworld to West Garden Upper", "Overworld Redux, ShopSpecial_",
-                {"Ladders to West Bell"}),
-            # Temple Rafters, excluded in non-ER and ladder rando due to soft lock potential
-            ("Overworld to West Garden Upper", "Overworld Redux, Temple_rafters",
-                {"Ladders to West Bell"}),
+        # connect the ls elevations to each other where applicable
+        if options.ladder_storage >= LadderStorage.option_medium:
+            for i in range(len(ow_ladder_groups) - 1):
+                ladder_regions[f"LS Elev {i}"].connect(ladder_regions[f"LS Elev {i + 1}"])
 
-            # In the furnace
-            # Furnace ladder to the fuse entrance
-            ("Furnace Ladder Area", "Furnace, Overworld Redux_gyro_upper_north", set()),
-            # Furnace ladder to Dark Tomb
-            ("Furnace Ladder Area", "Furnace, Crypt Redux_", set()),
-            # Furnace ladder to the West Garden connector
-            ("Furnace Ladder Area", "Furnace, Overworld Redux_gyro_west", set()),
+        # connect the applicable overworld regions to the ls elevation regions
+        for origin_region, ladders in region_ladders.items():
+            for ladder_region, region_info in ow_ladder_groups.items():
+                # checking if that region has a ladder or ladders for that elevation
+                common_ladders: FrozenSet[str] = frozenset(ladders.intersection(region_info.ladders))
+                if common_ladders:
+                    if options.shuffle_ladders:
+                        regions[origin_region].connect(
+                            connecting_region=ladder_regions[ladder_region],
+                            rule=lambda state, lads=common_ladders: state.has_any(lads, player)
+                            and can_ladder_storage(state, world))
+                    else:
+                        regions[origin_region].connect(
+                            connecting_region=ladder_regions[ladder_region],
+                            rule=lambda state: can_ladder_storage(state, world))
 
-            # West Garden
-            # exit after Garden Knight
-            ("West Garden", "Archipelagos Redux, Overworld Redux_upper", set()),
-            # West Garden laurels exit
-            ("West Garden", "Archipelagos Redux, Overworld Redux_lowest", set()),
+        # connect ls elevation regions to the region on the other side of the portals
+        for ladder_region, region_info in ow_ladder_groups.items():
+            for portal_dest in region_info.portals:
+                ls_connect(ladder_region, "Overworld Redux, " + portal_dest)
 
-            # Atoll, use the little ladder you fix at the beginning
-            ("Ruined Atoll", "Atoll Redux, Overworld Redux_lower", set()),
-            ("Ruined Atoll", "Atoll Redux, Frog Stairs_mouth", set()),
-            ("Ruined Atoll", "Atoll Redux, Frog Stairs_eye", set()),
+        # convenient staircase means this one is easy difficulty, even though there's an elevation change
+        ls_connect("LS Elev 0", "Overworld Redux, Furnace_gyro_west")
 
-            # East Forest
-            # Entrance by the dancing fox holy cross spot
-            ("East Forest", "East Forest Redux, East Forest Redux Laddercave_upper", set()),
+        # connect ls elevation regions to regions where you can get an enemy to knock you down, also well rail
+        if options.ladder_storage >= LadderStorage.option_medium:
+            for ladder_region, region_info in ow_ladder_groups.items():
+                for dest_region in region_info.regions:
+                    ladder_regions[ladder_region].connect(
+                        connecting_region=regions[dest_region],
+                        name=ladder_region + " (LS) " + dest_region)
+            # well rail, need height off portal pad for one side, and a tiny extra from stairs on the other
+            ls_connect("LS Elev 3", "Overworld Redux, Sewer_west_aqueduct")
+            ls_connect("LS Elev 3", "Overworld Redux, Furnace_gyro_upper_north")
 
-            # From the west side of Guard House 1 to the east side
-            ("Guard House 1 West", "East Forest Redux Laddercave, East Forest Redux_gate", set()),
-            ("Guard House 1 West", "East Forest Redux Laddercave, Forest Boss Room_", set()),
+        # connect ls elevation regions to portals where you need to get behind the map to enter it
+        if options.ladder_storage >= LadderStorage.option_hard:
+            ls_connect("LS Elev 1", "Overworld Redux, EastFiligreeCache_")
+            ls_connect("LS Elev 2", "Overworld Redux, Town_FiligreeRoom_")
+            ls_connect("LS Elev 2", "Overworld Redux, Ruins Passage_west")
+            ls_connect("LS Elev 3", "Overworld Redux, Overworld Interiors_house")
+            ls_connect("LS Elev 5", "Overworld Redux, Temple_main")
 
-            # Upper exit from the Forest Grave Path, use LS at the ladder by the gate switch
-            ("Forest Grave Path Main", "Sword Access, East Forest Redux_upper", set()),
-
-            # Fortress Exterior
-            # shop, ls at the ladder by the telescope
-            ("Fortress Exterior from Overworld", "Fortress Courtyard, Shop_", set()),
-            # Fortress main entry and grave path lower entry, ls at the ladder by the telescope
-            ("Fortress Exterior from Overworld", "Fortress Courtyard, Fortress Main_Big Door", set()),
-            ("Fortress Exterior from Overworld", "Fortress Courtyard, Fortress Reliquary_Lower", set()),
-            # Upper exits from the courtyard. Use the ramp in the courtyard, then the blocks north of the first fuse
-            ("Fortress Exterior from Overworld", "Fortress Courtyard, Fortress Reliquary_Upper", set()),
-            ("Fortress Exterior from Overworld", "Fortress Courtyard, Fortress East_", set()),
-
-            # same as above, except from the east side of the area
-            ("Fortress Exterior from East Forest", "Fortress Courtyard, Overworld Redux_", set()),
-            ("Fortress Exterior from East Forest", "Fortress Courtyard, Shop_", set()),
-            ("Fortress Exterior from East Forest", "Fortress Courtyard, Fortress Main_Big Door", set()),
-            ("Fortress Exterior from East Forest", "Fortress Courtyard, Fortress Reliquary_Lower", set()),
-            ("Fortress Exterior from East Forest", "Fortress Courtyard, Fortress Reliquary_Upper", set()),
-            ("Fortress Exterior from East Forest", "Fortress Courtyard, Fortress East_", set()),
-
-            # same as above, except from the Beneath the Vault entrance ladder
-            ("Fortress Exterior near cave", "Fortress Courtyard, Overworld Redux_",
-             {"Ladder to Beneath the Vault"}),
-            ("Fortress Exterior near cave", "Fortress Courtyard, Fortress Main_Big Door",
-             {"Ladder to Beneath the Vault"}),
-            ("Fortress Exterior near cave", "Fortress Courtyard, Fortress Reliquary_Lower",
-             {"Ladder to Beneath the Vault"}),
-            ("Fortress Exterior near cave", "Fortress Courtyard, Fortress Reliquary_Upper",
-             {"Ladder to Beneath the Vault"}),
-            ("Fortress Exterior near cave", "Fortress Courtyard, Fortress East_",
-             {"Ladder to Beneath the Vault"}),
-
-            # ls at the ladder, need to gain a little height to get up the stairs
-            # excluded in non-ER due to soft lock potential
-            ("Lower Mountain", "Mountain, Mountaintop_", set()),
-
-            # Where the rope is behind Monastery. Connecting here since, if you have this region, you don't need a sword
-            ("Quarry Monastery Entry", "Quarry Redux, Monastery_back", set()),
-
-            # Swamp to Gauntlet
-            ("Swamp Mid", "Swamp Redux 2, Cathedral Arena_",
-                {"Ladders in Swamp"}),
-            # Swamp to Overworld upper
-            ("Swamp Mid", "Swamp Redux 2, Overworld Redux_wall",
-                {"Ladders in Swamp"}),
-            # Ladder by the hero grave
-            ("Back of Swamp", "Swamp Redux 2, Overworld Redux_conduit", set()),
-            ("Back of Swamp", "Swamp Redux 2, Shop_", set()),
-            # Need to put the cathedral HC code mid-flight
-            ("Back of Swamp", "Swamp Redux 2, Cathedral Redux_secret", set()),
-        ]
-
-        for region_name, scene_dest, ladders in ladder_storages:
-            portal_name, paired_region = get_portal_info(scene_dest)
-            # this is the only exception, requiring holy cross as well
-            if portal_name == "Swamp to Cathedral Secret Legend Room Entrance" and region_name == "Back of Swamp":
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player)
-                    and has_ability(holy_cross, state, world)
-                    and (has_ladder("Ladders in Swamp", state, world)
-                         or has_ice_grapple_logic(True, state, world)
-                         or not options.entrance_rando))
-            # soft locked without this ladder
-            elif portal_name == "West Garden Exit after Boss" and not options.entrance_rando:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player)
-                    and (state.has("Ladders to West Bell", player)))
-            # soft locked unless you have either ladder. if you have laurels, you use the other Entrance
-            elif portal_name in {"Furnace Exit towards West Garden", "Furnace Exit to Dark Tomb"} \
-                    and not options.entrance_rando:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player)
-                    and state.has_any({"Ladder in Dark Tomb", "Ladders to West Bell"}, player))
-            # soft locked for the same reasons as above
-            elif portal_name in {"Entrance to Furnace near West Garden", "West Garden Entrance from Furnace"} \
-                    and not options.entrance_rando:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player) and state.has_any(ladders, player)
-                    and state.has_any({"Ladder in Dark Tomb", "Ladders to West Bell"}, player))
-            # soft locked if you can't get past garden knight backwards or up the belltower ladders
-            elif portal_name == "West Garden Entrance near Belltower" and not options.entrance_rando:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player) and state.has_any(ladders, player)
-                    and state.has_any({"Ladders to West Bell", laurels}, player))
-            # soft locked if you can't get back out
-            elif portal_name == "Fortress Courtyard to Beneath the Vault" and not options.entrance_rando:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player) and state.has("Ladder to Beneath the Vault", player)
-                    and has_lantern(state, world))
-            elif portal_name == "Atoll Lower Entrance" and not options.entrance_rando:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player) and state.has_any(ladders, player)
-                    and (state.has_any({"Ladders in Overworld Town", grapple}, player)
-                         or has_ice_grapple_logic(True, state, world)))
-            elif portal_name == "Atoll Upper Entrance" and not options.entrance_rando:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player) and state.has_any(ladders, player)
-                    and state.has(grapple, player) or has_ability(prayer, state, world))
-            # soft lock potential
-            elif portal_name in {"Special Shop Entrance", "Stairs to Top of the Mountain", "Swamp Upper Entrance",
-                                 "Swamp Lower Entrance", "Caustic Light Cave Entrance"} and not options.entrance_rando:
+        # connect the non-overworld ones
+        for ls_info in non_ow_ls_list:
+            # for places where the destination is a region (so you have to get knocked down)
+            if ls_info.dest_is_region:
+                # none of the non-ow ones have multiple ladders that can be used, so don't need has_any
+                if options.shuffle_ladders and ls_info.ladders_req:
+                    regions[ls_info.origin].connect(
+                        connecting_region=regions[ls_info.destination],
+                        name=ls_info.destination + " (LS) " + ls_info.origin,
+                        rule=lambda state, lad=ls_info.ladders_req: can_ladder_storage(state, world)
+                        and state.has(lad, player))
+                else:
+                    regions[ls_info.origin].connect(
+                        connecting_region=regions[ls_info.destination],
+                        name=ls_info.destination + " (LS) " + ls_info.origin,
+                        rule=lambda state: can_ladder_storage(state, world))
                 continue
-            # soft lock if you don't have the ladder, I regret writing unrestricted logic
-            elif portal_name == "Temple Rafters Entrance" and not options.entrance_rando:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player)
-                    and state.has_any(ladders, player)
-                    and (state.has("Ladder near Temple Rafters", player)
-                         or (state.has_all({laurels, grapple}, player)
-                             and ((state.has("Ladders near Patrol Cave", player)
-                                   and (state.has("Ladders near Dark Tomb", player)
-                                        or state.has("Ladder to Quarry", player)
-                                        and (state.has(fire_wand, player) or has_sword(state, player))))
-                                  or state.has("Ladders near Overworld Checkpoint", player)
-                                  or has_ice_grapple_logic(True, state, world)))))
-            # if no ladder items are required, just do the basic stick only lambda
-            elif not ladders or not options.shuffle_ladders:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player))
-            # one ladder required
-            elif len(ladders) == 1:
-                ladder = ladders.pop()
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player) and state.has(ladder, player))
-            # if multiple ladders can be used
+
+            portal_name, dest_region = get_portal_info(ls_info.destination)
+            # these two are special cases
+            if ls_info.destination == "Atoll Redux, Frog Stairs_mouth":
+                regions[ls_info.origin].connect(
+                    connecting_region=regions[dest_region],
+                    name=portal_name + " (LS) " + ls_info.origin,
+                    rule=lambda state: can_ladder_storage(state, world)
+                    and (has_ladder("Ladders in South Atoll", state, world)
+                         or state.has(key, player, 2)  # can do it from the rope
+                         # ice grapple push a crab into the door
+                         or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
+                         or options.ladder_storage >= LadderStorage.option_medium))  # use the little ladder
+            # holy cross mid-ls to get in here
+            elif ls_info.destination == "Swamp Redux 2, Cathedral Redux_secret":
+                if ls_info.origin == "Swamp Mid":
+                    regions[ls_info.origin].connect(
+                        connecting_region=regions[dest_region],
+                        name=portal_name + " (LS) " + ls_info.origin,
+                        rule=lambda state: can_ladder_storage(state, world) and has_ability(holy_cross, state, world)
+                        and has_ladder("Ladders in Swamp", state, world))
+                else:
+                    regions[ls_info.origin].connect(
+                        connecting_region=regions[dest_region],
+                        name=portal_name + " (LS) " + ls_info.origin,
+                        rule=lambda state: can_ladder_storage(state, world) and has_ability(holy_cross, state, world))
+
+            elif options.shuffle_ladders and ls_info.ladders_req:
+                regions[ls_info.origin].connect(
+                    connecting_region=regions[dest_region],
+                    name=portal_name + " (LS) " + ls_info.origin,
+                    rule=lambda state, lad=ls_info.ladders_req: can_ladder_storage(state, world)
+                    and state.has(lad, player))
             else:
-                regions[region_name].connect(
-                    regions[paired_region],
-                    name=portal_name + " (LS) " + region_name,
-                    rule=lambda state: has_stick(state, player) and state.has_any(ladders, player))
+                regions[ls_info.origin].connect(
+                    connecting_region=regions[dest_region],
+                    name=portal_name + " (LS) " + ls_info.origin,
+                    rule=lambda state: can_ladder_storage(state, world))
+
+        for region in ladder_regions.values():
+            world.multiworld.regions.append(region)
+
+    # for combat logic, easiest to replace or add to existing rules
+    if world.options.combat_logic >= CombatLogic.option_bosses_only:
+        set_rule(wg_to_after_gk,
+                 lambda state: state.has(laurels, player)
+                 or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
+                 or has_combat_reqs("Garden Knight", state, player))
+        # laurels past, or ice grapple it off, or ice grapple to it and fight
+        set_rule(after_gk_to_wg,
+                 lambda state: state.has(laurels, player)
+                 or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
+                 or (has_ice_grapple_logic(False, IceGrappling.option_easy, state, world)
+                     and has_combat_reqs("Garden Knight", state, player)))
+
+        if not world.options.hexagon_quest:
+            add_rule(heir_fight,
+                     lambda state: has_combat_reqs("The Heir", state, player))
+
+    if world.options.combat_logic == CombatLogic.option_on:
+        # these are redundant with combat logic off
+        regions["Fortress Grave Path Entry"].connect(
+            connecting_region=regions["Fortress Grave Path Dusty Entrance Region"],
+            rule=lambda state: state.has(laurels, player))
+
+        regions["Rooted Ziggurat Lower Entry"].connect(
+            connecting_region=regions["Rooted Ziggurat Lower Mid Checkpoint"],
+            rule=lambda state: state.has(laurels, player))
+        regions["Rooted Ziggurat Lower Mid Checkpoint"].connect(
+            connecting_region=regions["Rooted Ziggurat Lower Entry"],
+            rule=lambda state: state.has(laurels, player))
+
+        add_rule(ow_to_town_portal,
+                 lambda state: has_combat_reqs("Before Well", state, player))
+        # need to fight through the rudelings and turret, or just laurels from near the windmill
+        set_rule(ow_to_well_entry,
+                 lambda state: state.has(laurels, player)
+                 or has_combat_reqs("East Forest", state, player))
+        set_rule(ow_tunnel_beach,
+                 lambda state: has_combat_reqs("East Forest", state, player))
+
+        add_rule(atoll_statue,
+                 lambda state: has_combat_reqs("Ruined Atoll", state, player))
+        set_rule(frogs_front_to_main,
+                 lambda state: has_combat_reqs("Frog's Domain", state, player))
+
+        set_rule(btw_front_main,
+                 lambda state: state.has(laurels, player) or has_combat_reqs("Beneath the Well", state, player))
+        set_rule(btw_back_main,
+                 lambda state: has_ladder("Ladders in Well", state, world)
+                 and (state.has(laurels, player) or has_combat_reqs("Beneath the Well", state, player)))
+        set_rule(well_boss_to_dt,
+                 lambda state: has_combat_reqs("Beneath the Well", state, player)
+                 or laurels_zip(state, world))
+
+        add_rule(dt_entry_to_upper,
+                 lambda state: has_combat_reqs("Dark Tomb", state, player))
+        add_rule(dt_exit_to_main,
+                 lambda state: has_combat_reqs("Dark Tomb", state, player))
+
+        set_rule(wg_before_to_after_terry,
+                 lambda state: state.has_any({laurels, ice_dagger}, player)
+                 or has_combat_reqs("West Garden", state, player))
+        set_rule(wg_after_to_before_terry,
+                 lambda state: state.has_any({laurels, ice_dagger}, player)
+                 or has_combat_reqs("West Garden", state, player))
+        # laurels through, probably to the checkpoint, or just fight
+        set_rule(wg_checkpoint_to_after_terry,
+                 lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
+        set_rule(wg_checkpoint_to_before_boss,
+                 lambda state: has_combat_reqs("West Garden", state, player))
+
+        add_rule(btv_front_to_main,
+                 lambda state: has_combat_reqs("Beneath the Vault", state, player))
+        add_rule(btv_back_to_main,
+                 lambda state: has_combat_reqs("Beneath the Vault", state, player))
+
+        add_rule(fort_upper_lower,
+                 lambda state: state.has(ice_dagger, player)
+                 or has_combat_reqs("Eastern Vault Fortress", state, player))
+        set_rule(fort_grave_entry_to_combat,
+                 lambda state: has_combat_reqs("Eastern Vault Fortress", state, player))
+
+        set_rule(quarry_entry_to_main,
+                 lambda state: has_combat_reqs("Quarry", state, player))
+        set_rule(quarry_back_to_main,
+                 lambda state: has_combat_reqs("Quarry", state, player))
+        set_rule(monastery_to_quarry_main,
+                 lambda state: has_combat_reqs("Quarry", state, player))
+        set_rule(monastery_front_to_back,
+                 lambda state: has_combat_reqs("Quarry", state, player))
+        set_rule(lower_quarry_empty_to_combat,
+                 lambda state: has_combat_reqs("Quarry", state, player))
+
+        set_rule(zig_upper_front_back,
+                 lambda state: state.has(laurels, player)
+                 or has_combat_reqs("Rooted Ziggurat", state, player))
+        set_rule(zig_low_entry_to_front,
+                 lambda state: has_combat_reqs("Rooted Ziggurat", state, player))
+        set_rule(zig_low_mid_to_front,
+                 lambda state: has_combat_reqs("Rooted Ziggurat", state, player))
+        set_rule(zig_low_mid_to_back,
+                 lambda state: state.has(laurels, player)
+                 or (has_ability(prayer, state, world) and has_combat_reqs("Rooted Ziggurat", state, player)))
+        set_rule(zig_low_back_to_mid,
+                 lambda state: (state.has(laurels, player)
+                                or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world))
+                 and has_ability(prayer, state, world)
+                 and has_combat_reqs("Rooted Ziggurat", state, player))
+
+        # only activating the fuse requires combat logic
+        set_rule(cath_entry_to_elev,
+                 lambda state: options.entrance_rando
+                 or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
+                 or (has_ability(prayer, state, world) and has_combat_reqs("Cathedral", state, player)))
+
+        set_rule(cath_entry_to_main,
+                 lambda state: has_combat_reqs("Cathedral", state, player))
+        set_rule(cath_elev_to_main,
+                 lambda state: has_combat_reqs("Cathedral", state, player))
+
+        # for spots where you can go into and come out of an entrance to reset enemy aggro
+        if world.options.entrance_rando:
+            # for the chest outside of magic dagger house
+            dagger_entry_paired_name, dagger_entry_paired_region = (
+                get_paired_portal("Archipelagos Redux, archipelagos_house_"))
+            try:
+                dagger_entry_paired_entrance = world.get_entrance(dagger_entry_paired_name)
+            except KeyError:
+                # there is no paired entrance, so you must fight or dash past, which is done in the finally
+                pass
+            else:
+                set_rule(wg_checkpoint_to_dagger,
+                         lambda state: dagger_entry_paired_entrance.can_reach(state))
+                world.multiworld.register_indirect_condition(region=regions["West Garden at Dagger House"],
+                                                             entrance=dagger_entry_paired_entrance)
+            finally:
+                add_rule(wg_checkpoint_to_dagger,
+                         lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player),
+                         combine="or")
+
+            # zip past enemies in fortress grave path to enter the dusty entrance, then come back out
+            fort_dusty_paired_name, fort_dusty_paired_region = get_paired_portal("Fortress Reliquary, Dusty_")
+            try:
+                fort_dusty_paired_entrance = world.get_entrance(fort_dusty_paired_name)
+            except KeyError:
+                # there is no paired entrance, so you can't run past to deaggro
+                # the path to dusty can be done via combat, so no need to do anything here
+                pass
+            else:
+                # there is a paired entrance, so you can use that to deaggro enemies
+                regions["Fortress Grave Path Dusty Entrance Region"].connect(
+                    connecting_region=regions["Fortress Grave Path by Grave"],
+                    rule=lambda state: state.has(laurels, player) and fort_dusty_paired_entrance.can_reach(state))
+                world.multiworld.register_indirect_condition(region=regions["Fortress Grave Path by Grave"],
+                                                             entrance=fort_dusty_paired_entrance)
+
+            # for activating the ladder switch to get from fortress east upper to lower
+            fort_east_upper_right_paired_name, fort_east_upper_right_paired_region = (
+                get_paired_portal("Fortress East, Fortress Courtyard_"))
+            try:
+                fort_east_upper_right_paired_entrance = (
+                    world.get_entrance(fort_east_upper_right_paired_name))
+            except KeyError:
+                # no paired entrance, so you must fight, which is done in the finally
+                pass
+            else:
+                set_rule(fort_east_upper_lower,
+                         lambda state: fort_east_upper_right_paired_entrance.can_reach(state))
+                world.multiworld.register_indirect_condition(region=regions["Fortress East Shortcut Lower"],
+                                                             entrance=fort_east_upper_right_paired_entrance)
+            finally:
+                add_rule(fort_east_upper_lower,
+                         lambda state: has_combat_reqs("Eastern Vault Fortress", state, player)
+                         or has_ice_grapple_logic(True, IceGrappling.option_easy, state, world),
+                         combine="or")
+
+        else:
+            # if combat logic is on and ER is off, we can make this entrance freely
+            regions["Fortress Grave Path Dusty Entrance Region"].connect(
+                connecting_region=regions["Fortress Grave Path by Grave"],
+                rule=lambda state: state.has(laurels, player))
+    else:
+        # if combat logic is off, we can make this entrance freely
+        regions["Fortress Grave Path Dusty Entrance Region"].connect(
+            connecting_region=regions["Fortress Grave Path by Grave"],
+            rule=lambda state: state.has(laurels, player))
 
 
 def set_er_location_rules(world: "TunicWorld") -> None:
     player = world.player
-    options = world.options
 
     forbid_item(world.get_location("Secret Gathering Place - 20 Fairy Reward"), fairies, player)
 
@@ -1424,6 +1620,11 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     set_rule(world.get_location("East Forest - Ice Rod Grapple Chest"), lambda state: (
             state.has_all({grapple, ice_dagger, fire_wand}, player) and has_ability(icebolt, state, world)))
 
+    # Dark Tomb
+    # added to make combat logic smoother
+    set_rule(world.get_location("Dark Tomb - 2nd Laser Room"),
+             lambda state: has_lantern(state, world))
+
     # West Garden
     set_rule(world.get_location("West Garden - [North] Across From Page Pickup"),
              lambda state: state.has(laurels, player))
@@ -1439,10 +1640,13 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     # Ruined Atoll
     set_rule(world.get_location("Ruined Atoll - [West] Near Kevin Block"),
              lambda state: state.has(laurels, player))
+    # ice grapple push a crab through the door
     set_rule(world.get_location("Ruined Atoll - [East] Locked Room Lower Chest"),
-             lambda state: state.has(laurels, player) or state.has(key, player, 2))
+             lambda state: state.has(laurels, player) or state.has(key, player, 2)
+             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
     set_rule(world.get_location("Ruined Atoll - [East] Locked Room Upper Chest"),
-             lambda state: state.has(laurels, player) or state.has(key, player, 2))
+             lambda state: state.has(laurels, player) or state.has(key, player, 2)
+             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
     # Frog's Domain
     set_rule(world.get_location("Frog's Domain - Side Room Grapple Secret"),
@@ -1452,36 +1656,51 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     set_rule(world.get_location("Frog's Domain - Escape Chest"),
              lambda state: state.has_any({grapple, laurels}, player))
 
+    # Library Lab
+    set_rule(world.get_location("Library Lab - Page 1"),
+             lambda state: has_melee(state, player) or state.has_any((fire_wand, gun), player))
+    set_rule(world.get_location("Library Lab - Page 2"),
+             lambda state: has_melee(state, player) or state.has_any((fire_wand, gun), player))
+    set_rule(world.get_location("Library Lab - Page 3"),
+             lambda state: has_melee(state, player) or state.has_any((fire_wand, gun), player))
+
     # Eastern Vault Fortress
     set_rule(world.get_location("Fortress Arena - Hexagon Red"),
              lambda state: state.has(vault_key, player))
+    # yes, you can clear the leaves with dagger
+    # gun isn't included since it can only break one leaf pile at a time, and we don't check how much mana you have
+    # but really, I expect the player to just throw a bomb at them if they don't have melee
+    set_rule(world.get_location("Fortress Leaf Piles - Secret Chest"),
+             lambda state: has_melee(state, player) or state.has(ice_dagger, player))
 
     # Beneath the Vault
     set_rule(world.get_location("Beneath the Fortress - Bridge"),
-             lambda state: state.has_group("Melee Weapons", player, 1) or state.has_any({laurels, fire_wand}, player))
+             lambda state: has_melee(state, player) or state.has_any({laurels, fire_wand}, player))
 
     # Quarry
     set_rule(world.get_location("Quarry - [Central] Above Ladder Dash Chest"),
              lambda state: state.has(laurels, player))
 
     # Ziggurat
-    # if ER is off, you still need to get past the Admin or you'll get stuck in lower zig
+    # if ER is off, while you can get the chest, you won't be able to actually get through zig
     set_rule(world.get_location("Rooted Ziggurat Upper - Near Bridge Switch"),
-             lambda state: has_sword(state, player) or (state.has(fire_wand, player) and (state.has(laurels, player)
-                                                                                          or options.entrance_rando)))
+             lambda state: has_sword(state, player) or (state.has(fire_wand, player)
+                                                        and (state.has(laurels, player)
+                                                             or world.options.entrance_rando)))
     set_rule(world.get_location("Rooted Ziggurat Lower - After Guarded Fuse"),
              lambda state: has_sword(state, player) and has_ability(prayer, state, world))
 
     # Bosses
     set_rule(world.get_location("Fortress Arena - Siege Engine/Vault Key Pickup"),
              lambda state: has_sword(state, player))
-    # nmg - kill Librarian with a lure, or gun I guess
     set_rule(world.get_location("Librarian - Hexagon Green"),
-             lambda state: (has_sword(state, player) or options.logic_rules)
+             lambda state: has_sword(state, player)
              and has_ladder("Ladders in Library", state, world))
-    # nmg - kill boss scav with orb + firecracker, or similar
+    # can ice grapple boss scav off the side
+    # the grapple from the other side of the bridge isn't in logic 'cause we don't have a misc tricks option
     set_rule(world.get_location("Rooted Ziggurat Lower - Hexagon Blue"),
-             lambda state: has_sword(state, player) or (state.has(grapple, player) and options.logic_rules))
+             lambda state: has_sword(state, player)
+             or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
 
     # Swamp
     set_rule(world.get_location("Cathedral Gauntlet - Gauntlet Reward"),
@@ -1490,7 +1709,7 @@ def set_er_location_rules(world: "TunicWorld") -> None:
              lambda state: state.has(laurels, player))
     set_rule(world.get_location("Swamp - [South Graveyard] Upper Walkway Dash Chest"),
              lambda state: state.has(laurels, player))
-    # these two swamp checks really want you to kill the big skeleton first
+    # really hard to do 4 skulls with a big skeleton chasing you around
     set_rule(world.get_location("Swamp - [South Graveyard] 4 Orange Skulls"),
              lambda state: has_sword(state, player))
 
@@ -1512,9 +1731,9 @@ def set_er_location_rules(world: "TunicWorld") -> None:
 
     # Events
     set_rule(world.get_location("Eastern Bell"),
-             lambda state: (has_stick(state, player) or state.has(fire_wand, player)))
+             lambda state: (has_melee(state, player) or state.has(fire_wand, player)))
     set_rule(world.get_location("Western Bell"),
-             lambda state: (has_stick(state, player) or state.has(fire_wand, player)))
+             lambda state: (has_melee(state, player) or state.has(fire_wand, player)))
     set_rule(world.get_location("Furnace Fuse"),
              lambda state: has_ability(prayer, state, world))
     set_rule(world.get_location("South and West Fortress Exterior Fuses"),
@@ -1537,11 +1756,20 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     set_rule(world.get_location("West Garden Fuse"),
              lambda state: has_ability(prayer, state, world))
     set_rule(world.get_location("Library Fuse"),
-             lambda state: has_ability(prayer, state, world))
+             lambda state: has_ability(prayer, state, world) and has_ladder("Ladders in Library", state, world))
+    if not world.options.hexagon_quest:
+        set_rule(world.get_location("Place Questagons"),
+                 lambda state: state.has_all((red_hexagon, blue_hexagon, green_hexagon), player))
 
     # Bombable Walls
     for location_name in bomb_walls:
-        set_rule(world.get_location(location_name), lambda state: state.has(gun, player) or can_shop(state, world))
+        set_rule(world.get_location(location_name),
+                 lambda state: state.has(gun, player)
+                 or can_shop(state, world)
+                 or has_ice_grapple_logic(False, IceGrappling.option_hard, state, world))
+    # not enough space to ice grapple into here
+    set_rule(world.get_location("Quarry - [East] Bombable Wall"),
+             lambda state: state.has(gun, player) or can_shop(state, world))
 
     # Shop
     set_rule(world.get_location("Shop - Potion 1"),
@@ -1552,3 +1780,129 @@ def set_er_location_rules(world: "TunicWorld") -> None:
              lambda state: has_sword(state, player))
     set_rule(world.get_location("Shop - Coin 2"),
              lambda state: has_sword(state, player))
+
+    def combat_logic_to_loc(loc_name: str, combat_req_area: str, set_instead: bool = False,
+                            dagger: bool = False, laurel: bool = False) -> None:
+        # dagger means you can use magic dagger instead of combat for that check
+        # laurel means you can dodge the enemies freely with the laurels
+        if set_instead:
+            set_rule(world.get_location(loc_name),
+                     lambda state: has_combat_reqs(combat_req_area, state, player)
+                     or (dagger and state.has(ice_dagger, player))
+                     or (laurel and state.has(laurels, player)))
+        else:
+            add_rule(world.get_location(loc_name),
+                     lambda state: has_combat_reqs(combat_req_area, state, player)
+                     or (dagger and state.has(ice_dagger, player))
+                     or (laurel and state.has(laurels, player)))
+
+    if world.options.combat_logic >= CombatLogic.option_bosses_only:
+        # garden knight is in the regions part above
+        combat_logic_to_loc("Fortress Arena - Siege Engine/Vault Key Pickup", "Siege Engine", set_instead=True)
+        combat_logic_to_loc("Librarian - Hexagon Green", "The Librarian", set_instead=True)
+        set_rule(world.get_location("Librarian - Hexagon Green"),
+                 rule=lambda state: has_combat_reqs("The Librarian", state, player)
+                 and has_ladder("Ladders in Library", state, world))
+        combat_logic_to_loc("Rooted Ziggurat Lower - Hexagon Blue", "Boss Scavenger", set_instead=True)
+        if world.options.ice_grappling >= IceGrappling.option_medium:
+            add_rule(world.get_location("Rooted Ziggurat Lower - Hexagon Blue"),
+                     lambda state: has_ice_grapple_logic(False, IceGrappling.option_medium, state, world))
+        combat_logic_to_loc("Cathedral Gauntlet - Gauntlet Reward", "Gauntlet", set_instead=True)
+
+    if world.options.combat_logic == CombatLogic.option_on:
+        combat_logic_to_loc("Overworld - [Northeast] Flowers Holy Cross", "Garden Knight")
+        combat_logic_to_loc("Overworld - [Northwest] Chest Near Quarry Gate", "Before Well", dagger=True)
+        combat_logic_to_loc("Overworld - [Northeast] Chest Above Patrol Cave", "Garden Knight", dagger=True)
+        combat_logic_to_loc("Overworld - [Southwest] West Beach Guarded By Turret", "Overworld", dagger=True)
+        combat_logic_to_loc("Overworld - [Southwest] West Beach Guarded By Turret 2", "Overworld")
+        combat_logic_to_loc("Overworld - [Southwest] Bombable Wall Near Fountain", "East Forest", dagger=True)
+        combat_logic_to_loc("Overworld - [Southwest] Fountain Holy Cross", "East Forest", dagger=True)
+        combat_logic_to_loc("Overworld - [Southwest] South Chest Near Guard", "East Forest", dagger=True)
+        combat_logic_to_loc("Overworld - [Southwest] Tunnel Guarded By Turret", "East Forest", dagger=True)
+        combat_logic_to_loc("Overworld - [Northwest] Chest Near Turret", "Before Well")
+
+        add_rule(world.get_location("Hourglass Cave - Hourglass Chest"),
+                 lambda state: has_sword(state, player) and (state.has("Shield", player)
+                                                             # kill the turrets through the wall with a longer sword
+                                                             or state.has("Sword Upgrade", player, 3)))
+        add_rule(world.get_location("Hourglass Cave - Holy Cross Chest"),
+                 lambda state: has_sword(state, player) and (state.has("Shield", player)
+                                                             or state.has("Sword Upgrade", player, 3)))
+
+        # the first spider chest they literally do not attack you until you open the chest
+        # the second one, you can still just walk past them, but I guess /something/ would be wanted
+        combat_logic_to_loc("East Forest - Beneath Spider Chest", "East Forest", dagger=True, laurel=True)
+        combat_logic_to_loc("East Forest - Golden Obelisk Holy Cross", "East Forest", dagger=True)
+        combat_logic_to_loc("East Forest - Dancing Fox Spirit Holy Cross", "East Forest", dagger=True, laurel=True)
+        combat_logic_to_loc("East Forest - From Guardhouse 1 Chest", "East Forest", dagger=True, laurel=True)
+        combat_logic_to_loc("East Forest - Above Save Point", "East Forest", dagger=True)
+        combat_logic_to_loc("East Forest - Above Save Point Obscured", "East Forest", dagger=True)
+        combat_logic_to_loc("Forest Grave Path - Above Gate", "East Forest", dagger=True, laurel=True)
+        combat_logic_to_loc("Forest Grave Path - Obscured Chest", "East Forest", dagger=True, laurel=True)
+
+        # most of beneath the well is covered by the region access rule
+        combat_logic_to_loc("Beneath the Well - [Entryway] Chest", "Beneath the Well")
+        combat_logic_to_loc("Beneath the Well - [Entryway] Obscured Behind Waterfall", "Beneath the Well")
+        combat_logic_to_loc("Beneath the Well - [Back Corridor] Left Secret", "Beneath the Well")
+        combat_logic_to_loc("Beneath the Well - [Side Room] Chest By Phrends", "Overworld")
+
+        # laurels past the enemies, then use the wand or gun to take care of the fairies that chased you
+        add_rule(world.get_location("West Garden - [West Lowlands] Tree Holy Cross Chest"),
+                 lambda state: state.has_any({fire_wand, "Gun"}, player))
+        combat_logic_to_loc("West Garden - [Central Lowlands] Chest Beneath Faeries", "West Garden")
+        combat_logic_to_loc("West Garden - [Central Lowlands] Chest Beneath Save Point", "West Garden")
+        combat_logic_to_loc("West Garden - [West Highlands] Upper Left Walkway", "West Garden")
+
+        # with combat logic on, I presume the player will want to be able to see to avoid the spiders
+        set_rule(world.get_location("Beneath the Fortress - Bridge"),
+                 lambda state: has_lantern(state, world)
+                 and (state.has_any({laurels, fire_wand, "Gun"}, player) or has_melee(state, player)))
+
+        combat_logic_to_loc("Eastern Vault Fortress - [West Wing] Candles Holy Cross", "Eastern Vault Fortress",
+                            dagger=True)
+
+        # could just do the last two, but this outputs better in the spoiler log
+        # dagger is maybe viable here, but it's sketchy -- activate ladder switch, save to reset enemies, climb up
+        combat_logic_to_loc("Upper and Central Fortress Exterior Fuses", "Eastern Vault Fortress")
+        combat_logic_to_loc("Beneath the Vault Fuse", "Beneath the Vault")
+        combat_logic_to_loc("Eastern Vault West Fuses", "Eastern Vault Fortress")
+
+        # if you come in from the left, you only need to fight small crabs
+        add_rule(world.get_location("Ruined Atoll - [South] Near Birds"),
+                 lambda state: has_melee(state, player) or state.has_any({laurels, "Gun"}, player))
+
+        # can get this one without fighting if you have laurels
+        add_rule(world.get_location("Frog's Domain - Above Vault"),
+                 lambda state: state.has(laurels, player) or has_combat_reqs("Frog's Domain", state, player))
+
+        # with wand, you can get this chest. Non-ER, you need laurels to continue down. ER, you can just torch
+        set_rule(world.get_location("Rooted Ziggurat Upper - Near Bridge Switch"),
+                 lambda state: (state.has(fire_wand, player)
+                                and (state.has(laurels, player) or world.options.entrance_rando))
+                 or has_combat_reqs("Rooted Ziggurat", state, player))
+        set_rule(world.get_location("Rooted Ziggurat Lower - After Guarded Fuse"),
+                 lambda state: has_ability(prayer, state, world)
+                 and has_combat_reqs("Rooted Ziggurat", state, player))
+
+        # replace the sword rule with this one
+        combat_logic_to_loc("Swamp - [South Graveyard] 4 Orange Skulls", "Swamp", set_instead=True)
+        combat_logic_to_loc("Swamp - [South Graveyard] Guarded By Big Skeleton", "Swamp", dagger=True)
+        # don't really agree with this one but eh
+        combat_logic_to_loc("Swamp - [South Graveyard] Above Big Skeleton", "Swamp", dagger=True, laurel=True)
+        # the tentacles deal with everything else reasonably, and you can hide on the island, so no rule for it
+        add_rule(world.get_location("Swamp - [South Graveyard] Obscured Beneath Telescope"),
+                 lambda state: state.has(laurels, player)  # can dash from swamp mid to here and grab it
+                 or has_combat_reqs("Swamp", state, player))
+        add_rule(world.get_location("Swamp - [Central] South Secret Passage"),
+                 lambda state: state.has(laurels, player)  # can dash from swamp front to here and grab it
+                 or has_combat_reqs("Swamp", state, player))
+        combat_logic_to_loc("Swamp - [South Graveyard] Upper Walkway On Pedestal", "Swamp")
+        combat_logic_to_loc("Swamp - [Central] Beneath Memorial", "Swamp")
+        combat_logic_to_loc("Swamp - [Central] Near Ramps Up", "Swamp")
+        combat_logic_to_loc("Swamp - [Upper Graveyard] Near Telescope", "Swamp")
+        combat_logic_to_loc("Swamp - [Upper Graveyard] Near Shield Fleemers", "Swamp")
+        combat_logic_to_loc("Swamp - [Upper Graveyard] Obscured Behind Hill", "Swamp")
+
+        # zip through the rubble to sneakily grab this chest, or just fight to it
+        add_rule(world.get_location("Cathedral - [1F] Near Spikes"),
+                 lambda state: laurels_zip(state, world) or has_combat_reqs("Cathedral", state, player))
