@@ -199,8 +199,10 @@ class MagpieBridge:
                 logger.info(
                     f"Connected, supported features: {message['features']}")
                 self.features = message["features"]
+                
+                await self.send_handshAck()
 
-            if message["type"] in ("handshake", "sendFull"):
+            if message["type"] == "sendFull":
                 if "items" in self.features:
                     await self.send_all_inventory()
                 if "checks" in self.features:
@@ -209,8 +211,6 @@ class MagpieBridge:
                     await self.send_slot_data(self.slot_data)
                 if self.use_entrance_tracker():
                     await self.send_gps(diff=False)
-                
-                await self.send_handshAck()
 
     # Translate renamed IDs back to LADXR IDs
     @staticmethod
@@ -227,7 +227,7 @@ class MagpieBridge:
 
         message = {
             "type": "handshAck",
-            "version": "1.31",
+            "version": "1.32",
             "name": "archipelago-ladx-client",
         }
 
