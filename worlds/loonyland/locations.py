@@ -20,5 +20,3 @@ class LLLocation(NamedTuple):
     category: LLLocCat
     region: str
     can_create: Callable[[MultiWorld, int], bool] = lambda multiworld, player: True
-
-

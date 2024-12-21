@@ -8,8 +8,10 @@ class LoonylandItem(Item):
     """
     Item from the game Loonyland
     """
+
     game: str = "Loonyland"
     cheat: bool = False
+
 
 class LLItemCat(Enum):
     ITEM = 0

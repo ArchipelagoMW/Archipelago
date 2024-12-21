@@ -28,7 +28,7 @@ class LoonylandWebWorld(WebWorld):
         language="English",
         file_name="guide_en.md",
         link="guide/en",
-        authors=["AutomaticFrenzy"]
+        authors=["AutomaticFrenzy"],
     )
 
     tutorials = [setup_en]
@@ -46,7 +46,7 @@ class LoonylandWorld(World):
 
     item_name_groups = {
         "cheats": {name for name, data in loony_item_table.items() if data.category == LLItemCat.CHEAT},
-        "special_weapons": {name for name, data in loony_item_table.items() if VAR_WBOMBS <= data.id <= VAR_WHOTPANTS}
+        "special_weapons": {name for name, data in loony_item_table.items() if VAR_WBOMBS <= data.id <= VAR_WHOTPANTS},
     }
 
     def create_item(self, name: str) -> LoonylandItem:
@@ -58,9 +58,8 @@ class LoonylandWorld(World):
             if item.id and item.can_create(self.multiworld, self.player):
                 for i in range(item.frequency):
                     new_item = self.create_item(name)
-                    new_item.cheat = item.category==LLItemCat.CHEAT
+                    new_item.cheat = item.category == LLItemCat.CHEAT
                     item_pool.append(new_item)
-
 
         self.multiworld.itempool += item_pool
 
@@ -90,13 +89,10 @@ class LoonylandWorld(World):
         final_loc.place_locked_item(self.create_event("Victory"))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
-        #location rules
+        # location rules
         set_rules(self.multiworld, self, self.player)
-        #entrance rules
+        # entrance rules
         set_entrance_rules(self.multiworld, self, self.player)
 
     def fill_slot_data(self):
-        return {
-            "DeathLink": self.options.death_link.value,
-            "Difficulty": self.options.difficulty.value
-        }
+        return {"DeathLink": self.options.death_link.value, "Difficulty": self.options.difficulty.value}

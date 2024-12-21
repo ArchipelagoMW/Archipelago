@@ -14,8 +14,10 @@ class WinCondition(Choice):
     option_normal_remix = 2
     default = 0
 
+
 class Difficulty(Choice):
     """Difficulty Setting"""
+
     display_name = "Difficulty"
     option_beginner = 0
     option_normal = 1
@@ -28,7 +30,6 @@ class Difficulty(Choice):
 
 @dataclass
 class LoonylandOptions(PerGameCommonOptions):
-    #win_condition: WinCondition
+    # win_condition: WinCondition
     difficulty: Difficulty
     death_link: DeathLink
-
