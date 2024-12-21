@@ -11,7 +11,7 @@ class Entrance:
     indoor_map: int
     indoor_address: int
     name: str
-    other_side_name: str
+    other_side_name: str = None
     changed: bool = False
 
     def __init__(self, outdoor: int, indoor: int, name: str, indoor_address: int=None):

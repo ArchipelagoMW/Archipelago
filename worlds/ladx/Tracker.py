@@ -13,13 +13,14 @@ logger = logging.getLogger("Tracker")
 # kbranch you're a hero
 # https://github.com/kbranch/Magpie/blob/master/autotracking/checks.py
 class Check:
-    def __init__(self, id, address, mask, alternateAddress=None):
+    def __init__(self, id, address, mask, alternateAddress=None, linkedItem=None):
         self.id = id
         self.address = address
         self.alternateAddress = alternateAddress
         self.mask = mask
         self.value = None
         self.diff = 0
+        self.linkedItem = linkedItem
 
     def set(self, bytes):
         oldValue = self.value
@@ -89,6 +90,27 @@ class LocationTracker:
 
         blacklist = {'None', '0x2A1-2'}
 
+        def seashellCondition(slot_data):
+            return 'goal' not in slot_data or slot_data['goal'] != 'seashells'
+
+        linkedCheckItems = {
+            '0x2E9': {'item': 'SEASHELL', 'qty': 20, 'condition': seashellCondition},
+            '0x2A2': {'item': 'TOADSTOOL', 'qty': 1},
+            '0x2A6-Trade': {'item': 'TRADING_ITEM_YOSHI_DOLL', 'qty': 1},
+            '0x2B2-Trade': {'item': 'TRADING_ITEM_RIBBON', 'qty': 1},
+            '0x2FE-Trade': {'item': 'TRADING_ITEM_DOG_FOOD', 'qty': 1},
+            '0x07B-Trade': {'item': 'TRADING_ITEM_BANANAS', 'qty': 1},
+            '0x087-Trade': {'item': 'TRADING_ITEM_STICK', 'qty': 1},
+            '0x2D7-Trade': {'item': 'TRADING_ITEM_HONEYCOMB', 'qty': 1},
+            '0x019-Trade': {'item': 'TRADING_ITEM_PINEAPPLE', 'qty': 1},
+            '0x2D9-Trade': {'item': 'TRADING_ITEM_HIBISCUS', 'qty': 1},
+            '0x2A8-Trade': {'item': 'TRADING_ITEM_LETTER', 'qty': 1},
+            '0x0CD-Trade': {'item': 'TRADING_ITEM_BROOM', 'qty': 1},
+            '0x2F5-Trade': {'item': 'TRADING_ITEM_FISHING_HOOK', 'qty': 1},
+            '0x0C9-Trade': {'item': 'TRADING_ITEM_NECKLACE', 'qty': 1},
+            '0x297-Trade': {'item': 'TRADING_ITEM_SCALE', 'qty': 1},
+        }
+
         # in no dungeons boss shuffle, the d3 boss in d7 set 0x20 in fascade's room (0x1BC)
         # after beating evil eagile in D6, 0x1BC is now 0xAC (other things may have happened in between)
         # entered d3, slime eye flag had already been set (0x15A 0x20). after killing angler fish, bits 0x0C were set
@@ -100,6 +122,8 @@ class LocationTracker:
             mask = 0x10
             address = addressOverrides[check_id] if check_id in addressOverrides else 0xD800 + int(
                 room, 16)
+
+            linkedItem = linkedCheckItems[check_id] if check_id in linkedCheckItems else None
 
             if 'Trade' in check_id or 'Owl' in check_id:
                 mask = 0x20
@@ -114,8 +138,14 @@ class LocationTracker:
                 highest_check = max(
                     highest_check, alternateAddresses[check_id])
 
-            check = Check(check_id, address, mask,
-                          alternateAddresses[check_id] if check_id in alternateAddresses else None)
+            check = Check(
+                check_id,
+                address,
+                mask,
+                (alternateAddresses[check_id] if check_id in alternateAddresses else None),
+                linkedItem,
+            )
+
             if check_id == '0x2A3':
                 self.start_check = check
             self.all_checks.append(check)

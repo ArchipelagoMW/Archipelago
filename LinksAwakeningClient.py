@@ -652,6 +652,12 @@ class LinksAwakeningContext(CommonContext):
                 checkMetadataTable[check.id])] for check in ladxr_checks]
             self.new_checks(checks, [check.id for check in ladxr_checks])
 
+            for check in ladxr_checks:
+                if check.value and check.linkedItem:
+                    linkedItem = check.linkedItem
+                    if 'condition' not in linkedItem or linkedItem['condition'](self.slot_data):
+                        self.client.item_tracker.setExtraItem(check.linkedItem['item'], check.linkedItem['qty'])
+
         async def victory():
             await self.send_victory()
 
