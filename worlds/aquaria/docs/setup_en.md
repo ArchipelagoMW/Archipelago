@@ -3,11 +3,13 @@
 ## Required Software
 
 - The original Aquaria Game (purchasable from most online game stores)
-- The [Aquaria randomizer](https://github.com/tioui/Aquaria_Randomizer/releases)
+- The [Aquaria randomizer](https://github.com/tioui/Aquaria_Randomizer/releases/latest)
 
 ## Optional Software
  
-- For sending [commands](/tutorial/Archipelago/commands/en) like `!hint`: the TextClient from [the most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases)
+- For sending [commands](/tutorial/Archipelago/commands/en) like `!hint`: the TextClient from [the most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
+- [Aquaria AP Tracker](https://github.com/palex00/aquaria-ap-tracker/releases/latest), for use with
+[PopTracker](https://github.com/black-sliver/PopTracker/releases/latest)
 
 ## Installation and execution Procedures
 
@@ -113,3 +115,16 @@ sure that your executable has executable permission:
 ```bash
 chmod +x aquaria_randomizer
 ```
+
+## Auto-Tracking
+
+Aquaria has a fully functional map tracker that supports auto-tracking.
+
+1. Download [Aquaria AP Tracker](https://github.com/palex00/aquaria-ap-tracker/releases/latest) and
+[PopTracker](https://github.com/black-sliver/PopTracker/releases/latest).
+2. Put the tracker pack into /packs/ in your PopTracker install.
+3. Open PopTracker, and load the Aquaria pack.
+4. For autotracking, click on the "AP" symbol at the top.
+5. Enter the Archipelago server address (the one you connected your client to), slot name, and password.
+
+This pack will automatically prompt you to update if one is available.

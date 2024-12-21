@@ -26,10 +26,13 @@ class Component:
     cli: bool
     func: Optional[Callable]
     file_identifier: Optional[Callable[[str], bool]]
+    game_name: Optional[str]
+    supports_uri: Optional[bool]
 
     def __init__(self, display_name: str, script_name: Optional[str] = None, frozen_name: Optional[str] = None,
                  cli: bool = False, icon: str = 'icon', component_type: Optional[Type] = None,
-                 func: Optional[Callable] = None, file_identifier: Optional[Callable[[str], bool]] = None):
+                 func: Optional[Callable] = None, file_identifier: Optional[Callable[[str], bool]] = None,
+                 game_name: Optional[str] = None, supports_uri: Optional[bool] = False):
         self.display_name = display_name
         self.script_name = script_name
         self.frozen_name = frozen_name or f'Archipelago{script_name}' if script_name else None
@@ -45,6 +48,8 @@ class Component:
             Type.ADJUSTER if "Adjuster" in display_name else Type.MISC)
         self.func = func
         self.file_identifier = file_identifier
+        self.game_name = game_name
+        self.supports_uri = supports_uri
 
     def handles_file(self, path: str):
         return self.file_identifier(path) if self.file_identifier else False
@@ -56,10 +61,10 @@ class Component:
 processes = weakref.WeakSet()
 
 
-def launch_subprocess(func: Callable, name: str = None):
+def launch_subprocess(func: Callable, name: str = None, args: Tuple[str, ...] = ()) -> None:
     global processes
     import multiprocessing
-    process = multiprocessing.Process(target=func, name=name)
+    process = multiprocessing.Process(target=func, name=name, args=args)
     process.start()
     processes.add(process)
 
@@ -78,9 +83,9 @@ class SuffixIdentifier:
         return False
 
 
-def launch_textclient():
+def launch_textclient(*args):
     import CommonClient
-    launch_subprocess(CommonClient.run_as_textclient, name="TextClient")
+    launch_subprocess(CommonClient.run_as_textclient, name="TextClient", args=args)
 
 
 def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, pathlib.Path]]:
@@ -95,10 +100,16 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
 
     apworld_path = pathlib.Path(apworld_src)
 
-    module_name = pathlib.Path(apworld_path.name).stem
     try:
         import zipfile
-        zipfile.ZipFile(apworld_path).open(module_name + "/__init__.py")
+        zip = zipfile.ZipFile(apworld_path)
+        directories = [f.name for f in zipfile.Path(zip).iterdir() if f.is_dir()]
+        if len(directories) == 1 and directories[0] in apworld_path.stem:
+            module_name = directories[0]
+            apworld_name = module_name + ".apworld"
+        else:
+            raise Exception("APWorld appears to be invalid or damaged. (expected a single directory)")
+        zip.open(module_name + "/__init__.py")
     except ValueError as e:
         raise Exception("Archive appears invalid or damaged.") from e
     except KeyError as e:
@@ -117,7 +128,7 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
     # TODO: run generic test suite over the apworld.
     # TODO: have some kind of version system to tell from metadata if the apworld should be compatible.
 
-    target = pathlib.Path(worlds.user_folder) / apworld_path.name
+    target = pathlib.Path(worlds.user_folder) / apworld_name
     import shutil
     shutil.copyfile(apworld_path, target)
 
@@ -196,6 +207,7 @@ components: List[Component] = [
 ]
 
 
+# if registering an icon from within an apworld, the format "ap:module.name/path/to/file.png" can be used
 icon_paths = {
     'icon': local_path('data', 'icon.png'),
     'mcicon': local_path('data', 'mcicon.png'),
