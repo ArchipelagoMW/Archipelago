@@ -1,8 +1,9 @@
 from typing import Dict, List, Set, Tuple, TYPE_CHECKING
 from BaseClasses import Region, ItemClassification, Item, Location
-from .locations import location_table
+from .locations import all_locations
 from .er_data import Portal, portal_mapping, traversal_requirements, DeadEnd, RegionInfo
 from .er_rules import set_er_region_rules
+from .breakables import create_breakable_exclusive_regions, set_breakable_location_rules
 from Options import PlandoConnection
 from .options import EntranceRando
 from random import Random
@@ -23,7 +24,13 @@ class TunicERLocation(Location):
 def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
     regions: Dict[str, Region] = {}
     for region_name, region_data in world.er_regions.items():
-        regions[region_name] = Region(region_name, world.player, world.multiworld)
+        region = Region(region_name, world.player, world.multiworld)
+        regions[region_name] = region
+        world.multiworld.regions.append(region)
+
+    if world.options.breakable_shuffle:
+        breakable_regions = create_breakable_exclusive_regions(world)
+        regions.update({region.name: region for region in breakable_regions})
 
     if world.options.entrance_rando:
         portal_pairs = pair_portals(world, regions)
@@ -37,15 +44,15 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
 
     set_er_region_rules(world, regions, portal_pairs)
 
-    for location_name, location_id in world.location_name_to_id.items():
-        region = regions[location_table[location_name].er_region]
+    for location_name, location_id in world.player_location_table.items():
+        region = regions[all_locations[location_name].er_region]
         location = TunicERLocation(world.player, location_name, location_id, region)
         region.locations.append(location)
     
     create_randomized_entrances(portal_pairs, regions)
 
-    for region in regions.values():
-        world.multiworld.regions.append(region)
+    if world.options.breakable_shuffle:
+        set_breakable_location_rules(world)
 
     place_event_items(world, regions)
 

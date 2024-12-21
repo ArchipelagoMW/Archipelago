@@ -205,10 +205,10 @@ breakable_location_table: dict[str, TunicLocationData] = {
     "Beneath the Vault Back - Barrel 11": TunicLocationData("Beneath the Vault Back", breakable="Barrel"),
     "Beneath the Vault Back - Barrel 12": TunicLocationData("Beneath the Vault Back", breakable="Barrel"),
     "Beneath the Vault Back - Barrel 13": TunicLocationData("Beneath the Vault Back", breakable="Barrel"),
-    "Fortress Leaf Piles - Leaf Pile 1": TunicLocationData("Dusty", breakable="Leaf Pile"),
-    "Fortress Leaf Piles - Leaf Pile 2": TunicLocationData("Dusty", breakable="Leaf Pile"),
-    "Fortress Leaf Piles - Leaf Pile 3": TunicLocationData("Dusty", breakable="Leaf Pile"),
-    "Fortress Leaf Piles - Leaf Pile 4": TunicLocationData("Dusty", breakable="Leaf Pile"),
+    "Fortress Leaf Piles - Leaf Pile 1": TunicLocationData("Fortress Leaf Piles", breakable="Leaf Pile"),
+    "Fortress Leaf Piles - Leaf Pile 2": TunicLocationData("Fortress Leaf Piles", breakable="Leaf Pile"),
+    "Fortress Leaf Piles - Leaf Pile 3": TunicLocationData("Fortress Leaf Piles", breakable="Leaf Pile"),
+    "Fortress Leaf Piles - Leaf Pile 4": TunicLocationData("Fortress Leaf Piles", breakable="Leaf Pile"),
     "Fortress Arena - Pot 1": TunicLocationData("Fortress Arena", breakable="Pot"),
     "Fortress Arena - Pot 2": TunicLocationData("Fortress Arena", breakable="Pot"),
     "Atoll Southwest - Pot 1": TunicLocationData("Ruined Atoll", breakable="Pot"),
@@ -335,17 +335,17 @@ def can_break_leaf_piles(state: CollectionState, world: "TunicWorld") -> bool:
     return has_stick(state, world.player) or state.has_any(("Magic Dagger", "Gun"), world.player)
 
 
-def create_breakable_exclusive_regions(world: "TunicWorld") -> None:
+def create_breakable_exclusive_regions(world: "TunicWorld") -> list[Region]:
     player = world.player
     new_regions: list[Region] = []
 
-    region = Region("Fortress Courtyard westmost Pots", world.player, world.multiworld)
+    region = Region("Fortress Courtyard westmost pots", world.player, world.multiworld)
     new_regions.append(region)
     world.get_region("Fortress Courtyard").connect(region)
     world.get_region("Fortress Exterior near cave").connect(
         region, rule=lambda state: state.has_any(("Magic Wand", "Gun"), player))
 
-    region = Region("Fortress Courtyard west Pots", world.player, world.multiworld)
+    region = Region("Fortress Courtyard west pots", world.player, world.multiworld)
     new_regions.append(region)
     world.get_region("Fortress Courtyard").connect(region)
     world.get_region("Fortress Exterior near cave").connect(
@@ -377,6 +377,8 @@ def create_breakable_exclusive_regions(world: "TunicWorld") -> None:
 
     for region in new_regions:
         world.multiworld.regions.append(region)
+
+    return new_regions
 
 
 def set_breakable_location_rules(world: "TunicWorld") -> None:

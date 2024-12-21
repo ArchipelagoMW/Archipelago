@@ -2,7 +2,7 @@ from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union
 from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld
 from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
-from .locations import location_table, location_name_groups, location_name_to_id, hexagon_locations
+from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
 from .er_rules import set_er_location_rules
 from .regions import tunic_regions
@@ -10,6 +10,7 @@ from .er_scripts import create_er_regions
 from .er_data import portal_mapping, RegionInfo, tunic_er_regions
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
                       LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage)
+from .breakables import breakable_location_name_to_id, breakable_location_groups, breakable_location_table
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection
 from decimal import Decimal, ROUND_HALF_UP
@@ -71,10 +72,13 @@ class TunicWorld(World):
     settings: ClassVar[TunicSettings]
     item_name_groups = item_name_groups
     location_name_groups = location_name_groups
+    location_name_groups.update(breakable_location_groups)
 
     item_name_to_id = item_name_to_id
-    location_name_to_id = location_name_to_id
+    location_name_to_id = standard_location_name_to_id.copy()
+    location_name_to_id.update(breakable_location_name_to_id)
 
+    player_location_table: Dict[str, int]
     ability_unlocks: Dict[str, int]
     slot_data_items: List[TunicItem]
     tunic_portal_pairs: Dict[str, str]
@@ -127,6 +131,11 @@ class TunicWorld(World):
                 self.options.shuffle_ladders.value = passthrough["shuffle_ladders"]
                 self.options.fixed_shop.value = self.options.fixed_shop.option_false
                 self.options.laurels_location.value = self.options.laurels_location.option_anywhere
+                self.options.breakable_shuffle.value = passthrough["breakable_shuffle"]
+
+        self.player_location_table = standard_location_name_to_id.copy()
+        if self.options.breakable_shuffle:
+            self.player_location_table.update(breakable_location_name_to_id)
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
@@ -193,7 +202,6 @@ class TunicWorld(World):
         return TunicItem(name, classification or item_data.classification, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
-
         tunic_items: List[TunicItem] = []
         self.slot_data_items = []
 
@@ -202,6 +210,11 @@ class TunicWorld(World):
         for money_fool in fool_tiers[self.options.fool_traps]:
             items_to_create["Fool Trap"] += items_to_create[money_fool]
             items_to_create[money_fool] = 0
+
+        # creating these after the fool traps are made mostly so we don't have to mess with it
+        if self.options.breakable_shuffle:
+            for _ in breakable_location_table:
+                items_to_create[f"Money x{self.random.randint(1, 5)}"] += 1
 
         if self.options.start_with_sword:
             self.multiworld.push_precollected(self.create_item("Sword"))
@@ -323,7 +336,7 @@ class TunicWorld(World):
                 self.ability_unlocks["Pages 52-53 (Icebolt)"] = passthrough["Hexagon Quest Icebolt"]
 
         # ladder rando uses ER with vanilla connections, so that we're not managing more rules files
-        if self.options.entrance_rando or self.options.shuffle_ladders:
+        if self.options.entrance_rando or self.options.shuffle_ladders or self.options.breakable_shuffle:
             portal_pairs = create_er_regions(self)
             if self.options.entrance_rando:
                 # these get interpreted by the game to tell it which entrances to connect
@@ -351,7 +364,7 @@ class TunicWorld(World):
             victory_region.locations.append(victory_location)
 
     def set_rules(self) -> None:
-        if self.options.entrance_rando or self.options.shuffle_ladders:
+        if self.options.entrance_rando or self.options.shuffle_ladders or self.options.breakable_shuffle:
             set_er_location_rules(self)
         else:
             set_region_rules(self)
@@ -432,6 +445,7 @@ class TunicWorld(World):
             "Hexagon Quest Goal": self.options.hexagon_goal.value,
             "Entrance Rando": self.tunic_portal_pairs,
             "disable_local_spoiler": int(self.settings.disable_local_spoiler or self.multiworld.is_race),
+            "breakable_shuffle": self.options.breakable_shuffle.value,
         }
 
         # this would be in a stage if there was an appropriate stage for it
