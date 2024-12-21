@@ -7,43 +7,45 @@ from .TrackerConsts import EntranceCoord
 from .LADXR.entranceInfo import ENTRANCE_INFO
 
 class Entrance:
-    def __init__(self, outdoor, indoor, name, indoor_address=None):
+    outdoor_room: int
+    indoor_map: int
+    indoor_address: int
+    name: str
+    other_side_name: str
+    changed: bool = False
+
+    def __init__(self, outdoor: int, indoor: int, name: str, indoor_address: int=None):
         self.outdoor_room = outdoor
         self.indoor_map = indoor
         self.indoor_address = indoor_address
         self.name = name
-        self.changed = False
-        self.mapped_indoor = None
 
-    def map(self, indoor):
-        if indoor != self.mapped_indoor:
+    def map(self, other_side: str):
+        if other_side != self.other_side_name:
             self.changed = True
         
-        self.mapped_indoor = indoor
-
-        print(f'mapped {self.name} to {indoor}')
+        self.other_side_name = other_side
 
 class GpsTracker:
-    room = None
-    last_room = None
-    last_different_room = None
-    room_same_for = 0
-    room_changed = False
-    location_changed = False
-    screen_x = 0
-    screen_y = 0
-    spawn_x = 0
-    spawn_y = 0
-    indoors = None
-    indoors_changed = False
-    spawn_map = None
-    spawn_room = None
-    spawn_changed = False
-    spawn_same_for = 0
-    entrance_mapping = None
-    needs_found_entrances = False
-    needs_slot_data = True
+    room: int = None
+    last_room: int = None
+    last_different_room: int = None
+    room_same_for: int = 0
+    room_changed: bool = False
+    screen_x: int = 0
+    screen_y: int = 0
+    spawn_x: int = 0
+    spawn_y: int = 0
+    indoors: int = None
+    indoors_changed: bool = False
+    spawn_map: int = None
+    spawn_room: int = None
+    spawn_changed: bool = False
+    spawn_same_for: int = 0
+    entrance_mapping: typing.Dict[str, str] = None
     entrances_by_name: typing.Dict[str, Entrance] = {}
+    needs_found_entrances: bool = False
+    needs_slot_data: bool = True
 
     def __init__(self, gameboy) -> None:
         self.gameboy = gameboy
@@ -54,19 +56,21 @@ class GpsTracker:
             [Consts.transition_state]
         )
 
+    async def read_byte(self, b: int):
+        return (await self.gameboy.read_memory_cache([b]))[b]
+
     def load_slot_data(self, slot_data: typing.Dict[str, typing.Any]):
         if 'entrance_mapping' not in slot_data:
             return
 
+        # We need to know how entrances were mapped at generation before we can autotrack them
         self.entrance_mapping = {}
 
         # Convert to upstream's newer format
         for outside, inside in slot_data['entrance_mapping'].items():
-            new_inside = inside + ':inside'
+            new_inside = f"{inside}:inside"
             self.entrance_mapping[outside] = new_inside
             self.entrance_mapping[new_inside] = outside
-
-        self.reverse_entrance_mapping = {value: key for key, value in self.entrance_mapping.items()}
 
         self.entrances_by_name = {} 
 
@@ -86,10 +90,8 @@ class GpsTracker:
         self.needs_slot_data = False
         self.needs_found_entrances = True
 
-    async def read_byte(self, b: int):
-        return (await self.gameboy.read_memory_cache([b]))[b]
-
     async def read_location(self):
+        # We need to wait for screen transitions to finish
         transition_state = await self.read_byte(Consts.transition_state)
         transition_target_x = await self.read_byte(Consts.transition_target_x)
         transition_target_y = await self.read_byte(Consts.transition_target_y)
@@ -110,12 +112,14 @@ class GpsTracker:
 
         self.indoors = indoors
 
+        # We use the spawn point to know which entrance was most recently entered
         spawn_map = await self.read_byte(Consts.spawn_map)
         map_digit = Consts.map_map[spawn_map] << 8 if self.spawn_map else 0
         spawn_room = await self.read_byte(Consts.spawn_room) + map_digit
         spawn_x = await self.read_byte(Consts.spawn_x)
         spawn_y = await self.read_byte(Consts.spawn_y)
 
+        # The spawn point needs to be settled before we can trust location data
         if ((spawn_room != self.spawn_room and self.spawn_room != None)
             or (spawn_map != self.spawn_map and self.spawn_map != None)
             or (spawn_x != self.spawn_x and self.spawn_x != None)
@@ -130,6 +134,9 @@ class GpsTracker:
         self.spawn_x = spawn_x
         self.spawn_y = spawn_y
 
+        # Spawn point is preferred, but doesn't work for the sidescroller entrances
+        # Those can be addressed by keeping track of which room we're in
+        # Also used to validate that we came from the right room for what the spawn point is mapped to
         map_id = await self.read_byte(Consts.map_id)
         if map_id not in Consts.map_map:
             print(f'Unknown map ID {hex(map_id)}')
@@ -139,6 +146,7 @@ class GpsTracker:
         self.last_room = self.room
         self.room = await self.read_byte(Consts.room) + map_digit
 
+        # Again, the room needs to settle before we can trust location data
         if self.last_room != self.room:
             self.room_same_for = 0
             self.room_changed = True
@@ -146,24 +154,19 @@ class GpsTracker:
         else:
             self.room_same_for += 1
 
+        # Only update Link's location when he's not in the air to avoid weirdness
         if motion_state in [0, 1]:
-            old_x = self.screen_x
-            old_y = self.screen_y
-
             coords = await self.read_byte(Consts.screen_coord)
             self.screen_x = coords & 0x0F
             self.screen_y = (coords & 0xF0) >> 4
-
-            if (self.room != self.last_room
-                or old_x != self.screen_x
-                or old_y != self.screen_y):
-                self.location_changed = True
 
     async def read_entrances(self):
         if not self.last_different_room or not self.entrance_mapping:
             return
 
         if self.spawn_changed and self.spawn_same_for > 0 and self.room_same_for > 0:
+            # Use the spawn location, last room, and entrance mapping at generation to map the right entrance
+            # A bit overkill for simple ER, but necessary for upstream's advanced ER
             spawn_coord = EntranceCoord(None, self.spawn_room, self.spawn_x, self.spawn_y)
             if str(spawn_coord) in Consts.entrance_lookup:
                 valid_sources = {x.name for x in Consts.entrance_coords if x.room == self.last_different_room}
@@ -226,7 +229,7 @@ class GpsTracker:
         if not self.entrance_mapping:
             return
 
-        new_entrances = [x for x in self.entrances_by_name.values() if x.changed or (not diff and x.mapped_indoor)]
+        new_entrances = [x for x in self.entrances_by_name.values() if x.changed or (not diff and x.other_side_name)]
 
         if not new_entrances:
             return
@@ -239,7 +242,7 @@ class GpsTracker:
         }
 
         for entrance in new_entrances:
-            message['entranceMap'][entrance.name] = entrance.mapped_indoor
+            message['entranceMap'][entrance.name] = entrance.other_side_name
             entrance.changed = False
 
         await socket.send(json.dumps(message))

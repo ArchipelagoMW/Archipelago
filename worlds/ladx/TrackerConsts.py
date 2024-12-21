@@ -1,4 +1,9 @@
 class EntranceCoord:
+    name: str
+    room: int
+    x: int
+    y: int
+
     def __init__(self, name: str, room: int, x: int, y: int):
         self.name = name
         self.room = room

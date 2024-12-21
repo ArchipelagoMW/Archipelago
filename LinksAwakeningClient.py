@@ -238,7 +238,7 @@ class RAGameboy():
 
         self.last_cache_read = time.time()
     
-    async def read_memory_block(self, address, size):
+    async def read_memory_block(self, address: int, size: int):
         block = bytearray()
         remaining_size = size
         while remaining_size:
@@ -249,7 +249,6 @@ class RAGameboy():
         return block
 
     async def read_memory_cache(self, addresses):
-        # TODO: can we just update once per frame?
         if not self.last_cache_read or self.last_cache_read + 0.1 < time.time():
             await self.update_cache()
         if not self.cache:
