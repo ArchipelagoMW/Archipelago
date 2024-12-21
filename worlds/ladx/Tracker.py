@@ -1,3 +1,6 @@
+import typing
+
+from worlds.ladx.GpsTracker import GpsTracker
 from .LADXR.checkMetadata import checkMetadataTable
 import json
 import logging
@@ -147,9 +150,16 @@ class MagpieBridge:
     server = None
     checks = None
     item_tracker = None
+    gps_tracker: GpsTracker = None
     ws = None
     features = []
     slot_data = {}
+
+    def use_entrance_tracker(self):
+        return "entrances" in self.features \
+               and self.slot_data \
+               and "entrance_mapping" in self.slot_data \
+               and any([k != v for k, v in self.slot_data["entrance_mapping"].items()])
 
     async def handler(self, websocket):
         self.ws = websocket
@@ -167,6 +177,8 @@ class MagpieBridge:
                     await self.send_all_checks()
                 if "slot_data" in self.features:
                     await self.send_slot_data(self.slot_data)
+                if self.use_entrance_tracker():
+                    await self.send_gps(diff=False)
 
     # Translate renamed IDs back to LADXR IDs
     @staticmethod
@@ -222,11 +234,17 @@ class MagpieBridge:
             return
         await self.item_tracker.sendItems(self.ws, diff=True)
 
-    async def send_gps(self, gps):
+    async def send_gps(self, diff: bool=True) -> typing.Dict[str, str]:
         if not self.ws:
             return
-        await gps.send_location(self.ws)
-        await gps.send_entrances(self.ws)
+
+        await self.gps_tracker.send_location(self.ws)
+
+        if self.use_entrance_tracker():
+            if self.slot_data and self.gps_tracker.needs_slot_data:
+                self.gps_tracker.load_slot_data(self.slot_data)
+
+            return await self.gps_tracker.send_entrances(self.ws, diff)
 
     async def send_slot_data(self, slot_data):
         if not self.ws:

@@ -28,6 +28,7 @@ from CommonClient import (CommonContext, get_base_parser, gui_enabled, logger,
 from NetUtils import ClientStatus
 from worlds.ladx.Common import BASE_ID as LABaseID
 from worlds.ladx.GpsTracker import GpsTracker
+from worlds.ladx.TrackerConsts import storage_key
 from worlds.ladx.ItemTracker import ItemTracker
 from worlds.ladx.LADXR.checkMetadata import checkMetadataTable
 from worlds.ladx.Locations import get_locations_to_id, meta_to_name
@@ -405,11 +406,12 @@ class LinksAwakeningClient():
         auth = binascii.hexlify(await self.gameboy.async_read_memory(0x0134, 12)).decode()
         self.auth = auth
 
-    async def wait_and_init_tracker(self, slot_data):
+    async def wait_and_init_tracker(self, magpie: MagpieBridge):
         await self.wait_for_game_ready()
         self.tracker = LocationTracker(self.gameboy)
         self.item_tracker = ItemTracker(self.gameboy)
-        self.gps_tracker = GpsTracker(self.gameboy, slot_data)
+        self.gps_tracker = GpsTracker(self.gameboy)
+        magpie.gps_tracker = self.gps_tracker
 
     async def recved_item_from_ap(self, item_id, from_player, next_index):
         # Don't allow getting an item until you've got your first check
@@ -555,7 +557,19 @@ class LinksAwakeningContext(CommonContext):
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     async def send_checks(self):
-        message = [{"cmd": 'LocationChecks', "locations": self.found_checks}]
+        message = [{"cmd": "LocationChecks", "locations": self.found_checks}]
+        await self.send_msgs(message)
+    
+    async def send_new_entrances(self, entrances: typing.Dict[str, str]):
+        # Store the entrances we find on the server for future sessions
+        message = [{
+            "cmd": "Set",
+            "key": storage_key,
+            "default": {},
+            "want_reply": False,
+            "operations": [{"operation": "update", "value": entrances}],
+        }]
+
         await self.send_msgs(message)
 
     had_invalid_slot_data = None
@@ -584,6 +598,9 @@ class LinksAwakeningContext(CommonContext):
             logger.info("victory!")
             await self.send_msgs(message)
             self.won = True
+    
+    async def request_found_entrances(self):
+        await self.send_msgs([{"cmd": "Get", "keys": [storage_key]}])
 
     async def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
         if self.ENABLE_DEATHLINK:
@@ -615,12 +632,14 @@ class LinksAwakeningContext(CommonContext):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
             self.slot_data = args.get("slot_data", {})
-            self.client.gps_tracker.load_slot_data(self.slot_data)
             
         # TODO - use watcher_event
         if cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], start=args["index"]):
                 self.client.recvd_checks[index] = item
+        
+        if cmd == "Retrieved" and self.magpie_enabled and storage_key in args["keys"]:
+            self.client.gps_tracker.receive_found_entrances(args["keys"][storage_key])
 
     async def sync(self):
         sync_msg = [{'cmd': 'Sync'}]
@@ -667,7 +686,7 @@ class LinksAwakeningContext(CommonContext):
                 if not self.client.recvd_checks:
                     await self.sync()
 
-                await self.client.wait_and_init_tracker(self.slot_data)
+                await self.client.wait_and_init_tracker(self.magpie)
 
                 min_tick_duration = 0.1
                 last_tick = time.time()
@@ -688,8 +707,15 @@ class LinksAwakeningContext(CommonContext):
                         try:
                             self.magpie.set_checks(self.client.tracker.all_checks)
                             await self.magpie.set_item_tracker(self.client.item_tracker)
-                            await self.magpie.send_gps(self.client.gps_tracker)
                             self.magpie.slot_data = self.slot_data
+                            
+                            if self.client.gps_tracker.needs_found_entrances:
+                                await self.request_found_entrances()
+                                self.client.gps_tracker.needs_found_entrances = False
+
+                            new_entrances = await self.magpie.send_gps(self.client.gps_tracker)
+                            if new_entrances:
+                                await self.send_new_entrances(new_entrances)
                         except Exception:
                             # Don't let magpie errors take out the client
                             pass
