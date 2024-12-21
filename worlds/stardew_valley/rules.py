@@ -280,13 +280,6 @@ def set_skull_cavern_floor_entrance_rules(logic, multiworld, player):
         set_entrance_rule(multiworld, player, dig_to_skull_floor(floor), rule)
 
 
-def set_blacksmith_entrance_rules(logic, multiworld, player):
-    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_copper, MetalBar.copper, ToolMaterial.copper)
-    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_iron, MetalBar.iron, ToolMaterial.iron)
-    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_gold, MetalBar.gold, ToolMaterial.gold)
-    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_iridium, MetalBar.iridium, ToolMaterial.iridium)
-
-
 def set_skill_entrance_rules(logic, multiworld, player, world_options: StardewValleyOptions):
     set_entrance_rule(multiworld, player, LogicEntrance.grow_spring_crops, logic.farming.has_farming_tools & logic.season.has_spring)
     set_entrance_rule(multiworld, player, LogicEntrance.grow_summer_crops, logic.farming.has_farming_tools & logic.season.has_summer)
@@ -303,6 +296,13 @@ def set_skill_entrance_rules(logic, multiworld, player, world_options: StardewVa
     set_entrance_rule(multiworld, player, LogicEntrance.grow_summer_fall_crops_in_fall, true_)
 
     set_entrance_rule(multiworld, player, LogicEntrance.fishing, logic.skill.can_get_fishing_xp)
+
+
+def set_blacksmith_entrance_rules(logic, multiworld, player):
+    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_copper, MetalBar.copper, ToolMaterial.copper)
+    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_iron, MetalBar.iron, ToolMaterial.iron)
+    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_gold, MetalBar.gold, ToolMaterial.gold)
+    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_iridium, MetalBar.iridium, ToolMaterial.iridium)
 
 
 def set_blacksmith_upgrade_rule(logic, multiworld, player, entrance_name: str, item_name: str, tool_material: str):
