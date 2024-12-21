@@ -12,7 +12,7 @@ from ..stardew_rule import StardewRule, True_, False_
 from ..strings.ap_names.skill_level_names import ModSkillLevel
 from ..strings.region_names import Region, LogicRegion
 from ..strings.spells import MagicSpell
-from ..strings.tool_names import ToolMaterial, Tool
+from ..strings.tool_names import ToolMaterial, Tool, APTool
 
 fishing_rod_prices = {
     3: 1800,
@@ -69,6 +69,16 @@ class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixi
         return can_upgrade_rule
 
     @cache_self1
+    def can_mine_using(self, material: str) -> StardewRule:
+        if material == ToolMaterial.basic:
+            return self.logic.true_
+
+        if self.content.features.tool_progression.is_progressive:
+            return self.logic.received(APTool.pickaxe, tool_materials[material])
+        else:
+            return self.logic.tool._can_purchase_upgrade(material)
+
+    @cache_self1
     def _can_purchase_upgrade(self, material: str) -> StardewRule:
         return self.logic.region.can_reach(LogicRegion.blacksmith_upgrade(material))
 
@@ -80,7 +90,7 @@ class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixi
         assert 1 <= level <= 4, "Fishing rod 0 isn't real, it can't hurt you. Training is 1, Bamboo is 2, Fiberglass is 3 and Iridium is 4."
 
         if self.content.features.tool_progression.is_progressive:
-            return self.logic.received(f"Progressive {Tool.fishing_rod}", level)
+            return self.logic.received(APTool.fishing_rod, level)
 
         if level <= 2:
             # We assume you always have access to the Bamboo pole, because mod side there is a builtin way to get it back.

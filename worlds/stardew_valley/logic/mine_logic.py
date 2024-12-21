@@ -14,7 +14,7 @@ from ..stardew_rule import StardewRule, True_
 from ..strings.performance_names import Performance
 from ..strings.region_names import Region
 from ..strings.skill_names import Skill
-from ..strings.tool_names import Tool, ToolMaterial
+from ..strings.tool_names import ToolMaterial
 
 
 class MineLogicMixin(BaseLogicMixin):
@@ -55,12 +55,12 @@ SkillLogicMixin, CookingLogicMixin]]):
     def can_progress_in_the_mines_from_floor(self, floor: int) -> StardewRule:
         tier = floor // 40
         rules = []
+
         weapon_rule = self.logic.mine.get_weapon_rule_for_floor_tier(tier)
         rules.append(weapon_rule)
 
-        # No alternative for vanilla because we assume you will get ores to upgrade your tools in the mines.
-        if self.content.features.tool_progression.is_progressive:
-            rules.append(self.logic.tool.has_tool(Tool.pickaxe, ToolMaterial.tiers[tier]))
+        tool_rule = self.logic.tool.can_mine_using(ToolMaterial.tiers[tier])
+        rules.append(tool_rule)
 
         # No alternative for vanilla because we assume that you will grind the levels in the mines.
         if self.content.features.skill_progression.is_progressive:
@@ -85,12 +85,12 @@ SkillLogicMixin, CookingLogicMixin]]):
     def can_progress_in_the_skull_cavern_from_floor(self, floor: int) -> StardewRule:
         tier = floor // 50
         rules = []
+
         weapon_rule = self.logic.combat.has_great_weapon
         rules.append(weapon_rule)
 
-        # No alternative for vanilla because we assume you will get ores to upgrade your tools in the mines.
-        if self.content.features.tool_progression.is_progressive:
-            rules.append(self.logic.received("Progressive Pickaxe", min(4, max(0, tier + 2))))
+        tool_rule = self.logic.tool.can_mine_using(ToolMaterial.tiers[min(4, max(0, tier + 2))])
+        rules.append(tool_rule)
 
         # No alternative for vanilla because we assume that you will grind the levels in the mines.
         if self.content.features.skill_progression.is_progressive:
