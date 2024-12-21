@@ -145,7 +145,7 @@ class ShapezWorld(World):
         # Determines the order of buildings for levels logic
         if self.options.randomize_level_requirements:
             self.level_logic_type = self.options.randomize_level_logic.current_key
-            if self.level_logic_type.endswith("shuffled"):
+            if self.level_logic_type.endswith("shuffled") or self.level_logic_type == "dopamine":
                 vanilla_list = ["Cutter", "Painter", "Stacker"]
                 while len(vanilla_list) > 0:
                     index = self.random.randint(0, len(vanilla_list)-1)

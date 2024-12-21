@@ -64,7 +64,6 @@ funktionieren könnten. Wenn du es versuchst, dann also auf eigene Gefahr. Sollt
 ohne mit einem Server verbunden zu sein, dann sollte sich das Spiel so verhalten, als hättest du die Client-Mod gar 
 nicht installiert.
 
-## Hast du wirklich eine deutschsprachige Infoseite geschrieben, obwohl man sie aktuell nur über Umwege erreichen kann
-## und du eigentlich an dem Praktikumsportfolio arbeiten solltest?
+## Hast du wirklich eine deutschsprachige Infoseite geschrieben, obwohl man sie aktuell nur über Umwege erreichen kann und du eigentlich an dem Praktikumsportfolio arbeiten solltest?
 
 Ja
