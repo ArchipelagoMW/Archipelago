@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, PerGameCommonOptions, DeathLink
+from Options import Choice, DeathLink, PerGameCommonOptions
 
 
 class WinCondition(Choice):

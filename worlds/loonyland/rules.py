@@ -1,8 +1,10 @@
 
 from BaseClasses import CollectionState
 
+
 def have_light_source(state: CollectionState, player: int) -> bool:
-    return state.has("Lantern", player) or (state.has("Stick", player) and state.has("Boots", player) and state.can_reach_region("Swamp Gas Cavern", player))
+    return state.has("Lantern", player) or (state.has("Stick", player) and
+                    state.has("Boots", player) and state.can_reach_region("Swamp Gas Cavern", player))
     # 20/20 when badges added
 
 
@@ -42,3 +44,13 @@ def can_cleanse_crypts(state: CollectionState, player: int) -> bool:
             state.can_reach_region("Musty Crypt", player) and
             state.can_reach_region("Dusty Crypt", player) and
             state.can_reach_region("Rusty Crypt", player)             )
+
+def hundred_percent(state: CollectionState, player: int) -> bool:
+    return False
+
+def have_39_badges(state: CollectionState, player: int) -> bool:
+    return state.has_from_list_unique(state.multiworld.worlds[player].item_name_groups["cheats"], player, 39)
+
+def have_all_weapons(state: CollectionState, player: int) -> bool:
+    return state.has_all(state.multiworld.worlds[player].item_name_groups["special_weapons"], player)
+

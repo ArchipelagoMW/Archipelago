@@ -1,13 +1,22 @@
-loonyland_base_id: int = 2876900
+from BaseClasses import ItemClassification, Region, Tutorial
 
-from BaseClasses import Region, Tutorial, ItemClassification, Location
 from worlds.AutoWorld import WebWorld, World
-from .Items import LoonylandItem
-from .Locations import LoonylandLocation, LL_Location
-from .Options import LoonylandOptions
-from .Entrances import LoonylandEntrance
-from .Data.game_data import *
 
+from .Data.game_data import (
+    VAR_WBOMBS,
+    VAR_WHOTPANTS,
+    loony_item_table,
+    loonyland_location_table,
+    loonyland_region_table,
+    set_entrance_rules,
+    set_rules,
+)
+from .Data.game_data import (
+    ll_base_id as loonyland_base_id,
+)
+from .items import LLItemCat, LoonylandItem
+from .locations import LoonylandLocation
+from .options import LoonylandOptions
 
 
 class LoonylandWebWorld(WebWorld):
@@ -35,15 +44,23 @@ class LoonylandWorld(World):
     location_name_to_id = {name: data.id + loonyland_base_id for name, data in loonyland_location_table.items()}
     item_name_to_id = {name: data.id for name, data in loony_item_table.items()}
 
+    item_name_groups = {
+        "cheats": {name for name, data in loony_item_table.items() if data.category == LLItemCat.CHEAT},
+        "special_weapons": {name for name, data in loony_item_table.items() if VAR_WBOMBS <= data.id <= VAR_WHOTPANTS}
+    }
+
     def create_item(self, name: str) -> LoonylandItem:
         return LoonylandItem(name, loony_item_table[name].classification, loony_item_table[name].id, self.player)
 
     def create_items(self) -> None:
-        item_pool: List[LoonylandItem] = []
+        item_pool: list[LoonylandItem] = []
         for name, item in loony_item_table.items():
             if item.id and item.can_create(self.multiworld, self.player):
                 for i in range(item.frequency):
-                    item_pool.append(self.create_item(name))
+                    new_item = self.create_item(name)
+                    new_item.cheat = item.category==LLItemCat.CHEAT
+                    item_pool.append(new_item)
+
 
         self.multiworld.itempool += item_pool
 
@@ -80,5 +97,6 @@ class LoonylandWorld(World):
 
     def fill_slot_data(self):
         return {
-            "DeathLink": self.options.death_link.value
+            "DeathLink": self.options.death_link.value,
+            "Difficulty": self.options.difficulty.value
         }

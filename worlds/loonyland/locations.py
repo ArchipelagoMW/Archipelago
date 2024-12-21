@@ -1,25 +1,23 @@
 from enum import Enum
-from typing import NamedTuple, Callable
+from typing import Callable, NamedTuple
 
 from BaseClasses import Location, MultiWorld
-
-loonyland_base_id: int = 2876900
 
 
 class LoonylandLocation(Location):
     game = "Loonyland"
 
 
-class LL_LocCat(Enum):
+class LLLocCat(Enum):
     PICKUP = 0
     QUEST = 1
     BADGE = 2
     EVENT = 4
 
 
-class LL_Location(NamedTuple):
+class LLLocation(NamedTuple):
     id: int
-    category: LL_LocCat
+    category: LLLocCat
     region: str
     can_create: Callable[[MultiWorld, int], bool] = lambda multiworld, player: True
 

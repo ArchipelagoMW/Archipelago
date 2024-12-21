@@ -1,15 +1,17 @@
-from typing import NamedTuple, Callable
+from enum import Enum
+from typing import Callable, NamedTuple
 
 from BaseClasses import Item, ItemClassification, MultiWorld
-from enum import Enum
+
 
 class LoonylandItem(Item):
     """
     Item from the game Loonyland
     """
     game: str = "Loonyland"
+    cheat: bool = False
 
-class LL_ItemCat(Enum):
+class LLItemCat(Enum):
     ITEM = 0
     CHEAT = 1
     FILLER = 2
@@ -17,9 +19,9 @@ class LL_ItemCat(Enum):
     EVENT = 4
 
 
-class LL_Item(NamedTuple):
+class LLItem(NamedTuple):
     id: int
-    category: LL_ItemCat
+    category: LLItemCat
     classification: ItemClassification
     frequency: int = 1
     can_create: Callable[[MultiWorld, int], bool] = lambda multiworld, player: True
