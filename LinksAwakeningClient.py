@@ -500,7 +500,7 @@ def create_task_log_exception(awaitable) -> asyncio.Task:
 
 class LinksAwakeningContext(CommonContext):
     tags = {"AP"}
-    game = "Links Awakening DX Beta"
+    game = "Links Awakening DX"
     items_handling = 0b101
     want_slot_data = True
     la_task = None
