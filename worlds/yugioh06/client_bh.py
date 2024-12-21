@@ -118,7 +118,27 @@ class YuGiOh2006Client(BizHawkClient):
                 if locs_to_send is not None:
                     await ctx.send_msgs([{"cmd": "LocationChecks", "locations": list(locs_to_send)}])
 
-            # Send game clear if we're in either any ending cutscene or the credits state.
+            # Set collected Challenges to complete
+            for location in ctx.checked_locations:
+                if location not in ctx.locations_checked:
+                    cid = location - 5730038
+                    old_score = await bizhawk.read(
+                        ctx.bizhawk_ctx, [
+                            (cid * 4 + 0x6CC8, 1, "EWRAM")]
+                    )
+                    # set last 2 bits to 01
+                    old_score = old_score[0][0]
+                    new_score = old_score & 252 | 1
+                    await bizhawk.guarded_write(
+                        ctx.bizhawk_ctx,[
+                            (cid * 4 + 0x6CC8, new_score.to_bytes(1, "little"), "EWRAM"),
+                        ],
+                        [
+                            (cid * 4 + 0x6CC8, old_score.to_bytes(1, "little"), "EWRAM"),
+                        ]
+                    )
+
+            # Send game clear if the fifth tier 5 campaign opponent was beaten.
             if not ctx.finished_game and locations[18] & (1 << 5) != 0:
                 await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
 
