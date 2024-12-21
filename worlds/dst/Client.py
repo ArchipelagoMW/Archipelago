@@ -378,7 +378,7 @@ def send_response(conn:socket.socket, content:Dict = {}, status=100):
 
     body = json.dumps(content).encode()
     try:
-        conn.send(header + body)
+        conn.sendall(header + body)
     except Exception as e:
         print(f"Could not send content: {content}")
 
@@ -478,7 +478,7 @@ class DSTHandler():
     async def run_handler(self):
         while True:
             sock = socket.socket()
-            sock.bind(("", 8000))
+            sock.bind(("localhost", 8000))
             sock.listen(5)
             try:
                 while True:
