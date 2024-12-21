@@ -86,52 +86,21 @@ def write_tokens(world: World, patch: YGO06ProcedurePatch):
         inventory_map[index] = inventory_map[index] | (1 << bit)
     for i in range(32):
         patch.write_token(APTokenTypes.WRITE, 0xE9DC + i, struct.pack("<B", inventory_map[i]))
+
     # set unlock conditions for the last 3 campaign opponents
-    third_tier_5 = (
-        world.options.third_tier_5_campaign_boss_challenges.value
-        if world.options.third_tier_5_campaign_boss_unlock_condition.value == 1
-        else world.options.third_tier_5_campaign_boss_campaign_opponents.value
-    )
-    patch.write_token(APTokenTypes.WRITE, 0xEEFA, struct.pack("<B", third_tier_5))
+    patch.write_token(APTokenTypes.WRITE, 0xef9c,
+                      struct.pack("<B", world.options.third_tier_5_campaign_boss_campaign_opponents.value))
+    patch.write_token(APTokenTypes.WRITE, 0xef9d,
+                      struct.pack("<B", world.options.fourth_tier_5_campaign_boss_campaign_opponents.value))
+    patch.write_token(APTokenTypes.WRITE, 0xef9e,
+                      struct.pack("<B", world.options.final_campaign_boss_campaign_opponents.value))
+    patch.write_token(APTokenTypes.WRITE, 0xef9f,
+                      struct.pack("<B", world.options.third_tier_5_campaign_boss_challenges.value))
+    patch.write_token(APTokenTypes.WRITE, 0xefa0,
+                      struct.pack("<B", world.options.fourth_tier_5_campaign_boss_challenges.value))
+    patch.write_token(APTokenTypes.WRITE, 0xefa1,
+                      struct.pack("<B", world.options.final_campaign_boss_challenges.value))
 
-    fourth_tier_5 = (
-        world.options.fourth_tier_5_campaign_boss_challenges.value
-        if world.options.fourth_tier_5_campaign_boss_unlock_condition.value == 1
-        else world.options.fourth_tier_5_campaign_boss_campaign_opponents.value
-    )
-    patch.write_token(APTokenTypes.WRITE, 0xEF10, struct.pack("<B", fourth_tier_5))
-    final = (
-        world.options.final_campaign_boss_challenges.value
-        if world.options.final_campaign_boss_unlock_condition.value == 1
-        else world.options.final_campaign_boss_campaign_opponents.value
-    )
-    patch.write_token(APTokenTypes.WRITE, 0xEF22, struct.pack("<B", final))
-
-    patch.write_token(
-        APTokenTypes.WRITE,
-        0xEEF8,
-        struct.pack(
-            "<B",
-            int((function_addresses.get(world.options.third_tier_5_campaign_boss_unlock_condition.value) - 0xEEFA) / 2),
-        ),
-    )
-    patch.write_token(
-        APTokenTypes.WRITE,
-        0xEF0E,
-        struct.pack(
-            "<B",
-            int(
-                (function_addresses.get(world.options.fourth_tier_5_campaign_boss_unlock_condition.value) - 0xEF10) / 2
-            ),
-        ),
-    )
-    patch.write_token(
-        APTokenTypes.WRITE,
-        0xEF20,
-        struct.pack(
-            "<B", int((function_addresses.get(world.options.final_campaign_boss_unlock_condition.value) - 0xEF22) / 2)
-        ),
-    )
     # set starting money
     patch.write_token(APTokenTypes.WRITE, 0xF4734, struct.pack("<I", world.options.starting_money))
     patch.write_token(APTokenTypes.WRITE, 0xE70C, struct.pack("<B", world.options.money_reward_multiplier.value))

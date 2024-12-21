@@ -44,30 +44,6 @@ class Banlist(Choice):
     default = option_september_2005
 
 
-class FinalCampaignBossUnlockCondition(Choice):
-    """How to unlock the final campaign boss and goal for the world"""
-
-    display_name = "Final Campaign Boss unlock Condition"
-    option_campaign_opponents = 0
-    option_challenges = 1
-
-
-class FourthTier5UnlockCondition(Choice):
-    """How to unlock the fourth campaign boss"""
-
-    display_name = "Fourth Tier 5 Campaign Boss unlock Condition"
-    option_campaign_opponents = 0
-    option_challenges = 1
-
-
-class ThirdTier5UnlockCondition(Choice):
-    """How to unlock the third campaign boss"""
-
-    display_name = "Third Tier 5 Campaign Boss unlock Condition"
-    option_campaign_opponents = 0
-    option_challenges = 1
-
-
 class FinalCampaignBossChallenges(Range):
     """Number of Limited/Theme Duels completed for the Final Campaign Boss to appear"""
 
@@ -190,9 +166,6 @@ class Yugioh06Options(PerGameCommonOptions):
     structure_deck: StructureDeck
     starter_deck: StarterDeck
     banlist: Banlist
-    final_campaign_boss_unlock_condition: FinalCampaignBossUnlockCondition
-    fourth_tier_5_campaign_boss_unlock_condition: FourthTier5UnlockCondition
-    third_tier_5_campaign_boss_unlock_condition: ThirdTier5UnlockCondition
     final_campaign_boss_challenges: FinalCampaignBossChallenges
     fourth_tier_5_campaign_boss_challenges: FourthTier5CampaignBossChallenges
     third_tier_5_campaign_boss_challenges: ThirdTier5CampaignBossChallenges

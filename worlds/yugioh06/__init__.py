@@ -37,7 +37,7 @@ from .locations import (
     special,
 )
 from .logic import core_booster, yugioh06_difficulty
-from .opponents import OpponentData, get_opponent_condition, get_opponent_locations, get_opponents
+from .opponents import OpponentData, get_opponent_locations, get_opponents
 from .opponents import challenge_opponents as challenge_opponents
 from .options import Yugioh06Options
 from .rom import MD5America, MD5Europe, YGO06ProcedurePatch, write_tokens
@@ -122,7 +122,7 @@ class Yugioh06World(World):
         "Tier 4 Opponent": set(tier_4_opponents),
         "Tier 5 Opponent": set(tier_5_opponents),
         "Campaign Opponent": set(tier_1_opponents + tier_2_opponents + tier_3_opponents +
-                             tier_4_opponents + tier_5_opponents)
+                                 tier_4_opponents + tier_5_opponents)
     }
 
     removed_challenges: List[str]
@@ -149,15 +149,6 @@ class Yugioh06World(World):
                 slot_data = self.multiworld.re_gen_passthrough["Yu-Gi-Oh! 2006"]
                 self.options.structure_deck.value = slot_data["structure_deck"]
                 self.options.banlist.value = slot_data["banlist"]
-                self.options.final_campaign_boss_unlock_condition.value = slot_data[
-                    "final_campaign_boss_unlock_condition"
-                ]
-                self.options.fourth_tier_5_campaign_boss_unlock_condition.value = slot_data[
-                    "fourth_tier_5_campaign_boss_unlock_condition"
-                ]
-                self.options.third_tier_5_campaign_boss_unlock_condition.value = slot_data[
-                    "third_tier_5_campaign_boss_unlock_condition"
-                ]
                 self.options.final_campaign_boss_challenges.value = slot_data["final_campaign_boss_challenges"]
                 self.options.fourth_tier_5_campaign_boss_challenges.value = slot_data[
                     "fourth_tier_5_campaign_boss_challenges"
@@ -228,6 +219,7 @@ class Yugioh06World(World):
             for card_name, amount in worst_deck.items():
                 card = cards[card_name]
                 self.structure_deck[card] = amount
+
         # set starting booster and opponent
         for item in self.options.start_inventory:
             if item in opponents:
@@ -246,15 +238,9 @@ class Yugioh06World(World):
         if not self.removed_challenges:
             challenge = list(({**Limited_Duels, **Theme_Duels}).keys())
             noc = len(challenge) - max(
-                self.options.third_tier_5_campaign_boss_challenges.value
-                if self.options.third_tier_5_campaign_boss_unlock_condition == "challenges"
-                else 0,
-                self.options.fourth_tier_5_campaign_boss_challenges.value
-                if self.options.fourth_tier_5_campaign_boss_unlock_condition == "challenges"
-                else 0,
-                self.options.final_campaign_boss_challenges.value
-                if self.options.final_campaign_boss_unlock_condition == "challenges"
-                else 0,
+                self.options.third_tier_5_campaign_boss_challenges.value,
+                self.options.fourth_tier_5_campaign_boss_challenges.value,
+                self.options.final_campaign_boss_challenges.value,
                 self.options.number_of_challenges.value,
             )
 
@@ -266,7 +252,7 @@ class Yugioh06World(World):
             self.removed_challenges = total[:noc]
 
         self.campaign_opponents = get_opponents(
-            self.multiworld, self.player, self.options.campaign_opponents_shuffle.value
+            self.multiworld, self.player, bool(self.options.campaign_opponents_shuffle.value)
         )
 
 
@@ -308,38 +294,21 @@ class Yugioh06World(World):
             region = self.create_region(opponent.name, get_opponent_locations(opponent))
             entrance = Entrance(self.player, unlock_item, campaign)
             if opponent.tier == 5 and opponent.column > 2:
-                unlock_amount = 0
-                is_challenge = True
+                campaign_amount = 0
+                challenge_amount = 0
                 if opponent.column == 3:
-                    if self.options.third_tier_5_campaign_boss_unlock_condition.value == 1:
-                        unlock_item = "Challenge Beaten"
-                        unlock_amount = self.options.third_tier_5_campaign_boss_challenges.value
-                        is_challenge = True
-                    else:
-                        unlock_item = "Campaign Boss Beaten"
-                        unlock_amount = self.options.third_tier_5_campaign_boss_campaign_opponents.value
-                        is_challenge = False
+                    challenge_amount = self.options.third_tier_5_campaign_boss_challenges.value
+                    campaign_amount = self.options.third_tier_5_campaign_boss_campaign_opponents.value
                 if opponent.column == 4:
-                    if self.options.fourth_tier_5_campaign_boss_unlock_condition.value == 1:
-                        unlock_item = "Challenge Beaten"
-                        unlock_amount = self.options.fourth_tier_5_campaign_boss_challenges.value
-                        is_challenge = True
-                    else:
-                        unlock_item = "Campaign Boss Beaten"
-                        unlock_amount = self.options.fourth_tier_5_campaign_boss_campaign_opponents.value
-                        is_challenge = False
+                    challenge_amount = self.options.fourth_tier_5_campaign_boss_challenges.value
+                    campaign_amount = self.options.fourth_tier_5_campaign_boss_campaign_opponents.value
                 if opponent.column == 5:
-                    if self.options.final_campaign_boss_unlock_condition.value == 1:
-                        unlock_item = "Challenge Beaten"
-                        unlock_amount = self.options.final_campaign_boss_challenges.value
-                        is_challenge = True
-                    else:
-                        unlock_item = "Campaign Boss Beaten"
-                        unlock_amount = self.options.final_campaign_boss_campaign_opponents.value
-                        is_challenge = False
-                entrance.access_rule = get_opponent_condition(
-                    opponent, unlock_item, unlock_amount, self.player, is_challenge
-                )
+                    challenge_amount = self.options.final_campaign_boss_challenges.value
+                    campaign_amount = self.options.final_campaign_boss_campaign_opponents.value
+                entrance.access_rule = lambda state, chal_a=challenge_amount, cam_a=campaign_amount, opp=opponent: (
+                    state.has("Challenge Beaten", self.player, chal_a)) and \
+                    state.has_group("Campaign Boss Beaten", self.player, cam_a) and \
+                    state.has_all(opp.additional_info, self.player)
             else:
                 entrance.access_rule = lambda state, unlock=unlock_item, opp=opponent: state.has(
                     unlock, self.player
@@ -466,16 +435,11 @@ class Yugioh06World(World):
         slot_data: Dict[str, Any] = {
             "structure_deck": self.options.structure_deck.value,
             "banlist": self.options.banlist.value,
-            "final_campaign_boss_unlock_condition": self.options.final_campaign_boss_unlock_condition.value,
-            "fourth_tier_5_campaign_boss_unlock_condition":
-                self.options.fourth_tier_5_campaign_boss_unlock_condition.value,
-            "third_tier_5_campaign_boss_unlock_condition":
-                self.options.third_tier_5_campaign_boss_unlock_condition.value,
             "final_campaign_boss_challenges": self.options.final_campaign_boss_challenges.value,
             "fourth_tier_5_campaign_boss_challenges":
                 self.options.fourth_tier_5_campaign_boss_challenges.value,
             "third_tier_5_campaign_boss_challenges":
-                self.options.third_tier_5_campaign_boss_campaign_opponents.value,
+                self.options.third_tier_5_campaign_boss_challenges.value,
             "final_campaign_boss_campaign_opponents":
                 self.options.final_campaign_boss_campaign_opponents.value,
             "fourth_tier_5_campaign_boss_campaign_opponents":

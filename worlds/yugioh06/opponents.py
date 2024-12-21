@@ -246,19 +246,3 @@ def get_opponent_locations(opponent: OpponentData) -> Dict[str, Optional[Union[s
     for info in opponent.campaign_info:
         location[opponent.name + "-> " + info] = info
     return location
-
-
-def get_opponent_condition(opponent: OpponentData, unlock_item: str, unlock_amount: int, player: int,
-                           is_challenge: bool) -> CollectionRule:
-    if is_challenge:
-        return lambda state: (
-            state.has(unlock_item, player, unlock_amount)
-            and yugioh06_difficulty(state, player, opponent.difficulty)
-            and state.has_all(opponent.additional_info, player)
-        )
-    else:
-        return lambda state: (
-            state.has_group(unlock_item, player, unlock_amount)
-            and yugioh06_difficulty(state, player, opponent.difficulty)
-            and state.has_all(opponent.additional_info, player)
-        )
