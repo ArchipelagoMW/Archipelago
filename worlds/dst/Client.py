@@ -415,8 +415,10 @@ class DSTHandler():
             if datatype == "Ping":
                 if len(self._sendqueue):
                     send_response(conn, self._sendqueue.pop(0), 100)
+                    return
                 elif len(self._sendqueue_lowpriority):
                     send_response(conn, self._sendqueue_lowpriority.pop(0), 100)
+                    return
                 else:
                     # No data to send. Delay next ping
                     await asyncio.sleep(1.0)
@@ -477,8 +479,7 @@ class DSTHandler():
         while True:
             sock = socket.socket()
             sock.bind(("", 8000))
-            sock.listen(2)
-            sock.setblocking(False)
+            sock.listen(5)
             try:
                 while True:
                     await self.handle_dst_request(sock)
