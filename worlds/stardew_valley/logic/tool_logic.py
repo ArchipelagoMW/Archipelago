@@ -10,8 +10,7 @@ from .season_logic import SeasonLogicMixin
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..stardew_rule import StardewRule, True_, False_
 from ..strings.ap_names.skill_level_names import ModSkillLevel
-from ..strings.entrance_names import LogicEntrance
-from ..strings.region_names import Region
+from ..strings.region_names import Region, LogicRegion
 from ..strings.spells import MagicSpell
 from ..strings.tool_names import ToolMaterial, Tool
 
@@ -71,7 +70,7 @@ class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixi
 
     @cache_self1
     def _can_purchase_upgrade(self, material: str) -> StardewRule:
-        return self.logic.region.can_reach(LogicEntrance.blacksmith_upgrade(material))
+        return self.logic.region.can_reach(LogicRegion.blacksmith_upgrade(material))
 
     def can_use_tool_at(self, tool: str, material: str, region: str) -> StardewRule:
         return self.has_tool(tool, material) & self.logic.region.can_reach(region)
