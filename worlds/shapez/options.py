@@ -97,6 +97,8 @@ class RandomizeLevelLogic(Choice):
     option_random_steps = 6
     option_random_steps_shuffled = 7
     option_hardcore = 8
+    option_dopamine = 9
+    option_dopamine_overflow = 10
     default = 2
 
 

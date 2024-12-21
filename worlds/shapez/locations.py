@@ -224,11 +224,26 @@ def addlevels(maxlevel: int, logictype: str,
             f("Level 20 Additional", "Levels with 5 Buildings")
             f("Level 20 Additional 2", "Levels with 5 Buildings")
 
-    else:  # logictype == hardcore
+    elif logictype == "hardcore":
         f("Level 20 Additional", "Levels with 5 Buildings")
         f("Level 20 Additional 2", "Levels with 5 Buildings")
         for x in range(2, maxlevel+1):
             f(f"Level {x}", "Levels with 5 Buildings")
+
+    elif logictype == "dopamine":
+        f("Level 20 Additional", "Levels with 2 Buildings")
+        f("Level 20 Additional 2", "Levels with 2 Buildings")
+        for x in range(2, maxlevel+1):
+            f(f"Level {x}", "Levels with 2 Buildings")
+
+    elif logictype == "dopamine_overflow":
+        f("Level 20 Additional", "Main")
+        f("Level 20 Additional 2", "Main")
+        for x in range(2, maxlevel+1):
+            f(f"Level {x}", "Main")
+
+    else:
+        raise Exception(f"Illegal level logic type {logictype}")
 
     return locations
 
