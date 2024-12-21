@@ -438,7 +438,7 @@ class SC2CampaignGoal(NamedTuple):
 
 campaign_final_mission_locations: Dict[SC2Campaign, Optional[SC2CampaignGoal]] = {
     SC2Campaign.WOL: SC2CampaignGoal(SC2Mission.ALL_IN, f'{SC2Mission.ALL_IN.mission_name}: Victory'),
-    SC2Campaign.PROPHECY: SC2CampaignGoal(SC2Mission.IN_UTTER_DARKNESS, f'{SC2Mission.IN_UTTER_DARKNESS.mission_name}: Kills'),
+    SC2Campaign.PROPHECY: SC2CampaignGoal(SC2Mission.IN_UTTER_DARKNESS, f'{SC2Mission.IN_UTTER_DARKNESS.mission_name}: Defeat'),
     SC2Campaign.HOTS: SC2CampaignGoal(SC2Mission.THE_RECKONING, f'{SC2Mission.THE_RECKONING.mission_name}: Victory'),
     SC2Campaign.PROLOGUE: SC2CampaignGoal(SC2Mission.EVIL_AWOKEN, f'{SC2Mission.EVIL_AWOKEN.mission_name}: Victory'),
     SC2Campaign.LOTV: SC2CampaignGoal(SC2Mission.SALVATION, f'{SC2Mission.SALVATION.mission_name}: Victory'),
@@ -503,7 +503,9 @@ def get_goal_location(mission: SC2Mission) -> Union[str, None]:
     if mission in campaign_alt_goals:
         return campaign_alt_goals.get(mission)
 
-    return mission.mission_name + ": Victory"
+    return (mission.mission_name + ": Defeat") \
+        if mission in [SC2Mission.IN_UTTER_DARKNESS, SC2Mission.IN_UTTER_DARKNESS_T, SC2Mission.IN_UTTER_DARKNESS_Z] \
+        else mission.mission_name + ": Victory"
 
 
 def get_campaign_potential_goal_missions(campaign: SC2Campaign) -> List[SC2Mission]:
