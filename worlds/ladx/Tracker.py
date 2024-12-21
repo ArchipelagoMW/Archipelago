@@ -209,6 +209,8 @@ class MagpieBridge:
                     await self.send_slot_data(self.slot_data)
                 if self.use_entrance_tracker():
                     await self.send_gps(diff=False)
+                
+                await self.send_handshAck()
 
     # Translate renamed IDs back to LADXR IDs
     @staticmethod
@@ -218,6 +220,18 @@ class MagpieBridge:
         if the_id == "0x2A7":
             return "0x2A1-1"
         return the_id
+    
+    async def send_handshAck(self):
+        if not self.ws:
+            return
+
+        message = {
+            "type": "handshAck",
+            "version": "1.31",
+            "name": "archipelago-ladx-client",
+        }
+
+        await self.ws.send(json.dumps(message))
 
     async def send_all_checks(self):
         while self.checks == None:
@@ -227,7 +241,6 @@ class MagpieBridge:
         message = {
             "type": "check",
             "refresh":  True,
-            "version": "1.0",
             "diff": False,
             "checks": [{"id": self.fixup_id(check.id), "checked": check.value} for check in self.checks]
         }
@@ -242,7 +255,6 @@ class MagpieBridge:
         message = {
             "type": "check",
             "refresh": True,
-            "version": "1.0",
             "diff": True,
             "checks": [{"id": self.fixup_id(check), "checked": True} for check in checks]
         }
