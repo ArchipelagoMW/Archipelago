@@ -36,6 +36,9 @@
 # Castlevania 64
 /worlds/cv64/ @LiquidCat64
 
+# Castlevania: Circle of the Moon
+/worlds/cvcotm/ @LiquidCat64
+
 # Celeste 64
 /worlds/celeste64/ @PoryGone
 

@@ -496,7 +496,7 @@ class TextChoice(Choice):
 
     def __init__(self, value: typing.Union[str, int]):
         assert isinstance(value, str) or isinstance(value, int), \
-            f"{value} is not a valid option for {self.__class__.__name__}"
+            f"'{value}' is not a valid option for '{self.__class__.__name__}'"
         self.value = value
 
     @property
@@ -617,17 +617,17 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
                 used_locations.append(location)
                 used_bosses.append(boss)
                 if not cls.valid_boss_name(boss):
-                    raise ValueError(f"{boss.title()} is not a valid boss name.")
+                    raise ValueError(f"'{boss.title()}' is not a valid boss name.")
                 if not cls.valid_location_name(location):
-                    raise ValueError(f"{location.title()} is not a valid boss location name.")
+                    raise ValueError(f"'{location.title()}' is not a valid boss location name.")
                 if not cls.can_place_boss(boss, location):
-                    raise ValueError(f"{location.title()} is not a valid location for {boss.title()} to be placed.")
+                    raise ValueError(f"'{location.title()}' is not a valid location for {boss.title()} to be placed.")
             else:
                 if cls.duplicate_bosses:
                     if not cls.valid_boss_name(option):
-                        raise ValueError(f"{option} is not a valid boss name.")
+                        raise ValueError(f"'{option}' is not a valid boss name.")
                 else:
-                    raise ValueError(f"{option.title()} is not formatted correctly.")
+                    raise ValueError(f"'{option.title()}' is not formatted correctly.")
 
     @classmethod
     def can_place_boss(cls, boss: str, location: str) -> bool:
@@ -754,7 +754,7 @@ class NamedRange(Range):
         elif value > self.range_end and value not in self.special_range_names.values():
             raise Exception(f"{value} is higher than maximum {self.range_end} for option {self.__class__.__name__} " +
                             f"and is also not one of the supported named special values: {self.special_range_names}")
-        
+
         # See docstring
         for key in self.special_range_names:
             if key != key.lower():
@@ -817,15 +817,15 @@ class VerifyKeys(metaclass=FreezeValidKeys):
             for item_name in self.value:
                 if item_name not in world.item_names:
                     picks = get_fuzzy_results(item_name, world.item_names, limit=1)
-                    raise Exception(f"Item {item_name} from option {self} "
-                                    f"is not a valid item name from {world.game}. "
+                    raise Exception(f"Item '{item_name}' from option '{self}' "
+                                    f"is not a valid item name from '{world.game}'. "
                                     f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
         elif self.verify_location_name:
             for location_name in self.value:
                 if location_name not in world.location_names:
                     picks = get_fuzzy_results(location_name, world.location_names, limit=1)
-                    raise Exception(f"Location {location_name} from option {self} "
-                                    f"is not a valid location name from {world.game}. "
+                    raise Exception(f"Location '{location_name}' from option '{self}' "
+                                    f"is not a valid location name from '{world.game}'. "
                                     f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
 
     def __iter__(self) -> typing.Iterator[typing.Any]:
@@ -1111,11 +1111,11 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
             used_entrances.append(entrance)
             used_exits.append(exit)
             if not cls.validate_entrance_name(entrance):
-                raise ValueError(f"{entrance.title()} is not a valid entrance.")
+                raise ValueError(f"'{entrance.title()}' is not a valid entrance.")
             if not cls.validate_exit_name(exit):
-                raise ValueError(f"{exit.title()} is not a valid exit.")
+                raise ValueError(f"'{exit.title()}' is not a valid exit.")
             if not cls.can_connect(entrance, exit):
-                raise ValueError(f"Connection between {entrance.title()} and {exit.title()} is invalid.")
+                raise ValueError(f"Connection between '{entrance.title()}' and '{exit.title()}' is invalid.")
 
     @classmethod
     def from_any(cls, data: PlandoConFromAnyType) -> Self:
@@ -1180,7 +1180,7 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
 class Accessibility(Choice):
     """
     Set rules for reachability of your items/locations.
-    
+
     **Full:** ensure everything can be reached and acquired.
 
     **Minimal:** ensure what is needed to reach your goal can be acquired.
@@ -1198,7 +1198,7 @@ class Accessibility(Choice):
 class ItemsAccessibility(Accessibility):
     """
     Set rules for reachability of your items/locations.
-    
+
     **Full:** ensure everything can be reached and acquired.
 
     **Minimal:** ensure what is needed to reach your goal can be acquired.
@@ -1249,12 +1249,16 @@ class CommonOptions(metaclass=OptionsMetaProperty):
     progression_balancing: ProgressionBalancing
     accessibility: Accessibility
 
-    def as_dict(self, *option_names: str, casing: str = "snake") -> typing.Dict[str, typing.Any]:
+    def as_dict(self,
+                *option_names: str,
+                casing: typing.Literal["snake", "camel", "pascal", "kebab"] = "snake",
+                toggles_as_bools: bool = False) -> typing.Dict[str, typing.Any]:
         """
         Returns a dictionary of [str, Option.value]
 
         :param option_names: names of the options to return
         :param casing: case of the keys to return. Supports `snake`, `camel`, `pascal`, `kebab`
+        :param toggles_as_bools: whether toggle options should be output as bools instead of strings
         """
         assert option_names, "options.as_dict() was used without any option names."
         option_results = {}
@@ -1276,6 +1280,8 @@ class CommonOptions(metaclass=OptionsMetaProperty):
                 value = getattr(self, option_name).value
                 if isinstance(value, set):
                     value = sorted(value)
+                elif toggles_as_bools and issubclass(type(self).type_hints[option_name], Toggle):
+                    value = bool(value)
                 option_results[display_name] = value
             else:
                 raise ValueError(f"{option_name} not found in {tuple(type(self).type_hints)}")
@@ -1373,8 +1379,8 @@ class ItemLinks(OptionList):
                 picks_group = get_fuzzy_results(item_name, world.item_name_groups.keys(), limit=1)
                 picks_group = f" or '{picks_group[0][0]}' ({picks_group[0][1]}% sure)" if allow_item_groups else ""
 
-                raise Exception(f"Item {item_name} from item link {item_link} "
-                                f"is not a valid item from {world.game} for {pool_name}. "
+                raise Exception(f"Item '{item_name}' from item link '{item_link}' "
+                                f"is not a valid item from '{world.game}' for '{pool_name}'. "
                                 f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure){picks_group}")
             if allow_item_groups:
                 pool |= world.item_name_groups.get(item_name, {item_name})
