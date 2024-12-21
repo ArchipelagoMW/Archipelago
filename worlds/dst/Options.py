@@ -557,6 +557,7 @@ dontstarvetogether_option_presets = {
         "days_to_survive": 70,
         "season_flow": "normal",
         "season_gear_logic": "enabled",
+        "seed_items": False,
     },
     "Season Giants (Easy)": {
         "goal": "bosses_all",
