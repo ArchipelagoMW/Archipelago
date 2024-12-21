@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Toggle, Choice, DeathLinkMixin, StartInventoryPool, PerGameCommonOptions
+from Options import Toggle, Choice, DeathLinkMixin, StartInventoryPool, PerGameCommonOptions, DefaultOnToggle
 
 
 class Act1DeathLinkBehaviour(Choice):
@@ -12,6 +12,7 @@ class Act1DeathLinkBehaviour(Choice):
     display_name = "Act 1 Death Link Behaviour"
     option_sacrificed = 0
     option_candle_extinguished = 1
+    default = 0
 
 
 class Goal(Choice):
@@ -26,6 +27,7 @@ class Goal(Choice):
     option_full_story_in_order = 0
     option_full_story_any_order = 1
     option_first_act = 2
+    default = 0
 
 
 class RandomizeCodes(Toggle):
@@ -47,6 +49,7 @@ class RandomizeDeck(Choice):
     option_every_encounter_within_same_type = 1
     option_every_encounter_any_type = 2
     option_starting_only = 3
+    default = 0
 
 
 class RandomizeSigils(Choice):
@@ -61,6 +64,7 @@ class RandomizeSigils(Choice):
     option_disable = 0
     option_randomize_addons = 1
     option_randomize_all = 2
+    default = 0
 
 
 class OptionalDeathCard(Choice):
@@ -75,12 +79,12 @@ class OptionalDeathCard(Choice):
     option_disable = 0
     option_always_on = 1
     option_deathlink_only = 2
+    default = 2
 
 
-class SkipTutorial(Toggle):
+class SkipTutorial(DefaultOnToggle):
     """Skips the first few tutorial runs of act 1. Bones are available from the start."""
     display_name = "Skip Tutorial"
-    default = 1
 
 
 class SkipEpilogue(Toggle):
@@ -100,6 +104,7 @@ class EpitaphPiecesRandomization(Choice):
     option_all_pieces = 0
     option_in_groups = 1
     option_as_one_item = 2
+    default = 0
 
 
 class PaintingChecksBalancing(Choice):
@@ -114,6 +119,7 @@ class PaintingChecksBalancing(Choice):
     option_none = 0
     option_balanced = 1
     option_force_filler = 2
+    default = 1
 
 
 @dataclass
