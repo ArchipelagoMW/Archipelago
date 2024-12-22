@@ -108,12 +108,14 @@ class CMItemPool:
         """Create useful items."""
         items = []
         my_useful_items = list(useful_items.keys())
+        locked_items = {}  # Useful items don't need to lock anything
+
         while len(my_useful_items) > 0:
             chosen_item = self.world.random.choice(my_useful_items)
             if not self.world.has_prereqs(chosen_item):
                 continue
             if self.world.can_add_more(chosen_item):
-                self.consume_item(chosen_item)
+                self.consume_item(chosen_item, locked_items)
                 try_item = self.world.create_item(chosen_item)
                 items.append(try_item)
             else:
@@ -124,6 +126,7 @@ class CMItemPool:
         """Create filler items."""
         items = []
         my_filler_items = list(filler_items.keys())
+        locked_items = {}  # Filler items don't need to lock anything
         if not has_pocket:
             my_filler_items = [item for item in my_filler_items if "Pocket" not in item]
         
@@ -134,7 +137,7 @@ class CMItemPool:
             if not has_pocket and not self.world.has_prereqs(chosen_item):
                 continue
             if has_pocket or self.world.can_add_more(chosen_item):
-                self.consume_item(chosen_item)
+                self.consume_item(chosen_item, locked_items)
                 try_item = self.world.create_item(chosen_item)
                 items.append(try_item)
             else:

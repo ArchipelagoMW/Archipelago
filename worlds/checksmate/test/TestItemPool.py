@@ -1,9 +1,14 @@
 import unittest
 from typing import Dict, List
 from BaseClasses import MultiWorld, CollectionState
+from Options import DefaultOnToggle, Accessibility, ItemSet
 from .. import CMWorld
 from ..Items import progression_items, useful_items, filler_items
-from ..Options import CMOptions, MinorPieceLimitByType, MajorPieceLimitByType, QueenPieceLimitByType, QueenPieceLimit, PocketLimitByPocket
+from ..Options import (CMOptions, MinorPieceLimitByType, MajorPieceLimitByType, 
+                      QueenPieceLimitByType, QueenPieceLimit, PocketLimitByPocket,
+                      Goal, Difficulty,
+                      EnableTactics, PieceLocations, PieceTypes, FairyChessPieces,
+                      FairyChessArmy, FairyChessPawns)
 from ..ItemPool import CMItemPool
 
 
@@ -13,73 +18,52 @@ class TestItemPool(unittest.TestCase):
         self.multiworld.game[1] = "ChecksMate"
         self.world = CMWorld(self.multiworld, 1)
         
-        # Initialize options with default values
-        options_dict = {
-            "progression_balancing": True,
-            "accessibility": "locations",
-            "local_items": "any",
-            "non_local_items": "any",
-            "start_inventory": [],
-            "start_hints": [],
-            "start_location_hints": [],
-            "exclude_locations": set(),
-            "priority_locations": set(),
-            "item_links": [],
-            "goal": "single",
-            "difficulty": "normal",
-            "enable_tactics": "all",
-            "piece_locations": "all",
-            "piece_types": "all",
-            "early_material": 0,
-            "max_engine_penalties": 5,
-            "max_pocket": 12,
-            "max_kings": 3,
-            "fairy_kings": 2,
-            "fairy_chess_pieces": "none",
-            "fairy_chess_pieces_configure": "none",
-            "fairy_chess_army": "none",
-            "fairy_chess_pawns": "none",
-            "minor_piece_limit_by_type": MinorPieceLimitByType.range_end,
-            "major_piece_limit_by_type": MajorPieceLimitByType.range_end,
-            "queen_piece_limit_by_type": QueenPieceLimitByType.range_end,
-            "queen_piece_limit": QueenPieceLimit.range_end,
-            "pocket_limit_by_pocket": PocketLimitByPocket.range_end,
-            "locked_items": {},
-            "death_link": False
-        }
+        # Initialize options with proper option classes
+        progression_balancing = DefaultOnToggle(True)
+        accessibility = Accessibility.option_full
+        local_items = ItemSet({})
+        non_local_items = ItemSet({})
+        goal = Goal.option_single
+        difficulty = Difficulty.option_daily
+        enable_tactics = EnableTactics.option_all
+        piece_locations = PieceLocations.option_chaos
+        piece_types = PieceTypes.option_stable
+        fairy_chess_pieces = FairyChessPieces.option_full
+        fairy_chess_army = FairyChessArmy.option_stable
+        fairy_chess_pawns = FairyChessPawns.option_vanilla
         
         self.world.options = CMOptions(
-            options_dict["progression_balancing"],
-            options_dict["accessibility"],
-            options_dict["local_items"],
-            options_dict["non_local_items"],
-            options_dict["start_inventory"],
-            options_dict["start_hints"],
-            options_dict["start_location_hints"],
-            options_dict["exclude_locations"],
-            options_dict["priority_locations"],
-            options_dict["item_links"],
-            options_dict["goal"],
-            options_dict["difficulty"],
-            options_dict["enable_tactics"],
-            options_dict["piece_locations"],
-            options_dict["piece_types"],
-            options_dict["early_material"],
-            options_dict["max_engine_penalties"],
-            options_dict["max_pocket"],
-            options_dict["max_kings"],
-            options_dict["fairy_kings"],
-            options_dict["fairy_chess_pieces"],
-            options_dict["fairy_chess_pieces_configure"],
-            options_dict["fairy_chess_army"],
-            options_dict["fairy_chess_pawns"],
-            options_dict["minor_piece_limit_by_type"],
-            options_dict["major_piece_limit_by_type"],
-            options_dict["queen_piece_limit_by_type"],
-            options_dict["queen_piece_limit"],
-            options_dict["pocket_limit_by_pocket"],
-            options_dict["locked_items"],
-            options_dict["death_link"]
+            progression_balancing,
+            accessibility,
+            local_items,
+            non_local_items,
+            [],  # start_inventory
+            [],  # start_hints
+            [],  # start_location_hints
+            set(),  # exclude_locations
+            set(),  # priority_locations
+            [],  # item_links
+            goal,
+            difficulty,
+            enable_tactics,
+            piece_locations,
+            piece_types,
+            0,  # early_material
+            5,  # max_engine_penalties
+            12,  # max_pocket
+            3,  # max_kings
+            2,  # fairy_kings
+            fairy_chess_pieces,
+            fairy_chess_pieces,  # fairy_chess_pieces_configure
+            fairy_chess_army,
+            fairy_chess_pawns,
+            MinorPieceLimitByType.range_end,
+            MajorPieceLimitByType.range_end,
+            QueenPieceLimitByType.range_end,
+            QueenPieceLimit.range_end,
+            PocketLimitByPocket.range_end,
+            {},  # locked_items
+            False  # death_link
         )
         
         self.item_pool = CMItemPool(self.world)
