@@ -13,10 +13,14 @@ from .ItemPool import generate_itempool, starting_weapons, dangerous_weapon_loca
 from .Items import item_table, item_prices, item_game_ids
 from .Locations import location_table, level_locations, major_locations, shop_locations, all_level_locations, \
     standard_level_locations, shop_price_location_ids, secret_money_ids, location_ids, food_locations, \
-    take_any_locations, sword_cave_locations
+    take_any_locations, sword_cave_locations, shop_categories, cave_data_location_start
 from .Options import TlozOptions
-from .Rom import TLoZDeltaPatch, get_base_rom_path, first_quest_dungeon_items_early, first_quest_dungeon_items_late
+from .Rom import TLoZDeltaPatch, get_base_rom_path, first_quest_dungeon_items_early, first_quest_dungeon_items_late, \
+    cave_type_flags, warp_cave_offset, starting_sword_cave_location_byte, white_sword_pond_location_byte, \
+    magical_sword_grave_location_byte, letter_cave_location_byte
 from .Rules import set_rules
+from .Client import TLOZClient
+from .EntranceRandoRules import create_entrance_randomizer_set
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_rule
 
@@ -68,7 +72,7 @@ class TLoZWorld(World):
     options: TlozOptions
     settings: typing.ClassVar[TLoZSettings]
     game = "The Legend of Zelda"
-    topology_present = False
+    topology_present = True
     base_id = 7000
     web = TLoZWeb()
 
@@ -116,6 +120,7 @@ class TLoZWorld(World):
         self.rom_name_available_event = threading.Event()
         self.levels = None
         self.filler_items = None
+        self.entrance_randomizer_set = None
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld):
@@ -124,6 +129,14 @@ class TLoZWorld(World):
             raise FileNotFoundError(rom_file)
 
     def create_item(self, name: str):
+        if name == "Power Bracelet":
+            return TLoZItem(
+                name,
+                item_table[name].classification
+                    if self.options.EntranceShuffle.value not in [2, 3, 5]
+                    else ItemClassification.progression,
+                self.item_name_to_id[name],
+                self.player)
         return TLoZItem(name, item_table[name].classification, self.item_name_to_id[name], self.player)
 
     def create_event(self, event: str):
@@ -136,13 +149,21 @@ class TLoZWorld(World):
     def create_regions(self):
         menu = Region("Menu", self.player, self.multiworld)
         overworld = Region("Overworld", self.player, self.multiworld)
+
+        self.entrance_randomizer_set = create_entrance_randomizer_set(self)
+
         self.levels = [None]  # Yes I'm making a one-indexed array in a zero-indexed language. I hate me too.
         for i in range(1, 10):
             level = Region(f"Level {i}", self.player, self.multiworld)
             self.levels.append(level)
             new_entrance = Entrance(self.player, f"Level {i}", overworld)
+            entrando_entrance = [screen for screen, entrance in self.entrance_randomizer_set.items() if entrance[1] == f"Level {i}"][0]
+            entrando_rule = self.entrance_randomizer_set[entrando_entrance][0]
             new_entrance.connect(level)
-            overworld.exits.append(new_entrance)
+            overworld.connect(
+                level,
+                f"Level {i} Entrance at {entrando_entrance}",
+                lambda state: entrando_rule(state, self.player))
             self.multiworld.regions.append(level)
 
         for i, level in enumerate(level_locations):
@@ -159,13 +180,51 @@ class TLoZWorld(World):
             self.levels[level].locations.append(boss_event)
 
         for location in major_locations:
-            if self.options.ExpandedPool or "Take Any" not in location:
+            if location in sword_cave_locations or location == "Letter Cave":
+                region = Region(location, self.player, self.multiworld)
+                entrando_screen = [screen for screen, entrance in self.entrance_randomizer_set.items() if entrance[1] == location][0]
+                entrando_rule = self.entrance_randomizer_set[entrando_screen][0]
+                overworld.connect(region, f"Overworld to {entrando_screen}", lambda state: entrando_rule(state, self.player))
+                region.locations.append(
+                    self.create_location(location, self.location_name_to_id[location], region))
+            elif "Take Any" not in location:
                 overworld.locations.append(
                     self.create_location(location, self.location_name_to_id[location], overworld))
 
-        for location in shop_locations:
-            overworld.locations.append(
-                self.create_location(location, self.location_name_to_id[location], overworld))
+        if self.options.ExpandedPool:
+            entrando_screens = [screen for screen, entrance in self.entrance_randomizer_set.items() if entrance[1] == "Take Any Item"]
+            region = Region("Take Any Item", self.player, self.multiworld)
+            for screen in entrando_screens:
+                screen_region = Region(screen, self.player, self.multiworld)
+                entrando_rule = self.entrance_randomizer_set[screen][0]
+                screen_region.connect(
+                    region,
+                    f"{screen_region} to Take Any Item",
+                    lambda state: entrando_rule(state, self.player)
+                )
+                overworld.connect(screen_region, f"Overworld to {screen}", lambda state: True)
+            for location in take_any_locations:
+                region.locations.append(
+                    self.create_location(location, self.location_name_to_id[location], region)
+                )
+
+        for shop_category, shop_slots in shop_categories.items():
+            screens = [screen for screen, entrance in self.entrance_randomizer_set.items() if entrance[1] == shop_category]
+            shop_region = Region(shop_category, self.player, self.multiworld)
+            for screen in screens:
+                screen_region = Region(screen, self.player, self.multiworld)
+                entrando_rule = self.entrance_randomizer_set[screen][0]
+                screen_region.connect(
+                    shop_region,
+                    f"{screen_region} to {shop_category}",
+                    lambda state: entrando_rule(state, self.player))
+                overworld.connect(screen_region,
+                                  f"Overworld {screen}",
+                                  lambda state: True
+                                  )
+            for shop_slot in shop_slots:
+                shop_region.locations.append(
+                    self.create_location(shop_slot, self.location_name_to_id[shop_slot], shop_region))
 
         ganon = self.create_location("Ganon", None, self.multiworld.get_region("Level 9", self.player))
         zelda = self.create_location("Zelda", None, self.multiworld.get_region("Level 9", self.player))
@@ -230,9 +289,35 @@ class TLoZWorld(World):
                 rom_data[first_quest_dungeon_items_late + i] = item | 0b00111111
         return rom_data
 
+    def write_entrances(self, rom_data):
+        warp_caves = []
+        for entrance, data in self.entrance_randomizer_set.items():
+            entrance_offset = int(entrance[7:], 16)
+            entrance_name = data[1]
+            entrance_flag = cave_type_flags[entrance_name]
+            original_data = rom_data[cave_data_location_start + entrance_offset]
+            original_data = original_data & 0b00000011
+            new_data = entrance_flag | original_data
+            rom_data[cave_data_location_start + entrance_offset] = new_data
+            if entrance_name == "Warp Cave":
+                warp_caves.append(entrance_offset)
+            if entrance_name == "Starting Sword Cave":
+                rom_data[starting_sword_cave_location_byte] = entrance_offset
+            if entrance_name == "White Sword Pond":
+                rom_data[white_sword_pond_location_byte] = entrance_offset
+            if entrance_name == "Magical Sword Grave":
+                rom_data[magical_sword_grave_location_byte] = entrance_offset
+            if entrance_name == "Letter Cave":
+                rom_data[letter_cave_location_byte] = entrance_offset
+        for i, cave in enumerate(warp_caves):
+            rom_data[warp_cave_offset + i] = cave
+            print(hex(cave))
+        return rom_data
+
     def apply_randomizer(self):
         with open(get_base_rom_path(), 'rb') as rom:
             rom_data = self.apply_base_patch(rom)
+            rom_data = self.write_entrances(rom_data)
         # Write each location's new data in
         for location in self.multiworld.get_filled_locations(self.player):
             # Zelda and Ganon aren't real locations

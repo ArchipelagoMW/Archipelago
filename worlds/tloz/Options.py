@@ -33,8 +33,37 @@ class StartingPosition(Choice):
     option_dangerous = 2
     option_very_dangerous = 3
 
+class EntranceShuffle(Choice):
+    """Shuffle entrances around.
+    Dungeons means only dungeon entrances will be shuffled with each other.
+    Major means that dungeon entrances and major item locations (sword caves, take any caves, letter cave)
+    will be shuffled with each other
+    Open means that only dungeon entrances and open caves will be shuffled with each other.
+    All means all entrances will be shuffled amongst each other.
+    Warp Caves will be included if the Randomize Warp Caves setting is turned on.
+    """
+    display_name = "Entrance Shuffle"
+    option_off = 0
+    option_dungeons = 1
+    option_major = 2
+    option_major_open = 3
+    option_open = 4
+    option_all = 5
+    default = 0
+
+class DungeonShuffleRegions(DefaultOnToggle):
+    """If turned on, will attempt to spread dungeon entrances among the different regions of the game."""
+    display_name = "Dungeon Shuffle Regions"
+
+class RandomizeWarpCaves(Toggle):
+    """Include the Take Any Road caves in entrance randomization, when entrance randomization is set to Major or All."""
+    display_name = "Randomize Warp Caves"
+
 @dataclass
 class TlozOptions(PerGameCommonOptions):
     ExpandedPool: ExpandedPool
     TriforceLocations: TriforceLocations
     StartingPosition: StartingPosition
+    EntranceShuffle: EntranceShuffle
+    DungeonShuffleRegions: DungeonShuffleRegions
+    RandomizeWarpCaves: RandomizeWarpCaves
