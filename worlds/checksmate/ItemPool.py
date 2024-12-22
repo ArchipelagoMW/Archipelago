@@ -68,13 +68,15 @@ class CMItemPool:
             max_items -= len([loc for loc in location_table if location_table[loc].is_tactic == Tactic.Fork])
         return max_items
 
-    def create_progression_items(self, min_material: int, max_material: int) -> List[Item]:
+    def create_progression_items(self, max_items: int, min_material: int = 3900, max_material: int = 4000, locked_items: Dict[str, int] = {}, user_location_count: int = 0) -> List[Item]:
         """Create progression items up to material limits."""
         items = []
         material = 0
         my_progression_items = self.prepare_progression_item_pool()
         
-        while len(my_progression_items) > 0:
+        while ((len(items) + user_location_count + sum(locked_items.values())) < max_items and
+               material < max_material and
+               len(my_progression_items) > 0):
             chosen_item = self.world.random.choice(my_progression_items)
             if self.should_remove_item(chosen_item, material, min_material, max_material):
                 my_progression_items.remove(chosen_item)
@@ -104,13 +106,13 @@ class CMItemPool:
         items.append("Progressive Minor Piece")  # Extra minor piece
         return items
 
-    def create_useful_items(self) -> List[Item]:
+    def create_useful_items(self, max_items: int, locked_items: Dict[str, int] = {}, user_location_count: int = 0) -> List[Item]:
         """Create useful items."""
         items = []
         my_useful_items = list(useful_items.keys())
-        locked_items = {}  # Useful items don't need to lock anything
 
-        while len(my_useful_items) > 0:
+        while ((len(items) + user_location_count + sum(locked_items.values())) < max_items and
+               len(my_useful_items) > 0):
             chosen_item = self.world.random.choice(my_useful_items)
             if not self.world.has_prereqs(chosen_item):
                 continue
@@ -122,26 +124,36 @@ class CMItemPool:
                 my_useful_items.remove(chosen_item)
         return items
 
-    def create_filler_items(self, has_pocket: bool) -> List[Item]:
-        """Create filler items."""
+    def create_filler_items(self, has_pocket: bool, max_items: int, locked_items: Dict[str, int] = {}, user_location_count: int = 0) -> List[Item]:
+        """Create filler items up to max_items limit."""
         items = []
         my_filler_items = list(filler_items.keys())
-        locked_items = {}  # Filler items don't need to lock anything
         if not has_pocket:
             my_filler_items = [item for item in my_filler_items if "Pocket" not in item]
         
-        while len(my_filler_items) > 0:
-            if len(my_filler_items) == 0:
-                my_filler_items = ["Progressive Pocket Gems"]
+        # If we have no valid filler items and pocket is allowed, use pocket gems as fallback
+        if len(my_filler_items) == 0 and has_pocket:
+            my_filler_items = ["Progressive Pocket Gems"]
+        elif len(my_filler_items) == 0:
+            return items  # No valid items and pocket not allowed
+        
+        while (len(items) + user_location_count + sum(locked_items.values())) < max_items and my_filler_items:
             chosen_item = self.world.random.choice(my_filler_items)
             if not has_pocket and not self.world.has_prereqs(chosen_item):
+                my_filler_items.remove(chosen_item)  # Remove items we can't use
                 continue
+                
             if has_pocket or self.world.can_add_more(chosen_item):
                 self.consume_item(chosen_item, locked_items)
                 try_item = self.world.create_item(chosen_item)
                 items.append(try_item)
             else:
-                my_filler_items.remove(chosen_item)
+                my_filler_items.remove(chosen_item)  # Remove items we can't add
+                
+            # If we've exhausted all items but need pocket gems as fallback
+            if len(my_filler_items) == 0 and has_pocket:
+                my_filler_items = ["Progressive Pocket Gems"]
+                
         return items
 
     def consume_item(self, item_name: str, locked_items: Dict[str, int]) -> None:

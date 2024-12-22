@@ -139,16 +139,48 @@ class TestItemPool(unittest.TestCase):
         self.assertGreaterEqual(total_material, min_mat)
         self.assertLessEqual(total_material, max_mat)
 
-    def test_filler_item_creation(self):
+    def test_filler_item_creation_respects_pocket(self):
         """Test that filler items respect pocket requirements"""
+        max_items = 100  # Reasonable test value
         # Test without pocket
-        items_no_pocket = self.item_pool.create_filler_items(has_pocket=False)
+        items_no_pocket = self.item_pool.create_filler_items(has_pocket=False, max_items=max_items)
         self.assertTrue(all("Pocket" not in item.name for item in items_no_pocket))
         
         # Test with pocket
-        items_with_pocket = self.item_pool.create_filler_items(has_pocket=True)
+        items_with_pocket = self.item_pool.create_filler_items(has_pocket=True, max_items=max_items)
         has_pocket_items = any("Pocket" in item.name for item in items_with_pocket)
         self.assertTrue(has_pocket_items)
+
+    def test_filler_item_creation_with_pocket(self):
+        """Test that filler item creation handles pocket gems as fallback"""
+        max_items = 100  # Reasonable test value
+        user_location_count = 5  # Simulate some existing locations
+        locked_items = {"Progressive Major Piece": 2}  # Simulate some locked items
+        
+        # Test with pocket
+        items_with_pocket = self.item_pool.create_filler_items(
+            has_pocket=True,
+            max_items=max_items,
+            user_location_count=user_location_count,
+            locked_items=locked_items
+        )
+        total_count = len(items_with_pocket) + user_location_count + sum(locked_items.values())
+        self.assertLessEqual(total_count, max_items)
+        
+    def test_filler_item_creation_no_pocket(self):
+        """Test that filler item creation handles no pocket gems"""
+        max_items = 100  # Reasonable test value
+        user_location_count = 5  # Simulate some existing locations
+        locked_items = {"Progressive Major Piece": 2}  # Simulate some locked items
+        
+        # Test without pocket
+        items_no_pocket = self.item_pool.create_filler_items(
+            has_pocket=False, max_items=max_items,
+            user_location_count=user_location_count,
+            locked_items=locked_items
+        )
+        total_count = len(items_no_pocket) + user_location_count + sum(locked_items.values())
+        self.assertLessEqual(total_count, max_items)
 
     def test_excluded_items_handling(self):
         """Test that excluded items are handled correctly"""
