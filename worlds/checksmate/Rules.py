@@ -109,7 +109,7 @@ def set_rules(world: World):
                 continue
         # AI avoids making trades except where it wins material or secures victory, so require that much material
         material_cost = item.material_expectations if not super_sized else (
-            item.material_expectations_grand if always_super_sized else max(
+            item.material_expectations_grand if always_super_sized or item.material_expectations == -1 else min(
                 item.material_expectations, item.material_expectations_grand
             ))
         if material_cost > 0:
