@@ -1,5 +1,6 @@
 from typing import Dict, FrozenSet, Tuple, TYPE_CHECKING
 from worlds.generic.Rules import set_rule, add_rule, forbid_item
+from BaseClasses import Region, CollectionState
 from .options import IceGrappling, LadderStorage, CombatLogic
 from .rules import (has_ability, has_sword, has_melee, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
                     laurels_zip, bomb_walls)
@@ -7,7 +8,6 @@ from .er_data import Portal, get_portal_outlet_region
 from .ladder_storage_data import ow_ladder_groups, region_ladders, easy_ls, medium_ls, hard_ls
 from .combat_logic import has_combat_reqs
 from .grass import set_grass_location_rules
-from BaseClasses import Region, CollectionState
 
 if TYPE_CHECKING:
     from . import TunicWorld

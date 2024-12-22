@@ -1,4 +1,5 @@
-from typing import Dict, NamedTuple, Optional, Set, TYPE_CHECKING
+from typing import Dict, NamedTuple, Optional, TYPE_CHECKING, Set
+
 from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule, add_rule
 from .rules import has_sword, has_melee
@@ -7748,8 +7749,21 @@ grass_location_table: Dict[str, TunicLocationData] = {
         "Back of Swamp Laurels Area", "Back of Swamp Laurels Area"),
 }
 
-grass_location_name_to_id: Dict[str, int] = {name: location_base_id + 302 + index for index, name in
-                                             enumerate(grass_location_table)}
+excluded_grass_locations = {
+    "Overworld - Overworld Bush (7) (-39.0, 40.0, -41.0)",
+    "Overworld - Overworld Bush (2) (-41.0, 40.0, -41.0)",
+    "Overworld - Overworld Bush (16) (53.0, 12.0, -151.0)",
+    "Overworld - Overworld Bush (9) (-19.0, 28.0, -103.0)",
+    "Overworld - Overworld Bush (23) (-19.0, 28.0, -105.0)",
+    "Overworld - Overworld Bush (26) (-19.0, 28.0, -107.0)",
+    "Overworld - Overworld Bush (47) (91.0, 12.0, -155.0)",
+    "Overworld - Overworld Bush (42) (91.0, 12.0, -157.0)",
+    "Overworld - East Overworld Bush (58) (58.0, 44.0, -109.0)",
+    "Overworld - East Overworld Bush (62) (66.5, 44.0, -111.0)",
+    "Overworld - East Overworld Bush (64) (56.0, 44.0, -107.0)",
+}
+
+grass_location_name_to_id: Dict[str, int] = {name: location_base_id + 302 + index for index, name in enumerate(grass_location_table)}
 
 grass_location_name_groups: Dict[str, Set[str]] = {}
 for loc_name, loc_data in grass_location_table.items():
@@ -7759,324 +7773,172 @@ for loc_name, loc_data in grass_location_table.items():
 
 def can_break_grass(state: CollectionState, world: "TunicWorld") -> bool:
     player = world.player
-    if world.options.start_with_sword:
-        return True
-    else:
-        # no gun or wand because they're extremely tedious
-        return (has_sword(state, player)
-                or (has_melee(state, player) and state.has("Glass Cannon", player)))
+    # no gun or wand because they're extremely tedious
+    return (has_sword(state, player)
+            or (has_melee(state, player) and state.has("Glass Cannon", player)))
 
 
 def set_grass_location_rules(world: "TunicWorld") -> None:
     player = world.player
 
-    for location in grass_location_table.keys():
-        set_rule(world.get_location(location),
-                 lambda state: can_break_grass(state, world))
+    if not world.options.start_with_sword:
+        for location in grass_location_table.keys():
+            set_rule(world.get_location(location),
+                     lambda state: can_break_grass(state, world))
 
-    set_rule(
-        world.get_location("Fortress Courtyard - Fortress Courtyard Upper Grass (1) (72.0, 8.0, -29.0)"),
-        lambda state: state.has("Magic Wand", player))
-
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (325) (-111.8, 1.3, 2.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (323) (-111.8, 1.3, 1.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (316) (-110.5, 1.3, 3.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (319) (-111.5, 1.3, 4.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (317) (-111.5, 1.3, 3.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (318) (-110.5, 1.3, 4.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (321) (-112.3, 1.3, 4.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (320) (-112.3, 1.3, 3.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (326) (-112.8, 1.3, 2.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (327) (-113.5, 1.3, 2.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (324) (-112.8, 1.3, 1.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (322) (-113.5, 1.3, 1.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (328) (-112.0, 0.8, -2.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (329) (-112.0, 0.5, -3.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (333) (-111.3, 0.8, -2.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (331) (-111.3, 0.5, -3.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (330) (-110.3, 0.5, -3.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (332) (-110.3, 0.8, -2.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (334) (-111.0, 0.3, -4.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (337) (-110.3, 0.3, -4.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (354) (-113.0, 0.3, -4.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (353) (-112.0, 0.3, -4.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (336) (-109.3, 0.3, -4.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (338) (-109.3, -0.3, -5.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (339) (-110.3, -0.3, -5.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (335) (-111.0, -0.3, -5.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (350) (-112.0, -0.3, -5.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (349) (-113.8, 0.3, -4.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (351) (-113.0, -0.3, -5.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (352) (-113.8, -0.3, -5.0)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (314) (-112.3, 0.8, 6.8)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (315) (-112.3, 0.8, 7.8)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (313) (-111.5, 0.8, 6.8)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (311) (-111.5, 0.8, 7.8)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (310) (-110.5, 0.8, 7.8)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (306) (-110.5, 0.8, 8.8)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (312) (-110.5, 0.8, 6.8)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (307) (-109.5, 0.8, 8.8)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (308) (-111.5, 0.8, 8.8)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (300) (-107.5, 0.0, 10.8)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (301) (-107.5, 0.3, 9.8)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (304) (-108.3, 0.0, 10.8)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (299) (-108.5, 0.0, 10.8)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (303) (-110.5, 0.3, 9.8)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (302) (-109.5, 0.3, 9.8)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (305) (-109.5, 0.0, 10.8)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (298) (-108.5, 0.3, 9.8)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (341) (-113.5, 0.8, 10.5)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (344) (-113.5, 0.5, 11.5)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (346) (-113.5, 0.8, 9.5)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (309) (-111.5, 0.5, 9.8)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (345) (-112.5, 0.8, 9.5)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (342) (-112.5, 0.8, 8.5)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (340) (-112.5, 0.8, 10.5)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (347) (-114.3, 0.8, 8.5)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (348) (-114.3, 0.8, 9.5)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (343) (-113.5, 0.8, 8.5)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (191) (-89.5, 6.5, 53.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (190) (-89.5, 6.5, 54.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (189) (-88.5, 6.5, 54.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (188) (-88.5, 6.5, 53.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (197) (-87.0, 13.0, 75.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (194) (-87.0, 13.0, 74.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (184) (-86.0, 13.0, 73.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (183) (-86.0, 13.0, 74.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (181) (-86.0, 13.0, 75.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (185) (-84.7, 13.0, 73.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (182) (-83.0, 13.0, 72.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (199) (-83.0, 13.0, 70.8)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (201) (-84.0, 13.0, 70.8)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (135) (-83.5, 13.0, 58.8)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (128) (-82.5, 13.0, 57.8)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (130) (-82.5, 13.0, 58.8)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (147) (-86.0, 13.0, 54.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (132) (-82.5, 13.0, 60.8)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (134) (-83.5, 13.0, 59.8)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (131) (-82.5, 13.0, 59.8)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (136) (-78.5, 13.0, 56.8)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (139) (-79.5, 13.0, 55.8)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (133) (-79.5, 13.0, 56.8)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (138) (-80.5, 13.0, 55.8)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (137) (-80.5, 13.0, 56.8)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (143) (-85.0, 13.0, 53.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (142) (-86.0, 13.0, 53.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (145) (-87.0, 13.0, 53.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (146) (-87.0, 13.0, 54.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (140) (-85.0, 13.0, 52.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (141) (-86.0, 13.0, 52.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (144) (-84.0, 13.0, 52.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (192) (-70.5, 13.0, 56.8)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (186) (-69.5, 13.0, 56.8)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (187) (-69.5, 13.0, 55.8)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (123) (-82.5, 13.0, 44.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (126) (-82.5, 13.0, 45.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (121) (-83.5, 13.0, 45.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (124) (-83.5, 13.0, 44.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (125) (-83.5, 13.0, 43.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (151) (-82.5, 13.0, 27.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (152) (-82.5, 13.0, 26.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (150) (-81.5, 13.0, 27.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (148) (-81.5, 13.0, 25.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (149) (-81.5, 13.0, 26.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (154) (-79.0, 13.0, 23.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (153) (-78.0, 13.0, 23.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (161) (-68.0, 13.0, 26.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (162) (-68.0, 13.0, 27.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (165) (-69.0, 13.0, 27.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (164) (-69.0, 13.0, 28.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (163) (-68.0, 13.0, 28.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (166) (-68.0, 13.0, 29.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (167) (-63.0, 13.0, 24.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (168) (-62.0, 13.0, 24.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (170) (-61.0, 13.0, 25.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (169) (-62.0, 13.0, 25.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (172) (-62.0, 13.0, 26.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (178) (-61.0, 13.0, 43.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (175) (-60.0, 13.0, 43.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (177) (-61.0, 13.0, 44.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (174) (-59.0, 13.0, 42.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (173) (-59.0, 13.0, 43.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (171) (-59.0, 13.0, 44.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (176) (-60.0, 13.0, 44.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (159) (-83.5, 8.0, 23.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (160) (-83.5, 8.0, 24.5)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (158) (-83.5, 8.0, 22.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (155) (-82.5, 8.0, 24.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (157) (-82.5, 8.0, 22.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (156) (-82.5, 8.0, 23.0)"),
-             lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
-    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (9) (179.8, 61.9, -67.1)"),
-             lambda state: state.has("Magic Orb", player))
-    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (8) (178.6, 61.9, -67.1)"),
-             lambda state: state.has("Magic Orb", player))
-    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (7) (204.4, 58.1, -94.1)"),
-             lambda state: state.has("Magic Orb", player))
-    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (5) (205.5, 58.1, -94.1)"),
-             lambda state: state.has("Magic Orb", player))
-    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (6) (205.5, 58.1, -93.0)"),
-             lambda state: state.has("Magic Orb", player))
-    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (2) (205.5, 54.0, -77.0)"),
-             lambda state: state.has("Magic Orb", player))
-    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (205.5, 54.0, -76.0)"),
-             lambda state: state.has("Magic Orb", player))
-    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (1) (204.5, 54.0, -76.0)"),
-             lambda state: state.has("Magic Orb", player))
-    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (4) (201.4, 54.3, -71.3)"),
-             lambda state: state.has("Magic Orb", player))
-    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (3) (200.4, 54.3, -71.3)"),
-             lambda state: state.has("Magic Orb", player))
-    add_rule(world.get_location("West Garden - West Garden Grass (207) (-310.8, 1.3, 164.5)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("West Garden - West Garden Grass (210) (-310.8, 1.3, 165.5)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("West Garden - West Garden Grass (209) (-312.0, 1.3, 165.5)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("West Garden - West Garden Grass (208) (-312.0, 1.3, 164.5)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("West Garden - West Garden Grass (174) (-243.9, 0.5, 52.1)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("West Garden - West Garden Grass (262) (-244.8, 0.5, 51.3)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("West Garden - West Garden Grass (263) (-244.8, 0.5, 52.3)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Swamp - Back of Swamp Laurels Area Grass swamp (991) (34.5, 8.3, 31.8)"), 
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Swamp - Back of Swamp Laurels Area Grass swamp (992) (34.5, 8.0, 30.8)"), 
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Swamp - Back of Swamp Laurels Area Grass swamp (989) (35.5, 8.0, 30.8)"), 
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Swamp - Back of Swamp Laurels Area Grass swamp (990) (35.5, 8.0, 31.8)"),
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Swamp - Back of Swamp Laurels Area Grass swamp (995) (32.5, 8.3, 31.8)"), 
-             lambda state: state.has("Hero's Laurels", player))
-    add_rule(world.get_location("Swamp - Back of Swamp Laurels Area Grass swamp (994) (33.5, 8.0, 31.8)"),
-             lambda state: state.has("Hero's Laurels", player))
+    set_rule(world.get_location("Fortress Courtyard - Fortress Courtyard Upper Grass (1) (72.0, 8.0, -29.0)"),
+             lambda state: state.has("Magic Wand", player))
+    
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (325) (-111.8, 1.3, 2.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (323) (-111.8, 1.3, 1.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (316) (-110.5, 1.3, 3.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (319) (-111.5, 1.3, 4.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (317) (-111.5, 1.3, 3.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (318) (-110.5, 1.3, 4.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (321) (-112.3, 1.3, 4.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (320) (-112.3, 1.3, 3.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (326) (-112.8, 1.3, 2.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (327) (-113.5, 1.3, 2.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (324) (-112.8, 1.3, 1.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (322) (-113.5, 1.3, 1.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (328) (-112.0, 0.8, -2.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (329) (-112.0, 0.5, -3.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (333) (-111.3, 0.8, -2.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (331) (-111.3, 0.5, -3.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (330) (-110.3, 0.5, -3.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (332) (-110.3, 0.8, -2.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (334) (-111.0, 0.3, -4.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (337) (-110.3, 0.3, -4.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (354) (-113.0, 0.3, -4.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (353) (-112.0, 0.3, -4.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (336) (-109.3, 0.3, -4.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (338) (-109.3, -0.3, -5.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (339) (-110.3, -0.3, -5.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (335) (-111.0, -0.3, -5.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (350) (-112.0, -0.3, -5.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (349) (-113.8, 0.3, -4.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (351) (-113.0, -0.3, -5.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (352) (-113.8, -0.3, -5.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (314) (-112.3, 0.8, 6.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (315) (-112.3, 0.8, 7.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (313) (-111.5, 0.8, 6.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (311) (-111.5, 0.8, 7.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (310) (-110.5, 0.8, 7.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (306) (-110.5, 0.8, 8.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (312) (-110.5, 0.8, 6.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (307) (-109.5, 0.8, 8.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (308) (-111.5, 0.8, 8.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (300) (-107.5, 0.0, 10.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (301) (-107.5, 0.3, 9.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (304) (-108.3, 0.0, 10.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (299) (-108.5, 0.0, 10.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (303) (-110.5, 0.3, 9.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (302) (-109.5, 0.3, 9.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (305) (-109.5, 0.0, 10.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (298) (-108.5, 0.3, 9.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (341) (-113.5, 0.8, 10.5)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (344) (-113.5, 0.5, 11.5)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (346) (-113.5, 0.8, 9.5)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (309) (-111.5, 0.5, 9.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (345) (-112.5, 0.8, 9.5)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (342) (-112.5, 0.8, 8.5)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (340) (-112.5, 0.8, 10.5)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (347) (-114.3, 0.8, 8.5)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (348) (-114.3, 0.8, 9.5)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (343) (-113.5, 0.8, 8.5)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (297) (-99.0, 0.8, 7.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass beach (296) (-98.0, 0.8, 7.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (191) (-89.5, 6.5, 53.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (190) (-89.5, 6.5, 54.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (189) (-88.5, 6.5, 54.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (188) (-88.5, 6.5, 53.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (197) (-87.0, 13.0, 75.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (194) (-87.0, 13.0, 74.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (184) (-86.0, 13.0, 73.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (183) (-86.0, 13.0, 74.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (181) (-86.0, 13.0, 75.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (185) (-84.7, 13.0, 73.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (182) (-83.0, 13.0, 72.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (199) (-83.0, 13.0, 70.8)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (201) (-84.0, 13.0, 70.8)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (135) (-83.5, 13.0, 58.8)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (128) (-82.5, 13.0, 57.8)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (130) (-82.5, 13.0, 58.8)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (147) (-86.0, 13.0, 54.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (132) (-82.5, 13.0, 60.8)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (134) (-83.5, 13.0, 59.8)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (131) (-82.5, 13.0, 59.8)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (136) (-78.5, 13.0, 56.8)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (139) (-79.5, 13.0, 55.8)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (133) (-79.5, 13.0, 56.8)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (138) (-80.5, 13.0, 55.8)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (137) (-80.5, 13.0, 56.8)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (143) (-85.0, 13.0, 53.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (142) (-86.0, 13.0, 53.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (145) (-87.0, 13.0, 53.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (146) (-87.0, 13.0, 54.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (140) (-85.0, 13.0, 52.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (141) (-86.0, 13.0, 52.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (144) (-84.0, 13.0, 52.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (192) (-70.5, 13.0, 56.8)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (186) (-69.5, 13.0, 56.8)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (187) (-69.5, 13.0, 55.8)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (123) (-82.5, 13.0, 44.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (126) (-82.5, 13.0, 45.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (121) (-83.5, 13.0, 45.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (124) (-83.5, 13.0, 44.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (125) (-83.5, 13.0, 43.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (151) (-82.5, 13.0, 27.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (152) (-82.5, 13.0, 26.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (150) (-81.5, 13.0, 27.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (148) (-81.5, 13.0, 25.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (149) (-81.5, 13.0, 26.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (154) (-79.0, 13.0, 23.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (153) (-78.0, 13.0, 23.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (161) (-68.0, 13.0, 26.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (162) (-68.0, 13.0, 27.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (165) (-69.0, 13.0, 27.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (164) (-69.0, 13.0, 28.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (163) (-68.0, 13.0, 28.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (166) (-68.0, 13.0, 29.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (167) (-63.0, 13.0, 24.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (168) (-62.0, 13.0, 24.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (170) (-61.0, 13.0, 25.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (169) (-62.0, 13.0, 25.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (172) (-62.0, 13.0, 26.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (178) (-61.0, 13.0, 43.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (175) (-60.0, 13.0, 43.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (177) (-61.0, 13.0, 44.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (174) (-59.0, 13.0, 42.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (173) (-59.0, 13.0, 43.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (171) (-59.0, 13.0, 44.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (176) (-60.0, 13.0, 44.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (159) (-83.5, 8.0, 23.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (160) (-83.5, 8.0, 24.5)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (158) (-83.5, 8.0, 22.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (155) (-82.5, 8.0, 24.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (157) (-82.5, 8.0, 22.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Ruined Atoll - Ruined Atoll Grass (156) (-82.5, 8.0, 23.0)"), lambda state: state.has_any(("Hero's Laurels", "Magic Orb"), player))
+    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (9) (179.8, 61.9, -67.1)"), lambda state: state.has("Magic Orb", player))
+    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (8) (178.6, 61.9, -67.1)"), lambda state: state.has("Magic Orb", player))
+    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (7) (204.4, 58.1, -94.1)"), lambda state: state.has("Magic Orb", player))
+    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (5) (205.5, 58.1, -94.1)"), lambda state: state.has("Magic Orb", player))
+    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (6) (205.5, 58.1, -93.0)"), lambda state: state.has("Magic Orb", player))
+    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (2) (205.5, 54.0, -77.0)"), lambda state: state.has("Magic Orb", player))
+    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (205.5, 54.0, -76.0)"), lambda state: state.has("Magic Orb", player))
+    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (1) (204.5, 54.0, -76.0)"), lambda state: state.has("Magic Orb", player))
+    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (4) (201.4, 54.3, -71.3)"), lambda state: state.has("Magic Orb", player))
+    add_rule(world.get_location("Frog Stairway - Frog Stairs Lower Grass (3) (200.4, 54.3, -71.3)"), lambda state: state.has("Magic Orb", player))
+    add_rule(world.get_location("West Garden - West Garden Grass (207) (-310.8, 1.3, 164.5)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("West Garden - West Garden Grass (210) (-310.8, 1.3, 165.5)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("West Garden - West Garden Grass (209) (-312.0, 1.3, 165.5)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("West Garden - West Garden Grass (208) (-312.0, 1.3, 164.5)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("West Garden - West Garden Grass (174) (-243.9, 0.5, 52.1)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("West Garden - West Garden Grass (262) (-244.8, 0.5, 51.3)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("West Garden - West Garden Grass (263) (-244.8, 0.5, 52.3)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Swamp - Back of Swamp Laurels Area Grass swamp (991) (34.5, 8.3, 31.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Swamp - Back of Swamp Laurels Area Grass swamp (992) (34.5, 8.0, 30.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Swamp - Back of Swamp Laurels Area Grass swamp (989) (35.5, 8.0, 30.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Swamp - Back of Swamp Laurels Area Grass swamp (990) (35.5, 8.0, 31.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Swamp - Back of Swamp Laurels Area Grass swamp (995) (32.5, 8.3, 31.8)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("Swamp - Back of Swamp Laurels Area Grass swamp (994) (33.5, 8.0, 31.8)"), lambda state: state.has("Hero's Laurels", player))

@@ -645,7 +645,8 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "West Garden at Dagger House": RegionInfo("Archipelagos Redux"),  # just outside magic dagger house
     "West Garden South Checkpoint": RegionInfo("Archipelagos Redux"),  # the checkpoint and the blue lines area
     "Magic Dagger House": RegionInfo("archipelagos_house", dead_end=DeadEnd.all_cats),
-    "West Garden Portal": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted, outlet_region="West Garden by Portal"),
+    "West Garden Portal": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted,
+                                     outlet_region="West Garden by Portal"),
     "West Garden by Portal": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted),
     "West Garden Portal Item": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted),
     "West Garden Laurels Exit Region": RegionInfo("Archipelagos Redux"),
