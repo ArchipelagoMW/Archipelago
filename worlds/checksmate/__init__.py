@@ -14,6 +14,8 @@ from .Locations import CMLocation, location_table, highest_chessmen_requirement_
     Tactic
 from .Presets import checksmate_option_presets
 from .Rules import set_rules, determine_difficulty, determine_relaxation, determine_min_material, determine_max_material
+from .CollectionState import CMCollectionState
+from .ItemPool import CMItemPool
 
 
 class CMWeb(WebWorld):
