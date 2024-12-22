@@ -4,6 +4,7 @@ from .locations import all_locations
 from .er_data import (Portal, portal_mapping, traversal_requirements, DeadEnd, Direction, RegionInfo,
                       get_portal_outlet_region)
 from .er_rules import set_er_region_rules
+from .breakables import create_breakable_exclusive_regions, set_breakable_location_rules
 from Options import PlandoConnection
 from .options import EntranceRando, EntranceLayout
 from random import Random
@@ -35,7 +36,9 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
                         continue
                 elif world.options.entrance_layout != EntranceLayout.option_fixed_shop:
                     continue
-            regions[region_name] = Region(region_name, world.player, world.multiworld)
+            region = Region(region_name, world.player, world.multiworld)
+            regions[region_name] = region
+            world.multiworld.regions.append(region)
 
         portal_pairs = pair_portals(world, regions)
 
@@ -65,8 +68,8 @@ def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
         location = TunicERLocation(world.player, location_name, location_id, region)
         region.locations.append(location)
 
-    for region in regions.values():
-        world.multiworld.regions.append(region)
+    if world.options.breakable_shuffle:
+        set_breakable_location_rules(world)
 
     place_event_items(world, regions)
 

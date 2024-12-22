@@ -370,6 +370,14 @@ class LogicRules(Choice):
     default = 0
 
 
+class BreakableShuffle(Toggle):
+    """
+    Turns approximately 250 breakable objects in the game into checks.
+    """
+    internal_name = "breakable_shuffle"
+    display_name = "Breakable Shuffle"
+
+
 @dataclass
 class TunicOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -390,6 +398,7 @@ class TunicOptions(PerGameCommonOptions):
     laurels_location: LaurelsLocation
     grass_randomizer: GrassRandomizer
     grass_fill: GrassFill
+    breakable_shuffle: BreakableShuffle
     combat_logic: CombatLogic
     lanternless: Lanternless
     maskless: Maskless
