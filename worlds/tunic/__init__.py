@@ -159,6 +159,17 @@ class TunicWorld(World):
 
         self.player_location_table = standard_location_name_to_id.copy()
 
+        if self.options.local_fill == "default":
+            if self.options.grass_randomizer:
+                if self.options.breakable_shuffle:
+                    self.options.local_fill.value = 96
+                else:
+                    self.options.local_fill.value = 95
+            elif self.options.breakable_shuffle:
+                self.options.local_fill.value = 40
+            else:
+                self.options.local_fill.value = 0
+
         if self.options.grass_randomizer:
             if self.settings.limit_grass_rando and self.options.local_fill < 95 and self.multiworld.players > 1:
                 raise OptionError(f"TUNIC: Player {self.player_name} has their Grass Fill option set too low. "
@@ -412,7 +423,7 @@ class TunicWorld(World):
 
         # pull out the filler so that we can place it manually during pre_fill
         self.local_filler = []
-        if self.options.grass_randomizer and self.options.local_fill > 0 and self.multiworld.players > 1:
+        if self.options.local_fill > 0 and self.multiworld.players > 1:
             # skip items marked local or non-local, let fill deal with them in its own way
             # discard grass from non_local if it's meant to be limited
             if self.settings.limit_grass_rando:

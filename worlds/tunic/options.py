@@ -4,7 +4,7 @@ from typing import Dict, Any, TYPE_CHECKING
 from decimal import Decimal, ROUND_HALF_UP
 
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
-                     PerGameCommonOptions, OptionGroup, Removed, Visibility)
+                     PerGameCommonOptions, OptionGroup, Removed, Visibility, NamedRange)
 from .er_data import portal_mapping
 if TYPE_CHECKING:
     from . import TunicWorld
@@ -215,7 +215,7 @@ class GrassRandomizer(Toggle):
     display_name = "Grass Randomizer"
 
 
-class LocalFill(Range):
+class LocalFill(NamedRange):
     """
     Choose the percentage of your filler/trap items that will be kept local or distributed to other TUNIC players with Grass Randomizer enabled.
     To keep things balanced, this option must be set to 95% or higher. The host can remove this restriction by turning off the limit_grass_rando setting in host.yaml.
@@ -227,6 +227,9 @@ class LocalFill(Range):
     range_start = 0
     range_end = 100
     default = 95
+    special_range_names = {
+        "default": -1
+    }
     visibility = Visibility.template | Visibility.complex_ui | Visibility.spoiler
 
 
