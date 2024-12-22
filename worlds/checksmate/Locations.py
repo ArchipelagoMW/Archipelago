@@ -29,36 +29,36 @@ class CMLocationData(NamedTuple):
 location_table = {
     # capture individual pieces and pawns
     # AI prefers not to use edge pawns early - thus they stay defended longer
-    "Capture Pawn A": CMLocationData(4_902_000, 490, 810),
-    "Capture Pawn B": CMLocationData(4_902_001, 340, 610),
+    "Capture Pawn A": CMLocationData(4_902_000, 490, 1010),
+    "Capture Pawn B": CMLocationData(4_902_001, 340, 810),
     # AI prefers to open queenside as developing queen has more tempo
-    "Capture Pawn C": CMLocationData(4_902_002, 220, 460),
-    "Capture Pawn D": CMLocationData(4_902_003, 100, 320),
-    "Capture Pawn E": CMLocationData(4_902_004, 100, 120),
-    "Capture Pawn F": CMLocationData(4_902_005, 340, 120),  # TODO: The min() handling doesn't account for lack of super mode
-    "Capture Pawn G": CMLocationData(4_902_006, 390, 420),
+    "Capture Pawn C": CMLocationData(4_902_002, 220, 660),
+    "Capture Pawn D": CMLocationData(4_902_003, 100, 520),
+    "Capture Pawn E": CMLocationData(4_902_004, 100, 320),
+    "Capture Pawn F": CMLocationData(4_902_005, 320, 320),
+    "Capture Pawn G": CMLocationData(4_902_006, 390, 620),
     # AI prefers not to use edge pawns early - thus they stay defended longer
-    "Capture Pawn H": CMLocationData(4_902_007, 490, 660),
+    "Capture Pawn H": CMLocationData(4_902_007, 490, 860),
     "Capture Pawn I": CMLocationData(4_902_101, -1, 810),
     "Capture Pawn J": CMLocationData(4_902_102, -1, 890),
     # bishops are less deployable than knights, and rooks are even more stuck back there
     "Capture Piece Queen's Rook": CMLocationData(4_902_008, 1500, 2850),
     "Capture Piece Queen's Knight": CMLocationData(4_902_010, 700, 1200),
     "Capture Piece Queen's Bishop": CMLocationData(4_902_012, 1040, 1200),
-    "Capture Piece Queen": CMLocationData(4_902_014, 1300, 1900),
+    "Capture Piece Queen": CMLocationData(4_902_014, 1300, 4100),
     "Checkmate Minima": CMLocationData(4_902_098, 4020, 4020),  # (this is the game's goal / completion condition)
     "Checkmate Maxima": CMLocationData(4_902_099, -1, 6020),  # (this is the game's goal / completion condition)
     # AI prefers not to open kingside as developing queen has more tempo
     "Capture Piece King's Bishop": CMLocationData(4_902_013, 1140, 1400),
     "Capture Piece King's Knight": CMLocationData(4_902_011, 1040, 1400),
     "Capture Piece King's Rook": CMLocationData(4_902_009, 1900, 3250),
-    "Capture Piece Queen's Attendant": CMLocationData(4_902_109, -1, 1950),
-    "Capture Piece King's Attendant": CMLocationData(4_902_110, -1, 2030),
+    "Capture Piece Queen's Attendant": CMLocationData(4_902_109, -1, 3950),
+    "Capture Piece King's Attendant": CMLocationData(4_902_110, -1, 4030),
     # some first locations
     # for strategic analysis see: https://en.wikipedia.org/wiki/Bongcloud_Attack
     "King to E2/E7 Early": CMLocationData(4_902_015, 0, 0),
     "King to Center": CMLocationData(4_902_016, 50, 50),
-    "King to A File": CMLocationData(4_902_017, 0, 50),
+    "King to A File": CMLocationData(4_902_017, 0, 150),
     "King Captures Anything": CMLocationData(4_902_018, 150, 350),
     "King to Back Rank": CMLocationData(4_902_019, 2250, 5150),  # requires reaching a rather late-game state
     # capture series of pieces and pawns within 1 game
@@ -80,11 +80,11 @@ location_table = {
     "Capture 7 Pieces": CMLocationData(4_902_032, 3750, 4900, 6),
     "Capture 8 Pieces": CMLocationData(4_902_122, -1, 5200, 7),
     "Capture 9 Pieces": CMLocationData(4_902_123, -1, 5400, 8),
-    "Capture 2 Of Each": CMLocationData(4_902_033, 1900, 3750, 3),
-    "Capture 3 Of Each": CMLocationData(4_902_034, 2350, 4250, 5),
-    "Capture 4 Of Each": CMLocationData(4_902_035, 2750, 4650, 7),
-    "Capture 5 Of Each": CMLocationData(4_902_036, 3100, 5000, 9),
-    "Capture 6 Of Each": CMLocationData(4_902_037, 3500, 5400, 11),
+    "Capture 2 Of Each": CMLocationData(4_902_033, 2250, 4150, 3),
+    "Capture 3 Of Each": CMLocationData(4_902_034, 2650, 4550, 5),
+    "Capture 4 Of Each": CMLocationData(4_902_035, 2950, 4900, 7),
+    "Capture 5 Of Each": CMLocationData(4_902_036, 3200, 5200, 9),
+    "Capture 6 Of Each": CMLocationData(4_902_037, 3500, 5450, 11),
     "Capture 7 Of Each": CMLocationData(4_902_038, 3850, 5650, 13),
     "Capture 8 Of Each": CMLocationData(4_902_130, -1, 5850, 15),
     "Capture 9 Of Each": CMLocationData(4_902_131, -1, 5950, 17),
@@ -120,11 +120,11 @@ location_table = {
     # TODO: Getting a french move on the AI occurs seldom - maybe I can tweak the evaluation or something?
     # "French Move": CMLocationData(4_902_050, 0),
     "Fork, Sacrificial": CMLocationData(4_902_052, 700, 1100, 6, is_tactic=Tactic.Fork),
-    "Fork, Sacrificial Triple": CMLocationData(4_902_053, 1700, 2700, 9, is_tactic=Tactic.Fork),
+    "Fork, Sacrificial Triple": CMLocationData(4_902_053, 3300, 2700, 9, is_tactic=Tactic.Fork),
     # AI really hates getting royal forked
-    "Fork, Sacrificial Royal": CMLocationData(4_902_054, 3200, 5200, 12, is_tactic=Tactic.Fork),
-    "Fork, True": CMLocationData(4_902_055, 2550, 4550, 10, is_tactic=Tactic.Fork),
-    "Fork, True Triple": CMLocationData(4_902_056, 3450, 5450, 12, is_tactic=Tactic.Fork),
+    "Fork, Sacrificial Royal": CMLocationData(4_902_054, 3600, 5200, 12, is_tactic=Tactic.Fork),
+    "Fork, True": CMLocationData(4_902_055, 3150, 4550, 10, is_tactic=Tactic.Fork),
+    "Fork, True Triple": CMLocationData(4_902_056, 3850, 5850, 12, is_tactic=Tactic.Fork),
     # I sincerely believe this should be filler
     "Fork, True Royal": CMLocationData(4_902_057, 4020, 6020, 14, is_tactic=Tactic.Fork),
     "O-O Castle": CMLocationData(4_902_058, 0, 0, 2),
