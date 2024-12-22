@@ -68,7 +68,12 @@ class CMItemPool:
             max_items -= len([loc for loc in location_table if location_table[loc].is_tactic == Tactic.Fork])
         return max_items
 
-    def create_progression_items(self, max_items: int, min_material: int = 3900, max_material: int = 4000, locked_items: Dict[str, int] = {}, user_location_count: int = 0) -> List[Item]:
+    def create_progression_items(self,
+                                 max_items: int,
+                                 min_material: int = 3900,
+                                 max_material: int = 4000,
+                                 locked_items: Dict[str, int] = {},
+                                 user_location_count: int = 0) -> List[Item]:
         """Create progression items up to material limits."""
         items = []
         material = 0
@@ -78,7 +83,8 @@ class CMItemPool:
                material < max_material and
                len(my_progression_items) > 0):
             chosen_item = self.world.random.choice(my_progression_items)
-            if self.should_remove_item(chosen_item, material, min_material, max_material):
+            if self.should_remove_item(chosen_item, material, min_material, max_material,
+                                     items, my_progression_items, locked_items):
                 my_progression_items.remove(chosen_item)
                 continue
             
@@ -87,9 +93,11 @@ class CMItemPool:
                 
             if self.world.can_add_more(chosen_item):
                 try_item = self.world.create_item(chosen_item)
-                self.consume_item(chosen_item)
+                was_locked = self.consume_item(chosen_item, locked_items)
                 items.append(try_item)
                 material += progression_items[chosen_item].material
+                if not was_locked:
+                    self.lock_new_items(chosen_item, items, locked_items)
             elif material >= min_material:
                 my_progression_items.remove(chosen_item)
                 
@@ -156,8 +164,14 @@ class CMItemPool:
                 
         return items
 
-    def consume_item(self, item_name: str, locked_items: Dict[str, int]) -> None:
-        """Track item consumption in the pool."""
+    def consume_item(self, item_name: str, locked_items: Dict[str, int]) -> bool:
+        """Track item consumption in the pool. Returns True if the item was locked."""
+        was_locked = item_name in locked_items
+        if was_locked:
+            locked_items[item_name] -= 1
+            if locked_items[item_name] == 0:
+                del locked_items[item_name]
+            
         if item_name not in self.items_used[self.world.player]:
             self.items_used[self.world.player][item_name] = 0
         self.items_used[self.world.player][item_name] += 1
@@ -167,7 +181,7 @@ class CMItemPool:
                 self.items_remaining[self.world.player][item_name] = progression_items[item_name].quantity
             self.items_remaining[self.world.player][item_name] -= 1
 
-        self.lock_new_items(item_name, [], locked_items)
+        return was_locked
 
     def lock_new_items(self, chosen_item: str, items: List[Item], locked_items: Dict[str, int]) -> None:
         """Ensures the Castling location is reachable by locking necessary items."""
@@ -188,7 +202,8 @@ class CMItemPool:
 
         return total_majors - total_upgrades 
 
-    def should_remove_item(self, item: str, current_material: int, min_material: int, max_material: int) -> bool:
+    def should_remove_item(self, item: str, current_material: int, min_material: int, max_material: int,
+                         items: List[Item], progression_items: List[str], locked_items: Dict[str, int]) -> bool:
         """Determine if an item should be removed from the pool."""
         if item not in progression_items:
             return False

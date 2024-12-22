@@ -138,16 +138,25 @@ class TestItemPool(unittest.TestCase):
 
     def test_progression_item_creation(self):
         """Test that progression items are created within material limits"""
-        min_mat, max_mat = 10, 20
-        items = self.item_pool.create_progression_items(min_mat, max_mat)
+        min_mat, max_mat = 3900, 4000
+        max_items = 100
+        items = self.item_pool.create_progression_items(
+            max_items=max_items,
+            min_material=min_mat,
+            max_material=max_mat,
+            locked_items={}
+        )
         
         total_material = sum(progression_items[item.name].material for item in items)
         self.assertGreaterEqual(total_material, min_mat)
         self.assertLessEqual(total_material, max_mat)
+        
+        # Also verify we don't exceed max_items
+        self.assertLessEqual(len(items), max_items)
 
     def test_filler_item_creation_respects_pocket(self):
         """Test that filler items respect pocket requirements"""
-        max_items = 100  # Reasonable test value
+        max_items = 100
         # Test without pocket
         items_no_pocket = self.item_pool.create_filler_items(has_pocket=False, max_items=max_items)
         self.assertTrue(all("Pocket" not in item.name for item in items_no_pocket))
@@ -159,7 +168,7 @@ class TestItemPool(unittest.TestCase):
 
     def test_filler_item_creation_with_pocket(self):
         """Test that filler item creation handles pocket gems as fallback"""
-        max_items = 100  # Reasonable test value
+        max_items = 100
         user_location_count = 5  # Simulate some existing locations
         locked_items = {"Progressive Major Piece": 2}  # Simulate some locked items
         
@@ -175,7 +184,7 @@ class TestItemPool(unittest.TestCase):
         
     def test_filler_item_creation_no_pocket(self):
         """Test that filler item creation handles no pocket gems"""
-        max_items = 100  # Reasonable test value
+        max_items = 100
         user_location_count = 5  # Simulate some existing locations
         locked_items = {"Progressive Major Piece": 2}  # Simulate some locked items
         
