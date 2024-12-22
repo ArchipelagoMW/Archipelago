@@ -540,7 +540,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.SephirothFenrir,
         LocationName.SephiEventLocation
     ],
-    RegionName.CoR:                [
+    RegionName.CoR:                [ #todo: make logic for getting these checks.
         LocationName.CoRDepthsAPBoost,
         LocationName.CoRDepthsPowerCrystal,
         LocationName.CoRDepthsFrostCrystal,
