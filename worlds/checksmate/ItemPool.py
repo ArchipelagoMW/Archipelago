@@ -31,15 +31,17 @@ class CMItemPool:
             starter_items.extend([self.world.create_item(item_name) for _ in range(excluded_items[item_name])])
         return starter_items
 
-    def calculate_material_requirements(self, super_sized: bool) -> tuple[int, int]:
-        """Calculate minimum and maximum material requirements."""
+    def calculate_material_requirements(self, super_sized: bool) -> tuple[float, float]:
+        """Calculate the minimum and maximum material requirements based on world options."""
         min_material = determine_min_material(self.world.options)
         max_material = determine_max_material(self.world.options)
+        
         if super_sized:
             endgame_multiplier = (location_table["Checkmate Maxima"].material_expectations_grand /
                                 location_table["Checkmate Minima"].material_expectations_grand)
             min_material *= endgame_multiplier
             max_material *= endgame_multiplier
+            
         return min_material, max_material
 
     def handle_option_limits(self) -> None:
@@ -71,13 +73,13 @@ class CMItemPool:
 
     def create_progression_items(self,
                                  max_items: int,
-                                 min_material: int = 3900,
-                                 max_material: int = 4000,
+                                 min_material: float = 3900,
+                                 max_material: float = 4000,
                                  locked_items: Dict[str, int] = {},
                                  user_location_count: int = 0) -> List[Item]:
         """Create progression items up to material limits."""
         items = []
-        material = 0
+        material = self.calculate_current_material()  # Start with current material instead of 0
         my_progression_items = self.prepare_progression_item_pool()
         
         while ((len(items) + user_location_count + sum(locked_items.values())) < max_items and
@@ -106,8 +108,10 @@ class CMItemPool:
 
     def prepare_progression_item_pool(self) -> List[str]:
         """Prepare the pool of progression items with adjusted frequencies."""
-        items = list(progression_items.keys())
-        items.remove("Victory")
+        # Start with all progression items except Victory and those with quantity=0
+        items = [item for item in progression_items.keys() 
+                if item != "Victory" and progression_items[item].quantity > 0]
+        
         # Adjust frequencies
         items.extend(["Progressive Pawn"] * 3)  # More pawn chance
         items.extend(["Progressive Pocket"] * 2)  # More pocket chance
@@ -203,6 +207,21 @@ class CMItemPool:
 
         return total_majors - total_upgrades 
 
+    def calculate_current_material(self) -> int:
+        """Calculate the total material value of currently used items."""
+        return sum([
+            progression_items[item].material * self.items_used[self.world.player][item]
+            for item in self.items_used[self.world.player] if item in progression_items
+        ])
+
+    def calculate_remaining_material(self, locked_items: Dict[str, int]) -> int:
+        """Calculate the material value of locked items that have material value."""
+        return sum([
+            locked_items[item] * progression_items[item].material 
+            for item in locked_items 
+            if item in progression_items and progression_items[item].material > 0
+        ])
+
     def should_remove_item(self, chosen_item: str, material: int, min_material: float,
                          max_material: float, items: List[Item], my_progression_items: List[str],
                          locked_items: Dict[str, int]) -> bool:
@@ -212,19 +231,20 @@ class CMItemPool:
             return True
 
         if chosen_item in self.items_used[self.world.player] and \
-           self.items_used[self.world.player][chosen_item] >= item_table[chosen_item].quantity:
+            self.items_used[self.world.player][chosen_item] >= item_table[chosen_item].quantity:
             return True
         if not self.world.under_piece_limit(chosen_item, self.world.PieceLimitCascade.POTENTIAL_CHILDREN, my_progression_items):
             return True
 
         # Calculate total material including locked items and the chosen item
         chosen_material = self.lockable_material_value(chosen_item, items, locked_items)
-        remaining_material = sum([locked_items[item] * progression_items[item].material for item in locked_items])
+        remaining_material = self.calculate_remaining_material(locked_items)
         total_material = material + chosen_material + remaining_material
         exceeds_max = total_material > max_material
 
         if self.world.options.accessibility.value == self.world.options.accessibility.option_minimal:
             enough_yet = material + remaining_material >= min_material
+            # Only remove if we exceed max AND have enough material
             return exceeds_max and enough_yet
 
         # Check chessmen requirements for accessibility
