@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, NamedTuple
 
 from BaseClasses import CollectionState, Region
 from worlds.generic.Rules import set_rule
-from .rules import has_sword, has_stick
+from .rules import has_sword, has_melee
 if TYPE_CHECKING:
     from . import TunicWorld
 
@@ -135,8 +135,8 @@ breakable_location_table: dict[str, TunicLocationData] = {
     "Fortress Courtyard - Fire Pot 7": TunicLocationData("Fortress Courtyard", breakable="Fire Pot"),
     "Fortress Courtyard - Fire Pot 8": TunicLocationData("Fortress Courtyard", breakable="Fire Pot"),
     "Fortress Courtyard Upper - Fire Pot": TunicLocationData("Fortress Courtyard Upper pot", breakable="Fire Pot"),
-    "Fortress Grave Path - Pot 1": TunicLocationData("Fortress Grave Path", breakable="Pot"),
-    "Fortress Grave Path - Pot 2": TunicLocationData("Fortress Grave Path", breakable="Pot"),
+    "Fortress Grave Path - Pot 1": TunicLocationData("Fortress Grave Path Entry", breakable="Pot"),
+    "Fortress Grave Path - Pot 2": TunicLocationData("Fortress Grave Path Entry", breakable="Pot"),
     "Fortress Grave Path by Grave - Pot 1": TunicLocationData("Fortress Grave Path pots", breakable="Pot"),
     "Fortress Grave Path by Grave - Pot 2": TunicLocationData("Fortress Grave Path pots", breakable="Pot"),
     "Fortress Grave Path by Grave - Pot 3": TunicLocationData("Fortress Grave Path pots", breakable="Pot"),
@@ -144,7 +144,7 @@ breakable_location_table: dict[str, TunicLocationData] = {
     "Fortress Grave Path by Grave - Pot 5": TunicLocationData("Fortress Grave Path pots", breakable="Pot"),
     "Fortress Grave Path by Grave - Pot 6": TunicLocationData("Fortress Grave Path pots", breakable="Pot"),
     "Fortress Grave Path - Fire Pot 1": TunicLocationData("Fortress Grave Path westmost pot", breakable="Fire Pot"),
-    "Fortress Grave Path - Fire Pot 2": TunicLocationData("Fortress Grave Path", breakable="Fire Pot"),
+    "Fortress Grave Path - Fire Pot 2": TunicLocationData("Fortress Grave Path Combat", breakable="Fire Pot"),
     "Eastern Vault Fortress by Door - Pot 1": TunicLocationData("Eastern Vault Fortress", breakable="Pot"),
     "Eastern Vault Fortress by Door - Pot 2": TunicLocationData("Eastern Vault Fortress", breakable="Pot"),
     "Eastern Vault Fortress by Door - Pot 3": TunicLocationData("Eastern Vault Fortress", breakable="Pot"),
@@ -221,18 +221,18 @@ breakable_location_table: dict[str, TunicLocationData] = {
     "Frog Stairs Upper - Pot 4": TunicLocationData("Frog Stairs Upper", breakable="Pot"),
     "Frog Stairs Upper - Pot 5": TunicLocationData("Frog Stairs Upper", breakable="Pot"),
     "Frog Stairs Upper - Pot 6": TunicLocationData("Frog Stairs Upper", breakable="Pot"),
-    "Frog's Domain above Orb Altar - Pot 1": TunicLocationData("Frog's Domain", breakable="Pot"),
-    "Frog's Domain above Orb Altar - Pot 2": TunicLocationData("Frog's Domain", breakable="Pot"),
-    "Frog's Domain Side Room - Pot 1": TunicLocationData("Frog's Domain", breakable="Pot"),
-    "Frog's Domain Side Room - Pot 2": TunicLocationData("Frog's Domain", breakable="Pot"),
-    "Frog's Domain Side Room - Pot 3": TunicLocationData("Frog's Domain", breakable="Pot"),
-    "Frog's Domain Main Room - Pot 1": TunicLocationData("Frog's Domain", breakable="Pot"),
-    "Frog's Domain Main Room - Pot 2": TunicLocationData("Frog's Domain", breakable="Pot"),
-    "Frog's Domain Side Room - Pot 4": TunicLocationData("Frog's Domain", breakable="Pot"),
-    "Frog's Domain after Gate - Pot 1": TunicLocationData("Frog's Domain", breakable="Pot"),
-    "Frog's Domain after Gate - Pot 2": TunicLocationData("Frog's Domain", breakable="Pot"),
-    "Frog's Domain Orb Room - Explosive Pot 1": TunicLocationData("Frog's Domain", breakable="Explosive Pot"),
-    "Frog's Domain Orb Room - Explosive Pot 2": TunicLocationData("Frog's Domain", breakable="Explosive Pot"),
+    "Frog's Domain above Orb Altar - Pot 1": TunicLocationData("Frog's Domain Front", breakable="Pot"),
+    "Frog's Domain above Orb Altar - Pot 2": TunicLocationData("Frog's Domain Front", breakable="Pot"),
+    "Frog's Domain Side Room - Pot 1": TunicLocationData("Frog's Domain Main", breakable="Pot"),
+    "Frog's Domain Side Room - Pot 2": TunicLocationData("Frog's Domain Main", breakable="Pot"),
+    "Frog's Domain Side Room - Pot 3": TunicLocationData("Frog's Domain Main", breakable="Pot"),
+    "Frog's Domain Main Room - Pot 1": TunicLocationData("Frog's Domain Main", breakable="Pot"),
+    "Frog's Domain Main Room - Pot 2": TunicLocationData("Frog's Domain Main", breakable="Pot"),
+    "Frog's Domain Side Room - Pot 4": TunicLocationData("Frog's Domain Main", breakable="Pot"),
+    "Frog's Domain after Gate - Pot 1": TunicLocationData("Frog's Domain Main", breakable="Pot"),
+    "Frog's Domain after Gate - Pot 2": TunicLocationData("Frog's Domain Main", breakable="Pot"),
+    "Frog's Domain Orb Room - Explosive Pot 1": TunicLocationData("Frog's Domain Main", breakable="Explosive Pot"),
+    "Frog's Domain Orb Room - Explosive Pot 2": TunicLocationData("Frog's Domain Main", breakable="Explosive Pot"),
     "Library Lab - Library Glass 1": TunicLocationData("Library Lab", breakable="Library Glass"),
     "Library Lab - Library Glass 2": TunicLocationData("Library Lab", breakable="Library Glass"),
     "Library Lab - Library Glass 3": TunicLocationData("Library Lab", breakable="Library Glass"),
@@ -280,8 +280,8 @@ breakable_location_table: dict[str, TunicLocationData] = {
     "Monastery Back - Crate 7": TunicLocationData("Monastery Back", breakable="Crate"),
     "Monastery Back - Crate 8": TunicLocationData("Monastery Back", breakable="Crate"),
     "Monastery Back - Crate 9": TunicLocationData("Monastery Back", breakable="Crate"),
-    "Cathedral - Pot 1": TunicLocationData("Cathedral", breakable="Pot"),
-    "Cathedral - Pot 2": TunicLocationData("Cathedral", breakable="Pot"),
+    "Cathedral - Pot 1": TunicLocationData("Cathedral Main", breakable="Pot"),
+    "Cathedral - Pot 2": TunicLocationData("Cathedral Main", breakable="Pot"),
 }
 
 
@@ -323,7 +323,7 @@ for location_name, location_data in breakable_location_table.items():
 
 
 def can_break_breakables(state: CollectionState, world: "TunicWorld") -> bool:
-    return has_stick(state, world.player) or state.has_any(("Magic Wand", "Gun"), world.player)
+    return has_melee(state, world.player) or state.has_any(("Magic Wand", "Gun"), world.player)
 
 
 # and also the table
@@ -332,7 +332,7 @@ def can_break_signs(state: CollectionState, world: "TunicWorld") -> bool:
 
 
 def can_break_leaf_piles(state: CollectionState, world: "TunicWorld") -> bool:
-    return has_stick(state, world.player) or state.has_any(("Magic Dagger", "Gun"), world.player)
+    return has_melee(state, world.player) or state.has_any(("Magic Dagger", "Gun"), world.player)
 
 
 def create_breakable_exclusive_regions(world: "TunicWorld") -> list[Region]:
@@ -359,13 +359,13 @@ def create_breakable_exclusive_regions(world: "TunicWorld") -> list[Region]:
 
     region = Region("Fortress Grave Path westmost pot", world.player, world.multiworld)
     new_regions.append(region)
-    world.get_region("Fortress Grave Path").connect(region)
+    world.get_region("Fortress Grave Path Entry").connect(region)
     world.get_region("Fortress Grave Path Upper").connect(
         region, rule=lambda state: state.has_any(("Magic Wand", "Gun"), player))
 
     region = Region("Fortress Grave Path pots", world.player, world.multiworld)
     new_regions.append(region)
-    world.get_region("Fortress Grave Path").connect(region)
+    world.get_region("Fortress Grave Path by Grave").connect(region)
     world.get_region("Fortress Grave Path Dusty Entrance Region").connect(
         region, rule=lambda state: state.has("Magic Wand", player))
 
