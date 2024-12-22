@@ -207,7 +207,7 @@ class MagpieBridge:
                     await self.send_all_inventory()
                 if "checks" in self.features:
                     await self.send_all_checks()
-                if "slot_data" in self.features:
+                if "slot_data" in self.features and self.slot_data:
                     await self.send_slot_data(self.slot_data)
                 if self.use_entrance_tracker():
                     await self.send_gps(diff=False)
