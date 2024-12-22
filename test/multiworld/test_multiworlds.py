@@ -7,7 +7,7 @@ from BaseClasses import (
     CollectionState, Location, MultiWorld, Item, Entrance, Region, ItemClassification, LocationProgressType,
 )
 from Fill import distribute_items_restrictive
-from Options import Accessibility
+from Options import Accessibility, Removed
 from worlds.AutoWorld import AutoWorldRegister, call_all, call_single
 from ..general import gen_steps, setup_multiworld
 
@@ -109,14 +109,14 @@ class RegionData(TypedDict):
 class TestDeterministicGeneration(MultiworldTestBase):
     @staticmethod
     def _test_determinism_multiworld_to_basic_data(multiworld: MultiWorld) -> tuple[
-        dict[int, list[RegionData]], dict[int, list[EntranceData]], dict[int, list[LocationData]], dict[int, list[ItemData]]
+        dict[int, list[RegionData]], dict[int, list[EntranceData]], dict[int, list[LocationData]], dict[int, list[LocationData]], dict[int, list[ItemData]], dict[int, list[dict[str, str]]]
     ]:
         def item_to_basic_data(item: Item) -> ItemData:
             return {"name": item.name, "player": item.player, "code": item.code, "classification": item.classification}
 
-        def location_to_basic_data(loc: Location) -> LocationData:
+        def location_to_basic_data(loc: Location, include_items: bool = False) -> LocationData:
             item = loc.item
-            if item is not None:
+            if include_items and item is not None:
                 item_data = item_to_basic_data(item)
             else:
                 item_data = None
@@ -137,16 +137,36 @@ class TestDeterministicGeneration(MultiworldTestBase):
         def region_to_basic_data(reg: Region) -> RegionData:
             return {"name": reg.name, "locations": [loc.name for loc in reg.locations]}
 
+        def dump_options(multiworld: MultiWorld) -> dict[int, list[dict[str, str]]]:
+            all_options = {}
+            for player in multiworld.player_ids:
+                output = []
+                world = multiworld.worlds[player]
+                player_output = {
+                    "Game": multiworld.game[player],
+                    "Name": multiworld.get_player_name(player),
+                }
+                for option_key, option in world.options_dataclass.type_hints.items():
+                    if issubclass(Removed, option):
+                        continue
+                    display_name = getattr(option, "display_name", option_key)
+                    player_output[display_name] = getattr(world.options, option_key).current_option_name
+                output.append(player_output)
+                all_options[player] = output
+            return all_options
+
         regions = {player: list(map(region_to_basic_data, regions.values()))
                    for player, regions in multiworld.regions.region_cache.items()}
         entrances = {player: list(map(entrance_to_basic_data, entrances.values()))
                      for player, entrances in multiworld.regions.entrance_cache.items()}
         locations = {player: list(map(location_to_basic_data, locations.values()))
                      for player, locations in multiworld.regions.location_cache.items()}
+        locations_with_items = {player: list(map(location_to_basic_data, locations.values(), (True,) * len(locations)))
+                                for player, locations in multiworld.regions.location_cache.items()}
         precollected_items = {player: list(map(item_to_basic_data, items))
                               for player, items in multiworld.precollected_items.items()}
 
-        return regions, entrances, locations, precollected_items
+        return regions, entrances, locations, locations_with_items, precollected_items, dump_options(multiworld)
 
     @staticmethod
     def _test_determinism_world_setup(world_type_name: str, seed: int):
@@ -187,19 +207,19 @@ class TestDeterministicGeneration(MultiworldTestBase):
                     # Get our data first in-case we break something, so we get better exception tracebacks.
                     data_from_current_process = TestDeterministicGeneration._test_determinism_multiworld_to_basic_data(self.multiworld)
                     data_from_other_process = future.result(timeout=10.0)
-                    for data_current, data_other, name in zip(data_from_current_process, data_from_other_process, ["regions", "entrances", "locations", "start_inventory"], strict=True):
+                    for data_current, data_other, name in zip(data_from_current_process, data_from_other_process, ["regions", "entrances", "locations", "locations_with_items", "start_inventory", "options"], strict=True):
                         with self.subTest(name):
-                            self.assertEqual(data_current, data_other)
-                    with self.subTest("locations2"):
-                        current_locations = data_from_current_process[2]
-                        other_locations = data_from_other_process[2]
-                        for player, current_locations_data in current_locations.items():
-                            other_locations_data = other_locations.get(player, [])
-                            current_locations_dict = {(loc["name"], loc["address"]): (loc["progress_type"], loc["item"]) for loc in current_locations_data}
-                            self.assertEqual(len(current_locations_dict), len(current_locations_data), "Duplicate locations were found (current process)")
-                            other_locations_dict = {(loc["name"], loc["address"]): (loc["progress_type"], loc["item"]) for loc in other_locations_data}
-                            self.assertEqual(len(other_locations_dict), len(other_locations_data), "Duplicate locations were found (other process)")
-                            self.assertEqual(current_locations_dict.keys(), other_locations_dict.keys(), "the names and IDs of the locations existing in the multiworld did not match")
-                            for loc_key, loc_value in current_locations_dict.items():
-                                other_loc_value = other_locations_dict[loc_key]
-                                self.assertEqual(other_loc_value, loc_value, f"location data for {loc_key} did not match")
+                            if name == "locations_with_items":
+                                for player, current_locations_data in data_current.items():
+                                    other_locations_data = data_other.get(player, [])
+                                    current_locations_dict = {(loc["name"], loc["address"]): (loc["progress_type"], loc["item"]) for loc in current_locations_data}
+                                    self.assertEqual(len(current_locations_dict), len(current_locations_data), "Duplicate locations were found (current process)")
+                                    other_locations_dict = {(loc["name"], loc["address"]): (loc["progress_type"], loc["item"]) for loc in other_locations_data}
+                                    self.assertEqual(len(other_locations_dict), len(other_locations_data), "Duplicate locations were found (other process)")
+                                    self.assertEqual(current_locations_dict.keys(), other_locations_dict.keys(), "the names and IDs of the locations existing in the multiworld did not match")
+                                    for loc_key, loc_value in current_locations_dict.items():
+                                        other_loc_value = other_locations_dict[loc_key]
+                                        self.assertEqual(other_loc_value, loc_value, f"location data for {loc_key} did not match")
+                            else:
+                                self.assertEqual(data_current, data_other)
+
