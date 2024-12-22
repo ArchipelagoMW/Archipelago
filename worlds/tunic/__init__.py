@@ -352,7 +352,7 @@ class TunicWorld(World):
                 region = self.get_region(region_name)
                 region.add_exits(exits)
 
-            for location_name, location_id in self.location_name_to_id.items():
+            for location_name, location_id in self.player_location_table.items():
                 region = self.get_region(location_table[location_name].region)
                 location = TunicLocation(self.player, location_name, location_id, region)
                 region.locations.append(location)
