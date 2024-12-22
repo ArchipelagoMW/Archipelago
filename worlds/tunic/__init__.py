@@ -13,7 +13,8 @@ from .grass import grass_location_table, grass_location_name_to_id, grass_locati
 from .breakables import breakable_location_name_to_id, breakable_location_groups, breakable_location_table
 from .er_data import portal_mapping, RegionInfo, tunic_er_regions
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
-                      LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage, EntranceLayout, check_options)
+                      LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage, EntranceLayout,
+                      check_options, LocalFill)
 from .combat_logic import area_data, CombatState
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection, OptionError
@@ -97,7 +98,12 @@ class TunicWorld(World):
     seed_groups: Dict[str, SeedGroup] = {}
     used_shop_numbers: Set[int]
     er_regions: Dict[str, RegionInfo]  # absolutely needed so outlet regions work
-    local_filler: List[TunicItem]
+
+    # for the local_fill option -- grass and non-grass option worlds get their own pools
+    grass_fill: List[TunicItem]
+    non_grass_fill: List[TunicItem]
+    grass_fill_locations: List[Location]
+    non_grass_fill_locations: List[Location]
 
     # so we only loop the multiworld locations once
     # if these are locations instead of their info, it gives a memory leak error
@@ -159,7 +165,7 @@ class TunicWorld(World):
 
         self.player_location_table = standard_location_name_to_id.copy()
 
-        if self.options.local_fill == "default":
+        if self.options.local_fill == -1:
             if self.options.grass_randomizer:
                 if self.options.breakable_shuffle:
                     self.options.local_fill.value = 96
@@ -422,7 +428,17 @@ class TunicWorld(World):
                 self.slot_data_items.append(tunic_item)
 
         # pull out the filler so that we can place it manually during pre_fill
-        self.local_filler = []
+        self.grass_fill = []
+        self.grass_fill_locations = []
+        self.non_grass_fill = []
+        self.non_grass_fill_locations = []
+        # grass and non-grass get their own pools
+        if self.options.grass_randomizer:
+            filler = self.grass_fill
+            fill_locations = self.grass_fill_locations
+        else:
+            filler = self.non_grass_fill
+            fill_locations = self.non_grass_fill_locations
         if self.options.local_fill > 0 and self.multiworld.players > 1:
             # skip items marked local or non-local, let fill deal with them in its own way
             # discard grass from non_local if it's meant to be limited
@@ -438,39 +454,42 @@ class TunicWorld(World):
                 else:
                     non_filler.append(tunic_item)
             amount_to_local_fill = int(self.options.local_fill.value * len(all_filler) / 100)
-            self.local_filler = all_filler[:amount_to_local_fill]
+            # we need to reserve a couple locations so that we don't fill up every sphere 1 location
+            reserved_locations: Set[str] = set(self.random.sample(sphere_one, 2))
+            viable_locations = [loc for loc in self.multiworld.get_unfilled_locations(self.player)
+                                if loc.name not in reserved_locations
+                                or loc.progress_type is not LocationProgressType.EXCLUDED
+                                or loc.name in self.options.priority_locations.value]
+            amount_to_local_fill = min(amount_to_local_fill, len(viable_locations))
+            self.random.shuffle(all_filler)
+            filler += all_filler[:amount_to_local_fill]
             del all_filler[:amount_to_local_fill]
+            self.random.shuffle(viable_locations)
+            fill_locations += viable_locations[:amount_to_local_fill]
             tunic_items = all_filler + non_filler
 
         self.multiworld.itempool += tunic_items
 
     @classmethod
     def stage_pre_fill(cls, multiworld: MultiWorld) -> None:
-        tunic_grass_worlds: List[TunicWorld] = [world for world in multiworld.get_game_worlds("TUNIC")
-                                                if world.options.grass_randomizer]
-        if tunic_grass_worlds:
-            tunic_players_with_grass: List[int] = [world.player for world in tunic_grass_worlds]
+        tunic_fill_worlds: List[TunicWorld] = [world for world in multiworld.get_game_worlds("TUNIC")
+                                               if world.options.local_fill.value > 0]
+        if tunic_fill_worlds:
+            grass_fill: List[TunicItem] = []
+            non_grass_fill: List[TunicItem] = []
+            grass_fill_locations: List[Location] = []
+            non_grass_fill_locations: List[Location] = []
+            for world in tunic_fill_worlds:
+                grass_fill.extend(world.grass_fill)
+                non_grass_fill.extend(world.non_grass_fill)
+                grass_fill_locations.extend(world.grass_fill_locations)
+                non_grass_fill_locations.extend(world.non_grass_fill_locations)
 
-            grass_filler_items: List[TunicItem] = []
-            for world in tunic_grass_worlds:
-                grass_filler_items.extend(world.local_filler)
+            for loc in grass_fill_locations:
+                multiworld.push_item(loc, grass_fill.pop(), collect=False)
 
-            if grass_filler_items:
-                # we need to reserve a couple locations so that we don't fill up every sphere 1 location
-                reserved_locations: Set[str] = set(multiworld.random.sample(sphere_one, 2))
-                unfilled_locations = [loc for loc in multiworld.get_unfilled_locations_for_players(
-                    location_names=[], players=tunic_players_with_grass) if loc.progress_type != LocationProgressType.PRIORITY
-                                      and loc.name not in reserved_locations]
-
-                grass_filler_count = len(grass_filler_items)
-                # in case you plando or priority a bunch of locations
-                if len(unfilled_locations) < grass_filler_count:
-                    raise Exception("Not enough locations for TUNIC grass randomizer players to place grass fill into TUNIC "
-                                    "locations. This is likely due to excessive priority locations or plando.")
-
-                locations_to_grass_fill = multiworld.random.sample(unfilled_locations, grass_filler_count)
-                for loc in locations_to_grass_fill:
-                    multiworld.push_item(loc, grass_filler_items.pop(), collect=False)
+            for loc in non_grass_fill_locations:
+                multiworld.push_item(loc, non_grass_fill.pop(), collect=False)
 
     def create_regions(self) -> None:
         self.tunic_portal_pairs = {}
