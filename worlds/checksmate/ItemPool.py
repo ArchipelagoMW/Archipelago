@@ -1,9 +1,10 @@
 from typing import Dict, List, Optional
 from BaseClasses import Item
+from . import chessmen_count
 from .Items import (CMItem, item_table, filler_items, progression_items,
                    useful_items, item_name_groups)
 from .Rules import determine_min_material, determine_max_material
-from .Locations import location_table, Tactic
+from .Locations import location_table, Tactic, highest_chessmen_requirement_small, highest_chessmen_requirement
 import logging
 
 
@@ -202,11 +203,61 @@ class CMItemPool:
 
         return total_majors - total_upgrades 
 
-    def should_remove_item(self, item: str, current_material: int, min_material: int, max_material: int,
-                         items: List[Item], progression_items: List[str], locked_items: Dict[str, int]) -> bool:
-        """Determine if an item should be removed from the pool."""
-        if item not in progression_items:
-            return False
-        if current_material >= max_material:
+    def should_remove_item(self, chosen_item: str, material: int, min_material: float,
+                         max_material: float, items: List[Item], my_progression_items: List[str],
+                         locked_items: Dict[str, int]) -> bool:
+        """Determine if an item should be removed from the pool based on material limits and accessibility."""
+        if chosen_item == "Progressive Major To Queen" and "Progressive Major Piece" not in my_progression_items:
+            # TODO: there is a better way, probably next step is a "one strike" mechanism
             return True
-        return False 
+
+        if chosen_item in self.items_used[self.world.player] and \
+           self.items_used[self.world.player][chosen_item] >= item_table[chosen_item].quantity:
+            return True
+        if not self.world.under_piece_limit(chosen_item, self.world.PieceLimitCascade.POTENTIAL_CHILDREN):
+            return True
+
+        # Calculate total material including locked items and the chosen item
+        chosen_material = progression_items[chosen_item].material
+        if self.world.options.accessibility.value != self.world.options.accessibility.option_minimal:
+            if chosen_item == "Progressive Major To Queen" and self.unupgraded_majors_in_pool(items, locked_items) <= 2:
+                chosen_material += progression_items["Progressive Major Piece"].material
+
+        remaining_material = sum([locked_items[item] * progression_items[item].material for item in locked_items])
+        total_material = material + chosen_material + remaining_material
+        exceeds_max = total_material > max_material
+
+        if self.world.options.accessibility.value == self.world.options.accessibility.option_minimal:
+            enough_yet = material + remaining_material >= min_material
+            return exceeds_max and enough_yet
+
+        # Check chessmen requirements for accessibility
+        chessmen_requirement = highest_chessmen_requirement_small if \
+            self.world.options.goal.value == self.world.options.goal.option_single else \
+            highest_chessmen_requirement
+        necessary_chessmen = (chessmen_requirement - chessmen_count(items, self.world.options.pocket_limit_by_pocket.value))
+        if chosen_item in item_name_groups["Chessmen"]:
+            necessary_chessmen -= 1
+        elif chosen_item == "Progressive Pocket":
+            # We know pocket_limit > 0, because pockets are not disabled, because we checked items_used
+            pocket_limit = self.world.options.pocket_limit_by_pocket.value
+            next_pocket = locked_items.get("Progressive Pocket", 0) + \
+                len([item for item in items if item.name == "Progressive Pocket"]) + \
+                1
+            if next_pocket % pocket_limit == 1:
+                necessary_chessmen -= 1
+
+        if necessary_chessmen <= 0:
+            return exceeds_max
+        minimum_possible_material = total_material + (
+            item_table["Progressive Pawn"].material * necessary_chessmen)
+        return minimum_possible_material > max_material
+    
+    # if this piece was added, it might add more than its own material to the locked pool
+    def lockable_material_value(self, chosen_item: str, items: List[CMItem], locked_items: Dict[str, int]):
+        material = progression_items[chosen_item].material
+        if self.world.options.accessibility.value == self.world.options.accessibility.option_minimal:
+            return material
+        if chosen_item == "Progressive Major To Queen" and self.unupgraded_majors_in_pool(items, locked_items) <= 2:
+            material += progression_items["Progressive Major Piece"].material
+        return material
