@@ -1,10 +1,21 @@
+import typing
 from dataclasses import dataclass
 
-from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle
+from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle, OptionDict, ItemDict, OptionList, \
+    OptionSet, ItemSet
+from worlds.yugioh06.card_data import get_all_valid_cards_set
 
 
 class StructureDeck(Choice):
-    """Which Structure Deck you start with"""
+    """
+    Which Structure Deck you start with.
+    The first 6 are regular Structure Decks
+    Worst: Start you of with basically nothing
+    Random Deck: Chooses one of the Regular SDs at random.
+    Random Singles: Your deck contains 40 completely random cards with no duplicates.
+    Random Playsets: Your deck contains 14 completely random playsets of 3.
+    Custom: Create your own starting deck see Custom Structure Deck for more details.
+    """
 
     display_name = "Structure Deck"
     option_dragons_roar = 0
@@ -17,18 +28,69 @@ class StructureDeck(Choice):
     option_random_deck = 7
     option_random_singles = 8
     option_random_playsets = 9
+    option_custom = 10
     default = 7
 
 
+class CustomStructureDeck(OptionDict):
+    """
+    Create your own Structure Deck to start with
+    Only works if structure deck is set to custom
+    Has to be below 80 cards in total.
+    Fusion monsters don't work properly you have to add them to your Trunk and then back into the deck.
+    """
+    display_name = "Custom Structure Deck"
+    valid_keys = get_all_valid_cards_set()
+
+    def __init__(self, value: typing.Dict[str, int]):
+        if any(amount is None for amount in value.values()):
+            raise Exception("Cards must have amounts associated with them. Please provide positive integer values in the format \"card\": amount .")
+        if any(amount < 1 for amount in value.values()):
+            raise Exception("Cannot have non-positive card amounts.")
+        if any(amount > 3 for amount in value.values()):
+            raise Exception("Cannot have more than 3 of the same card.")
+        if sum(value.values()) > 80:
+            raise Exception("The Structure Deck cannot have more than 80 cards.")
+        super(CustomStructureDeck, self).__init__(value)
+
+
 class StarterDeck(Choice):
-    """What are the cards you start with in the Trunk"""
+    """
+    What are the cards you start with in the Trunk
+    Vanilla: Default starting cards.
+    Remove: Start with no cards in Trunk.
+    Random Singles: Start with 40 random cards with no duplicates.
+    Random Playsets: Start with 13 random playsets of 3.
+    Custom: Choose your own cards. For more details see Custom Starter Deck.
+    """
     display_name = "Starter Deck"
     option_vanilla = 0
     option_remove = 1
     option_random_singles = 2
     option_random_playsets = 3
+    option_custom = 4
     default = 0
 
+
+class CustomStarterDeck(OptionDict):
+    """
+    Choose the cards that you have in your trunk at the start of the game
+    Only works if starter deck is set to custom.
+    Must be below 40 cards in total.
+    """
+    display_name = "Custom Structure Deck"
+    valid_keys = get_all_valid_cards_set()
+
+    def __init__(self, value: typing.Dict[str, int]):
+        if any(amount is None for amount in value.values()):
+            raise Exception("Cards must have amounts associated with them. Please provide positive integer values in the format \"card\": amount .")
+        if any(amount < 1 for amount in value.values()):
+            raise Exception("Cannot have non-positive card amounts.")
+        if any(amount > 3 for amount in value.values()):
+            raise Exception("Cannot have more than 3 of the same card.")
+        if sum(value.values()) > 40:
+            raise Exception("The Starter Deck cannot have more than 40 cards.")
+        super(CustomStarterDeck, self).__init__(value)
 
 
 class Banlist(Choice):
@@ -180,3 +242,5 @@ class Yugioh06Options(PerGameCommonOptions):
     add_empty_banlist: AddEmptyBanList
     campaign_opponents_shuffle: CampaignOpponentsShuffle
     ocg_arts: OCGArts
+    custom_structure_deck: CustomStructureDeck
+    custom_starter_deck: CustomStarterDeck

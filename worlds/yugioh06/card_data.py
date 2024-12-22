@@ -1504,7 +1504,7 @@ cards: Dict[str, CardData] = {
                               "Trap", "Trap", "Trap", "None", 0x4C04, 0x1301),
     "Royal Decree": CardData(688, 4866, "Royal Decree", "51452091", 0, False, 0, 0, 0,
                              "Trap", "Trap", "Trap", "Continuous", 0x4C08, 0x1302),
-    "Polymerization Alt 1": CardData(689, 4867, "Polymerization", "27847700", 0, True, 0, 0, 0,
+    "Polymerization (Alt)": CardData(689, 4867, "Polymerization", "27847700", 0, True, 0, 0, 0,
                                "Spell", "Spell", "Spell", "None", 0x4C0C, 0x1303),
     "Magical Thorn": CardData(690, 4870, "Magical Thorn", "53119267", 0, False, 0, 0, 0,
                               "Trap", "Trap", "Trap", "Continuous", 0x4C18, 0x1306),
@@ -1951,7 +1951,7 @@ cards: Dict[str, CardData] = {
                                      "Spell", "Spell", "Spell", "Continuous", 0x50A4, 0x1429),
     "Creature Swap": CardData(910, 5162, "Creature Swap", "31036355", 0, False, 0, 0, 0,
                               "Spell", "Spell", "Spell", "None", 0x50A8, 0x142A),
-    "Dark Magician Alt 3": CardData(911, 5165, "Dark Magician", "36996508", 0, False, 2500, 2100, 7,
+    "Dark Magician (Arcana)": CardData(911, 5165, "Dark Magician", "36996508", 0, False, 2500, 2100, 7,
                               "Spellcaster", "DARK", "None", "None", 0x50B4, 0x142D),
     "Thousand Knives": CardData(912, 5166, "Thousand Knives", "63391643", 0, False, 0, 0, 0,
                                 "Spell", "Spell", "Spell", "None", 0x50B8, 0x142E),
@@ -6464,6 +6464,15 @@ starter_id_to_name = {
     0x19fd: "Elemental Hero Neos",
     0x19fe: "Dandylion",
 }
+
+
+def get_all_valid_cards_set():
+    card_set = set()
+    for name, card in cards.items():
+        if card.art == 0:
+            card_set.add(name)
+    return frozenset(card_set)
+
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)

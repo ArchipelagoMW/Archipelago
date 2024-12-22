@@ -1,3 +1,4 @@
+import logging
 import os
 import pkgutil
 from typing import Any, ClassVar, Dict, List, Set
@@ -129,7 +130,7 @@ class Yugioh06World(World):
     starting_booster: str
     starting_opponent: str
     campaign_opponents: List[OpponentData]
-    starter_deck: List[CardData]
+    starter_deck: Dict[CardData, int]
     structure_deck: Dict[CardData, int]
     is_draft_mode: bool
 
@@ -140,7 +141,7 @@ class Yugioh06World(World):
         self.starting_opponent = ""
         self.starting_booster = ""
         self.removed_challenges = []
-        self.starter_deck = []
+        self.starter_deck = {}
         self.structure_deck = {}
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
@@ -190,15 +191,30 @@ class Yugioh06World(World):
             for i in range(0, 40):
                 card = self.random.choice(card_list)
                 card_list.remove(card)
-                self.starter_deck.append(card)
+                self.starter_deck[card] = 1
         elif self.options.starter_deck.value == self.options.starter_deck.option_random_playsets:
             for i in range(0, 13):
                 card = self.random.choice(card_list)
                 card_list.remove(card)
-                self.starter_deck.append(card)
-                self.starter_deck.append(card)
-                self.starter_deck.append(card)
-            self.starter_deck.append(empty_card_data)
+                self.starter_deck[card] = 3
+            self.starter_deck[empty_card_data] = 1
+        elif self.options.starter_deck.value == self.options.starter_deck.option_custom:
+            total_amount = 0
+            for name, amount in self.options.custom_starter_deck.value.items():
+                card = cards[name]
+                if amount > 3:
+                    logging.warning(
+                        f"{self.player} has too many {name} in their "
+                        f"Custom Starter Deck setting. Setting it to 3")
+                    amount = 3
+                total_amount += amount
+                if total_amount > 40:
+                    logging.warning(f"{self.player} Starter Deck cards exceeded the maximum of 40")
+                    break
+                if amount > 0:
+                    self.starter_deck[card] = amount
+            if total_amount < 40:
+                self.starter_deck[empty_card_data] = 40 - total_amount
 
         # set structure deck
         if self.options.structure_deck.current_key == "random_deck":
@@ -219,6 +235,29 @@ class Yugioh06World(World):
             for card_name, amount in worst_deck.items():
                 card = cards[card_name]
                 self.structure_deck[card] = amount
+        elif self.options.structure_deck.value == self.options.structure_deck.option_custom:
+            total_amount = 0
+            for name, amount in self.options.custom_structure_deck.value.items():
+                card = cards[name]
+                if amount > 3:
+                    logging.warning(
+                        f"{self.player} has too many {name} in their "
+                        f"Custom Structure Deck setting. Setting it to 3")
+                    amount = 3
+                total_amount += amount
+                if total_amount > 80:
+                    logging.warning(f"{self.player} Structure Deck cards exceeded the maximum of 80")
+                    break
+                if amount > 0:
+                    self.structure_deck[card] = amount
+            if total_amount < 40:
+                for card_name, w_amount in worst_deck.items():
+                    card = cards[card_name]
+                    self.structure_deck[card] = w_amount
+                    total_amount += min(w_amount, 40 - total_amount)
+                    if total_amount >= 40:
+                        break
+            self.options.structure_deck.value = self.options.structure_deck.option_worst
 
         # set starting booster and opponent
         for item in self.options.start_inventory:

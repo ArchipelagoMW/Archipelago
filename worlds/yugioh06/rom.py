@@ -39,9 +39,12 @@ def write_tokens(world: World, patch: YGO06ProcedurePatch):
             patch.write_token(APTokenTypes.WRITE, 0x01e5f884 + (i * 2),
                               struct.pack("<H", 0x0))
     elif world.starter_deck:
-        for i in range(0, len(world.starter_deck)):
-            patch.write_token(APTokenTypes.WRITE, 0x01e5f884 + (i * 2),
-                              struct.pack("<H", world.starter_deck[i].starter_id))
+        pointer = 0
+        for card, amount in world.starter_deck.items():
+            for i in range(0, amount):
+                patch.write_token(APTokenTypes.WRITE, 0x01e5f884 + pointer,
+                                  struct.pack("<H", card.starter_id))
+                pointer = pointer + 2
 
     # override Structure Deck
     if world.structure_deck:
@@ -54,6 +57,8 @@ def write_tokens(world: World, patch: YGO06ProcedurePatch):
         deck_name = "\x00"
         if world.is_draft_mode:
             deck_name = "Worst Deck\x00"
+        elif world.options.structure_deck.value == world.options.structure_deck.option_custom:
+            deck_name = "Custom Deck\x00"
         else:
             deck_name = "Random Deck\x00"
         for j, b in enumerate(deck_name.encode("ascii")):
