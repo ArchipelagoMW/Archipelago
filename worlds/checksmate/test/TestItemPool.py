@@ -7,7 +7,7 @@ from ..Items import progression_items, useful_items, filler_items
 from ..Options import (CMOptions, MinorPieceLimitByType, MajorPieceLimitByType, 
                       QueenPieceLimitByType, QueenPieceLimit, PocketLimitByPocket,
                       Goal, Difficulty, EnableTactics, PieceLocations, PieceTypes,
-                      FairyChessPieces, FairyChessArmy, FairyChessPawns)
+                      FairyChessPieces, FairyChessPiecesConfigure, FairyChessArmy, FairyChessPawns)
 from ..ItemPool import CMItemPool
 
 
@@ -16,7 +16,7 @@ class TestItemPool(unittest.TestCase):
         self.multiworld = MultiWorld(1)
         self.multiworld.game[1] = "ChecksMate"
         self.world = CMWorld(self.multiworld, 1)
-        
+
         # Initialize options with proper option classes
         progression_balancing = DefaultOnToggle(True)
         accessibility = Accessibility(Accessibility.option_full)
@@ -28,9 +28,10 @@ class TestItemPool(unittest.TestCase):
         piece_locations = PieceLocations(PieceLocations.option_chaos)
         piece_types = PieceTypes(PieceTypes.option_stable)
         fairy_chess_pieces = FairyChessPieces(FairyChessPieces.option_full)
+        fairy_chess_pieces_configure = FairyChessPiecesConfigure(FairyChessPiecesConfigure.default)
         fairy_chess_army = FairyChessArmy(FairyChessArmy.option_stable)
         fairy_chess_pawns = FairyChessPawns(FairyChessPawns.option_vanilla)
-        
+
         self.world.options = CMOptions(
             progression_balancing,
             accessibility,
@@ -53,7 +54,7 @@ class TestItemPool(unittest.TestCase):
             3,  # max_kings
             2,  # fairy_kings
             fairy_chess_pieces,
-            fairy_chess_pieces,  # fairy_chess_pieces_configure
+            fairy_chess_pieces_configure,
             fairy_chess_army,
             fairy_chess_pawns,
             MinorPieceLimitByType.range_end,
