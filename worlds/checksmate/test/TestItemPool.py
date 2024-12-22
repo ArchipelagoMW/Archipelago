@@ -32,6 +32,11 @@ class TestItemPool(unittest.TestCase):
         fairy_chess_army = FairyChessArmy(FairyChessArmy.option_stable)
         fairy_chess_pawns = FairyChessPawns(FairyChessPawns.option_vanilla)
 
+        # Create numeric options with proper value attributes
+        class NumericOption:
+            def __init__(self, value):
+                self.value = value
+
         self.world.options = CMOptions(
             progression_balancing,
             accessibility,
@@ -48,20 +53,20 @@ class TestItemPool(unittest.TestCase):
             enable_tactics,
             piece_locations,
             piece_types,
-            0,  # early_material
-            5,  # max_engine_penalties
-            12,  # max_pocket
-            3,  # max_kings
-            2,  # fairy_kings
+            NumericOption(0),  # early_material
+            NumericOption(5),  # max_engine_penalties
+            NumericOption(12),  # max_pocket
+            NumericOption(3),  # max_kings
+            NumericOption(2),  # fairy_kings
             fairy_chess_pieces,
             fairy_chess_pieces_configure,
             fairy_chess_army,
             fairy_chess_pawns,
-            MinorPieceLimitByType.range_end,
-            MajorPieceLimitByType.range_end,
-            QueenPieceLimitByType.range_end,
-            QueenPieceLimit.range_end,
-            PocketLimitByPocket.range_end,
+            NumericOption(MinorPieceLimitByType.range_end),
+            NumericOption(MajorPieceLimitByType.range_end),
+            NumericOption(QueenPieceLimitByType.range_end),
+            NumericOption(QueenPieceLimit.range_end),
+            NumericOption(PocketLimitByPocket.range_end),
             {},  # locked_items
             False  # death_link
         )
