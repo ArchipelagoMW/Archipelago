@@ -570,7 +570,7 @@ Possible values for `type` include:
 | location_id | Location ID, should be resolved to Location Name |
 | location_name | Location Name, not currently used over network, but supported by reference Clients. |
 | entrance_name | Entrance Name. No ID mapping exists. |
-| hint_status | The status of the hint (i.e. found, priority). See [HintStatus](#HintStatus) for details. Both `text` and `hint_status` are given. |
+| hint_status | The status of the hint (i.e. found, priority). Both `text` and `hint_status` are given. |
 | color | Regular text that should be colored. Only `type` that will contain `color` data. |
 
 
