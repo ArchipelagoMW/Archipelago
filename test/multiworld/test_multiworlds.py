@@ -155,18 +155,21 @@ class TestDeterministicGeneration(MultiworldTestBase):
                 all_options[player] = output
             return all_options
 
-        regions = {player: list(map(region_to_basic_data, regions.values()))
+        # The order that regions and entrances are added to the multiworld is not considered important, so sort them by
+        # name.
+        regions = {player: sorted(map(region_to_basic_data, regions.values()), key=lambda reg: reg["name"])
                    for player, regions in multiworld.regions.region_cache.items()}
-        entrances = {player: list(map(entrance_to_basic_data, entrances.values()))
+        entrances = {player: sorted(map(entrance_to_basic_data, entrances.values()), key=lambda ent: ent["name"])
                      for player, entrances in multiworld.regions.entrance_cache.items()}
         locations = {player: list(map(location_to_basic_data, locations.values()))
                      for player, locations in multiworld.regions.location_cache.items()}
-        locations_with_items = {player: list(map(location_to_basic_data, locations.values(), (True,) * len(locations)))
+        # Locations with the items placed at them, to compare the results of filling the multiworld.
+        placements = {player: list(map(location_to_basic_data, locations.values(), (True,) * len(locations)))
                                 for player, locations in multiworld.regions.location_cache.items()}
         precollected_items = {player: list(map(item_to_basic_data, items))
                               for player, items in multiworld.precollected_items.items()}
 
-        return regions, entrances, locations, locations_with_items, precollected_items, dump_options(multiworld)
+        return regions, entrances, locations, placements, precollected_items, dump_options(multiworld)
 
     @staticmethod
     def _test_determinism_world_setup(world_type_name: str, seed: int):
