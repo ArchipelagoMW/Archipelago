@@ -554,7 +554,7 @@ class JSONMessagePart(TypedDict):
     color: Optional[str] # only available if type is a color
     flags: Optional[int] # only available if type is an item_id or item_name
     player: Optional[int] # only available if type is either item or location
-    hint_status: Optional[int] # only available if type is hint_status
+    hint_status: Optional[[HintStatus](#HintStatus)] # only available if type is hint_status
 ```
 
 `type` is used to denote the intent of the message part. This can be used to indicate special information which may be rendered differently depending on client. How these types are displayed in Archipelago's ALttP client is not the end-all be-all. Other clients may choose to interpret and display these messages differently.
