@@ -6,9 +6,8 @@ from .. import CMWorld
 from ..Items import progression_items, useful_items, filler_items
 from ..Options import (CMOptions, MinorPieceLimitByType, MajorPieceLimitByType, 
                       QueenPieceLimitByType, QueenPieceLimit, PocketLimitByPocket,
-                      Goal, Difficulty,
-                      EnableTactics, PieceLocations, PieceTypes, FairyChessPieces,
-                      FairyChessArmy, FairyChessPawns)
+                      Goal, Difficulty, EnableTactics, PieceLocations, PieceTypes,
+                      FairyChessPieces, FairyChessArmy, FairyChessPawns)
 from ..ItemPool import CMItemPool
 
 
@@ -20,17 +19,17 @@ class TestItemPool(unittest.TestCase):
         
         # Initialize options with proper option classes
         progression_balancing = DefaultOnToggle(True)
-        accessibility = Accessibility.option_full
+        accessibility = Accessibility(Accessibility.option_full)
         local_items = ItemSet({})
         non_local_items = ItemSet({})
-        goal = Goal.option_single
-        difficulty = Difficulty.option_daily
-        enable_tactics = EnableTactics.option_all
-        piece_locations = PieceLocations.option_chaos
-        piece_types = PieceTypes.option_stable
-        fairy_chess_pieces = FairyChessPieces.option_full
-        fairy_chess_army = FairyChessArmy.option_stable
-        fairy_chess_pawns = FairyChessPawns.option_vanilla
+        goal = Goal(Goal.option_single)
+        difficulty = Difficulty(Difficulty.option_daily)
+        enable_tactics = EnableTactics(EnableTactics.option_all)
+        piece_locations = PieceLocations(PieceLocations.option_chaos)
+        piece_types = PieceTypes(PieceTypes.option_stable)
+        fairy_chess_pieces = FairyChessPieces(FairyChessPieces.option_full)
+        fairy_chess_army = FairyChessArmy(FairyChessArmy.option_stable)
+        fairy_chess_pawns = FairyChessPawns(FairyChessPawns.option_vanilla)
         
         self.world.options = CMOptions(
             progression_balancing,
@@ -114,7 +113,7 @@ class TestItemPool(unittest.TestCase):
         self.assertGreater(super_max, base_max)
         
         # Test with tactics disabled
-        self.world.options.enable_tactics.value = self.world.options.enable_tactics.option_none
+        self.world.options.enable_tactics = EnableTactics(EnableTactics.option_none)
         no_tactics_max = self.item_pool.get_max_items(super_sized=False)
         self.assertLess(no_tactics_max, base_max)
 
