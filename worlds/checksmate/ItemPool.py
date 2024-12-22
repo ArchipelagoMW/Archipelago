@@ -1,6 +1,6 @@
 from typing import Dict, List, Optional
 from BaseClasses import Item
-from . import chessmen_count
+from .item_utils import chessmen_count
 from .Items import (CMItem, item_table, filler_items, progression_items,
                    useful_items, item_name_groups)
 from .Rules import determine_min_material, determine_max_material
@@ -218,11 +218,7 @@ class CMItemPool:
             return True
 
         # Calculate total material including locked items and the chosen item
-        chosen_material = progression_items[chosen_item].material
-        if self.world.options.accessibility.value != self.world.options.accessibility.option_minimal:
-            if chosen_item == "Progressive Major To Queen" and self.unupgraded_majors_in_pool(items, locked_items) <= 2:
-                chosen_material += progression_items["Progressive Major Piece"].material
-
+        chosen_material = self.lockable_material_value(chosen_item, items, locked_items)
         remaining_material = sum([locked_items[item] * progression_items[item].material for item in locked_items])
         total_material = material + chosen_material + remaining_material
         exceeds_max = total_material > max_material
