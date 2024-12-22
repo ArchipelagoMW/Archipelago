@@ -214,7 +214,7 @@ class CMItemPool:
         if chosen_item in self.items_used[self.world.player] and \
            self.items_used[self.world.player][chosen_item] >= item_table[chosen_item].quantity:
             return True
-        if not self.world.under_piece_limit(chosen_item, self.world.PieceLimitCascade.POTENTIAL_CHILDREN):
+        if not self.world.under_piece_limit(chosen_item, self.world.PieceLimitCascade.POTENTIAL_CHILDREN, my_progression_items):
             return True
 
         # Calculate total material including locked items and the chosen item

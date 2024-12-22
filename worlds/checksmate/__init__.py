@@ -2,7 +2,7 @@ import logging
 import math
 from collections import Counter
 from enum import Enum
-from typing import List, Dict, ClassVar, Callable, Type, Union
+from typing import List, Dict, ClassVar, Callable, Type, Union, Optional
 
 from BaseClasses import Tutorial, Region, MultiWorld, Item, CollectionState
 from Options import PerGameCommonOptions
@@ -508,11 +508,11 @@ class CMWorld(World):
             item_table[chosen_item].quantity == -1 or \
             self.items_used[self.player][chosen_item] < item_table[chosen_item].quantity
 
-    def under_piece_limit(self, chosen_item: str, with_children: PieceLimitCascade) -> bool:
+    def under_piece_limit(self, chosen_item: str, with_children: PieceLimitCascade, available_items: Optional[List[str]] = None) -> bool:
         if self.player not in self.items_used:
             # this can be the case during push_precollected
             return True
-        piece_limit = self.find_piece_limit(chosen_item, with_children)
+        piece_limit = self.find_piece_limit(chosen_item, with_children, available_items)
         pieces_used = self.items_used[self.player].get(chosen_item, 0)
         if 0 < piece_limit <= pieces_used:
             # Intentionally ignore "parents" property: player might receive parent items after all children
@@ -526,7 +526,7 @@ class CMWorld(World):
                 return False
         return True
 
-    def find_piece_limit(self, chosen_item: str, with_children: PieceLimitCascade) -> int:
+    def find_piece_limit(self, chosen_item: str, with_children: PieceLimitCascade, available_items: Optional[List[str]] = None) -> int:
         """Limit pieces placed by individual variety. This applies the Piece Type Limit setting."""
         if chosen_item not in piece_type_limit_options:
             return 0
@@ -543,7 +543,10 @@ class CMWorld(World):
                 if with_children == self.PieceLimitCascade.ACTUAL_CHILDREN:
                     piece_limit = piece_limit + sum([self.items_used[self.player].get(child, 0) for child in children])
                 elif with_children == self.PieceLimitCascade.POTENTIAL_CHILDREN:
-                    piece_limit = piece_limit + sum([self.find_piece_limit(child, with_children) for child in children])
+                    # If we have available_items, only consider children that are still available
+                    if available_items is not None:
+                        children = [child for child in children if child in available_items]
+                    piece_limit = piece_limit + sum([self.find_piece_limit(child, with_children, available_items) for child in children])
         return piece_limit
 
     def piece_limit_of(self, chosen_item: str):
