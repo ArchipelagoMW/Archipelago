@@ -128,7 +128,7 @@ class CMWorld(World):
         if self.player in self.armies:
             cursed_knowledge["army"] = self.armies[self.player]
         # See Archipelago.APChessV.ApmwConfig#Instantiate to observe requested parameters
-        option_names = ["goal", "difficulty", "piece_locations", "piece_types",
+        option_names = ["goal", "death_link", "difficulty", "piece_locations", "piece_types",
                         "fairy_chess_army", "fairy_chess_pieces", "fairy_chess_pieces_configure", "fairy_chess_pawns",
                         "minor_piece_limit_by_type", "major_piece_limit_by_type", "queen_piece_limit_by_type",
                         "pocket_limit_by_pocket"]
