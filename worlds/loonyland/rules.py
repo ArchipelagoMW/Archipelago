@@ -56,8 +56,8 @@ def hundred_percent(state: CollectionState, player: int) -> bool:
 
 
 def have_39_badges(state: CollectionState, player: int) -> bool:
-    return state.has_from_list_unique(state.multiworld.worlds[player].item_name_groups["cheats"], player, 39)
+    return state.has_group("cheats", player, 10)
 
 
 def have_all_weapons(state: CollectionState, player: int) -> bool:
-    return state.has_all(state.multiworld.worlds[player].item_name_groups["special_weapons"], player)
+    return state.has_group("special_weapons", player, 7)

@@ -15,7 +15,7 @@ from .Data.game_data import (
     ll_base_id as loonyland_base_id,
 )
 from .items import LLItemCat, LoonylandItem
-from .locations import LoonylandLocation
+from .locations import LLLocCat, LoonylandLocation
 from .options import LoonylandOptions
 
 
@@ -46,11 +46,23 @@ class LoonylandWorld(World):
 
     item_name_groups = {
         "cheats": {name for name, data in loony_item_table.items() if data.category == LLItemCat.CHEAT},
-        "special_weapons": {name for name, data in loony_item_table.items() if VAR_WBOMBS <= data.id <= VAR_WHOTPANTS},
+        "special_weapons": {
+            name
+            for name, data in loony_item_table.items()
+            if VAR_WBOMBS <= data.id - loonyland_base_id <= VAR_WHOTPANTS
+        },
+    }
+
+    location_name_groups = {
+        "quests": {name for name, data in loonyland_location_table.items() if data.category == LLLocCat.QUEST},
+        "badges": {name for name, data in loonyland_location_table.items() if data.category == LLLocCat.BADGE},
     }
 
     def create_item(self, name: str) -> LoonylandItem:
         return LoonylandItem(name, loony_item_table[name].classification, loony_item_table[name].id, self.player)
+
+    def create_junk(self, name: str) -> LoonylandItem:
+        return LoonylandItem(name, ItemClassification.filler, loonyland_base_id + 3000, self.player)
 
     def create_items(self) -> None:
         item_pool: list[LoonylandItem] = []
@@ -60,6 +72,9 @@ class LoonylandWorld(World):
                     new_item = self.create_item(name)
                     new_item.cheat = item.category == LLItemCat.CHEAT
                     item_pool.append(new_item)
+
+        junk = len(self.multiworld.get_unfilled_locations(self.player)) - len(item_pool) - 1  # - 1 for win con location
+        item_pool += [self.create_junk(self.get_filler_item_name()) for _ in range(junk)]
 
         self.multiworld.itempool += item_pool
 

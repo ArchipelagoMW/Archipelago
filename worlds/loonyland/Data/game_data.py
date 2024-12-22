@@ -305,6 +305,13 @@ CH_THORNS = 37
 CH_REGEN = 38
 CH_NOFARLEY = 39
 AP_BADGEMOD = 1000
+AP_MODEMOD = 2000
+MODE_SURVIVAL = 0
+MODE_BOSSBASH = 1
+MODE_LOONYBALL = 2
+MODE_BOWLING = 3
+MODE_BADGES = 4
+MODE_REMIX = 5
 loony_item_table: dict[str, LLItem] = {
     "Heart": LLItem(ll_base_id + VAR_HEART, LLItemCat.ITEM, ItemClassification.useful, 20),
     "Lightning": LLItem(ll_base_id + VAR_LIGHTNING, LLItemCat.ITEM, ItemClassification.useful, 10),
@@ -338,46 +345,69 @@ loony_item_table: dict[str, LLItem] = {
     "Lantern": LLItem(ll_base_id + VAR_LANTERN, LLItemCat.ITEM, ItemClassification.progression),
     "Reflect Gem": LLItem(ll_base_id + VAR_REFLECT, LLItemCat.ITEM, ItemClassification.useful),
     "Silver Sling": LLItem(ll_base_id + VAR_SILVERSLING, LLItemCat.ITEM, ItemClassification.progression),
-    "20/20 Vision": LLItem(ll_base_id + CH_LIGHT, LLItemCat.CHEAT, ItemClassification.progression),
-    "Disco Mode": LLItem(ll_base_id + CH_DISCO, LLItemCat.CHEAT, ItemClassification.filler),
-    "Terror Mode": LLItem(ll_base_id + CH_TERROR, LLItemCat.CHEAT, ItemClassification.progression),
-    "Surprise Mode": LLItem(ll_base_id + CH_SURPRISE, LLItemCat.CHEAT, ItemClassification.progression),
-    "Quick Mode": LLItem(ll_base_id + CH_QUICK, LLItemCat.CHEAT, ItemClassification.useful),
-    "Infinite Gems": LLItem(ll_base_id + CH_GEMS, LLItemCat.CHEAT, ItemClassification.useful),
-    "Sidekick": LLItem(ll_base_id + CH_SIDEKICK, LLItemCat.CHEAT, ItemClassification.filler),
-    "Homing Shots": LLItem(ll_base_id + CH_HOMING, LLItemCat.CHEAT, ItemClassification.useful),
-    "Ultimate Firepower": LLItem(ll_base_id + CH_MAXPOWER, LLItemCat.CHEAT, ItemClassification.filler),
-    "Vintage Mode": LLItem(ll_base_id + CH_VINTAGE, LLItemCat.CHEAT, ItemClassification.useful),
-    "Play As Bonkula": LLItem(ll_base_id + CH_BONKULA, LLItemCat.CHEAT, ItemClassification.useful),
-    "Play As Toad": LLItem(ll_base_id + CH_TOAD, LLItemCat.CHEAT, ItemClassification.useful),
-    "Crystal Ball": LLItem(ll_base_id + CH_CRYSTAL, LLItemCat.CHEAT, ItemClassification.useful),
-    "Radar": LLItem(ll_base_id + CH_RADAR, LLItemCat.CHEAT, ItemClassification.useful),
-    "Heavy Hitter": LLItem(ll_base_id + CH_HEAVYHIT, LLItemCat.CHEAT, ItemClassification.useful),
-    "Rapid Fire": LLItem(ll_base_id + CH_RAPIDFIRE, LLItemCat.CHEAT, ItemClassification.filler),
-    "Touch Of Death": LLItem(ll_base_id + CH_DEATH, LLItemCat.CHEAT, ItemClassification.progression),
-    "All Access Pass": LLItem(ll_base_id + CH_ALLACCESS, LLItemCat.CHEAT, ItemClassification.filler),
-    "Play As Swampdog": LLItem(ll_base_id + CH_SWAMPDOG, LLItemCat.CHEAT, ItemClassification.progression),
-    "Hardcore Mode": LLItem(ll_base_id + CH_HARDCORE, LLItemCat.CHEAT, ItemClassification.filler),
-    "Save Anywhere": LLItem(ll_base_id + CH_SAVEANY, LLItemCat.CHEAT, ItemClassification.useful),
-    "Guided Shots": LLItem(ll_base_id + CH_GUIDED, LLItemCat.CHEAT, ItemClassification.useful),
-    "Slo-Mo": LLItem(ll_base_id + CH_SLOMO, LLItemCat.CHEAT, ItemClassification.useful),
-    "Combo-Bombo": LLItem(ll_base_id + CH_CORPSE, LLItemCat.CHEAT, ItemClassification.useful),
-    "Frog-o-rama": LLItem(ll_base_id + CH_FROGWPN, LLItemCat.CHEAT, ItemClassification.filler),
-    "Play As Witch": LLItem(ll_base_id + CH_WITCH, LLItemCat.CHEAT, ItemClassification.progression),
-    "Play As Werewolf": LLItem(ll_base_id + CH_WEREWOLF, LLItemCat.CHEAT, ItemClassification.useful),
-    "Enemy Overload": LLItem(ll_base_id + CH_RESPAWN, LLItemCat.CHEAT, ItemClassification.filler),
-    "Kick The Cat!": LLItem(ll_base_id + CH_KICKCAT, LLItemCat.CHEAT, ItemClassification.filler),
-    "Infinite Survival": LLItem(ll_base_id + CH_RNDSURVIVAL, LLItemCat.CHEAT, ItemClassification.progression),
-    "Play As Summony": LLItem(ll_base_id + CH_SUMMON, LLItemCat.CHEAT, ItemClassification.useful),
-    "Play As Ninja Girl": LLItem(ll_base_id + CH_THIEF, LLItemCat.CHEAT, ItemClassification.progression),
-    "Molecular Dispersion": LLItem(ll_base_id + CH_WALLWALK, LLItemCat.CHEAT, ItemClassification.progression),
-    "Guaranteed Survival": LLItem(ll_base_id + CH_SUPERSURV, LLItemCat.CHEAT, ItemClassification.useful),
-    "Bend It Like Bouapha": LLItem(ll_base_id + CH_BEND, LLItemCat.CHEAT, ItemClassification.useful),
-    "Stinky Farley": LLItem(ll_base_id + CH_STINKY, LLItemCat.CHEAT, ItemClassification.useful),
-    "Ultra Weapons Are Go!": LLItem(ll_base_id + CH_ULTRAWEAPON, LLItemCat.CHEAT, ItemClassification.useful),
-    "Thorns Aura": LLItem(ll_base_id + CH_THORNS, LLItemCat.CHEAT, ItemClassification.useful),
-    "Monster Regeneration": LLItem(ll_base_id + CH_REGEN, LLItemCat.CHEAT, ItemClassification.filler),
-    "Farley Free Zone": LLItem(ll_base_id + CH_NOFARLEY, LLItemCat.CHEAT, ItemClassification.filler),
+    "20/20 Vision": LLItem(ll_base_id + CH_LIGHT + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Disco Mode": LLItem(ll_base_id + CH_DISCO + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Terror Mode": LLItem(ll_base_id + CH_TERROR + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Surprise Mode": LLItem(ll_base_id + CH_SURPRISE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Quick Mode": LLItem(ll_base_id + CH_QUICK + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Infinite Gems": LLItem(ll_base_id + CH_GEMS + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Sidekick": LLItem(ll_base_id + CH_SIDEKICK + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Homing Shots": LLItem(ll_base_id + CH_HOMING + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Ultimate Firepower": LLItem(
+        ll_base_id + CH_MAXPOWER + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression
+    ),
+    "Vintage Mode": LLItem(ll_base_id + CH_VINTAGE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Play As Bonkula": LLItem(ll_base_id + CH_BONKULA + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Play As Toad": LLItem(ll_base_id + CH_TOAD + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Crystal Ball": LLItem(ll_base_id + CH_CRYSTAL + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Radar": LLItem(ll_base_id + CH_RADAR + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Heavy Hitter": LLItem(ll_base_id + CH_HEAVYHIT + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Rapid Fire": LLItem(ll_base_id + CH_RAPIDFIRE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Touch Of Death": LLItem(ll_base_id + CH_DEATH + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "All Access Pass": LLItem(ll_base_id + CH_ALLACCESS + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Play As Swampdog": LLItem(ll_base_id + CH_SWAMPDOG + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Hardcore Mode": LLItem(ll_base_id + CH_HARDCORE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Save Anywhere": LLItem(ll_base_id + CH_SAVEANY + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Guided Shots": LLItem(ll_base_id + CH_GUIDED + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Slo-Mo": LLItem(ll_base_id + CH_SLOMO + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Combo-Bombo": LLItem(ll_base_id + CH_CORPSE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Frog-o-rama": LLItem(ll_base_id + CH_FROGWPN + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Play As Witch": LLItem(ll_base_id + CH_WITCH + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Play As Werewolf": LLItem(ll_base_id + CH_WEREWOLF + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Enemy Overload": LLItem(ll_base_id + CH_RESPAWN + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Kick The Cat!": LLItem(ll_base_id + CH_KICKCAT + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Infinite Survival": LLItem(
+        ll_base_id + CH_RNDSURVIVAL + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression
+    ),
+    "Play As Summony": LLItem(ll_base_id + CH_SUMMON + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Play As Ninja Girl": LLItem(ll_base_id + CH_THIEF + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Molecular Dispersion": LLItem(
+        ll_base_id + CH_WALLWALK + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression
+    ),
+    "Guaranteed Survival": LLItem(
+        ll_base_id + CH_SUPERSURV + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression
+    ),
+    "Bend It Like Bouapha": LLItem(ll_base_id + CH_BEND + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Stinky Farley": LLItem(ll_base_id + CH_STINKY + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Ultra Weapons Are Go!": LLItem(
+        ll_base_id + CH_ULTRAWEAPON + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression
+    ),
+    "Thorns Aura": LLItem(ll_base_id + CH_THORNS + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Monster Regeneration": LLItem(
+        ll_base_id + CH_REGEN + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression
+    ),
+    "Farley Free Zone": LLItem(ll_base_id + CH_NOFARLEY + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Bowling Access": LLItem(ll_base_id + MODE_BOWLING + AP_MODEMOD, LLItemCat.ACCESS, ItemClassification.progression),
+    "Survival Access": LLItem(
+        ll_base_id + MODE_SURVIVAL + AP_MODEMOD, LLItemCat.ACCESS, ItemClassification.progression
+    ),
+    "Boss Bash Access": LLItem(
+        ll_base_id + MODE_BOSSBASH + AP_MODEMOD, LLItemCat.ACCESS, ItemClassification.progression
+    ),
+    "Loony Ball Access": LLItem(
+        ll_base_id + MODE_LOONYBALL + AP_MODEMOD, LLItemCat.ACCESS, ItemClassification.progression
+    ),
+    "Remix Access": LLItem(ll_base_id + MODE_REMIX + AP_MODEMOD, LLItemCat.ACCESS, ItemClassification.progression),
 }
 loonyland_region_table: dict[str, LLRegion] = {
     "Menu": LLRegion(False),
@@ -589,11 +619,19 @@ loonyland_location_table: dict[str, LLLocation] = {
     "Q: Scaredy Cat": LLLocation(96, LLLocCat.QUEST, "Halloween Hill"),
     "Q: Sticky Shoes": LLLocation(97, LLLocCat.QUEST, "Halloween Hill"),
     "Q: Mushroom Hunt": LLLocation(98, LLLocCat.QUEST, "The Witch's Cabin"),
+    "Q: Picking Daisies": LLLocation(99, LLLocCat.QUEST, "Menu"),
+    "Q: Curse The Darkness": LLLocation(100, LLLocCat.QUEST, "Swamp Gas Cavern"),
     "Q: Zombie Stomp": LLLocation(101, LLLocCat.QUEST, "Zombiton"),
     "Q: Smashing Pumpkins": LLLocation(102, LLLocCat.QUEST, "Halloween Hill"),
+    "Q: Mystery Lake": LLLocation(103, LLLocCat.QUEST, "Halloween Hill"),
+    "Q: Beneath The Lake": LLLocation(104, LLLocCat.QUEST, "Frankenjulie's Laboratory"),
+    "Q: Happy Stick?!?": LLLocation(105, LLLocCat.QUEST, "Happy Stick Woods"),
+    "Q: A True Hero": LLLocation(106, LLLocCat.QUEST, "Under The Ravine"),
     "Q: Silver Bullet": LLLocation(107, LLLocCat.QUEST, "Zombiton"),
     "Q: Hairy Larry": LLLocation(108, LLLocCat.QUEST, "The Wolf Den"),
     "Q: Ghostbusting": LLLocation(109, LLLocCat.QUEST, "The Witch's Cabin"),
+    "Q: The Haunted Tower": LLLocation(110, LLLocCat.QUEST, "Haunted Tower Roof"),
+    "Q: The Last Gate": LLLocation(111, LLLocCat.QUEST, "Castle Vampy IV"),
     "Q: The Rescue": LLLocation(112, LLLocCat.QUEST, "A Gloomy Cavern"),
     "Q: The Collection": LLLocation(113, LLLocCat.QUEST, "A Cabin Collector"),
     "Evil Smashin'": LLLocation(114, LLLocCat.BADGE, "The Evilizer"),
@@ -673,9 +711,12 @@ def set_rules(multiworld, world, player):
         "Q: Mushroom Hunt": lambda state: state.has("Mushroom", player, 10),
         "Q: Zombie Stomp": lambda state: can_cleanse_crypts(state, player),
         "Q: Smashing Pumpkins": lambda state: can_cleanse_crypts(state, player),
+        "Q: Mystery Lake": lambda state: state.has("Orb", player, 4),
+        "Q: A True Hero": lambda state: state.has("Fertilizer", player),
         "Q: Silver Bullet": lambda state: can_cleanse_crypts(state, player) and state.has("Silver", player),
         "Q: Hairy Larry": lambda state: state.can_reach_region("Larry's Lair", player),
         "Q: Ghostbusting": lambda state: state.has("Doom Daisy", player) and state.has("Mushroom", player, 10),
+        "Q: The Last Gate": lambda state: state.has("Vampire Bust", player, 8),
         "Q: The Collection": lambda state: state.has("Silver Sling", player)
         and state.has("Ghost Potion", player)
         and state.can_reach_region("Castle Vampy", player),
@@ -703,11 +744,11 @@ def set_rules(multiworld, world, player):
 def set_entrance_rules(multiworld, world, player):
     loonyland_entrance_table: list[LLEntrance] = [
         LLEntrance("Menu", "Halloween Hill", False),
-        LLEntrance("Menu", "Bowling", False),
-        LLEntrance("Menu", "Survival", False),
-        LLEntrance("Menu", "Boss Bash", False),
-        LLEntrance("Menu", "Loony Ball", False),
-        LLEntrance("Menu", "Remix", False),
+        LLEntrance("Menu", "Bowling", False, lambda state: state.has("Bowling Access", player)),
+        LLEntrance("Menu", "Survival", False, lambda state: state.has("Survival Access", player)),
+        LLEntrance("Menu", "Boss Bash", False, lambda state: state.has("Boss Bash Access", player)),
+        LLEntrance("Menu", "Loony Ball", False, lambda state: state.has("Loony Ball Access", player)),
+        LLEntrance("Menu", "Remix", False, lambda state: state.has("Remix Access", player)),
         LLEntrance("Halloween Hill", "A Cabin Trees", True),
         LLEntrance("Halloween Hill", "The Witch's Cabin", True),
         LLEntrance("Halloween Hill", "Bonita's Cabin", True),
