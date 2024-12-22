@@ -554,7 +554,7 @@ class JSONMessagePart(TypedDict):
     color: Optional[str] # only available if type is a color
     flags: Optional[int] # only available if type is an item_id or item_name
     player: Optional[int] # only available if type is either item or location
-    hint_status: Optional[[HintStatus](#HintStatus)] # only available if type is hint_status
+    hint_status: Optional[HintStatus] # only available if type is hint_status
 ```
 
 `type` is used to denote the intent of the message part. This can be used to indicate special information which may be rendered differently depending on client. How these types are displayed in Archipelago's ALttP client is not the end-all be-all. Other clients may choose to interpret and display these messages differently.
@@ -570,7 +570,7 @@ Possible values for `type` include:
 | location_id | Location ID, should be resolved to Location Name |
 | location_name | Location Name, not currently used over network, but supported by reference Clients. |
 | entrance_name | Entrance Name. No ID mapping exists. |
-| hint_status | The status of the hint (i.e. found, priority). Both `text` and `hint_status` are given. |
+| hint_status | The [HintStatus](#HintStatus) of the hint. Both `text` and `hint_status` are given. |
 | color | Regular text that should be colored. Only `type` that will contain `color` data. |
 
 
