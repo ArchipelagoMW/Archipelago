@@ -73,8 +73,8 @@ class CMItemPool:
 
     def create_progression_items(self,
                                max_items: int,
-                               min_material: float = 3900,
-                               max_material: float = 4000,
+                               min_material: float = 4100,
+                               max_material: float = 4600,
                                locked_items: Dict[str, int] = {},
                                user_location_count: int = 0) -> List[Item]:
         """Create progression items up to material limits."""
@@ -254,7 +254,7 @@ class CMItemPool:
         # For minimal accessibility, we only care about material. The Checkmate locations have no chessmen requirements.
         if self.world.options.accessibility.value == self.world.options.accessibility.option_minimal:
             # Only remove if we exceed max AND have enough material
-            return exceeds_max or enough_yet
+            return exceeds_max and enough_yet
 
         # For full accessibility, check basic chessman requirements and whether you can castle (needs 2 rooks)
         chessmen_requirement = highest_chessmen_requirement_small if \
@@ -274,15 +274,15 @@ class CMItemPool:
                 necessary_chessmen -= 1
 
         # If we still need chessmen, we can't remove unless adding the minimum required chessmen
-        # would exceed max_material
+        # would exceed max_material AND we have enough material
         if necessary_chessmen > 0:
             minimum_possible_material = total_material + (
                 item_table["Progressive Pawn"].material * necessary_chessmen)
             # Only remove if we can't possibly satisfy chessmen requirement within material limits
-            return minimum_possible_material > max_material or enough_yet
+            return minimum_possible_material > max_material and enough_yet
 
         # If we don't need chessmen, we still need to check material requirements
-        return exceeds_max or enough_yet
+        return exceeds_max and enough_yet
     
     # if this piece was added, it might add more than its own material to the locked pool
     def lockable_material_value(self, chosen_item: str, items: List[CMItem], locked_items: Dict[str, int]):
