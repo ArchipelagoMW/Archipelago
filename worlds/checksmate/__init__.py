@@ -256,7 +256,7 @@ class CMWorld(World):
             max_items -= len([loc for loc in location_table if location_table[loc].is_tactic == Tactic.Fork])
 
         while ((len(items) + user_location_count + sum(locked_items.values())) < max_items and
-               material < max_material and len(my_progression_items) > 0):
+               len(my_progression_items) > 0):
             chosen_item = self.random.choice(my_progression_items)
             # obey user's wishes
             if (self.should_remove(chosen_item, material, min_material, max_material,

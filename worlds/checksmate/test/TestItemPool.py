@@ -140,14 +140,17 @@ class TestItemPool(unittest.TestCase):
         """Test that progression items are created within material limits"""
         min_mat, max_mat = 4100, 4600
         max_items = 100
+        locked_items = {}
         items = self.item_pool.create_progression_items(
             max_items=max_items,
             min_material=min_mat,
             max_material=max_mat,
-            locked_items={}
+            locked_items=locked_items
         )
         
-        total_material = sum(progression_items[item.name].material for item in items)
+        added_material = sum(progression_items[item.name].material for item in items)
+        locked_material = sum(progression_items[item.name].material for item in locked_items.values())
+        total_material = added_material + locked_material
         self.assertGreaterEqual(total_material, min_mat)
         self.assertLessEqual(total_material, max_mat)
         

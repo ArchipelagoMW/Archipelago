@@ -89,7 +89,6 @@ class CMItemPool:
         my_progression_items = self.prepare_progression_item_pool()
         
         while ((len(items) + user_location_count + sum(locked_items.values())) < max_items and
-               material < max_material and
                len(my_progression_items) > 0):
             chosen_item = self.world.random.choice(my_progression_items)
             
