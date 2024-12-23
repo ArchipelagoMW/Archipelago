@@ -1113,7 +1113,7 @@ Door - 0x2D77D (Caves Entry) - 0x00FF8
 
 ==Caves==
 
-Caves Entry Door - TrueOneWay:
+Caves Entry Door (Caves):
 
 Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x019A5 - Caves Entry Door - TrueOneWay:
 158451 - 0x335AB (Elevator Inside Control) - True - Dots & Squares & Black/White Squares
