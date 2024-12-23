@@ -221,3 +221,11 @@ class CMWorld(World):
 
     def remove(self, state: CollectionState, item: Item) -> bool:
         return self._collection_state.remove(state, item)
+
+    def find_piece_limit(self, piece_name: str, cascade_type: int) -> int:
+        """Delegate piece limit finding to the PieceModel."""
+        return self._piece_model.find_piece_limit(piece_name, cascade_type)
+
+    def unupgraded_majors_in_pool(self, items: List[Item], locked_items: Dict[str, int]) -> int:
+        """Delegate unupgraded majors calculation to the ItemPool."""
+        return self._item_pool.unupgraded_majors_in_pool(items, locked_items)
