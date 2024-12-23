@@ -1,76 +1,45 @@
 import unittest
-from typing import Dict, List
-from BaseClasses import MultiWorld, CollectionState
-from Options import DefaultOnToggle, Accessibility, ItemSet
-from .. import CMWorld
-from ..Items import progression_items, useful_items, filler_items
-from ..Options import (CMOptions, MinorPieceLimitByType, MajorPieceLimitByType, 
-                      QueenPieceLimitByType, QueenPieceLimit, PocketLimitByPocket,
-                      Goal, Difficulty, EnableTactics, PieceLocations, PieceTypes,
-                      FairyChessPieces, FairyChessPiecesConfigure, FairyChessArmy, FairyChessPawns)
+import random
 from ..ItemPool import CMItemPool
-
+from ..Items import progression_items
+from ..Options import EnableTactics
 
 class TestItemPool(unittest.TestCase):
     def setUp(self):
-        self.multiworld = MultiWorld(1)
-        self.multiworld.game[1] = "ChecksMate"
-        self.world = CMWorld(self.multiworld, 1)
+        # Create minimal mock world with just what ItemPool needs
+        class MockWorld:
+            def __init__(self):
+                self.player = 1
+                self.random = random.Random(0)  # Add deterministic random for tests
+                self.options = type('Options', (), {
+                    'accessibility': type('Accessibility', (), {'value': 0, 'option_minimal': 0}),
+                    'max_kings': type('MaxKings', (), {'value': 3})(),
+                    'fairy_kings': type('FairyKings', (), {'value': 2})(),
+                    'max_engine_penalties': type('MaxEnginePenalties', (), {'value': 5})(),
+                    'max_pocket': type('MaxPocket', (), {'value': 12})(),
+                    'pocket_limit_by_pocket': type('PocketLimit', (), {'value': 3})(),
+                    'enable_tactics': EnableTactics(EnableTactics.option_all),
+                    'goal': type('Goal', (), {
+                        'value': 0,
+                        'option_single': 0,
+                        'option_progressive': 1
+                    })()
+                })()
+                self.piece_types_by_army = {0: {"Progressive Minor Piece": 2}}
+                self.armies = {1: [0]}
 
-        # Initialize options with proper option classes
-        progression_balancing = DefaultOnToggle(True)
-        accessibility = Accessibility(Accessibility.option_full)
-        local_items = ItemSet({})
-        non_local_items = ItemSet({})
-        goal = Goal(Goal.option_single)
-        difficulty = Difficulty(Difficulty.option_daily)
-        enable_tactics = EnableTactics(EnableTactics.option_all)
-        piece_locations = PieceLocations(PieceLocations.option_chaos)
-        piece_types = PieceTypes(PieceTypes.option_stable)
-        fairy_chess_pieces = FairyChessPieces(FairyChessPieces.option_full)
-        fairy_chess_pieces_configure = FairyChessPiecesConfigure(FairyChessPiecesConfigure.default)
-        fairy_chess_army = FairyChessArmy(FairyChessArmy.option_stable)
-        fairy_chess_pawns = FairyChessPawns(FairyChessPawns.option_vanilla)
+            def create_item(self, name):
+                return type('CMItem', (), {'name': name})()
 
-        # Create numeric options with proper value attributes
-        class NumericOption:
-            def __init__(self, value):
-                self.value = value
+            def has_prereqs(self, item_name):
+                # Mock implementation
+                return True
 
-        self.world.options = CMOptions(
-            progression_balancing,
-            accessibility,
-            local_items,
-            non_local_items,
-            [],  # start_inventory
-            [],  # start_hints
-            [],  # start_location_hints
-            set(),  # exclude_locations
-            set(),  # priority_locations
-            [],  # item_links
-            goal,
-            difficulty,
-            enable_tactics,
-            piece_locations,
-            piece_types,
-            NumericOption(0),  # early_material
-            NumericOption(5),  # max_engine_penalties
-            NumericOption(12),  # max_pocket
-            NumericOption(3),  # max_kings
-            NumericOption(2),  # fairy_kings
-            fairy_chess_pieces,
-            fairy_chess_pieces_configure,
-            fairy_chess_army,
-            fairy_chess_pawns,
-            NumericOption(MinorPieceLimitByType.range_end),
-            NumericOption(MajorPieceLimitByType.range_end),
-            NumericOption(QueenPieceLimitByType.range_end),
-            NumericOption(QueenPieceLimit.range_end),
-            NumericOption(PocketLimitByPocket.range_end),
-            {},  # locked_items
-            False  # death_link
-        )
-        
+            def can_add_more(self, item_name):
+                # Mock implementation
+                return True
+
+        self.world = MockWorld()
         self.item_pool = CMItemPool(self.world)
         self.item_pool.initialize_item_tracking()
 
@@ -149,8 +118,10 @@ class TestItemPool(unittest.TestCase):
         )
         
         added_material = sum(progression_items[item.name].material for item in items)
-        locked_material = sum(progression_items[item.name].material for item in locked_items.values())
+        locked_material = sum(progression_items[item_name].material * count 
+                            for item_name, count in locked_items.items())
         total_material = added_material + locked_material
+        
         self.assertGreaterEqual(total_material, min_mat)
         self.assertLessEqual(total_material, max_mat)
         
@@ -207,8 +178,4 @@ class TestItemPool(unittest.TestCase):
         
         self.assertEqual(len(starter_items), 3)  # 2 pawns + 1 minor piece
         self.assertEqual(self.item_pool.items_used[self.world.player]["Progressive Pawn"], 2)
-        self.assertEqual(self.item_pool.items_used[self.world.player]["Progressive Minor Piece"], 1)
-
-
-if __name__ == '__main__':
-    unittest.main() 
+        self.assertEqual(self.item_pool.items_used[self.world.player]["Progressive Minor Piece"], 1) 
