@@ -26,13 +26,14 @@ import Utils
 if Utils.is_frozen():
     os.environ["KIVY_DATA_DIR"] = Utils.local_path("data")
 
+
 from kivy.config import Config
 
 Config.set("input", "mouse", "mouse,disable_multitouch")
 Config.set("kivy", "exit_on_escape", "0")
 Config.set("graphics", "multisamples", "0")  # multisamples crash old intel drivers
-
-from kivy.app import App
+from kivy.uix.image import AsyncImage
+from kivymd.uix.divider import MDDivider
 from kivy.core.window import Window
 from kivy.core.clipboard import Clipboard
 from kivy.core.text.markup import MarkupLabel
@@ -42,29 +43,31 @@ from kivy.clock import Clock
 from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
 from kivy.metrics import dp
-from kivy.effects.scroll import ScrollEffect
 from kivy.uix.widget import Widget
-from kivy.uix.button import Button
-from kivy.uix.gridlayout import GridLayout
 from kivy.uix.layout import Layout
-from kivy.uix.textinput import TextInput
-from kivy.uix.scrollview import ScrollView
-from kivy.uix.recycleview import RecycleView
-from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.label import Label
-from kivy.uix.progressbar import ProgressBar
-from kivy.uix.dropdown import DropDown
 from kivy.utils import escape_markup
 from kivy.lang import Builder
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
-from kivy.uix.behaviors import FocusBehavior
+from kivy.uix.behaviors import FocusBehavior, ToggleButtonBehavior
 from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.animation import Animation
 from kivy.uix.popup import Popup
 from kivy.uix.image import AsyncImage
+from kivymd.app import MDApp
+from kivymd.uix.gridlayout import MDGridLayout
+from kivymd.uix.floatlayout import MDFloatLayout
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.tab.tab import MDTabsPrimary, MDTabsItem, MDTabsItemText, MDTabsCarousel
+from kivymd.uix.menu import MDDropdownMenu
+from kivymd.uix.dropdownitem import MDDropDownItem, MDDropDownItemText
+from kivymd.uix.button import MDButton, MDButtonText, MDButtonIcon, MDIconButton
+from kivymd.uix.label import MDLabel, MDIcon
+from kivymd.uix.recycleview import MDRecycleView
+from kivymd.uix.textfield.textfield import MDTextField
+from kivymd.uix.progressindicator import MDLinearProgressIndicator
+from kivymd.uix.scrollview import MDScrollView
+from kivymd.uix.tooltip import MDTooltip, MDTooltipPlain
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
@@ -80,6 +83,78 @@ else:
 
 remove_between_brackets = re.compile(r"\[.*?]")
 
+
+class ImageIcon(MDButtonIcon, AsyncImage):
+    def __init__(self, *args, **kwargs):
+        super().__init__(args, kwargs)
+        self.image = AsyncImage(**kwargs)
+        self.add_widget(self.image)
+
+    def add_widget(self, widget, index=0, canvas=None):
+        return super(MDIcon, self).add_widget(widget)
+
+
+class ImageButton(MDIconButton):
+    def __init__(self, **kwargs):
+        image_args = dict()
+        for kwarg in ("fit_mode", "image_size", "color", "source", "texture"):
+            val = kwargs.pop(kwarg, "None")
+            if val != "None":
+                image_args[kwarg.replace("image_", "")] = val
+        super().__init__()
+        self.image = AsyncImage(**image_args)
+        def set_center(button, center):
+            self.image.center_x = self.center_x
+            self.image.center_y = self.center_y
+        self.bind(center=set_center)
+        self.add_widget(self.image)
+
+    def add_widget(self, widget, index=0, canvas=None):
+        return super(MDIcon, self).add_widget(widget)
+
+
+class ScrollBox(MDScrollView):
+    layout: MDBoxLayout
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.layout = MDBoxLayout(size_hint_y=None)
+        self.layout.bind(minimum_height=self.layout.setter("height"))
+        self.add_widget(self.layout)
+        self.bar_width = dp(12)
+        self.scroll_type = ["bars"]
+
+
+# thanks kivymd
+class ToggleButton(MDButton, ToggleButtonBehavior):
+    def __init__(self, *args, **kwargs):
+        super(ToggleButton, self).__init__(*args, **kwargs)
+        self.bind(state=self._update_bg)
+
+    def _update_bg(self, _, state: str):
+        if self.disabled:
+            return
+        if self.theme_bg_color == "Primary":
+            self.theme_bg_color = "Custom"
+
+        if state == "down":
+            self.md_bg_color = self.theme_cls.primaryColor
+            for child in self.children:
+                if child.theme_text_color == "Primary":
+                    child.theme_text_color = "Custom"
+                if child.theme_icon_color == "Primary":
+                    child.theme_icon_color = "Custom"
+                child.text_color = self.theme_cls.onPrimaryColor
+                child.icon_color = self.theme_cls.onPrimaryColor
+        else:
+            self.md_bg_color = self.theme_cls.surfaceContainerLowestColor
+            for child in self.children:
+                if child.theme_text_color == "Primary":
+                    child.theme_text_color = "Custom"
+                if child.theme_icon_color == "Primary":
+                    child.theme_icon_color = "Custom"
+                child.text_color = self.theme_cls.primaryColor
+                child.icon_color = self.theme_cls.primaryColor
 
 # I was surprised to find this didn't already exist in kivy :(
 class HoverBehavior(object):
@@ -120,7 +195,7 @@ class HoverBehavior(object):
 Factory.register("HoverBehavior", HoverBehavior)
 
 
-class ToolTip(Label):
+class ToolTip(MDTooltipPlain):
     pass
 
 
@@ -128,49 +203,30 @@ class ServerToolTip(ToolTip):
     pass
 
 
-class ScrollBox(ScrollView):
-    layout: BoxLayout
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.layout = BoxLayout(size_hint_y=None)
-        self.layout.bind(minimum_height=self.layout.setter("height"))
-        self.add_widget(self.layout)
-        self.effect_cls = ScrollEffect
-        self.bar_width = dp(12)
-        self.scroll_type = ["content", "bars"]
-
-
-class HovererableLabel(HoverBehavior, Label):
+class HovererableLabel(HoverBehavior, MDLabel):
     pass
 
 
-class TooltipLabel(HovererableLabel):
-    tooltip = None
+class TooltipLabel(HovererableLabel, MDTooltip):
+    tooltip_display_delay = 0.1
 
     def create_tooltip(self, text, x, y):
         text = text.replace("<br>", "\n").replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]")
-        if self.tooltip:
-            # update
-            self.tooltip.children[0].text = text
-        else:
-            self.tooltip = FloatLayout()
-            tooltip_label = ToolTip(text=text)
-            self.tooltip.add_widget(tooltip_label)
-            fade_in_animation.start(self.tooltip)
-            App.get_running_app().root.add_widget(self.tooltip)
-
-        # handle left-side boundary to not render off-screen
-        x = max(x, 3 + self.tooltip.children[0].texture_size[0] / 2)
-
         # position float layout
-        self.tooltip.x = x - self.tooltip.width / 2
-        self.tooltip.y = y - self.tooltip.height / 2 + 48
+        center_x, center_y = self.to_window(self.center_x, self.center_y)
+        self.shift_y = y - center_y
+        shift_x = center_x - x
+        if shift_x > 0:
+            self.shift_left = shift_x
+        else:
+            self.shift_right = shift_x
 
-    def remove_tooltip(self):
-        if self.tooltip:
-            App.get_running_app().root.remove_widget(self.tooltip)
-            self.tooltip = None
+        if self._tooltip:
+            # update
+            self._tooltip.text = text
+        else:
+            self._tooltip = ToolTip(text=text, pos_hint={})
+            self.display_tooltip()
 
     def on_mouse_pos(self, window, pos):
         if not self.get_root_window():
@@ -197,26 +253,26 @@ class TooltipLabel(HovererableLabel):
 
     def on_leave(self):
         self.remove_tooltip()
+        self._tooltip = None
 
 
-class ServerLabel(HovererableLabel):
+class ServerLabel(HovererableLabel, MDTooltip):
+    tooltip_display_delay = 0.1
+
     def __init__(self, *args, **kwargs):
         super(HovererableLabel, self).__init__(*args, **kwargs)
-        self.layout = FloatLayout()
-        self.popuplabel = ServerToolTip(text="Test")
-        self.layout.add_widget(self.popuplabel)
+        self._tooltip = ServerToolTip(text="Test")
 
     def on_enter(self):
-        self.popuplabel.text = self.get_text()
-        App.get_running_app().root.add_widget(self.layout)
-        fade_in_animation.start(self.layout)
+        self._tooltip.text = self.get_text()
+        self.display_tooltip()
 
     def on_leave(self):
-        App.get_running_app().root.remove_widget(self.layout)
+        self.animation_tooltip_dismiss()
 
     @property
     def ctx(self) -> context_type:
-        return App.get_running_app().ctx
+        return MDApp.get_running_app().ctx
 
     def get_text(self):
         if self.ctx.server:
@@ -257,11 +313,11 @@ class ServerLabel(HovererableLabel):
             return "No current server connection. \nPlease connect to an Archipelago server."
 
 
-class MainLayout(GridLayout):
+class MainLayout(MDGridLayout):
     pass
 
 
-class ContainerLayout(FloatLayout):
+class ContainerLayout(MDFloatLayout):
     pass
 
 
@@ -281,6 +337,11 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
         return super(SelectableLabel, self).refresh_view_attrs(
             rv, index, data)
 
+    def on_size(self, instance_label, size: list) -> None:
+        super().on_size(instance_label, size)
+        if self.parent:
+            self.width = self.parent.width
+
     def on_touch_down(self, touch):
         """ Add selection on touch down """
         if super(SelectableLabel, self).on_touch_down(touch):
@@ -292,9 +353,9 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
                 # Not a fan of the following few lines, but they work.
                 temp = MarkupLabel(text=self.text).markup
                 text = "".join(part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
-                cmdinput = App.get_running_app().textinput
+                cmdinput = MDApp.get_running_app().textinput
                 if not cmdinput.text:
-                    input_text = get_input_text_from_response(text, App.get_running_app().last_autofillable_command)
+                    input_text = get_input_text_from_response(text, MDApp.get_running_app().last_autofillable_command)
                     if input_text is not None:
                         cmdinput.text = input_text
 
@@ -305,11 +366,17 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
         """ Respond to the selection of items in the view. """
         self.selected = is_selected
 
-class HintLabel(RecycleDataViewBehavior, BoxLayout):
+status_icons = {
+    HintStatus.HINT_NO_PRIORITY: "information",
+    HintStatus.HINT_PRIORITY: "exclamation-thick",
+    HintStatus.HINT_AVOID: "alert"
+}
+
+class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
     selected = BooleanProperty(False)
     striped = BooleanProperty(False)
     index = None
-    dropdown: DropDown
+    dropdown: MDDropdownMenu
 
     def __init__(self):
         super(HintLabel, self).__init__()
@@ -320,31 +387,30 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         self.entrance_text = ""
         self.status_text = ""
         self.hint = {}
-        for child in self.children:
-            child.bind(texture_size=self.set_height)
 
+        ctx = MDApp.get_running_app().ctx
+        menu_items = []
 
-        ctx = App.get_running_app().ctx
-        self.dropdown = DropDown()
+        for status in (HintStatus.HINT_NO_PRIORITY, HintStatus.HINT_PRIORITY, HintStatus.HINT_AVOID):
+            name = status_names[status]
+            status_button = MDDropDownItem(MDDropDownItemText(text=name), size_hint_y=None, height=dp(50))
+            status_button.status = status
+            menu_items.append({
+                "text": name,
+                "leading_icon": status_icons[status],
+                "on_release": lambda x=status: select(self, x)
+            })
 
-        def set_value(button):
-            self.dropdown.select(button.status)
+        self.dropdown = MDDropdownMenu(caller=self.ids["status"], items=menu_items)
 
         def select(instance, data):
             ctx.update_hint(self.hint["location"],
                             self.hint["finding_player"],
                             data)
 
-        for status in (HintStatus.HINT_NO_PRIORITY, HintStatus.HINT_PRIORITY, HintStatus.HINT_AVOID):
-            name = status_names[status]
-            status_button = Button(text=name, size_hint_y=None, height=dp(50))
-            status_button.status = status
-            status_button.bind(on_release=set_value)
-            self.dropdown.add_widget(status_button)
+        self.dropdown.bind(on_release=self.dropdown.dismiss)
 
-        self.dropdown.bind(on_select=select)
-
-    def set_height(self, instance, value):
+    def set_height(self, _, _2):
         self.height = max([child.texture_size[1] for child in self.children])
 
     def refresh_view_attrs(self, rv, index, data):
@@ -357,7 +423,6 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         self.entrance_text = data["entrance"]["text"]
         self.status_text = data["status"]["text"]
         self.hint = data["status"]["hint"]
-        self.height = self.minimum_height
         return super(HintLabel, self).refresh_view_attrs(rv, index, data)
 
     def on_touch_down(self, touch):
@@ -370,10 +435,10 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
                 if status_label.collide_point(*touch.pos):
                     if self.hint["status"] == HintStatus.HINT_FOUND:
                         return
-                    ctx = App.get_running_app().ctx
+                    ctx = MDApp.get_running_app().ctx
                     if ctx.slot_concerns_self(self.hint["receiving_player"]):  # If this player owns this hint
                         # open a dropdown
-                        self.dropdown.open(self.ids["status"])
+                        self.dropdown.open()
                 elif self.selected:
                     self.parent.clear_selection()
                 else:
@@ -403,7 +468,7 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
                     else:
                         parent.sort_key = key
                         parent.reversed = False
-                    App.get_running_app().update_hints()
+                    MDApp.get_running_app().update_hints()
 
     def apply_selection(self, rv, index, is_selected):
         """ Respond to the selection of items in the view. """
@@ -411,7 +476,7 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
             self.selected = is_selected
 
 
-class ConnectBarTextInput(TextInput):
+class ConnectBarTextInput(MDTextField):
     def insert_text(self, substring, from_undo=False):
         s = substring.replace("\n", "").replace("\r", "")
         return super(ConnectBarTextInput, self).insert_text(s, from_undo=from_undo)
@@ -421,7 +486,7 @@ def is_command_input(string: str) -> bool:
     return len(string) > 0 and string[0] in "/!"
 
 
-class CommandPromptTextInput(TextInput):
+class CommandPromptTextInput(MDTextField):
     MAXIMUM_HISTORY_MESSAGES = 50
 
     def __init__(self, **kwargs) -> None:
@@ -469,7 +534,7 @@ class CommandPromptTextInput(TextInput):
 
 
 class MessageBox(Popup):
-    class MessageBoxLabel(Label):
+    class MessageBoxLabel(MDLabel):
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
             self._label.refresh()
@@ -487,14 +552,31 @@ class MessageBox(Popup):
         self.height += max(0, label.height - 18)
 
 
-class GameManager(App):
+class ClientTabs(MDTabsPrimary):
+    carousel: MDTabsCarousel
+    lock_swiping = True
+
+    def __init__(self, *args, **kwargs):
+        self.carousel = MDTabsCarousel(lock_swiping=True)
+        super().__init__(*args, MDDivider(size_hint_y=None, height=dp(4)), self.carousel, **kwargs)
+        self.size_hint_y = 1
+
+    def remove_tab(self, tab, content=None):
+        if content is None:
+            content = tab.content
+        self.ids.container.remove_widget(tab)
+        self.carousel.remove_widget(content)
+        self.on_size(self, self.size)
+
+
+class GameManager(MDApp):
     logging_pairs = [
         ("Client", "Archipelago"),
     ]
     base_title: str = "Archipelago Client"
     last_autofillable_command: str
 
-    main_area_container: GridLayout
+    main_area_container: MDGridLayout
     """ subclasses can add more columns beside the tabs """
 
     def __init__(self, ctx: context_type):
@@ -529,18 +611,27 @@ class GameManager(App):
             return max(1, len(self.tabs.tab_list))
         return 1
 
+    def on_start(self):
+        def on_start(*args):
+            self.root.md_bg_color = self.theme_cls.backgroundColor
+        super().on_start()
+        Clock.schedule_once(on_start)
+
     def build(self) -> Layout:
+        self.theme_cls.theme_style = self.json_to_kivy_parser.theme_style
+        self.theme_cls.primary_palette = self.json_to_kivy_parser.primary_palette
         self.container = ContainerLayout()
 
         self.grid = MainLayout()
         self.grid.cols = 1
-        self.connect_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=dp(30))
+        self.connect_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(70),
+                                          spacing=5, padding=(5, 10))
         # top part
-        server_label = ServerLabel()
+        server_label = ServerLabel(halign="center")
         self.connect_layout.add_widget(server_label)
         self.server_connect_bar = ConnectBarTextInput(text=self.ctx.suggested_address or "archipelago.gg:",
-                                                      size_hint_y=None,
-                                                      height=dp(30), multiline=False, write_tab=False)
+                                                      size_hint_y=None, role="medium",
+                                                      height=dp(70), multiline=False, write_tab=False)
 
         def connect_bar_validate(sender):
             if not self.ctx.server:
@@ -548,46 +639,50 @@ class GameManager(App):
 
         self.server_connect_bar.bind(on_text_validate=connect_bar_validate)
         self.connect_layout.add_widget(self.server_connect_bar)
-        self.server_connect_button = Button(text="Connect", size=(dp(100), dp(30)), size_hint_y=None, size_hint_x=None)
+        self.server_connect_button = MDButton(MDButtonText(text="Connect"), style="filled", size=(dp(100), dp(70)),
+                                              size_hint_x=None, size_hint_y=None, radius=5, pos_hint={"center_y": 0.55})
         self.server_connect_button.bind(on_press=self.connect_button_action)
+        self.server_connect_button.height = self.server_connect_bar.height
         self.connect_layout.add_widget(self.server_connect_button)
         self.grid.add_widget(self.connect_layout)
-        self.progressbar = ProgressBar(size_hint_y=None, height=3)
+        self.progressbar = MDLinearProgressIndicator(size_hint_y=None, height=3)
         self.grid.add_widget(self.progressbar)
 
         # middle part
-        self.tabs = TabbedPanel(size_hint_y=1)
-        self.tabs.default_tab_text = "All"
+        self.tabs = ClientTabs()
+        self.tabs.add_widget(MDTabsItem(MDTabsItemText(text="All" if len(self.logging_pairs) > 1 else "Archipelago")))
         self.log_panels["All"] = self.tabs.default_tab_content = UILog(*(logging.getLogger(logger_name)
-                                                                         for logger_name, name in
-                                                                         self.logging_pairs))
+                                                                             for logger_name, name in
+                                                                             self.logging_pairs))
+        self.tabs.carousel.add_widget(self.tabs.default_tab_content)
 
         for logger_name, display_name in self.logging_pairs:
             bridge_logger = logging.getLogger(logger_name)
-            panel = TabbedPanelItem(text=display_name)
-            self.log_panels[display_name] = panel.content = UILog(bridge_logger)
+            self.log_panels[display_name] = UILog(bridge_logger)
             if len(self.logging_pairs) > 1:
+                panel = MDTabsItem(MDTabsItemText(text=display_name))
+                panel.content = self.log_panels[display_name]
                 # show Archipelago tab if other logging is present
+                self.tabs.carousel.add_widget(panel.content)
                 self.tabs.add_widget(panel)
 
         hint_panel = self.add_client_tab("Hints", HintLog(self.json_to_kivy_parser))
         self.log_panels["Hints"] = hint_panel.content
 
-        if len(self.logging_pairs) == 1:
-            self.tabs.default_tab_text = "Archipelago"
-
-        self.main_area_container = GridLayout(size_hint_y=1, rows=1)
+        self.main_area_container = MDGridLayout(size_hint_y=1, rows=1)
         self.main_area_container.add_widget(self.tabs)
 
         self.grid.add_widget(self.main_area_container)
 
         # bottom part
-        bottom_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=dp(30))
-        info_button = Button(size=(dp(100), dp(30)), text="Command:", size_hint_x=None)
+        bottom_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(70), spacing=5, padding=(5, 10))
+        info_button = MDButton(MDButtonText(text="Command:"), radius=5, style="filled", size=(dp(100), dp(70)),
+                               size_hint_x=None, size_hint_y=None, pos_hint={"center_y": 0.575})
         info_button.bind(on_release=self.command_button_action)
         bottom_layout.add_widget(info_button)
         self.textinput = CommandPromptTextInput(size_hint_y=None, height=dp(30), multiline=False, write_tab=False)
         self.textinput.bind(on_text_validate=self.on_message)
+        info_button.height = self.textinput.height
         self.textinput.text_validate_unfocus = False
         bottom_layout.add_widget(self.textinput)
         self.grid.add_widget(bottom_layout)
@@ -608,24 +703,26 @@ class GameManager(App):
     def add_client_tab(self, title: str, content: Widget) -> Widget:
         """Adds a new tab to the client window with a given title, and provides a given Widget as its content.
          Returns the new tab widget, with the provided content being placed on the tab as content."""
-        new_tab = TabbedPanelItem(text=title)
+        new_tab = MDTabsItem(MDTabsItemText(text=title))
         new_tab.content = content
         self.tabs.add_widget(new_tab)
+        self.tabs.carousel.add_widget(new_tab.content)
         return new_tab
 
     def update_texts(self, dt):
-        if hasattr(self.tabs.content.children[0], "fix_heights"):
-            self.tabs.content.children[0].fix_heights()  # TODO: remove this when Kivy fixes this upstream
+        for slide in self.tabs.carousel.slides:
+            if hasattr(slide, "fix_heights"):
+                slide.fix_heights()  # TODO: remove this when Kivy fixes this upstream
         if self.ctx.server:
             self.title = self.base_title + " " + Utils.__version__ + \
                          f" | Connected to: {self.ctx.server_address} " \
                          f"{'.'.join(str(e) for e in self.ctx.server_version)}"
-            self.server_connect_button.text = "Disconnect"
+            self.server_connect_button._button_text.text = "Disconnect"
             self.server_connect_bar.readonly = True
             self.progressbar.max = len(self.ctx.checked_locations) + len(self.ctx.missing_locations)
             self.progressbar.value = len(self.ctx.checked_locations)
         else:
-            self.server_connect_button.text = "Connect"
+            self.server_connect_button._button_text.text = "Connect"
             self.server_connect_bar.readonly = False
             self.title = self.base_title + " " + Utils.__version__
             self.progressbar.value = 0
@@ -688,8 +785,8 @@ class GameManager(App):
 
     def enable_energy_link(self):
         if not hasattr(self, "energy_link_label"):
-            self.energy_link_label = Label(text="Energy Link: Standby",
-                                           size_hint_x=None, width=150)
+            self.energy_link_label = MDLabel(text="Energy Link: Standby",
+                                           size_hint_x=None, width=150, halign="center")
             self.connect_layout.add_widget(self.energy_link_label)
 
     def set_new_energy_link_value(self):
@@ -725,8 +822,9 @@ class LogtoUI(logging.Handler):
             self.on_log(self.format(record))
 
 
-class UILog(RecycleView):
+class UILog(MDRecycleView):
     messages: typing.ClassVar[int]  # comes from kv file
+    adaptive_height = True
 
     def __init__(self, *loggers_to_handle, **kwargs):
         super(UILog, self).__init__(**kwargs)
@@ -753,6 +851,7 @@ class UILog(RecycleView):
                 element.height = element.texture_size[1]
 
 
+
 status_names: typing.Dict[HintStatus, str] = {
     HintStatus.HINT_FOUND: "Found",
     HintStatus.HINT_UNSPECIFIED: "Unspecified",
@@ -769,7 +868,7 @@ status_colors: typing.Dict[HintStatus, str] = {
 }
 
 
-class HintLog(RecycleView):
+class HintLog(MDRecycleView):
     header = {
         "receiving": {"text": "[u]Receiving Player[/u]"},
         "item": {"text": "[u]Item[/u]"},
@@ -780,7 +879,7 @@ class HintLog(RecycleView):
                    "hint": {"receiving_player": -1, "location": -1, "finding_player": -1, "status": ""}},
         "striped": True,
     }
-
+    data: typing.List[typing.Any]
     sort_key: str = ""
     reversed: bool = True
 
@@ -793,7 +892,7 @@ class HintLog(RecycleView):
         if not hints:  # Fix the scrolling looking visually wrong in some edge cases
             self.scroll_y = 1.0
         data = []
-        ctx = App.get_running_app().ctx
+        ctx = MDApp.get_running_app().ctx
         for hint in hints:
             if not hint.get("status"): # Allows connecting to old servers
                 hint["status"] = HintStatus.HINT_FOUND if hint["found"] else HintStatus.HINT_UNSPECIFIED
@@ -896,6 +995,8 @@ class KivyJSONtoTextParser(JSONtoTextParser):
         for name, code in color_codes.items():
             color_codes[name] = getattr(colors, name, code)
         self.color_codes = color_codes
+        self.theme_style = colors.theme_style
+        self.primary_palette = colors.primary_palette
         super().__init__(*args, **kwargs)
 
     def __call__(self, *args, **kwargs):
