@@ -279,7 +279,7 @@ class CMItemPool:
             minimum_possible_material = total_material + (
                 item_table["Progressive Pawn"].material * necessary_chessmen)
             # Only remove if we can't possibly satisfy chessmen requirement within material limits
-            return minimum_possible_material > max_material
+            return minimum_possible_material > max_material and enough_yet
 
         # If we don't need chessmen, we still need to check material requirements
         return exceeds_max and enough_yet
