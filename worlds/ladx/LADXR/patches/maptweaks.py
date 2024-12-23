@@ -38,3 +38,12 @@ def tweakBirdKeyRoom(rom):
     re.moveObject(2, 5, 3, 6)
     re.addEntity(3, 5, 0x9D)
     re.store(rom)
+
+
+def openMabe(rom):
+    # replaces rocks on east side of Mabe Village with bushes
+    re = RoomEditor(rom, 0x094)
+    re.changeObject(5, 1, 0x5C)
+    re.overlay[5 + 1 * 10] = 0x5C
+    re.overlay[5 + 2 * 10] = 0x5C
+    re.store(rom)
