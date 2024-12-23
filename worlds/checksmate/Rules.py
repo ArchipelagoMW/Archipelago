@@ -97,17 +97,8 @@ def set_rules(world: World):
 
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
 
-    # Add debug logging
-    logging.debug(f"Setting rules for player {world.player}")
-    logging.debug(f"items_used: {world.items_used}")
-    logging.debug(f"Difficulty: {difficulty}")
-    logging.debug(f"Super sized: {super_sized}")
-
-    # Initialize items_used if needed
-    if world.player not in world.items_used:
-        world.items_used[world.player] = {}
-
-    total_queens = world.items_used[world.player].get("Progressive Major To Queen", 0)
+    # Calculate minimum queens for castle requirements
+    max_queens = world._item_pool.calculate_possible_queens()
 
     for name, item in location_table.items():
         if not super_sized and item.material_expectations == -1:
@@ -161,6 +152,6 @@ def set_rules(world: World):
 
     # Castle rules
     add_rule(world.multiworld.get_location("O-O Castle", world.player),
-             lambda state: state.has("Progressive Major Piece", world.player, 2 + total_queens))
+             lambda state: state.has("Progressive Major Piece", world.player, 2 + max(max_queens, state.count("Progressive Major To Queen", world.player))))
     add_rule(world.multiworld.get_location("O-O-O Castle", world.player),
-             lambda state: state.has("Progressive Major Piece", world.player, 2 + total_queens))
+             lambda state: state.has("Progressive Major Piece", world.player, 2 + max(max_queens, state.count("Progressive Major To Queen", world.player))))

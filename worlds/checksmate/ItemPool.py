@@ -84,14 +84,24 @@ class CMItemPool:
 
     def get_max_items(self, super_sized: bool) -> int:
         """Calculate the maximum number of items based on world options."""
-        max_items = len(location_table)
-        if not super_sized:
-            max_items -= len([loc for loc in location_table if location_table[loc].material_expectations == -1])
+        # Start with all locations that are valid for the current game mode
+        valid_locations = [loc for loc in location_table if 
+                         (super_sized or location_table[loc].material_expectations != -1)]
+        
+        # Filter out tactics based on options
         if self.world.options.enable_tactics.value == self.world.options.enable_tactics.option_none:
-            max_items -= len([loc for loc in location_table if location_table[loc].is_tactic is not None])
+            valid_locations = [loc for loc in valid_locations if location_table[loc].is_tactic is None]
         elif self.world.options.enable_tactics.value == self.world.options.enable_tactics.option_turns:
-            max_items -= len([loc for loc in location_table if location_table[loc].is_tactic == Tactic.Fork])
-        return max_items
+            valid_locations = [loc for loc in valid_locations if 
+                             location_table[loc].is_tactic is None or 
+                             location_table[loc].is_tactic == Tactic.Turns]
+        
+        # Add early material location if enabled
+        if self.world.options.early_material.value > 0:
+            if "King to E2/E7 Early" not in valid_locations:
+                valid_locations.append("King to E2/E7 Early")
+        
+        return len(valid_locations)
 
     def create_progression_items(self,
                                max_items: int,
@@ -115,8 +125,7 @@ class CMItemPool:
                 continue
             
             if (self.piece_model.has_prereqs(chosen_item) and
-                self.piece_model.can_add_more(chosen_item)):
-
+                    self.piece_model.can_add_more(chosen_item)):
                 try_item = self.world.create_item(chosen_item)
                 was_locked = self.consume_item(chosen_item, locked_items)
                 items.append(try_item)
@@ -124,7 +133,7 @@ class CMItemPool:
                 if not was_locked:
                     self.lock_new_items(chosen_item, items, locked_items)
                 
-        all_material = sum([locked_items[item] * progression_items[item].material for item in locked_items]) + material
+        all_material = sum([locked_items[item] * progression_items[item].material for item in locked_items if item in progression_items]) + material
         logging.debug(str(self.world.player) + " granted total material of " + str(all_material) +
                       " toward " + str(max_material) + " via items " + str(self.items_used[self.world.player]) +
                       " having generated " + str(Counter(items)))
@@ -165,6 +174,8 @@ class CMItemPool:
         """Create filler items up to max_items limit."""
         items = []
         my_filler_items = list(filler_items.keys())
+        
+        # Filter out pocket-related items if pocket is disabled
         if not has_pocket:
             my_filler_items = [item for item in my_filler_items if "Pocket" not in item]
         
@@ -245,6 +256,15 @@ class CMItemPool:
             for item in locked_items 
             if item in progression_items and progression_items[item].material > 0
         ])
+
+    def calculate_possible_queens(self) -> int:
+        """Calculate the maximum number of queen upgrades that will be in the game.
+        This is used to determine the minimum number of major pieces needed for castling.
+        We use the minimum possible number to avoid the 'Oh no, Terraria Hard Mode' problem, where
+        getting more items (queen upgrades) could make a location (castling) harder to access."""
+        if self.world.options.accessibility.value == self.world.options.accessibility.option_minimal:
+            return 0
+        return self.items_used[self.world.player].get("Progressive Major To Queen", 0)
 
     def should_remove_item(self, chosen_item: str, material: int, min_material: float,
                          max_material: float, items: List[Item], my_progression_items: List[str],
@@ -380,3 +400,44 @@ class CMItemPool:
             user_items.append(item)
 
         return user_items
+
+    def handle_locked_items(self) -> Dict[str, int]:
+        """Process locked items from options and ensure prerequisites are met."""
+        # Get locked items from options
+        yaml_locked_items: Dict[str, int] = self.world.options.locked_items.value
+        locked_items = dict(yaml_locked_items)
+
+        # Ensure locked items have enough parents
+        player_queens: int = (locked_items.get("Progressive Major To Queen", 0) +
+                            self.items_used[self.world.player].get("Progressive Major To Queen", 0))
+        locked_items["Progressive Major Piece"] = max(
+            player_queens, locked_items.get("Progressive Major Piece", 0))
+
+        # Ensure castling is possible
+        if self.world.options.accessibility.value != self.world.options.accessibility.option_minimal:
+            required_majors: int = 2 - self.items_used[self.world.player].get("Progressive Major Piece", 0) + player_queens
+            locked_items["Progressive Major Piece"] = max(
+                required_majors, locked_items.get("Progressive Major Piece", 0))
+
+        # Calculate and log remaining material
+        remaining_material = sum([locked_items[item] * progression_items[item].material 
+                                for item in locked_items if item in progression_items])
+        current_material = self.calculate_current_material()
+        logging.debug(f"{self.world.player} pre-fill granted total material of {current_material + remaining_material} " +
+                     f"via items {self.items_used[self.world.player]} with locked items {locked_items}")
+
+        return locked_items
+
+    def initialize_required_items(self) -> List[Item]:
+        """Initialize required items like Victory and Play as White."""
+        items = []
+        
+        # Add Super-Size Me for progressive mode
+        if self.world.options.goal.value == self.world.options.goal.option_progressive:
+            items.append(self.world.create_item("Super-Size Me"))
+            
+        # Add Play as White
+        items.append(self.world.create_item("Play as White"))
+        self.items_used[self.world.player]["Play as White"] = 1
+        
+        return items

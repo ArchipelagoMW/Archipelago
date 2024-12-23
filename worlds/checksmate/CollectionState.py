@@ -13,18 +13,27 @@ class CMCollectionState:
         self.world = world
 
     def collect(self, state: CollectionState, item: Item) -> bool:
+        # Initialize Material tracking if needed
+        if "Material" not in state.prog_items[self.world.player]:
+            state.prog_items[self.world.player]["Material"] = 0
+            
+        # Get current count before adding new item
+        item_count = state.prog_items[self.world.player].get(item.name, 0)
+        
+        # Increment the item count
+        state.prog_items[self.world.player][item.name] = item_count + 1
+        
         material = 0
-        item_count = state.prog_items[self.world.player][item.name]
         # check if there are existing unused upgrades to this piece which are immediately satisfied
         children = get_children(item.name)
         for child in children:
             if item_table[child].material == 0:
                 continue
             # TODO: when a child could have multiple parents, check that this is also the least parent
-            if item_count < state.prog_items[self.world.player][child]:
+            if item_count < state.prog_items[self.world.player].get(child, 0):
                 # we had an upgrade, so add that upgrade to the material count
                 material += item_table[child].material
-                logging.debug("Adding child " + child + " having count: " + str(state.prog_items[self.world.player][child]))
+                logging.debug("Adding child " + child + " having count: " + str(state.prog_items[self.world.player].get(child, 0)))
             else:
                 # not immediately upgraded, but maybe later
                 logging.debug("Added item " + item.name + " had insufficient children " + child + " to upgrade it")
@@ -48,20 +57,29 @@ class CMCollectionState:
         state.prog_items[self.world.player]["Material"] += material
         return True
 
-    # TODO: extremely similar - refactor to pass lt/lte comparator and an arithmetic lambda +/-
     def remove(self, state: CollectionState, item: Item) -> bool:
+        # Initialize Material tracking if needed
+        if "Material" not in state.prog_items[self.world.player]:
+            state.prog_items[self.world.player]["Material"] = 0
+            
+        # Get current count before removing item
+        item_count = state.prog_items[self.world.player].get(item.name, 0)
+        
+        # Decrement the item count
+        if item_count > 0:
+            state.prog_items[self.world.player][item.name] = item_count - 1
+        
         material = 0
-        item_count = state.prog_items[self.world.player][item.name]
         # check if there are existing unused upgrades to this piece which are immediately satisfied
         children = get_children(item.name)
         for child in children:
             if item_table[child].material == 0:
                 continue
             # TODO: when a child could have multiple parents, check that this is also the least parent
-            if item_count <= state.prog_items[self.world.player][child]:
+            if item_count <= state.prog_items[self.world.player].get(child, 0):
                 # we had an upgrade, so remove that upgrade from the material count
                 material += item_table[child].material
-                logging.debug("Removing child " + child + " having count: " + str(state.prog_items[self.world.player][child]))
+                logging.debug("Removing child " + child + " having count: " + str(state.prog_items[self.world.player].get(child, 0)))
             else:
                 # not immediately upgraded, but maybe later
                 logging.debug("Removed item " + item.name + " had insufficient children " + child + " to upgrade it")
