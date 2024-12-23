@@ -206,6 +206,12 @@ class CMWorld(World):
             items.extend(filler_items)
             logging.debug(f"Created {len(filler_items)} filler items")
 
+        for item in locked_items:
+            if item not in self.items_used[self.player]:
+                self.items_used[self.player][item] = 0
+            self.items_used[self.player][item] += locked_items[item]
+            items.extend([self.create_item(item) for i in range(locked_items[item])])
+
         self.multiworld.itempool += items
 
     def create_regions(self) -> None:
