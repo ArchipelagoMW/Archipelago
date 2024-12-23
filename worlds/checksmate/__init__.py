@@ -519,7 +519,6 @@ class CMWorld(World):
         # Limit pieces placed by total number
         if chosen_item in piece_limit_options:
             piece_total_limit = piece_limit_options[chosen_item](self.options).value
-            pieces_used = self.items_used[self.player].get(chosen_item, 0)
             if 0 < piece_total_limit <= pieces_used:
                 return False
         return True

@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Counter, Optional, Union
 from BaseClasses import Item
 import logging
 import math
@@ -7,7 +7,7 @@ from .Items import (CMItem, item_table, filler_items, progression_items,
                    useful_items, item_name_groups)
 from .Locations import location_table, Tactic, highest_chessmen_requirement_small, highest_chessmen_requirement
 from .Rules import determine_min_material, determine_max_material
-from .piece_model import PieceModel, PieceLimitCascade
+from .PieceModel import PieceModel, PieceLimitCascade
 
 
 class CMItemPool:
@@ -108,6 +108,10 @@ class CMItemPool:
                 if not was_locked:
                     self.lock_new_items(chosen_item, items, locked_items)
                 
+        all_material = sum([locked_items[item] * progression_items[item].material for item in locked_items]) + material
+        logging.debug(str(self.world.player) + " granted total material of " + str(all_material) +
+                      " toward " + str(max_material) + " via items " + str(self.items_used[self.world.player]) +
+                      " having generated " + str(Counter(items)))
         return items
 
     def prepare_progression_item_pool(self) -> List[str]:
@@ -249,13 +253,10 @@ class CMItemPool:
         chosen_material = self.lockable_material_value(chosen_item, items, locked_items)
         remaining_material = self.calculate_remaining_material(locked_items)
         total_material = material + chosen_material + remaining_material
-        current_total = material + remaining_material
-        enough_yet = current_total >= min_material
-        exceeds_max = total_material > max_material
 
         # For minimal accessibility, we only care about material
         if self.world.options.accessibility.value == self.world.options.accessibility.option_minimal:
-            return total_material > max_material and current_total >= min_material
+            return total_material > max_material
 
         # For full accessibility, check basic chessman requirements and whether you can castle (needs 2 rooks)
         chessmen_requirement = highest_chessmen_requirement_small if \
@@ -279,12 +280,10 @@ class CMItemPool:
         if necessary_chessmen > 0:
             minimum_possible_material = total_material + (
                 item_table["Progressive Pawn"].material * necessary_chessmen)
-            # Only remove if we can't possibly satisfy chessmen requirement within material limits
-            # AND we have enough material
-            return minimum_possible_material > max_material and current_total >= min_material
+            return minimum_possible_material > max_material
 
         # If we don't need chessmen, we still need to check material requirements
-        return total_material > max_material and current_total >= min_material
+        return total_material > max_material
 
     def chessmen_count(self, items: List[CMItem], pocket_limit: int) -> int:
         """Count the number of chessmen in the item pool."""

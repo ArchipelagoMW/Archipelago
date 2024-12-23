@@ -1,3 +1,4 @@
+import math
 from enum import Enum
 from typing import Dict, List, Optional, Union, Callable
 from .Items import item_table, progression_items, item_name_groups
@@ -49,7 +50,7 @@ class PieceModel:
         if not self.under_piece_limit(chosen_item, PieceLimitCascade.POTENTIAL_CHILDREN):
             return False
         return chosen_item not in self.items_used[self.world.player] or \
-            item_table[chosen_item].quantity == -1 or \
+            item_table[chosen_item].quantity == math.inf or \
             self.items_used[self.world.player][chosen_item] < item_table[chosen_item].quantity
 
     def under_piece_limit(self, chosen_item: str, with_children: PieceLimitCascade,
