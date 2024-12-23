@@ -57,7 +57,8 @@ EASTER_EGGS = {
     "Mountain Floor 1 Bridge": 1,
     "Mountain Floor 2": 1,
     "Mountain Bottom Floor Pillars Room": 1,
-    "Caves": 2,
+    "Caves Entry Door": 1,
+    "Caves": 1,
     "Challenge": 2,
     "Tunnels": 2,
 }

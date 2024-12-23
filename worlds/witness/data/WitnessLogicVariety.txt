@@ -1106,14 +1106,16 @@ Elevator (Mountain Bottom Floor):
 Mountain Pink Bridge EP (Mountain Floor 2):
 159312 - 0x09D63 (Pink Bridge EP) - 0x09E39 - True
 
-Mountain Path to Caves (Mountain Bottom Floor) - Caves - 0x2D77D:
+Mountain Path to Caves (Mountain Bottom Floor) - Caves - 0x2D77D - Caves Entry Door - TrueOneWay:
 158447 - 0x00FF8 (Caves Entry Panel) - True - Black/White Squares & Arrows & Triangles
 Door - 0x2D77D (Caves Entry) - 0x00FF8
 158448 - 0x334E1 (Rock Control) - True - True
 
 ==Caves==
 
-Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x019A5:
+Caves Entry Door (Caves):
+
+Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x019A5 - Caves Entry Door - TrueOneWay:
 158451 - 0x335AB (Elevator Inside Control) - True - Dots & Black/White Squares
 158452 - 0x335AC (Elevator Upper Outside Control) - 0x335AB - Black/White Squares
 158453 - 0x3369D (Elevator Lower Outside Control) - 0x335AB - Black/White Squares & Dots
