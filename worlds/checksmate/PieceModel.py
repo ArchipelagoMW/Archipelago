@@ -85,10 +85,9 @@ class PieceModel:
             piece: sum([self.world.piece_types_by_army[army][piece] 
                        for army in self.world.armies[self.world.player]])
             for piece in set().union(*self.world.piece_types_by_army.values())}
-        limit_multiplier = get_limit_multiplier_for_item(army_piece_types)
         
         # Calculate total limit including army multiplier
-        total_limit = base_limit * limit_multiplier(chosen_item)
+        total_limit = base_limit * army_piece_types[chosen_item]
         
         # For NO_CHILDREN, return just the base limit
         if with_children == PieceLimitCascade.NO_CHILDREN:
@@ -115,8 +114,3 @@ class PieceModel:
     def piece_limit_of(self, chosen_item: str) -> int:
         """Get the base piece limit for this item type."""
         return piece_type_limit_options[chosen_item](self.world.options).value
-
-
-def get_limit_multiplier_for_item(item_dictionary: Dict[str, int]) -> Callable[[str], int]:
-    """Get a function that returns the limit multiplier for a given item."""
-    return lambda item_name: item_dictionary[item_name] 
