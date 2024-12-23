@@ -273,8 +273,6 @@ class CMWorld(World):
                 material += progression_items[chosen_item].material
                 if not was_locked:
                     self.lock_new_items(chosen_item, items, locked_items)
-            elif material >= min_material:
-                my_progression_items.remove(chosen_item)
         all_material = sum([locked_items[item] * progression_items[item].material for item in locked_items]) + material
         logging.debug(str(self.player) + " granted total material of " + str(all_material) +
                       " toward " + str(max_material) + " via items " + str(self.items_used[self.player]) +
