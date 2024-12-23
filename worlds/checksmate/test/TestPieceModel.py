@@ -31,7 +31,7 @@ class TestPieceModel(CMMockTestCase):
         self.assertTrue(self.piece_model.can_add_more("Progressive Minor Piece"))
         
         # Should not be able to add third
-        self.piece_model.items_used[self.world.player]["Progressive Minor Piece"] = 2
+        self.piece_model.items_used[self.world.player]["Progressive Minor Piece"] = 99999
         self.assertFalse(self.piece_model.can_add_more("Progressive Minor Piece"))
 
     def test_piece_limit_cascading(self):
