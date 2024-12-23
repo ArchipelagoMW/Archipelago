@@ -37,6 +37,81 @@ class CMItemPool:
             self._material_model = MaterialModel(self.world)
             self._material_model.items_used = self.items_used
         return self._material_model
+    
+    def create_items(self) -> None:
+        super_sized = self.world.options.goal.value != self.world.options.goal.option_single
+        self.initialize_item_tracking()
+
+        # Initialize required items (Victory and Play as White)
+        items = self.initialize_required_items()
+        
+        # Handle excluded items and starter items
+        excluded_items = self.get_excluded_items()
+        starter_items = self.assign_starter_items(excluded_items, self.world.locked_locations)
+        for item in starter_items:
+            self.consume_item(item.name, {})
+        self.handle_excluded_items(excluded_items)
+        user_location_count = len(starter_items)
+        user_location_count += 1  # Victory item is counted as part of the pool, but you don't start with it
+
+        # Calculate material requirements
+        min_material, max_material = self.material_model.calculate_material_requirements(super_sized)
+        logging.debug(f"Material requirements: min={min_material}, max={max_material}")
+
+        # Handle option limits
+        self.handle_option_limits()
+
+        # Process locked items and ensure prerequisites
+        locked_items = self.handle_locked_items()
+
+        # Calculate max items
+        max_items = self.get_max_items(super_sized)
+        logging.debug(f"Max items: {max_items}")
+
+        # Create progression items
+        progression_items = self.create_progression_items(
+            max_items=max_items,
+            min_material=min_material,
+            max_material=max_material,
+            locked_items=locked_items,
+            user_location_count=user_location_count
+        )
+        items.extend(progression_items)
+        logging.debug(f"Created {len(progression_items)} progression items")
+
+        # Create useful items with remaining space
+        remaining_items = max_items - len(items)
+        if remaining_items > 0:
+            useful_items = self.create_useful_items(
+                max_items=remaining_items,
+                locked_items=locked_items,
+                user_location_count=user_location_count
+            )
+            items.extend(useful_items)
+            logging.debug(f"Created {len(useful_items)} useful items")
+
+        # Check for pocket items
+        has_pocket = any("Pocket" in item.name for item in items)
+
+        # Create filler items with remaining space
+        remaining_items = max_items - len(items)
+        if remaining_items > 0:
+            filler_items = self.create_filler_items(
+                has_pocket=has_pocket,
+                max_items=remaining_items,
+                locked_items=locked_items,
+                user_location_count=user_location_count
+            )
+            items.extend(filler_items)
+            logging.debug(f"Created {len(filler_items)} filler items")
+
+        for item in locked_items:
+            if item not in self.items_used[self.world.player]:
+                self.items_used[self.world.player][item] = 0
+            self.items_used[self.world.player][item] += locked_items[item]
+            items.extend([self.world.create_item(item) for i in range(locked_items[item])])
+
+        return items
 
     def initialize_item_tracking(self) -> None:
         """Initialize the item tracking dictionaries."""
