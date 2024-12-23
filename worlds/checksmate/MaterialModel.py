@@ -1,6 +1,7 @@
 from typing import Dict, List
 
-from . import determine_max_material, determine_min_material, location_table
+from .Rules import determine_max_material, determine_min_material
+from .Locations import location_table
 from .Items import progression_items, CMItem
 
 class MaterialModel:

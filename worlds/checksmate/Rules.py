@@ -1,11 +1,8 @@
 from math import ceil
-
 from typing import cast
-
 from BaseClasses import CollectionState
 from worlds.AutoWorld import World
-from . import progression_items
-
+from .Items import progression_items
 from worlds.generic.Rules import set_rule, add_rule
 from .Options import CMOptions
 from .Locations import location_table, Tactic
