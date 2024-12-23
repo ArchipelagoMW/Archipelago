@@ -33,8 +33,6 @@ AP_PLACEHOLDER_ITEM = ItemData(0xA0B, "AP Placeholder", ItemClassification.fille
 all_items = all_gen_items
 item_table: Dict[str, ItemData] = {item.name: item for item in all_items}
 items_by_id: Dict[int, ItemData] = {item.id: item for item in all_items}
-filler_pool_weights: Dict[FillerType, int] = {}
-trap_pool_weights: Dict[TrapType, int] = {}
 
 coin_items: {int: ItemData} = {}
 def _get_coin_item(id: int):
@@ -292,12 +290,14 @@ def create_items(world: 'GSTLAWorld', player: int):
 
 def get_filler_item(world: 'GSTLAWorld', includetraps: bool = True) -> ItemData:
     if includetraps and world.options.trap_chance > 0 and world.random.randint(1, 100) <= world.options.trap_chance:
+        trap_pool_weights = create_trap_pool_weights(world)
         trap_type = world.random.choices(list(trap_pool_weights.keys()), list(trap_pool_weights.values()))[0]
 
         if trap_type == TrapType.Mimic:
             item = world.random.choice(mimics)
 
     else:
+        filler_pool_weights = create_filler_pool_weights(world)
         filler_type = world.random.choices(list(filler_pool_weights.keys()), list(filler_pool_weights.values()))[0]
 
         if filler_type == FillerType.ForgeMaterials:
@@ -336,6 +336,7 @@ def get_filler_item(world: 'GSTLAWorld', includetraps: bool = True) -> ItemData:
 
 def create_filler_pool_weights(world: 'GSTLAWorld') -> Dict[FillerType, int]:
     """Creates a dictionary mapping FillerTypes to weight to be used for rolling filler items in the itempool""" 
+    filler_pool_weights: Dict[FillerType, int] = {}
 
     if world.options.forge_material_filler_weight > 0:
         filler_pool_weights[FillerType.ForgeMaterials] = world.options.forge_material_filler_weight
@@ -368,6 +369,7 @@ def create_filler_pool_weights(world: 'GSTLAWorld') -> Dict[FillerType, int]:
 
 def create_trap_pool_weights(world: 'GSTLAWorld') -> Dict[TrapType, int]:
     """Creates a dictionary mapping TrapTypes to weight to be used for rolling trap items in the itempool""" 
+    trap_pool_weights: Dict[TrapType, int] = {}
 
     if world.options.mimic_trap_weight > 0:
         trap_pool_weights[TrapType.Mimic] = world.options.mimic_trap_weight
