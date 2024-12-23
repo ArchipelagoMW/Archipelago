@@ -37,7 +37,7 @@ class TestPieceModel(CMMockTestCase):
     def test_piece_limit_cascading(self):
         """Test that piece limits properly cascade to children"""
         # Set up a scenario where we have a major piece that could be upgraded to queen
-        self.piece_model.items_used[self.world.player]["Progressive Major Piece"] = 1
+        self.piece_model.items_used[self.world.player]["Progressive Major To Queen"] = 1
         
         # Test different cascade levels
         no_children = self.piece_model.find_piece_limit(
@@ -54,4 +54,4 @@ class TestPieceModel(CMMockTestCase):
         )
         
         self.assertLess(no_children, with_children)
-        self.assertLess(with_children, potential) 
+        self.assertLess(with_children, potential)

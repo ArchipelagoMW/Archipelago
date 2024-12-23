@@ -42,13 +42,19 @@ class CMMockTestCase(unittest.TestCase):
                     'queen_piece_limit_by_type': type('QueenPieceLimitByType', (), {'value': 1})(),
                     'queen_piece_limit': type('QueenPieceLimit', (), {'value': 2})()
                 })()
+                # The above limits to 2 of all except queens, which means:
+                # 2 * 2 = 4 minors
+                # 2 * 2 + 1 queen upgrade= 5 majors 
+                # 2 = 2 queens
+                # The queen piece limit is higher than the by type limit, and there is only 1 army, so it has no effect.
                 self.piece_types_by_army = {0: {
-                    "Progressive Minor Piece": 2,
-                    "Progressive Major Piece": 2,
-                    "Progressive Major To Queen": 1,
-                    "Progressive Queen": 2
+                    "Progressive Minor Piece": 2,  # Multiplier of 2
+                    "Progressive Major Piece": 2,  # Multiplier of 2
+                    "Progressive Major To Queen": 2,  # Multiplier of 2
+                    "Progressive Queen": 2  # Multiplier of 2
                 }}
-                self.armies = {1: [0]}
+                # Set up army configuration
+                self.armies = {1: [0]}  # Player 1 has access to army 0
 
             def create_item(self, name):
                 """Create a mock item with the given name."""
