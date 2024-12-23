@@ -1,11 +1,13 @@
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 from BaseClasses import Item
-from .item_utils import chessmen_count
+import logging
+import math
+
 from .Items import (CMItem, item_table, filler_items, progression_items,
                    useful_items, item_name_groups)
-from .Rules import determine_min_material, determine_max_material
 from .Locations import location_table, Tactic, highest_chessmen_requirement_small, highest_chessmen_requirement
-import logging
+from .Rules import determine_min_material, determine_max_material
+from .piece_model import PieceModel, PieceLimitCascade
 
 
 class CMItemPool:
@@ -15,6 +17,9 @@ class CMItemPool:
         self.world = world
         self.items_used: Dict[int, Dict[str, int]] = {}
         self.items_remaining: Dict[int, Dict[str, int]] = {}
+        self.piece_model = PieceModel(world)
+        # Share the items_used dictionary with the piece model
+        self.piece_model.items_used = self.items_used
 
     def initialize_item_tracking(self) -> None:
         """Initialize the item tracking dictionaries."""
@@ -79,7 +84,7 @@ class CMItemPool:
                                user_location_count: int = 0) -> List[Item]:
         """Create progression items up to material limits."""
         items = []
-        material = self.calculate_current_material()  # Start with current material instead of 0
+        material = self.calculate_current_material()
         my_progression_items = self.prepare_progression_item_pool()
         
         while ((len(items) + user_location_count + sum(locked_items.values())) < max_items and
@@ -93,21 +98,21 @@ class CMItemPool:
                 my_progression_items.remove(chosen_item)
                 continue
             
-            # Check if we can add this item
-            if not self.world.has_prereqs(chosen_item):
+            if not self.piece_model.has_prereqs(chosen_item):
                 continue
                 
-            if self.world.can_add_more(chosen_item):
+            if self.piece_model.can_add_more(chosen_item):
                 try_item = self.world.create_item(chosen_item)
                 was_locked = self.consume_item(chosen_item, locked_items)
                 items.append(try_item)
-                # Only add material if the item has material value
                 if chosen_item in progression_items and progression_items[chosen_item].material > 0:
                     material += progression_items[chosen_item].material
                 if not was_locked:
                     self.lock_new_items(chosen_item, items, locked_items)
-            elif material >= min_material:
-                my_progression_items.remove(chosen_item)
+            else:
+                if self.should_remove_item(chosen_item, material, min_material, max_material,
+                                         items, my_progression_items, locked_items):
+                    my_progression_items.remove(chosen_item)
                 
         return items
 
@@ -240,7 +245,7 @@ class CMItemPool:
             self.items_used[self.world.player][chosen_item] >= item_table[chosen_item].quantity:
             return True
 
-        if not self.world.under_piece_limit(chosen_item, self.world.PieceLimitCascade.POTENTIAL_CHILDREN, my_progression_items):
+        if not self.piece_model.under_piece_limit(chosen_item, PieceLimitCascade.POTENTIAL_CHILDREN, my_progression_items):
             return True
 
         # TODO: The bottom half of this function checks whether victory is reachable. The top half is about limits.
@@ -254,16 +259,16 @@ class CMItemPool:
         enough_yet = current_total >= min_material
         exceeds_max = total_material > max_material
 
-        # For minimal accessibility, we only care about material. The Checkmate locations have no chessmen requirements.
+        # For minimal accessibility, we only care about material
         if self.world.options.accessibility.value == self.world.options.accessibility.option_minimal:
-            # Only remove if we exceed max AND have enough material
             return exceeds_max and enough_yet
 
         # For full accessibility, check basic chessman requirements and whether you can castle (needs 2 rooks)
         chessmen_requirement = highest_chessmen_requirement_small if \
             self.world.options.goal.value == self.world.options.goal.option_single else \
             highest_chessmen_requirement
-        necessary_chessmen = (chessmen_requirement - chessmen_count(items, self.world.options.pocket_limit_by_pocket.value))
+        necessary_chessmen = (chessmen_requirement - 
+                            self.chessmen_count(items, self.world.options.pocket_limit_by_pocket.value))
         
         # Adjust necessary chessmen based on the current item
         if chosen_item in item_name_groups["Chessmen"]:
@@ -286,9 +291,17 @@ class CMItemPool:
 
         # If we don't need chessmen, we still need to check material requirements
         return exceeds_max and enough_yet
-    
-    # if this piece was added, it might add more than its own material to the locked pool
+
+    def chessmen_count(self, items: List[CMItem], pocket_limit: int) -> int:
+        """Count the number of chessmen in the item pool."""
+        pocket_amount = (0 if pocket_limit <= 0 else
+                        math.ceil(len([item for item in items if item.name == "Progressive Pocket"]) / pocket_limit))
+        chessmen_amount = len([item for item in items if item.name in item_name_groups["Chessmen"]])
+        logging.debug("Found {} chessmen and {} pocket men".format(chessmen_amount, pocket_amount))
+        return chessmen_amount + pocket_amount
+
     def lockable_material_value(self, chosen_item: str, items: List[CMItem], locked_items: Dict[str, int]):
+        '''if this piece was added, it might add more than its own material to the locked pool'''
         material = progression_items[chosen_item].material
         if self.world.options.accessibility.value == self.world.options.accessibility.option_minimal:
             return material
