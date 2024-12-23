@@ -254,7 +254,7 @@ class CMItemPool:
         # For minimal accessibility, we only care about material. The Checkmate locations have no chessmen requirements.
         if self.world.options.accessibility.value == self.world.options.accessibility.option_minimal:
             # Only remove if we exceed max AND have enough material
-            return exceeds_max and enough_yet
+            return exceeds_max or enough_yet
 
         # For full accessibility, check basic chessman requirements and whether you can castle (needs 2 rooks)
         chessmen_requirement = highest_chessmen_requirement_small if \
@@ -279,10 +279,10 @@ class CMItemPool:
             minimum_possible_material = total_material + (
                 item_table["Progressive Pawn"].material * necessary_chessmen)
             # Only remove if we can't possibly satisfy chessmen requirement within material limits
-            return minimum_possible_material > max_material and enough_yet
+            return minimum_possible_material > max_material or enough_yet
 
         # If we don't need chessmen, we still need to check material requirements
-        return exceeds_max and enough_yet
+        return exceeds_max or enough_yet
     
     # if this piece was added, it might add more than its own material to the locked pool
     def lockable_material_value(self, chosen_item: str, items: List[CMItem], locked_items: Dict[str, int]):
