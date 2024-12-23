@@ -199,11 +199,6 @@ class CMItemPool:
             valid_locations = [loc for loc in valid_locations if 
                              location_table[loc].is_tactic is None or 
                              location_table[loc].is_tactic == Tactic.Turns]
-        
-        # Add early material location if enabled
-        if self.world.options.early_material.value > 0:
-            if "King to E2/E7 Early" not in valid_locations:
-                valid_locations.append("King to E2/E7 Early")
 
         return len(valid_locations)
 
@@ -293,23 +288,17 @@ class CMItemPool:
         
         while (len(items) + user_location_count + sum(locked_items.values())) < max_items and my_filler_items:
             chosen_item = self.world.random.choice(my_filler_items)
-            
-            # Check if we've hit the quantity limit for this item
-            if chosen_item in self.items_used[self.world.player] and \
-                self.items_used[self.world.player][chosen_item] >= filler_items[chosen_item].quantity:
-                my_filler_items.remove(chosen_item)
-                continue
-            
-            # Check if we have the prerequisites for this item
-            if not self.piece_model.has_prereqs(chosen_item):
-                my_filler_items.remove(chosen_item)
+            if not has_pocket and not self.piece_model.has_prereqs(chosen_item):
+                my_filler_items.remove(chosen_item)  # Remove items we can't use
                 continue
                 
-            # Create and track the item
-            self.consume_item(chosen_item, locked_items)
-            try_item = self.world.create_item(chosen_item)
-            items.append(try_item)
-            
+            if has_pocket or self.piece_model.can_add_more(chosen_item):
+                self.consume_item(chosen_item, locked_items)
+                try_item = self.world.create_item(chosen_item)
+                items.append(try_item)
+            else:
+                my_filler_items.remove(chosen_item)  # Remove items we can't add
+                
             # If we've exhausted all items but need pocket gems as fallback
             if len(my_filler_items) == 0 and has_pocket:
                 my_filler_items = ["Progressive Pocket Gems"]

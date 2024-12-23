@@ -63,7 +63,7 @@ class CMCollectionState:
         material = 0
         # First, remove base material value if this is a root item or has material value
         if len(get_parents(item.name)) == 0 or item_table[item.name].material > 0:
-            material -= item_table[item.name].material
+            material += item_table[item.name].material
             
         # Then check for downgrades to existing pieces
         children = get_children(item.name)
@@ -73,7 +73,7 @@ class CMCollectionState:
             # TODO: when a child could have multiple parents, check that this is also the least parent
             if item_count <= state.prog_items[self.world.player].get(child, 0):
                 # we had an upgrade, so remove that upgrade from the material count
-                material -= item_table[child].material
+                material += item_table[child].material
                 logging.debug("Removing child " + child + " having count: " + str(state.prog_items[self.world.player].get(child, 0)))
             else:
                 # not immediately upgraded, but maybe later
@@ -87,7 +87,7 @@ class CMCollectionState:
             # TODO: when a parent could have multiple children, check that this is also the least child
             if item_count <= fewest_parents * parents[0][1]:
                 # found a piece we could downgrade, so remove the upgrade
-                material -= item_table[item.name].material
+                material += item_table[item.name].material
                 logging.debug("Item " + item.name + " had sufficient parents " + str(fewest_parents) + " to be removed")
             else:
                 # not upgrading anything, but maybe later
