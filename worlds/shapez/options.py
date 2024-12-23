@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 import orjson
 
-from Options import Range, Toggle, Choice, PerGameCommonOptions, FreeText
+from Options import Toggle, Choice, PerGameCommonOptions, FreeText, NamedRange
 
 datapackage_options = orjson.loads(pkgutil.get_data(__name__, "data/options.json"))
 max_levels_and_upgrades = datapackage_options["max_levels_and_upgrades"]
@@ -29,7 +29,7 @@ class Goal(Choice):
     default = 0
 
 
-class GoalAmount(Range):
+class GoalAmount(NamedRange):
     """Specify, what level or tier (when either MAM or even fasterer is chosen as goal) is required to reach the goal.
 
     If MAM is set as the goal, this has to be set to 27 or more. Else it will raise an error."""
@@ -38,9 +38,18 @@ class GoalAmount(Range):
     range_start = 9
     range_end = max_levels_and_upgrades
     default = 27
+    special_range_names = {
+        "minimum_mam": 27,
+        "recommended_mam": 50,
+        "long_game_mam": 120,
+        "minimum_even_fasterer": 9,
+        "recommended_even_fasterer": 16,
+        "long_play_even_fasterer": 35,
+        "maximum": max_levels_and_upgrades,
+    }
 
 
-class RequiredShapesMultiplier(Range):
+class RequiredShapesMultiplier(NamedRange):
     """Multiplies the amount of required shapes for levels and upgrades by value/10.
 
     For level 1, the amount of shapes ranges from 3 to 300.
@@ -51,6 +60,11 @@ class RequiredShapesMultiplier(Range):
     range_start = 1
     range_end = 100
     default = 10
+    special_range_names = {
+        "minimum": 1,
+        "default": 10,
+        "maximum": 100,
+    }
 
 
 class AllowFloatingLayers(Toggle):
@@ -134,17 +148,23 @@ class RandomizeUpgradeLogic(Choice):
     default = 1
 
 
-class ThroughputLevelsRatio(Range):
+class ThroughputLevelsRatio(NamedRange):
     """If level requirements are randomized, this sets the ratio of how many levels (approximately) will require either
     a total amount or per second amount (throughput) of shapes delivered.
 
-    0 means only total, 100 means only throughput, and -1 means vanilla (levels 14, 27 and beyond have throughput).
+    0 means only total, 100 means only throughput, and vanilla (-1) means only levels 14, 27 and beyond have throughput.
     """
     display_name = "Throughput levels ratio"
     rich_text_doc = True
-    range_start = -1
+    range_start = 0
     range_end = 100
     default = 0
+    special_range_names = {
+        "vanilla": -1,
+        "only_total": 0,
+        "half_half": 50,
+        "only_throughput": 100,
+    }
 
 
 class ComplexityGrowthGradient(FreeText):
@@ -230,22 +250,33 @@ class ExcludeProgressionUnreasonable(Toggle):
     default = True
 
 
-class ShapesanityAmount(Range):
+class ShapesanityAmount(NamedRange):
     """Amount of single-layer shapes that will be included as locations."""
     display_name = "Shapesanity amount"
     rich_text_doc = True
     range_start = 4
     range_end = max_shapesanity
     default = 50
+    special_range_names = {
+        "minimum": 4,
+        "default": 50,
+        "maximum": max_shapesanity,
+    }
 
 
-class TrapsProbability(Range):
+class TrapsProbability(NamedRange):
     """The probability of any filler item (in percent) being replaced by a trap."""
     display_name = "Traps Percentage"
     rich_text_doc = True
     range_start = 0
     range_end = 100
     default = 0
+    special_range_names = {
+        "none": 0,
+        "rare": 4,
+        "occasionally": 10,
+        "maximum_suffering": 100,
+    }
 
 
 class SplitInventoryDrainingTrap(Toggle):
