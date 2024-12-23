@@ -313,9 +313,11 @@ class SMWorld(World):
         return super(SMWorld, self).remove(state, item)
 
     def create_item(self, name: str) -> Item:
-        item = next(x for x in ItemManager.Items.values() if x.Name == name)
-        return SMItem(item.Name, ItemClassification.progression if item.Class != 'Minor' else ItemClassification.filler, item.Type, self.item_name_to_id[item.Name],
+        item = next((x for x in ItemManager.Items.values() if x.Name == name), None)
+        if item:
+            return SMItem(item.Name, ItemClassification.progression if item.Class != 'Minor' else ItemClassification.filler, item.Type, self.item_name_to_id[item.Name],
                       player=self.player)
+        raise KeyError(f"Item {name} for {self.player_name} is invalid.")
 
     def get_filler_item_name(self) -> str:
         if self.multiworld.random.randint(0, 100) < self.options.minor_qty.value:

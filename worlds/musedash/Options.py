@@ -12,7 +12,6 @@ class DLCMusicPacks(OptionSet):
     Note: The [Just As Planned] DLC contains all [Muse Plus] songs.
     """
     display_name = "DLC Packs"
-    default = {}
     valid_keys = [dlc for dlc in MuseDashCollections.DLC]
 
 
@@ -143,7 +142,6 @@ class ChosenTraps(OptionSet):
     Note: SFX traps are only available if [Just as Planned] DLC songs are enabled.
     """
     display_name = "Chosen Traps"
-    default = {}
     valid_keys = {trap for trap in MuseDashCollections.trap_items.keys()}
 
 
