@@ -13,6 +13,8 @@ class LLLocCat(Enum):
     QUEST = 1
     BADGE = 2
     EVENT = 4
+    REWARD = 5
+    DOLL = 6
 
 
 class LLLocation(NamedTuple):

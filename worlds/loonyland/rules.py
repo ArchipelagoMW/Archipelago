@@ -4,12 +4,16 @@ from BaseClasses import CollectionState
 def have_light_source(state: CollectionState, player: int) -> bool:
     return state.has("Lantern", player) or (
         state.has("Stick", player) and state.has("Boots", player) and state.can_reach_region("Swamp Gas Cavern", player)
+    ) or (
+        state.has("20/20 Vision", player)
     )
     # 20/20 when badges added
 
+def can_kill_werewolves(state: CollectionState, player: int) -> bool:
+    return state.has("Silver Sling", player) or state.has("Touch Of Death", player)
 
 def have_bombs(state: CollectionState, player: int) -> bool:
-    return state.has("Bombs", player)
+    return state.has("Bombs", player) or state.has("Combo-Bombo", player) or state.has("Play As Werewolf", player)
     # or werewolf badge when badges are added
 
 
@@ -61,3 +65,20 @@ def have_39_badges(state: CollectionState, player: int) -> bool:
 
 def have_all_weapons(state: CollectionState, player: int) -> bool:
     return state.has_group("special_weapons", player, 7)
+
+def can_reach_bats(state: CollectionState, player: int) -> bool:
+    return state.can_reach_region("The Shrine Of Bombulus", player)
+def can_reach_skeleton(state: CollectionState, player: int) -> bool:
+    return state.can_reach_region("Halloween Hill", player)
+def can_reach_frog(state: CollectionState, player: int) -> bool:
+    return state.can_reach_region("Halloween Hill", player)
+def can_reach_ghost(state: CollectionState, player: int) -> bool:
+    return state.can_reach_region("Haunted Tower", player)
+def can_reach_mummy(state: CollectionState, player: int) -> bool:
+    return state.can_reach_region("Rocky Cliffs", player)
+def can_reach_swampdog(state: CollectionState, player: int) -> bool:
+    return state.can_reach_region("Halloween Hill", player)
+def can_reach_vampire(state: CollectionState, player: int) -> bool:
+    return state.can_reach_region("Castle Vampy", player)
+def can_reach_wolves(state: CollectionState, player: int) -> bool:
+    return state.can_reach_region("Halloween Hill", player)

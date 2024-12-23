@@ -20,6 +20,7 @@ class LLItemCat(Enum):
     TRAP = 3
     EVENT = 4
     ACCESS = 5
+    DOLL = 6
 
 
 class LLItem(NamedTuple):
