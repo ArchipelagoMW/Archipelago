@@ -62,6 +62,24 @@ class ShapezWorld(World):
     base_id = 20010707
     item_name_to_id = {name: id for id, name in enumerate(item_table.keys(), base_id)}
     location_name_to_id = {name: id for id, name in enumerate(all_locations, base_id)}
+    item_name_groups = {
+        "Main Buildings": {"Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"},
+        "Goal Buildings": {"Cutter", "Rotator", "Painter", "Rotator (CCW)", "Color Mixer", "Stacker", "Quad Cutter",
+                           "Double Painter", "Quad Painter", "Wires", "Switch", "Constant Signal"},
+        "Most Useful Buildings": {"Balancer", "Tunnel", "Tunnel Tier II", "Compact Merger", "Compact Splitter", "Trash",
+                                  "Chaining Extractor"},
+        "Most Important Buildings": {"Belt", "Extractor"},
+        "Gameplay Mechanics": {"Blueprints", "Wires"},
+        "Upgrades": {"Big Belt Upgrade", "Big Miner Upgrade", "Big Processors Upgrade", "Big Painting Upgrade",
+                     "Small Belt Upgrade", "Small Miner Upgrade", "Small Processors Upgrade", "Small Painting Upgrade"},
+        "Belt Upgrades": {"Big Belt Upgrade", "Small Belt Upgrade"},
+        "Miner Upgrades": {"Big Miner Upgrade", "Small Miner Upgrade"},
+        "Processors Upgrades": {"Big Processors Upgrade", "Small Processors Upgrade"},
+        "Painting Upgrades": {"Big Painting Upgrade", "Small Painting Upgrade"},
+        "Bundles": {"Blueprint Shapes Bundle", "Level Shapes Bundle", "Upgrade Shapes Bundle"},
+        "Traps": {"Locked Building Trap", "Throttled Building Trap", "Malfunctioning Trap", "Inventory Draining Trap",
+                  "Blueprint Shapes Draining Trap", "Level Shapes Draining Trap", "Upgrade Shapes Draining Trap"},
+    }
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
