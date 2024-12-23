@@ -1,7 +1,7 @@
 from typing import Dict, List, Union
 from BaseClasses import CollectionState, Item
 from .Items import item_table, progression_items
-from .item_utils import get_parents, get_children
+from .ItemUtils import get_parents, get_children
 import logging
 
 
