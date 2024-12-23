@@ -235,10 +235,38 @@ class CMWorld(World):
             self.multiworld.get_location("Checkmate Maxima", self.player).place_locked_item(victory_item)
 
     def collect(self, state: CollectionState, item: Item) -> bool:
-        return self._collection_state.collect(state, item)
+        """Collect an item and update material value."""
+        # Initialize Material tracking if needed
+        if "Material" not in state.prog_items[self.player]:
+            state.prog_items[self.player]["Material"] = 0
+
+        # Calculate material value before state change
+        material = self._collection_state.collect(state, item)
+
+        # Update state through parent class
+        change = super().collect(state, item)
+        if change:
+            # we actually collected the item, so we must gain the material
+            state.prog_items[self.player]["Material"] += material
+
+        return change
 
     def remove(self, state: CollectionState, item: Item) -> bool:
-        return self._collection_state.remove(state, item)
+        """Remove an item and update material value."""
+        # Initialize Material tracking if needed
+        if "Material" not in state.prog_items[self.player]:
+            state.prog_items[self.player]["Material"] = 0
+
+        # Calculate material value before state change
+        material = self._collection_state.remove(state, item)
+
+        # Update state through parent class
+        change = super().remove(state, item)
+        if change:
+            # we actually removed the item, so we must lose the material
+            state.prog_items[self.player]["Material"] -= material
+
+        return change
 
     def find_piece_limit(self, piece_name: str, cascade_type: PieceLimitCascade) -> int:
         """Delegate piece limit finding to the PieceModel."""

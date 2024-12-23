@@ -152,6 +152,8 @@ def set_rules(world: World):
 
     # Castle rules
     add_rule(world.multiworld.get_location("O-O Castle", world.player),
-             lambda state: state.has("Progressive Major Piece", world.player, 2 + max(max_queens, state.count("Progressive Major To Queen", world.player))))
+             lambda state: state.has("Progressive Major Piece", world.player,
+                                     2 + max(max_queens, state.count("Progressive Major To Queen", world.player))))
     add_rule(world.multiworld.get_location("O-O-O Castle", world.player),
-             lambda state: state.has("Progressive Major Piece", world.player, 2 + max(max_queens, state.count("Progressive Major To Queen", world.player))))
+             lambda state: state.has("Progressive Major Piece", world.player,
+                                     2 + max(max_queens, state.count("Progressive Major To Queen", world.player))))

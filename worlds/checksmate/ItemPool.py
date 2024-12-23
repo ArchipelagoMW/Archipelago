@@ -43,6 +43,83 @@ class CMItemPool:
         self.items_used[self.world.player] = {}
         self.items_remaining[self.world.player] = {}
 
+    def initialize_required_items(self) -> List[Item]:
+        """Initialize required items like Victory and Play as White."""
+        items = []
+        
+        # Add Super-Size Me for progressive mode
+        if self.world.options.goal.value == self.world.options.goal.option_progressive:
+            items.append(self.world.create_item("Super-Size Me"))
+            
+        # Add Play as White
+        items.append(self.world.create_item("Play as White"))
+        self.items_used[self.world.player]["Play as White"] = 1
+        
+        return items
+
+    def get_excluded_items(self) -> Dict[str, int]:
+        """Get items that should be excluded from the item pool."""
+        excluded_items: Dict[str, int] = {}
+
+        # Handle super-sized items
+        if self.world.options.goal.value == self.world.options.goal.option_super:
+            item = self.world.create_item("Super-Size Me")
+            self.world.multiworld.push_precollected(item)
+
+        # Track precollected items
+        for item in self.world.multiworld.precollected_items[self.world.player]:
+            if item.name not in excluded_items:
+                excluded_items[item.name] = 0
+            excluded_items[item.name] += 1
+
+        # TODO: Handle excluded_items_option if needed
+        # excluded_items_option = getattr(multiworld, 'excluded_items', {player: []})
+        # excluded_items.update(excluded_items_option[player].value)
+
+        return excluded_items
+
+    def assign_starter_items(self,
+                             excluded_items: Dict[str, int],
+                             locked_locations: List[str]) -> List[Item]:
+        """Assign starter items based on game options."""
+        user_items = []
+        
+        # Handle ordered progression
+        if self.world.options.goal.value == self.world.options.goal.option_ordered_progressive:
+            item = self.world.create_item("Super-Size Me")
+            self.world.multiworld.get_location("Checkmate Minima", self.world.player).place_locked_item(item)
+            locked_locations.append("Checkmate Minima")
+            user_items.append(item)
+
+        # Handle early material option
+        early_material_option = self.world.options.early_material.value
+        if early_material_option > 0:
+            early_units = []
+            if early_material_option == 1 or early_material_option > 4:
+                early_units.append("Progressive Pawn")
+            if early_material_option == 2 or early_material_option > 3:
+                early_units.append("Progressive Minor Piece")
+            if early_material_option > 2:
+                early_units.append("Progressive Major Piece")
+
+            # Filter out non-local and excluded items
+            non_local_items = self.world.options.non_local_items.value
+            local_basic_unit = sorted(item for item in early_units if
+                                    item not in non_local_items and (
+                                        item not in excluded_items or
+                                        excluded_items[item] < item_table[item].quantity))
+            
+            if not local_basic_unit:
+                raise Exception("At least one early chessman must be local")
+
+            # Place early material item
+            item = self.world.create_item(self.world.random.choice(local_basic_unit))
+            self.world.multiworld.get_location("King to E2/E7 Early", self.world.player).place_locked_item(item)
+            locked_locations.append("King to E2/E7 Early")
+            user_items.append(item)
+
+        return user_items
+
     def handle_excluded_items(self, excluded_items: Dict[str, int]) -> List[Item]:
         """Process excluded items and return starter items."""
         starter_items = []
@@ -82,6 +159,33 @@ class CMItemPool:
             (12 - min(self.world.options.max_pocket.value, 3 * self.world.options.pocket_limit_by_pocket.value)))
         self.items_used[self.world.player]["Super-Size Me"] = 1
 
+    def handle_locked_items(self) -> Dict[str, int]:
+        """Process locked items from options and ensure prerequisites are met."""
+        # Get locked items from options
+        yaml_locked_items: Dict[str, int] = self.world.options.locked_items.value
+        locked_items = dict(yaml_locked_items)
+
+        # Ensure locked items have enough parents
+        player_queens: int = (locked_items.get("Progressive Major To Queen", 0) +
+                            self.items_used[self.world.player].get("Progressive Major To Queen", 0))
+        locked_items["Progressive Major Piece"] = max(
+            player_queens, locked_items.get("Progressive Major Piece", 0))
+
+        # Ensure castling is possible
+        if self.world.options.accessibility.value != self.world.options.accessibility.option_minimal:
+            required_majors: int = 2 - self.items_used[self.world.player].get("Progressive Major Piece", 0) + player_queens
+            locked_items["Progressive Major Piece"] = max(
+                required_majors, locked_items.get("Progressive Major Piece", 0))
+
+        # Calculate and log remaining material
+        remaining_material = sum([locked_items[item] * progression_items[item].material 
+                                for item in locked_items if item in progression_items])
+        current_material = self.calculate_current_material()
+        logging.debug(f"{self.world.player} pre-fill granted total material of {current_material + remaining_material} " +
+                     f"via items {self.items_used[self.world.player]} with locked items {locked_items}")
+
+        return locked_items
+
     def get_max_items(self, super_sized: bool) -> int:
         """Calculate the maximum number of items based on world options."""
         # Start with all locations that are valid for the current game mode
@@ -100,7 +204,7 @@ class CMItemPool:
         if self.world.options.early_material.value > 0:
             if "King to E2/E7 Early" not in valid_locations:
                 valid_locations.append("King to E2/E7 Early")
-        
+
         return len(valid_locations)
 
     def create_progression_items(self,
@@ -113,6 +217,8 @@ class CMItemPool:
         items = []
         material = self.calculate_current_material()
         my_progression_items = self.prepare_progression_item_pool()
+        self.items_remaining[self.world.player] = {
+            name: progression_items[name].quantity - self.items_used[self.world.player].get(name, 0) for name in my_progression_items}
         
         while ((len(items) + user_location_count + sum(locked_items.values())) < max_items and
                len(my_progression_items) > 0):
@@ -337,107 +443,3 @@ class CMItemPool:
         if chosen_item == "Progressive Major To Queen" and self.unupgraded_majors_in_pool(items, locked_items) <= 2:
             material += progression_items["Progressive Major Piece"].material
         return material
-
-    def get_excluded_items(self) -> Dict[str, int]:
-        """Get items that should be excluded from the item pool."""
-        excluded_items: Dict[str, int] = {}
-
-        # Handle super-sized items
-        if self.world.options.goal.value == self.world.options.goal.option_super:
-            item = self.world.create_item("Super-Size Me")
-            self.world.multiworld.push_precollected(item)
-
-        # Track precollected items
-        for item in self.world.multiworld.precollected_items[self.world.player]:
-            if item.name not in excluded_items:
-                excluded_items[item.name] = 0
-            excluded_items[item.name] += 1
-
-        # TODO: Handle excluded_items_option if needed
-        # excluded_items_option = getattr(multiworld, 'excluded_items', {player: []})
-        # excluded_items.update(excluded_items_option[player].value)
-
-        return excluded_items
-
-    def assign_starter_items(self,
-                             excluded_items: Dict[str, int],
-                             locked_locations: List[str]) -> List[Item]:
-        """Assign starter items based on game options."""
-        user_items = []
-        
-        # Handle ordered progression
-        if self.world.options.goal.value == self.world.options.goal.option_ordered_progressive:
-            item = self.world.create_item("Super-Size Me")
-            self.world.multiworld.get_location("Checkmate Minima", self.world.player).place_locked_item(item)
-            locked_locations.append("Checkmate Minima")
-            user_items.append(item)
-
-        # Handle early material option
-        early_material_option = self.world.options.early_material.value
-        if early_material_option > 0:
-            early_units = []
-            if early_material_option == 1 or early_material_option > 4:
-                early_units.append("Progressive Pawn")
-            if early_material_option == 2 or early_material_option > 3:
-                early_units.append("Progressive Minor Piece")
-            if early_material_option > 2:
-                early_units.append("Progressive Major Piece")
-
-            # Filter out non-local and excluded items
-            non_local_items = self.world.options.non_local_items.value
-            local_basic_unit = sorted(item for item in early_units if
-                                    item not in non_local_items and (
-                                        item not in excluded_items or
-                                        excluded_items[item] < item_table[item].quantity))
-            
-            if not local_basic_unit:
-                raise Exception("At least one early chessman must be local")
-
-            # Place early material item
-            item = self.world.create_item(self.world.random.choice(local_basic_unit))
-            self.world.multiworld.get_location("King to E2/E7 Early", self.world.player).place_locked_item(item)
-            locked_locations.append("King to E2/E7 Early")
-            user_items.append(item)
-
-        return user_items
-
-    def handle_locked_items(self) -> Dict[str, int]:
-        """Process locked items from options and ensure prerequisites are met."""
-        # Get locked items from options
-        yaml_locked_items: Dict[str, int] = self.world.options.locked_items.value
-        locked_items = dict(yaml_locked_items)
-
-        # Ensure locked items have enough parents
-        player_queens: int = (locked_items.get("Progressive Major To Queen", 0) +
-                            self.items_used[self.world.player].get("Progressive Major To Queen", 0))
-        locked_items["Progressive Major Piece"] = max(
-            player_queens, locked_items.get("Progressive Major Piece", 0))
-
-        # Ensure castling is possible
-        if self.world.options.accessibility.value != self.world.options.accessibility.option_minimal:
-            required_majors: int = 2 - self.items_used[self.world.player].get("Progressive Major Piece", 0) + player_queens
-            locked_items["Progressive Major Piece"] = max(
-                required_majors, locked_items.get("Progressive Major Piece", 0))
-
-        # Calculate and log remaining material
-        remaining_material = sum([locked_items[item] * progression_items[item].material 
-                                for item in locked_items if item in progression_items])
-        current_material = self.calculate_current_material()
-        logging.debug(f"{self.world.player} pre-fill granted total material of {current_material + remaining_material} " +
-                     f"via items {self.items_used[self.world.player]} with locked items {locked_items}")
-
-        return locked_items
-
-    def initialize_required_items(self) -> List[Item]:
-        """Initialize required items like Victory and Play as White."""
-        items = []
-        
-        # Add Super-Size Me for progressive mode
-        if self.world.options.goal.value == self.world.options.goal.option_progressive:
-            items.append(self.world.create_item("Super-Size Me"))
-            
-        # Add Play as White
-        items.append(self.world.create_item("Play as White"))
-        self.items_used[self.world.player]["Play as White"] = 1
-        
-        return items
