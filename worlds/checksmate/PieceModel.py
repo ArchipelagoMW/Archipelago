@@ -3,13 +3,7 @@ from enum import Enum
 from typing import Dict, List, Optional, Union, Callable
 from .Items import item_table, progression_items, item_name_groups
 from .Options import piece_type_limit_options, piece_limit_options
-
-
-class PieceLimitCascade(Enum):
-    """Controls how child pieces are considered when checking piece limits."""
-    NO_CHILDREN = 1  # Only consider the piece itself
-    ACTUAL_CHILDREN = 2  # Consider the piece and its existing children
-    POTENTIAL_CHILDREN = 3  # Consider the piece and all possible children
+from .PieceLimitCascade import PieceLimitCascade
 
 
 class PieceModel:

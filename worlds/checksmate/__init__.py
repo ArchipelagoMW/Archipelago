@@ -13,7 +13,7 @@ from .Presets import checksmate_option_presets
 from .Rules import set_rules
 from .CollectionState import CMCollectionState
 from .ItemPool import CMItemPool
-from .PieceModel import PieceModel
+from .PieceModel import PieceModel, PieceLimitCascade
 from .MaterialModel import MaterialModel
 
 
@@ -222,7 +222,7 @@ class CMWorld(World):
     def remove(self, state: CollectionState, item: Item) -> bool:
         return self._collection_state.remove(state, item)
 
-    def find_piece_limit(self, piece_name: str, cascade_type: int) -> int:
+    def find_piece_limit(self, piece_name: str, cascade_type: PieceLimitCascade) -> int:
         """Delegate piece limit finding to the PieceModel."""
         return self._piece_model.find_piece_limit(piece_name, cascade_type)
 

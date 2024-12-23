@@ -1,8 +1,8 @@
 from copy import copy
 
-from worlds.checksmate.PieceModel import PieceLimitCascade
 from . import CMTestBase
 from .. import Options
+from ..PieceLimitCascade import PieceLimitCascade
 
 
 # I don't like that this generates many entire seeds just to check some global logic.
