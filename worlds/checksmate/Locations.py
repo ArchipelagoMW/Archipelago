@@ -88,7 +88,7 @@ location_table = {
     "Capture 7 Of Each": CMLocationData(4_902_038, 3850, 5650, 13),
     "Capture 8 Of Each": CMLocationData(4_902_130, -1, 5850, 15),
     "Capture 9 Of Each": CMLocationData(4_902_131, -1, 5950, 17),
-    "Capture Everything": CMLocationData(4_902_039, 4020, 6050, -1),
+    "Capture Everything": CMLocationData(4_902_039, 4020, 6050, -1),  # TODO: Always count the higher material
     "Capture Any 2": CMLocationData(4_902_070, 750, 1650, 1),
     "Capture Any 3": CMLocationData(4_902_071, 1450, 2450, 2),
     "Capture Any 4": CMLocationData(4_902_072, 2240, 3240, 3),
