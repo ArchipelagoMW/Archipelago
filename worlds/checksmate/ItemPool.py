@@ -109,7 +109,7 @@ class CMItemPool:
             if item not in self.items_used[self.world.player]:
                 self.items_used[self.world.player][item] = 0
             self.items_used[self.world.player][item] += locked_items[item]
-            items.extend([self.world.create_item(item) for i in range(locked_items[item])])
+            items.extend([self.world.create_item(item) for _ in range(locked_items[item])])
 
         return items
 
@@ -255,9 +255,8 @@ class CMItemPool:
         # Calculate and log remaining material
         remaining_material = sum([locked_items[item] * progression_items[item].material 
                                 for item in locked_items if item in progression_items])
-        current_material = self.calculate_current_material()
-        logging.debug(f"{self.world.player} pre-fill granted total material of {current_material + remaining_material} " +
-                     f"via items {self.items_used[self.world.player]} with locked items {locked_items}")
+        logging.debug(f"{self.world.player} pre-fill granted total material of {remaining_material} " +
+                     f"via locked items {locked_items} with excluded items {self.items_used[self.world.player]}")
 
         return locked_items
 
@@ -285,7 +284,7 @@ class CMItemPool:
                                user_location_count: int = 0) -> List[Item]:
         """Create progression items up to material limits."""
         items = []
-        material = self.calculate_current_material()
+        material = self.calculate_current_material(items)
         my_progression_items = self.prepare_progression_item_pool()
         self.items_remaining[self.world.player] = {
             name: progression_items[name].quantity - self.items_used[self.world.player].get(name, 0) for name in my_progression_items}
@@ -418,12 +417,19 @@ class CMItemPool:
 
         return total_majors - total_upgrades 
 
-    def calculate_current_material(self) -> int:
-        """Calculate the total material value of currently used items."""
-        return sum([
-            progression_items[item].material * self.items_used[self.world.player][item]
-            for item in self.items_used[self.world.player] if item in progression_items
-        ])
+    def calculate_current_material(self, items: List[Item] = None) -> int:
+        """Calculate the total material value of currently generated items.
+        
+        Args:
+            items: List of items to calculate material from. If None, calculates from items_used (for backward compatibility).
+        """
+        # Calculate based on actual items
+        item_counts = Counter(item.name for item in items)
+        return sum(
+            progression_items[item_name].material * count
+            for item_name, count in item_counts.items()
+            if item_name in progression_items
+        )
 
     def calculate_remaining_material(self, locked_items: Dict[str, int]) -> int:
         """Calculate the material value of locked items that have material value."""

@@ -14,15 +14,9 @@ class CMCollectionState:
 
     def collect(self, state: CollectionState, item: Item) -> int:
         """Calculate the material value gained from collecting this item."""
-        # Get current count before adding new item
-        item_count = state.prog_items[self.world.player].get(item.name, 0)
-        
         material = 0
-        # First, add base material value if this is a root item or has material value
-        if len(get_parents(item.name)) == 0 or item_table[item.name].material > 0:
-            material += item_table[item.name].material
-            
-        # Then check for upgrades to existing pieces
+        item_count = state.prog_items[self.world.player][item.name]
+        # check if there are existing unused upgrades to this piece which are immediately satisfied
         children = get_children(item.name)
         for child in children:
             if item_table[child].material == 0:
@@ -35,10 +29,12 @@ class CMCollectionState:
             else:
                 # not immediately upgraded, but maybe later
                 logging.debug("Added item " + item.name + " had insufficient children " + child + " to upgrade it")
-
-        # Finally check if this is an upgrade that can be applied to existing pieces
+        # check if this is an upgrade which is immediately satisfied by applying it to an existing piece
         parents = get_parents(item.name)
-        if len(parents) > 0 and item_table[item.name].material > 0:
+        if len(parents) == 0 or item_table[item.name].material == 0:
+            # this is a root element (like a piece), not an upgrade, so we can use it immediately
+            material += item_table[item.name].material
+        else:
             # this is an upgrade, so we can only apply it if it can find an unsatisfied parent
             fewest_parents = min([state.prog_items[self.world.player].get(parent[0], 0) for parent in parents])
             # TODO: when a parent could have multiple children, check that this is also the least child

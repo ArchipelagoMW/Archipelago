@@ -2,6 +2,7 @@ from copy import copy
 
 from . import CMTestBase
 from ..Rules import determine_difficulty
+from ..Items import item_table
 
 
 class MaterialStateTestBase(CMTestBase):
@@ -36,6 +37,25 @@ class TestSimpleMaterial(MaterialStateTestBase):
         past_material = self.multiworld.state.prog_items[self.player]["Material"]
         self.assertLessEqual(4150 * self.difficulty, past_material)
         self.assertGreaterEqual(4650 * self.difficulty, past_material)
+
+    def test_exact_material(self) -> None:
+        """Test that the material value matches exactly what we expect from summing all items."""
+        # First collect everything
+        self.collect_all_but("Progressive Pocket Gems", self.multiworld.state)
+        actual_material = self.multiworld.state.prog_items[self.player]["Material"]
+        
+        # Calculate expected material by summing up each item's material value
+        expected_material = 0
+        for item_name, count in self.multiworld.state.prog_items[self.player].items():
+            if item_name == "Material":  # Skip the material counter itself
+                continue
+            if item_name in item_table and item_table[item_name].material > 0:
+                expected_material += item_table[item_name].material * count
+        
+        # Assert exact equality and print values if they don't match
+        self.assertEqual(expected_material, actual_material, 
+            f"Material mismatch: expected {expected_material}, got {actual_material}. "
+            f"Difference: {actual_material - expected_material}")
 
 
 class TestCyclicMaterial(MaterialStateTestBase):
