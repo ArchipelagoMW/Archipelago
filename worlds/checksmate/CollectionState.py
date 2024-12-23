@@ -44,8 +44,7 @@ class CMCollectionState:
         return total_material
 
     def _check_children(self, state: CollectionState, item: Item, item_count: int) -> Tuple[int, bool]:
-        """Check child upgrades and calculate material value.
-        Returns (material_value, has_immediate_upgrade)"""
+        """Check child upgrades and calculate material value."""
         material = 0
         children = get_children(item.name)
         
