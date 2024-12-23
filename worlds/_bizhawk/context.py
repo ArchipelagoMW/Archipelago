@@ -8,6 +8,8 @@ import enum
 import subprocess
 from typing import Any, Dict, Optional
 
+import urllib
+
 from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, logger, gui_enabled
 import Patch
 import Utils
@@ -244,6 +246,15 @@ def launch(*launch_args) -> None:
         parser = get_base_parser()
         parser.add_argument("patch_file", default="", type=str, nargs="?", help="Path to an Archipelago patch file")
         args = parser.parse_args(launch_args)
+
+        if args.patch_file.startswith("archipelago://"):
+            url = urllib.parse.urlparse(args.patch_file)
+            args.connect = url.netloc
+            if url.username:
+                args.name = urllib.parse.unquote(url.username)
+            if url.password:
+                args.password = urllib.parse.unquote(url.password)
+            args.patch_file = ""
 
         ctx = BizHawkClientContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
