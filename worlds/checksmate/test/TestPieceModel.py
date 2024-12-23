@@ -1,21 +1,10 @@
-import unittest
+from .CMMockTestCase import CMMockTestCase
 from ..PieceModel import PieceModel, PieceLimitCascade
 from ..Items import progression_items
 
-class TestPieceModel(unittest.TestCase):
+class TestPieceModel(CMMockTestCase):
     def setUp(self):
-        # Create minimal mock world with just what PieceModel needs
-        class MockWorld:
-            def __init__(self):
-                self.player = 1
-                self.options = type('Options', (), {
-                    'minor_piece_limit_by_type': 2,
-                    'accessibility': type('Accessibility', (), {'value': 0, 'option_minimal': 0})
-                })()
-                self.piece_types_by_army = {0: {"Progressive Minor Piece": 2}}
-                self.armies = {1: [0]}
-
-        self.world = MockWorld()
+        super().setUp()
         self.piece_model = PieceModel(self.world)
         self.piece_model.items_used = {self.world.player: {}}
 

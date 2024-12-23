@@ -1,18 +1,12 @@
-import unittest
+from .CMMockTestCase import CMMockTestCase
 from ..MaterialModel import MaterialModel
 from ..Items import progression_items
+from ..Options import (FairyChessArmy, FairyChessPieces, FairyChessPawns, 
+                      Difficulty, FairyChessPiecesConfigure)
 
-class TestMaterialModel(unittest.TestCase):
+class TestMaterialModel(CMMockTestCase):
     def setUp(self):
-        # Create minimal mock world with just what MaterialModel needs
-        class MockWorld:
-            def __init__(self):
-                self.player = 1
-                self.options = type('Options', (), {
-                    'accessibility': type('Accessibility', (), {'value': 0, 'option_minimal': 0})
-                })()
-
-        self.world = MockWorld()
+        super().setUp()
         self.material_model = MaterialModel(self.world)
         self.material_model.items_used = {self.world.player: {}}
 
@@ -43,7 +37,7 @@ class TestMaterialModel(unittest.TestCase):
         min_mat_super, max_mat_super = self.material_model.calculate_material_requirements(super_sized=True)
         
         self.assertGreater(min_mat_super, min_mat)
-        self.assertGreater(max_mat_super, max_mat) 
+        self.assertGreater(max_mat_super, max_mat)
 
     def test_unupgraded_majors_in_pool(self):
         """Test counting of unupgraded major pieces"""

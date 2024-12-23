@@ -18,9 +18,14 @@ class CMItemPool:
         self.world = world
         self.items_used: Dict[int, Dict[str, int]] = {}
         self.items_remaining: Dict[int, Dict[str, int]] = {}
-        self.piece_model = PieceModel(world)
-        # Share the items_used dictionary with the piece model
-        self.piece_model.items_used = self.items_used
+        self._piece_model = None
+
+    @property
+    def piece_model(self) -> PieceModel:
+        """Lazy initialization of piece model to avoid circular dependencies."""
+        if self._piece_model is None:
+            self._piece_model = PieceModel(self.world)
+        return self._piece_model
 
     def initialize_item_tracking(self) -> None:
         """Initialize the item tracking dictionaries."""
@@ -164,7 +169,7 @@ class CMItemPool:
                 my_filler_items.remove(chosen_item)  # Remove items we can't use
                 continue
                 
-            if has_pocket or self.world.can_add_more(chosen_item):
+            if has_pocket or self.piece_model.can_add_more(chosen_item):
                 self.consume_item(chosen_item, locked_items)
                 try_item = self.world.create_item(chosen_item)
                 items.append(try_item)

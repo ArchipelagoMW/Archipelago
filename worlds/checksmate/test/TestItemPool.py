@@ -1,48 +1,14 @@
-import unittest
-import random
+from .CMMockTestCase import CMMockTestCase
 from ..ItemPool import CMItemPool
 from ..Items import progression_items
 from ..Options import EnableTactics
 
-class TestItemPool(unittest.TestCase):
+class TestItemPool(CMMockTestCase):
     def setUp(self):
-        # Create minimal mock world with just what ItemPool needs
-        class MockWorld:
-            def __init__(self):
-                self.player = 1
-                self.random = random.Random(0)  # Add deterministic random for tests
-                self.options = type('Options', (), {
-                    'accessibility': type('Accessibility', (), {'value': 0, 'option_minimal': 0}),
-                    'max_kings': type('MaxKings', (), {'value': 3})(),
-                    'fairy_kings': type('FairyKings', (), {'value': 2})(),
-                    'max_engine_penalties': type('MaxEnginePenalties', (), {'value': 5})(),
-                    'max_pocket': type('MaxPocket', (), {'value': 12})(),
-                    'pocket_limit_by_pocket': type('PocketLimit', (), {'value': 3})(),
-                    'enable_tactics': EnableTactics(EnableTactics.option_all),
-                    'goal': type('Goal', (), {
-                        'value': 0,
-                        'option_single': 0,
-                        'option_progressive': 1
-                    })()
-                })()
-                self.piece_types_by_army = {0: {"Progressive Minor Piece": 2}}
-                self.armies = {1: [0]}
-
-            def create_item(self, name):
-                return type('CMItem', (), {'name': name})()
-
-            def has_prereqs(self, item_name):
-                # Mock implementation
-                return True
-
-            def can_add_more(self, item_name):
-                # Mock implementation
-                return True
-
-        self.world = MockWorld()
+        super().setUp()
         self.item_pool = CMItemPool(self.world)
         self.item_pool.initialize_item_tracking()
-
+        
     def test_material_requirements(self):
         """Test that material requirements are calculated correctly for both board sizes"""
         min_mat, max_mat = self.item_pool.calculate_material_requirements(super_sized=False)
