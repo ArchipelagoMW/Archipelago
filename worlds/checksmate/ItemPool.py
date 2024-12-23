@@ -452,11 +452,32 @@ class CMItemPool:
                          max_material: float, items: List[Item], my_progression_items: List[str],
                          locked_items: Dict[str, int]) -> bool:
         """Determine if an item should be removed from the pool based on material limits and accessibility."""
-        # Always remove if we've hit quantity limits or piece type limits
-        # TODO: This can check if we have more locked and current majors than we have necessary rooks
+        # Handle Progressive Major To Queen removal
         if chosen_item == "Progressive Major To Queen" and "Progressive Major Piece" not in my_progression_items:
-            return True
+            # Count total majors and queens across both items and locked items
+            total_majors = (
+                len([item for item in items if item.name == "Progressive Major Piece"]) +
+                locked_items.get("Progressive Major Piece", 0)
+            )
+            total_queens = (
+                len([item for item in items if item.name == "Progressive Major To Queen"]) +
+                locked_items.get("Progressive Major To Queen", 0)
+            )
+            
+            # In minimal accessibility, remove if we have equal or more queens than majors
+            if self.world.options.accessibility.value == self.world.options.accessibility.option_minimal:
+                if total_queens >= total_majors:
+                    return True
+            # In full accessibility, remove if we have 2 more majors than queens
+            else:
+                if total_queens + 2 >= total_majors:
+                    return True
+            
+            # Also remove if we don't have any majors yet and aren't guaranteed any
+            if total_majors == 0:
+                return True
 
+        # Always remove if we've hit quantity limits or piece type limits
         if chosen_item in self.items_used[self.world.player] and \
             self.items_used[self.world.player][chosen_item] >= item_table[chosen_item].quantity:
             return True
