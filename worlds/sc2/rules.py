@@ -1721,10 +1721,10 @@ class SC2Logic:
                                                                 or state.has(item_names.FIREBAT, self.player)
                                                         )
                                                         and self.terran_bio_heal(state)
+                                                        or state.has_all({item_names.VIKING, item_names.VIKING_SHREDDER_ROUNDS},
+                                                                         self.player)
+                                                        or state.has(item_names.BANSHEE, self.player)
                                                 )
-                                                or state.has_all({item_names.VIKING, item_names.VIKING_SHREDDER_ROUNDS},
-                                                                 self.player)
-                                                or state.has(item_names.BANSHEE, self.player)
                                         )
                                 )
                         )
