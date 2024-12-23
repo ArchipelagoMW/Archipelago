@@ -2,7 +2,8 @@ MAXIMUM_EASTER_EGG_CHECKS = 50
 
 EASTER_EGGS = {
     "Tutorial": 1,
-    "Outside Tutorial": 3,
+    "Outside Tutorial": 2,
+    "Outside Tutorial Path To Outpost": 1,
     "Orchard Beyond First Gate": 1,
     "Orchard End": 1,
     "Inside Glass Factory": 2,
