@@ -38,14 +38,14 @@ class CMMockTestCase(unittest.TestCase):
                     'fairy_chess_pawns': FairyChessPawns(FairyChessPawns.option_vanilla),
                     'difficulty': Difficulty(Difficulty.option_daily),
                     'minor_piece_limit_by_type': type('MinorPieceLimitByType', (), {'value': 2})(),
-                    'major_piece_limit_by_type': type('MajorPieceLimitByType', (), {'value': 4})(),
-                    'queen_piece_limit_by_type': type('QueenPieceLimitByType', (), {'value': 2})(),
+                    'major_piece_limit_by_type': type('MajorPieceLimitByType', (), {'value': 2})(),
+                    'queen_piece_limit_by_type': type('QueenPieceLimitByType', (), {'value': 1})(),
                     'queen_piece_limit': type('QueenPieceLimit', (), {'value': 2})()
                 })()
                 self.piece_types_by_army = {0: {
                     "Progressive Minor Piece": 2,
-                    "Progressive Major Piece": 4,
-                    "Progressive Major To Queen": 2,
+                    "Progressive Major Piece": 2,
+                    "Progressive Major To Queen": 1,
                     "Progressive Queen": 2
                 }}
                 self.armies = {1: [0]}
