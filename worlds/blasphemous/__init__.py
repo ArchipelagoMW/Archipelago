@@ -203,7 +203,7 @@ class BlasphemousWorld(World):
 
         if self.options.thorn_shuffle == "local_only":
             self.options.local_items.value.add("Thorn Upgrade")
-        
+
 
     def place_items_from_set(self, location_set: Set[str], name: str):
         for loc in location_set:
