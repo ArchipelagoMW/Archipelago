@@ -33,7 +33,7 @@ def roman(num: int) -> str:
     return rom
 
 
-location_description = {  # TODO give at least some locations a description
+location_description = {
     "Level 1": "Levels are completed by delivering certain shapes in certain amounts to the hub. The required shape "
                "and amount for the current level are always displayed on the hub.",
     "Level 1 Additional": "In the vanilla game, levels 1 and 20 have unlock more than one building.",
@@ -69,51 +69,82 @@ location_description = {  # TODO give at least some locations a description
     f"Painting Upgrade Tier {roman(max_levels_and_upgrades)}": "This is the highest possible upgrade in the painters "
                                                                "and color mixer category, if your goal is set to "
                                                                "\"even_fasterer\".",
-    "My eyes no longer hurt": "TODO",
-    "Painter": "TODO",
-    "Cutter": "TODO",
-    "Rotater": "TODO",
-    "Wait, they stack?": "TODO",
-    "Wires": "TODO",
-    "Storage": "TODO",
-    "Freedom": "TODO",
-    "The logo!": "TODO",
-    "To the moon": "TODO",
-    "It's piling up": "TODO",
-    "I'll use it later": "TODO",
-    "Efficiency 1": "TODO",
-    "Preparing to launch": "TODO",
-    "SpaceY": "TODO",
-    "Stack overflow": "TODO",
-    "It's a mess": "TODO",
-    "Faster": "TODO",
-    "Even faster": "TODO",
-    "Get rid of them": "TODO",
-    "It's been a long time": "TODO",
-    "Addicted": "TODO",
-    "Can't stop": "TODO",
-    "Is this the end?": "TODO",
-    "Getting into it": "TODO",
-    "Now it's easy": "TODO",
-    "Computer Guy": "TODO",
-    "Speedrun Master": "TODO",
-    "Speedrun Novice": "TODO",
-    "Not an idle game": "TODO",
-    "Efficiency 2": "TODO",
-    "Branding specialist 1": "TODO",
-    "Branding specialist 2": "TODO",
-    "King of Inefficiency": "TODO",
-    "It's so slow": "TODO",
-    "MAM (Make Anything Machine)": "TODO",
-    "Perfectionist": "TODO",
-    "The next dimension": "TODO",
-    "Oops": "TODO",
-    "Copy-Pasta": "TODO",
-    "I've seen that before ...": "TODO",
-    "Memories from the past": "TODO",
-    "I need trains": "TODO",
-    "A bit early?": "TODO",
-    "GPS": "TODO"
+    "My eyes no longer hurt": "This is an achievement, that is unlocked by activating dark mode.",
+    "Painter": "This is an achievement, that is unlocked by painting a shape using the painter or double painter.",
+    "Cutter": "This is an achievement, that is unlocked by cutting a shape in half using the cutter.",
+    "Rotater": "This is an achievement, that is unlocked by rotating a shape clock wise.",
+    "Wait, they stack?": "This is an achievement, that is unlocked by stacking two shapes on top of each other.",
+    "Wires": "This is an achievement, that is unlocked by completing level 20.",
+    "Storage": "This is an achievement, that is unlocked by storing a shape in a storage.",
+    "Freedom": "This is an achievement, that is unlocked by completing level 20. It is only included if the goal is "
+               "**not** set to vanilla.",
+    "The logo!": "This is an achievement, that is unlocked by producing the logo of the game.",
+    "To the moon": "This is an achievement, that is unlocked by producing the rocket shape.",
+    "It's piling up": "This is an achievement, that is unlocked by having 100.000 blueprint shapes stored in the hub.",
+    "I'll use it later": "This is an achievement, that is unlocked by having one million blueprint shapes stored in "
+                         "the hub.",
+    "Efficiency 1": "This is an achievement, that is unlocked by delivering 25 blueprint shapes per second to the hub.",
+    "Preparing to launch": "This is an achievement, that is unlocked by delivering 10 rocket shapes per second to the "
+                           "hub.",
+    "SpaceY": "This is an achievement, that is unlocked by 20 rocket shapes per second to the hub.",
+    "Stack overflow": "This is an achievement, that is unlocked by stacking 4 layers on top of each other.",
+    "It's a mess": "This is an achievement, that is unlocked by having 100 different shapes stored in the hub.",
+    "Faster": "This is an achievement, that is unlocked by upgrading everything to at least tier V.",
+    "Even faster": "This is an achievement, that is unlocked by upgrading everything to at least tier VIII.",
+    "Get rid of them": "This is an achievement, that is unlocked by transporting 1000 shapes into a trash can.",
+    "It's been a long time": "This is an achievement, that is unlocked by playing your save file for 10 hours "
+                             "(combined playtime).",
+    "Addicted": "This is an achievement, that is unlocked by playing your save file for 20 hours (combined playtime).",
+    "Can't stop": "This is an achievement, that is unlocked by reaching level 50.",
+    "Is this the end?": "This is an achievement, that is unlocked by reaching level 100.",
+    "Getting into it": "This is an achievement, that is unlocked by playing your save file for 1 hour (combined "
+                       "playtime).",
+    "Now it's easy": "This is an achievement, that is unlocked by placing a blueprint.",
+    "Computer Guy": "This is an achievement, that is unlocked by placing 5000 wires.",
+    "Speedrun Master": "This is an achievement, that is unlocked by completing level 12 in under 30 Minutes. This "
+                       "location is excluded by default, as it can become inaccessible in a save file after that time.",
+    "Speedrun Novice": "This is an achievement, that is unlocked by completing level 12 in under 60 Minutes. This "
+                       "location is excluded by default, as it can become inaccessible in a save file after that time.",
+    "Not an idle game": "This is an achievement, that is unlocked by completing level 12 in under 120 Minutes. This "
+                       "location is excluded by default, as it can become inaccessible in a save file after that time.",
+    "Efficiency 2": "This is an achievement, that is unlocked by delivering 50 blueprint shapes per second to the hub.",
+    "Branding specialist 1": "This is an achievement, that is unlocked by delivering 25 logo shapes per second to the "
+                             "hub.",
+    "Branding specialist 2": "This is an achievement, that is unlocked by delivering 50 logo shapes per second to the "
+                             "hub.",
+    "King of Inefficiency": "This is an achievement, that is unlocked by **not** placing a counter clock wise rotator "
+                            "until level 14. This location is excluded by default, as it can become inaccessible in a "
+                            "save file after placing that building.",
+    "It's so slow": "This is an achievement, that is unlocked by completing level 12 **without** buying any belt "
+                    "upgrade. This location is excluded by default, as it can become inaccessible in a save file after "
+                    "buying that upgrade.",
+    "MAM (Make Anything Machine)": "This is an achievement, that is unlocked by completing any level after level 26 "
+                                   "**without** modifying your factory. It is recommended to build a Make Anything "
+                                   "Machine.",
+    "Perfectionist": "This is an achievement, that is unlocked by destroying more than 1000 buildings at once.",
+    "The next dimension": "This is an achievement, that is unlocked by opening the wires layer.",
+    "Oops": "This is an achievement, that is unlocked by delivering a shape, that neither a level requirement nor an "
+            "upgrade requirement.",
+    "Copy-Pasta": "This is an achievement, that is unlocked by placing a blueprint with at least 1000 buildings.",
+    "I've seen that before ...": "This is an achievement, that is unlocked by producing RgRyRbRr.",
+    "Memories from the past": "This is an achievement, that is unlocked by producing WrRgWrRg:CwCrCwCr:SgSgSgSg.",
+    "I need trains": "This is an achievement, that is unlocked by placing a 500 tiles long belt.",
+    "A bit early?": "This is an achievement, that is unlocked by producing the logo shape before reaching level 18. "
+                    "This location is excluded by default, as it can become inaccessible in a save file after reaching "
+                    "that level.",
+    "GPS": "This is an achievement, that is unlocked by placing 15 or more map markers.",
+    "Shapesanity 1": "Shapesanity locations can be checked by delivering a described shape to the hub, without "
+                     "requiring a certain roation, orientation, or ordering. Shapesanity 1 is always an uncolored "
+                     "circle.",
+    "Shapesanity 2": "Shapesanity locations can be checked by delivering a described shape to the hub, without "
+                     "requiring a certain roation, orientation, or ordering. Shapesanity 2 is always an uncolored "
+                     "square.",
+    "Shapesanity 3": "Shapesanity locations can be checked by delivering a described shape to the hub, without "
+                     "requiring a certain roation, orientation, or ordering. Shapesanity 3 is always an uncolored "
+                     "star.",
+    "Shapesanity 4": "Shapesanity locations can be checked by delivering a described shape to the hub, without "
+                     "requiring a certain roation, orientation, or ordering. Shapesanity 4 is always an uncolored "
+                     "windmill.",
 }
 
 shapesanity_simple: Dict[str, str] = {}
@@ -332,18 +363,20 @@ def addachievements(excludesoftlock: bool, excludelong: bool, excludeprogressive
     """Returns a dictionary with all achievement locations based on player options."""
 
     locations: Dict[str, Tuple[str, LocationProgressType]] = dict()
+    upgrade_regions = ["Main", "Upgrades with 1 Building", "Upgrades with 2 Buildings", "Upgrades with 3 Buildings",
+                       "Upgrades with 4 Buildings", "Upgrades with 5 Buildings"]
 
     def f(name: str, region: str, alias: str, progress: LocationProgressType = LocationProgressType.DEFAULT):
         locations[name] = (region, progress)
         add_alias(name, alias)
 
     f("My eyes no longer hurt", "Menu", "Activate dark mode")
-    f("Painter", "Painted Shape Achievements", "Paint a shape")
-    f("Cutter", "Cut Shape Achievements", "Cut a shape")
-    f("Rotater", "Rotated Shape Achievements", "Rotate a shape")
+    f("Painter", "Painted Shape Achievements", "Paint a shape (no Quad Painter)")
+    f("Cutter", "Cut Shape Achievements", "Cut a shape (no Quad Cutter)")
+    f("Rotater", "Rotated Shape Achievements", "Rotate a shape clock wise")
     f("Wait, they stack?", "Stacked Shape Achievements", "Stack a shape")
     f("Storage", "Stored Shape Achievements", "Store a shape in the storage")
-    f("The logo!", "All Buildings Shapes", "Produce the shapez.io logo")
+    f("The logo!", "All Buildings Shapes", "Produce the shapez logo")
     f("To the moon", "All Buildings Shapes", "Produce the rocket shape")
     f("It's piling up", "All Buildings Shapes", "100k blueprint shapes")
     f("I'll use it later", "All Buildings Shapes", "1 million blueprint shapes")
@@ -352,12 +385,11 @@ def addachievements(excludesoftlock: bool, excludelong: bool, excludeprogressive
     f("SpaceY", "All Buildings Shapes", "20 rocket shapes / second")
 
     f("Stack overflow", "Stacked Shape Achievements", "4 layers shape")
-    f("It's a mess", "Main", "100 different shapes")
-    f("Even faster", "Upgrades with 5 Buildings", "All upgrades on tier 8")
+    f("It's a mess", "Main", "100 different shapes in hub")
     f("Get rid of them", "Trashed Shape Achievements", "1000 shapes trashed")
     f("Getting into it", "Menu", "1 hour")
     f("Now it's easy", "Blueprint Achievements", "Place a blueprint")
-    f("Computer Guy", "Wiring Achievements", "Place 5,000 wires")
+    f("Computer Guy", "Wiring Achievements", "Place 5000 wires")
     f("Efficiency 2", "All Buildings Shapes", "50 blueprints shapes / second")
     f("Branding specialist 1", "All Buildings Shapes", "25 logo shapes / second")
     f("Branding specialist 2", "All Buildings Shapes", "50 logo shapes / second")
@@ -370,10 +402,16 @@ def addachievements(excludesoftlock: bool, excludelong: bool, excludeprogressive
     f("I need trains", "Main", "Have a 500 tiles belt")
     f("GPS", "Menu", "15 map markers")
     # Achievements that depend on upgrades
+    f("Even faster", "Upgrades with 5 Buildings", "All upgrades on tier VIII")
     if upgradelogictype == "linear":
-        f("Faster", "Upgrades with 3 Buildings", "All upgrades on tier 5")
+        f("Faster", "Upgrades with 3 Buildings", "All upgrades on tier V")
+    elif upgradelogictype == "category_random":
+        f("Faster", upgrade_regions[
+            max(category_random_logic_amounts["belt"], category_random_logic_amounts["miner"],
+                category_random_logic_amounts["processors"], category_random_logic_amounts["painting"])
+        ], "All upgrades on tier V")
     else:
-        f("Faster", "Upgrades with 5 Buildings", "All upgrades on tier 5")
+        f("Faster", "Upgrades with 5 Buildings", "All upgrades on tier V")
     # Achievements that depend on the level
     f("Wires", presentlocations["Level 20"][0], "Complete level 20")
     if not goal == "vanilla":

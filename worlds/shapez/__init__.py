@@ -45,7 +45,7 @@ class ShapezWeb(WebWorld):
     )
     tutorials = [setup_en, setup_de, datapackage_options]
     item_descriptions = item_descriptions
-    # location_descriptions = location_description
+    location_descriptions = location_description
 
 
 class ShapezWorld(World):
