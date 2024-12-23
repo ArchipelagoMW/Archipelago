@@ -3,7 +3,8 @@ from dataclasses import dataclass
 
 import orjson
 
-from Options import Toggle, Choice, PerGameCommonOptions, FreeText, NamedRange
+from Options import Toggle, Choice, PerGameCommonOptions, FreeText, NamedRange, Range
+from .common.options import FloatRangeText
 
 datapackage_options = orjson.loads(pkgutil.get_data(__name__, "data/options.json"))
 max_levels_and_upgrades = datapackage_options["max_levels_and_upgrades"]
@@ -45,11 +46,10 @@ class GoalAmount(NamedRange):
         "minimum_even_fasterer": 9,
         "recommended_even_fasterer": 16,
         "long_play_even_fasterer": 35,
-        "maximum": max_levels_and_upgrades,
     }
 
 
-class RequiredShapesMultiplier(NamedRange):
+class RequiredShapesMultiplier(Range):
     """Multiplies the amount of required shapes for levels and upgrades by value/10.
 
     For level 1, the amount of shapes ranges from 3 to 300.
@@ -60,11 +60,6 @@ class RequiredShapesMultiplier(NamedRange):
     range_start = 1
     range_end = 100
     default = 10
-    special_range_names = {
-        "minimum": 1,
-        "default": 10,
-        "maximum": 100,
-    }
 
 
 class AllowFloatingLayers(Toggle):
@@ -167,26 +162,16 @@ class ThroughputLevelsRatio(NamedRange):
     }
 
 
-class ComplexityGrowthGradient(FreeText):
+class ComplexityGrowthGradient(FloatRangeText):
     """If level requirements are randomized, this determines how fast complexity will grow each level. In other words:
-    The higher you set this value, the more difficult lategame shapes will be. Allowed values are floating numbers
-    ranging from 0.0 to 10.0."""
+    The higher you set this value, the more difficult lategame shapes will be.
+
+    Allowed values are floating numbers ranging from 0.0 to 10.0."""
     display_name = "Complexity growth gradient"
     rich_text_doc = True
+    range_start = 0.0
+    range_end = 10.0
     default = "0.5"
-
-    def __init__(self, value: str):
-        super().__init__(value)
-        try:
-            self.float_value = float(value)
-        except ValueError:
-            raise Exception(f"complexity_growth_gradient expected a python floating number, but got {value}")
-        except OverflowError:
-            raise Exception(f"{value} for complexity_growth_gradient is outside the range of a python floating number")
-        if self.float_value < 0.0:
-            raise Exception(f"{value} is lower than minimum 0.0 for option {self.__class__.__name__}")
-        if self.float_value > 10.0:
-            raise Exception(f"{value} is higher than maximum 10.0 for option {self.__class__.__name__}")
 
 
 class SameLateUpgradeRequirements(Toggle):
@@ -250,18 +235,13 @@ class ExcludeProgressionUnreasonable(Toggle):
     default = True
 
 
-class ShapesanityAmount(NamedRange):
+class ShapesanityAmount(Range):
     """Amount of single-layer shapes that will be included as locations."""
     display_name = "Shapesanity amount"
     rich_text_doc = True
     range_start = 4
     range_end = max_shapesanity
     default = 50
-    special_range_names = {
-        "minimum": 4,
-        "default": 50,
-        "maximum": max_shapesanity,
-    }
 
 
 class TrapsProbability(NamedRange):

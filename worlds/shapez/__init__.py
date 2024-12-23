@@ -339,7 +339,7 @@ class ShapezWorld(World):
             "randomize_level_logic": self.level_logic_type,
             "randomize_upgrade_logic": self.upgrade_logic_type,
             "throughput_levels_ratio": self.options.throughput_levels_ratio.value,
-            "complexity_growth_gradient": self.options.complexity_growth_gradient.float_value,
+            "complexity_growth_gradient": self.options.complexity_growth_gradient.value,
             "same_late_upgrade_requirements": bool(self.options.same_late_upgrade_requirements)
         }
 
