@@ -25,6 +25,7 @@ class CMItemPool:
         """Lazy initialization of piece model to avoid circular dependencies."""
         if self._piece_model is None:
             self._piece_model = PieceModel(self.world)
+            self._piece_model.items_used = self.items_used
         return self._piece_model
 
     def initialize_item_tracking(self) -> None:
