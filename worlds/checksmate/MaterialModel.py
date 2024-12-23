@@ -37,6 +37,9 @@ class MaterialModel:
             min_material *= endgame_multiplier
             max_material *= endgame_multiplier
             
+        # We already handle 50 material due to Play as White being forced into the item pool
+        min_material -= 50
+        max_material -= 50
         return min_material, max_material
 
     def unupgraded_majors_in_pool(self, items: List[CMItem], locked_items: Dict[str, int]) -> int:
