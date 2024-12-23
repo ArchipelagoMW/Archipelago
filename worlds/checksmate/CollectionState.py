@@ -7,8 +7,22 @@ import logging
 
 class CMCollectionState:
     """Handles the state management for ChecksMate while items are being placed in locations, including
-    collecting and removing items, and tracking material values. This work is after items are created."""
+    collecting and removing items, and tracking material values. This work is after items are created.
+    
+    Pretty much the entire reason this exists is to handle the items:
+    - Progressive Major Piece
+    - Progressive Major To Queen
 
+    Major To Queen is a "child" of the Major Piece, which means it only has a game effect if a Major Piece
+    is collected and can be upgraded. This means they need to pair off, and if we can't find a pair, the upgrade
+    is not applied. However, a Major Piece is always counted.
+    
+    This means when we add a Major Piece, we need to check if there is a Major To Queen that can be upgraded, and count it too.
+    Also, when we remove a Major Piece, we need to check if there is a Major To Queen that can be downgraded, and count it too.
+    Finally, when we add or remove a Major To Queen, we need to check if there is a Major Piece, otherwise the new upgrade
+    should have a material value of 0 - until we add that Major Piece, which will be worth more.
+    """
+    
     def __init__(self, world):
         self.world = world
 
