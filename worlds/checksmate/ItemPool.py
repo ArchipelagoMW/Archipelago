@@ -10,6 +10,7 @@ from .Locations import location_table, Tactic, highest_chessmen_requirement_smal
 from .Rules import determine_min_material, determine_max_material
 from .PieceModel import PieceModel, PieceLimitCascade
 from .MaterialModel import MaterialModel
+from .ItemRemoval import ItemRemoval
 
 
 class CMItemPool:
@@ -21,6 +22,7 @@ class CMItemPool:
         self.items_remaining: Dict[int, Dict[str, int]] = {}
         self._piece_model = None
         self._material_model = None
+        self._removal = None
 
     @property
     def piece_model(self) -> PieceModel:
@@ -37,7 +39,14 @@ class CMItemPool:
             self._material_model = MaterialModel(self.world)
             self._material_model.items_used = self.items_used
         return self._material_model
-    
+
+    @property
+    def removal_rules(self) -> ItemRemoval:
+        """Lazy initialization of removal rules to avoid circular dependencies."""
+        if self._removal is None:
+            self._removal = ItemRemoval(self.world, self.piece_model)
+        return self._removal
+
     def create_items(self) -> None:
         super_sized = self.world.options.goal.value != self.world.options.goal.option_single
         self.initialize_item_tracking()
@@ -451,78 +460,10 @@ class CMItemPool:
     def should_remove_item(self, chosen_item: str, material: int, min_material: float,
                          max_material: float, items: List[Item], my_progression_items: List[str],
                          locked_items: Dict[str, int]) -> bool:
-        """Determine if an item should be removed from the pool based on material limits and accessibility."""
-        # Handle Progressive Major To Queen removal
-        if chosen_item == "Progressive Major To Queen" and "Progressive Major Piece" not in my_progression_items:
-            # Count total majors and queens across both items and locked items
-            total_majors = (
-                len([item for item in items if item.name == "Progressive Major Piece"]) +
-                locked_items.get("Progressive Major Piece", 0)
-            )
-            total_queens = (
-                len([item for item in items if item.name == "Progressive Major To Queen"]) +
-                locked_items.get("Progressive Major To Queen", 0)
-            )
-            
-            # In minimal accessibility, remove if we have equal or more queens than majors
-            if self.world.options.accessibility.value == self.world.options.accessibility.option_minimal:
-                if total_queens >= total_majors:
-                    return True
-            # In full accessibility, remove if we have 2 more majors than queens
-            else:
-                if total_queens + 2 >= total_majors:
-                    return True
-            
-            # Also remove if we don't have any majors yet and aren't guaranteed any
-            if total_majors == 0:
-                return True
-
-        # Always remove if we've hit quantity limits or piece type limits
-        if chosen_item in self.items_used[self.world.player] and \
-            self.items_used[self.world.player][chosen_item] >= item_table[chosen_item].quantity:
-            return True
-
-        if not self.piece_model.under_piece_limit(chosen_item, PieceLimitCascade.POTENTIAL_CHILDREN, my_progression_items):
-            return True
-
-        # TODO: The bottom half of this function checks whether victory is reachable. The top half is about limits.
-        # TODO: This can be split into two functions.
-
-        # Calculate total material including locked items and the chosen item
-        chosen_material = self.lockable_material_value(chosen_item, items, locked_items)
-        remaining_material = self.calculate_remaining_material(locked_items)
-        total_material = material + chosen_material + remaining_material
-
-        # For minimal accessibility, we only care about material
-        if self.world.options.accessibility.value == self.world.options.accessibility.option_minimal:
-            return total_material > max_material
-
-        # For full accessibility, check basic chessman requirements and whether you can castle (needs 2 rooks)
-        chessmen_requirement = highest_chessmen_requirement_small if \
-            self.world.options.goal.value == self.world.options.goal.option_single else \
-            highest_chessmen_requirement
-        necessary_chessmen = (chessmen_requirement - 
-                            self.chessmen_count(items, self.world.options.pocket_limit_by_pocket.value))
-        
-        # Adjust necessary chessmen based on the current item
-        if chosen_item in item_name_groups["Chessmen"]:
-            necessary_chessmen -= 1
-        elif chosen_item == "Progressive Pocket":
-            pocket_limit = self.world.options.pocket_limit_by_pocket.value
-            next_pocket = locked_items.get("Progressive Pocket", 0) + \
-                len([item for item in items if item.name == "Progressive Pocket"]) + \
-                1
-            if next_pocket % pocket_limit == 1:
-                necessary_chessmen -= 1
-
-        # If we still need chessmen, check if we can satisfy both material and chessmen requirements
-        if necessary_chessmen > 0:
-            minimum_possible_material = total_material + (
-                item_table["Progressive Pawn"].material * necessary_chessmen)
-            return minimum_possible_material > max_material
-
-        # If we don't need chessmen, we still need to check material requirements
-        return total_material > max_material
+        """Delegate item removal decision to ItemRemovalRules."""
+        return self.removal_rules.should_remove_item(
+            chosen_item, material, min_material, max_material,
+            items, my_progression_items, locked_items)
 
     def chessmen_count(self, items: List[CMItem], pocket_limit: int) -> int:
         """Count the number of chessmen in the item pool."""
