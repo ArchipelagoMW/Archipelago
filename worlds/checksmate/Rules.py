@@ -6,6 +6,7 @@ from .Items import progression_items
 from worlds.generic.Rules import set_rule, add_rule
 from .Options import CMOptions
 from .Locations import location_table, Tactic
+import logging
 
 
 def has_french_move(state: CollectionState, player: int) -> bool:
@@ -72,9 +73,10 @@ def determine_relaxation(opts: CMOptions) -> int:
 
 def meets_material_expectations(state: CollectionState,
                                 material: int, player: int, difficulty: float, absolute_relaxation: int) -> bool:
-    # TODO: handle other goals
     target = (material * difficulty) + (absolute_relaxation if material > 90 else 0)
-    return state.prog_items[player]["Material"] >= target
+    current_material = state.prog_items[player]["Material"]
+    logging.debug(f"Checking material: current={current_material}, target={target}")
+    return current_material >= target
 
 
 def meets_chessmen_expectations(state: CollectionState,
@@ -94,6 +96,12 @@ def set_rules(world: World):
     always_super_sized = opts.goal.value == opts.goal.option_super
 
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
+
+    # Add debug logging
+    logging.debug(f"Setting rules for player {world.player}")
+    logging.debug(f"items_used: {world.items_used}")
+    logging.debug(f"Difficulty: {difficulty}")
+    logging.debug(f"Super sized: {super_sized}")
 
     # Initialize items_used if needed
     if world.player not in world.items_used:

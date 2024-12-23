@@ -73,8 +73,8 @@ class CMWorld(World):
     def __init__(self, multiworld: MultiWorld, player: int) -> None:
         super(CMWorld, self).__init__(multiworld, player)
         self.locked_locations = []
-        self.items_used = {player: {}}
-        self.items_remaining = {player: {}}
+        self.items_used = {}
+        self.items_remaining = {}
         self._item_pool = CMItemPool(self)
         self._item_pool.items_used = self.items_used
         self._piece_model = PieceModel(self)
@@ -148,17 +148,20 @@ class CMWorld(World):
 
         # Handle excluded items and starter items
         excluded_items = self._item_pool.get_excluded_items()
-        starter_items = self._item_pool.handle_excluded_items(excluded_items)
+        starter_items = self._item_pool.assign_starter_items(excluded_items, self.locked_locations)
+        self._item_pool.handle_excluded_items(excluded_items)
         user_location_count = len(starter_items)
 
         # Calculate material requirements
         min_material, max_material = self._material_model.calculate_material_requirements(super_sized)
+        logging.debug(f"Material requirements: min={min_material}, max={max_material}")
 
         # Handle option limits
         self._item_pool.handle_option_limits()
 
         # Calculate max items
         max_items = self._item_pool.get_max_items(super_sized)
+        logging.debug(f"Max items: {max_items}")
 
         # Create progression items
         items = self._item_pool.create_progression_items(
@@ -167,6 +170,7 @@ class CMWorld(World):
             max_material=max_material,
             user_location_count=user_location_count
         )
+        logging.debug(f"Created {len(items)} progression items")
 
         # Create useful items
         items.extend(self._item_pool.create_useful_items(

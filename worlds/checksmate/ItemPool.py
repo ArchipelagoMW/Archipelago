@@ -338,3 +338,45 @@ class CMItemPool:
         # excluded_items.update(excluded_items_option[player].value)
 
         return excluded_items
+
+    def assign_starter_items(self,
+                             excluded_items: Dict[str, int],
+                             locked_locations: List[str]) -> List[Item]:
+        """Assign starter items based on game options."""
+        user_items = []
+        
+        # Handle ordered progression
+        if self.world.options.goal.value == self.world.options.goal.option_ordered_progressive:
+            item = self.world.create_item("Super-Size Me")
+            self.world.multiworld.get_location("Checkmate Minima", self.world.player).place_locked_item(item)
+            locked_locations.append("Checkmate Minima")
+            user_items.append(item)
+
+        # Handle early material option
+        early_material_option = self.world.options.early_material.value
+        if early_material_option > 0:
+            early_units = []
+            if early_material_option == 1 or early_material_option > 4:
+                early_units.append("Progressive Pawn")
+            if early_material_option == 2 or early_material_option > 3:
+                early_units.append("Progressive Minor Piece")
+            if early_material_option > 2:
+                early_units.append("Progressive Major Piece")
+
+            # Filter out non-local and excluded items
+            non_local_items = self.world.options.non_local_items.value
+            local_basic_unit = sorted(item for item in early_units if
+                                    item not in non_local_items and (
+                                        item not in excluded_items or
+                                        excluded_items[item] < item_table[item].quantity))
+            
+            if not local_basic_unit:
+                raise Exception("At least one early chessman must be local")
+
+            # Place early material item
+            item = self.world.create_item(self.world.random.choice(local_basic_unit))
+            self.world.multiworld.get_location("King to E2/E7 Early", self.world.player).place_locked_item(item)
+            locked_locations.append("King to E2/E7 Early")
+            user_items.append(item)
+
+        return user_items
