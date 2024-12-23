@@ -51,46 +51,28 @@ class CMCollectionState:
 
     def remove(self, state: CollectionState, item: Item) -> int:
         """Calculate the material value lost from removing this item."""
-        # Get current count before removing item
-        item_count = state.prog_items[self.world.player].get(item.name, 0)
-        if item_count <= 0:
-            return 0
-            
         material = 0
-        has_immediate_downgrade = False
-        
-        # First check for downgrades to existing pieces
+        item_count = state.prog_items[self.world.player][item.name]
         children = get_children(item.name)
         for child in children:
             if item_table[child].material == 0:
                 continue
             # TODO: when a child could have multiple parents, check that this is also the least parent
-            if item_count < state.prog_items[self.world.player].get(child, 0):
-                # we had an upgrade, so remove that upgrade from the material count
+            if item_count <= state.prog_items[self.world.player][child]:
                 material -= item_table[child].material
-                has_immediate_downgrade = True
-                logging.debug("Removing child " + child + " having count: " + str(state.prog_items[self.world.player].get(child, 0)))
+                logging.debug("Removing child " + child + " having count: " + str(state.prog_items[self.world.player][child]))
             else:
-                # not immediately downgraded, but maybe later
-                logging.debug("Removed item " + item.name + " had insufficient children " + child + " to downgrade it")
-
-        # Then check if this is an upgrade that was applied to existing pieces
+                logging.debug("Removed item " + item.name + " had insufficient children " + child)
         parents = get_parents(item.name)
-        if len(parents) > 0 and item_table[item.name].material > 0:
-            # this is an upgrade, so we can only remove it if it was applied to a parent
+        if len(parents) == 0 or item_table[item.name].material == 0:
+            material -= item_table[item.name].material
+        else:
             fewest_parents = min([state.prog_items[self.world.player].get(parent[0], 0) for parent in parents])
-            # TODO: when a parent could have multiple children, check that this is also the least child
-            if item_count < fewest_parents * parents[0][1]:
-                # found a piece we could downgrade, so remove the upgrade
+            if item_count <= fewest_parents:
                 material -= item_table[item.name].material
                 logging.debug("Item " + item.name + " had sufficient parents " + str(fewest_parents) + " to be removed")
             else:
-                # not upgrading anything, but maybe later
                 logging.debug("Removed item " + item.name + " had insufficient parents " + str(fewest_parents))
-
-        # Finally, remove base material value only if this piece isn't being immediately downgraded
-        if (len(get_parents(item.name)) == 0 or item_table[item.name].material == 0) and not has_immediate_downgrade:
-            material -= item_table[item.name].material
 
         logging.debug("Removing " + item.name + " with material value " + str(material))
         return material

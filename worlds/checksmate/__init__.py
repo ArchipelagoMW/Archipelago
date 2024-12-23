@@ -201,6 +201,7 @@ class CMWorld(World):
         change = super().remove(state, item)
         if change:
             # we actually removed the item, so we must lose the material
+            # material is negative from CMCollectionState.remove(), so adding it will subtract from total
             state.prog_items[self.player]["Material"] += material
 
         return change
