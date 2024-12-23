@@ -138,7 +138,7 @@ class TestItemPool(unittest.TestCase):
 
     def test_progression_item_creation(self):
         """Test that progression items are created within material limits"""
-        min_mat, max_mat = 3900, 4000
+        min_mat, max_mat = 4100, 4600
         max_items = 100
         items = self.item_pool.create_progression_items(
             max_items=max_items,

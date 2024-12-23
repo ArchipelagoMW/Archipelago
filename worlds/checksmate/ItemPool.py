@@ -86,11 +86,14 @@ class CMItemPool:
                material < max_material and
                len(my_progression_items) > 0):
             chosen_item = self.world.random.choice(my_progression_items)
+            
+            # Check if we should remove this item from consideration (limits, material, accessibility)
             if self.should_remove_item(chosen_item, material, min_material, max_material,
                                      items, my_progression_items, locked_items):
                 my_progression_items.remove(chosen_item)
                 continue
             
+            # Check if we can add this item
             if not self.world.has_prereqs(chosen_item):
                 continue
                 
