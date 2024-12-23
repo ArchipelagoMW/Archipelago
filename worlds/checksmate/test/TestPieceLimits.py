@@ -1,7 +1,8 @@
 from copy import copy
 
+from worlds.checksmate.PieceModel import PieceLimitCascade
 from . import CMTestBase
-from .. import CMWorld, Options
+from .. import Options
 
 
 # I don't like that this generates many entire seeds just to check some global logic.
@@ -11,9 +12,9 @@ from .. import CMWorld, Options
 
 
 class PieceLimitTestBase(CMTestBase):
-    NO_CHILDREN = CMWorld.PieceLimitCascade.NO_CHILDREN
-    ACTUAL_CHILDREN = CMWorld.PieceLimitCascade.ACTUAL_CHILDREN
-    POTENTIAL_CHILDREN = CMWorld.PieceLimitCascade.POTENTIAL_CHILDREN
+    NO_CHILDREN = PieceLimitCascade.NO_CHILDREN
+    ACTUAL_CHILDREN = PieceLimitCascade.ACTUAL_CHILDREN
+    POTENTIAL_CHILDREN = PieceLimitCascade.POTENTIAL_CHILDREN
 
     def world_setup(self, *args, **kwargs) -> None:
         self.options = copy(self.options)

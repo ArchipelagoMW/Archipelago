@@ -1,5 +1,5 @@
 import unittest
-from ..item_utils import get_parents, get_children
+from ..ItemUtils import get_parents, get_children
 from ..Items import item_table
 
 

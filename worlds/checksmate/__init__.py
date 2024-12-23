@@ -73,10 +73,16 @@ class CMWorld(World):
     def __init__(self, multiworld: MultiWorld, player: int) -> None:
         super(CMWorld, self).__init__(multiworld, player)
         self.locked_locations = []
+        self.items_used = {player: {}}
+        self.items_remaining = {player: {}}
         self._item_pool = CMItemPool(self)
+        self._item_pool.items_used = self.items_used
         self._piece_model = PieceModel(self)
+        self._piece_model.items_used = self.items_used
         self._material_model = MaterialModel(self)
+        self._material_model.items_used = self.items_used
         self._collection_state = CMCollectionState(self)
+
 
     def generate_early(self) -> None:
         piece_collection = self.options.fairy_chess_pieces.value

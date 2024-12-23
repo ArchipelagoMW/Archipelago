@@ -1,7 +1,7 @@
 from copy import copy
 
 from . import CMTestBase
-from .. import determine_difficulty
+from ..Rules import determine_difficulty
 
 
 class MaterialStateTestBase(CMTestBase):

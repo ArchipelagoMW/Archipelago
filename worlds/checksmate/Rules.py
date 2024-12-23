@@ -95,6 +95,12 @@ def set_rules(world: World):
 
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
 
+    # Initialize items_used if needed
+    if world.player not in world.items_used:
+        world.items_used[world.player] = {}
+
+    total_queens = world.items_used[world.player].get("Progressive Major To Queen", 0)
+
     for name, item in location_table.items():
         if not super_sized and item.material_expectations == -1:
             continue
@@ -142,7 +148,6 @@ def set_rules(world: World):
     add_rule(world.get_location("Threaten Queen"), lambda state: has_pin(state, world.player))
     add_rule(world.get_location("Threaten King"), lambda state: has_pin(state, world.player))
     # special moves
-    total_queens = world.items_used[world.player].get("Progressive Major To Queen", 0)
     add_rule(world.get_location("O-O Castle"),
              lambda state: state.has("Progressive Major Piece", world.player, 2 + total_queens))
     add_rule(world.get_location("O-O-O Castle"),

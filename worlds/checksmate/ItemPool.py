@@ -9,6 +9,7 @@ from .Items import (CMItem, item_table, filler_items, progression_items,
 from .Locations import location_table, Tactic, highest_chessmen_requirement_small, highest_chessmen_requirement
 from .Rules import determine_min_material, determine_max_material
 from .PieceModel import PieceModel, PieceLimitCascade
+from .MaterialModel import MaterialModel
 
 
 class CMItemPool:
@@ -19,6 +20,7 @@ class CMItemPool:
         self.items_used: Dict[int, Dict[str, int]] = {}
         self.items_remaining: Dict[int, Dict[str, int]] = {}
         self._piece_model = None
+        self._material_model = None
 
     @property
     def piece_model(self) -> PieceModel:
@@ -27,6 +29,14 @@ class CMItemPool:
             self._piece_model = PieceModel(self.world)
             self._piece_model.items_used = self.items_used
         return self._piece_model
+
+    @property
+    def material_model(self) -> MaterialModel:
+        """Lazy initialization of material model to avoid circular dependencies."""
+        if self._material_model is None:
+            self._material_model = MaterialModel(self.world)
+            self._material_model.items_used = self.items_used
+        return self._material_model
 
     def initialize_item_tracking(self) -> None:
         """Initialize the item tracking dictionaries."""
@@ -141,9 +151,9 @@ class CMItemPool:
         while ((len(items) + user_location_count + sum(locked_items.values())) < max_items and
                len(my_useful_items) > 0):
             chosen_item = self.world.random.choice(my_useful_items)
-            if not self.world.has_prereqs(chosen_item):
+            if not self.piece_model.has_prereqs(chosen_item):
                 continue
-            if self.world.can_add_more(chosen_item):
+            if self.piece_model.can_add_more(chosen_item):
                 self.consume_item(chosen_item, locked_items)
                 try_item = self.world.create_item(chosen_item)
                 items.append(try_item)
@@ -166,7 +176,7 @@ class CMItemPool:
         
         while (len(items) + user_location_count + sum(locked_items.values())) < max_items and my_filler_items:
             chosen_item = self.world.random.choice(my_filler_items)
-            if not has_pocket and not self.world.has_prereqs(chosen_item):
+            if not has_pocket and not self.piece_model.has_prereqs(chosen_item):
                 my_filler_items.remove(chosen_item)  # Remove items we can't use
                 continue
                 
@@ -307,3 +317,24 @@ class CMItemPool:
         if chosen_item == "Progressive Major To Queen" and self.unupgraded_majors_in_pool(items, locked_items) <= 2:
             material += progression_items["Progressive Major Piece"].material
         return material
+
+    def get_excluded_items(self) -> Dict[str, int]:
+        """Get items that should be excluded from the item pool."""
+        excluded_items: Dict[str, int] = {}
+
+        # Handle super-sized items
+        if self.world.options.goal.value == self.world.options.goal.option_super:
+            item = self.world.create_item("Super-Size Me")
+            self.world.multiworld.push_precollected(item)
+
+        # Track precollected items
+        for item in self.world.multiworld.precollected_items[self.world.player]:
+            if item.name not in excluded_items:
+                excluded_items[item.name] = 0
+            excluded_items[item.name] += 1
+
+        # TODO: Handle excluded_items_option if needed
+        # excluded_items_option = getattr(multiworld, 'excluded_items', {player: []})
+        # excluded_items.update(excluded_items_option[player].value)
+
+        return excluded_items
