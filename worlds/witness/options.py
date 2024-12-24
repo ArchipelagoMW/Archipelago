@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 
 from schema import And, Schema
 
@@ -140,6 +141,33 @@ class ShuffleEnvironmentalPuzzles(Choice):
     option_off = 0
     option_individual = 1
     option_obelisk_sides = 2
+
+
+class EasterEggHunt(Choice):
+    """
+    Adds up to 100 Easter Eggs to the game, placed by NewSoupVi, Exempt-Medic, hatkirby, Scipio, and Rever.
+    These can be collected by simply clicking on them.
+
+    Each consecutive check will logically expect 5 Easter Eggs to be collected.
+    However, the amount that you need to collect to actually trigger the next location check differs by option choice:
+    - Easy: For every 2 Easter Eggs collected, an item is sent
+    - Normal: For every 3 Easter Eggs collected, an item is sent
+    - Hard: For every 4 Easter Eggs collected, an item is sent
+    - Very Hard: For every 5 Easter Eggs collected, an item is sent (You are expected to find every Easter Egg)
+
+    On Easy, there will still be a location check for "100 Easter Eggs Collected" (provided there aren't any unreachable eggs due to options like shuffle_postgame: false), but all checks after 40 Eggs will be excluded.
+    """
+
+    visibility = Visibility.all if datetime.now().month == 4 else Visibility.none
+
+    display_name = "Easter Egg Hunt"
+    option_off = 0
+    # Number represents the amount of eggs needed per check
+    option_easy = 2
+    option_normal = 3
+    option_hard = 4
+    option_very_hard = 5
+    default = 3 if datetime.now().month == 4 else 0
 
 
 class ShuffleDog(Choice):
@@ -504,6 +532,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     death_link_amnesty: DeathLinkAmnesty
     puzzle_randomization_seed: PuzzleRandomizationSeed
     shuffle_dog: ShuffleDog
+    easter_egg_hunt: EasterEggHunt
 
 
 witness_option_groups = [
@@ -559,5 +588,6 @@ witness_option_groups = [
     ]),
     OptionGroup("Silly Options", [
         ShuffleDog,
+        EasterEggHunt,
     ])
 ]
