@@ -30,6 +30,7 @@ from .gen.LocationData import LocationType, location_name_to_data
 from .gen.ItemNames import ItemName, item_id_by_name, name_by_item_id
 from .gen.LocationNames import LocationName, ids_by_loc_name, loc_names_by_id
 from .Names.RegionName import RegionName
+from .LocationGroups import goldensuntla_location_groups
 from .Rom import GSTLAPatchExtension, GSTLADeltaPatch, CHECKSUM_GSTLA
 from .BizClient import GSTLAClient
 
@@ -127,6 +128,7 @@ class GSTLAWorld(World):
         "Sea Gods Tear": {ItemName.Sea_Gods_Tear.value},
         "Lil Turtle": {ItemName.Lil_Turtle.value}
     }
+    location_name_groups = goldensuntla_location_groups
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
