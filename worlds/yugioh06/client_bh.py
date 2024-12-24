@@ -1,14 +1,42 @@
+import logging
 import math
 from typing import TYPE_CHECKING, List, Optional, Set
 
+from numpy.matlib import empty
+
+from MultiServer import mark_raw
 from NetUtils import ClientStatus, NetworkItem
 
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 from . import item_to_index
+from .boosterpacks_data import booster_pack_data, booster_card_id_to_name
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
+
+logger = logging.getLogger("Client")
+
+@mark_raw
+def cmd_booster_pack(self, booster_name: str = ""):
+    """Print Booster Contents"""
+    if self.ctx.game != "Yu-Gi-Oh! 2006":
+        logger.warning("This command can only be used when playing Yu-Gi-Oh! 2006.")
+        return
+    booster_name = booster_name.upper()
+    booster_found = False
+    for name in booster_pack_data.keys():
+        if name.upper() == booster_name:
+            booster_found = True
+            booster_name = name
+            break
+    if not booster_found:
+        logger.warning("Pack not found")
+        return
+    client = self.ctx.client_handler
+    assert isinstance(client, YuGiOh2006Client)
+    logger.info("Send request for " + booster_name)
+    client.print_pack = booster_name
 
 
 class YuGiOh2006Client(BizHawkClient):
@@ -18,6 +46,7 @@ class YuGiOh2006Client(BizHawkClient):
     local_checked_locations: Set[int]
     goal_flag: int
     rom_slot_name: Optional[str]
+    print_pack: str = ""
 
     def __init__(self) -> None:
         super().__init__()
@@ -49,6 +78,8 @@ class YuGiOh2006Client(BizHawkClient):
         ctx.game = self.game
         ctx.items_handling = 0b001
         ctx.want_slot_data = False
+        if "boosterpack" not in ctx.command_processor.commands:
+            ctx.command_processor.commands["boosterpack"] = cmd_booster_pack
         return True
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
@@ -142,6 +173,24 @@ class YuGiOh2006Client(BizHawkClient):
             if not ctx.finished_game and locations[18] & (1 << 5) != 0:
                 await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
 
+            # print booster contents
+            if self.print_pack != "":
+                logger.info("Printing Pack: " + self.print_pack)
+                pack_data = booster_pack_data[self.print_pack]
+                pointer = pack_data.pointer
+                raw_data = await bizhawk.read(
+                    ctx.bizhawk_ctx, [
+                        (pointer, pack_data.cards_in_set * 4, "ROM")]
+                )
+                raw_data = raw_data[0]
+                for i in range(0, pack_data.cards_in_set):
+                    cid = int.from_bytes(raw_data[i * 4: i * 4 + 2], "little")
+                    if cid in booster_card_id_to_name.keys():
+                        logger.info(str(i) + ": " + booster_card_id_to_name[cid])
+                    else:
+                        logger.info(str(i) + ": " + str(hex(cid)))
+                self.print_pack = ""
+
         except bizhawk.RequestFailedError:
             # Exit handler and return to main loop to reconnect.
             pass
@@ -157,3 +206,4 @@ def parse_items(local_items: bytearray, items: List[NetworkItem]) -> bytearray:
             bit = index % 8
             array[byte] = array[byte] | (1 << bit)
     return array
+
