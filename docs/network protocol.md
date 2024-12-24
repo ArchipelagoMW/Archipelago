@@ -341,7 +341,7 @@ This is useful in cases where an item appears in the game world, such as 'ledge 
 | Name | Type | Notes |
 | ---- | ---- | ----- |
 | locations | list\[int\] | The ids of the locations seen by the client. May contain any number of locations, even ones sent before; duplicates do not cause issues with the Archipelago server. |
-| create_as_hint | int | If non-zero, the scouted locations get created and broadcasted as a player-visible hint. <br/>If 2 only new hints are broadcast, however this does not remove them from the LocationInfo reply. |
+| create_as_hint | int | If non-zero, the scouted locations get created and broadcasted as a player-visible hint. <br/>If 2 only new hints for unfound locations are broadcast, however this does not remove them from the LocationInfo reply. |
 
 ### UpdateHint
 Sent to the server to update the status of a Hint. The client must be the 'receiving_player' of the Hint, or the update fails.
