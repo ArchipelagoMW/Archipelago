@@ -1,12 +1,13 @@
 from typing import Dict, FrozenSet, Tuple, TYPE_CHECKING
 from worlds.generic.Rules import set_rule, add_rule, forbid_item
+from BaseClasses import Region, CollectionState
 from .options import IceGrappling, LadderStorage, CombatLogic
 from .rules import (has_ability, has_sword, has_melee, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
                     laurels_zip, bomb_walls)
 from .er_data import Portal, get_portal_outlet_region
 from .ladder_storage_data import ow_ladder_groups, region_ladders, easy_ls, medium_ls, hard_ls
 from .combat_logic import has_combat_reqs
-from BaseClasses import Region, CollectionState
+from .grass import set_grass_location_rules
 
 if TYPE_CHECKING:
     from . import TunicWorld
@@ -555,7 +556,6 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Dark Tomb Upper"].connect(
         connecting_region=regions["Dark Tomb Entry Point"])
 
-    # ice grapple through the wall, get the little secret sound to trigger
     regions["Dark Tomb Upper"].connect(
         connecting_region=regions["Dark Tomb Main"],
         rule=lambda state: has_ladder("Ladder in Dark Tomb", state, world)
@@ -577,10 +577,23 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     wg_after_to_before_terry = regions["West Garden after Terry"].connect(
         connecting_region=regions["West Garden before Terry"])
 
-    regions["West Garden after Terry"].connect(
-        connecting_region=regions["West Garden South Checkpoint"])
-    wg_checkpoint_to_after_terry = regions["West Garden South Checkpoint"].connect(
+    wg_after_terry_to_west_combat = regions["West Garden after Terry"].connect(
+        connecting_region=regions["West Garden West Combat"])
+    regions["West Garden West Combat"].connect(
         connecting_region=regions["West Garden after Terry"])
+
+    wg_checkpoint_to_west_combat = regions["West Garden South Checkpoint"].connect(
+        connecting_region=regions["West Garden West Combat"])
+    regions["West Garden West Combat"].connect(
+        connecting_region=regions["West Garden South Checkpoint"])
+
+    # if not laurels, it goes through the west combat region instead
+    regions["West Garden after Terry"].connect(
+        connecting_region=regions["West Garden South Checkpoint"],
+        rule=lambda state: state.has(laurels, player))
+    regions["West Garden South Checkpoint"].connect(
+        connecting_region=regions["West Garden after Terry"],
+        rule=lambda state: state.has(laurels, player))
 
     wg_checkpoint_to_dagger = regions["West Garden South Checkpoint"].connect(
         connecting_region=regions["West Garden at Dagger House"])
@@ -1402,11 +1415,15 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         set_rule(wg_after_to_before_terry,
                  lambda state: state.has_any({laurels, ice_dagger}, player)
                  or has_combat_reqs("West Garden", state, player))
-        # laurels through, probably to the checkpoint, or just fight
-        set_rule(wg_checkpoint_to_after_terry,
-                 lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
-        set_rule(wg_checkpoint_to_before_boss,
+
+        set_rule(wg_after_terry_to_west_combat,
                  lambda state: has_combat_reqs("West Garden", state, player))
+        set_rule(wg_checkpoint_to_west_combat,
+                 lambda state: has_combat_reqs("West Garden", state, player))
+
+        # maybe a little too generous? probably fine though
+        set_rule(wg_checkpoint_to_before_boss,
+                 lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
 
         add_rule(btv_front_to_main,
                  lambda state: has_combat_reqs("Beneath the Vault", state, player))
@@ -1527,6 +1544,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
 def set_er_location_rules(world: "TunicWorld") -> None:
     player = world.player
+
+    if world.options.grass_randomizer:
+        set_grass_location_rules(world)
 
     forbid_item(world.get_location("Secret Gathering Place - 20 Fairy Reward"), fairies, player)
 
@@ -1852,6 +1872,8 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         combat_logic_to_loc("West Garden - [Central Lowlands] Chest Beneath Faeries", "West Garden")
         combat_logic_to_loc("West Garden - [Central Lowlands] Chest Beneath Save Point", "West Garden")
         combat_logic_to_loc("West Garden - [West Highlands] Upper Left Walkway", "West Garden")
+        combat_logic_to_loc("West Garden - [Central Highlands] Holy Cross (Blue Lines)", "West Garden")
+        combat_logic_to_loc("West Garden - [Central Highlands] Behind Guard Captain", "West Garden")
 
         # with combat logic on, I presume the player will want to be able to see to avoid the spiders
         set_rule(world.get_location("Beneath the Fortress - Bridge"),
