@@ -346,12 +346,6 @@ class StartWithRevivePsynergy(Toggle):
     display_name = "Start with Revive Psynergy"
     default = 0
 
-class StartWithRevealPsynergy(Toggle):
-    """When enabled, start the game with Reveal Psynergy"""
-    internal_name = "start_with_reveal"
-    display_name = "Start with Reveal Psynergy"
-    default = 0
-
 class ScaleExpGained(Range):
     """Scale how much Exp is earned by the party."""
     internal_name = "scale_exp"
@@ -660,7 +654,6 @@ class GSTLAOptions(PerGameCommonOptions):
 
     start_with_healing_psynergy: StartWithHealPsynergy
     start_with_revive: StartWithRevivePsynergy
-    start_with_reveal: StartWithRevealPsynergy
 
     #Djinn and Summon Settings
     shuffle_djinn: DjinnShuffle

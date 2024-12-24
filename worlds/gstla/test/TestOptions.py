@@ -821,9 +821,6 @@ class StartRevive(TestFormatBase):
         self.assertEqual(0x2, 0x2 & data)
 
 class NoStartReveal(TestFormatBase):
-    options = {
-        "start_with_reveal": 0
-    }
 
     def test_no_start_reveal(self):
         data = self._get_option_byte(6)
@@ -831,7 +828,9 @@ class NoStartReveal(TestFormatBase):
 
 class StartReveal(TestFormatBase):
     options = {
-        "start_with_reveal": 1
+        "start_inventory_from_pool": {
+            "Reveal": 1
+        }
     }
 
     def test_start_reveal(self):

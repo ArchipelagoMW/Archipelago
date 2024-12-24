@@ -176,10 +176,6 @@ def create_items(world: 'GSTLAWorld', player: int):
         world.multiworld.itempool.append(ap_item)
         sum_locations -= 1
     for item in psyenergy_list:
-        #When starting with reveal we do not add it to the item pool
-        if item.name == ItemName.Reveal and world.options.start_with_reveal == 1:
-            continue
-
         ap_item = create_item_direct(item, player)
         world.multiworld.itempool.append(ap_item)
         sum_locations -= 1

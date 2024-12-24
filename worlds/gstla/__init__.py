@@ -142,8 +142,6 @@ class GSTLAWorld(World):
             self.multiworld.push_precollected(create_item(ItemName.Ship, self.player))
         if self.options.start_with_wings_of_anemos == 1:
             self.multiworld.push_precollected(create_item(ItemName.Wings_of_Anemos, self.player))
-        if self.options.start_with_reveal == 1:
-            self.multiworld.push_precollected(create_item(ItemName.Reveal, self.player))
 
         #When we add more traps and none are enabled we should force trap_chance to off
         if self.options.mimic_trap_weight == 0:
@@ -218,9 +216,6 @@ class GSTLAWorld(World):
                 ret['start_inventory'][item_id_by_name[k]] += v
             else:
                 ret['start_inventory'][item_id_by_name[k]] = v
-
-        if self.options.start_with_reveal == 1:
-            ret['start_inventory'][item_id_by_name[ItemName.Reveal]] = 1
 
         return ret
 
@@ -501,8 +496,10 @@ class GSTLAWorld(World):
         debug_file.write('Start Heal: ' + self.options.start_with_healing_psynergy.name_lookup[self.options.start_with_healing_psynergy] + '\n')
         write_me += self.options.start_with_revive << 1 #start-revive
         debug_file.write('Start Revive: ' + self.options.start_with_revive.name_lookup[self.options.start_with_revive] + '\n')
-        write_me += self.options.start_with_reveal #start-reveal
-        debug_file.write('Start Reveal: ' + self.options.start_with_reveal.name_lookup[self.options.start_with_reveal] + '\n')
+
+        if ItemName.Reveal.name in self.options.start_inventory or ItemName.Reveal.name in self.options.start_inventory_from_pool:
+            write_me += 1 #start-reveal
+            debug_file.write('Start Reveal: true\n')
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
 
 
