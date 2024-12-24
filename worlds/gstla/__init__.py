@@ -217,6 +217,9 @@ class GSTLAWorld(World):
             else:
                 ret['start_inventory'][item_id_by_name[k]] = v
 
+        if self.options.start_with_reveal == 1:
+            ret['start_inventory'][item_id_by_name[ItemName.Reveal]] = 1
+
         return ret
 
     def generate_output(self, output_directory: str):
