@@ -1,7 +1,9 @@
 from enum import Enum
-from typing import Callable, NamedTuple
+from typing import NamedTuple
 
-from BaseClasses import Item, ItemClassification, MultiWorld
+from BaseClasses import Item, ItemClassification
+
+from worlds.loonyland.options import Badges, LongChecks, LoonylandOptions, MonsterDolls, Remix
 
 
 class LoonylandItem(Item):
@@ -10,7 +12,6 @@ class LoonylandItem(Item):
     """
 
     game: str = "Loonyland"
-    cheat: bool = False
 
 
 class LLItemCat(Enum):
@@ -28,4 +29,19 @@ class LLItem(NamedTuple):
     category: LLItemCat
     classification: ItemClassification
     frequency: int = 1
-    can_create: Callable[[MultiWorld, int], bool] = lambda multiworld, player: True
+    flags: list[str] = []
+
+    def can_create(self, options: LoonylandOptions) -> bool:
+        if (
+            self.category == LLItemCat.CHEAT
+            and (options.badges == Badges.option_none or options.badges == Badges.option_vanilla)
+        ) or (
+            self.category == LLItemCat.DOLL
+            and (options.dolls == MonsterDolls.option_none or options.dolls == MonsterDolls.option_vanilla)
+        ):
+            return False
+        if options.long_checks == LongChecks.option_excluded and ("OP" in self.flags):
+            return False
+        if options.remix == Remix.option_excluded and ("REMIX" in self.flags):
+            return False
+        return True
