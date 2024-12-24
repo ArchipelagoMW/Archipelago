@@ -39,7 +39,7 @@ class TestImplemented(unittest.TestCase):
         """Tests that if a world creates slot data, it's json serializable."""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             # has an await for generate_output which isn't being called
-            if game_name in {"Ocarina of Time", "Zillion"}:
+            if game_name in {"Ocarina of Time"}:
                 continue
             multiworld = setup_solo_multiworld(world_type)
             with self.subTest(game=game_name, seed=multiworld.seed):
