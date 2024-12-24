@@ -310,7 +310,7 @@ class UnconfineHomeWater(Choice):
     default = 0
 
 
-class ThroneAsLocation(DefaultOnToggle):
+class ThroneAsLocation(Toggle):
     """
     If enabled, sitting on the Mithalas City Castle throne (with the seal on it) will be a location and opening the
     door to the Mithalas Cathedral will be an item.

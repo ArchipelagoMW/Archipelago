@@ -373,7 +373,7 @@ item_table = {
     ItemNames.TRANSTURTLE_BODY: ItemData(698131, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_finalboss
     ItemNames.TRANSTURTLE_SIMON_SAYS: ItemData(698132, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_forest05
     ItemNames.TRANSTURTLE_ARNASSI_RUINS: ItemData(698133, 1, ItemType.PROGRESSION, ItemGroup.TURTLE),  # transport_seahorse
-    ItemNames.DOOR_TO_CATHEDRAL: ItemData(698133, 1, ItemType.PROGRESSION, ItemGroup.DOOR),  # door_to_cathedral
+    ItemNames.DOOR_TO_CATHEDRAL: ItemData(698134, 1, ItemType.PROGRESSION, ItemGroup.DOOR),  # door_to_cathedral
 }
 
 

@@ -1135,10 +1135,6 @@ class AquariaRegions:
         ), lambda state: _has_beast_form_or_arnassi_armor(state, self.player))
         add_rule(self.multiworld.get_location(AquariaLocationNames.KELP_FOREST_TOP_LEFT_AREA_JELLY_EGG, self.player),
                  lambda state: _has_beast_form(state, self.player))
-        add_rule(self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_FIRST_CLIFF_BULB, self.player),
-                 lambda state: state.has("Sun God beated", self.player))
-        add_rule(self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_SECOND_CLIFF_BULB, self.player),
-                 lambda state: state.has("Sun God beated", self.player))
         add_rule(self.multiworld.get_location(
             AquariaLocationNames.OPEN_WATERS_TOP_RIGHT_AREA_BULB_IN_THE_SMALL_PATH_BEFORE_MITHALAS,
             self.player), lambda state: _has_bind_song(state, self.player)
