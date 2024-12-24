@@ -196,6 +196,18 @@ class SC2World(World):
         if SC2Campaign.HOTS not in enabled_campaigns:
             slot_data["kerrigan_presence"] = KerriganPresence.option_not_present
 
+        # vbn save info here
+        # print("Yo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        mission_item_classification: Dict[str, ItemClassification] = {}
+        for location in self.multiworld.get_locations(self.player):
+            loc: Location = self.multiworld.get_location(location.name, self.player)
+            # print(location.name, loc.item.classification)
+            # vbn by pass event?
+            # assert loc.item
+            # vbn Format?
+            mission_item_classification[location.name] = int(loc.item.classification)
+        slot_data["mission_item_classification"] = mission_item_classification
+
         # Disable trade if there is no trade partner
         traders = [
             world
