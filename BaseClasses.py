@@ -979,9 +979,6 @@ class Entrance:
     name: str
     parent_region: Optional[Region]
     connected_region: Optional[Region] = None
-    # LttP specific, TODO: should make a LttPEntrance
-    addresses = None
-    target = None
 
     def __init__(self, player: int, name: str = "", parent: Optional[Region] = None) -> None:
         self.name = name
@@ -997,10 +994,8 @@ class Entrance:
 
         return False
 
-    def connect(self, region: Region, addresses: Any = None, target: Any = None) -> None:
+    def connect(self, region: Region) -> None:
         self.connected_region = region
-        self.target = target
-        self.addresses = addresses
         region.entrances.append(self)
 
     def __repr__(self):
