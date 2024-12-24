@@ -1,0 +1,91 @@
+{% extends "multitracker.html" %}
+{% block head %}
+    {{ super() }}
+    <script type="application/ecmascript" src="{{ url_for("static", filename="assets/jquery.scrollsync.js") }}"></script>
+{% endblock %}
+
+{# Original icons located at https://github.com/PoryGone/Celeste-64-AP-Tracker/tree/main/images #}
+{# List all tracker-relevant icons. Format: (Name, Image URL) #}
+{% set icons = {
+    "Strawberry"            : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/strawberry.png?raw=true",
+    
+    "Air Dash"              : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/AirDash.png?raw=true",
+    "Breakable Blocks"      : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Breakables_Filled.PNG?raw=true",
+    "Cassettes"             : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Cassettes_Filled.PNG?raw=true",
+    "Climb"                 : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Climb.png?raw=true",
+    "Coins"                 : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Coins_Filled.PNG?raw=true",
+    "Dash Refills"          : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Dash_Filled.png?raw=true",
+    "Double Dash Refills"   : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/DoubleDash_Filled.png?raw=true",
+    "Feathers"              : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Feather_Filled.png?raw=true",
+    "Ground Dash"           : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/GroundDash.png?raw=true",
+    "Skid Jump"             : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/SkidJump.png?raw=true",
+    "Springs"               : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Springs_Filled.png?raw=true",
+    "Traffic Blocks"        : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Traffic_Filled.png?raw=true",
+
+    "IsCompleted"           : "https://github.com/mrkssr/ap-icons/blob/main/Celeste%2064%20Tracker/items/Baddy.png?raw=true"
+} %}
+
+{% set inventory_order = [
+    "Strawberry",
+    
+    "Climb",
+    "Skid Jump",
+    "Air Dash",
+    "Ground Dash",
+    
+    "Cassettes",
+    "Dash Refills",
+    "Double Dash Refills",
+    "Feathers",
+    
+    "Coins",
+    "Breakable Blocks",
+    "Springs",
+    "Traffic Blocks",
+
+    "IsCompleted"
+] %}
+
+{% set multi_items = [
+    "Strawberry"
+] %}
+
+{# Most have a duplicated 0th entry for when we have none of that item to still load the correct icon/name. #}
+{% set progressive_order = {
+    
+} %}
+
+{%- block custom_table_headers %}
+    {#- macro that creates a table header with display name and image -#}
+    {%- macro make_header(name, img_src) %}
+        <th class="center-column">
+            <img height="24" src="{{ img_src }}" title="{{ name }}" alt="{{ name }}">
+        </th>
+    {% endmacro -%}
+
+    {#- call the macro to build the table header -#}
+    {%- for item in inventory_order %}
+        {%- if item in icons -%}
+            <th class="center-column">
+                <img class="icon-sprite" src="{{ icons[item] }}" alt="{{ item | e }}" title="{{ item | e }}">
+            </th>
+        {%- endif %}
+    {% endfor -%}
+{% endblock %}
+
+{# build each row of custom entries #}
+{% block custom_table_row scoped %}
+    {%- for item in inventory_order -%}
+        {%- if inventories[(team, player)][item] -%}
+            <td class="center-column item-acquired">
+                {% if item in multi_items %}
+                    {{ inventories[(team, player)][item] }}
+                {% else %}
+                    ✔️
+                {% endif %}
+            </td>
+        {%- else -%}
+            <td></td>
+        {%- endif -%}
+    {% endfor %}
+{% endblock %}
