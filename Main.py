@@ -150,6 +150,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     # Set local and non-local item rules.
     if multiworld.players > 1:
         locality_rules(multiworld)
+    else:  # Done before generate_early and again here to satisfy impossible non-local can_fill requirements
+        multiworld.worlds[1].options.non_local_items.value = set()
+        multiworld.worlds[1].options.local_items.value = set()
 
     AutoWorld.call_all(multiworld, "generate_basic")
 
