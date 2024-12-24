@@ -33,11 +33,8 @@ def can_flash(state, world, player):
 
 
 def can_learn_hm(state, world, move, player):
-    for pokemon, data in world.local_poke_data.items():
-        if state.has(pokemon, player) and data["tms"][6] & 1 << (["Cut", "Fly", "Surf", "Strength",
-                                                                  "Flash"].index(move) + 2):
-            return True
-    return False
+    hm_mons = world.local_hm_mons_cache[move]
+    return hm_mons and state.has_any(hm_mons, player)
 
 
 def can_get_hidden_items(state, world, player):
