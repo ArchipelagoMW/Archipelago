@@ -1254,13 +1254,26 @@ class Location:
 
 
 class ItemClassification(IntFlag):
-    filler = 0b0000  # aka trash, as in filler items like ammo, currency etc,
-    progression = 0b0001  # Item that is logically relevant
-    useful = 0b0010  # Item that is generally quite useful, but not required for anything logical
-    trap = 0b0100  # detrimental item
-    skip_balancing = 0b1000  # should technically never occur on its own
-    # Item that is logically relevant, but progression balancing should not touch.
-    # Typically currency or other counted items.
+    filler = 0b0000
+    """ aka trash, as in filler items like ammo, currency etc """
+
+    progression = 0b0001
+    """ Item that is logically relevant.
+    Protects this item from being placed on excluded or unreachable locations. """
+
+    useful = 0b0010
+    """ Item that is especially useful.
+    Protects this item from being placed on excluded or unreachable locations.
+    When combined with another flag like "progression", it means "an especially useful progression item". """
+
+    trap = 0b0100
+    """ Item that is detrimental in some way. """
+
+    skip_balancing = 0b1000
+    """ should technically never occur on its own
+    Item that is logically relevant, but progression balancing should not touch.
+    Typically currency or other counted items. """
+
     progression_skip_balancing = 0b1001  # only progression gets balanced
 
     def as_flag(self) -> int:

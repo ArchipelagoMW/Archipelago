@@ -131,8 +131,8 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
   the location without using any hint points.
 * `start_location_hints` is the same as `start_hints` but for locations, allowing you to hint for the item contained
   there without using any hint points.
-* `exclude_locations` lets you define any locations that you don't want to do and forces a filler or trap item which
-  isn't necessary for progression into these locations.
+* `exclude_locations` lets you define any locations that you don't want to do and prevents items classified as
+  "progression" or "useful" from being placed on them.
 * `priority_locations` lets you define any locations that you want to do and forces a progression item into these
   locations.
 * `item_links` allows players to link their items into a group with the same item link name and game. The items declared
