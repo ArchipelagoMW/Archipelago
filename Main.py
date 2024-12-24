@@ -84,6 +84,11 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     if not args.skip_output:
         AutoWorld.call_stage(multiworld, "assert_generate")
 
+    # Clear non-applicable local and non-local items.
+    if multiworld.players == 1:
+        multiworld.worlds[1].options.non_local_items.value = set()
+        multiworld.worlds[1].options.local_items.value = set()
+
     AutoWorld.call_all(multiworld, "generate_early")
 
     logger.info('')
@@ -145,10 +150,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     # Set local and non-local item rules.
     if multiworld.players > 1:
         locality_rules(multiworld)
-    else:
-        multiworld.worlds[1].options.non_local_items.value = set()
-        multiworld.worlds[1].options.local_items.value = set()
-    
+
     AutoWorld.call_all(multiworld, "generate_basic")
 
     # remove starting inventory from pool items.
