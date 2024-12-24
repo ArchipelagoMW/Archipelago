@@ -534,7 +534,8 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
                 sys.__excepthook__(exc_type, exc_value, exc_traceback)
                 return
             logging.getLogger(exception_logger).exception("Uncaught exception",
-                                                          exc_info=(exc_type, exc_value, exc_traceback))
+                                                          exc_info=(exc_type, exc_value, exc_traceback),
+                                                          extra={"NoStream": exception_logger is None})
             return orig_hook(exc_type, exc_value, exc_traceback)
 
         handle_exception._wrapped = True
@@ -557,7 +558,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
     import platform
     logging.info(
         f"Archipelago ({__version__}) logging initialized"
-        f" on {platform.platform()}"
+        f" on {platform.platform()} process {os.getpid()}"
         f" running Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
         f"{' (frozen)' if is_frozen() else ''}"
     )
