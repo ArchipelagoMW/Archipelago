@@ -13,6 +13,7 @@ from ..strings.craftable_names import Consumable
 from ..strings.currency_names import Currency
 from ..strings.fish_names import WaterChest
 from ..strings.geode_names import Geode
+from ..strings.material_names import Material
 from ..strings.region_names import Region
 from ..strings.tool_names import Tool
 
@@ -21,9 +22,14 @@ if TYPE_CHECKING:
 else:
     ToolLogicMixin = object
 
-MIN_ITEMS = 10
-MAX_ITEMS = 999
-PERCENT_REQUIRED_FOR_MAX_ITEM = 24
+MIN_MEDIUM_ITEMS = 10
+MAX_MEDIUM_ITEMS = 999
+PERCENT_REQUIRED_FOR_MAX_MEDIUM_ITEM = 24
+
+EASY_ITEMS = {Material.wood, Material.stone, Material.fiber, Material.sap}
+MIN_EASY_ITEMS = 300
+MAX_EASY_ITEMS = 2997
+PERCENT_REQUIRED_FOR_MAX_EASY_ITEM = 6
 
 
 class GrindLogicMixin(BaseLogicMixin):
@@ -43,7 +49,7 @@ class GrindLogic(BaseLogic[Union[GrindLogicMixin, HasLogicMixin, ReceivedLogicMi
         # Assuming one box per day, but halved because we don't know how many months have passed before Mr. Qi's Plane Ride.
         time_rule = self.logic.time.has_lived_months(quantity // 14)
         return self.logic.and_(opening_rule, mystery_box_rule,
-                               book_of_mysteries_rule, time_rule,)
+                               book_of_mysteries_rule, time_rule, )
 
     def can_grind_artifact_troves(self, quantity: int) -> StardewRule:
         opening_rule = self.logic.region.can_reach(Region.blacksmith)
@@ -67,11 +73,26 @@ class GrindLogic(BaseLogic[Union[GrindLogicMixin, HasLogicMixin, ReceivedLogicMi
                                # Assuming twelve per month if the player does not grind it.
                                self.logic.time.has_lived_months(quantity // 12))
 
+    def can_grind_item(self, quantity: int, item: str | None = None) -> StardewRule:
+        if item in EASY_ITEMS:
+            return self.logic.grind.can_grind_easy_item(quantity)
+        else:
+            return self.logic.grind.can_grind_medium_item(quantity)
+
     @cache_self1
-    def can_grind_item(self, quantity: int) -> StardewRule:
-        if quantity <= MIN_ITEMS:
+    def can_grind_medium_item(self, quantity: int) -> StardewRule:
+        if quantity <= MIN_MEDIUM_ITEMS:
             return self.logic.true_
 
-        quantity = min(quantity, MAX_ITEMS)
-        price = max(1, quantity * PERCENT_REQUIRED_FOR_MAX_ITEM // MAX_ITEMS)
+        quantity = min(quantity, MAX_MEDIUM_ITEMS)
+        price = max(1, quantity * PERCENT_REQUIRED_FOR_MAX_MEDIUM_ITEM // MAX_MEDIUM_ITEMS)
+        return HasProgressionPercent(self.player, price)
+
+    @cache_self1
+    def can_grind_easy_item(self, quantity: int) -> StardewRule:
+        if quantity <= MIN_EASY_ITEMS:
+            return self.logic.true_
+
+        quantity = min(quantity, MAX_EASY_ITEMS)
+        price = max(1, quantity * PERCENT_REQUIRED_FOR_MAX_EASY_ITEM // MAX_EASY_ITEMS)
         return HasProgressionPercent(self.player, price)
