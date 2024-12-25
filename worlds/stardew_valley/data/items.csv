@@ -509,6 +509,7 @@ id,name,classification,groups,mod_name
 561,Fishing Bar Size Bonus,filler,PLAYER_BUFF,
 562,Quality Bonus,filler,PLAYER_BUFF,
 563,Glow Bonus,filler,PLAYER_BUFF,
+564,Pet Bowl,progression,BUILDING,
 4001,Burnt Trap,trap,TRAP,
 4002,Darkness Trap,trap,TRAP,
 4003,Frozen Trap,trap,TRAP,
