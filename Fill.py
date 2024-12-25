@@ -537,7 +537,7 @@ def distribute_items_restrictive(multiworld: MultiWorld,
     if excludedlocations:
         raise FillError(
             f"Not enough filler items for excluded locations. "
-            f"There are {len(excludedlocations)} more excluded locations than filler or trap items.",
+            f"There are {len(excludedlocations)} more excluded locations than excludable items.",
             multiworld=multiworld,
         )
 
