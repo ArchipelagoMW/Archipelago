@@ -1,9 +1,7 @@
-import math
-import numbers
 import random
 import typing
 
-from Options import FreeText, Range, NumericOption
+from Options import FreeText, NumericOption
 
 
 class FloatRangeText(FreeText, NumericOption):

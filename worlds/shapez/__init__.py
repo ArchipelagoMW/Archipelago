@@ -21,7 +21,7 @@ class ShapezWeb(WebWorld):
     game_info_languages = ['en', 'de']
     setup_en = Tutorial(
         "Multiworld Setup Guide",
-        "A guide to playing shapez with Archipelago.",
+        "A guide to playing shapez with Archipelago:",
         "English",
         "setup_en.md",
         "setup/en",
@@ -35,15 +35,23 @@ class ShapezWeb(WebWorld):
         "setup/de",
         ["BlastSlimey"]
     )
-    datapackage_options = Tutorial(
-        "Changing datapackage options",
-        "3000 locations a too many or not enough? Here's how you can change that:",
+    datapackage_settings_en = Tutorial(
+        "Changing datapackage settings",
+        "3000 locations are too many or not enough? Here's how you can change that:",
         "English",
-        "datapackage_options.md",
-        "datapackage/en",
+        "datapackage_settings_en.md",
+        "datapackage_settings/en",
         ["BlastSlimey"]
     )
-    tutorials = [setup_en, setup_de, datapackage_options]
+    datapackage_settings_de = Tutorial(
+        datapackage_settings_en.tutorial_name,
+        datapackage_settings_en.description,
+        "Deutsch",
+        "datapackage_settings_de.md",
+        "datapackage_settings/de",
+        ["BlastSlimey"]
+    )
+    tutorials = [setup_en, setup_de, datapackage_settings_en, datapackage_settings_de]
     item_descriptions = item_descriptions
     location_descriptions = location_description
 

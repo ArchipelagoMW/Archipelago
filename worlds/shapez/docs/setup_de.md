@@ -30,9 +30,9 @@ Ordner kopieren. Wenn du nicht weißt, wo dieser ist, dann öffne das Spiel, dr�
 
 ### Was ist eine YAML-Datei und wofür brauche ich die?
 
-Deine persönliche YAML-Datei beinhaltet eine Reihe von Einstellungen, die der Zufallsgenerator zum Erstellen von deinem 
+Deine persönliche YAML-Datei beinhaltet eine Reihe von Optionen, die der Zufallsgenerator zum Erstellen von deinem 
 Spiel benötigt. Jeder Spieler einer Multiworld stellt seine eigene YAML-Datei zur Verfügung. Dadurch kann jeder Spieler 
-sein Spiel nach seinem eigenen Geschmack gestalten, während andere Spieler unabhängig davon ihre eigenen Einstellungen 
+sein Spiel nach seinem eigenen Geschmack gestalten, während andere Spieler unabhängig davon ihre eigenen Optionen 
 wählen können!
 
 ### Wo bekomme ich so eine YAML-Datei her?
@@ -49,8 +49,10 @@ Template herunterladen.
    - Ob du verbunden bist, steht direkt daneben.
 4. Starte ein neues Spiel.
 
-Nachdem der Speicherstand erstellt wurde und du zum Hauptmenü zurückkehrst, wird das erneute Öffnen des Speicherstandes erneut verbinden.
+Nachdem der Speicherstand erstellt wurde und du zum Hauptmenü zurückkehrst, wird das erneute Öffnen des Speicherstandes 
+erneut verbinden.
 
 ### Der Port/Die Adresse der MultiWorld hat sich geändert, wie trete ich mit meinem existierenden Speicherstand bei? 
 
-Wiederhole die Schritte 1-3 und öffne den existierenden Speicherstand. Dies wird außerdem die gespeicherten Login-Daten überschreiben, sodass du dies nur einmal machen musst. 
+Wiederhole die Schritte 1-3 und öffne den existierenden Speicherstand. Dies wird außerdem die gespeicherten Login-Daten 
+überschreiben, sodass du dies nur einmal machen musst. 

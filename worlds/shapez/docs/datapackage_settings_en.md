@@ -1,8 +1,8 @@
 # Guide to change maximum locations in shapez
 
-## Where do I find the option to increase/decrease the amount of possible locations?
+## Where do I find the settings to increase/decrease the amount of possible locations?
 
-The maximum values of the `goal_amount` and `shapesanity_amount` are hardcoded options that afflict the datapackage. 
+The maximum values of the `goal_amount` and `shapesanity_amount` are hardcoded settings that afflict the datapackage. 
 They are stored in a file called `options.json` inside the apworld. By changing them, you will create a custom apworld 
 on your local machine.
 
@@ -16,10 +16,10 @@ Proceed at your own risk.
 3. Open the zip file and go to `shapez/data/options.json`.
 4. Edit the values in this file to your desire and save the file.
    - `max_shapesanity` cannot be lower than `4`, as this is the minimum amount to prevent FillErrors.
-   - `max_shapesanity` also cannot be higher than 75800, as this is the maximum amount of possible shapesanity names. 
-   Else the multiworld generation might fail.
-   - `max_levels_and_upgrades` cannot be lower than 27, as this is the minimum amount for the `mam` goal to properly 
-   work.
+   - `max_shapesanity` also cannot be higher than `75800`, as this is the maximum amount of possible shapesanity names. 
+     Else the multiworld generation might fail.
+   - `max_levels_and_upgrades` cannot be lower than `27`, as this is the minimum amount for the `mam` goal to properly 
+     work.
 5. Close the zip and rename it back to `shapez.apworld`.
 
 ## Why do I have to do this manually?

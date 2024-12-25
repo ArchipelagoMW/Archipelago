@@ -51,4 +51,5 @@ After creating the save file and returning to the main menu, opening the save fi
 
 ### The MultiWorld changed its port/address, how do I reconnect correctly with my existing save file? 
 
-Repeat steps 1-3 and open the existing save file. This will also overwrite the saved connection details, so you will only have to do this once. 
+Repeat steps 1-3 and open the existing save file. This will also overwrite the saved connection details, so you will 
+only have to do this once. 
