@@ -34,16 +34,17 @@ class FloatRangeText(FreeText, NumericOption):
                 self.value = float(self.default)
             else:  # "false"
                 self.value = 0.0
-        try:
-            self.value = float(value)
-        except ValueError:
-            raise Exception(f"Invalid value for option {self.__class__.__name__}: {value}")
-        except OverflowError:
-            raise Exception(f"Out of range floating value for option {self.__class__.__name__}: {value}")
-        if self.value < self.range_start:
-            raise Exception(f"{value} is lower than minimum {self.range_start} for option {self.__class__.__name__}")
-        if self.value > self.range_end:
-            raise Exception(f"{value} is higher than maximum {self.range_end} for option {self.__class__.__name__}")
+        else:
+            try:
+                self.value = float(value)
+            except ValueError:
+                raise Exception(f"Invalid value for option {self.__class__.__name__}: {value}")
+            except OverflowError:
+                raise Exception(f"Out of range floating value for option {self.__class__.__name__}: {value}")
+            if self.value < self.range_start:
+                raise Exception(f"{value} is lower than minimum {self.range_start} for option {self.__class__.__name__}")
+            if self.value > self.range_end:
+                raise Exception(f"{value} is higher than maximum {self.range_end} for option {self.__class__.__name__}")
 
     @classmethod
     def from_text(cls, text: str) -> typing.Any:
