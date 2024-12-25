@@ -1,0 +1,550 @@
+npc(#RosaMom)
+{
+    eventcall {
+        $4B
+    }
+}
+
+event($4B) {
+    [#B #Rando_KeyItemLocationHint]
+}
+
+
+msfpatch {
+    .def KeyItemLocationHintCounter  $7e1625
+    .def PossibleKeyItemRewardSlots  $21dc00
+
+    EvEx__Rando_KeyItemLocationHint:
+        lda $_KeyItemLocationHintCounter
+        beq $+FirstHint
+
+        lda $_KeyItemLocationHintCounter
+        inc a
+        cmp #$.Rewards__MaxSlotCount
+        bcc $+NoPreloopOverflow
+        lda #$00
+    %NoPreloopOverflow:
+        sta $1680
+        sta $1681
+        stz $1682
+    %SearchLoop:
+        // check if slot is a potential key item slot
+        ldx $1681
+        lda $=PossibleKeyItemRewardSlots,x
+        beq $+SearchLoopNext
+        // check if slot has been checked
+        txa
+        ldx #$_Tracker__RewardSlotFlags
+        jsl $=Tracker__CheckBit
+        bcc $+HaveRewardSlot
+    %SearchLoopNext:
+        inc $1681
+        lda $1681
+        cmp #$.Rewards__MaxSlotCount
+        bcc $+NoLoopOverflow
+        stz $1681
+    %NoLoopOverflow:
+        lda $1681
+        cmp $1680
+        bne $-SearchLoop
+    %NoMoreHints:
+        lda #$21
+        jmp $_HaveMessageNumber
+
+    %FirstHint:
+        dec $_KeyItemLocationHintCounter
+        lda #$20
+        jmp $_HaveMessageNumber
+
+    %HaveRewardSlot:
+        lda $1681
+        sta $_KeyItemLocationHintCounter
+        jsr $_FastForwardCounter
+        lda $_KeyItemLocationHintCounter
+        clc
+        adc #$20
+    %HaveMessageNumber:
+        sta $b2
+        // pull return address
+        pla
+        pla
+        pla
+
+        // defer to bank 1 message handler
+        jml $00ef53
+
+    // helper function that advances the
+    // counter to the end of a group of
+    // similar slots
+    %FastForwardCounter:
+        lda $_KeyItemLocationHintCounter
+        cmp #$39
+        beq $+FF_Ribbon1
+        cmp #$50
+        bcs $+FF_CheckLunarCoreChest
+        cmp #$47
+        bcs $+FF_CheckSylphCaveChest
+        cmp #$40
+        bcs $+FF_CheckLowerBabilChest
+        cmp #$3d
+        bcs $+FF_CheckEblanChest
+    %FF_Cancel:
+        rts
+
+    %FF_Ribbon1:
+        inc $_KeyItemLocationHintCounter
+        rts
+    %FF_CheckLunarCoreChest:
+        cmp #$58
+        bcs $-FF_Cancel
+        lda #$58
+        bra $+FF_Apply
+    %FF_CheckSylphCaveChest:
+        cmp #$4D
+        bcs $-FF_Cancel
+        lda #$4D
+        bra $+FF_Apply
+    %FF_CheckLowerBabilChest:
+        cmp #$43
+        bcs $-FF_Cancel
+        lda #$43
+        bra $+FF_Apply
+    %FF_CheckEblanChest:
+        cmp #$3F
+        bcs $-FF_Cancel
+        lda #$3F
+
+    %FF_Apply:
+        sta $_KeyItemLocationHintCounter
+        rts
+
+}
+
+
+
+
+
+
+
+
+
+//-------------------------------------------------------------
+
+text(bank 1 message $20)   // $00 none
+{
+[Rosa]'s Mom:Not sure
+which places you haven't
+checked for key items
+items yet?
+Come talk to me!
+// %flags hidden%
+
+
+
+__But the flags are hidden
+today, so some of my
+recommendations might not
+be correct!
+// %end%
+}
+text(bank 1 message $21)   // $01  starting_character
+{
+Wow! You found everything!
+Well done!
+}
+
+/* TODO: uncomment when ready
+
+text(bank 1 message $22)   // $02  starting_partner_character
+{X}
+text(bank 1 message $23)   // $03  mist_character
+{
+The Package will burn the
+village Mist. Take the
+survivor to Kaipo Inn
+afterward.
+}
+text(bank 1 message $24)   // $04  watery_pass_character
+{
+Check across a bridge just
+inside the Watery Pass.
+}
+text(bank 1 message $25)   // $05  damcyan_character
+{
+Go to the top floor of
+Damcyan Castle.
+}
+text(bank 1 message $26)   // $06  kaipo_character
+{
+The SandRuby will heal
+the bedridden patient
+in Kaipo.
+}
+text(bank 1 message $27)   // $07  hobs_character
+{
+Challenge the foe atop
+of Mt. Hobs.
+}
+text(bank 1 message $28)   // $08  mysidia_character_1
+{X}
+text(bank 1 message $29)   // $09  mysidia_character_2
+{
+The Elder of Mysidia can
+offer you two assets.
+}
+text(bank 1 message $2A)   // $0A  ordeals_character
+{
+You will meet something
+halfway up Mt. Ordeals.
+}
+text(bank 1 message $2D)   // $0D  baron_inn_character
+{
+A brainwashed agent in
+Baron Inn must be brought
+to their senses.
+}
+text(bank 1 message $2E)   // $0E  baron_castle_character
+{
+A reward is being held
+captive by the false king
+of Baron Castle.
+}
+text(bank 1 message $2F)   // $0F  zot_character_1
+{X}
+text(bank 1 message $30)   // $10  zot_character_2
+{
+A hostage and their
+captor's accomplice can be
+freed from the Tower of
+Zot by trading [crystal]Earth.
+}
+text(bank 1 message $31)   // $11  dwarf_castle_character
+{
+An aide will find you in
+your hour of need
+defending the Dwarf
+Castle crystal room.
+}
+text(bank 1 message $32)   // $12  cave_eblan_character
+{
+Find a reward waiting at
+the end of Cave Eblan.
+}
+text(bank 1 message $33)   // $13  lunar_palace_character
+{
+Approach the seat of the
+Lunar Palace.
+}
+text(bank 1 message $34)   // $14  giant_character
+{
+Fell the Giant of Bab-il
+to claim its reward.
+}
+
+*/
+
+// clear for space
+text(bank 1 message $35) {X}
+text(bank 1 message $36) {X}
+text(bank 1 message $37) {X}
+text(bank 1 message $38) {X}
+text(bank 1 message $39) {X}
+text(bank 1 message $3A) {X}
+text(bank 1 message $3B) {X}
+text(bank 1 message $3C) {X}
+text(bank 1 message $3D) {X}
+text(bank 1 message $3E) {X}
+text(bank 1 message $3F) {X}
+
+text(bank 1 message $40)   // $20  starting_item
+{X}
+text(bank 1 message $41)   // $21  antlion_item
+{
+Dig in the heart of the
+Antlion's Nest.
+}
+text(bank 1 message $42)   // $22  fabul_item
+{
+Fabul is under siege and
+is in need of defense.
+}
+text(bank 1 message $43)   // $23  ordeals_item
+{
+Something waits in the
+mirror room atop Mt.
+Ordeals.
+}
+text(bank 1 message $44)   // $24  baron_inn_item
+{
+An adversary is waiting
+at the Baron Inn.
+}
+text(bank 1 message $45)   // $25  baron_castle_item
+{
+[key]Baron unlocks the
+sewer entrance in Baron.
+Use it to sneak into the
+castle and face the king.
+}
+text(bank 1 message $46)   // $26  toroia_hospital_item
+{
+Prince [Edward] of Damcyan
+has a gift for you. He's
+sick in bed in Toroia.
+}
+text(bank 1 message $47)   // $27  magnes_item
+{
+[harp]TwinHarp will break the
+Dark Elf's spell in Cave
+Magnes. Defeat him to
+claim his prize.
+}
+text(bank 1 message $48)   // $28  zot_item
+{
+A hostage waits for rescue
+in the Tower of Zot. Only
+the [crystal]Earth can pay the
+ransom.
+}
+text(bank 1 message $49)   // $29  babil_boss_item
+{
+Defeat the mad scientist
+wreaking havoc underground
+in the Tower of Bab-il.
+}
+text(bank 1 message $4A)   // $2A  cannon_item
+{
+[key]Tower unlocks the
+cannon room in the Tower
+of Bab-il. Watch your step
+on the way out!
+}
+text(bank 1 message $4B)   // $2B  luca_item
+{
+An enemy lurks behind the
+throne of the dwarf king.
+}
+text(bank 1 message $4C)   // $2C  sealed_cave_item
+{
+[key]Luca unlocks the Sealed
+Cave. A reward waits at
+its end.
+}
+text(bank 1 message $4D)   // $2D  feymarch_item
+{
+There is a special chest
+in the Town of Monsters.
+}
+text(bank 1 message $4E)   // $2E  rat_trade_item
+{
+A man in the Adamant
+Grotto would love to
+trade for a [tail]Rat.
+}
+text(bank 1 message $4F)   // $2F  found_yang_item
+{
+Seek out [Yang] in the
+Sylph Cave, then speak to
+his wife in Fabul.
+}
+text(bank 1 message $50)   // $30  pan_trade_item
+{
+[Yang] in the Sylph Cave
+can be awakened by a smack
+with the Pan. Return it to
+his wife in Fabul after.
+}
+text(bank 1 message $51)   // $31  feymarch_queen_item
+{
+Prove your skill to the
+queen of the Town of
+Monsters.
+}
+text(bank 1 message $52)   // $32  feymarch_king_item
+{
+Test your mettle against
+the king of the Town of
+Monsters.
+}
+text(bank 1 message $53)   // $33  baron_throne_item
+{
+The true king of Baron
+is expecting you on the
+throne beneath Baron
+Castle.
+}
+text(bank 1 message $54)   // $34  sylph_item
+{
+Wake [Yang] underground
+in the Sylph Cave with the
+Pan, and the sylphs there
+will reward you.
+}
+text(bank 1 message $55)   // $35  bahamut_item
+{
+Defeat the master of
+Bahamut's Cave on the
+moon.
+}
+text(bank 1 message $56)   // $36  lunar_boss_1_item
+{
+Go west when you enter
+the Lunar Subterrane.
+Challenge the altar you
+find through there.
+}
+text(bank 1 message $57)   // $37  lunar_boss_2_item
+{
+Cross the secret bridge
+in the Lunar Subterrane
+and challenge the altar
+at the end of the path.
+}
+text(bank 1 message $58)   // $38  lunar_boss_3_item
+{
+In the Lunar Subterrane,
+face the altar that sits
+in the second of the
+three small rooms.
+}
+text(bank 1 message $59)   // $39  lunar_boss_4_item_1
+{X}
+text(bank 1 message $5A)   // $3A  lunar_boss_4_item_2
+{
+Two chests sit in a small
+chamber of the Lunar
+Subterrane, watched by
+two pillars.
+}
+text(bank 1 message $5B)   // $3B  lunar_boss_5_item
+{
+In the crystalline depths
+of the Lunar Core, face
+the final altar.
+}
+text(bank 1 message $5C)   // $3C  zot_chest
+{
+A monster-in-a-box waits
+in the Tower of Zot.
+}
+text(bank 1 message $5D)   // $3D  eblan_chest_1
+{X}
+text(bank 1 message $5E)   // $3E  eblan_chest_2
+{X}
+text(bank 1 message $5F)   // $3F  eblan_chest_3
+{
+There are three monster-
+-in-a-box chests in Eblan
+Castle. Have you found
+them all?
+}
+text(bank 1 message $60)   // $40  lower_babil_chest_1
+{X}
+text(bank 1 message $61)   // $41  lower_babil_chest_2
+{X}
+text(bank 1 message $62)   // $42  lower_babil_chest_3
+{X}
+text(bank 1 message $63)   // $43  lower_babil_chest_4
+{
+There are four monster-in-
+a-box chests in the Tower
+of Bab-il underground.
+Have you found them all?
+}
+text(bank 1 message $64)   // $44  cave_eblan_chest
+{
+One monster-in-a-box can
+be found in Cave Eblan.
+Be sure to check the pot
+in the hospital.
+}
+text(bank 1 message $65)   // $45  upper_babil_chest
+{
+There is a monster-in-a-
+box in the upper Tower
+of Bab-il, beyond Cave
+Eblan.
+}
+text(bank 1 message $66)   // $46  cave_of_summons_chest
+{
+A monster-in-a-box has
+yet to be found in the
+Cave of Summons.
+}
+text(bank 1 message $67)   // $47  sylph_cave_chest_1
+{X}
+text(bank 1 message $68)   // $48  sylph_cave_chest_2
+{X}
+text(bank 1 message $69)   // $49  sylph_cave_chest_3
+{X}
+text(bank 1 message $6A)   // $4A  sylph_cave_chest_4
+{X}
+text(bank 1 message $6B)   // $4B  sylph_cave_chest_5
+{X}
+text(bank 1 message $6C)   // $4C  sylph_cave_chest_6
+{X}
+text(bank 1 message $6D)   // $4D  sylph_cave_chest_7
+{
+The Sylph Cave contains
+seven monster-in-a-box
+chests. Have you found
+them all?
+}
+text(bank 1 message $6E)   // $4E  giant_chest
+{
+There is a monster-in-a-
+box yet to be opened in
+the Giant of Bab-il.
+}
+text(bank 1 message $6F)   // $4F  lunar_path_chest
+{
+One monster-in-a-box can
+be found in the caves of
+the Lunar Path.
+}
+text(bank 1 message $70)   // $50  lunar_core_chest_1
+{X}
+text(bank 1 message $71)   // $51  lunar_core_chest_2
+{X}
+text(bank 1 message $72)   // $52  lunar_core_chest_3
+{X}
+text(bank 1 message $73)   // $53  lunar_core_chest_4
+{X}
+text(bank 1 message $74)   // $54  lunar_core_chest_5
+{X}
+text(bank 1 message $75)   // $55  lunar_core_chest_6
+{X}
+text(bank 1 message $76)   // $56  lunar_core_chest_7
+{X}
+text(bank 1 message $77)   // $57  lunar_core_chest_8
+{X}
+text(bank 1 message $78)   // $58  lunar_core_chest_9
+{
+There are nine monster-
+-in-a-box chests on the
+way to the Lunar Core.
+Have you found them all?
+}
+text(bank 1 message $79)   // $59  rydias_mom_item
+{
+Once the Mist Dragon has
+been hunted down, Rydia's
+mother in Mist will offer
+a reward.
+}
+text(bank 1 message $7A)   // $5A  fallen_golbez_item
+{
+The [crystal]Crystal is waiting
+in the hands of Golbez at
+the heart of the moon.
+}
+text(bank 1 message $7B)   // $5B  forge_item
+{
+Kokkol the Smith can forge
+the [crystal]Crystal when given
+the [lightsword]Legend and Adamant.
+}
+text(bank 1 message $7C)   // $5C  pink_trade_item
+{X}
+text(bank 1 message $7D)   // $5D  fixed_crystal
+{X}

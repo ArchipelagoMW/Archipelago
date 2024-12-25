@@ -1,0 +1,193 @@
+// Set up new King Fabul NPC
+npc(#fe_KingFabulThroneRoom)
+{
+    sprite #King
+    default active
+    eventcall {
+    }
+}
+placement($49 1)  //#FabulThroneRoom
+{ npc #fe_KingFabulThroneRoom }
+
+
+placement($26 8)  { 
+    npc #fe_DynamicNPC 
+    // %fabulgauntlet_slot sprite 1 palette%
+    // %end%
+    }
+placement($26 9)  {
+    npc #fe_DynamicNPC 
+    // %fabulgauntlet_slot sprite 2 palette%
+    // %end%
+    }
+placement($26 10) {
+    npc #fe_DynamicNPC 
+    // %fabulgauntlet_slot sprite 3 palette%
+    // %end%
+    }
+
+// disable Fabul crystal, it is never seen
+npc(#MysidiaFabulCrystal) {
+    default inactive
+}
+
+event($48)  //Fabul battle
+{
+    consts(placement) {
+        0   Yang1
+        2   Edward1_A
+        3   ChildRydia
+        4   Rosa1
+    }
+    // autodetected map #FabulThroneRoom
+    batch 4 {
+        player move up
+    }
+    confirm message $19A
+    batch 7 {
+        player move down
+    }
+    player invisible
+
+    deactivate #fe_KingFabulThroneRoom
+    activate #Monk
+    activate #FabulMonk2
+    clear status 
+    restore hp
+    restore mp
+    toggle music fade
+    toggle screen fade
+    consts(placement) {
+        0   FabulMonk2
+        1   Yang1
+        2   Edward1
+        3   Monk
+        6   FabulMonk1_C
+        7   FabulMonk1_D
+        8   HoodedMonster1_A
+        9   HoodedMonster1_B
+        10   HoodedMonster1_C
+    }
+    load map #Fabul at 15 27 facing down
+    music #None
+    player face down
+    player visible
+    toggle screen fade
+    pause 18
+    sound #Flee
+    batch 8 {
+        p #Monk move right
+    }
+    p #Monk move down
+    pause 2
+    music #BossBattle
+    pause 8
+    p #HoodedMonster1_A toggle visible
+    batch 1 {
+        p #HoodedMonster1_A move up
+        p #HoodedMonster1_B toggle visible
+    }
+    batch 1 {
+        p #HoodedMonster1_A move up
+        p #HoodedMonster1_B move up
+        p #HoodedMonster1_C toggle visible
+    }
+    batch 1 {
+        p #HoodedMonster1_A move up
+        p #HoodedMonster1_B move up
+        p #HoodedMonster1_C move up
+    }
+    batch 1 {
+        p #HoodedMonster1_A toggle visible
+        p #HoodedMonster1_B toggle visible
+        p #HoodedMonster1_C toggle visible
+    }
+
+    [#B #Rando_BossBattle #rando.fabulgauntlet_slot]
+
+    deactivate #Monk
+    activate #FabulKing
+    activate #FabulKarateFighter1
+    activate #FabulKarateFighter2
+    set #FabulBattle
+    player face down
+    [#B #Objectives_TickBossSlot #rando.fabulgauntlet_slot]
+    [#B #Rando_PostBossBattle #rando.fabulgauntlet_slot]
+    toggle music fade
+    pause 18
+
+    music #Fabul
+    toggle screen fade
+
+    clear status 
+    restore hp
+    restore mp
+
+    consts(placement) {
+        1   FabulKing
+        2   ChildRydia
+        3   Edward1
+        4   Yang1
+    }
+    load map #FabulKingRoom at 5 3 facing right
+    player face right
+    toggle screen fade
+    pause 8
+    p #FabulKing face left
+    pause 4
+    map message 1  // take this
+    // %if ap_fabul_item%
+    music #DummyFanfare
+    message #ap_reward_slot.fabul_item
+    // %else%
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.fabul_item 0]
+    message #msg.fe_ReceivedFanfare
+    // %end%
+    [#B #Objectives_TickRewardSlot #reward_slot.fabul_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.fabul_item]
+
+    set #SpokeAboutRescuingRosa
+    set #LeviathanAttacked
+    deactivate #Monk    
+    deactivate #FabulMonk2
+    deactivate #fe_KingFabulThroneRoom
+    music #Fabul fade in
+
+    [#B #Objectives_Tick #objective.quest_fabul]
+
+cancel:
+    message $19B   // "King of Fabul:I see_  We can't force you."
+    batch 7 {
+        player move down
+    }
+    load map #FabulSecondFloor at 4 1 facing down
+}
+
+// delete sub-event trigger at inn
+trigger(#FabulInn 0)
+{
+    delete
+}
+mapgrid($4C 17 5) { 01 }
+
+// nullify Fabul ship trigger
+trigger(#Overworld 29)
+{
+    event call $02 // nothing
+}
+
+text(bank 1 message $19A) {
+King of Fabul:Will you
+ help us defend the
+ crystal?[next]
+}
+
+text(map #FabulKingRoom message $01) {
+King:We owe you so much.
+ Take this. Dark Knight
+ who came to Fabul left
+ this long ago.
+}
+
+text(map #FabulKingRoom message $07) {X}
+

@@ -1,0 +1,70 @@
+npc(#Yang4)
+{
+    eventcall {
+        if #UsedPan:
+            $27   //map message 0
+        else:
+            $E5   //Rydia learning Sylph using the Pan
+    }
+}
+
+event($E5)  //Rydia learning Sylph using the Pan
+{
+    consts(placement) {
+        0   Yang4
+        4   BedsideSylph
+    }
+    // autodetected map #SylvanCaveYangRoom
+    set #FoundSleepingYang
+    select item #Pan
+    player face up
+    music #None
+    sound $76
+    batch 10 {
+        screen flash
+    }
+    p #Yang4 bow head
+    pause 16
+    map message 9  // "[Yang]:Mmm_ "
+    player face up
+    music #Town fade in
+    pause 4
+    p #Yang4 face down
+    pause 6
+    p #Yang4 face left
+    pause 3
+    p #Yang4 face down
+    pause 3
+    p #Yang4 face right
+    pause 3
+    p #Yang4 face down
+    pause 8
+    [#B #Objectives_Tick #objective.quest_wakeyang]
+
+    p #BedsideSylph move down
+    player face right
+    pause 4
+
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.sylph_item 0]
+    // %if ap_sylph_item%
+    music #DummyFanfare
+    message #ap_reward_slot.sylph_item
+    // %else%
+    message #msg.fe_ReceivedFanfare
+    // %end%
+    sound #GetItem
+    [#B #Objectives_TickRewardSlot #reward_slot.sylph_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.sylph_item]
+    player face up
+
+    pause 2
+    p #BedsideSylph move up
+
+    p #Yang4 bow head
+    pause 4
+    map message 0  // "[Yang]:Sorry_ I cannot  be of any help now."
+    music #Feymarch fade in
+    set #UsedPan
+}
+
+text(map #SylvanCaveYangRoom message 10) {X}

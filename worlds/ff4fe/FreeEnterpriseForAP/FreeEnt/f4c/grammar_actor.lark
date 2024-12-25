@@ -1,0 +1,17 @@
+actor_block_params : actor_value
+
+actor_block_body : actor_block_item*
+
+actor_block_item : "name" number                -> name
+                 | "load" load_params           -> load
+                 | "save" "to" "slot" number    -> save
+                 | "discard"                    -> discard
+                 | "commands" _block_start command_value* _block_end   -> commands
+                 | "right" "hand" item_value [number]  -> right_hand
+                 | "left" "hand" item_value [number]   -> left_hand
+                 | "head" item_value                   -> head
+                 | "body" item_value                   -> body
+                 | "arms" item_value                   -> arms
+
+load_params : "from" "slot" number                          -> slot
+            | "from" "stats" number                         -> stats

@@ -1,0 +1,478 @@
+msfpatch {
+    Wacky__PostTreasureHook:
+        // trigger random battle
+        lda $1702
+        sta $3d
+        stz $3e
+        lda $1701
+        beq $+Overworld
+        inc $3e
+    %Overworld:
+        // set can't run value
+        lda #$01
+        sta $_Wacky__RAM
+
+        lda #$00
+        ldy #$8a73
+        jml $=LongCall // thunk to RTL
+
+    Wacky__PostBattleHook:
+        // clear can't run value
+        stz $_Wacky__RAM
+        rtl
+}
+
+// %if flags: ~Ecantrun%
+msfpatch {
+    .addr $03a0b0
+        jml $=Wacky__WannaFight_RunCheck1
+
+    .new
+    Wacky__WannaFight_RunCheck1:
+        and #$01
+        bne $+RunningDisabled
+        lda $_Wacky__RAM
+        bne $+RunningDisabled
+        lda #$00
+        jml $03a0b4
+    
+    %RunningDisabled:
+        jml $03a0e8
+}
+
+msfpatch {
+    .addr $03d982
+        jml $=Wacky__WannaFight_RunCheck2
+
+    .new
+    Wacky__WannaFight_RunCheck2:
+        and #$01
+        bne $+RunningDisabled
+        lda $_Wacky__RAM
+        bne $+RunningDisabled
+        lda #$00
+        jml $03d986
+    
+    %RunningDisabled:
+        jml $03d991
+}
+// %end%
+
+// use top bit of encounter table index number to
+// mean "use the outdoor encounter table"
+msfpatch {
+    .addr $008a75
+        jsl $=Wacky__WannaFight_OutdoorTableCheck1
+
+    .new
+    Wacky__WannaFight_OutdoorTableCheck1:
+        lda $0ec596,x
+        pha
+        and #$80
+        sta $_(Wacky__RAM+1)
+        pla
+        and #$7f
+        rtl
+}
+
+msfpatch {
+    .addr $008a7e
+        jsl $=Wacky__WannaFight_OutdoorTableCheck2
+
+    .new
+    Wacky__WannaFight_OutdoorTableCheck2:
+        lda $_(Wacky__RAM+1)
+        bne $+UseOutdoorTable
+        lda $0ec816,x
+        rtl
+    %UseOutdoorTable:
+        lda $0ec796,x
+        rtl
+}
+
+
+// Fill in encounter table for maps without encounters
+patch ($0ec596 bus) {
+     80  // $00  BaronTown
+     81  // $01  Mist
+     81  // $02  Kaipo
+     84  // $03  Mysidia
+     85  // $04  Silvera
+     85  // $05  ToroiaTown
+     86  // $06  Agart
+     85  // $07  ToroiaInn
+     85  // $08  ToroiaWeapon
+     85  // $09  ToroiaArmor
+     85  // $0A  ToroiaItem
+     80  // $0B  BaronInn
+     80  // $0C  BaronEquipment
+     80  // $0D  CidHouse
+     80  // $0E  RosaHouse
+     81  // $0F  RydiaHouse
+     81  // $10  KaipoInn
+     81  // $11  KaipoCafe
+     81  // $12  KaipoHospital
+     84  // $13  MysidiaCafe
+     84  // $14  MysidiaInn
+    00  // $15  MountOrdealsMirrorRoom
+     84  // $16  HouseOfWishes
+     84  // $17  RoomOfWishes
+     85  // $18  ToroiaCafe
+     85  // $19  ToroiaCafeUpstairs
+     85  // $1A  ToroiaDancers
+    00  // $1B  ???
+     85  // $1C  ToroiaStable
+     85  // $1D  ToroiaStableDownstairs
+     86  // $1E  AstroTower
+     86  // $1F  AstroTowerObservatory
+     86  // $20  AgartInn
+     05  // $21  BlackChocoboForest
+    00  // $22  TownWaterBG
+    00  // $23  CastleFloorBG
+     80  // $24  BaronCastle
+     82  // $25  Damcyan
+     83  // $26  Fabul
+     85  // $27  ToroiaCastle
+     86  // $28  Eblan
+    00  // $29  DesertBG
+     80  // $2A  BaronCastleLobby
+     80  // $2B  BaronCastleOuterCourt
+     80  // $2C  BaronCastleThroneRoom
+     80  // $2D  BaronCastleWestHall
+     80  // $2E  BaronCastleEastHall
+     80  // $2F  BaronCastlePrisonEntrance
+     80  // $30  BaronCastlePrison
+     80  // $31  BaronCastleSoldiersQuarters
+     80  // $32  BaronCastleWestTower1F
+     80  // $33  BaronCastleWestTower2F
+     80  // $34  BaronCastleCecilRoom
+     80  // $35  BaronCastleEastTower1F
+     80  // $36  BaronCastleEastTower2F
+     80  // $37  BaronCastleEastTower3F
+     80  // $38  BaronCastleEastTowerB1
+     80  // $39  BaronCastleOdinRoom
+    0E  // $3A  SewerEntrance
+    0F  // $3B  SewerB3
+    10  // $3C  SewerB1
+    10  // $3D  SewerSaveRoom
+    10  // $3E  SewerB2
+     82  // $3F  Damcyan1F
+     82  // $40  Damcyan2F
+     82  // $41  Damcyan3F
+     82  // $42  DamcyanTreasuryEntrance
+     82  // $43  DamcyanTreasuryDownstairs
+     0E  // $44  RoomToSewer
+     86  // $45  AgartWeapon
+     86  // $46  AgartArmor
+     83  // $47  FabulLobby
+     83  // $48  FabulSecondFloor
+     83  // $49  FabulThroneRoom
+     83  // $4A  FabulCrystalRoom
+     83  // $4B  FabulEquipment
+     83  // $4C  FabulInn
+     83  // $4D  FabulEastTower1F
+     83  // $4E  FabulEastTower2F
+     83  // $4F  FabulKingRoom
+     83  // $50  FabulWestTower1F
+     83  // $51  FabulHospital
+     83  // $52  FabulYangRoom
+    00  // $53  FieldOutsideMist
+     01  // $54  WateryPassSaveRoom
+     85  // $55  ToroiaCastleLobby
+     85  // $56  ToroiaCastleClericRoom
+     85  // $57  ToroiaCastleCrystalRoom
+     85  // $58  ToroiaCastleHospital
+     85  // $59  ToroiaCastleStairs
+     85  // $5A  ToroiaCastleHall
+     85  // $5B  ToroiaCastlePotRoom
+     85  // $5C  ToroiaCastleChestRoom
+     85  // $5D  ToroiaCastleTreasury
+     86  // $5E  Eblan1F
+     86  // $5F  Eblan2F
+     86  // $60  EblanThroneRoom
+     86  // $61  EblanWestTower1F
+     86  // $62  EblanWestTower2F
+     86  // $63  EblanEastTower1F
+     86  // $64  EblanEastTower2F
+     86  // $65  EblanBasement
+     80  // $66  BaronCastleBlackMagicSchool
+     80  // $67  BaronCastleWhiteMagicSchool
+    00  // $68  DesertBG2
+    00  // $69  TrainingRoom
+     04  // $6A  Waterfall
+    00  // $6B  CastleWaterBG
+    00  // $6C  MistCave
+    00  // $6D  MirrorRoomBG
+    00  // $6E  WateryPassBG
+    01  // $6F  WateryPass1F
+    01  // $70  WateryPass2F
+    02  // $71  WateryPass3F
+    02  // $72  WateryPass4F
+    03  // $73  WateryPass5F
+    04  // $74  WaterfallEntrance
+    04  // $75  Waterfall1F
+    04  // $76  Waterfall2F
+    05  // $77  AntlionCave1F
+    06  // $78  AntlionCave2F
+    06  // $79  AntlionCaveNest
+    05  // $7A  AntlionCaveSaveRoom
+    05  // $7B  AntlionCaveTreasureRoom
+    05  // $7C  BlackBG
+    05  // $7D  MistBG
+    07  // $7E  MountHobsWest
+    08  // $7F  MountHobsSummit
+    09  // $80  MountHobsEast
+    08  // $81  MountHobsSave
+    00  // $82  MountainBG
+    00  // $83  WateryPassWaterfallRoom
+    0A  // $84  MountOrdeals1F
+    0B  // $85  MountOrdeals2F
+    0C  // $86  MountOrdeals3F
+    0C  // $87  MountOrdealsSummit
+     84  // $88  MysidiaCrystalRoom
+     84  // $89  MysidiaSerpentRoad
+     80  // $8A  BaronCastleAntechamber
+     86  // $8B  AgartWell
+    11  // $8C  CaveMagnes1F
+    12  // $8D  CaveMagnes2F
+    12  // $8E  CaveMagnesPitTreasureRoom
+    13  // $8F  CaveMagnes3F
+    13  // $90  CaveMagnesTorchTreasureRoom
+    14  // $91  CaveMagnes4F
+    11  // $92  CaveMagnesSaveRoom
+    14  // $93  CaveMagnes5F
+     14  // $94  CaveMagnesCrystalRoom
+    00  // $95  CaveMagnesBG
+    00  // $96  WateryPassCamp
+     80  // $97  BaronSerpentRoad
+    15  // $98  Zot1F
+    16  // $99  Zot2F
+    17  // $9A  Zot3F
+    00  // $9B  Black
+    18  // $9C  Zot4F
+    19  // $9D  Zot5F
+     19  // $9E  Zot6F
+     19  // $9F  ZotCommandCenter
+     85  // $A0  AdamantGrotto
+     14  // $A1  CaveMagnesSaveRoom2
+     19  // $A2  ZotSaveRoom
+    00  // $A3  CidAirship
+    00  // $A4  TwinsAirship
+    00  // $A5  EdwardAirship
+     26  // $A6  BabilSaveRoom2
+    24  // $A7  BabilB1
+    25  // $A8  BabilB2
+    26  // $A9  BabilB3
+    27  // $AA  BabilB4
+     28  // $AB  BabilCrystalRoom
+    28  // $AC  BabilB5
+    29  // $AD  FallingBG
+    2A  // $AE  UndergroundTunnelBG
+    00  // $AF  CrystalRoomBG
+    00  // $B0  EndingCecilRoom
+    00  // $B1  TrainingRoomMain
+    00  // $B2  TrainingRoomUpstairs
+    00  // $B3  ???
+    00  // $B4  ???
+    3A  // $B5  GiantMouth
+    3A  // $B6  GiantNeck
+    3B  // $B7  GiantChest
+    00  // $B8  ???
+    3C  // $B9  GiantStomach
+    3D  // $BA  GiantPassage
+    00  // $BB  ???
+    3E  // $BC  GiantLung
+    3F  // $BD  GiantCPU
+    00  // $BE  GiantBG
+    00  // $BF  ???
+    00  // $C0  SoldierAirship
+    00  // $C1  FabulPort
+    00  // $C2  Boat
+    00  // $C3  DockedAirship
+    00  // $C4  JoinedAirships
+    00  // $C5  EmptyAirship
+    00  // $C6  UnderworldAirship
+    1A  // $C7  CaveEblanEntrance
+     1A  // $C8  CaveEblanSettlement
+    1B  // $C9  CaveEblanPass
+    0D  // $CA  CaveEblanExit
+     1A  // $CB  CaveEblanInn
+     1A  // $CC  CaveEblanEquipment
+     1A  // $CD  CaveEblanSaveRoom
+     1A  // $CE  CaveEblanHospital
+     83  // $CF  FabulChocoboForest
+    00  // $D0  EmptyAirship2
+     84  // $D1  MountOrdealsChocoboForest
+     80  // $D2  BaronChocoboForest
+     85  // $D3  TroiaChocoboForest
+     81  // $D4  IslandChocoboForest
+     80  // $D5  BaronEmptyThroneRoom
+    00  // $D6  EmptyAirshipBlack
+    00  // $D7  EmptyAirship3
+    00  // $D8  EmptyAirshipUnderground
+    00  // $D9  EmptyAirshipBlack2
+    00  // $DA  TowerOfWishesFinalBattle
+    00  // $DB  AirshipBG
+    00  // $DC  LargeDock
+    00  // $DD  ???
+    00  // $DE  ???
+    00  // $DF  SmallDock
+     81  // $E0  MistInn
+     81  // $E1  MistWeapon
+     81  // $E2  MistArmor
+     81  // $E3  KaipoWeapon
+     81  // $E4  KaipoArmor
+     84  // $E5  MysidiaWeapon
+     84  // $E6  MysidiaArmor
+     84  // $E7  MysidiaItem
+     85  // $E8  SilveraInn
+     85  // $E9  SilveraWeapons
+     85  // $EA  SilveraArmor
+     85  // $EB  SilveraItems
+     80  // $EC  BaronTownItems
+    00  // $ED  EndingTowerOfWishes
+    00  // $EE  EndingPalom
+    00  // $EF  EndingEblan
+    00  // $F0  EndingLeviathan
+    00  // $F1  EndingDamcyan
+    00  // $F2  EndingDwarfCastle
+    00  // $F3  EndingMountOrdeals
+    00  // $F4  EndingAstroTower
+    00  // $F5  EndingCecilRoom2
+    00  // $F6  EndingBaronThroneRoom
+    00  // $F7  EndingFabulThroneRoom
+    00  // $F8  ???
+    00  // $F9  ???
+    00  // $FA  ???
+    00  // $FB  Overworld
+    00  // $FC  Underworld
+    00  // $FD  Moon
+    00  // $FE  CurrentMap
+    00  // $FF  ???
+     88  // $100  SmithyHouse
+     88  // $101  Tomra
+     88  // $102  SmithyHouseMainFloor
+     88  // $103  SmithyRoom
+     88  // $104  TomraInn
+     88  // $105  TomraEquipment
+     88  // $106  TomraTreasury
+     87  // $107  DwarfCastle
+     87  // $108  DwarfCastleLobby
+     87  // $109  DwarfCastleThroneRoom
+     87  // $10A  DwarfCastleFatChocobo
+     87  // $10B  DwarfCastleTunnel
+    00  // $10C  CrystalRoomBG2
+     87  // $10D  DwarfCastleCrystalRoom
+     87  // $10E  DwarfCastleEquipment
+     87  // $10F  DwarfCastleBasement
+     87  // $110  DwarfCastleEastTower1F
+     87  // $111  DwarfCastleInn
+     87  // $112  DwarfCastleHospital
+     87  // $113  DwarfCastleWestTower1F
+     1D  // $114  BabilSaveRoom
+    1D  // $115  BabilIcebrandRoom
+    1E  // $116  BabilBlizzardRoom
+    1F  // $117  BabilIceShieldRoom
+    20  // $118  BabilIceMailRoom
+     87  // $119  DwarfCastleEastTower3F
+     87  // $11A  DwarfCastleWestTower3F
+     87  // $11B  DwarfCastleTower2F
+     87  // $11C  DwarfCastleBG
+    2B  // $11D  BabilFloorLugae
+    2C  // $11E  BabilFloorIceMail
+    2D  // $11F  BabilFloorAirship
+     87  // $120  DwarfCastleCafe
+    1C  // $121  Babil1F
+    1D  // $122  Babil2F
+    1E  // $123  Babil3F
+    1F  // $124  Babil4F
+    20  // $125  Babil5F
+    21  // $126  BabilFloorAirship2
+    22  // $127  BabilFloorIceMail2
+    23  // $128  BabilFloorLugae2
+    39  // $129  ???
+    00  // $12A  ???
+    00  // $12B  ???
+    00  // $12C  BigWhale
+     1F  // $12D  BabilCannon
+    00  // $12E  DwarfTank
+    00  // $12F  BigWhale2
+    00  // $130  BabilBG
+    00  // $131  EndingPalom2
+     88  // $132  TomraItem
+     84  // $133  TowerOfWishesAfterGiant
+    00  // $134  CastleFloorBG2
+    00  // $135  TownWaterBG2
+    33  // $136  CaveOfSummons1F
+    34  // $137  CaveOfSummons2F
+    35  // $138  CaveOfSummons3F
+    00  // $139  SylvanCaveBG
+     33  // $13A  Feymarch1F
+     34  // $13B  FeymarchTreasury
+     34  // $13C  Feymarch2F
+     35  // $13D  FeymarchSaveRoom
+     35  // $13E  FeymarchLibrary1F
+     35  // $13F  FeymarchLibrary2F
+     35  // $140  FeymarchLeviathanRoom
+     35  // $141  FeymarchWeapon
+     35  // $142  FeymarchArmor
+     35  // $143  FeymarchInn
+     30  // $144  SealedCaveEntrance
+    2E  // $145  SylvanCave1F
+    2F  // $146  SylvanCave2F
+    2E  // $147  SylvanCave3F
+    2F  // $148  SylvanCaveTreasury
+     2E  // $149  SylvanCaveYangRoom
+    30  // $14A  SealedCave1F
+    30  // $14B  SealedCaveRoomKatanaEther
+    30  // $14C  SealedCave2F
+    30  // $14D  SealedCave3F
+    31  // $14E  SealedCaveRoomKatanaNinjaHat
+    31  // $14F  SealedCaveRoomNinjaStarElixir
+    31  // $150  SealedCaveRoomLightSword
+    31  // $151  SealedCave4F
+    31  // $152  SealedCave5F
+    32  // $153  SealedCave6F
+    32  // $154  SealedCaveRoomBoxes
+     32  // $155  SealedCave7F
+     32  // $156  SealedCaveSaveRoom
+     32  // $157  SealedCaveDemonWallRoom
+     32  // $158  SealedCaveEmptyRoom
+     32  // $159  SealedCaveCrystalRoom
+    37  // $15A  Bahamut1F
+    38  // $15B  Bahamut2F
+    42  // $15C  BahamutFloor
+    00  // $15D  ???
+    00  // $15E  ???
+    00  // $15F  ???
+     89  // $160  LunarPalaceLobby
+     89  // $161  LunarPalaceCrystalRoom
+    00  // $162  LunarBG
+    4A  // $163  LunarPassage1
+    4B  // $164  LunarPassage2
+     89  // $165  Hummingway
+    00  // $166  LunarLairBG
+    40  // $167  LunarSubterran1F
+    41  // $168  LunarSubterran2F
+    42  // $169  LunarSubterran3F
+    43  // $16A  LunarSubterran4F
+    44  // $16B  LunarSubterran5F
+    45  // $16C  LunarSubterran6F
+    46  // $16D  LunarSubterran7F
+    48  // $16E  LunarCore1F
+    48  // $16F  LunarCore2F
+    49  // $170  LunarCore3F
+    3F  // $171  LunarCore4F
+     3F  // $172  LunarCoreZemusRoom
+    44  // $173  LunarSubterranRoomElixir
+    46  // $174  LunarSubterranTunnelCure3
+    46  // $175  LunarSubterranTunnelProtectRing
+    47  // $176  LunarSubterranTunnelWhiteRobe
+    4C  // $177  LunarSubterranPinkpuff
+     44  // $178  LunarSubterranSaveRoom1
+    47  // $179  LunarSubterranTunnelMinerva
+    47  // $17A  LunarSubterranRoomHolyLance
+     46  // $17B  LunarSubterranSaveRoom2
+    47  // $17C  LunarSubterranRoomRibbons
+    00  // $17D  LunarCoreBG
+}

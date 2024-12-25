@@ -1,0 +1,548 @@
+msfpatch {
+    .def  Util__LongAddress_Low   $7e166d
+    .def  Util__LongAddress_High  $7e166e
+    .def  Util__LongAddress_Bank  $7e166f
+}
+
+msfpatch {
+    Util__WaitVBlank:
+        lda #$01
+        sta $7d
+    %Loop:
+        lda $7d
+        bne $-Loop
+        rts
+}
+
+msfpatch {
+    Util__XPlus40:
+        rep #$20
+        .mx 0x00
+        pha
+        txa
+        clc
+        adc #$0040
+        tax
+        pla
+        sep #$20
+        .mx 0x20
+        rts
+
+    Util__XPlus80:
+        rep #$20
+        .mx 0x00
+        pha
+        txa
+        clc
+        adc #$0080
+        tax
+        pla
+        sep #$20
+        .mx 0x20
+        rts
+
+    Util__YPlus40:
+        rep #$20
+        .mx 0x00
+        pha
+        tya
+        clc
+        adc #$0040
+        tay
+        pla
+        sep #$20
+        .mx 0x20
+        rts
+
+
+
+
+    Util__FindJobInParty:
+        // params: A = job to find
+        phy
+        ldx #$0000
+        ldy #$0000
+        sta $0ffb
+    Util__FindJobInParty_Loop:
+        lda $1000,x
+        and #$1f
+        beq $+Util__FindJobInParty_LoopNext
+        lda $1001,x
+        and #$0f
+        cmp $0ffb
+        bne $+Util__FindJobInParty_LoopNext
+
+        // found job
+        tya
+        ply
+        rts
+
+    Util__FindJobInParty_LoopNext:
+        iny
+        jsr $_Util__XPlus40
+        cpx #$0140
+        bne $-Util__FindJobInParty_Loop
+
+        lda #$ff
+        ply
+        rts
+
+
+
+    Util__PlaySFX:
+        // params: A = sfx to play
+        sta $1e01
+        lda #$80
+        sta $1e02
+        lda #$ff
+        sta $1e03
+        lda #$02
+        sta $1e00
+        jsr $048004
+        rts        
+}
+
+msfpatch {
+    Util__CheckPlotFlag:
+        // param: A = flag to check
+
+        // code below is largely taken from 00:F133
+        pha         
+        lsr a
+        lsr a
+        lsr a
+        sta $168e
+        stz $168f
+        pla
+        and #$07
+        tay
+        // at this point: $168e = (flag >> 3), Y = (flag & 0x07)
+
+        lda #$01
+    %LoopStart:
+        cpy #$0000
+        beq $+LoopEnd
+        asl a
+        dey
+        bra $-LoopStart
+
+    %LoopEnd:
+        ldx $168e
+        and $1280,x
+        beq $+ReturnFalse
+        sec
+        rts
+
+    %ReturnFalse:
+        clc
+        rts
+}
+
+msfpatch {
+    // replication of 0383e0 used for battle hacking. 
+    // calculates $E3 = $DF * $E1 (16-bit operands and result)
+    Util__BattleMultiplyE3:
+        stz $e0
+        stz $e2
+        rep #$20
+        .mx 0x00
+        ldx #$0010
+        stz $e3
+        stz $394d
+    %Loop:
+        ror $e1
+        bcc $+Zero
+        clc 
+        lda $df
+        adc $394d
+        sta $394d
+    %Zero:
+        ror $394d
+        ror $e3
+        dex 
+        bne $-Loop
+        tdc 
+        sep #$20
+        .mx 0x20
+        rts 
+}
+
+msfpatch {
+    // replication of 0383e0 used for battle hacking. 
+    // calculates $3941 = $393d * $393f (16-bit operands, 32-bit result)
+    Util__BattleMultiply3941:
+        rep #$20
+        .mx 0x00
+        ldx #$0010
+        stz $3941
+        stz $3943
+    %Loop:
+        ror $393f
+        bcc $+Zero
+        clc 
+        lda $393d
+        adc $3943
+        sta $3943
+    %Zero:
+        ror $3943
+        ror $3941
+        dex 
+        bne $-Loop
+        tdc 
+        sep #$20
+        .mx 0x20
+        rts 
+}
+
+msfpatch {
+    // replication of 038489 used for battle hacking
+    Util__CalcBattleOffsets:
+        sta $352f
+        sta $df
+        lda #$80
+        sta $e1
+        jsr $_Util__BattleMultiplyE3
+        ldx $e3
+        stx $a6
+        lda $352f
+        sta $df
+        lda #$15
+        sta $e1
+        jsr $_Util__BattleMultiplyE3
+        ldx $e3
+        stx $3530
+        lda $352f
+        sta $df
+        lda #$37
+        sta $e1
+        jsr $_Util__BattleMultiplyE3
+        ldx $e3
+        stx $3532
+        lda $352f
+        sta $df
+        lda #$1c
+        sta $e1
+        jsr $_Util__BattleMultiplyE3
+        ldx $e3
+        stx $3534
+        lda $352f
+        tax 
+        stx $393d
+        ldx #$0120
+        stx $393f
+        jsr $_Util__BattleMultiply3941
+        ldx $3941
+        stx $3536
+        rts 
+}
+
+msfpatch {
+    // Copy $13ff5f's division subroutine with different addrs
+    // ($1678-167A) = ($1670-1672) / ($1673-1674), remainder in $167D-167F 
+
+    .def Util__Divide_Dividend0  $7e1670
+    .def Util__Divide_Dividend1  $7e1671
+    .def Util__Divide_Dividend2  $7e1672
+    .def Util__Divide_Divisor0   $7e1674
+    .def Util__Divide_Divisor1   $7e1675
+    .def Util__Divide_Quotient0  $7e1678
+    .def Util__Divide_Quotient1  $7e1679
+    .def Util__Divide_Quotient2  $7e167a
+    .def Util__Divide_Remainder0 $7e167c
+    .def Util__Divide_Remainder1 $7e167d
+    .def Util__Divide_Remainder2 $7e167e
+
+    // quick reference for converting addresses from original code
+    // A9 AA AB AC AD AE AF B0 B1 B2 B3 B4 B5 B6 B7 B8
+    // 70 71 72 73 74 75 76 77 78 79 7A 7B 7C 7D 7E 7F
+
+    Util__Divide:
+        stz $1673
+        ldx #$0009
+    %BlankLoop:
+        stz $1676,x
+        dex
+        bpl $-BlankLoop
+
+        rep #$20
+        .mx 0x00
+        clc
+        ldx #$0020
+
+    %Loop:
+        rol $1670
+        rol $1672
+        rol $167c
+        rol $167e
+
+        sec
+        lda $167c
+        sbc $1674
+        sta $167c
+        lda $167e
+        sbc $1676
+        sta $167e
+
+        bcs $+Next
+
+        lda $167c
+        adc $1674
+        sta $167c
+        lda $167e
+        adc $1676
+        sta $167e
+        clc
+
+    %Next:
+        rol $1678
+        rol $167a
+        dex
+        bne $-Loop
+
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        rts
+}
+
+
+msfpatch {
+    // Input:  3-byte number in $1670-1672, prepadding character in 1673
+    // Output: text chars in $1674-167b
+
+    // largely a copy of 15c32a, but with different addrs
+
+    .def Util__NumberToText_Input0  $7e1670
+    .def Util__NumberToText_Input1  $7e1671
+    .def Util__NumberToText_Input2  $7e1672
+    .def Util__NumberToText_Pad     $7e1673
+    .def Util__NumberToText_Output0  $7e1674
+    .def Util__NumberToText_Output1  $7e1675
+    .def Util__NumberToText_Output2  $7e1676
+    .def Util__NumberToText_Output3  $7e1677
+    .def Util__NumberToText_Output4  $7e1678
+    .def Util__NumberToText_Output5  $7e1679
+    .def Util__NumberToText_Output6  $7e167a
+    .def Util__NumberToText_Output7  $7e167b
+
+    Util__NumberToText:
+        phx
+        phy
+
+        // copy padding character to safe area
+        lda $1673
+        bne $+NotDefaultChar
+        lda #$ff
+    %NotDefaultChar:
+        sta $167d
+
+        ldx #$0000
+    %DigitLoop:
+        ldy #$0080
+        stz $1673
+    %CountLoop:
+        rep #$20
+        .mx 0x00
+        lda $1670
+        sec
+        sbc $15c375,x
+        sta $1670
+        lda $1672
+        sbc $15c385,x
+        sta $1672
+        bcc $+Overflow
+        iny
+        bra $-CountLoop
+
+    %Overflow:
+        lda $1670
+        clc
+        adc $15c375,x
+        sta $1670
+        lda $1672
+        adc $15c385,x
+        sta $1672
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        phx
+        txa
+        lsr a
+        tax
+        tya
+        sta $1674,x
+        plx
+        inx
+        inx
+        cpx #$0010
+        bne $-DigitLoop
+
+        // add 00 terminator for convenience
+        stz $167c
+
+        // replace leading 0's with prepadding character
+        ldy #$0000
+    %PrepadLoop:
+        lda $1674,y
+        cmp #$80
+        bne $+PrepadDone
+        lda $167d
+        sta $1674,y
+        iny
+        cpy #$0007
+        bcc $-PrepadLoop
+
+    %PrepadDone:
+        ply
+        plx
+        rts
+
+
+}
+
+
+msfpatch {
+    // bank 3 external interface functions
+    .addr $03fee3
+        Util__BattleRNG:
+            jsr $8379
+            rtl
+}
+
+msfpatch {
+    // copy of 01:8078
+    Util__MenuDMA:
+        phb                 // sub: (H?)DMA transfer to VRAM
+        tdc                 //  $011D - VRAM word address
+        pha                 //  $011F - source address
+        plb                 //  $0121 - source bank / HDMA bank???
+        lda #$80            //  $0123 - transfer size high byte
+        sta $2115
+        tdc 
+        sta $420c
+        ldy $011d
+        sty $2116
+        lda #$01
+        sta $4300
+        lda #$18
+        sta $4301
+        rep #$20
+        .mx 0x00
+        lda $011f
+        sta $4302
+        lda $0121
+        sta $4304
+        sep #$20
+        .mx 0x20        
+        lda $0123
+        sta $4306
+        lda #$01
+        sta $420b
+        plb 
+        rts 
+
+}
+
+msfpatch {
+    Util__LoadChecksumTiles:
+        lda $00ffde
+        pha
+        and #$0f
+        sta $1670
+        pla
+        lsr a
+        lsr a
+        lsr a
+        lsr a
+        sta $1671
+
+        lda $00ffdf
+        pha
+        and #$0f
+        sta $1672
+        pla
+        lsr a
+        lsr a
+        lsr a
+        lsr a
+        sta $1673
+
+        lda #$00
+        xba
+        
+        ldy #$0000
+    %TranslateLoop:
+        lda $1670,y
+        tax
+        lda $=TileTable,x
+        sta $1670,y
+        iny
+        cpy #$0004
+        bcc $-TranslateLoop
+
+        rts
+
+    %TileTable: [[
+        23 //mini
+        28 //feather
+        29 //claw
+        2B //staff
+        2E //sword
+        32 //star
+        36 //harp
+        37 //bow
+        3B //shield
+        3E //glove
+        79 //tent
+        7A //potion
+        7B //shirt
+        7C //ring
+        7D //crystal
+        7E //key
+    ]]
+}
+
+msfpatch {
+    Util__GetPartySize:
+        phx
+        ldx #$0000
+        lda $1000
+        beq $01
+        inx
+        lda $1040
+        beq $01
+        inx
+        lda $1080
+        beq $01
+        inx
+        lda $10c0
+        beq $01
+        inx
+        lda $1100
+        beq $01
+        inx
+        txa
+        plx
+        rts
+}
+
+
+msfpatch {
+    Util__SlotToPartyOffset:
+        // input: A = slot number
+        // output: X = slot number * 0x40
+        php
+        rep #$20
+        .mx 0x00
+
+        and #$00ff
+        asl a
+        tax
+        lda $16fd06,x
+        tax
+        lda #$0000
+        plp
+        rts
+}

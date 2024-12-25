@@ -1,0 +1,835 @@
+// ending vignette display positions
+patch($21d000 bus) {
+    00 00 00 00                              // none                        = 0x00
+    00 00 00 00                              // starting_character          = 0x01
+    00 00 00 00                              // starting_partner_character  = 0x02
+    00 00 00 00                              // mist_character              = 0x03
+    00 00 00 00                              // watery_pass_character       = 0x04
+    00 00 00 00                              // damcyan_character           = 0x05
+    00 00 00 00                              // kaipo_character             = 0x06
+    00 00 00 00                              // hobs_character              = 0x07
+    00 00 00 00                              // mysidia_character_1         = 0x08
+    00 00 00 00                              // mysidia_character_2         = 0x09
+    00 00 00 00                              // ordeals_character           = 0x0A
+    00 00 00 00                              //                             = 0x0B
+    00 00 00 00                              //                             = 0x0C
+    00 00 00 00                              // baron_inn_character         = 0x0D
+    00 00 00 00                              // baron_castle_character      = 0x0E
+    00 00 00 00                              // zot_character_1             = 0x0F
+    00 00 00 00                              // zot_character_2             = 0x10
+    00 00 00 00                              // dwarf_castle_character      = 0x11
+    00 00 00 00                              // cave_eblan_character        = 0x12
+    00 00 00 00                              // lunar_palace_character      = 0x13
+    00 00 00 00                              // giant_character             = 0x14
+    00 00 00 00                              //                             = 0x15
+    00 00 00 00                              //                             = 0x16
+    00 00 00 00                              //                             = 0x17
+    00 00 00 00                              //                             = 0x18
+    00 00 00 00                              //                             = 0x19
+    00 00 00 00                              //                             = 0x1A
+    00 00 00 00                              //                             = 0x1B
+    00 00 00 00                              //                             = 0x1C
+    00 00 00 00                              //                             = 0x1D
+    00 00 00 00                              //                             = 0x1E
+    00 00 00 00                              //                             = 0x1F
+    ##map.BaronCastleLobby             08 02 // starting_item               = 0x20
+    ##map.AntlionCaveNest              0E 16 // antlion_item                = 0x21
+    ##map.FabulKingRoom                06 03 // fabul_item                  = 0x22
+    ##map.MountOrdealsMirrorRoom       05 04 // ordeals_item                = 0x23
+    ##map.BaronInn                     0E 04 // baron_inn_item              = 0x24
+    ##map.BaronCastleThroneRoom        08 03 // baron_castle_item           = 0x25
+    ##map.ToroiaCastleHospital         09 07 // toroia_hospital_item        = 0x26
+    ##map.CaveMagnesCrystalRoom        0B 0B // magnes_item                 = 0x27
+    ##map.Zot6F                        07 05 // zot_item                    = 0x28
+    ##map.BabilFloorLugae              10 10 // babil_boss_item             = 0x29
+    ##map.BabilCannon                  05 06 // cannon_item                 = 0x2A
+    ##map.DwarfCastleThroneRoom        0B 05 // luca_item                   = 0x2B
+    ##map.SealedCaveDemonWallRoom      0F 03 // sealed_cave_item            = 0x2C
+    ##map.Feymarch1F                   14 08 // feymarch_item               = 0x2D
+    ##map.AdamantGrotto                07 0C // rat_trade_item              = 0x2E
+    ##map.FabulYangRoom                06 04 // found_yang_item             = 0x2F
+    ##map.FabulYangRoom                06 04 // pan_trade_item              = 0x30
+    ##map.FeymarchLeviathanRoom        07 05 // feymarch_queen_item         = 0x31
+    ##map.FeymarchLeviathanRoom        06 05 // feymarch_king_item          = 0x32
+    ##map.BaronCastleOdinRoom          0B 04 // baron_throne_item           = 0x33
+    ##map.SylvanCaveYangRoom           02 06 // sylph_item                  = 0x34
+    ##map.BahamutFloor                 08 0D // bahamut_item                = 0x35
+    ##map.LunarSubterran3F             04 15 // lunar_boss_1_item           = 0x36
+    ##map.LunarSubterran5F             18 04 // lunar_boss_2_item           = 0x37
+    ##map.LunarSubterranRoomHolyLance  03 05 // lunar_boss_3_item           = 0x38
+    ##map.LunarSubterranRoomRibbons    02 05 // lunar_boss_4_item_1         = 0x39
+    ##map.LunarSubterranRoomRibbons    04 05 // lunar_boss_4_item_2         = 0x3A
+    ##map.LunarCore1F                  18 18 // lunar_boss_5_item           = 0x3B
+    // %miab vignette positions%
+                                             // zot_chest                   = 0x3C
+                                             // eblan_chest_1               = 0x3D
+                                             // eblan_chest_2               = 0x3E
+                                             // eblan_chest_3               = 0x3F
+                                             // lower_babil_chest_1         = 0x40
+                                             // lower_babil_chest_2         = 0x41
+                                             // lower_babil_chest_3         = 0x42
+                                             // lower_babil_chest_4         = 0x43
+                                             // cave_eblan_chest            = 0x44
+                                             // upper_babil_chest           = 0x45
+                                             // cave_of_summons_chest       = 0x46
+                                             // sylph_cave_chest_1          = 0x47
+                                             // sylph_cave_chest_2          = 0x48
+                                             // sylph_cave_chest_3          = 0x49
+                                             // sylph_cave_chest_4          = 0x4A
+                                             // sylph_cave_chest_5          = 0x4B
+                                             // sylph_cave_chest_6          = 0x4C
+                                             // sylph_cave_chest_7          = 0x4D
+                                             // giant_chest                 = 0x4E
+                                             // lunar_path_chest            = 0x4F
+                                             // lunar_core_chest_1          = 0x50
+                                             // lunar_core_chest_2          = 0x51
+                                             // lunar_core_chest_3          = 0x52
+                                             // lunar_core_chest_4          = 0x53
+                                             // lunar_core_chest_5          = 0x54
+                                             // lunar_core_chest_6          = 0x55
+                                             // lunar_core_chest_7          = 0x56
+                                             // lunar_core_chest_8          = 0x57
+                                             // lunar_core_chest_9          = 0x58
+    // %end%
+    ##map.Mist                         0E 08 // rydias_mom_item             = 0x59
+    ##map.LunarCoreZemusRoom           10 0F // fallen_golbez_item          = 0x5A
+    ##map.SmithyHouseMainFloor         07 0A // forge_item                  = 0x5B
+    ##map.AdamantGrotto                07 0C // pink_trade_item             = 0x5C
+    00 00 00 00                              // fixed_crystal               = 0x5D
+}
+
+
+event($1C) {
+    music #Ending2
+
+    toggle screen fade
+
+    player invisible
+    [#B #Ending_FinalizeStats]
+    vfx #MysidianLegendSpace
+
+    [#B #If #not_ChecksumValid 0] {
+        // no ending vignettes if stored checksum has changed
+        // (eg. player has loaded this save data into another seed)
+        [#B #GotoEvent $31]
+    }
+
+    pause 6
+    
+    // activate all possibly-deactivated NPCs 
+    // that we need for vignettes
+    [#B #ActivateNPC #npc.fe_BaronYang 0]
+    [#B #ActivateNPC #npc.DoubleDoor16 1]
+    [#B #ActivateNPC #npc.DarkElf 0]
+    [#B #DeactivateNPC #npc.KingBaron 0]
+    [#B #ActivateNPC #npc.Kainazzo 0]
+    [#B #ActivateNPC #npc.FabulKing 0]
+    [#B #ActivateNPC #npc.HoodedMonster2 1]
+    [#B #ActivateNPC #npc.DarkKnightCecil1 0]  // actually Ordeals boss
+    [#B #DeactivateNPC #npc.Calbrena 1]
+    [#B #ActivateNPC #npc.Luca1 1]
+    [#B #ActivateNPC #npc.ZotKain 0]
+    [#B #ActivateNPC #npc.Golbez2 0]
+    [#B #ActivateNPC #npc.Baigan 0]
+    [#B #ActivateNPC #npc.CastleBaronSoldier1 0]
+    [#B #ActivateNPC #npc.CastleBaronSoldier2 0]
+    [#B #ActivateNPC #npc.CastleBaronSoldier3 0]
+    [#B #ActivateNPC #npc.AntlionLeftClaw 0]
+    [#B #ActivateNPC #npc.AntlionRightClaw 0]
+    [#B #ActivateNPC #npc.Lugae 1]
+    [#B #ActivateNPC #npc.fe_Odin 0]
+    [#B #ActivateNPC #npc.Murasame 1]
+    [#B #ActivateNPC #npc.CrystalSword 1]
+    [#B #ActivateNPC #npc.WhiteSpear 1]
+    [#B #ActivateNPC #npc.Masamune 1]
+    [#B #ActivateNPC #npc.RydiaMom 0]
+    [#B #ActivateNPC #npc.SmithyFinishedExcalibur 1]
+
+    // clear any lingering screen tints
+    [#B #TintOff]
+
+    // begin vignette loop
+    player invisible
+    [#B #Ending_InitVignetteLoop]
+    [#B #GotoEvent $1D]
+}
+
+event($1D) {
+    // main vignette loop
+    [#B #Ending_CheckVignettesDone]
+    [#B #If #Flag #flag.Result] {
+        // after vignettes
+
+        toggle screen fade
+
+        pause 10
+
+        [#B #GotoEvent $31]
+    }
+
+    [#B #Ending_LoadVignetteMap]
+    [#B #GiveFloat]  // in case of vignettes with damage floors
+
+    pause 7
+
+    // "scroll up"
+    batch 11 {
+        player move up
+    }
+
+    pause 6
+
+    [#B #If #ChecksumValid 0] {
+        // only show text box if checksum is valid
+        // (prevents seeing answers from loading save
+        //  state from another seed)
+        [#B #Ending_DrawVignetteWindow]
+    }
+
+    // loop
+    [#B #Ending_NextVignette]
+    [#B #GotoEvent $1D]
+}
+
+
+event($31) {
+    music #Ending3
+    vfx #EndCredits
+}
+
+
+//------------------------------------------------------
+// hack the text rendering routine used for
+// Mysidian Legend to respond to new custom
+// codes for displaying our stats
+
+msfpatch {
+    .addr $13eb40
+        jml $=Ending_TextCodes_Hook
+}
+
+msfpatch {
+    Ending_TextCodes_Hook:
+        // perform 0A check from displaced code 
+        // and simulate behavior
+        cmp #$0a
+        bne $04
+        jml $13eb7c
+
+        // check new command codes
+        // (can't use 02, that one is multispace)
+        cmp #$03
+        bne $03
+        jmp $_Ending_TextCodes_Stats
+
+        // all other cases, treat as multispace
+        // as per usual behavior
+        jml $13eb47
+
+    Ending_TextCodes_Return:
+        jml $13eb36
+
+    Ending_TextCodes_Stats:
+        // get next parameter to see what stat
+        ldx $36
+        inx
+        stx $36
+        lda [$36]
+
+        cmp #$00
+        bne $03
+        jmp $_Ending_TextCodes_Stats_KeyItems
+
+        cmp #$01
+        bne $03
+        jmp $_Ending_TextCodes_Stats_Characters
+
+        cmp #$02
+        bne $03
+        jmp $_Ending_TextCodes_Stats_Treasures
+
+        cmp #$03
+        bne $03
+        jmp $_Ending_TextCodes_Stats_Bosses
+
+        cmp #$04
+        bne $03
+        jmp $_Ending_TextCodes_Stats_EndTime
+
+        cmp #$05
+        bne $03
+        jmp $_Ending_TextCodes_Stats_MaxKeyItems
+
+        cmp #$06
+        bne $03
+        jmp $_Ending_TextCodes_Stats_MaxCharacters
+
+        cmp #$07
+        bne $03
+        jmp $_Ending_TextCodes_Stats_MaxTreasures
+
+        jmp $_Ending_TextCodes_Return
+
+    Ending_TextCodes_Number_TwoDigitFromA:
+        sta $30
+        stz $31
+        stz $32
+
+        // The number-to-digits subroutine stomps all over
+        // the memory being used in the text reading routine,
+        // so save that state
+        ldx $34
+        phx
+        ldx $36
+        phx
+        ldx $38
+        phx
+        ldx $3a
+        phx
+
+        // call conversion routine
+        phy
+        jsl $15c32a
+        ply
+
+        // save digit chars
+        lda #$80
+        sta $30
+        ldx $3a
+        stx $31
+
+        // restore saved state
+        plx
+        stx $3a
+        plx
+        stx $38
+        plx
+        stx $36
+        plx
+        stx $34
+
+        jsr $_Ending_TextCodes_Number_HandleLeadingZeroes
+        jmp $_Ending_TextCodes_Number_OutputTwoDigits
+
+
+    Ending_TextCodes_Number_ThreeDigitFromX:
+        stx $30
+        stz $32
+
+        // The number-to-digits subroutine stomps all over
+        // the memory being used in the text reading routine,
+        // so save that state
+        ldx $34
+        phx
+        ldx $36
+        phx
+        ldx $38
+        phx
+        ldx $3a
+        phx
+
+        // call conversion routine
+        phy
+        jsl $15c32a
+        ply
+
+        // save digit chars
+        ldx $39
+        stx $30
+        lda $3b
+        sta $32
+
+        // restore saved state
+        plx
+        stx $3a
+        plx
+        stx $38
+        plx
+        stx $36
+        plx
+        stx $34
+
+        // output digits
+        jsr $_Ending_TextCodes_Number_HandleLeadingZeroes
+
+        lda $30
+        jsr $_Ending_TextCodes_OutputA
+    Ending_TextCodes_Number_OutputTwoDigits:
+        lda $31
+        jsr $_Ending_TextCodes_OutputA
+        lda $32
+        jsr $_Ending_TextCodes_OutputA
+        rts
+
+
+    Ending_TextCodes_Number_HandleLeadingZeroes:
+        lda $3e
+        bne $+Ending_TextCodes_Number_HandleLeadingZeroes_Done
+
+        lda $30
+        cmp #$80
+        bne $+Ending_TextCodes_Number_HandleLeadingZeroes_Done
+        lda #$FF
+        sta $30
+
+        lda $31
+        cmp #$80
+        bne $+Ending_TextCodes_Number_HandleLeadingZeroes_Done
+        lda #$FF
+        sta $31
+
+    Ending_TextCodes_Number_HandleLeadingZeroes_Done:
+        rts
+
+
+
+    Ending_TextCodes_Stats_KeyItems:
+        lda $_Stats_KeyItems
+        stz $3e  // erase leading zeroes
+        jsr $_Ending_TextCodes_Number_TwoDigitFromA
+        jmp $_Ending_TextCodes_Return
+
+    Ending_TextCodes_Stats_MaxKeyItems:
+        lda $21f0fe  // [hardcoded]
+        stz $3e  // erase leading zeroes
+        jsr $_Ending_TextCodes_Number_TwoDigitFromA
+        jmp $_Ending_TextCodes_Return
+
+    Ending_TextCodes_Stats_Characters:
+        lda $_Stats_Characters
+        stz $3e  // erase leading zeroes
+        jsr $_Ending_TextCodes_Number_TwoDigitFromA
+        jmp $_Ending_TextCodes_Return
+
+    Ending_TextCodes_Stats_MaxCharacters:
+        lda $21f0fd   // [hardcoded]
+        stz $3e  // erase leading zeroes
+        jsr $_Ending_TextCodes_Number_TwoDigitFromA
+        jmp $_Ending_TextCodes_Return
+
+    Ending_TextCodes_Stats_Treasures:
+        rep #$20
+        .mx 0x00
+        lda $21f0fa   // [hardcoded]
+        clc
+        adc $_Stats_Treasures
+        sec
+        sbc #$018f    // [hardcoded] = 399
+        tax
+        lda #$0000
+        sep #$20
+        .mx 0x20
+
+        stz $3e  // erase leading zeroes
+        jsr $_Ending_TextCodes_Number_ThreeDigitFromX
+        jmp $_Ending_TextCodes_Return
+
+    Ending_TextCodes_Stats_MaxTreasures:
+        lda $21f0fa  // [hardcoded]
+        sta $1670
+        lda $21f0fb  // [hardcoded]
+        sta $1671
+        ldx $1670
+
+        stz $3e  // erase leading zeroes
+        jsr $_Ending_TextCodes_Number_ThreeDigitFromX
+        jmp $_Ending_TextCodes_Return
+        
+    Ending_TextCodes_Stats_Bosses:
+        lda $_Stats_Bosses
+        stz $3e  // erase leading zeroes
+        jsr $_Ending_TextCodes_Number_TwoDigitFromA
+        jmp $_Ending_TextCodes_Return
+
+
+    Ending_TextCodes_Stats_EndTime:
+        // get hours
+        ldx $_Stats_EndTime1
+        stx $17eb
+        lda $_Stats_EndTime3
+        sta $17ed
+        ldx #$0e10  // 3600 seconds in an hour
+        stx $ab
+        phy
+        jsr $_Ending_Division  // division subroutine
+        ply
+
+        lda $ad
+        stz $3e   // erase leading zeros on hour
+        jsr $_Ending_TextCodes_Number_TwoDigitFromA
+
+        lda #$c8   // colon
+        jsr $_Ending_TextCodes_OutputA
+
+        // get minutes
+        ldx $b5  // remainder from prev div
+        stx $17eb
+        lda $b7
+        sta $17ed
+        ldx #$003c // 60 seconds in a minute
+        stx $ab
+        phy
+        jsr $_Ending_Division  // division subroutine
+        ply
+
+        lda $ad
+        inc $3e    // keep leading zeros on minutes and seconds
+        jsr $_Ending_TextCodes_Number_TwoDigitFromA
+
+        lda #$c8   // colon
+        jsr $_Ending_TextCodes_OutputA
+
+        // get seconds
+        lda $b5
+        jsr $_Ending_TextCodes_Number_TwoDigitFromA
+
+        jmp $_Ending_TextCodes_Return
+
+    Ending_TextCodes_OutputA:
+        sta ($3c),y
+        lda #$ff
+        sta ($39),y
+        iny
+        rts
+
+
+    // $13ff5f's division subroutine, except we replace
+    // the first part to load from different addresses
+    // so that we don't stomp on memory used in the ending
+    //  ...use $17eb-17ed, which is normally top of
+    //     warp stack, which we don't care about anymore
+
+    Ending_Division:
+        ldx $ab
+        phx
+        ldx #$000f
+        stz $a9,x
+        dex 
+        bpl $fb
+        plx 
+        stx $ad
+        ldx $17eb
+        stx $a9
+        lda $17ed
+        sta $ab
+        jsl $13ff77
+        rts
+}
+
+
+//-----------------------------------------------
+// replace Mysidian Legend text
+
+// change where game loads the text from
+patch($13d819 bus) { 00 D5 }
+patch($13d81f bus) { 21 }
+
+// shorter wait before Mysidian legend scroll starts
+patch($13d92e bus) { C0 FE }
+
+// reduce length for MysidianLegendInSpace
+patch($13d660 bus) { 80 }
+patch($13d666 bus) { 0C }
+
+// supply new text
+//--------||--------//
+text($21d500 bus) {
+~~~Congratulations!
+
+
+
+~~~Final Fantasy IV
+~~~~Free Enterprise
+
+// %ending_version%
+~~~~~~~~v0.1.0
+~~~~~JKCT3S4BE3G
+~~~~~THEUNTEHUTU
+~~~~~~~12345678
+// %end%
+
+
+
+
+~~~~~Completed in
+~~~~~~~[$03][$04]
+
+
+
+
+
+
+
+
+
+ Key Items:~~~[$03][$00]/ [$03][$05]
+
+
+ Characters:~~[$03][$01]/ [$03][$06]
+
+
+ Treasures:~~[$03][$02]/[$03][$07]
+
+
+ Bosses:~~~~~~[$03][$03]/ 34
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[$00]
+}
+//--------||--------//
+
+
+//-----------------------------------------------------------
+// change load address for end credits text
+patch ($13d7f0 bus) { 00 D8 }
+patch ($13d7f6 bus) { 22 }
+
+// extend end credits music by repeating A section an additional time
+patch($42E93) { 02 }
+patch($42FD4) { 02 }
+patch($43188) { 02 }
+patch($4334D) { 02 }
+patch($434AA) { 02 }
+patch($43577) { 02 }
+patch($435D6) { 02 }
+patch($4370D) { 02 }
+
+// change end credits text scroll timer length
+patch($13D61E bus) { A8 }
+patch($13D624 bus) { 0D }
+
+
+text($22d800 bus) {
+~~~~~FINAL FANTASY IV~~STAFF
+
+
+
+~~~~~~~~~~~~DIRECTOR
+
+~~~~~~~~~~~H`SAKAGUCHI
+
+
+
+~~~~~~~~CHARACTER DESIGN
+
+
+~~~~~~~~~~~~~Y`AMANO
+
+
+
+~~~~~~~~~~MUSIC COMPOSER
+
+~~~~~~~~~~~~N`UEMATSU
+
+
+
+~~~~~~~~~~~MAIN DESIGN
+
+~~~~~~~~~~~~T`TOKITA
+
+
+~~~~~~~~~~MAIN PROGRAM
+
+~~~~~~~~~~~~K`NARITA
+
+
+~~~~~~~~~~MAIN GRAPHIC
+
+~~~~~~~~~~~~H`NAKADA
+
+~~~~~~~~~~~~R`TANAKA
+
+
+~~~~~~~~~~~MAP DESIGN
+
+~~~~~~~~~~~Y`MATSUMURA
+
+
+~~~~~~~~~~BATTLE DESIGN
+
+~~~~~~~~~~~~~K`AOKI
+
+~~~~~~~~~~~~~~H`ITO
+
+~~~~~~~~~~~~A`MATSUI
+
+
+~~~~~~~~~BATTLE PROGRAM
+
+~~~~~~~~~~~~~K`YOSHII
+
+~~~~~~~~~~~~K`HIGUCHI
+
+
+~~~~~~~~~BATTLE GRAPHIC
+
+~~~~~~~~~~~T`TAKAHASHI
+
+~~~~~~~~~~~~M`HOSHINO
+
+
+~~~~~~~~~~MENU PROGRAM
+
+~~~~~~~~~~~~K`ADACHI
+
+
+~~~~~~~~~~MUSIC PROGRAM
+
+~~~~~~~~~~~~~M`AKAO
+
+
+~~~~~~~~~~SOUND EFFECT
+
+~~~~~~~~~~~~~~K`ITO
+
+~~~~~~~~~~~~~A`UEDA
+
+
+~~~~~~~~~~~TRANSLATION
+
+~~~~~~~~~~~K`MORIYAMA
+
+~~~~~~~~~~~~K`OKAHISA
+
+~~~~~~~~~~~H`TAKAHASHI
+
+
+
+~~~~~~~EXECUTIVE PRODUCER
+
+
+~~~~~~~~~~~M`MIYAMOTO
+
+
+
+~~~~~~~SPECIAL THANKS TO ```
+
+
+~~~~~~~~~~~~~A`SAITO
+~~~~~~~~~~D`R`CLOUTIER
+~~~~~~~~~~R`D`SILVEIRA
+~~~~~~~~~~J`YANAGIHARA
+~~~~~~~~~~~~D`R`GARZA
+~~~~~~~~~~~~C`B`BUDD
+~~~~~~~~~~~V`A`MAYHEW
+~~~~~~~~~K`M`FREDRICKSON
+~~~~~~~~~~K`E`KIRCHNER
+~~~~~~~~~~~N`WILLIAMS
+
+~~~~~~~~~~~~K`KOIZUMI
+~~~~~~~~~~~~I`DOBASHI
+~~~~~~~~~~~~S`TANAKA
+~~~~~~~~~~~~T`NOMURA
+~~~~~~~~~~~~Y`KAMATA
+
+~~~~~~~~~~~~H`TANAKA
+~~~~~~~~~~~~A`KAWAZU
+~~~~~~~~~~~~~K`ISHII
+~~~~~~~~~~~~K`SHIBUYA
+~~~~~~~~~~~~~T`ENDO
+~~~~~~~~~~~T`TAKAHASHI
+~~~~~~~~~~~~S`KAMEOKA
+
+~~~~~~~~~~~H`TAKEMURA
+~~~~~~~~~~~~H`SUZUKI
+~~~~~~~~~~~H`KOBAYASHI
+~~~~~~~~~~~~T`MIZUNO
+~~~~~~~~~~~~T`TAKECHI
+
+~~~~~~~~~~~~T`ANAZAWA
+~~~~~~~~~~~~K`KOKUBO
+~~~~~~~~~~~~~T`INOUE
+~~~~~~~~~~~~~N`INOUE
+~~~~~~~~~~~~~~H`ITO
+~~~~~~~~~~~~Y`KITASE
+~~~~~~~~~~~~G`OHASHI
+~~~~~~~~~~~S`YOSHIEDA
+~~~~~~~~~~~~~M`SAITO
+~~~~~~~~~~~~~H`TAKAI
+~~~~~~~~~~~M`DAISHIMA
+
+~~~~~~~~~~~~T`SUZUKI
+~~~~~~~~~~~~~S`SANO
+~~~~~~~~~~~~~N`GOTO
+
+
+
+~~~~~~~FREE ENTERPRISE DEV
+
+
+~~~~~~~~~~~B0ARDFACE
+
+~~~~~~~~~~MXZV   WYLEM
+
+~~~~~~~~~~RIVERSMCCOWN
+
+~~~~~~~~~~~SCHALAKITTY
+
+~~~~~~CALMLAMITY   XENOCAT
+
+
+~~~~additional programming by
+
+~~~~~~~~~~~~~~CROW
+~~~~~~~~~~~MYSELF086
+~~~~~~~~~~CASSIDYMOEN
+
+~~~~~~~~~special thanks
+
+~~~~~~~~~~~~PINKPUFF
+~~~~~~~~~~~CHILLYFEEZ
+~~~~~~~~~~~GRIMOIRELD
+~~~~~~~~~~DRAVENHEART
+~~~~~~~~~~~PENGUIN8R
+~~~~~~~~~~~~~NETARA
+~~~~~~~~~~~~~NEERRM
+~~~~~~~~~~~FCOUGHLIN
+~~~~~~~~~~INVENERABLE
+~~~~~~~~~~DARKPALADIN
+~~~~~~~~~~~~AEXODEN
+~~~~~~~~~~~~DEMERINE
+~~~~~~~~~~~~ELMAGUS
+~~~~~~~~~~~~KHOBAHI
+~~~~~~~~~~~~~SIMBU
+~~~~~~~~~~~~KIRCHIN
+~~~~~~~~~~~~PUWEXIL
+~~~~~~~~~~~~~MYRIA
+~~~~~~~~~~~~FLEURY14
+~~~~~~~~~~BAKASHINOBI
+~~~~~~~~~~~~ANTIDALE
+~~~~~~~~~MOONBLAZEWOLF
+~~~~~~~~~~~~POIDRAC
+~~~~~~~~~MAGGIETHEKATT
+~~~~~~~~~~~~SMAEPDII
+~~~~~~~~~~~DUSTYGRIFF
+~~~~~~~~~~~~ALLISELE
+~~~~~~~~~~~~SOLERAS
+~~~~~~~~~POSSUMORPHEUS
+~~~~~~~~~~~~ASUKA424
+~~~~~~~~~~~~NYOBARI
+{% vintage shoutout : %}
+
+
+
+
+
+
+
+
+~~~~~~~~~~PRESENTED BY
+
+~~~~~~~~~~~~~SQU[$D8]RE
+}

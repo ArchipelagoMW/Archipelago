@@ -1,0 +1,144 @@
+npc(#Lugae) {
+    sprite
+        // %lugae_slot sprite main%
+        #sprite.Lugae
+        // %end%
+}
+
+placement($128 0) {
+    // %lugae_slot sprite main palette%
+    // %end%
+}
+
+npc(#Rubicant3) {
+    sprite
+        // %rubicant_slot sprite main%
+        #sprite.Rubicant
+        // %end%
+}
+
+placement($128 1) {
+    // %rubicant_slot alt1 sprite main palette%
+    // %end%
+}
+
+event($94)  //Dr. Lugae battles
+{
+    consts(placement) {
+        0   Lugae
+        1   Rubicant3
+        2   Rosa2
+        3   Yang3
+        4   Kain2
+        5   AdultRydia2
+        6   Teleportation
+    }
+    // autodetected map #BabilFloorLugae2
+    player move up
+    music #Suspicions
+    pause 8
+    p #Lugae move up
+    pause 4
+    sound #Magnes
+    toggle tint $57
+    batch 10 {
+        screen flash
+    }
+    batch 9 {
+        p #Rubicant3 toggle visible
+    }
+    deactivate #Rubicant3
+    deactivate #Lugae
+    toggle tint $00
+    toggle music fade
+    pause 8
+    p #Lugae face left
+    pause 2
+    p #Lugae face up
+    pause 2
+    p #Lugae face right
+    pause 2
+    p #Lugae face up
+    pause 2
+    music #Calbrena
+    p #Lugae face down
+    batch 4 {
+        p #Lugae spin
+    }
+    p #Lugae face down
+    p #Lugae spin jump
+    p #Lugae move left
+    p #Lugae face right
+    p #Lugae jump sideways
+    p #Lugae face down
+    p #Lugae spin
+    p #Lugae face left
+    p #Lugae jump sideways
+    p #Lugae face down
+    p #Lugae spin
+    p #Lugae move right
+    p #Lugae face down
+    p #Lugae spin jump
+    p #Lugae face up
+    pause 4
+    p #Lugae spin
+    p #Lugae face down
+    p #Lugae move down
+    p #Lugae move down
+    p #Lugae spin
+    p #Lugae spin jump
+    p #Lugae move down
+
+    [#B #Rando_BossBattle #rando.lugae_slot]
+
+    player face up
+    music #None
+    [#B #Objectives_TickBossSlot #rando.lugae_slot]
+    [#B #Rando_PostBossBattle #rando.lugae_slot]
+
+
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.babil_boss_item 0]
+    // %if ap_babil_boss_item%
+    music #DummyFanfare
+    message #ap_reward_slot.babil_boss_item
+    // %else%
+    message #msg.fe_Received
+    // %end%
+    sound #GetItem
+    [#B #Objectives_TickRewardSlot #reward_slot.babil_boss_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.babil_boss_item]
+    player face up
+
+    pause 8
+    batch 10 {
+        screen flash
+    }
+    sound #Explosion
+    batch 1 {
+        p #Lugae toggle visible
+        p #Teleportation toggle visible
+    }
+    pause 8
+    p #Teleportation toggle visible
+    pause 8
+    player face down
+    [#B #Objectives_Tick #objective.quest_lowerbabil]
+    music #Babil
+    deactivate #Lugae
+    set #LugaeBattle
+}
+
+text(map #BabilFloorLugae2 message $0C) {
+[name $f0]:Looks like a warp
+ device, but we can't use
+ it.
+}
+
+//-----------------------------------------------------------------------------
+// remove Tower key drop from Dr. Lugae (will be handled in event)
+monster($B8)   // Dr.Lugae
+{
+    drop index $00
+    drop rate $00
+}
+

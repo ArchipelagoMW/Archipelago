@@ -1,0 +1,28 @@
+// common function to apply spell misdirection
+msfpatch {
+    Wacky__Misspell:
+        phx
+        xba
+        lda #$00
+        xba
+        tax
+        lda $=Wacky__ROMData,x
+        plx
+        rtl
+}
+
+
+// apply spell misdirection at level up
+msfpatch {
+    .addr $03f176
+        jsl $=Wacky__Misspelled_LevelUp
+        nop
+
+    .new
+    Wacky__Misspelled_LevelUp:
+        lda $b9
+        jsl $=Wacky__Misspell
+        sta $1560,x
+        rtl
+}
+

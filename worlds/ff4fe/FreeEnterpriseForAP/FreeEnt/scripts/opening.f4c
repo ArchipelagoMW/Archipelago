@@ -1,0 +1,393 @@
+event($10)  //Opening events
+{
+    vfx 0 // wipe out latent CHR data
+
+    // Initial game state
+    set #OpeningComplete
+    set #DamcyanBombed
+    set #ReinforcedEnterprise
+
+    // disable "free" spots with no free lunch flag
+    // (Damcyan needs special case handling in damcyan.f4c)
+    [#B #Rando_CheckFlag #randoflag.no_free_characters]
+    [#B #If #Flag #flag.Result] {
+        deactivate #fe_WateryPassTellah
+        deactivate #Elder1
+        set #TellahRejoined
+    }
+
+    // disable non-"free" spots with only free characters flag
+    // all others disabled in their respective .f4c file
+    [#B #Rando_CheckFlag #randoflag.no_earned_characters]
+    [#B #If #Flag #flag.Result] {
+        deactivate #Edge1
+        set #FusoyaJoined
+    }
+
+    [#B #Rando_CheckFlag #randoflag.no_free_key_item]
+    [#B #If #Flag #flag.Result] {
+        set #SpokeToEdwardInToroia
+    }
+
+    // %testmode%
+    [#B #TestMode_Startup]
+    // %end%
+    // %test_setting characters%
+    [#B #DebugFillShadowParty]
+    // %end%
+
+    // %debug init%
+    // %end%
+
+    // %quickstart%
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.starting_partner_character]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.starting_item]
+    [#B #GiveStarterKit]
+    music #Prologue
+    load map #Overworld at 102 155 on enterprise no transition no launch
+    [#B #EndEvent]
+    // %end%
+
+    toggle music fade
+    toggle screen fade
+
+    consts(placement) {
+        1   Soldier1
+        2   Soldier2
+        3   Soldier3
+        8   Baigan
+        7   Kain1
+    }
+    load map #BaronCastleLobby at 1 5 facing down
+    player invisible
+    batch 1 {
+        player face down
+        p #Soldier1 toggle visible
+        p #Soldier2 toggle visible
+        p #Soldier3 toggle visible
+    }
+
+    toggle screen fade
+    pause 2
+    player visible
+    [#B #PlacementSetVisible 7]  // p #Kain1 toggle visible
+    batch 5 {
+        player move down
+    }
+    batch 7 {
+        player move right
+        p #Kain1 move left
+    }
+    p #Baigan toggle visible
+    pause 4
+    batch 1 {
+        player face up
+        p #Kain1 face up
+        p #Baigan move down
+    }
+    batch 6 {
+        p #Baigan move down
+    }
+    pause 2
+    message $1D  // From the king
+    // %if ap_starting_item%
+    message #ap_reward_slot.starting_item
+    // %else%
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.starting_item 0]
+    message #msg.fe_Received
+    // %end%
+    sound #GetItem
+    [#B #Objectives_TickRewardSlot #reward_slot.starting_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.starting_item]
+
+    // %starterkit0 message enable%
+    sound #GetItem
+    message $A1
+    // %end%
+    // %starterkit1 message enable%
+    sound #GetItem
+    message $A2
+    // %end%
+    // %starterkit2 message enable%
+    sound #GetItem
+    message $A3
+    // %end%
+    // %starterkit3 message enable%
+    sound #GetItem
+    message $A5
+    // %end%
+    [#B #GiveStarterKit]
+
+    pause 2
+    batch 1 {
+        player face right
+        p #Kain1 face left
+    }
+    pause 2
+
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.starting_partner_character 0]
+    map message 6 // Let's go!
+
+    // %flags: Cparty:1 ~Cpermajoin%
+    p #Kain1 toggle visible
+    // %end%
+
+    //TODO: restore? [#B #Objectives_TickRewardSlot #reward_slot.starting_partner_character]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.starting_partner_character]
+    pause 2
+
+    [#B #If #not_PartySize 1]
+    {
+        batch 1 {
+            player bow head
+            p #Kain1 bow head
+        }
+        pause 2
+        batch 1 {
+            player face down
+            p #Kain1 face down
+        }
+        // %if wacky_challenge_enabled%
+        music #FatChocobo
+        // %else%
+        music #Prologue
+        // %end%
+        batch {
+            p #Baigan face right
+            p #Kain1 face up
+            player face up
+        }
+        player toggle turning
+        p #Baigan move left
+        player toggle turning
+        batch {
+            player move up
+            p #Kain1 move left
+        }
+        batch 2 {
+            player move up
+            p #Kain1 move up
+        }
+        batch {
+            p #Baigan move right
+            player move up
+            p #Kain1 move up
+        }
+        batch 6 {
+            p #Baigan face up
+            player move up
+            p #Kain1 move up
+        }
+    }
+
+    [#B #If #PartySize 1]
+    {
+        player bow head
+        pause 2
+        player face down
+        // %if wacky_challenge_enabled%
+        music #FatChocobo
+        // %else%
+        music #Prologue
+        // %end%
+        batch {
+            p #Baigan face right
+            player face up
+        }
+        player toggle turning
+        p #Baigan move left
+        player toggle turning
+        batch {
+            player move up
+            p #Kain1 face up
+        }
+        batch 2 {
+            player move up
+        }
+        batch {
+            p #Baigan move right
+            player move up
+        }
+        batch 6 {
+            p #Baigan face up
+            player move up
+        }
+    }
+
+    consts(placement) {
+        0  Cid
+        5  Kain
+    }
+    load map #DockedAirship at 25 8 facing left
+    player face left
+    [#B #If #not_PartySize 1] {
+        batch {
+            player move left
+            p #Kain toggle visible
+        }
+    }
+    [#B #If #PartySize 1] {
+        player move left
+    }
+
+    batch {
+        player move left
+        p #Kain move left
+    }
+    batch {
+        player move down
+        p #Kain move left
+    }
+    batch {
+        player move down
+        p #Kain move down
+    }
+    batch {
+        player move left
+        p #Kain move down
+    }
+    batch 7 {
+        player move left
+        p #Kain move left
+    }
+    batch {
+        player move down
+        p #Kain move left
+    }
+    batch {
+        player move left
+        p #Kain move down
+    }
+    batch 2 {
+        player move left
+        p #Kain move left
+    }
+    batch 2 {
+        player move down
+        p #Kain move down
+    }
+    player move down
+    pause 8
+    player wave in
+    pause 7
+    sound #Earthquake
+    pause 15
+
+    sound $5E
+    toggle screen shake
+    pause 16
+    //sound #None
+    toggle screen shake
+
+    vfx #Prologue
+
+    toggle screen shake
+
+    load map #Overworld at 102 155 on enterprise no transition
+    sound #None
+    sound #None
+    toggle screen shake
+
+    // %if wacky_challenge_enabled%
+    [#B #GotoEvent #event.fe_GuidingwayIntro]
+    // %end%
+}
+
+placement($2A 7)  //#BaronCastleLobby
+{
+    // %kain1_slot npc1%
+    npc #fe_DynamicNPC
+    // %end%
+}
+
+npc(#Baigan) {
+    sprite
+        // %baigan_slot sprite main%
+        #Captain
+        // %end%
+}
+
+placement($2A 8)
+{
+    npc #Baigan
+    position 8 2
+    walking off
+    tangible
+    face down
+    // %baigan_slot sprite main palette%
+    palette 0
+    // %end%
+    turning off
+    marching off
+    speed 2
+}
+
+// remove Yang from DockedAirship
+placement($C3 1)
+{
+    npc #BaronDancerDress
+    position 0 0
+    intangible
+    walking off
+}
+
+placement($C3 5)
+{
+    // %kain1_slot npc1%
+    npc #fe_DynamicNPC
+    // %end%
+}
+
+text(bank 1 message $1D) {
+From the king.
+}
+
+text(bank 1 message $A1) {
+// %starterkit0 message text%
+// %end%    
+}
+text(bank 1 message $A2) {
+// %starterkit1 message text%
+// %end%    
+}
+text(bank 1 message $A3) {
+// %starterkit2 message text%
+// %end%    
+}
+text(bank 1 message $A5) {
+// %starterkit3 message text%
+// %end%
+}
+
+
+// %flags: ~Cparty:1%
+text(map #BaronCastleLobby message $06) {
+[name $e0]:Let's go, [name $f0]!
+}
+// %end%
+
+// %flags: Cparty:1 Cpermajoin%
+text(map #BaronCastleLobby message $06) {
+[name $e0]:You got this, 
+[name $f0]!
+}
+// %end%
+
+// %flags: Cparty:1 ~Cpermajoin%
+text(map #BaronCastleLobby message $06) {
+[name $e0]:You or me, [name $f0]?
+}
+// %end%
+
+mapgrid($24 6 13) { 02 } // erase Cid greeting trigger in Castle Baron
+
+// Erase Rosa conversation trigger
+mapgrid($2D 2 6) { 01 }
+
+
+// Remove "prologue complete" flag check from Cecil bedroom to save a flag
+eventcall($05)
+{
+    $68   //Resting for free in Castle Baron
+}
+

@@ -1,0 +1,94 @@
+//---------------------------------------------------------
+// Japanese command names:
+//  Dark, Recal, Heal, Pray, Power, Bear, Bluff, Cry, Regen
+
+text(command name #DarkWave)    {Dark}
+text(command name #Recall)      {Recal}
+text(command name #Medicine)    {Heal}
+text(command name #Pray)        {Pray}
+text(command name #Focus)       {Power}
+text(command name #Fortify)     {Bear}
+text(command name #Bluff)       {Bluff}
+text(command name #Cry)         {Cry}
+text(command name #Regen)       {Regen}
+
+text(alert message $0F) {
+Out of [potion]Cure1.
+}
+
+text(alert message $10) {
+Prayer unanswered.
+}
+
+text(alert message $12) {
+Magic power up!
+}
+
+text(alert message $13) {
+Flustered the enemy!
+}
+
+text(alert message $36) {
+Regenerating HP!
+}
+
+text(alert message $39) {
+Building up power_
+}
+
+text(alert message $3A) {
+Defense up!
+}
+
+
+
+// spell names are Armor, Shell and Dspel, all with [whiteorb]
+
+text(spell name #Armor) {[whitemagic]Armor}
+text(spell name #Shell) {[whitemagic]Shell}
+text(spell name #Dspel) {[whitemagic]Dspel}
+
+
+
+text(item name #Bomb)       {[$15]Bomb}
+text(item name #BigBomb)    {[$15]BigBomb}
+text(item name #Notus)      {[$15]Notus}
+text(item name #Boreas)     {[$15]Boreas}
+text(item name #ThorRage)   {[$15]ThorRage}
+text(item name #ZeusRage)   {[$15]ZeusRage}
+text(item name #Stardust)   {[$15]Stardust}
+text(item name #Succubus)   {[$15]Succubus}
+text(item name #Vampire)    {[$15]Vampire}
+text(item name #Bacchus)    {[$15]Bacchus}
+text(item name #Hermes)     {[$15]Hermes}
+text(item name #HrGlass1)   {[$15]HrGlass1}
+text(item name #HrGlass2)   {[$15]HrGlass2}
+text(item name #HrGlass3)   {[$15]HrGlass3}
+text(item name #SilkWeb)    {[$15]SilkWeb}
+text(item name #Illusion)   {[$15]Illusion}
+text(item name #Blizzard)   {[$15]Blizzard}
+text(item name #StarVeil)   {[$15]StarVeil}
+text(item name #Kamikaze)   {[$15]Kamikaze}
+text(item name #MoonVeil)   {[$15]MoonVeil}
+text(item name #MuteBell)   {[$15]MuteBell}
+text(item name #GaiaDrum)   {[$15]GaiaDrum}
+text(item name #Coffin)     {[$15]Coffin}
+text(item name #Grimoire)   {[$15]Grimoire}
+text(item name #Bestiary)   {[$15]Bestiary}
+text(item name #Alarm)      {[$15]Alarm}
+text(item name #Unihorn)    {[$15]Unihorn}
+text(item name #Soft)       {[$15]Soft}
+text(item name #MaidKiss)   {[$15]MaidKiss}
+text(item name #Mallet)     {[$15]Mallet}
+text(item name #DietFood)   {[$15]DietFood}
+text(item name #EchoNote)   {[$15]EchoNote}
+text(item name #EyeDrops)   {[$15]Eyedrops}
+text(item name #Antidote)   {[$15]Antidote}
+text(item name #Cross)      {[$15]Cross}
+text(item name #Siren)      {[$15]Siren}
+text(item name #AuApple)    {[$15]AuApple}
+text(item name #AgApple)    {[$15]AgApple}
+text(item name #SomaDrop)   {[$15]SomaDrop}
+text(item name #Exit)       {[$15]Exit}
+// Dark Matter is always on; defined in dark_matter.f4c
+// text(item name #DwarfBread) {EagleEye}  <- we change Smut to EagleEye so that DwarfBread can become Sylph
