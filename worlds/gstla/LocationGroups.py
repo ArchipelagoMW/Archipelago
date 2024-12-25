@@ -7,7 +7,7 @@ goldensuntla_location_groups = {
         LocationName.Idejima_Jenna.value,
         LocationName.Idejima_Sheba.value
     },
-    "Party Members": {
+    "Party Psynergy": {
         LocationName.Idejima_Mind_Read.value,
         LocationName.Idejima_Whirlwind.value,
         LocationName.Kibombo_Douse_Drop.value,
@@ -165,7 +165,6 @@ goldensuntla_location_groups = {
         LocationName.Shaman_Village_Lucky_Medal.value,
         LocationName.Shaman_Village_Lucky_Pepper.value,
         LocationName.Shaman_Village_Weasels_Claw.value,
-        LocationName.Shaman_Village_Moapa_fight.value,
         LocationName.Shaman_Village_Hover_Jade.value
     },
     "Atteka Inlet": {
@@ -175,9 +174,7 @@ goldensuntla_location_groups = {
         LocationName.Contigo_Corn.value,
         LocationName.Contigo_Bramble_Seed.value,
         LocationName.Contigo_Dragon_Skin.value,
-        LocationName.Contigo_Power_Bread.value
-    },
-    "Reunion": {
+        LocationName.Contigo_Power_Bread.value,
         LocationName.Contigo_Isaac.value,
         LocationName.Contigo_Garet.value,
         LocationName.Contigo_Ivan.value,
@@ -292,10 +289,6 @@ goldensuntla_location_groups = {
         LocationName.Lemurian_Ship_Antidote.value,
         LocationName.Lemurian_Ship_Mist_Potion.value
     },
-    "Eastern Sea": {
-        LocationName.Overworld_Rusty_Axe.value,
-        LocationName.Overworld_Rusty_Mace.value
-    },
     "Aqua Rock": {
         LocationName.Aqua_Rock_Nut.value,
         LocationName.Aqua_Rock_Vial.value,
@@ -384,11 +377,6 @@ goldensuntla_location_groups = {
         LocationName.Taopo_Swamp_Tear_Stone.value,
         LocationName.Taopo_Swamp_Tear_Stone_Two.value
     },
-    "Western Sea": {
-        LocationName.Overworld_Rusty_Sword.value,
-        LocationName.Overworld_Rusty_Sword_Two.value,
-        LocationName.Overworld_Rusty_Staff.value
-    },
     "Jupiter Lighthouse": {
         LocationName.Jupiter_Lighthouse_Mint.value,
         LocationName.Jupiter_Lighthouse_Blue_Key.value,
@@ -435,19 +423,6 @@ goldensuntla_location_groups = {
         LocationName.Mars_Lighthouse_Orihalcon.value,
         LocationName.Mars_Lighthouse_Valkyrie_Mail.value,
         LocationName.Mars_Lighthouse_Teleport_Lapis.value,
-        LocationName.Mars_Lighthouse_Alastors_Hood.value,
-        LocationName.Mars_Lighthouse_Psy_Crystal.value
-    },
-    "Mars Lighthouse Unlit": {
-        LocationName.Mars_Lighthouse_Mars_Star.value,
-        LocationName.Mars_Lighthouse_Sol_Blade.value,
-        LocationName.Mars_Lighthouse_Apple.value,
-        LocationName.Mars_Lighthouse_Mimic.value,
-        LocationName.Mars_Lighthouse_Orihalcon.value,
-        LocationName.Mars_Lighthouse_Valkyrie_Mail.value,
-        LocationName.Mars_Lighthouse_Teleport_Lapis.value
-    },
-    "Mars Lighthouse Lit": {
         LocationName.Mars_Lighthouse_Alastors_Hood.value,
         LocationName.Mars_Lighthouse_Psy_Crystal.value
     },
