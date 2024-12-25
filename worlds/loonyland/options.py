@@ -29,7 +29,7 @@ class Difficulty(Choice):
 
 
 class LongChecks(Choice):
-    """Excluded: Remove 100%, 39 badges, swampdog to 50, witch to lvl 9 spells, 5000 gems, and the monster point badges
+    """Excluded: Remove 100%, 39 badges, swampdog to 50, witch to lvl 9 spells, 5000 gems, the monster point badges, a true hero
     Does nothing if badges are already set to none
     """
 
@@ -64,7 +64,7 @@ class Badges(Choice):
 class MonsterDolls(Choice):
     """Full: Monsters can drop randomized items, monster dolls can be found at locations
     Vanilla: Monsters drop their normal monster doll
-    None: Dolls aren't in logic"""
+    None: Dolls aren't in logic, the collection quest gives nothing"""
 
     display_name = "Monster Dolls"
     option_full = 0

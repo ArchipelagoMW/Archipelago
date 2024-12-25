@@ -28,12 +28,12 @@ class LLLocation(NamedTuple):
     base_item: str = ""
 
     def can_create(self, options: LoonylandOptions) -> bool:
-        if (self.category == LLLocCat.BADGE and (options.badges == Badges.option_none)) or (
-            self.category == LLLocCat.DOLL and (options.dolls == MonsterDolls.option_none)
-        ):
+        if self.category == LLLocCat.BADGE and options.badges == Badges.option_none:
+            return False
+        if options.dolls == MonsterDolls.option_none and (self.category == LLLocCat.DOLL or "DOLL" in self.flags):
             return False
         if options.long_checks == LongChecks.option_excluded and (
-            "LONG" in self.flags or ("LONG_VANILLA" in self.flags and options.badges == Badges.option_vanilla)
+            "LONG" in self.flags or ("LONG_VANILLA_BADGES" in self.flags and options.badges == Badges.option_vanilla)
         ):
             return False
         if options.remix == Remix.option_excluded and ("REMIX" in self.flags):

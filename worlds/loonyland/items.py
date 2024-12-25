@@ -4,6 +4,7 @@ from typing import NamedTuple
 from BaseClasses import Item, ItemClassification
 
 from worlds.loonyland.options import Badges, LongChecks, LoonylandOptions, MonsterDolls, Remix
+from worlds.stardew_valley import true_
 
 
 class LoonylandItem(Item):
@@ -34,14 +35,40 @@ class LLItem(NamedTuple):
     def can_create(self, options: LoonylandOptions) -> bool:
         if (
             self.category == LLItemCat.CHEAT
-            and (options.badges == Badges.option_none or options.badges == Badges.option_vanilla)
+            and options.badges == Badges.option_vanilla
         ) or (
             self.category == LLItemCat.DOLL
-            and (options.dolls == MonsterDolls.option_none or options.dolls == MonsterDolls.option_vanilla)
+            and options.dolls == MonsterDolls.option_vanilla
         ):
             return False
-        if options.long_checks == LongChecks.option_excluded and ("OP" in self.flags):
+        if "OP" in self.flags:
             return False
         if options.remix == Remix.option_excluded and ("REMIX" in self.flags):
             return False
         return True
+
+    def in_logic(self, options: LoonylandOptions) -> bool:
+        if self.category == LLItemCat.CHEAT and options.badges == Badges.option_none:
+            return False
+        if self.category == LLItemCat.DOLL and options.dolls == MonsterDolls.option_none:
+            return False
+        return True
+
+    def modified_classification(self, options: LoonylandOptions):
+        if options.long_checks==LongChecks.option_included:
+            if self.category == LLItemCat.CHEAT: #39 badges
+                return ItemClassification.progression
+            if self.category == LLItemCat.ITEM: # 100%
+                return ItemClassification.progression
+            if self.category == LLItemCat.DOLL: # 100%
+                return ItemClassification.progression
+        if options.badges==Badges.option_none:
+            if self.category == LLItemCat.ACCESS:
+                return ItemClassification.filler
+        if options.badges==Badges.option_none:
+            if self.category==LLItemCat.ACCESS:
+                return ItemClassification.filler
+        if "PWR" in self.flags or "PWR_BIG" in self.flags or "PWR_MAX" in self.flags: #need to be able to kill bosses, eventually an option for this
+            return ItemClassification.progression
+
+        return self.classification

@@ -53,6 +53,9 @@ class LoonylandWorld(World):
             for name, data in loony_item_table.items()
             if VAR_WBOMBS <= data.id - loonyland_base_id <= VAR_WHOTPANTS
         },
+        "power": {name for name, data in loony_item_table.items() if "PWR" in data.flags},
+        "power_big": {name for name, data in loony_item_table.items() if "PWR_BIG" in data.flags},
+        "power_max": {name for name, data in loony_item_table.items() if "PWR_MAX" in data.flags},
     }
 
     location_name_groups = {
@@ -61,7 +64,7 @@ class LoonylandWorld(World):
     }
 
     def create_item(self, name: str) -> LoonylandItem:
-        return LoonylandItem(name, loony_item_table[name].classification, loony_item_table[name].id, self.player)
+        return LoonylandItem(name, loony_item_table[name].modified_classification(self.options), loony_item_table[name].id, self.player)
 
     def create_junk(self) -> LoonylandItem:
         return LoonylandItem("A Cool Filler Item", ItemClassification.filler, loonyland_base_id + 3000, self.player)
@@ -69,7 +72,7 @@ class LoonylandWorld(World):
     def create_items(self) -> None:
         item_pool: list[LoonylandItem] = []
         for name, item in loony_item_table.items():
-            if item.id and item.can_create(self.options):
+            if item.id and item.can_create(self.options) and item.in_logic(self.options):
                 for i in range(item.frequency):
                     new_item = self.create_item(name)
                     item_pool.append(new_item)
@@ -108,9 +111,14 @@ class LoonylandWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
         # location rules
-        set_rules(self.multiworld, self, self.player)
+        set_rules(self.multiworld, self)
         # entrance rules
-        set_entrance_rules(self.multiworld, self, self.player)
+        set_entrance_rules(self.multiworld, self)
 
     def fill_slot_data(self):
-        return {"DeathLink": self.options.death_link.value, "Difficulty": self.options.difficulty.value}
+        return {"Difficulty": self.options.difficulty.value,
+                "LongChecks": self.options.long_checks.value,
+                "Remix": self.options.remix.value,
+                "Badges": self.options.badges.value,
+                "Dolls": self.options.dolls.value,
+                "DeathLink": self.options.death_link.value}
