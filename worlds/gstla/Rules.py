@@ -544,9 +544,15 @@ def set_access_rules(world: 'GSTLAWorld'):
     add_rule(world.get_location(LocationName.Rime),
              lambda state: state.has(ItemName.Grindstone, player) and state.has(ItemName.Cyclone_Chip, player) and state.has(ItemName.Tremor_Bit, player))
 
+    #If item shuffle everything is on a lucky medal is guaranteed in the pool, otherwise there are guarenteed lucky medals in Lemuria
     if world.options.item_shuffle == 3:
         add_rule(world.get_location(LocationName.Lemuria_Eclipse),
                  lambda state: state.has(ItemName.Lucky_Medal, player))
+    else:
+        #If hidden items are enabled make sure we sure Reveal is in logic as the guarenteed medals are hidden, one in the castle barrel, one dug up with scoop. We can assume for now just Reveal is enough
+        if world.options.reveal_hidden_item == 1:
+          add_rule(world.get_location(LocationName.Lemuria_Eclipse),
+                    lambda state: state.has(ItemName.Reveal, player))
 
     #Western Sea
 
