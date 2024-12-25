@@ -139,7 +139,7 @@ overworld_regions = {  # These are not AP Regions (tm). They're for regional ent
 }
 
 def should_shuffle_warp_cave(screen, world: World):
-    if world.options.RandomizeWarpCaves.value == True:
+    if world.options.RandomizeWarpCaves == True:
         return True
     elif screen in warp_caves:
         return False
@@ -150,42 +150,39 @@ def create_entrance_randomizer_set(world: World):
     overworld_entrances = deepcopy(overworld_entrances_data)
     screens = []
     destinations = []
+    shuffled_entrances = []
     if world.options.EntranceShuffle.value == 0:
         return overworld_entrances
     elif world.options.EntranceShuffle.value == 1:
-        screens = [screen for screen in overworld_entrances.keys()
-                   if screen in dungeon_entrances and should_shuffle_warp_cave(screen, world)]
-        destinations = [data[1] for screen, data in overworld_entrances.items()
-                        if screen in dungeon_entrances and should_shuffle_warp_cave(screen, world)]
+        shuffled_entrances = [*dungeon_entrances]
     elif world.options.EntranceShuffle.value == 2:
-        screens = [screen for screen in overworld_entrances.keys()
-                   if screen in dungeon_entrances and should_shuffle_warp_cave(screen, world)]
-        destinations = [data[1] for screen, data in overworld_entrances.items()
-                        if screen in dungeon_entrances and should_shuffle_warp_cave(screen, world)]
+        shuffled_entrances = [*major_entrances]
     elif world.options.EntranceShuffle.value == 3:
-        screens = [screen for screen in overworld_entrances.keys()
-                   if screen in dungeon_entrances and should_shuffle_warp_cave(screen, world)]
-        destinations = [data[1] for screen, data in overworld_entrances.items()
-                        if screen in dungeon_entrances and should_shuffle_warp_cave(screen, world)]
+        shuffled_entrances = [*open_entrances]
     elif world.options.EntranceShuffle.value == 4:
-        screens = [screen for screen in overworld_entrances.keys()
-                   if screen in dungeon_entrances and should_shuffle_warp_cave(screen, world)]
-        destinations = [data[1] for screen, data in overworld_entrances.items()
-                        if screen in dungeon_entrances and should_shuffle_warp_cave(screen, world)]
+        shuffled_entrances = [*major_entrances, *open_entrances]
     elif world.options.EntranceShuffle.value == 5:
-        screens = [screen for screen in overworld_entrances.keys()
-                   if should_shuffle_warp_cave(screen, world)]
-        destinations = [data[1] for screen, data in overworld_entrances.items()
-                        if should_shuffle_warp_cave(screen, world)]
+        shuffled_entrances = [*all_entrances]
+    if world.options.RandomizeWarpCaves == True:
+        shuffled_entrances.extend(warp_caves)
+    screens = [screen for screen in overworld_entrances.keys()
+                   if screen in shuffled_entrances and should_shuffle_warp_cave(screen, world)]
+    destinations = [data[1] for screen, data in overworld_entrances.items()
+                    if screen in shuffled_entrances and should_shuffle_warp_cave(screen, world)]
+
     world.random.shuffle(screens)
     world.random.shuffle(destinations)
     new_destinations = {screen[0]: screen[1] for screen in zip(screens, destinations)}
-    starting_sword_cave = [screen for screen, destination in new_destinations.items() if destination == "Starting Sword Cave"][0]
-    while starting_sword_cave not in open_entrances:
+    for screen, destination in new_destinations.items():
+        overworld_entrances[screen] = (overworld_entrances[screen][0], destination)
+    starting_sword_cave = [screen for screen, dest in overworld_entrances.items() if dest[1] == "Starting Sword Cave"][0]
+
+    while starting_sword_cave not in open_entrances and world.options.EntranceShuffle.value in [2, 4, 5]:
         world.random.shuffle(screens)
         world.random.shuffle(destinations)
         new_destinations = {screen[0]: screen[1] for screen in zip(screens, destinations)}
-        starting_sword_cave = [screen for screen, destination in new_destinations.items() if destination == "Starting Sword Cave"][0]
-    for screen, destination in new_destinations.items():
-        overworld_entrances[screen] = (overworld_entrances[screen][0], destination)
+        for screen, destination in new_destinations.items():
+            overworld_entrances[screen] = (overworld_entrances[screen][0], destination)
+        starting_sword_cave = [screen for screen, dest in overworld_entrances.items() if dest[1] == "Starting Sword Cave"][0]
+
     return overworld_entrances

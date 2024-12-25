@@ -55,6 +55,7 @@ class TLOZClient(BizHawkClient):
         try:
             if self.major_location_offsets is None:
                 location_offsets = await self.read_rom(ctx, 0x40, 4)
+                location_offsets = bytearray(location_offsets)
                 starting_sword_cave_location = location_offsets[0]
                 white_sword_pond_location = location_offsets[1]
                 magical_sword_grave_location = location_offsets[2]
@@ -87,7 +88,7 @@ class TLOZClient(BizHawkClient):
         overworld_data = await self.read_ram_values(ctx, Rom.overworld_status_block, 0x80)
         underworld_early_data = await self.read_ram_values(ctx, Rom.underworld_early_status_block, 0x80)
         underworld_late_data = await self.read_ram_values(ctx, Rom.underworld_late_status_block, 0x80)
-        for location, index in Locations.major_location_offsets.items():
+        for location, index in self.major_location_offsets.items():
             if (int(overworld_data[index]) & 0x10) > 0:
                 locations_checked.append(Locations.location_table[location])
         for location, index in Locations.floor_location_game_offsets_early.items():
@@ -184,6 +185,9 @@ class TLOZClient(BizHawkClient):
             current_bombs_value = await self.read_ram_value(ctx, Rom.bombs)
             current_max_bombs_value = await self.read_ram_value(ctx, Rom.max_bombs)
             await self.write(ctx, Rom.bombs, min(current_max_bombs_value, current_bombs_value + 4))
+        elif item_name == "Bow":
+            current_bow_value = await self.read_ram_value(ctx, Rom.bow)
+            await self.write(ctx, Rom.bow, 1)
         elif item_name == "Arrow":
             current_arrow_value = await self.read_ram_value(ctx, Rom.arrow)
             await self.write(ctx, Rom.arrow, max(1, current_arrow_value))
@@ -217,7 +221,7 @@ class TLOZClient(BizHawkClient):
         elif item_name == "Red Ring":
             current_ring_value = await self.read_ram_value(ctx, Rom.ring)
             await self.write(ctx, Rom.ring, max(2, current_ring_value))
-            await bizhawk.write(ctx.bizhawk_ctx, [(0x0B92, [0x32], self.sram), (0x0804, [0x32], self.sram)])
+            await bizhawk.write(ctx.bizhawk_ctx, [(0x0B92, [0x16], self.sram), (0x0804, [0x16], self.sram)])
         elif item_name == "Stepladder":
             await self.write(ctx, Rom.stepladder, 1)
         elif item_name == "Magical Key":
@@ -277,7 +281,7 @@ class TLOZClient(BizHawkClient):
         return int.from_bytes(value)
 
     async def read_rom(self, ctx, location, size):
-        return await bizhawk.read(ctx.bizhawk_ctx, [(location, size, self.rom)])
+        return (await bizhawk.read(ctx.bizhawk_ctx, [(location, size, self.rom)]))[0]
 
     async def write(self, ctx, location, value):
         return await bizhawk.write(ctx.bizhawk_ctx, [(location, [value], self.wram)])

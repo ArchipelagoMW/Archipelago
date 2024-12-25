@@ -2,7 +2,7 @@ from collections import Counter
 
 from BaseClasses import ItemClassification
 from .Locations import level_locations, all_level_locations, standard_level_locations, shop_locations
-from .Options import TriforceLocations, StartingPosition
+from .Options import TriforceLocations, StartingPosition, EntranceShuffle
 
 # Swords are in starting_weapons
 overworld_items = {
@@ -100,7 +100,8 @@ def get_pool_core(world):
     if not final_starting_weapons:
         final_starting_weapons = starting_weapons
     starting_weapon = random.choice(final_starting_weapons)
-    if world.options.StartingPosition == StartingPosition.option_safe:
+    if (world.options.StartingPosition == StartingPosition.option_safe
+          or world.options.EntranceShuffle.value in [2, 4, 5]): # Major, Major Open, and All
         placed_items[start_weapon_locations[0]] = starting_weapon
     elif world.options.StartingPosition in \
             [StartingPosition.option_unsafe, StartingPosition.option_dangerous]:
