@@ -19,6 +19,7 @@
 - Flying Dog boss should no longer crash when you have done at least 3 Intermediate Kart Races
 - Chaos Emeralds should no longer disproportionately end up in Cannon's Core or the final Level Gate
 - Going into submenus from the pause menu should no longer reset traps
+- `Sonic - Magic Gloves`
 - Chao Garden:
 	- Prevent races from occasionally becoming uncompletable when using the "Prize Only" option
 	- Properly allow Hero Chao to participate in Dark Races

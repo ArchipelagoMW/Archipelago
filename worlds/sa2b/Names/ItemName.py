@@ -5,7 +5,7 @@ emblem = "Emblem"
 market_token = "Chao Coin"
 
 # Upgrade Definitions
-sonic_gloves          = "Sonic - Magic Glove"
+sonic_gloves          = "Sonic - Magic Gloves"
 sonic_light_shoes     = "Sonic - Light Shoes"
 sonic_ancient_light   = "Sonic - Ancient Light"
 sonic_bounce_bracelet = "Sonic - Bounce Bracelet"
