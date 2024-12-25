@@ -1,3 +1,4 @@
+import typing
 from functools import cached_property
 from typing import Union, Tuple
 
@@ -24,6 +25,11 @@ from ..strings.skill_names import Skill, all_mod_skills, all_vanilla_skills
 from ..strings.tool_names import ToolMaterial, Tool
 from ..strings.wallet_item_names import Wallet
 
+if typing.TYPE_CHECKING:
+    from ..mods.logic.mod_logic import ModLogicMixin
+else:
+    ModLogicMixin = object
+
 fishing_regions = (Region.beach, Region.town, Region.forest, Region.mountain, Region.island_south, Region.island_west)
 vanilla_skill_items = ("Farming Level", "Mining Level", "Foraging Level", "Fishing Level", "Combat Level")
 
@@ -35,7 +41,7 @@ class SkillLogicMixin(BaseLogicMixin):
 
 
 class SkillLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, TimeLogicMixin, ToolLogicMixin, SkillLogicMixin,
-CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin]]):
+CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin, ModLogicMixin]]):
 
     # Should be cached
     def can_earn_level(self, skill: str, level: int) -> StardewRule:
