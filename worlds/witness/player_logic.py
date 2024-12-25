@@ -991,7 +991,6 @@ class WitnessPlayerLogic:
 
         # Gather quick references to relevant options
         eps_shuffled = world.options.shuffle_EPs
-        come_to_you = world.options.elevators_come_to_you
         difficulty = world.options.puzzle_randomization
         discards_shuffled = world.options.shuffle_discarded_panels
         boat_shuffled = world.options.shuffle_boat
@@ -1003,6 +1002,9 @@ class WitnessPlayerLogic:
         shortbox_req = world.options.mountain_lasers
         longbox_req = world.options.challenge_lasers
         eggs_exist = world.options.easter_egg_hunt
+
+        swamp_bridge_comes_to_you = "Swamp Long Bridge" in world.options.elevators_come_to_you
+        quarry_elevator_comes_to_you = "Quarry Elevator" in world.options.elevators_come_to_you
 
         # Make some helper booleans so it is easier to follow what's going on
         mountain_upper_is_in_postgame = (
@@ -1021,8 +1023,8 @@ class WitnessPlayerLogic:
             "0x17D02": eps_shuffled,  # Windmill Turn Control
             "0x0368A": symbols_shuffled or door_panels,  # Quarry Stoneworks Stairs Door
             "0x3865F": symbols_shuffled or door_panels or eps_shuffled,  # Quarry Boathouse 2nd Barrier
-            "0x17CC4": come_to_you or eps_shuffled,  # Quarry Elevator Panel
-            "0x17E2B": come_to_you and boat_shuffled or eps_shuffled,  # Swamp Long Bridge
+            "0x17CC4": quarry_elevator_comes_to_you or eps_shuffled,  # Quarry Elevator Panel
+            "0x17E2B": swamp_bridge_comes_to_you and boat_shuffled or eps_shuffled,  # Swamp Long Bridge
             "0x0CF2A": eggs_exist,  # Jungle Monastery Garden Shortcut
             "0x0364E": False,  # Monastery Laser Shortcut Door
             "0x03713": remote_doors,  # Monastery Laser Shortcut Panel
