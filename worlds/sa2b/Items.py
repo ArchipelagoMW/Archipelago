@@ -100,6 +100,7 @@ minigame_trap_table = {
     ItemName.pinball_trap:         ItemData(0xFF0058, False, True),
     ItemName.math_quiz_trap:       ItemData(0xFF0059, False, True),
     ItemName.snake_trap:           ItemData(0xFF005A, False, True),
+    ItemName.input_sequence_trap:  ItemData(0xFF005B, False, True),
 }
 
 emeralds_table = {
