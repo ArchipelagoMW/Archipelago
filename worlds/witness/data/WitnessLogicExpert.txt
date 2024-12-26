@@ -1013,7 +1013,7 @@ Mountaintop (Mountaintop) - Mountain Floor 1 - 0x17C34:
 Mountain Floor 1 (Mountain Floor 1) - Mountain Floor 1 Bridge - 0x09E39:
 158408 - 0x09E39 (Light Bridge Controller) - True - Eraser & Triangles
 
-Mountain Floor 1 Bridge (Mountain Floor 1) - Mountain Floor 1 At Door - TrueOneWay:
+Mountain Floor 1 Bridge (Mountain Floor 1) - Mountain Floor 1 At Door - TrueOneWay - Mountain Floor 1 Trash Pillar - TrueOneWay - Mountain Floor 1 Back Section - TrueOneWay:
 158409 - 0x09E7A (Right Row 1) - True - Black/White Squares & Dots & Stars & Stars + Same Colored Symbol
 158410 - 0x09E71 (Right Row 2) - 0x09E7A - Black/White Squares & Triangles
 158411 - 0x09E72 (Right Row 3) - 0x09E71 - Black/White Squares & Shapers & Stars & Stars + Same Colored Symbol
@@ -1026,11 +1026,15 @@ Mountain Floor 1 Bridge (Mountain Floor 1) - Mountain Floor 1 At Door - TrueOneW
 158418 - 0x09E6C (Left Row 5) - 0x09E79 - Stars & Shapers & Negative Shapers & Stars + Same Colored Symbol
 158419 - 0x09E6F (Left Row 6) - 0x09E6C - Symmetry & Stars & Colored Squares & Black/White Squares & Stars + Same Colored Symbol & Symmetry & Eraser
 158420 - 0x09E6B (Left Row 7) - 0x09E6F - Symmetry & Dots & Full Dots & Triangles
+158424 - 0x09EAD (Trash Pillar 1) - True - Rotated Shapers & Stars
+158425 - 0x09EAF (Trash Pillar 2) - 0x09EAD - Rotated Shapers & Triangles
+
+Mountain Floor 1 Trash Pillar (Mountain Floor 1):
+
+Mountain Floor 1 Back Section (Mountain Floor 1):
 158421 - 0x33AF5 (Back Row 1) - True - Symmetry & Black/White Squares & Triangles
 158422 - 0x33AF7 (Back Row 2) - 0x33AF5 - Symmetry & Stars & Triangles & Stars + Same Colored Symbol
 158423 - 0x09F6E (Back Row 3) - 0x33AF7 - Symmetry & Stars & Shapers & Stars + Same Colored Symbol
-158424 - 0x09EAD (Trash Pillar 1) - True - Rotated Shapers & Stars
-158425 - 0x09EAF (Trash Pillar 2) - 0x09EAD - Rotated Shapers & Triangles
 
 Mountain Floor 1 At Door (Mountain Floor 1) - Mountain Floor 2 - 0x09E54:
 Door - 0x09E54 (Exit) - 0x09EAF & 0x09F6E & 0x09E6B & 0x09E7B
