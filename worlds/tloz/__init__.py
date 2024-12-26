@@ -125,12 +125,6 @@ class TLoZWorld(World):
         self.filler_items = None
         self.entrance_randomizer_set = None
 
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld):
-        rom_file = get_base_rom_path()
-        if not os.path.exists(rom_file):
-            raise FileNotFoundError(rom_file)
-
     def create_item(self, name: str):
         if name == "Power Bracelet":
             return TLoZItem(
@@ -166,7 +160,7 @@ class TLoZWorld(World):
             overworld.connect(
                 level,
                 f"Level {i} Entrance at {entrando_entrance}",
-                lambda state: entrando_rule(state, self.player))
+                lambda state, rule=entrando_rule: rule(state, self.player))
             self.multiworld.regions.append(level)
 
         for i, level in enumerate(level_locations):
@@ -187,7 +181,7 @@ class TLoZWorld(World):
                 region = Region(location, self.player, self.multiworld)
                 entrando_screen = [screen for screen, entrance in self.entrance_randomizer_set.items() if entrance[1] == location][0]
                 entrando_rule = self.entrance_randomizer_set[entrando_screen][0]
-                overworld.connect(region, f"Overworld to {entrando_screen}", lambda state: entrando_rule(state, self.player))
+                overworld.connect(region, f"Overworld to {entrando_screen}", lambda state, rule=entrando_rule: rule(state, self.player))
                 region.locations.append(
                     self.create_location(location, self.location_name_to_id[location], region))
             elif "Take Any" not in location:
@@ -203,7 +197,7 @@ class TLoZWorld(World):
                 screen_region.connect(
                     region,
                     f"{screen_region} to Take Any Item",
-                    lambda state: entrando_rule(state, self.player)
+                    lambda state, rule=entrando_rule: rule(state, self.player)
                 )
                 overworld.connect(screen_region, f"Overworld to {screen}", lambda state: True)
             for location in take_any_locations:
@@ -220,7 +214,7 @@ class TLoZWorld(World):
                 screen_region.connect(
                     shop_region,
                     f"{screen_region} to {shop_category}",
-                    lambda state: entrando_rule(state, self.player))
+                    lambda state, rule=entrando_rule: rule(state, self.player))
                 overworld.connect(screen_region,
                                   f"Overworld {screen}",
                                   lambda state: True

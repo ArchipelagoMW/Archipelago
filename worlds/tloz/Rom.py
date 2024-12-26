@@ -9,7 +9,6 @@ import bsdiff4
 import Utils
 from BaseClasses import ItemClassification
 from worlds.Files import APDeltaPatch, APProcedurePatch, APTokenMixin, APPatchExtension
-from worlds.dkc3.Locations import secret_cave_location_table
 
 
 NA10CHECKSUM = '337bd6f1a1163df31bf2633665589ab0'
