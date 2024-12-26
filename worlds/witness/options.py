@@ -155,7 +155,8 @@ class EasterEggHunt(Choice):
     - Hard: For every 4 Easter Eggs collected, an item is sent
     - Very Hard: For every 5 Easter Eggs collected, an item is sent (You are expected to find every Easter Egg)
 
-    On Easy, there will still be a location check for "120 Easter Eggs Collected" (provided there aren't any unreachable eggs due to options like shuffle_postgame: false), but all checks after 48 Eggs will be excluded.
+    Checks that require more Eggs than logically available still exist, but are excluded.
+    For example, on "Easy", the "60 Eggs Collected" check can physically be obtained, but would logically require 150 Easter Eggs, which is impossible. Thus, it is excluded.
 
     It is recommended that you play this mode together with Door Shuffle. Without it, more than half of the Easter Eggs will be in sphere 1.
     """
