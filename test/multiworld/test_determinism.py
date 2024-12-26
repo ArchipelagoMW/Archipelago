@@ -178,13 +178,20 @@ class TestDeterministicGeneration(TestCase):
         # Generate a multiworld and create serializable multiworld data for each game.
         # This data will be shared by each test within TestDeterministicGeneration to make the tests faster by reducing
         # the number of worlds that have to be generated.
-        for world_type_name, world_type in AutoWorldRegister.world_types.items():
+        for game, world_type in AutoWorldRegister.world_types.items():
             multiworld = setup_multiworld(world_type)
-            item_pool_copy = multiworld.itempool.copy()
-            distribute_items_restrictive(multiworld)
-            call_all(multiworld, "post_fill")
-            serializable_data = multiworld_to_serializable(item_pool_copy, multiworld)
-            cls.initial_multiworld_data[world_type_name] = (multiworld.seed, serializable_data)
+            try:
+                item_pool_copy = multiworld.itempool.copy()
+                distribute_items_restrictive(multiworld)
+                call_all(multiworld, "post_fill")
+                serializable_data = multiworld_to_serializable(item_pool_copy, multiworld)
+                cls.initial_multiworld_data[game] = (multiworld.seed, serializable_data)
+            except Exception as e:
+                # distribute_items_restrictive is the most likely to fail due to rare restrictive starts where swap is
+                # unable to figure out a suitable fill before giving up.
+
+                # Re-raise with the seed and game included.
+                raise RuntimeError(f"World setup failed for {game} with seed {multiworld.seed}") from e
 
     @classmethod
     def tearDownClass(cls):
