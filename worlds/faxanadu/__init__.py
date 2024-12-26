@@ -169,7 +169,7 @@ class FaxanaduWorld(World):
         # If red potions are locked in shops, remove the count from the ratio.
         self.filler_ratios["Red Potion"] -= red_potion_in_shop_count
 
-        # Remove poisons if not desired
+        # Add poisons if desired
         if self.options.include_poisons:
             self.filler_ratios["Poison"] = self.item_name_to_item["Poison"].count
 
