@@ -81,34 +81,34 @@ class TestEggRestrictions(WitnessMultiworldTestBase):
     }
 
     def test_egg_restrictions(self) -> None:
-        with self.subTest("Test that locations beyond 91 Easter Eggs don't exist for a seed without Mountain"):
-            self.assert_location_exists("88 Easter Eggs Collected", 1)
-            self.assert_location_does_not_exist("92 Easter Eggs Collected", 1)
+        with self.subTest("Test that locations beyond 108 Easter Eggs don't exist for a seed without Mountain"):
+            self.assert_location_exists("108 Easter Eggs Collected", 1)
+            self.assert_location_does_not_exist("112 Easter Eggs Collected", 1)
 
         with self.subTest(
-            "Test that locations beyond 72 Easter Eggs, which would logically require more than 91 Eggs, are excluded"
+            "Test that locations beyond 86 Easter Eggs, which would logically require more than 108 Eggs, are excluded"
         ):
-            egg_68_location = self.multiworld.get_location("72 Easter Eggs Collected", 1)
-            egg_72_location = self.multiworld.get_location("76 Easter Eggs Collected", 1)
+            egg_84_location = self.multiworld.get_location("84 Easter Eggs Collected", 1)
+            egg_88_location = self.multiworld.get_location("88 Easter Eggs Collected", 1)
 
-            self.assertNotEqual(egg_68_location.progress_type, LocationProgressType.EXCLUDED)
-            self.assertEqual(egg_72_location.progress_type, LocationProgressType.EXCLUDED)
+            self.assertNotEqual(egg_84_location.progress_type, LocationProgressType.EXCLUDED)
+            self.assertEqual(egg_88_location.progress_type, LocationProgressType.EXCLUDED)
 
-        with self.subTest("Test that in a seed with the whole game included, the 100 egg location exists"):
-            self.assert_location_exists("100 Easter Eggs Collected", 2)
+        with self.subTest("Test that in a seed with the whole game included, the 120 egg location exists"):
+            self.assert_location_exists("120 Easter Eggs Collected", 2)
 
         with self.subTest(
-            "Test that locations beyond 80 Easter Eggs, which would logically require more than 100 Eggs, are excluded"
+            "Test that locations beyond 96 Easter Eggs, which would logically require more than 120 Eggs, are excluded"
         ):
-            egg_80_location = self.multiworld.get_location("80 Easter Eggs Collected", 2)
-            egg_84_location = self.multiworld.get_location("84 Easter Eggs Collected", 2)
+            egg_96_location = self.multiworld.get_location("96 Easter Eggs Collected", 2)
+            egg_100_location = self.multiworld.get_location("100 Easter Eggs Collected", 2)
 
-            self.assertNotEqual(egg_80_location.progress_type, LocationProgressType.EXCLUDED)
-            self.assertEqual(egg_84_location.progress_type, LocationProgressType.EXCLUDED)
+            self.assertNotEqual(egg_96_location.progress_type, LocationProgressType.EXCLUDED)
+            self.assertEqual(egg_100_location.progress_type, LocationProgressType.EXCLUDED)
 
         with self.subTest("Test that you can exclude and egg to disable it"):
-            self.assert_location_exists("96 Easter Eggs Collected", 3)
-            self.assert_location_does_not_exist("100 Easter Eggs Collected", 3)
+            self.assert_location_exists("116 Easter Eggs Collected", 3)
+            self.assert_location_does_not_exist("120 Easter Eggs Collected", 3)
 
 
 class TestBunkerElevatorEgg(WitnessMultiworldTestBase):
