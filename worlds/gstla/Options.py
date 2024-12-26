@@ -3,9 +3,9 @@ from dataclasses import dataclass
 
 class StartWithShip(Choice):
     """What needs to be done to get the ship?
-    Vanilla: requires getting the black crystal and completing the gabomba statue to get the reward from Madras Mayor.
-    Ship Door Unlocked: involves getting the black crystal and activating the ship as per vanilla.
-    Available From The Start: allows you to use the ship from the beginning of the game.
+    Vanilla: requires getting the Black Crystal and completing the Gabomba Statue to get the reward from Madras Mayor to be able to enter the ship and activate it.
+    Ship Door Unlocked: The ship door is unlocked but you still require to activate the ship by reaching the engine room. Black Crystal is no longer in the pool as it is not required.
+    Available From The Start: allows you to use the ship from the beginning of the game. Black Crystal is no longer in the pool as it is not required.
     """
     internal_name = "lemurian_ship"
     display_name = "Lemurian Ship"
