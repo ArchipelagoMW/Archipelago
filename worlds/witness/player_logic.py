@@ -533,8 +533,7 @@ class WitnessPlayerLogic:
         return postgame_adjustments
 
     def set_easter_egg_requirements(self, world: "WitnessWorld") -> None:
-        required_eggs_per_check = world.options.easter_egg_hunt.value
-        logically_required_eggs_per_check = 5
+        eggs_per_check, logically_required_eggs_per_check = world.options.easter_egg_hunt.get_step_and_logical_step()
 
         for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items():
             if entity_obj["entityType"] != "Easter Egg Total":
@@ -542,10 +541,10 @@ class WitnessPlayerLogic:
 
             direct_egg_count = int(entity_obj["checkName"].split(" ")[0])
 
-            if direct_egg_count % required_eggs_per_check:
+            if direct_egg_count % eggs_per_check:
                 self.COMPLETELY_DISABLED_ENTITIES.add(entity_hex)
 
-            requirement = direct_egg_count // required_eggs_per_check * logically_required_eggs_per_check
+            requirement = direct_egg_count // eggs_per_check * logically_required_eggs_per_check
             self.DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex] = {
                 "entities": frozenset({frozenset({f"{requirement} Eggs"})})
             }
@@ -562,9 +561,7 @@ class WitnessPlayerLogic:
             region_name = static_witness_logic.ENTITIES_BY_HEX[entity_hex]["region"]["name"]
             self.AVAILABLE_EASTER_EGGS_PER_REGION[region_name] += 1
 
-        # This is what makes "easy" easier than "very hard" - 2 required, 5 logically required
-        needed_eggs_per_check = world.options.easter_egg_hunt.value
-        logically_needed_eggs_per_check = 5
+        eggs_per_check, logically_required_eggs_per_check = world.options.easter_egg_hunt.get_step_and_logical_step()
 
         for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items():
             if entity_obj["entityType"] != "Easter Egg Total":
@@ -573,7 +570,7 @@ class WitnessPlayerLogic:
                 continue
 
             direct_egg_count = int(entity_obj["checkName"].split(" ", 1)[0])
-            logically_required_egg_count = direct_egg_count // needed_eggs_per_check * logically_needed_eggs_per_check
+            logically_required_egg_count = direct_egg_count // eggs_per_check * logically_required_eggs_per_check
             if direct_egg_count > max_eggs:
                 self.COMPLETELY_DISABLED_ENTITIES.add(entity_hex)
                 continue

@@ -23,6 +23,9 @@ class TestEasterEggShuffle(WitnessMultiworldTestBase):
         {
             "easter_egg_hunt": "very_hard",
         },
+        {
+            "easter_egg_hunt": "extreme",
+        },
     ]
 
     def test_easter_egg_hunt(self) -> None:
@@ -30,7 +33,7 @@ class TestEasterEggShuffle(WitnessMultiworldTestBase):
             egg_locations = {location for location in self.multiworld.get_locations(1) if "Egg" in location.name}
             self.assertFalse(egg_locations)
 
-        for player, required_eggs_per_check in zip([2, 3, 4, 5], [2, 3, 4, 5]):
+        for player, eggs_per_check, logical_eggs_per_check in zip([2, 3, 4, 5, 6], [3, 3, 4, 4, 4], [8, 6, 6, 5, 4]):
             world = cast(WitnessWorld, self.multiworld.worlds[player])
             option_name = world.options.easter_egg_hunt
 
@@ -38,22 +41,27 @@ class TestEasterEggShuffle(WitnessMultiworldTestBase):
                 self.assertEqual(self.multiworld.state.count("Egg", player), 0)
 
             with self.subTest(f"Test that the correct Egg Collection locations exist for {option_name} player"):
-                first_egg_location = f"{required_eggs_per_check} Easter Eggs Collected"
-                one_less_location = f"{required_eggs_per_check - 1} Easter Eggs Collected"
-                one_more_location = f"{required_eggs_per_check + 1} Easter Eggs Collected"
+                first_egg_location = f"{eggs_per_check} Easter Eggs Collected"
+                one_less_location = f"{eggs_per_check - 1} Easter Eggs Collected"
+                one_more_location = f"{eggs_per_check + 1} Easter Eggs Collected"
                 self.assert_location_exists(first_egg_location, player)
                 self.assert_location_does_not_exist(one_less_location, player, strict_check=False)
                 self.assert_location_does_not_exist(one_more_location, player, strict_check=False)
 
-            with self.subTest('Test that "+4 Easter Eggs" item adds 4 easter eggs'):
-                item = world.create_item("+4 Easter Eggs")
+            one_too_few = logical_eggs_per_check - 1
+            with self.subTest(f'Test that "+{one_too_few} Easter Eggs" item adds 4 easter eggs'):
+                item = world.create_item(f"+{one_too_few} Easter Eggs")
                 self.multiworld.state.collect(item, prevent_sweep=True)
-                self.assertEqual(self.multiworld.state.count("Egg", player), 4)
+                self.assertEqual(self.multiworld.state.count("Egg", player), one_too_few)
 
-            with self.subTest(f"Test that 4 Easter Eggs are not enough for {option_name} player's first location"):
+            with self.subTest(
+                f"Test that {one_too_few} Easter Eggs are not enough for {option_name} player's first location"
+            ):
                 self.assertFalse(self.multiworld.state.can_reach_location(first_egg_location, player))
 
-            with self.subTest(f"Test that 5 Easter Eggs are enough for {option_name} player's first location"):
+            with self.subTest(
+                f"Test that {logical_eggs_per_check} Easter Eggs are enough for {option_name} player's first location"
+            ):
                 item = world.create_item("+1 Easter Egg")
                 self.multiworld.state.collect(item, prevent_sweep=True)
                 self.assertTrue(self.multiworld.state.can_reach_location(first_egg_location, player))
@@ -76,7 +84,7 @@ class TestEggRestrictions(WitnessMultiworldTestBase):
     common_options = {
         "victory_condition": "mountain_box_short",
         "shuffle_doors": "off",
-        "easter_egg_hunt": "hard",
+        "easter_egg_hunt": "very_hard",
         "shuffle_vault_boxes": True,
     }
 

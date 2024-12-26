@@ -148,15 +148,16 @@ class EasterEggHunt(Choice):
     Adds up to 120 Easter Eggs to the game, placed by NewSoupVi, Exempt-Medic, hatkirby, Scipio, and Rever.
     These can be collected by simply clicking on them.
 
-    Each consecutive check will logically expect 5 Easter Eggs to be collected.
-    However, the amount that you need to collect to actually trigger the next location check differs by option choice:
-    - Easy: For every 2 Easter Eggs collected, an item is sent
-    - Normal: For every 3 Easter Eggs collected, an item is sent
-    - Hard: For every 4 Easter Eggs collected, an item is sent
-    - Very Hard: For every 5 Easter Eggs collected, an item is sent (You are expected to find every Easter Egg)
+    The difficulty options differ by how many Eggs you need to collect for each check and how many are logically required for each check.
+
+    - "Easy": 3 / 8
+    - "Normal": 3 / 6
+    - "Hard": 4 / 6
+    - "Very Hard": 4 / 5
+    - "Extreme": 4 / 4 (You are expected to collect every Easter Egg)
 
     Checks that require more Eggs than logically available still exist, but are excluded.
-    For example, on "Easy", the "60 Eggs Collected" check can physically be obtained, but would logically require 150 Easter Eggs, which is impossible. Thus, it is excluded.
+    For example, on "Easy", the "63 Eggs Collected" check can physically be obtained, but would logically require 125 Easter Eggs, which is impossible. Thus, it is excluded.
 
     It is recommended that you play this mode together with Door Shuffle. Without it, more than half of the Easter Eggs will be in sphere 1.
     """
@@ -166,11 +167,23 @@ class EasterEggHunt(Choice):
     display_name = "Easter Egg Hunt"
     option_off = 0
     # Number represents the amount of eggs needed per check
-    option_easy = 2
-    option_normal = 3
-    option_hard = 4
-    option_very_hard = 5
-    default = 3 if datetime.now().month == 4 else 0
+    option_easy = 1
+    option_normal = 2
+    option_hard = 3
+    option_very_hard = 4
+    option_extreme = 5
+    default = 2 if datetime.now().month == 4 else 0
+
+    def get_step_and_logical_step(self):
+        if self == "easy":
+            return 3, 8
+        if self == "normal":
+            return 3, 6
+        if self == "hard":
+            return 4, 6
+        if self == "very_hard":
+            return 4, 5
+        return 4, 4
 
 
 class ShuffleDog(Choice):
