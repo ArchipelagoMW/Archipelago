@@ -138,7 +138,7 @@ class TunicWorld(World):
                 self.options.entrance_rando.value = passthrough["entrance_rando"]
                 self.options.shuffle_ladders.value = passthrough["shuffle_ladders"]
                 self.options.entrance_layout.value = EntranceLayout.option_standard
-                self.options.decoupled = passthrough["decoupled"]
+                self.options.decoupled = passthrough.get("decoupled", 0)
                 self.options.laurels_location.value = LaurelsLocation.option_anywhere
                 self.options.combat_logic.value = passthrough["combat_logic"]
 
