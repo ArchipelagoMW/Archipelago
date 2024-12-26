@@ -58,7 +58,7 @@ class StaticWitnessLogicObj:
             correct_area = region_object["area"]
 
             for _ in range(entity_amount):
-                location_id = 160100 + egg_counter
+                location_id = 160200 + egg_counter
                 entity_hex = hex(0xEE000 + egg_counter)
                 egg_counter += 1
 
