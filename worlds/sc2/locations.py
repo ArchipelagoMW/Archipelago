@@ -58,6 +58,7 @@ class LocationData(NamedTuple):
     type: LocationType
     rule: Callable[['CollectionState'], bool] = Location.access_rule
     flags: LocationFlag = LocationFlag.NONE
+    hard_rule: Optional[Callable[['CollectionState'], bool]] = None
 
 
 def make_location_data(
@@ -67,8 +68,9 @@ def make_location_data(
     type: LocationType,
     rule: Callable[['CollectionState'], bool] = Location.access_rule,
     flags: LocationFlag = LocationFlag.NONE,
+    hard_rule: Optional[Callable[['CollectionState'], bool]] = None,
 ) -> LocationData:
-    return LocationData(region, f'{region}: {name}', code, type, rule, flags)
+    return LocationData(region, f'{region}: {name}', code, type, rule, flags, hard_rule)
 
 
 def get_location_types(world: 'SC2World', inclusion_type: int) -> Set[LocationType]:
@@ -106,7 +108,6 @@ def get_location_flags(world: 'SC2World', inclusion_type: int) -> LocationFlag:
 
 def get_plando_locations(world: World) -> List[str]:
     """
-
     :param multiworld:
     :param player:
     :return: A list of locations affected by a plando in a world
@@ -1316,28 +1317,36 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 and logic.zerg_competent_anti_air(state))
         ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 1200, LocationType.VICTORY,
-            logic.supreme_requirement
+            logic.supreme_requirement,
+            hard_rule=logic.supreme_requirement,
         ),
         make_location_data(SC2Mission.SUPREME.mission_name, "First Relic", SC2HOTS_LOC_ID_OFFSET + 1201, LocationType.VANILLA,
-            logic.supreme_requirement
+            logic.supreme_requirement,
+            hard_rule=logic.supreme_requirement,
         ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Second Relic", SC2HOTS_LOC_ID_OFFSET + 1202, LocationType.VANILLA,
-            logic.supreme_requirement
+            logic.supreme_requirement,
+            hard_rule=logic.supreme_requirement,
         ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Third Relic", SC2HOTS_LOC_ID_OFFSET + 1203, LocationType.VANILLA,
-            logic.supreme_requirement
+            logic.supreme_requirement,
+            hard_rule=logic.supreme_requirement,
         ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Fourth Relic", SC2HOTS_LOC_ID_OFFSET + 1204, LocationType.VANILLA,
-            logic.supreme_requirement
+            logic.supreme_requirement,
+            hard_rule=logic.supreme_requirement,
         ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Yagdra", SC2HOTS_LOC_ID_OFFSET + 1205, LocationType.EXTRA,
-            logic.supreme_requirement
+            logic.supreme_requirement,
+            hard_rule=logic.supreme_requirement,
         ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Kraith", SC2HOTS_LOC_ID_OFFSET + 1206, LocationType.EXTRA,
-            logic.supreme_requirement
+            logic.supreme_requirement,
+            hard_rule=logic.supreme_requirement,
         ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Slivan", SC2HOTS_LOC_ID_OFFSET + 1207, LocationType.EXTRA,
-            logic.supreme_requirement
+            logic.supreme_requirement,
+            hard_rule=logic.supreme_requirement,
         ),
         make_location_data(SC2Mission.INFESTED.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 1300, LocationType.VICTORY,
             lambda state: (
@@ -2082,35 +2091,43 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.sudden_strike_requirement
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "Victory", SC2NCO_LOC_ID_OFFSET + 300, LocationType.VICTORY,
-            logic.enemy_intelligence_third_stage_requirement
+            logic.enemy_intelligence_third_stage_requirement,
+            hard_rule=logic.enemy_intelligence_cliff_garrison,
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "West Garrison", SC2NCO_LOC_ID_OFFSET + 301, LocationType.EXTRA,
-            logic.enemy_intelligence_first_stage_requirement
+            logic.enemy_intelligence_first_stage_requirement,
+            hard_rule=logic.enemy_intelligence_garrisonable_unit,
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "Close Garrison", SC2NCO_LOC_ID_OFFSET + 302, LocationType.EXTRA,
-            logic.enemy_intelligence_first_stage_requirement
+            logic.enemy_intelligence_first_stage_requirement,
+            hard_rule=logic.enemy_intelligence_garrisonable_unit,
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "Northeast Garrison", SC2NCO_LOC_ID_OFFSET + 303, LocationType.EXTRA,
-            logic.enemy_intelligence_first_stage_requirement
+            logic.enemy_intelligence_first_stage_requirement,
+            hard_rule=logic.enemy_intelligence_garrisonable_unit,
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "Southeast Garrison", SC2NCO_LOC_ID_OFFSET + 304, LocationType.EXTRA,
             lambda state: (
                 logic.enemy_intelligence_first_stage_requirement(state)
-                and logic.enemy_intelligence_cliff_garrison(state))
+                and logic.enemy_intelligence_cliff_garrison(state)),
+            hard_rule=logic.enemy_intelligence_cliff_garrison,
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "South Garrison", SC2NCO_LOC_ID_OFFSET + 305, LocationType.EXTRA,
-            logic.enemy_intelligence_first_stage_requirement
+            logic.enemy_intelligence_first_stage_requirement,
+            hard_rule=logic.enemy_intelligence_garrisonable_unit,
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "All Garrisons", SC2NCO_LOC_ID_OFFSET + 306, LocationType.VANILLA,
             lambda state: (
                 logic.enemy_intelligence_first_stage_requirement(state)
-                and logic.enemy_intelligence_cliff_garrison(state))
+                and logic.enemy_intelligence_cliff_garrison(state)),
+            hard_rule=logic.enemy_intelligence_cliff_garrison,
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "Forces Rescued", SC2NCO_LOC_ID_OFFSET + 307, LocationType.VANILLA,
             logic.enemy_intelligence_first_stage_requirement
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "Communications Hub", SC2NCO_LOC_ID_OFFSET + 308, LocationType.VANILLA,
-            logic.enemy_intelligence_second_stage_requirement
+            logic.enemy_intelligence_second_stage_requirement,
+            hard_rule=logic.enemy_intelligence_cliff_garrison,
         ),
         make_location_data(SC2Mission.TROUBLE_IN_PARADISE.mission_name, "Victory", SC2NCO_LOC_ID_OFFSET + 400, LocationType.VICTORY,
             logic.trouble_in_paradise_requirement

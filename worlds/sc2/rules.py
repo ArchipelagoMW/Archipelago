@@ -1,10 +1,10 @@
 from math import floor
-from typing import TYPE_CHECKING, Set, Optional
+from typing import TYPE_CHECKING, Set, Optional, Callable
 
-from BaseClasses import  CollectionState
+from BaseClasses import CollectionState, Location
 from .options import (
     get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap,
-    GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, SpearOfAdunAutonomouslyCastAbilityPresence,
+    GrantStoryTech, GrantStoryLevels, SpearOfAdunAutonomouslyCastAbilityPresence,
     get_enabled_campaigns, MissionOrder, EnableMorphling, get_enabled_races
 )
 from .item.item_tables import (
@@ -2399,6 +2399,7 @@ class SC2Logic:
         self.mission_order = get_option_value(world, "mission_order")
         self.generic_upgrade_missions = get_option_value(world, "generic_upgrade_missions")
 
+
 def get_basic_units(logic_level: int, race: SC2Race) -> Set[str]:
     if logic_level == RequiredTactics.option_no_logic:
         return no_logic_basic_units[race]
@@ -2406,3 +2407,37 @@ def get_basic_units(logic_level: int, race: SC2Race) -> Set[str]:
         return advanced_basic_units[race]
     else:
         return basic_units[race]
+
+
+def has_terran_units(player: int, target: int) -> Callable[['CollectionState'], bool]:
+    def _has_terran_units(state: CollectionState) -> bool:
+        return (
+            state.count_from_list_unique(item_groups.terran_units + item_groups.terran_buildings, player) >= target
+        )
+    return _has_terran_units
+
+
+def has_zerg_units(player: int, target: int) -> Callable[['CollectionState'], bool]:
+    def _has_zerg_units(state: CollectionState) -> bool:
+        return (
+            state.count_from_list_unique(item_groups.zerg_units + item_groups.zerg_buildings, player) >= target
+        )
+    return _has_zerg_units
+
+
+def has_protoss_units(player: int, target: int) -> Callable[['CollectionState'], bool]:
+    def _has_protoss_units(state: CollectionState) -> bool:
+        return (
+            state.count_from_list_unique(item_groups.protoss_units + item_groups.protoss_buildings, player) >= target
+        )
+    return _has_protoss_units
+
+
+def has_race_units(player: int, target: int, race: SC2Race) -> Callable[['CollectionState'], bool]:
+    if race == SC2Race.TERRAN:
+        return has_terran_units(player, target)
+    if race == SC2Race.ZERG:
+        return has_zerg_units(player, target)
+    if race == SC2Race.PROTOSS:
+        return has_protoss_units(player, target)
+    return Location.access_rule

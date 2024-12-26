@@ -365,18 +365,21 @@ class StarterUnit(Choice):
 
 class RequiredTactics(Choice):
     """
-    Determines the maximum tactical difficulty of the world (separate from mission difficulty).  Higher settings
-    increase randomness.
+    Determines the maximum tactical difficulty of the world (separate from mission difficulty).
+    Higher settings increase randomness.
 
     Standard:  All missions can be completed with good micro and macro.
     Advanced:  Completing missions may require relying on starting units and micro-heavy units.
-    No Logic:  Units and upgrades may be placed anywhere.  LIKELY TO RENDER THE RUN IMPOSSIBLE ON HARDER DIFFICULTIES!
+    Any Units: Logic guarantees at least one unit or building unlock per mission depth, up to 5 units,
+               without restriction on what those units are. May render the run impossible on harder difficulties.
+    No Logic:  Units and upgrades may be placed anywhere. LIKELY TO RENDER THE RUN IMPOSSIBLE ON HARDER DIFFICULTIES!
                Locks Grant Story Tech option to true.
     """
     display_name = "Required Tactics"
     option_standard = 0
     option_advanced = 1
-    option_no_logic = 2
+    option_any_units = 2
+    option_no_logic = 3
 
 
 class EnableVoidTrade(Toggle):
