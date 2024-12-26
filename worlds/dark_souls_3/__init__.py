@@ -1466,7 +1466,8 @@ class DarkSouls3World(World):
                     offworld = ds3_world._shuffle([loc for loc in locations if loc.game != "Dark Souls III"])
                     onworld = sorted((loc for loc in locations if loc.game == "Dark Souls III"),
                                      key=lambda loc: loc.data.region_value)
-                    sorted_spheres.extend(onworld + offworld)
+                    sorted_spheres.extend(onworld)
+                    sorted_spheres.extend(offworld)
 
                 # Give offworld regions the last (best) items within a given sphere
                 converted_item_order.reverse()
