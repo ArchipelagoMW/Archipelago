@@ -156,6 +156,8 @@ class EasterEggHunt(Choice):
     - Very Hard: For every 5 Easter Eggs collected, an item is sent (You are expected to find every Easter Egg)
 
     On Easy, there will still be a location check for "120 Easter Eggs Collected" (provided there aren't any unreachable eggs due to options like shuffle_postgame: false), but all checks after 48 Eggs will be excluded.
+
+    It is recommended that you play this mode together with Door Shuffle. Without it, more than half of the Easter Eggs will be in sphere 1.
     """
 
     visibility = Visibility.all if datetime.now().month == 4 else Visibility.none
