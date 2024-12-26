@@ -137,12 +137,6 @@ class BlasphemousWorld(World):
         ]
 
         skipped_items = []
-        junk: int = 0
-
-        for item, count in self.options.start_inventory.value.items():
-            for _ in range(count):
-                skipped_items.append(item)
-                junk += 1
 
         skipped_items.extend(unrandomized_dict.values())
 
@@ -193,9 +187,6 @@ class BlasphemousWorld(World):
             else:
                 for _ in range(count):
                     pool.append(self.create_item(item["name"]))
-
-        for _ in range(junk):
-            pool.append(self.create_item(self.get_filler_item_name()))
 
         self.multiworld.itempool += pool
 

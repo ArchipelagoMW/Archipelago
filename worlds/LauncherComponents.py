@@ -103,7 +103,7 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
     try:
         import zipfile
         zip = zipfile.ZipFile(apworld_path)
-        directories = [f.filename.strip('/') for f in zip.filelist if f.CRC == 0 and f.file_size == 0 and f.filename.count('/') == 1]
+        directories = [f.name for f in zipfile.Path(zip).iterdir() if f.is_dir()]
         if len(directories) == 1 and directories[0] in apworld_path.stem:
             module_name = directories[0]
             apworld_name = module_name + ".apworld"
@@ -207,6 +207,7 @@ components: List[Component] = [
 ]
 
 
+# if registering an icon from within an apworld, the format "ap:module.name/path/to/file.png" can be used
 icon_paths = {
     'icon': local_path('data', 'icon.png'),
     'mcicon': local_path('data', 'mcicon.png'),
