@@ -227,10 +227,10 @@ class LocalFill(NamedRange):
     display_name = "Local Fill Percent"
     range_start = 0
     range_end = 100
-    default = 95
     special_range_names = {
         "default": -1
     }
+    default = -1
     visibility = Visibility.template | Visibility.complex_ui | Visibility.spoiler
 
 
