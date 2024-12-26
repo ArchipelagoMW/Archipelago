@@ -19,11 +19,11 @@ class LocationName(str, Enum):
     Yampi_Desert_315_coins = "Yampi Desert - Buried Item"
     Alhafra_Sleep_Bomb = "Alhafra - West Jar"
     Alhafra_Lucky_Medal = "Alhafra - North-East Jar"
-    Alhafra_32_coins = "Alhafra - Jail - Jar"
+    Alhafra_32_coins = "Alhafra - Outside Mayor's House East Box"
     Alhafra_Smoke_Bomb = "Alhafra - Eastern Alhafra - Jar"
     Alhafra_Elixir = "Alhafra - Upper Long House - Barrel"
     Alhafra_Apple = "Alhafra - Inn - Upstairs Jar"
-    Alhafran_Cave_Power_Bread = "Alhafran_Cave - Power_Bread"
+    Alhafran_Cave_Power_Bread = "Alhafra - Jail - Jar"
     Mikasalla_Nut = "Mikasalla - South-West Box"
     Mikasalla_Elixir = "Mikasalla - South-East Barrel"
     Mikasalla_Lucky_Pepper = "Mikasalla - Inn - Barrel"
@@ -123,23 +123,23 @@ class LocationName(str, Enum):
     Aqua_Rock_Parch = "Aqua Rock Interior - Parch Tablet"
     Gaia_Rock_Sand = "Gaia Rock - Sand Tablet"
     Magma_Rock_Blaze = "Magma Rock Interior - Blaze Tablet"
-    Idejima_Shamans_Rod = "Idejima - Shamans_Rod"
-    Idejima_Mind_Read = "Idejima - Mind_Read"
-    Idejima_Whirlwind = "Idejima - Whirlwind"
-    Idejima_Growth = "Idejima - Growth"
-    Contigo_Carry_Stone = "Contigo - Carry_Stone"
-    Contigo_Lifting_Gem = "Contigo - Lifting_Gem"
-    Contigo_Orb_of_Force = "Contigo - Orb_of_Force"
-    Contigo_Catch_Beads = "Contigo - Catch_Beads"
-    Kibombo_Douse_Drop = "Kibombo - Douse_Drop"
-    Kibombo_Frost_Jewel = "Kibombo - Frost_Jewel"
-    Contigo_Isaac = "Contigo - Isaac"
-    Contigo_Garet = "Contigo - Garet"
-    Contigo_Ivan = "Contigo - Ivan"
-    Contigo_Mia = "Contigo - Mia"
-    Idejima_Jenna = "Idejima - Jenna"
-    Idejima_Sheba = "Idejima - Sheba"
-    Kibombo_Piers = "Kibombo - Piers"
+    Idejima_Shamans_Rod = "Felix - Shaman's Rod"
+    Idejima_Mind_Read = "Sheba - Mind Read"
+    Idejima_Whirlwind = "Sheba - Whirlwind"
+    Idejima_Growth = "Felix - Growth"
+    Contigo_Carry_Stone = "Mia - Carry Stone"
+    Contigo_Lifting_Gem = "Ivan - Lifting Gem"
+    Contigo_Orb_of_Force = "Garet - Orb of Force"
+    Contigo_Catch_Beads = "Isaac - Catch Beads"
+    Kibombo_Douse_Drop = "Piers - Douse Drop"
+    Kibombo_Frost_Jewel = "Piers - Frost Jewel"
+    Contigo_Isaac = "Contigo - Recruit Isaac"
+    Contigo_Garet = "Contigo - Recruit Garet"
+    Contigo_Ivan = "Contigo - Recruit Ivan"
+    Contigo_Mia = "Contigo - Recruit Mia"
+    Idejima_Jenna = "Idejima - Recruit Jenna"
+    Idejima_Sheba = "Idejima - Recruit Sheba"
+    Kibombo_Piers = "Kibombo - Recruit Piers"
     
 
     ##summonTablets
@@ -563,14 +563,14 @@ ids_by_loc_name: Dict[LocationName, int] = {
     "Alhafra - Reveal Circle": 992244,
     "Alhafra - West Jar": 992252,
     "Alhafra - North-East Jar": 992260,
-    "Alhafra - Jail - Jar": 992268,
+    "Alhafra - Outside Mayor's House East Box": 992268,
     "Alhafra - Eastern Alhafra - Jar": 992280,
     "Alhafra - Upper Long House - Barrel": 992304,
     "Alhafra - Inn - Upstairs Jar": 992312,
     "Alhafra - Cave Left Side": 992324,
     "Alhafra - Cave Left Side Two": 992332,
     "Alhafra - Cave Left Side Three": 992340,
-    "Alhafran_Cave - Power_Bread": 992348,
+    "Alhafra - Jail - Jar": 992348,
     "Alhafra - Cave Right Side": 992360,
     "Alhafra - Cave Right Side Two": 992368,
     "Alhafra - Cave Right Side Three": 992376,
@@ -822,23 +822,23 @@ ids_by_loc_name: Dict[LocationName, int] = {
     "Gaia Rock - Sand Tablet": 16384194,
     "Magma Rock Interior - Blaze Tablet": 16384196,
     "Lemuria - Eclipse Tablet": 16384198,
-    "Idejima - Shamans_Rod": 16384202,
-    "Idejima - Mind_Read": 16384204,
-    "Idejima - Whirlwind": 16384206,
-    "Idejima - Growth": 16384208,
-    "Contigo - Carry_Stone": 16384210,
-    "Contigo - Lifting_Gem": 16384212,
-    "Contigo - Orb_of_Force": 16384214,
-    "Contigo - Catch_Beads": 16384216,
-    "Kibombo - Douse_Drop": 16384218,
-    "Kibombo - Frost_Jewel": 16384220,
-    "Contigo - Isaac": 16384384,
-    "Contigo - Garet": 16384386,
-    "Contigo - Ivan": 16384388,
-    "Contigo - Mia": 16384390,
-    "Idejima - Jenna": 16384392,
-    "Idejima - Sheba": 16384394,
-    "Kibombo - Piers": 16384396,
+    "Felix - Shaman's Rod": 16384202,
+    "Sheba - Mind Read": 16384204,
+    "Sheba - Whirlwind": 16384206,
+    "Felix - Growth": 16384208,
+    "Mia - Carry Stone": 16384210,
+    "Ivan - Lifting Gem": 16384212,
+    "Garet - Orb of Force": 16384214,
+    "Isaac - Catch Beads": 16384216,
+    "Piers - Douse Drop": 16384218,
+    "Piers - Frost Jewel": 16384220,
+    "Contigo - Recruit Isaac": 16384384,
+    "Contigo - Recruit Garet": 16384386,
+    "Contigo - Recruit Ivan": 16384388,
+    "Contigo - Recruit Mia": 16384390,
+    "Idejima - Recruit Jenna": 16384392,
+    "Idejima - Recruit Sheba": 16384394,
+    "Kibombo - Recruit Piers": 16384396,
     
 }
 
@@ -970,14 +970,14 @@ loc_names_by_id: Dict[int, LocationName] = {
     992244: "Alhafra - Reveal Circle",
     992252: "Alhafra - West Jar",
     992260: "Alhafra - North-East Jar",
-    992268: "Alhafra - Jail - Jar",
+    992268: "Alhafra - Outside Mayor's House East Box",
     992280: "Alhafra - Eastern Alhafra - Jar",
     992304: "Alhafra - Upper Long House - Barrel",
     992312: "Alhafra - Inn - Upstairs Jar",
     992324: "Alhafra - Cave Left Side",
     992332: "Alhafra - Cave Left Side Two",
     992340: "Alhafra - Cave Left Side Three",
-    992348: "Alhafran_Cave - Power_Bread",
+    992348: "Alhafra - Jail - Jar",
     992360: "Alhafra - Cave Right Side",
     992368: "Alhafra - Cave Right Side Two",
     992376: "Alhafra - Cave Right Side Three",
@@ -1229,23 +1229,23 @@ loc_names_by_id: Dict[int, LocationName] = {
     16384194: "Gaia Rock - Sand Tablet",
     16384196: "Magma Rock Interior - Blaze Tablet",
     16384198: "Lemuria - Eclipse Tablet",
-    16384202: "Idejima - Shamans_Rod",
-    16384204: "Idejima - Mind_Read",
-    16384206: "Idejima - Whirlwind",
-    16384208: "Idejima - Growth",
-    16384210: "Contigo - Carry_Stone",
-    16384212: "Contigo - Lifting_Gem",
-    16384214: "Contigo - Orb_of_Force",
-    16384216: "Contigo - Catch_Beads",
-    16384218: "Kibombo - Douse_Drop",
-    16384220: "Kibombo - Frost_Jewel",
-    16384384: "Contigo - Isaac",
-    16384386: "Contigo - Garet",
-    16384388: "Contigo - Ivan",
-    16384390: "Contigo - Mia",
-    16384392: "Idejima - Jenna",
-    16384394: "Idejima - Sheba",
-    16384396: "Kibombo - Piers",
+    16384202: "Felix - Shaman's Rod",
+    16384204: "Sheba - Mind Read",
+    16384206: "Sheba - Whirlwind",
+    16384208: "Felix - Growth",
+    16384210: "Mia - Carry Stone",
+    16384212: "Ivan - Lifting Gem",
+    16384214: "Garet - Orb of Force",
+    16384216: "Isaac - Catch Beads",
+    16384218: "Piers - Douse Drop",
+    16384220: "Piers - Frost Jewel",
+    16384384: "Contigo - Recruit Isaac",
+    16384386: "Contigo - Recruit Garet",
+    16384388: "Contigo - Recruit Ivan",
+    16384390: "Contigo - Recruit Mia",
+    16384392: "Idejima - Recruit Jenna",
+    16384394: "Idejima - Recruit Sheba",
+    16384396: "Kibombo - Recruit Piers",
     
 }
 
