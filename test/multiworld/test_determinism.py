@@ -11,7 +11,8 @@ from worlds.AutoWorld import AutoWorldRegister, call_all
 from ..general import setup_multiworld
 
 
-# TypedDicts for passing generated multiworld data between processes
+# TypedDicts for passing generated multiworld data between processes. At runtime, TypedDict is equivalent to a plain
+# dict, so is efficient to transfer between processes.
 class ItemData(TypedDict):
     name: str
     player: int
@@ -37,72 +38,97 @@ class RegionData(TypedDict):
     locations: list[str]
 
 
+def serialize_item(item: Item, item_memodict: dict[int, ItemData]) -> ItemData:
+    object_id = id(item)
+    if object_id in item_memodict:
+        return item_memodict[object_id]
+    else:
+        to_return = {"name": item.name, "player": item.player, "code": item.code, "classification": item.classification}
+        item_memodict[object_id] = to_return
+        return to_return
+
+
+def serialize_location(loc: Location, item_memodict: dict[int, ItemData], include_item: bool = False) -> LocationData:
+    item = loc.item
+    if include_item and item is not None:
+        item_data = serialize_item(item, item_memodict)
+    else:
+        item_data = None
+
+    # ALttP does not play by the rules and sets some location addresses to `list[int]` instead of `int | None`.
+    address = loc.address
+    if address is not None and type(address) is not int:
+        address = None
+    return {"name": loc.name, "address": address, "progress_type": loc.progress_type, "item": item_data}
+
+
+def serialize_entrance(ent: Entrance) -> EntranceData:
+    parent_region = ent.parent_region
+    parent_region_name = parent_region.name if parent_region is not None else None
+    connected_region = ent.connected_region
+    connected_region_name = connected_region.name if connected_region is not None else None
+    return {"name": ent.name, "parent_region": parent_region_name, "connected_region": connected_region_name}
+
+
+def serialize_region(reg: Region) -> RegionData:
+    return {"name": reg.name, "locations": [loc.name for loc in reg.locations]}
+
+
+def serialize_options(multiworld: MultiWorld) -> dict[int, list[dict[str, str]]]:
+    # Based on Options.dump_player_options.
+    all_options = {}
+    for player in multiworld.player_ids:
+        output = []
+        world = multiworld.worlds[player]
+        player_output = {
+            "Game": multiworld.game[player],
+            "Name": multiworld.get_player_name(player),
+        }
+        for option_key, option in world.options_dataclass.type_hints.items():
+            if issubclass(Removed, option):
+                continue
+            display_name = getattr(option, "display_name", option_key)
+            player_output[display_name] = getattr(world.options, option_key).current_option_name
+        output.append(player_output)
+        all_options[player] = output
+    return all_options
+
+
+def serialize_multiworld(item_pool_copy: list[Item], multiworld: MultiWorld) -> tuple[
+    list[ItemData],
+    dict[int, list[RegionData]],
+    dict[int, list[EntranceData]],
+    dict[int, list[LocationData]],
+    dict[int, list[tuple[str, ItemData | None]]],
+    dict[int, list[ItemData]],
+    dict[int, list[dict[str, str]]]
+]:
+    # Items that were in the item pool are expected to be placed at locations. The ItemData for these items is
+    # deduplicated by tracking the created ItemData for each Item instance, by the Item instance's unique object
+    # identifier. This is similar to using copy.deepcopy(obj, item_memo).
+    item_memo: dict[int, ItemData] = {}
+
+    item_pool_before_main_fill = [serialize_item(item, item_memo) for item in item_pool_copy]
+    # The order that regions and entrances are added to the multiworld is not considered important, so sort them by
+    # name.
+    regions = {player: sorted(map(serialize_region, regions.values()), key=lambda reg: reg["name"])
+               for player, regions in multiworld.regions.region_cache.items()}
+    entrances = {player: sorted(map(serialize_entrance, entrances.values()), key=lambda ent: ent["name"])
+                 for player, entrances in multiworld.regions.entrance_cache.items()}
+    locations = {player: [serialize_location(loc, item_memo) for loc in locations.values()]
+                 for player, locations in multiworld.regions.location_cache.items()}
+    # Locations with the items placed at them, to compare the results of filling the multiworld.
+    placements = {player: [(loc.name, None if loc.item is None else serialize_item(loc.item, item_memo)) for loc in locations.values()]
+                  for player, locations in multiworld.regions.location_cache.items()}
+    # Items that were in the item pool typically won't end up precollected_items, but it is possible, so `item_memo`
+    # is passed as an argument.
+    precollected_items = {player: [serialize_item(item, item_memo) for item in items]
+                          for player, items in multiworld.precollected_items.items()}
+
+    return item_pool_before_main_fill, regions, entrances, locations, placements, precollected_items, serialize_options(multiworld)
+
+
 class TestDeterministicGeneration(TestCase):
-    @staticmethod
-    def _test_determinism_multiworld_to_basic_data(item_pool_copy: list[Item], multiworld: MultiWorld) -> tuple[
-        list[ItemData], dict[int, list[RegionData]], dict[int, list[EntranceData]], dict[int, list[LocationData]], dict[int, list[LocationData]], dict[int, list[ItemData]], dict[int, list[dict[str, str]]]
-    ]:
-        def item_to_basic_data(item: Item) -> ItemData:
-            return {"name": item.name, "player": item.player, "code": item.code, "classification": item.classification}
-
-        def location_to_basic_data(loc: Location, include_items: bool = False) -> LocationData:
-            item = loc.item
-            if include_items and item is not None:
-                item_data = item_to_basic_data(item)
-            else:
-                item_data = None
-
-            # ALttP does not play by the rules and sets some location addresses to `list[int]` instead of `int | None`.
-            address = loc.address
-            if address is not None and type(address) is not int:
-                address = None
-            return {"name": loc.name, "address": address, "progress_type": loc.progress_type, "item": item_data}
-
-        def entrance_to_basic_data(ent: Entrance) -> EntranceData:
-            parent_region = ent.parent_region
-            parent_region_name = parent_region.name if parent_region is not None else None
-            connected_region = ent.connected_region
-            connected_region_name = connected_region.name if connected_region is not None else None
-            return {"name": ent.name, "parent_region": parent_region_name, "connected_region": connected_region_name}
-
-        def region_to_basic_data(reg: Region) -> RegionData:
-            return {"name": reg.name, "locations": [loc.name for loc in reg.locations]}
-
-        def dump_options(multiworld: MultiWorld) -> dict[int, list[dict[str, str]]]:
-            all_options = {}
-            for player in multiworld.player_ids:
-                output = []
-                world = multiworld.worlds[player]
-                player_output = {
-                    "Game": multiworld.game[player],
-                    "Name": multiworld.get_player_name(player),
-                }
-                for option_key, option in world.options_dataclass.type_hints.items():
-                    if issubclass(Removed, option):
-                        continue
-                    display_name = getattr(option, "display_name", option_key)
-                    player_output[display_name] = getattr(world.options, option_key).current_option_name
-                output.append(player_output)
-                all_options[player] = output
-            return all_options
-
-        item_pool_before_main_fill = list(map(item_to_basic_data, item_pool_copy))
-        # The order that regions and entrances are added to the multiworld is not considered important, so sort them by
-        # name.
-        regions = {player: sorted(map(region_to_basic_data, regions.values()), key=lambda reg: reg["name"])
-                   for player, regions in multiworld.regions.region_cache.items()}
-        entrances = {player: sorted(map(entrance_to_basic_data, entrances.values()), key=lambda ent: ent["name"])
-                     for player, entrances in multiworld.regions.entrance_cache.items()}
-        locations = {player: list(map(location_to_basic_data, locations.values()))
-                     for player, locations in multiworld.regions.location_cache.items()}
-        # Locations with the items placed at them, to compare the results of filling the multiworld.
-        placements = {player: list(map(location_to_basic_data, locations.values(), (True,) * len(locations)))
-                                for player, locations in multiworld.regions.location_cache.items()}
-        precollected_items = {player: list(map(item_to_basic_data, items))
-                              for player, items in multiworld.precollected_items.items()}
-
-        return item_pool_before_main_fill, regions, entrances, locations, placements, precollected_items, dump_options(multiworld)
-
     @staticmethod
     def _test_determinism_world_setup(world_type_name: str, seed: int):
         world_type = worlds.AutoWorldRegister.world_types[world_type_name]
@@ -110,7 +136,7 @@ class TestDeterministicGeneration(TestCase):
         item_pool_copy = multiworld.itempool.copy()
         distribute_items_restrictive(multiworld)
         call_all(multiworld, "post_fill")
-        return TestDeterministicGeneration._test_determinism_multiworld_to_basic_data(item_pool_copy, multiworld)
+        return serialize_multiworld(item_pool_copy, multiworld)
 
     @staticmethod
     def _hash_check():
@@ -141,22 +167,11 @@ class TestDeterministicGeneration(TestCase):
                     item_pool_copy = self.multiworld.itempool.copy()
                     distribute_items_restrictive(self.multiworld)
                     call_all(self.multiworld, "post_fill")
-                    # Get our data first in-case we break something, so we get better exception tracebacks.
-                    data_from_current_process = TestDeterministicGeneration._test_determinism_multiworld_to_basic_data(item_pool_copy, self.multiworld)
+                    # Serialize self.multiworld first in-case something in the test breaks, so full exception tracebacks
+                    # are produced instead of receiving an Exception from the other process.
+                    data_from_current_process = serialize_multiworld(item_pool_copy, self.multiworld)
                     data_from_other_process = future.result(timeout=10.0)
                     for data_current, data_other, name in zip(data_from_current_process, data_from_other_process, ["item_pool", "regions", "entrances", "locations", "locations_with_items", "start_inventory", "options"], strict=True):
                         with self.subTest(name):
-                            if name == "locations_with_items":
-                                for player, current_locations_data in data_current.items():
-                                    other_locations_data = data_other.get(player, [])
-                                    current_locations_dict = {(loc["name"], loc["address"]): (loc["progress_type"], loc["item"]) for loc in current_locations_data}
-                                    self.assertEqual(len(current_locations_dict), len(current_locations_data), "Duplicate locations were found (current process)")
-                                    other_locations_dict = {(loc["name"], loc["address"]): (loc["progress_type"], loc["item"]) for loc in other_locations_data}
-                                    self.assertEqual(len(other_locations_dict), len(other_locations_data), "Duplicate locations were found (other process)")
-                                    self.assertEqual(current_locations_dict.keys(), other_locations_dict.keys(), "the names and IDs of the locations existing in the multiworld did not match")
-                                    for loc_key, loc_value in current_locations_dict.items():
-                                        other_loc_value = other_locations_dict[loc_key]
-                                        self.assertEqual(other_loc_value, loc_value, f"location data for {loc_key} did not match")
-                            else:
-                                self.assertEqual(data_current, data_other)
+                            self.assertEqual(data_current, data_other)
 
