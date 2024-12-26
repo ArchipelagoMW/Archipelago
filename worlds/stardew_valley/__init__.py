@@ -3,7 +3,7 @@ from random import Random
 from typing import Dict, Any, Iterable, Optional, Union, List, TextIO
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
-from Options import PerGameCommonOptions, Accessibility
+from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from . import rules
 from .bundles.bundle_room import BundleRoom
@@ -15,10 +15,11 @@ from .locations import location_table, create_locations, LocationData, locations
 from .logic.bundle_logic import BundleLogic
 from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
-from .option_groups import sv_option_groups
-from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, BundlePrice, EnabledFillerBuffs, NumberOfMovementBuffs, \
-    BackpackProgression, BuildingProgression, ExcludeGingerIsland, TrapItems, EntranceRandomization, FarmType, Walnutsanity
-from .presets import sv_options_presets
+from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, EnabledFillerBuffs, NumberOfMovementBuffs, \
+    BuildingProgression, ExcludeGingerIsland, TrapItems, EntranceRandomization, FarmType, Walnutsanity
+from .options.forced_options import force_change_options_if_incompatible
+from .options.option_groups import sv_option_groups
+from .options.presets import sv_options_presets
 from .regions import create_regions
 from .rules import set_rules
 from .stardew_rule import True_, StardewRule, HasProgressionPercent, true_
@@ -112,35 +113,8 @@ class StardewValleyWorld(World):
         return seed
 
     def generate_early(self):
-        self.force_change_options_if_incompatible()
+        force_change_options_if_incompatible(self.options, self.player, self.player_name)
         self.content = create_content(self.options)
-
-    def force_change_options_if_incompatible(self):
-        goal_is_walnut_hunter = self.options.goal == Goal.option_greatest_walnut_hunter
-        goal_is_perfection = self.options.goal == Goal.option_perfection
-        goal_is_island_related = goal_is_walnut_hunter or goal_is_perfection
-        exclude_ginger_island = self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
-
-        if goal_is_island_related and exclude_ginger_island:
-            self.options.exclude_ginger_island.value = ExcludeGingerIsland.option_false
-            goal_name = self.options.goal.current_key
-            logger.warning(
-                f"Goal '{goal_name}' requires Ginger Island. Exclude Ginger Island setting forced to 'False' for player {self.player} ({self.player_name})")
-
-        if exclude_ginger_island and self.options.walnutsanity != Walnutsanity.preset_none:
-            self.options.walnutsanity.value = Walnutsanity.preset_none
-            logger.warning(
-                f"Walnutsanity requires Ginger Island. Ginger Island was excluded from {self.player} ({self.player_name})'s world, so walnutsanity was force disabled")
-
-        if goal_is_perfection and self.options.accessibility == Accessibility.option_minimal:
-            self.options.accessibility.value = Accessibility.option_full
-            logger.warning(
-                f"Goal 'Perfection' requires full accessibility. Accessibility setting forced to 'Full' for player {self.player} ({self.player_name})")
-
-        elif self.options.goal == Goal.option_allsanity and self.options.accessibility == Accessibility.option_minimal:
-            self.options.accessibility.value = Accessibility.option_full
-            logger.warning(
-                f"Goal 'Allsanity' requires full accessibility. Accessibility setting forced to 'Full' for player {self.player} ({self.player_name})")
 
     def create_regions(self):
         def create_region(name: str, exits: Iterable[str]) -> Region:
