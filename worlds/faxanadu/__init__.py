@@ -171,7 +171,7 @@ class FaxanaduWorld(World):
 
         # Remove poisons if not desired
         if self.options.include_poisons:
-            self.filler_ratios["Poison"] = 13
+            self.filler_ratios["Poison"] = self.item_name_to_item["Poison"].count
 
         # Randomly add fillers to the pool with ratios based on og game occurrence counts.
         filler_count = len(Locations.locations) - len(itempool) - prefilled_count
