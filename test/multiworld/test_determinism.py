@@ -1,5 +1,5 @@
 import random
-from typing import TypedDict
+from typing import TypedDict, ClassVar
 from unittest import TestCase
 
 import worlds
@@ -170,6 +170,27 @@ class TestDeterministicGeneration(TestCase):
     - Use of `random` module instead of per-world or per-multiworld `.random` attributes, or other nondeterministically
     seeded Random instances
     """
+
+    initial_multiworld_data: ClassVar[dict[str, tuple[int, SerializableMultiWorldData]]] = {}
+
+    @classmethod
+    def setUpClass(cls):
+        # Generate a multiworld and create serializable multiworld data for each game.
+        # This data will be shared by each test within TestDeterministicGeneration to make the tests faster by reducing
+        # the number of worlds that have to be generated.
+        for world_type_name, world_type in AutoWorldRegister.world_types.items():
+            multiworld = setup_multiworld(world_type)
+            item_pool_copy = multiworld.itempool.copy()
+            distribute_items_restrictive(multiworld)
+            call_all(multiworld, "post_fill")
+            serializable_data = multiworld_to_serializable(item_pool_copy, multiworld)
+            cls.initial_multiworld_data[world_type_name] = (multiworld.seed, serializable_data)
+
+    @classmethod
+    def tearDownClass(cls):
+        # Allow the data to be garbage collected by clearing the dict.
+        cls.initial_multiworld_data.clear()
+
     @staticmethod
     def _test_determinism_world_setup(world_type_name: str, seed: int):
         world_type = worlds.AutoWorldRegister.world_types[world_type_name]
@@ -232,18 +253,12 @@ class TestDeterministicGeneration(TestCase):
 
             # The secondary process is running and has a different hashseed, so proceed with the test.
             for world_type_name, world_type in AutoWorldRegister.world_types.items():
-                self.multiworld = setup_multiworld(world_type)
-                with self.subTest(game=world_type.game, seed=self.multiworld.seed):
+                seed, base_multiworld_data = self.initial_multiworld_data[world_type_name]
+                with self.subTest(game=world_type.game, seed=seed):
                     future: Future = ppe.submit(TestDeterministicGeneration._test_determinism_world_setup,
-                                                world_type_name, self.multiworld.seed)
-                    item_pool_copy = self.multiworld.itempool.copy()
-                    distribute_items_restrictive(self.multiworld)
-                    call_all(self.multiworld, "post_fill")
-                    # Serialize self.multiworld first in-case something in the test breaks, so full exception tracebacks
-                    # are produced instead of receiving an Exception from the other process.
-                    data_from_current_process = multiworld_to_serializable(item_pool_copy, self.multiworld)
+                                                world_type_name, seed)
                     data_from_other_process = future.result(timeout=10.0)
-                    self.assertMultiWorldsEquivalent(data_from_current_process, data_from_other_process)
+                    self.assertMultiWorldsEquivalent(base_multiworld_data, data_from_other_process)
 
     def test_shared_state_determinism(self) -> None:
         """
@@ -251,23 +266,18 @@ class TestDeterministicGeneration(TestCase):
         be modified across multiple generations.
         """
         for world_type_name, world_type in AutoWorldRegister.world_types.items():
-            multiworld1 = setup_multiworld(world_type)
-            with self.subTest(game=world_type_name, seed=multiworld1.seed):
-                item_pool_copy1 = multiworld1.itempool.copy()
-                distribute_items_restrictive(multiworld1)
-                call_all(multiworld1, "post_fill")
-
+            seed, base_multiworld_data = self.initial_multiworld_data[world_type_name]
+            with self.subTest(game=world_type_name, seed=seed):
                 # Generate an extra multiworld with a random seed
                 _extra_multiworld = setup_multiworld(world_type)
 
-                multiworld2 = setup_multiworld(world_type, seed=multiworld1.seed)
+                multiworld2 = setup_multiworld(world_type, seed=seed)
                 item_pool_copy2 = multiworld2.itempool.copy()
                 distribute_items_restrictive(multiworld2)
                 call_all(multiworld2, "post_fill")
 
-                data1 = multiworld_to_serializable(item_pool_copy1, multiworld1)
                 data2 = multiworld_to_serializable(item_pool_copy2, multiworld2)
-                self.assertMultiWorldsEquivalent(data1, data2)
+                self.assertMultiWorldsEquivalent(base_multiworld_data, data2)
 
     def test_random_module_usage_determinism(self) -> None:
         """
@@ -282,15 +292,11 @@ class TestDeterministicGeneration(TestCase):
         """
         generation_steps = gen_steps
         for world_type_name, world_type in AutoWorldRegister.world_types.items():
-            multiworld1 = setup_multiworld(world_type, generation_steps)
-            with self.subTest(game=world_type_name, seed=multiworld1.seed):
-                item_pool_copy1 = multiworld1.itempool.copy()
-                distribute_items_restrictive(multiworld1)
-                call_all(multiworld1, "post_fill")
-
+            seed, base_multiworld_data = self.initial_multiworld_data[world_type_name]
+            with self.subTest(game=world_type_name, seed=seed):
                 # Set up the second world with the same seed, but increment the `random` module's RNG before calling any
                 # of the generation steps.
-                multiworld2 = setup_multiworld(world_type, (), seed=multiworld1.seed)
+                multiworld2 = setup_multiworld(world_type, (), seed=seed)
                 # Set the `random` module to a different seed.
                 random.seed(random.random())
                 # Call the same generation steps as normal.
@@ -301,6 +307,5 @@ class TestDeterministicGeneration(TestCase):
                 distribute_items_restrictive(multiworld2)
                 call_all(multiworld2, "post_fill")
 
-                data1 = multiworld_to_serializable(item_pool_copy1, multiworld1)
                 data2 = multiworld_to_serializable(item_pool_copy2, multiworld2)
-                self.assertMultiWorldsEquivalent(data1, data2)
+                self.assertMultiWorldsEquivalent(base_multiworld_data, data2)
