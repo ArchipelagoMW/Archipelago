@@ -6,6 +6,7 @@ from logging import warning
 from typing import cast, Any, Callable, Dict, Set, List, Optional, TextIO, Union
 
 from BaseClasses import CollectionState, MultiWorld, Region, Location, LocationProgressType, Entrance, Tutorial, ItemClassification
+from Fill import remaining_fill
 
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import CollectionRule, ItemRule, add_rule, add_item_rule
@@ -1437,6 +1438,7 @@ class DarkSouls3World(World):
                     f"contain smoothed items, but only {len(converted_item_order)} items to smooth."
                 )
 
+            sorted_spheres = []
             for sphere in locations_by_sphere:
                 locations = [loc for loc in sphere if loc.item.name in names]
 
@@ -1444,12 +1446,11 @@ class DarkSouls3World(World):
                 offworld = self._shuffle([loc for loc in locations if loc.game != "Dark Souls III"])
                 onworld = sorted((loc for loc in locations if loc.game == "Dark Souls III"),
                                  key=lambda loc: loc.data.region_value)
+                sorted_spheres.extend(onworld + offworld)
 
-                # Give offworld regions the last (best) items within a given sphere
-                for location in onworld + offworld:
-                    new_item = self._pop_item(location, converted_item_order)
-                    location.item = new_item
-                    new_item.location = location
+            # Give offworld regions the last (best) items within a given sphere
+            converted_item_order.reverse()
+            remaining_fill(self.multiworld, sorted_spheres, converted_item_order, name="DS3 Smoothing", check_location_can_fill=True)
 
         if self.options.smooth_upgrade_items:
             base_names = {
@@ -1481,19 +1482,6 @@ class DarkSouls3World(World):
         copy = list(seq)
         self.random.shuffle(copy)
         return copy
-
-    def _pop_item(
-        self,
-        location: Location,
-        items: List[DarkSouls3Item]
-    ) -> DarkSouls3Item:
-        """Returns the next item in items that can be assigned to location."""
-        for i, item in enumerate(items):
-            if location.can_fill(self.multiworld.state, item, False):
-                return items.pop(i)
-
-        # If we can't find a suitable item, give up and assign an unsuitable one.
-        return items.pop(0)
 
     def _get_our_locations(self) -> List[DarkSouls3Location]:
         return cast(List[DarkSouls3Location], self.multiworld.get_locations(self.player))
