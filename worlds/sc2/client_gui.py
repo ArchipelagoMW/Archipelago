@@ -385,6 +385,9 @@ class SC2Manager(GameManager):
             tooltip += f"[b][color={COLOR_MISSION_IMPORTANT}]Uncollected locations[/color][/b]"
             last_location_type = LocationType.VICTORY
             victory_printed = False
+            # vbn 
+            # scoutable = mission_id in available_missions
+            scoutable = layout_locked == False
             for location_type, location_name, _ in remaining_locations:
                 if location_type in (LocationType.VICTORY, LocationType.VICTORY_CACHE) and victory_printed:
                     continue
@@ -398,14 +401,17 @@ class SC2Manager(GameManager):
                         victory_loc += f' ({victory_count})'
                     tooltip += f"\n- {victory_loc}[/color]"
                     victory_printed = True
+                    # vbn get the more important one 
                 else:
                     # vbn 
-                    scoutable = mission_id in available_missions
-                    tooltip += self.handle_location_color(location_name, scoutable)
                     # if mission_id in available_missions:
                     #     tooltip += f"\n- {location_name} {self.ctx.mission_item_classification[location_name]}"
                     # else:
                     #     tooltip += f"\n- {location_name}"
+                    #
+                    tooltip += f"\n- {location_name}"
+                # vbn
+                tooltip += self.handle_scout_information(location_name, scoutable)
             if len(plando_locations) > 0:
                 tooltip += f"\n[b]Plando:[/b]\n- "
                 tooltip += "\n- ".join(plando_locations)
@@ -471,26 +477,23 @@ class SC2Manager(GameManager):
         return title
     
     # vbn 
-    def handle_location_color(self, location_name, scoutable):
-        # if flags == 0:
-        #     node["color"] = 'cyan'
-        # elif flags & 0b001:  # advancement
-        #     node["color"] = 'plum'
-        # elif flags & 0b010:  # useful
-        #     node["color"] = 'slateblue'
-        # elif flags & 0b100:  # trap
-        #     node["color"] = 'salmon'
-        # else:
-        #     node["color"] = 'cyan'
-        # f"[color={COLOR_MISSION_IMPORTANT}]{text}[/color]"
+    def handle_scout_information(self, location_name, scoutable):
         if scoutable:
             item_classification_key = {}
-            item_classification_key[0] = "Filler"
-            item_classification_key[1] = "Progression"
-            item_classification_key[2] = "Usefull"
-            item_classification_key[3] = "Trap"
+            item_classification_key[0] = "[color=00EEEE](Filler)[/color]"
+            item_classification_key[1] = "[color=AF99EF](Progression)[/color]"
+            item_classification_key[2] = "[color=6D8BE8](Usefull)[/color]"
+            item_classification_key[3] = "[color=FA8072](Trap)[/color]"
             item_classification = item_classification_key[self.ctx.mission_item_classification[location_name]]
-            return f"\n- {location_name} [color=FFFFFF]({item_classification})[/color]"
+            return f" {item_classification}"
+            #
+            # item_classification_key = {}
+            # item_classification_key[0] = "Filler"
+            # item_classification_key[1] = "Progression"
+            # item_classification_key[2] = "Usefull"
+            # item_classification_key[3] = "Trap"
+            # item_classification = item_classification_key[self.ctx.mission_item_classification[location_name]]
+            # return f"\n- {location_name} [color=FFFFFF]({item_classification})[/color]"
             #
             # item_classification_color = {}
             # item_classification_color[0] = "00EEEE"
@@ -502,7 +505,7 @@ class SC2Manager(GameManager):
             #
             # return f"\n- {location_name} {self.ctx.mission_item_classification[location_name]}"
         else:
-            return f"\n- {location_name}"
+            return ""
 
 def start_gui(context: SC2Context):
     context.ui = SC2Manager(context)

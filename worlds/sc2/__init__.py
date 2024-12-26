@@ -205,7 +205,7 @@ class SC2World(World):
             # vbn by pass event?
             # assert loc.item
             # vbn Format?
-            mission_item_classification[location.name] = int(loc.item.classification)
+            mission_item_classification[location.name] = loc.item.classification.as_flag()
         slot_data["mission_item_classification"] = mission_item_classification
 
         # Disable trade if there is no trade partner
