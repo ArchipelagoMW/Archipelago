@@ -1,57 +1,76 @@
+import random
 from typing import TypedDict
 from unittest import TestCase
 
 import worlds
-from BaseClasses import (
-    Location, MultiWorld, Item, Entrance, Region, ItemClassification, LocationProgressType,
-)
+from BaseClasses import Location, MultiWorld, Item, Entrance, Region, ItemClassification, LocationProgressType
 from Fill import distribute_items_restrictive
 from Options import Removed
 from worlds.AutoWorld import AutoWorldRegister, call_all
-from ..general import setup_multiworld
+from ..general import setup_multiworld, gen_steps
 
 
 # TypedDicts for passing generated multiworld data between processes. At runtime, TypedDict is equivalent to a plain
 # dict, so is efficient to transfer between processes.
-class ItemData(TypedDict):
+class SerializableItemData(TypedDict):
     name: str
     player: int
     code: int | None
     classification: ItemClassification
 
 
-class LocationData(TypedDict):
+class SerializableLocationData(TypedDict):
     name: str
     address: int | None
     progress_type: LocationProgressType
-    item: ItemData | None
+    item: SerializableItemData | None
 
 
-class EntranceData(TypedDict):
+class SerializableEntranceData(TypedDict):
     name: str
     parent_region: str | None
     connected_region: str | None
 
 
-class RegionData(TypedDict):
+class SerializableRegionData(TypedDict):
     name: str
     locations: list[str]
 
 
-def serialize_item(item: Item, item_memodict: dict[int, ItemData]) -> ItemData:
+class SerializableMultiWorldData(TypedDict):
+    item_pool: list[SerializableItemData]
+    regions: dict[int, list[SerializableRegionData]]
+    entrances: dict[int, list[SerializableEntranceData]]
+    locations: dict[int, list[SerializableLocationData]]
+    placements: dict[int, list[tuple[str, SerializableItemData | None]]]
+    start_inventory: dict[int, list[SerializableItemData]]
+    options: dict[int, list[dict[str, str]]]
+
+
+DICTS_OF_LISTS = frozenset(("regions", "entrances", "locations", "placements", "start_inventory", "options"))
+"""Keys in SerializableMultiworldData which have values that are dicts containing list values."""
+
+
+def item_to_serializable(item: Item, item_memo: dict[int, SerializableItemData]) -> SerializableItemData:
     object_id = id(item)
-    if object_id in item_memodict:
-        return item_memodict[object_id]
+    if object_id in item_memo:
+        return item_memo[object_id]
     else:
-        to_return = {"name": item.name, "player": item.player, "code": item.code, "classification": item.classification}
-        item_memodict[object_id] = to_return
+        to_return: SerializableItemData = {
+            "name": item.name,
+            "player": item.player,
+            "code": item.code,
+            "classification": item.classification
+        }
+        item_memo[object_id] = to_return
         return to_return
 
 
-def serialize_location(loc: Location, item_memodict: dict[int, ItemData], include_item: bool = False) -> LocationData:
+def location_to_serializable(loc: Location, item_memodict: dict[int, SerializableItemData], include_item: bool = False
+                             ) -> SerializableLocationData:
     item = loc.item
     if include_item and item is not None:
-        item_data = serialize_item(item, item_memodict)
+        item_data = item_to_serializable(item, item_memodict)
     else:
         item_data = None
 
@@ -62,7 +81,7 @@ def serialize_location(loc: Location, item_memodict: dict[int, ItemData], includ
     return {"name": loc.name, "address": address, "progress_type": loc.progress_type, "item": item_data}
 
 
-def serialize_entrance(ent: Entrance) -> EntranceData:
+def entrance_to_serializable(ent: Entrance) -> SerializableEntranceData:
     parent_region = ent.parent_region
     parent_region_name = parent_region.name if parent_region is not None else None
     connected_region = ent.connected_region
@@ -70,11 +89,11 @@ def serialize_entrance(ent: Entrance) -> EntranceData:
     return {"name": ent.name, "parent_region": parent_region_name, "connected_region": connected_region_name}
 
 
-def serialize_region(reg: Region) -> RegionData:
+def region_to_serializable(reg: Region) -> SerializableRegionData:
     return {"name": reg.name, "locations": [loc.name for loc in reg.locations]}
 
 
-def serialize_options(multiworld: MultiWorld) -> dict[int, list[dict[str, str]]]:
+def options_to_serializable(multiworld: MultiWorld) -> dict[int, list[dict[str, str]]]:
     # Based on Options.dump_player_options.
     all_options = {}
     for player in multiworld.player_ids:
@@ -94,41 +113,63 @@ def serialize_options(multiworld: MultiWorld) -> dict[int, list[dict[str, str]]]
     return all_options
 
 
-def serialize_multiworld(item_pool_copy: list[Item], multiworld: MultiWorld) -> tuple[
-    list[ItemData],
-    dict[int, list[RegionData]],
-    dict[int, list[EntranceData]],
-    dict[int, list[LocationData]],
-    dict[int, list[tuple[str, ItemData | None]]],
-    dict[int, list[ItemData]],
-    dict[int, list[dict[str, str]]]
-]:
+def multiworld_to_serializable(item_pool_copy: list[Item], multiworld: MultiWorld) -> SerializableMultiWorldData:
     # Items that were in the item pool are expected to be placed at locations. The ItemData for these items is
     # deduplicated by tracking the created ItemData for each Item instance, by the Item instance's unique object
     # identifier. This is similar to using copy.deepcopy(obj, item_memo).
-    item_memo: dict[int, ItemData] = {}
+    item_memo: dict[int, SerializableItemData] = {}
 
-    item_pool_before_main_fill = [serialize_item(item, item_memo) for item in item_pool_copy]
+    item_pool_before_main_fill = [item_to_serializable(item, item_memo) for item in item_pool_copy]
     # The order that regions and entrances are added to the multiworld is not considered important, so sort them by
     # name.
-    regions = {player: sorted(map(serialize_region, regions.values()), key=lambda reg: reg["name"])
+    regions = {player: sorted(map(region_to_serializable, regions.values()), key=lambda reg: reg["name"])
                for player, regions in multiworld.regions.region_cache.items()}
-    entrances = {player: sorted(map(serialize_entrance, entrances.values()), key=lambda ent: ent["name"])
+    entrances = {player: sorted(map(entrance_to_serializable, entrances.values()), key=lambda ent: ent["name"])
                  for player, entrances in multiworld.regions.entrance_cache.items()}
-    locations = {player: [serialize_location(loc, item_memo) for loc in locations.values()]
-                 for player, locations in multiworld.regions.location_cache.items()}
-    # Locations with the items placed at them, to compare the results of filling the multiworld.
-    placements = {player: [(loc.name, None if loc.item is None else serialize_item(loc.item, item_memo)) for loc in locations.values()]
-                  for player, locations in multiworld.regions.location_cache.items()}
+
+    # Locations and the placed items at those locations are tested and serialized separately.
+    locations: dict[int, list[SerializableLocationData]] = {}
+    placements: dict[int, list[tuple[str, SerializableItemData | None]]] = {}
+    for player, player_locations in multiworld.regions.location_cache.items():
+        locations_list = locations[player] = []
+
+        placements_list = placements[player] = []
+
+        for loc_name, loc in player_locations.items():
+            locations_list.append(location_to_serializable(loc, item_memo))
+            item = loc.item
+            if item is not None:
+                serializable_item = item_to_serializable(item, item_memo)
+            else:
+                serializable_item = None
+            placements_list.append((loc_name, serializable_item))
+
     # Items that were in the item pool typically won't end up precollected_items, but it is possible, so `item_memo`
-    # is passed as an argument.
-    precollected_items = {player: [serialize_item(item, item_memo) for item in items]
+    # is still passed as an argument.
+    precollected_items = {player: [item_to_serializable(item, item_memo) for item in items]
                           for player, items in multiworld.precollected_items.items()}
 
-    return item_pool_before_main_fill, regions, entrances, locations, placements, precollected_items, serialize_options(multiworld)
+    return {
+        "options": options_to_serializable(multiworld),
+        "item_pool": item_pool_before_main_fill,
+        "start_inventory": precollected_items,
+        "regions": regions,
+        "entrances": entrances,
+        "locations": locations,
+        "placements": placements,
+    }
 
 
 class TestDeterministicGeneration(TestCase):
+    """
+    Test that, for each world type, generating a multiworld with the same seed produces deterministic results.
+
+    Common sources of nondeterministic behaviour that this test may be able to identify:
+    - Iteration of sets
+    - Accidental modification of shared data
+    - Use of `random` module instead of per-world or per-multiworld `.random` attributes, or other nondeterministically
+    seeded Random instances
+    """
     @staticmethod
     def _test_determinism_world_setup(world_type_name: str, seed: int):
         world_type = worlds.AutoWorldRegister.world_types[world_type_name]
@@ -136,13 +177,41 @@ class TestDeterministicGeneration(TestCase):
         item_pool_copy = multiworld.itempool.copy()
         distribute_items_restrictive(multiworld)
         call_all(multiworld, "post_fill")
-        return serialize_multiworld(item_pool_copy, multiworld)
+        return multiworld_to_serializable(item_pool_copy, multiworld)
 
     @staticmethod
     def _hash_check():
+        # Note: hashing an integer returns that integer if it's not too large, so a string literal is hashed instead
+        # because str objects are "salted" with an unpredictable random value that remains constant within an individual
+        # Python process.
         return hash("hash check")
 
-    def test_determinism(self) -> None:
+    def assertMultiWorldsEquivalent(self, m1: SerializableMultiWorldData, m2: SerializableMultiWorldData):
+        for key, data_current in m1.items():
+            # PyCharm sees `key` as str, rather than one of the valid string literals, so disable the inspection.
+            # noinspection PyTypedDict
+            data_other = m2[key]
+            with self.subTest(key):
+                # Iterate dictionaries with list values because comparing lists produces better output than
+                # comparing dictionaries when the test fails.
+                if key in DICTS_OF_LISTS:
+                    for k_current, v_current in data_current.items():
+                        self.assertIn(k_current, data_other)
+                        v_other = data_other[k_current]
+                        self.assertEqual(v_current, v_other)
+                else:
+                    self.assertEqual(data_current, data_other)
+
+    def test_hash_determinism(self) -> None:
+        """
+        For security purposes, Python randomizes its hash seed when starting a Python process. This notably changes the
+        order of elements in a set due to changing the hashes of the elements.
+
+        For Archipelago, this means that iterating sets can be a common source of nondeterministic generation.
+
+        To effectively test for nondeterministic generation caused by iterating sets, multiworlds with the same seed
+        need to be generated with different Python hash seeds, which requires separate Python processes.
+        """
         from concurrent.futures import ProcessPoolExecutor, Future
         import multiprocessing
 
@@ -160,18 +229,78 @@ class TestDeterministicGeneration(TestCase):
             #     self.skipTest("spawned process produced the same hash as the current process")
             self.assertNotEqual(other_hash, hash_check, "Different hashes should be produced by the current"
                                                         " process and the spawned process, but they were the same")
+
+            # The secondary process is running and has a different hashseed, so proceed with the test.
             for world_type_name, world_type in AutoWorldRegister.world_types.items():
                 self.multiworld = setup_multiworld(world_type)
                 with self.subTest(game=world_type.game, seed=self.multiworld.seed):
-                    future: Future = ppe.submit(TestDeterministicGeneration._test_determinism_world_setup, world_type_name, self.multiworld.seed)
+                    future: Future = ppe.submit(TestDeterministicGeneration._test_determinism_world_setup,
+                                                world_type_name, self.multiworld.seed)
                     item_pool_copy = self.multiworld.itempool.copy()
                     distribute_items_restrictive(self.multiworld)
                     call_all(self.multiworld, "post_fill")
                     # Serialize self.multiworld first in-case something in the test breaks, so full exception tracebacks
                     # are produced instead of receiving an Exception from the other process.
-                    data_from_current_process = serialize_multiworld(item_pool_copy, self.multiworld)
+                    data_from_current_process = multiworld_to_serializable(item_pool_copy, self.multiworld)
                     data_from_other_process = future.result(timeout=10.0)
-                    for data_current, data_other, name in zip(data_from_current_process, data_from_other_process, ["item_pool", "regions", "entrances", "locations", "locations_with_items", "start_inventory", "options"], strict=True):
-                        with self.subTest(name):
-                            self.assertEqual(data_current, data_other)
+                    self.assertMultiWorldsEquivalent(data_from_current_process, data_from_other_process)
 
+    def test_shared_state_determinism(self) -> None:
+        """
+        Many worlds have constant, shared data used to create locations/regions/etc. and to set up logic that should not
+        be modified across multiple generations.
+        """
+        for world_type_name, world_type in AutoWorldRegister.world_types.items():
+            multiworld1 = setup_multiworld(world_type)
+            with self.subTest(game=world_type_name, seed=multiworld1.seed):
+                item_pool_copy1 = multiworld1.itempool.copy()
+                distribute_items_restrictive(multiworld1)
+                call_all(multiworld1, "post_fill")
+
+                # Generate an extra multiworld with a random seed
+                _extra_multiworld = setup_multiworld(world_type)
+
+                multiworld2 = setup_multiworld(world_type, seed=multiworld1.seed)
+                item_pool_copy2 = multiworld2.itempool.copy()
+                distribute_items_restrictive(multiworld2)
+                call_all(multiworld2, "post_fill")
+
+                data1 = multiworld_to_serializable(item_pool_copy1, multiworld1)
+                data2 = multiworld_to_serializable(item_pool_copy2, multiworld2)
+                self.assertMultiWorldsEquivalent(data1, data2)
+
+    def test_random_module_usage_determinism(self) -> None:
+        """
+        Usage of the `random` module directly within worlds is unsafe because its Random instance can be used by
+        libraries and more in nondeterministic ways. Worlds should use their own Random instance, either `.random` or
+        `.multiworld.random`, instead. Alternatively, to work with libraries that perform randomization, worlds should
+        pass a deterministic seed to the libraries or pass a new Random instance using a deterministic seed.
+
+        It may be possible for worlds to call `random.seed(deterministic_seed)` before running library functions, but
+        this is not recommended if it is possible to pass a Random instance or a seed that can be used to create a
+        Random instance by the library.
+        """
+        generation_steps = gen_steps
+        for world_type_name, world_type in AutoWorldRegister.world_types.items():
+            multiworld1 = setup_multiworld(world_type, generation_steps)
+            with self.subTest(game=world_type_name, seed=multiworld1.seed):
+                item_pool_copy1 = multiworld1.itempool.copy()
+                distribute_items_restrictive(multiworld1)
+                call_all(multiworld1, "post_fill")
+
+                # Set up the second world with the same seed, but increment the `random` module's RNG before calling any
+                # of the generation steps.
+                multiworld2 = setup_multiworld(world_type, (), seed=multiworld1.seed)
+                # Set the `random` module to a different seed.
+                random.seed(random.random())
+                # Call the same generation steps as normal.
+                for step in generation_steps:
+                    call_all(multiworld2, step)
+
+                item_pool_copy2 = multiworld2.itempool.copy()
+                distribute_items_restrictive(multiworld2)
+                call_all(multiworld2, "post_fill")
+
+                data1 = multiworld_to_serializable(item_pool_copy1, multiworld1)
+                data2 = multiworld_to_serializable(item_pool_copy2, multiworld2)
+                self.assertMultiWorldsEquivalent(data1, data2)
