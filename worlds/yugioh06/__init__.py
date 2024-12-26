@@ -1,17 +1,19 @@
 import logging
 import os
 import pkgutil
-from typing import Any, ClassVar, Dict, List, Set
+from typing import Any, ClassVar, Dict, List, Set, TextIO
 
 import settings
 from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
 
 import Utils
 from worlds.AutoWorld import WebWorld, World
+from .boosterpack_contents import get_booster_contents
 
 from .boosterpacks import booster_contents as booster_contents
 from .boosterpacks import get_booster_locations
 from .card_data import CardData, cards, empty_card_data
+from .card_rules import set_card_rules
 from .items import (
     Banlist_Items,
     booster_packs,
@@ -133,6 +135,9 @@ class Yugioh06World(World):
     starter_deck: Dict[CardData, int]
     structure_deck: Dict[CardData, int]
     is_draft_mode: bool
+    progression_cards: Dict[str, List[str]]
+    progression_cards_in_booster: List[str]
+    progression_cards_in_start: List[str]
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
@@ -143,6 +148,9 @@ class Yugioh06World(World):
         self.removed_challenges = []
         self.starter_deck = {}
         self.structure_deck = {}
+        self.progression_cards = {}
+        self.progression_cards_in_booster = []
+        self.progression_cards_in_start = []
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "Yu-Gi-Oh! 2006" in self.multiworld.re_gen_passthrough:
@@ -294,6 +302,9 @@ class Yugioh06World(World):
             self.multiworld, self.player, bool(self.options.campaign_opponents_shuffle.value)
         )
 
+        # set progression_cards
+        set_card_rules(self)
+
 
     def create_region(self, name: str, locations=None, exits=None):
         region = Region(name, self.player, self.multiworld)
@@ -318,7 +329,7 @@ class Yugioh06World(World):
             self.create_region("Campaign", {**Bonuses,  **Campaign_Opponents}),
             self.create_region("Challenges"),
             self.create_region("Card Shop", {**Required_Cards, **collection_events}),
-            self.create_region("Structure Deck", get_deck_content_locations(structure_deck)),
+            self.create_region("Structure Deck", get_deck_content_locations(self, structure_deck)),
         ]
 
         self.get_entrance("to Campaign").connect(self.get_region("Campaign"))
@@ -359,7 +370,8 @@ class Yugioh06World(World):
         card_shop = self.get_region("Card Shop")
         # Booster Contents
         for booster in booster_packs:
-            region = self.create_region(booster, get_booster_locations(booster))
+            region = self.create_region(booster, {**get_booster_locations(booster),
+                                                  **get_booster_contents(booster, self)})
             entrance = Entrance(self.player, booster, card_shop)
             entrance.access_rule = lambda state, unlock=booster: state.has(unlock, self.player)
             card_shop.exits.append(entrance)
@@ -434,8 +446,14 @@ class Yugioh06World(World):
                 location = self.multiworld.get_location(location_name, self.player)
                 location.place_locked_item(item)
 
+        for booster in booster_packs:
+            for location_name, content in get_booster_contents(booster, self).items():
+                item = Yugioh2006Item(content, ItemClassification.progression, None, self.player)
+                location = self.multiworld.get_location(location_name, self.player)
+                location.place_locked_item(item)
+
         structure_deck = self.options.structure_deck.current_key
-        for location_name, content in get_deck_content_locations(structure_deck).items():
+        for location_name, content in get_deck_content_locations(self, structure_deck).items():
             item = Yugioh2006Item(content, ItemClassification.progression, None, self.player)
             location = self.multiworld.get_location(location_name, self.player)
             location.place_locked_item(item)
@@ -493,11 +511,24 @@ class Yugioh06World(World):
         slot_data["starting_opponent"] = self.starting_opponent
         return slot_data
 
+    def write_spoiler(self, spoiler_handle: TextIO) -> None:
+        spoiler_handle.write(f"\n\nProgression cards for {self.multiworld.player_name[self.player]}")
+        for location, p_cards in self.progression_cards.items():
+            spoiler_handle.write(f"\n   {location}: ")
+            for card in p_cards:
+                spoiler_handle.write(f"{card}, ")
+        spoiler_handle.write(f"\n\nProgression cards in start for {self.multiworld.player_name[self.player]}\n")
+        for card in self.progression_cards_in_start:
+            spoiler_handle.write(f" {card}, ")
+        spoiler_handle.write(f"\n\nProgression cards in booster for {self.multiworld.player_name[self.player]}\n")
+        for card in self.progression_cards_in_booster:
+            spoiler_handle.write(f" {card}, ")
     # for the universal tracker, doesn't get called in standard gen
     @staticmethod
     def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
         # returning slot_data so it regens, giving it back in multiworld.re_gen_passthrough
         return slot_data
+
 
 
 class Yugioh2006Item(Item):

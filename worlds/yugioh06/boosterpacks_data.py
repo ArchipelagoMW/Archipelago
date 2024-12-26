@@ -2,6 +2,7 @@ from typing import Dict
 
 from typing_extensions import NamedTuple
 
+
 class BoosterPackData(NamedTuple):
     id: int
     cards_in_set: int

@@ -78,7 +78,7 @@ class CustomStarterDeck(OptionDict):
     Only works if starter deck is set to custom.
     Must be below 40 cards in total.
     """
-    display_name = "Custom Structure Deck"
+    display_name = "Custom Starter Deck"
     valid_keys = get_all_valid_cards_set()
 
     def __init__(self, value: typing.Dict[str, int]):

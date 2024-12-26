@@ -2260,7 +2260,7 @@ cards: Dict[str, CardData] = {
                              "Spell", "Spell", "Spell", "None", 0x53DC, 0x14F7),
     "Fiber Jar": CardData(1062, 5371, "Fiber Jar", "78706415", 0, False, 500, 500, 3,
                           "Plant", "EARTH", "Effect", "None", 0x53EC, 0x14FB),
-    "Gradius' Option": CardData(1063, 5372, "Gradius' Option", "14291024", 0, False, 65535, 65535, 1,
+    "Gradius' Option": CardData(1063, 5372, "Gradius' Option", "14291024", 0, False, 0, 0, 1,
                                 "Machine", "LIGHT", "Effect", "None", 0x53F0, 0x14FC),
     "Maharaghi": CardData(1064, 5373, "Maharaghi", "40695128", 0, False, 1200, 1700, 4,
                           "Rock", "EARTH", "Spirit", "None", 0x53F4, 0x14FD),
@@ -2788,7 +2788,7 @@ cards: Dict[str, CardData] = {
                                      "Warrior", "EARTH", "Effect", "None", 0x5948, 0x1652),
     "Despair from the Dark": CardData(1323, 5715, "Despair from the Dark", "71200730", 0, False, 2800, 3000, 8,
                                       "Zombie", "DARK", "Effect", "None", 0x594C, 0x1653),
-    "Maju Garzett": CardData(1324, 5716, "Maju Garzett", "08794435", 0, False, 65535, 0, 7,
+    "Maju Garzett": CardData(1324, 5716, "Maju Garzett", "08794435", 0, False, 0, 0, 7,
                              "Fiend", "DARK", "Effect", "None", 0x5950, 0x1654),
     "Fear from the Dark": CardData(1325, 5717, "Fear from the Dark", "34193084", 0, False, 1700, 1500, 4,
                                    "Zombie", "DARK", "Effect", "None", 0x5954, 0x1655),
@@ -2991,7 +2991,7 @@ cards: Dict[str, CardData] = {
                          "Fairy", "WIND", "Effect", "None", 0x5B20, 0x16C8),
     "Chaos Sorcerer": CardData(1419, 5833, "Chaos Sorcerer", "09596126", 0, False, 2300, 2000, 6,
                                "Spellcaster", "DARK", "Effect", "None", 0x5B24, 0x16C9),
-    "Gren Maju Da Eiza": CardData(1420, 5834, "Gren Maju Da Eiza", "36584821", 0, False, 65535, 65535, 3,
+    "Gren Maju Da Eiza": CardData(1420, 5834, "Gren Maju Da Eiza", "36584821", 0, False, 0, 0, 3,
                                   "Fiend", "FIRE", "Effect", "None", 0x5B28, 0x16CA),
     "Black Luster Soldier - Envoy of the Beginning": CardData(1421, 5835,
                                                               "Black Luster Soldier - Envoy of the Beginning",
@@ -3838,7 +3838,7 @@ cards: Dict[str, CardData] = {
                                     "Insect", "EARTH", "Effect", "None", 0x62B8, 0x18AE),
     "Ultimate Insect LV7": CardData(1823, 6319, "Ultimate Insect LV7", "19877898", 0, False, 2600, 1200, 7,
                                     "Insect", "WIND", "Effect", "None", 0x62BC, 0x18AF),
-    "Lost Guardian": CardData(1824, 6320, "Lost Guardian", "45871897", 0, False, 100, 65535, 4,
+    "Lost Guardian": CardData(1824, 6320, "Lost Guardian", "45871897", 0, False, 100, 0, 4,
                               "Rock", "EARTH", "Effect", "None", 0x62C0, 0x18B0),
     "Hieracosphinx": CardData(1825, 6321, "Hieracosphinx", "82260502", 0, False, 2400, 1200, 6,
                               "Rock", "EARTH", "Effect", "None", 0x62C4, 0x18B1),
@@ -3846,7 +3846,7 @@ cards: Dict[str, CardData] = {
                            "Rock", "EARTH", "Effect", "None", 0x62C8, 0x18B2),
     "Moai Interceptor Cannons": CardData(1827, 6323, "Moai Interceptor Cannons", "45159319", 0, False, 1100, 2000, 4,
                                          "Rock", "EARTH", "Effect", "None", 0x62CC, 0x18B3),
-    "Megarock Dragon": CardData(1828, 6324, "Megarock Dragon", "71544954", 0, False, 65535, 65535, 7,
+    "Megarock Dragon": CardData(1828, 6324, "Megarock Dragon", "71544954", 0, False, 0, 0, 7,
                                 "Rock", "EARTH", "Effect", "None", 0x62D0, 0x18B4),
     "Dummy Golem": CardData(1829, 6325, "Dummy Golem", "13532663", 0, False, 800, 800, 2,
                             "Rock", "EARTH", "Effect", "None", 0x62D4, 0x18B5),
@@ -3880,7 +3880,7 @@ cards: Dict[str, CardData] = {
                               "Thunder", "LIGHT", "Effect", "None", 0x630C, 0x18C3),
     "Des Wombat": CardData(1844, 6340, "Des Wombat", "09637706", 0, False, 1600, 300, 3,
                            "Beast", "EARTH", "Effect", "None", 0x6310, 0x18C4),
-    "King of the Skull Servants": CardData(1845, 6341, "King of the Skull Servants", "36021814", 0, False, 65535, 0, 1,
+    "King of the Skull Servants": CardData(1845, 6341, "King of the Skull Servants", "36021814", 0, False, 0, 0, 1,
                                            "Zombie", "DARK", "Effect", "None", 0x6314, 0x18C5),
     "Reshef the Dark Being": CardData(1846, 6342, "Reshef the Dark Being", "62420419", 0, False, 2500, 1500, 8,
                                       "Fiend", "LIGHT", "Ritual/Effect", "None", 0x6318, 0x18C6),
@@ -3962,7 +3962,7 @@ cards: Dict[str, CardData] = {
                                          "Warrior", "WATER", "Effect", "None", 0x63E4, 0x18F9),
     "Steam Gyroid": CardData(1883, 6394, "Steam Gyroid", "05368615", 0, False, 2200, 1600, 6,
                              "Machine", "EARTH", "Fusion", "None", 0x63E8, 0x18FA),
-    "UFOroid Fighter": CardData(1884, 6395, "UFOroid Fighter", "32752319", 0, False, 65535, 65535, 10,
+    "UFOroid Fighter": CardData(1884, 6395, "UFOroid Fighter", "32752319", 0, False, 0, 0, 10,
                                 "Machine", "LIGHT", "Fusion/Effect", "None", 0x63EC, 0x18FB),
     "Cyber Twin Dragon": CardData(1885, 6396, "Cyber Twin Dragon", "74157028", 0, False, 2800, 2100, 8,
                                   "Machine", "LIGHT", "Fusion/Effect", "None", 0x63F0, 0x18FC),
@@ -4018,7 +4018,7 @@ cards: Dict[str, CardData] = {
                                "Aqua", "WATER", "Effect", "None", 0x6464, 0x1919),
     "Poison Draw Frog": CardData(1911, 6426, "Poison Draw Frog", "56840658", 0, False, 100, 100, 2,
                                  "Aqua", "WATER", "Effect", "None", 0x6468, 0x191A),
-    "Tyranno Infinity": CardData(1912, 6427, "Tyranno Infinity", "83235263", 0, False, 65535, 0, 4,
+    "Tyranno Infinity": CardData(1912, 6427, "Tyranno Infinity", "83235263", 0, False, 0, 0, 4,
                                  "Dinosaur", "EARTH", "Effect", "None", 0x646C, 0x191B),
     "Batteryman C": CardData(1913, 6428, "Batteryman C", "19733961", 0, False, 0, 0, 2,
                              "Thunder", "LIGHT", "Effect", "None", 0x6470, 0x191C),
@@ -4291,7 +4291,7 @@ cards: Dict[str, CardData] = {
                                                 "Warrior", "LIGHT", "Effect", "None", 0x6708, 0x19C2),
     "Tenkabito Shien": CardData(2038, 6595, "Tenkabito Shien", "41589166", 0, False, 1500, 1000, 4,
                                 "Pyro", "FIRE", "Effect", "None", 0x670C, 0x19C3),
-    "Parasitic Ticky": CardData(2039, 6596, "Parasitic Ticky", "87978805", 0, False, 65535, 65535, 1,
+    "Parasitic Ticky": CardData(2039, 6596, "Parasitic Ticky", "87978805", 0, False, 0, 0, 1,
                                 "Insect", "EARTH", "Effect", "None", 0x6710, 0x19C4),
     "Gokipon": CardData(2040, 6597, "Gokipon", "14472500", 0, False, 800, 800, 2,
                         "Insect", "EARTH", "Effect", "None", 0x6714, 0x19C5),
@@ -4368,11 +4368,11 @@ cards: Dict[str, CardData] = {
                            "Spell", "Spell", "Spell", "Field", 0x67C8, 0x19F2),
     "Homunculus Gold": CardData(2075, 6645, "Homunculus Gold", "27408609", 0, False, 1500, 1500, 6,
                                 "Warrior", "LIGHT", "Effect", "None", 0x67D4, 0x19F5),
-    "The Ancient Sun Helios": CardData(2076, 6646, "The Ancient Sun Helios", "54493213", 0, False, 65535, 65535, 4,
+    "The Ancient Sun Helios": CardData(2076, 6646, "The Ancient Sun Helios", "54493213", 0, False, 0, 0, 4,
                                        "Pyro", "LIGHT", "Effect", "None", 0x67D8, 0x19F6),
-    "Helios Duo Megiste": CardData(2077, 6647, "Helios Duo Megiste", "80887952", 0, False, 65535, 65535, 6,
+    "Helios Duo Megiste": CardData(2077, 6647, "Helios Duo Megiste", "80887952", 0, False, 0, 0, 6,
                                    "Pyro", "LIGHT", "Effect", "None", 0x67DC, 0x19F7),
-    "Helios Tris Megiste": CardData(2078, 6648, "Helios Tris Megiste", "17286057", 0, False, 65535, 65535, 8,
+    "Helios Tris Megiste": CardData(2078, 6648, "Helios Tris Megiste", "17286057", 0, False, 0, 0, 8,
                                     "Pyro", "LIGHT", "Effect", "None", 0x67E0, 0x19F8),
     "Elemental Hero Neos": CardData(2079, 6653, "Elemental Hero Neos", "89943723", 0, False, 2500, 2000, 7,
                                     "Warrior", "LIGHT", "None", "None", 0x67F4, 0x19FD),
@@ -4382,6 +4382,76 @@ cards: Dict[str, CardData] = {
 
 empty_card_data = CardData(0, 0, "Empty", "0", 0, False, 0, 0, 0, "None", "None", "None", "None", 0x0, 0x0)
 
+# Monsters that can't be normal summoned
+nomi_monsters = {
+    "Aqua Spirit",
+    "Archlord Zerato",
+    "Armed Dragon Lv7",
+    "Armed Dragon Lv10",
+    "Berserk Dragon",
+    "Black Luster Soldier - Envoy of the Begining",
+    "Blue-Eyes Shining Dragon",
+    "Blue-Eyes Toon Dragon",
+    "Chaos Emperor Dragon - Envoy of the End",
+    "Chaos Sorcerer",
+    "Cyber Barrier Dragon",
+    "Cyber Laser Dragon",
+    "Dark Eradicator Warlock",
+    "Dark Magician Knight",
+    "Dark Necrofear",
+    "Dark Sage",
+    "Doom Dozer",
+    "Elemental Hero Neo Bubbleman",
+    "Exodia Necross",
+    "Fenrir",
+    "Fushioh Richie",
+    "Garuda the Wind Spirit",
+    "Gate Guardian",
+    "Gearfried the Swordmaster",
+    "Gigantes",
+    "Gradius' Option",
+    "Great Moth",
+    "Guardian Exode",
+    "Hamon, Lord of Striking Thunder",
+    "Harpie Lady Sisiters",
+    "Horus the Black Flame Dragon Lv8",
+    "Inferno",
+    "Larvae Moth",
+    "Lava Golem",
+    "Manga Ryu-Ran",
+    "Master Monk",
+    "Mazera DeVille",
+    "Megarock Dragon",
+    "Metalzoa",
+    "Mirage Knight",
+    "Ocean Dragon Lord - Neo-Daedalus",
+    "Perfectly Ultimate Great Moth",
+    "Princess Curran",
+    "Princess Pikeru",
+    "Rare Metal Dragon",
+    "Raviel, Lord of Phantasms",
+    "Red-Eyes Black Metal Dragon",
+    "Red-Eyes Darkness Dragon",
+    "Shadow Ghoul",
+    "Silent Magician Lv8",
+    "Silent Swordsman Lv7",
+    "Silpheed",
+    "Sorcerer of Dark Magic",
+    "Soul of Purity and Light",
+    "Spirit of Flames",
+    "Spirit of the Pharaoh",
+    "The Rock Spirit",
+    "Theinen the Great Sphinx",
+    "Toon Dark Magician Girl",
+    "Toon Mermaid",
+    "Toon Summoned",
+    "Uria, Lord of Searing Flames",
+    "Valkyrion the Magna Warriror",
+    "Vampire Genesis",
+    "Wall Shadow",
+    "Water Dragon",
+    "Winged Kuriboh Lv10"
+}
 
 def get_all_valid_cards_set():
     card_set = set()
@@ -4470,18 +4540,14 @@ booster_packs: List[str] = [
 ]
 
 def import_data():
-    with open("Yugioh 2006 Card Data.tsv") as file:
+    with open("Deck.tsv") as file:
         data = csv.reader(file, delimiter="\t")
         for card in data:
-            print(" \"" + card[2] + ("" if card[4] == "0" else " Alt " + card[4]) + "\": CardData(" + card[0] + ", " + card[1] + ", \"" + card[2] + "\", " + card[3] + ", "
-                  + card[4] + ", " + ('True' if card[5] == "TRUE" else 'False') + ", " + card[6] + ", " + card[7] + ", " + card[8]
-                  + ",\n            \"" + card[9] +
-                  "\", \"" + card[10] + "\", \"" + card[11] + "\", \"" + card[12] + "\", " + card[13] + ", " + card[14]+"),")
+            print("     \"" + card[0] + "\": " + card[2] + ",")
 
 
 def build_id_table():
     for name, c in cards.items():
         print(" " + hex(c.starter_id) + ": \"" + name + "\",")
 
-
-read_rom()
+# import_data()
