@@ -61,9 +61,38 @@ If the Progression Balancing of one world is greater than that of others, items 
 obtained early, and vice versa if its value is smaller. 
 However, StarCraft 2 is more permissive regarding the items that can be used to progress, so this option has little 
 influence on progression in a StarCraft 2 world. 
-StarCraft 2. 
 Since this option increases the time required to generate a MultiWorld, we recommend deactivating it (i.e., setting it 
 to zero) for a StarCraft 2 world.
+
+#### What does Tactics Level do?
+
+Tactics level allows controlling the difficulty through what items you're likely to get early.
+This is independent of game difficulty like causal, normal, hard, or brutal.
+
+"Standard" and "Advanced" levels are guaranteed to be beatable with the items you are given.
+The logic is a little more restrictive than a player's creativity, so an advanced player is likely to have
+more items than they need in any situation. These levels are entirely safe to use in a multiworld.
+
+The "Any Units" level only guarantees that a minimum number of faction-appropriate units or buildings are reachable
+early on, but not what those units are.
+Before starting a build mission, the generator will guarantee that N units or buildings can be acquired before starting it,
+where N is the number of missions the player needs to beat to access the mission, and the units belong to the faction
+the player will play in the mission. For a linear order of missions, ordered [zerg, protoss, terran], a protoss unit
+is guaranteed to be unlocked in the zerg mission, and 2 terran units are guaranteed to be unlocked
+in the preceding 2 missions. This effect maxes out at 5 units guaranteed for each faction.
+
+It's possible to get stuck on "Any Units" if the units can't attack,
+like getting only medics and medivacs for the first 2 units, only getting units that take too long to build
+for the missions at hand, or simply not having enough damage output.
+Some safeguards exist to make sure terrain traversal, no-builds, and having something that can hit air objectives exists,
+meaning cheat codes like `terribleterribledamage` can be used to recover a seemingly stuck world.
+This logic option is likely to be beatable without cheats, but not guaranteed to be.
+Thus, it is only safe to use in a multiworld if the player is willing to use cheats to get a world unstuck if
+the situation calls for it, or uses settings like start inventory or mission exclusions to guarantee beatability.
+
+The "No Logic" level provides no logical safeguards for beatability. It is only safe to use in a multiworld if the player curates
+a start inventory or the organizer is okay with the possibility of the StarCraft 2 world being unbeatable.
+Safeguards exist so that other games' items placed in the StarCraft 2 world are reachable under "Advanced" logic rules.
 
 #### How do I specify items in a list, like in excluded items?
 
@@ -102,8 +131,6 @@ for each game that it currently supports, including StarCraft 2.
 You can also look up a complete list of the item names in the 
 [Icon Repository](https://matthewmarinets.github.io/ap_sc2_icons/) page.
 This page also contains supplementary information of each item.
-However, the items shown in that page might differ from those shown in the datapackage page of Archipelago since the 
-former is generated, most of the time, from beta versions of StarCraft 2 Archipelago undergoing development.
 
 As for the locations, you can see all the locations associated to a mission in your world by placing your cursor over 
 the mission in the 'StarCraft 2 Launcher' tab in the client.
