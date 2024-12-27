@@ -77,8 +77,8 @@ that, your region graph might look something like the following diagram. Note ho
 
 > [!NOTE]
 > It is required to use explicit indirect conditions when using Generic ER. Without this restriction,
-> Generic ER would have no way to determine they are required when performing randomization,
-> leading to significantly higher failure rates due to mis-categorized required regions.
+> Generic ER would have no way to correctly determine that a region may be required in logic,
+> leading to significantly higher failure rates due to mis-categorized regions.
 
 ```mermaid
 %%{init: {"graph": {"defaultRenderer": "elk"}} }%%
