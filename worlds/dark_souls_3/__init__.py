@@ -1466,10 +1466,10 @@ class DarkSouls3World(World):
                     offworld = ds3_world._shuffle([loc for loc in locations if loc.game != "Dark Souls III"])
                     onworld = sorted((loc for loc in locations if loc.game == "Dark Souls III"),
                                      key=lambda loc: loc.data.region_value)
+                    # Give offworld regions the last (best) items within a given sphere
                     sorted_spheres.extend(onworld)
                     sorted_spheres.extend(offworld)
 
-                # Give offworld regions the last (best) items within a given sphere
                 converted_item_order.reverse()
                 remaining_fill(multiworld, sorted_spheres, converted_item_order, name="DS3 Smoothing", check_location_can_fill=True)
 
