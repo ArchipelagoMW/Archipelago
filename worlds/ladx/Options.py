@@ -403,13 +403,13 @@ class TrendyGame(Choice):
     default = option_normal
 
 
-class GfxMod(FreeText):
+class GfxMod(DefaultOffToggle):
     """
-    Sets the sprite for link, among other things.
-    The option should be the same name as a sprite file in data/sprites/ladx (extension included) when patching the rom.
+    If enabled, the patcher will prompt the user for a modification file to change sprites in the game and optionally some text.
+    Grab one from upstream or make your own.
+    https://github.com/daid/LADXR/tree/master/gfx
     """
     display_name = "GFX Modification"
-    default = ''
 
 
 class Palette(Choice):

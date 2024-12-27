@@ -5,6 +5,7 @@ import os
 import random
 import pickle
 import Utils
+import settings
 from collections import defaultdict
 from typing import Dict
 
@@ -83,10 +84,9 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
         pymod.prePatch(rom)
 
     if options["gfxmod"]:
-        gfxmod_file = Utils.user_path("data", "sprites", "ladx", options["gfxmod"])
-        if not os.path.isfile(gfxmod_file):
-            raise FileNotFoundError(gfxmod_file)
-        patches.aesthetics.gfxMod(rom, gfxmod_file)
+        user_settings = settings.get_settings()
+        gfx_mod_file = user_settings["ladx_options"]["gfx_mod_file"]
+        patches.aesthetics.gfxMod(rom, gfx_mod_file)
 
     assembler.resetConsts()
     assembler.const("INV_SIZE", 16)

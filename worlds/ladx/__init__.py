@@ -48,8 +48,16 @@ class LinksAwakeningSettings(settings.Group):
     class DisplayMsgs(settings.Bool):
         """Display message inside of Bizhawk"""
 
+    class GfxModFile(settings.FilePath):
+        """
+        Gfxmod file, get it from upstream: https://github.com/daid/LADXR/tree/master/gfx
+        Only .bin or .bdiff files
+        The same directory will be checked for a matching text modification file
+        """
+
     rom_file: RomFile = RomFile(RomFile.copy_to)
     rom_start: typing.Union[RomStart, bool] = True
+    gfx_mod_file: GfxModFile = GfxModFile()
 
 class LinksAwakeningWebWorld(WebWorld):
     tutorials = [Tutorial(
