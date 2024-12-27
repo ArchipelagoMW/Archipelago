@@ -1367,7 +1367,6 @@ itembox_location_table = {
     LocationName.final_chase_itembox_1: 0xFF161D,
 
     LocationName.cannon_core_itembox_1: 0xFF161E,
-    LocationName.green_hill_itembox_1: 0xFF161F,
 
     LocationName.city_escape_itembox_2: 0xFF1620,
     LocationName.wild_canyon_itembox_2: 0xFF1621,
@@ -1400,7 +1399,6 @@ itembox_location_table = {
     LocationName.final_chase_itembox_2: 0xFF163D,
 
     LocationName.cannon_core_itembox_2: 0xFF163E,
-    LocationName.green_hill_itembox_2: 0xFF163F,
 
     LocationName.city_escape_itembox_3: 0xFF1640,
     LocationName.wild_canyon_itembox_3: 0xFF1641,
@@ -1433,7 +1431,6 @@ itembox_location_table = {
     LocationName.final_chase_itembox_3: 0xFF165D,
 
     LocationName.cannon_core_itembox_3: 0xFF165E,
-    LocationName.green_hill_itembox_3: 0xFF165F,
 
     LocationName.city_escape_itembox_4: 0xFF1660,
     LocationName.wild_canyon_itembox_4: 0xFF1661,
@@ -1466,7 +1463,6 @@ itembox_location_table = {
     LocationName.final_chase_itembox_4: 0xFF167D,
 
     LocationName.cannon_core_itembox_4: 0xFF167E,
-    LocationName.green_hill_itembox_4: 0xFF167F,
 
     LocationName.city_escape_itembox_5: 0xFF1680,
     LocationName.wild_canyon_itembox_5: 0xFF1681,
@@ -1499,7 +1495,6 @@ itembox_location_table = {
     LocationName.final_chase_itembox_5: 0xFF169D,
 
     LocationName.cannon_core_itembox_5: 0xFF169E,
-    LocationName.green_hill_itembox_5: 0xFF169F,
 
     LocationName.city_escape_itembox_6: 0xFF16A0,
     LocationName.wild_canyon_itembox_6: 0xFF16A1,
@@ -1530,7 +1525,6 @@ itembox_location_table = {
     LocationName.final_chase_itembox_6: 0xFF16BD,
 
     LocationName.cannon_core_itembox_6: 0xFF16BE,
-    LocationName.green_hill_itembox_6: 0xFF16BF,
 
     LocationName.city_escape_itembox_7: 0xFF16C0,
     LocationName.wild_canyon_itembox_7: 0xFF16C1,
@@ -1557,7 +1551,6 @@ itembox_location_table = {
     LocationName.final_chase_itembox_7: 0xFF16DD,
 
     LocationName.cannon_core_itembox_7: 0xFF16DE,
-    LocationName.green_hill_itembox_7: 0xFF16DF,
 
     LocationName.city_escape_itembox_8: 0xFF16E0,
     LocationName.wild_canyon_itembox_8: 0xFF16E1,
@@ -1582,7 +1575,6 @@ itembox_location_table = {
     LocationName.final_chase_itembox_8: 0xFF16FD,
 
     LocationName.cannon_core_itembox_8: 0xFF16FE,
-    LocationName.green_hill_itembox_8: 0xFF16FF,
     
     LocationName.city_escape_itembox_9: 0xFF1700,
     LocationName.green_forest_itembox_9: 0xFF1704,
@@ -1605,7 +1597,6 @@ itembox_location_table = {
     LocationName.final_chase_itembox_9: 0xFF171D,
 
     LocationName.cannon_core_itembox_9: 0xFF171E,
-    LocationName.green_hill_itembox_9: 0xFF171F,
 
     LocationName.green_forest_itembox_10: 0xFF1724,
     LocationName.pumpkin_hill_itembox_10: 0xFF1725,
@@ -1626,7 +1617,6 @@ itembox_location_table = {
     LocationName.final_chase_itembox_10: 0xFF173D,
 
     LocationName.cannon_core_itembox_10: 0xFF173E,
-    LocationName.green_hill_itembox_10: 0xFF173F,
 
     LocationName.green_forest_itembox_11: 0xFF1744,
     LocationName.pyramid_cave_itembox_11: 0xFF174A,
@@ -1645,7 +1635,6 @@ itembox_location_table = {
     LocationName.final_chase_itembox_11: 0xFF175D,
 
     LocationName.cannon_core_itembox_11: 0xFF175E,
-    LocationName.green_hill_itembox_11: 0xFF175F,
 
     LocationName.green_forest_itembox_12: 0xFF1764,
     LocationName.pyramid_cave_itembox_12: 0xFF176A,
@@ -2207,6 +2196,20 @@ green_hill_animal_location_table = {
     #LocationName.green_hill_animal_1: 0xFF0B1F, # Disabled for technical reasons, may return
 }
 
+green_hill_itembox_location_table = {
+    LocationName.green_hill_itembox_1: 0xFF161F,
+    LocationName.green_hill_itembox_2: 0xFF163F,
+    LocationName.green_hill_itembox_3: 0xFF165F,
+    LocationName.green_hill_itembox_4: 0xFF167F,
+    LocationName.green_hill_itembox_5: 0xFF169F,
+    LocationName.green_hill_itembox_6: 0xFF16BF,
+    LocationName.green_hill_itembox_7: 0xFF16DF,
+    LocationName.green_hill_itembox_8: 0xFF16FF,
+    LocationName.green_hill_itembox_9: 0xFF171F,
+    LocationName.green_hill_itembox_10: 0xFF173F,
+    LocationName.green_hill_itembox_11: 0xFF175F,
+}
+
 final_boss_location_table = {
     # LocationName.biolizard: 0xFF003F,
     LocationName.finalhazard: 0xFF005F,
@@ -2248,6 +2251,7 @@ all_locations = {
     **green_hill_location_table,
     **green_hill_chao_location_table,
     **green_hill_animal_location_table,
+    **green_hill_itembox_location_table,
     **final_boss_location_table,
     **grand_prix_location_table,
     **chaos_chao_location_table,
@@ -2376,6 +2380,9 @@ def setup_locations(world: World, player: int, mission_map: typing.Dict[int, int
 
             if world.options.animalsanity:
                 location_table.update({**green_hill_animal_location_table})
+
+            if world.options.itemboxsanity.value == 2:
+                location_table.update({**green_hill_itembox_location_table})
 
         if world.options.goal.value in [4, 5, 6]:
             location_table.update({**boss_rush_location_table})
