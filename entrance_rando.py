@@ -3,7 +3,7 @@ import logging
 import random
 import time
 from collections import deque
-from typing import Callable, Dict, Iterable, List, Tuple, Set, Optional
+from collections.abc import Callable, Iterable
 
 from BaseClasses import CollectionState, Entrance, Region, EntranceType
 from Options import Accessibility
@@ -16,7 +16,7 @@ class EntranceRandomizationError(RuntimeError):
 
 class EntranceLookup:
     class GroupLookup:
-        _lookup: Dict[int, List[Entrance]]
+        _lookup: dict[int, list[Entrance]]
 
         def __init__(self):
             self._lookup = {}
@@ -27,7 +27,7 @@ class EntranceLookup:
         def __bool__(self):
             return bool(self._lookup)
 
-        def __getitem__(self, item: int) -> List[Entrance]:
+        def __getitem__(self, item: int) -> list[Entrance]:
             return self._lookup.get(item, [])
 
         def __iter__(self):
@@ -48,7 +48,7 @@ class EntranceLookup:
     dead_ends: GroupLookup
     others: GroupLookup
     _random: random.Random
-    _expands_graph_cache: Dict[Entrance, bool]
+    _expands_graph_cache: dict[Entrance, bool]
     _coupled: bool
 
     def __init__(self, rng: random.Random, coupled: bool):
@@ -135,9 +135,9 @@ class EntranceLookup:
 
 class ERPlacementState:
     """The state of an ongoing or completed entrance randomization"""
-    placements: List[Entrance]
+    placements: list[Entrance]
     """The list of randomized Entrance objects which have been connected successfully"""
-    pairings: List[Tuple[str, str]]
+    pairings: list[tuple[str, str]]
     """A list of pairings of connected entrance names, of the form (source_exit, target_entrance)"""
     world: World
     """The world which is having its entrances randomized"""
@@ -154,10 +154,10 @@ class ERPlacementState:
         self.collection_state = world.multiworld.get_all_state(False, True)
 
     @property
-    def placed_regions(self) -> Set[Region]:
+    def placed_regions(self) -> set[Region]:
         return self.collection_state.reachable_regions[self.world.player]
 
-    def find_placeable_exits(self, check_validity: bool) -> List[Entrance]:
+    def find_placeable_exits(self, check_validity: bool) -> list[Entrance]:
         if check_validity:
             blocked_connections = self.collection_state.blocked_connections[self.world.player]
             blocked_connections = sorted(blocked_connections, key=lambda x: x.name)
@@ -209,7 +209,7 @@ class ERPlacementState:
             self,
             source_exit: Entrance,
             target_entrance: Entrance
-    ) -> Tuple[List[Entrance], List[Entrance]]:
+    ) -> tuple[list[Entrance], list[Entrance]]:
         """
         Connects a source exit to a target entrance in the graph, accounting for coupling
 
@@ -248,8 +248,8 @@ class ERPlacementState:
         return [source_exit], [target_entrance]
 
 
-def bake_target_group_lookup(world: World, get_target_groups: Callable[[int], List[int]]) \
-        -> Dict[int, List[int]]:
+def bake_target_group_lookup(world: World, get_target_groups: Callable[[int], list[int]]) \
+        -> dict[int, list[int]]:
     """
     Applies a transformation to all known entrance groups on randomizable exists to build a group lookup table.
 
@@ -262,7 +262,7 @@ def bake_target_group_lookup(world: World, get_target_groups: Callable[[int], Li
     return { group: get_target_groups(group) for group in unique_groups }
 
 
-def disconnect_entrance_for_randomization(entrance: Entrance, target_group: Optional[int] = None) -> None:
+def disconnect_entrance_for_randomization(entrance: Entrance, target_group: int | None = None) -> None:
     """
     Given an entrance in a "vanilla" region graph, splits that entrance to prepare it for randomization
     in randomize_entrances. This should be done after setting the type and group of the entrance.
@@ -293,11 +293,11 @@ def disconnect_entrance_for_randomization(entrance: Entrance, target_group: Opti
 def randomize_entrances(
         world: World,
         coupled: bool,
-        target_group_lookup: Dict[int, List[int]],
+        target_group_lookup: dict[int, list[int]],
         preserve_group_order: bool = False,
-        er_targets: Optional[List[Entrance]] = None,
-        exits: Optional[List[Entrance]] = None,
-        on_connect: Optional[Callable[[ERPlacementState, List[Entrance]], None]] = None
+        er_targets: list[Entrance] | None = None,
+        exits: list[Entrance] | None = None,
+        on_connect: Callable[[ERPlacementState, list[Entrance]], None] | None = None
 ) -> ERPlacementState:
     """
     Randomizes Entrances for a single world in the multiworld.

@@ -1,6 +1,5 @@
 import unittest
 from enum import IntEnum
-from typing import List, Type
 
 from BaseClasses import Region, EntranceType, MultiWorld, Entrance
 from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances, EntranceRandomizationError, \
@@ -35,7 +34,7 @@ def generate_entrance_pair(region: Region, name_suffix: str, group: int):
 
 
 def generate_disconnected_region_grid(multiworld: MultiWorld, grid_side_length: int, region_size: int = 0,
-                                      region_type: Type[Region] = Region):
+                                      region_type: type[Region] = Region):
     """
     Generates a grid-like region structure for ER testing, where menu is connected to the top-left region, and each
     region "in vanilla" has 2 2-way exits going either down or to the right, until reaching the goal region in the
@@ -225,7 +224,7 @@ class TestRandomizeEntrances(unittest.TestCase):
         generate_disconnected_region_grid(multiworld, 5)
         seen_placement_count = 0
 
-        def verify_coupled(_: ERPlacementState, placed_entrances: List[Entrance]):
+        def verify_coupled(_: ERPlacementState, placed_entrances: list[Entrance]):
             nonlocal seen_placement_count
             seen_placement_count += len(placed_entrances)
             self.assertEqual(2, len(placed_entrances))
@@ -243,7 +242,7 @@ class TestRandomizeEntrances(unittest.TestCase):
         generate_disconnected_region_grid(multiworld, 5)
         seen_placement_count = 0
 
-        def verify_uncoupled(state: ERPlacementState, placed_entrances: List[Entrance]):
+        def verify_uncoupled(state: ERPlacementState, placed_entrances: list[Entrance]):
             nonlocal seen_placement_count
             seen_placement_count += len(placed_entrances)
             self.assertEqual(1, len(placed_entrances))
