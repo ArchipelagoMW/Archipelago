@@ -40,6 +40,12 @@ def can_shop(state: CollectionState, world: "TunicWorld") -> bool:
     return has_sword(state, world.player) and state.can_reach_region("Shop", world.player)
 
 
+# for the ones that are not early bushes where ER can screw you over a bit
+def can_get_past_bushes(state: CollectionState, world: "TunicWorld") -> bool:
+    # add in glass cannon + stick for grass rando
+    return has_sword(state, world.player) or state.has_any((fire_wand, laurels, gun), world.player)
+
+
 def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_pairs: Dict[Portal, Portal]) -> None:
     player = world.player
     options = world.options
@@ -437,6 +443,14 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Forest Belltower Lower"],
         rule=lambda state: has_ladder("Ladder to East Forest", state, world))
 
+    regions["Forest Belltower Main behind bushes"].connect(
+        connecting_region=regions["Forest Belltower Main"],
+        rule=lambda state: can_get_past_bushes(state, world)
+        or has_ice_grapple_logic(False, IceGrappling.option_easy, state, world))
+    # you can use the slimes to break the bushes
+    regions["Forest Belltower Main"].connect(
+        connecting_region=regions["Forest Belltower Main behind bushes"])
+
     # ice grapple up to dance fox spot, and vice versa
     regions["East Forest"].connect(
         connecting_region=regions["East Forest Dance Fox Spot"],
@@ -467,11 +481,18 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         connecting_region=regions["Guard House 1 East"],
         rule=lambda state: state.has(laurels, player))
 
-    regions["Guard House 2 Upper"].connect(
+    regions["Guard House 2 Upper before bushes"].connect(
+        connecting_region=regions["Guard House 2 Upper after bushes"],
+        rule=lambda state: can_get_past_bushes(state, world))
+    regions["Guard House 2 Upper after bushes"].connect(
+        connecting_region=regions["Guard House 2 Upper before bushes"],
+        rule=lambda state: can_get_past_bushes(state, world))
+
+    regions["Guard House 2 Upper after bushes"].connect(
         connecting_region=regions["Guard House 2 Lower"],
         rule=lambda state: has_ladder("Ladders to Lower Forest", state, world))
     regions["Guard House 2 Lower"].connect(
-        connecting_region=regions["Guard House 2 Upper"],
+        connecting_region=regions["Guard House 2 Upper after bushes"],
         rule=lambda state: has_ladder("Ladders to Lower Forest", state, world))
 
     # ice grapple from upper grave path exit to the rest of it
