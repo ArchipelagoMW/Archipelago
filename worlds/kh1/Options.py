@@ -104,12 +104,21 @@ class SuperBosses(Toggle):
     """
     display_name = "Super Bosses"
 
-class Cups(Toggle):
+class Cups(Choice):
     """
-    Toggle whether to include checks behind completing Phil, Pegasus, Hercules, or Hades cups.
-    Please note that the cup items will still appear in the multiworld even if toggled off, as they are required to challenge Sephiroth.
+    Determines what cups to include checks behind completing.
+    Please note that the cup items will still appear in the multiworld even if set to off, as they are required to challenge Sephiroth.
+
+    Off: All cup locations are removed
+    Cups: Phil, Pegasus, and Hercules cups are included
+    Hades Cup: Hades Cup is included in addition to Phil, Pegasus, and Hercules
+    Ice Titan: The Ice Titan boss location is included in addition to Phil, Pegasus, Hercules, or Hades cups
     """
     display_name = "Cups"
+    option_off = 0
+    option_cups = 1
+    option_hades_cup = 2
+    option_ice_titan = 3
 
 class Goal(Choice):
     """
