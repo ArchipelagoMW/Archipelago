@@ -2394,8 +2394,9 @@ def connect_regions(multiworld: MultiWorld, world: World, player: int, gates: ty
         connect(multiworld, player, names, LocationName.gate_0_region, LocationName.chaos_chao,
                 lambda state: (state.has_all(chao_animal_event_location_table.keys(), player)))
     elif world.options.goal == 8:
+        trap_item_mapping = { minigame: world.options.minigame_madness_amount.value for minigame in minigame_trap_table.keys() }
         connect(multiworld, player, names, LocationName.gate_0_region, LocationName.biolizard_region,
-                lambda state: (state.has_all(minigame_trap_table.keys(), player)))
+                lambda state: (state.has_all_counts(trap_item_mapping, player)))
 
     for i in range(len(gates[0].gate_levels)):
         connect(multiworld, player, names, LocationName.gate_0_region, shuffleable_regions[gates[0].gate_levels[i]])
