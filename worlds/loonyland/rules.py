@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
+
 if TYPE_CHECKING:
     from worlds.loonyland import LoonylandWorld
 
@@ -23,12 +24,18 @@ def can_kill_werewolves(state: CollectionState, world: "LoonylandWorld") -> bool
 
 
 def have_bombs(state: CollectionState, world: "LoonylandWorld") -> bool:
-    return state.has("Bombs", world.player) or state.has("Combo-Bombo", world.player) or state.has("Play As Werewolf", world.player)
+    return (
+        state.has("Bombs", world.player)
+        or state.has("Combo-Bombo", world.player)
+        or state.has("Play As Werewolf", world.player)
+    )
     # or werewolf badge when badges are added
 
 
 def have_many_bombs(state: CollectionState, world: "LoonylandWorld") -> bool:
-    return state.has("Bombs", world.player) or (state.has("Play As Werewolf", world.player) and state.has("Infinite Gems", world.player))
+    return state.has("Bombs", world.player) or (
+        state.has("Play As Werewolf", world.player) and state.has("Infinite Gems", world.player)
+    )
 
 
 def have_special_weapon_damage(state: CollectionState, world: "LoonylandWorld") -> bool:
@@ -112,8 +119,10 @@ def can_reach_vampire(state: CollectionState, world: "LoonylandWorld") -> bool:
 def can_reach_wolves(state: CollectionState, world: "LoonylandWorld") -> bool:
     return state.can_reach_region("Halloween Hill", world.player)
 
+
 def can_do_collection(state: CollectionState, world: "LoonylandWorld") -> bool:
     return state.has_group_unique("monster_dolls", world.player, 8)
+
 
 def power_level(state: CollectionState, world: "LoonylandWorld", level_goal: int) -> bool:
     level: int = 0

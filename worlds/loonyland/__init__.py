@@ -16,7 +16,7 @@ from .Data.game_data import (
 )
 from .items import LLItemCat, LoonylandItem
 from .locations import LLLocCat, LoonylandLocation
-from .options import Badges, LoonylandOptions
+from .options import LoonylandOptions
 
 
 class LoonylandWebWorld(WebWorld):
@@ -43,6 +43,7 @@ class LoonylandWorld(World):
     options_dataclass = LoonylandOptions
     location_name_to_id = {name: data.id + loonyland_base_id for name, data in loonyland_location_table.items()}
     item_name_to_id = {name: data.id for name, data in loony_item_table.items()}
+    item_name_to_id["A Cool Filler Item"] = loonyland_base_id + 3000
 
     item_name_groups = {
         "physical_items": {name for name, data in loony_item_table.items() if data.category == LLItemCat.ITEM},
@@ -63,11 +64,15 @@ class LoonylandWorld(World):
         "badges": {name for name, data in loonyland_location_table.items() if data.category == LLLocCat.BADGE},
     }
 
-    def create_item(self, name: str) -> LoonylandItem:
-        return LoonylandItem(name, loony_item_table[name].modified_classification(self.options), loony_item_table[name].id, self.player)
-
     def create_junk(self) -> LoonylandItem:
         return LoonylandItem("A Cool Filler Item", ItemClassification.filler, loonyland_base_id + 3000, self.player)
+
+    def create_item(self, name: str) -> LoonylandItem:
+        if name == "A Cool Filler Item":
+            return self.create_junk()
+        return LoonylandItem(
+            name, loony_item_table[name].modified_classification(self.options), loony_item_table[name].id, self.player
+        )
 
     def create_items(self) -> None:
         item_pool: list[LoonylandItem] = []
@@ -88,9 +93,10 @@ class LoonylandWorld(World):
         return LoonylandItem(event, ItemClassification.progression, None, self.player)
 
     def create_regions(self) -> None:
-        for region_name in loonyland_region_table:
-            region = Region(region_name, self.player, self.multiworld)
-            self.multiworld.regions.append(region)
+        for region_name, region_data in loonyland_region_table.items():
+            if region_data.can_create(self.options):
+                region = Region(region_name, self.player, self.multiworld)
+                self.multiworld.regions.append(region)
 
         for loc_name, loc_data in loonyland_location_table.items():
             if not loc_data.can_create(self.options):
@@ -116,9 +122,12 @@ class LoonylandWorld(World):
         set_entrance_rules(self.multiworld, self)
 
     def fill_slot_data(self):
-        return {"Difficulty": self.options.difficulty.value,
-                "LongChecks": self.options.long_checks.value,
-                "Remix": self.options.remix.value,
-                "Badges": self.options.badges.value,
-                "Dolls": self.options.dolls.value,
-                "DeathLink": self.options.death_link.value}
+        return {
+            "Difficulty": self.options.difficulty.value,
+            "LongChecks": self.options.long_checks.value,
+            "MultipleSaves": self.options.multisave.value,
+            "Remix": self.options.remix.value,
+            "Badges": self.options.badges.value,
+            "Dolls": self.options.dolls.value,
+            "DeathLink": self.options.death_link.value,
+        }

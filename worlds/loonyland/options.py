@@ -21,10 +21,10 @@ class Difficulty(Choice):
     display_name = "Difficulty"
     option_beginner = 0
     option_normal = 1
-    option_hard = 2
-    option_challenge = 3
-    option_mad = 4
-    option_loony = 5
+    option_hard = 5
+    option_challenge = 2
+    option_mad = 3
+    option_loony = 4
     default = 1
 
 
@@ -36,6 +36,15 @@ class LongChecks(Choice):
     display_name = "Long Checks"
     option_excluded = 0
     option_included = 1
+    default = 0
+
+
+class MultipleSaves(Choice):
+    """Excluded: Remove badges that require using certain characters/terror mode, removes all "takes effect on new game" cheats"""
+
+    display_name = "Multiple Saves"
+    option_disabled = 0
+    option_enabled = 1
     default = 0
 
 
@@ -78,6 +87,7 @@ class LoonylandOptions(PerGameCommonOptions):
     # win_condition: WinCondition
     difficulty: Difficulty
     long_checks: LongChecks
+    multisave: MultipleSaves
     remix: Remix
     badges: Badges
     dolls: MonsterDolls

@@ -3,7 +3,7 @@ from typing import NamedTuple
 
 from BaseClasses import Location
 
-from worlds.loonyland.options import Badges, LongChecks, LoonylandOptions, MonsterDolls, Remix
+from worlds.loonyland.options import Badges, LongChecks, LoonylandOptions, MonsterDolls, MultipleSaves, Remix
 
 
 class LoonylandLocation(Location):
@@ -37,6 +37,8 @@ class LLLocation(NamedTuple):
         ):
             return False
         if options.remix == Remix.option_excluded and ("REMIX" in self.flags):
+            return False
+        if options.multisave == MultipleSaves.option_disabled and ("MULTISAVE" in self.flags):
             return False
         return True
 
