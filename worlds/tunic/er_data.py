@@ -188,8 +188,6 @@ portal_mapping: List[Portal] = [
     Portal(name="Temple Door Exit", region="Sealed Temple",
            destination="Overworld Redux", tag="_main", direction=Direction.south),
 
-    Portal(name="Forest Belltower to Fortress", region="Forest Belltower Main",
-           destination="Fortress Courtyard", tag="_", direction=Direction.north),
     Portal(name="Forest Belltower to Fortress", region="Forest Belltower Main behind bushes",
            destination="Fortress Courtyard", tag="_", direction=Direction.north),
     Portal(name="Forest Belltower to Forest", region="Forest Belltower Lower",
