@@ -608,4 +608,8 @@ SONG_DATA: Dict[str, SongData] = {
     "Trance dance anarchy": SongData(2900732, "80-3", "Touhou Mugakudan -IV-", False, 4, 7, 10),
     "fairy stage": SongData(2900733, "80-4", "Touhou Mugakudan -IV-", False, 4, 6, 9),
     "Scarlet Police on Ghetto Patrol": SongData(2900734, "80-5", "Touhou Mugakudan -IV-", False, 5, 7, 10),
+    "Unwelcome School": SongData(2900735, "81-0", "MD-level Tactical Training Blu-ray", False, 6, 8, 10),
+    "Usagi Flap": SongData(2900736, "81-1", "MD-level Tactical Training Blu-ray", False, 3, 6, 8),
+    "RE Aoharu": SongData(2900737, "81-2", "MD-level Tactical Training Blu-ray", False, 3, 5, 8),
+    "Operation*DOTABATA!": SongData(2900738, "81-3", "MD-level Tactical Training Blu-ray", False, 5, 7, 10),
 }
