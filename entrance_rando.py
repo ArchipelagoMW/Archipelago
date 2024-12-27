@@ -316,6 +316,10 @@ def randomize_entrances(
     :param on_connect: A callback function which allows specifying side effects after a placement is completed
                        successfully and the underlying collection state has been updated.
     """
+    if not world.explicit_indirect_conditions:
+        raise EntranceRandomizationError("Entrance randomization requires explicit indirect conditions in order "
+                                         + "to correctly analyze whether dead end regions can be required in logic.")
+
     start_time = time.perf_counter()
     er_state = ERPlacementState(world, coupled)
     entrance_lookup = EntranceLookup(world.random, coupled)

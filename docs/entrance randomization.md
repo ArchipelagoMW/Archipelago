@@ -75,10 +75,10 @@ logic to generate a valid world layout by connecting the partially connected edg
 that, your region graph might look something like the following diagram. Note how each randomizable entrance/exit pair
 (represented as a bidirectional arrow) is disconnected on one end.
 
-> [!WARNING]
-> It is highly recommended to use explicit indirect conditions when using Generic ER. Failure to do so may lead to an
-> increased failure rate if your dead end regions are required in logic rules as Generic ER would have no way to
-> determine they are required when performing randomization and treat them accordingly.
+> [!NOTE]
+> It is required to use explicit indirect conditions when using Generic ER. Without this restriction,
+> Generic ER would have no way to determine they are required when performing randomization,
+> leading to significantly higher failure rates due to mis-categorized required regions.
 
 ```mermaid
 %%{init: {"graph": {"defaultRenderer": "elk"}} }%%
