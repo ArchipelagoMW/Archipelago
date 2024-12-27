@@ -4532,4 +4532,4 @@ def find_all_non_standard_cards():
     for card in non_standard:
         print(f"    \"{card}\",")
 
-read_rom()
+# read_rom()

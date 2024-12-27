@@ -146,7 +146,7 @@ def set_card_rules(world):
         "LD11 All except Fairies forbidden": only_fairy(),
         "LD12 All except Wind forbidden": only_wind(),
         "LD14 Level 3 or below forbidden": CardRule(cards=lambda: find_cards_with(min_attack=1700, max_attack=2000,
-                                                                                  min_level=4), min_amount=12),
+                                                                                  min_level=4, max_level=4), min_amount=12),
         "LD15 DEF 1500 or less forbidden": CardRule(cards=lambda: find_cards_with(min_attack=1500, max_attack=2000,
                                                                                   min_defence=1550, max_level=4),
                                                     min_amount=12),
@@ -175,9 +175,9 @@ def set_card_rules(world):
     if world.starter_deck:
         for card in world.starter_deck:
             if card.name in starting_cards:
-                starting_cards[card.name] += world.structure_deck[card]
+                starting_cards[card.name] += world.starter_deck[card]
             else:
-                starting_cards[card.name] = world.structure_deck[card]
+                starting_cards[card.name] = world.starter_deck[card]
     elif world.options.starter_deck.value != world.options.starter_deck.option_remove:
         for card, amount in structure_contents["starter"].items():
             if card in starting_cards:
@@ -250,7 +250,6 @@ def resolve_rule(world, rule, starter_cards: Dict[str, int]):
             a += starter_cards[c]
             if starter_cards[c] == 3:
                 potential_cards.remove(c)
-                chosen_starters.append(c)
             potential_starters.append(c)
             if a >= rule.min_amount:
                 return [], potential_starters
@@ -261,11 +260,11 @@ def resolve_rule(world, rule, starter_cards: Dict[str, int]):
             chosen_cards.append(potential_cards[i])
             if potential_cards[i] in overlap:
                 a += 3 - starter_cards[potential_cards[i]]
-                overlap.remove(potential_cards[i])
+                potential_starters.remove(potential_cards[i])
             else:
                 a += 3
             i += 1
-        return chosen_cards, overlap
+        return chosen_cards, potential_starters
     else:
         chosen_starters: List[str] = []
         chosen_cards: List[str] = []
@@ -468,7 +467,7 @@ def only_warrior():
     big_beaters = [
         "Freed the Matchless General",
         "Holy Knight Ishzark",
-        "Silent Swordsman Lv5"
+        "Silent Swordsman LV5"
     ]
     utility = [
         "Warrior Lady of the Wasteland",
@@ -476,7 +475,7 @@ def only_warrior():
         "Mystic Swordsman LV2",
         "Dimensional Warrior",
         "Dandylion",
-        "D.D. Assailant",
+        "D. D. Assailant",
         "Blade Knight",
         "D.D. Warrior Lady",
         "Marauding Captain",
@@ -583,8 +582,8 @@ def only_level():
         ["Armed Dragon LV3", "Armed Dragon LV5"],
         ["Horus the Black Flame Dragon LV4", "Horus the Black Flame Dragon LV6"],
         ["Mystic Swordsman LV4", "Mystic Swordsman LV6"],
-        ["Silent Swordsman Lv3", "Silent Swordsman Lv5"],
-        ["Ultimate Insect Lv3", "Ultimate Insect Lv5"],
+        ["Silent Swordsman LV3", "Silent Swordsman LV5"],
+        ["Ultimate Insect LV3", "Ultimate Insect LV5"],
     ]
     card_rules: List[CardRule] = []
     level_up_rule = InnerCardRule(["Level Up!"], 3)
@@ -599,44 +598,14 @@ def only_level():
 
 
 def only_normal():
-    beaters = [
-        "Archfiend Soldier",
-        "Gemini Elf",
-        "Insect Knight",
-        "Luster Dragon",
-        "Mad Dog of Darkness",
-        "Vorse Raider",
-        "Blazing Inpachi",
-        "Gagagigo",
-        "Mechanicalchaser",
-        "7 Colored Fish",
-        "Dark Blade",
-        "Dunames Dark Witch",
-        "Giant Red Snake",
-        "Gil Garth",
-        "Great Angus",
-        "Harpie's Brother",
-        "La Jinn the Mystical Genie of the Lamp",
-        "Neo Bug",
-        "Nin-Ken Dog",
-        "Opticlops",
-        "Sea Serpent Warrior of Darkness",
-        "X-Head Cannon",
-        "Zure, Knight of Dark World"
-    ]
-    big_beaters = [
-        "Cyber-Tech Alligator",
-        "Summoned Skull",
-        "Giga Gagagigo",
-        "Amphibian Beast",
-        "Beast of Talwar",
-        "Luster Dragon #2",
-        "Terrorking Salmon"
-    ]
+    beaters = find_cards_with(min_attack=1800, max_level=4, card_type="None")
+    big_beaters = find_cards_with(min_attack=2400, min_level=5,  max_level=6, card_type="None")
     return CardRule(beaters, min_amount=9, additional_cards=InnerCardRule(big_beaters, min_amount=1))
 
-def find_cards_with(min_attack: int = None, max_attack: int = None, min_defence:int = None, min_level: int = None, max_level: int = None,
-                    attribute: str = None, no_nomi: bool = True):
+
+def find_cards_with(min_attack: int = None, max_attack: int = None, min_defence:int = None,
+                    min_level: int = None, max_level: int = None, attribute: str = None,
+                    card_type: str = None, no_nomi: bool = True):
     result: List[str] = []
     for name, card in cards.items():
         if min_attack and not card.attack >= min_attack:
@@ -645,11 +614,13 @@ def find_cards_with(min_attack: int = None, max_attack: int = None, min_defence:
             continue
         if min_level and not card.level >= min_level:
             continue
+        if max_level and not card.level <= max_level:
+            continue
         if min_defence and not card.defence >= min_defence:
             continue
-        if max_level and not card.level <= min_attack:
-            continue
         if attribute and card.attribute != attribute:
+            continue
+        if card_type and card.card_type != card_type:
             continue
         if no_nomi and (card.card_type == "Fusion" or card.card_type == "Ritual" or name in nomi_monsters):
             continue
@@ -672,4 +643,5 @@ raise_attack = [
         cards=lambda: find_cards_with(min_attack=2650), min_amount=1)),
     CardRule("Black Pendant", min_amount=1, additional_cards=InnerCardRule(
         cards=lambda: find_cards_with(min_attack=2550), min_amount=1)),
+    # todo
 ]

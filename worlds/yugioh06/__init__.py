@@ -8,6 +8,7 @@ from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld
 
 import Utils
 from worlds.AutoWorld import WebWorld, World
+from .banlists import banlists
 from .boosterpack_contents import get_booster_contents
 
 from .boosterpacks import booster_contents as booster_contents
@@ -223,8 +224,10 @@ class Yugioh06World(World):
                     self.starter_deck[card] = amount
             if total_amount < 40:
                 self.starter_deck[empty_card_data] = 40 - total_amount
-
         # set structure deck
+        banlist = banlists[self.options.banlist.current_key]
+        # make sure the structure deck is a legal deck
+        card_list = [card for card in card_list if card.card_type != "Fusion" and card not in banlist["Forbidden"]]
         if self.options.structure_deck.current_key == "random_deck":
             self.options.structure_deck.value = self.random.randint(0, 5)
         if self.options.structure_deck.value == self.options.structure_deck.option_random_singles:
@@ -234,10 +237,19 @@ class Yugioh06World(World):
                 self.structure_deck[card] = 1
             self.options.structure_deck.value = self.options.structure_deck.option_worst
         elif self.options.structure_deck.value == self.options.structure_deck.option_random_playsets:
-            for i in range(0, 14):
+            amount = 0
+            while amount < 40:
                 card = self.random.choice(card_list)
                 card_list.remove(card)
-                self.structure_deck[card] = 3
+                if card.name in banlist["Limited"]:
+                    self.structure_deck[card] = 1
+                    amount += 1
+                elif card.name in banlist["Semi-Limited"]:
+                    self.structure_deck[card] = 2
+                    amount += 2
+                else:
+                    self.structure_deck[card] = 3
+                    amount += 3
             self.options.structure_deck.value = self.options.structure_deck.option_worst
         elif self.options.structure_deck.value == self.options.structure_deck.option_worst:
             for card_name, amount in worst_deck.items():
