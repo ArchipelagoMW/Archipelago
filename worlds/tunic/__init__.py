@@ -185,7 +185,11 @@ class TunicWorld(World):
             self.player_location_table.update(grass_location_name_to_id)
 
         if self.options.breakable_shuffle:
-            self.player_location_table.update(breakable_location_name_to_id)
+            if self.options.entrance_rando:
+                self.player_location_table.update(breakable_location_name_to_id)
+            else:
+                self.player_location_table.update({name: num for name, num in breakable_location_name_to_id.items()
+                                                   if not name.startswith("Purgatory")})
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
@@ -304,7 +308,9 @@ class TunicWorld(World):
 
         # creating these after the fool traps are made mostly so we don't have to mess with it
         if self.options.breakable_shuffle:
-            for _ in breakable_location_table:
+            for _, loc_data in breakable_location_table.items():
+                if not self.options.entrance_rando and loc_data.er_region == "Purgatory":
+                    continue
                 items_to_create[f"Money x{self.random.randint(1, 5)}"] += 1
 
         if self.options.start_with_sword:

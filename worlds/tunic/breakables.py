@@ -282,6 +282,39 @@ breakable_location_table: dict[str, TunicLocationData] = {
     "Monastery Back - Crate 9": TunicLocationData("Monastery Back", breakable="Crate"),
     "Cathedral - Pot 1": TunicLocationData("Cathedral Main", breakable="Pot"),
     "Cathedral - Pot 2": TunicLocationData("Cathedral Main", breakable="Pot"),
+    "Purgatory - Pot 1": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 2": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 3": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 4": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 5": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 6": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 7": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 8": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 9": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 10": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 11": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 12": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 13": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 14": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 15": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 16": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 17": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 18": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 19": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 20": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 21": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 22": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 23": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 24": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 25": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 26": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 27": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 28": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 29": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 30": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 31": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 32": TunicLocationData("Purgatory", breakable="Pot"),
+    "Purgatory - Pot 33": TunicLocationData("Purgatory", breakable="Pot"),
 }
 
 
@@ -383,6 +416,8 @@ def create_breakable_exclusive_regions(world: "TunicWorld") -> list[Region]:
 
 def set_breakable_location_rules(world: "TunicWorld") -> None:
     for loc_name, loc_data in breakable_location_table.items():
+        if not world.options.entrance_rando and loc_data.er_region == "Purgatory":
+            continue
         location = world.get_location(loc_name)
         if loc_data.breakable == "Leaf Pile":
             set_rule(location, lambda state: can_break_leaf_piles(state, world))
