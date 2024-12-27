@@ -125,19 +125,13 @@ def set_rules(world):
         "Can Exodia Win":
             lambda state: state.has_all(world.progression_cards["Can Exodia Win"], player),
         "Can Last Turn Win":
-            lambda state: state.has_all(["Last Turn", "Wall of Revealing Light"], player) and
-                          (state.has_any(["Jowgen the Spiritualist", "Jowls of Dark Demise", "Non Aggression Area"],
-                                         player)
-                           or state.has_all(["Cyber-Stein", "The Last Warrior from Another Planet"], player)),
+            lambda state: state.has_all(world.progression_cards["Can Last Turn Win"], player),
         "Can Yata Lock":
-            lambda state: state.has_all(["Yata-Garasu", "Chaos Emperor Dragon - Envoy of the End", "Sangan"], player)
-                          and state.has_any(["No Banlist", "Banlist September 2003"], player),
+            lambda state: state.has_all(world.progression_cards["Can Yata Lock"], player),
         "Can Stall with Monsters":
-            lambda state: state.count_from_list_unique(
-                ["Spirit Reaper", "Giant Germ", "Marshmallon", "Nimble Momonga"], player) >= 2,
+            lambda state: state.has_all(world.progression_cards["Can Stall with Monsters"], player),
         "Can Stall with ST":
-            lambda state: state.count_from_list_unique(["Level Limit - Area B", "Gravity Bind", "Messenger of Peace"],
-                                                       player) >= 2,
+            lambda state: state.has_all(world.progression_cards["Can Stall with ST"], player),
         "Can Gain LP Every Turn": lambda state: state.has_all(world.progression_cards["Can Gain LP Every Turn"],
                                                               player),
         "Can Self Mill": lambda state: state.has_all(world.progression_cards["Can Self Mill"], player),
@@ -148,7 +142,7 @@ def set_rules(world):
     access_rules = {
         # Limited
         "LD01 All except Level 4 forbidden":
-            lambda state: yugioh06_difficulty(state, player, 2),
+            lambda state: state.has_all(world.progression_cards["LD01 All except Level 4 forbidden"], player),
         "LD02 Medium/high Level forbidden":
             lambda state: yugioh06_difficulty(state, player, 1),
         "LD03 ATK 1500 or more forbidden":
@@ -166,26 +160,23 @@ def set_rules(world):
         "LD09 Sets Forbidden":
             lambda state: yugioh06_difficulty(state, player, 1),
         "LD10 All except LV monsters forbidden":
-            lambda state: only_level(state, player) and yugioh06_difficulty(state, player, 2),
+            lambda state: state.has_all(world.progression_cards["LD10 All except LV monsters forbidden"], player),
         "LD11 All except Fairies forbidden":
-            lambda state: only_fairy(state, player) and yugioh06_difficulty(state, player, 2),
+            lambda state: state.has_all(world.progression_cards["LD11 All except Fairies forbidden"], player),
         "LD12 All except Wind forbidden":
-            lambda state: only_wind(state, player) and yugioh06_difficulty(state, player, 2),
+            lambda state: state.has_all(world.progression_cards["LD12 All except Wind forbidden"], player),
         "LD13 All except monsters forbidden":
             lambda state: yugioh06_difficulty(state, player, 3),
         "LD14 Level 3 or below forbidden":
-            lambda state: yugioh06_difficulty(state, player, 1),
+            lambda state: state.has_all(world.progression_cards["LD14 Level 3 or below forbidden"], player),
         "LD15 DEF 1500 or less forbidden":
-            lambda state: yugioh06_difficulty(state, player, 3),
+            lambda state: state.has_all(world.progression_cards["LD15 DEF 1500 or less forbidden"], player),
         "LD16 Effect Monsters forbidden":
-            lambda state: only_normal(state, player) and yugioh06_difficulty(state, player, 4),
+            lambda state: state.has_all(world.progression_cards["LD16 Effect Monsters forbidden"], player),
         "LD17 Spells forbidden":
             lambda state: yugioh06_difficulty(state, player, 3),
         "LD18 Attacks forbidden":
-            lambda state: state.has_all(["Wave-Motion Cannon", "Stealth Bird"], player)
-                          and state.count_from_list_unique(["Dark World Lightning", "Nobleman of Crossout",
-                                                            "Shield Crash", "Tribute to the Doomed"], player) >= 2
-                          and yugioh06_difficulty(state, player, 3),
+            lambda state: state.has_all(world.progression_cards["LD18 Attacks forbidden"], player),
         "LD19 All except E-Hero's forbidden":
             lambda state: state.has_any(["Polymerization", "Fusion Gate"], player) and
                           count_has_materials(state, ["Elemental Hero Flame Wingman",
@@ -196,9 +187,9 @@ def set_rules(world):
                                                       "Elemental Hero Wildedge"], player) >= 3 and
                           yugioh06_difficulty(state, player, 3),
         "LD20 All except Warriors forbidden":
-            lambda state: only_warrior(state, player) and yugioh06_difficulty(state, player, 2),
+            lambda state: state.has_all(world.progression_cards["LD20 All except Warriors forbidden"], player),
         "LD21 All except Dark forbidden":
-            lambda state: only_dark(state, player) and yugioh06_difficulty(state, player, 2),
+            lambda state: state.has_all(world.progression_cards["LD21 All except Dark forbidden"], player),
         "LD22 All limited cards forbidden":
             lambda state: yugioh06_difficulty(state, player, 3),
         "LD23 Refer to Mar 05 Banlist":

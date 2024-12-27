@@ -2,6 +2,7 @@ import logging
 from typing import List, NamedTuple, Callable, Dict
 
 from worlds.yugioh06 import cards
+from worlds.yugioh06.boosterpack_contents import not_in_standard_pool
 from worlds.yugioh06.card_data import nomi_monsters
 from worlds.yugioh06.structure_deck import structure_contents
 
@@ -17,43 +18,12 @@ class InnerCardRule(NamedTuple):
 class CardRule(NamedTuple):
     cards: str | List[str] | Callable
     min_amount: int
-    additional_cards: InnerCardRule | List[InnerCardRule] | Callable = []
     amount_protocol: str = "total"
-
-
-def find_cards_with(min_attack: int = None, attribute: str = None, no_nomi: bool = True):
-    result: List[str] = []
-    for name, card in cards.items():
-        if min_attack and not card.attack >= min_attack:
-            continue
-        if attribute and card.attribute != attribute:
-            continue
-        if no_nomi and (card.card_type == "Fusion" or card.card_type == "Ritual" or name in nomi_monsters):
-            continue
-        result.append(name)
-    return result
-
-
-raise_attack = [
-    CardRule("A Legendary Ocean", additional_cards=InnerCardRule(
-        cards=lambda: find_cards_with(min_attack=2850, attribute="WATER"), min_amount=1), min_amount=1),
-    CardRule("Ancient Gear Castle", min_amount=1,
-             additional_cards=InnerCardRule(cards="Ancient Gear Golem", min_amount=1)),
-    CardRule("Axe of Despair", min_amount=1, additional_cards=InnerCardRule(
-        cards=lambda: find_cards_with(min_attack=2050), min_amount=1)),
-    CardRule("Ballista of Rampart Smashing", min_amount=1, additional_cards=InnerCardRule(
-        cards=lambda: find_cards_with(min_attack=1550), min_amount=1)),
-    CardRule("Banner of Courage", min_amount=1, additional_cards=InnerCardRule(
-        cards=lambda: find_cards_with(min_attack=2850), min_amount=1)),
-    CardRule("Banner of Courage", min_amount=1, additional_cards=InnerCardRule(
-        cards=lambda: find_cards_with(min_attack=2650), min_amount=1)),
-    CardRule("Black Pendant", min_amount=1, additional_cards=InnerCardRule(
-        cards=lambda: find_cards_with(min_attack=2550), min_amount=1)),
-]
+    additional_cards: InnerCardRule | List[InnerCardRule] | Callable = []
 
 
 def set_card_rules(world):
-    rules = {
+    evergreen_rules = {
         "Max ATK Bonus": raise_attack,
         "Skull Servant Finish Bonus":
             CardRule("Skull Servant", 1),
@@ -70,7 +40,7 @@ def set_card_rules(world):
         "Extremely Low LP Bonus":
             CardRule(["Wall of Revealing Light", "Messenger of Peace"], 1, amount_protocol="each",
                      additional_cards=InnerCardRule(
-                         cards=lambda: {name for name, c in cards.items() if c.attack % 100 != 0},
+                         cards=lambda: {name for name, c in cards.items() if c.attack % 100 != 0 and c.level <= 4},
                          min_amount=1)),
         "Effect Damage Only Bonus":
             [CardRule(["Solar Flare Dragon", "UFO Turtle"], 2, amount_protocol="each"),
@@ -141,21 +111,56 @@ def set_card_rules(world):
         # Events
         "Exodia":
             CardRule(["Exodia the Forbidden One", "Left Arm of the Forbidden One",
-                    "Right Arm of the Forbidden One", "Left Leg of the Forbidden One",
+                      "Right Arm of the Forbidden One", "Left Leg of the Forbidden One",
                       "Right Leg of the Forbidden One", "Heart of the Underdog"], min_amount=1,
                      amount_protocol="each"),
         "Can Exodia Win":
             CardRule(["Heart of the Underdog"], min_amount=1,
                      amount_protocol="each"),
+        "Can Last Turn Win":
+            [CardRule(["Last Turn", "Wall of Revealing Light"], 1, "each",
+                      InnerCardRule(["Jowgen the Spiritualist", "Jowls of Dark Demise", "Non Aggression Area"], 3)),
+             CardRule(["Last Turn", "Wall of Revealing Light"], 1, "each",
+                      InnerCardRule(["Cyber-Stein", "The Last Warrior from Another Planet"], 3)),
+             ],
+        "Can Yata Lock": CardRule(["Yata-Garasu", "Chaos Emperor Dragon - Envoy of the End", "Sangan"], 1, "each"),
+        "Can Stall with Monsters": CardRule(["Spirit Reaper", "Giant Germ", "Marshmallon", "Nimble Momonga"], 6),
+        "Can Stall with ST": CardRule(["Level Limit - Area B", "Gravity Bind", "Messenger of Peace"], 4),
         "Can Gain LP Every Turn":
             CardRule(["Solemn Wishes", "Cure Mermaid",
                       "Dancing Fairy", "Princess Pikeru", "Kiseitai"], 9),
         "Can Self Mill":
             CardRule(["Reasoning", "Monster Gate", "Magical Merchant"], 3),
-
-        # Limited
-        "LD20 All except Warriors forbidden": only_warrior()
     }
+
+    challenge_rules = {
+        # Limited
+        "LD01 All except Level 4 forbidden": CardRule(cards=lambda: find_cards_with(min_attack=1700, max_attack=2000,
+                                                                                    min_level=4, max_level=4),
+                                                      min_amount=12),
+        "LD02 Medium/high Level forbidden": CardRule(cards=lambda: find_cards_with(min_attack=1700, max_attack=2000,
+                                                                                   max_level=4), min_amount=12),
+        "LD03 ATK 1500 or more forbidden": CardRule(cards=lambda: find_cards_with(min_attack=1300, max_attack=1500,
+                                                                                  max_level=4), min_amount=12),
+        "LD10 All except LV monsters forbidden": only_level(),
+        "LD11 All except Fairies forbidden": only_fairy(),
+        "LD12 All except Wind forbidden": only_wind(),
+        "LD14 Level 3 or below forbidden": CardRule(cards=lambda: find_cards_with(min_attack=1700, max_attack=2000,
+                                                                                  min_level=4), min_amount=12),
+        "LD15 DEF 1500 or less forbidden": CardRule(cards=lambda: find_cards_with(min_attack=1500, max_attack=2000,
+                                                                                  min_defence=1550, max_level=4),
+                                                    min_amount=12),
+        "LD16 Effect Monsters forbidden": only_normal(),
+        "LD18 Attacks forbidden": CardRule(["Wave-Motion Cannon", "Stealth Bird"], 3,"each",
+                                           InnerCardRule(["Dark World Lightning", "Nobleman of Crossout",
+                                                          "Shield Crash", "Tribute to the Doomed"], 4)),
+        "LD20 All except Warriors forbidden": only_warrior(),
+        "LD21 All except Dark forbidden": only_dark(),
+        "LD30 All except Light forbidden": only_light(),
+    }
+
+    rules = {**evergreen_rules, **{k: v for k, v in challenge_rules.items() if k not in world.removed_challenges}}
+
     progression_cards = world.progression_cards
     cards_in_booster = world.progression_cards_in_booster
     cards_in_starter = world.progression_cards_in_start
@@ -168,12 +173,12 @@ def set_card_rules(world):
     else:
         starting_cards = structure_contents[world.options.structure_deck.current_key]
     if world.starter_deck:
-        for card in world.structure_deck:
+        for card in world.starter_deck:
             if card.name in starting_cards:
                 starting_cards[card.name] += world.structure_deck[card]
             else:
                 starting_cards[card.name] = world.structure_deck[card]
-    else:
+    elif world.options.starter_deck.value != world.options.starter_deck.option_remove:
         for card, amount in structure_contents["starter"].items():
             if card in starting_cards:
                 starting_cards[card] += amount
@@ -237,6 +242,7 @@ def resolve_rule(world, rule, starter_cards: Dict[str, int]):
         potential_cards.extend(rule.cards)
     if rule.amount_protocol == "total":
         overlap = [x for x in potential_cards if x in starter_cards.keys()]
+        potential_cards = [x for x in potential_cards if x in overlap or x not in not_in_standard_pool]
         a = 0
         chosen_starters: List[str] = []
         potential_starters: List[str] = []
@@ -271,6 +277,186 @@ def resolve_rule(world, rule, starter_cards: Dict[str, int]):
         return chosen_cards, chosen_starters
 
 
+def only_light():
+    beaters = [
+        "Dunames Dark Witch",
+        "X-Head Cannon",
+        "Homunculus the Alchemic Being",
+        "Hysteric Fairy",
+        "Ninja Grandmaster Sasuke"
+    ]
+    big_beaters = [
+        "Chaos Command Magician",
+        "Cybernetic Magician",
+        "Kaiser Glider",
+        "The Agent of Judgment - Saturn",
+        "Zaborg the Thunder Monarch",
+        "Cyber Dragon"
+    ]
+    utility = [
+        "D.D. Warrior Lady",
+        "Mystic Swordsman LV2",
+        "Y-Dragon Head",
+        "Z-Metal Tank",
+    ]
+    return CardRule(utility + beaters, min_amount=6, additional_cards=[
+        InnerCardRule(big_beaters, min_amount=1),
+        InnerCardRule(["Shining Angel"], min_amount=3),
+    ])
+
+
+def only_dark():
+    beaters = [
+        "Dark Elf",
+        "Archfiend Soldier",
+        "Mad Dog of Darkness",
+        "Vorse Raider",
+        "Skilled Dark Magician",
+        "Skull Descovery Knight",
+        "Mechanicalchaser",
+        "Dark Blade",
+        "Gil Garth",
+        "La Jinn the Mystical Genie of the Lamp",
+        "Opticlops",
+        "Zure, Knight of Dark World",
+        "Brron, Mad King of Dark World",
+        "D.D. Survivor",
+        "Exarion Universe",
+        "Kycoo the Ghost Destroyer",
+        "Regenerating Mummy"
+    ]
+    big_beaters = [
+        "Summoned Skull",
+        "Skull Archfiend of Lightning",
+        "The End of Anubis",
+        "Dark Ruler Ha Des",
+        "Beast of Talwar",
+        "Inferno Hammer",
+        "Jinzo",
+        "Ryu Kokki"
+    ]
+    utility = [
+        "Legendary Fiend",
+        "Don Zaloog",
+        "Newdoria",
+        "Sangan",
+        "Spirit Reaper",
+        "Giant Germ"
+    ]
+    return CardRule(utility + beaters, min_amount=9, additional_cards=[
+        InnerCardRule(big_beaters, min_amount=1),
+        InnerCardRule(["Mystic Tomato"], min_amount=3),
+    ])
+
+
+def only_earth():
+    beaters = [
+        "Berserk Gorilla",
+        "Gemini Elf",
+        "Insect Knight",
+        "Toon Gemini Elf",
+        "Familiar-Possessed - Aussa",
+        "Neo Bug",
+        "Blindly Loyal Goblin",
+        "Chiron the Mage",
+        "Gearfried the Iron Knight"
+    ]
+    big_beaters = [
+        "Dark Driceratops",
+        "Granmarg the Rock Monarch",
+        "Hieracosphinx",
+        "Saber Beetle"
+    ]
+    utility = [
+        "Hyper Hammerhead",
+        "Green Gadget",
+        "Red Gadget",
+        "Yellow Gadget",
+        "Dimensional Warrior",
+        "Enraged Muka Muka",
+        "Exiled Force"
+    ]
+    return CardRule(utility + beaters, min_amount=6, additional_cards=[
+        InnerCardRule(big_beaters, min_amount=1),
+        InnerCardRule(["Giant Rat"], min_amount=3),
+    ])
+
+
+def only_water():
+    beaters = [
+        "Gagagigo",
+        "Familiar-Possessed - Eria",
+        "7 Colored Fish",
+        "Sea Serpent Warrior of Darkness",
+        "Abyss Soldier"
+    ]
+    big_beaters = [
+        "Giga Gagagigo",
+        "Amphibian Beast",
+        "Terrorking Salmon",
+        "Mobius the Frost Monarch"
+    ]
+    utility = [
+        "Revival Jam",
+        "Yomi Ship",
+        "Treeborn Frog"
+    ]
+    return CardRule(utility + beaters, min_amount=6, additional_cards=[
+        InnerCardRule(big_beaters, min_amount=1),
+        InnerCardRule(["Mother Grizzly"], min_amount=3),
+    ])
+
+
+def only_fire():
+    beaters = [
+        "Blazing Inpachi",
+        "Familiar-Possessed - Hiita",
+        "Great Angus",
+        "Fire Beaters"
+    ]
+    big_beaters = [
+        "Thestalos the Firestorm Monarch",
+        "Horus the Black Flame Dragon LV6"
+    ]
+    utility = [
+        "Solar Flare Dragon",
+        "Tenkabito Shien",
+        "Ultimate Baseball Kid"
+    ]
+    return CardRule(utility + beaters, min_amount=6, additional_cards=[
+        InnerCardRule(big_beaters, min_amount=1),
+        InnerCardRule(["UFO Turtle"], min_amount=3),
+    ])
+
+
+def only_wind():
+    beaters = [
+        "Luster Dragon",
+        "Slate Warrior",
+        "Spear Dragon",
+        "Familiar-Possessed - Wynn",
+        "Harpie's Brother",
+        "Nin-Ken Dog",
+        "Cyber Harpie Lady",
+        "Oxygeddon"
+    ]
+    big_beaters = [
+        "Cyber-Tech Alligator",
+        "Luster Dragon #2",
+        "Armed Dragon LV5",
+        "Roc from the Valley of Haze"
+    ]
+    utility = [
+        "Armed Dragon LV3",
+        "Twin-Headed Behemoth",
+        "Harpie Lady 1"
+    ]
+    return CardRule(utility + beaters, min_amount=6, additional_cards=[
+        InnerCardRule(big_beaters, min_amount=1),
+        InnerCardRule(["UFO Turtle"], min_amount=3),
+    ])
+
+
 def only_warrior():
     beaters = [
         "Dark Blade",
@@ -297,7 +483,193 @@ def only_warrior():
         "Command Knight",
         "Reinforcement of the Army"
     ]
-    return CardRule(utility, min_amount=12, additional_cards=[
-        InnerCardRule(beaters, min_amount=3),
-        InnerCardRule(big_beaters, min_amount=1)
-    ])
+    return CardRule(utility + beaters, min_amount=9, additional_cards=InnerCardRule(big_beaters, min_amount=1))
+
+
+def only_fairy():
+    beaters = [
+        "Dunames Dark Witch",
+        "Hysteric Fairy",
+    ]
+    big_beaters = [
+        "The Agent of Judgment - Saturn",
+        "Airknight Parshath"
+    ]
+    utility = [
+        "Dancing Fairy",
+        "Zolga",
+        "Shining Angel",
+        "Kelbek",
+        "Mudora",
+        "Asura Priest",
+        "Cestus of Dagla"
+    ]
+    return CardRule(utility + beaters, min_amount=9, additional_cards=InnerCardRule(big_beaters, min_amount=1))
+
+
+def only_zombie():
+    return CardRule([
+        "Regenerating Mummy",
+        "Ryu Kokki",
+        "Spirit Reaper",
+        "Master Kyonshee",
+        "Curse of Vampire",
+        "Vampire Lord",
+        "Goblin Zombie",
+        "Curse of Vampire",
+        "Vampire Lord",
+        "Goblin Zombie",
+        "Book of Life",
+        "Call of the Mummy"
+    ], 12, additional_cards=InnerCardRule(["Pyramid Turtle"], 3))
+
+
+def only_dragon():
+    beaters = [
+        "Luster Dragon",
+        "Spear Dragon",
+        "Cave Dragon"
+        "Armed Dragon LV3",
+        "Masked Dragon",
+        "Twin-Headed Behemoth",
+        "Element Dragon",
+        "Troop Dragon",
+        "Horus the Black Flame Dragon LV4",
+        "Stamping Destruction"
+    ]
+    big_beaters = [
+        "Luster Dragon #2",
+        "Armed Dragon LV5",
+        "Kaiser Glider",
+        "Horus the Black Flame Dragon LV6"
+    ]
+    return CardRule(beaters, min_amount=9, additional_cards=InnerCardRule(big_beaters, min_amount=1))
+
+
+def only_spellcaster():
+    beaters = [
+        "Dark Elf",
+        "Gemini Elf",
+        "Skilled Dark Magician",
+        "Toon Gemini Elf",
+        "Kycoo the Ghost Destroyer",
+        "Familiar-Possessed - Aussa",
+        "Familiar-Possessed - Eria",
+        "Familiar-Possessed - Hiita",
+        "Familiar-Possessed - Wynn",
+    ]
+    big_beaters = [
+        "Chaos Command Magician",
+        "Cybernetic Magician"
+    ]
+    utility = [
+        "Breaker the magical Warrior",
+        "The Tricky",
+        "Injection Fairy Lily",
+        "Magician of Faith",
+        "Tsukuyomi",
+        "Gravekeeper's Spy",
+        "Gravekeeper's Guard",
+        "Summon Priest",
+        "Old Vindictive Magician",
+        "Apprentice Magician",
+        "Magical Dimension"
+    ]
+    return CardRule(utility + beaters, min_amount=9, additional_cards=InnerCardRule(big_beaters, min_amount=1))
+
+
+def only_level():
+    lv_pairs = [
+        ["Armed Dragon LV3", "Armed Dragon LV5"],
+        ["Horus the Black Flame Dragon LV4", "Horus the Black Flame Dragon LV6"],
+        ["Mystic Swordsman LV4", "Mystic Swordsman LV6"],
+        ["Silent Swordsman Lv3", "Silent Swordsman Lv5"],
+        ["Ultimate Insect Lv3", "Ultimate Insect Lv5"],
+    ]
+    card_rules: List[CardRule] = []
+    level_up_rule = InnerCardRule(["Level Up!"], 3)
+    # one pair and bunch of lose LV monsters
+    for pair in lv_pairs:
+        inner_cards = list(lv_pairs)
+        inner_cards.remove(pair)
+        inner_cards = sum(inner_cards, [])
+        rule = CardRule(pair, 6, additional_cards=[level_up_rule, InnerCardRule(inner_cards, 6)])
+        card_rules.append(rule)
+    return card_rules
+
+
+def only_normal():
+    beaters = [
+        "Archfiend Soldier",
+        "Gemini Elf",
+        "Insect Knight",
+        "Luster Dragon",
+        "Mad Dog of Darkness",
+        "Vorse Raider",
+        "Blazing Inpachi",
+        "Gagagigo",
+        "Mechanicalchaser",
+        "7 Colored Fish",
+        "Dark Blade",
+        "Dunames Dark Witch",
+        "Giant Red Snake",
+        "Gil Garth",
+        "Great Angus",
+        "Harpie's Brother",
+        "La Jinn the Mystical Genie of the Lamp",
+        "Neo Bug",
+        "Nin-Ken Dog",
+        "Opticlops",
+        "Sea Serpent Warrior of Darkness",
+        "X-Head Cannon",
+        "Zure, Knight of Dark World"
+    ]
+    big_beaters = [
+        "Cyber-Tech Alligator",
+        "Summoned Skull",
+        "Giga Gagagigo",
+        "Amphibian Beast",
+        "Beast of Talwar",
+        "Luster Dragon #2",
+        "Terrorking Salmon"
+    ]
+    return CardRule(beaters, min_amount=9, additional_cards=InnerCardRule(big_beaters, min_amount=1))
+
+def find_cards_with(min_attack: int = None, max_attack: int = None, min_defence:int = None, min_level: int = None, max_level: int = None,
+                    attribute: str = None, no_nomi: bool = True):
+    result: List[str] = []
+    for name, card in cards.items():
+        if min_attack and not card.attack >= min_attack:
+            continue
+        if max_attack and not card.attack <= max_attack:
+            continue
+        if min_level and not card.level >= min_level:
+            continue
+        if min_defence and not card.defence >= min_defence:
+            continue
+        if max_level and not card.level <= min_attack:
+            continue
+        if attribute and card.attribute != attribute:
+            continue
+        if no_nomi and (card.card_type == "Fusion" or card.card_type == "Ritual" or name in nomi_monsters):
+            continue
+        result.append(name)
+    return result
+
+
+raise_attack = [
+    CardRule("A Legendary Ocean", additional_cards=InnerCardRule(
+        cards=lambda: find_cards_with(min_attack=2850, attribute="WATER"), min_amount=1), min_amount=1),
+    CardRule("Ancient Gear Castle", min_amount=1,
+             additional_cards=InnerCardRule(cards="Ancient Gear Golem", min_amount=1)),
+    CardRule("Axe of Despair", min_amount=1, additional_cards=InnerCardRule(
+        cards=lambda: find_cards_with(min_attack=2050), min_amount=1)),
+    CardRule("Ballista of Rampart Smashing", min_amount=1, additional_cards=InnerCardRule(
+        cards=lambda: find_cards_with(min_attack=1550), min_amount=1)),
+    CardRule("Banner of Courage", min_amount=1, additional_cards=InnerCardRule(
+        cards=lambda: find_cards_with(min_attack=2850), min_amount=1)),
+    CardRule("Banner of Courage", min_amount=1, additional_cards=InnerCardRule(
+        cards=lambda: find_cards_with(min_attack=2650), min_amount=1)),
+    CardRule("Black Pendant", min_amount=1, additional_cards=InnerCardRule(
+        cards=lambda: find_cards_with(min_attack=2550), min_amount=1)),
+]

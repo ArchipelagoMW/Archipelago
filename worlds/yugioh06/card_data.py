@@ -4,6 +4,8 @@ from typing import NamedTuple, Dict, List
 
 import Utils
 from settings import get_settings
+from worlds.yugioh06.boosterpack_contents import contents
+from worlds.yugioh06.boosterpacks_data import booster_pack_data, booster_card_id_to_name
 
 monster_types = {
     0x00: "None",
@@ -50,9 +52,9 @@ card_types = {
     0x0: "None",
     0x1: "Effect",
     0x2: "Fusion",
-    0x3: "Fusion/Effect",
+    0x3: "Fusion",
     0x4: "Ritual",
-    0x5: "Ritual/Effect",
+    0x5: "Ritual",
     0x6: "Toon",
     0x7: "Spirit",
     0x8: "Union",
@@ -92,7 +94,7 @@ class CardData(NamedTuple):
     structure_id: int
     starter_id: int
 
-
+# auto-generated
 cards: Dict[str, CardData] = {
     "Blue-Eyes White Dragon": CardData(1, 4007, "Blue-Eyes White Dragon", "89631139", 0, False, 3000, 2500, 8,
                                        "Dragon", "LIGHT", "None", "None", 0x3E9C, 0x0FA7),
@@ -1305,11 +1307,11 @@ cards: Dict[str, CardData] = {
     "Toon Summoned Skull": CardData(591, 4735, "Toon Summoned Skull", "91842653", 0, False, 2500, 1200, 6,
                                     "Fiend", "DARK", "Toon", "None", 0x49FC, 0x127F),
     "Relinquished": CardData(592, 4737, "Relinquished", "64631466", 0, False, 0, 0, 1,
-                             "Spellcaster", "DARK", "Ritual/Effect", "None", 0x4A04, 0x1281),
+                             "Spellcaster", "DARK", "Ritual", "None", 0x4A04, 0x1281),
     "Thousand-Eyes Idol": CardData(593, 4739, "Thousand-Eyes Idol", "27125110", 0, False, 0, 0, 1,
                                    "Spellcaster", "DARK", "None", "None", 0x4A0C, 0x1283),
     "Thousand-Eyes Restrict": CardData(594, 4740, "Thousand-Eyes Restrict", "63519819", 0, False, 0, 0, 1,
-                                       "Spellcaster", "DARK", "Fusion/Effect", "None", 0x4A10, 0x1284),
+                                       "Spellcaster", "DARK", "Fusion", "None", 0x4A10, 0x1284),
     "Steel Ogre Grotto #2": CardData(595, 4741, "Steel Ogre Grotto #2", "90908427", 0, False, 1900, 2200, 6,
                                      "Machine", "EARTH", "None", "None", 0x4A14, 0x1285),
     "Blast Sphere": CardData(596, 4742, "Blast Sphere", "26302522", 0, False, 1400, 1400, 4,
@@ -1345,7 +1347,7 @@ cards: Dict[str, CardData] = {
                          "Fiend", "DARK", "Effect", "None", 0x4A4C, 0x1293),
     "Chimera the Flying Mythical Beast": CardData(610, 4756, "Chimera the Flying Mythical Beast", "04796100", 0, False,
                                                   2100, 1800, 6,
-                                                  "Beast", "WIND", "Fusion/Effect", "None", 0x4A50, 0x1294),
+                                                  "Beast", "WIND", "Fusion", "None", 0x4A50, 0x1294),
     "Gear Golem the Moving Fortress": CardData(611, 4757, "Gear Golem the Moving Fortress", "30190809", 0, False, 800,
                                                2200, 4,
                                                "Machine", "EARTH", "Effect", "None", 0x4A54, 0x1295),
@@ -1395,7 +1397,7 @@ cards: Dict[str, CardData] = {
                                  "Machine", "LIGHT", "Effect", "None", 0x4AB0, 0x12AC),
     "The Last Warrior from Another Planet": CardData(634, 4785, "The Last Warrior from Another Planet", "86099788", 0,
                                                      False, 2350, 2300, 7,
-                                                     "Warrior", "EARTH", "Fusion/Effect", "None", 0x4AC4, 0x12B1),
+                                                     "Warrior", "EARTH", "Fusion", "None", 0x4AC4, 0x12B1),
     "Dunames Dark Witch": CardData(635, 4786, "Dunames Dark Witch", "12493482", 0, True, 1800, 1050, 4,
                                    "Fairy", "LIGHT", "None", "None", 0x4AC8, 0x12B2),
     "Garnecia Elefantis": CardData(636, 4787, "Garnecia Elefantis", "49888191", 0, False, 2400, 2000, 7,
@@ -1727,7 +1729,7 @@ cards: Dict[str, CardData] = {
                                             8,
                                             "Rock", "EARTH", "Effect", "None", 0x4E28, 0x138A),
     "Alligator's Sword Dragon": CardData(799, 5003, "Alligator's Sword Dragon", "03366982", 0, False, 1700, 1500, 5,
-                                         "Dragon", "WIND", "Fusion/Effect", "None", 0x4E2C, 0x138B),
+                                         "Dragon", "WIND", "Fusion", "None", 0x4E2C, 0x138B),
     "Vorse Raider": CardData(800, 5004, "Vorse Raider", "14898066", 0, False, 1900, 1200, 4,
                              "Beast-Warrior", "DARK", "None", "None", 0x4E30, 0x138C),
     "Vorse Raider Alt 1": CardData(801, 5004, "Vorse Raider", "14898066", 1, False, 1900, 1200, 4,
@@ -2137,7 +2139,7 @@ cards: Dict[str, CardData] = {
     "Dark Ruler Ha Des": CardData(1001, 5301, "Dark Ruler Ha Des", "53982768", 0, True, 2450, 1600, 6,
                                   "Fiend", "DARK", "Effect", "None", 0x52D4, 0x14B5),
     "Dark Balter the Terrible": CardData(1002, 5302, "Dark Balter the Terrible", "80071763", 0, True, 2000, 1200, 5,
-                                         "Fiend", "DARK", "Fusion/Effect", "None", 0x52D8, 0x14B6),
+                                         "Fiend", "DARK", "Fusion", "None", 0x52D8, 0x14B6),
     "Lesser Fiend": CardData(1003, 5303, "Lesser Fiend", "16475472", 0, True, 2100, 1000, 5,
                              "Fiend", "DARK", "Effect", "None", 0x52DC, 0x14B7),
     "Possessed Dark Soul": CardData(1004, 5304, "Possessed Dark Soul", "52860176", 0, False, 1200, 800, 3,
@@ -2166,7 +2168,7 @@ cards: Dict[str, CardData] = {
     "Marauding Captain": CardData(1015, 5318, "Marauding Captain", "02460565", 0, False, 1200, 400, 3,
                                   "Warrior", "EARTH", "Effect", "None", 0x5318, 0x14C6),
     "Ryu Senshi": CardData(1016, 5319, "Ryu Senshi", "49868263", 0, False, 2000, 1200, 6,
-                           "Warrior", "EARTH", "Fusion/Effect", "None", 0x531C, 0x14C7),
+                           "Warrior", "EARTH", "Fusion", "None", 0x531C, 0x14C7),
     "Warrior Dai Grepher": CardData(1017, 5320, "Warrior Dai Grepher", "75953262", 0, False, 1700, 1600, 4,
                                     "Warrior", "EARTH", "None", "None", 0x5320, 0x14C8),
     "Frontier Wiseman": CardData(1018, 5322, "Frontier Wiseman", "38742075", 0, False, 1600, 800, 3,
@@ -2203,7 +2205,7 @@ cards: Dict[str, CardData] = {
     "Lizard Soldier": CardData(1033, 5337, "Lizard Soldier", "20831168", 0, False, 1100, 800, 3,
                                "Dragon", "WIND", "None", "None", 0x5364, 0x14D9),
     "Fiend Skull Dragon": CardData(1034, 5338, "Fiend Skull Dragon", "66235877", 0, False, 2000, 1200, 5,
-                                   "Dragon", "WIND", "Fusion/Effect", "None", 0x5368, 0x14DA),
+                                   "Dragon", "WIND", "Fusion", "None", 0x5368, 0x14DA),
     "Cave Dragon": CardData(1035, 5339, "Cave Dragon", "93220472", 0, False, 2000, 100, 4,
                             "Dragon", "WIND", "Effect", "None", 0x536C, 0x14DB),
     "Gray Wing": CardData(1036, 5340, "Gray Wing", "29618570", 0, False, 1300, 700, 3,
@@ -2283,9 +2285,9 @@ cards: Dict[str, CardData] = {
     "Fushi No Tori": CardData(1073, 5382, "Fushi No Tori", "38538445", 0, False, 1200, 0, 4,
                               "Winged Beast", "FIRE", "Spirit", "None", 0x5418, 0x1506),
     "Super Robolady": CardData(1074, 5383, "Super Robolady", "75923050", 0, False, 1200, 500, 6,
-                               "Machine", "EARTH", "Fusion/Effect", "None", 0x541C, 0x1507),
+                               "Machine", "EARTH", "Fusion", "None", 0x541C, 0x1507),
     "Super Roboyarou": CardData(1075, 5384, "Super Roboyarou", "01412158", 0, False, 1200, 500, 6,
-                                "Machine", "EARTH", "Fusion/Effect", "None", 0x5420, 0x1508),
+                                "Machine", "EARTH", "Fusion", "None", 0x5420, 0x1508),
     "Fengsheng Mirror": CardData(1076, 5385, "Fengsheng Mirror", "37406863", 0, False, 0, 0, 0,
                                  "Spell", "Spell", "Spell", "None", 0x5424, 0x1509),
     "Heart of Clear Water": CardData(1077, 5386, "Heart of Clear Water", "64801562", 0, False, 0, 0, 0,
@@ -2448,9 +2450,9 @@ cards: Dict[str, CardData] = {
     "Dark Jeroid": CardData(1155, 5499, "Dark Jeroid", "90980792", 0, False, 1200, 1500, 4,
                             "Fiend", "DARK", "Effect", "None", 0x55EC, 0x157B),
     "Master of Dragon Soldier": CardData(1156, 5501, "Master of Dragon Soldier", "62873545", 0, False, 5000, 5000, 12,
-                                         "Dragon", "LIGHT", "Fusion/Effect", "None", 0x55F4, 0x157D),
+                                         "Dragon", "LIGHT", "Fusion", "None", 0x55F4, 0x157D),
     "F.G.D.": CardData(1157, 5502, "F.G.D.", "99267150", 0, False, 5000, 5000, 12,
-                       "Dragon", "DARK", "Fusion/Effect", "None", 0x55F8, 0x157E),
+                       "Dragon", "DARK", "Fusion", "None", 0x55F8, 0x157E),
     "Queen's Knight": CardData(1158, 5503, "Queen's Knight", "25652259", 0, False, 1500, 1600, 4,
                                "Warrior", "LIGHT", "None", "None", 0x55FC, 0x157F),
     "X-Head Cannon": CardData(1159, 5504, "X-Head Cannon", "62651957", 0, True, 1800, 1500, 4,
@@ -2498,7 +2500,7 @@ cards: Dict[str, CardData] = {
     "Nightmare Horse": CardData(1179, 5527, "Nightmare Horse", "59290628", 0, False, 500, 400, 2,
                                 "Zombie", "DARK", "Effect", "None", 0x565C, 0x1597),
     "Reaper on the Nightmare": CardData(1180, 5528, "Reaper on the Nightmare", "85684223", 0, False, 800, 600, 5,
-                                        "Zombie", "DARK", "Fusion/Effect", "None", 0x5660, 0x1598),
+                                        "Zombie", "DARK", "Fusion", "None", 0x5660, 0x1598),
     "Card Shuffle": CardData(1181, 5529, "Card Shuffle", "12183332", 0, False, 0, 0, 0,
                              "Spell", "Spell", "Spell", "Continuous", 0x5664, 0x1599),
     "Reasoning": CardData(1182, 5530, "Reasoning", "58577036", 0, False, 0, 0, 0,
@@ -2540,15 +2542,15 @@ cards: Dict[str, CardData] = {
     "Y-Dragon Head": CardData(1200, 5552, "Y-Dragon Head", "65622692", 0, False, 1500, 1600, 4,
                               "Machine", "LIGHT", "Union", "None", 0x56C0, 0x15B0),
     "XY-Dragon Cannon": CardData(1201, 5553, "XY-Dragon Cannon", "02111707", 0, True, 2200, 1900, 6,
-                                 "Machine", "LIGHT", "Fusion/Effect", "None", 0x56C4, 0x15B1),
+                                 "Machine", "LIGHT", "Fusion", "None", 0x56C4, 0x15B1),
     "Z-Metal Tank": CardData(1202, 5555, "Z-Metal Tank", "64500000", 0, False, 1500, 1300, 4,
                              "Machine", "LIGHT", "Union", "None", 0x56CC, 0x15B3),
     "XYZ-Dragon Cannon": CardData(1203, 5556, "XYZ-Dragon Cannon", "91998119", 0, True, 2800, 2600, 8,
-                                  "Machine", "LIGHT", "Fusion/Effect", "None", 0x56D0, 0x15B4),
+                                  "Machine", "LIGHT", "Fusion", "None", 0x56D0, 0x15B4),
     "XYZ-Dragon Cannon Alt 1": CardData(1204, 5556, "XYZ-Dragon Cannon", "91998119", 1, True, 2800, 2600, 8,
-                                  "Machine", "LIGHT", "Fusion/Effect", "None", 0x56D0, 0x15B4),
+                                  "Machine", "LIGHT", "Fusion", "None", 0x56D0, 0x15B4),
     "XYZ-Dragon Cannon Alt 2": CardData(1205, 5556, "XYZ-Dragon Cannon", "91998119", 2, True, 2800, 2600, 8,
-                                  "Machine", "LIGHT", "Fusion/Effect", "None", 0x56D0, 0x15B4),
+                                  "Machine", "LIGHT", "Fusion", "None", 0x56D0, 0x15B4),
     "Rope of Spirit": CardData(1206, 5557, "Rope of Spirit", "37383714", 0, False, 0, 0, 0,
                                "Trap", "Trap", "Trap", "None", 0x56D4, 0x15B5),
     "King's Knight": CardData(1207, 5558, "King's Knight", "64788463", 0, False, 1600, 1400, 4,
@@ -2605,7 +2607,7 @@ cards: Dict[str, CardData] = {
     "Roulette Barrel": CardData(1232, 5599, "Roulette Barrel", "46303688", 0, True, 1000, 2000, 4,
                                 "Machine", "LIGHT", "Effect", "None", 0x577C, 0x15DF),
     "Paladin of White Dragon": CardData(1233, 5600, "Paladin of White Dragon", "73398797", 0, False, 1900, 1200, 4,
-                                        "Dragon", "LIGHT", "Ritual/Effect", "None", 0x5780, 0x15E0),
+                                        "Dragon", "LIGHT", "Ritual", "None", 0x5780, 0x15E0),
     "White Dragon Ritual": CardData(1234, 5601, "White Dragon Ritual", "09786492", 0, False, 0, 0, 0,
                                     "Spell", "Spell", "Spell", "Ritual", 0x5784, 0x15E1),
     "Frontline Base": CardData(1235, 5602, "Frontline Base", "46181000", 0, False, 0, 0, 0,
@@ -2645,17 +2647,17 @@ cards: Dict[str, CardData] = {
     "Adhesion Trap Hole": CardData(1252, 5624, "Adhesion Trap Hole", "62325062", 0, False, 0, 0, 0,
                                    "Trap", "Trap", "Trap", "None", 0x57E0, 0x15F8),
     "XZ-Tank Cannon": CardData(1253, 5625, "XZ-Tank Cannon", "99724761", 0, True, 2400, 2100, 6,
-                               "Machine", "LIGHT", "Fusion/Effect", "None", 0x57E4, 0x15F9),
+                               "Machine", "LIGHT", "Fusion", "None", 0x57E4, 0x15F9),
     "YZ-Tank Dragon": CardData(1254, 5626, "YZ-Tank Dragon", "25119460", 0, True, 2100, 2200, 6,
-                               "Machine", "LIGHT", "Fusion/Effect", "None", 0x57E8, 0x15FA),
+                               "Machine", "LIGHT", "Fusion", "None", 0x57E8, 0x15FA),
     "Final Attack Orders": CardData(1255, 5627, "Final Attack Orders", "52503575", 0, False, 0, 0, 0,
                                     "Trap", "Trap", "Trap", "Continuous", 0x57EC, 0x15FB),
     "Dark Paladin": CardData(1256, 5628, "Dark Paladin", "98502113", 0, False, 2900, 2400, 8,
-                             "Spellcaster", "DARK", "Fusion/Effect", "None", 0x57F0, 0x15FC),
+                             "Spellcaster", "DARK", "Fusion", "None", 0x57F0, 0x15FC),
     "Dark Paladin Alt 1": CardData(1257, 5628, "Dark Paladin", "98502113", 1, False, 2900, 2400, 8,
-                             "Spellcaster", "DARK", "Fusion/Effect", "None", 0x57F0, 0x15FC),
+                             "Spellcaster", "DARK", "Fusion", "None", 0x57F0, 0x15FC),
     "Dark Paladin Alt 2": CardData(1258, 5628, "Dark Paladin", "98502113", 2, False, 2900, 2400, 8,
-                             "Spellcaster", "DARK", "Fusion/Effect", "None", 0x57F0, 0x15FC),
+                             "Spellcaster", "DARK", "Fusion", "None", 0x57F0, 0x15FC),
     "Spell Absorption": CardData(1259, 5630, "Spell Absorption", "51481927", 0, False, 0, 0, 0,
                                  "Spell", "Spell", "Spell", "Continuous", 0x57F8, 0x15FE),
     "Diffusion Wave-Motion": CardData(1260, 5631, "Diffusion Wave-Motion", "87880531", 0, False, 0, 0, 0,
@@ -2753,9 +2755,9 @@ cards: Dict[str, CardData] = {
                           "Reptile", "WATER", "Effect", "None", 0x58FC, 0x163F),
     "Shinato, King of a Higher Plane": CardData(1306, 5697, "Shinato, King of a Higher Plane", "86327225", 0, False,
                                                 3300, 3000, 8,
-                                                "Fairy", "LIGHT", "Ritual/Effect", "None", 0x5904, 0x1641),
+                                                "Fairy", "LIGHT", "Ritual", "None", 0x5904, 0x1641),
     "Dark Flare Knight": CardData(1307, 5698, "Dark Flare Knight", "13722870", 0, False, 2200, 800, 6,
-                                  "Warrior", "DARK", "Fusion/Effect", "None", 0x5908, 0x1642),
+                                  "Warrior", "DARK", "Fusion", "None", 0x5908, 0x1642),
     "Mirage Knight": CardData(1308, 5699, "Mirage Knight", "49217579", 0, False, 2800, 2000, 8,
                               "Warrior", "LIGHT", "Effect", "None", 0x590C, 0x1643),
     "Berserk Dragon": CardData(1309, 5700, "Berserk Dragon", "85605684", 0, False, 3500, 0, 8,
@@ -2903,9 +2905,9 @@ cards: Dict[str, CardData] = {
     "Tsukuyomi": CardData(1376, 5780, "Tsukuyomi", "34853266", 0, False, 1100, 1400, 4,
                           "Spellcaster", "DARK", "Spirit", "None", 0x5A50, 0x1694),
     "Legendary Flame Lord": CardData(1377, 5781, "Legendary Flame Lord", "60258960", 0, False, 2400, 2000, 7,
-                                     "Spellcaster", "FIRE", "Ritual/Effect", "None", 0x5A54, 0x1695),
+                                     "Spellcaster", "FIRE", "Ritual", "None", 0x5A54, 0x1695),
     "Dark Master - Zorc": CardData(1378, 5782, "Dark Master - Zorc", "97642679", 0, False, 2700, 1500, 8,
-                                   "Fiend", "DARK", "Ritual/Effect", "None", 0x5A58, 0x1696),
+                                   "Fiend", "DARK", "Ritual", "None", 0x5A58, 0x1696),
     "Incandescent Ordeal": CardData(1379, 5783, "Incandescent Ordeal", "33031674", 0, False, 0, 0, 0,
                                     "Spell", "Spell", "Spell", "Ritual", 0x5A5C, 0x1697),
     "Contract with the Abyss": CardData(1380, 5784, "Contract with the Abyss", "69035382", 0, False, 0, 0, 0,
@@ -3491,7 +3493,7 @@ cards: Dict[str, CardData] = {
     "Penumbral Soldier Lady": CardData(1658, 6125, "Penumbral Soldier Lady", "64751286", 0, False, 2100, 1400, 6,
                                        "Warrior", "DARK", "Effect", "None", 0x5FB4, 0x17ED),
     "Ojama King": CardData(1659, 6126, "Ojama King", "90140980", 0, False, 0, 3000, 6,
-                           "Beast", "LIGHT", "Fusion/Effect", "None", 0x5FB8, 0x17EE),
+                           "Beast", "LIGHT", "Fusion", "None", 0x5FB8, 0x17EE),
     "Master of Oz": CardData(1660, 6127, "Master of Oz", "27134689", 0, False, 4200, 3700, 9,
                              "Beast", "EARTH", "Fusion", "None", 0x5FBC, 0x17EF),
     "Sanwitch": CardData(1661, 6128, "Sanwitch", "53539634", 0, False, 2100, 1800, 6,
@@ -3640,9 +3642,9 @@ cards: Dict[str, CardData] = {
                                               "Plant", "LIGHT", "Effect", "None", 0x60EC, 0x183B),
     "Dark Blade the Dragon Knight": CardData(1728, 6204, "Dark Blade the Dragon Knight", "86805855", 0, False, 2200,
                                              1500, 6,
-                                             "Warrior", "DARK", "Fusion/Effect", "None", 0x60F0, 0x183C),
+                                             "Warrior", "DARK", "Fusion", "None", 0x60F0, 0x183C),
     "Mokey Mokey King": CardData(1729, 6205, "Mokey Mokey King", "13803864", 0, False, 300, 100, 6,
-                                 "Fairy", "LIGHT", "Fusion/Effect", "None", 0x60F4, 0x183D),
+                                 "Fairy", "LIGHT", "Fusion", "None", 0x60F4, 0x183D),
     "Serial Spell": CardData(1730, 6206, "Serial Spell", "49398568", 0, False, 0, 0, 0,
                              "Spell", "Spell", "Spell", "Quick-Play", 0x60F8, 0x183E),
     "Harpies' Hunting Ground": CardData(1731, 6207, "Harpies' Hunting Ground", "75782277", 0, True, 0, 0, 0,
@@ -3760,9 +3762,9 @@ cards: Dict[str, CardData] = {
     "Brain Jacker": CardData(1784, 6263, "Brain Jacker", "40267580", 0, True, 200, 900, 2,
                              "Fiend", "DARK", "Effect", "None", 0x61DC, 0x1877),
     "Gatling Dragon": CardData(1785, 6264, "Gatling Dragon", "87751584", 0, True, 2600, 1200, 8,
-                               "Machine", "DARK", "Fusion/Effect", "None", 0x61E0, 0x1878),
+                               "Machine", "DARK", "Fusion", "None", 0x61E0, 0x1878),
     "King Dragun": CardData(1786, 6265, "King Dragun", "13756293", 0, False, 2400, 1100, 7,
-                            "Dragon", "DARK", "Fusion/Effect", "None", 0x61E4, 0x1879),
+                            "Dragon", "DARK", "Fusion", "None", 0x61E4, 0x1879),
     "A Feather of the Phoenix": CardData(1787, 6266, "A Feather of the Phoenix", "49140998", 0, False, 0, 0, 0,
                                          "Spell", "Spell", "Spell", "None", 0x61E8, 0x187A),
     "Poison Fangs": CardData(1788, 6267, "Poison Fangs", "76539047", 0, True, 0, 0, 0,
@@ -3883,16 +3885,16 @@ cards: Dict[str, CardData] = {
     "King of the Skull Servants": CardData(1845, 6341, "King of the Skull Servants", "36021814", 0, False, 0, 0, 1,
                                            "Zombie", "DARK", "Effect", "None", 0x6314, 0x18C5),
     "Reshef the Dark Being": CardData(1846, 6342, "Reshef the Dark Being", "62420419", 0, False, 2500, 1500, 8,
-                                      "Fiend", "LIGHT", "Ritual/Effect", "None", 0x6318, 0x18C6),
+                                      "Fiend", "LIGHT", "Ritual", "None", 0x6318, 0x18C6),
     "Elemental Mistress Doriado": CardData(1847, 6343, "Elemental Mistress Doriado", "99414168", 0, False, 1200, 1400,
                                            3,
-                                           "Spellcaster", "LIGHT", "Ritual/Effect", "None", 0x631C, 0x18C7),
+                                           "Spellcaster", "LIGHT", "Ritual", "None", 0x631C, 0x18C7),
     "Elemental Hero Flame Wingman": CardData(1848, 6344, "Elemental Hero Flame Wingman", "35809262", 0, False, 2100,
                                              1200, 6,
-                                             "Warrior", "WIND", "Fusion/Effect", "None", 0x6320, 0x18C8),
+                                             "Warrior", "WIND", "Fusion", "None", 0x6320, 0x18C8),
     "Elemental Hero Thunder Giant": CardData(1849, 6345, "Elemental Hero Thunder Giant", "61204971", 0, False, 2400,
                                              1500, 6,
-                                             "Warrior", "LIGHT", "Fusion/Effect", "None", 0x6324, 0x18C9),
+                                             "Warrior", "LIGHT", "Fusion", "None", 0x6324, 0x18C9),
     "Gift of the Martyr": CardData(1850, 6346, "Gift of the Martyr", "98792570", 0, True, 0, 0, 0,
                                    "Spell", "Spell", "Spell", "None", 0x6328, 0x18CA),
     "Double Attack": CardData(1851, 6347, "Double Attack", "34187685", 0, False, 0, 0, 0,
@@ -3963,11 +3965,11 @@ cards: Dict[str, CardData] = {
     "Steam Gyroid": CardData(1883, 6394, "Steam Gyroid", "05368615", 0, False, 2200, 1600, 6,
                              "Machine", "EARTH", "Fusion", "None", 0x63E8, 0x18FA),
     "UFOroid Fighter": CardData(1884, 6395, "UFOroid Fighter", "32752319", 0, False, 0, 0, 10,
-                                "Machine", "LIGHT", "Fusion/Effect", "None", 0x63EC, 0x18FB),
+                                "Machine", "LIGHT", "Fusion", "None", 0x63EC, 0x18FB),
     "Cyber Twin Dragon": CardData(1885, 6396, "Cyber Twin Dragon", "74157028", 0, False, 2800, 2100, 8,
-                                  "Machine", "LIGHT", "Fusion/Effect", "None", 0x63F0, 0x18FC),
+                                  "Machine", "LIGHT", "Fusion", "None", 0x63F0, 0x18FC),
     "Cyber End Dragon": CardData(1886, 6397, "Cyber End Dragon", "01546123", 0, False, 4000, 2800, 10,
-                                 "Machine", "LIGHT", "Fusion/Effect", "None", 0x63F4, 0x18FD),
+                                 "Machine", "LIGHT", "Fusion", "None", 0x63F4, 0x18FD),
     "Power Bond": CardData(1887, 6398, "Power Bond", "37630732", 0, False, 0, 0, 0,
                            "Spell", "Spell", "Spell", "None", 0x63F8, 0x18FE),
     "Skyscraper": CardData(1888, 6399, "Skyscraper", "63035430", 0, False, 0, 0, 0,
@@ -4069,7 +4071,7 @@ cards: Dict[str, CardData] = {
     "Triage": CardData(1935, 6450, "Triage", "30888983", 0, False, 0, 0, 0,
                        "Trap", "Trap", "Trap", "Counter", 0x64C8, 0x1932),
     "Alkana Knight Joker": CardData(1936, 6454, "Alkana Knight Joker", "06150044", 0, False, 3800, 2500, 9,
-                                    "Warrior", "LIGHT", "Fusion/Effect", "None", 0x64D8, 0x1936),
+                                    "Warrior", "LIGHT", "Fusion", "None", 0x64D8, 0x1936),
     "Gilford the Legend": CardData(1937, 6456, "Gilford the Legend", "69933858", 0, False, 2600, 2000, 8,
                                    "Warrior", "EARTH", "Effect", "None", 0x64E0, 0x1938),
     "Warrior Lady of the Wasteland": CardData(1938, 6457, "Warrior Lady of the Wasteland", "05438492", 0, False, 1100,
@@ -4079,7 +4081,7 @@ cards: Dict[str, CardData] = {
                                              "Spell", "Spell", "Spell", "Equip", 0x64E8, 0x193A),
     "Elemental Hero Shining Flare Wingman": CardData(1940, 6467, "Elemental Hero Shining Flare Wingman", "25366484", 0,
                                                      False, 2500, 2100, 8,
-                                                     "Warrior", "LIGHT", "Fusion/Effect", "None", 0x650C, 0x1943),
+                                                     "Warrior", "LIGHT", "Fusion", "None", 0x650C, 0x1943),
     "Level Modulation": CardData(1941, 6468, "Level Modulation", "61850482", 0, False, 0, 0, 0,
                                  "Spell", "Spell", "Spell", "None", 0x6510, 0x1944),
     "Ojamuscle": CardData(1942, 6469, "Ojamuscle", "98259197", 0, False, 0, 0, 0,
@@ -4107,19 +4109,19 @@ cards: Dict[str, CardData] = {
     "Etoile Cyber": CardData(1953, 6482, "Etoile Cyber", "11460577", 0, True, 1200, 1600, 4,
                              "Warrior", "EARTH", "Effect", "None", 0x6548, 0x1952),
     "VW-Tiger Catapult": CardData(1954, 6483, "VW-Tiger Catapult", "58859575", 0, False, 2000, 2100, 6,
-                                  "Machine", "LIGHT", "Fusion/Effect", "None", 0x654C, 0x1953),
+                                  "Machine", "LIGHT", "Fusion", "None", 0x654C, 0x1953),
     "VWXYZ-Dragon Catapult Cannon": CardData(1955, 6484, "VWXYZ-Dragon Catapult Cannon", "84243274", 0, True, 3000,
                                              2800, 8,
-                                             "Machine", "LIGHT", "Fusion/Effect", "None", 0x6550, 0x1954),
+                                             "Machine", "LIGHT", "Fusion", "None", 0x6550, 0x1954),
     "Cyber Blader": CardData(1956, 6485, "Cyber Blader", "10248389", 0, True, 2100, 800, 7,
-                             "Warrior", "EARTH", "Fusion/Effect", "None", 0x6554, 0x1955),
+                             "Warrior", "EARTH", "Fusion", "None", 0x6554, 0x1955),
     "Elemental Hero Rampart Blaster": CardData(1957, 6486, "Elemental Hero Rampart Blaster", "47737087", 0, True, 2000,
                                                2500, 6,
-                                               "Warrior", "EARTH", "Fusion/Effect", "None", 0x6558, 0x1956),
+                                               "Warrior", "EARTH", "Fusion", "None", 0x6558, 0x1956),
     "Elemental Hero Tempest": CardData(1958, 6487, "Elemental Hero Tempest", "83121692", 0, False, 2800, 2800, 8,
-                                       "Warrior", "WIND", "Fusion/Effect", "None", 0x655C, 0x1957),
+                                       "Warrior", "WIND", "Fusion", "None", 0x655C, 0x1957),
     "Elemental Hero Wildedge": CardData(1959, 6488, "Elemental Hero Wildedge", "10526791", 0, False, 2600, 2300, 8,
-                                        "Warrior", "EARTH", "Fusion/Effect", "None", 0x6560, 0x1958),
+                                        "Warrior", "EARTH", "Fusion", "None", 0x6560, 0x1958),
     "Chthonian Alliance": CardData(1960, 6489, "Chthonian Alliance", "46910446", 0, False, 0, 0, 0,
                                    "Spell", "Spell", "Spell", "Equip", 0x6564, 0x1959),
     "Feather Shot": CardData(1961, 6491, "Feather Shot", "19394153", 0, False, 0, 0, 0,
@@ -4202,7 +4204,7 @@ cards: Dict[str, CardData] = {
     "Hero Heyro": CardData(1995, 6528, "Hero Heyro", "26647858", 0, False, 0, 0, 0,
                            "Trap", "Trap", "Trap", "None", 0x6600, 0x1980),
     "Elemental Hero Madballman": CardData(1996, 6529, "Elemental Hero Madballman", "52031567", 0, False, 1900, 3000, 6,
-                                          "Warrior", "EARTH", "Fusion/Effect", "None", 0x6604, 0x1981),
+                                          "Warrior", "EARTH", "Fusion", "None", 0x6604, 0x1981),
     "Dark Eradicator Warlock": CardData(1997, 6530, "Dark Eradicator Warlock", "29436665", 0, False, 2500, 2100, 7,
                                         "Spellcaster", "DARK", "Effect", "None", 0x6608, 0x1982),
     "Mythical Beast Cerberus": CardData(1998, 6531, "Mythical Beast Cerberus", "55424270", 0, False, 1400, 1400, 4,
@@ -4211,7 +4213,7 @@ cards: Dict[str, CardData] = {
                               "Spell", "Spell", "Spell", "None", 0x6610, 0x1984),
     "Elemental Hero Steam Healer": CardData(2000, 6535, "Elemental Hero Steam Healer", "81197327", 0, False, 1800, 1000,
                                             5,
-                                            "Warrior", "WATER", "Fusion/Effect", "None", 0x661C, 0x1987),
+                                            "Warrior", "WATER", "Fusion", "None", 0x661C, 0x1987),
     "Burst Return": CardData(2001, 6536, "Burst Return", "27191436", 0, True, 0, 0, 0,
                              "Spell", "Spell", "Spell", "None", 0x6620, 0x1988),
     "Bubble Blaster": CardData(2002, 6537, "Bubble Blaster", "53586134", 0, False, 0, 0, 0,
@@ -4324,12 +4326,12 @@ cards: Dict[str, CardData] = {
     "Divine Dragon - Excelion": CardData(2054, 6611, "Divine Dragon - Excelion", "10032958", 0, False, 1500, 900, 5,
                                          "Dragon", "LIGHT", "Effect", "None", 0x674C, 0x19D3),
     "Ruin, Queen of Oblivion": CardData(2055, 6612, "Ruin, Queen of Oblivion", "46427957", 0, False, 2300, 2000, 8,
-                                        "Fairy", "LIGHT", "Ritual/Effect", "None", 0x6750, 0x19D4),
+                                        "Fairy", "LIGHT", "Ritual", "None", 0x6750, 0x19D4),
     "Demise, King of Armageddon": CardData(2056, 6613, "Demise, King of Armageddon", "72426662", 0, False, 2400, 2000,
                                            8,
-                                           "Fiend", "DARK", "Ritual/Effect", "None", 0x6754, 0x19D5),
+                                           "Fiend", "DARK", "Ritual", "None", 0x6754, 0x19D5),
     "D.3.S. Frog": CardData(2057, 6614, "D.3.S. Frog", "09910360", 0, True, 2500, 2000, 8,
-                            "Aqua", "WATER", "Fusion/Effect", "None", 0x6758, 0x19D6),
+                            "Aqua", "WATER", "Fusion", "None", 0x6758, 0x19D6),
     "Symbol of Heritage": CardData(2058, 6615, "Symbol of Heritage", "45305419", 0, False, 0, 0, 0,
                                    "Spell", "Spell", "Spell", "Equip", 0x675C, 0x19D7),
     "Trial of the Princesses": CardData(2059, 6616, "Trial of the Princesses", "72709014", 0, False, 0, 0, 0,
@@ -4359,7 +4361,7 @@ cards: Dict[str, CardData] = {
                                                "Spell", "Spell", "Spell", "Quick-Play", 0x67B0, 0x19EC),
     "Elemental Hero Erikshieler": CardData(2071, 6639, "Elemental Hero Erikshieler", "29343734", 0, False, 2900, 2600,
                                            10,
-                                           "Warrior", "LIGHT", "Fusion/Effect", "None", 0x67BC, 0x19EF),
+                                           "Warrior", "LIGHT", "Fusion", "None", 0x67BC, 0x19EF),
     "Guardian Exode": CardData(2072, 6640, "Guardian Exode", "55737443", 0, False, 0, 4000, 8,
                                "Rock", "EARTH", "Effect", "None", 0x67C0, 0x19F0),
     "Great Spirit": CardData(2073, 6641, "Great Spirit", "92736188", 0, False, 500, 1500, 4,
@@ -4477,67 +4479,37 @@ def get_base_rom_path(file_name: str = "") -> str:
 def read_rom():
     rom_data = get_base_rom_bytes()
     offset = 0
-    i = 1
-    for pack_name in booster_packs:
-        price = int.from_bytes(rom_data[0x1e5e2e8 + offset:0x1e5e2ea + offset], "little") # 2
-        cards_per_pack = int.from_bytes(rom_data[0x1e5e2ea + offset:0x1e5e2ec + offset], "little") # 2
-        total_cards = int.from_bytes(rom_data[0x1e5e2ec + offset:0x1e5e2ed + offset], "little") # 2 6
-        pointer = int.from_bytes(rom_data[0x01e5e2f4 + offset:0x1e5e2f8 + offset], "little")  # 4
-        pointer -= 0x08000000
-        offset += 16
+    forbidden: List[str] = []
+    limited: List[str] = []
+    semi_limited: List[str] = []
+    banlist_pointer = 0x1e5f580
+    for number in range(0, 83):
+        card_id = int.from_bytes(rom_data[banlist_pointer + offset:banlist_pointer + 2 + offset], "little") # 2
+        amount = int.from_bytes(rom_data[banlist_pointer + 2 + offset:banlist_pointer + 4 + offset], "little") # 2
+        offset += 4
+        if card_id in booster_card_id_to_name:
+            card_name = booster_card_id_to_name[card_id]
+        else:
+            card_name = str(hex(card_id))
+        if amount == 0:
+            forbidden.append(card_name)
+        if amount == 1:
+            limited.append(card_name)
+        if amount == 2:
+            semi_limited.append(card_name)
+    print("     \"Forbidden\": [")
+    for name in forbidden:
+        print(f"            \"{name}\",")
+    print("     ],")
+    print("     \"Limited\": [")
+    for name in limited:
+        print(f"            \"{name}\",")
+    print("     ],")
+    print("     \"Semi-Limited\": [")
+    for name in semi_limited:
+        print(f"            \"{name}\",")
+    print("     ],")
 
-        print("         \"" + pack_name + "\": BoosterPackData(" + str(i) + ", " + str(total_cards) + ", " + str(hex(pointer)) + ", "
-              + str(cards_per_pack) + ", " + str(price) + "),")
-        i += 1
-
-
-booster_packs: List[str] = [
-    "LEGEND OF B.E.W.D.",
-    "METAL RAIDERS",
-    "PHARAOH'S SERVANT",
-    "PHARAONIC GUARDIAN",
-    "SPELL RULER",
-    "LABYRINTH OF NIGHTMARE",
-    "LEGACY OF DARKNESS",
-    "MAGICIAN'S FORCE",
-    "DARK CRISIS",
-    "INVASION OF CHAOS",
-    "ANCIENT SANCTUARY",
-    "SOUL OF THE DUELIST",
-    "RISE OF DESTINY",
-    "FLAMING ETERNITY",
-    "THE LOST MILLENIUM",
-    "CYBERNETIC REVOLUTION",
-    "ELEMENTAL ENERGY",
-    "SHADOW OF INFINITY",
-    "GAME GIFT COLLECTION",
-    "Special Gift Collection",
-    "Fairy Collection",
-    "Dragon Collection",
-    "Warrior Collection A",
-    "Warrior Collection B",
-    "Fiend Collection A",
-    "Fiend Collection B",
-    "Machine Collection A",
-    "Machine Collection B",
-    "Spellcaster Collection A",
-    "Spellcaster Collection B",
-    "Zombie Collection",
-    "Special Monsters A",
-    "Special Monsters B",
-    "Reverse Collection",
-    "LP Recovery Collection",
-    "Special Summon Collection A",
-    "Special Summon Collection B",
-    "Special Summon Collection C",
-    "Equipment Collection",
-    "Continuous Spell/Trap A",
-    "Continuous Spell/Trap B",
-    "Quick/Counter Collection",
-    "Direct Damage Collection",
-    "Direct Attack Collection",
-    "Monster Destroy Collection",
-]
 
 def import_data():
     with open("Deck.tsv") as file:
@@ -4550,4 +4522,14 @@ def build_id_table():
     for name, c in cards.items():
         print(" " + hex(c.starter_id) + ": \"" + name + "\",")
 
-# import_data()
+
+def find_all_non_standard_cards():
+    non_standard = list(cards.keys())
+    for booster in contents:
+        for card in contents[booster]:
+            if card in non_standard:
+                non_standard.remove(card)
+    for card in non_standard:
+        print(f"    \"{card}\",")
+
+read_rom()
