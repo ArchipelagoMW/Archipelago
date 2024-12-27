@@ -370,8 +370,10 @@ class RequiredTactics(Choice):
 
     Standard:  All missions can be completed with good micro and macro.
     Advanced:  Completing missions may require relying on starting units and micro-heavy units.
-    Any Units: Logic guarantees at least one unit or building unlock per mission depth, up to 5 units,
-               without restriction on what those units are. May render the run impossible on harder difficulties.
+    Any Units: Logic guarantees faction-appropriate units appear early without regard to what those units are.
+               i.e. if the third mission is a protoss build mission,
+               logic guarantees at least 2 protoss units are reachable before starting it.
+               May render the run impossible on harder difficulties.
     No Logic:  Units and upgrades may be placed anywhere. LIKELY TO RENDER THE RUN IMPOSSIBLE ON HARDER DIFFICULTIES!
                Locks Grant Story Tech option to true.
     """
