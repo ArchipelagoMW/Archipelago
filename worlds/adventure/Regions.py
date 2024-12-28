@@ -76,10 +76,9 @@ def create_regions(options: PerGameCommonOptions, multiworld: MultiWorld, player
     multiworld.regions.append(credits_room_far_side)
 
     dragon_slay_check = options.dragon_slay_check.value
-    priority_locations = determine_priority_locations(multiworld, dragon_slay_check)
+    priority_locations = determine_priority_locations()
 
     for name, location_data in location_table.items():
-        require_sword = False
         if location_data.region == "Varies":
             if location_data.name == "Slay Yorgle":
                 if not dragon_slay_check:
@@ -154,6 +153,7 @@ def create_regions(options: PerGameCommonOptions, multiworld: MultiWorld, player
 
 
 # Placeholder for adding sets of priority locations at generation, possibly as an option in the future
-def determine_priority_locations(world: MultiWorld, dragon_slay_check: bool) -> {}:
+# def determine_priority_locations(multiworld: MultiWorld, dragon_slay_check: bool) -> {}:
+def determine_priority_locations() -> {}:
     priority_locations = {}
     return priority_locations

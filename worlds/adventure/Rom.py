@@ -86,9 +86,7 @@ class AdventureDeltaPatch(APPatch, metaclass=AutoPatchRegister):
 
     # locations: [], autocollect: [], seed_name: bytes,
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        patch_only = True
         if "autocollect" in kwargs:
-            patch_only = False
             self.foreign_items: [AdventureForeignItemInfo] = [AdventureForeignItemInfo(loc.short_location_id, loc.room_id, loc.room_x, loc.room_y)
                                   for loc in kwargs["locations"]]
 
