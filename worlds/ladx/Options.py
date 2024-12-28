@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import os.path
 import typing
 import logging
-from Options import Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions, OptionGroup, Removed
+from Options import Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions, OptionGroup, Removed, DeathLink
 from collections import defaultdict
 import Utils
 
@@ -564,6 +564,7 @@ ladx_option_groups = [
         NagMessages,
         Quickswap,
         HardMode,
+        DeathLink,
         BootsControls
     ]),
     OptionGroup("Experimental", [
@@ -624,6 +625,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     nag_messages: NagMessages
     ap_title_screen: APTitleScreen
     boots_controls: BootsControls
+    death_link: DeathLink
     quickswap: Quickswap
     hard_mode: HardMode
     low_hp_beep: LowHpBeep
