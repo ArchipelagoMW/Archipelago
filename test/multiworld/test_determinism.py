@@ -317,8 +317,8 @@ class TestDeterministicGeneration(TestCase):
         It may be possible for worlds to call `random.seed(deterministic_seed)` before running library functions, but
         this should be considered a last resort.
 
-        Failing this test means that a world will most likely generate nondeterministically on webhost (archipelago.gg
-        and other hosts of the website generator).
+        Failing this test means that a world will generate nondeterministically on webhost (archipelago.gg and other
+        hosts of the website generator).
         """
         generation_steps = gen_steps
         for game, world_type in AutoWorldRegister.world_types.items():
