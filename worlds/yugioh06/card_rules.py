@@ -4,6 +4,8 @@ from typing import List, NamedTuple, Callable, Dict
 from worlds.yugioh06 import cards
 from worlds.yugioh06.boosterpack_contents import not_in_standard_pool
 from worlds.yugioh06.card_data import nomi_monsters
+from worlds.yugioh06.fusions import fusions, fusion_subs
+from worlds.yugioh06.ritual import rituals
 from worlds.yugioh06.structure_deck import structure_contents
 
 logger = logging.getLogger("card_rules")
@@ -23,6 +25,35 @@ class CardRule(NamedTuple):
 
 
 def set_card_rules(world):
+    progression_cards = world.progression_cards
+    cards_in_booster = world.progression_cards_in_booster
+    cards_in_starter = world.progression_cards_in_start
+
+    # gather cards from starter and structure
+    starting_cards: Dict[str, int] = {}
+    if world.structure_deck:
+        for card in world.structure_deck:
+            starting_cards[card.name] = world.structure_deck[card]
+    else:
+        starting_cards = structure_contents[world.options.structure_deck.current_key]
+    if world.starter_deck:
+        for card in world.starter_deck:
+            if card.name in starting_cards:
+                starting_cards[card.name] += world.starter_deck[card]
+            else:
+                starting_cards[card.name] = world.starter_deck[card]
+    elif world.options.starter_deck.value != world.options.starter_deck.option_remove:
+        for card, amount in structure_contents["starter"].items():
+            if card in starting_cards:
+                starting_cards[card] += amount
+            else:
+                starting_cards[card] = amount
+    subs_in_start = [x for x in fusion_subs if x in starting_cards.keys()]
+    if len(subs_in_start):
+        world.fusion_sub_of_choice = world.random.choice(subs_in_start)
+    else:
+        world.fusion_sub_of_choice = world.random.choice(fusion_subs)
+
     evergreen_rules = {
         "Max ATK Bonus": raise_attack,
         "No Spell Cards Bonus": non_spell_monster_removal(),
@@ -37,6 +68,8 @@ def set_card_rules(world):
         "Max Damage Bonus":
             CardRule(["Wave-Motion Cannon", "Megamorph", "United We Stand",
                       "Mage Power"], 1),
+        "Fusion Summon Bonus": any_fusion(world),
+        "Ritual Summon Bonus": any_ritual(),
         "Low LP Bonus":
             CardRule(["Wall of Revealing Light"], 1),
         "Extremely Low LP Bonus":
@@ -68,7 +101,7 @@ def set_card_rules(world):
 
         # Collection Events
         "Ojama Delta Hurricane and required cards":
-            CardRule(["Ojama Delta Hurricane", "Ojama Green", "Ojama Yellow",
+            CardRule(["Ojama Delta Hurricane!!", "Ojama Green", "Ojama Yellow",
                       "Ojama Black"], 1, amount_protocol="each"),
         "Huge Revolution and its required cards":
             CardRule(["Huge Revolution", "Oppressed People", "United Resistance",
@@ -79,8 +112,8 @@ def set_card_rules(world):
                      amount_protocol="each"),
         "Valkyrion the Magna Warrior and its pieces":
             CardRule(["Valkyrion the Magna Warrior",
-                      "Alpha the Magnet Warrior", "Beta the Magnet Warrior",
-                      "Gamma the Magnet Warrior"], 1, amount_protocol="each"),
+                      "Alpha The Magnet Warrior", "Beta The Magnet Warrior",
+                      "Gamma The Magnet Warrior"], 1, amount_protocol="each"),
         "Dark Sage and its required cards":
             CardRule(["Dark Sage", "Dark Magician", "Time Wizard"], 1, amount_protocol="each"),
         "Destiny Board and its letters":
@@ -164,6 +197,7 @@ def set_card_rules(world):
             CardRule(["Wave-Motion Cannon", "Stealth Bird"], 3, "each",
                      InnerCardRule(["Dark World Lightning", "Nobleman of Crossout",
                                     "Shield Crash", "Tribute to The Doomed"], 4)),
+        "LD19 All except E-Hero's forbidden": hero_gate_deck(world),
         "LD20 All except Warriors forbidden": only_warrior(),
         "LD21 All except Dark forbidden": only_dark(),
         "LD26 All except Toons forbidden": only_toons(),
@@ -172,6 +206,7 @@ def set_card_rules(world):
         "LD29 All except Spellcasters forbidden": only_spellcaster(),
         "LD30 All except Light forbidden": only_light(),
         "LD31 All except Fire forbidden": only_fire(),
+        "LD34 Normal Summons forbidden": [hero_gate_deck(world), pacman_deck()],
         "LD35 All except Zombies forbidden": only_zombie(),
         "LD36 All except Earth forbidden": only_earth(),
         "LD37 All except Water forbidden": only_water(),
@@ -236,7 +271,7 @@ def set_card_rules(world):
                      additional_cards=InnerCardRule(["Dark Dust Spirit", "Great Long Nose"], 3)),
         "TD31 Special Summon C":
             CardRule([
-                "Aqua Spirit", "Rock Spirit", "Spirit of Flames",
+                "Aqua Spirit", "The Rock Spirit", "Spirit of Flames",
                 "Garuda the Wind Spirit", "Gigantes", "Inferno",
                 "Megarock Dragon", "Silpheed"
             ], 12),
@@ -273,6 +308,7 @@ def set_card_rules(world):
             CardRule(["Treeborn Frog", "Tribute Doll"], 3, "each"),
         "TD43 Return Monsters with Effects":
             CardRule(["Penguin Soldier", "Messenger of Peace"], 3, "each"),
+        "TD44 Fusion Summon": hero_gate_deck(world),
         "TD45 Big Damage at once":
             CardRule(["Wave-Motion Cannon"], 3),
         "TD46 XYZ In the House":
@@ -305,30 +341,6 @@ def set_card_rules(world):
     }
 
     rules = {**evergreen_rules, **{k: v for k, v in challenge_rules.items() if k not in world.removed_challenges}}
-
-    progression_cards = world.progression_cards
-    cards_in_booster = world.progression_cards_in_booster
-    cards_in_starter = world.progression_cards_in_start
-
-    # gather cards from starter and structure
-    starting_cards: Dict[str, int] = {}
-    if world.structure_deck:
-        for card in world.structure_deck:
-            starting_cards[card.name] = world.structure_deck[card]
-    else:
-        starting_cards = structure_contents[world.options.structure_deck.current_key]
-    if world.starter_deck:
-        for card in world.starter_deck:
-            if card.name in starting_cards:
-                starting_cards[card.name] += world.starter_deck[card]
-            else:
-                starting_cards[card.name] = world.starter_deck[card]
-    elif world.options.starter_deck.value != world.options.starter_deck.option_remove:
-        for card, amount in structure_contents["starter"].items():
-            if card in starting_cards:
-                starting_cards[card] += amount
-            else:
-                starting_cards[card] = amount
 
     for location, rule in rules.items():
         if isinstance(rule, List):
@@ -708,7 +720,7 @@ def only_spellcaster():
         "Cybernetic Magician"
     ]
     utility = [
-        "Breaker the magical Warrior",
+        "Breaker the Magical Warrior",
         "The Tricky",
         "Injection Fairy Lily",
         "Magician of Faith",
@@ -909,6 +921,7 @@ def counter_traps():
     ]
     return CardRule(c_traps, 15)
 
+
 def countinous_spells():
     blacklist = [
         "Spirit Message 'I'",
@@ -919,6 +932,7 @@ def countinous_spells():
     c_spells = find_cards_with(card_type="Spell", spell_trap_type="Continuous")
     c_spells = [c for c in c_spells if c not in blacklist]
     return InnerCardRule(c_spells, 9)
+
 
 def monster_removal():
     unlimted_removal = [
@@ -1008,6 +1022,52 @@ def backrow_removal():
         "Heavy Storm",
     ]
     return CardRule(unlimited_removal, 5, additional_cards=InnerCardRule(limited_removal, 1))
+
+
+def any_fusion(world):
+    return [build_card_rule_for_fusion(world, f) for f in fusions if f not in not_in_standard_pool]
+
+
+def build_card_rule_for_fusion(world, fusion_monster: str):
+    fusion_data = fusions[fusion_monster]
+    materials = list(fusion_data.materials)
+    number_of_materials = len(materials)
+    if fusion_data.replaceable:
+        materials.append(world.fusion_sub_of_choice)
+        world.random.shuffle(materials)
+        materials = materials[0:number_of_materials]
+    return CardRule(fusion_monster, 1, additional_cards=[
+        InnerCardRule(materials, 1, "each"),
+        InnerCardRule(["Polymerization", "Fusion Gate"] + fusion_data.additional_spells, 1)
+    ])
+
+
+def hero_gate_deck(world):
+    return CardRule(["Fusion Gate", "Terraforming", "Dimension Fusion",
+                    "Return from the Different Dimension"], 3, "each", [
+        InnerCardRule([
+            "Elemental Hero Flame Wingman",
+            "Elemental Hero Madballman",
+            "Elemental Hero Rampart Blaster",
+            "Elemental Hero Steam Healer"
+        ], 2, "each"),
+        InnerCardRule([
+            "Elemental Hero Avian",
+            "Elemental Hero Burstinatrix",
+            "Elemental Hero Bubbleman",
+            "Elemental Hero Clayman",
+            world.fusion_sub_of_choice
+        ], 3, "each"),
+    ])
+
+
+def any_ritual():
+    return [build_card_rule_for_rituals(f) for f in rituals if len(rituals[f].ritual_spells) > 0]
+
+
+def build_card_rule_for_rituals(ritual_monster: str):
+    ritual_data = rituals[ritual_monster]
+    return CardRule(ritual_monster, 1, additional_cards=InnerCardRule(ritual_data.ritual_spells, 1))
 
 
 def find_cards_with(min_attack: int = None, max_attack: int = None, min_defence: int = None,

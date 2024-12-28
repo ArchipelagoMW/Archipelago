@@ -1,4 +1,4 @@
-from typing import List, NamedTuple
+from typing import List, NamedTuple, Dict
 
 
 class FusionData(NamedTuple):
@@ -8,7 +8,7 @@ class FusionData(NamedTuple):
     additional_spells: List[str]
 
 
-fusions = {
+fusions: Dict[str, FusionData] = {
     "Elemental Hero Flame Wingman": FusionData(
         "Elemental Hero Flame Wingman",
         ["Elemental Hero Avian", "Elemental Hero Burstinatrix"],
@@ -39,6 +39,7 @@ fusions = {
         ["Elemental Hero Wildheart", "Elemental Hero Bladedge"],
         True,
         ["Miracle Fusion"])
+    # todo
 }
 
 fusion_subs = ["The Dark - Hex-Sealed Fusion",
@@ -46,7 +47,8 @@ fusion_subs = ["The Dark - Hex-Sealed Fusion",
                "The Light - Hex-Sealed Fusion",
                "Goddess with the Third Eye",
                "King of the Swamp",
-               "Versago the Destroyer",
+               "Versago the Destroyer"]
+fusion_subs_nisp = [
                # Only in All-packs
                "Beastking of the Swamps",
                "Mystical Sheep #1"]

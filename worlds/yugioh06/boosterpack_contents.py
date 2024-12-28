@@ -3816,8 +3816,9 @@ not_in_standard_pool = {
     "Winged Kuriboh Alt 1",
 }
 
+
 def get_booster_contents(booster: str, world) -> Dict[str, str]:
     return {
-        f"{booster} {i + 100}": content
+        f"{booster} {i}": content
         for i, content in enumerate(contents[booster], 1) if content in world.progression_cards_in_booster
     }

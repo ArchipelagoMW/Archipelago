@@ -4527,12 +4527,28 @@ def build_id_table():
         print(" " + hex(c.starter_id) + ": \"" + name + "\",")
 
 names = [
-    "Pitch-Black Power Stone",
-    "Blast Magician",
-    "Magical Marionette",
-    "Mythical Beast Cerberus",
-    "Royal Magical Library",
-    "Spell-Counter Cards"
+    "Dark Elf",
+    "Gemini Elf",
+    "Skilled Dark Magician",
+    "Toon Gemini Elf",
+    "Kycoo the Ghost Destroyer",
+    "Familiar-Possessed - Aussa",
+    "Familiar-Possessed - Eria",
+    "Familiar-Possessed - Hiita",
+    "Familiar-Possessed - Wynn",
+    "Chaos Command Magician",
+    "Cybernetic Magician",
+    "Breaker the magical Warrior",
+    "The Tricky",
+    "Injection Fairy Lily",
+    "Magician of Faith",
+    "Tsukuyomi",
+    "Gravekeeper's Spy",
+    "Gravekeeper's Guard",
+    "Summon Priest",
+    "Old Vindictive Magician",
+    "Apprentice Magician",
+    "Magical Dimension"
 ]
 
 def spell_check():
@@ -4543,7 +4559,7 @@ def spell_check():
 
 def non_normal_nisp():
     for card in not_in_standard_pool:
-        if cards[card].card_type == "Trap":
+        if cards[card].card_type == "Ritual":
             print(card)
 
 

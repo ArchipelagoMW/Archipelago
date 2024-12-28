@@ -52,9 +52,8 @@ def set_rules(world):
                                                                   player),
         "Konami Bonus": lambda state: state.has_all(world.progression_cards["Konami Bonus"], player),
         "Max Damage Bonus": lambda state: state.has_all(world.progression_cards["Max Damage Bonus"], player),
-        "Fusion Summon Bonus": lambda state: state.has_any(["Polymerization", "Fusion Gate", "Power Bond"], player),
-        # TODO
-        "Ritual Summon Bonus": lambda state: state.has("Ritual", player),  # TODO
+        "Fusion Summon Bonus": lambda state: state.has_all(world.progression_cards["Fusion Summon Bonus"], player),
+        "Ritual Summon Bonus": lambda state: state.has_all(world.progression_cards["Ritual Summon Bonus"], player),
         "Over 20000 LP Bonus": lambda state: state.has("Can Gain LP Every Turn", player) and state.has(
             "Can Stall with ST", player),
         "Low LP Bonus": lambda state: state.has_all(world.progression_cards["Low LP Bonus"], player),
@@ -186,13 +185,7 @@ def set_rules(world):
         "LD18 Attacks forbidden":
             lambda state: state.has_all(world.progression_cards["LD18 Attacks forbidden"], player),
         "LD19 All except E-Hero's forbidden":
-            lambda state: state.has_any(["Polymerization", "Fusion Gate"], player) and  # todo
-                          count_has_materials(state, ["Elemental Hero Flame Wingman",
-                                                      "Elemental Hero Madballman",
-                                                      "Elemental Hero Rampart Blaster",
-                                                      "Elemental Hero Steam Healer",
-                                                      "Elemental Hero Shining Flare Wingman",
-                                                      "Elemental Hero Wildedge"], player) >= 3,
+            lambda state: state.has_all(world.progression_cards["LD19 All except E-Hero's forbidden"], player),
         "LD20 All except Warriors forbidden":
             lambda state: state.has_all(world.progression_cards["LD20 All except Warriors forbidden"], player),
         "LD21 All except Dark forbidden":
@@ -222,13 +215,7 @@ def set_rules(world):
         "LD33 Special Summons forbidden":
             lambda state: yugioh06_difficulty(world, state, player, 1),
         "LD34 Normal Summons forbidden":
-            lambda state: state.has_all(["Polymerization", "King of the Swamp"], player) and  # todo
-                          count_has_materials(state, ["Elemental Hero Flame Wingman",
-                                                      "Elemental Hero Madballman",
-                                                      "Elemental Hero Rampart Blaster",
-                                                      "Elemental Hero Steam Healer",
-                                                      "Elemental Hero Shining Flare Wingman",
-                                                      "Elemental Hero Wildedge"], player) >= 3,
+            lambda state: state.has_all(world.progression_cards["LD34 Normal Summons forbidden"], player),
         "LD35 All except Zombies forbidden":
             lambda state: state.has_all(world.progression_cards["LD35 All except Zombies forbidden"], player),
         "LD36 All except Earth forbidden":
@@ -340,14 +327,7 @@ def set_rules(world):
         "TD43 Return Monsters with Effects":
             lambda state: state.has_all(world.progression_cards["TD43 Return Monsters with Effects"], player),
         "TD44 Fusion Summon":
-            lambda state: state.has_all(["Fusion Gate", "Terraforming", "Dimension Fusion",
-                                         "Return from the Different Dimension"], player) and
-                          count_has_materials(state, ["Elemental Hero Flame Wingman",
-                                                      "Elemental Hero Madballman",
-                                                      "Elemental Hero Rampart Blaster",
-                                                      "Elemental Hero Steam Healer",
-                                                      "Elemental Hero Shining Flare Wingman",
-                                                      "Elemental Hero Wildedge"], player) >= 4,  # todo
+            lambda state: state.has_all(world.progression_cards["TD44 Fusion Summon"], player),
         "TD45 Big Damage at once":
             lambda state: state.has_all(world.progression_cards["TD45 Big Damage at once"], player),
         "TD46 XYZ In the House":
