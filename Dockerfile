@@ -22,7 +22,7 @@ RUN if [ "$ARCHITECTURE" = "x86_64" ]; then \
 #Archipelago
 FROM python:3.12-slim AS archipelago
 ENV VIRTUAL_ENV=/opt/venv
-WORKDIR /run
+WORKDIR /app
 COPY . .
 
 #install requirements
@@ -41,7 +41,7 @@ RUN python -m venv $VIRTUAL_ENV; \
     . $VIRTUAL_ENV/bin/activate
 
 #hadolint ignore=DL3042
-RUN pip install -r WebHostLib/requirements.txt; \
+RUN pip install -r WebHostLib/requirements.txt gunicorn==23.0.0; \
     python ModuleUpdate.py -y
 
 RUN cythonize -i _speedups.pyx
@@ -63,4 +63,4 @@ RUN if [ "$ARCHITECTURE" = "x86_64" ]; then \
     fi; \
     rm -rf /tmp/EnemizerCLI
 
-CMD ["python", "WebHost.py"]
+ENTRYPOINT [ "python", "WebHost.py" ]
