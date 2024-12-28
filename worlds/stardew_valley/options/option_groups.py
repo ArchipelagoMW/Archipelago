@@ -35,7 +35,6 @@ else:
             options.Fishsanity,
             options.Museumsanity,
             options.Friendsanity,
-            options.FriendsanityHeartSize,
             options.Monstersanity,
             options.Shipsanity,
             options.Cooksanity,
@@ -44,12 +43,14 @@ else:
             options.Booksanity,
             options.Walnutsanity,
         ]),
-        OptionGroup("Multipliers and Buffs", [
+        OptionGroup("Multipliers, Buffs and extra customization", [
             options.StartingMoney,
             options.ProfitMargin,
             options.ExperienceMultiplier,
             options.FriendshipMultiplier,
+            options.FriendsanityHeartSize,
             options.DebrisMultiplier,
+            options.BackpackSize,
             options.NumberOfMovementBuffs,
             options.EnabledFillerBuffs,
             options.TrapDifficulty,

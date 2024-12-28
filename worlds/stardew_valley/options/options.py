@@ -232,6 +232,25 @@ class BackpackProgression(Choice):
     option_early_progressive = 2
 
 
+class BackpackSize(Choice):
+    """Customize the granularity of the backpack upgrades
+    This works with vanilla and progressive backpack.
+    Default size is 12, which means you start with one backpack (12 slots), and get 2 more upgrades up to 36 slots.
+    If you pick 4, then you start with 3 backpacks (12 slots), and get 6 more upgrades up to 36 slots"""
+    internal_name = "backpack_size"
+    option_1 = 1
+    option_2 = 2
+    option_3 = 3
+    option_4 = 4
+    option_6 = 6
+    option_12 = 12
+    default = option_12
+    display_name = "Backpack Size"
+
+    def count_per_tier(self) -> int:
+        return 12 // self.value
+
+
 class ToolProgression(Choice):
     """Shuffle the tool upgrades?
     Vanilla: Clint will upgrade your tools with metal bars.
@@ -882,6 +901,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     season_randomization: SeasonRandomization
     cropsanity: Cropsanity
     backpack_progression: BackpackProgression
+    backpack_size: BackpackSize
     tool_progression: ToolProgression
     skill_progression: SkillProgression
     building_progression: BuildingProgression

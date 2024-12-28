@@ -16,6 +16,7 @@ from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.buff_names import Buff
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.ap_names.mods.mod_items import SVEQuestItem
+from ..strings.backpack_tiers import Backpack
 from ..strings.currency_names import Currency
 from ..strings.tool_names import Tool
 from ..strings.wallet_item_names import Wallet
@@ -132,11 +133,12 @@ def create_raccoons(item_factory: StardewItemFactory, options: StardewValleyOpti
 
 
 def create_backpack_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if (options.backpack_progression == BackpackProgression.option_progressive or
-            options.backpack_progression == BackpackProgression.option_early_progressive):
-        items.extend(item_factory(item) for item in ["Progressive Backpack"] * 2)
-        if ModNames.big_backpack in options.mods:
-            items.append(item_factory("Progressive Backpack"))
+    if options.backpack_progression == BackpackProgression.option_vanilla:
+        return
+    num_per_tier = options.backpack_size.count_per_tier()
+    backpack_tier_names = Backpack.get_purchasable_tiers(ModNames.big_backpack in options.mods)
+    num_backpacks = len(backpack_tier_names) * num_per_tier
+    items.extend(item_factory(item) for item in ["Progressive Backpack"] * num_backpacks)
 
 
 def create_weapons(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):

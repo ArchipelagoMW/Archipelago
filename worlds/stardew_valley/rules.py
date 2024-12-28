@@ -29,6 +29,7 @@ from .strings.ap_names.community_upgrade_names import CommunityUpgrade
 from .strings.ap_names.mods.mod_items import SVEQuestItem, SVERunes
 from .strings.ap_names.transport_names import Transportation
 from .strings.artisan_good_names import ArtisanGood
+from .strings.backpack_tiers import Backpack
 from .strings.building_names import Building
 from .strings.bundle_names import CCRoom
 from .strings.calendar_names import Weekday
@@ -656,15 +657,21 @@ def get_museum_item_count_rule(logic: StardewLogic, suffix, milestone_name, acce
 
 
 def set_backpack_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
-    if world_options.backpack_progression != BackpackProgression.option_vanilla:
-        set_rule(multiworld.get_location("Large Pack", player),
-                 logic.money.can_spend(2000))
-        set_rule(multiworld.get_location("Deluxe Pack", player),
-                 (logic.money.can_spend(10000) & logic.received("Progressive Backpack")))
-        if ModNames.big_backpack in world_options.mods:
-            set_rule(multiworld.get_location("Premium Pack", player),
-                     (logic.money.can_spend(150000) &
-                      logic.received("Progressive Backpack", 2)))
+    if world_options.backpack_progression == BackpackProgression.option_vanilla:
+        return
+
+    num_per_tier = world_options.backpack_size.count_per_tier()
+    backpack_tier_names = Backpack.get_purchasable_tiers(ModNames.big_backpack in world_options.mods)
+    previous_backpacks = 0
+    for tier in backpack_tier_names:
+        for i in range(1, num_per_tier + 1):
+            loc_name = f"{tier} {i}"
+            if num_per_tier == 1:
+                loc_name = tier
+            price = Backpack.prices_per_tier[tier]
+            set_rule(multiworld.get_location(loc_name, player),
+                     logic.money.can_spend(price) & logic.received("Progressive Backpack", previous_backpacks))
+            previous_backpacks += 1
 
 
 def set_festival_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player):

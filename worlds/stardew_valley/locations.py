@@ -13,6 +13,8 @@ from .mods.mod_data import ModNames
 from .options import ExcludeGingerIsland, ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, \
     FestivalLocations, ElevatorProgression, BackpackProgression, FarmType
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
+from .options.options import BackpackSize
+from .strings.backpack_tiers import Backpack
 from .strings.goal_names import Goal
 from .strings.quest_names import ModQuest, Quest
 from .strings.region_names import Region, LogicRegion
@@ -34,6 +36,8 @@ class LocationTags(enum.Enum):
     COMMUNITY_CENTER_ROOM = enum.auto()
     RACCOON_BUNDLES = enum.auto()
     BACKPACK = enum.auto()
+    BACKPACK_TIER = enum.auto()
+    SPLIT_BACKPACK = enum.auto()
     TOOL_UPGRADE = enum.auto()
     HOE_UPGRADE = enum.auto()
     PICKAXE_UPGRADE = enum.auto()
@@ -42,6 +46,7 @@ class LocationTags(enum.Enum):
     TRASH_CAN_UPGRADE = enum.auto()
     FISHING_ROD_UPGRADE = enum.auto()
     PAN_UPGRADE = enum.auto()
+    STARTING_TOOLS = enum.auto()
     THE_MINES_TREASURE = enum.auto()
     CROPSANITY = enum.auto()
     ELEVATOR = enum.auto()
@@ -354,7 +359,18 @@ def extend_bundle_locations(randomized_locations: List[LocationData], bundle_roo
 def extend_backpack_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
     if options.backpack_progression == BackpackProgression.option_vanilla:
         return
-    backpack_locations = [location for location in locations_by_tag[LocationTags.BACKPACK]]
+
+    if options.backpack_size == BackpackSize.option_12:
+        backpack_locations = [location for location in locations_by_tag[LocationTags.BACKPACK_TIER]]
+    else:
+        num_per_tier = options.backpack_size.count_per_tier()
+        backpack_tier_names = Backpack.get_purchasable_tiers(ModNames.big_backpack in options.mods)
+        backpack_locations = []
+        for tier in backpack_tier_names:
+            for i in range(1, num_per_tier + 1):
+                backpack_locations.append(location_table[f"{tier} {i}"])
+                i += 1
+
     filtered_backpack_locations = filter_modded_locations(options, backpack_locations)
     randomized_locations.extend(filtered_backpack_locations)
 

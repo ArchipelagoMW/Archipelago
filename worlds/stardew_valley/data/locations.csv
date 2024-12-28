@@ -98,8 +98,8 @@ id,region,name,tags,mod_name
 98,Vault,Carnival Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,VAULT_BUNDLE",
 99,Vault,Walnut Hunter Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,VAULT_BUNDLE",
 100,Vault,Qi's Helper Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,VAULT_BUNDLE",
-101,Pierre's General Store,Large Pack,BACKPACK,
-102,Pierre's General Store,Deluxe Pack,BACKPACK,
+101,Pierre's General Store,Large Pack,"BACKPACK,BACKPACK_TIER",
+102,Pierre's General Store,Deluxe Pack,"BACKPACK,BACKPACK_TIER",
 103,Blacksmith Copper Upgrades,Copper Hoe Upgrade,"HOE_UPGRADE,TOOL_UPGRADE",
 104,Blacksmith Iron Upgrades,Iron Hoe Upgrade,"HOE_UPGRADE,TOOL_UPGRADE",
 105,Blacksmith Gold Upgrades,Gold Hoe Upgrade,"HOE_UPGRADE,TOOL_UPGRADE",
@@ -177,6 +177,42 @@ id,region,name,tags,mod_name
 237,The Mines - Floor 120,Floor 120 Elevator,ELEVATOR,
 250,Shipping,Demetrius's Breakthrough,MANDATORY,
 251,Volcano - Floor 10,Volcano Caldera Treasure,"GINGER_ISLAND,MANDATORY",
+161,Pierre's General Store,Small Pack 1,"BACKPACK,SPLIT_BACKPACK,STARTING_TOOLS",
+162,Pierre's General Store,Small Pack 2,"BACKPACK,SPLIT_BACKPACK,STARTING_TOOLS",
+163,Pierre's General Store,Small Pack 3,"BACKPACK,SPLIT_BACKPACK,STARTING_TOOLS",
+164,Pierre's General Store,Small Pack 4,"BACKPACK,SPLIT_BACKPACK,STARTING_TOOLS",
+165,Pierre's General Store,Small Pack 5,"BACKPACK,SPLIT_BACKPACK,STARTING_TOOLS",
+166,Pierre's General Store,Small Pack 6,"BACKPACK,SPLIT_BACKPACK,STARTING_TOOLS",
+167,Pierre's General Store,Small Pack 7,"BACKPACK,SPLIT_BACKPACK,STARTING_TOOLS",
+168,Pierre's General Store,Small Pack 8,"BACKPACK,SPLIT_BACKPACK,STARTING_TOOLS",
+169,Pierre's General Store,Small Pack 9,"BACKPACK,SPLIT_BACKPACK,STARTING_TOOLS",
+170,Pierre's General Store,Small Pack 10,"BACKPACK,SPLIT_BACKPACK,STARTING_TOOLS",
+171,Pierre's General Store,Small Pack 11,"BACKPACK,SPLIT_BACKPACK,STARTING_TOOLS",
+172,Pierre's General Store,Small Pack 12,"BACKPACK,SPLIT_BACKPACK,STARTING_TOOLS",
+174,Pierre's General Store,Large Pack 1,"BACKPACK,SPLIT_BACKPACK",
+175,Pierre's General Store,Large Pack 2,"BACKPACK,SPLIT_BACKPACK",
+176,Pierre's General Store,Large Pack 3,"BACKPACK,SPLIT_BACKPACK",
+177,Pierre's General Store,Large Pack 4,"BACKPACK,SPLIT_BACKPACK",
+178,Pierre's General Store,Large Pack 5,"BACKPACK,SPLIT_BACKPACK",
+179,Pierre's General Store,Large Pack 6,"BACKPACK,SPLIT_BACKPACK",
+180,Pierre's General Store,Large Pack 7,"BACKPACK,SPLIT_BACKPACK",
+181,Pierre's General Store,Large Pack 8,"BACKPACK,SPLIT_BACKPACK",
+182,Pierre's General Store,Large Pack 9,"BACKPACK,SPLIT_BACKPACK",
+183,Pierre's General Store,Large Pack 10,"BACKPACK,SPLIT_BACKPACK",
+184,Pierre's General Store,Large Pack 11,"BACKPACK,SPLIT_BACKPACK",
+185,Pierre's General Store,Large Pack 12,"BACKPACK,SPLIT_BACKPACK",
+187,Pierre's General Store,Deluxe Pack 1,"BACKPACK,SPLIT_BACKPACK",
+188,Pierre's General Store,Deluxe Pack 2,"BACKPACK,SPLIT_BACKPACK",
+189,Pierre's General Store,Deluxe Pack 3,"BACKPACK,SPLIT_BACKPACK",
+190,Pierre's General Store,Deluxe Pack 4,"BACKPACK,SPLIT_BACKPACK",
+191,Pierre's General Store,Deluxe Pack 5,"BACKPACK,SPLIT_BACKPACK",
+192,Pierre's General Store,Deluxe Pack 6,"BACKPACK,SPLIT_BACKPACK",
+193,Pierre's General Store,Deluxe Pack 7,"BACKPACK,SPLIT_BACKPACK",
+194,Pierre's General Store,Deluxe Pack 8,"BACKPACK,SPLIT_BACKPACK",
+195,Pierre's General Store,Deluxe Pack 9,"BACKPACK,SPLIT_BACKPACK",
+196,Pierre's General Store,Deluxe Pack 10,"BACKPACK,SPLIT_BACKPACK",
+197,Pierre's General Store,Deluxe Pack 11,"BACKPACK,SPLIT_BACKPACK",
+198,Pierre's General Store,Deluxe Pack 12,"BACKPACK,SPLIT_BACKPACK",
 301,Farm,Level 1 Farming,"FARMING_LEVEL,SKILL_LEVEL",
 302,Farm,Level 2 Farming,"FARMING_LEVEL,SKILL_LEVEL",
 303,Farm,Level 3 Farming,"FARMING_LEVEL,SKILL_LEVEL",
@@ -2865,7 +2901,7 @@ id,region,name,tags,mod_name
 6372,The Lost Valley,Friendsanity: Gregory 12 <3,FRIENDSANITY,Boarding House and Bus Stop Extension
 6373,The Lost Valley,Friendsanity: Gregory 13 <3,FRIENDSANITY,Boarding House and Bus Stop Extension
 6374,The Lost Valley,Friendsanity: Gregory 14 <3,FRIENDSANITY,Boarding House and Bus Stop Extension
-7001,Pierre's General Store,Premium Pack,BACKPACK,Bigger Backpack
+7001,Pierre's General Store,Premium Pack,"BACKPACK,BACKPACK_TIER",Bigger Backpack
 7002,Carpenter Shop,Tractor Garage Blueprint,BUILDING_BLUEPRINT,Tractor Mod
 7003,The Deep Woods Depth 100,Pet the Deep Woods Unicorn,MANDATORY,DeepWoods
 7004,The Deep Woods Depth 50,Breaking Up Deep Woods Gingerbread House,MANDATORY,DeepWoods
@@ -2900,6 +2936,18 @@ id,region,name,tags,mod_name
 7055,Abandoned Mines - 3,Abandoned Treasure - Floor 3,MANDATORY,Boarding House and Bus Stop Extension
 7056,Abandoned Mines - 4,Abandoned Treasure - Floor 4,MANDATORY,Boarding House and Bus Stop Extension
 7057,Abandoned Mines - 5,Abandoned Treasure - Floor 5,MANDATORY,Boarding House and Bus Stop Extension
+7101,Pierre's General Store,Premium Pack 1,"BACKPACK,SPLIT_BACKPACK",Bigger Backpack
+7102,Pierre's General Store,Premium Pack 2,"BACKPACK,SPLIT_BACKPACK",Bigger Backpack
+7103,Pierre's General Store,Premium Pack 3,"BACKPACK,SPLIT_BACKPACK",Bigger Backpack
+7104,Pierre's General Store,Premium Pack 4,"BACKPACK,SPLIT_BACKPACK",Bigger Backpack
+7105,Pierre's General Store,Premium Pack 5,"BACKPACK,SPLIT_BACKPACK",Bigger Backpack
+7106,Pierre's General Store,Premium Pack 6,"BACKPACK,SPLIT_BACKPACK",Bigger Backpack
+7107,Pierre's General Store,Premium Pack 7,"BACKPACK,SPLIT_BACKPACK",Bigger Backpack
+7108,Pierre's General Store,Premium Pack 8,"BACKPACK,SPLIT_BACKPACK",Bigger Backpack
+7109,Pierre's General Store,Premium Pack 9,"BACKPACK,SPLIT_BACKPACK",Bigger Backpack
+7110,Pierre's General Store,Premium Pack 10,"BACKPACK,SPLIT_BACKPACK",Bigger Backpack
+7111,Pierre's General Store,Premium Pack 11,"BACKPACK,SPLIT_BACKPACK",Bigger Backpack
+7112,Pierre's General Store,Premium Pack 12,"BACKPACK,SPLIT_BACKPACK",Bigger Backpack
 7401,Farm,Cook Magic Elixir,COOKSANITY,Magic
 7402,Farm,Craft Travel Core,CRAFTSANITY,Magic
 7403,Farm,Craft Haste Elixir,CRAFTSANITY,Stardew Valley Expanded
