@@ -80,8 +80,12 @@ def hundred_percent(state: CollectionState, world: "LoonylandWorld") -> bool:
     return state.has_group("physical_items", world.player, 105)
 
 
+def have_x_badges(state: CollectionState, world: "LoonylandWorld", count: int) -> bool:
+    return state.has("BadgeEarned", world.player, count)
+
+
 def have_39_badges(state: CollectionState, world: "LoonylandWorld") -> bool:
-    return state.has_group("cheats", world.player, 39)
+    return state.has("BadgeEarned", world.player, 39)
 
 
 def have_all_weapons(state: CollectionState, world: "LoonylandWorld") -> bool:

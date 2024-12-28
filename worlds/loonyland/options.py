@@ -1,18 +1,27 @@
 from dataclasses import dataclass
 
-from Options import Choice, DeathLink, PerGameCommonOptions
+from Options import Choice, DeathLink, PerGameCommonOptions, Range
 
 
 class WinCondition(Choice):
     """Evilizer: Beat the final boss
-    NOT IMPLEMENTED: 40 badges: get all 40 badge locs
+     Badges: Get X merit badges earned
     NOT IMPLEMENTED: normal_remix: Beat the final boss in normal and remix"""
 
     display_name = "Win Condition"
     option_evilizer = 0
-    #option_40badges = 1
-    #option_normal_remix = 2
+    option_badges = 1
+    # option_normal_remix = 2
     default = 0
+
+
+class BadgesRequired(Range):
+    """For the Badges win con, how many badges are needed"""
+
+    display_name = "Badges Required"
+    range_start = 1
+    range_end = 40
+    default = 30
 
 
 class Difficulty(Choice):
@@ -57,6 +66,16 @@ class Remix(Choice):
     default = 0
 
 
+class OverpoweredCheats(Choice):
+    """Walk Through Walls, Infinite health, Touch of Death
+    Also disables Brawlin' as a location, since it requires Touch of Death"""
+
+    display_name = "Overpowered Cheats"
+    option_excluded = 0
+    option_included = 1
+    default = 0
+
+
 class Badges(Choice):
     """Full: All badges and their cheats are in logic
     Reasonable: Remove hard to get badges and overpowered cheats
@@ -85,10 +104,12 @@ class MonsterDolls(Choice):
 @dataclass
 class LoonylandOptions(PerGameCommonOptions):
     win_condition: WinCondition
+    badges_required: BadgesRequired
     difficulty: Difficulty
     long_checks: LongChecks
     multisave: MultipleSaves
     remix: Remix
+    overpowered_cheats: OverpoweredCheats
     badges: Badges
     dolls: MonsterDolls
     death_link: DeathLink

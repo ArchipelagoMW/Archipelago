@@ -16,7 +16,8 @@ from .Data.game_data import (
 )
 from .items import LLItemCat, LoonylandItem
 from .locations import LLLocCat, LoonylandLocation
-from .options import LoonylandOptions
+from .options import LoonylandOptions, WinCondition
+from .rules import have_x_badges
 
 
 class LoonylandWebWorld(WebWorld):
@@ -82,9 +83,9 @@ class LoonylandWorld(World):
                     new_item = self.create_item(name)
                     item_pool.append(new_item)
 
-        junk_len = (
-            len(self.multiworld.get_unfilled_locations(self.player)) - len(item_pool) - 1
-        )  # - 1 for win con location
+        junk_len = len(self.multiworld.get_unfilled_locations(self.player)) - len(item_pool)
+        if self.options.win_condition == WinCondition.option_evilizer:
+            junk_len = junk_len - 1
         item_pool += [self.create_junk() for _ in range(junk_len)]
 
         self.multiworld.itempool += item_pool
@@ -107,12 +108,27 @@ class LoonylandWorld(World):
                 new_loc.place_locked_item(self.create_event(loc_data.base_item))
                 new_loc.address = None
             region.locations.append(new_loc)
+            if loc_data.category == LLLocCat.BADGE:
+                new_loc_as_event = LoonylandLocation(self.player, loc_name + " Earned", None, region)
+                new_loc_as_event.place_locked_item(self.create_event("BadgeEarned"))
+                region.locations.append(new_loc_as_event)
 
     def set_rules(self):
         # Completion condition.
         # self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
-        final_loc = self.get_location("Q: Save Halloween Hill")
-        final_loc.address = None
+        final_loc = None
+        if self.options.win_condition == WinCondition.option_evilizer:
+            final_loc = self.get_location("Q: Save Halloween Hill")
+            final_loc.address = None
+        elif self.options.win_condition == WinCondition.option_badges:
+            final_loc = LoonylandLocation(
+                self.player, str(self.options.badges_required.value) + " Badges Earned", None, self.get_region("Menu")
+            )
+            final_loc.access_rule = lambda state: have_x_badges(state, self, self.options.badges_required.value)
+            self.get_region("Menu").locations.append(final_loc)
+        else:  # no win con
+            final_loc = self.get_location("Swamp: Outside Luniton")
+
         final_loc.place_locked_item(self.create_event("Victory"))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
@@ -123,10 +139,13 @@ class LoonylandWorld(World):
 
     def fill_slot_data(self):
         return {
+            "WinCondition": self.options.win_condition.value,
+            "BadgesRequired": self.options.badges_required.value,
             "Difficulty": self.options.difficulty.value,
             "LongChecks": self.options.long_checks.value,
             "MultipleSaves": self.options.multisave.value,
             "Remix": self.options.remix.value,
+            "OverpoweredCheats": self.options.overpowered_cheats.value,
             "Badges": self.options.badges.value,
             "Dolls": self.options.dolls.value,
             "DeathLink": self.options.death_link.value,

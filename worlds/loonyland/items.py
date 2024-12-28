@@ -3,7 +3,15 @@ from typing import NamedTuple
 
 from BaseClasses import Item, ItemClassification
 
-from worlds.loonyland.options import Badges, LongChecks, LoonylandOptions, MonsterDolls, MultipleSaves, Remix
+from worlds.loonyland.options import (
+    Badges,
+    LongChecks,
+    LoonylandOptions,
+    MonsterDolls,
+    MultipleSaves,
+    OverpoweredCheats,
+    Remix,
+)
 
 
 class LoonylandItem(Item):
@@ -36,7 +44,7 @@ class LLItem(NamedTuple):
             self.category == LLItemCat.DOLL and options.dolls == MonsterDolls.option_vanilla
         ):
             return False
-        if "OP" in self.flags:
+        if options.overpowered_cheats == OverpoweredCheats.option_excluded and "OP" in self.flags:
             return False
         if options.remix == Remix.option_excluded and ("REMIX" in self.flags):
             return False
@@ -53,11 +61,13 @@ class LLItem(NamedTuple):
 
     def modified_classification(self, options: LoonylandOptions):
         if options.long_checks == LongChecks.option_included:
-            if self.category == LLItemCat.CHEAT:  # 39 badges
-                return ItemClassification.progression
+            # if self.category == LLItemCat.CHEAT:  # 39 badges
+            #    return ItemClassification.progression
             if self.category == LLItemCat.ITEM:  # 100%
                 return ItemClassification.progression
             if self.category == LLItemCat.DOLL:  # 100%
+                return ItemClassification.progression
+            if "LONG" in self.flags:  # items that are required for long checks
                 return ItemClassification.progression
         if options.badges == Badges.option_none:
             if self.category == LLItemCat.ACCESS:

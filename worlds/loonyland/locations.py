@@ -3,8 +3,16 @@ from typing import NamedTuple
 
 from BaseClasses import Location
 
-from worlds.loonyland.options import Badges, LongChecks, LoonylandOptions, MonsterDolls, MultipleSaves, Remix, \
-    WinCondition
+from worlds.loonyland.options import (
+    Badges,
+    LongChecks,
+    LoonylandOptions,
+    MonsterDolls,
+    MultipleSaves,
+    OverpoweredCheats,
+    Remix,
+    WinCondition,
+)
 
 
 class LoonylandLocation(Location):
@@ -42,6 +50,8 @@ class LLLocation(NamedTuple):
         if options.multisave == MultipleSaves.option_disabled and ("MULTISAVE" in self.flags):
             return False
         if options.win_condition == WinCondition.option_evilizer and ("POSTGAME" in self.flags):
+            return False
+        if options.overpowered_cheats == OverpoweredCheats.option_excluded and "OP" in self.flags:
             return False
         return True
 
