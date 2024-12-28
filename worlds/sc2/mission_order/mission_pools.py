@@ -182,12 +182,12 @@ class SC2MOGenMissionPools:
                 self._used_flags[flag] += 1
         self._used_missions.append(mission)
 
-    def pull_random_mission(self, world: World, slot: 'SC2MOGenMission', *, prefer_min_difficulty: Difficulty = None) -> SC2Mission:
+    def pull_random_mission(self, world: World, slot: 'SC2MOGenMission', *, prefer_close_difficulty: bool = False) -> SC2Mission:
         """Picks a random mission from the mission pool of the given slot and marks it as present in the mission order.
 
         With `prefer_close_difficulty = True` the mission is picked to be as close to the slot's desired difficulty as possible."""
         pool = slot.option_mission_pool.intersection(self.master_list)
-        
+
         difficulty_pools: Dict[int, List[int]] = {
             diff: sorted(pool.intersection(self.difficulty_pools[diff]))
             for diff in Difficulty if diff != Difficulty.RELATIVE
@@ -195,13 +195,13 @@ class SC2MOGenMissionPools:
 
         final_pool: List[int] = []
         desired_difficulty = slot.option_difficulty
-        if prefer_min_difficulty is None:
+        if prefer_close_difficulty:
             # Iteratively look down and up around the slot's desired difficulty
             # Either a difficulty with valid missions is found, or an error is raised
             difficulty_offset = 0
             while len(final_pool) == 0:
                 lower_diff = max(desired_difficulty - difficulty_offset, 1)
-                higher_diff = min(desired_difficulty + difficulty_offset, 5)
+                higher_diff = min(desired_difficulty + difficulty_offset + 1, 5)
                 final_pool = difficulty_pools[lower_diff]
                 if len(final_pool) > 0:
                     break
@@ -211,25 +211,17 @@ class SC2MOGenMissionPools:
                 if lower_diff == Difficulty.STARTER and higher_diff == Difficulty.VERY_HARD:
                     raise IndexError()
                 difficulty_offset += 1
-        
+
         else:
             # Consider missions from all lower difficulties as well the desired difficulty
-            min_difficulty = prefer_min_difficulty
-            while len(final_pool) == 0:
-                final_pool = [
-                    mission
-                    for difficulty in range(min_difficulty, desired_difficulty + 1)
-                    for mission in difficulty_pools[difficulty]
-                ]
-                if min_difficulty <= Difficulty.STARTER:
-                    break
-                min_difficulty -= 1
             # Only take from higher difficulties if no lower difficulty is possible
+            final_pool = [
+                mission
+                for difficulty in range(Difficulty.STARTER, desired_difficulty + 1)
+                for mission in difficulty_pools[difficulty]
+            ]
             difficulty_offset = 1
             while len(final_pool) == 0:
-                # Ban difficulty offsets greater than 1 when reverse filling to avoid unnatural difficulty spikes
-                if difficulty_offset > 1 and prefer_min_difficulty == desired_difficulty:
-                    raise Exception("Invalid mission pool for this mission order. Try changing your Mission Bias option to easy.")
                 higher_difficulty = desired_difficulty + difficulty_offset
                 if higher_difficulty > Difficulty.VERY_HARD:
                     raise IndexError()
