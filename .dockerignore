@@ -1,0 +1,7 @@
+.git
+.github
+.run
+docs
+test
+typings
+*Client.py
