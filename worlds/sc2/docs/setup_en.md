@@ -85,7 +85,8 @@ It's possible to get stuck on "Any Units" if the units can't attack,
 like getting only medics and medivacs for the first 2 units, only getting units that take too long to build
 for the missions at hand, or simply not having enough damage output.
 Some safeguards exist to make sure terrain traversal, no-builds, and having something that can hit air objectives exists,
-meaning cheat codes like `terribleterribledamage` can be used to recover a seemingly stuck world.
+so a stuck world can be recovered by either setting the difficulty to casual with `/difficulty casual` in the client
+or using cheat codes like `terribleterribledamage` in-game.
 This logic option is likely to be beatable without cheats, but not guaranteed to be.
 Thus, it is only safe to use in a multiworld if the player is willing to use cheats to get a world unstuck if
 the situation calls for it, or uses settings like start inventory or mission exclusions to guarantee beatability.
