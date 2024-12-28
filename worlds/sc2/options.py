@@ -863,6 +863,16 @@ class ExcludedMissions(Sc2MissionSet):
     valid_keys = {mission.mission_name for mission in SC2Mission}
 
 
+class MissionBias(Choice):
+    """
+    When building a campaign, determines whether easy or hard missions are more likely to appear.
+    Only applies to mission orders with fewer missions than those available.
+    """
+    display_name = "Mission Bias"
+    option_easy = 0
+    option_hard = 1
+
+
 class ExcludeVeryHardMissions(Choice):
     """
     Excludes Very Hard missions outside of Epilogue campaign (All-In, The Reckoning, Salvation, and all Epilogue missions are considered Very Hard).
@@ -1207,6 +1217,7 @@ class Starcraft2Options(PerGameCommonOptions):
     excluded_items: ExcludedItems
     unexcluded_items: UnexcludedItems
     excluded_missions: ExcludedMissions
+    mission_bias: MissionBias
     exclude_very_hard_missions: ExcludeVeryHardMissions
     vanilla_items_only: VanillaItemsOnly
     victory_cache: VictoryCache
