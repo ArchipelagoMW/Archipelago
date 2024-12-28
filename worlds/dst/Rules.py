@@ -1555,7 +1555,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             "Moleworm":                         moleworm.rule if PEACEFUL_LOGIC else lambda state: state.has_any({dusk.event, night.event, digging.event}, player),
             "Naked Mole Bat":                   lambda state: state.has_all({basic_combat.event, cave_exploration.event}, player),
             "Splumonkey":                       ruins_exploration.rule,
-            "Moon Moth":                        combine_rules(can_reach_islands.rule, bug_catching.rule if PEACEFUL_LOGIC else ALWAYS_TRUE),
+            "Moon Moth":                        combine_rules(can_reach_islands.rule, chopping.rule, bug_catching.rule if PEACEFUL_LOGIC else ALWAYS_TRUE),
             "Mosquito":                         combine_rules(swamp_exploration.rule, bug_catching.rule if PEACEFUL_LOGIC else ALWAYS_TRUE),
             "Mosling":                          moosegoose.rule,
             "Mush Gnome":                       lambda state: state.has_all({basic_combat.event, cave_exploration.event}, player),
