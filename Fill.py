@@ -235,18 +235,30 @@ def remaining_fill(multiworld: MultiWorld,
                    locations: typing.List[Location],
                    itempool: typing.List[Item],
                    name: str = "Remaining", 
-                   move_unplaceable_to_start_inventory: bool = False) -> None:
+                   move_unplaceable_to_start_inventory: bool = False,
+                   check_location_can_fill: bool = False) -> None:
     unplaced_items: typing.List[Item] = []
     placements: typing.List[Location] = []
     swapped_items: typing.Counter[typing.Tuple[int, str]] = Counter()
     total = min(len(itempool),  len(locations))
     placed = 0
+
+    # Optimisation: Decide whether to do full location.can_fill check (respect excluded), or only check the item rule
+    if check_location_can_fill:
+        state = CollectionState(multiworld)
+
+        def location_can_fill_item(location_to_fill: Location, item_to_fill: Item):
+            return location_to_fill.can_fill(state, item_to_fill, check_access=False)
+    else:
+        def location_can_fill_item(location_to_fill: Location, item_to_fill: Item):
+            return location_to_fill.item_rule(item_to_fill)
+
     while locations and itempool:
         item_to_place = itempool.pop()
         spot_to_fill: typing.Optional[Location] = None
 
         for i, location in enumerate(locations):
-            if location.item_rule(item_to_place):
+            if location_can_fill_item(location, item_to_place):
                 # popping by index is faster than removing by content,
                 spot_to_fill = locations.pop(i)
                 # skipping a scan for the element
@@ -267,7 +279,7 @@ def remaining_fill(multiworld: MultiWorld,
 
                 location.item = None
                 placed_item.location = None
-                if location.item_rule(item_to_place):
+                if location_can_fill_item(location, item_to_place):
                     # Add this item to the existing placement, and
                     # add the old item to the back of the queue
                     spot_to_fill = placements.pop(i)
@@ -537,7 +549,7 @@ def distribute_items_restrictive(multiworld: MultiWorld,
     if excludedlocations:
         raise FillError(
             f"Not enough filler items for excluded locations. "
-            f"There are {len(excludedlocations)} more excluded locations than filler or trap items.",
+            f"There are {len(excludedlocations)} more excluded locations than excludable items.",
             multiworld=multiworld,
         )
 
