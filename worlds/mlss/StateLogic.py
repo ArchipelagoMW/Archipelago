@@ -105,8 +105,9 @@ def surfable(state, player):
     )
 
 
-def postJokes(state, player):
-    return (
+def postJokes(state, player, goal):
+    if goal == 0:
+        return (
         surfable(state, player)
         and canDig(state, player)
         and dressBeanstar(state, player)
@@ -115,7 +116,13 @@ def postJokes(state, player):
         and brooch(state, player)
         and rose(state, player)
         and canDash(state, player)
-    )
+        )
+    else:
+        return (
+        surfable(state, player)
+        and canDig(state, player)
+        and canDash(state, player)
+        )
 
 
 def teehee(state, player):

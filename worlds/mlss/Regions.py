@@ -220,8 +220,8 @@ def connect_regions(world: "MLSSWorld"):
     connect(world, names, "Surfable", "GwarharEntrance")
     connect(world, names, "Surfable", "Oasis")
     connect(world, names, "Surfable", "JokesEntrance", lambda state: StateLogic.fire(state, world.player))
-    connect(world, names, "JokesMain", "PostJokes", lambda state: StateLogic.postJokes(state, world.player))
-    if not world.options.castle_skip and not world.options.goal == 1:
+    connect(world, names, "JokesMain", "PostJokes", lambda state: StateLogic.postJokes(state, world.player, world.options.goal.value))
+    if not world.options.castle_skip and not world.options.goal.value == 1:
         connect(world, names, "PostJokes", "Bowser's Castle")
         connect(
             world,
@@ -261,7 +261,7 @@ def connect_regions(world: "MLSSWorld"):
             names,
             "Fungitown",
             "Fungitown Shop Birdo Flag",
-            lambda state: StateLogic.postJokes(state, world.player),
+            lambda state: StateLogic.postJokes(state, world.player, world.options.goal.value),
         )
     else:
         connect(
@@ -283,14 +283,14 @@ def connect_regions(world: "MLSSWorld"):
             names,
             "Shop Starting Flag",
             "Shop Birdo Flag",
-            lambda state: StateLogic.canCrash(state, world.player) and StateLogic.postJokes(state, world.player),
+            lambda state: StateLogic.canCrash(state, world.player) and StateLogic.postJokes(state, world.player, world.options.goal.value),
         )
         connect(
             world,
             names,
             "Fungitown",
             "Fungitown Shop Birdo Flag",
-            lambda state: StateLogic.canCrash(state, world.player) and StateLogic.postJokes(state, world.player),
+            lambda state: StateLogic.canCrash(state, world.player) and StateLogic.postJokes(state, world.player, world.options.goal.value),
         )
 
 

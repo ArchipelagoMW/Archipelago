@@ -28,7 +28,6 @@ def set_rules(world: "MLSSWorld", excluded):
                 lambda state: StateLogic.canDig(state, world.player),
             )
         if "Shop" in location.name and "Coffee" not in location.name and location.name not in excluded:
-            forbid_item(world.get_location(location.name), "Hammers", world.player)
             if "Badge" in location.name or "Pants" in location.name:
                 add_rule(
                     world.get_location(location.name),
@@ -401,12 +400,28 @@ def set_rules(world: "MLSSWorld", excluded):
         lambda state: StateLogic.winkle(state, world.player),
     )
     add_rule(
+        world.get_location("Guffawha Ruins Block"),
+        lambda state: StateLogic.thunder(state, world.player),
+    )
+    add_rule(
         world.get_location(LocationName.GwarharLagoonSpangleReward),
         lambda state: StateLogic.spangle(state, world.player),
     )
     add_rule(
         world.get_location(LocationName.PantsShopMomPiranhaFlag1),
         lambda state: StateLogic.brooch(state, world.player) or StateLogic.rose(state, world.player),
+    )
+    add_rule(
+        world.get_location("Chucklehuck Woods Solo Luigi Cave Room 2 Block"),
+        lambda state: StateLogic.brooch(state, world.player) and StateLogic.canDig(state, world.player),
+    )
+    add_rule(
+        world.get_location("Chucklehuck Woods Solo Luigi Cave Room 3 Block 1"),
+        lambda state: StateLogic.brooch(state, world.player) and StateLogic.canDig(state, world.player),
+    )
+    add_rule(
+        world.get_location("Chucklehuck Woods Solo Luigi Cave Room 3 Block 2"),
+        lambda state: StateLogic.brooch(state, world.player) and StateLogic.canDig(state, world.player),
     )
     add_rule(
         world.get_location(LocationName.PantsShopMomPiranhaFlag2),
@@ -601,6 +616,14 @@ def set_rules(world: "MLSSWorld", excluded):
         add_rule(
             world.get_location(LocationName.HoohooMountainBaseBooStatueCaveCoinBlock1),
             lambda state: StateLogic.canCrash(state, world.player) or StateLogic.super(state, world.player),
+        )
+        add_rule(
+            world.get_location("Chucklehuck Woods Solo Luigi Cave Room 1 Coin Block 1"),
+            lambda state: StateLogic.canDig(state, world.player) and StateLogic.brooch(state, world.player),
+        )
+        add_rule(
+            world.get_location("Chucklehuck Woods Solo Luigi Cave Room 1 Coin Block 2"),
+            lambda state: StateLogic.canDig(state, world.player) and StateLogic.brooch(state, world.player),
         )
         add_rule(
             world.get_location(LocationName.HoohooMountainBaseBooStatueCaveCoinBlock2),
