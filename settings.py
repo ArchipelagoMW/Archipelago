@@ -599,6 +599,7 @@ class ServerOptions(Group):
     savefile: Optional[str] = None
     disable_save: bool = False
     loglevel: str = "info"
+    logtime: bool = False
     server_password: Optional[ServerPassword] = None
     disable_item_cheat: Union[DisableItemCheat, bool] = False
     location_check_points: LocationCheckPoints = LocationCheckPoints(1)

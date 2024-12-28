@@ -485,9 +485,9 @@ def get_text_after(text: str, start: str) -> str:
 loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}
 
 
-def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
-                 log_format: str = "[%(name)s at %(asctime)s]: %(message)s",
-                 exception_logger: typing.Optional[str] = None):
+def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
+                 write_mode: str = "w", log_format: str = "[%(name)s at %(asctime)s]: %(message)s",
+                 add_timestamp: bool = False, exception_logger: typing.Optional[str] = None):
     import datetime
     loglevel: int = loglevel_mapping.get(loglevel, loglevel)
     log_folder = user_path("logs")
@@ -521,7 +521,8 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         formatter = logging.Formatter(fmt='[%(asctime)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
         stream_handler = logging.StreamHandler(sys.stdout)
         stream_handler.addFilter(Filter("NoFile", lambda record: not getattr(record, "NoStream", False)))
-        stream_handler.setFormatter(formatter)
+        if add_timestamp:
+            stream_handler.setFormatter(formatter)
         root_logger.addHandler(stream_handler)
 
     # Relay unhandled exceptions to logger.
@@ -533,7 +534,8 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
                 sys.__excepthook__(exc_type, exc_value, exc_traceback)
                 return
             logging.getLogger(exception_logger).exception("Uncaught exception",
-                                                          exc_info=(exc_type, exc_value, exc_traceback))
+                                                          exc_info=(exc_type, exc_value, exc_traceback),
+                                                          extra={"NoStream": exception_logger is None})
             return orig_hook(exc_type, exc_value, exc_traceback)
 
         handle_exception._wrapped = True
@@ -556,7 +558,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
     import platform
     logging.info(
         f"Archipelago ({__version__}) logging initialized"
-        f" on {platform.platform()}"
+        f" on {platform.platform()} process {os.getpid()}"
         f" running Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
         f"{' (frozen)' if is_frozen() else ''}"
     )

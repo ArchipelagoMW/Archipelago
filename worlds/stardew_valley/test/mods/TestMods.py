@@ -1,9 +1,10 @@
 import random
 
 from BaseClasses import get_seed
-from .. import SVTestBase, SVTestCase, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x, complete_options_with_default, solo_multiworld
+from .. import SVTestBase, SVTestCase, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x, solo_multiworld, \
+    fill_dataclass_with_default
 from ..assertion import ModAssertMixin, WorldAssertMixin
-from ... import items, Group, ItemClassification
+from ... import items, Group, ItemClassification, create_content
 from ... import options
 from ...items import items_by_group
 from ...options import SkillProgression, Walnutsanity
@@ -122,18 +123,19 @@ class TestModEntranceRando(SVTestCase):
                              (options.EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
                              (options.EntranceRandomization.option_buildings_without_house, RandomizationFlag.BUILDINGS),
                              (options.EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
-            sv_options = complete_options_with_default({
+            sv_options = fill_dataclass_with_default({
                 options.EntranceRandomization.internal_name: option,
                 options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
                 SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
                 options.Mods.internal_name: frozenset(options.Mods.valid_keys)
             })
+            content = create_content(sv_options)
             seed = get_seed()
             rand = random.Random(seed)
             with self.subTest(option=option, flag=flag, seed=seed):
                 final_connections, final_regions = create_final_connections_and_regions(sv_options)
 
-                _, randomized_connections = randomize_connections(rand, sv_options, final_regions, final_connections)
+                _, randomized_connections = randomize_connections(rand, sv_options, content, final_regions, final_connections)
 
                 for connection_name in final_connections:
                     connection = final_connections[connection_name]
