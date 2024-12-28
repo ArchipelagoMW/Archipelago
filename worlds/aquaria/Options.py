@@ -132,96 +132,6 @@ class SkipFirstVision(Toggle):
     display_name = "Skip Naija's first vision"
 
 
-class NoProgressionHardOrHiddenLocation(Toggle):
-    """
-    Make sure that there are no progression items at hard-to-reach or hard-to-find locations.
-    Those locations are very High locations (that need beast form, soup and skill to get),
-    every location in the bubble cave, locations where need you to cross a false wall without any indication,
-    the Arnassi race, bosses and minibosses. Useful for those that want a more casual run.
-    """
-    display_name = "No progression in hard or hidden locations"
-
-
-class NoProgressionSimonSays(Toggle):
-    """
-    Make sure that there are no progression items in the says area
-    """
-    display_name = "No progression in Simon says area"
-
-
-class NoProgressionKelpForest(Toggle):
-    """
-    Make sure that there are no progression items in Kelp Forest (excluding Simon says area).
-    Can be usefull to get smaller runs.
-    """
-    display_name = "No progression in Kelp Forest"
-
-
-class NoProgressionVeil(Toggle):
-    """
-    Make sure that there are no progression items in the Veil. Can be usefull to get smaller runs.
-    """
-    display_name = "No progression in the Veil"
-
-
-class NoProgressionMithalas(Toggle):
-    """
-    Make sure that there are no progression items in the Mithalas (city, castle and cathedral).
-    Can be usefull to get smaller runs.
-    """
-    display_name = "No progression in Mithalas"
-
-
-class NoProgressionEnergyTemple(Toggle):
-    """
-    Make sure that there are no progression items in the Energy Temple. Can be usefull to get smaller runs.
-    """
-    display_name = "No progression in the Energy Temple"
-
-
-class NoProgressionArnassiRuins(Toggle):
-    """
-    Make sure that there are no progression items in the Arnassi Ruins. Can be usefull to get smaller runs.
-    Note that if the Transportation turtle are not randomize, this include Simon Says area.
-    """
-    display_name = "No progression in Arnassi Ruins"
-
-
-class NoProgressionFrozenVeil(Toggle):
-    """
-    Make sure that there are no progression items in the Frozen Veil (including Ice Cavern and Bubble Cave)
-    Can be usefull to get smaller runs.
-    """
-    display_name = "No progression in the Frozen Veil"
-
-
-class NoProgressionAbyss(Toggle):
-    """
-    Make sure that there are no progression items in the Abyss
-    Can be usefull to get smaller runs.
-    Have no effect if the objective is killing the four enemy gods.
-    """
-    display_name = "No progression in the Abyss"
-
-
-class NoProgressionSunkenCity(Toggle):
-    """
-    Make sure that there are no progression items in the Sunken City
-    Can be usefull to get smaller runs.
-    Have no effect if the objective is killing the four enemy gods.
-    """
-    display_name = "No progression in the Sunken City"
-
-
-class NoProgressionBody(Toggle):
-    """
-    Make sure that there are no progression items in the Body (including the before boss transturtle room
-    and the boss location. Can be usefull to get smaller runs.
-    Have no effect if the objective is killing the four enemy gods.
-    """
-    display_name = "No progression in the Body"
-
-
 class LightNeededToGetToDarkPlaces(Choice):
     """
     Make sure that the sun form or the dumbo pet can be acquired before getting to dark places.
@@ -317,6 +227,96 @@ class ThroneAsLocation(Toggle):
     """
     display_name = "Throne as a location"
 
+
+class NoProgressionHardOrHiddenLocation(Toggle):
+    """
+    Make sure that there are no progression items at hard-to-reach or hard-to-find locations.
+    Those locations are very High locations (that need beast form, soup and skill to get),
+    every location in the bubble cave, locations where need you to cross a false wall without any indication,
+    the Arnassi race, bosses and minibosses. Useful for those that want a more casual run.
+    """
+    display_name = "No progression in hard or hidden locations"
+
+
+class NoProgressionSimonSays(Toggle):
+    """
+    Make sure that there are no progression items in the says area
+    """
+    display_name = "No progression in Simon says area"
+
+
+class NoProgressionKelpForest(Toggle):
+    """
+    Make sure that there are no progression items in Kelp Forest (excluding Simon says area).
+    Can be usefull to get smaller runs.
+    """
+    display_name = "No progression in Kelp Forest"
+
+
+class NoProgressionVeil(Toggle):
+    """
+    Make sure that there are no progression items in the Veil. Can be usefull to get smaller runs.
+    """
+    display_name = "No progression in the Veil"
+
+
+class NoProgressionMithalas(Toggle):
+    """
+    Make sure that there are no progression items in the Mithalas (city, castle and cathedral).
+    Can be usefull to get smaller runs.
+    """
+    display_name = "No progression in Mithalas"
+
+
+class NoProgressionEnergyTemple(Toggle):
+    """
+    Make sure that there are no progression items in the Energy Temple. Can be usefull to get smaller runs.
+    """
+    display_name = "No progression in the Energy Temple"
+
+
+class NoProgressionArnassiRuins(Toggle):
+    """
+    Make sure that there are no progression items in the Arnassi Ruins. Can be usefull to get smaller runs.
+    Note that if the Transportation turtle are not randomize, this include Simon Says area.
+    """
+    display_name = "No progression in Arnassi Ruins"
+
+
+class NoProgressionFrozenVeil(Toggle):
+    """
+    Make sure that there are no progression items in the Frozen Veil (including Ice Cavern and Bubble Cave)
+    Can be usefull to get smaller runs.
+    """
+    display_name = "No progression in the Frozen Veil"
+
+
+class NoProgressionAbyss(Toggle):
+    """
+    Make sure that there are no progression items in the Abyss
+    Can be usefull to get smaller runs.
+    Have no effect if the objective is killing the four enemy gods.
+    """
+    display_name = "No progression in the Abyss"
+
+
+class NoProgressionSunkenCity(Toggle):
+    """
+    Make sure that there are no progression items in the Sunken City
+    Can be usefull to get smaller runs.
+    Have no effect if the objective is killing the four enemy gods.
+    """
+    display_name = "No progression in the Sunken City"
+
+
+class NoProgressionBody(Toggle):
+    """
+    Make sure that there are no progression items in the Body (including the before boss transturtle room
+    and the boss location. Can be usefull to get smaller runs.
+    Have no effect if the objective is killing the four enemy gods.
+    """
+    display_name = "No progression in the Body"
+
 @dataclass
 class AquariaOptions(PerGameCommonOptions):
     """
@@ -332,17 +332,6 @@ class AquariaOptions(PerGameCommonOptions):
     light_needed_to_get_to_dark_places: LightNeededToGetToDarkPlaces
     bind_song_needed_to_get_under_rock_bulb: BindSongNeededToGetUnderRockBulb
     unconfine_home_water: UnconfineHomeWater
-    no_progression_hard_or_hidden_locations: NoProgressionHardOrHiddenLocation
-    no_progression_simon_says: NoProgressionSimonSays
-    no_progression_kelp_forest: NoProgressionKelpForest
-    no_progression_veil: NoProgressionVeil
-    no_progression_mithalas: NoProgressionMithalas
-    no_progression_energy_temple: NoProgressionEnergyTemple
-    no_progression_arnassi_ruins: NoProgressionArnassiRuins
-    no_progression_frozen_veil: NoProgressionFrozenVeil
-    no_progression_abyss: NoProgressionAbyss
-    no_progression_sunken_city: NoProgressionSunkenCity
-    no_progression_body: NoProgressionBody
     ingredient_randomizer: IngredientRandomizer
     dish_randomizer: DishRandomizer
     aquarian_translation: AquarianTranslation
@@ -354,3 +343,14 @@ class AquariaOptions(PerGameCommonOptions):
     skip_final_boss_3rd_form: SkipFinalBoss3rdForm
     save_healing: SaveHealing
     throne_as_location: ThroneAsLocation
+    no_progression_hard_or_hidden_locations: NoProgressionHardOrHiddenLocation
+    no_progression_simon_says: NoProgressionSimonSays
+    no_progression_kelp_forest: NoProgressionKelpForest
+    no_progression_veil: NoProgressionVeil
+    no_progression_mithalas: NoProgressionMithalas
+    no_progression_energy_temple: NoProgressionEnergyTemple
+    no_progression_arnassi_ruins: NoProgressionArnassiRuins
+    no_progression_frozen_veil: NoProgressionFrozenVeil
+    no_progression_abyss: NoProgressionAbyss
+    no_progression_sunken_city: NoProgressionSunkenCity
+    no_progression_body: NoProgressionBody
