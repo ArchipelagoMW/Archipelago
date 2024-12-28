@@ -1,4 +1,4 @@
-VERSION:str = "1.2.1.1"
+VERSION:str = "1.2.2"
 ITEM_ID_OFFSET:int = 264000
 LOCATION_ID_OFFSET:int = 264000
 LOCATION_DAY_OFFSET = 266000
@@ -578,7 +578,7 @@ DSTAP_LOCATIONS = [
     [266,   "Nightmare Werepig",        "daywalker",                [ "boss", "ruins", "priority_scrappywerepig_boss" ] ],
     [267,   "Scrappy Werepig",          "daywalker2",               [ "boss", "ruins" ] ],
     [268,   "Dragonfly",                "dragonfly",                [ "boss", "raidboss" ] ],
-    [269,   "Klaus",                    "klaus",                    [ "boss", "raidboss", "seasonal", "winter" ] ],
+    [269,   "Klaus",                    "klaus",                    [ "boss", "raidboss", "seasonal", "winter", "seasons_passed_1" ] ],
     [270,   "Frostjaw",                 "sharkboi",                 [ "boss", "ocean" ] ],
     [271,   "Ancient Fuelweaver",       "stalker_atrium",           [ "boss", "raidboss", "ruins", "night" ] ],
     [272,   "Retinazor",                "twinofterror1",            [ "boss", "raidboss", "night" ] ],
@@ -663,7 +663,7 @@ DSTAP_LOCATIONS = [
     [373,   "Lure Plant",               "lureplant",            [ "creature", "spring", "rng" ] ],
     [374,   "Glommer",                  "glommer",              [ "creature", "peaceful", "night", "seasonal", "seasons_passed_half" ] ],
     [375,   "Dust Moth",                "dustmoth",             [ "creature", "archive", "peaceful" ] ],
-    [376,   "No-Eyed Deer",             "deer",                 [ "creature", "seasonal", "winter", "peaceful" ] ],
+    [376,   "No-Eyed Deer",             "deer",                 [ "creature", "seasonal", "winter", "peaceful", "seasons_passed_1" ] ],
     [377,   "Moonblind Crow",           "bird_mutant",          [ "creature", "moonstorm", "peaceful" ] ],
     [378,   "Misshapen Bird",           "bird_mutant_spitter",  [ "creature", "moonstorm", "peaceful" ] ],
     [379,   "Moonrock Pengull",         "mutated_penguin",      [ "creature", "moonstorm", "seasonal", "winter", "rng" ] ],
@@ -712,7 +712,7 @@ DSTAP_LOCATIONS = [
     [518,   "Science (Cactus Flower)",          "cactus_flower",            [ "research", "science", "tier_2", "seasonal", "summer" ] ],
     [519,   "Science (Honeycomb)",              "honeycomb",                [ "research", "science", "tier_2" ] ],
     [520,   "Science (Petals)",                 "petals",                   [ "research", "science", "tier_2" ] ],
-    [521,   "Science (Succulent)",              "succulent_picked",         [ "research", "science", "tier_2" ] ],
+    [521,   "Science (Succulent)",              "succulent_picked",         [ "research", "science", "tier_2", "seasonal", "summer" ] ],
     [522,   "Science (Foliage)",                "foliage",                  [ "research", "science", "tier_2" ] ],
     [523,   "Science (Tillweeds)",              "tillweed",                 [ "research", "science", "tier_2" ] ],
     [524,   "Science (Lichen)",                 "cutlichen",                [ "research", "science", "tier_1", "veggie_research", "ruins" ] ],
