@@ -10,8 +10,8 @@ class WinCondition(Choice):
 
     display_name = "Win Condition"
     option_evilizer = 0
-    option_40badges = 1
-    option_normal_remix = 2
+    #option_40badges = 1
+    #option_normal_remix = 2
     default = 0
 
 
@@ -64,9 +64,9 @@ class Badges(Choice):
     None: Badges aren't in logic"""
 
     display_name = "Badges"
-    option_full = 0
+    option_none = 0
     option_vanilla = 1
-    option_none = 2
+    option_full = 2
     default = 2
 
 
@@ -76,15 +76,15 @@ class MonsterDolls(Choice):
     None: Dolls aren't in logic, the collection quest gives nothing"""
 
     display_name = "Monster Dolls"
-    option_full = 0
+    option_none = 0
     option_vanilla = 1
-    option_none = 2
-    default = 0
+    option_full = 2
+    default = 2
 
 
 @dataclass
 class LoonylandOptions(PerGameCommonOptions):
-    # win_condition: WinCondition
+    win_condition: WinCondition
     difficulty: Difficulty
     long_checks: LongChecks
     multisave: MultipleSaves
