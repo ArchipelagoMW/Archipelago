@@ -144,7 +144,7 @@ class CompletionAllBowserTestBase(SM64TestBase):
 
 
 
-# Combinations
+# Option Combos
 
 
 # Smallest Power Star count possible
@@ -163,7 +163,7 @@ class MinimumStarsPossibleTestBase(SM64TestBase):
         self.assertGreater(filler_count, star_count)
 
 
-# Entrance + Move Rando
+# Entrance + Move Randos
 class CourseEntrancesMoveTestBase(SM64TestBase):
     options = {
         "enable_move_rando": Options.EnableMoveRandomizer.option_true,
@@ -282,3 +282,13 @@ class AllEntrancesMoveTestBase(SM64TestBase):
         bitfs_level_id = sm64_entrances_to_level["Bowser in the Fire Sea"]
         if self.world.area_connections[bitfs_level_id] == sm64_entrances_to_level["Hazy Maze Cave"]:
             assert self.world.area_connections[cotmc_level_id] != sm64_entrances_to_level["Dire, Dire Docks"]
+
+# No Strict Requirements
+class NoStrictRequiremntsTestBase(SM64TestBase):
+    options = {
+        "enable_move_rando": Options.EnableMoveRandomizer.option_true,
+        "buddy_checks": Options.BuddyChecks.option_true,
+        "strict_move_requirements": Options.StrictMoveRequirements.option_false,
+        "strict_cap_requirements": Options.StrictCapRequirements.option_false,
+        "strict_cannon_requirements": Options.StrictCannonRequirements.option_false,
+    }
