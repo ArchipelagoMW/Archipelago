@@ -40,7 +40,10 @@ def connect_plando(world: "MessengerWorld", plando_connections: TransitionPlando
         # connect the regions
         reg1.connect(reg2)
 
-        if plando_connection.direction == "both" and plando_connection.exit in RANDOMIZED_CONNECTIONS:
+        # pretend the user set the direction as "both" regardless of what they actually put on coupled
+        if ((world.options.shuffle_transitions == ShuffleTransitions.option_coupled
+             or plando_connection.direction == "both")
+                and plando_connection.exit in RANDOMIZED_CONNECTIONS):
             remove_dangling_exit(reg2)
             remove_dangling_entrance(reg1)
             reg2.connect(reg1)
