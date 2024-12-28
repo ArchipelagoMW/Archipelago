@@ -25,6 +25,8 @@ class CardRule(NamedTuple):
 def set_card_rules(world):
     evergreen_rules = {
         "Max ATK Bonus": raise_attack,
+        "No Spell Cards Bonus": non_spell_monster_removal(),
+        "No Trap Cards Bonus": non_trap_monster_removal(),
         "Skull Servant Finish Bonus":
             CardRule("Skull Servant", 1),
         "Konami Bonus":
@@ -38,12 +40,11 @@ def set_card_rules(world):
         "Low LP Bonus":
             CardRule(["Wall of Revealing Light"], 1),
         "Extremely Low LP Bonus":
-            CardRule(["Wall of Revealing Light", "Messenger of Peace"], 1, amount_protocol="each",
+            CardRule(["Wall of Revealing Light", "Messenger of Peace"], 1, "each",
                      additional_cards=InnerCardRule(
-                         cards=lambda: {name for name, c in cards.items() if c.attack % 100 != 0 and c.level <= 4},
-                         min_amount=1)),
+                         lambda: {name for name, c in cards.items() if c.attack % 100 != 0 and c.level <= 4}, 1)),
         "Effect Damage Only Bonus":
-            [CardRule(["Solar Flare Dragon", "UFO Turtle"], 2, amount_protocol="each"),
+            [CardRule(["Solar Flare Dragon", "UFO Turtle"], 2, "each"),
              CardRule(["Wave-Motion Cannon"], 3)],
         "No More Cards Bonus":
             CardRule(["Morphing Jar", "Morphing Jar #2", "Needle Worm"], 1,
@@ -131,32 +132,176 @@ def set_card_rules(world):
                       "Dancing Fairy", "Princess Pikeru", "Kiseitai"], 9),
         "Can Self Mill":
             CardRule(["Reasoning", "Monster Gate", "Magical Merchant"], 3),
+        # All removal is always progression
+        "Backrow Removal": backrow_removal(),
+        "Monster Removal": monster_removal(),
+        # for deck strength
+        "Beaters": CardRule(find_cards_with(min_attack=1800, max_attack=2000, max_level=4), 15)
     }
 
     challenge_rules = {
         # Limited
-        "LD01 All except Level 4 forbidden": CardRule(cards=lambda: find_cards_with(min_attack=1700, max_attack=2000,
-                                                                                    min_level=4, max_level=4),
-                                                      min_amount=12),
-        "LD02 Medium/high Level forbidden": CardRule(cards=lambda: find_cards_with(min_attack=1700, max_attack=2000,
-                                                                                   max_level=4), min_amount=12),
-        "LD03 ATK 1500 or more forbidden": CardRule(cards=lambda: find_cards_with(min_attack=1300, max_attack=1500,
-                                                                                  max_level=4), min_amount=12),
+        "LD01 All except Level 4 forbidden":
+            CardRule(cards=lambda: find_cards_with(min_attack=1700, max_attack=2000,
+                                                   min_level=4, max_level=4), min_amount=12),
+        "LD02 Medium/high Level forbidden":
+            CardRule(cards=lambda: find_cards_with(min_attack=1700, max_attack=2000,
+                                                   max_level=4), min_amount=12),
+        "LD03 ATK 1500 or more forbidden":
+            CardRule(cards=lambda: find_cards_with(min_attack=1300, max_attack=1500,
+                                                   max_level=4), min_amount=12),
         "LD10 All except LV monsters forbidden": only_level(),
         "LD11 All except Fairies forbidden": only_fairy(),
         "LD12 All except Wind forbidden": only_wind(),
-        "LD14 Level 3 or below forbidden": CardRule(cards=lambda: find_cards_with(min_attack=1700, max_attack=2000,
-                                                                                  min_level=4, max_level=4), min_amount=12),
-        "LD15 DEF 1500 or less forbidden": CardRule(cards=lambda: find_cards_with(min_attack=1500, max_attack=2000,
-                                                                                  min_defence=1550, max_level=4),
-                                                    min_amount=12),
+        "LD14 Level 3 or below forbidden":
+            CardRule(cards=lambda: find_cards_with(min_attack=1700, max_attack=2000,
+                                                   min_level=4, max_level=4), min_amount=12),
+        "LD15 DEF 1500 or less forbidden":
+            CardRule(cards=lambda: find_cards_with(min_attack=1500, max_attack=2000,
+                                                   min_defence=1550, max_level=4), min_amount=12),
         "LD16 Effect Monsters forbidden": only_normal(),
-        "LD18 Attacks forbidden": CardRule(["Wave-Motion Cannon", "Stealth Bird"], 3,"each",
-                                           InnerCardRule(["Dark World Lightning", "Nobleman of Crossout",
-                                                          "Shield Crash", "Tribute to the Doomed"], 4)),
+        "LD18 Attacks forbidden":
+            CardRule(["Wave-Motion Cannon", "Stealth Bird"], 3, "each",
+                     InnerCardRule(["Dark World Lightning", "Nobleman of Crossout",
+                                    "Shield Crash", "Tribute to The Doomed"], 4)),
         "LD20 All except Warriors forbidden": only_warrior(),
         "LD21 All except Dark forbidden": only_dark(),
+        "LD26 All except Toons forbidden": only_toons(),
+        "LD27 All except Spirits forbidden": only_spirit(),
+        "LD28 All except Dragons forbidden": only_dragon(),
+        "LD29 All except Spellcasters forbidden": only_spellcaster(),
         "LD30 All except Light forbidden": only_light(),
+        "LD31 All except Fire forbidden": only_fire(),
+        "LD35 All except Zombies forbidden": only_zombie(),
+        "LD36 All except Earth forbidden": only_earth(),
+        "LD37 All except Water forbidden": only_water(),
+        "LD39 Monsters forbidden":
+            CardRule(["Skull Zoma", "Embodiment of Apophis"], 3, "each"),
+        "TD02 Deflected Damage":
+            CardRule("Fairy Box", 3, additional_cards=InnerCardRule(find_cards_with(min_defence=2000, max_level=4), 6)),
+        "TD04 Ritual Summon": ritual_deck(),
+        "TD05 Special Summon A": recruiters(),
+        "TD06 20x Spell":
+            CardRule("Magical Blast", 3),
+        "TD07 10x Trap":
+            CardRule(find_cards_with(card_type="Trap", spell_trap_type="None"), 15),
+        "TD08 Draw":
+            CardRule(["Self-Destruct Button", "Dark Snake Syndrome"], 3),
+        "TD09 Hand Destruction":
+            CardRule([
+                "Cyber Jar",
+                "Morphing Jar",
+                "Book of Moon",
+                "Book of Taiyou",
+                "Card Destruction",
+                "Serial Spell",
+                "Spell Reproduction",
+                "The Shallow Grave"
+            ], 3, "each"),
+        "TD10 During Opponent's Turn": opponents_turn(),
+        "TD12 Remove Monsters by Effect":
+            CardRule("Soul Release", 3),
+        "TD13 Flip Summon": pacman_deck(),
+        "TD14 Special Summon B": [
+            CardRule(["Manticore of Darkness"], 3, "each", InnerCardRule("Foolish Burial", 3)),
+            CardRule(["Treeborn Frog"], 3, "each", InnerCardRule("Foolish Burial", 3)),
+        ],
+        "TD15 Token": CardRule(["Dandylion", "Ojama Trio", "Stray Lambs"], 3, "each"),
+        "TD16 Union": equip_unions(),
+        "TD17 10x Quick Spell": quick_plays(),
+        "TD20 Deck Destruction":
+            CardRule([
+                "Morphing Jar",
+                "Morphing Jar #2",
+                "Needle Worm"
+            ], 3, additional_cards=[
+                InnerCardRule(["Spear Cretin", "The Shallow Grave"], 3),
+            ]),
+        "TD21 Victory D.":
+            CardRule("Victory D.", 1, additional_cards=only_dragon(True)),
+        "TD22 The Preventers Fight Back":
+            CardRule(["Rescue Cat", "Enchanting Fitting Room", "Jerry Beans Man"], 3, "each"),
+        "TD23 Huge Revolution":
+            CardRule([
+                "Enchanting Fitting Room", "Jerry Beans Man"
+            ], 3, "each"),
+        "TD24 Victory in 5 Turns":
+            CardRule(["Snatch Steal", "Lightning Vortex"], 4),
+        "TD25 Moth Grows Up":
+            CardRule(["Gokipon", "Howling Insect"], 3, "each"),
+        "TD27 Dark Sage":
+            CardRule(["Skilled Dark Magician", "Dark Magic Curtain"], 3),
+        "TD30 Tribute Summon":
+            CardRule(["Treeborn Frog"], 3, "each",
+                     additional_cards=InnerCardRule(["Dark Dust Spirit", "Great Long Nose"], 3)),
+        "TD31 Special Summon C":
+            CardRule([
+                "Aqua Spirit", "Rock Spirit", "Spirit of Flames",
+                "Garuda the Wind Spirit", "Gigantes", "Inferno",
+                "Megarock Dragon", "Silpheed"
+            ], 12),
+        "TD32 Toon": only_toons(),
+        "TD33 10x Counter": counter_traps(),
+        "TD34 Destiny Board": CardRule("A Cat of Ill Omen", 3),
+        "TD35 Huge Damage in a Turn":
+            CardRule([
+            "Cyber-Stein",
+            "Cyber Twin Dragon",
+            "Megamorph"], 3, "each"),
+        "TD37 Uria, Lord of Searing Flames":
+            CardRule([
+                "Uria, Lord of Searing Flames",
+                "Embodiment of Apophis",
+                "Skull Zoma",
+                "Metal Reflect Slime"
+            ], 3, "each"),
+        "TD38 Hamon, Lord of Striking Thunder":
+            CardRule("Hamon, Lord of Striking Thunder", 3,
+                     additional_cards=countinous_spells()),
+        "TD39 Raviel, Lord of Phantasms":
+            CardRule(["Raviel, Lord of Phantasms", "Giant Germ"], 3, "each",
+                     additional_cards=InnerCardRule([
+                         "Archfiend Soldier",
+                         "Skull Descovery Knight",
+                         "Slate Warrior",
+                         "D. D. Trainer",
+                         "Earthbound Spirit"
+                     ], 9)),
+        "TD40 Make a Chain":
+            CardRule("Ultimate Offering", 1),
+        "TD41 The Gatekeeper Stands Tall":
+            CardRule(["Treeborn Frog", "Tribute Doll"], 3, "each"),
+        "TD43 Return Monsters with Effects":
+            CardRule(["Penguin Soldier", "Messenger of Peace"], 3, "each"),
+        "TD45 Big Damage at once":
+            CardRule(["Wave-Motion Cannon"], 3),
+        "TD46 XYZ In the House":
+            CardRule("Dimension Fusion", 3),
+        "TD47 Spell Counter":
+            CardRule("Pitch-Black Power Stone", 3,
+                     additional_cards=InnerCardRule([
+                         "Blast Magician",
+                         "Magical Marionette",
+                         "Mythical Beast Cerberus",
+                         "Royal Magical Library",
+                     ], 6)),
+        "TD48 Destroy Monsters with Effects":
+            CardRule(["Blade Rabbit", "Dream Clown"], 3, "each"),
+        "TD49 Plunder":
+            CardRule([
+                "Aussa the Earth Charmer",
+                "Jowls of Dark Demise",
+                "Brain Control",
+                "Creature Swap",
+                "Enemy Controller",
+                "Mind Control",
+                "Magician of Faith"
+            ], 15),
+        "TD50 Dark Scorpion Combination":
+            CardRule([
+                "Reinforcement of the Army",
+                "Mystic Tomato"
+            ], 3, "each")
     }
 
     rules = {**evergreen_rules, **{k: v for k, v in challenge_rules.items() if k not in world.removed_challenges}}
@@ -240,11 +385,10 @@ def resolve_rule(world, rule, starter_cards: Dict[str, int]):
         potential_cards.extend(rule.cards())
     if isinstance(rule.cards, List):
         potential_cards.extend(rule.cards)
-    if rule.amount_protocol == "total":
+    if rule.amount_protocol == "total" and len(potential_cards) > 1:
         overlap = [x for x in potential_cards if x in starter_cards.keys()]
         potential_cards = [x for x in potential_cards if x in overlap or x not in not_in_standard_pool]
         a = 0
-        chosen_starters: List[str] = []
         potential_starters: List[str] = []
         for c in overlap:
             a += starter_cards[c]
@@ -411,16 +555,15 @@ def only_fire():
         "Blazing Inpachi",
         "Familiar-Possessed - Hiita",
         "Great Angus",
-        "Fire Beaters"
     ]
     big_beaters = [
         "Thestalos the Firestorm Monarch",
-        "Horus the Black Flame Dragon LV6"
+        "Horus the Black Flame Dragon LV6",
     ]
     utility = [
         "Solar Flare Dragon",
         "Tenkabito Shien",
-        "Ultimate Baseball Kid"
+        "Ultimate Baseball Kid",
     ]
     return CardRule(utility + beaters, min_amount=6, additional_cards=[
         InnerCardRule(big_beaters, min_amount=1),
@@ -461,7 +604,7 @@ def only_warrior():
         "Dark Blade",
         "Blindly Loyal Goblin",
         "D.D. Survivor",
-        "Gearfried the Iron knight",
+        "Gearfried the Iron Knight",
         "Ninja Grandmaster Sasuke",
     ]
     big_beaters = [
@@ -523,26 +666,29 @@ def only_zombie():
     ], 12, additional_cards=InnerCardRule(["Pyramid Turtle"], 3))
 
 
-def only_dragon():
+def only_dragon(inner: bool = False):
     beaters = [
         "Luster Dragon",
         "Spear Dragon",
-        "Cave Dragon"
+        "Cave Dragon",
         "Armed Dragon LV3",
         "Masked Dragon",
         "Twin-Headed Behemoth",
         "Element Dragon",
         "Troop Dragon",
         "Horus the Black Flame Dragon LV4",
-        "Stamping Destruction"
+        "Stamping Destruction",
     ]
     big_beaters = [
         "Luster Dragon #2",
         "Armed Dragon LV5",
         "Kaiser Glider",
-        "Horus the Black Flame Dragon LV6"
+        "Horus the Black Flame Dragon LV6",
     ]
-    return CardRule(beaters, min_amount=9, additional_cards=InnerCardRule(big_beaters, min_amount=1))
+    if inner:
+        return InnerCardRule(beaters, min_amount=9)
+    else:
+        return CardRule(beaters, min_amount=9, additional_cards=InnerCardRule(big_beaters, min_amount=1))
 
 
 def only_spellcaster():
@@ -577,6 +723,18 @@ def only_spellcaster():
     return CardRule(utility + beaters, min_amount=9, additional_cards=InnerCardRule(big_beaters, min_amount=1))
 
 
+def only_toons():
+    good_toons = [
+        "Toon Gemini Elf",
+        "Toon Goblin Attack Force",
+        "Toon Masked Sorcerer",
+        "Toon Mermaid",
+        "Toon Dark Magician Girl",
+        "Toon World"
+    ]
+    return CardRule(good_toons, 3, "each")
+
+
 def only_level():
     lv_pairs = [
         ["Armed Dragon LV3", "Armed Dragon LV5"],
@@ -599,13 +757,262 @@ def only_level():
 
 def only_normal():
     beaters = find_cards_with(min_attack=1800, max_level=4, card_type="None")
-    big_beaters = find_cards_with(min_attack=2400, min_level=5,  max_level=6, card_type="None")
+    big_beaters = find_cards_with(min_attack=2400, min_level=5, max_level=6, card_type="None")
     return CardRule(beaters, min_amount=9, additional_cards=InnerCardRule(big_beaters, min_amount=1))
 
 
-def find_cards_with(min_attack: int = None, max_attack: int = None, min_defence:int = None,
+def only_spirit():
+    good_spirits = [
+        "Asura Priest",
+        "Fushi No Tori",
+        "Maharaghi",
+        "Susa Soldier"
+    ]
+    return CardRule(good_spirits, 3, "each")
+
+
+def ritual_deck():
+    return CardRule([
+        "Contract with the Abyss",
+        "Manju of the Ten Thousand Hands",
+        "Senju of the Thousand Hands",
+        "Sonic Bird",
+        "Pot of Avarice",
+        "Dark Master - Zorc",
+        "Demise, King of Armageddon",
+        "The Masked Beast",
+        "Magician of Black Chaos",
+        "Dark Magic Ritual"
+    ], 3, "each")
+
+
+def pacman_deck():
+    return CardRule([
+        "Des Lacooda",
+        "Swarm of Locusts",
+        "Swarm of Scarabs",
+        "Wandering Mummy",
+        "Golem Sentry",
+        "Great Spirit",
+        "Royal Keeper",
+        "Stealth Bird"
+    ], 12)
+
+
+def recruiters():
+    all_recruiters = [
+        "Flying Kamakiri #1",
+        "Giant Rat",
+        "Masked Dragon",
+        "Mother Grizzly",
+        "Mystic Tomato",
+        "Shining Angel",
+        "UFO Turtle",
+        "Howling Insect",
+        "Pyramid Turtle"
+    ]
+    return CardRule(all_recruiters, 12)
+
+
+def opponents_turn():
+    combat_tricks: List[str] = [
+        "Blast with Chain",
+        "Covering Fire",
+        "Curse of Aging",
+        "Deal of Phantom",
+        "Energy Drain",
+        "Fairy Box",
+        "Kunai with Chain",
+        "Mask of Weakness",
+        "Mirror Wall",
+        # "Reinforcements", starter only
+        "Collapse",
+        "Rush Recklessly",
+    ]
+    burn: List[str] = [
+        "Poison of the Old Man",
+        "Attack and Receive",
+        "Ceasefire",
+        "Cemetary Bomb",
+        "Chthonian Blast",
+        "Destruction Ring",
+        "Dimension Wall",
+        "Full Salvo",
+        "Just Desserts",
+        "Magic Cylinder",
+        "Minor Goblin Official",
+        "Ring of Destruction",
+        "Secret Barrel",
+        "Skull Zoma",
+        "Type Zero Magic Crusher",
+    ]
+    return CardRule(combat_tricks + burn, 3)
+
+
+def equip_unions():
+    support = InnerCardRule(["Frontline Base", "Formation Union", "Roll Out!"], 3)
+    return [
+        CardRule("Mother Grizzly", 3, "each", [
+            InnerCardRule(["Burning Beast", "Freezing Beast",
+                           "Metallizing Parasite - Lunatite"], 3, "each"),
+            support
+            ]),
+        CardRule("Mystic Tomato", 3, "each", [
+            InnerCardRule(["Dark Blade", "Pitch-Dark Dragon",
+                           "Giant Orc", "Second Goblin"], 3, "each"),
+            support
+        ]),
+        CardRule("Giant Rat", 3, "each", [
+            InnerCardRule(["Decayed Commander", "Zombie Tiger",
+                           "Vampire Orchis", "Des Dendle"], 3, "each"),
+            support
+        ]),
+        CardRule("Shining Angel", 3, "each", [
+            InnerCardRule(["Indomitable Fighter Lei Lei", "Protective Soul Ailin",
+                           "V-Tiger Jet", "W-Wing Catapult"], 3, "each"),
+            support
+        ]),
+        CardRule("Shining Angel", 3, "each", [
+            InnerCardRule(["X-Head Cannon", "Y-Dragon Head", "Z-Metal Tank"], 3, "each"),
+            support
+        ])
+    ]
+
+
+def quick_plays():
+    quickplays = [
+        "Collapse",
+        "Emergency Provisions",
+        "Enemy Controller",
+        "Graceful Dice",
+        "Mystik Wok",
+        "Offerings to the Doomed",
+        "Poison of the Old Man",
+        "Reload",
+        "Rush Recklessly",
+        "The Reliable Guardian",
+    ]
+    return CardRule(quickplays, 12)
+
+
+def counter_traps():
+    c_traps = [
+        "Cursed Seal of the Forbidden Spell",
+        "Divine Wrath",
+        "Horn of Heaven",
+        "Magic Drain",
+        "Magic Jammer",
+        "Negate Attack",
+        "Seven Tools of the Bandit",
+        "Solemn Judgment",
+        "Spell Shield Type-8"
+    ]
+    return CardRule(c_traps, 15)
+
+def countinous_spells():
+    blacklist = [
+        "Spirit Message 'I'",
+        "Spirit Message 'N'"
+        "Spirit Message 'A'"
+        "Spirit Message 'L'"
+    ]
+    c_spells = find_cards_with(card_type="Spell", spell_trap_type="Continuous")
+    c_spells = [c for c in c_spells if c not in blacklist]
+    return InnerCardRule(c_spells, 9)
+
+def monster_removal():
+    unlimted_removal = [
+        "Blast Sphere",
+        "Man-Eater Bug",
+        "Sakuretsu Armor",
+        "Smashing Ground",
+        "Dark Core",
+        "Zaborg the Thunder Monarch",
+        "D. D. Assailant",
+        "Fissure",
+        "Dimensional Warrior",
+        "Hammer Shot",
+        "Michizure",
+        "Raigeki Break",
+        "Soul Taker",
+        "Yomi Ship",
+        "Tribute to The Doomed",
+        "Newdoria",
+        "Widespread Ruin",
+        "Old Vindictive Magician",
+        "Offerings to the Doomed",
+    ]
+    limited_removal = [
+        "D.D. Warrior Lady",
+        "Night Assailant",
+        "Torrential Tribute",
+        "Exiled Force",
+        "Lightning Vortex",
+    ]
+    return CardRule(unlimted_removal, 5, "total", InnerCardRule(limited_removal, 1, "each"))
+
+
+def non_spell_monster_removal():
+    removal = [
+        "Blast Sphere",
+        "Man-Eater Bug",
+        "Sakuretsu Armor",
+        "Zaborg the Thunder Monarch",
+        "D. D. Assailant",
+        "Dimensional Warrior",
+        "Michizure",
+        "Raigeki Break",
+        "Yomi Ship",
+        "Newdoria",
+        "Widespread Ruin",
+        "Old Vindictive Magician",
+    ]
+    return CardRule(removal, 3)
+
+
+def non_trap_monster_removal():
+    removal = [
+        "Blast Sphere",
+        "Man-Eater Bug",
+        "Smashing Ground",
+        "Dark Core",
+        "Zaborg the Thunder Monarch",
+        "D. D. Assailant",
+        "Fissure",
+        "Dimensional Warrior",
+        "Hammer Shot",
+        "Soul Taker",
+        "Yomi Ship",
+        "Tribute to The Doomed",
+        "Newdoria",
+        "Old Vindictive Magician",
+        "Offerings to the Doomed",
+    ]
+    return CardRule(removal, 3)
+
+
+def backrow_removal():
+    unlimited_removal = [
+        "Mobius the Frost Monarch",
+        "Anteatereatingant",
+        "B.E.S. Tetran",
+        "Chiron the Mage",
+        "Raigeki Break",
+        "Calamity of the Wicked",
+        "Dust Tornado",
+        "Stamping Destruction",
+    ]
+    limited_removal = [
+        "Mystical Space Typhoon",
+        "Breaker the Magical Warrior",
+        "Heavy Storm",
+    ]
+    return CardRule(unlimited_removal, 5, additional_cards=InnerCardRule(limited_removal, 1))
+
+
+def find_cards_with(min_attack: int = None, max_attack: int = None, min_defence: int = None,
                     min_level: int = None, max_level: int = None, attribute: str = None,
-                    card_type: str = None, no_nomi: bool = True):
+                    card_type: str = None, spell_trap_type: str = None, no_nomi: bool = True):
     result: List[str] = []
     for name, card in cards.items():
         if min_attack and not card.attack >= min_attack:
@@ -622,6 +1029,8 @@ def find_cards_with(min_attack: int = None, max_attack: int = None, min_defence:
             continue
         if card_type and card.card_type != card_type:
             continue
+        if spell_trap_type and card.spell_trap_type != spell_trap_type:
+            continue
         if no_nomi and (card.card_type == "Fusion" or card.card_type == "Ritual" or name in nomi_monsters):
             continue
         result.append(name)
@@ -629,19 +1038,19 @@ def find_cards_with(min_attack: int = None, max_attack: int = None, min_defence:
 
 
 raise_attack = [
-    CardRule("A Legendary Ocean", additional_cards=InnerCardRule(
-        cards=lambda: find_cards_with(min_attack=2850, attribute="WATER"), min_amount=1), min_amount=1),
-    CardRule("Ancient Gear Castle", min_amount=1,
-             additional_cards=InnerCardRule(cards="Ancient Gear Golem", min_amount=1)),
-    CardRule("Axe of Despair", min_amount=1, additional_cards=InnerCardRule(
-        cards=lambda: find_cards_with(min_attack=2050), min_amount=1)),
-    CardRule("Ballista of Rampart Smashing", min_amount=1, additional_cards=InnerCardRule(
-        cards=lambda: find_cards_with(min_attack=1550), min_amount=1)),
-    CardRule("Banner of Courage", min_amount=1, additional_cards=InnerCardRule(
-        cards=lambda: find_cards_with(min_attack=2850), min_amount=1)),
-    CardRule("Banner of Courage", min_amount=1, additional_cards=InnerCardRule(
-        cards=lambda: find_cards_with(min_attack=2650), min_amount=1)),
-    CardRule("Black Pendant", min_amount=1, additional_cards=InnerCardRule(
-        cards=lambda: find_cards_with(min_attack=2550), min_amount=1)),
+    CardRule("A Legendary Ocean", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2850, attribute="WATER"), 1)),
+    CardRule("Ancient Gear Castle", 1,
+             additional_cards=InnerCardRule("Ancient Gear Golem", 1)),
+    CardRule("Axe of Despair", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2050), 1)),
+    CardRule("Ballista of Rampart Smashing", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=1550), 1)),
+    CardRule("Banner of Courage", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2850), 1)),
+    CardRule("Big Bang Shot", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2650), 1)),
+    CardRule("Black Pendant", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550), 1)),
     # todo
 ]

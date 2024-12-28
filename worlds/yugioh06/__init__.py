@@ -27,7 +27,7 @@ from .items import (
     tier_2_opponents,
     tier_3_opponents,
     tier_4_opponents,
-    tier_5_opponents,
+    tier_5_opponents, core_booster,
 )
 from .items import challenges as challenges
 from .locations import (
@@ -40,7 +40,7 @@ from .locations import (
     get_beat_challenge_events,
     special,
 )
-from .logic import core_booster, yugioh06_difficulty
+from .logic import yugioh06_difficulty
 from .opponents import OpponentData, get_opponent_locations, get_opponents
 from .opponents import challenge_opponents as challenge_opponents
 from .options import Yugioh06Options
@@ -235,7 +235,6 @@ class Yugioh06World(World):
                 card = self.random.choice(card_list)
                 card_list.remove(card)
                 self.structure_deck[card] = 1
-            self.options.structure_deck.value = self.options.structure_deck.option_worst
         elif self.options.structure_deck.value == self.options.structure_deck.option_random_playsets:
             amount = 0
             while amount < 40:
@@ -250,7 +249,6 @@ class Yugioh06World(World):
                 else:
                     self.structure_deck[card] = 3
                     amount += 3
-            self.options.structure_deck.value = self.options.structure_deck.option_worst
         elif self.options.structure_deck.value == self.options.structure_deck.option_worst:
             for card_name, amount in worst_deck.items():
                 card = cards[card_name]
@@ -277,7 +275,6 @@ class Yugioh06World(World):
                     total_amount += min(w_amount, 40 - total_amount)
                     if total_amount >= 40:
                         break
-            self.options.structure_deck.value = self.options.structure_deck.option_worst
 
         # set starting booster and opponent
         for item in self.options.start_inventory:
@@ -374,7 +371,7 @@ class Yugioh06World(World):
             else:
                 entrance.access_rule = lambda state, unlock=unlock_item, opp=opponent: state.has(
                     unlock, self.player
-                ) and yugioh06_difficulty(state, self.player, opp.difficulty)
+                ) and yugioh06_difficulty(self, state, self.player, opp.difficulty)
             campaign.exits.append(entrance)
             entrance.connect(region)
             self.multiworld.regions.append(region)

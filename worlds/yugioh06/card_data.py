@@ -4,8 +4,10 @@ from typing import NamedTuple, Dict, List
 
 import Utils
 from settings import get_settings
-from worlds.yugioh06.boosterpack_contents import contents
+from worlds.yugioh06 import banlists
+from worlds.yugioh06.boosterpack_contents import contents, not_in_standard_pool
 from worlds.yugioh06.boosterpacks_data import booster_pack_data, booster_card_id_to_name
+from worlds.yugioh06.structure_deck import structure_contents
 
 monster_types = {
     0x00: "None",
@@ -4388,10 +4390,10 @@ empty_card_data = CardData(0, 0, "Empty", "0", 0, False, 0, 0, 0, "None", "None"
 nomi_monsters = {
     "Aqua Spirit",
     "Archlord Zerato",
-    "Armed Dragon Lv7",
+    "Armed Dragon LV7",
     "Armed Dragon Lv10",
     "Berserk Dragon",
-    "Black Luster Soldier - Envoy of the Begining",
+    "Black Luster Soldier - Envoy of the Beginning",
     "Blue-Eyes Shining Dragon",
     "Blue-Eyes Toon Dragon",
     "Chaos Emperor Dragon - Envoy of the End",
@@ -4415,8 +4417,8 @@ nomi_monsters = {
     "Great Moth",
     "Guardian Exode",
     "Hamon, Lord of Striking Thunder",
-    "Harpie Lady Sisiters",
-    "Horus the Black Flame Dragon Lv8",
+    "Harpie Lady Sisters",
+    "Horus the Black Flame Dragon LV8",
     "Inferno",
     "Larvae Moth",
     "Lava Golem",
@@ -4435,8 +4437,8 @@ nomi_monsters = {
     "Red-Eyes Black Metal Dragon",
     "Red-Eyes Darkness Dragon",
     "Shadow Ghoul",
-    "Silent Magician Lv8",
-    "Silent Swordsman Lv7",
+    "Silent Magician LV8",
+    "Silent Swordsman LV7",
     "Silpheed",
     "Sorcerer of Dark Magic",
     "Soul of Purity and Light",
@@ -4446,13 +4448,15 @@ nomi_monsters = {
     "Theinen the Great Sphinx",
     "Toon Dark Magician Girl",
     "Toon Mermaid",
-    "Toon Summoned",
+    "Toon Summoned Skull",
     "Uria, Lord of Searing Flames",
-    "Valkyrion the Magna Warriror",
+    "Valkyrion the Magna Warrior",
     "Vampire Genesis",
     "Wall Shadow",
     "Water Dragon",
-    "Winged Kuriboh Lv10"
+    "Winged Kuriboh LV10",
+    "Giant Kozaky",
+    "Cyber Archfiend"
 }
 
 def get_all_valid_cards_set():
@@ -4522,14 +4526,60 @@ def build_id_table():
     for name, c in cards.items():
         print(" " + hex(c.starter_id) + ": \"" + name + "\",")
 
+names = [
+    "Pitch-Black Power Stone",
+    "Blast Magician",
+    "Magical Marionette",
+    "Mythical Beast Cerberus",
+    "Royal Magical Library",
+    "Spell-Counter Cards"
+]
 
-def find_all_non_standard_cards():
-    non_standard = list(cards.keys())
-    for booster in contents:
-        for card in contents[booster]:
-            if card in non_standard:
-                non_standard.remove(card)
-    for card in non_standard:
-        print(f"    \"{card}\",")
+def spell_check():
+    print("Misspell List")
+    for name in names:
+        if name not in cards.keys():
+            print(f"Misspelled: {name}")
 
-# read_rom()
+def non_normal_nisp():
+    for card in not_in_standard_pool:
+        if cards[card].card_type == "Trap":
+            print(card)
+
+
+def find_removal():
+    forbidden = []
+    limited = []
+    semilimted = []
+    unlimted = []
+    for card in []:
+        min_status = 3
+        for blist in banlists.values():
+            if card in blist["Forbidden"]:
+                min_status = 0
+            if card in blist["Limited"]:
+                min_status = min(min_status, 1)
+            if card in blist["Semi-Limited"]:
+                min_status = min(min_status, 2)
+        if min_status == 0:
+            forbidden.append(card)
+        elif min_status == 1:
+            limited.append(card)
+        elif min_status == 2:
+            semilimted.append(card)
+        else:
+            unlimted.append(card)
+        print("Forbidden:")
+        for card in forbidden:
+            print(f"    \"{card}\",")
+        print("Limited:")
+        for card in limited:
+            print(f"    \"{card}\",")
+        print("Semi-Limited:")
+        for card in semilimted:
+            print(f"    \"{card}\",")
+        print("Unlimited:")
+        for card in unlimted:
+            print(f"    \"{card}\",")
+
+spell_check()

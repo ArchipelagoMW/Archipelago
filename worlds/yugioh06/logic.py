@@ -1,68 +1,27 @@
-from typing import List
-
 from BaseClasses import CollectionState
 
-core_booster: List[str] = [
-    "LEGEND OF B.E.W.D.",
-    "METAL RAIDERS",
-    "PHARAOH'S SERVANT",
-    "PHARAONIC GUARDIAN",
-    "SPELL RULER",
-    "LABYRINTH OF NIGHTMARE",
-    "LEGACY OF DARKNESS",
-    "MAGICIAN'S FORCE",
-    "DARK CRISIS",
-    "INVASION OF CHAOS",
-    "ANCIENT SANCTUARY",
-    "SOUL OF THE DUELIST",
-    "RISE OF DESTINY",
-    "FLAMING ETERNITY",
-    "THE LOST MILLENIUM",
-    "CYBERNETIC REVOLUTION",
-    "ELEMENTAL ENERGY",
-    "SHADOW OF INFINITY",
-]
 
-
-def yugioh06_difficulty(state: CollectionState, player: int, amount: int):
-    return state.has_from_list(core_booster, player, amount)
-
-
-back_row_removal = {
-    "Anteatereatingant",
-    "B.E.S. Tetran",
-    "Breaker the Magical Warrior",
-    "Calamity of the Wicked",
-    "Chiron the Mage",
-    "Dust Tornado",
-    "Heavy Storm",
-    "Mystical Space Typhoon",
-    "Mobius the Frost Monarch",
-    "Raigeki Break",
-    "Stamping Destruction",
-    "Swarm of Locusts"
-}
-
-
-monster_removal = {
-    "Blast Sphere",
-    "Exiled Force",
-    "Fissure",
-    "Hammer Shot",
-    "Lightning Vortex",
-    "Man-Eater Bug",
-    "Michizure",
-    "Newdoria",
-    "Night Assailant",
-    "Offerings to the Doomed",
-    "Old Vindictive Magician",
-    "Raigeki Break",
-    "Sakuretsu Armor",
-    "Smashing Ground",
-    "Soul Taker",
-    "Torrential Tribute",
-    "Tribute to the Doomed",
-    "Widespread Ruin",
-    "Yomi Ship",
-    "Zaborg the Thunder Monarch"
-}
+def yugioh06_difficulty(world, state: CollectionState, player: int, level: int):
+    total_beaters = len(world.progression_cards["Beaters"])
+    total_monster_removal = len(world.progression_cards["Monster Removal"])
+    total_backrow_removal = len(world.progression_cards["Backrow Removal"])
+    if level <= 0:
+        return True
+    elif level == 1:
+        return state.has_from_list_unique(world.progression_cards["Beaters"], player,
+                                          int(total_beaters / 3),) and \
+            state.has_from_list_unique(world.progression_cards["Monster Removal"], player,
+                                       int(total_monster_removal / 3)) and \
+            state.has_from_list_unique(world.progression_cards["Backrow Removal"], player,
+                                       int(total_backrow_removal / 3))
+    elif level == 2:
+        return state.has_from_list_unique(world.progression_cards["Beaters"], player,
+                                          int(total_beaters * 2 / 3), ) and \
+            state.has_from_list_unique(world.progression_cards["Monster Removal"], player,
+                                       int(total_monster_removal * 2 / 3)) and \
+            state.has_from_list_unique(world.progression_cards["Backrow Removal"], player,
+                                       int(total_backrow_removal * 2 / 3))
+    elif level >= 3:
+        return state.has_all(world.progression_cards["Beaters"], player) and \
+            state.has_all(world.progression_cards["Monster Removal"], player) and \
+            state.has_all(world.progression_cards["Backrow Removal"], player)

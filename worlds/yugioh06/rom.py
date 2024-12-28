@@ -29,10 +29,12 @@ class YGO06ProcedurePatch(APProcedurePatch, APTokenMixin):
 
 
 def write_tokens(world: World, patch: YGO06ProcedurePatch):
-    structure_deck = structure_deck_selection.get(world.options.structure_deck.value)
     # set structure deck
-    patch.write_token(APTokenTypes.WRITE, 0x000FD0AA, struct.pack("<B", structure_deck))
-
+    if not world.structure_deck:
+        structure_deck = structure_deck_selection.get(world.options.structure_deck.value)
+        patch.write_token(APTokenTypes.WRITE, 0x000FD0AA, struct.pack("<B", structure_deck))
+    else:
+        patch.write_token(APTokenTypes.WRITE, 0x000FD0AA, struct.pack("<B", 0x1))
     # override Starter Deck
     if world.options.starter_deck.value == world.options.starter_deck.option_remove:
         for i in range(0, 40):

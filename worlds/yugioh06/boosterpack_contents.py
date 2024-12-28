@@ -3,12 +3,13 @@ from typing import Dict
 from typing_extensions import NamedTuple
 
 
-class Booster_Card(NamedTuple):
+class BoosterCard(NamedTuple):
     slot: int
     name: str
     rarity: str
 
 
+# auto generated
 contents = {
     "LEGEND OF B.E.W.D.": {
         "Blue-Eyes White Dragon Alt 1": "Secret Rare",

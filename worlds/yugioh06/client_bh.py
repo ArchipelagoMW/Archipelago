@@ -10,7 +10,7 @@ from NetUtils import ClientStatus, NetworkItem
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 from . import item_to_index
-from .boosterpack_contents import Booster_Card
+from .boosterpack_contents import BoosterCard
 from .boosterpacks_data import booster_pack_data, booster_card_id_to_name, rarities
 
 if TYPE_CHECKING:
@@ -196,7 +196,7 @@ class YuGiOh2006Client(BizHawkClient):
                     )
                     raw_data = raw_data[0]
                     logger.info("   \"" + self.print_pack + "\": {")
-                    cards: List[Booster_Card] = []
+                    cards: List[BoosterCard] = []
                     for i in range(0, pack_data.cards_in_set):
                         cid = int.from_bytes(raw_data[i * 4: i * 4 + 2], "little")
                         if cid in booster_card_id_to_name.keys():
@@ -204,7 +204,7 @@ class YuGiOh2006Client(BizHawkClient):
                         else:
                             name = str(hex(cid))
                         rarity = rarities[int.from_bytes(raw_data[i * 4 + 2: i * 4 + 4], "little")]
-                        cards.append(Booster_Card(i , name, rarity))
+                        cards.append(BoosterCard(i, name, rarity))
 
                     for card in sorted(cards, key=lambda card: (rarity_sort_order[card.rarity], card.name)):
                         logger.info("       \"" + card.name +

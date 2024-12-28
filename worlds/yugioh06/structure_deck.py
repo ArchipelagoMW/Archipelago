@@ -280,7 +280,7 @@ structure_contents: Dict[str, Dict[str, int]] = {
 def get_deck_content_locations(world, deck: str) -> Dict[str, str]:
     return {
         f"{deck} {i}": content
-        for i, content in enumerate(structure_contents[deck], 1) if content in world.progression_cards_in_start
+        for i, content in enumerate(world.progression_cards_in_start, 1)
     }
 
 
