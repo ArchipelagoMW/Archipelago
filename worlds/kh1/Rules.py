@@ -646,7 +646,7 @@ def set_rules(kh1world):
             and
             (
                 has_emblems(state, player, options.keyblades_unlock_chests)
-                or (options.advanced_logic and state.has("High Jump", player, 2) and state.has("Progressive Glide", player))
+                or (state.has("High Jump", player, 2) and state.has("Progressive Glide", player))
                 or (options.advanced_logic and can_dumbo_skip(state, player) and state.has("Progressive Glide", player))
             )
         ))
@@ -700,7 +700,7 @@ def set_rules(kh1world):
             and
             (
                 has_emblems(state, player, options.keyblades_unlock_chests)
-                or (options.advanced_logic and state.has("High Jump", player, 2) and state.has("Progressive Glide", player))
+                or (state.has("High Jump", player, 2) and state.has("Progressive Glide", player))
                 or (options.advanced_logic and can_dumbo_skip(state, player) and state.has("Progressive Glide", player))
             )
         ))
