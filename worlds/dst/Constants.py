@@ -4,6 +4,9 @@ LOCATION_ID_OFFSET:int = 264000
 LOCATION_DAY_OFFSET = 266000
 LOCATION_BOSS_RANGE = {"start": 264251, "end": 264300}
 LOCATION_RESEARCH_RANGE = {"start": 264501, "end": 264900}
+# If for some reason you want the client to connect to DST across different machines, this should be changed to "0.0.0.0", and in DST: ArchipelagoDST.AP_CLIENT_IP should be changed
+CLIENT_HOSTNAME = "localhost"
+CLIENT_PORT = 8000
 
 class REGION:
     NONE = "None"

@@ -9,7 +9,7 @@ import random
 from NetUtils import ClientStatus
 from CommonClient import CommonContext, get_base_parser
 from Utils import async_start
-from .Constants import LOCATION_BOSS_RANGE, LOCATION_RESEARCH_RANGE, VERSION
+from .Constants import LOCATION_BOSS_RANGE, LOCATION_RESEARCH_RANGE, VERSION, CLIENT_HOSTNAME, CLIENT_PORT
 
 class DSTInvalidRequest(Exception):
     pass
@@ -148,6 +148,8 @@ class DSTContext(CommonContext):
                 # Remind player of their goal and world settings
                 async def goal_hint():
                     await asyncio.sleep(0.5)
+                    # Announce generator version
+                    self.logger.info(f"World generated on DST version: {self.slotdata.get('generator_version', 'Unknown')}")
                     # Announce goal type
                     _goal = self.slotdata.get("goal")
                     self.logger.info(f"Goal type: {_goal}")
@@ -464,11 +466,13 @@ class DSTHandler():
                 raise
             except DSTInvalidRequest as e:
                 print(f"Invalid request! {e}")
-                await loop.sock_sendall(conn, DSTResponse({"datatype": "Error"}, 400).response)
+                if conn:
+                    await loop.sock_sendall(conn, DSTResponse({"datatype": "Error"}, 400).response)
                 next_ping_time = 1.0
             except Exception as e:
                 self.logger.error(f"DST request error: {e}")
-                await loop.sock_sendall(conn, DSTResponse({"datatype": "Error"}, 500).response)
+                if conn:
+                    await loop.sock_sendall(conn, DSTResponse({"datatype": "Error"}, 500).response)
                 next_ping_time = 1.0
             finally:
                 if conn:
@@ -477,11 +481,25 @@ class DSTHandler():
                 if next_ping_time > 0:
                     await asyncio.sleep(next_ping_time)
 
+    async def bind_socket(self, sock:socket.socket):
+        sock.bind((CLIENT_HOSTNAME, CLIENT_PORT))
+
     async def run_handler(self):
+        self.logger.info(f"Running Don't Starve Together Client Version {VERSION}")
         while True:
+            # Bind the socket and make sure it actually succeeds
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.bind(("localhost", 8000))
-            sock.listen(5)
+            try:
+                await asyncio.wait_for(self.bind_socket(sock), timeout=3)
+                sock.listen(5) 
+            except Exception as e:
+                self.logger.error("Could not bind socket. Check that you don't already have another instance of the client running! Attempting again in 10 seconds.")
+                sock.close()
+                self.connected = False
+                await asyncio.sleep(10.0)
+                continue
+
+            # Handle requests
             try:
                 while True:
                     await self.handle_dst_request(sock)
