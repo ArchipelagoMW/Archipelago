@@ -1,0 +1,22 @@
+services:
+  web:
+    build:
+      context: .
+    command: python WebHost.py
+    volumes:
+      - static_volume:/app/WebHostLib
+      - ./config.yaml:/app/config.yaml
+    expose:
+      - 5000
+  nginx:
+    image: nginx:stable-alpine
+    volumes:
+      - static_volume:/app/WebHostLib
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 7235:80
+    depends_on:
+      - web
+
+volumes:
+  static_volume:
