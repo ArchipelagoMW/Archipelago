@@ -40,6 +40,7 @@ base_info = {
         "base >= 2.0.15",
         "? quality >= 2.0.15",
         "! space-age",
+        "! skins-factored",
         "? science-not-invited",
         "? factory-levels"
     ]
