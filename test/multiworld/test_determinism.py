@@ -23,7 +23,6 @@ class SerializableLocationData(TypedDict):
     name: str
     address: int | None
     progress_type: LocationProgressType
-    item: SerializableItemData | None
 
 
 class SerializableEntranceData(TypedDict):
@@ -62,19 +61,12 @@ def item_to_serializable(item: Item, item_memo: dict[int, SerializableItemData])
         return to_return
 
 
-def location_to_serializable(loc: Location, item_memo: dict[int, SerializableItemData], include_item: bool = False
-                             ) -> SerializableLocationData:
-    item = loc.item
-    if include_item and item is not None:
-        item_data = item_to_serializable(item, item_memo)
-    else:
-        item_data = None
-
+def location_to_serializable(loc: Location) -> SerializableLocationData:
     # ALttP does not play by the rules and sets some location addresses to `list[int]` instead of `int | None`.
     address = loc.address
     if address is not None and type(address) is not int:
         address = None
-    return {"name": loc.name, "address": address, "progress_type": loc.progress_type, "item": item_data}
+    return {"name": loc.name, "address": address, "progress_type": loc.progress_type}
 
 
 def entrance_to_serializable(ent: Entrance) -> SerializableEntranceData:
@@ -133,7 +125,7 @@ def multiworld_to_serializable(item_pool_before_fill: list[Item], multiworld: Mu
         placements_list = placements[player] = []
 
         for loc_name, loc in player_locations.items():
-            locations_list.append(location_to_serializable(loc, item_memo))
+            locations_list.append(location_to_serializable(loc))
             item = loc.item
             if item is not None:
                 serializable_item = item_to_serializable(item, item_memo)
