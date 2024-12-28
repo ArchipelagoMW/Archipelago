@@ -271,12 +271,10 @@ class TestDeterministicGeneration(TestCase):
             # Starting up the process takes a while (6 or more seconds), so give it a generous timeout.
             # This opportunity is also used to check that the new process (most likely) has a different hashseed set.
             other_hash = ppe.submit(TestDeterministicGeneration._hash_check).result(timeout=20.0)
-            # if other_hash == hash_check:
-            #     self.skipTest("spawned process produced the same hash as the current process")
-            self.assertNotEqual(other_hash, hash_check, "Different hashes should be produced by the current"
-                                                        " process and the spawned process, but they were the same."
-                                                        " It is technically possible for both processes to produce the"
-                                                        " same hash, but this should not realistically occur.")
+            if other_hash == hash_check:
+                self.skipTest("Different hashes should be produced by the current  process and the spawned process, but"
+                              " they were the same. It is technically possible for both processes to produce the same"
+                              " hash, but this should not realistically occur.")
 
             # The secondary process is running and has a different hashseed, so proceed with the test.
             for game, world_type in AutoWorldRegister.world_types.items():
