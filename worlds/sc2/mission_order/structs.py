@@ -415,6 +415,7 @@ class SC2MissionOrder(MissionOrderNode):
         locations_per_region = get_locations_per_region(locations)
         regions: List[Region] = [create_region(world, locations_per_region, location_cache, "Menu")]
         locked_ids = [lookup_name_to_mission[mission].id for mission in locked_missions]
+        prefer_easy_missions = world.options.mission_bias.value == world.options.mission_bias.option_easy
 
         # Resolve slots with set mission names
         for mission_slot in self.fixed_missions:
@@ -435,6 +436,9 @@ class SC2MissionOrder(MissionOrderNode):
             world.random.shuffle(self.sorted_missions[difficulty])
             sorted_goals.extend(mission for mission in self.sorted_missions[difficulty] if mission in self.goal_missions)
         all_slots = [slot for diff in sorted(self.sorted_missions.keys()) for slot in self.sorted_missions[diff]]
+        # Sort standard slot difficulties from highest to lowest when using hard bias
+        if not prefer_easy_missions:
+            all_slots.reverse()
         all_slots.sort(key = lambda slot: len(slot.option_mission_pool.intersection(self.mission_pools.master_list)))
         sorted_goals.reverse()
 
@@ -465,7 +469,7 @@ class SC2MissionOrder(MissionOrderNode):
         # Pick goal missions first with stricter difficulty matching, and starting with harder goals
         for goal_slot in sorted_goals:
             try:
-                mission = self.mission_pools.pull_random_mission(world, goal_slot, prefer_close_difficulty=True)
+                mission = self.mission_pools.pull_random_mission(world, goal_slot)
                 goal_slot.set_mission(world, mission, locations_per_region, location_cache)
                 regions.append(goal_slot.region)
                 all_slots.remove(goal_slot)
@@ -479,7 +483,8 @@ class SC2MissionOrder(MissionOrderNode):
         remaining_count = len(all_slots)
         for mission_slot in all_slots:
             try:
-                mission = self.mission_pools.pull_random_mission(world, mission_slot)
+                prefer_min_difficulty = Difficulty.STARTER if prefer_easy_missions else mission_slot.option_difficulty
+                mission = self.mission_pools.pull_random_mission(world, mission_slot, prefer_min_difficulty=prefer_min_difficulty)
                 mission_slot.set_mission(world, mission, locations_per_region, location_cache)
                 regions.append(mission_slot.region)
                 remaining_count -= 1
