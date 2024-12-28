@@ -202,6 +202,12 @@ class ShiversWorld(World):
             self.options.non_local_items.value |= {name for name, data in item_table.items() if
                                                    data.type in [ItemType.POT, ItemType.POT_COMPLETE]}
 
+        # Ixupi captures priority locations:
+        if self.options.ixupi_captures_priority == 1:
+            self.options.priority_locations.value |= (
+                {name for name in self.location_names if name.startswith('Ixupi Captured')}
+            )
+
         self.multiworld.itempool += item_pool
 
     def pre_fill(self) -> None:
