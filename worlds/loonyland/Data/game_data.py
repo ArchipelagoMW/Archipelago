@@ -733,7 +733,9 @@ loonyland_location_table: dict[str, LLLocation] = {
         135, LLLocCat.BADGE, 21, "Survival", flags=["LONG_VANILLA_BADGES"], base_item="Touch Of Death"
     ),
     "Huntin'": LLLocation(136, LLLocCat.BADGE, 22, "Halloween Hill", base_item="All Access Pass"),
-    "Advanced Winnin'": LLLocation(137, LLLocCat.BADGE, 23, "Menu", flags=["LONG"], base_item="Terror Mode"),
+    "Advanced Winnin'": LLLocation(
+        137, LLLocCat.BADGE, 23, "Menu", flags=["LONG", "POSTGAME"], base_item="Terror Mode"
+    ),
     "Survivin'": LLLocation(138, LLLocCat.BADGE, 24, "Survival", base_item="Save Anywhere"),
     "Puppy Poundin'": LLLocation(139, LLLocCat.BADGE, 25, "Larry's Lair", base_item="Guided Shots"),
     "Mad Skeelz": LLLocation(
@@ -747,7 +749,9 @@ loonyland_location_table: dict[str, LLLocation] = {
     "Frankenfryin'": LLLocation(141, LLLocCat.BADGE, 27, "Frankenjulie's Laboratory", base_item="Slo-Mo"),
     "Combo Magic": LLLocation(142, LLLocCat.BADGE, 28, "Survival", base_item="Infinite Survival"),
     "Hedge Clippin'": LLLocation(143, LLLocCat.BADGE, 29, "Slurpy Swamp Mud", base_item="Frog-o-rama"),
-    "R-R-R-Remix!": LLLocation(144, LLLocCat.BADGE, 30, "Menu", flags=["REMIX", "LONG"], base_item="Play As Summony"),
+    "R-R-R-Remix!": LLLocation(
+        144, LLLocCat.BADGE, 30, "Menu", flags=["REMIX", "LONG", "POSTGAME"], base_item="Play As Summony"
+    ),
     "Witchcraft": LLLocation(
         145, LLLocCat.BADGE, 31, "Menu", flags=["LONG", "MULTISAVE"], base_item="Play As Ninja Girl"
     ),
@@ -870,6 +874,7 @@ def set_rules(multiworld, world):
         "Stayin' Alive": lambda state: state.has("Infinite Survival", world.player),
         "Swampdoggin'": lambda state: state.has("Play As Swampdog", world.player)
         and state.can_reach_region("Castle Vampy IV", world.player),
+        "Scorin'": lambda state: state.has("Boss Bash Access", world.player) and power_level(state, world, 30),
         "Brawlin'": lambda state: state.has("Touch Of Death", world.player),
         "Minin' For Treasure": lambda state: state.can_reach_region("Abandoned Mines", world.player)
         and state.has("Remix Access", world.player),
