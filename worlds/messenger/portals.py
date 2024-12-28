@@ -1,7 +1,7 @@
 from copy import deepcopy
 from typing import TYPE_CHECKING
 
-from BaseClasses import CollectionState, PlandoOptions
+from BaseClasses import CollectionState
 from Options import PlandoConnection
 
 if TYPE_CHECKING:
