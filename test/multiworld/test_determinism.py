@@ -211,11 +211,11 @@ class TestDeterministicGeneration(TestCase):
 
     @staticmethod
     def _hash_check():
-        """Called by both the main Python process and a separate Python process to check that the hashseeds differ."""
+        """Called by both the main Python process and a separate Python process to check that the hash seeds differ."""
         # Note: hashing an integer returns that integer if it's not too large, so a string literal is hashed instead
         # because str objects are "salted" with an unpredictable random value that remains constant within an individual
         # Python process.
-        return hash("This string is hashed to check that one process' hashseed differs from another")
+        return hash("This string is hashed to check that one process' hash seed differs from another")
 
     def assertMultiWorldsEquivalent(self, m1: SerializableMultiWorldData, m2: SerializableMultiWorldData):
         for key, data_current in m1.items():
@@ -255,18 +255,18 @@ class TestDeterministicGeneration(TestCase):
 
         # ProcessPoolExecutor is used so that we don't have to mess around with setting up communication between the new
         # process as well as exception handling and more.
-        # The new process must be spawned so that the new process gets a different hashseed, resulting in different
+        # The new process must be spawned so that the new process gets a different hash seed, resulting in different
         # ordering within `set` objects.
         with ProcessPoolExecutor(max_workers=1, mp_context=multiprocessing.get_context("spawn")) as ppe:
             # Starting up the process takes a while (6 or more seconds), so give it a generous timeout.
-            # This opportunity is also used to check that the new process (most likely) has a different hashseed set.
+            # This opportunity is also used to check that the new process (most likely) has a different hash seed set.
             other_process_hash_result = ppe.submit(TestDeterministicGeneration._hash_check).result(timeout=20.0)
             if other_process_hash_result == current_hash_result:
                 self.skipTest("Different hashes should be produced by the current  process and the spawned process, but"
                               " they were the same. It is technically possible for both processes to produce the same"
                               " hash, but this should not realistically occur.")
 
-            # The secondary process is running and has a different hashseed, so proceed with the test.
+            # The secondary process is running and has a different hash seed, so proceed with the test.
             for game, world_type in AutoWorldRegister.world_types.items():
                 seed, initial_multiworld_data = self.get_initial_multiworld(game)
                 if initial_multiworld_data is None:
