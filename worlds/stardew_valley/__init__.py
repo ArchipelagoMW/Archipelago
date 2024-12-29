@@ -18,8 +18,7 @@ from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRand
 from .options.forced_options import force_change_options_if_incompatible
 from .options.option_groups import sv_option_groups
 from .options.presets import sv_options_presets
-from .regions import create_regions
-from .regions.entrance_rando import prepare_mod_data
+from .regions import create_regions, prepare_mod_data
 from .rules import set_rules
 from .stardew_rule import True_, StardewRule, HasProgressionPercent
 from .strings.ap_names.event_names import Event
