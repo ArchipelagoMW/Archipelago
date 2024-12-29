@@ -65,8 +65,8 @@ def shuffle_transitions(world: "MessengerWorld") -> None:
         else:
             mock_entrance = child_region.create_er_target(child)
 
-        entrance.er_type = er_type
-        mock_entrance.er_type = er_type
+        entrance.randomization_type = er_type
+        mock_entrance.randomization_type = er_type
 
     for parent, child in RANDOMIZED_CONNECTIONS.items():
         if child == "Corrupted Future":
