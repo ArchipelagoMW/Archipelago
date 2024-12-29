@@ -99,7 +99,7 @@ goldensuntla_location_groups = {
         LocationName.N_Osenia_Islet_Milk.value
     },
     "Sea Of Time Islet": {
-        LocationName.Sea_of_Time_Islet_Lucky_Medal
+        LocationName.Sea_of_Time_Islet_Lucky_Medal.value
     },
     "Islet Cave": {
         LocationName.Islet_Cave_Turtle_Boots.value,
