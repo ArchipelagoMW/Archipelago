@@ -1069,7 +1069,7 @@ def any_ritual():
 
 def build_card_rule_for_rituals(ritual_monster: str):
     ritual_data = rituals[ritual_monster]
-    return CardRule(ritual_monster, 1, additional_cards=InnerCardRule(ritual_data.ritual_spells, 1))
+    return CardRule(ritual_monster, 2, additional_cards=InnerCardRule(ritual_data.ritual_spells, 1))
 
 
 def find_cards_with(min_attack: int = None, max_attack: int = None, min_defence: int = None,
