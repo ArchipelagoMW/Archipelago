@@ -112,6 +112,7 @@ def place_early_items(world: "WitnessWorld", prog_itempool: List[Item], fill_loc
         next_findable_items_dict = {
             item_list.pop(): item_type
             for item_type, item_list in eligible_early_items_by_type.items()
+            if item_list
         }
 
         # Get their IDs as a set
