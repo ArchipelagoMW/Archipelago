@@ -2471,3 +2471,181 @@ if "Starcraft 2" in network_data_package["games"]:
         )
 
     _player_trackers["Starcraft 2"] = render_Starcraft2_tracker
+
+if "Celeste 64" in network_data_package["games"]:
+    # Mapping from non-progressive item to progressive name and max level.
+    non_progressive_items = {
+        
+    }
+
+    progressive_item_max = {
+        
+    }
+
+    REGION_OVERWORLD    = "Overworld"
+    REGION_CASSETTES    = "Cassettes"
+    REGION_FRIENDS      = "Friends"
+    REGION_SIGNS        = "Signs"
+    REGION_CARS         = "Cars"
+
+    known_regions = [REGION_OVERWORLD, REGION_CASSETTES, REGION_FRIENDS, REGION_SIGNS, REGION_CARS]
+
+    locations_table = {
+        13238272: REGION_OVERWORLD,
+        13238273: REGION_OVERWORLD,
+        13238274: REGION_OVERWORLD,
+        13238275: REGION_OVERWORLD,
+        13238276: REGION_OVERWORLD,
+        13238277: REGION_OVERWORLD,
+        13238278: REGION_OVERWORLD,
+        13238279: REGION_OVERWORLD,
+        13238280: REGION_OVERWORLD,
+        13238281: REGION_OVERWORLD,
+        13238282: REGION_OVERWORLD,
+        13238283: REGION_OVERWORLD,
+        13238284: REGION_OVERWORLD,
+        13238285: REGION_OVERWORLD,
+        13238286: REGION_OVERWORLD,
+        13238287: REGION_OVERWORLD,
+        13238288: REGION_OVERWORLD,
+        13238289: REGION_OVERWORLD,
+        13238290: REGION_OVERWORLD,
+        13238291: REGION_OVERWORLD,
+        
+        13238292: REGION_CASSETTES,
+        13238293: REGION_CASSETTES,
+        13238294: REGION_CASSETTES,
+        13238295: REGION_CASSETTES,
+        13238296: REGION_CASSETTES,
+        13238297: REGION_CASSETTES,
+        13238298: REGION_CASSETTES,
+        13238299: REGION_CASSETTES,
+        13238300: REGION_CASSETTES,
+        13238301: REGION_CASSETTES,
+
+        13238531: REGION_FRIENDS,
+        13238532: REGION_FRIENDS,
+        13238533: REGION_FRIENDS,
+        13238534: REGION_FRIENDS,
+        13238535: REGION_FRIENDS,
+        13238536: REGION_FRIENDS,
+        13238528: REGION_FRIENDS,
+        13238529: REGION_FRIENDS,
+        13238530: REGION_FRIENDS,
+
+        13238786: REGION_SIGNS,
+        13238787: REGION_SIGNS,
+        13238788: REGION_SIGNS,
+        13238784: REGION_SIGNS,
+        13238785: REGION_SIGNS,
+        
+        13239040: REGION_CARS,
+        13239041: REGION_CARS
+    }
+
+    def prepare_inventories(team: int, player: int, inventory: Counter[str], tracker_data: TrackerData):
+        # These settings were added in v1.2.
+        # That this tracker also work for generated seeds on earlier versions is a check if the option is even available in the slot data.
+        if not ("move_shuffle" in tracker_data.get_slot_data(team, player) and bool(tracker_data.get_slot_data(team, player)["move_shuffle"])):
+            # If moves are not shuffled add these abilities to the inventory to avoid extra handling for the collected items.
+            inventory["Climb"] = 1
+            inventory["Skid Jump"] = 1
+            inventory["Air Dash"] = 1
+            inventory["Ground Dash"] = 1
+
+        for item, (prog_item, level) in non_progressive_items.items():
+            if item in inventory:
+                inventory[prog_item] = min(max(inventory[prog_item], level), progressive_item_max[prog_item])
+
+        # Completed item if we meet goal.
+        if tracker_data.get_room_client_statuses()[team, player] == ClientStatus.CLIENT_GOAL:
+            inventory["IsCompleted"] = 1
+
+    def render_Celeste64_multiworld_tracker(tracker_data: TrackerData, enabled_trackers: List[str]):
+        inventories: Dict[Tuple[int, int], Counter[str]] = {
+            (team, player): collections.Counter({
+                tracker_data.item_id_to_name["Celeste 64"][code]: count
+                for code, count in tracker_data.get_player_inventory_counts(team, player).items()
+            })
+            for team, players in tracker_data.get_all_players().items()
+            for player in players if tracker_data.get_slot_info(team, player).game == "Celeste 64"
+        }
+
+        # Translate non-progression items to progression items for tracker simplicity.
+        for (team, player), inventory in inventories.items():
+            prepare_inventories(team, player, inventory, tracker_data)
+
+        return render_template(
+            "multitracker__Celeste64.html",
+            enabled_trackers=enabled_trackers,
+            current_tracker="Celeste 64",
+            room=tracker_data.room,
+            all_slots=tracker_data.get_all_slots(),
+            room_players=tracker_data.get_all_players(),
+            locations=tracker_data.get_room_locations(),
+            locations_complete=tracker_data.get_room_locations_complete(),
+            total_team_locations=tracker_data.get_team_locations_total_count(),
+            total_team_locations_complete=tracker_data.get_team_locations_checked_count(),
+            player_names_with_alias=tracker_data.get_room_long_player_names(),
+            completed_worlds=tracker_data.get_team_completed_worlds_count(),
+            games=tracker_data.get_room_games(),
+            states=tracker_data.get_room_client_statuses(),
+            hints=tracker_data.get_team_hints(),
+            activity_timers=tracker_data.get_room_last_activity(),
+            videos=tracker_data.get_room_videos(),
+            item_id_to_name=tracker_data.item_id_to_name,
+            location_id_to_name=tracker_data.location_id_to_name,
+            inventories=inventories
+        )
+
+    def render_Celeste64_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
+        inventory = collections.Counter({
+            tracker_data.item_id_to_name["Celeste 64"][code]: count
+            for code, count in tracker_data.get_player_inventory_counts(team, player).items()
+        })
+        
+        # Translate non-progression items to progression items for tracker simplicity.
+        prepare_inventories(team, player, inventory, tracker_data)
+
+        # These settings were added in v1.2.
+        # That this tracker also work for generated seeds on earlier versions is a check if the option is even available in the slot data.
+        friendSanity = "friendsanity" in tracker_data.get_slot_data(team, player) and bool(tracker_data.get_slot_data(team, player)["friendsanity"])
+        signSanity   = "signsanity"   in tracker_data.get_slot_data(team, player) and bool(tracker_data.get_slot_data(team, player)["signsanity"])
+        carSanity    = "carsanity"    in tracker_data.get_slot_data(team, player) and bool(tracker_data.get_slot_data(team, player)["carsanity"])
+        knowRegionsCopy = known_regions.copy() # lifecycle thing
+
+        if not friendSanity : knowRegionsCopy.remove(REGION_FRIENDS)
+        if not signSanity   : knowRegionsCopy.remove(REGION_SIGNS)
+        if not carSanity    : knowRegionsCopy.remove(REGION_CARS)
+
+        regions = {
+            region_name: {
+                "checked": sum(
+                    1 for id, region in locations_table.items()
+                    if region == region_name and id in tracker_data.get_player_checked_locations(team, player)
+                ),
+                "locations": [
+                    (
+                        tracker_data.location_id_to_name["Celeste 64"][id],
+                        id in tracker_data.get_player_checked_locations(team, player)
+                    )
+                    for id, region in locations_table.items()
+                        if region == region_name
+                ],
+            }
+            for region_name in knowRegionsCopy
+        }
+
+        return render_template(
+            template_name_or_list="tracker__Celeste64.html",
+            room=tracker_data.room,
+            team=team,
+            player=player,
+            inventory=inventory,
+            player_name=tracker_data.get_player_name(team, player),
+            regions=regions,
+            known_regions=knowRegionsCopy
+        )
+
+    _multiworld_trackers["Celeste 64"] = render_Celeste64_multiworld_tracker
+    _player_trackers["Celeste 64"] = render_Celeste64_tracker
