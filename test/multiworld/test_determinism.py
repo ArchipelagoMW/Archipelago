@@ -16,12 +16,16 @@ class SerializableItemData(TypedDict):
     name: str
     player: int
     code: int | None
+    # classification could be stored as an int instead, but for the simplicity of providing better test output, it is
+    # left as an ItemClassification.
     classification: ItemClassification
 
 
 class SerializableLocationData(TypedDict):
     name: str
     address: int | None
+    # progress_type could be stored as an int instead, but for the simplicity of providing better test output, it is
+    # left as a LocationProgressType.
     progress_type: LocationProgressType
 
 
@@ -101,13 +105,13 @@ def options_to_serializable(multiworld: MultiWorld) -> dict[int, list[dict[str, 
     return all_options
 
 
-def multiworld_to_serializable(item_pool_before_fill: list[Item], multiworld: MultiWorld) -> SerializableMultiWorldData:
+def multiworld_to_serializable(itempool_before_fill: list[Item], multiworld: MultiWorld) -> SerializableMultiWorldData:
     # Items that were in the item pool are expected to be placed at locations. The ItemData for these items is
     # deduplicated by tracking the created ItemData for each Item instance, by the Item instance's unique object
     # identifier. This is similar to using copy.deepcopy(obj, item_memo).
     item_memo: dict[int, SerializableItemData] = {}
 
-    item_pool_before_main_fill = [item_to_serializable(item, item_memo) for item in item_pool_before_fill]
+    itempool = [item_to_serializable(item, item_memo) for item in itempool_before_fill]
 
     # The order that regions and entrances are added to the multiworld is not considered important, so sort them by
     # name.
@@ -132,6 +136,10 @@ def multiworld_to_serializable(item_pool_before_fill: list[Item], multiworld: Mu
             else:
                 serializable_item = None
             placements_list.append((loc_name, serializable_item))
+        # Ignore ordering of locations for the placements list. Failures of deterministic location order will be
+        # presented through the locations_list.
+        # A list is preferred to a dict due to more useful test output when the test fails.
+        placements_list.sort(key=lambda t: t[0])
 
     # Items that were in the item pool typically won't end up precollected_items, but it is possible, so `item_memo`
     # is still passed as an argument.
@@ -140,7 +148,7 @@ def multiworld_to_serializable(item_pool_before_fill: list[Item], multiworld: Mu
 
     return {
         "options": options_to_serializable(multiworld),
-        "itempool": item_pool_before_main_fill,
+        "itempool": itempool,
         "start_inventory": precollected_items,
         "regions": regions,
         "entrances": entrances,
@@ -151,46 +159,55 @@ def multiworld_to_serializable(item_pool_before_fill: list[Item], multiworld: Mu
 
 class TestDeterministicGeneration(TestCase):
     """
-    Test that, for each world type, generating a multiworld with the same seed produces deterministic results.
+    Test that, for each world type, generating a multiworld is deterministic, so generating with the same seed multiple
+    times produces the same result each time.
 
     Common sources of nondeterministic behaviour that this test may be able to identify:
     - Iteration of sets
     - Accidental modification of shared data
-    - Use of `random` module instead of per-world or per-multiworld `.random` attributes, or use of other
-    nondeterministically seeded Random instances
+    - Use of `random` module, instead of per-world or per-multiworld `.random` attributes or other deterministically
+    seeded Random instances
     """
 
-    initial_multiworld_data: ClassVar[dict[str, tuple[int, SerializableMultiWorldData]]] = {}
+    initial_multiworld_data_cache: ClassVar[dict[str, tuple[int, SerializableMultiWorldData]]] = {}
+    """
+    To reduce test duration, the initial multiworld for each test is generated only once and then shared between the
+    tests.
+    """
 
     @classmethod
     def tearDownClass(cls):
         # Allow the data to be garbage collected by clearing the dict.
-        cls.initial_multiworld_data.clear()
+        cls.initial_multiworld_data_cache.clear()
 
     def get_initial_multiworld(self, game: str) -> tuple[int, SerializableMultiWorldData] | tuple[int, None]:
         """
-        Get the initial multiworld seed and multiworld as serializable data for this game, or generate it if it does not
-        exist.
+        Get the initial multiworld seed and multiworld as serializable data for this game, or generate it and cache it
+        if it does not exist.
 
         Each test method within this test class shares the same initial multiworld data for better test performance, by
         reducing the number of multiworlds that need to be generated.
+
+        If world setup fails, the returned SerializableMultiWorldData will be None and a subtest will be recorded as
+        having failed along with the reason.
         """
-        if game in self.initial_multiworld_data:
-            return self.initial_multiworld_data[game]
+        if game in self.initial_multiworld_data_cache:
+            return self.initial_multiworld_data_cache[game]
 
         world_type = AutoWorldRegister.world_types[game]
+        # Generate without calling any generation steps to start with so that the seed can be retrieved first.
         multiworld = setup_multiworld(world_type, ())
         seed = multiworld.seed
         self.assertIsNotNone(seed)
         with self.subTest("initial multiworld setup", game=game, seed=seed):
             for step in gen_steps:
                 call_all(multiworld, step)
-            item_pool_copy = multiworld.itempool.copy()
+            itempool_copy = multiworld.itempool.copy()
             distribute_items_restrictive(multiworld)
             call_all(multiworld, "post_fill")
-            serializable_data = multiworld_to_serializable(item_pool_copy, multiworld)
+            serializable_data = multiworld_to_serializable(itempool_copy, multiworld)
             to_return = (seed, serializable_data)
-            self.initial_multiworld_data[game] = to_return
+            self.initial_multiworld_data_cache[game] = to_return
             return to_return
         # If the code in the self.subTest() context fails, execution continues after the end of the context, so this
         # return statement is reachable, despite PyCharm thinking it is unreachable.
@@ -198,16 +215,18 @@ class TestDeterministicGeneration(TestCase):
         return multiworld.seed, None
 
     @staticmethod
-    def _test_hash_determinism_world_setup(game: str, seed: int):
+    def _new_multiworld_to_serializable_data(game: str, seed: int):
         """
-        Called on a separate Python process to generate a multiworld and return the multiworld as serializable data.
+        Generate a multiworld for the given game and seed and return the multiworld as serializable data.
+
+        May be called on a separate Python process.
         """
         world_type = worlds.AutoWorldRegister.world_types[game]
-        multiworld = setup_multiworld(world_type, seed=seed)
-        item_pool_copy = multiworld.itempool.copy()
+        multiworld = setup_multiworld(world_type, gen_steps, seed=seed)
+        itempool_copy = multiworld.itempool.copy()
         distribute_items_restrictive(multiworld)
         call_all(multiworld, "post_fill")
-        return multiworld_to_serializable(item_pool_copy, multiworld)
+        return multiworld_to_serializable(itempool_copy, multiworld)
 
     @staticmethod
     def _hash_check():
@@ -219,9 +238,8 @@ class TestDeterministicGeneration(TestCase):
 
     def assertMultiWorldsEquivalent(self, m1: SerializableMultiWorldData, m2: SerializableMultiWorldData):
         for key, data_current in m1.items():
-            # PyCharm sees `key` as str, rather than one of the valid string literals, so disable the inspection.
-            # noinspection PyTypedDict
-            data_other = m2[key]
+            # Type checkers see `key` as str, rather than one of the valid string literals, so disable the inspection.
+            data_other = m2[key]  # type: ignore
             with self.subTest(key):
                 # Iterate dictionaries with list values because comparing lists for equality produces better output than
                 # comparing dictionaries for equality when the test fails.
@@ -248,6 +266,8 @@ class TestDeterministicGeneration(TestCase):
         should remain constant. The separate Python process won't have any of these accidental modifications, which can
         produce different results with the same seed and fail the test.
         """
+        # These imports are not required for the spawned process and might not be needed by worlds, so are imported
+        # inside this method.
         from concurrent.futures import ProcessPoolExecutor, Future
         import multiprocessing
 
@@ -257,12 +277,12 @@ class TestDeterministicGeneration(TestCase):
         # process as well as exception handling and more.
         # The new process must be spawned so that the new process gets a different hash seed, resulting in different
         # ordering within `set` objects.
-        with ProcessPoolExecutor(max_workers=1, mp_context=multiprocessing.get_context("spawn")) as ppe:
-            # Starting up the process takes a while (6 or more seconds), so give it a generous timeout.
+        with ProcessPoolExecutor(max_workers=1, mp_context=multiprocessing.get_context("spawn")) as executor:
+            # Starting up the process can take a while (6 or more seconds), so give it a generous timeout.
             # This opportunity is also used to check that the new process (most likely) has a different hash seed set.
-            other_process_hash_result = ppe.submit(TestDeterministicGeneration._hash_check).result(timeout=20.0)
+            other_process_hash_result = executor.submit(TestDeterministicGeneration._hash_check).result(timeout=20.0)
             if other_process_hash_result == current_hash_result:
-                self.skipTest("Different hashes should be produced by the current  process and the spawned process, but"
+                self.skipTest("Different hashes should be produced by the current process and the spawned process, but"
                               " they were the same. It is technically possible for both processes to produce the same"
                               " hash, but this should not realistically occur.")
 
@@ -272,8 +292,14 @@ class TestDeterministicGeneration(TestCase):
                 if initial_multiworld_data is None:
                     continue
                 with self.subTest(game=world_type.game, seed=seed):
-                    future: Future = ppe.submit(TestDeterministicGeneration._test_hash_determinism_world_setup,
-                                                game, seed)
+                    future: Future[SerializableMultiWorldData]
+                    # Tell the other process to generate the same seed as the initial multiworld.
+                    future = executor.submit(TestDeterministicGeneration._new_multiworld_to_serializable_data, game,
+                                             seed)
+                    # Most solo multiworlds will generate in less than a second, though larger and more complex worlds
+                    # can often take 2-3 seconds. Getting a seed that has to perform lots of swaps during progression
+                    # fill can take even longer, so 10 seconds should be an ample timeout for even the worst solo
+                    # generations.
                     data_from_other_process = future.result(timeout=10.0)
                     self.assertMultiWorldsEquivalent(initial_multiworld_data, data_from_other_process)
 
@@ -297,15 +323,10 @@ class TestDeterministicGeneration(TestCase):
                 # To increase the likelihood of constant data being changed in a way that alters the second generation,
                 # an extra multiworld is generated with a random seed before the second generation of the original seed.
                 # For better performance, only the generation steps prior to `distribute_items_restrictive` are used.
-                setup_multiworld(world_type)
+                setup_multiworld(world_type, gen_steps)
 
-                multiworld2 = setup_multiworld(world_type, seed=seed)
-                item_pool_copy2 = multiworld2.itempool.copy()
-                distribute_items_restrictive(multiworld2)
-                call_all(multiworld2, "post_fill")
-
-                data2 = multiworld_to_serializable(item_pool_copy2, multiworld2)
-                self.assertMultiWorldsEquivalent(initial_multiworld_data, data2)
+                secondary_multiworld_data = TestDeterministicGeneration._new_multiworld_to_serializable_data(game, seed)
+                self.assertMultiWorldsEquivalent(initial_multiworld_data, secondary_multiworld_data)
 
     def test_random_module_usage_determinism(self) -> None:
         """
@@ -320,15 +341,13 @@ class TestDeterministicGeneration(TestCase):
         Failing this test means that a world will generate nondeterministically on webhost (archipelago.gg and other
         hosts of the website generator).
         """
-        generation_steps = gen_steps
         for game, world_type in AutoWorldRegister.world_types.items():
             seed, initial_multiworld_data = self.get_initial_multiworld(game)
             if initial_multiworld_data is None:
                 continue
             with self.subTest(game=game, seed=seed):
-                # Set up the second world with the same seed, but increment the `random` module's RNG before calling any
-                # of the generation steps.
-                multiworld2 = setup_multiworld(world_type, (), seed=seed)
+                # Set up the second world with the same seed, but without calling any of the generation steps.
+                multiworld = setup_multiworld(world_type, (), seed=seed)
 
                 # Set the `random` module to a different seed.
                 # This should have no effect on generation because worlds should not be using the `random` module
@@ -336,12 +355,12 @@ class TestDeterministicGeneration(TestCase):
                 random.seed(random.random())
 
                 # Call the same generation steps as normal.
-                for step in generation_steps:
-                    call_all(multiworld2, step)
+                for step in gen_steps:
+                    call_all(multiworld, step)
 
-                item_pool_copy2 = multiworld2.itempool.copy()
-                distribute_items_restrictive(multiworld2)
-                call_all(multiworld2, "post_fill")
+                itempool_copy = multiworld.itempool.copy()
+                distribute_items_restrictive(multiworld)
+                call_all(multiworld, "post_fill")
 
-                data2 = multiworld_to_serializable(item_pool_copy2, multiworld2)
-                self.assertMultiWorldsEquivalent(initial_multiworld_data, data2)
+                secondary_multiworld_data = multiworld_to_serializable(itempool_copy, multiworld)
+                self.assertMultiWorldsEquivalent(initial_multiworld_data, secondary_multiworld_data)
