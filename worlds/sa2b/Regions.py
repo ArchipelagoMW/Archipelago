@@ -2902,7 +2902,7 @@ def connect_regions(multiworld: MultiWorld, world: World, player: int, gates: ty
                         lambda state: (state.has(ItemName.knuckles_shovel_claws, player)))
 
                 connect(multiworld, player, names, LocationName.pyramid_cave_region, LocationName.animal_skeleton_dog,
-                        lambda state: (state.has(ItemName.sonic_light_shoes, player) and
+                        lambda state: (state.has(ItemName.sonic_bounce_bracelet, player) and
                                        state.has(ItemName.sonic_flame_ring, player)))
 
                 connect(multiworld, player, names, LocationName.iron_gate_region, LocationName.animal_dragon,
@@ -2917,8 +2917,7 @@ def connect_regions(multiworld: MultiWorld, world: World, player: int, gates: ty
                         lambda state: (state.has(ItemName.knuckles_shovel_claws, player)))
 
                 connect(multiworld, player, names, LocationName.pyramid_cave_region, LocationName.animal_skeleton_dog,
-                        lambda state: (state.has(ItemName.sonic_light_shoes, player) and
-                                       state.has(ItemName.sonic_flame_ring, player)))
+                        lambda state: (state.has(ItemName.sonic_flame_ring, player)))
 
                 connect(multiworld, player, names, LocationName.iron_gate_region, LocationName.animal_dragon,
                         lambda state: (state.has(ItemName.eggman_jet_engine, player)))
@@ -2928,7 +2927,8 @@ def connect_regions(multiworld: MultiWorld, world: World, player: int, gates: ty
             if world.options.logic_difficulty.value == 2:
                 connect(multiworld, player, names, LocationName.wild_canyon_region, LocationName.animal_dragon)
 
-                connect(multiworld, player, names, LocationName.pyramid_cave_region, LocationName.animal_skeleton_dog)
+                connect(multiworld, player, names, LocationName.pyramid_cave_region, LocationName.animal_skeleton_dog,
+                        lambda state: (state.has(ItemName.sonic_flame_ring, player)))
 
                 connect(multiworld, player, names, LocationName.iron_gate_region, LocationName.animal_dragon,
                         lambda state: (state.has(ItemName.eggman_jet_engine, player)))

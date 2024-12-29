@@ -1316,6 +1316,7 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
         add_rule(multiworld.get_location(LocationName.pyramid_cave_animal_19, player),
                  lambda state: state.has(ItemName.sonic_light_shoes, player) and
                                state.has(ItemName.sonic_bounce_bracelet, player) and
+                               state.has(ItemName.sonic_flame_ring, player) and
                                state.has(ItemName.sonic_mystic_melody, player))
 
         add_rule(multiworld.get_location(LocationName.cannon_core_animal_19, player),
@@ -2916,8 +2917,7 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, world: World, player:
                                state.has(ItemName.knuckles_hammer_gloves, player))
 
         add_rule(multiworld.get_location(LocationName.pyramid_cave_animal_19, player),
-                 lambda state: state.has(ItemName.sonic_bounce_bracelet, player) and
-                               state.has(ItemName.sonic_mystic_melody, player))
+                 lambda state: state.has(ItemName.sonic_flame_ring, player))
 
         add_rule(multiworld.get_location(LocationName.cannon_core_animal_19, player),
                  lambda state: state.has(ItemName.tails_booster, player) and
@@ -3994,8 +3994,7 @@ def set_mission_upgrade_rules_expert(multiworld: MultiWorld, world: World, playe
                                (state.has(ItemName.knuckles_hammer_gloves, player)) and state.has(ItemName.sonic_flame_ring, player))
 
         add_rule(multiworld.get_location(LocationName.pyramid_cave_animal_19, player),
-                 lambda state: state.has(ItemName.sonic_bounce_bracelet, player) and
-                               state.has(ItemName.sonic_mystic_melody, player))
+                 lambda state: state.has(ItemName.sonic_flame_ring, player))
 
         add_rule(multiworld.get_location(LocationName.cannon_core_animal_19, player),
                  lambda state: state.has(ItemName.eggman_large_cannon, player) and
