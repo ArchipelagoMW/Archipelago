@@ -9,7 +9,7 @@ import random
 from NetUtils import ClientStatus
 from CommonClient import CommonContext, get_base_parser
 from Utils import async_start
-from .Constants import LOCATION_BOSS_RANGE, LOCATION_RESEARCH_RANGE, VERSION
+from .Constants import LOCATION_BOSS_RANGE, LOCATION_RESEARCH_RANGE, VERSION, CLIENT_HOSTNAME, CLIENT_PORT
 
 class DSTInvalidRequest(Exception):
     pass
@@ -148,6 +148,8 @@ class DSTContext(CommonContext):
                 # Remind player of their goal and world settings
                 async def goal_hint():
                     await asyncio.sleep(0.5)
+                    # Announce generator version
+                    self.logger.info(f"World generated on DST version: {self.slotdata.get('generator_version', 'Unknown')}")
                     # Announce goal type
                     _goal = self.slotdata.get("goal")
                     self.logger.info(f"Goal type: {_goal}")
@@ -369,18 +371,17 @@ def parse_request(req_bytes:bytes):
         print(req_bytes)
         raise
 
+class DSTResponse():
+    response:bytes
+    next_ping_time:float = 0.0
+    def __init__(self, content:Dict = {}, status=100, next_ping_time:float=0.0):
+        header  = f"HTTP/1.1 {status}\r\n".encode()
+        header += b"Content-type: application/json\r\n"
+        header += b"\r\n"
 
-def send_response(conn:socket.socket, content:Dict = {}, status=100):
-    "Sends a response to the connection "
-    header  = f"HTTP/1.1 {status}\r\n".encode()
-    header += b"Content-type: application/json\r\n"
-    header += b"\r\n"
-
-    body = json.dumps(content).encode()
-    try:
-        conn.sendall(header + body)
-    except Exception as e:
-        print(f"Could not send content: {content}")
+        body = json.dumps(content).encode()
+        self.response = header + body
+        self.next_ping_time = next_ping_time
 
 class DSTHandler():
     logger = logging.getLogger("DSTInterface")
@@ -409,19 +410,18 @@ class DSTHandler():
         if self.connected:
             (self._sendqueue if priority else self._sendqueue_lowpriority).append(data)
 
-    async def handle_dst_data(self, conn, data):
+    async def handle_dst_data(self, data) -> DSTResponse:
         try:
             datatype:str = data.get("datatype")
+            next_ping_time = 0.0
             if datatype == "Ping":
                 if len(self._sendqueue):
-                    send_response(conn, self._sendqueue.pop(0), 100)
-                    return
+                    return DSTResponse(self._sendqueue.pop(0), 100)
                 elif len(self._sendqueue_lowpriority):
-                    send_response(conn, self._sendqueue_lowpriority.pop(0), 100)
-                    return
+                    return DSTResponse(self._sendqueue_lowpriority.pop(0), 100)
                 else:
                     # No data to send. Delay next ping
-                    await asyncio.sleep(1.0)
+                    next_ping_time = 1.0
 
             elif datatype in {"Chat", "Join", "Leave", "Death", "Connect", "Disconnect", "DeathLink"}:
                  # Instant event
@@ -433,17 +433,14 @@ class DSTHandler():
 
             else:
                 if datatype: self.logger.error(f"Error! Received invalid datatype: {datatype}")
-                await asyncio.sleep(1.0)
-                send_response(conn, {"datatype": "Error"}, 400)
-                return
+                return DSTResponse({"datatype": "Error"}, 400, 1.0)
 
             # Tell DST if we're connected to AP
-            send_response(conn, {"datatype": "State", "connected": self.ctx.connected_to_ap}, 100)
+            return DSTResponse({"datatype": "State", "connected": self.ctx.connected_to_ap}, 100, next_ping_time)
 
         except Exception as e:
             print(f"Handle DST data error! {e}")
-            send_response(conn, {"datatype": "Error"}, 400)
-            await asyncio.sleep(1.0)
+            return DSTResponse({"datatype": "Error"}, 400, 1.0)
 
     def on_sock_accept(self, conn, address):
         if not self.connected:
@@ -453,6 +450,7 @@ class DSTHandler():
 
     async def handle_dst_request(self, sock:socket.socket):
         loop = asyncio.get_event_loop()
+        next_ping_time = 0.0
         while True:
             conn = None
             try:
@@ -461,25 +459,47 @@ class DSTHandler():
                 self.on_sock_accept(conn, address)
                 if not request: break
                 self.lastping = time.time()
-                await self.handle_dst_data(conn, parse_request(request))
+                response:DSTResponse = await self.handle_dst_data(parse_request(request))
+                next_ping_time = response.next_ping_time
+                await loop.sock_sendall(conn, response.response)
             except asyncio.TimeoutError:
                 raise
             except DSTInvalidRequest as e:
                 print(f"Invalid request! {e}")
-                send_response(conn, {"datatype": "Error"}, 400)
-                await asyncio.sleep(1.0)
+                if conn:
+                    await loop.sock_sendall(conn, DSTResponse({"datatype": "Error"}, 400).response)
+                next_ping_time = 1.0
             except Exception as e:
                 self.logger.error(f"DST request error: {e}")
-                send_response(conn, {"datatype": "Error"}, 500)
-                await asyncio.sleep(1.0)
+                if conn:
+                    await loop.sock_sendall(conn, DSTResponse({"datatype": "Error"}, 500).response)
+                next_ping_time = 1.0
             finally:
-                if conn: conn.close()
+                if conn:
+                    conn.shutdown(socket.SHUT_RDWR)
+                    conn.close()
+                if next_ping_time > 0:
+                    await asyncio.sleep(next_ping_time)
+
+    async def bind_socket(self, sock:socket.socket):
+        sock.bind((CLIENT_HOSTNAME, CLIENT_PORT))
 
     async def run_handler(self):
+        self.logger.info(f"Running Don't Starve Together Client Version {VERSION}")
         while True:
-            sock = socket.socket()
-            sock.bind(("localhost", 8000))
-            sock.listen(5)
+            # Bind the socket and make sure it actually succeeds
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            try:
+                await asyncio.wait_for(self.bind_socket(sock), timeout=3)
+                sock.listen(5) 
+            except Exception as e:
+                self.logger.error("Could not bind socket. Check that you don't already have another instance of the client running! Attempting again in 10 seconds.")
+                sock.close()
+                self.connected = False
+                await asyncio.sleep(10.0)
+                continue
+
+            # Handle requests
             try:
                 while True:
                     await self.handle_dst_request(sock)
