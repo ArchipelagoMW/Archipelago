@@ -2,7 +2,7 @@ import random
 import unittest
 from typing import Set
 
-from BaseClasses import get_seed
+from BaseClasses import get_seed, MultiWorld
 from . import SVTestCase
 from .options.utils import fill_dataclass_with_default
 from .. import create_content
@@ -19,13 +19,13 @@ class TestRegions(unittest.TestCase):
         for region in vanilla_data.vanilla_regions:
             with self.subTest(region=region):
                 for exit_ in region.exits:
-                    self.assertIn(exit_, vanilla_data.connections_by_name,
+                    self.assertIn(exit_, vanilla_data.connections_without_ginger_island_by_name,
                                   f"{region.name} is leading to {exit_} but it does not exist.")
 
     def test_connection_lead_somewhere(self):
         for connection in vanilla_data.vanilla_connections:
             with self.subTest(connection=connection):
-                self.assertIn(connection.destination, vanilla_data.regions_by_name,
+                self.assertIn(connection.destination, vanilla_data.regions_without_ginger_island_by_name,
                               f"{connection.name} is leading to {connection.destination} but it does not exist.")
 
 
@@ -101,7 +101,7 @@ class TestEntranceRando(SVTestCase):
 
                 for connection in vanilla_data.vanilla_connections:
                     if flag in connection.flag:
-                        if RandomizationFlag.GINGER_ISLAND in connection.flag:
+                        if RandomizationFlag.EXCLUDE_GINGER_ISLAND in connection.flag:
                             self.assertNotIn(connection.name, randomized_connections,
                                              f"Connection {connection.name} should not be randomized but it is in the output.")
                             self.assertNotIn(connection.reverse, randomized_connections,
@@ -143,11 +143,15 @@ class TestEntranceRando(SVTestCase):
 class TestEntranceClassifications(SVTestCase):
 
     def test_non_progression_are_all_accessible_with_empty_inventory(self):
-        for option, flag in [(EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
-                             (EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION)]:
+        for option, flag in [
+            (EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
+            (EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION)
+        ]:
+
             world_options = {
                 EntranceRandomization.internal_name: option
             }
+
             with self.solo_world_sub_test(world_options=world_options, flag=flag) as (multiworld, sv_world):
                 ap_entrances = {entrance.name: entrance for entrance in multiworld.get_entrances()}
                 for randomized_entrance in sv_world.randomized_entrances:
@@ -163,9 +167,8 @@ class TestEntranceClassifications(SVTestCase):
             EntranceRandomization.internal_name: EntranceRandomization.option_disabled,
             ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true
         }
+
         with self.solo_world_sub_test(world_options=world_options) as (multiworld, _):
-            ap_entrances = {entrance.name: entrance for entrance in multiworld.get_entrances()}
-            for entrance_name in ap_entrances:
-                entrance_data = vanilla_data.connections_by_name[entrance_name]
-                with self.subTest(f"{entrance_name}: {entrance_data.flag}"):
-                    self.assertFalse(entrance_data.flag & RandomizationFlag.GINGER_ISLAND)
+            multiworld: MultiWorld
+            for entrance in multiworld.get_entrances():
+                self.assertIn(entrance.name, vanilla_data.connections_without_ginger_island_by_name)

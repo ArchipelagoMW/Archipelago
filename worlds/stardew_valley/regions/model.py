@@ -13,14 +13,30 @@ class MergeFlag(IntFlag):
 
 
 class RandomizationFlag(IntFlag):
-    NOT_RANDOMIZED = 0b0
-    PELICAN_TOWN = 0b00011111
-    NON_PROGRESSION = 0b00011110
-    BUILDINGS = 0b00011100
-    EVERYTHING = 0b00011000
-    GINGER_ISLAND = 0b00100000
-    LEAD_TO_OPEN_AREA = 0b01000000
-    MASTERIES = 0b10000000
+    NOT_RANDOMIZED = 0
+
+    # Randomization options
+    # The first 4 bits are used to mark if an entrance is eligible for randomization according to the entrance randomization options.
+    BIT_PELICAN_TOWN = 1  # 0b0001
+    BIT_NON_PROGRESSION = 1 << 1  # 0b0010
+    BIT_BUILDINGS = 1 << 2  # 0b0100
+    BIT_EVERYTHING = 1 << 3  # 0b1000
+
+    # Content flag for entrances exclusions
+    # The next 2 bits are used to mark if an entrance is to be excluded from randomization according to the content options.
+    # Those bits should be removed when an entrance should be excluded.
+    EXCLUDE_MASTERIES = 1 << 5  # 0b100000
+
+    # Entrance groups
+    # The last bit is used to add additional qualifiers on entrances to group them
+    # Those bits should be added when an entrance need additional qualifiers.
+    LEAD_TO_OPEN_AREA = 1 << 6
+
+    # Tags to apply on regions
+    EVERYTHING = EXCLUDE_MASTERIES | BIT_EVERYTHING
+    BUILDINGS = EVERYTHING | BIT_BUILDINGS
+    NON_PROGRESSION = BUILDINGS | BIT_NON_PROGRESSION
+    PELICAN_TOWN = NON_PROGRESSION | BIT_PELICAN_TOWN
 
 
 @dataclass(frozen=True)
@@ -60,6 +76,9 @@ class ConnectionData:
         except ValueError:
             return None
         return f"{destination}{connector_keyword}{origin}"
+
+    def is_eligible_for_randomization(self, ) -> bool:
+        return self.flag != RandomizationFlag.NOT_RANDOMIZED
 
 
 @dataclass(frozen=True)

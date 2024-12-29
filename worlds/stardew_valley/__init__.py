@@ -1,9 +1,9 @@
 import logging
 from random import Random
-from typing import Dict, Any, Iterable, Optional, List, TextIO, cast
+from typing import Dict, Any, Optional, List, TextIO, cast
 
 import entrance_rando
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
+from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from .bundles.bundle_room import BundleRoom
@@ -111,12 +111,10 @@ class StardewValleyWorld(World):
         self.content = create_content(self.options)
 
     def create_regions(self):
-        def create_region(name: str, exits: Iterable[str]) -> Region:
-            region = Region(name, self.player, self.multiworld)
-            region.exits = [Entrance(self.player, exit_name, region) for exit_name in exits]
-            return region
+        def create_region(name: str) -> Region:
+            return Region(name, self.player, self.multiworld)
 
-        world_regions, world_entrances, self.randomized_entrances = create_regions(create_region, self.random, self.options, self.content)
+        world_regions, world_entrances = create_regions(create_region, self.options, self.content)
 
         self.logic = StardewLogic(self.player, self.options, self.content, world_regions.keys())
         self.modified_bundles = get_all_bundles(self.random, self.logic, self.content, self.options)
@@ -297,7 +295,9 @@ class StardewValleyWorld(World):
 
     def pre_fill(self) -> None:
         no_target_groups = {0: [0]}
-        entrance_rando.randomize_entrances(self, coupled=True, target_group_lookup=no_target_groups)
+        placement = entrance_rando.randomize_entrances(self, coupled=True, target_group_lookup=no_target_groups)
+        print(placement.pairings)
+        self.randomized_entrances = {}
 
     def get_filler_item_name(self) -> str:
         if not self.filler_item_pool_names:

@@ -1,59 +1,36 @@
-from typing import Dict
-
 from . import vanilla_data, mods
-from .model import RegionData, ConnectionData, RandomizationFlag
+from .model import RegionData, ConnectionData
+from ..content.vanilla.ginger_island import ginger_island_content_pack
 
 
-def create_connections_and_regions(world_options) -> tuple[dict[str, ConnectionData], dict[str, RegionData]]:
-    active_mods = world_options.mods.value
-
-    regions_by_name = create_all_regions(active_mods)
-    connections_by_name = create_all_connections(active_mods)
-
-    if world_options.exclude_ginger_island.value:
-        remove_ginger_island_regions_and_connections(connections_by_name, regions_by_name)
+def create_connections_and_regions(active_content_packs: set[str]) -> tuple[dict[str, ConnectionData], dict[str, RegionData]]:
+    regions_by_name = create_all_regions(active_content_packs)
+    connections_by_name = create_all_connections(active_content_packs)
 
     return connections_by_name, regions_by_name
 
 
-def create_vanilla_regions() -> dict[str, RegionData]:
-    return {region.name: region for region in vanilla_data.vanilla_regions}
+def create_vanilla_regions(active_content_packs: set[str]) -> dict[str, RegionData]:
+    if ginger_island_content_pack.name in active_content_packs:
+        return {**vanilla_data.regions_with_ginger_island_by_name}
+    else:
+        return {**vanilla_data.regions_without_ginger_island_by_name}
 
 
-def create_all_regions(active_mods: set[str]) -> dict[str, RegionData]:
-    current_regions_by_name = create_vanilla_regions()
-    mods.modify_regions_for_mods(current_regions_by_name, active_mods)
+def create_all_regions(active_content_packs: set[str]) -> dict[str, RegionData]:
+    current_regions_by_name = create_vanilla_regions(active_content_packs)
+    mods.modify_regions_for_mods(current_regions_by_name, active_content_packs)
     return current_regions_by_name
 
 
-def create_vanilla_connections() -> dict[str, ConnectionData]:
-    return {connection.name: connection for connection in vanilla_data.vanilla_connections}
+def create_vanilla_connections(active_content_packs: set[str]) -> dict[str, ConnectionData]:
+    if ginger_island_content_pack.name in active_content_packs:
+        return {**vanilla_data.connections_with_ginger_island_by_name}
+    else:
+        return {**vanilla_data.connections_without_ginger_island_by_name}
 
 
-def create_all_connections(active_mods: set[str]) -> dict[str, ConnectionData]:
-    connections = create_vanilla_connections()
-    mods.modify_connections_for_mods(connections, active_mods)
+def create_all_connections(active_content_packs: set[str]) -> dict[str, ConnectionData]:
+    connections = create_vanilla_connections(active_content_packs)
+    mods.modify_connections_for_mods(connections, active_content_packs)
     return connections
-
-
-def remove_ginger_island_regions_and_connections(connections_by_name: dict[str, ConnectionData], regions_by_name: Dict[str, RegionData]):
-    connections_to_remove = set()
-
-    for connection_name, connection in connections_by_name.items():
-        if connection.flag & RandomizationFlag.GINGER_ISLAND:
-            connections_to_remove.add(connection_name)
-
-    regions_to_remove = set()
-    for region_name, region in regions_by_name.items():
-        if region.is_ginger_island:
-            regions_to_remove.add(region_name)
-            continue
-
-        regions_by_name[region_name] = region.get_without_exits(connections_to_remove)
-
-    for connection_name in connections_to_remove:
-        del connections_by_name[connection_name]
-    for region_name in regions_to_remove:
-        del regions_by_name[region_name]
-
-    return connections_by_name, regions_by_name

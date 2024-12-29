@@ -1,6 +1,5 @@
 from typing import Union
 
-from ..region_data import SVERegion
 from ...logic.base_logic import BaseLogicMixin, BaseLogic
 from ...logic.combat_logic import CombatLogicMixin
 from ...logic.cooking_logic import CookingLogicMixin
@@ -16,7 +15,7 @@ from ...logic.tool_logic import ToolLogicMixin
 from ...strings.ap_names.mods.mod_items import SVELocation, SVERunes, SVEQuestItem
 from ...strings.quest_names import ModQuest
 from ...strings.quest_names import Quest
-from ...strings.region_names import Region
+from ...strings.region_names import Region, SVERegion
 from ...strings.tool_names import Tool, ToolMaterial
 from ...strings.wallet_item_names import Wallet
 

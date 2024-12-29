@@ -11,10 +11,10 @@ def modify_regions_for_mods(current_regions_by_name: dict[str, RegionData], acti
         except KeyError:
             continue
 
-        add_mod_regions(current_regions_by_name, region_data)
+        merge_mod_regions(current_regions_by_name, region_data)
 
 
-def add_mod_regions(current_regions_by_name: dict[str, RegionData], mod_region_data: ModRegionsData) -> None:
+def merge_mod_regions(current_regions_by_name: dict[str, RegionData], mod_region_data: ModRegionsData) -> None:
     for new_region in mod_region_data.regions:
         region_name = new_region.name
         try:

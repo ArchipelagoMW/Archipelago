@@ -3,9 +3,33 @@ from typing import Iterable, Dict, List, Tuple, Set
 
 from BaseClasses import Region
 from .model import RegionData, ConnectionData, RandomizationFlag
-from ..content import content_packs, StardewContent
+from ..content import StardewContent
 from ..options import EntranceRandomization, StardewValleyOptions
 from ..strings.region_names import Region
+
+
+def create_randomization_flag_mask(entrance_randomization_choice: EntranceRandomization, content: StardewContent):
+    flag = RandomizationFlag.NOT_RANDOMIZED
+
+    if entrance_randomization_choice.value == EntranceRandomization.option_disabled:
+        return flag
+
+    if entrance_randomization_choice == EntranceRandomization.option_pelican_town:
+        flag |= RandomizationFlag.BIT_PELICAN_TOWN
+    elif entrance_randomization_choice == EntranceRandomization.option_non_progression:
+        flag |= RandomizationFlag.BIT_NON_PROGRESSION
+
+    elif entrance_randomization_choice in (
+            EntranceRandomization.option_buildings,
+            EntranceRandomization.option_buildings_without_house,
+            EntranceRandomization.option_chaos
+    ):
+        flag |= RandomizationFlag.BIT_BUILDINGS
+
+    if content.features.skill_progression.are_masteries_shuffled:
+        flag |= RandomizationFlag.EXCLUDE_MASTERIES
+
+    return flag
 
 
 def randomize_connections(random: Random, world_options: StardewValleyOptions, content: StardewContent, regions_by_name: Dict[str, RegionData],
@@ -49,10 +73,10 @@ def randomize_connections(random: Random, world_options: StardewValleyOptions, c
 
 def remove_excluded_entrances(connections_to_randomize: List[ConnectionData], content: StardewContent) -> List[ConnectionData]:
     # FIXME remove when regions are handled in content packs
-    if content_packs.ginger_island_content_pack.name not in content.registered_packs:
-        connections_to_randomize = [connection for connection in connections_to_randomize if RandomizationFlag.GINGER_ISLAND not in connection.flag]
+    # if content_packs.ginger_island_content_pack.name not in content.registered_packs:
+    #     connections_to_randomize = [connection for connection in connections_to_randomize if RandomizationFlag.GINGER_ISLAND not in connection.flag]
     if not content.features.skill_progression.are_masteries_shuffled:
-        connections_to_randomize = [connection for connection in connections_to_randomize if RandomizationFlag.MASTERIES not in connection.flag]
+        connections_to_randomize = [connection for connection in connections_to_randomize if RandomizationFlag.EXCLUDE_MASTERIES not in connection.flag]
 
     return connections_to_randomize
 

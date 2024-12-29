@@ -1,16 +1,12 @@
-import random
-
-from BaseClasses import get_seed
-from .. import SVTestBase, SVTestCase, allsanity_mods_6_x_x, fill_dataclass_with_default
+from .. import SVTestBase, SVTestCase, allsanity_mods_6_x_x
 from ..assertion import ModAssertMixin, WorldAssertMixin
-from ... import items, Group, ItemClassification, create_content
+from ... import items, Group, ItemClassification, StardewValleyWorld
 from ... import options
 from ...mods.mod_data import ModNames
-from ...options import SkillProgression, Walnutsanity
+from ...options import Walnutsanity
 from ...options.options import all_mods
-from ...regions import create_connections_and_regions
-from ...regions.entrance_rando import randomize_connections
-from ...regions.model import RandomizationFlag
+from ...regions.entrance_rando import create_randomization_flag_mask
+from ...regions.regions import create_all_connections
 
 
 class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
@@ -161,32 +157,28 @@ class TestNoGingerIslandModItemGeneration(SVTestBase):
 
 class TestModEntranceRando(SVTestCase):
 
-    def test_mod_entrance_randomization(self):
-        for option, flag in [(options.EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
-                             (options.EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
-                             (options.EntranceRandomization.option_buildings_without_house, RandomizationFlag.BUILDINGS),
-                             (options.EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
-            sv_options = fill_dataclass_with_default({
-                options.EntranceRandomization.internal_name: option,
-                options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
-                SkillProgression.internal_name: SkillProgression.option_progressive_with_masteries,
-                options.Mods.internal_name: frozenset(options.Mods.valid_keys)
-            })
-            content = create_content(sv_options)
-            seed = get_seed()
-            rand = random.Random(seed)
-            with self.subTest(option=option, flag=flag, seed=seed):
-                final_connections, final_regions = create_connections_and_regions(sv_options)
+    def test_entrance_randomization(self):
+        for option in (options.EntranceRandomization.option_pelican_town, options.EntranceRandomization.option_non_progression,
+                       options.EntranceRandomization.option_buildings_without_house, options.EntranceRandomization.option_buildings):
+            test_options = {
+                options.EntranceRandomization: option,
+                options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false,
+                options.SkillProgression: options.SkillProgression.option_progressive_with_masteries,
+                options.Mods: frozenset(options.Mods.valid_keys)
+            }
+            with self.solo_world_sub_test(world_options=test_options, world_caching=False) as (multiworld, world):
+                world: StardewValleyWorld
+                entrances_placement = world.randomized_entrances
+                flag = create_randomization_flag_mask(world.options.entrance_randomization, world.content)
 
-                _, randomized_connections = randomize_connections(rand, sv_options, content, final_regions, final_connections)
+                expected_randomized_connections = [connection
+                                                   for connection in create_all_connections(world.content.registered_packs).values()
+                                                   if connection.is_eligible_for_randomization(flag)]
+                for connection in expected_randomized_connections:
+                    self.assertIn(connection.name, entrances_placement,
+                                  f"Connection {connection.name} should be randomized but it is not in the output.")
+                    self.assertIn(connection.reverse, entrances_placement,
+                                  f"Connection {connection.reverse} should be randomized but it is not in the output.")
 
-                for connection_name in final_connections:
-                    connection = final_connections[connection_name]
-                    if flag in connection.flag:
-                        connection_in_randomized = connection_name in randomized_connections
-                        reverse_in_randomized = connection.reverse in randomized_connections
-                        self.assertTrue(connection_in_randomized, f"Connection {connection_name} should be randomized but it is not in the output")
-                        self.assertTrue(reverse_in_randomized, f"Connection {connection.reverse} should be randomized but it is not in the output.")
-
-                self.assertEqual(len(set(randomized_connections.values())), len(randomized_connections.values()),
+                self.assertEqual(len(set(entrances_placement.values())), len(entrances_placement.values()),
                                  f"Connections are duplicated in randomization.")

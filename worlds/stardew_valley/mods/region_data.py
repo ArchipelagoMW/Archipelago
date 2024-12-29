@@ -1,4 +1,5 @@
 from .mod_data import ModNames
+from ..content.mods.sve import SVE_GINGER_ISLAND_PACK
 from ..regions.model import RegionData, ConnectionData, MergeFlag, RandomizationFlag, ModRegionsData
 from ..strings.entrance_names import Entrance, DeepWoodsEntrance, EugeneEntrance, LaceyEntrance, BoardingHouseEntrance, \
     JasperEntrance, AlecEntrance, YobaEntrance, JunaEntrance, MagicEntrance, AyeishaEntrance, RileyEntrance, SVEEntrance, AlectoEntrance
@@ -131,7 +132,7 @@ riley_entrances = [
                    flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA)
 ]
 
-stardew_valley_expanded_regions = [
+sve_main_land_regions = [
     RegionData(Region.backwoods, (SVEEntrance.backwoods_to_grove,)),
     RegionData(SVERegion.enchanted_grove, (SVEEntrance.grove_to_outpost_warp, SVEEntrance.grove_to_wizard_warp,
                                            SVEEntrance.grove_to_farm_warp, SVEEntrance.grove_to_guild_warp, SVEEntrance.grove_to_junimo_warp,
@@ -169,23 +170,11 @@ stardew_valley_expanded_regions = [
     RegionData(SVERegion.willy_bedroom),
     RegionData(Region.mountain, (SVEEntrance.mountain_to_guild_summit,)),
     RegionData(Region.mountain, (Entrance.mountain_to_adventurer_guild, Entrance.mountain_to_the_mines), MergeFlag.REMOVE_EXITS),
-    RegionData(SVERegion.guild_summit, (SVEEntrance.guild_to_interior, SVEEntrance.guild_to_mines, SVEEntrance.summit_to_highlands)),
+    RegionData(SVERegion.guild_summit, (SVEEntrance.guild_to_interior, SVEEntrance.guild_to_mines)),
     RegionData(Region.railroad, (SVEEntrance.to_susan_house, SVEEntrance.enter_summit, SVEEntrance.railroad_to_grampleton_station)),
     RegionData(SVERegion.grampleton_station, (SVEEntrance.grampleton_station_to_grampleton_suburbs,)),
     RegionData(SVERegion.grampleton_suburbs, (SVEEntrance.grampleton_suburbs_to_scarlett_house,)),
     RegionData(SVERegion.scarlett_house),
-    RegionData(Region.wizard_basement, (SVEEntrance.wizard_to_fable_reef,)),
-    RegionData(SVERegion.fable_reef, (SVEEntrance.fable_reef_to_guild,), is_ginger_island=True),
-    RegionData(SVERegion.first_slash_guild, (SVEEntrance.first_slash_guild_to_hallway,), is_ginger_island=True),
-    RegionData(SVERegion.first_slash_hallway, (SVEEntrance.first_slash_hallway_to_room,), is_ginger_island=True),
-    RegionData(SVERegion.first_slash_spare_room, is_ginger_island=True),
-    RegionData(SVERegion.highlands_outside, (SVEEntrance.highlands_to_lance, SVEEntrance.highlands_to_cave, SVEEntrance.highlands_to_pond),
-               is_ginger_island=True),
-    RegionData(SVERegion.highlands_pond, is_ginger_island=True),
-    RegionData(SVERegion.highlands_cavern, (SVEEntrance.to_dwarf_prison,), is_ginger_island=True),
-    RegionData(SVERegion.dwarf_prison, is_ginger_island=True),
-    RegionData(SVERegion.lances_house, (SVEEntrance.lance_to_ladder,), is_ginger_island=True),
-    RegionData(SVERegion.lances_ladder, (SVEEntrance.lance_ladder_to_highlands,), is_ginger_island=True),
     RegionData(SVERegion.forest_west, (SVEEntrance.forest_west_to_spring, SVEEntrance.west_to_aurora, SVEEntrance.use_bear_shop,)),
     RegionData(SVERegion.aurora_vineyard, (SVEEntrance.to_aurora_basement,)),
     RegionData(SVERegion.aurora_vineyard_basement),
@@ -202,7 +191,24 @@ stardew_valley_expanded_regions = [
     RegionData(SVERegion.susans_house),
 ]
 
-mandatory_sve_connections = [
+sve_ginger_island_regions = [
+    RegionData(Region.wizard_basement, (SVEEntrance.wizard_to_fable_reef,)),
+
+    RegionData(SVERegion.fable_reef, (SVEEntrance.fable_reef_to_guild,), is_ginger_island=True),
+    RegionData(SVERegion.first_slash_guild, (SVEEntrance.first_slash_guild_to_hallway,), is_ginger_island=True),
+    RegionData(SVERegion.first_slash_hallway, (SVEEntrance.first_slash_hallway_to_room,), is_ginger_island=True),
+    RegionData(SVERegion.first_slash_spare_room, is_ginger_island=True),
+    RegionData(SVERegion.guild_summit, (SVEEntrance.summit_to_highlands,)),
+    RegionData(SVERegion.highlands_outside, (SVEEntrance.highlands_to_lance, SVEEntrance.highlands_to_cave, SVEEntrance.highlands_to_pond),
+               is_ginger_island=True),
+    RegionData(SVERegion.highlands_pond, is_ginger_island=True),
+    RegionData(SVERegion.highlands_cavern, (SVEEntrance.to_dwarf_prison,), is_ginger_island=True),
+    RegionData(SVERegion.dwarf_prison, is_ginger_island=True),
+    RegionData(SVERegion.lances_house, (SVEEntrance.lance_to_ladder,), is_ginger_island=True),
+    RegionData(SVERegion.lances_ladder, (SVEEntrance.lance_ladder_to_highlands,), is_ginger_island=True),
+]
+
+sve_main_land_connections = [
     ConnectionData(SVEEntrance.town_to_jenkins, SVERegion.jenkins_residence, flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
     ConnectionData(SVEEntrance.jenkins_to_cellar, SVERegion.jenkins_cellar, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.forest_to_bmv, SVERegion.blue_moon_vineyard),
@@ -217,7 +223,7 @@ mandatory_sve_connections = [
     ConnectionData(SVEEntrance.grandpa_interior_to_upstairs, SVERegion.grandpas_shed_upstairs, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.grandpa_shed_to_town, Region.town),
     ConnectionData(SVEEntrance.bmv_to_sophia, SVERegion.sophias_house, flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(SVEEntrance.summit_to_highlands, SVERegion.highlands_outside, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(SVEEntrance.summit_to_highlands, SVERegion.highlands_outside),
     ConnectionData(SVEEntrance.guild_to_interior, Region.adventurer_guild, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.backwoods_to_grove, SVERegion.enchanted_grove, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
     ConnectionData(SVEEntrance.grove_to_outpost_warp, SVERegion.grove_outpost_warp),
@@ -236,8 +242,6 @@ mandatory_sve_connections = [
     ConnectionData(SVEEntrance.use_purple_junimo, SVERegion.purple_junimo_shop),
     ConnectionData(SVEEntrance.grove_to_spring_warp, SVERegion.grove_spring_warp),
     ConnectionData(SVEEntrance.spring_warp_to_spring, SVERegion.sprite_spring, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(SVEEntrance.wizard_to_fable_reef, SVERegion.fable_reef, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.GINGER_ISLAND),
-    ConnectionData(SVEEntrance.fable_reef_to_guild, SVERegion.first_slash_guild, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.GINGER_ISLAND),
     ConnectionData(SVEEntrance.outpost_to_badlands_entrance, SVERegion.badlands_entrance, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.badlands_entrance_to_badlands, SVERegion.crimson_badlands, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.badlands_to_cave, SVERegion.badlands_cave, flag=RandomizationFlag.BUILDINGS),
@@ -253,25 +257,29 @@ mandatory_sve_connections = [
     ConnectionData(SVEEntrance.to_susan_house, SVERegion.susans_house, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.enter_summit, SVERegion.summit, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.forest_to_fairhaven, SVERegion.fairhaven_farm, flag=RandomizationFlag.NON_PROGRESSION),
-    ConnectionData(SVEEntrance.highlands_to_lance, SVERegion.lances_house, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.GINGER_ISLAND),
-    ConnectionData(SVEEntrance.lance_to_ladder, SVERegion.lances_ladder, flag=RandomizationFlag.GINGER_ISLAND),
-    ConnectionData(SVEEntrance.lance_ladder_to_highlands, SVERegion.highlands_outside, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.GINGER_ISLAND),
-    ConnectionData(SVEEntrance.highlands_to_cave, SVERegion.highlands_cavern, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.GINGER_ISLAND),
     ConnectionData(SVEEntrance.use_bear_shop, SVERegion.bear_shop),
     ConnectionData(SVEEntrance.use_purple_junimo, SVERegion.purple_junimo_shop),
     ConnectionData(SVEEntrance.use_alesia_shop, SVERegion.alesia_shop),
     ConnectionData(SVEEntrance.use_isaac_shop, SVERegion.isaac_shop),
-    ConnectionData(SVEEntrance.to_dwarf_prison, SVERegion.dwarf_prison, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.GINGER_ISLAND),
     ConnectionData(SVEEntrance.railroad_to_grampleton_station, SVERegion.grampleton_station),
     ConnectionData(SVEEntrance.grampleton_station_to_grampleton_suburbs, SVERegion.grampleton_suburbs),
     ConnectionData(SVEEntrance.grampleton_suburbs_to_scarlett_house, SVERegion.scarlett_house, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(SVEEntrance.first_slash_guild_to_hallway, SVERegion.first_slash_hallway, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.GINGER_ISLAND),
-    ConnectionData(SVEEntrance.first_slash_hallway_to_room, SVERegion.first_slash_spare_room,
-                   flag=RandomizationFlag.BUILDINGS | RandomizationFlag.GINGER_ISLAND),
     ConnectionData(SVEEntrance.sprite_spring_to_cave, SVERegion.sprite_spring_cave, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.fish_shop_to_willy_bedroom, SVERegion.willy_bedroom, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.museum_to_gunther_bedroom, SVERegion.gunther_bedroom, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.highlands_to_pond, SVERegion.highlands_pond),
+]
+
+sve_ginger_island_connections = [
+    ConnectionData(SVEEntrance.wizard_to_fable_reef, SVERegion.fable_reef, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(SVEEntrance.fable_reef_to_guild, SVERegion.first_slash_guild, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(SVEEntrance.highlands_to_lance, SVERegion.lances_house, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(SVEEntrance.lance_to_ladder, SVERegion.lances_ladder),
+    ConnectionData(SVEEntrance.lance_ladder_to_highlands, SVERegion.highlands_outside, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(SVEEntrance.highlands_to_cave, SVERegion.highlands_cavern, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(SVEEntrance.to_dwarf_prison, SVERegion.dwarf_prison, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(SVEEntrance.first_slash_guild_to_hallway, SVERegion.first_slash_hallway, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(SVEEntrance.first_slash_hallway_to_room, SVERegion.first_slash_spare_room, flag=RandomizationFlag.BUILDINGS),
 ]
 
 alecto_regions = [
@@ -365,7 +373,8 @@ region_data_by_mod = {
     ModNames.magic: ModRegionsData(ModNames.magic, magic_regions, magic_entrances),
     ModNames.ayeisha: ModRegionsData(ModNames.ayeisha, ayeisha_regions, ayeisha_entrances),
     ModNames.riley: ModRegionsData(ModNames.riley, riley_regions, riley_entrances),
-    ModNames.sve: ModRegionsData(ModNames.sve, stardew_valley_expanded_regions, mandatory_sve_connections),
+    ModNames.sve: ModRegionsData(ModNames.sve, sve_main_land_regions, sve_main_land_connections),
+    SVE_GINGER_ISLAND_PACK: ModRegionsData(SVE_GINGER_ISLAND_PACK, sve_ginger_island_regions, sve_ginger_island_connections),
     ModNames.alecto: ModRegionsData(ModNames.alecto, alecto_regions, alecto_entrances),
     ModNames.lacey: ModRegionsData(ModNames.lacey, lacey_regions, lacey_entrances),
     ModNames.boarding_house: ModRegionsData(ModNames.boarding_house, boarding_house_regions, boarding_house_entrances),
