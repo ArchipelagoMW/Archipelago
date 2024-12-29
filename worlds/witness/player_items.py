@@ -31,6 +31,13 @@ class WitnessItem(Item):
     Item from the game The Witness
     """
     game: str = "The Witness"
+    eggs: int = 0
+
+    @classmethod
+    def make_egg_event(cls, item_name: str, player: int):
+        ret = cls(item_name, ItemClassification.progression, None, player)
+        ret.eggs = int(item_name[1:].split(" ", 1)[0])
+        return ret
 
 
 class WitnessPlayerItems:
