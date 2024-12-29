@@ -9,7 +9,8 @@ import Utils
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 
 from worlds.AutoWorld import World
-from . import Theme_Duels, Limited_Duels
+from . import Theme_Duels, Limited_Duels, cards
+from .boosterpacks_data import booster_pack_data, reverse_rarities
 from .items import item_to_index
 from .rom_values import banlist_ids, function_addresses, structure_deck_selection
 
@@ -66,7 +67,16 @@ def write_tokens(world: World, patch: YGO06ProcedurePatch):
         for j, b in enumerate(deck_name.encode("ascii")):
             patch.write_token(APTokenTypes.WRITE, 0x1dc9f56 + j, struct.pack("<B", b))
 
-
+    # override set contents
+    if world.booster_pack_contents:
+        for name, data in booster_pack_data.items():
+            pointer = data.pointer
+            for card, rarity in world.booster_pack_contents[name].items():
+                card_data = cards[card]
+                patch.write_token(APTokenTypes.WRITE, pointer, struct.pack("<H", card_data.starter_id))
+                patch.write_token(APTokenTypes.WRITE, pointer + 2,
+                                  struct.pack("<H", reverse_rarities[rarity] + card_data.art))
+                pointer += 4
 
     # set banlist
     banlist = world.options.banlist

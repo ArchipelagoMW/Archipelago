@@ -10,7 +10,7 @@ class BoosterCard(NamedTuple):
 
 
 # auto generated
-contents = {
+contents: Dict[str, Dict[str, str]] = {
     "LEGEND OF B.E.W.D.": {
         "Blue-Eyes White Dragon Alt 1": "Secret Rare",
         "Raigeki": "Secret Rare",
@@ -2301,7 +2301,7 @@ contents = {
         "Dark Sage": "Ultra Rare",
         "Injection Fairy Lily": "Ultra Rare",
         "Thousand-Eyes Restrict": "Ultra Rare",
-        "Dark Magician Alt 3": "Super Rare",
+        "Dark Magician (Arcana)": "Super Rare",
         "Dark Magician Girl": "Super Rare",
         "Exodia the Forbidden One": "Super Rare",
         "Hannibal Necromancer": "Super Rare",
@@ -3817,8 +3817,14 @@ not_in_standard_pool = {
 }
 
 
-def get_booster_contents(booster: str, world) -> Dict[str, str]:
-    return {
-        f"{booster} {i}": content
-        for i, content in enumerate(contents[booster], 1) if content in world.progression_cards_in_booster
-    }
+def get_booster_contents(booster: str, world, booster_contents: Dict[str, Dict[str, str]]) -> Dict[str, str]:
+    if booster_contents:
+        return {
+            f"{booster} {i}": content
+            for i, content in enumerate(booster_contents[booster], 1) if content in world.progression_cards_in_booster
+        }
+    else:
+        return {
+            f"{booster} {i}": content
+            for i, content in enumerate(contents[booster], 1) if content in world.progression_cards_in_booster
+        }

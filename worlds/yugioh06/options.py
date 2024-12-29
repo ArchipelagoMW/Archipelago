@@ -112,7 +112,7 @@ class FinalCampaignBossChallenges(Range):
     display_name = "Final Campaign Boss challenges unlock amount"
     range_start = 0
     range_end = 91
-    default = 10
+    default = 5
 
 
 class FourthTier5CampaignBossChallenges(Range):
@@ -121,7 +121,7 @@ class FourthTier5CampaignBossChallenges(Range):
     display_name = "Fourth Tier 5 Campaign Boss unlock amount"
     range_start = 0
     range_end = 91
-    default = 5
+    default = 3
 
 
 class ThirdTier5CampaignBossChallenges(Range):
@@ -130,7 +130,7 @@ class ThirdTier5CampaignBossChallenges(Range):
     display_name = "Third Tier 5 Campaign Boss unlock amount"
     range_start = 0
     range_end = 91
-    default = 2
+    default = 1
 
 
 class FinalCampaignBossCampaignOpponents(Range):
@@ -188,7 +188,7 @@ class MoneyRewardMultiplier(Range):
 
 
 class NormalizeBoostersPacks(DefaultOnToggle):
-    """If enabled every booster pack costs the same otherwise vanilla cost is used"""
+    """If enabled every booster pack costs the same and has 5 cards per pack otherwise vanilla cost is used"""
 
     display_name = "Normalize Booster Packs"
 
@@ -203,6 +203,15 @@ class BoosterPackPrices(Range):
     range_start = 1
     range_end = 3000
     default = 100
+
+
+class RandomizePackContents(Choice):
+    """Randomize the contents of the Booster Packs"""
+    display_name = "Randomize Pack Contents"
+    option_vanilla = 0
+    option_shuffle = 1
+    option_keep_themes = 2
+    option_chaos = 3
 
 
 class AddEmptyBanList(Toggle):
@@ -239,6 +248,7 @@ class Yugioh06Options(PerGameCommonOptions):
     money_reward_multiplier: MoneyRewardMultiplier
     normalize_boosters_packs: NormalizeBoostersPacks
     booster_pack_prices: BoosterPackPrices
+    randomize_pack_contents: RandomizePackContents
     add_empty_banlist: AddEmptyBanList
     campaign_opponents_shuffle: CampaignOpponentsShuffle
     ocg_arts: OCGArts

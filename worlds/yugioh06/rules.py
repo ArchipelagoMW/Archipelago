@@ -264,7 +264,7 @@ def set_rules(world):
         "TD16 Union":
             lambda state: state.has_all(world.progression_cards["TD16 Union"], player),
         "TD17 10x Quick Spell":
-            lambda state: state.has_all(world.progression_cards["TD16 Union"], player),
+            lambda state: state.has_all(world.progression_cards["TD17 10x Quick Spell"], player),
         "TD18 The Forbidden":
             lambda state: state.has("Can Exodia Win", player),
         "TD19 20 Turns":

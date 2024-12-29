@@ -9,54 +9,60 @@ class BoosterPackData(NamedTuple):
     pointer: int
     cards_per_pack: int
     prize: int
+    secret_rares: int
+    ultra_rares: int
+    super_rares: int
+    rares: int
+    commons: int
 
 
+# auto generated
 booster_pack_data: Dict[str, BoosterPackData] = {
-    "LEGEND OF B.E.W.D.": BoosterPackData(1, 106, 0x1e5abfc, 5, 150),
-    "METAL RAIDERS": BoosterPackData(2, 114, 0x1e5ada4, 5, 150),
-    "PHARAOH'S SERVANT": BoosterPackData(3, 92, 0x1e5af6c, 5, 200),
-    "PHARAONIC GUARDIAN": BoosterPackData(4, 91, 0x1e5b0dc, 5, 300),
-    "SPELL RULER": BoosterPackData(5, 88, 0x1e5b248, 5, 200),
-    "LABYRINTH OF NIGHTMARE": BoosterPackData(6, 96, 0x1e5b3a8, 5, 250),
-    "LEGACY OF DARKNESS": BoosterPackData(7, 92, 0x1e5b528, 5, 250),
-    "MAGICIAN'S FORCE": BoosterPackData(8, 92, 0x1e5b698, 5, 300),
-    "DARK CRISIS": BoosterPackData(9, 101, 0x1e5b808, 5, 300),
-    "INVASION OF CHAOS": BoosterPackData(10, 107, 0x1e5b99c, 5, 350),
-    "ANCIENT SANCTUARY": BoosterPackData(11, 103, 0x1e5bb48, 5, 350),
-    "SOUL OF THE DUELIST": BoosterPackData(12, 57, 0x1e5bce4, 5, 400),
-    "RISE OF DESTINY": BoosterPackData(13, 59, 0x1e5bdc8, 5, 400),
-    "FLAMING ETERNITY": BoosterPackData(14, 58, 0x1e5beb4, 5, 450),
-    "THE LOST MILLENIUM": BoosterPackData(15, 58, 0x1e5bf9c, 5, 450),
-    "CYBERNETIC REVOLUTION": BoosterPackData(16, 59, 0x1e5c084, 5, 500),
-    "ELEMENTAL ENERGY": BoosterPackData(17, 57, 0x1e5c170, 5, 500),
-    "SHADOW OF INFINITY": BoosterPackData(18, 58, 0x1e5c254, 5, 500),
-    "GAME GIFT COLLECTION": BoosterPackData(19, 82, 0x1e5c33c, 5, 1000),
-    "Special Gift Collection": BoosterPackData(20, 72, 0x1e5c484, 5, 1000),
-    "Fairy Collection": BoosterPackData(21, 68, 0x1e5c5a4, 5, 500),
-    "Dragon Collection": BoosterPackData(22, 76, 0x1e5c6b4, 5, 500),
-    "Warrior Collection A": BoosterPackData(23, 82, 0x1e5c7e4, 5, 400),
-    "Warrior Collection B": BoosterPackData(24, 85, 0x1e5c92c, 5, 600),
-    "Fiend Collection A": BoosterPackData(25, 67, 0x1e5ca80, 5, 400),
-    "Fiend Collection B": BoosterPackData(26, 87, 0x1e5cb8c, 5, 600),
-    "Machine Collection A": BoosterPackData(27, 53, 0x1e5cce8, 5, 400),
-    "Machine Collection B": BoosterPackData(28, 68, 0x1e5cdbc, 5, 600),
-    "Spellcaster Collection A": BoosterPackData(29, 63, 0x1e5cecc, 5, 400),
-    "Spellcaster Collection B": BoosterPackData(30, 70, 0x1e5cfc8, 5, 600),
-    "Zombie Collection": BoosterPackData(31, 66, 0x1e5d0e0, 5, 500),
-    "Special Monsters A": BoosterPackData(32, 55, 0x1e5d1e8, 5, 800),
-    "Special Monsters B": BoosterPackData(33, 62, 0x1e5d2c4, 5, 1000),
-    "Reverse Collection": BoosterPackData(34, 71, 0x1e5d3bc, 3, 450),
-    "LP Recovery Collection": BoosterPackData(35, 56, 0x1e5d4d8, 5, 300),
-    "Special Summon Collection A": BoosterPackData(36, 86, 0x1e5d5b8, 3, 600),
-    "Special Summon Collection B": BoosterPackData(37, 85, 0x1e5d710, 3, 800),
-    "Special Summon Collection C": BoosterPackData(38, 93, 0x1e5d864, 3, 1000),
-    "Equipment Collection": BoosterPackData(39, 74, 0x1e5d9d8, 3, 400),
-    "Continuous Spell/Trap A": BoosterPackData(40, 74, 0x1e5db00, 3, 300),
-    "Continuous Spell/Trap B": BoosterPackData(41, 80, 0x1e5dc28, 3, 500),
-    "Quick/Counter Collection": BoosterPackData(42, 66, 0x1e5dd68, 5, 800),
-    "Direct Damage Collection": BoosterPackData(43, 107, 0x1e5de70, 5, 600),
-    "Direct Attack Collection": BoosterPackData(44, 49, 0x1e5e01c, 5, 500),
-    "Monster Destroy Collection": BoosterPackData(45, 130, 0x1e5e0e0, 5, 800),
+    "LEGEND OF B.E.W.D.": BoosterPackData(1, 106, 0x1e5abfc, 106, 150, 2, 4, 7, 15, 78),
+    "METAL RAIDERS": BoosterPackData(2, 114, 0x1e5ada4, 114, 150, 3, 4, 7, 15, 85),
+    "PHARAOH'S SERVANT": BoosterPackData(3, 92, 0x1e5af6c, 92, 200, 1, 5, 8, 14, 64),
+    "PHARAONIC GUARDIAN": BoosterPackData(4, 91, 0x1e5b0dc, 91, 300, 1, 4, 7, 14, 65),
+    "SPELL RULER": BoosterPackData(5, 88, 0x1e5b248, 88, 200, 3, 4, 7, 15, 59),
+    "LABYRINTH OF NIGHTMARE": BoosterPackData(6, 96, 0x1e5b3a8, 96, 250, 0, 5, 8, 13, 70),
+    "LEGACY OF DARKNESS": BoosterPackData(7, 92, 0x1e5b528, 92, 250, 2, 5, 8, 12, 65),
+    "MAGICIAN'S FORCE": BoosterPackData(8, 92, 0x1e5b698, 92, 300, 1, 5, 7, 13, 66),
+    "DARK CRISIS": BoosterPackData(9, 101, 0x1e5b808, 101, 300, 1, 4, 7, 15, 74),
+    "INVASION OF CHAOS": BoosterPackData(10, 107, 0x1e5b99c, 107, 350, 2, 4, 7, 15, 79),
+    "ANCIENT SANCTUARY": BoosterPackData(11, 103, 0x1e5bb48, 103, 350, 0, 4, 7, 15, 77),
+    "SOUL OF THE DUELIST": BoosterPackData(12, 57, 0x1e5bce4, 57, 400, 0, 5, 6, 13, 33),
+    "RISE OF DESTINY": BoosterPackData(13, 59, 0x1e5bdc8, 59, 400, 0, 4, 7, 14, 34),
+    "FLAMING ETERNITY": BoosterPackData(14, 58, 0x1e5beb4, 58, 450, 0, 4, 7, 13, 34),
+    "THE LOST MILLENIUM": BoosterPackData(15, 58, 0x1e5bf9c, 58, 450, 0, 4, 7, 14, 33),
+    "CYBERNETIC REVOLUTION": BoosterPackData(16, 59, 0x1e5c084, 59, 500, 0, 4, 7, 13, 35),
+    "ELEMENTAL ENERGY": BoosterPackData(17, 57, 0x1e5c170, 57, 500, 0, 4, 7, 13, 33),
+    "SHADOW OF INFINITY": BoosterPackData(18, 58, 0x1e5c254, 58, 500, 0, 4, 7, 14, 33),
+    "GAME GIFT COLLECTION": BoosterPackData(19, 82, 0x1e5c33c, 82, 1000, 2, 4, 7, 16, 53),
+    "Special Gift Collection": BoosterPackData(20, 72, 0x1e5c484, 72, 1000, 1, 4, 6, 14, 47),
+    "Fairy Collection": BoosterPackData(21, 68, 0x1e5c5a4, 68, 500, 0, 4, 6, 15, 43),
+    "Dragon Collection": BoosterPackData(22, 76, 0x1e5c6b4, 76, 500, 1, 5, 6, 14, 50),
+    "Warrior Collection A": BoosterPackData(23, 82, 0x1e5c7e4, 82, 400, 0, 4, 6, 12, 60),
+    "Warrior Collection B": BoosterPackData(24, 85, 0x1e5c92c, 85, 600, 2, 4, 8, 14, 57),
+    "Fiend Collection A": BoosterPackData(25, 67, 0x1e5ca80, 67, 400, 0, 3, 5, 6, 53),
+    "Fiend Collection B": BoosterPackData(26, 87, 0x1e5cb8c, 87, 600, 1, 4, 7, 13, 62),
+    "Machine Collection A": BoosterPackData(27, 53, 0x1e5cce8, 53, 400, 0, 4, 5, 11, 33),
+    "Machine Collection B": BoosterPackData(28, 68, 0x1e5cdbc, 68, 600, 0, 4, 7, 13, 44),
+    "Spellcaster Collection A": BoosterPackData(29, 63, 0x1e5cecc, 63, 400, 1, 4, 7, 13, 38),
+    "Spellcaster Collection B": BoosterPackData(30, 70, 0x1e5cfc8, 70, 600, 1, 5, 8, 13, 43),
+    "Zombie Collection": BoosterPackData(31, 66, 0x1e5d0e0, 66, 500, 0, 4, 6, 10, 46),
+    "Special Monsters A": BoosterPackData(32, 55, 0x1e5d1e8, 55, 800, 1, 3, 5, 13, 33),
+    "Special Monsters B": BoosterPackData(33, 62, 0x1e5d2c4, 62, 1000, 0, 5, 8, 13, 36),
+    "Reverse Collection": BoosterPackData(34, 71, 0x1e5d3bc, 71, 450, 1, 4, 6, 14, 46),
+    "LP Recovery Collection": BoosterPackData(35, 56, 0x1e5d4d8, 56, 300, 0, 4, 6, 13, 33),
+    "Special Summon Collection A": BoosterPackData(36, 86, 0x1e5d5b8, 86, 600, 0, 4, 7, 13, 62),
+    "Special Summon Collection B": BoosterPackData(37, 85, 0x1e5d710, 85, 800, 3, 4, 7, 14, 57),
+    "Special Summon Collection C": BoosterPackData(38, 93, 0x1e5d864, 93, 1000, 3, 4, 11, 15, 60),
+    "Equipment Collection": BoosterPackData(39, 74, 0x1e5d9d8, 74, 400, 1, 4, 5, 14, 50),
+    "Continuous Spell/Trap A": BoosterPackData(40, 74, 0x1e5db00, 74, 300, 2, 4, 6, 15, 47),
+    "Continuous Spell/Trap B": BoosterPackData(41, 80, 0x1e5dc28, 80, 500, 2, 3, 6, 12, 57),
+    "Quick/Counter Collection": BoosterPackData(42, 66, 0x1e5dd68, 66, 800, 0, 5, 7, 14, 40),
+    "Direct Damage Collection": BoosterPackData(43, 107, 0x1e5de70, 107, 600, 2, 4, 7, 15, 79),
+    "Direct Attack Collection": BoosterPackData(44, 49, 0x1e5e01c, 49, 500, 1, 4, 6, 12, 26),
+    "Monster Destroy Collection": BoosterPackData(45, 130, 0x1e5e0e0, 130, 800, 5, 6, 9, 20, 90),
 }
 
 rarities = {
@@ -80,6 +86,14 @@ rarities = {
     0x11: "Rare Alt 1",
     0x12: "Rare Alt 2",
     0x13: "Rare Alt 3",
+}
+
+reverse_rarities = {
+    "Common": 0x00,
+    "Secret Rare": 0x04,
+    "Ultra Rare": 0x08,
+    "Super Rare": 0x0C,
+    "Rare": 0x10
 }
 
 booster_card_id_to_name = {

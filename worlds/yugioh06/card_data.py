@@ -4563,11 +4563,29 @@ def non_normal_nisp():
             print(card)
 
 
-def print_fusions():
-    fusions = [name for name, card in cards.items() if card.card_type == "Fusion"]
-    fusions.sort()
-    for fusion in fusions:
-        print(f"        \"{fusion}\": FusionData(\n            \"{fusion}\",\n            [],\n           True\n      ),")
+def get_each_card_count():
+    card_count: Dict[str, int] = {}
+    for name, pack in contents.items():
+        secret_rares = 0
+        ultra_rares = 0
+        super_rares = 0
+        rares = 0
+        commons = 0
+        for card in pack.values():
+            if card == "Secret Rare":
+                secret_rares += 1
+            elif card == "Ultra Rare":
+                ultra_rares += 1
+            elif card == "Super Rare":
+                super_rares += 1
+            elif card == "Rare":
+                rares += 1
+            elif card == "Common":
+                commons += 1
+        pack_data = booster_pack_data[name]
+        print(f"    \"{name}\": BoosterPackData({pack_data.id}, {pack_data.cards_in_set}, {hex(pack_data.pointer)}, "
+              f"{pack_data.cards_in_set}, {pack_data.prize}, {secret_rares}, {ultra_rares}, {super_rares}, {rares}, {commons}),")
+
 
 def find_removal():
     forbidden = []
@@ -4604,4 +4622,4 @@ def find_removal():
         for card in unlimted:
             print(f"    \"{card}\",")
 
-# print_fusions()
+# get_each_card_count()

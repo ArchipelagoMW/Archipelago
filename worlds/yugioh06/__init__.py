@@ -10,6 +10,7 @@ import Utils
 from worlds.AutoWorld import WebWorld, World
 from .banlists import banlists
 from .boosterpack_contents import get_booster_contents
+from .boosterpack_shuffle import create_shuffled_packs
 from .card_data import CardData, cards, empty_card_data
 from .card_rules import set_card_rules
 from .items import (
@@ -136,6 +137,7 @@ class Yugioh06World(World):
     progression_cards: Dict[str, List[str]]
     progression_cards_in_booster: List[str]
     progression_cards_in_start: List[str]
+    booster_pack_contents: Dict[str, Dict[str, str]]
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
@@ -149,6 +151,7 @@ class Yugioh06World(World):
         self.progression_cards = {}
         self.progression_cards_in_booster = []
         self.progression_cards_in_start = []
+        self.booster_pack_contents = {}
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "Yu-Gi-Oh! 2006" in self.multiworld.re_gen_passthrough:
@@ -272,7 +275,8 @@ class Yugioh06World(World):
                     total_amount += min(w_amount, 40 - total_amount)
                     if total_amount >= 40:
                         break
-
+        if self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_shuffle:
+            self.booster_pack_contents = create_shuffled_packs(self)
         # set starting booster and opponent
         for item in self.options.start_inventory:
             if item in opponents:
@@ -376,7 +380,7 @@ class Yugioh06World(World):
         card_shop = self.get_region("Card Shop")
         # Booster Contents
         for booster in booster_packs:
-            region = self.create_region(booster, get_booster_contents(booster, self))
+            region = self.create_region(booster, get_booster_contents(booster, self, self.booster_pack_contents))
             entrance = Entrance(self.player, booster, card_shop)
             entrance.access_rule = lambda state, unlock=booster: state.has(unlock, self.player)
             card_shop.exits.append(entrance)
@@ -446,7 +450,7 @@ class Yugioh06World(World):
                     location.place_locked_item(item)
 
         for booster in booster_packs:
-            for location_name, content in get_booster_contents(booster, self).items():
+            for location_name, content in get_booster_contents(booster, self, self.booster_pack_contents).items():
                 item = Yugioh2006Item(content, ItemClassification.progression, None, self.player)
                 location = self.multiworld.get_location(location_name, self.player)
                 location.place_locked_item(item)
