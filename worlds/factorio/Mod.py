@@ -35,9 +35,11 @@ base_info = {
     "author": "Berserker",
     "homepage": "https://archipelago.gg",
     "description": "Integration client for the Archipelago Randomizer",
-    "factorio_version": "1.1",
+    "factorio_version": "2.0",
     "dependencies": [
-        "base >= 1.1.0",
+        "base >= 2.0.15",
+        "? quality >= 2.0.15",
+        "! space-age",
         "? science-not-invited",
         "? factory-levels"
     ]
@@ -133,21 +135,21 @@ def generate_mod(world: "Factorio", output_directory: str):
         "allowed_science_packs": world.options.max_science_pack.get_allowed_packs(),
         "custom_technologies": world.custom_technologies,
         "tech_tree_layout_prerequisites": world.tech_tree_layout_prerequisites,
-        "slot_name": world.player_name, "seed_name": multiworld.seed_name,
+        "slot_name": world.player_name,
+        "seed_name": multiworld.seed_name,
         "slot_player": player,
-        "starting_items": world.options.starting_items, "recipes": recipes,
-        "random": random, "flop_random": flop_random,
+        "recipes": recipes,
+        "random": random,
+        "flop_random": flop_random,
         "recipe_time_scale": recipe_time_scales.get(world.options.recipe_time.value, None),
         "recipe_time_range": recipe_time_ranges.get(world.options.recipe_time.value, None),
         "free_sample_blacklist": {item: 1 for item in free_sample_exclusions},
+        "free_sample_quality_name": world.options.free_samples_quality.current_key,
         "progressive_technology_table": {tech.name: tech.progressive for tech in
                                          progressive_technology_table.values()},
         "custom_recipes": world.custom_recipes,
-        "max_science_pack": world.options.max_science_pack.value,
         "liquids": fluids,
-        "goal": world.options.goal.value,
-        "energy_link": world.options.energy_link.value,
-        "useless_technologies": useless_technologies,
+        "removed_technologies": world.removed_technologies,
         "chunk_shuffle": 0,
     }
 

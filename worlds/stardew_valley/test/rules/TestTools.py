@@ -21,30 +21,30 @@ class TestProgressiveToolsLogic(SVTestBase):
         self.assert_rule_false(sturgeon_rule, self.multiworld.state)
 
         summer = self.create_item("Summer")
-        self.multiworld.state.collect(summer, prevent_sweep=False)
+        self.multiworld.state.collect(summer)
         self.assert_rule_false(sturgeon_rule, self.multiworld.state)
 
         fishing_rod = self.create_item("Progressive Fishing Rod")
-        self.multiworld.state.collect(fishing_rod, prevent_sweep=False)
-        self.multiworld.state.collect(fishing_rod, prevent_sweep=False)
+        self.multiworld.state.collect(fishing_rod)
+        self.multiworld.state.collect(fishing_rod)
         self.assert_rule_false(sturgeon_rule, self.multiworld.state)
 
         fishing_level = self.create_item("Fishing Level")
-        self.multiworld.state.collect(fishing_level, prevent_sweep=False)
+        self.multiworld.state.collect(fishing_level)
         self.assert_rule_false(sturgeon_rule, self.multiworld.state)
 
-        self.multiworld.state.collect(fishing_level, prevent_sweep=False)
-        self.multiworld.state.collect(fishing_level, prevent_sweep=False)
-        self.multiworld.state.collect(fishing_level, prevent_sweep=False)
-        self.multiworld.state.collect(fishing_level, prevent_sweep=False)
-        self.multiworld.state.collect(fishing_level, prevent_sweep=False)
+        self.multiworld.state.collect(fishing_level)
+        self.multiworld.state.collect(fishing_level)
+        self.multiworld.state.collect(fishing_level)
+        self.multiworld.state.collect(fishing_level)
+        self.multiworld.state.collect(fishing_level)
         self.assert_rule_true(sturgeon_rule, self.multiworld.state)
 
         self.remove(summer)
         self.assert_rule_false(sturgeon_rule, self.multiworld.state)
 
         winter = self.create_item("Winter")
-        self.multiworld.state.collect(winter, prevent_sweep=False)
+        self.multiworld.state.collect(winter)
         self.assert_rule_true(sturgeon_rule, self.multiworld.state)
 
         self.remove(fishing_rod)
@@ -53,24 +53,24 @@ class TestProgressiveToolsLogic(SVTestBase):
     def test_old_master_cannoli(self):
         self.multiworld.state.prog_items = {1: Counter()}
 
-        self.multiworld.state.collect(self.create_item("Progressive Axe"), prevent_sweep=False)
-        self.multiworld.state.collect(self.create_item("Progressive Axe"), prevent_sweep=False)
-        self.multiworld.state.collect(self.create_item("Summer"), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item("Progressive Axe"))
+        self.multiworld.state.collect(self.create_item("Progressive Axe"))
+        self.multiworld.state.collect(self.create_item("Summer"))
         self.collect_lots_of_money()
 
         rule = self.world.logic.region.can_reach_location("Old Master Cannoli")
         self.assert_rule_false(rule, self.multiworld.state)
 
         fall = self.create_item("Fall")
-        self.multiworld.state.collect(fall, prevent_sweep=False)
+        self.multiworld.state.collect(fall)
         self.assert_rule_false(rule, self.multiworld.state)
 
         tuesday = self.create_item("Traveling Merchant: Tuesday")
-        self.multiworld.state.collect(tuesday, prevent_sweep=False)
+        self.multiworld.state.collect(tuesday)
         self.assert_rule_false(rule, self.multiworld.state)
 
         rare_seed = self.create_item("Rare Seed")
-        self.multiworld.state.collect(rare_seed, prevent_sweep=False)
+        self.multiworld.state.collect(rare_seed)
         self.assert_rule_true(rule, self.multiworld.state)
 
         self.remove(fall)
@@ -80,11 +80,11 @@ class TestProgressiveToolsLogic(SVTestBase):
 
         green_house = self.create_item("Greenhouse")
         self.collect(self.create_item(Event.fall_farming))
-        self.multiworld.state.collect(green_house, prevent_sweep=False)
+        self.multiworld.state.collect(green_house)
         self.assert_rule_false(rule, self.multiworld.state)
 
         friday = self.create_item("Traveling Merchant: Friday")
-        self.multiworld.state.collect(friday, prevent_sweep=False)
+        self.multiworld.state.collect(friday)
         self.assertTrue(self.multiworld.get_location("Old Master Cannoli", 1).access_rule(self.multiworld.state))
 
         self.remove(green_house)
@@ -111,7 +111,7 @@ class TestToolVanillaRequiresBlacksmith(SVTestBase):
             for material in [ToolMaterial.copper, ToolMaterial.iron, ToolMaterial.gold, ToolMaterial.iridium]:
                 self.assert_rule_false(self.world.logic.tool.has_tool(tool, material), self.multiworld.state)
 
-        self.multiworld.state.collect(self.create_item(railroad_item), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item(railroad_item))
 
         for tool in [Tool.pickaxe, Tool.axe, Tool.hoe, Tool.trash_can, Tool.watering_can]:
             for material in [ToolMaterial.copper, ToolMaterial.iron, ToolMaterial.gold, ToolMaterial.iridium]:
@@ -125,7 +125,7 @@ class TestToolVanillaRequiresBlacksmith(SVTestBase):
         for fishing_rod_level in [3, 4]:
             self.assert_rule_false(self.world.logic.tool.has_fishing_rod(fishing_rod_level), self.multiworld.state)
 
-        self.multiworld.state.collect(self.create_item(railroad_item), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item(railroad_item))
 
         for fishing_rod_level in [3, 4]:
             self.assert_rule_true(self.world.logic.tool.has_fishing_rod(fishing_rod_level), self.multiworld.state)

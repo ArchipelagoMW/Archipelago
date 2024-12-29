@@ -39,7 +39,9 @@ You can find items wherever items can be picked up in the original game. This in
 
 When you attempt to hint for items in Archipelago you can use either the name for the specific item, or the name of a
 group of items. Hinting for a group will choose a random item from the group that you do not currently have and hint
-for it. The groups you can use for The Messenger are:
+for it.
+
+The groups you can use for The Messenger are:
 * Notes - This covers the music notes
 * Keys - An alternative name for the music notes
 * Crest - The Sun and Moon Crests
@@ -50,26 +52,26 @@ for it. The groups you can use for The Messenger are:
 
 * The player can return to the Tower of Time HQ at any point by selecting the button from the options menu
     * This can cause issues if used at specific times. If used in any of these known problematic areas, immediately
-quit to title and reload the save. The currently known areas include:
+      quit to title and reload the save. The currently known areas include:
         * During Boss fights
         * After Courage Note collection (Corrupted Future chase)
 * After reaching ninja village a teleport option is added to the menu to reach it quickly
 * Toggle Windmill Shuriken button is added to option menu once the item is received
 * The mod option menu will also have a hint item button, as well as a release and collect button that are all placed
-when the player fulfills the necessary conditions.
+  when the player fulfills the necessary conditions.
 * After running the game with the mod, a config file (APConfig.toml) will be generated in your game folder that can be
-used to modify certain settings such as text size and color. This can also be used to specify a player name that can't
-be entered in game.
+  used to modify certain settings such as text size and color. This can also be used to specify a player name that can't
+  be entered in game.
 
 ## Known issues
 * Ruxxtin Coffin cutscene will sometimes not play correctly, but will still reward the item
 * If you receive the Magic Firefly while in Quillshroom Marsh, The De-curse Queen cutscene will not play. You can exit
-to Searing Crags and re-enter to get it to play correctly.
+  to Searing Crags and re-enter to get it to play correctly.
 * Teleporting back to HQ, then returning to the same level you just left through a Portal can cause Ninja to run left
-and enter a different portal than the one entered by the player or lead to other incorrect inputs, causing a soft lock
+  and enter a different portal than the one entered by the player or lead to other incorrect inputs, causing a soft lock
 * Text entry menus don't accept controller input
 * In power seal hunt mode, the chest must be opened by entering the shop from a level. Teleporting to HQ and opening the
-chest will not work.
+  chest will not work.
 
 ## What do I do if I have a problem?
 
