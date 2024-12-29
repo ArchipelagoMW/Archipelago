@@ -124,8 +124,8 @@ class ValidInventory:
             for parent_item in item_parents.child_item_to_parent_items.get(item.name, []):
                 self.item_name_to_child_items.setdefault(parent_item, []).append(item)
 
-    def has(self, item: str, player: int) -> bool:
-        return self.logical_inventory.get(item, 0) > 0
+    def has(self, item: str, player: int, count: int = 1) -> bool:
+        return self.logical_inventory.get(item, 0) >= count
 
     def has_any(self, items: Set[str], player: int) -> bool:
         return any(self.logical_inventory.get(item) for item in items)

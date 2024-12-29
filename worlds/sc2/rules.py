@@ -1412,7 +1412,7 @@ class SC2Logic:
                 item_names.SOA_SOLAR_BOMBARDMENT, item_names.SOA_PURIFIER_BEAM,
                 item_names.SOA_PYLON_OVERCHARGE,
             ), self.player)
-            or state.has(item_names.SOA_PROGRESSIVE_PROXY_PYLON, self.player, 2)  # Reinforcements)
+            or state.has(item_names.SOA_PROGRESSIVE_PROXY_PYLON, self.player, 2)  # Warp-In Reinforcements
         )
 
     def protoss_any_anti_air_unit(self, state: CollectionState) -> bool:
