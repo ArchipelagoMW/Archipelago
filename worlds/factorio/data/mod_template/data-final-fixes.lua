@@ -163,6 +163,7 @@ data.raw["ammo"]["artillery-shell"].stack_size = 10
 {# each randomized tech gets set to be invisible, with new nodes added that trigger those #}
 {%- for original_tech_name in base_tech_table -%}
 technologies["{{ original_tech_name }}"].hidden = true
+technologies["{{ original_tech_name }}"].hidden_in_factoriopedia = true
 {% endfor %}
 {%- for location, item in locations %}
 {#- the tech researched by the local player #}
