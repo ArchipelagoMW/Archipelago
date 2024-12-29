@@ -77,7 +77,7 @@ resource_efficiency_cost_reduction = {
     item_names.INFESTED_LIBERATOR:    (0, 25, 0),
 
     # War Council
-    item_names.CENTURION:     (0, 50, 0),
+    item_names.CENTURION:     (0, 40, 0),
     item_names.SENTINEL:      (60, 0, 1),
 }
 
