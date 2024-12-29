@@ -999,7 +999,7 @@ item_descriptions = {
         item_names.SENTINEL),
     item_names.STALKER_PHASE_REACTOR: "Stalker War Council upgrade. Stalkers restore 80 shields over 5 seconds after they Blink.",
     item_names.DRAGOON_PHALANX_SUIT: "Dragoon War Council upgrade. Dragoons gain +1 range, move slightly faster, and can form tighter formations.",
-    item_names.INSTIGATOR_MODERNIZED_SERVOS: "Instigator War Council upgrade. Instigators move 20% faster",
+    item_names.INSTIGATOR_MODERNIZED_SERVOS: "Instigator War Council upgrade. Instigators move 20% faster.",
     item_names.ADEPT_DISRUPTIVE_TRANSFER: "Adept War Council upgrade. Adept shades apply a debuff to enemies they touch, increasing damage taken by +5.",
     item_names.SLAYER_PHASE_BLINK: "Slayer War Council upgrade. Slayers can now blink. After blinking, the Slayer's next attack within 8 seconds deals double damage.",
     item_names.AVENGER_KRYHAS_CLOAK: "Avenger War Council upgrade. Avengers are now permanently cloaked.",
