@@ -1,6 +1,6 @@
 from typing import Union
 
-from ..mod_regions import SVERegion
+from ..region_data import SVERegion
 from ...logic.base_logic import BaseLogicMixin, BaseLogic
 from ...logic.combat_logic import CombatLogicMixin
 from ...logic.cooking_logic import CookingLogicMixin
@@ -28,7 +28,7 @@ class SVELogicMixin(BaseLogicMixin):
 
 
 class SVELogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, QuestLogicMixin, RegionLogicMixin, RelationshipLogicMixin, TimeLogicMixin, ToolLogicMixin,
-                               CookingLogicMixin, MoneyLogicMixin, CombatLogicMixin, SeasonLogicMixin]]):
+CookingLogicMixin, MoneyLogicMixin, CombatLogicMixin, SeasonLogicMixin]]):
     def initialize_rules(self):
         self.registry.sve_location_rules.update({
             SVELocation.tempered_galaxy_sword: self.logic.money.can_spend_at(SVERegion.alesia_shop, 350000),

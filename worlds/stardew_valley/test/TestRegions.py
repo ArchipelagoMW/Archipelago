@@ -7,26 +7,25 @@ from . import SVTestCase
 from .options.utils import fill_dataclass_with_default
 from .. import create_content
 from ..options import EntranceRandomization, ExcludeGingerIsland, SkillProgression
-from ..regions import vanilla_regions, vanilla_connections, randomize_connections, RandomizationFlag, create_final_connections_and_regions
+from ..regions import create_connections_and_regions, vanilla_data
+from ..regions.entrance_rando import randomize_connections
+from ..regions.model import RandomizationFlag
 from ..strings.entrance_names import Entrance as EntranceName
 from ..strings.region_names import Region as RegionName
-
-connections_by_name = {connection.name for connection in vanilla_connections}
-regions_by_name = {region.name for region in vanilla_regions}
 
 
 class TestRegions(unittest.TestCase):
     def test_region_exits_lead_somewhere(self):
-        for region in vanilla_regions:
+        for region in vanilla_data.vanilla_regions:
             with self.subTest(region=region):
-                for exit in region.exits:
-                    self.assertIn(exit, connections_by_name,
-                                  f"{region.name} is leading to {exit} but it does not exist.")
+                for exit_ in region.exits:
+                    self.assertIn(exit_, vanilla_data.connections_by_name,
+                                  f"{region.name} is leading to {exit_} but it does not exist.")
 
     def test_connection_lead_somewhere(self):
-        for connection in vanilla_connections:
+        for connection in vanilla_data.vanilla_connections:
             with self.subTest(connection=connection):
-                self.assertIn(connection.destination, regions_by_name,
+                self.assertIn(connection.destination, vanilla_data.regions_by_name,
                               f"{connection.name} is leading to {connection.destination} but it does not exist.")
 
 
@@ -69,10 +68,10 @@ class TestEntranceRando(SVTestCase):
             seed = get_seed()
             rand = random.Random(seed)
             with self.subTest(flag=flag, msg=f"Seed: {seed}"):
-                entrances, regions = create_final_connections_and_regions(sv_options)
+                entrances, regions = create_connections_and_regions(sv_options)
                 _, randomized_connections = randomize_connections(rand, sv_options, content, regions, entrances)
 
-                for connection in vanilla_connections:
+                for connection in vanilla_data.vanilla_connections:
                     if flag in connection.flag:
                         connection_in_randomized = connection.name in randomized_connections
                         reverse_in_randomized = connection.reverse in randomized_connections
@@ -97,10 +96,10 @@ class TestEntranceRando(SVTestCase):
             seed = get_seed()
             rand = random.Random(seed)
             with self.subTest(option=option, flag=flag, seed=seed):
-                entrances, regions = create_final_connections_and_regions(sv_options)
+                entrances, regions = create_connections_and_regions(sv_options)
                 _, randomized_connections = randomize_connections(rand, sv_options, content, regions, entrances)
 
-                for connection in vanilla_connections:
+                for connection in vanilla_data.vanilla_connections:
                     if flag in connection.flag:
                         if RandomizationFlag.GINGER_ISLAND in connection.flag:
                             self.assertNotIn(connection.name, randomized_connections,
@@ -128,7 +127,7 @@ class TestEntranceRando(SVTestCase):
             seed = get_seed()
             rand = random.Random(seed)
             with self.subTest(msg=f"Seed: {seed}"):
-                entrances, regions = create_final_connections_and_regions(sv_options)
+                entrances, regions = create_connections_and_regions(sv_options)
                 randomized_connections, randomized_data = randomize_connections(rand, sv_options, content, regions, entrances)
                 connections_by_name = {connection.name: connection for connection in randomized_connections}
 
@@ -166,8 +165,7 @@ class TestEntranceClassifications(SVTestCase):
         }
         with self.solo_world_sub_test(world_options=world_options) as (multiworld, _):
             ap_entrances = {entrance.name: entrance for entrance in multiworld.get_entrances()}
-            entrance_data_by_name = {entrance.name: entrance for entrance in vanilla_connections}
             for entrance_name in ap_entrances:
-                entrance_data = entrance_data_by_name[entrance_name]
+                entrance_data = vanilla_data.connections_by_name[entrance_name]
                 with self.subTest(f"{entrance_name}: {entrance_data.flag}"):
                     self.assertFalse(entrance_data.flag & RandomizationFlag.GINGER_ISLAND)

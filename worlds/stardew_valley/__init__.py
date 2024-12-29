@@ -2,6 +2,7 @@ import logging
 from random import Random
 from typing import Dict, Any, Iterable, Optional, List, TextIO, cast
 
+import entrance_rando
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
@@ -118,10 +119,7 @@ class StardewValleyWorld(World):
         world_regions, world_entrances, self.randomized_entrances = create_regions(create_region, self.random, self.options, self.content)
 
         self.logic = StardewLogic(self.player, self.options, self.content, world_regions.keys())
-        self.modified_bundles = get_all_bundles(self.random,
-                                                self.logic,
-                                                self.content,
-                                                self.options)
+        self.modified_bundles = get_all_bundles(self.random, self.logic, self.content, self.options)
 
         def add_location(name: str, code: Optional[int], region: str):
             region: Region = world_regions[region]
@@ -296,6 +294,10 @@ class StardewValleyWorld(World):
 
     def generate_basic(self):
         pass
+
+    def pre_fill(self) -> None:
+        no_target_groups = {0: [0]}
+        entrance_rando.randomize_entrances(self, coupled=True, target_group_lookup=no_target_groups)
 
     def get_filler_item_name(self) -> str:
         if not self.filler_item_pool_names:
