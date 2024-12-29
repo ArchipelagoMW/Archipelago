@@ -70,7 +70,7 @@ def create_connections_for_generation(randomized_connections: Dict[ConnectionDat
     connections = []
     for connection in randomized_connections:
         destination = randomized_connections[connection]
-        connections.append(ConnectionData(connection.name, destination.destination, destination.reverse))
+        connections.append(ConnectionData(connection.name, destination.destination))
     return connections
 
 

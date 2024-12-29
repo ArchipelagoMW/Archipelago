@@ -51,7 +51,9 @@ def remove_ginger_island_regions_and_connections(connections_by_name: dict[str, 
 
         regions_by_name[region_name] = region.get_without_exits(connections_to_remove)
 
-    for region_to_remove in regions_to_remove:
-        del regions_by_name[region_to_remove]
+    for connection_name in connections_to_remove:
+        del connections_by_name[connection_name]
+    for region_name in regions_to_remove:
+        del regions_by_name[region_name]
 
     return connections_by_name, regions_by_name
