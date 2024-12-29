@@ -13,8 +13,7 @@ from ...logic.season_logic import SeasonLogicMixin
 from ...logic.time_logic import TimeLogicMixin
 from ...logic.tool_logic import ToolLogicMixin
 from ...strings.ap_names.mods.mod_items import SVELocation, SVERunes, SVEQuestItem
-from ...strings.quest_names import ModQuest
-from ...strings.quest_names import Quest
+from ...strings.quest_names import ModQuest, Quest
 from ...strings.region_names import Region, SVERegion
 from ...strings.tool_names import Tool, ToolMaterial
 from ...strings.wallet_item_names import Wallet

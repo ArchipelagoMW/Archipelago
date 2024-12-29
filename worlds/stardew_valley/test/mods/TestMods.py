@@ -1,11 +1,10 @@
-from .. import SVTestBase, SVTestCase, allsanity_mods_6_x_x
+from .. import SVTestBase, SVTestCase,  allsanity_mods_6_x_x
 from ..assertion import ModAssertMixin, WorldAssertMixin
 from ... import items, Group, ItemClassification, StardewValleyWorld
 from ... import options
 from ...mods.mod_data import ModNames
-from ...options import Walnutsanity
 from ...options.options import all_mods
-from ...regions.entrance_rando import create_randomization_flag_mask
+from ...regions.entrance_rando import create_player_randomization_flag
 from ...regions.regions import create_all_connections
 
 
@@ -101,7 +100,7 @@ class TestBaseItemGeneration(SVTestBase):
         options.Chefsanity.internal_name: options.Chefsanity.option_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
         options.Booksanity.internal_name: options.Booksanity.option_all,
-        Walnutsanity.internal_name: Walnutsanity.preset_all,
+        options.Walnutsanity.internal_name: options.Walnutsanity.preset_all,
         options.Mods.internal_name: frozenset(options.Mods.valid_keys)
     }
 
@@ -169,7 +168,7 @@ class TestModEntranceRando(SVTestCase):
             with self.solo_world_sub_test(world_options=test_options, world_caching=False) as (multiworld, world):
                 world: StardewValleyWorld
                 entrances_placement = world.randomized_entrances
-                flag = create_randomization_flag_mask(world.options.entrance_randomization, world.content)
+                flag = create_player_randomization_flag(world.options.entrance_randomization, world.content)
 
                 expected_randomized_connections = [connection
                                                    for connection in create_all_connections(world.content.registered_packs).values()

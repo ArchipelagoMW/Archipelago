@@ -2,13 +2,18 @@ from random import Random
 from typing import Iterable, Dict, List, Tuple, Set
 
 from BaseClasses import Region
-from .model import RegionData, ConnectionData, RandomizationFlag
+from entrance_rando import ERPlacementState
+from .model import RegionData, ConnectionData, RandomizationFlag, reverse_connection_name
 from ..content import StardewContent
 from ..options import EntranceRandomization, StardewValleyOptions
-from ..strings.region_names import Region
+from ..strings.region_names import Region as SVRegions
 
 
-def create_randomization_flag_mask(entrance_randomization_choice: EntranceRandomization, content: StardewContent):
+def create_player_randomization_flag(entrance_randomization_choice: EntranceRandomization, content: StardewContent):
+    """Return the flag that a connection is expected of have to be randomized. Only the bit corresponding to the player randomization choice will be enabled.
+
+    Other bits for content exclusion might also be enabled, tho the preferred solution to exclude content should be to not create those regions at alls, when possible.
+    """
     flag = RandomizationFlag.NOT_RANDOMIZED
 
     if entrance_randomization_choice.value == EntranceRandomization.option_disabled:
@@ -18,7 +23,6 @@ def create_randomization_flag_mask(entrance_randomization_choice: EntranceRandom
         flag |= RandomizationFlag.BIT_PELICAN_TOWN
     elif entrance_randomization_choice == EntranceRandomization.option_non_progression:
         flag |= RandomizationFlag.BIT_NON_PROGRESSION
-
     elif entrance_randomization_choice in (
             EntranceRandomization.option_buildings,
             EntranceRandomization.option_buildings_without_house,
@@ -26,10 +30,33 @@ def create_randomization_flag_mask(entrance_randomization_choice: EntranceRandom
     ):
         flag |= RandomizationFlag.BIT_BUILDINGS
 
-    if content.features.skill_progression.are_masteries_shuffled:
+    if not content.features.skill_progression.are_masteries_shuffled:
         flag |= RandomizationFlag.EXCLUDE_MASTERIES
 
     return flag
+
+
+def create_entrance_rando_target(origin: Region, destination: Region, connection_data: ConnectionData) -> None:
+    origin.create_exit(connection_data.name)
+    destination.create_er_target(connection_data.reverse)
+
+
+def prepare_mod_data(placements: ERPlacementState) -> dict[str, str]:
+    """Take the placements from GER and prepare the data for the mod.
+    The mod require a dictionary detailing which connections need to be swapped. It acts as if the connections are decoupled, so both directions are required.
+
+    For instance, GER will provide placements like (Town to Community Center, Hospital to Town), meaning that the door of the Community Center will instead lead
+     to the Hospital, and that the exit of the Hospital will lead to the Town by the Community Center door. The mod need to know both swaps, being the original
+     destination of the "Town to Community Center" connection is to be replaced by the original destination of "Town to Hospital", and the original destination of "Hospital to Town" is to be replaced by the original destination of "Community Center to Town".
+    """
+
+    swapped_connections = {}
+
+    for entrance, exit_ in placements.pairings:
+        swapped_connections[entrance] = reverse_connection_name(exit_)
+        swapped_connections[exit_] = reverse_connection_name(entrance)
+
+    return swapped_connections
 
 
 def randomize_connections(random: Random, world_options: StardewValleyOptions, content: StardewContent, regions_by_name: Dict[str, RegionData],
@@ -133,7 +160,7 @@ def swap_connections_until_valid(regions_by_name, connections_by_name: Dict[str,
 
 
 def region_should_be_reachable(region_name: str, connections_in_slot: Iterable[ConnectionData]) -> bool:
-    if region_name == Region.menu:
+    if region_name == SVRegions.menu:
         return True
     for connection in connections_in_slot:
         if region_name == connection.destination:
@@ -143,11 +170,11 @@ def region_should_be_reachable(region_name: str, connections_in_slot: Iterable[C
 
 def find_reachable_regions(regions_by_name, connections_by_name,
                            randomized_connections: Dict[ConnectionData, ConnectionData]):
-    reachable_regions = {Region.menu}
+    reachable_regions = {SVRegions.menu}
     unreachable_regions = {region for region in regions_by_name.keys()}
     # unreachable_regions = {region for region in regions_by_name.keys() if region_should_be_reachable(region, connections_by_name.values())}
-    unreachable_regions.remove(Region.menu)
-    exits_to_explore = list(regions_by_name[Region.menu].exits)
+    unreachable_regions.remove(SVRegions.menu)
+    exits_to_explore = list(regions_by_name[SVRegions.menu].exits)
     while exits_to_explore:
         exit_name = exits_to_explore.pop()
         # if exit_name not in connections_by_name:

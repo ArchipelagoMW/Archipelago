@@ -2,8 +2,9 @@ import logging
 import os
 import threading
 import unittest
+from collections.abc import Iterator
 from contextlib import contextmanager
-from typing import Dict, ClassVar, Iterable, Tuple, Optional, List, Union, Any
+from typing import Dict, ClassVar, Iterable, Optional, List, Union, Any
 
 from BaseClasses import MultiWorld, CollectionState, get_seed, Location, Item
 from test.bases import WorldTestBase
@@ -207,7 +208,7 @@ class SVTestCase(unittest.TestCase):
                             *,
                             seed=DEFAULT_TEST_SEED,
                             world_caching=True,
-                            **kwargs) -> Tuple[MultiWorld, StardewValleyWorld]:
+                            **kwargs) -> Iterator[tuple[MultiWorld, StardewValleyWorld]]:
         if msg is not None:
             msg += " "
         else:
@@ -323,7 +324,7 @@ pre_generated_worlds = {}
 def solo_multiworld(world_options: Optional[Dict[Union[str, StardewValleyOption], Any]] = None,
                     *,
                     seed=DEFAULT_TEST_SEED,
-                    world_caching=True) -> Tuple[MultiWorld, StardewValleyWorld]:
+                    world_caching=True) -> Iterator[tuple[MultiWorld, StardewValleyWorld]]:
     if not world_caching:
         multiworld = setup_solo_multiworld(world_options, seed, _cache={})
         yield multiworld, multiworld.worlds[1]

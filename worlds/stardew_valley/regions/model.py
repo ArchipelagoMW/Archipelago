@@ -2,9 +2,16 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import IntFlag
-from functools import cached_property
 
 connector_keyword = " to "
+
+
+def reverse_connection_name(name: str) -> str | None:
+    try:
+        origin, destination = name.split(connector_keyword)
+    except ValueError:
+        return None
+    return f"{destination}{connector_keyword}{origin}"
 
 
 class MergeFlag(IntFlag):
@@ -32,7 +39,7 @@ class RandomizationFlag(IntFlag):
     # Those bits should be added when an entrance need additional qualifiers.
     LEAD_TO_OPEN_AREA = 1 << 6
 
-    # Tags to apply on regions
+    # Tags to apply on connections
     EVERYTHING = EXCLUDE_MASTERIES | BIT_EVERYTHING
     BUILDINGS = EVERYTHING | BIT_BUILDINGS
     NON_PROGRESSION = BUILDINGS | BIT_NON_PROGRESSION
@@ -44,6 +51,7 @@ class RegionData:
     name: str
     exits: tuple[str, ...] = field(default_factory=tuple)
     flag: MergeFlag = MergeFlag.ADD_EXITS
+    # TODO remove this
     is_ginger_island: bool = False
 
     def __post_init__(self):
@@ -69,16 +77,12 @@ class ConnectionData:
     destination: str
     flag: RandomizationFlag = RandomizationFlag.NOT_RANDOMIZED
 
-    @cached_property
+    @property
     def reverse(self) -> str | None:
-        try:
-            origin, destination = self.name.split(connector_keyword)
-        except ValueError:
-            return None
-        return f"{destination}{connector_keyword}{origin}"
+        return reverse_connection_name(self.name)
 
-    def is_eligible_for_randomization(self, ) -> bool:
-        return self.flag != RandomizationFlag.NOT_RANDOMIZED
+    def is_eligible_for_randomization(self, chosen_randomization_flag: RandomizationFlag) -> bool:
+        return chosen_randomization_flag and chosen_randomization_flag in self.flag
 
 
 @dataclass(frozen=True)
