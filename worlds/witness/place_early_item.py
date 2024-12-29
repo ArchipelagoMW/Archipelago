@@ -39,7 +39,7 @@ def get_available_early_locations(world: "WitnessWorld") -> List[Location]:
             world.get_location(location_name) for location_name in world.reachable_early_locations
             if location_name not in tutorial_checks_in_order
         ),
-        key=lambda location_object: static_witness_logic.ENTITIES_BY_NAME[location_object.name]["processing_order"]
+        key=lambda location_object: static_witness_logic.ENTITIES_BY_NAME[location_object.name]["order"]
     )
 
     return [
