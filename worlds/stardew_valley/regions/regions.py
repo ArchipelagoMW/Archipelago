@@ -22,7 +22,7 @@ def create_vanilla_regions() -> dict[str, RegionData]:
 
 def create_all_regions(active_mods: set[str]) -> dict[str, RegionData]:
     current_regions_by_name = create_vanilla_regions()
-    mods.add_mods_regions(current_regions_by_name, active_mods)
+    mods.modify_regions_for_mods(current_regions_by_name, active_mods)
     return current_regions_by_name
 
 
@@ -32,7 +32,7 @@ def create_vanilla_connections() -> dict[str, ConnectionData]:
 
 def create_all_connections(active_mods: set[str]) -> dict[str, ConnectionData]:
     connections = create_vanilla_connections()
-    connections = mods.modify_connections_for_mods(connections, active_mods)
+    mods.modify_connections_for_mods(connections, active_mods)
     return connections
 
 

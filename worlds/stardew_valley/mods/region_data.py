@@ -1,5 +1,3 @@
-from typing import Dict, List
-
 from .mod_data import ModNames
 from ..regions.model import RegionData, ConnectionData, MergeFlag, RandomizationFlag, ModRegionsData
 from ..strings.entrance_names import Entrance, DeepWoodsEntrance, EugeneEntrance, LaceyEntrance, BoardingHouseEntrance, \
@@ -170,6 +168,7 @@ stardew_valley_expanded_regions = [
     RegionData(Region.fish_shop, (SVEEntrance.fish_shop_to_willy_bedroom,)),
     RegionData(SVERegion.willy_bedroom),
     RegionData(Region.mountain, (SVEEntrance.mountain_to_guild_summit,)),
+    RegionData(Region.mountain, (Entrance.mountain_to_adventurer_guild, Entrance.mountain_to_the_mines), MergeFlag.REMOVE_EXITS),
     RegionData(SVERegion.guild_summit, (SVEEntrance.guild_to_interior, SVEEntrance.guild_to_mines, SVEEntrance.summit_to_highlands)),
     RegionData(Region.railroad, (SVEEntrance.to_susan_house, SVEEntrance.enter_summit, SVEEntrance.railroad_to_grampleton_station)),
     RegionData(SVERegion.grampleton_station, (SVEEntrance.grampleton_station_to_grampleton_suburbs,)),
@@ -201,8 +200,6 @@ stardew_valley_expanded_regions = [
     RegionData(SVERegion.isaac_shop),
     RegionData(SVERegion.summit),
     RegionData(SVERegion.susans_house),
-    RegionData(Region.mountain, (Entrance.mountain_to_adventurer_guild, Entrance.mountain_to_the_mines), MergeFlag.REMOVE_EXITS)
-
 ]
 
 mandatory_sve_connections = [
@@ -351,13 +348,11 @@ boarding_house_entrances = [
     ConnectionData(BoardingHouseEntrance.lost_valley_ruins_to_lost_valley_house_2, BoardingHouseRegion.lost_valley_house_2, flag=RandomizationFlag.BUILDINGS)
 ]
 
-vanilla_connections_to_remove_by_mod: Dict[str, List[ConnectionData]] = {
-    ModNames.sve: [
-        ConnectionData(Entrance.mountain_to_the_mines, Region.mines,
-                       flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
-        ConnectionData(Entrance.mountain_to_adventurer_guild, Region.adventurer_guild,
-                       flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ]
+vanilla_connections_to_remove_by_mod: dict[str, tuple[str, ...]] = {
+    ModNames.sve: (
+        Entrance.mountain_to_the_mines,
+        Entrance.mountain_to_adventurer_guild,
+    )
 }
 
 region_data_by_mod = {
