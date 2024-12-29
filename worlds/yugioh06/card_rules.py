@@ -358,7 +358,9 @@ def set_card_rules(world):
                 if len(overlap) > 0:
                     chosen_rule = r
                     break
+
             if chosen_rule is None:
+                rule_cards = [x for x in rule.cards if x in starting_cards.keys()]
                 chosen_rule = world.random.choice(rule)
         elif isinstance(rule, CardRule):
             chosen_rule = rule
@@ -1071,7 +1073,7 @@ def build_card_rule_for_rituals(ritual_monster: str):
 
 
 def find_cards_with(min_attack: int = None, max_attack: int = None, min_defence: int = None,
-                    min_level: int = None, max_level: int = None, attribute: str = None,
+                    min_level: int = None, max_level: int = None, attribute: str = None, types: List[str] = None,
                     card_type: str = None, spell_trap_type: str = None, no_nomi: bool = True):
     result: List[str] = []
     for name, card in cards.items():
@@ -1086,6 +1088,8 @@ def find_cards_with(min_attack: int = None, max_attack: int = None, min_defence:
         if min_defence and not card.defence >= min_defence:
             continue
         if attribute and card.attribute != attribute:
+            continue
+        if types and card_type not in types:
             continue
         if card_type and card.card_type != card_type:
             continue
@@ -1112,5 +1116,96 @@ raise_attack = [
         lambda: find_cards_with(min_attack=2650), 1)),
     CardRule("Black Pendant", 1, additional_cards=InnerCardRule(
         lambda: find_cards_with(min_attack=2550), 1)),
-    # todo
+    CardRule("BladeFly", 1, additional_cards=InnerCardRule(
+        lambda : find_cards_with(min_attack=2550, attribute="WIND"), 1)),
+    CardRule("Blast with Chain", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550), 1)),
+    CardRule("Bright Castle", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2350, attribute="LIGHT"), 1)),
+    CardRule("Cestus of Dagla", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550, types=["Fairy"]), 1)),
+    CardRule("Command Knight", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2650, types=["Warrior"]), 1)),
+    CardRule("Dark Magician's Tome of Black Magic", 1, additional_cards=InnerCardRule(
+        "Dark Magician", 1)),
+    CardRule("Divine Sword - Phoenix Blade", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2750, types=["Warrior"]), 1)),
+    CardRule("Emes the Infinity", 1),
+    CardRule("Fusion Sword Murasame", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2250, types=["Warrior"]), 1)),
+    CardRule("Gaia Power", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550, attribute="EARTH"), 1)),
+    CardRule("Gravity Axe - Grarl", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550), 1)),
+    CardRule("Heavy Mech Support Platform", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550, types=["Machine"]), 1)),
+    CardRule("Horn of the Unicorn", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2350), 1)),
+    CardRule("Hoshiningen", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550, attribute="LIGHT"), 1)),
+    CardRule("Injection Fairy Lily", 1),
+    CardRule("insect Armor with Laser Cannon", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2350, types=["Insect"]), 1)),
+    CardRule("Blast with Chain", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550), 1)),
+    CardRule("Kunai with Chain", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550), 1)),
+    CardRule("Lightning Blade", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2250, types=["Warrior"]), 1)),
+    CardRule("Limiter Removal", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=1550, types=["Limiter Removal"]), 1)),
+    CardRule("Little Chimera", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550, attribute="FIRE"), 1)),
+    CardRule("Luminous Spark", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550, attribute="LIGHT"), 1)),
+    CardRule("Mage Power", 1),
+    CardRule("Maju Garzett", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=1550), 2)),
+    CardRule("Malevolent Nuzzler", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2350), 1)),
+    CardRule("Mask of Brutality", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2050), 1)),
+    CardRule("Megamorph", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=1550), 1)),
+    CardRule("Metalmorph", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=1850), 1)),
+    CardRule("Milus Radiant", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550, attribute="EARTH"), 1)),
+    CardRule("Molten Destruction", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550, attribute="FIRE"), 1)),
+    CardRule("Mountain", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2850, types=["Dragon", "Winged Beast", "Thunder"]), 1)),
+    CardRule("Mystic Plasma Zone", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550, attribute="DARK"), 1)),
+    CardRule("Nightmare Penguin", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2850, attribute="WATER"), 1)),
+    CardRule("Rare Metalmorph", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550, types=["Machine"]), 1)),
+    CardRule("Rising Air Current", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550, attribute="WIND"), 1)),
+    CardRule("Rising Energy", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=1550), 1)),
+    CardRule("Rush Recklessly", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2350), 1)),
+    CardRule("Salamandra", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2350, attribute="FIRE"), 1)),
+    CardRule("Star Boy", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550), 1)),
+    CardRule("Stim-Pack", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2350), 1)),
+    CardRule("Sword of Deep-Seated", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550), 1)),
+    CardRule("Sword of Dragon's Soul", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2350, types=["Warrior"]), 1)),
+    CardRule("Umiiruka", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550, attribute="WATER"), 1)),
+    CardRule("United We Stand", 1),
+    CardRule("Wicked-Breaking Flamberge - Baou", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550), 1)),
+    CardRule("Winged Mininon", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2350, types=["Fiend"]), 1)),
+    CardRule("Witch's Apprentice", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2550, attribute="DARK"), 1)),
+    CardRule("Yami", 1, additional_cards=InnerCardRule(
+        lambda: find_cards_with(min_attack=2850, types=["Fiend, Spellcaster"]), 1)),
 ]
