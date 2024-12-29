@@ -6,18 +6,19 @@ from abc import ABC, abstractmethod
 import logging
 
 from BaseClasses import Region, Location, CollectionState, Entrance
-from ..mission_tables import SC2Mission, lookup_name_to_mission, MissionFlag, lookup_id_to_mission, get_goal_location
+from ..mission_tables import SC2Mission, SC2Race, lookup_name_to_mission, MissionFlag, lookup_id_to_mission, get_goal_location
 from ..item.item_tables import named_layout_key_item_table, named_campaign_key_item_table
 from ..item import item_names
 from .layout_types import LayoutType
 from .entry_rules import EntryRule, SubRuleEntryRule, CountMissionsEntryRule, BeatMissionsEntryRule, SubRuleRuleData, ItemEntryRule
 from .mission_pools import SC2MOGenMissionPools, Difficulty, modified_difficulty_thresholds
+from .options import GENERIC_KEY_NAME
+from .. import rules
 
 if TYPE_CHECKING:
     from ..locations import LocationData
     from .. import SC2World
 
-GENERIC_KEY_NAME = "Key".casefold()
 
 class MissionOrderNode(ABC):
     parent: Optional[ReferenceType[MissionOrderNode]]
@@ -1069,7 +1070,22 @@ def create_location(player: int, location_data: 'LocationData', region: Region,
     location.access_rule = location_data.rule
 
     location_cache.append(location)
+    return location
 
+
+def create_minimal_logic_location(
+    player: int, location_data: 'LocationData', region: Region, location_cache: List[Location], unit_count: int = 0,
+) -> Location:
+    location = Location(player, location_data.name, location_data.code, region)
+    mission = lookup_name_to_mission.get(region.name)
+    if mission is None:
+        pass
+    elif location_data.hard_rule:
+        unit_rule = rules.has_race_units(player, unit_count, mission.race)
+        location.access_rule = lambda state: unit_rule(state) and location_data.hard_rule(state)
+    else:
+        location.access_rule = rules.has_race_units(player, unit_count, mission.race)
+    location_cache.append(location)
     return location
 
 
@@ -1094,7 +1110,10 @@ def create_region(
             if victory_cache_locations >= target_victory_cache_locations:
                 continue
             victory_cache_locations += 1
-        location = create_location(world.player, location_data, region, location_cache)
+        if world.options.required_tactics.value == world.options.required_tactics.option_any_units:
+            location = create_minimal_logic_location(world.player, location_data, region, location_cache, min(slot.min_depth, 5))
+        else:
+            location = create_location(world.player, location_data, region, location_cache)
         region.locations.append(location)
 
     return region

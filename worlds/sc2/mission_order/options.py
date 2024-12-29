@@ -11,7 +11,8 @@ from ..mission_tables import lookup_name_to_mission
 from ..mission_groups import mission_groups
 from ..item.item_tables import item_table
 from ..item.item_groups import item_name_groups
-from .structs import Difficulty, LayoutType, GENERIC_KEY_NAME
+from .layout_types import LayoutType
+from .mission_pools import Difficulty
 from .layout_types import Column, Grid, Hopscotch, Gauntlet, Blitz, Canvas
 from .presets_static import (
     static_preset, preset_mini_wol_with_prophecy, preset_mini_wol, preset_mini_hots, preset_mini_prophecy,
@@ -20,6 +21,10 @@ from .presets_static import (
     preset_lotv_epilogue, preset_lotv, preset_nco
 )
 from .presets_scripted import make_golden_path
+
+
+GENERIC_KEY_NAME = "Key".casefold()
+
 
 STR_OPTION_VALUES: Dict[str, Dict[str, Any]] = {
     "type": {

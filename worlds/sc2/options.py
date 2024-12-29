@@ -365,18 +365,23 @@ class StarterUnit(Choice):
 
 class RequiredTactics(Choice):
     """
-    Determines the maximum tactical difficulty of the world (separate from mission difficulty).  Higher settings
-    increase randomness.
+    Determines the maximum tactical difficulty of the world (separate from mission difficulty).
+    Higher settings increase randomness.
 
     Standard:  All missions can be completed with good micro and macro.
     Advanced:  Completing missions may require relying on starting units and micro-heavy units.
-    No Logic:  Units and upgrades may be placed anywhere.  LIKELY TO RENDER THE RUN IMPOSSIBLE ON HARDER DIFFICULTIES!
+    Any Units: Logic guarantees faction-appropriate units appear early without regard to what those units are.
+               i.e. if the third mission is a protoss build mission,
+               logic guarantees at least 2 protoss units are reachable before starting it.
+               May render the run impossible on harder difficulties.
+    No Logic:  Units and upgrades may be placed anywhere. LIKELY TO RENDER THE RUN IMPOSSIBLE ON HARDER DIFFICULTIES!
                Locks Grant Story Tech option to true.
     """
     display_name = "Required Tactics"
     option_standard = 0
     option_advanced = 1
-    option_no_logic = 2
+    option_any_units = 2
+    option_no_logic = 3
 
 
 class EnableVoidTrade(Toggle):
