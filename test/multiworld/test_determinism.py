@@ -147,12 +147,14 @@ def multiworld_to_serializable(itempool_before_fill: list[Item], multiworld: Mul
                           for player, items in multiworld.precollected_items.items()}
 
     return {
+        # Options are ordered first because differences in rolled options are likely to affect the rest of generation.
         "options": options_to_serializable(multiworld),
         "itempool": itempool,
         "start_inventory": precollected_items,
         "regions": regions,
         "entrances": entrances,
         "locations": locations,
+        # Placements are ordered last because they are likely to be affected by all previous parts of the multiworld.
         "placements": placements,
     }
 
@@ -162,11 +164,19 @@ class TestDeterministicGeneration(TestCase):
     Test that, for each world type, generating a multiworld is deterministic, so generating with the same seed multiple
     times produces the same result each time.
 
-    Common sources of nondeterministic behaviour that this test may be able to identify:
+    Common sources of nondeterministic behaviour that these tests may be able to identify:
     - Iteration of sets
     - Accidental modification of shared data
     - Use of `random` module, instead of per-world or per-multiworld `.random` attributes or other deterministically
     seeded Random instances
+
+    The tests check the following:
+    - Rolled options
+    - Item code and classification, and the order of the items in the item pool and start inventory (precollected items)
+    - Location address and progress_type, and the order of the locations in the multiworld
+    - Locations within each Region and the order of the locations
+    - The parent and connected region of each Entrance
+    - The placement of items after post_fill
     """
 
     initial_multiworld_data_cache: ClassVar[dict[str, tuple[int, SerializableMultiWorldData]]] = {}
@@ -192,6 +202,7 @@ class TestDeterministicGeneration(TestCase):
         having failed along with the reason.
         """
         if game in self.initial_multiworld_data_cache:
+            # The initial multiworld for this game has already been generated.
             return self.initial_multiworld_data_cache[game]
 
         world_type = AutoWorldRegister.world_types[game]
@@ -253,6 +264,8 @@ class TestDeterministicGeneration(TestCase):
 
     def test_hash_determinism(self) -> None:
         """
+        Test that generation is deterministic across multiple Python processes.
+
         For security purposes, Python randomizes its hash seed when starting a Python process. This notably changes the
         order of elements in a set due to changing the hashes of the elements.
 
@@ -305,6 +318,8 @@ class TestDeterministicGeneration(TestCase):
 
     def test_shared_state_determinism(self) -> None:
         """
+        Test that generation is deterministic across multiple generations on the same process.
+
         Many worlds have constant, shared data used to create locations/regions/etc. and to set up logic that should not
         be modified across multiple generations.
 
@@ -330,6 +345,9 @@ class TestDeterministicGeneration(TestCase):
 
     def test_random_module_usage_determinism(self) -> None:
         """
+        Test that generation is likely deterministic on webhost, specifically that it does not use the `random` module
+        directly.
+
         Usage of the `random` module directly within worlds is unsafe because its Random instance can be used by
         libraries and more in nondeterministic ways. Worlds should use their own Random instance, either `.random` or
         `.multiworld.random`, instead. Alternatively, to work with libraries that perform randomization, worlds should
