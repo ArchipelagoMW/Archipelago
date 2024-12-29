@@ -1,8 +1,10 @@
 from collections import deque
 from collections.abc import Collection
+from typing import ClassVar
 from unittest.mock import patch, Mock
 
 from BaseClasses import get_seed, MultiWorld, Entrance
+from test.param import classvar_matrix
 from ..assertion import WorldAssertMixin
 from ..bases import SVTestCase, solo_multiworld
 from ... import options
@@ -59,67 +61,24 @@ class TestEntranceRando(SVTestCase):
         self.assertEqual({"A to B": "A to C", "C to A": "B to A", "C to D": "C to A", "A to C": "D to C"}, swapped_connections)
 
 
-class TestEntranceRandoCreatesValidWorlds(WorldAssertMixin, SVTestCase):
+@classvar_matrix(mod=all_mods.difference([
+    ModNames.ginger, ModNames.distant_lands, ModNames.skull_cavern_elevator, ModNames.wellwick, ModNames.magic, ModNames.binning_skill, ModNames.big_backpack,
+    ModNames.luck_skill, ModNames.tractor, ModNames.shiko, ModNames.archaeology, ModNames.delores, ModNames.socializing_skill, ModNames.cooking_skill
+]))
+class TestCanGenerateEachModWithEntranceRandomizationBuildings(WorldAssertMixin, SVTestCase):
+    """The following tests validate that ER still generates winnable and logically-sane games with given mods.
+    Mods that do not interact with entrances are skipped
+    Not all ER settings are tested, because 'buildings' is, essentially, a superset of all others
+    """
+    mod: ClassVar[str]
 
-    # The following tests validate that ER still generates winnable and logically-sane games with given mods.
-    # Mods that do not interact with entrances are skipped
-    # Not all ER settings are tested, because 'buildings' is, essentially, a superset of all others
-    def test_ginger_island_excluded_buildings(self):
+    def test_given_mod_when_generate_then_basic_checks(self) -> None:
         world_options = {
             options.EntranceRandomization: options.EntranceRandomization.option_buildings,
-            options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_true
-        }
-        with solo_multiworld(world_options) as (multi_world, _):
-            self.assert_basic_checks(multi_world)
-
-    def test_deepwoods_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.deepwoods, options.EntranceRandomization.option_buildings)
-
-    def test_juna_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.juna, options.EntranceRandomization.option_buildings)
-
-    def test_jasper_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.jasper, options.EntranceRandomization.option_buildings)
-
-    def test_alec_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.alec, options.EntranceRandomization.option_buildings)
-
-    def test_yoba_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.yoba, options.EntranceRandomization.option_buildings)
-
-    def test_eugene_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.eugene, options.EntranceRandomization.option_buildings)
-
-    def test_ayeisha_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.ayeisha, options.EntranceRandomization.option_buildings)
-
-    def test_riley_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.riley, options.EntranceRandomization.option_buildings)
-
-    def test_sve_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.sve, options.EntranceRandomization.option_buildings)
-
-    def test_alecto_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.alecto, options.EntranceRandomization.option_buildings)
-
-    def test_lacey_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.lacey, options.EntranceRandomization.option_buildings)
-
-    def test_boarding_house_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(ModNames.boarding_house, options.EntranceRandomization.option_buildings)
-
-    def test_all_mods_entrance_randomization_buildings(self):
-        self.perform_basic_checks_on_mod_with_er(all_mods, options.EntranceRandomization.option_buildings)
-
-    def perform_basic_checks_on_mod_with_er(self, mods: str | set[str], er_option: int) -> None:
-        if isinstance(mods, str):
-            mods = {mods}
-        world_options = {
-            options.EntranceRandomization: er_option,
-            options.Mods: frozenset(mods),
+            options.Mods: self.mod,
             options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false
         }
-        with solo_multiworld(world_options) as (multi_world, _):
+        with solo_multiworld(world_options, world_caching=False) as (multi_world, _):
             self.assert_basic_checks(multi_world)
 
 
