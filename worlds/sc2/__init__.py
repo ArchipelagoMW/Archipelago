@@ -197,16 +197,22 @@ class SC2World(World):
             slot_data["kerrigan_presence"] = KerriganPresence.option_not_present
 
         # vbn save info here
-        # print("Yo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        mission_item_classification: Dict[str, ItemClassification] = {}
-        for location in self.multiworld.get_locations(self.player):
-            loc: Location = self.multiworld.get_location(location.name, self.player)
-            # print(location.name, loc.item.classification)
-            # vbn by pass event?
-            # assert loc.item
-            # vbn Format?
-            mission_item_classification[location.name] = loc.item.classification.as_flag()
-        slot_data["mission_item_classification"] = mission_item_classification
+        if get_option_value(self, "mission_order_scouting") > 0:
+            mission_item_classification: Dict[str, ItemClassification] = {}
+            for location in self.multiworld.get_locations(self.player):
+                # Victory location are duplicated as event with the Beat prefix. Ignore them.
+                if not location.name.startswith("Beat"):
+                    loc: Location = self.multiworld.get_location(location.name, self.player)
+                    # Ensure that if there are multiple items given for ending a mission and that at least 
+                    # one is progressive, the flag kept is progressive.
+                    # Assuming that the location added are always after the basic one and named Cache. 
+                    if " Cache (" in location.name:
+                        location_name = location.name.split(" Cache")[0]
+                        if mission_item_classification[location_name] != 1:
+                            mission_item_classification[location_name] = loc.item.classification.as_flag() 
+                    else:
+                        mission_item_classification[location.name] = loc.item.classification.as_flag()
+            slot_data["mission_item_classification"] = mission_item_classification
 
         # Disable trade if there is no trade partner
         traders = [

@@ -797,9 +797,8 @@ class SC2Context(CommonContext):
             self.trade_enabled = args["slot_data"].get("enable_void_trade", EnableVoidTrade.option_false)
             self.difficulty_damage_modifier = args["slot_data"].get("difficulty_damage_modifier", DifficultyDamageModifier.option_true)
             # vbn 
-            # print(args["slot_data"]["mission_item_classification"])
+            self.mission_order_scouting = args["slot_data"].get("mission_order_scouting", 0)
             self.mission_item_classification = args["slot_data"].get("mission_item_classification", None)
-            # print(self.mission_item_classification)
 
             if self.required_tactics == RequiredTactics.option_no_logic:
                 # Locking Grant Story Tech/Levels if no logic
@@ -822,7 +821,7 @@ class SC2Context(CommonContext):
 
             self.build_location_to_mission_mapping()
 
-            # vbn
+            # vbn for debug 
             # # Looks for the required maps and mods for SC2. Runs check_game_install_path.
             # maps_present = is_mod_installed_correctly()
             # if os.path.exists(get_metadata_file()):
