@@ -360,7 +360,6 @@ def set_card_rules(world):
                     break
 
             if chosen_rule is None:
-                rule_cards = [x for x in rule.cards if x in starting_cards.keys()]
                 chosen_rule = world.random.choice(rule)
         elif isinstance(rule, CardRule):
             chosen_rule = rule
@@ -1027,21 +1026,41 @@ def backrow_removal():
 
 
 def any_fusion(world):
-    return [build_card_rule_for_fusion(world, f) for f in fusions if f not in not_in_standard_pool]
+    fusion_rules = [build_card_rule_for_fusion(world, f) for f, r in fusions.items()
+                    if f not in not_in_standard_pool and not r.contact_fusion]
+    return [r for r in fusion_rules if r]
 
 
 def build_card_rule_for_fusion(world, fusion_monster: str):
     fusion_data = fusions[fusion_monster]
     materials = list(fusion_data.materials)
     number_of_materials = len(materials)
+    invalid_materials = []
+    for mat in materials:
+        if mat in not_in_standard_pool or cards[mat].card_type == "Fusion":
+            invalid_materials.append(mat)
+    for mat in invalid_materials:
+        materials.remove(mat)
     if fusion_data.replaceable:
         materials.append(world.fusion_sub_of_choice)
         world.random.shuffle(materials)
-        materials = materials[0:number_of_materials]
-    return CardRule(fusion_monster, 1, additional_cards=[
-        InnerCardRule(materials, 1, "each"),
+    if not fusion_data.generic:
+        if len(materials) >= number_of_materials:
+            materials = materials[0:number_of_materials]
+        else:
+            return False
+        return CardRule(fusion_monster, 1, additional_cards=[
+            InnerCardRule(materials, 1, "each"),
+            InnerCardRule(["Polymerization", "Fusion Gate"] + fusion_data.additional_spells, 1)
+        ])
+    elif fusion_data.generic == "Dragon":
+        return CardRule(fusion_monster, 1, additional_cards=[
+            only_dragon(True),
+            InnerCardRule(["Dragon's Mirror"], 1)
+        ])
+    elif fusion_data.generic == "Warrior":
+        InnerCardRule(find_cards_with(types=["Warrior"]), 1),
         InnerCardRule(["Polymerization", "Fusion Gate"] + fusion_data.additional_spells, 1)
-    ])
 
 
 def hero_gate_deck(world):

@@ -4563,6 +4563,12 @@ def non_normal_nisp():
             print(card)
 
 
+def print_fusions():
+    fusions = [name for name, card in cards.items() if card.card_type == "Fusion"]
+    fusions.sort()
+    for fusion in fusions:
+        print(f"        \"{fusion}\": FusionData(\n            \"{fusion}\",\n            [],\n           True\n      ),")
+
 def find_removal():
     forbidden = []
     limited = []
@@ -4598,4 +4604,4 @@ def find_removal():
         for card in unlimted:
             print(f"    \"{card}\",")
 
-spell_check()
+# print_fusions()
