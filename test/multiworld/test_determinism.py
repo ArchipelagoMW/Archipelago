@@ -146,15 +146,13 @@ def multiworld_to_serializable(itempool_before_fill: list[Item], multiworld: Mul
                           for player, items in multiworld.precollected_items.items()}
 
     return {
-        # Options are ordered first because differences in rolled options are likely to affect the rest of generation.
-        "options": options_to_serializable(multiworld),
         "itempool": itempool,
-        "start_inventory": precollected_items,
         "regions": regions,
         "entrances": entrances,
         "locations": locations,
-        # Placements are ordered last because they are likely to be affected by all previous parts of the multiworld.
         "placements": placements,
+        "start_inventory": precollected_items,
+        "options": options_to_serializable(multiworld),
     }
 
 
@@ -173,7 +171,7 @@ class TestDeterministicGeneration(TestCase):
     - Rolled options
     - Item code and classification, and the order of the items in the item pool and start inventory (precollected items)
     - Location address and progress_type, and the order of the locations in the multiworld
-    - Locations within each Region and the order of the locations
+    - Locations within each Region and the order of those locations
     - The parent and connected region of each Entrance
     - The placement of items after post_fill
     """
@@ -188,6 +186,7 @@ class TestDeterministicGeneration(TestCase):
     def tearDownClass(cls):
         # Allow the data to be garbage collected by clearing the dict.
         cls.initial_multiworld_data_cache.clear()
+        super().tearDownClass()
 
     def get_initial_multiworld(self, game: str) -> tuple[int, SerializableMultiWorldData] | tuple[int, None]:
         """
@@ -274,8 +273,12 @@ class TestDeterministicGeneration(TestCase):
                   + "" if msg is None else f" : {msg}")
 
     def assertMultiWorldsEquivalent(self, m1: SerializableMultiWorldData, m2: SerializableMultiWorldData):
-        for key, data1 in m1.items():
+        # Options are checked first because differences in rolled options are likely to affect the rest of generation.
+        # Placements are checked last because they are likely to be affected by all previously checked parts.
+        keys = ("options", "itempool", "start_inventory", "regions", "entrances", "locations", "placements")
+        for key in keys:
             # Type checkers see `key` as str, rather than one of the valid string literals, so disable the inspection.
+            data1 = m1[key]  # type: ignore
             data2 = m2[key]  # type: ignore
             # Iterate dictionaries with list values because comparing lists for equality produces better output than
             # comparing dictionaries for equality when the test fails.
@@ -284,24 +287,25 @@ class TestDeterministicGeneration(TestCase):
                 self.assertIsInstance(data2, list)
                 # These lists are not pre-sorted, so check the counts of each element first.
                 with self.subTest(key + " counts"):
-                    self.assertCountEqual(data1, data2)
+                    self.assertCountEqual(data1, data2, f"{key} counts did not match")
                     # Now check that the order is the same by checking for equality.
                     with self.subTest(key + " order"):
-                        self.assertListEqual(data1, data2)
+                        self.assertListEqual(data1, data2, f"{key} order did not match")
             else:
+                # All other serializable data should be dicts keyed by player ID.
                 self.assertIsInstance(data1, dict)
                 self.assertIsInstance(data2, dict)
                 self.assertEqual(data1.keys(), data2.keys())
                 if key in {"locations", "start_inventory"}:
-                    for player, v1 in data1.items():
-                        v2 = data2[player]
-                        # These lists are not pre-sorted, so check the counts of each element first.
-                        self.assertIsInstance(v1, list)
-                        self.assertIsInstance(v2, list)
-                        with self.subTest(key + " counts"):
+                    with self.subTest(key + " counts"):
+                        for player, v1 in data1.items():
+                            v2 = data2[player]
+                            # The order of these lists is important, so they are provided in their original order.
                             self.assertCountEqual(v1, v2, f"{key} counts did not match for player: {player}")
+                        with self.subTest(key + " order"):
                             # Now check that the order is the same by checking for equality.
-                            with self.subTest(key + " order"):
+                            for player, v1 in data1.items():
+                                v2 = data2[player]
                                 self.assertListEqual(v1, v2, f"{key} order did not match for player: {player}")
                 elif key == "placements":
                     with self.subTest(key):
@@ -309,9 +313,7 @@ class TestDeterministicGeneration(TestCase):
                             v2 = data2[player]
                             # Placements lists are pre-sorted by name, so that not being in a nondeterministic order
                             # does not affect the comparison.
-                            self.assertIsInstance(v1, list)
-                            self.assertIsInstance(v2, list)
-                            self.assertEqual(v1, v2, f"{key} did not match for player: {player}")
+                            self.assertListEqual(v1, v2, f"{key} did not match for player: {player}")
                 elif key in {"options", "regions", "entrances"}:
                     with self.subTest(key):
                         for player, v1 in data1.items():
