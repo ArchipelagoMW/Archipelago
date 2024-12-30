@@ -2,8 +2,6 @@ import logging
 import math
 from typing import TYPE_CHECKING, List, Optional, Set
 
-from numpy.matlib import empty
-
 from MultiServer import mark_raw
 from NetUtils import ClientStatus, NetworkItem
 
@@ -27,6 +25,7 @@ rarity_sort_order  = {
     "Common": 5,
 }
 
+
 @mark_raw
 def cmd_booster_pack(self, booster_name: str = ""):
     """Print Booster Contents"""
@@ -49,6 +48,27 @@ def cmd_booster_pack(self, booster_name: str = ""):
     client.print_pack = booster_name
 
 
+@mark_raw
+def cmd_search_card(self, card_name: str = ""):
+    """What packs can this card be found in"""
+    if self.ctx.game != "Yu-Gi-Oh! 2006":
+        logger.warning("This command can only be used when playing Yu-Gi-Oh! 2006.")
+        return
+    card_name = card_name.upper()
+    card_found = False
+    for name in cards.keys():
+        if name.upper() == card_name:
+            card_found = True
+            card_name = name
+    if not card_found:
+        logger.warning("Card not found")
+        return
+    client = self.ctx.client_handler
+    assert isinstance(client, YuGiOh2006Client)
+    logger.info("Send request for " + card_name)
+    client.card_search = card_name
+
+
 class YuGiOh2006Client(BizHawkClient):
     game = "Yu-Gi-Oh! 2006"
     system = "GBA"
@@ -57,6 +77,7 @@ class YuGiOh2006Client(BizHawkClient):
     goal_flag: int
     rom_slot_name: Optional[str]
     print_pack: str = ""
+    card_search: str = ""
     progression_cards: List[int] = []
 
     def __init__(self) -> None:
@@ -91,6 +112,8 @@ class YuGiOh2006Client(BizHawkClient):
         ctx.want_slot_data = True
         if "boosterpack" not in ctx.command_processor.commands:
             ctx.command_processor.commands["boosterpack"] = cmd_booster_pack
+        if "search_card" not in ctx.command_processor.commands:
+            ctx.command_processor.commands["search_card"] = cmd_search_card
         return True
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
@@ -195,6 +218,7 @@ class YuGiOh2006Client(BizHawkClient):
                 logger.info("Printing Pack: " + self.print_pack)
                 pack_data = booster_pack_data[self.print_pack]
                 pointer = pack_data.pointer
+                # two separate bizhawk read cause I got buggy results otherwise
                 raw_data = await bizhawk.read(
                     ctx.bizhawk_ctx, [
                         (pointer, pack_data.cards_in_set * 4, "ROM")
@@ -207,7 +231,6 @@ class YuGiOh2006Client(BizHawkClient):
                     ]
                 )
                 collection_data = raw_data[0]
-                logger.info("   \"" + self.print_pack + "\": {")
                 booster_cards: List[BoosterCard] = []
                 for i in range(0, pack_data.cards_in_set):
                     cid = int.from_bytes(boosterpack_data[i * 4: i * 4 + 2], "little")
@@ -233,6 +256,29 @@ class YuGiOh2006Client(BizHawkClient):
                                         "type": "color", "color": card.color}])
                 self.print_pack = ""
 
+            if self.card_search:
+                logger.info("Searching for Card: " + self.card_search)
+                card_data = cards[self.card_search]
+                found_in_pack: List[str] = []
+                for name, booster in booster_pack_data.items():
+                    pointer = booster.pointer
+                    raw_data = await bizhawk.read(
+                        ctx.bizhawk_ctx, [
+                            (pointer, booster.cards_in_set * 4, "ROM")
+                        ]
+                    )
+                    boosterpack_data = raw_data[0]
+                    for i in range(0, booster.cards_in_set):
+                        cid = int.from_bytes(boosterpack_data[i * 4: i * 4 + 2], "little")
+                        if cid == card_data.starter_id:
+                            found_in_pack.append(name)
+                if len(found_in_pack) > 0:
+                    logger.info("Can be found in:")
+                    for found_pack in found_in_pack:
+                        logger.info(found_pack)
+                else:
+                    logger.info("Cannot be found in any pack")
+                self.card_search = ""
         except bizhawk.RequestFailedError:
             # Exit handler and return to main loop to reconnect.
             pass
