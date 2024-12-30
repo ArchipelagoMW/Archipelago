@@ -13,7 +13,10 @@ from .item.item_tables import (
 )
 from . import location_groups
 from .item import FilterItem, ItemFilterFlags, StarcraftItem, item_groups, item_names, item_tables, item_parents
-from .locations import get_locations, DEFAULT_LOCATION_LIST, get_location_types, get_location_flags, get_plando_locations
+from .locations import (
+	get_locations, DEFAULT_LOCATION_LIST, get_location_types, get_location_flags, 
+    get_plando_locations, LocationType, lookup_location_id_to_type
+)
 from .mission_order.layout_types import LayoutType, Gauntlet
 from .options import (
     get_option_value, LocationInclusion, KerriganLevelItemDistribution,
@@ -199,18 +202,17 @@ class SC2World(World):
         if self.options.mission_order_scouting != MissionOrderScouting.option_none:
             mission_item_classification: Dict[str, ItemClassification] = {}
             for location in self.multiworld.get_locations(self.player):
-                # Victory location are duplicated as event with the Beat prefix. Ignore them.
+                # Event do not hold items
                 if not location.is_event:
-                    loc: Location = self.multiworld.get_location(location.name, self.player)
                     # Ensure that if there are multiple items given for finishing a mission and that at least 
                     # one is progressive, the flag kept is progressive.
                     # Assuming that the location added are always after the basic one and named Cache. 
-                    if " Cache (" in location.name:
+                    if lookup_location_id_to_type[location.address] == LocationType.VICTORY_CACHE:
                         location_name = location.name.split(" Cache")[0]
                         if mission_item_classification[location_name] != ItemClassification.progression:
-                            mission_item_classification[location_name] = loc.item.classification.as_flag() 
+                            mission_item_classification[location_name] = location.item.classification.as_flag() 
                     else:
-                        mission_item_classification[location.name] = loc.item.classification.as_flag()
+                        mission_item_classification[location.name] = location.item.classification.as_flag()
             slot_data["mission_item_classification"] = mission_item_classification
 
         # Disable trade if there is no trade partner
