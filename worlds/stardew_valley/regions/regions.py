@@ -1,6 +1,6 @@
 from typing import Protocol
 
-from BaseClasses import Region, Entrance
+from BaseClasses import Region
 from . import vanilla_data, mods
 from .entrance_rando import create_player_randomization_flag, create_entrance_rando_target
 from .model import ConnectionData, RegionData
@@ -14,8 +14,7 @@ class RegionFactory(Protocol):
         raise NotImplementedError
 
 
-def create_regions(region_factory: RegionFactory, world_options: StardewValleyOptions, content: StardewContent) \
-        -> tuple[dict[str, Region], dict[str, Entrance]]:
+def create_regions(region_factory: RegionFactory, world_options: StardewValleyOptions, content: StardewContent) -> dict[str, Region]:
     connection_data_by_name, region_data_by_name = create_connections_and_regions(content.registered_packs)
 
     regions_by_name: dict[str: Region] = {
@@ -23,9 +22,6 @@ def create_regions(region_factory: RegionFactory, world_options: StardewValleyOp
         for region_name in region_data_by_name
     }
 
-    entrances_by_name: dict[str: Entrance] = {}
-
-    # Not really a mask... :thinking:
     randomization_flag = create_player_randomization_flag(world_options.entrance_randomization, content)
 
     for region_name, region_data in region_data_by_name.items():
@@ -40,7 +36,7 @@ def create_regions(region_factory: RegionFactory, world_options: StardewValleyOp
             else:
                 origin_region.connect(destination_region, connection_data.name)
 
-    return regions_by_name, entrances_by_name
+    return regions_by_name
 
 
 def create_connections_and_regions(active_content_packs: set[str]) -> tuple[dict[str, ConnectionData], dict[str, RegionData]]:
@@ -50,6 +46,12 @@ def create_connections_and_regions(active_content_packs: set[str]) -> tuple[dict
     return connections_by_name, regions_by_name
 
 
+def create_all_regions(active_content_packs: set[str]) -> dict[str, RegionData]:
+    current_regions_by_name = create_vanilla_regions(active_content_packs)
+    mods.modify_regions_for_mods(current_regions_by_name, active_content_packs)
+    return current_regions_by_name
+
+
 def create_vanilla_regions(active_content_packs: set[str]) -> dict[str, RegionData]:
     if ginger_island_content_pack.name in active_content_packs:
         return {**vanilla_data.regions_with_ginger_island_by_name}
@@ -57,10 +59,10 @@ def create_vanilla_regions(active_content_packs: set[str]) -> dict[str, RegionDa
         return {**vanilla_data.regions_without_ginger_island_by_name}
 
 
-def create_all_regions(active_content_packs: set[str]) -> dict[str, RegionData]:
-    current_regions_by_name = create_vanilla_regions(active_content_packs)
-    mods.modify_regions_for_mods(current_regions_by_name, active_content_packs)
-    return current_regions_by_name
+def create_all_connections(active_content_packs: set[str]) -> dict[str, ConnectionData]:
+    connections = create_vanilla_connections(active_content_packs)
+    mods.modify_connections_for_mods(connections, active_content_packs)
+    return connections
 
 
 def create_vanilla_connections(active_content_packs: set[str]) -> dict[str, ConnectionData]:
@@ -68,9 +70,3 @@ def create_vanilla_connections(active_content_packs: set[str]) -> dict[str, Conn
         return {**vanilla_data.connections_with_ginger_island_by_name}
     else:
         return {**vanilla_data.connections_without_ginger_island_by_name}
-
-
-def create_all_connections(active_content_packs: set[str]) -> dict[str, ConnectionData]:
-    connections = create_vanilla_connections(active_content_packs)
-    mods.modify_connections_for_mods(connections, active_content_packs)
-    return connections
