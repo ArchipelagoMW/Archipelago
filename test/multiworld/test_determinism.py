@@ -2,11 +2,12 @@ import random
 from typing import TypedDict, ClassVar
 from unittest import TestCase
 
-import worlds
 from BaseClasses import Location, MultiWorld, Item, Entrance, Region, ItemClassification, LocationProgressType
 from Fill import distribute_items_restrictive
 from Options import Removed
+import worlds
 from worlds.AutoWorld import AutoWorldRegister, call_all
+
 from ..general import setup_multiworld, gen_steps
 
 
@@ -47,7 +48,7 @@ class SerializableMultiWorldData(TypedDict):
     locations: dict[int, list[SerializableLocationData]]
     placements: dict[int, list[tuple[str, SerializableItemData | None]]]
     start_inventory: dict[int, list[SerializableItemData]]
-    options: dict[int, list[dict[str, str]]]
+    options: dict[int, dict[str, str]]
 
 
 def item_to_serializable(item: Item, item_memo: dict[int, SerializableItemData]) -> SerializableItemData:
@@ -85,11 +86,10 @@ def region_to_serializable(reg: Region) -> SerializableRegionData:
     return {"name": reg.name, "locations": [loc.name for loc in reg.locations]}
 
 
-def options_to_serializable(multiworld: MultiWorld) -> dict[int, list[dict[str, str]]]:
+def options_to_serializable(multiworld: MultiWorld) -> dict[int, dict[str, str]]:
     # Based on Options.dump_player_options.
     all_options = {}
     for player in multiworld.player_ids:
-        output = []
         world = multiworld.worlds[player]
         player_output = {
             "Game": multiworld.game[player],
@@ -100,8 +100,7 @@ def options_to_serializable(multiworld: MultiWorld) -> dict[int, list[dict[str, 
                 continue
             display_name = getattr(option, "display_name", option_key)
             player_output[display_name] = getattr(world.options, option_key).current_option_name
-        output.append(player_output)
-        all_options[player] = output
+        all_options[player] = player_output
     return all_options
 
 
@@ -248,19 +247,41 @@ class TestDeterministicGeneration(TestCase):
         return hash("This string is hashed to check that one process' hash seed differs from another")
 
     def assertMultiWorldsEquivalent(self, m1: SerializableMultiWorldData, m2: SerializableMultiWorldData):
-        for key, data_current in m1.items():
+        for key, data1 in m1.items():
             # Type checkers see `key` as str, rather than one of the valid string literals, so disable the inspection.
-            data_other = m2[key]  # type: ignore
-            with self.subTest(key):
-                # Iterate dictionaries with list values because comparing lists for equality produces better output than
-                # comparing dictionaries for equality when the test fails.
-                if isinstance(data_current, dict) and isinstance(data_other, dict):
-                    self.assertEqual(data_current.keys(), data_other.keys())
-                    for k_current, v_current in data_current.items():
-                        v_other = data_other[k_current]
-                        self.assertEqual(v_current, v_other)
+            data2 = m2[key]  # type: ignore
+            # Iterate dictionaries with list values because comparing lists for equality produces better output than
+            # comparing dictionaries for equality when the test fails.
+            if key == "itempool":
+                self.assertIsInstance(data1, list)
+                self.assertIsInstance(data2, list)
+                # These lists are not pre-sorted, so check the counts of each element first.
+                with self.subTest(key + " counts"):
+                    self.assertCountEqual(data1, data2)
+                    # Now check that the order is the same by checking for equality.
+                    with self.subTest(key + " order"):
+                        self.assertListEqual(data1, data2)
+            else:
+                self.assertIsInstance(data1, dict)
+                self.assertIsInstance(data2, dict)
+                self.assertEqual(data1.keys(), data2.keys())
+                if key in {"locations", "start_inventory"}:
+                    for player, v1 in data1.items():
+                        v2 = data2[player]
+                        # These lists are not pre-sorted, so check the counts of each element first.
+                        self.assertIsInstance(v1, list)
+                        self.assertIsInstance(v2, list)
+                        with self.subTest(key + " counts"):
+                            self.assertCountEqual(v1, v2, f"{key} counts did not match for player: {player}")
+                            # Now check that the order is the same by checking for equality.
+                            with self.subTest(key + " order"):
+                                self.assertListEqual(v1, v2, f"{key} order did not match for player: {player}")
                 else:
-                    self.assertEqual(data_current, data_other)
+                    self.assertIn(key, {"regions", "entrances", "placements", "options"})
+                    for player, v1 in data1.items():
+                        v2 = data2[player]
+                        with self.subTest(key):
+                            self.assertEqual(v1, v2, f"{key} did not match for player: {player}")
 
     def test_hash_determinism(self) -> None:
         """
