@@ -1,11 +1,12 @@
 from math import floor
-from typing import TYPE_CHECKING, Set, Optional
+from typing import TYPE_CHECKING, Set, Optional, Callable
 
-from BaseClasses import  CollectionState
+from BaseClasses import CollectionState, Location
 from .options import (
     get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap,
-    GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, SpearOfAdunAutonomouslyCastAbilityPresence,
-    get_enabled_campaigns, MissionOrder, EnableMorphling, get_enabled_races
+    GrantStoryTech, GrantStoryLevels, SpearOfAdunAutonomouslyCastAbilityPresence,
+    SpearOfAdunPresence, MissionOrder, EnableMorphling,
+    get_enabled_campaigns, get_enabled_races,
 )
 from .item.item_tables import (
     tvx_defense_ratings, tvz_defense_ratings, kerrigan_actives, tvx_air_defense_ratings,
@@ -279,6 +280,37 @@ class SC2Logic:
                 )
             )
         )
+    
+    def terran_any_anti_air(self, state: CollectionState) -> bool:
+        return (
+            state.has_any((
+                # Barracks
+                item_names.MARINE, item_names.WAR_PIGS, item_names.SON_OF_KORHAL,
+                item_names.DOMINION_TROOPER,
+                item_names.GHOST, item_names.SPECTRE, item_names.EMPERORS_SHADOW,
+                # Factory
+                item_names.GOLIATH, item_names.SPARTAN_COMPANY, item_names.BULWARK_COMPANY,
+                item_names.CYCLONE, item_names.WIDOW_MINE,
+                item_names.THOR, item_names.JOTUN, item_names.BLACKHAMMER,
+                # Ships
+                item_names.WRAITH, item_names.WINGED_NIGHTMARES, item_names.NIGHT_HAWK,
+                item_names.VIKING, item_names.HELS_ANGELS, item_names.SKY_FURY,
+                item_names.LIBERATOR, item_names.MIDNIGHT_RIDERS, item_names.EMPERORS_GUARDIAN,
+                item_names.VALKYRIE, item_names.BRYNHILDS,
+                item_names.BATTLECRUISER, item_names.JACKSONS_REVENGE, item_names.PRIDE_OF_AUGUSTRGRAD,
+                item_names.RAVEN,
+                # Buildings
+                item_names.MISSILE_TURRET,
+            ), self.player)
+            or state.has_all((item_names.REAPER, item_names.REAPER_JET_PACK_OVERDRIVE), self.player)
+            or state.has_all((item_names.PLANETARY_FORTRESS, item_names.PLANETARY_FORTRESS_ADVANCED_TARGETING), self.player)
+            or (
+                state.has(item_names.MEDIVAC, self.player)
+                and state.has_any((item_names.SIEGE_TANK, item_names.SIEGE_BREAKERS, item_names.SHOCK_DIVISION), self.player)
+                and state.count(item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK, self.player) >= 2
+            )
+        )
+
 
     def terran_basic_anti_air(self, state: CollectionState) -> bool:
         """
@@ -885,6 +917,29 @@ class SC2Logic:
             or state.has_all({item_names.SCOURGE, item_names.SCOURGE_RESOURCE_EFFICIENCY}, self.player)
             or (self.advanced_tactics and state.has(item_names.INFESTOR, self.player))
         )
+    
+    def zerg_kerrigan_or_any_anti_air(self, state: CollectionState) -> bool:
+        return self.kerrigan_unit_available or self.zerg_any_anti_air(state)
+    
+    def zerg_any_anti_air(self, state: CollectionState) -> bool:
+        return (
+            state.has_any((
+                item_names.HYDRALISK, item_names.SWARM_QUEEN,
+                item_names.BROOD_QUEEN, item_names.MUTALISK, item_names.CORRUPTOR, item_names.SCOURGE,
+                item_names.INFESTOR,
+                item_names.INFESTED_MARINE, item_names.INFESTED_LIBERATOR,
+                item_names.SPORE_CRAWLER, item_names.INFESTED_MISSILE_TURRET,
+                item_names.INFESTED_BUNKER,
+                item_names.HUNTER_KILLERS, item_names.THORNSHELL,
+            ), self.player)
+            or state.has_all((item_names.SWARM_HOST, item_names.SWARM_HOST_PRESSURIZED_GLANDS), self.player)
+            or state.has_all((item_names.ABERRATION, item_names.ABERRATION_PROGRESSIVE_BANELING_LAUNCH), self.player)
+            or state.has_all((item_names.INFESTED_DIAMONDBACK, item_names.INFESTED_DIAMONDBACK_PROGRESSIVE_FUNGAL_SNARE), self.player)
+            or self.morph_ravager(state)
+            or self.morph_viper(state)
+            or self.morph_devourer(state)
+            or (self.morph_guardian(state) and state.has(item_names.GUARDIAN_PRIMAL_ADAPTATION, self.player))
+        )
 
     def zerg_basic_anti_air(self, state: CollectionState) -> bool:
         return self.zerg_basic_kerriganless_anti_air(state) or self.kerrigan_unit_available
@@ -931,6 +986,12 @@ class SC2Logic:
                         or state.has(item_names.INFESTED_BUNKER, self.player)
                         or state.count(item_names.INFESTED_SIEGE_TANK_PROGRESSIVE_AUTOMATED_MITOSIS, self.player) >= (1 if self.advanced_tactics else 2)
                 )
+        )
+
+    def morph_ravager(self, state: CollectionState) -> bool:
+        return (
+            (state.has(item_names.ROACH, self.player) or self.morphling_enabled)
+            and state.has(item_names.ROACH_RAVAGER_ASPECT, self.player)
         )
 
     def morph_brood_lord(self, state: CollectionState) -> bool:
@@ -1331,6 +1392,61 @@ class SC2Logic:
 
     def protoss_common_unit(self, state: CollectionState) -> bool:
         return state.has_any(self.basic_protoss_units, self.player)
+    
+    def protoss_any_anti_air_unit_or_soa_any_protoss(self, state: CollectionState) -> bool:
+        return (
+            self.protoss_any_anti_air_unit(state)
+            or (
+                self.spear_of_adun_presence in (SpearOfAdunPresence.option_everywhere, SpearOfAdunPresence.option_protoss)
+                and self.protoss_any_anti_air_soa(state)
+            )
+        )
+    
+    def protoss_any_anti_air_unit_or_soa(self, state: CollectionState) -> bool:
+        return self.protoss_any_anti_air_unit(state) or self.protoss_any_anti_air_soa(state)
+
+    def protoss_any_anti_air_soa(self, state: CollectionState) -> bool:
+        return (
+            state.has_any((
+                item_names.SOA_ORBITAL_STRIKE, item_names.SOA_SOLAR_LANCE,
+                item_names.SOA_SOLAR_BOMBARDMENT, item_names.SOA_PURIFIER_BEAM,
+                item_names.SOA_PYLON_OVERCHARGE,
+            ), self.player)
+            or state.has(item_names.SOA_PROGRESSIVE_PROXY_PYLON, self.player, 2)  # Warp-In Reinforcements
+        )
+
+    def protoss_any_anti_air_unit(self, state: CollectionState) -> bool:
+        return (
+            state.has_any((
+                # Gateway
+                item_names.STALKER, item_names.SLAYER, item_names.INSTIGATOR,
+                item_names.DRAGOON, item_names.ADEPT,
+                item_names.SENTRY, item_names.ENERGIZER,
+                item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT, item_names.DARK_ARCHON,
+                item_names.DARK_TEMPLAR,  # Archon, Dark Archon Meld
+                # Stargate
+                item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR,
+                item_names.SCOUT, item_names.ARBITER,
+                item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY,
+                item_names.CARRIER, item_names.SKYLORD, item_names.TEMPEST,
+                item_names.MOTHERSHIP,
+                # Buildings
+                item_names.NEXUS_OVERCHARGE, item_names.PHOTON_CANNON, item_names.KHAYDARIN_MONOLITH,
+            ), self.player)
+            or state.has_all((item_names.SUPPLICANT, item_names.SUPPLICANT_ZENITH_PITCH), self.player)
+            or state.has_all((item_names.WARP_PRISM, item_names.WARP_PRISM_PHASE_BLASTER), self.player)
+            or state.has_all((item_names.WRATHWALKER, item_names.WRATHWALKER_AERIAL_TRACKING), self.player)
+            or state.has_all((item_names.DISRUPTOR, item_names.DISRUPTOR_PERFECTED_POWER), self.player)
+            or state.has_all((item_names.IMMORTAL, item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS), self.player)
+            or (state.has(item_names.ANNIHILATOR, self.player)
+                and state.has_any((
+                    item_names.ANNIHILATOR_AERIAL_TRACKING,
+                    item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS,
+                ), self.player)
+            )
+            or state.has_all((item_names.SKIRMISHER, item_names.SKIRMISHER_PEER_CONTEMPT), self.player)
+            or state.has_all((item_names.TRIREME, item_names.TRIREME_SOLAR_BEAM), self.player)
+        )
 
     def protoss_basic_anti_air(self, state: CollectionState) -> bool:
         return (
@@ -2096,6 +2212,13 @@ class SC2Logic:
             )
         else:
             return state.has(item_names.MUTALISK, self.player) and self.zerg_competent_comp(state)
+    
+    def nova_any_nobuild_damage(self, state: CollectionState) -> bool:
+        return state.has_any((
+            item_names.NOVA_C20A_CANISTER_RIFLE, item_names.NOVA_HELLFIRE_SHOTGUN, item_names.NOVA_PLASMA_RIFLE,
+            item_names.NOVA_MONOMOLECULAR_BLADE, item_names.NOVA_BLAZEFIRE_GUNBLADE,
+            item_names.NOVA_PULSE_GRENADES, item_names.NOVA_DOMINATION,
+        ), self.player)
 
     def nova_any_weapon(self, state: CollectionState) -> bool:
         return state.has_any({
@@ -2249,6 +2372,18 @@ class SC2Logic:
                 )
             )
         )
+    
+    def enemy_intelligence_cliff_garrison_and_nova_mobility(self, state: CollectionState) -> bool:
+        return (
+            self.enemy_intelligence_cliff_garrison(state)
+            and (
+                self.nova_any_nobuild_damage(state)
+                or (
+                    state.has(item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE, self.player, 2)
+                    and state.has_any((item_names.NOVA_FLASHBANG_GRENADES, item_names.NOVA_BLINK), self.player)
+                )
+            )
+        )
 
     def trouble_in_paradise_requirement(self, state: CollectionState) -> bool:
         return (
@@ -2307,6 +2442,15 @@ class SC2Logic:
         return state.has_any({
             item_names.NOVA_DOMINATION, item_names.NOVA_BLINK, item_names.NOVA_JUMP_SUIT_MODULE
         }, self.player)
+    
+    def enemy_shadow_nova_damage_and_blazefire_unlock(self, state: CollectionState) -> bool:
+        return (
+            self.nova_any_nobuild_damage(state)
+            and (
+                state.has(item_names.NOVA_BLINK, self.player)
+                or state.has_all((item_names.NOVA_HOLO_DECOY, item_names.NOVA_DOMINATION), self.player)
+            )
+        )
 
     def enemy_shadow_domination(self, state: CollectionState) -> bool:
         return (
@@ -2394,10 +2538,12 @@ class SC2Logic:
         self.basic_terran_units = get_basic_units(self.logic_level, SC2Race.TERRAN)
         self.basic_zerg_units = get_basic_units(self.logic_level, SC2Race.ZERG)
         self.basic_protoss_units = get_basic_units(self.logic_level, SC2Race.PROTOSS)
+        self.spear_of_adun_presence = SpearOfAdunPresence.default if world is None else world.options.spear_of_adun_presence.value
         self.spear_of_adun_autonomously_cast_presence = get_option_value(world, "spear_of_adun_autonomously_cast_ability_presence")
         self.enabled_campaigns = get_enabled_campaigns(world)
         self.mission_order = get_option_value(world, "mission_order")
         self.generic_upgrade_missions = get_option_value(world, "generic_upgrade_missions")
+
 
 def get_basic_units(logic_level: int, race: SC2Race) -> Set[str]:
     if logic_level == RequiredTactics.option_no_logic:
@@ -2406,3 +2552,42 @@ def get_basic_units(logic_level: int, race: SC2Race) -> Set[str]:
         return advanced_basic_units[race]
     else:
         return basic_units[race]
+
+
+def has_terran_units(player: int, target: int) -> Callable[['CollectionState'], bool]:
+    def _has_terran_units(state: CollectionState) -> bool:
+        return (
+            state.count_from_list_unique(item_groups.terran_units + item_groups.terran_buildings, player) >= target
+        )
+    return _has_terran_units
+
+
+def has_zerg_units(player: int, target: int) -> Callable[['CollectionState'], bool]:
+    def _has_zerg_units(state: CollectionState) -> bool:
+        return (
+            state.count_from_list_unique(item_groups.zerg_units + item_groups.zerg_buildings, player) >= target
+        )
+    return _has_zerg_units
+
+
+def has_protoss_units(player: int, target: int) -> Callable[['CollectionState'], bool]:
+    def _has_protoss_units(state: CollectionState) -> bool:
+        return (
+            state.count_from_list_unique(
+                item_groups.protoss_units
+                + item_groups.protoss_buildings
+                + [item_names.NEXUS_OVERCHARGE],
+                player
+            ) >= target
+        )
+    return _has_protoss_units
+
+
+def has_race_units(player: int, target: int, race: SC2Race) -> Callable[['CollectionState'], bool]:
+    if race == SC2Race.TERRAN:
+        return has_terran_units(player, target)
+    if race == SC2Race.ZERG:
+        return has_zerg_units(player, target)
+    if race == SC2Race.PROTOSS:
+        return has_protoss_units(player, target)
+    return Location.access_rule

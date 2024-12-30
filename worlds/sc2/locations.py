@@ -58,6 +58,7 @@ class LocationData(NamedTuple):
     type: LocationType
     rule: Callable[['CollectionState'], bool] = Location.access_rule
     flags: LocationFlag = LocationFlag.NONE
+    hard_rule: Optional[Callable[['CollectionState'], bool]] = None
 
 
 def make_location_data(
@@ -67,8 +68,9 @@ def make_location_data(
     type: LocationType,
     rule: Callable[['CollectionState'], bool] = Location.access_rule,
     flags: LocationFlag = LocationFlag.NONE,
+    hard_rule: Optional[Callable[['CollectionState'], bool]] = None,
 ) -> LocationData:
-    return LocationData(region, f'{region}: {name}', code, type, rule, flags)
+    return LocationData(region, f'{region}: {name}', code, type, rule, flags, hard_rule)
 
 
 def get_location_types(world: 'SC2World', inclusion_type: int) -> Set[LocationType]:
@@ -106,7 +108,6 @@ def get_location_flags(world: 'SC2World', inclusion_type: int) -> LocationFlag:
 
 def get_plando_locations(world: World) -> List[str]:
     """
-
     :param multiworld:
     :param player:
     :return: A list of locations affected by a plando in a world
@@ -253,7 +254,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.terran_outbreak_requirement
         ),
         make_location_data(SC2Mission.SAFE_HAVEN.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 600, LocationType.VICTORY,
-            logic.terran_safe_haven_requirement
+            logic.terran_safe_haven_requirement,
+            hard_rule=logic.terran_any_anti_air,
         ),
         make_location_data(SC2Mission.SAFE_HAVEN.mission_name, "North Nexus", SC2WOL_LOC_ID_OFFSET + 601, LocationType.EXTRA,
             logic.terran_safe_haven_requirement
@@ -265,13 +267,16 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.terran_safe_haven_requirement
         ),
         make_location_data(SC2Mission.SAFE_HAVEN.mission_name, "First Terror Fleet", SC2WOL_LOC_ID_OFFSET + 604, LocationType.VANILLA,
-            logic.terran_safe_haven_requirement
+            logic.terran_safe_haven_requirement,
+            hard_rule=logic.terran_any_anti_air,
         ),
         make_location_data(SC2Mission.SAFE_HAVEN.mission_name, "Second Terror Fleet", SC2WOL_LOC_ID_OFFSET + 605, LocationType.VANILLA,
-            logic.terran_safe_haven_requirement
+            logic.terran_safe_haven_requirement,
+            hard_rule=logic.terran_any_anti_air,
         ),
         make_location_data(SC2Mission.SAFE_HAVEN.mission_name, "Third Terror Fleet", SC2WOL_LOC_ID_OFFSET + 606, LocationType.VANILLA,
-            logic.terran_safe_haven_requirement
+            logic.terran_safe_haven_requirement,
+            hard_rule=logic.terran_any_anti_air,
         ),
         make_location_data(SC2Mission.HAVENS_FALL.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 700, LocationType.VICTORY,
             lambda state: (
@@ -532,7 +537,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.terran_survives_rip_field
         ),
         make_location_data(SC2Mission.MAW_OF_THE_VOID.mission_name, "Mothership", SC2WOL_LOC_ID_OFFSET + 1206, LocationType.EXTRA,
-            logic.terran_survives_rip_field
+            logic.terran_survives_rip_field,
+            hard_rule=logic.terran_any_anti_air,
         ),
         make_location_data(SC2Mission.MAW_OF_THE_VOID.mission_name, "Expansion Rip Field Generator", SC2WOL_LOC_ID_OFFSET + 1207, LocationType.EXTRA,
             lambda state: adv_tactics or logic.terran_survives_rip_field(state)
@@ -937,7 +943,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.terran_competent_comp
         ),
         make_location_data(SC2Mission.SHATTER_THE_SKY.mission_name, "Leviathan", SC2WOL_LOC_ID_OFFSET + 2805, LocationType.VANILLA,
-            logic.terran_competent_comp
+            logic.terran_competent_comp,
+            hard_rule=logic.terran_any_anti_air,
         ),
         make_location_data(SC2Mission.SHATTER_THE_SKY.mission_name, "East Hatchery", SC2WOL_LOC_ID_OFFSET + 2806, LocationType.EXTRA,
             logic.terran_competent_comp
@@ -1316,28 +1323,36 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 and logic.zerg_competent_anti_air(state))
         ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 1200, LocationType.VICTORY,
-            logic.supreme_requirement
+            logic.supreme_requirement,
+            hard_rule=logic.supreme_requirement,
         ),
         make_location_data(SC2Mission.SUPREME.mission_name, "First Relic", SC2HOTS_LOC_ID_OFFSET + 1201, LocationType.VANILLA,
-            logic.supreme_requirement
+            logic.supreme_requirement,
+            hard_rule=logic.supreme_requirement,
         ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Second Relic", SC2HOTS_LOC_ID_OFFSET + 1202, LocationType.VANILLA,
-            logic.supreme_requirement
+            logic.supreme_requirement,
+            hard_rule=logic.supreme_requirement,
         ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Third Relic", SC2HOTS_LOC_ID_OFFSET + 1203, LocationType.VANILLA,
-            logic.supreme_requirement
+            logic.supreme_requirement,
+            hard_rule=logic.supreme_requirement,
         ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Fourth Relic", SC2HOTS_LOC_ID_OFFSET + 1204, LocationType.VANILLA,
-            logic.supreme_requirement
+            logic.supreme_requirement,
+            hard_rule=logic.supreme_requirement,
         ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Yagdra", SC2HOTS_LOC_ID_OFFSET + 1205, LocationType.EXTRA,
-            logic.supreme_requirement
+            logic.supreme_requirement,
+            hard_rule=logic.supreme_requirement,
         ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Kraith", SC2HOTS_LOC_ID_OFFSET + 1206, LocationType.EXTRA,
-            logic.supreme_requirement
+            logic.supreme_requirement,
+            hard_rule=logic.supreme_requirement,
         ),
         make_location_data(SC2Mission.SUPREME.mission_name, "Slivan", SC2HOTS_LOC_ID_OFFSET + 1207, LocationType.EXTRA,
-            logic.supreme_requirement
+            logic.supreme_requirement,
+            hard_rule=logic.supreme_requirement,
         ),
         make_location_data(SC2Mission.INFESTED.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 1300, LocationType.VICTORY,
             lambda state: (
@@ -1789,7 +1804,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.protoss_common_unit_anti_armor_air
         ),
         make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION.mission_name, "Titanic Warp Prism", SC2LOTV_LOC_ID_OFFSET + 1206, LocationType.VANILLA,
-            logic.protoss_common_unit_anti_armor_air
+            logic.protoss_common_unit_anti_armor_air,
+            hard_rule=logic.protoss_any_anti_air_unit_or_soa,
         ),
         make_location_data(SC2Mission.THE_INFINITE_CYCLE.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 1300, LocationType.VICTORY,
             logic.the_infinite_cycle_requirement
@@ -1931,22 +1947,27 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.protoss_steps_of_the_rite_requirement
         ),
         make_location_data(SC2Mission.STEPS_OF_THE_RITE.mission_name, "North Mothership", SC2LOTV_LOC_ID_OFFSET + 1706, LocationType.VANILLA,
-            logic.protoss_steps_of_the_rite_requirement
+            logic.protoss_steps_of_the_rite_requirement,
+            hard_rule=logic.protoss_any_anti_air_unit_or_soa,
         ),
         make_location_data(SC2Mission.STEPS_OF_THE_RITE.mission_name, "South Mothership", SC2LOTV_LOC_ID_OFFSET + 1707, LocationType.VANILLA,
-            logic.protoss_steps_of_the_rite_requirement
+            logic.protoss_steps_of_the_rite_requirement,
+            hard_rule=logic.protoss_any_anti_air_unit_or_soa,
         ),
         make_location_data(SC2Mission.RAK_SHIR.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 1800, LocationType.VICTORY,
             logic.protoss_competent_comp
         ),
         make_location_data(SC2Mission.RAK_SHIR.mission_name, "North Slayn Elemental", SC2LOTV_LOC_ID_OFFSET + 1801, LocationType.VANILLA,
-            logic.protoss_competent_comp
+            logic.protoss_competent_comp,
+            hard_rule=logic.protoss_any_anti_air_unit_or_soa,
         ),
         make_location_data(SC2Mission.RAK_SHIR.mission_name, "Southwest Slayn Elemental", SC2LOTV_LOC_ID_OFFSET + 1802, LocationType.VANILLA,
-            logic.protoss_competent_comp
+            logic.protoss_competent_comp,
+            hard_rule=logic.protoss_any_anti_air_unit_or_soa,
         ),
         make_location_data(SC2Mission.RAK_SHIR.mission_name, "East Slayn Elemental", SC2LOTV_LOC_ID_OFFSET + 1803, LocationType.VANILLA,
-            logic.protoss_competent_comp
+            logic.protoss_competent_comp,
+            hard_rule=logic.protoss_any_anti_air_unit_or_soa,
         ),
         make_location_data(SC2Mission.TEMPLAR_S_CHARGE.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 1900, LocationType.VICTORY,
             logic.protoss_templars_charge_requirement
@@ -2052,22 +2073,27 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
 
         # Nova Covert Ops
         make_location_data(SC2Mission.THE_ESCAPE.mission_name, "Victory", SC2NCO_LOC_ID_OFFSET + 100, LocationType.VICTORY,
-            logic.the_escape_requirement
+            logic.the_escape_requirement,
+            hard_rule=logic.nova_any_nobuild_damage,
         ),
         make_location_data(SC2Mission.THE_ESCAPE.mission_name, "Rifle", SC2NCO_LOC_ID_OFFSET + 101, LocationType.VANILLA,
             logic.the_escape_first_stage_requirement
         ),
         make_location_data(SC2Mission.THE_ESCAPE.mission_name, "Grenades", SC2NCO_LOC_ID_OFFSET + 102, LocationType.VANILLA,
-            logic.the_escape_first_stage_requirement
+            logic.the_escape_first_stage_requirement,
+            hard_rule=logic.nova_any_nobuild_damage,
         ),
         make_location_data(SC2Mission.THE_ESCAPE.mission_name, "Agent Delta", SC2NCO_LOC_ID_OFFSET + 103, LocationType.VANILLA,
-            logic.the_escape_requirement
+            logic.the_escape_requirement,
+            hard_rule=logic.nova_any_nobuild_damage,
         ),
         make_location_data(SC2Mission.THE_ESCAPE.mission_name, "Agent Pierce", SC2NCO_LOC_ID_OFFSET + 104, LocationType.VANILLA,
-            logic.the_escape_requirement
+            logic.the_escape_requirement,
+            hard_rule=logic.nova_any_nobuild_damage,
         ),
         make_location_data(SC2Mission.THE_ESCAPE.mission_name, "Agent Stone", SC2NCO_LOC_ID_OFFSET + 105, LocationType.VANILLA,
-            logic.the_escape_requirement
+            logic.the_escape_requirement,
+            hard_rule=logic.nova_any_nobuild_damage,
         ),
         make_location_data(SC2Mission.SUDDEN_STRIKE.mission_name, "Victory", SC2NCO_LOC_ID_OFFSET + 200, LocationType.VICTORY,
             logic.sudden_strike_requirement
@@ -2082,35 +2108,43 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.sudden_strike_requirement
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "Victory", SC2NCO_LOC_ID_OFFSET + 300, LocationType.VICTORY,
-            logic.enemy_intelligence_third_stage_requirement
+            logic.enemy_intelligence_third_stage_requirement,
+            hard_rule=logic.enemy_intelligence_cliff_garrison_and_nova_mobility,
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "West Garrison", SC2NCO_LOC_ID_OFFSET + 301, LocationType.EXTRA,
-            logic.enemy_intelligence_first_stage_requirement
+            logic.enemy_intelligence_first_stage_requirement,
+            hard_rule=logic.enemy_intelligence_garrisonable_unit,
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "Close Garrison", SC2NCO_LOC_ID_OFFSET + 302, LocationType.EXTRA,
-            logic.enemy_intelligence_first_stage_requirement
+            logic.enemy_intelligence_first_stage_requirement,
+            hard_rule=logic.enemy_intelligence_garrisonable_unit,
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "Northeast Garrison", SC2NCO_LOC_ID_OFFSET + 303, LocationType.EXTRA,
-            logic.enemy_intelligence_first_stage_requirement
+            logic.enemy_intelligence_first_stage_requirement,
+            hard_rule=logic.enemy_intelligence_garrisonable_unit,
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "Southeast Garrison", SC2NCO_LOC_ID_OFFSET + 304, LocationType.EXTRA,
             lambda state: (
                 logic.enemy_intelligence_first_stage_requirement(state)
-                and logic.enemy_intelligence_cliff_garrison(state))
+                and logic.enemy_intelligence_cliff_garrison(state)),
+            hard_rule=logic.enemy_intelligence_cliff_garrison,
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "South Garrison", SC2NCO_LOC_ID_OFFSET + 305, LocationType.EXTRA,
-            logic.enemy_intelligence_first_stage_requirement
+            logic.enemy_intelligence_first_stage_requirement,
+            hard_rule=logic.enemy_intelligence_garrisonable_unit,
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "All Garrisons", SC2NCO_LOC_ID_OFFSET + 306, LocationType.VANILLA,
             lambda state: (
                 logic.enemy_intelligence_first_stage_requirement(state)
-                and logic.enemy_intelligence_cliff_garrison(state))
+                and logic.enemy_intelligence_cliff_garrison(state)),
+            hard_rule=logic.enemy_intelligence_cliff_garrison,
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "Forces Rescued", SC2NCO_LOC_ID_OFFSET + 307, LocationType.VANILLA,
             logic.enemy_intelligence_first_stage_requirement
         ),
         make_location_data(SC2Mission.ENEMY_INTELLIGENCE.mission_name, "Communications Hub", SC2NCO_LOC_ID_OFFSET + 308, LocationType.VANILLA,
-            logic.enemy_intelligence_second_stage_requirement
+            logic.enemy_intelligence_second_stage_requirement,
+            hard_rule=logic.enemy_intelligence_cliff_garrison_and_nova_mobility,
         ),
         make_location_data(SC2Mission.TROUBLE_IN_PARADISE.mission_name, "Victory", SC2NCO_LOC_ID_OFFSET + 400, LocationType.VICTORY,
             logic.trouble_in_paradise_requirement
@@ -2243,22 +2277,28 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.flashpoint_far_requirement
         ),
         make_location_data(SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name, "Victory", SC2NCO_LOC_ID_OFFSET + 700, LocationType.VICTORY,
-            logic.enemy_shadow_victory
+            logic.enemy_shadow_victory,
+            hard_rule=logic.nova_any_nobuild_damage,
         ),
         make_location_data(SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name, "Sewers: Domination Visor", SC2NCO_LOC_ID_OFFSET + 701, LocationType.VANILLA,
-            logic.enemy_shadow_domination
+            logic.enemy_shadow_domination,
+            hard_rule=logic.nova_any_nobuild_damage,
         ),
         make_location_data(SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name, "Sewers: Resupply Crate", SC2NCO_LOC_ID_OFFSET + 702, LocationType.EXTRA,
-            logic.enemy_shadow_first_stage
+            logic.enemy_shadow_first_stage,
+            hard_rule=logic.nova_any_nobuild_damage,
         ),
         make_location_data(SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name, "Sewers: Facility Access", SC2NCO_LOC_ID_OFFSET + 703, LocationType.VANILLA,
-            logic.enemy_shadow_first_stage
+            logic.enemy_shadow_first_stage,
+            hard_rule=logic.nova_any_nobuild_damage,
         ),
         make_location_data(SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name, "Facility: Northwest Door Lock", SC2NCO_LOC_ID_OFFSET + 704, LocationType.VANILLA,
-            logic.enemy_shadow_door_controls
+            logic.enemy_shadow_door_controls,
+            hard_rule=logic.nova_any_nobuild_damage,
         ),
         make_location_data(SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name, "Facility: Southeast Door Lock", SC2NCO_LOC_ID_OFFSET + 705, LocationType.VANILLA,
-            logic.enemy_shadow_door_controls
+            logic.enemy_shadow_door_controls,
+            hard_rule=logic.nova_any_nobuild_damage,
         ),
         make_location_data(SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name, "Facility: Blazefire Gunblade", SC2NCO_LOC_ID_OFFSET + 706, LocationType.VANILLA,
             lambda state: (
@@ -2268,28 +2308,36 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                     or (adv_tactics
                         and state.has_all({item_names.NOVA_DOMINATION, item_names.NOVA_HOLO_DECOY, item_names.NOVA_JUMP_SUIT_MODULE}, player)
                     )
-                ))
+                )),
+            hard_rule=logic.enemy_shadow_nova_damage_and_blazefire_unlock,
         ),
         make_location_data(SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name, "Facility: Blink Suit", SC2NCO_LOC_ID_OFFSET + 707, LocationType.VANILLA,
-            logic.enemy_shadow_second_stage
+            logic.enemy_shadow_second_stage,
+            hard_rule=logic.nova_any_nobuild_damage,
         ),
         make_location_data(SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name, "Facility: Advanced Weaponry", SC2NCO_LOC_ID_OFFSET + 708, LocationType.VANILLA,
-            logic.enemy_shadow_second_stage
+            logic.enemy_shadow_second_stage,
+            hard_rule=logic.nova_any_nobuild_damage,
         ),
         make_location_data(SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name, "Facility: Entrance Resupply Crate", SC2NCO_LOC_ID_OFFSET + 709, LocationType.EXTRA,
-            logic.enemy_shadow_first_stage
+            logic.enemy_shadow_first_stage,
+            hard_rule=logic.nova_any_nobuild_damage,
         ),
         make_location_data(SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name, "Facility: West Resupply Crate", SC2NCO_LOC_ID_OFFSET + 710, LocationType.EXTRA,
-            logic.enemy_shadow_second_stage
+            logic.enemy_shadow_second_stage,
+            hard_rule=logic.nova_any_nobuild_damage,
         ),
         make_location_data(SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name, "Facility: North Resupply Crate", SC2NCO_LOC_ID_OFFSET + 711, LocationType.EXTRA,
-            logic.enemy_shadow_second_stage
+            logic.enemy_shadow_second_stage,
+            hard_rule=logic.nova_any_nobuild_damage,
         ),
         make_location_data(SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name, "Facility: East Resupply Crate", SC2NCO_LOC_ID_OFFSET + 712, LocationType.EXTRA,
-            logic.enemy_shadow_second_stage
+            logic.enemy_shadow_second_stage,
+            hard_rule=logic.nova_any_nobuild_damage,
         ),
         make_location_data(SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name, "Facility: South Resupply Crate", SC2NCO_LOC_ID_OFFSET + 713, LocationType.EXTRA,
-            logic.enemy_shadow_second_stage
+            logic.enemy_shadow_second_stage,
+            hard_rule=logic.nova_any_nobuild_damage,
         ),
         make_location_data(SC2Mission.DARK_SKIES.mission_name, "Victory", SC2NCO_LOC_ID_OFFSET + 800, LocationType.VICTORY,
             logic.dark_skies_requirement
@@ -2542,47 +2590,69 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 and logic.protoss_common_unit(state))
         ),
         make_location_data(SC2Mission.SAFE_HAVEN_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1100, LocationType.VICTORY,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            lambda state: logic.zerg_common_unit(state) and
+                          logic.zerg_competent_anti_air(state),
+            hard_rule=logic.zerg_any_anti_air,
+        ),
         make_location_data(SC2Mission.SAFE_HAVEN_Z.mission_name, "North Nexus", SC2_RACESWAP_LOC_ID_OFFSET + 1101, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            lambda state: logic.zerg_common_unit(state) and
+                          logic.zerg_competent_anti_air(state)
+        ),
         make_location_data(SC2Mission.SAFE_HAVEN_Z.mission_name, "East Nexus", SC2_RACESWAP_LOC_ID_OFFSET + 1102, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            lambda state: logic.zerg_common_unit(state) and
+                          logic.zerg_competent_anti_air(state)
+        ),
         make_location_data(SC2Mission.SAFE_HAVEN_Z.mission_name, "South Nexus", SC2_RACESWAP_LOC_ID_OFFSET + 1103, LocationType.EXTRA,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            lambda state: logic.zerg_common_unit(state) and
+                          logic.zerg_competent_anti_air(state)
+        ),
         make_location_data(SC2Mission.SAFE_HAVEN_Z.mission_name, "First Terror Fleet", SC2_RACESWAP_LOC_ID_OFFSET + 1104, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            lambda state: logic.zerg_common_unit(state) and
+                          logic.zerg_competent_anti_air(state),
+            hard_rule=logic.zerg_any_anti_air,
+        ),
         make_location_data(SC2Mission.SAFE_HAVEN_Z.mission_name, "Second Terror Fleet", SC2_RACESWAP_LOC_ID_OFFSET + 1105, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            lambda state: logic.zerg_common_unit(state) and
+                          logic.zerg_competent_anti_air(state),
+            hard_rule=logic.zerg_any_anti_air,
+        ),
         make_location_data(SC2Mission.SAFE_HAVEN_Z.mission_name, "Third Terror Fleet", SC2_RACESWAP_LOC_ID_OFFSET + 1106, LocationType.VANILLA,
-                     lambda state: logic.zerg_common_unit(state) and
-                                   logic.zerg_competent_anti_air(state)),
+            lambda state: logic.zerg_common_unit(state) and
+                          logic.zerg_competent_anti_air(state),
+            hard_rule=logic.zerg_any_anti_air,
+        ),
         make_location_data(SC2Mission.SAFE_HAVEN_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1200, LocationType.VICTORY,
-                     lambda state: logic.protoss_common_unit(state) and
-                                   logic.protoss_competent_anti_air(state)),
+            lambda state: logic.protoss_common_unit(state) and
+                          logic.protoss_competent_anti_air(state),
+            hard_rule=logic.protoss_any_anti_air_unit_or_soa_any_protoss,
+        ),
         make_location_data(SC2Mission.SAFE_HAVEN_P.mission_name, "North Nexus", SC2_RACESWAP_LOC_ID_OFFSET + 1201, LocationType.EXTRA,
-                     lambda state: logic.protoss_common_unit(state) and
-                                   logic.protoss_competent_anti_air(state)),
+            lambda state: logic.protoss_common_unit(state) and
+                          logic.protoss_competent_anti_air(state)
+        ),
         make_location_data(SC2Mission.SAFE_HAVEN_P.mission_name, "East Nexus", SC2_RACESWAP_LOC_ID_OFFSET + 1202, LocationType.EXTRA,
-                     lambda state: logic.protoss_common_unit(state) and
-                                   logic.protoss_competent_anti_air(state)),
+            lambda state: logic.protoss_common_unit(state) and
+                          logic.protoss_competent_anti_air(state)
+        ),
         make_location_data(SC2Mission.SAFE_HAVEN_P.mission_name, "South Nexus", SC2_RACESWAP_LOC_ID_OFFSET + 1203, LocationType.EXTRA,
-                     lambda state: logic.protoss_common_unit(state) and
-                                   logic.protoss_competent_anti_air(state)),
+            lambda state: logic.protoss_common_unit(state) and
+                          logic.protoss_competent_anti_air(state)
+        ),
         make_location_data(SC2Mission.SAFE_HAVEN_P.mission_name, "First Terror Fleet", SC2_RACESWAP_LOC_ID_OFFSET + 1204, LocationType.VANILLA,
-                     lambda state: logic.protoss_common_unit(state) and
-                                   logic.protoss_competent_anti_air(state)),
+            lambda state: logic.protoss_common_unit(state) and
+                          logic.protoss_competent_anti_air(state),
+            hard_rule=logic.protoss_any_anti_air_unit_or_soa_any_protoss,
+        ),
         make_location_data(SC2Mission.SAFE_HAVEN_P.mission_name, "Second Terror Fleet", SC2_RACESWAP_LOC_ID_OFFSET + 1205, LocationType.VANILLA,
-                     lambda state: logic.protoss_common_unit(state) and
-                                   logic.protoss_competent_anti_air(state)),
+            lambda state: logic.protoss_common_unit(state) and
+                          logic.protoss_competent_anti_air(state),
+            hard_rule=logic.protoss_any_anti_air_unit_or_soa_any_protoss,
+        ),
         make_location_data(SC2Mission.SAFE_HAVEN_P.mission_name, "Third Terror Fleet", SC2_RACESWAP_LOC_ID_OFFSET + 1206, LocationType.VANILLA,
-                     lambda state: logic.protoss_common_unit(state) and
-                                   logic.protoss_competent_anti_air(state)),
+            lambda state: logic.protoss_common_unit(state) and
+                          logic.protoss_competent_anti_air(state),
+            hard_rule=logic.protoss_any_anti_air_unit_or_soa_any_protoss,
+        ),
         make_location_data(SC2Mission.HAVENS_FALL_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 1300, LocationType.VICTORY,
             lambda state: (
                 logic.zerg_common_unit(state)
@@ -3098,7 +3168,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.zerg_maw_requirement
         ),
         make_location_data(SC2Mission.MAW_OF_THE_VOID_Z.mission_name, "Mothership", SC2_RACESWAP_LOC_ID_OFFSET + 2306, LocationType.EXTRA,
-            logic.zerg_maw_requirement
+            logic.zerg_maw_requirement,
+            hard_rule=logic.zerg_any_anti_air,
         ),
         make_location_data(SC2Mission.MAW_OF_THE_VOID_Z.mission_name, "Expansion Rip Field Generator", SC2_RACESWAP_LOC_ID_OFFSET + 2307, LocationType.EXTRA,
             logic.zerg_maw_requirement
@@ -3138,7 +3209,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.protoss_maw_requirement
         ),
         make_location_data(SC2Mission.MAW_OF_THE_VOID_P.mission_name, "Mothership", SC2_RACESWAP_LOC_ID_OFFSET + 2406, LocationType.EXTRA,
-            logic.protoss_maw_requirement
+            logic.protoss_maw_requirement,
+            hard_rule=logic.protoss_any_anti_air_unit_or_soa_any_protoss,
         ),
         make_location_data(SC2Mission.MAW_OF_THE_VOID_P.mission_name, "Expansion Rip Field Generator", SC2_RACESWAP_LOC_ID_OFFSET + 2407, LocationType.EXTRA,
             lambda state: adv_tactics or logic.protoss_maw_requirement(state)
@@ -3821,7 +3893,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.zerg_competent_comp
         ),
         make_location_data(SC2Mission.SHATTER_THE_SKY_Z.mission_name, "Leviathan", SC2_RACESWAP_LOC_ID_OFFSET + 5505, LocationType.VANILLA,
-            logic.zerg_competent_comp
+            logic.zerg_competent_comp,
+            hard_rule=logic.zerg_any_anti_air,
         ),
         make_location_data(SC2Mission.SHATTER_THE_SKY_Z.mission_name, "East Hatchery", SC2_RACESWAP_LOC_ID_OFFSET + 5506, LocationType.EXTRA,
             logic.zerg_competent_comp
@@ -3848,7 +3921,8 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.protoss_competent_comp
         ),
         make_location_data(SC2Mission.SHATTER_THE_SKY_P.mission_name, "Leviathan", SC2_RACESWAP_LOC_ID_OFFSET + 5605, LocationType.VANILLA,
-            logic.protoss_competent_comp
+            logic.protoss_competent_comp,
+            hard_rule=logic.protoss_any_anti_air_unit_or_soa_any_protoss,
         ),
         make_location_data(SC2Mission.SHATTER_THE_SKY_P.mission_name, "East Hatchery", SC2_RACESWAP_LOC_ID_OFFSET + 5606, LocationType.EXTRA,
             logic.protoss_competent_comp
@@ -5342,8 +5416,9 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            logic.terran_beats_protoss_deathball
                            ),
         make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_T.mission_name, "Titanic Warp Prism", SC2_RACESWAP_LOC_ID_OFFSET + 12106, LocationType.VANILLA,
-                           logic.terran_beats_protoss_deathball
-                           ),
+            logic.terran_beats_protoss_deathball,
+            hard_rule=logic.terran_any_anti_air,
+        ),
         make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 12200, LocationType.VICTORY,
                            logic.zerg_temple_of_unification_requirement
                            ),
@@ -5363,8 +5438,9 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            logic.zerg_temple_of_unification_requirement
                            ),
         make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_Z.mission_name, "Titanic Warp Prism", SC2_RACESWAP_LOC_ID_OFFSET + 12206, LocationType.VANILLA,
-                           logic.zerg_temple_of_unification_requirement
-                           ),
+            logic.zerg_temple_of_unification_requirement,
+            hard_rule=logic.zerg_any_anti_air,
+        ),
         make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 12500, LocationType.VICTORY,
                            logic.terran_harbinger_of_oblivion_requirement
                            ),
@@ -5592,11 +5668,13 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            logic.terran_steps_of_the_rite_requirement
                            ),
         make_location_data(SC2Mission.STEPS_OF_THE_RITE_T.mission_name, "North Mothership", SC2_RACESWAP_LOC_ID_OFFSET + 13106, LocationType.VANILLA,
-                           logic.terran_steps_of_the_rite_requirement
-                           ),
+            logic.terran_steps_of_the_rite_requirement,
+            hard_rule=logic.terran_any_anti_air,
+        ),
         make_location_data(SC2Mission.STEPS_OF_THE_RITE_T.mission_name, "South Mothership", SC2_RACESWAP_LOC_ID_OFFSET + 13107, LocationType.VANILLA,
-                           logic.terran_steps_of_the_rite_requirement
-                           ),
+            logic.terran_steps_of_the_rite_requirement,
+            hard_rule=logic.terran_any_anti_air,
+        ),
         make_location_data(SC2Mission.STEPS_OF_THE_RITE_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 13200, LocationType.VICTORY,
                            logic.zerg_steps_of_the_rite_requirement
                            ),
@@ -5616,38 +5694,46 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            logic.zerg_steps_of_the_rite_requirement
                            ),
         make_location_data(SC2Mission.STEPS_OF_THE_RITE_Z.mission_name, "North Mothership", SC2_RACESWAP_LOC_ID_OFFSET + 13206, LocationType.VANILLA,
-                           logic.zerg_steps_of_the_rite_requirement
-                           ),
+            logic.zerg_steps_of_the_rite_requirement,
+            hard_rule=logic.zerg_any_anti_air,
+        ),
         make_location_data(SC2Mission.STEPS_OF_THE_RITE_Z.mission_name, "South Mothership", SC2_RACESWAP_LOC_ID_OFFSET + 13207, LocationType.VANILLA,
-                           logic.zerg_steps_of_the_rite_requirement
-                           ),
+            logic.zerg_steps_of_the_rite_requirement,
+            hard_rule=logic.zerg_any_anti_air,
+        ),
         make_location_data(SC2Mission.RAK_SHIR_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 13300, LocationType.VICTORY,
-                           logic.terran_rak_shir_requirement
-                           ),
+            logic.terran_rak_shir_requirement
+        ),
         make_location_data(SC2Mission.RAK_SHIR_T.mission_name, "North Slayn Elemental", SC2_RACESWAP_LOC_ID_OFFSET + 13301, LocationType.VANILLA,
-                           logic.terran_rak_shir_requirement
-                           ),
+            logic.terran_rak_shir_requirement,
+            hard_rule=logic.terran_any_anti_air,
+        ),
         make_location_data(SC2Mission.RAK_SHIR_T.mission_name, "Southwest Slayn Elemental", SC2_RACESWAP_LOC_ID_OFFSET + 13302, LocationType.VANILLA,
-                           logic.terran_rak_shir_requirement
-                           ),
+            logic.terran_rak_shir_requirement,
+            hard_rule=logic.terran_any_anti_air,
+        ),
         make_location_data(SC2Mission.RAK_SHIR_T.mission_name, "East Slayn Elemental", SC2_RACESWAP_LOC_ID_OFFSET + 13303, LocationType.VANILLA,
-                           logic.terran_rak_shir_requirement
-                           ),
+            logic.terran_rak_shir_requirement,
+            hard_rule=logic.terran_any_anti_air,
+        ),
         make_location_data(SC2Mission.RAK_SHIR_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 13400, LocationType.VICTORY,
-                           logic.zerg_rak_shir_requirement
-                           ),
+            logic.zerg_rak_shir_requirement
+        ),
         make_location_data(SC2Mission.RAK_SHIR_Z.mission_name, "North Slayn Elemental", SC2_RACESWAP_LOC_ID_OFFSET + 13401, LocationType.VANILLA,
-                           logic.zerg_rak_shir_requirement
-                           ),
+            logic.zerg_rak_shir_requirement,
+            hard_rule=logic.zerg_any_anti_air,
+        ),
         make_location_data(SC2Mission.RAK_SHIR_Z.mission_name, "Southwest Slayn Elemental", SC2_RACESWAP_LOC_ID_OFFSET + 13402, LocationType.VANILLA,
-                           logic.zerg_rak_shir_requirement
-                           ),
+            logic.zerg_rak_shir_requirement,
+            hard_rule=logic.zerg_any_anti_air,
+        ),
         make_location_data(SC2Mission.RAK_SHIR_Z.mission_name, "East Slayn Elemental", SC2_RACESWAP_LOC_ID_OFFSET + 13403, LocationType.VANILLA,
-                           logic.zerg_rak_shir_requirement
-                           ),
+            logic.zerg_rak_shir_requirement,
+            hard_rule=logic.zerg_any_anti_air,
+        ),
         make_location_data(SC2Mission.TEMPLAR_S_CHARGE_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 13500, LocationType.VICTORY,
-                           logic.terran_templars_charge_requirement
-                           ),
+            logic.terran_templars_charge_requirement
+        ),
         make_location_data(SC2Mission.TEMPLAR_S_CHARGE_T.mission_name, "Northwest Power Core", SC2_RACESWAP_LOC_ID_OFFSET + 13501, LocationType.EXTRA,
                            logic.terran_templars_charge_requirement
                            ),
@@ -5789,7 +5875,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         # Generating Beat event and Victory Cache locations
         if location_data.type == LocationType.VICTORY:
             beat_events.append(
-                location_data._replace(name="Beat " + location_data.region, code=None)
+                location_data._replace(name="Beat " + location_data.region, code=None)  # type: ignore
             )
             for v in range(VICTORY_CACHE_SIZE):
                 victory_caches.append(

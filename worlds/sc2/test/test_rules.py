@@ -24,7 +24,7 @@ class TestInventory:
     def random_boolean(self):
         return self.random.choice([True, False])
 
-    def has(self, item: str, player: int):
+    def has(self, item: str, player: int, count: int = 1):
         if not self.is_item_progression(item):
             raise AssertionError("Logic item {} is not a progression item".format(item))
         return self.random_boolean()
@@ -54,6 +54,9 @@ class TestInventory:
             return random_value
 
     def count_from_list(self, items: Iterable[str], player: int) -> int:
+        return sum(self.count(item_name, player) for item_name in items)
+
+    def count_from_list_unique(self, items: Iterable[str], player: int) -> int:
         return sum(self.count(item_name, player) for item_name in items)
 
 

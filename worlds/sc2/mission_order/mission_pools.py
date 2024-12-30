@@ -187,7 +187,7 @@ class SC2MOGenMissionPools:
 
         With `prefer_close_difficulty = True` the mission is picked to be as close to the slot's desired difficulty as possible."""
         pool = slot.option_mission_pool.intersection(self.master_list)
-        
+
         difficulty_pools: Dict[int, List[int]] = {
             diff: sorted(pool.intersection(self.difficulty_pools[diff]))
             for diff in Difficulty if diff != Difficulty.RELATIVE
@@ -201,7 +201,7 @@ class SC2MOGenMissionPools:
             difficulty_offset = 0
             while len(final_pool) == 0:
                 lower_diff = max(desired_difficulty - difficulty_offset, 1)
-                higher_diff = min(desired_difficulty + difficulty_offset, 5)
+                higher_diff = min(desired_difficulty + difficulty_offset + 1, 5)
                 final_pool = difficulty_pools[lower_diff]
                 if len(final_pool) > 0:
                     break
@@ -211,7 +211,7 @@ class SC2MOGenMissionPools:
                 if lower_diff == Difficulty.STARTER and higher_diff == Difficulty.VERY_HARD:
                     raise IndexError()
                 difficulty_offset += 1
-        
+
         else:
             # Consider missions from all lower difficulties as well the desired difficulty
             # Only take from higher difficulties if no lower difficulty is possible
