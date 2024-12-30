@@ -20,7 +20,7 @@ from .options import (
     KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
     get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options,
     GrantStoryTech, GenericUpgradeResearch, RequiredTactics,
-    upgrade_included_names, EnableVoidTrade, FillerRatio,
+    upgrade_included_names, EnableVoidTrade, FillerRatio, MissionOrderScouting,
 )
 from .rules import get_basic_units
 from . import settings
@@ -196,22 +196,23 @@ class SC2World(World):
         if SC2Campaign.HOTS not in enabled_campaigns:
             slot_data["kerrigan_presence"] = KerriganPresence.option_not_present
 
-        if get_option_value(self, "mission_order_scouting") > 0:
+        if self.options.mission_order_scouting != MissionOrderScouting.option_none:
             mission_item_classification: Dict[str, ItemClassification] = {}
             for location in self.multiworld.get_locations(self.player):
                 # Victory location are duplicated as event with the Beat prefix. Ignore them.
-                if not location.name.startswith("Beat"):
+                if not location.is_event:
                     loc: Location = self.multiworld.get_location(location.name, self.player)
                     # Ensure that if there are multiple items given for finishing a mission and that at least 
                     # one is progressive, the flag kept is progressive.
                     # Assuming that the location added are always after the basic one and named Cache. 
                     if " Cache (" in location.name:
                         location_name = location.name.split(" Cache")[0]
-                        if mission_item_classification[location_name] != 1:
+                        if mission_item_classification[location_name] != ItemClassification.progression:
                             mission_item_classification[location_name] = loc.item.classification.as_flag() 
                     else:
                         mission_item_classification[location.name] = loc.item.classification.as_flag()
             slot_data["mission_item_classification"] = mission_item_classification
+            print(len(slot_data["mission_item_classification"]))
 
         # Disable trade if there is no trade partner
         traders = [

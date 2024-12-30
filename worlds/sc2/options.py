@@ -1020,7 +1020,7 @@ class PreventativeLocations(LocationInclusion):
 
 class MissionOrderScouting(Choice):
     """
-    Allow the Sc2 mission order client tabs to indicate the type of item (i.e., progression, usefull, etc.) available at each location of a mission.
+    Allow the Sc2 mission order client tabs to indicate the type of item (i.e., progression, useful, etc.) available at each location of a mission.
     The option defines when this information will be available for the player.
     By default, this option is deactivated.
 
