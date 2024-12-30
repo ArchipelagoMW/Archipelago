@@ -51,8 +51,6 @@ class RegionData:
     name: str
     exits: tuple[str, ...] = field(default_factory=tuple)
     flag: MergeFlag = MergeFlag.ADD_EXITS
-    # TODO remove this
-    is_ginger_island: bool = False
 
     def __post_init__(self):
         assert not isinstance(self.exits, str), "Exits must be a tuple of strings, you probably forgot a trailing comma."
@@ -64,11 +62,11 @@ class RegionData:
             return self.get_without_exits(set(other.exits))
 
         merged_exits = tuple(set(self.exits + other.exits))
-        return RegionData(self.name, merged_exits, is_ginger_island=self.is_ginger_island)
+        return RegionData(self.name, merged_exits)
 
     def get_without_exits(self, exits_to_remove: set[str]) -> RegionData:
         exits = tuple(exit_ for exit_ in self.exits if exit_ not in exits_to_remove)
-        return RegionData(self.name, exits, is_ginger_island=self.is_ginger_island)
+        return RegionData(self.name, exits)
 
 
 @dataclass(frozen=True)

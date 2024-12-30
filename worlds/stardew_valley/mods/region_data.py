@@ -194,18 +194,17 @@ sve_main_land_regions = [
 sve_ginger_island_regions = [
     RegionData(Region.wizard_basement, (SVEEntrance.wizard_to_fable_reef,)),
 
-    RegionData(SVERegion.fable_reef, (SVEEntrance.fable_reef_to_guild,), is_ginger_island=True),
-    RegionData(SVERegion.first_slash_guild, (SVEEntrance.first_slash_guild_to_hallway,), is_ginger_island=True),
-    RegionData(SVERegion.first_slash_hallway, (SVEEntrance.first_slash_hallway_to_room,), is_ginger_island=True),
-    RegionData(SVERegion.first_slash_spare_room, is_ginger_island=True),
+    RegionData(SVERegion.fable_reef, (SVEEntrance.fable_reef_to_guild,)),
+    RegionData(SVERegion.first_slash_guild, (SVEEntrance.first_slash_guild_to_hallway,)),
+    RegionData(SVERegion.first_slash_hallway, (SVEEntrance.first_slash_hallway_to_room,)),
+    RegionData(SVERegion.first_slash_spare_room),
     RegionData(SVERegion.guild_summit, (SVEEntrance.summit_to_highlands,)),
-    RegionData(SVERegion.highlands_outside, (SVEEntrance.highlands_to_lance, SVEEntrance.highlands_to_cave, SVEEntrance.highlands_to_pond),
-               is_ginger_island=True),
-    RegionData(SVERegion.highlands_pond, is_ginger_island=True),
-    RegionData(SVERegion.highlands_cavern, (SVEEntrance.to_dwarf_prison,), is_ginger_island=True),
-    RegionData(SVERegion.dwarf_prison, is_ginger_island=True),
-    RegionData(SVERegion.lances_house, (SVEEntrance.lance_to_ladder,), is_ginger_island=True),
-    RegionData(SVERegion.lances_ladder, (SVEEntrance.lance_ladder_to_highlands,), is_ginger_island=True),
+    RegionData(SVERegion.highlands_outside, (SVEEntrance.highlands_to_lance, SVEEntrance.highlands_to_cave, SVEEntrance.highlands_to_pond), ),
+    RegionData(SVERegion.highlands_pond),
+    RegionData(SVERegion.highlands_cavern, (SVEEntrance.to_dwarf_prison,)),
+    RegionData(SVERegion.dwarf_prison),
+    RegionData(SVERegion.lances_house, (SVEEntrance.lance_to_ladder,)),
+    RegionData(SVERegion.lances_ladder, (SVEEntrance.lance_ladder_to_highlands,)),
 ]
 
 sve_main_land_connections = [

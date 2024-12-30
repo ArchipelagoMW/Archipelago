@@ -297,7 +297,6 @@ class StardewValleyWorld(World):
         no_target_groups = {0: [0]}
         placement = entrance_rando.randomize_entrances(self, coupled=True, target_group_lookup=no_target_groups)
         self.randomized_entrances = prepare_mod_data(placement)
-        self.randomized_entrances = {}
 
     def get_filler_item_name(self) -> str:
         if not self.filler_item_pool_names:
