@@ -796,7 +796,6 @@ class SC2Context(CommonContext):
             self.nova_covert_ops_only = args["slot_data"].get("nova_covert_ops_only", False)
             self.trade_enabled = args["slot_data"].get("enable_void_trade", EnableVoidTrade.option_false)
             self.difficulty_damage_modifier = args["slot_data"].get("difficulty_damage_modifier", DifficultyDamageModifier.option_true)
-            # vbn 
             self.mission_order_scouting = args["slot_data"].get("mission_order_scouting", 0)
             self.mission_item_classification = args["slot_data"].get("mission_item_classification", None)
 
@@ -821,30 +820,29 @@ class SC2Context(CommonContext):
 
             self.build_location_to_mission_mapping()
 
-            # vbn for debug 
-            # # Looks for the required maps and mods for SC2. Runs check_game_install_path.
-            # maps_present = is_mod_installed_correctly()
-            # if os.path.exists(get_metadata_file()):
-            #     with open(get_metadata_file(), "r") as f:
-            #         current_ver = f.read()
-            #         sc2_logger.debug(f"Current version: {current_ver}")
-            #     if is_mod_update_available(DATA_REPO_OWNER, DATA_REPO_NAME, DATA_API_VERSION, current_ver):
-            #         (
-            #             ColouredMessage().coloured("NOTICE: Update for required files found. ", colour="red")
-            #             ("Run ").coloured("/download_data", colour="slateblue")
-            #             (" to install.")
-            #         ).send(self)
-            #         self.data_out_of_date = True
-            # elif maps_present:
-            #     (
-            #         ColouredMessage()
-            #         .coloured("NOTICE: Your map files may be outdated (version number not found). ", colour="red")
-            #         ("Run ").coloured("/download_data", colour="slateblue")
-            #         (" to install.")
-            #     ).send(self)
-            #     self.data_out_of_date = True
+            # Looks for the required maps and mods for SC2. Runs check_game_install_path.
+            maps_present = is_mod_installed_correctly()
+            if os.path.exists(get_metadata_file()):
+                with open(get_metadata_file(), "r") as f:
+                    current_ver = f.read()
+                    sc2_logger.debug(f"Current version: {current_ver}")
+                if is_mod_update_available(DATA_REPO_OWNER, DATA_REPO_NAME, DATA_API_VERSION, current_ver):
+                    (
+                        ColouredMessage().coloured("NOTICE: Update for required files found. ", colour="red")
+                        ("Run ").coloured("/download_data", colour="slateblue")
+                        (" to install.")
+                    ).send(self)
+                    self.data_out_of_date = True
+            elif maps_present:
+                (
+                    ColouredMessage()
+                    .coloured("NOTICE: Your map files may be outdated (version number not found). ", colour="red")
+                    ("Run ").coloured("/download_data", colour="slateblue")
+                    (" to install.")
+                ).send(self)
+                self.data_out_of_date = True
             
-            # ColouredMessage("[b]Check the Launcher tab to start playing.[/b]", keep_markup=True).send(self)
+            ColouredMessage("[b]Check the Launcher tab to start playing.[/b]", keep_markup=True).send(self)
         
         elif cmd == "SetReply":
             # Currently can only be Void Trade reply

@@ -386,7 +386,6 @@ class SC2Manager(GameManager):
             last_location_type = LocationType.VICTORY
             victory_printed = False
 
-            # vbn 
             if self.ctx.mission_order_scouting > 0:
                 mission_available =  mission_id in available_missions
 
@@ -409,7 +408,6 @@ class SC2Manager(GameManager):
                     victory_printed = True
                 else:
                     tooltip += f"\n- {location_name}"
-                # vbn
                 if scoutable:
                     tooltip += self.handle_scout_display(location_name)
             if len(plando_locations) > 0:
@@ -476,7 +474,6 @@ class SC2Manager(GameManager):
             title += ""
         return title
     
-    # vbn 
     def is_scoutable(self, remaining_locations, mission_available: bool, layout_locked: bool, campaign_locked: bool) -> bool:
         if self.ctx.mission_order_scouting == 5:
             return True
@@ -493,9 +490,8 @@ class SC2Manager(GameManager):
             return False
 
 
-    # vbn 
     def handle_scout_display(self, location_name: str) -> str:
-        # Only one information is provided for the victory locations
+        # Only one information is provided for the victory locations of a mission
         if " Cache (" in location_name:
             location_name = location_name.split(" Cache")[0]
         item_classification_key = self.ctx.mission_item_classification[location_name]

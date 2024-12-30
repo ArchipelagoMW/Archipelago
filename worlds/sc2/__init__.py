@@ -196,7 +196,6 @@ class SC2World(World):
         if SC2Campaign.HOTS not in enabled_campaigns:
             slot_data["kerrigan_presence"] = KerriganPresence.option_not_present
 
-        # vbn save info here
         if get_option_value(self, "mission_order_scouting") > 0:
             mission_item_classification: Dict[str, ItemClassification] = {}
             for location in self.multiworld.get_locations(self.player):

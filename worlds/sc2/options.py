@@ -1003,7 +1003,6 @@ class PreventativeLocations(LocationInclusion):
     display_name = "Preventative Locations"
 
 
-# vbn
 class MissionOrderScouting(Choice):
     """
     Allow the Sc2 mission order client tabs to indicate the type of item (i.e., progression, usefull, etc.) available at each location of a mission.
