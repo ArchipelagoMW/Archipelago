@@ -1,0 +1,23 @@
+<MENUOFF>
+<LUIGISTOP2>
+<FULLSCREEN>
+<CLEARCOUNT>
+<CHECKTELESA>({CountOne})({CountTwo})({CountThree})({CountFour})({CountFive})
+<COUNTJMP>"not_enough""not_enough""not_enough""not_enough""boos_captured""boos_captured"
+<CASE>"not_enough"
+<SE>(95)
+<WINDOW>(0)<COLOR>(16)
+<SAY><COLOR>(3)You require {CountFive} boo(s) before\nyou can open this door...
+<ANYKEY>
+<CLOSEWINDOW>(0)
+<FORCEMOVE>(-1040.000000)(100.000000)(-4150.000000)(20)
+<NORMALSCREEN>
+<LUIGIFREE2>
+<MENUON>
+<END>
+<CASE>"boos_captured"
+<FLAGON>(28)
+<NORMALSCREEN>
+<LUIGIFREE2>
+<MENUON>
+<END>
