@@ -325,11 +325,6 @@ class SC2Manager(GameManager):
         # Map requirements not met
         else:
             mission_rule, layout_rule, campaign_rule = ctx.mission_id_to_entry_rules[mission_id]
-            # vbn deal with key?
-            # print(mission_rule)
-            # if len(mission_rule.sub_rules) != 0:
-            #     print(mission_rule.sub_rules[0].visual_reqs)
-            # print()
             mission_has_rule = mission_rule.amount > 0
             layout_has_rule = layout_rule.amount > 0
             extra_reqs = False
@@ -390,6 +385,15 @@ class SC2Manager(GameManager):
             tooltip += f"[b][color={COLOR_MISSION_IMPORTANT}]Uncollected locations[/color][/b]"
             last_location_type = LocationType.VICTORY
             victory_printed = False
+
+            # vbn 
+            if self.ctx.mission_order_scouting > 0:
+                mission_available =  mission_id in available_missions
+
+                scoutable = self.is_scoutable(remaining_locations, mission_available, layout_locked, campaign_locked)
+            else:
+                scoutable = False
+
             for location_type, location_name, _ in remaining_locations:
                 if location_type in (LocationType.VICTORY, LocationType.VICTORY_CACHE) and victory_printed:
                     continue
@@ -406,9 +410,8 @@ class SC2Manager(GameManager):
                 else:
                     tooltip += f"\n- {location_name}"
                 # vbn
-                if self.ctx.mission_order_scouting > 0:
-                    mission_available =  mission_id in available_missions
-                    tooltip += self.handle_scout_information(location_name, mission_available, layout_locked, campaign_locked)
+                if scoutable:
+                    tooltip += self.handle_scout_display(location_name)
             if len(plando_locations) > 0:
                 tooltip += f"\n[b]Plando:[/b]\n- "
                 tooltip += "\n- ".join(plando_locations)
@@ -474,42 +477,39 @@ class SC2Manager(GameManager):
         return title
     
     # vbn 
-    def handle_scout_information(self, location_name, mission_available, layout_locked, campaign_locked):
-        if self.ctx.mission_order_scouting == 4:
-            pass
-        elif self.ctx.mission_order_scouting == 3 and not campaign_locked:
-            pass
-        elif self.ctx.mission_order_scouting == 2 and not layout_locked:
-            pass
-        elif self.ctx.mission_order_scouting == 1 and mission_available:
-            pass
+    def is_scoutable(self, remaining_locations, mission_available: bool, layout_locked: bool, campaign_locked: bool) -> bool:
+        if self.ctx.mission_order_scouting == 5:
+            return True
+        elif self.ctx.mission_order_scouting == 4 and not campaign_locked:
+            return True
+        elif self.ctx.mission_order_scouting == 3 and not layout_locked:
+            return True
+        elif self.ctx.mission_order_scouting == 2 and mission_available:
+            return True
+        elif self.ctx.mission_order_scouting == 1 and len([loc for loc in remaining_locations if loc[0] in (LocationType.VICTORY, LocationType.VICTORY_CACHE)]) == 0:
+            # Assuming that when a mission is completed, all victory location are removed 
+            return True
         else:
+            return False
+
+
+    # vbn 
+    def handle_scout_display(self, location_name: str) -> str:
+        # Only one information is provided for the victory locations
+        if " Cache (" in location_name:
+            location_name = location_name.split(" Cache")[0]
+        item_classification_key = self.ctx.mission_item_classification[location_name]
+        if item_classification_key == 0:
+            return " [color=00EEEE](Filler)[/color]"
+        if item_classification_key == 1:
+            return " [color=AF99EF](Progression)[/color]"
+        elif item_classification_key == 2:
+            return " [color=6D8BE8](Usefull)[/color]"
+        elif item_classification_key == 3:
+            return " [color=FA8072](Trap)[/color]"
+        else:
+            # Should not happen, but better safe than sory
             return ""
-        item_classification_key = {}
-        item_classification_key[0] = "[color=00EEEE](Filler)[/color]"
-        item_classification_key[1] = "[color=AF99EF](Progression)[/color]"
-        item_classification_key[2] = "[color=6D8BE8](Usefull)[/color]"
-        item_classification_key[3] = "[color=FA8072](Trap)[/color]"
-        item_classification = item_classification_key[self.ctx.mission_item_classification[location_name]]
-        return f" {item_classification}"
-        #
-        # item_classification_key = {}
-        # item_classification_key[0] = "Filler"
-        # item_classification_key[1] = "Progression"
-        # item_classification_key[2] = "Usefull"
-        # item_classification_key[3] = "Trap"
-        # item_classification = item_classification_key[self.ctx.mission_item_classification[location_name]]
-        # return f"\n- {location_name} [color=FFFFFF]({item_classification})[/color]"
-        #
-        # item_classification_color = {}
-        # item_classification_color[0] = "00EEEE"
-        # item_classification_color[1] = "AF99EF"
-        # item_classification_color[2] = "6D8BE8"
-        # item_classification_color[3] = "FA8072"
-        # location_color = item_classification_color[self.ctx.mission_item_classification[location_name]]
-        # return f"\n- [color={location_color}]{location_name}[/color]"
-        #
-        # return f"\n- {location_name} {self.ctx.mission_item_classification[location_name]}"
 
 def start_gui(context: SC2Context):
     context.ui = SC2Manager(context)

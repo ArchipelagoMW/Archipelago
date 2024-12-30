@@ -203,7 +203,7 @@ class SC2World(World):
                 # Victory location are duplicated as event with the Beat prefix. Ignore them.
                 if not location.name.startswith("Beat"):
                     loc: Location = self.multiworld.get_location(location.name, self.player)
-                    # Ensure that if there are multiple items given for ending a mission and that at least 
+                    # Ensure that if there are multiple items given for finishing a mission and that at least 
                     # one is progressive, the flag kept is progressive.
                     # Assuming that the location added are always after the basic one and named Cache. 
                     if " Cache (" in location.name:

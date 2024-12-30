@@ -1006,26 +1006,27 @@ class PreventativeLocations(LocationInclusion):
 # vbn
 class MissionOrderScouting(Choice):
     """
-    Allow the Sc2 mission order client tabs to indicate the type of item (i.e., progression, usefull, etc.)available in each location of a mission.
+    Allow the Sc2 mission order client tabs to indicate the type of item (i.e., progression, usefull, etc.) available at each location of a mission.
     The option defines when this information will be available for the player.
     By default, this option is deactivated.
 
     None: Never provide information
+    Completed: Only for missions that were completed 
     Available: Only for missions that are available to play
     Layout: Only for missions that are in a acessible layout (e.g. Char, Mar Sara, etc.)
     Campaign: Only for missions that are in a acessible campaign (e.g. WoL, HotS, etc.)
-    All: All mission.
+    All: All missions
     """
     display_name = "Mission Order Scouting"
     option_none = 0
-    option_available = 1
-    option_layout = 2
-    option_campaign = 3
-    option_all = 4
+    option_completed = 1
+    option_available = 2
+    option_layout = 3
+    option_campaign = 4
+    option_all = 5
 
     default = option_none
 
-# vbn key block?
 
 class FillerPercentage(Range):
     """
