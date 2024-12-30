@@ -181,14 +181,17 @@ class LuigisMansionRandomizer:
         self.dol.data.write(struct.pack(">B", *scare_val))
 
     # Updates all jmp tables in the map2.szp file.
-    def update_maptwo_jmp_tables(self, boo_checks: bool):
+    def update_maptwo_jmp_tables(self):
+        # Get Output data required information
+        bool_boo_checks = True if self.output_data["Options"]["boo_gates"] == 1 else False
+
         # Updates all data entries for each jmp table in memory first.
         update_character_info(self.jmp_character_info_table, self.output_data)
         update_item_info_table(self.jmp_item_info_table, self.output_data)
         update_item_appear_table(self.jmp_item_appear_table, self.output_data)
         update_treasure_table(self.jmp_treasure_table, self.jmp_character_info_table, self.output_data)
         update_furniture_info(self.jmp_furniture_info_table, self.jmp_item_appear_table, self.output_data)
-        update_event_info(self.jmp_event_info_table, boo_checks)
+        update_event_info(self.jmp_event_info_table, bool_boo_checks)
         update_observer_info(self.jmp_observer_info_table)
         update_key_info(self.jmp_key_info_table, self.output_data)
         update_obj_info(self.jmp_obj_info_table)
@@ -210,8 +213,7 @@ class LuigisMansionRandomizer:
 
     def save_randomized_iso(self):
         seed(self.output_data["Seed"])
-
-        self.update_maptwo_jmp_tables(True if self.output_data["Options"]["boo_gates"] == 1 else False)
+        self.update_maptwo_jmp_tables()
 
         # Save the map two file changes
         # As mentioned before, these szp files need to be compressed again in order to be properly read by Dolphin/GC.
@@ -223,6 +225,9 @@ class LuigisMansionRandomizer:
         self.update_dol_offsets()
         self.dol.save_changes()
         self.gcm.changed_files["sys/main.dol"] = self.dol.data
+
+        # Get Output data required information
+        bool_boo_checks = True if self.output_data["Options"]["boo_gates"] == 1 else False
 
         # Update all custom events
         # TODO Add custom events for 16, 47, and 96 (custom boo events) Add a function to pass and overwrite
@@ -252,6 +257,32 @@ class LuigisMansionRandomizer:
         lines = lines.replace("{DOOR_LIST}", ''.join(event_door_list))
 
         self.update_custom_event("48", False, lines)
+
+        if bool_boo_checks:
+            boo_list_events = ["16", "47", "96"]
+            for event_no in boo_list_events:
+                lines = get_data(__name__, "data/custom_events/event" + event_no + ".txt").decode('utf-8')
+                required_boo_count = 0
+                match event_no:
+                    case "16":
+                        required_boo_count = self.output_data["Options"]["final_boo_count"]
+                    case "47":
+                        required_boo_count = self.output_data["Options"]["washroom_boo_count"]
+                    case "96":
+                        required_boo_count = self.output_data["Options"]["balcony_boo_count"]
+
+                min_boo_count = 0 if required_boo_count - 20 <= 0 else required_boo_count - 20
+                second_boo_count = 0 if required_boo_count - 15 <= 0 else required_boo_count - 15
+                third_boo_count = 0 if required_boo_count - 10 <= 0 else required_boo_count - 10
+                fourth_boo_count = 0 if required_boo_count - 5 <= 0 else required_boo_count - 5
+
+                lines = lines.replace("{CountOne}", str(min_boo_count))
+                lines = lines.replace("{CountTwo}", str(second_boo_count))
+                lines = lines.replace("{CountThree}", str(third_boo_count))
+                lines = lines.replace("{CountFour}", str(fourth_boo_count))
+                lines = lines.replace("{CountFive}", str(required_boo_count))
+
+                self.update_custom_event(event_no, False, lines)
 
         # Generator function to combine all necessary files into an ISO file.
         # Returned information is ignored. # Todo Maybe there is something better to put here?
