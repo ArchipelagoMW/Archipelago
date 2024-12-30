@@ -40,7 +40,7 @@ class CatQuestWorld(World):
         super(CatQuestWorld, self).__init__(multiworld, player)
 
     def get_filler_item_name(self) -> str:
-        return "13 Coins"
+        return "500 Exp"
 
     def create_item(self, name: str) -> "CatQuestItem":
         item_id: int = self.item_name_to_id[name]
@@ -78,7 +78,7 @@ class CatQuestWorld(World):
 
 
     def set_rules(self):
-        create_rules(self)
+        create_rules(self, locations)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         options = self.options

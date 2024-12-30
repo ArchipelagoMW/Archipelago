@@ -3,7 +3,7 @@ from typing import List, TypedDict
 class Location(TypedDict):
     id: int
     inGameId: str
-    title: str
+    name: str
     art: str
 
 base_id = 123500
@@ -13,99 +13,99 @@ locations: List[Location] = [
     {
         "id": base_id + 1,
         "inGameId": "MainQuest_001",
-        "title": "A Whole New World",
+        "name": "A Whole New World",
         "art": "none"
     },
     {
         "id": base_id + 2,
         "inGameId": "MainQuest_002",
-        "title": "The Catpital (1)",
+        "name": "The Catpital (1)",
         "art": "none"
     },
     {
         "id": base_id + 3,
         "inGameId": "MainQuest_003",
-        "title": "The Catpital (2)",
+        "name": "The Catpital (2)",
         "art": "none"
     },
     {
         "id": base_id + 4,
         "inGameId": "MainQuest_004",
-        "title": "The Dragon and the Cat",
+        "name": "The Dragon and the Cat",
         "art": "none"
     },
     {
         "id": base_id + 5,
         "inGameId": "MainQuest_005",
-        "title": "The Old Ruins",
+        "name": "The Old Ruins",
         "art": "none"
     },
     {
         "id": base_id + 6,
         "inGameId": "MainQuest_006",
-        "title": "Of Sea and Rock (1)",
-        "art": "none"
+        "name": "Of Sea and Rock (1)",
+        "art": "water"
     },
     {
         "id": base_id + 7,
         "inGameId": "MainQuest_007",
-        "title": "Of Sea and Rock (2)",
-        "art": "none"
+        "name": "Of Sea and Rock (2)",
+        "art": "both"
     },
     {
         "id": base_id + 8,
         "inGameId": "MainQuest_008",
-        "title": "The Old Friend",
-        "art": "none"
+        "name": "The Old Friend",
+        "art": "both"
     },
     {
         "id": base_id + 9,
         "inGameId": "MainQuest_009",
-        "title": "The Dragonblood",
-        "art": "none"
+        "name": "The Dragonblood",
+        "art": "both"
     },
     {
         "id": base_id + 10,
         "inGameId": "MainQuest_010",
-        "title": "The Dragonsbane",
-        "art": "none"
+        "name": "The Dragonsbane",
+        "art": "both"
     },
     {
         "id": base_id + 11,
         "inGameId": "MainQuest_011",
-        "title": "The Dragons Void",
-        "art": "none"
+        "name": "The Dragons Void",
+        "art": "both"
     },
     {
         "id": base_id + 12,
         "inGameId": "MainQuest_012",
-        "title": "Epilogue",
-        "art": "none"
+        "name": "Epilogue",
+        "art": "both"
     },
 
     # Sanctuary Quests
     {
         "id": base_id + 13,
         "inGameId": "sanctuary_one",
-        "title": "I. The Strange Charm",
+        "name": "I. The Strange Charm",
         "art": "none"
     },
     {
         "id": base_id + 14,
         "inGameId": "sanctuary_two",
-        "title": "II. The Escape",
+        "name": "II. The Escape",
         "art": "none"
     },
     {
         "id": base_id + 15,
         "inGameId": "sanctuary_three",
-        "title": "III. The Sacrifice",
+        "name": "III. The Sacrifice",
         "art": "none"
     },
     {
         "id": base_id + 16,
         "inGameId": "sanctuary_four",
-        "title": "IV. The Sanctuary",
+        "name": "IV. The Sanctuary",
         "art": "none"
     },
 
@@ -113,71 +113,71 @@ locations: List[Location] = [
     {
         "id": base_id + 17,
         "inGameId": "greatspirit_one",
-        "title": "I. The Servant of God",
-        "art": "none"
+        "name": "I. The Servant of God",
+        "art": "water"
     },
     {
         "id": base_id + 18,
         "inGameId": "greatspirit_two",
-        "title": "II. The Offerings",
-        "art": "none"
+        "name": "II. The Offerings",
+        "art": "water"
     },
     {
         "id": base_id + 19,
         "inGameId": "greatspirit_three",
-        "title": "III. The Prayer",
-        "art": "none"
+        "name": "III. The Prayer",
+        "art": "water"
     },
     {
         "id": base_id + 20,
         "inGameId": "greatspirit_four",
-        "title": "IV. The Godcat, Mauth",
-        "art": "none"
+        "name": "IV. The Godcat, Mauth",
+        "art": "water"
     },
 
     # Kitmas Quests
     {
         "id": base_id + 21, 
         "inGameId": "kitmas_one", 
-        "title": "The First Day of Kitmas", 
+        "name": "The First Day of Kitmas", 
         "art": "none"
     },
     {
         "id": base_id + 22, 
         "inGameId": "kitmas_two", 
-        "title": "The Second Day of Kitmas", 
+        "name": "The Second Day of Kitmas", 
         "art": "none"
     },
     {
         "id": base_id + 23, 
         "inGameId": "kitmas_three", 
-        "title": "The Third Day of Kitmas", 
-        "art": "none"
+        "name": "The Third Day of Kitmas", 
+        "art": "water"
     },
     {
         "id": base_id + 24, 
         "inGameId": "kitmas_four", 
-        "title": "The Fourth Day of Kitmas", 
-        "art": "none"
+        "name": "The Fourth Day of Kitmas", 
+        "art": "water"
     },
     {
         "id": base_id + 25, 
         "inGameId": "kitmas_five", 
-        "title": "Mewry Kitmas!", 
-        "art": "none"
+        "name": "Mewry Kitmas!", 
+        "art": "water"
     },
 
     # Missing Quests
     {
         "id": base_id + 26, 
         "inGameId": "missing_one", 
-        "title": "I. The Missing Soldiers", 
+        "name": "I. The Missing Soldiers", 
         "art": "none"
     },
     {
         "id": base_id + 27, 
         "inGameId": "missing_two", 
-        "title": "II. The Rescue", 
+        "name": "II. The Rescue", 
         "art": "none"
     },
 
@@ -185,25 +185,25 @@ locations: List[Location] = [
     {
         "id": base_id + 28, 
         "inGameId": "faded_king_one", 
-        "title": "I. The King's Mage", 
+        "name": "I. The King's Mage", 
         "art": "none"
     },
     {
         "id": base_id + 29, 
         "inGameId": "faded_king_three", 
-        "title": "II. The Mage Search", 
+        "name": "II. The Mage Search", 
         "art": "none"
     },
     {
         "id": base_id + 30, 
         "inGameId": "faded_king_four", 
-        "title": "III. The Spirits", 
+        "name": "III. The Spirits", 
         "art": "none"
     },
     {
         "id": base_id + 31, 
         "inGameId": "faded_king_five", 
-        "title": "IV. The Lion King", 
+        "name": "IV. The Lion King", 
         "art": "none"
     },
 
@@ -211,25 +211,25 @@ locations: List[Location] = [
     {
         "id": base_id + 32, 
         "inGameId": "east_one", 
-        "title": "I. The East Suspicion", 
+        "name": "I. The East Suspicion", 
         "art": "none"
     },
     {
         "id": base_id + 33, 
         "inGameId": "east_two", 
-        "title": "II. The East Shipment", 
+        "name": "II. The East Shipment", 
         "art": "none"
     },
     {
         "id": base_id + 34, 
         "inGameId": "east_three", 
-        "title": "III. The East Escort", 
+        "name": "III. The East Escort", 
         "art": "none"
     },
     {
         "id": base_id + 35, 
         "inGameId": "east_four", 
-        "title": "IV. The East Catfrontation", 
+        "name": "IV. The East Catfrontation", 
         "art": "none"
     },
 
@@ -237,25 +237,25 @@ locations: List[Location] = [
     {
         "id": base_id + 36, 
         "inGameId": "meatmeatmeat", 
-        "title": "I. Meat Meat Meat!", 
+        "name": "I. Meat Meat Meat!", 
         "art": "none"
     },
     {
         "id": base_id + 37, 
         "inGameId": "red_riding_kitty", 
-        "title": "II. Meatmeatmeatmeat!!", 
+        "name": "II. Meatmeatmeatmeat!!", 
         "art": "none"
     },
     {
         "id": base_id + 38, 
         "inGameId": "distraction", 
-        "title": "III. Meat Disposal Crew", 
+        "name": "III. Meat Disposal Crew", 
         "art": "none"
     },
     {
         "id": base_id + 39, 
         "inGameId": "crafty_merchant", 
-        "title": "IV. The Meat Seller", 
+        "name": "IV. The Meat Seller", 
         "art": "none"
     },
 
@@ -263,31 +263,31 @@ locations: List[Location] = [
     {
         "id": base_id + 40, 
         "inGameId": "the_whisperer_one", 
-        "title": "I. The Growling Peasant", 
+        "name": "I. The Growling Peasant", 
         "art": "none"
     },
     {
         "id": base_id + 41, 
         "inGameId": "the_whisperer_two", 
-        "title": "II. The Catnip Ritual", 
+        "name": "II. The Catnip Ritual", 
         "art": "none"
     },
     {
         "id": base_id + 42, 
         "inGameId": "the_whisperer_three", 
-        "title": "III. The Circle", 
+        "name": "III. The Circle", 
         "art": "none"
     },
     {
         "id": base_id + 43, 
         "inGameId": "the_whisperer_four", 
-        "title": "IV. Fur-reedom!", 
+        "name": "IV. Fur-reedom!", 
         "art": "none"
     },
     {
         "id": base_id + 44, 
         "inGameId": "the_whisperer_five", 
-        "title": "V. The Whispurrer", 
+        "name": "V. The Whispurrer", 
         "art": "none"
     },
 
@@ -295,51 +295,51 @@ locations: List[Location] = [
     {
         "id": base_id + 45, 
         "inGameId": "waters_one", 
-        "title": "I. Path to Water Walking", 
+        "name": "I. Path to Water Walking", 
         "art": "none"
     },
     {
         "id": base_id + 46, 
         "inGameId": "waters_three", 
-        "title": "II. The Fusion", 
+        "name": "II. The Fusion", 
         "art": "none"
     },
     {
         "id": base_id + 47, 
         "inGameId": "waters_four", 
-        "title": "III. Rogue Mages", 
+        "name": "III. Rogue Mages", 
         "art": "none"
     },
     {
         "id": base_id + 48, 
         "inGameId": "waters_five", 
-        "title": "IV. The Miracle", 
-        "art": "none"
+        "name": "IV. The Miracle", 
+        "art": "water"
     },
 
     # West Quests
     {
         "id": base_id + 49, 
         "inGameId": "west_one", 
-        "title": "I. The West Investigation", 
+        "name": "I. The West Investigation", 
         "art": "none"
     },
     {
         "id": base_id + 50, 
         "inGameId": "west_two", 
-        "title": "II. The West Heist", 
+        "name": "II. The West Heist", 
         "art": "none"
     },
     {
         "id": base_id + 51, 
         "inGameId": "west_three", 
-        "title": "III. The Magic Lock", 
+        "name": "III. The Magic Lock", 
         "art": "none"
     },
     {
         "id": base_id + 52, 
         "inGameId": "west_four", 
-        "title": "IV. The Revelation", 
+        "name": "IV. The Revelation", 
         "art": "none"
     },
 
@@ -347,51 +347,51 @@ locations: List[Location] = [
     {
         "id": base_id + 53, 
         "inGameId": "magesold_one", 
-        "title": "I. The Flying Bush", 
-        "art": "none"
+        "name": "I. The Flying Bush", 
+        "art": "water"
     },
     {
         "id": base_id + 54, 
         "inGameId": "magesold_two", 
-        "title": "II. The Magic Tree", 
-        "art": "none"
+        "name": "II. The Magic Tree", 
+        "art": "water"
     },
     {
         "id": base_id + 55, 
         "inGameId": "magesold_three", 
-        "title": "III. The Cult", 
-        "art": "none"
+        "name": "III. The Cult", 
+        "art": "water"
     },
     {
         "id": base_id + 56, 
         "inGameId": "magesold_four", 
-        "title": "IV. Dragonflight", 
-        "art": "none"
+        "name": "IV. Dragonflight", 
+        "art": "water"
     },
 
     # Dark Past Quests
     {
         "id": base_id + 57, 
         "inGameId": "darkpast_one", 
-        "title": "I. The Missing Pages", 
+        "name": "I. The Missing Pages", 
         "art": "none"
     },
     {
         "id": base_id + 58, 
         "inGameId": "darkpast_two", 
-        "title": "II. The Protected Pages", 
+        "name": "II. The Protected Pages", 
         "art": "none"
     },
     {
         "id": base_id + 59, 
         "inGameId": "darkpast_three", 
-        "title": "III. The Runaway Archeologist", 
+        "name": "III. The Runaway Archeologist", 
         "art": "none"
     },
     {
         "id": base_id + 60, 
         "inGameId": "darkpast_four", 
-        "title": "IV. The Treasure", 
+        "name": "IV. The Treasure", 
         "art": "none"
     },
 
@@ -399,119 +399,119 @@ locations: List[Location] = [
     {
         "id": base_id + 61, 
         "inGameId": "blacksmith_assistance", 
-        "title": "I. Blacksmith Assistance", 
+        "name": "I. Blacksmith Assistance", 
         "art": "none"
     },
     {
         "id": base_id + 62, 
         "inGameId": "blacksmith_apprentice", 
-        "title": "II. Blacksmith Apprentice", 
+        "name": "II. Blacksmith Apprentice", 
         "art": "none"
     },
     {
         "id": base_id + 63, 
         "inGameId": "blacksmith_journeyman", 
-        "title": "III. Blacksmith Journeyman", 
+        "name": "III. Blacksmith Journeyman", 
         "art": "none"
     },
     {
         "id": base_id + 64, 
         "inGameId": "blacksmith_master", 
-        "title": "IV. Blacksmith Master", 
+        "name": "IV. Blacksmith Master", 
         "art": "none"
     },
 
     # Misc Quests
-    {#?
+    {
         "id": base_id + 65, 
         "inGameId": "wyvern_attack", 
-        "title": "The Dragon Worshippers", 
+        "name": "The Dragon Worshippers", 
         "art": "none"
     },
     {
         "id": base_id + 66, 
         "inGameId": "the_heirloom", 
-        "title": "The Heirloom Armor", 
-        "art": "none"
+        "name": "The Heirloom Armor", 
+        "art": "water"
     },
     {
         "id": base_id + 67, 
         "inGameId": "furbidden_mystery", 
-        "title": "The Furbidden History", 
-        "art": "none"
+        "name": "The Furbidden History", 
+        "art": "water"
     },
     {
         "id": base_id + 68, 
         "inGameId": "golden_key", 
-        "title": "The Golden Key", 
-        "art": "none"
+        "name": "The Golden Key", 
+        "art": "either"
     },
     {
         "id": base_id + 69, 
         "inGameId": "ultimate_dragonsbane", 
-        "title": "The Ultimate Dragonsbane", 
-        "art": "none"
+        "name": "The Ultimate Dragonsbane", 
+        "art": "water"
     },
     {
         "id": base_id + 70, 
         "inGameId": "pawtato_one", 
-        "title": "The Pawtato Mystery", 
-        "art": "none"
+        "name": "The Pawtato Mystery", 
+        "art": "water"
     },
     {
         "id": base_id + 71, 
         "inGameId": "advertising_one", 
-        "title": "Everyone's invited!", 
-        "art": "none"
+        "name": "Everyone's invited!", 
+        "art": "flight"
     },
     {
         "id": base_id + 72, 
         "inGameId": "slashy_one", 
-        "title": "The Forgotten Hero", 
-        "art": "none"
+        "name": "The Forgotten Hero", 
+        "art": "water"
     },
 
     # Catnip Cure Quests
     {
         "id": base_id + 73, 
         "inGameId": "catnip_cure_A", 
-        "title": "I. The Catnip Cure", 
+        "name": "I. The Catnip Cure", 
         "art": "none"
     },
     {
         "id": base_id + 74, 
         "inGameId": "catnip_cure_B", 
-        "title": "I. The Catnip Cure...again", 
+        "name": "I. The Catnip Cure...again", 
         "art": "none"
     },
     {
         "id": base_id + 75, 
         "inGameId": "knightmare_A", 
-        "title": "II. The Knightmare", 
+        "name": "II. The Knightmare", 
         "art": "none"
     },
     {
         "id": base_id + 76, 
         "inGameId": "knightmare_B", 
-        "title": "II. The Knightmare... again", 
+        "name": "II. The Knightmare... again", 
         "art": "none"
     },
     {
         "id": base_id + 77, 
         "inGameId": "book_A", 
-        "title": "III. The Book", 
+        "name": "III. The Book", 
         "art": "none"
     },
     {
         "id": base_id + 78, 
         "inGameId": "book_B", 
-        "title": "III. The Book...again", 
+        "name": "III. The Book...again", 
         "art": "none"
     },
     {
         "id": base_id + 79, 
         "inGameId": "resolution_A", 
-        "title": "IV. The Twin Resolution", 
+        "name": "IV. The Twin Resolution", 
         "art": "none"
     }
 ]

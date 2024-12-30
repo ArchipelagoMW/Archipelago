@@ -6,8 +6,14 @@ def create_rules(self, locations):
 
     for loc in locations:
         if loc["art"] == "water":
-            add_rule(multiworld.get_location(loc.name, player),
+            add_rule(multiworld.get_location(loc["name"], player),
             lambda state: state.has("Royal Art of Water Walking", player))
         elif loc["art"] == "flight":
-            add_rule(multiworld.get_location(loc.name, player),
+            add_rule(multiworld.get_location(loc["name"], player),
             lambda state: state.has("Royal Art of Flight", player))
+        elif loc["art"] == "both":
+            add_rule(multiworld.get_location(loc["name"], player),
+            lambda state: state.has("Royal Art of Flight", player) and state.has("Royal Art of Water Walking", player))
+        elif loc["art"] == "either":
+            add_rule(multiworld.get_location(loc["name"], player),
+            lambda state: state.has("Royal Art of Flight", player) or state.has("Royal Art of Water Walking", player))

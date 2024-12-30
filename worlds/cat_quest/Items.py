@@ -10,7 +10,7 @@ class Item(TypedDict):
 
 base_id = 123000
 
-Items: List[Item] = [
+items: List[Item] = [
     # Royal Arts
     {"name": "Royal Art of Water Walking", "id": base_id + 1, "inGameId": "art.water", "count": 1, "classification": ItemClassification.progression},
     {"name": "Royal Art of Flight", "id": base_id + 2, "inGameId": "art.flight", "count": 1, "classification": ItemClassification.progression},
@@ -42,5 +42,5 @@ Items: List[Item] = [
     {"name": "20000 Exp", "id": base_id + 20, "inGameId": "exp.20000", "count": 2, "classification": ItemClassification.filler},
 
     # Balancing filler
-    {"name": "100 Exp", "id": base_id + 21, "inGameId": "exp.100", "count": 0, "classification": ItemClassification.filler},
+    {"name": "500 Exp", "id": base_id + 21, "inGameId": "exp.500", "count": 0, "classification": ItemClassification.filler},
 ]
