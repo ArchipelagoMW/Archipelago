@@ -2,10 +2,13 @@ import random
 from typing import TypedDict, ClassVar
 from unittest import TestCase
 
+# Imported before importing from Fill to prevent circular imports in spawned processes, when run as part of the full
+# test suite.
+import worlds
+
 from BaseClasses import Location, MultiWorld, Item, Entrance, Region, ItemClassification, LocationProgressType
 from Fill import distribute_items_restrictive
 from Options import Removed
-import worlds
 from worlds.AutoWorld import AutoWorldRegister, call_all
 
 from ..general import setup_multiworld, gen_steps
@@ -230,6 +233,8 @@ class TestDeterministicGeneration(TestCase):
 
         May be called on a separate Python process.
         """
+        if game not in worlds.AutoWorldRegister.world_types:
+            raise RuntimeError(f"No world loaded for game '{game}'. Failed world loads: {worlds.failed_world_loads}")
         world_type = worlds.AutoWorldRegister.world_types[game]
         multiworld = setup_multiworld(world_type, gen_steps, seed=seed)
         itempool_copy = multiworld.itempool.copy()
