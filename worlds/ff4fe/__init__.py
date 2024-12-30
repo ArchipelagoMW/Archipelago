@@ -8,7 +8,7 @@ import Utils
 import settings
 from BaseClasses import Region, ItemClassification, MultiWorld, Tutorial
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import set_rule, add_rule, add_item_rule
+from worlds.generic.Rules import set_rule, add_rule, add_item_rule, forbid_items_for_player
 from . import events, items, locations
 from . import rules as FERules
 from .Client import FF4FEClient
@@ -39,7 +39,7 @@ class FF4FEWebWorld(WebWorld):
 
 
 class FF4FESettings(settings.Group):
-    class RomFile(settings.UserFilePath):
+    class RomFile(settings.SNESRomPath):
         """File name of the FF4 USA 1.1 US rom"""
 
         copy_to = "Final Fantasy II (USA) (Rev A).sfc"
@@ -59,7 +59,6 @@ class FF4FEWorld(World):
     settings: typing.ClassVar[FF4FESettings]
 
     web = FF4FEWebWorld()
-    topology_present = True
     base_id = 7191991
     item_name_to_id = {item.name: id for
                        id, item in enumerate(all_items, base_id)}
@@ -152,17 +151,16 @@ class FF4FEWorld(World):
             overworld.locations.append(new_location)
 
     def create_item(self, item: str) -> FF4FEItem:
-        item_data: ItemData = [item_data for item_data in all_items if item_data.name == item].pop()
+        item_data: ItemData = next((item_data for item_data in all_items if item_data.name == item), None)
+        if not item_data:
+            raise Exception(f"{item} is not a valid item name for Final Fantasy 4 Free Enterprise")
         return FF4FEItem(item, item_data.classification, self.item_name_to_id[item], self.player)
 
     def create_event(self, event: str) -> FF4FEItem:
         return FF4FEItem(event, ItemClassification.progression, None, self.player)
 
     def create_items(self) -> None:
-        item_pool_result = create_itempool(locations.all_locations, self)
-        item_pool = item_pool_result[0]
-        self.chosen_character = item_pool_result[1]
-        self.second_character = item_pool_result[2]
+        item_pool, self.chosen_character, self.second_character = create_itempool(locations.all_locations, self)
         chosen_character_placed = False
         second_character_placed = False
 
@@ -182,19 +180,19 @@ class FF4FEWorld(World):
                 self.get_location(location).place_locked_item(self.create_item("None"))
                 item_pool.remove("None")
 
-        restricted_character_allow_locations = list(set(character_locations) - set(locations.restricted_character_locations)).copy()
-        restricted_character_forbid_locations = list(set(character_locations) - set(restricted_character_allow_locations)).copy()
+        restricted_character_allow_locations = sorted(set(character_locations) - set(locations.restricted_character_locations))
+        restricted_character_forbid_locations = sorted(set(character_locations) - set(restricted_character_allow_locations))
         self.random.shuffle(restricted_character_allow_locations)
         self.random.shuffle(restricted_character_forbid_locations)
 
         for item in map(self.create_item, item_pool):
-            # If we've specifically chosen a startinc character, we place them directly even though we're not normally
+            # If we've specifically chosen a starting character, we place them directly even though we're not normally
             # allowed to have a restricted character as a starter.
             if item.name == self.chosen_character and not chosen_character_placed:
                 self.get_location("Starting Character 1").place_locked_item(self.create_item(self.chosen_character))
                 chosen_character_placed = True
                 continue
-            if item.name == self.second_character and not second_character_placed:
+            elif item.name == self.second_character and not second_character_placed:
                 self.get_location("Starting Character 2").place_locked_item(self.create_item(self.second_character))
                 second_character_placed = True
                 continue
@@ -255,8 +253,7 @@ class FF4FEWorld(World):
                 # No key items except Dark Matters in minor slots when we're doing major/minor split.
                 if (self.options.ItemPlacement.current_key == "major_minor_split" and not location.major_slot
                         and location.name not in self.options.priority_locations):
-                    add_item_rule(self.get_location(location.name),
-                                  lambda item: (item.classification & ItemClassification.progression == 0) or item.name == "DkMatter")
+                    forbid_items_for_player(self.get_location(location.name), set(items.characters), self.player)
 
         # Conquer the Giant doesn't have a character, so we force it to None.
         if self.options.ConquerTheGiant:
@@ -285,9 +282,7 @@ class FF4FEWorld(World):
             if location.area in topology.underworld_areas:
                 # Skip over Kokkol on Forge the Crystal...
                 if location.name == "Kokkol's House 2F -- Kokkol -- forge item":
-                    try:
-                        self.get_location(location.name)
-                    except KeyError:
+                    if not location.name in self.multiworld.regions.location_cache[self.player]:
                         continue
                 # ...but otherwise all underground locations require underground access.
                 add_rule(self.get_location(location.name),
@@ -357,18 +352,11 @@ class FF4FEWorld(World):
 
         # Some locations need bespoke rules. This applies them.
         for location in FERules.individual_location_rules.keys():
-            try:
+            if location in self.multiworld.regions.location_cache[self.player]:
                 ap_location = self.get_location(location)
                 for requirement in FERules.individual_location_rules[location]:
                     add_rule(ap_location,
                              lambda state, true_requirement=requirement: state.has(true_requirement, self.player))
-            except KeyError:
-                # Objectives and Kokkol if nonapplicable are fine to skip over...
-                if location.startswith("Objective") or location == "Kokkol's House 2F -- Kokkol -- forge item":
-                    continue
-                else:
-                    # ...but if I went and typoed on a location name I'd like to know.
-                    raise KeyError
 
         # Bosses get locked events for spoiler log niceness.
         for event in events.boss_events:
@@ -426,9 +414,10 @@ class FF4FEWorld(World):
         placement_dict["output_file"] = f'{self.multiworld.get_out_file_name_base(self.player)}' + '.sfc'
         placement_dict["flags"] = flags.create_flags_from_options(self.options, self.objective_count)
         placement_dict["junk_tier"] = self.options.JunkTier.value
+        placement_dict["data_dir"] = Utils.user_path("data", "ff4fe")
 
         # Our actual patch is just a set of instructions and data for FE to use.
-        patch = FF4FEProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
+        patch = FF4FEProcedurePatch(player=self.player, player_name=self.player_name)
         patch.write_file("placement_file.json" , json.dumps(placement_dict).encode("UTF-8"))
         rom_path = os.path.join(
             output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}" f"{patch.patch_file_ending}"

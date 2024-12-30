@@ -1,16 +1,14 @@
 import argparse
-import io
 import json
+import logging
 import os
-import random
-import typing
+import tempfile
 
-from typing import TYPE_CHECKING, Optional, BinaryIO
+from typing import TYPE_CHECKING
 
 import Utils
-from BaseClasses import Item, Location
 from settings import get_settings
-from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
+from worlds.Files import APProcedurePatch, APTokenMixin, APPatchExtension
 from .FreeEnterpriseForAP.FreeEnt.cmd_make import MakeCommand
 
 if TYPE_CHECKING:
@@ -84,23 +82,22 @@ class FF4FEPatchExtension(APPatchExtension):
         cmd = MakeCommand()
         parser = argparse.ArgumentParser()
         cmd.add_parser_arguments(parser)
-        with open("ff4base.sfc", "wb") as file:
+        directory = tempfile.gettempdir()
+        with open(os.path.join(directory, "ff4base.sfc"), "wb") as file:
             file.write(rom)
             arguments = [
-                "ff4base.sfc",
+                os.path.join(directory, "ff4base.sfc"),
                 f"-s={seed}",
                 f"-f={flags}",
-                f"-o={output_file}",
+                f"-o={os.path.join(directory, output_file)}",
                 f"-a={placements}"
             ]
             args = parser.parse_args(arguments)
             cmd.execute(args)
-        os.unlink("ff4base.sfc")
-        with open(output_file, "rb") as file:
+        with open(os.path.join(directory, output_file), "rb") as file:
             rom_data = bytearray(file.read())
             rom_data[ROM_NAME:ROM_NAME+20] = bytes(rom_name, encoding="utf-8")
             rom_data[junk_tier_byte:junk_tier_byte + 1] = bytes([junk_tier])
-        os.unlink(output_file)
         return rom_data
 
 

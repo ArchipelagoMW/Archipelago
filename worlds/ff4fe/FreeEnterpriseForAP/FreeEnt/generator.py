@@ -649,30 +649,28 @@ def build(romfile, options, force_recompile=False):
 
     if not options.flags.has('vanilla_z') or options.flags.has('vintage'):
         try:
-            ZEROMUS_PICS_DIR = os.path.join('compiled_zeromus_pics')
-            if not options.flags.has('vanilla_z'):
-                z_asset = select_from_catalog(os.path.join(ZEROMUS_PICS_DIR, 'catalog'), env)
-                if options.flags.has('vintage'):
-                    z_asset += '.vintage'
-                z_asset += '.asset'
-            else:
-                z_asset = 'ZeromNES.png.f4c'
-            infile = pkgutil.get_data(__name__, ZEROMUS_PICS_DIR + "/" + z_asset).decode()
-            zeromus_sprite_script = infile
-            env.add_scripts('// [[[ ZEROMUS SPRITE START ]]]\n' + zeromus_sprite_script + '\n// [[[ ZEROMUS SPRITE END ]]]\n')
+            ZEROMUS_PICS_DIR = os.path.join(options.ap_data["data_dir"], "zsprite")
+            files = [file for file in os.listdir(ZEROMUS_PICS_DIR) if file.endswith(".asset") and "vintage" not in file]
+            z_asset = env.rnd.choice(files)
+            infile = os.path.join(ZEROMUS_PICS_DIR, z_asset)
+            with open(infile) as file:
+                zeromus_sprite_script = file.read()
+                env.add_scripts('// [[[ ZEROMUS SPRITE START ]]]\n' + zeromus_sprite_script + '\n// [[[ ZEROMUS SPRITE END ]]]\n')
         except:
             pass
 
     try:
-        HARP_SONGS_DIR = os.path.join('compiled_songs')
-        song_asset = select_from_catalog(os.path.join(HARP_SONGS_DIR, 'catalog'), env) + '.asset'
+        HARP_SONGS_DIR = os.path.join(options.ap_data["data_dir"], "harp")
+        files = [file for file in os.listdir(HARP_SONGS_DIR) if file.endswith(".asset")]
+        harp_song = env.rnd.choice(files)
         env.add_substitution('midiharp default credits', '')
-        infile = pkgutil.get_data(__name__, HARP_SONGS_DIR + "/" + song_asset).decode()
-        harp_script = infile
-        env.add_scripts('// [[[ HARP START ]]]\n' + harp_script + '\n// [[[ HARP END ]]]\n')
-        env.add_file('scripts/midiharp.f4c')
+        infile = os.path.join(HARP_SONGS_DIR, harp_song)
+        with open(infile) as file:
+            harp_script = file.read()
+            env.add_scripts('// [[[ HARP START ]]]\n' + harp_script + '\n// [[[ HARP END ]]]\n')
+            env.add_file('scripts/midiharp.f4c')
     except:
-        pass
+            pass
 
     # hack: add a block area to insert default names in rescript.py
     env.add_scripts('// [[[ NAMES START ]]]\n// [[[ NAMES END ]]]')
@@ -761,8 +759,8 @@ def build(romfile, options, force_recompile=False):
     env.add_substitution('pregame_screen_text', _generate_pregame_screen_text(env))
 
     if options.debug:
-        with pkgutil.get_data(__name__, "scripts/debug_init.f4c") as infile:
-            env.add_substitution('debug init', infile.read())
+        infile = pkgutil.get_data(__name__, "scripts/debug_init.f4c").decode()
+        env.add_substitution('debug init', infile)
         env.add_substitution('debug disable', '')
     else:
         env.add_substitution('debug enable', '')
@@ -801,8 +799,8 @@ def build(romfile, options, force_recompile=False):
         scripts.append(script_preprocessor.preprocess(script))
 
     if options.debug:
-        with pkgutil.get_data(__name__, "scripts/sandbox.f4c") as infile:
-            scripts.append(script_preprocessor.preprocess(infile.read()))
+        infile = pkgutil.get_data(__name__, "scripts/sandbox.f4c").decode()
+        scripts.append(script_preprocessor.preprocess(infile))
 
     for addr in BINARY_PATCHES:
         infile = pkgutil.get_data(__name__, BINARY_PATCHES[addr])
