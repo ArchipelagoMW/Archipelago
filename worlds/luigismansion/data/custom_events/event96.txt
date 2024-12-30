@@ -1,0 +1,12 @@
+<CLEARCOUNT>
+<CHECKTELESA>({CountOne})({CountTwo})({CountThree})({CountFour})({CountFive})
+<COUNTJMP>"not_enough""not_enough""not_enough""not_enough""boos_captured""boos_captured"
+<CASE>"not_enough"
+<WINDOW>(0)<COLOR>(16)
+<SAY><COLOR>(3)You require {CountFive} boo(s) before\nyou can open this door...
+<ANYKEY>
+<CLOSEWINDOW>(0)
+<END>
+<CASE>"boos_captured"
+<FLAGON>(2)
+<END>
