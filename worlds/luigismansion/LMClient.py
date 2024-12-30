@@ -15,6 +15,9 @@ from .LMGenerator import LuigisMansionRandomizer
 from .Items import LOOKUP_ID_TO_NAME, ALL_ITEMS_TABLE
 from .Locations import ALL_LOCATION_TABLE, LMLocation
 
+# filtered_location_list = list(filter(
+        #lambda (key, named_tuple): named_tuple.ram_address_room_id == int_current_room, ALL_LOCATION_TABLE.items()))
+
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
 )
@@ -61,6 +64,18 @@ GIVE_ITEM_ARRAY_ADDR = 0x803FE868
 # This way, the player does not have to manually authenticate their slot name.
 # SLOT_NAME_ADDR = 0x803FE88C
 
+# This address contains the starting point of furniture ID table, where each 4 bytes would contain the furniture ID
+FURNITURE_ID_TABLE_START = 0x80C0C898
+
+# This address contains the starting point of furniture interaction table, where 0 represent not interacted with,
+# 1 represents means it's been activated, and 2 has something to do with Mario
+FURNITURE_INTERACTION_TABLE_START = 0x80C0C868
+
+# Backup Furniture IDs
+FURNITURE_MAIN_TABLE_ID = 0x803CD770
+FURN_FLAG_OFFSET = 0x8C
+FURN_ID_OFFSET = 0xBC
+
 
 key_name_collection = [["", "Butler's Room", "", "Heart", "Fortune Teller", "Mirror Room", "", "Laundry Room"],
                        ["", "Stairs 1F - BF", "Boneyard", "Kitchen", "", "", "Dinning Room", "Ball Room"],
@@ -98,6 +113,10 @@ boo_name_collection = [["Butler's Room Boo (PeekaBoo)", "Hidden Room Boo (GumBoo
                         "Boolossus Boo 11", "Boolossus Boo 12", "Boolossus Boo 13"],
                        ["Boolossus Boo 14", "Boolossus Boo 15", "", "", "", "", "", ""]]
 
+furniture_id_collection = [[],
+                           [],
+                           [{"0x63": "Right Tall Candles"}, {"0x64": "Left Tall Candles"}, {}, {}, {}]]
+
 
 def get_base_rom_path(file_name: str = "") -> str:
     options: Settings = get_settings()
@@ -128,6 +147,7 @@ class LMCommandProcessor(ClientCommandProcessor):
 
 
 class LMContext(CommonContext):
+    check_furn = False # TODO Remove
     command_processor = LMCommandProcessor
     game = "Luigi's Mansion"
     items_handling = 0b111
@@ -145,8 +165,8 @@ class LMContext(CommonContext):
 
         # Jake temp custom variables
         self.keys_tracked = [-1] * 10
-        self.medals_tracked = [-1] * 3
-        self.mario_items_tracked = [-1] * 5
+        self.medals_tracked = -1
+        self.mario_items_tracked = [-1] * 2
         self.boos_captured = [-1] * 7
 
     async def disconnect(self, allow_autoreconnect: bool = False):
@@ -265,54 +285,109 @@ async def check_locations(ctx: LMContext):
     # switches_bitfield = int.from_bytes(dolphin_memory_engine.read_bytes(SWITCHES_BITFLD_ADDR, 10))
     # pickups_bitfield = dolphin_memory_engine.read_word(PICKUPS_BITFLD_ADDR)
 
-    temp_medals_watch = int.from_bytes(dolphin_memory_engine.read_bytes(MEDALS_RECV_ADDR, 1), 'big')
-    medals_recv_arr = [(temp_medals_watch & (1 << 5)), (temp_medals_watch & (1 << 6)), (temp_medals_watch & (1 << 7))]
-    if medals_recv_arr != ctx.medals_tracked:
-        ctx.medals_tracked = medals_recv_arr
-        bool_fire = True if medals_recv_arr[0] else False
-        bool_ice = True if medals_recv_arr[1] else False
-        bool_water = True if medals_recv_arr[2] else False
-        medals_str = f"Fire Medal: {bool_fire}; Ice Medal: {bool_ice}; Water Medal: {bool_water}"
-        print("Currently Luigi has the following medals: " + medals_str)
+    temp_medals_watch = dolphin_memory_engine.read_byte(MEDALS_RECV_ADDR)
+    if temp_medals_watch != ctx.medals_tracked:
+        if ctx.medals_tracked > 0:
+            bit_int = temp_medals_watch ^ ctx.medals_tracked
+        else:
+            bit_int = temp_medals_watch
+        ctx.medals_tracked = temp_medals_watch
+        for i in range(5,8,1):
+            if (bit_int & (1<<i)) > 0:
+                match i:
+                    case 5:
+                        print("Medal received: Fire")
+                        continue
+                    case 6:
+                        print("Medal received: Ice")
+                        continue
+                    case 7:
+                        print("Medal received: Water")
+                        continue
+                    case _:
+                        print("Not supposed to be reached")
+                        continue
 
-    for mem_addr_pos in range(10):
-        current_keys_int = int.from_bytes(dolphin_memory_engine.read_bytes(KEYS_BITFLD_ADDR + mem_addr_pos, 1), 'big')
-        if current_keys_int != ctx.keys_tracked[mem_addr_pos]:
-            if ctx.keys_tracked[mem_addr_pos] > 0:
-                bit_int = current_keys_int ^ ctx.keys_tracked[mem_addr_pos]
+    mario_items_arr_one = dolphin_memory_engine.read_byte(MARIO_ITEMS_RECV_ONE_ADDR)
+    if mario_items_arr_one != ctx.mario_items_tracked[0]:
+        if ctx.mario_items_tracked[0] > 0:
+            bit_int = mario_items_arr_one ^ ctx.mario_items_tracked[0]
+        else:
+            bit_int = mario_items_arr_one
+        ctx.mario_items_tracked[0] = mario_items_arr_one
+        for i in range(4,8,1):
+            if (bit_int & (1<<i)) > 0:
+                match i:
+                    case 4:
+                        print("Mario Item received: Hat")
+                        continue
+                    case 5:
+                        print("Mario Item received: Star")
+                        continue
+                    case 6:
+                        print("Mario Item received: Glove")
+                        continue
+                    case 7:
+                        print("Mario Item received: Shoe")
+                        continue
+                    case _:
+                        print("Not supposed to be reached")
+                        continue
+
+    mario_items_arr_two = dolphin_memory_engine.read_byte(MARIO_ITEMS_RECV_TWO_ADDR)
+    if mario_items_arr_two != ctx.mario_items_tracked[1]:
+        if ctx.mario_items_tracked[1] > 0:
+            bit_int = mario_items_arr_two ^ ctx.mario_items_tracked[1]
+        else:
+            bit_int = mario_items_arr_two
+        ctx.mario_items_tracked[1] = mario_items_arr_two
+        if (bit_int & (1 << 0)) > 0:
+            print("Mario Item received: Letter")
+
+    for key_addr_pos in range(10):
+        current_keys_int = dolphin_memory_engine.read_byte(KEYS_BITFLD_ADDR + key_addr_pos)
+        if current_keys_int != ctx.keys_tracked[key_addr_pos]:
+            if ctx.keys_tracked[key_addr_pos] > 0:
+                bit_int = current_keys_int ^ ctx.keys_tracked[key_addr_pos]
             else:
                 bit_int = current_keys_int
-            ctx.keys_tracked[mem_addr_pos] = current_keys_int
+            ctx.keys_tracked[key_addr_pos] = current_keys_int
             for i in range(8):
-                if (bit_int & (1<<i)) > 0 and not key_name_collection[mem_addr_pos][i] == "":
-                    print("Key Received: '" + key_name_collection[mem_addr_pos][i] + " Key'")
+                if (bit_int & (1<<i)) > 0 and not key_name_collection[key_addr_pos][i] == "":
+                    print("Key Received: '" + key_name_collection[key_addr_pos][i] + " Key'")
 
-    mario_items_arr_one = int.from_bytes(dolphin_memory_engine.read_bytes(MARIO_ITEMS_RECV_ONE_ADDR, 1), 'big')
-    mario_items_arr_two = int.from_bytes(dolphin_memory_engine.read_bytes(MARIO_ITEMS_RECV_TWO_ADDR, 1), 'big')
-    mario_items_recv_arr = [(mario_items_arr_one & (1 << 4)), (mario_items_arr_one & (1 << 5)),
-                            (mario_items_arr_one & (1 << 6)), (mario_items_arr_one & (1 << 7)),
-                            (mario_items_arr_two & (1 << 0))]
-    if mario_items_recv_arr != ctx.mario_items_tracked:
-        ctx.mario_items_tracked = mario_items_recv_arr
-        bool_hat = True if mario_items_recv_arr[0] else False
-        bool_star = True if mario_items_recv_arr[1] else False
-        bool_glove = True if mario_items_recv_arr[2] else False
-        bool_shoe = True if mario_items_recv_arr[3] else False
-        bool_letter = True if mario_items_recv_arr[4] else False
-        mario_items_str = f"Hat: {bool_hat}; Star: {bool_star}; Glove: {bool_glove}; Shoe: {bool_shoe}; Letter: {bool_letter}"
-        print("Currently Luigi has the following mario items: " + mario_items_str)
-
-    for mem_addr_pos in range(7):
-        current_boos_int = int.from_bytes(dolphin_memory_engine.read_bytes(BOOS_BITFLD_ADDR + mem_addr_pos, 1), 'big')
-        if current_boos_int != ctx.boos_captured[mem_addr_pos]:
-            if ctx.boos_captured[mem_addr_pos] > 0:
-                bit_int = current_boos_int ^ ctx.boos_captured[mem_addr_pos]
+    for boo_addr_pos in range(7):
+        current_boos_int = dolphin_memory_engine.read_byte(BOOS_BITFLD_ADDR + boo_addr_pos)
+        if current_boos_int != ctx.boos_captured[boo_addr_pos]:
+            if ctx.boos_captured[boo_addr_pos] > 0:
+                bit_int = current_boos_int ^ ctx.boos_captured[boo_addr_pos]
             else:
                 bit_int = current_boos_int
-            ctx.boos_captured[mem_addr_pos] = current_boos_int
+            ctx.boos_captured[boo_addr_pos] = current_boos_int
             for i in range(8):
-                if (bit_int & (1<<i)) > 0 and not boo_name_collection[mem_addr_pos][i] == "":
-                    print("Boo Captured: '" + boo_name_collection[mem_addr_pos][i] + "'")
+                if (bit_int & (1<<i)) > 0 and not boo_name_collection[boo_addr_pos][i] == "":
+                    print("Boo Captured: '" + boo_name_collection[boo_addr_pos][i] + "'")
+
+    #if not LMContext.check_furn:
+        #for furniture_id_addr in range(0, 64, 4): # TODO find max amount of furniture pieces loaded in.
+        #    furniture_id = dolphin_memory_engine.read_word(
+        #        dolphin_memory_engine.follow_pointers(FURNITURE_MAIN_TABLE_ID, [FURN_ID_OFFSET]))
+        #    furniture_flag =  dolphin_memory_engine.read_word(
+        #        dolphin_memory_engine.follow_pointers(FURNITURE_MAIN_TABLE_ID, [FURN_FLAG_OFFSET]))
+        #    furniture_id = int.from_bytes(dolphin_memory_engine.read_bytes(FURNITURE_MAIN_TABLE_ID + FURN_ID_OFFSET + furniture_id_addr, 4))
+        #    furniture_flag = int.from_bytes(dolphin_memory_engine.read_bytes(FURNITURE_MAIN_TABLE_ID + FURN_FLAG_OFFSET + furniture_id_addr, 4))
+
+        #    print(f"Offset: {str(FURNITURE_MAIN_TABLE_ID + FURN_ID_OFFSET + furniture_id_addr)}; ID: {furniture_id}; Flag: {furniture_flag}; Another ID: {furn_id}")
+        #LMContext.check_furn = True
+        #if furniture_id in filtered_location_list:
+            #furniture_state =
+            #    int.from_bytes(dolphin_memory_engine.read_bytes(FURNITURE_INTERACTION_TABLE_START +
+            #                                                    furniture_id_addr, 4)
+            #if furniture_state == 0:
+            #    continue
+            # print("You interacted with " + filtered_location_list[current_index])
+            # Add to interacted locations.
+
 
     # for location, data in ALL_LOCATION_TABLE.items():
     #     checked = False
@@ -425,12 +500,15 @@ async def dolphin_sync_task(ctx: LMContext):
                     await give_items(ctx)
                     await check_locations(ctx)
                 else:
-                    if not ctx.auth:
-                        logger.info('Enter slot name:')
-                        ctx.auth = await ctx.console_input()
+                    # if not ctx.auth:
+                        # logger.info('Enter slot name:')
+                        # ctx.auth = await ctx.console_input()
                         # ctx.auth = read_string(SLOT_NAME_ADDR, 0x40)
                     if ctx.awaiting_rom:
                         await ctx.server_auth()
+                        if not ctx.auth:
+                            logger.info('Enter slot name:')
+                            ctx.auth = await ctx.console_input()
                 await asyncio.sleep(0.1)
             else:
                 if ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
@@ -439,7 +517,7 @@ async def dolphin_sync_task(ctx: LMContext):
                 logger.info("Attempting to connect to Dolphin...")
                 dolphin_memory_engine.hook()
                 if dolphin_memory_engine.is_hooked():
-                    if dolphin_memory_engine.read_bytes(0x80000000, 6) != b"GLME01":
+                    if read_string(0x80000000, 6) != "GLME01":
                         logger.info(CONNECTION_REFUSED_GAME_STATUS)
                         ctx.dolphin_status = CONNECTION_REFUSED_GAME_STATUS
                         dolphin_memory_engine.un_hook()
