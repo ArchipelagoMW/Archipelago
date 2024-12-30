@@ -130,7 +130,7 @@ class SMWorld(World):
         Logic.factory('vanilla')
 
         dummy_rom_file = Utils.user_path(SMSettings.RomFile.copy_to)  # actual rom set in generate_output
-        self.variaRando = VariaRandomizer(self.options, dummy_rom_file, self.player)
+        self.variaRando = VariaRandomizer(self.options, dummy_rom_file, self.player, self.multiworld.seed, self.random)
         self.multiworld.state.smbm[self.player] = SMBoolManager(self.player, self.variaRando.maxDifficulty)
 
         # keeps Nothing items local so no player will ever pickup Nothing
