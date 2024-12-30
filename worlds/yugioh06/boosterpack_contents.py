@@ -7,6 +7,8 @@ class BoosterCard(NamedTuple):
     slot: int
     name: str
     rarity: str
+    amount: int
+    color: str
 
 
 # auto generated

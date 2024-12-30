@@ -492,26 +492,23 @@ class Yugioh06World(World):
         patch.write(os.path.join(output_directory, f"{out_file_name}{patch.patch_file_ending}"))
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        slot_data: Dict[str, Any] = {
-            "structure_deck": self.options.structure_deck.value,
-            "banlist": self.options.banlist.value,
-            "final_campaign_boss_challenges": self.options.final_campaign_boss_challenges.value,
-            "fourth_tier_5_campaign_boss_challenges":
-                self.options.fourth_tier_5_campaign_boss_challenges.value,
-            "third_tier_5_campaign_boss_challenges":
-                self.options.third_tier_5_campaign_boss_challenges.value,
-            "final_campaign_boss_campaign_opponents":
-                self.options.final_campaign_boss_campaign_opponents.value,
-            "fourth_tier_5_campaign_boss_campaign_opponents":
-                self.options.fourth_tier_5_campaign_boss_campaign_opponents.value,
-            "third_tier_5_campaign_boss_campaign_opponents":
-                self.options.third_tier_5_campaign_boss_campaign_opponents.value,
-            "number_of_challenges": self.options.number_of_challenges.value,
-        }
-
+        slot_data: Dict[str, Any] = {}
+        slot_data["structure_deck"] = self.options.structure_deck.value
+        slot_data["banlist"] = self.options.banlist.value
+        slot_data["final_campaign_boss_challenges"] = self.options.final_campaign_boss_challenges.value
+        slot_data["fourth_tier_5_campaign_boss_challenges"] = self.options.fourth_tier_5_campaign_boss_challenges.value
+        slot_data["third_tier_5_campaign_boss_challenges"] = self.options.third_tier_5_campaign_boss_challenges.value
+        slot_data["final_campaign_boss_campaign_opponents"] = self.options.final_campaign_boss_campaign_opponents.value
+        slot_data["fourth_tier_5_campaign_boss_campaign_opponents"] =(
+            self.options.fourth_tier_5_campaign_boss_campaign_opponents.value)
+        slot_data["third_tier_5_campaign_boss_campaign_opponents"] =(
+            self.options.third_tier_5_campaign_boss_campaign_opponents.value)
+        slot_data["number_of_challenges"] = self.options.number_of_challenges.value
         slot_data["removed challenges"] = self.removed_challenges
         slot_data["starting_booster"] = self.starting_booster
         slot_data["starting_opponent"] = self.starting_opponent
+        slot_data["progression_cards"] = [cards[c].starter_id for c in
+                                          self.progression_cards_in_booster + self.progression_cards_in_start]
         return slot_data
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:

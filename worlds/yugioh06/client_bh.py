@@ -9,7 +9,7 @@ from NetUtils import ClientStatus, NetworkItem
 
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
-from . import item_to_index
+from . import item_to_index, cards
 from .boosterpack_contents import BoosterCard
 from .boosterpacks_data import booster_pack_data, booster_card_id_to_name, rarities
 
@@ -57,6 +57,7 @@ class YuGiOh2006Client(BizHawkClient):
     goal_flag: int
     rom_slot_name: Optional[str]
     print_pack: str = ""
+    progression_cards: List[int] = []
 
     def __init__(self) -> None:
         super().__init__()
@@ -87,13 +88,19 @@ class YuGiOh2006Client(BizHawkClient):
 
         ctx.game = self.game
         ctx.items_handling = 0b001
-        ctx.want_slot_data = False
+        ctx.want_slot_data = True
         if "boosterpack" not in ctx.command_processor.commands:
             ctx.command_processor.commands["boosterpack"] = cmd_booster_pack
         return True
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
         ctx.auth = self.rom_slot_name
+
+    def on_package(self, ctx, cmd, args):
+        if cmd == 'Connected':
+            if 'progression_cards' in args['slot_data'] and args['slot_data']['progression_cards']:
+                self.progression_cards = args['slot_data']['progression_cards']
+        super().on_package(ctx, cmd, args)
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         try:
@@ -186,31 +193,44 @@ class YuGiOh2006Client(BizHawkClient):
             # print booster contents
             if self.print_pack != "":
                 logger.info("Printing Pack: " + self.print_pack)
-                for pack in booster_pack_data.keys():
-                    self.print_pack = pack
-                    pack_data = booster_pack_data[self.print_pack]
-                    pointer = pack_data.pointer
-                    raw_data = await bizhawk.read(
-                        ctx.bizhawk_ctx, [
-                            (pointer, pack_data.cards_in_set * 4, "ROM")]
-                    )
-                    raw_data = raw_data[0]
-                    logger.info("   \"" + self.print_pack + "\": {")
-                    cards: List[BoosterCard] = []
-                    for i in range(0, pack_data.cards_in_set):
-                        cid = int.from_bytes(raw_data[i * 4: i * 4 + 2], "little")
-                        if cid in booster_card_id_to_name.keys():
-                            name = booster_card_id_to_name[cid]
-                        else:
-                            name = str(hex(cid))
-                        rarity = rarities[int.from_bytes(raw_data[i * 4 + 2: i * 4 + 4], "little")]
-                        cards.append(BoosterCard(i, name, rarity))
-
-                    for card in sorted(cards, key=lambda card: (rarity_sort_order[card.rarity], card.name)):
-                        logger.info("       \"" + card.name +
-                                        "\": \"" + card.rarity + "\",")
-
-                    logger.info("   },")
+                pack_data = booster_pack_data[self.print_pack]
+                pointer = pack_data.pointer
+                raw_data = await bizhawk.read(
+                    ctx.bizhawk_ctx, [
+                        (pointer, pack_data.cards_in_set * 4, "ROM")
+                    ]
+                )
+                boosterpack_data = raw_data[0]
+                raw_data = await bizhawk.read(
+                    ctx.bizhawk_ctx, [
+                        (0x8, 0x1042, "EWRAM")
+                    ]
+                )
+                collection_data = raw_data[0]
+                logger.info("   \"" + self.print_pack + "\": {")
+                booster_cards: List[BoosterCard] = []
+                for i in range(0, pack_data.cards_in_set):
+                    cid = int.from_bytes(boosterpack_data[i * 4: i * 4 + 2], "little")
+                    if cid in booster_card_id_to_name.keys():
+                        name = booster_card_id_to_name[cid]
+                    else:
+                        name = str(hex(cid))
+                    rarity = rarities[int.from_bytes(boosterpack_data[i * 4 + 2: i * 4 + 4], "little")]
+                    if rarity.endswith(" Alt 1"):
+                        name += " Alt 1"
+                    elif rarity.endswith(" Alt 2"):
+                        name += " Alt 2"
+                    elif rarity.endswith(" Alt 3"):
+                        name += " Alt 3"
+                    amount = collection_data[(cards[name].id - 1) * 2] & 0xF
+                    if cid in self.progression_cards:
+                        color = "blue"
+                    else:
+                        color = "white"
+                    booster_cards.append(BoosterCard(i, name, rarity, amount, color))
+                for card in sorted(booster_cards, key=lambda card: (rarity_sort_order[card.rarity], card.name)):
+                    ctx.ui.print_json([{"text": f"{card.amount}x {card.name}: {card.rarity}",
+                                        "type": "color", "color": card.color}])
                 self.print_pack = ""
 
         except bizhawk.RequestFailedError:
