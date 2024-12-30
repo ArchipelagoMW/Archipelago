@@ -46,7 +46,7 @@ def __get_item_name(item_data):
 def update_event_info(event_info, boo_checks: bool):
     # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
     # boss battles / grabbing boss keys, and various cutscenes etc.
-    events_to_remove = [15, 11, 42, 80, 70, 69, 35, 85, 73, 54, 91, 92, 93, 94]
+    events_to_remove = [11, 15, 35, 42, 54, 69, 70, 73, 80, 85, 91, 92, 93, 94]
 
     # Only remove the boo checks if the player does not want them.
     if not boo_checks:
@@ -81,8 +81,44 @@ def update_event_info(event_info, boo_checks: bool):
             x["PlayerStop"] = 0
             x["EventLoad"] = 0
 
+        # Removes the zoom on Bogmire's tombstone
         if x["EventNo"] == 65:
             x["disappear_flag"] = 10
+
+        # Update the Washroom event trigger to be A-pressed based
+        # Also updates the event disappear trigger to be flag 28
+        if boo_checks and x["EventNo"] == 47:
+            x["pos_x"] = -1300.000000
+            x["pos_y"] = 100.000000
+            x["pos_z"] = -4161.000000
+            x["disappear_flag"] = 28
+            x["EventIf"] = 1
+            x["EventArea"] = 800
+            x["EventLock"] = 1
+            x["PlayerStop"] = 1
+            x["EventLoad"] = 0
+
+        # Update the King Boo event trigger to be A-pressed based
+        if boo_checks and x["EventNo"] == 16:
+            x["pos_x"] = 2250.000000
+            x["pos_y"] = -450.000000
+            x["pos_z"] = -4800.000000
+            x["EventIf"] = 1
+            x["EventArea"] = 800
+            x["EventLock"] = 1
+            x["PlayerStop"] = 1
+            x["EventLoad"] = 0
+
+        # Update the Balcony Boo event trigger to be A-pressed based
+        if boo_checks and x["EventNo"] == 96:
+            x["pos_x"] = 1800.000000
+            x["pos_y"] = 1200.000000
+            x["pos_z"] = -2300.000000
+            x["EventIf"] = 1
+            x["EventArea"] = 800
+            x["EventLock"] = 1
+            x["PlayerStop"] = 1
+            x["EventLoad"] = 0
 
 def update_character_info(character_info, output_data):
     # Removes useless cutscene objects and the vacuum in the Parlor under the closet.
