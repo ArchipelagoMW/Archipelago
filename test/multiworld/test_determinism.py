@@ -246,35 +246,30 @@ class TestDeterministicGeneration(TestCase):
         # Python process.
         return hash("This string is hashed to check that one process' hash seed differs from another")
 
-    def assertDictEqualDiffMismatched(self, d1, d2, msg=None):
+    def assertDictEqualDiffMismatchedOnly(self, d1, d2, msg=None):
         """
         assertDictEqual's output on failure is not very readable for large dictionaries because it makes a diff of the
-        entire dictionaries, rather than only outputting the differences.
+        entire dictionaries, rather than only the differences.
 
-        If the dictionaries are not equal, this method compares the keys first and then, if the keys match, fails with
-        a diff of only the keys with mismatched values.
+        If the dictionaries are not equal, this method fails like assertDictEqual, or assertEqual with dict arguments,
+        but outputs only a diff of the mismatching items.
         """
         self.assertIsInstance(d1, dict, msg)
         self.assertIsInstance(d2, dict, msg)
         if d1 == d2:
             return
-        # Compare keys first.
-        keys1 = set(d1.keys())
-        keys2 = set(d2.keys())
-        self.assertSetEqual(keys1, keys2, msg)
-
-        # Keys match, so find mismatched values.
-        # If the dictionaries had keys in different orders, this produces two dictionaries with keys in the same order.
-        mismatched_values1 = {}
-        mismatched_values2 = {}
+        # Produce copies of the dictionaries with equal items removed.
+        d1_mismatched = d1.copy()
+        d2_mismatched = d2.copy()
         for k, v1 in d1.items():
-            v2 = d2[k]
-            if v1 != v2:
-                mismatched_values1[k] = v1
-                mismatched_values2[k] = v2
+            if k in d2:
+                v2 = d2[k]
+                if v1 == v2:
+                    del d1_mismatched[k]
+                    del d2_mismatched[k]
         # This should always fail. assertEquals is used for better output by getting a diff over only the keys that have
         # mismatched values rather than the entire dictionaries.
-        self.assertEqual(mismatched_values1, mismatched_values2, msg)
+        self.assertEqual(d1_mismatched, d2_mismatched, msg)
         self.fail("Dictionaries were not equal, but they somehow had all the same keys and values."
                   + "" if msg is None else f" : {msg}")
 
@@ -312,7 +307,8 @@ class TestDeterministicGeneration(TestCase):
                     for player, v1 in data1.items():
                         v2 = data2[player]
                         with self.subTest(key):
-                            self.assertDictEqualDiffMismatched(v1, v2, f"{key} did not match for player: {player}")
+                            # Produces better output than self.assertEqual for dicts.
+                            self.assertDictEqualDiffMismatchedOnly(v1, v2, f"{key} did not match for player: {player}")
                 else:
                     self.assertIn(key, {"regions", "entrances", "placements"})
                     for player, v1 in data1.items():
