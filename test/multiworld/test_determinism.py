@@ -31,20 +31,20 @@ class SerializableLocationData(TypedDict):
 
 
 class SerializableEntranceData(TypedDict):
-    name: str
+    # Name is not included because the data is returned as a dict keyed by name.
     parent_region: str | None
     connected_region: str | None
 
 
 class SerializableRegionData(TypedDict):
-    name: str
+    # Name is not included because the data is returned as a dict keyed by name.
     locations: list[str]
 
 
 class SerializableMultiWorldData(TypedDict):
     itempool: list[SerializableItemData]
-    regions: dict[int, list[SerializableRegionData]]
-    entrances: dict[int, list[SerializableEntranceData]]
+    regions: dict[int, dict[str, SerializableRegionData]]
+    entrances: dict[int, dict[str, SerializableEntranceData]]
     locations: dict[int, list[SerializableLocationData]]
     placements: dict[int, list[tuple[str, SerializableItemData | None]]]
     start_inventory: dict[int, list[SerializableItemData]]
@@ -79,11 +79,11 @@ def entrance_to_serializable(ent: Entrance) -> SerializableEntranceData:
     parent_region_name = parent_region.name if parent_region is not None else None
     connected_region = ent.connected_region
     connected_region_name = connected_region.name if connected_region is not None else None
-    return {"name": ent.name, "parent_region": parent_region_name, "connected_region": connected_region_name}
+    return {"parent_region": parent_region_name, "connected_region": connected_region_name}
 
 
 def region_to_serializable(reg: Region) -> SerializableRegionData:
-    return {"name": reg.name, "locations": [loc.name for loc in reg.locations]}
+    return {"locations": [loc.name for loc in reg.locations]}
 
 
 def options_to_serializable(multiworld: MultiWorld) -> dict[int, dict[str, str]]:
@@ -112,11 +112,11 @@ def multiworld_to_serializable(itempool_before_fill: list[Item], multiworld: Mul
 
     itempool = [item_to_serializable(item, item_memo) for item in itempool_before_fill]
 
-    # The order that regions and entrances are added to the multiworld is not considered important, so sort them by
-    # name.
-    regions = {player: sorted(map(region_to_serializable, regions.values()), key=lambda reg: reg["name"])
+    # The order that regions and entrances are added to the multiworld is not considered important, so are returned as
+    # dictionaries.
+    regions = {player: {reg_name: region_to_serializable(reg) for reg_name, reg in regions.items()}
                for player, regions in multiworld.regions.region_cache.items()}
-    entrances = {player: sorted(map(entrance_to_serializable, entrances.values()), key=lambda ent: ent["name"])
+    entrances = {player: {ent_name: entrance_to_serializable(ent) for ent_name, ent in entrances.items()}
                  for player, entrances in multiworld.regions.entrance_cache.items()}
 
     # Locations and the placed items at those locations are tested and serialized separately.
@@ -303,18 +303,22 @@ class TestDeterministicGeneration(TestCase):
                             # Now check that the order is the same by checking for equality.
                             with self.subTest(key + " order"):
                                 self.assertListEqual(v1, v2, f"{key} order did not match for player: {player}")
-                elif key == "options":
-                    for player, v1 in data1.items():
-                        v2 = data2[player]
-                        with self.subTest(key):
-                            # Produces better output than self.assertEqual for dicts.
+                elif key == "placements":
+                    with self.subTest(key):
+                        for player, v1 in data1.items():
+                            v2 = data2[player]
+                            # Placements lists are pre-sorted by name, so that not being in a nondeterministic order
+                            # does not affect the comparison.
+                            self.assertIsInstance(v1, list)
+                            self.assertIsInstance(v2, list)
+                            self.assertEqual(v1, v2, f"{key} did not match for player: {player}")
+                elif key in {"options", "regions", "entrances"}:
+                    with self.subTest(key):
+                        for player, v1 in data1.items():
+                            v2 = data2[player]
                             self.assertDictEqualDiffMismatchedOnly(v1, v2, f"{key} did not match for player: {player}")
                 else:
-                    self.assertIn(key, {"regions", "entrances", "placements"})
-                    for player, v1 in data1.items():
-                        v2 = data2[player]
-                        with self.subTest(key):
-                            self.assertEqual(v1, v2, f"{key} did not match for player: {player}")
+                    self.fail(f"Unexpected key: '{key}'")
 
     def test_hash_determinism(self) -> None:
         """
