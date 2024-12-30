@@ -212,7 +212,6 @@ class SC2World(World):
                     else:
                         mission_item_classification[location.name] = loc.item.classification.as_flag()
             slot_data["mission_item_classification"] = mission_item_classification
-            print(len(slot_data["mission_item_classification"]))
 
         # Disable trade if there is no trade partner
         traders = [
