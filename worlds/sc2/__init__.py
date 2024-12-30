@@ -204,11 +204,14 @@ class SC2World(World):
             for location in self.multiworld.get_locations(self.player):
                 # Event do not hold items
                 if not location.is_event:
-                    # Ensure that if there are multiple items given for finishing a mission and that at least 
-                    # one is progressive, the flag kept is progressive.
-                    # Assuming that the location added are always after the basic one and named Cache. 
-                    if lookup_location_id_to_type[location.address] == LocationType.VICTORY_CACHE:
-                        location_name = location.name.split(" Cache")[0]
+                    if lookup_location_id_to_type[location.address] == LocationType.VICTORY:
+                        location_name = location.name
+                        mission_item_classification[location_name] = location.item.classification.as_flag()
+                    elif lookup_location_id_to_type[location.address] == LocationType.VICTORY_CACHE:
+                        # Ensure that if there are multiple items given for finishing a mission and that at least 
+                        # one is progressive, the flag kept is progressive.
+                        # Assuming that the location added are always after the basic one, which is true as long as 
+                        # VICTORY_CACHE_OFFSET is a positive integer.
                         if mission_item_classification[location_name] != ItemClassification.progression:
                             mission_item_classification[location_name] = location.item.classification.as_flag() 
                     else:
