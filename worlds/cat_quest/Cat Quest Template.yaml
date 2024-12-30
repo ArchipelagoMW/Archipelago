@@ -1,0 +1,5 @@
+name: Nikki
+game: Cat Quest
+description: Template for Cat Quest
+Cat Quest:
+  goal: main_quest
