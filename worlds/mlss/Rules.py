@@ -100,9 +100,86 @@ def set_rules(world: "MLSSWorld", excluded):
             lambda state: StateLogic.ultra(state, world.player) and StateLogic.thunder(state, world.player),
         )
 
-    forbid_item(
-        world.get_location(LocationName.SSChuckolaMembershipCard), "Nuts", world.player
-    )  # Bandaid Fix
+    if world.options.goal == 1 and not world.options.castle_skip:
+        add_rule(
+            world.get_location(LocationName.BowsersCastleRoyCorridorBlock1),
+            lambda state: StateLogic.canDig(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleRoyCorridorBlock2),
+            lambda state: StateLogic.canDig(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleMiniMarioSidescrollerBlock1),
+            lambda state: StateLogic.canDig(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleMiniMarioSidescrollerBlock2),
+            lambda state: StateLogic.canDig(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleMiniMarioMazeBlock1),
+            lambda state: StateLogic.canDig(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleMiniMarioMazeBlock2),
+            lambda state: StateLogic.canDig(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleBeforeWendyFightBlock1),
+            lambda state: StateLogic.canDig(state, world.player)
+                        and StateLogic.ultra(state, world.player)
+                        and StateLogic.fire(state, world.player)
+                        and StateLogic.canCrash(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleBeforeWendyFightBlock2),
+            lambda state: StateLogic.canDig(state, world.player)
+                          and StateLogic.ultra(state, world.player)
+                          and StateLogic.fire(state, world.player)
+                          and StateLogic.canCrash(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleLarryRoomBlock),
+            lambda state: StateLogic.canDig(state, world.player)
+                          and StateLogic.ultra(state, world.player)
+                          and StateLogic.canDash(state, world.player)
+                          and StateLogic.canCrash(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleWendyLarryHallwayDigspot),
+            lambda state: StateLogic.ultra(state, world.player)
+                          and StateLogic.fire(state, world.player)
+                          and StateLogic.canCrash(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleBeforeFawfulFightBlock1),
+            lambda state: StateLogic.canDig(state, world.player)
+                          and StateLogic.ultra(state, world.player)
+                          and StateLogic.canDash(state, world.player)
+                          and StateLogic.canCrash(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleBeforeFawfulFightBlock2),
+            lambda state: StateLogic.canDig(state, world.player)
+                          and StateLogic.ultra(state, world.player)
+                          and StateLogic.canDash(state, world.player)
+                          and StateLogic.canCrash(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleGreatDoorBlock1),
+            lambda state: StateLogic.canDig(state, world.player)
+                          and StateLogic.ultra(state, world.player)
+                          and StateLogic.canDash(state, world.player)
+                          and StateLogic.canCrash(state, world.player)
+        )
+        add_rule(
+            world.get_location(LocationName.BowsersCastleGreatDoorBlock2),
+            lambda state: StateLogic.canDig(state, world.player)
+                          and StateLogic.ultra(state, world.player)
+                          and StateLogic.canDash(state, world.player)
+                          and StateLogic.canCrash(state, world.player)
+        )
 
     add_rule(
         world.get_location(LocationName.HoohooVillageHammerHouseBlock),

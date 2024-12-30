@@ -160,3 +160,10 @@ def birdo_shop(state, player):
 
 def fungitown_birdo_shop(state, player):
     return state.can_reach("Fungitown Shop Birdo Flag", "Region", player)
+
+def soul(state, player):
+    return (ultra(state, player)
+            and canMini(state, player)
+            and canDig(state, player)
+            and canDash(state, player)
+            and canCrash(state, player))

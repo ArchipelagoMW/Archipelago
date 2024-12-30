@@ -93,11 +93,14 @@ def connect_regions(world: "MLSSWorld"):
     connect(world, names, "Main Area", "BooStatue", lambda state: StateLogic.canCrash(state, world.player))
     if world.options.goal == 1:
         if world.options.castle_skip:
-            connect(world, names, "Main Area", "Bowser's Castle", lambda state: state.has("Beanstar Emblem", world.player, world.options.emblems_required.value))
-            connect(world, names, "Bowser's Castle", "Bowser's Castle Mini", lambda state: StateLogic.canMini(state, world.player) and StateLogic.thunder(state, world.player))
-            connect(world, names, "Bowser's Castle Mini", "Cackletta's Soul", lambda state: StateLogic.canCrash(state, world.player))
+            connect(world, names, "Main Area", "Cackletta's Soul",
+                    lambda state: state.has("Beanstar Emblem", world.player, world.options.emblems_required.value))
         else:
-            connect(world, names, "Main Area", "Cackletta's Soul", lambda state: state.has("Beanstar Emblem", world.player, world.options.emblems_required.value))
+            connect(world, names, "Main Area", "Bowser's Castle", lambda state: state.has("Beanstar Emblem", world.player, world.options.emblems_required.value))
+            connect(world, names, "Bowser's Castle", "Bowser's Castle Mini", lambda state:
+                                  StateLogic.canMini(state, world.player)
+                                  and StateLogic.thunder(state,world.player))
+            connect(world, names, "Bowser's Castle Mini", "Cackletta's Soul", lambda state: StateLogic.soul(state, world.player))
     connect(
         world,
         names,
@@ -254,7 +257,7 @@ def connect_regions(world: "MLSSWorld"):
             names,
             "Shop Starting Flag",
             "Shop Birdo Flag",
-            lambda state: StateLogic.postJokes(state, world.player),
+            lambda state: StateLogic.postJokes(state, world.player, world.options.goal.value),
         )
         connect(
             world,
