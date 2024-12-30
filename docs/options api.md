@@ -355,7 +355,7 @@ format.
 ### OptionCounter
 This is a special case of OptionDict where the dictionary values can only be integers.  
 It returns a [collections.Counter](https://docs.python.org/3/library/collections.html#collections.Counter).
-This means that if you access a key that isn't present, its value will be 0.
+This means that if you access a key that isn't present, its value will be 0.  
 The upside of using an OptionCounter (instead of an OptionDict with integer values) is that an OptionCounter can be
 displayed on the Options page on WebHost.
 
