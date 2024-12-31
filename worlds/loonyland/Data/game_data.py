@@ -710,8 +710,8 @@ loonyland_location_table: dict[str, LLLocation] = {
     "Bowlin'": LLLocation(115, LLLocCat.BADGE, 1, "Bowling", base_item="Disco Mode"),
     "Vandalizin'": LLLocation(116, LLLocCat.BADGE, 2, "Zombiton", base_item="Vintage Mode"),
     "Greed": LLLocation(117, LLLocCat.BADGE, 3, "Menu", flags=["LONG"], base_item="Infinite Gems"),
-    "Monster Slayin'": LLLocation(118, LLLocCat.BADGE, 4, "Menu", base_item="Sidekick"),
-    "Monster Poundin'": LLLocation(119, LLLocCat.BADGE, 5, "Menu", flags=["LONG"], base_item="Hardcore Mode"),
+    "Monster Slayin'": LLLocation(118, LLLocCat.BADGE, 4, "Menu", flags=["LONG"], base_item="Sidekick"),
+    "Monster Poundin'": LLLocation(119, LLLocCat.BADGE, 5, "Menu", base_item="Hardcore Mode"),
     "Ghostbustin'": LLLocation(120, LLLocCat.BADGE, 6, "Haunted Tower Roof", base_item="Homing Shots"),
     "Lookin'": LLLocation(121, LLLocCat.BADGE, 7, "The Witch's Cabin", base_item="20/20 Vision"),
     "Ultimate Victory": LLLocation(
@@ -982,9 +982,7 @@ def set_entrance_rules(multiworld, world):
         LLEntrance("Deeper Under The Lake", "Frankenjulie's Laboratory", True),
         LLEntrance("Frankenjulie's Laboratory", "Deeper Under The Lake", True),
         LLEntrance("Frankenjulie's Laboratory", "Halloween Hill", True),
-        LLEntrance(
-            "Haunted Tower Entrance", "Haunted Tower", False, lambda state: state.has("Ghost Potion", world.player)
-        ),
+        LLEntrance("Haunted Tower Entrance", "Haunted Tower", False),
         LLEntrance("Haunted Tower", "Haunted Basement Entrance", False),
         LLEntrance("Haunted Tower", "Haunted Tower Stairs Up", False),
         LLEntrance(
@@ -996,17 +994,14 @@ def set_entrance_rules(multiworld, world):
             and state.has("Skull Key", world.player),
         ),
         LLEntrance("Haunted Tower Stairs Up", "Haunted Tower Floor 2 Entrance", True),
-        LLEntrance(
-            "Haunted Tower Stairs Up", "Haunted Tower", False, lambda state: state.has("Ghost Potion", world.player)
-        ),
+        LLEntrance("Haunted Tower Stairs Up", "Haunted Tower", False),
         LLEntrance(
             "Haunted Tower Stairs Down",
             "Haunted Tower",
             False,
             lambda state: state.has("Bat Key", world.player)
             and state.has("Pumpkin Key", world.player)
-            and state.has("Skull Key", world.player)
-            and state.has("Ghost Potion", world.player),
+            and state.has("Skull Key", world.player),
         ),
         LLEntrance(
             "Haunted Tower Stairs Down",
