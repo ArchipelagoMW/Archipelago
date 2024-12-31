@@ -113,7 +113,9 @@ class DSTContext(CommonContext):
                 "itemname": self.item_names.lookup_in_slot(hint["item"], hint["receiving_player"]),
                 "location": hint["location"],
                 "locationname": self.location_names.lookup_in_slot(hint["location"], hint["finding_player"]),
+                "finding_player": hint["finding_player"],
                 "findingname": self.player_names[hint["finding_player"]],
+                "receiving_player" : hint["receiving_player"],
                 "receivingname": self.player_names[hint["receiving_player"]],
             }, False)
 
