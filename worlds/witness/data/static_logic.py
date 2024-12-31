@@ -87,7 +87,7 @@ class StaticWitnessLogicObj:
             entity_hex = entity_name_full[0:7]
             entity_name = entity_name_full[9:-1]
 
-            rule_string = line_split.pop(0)
+            entity_requirement_string = line_split.pop(0)
 
             full_entity_name = current_region.short_name + " " + entity_name
 
@@ -105,7 +105,9 @@ class StaticWitnessLogicObj:
 
                 self.ENTITIES_BY_NAME[self.ENTITIES_BY_HEX[entity_hex]["checkName"]] = self.ENTITIES_BY_HEX[entity_hex]
 
-                self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex] = {"entities": parse_witness_rule(rule_string)}
+                self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex] = {
+                    "entities": parse_witness_rule(entity_requirement_string)
+                }
 
                 # Lasers and Doors exist in a region, but don't have a regional *requirement*
                 # If a laser is activated, you don't need to physically walk up to it for it to count
@@ -115,7 +117,7 @@ class StaticWitnessLogicObj:
                 current_region.physical_entities.append(entity_hex)
                 continue
 
-            rule_string = line_split.pop(0)
+            item_requirement_string = line_split.pop(0)
 
             laser_names = {
                 "Laser",
@@ -151,18 +153,18 @@ class StaticWitnessLogicObj:
                 entity_type = "Panel"
                 location_type = "General"
 
-            required_items = parse_witness_rule(rule_string)
-            required_panels = parse_witness_rule(rule_string)
+            required_items = parse_witness_rule(item_requirement_string)
+            required_entities = parse_witness_rule(entity_requirement_string)
 
             required_items = frozenset(required_items)
 
             requirement = {
-                "entities": required_panels,
+                "entities": required_entities,
                 "items": required_items
             }
 
             if entity_type == "Obelisk Side":
-                eps = set(next(iter(required_panels)))
+                eps = set(next(iter(required_entities)))
                 eps -= {"Theater to Tunnels"}
 
                 eps_ints = {int(h, 16) for h in eps}
