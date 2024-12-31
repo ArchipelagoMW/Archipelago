@@ -79,8 +79,9 @@ def get_chosen_character(world: World):
             chosen_character = world.random.choice(sorted(world.options.AllowedCharacters.value))
     return chosen_character
 
-def get_second_character(world: World, chosen_character: str, character_pool: str):
-    pruned_pool = [character for character in character_pool if character != "None"]
+def get_second_character(world: World, chosen_character: str, character_pool: List[str]):
+    pruned_pool = [character for character in character_pool if character != "None"
+                   and character not in world.options.RestrictedCharacters.value]
     if world.options.AllowDuplicateCharacters.value == True:
         pruned_pool = [character for character in pruned_pool if character != chosen_character]
     if len(pruned_pool) > 0:
