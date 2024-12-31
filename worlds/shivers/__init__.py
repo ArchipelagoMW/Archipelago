@@ -251,9 +251,9 @@ class ShiversWorld(World):
 
     def get_pre_fill_items(self) -> List["Item"]:
         if self.options.full_pots == "pieces":
-            return [self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 70 + i]) for i in range(20)]
+            return [self.create_item(self.item_id_to_name[SHIVERS_ITEM_ID_OFFSET + i]) for i in range(20)]
         elif self.options.full_pots == "complete":
-            return [self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 140 + i]) for i in range(10)]
+            return [self.create_item(self.item_id_to_name[SHIVERS_ITEM_ID_OFFSET + 20 + i]) for i in range(10)]
         else:
             pool = []
             for i in range(10):
