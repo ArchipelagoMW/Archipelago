@@ -115,7 +115,7 @@ class StaticWitnessLogicObj:
                 current_region.physical_entities.append(entity_hex)
                 continue
 
-            required_item_lambda = line_split.pop(0)
+            rule_string = line_split.pop(0)
 
             laser_names = {
                 "Laser",
@@ -151,7 +151,7 @@ class StaticWitnessLogicObj:
                 entity_type = "Panel"
                 location_type = "General"
 
-            required_items = parse_witness_rule(required_item_lambda)
+            required_items = parse_witness_rule(rule_string)
             required_panels = parse_witness_rule(rule_string)
 
             required_items = frozenset(required_items)
