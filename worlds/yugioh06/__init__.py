@@ -175,6 +175,11 @@ class Yugioh06World(World):
                 for name, v in slot_data["progression_cards"].items():
                     self.progression_cards[name] = [booster_card_id_to_name[cid] for cid in
                                                     slot_data["progression_cards"][name]]
+                for name, content in slot_data["booster_pack_contents"]:
+                    con = {}
+                    for cid in slot_data["booster_pack_contents"][name]:
+                        con[booster_card_id_to_name(cid)] = "Common"
+                    self.booster_pack_contents[name] = con
 
         # set possible starting booster and opponent. Restrict them if you don't start with a standard booster
         if self.options.structure_deck.value > 5:
@@ -314,9 +319,11 @@ class Yugioh06World(World):
             set_card_rules(self)
 
         # randomize packs
-        if self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_shuffle:
+        if not self.booster_pack_contents and\
+            self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_shuffle:
             self.booster_pack_contents = create_shuffled_packs(self)
-        elif self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_chaos:
+        elif not self.booster_pack_contents and\
+                self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_chaos:
             self.booster_pack_contents = create_chaos_packs(self)
 
     def create_region(self, name: str, locations=None, exits=None):
@@ -517,6 +524,10 @@ class Yugioh06World(World):
         slot_data["progression_cards"] = {}
         for k, v in self.progression_cards.items():
             slot_data["progression_cards"][k] = [cards[c].starter_id for c in v]
+
+        slot_data["booster_pack_contents"] = {}
+        for name, content in self.booster_pack_contents.items():
+            slot_data["booster_pack_contents"][name] = [cards[c].starter_id for c in content.keys()]
         return slot_data
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
