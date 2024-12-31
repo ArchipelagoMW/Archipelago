@@ -363,13 +363,17 @@ class CMItemPool:
         if not has_pocket:
             my_filler_items = [item for item in my_filler_items if "Pocket" not in item]
         
-        # If we have no valid filler items and pocket is allowed, use pocket gems as fallback
-        if len(my_filler_items) == 0 and has_pocket:
-            my_filler_items = ["Progressive Pocket Gems"]
-        elif len(my_filler_items) == 0:
-            return items  # No valid items and pocket not allowed
-        
-        while (len(items) + user_location_count + sum(locked_items.values())) < max_items and my_filler_items:
+        while (len(items) + user_location_count + sum(locked_items.values())) < max_items:
+            # If we have no valid filler items, use pocket gems as fallback
+            if not my_filler_items:
+                # Fill all remaining slots with Progressive Pocket Gems
+                remaining_slots = max_items - (len(items) + user_location_count + sum(locked_items.values()))
+                for _ in range(remaining_slots):
+                    self.consume_item("Progressive Pocket Gems", locked_items)
+                    try_item = self.world.create_item("Progressive Pocket Gems")
+                    items.append(try_item)
+                break
+            
             chosen_item = self.world.random.choice(my_filler_items)
             if not has_pocket and not self.piece_model.has_prereqs(chosen_item):
                 my_filler_items.remove(chosen_item)  # Remove items we can't use
@@ -381,10 +385,6 @@ class CMItemPool:
                 items.append(try_item)
             else:
                 my_filler_items.remove(chosen_item)  # Remove items we can't add
-                
-            # If we've exhausted all items but need pocket gems as fallback
-            if len(my_filler_items) == 0 and has_pocket:
-                my_filler_items = ["Progressive Pocket Gems"]
                 
         return items
 
