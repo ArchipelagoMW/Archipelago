@@ -66,7 +66,7 @@ class StaticWitnessLogicObj:
                 new_region_and_connections = define_new_region(line)
                 current_region = new_region_and_connections[0]
                 region_name = current_region.name
-                self.ALL_REGIONS_BY_NAME[current_region.name] = current_region
+                self.ALL_REGIONS_BY_NAME[region_name] = current_region
                 for connection in new_region_and_connections[1]:
                     self.CONNECTIONS_WITH_DUPLICATES[region_name].append(connection)
                 current_area.regions.append(region_name)
