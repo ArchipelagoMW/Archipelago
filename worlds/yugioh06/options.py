@@ -210,8 +210,7 @@ class RandomizePackContents(Choice):
     display_name = "Randomize Pack Contents"
     option_vanilla = 0
     option_shuffle = 1
-    option_keep_themes = 2
-    option_chaos = 3
+    option_chaos = 2
 
 
 class AddEmptyBanList(Toggle):

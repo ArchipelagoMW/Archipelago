@@ -9,6 +9,7 @@ from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld
 import Utils
 from worlds.AutoWorld import WebWorld, World
 from .banlists import banlists
+from .boosterpack_chaos import create_chaos_packs
 from .boosterpack_contents import get_booster_contents
 from .boosterpack_shuffle import create_shuffled_packs
 from .boosterpacks_data import booster_card_id_to_name
@@ -328,6 +329,8 @@ class Yugioh06World(World):
         # randomize packs
         if self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_shuffle:
             self.booster_pack_contents = create_shuffled_packs(self)
+        elif self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_chaos:
+            self.booster_pack_contents = create_chaos_packs(self)
 
     def create_region(self, name: str, locations=None, exits=None):
         region = Region(name, self.player, self.multiworld)

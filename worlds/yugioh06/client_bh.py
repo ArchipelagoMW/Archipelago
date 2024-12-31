@@ -18,11 +18,25 @@ logger = logging.getLogger("Client")
 
 rarity_sort_order  = {
     "Secret Rare Alt 1": 0,
-    "Secret Rare": 1,
-    "Ultra Rare": 2,
-    "Super Rare": 3,
-    "Rare": 4,
-    "Common": 5,
+    "Secret Rare Alt 2": 1,
+    "Secret Rare Alt 3": 2,
+    "Secret Rare": 3,
+    "Ultra Rare Alt 1": 4,
+    "Ultra Rare Alt 2": 5,
+    "Ultra Rare Alt 3": 6,
+    "Ultra Rare": 7,
+    "Super Rare Alt 1": 8,
+    "Super Rare ALt 2": 9,
+    "Super Rare Alt 3": 10,
+    "Super Rare": 11,
+    "Rare Alt 1": 12,
+    "Rare Alt 2": 13,
+    "Rare Alt 3": 14,
+    "Rare": 15,
+    "Common Alt 1": 16,
+    "Common Alt 2": 17,
+    "Common Alt 3": 18,
+    "Common": 19,
 }
 
 

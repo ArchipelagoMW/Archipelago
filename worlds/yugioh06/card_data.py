@@ -1,13 +1,10 @@
 import csv
-import os
 from typing import NamedTuple, Dict, List
 
 import Utils
-from settings import get_settings
 from worlds.yugioh06 import banlists
-from worlds.yugioh06.boosterpack_contents import contents, not_in_standard_pool
+from worlds.yugioh06.boosterpack_contents import contents
 from worlds.yugioh06.boosterpacks_data import booster_pack_data, booster_card_id_to_name
-from worlds.yugioh06.structure_deck import structure_contents
 
 monster_types = {
     0x00: "None",
@@ -4569,10 +4566,14 @@ def spell_check():
         if name not in cards.keys():
             print(f"Misspelled: {name}")
 
-def non_normal_nisp():
-    for card in not_in_standard_pool:
-        if cards[card].card_type == "Ritual":
-            print(card)
+def print_legal_ids():
+    i = 0
+    for name, card in cards.items():
+        if i % 10 != 0:
+            print(f"{hex(card.starter_id)},", end=" ")
+        else:
+            print(f"{hex(card.starter_id)},")
+        i += 1
 
 
 def get_each_card_count():
@@ -4634,4 +4635,4 @@ def find_removal():
         for card in unlimted:
             print(f"    \"{card}\",")
 
-# get_each_card_count()
+print_legal_ids()
