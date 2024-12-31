@@ -77,13 +77,13 @@ def define_new_region(region_string: str) -> Tuple[RegionDefinition, List[Connec
         connected_region = line_split.pop(0)
         traversal_rule_string = line_split.pop(0)
 
-        options.append(ConnectionDefinition(connected_region, parse_lambda(traversal_rule_string)))
+        options.append(ConnectionDefinition(connected_region, parse_witness_rule(traversal_rule_string)))
 
     region_obj = RegionDefinition(region_name, region_name_simple)
     return region_obj, options
 
 
-def parse_lambda(lambda_string: str) -> WitnessRule:
+def parse_witness_rule(lambda_string: str) -> WitnessRule:
     """
     Turns a lambda String literal like this: a | b & c
     into a set of sets like this: {{a}, {b, c}}

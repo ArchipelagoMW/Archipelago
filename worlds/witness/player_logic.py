@@ -48,7 +48,7 @@ from .data.utils import (
     get_vault_exclusion_list,
     logical_and_witness_rules,
     logical_or_witness_rules,
-    parse_lambda,
+    parse_witness_rule,
 )
 from .entity_hunt import EntityHuntPicker
 
@@ -353,11 +353,11 @@ class WitnessPlayerLogic:
             line_split = line.split(" - ")
 
             requirement = {
-                "entities": parse_lambda(line_split[1]),
+                "entities": parse_witness_rule(line_split[1]),
             }
 
             if len(line_split) > 2:
-                required_items = parse_lambda(line_split[2])
+                required_items = parse_witness_rule(line_split[2])
                 items_actually_in_the_game = [
                     item_name for item_name, item_definition in static_witness_logic.ALL_ITEMS.items()
                     if item_definition.category is ItemCategory.SYMBOL
@@ -412,13 +412,13 @@ class WitnessPlayerLogic:
                         self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].append(only_connection)
                     else:
                         combined_rule = logical_or_witness_rules(
-                            [connection.traversal_rule, parse_lambda(panel_set_string)]
+                            [connection.traversal_rule, parse_witness_rule(panel_set_string)]
                         )
                         combined_connection = ConnectionDefinition(target_region, combined_rule)
                         self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].append(combined_connection)
                     break
             else:
-                new_connection = ConnectionDefinition(target_region, parse_lambda(panel_set_string))
+                new_connection = ConnectionDefinition(target_region, parse_witness_rule(panel_set_string))
                 self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].append(new_connection)
 
         if adj_type == "Added Locations":

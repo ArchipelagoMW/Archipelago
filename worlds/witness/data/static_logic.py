@@ -20,7 +20,7 @@ from .utils import (
     get_umbra_variety_logic,
     get_vanilla_logic,
     logical_or_witness_rules,
-    parse_lambda,
+    parse_witness_rule,
 )
 
 
@@ -106,7 +106,7 @@ class StaticWitnessLogicObj:
                 self.ENTITIES_BY_NAME[self.ENTITIES_BY_HEX[entity_hex]["checkName"]] = self.ENTITIES_BY_HEX[entity_hex]
 
                 self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex] = {
-                    "entities": parse_lambda(required_panel_lambda)
+                    "entities": parse_witness_rule(required_panel_lambda)
                 }
 
                 # Lasers and Doors exist in a region, but don't have a regional *requirement*
@@ -153,8 +153,8 @@ class StaticWitnessLogicObj:
                 entity_type = "Panel"
                 location_type = "General"
 
-            required_items = parse_lambda(required_item_lambda)
-            required_panels = parse_lambda(required_panel_lambda)
+            required_items = parse_witness_rule(required_item_lambda)
+            required_panels = parse_witness_rule(required_panel_lambda)
 
             required_items = frozenset(required_items)
 
