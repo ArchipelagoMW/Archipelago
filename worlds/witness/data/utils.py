@@ -3,7 +3,7 @@ from pkgutil import get_data
 from random import Random
 from typing import Collection, FrozenSet, Iterable, List, Optional, Set, Tuple, TypeVar
 
-from worlds.witness.data.definition_classes import ConnectionDefinition, RegionDefinition, WitnessRule
+from .definition_classes import ConnectionDefinition, RegionDefinition, WitnessRule
 
 T = TypeVar("T")
 
