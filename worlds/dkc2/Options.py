@@ -192,7 +192,7 @@ class DamageTrapWeight(BaseTrapWeight):
     Likelihood of a receiving a trap which damages the player
     """
     display_name = "Damage Trap Weight"
-    visibility = Visibility.spoiler | Visibility.complex_ui | Visibility.template
+    visibility = Visibility.spoiler | Visibility.complex_ui
     default = 0
 
 class InstaDeathTrapWeight(BaseTrapWeight):
@@ -200,7 +200,7 @@ class InstaDeathTrapWeight(BaseTrapWeight):
     Likelihood of a receiving a trap which instantly kills the player
     """
     display_name = "Instant Death Trap Weight"
-    visibility = Visibility.spoiler | Visibility.complex_ui | Visibility.template
+    visibility = Visibility.spoiler | Visibility.complex_ui
     default = 0
 
 dkc2_option_groups = [
