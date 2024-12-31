@@ -213,7 +213,7 @@ class YuGiOh2006Client(BizHawkClient):
             if not ctx.finished_game and locations[18] & (1 << 5) != 0:
                 await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
 
-            # print booster contents
+            # print booster contents command
             if self.print_pack != "":
                 logger.info("Printing Pack: " + self.print_pack)
                 pack_data = booster_pack_data[self.print_pack]
@@ -245,9 +245,17 @@ class YuGiOh2006Client(BizHawkClient):
                         name += " Alt 2"
                     elif rarity.endswith(" Alt 3"):
                         name += " Alt 3"
-                    amount = collection_data[(cards[name].id - 1) * 2] & 0xF
+
+                    if name in cards:
+                        card_id = cards[name].id
+                    else:
+                        card_id = 0
+                        name = "ERROR: " + name
+                    amount = collection_data[(card_id - 1) * 2] & 0xF
                     if cid in self.progression_cards:
                         color = "blue"
+                    elif name.startswith("ERROR"):
+                        color = "red"
                     else:
                         color = "white"
                     booster_cards.append(BoosterCard(i, name, rarity, amount, color))
@@ -256,6 +264,7 @@ class YuGiOh2006Client(BizHawkClient):
                                         "type": "color", "color": card.color}])
                 self.print_pack = ""
 
+            # cards search command
             if self.card_search:
                 logger.info("Searching for Card: " + self.card_search)
                 card_data = cards[self.card_search]

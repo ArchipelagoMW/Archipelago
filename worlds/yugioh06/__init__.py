@@ -183,7 +183,8 @@ class Yugioh06World(World):
         # set possible starting booster and opponent
         if self.options.structure_deck.value == self.options.structure_deck.option_worst:
             self.is_draft_mode = True
-            boosters = draft_boosters
+            if self.options.randomize_pack_contents == self.options.randomize_pack_contents.option_vanilla:
+                boosters = draft_boosters
             if self.options.campaign_opponents_shuffle.value:
                 opponents = tier_1_opponents
             else:
@@ -275,8 +276,6 @@ class Yugioh06World(World):
                     total_amount += min(w_amount, 40 - total_amount)
                     if total_amount >= 40:
                         break
-        if self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_shuffle:
-            self.booster_pack_contents = create_shuffled_packs(self)
         # set starting booster and opponent
         for item in self.options.start_inventory:
             if item in opponents:
@@ -315,6 +314,9 @@ class Yugioh06World(World):
         # set progression_cards
         set_card_rules(self)
 
+        # randomize packs
+        if self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_shuffle:
+            self.booster_pack_contents = create_shuffled_packs(self)
 
     def create_region(self, name: str, locations=None, exits=None):
         region = Region(name, self.player, self.multiworld)

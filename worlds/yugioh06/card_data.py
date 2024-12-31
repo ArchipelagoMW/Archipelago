@@ -96,6 +96,7 @@ class CardData(NamedTuple):
     structure_id: int
     starter_id: int
 
+
 # auto-generated
 cards: Dict[str, CardData] = {
     "Blue-Eyes White Dragon": CardData(1, 4007, "Blue-Eyes White Dragon", "89631139", 0, False, 3000, 2500, 8,
@@ -4455,8 +4456,19 @@ nomi_monsters = {
     "Wall Shadow",
     "Water Dragon",
     "Winged Kuriboh LV10",
+    # additional blacklist
     "Giant Kozaky",
-    "Cyber Archfiend"
+    "Cyber Archfiend",
+    "Nuvia the Wicked",
+    "Panther Warrior"
+    "Armor Axe",
+    "Arsenal Bug",
+    "Cave Dragon",
+    "Flash Assailant",
+    "Gaia Soul the Combustible Collective",
+    "Terrorking Archfiend",
+    "Mystic Swordsman LV4"
+
 }
 
 def get_all_valid_cards_set():

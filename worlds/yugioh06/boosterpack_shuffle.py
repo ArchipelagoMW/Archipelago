@@ -1,7 +1,8 @@
 from typing import Dict
 
-from worlds.yugioh06.boosterpack_contents import contents
+from worlds.AutoWorld import World
 from worlds.yugioh06.boosterpacks_data import booster_pack_data
+from worlds.yugioh06.logic import get_cards_in_first_pack
 
 all_cards_in_pool = {
     "4-Starred Ladybug of Doom": 2,
@@ -1893,14 +1894,35 @@ all_cards_in_pool = {
 }
 
 
-def create_shuffled_packs(world):
+def create_shuffled_packs(world: World):
+    beater_in_first_pack = get_cards_in_first_pack(world, "Beaters")
+    monster_removal_in_first_pack = get_cards_in_first_pack(world, "Monster Removal")
+    backrow_removal_in_first_pack = get_cards_in_first_pack(world, "Backrow Removal")
+
     card_pool = dict(all_cards_in_pool)
     packs: Dict[str, Dict[str, str]] = {}
+    starting_booster_name = world.starting_booster
+    starting_booster_contents = {}
+
+    for card in beater_in_first_pack:
+        starting_booster_contents[card] = "Common"
+        card_pool[card] -= 1
+    for card in monster_removal_in_first_pack:
+        starting_booster_contents[card] = "Common"
+        card_pool[card] -= 1
+    for card in backrow_removal_in_first_pack:
+        starting_booster_contents[card] = "Common"
+        card_pool[card] -= 1
+    packs[starting_booster_name] = starting_booster_contents
+
     for name, booster in booster_pack_data.items():
         remaining_cards = [name for name, amount in card_pool.items() if amount > 0]
         world.random.shuffle(remaining_cards)
-        set_contents = remaining_cards[0:booster.cards_in_set]
-        contents_with_rarity = {}
+        if name in packs:
+            contents_with_rarity = packs[name]
+        else:
+            contents_with_rarity = {}
+        set_contents = remaining_cards[0:booster.cards_in_set - len(contents_with_rarity)]
         data = booster_pack_data[name]
         i = 0
         for card in set_contents:

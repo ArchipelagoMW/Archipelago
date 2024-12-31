@@ -1007,7 +1007,7 @@ booster_card_id_to_name = {
     0x1421: "Type Zero Magic Crusher",
     0x1429: "Yellow Luster Shield",
     0x142a: "Creature Swap",
-    0x142d: "Dark Magician Alt 3",
+    0x142d: "Dark Magician (Arcana)",
     0x142e: "Thousand Knives",
     0x1430: "Mystic Box",
     0x1432: "Ground Collapse",
