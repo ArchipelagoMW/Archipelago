@@ -4,15 +4,24 @@ import hashlib
 import os
 import json
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 if TYPE_CHECKING:
     from . import DKC2World
 
+from BaseClasses import ItemClassification, LocationProgressType
+
 from .Names import ItemName
 from .Items import item_groups
+from .Text import string_to_bytes, goal_texts
+from .Levels import level_map
+from .Options import Goal
+from Options import OptionError
 
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
+
+from .data.Trivia import TriviaQuestion, trivia_data, trivia_addrs, original_correct_answers, excluded_questions
+from .data.Hints import CrankyHint, WrinklyHint, cranky_rarity_text, cranky_location_text, wrinkly_hint_text
 
 HASH_US = '98458530599b9dff8a7414a7f20b777a'
 HASH_US_REV_1 = 'd323e6bb4ccc85fd7b416f58350bc1a2'
@@ -37,9 +46,9 @@ rom_start_inventory = {
     ItemName.skull_kart: 0x3DFF91,
     ItemName.barrel_kannons: 0x3DFF92,
     ItemName.barrel_exclamation: 0x3DFF93,
-    ItemName.barrel_kong: 0x3DFF93,
-    ItemName.barrel_warp: 0x3DFF94,
-    ItemName.barrel_control: 0x3DFF95,
+    ItemName.barrel_kong: 0x3DFF94,
+    ItemName.barrel_warp: 0x3DFF95,
+    ItemName.barrel_control: 0x3DFF96,
 }
 
 unlock_data = {
@@ -80,6 +89,7 @@ unlock_data = {
 }
 
 currency_data = {
+    STARTING_ID + 0x002F: [0x8024, 0x56],
     STARTING_ID + 0x0008: [0x802F, 0x36], # Lost World Rock
     STARTING_ID + 0x0009: [0x08CE, 0x56], # DK Coin
     STARTING_ID + 0x000A: [0x08CC, 0x36], # Kremkoin
@@ -90,6 +100,8 @@ currency_data = {
 trap_data = {
     STARTING_ID + 0x0040: [0x40, 0x00], # Freeze Trap
     STARTING_ID + 0x0041: [0x42, 0x00], # Reverse Trap
+    STARTING_ID + 0x0042: [0x44, 0x00], # Damage Trap
+    STARTING_ID + 0x0043: [0x46, 0x00], # Instant Death Trap
 }
 
 
@@ -100,11 +112,10 @@ class DKC2PatchExtension(APPatchExtension):
     def shuffle_levels(caller: APProcedurePatch, rom: bytes) -> bytes:
         unshuffled_rom = bytearray(rom)
         rom = bytearray(rom)
-        rom_connections = json.loads(caller.get_file("levels.json").decode("UTF-8"))
+        rom_connections = json.loads(caller.get_file("levels.bin").decode("UTF-8"))
         
         from .Levels import level_rom_data, boss_rom_data
         dkc2_level_rom_data = dict(level_rom_data, **boss_rom_data)
-
 
         for level, selected_level in rom_connections.items():
             addr = dkc2_level_rom_data[level][0]
@@ -120,8 +131,174 @@ class DKC2PatchExtension(APPatchExtension):
 
         return bytes(rom)
 
+    @staticmethod
+    def generate_trivia(caller: APProcedurePatch, rom: bytes) -> bytes:
+        import random
+
+        rom = bytearray(rom)
+
+        json_data = json.loads(caller.get_file("data.json").decode("UTF-8"))
+        random.seed(json_data["seed"])
+        games_in_session = json_data["games_in_session"]
+
+        # Build database from original questions
+        start_addr = 0x34C591
+        local_trivia_data = {**trivia_data}
+
+        for idx in range(0, 0x1B0, 8):
+            if idx in excluded_questions:
+                continue
+            offset = int.from_bytes(rom[start_addr+idx:start_addr+idx+2], "little")
+            offset |= 0x370000
+            text_data = rom[offset:offset+0xD0]     # The max amount should be around 0xC6
+            text_data = text_data.split(b'\x00')
+            question = []
+            for _ in range(6):
+                question.append(text_data.pop(0).decode() + "°")
+
+            offset = int.from_bytes(rom[start_addr+idx+4:start_addr+idx+6], "little")
+            offset |= 0x370000
+            text_data = rom[offset:offset+0x70]     # The max amount should be around 0x66
+            text_data = text_data.split(b'\x00')
+            answers = []
+            for _ in range(3):
+                text = text_data.pop(0).decode() + "°" + text_data.pop(0).decode() + "°"
+                text = text[8:]
+                answers.append(text)
+
+            idy = original_correct_answers[idx >> 3]
+            correct_answer = answers.pop(idy)
+            data = TriviaQuestion(question, correct_answer, answers.pop(0), answers.pop(0))
+            if idx % 0x48 < 0x10:
+                local_trivia_data["Donkey Kong Country 2"][0].append(data)
+            elif idx % 0x48 < 0x28:
+                local_trivia_data["Donkey Kong Country 2"][1].append(data)
+            else:
+                local_trivia_data["Donkey Kong Country 2"][2].append(data)
+
+        # Build valid library
+        selected_trivia = {
+            "easy": [],
+            "medium": [],
+            "hard": [],
+        }
+        
+        for game, trivia in local_trivia_data.items():
+            if game in games_in_session:
+                selected_trivia["easy"].extend(trivia[0].copy())
+                selected_trivia["medium"].extend(trivia[1].copy())
+                selected_trivia["hard"].extend(trivia[2].copy())
+
+        answer_a = "     A. "
+        answer_b = "     B. "
+        answer_c = "     C. "
+
+        # Choose questions and write them to ROM
+        write_addr = 0x378466
+        for difficulty, questions in selected_trivia.items():
+            random.shuffle(questions)
+            for idx in range(6):
+                question_count = json_data["question_count"]
+                pointer_addr = trivia_addrs[difficulty][idx]
+                for idy in range(0, question_count*8, 8):
+                    # Write a question
+                    addr = write_addr & 0xFFFF
+                    rom[pointer_addr+idy:pointer_addr+idy+2] = addr.to_bytes(2, "little")
+                    rom[pointer_addr+idy+2:pointer_addr+idy+4] = bytearray([0x58, 0x02])
+                    trivia: TriviaQuestion = questions.pop(0)
+                    for line in trivia.question:
+                        write_addr = write_text_to_rom(rom, write_addr, line)
+
+                    # Write answers
+                    choice = random.randrange(1, 4)
+                    addr = write_addr & 0xFFFF
+                    rom[pointer_addr+idy+4:pointer_addr+idy+6] = addr.to_bytes(2, "little")
+                    rom[pointer_addr+idy+6:pointer_addr+idy+8] = choice.to_bytes(2, "little")
+                    if choice == 1:
+                        write_addr = write_text_to_rom(rom, write_addr, answer_a + trivia.correct_answer)
+                        write_addr = write_text_to_rom(rom, write_addr, answer_b + trivia.incorrect_answer_1)
+                        write_addr = write_text_to_rom(rom, write_addr, answer_c + trivia.incorrect_answer_2)
+                    elif choice == 2:
+                        write_addr = write_text_to_rom(rom, write_addr, answer_a + trivia.incorrect_answer_1)
+                        write_addr = write_text_to_rom(rom, write_addr, answer_b + trivia.correct_answer)
+                        write_addr = write_text_to_rom(rom, write_addr, answer_c + trivia.incorrect_answer_2)
+                    else:
+                        write_addr = write_text_to_rom(rom, write_addr, answer_a + trivia.incorrect_answer_1)
+                        write_addr = write_text_to_rom(rom, write_addr, answer_b + trivia.incorrect_answer_2)
+                        write_addr = write_text_to_rom(rom, write_addr, answer_c + trivia.correct_answer)
+
+        # Save last written addr for later
+        rom[0x400000:0x400003] = write_addr.to_bytes(3, "little")
+
+        return bytes(rom)
+
+
+    @staticmethod
+    def write_cranky_hints(caller: APProcedurePatch, rom: bytes) -> bytes:
+        rom = bytearray(rom)
+        hint_data = bytearray(caller.get_file("cranky_hints.bin"))
+        hint_offsets = bytearray(caller.get_file("cranky_hint_offsets.bin"))
+
+        write_addr = int.from_bytes(rom[0x400000:0x400003], "little")
+
+        size = len(hint_data)
+        rom[write_addr:write_addr+size] = hint_data
+        addr = 0x34C7B1
+        
+        for idx in range(0, 82, 2):
+            offset = int.from_bytes(hint_offsets[idx:idx+2], "little")
+            pointer = offset + (write_addr & 0xFFFF)
+            rom[addr+idx:addr+idx+2] = bytearray(pointer.to_bytes(2, "little"))
+
+        write_addr = write_addr + size
+        rom[0x400000:0x400003] = write_addr.to_bytes(3, "little")
+
+        return bytes(rom)
+    
+
+    @staticmethod
+    def write_wrinkly_hints(caller: APProcedurePatch, rom: bytes) -> bytes:
+        rom = bytearray(rom)
+        hint_data = bytearray(caller.get_file("wrinkly_hints.bin"))
+        hint_offsets = bytearray(caller.get_file("wrinkly_hint_offsets.bin"))
+
+        write_addr = int.from_bytes(rom[0x400000:0x400003], "little")
+
+        size = len(hint_data)
+        rom[write_addr:write_addr+size] = hint_data
+        addr = 0x34C74F
+
+        invalid_options = [
+            7*2,
+            14*2,
+            21*2,
+            25*2,
+            29*2,
+            32*2,
+        ]
+        idy = 0
+        for idx in range(2, 70, 2):
+            if idx in invalid_options:
+                continue
+            offset = int.from_bytes(hint_offsets[idy:idy+2], "little")
+            idy += 2
+            pointer = offset + (write_addr & 0xFFFF)
+            rom[addr+idx:addr+idx+2] = bytearray(pointer.to_bytes(2, "little"))
+
+        print (f"{write_addr:06X}")
+
+        return bytes(rom[:-3])
+
+
+def write_text_to_rom(rom: bytearray, write_addr: int, input_string: str):
+    data = string_to_bytes(input_string)
+    size = len(data)
+    rom[write_addr:write_addr+size] = data
+    write_addr += size
+    return write_addr
+
 class DKC2ProcedurePatch(APProcedurePatch, APTokenMixin):
-    hash = [HASH_US, HASH_US_REV_1]
+    hash = [HASH_US_REV_1]
     game = "Donkey Kong Country 2"
     patch_file_ending = ".apdkc2"
     result_file_ending = ".sfc"
@@ -130,16 +307,19 @@ class DKC2ProcedurePatch(APProcedurePatch, APTokenMixin):
         ("apply_tokens", ["token_patch.bin"]),
         ("apply_bsdiff4", ["dkc2_basepatch.bsdiff4"]),
         ("shuffle_levels", []),
+        ("generate_trivia", []),
+        ("write_cranky_hints", []),
+        ("write_wrinkly_hints", []),
     ]
 
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
 
-    def write_byte(self, offset, value):
+    def write_byte(self, offset: int, value: int):
         self.write_token(APTokenTypes.WRITE, offset, value.to_bytes(1, "little"))
 
-    def write_bytes(self, offset, value: typing.Iterable[int]):
+    def write_bytes(self, offset: int, value: typing.Iterable[int]):
         self.write_token(APTokenTypes.WRITE, offset, bytes(value))
 
 def patch_rom(world: "DKC2World", patch: DKC2ProcedurePatch):
@@ -152,9 +332,13 @@ def patch_rom(world: "DKC2World", patch: DKC2ProcedurePatch):
     # Set goal
     patch.write_byte(0x3DFF81, world.options.goal.value)
     patch.write_byte(0x3DFF82, world.options.lost_world_rocks.value)
+    patch.write_byte(0x3DFF97, world.options.krock_boss_tokens.value)
 
     # Set starting lives
     patch.write_byte(0x008FA1, world.options.starting_life_count.value)
+
+    # Death link enable
+    patch.write_byte(0x3DFF98, world.options.death_link.value)
 
     # Write starting inventory
     patch.write_byte(0x3DFF80, world.options.starting_kong.value)
@@ -178,12 +362,269 @@ def patch_rom(world: "DKC2World", patch: DKC2ProcedurePatch):
         else:
             patch.write_byte(addr, 0x01)
 
+    # Write amount of questions per quiz (for the menus)
+    patch.write_byte(0x34A3CC, world.options.swanky_questions_per_quiz.value)
+
+    # Write flavor text for the goal
+    if world.options.goal == Goal.option_kompletionist:
+        if world.options.krock_boss_tokens.value != 0:
+            text = goal_texts["kompletionist_tokens"].copy()
+        else:
+            text = goal_texts["kompletionist_item"].copy()
+    elif world.options.goal == Goal.option_flying_krock:
+        if world.options.krock_boss_tokens.value != 0:
+            text = goal_texts["flying_krock_tokens"].copy()
+        else:
+            text = goal_texts["flying_krock_items"].copy()
+    else:
+        text = goal_texts["lost_world"].copy()
+    
+    data = bytearray()
+    for line in text:
+        line = line.replace("TOKENS", str(world.options.krock_boss_tokens.value))
+        line = line.replace("ROCKS", str(world.options.lost_world_rocks.value))
+        line = line.center(32, " ").rstrip() + "°"
+        line = string_to_bytes(line)
+        data += line
+
+    patch.write_bytes(0x34AC84, data)
+
+    # Write additional data for generation
+    data_dict = {
+        "seed": world.random.getrandbits(64),
+        "question_count": world.options.swanky_questions_per_quiz.value,
+        "games_in_session": list(world.games_in_session),
+    }
+    patch.write_file("data.json", json.dumps(data_dict).encode("UTF-8"))
+
+    # Write hints to an external file
+    compute_cranky_hints(world, patch)
+    compute_wrinkly_hints(world, patch)
+
     # Save shuffled levels data
-    patch.write_file("levels.json", json.dumps(world.rom_connections).encode("UTF-8"))
+    patch.write_file("levels.bin", json.dumps(world.rom_connections).encode("UTF-8"))
 
     patch.write_file("token_patch.bin", patch.get_token_binary())
 
+ 
+def compute_cranky_hints(world: "DKC2World", patch: DKC2ProcedurePatch):
+    # Prepare hints
+    reverse_connections = {y: x for x, y in world.level_connections.items()}
+    valid_hints: List[CrankyHint] = []
+    for location in world.multiworld.get_filled_locations(world.player):
+        if location.progress_type is LocationProgressType.EXCLUDED or \
+            "Defeated" in location.name or \
+            "K. Rool Duel" in location.name or  \
+            "Krocodile Kore" in location.name:
+            continue
+        level_name = location.name.split(" - ")[0]
+        location_type = location.name.split(" - ")[1].split(" #")[0]
+        bonus_num = 0
+        if "Swanky" in location.name:
+            level_name = "Swanky Trivia"
+            location_type = "Swanky"
+            world_name = location.name.split(" at ")[1].split(" - ")[0]
+        elif "Bonus" in location.name:
+            bonus_num = location.name.split("#")[1]
+        else:
+            level_map_name = reverse_connections[level_name + ": Level"]
+            world_name = level_map[level_map_name]
+        world_name = world_name.split(" (")[0]
+
+        classification = location.item.classification
+        classification &= ItemClassification.skip_balancing^0xFFFF
+
+        data = CrankyHint(
+            location_type,
+            level_name, 
+            world_name, 
+            bonus_num,
+            location.item.name, 
+            int(classification),
+            world.multiworld.get_player_name(location.item.player),
+        )
+        valid_hints.append(data)
+
+    # Select hints
+    hint_data = bytearray()
+    hint_offsets = bytearray()
+    world.random.shuffle(valid_hints)
+    count = 0
+    addr = 0
+    for hint in valid_hints:
+        hint_text: List[str] = []
+        selection = world.random.choice(cranky_location_text[hint.type])
+        hint_text.extend(selection)
+        if hint.classification not in cranky_rarity_text.keys():
+            hint.classification = 0xFF
+        selection = world.random.choice(cranky_rarity_text[hint.classification])
+        hint_text.extend(selection)
+
+        hint_offsets += addr.to_bytes(2, "little")
+
+        for line in hint_text:
+            line = line.replace("LEVEL", hint.level)
+            line = line.replace("WORLD", hint.world)
+            line = line.replace("NUM", hint.bonus)
+            line = line.replace("PLAYER", hint.player)
+            line = line.replace("ITEM", hint.item)
+            line = line.center(32, " ").rstrip() + "°"
+            line = string_to_bytes(line)
+            hint_data += line
+            addr += len(line)
+
+        count += 1
+        if count == 41:
+            break
+
+    patch.write_file("cranky_hints.bin", hint_data)
+    patch.write_file("cranky_hint_offsets.bin", hint_offsets)
+
+
+def compute_wrinkly_hints(world: "DKC2World", patch: DKC2ProcedurePatch):
+    hint_data = bytearray()
+    hint_offsets = bytearray()
+    hints = []
+
+    hintable_items = [
+        ItemName.diddy,
+        ItemName.dixie,
+        ItemName.crocodile_cauldron,
+        ItemName.krem_quay,
+        ItemName.krazy_kremland,
+        ItemName.gloomy_gulch,
+        ItemName.krools_keep,
+        ItemName.the_flying_krock,
+        ItemName.lost_world_cauldron,
+        ItemName.lost_world_quay,
+        ItemName.lost_world_kremland,
+        ItemName.lost_world_gulch,
+        ItemName.lost_world_keep,
+        ItemName.carry,
+        ItemName.climb,
+        ItemName.cling,
+        ItemName.cartwheel,
+        ItemName.swim,
+        ItemName.team_attack,
+        ItemName.helicopter_spin,
+        ItemName.rambi,
+        ItemName.squawks,
+        ItemName.enguarde,
+        ItemName.squitter,
+        ItemName.rattly,
+        ItemName.clapper,
+        ItemName.glimmer,
+        ItemName.barrel_kannons,
+        ItemName.barrel_exclamation,
+        ItemName.barrel_kong,
+        ItemName.barrel_warp,
+        ItemName.barrel_control,
+        ItemName.skull_kart,
+        ItemName.lost_world_rock,
+        ItemName.dk_coin,
+        ItemName.kremkoins,
+        ItemName.banana_coin,
+        ItemName.red_balloon,
+    ]
+    unskippable_items = [
+        ItemName.lost_world_rock,
+        ItemName.dk_coin,
+        ItemName.kremkoins,
+        ItemName.banana_coin,
+        ItemName.red_balloon,
+    ]
+
+    abort = False
+    count = 0
+    for item in hintable_items:
+        if item in world.options.start_inventory.value and item not in unskippable_items:
+            continue
+        locations = world.multiworld.find_item_locations(item, world.player)
+        if len(locations) == 0:
+            continue
+        
+        for location in locations:
+            hint = WrinklyHint(
+                location.item.name,
+                location.name,
+                world.multiworld.get_player_name(location.player),
+                location.game,
+            )
+            hints.append(hint)
+            count += 1
+            if count == 28:
+                abort = True
+                break
+
+        if abort:
+            break
+
+    world.random.shuffle(hints)
+    # B4AC84
+    addr = 0
+    hint: WrinklyHint
+    for hint in hints:
+        hint_text: List[str] = []
+        selection = world.random.choice(wrinkly_hint_text)
+        hint_text.extend(selection)
+
+        hint_offsets += addr.to_bytes(2, "little")
+
+        if "LOCATION" in hint_text[-1]:
+            hint_text.pop()
+            hint_text.extend(hint.location)
+
+        for line in hint_text:
+            line = line.replace("PLAYER", hint.player)
+            line = line.replace("ITEM", hint.item)
+            line = line.replace("GAME", hint.game)
+            line = line.center(32, " ").rstrip() + "°"
+            line = string_to_bytes(line)
+            hint_data += line
+            addr += len(line)
+            
+    patch.write_file("wrinkly_hints.bin", hint_data)
+    patch.write_file("wrinkly_hint_offsets.bin", hint_offsets)
+
+
+def generate_game_trivia(world: "DKC2World"):
+    games_in_session = set()
+    for game in trivia_data.keys():
+        if len(world.multiworld.get_game_worlds(game)) != 0:
+            games_in_session.add(game)
+    for game in world.options.swanky_excluded_topics.value:
+        games_in_session.remove(game)
+    for game in world.options.swanky_forced_topics.value:
+        games_in_session.add(game)
     
+    games_in_session.add("Donkey Kong Country 2")
+    
+    trivia_easy_count = 7
+    trivia_medium_count = 15
+    trivia_hard_count = 19
+    
+    for game, trivia in trivia_data.items():
+        if game in games_in_session:
+            trivia_easy_count += len(trivia[0])
+            trivia_medium_count += len(trivia[1])
+            trivia_hard_count += len(trivia[2])
+
+    max_count = world.options.swanky_questions_per_quiz.value * 6
+
+    if trivia_easy_count < max_count or trivia_medium_count < max_count or trivia_hard_count < max_count:
+        raise OptionError(f"Slot \"{world.player_name}\" has way too many trivia questions per quiz. Please do one of the following: \n"
+                          f" * Force additional trivia categories\n"
+                          f" * Remove categories from being excluded\n"
+                          f" * Reduce the amount of trivia questions per quiz (Currently: {world.options.swanky_questions_per_quiz.value})\n\n"
+                          f"Current trivia counts:\n"
+                          f" * NEEDED: {max_count}\n"
+                          f" * EASY:   {trivia_easy_count}\n"
+                          f" * MEDIUM: {trivia_medium_count}\n"
+                          f" * HARD:   {trivia_hard_count}")
+    
+    return games_in_session
+
+
 def get_base_rom_bytes(file_name: str = "") -> bytes:
     base_rom_bytes = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
@@ -192,8 +633,8 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
-        if basemd5.hexdigest() not in {HASH_US, HASH_US_REV_1}:
-            raise Exception('Supplied Base Rom does not match known MD5 for US 1.0 or 1.1 release. '
+        if basemd5.hexdigest() not in {HASH_US_REV_1}:
+            raise Exception('Supplied Base Rom does not match known MD5 for US 1.1 release. '
                             'Get the correct game and version, then dump it')
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes

@@ -30,6 +30,8 @@ DKC2_SPC_CHANNEL_BUSY = WRAM_START + 0x0621
 DKC2_SRAM = SRAM_START + 0x800
 DKC2_RECV_INDEX = DKC2_SRAM + 0x020
 DKC2_INIT_FLAG = DKC2_SRAM + 0x022
+DKC2_DAMAGE_FLAG = DKC2_SRAM + 0x044
+DKC2_INSTA_DEATH_FLAG = DKC2_SRAM + 0x046
 
 DKC2_GAME_TIME = WRAM_START + 0x00D5
 DKC2_IN_LEVEL = WRAM_START + 0x01FF
@@ -49,6 +51,8 @@ DKC2_STAGE_FLAGS = WRAM_START + 0x59F2
 
 DKC2_ROMHASH_START = 0xFFC0
 ROMHASH_SIZE = 0x15
+
+UNCOLLECTABLE_LEVELS = [0x09, 0x21, 0x63, 0x60, 0x0D]
 
 class DKC2SNIClient(SNIClient):
     game = "Donkey Kong Country 2"
@@ -72,7 +76,8 @@ class DKC2SNIClient(SNIClient):
         from SNIClient import snes_read
 
         rom_name = await snes_read(ctx, DKC2_ROMHASH_START, ROMHASH_SIZE)
-        if rom_name is None or rom_name == bytes([0] * ROMHASH_SIZE) or rom_name[:4] != b"DKC2":
+        death_link = await snes_read(ctx, DKC2_SETTINGS + 0x18, 0x1)
+        if rom_name is None or death_link is None or rom_name == bytes([0] * ROMHASH_SIZE) or rom_name[:4] != b"DKC2":
             return False
         
         ctx.game = self.game
@@ -81,9 +86,8 @@ class DKC2SNIClient(SNIClient):
         ctx.send_option = 0
         ctx.allow_collect = True
 
-        #death_link = await snes_read(ctx, MMX_DEATH_LINK_ACTIVE, 1)
-        #if death_link[0]:
-        #    await ctx.update_death_link(bool(death_link[0] & 0b1))
+        if death_link[0]:
+            await ctx.update_death_link(bool(death_link[0] & 0b1))
 
         ctx.rom = rom_name
 
@@ -97,12 +101,26 @@ class DKC2SNIClient(SNIClient):
         general_data = await snes_read(ctx, WRAM_START + 0x00D0, 0x0F)
         game_flags = await snes_read(ctx, DKC2_GAME_FLAGS, 0x60)
         misc_flags = await snes_read(ctx, DKC2_MISC_FLAGS, 0x80)
+        swanky_flags = await snes_read(ctx, DKC2_SWANKY_FLAGS, 0x09)
 
-        if general_data is None or game_flags is None or misc_flags is None or setting_data is None:
+        if general_data is None or game_flags is None or misc_flags is None or setting_data is None or swanky_flags is None:
+            self.game_state = False
             return
 
         loaded_save = int.from_bytes(general_data[0x05:0x07], "little")
         if loaded_save == 0:
+            self.game_state = False
+            return
+
+        nmi_pointer = await snes_read(ctx, WRAM_START + 0x0020, 0x2)
+        if nmi_pointer is None:
+            self.game_state = False
+            return
+        nmi_pointer = int.from_bytes(nmi_pointer, "little")
+        if nmi_pointer == 0x8CE9:
+            self.game_state = True
+            
+        if not self.game_state:
             return
 
         validation = int.from_bytes(await snes_read(ctx, DKC2_INIT_FLAG, 0x2), "little")
@@ -111,11 +129,19 @@ class DKC2SNIClient(SNIClient):
             self.game_state = False
             return
         
+        player_state = await snes_read(ctx, WRAM_START + 0x08C3, 0x01)
+        if player_state is None:
+            return
+        
+        if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
+            currently_dead = player_state[0] & 0x20
+            await ctx.handle_deathlink_state(currently_dead)
+
         from .Levels import location_id_to_level_id
         from worlds import AutoWorldRegister
 
         new_checks = []
-        current_level = int.from_bytes(await snes_read(ctx, DKC2_CURRENT_LEVEL, 0x01))
+        current_level = int.from_bytes(await snes_read(ctx, DKC2_CURRENT_LEVEL, 0x01), "little")
         kong_flags = misc_flags[0x30]
         stage_flags = game_flags[0x40:0x60]
         bonus_flags = list(game_flags[0x00:0x20])
@@ -147,6 +173,14 @@ class DKC2SNIClient(SNIClient):
                     level_data = int.from_bytes(bonus_flags[level_offset:level_offset+2], "little")
                     if level_data & level_bit:
                         new_checks.append(loc_id)
+                elif loc_type == 0x04:
+                    # Swanky Games
+                    bonus_offset = data[1] >> 4
+                    bonus_data = swanky_flags[bonus_offset]
+                    bonus_bit = data[1] & 0x07
+                    if bonus_data & bonus_bit:
+                        new_checks.append(loc_id)
+
 
         # Check goals
         goal_check = 0
@@ -265,12 +299,21 @@ class DKC2SNIClient(SNIClient):
             await snes_flush_writes(ctx)
                 
         # Handle collected locations
+        nmi_pointer = await snes_read(ctx, WRAM_START + 0x0020, 0x2)
+        if nmi_pointer is None:
+            return
+        nmi_pointer = int.from_bytes(nmi_pointer, "little")
+        if nmi_pointer != 0x8CE9:
+            return
+
         new_level_clear = False
         new_dk_coin = False
         new_bonus = False
+        new_quiz = False
         stage_flags = list(game_flags[0x40:0x60])
         bonus_flags = list(game_flags[0x00:0x20])
         dk_coin_flags = list(game_flags[0x20:0x40])
+        swanky_flags = list(swanky_flags)
         i = 0
         for loc_id in ctx.checked_locations:
             if loc_id not in ctx.locations_checked:
@@ -290,6 +333,9 @@ class DKC2SNIClient(SNIClient):
                 level_offset = (level_num >> 3) & 0x1E
                 level_bit = 1 << (level_num & 0x0F)
 
+                if level_num in UNCOLLECTABLE_LEVELS:
+                    continue
+
                 if loc_type == 0x00:
                     # Level clear
                     level_data = int.from_bytes(stage_flags[level_offset:level_offset+2], "little")
@@ -308,6 +354,12 @@ class DKC2SNIClient(SNIClient):
                     level_data |= level_bit
                     bonus_flags[level_offset:level_offset+2] = level_data.to_bytes(2, "little")
                     new_bonus = True
+                elif loc_type == 0x04:
+                    # Swanky
+                    bonus_offset = data[1] >> 4
+                    bonus_bit = data[1] & 0x07
+                    swanky_flags[bonus_offset] |= bonus_bit
+                    new_quiz = True
         
         if new_level_clear:
             snes_buffered_write(ctx, DKC2_STAGE_FLAGS, bytearray(stage_flags))
@@ -315,3 +367,24 @@ class DKC2SNIClient(SNIClient):
             snes_buffered_write(ctx, DKC2_DK_COIN_FLAGS, bytearray(dk_coin_flags))
         if new_bonus:
             snes_buffered_write(ctx, DKC2_BONUS_FLAGS, bytearray(bonus_flags))
+        if new_quiz:
+            snes_buffered_write(ctx, DKC2_SWANKY_FLAGS, bytearray(swanky_flags))
+
+        await snes_flush_writes(ctx)
+
+
+    async def deathlink_kill_player(self, ctx):
+        from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
+
+        addr = DKC2_INSTA_DEATH_FLAG
+        currency = await snes_read(ctx, addr, 0x02)
+        if currency is None:
+            return
+        currency = int.from_bytes(currency, "little") + 1
+        currency &= 0x0FFF
+        snes_buffered_write(ctx, addr, bytes([currency]))
+
+        await snes_flush_writes(ctx)
+
+        ctx.death_state = DeathState.dead
+        ctx.last_death_link = time.time()

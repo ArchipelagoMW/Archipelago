@@ -6,14 +6,15 @@ krazy_kremland = "Krazy Kremland Access"
 gloomy_gulch = "Gloomy Gulch Access"
 krools_keep = "K. Rool's Keep Access"
 the_flying_krock = "The Flying Krock Access"
-lost_world_cauldron = "Lost World Access (Crocodile Cauldron)"
-lost_world_quay = "Lost World Access (Krem Quay)"
-lost_world_kremland = "Lost World Access (Krazy Kremland)"
-lost_world_gulch = "Lost World Access (Gloomy Gulch)"
-lost_world_keep = "Lost World Access (K. Rool's Keep)"
+lost_world_cauldron = "Lost World Access (Cauldron)"
+lost_world_quay = "Lost World Access (Quay)"
+lost_world_kremland = "Lost World Access (Kremland)"
+lost_world_gulch = "Lost World Access (Gulch)"
+lost_world_keep = "Lost World Access (Keep)"
 
 # Collectibles
 lost_world_rock = "Lost World Rock"
+boss_token = "Boss Token"
 
 # Playable Characters
 diddy = "Diddy"
@@ -49,13 +50,15 @@ barrel_control = "Controllable Barrels"
 victory = "Donkey Kong"
 
 # Currency (Hintables)
-kremkoins = "Kremkoins"
+kremkoins = "Kremkoin"
 dk_coin = "DK Coin"
 
 # Traps
 freeze_trap = "Freeze Trap"
 reverse_trap = "Reverse Trap"
+damage_trap = "Damage Trap"
+death_trap = "Instant Death Trap"
 
 # Junk
-red_balloon = "1-Up"
+red_balloon = "1-Up Balloon"
 banana_coin = "Banana Coin"

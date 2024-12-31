@@ -1,5 +1,8 @@
+from typing import TYPE_CHECKING
 
-from worlds.AutoWorld import World
+if TYPE_CHECKING:
+    from . import DKC2World
+
 from .Names import RegionName, LocationName
 
 
@@ -50,6 +53,12 @@ location_id_to_level_id = {
     LocationName.klobber_karnage_clear:     [0x00, 0x80],
     LocationName.fiery_furnace_clear:       [0x00, 0x16],
     LocationName.animal_antics_clear:       [0x00, 0x9A],
+
+    LocationName.krow_defeated:             [0x00, 0x09],
+    LocationName.kleever_defeated:          [0x00, 0x21],
+    LocationName.kudgel_defeated:           [0x00, 0x63],
+    LocationName.king_zing_defeated:        [0x00, 0x60],
+    LocationName.kreepy_krow_defeated:      [0x00, 0x0D],
     
     LocationName.pirate_panic_kong:        [0x01, 0x03],
     LocationName.mainbrace_mayhem_kong:    [0x01, 0x0C],
@@ -199,6 +208,25 @@ location_id_to_level_id = {
     LocationName.chain_link_chamber_bonus_2:  [0x03, 0xB6],
     LocationName.toxic_tower_bonus_1:         [0x03, 0xA5],
     LocationName.screechs_sprint_bonus_1:     [0x03, 0xA7],
+
+    LocationName.swanky_galleon_game_1:       [0x04, 0x01],
+    LocationName.swanky_galleon_game_2:       [0x04, 0x02],
+    LocationName.swanky_galleon_game_3:       [0x04, 0x04],
+    LocationName.swanky_cauldron_game_1:      [0x04, 0x11],
+    LocationName.swanky_cauldron_game_2:      [0x04, 0x12],
+    LocationName.swanky_cauldron_game_3:      [0x04, 0x14],
+    LocationName.swanky_quay_game_1:          [0x04, 0x21],
+    LocationName.swanky_quay_game_2:          [0x04, 0x22],
+    LocationName.swanky_quay_game_3:          [0x04, 0x24],
+    LocationName.swanky_kremland_game_1:      [0x04, 0x81],
+    LocationName.swanky_kremland_game_2:      [0x04, 0x82],
+    LocationName.swanky_kremland_game_3:      [0x04, 0x84],
+    LocationName.swanky_gulch_game_1:         [0x04, 0x41],
+    LocationName.swanky_gulch_game_2:         [0x04, 0x42],
+    LocationName.swanky_gulch_game_3:         [0x04, 0x44],
+    LocationName.swanky_keep_game_1:          [0x04, 0x51],
+    LocationName.swanky_keep_game_2:          [0x04, 0x52],
+    LocationName.swanky_keep_game_3:          [0x04, 0x54],
 }
 
 level_list = [
@@ -402,7 +430,7 @@ boss_rom_data = {
     RegionName.stronghold_showdown_level:   [0x34DD34+9, 0x34DD43],
 }
 
-def generate_level_list(world: World):
+def generate_level_list(world: "DKC2World"):
     shuffled_level_list = level_list.copy()
     shuffled_boss_list = boss_list.copy()
     if world.options.shuffle_levels:

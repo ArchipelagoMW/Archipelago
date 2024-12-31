@@ -1,9 +1,7 @@
-import dataclasses
 import os
 import typing
 import math
 import settings
-import hashlib
 import threading
 import pkgutil
 
@@ -14,18 +12,18 @@ from .Items import DKC2Item, ItemData, item_table, junk_table, item_groups
 from .Locations import DKC2Location, setup_locations, all_locations, location_groups
 from .Regions import create_regions, connect_regions
 from .Names import ItemName, LocationName, EventName
-from .Options import DKC2Options, Logic, StartingKong
+from .Options import DKC2Options, Logic, StartingKong, Goal, dkc2_option_groups
 from .Client import DKC2SNIClient
 from .Levels import generate_level_list, level_map, location_id_to_level_id
 from .Rules import DKC2StrictRules, DKC2LooseRules, DKC2ExpertRules
-from .Rom import patch_rom, DKC2ProcedurePatch, HASH_US, HASH_US_REV_1
+from .Rom import patch_rom, DKC2ProcedurePatch, generate_game_trivia, HASH_US_REV_1
 
 class DKC2Settings(settings.Group):
     class RomFile(settings.SNESRomPath):
-        """File name of the Mega Man X US ROM"""
+        """File name of the Donkey Kong Country 2 US v1.1 ROM"""
         description = "Donkey Kong Country 2 (USA) ROM File"
         copy_to = "Donkey Kong Country 2 - Diddy's Kong Quest (USA).sfc"
-        md5s = [HASH_US, HASH_US_REV_1]
+        md5s = [HASH_US_REV_1]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
 
@@ -43,6 +41,8 @@ class DKC2Web(WebWorld):
     )
 
     tutorials = [setup_en]
+
+    option_groups = dkc2_option_groups
 
 
 class DKC2World(World):
@@ -64,6 +64,11 @@ class DKC2World(World):
     item_name_groups = item_groups
     location_name_groups = location_groups
     hint_blacklist = {
+        LocationName.krow_defeated,
+        LocationName.kleever_defeated,
+        LocationName.kudgel_defeated,
+        LocationName.king_zing_defeated,
+        LocationName.kreepy_krow_defeated,
     }
 
     def __init__(self, multiworld: MultiWorld, player: int):
@@ -72,13 +77,19 @@ class DKC2World(World):
 
     def create_regions(self) -> None:
         location_table = setup_locations(self)
-        create_regions(self.multiworld, self.player, self, location_table)
+        create_regions(self, location_table)
 
         itempool: typing.List[DKC2Item] = []
         
         connect_regions(self)
         
-        total_required_locations = 191
+        total_required_locations = 45 + 68
+        if self.options.kong_checks:
+            total_required_locations += 39
+        if self.options.dk_coin_checks:
+            total_required_locations += 39
+        if self.options.swanky_checks:
+            total_required_locations += 18
 
         # Set starting kong
         if self.options.starting_kong == StartingKong.option_diddy:
@@ -99,7 +110,8 @@ class DKC2World(World):
         itempool += [self.create_item(ItemName.krazy_kremland)]
         itempool += [self.create_item(ItemName.gloomy_gulch)]
         itempool += [self.create_item(ItemName.krools_keep)]
-        itempool += [self.create_item(ItemName.the_flying_krock)]
+        if self.options.krock_boss_tokens.value == 0:
+            itempool += [self.create_item(ItemName.the_flying_krock)]
         itempool += [self.create_item(ItemName.lost_world_cauldron)]
         itempool += [self.create_item(ItemName.lost_world_quay)]
         itempool += [self.create_item(ItemName.lost_world_kremland)]
@@ -124,14 +136,21 @@ class DKC2World(World):
             else:
                 self.multiworld.push_precollected(self.create_item(item))
 
-        for _ in range(self.options.lost_world_rocks.value):
-            itempool.append(self.create_item(ItemName.lost_world_rock))
+        if self.options.goal in {Goal.option_kompletionist, Goal.option_lost_world}:
+            for _ in range(self.options.lost_world_rocks.value):
+                itempool.append(self.create_item(ItemName.lost_world_rock))
+
+        # Add hint currency items into the pool
+        itempool += [self.create_item(ItemName.kremkoins) for _ in range(28)]
+        itempool += [self.create_item(ItemName.dk_coin) for _ in range(41)]
 
         # Add trap items into the pool
         junk_count = total_required_locations - len(itempool)
         trap_weights = []
         trap_weights += ([ItemName.freeze_trap] * self.options.freeze_trap_weight.value)
         trap_weights += ([ItemName.reverse_trap] * self.options.reverse_trap_weight.value)
+        trap_weights += ([ItemName.damage_trap] * self.options.damage_trap_weight.value)
+        trap_weights += ([ItemName.death_trap] * self.options.insta_death_trap_weight.value)
         trap_count = 0 if (len(trap_weights) == 0) else math.ceil(junk_count * (self.options.trap_fill_percentage.value / 100.0))
         junk_count -= trap_count
 
@@ -144,7 +163,7 @@ class DKC2World(World):
 
         # Add junk items into the pool
         junk_weights = []
-        junk_weights += ([ItemName.red_balloon] * 40)
+        junk_weights += ([ItemName.red_balloon] * 30)
         junk_weights += ([ItemName.banana_coin] * 20)
 
         junk_pool = []
@@ -153,6 +172,16 @@ class DKC2World(World):
             junk_pool.append(self.create_item(junk_item))
 
         itempool += junk_pool
+
+        boss_locations = [
+            LocationName.krow_defeated,
+            LocationName.kleever_defeated,
+            LocationName.kudgel_defeated,
+            LocationName.king_zing_defeated,
+            LocationName.kreepy_krow_defeated,
+        ]
+        for location in boss_locations:
+            self.multiworld.get_location(location, self.player).place_locked_item(self.create_item(ItemName.boss_token))
 
         # Finish
         self.multiworld.itempool += itempool
@@ -163,12 +192,8 @@ class DKC2World(World):
 
         if force_classification:
             classification = force_classification
-        elif data.progression:
-            classification = ItemClassification.progression
-        elif data.trap:
-            classification = ItemClassification.trap
         else:
-            classification = ItemClassification.filler
+            classification = data.classsification
         
         created_item = DKC2Item(name, classification, data.code, self.player)
 
@@ -199,9 +224,14 @@ class DKC2World(World):
         slot_data["goal"] = self.options.goal.value
         slot_data["starting_kong"] = self.options.starting_kong.value
         slot_data["lost_world_rocks"] = self.options.lost_world_rocks.value
+        slot_data["krock_boss_tokens"] = self.options.krock_boss_tokens.value
         slot_data["shuffled_abilities"] = self.options.shuffle_abilities.value
         slot_data["shuffled_animals"] = self.options.shuffle_animals.value
         slot_data["shuffled_barrels"] = self.options.shuffle_barrels.value
+        slot_data["kong_checks"] = self.options.kong_checks.value
+        slot_data["dk_coin_checks"] = self.options.dk_coin_checks.value
+        slot_data["swanky_checks"] = self.options.swanky_checks.value
+
         return slot_data
 
 
@@ -210,6 +240,8 @@ class DKC2World(World):
         self.boss_connections = dict()
         self.rom_connections = dict()
         generate_level_list(self)
+
+        self.games_in_session: set = generate_game_trivia(self)
 
         # Handle Universal Tracker support, doesn't do anything during regular generation
         if hasattr(self.multiworld, "re_gen_passthrough"):
@@ -220,13 +252,13 @@ class DKC2World(World):
                 self.options.goal.value = passthrough["goal"]
                 self.options.starting_kong.value = passthrough["starting_kong"]
                 self.options.lost_world_rocks.value = passthrough["lost_world_rocks"]
+                self.options.krock_boss_tokens.value = passthrough["krock_boss_tokens"]
                 self.options.shuffle_abilities.value = passthrough["shuffled_abilities"]
                 self.options.shuffle_animals.value = passthrough["shuffled_animals"]
                 self.options.shuffle_barrels.value = passthrough["shuffled_barrels"]
-
-
-    def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
-        pass
+                self.options.kong_checks.value = passthrough["kong_checks"]
+                self.options.dk_coin_checks.value = passthrough["dk_coin_checks"]
+                self.options.swanky_checks.value = passthrough["swanky_checks"]
 
 
     def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
@@ -236,6 +268,10 @@ class DKC2World(World):
             level_name = loc_name.split(' - ')[0] + ": Level"
             for map_spot, level in map_connections.items():
                 if level != level_name:
+                    continue
+                if "KONG" in loc_name and not self.options.kong_checks:
+                    continue
+                if "DK Coin" in loc_name and not self.options.dk_coin_checks:
                     continue
                 location = self.multiworld.get_location(loc_name, self.player)
                 er_hint_data[location.address] = level_map[map_spot]

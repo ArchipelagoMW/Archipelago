@@ -6,8 +6,7 @@ from .Names import ItemName
 
 class ItemData(typing.NamedTuple):
     code: typing.Optional[int]
-    progression: bool
-    trap: bool = False
+    classsification: ItemClassification
     quantity: int = 1
 
 STARTING_ID = 0xBF0000
@@ -17,66 +16,72 @@ class DKC2Item(Item):
 
 # Item tables
 event_table = {
-    ItemName.victory:           ItemData(STARTING_ID + 0x0000, True),
+    ItemName.victory:           ItemData(STARTING_ID + 0x0000, ItemClassification.progression_skip_balancing),
 }
 
 worlds_table = {
-    ItemName.gangplank_galleon:     ItemData(STARTING_ID + 0x0001, True),
-    ItemName.crocodile_cauldron:    ItemData(STARTING_ID + 0x0002, True),
-    ItemName.krem_quay:             ItemData(STARTING_ID + 0x0003, True),
-    ItemName.krazy_kremland:        ItemData(STARTING_ID + 0x0004, True),
-    ItemName.gloomy_gulch:          ItemData(STARTING_ID + 0x0005, True),
-    ItemName.krools_keep:           ItemData(STARTING_ID + 0x0006, True),
-    ItemName.the_flying_krock:      ItemData(STARTING_ID + 0x0007, True),
+    ItemName.gangplank_galleon:     ItemData(STARTING_ID + 0x0001, ItemClassification.progression | ItemClassification.useful),
+    ItemName.crocodile_cauldron:    ItemData(STARTING_ID + 0x0002, ItemClassification.progression | ItemClassification.useful),
+    ItemName.krem_quay:             ItemData(STARTING_ID + 0x0003, ItemClassification.progression | ItemClassification.useful),
+    ItemName.krazy_kremland:        ItemData(STARTING_ID + 0x0004, ItemClassification.progression | ItemClassification.useful),
+    ItemName.gloomy_gulch:          ItemData(STARTING_ID + 0x0005, ItemClassification.progression | ItemClassification.useful),
+    ItemName.krools_keep:           ItemData(STARTING_ID + 0x0006, ItemClassification.progression | ItemClassification.useful),
+    ItemName.the_flying_krock:      ItemData(STARTING_ID + 0x0007, ItemClassification.progression | ItemClassification.useful),
 }
 
 mcguffin_table = {
-    ItemName.lost_world_rock:       ItemData(STARTING_ID + 0x0008, True),
-    ItemName.dk_coin:               ItemData(STARTING_ID + 0x0009, False),
-    ItemName.kremkoins:             ItemData(STARTING_ID + 0x000A, False),
+    ItemName.boss_token:            ItemData(STARTING_ID + 0x002F, ItemClassification.progression_skip_balancing),
+    ItemName.lost_world_rock:       ItemData(STARTING_ID + 0x0008, ItemClassification.progression),
+}
+
+hints_table = {
+    ItemName.dk_coin:               ItemData(STARTING_ID + 0x0009, ItemClassification.useful),
+    ItemName.kremkoins:             ItemData(STARTING_ID + 0x000A, ItemClassification.useful),
 }
 
 lost_world_table = {
-    ItemName.lost_world_cauldron:   ItemData(STARTING_ID + 0x000B, True),
-    ItemName.lost_world_quay:       ItemData(STARTING_ID + 0x000C, True),
-    ItemName.lost_world_kremland:   ItemData(STARTING_ID + 0x000D, True),
-    ItemName.lost_world_gulch:      ItemData(STARTING_ID + 0x000E, True),
-    ItemName.lost_world_keep:       ItemData(STARTING_ID + 0x000F, True),
+    ItemName.lost_world_cauldron:   ItemData(STARTING_ID + 0x000B, ItemClassification.progression),
+    ItemName.lost_world_quay:       ItemData(STARTING_ID + 0x000C, ItemClassification.progression),
+    ItemName.lost_world_kremland:   ItemData(STARTING_ID + 0x000D, ItemClassification.progression),
+    ItemName.lost_world_gulch:      ItemData(STARTING_ID + 0x000E, ItemClassification.progression),
+    ItemName.lost_world_keep:       ItemData(STARTING_ID + 0x000F, ItemClassification.progression),
 }
 
 progression_table = {
-    ItemName.diddy:                 ItemData(STARTING_ID + 0x0010, True),
-    ItemName.dixie:                 ItemData(STARTING_ID + 0x0011, True),
-    ItemName.carry:                 ItemData(STARTING_ID + 0x0012, True),
-    ItemName.climb:                 ItemData(STARTING_ID + 0x0013, True),
-    ItemName.cling:                 ItemData(STARTING_ID + 0x0014, True),
-    ItemName.cartwheel:             ItemData(STARTING_ID + 0x0015, True),
-    ItemName.swim:                  ItemData(STARTING_ID + 0x0016, True),
-    ItemName.team_attack:           ItemData(STARTING_ID + 0x0017, True),
-    ItemName.helicopter_spin:       ItemData(STARTING_ID + 0x0018, True),
-    ItemName.rambi:                 ItemData(STARTING_ID + 0x0019, True),
-    ItemName.squawks:               ItemData(STARTING_ID + 0x001A, True),
-    ItemName.enguarde:              ItemData(STARTING_ID + 0x001B, True),
-    ItemName.squitter:              ItemData(STARTING_ID + 0x001C, True),
-    ItemName.rattly:                ItemData(STARTING_ID + 0x001D, True),
-    ItemName.clapper:               ItemData(STARTING_ID + 0x001E, True),
-    ItemName.glimmer:               ItemData(STARTING_ID + 0x001F, True),
-    ItemName.barrel_kannons:        ItemData(STARTING_ID + 0x0020, True),
-    ItemName.barrel_exclamation:    ItemData(STARTING_ID + 0x0021, True),
-    ItemName.barrel_kong:           ItemData(STARTING_ID + 0x0022, True),
-    ItemName.barrel_warp:           ItemData(STARTING_ID + 0x0023, True),
-    ItemName.barrel_control:        ItemData(STARTING_ID + 0x0024, True),
-    ItemName.skull_kart:            ItemData(STARTING_ID + 0x0025, True),
+    ItemName.diddy:                 ItemData(STARTING_ID + 0x0010, ItemClassification.progression | ItemClassification.useful),
+    ItemName.dixie:                 ItemData(STARTING_ID + 0x0011, ItemClassification.progression | ItemClassification.useful),
+    ItemName.carry:                 ItemData(STARTING_ID + 0x0012, ItemClassification.progression),
+    ItemName.climb:                 ItemData(STARTING_ID + 0x0013, ItemClassification.progression),
+    ItemName.cling:                 ItemData(STARTING_ID + 0x0014, ItemClassification.progression),
+    ItemName.cartwheel:             ItemData(STARTING_ID + 0x0015, ItemClassification.progression),
+    ItemName.swim:                  ItemData(STARTING_ID + 0x0016, ItemClassification.progression),
+    ItemName.team_attack:           ItemData(STARTING_ID + 0x0017, ItemClassification.progression),
+    ItemName.helicopter_spin:       ItemData(STARTING_ID + 0x0018, ItemClassification.progression),
+    ItemName.rambi:                 ItemData(STARTING_ID + 0x0019, ItemClassification.progression),
+    ItemName.squawks:               ItemData(STARTING_ID + 0x001A, ItemClassification.progression),
+    ItemName.enguarde:              ItemData(STARTING_ID + 0x001B, ItemClassification.progression),
+    ItemName.squitter:              ItemData(STARTING_ID + 0x001C, ItemClassification.progression),
+    ItemName.rattly:                ItemData(STARTING_ID + 0x001D, ItemClassification.progression),
+    ItemName.clapper:               ItemData(STARTING_ID + 0x001E, ItemClassification.progression),
+    ItemName.glimmer:               ItemData(STARTING_ID + 0x001F, ItemClassification.progression),
+    ItemName.barrel_kannons:        ItemData(STARTING_ID + 0x0020, ItemClassification.progression),
+    ItemName.barrel_exclamation:    ItemData(STARTING_ID + 0x0021, ItemClassification.progression),
+    ItemName.barrel_kong:           ItemData(STARTING_ID + 0x0022, ItemClassification.progression),
+    ItemName.barrel_warp:           ItemData(STARTING_ID + 0x0023, ItemClassification.useful),
+    ItemName.barrel_control:        ItemData(STARTING_ID + 0x0024, ItemClassification.progression),
+    ItemName.skull_kart:            ItemData(STARTING_ID + 0x0025, ItemClassification.progression),
 }
 
 junk_table = {
-    ItemName.banana_coin:           ItemData(STARTING_ID + 0x0030, False),
-    ItemName.red_balloon:           ItemData(STARTING_ID + 0x0031, False),
+    ItemName.banana_coin:           ItemData(STARTING_ID + 0x0030, ItemClassification.filler),
+    ItemName.red_balloon:           ItemData(STARTING_ID + 0x0031, ItemClassification.filler),
 }
 
 trap_table = {
-    ItemName.freeze_trap:           ItemData(STARTING_ID + 0x0040, False, True),
-    ItemName.reverse_trap:          ItemData(STARTING_ID + 0x0041, False, True),
+    ItemName.freeze_trap:           ItemData(STARTING_ID + 0x0040, ItemClassification.trap),
+    ItemName.reverse_trap:          ItemData(STARTING_ID + 0x0041, ItemClassification.trap),
+    ItemName.damage_trap:           ItemData(STARTING_ID + 0x0042, ItemClassification.trap),
+    ItemName.death_trap:            ItemData(STARTING_ID + 0x0043, ItemClassification.trap),
 }
 
 item_groups = {
@@ -130,6 +135,7 @@ item_table = {
     **worlds_table,
     **lost_world_table,
     **progression_table,
+    **hints_table,
     **trap_table,
     **junk_table,
 }

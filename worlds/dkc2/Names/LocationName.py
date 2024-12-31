@@ -29,6 +29,7 @@ topsail_trouble_bonus_1 = "Topsail Trouble - Bonus #1"
 topsail_trouble_bonus_2 = "Topsail Trouble - Bonus #2"
 
 krows_nest_clear = "Krow's Nest - Clear"
+krow_defeated = "Defeated Krow"
 
 hot_head_hop_clear = "Hot-Head Hop - Clear"
 hot_head_hop_kong = "Hot-Head Hop - KONG"
@@ -63,6 +64,7 @@ squawks_shaft_bonus_2 = "Squawks's Shaft - Bonus #2"
 squawks_shaft_bonus_3 = "Squawks's Shaft - Bonus #3"
 
 kleevers_kiln_clear = "Kleever's Kiln - Clear"
+kleever_defeated = "Defeated Kleever"
 
 barrel_bayou_clear = "Barrel Bayou - Clear"
 barrel_bayou_kong = "Barrel Bayou - KONG"
@@ -101,6 +103,7 @@ bramble_blast_bonus_1 = "Bramble Blast - Bonus #1"
 bramble_blast_bonus_2 = "Bramble Blast - Bonus #2"
 
 kudgels_kontest_clear = "Kudgel's Kontest - Clear"
+kudgel_defeated = "Defeated Kudgel"
 
 hornet_hole_clear = "Hornet Hole - Clear"
 hornet_hole_kong = "Hornet Hole - KONG"
@@ -138,6 +141,7 @@ rambi_rumble_bonus_1 = "Rambi Rumble - Bonus #1"
 rambi_rumble_bonus_2 = "Rambi Rumble - Bonus #2"
 
 king_zing_sting_clear = "King Zing Sting - Clear"
+king_zing_defeated = "Defeated King Zing"
 
 ghostly_grove_clear = "Ghostly Grove - Clear"
 ghostly_grove_kong = "Ghostly Grove - KONG"
@@ -171,6 +175,7 @@ web_woods_bonus_1 = "Web Woods - Bonus #1"
 web_woods_bonus_2 = "Web Woods - Bonus #2"
 
 kreepy_krow_clear = "Kreepy Krow - Clear"
+kreepy_krow_defeated = "Defeated Kreepy Krow"
 
 arctic_abyss_clear = "Arctic Abyss - Clear"
 arctic_abyss_kong = "Arctic Abyss - KONG"
@@ -237,3 +242,27 @@ animal_antics_kong = "Animal Antics - KONG"
 animal_antics_dk_coin = "Animal Antics - DK Coin"
 
 krocodile_core_clear = "Krocodile Kore - Clear"
+
+swanky_galleon_game_1 = "Swanky at Galleon - Easy"
+swanky_galleon_game_2 = "Swanky at Galleon - Medium"
+swanky_galleon_game_3 = "Swanky at Galleon - Hard"
+
+swanky_cauldron_game_1 = "Swanky at Cauldron - Easy"
+swanky_cauldron_game_2 = "Swanky at Cauldron - Medium"
+swanky_cauldron_game_3 = "Swanky at Cauldron - Hard"
+
+swanky_quay_game_1 = "Swanky at Quay - Easy"
+swanky_quay_game_2 = "Swanky at Quay - Medium"
+swanky_quay_game_3 = "Swanky at Quay - Hard"
+
+swanky_kremland_game_1 = "Swanky at Kremland - Easy"
+swanky_kremland_game_2 = "Swanky at Kremland - Medium"
+swanky_kremland_game_3 = "Swanky at Kremland - Hard"
+
+swanky_gulch_game_1 = "Swanky at Gulch - Easy"
+swanky_gulch_game_2 = "Swanky at Gulch - Medium"
+swanky_gulch_game_3 = "Swanky at Gulch - Hard"
+
+swanky_keep_game_1 = "Swanky at Keep - Easy"
+swanky_keep_game_2 = "Swanky at Keep - Medium"
+swanky_keep_game_3 = "Swanky at Keep - Hard"

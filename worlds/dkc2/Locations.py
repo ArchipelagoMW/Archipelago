@@ -1,8 +1,11 @@
 import typing
 
 from BaseClasses import Location
-from worlds.AutoWorld import World
 from .Names import LocationName
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from . import DKC2World
 
 class DKC2Location(Location):
     game = "Donkey Kong Country 2"
@@ -60,6 +63,11 @@ stage_clears = {
     LocationName.fiery_furnace_clear:       STARTING_ID + 0x002D,
     LocationName.animal_antics_clear:       STARTING_ID + 0x002E,
     #LocationName.krocodile_core_clear:      STARTING_ID + 0x002F,
+    LocationName.krow_defeated:             STARTING_ID + 0x0030,
+    LocationName.kleever_defeated:          STARTING_ID + 0x0031,
+    LocationName.kudgel_defeated:           STARTING_ID + 0x0032,
+    LocationName.king_zing_defeated:        STARTING_ID + 0x0033,
+    LocationName.kreepy_krow_defeated:      STARTING_ID + 0x0034,
 }
 
 stage_kong = {
@@ -217,11 +225,33 @@ stage_bonus = {
     LocationName.screechs_sprint_bonus_1:     STARTING_ID + 0x0103,
 }
 
+swanky_quiz = {
+    LocationName.swanky_galleon_game_1:       STARTING_ID + 0x0140,
+    LocationName.swanky_galleon_game_2:       STARTING_ID + 0x0141,
+    LocationName.swanky_galleon_game_3:       STARTING_ID + 0x0142,
+    LocationName.swanky_cauldron_game_1:      STARTING_ID + 0x0143,
+    LocationName.swanky_cauldron_game_2:      STARTING_ID + 0x0144,
+    LocationName.swanky_cauldron_game_3:      STARTING_ID + 0x0145,
+    LocationName.swanky_quay_game_1:          STARTING_ID + 0x0146,
+    LocationName.swanky_quay_game_2:          STARTING_ID + 0x0147,
+    LocationName.swanky_quay_game_3:          STARTING_ID + 0x0148,
+    LocationName.swanky_kremland_game_1:      STARTING_ID + 0x0149,
+    LocationName.swanky_kremland_game_2:      STARTING_ID + 0x014A,
+    LocationName.swanky_kremland_game_3:      STARTING_ID + 0x014B,
+    LocationName.swanky_gulch_game_1:         STARTING_ID + 0x014C,
+    LocationName.swanky_gulch_game_2:         STARTING_ID + 0x014D,
+    LocationName.swanky_gulch_game_3:         STARTING_ID + 0x014E,
+    LocationName.swanky_keep_game_1:          STARTING_ID + 0x014F,
+    LocationName.swanky_keep_game_2:          STARTING_ID + 0x0150,
+    LocationName.swanky_keep_game_3:          STARTING_ID + 0x0151,
+}
+
 all_locations = {
     **stage_clears,
     **stage_dk_coin,
     **stage_kong,
     **stage_bonus,
+    **swanky_quiz,
 }
 
 location_table = {}
@@ -229,13 +259,18 @@ location_table = {}
 location_groups = {
 }
     
-def setup_locations(world: World):
+def setup_locations(world: "DKC2World"):
     location_table = {
         **stage_clears,
-        **stage_dk_coin,
-        **stage_kong,
         **stage_bonus,
     }
+
+    if world.options.dk_coin_checks:
+        location_table.update(stage_dk_coin)
+    if world.options.kong_checks:
+        location_table.update(stage_kong)
+    if world.options.swanky_checks:
+        location_table.update(swanky_quiz)
 
     return location_table
 

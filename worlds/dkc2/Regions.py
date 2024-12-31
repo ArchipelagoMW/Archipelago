@@ -1,13 +1,18 @@
-import typing
-
-from BaseClasses import CollectionState, MultiWorld, Region, Entrance, ItemClassification
+from BaseClasses import MultiWorld, Region, ItemClassification
 from .Locations import DKC2Location
 from .Items import DKC2Item
-from .Names import LocationName, ItemName, RegionName, EventName
+from .Names import LocationName, RegionName, EventName
+from .Options import Goal
 from worlds.AutoWorld import World
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from . import DKC2World
 
-def create_regions(multiworld: MultiWorld, player: int, world: World, active_locations):
+def create_regions(world: "DKC2World", active_locations):
+    multiworld = world.multiworld
+    player = world.player
+
     menu = create_region(multiworld, player, active_locations, 'Menu')
 
     # Worlds
@@ -295,91 +300,18 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     add_location_to_region(multiworld, player, active_locations, RegionName.fiery_furnace_level, LocationName.fiery_furnace_clear)
     add_location_to_region(multiworld, player, active_locations, RegionName.animal_antics_level, LocationName.animal_antics_clear)
 
-    add_event_to_region(multiworld, player, RegionName.k_rool_duel_level, LocationName.k_rool_duel_clear, EventName.k_rool_duel_clear)
-    add_event_to_region(multiworld, player, RegionName.krocodile_core_level, LocationName.krocodile_core_clear, EventName.krocodile_core_clear)
+    add_location_to_region(multiworld, player, active_locations, RegionName.krows_nest_level, LocationName.krow_defeated)
+    add_location_to_region(multiworld, player, active_locations, RegionName.kleevers_kiln_level, LocationName.kleever_defeated)
+    add_location_to_region(multiworld, player, active_locations, RegionName.kudgels_kontest_level, LocationName.kudgel_defeated)
+    add_location_to_region(multiworld, player, active_locations, RegionName.king_zing_sting_level, LocationName.king_zing_defeated)
+    add_location_to_region(multiworld, player, active_locations, RegionName.kreepy_krow_level, LocationName.kreepy_krow_defeated)
+
+    if world.options.goal != Goal.option_lost_world:
+        add_event_to_region(multiworld, player, RegionName.k_rool_duel_level, LocationName.k_rool_duel_clear, EventName.k_rool_duel_clear)
+
+    if world.options.goal != Goal.option_flying_krock:
+        add_event_to_region(multiworld, player, RegionName.krocodile_core_level, LocationName.krocodile_core_clear, EventName.krocodile_core_clear)
     
-    # KONG
-    add_location_to_region(multiworld, player, active_locations, RegionName.pirate_panic_level, LocationName.pirate_panic_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.mainbrace_mayhem_level, LocationName.mainbrace_mayhem_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.gangplank_galley_level, LocationName.gangplank_galley_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.lockjaws_locker_level, LocationName.lockjaws_locker_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.topsail_trouble_level, LocationName.topsail_trouble_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.hot_head_hop_level, LocationName.hot_head_hop_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.kannons_klaim_level, LocationName.kannons_klaim_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.lava_lagoon_level, LocationName.lava_lagoon_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.red_hot_ride_level, LocationName.red_hot_ride_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.squawks_shaft_level, LocationName.squawks_shaft_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.barrel_bayou_level, LocationName.barrel_bayou_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.glimmers_galleon_level, LocationName.glimmers_galleon_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.krockhead_klamber_level, LocationName.krockhead_klamber_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.rattle_battle_level, LocationName.rattle_battle_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.slime_climb_level, LocationName.slime_climb_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.bramble_blast_level, LocationName.bramble_blast_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.hornet_hole_level, LocationName.hornet_hole_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.target_terror_level, LocationName.target_terror_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.bramble_scramble_level, LocationName.bramble_scramble_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.rickety_race_level, LocationName.rickety_race_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.mudhole_marsh_level, LocationName.mudhole_marsh_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.rambi_rumble_level, LocationName.rambi_rumble_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.ghostly_grove_level, LocationName.ghostly_grove_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.haunted_hall_level, LocationName.haunted_hall_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.gusty_glade_level, LocationName.gusty_glade_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.parrot_chute_panic_level, LocationName.parrot_chute_panic_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.web_woods_level, LocationName.web_woods_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.arctic_abyss_level, LocationName.arctic_abyss_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.windy_well_level, LocationName.windy_well_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.castle_crush_level, LocationName.castle_crush_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.clappers_cavern_level, LocationName.clappers_cavern_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.chain_link_chamber_level, LocationName.chain_link_chamber_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.toxic_tower_level, LocationName.toxic_tower_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.screechs_sprint_level, LocationName.screechs_sprint_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.jungle_jinx_level, LocationName.jungle_jinx_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.black_ice_battle_level, LocationName.black_ice_battle_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.klobber_karnage_level, LocationName.klobber_karnage_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.fiery_furnace_level, LocationName.fiery_furnace_kong)
-    add_location_to_region(multiworld, player, active_locations, RegionName.animal_antics_level, LocationName.animal_antics_kong)
-
-    # DK Coin
-    add_location_to_region(multiworld, player, active_locations, RegionName.pirate_panic_level, LocationName.pirate_panic_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.mainbrace_mayhem_level, LocationName.mainbrace_mayhem_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.gangplank_galley_level, LocationName.gangplank_galley_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.lockjaws_locker_level, LocationName.lockjaws_locker_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.topsail_trouble_level, LocationName.topsail_trouble_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.hot_head_hop_level, LocationName.hot_head_hop_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.kannons_klaim_level, LocationName.kannons_klaim_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.lava_lagoon_level, LocationName.lava_lagoon_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.red_hot_ride_level, LocationName.red_hot_ride_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.squawks_shaft_level, LocationName.squawks_shaft_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.barrel_bayou_level, LocationName.barrel_bayou_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.glimmers_galleon_level, LocationName.glimmers_galleon_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.krockhead_klamber_level, LocationName.krockhead_klamber_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.rattle_battle_level, LocationName.rattle_battle_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.slime_climb_level, LocationName.slime_climb_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.bramble_blast_level, LocationName.bramble_blast_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.hornet_hole_level, LocationName.hornet_hole_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.target_terror_level, LocationName.target_terror_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.bramble_scramble_level, LocationName.bramble_scramble_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.rickety_race_level, LocationName.rickety_race_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.mudhole_marsh_level, LocationName.mudhole_marsh_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.rambi_rumble_level, LocationName.rambi_rumble_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.ghostly_grove_level, LocationName.ghostly_grove_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.haunted_hall_level, LocationName.haunted_hall_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.gusty_glade_level, LocationName.gusty_glade_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.parrot_chute_panic_level, LocationName.parrot_chute_panic_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.web_woods_level, LocationName.web_woods_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.arctic_abyss_level, LocationName.arctic_abyss_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.windy_well_level, LocationName.windy_well_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.castle_crush_level, LocationName.castle_crush_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.clappers_cavern_level, LocationName.clappers_cavern_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.chain_link_chamber_level, LocationName.chain_link_chamber_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.toxic_tower_level, LocationName.toxic_tower_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.screechs_sprint_level, LocationName.screechs_sprint_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.jungle_jinx_level, LocationName.jungle_jinx_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.black_ice_battle_level, LocationName.black_ice_battle_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.klobber_karnage_level, LocationName.klobber_karnage_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.fiery_furnace_level, LocationName.fiery_furnace_dk_coin)
-    add_location_to_region(multiworld, player, active_locations, RegionName.animal_antics_level, LocationName.animal_antics_dk_coin)
-
     # Bonuses
     add_location_to_region(multiworld, player, active_locations, RegionName.pirate_panic_level, LocationName.pirate_panic_bonus_1)
     add_location_to_region(multiworld, player, active_locations, RegionName.pirate_panic_level, LocationName.pirate_panic_bonus_2)
@@ -450,8 +382,112 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     add_location_to_region(multiworld, player, active_locations, RegionName.toxic_tower_level, LocationName.toxic_tower_bonus_1)
     add_location_to_region(multiworld, player, active_locations, RegionName.screechs_sprint_level, LocationName.screechs_sprint_bonus_1)
 
+    # KONG
+    if world.options.kong_checks:
+        add_location_to_region(multiworld, player, active_locations, RegionName.pirate_panic_level, LocationName.pirate_panic_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.mainbrace_mayhem_level, LocationName.mainbrace_mayhem_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.gangplank_galley_level, LocationName.gangplank_galley_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.lockjaws_locker_level, LocationName.lockjaws_locker_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.topsail_trouble_level, LocationName.topsail_trouble_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.hot_head_hop_level, LocationName.hot_head_hop_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.kannons_klaim_level, LocationName.kannons_klaim_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.lava_lagoon_level, LocationName.lava_lagoon_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.red_hot_ride_level, LocationName.red_hot_ride_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.squawks_shaft_level, LocationName.squawks_shaft_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.barrel_bayou_level, LocationName.barrel_bayou_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.glimmers_galleon_level, LocationName.glimmers_galleon_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.krockhead_klamber_level, LocationName.krockhead_klamber_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.rattle_battle_level, LocationName.rattle_battle_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.slime_climb_level, LocationName.slime_climb_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.bramble_blast_level, LocationName.bramble_blast_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.hornet_hole_level, LocationName.hornet_hole_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.target_terror_level, LocationName.target_terror_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.bramble_scramble_level, LocationName.bramble_scramble_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.rickety_race_level, LocationName.rickety_race_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.mudhole_marsh_level, LocationName.mudhole_marsh_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.rambi_rumble_level, LocationName.rambi_rumble_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.ghostly_grove_level, LocationName.ghostly_grove_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.haunted_hall_level, LocationName.haunted_hall_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.gusty_glade_level, LocationName.gusty_glade_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.parrot_chute_panic_level, LocationName.parrot_chute_panic_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.web_woods_level, LocationName.web_woods_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.arctic_abyss_level, LocationName.arctic_abyss_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.windy_well_level, LocationName.windy_well_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.castle_crush_level, LocationName.castle_crush_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.clappers_cavern_level, LocationName.clappers_cavern_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.chain_link_chamber_level, LocationName.chain_link_chamber_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.toxic_tower_level, LocationName.toxic_tower_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.screechs_sprint_level, LocationName.screechs_sprint_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.jungle_jinx_level, LocationName.jungle_jinx_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.black_ice_battle_level, LocationName.black_ice_battle_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.klobber_karnage_level, LocationName.klobber_karnage_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.fiery_furnace_level, LocationName.fiery_furnace_kong)
+        add_location_to_region(multiworld, player, active_locations, RegionName.animal_antics_level, LocationName.animal_antics_kong)
 
-def connect_regions(world: World):
+    # DK Coin
+    if world.options.dk_coin_checks:
+        add_location_to_region(multiworld, player, active_locations, RegionName.pirate_panic_level, LocationName.pirate_panic_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.mainbrace_mayhem_level, LocationName.mainbrace_mayhem_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.gangplank_galley_level, LocationName.gangplank_galley_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.lockjaws_locker_level, LocationName.lockjaws_locker_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.topsail_trouble_level, LocationName.topsail_trouble_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.hot_head_hop_level, LocationName.hot_head_hop_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.kannons_klaim_level, LocationName.kannons_klaim_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.lava_lagoon_level, LocationName.lava_lagoon_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.red_hot_ride_level, LocationName.red_hot_ride_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.squawks_shaft_level, LocationName.squawks_shaft_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.barrel_bayou_level, LocationName.barrel_bayou_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.glimmers_galleon_level, LocationName.glimmers_galleon_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.krockhead_klamber_level, LocationName.krockhead_klamber_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.rattle_battle_level, LocationName.rattle_battle_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.slime_climb_level, LocationName.slime_climb_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.bramble_blast_level, LocationName.bramble_blast_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.hornet_hole_level, LocationName.hornet_hole_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.target_terror_level, LocationName.target_terror_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.bramble_scramble_level, LocationName.bramble_scramble_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.rickety_race_level, LocationName.rickety_race_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.mudhole_marsh_level, LocationName.mudhole_marsh_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.rambi_rumble_level, LocationName.rambi_rumble_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.ghostly_grove_level, LocationName.ghostly_grove_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.haunted_hall_level, LocationName.haunted_hall_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.gusty_glade_level, LocationName.gusty_glade_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.parrot_chute_panic_level, LocationName.parrot_chute_panic_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.web_woods_level, LocationName.web_woods_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.arctic_abyss_level, LocationName.arctic_abyss_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.windy_well_level, LocationName.windy_well_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.castle_crush_level, LocationName.castle_crush_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.clappers_cavern_level, LocationName.clappers_cavern_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.chain_link_chamber_level, LocationName.chain_link_chamber_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.toxic_tower_level, LocationName.toxic_tower_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.screechs_sprint_level, LocationName.screechs_sprint_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.jungle_jinx_level, LocationName.jungle_jinx_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.black_ice_battle_level, LocationName.black_ice_battle_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.klobber_karnage_level, LocationName.klobber_karnage_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.fiery_furnace_level, LocationName.fiery_furnace_dk_coin)
+        add_location_to_region(multiworld, player, active_locations, RegionName.animal_antics_level, LocationName.animal_antics_dk_coin)
+
+    if world.options.swanky_checks:
+        add_location_to_region(multiworld, player, active_locations, RegionName.gangplank_galleon, LocationName.swanky_galleon_game_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.gangplank_galleon, LocationName.swanky_galleon_game_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.gangplank_galleon, LocationName.swanky_galleon_game_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.crocodile_cauldron, LocationName.swanky_cauldron_game_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.crocodile_cauldron, LocationName.swanky_cauldron_game_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.crocodile_cauldron, LocationName.swanky_cauldron_game_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.krem_quay, LocationName.swanky_quay_game_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.krem_quay, LocationName.swanky_quay_game_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.krem_quay, LocationName.swanky_quay_game_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.krazy_kremland, LocationName.swanky_kremland_game_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.krazy_kremland, LocationName.swanky_kremland_game_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.krazy_kremland, LocationName.swanky_kremland_game_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.gloomy_gulch, LocationName.swanky_gulch_game_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.gloomy_gulch, LocationName.swanky_gulch_game_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.gloomy_gulch, LocationName.swanky_gulch_game_3)
+        add_location_to_region(multiworld, player, active_locations, RegionName.krools_keep, LocationName.swanky_keep_game_1)
+        add_location_to_region(multiworld, player, active_locations, RegionName.krools_keep, LocationName.swanky_keep_game_2)
+        add_location_to_region(multiworld, player, active_locations, RegionName.krools_keep, LocationName.swanky_keep_game_3)
+
+
+def connect_regions(world: "DKC2World"):
     connect(world, "Menu", RegionName.crocodile_isle)
 
     connect(world, RegionName.crocodile_isle, RegionName.gangplank_galleon)
@@ -532,7 +568,6 @@ def connect_regions(world: World):
 
     for map_level, level in world.level_connections.items():
         connect(world, map_level, level)
-
 
 
 def create_region(multiworld: MultiWorld, player: int, active_locations, name: str, locations=None):
