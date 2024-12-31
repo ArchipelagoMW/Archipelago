@@ -410,8 +410,8 @@ class TestDeterministicGeneration(TestCase):
 
     def test_random_module_usage_determinism(self) -> None:
         """
-        Test that generation is likely deterministic on webhost, specifically that it does not use the `random` module
-        directly.
+        Test that generation is likely to produce the same output on webhost, specifically that it does not use the
+        `random` module directly.
 
         Usage of the `random` module directly within worlds is unsafe because its Random instance can be used by
         libraries and more in nondeterministic ways. Worlds should use their own Random instance, either `.random` or
@@ -421,8 +421,8 @@ class TestDeterministicGeneration(TestCase):
         It may be possible for worlds to call `random.seed(deterministic_seed)` before running library functions, but
         this should be considered a last resort.
 
-        Failing this test means that a world will generate nondeterministically on webhost (archipelago.gg and other
-        hosts of the website generator).
+        Failing this test means that a world will generate differently on webhost (archipelago.gg and other hosts of the
+        website generator) compared to local generation.
         """
         for game, world_type in AutoWorldRegister.world_types.items():
             seed, initial_multiworld_data = self.get_initial_multiworld(game)
