@@ -58,7 +58,7 @@ def write_tokens(world: World, patch: YGO06ProcedurePatch):
             pointer = pointer + 4
         patch.write_token(APTokenTypes.WRITE, 0x1e5fd58, struct.pack("<B", len(world.structure_deck)))
         deck_name = "\x00"
-        if world.is_draft_mode:
+        if world.options.structure_deck.value == world.options.structure_deck.option_worst:
             deck_name = "Worst Deck\x00"
         elif world.options.structure_deck.value == world.options.structure_deck.option_custom:
             deck_name = "Custom Deck\x00"

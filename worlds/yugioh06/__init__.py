@@ -11,6 +11,7 @@ from worlds.AutoWorld import WebWorld, World
 from .banlists import banlists
 from .boosterpack_contents import get_booster_contents
 from .boosterpack_shuffle import create_shuffled_packs
+from .boosterpacks_data import booster_card_id_to_name
 from .card_data import CardData, cards, empty_card_data
 from .card_rules import set_card_rules
 from .items import (
@@ -179,12 +180,21 @@ class Yugioh06World(World):
                 self.removed_challenges = slot_data["removed challenges"]
                 self.starting_booster = slot_data["starting_booster"]
                 self.starting_opponent = slot_data["starting_opponent"]
+                self.progression_cards_in_start = [booster_card_id_to_name[cid] for cid in
+                                                   slot_data["progression_cards_in_start"]]
+                self.progression_cards_in_booster = [booster_card_id_to_name[cid] for cid in
+                                                     slot_data["progression_cards_in_booster"]]
+                for name, v in slot_data["progression_cards"].items():
+                    self.progression_cards[name] = [booster_card_id_to_name[cid] for cid in
+                                                    slot_data["progression_cards"][name]]
 
-        # set possible starting booster and opponent
-        if self.options.structure_deck.value == self.options.structure_deck.option_worst:
+        # set possible starting booster and opponent. Restrict them if you don't start with a standard booster
+        if self.options.structure_deck.value > 5:
             self.is_draft_mode = True
             if self.options.randomize_pack_contents == self.options.randomize_pack_contents.option_vanilla:
                 boosters = draft_boosters
+            else:
+                boosters = booster_packs
             if self.options.campaign_opponents_shuffle.value:
                 opponents = tier_1_opponents
             else:
@@ -228,7 +238,7 @@ class Yugioh06World(World):
         # set structure deck
         banlist = banlists[self.options.banlist.current_key]
         # make sure the structure deck is a legal deck
-        card_list = [card for card in card_list if card.card_type != "Fusion" and card not in banlist["Forbidden"]]
+        card_list = [card for card in card_list if card.card_type != "Fusion" and card.name not in banlist["Forbidden"]]
         if self.options.structure_deck.current_key == "random_deck":
             self.options.structure_deck.value = self.random.randint(0, 5)
         if self.options.structure_deck.value == self.options.structure_deck.option_random_singles:
@@ -311,8 +321,9 @@ class Yugioh06World(World):
             self.multiworld, self.player, bool(self.options.campaign_opponents_shuffle.value)
         )
 
-        # set progression_cards
-        set_card_rules(self)
+        if not self.progression_cards:
+            # set progression_cards
+            set_card_rules(self)
 
         # randomize packs
         if self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_shuffle:
@@ -509,8 +520,13 @@ class Yugioh06World(World):
         slot_data["removed challenges"] = self.removed_challenges
         slot_data["starting_booster"] = self.starting_booster
         slot_data["starting_opponent"] = self.starting_opponent
-        slot_data["progression_cards"] = [cards[c].starter_id for c in
-                                          self.progression_cards_in_booster + self.progression_cards_in_start]
+        slot_data["progression_cards_in_start"] = [cards[c].starter_id for c in self.progression_cards_in_start]
+        slot_data["progression_cards_in_booster"] = [cards[c].starter_id for c in self.progression_cards_in_booster]
+        slot_data["all_progression_cards"] = [cards[c].starter_id for c in
+                                              self.progression_cards_in_booster + self.progression_cards_in_start]
+        slot_data["progression_cards"] = {}
+        for k, v in self.progression_cards.items():
+            slot_data["progression_cards"][k] = [cards[c].starter_id for c in v]
         return slot_data
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:

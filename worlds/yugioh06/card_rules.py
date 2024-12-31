@@ -1135,7 +1135,7 @@ raise_attack = [
         lambda: find_cards_with(min_attack=2650), 1)),
     CardRule("Black Pendant", 1, additional_cards=InnerCardRule(
         lambda: find_cards_with(min_attack=2550), 1)),
-    CardRule("BladeFly", 1, additional_cards=InnerCardRule(
+    CardRule("Bladefly", 1, additional_cards=InnerCardRule(
         lambda : find_cards_with(min_attack=2550, attribute="WIND"), 1)),
     CardRule("Blast with Chain", 1, additional_cards=InnerCardRule(
         lambda: find_cards_with(min_attack=2550), 1)),
@@ -1150,7 +1150,7 @@ raise_attack = [
     CardRule("Divine Sword - Phoenix Blade", 1, additional_cards=InnerCardRule(
         lambda: find_cards_with(min_attack=2750, types=["Warrior"]), 1)),
     CardRule("Emes the Infinity", 1),
-    CardRule("Fusion Sword Murasame", 1, additional_cards=InnerCardRule(
+    CardRule("Fusion Sword Murasame Blade", 1, additional_cards=InnerCardRule(
         lambda: find_cards_with(min_attack=2250, types=["Warrior"]), 1)),
     CardRule("Gaia Power", 1, additional_cards=InnerCardRule(
         lambda: find_cards_with(min_attack=2550, attribute="EARTH"), 1)),
@@ -1163,7 +1163,7 @@ raise_attack = [
     CardRule("Hoshiningen", 1, additional_cards=InnerCardRule(
         lambda: find_cards_with(min_attack=2550, attribute="LIGHT"), 1)),
     CardRule("Injection Fairy Lily", 1),
-    CardRule("insect Armor with Laser Cannon", 1, additional_cards=InnerCardRule(
+    CardRule("Insect Armor with Laser Cannon", 1, additional_cards=InnerCardRule(
         lambda: find_cards_with(min_attack=2350, types=["Insect"]), 1)),
     CardRule("Blast with Chain", 1, additional_cards=InnerCardRule(
         lambda: find_cards_with(min_attack=2550), 1)),
@@ -1221,7 +1221,7 @@ raise_attack = [
     CardRule("United We Stand", 1),
     CardRule("Wicked-Breaking Flamberge - Baou", 1, additional_cards=InnerCardRule(
         lambda: find_cards_with(min_attack=2550), 1)),
-    CardRule("Winged Mininon", 1, additional_cards=InnerCardRule(
+    CardRule("Winged Minion", 1, additional_cards=InnerCardRule(
         lambda: find_cards_with(min_attack=2350, types=["Fiend"]), 1)),
     CardRule("Witch's Apprentice", 1, additional_cards=InnerCardRule(
         lambda: find_cards_with(min_attack=2550, attribute="DARK"), 1)),

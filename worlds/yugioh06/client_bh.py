@@ -78,7 +78,7 @@ class YuGiOh2006Client(BizHawkClient):
     rom_slot_name: Optional[str]
     print_pack: str = ""
     card_search: str = ""
-    progression_cards: List[int] = []
+    all_progression_cards: List[int] = []
 
     def __init__(self) -> None:
         super().__init__()
@@ -121,8 +121,8 @@ class YuGiOh2006Client(BizHawkClient):
 
     def on_package(self, ctx, cmd, args):
         if cmd == 'Connected':
-            if 'progression_cards' in args['slot_data'] and args['slot_data']['progression_cards']:
-                self.progression_cards = args['slot_data']['progression_cards']
+            if 'all_progression_cards' in args['slot_data'] and args['slot_data']['all_progression_cards']:
+                self.all_progression_cards = args['slot_data']['all_progression_cards']
         super().on_package(ctx, cmd, args)
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
@@ -252,7 +252,7 @@ class YuGiOh2006Client(BizHawkClient):
                         card_id = 0
                         name = "ERROR: " + name
                     amount = collection_data[(card_id - 1) * 2] & 0xF
-                    if cid in self.progression_cards:
+                    if cid in self.all_progression_cards:
                         color = "blue"
                     elif name.startswith("ERROR"):
                         color = "red"
