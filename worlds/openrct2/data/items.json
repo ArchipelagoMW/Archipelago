@@ -92,6 +92,8 @@
         "Alpine Roller Coaster",
         "Classic Wooden Roller Coaster",
         "Classic Stand-up Roller Coaster",
+        "LSM Launched Roller Coaster",
+        "Classic Wooden Twister Roller Coaster",
         "scenery",
         "Rainstorm",
         "Thunderstorm",
@@ -224,6 +226,8 @@
         "Alpine Roller Coaster",
         "Classic Wooden Roller Coaster",
         "Classic Stand-up Roller Coaster",
+        "LSM Launched Roller Coaster",
+        "Classic Wooden Twister Roller Coaster",
         "Miniature Railway",
         "Monorail",
         "Chairlift",
@@ -310,7 +314,9 @@
         "Single Rail Roller Coaster",
         "Alpine Roller Coaster",
         "Classic Wooden Roller Coaster",
-        "Classic Stand-up Roller Coaster"
+        "Classic Stand-up Roller Coaster",
+        "LSM Launched Roller Coaster",
+        "Classic Wooden Twister Roller Coaster"
     ],
     "Transport Rides": [
         "Miniature Railway",
@@ -477,7 +483,9 @@
         "River Rapids",
         "Splash Boats",
         "Submarine Ride",
-        "River Rafts"
+        "River Rafts",
+        "LSM Launched Roller Coaster",
+        "Classic Wooden Twister Roller Coaster"
     ],
     "ride_types": [
         "Roller Coasters",
