@@ -282,7 +282,6 @@ item_descriptions = {
     item_names.SIEGE_TANK_JUMP_JETS: inspect.cleandoc("""
         Repositions Siege Tank to a target location. 
         Can be used in either mode and to jump up and down cliffs. 
-        Shock Divisions get Blink ability instead to reposition themselves.
     """),
     item_names.SIEGE_TANK_SPIDER_MINES: inspect.cleandoc("""
         Allows Siege Tanks to lay Spider Mines. 
