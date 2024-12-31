@@ -83,15 +83,15 @@ def define_new_region(region_string: str) -> Tuple[RegionDefinition, List[Connec
     return region_obj, options
 
 
-def parse_witness_rule(lambda_string: str) -> WitnessRule:
+def parse_witness_rule(rule_string: str) -> WitnessRule:
     """
-    Turns a lambda String literal like this: a | b & c
-    into a set of sets like this: {{a}, {b, c}}
-    The lambda has to be in DNF.
+    Turns a rule string literal like this: a | b & c
+    into a set of sets (called "WitnessRule") like this: {{a}, {b, c}}
+    The rule string has to be in DNF.
     """
-    if lambda_string == "True":
+    if rule_string == "True":
         return frozenset([frozenset()])
-    split_ands = set(lambda_string.split(" | "))
+    split_ands = set(rule_string.split(" | "))
     return frozenset({frozenset(a.split(" & ")) for a in split_ands})
 
 
