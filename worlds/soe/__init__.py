@@ -188,6 +188,7 @@ class SoEWorld(World):
     connect_name: str
 
     _halls_ne_chest_names: typing.List[str] = [loc.name for loc in _locations if 'Halls NE' in loc.name]
+    _fillers = sorted(item_name_groups["Ingredients"])
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         self.connect_name_available_event = threading.Event()
@@ -469,7 +470,7 @@ class SoEWorld(World):
             multidata["connect_names"][self.connect_name] = payload
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(list(self.item_name_groups["Ingredients"]))
+        return self.random.choice(self._fillers)
 
 
 class SoEItem(Item):

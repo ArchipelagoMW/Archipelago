@@ -4,7 +4,7 @@ from Utils import cache_self1
 from .base_logic import BaseLogic, BaseLogicMixin
 from .has_logic import HasLogicMixin
 from ..options import EntranceRandomization
-from ..stardew_rule import StardewRule, And, Or, Reach, false_, true_
+from ..stardew_rule import StardewRule, Reach, false_, true_
 from ..strings.region_names import Region
 
 main_outside_area = {Region.menu, Region.stardew_valley, Region.farm_house, Region.farm, Region.town, Region.beach, Region.mountain, Region.forest,
@@ -18,6 +18,7 @@ always_accessible_regions_without_er = {*main_outside_area, Region.community_cen
 always_regions_by_setting = {EntranceRandomization.option_disabled: always_accessible_regions_without_er,
                              EntranceRandomization.option_pelican_town: always_accessible_regions_without_er,
                              EntranceRandomization.option_non_progression: always_accessible_regions_without_er,
+                             EntranceRandomization.option_buildings_without_house: main_outside_area,
                              EntranceRandomization.option_buildings: main_outside_area,
                              EntranceRandomization.option_chaos: always_accessible_regions_without_er}
 
@@ -42,11 +43,14 @@ class RegionLogic(BaseLogic[Union[RegionLogicMixin, HasLogicMixin]]):
 
     @cache_self1
     def can_reach_any(self, region_names: Tuple[str, ...]) -> StardewRule:
-        return Or(*(self.logic.region.can_reach(spot) for spot in region_names))
+        if any(r in always_regions_by_setting[self.options.entrance_randomization] for r in region_names):
+            return true_
+
+        return self.logic.or_(*(self.logic.region.can_reach(spot) for spot in region_names))
 
     @cache_self1
     def can_reach_all(self, region_names: Tuple[str, ...]) -> StardewRule:
-        return And(*(self.logic.region.can_reach(spot) for spot in region_names))
+        return self.logic.and_(*(self.logic.region.can_reach(spot) for spot in region_names))
 
     @cache_self1
     def can_reach_all_except_one(self, region_names: Tuple[str, ...]) -> StardewRule:

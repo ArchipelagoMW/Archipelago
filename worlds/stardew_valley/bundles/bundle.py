@@ -1,8 +1,10 @@
+import math
 from dataclasses import dataclass
 from random import Random
-from typing import List
+from typing import List, Tuple
 
 from .bundle_item import BundleItem
+from ..content import StardewContent
 from ..options import BundlePrice, StardewValleyOptions, ExcludeGingerIsland, FestivalLocations
 from ..strings.currency_names import Currency
 
@@ -26,7 +28,8 @@ class BundleTemplate:
     number_possible_items: int
     number_required_items: int
 
-    def __init__(self, room: str, name: str, items: List[BundleItem], number_possible_items: int, number_required_items: int):
+    def __init__(self, room: str, name: str, items: List[BundleItem], number_possible_items: int,
+                 number_required_items: int):
         self.room = room
         self.name = name
         self.items = items
@@ -35,17 +38,12 @@ class BundleTemplate:
 
     @staticmethod
     def extend_from(template, items: List[BundleItem]):
-        return BundleTemplate(template.room, template.name, items, template.number_possible_items, template.number_required_items)
+        return BundleTemplate(template.room, template.name, items, template.number_possible_items,
+                              template.number_required_items)
 
-    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, options: StardewValleyOptions) -> Bundle:
-        if bundle_price_option == BundlePrice.option_minimum:
-            number_required = 1
-        elif bundle_price_option == BundlePrice.option_maximum:
-            number_required = 8
-        else:
-            number_required = self.number_required_items + bundle_price_option.value
-        number_required = max(1, number_required)
-        filtered_items = [item for item in self.items if item.can_appear(options)]
+    def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
+        number_required, price_multiplier = get_bundle_final_prices(options.bundle_price, self.number_required_items, False)
+        filtered_items = [item for item in self.items if item.can_appear(content, options)]
         number_items = len(filtered_items)
         number_chosen_items = self.number_possible_items
         if number_chosen_items < number_required:
@@ -55,6 +53,7 @@ class BundleTemplate:
             chosen_items = filtered_items + random.choices(filtered_items, k=number_chosen_items - number_items)
         else:
             chosen_items = random.sample(filtered_items, number_chosen_items)
+        chosen_items = [item.as_amount(max(1, math.floor(item.amount * price_multiplier))) for item in chosen_items]
         return Bundle(self.room, self.name, chosen_items, number_required)
 
     def can_appear(self, options: StardewValleyOptions) -> bool:
@@ -68,19 +67,13 @@ class CurrencyBundleTemplate(BundleTemplate):
         super().__init__(room, name, [item], 1, 1)
         self.item = item
 
-    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, options: StardewValleyOptions) -> Bundle:
-        currency_amount = self.get_currency_amount(bundle_price_option)
+    def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
+        currency_amount = self.get_currency_amount(options.bundle_price)
         return Bundle(self.room, self.name, [BundleItem(self.item.item_name, currency_amount)], 1)
 
     def get_currency_amount(self, bundle_price_option: BundlePrice):
-        if bundle_price_option == BundlePrice.option_minimum:
-            price_multiplier = 0.1
-        elif bundle_price_option == BundlePrice.option_maximum:
-            price_multiplier = 4
-        else:
-            price_multiplier = round(1 + (bundle_price_option.value * 0.4), 2)
-
-        currency_amount = int(self.item.amount * price_multiplier)
+        _, price_multiplier = get_bundle_final_prices(bundle_price_option, self.number_required_items, True)
+        currency_amount = max(1, int(self.item.amount * price_multiplier))
         return currency_amount
 
     def can_appear(self, options: StardewValleyOptions) -> bool:
@@ -95,11 +88,11 @@ class CurrencyBundleTemplate(BundleTemplate):
 
 class MoneyBundleTemplate(CurrencyBundleTemplate):
 
-    def __init__(self, room: str, item: BundleItem):
-        super().__init__(room, "", item)
+    def __init__(self, room: str, default_name: str, item: BundleItem):
+        super().__init__(room, default_name, item)
 
-    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, options: StardewValleyOptions) -> Bundle:
-        currency_amount = self.get_currency_amount(bundle_price_option)
+    def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
+        currency_amount = self.get_currency_amount(options.bundle_price)
         currency_name = "g"
         if currency_amount >= 1000:
             unit_amount = currency_amount % 1000
@@ -111,13 +104,8 @@ class MoneyBundleTemplate(CurrencyBundleTemplate):
         return Bundle(self.room, name, [BundleItem(self.item.item_name, currency_amount)], 1)
 
     def get_currency_amount(self, bundle_price_option: BundlePrice):
-        if bundle_price_option == BundlePrice.option_minimum:
-            price_multiplier = 0.1
-        elif bundle_price_option == BundlePrice.option_maximum:
-            price_multiplier = 4
-        else:
-            price_multiplier = round(1 + (bundle_price_option.value * 0.4), 2)
-        currency_amount = int(self.item.amount * price_multiplier)
+        _, price_multiplier = get_bundle_final_prices(bundle_price_option, self.number_required_items, True)
+        currency_amount = max(1, int(self.item.amount * price_multiplier))
         return currency_amount
 
 
@@ -134,30 +122,54 @@ class FestivalBundleTemplate(BundleTemplate):
 class DeepBundleTemplate(BundleTemplate):
     categories: List[List[BundleItem]]
 
-    def __init__(self, room: str, name: str, categories: List[List[BundleItem]], number_possible_items: int, number_required_items: int):
+    def __init__(self, room: str, name: str, categories: List[List[BundleItem]], number_possible_items: int,
+                 number_required_items: int):
         super().__init__(room, name, [], number_possible_items, number_required_items)
         self.categories = categories
 
-    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, options: StardewValleyOptions) -> Bundle:
-        if bundle_price_option == BundlePrice.option_minimum:
-            number_required = 1
-        elif bundle_price_option == BundlePrice.option_maximum:
-            number_required = 8
-        else:
-            number_required = self.number_required_items + bundle_price_option.value
+    def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
+        number_required, price_multiplier = get_bundle_final_prices(options.bundle_price, self.number_required_items, False)
         number_categories = len(self.categories)
         number_chosen_categories = self.number_possible_items
         if number_chosen_categories < number_required:
             number_chosen_categories = number_required
 
         if number_chosen_categories > number_categories:
-            chosen_categories = self.categories + random.choices(self.categories, k=number_chosen_categories - number_categories)
+            chosen_categories = self.categories + random.choices(self.categories,
+                                                                 k=number_chosen_categories - number_categories)
         else:
             chosen_categories = random.sample(self.categories, number_chosen_categories)
 
         chosen_items = []
         for category in chosen_categories:
-            filtered_items = [item for item in category if item.can_appear(options)]
+            filtered_items = [item for item in category if item.can_appear(content, options)]
             chosen_items.append(random.choice(filtered_items))
 
+        chosen_items = [item.as_amount(max(1, math.floor(item.amount * price_multiplier))) for item in chosen_items]
         return Bundle(self.room, self.name, chosen_items, number_required)
+
+
+def get_bundle_final_prices(bundle_price_option: BundlePrice, default_required_items: int, is_currency: bool) -> Tuple[int, float]:
+    number_required_items = get_number_required_items(bundle_price_option, default_required_items)
+    price_multiplier = get_price_multiplier(bundle_price_option, is_currency)
+    return number_required_items, price_multiplier
+
+
+def get_number_required_items(bundle_price_option: BundlePrice, default_required_items: int) -> int:
+    if bundle_price_option == BundlePrice.option_minimum:
+        return 1
+    if bundle_price_option == BundlePrice.option_maximum:
+        return 8
+    number_required = default_required_items + bundle_price_option.value
+    return min(8, max(1, number_required))
+
+
+def get_price_multiplier(bundle_price_option: BundlePrice, is_currency: bool) -> float:
+    if bundle_price_option == BundlePrice.option_minimum:
+        return 0.1 if is_currency else 0.2
+    if bundle_price_option == BundlePrice.option_maximum:
+        return 4 if is_currency else 1.4
+    price_factor = 0.4 if is_currency else (0.2 if bundle_price_option.value <= 0 else 0.1)
+    price_multiplier_difference = bundle_price_option.value * price_factor
+    price_multiplier = 1 + price_multiplier_difference
+    return round(price_multiplier, 2)

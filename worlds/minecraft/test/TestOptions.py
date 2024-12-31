@@ -1,19 +1,19 @@
 from . import MCTestBase
 from ..Constants import region_info
-from ..Options import minecraft_options
+from .. import Options
 
 from BaseClasses import ItemClassification
 
 class AdvancementTestBase(MCTestBase):
     options = {
-        "advancement_goal": minecraft_options["advancement_goal"].range_end
+        "advancement_goal": Options.AdvancementGoal.range_end
     }
     # beatability test implicit
 
 class ShardTestBase(MCTestBase):
     options = {
-        "egg_shards_required": minecraft_options["egg_shards_required"].range_end,
-        "egg_shards_available": minecraft_options["egg_shards_available"].range_end
+        "egg_shards_required": Options.EggShardsRequired.range_end,
+        "egg_shards_available": Options.EggShardsAvailable.range_end
     }
 
     # check that itempool is not overfilled with shards
@@ -29,7 +29,7 @@ class CompassTestBase(MCTestBase):
 
 class NoBeeTestBase(MCTestBase):
     options = {
-        "bee_traps": 0
+        "bee_traps": Options.BeeTraps.range_start
     }
 
     # With no bees, there are no traps in the pool
@@ -40,7 +40,7 @@ class NoBeeTestBase(MCTestBase):
 
 class AllBeeTestBase(MCTestBase):
     options = {
-        "bee_traps": 100
+        "bee_traps": Options.BeeTraps.range_end
     }
 
     # With max bees, there are no filler items, only bee traps

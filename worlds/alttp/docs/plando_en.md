@@ -2,8 +2,8 @@
 
 ## Configuration
 
-1. Plando features have to be enabled first, before they can be used (opt-in).
-2. To do so, go to your installation directory (Windows default: `C:\ProgramData\Archipelago`), then open the host.yaml
+1. All plando options are enabled by default, except for "items plando" which has to be enabled before it can be used (opt-in).
+2. To enable it, go to your installation directory (Windows default: `C:\ProgramData\Archipelago`), then open the host.yaml
    file with a text editor.
 3. In it, you're looking for the option key `plando_options`. To enable all plando modules you can set the value
    to `bosses, items, texts, connections`
@@ -66,6 +66,7 @@ boss_shuffle:
     - ignored if only one world is generated
     - can be a number, to target that slot in the multiworld
     - can be a name, to target that player's world
+    - can be a list of names, to target those players' worlds
     - can be true, to target any other player's world
     - can be false, to target own world and is the default
     - can be null, to target a random world
@@ -132,17 +133,15 @@ plando_items:
 
 ### Texts
 
-- This module is disabled by default.
 - Has the options `text`, `at`, and `percentage`
+- All of these options support subweights
 - percentage is the percentage chance for this text to be placed, can be omitted entirely for 100%
 - text is the text to be placed.
-    - can be weighted.
     - `\n` is a newline.
     - `@` is the entered player's name.
     - Warning: Text Mapper does not support full unicode.
     - [Alphabet](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Text.py#L758)
 - at is the location within the game to attach the text to.
-    - can be weighted.
     - [List of targets](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/Text.py#L1499)
 
 #### Example
@@ -162,7 +161,6 @@ and `uncle_dying_sewer`, then places the text "This is a plando. You've been war
 
 ### Connections
 
-- This module is disabled by default.
 - Has the options `percentage`, `entrance`, `exit` and `direction`.
 - All options support subweights
 - percentage is the percentage chance for this to be connected, can be omitted entirely for 100%

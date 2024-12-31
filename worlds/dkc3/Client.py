@@ -60,7 +60,7 @@ class DKC3SNIClient(SNIClient):
             return
 
         new_checks = []
-        from worlds.dkc3.Rom import location_rom_data, item_rom_data, boss_location_ids, level_unlock_map
+        from .Rom import location_rom_data, item_rom_data, boss_location_ids, level_unlock_map
         location_ram_data = await snes_read(ctx, WRAM_START + 0x5FE, 0x81)
         for loc_id, loc_data in location_rom_data.items():
             if loc_id not in ctx.locations_checked:

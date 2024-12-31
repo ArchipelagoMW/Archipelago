@@ -222,10 +222,10 @@ for item, data in item_table.items():
 
 def create_items(self) -> None:
     items = []
-    starting_weapon = self.multiworld.starting_weapon[self.player].current_key.title().replace("_", " ")
+    starting_weapon = self.options.starting_weapon.current_key.title().replace("_", " ")
     self.multiworld.push_precollected(self.create_item(starting_weapon))
     self.multiworld.push_precollected(self.create_item("Steel Armor"))
-    if self.multiworld.sky_coin_mode[self.player] == "start_with":
+    if self.options.sky_coin_mode == "start_with":
         self.multiworld.push_precollected(self.create_item("Sky Coin"))
 
     precollected_item_names = {item.name for item in self.multiworld.precollected_items[self.player]}
@@ -233,28 +233,28 @@ def create_items(self) -> None:
     def add_item(item_name):
         if item_name in ["Steel Armor", "Sky Fragment"] or "Progressive" in item_name:
             return
-        if item_name.lower().replace(" ", "_") == self.multiworld.starting_weapon[self.player].current_key:
+        if item_name.lower().replace(" ", "_") == self.options.starting_weapon.current_key:
             return
-        if self.multiworld.progressive_gear[self.player]:
+        if self.options.progressive_gear:
             for item_group in prog_map:
                 if item_name in self.item_name_groups[item_group]:
                     item_name = prog_map[item_group]
                     break
         if item_name == "Sky Coin":
-            if self.multiworld.sky_coin_mode[self.player] == "shattered_sky_coin":
+            if self.options.sky_coin_mode == "shattered_sky_coin":
                 for _ in range(40):
                     items.append(self.create_item("Sky Fragment"))
                 return
-            elif self.multiworld.sky_coin_mode[self.player] == "save_the_crystals":
+            elif self.options.sky_coin_mode == "save_the_crystals":
                 items.append(self.create_filler())
                 return
         if item_name in precollected_item_names:
             items.append(self.create_filler())
             return
         i = self.create_item(item_name)
-        if self.multiworld.logic[self.player] != "friendly" and item_name in ("Magic Mirror", "Mask"):
+        if self.options.logic != "friendly" and item_name in ("Magic Mirror", "Mask"):
             i.classification = ItemClassification.useful
-        if (self.multiworld.logic[self.player] == "expert" and self.multiworld.map_shuffle[self.player] == "none" and
+        if (self.options.logic == "expert" and self.options.map_shuffle == "none" and
                 item_name == "Exit Book"):
             i.classification = ItemClassification.progression
         items.append(i)
@@ -263,11 +263,11 @@ def create_items(self) -> None:
         for item in self.item_name_groups[item_group]:
             add_item(item)
 
-    if self.multiworld.brown_boxes[self.player] == "include":
+    if self.options.brown_boxes == "include":
         filler_items = []
         for item, count in fillers.items():
             filler_items += [self.create_item(item) for _ in range(count)]
-        if self.multiworld.sky_coin_mode[self.player] == "shattered_sky_coin":
+        if self.options.sky_coin_mode == "shattered_sky_coin":
             self.multiworld.random.shuffle(filler_items)
             filler_items = filler_items[39:]
         items += filler_items

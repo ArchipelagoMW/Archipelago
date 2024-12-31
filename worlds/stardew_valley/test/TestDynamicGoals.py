@@ -12,29 +12,30 @@ from ..strings.wallet_item_names import Wallet
 
 def collect_fishing_abilities(tester: SVTestBase):
     for i in range(4):
-        tester.multiworld.state.collect(tester.world.create_item(APTool.fishing_rod), event=False)
-        tester.multiworld.state.collect(tester.world.create_item(APTool.pickaxe), event=False)
-        tester.multiworld.state.collect(tester.world.create_item(APTool.axe), event=False)
-        tester.multiworld.state.collect(tester.world.create_item(APWeapon.weapon), event=False)
+        tester.multiworld.state.collect(tester.world.create_item(APTool.fishing_rod), prevent_sweep=False)
+        tester.multiworld.state.collect(tester.world.create_item(APTool.pickaxe), prevent_sweep=False)
+        tester.multiworld.state.collect(tester.world.create_item(APTool.axe), prevent_sweep=False)
+        tester.multiworld.state.collect(tester.world.create_item(APWeapon.weapon), prevent_sweep=False)
     for i in range(10):
-        tester.multiworld.state.collect(tester.world.create_item("Fishing Level"), event=False)
-        tester.multiworld.state.collect(tester.world.create_item("Combat Level"), event=False)
-        tester.multiworld.state.collect(tester.world.create_item("Mining Level"), event=False)
+        tester.multiworld.state.collect(tester.world.create_item("Fishing Level"), prevent_sweep=False)
+        tester.multiworld.state.collect(tester.world.create_item("Combat Level"), prevent_sweep=False)
+        tester.multiworld.state.collect(tester.world.create_item("Mining Level"), prevent_sweep=False)
     for i in range(17):
-        tester.multiworld.state.collect(tester.world.create_item("Progressive Mine Elevator"), event=False)
-    tester.multiworld.state.collect(tester.world.create_item("Spring"), event=False)
-    tester.multiworld.state.collect(tester.world.create_item("Summer"), event=False)
-    tester.multiworld.state.collect(tester.world.create_item("Fall"), event=False)
-    tester.multiworld.state.collect(tester.world.create_item("Winter"), event=False)
-    tester.multiworld.state.collect(tester.world.create_item(Transportation.desert_obelisk), event=False)
-    tester.multiworld.state.collect(tester.world.create_item("Railroad Boulder Removed"), event=False)
-    tester.multiworld.state.collect(tester.world.create_item("Island North Turtle"), event=False)
-    tester.multiworld.state.collect(tester.world.create_item("Island West Turtle"), event=False)
+        tester.multiworld.state.collect(tester.world.create_item("Progressive Mine Elevator"), prevent_sweep=False)
+    tester.multiworld.state.collect(tester.world.create_item("Spring"), prevent_sweep=False)
+    tester.multiworld.state.collect(tester.world.create_item("Summer"), prevent_sweep=False)
+    tester.multiworld.state.collect(tester.world.create_item("Fall"), prevent_sweep=False)
+    tester.multiworld.state.collect(tester.world.create_item("Winter"), prevent_sweep=False)
+    tester.multiworld.state.collect(tester.world.create_item(Transportation.desert_obelisk), prevent_sweep=False)
+    tester.multiworld.state.collect(tester.world.create_item("Beach Bridge"), prevent_sweep=False)
+    tester.multiworld.state.collect(tester.world.create_item("Railroad Boulder Removed"), prevent_sweep=False)
+    tester.multiworld.state.collect(tester.world.create_item("Island North Turtle"), prevent_sweep=False)
+    tester.multiworld.state.collect(tester.world.create_item("Island West Turtle"), prevent_sweep=False)
 
 
 def create_and_collect(tester: SVTestBase, item_name: str) -> StardewItem:
     item = tester.world.create_item(item_name)
-    tester.multiworld.state.collect(item, event=False)
+    tester.multiworld.state.collect(item, prevent_sweep=False)
     return item
 
 

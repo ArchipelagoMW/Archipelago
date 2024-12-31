@@ -15,7 +15,7 @@
 ### What to do if Lumafly fails to find your installation directory
 1. Find the directory manually.
    * Xbox Game Pass:
-      1. Enter the XBox app and move your mouse over "Hollow Knight" on the left sidebar. 
+      1. Enter the Xbox app and move your mouse over "Hollow Knight" on the left sidebar. 
       2. Click the three points then click "Manage".
       3. Go to the "Files" tab and select "Browse...". 
       4. Click "Hollow Knight", then "Content", then click the path bar and copy it.

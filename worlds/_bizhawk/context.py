@@ -59,14 +59,10 @@ class BizHawkClientContext(CommonContext):
         self.bizhawk_ctx = BizHawkContext()
         self.watcher_timeout = 0.5
 
-    def run_gui(self):
-        from kvui import GameManager
-
-        class BizHawkManager(GameManager):
-            base_title = "Archipelago BizHawk Client"
-
-        self.ui = BizHawkManager(self)
-        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+    def make_gui(self):
+        ui = super().make_gui()
+        ui.base_title = "Archipelago BizHawk Client"
+        return ui
 
     def on_package(self, cmd, args):
         if cmd == "Connected":
@@ -243,11 +239,11 @@ async def _patch_and_run_game(patch_file: str):
         logger.exception(exc)
 
 
-def launch() -> None:
+def launch(*launch_args) -> None:
     async def main():
         parser = get_base_parser()
         parser.add_argument("patch_file", default="", type=str, nargs="?", help="Path to an Archipelago patch file")
-        args = parser.parse_args()
+        args = parser.parse_args(launch_args)
 
         ctx = BizHawkClientContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")

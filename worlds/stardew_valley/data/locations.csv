@@ -36,6 +36,7 @@ id,region,name,tags,mod_name
 35,Boiler Room,Complete Boiler Room,COMMUNITY_CENTER_ROOM,
 36,Bulletin Board,Complete Bulletin Board,COMMUNITY_CENTER_ROOM,
 37,Vault,Complete Vault,COMMUNITY_CENTER_ROOM,
+38,Crafts Room,Forest Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE",
 39,Fish Tank,Deep Fishing Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE",
 40,Crafts Room,Beach Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE",
 41,Crafts Room,Mines Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE",
@@ -78,7 +79,6 @@ id,region,name,tags,mod_name
 78,Vault,500g Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,VAULT_BUNDLE",
 79,Vault,"1,000g Bundle","BUNDLE,COMMUNITY_CENTER_BUNDLE,VAULT_BUNDLE",
 80,Vault,"2,000g Bundle","BUNDLE,COMMUNITY_CENTER_BUNDLE,VAULT_BUNDLE",
-81,Vault,"5,000g Bundle","BUNDLE,COMMUNITY_CENTER_BUNDLE,VAULT_BUNDLE",
 82,Vault,"1,500g Bundle","BUNDLE,COMMUNITY_CENTER_BUNDLE,VAULT_BUNDLE",
 83,Vault,"3,000g Bundle","BUNDLE,COMMUNITY_CENTER_BUNDLE,VAULT_BUNDLE",
 84,Vault,"3,500g Bundle","BUNDLE,COMMUNITY_CENTER_BUNDLE,VAULT_BUNDLE",
@@ -124,6 +124,20 @@ id,region,name,tags,mod_name
 124,Beach,Bamboo Pole Cutscene,"FISHING_ROD_UPGRADE,TOOL_UPGRADE",
 125,Willy's Fish Shop,Purchase Fiberglass Rod,"FISHING_ROD_UPGRADE,TOOL_UPGRADE",
 126,Willy's Fish Shop,Purchase Iridium Rod,"FISHING_ROD_UPGRADE,TOOL_UPGRADE",
+127,Mountain,Copper Pan Cutscene,"TOOL_UPGRADE,PAN_UPGRADE",
+128,Blacksmith Iron Upgrades,Iron Pan Upgrade,"TOOL_UPGRADE,PAN_UPGRADE",
+129,Blacksmith Gold Upgrades,Gold Pan Upgrade,"TOOL_UPGRADE,PAN_UPGRADE",
+130,Blacksmith Iridium Upgrades,Iridium Pan Upgrade,"TOOL_UPGRADE,PAN_UPGRADE",
+151,Bulletin Board,Helper's Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE",
+152,Bulletin Board,Spirit's Eve Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE",
+153,Bulletin Board,Winter Star Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE",
+154,Bulletin Board,Calico Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE",
+155,Pantry,Sommelier Bundle,"PANTRY_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE",
+156,Pantry,Dry Bundle,"PANTRY_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE",
+157,Fish Tank,Fish Smoker Bundle,"FISH_TANK_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE",
+158,Bulletin Board,Raccoon Bundle,"BULLETIN_BOARD_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE",
+159,Crafts Room,Green Rain Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE",
+160,Fish Tank,Specific Fishing Bundle,"FISH_TANK_BUNDLE,BUNDLE,COMMUNITY_CENTER_BUNDLE",
 201,The Mines - Floor 10,The Mines Floor 10 Treasure,"MANDATORY,THE_MINES_TREASURE",
 202,The Mines - Floor 20,The Mines Floor 20 Treasure,"MANDATORY,THE_MINES_TREASURE",
 203,The Mines - Floor 40,The Mines Floor 40 Treasure,"MANDATORY,THE_MINES_TREASURE",
@@ -161,18 +175,18 @@ id,region,name,tags,mod_name
 235,The Mines - Floor 110,Floor 110 Elevator,ELEVATOR,
 236,The Mines - Floor 115,Floor 115 Elevator,ELEVATOR,
 237,The Mines - Floor 120,Floor 120 Elevator,ELEVATOR,
-250,Shipping,Demetrius's Breakthrough,MANDATORY
+250,Shipping,Demetrius's Breakthrough,MANDATORY,
 251,Volcano - Floor 10,Volcano Caldera Treasure,"GINGER_ISLAND,MANDATORY",
-301,Farming,Level 1 Farming,"FARMING_LEVEL,SKILL_LEVEL",
-302,Farming,Level 2 Farming,"FARMING_LEVEL,SKILL_LEVEL",
-303,Farming,Level 3 Farming,"FARMING_LEVEL,SKILL_LEVEL",
-304,Farming,Level 4 Farming,"FARMING_LEVEL,SKILL_LEVEL",
-305,Farming,Level 5 Farming,"FARMING_LEVEL,SKILL_LEVEL",
-306,Farming,Level 6 Farming,"FARMING_LEVEL,SKILL_LEVEL",
-307,Farming,Level 7 Farming,"FARMING_LEVEL,SKILL_LEVEL",
-308,Farming,Level 8 Farming,"FARMING_LEVEL,SKILL_LEVEL",
-309,Farming,Level 9 Farming,"FARMING_LEVEL,SKILL_LEVEL",
-310,Farming,Level 10 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+301,Farm,Level 1 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+302,Farm,Level 2 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+303,Farm,Level 3 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+304,Farm,Level 4 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+305,Farm,Level 5 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+306,Farm,Level 6 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+307,Farm,Level 7 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+308,Farm,Level 8 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+309,Farm,Level 9 Farming,"FARMING_LEVEL,SKILL_LEVEL",
+310,Farm,Level 10 Farming,"FARMING_LEVEL,SKILL_LEVEL",
 311,Fishing,Level 1 Fishing,"FISHING_LEVEL,SKILL_LEVEL",
 312,Fishing,Level 2 Fishing,"FISHING_LEVEL,SKILL_LEVEL",
 313,Fishing,Level 3 Fishing,"FISHING_LEVEL,SKILL_LEVEL",
@@ -213,6 +227,11 @@ id,region,name,tags,mod_name
 348,The Mines - Floor 90,Level 8 Combat,"COMBAT_LEVEL,SKILL_LEVEL",
 349,The Mines - Floor 100,Level 9 Combat,"COMBAT_LEVEL,SKILL_LEVEL",
 350,The Mines - Floor 110,Level 10 Combat,"COMBAT_LEVEL,SKILL_LEVEL",
+351,Mastery Cave,Farming Mastery,"MASTERY_LEVEL,SKILL_LEVEL",
+352,Mastery Cave,Fishing Mastery,"MASTERY_LEVEL,SKILL_LEVEL",
+353,Mastery Cave,Foraging Mastery,"MASTERY_LEVEL,SKILL_LEVEL",
+354,Mastery Cave,Mining Mastery,"MASTERY_LEVEL,SKILL_LEVEL",
+355,Mastery Cave,Combat Mastery,"MASTERY_LEVEL,SKILL_LEVEL",
 401,Carpenter Shop,Coop Blueprint,BUILDING_BLUEPRINT,
 402,Carpenter Shop,Big Coop Blueprint,BUILDING_BLUEPRINT,
 403,Carpenter Shop,Deluxe Coop Blueprint,BUILDING_BLUEPRINT,
@@ -279,6 +298,8 @@ id,region,name,tags,mod_name
 546,Mutant Bug Lair,Dark Talisman,"STORY_QUEST",
 547,Witch's Swamp,Goblin Problem,"STORY_QUEST",
 548,Witch's Hut,Magic Ink,"STORY_QUEST",
+549,Forest,The Giant Stump,"STORY_QUEST",
+550,Farm,Feeding Animals,"STORY_QUEST",
 601,JotPK World 1,JotPK: Boots 1,"ARCADE_MACHINE,JOTPK",
 602,JotPK World 1,JotPK: Boots 2,"ARCADE_MACHINE,JOTPK",
 603,JotPK World 1,JotPK: Gun 1,"ARCADE_MACHINE,JOTPK",
@@ -292,14 +313,14 @@ id,region,name,tags,mod_name
 611,JotPK World 2,JotPK: Cowboy 2,"ARCADE_MACHINE,JOTPK",
 612,Junimo Kart 1,Junimo Kart: Crumble Cavern,"ARCADE_MACHINE,JUNIMO_KART",
 613,Junimo Kart 1,Junimo Kart: Slippery Slopes,"ARCADE_MACHINE,JUNIMO_KART",
-614,Junimo Kart 2,Junimo Kart: Secret Level,"ARCADE_MACHINE,JUNIMO_KART",
+614,Junimo Kart 4,Junimo Kart: Secret Level,"ARCADE_MACHINE,JUNIMO_KART",
 615,Junimo Kart 2,Junimo Kart: The Gem Sea Giant,"ARCADE_MACHINE,JUNIMO_KART",
 616,Junimo Kart 2,Junimo Kart: Slomp's Stomp,"ARCADE_MACHINE,JUNIMO_KART",
 617,Junimo Kart 2,Junimo Kart: Ghastly Galleon,"ARCADE_MACHINE,JUNIMO_KART",
 618,Junimo Kart 3,Junimo Kart: Glowshroom Grotto,"ARCADE_MACHINE,JUNIMO_KART",
 619,Junimo Kart 3,Junimo Kart: Red Hot Rollercoaster,"ARCADE_MACHINE,JUNIMO_KART",
 620,JotPK World 3,Journey of the Prairie King Victory,"ARCADE_MACHINE_VICTORY,JOTPK",
-621,Junimo Kart 3,Junimo Kart: Sunset Speedway (Victory),"ARCADE_MACHINE_VICTORY,JUNIMO_KART",
+621,Junimo Kart 4,Junimo Kart: Sunset Speedway (Victory),"ARCADE_MACHINE_VICTORY,JUNIMO_KART",
 701,Secret Woods,Old Master Cannoli,MANDATORY,
 702,Beach,Beach Bridge Repair,MANDATORY,
 703,Desert,Galaxy Sword Shrine,MANDATORY,
@@ -307,6 +328,7 @@ id,region,name,tags,mod_name
 705,Farmhouse,Have Another Baby,BABY,
 706,Farmhouse,Spouse Stardrop,,
 707,Sewer,Krobus Stardrop,MANDATORY,
+708,Forest,Pot Of Gold,MANDATORY,
 801,Forest,Help Wanted: Gathering 1,HELP_WANTED,
 802,Forest,Help Wanted: Gathering 2,HELP_WANTED,
 803,Forest,Help Wanted: Gathering 3,HELP_WANTED,
@@ -454,6 +476,7 @@ id,region,name,tags,mod_name
 1068,Beach,Fishsanity: Legend II,"FISHSANITY,GINGER_ISLAND,REQUIRES_QI_ORDERS",
 1069,Beach,Fishsanity: Ms. Angler,"FISHSANITY,GINGER_ISLAND,REQUIRES_QI_ORDERS",
 1070,Beach,Fishsanity: Radioactive Carp,"FISHSANITY,GINGER_ISLAND,REQUIRES_QI_ORDERS",
+1071,Fishing,Fishsanity: Goby,FISHSANITY,
 1100,Museum,Museumsanity: 5 Donations,MUSEUM_MILESTONES,
 1101,Museum,Museumsanity: 10 Donations,MUSEUM_MILESTONES,
 1102,Museum,Museumsanity: 15 Donations,MUSEUM_MILESTONES,
@@ -1021,6 +1044,57 @@ id,region,name,tags,mod_name
 2034,Dance of the Moonlight Jellies,Moonlight Jellies Banner,FESTIVAL,
 2035,Dance of the Moonlight Jellies,Starport Decal,FESTIVAL,
 2036,Casino,Rarecrow #3 (Alien),FESTIVAL,
+2041,Desert Festival,Calico Race,FESTIVAL,
+2042,Desert Festival,Mummy Mask,FESTIVAL_HARD,
+2043,Desert Festival,Calico Statue,FESTIVAL,
+2044,Desert Festival,Emily's Outfit Services,FESTIVAL,
+2045,Desert Festival,Earthy Mousse,DESERT_FESTIVAL_CHEF,
+2046,Desert Festival,Sweet Bean Cake,DESERT_FESTIVAL_CHEF,
+2047,Desert Festival,Skull Cave Casserole,DESERT_FESTIVAL_CHEF,
+2048,Desert Festival,Spicy Tacos,DESERT_FESTIVAL_CHEF,
+2049,Desert Festival,Mountain Chili,DESERT_FESTIVAL_CHEF,
+2050,Desert Festival,Crystal Cake,DESERT_FESTIVAL_CHEF,
+2051,Desert Festival,Cave Kebab,DESERT_FESTIVAL_CHEF,
+2052,Desert Festival,Hot Log,DESERT_FESTIVAL_CHEF,
+2053,Desert Festival,Sour Salad,DESERT_FESTIVAL_CHEF,
+2054,Desert Festival,Superfood Cake,DESERT_FESTIVAL_CHEF,
+2055,Desert Festival,Warrior Smoothie,DESERT_FESTIVAL_CHEF,
+2056,Desert Festival,Rumpled Fruit Skin,DESERT_FESTIVAL_CHEF,
+2057,Desert Festival,Calico Pizza,DESERT_FESTIVAL_CHEF,
+2058,Desert Festival,Stuffed Mushrooms,DESERT_FESTIVAL_CHEF,
+2059,Desert Festival,Elf Quesadilla,DESERT_FESTIVAL_CHEF,
+2060,Desert Festival,Nachos Of The Desert,DESERT_FESTIVAL_CHEF,
+2061,Desert Festival,Cioppino,DESERT_FESTIVAL_CHEF,
+2062,Desert Festival,Rainforest Shrimp,DESERT_FESTIVAL_CHEF,
+2063,Desert Festival,Shrimp Donut,DESERT_FESTIVAL_CHEF,
+2064,Desert Festival,Smell Of The Sea,DESERT_FESTIVAL_CHEF,
+2065,Desert Festival,Desert Gumbo,DESERT_FESTIVAL_CHEF,
+2066,Desert Festival,Free Cactis,FESTIVAL,
+2067,Desert Festival,Monster Hunt,FESTIVAL_HARD,
+2068,Desert Festival,Deep Dive,FESTIVAL_HARD,
+2069,Desert Festival,Treasure Hunt,FESTIVAL_HARD,
+2070,Desert Festival,Touch A Calico Statue,FESTIVAL,
+2071,Desert Festival,Real Calico Egg Hunter,FESTIVAL,
+2072,Desert Festival,Willy's Challenge,FESTIVAL_HARD,
+2073,Desert Festival,Desert Scholar,FESTIVAL,
+2074,Trout Derby,Trout Derby Reward 1,FESTIVAL,
+2075,Trout Derby,Trout Derby Reward 2,FESTIVAL,
+2076,Trout Derby,Trout Derby Reward 3,FESTIVAL,
+2077,Trout Derby,Trout Derby Reward 4,FESTIVAL_HARD,
+2078,Trout Derby,Trout Derby Reward 5,FESTIVAL_HARD,
+2079,Trout Derby,Trout Derby Reward 6,FESTIVAL_HARD,
+2080,Trout Derby,Trout Derby Reward 7,FESTIVAL_HARD,
+2081,Trout Derby,Trout Derby Reward 8,FESTIVAL_HARD,
+2082,Trout Derby,Trout Derby Reward 9,FESTIVAL_HARD,
+2083,Trout Derby,Trout Derby Reward 10,FESTIVAL_HARD,
+2084,SquidFest,SquidFest Day 1 Copper,FESTIVAL,
+2085,SquidFest,SquidFest Day 1 Iron,FESTIVAL,
+2086,SquidFest,SquidFest Day 1 Gold,FESTIVAL_HARD,
+2087,SquidFest,SquidFest Day 1 Iridium,FESTIVAL_HARD,
+2088,SquidFest,SquidFest Day 2 Copper,FESTIVAL,
+2089,SquidFest,SquidFest Day 2 Iron,FESTIVAL,
+2090,SquidFest,SquidFest Day 2 Gold,FESTIVAL_HARD,
+2091,SquidFest,SquidFest Day 2 Iridium,FESTIVAL_HARD,
 2101,Town,Island Ingredients,"GINGER_ISLAND,SPECIAL_ORDER_BOARD",
 2102,The Mines - Floor 75,Cave Patrol,SPECIAL_ORDER_BOARD,
 2103,Fishing,Aquatic Overpopulation,SPECIAL_ORDER_BOARD,
@@ -1065,53 +1139,59 @@ id,region,name,tags,mod_name
 2214,Island West,Parrot Express,"GINGER_ISLAND,WALNUT_PURCHASE",
 2215,Dig Site,Open Professor Snail Cave,GINGER_ISLAND,
 2216,Field Office,Complete Island Field Office,GINGER_ISLAND,
-2301,Farming,Harvest Amaranth,CROPSANITY,
-2302,Farming,Harvest Artichoke,CROPSANITY,
-2303,Farming,Harvest Beet,CROPSANITY,
-2304,Farming,Harvest Blue Jazz,CROPSANITY,
-2305,Farming,Harvest Blueberry,CROPSANITY,
-2306,Farming,Harvest Bok Choy,CROPSANITY,
-2307,Farming,Harvest Cauliflower,CROPSANITY,
-2308,Farming,Harvest Corn,CROPSANITY,
-2309,Farming,Harvest Cranberries,CROPSANITY,
-2310,Farming,Harvest Eggplant,CROPSANITY,
-2311,Farming,Harvest Fairy Rose,CROPSANITY,
-2312,Farming,Harvest Garlic,CROPSANITY,
-2313,Farming,Harvest Grape,CROPSANITY,
-2314,Farming,Harvest Green Bean,CROPSANITY,
-2315,Farming,Harvest Hops,CROPSANITY,
-2316,Farming,Harvest Hot Pepper,CROPSANITY,
-2317,Farming,Harvest Kale,CROPSANITY,
-2318,Farming,Harvest Melon,CROPSANITY,
-2319,Farming,Harvest Parsnip,CROPSANITY,
-2320,Farming,Harvest Poppy,CROPSANITY,
-2321,Farming,Harvest Potato,CROPSANITY,
-2322,Farming,Harvest Pumpkin,CROPSANITY,
-2323,Farming,Harvest Radish,CROPSANITY,
-2324,Farming,Harvest Red Cabbage,CROPSANITY,
-2325,Farming,Harvest Rhubarb,CROPSANITY,
-2326,Farming,Harvest Starfruit,CROPSANITY,
-2327,Farming,Harvest Strawberry,CROPSANITY,
-2328,Farming,Harvest Summer Spangle,CROPSANITY,
-2329,Farming,Harvest Sunflower,CROPSANITY,
-2330,Farming,Harvest Tomato,CROPSANITY,
-2331,Farming,Harvest Tulip,CROPSANITY,
-2332,Farming,Harvest Unmilled Rice,CROPSANITY,
-2333,Farming,Harvest Wheat,CROPSANITY,
-2334,Farming,Harvest Yam,CROPSANITY,
-2335,Farming,Harvest Cactus Fruit,CROPSANITY,
-2336,Farming,Harvest Pineapple,"CROPSANITY,GINGER_ISLAND",
-2337,Farming,Harvest Taro Root,"CROPSANITY,GINGER_ISLAND",
-2338,Farming,Harvest Sweet Gem Berry,CROPSANITY,
-2339,Farming,Harvest Apple,CROPSANITY,
-2340,Farming,Harvest Apricot,CROPSANITY,
-2341,Farming,Harvest Cherry,CROPSANITY,
-2342,Farming,Harvest Orange,CROPSANITY,
-2343,Farming,Harvest Pomegranate,CROPSANITY,
-2344,Farming,Harvest Peach,CROPSANITY,
-2345,Farming,Harvest Banana,"CROPSANITY,GINGER_ISLAND",
-2346,Farming,Harvest Mango,"CROPSANITY,GINGER_ISLAND",
-2347,Farming,Harvest Coffee Bean,CROPSANITY,
+2301,Fall Farming,Harvest Amaranth,CROPSANITY,
+2302,Fall Farming,Harvest Artichoke,CROPSANITY,
+2303,Fall Farming,Harvest Beet,CROPSANITY,
+2304,Spring Farming,Harvest Blue Jazz,CROPSANITY,
+2305,Summer Farming,Harvest Blueberry,CROPSANITY,
+2306,Fall Farming,Harvest Bok Choy,CROPSANITY,
+2307,Spring Farming,Harvest Cauliflower,CROPSANITY,
+2308,Summer or Fall Farming,Harvest Corn,CROPSANITY,
+2309,Fall Farming,Harvest Cranberries,CROPSANITY,
+2310,Fall Farming,Harvest Eggplant,CROPSANITY,
+2311,Fall Farming,Harvest Fairy Rose,CROPSANITY,
+2312,Spring Farming,Harvest Garlic,CROPSANITY,
+2313,Fall Farming,Harvest Grape,CROPSANITY,
+2314,Spring Farming,Harvest Green Bean,CROPSANITY,
+2315,Summer Farming,Harvest Hops,CROPSANITY,
+2316,Summer Farming,Harvest Hot Pepper,CROPSANITY,
+2317,Spring Farming,Harvest Kale,CROPSANITY,
+2318,Summer Farming,Harvest Melon,CROPSANITY,
+2319,Spring Farming,Harvest Parsnip,CROPSANITY,
+2320,Summer Farming,Harvest Poppy,CROPSANITY,
+2321,Spring Farming,Harvest Potato,CROPSANITY,
+2322,Fall Farming,Harvest Pumpkin,CROPSANITY,
+2323,Summer Farming,Harvest Radish,CROPSANITY,
+2324,Summer Farming,Harvest Red Cabbage,CROPSANITY,
+2325,Spring Farming,Harvest Rhubarb,CROPSANITY,
+2326,Summer Farming,Harvest Starfruit,CROPSANITY,
+2327,Spring Farming,Harvest Strawberry,CROPSANITY,
+2328,Summer Farming,Harvest Summer Spangle,CROPSANITY,
+2329,Summer or Fall Farming,Harvest Sunflower,CROPSANITY,
+2330,Summer Farming,Harvest Tomato,CROPSANITY,
+2331,Spring Farming,Harvest Tulip,CROPSANITY,
+2332,Spring Farming,Harvest Unmilled Rice,CROPSANITY,
+2333,Summer or Fall Farming,Harvest Wheat,CROPSANITY,
+2334,Fall Farming,Harvest Yam,CROPSANITY,
+2335,Indoor Farming,Harvest Cactus Fruit,CROPSANITY,
+2336,Summer Farming,Harvest Pineapple,"CROPSANITY,GINGER_ISLAND",
+2337,Summer Farming,Harvest Taro Root,"CROPSANITY,GINGER_ISLAND",
+2338,Fall Farming,Harvest Sweet Gem Berry,CROPSANITY,
+2339,Fall Farming,Harvest Apple,CROPSANITY,
+2340,Spring Farming,Harvest Apricot,CROPSANITY,
+2341,Spring Farming,Harvest Cherry,CROPSANITY,
+2342,Summer Farming,Harvest Orange,CROPSANITY,
+2343,Fall Farming,Harvest Pomegranate,CROPSANITY,
+2344,Summer Farming,Harvest Peach,CROPSANITY,
+2345,Summer Farming,Harvest Banana,"CROPSANITY,GINGER_ISLAND",
+2346,Summer Farming,Harvest Mango,"CROPSANITY,GINGER_ISLAND",
+2347,Indoor Farming,Harvest Coffee Bean,CROPSANITY,
+2348,Fall Farming,Harvest Broccoli,CROPSANITY,
+2349,Spring Farming,Harvest Carrot,CROPSANITY,
+2350,Summer Farming,Harvest Powdermelon,CROPSANITY,
+2351,Summer Farming,Harvest Summer Squash,CROPSANITY,
+2352,Indoor Farming,Harvest Ancient Fruit,CROPSANITY,
+2353,Indoor Farming,Harvest Qi Fruit,"CROPSANITY,GINGER_ISLAND",
 2401,Shipping,Shipsanity: Duck Egg,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",
 2402,Shipping,Shipsanity: Duck Feather,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",
 2403,Shipping,Shipsanity: Egg,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",
@@ -1431,7 +1511,7 @@ id,region,name,tags,mod_name
 2717,Shipping,Shipsanity: Cactus Fruit,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT",
 2718,Shipping,Shipsanity: Cave Carrot,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT",
 2719,Shipping,Shipsanity: Chanterelle,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT",
-2720,Shipping,Shipsanity: Clam,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT",
+2720,Shipping,Shipsanity: Clam,"SHIPSANITY,SHIPSANITY_FISH",
 2721,Shipping,Shipsanity: Coconut,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT",
 2722,Shipping,Shipsanity: Common Mushroom,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT",
 2723,Shipping,Shipsanity: Coral,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT",
@@ -1683,7 +1763,7 @@ id,region,name,tags,mod_name
 2969,Shipping,Shipsanity: Mango Sapling,"GINGER_ISLAND,SHIPSANITY",
 2970,Shipping,Shipsanity: Mushroom Tree Seed,"GINGER_ISLAND,SHIPSANITY,REQUIRES_QI_ORDERS",
 2971,Shipping,Shipsanity: Pineapple Seeds,"GINGER_ISLAND,SHIPSANITY",
-2972,Shipping,Shipsanity: Qi Bean,"GINGER_ISLAND,SHIPSANITY",
+2972,Shipping,Shipsanity: Qi Bean,"GINGER_ISLAND,SHIPSANITY,REQUIRES_QI_ORDERS",
 2973,Shipping,Shipsanity: Taro Tuber,"GINGER_ISLAND,SHIPSANITY",
 3001,Adventurer's Guild,Monster Eradication: Slimes,"MONSTERSANITY,MONSTERSANITY_GOALS",
 3002,Adventurer's Guild,Monster Eradication: Void Spirits,"MONSTERSANITY,MONSTERSANITY_GOALS",
@@ -1852,6 +1932,7 @@ id,region,name,tags,mod_name
 3278,Kitchen,Cook Tropical Curry,"COOKSANITY,GINGER_ISLAND",
 3279,Kitchen,Cook Trout Soup,"COOKSANITY,COOKSANITY_QOS",
 3280,Kitchen,Cook Vegetable Medley,COOKSANITY,
+3281,Kitchen,Cook Moss Soup,COOKSANITY,
 3301,Farm,Algae Soup Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
 3302,The Queen of Sauce,Artichoke Dip Recipe,"CHEFSANITY,CHEFSANITY_QOS",
 3303,Farm,Autumn's Bounty Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
@@ -1932,6 +2013,7 @@ id,region,name,tags,mod_name
 3378,Island Resort,Tropical Curry Recipe,"CHEFSANITY,GINGER_ISLAND,CHEFSANITY_PURCHASE",
 3379,The Queen of Sauce,Trout Soup Recipe,"CHEFSANITY,CHEFSANITY_QOS",
 3380,Farm,Vegetable Medley Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
+3381,Farm,Moss Soup Recipe,"CHEFSANITY,CHEFSANITY_SKILL",
 3401,Farm,Craft Cherry Bomb,CRAFTSANITY,
 3402,Farm,Craft Bomb,CRAFTSANITY,
 3403,Farm,Craft Mega Bomb,CRAFTSANITY,
@@ -2006,7 +2088,7 @@ id,region,name,tags,mod_name
 3472,Farm,Craft Life Elixir,CRAFTSANITY,
 3473,Farm,Craft Oil of Garlic,CRAFTSANITY,
 3474,Farm,Craft Monster Musk,CRAFTSANITY,
-3475,Farm,Craft Fairy Dust,CRAFTSANITY,
+3475,Farm,Craft Fairy Dust,"CRAFTSANITY,GINGER_ISLAND",
 3476,Farm,Craft Warp Totem: Beach,CRAFTSANITY,
 3477,Farm,Craft Warp Totem: Mountains,CRAFTSANITY,
 3478,Farm,Craft Warp Totem: Farm,CRAFTSANITY,
@@ -2062,6 +2144,26 @@ id,region,name,tags,mod_name
 3528,Farm,Craft Farm Computer,CRAFTSANITY,
 3529,Farm,Craft Hopper,"CRAFTSANITY,GINGER_ISLAND",
 3530,Farm,Craft Cookout Kit,CRAFTSANITY,
+3531,Farm,Craft Fish Smoker,"CRAFTSANITY",
+3532,Farm,Craft Dehydrator,"CRAFTSANITY",
+3533,Farm,Craft Blue Grass Starter,"CRAFTSANITY,GINGER_ISLAND",
+3534,Farm,Craft Mystic Tree Seed,"CRAFTSANITY,REQUIRES_MASTERIES",
+3535,Farm,Craft Sonar Bobber,"CRAFTSANITY",
+3536,Farm,Craft Challenge Bait,"CRAFTSANITY,REQUIRES_MASTERIES",
+3537,Farm,Craft Treasure Totem,"CRAFTSANITY,REQUIRES_MASTERIES",
+3538,Farm,Craft Heavy Furnace,"CRAFTSANITY,REQUIRES_MASTERIES",
+3539,Farm,Craft Deluxe Worm Bin,"CRAFTSANITY",
+3540,Farm,Craft Mushroom Log,"CRAFTSANITY",
+3541,Farm,Craft Big Chest,"CRAFTSANITY",
+3542,Farm,Craft Big Stone Chest,"CRAFTSANITY",
+3543,Farm,Craft Text Sign,"CRAFTSANITY",
+3544,Farm,Craft Tent Kit,"CRAFTSANITY",
+3545,Farm,Craft Statue Of The Dwarf King,"CRAFTSANITY,REQUIRES_MASTERIES",
+3546,Farm,Craft Statue Of Blessings,"CRAFTSANITY,REQUIRES_MASTERIES",
+3547,Farm,Craft Anvil,"CRAFTSANITY,REQUIRES_MASTERIES",
+3548,Farm,Craft Mini-Forge,"CRAFTSANITY,GINGER_ISLAND,REQUIRES_MASTERIES",
+3549,Farm,Craft Deluxe Bait,"CRAFTSANITY",
+3550,Farm,Craft Bait Maker,"CRAFTSANITY",
 3551,Pierre's General Store,Grass Starter Recipe,CRAFTSANITY,
 3552,Carpenter Shop,Wood Floor Recipe,CRAFTSANITY,
 3553,Carpenter Shop,Rustic Plank Floor Recipe,CRAFTSANITY,
@@ -2088,6 +2190,226 @@ id,region,name,tags,mod_name
 3574,Sewer,Wicked Statue Recipe,CRAFTSANITY,
 3575,Desert,Warp Totem: Desert Recipe,"CRAFTSANITY",
 3576,Island Trader,Deluxe Retaining Soil Recipe,"CRAFTSANITY,GINGER_ISLAND",
+3577,Willy's Fish Shop,Fish Smoker Recipe,CRAFTSANITY,
+3578,Pierre's General Store,Dehydrator Recipe,CRAFTSANITY,
+3579,Carpenter Shop,Big Chest Recipe,CRAFTSANITY,
+3580,Mines Dwarf Shop,Big Stone Chest Recipe,CRAFTSANITY,
+3701,Raccoon Bundles,Raccoon Request 1,"BUNDLE,RACCOON_BUNDLES",
+3702,Raccoon Bundles,Raccoon Request 2,"BUNDLE,RACCOON_BUNDLES",
+3703,Raccoon Bundles,Raccoon Request 3,"BUNDLE,RACCOON_BUNDLES",
+3704,Raccoon Bundles,Raccoon Request 4,"BUNDLE,RACCOON_BUNDLES",
+3705,Raccoon Bundles,Raccoon Request 5,"BUNDLE,RACCOON_BUNDLES",
+3706,Raccoon Bundles,Raccoon Request 6,"BUNDLE,RACCOON_BUNDLES",
+3707,Raccoon Bundles,Raccoon Request 7,"BUNDLE,RACCOON_BUNDLES",
+3708,Raccoon Bundles,Raccoon Request 8,"BUNDLE,RACCOON_BUNDLES",
+3801,Shipping,Shipsanity: Goby,"SHIPSANITY,SHIPSANITY_FISH",
+3802,Shipping,Shipsanity: Fireworks (Red),"SHIPSANITY",
+3803,Shipping,Shipsanity: Fireworks (Purple),"SHIPSANITY",
+3804,Shipping,Shipsanity: Fireworks (Green),"SHIPSANITY",
+3805,Shipping,Shipsanity: Far Away Stone,"SHIPSANITY",
+3806,Shipping,Shipsanity: Calico Egg,"SHIPSANITY",
+3807,Shipping,Shipsanity: Mixed Flower Seeds,"SHIPSANITY",
+3808,Shipping,Shipsanity: Mystery Box,"SHIPSANITY",
+3809,Shipping,Shipsanity: Golden Tag,"SHIPSANITY",
+3810,Shipping,Shipsanity: Deluxe Bait,"SHIPSANITY",
+3811,Shipping,Shipsanity: Moss,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",
+3812,Shipping,Shipsanity: Mossy Seed,"SHIPSANITY",
+3813,Shipping,Shipsanity: Sonar Bobber,"SHIPSANITY",
+3814,Shipping,Shipsanity: Tent Kit,"SHIPSANITY",
+3815,Shipping,Shipsanity: Mystic Tree Seed,"SHIPSANITY,REQUIRES_MASTERIES",
+3816,Shipping,Shipsanity: Mystic Syrup,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",
+3817,Shipping,Shipsanity: Raisins,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",
+3818,Shipping,Shipsanity: Dried Fruit,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",
+3819,Shipping,Shipsanity: Dried Mushrooms,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",
+3820,Shipping,Shipsanity: Stardrop Tea,"SHIPSANITY",
+3821,Shipping,Shipsanity: Prize Ticket,"SHIPSANITY",
+3822,Shipping,Shipsanity: Treasure Totem,"SHIPSANITY,REQUIRES_MASTERIES",
+3823,Shipping,Shipsanity: Challenge Bait,"SHIPSANITY,REQUIRES_MASTERIES",
+3824,Shipping,Shipsanity: Carrot Seeds,"SHIPSANITY",
+3825,Shipping,Shipsanity: Carrot,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT",
+3826,Shipping,Shipsanity: Summer Squash Seeds,"SHIPSANITY",
+3827,Shipping,Shipsanity: Summer Squash,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT",
+3828,Shipping,Shipsanity: Broccoli Seeds,"SHIPSANITY",
+3829,Shipping,Shipsanity: Broccoli,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT",
+3830,Shipping,Shipsanity: Powdermelon Seeds,"SHIPSANITY",
+3831,Shipping,Shipsanity: Powdermelon,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT",
+3832,Shipping,Shipsanity: Smoked Fish,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",
+3833,Shipping,Shipsanity: Book Of Stars,"SHIPSANITY",
+3834,Shipping,Shipsanity: Stardew Valley Almanac,"SHIPSANITY",
+3835,Shipping,Shipsanity: Woodcutter's Weekly,"SHIPSANITY",
+3836,Shipping,Shipsanity: Bait And Bobber,"SHIPSANITY",
+3837,Shipping,Shipsanity: Mining Monthly,"SHIPSANITY",
+3838,Shipping,Shipsanity: Combat Quarterly,"SHIPSANITY",
+3839,Shipping,Shipsanity: The Alleyway Buffet,"SHIPSANITY",
+3840,Shipping,Shipsanity: The Art O' Crabbing,"SHIPSANITY",
+3841,Shipping,Shipsanity: Dwarvish Safety Manual,"SHIPSANITY",
+3842,Shipping,Shipsanity: Jewels Of The Sea,"SHIPSANITY",
+3843,Shipping,Shipsanity: Raccoon Journal,"SHIPSANITY",
+3844,Shipping,Shipsanity: Woody's Secret,"SHIPSANITY",
+3845,Shipping,"Shipsanity: Jack Be Nimble, Jack Be Thick","SHIPSANITY",
+3846,Shipping,Shipsanity: Friendship 101,"SHIPSANITY",
+3847,Shipping,Shipsanity: Monster Compendium,"SHIPSANITY",
+3848,Shipping,Shipsanity: Way Of The Wind pt. 1,"SHIPSANITY",
+3849,Shipping,Shipsanity: Mapping Cave Systems,"SHIPSANITY",
+3850,Shipping,Shipsanity: Price Catalogue,"SHIPSANITY",
+3851,Shipping,Shipsanity: Queen Of Sauce Cookbook,"SHIPSANITY,GINGER_ISLAND",
+3852,Shipping,Shipsanity: The Diamond Hunter,"SHIPSANITY,GINGER_ISLAND",
+3853,Shipping,Shipsanity: Book of Mysteries,"SHIPSANITY",
+3854,Shipping,Shipsanity: Animal Catalogue,"SHIPSANITY",
+3855,Shipping,Shipsanity: Way Of The Wind pt. 2,"SHIPSANITY",
+3856,Shipping,Shipsanity: Golden Animal Cracker,"SHIPSANITY,REQUIRES_MASTERIES",
+3857,Shipping,Shipsanity: Golden Mystery Box,"SHIPSANITY,REQUIRES_MASTERIES",
+3858,Shipping,Shipsanity: Sea Jelly,"SHIPSANITY,SHIPSANITY_FISH",
+3859,Shipping,Shipsanity: Cave Jelly,"SHIPSANITY,SHIPSANITY_FISH",
+3860,Shipping,Shipsanity: River Jelly,"SHIPSANITY,SHIPSANITY_FISH",
+3861,Shipping,Shipsanity: Treasure Appraisal Guide,"SHIPSANITY",
+3862,Shipping,Shipsanity: Horse: The Book,"SHIPSANITY",
+3863,Shipping,Shipsanity: Butterfly Powder,"SHIPSANITY",
+3864,Shipping,Shipsanity: Blue Grass Starter,"SHIPSANITY,GINGER_ISLAND,REQUIRES_QI_ORDERS",
+3865,Shipping,Shipsanity: Moss Soup,"SHIPSANITY",
+3866,Shipping,Shipsanity: Ol' Slitherlegs,"SHIPSANITY",
+3867,Shipping,Shipsanity: Targeted Bait,"SHIPSANITY",
+4001,Farm,Read Price Catalogue,"BOOKSANITY,BOOKSANITY_POWER",
+4002,Farm,Read Mapping Cave Systems,"BOOKSANITY,BOOKSANITY_POWER",
+4003,Farm,Read Way Of The Wind pt. 1,"BOOKSANITY,BOOKSANITY_POWER",
+4004,Farm,Read Way Of The Wind pt. 2,"BOOKSANITY,BOOKSANITY_POWER",
+4005,Farm,Read Monster Compendium,"BOOKSANITY,BOOKSANITY_POWER",
+4006,Farm,Read Friendship 101,"BOOKSANITY,BOOKSANITY_POWER",
+4007,Farm,"Read Jack Be Nimble, Jack Be Thick","BOOKSANITY,BOOKSANITY_POWER",
+4008,Farm,Read Woody's Secret,"BOOKSANITY,BOOKSANITY_POWER",
+4009,Farm,Read Raccoon Journal,"BOOKSANITY,BOOKSANITY_POWER",
+4010,Farm,Read Jewels Of The Sea,"BOOKSANITY,BOOKSANITY_POWER",
+4011,Farm,Read Dwarvish Safety Manual,"BOOKSANITY,BOOKSANITY_POWER",
+4012,Farm,Read The Art O' Crabbing,"BOOKSANITY,BOOKSANITY_POWER",
+4013,Farm,Read The Alleyway Buffet,"BOOKSANITY,BOOKSANITY_POWER",
+4014,Farm,Read The Diamond Hunter,"BOOKSANITY,BOOKSANITY_POWER,GINGER_ISLAND",
+4015,Farm,Read Book of Mysteries,"BOOKSANITY,BOOKSANITY_POWER",
+4016,Farm,Read Horse: The Book,"BOOKSANITY,BOOKSANITY_POWER",
+4017,Farm,Read Treasure Appraisal Guide,"BOOKSANITY,BOOKSANITY_POWER",
+4018,Farm,Read Ol' Slitherlegs,"BOOKSANITY,BOOKSANITY_POWER",
+4019,Farm,Read Animal Catalogue,"BOOKSANITY,BOOKSANITY_POWER",
+4031,Farm,Read Bait And Bobber,"BOOKSANITY,BOOKSANITY_SKILL",
+4032,Farm,Read Book Of Stars,"BOOKSANITY,BOOKSANITY_SKILL",
+4033,Farm,Read Combat Quarterly,"BOOKSANITY,BOOKSANITY_SKILL",
+4034,Farm,Read Mining Monthly,"BOOKSANITY,BOOKSANITY_SKILL",
+4035,Farm,Read Queen Of Sauce Cookbook,"BOOKSANITY,BOOKSANITY_SKILL,GINGER_ISLAND",
+4036,Farm,Read Stardew Valley Almanac,"BOOKSANITY,BOOKSANITY_SKILL",
+4037,Farm,Read Woodcutter's Weekly,"BOOKSANITY,BOOKSANITY_SKILL",
+4051,Museum,Read Tips on Farming,"BOOKSANITY,BOOKSANITY_LOST",
+4052,Museum,Read This is a book by Marnie,"BOOKSANITY,BOOKSANITY_LOST",
+4053,Museum,Read On Foraging,"BOOKSANITY,BOOKSANITY_LOST",
+4054,Museum,"Read The Fisherman, Act 1","BOOKSANITY,BOOKSANITY_LOST",
+4055,Museum,Read How Deep do the mines go?,"BOOKSANITY,BOOKSANITY_LOST",
+4056,Museum,Read An Old Farmer's Journal,"BOOKSANITY,BOOKSANITY_LOST",
+4057,Museum,Read Scarecrows,"BOOKSANITY,BOOKSANITY_LOST",
+4058,Museum,Read The Secret of the Stardrop,"BOOKSANITY,BOOKSANITY_LOST",
+4059,Museum,Read Journey of the Prairie King -- The Smash Hit Video Game!,"BOOKSANITY,BOOKSANITY_LOST",
+4060,Museum,Read A Study on Diamond Yields,"BOOKSANITY,BOOKSANITY_LOST",
+4061,Museum,Read Brewmaster's Guide,"BOOKSANITY,BOOKSANITY_LOST",
+4062,Museum,Read Mysteries of the Dwarves,"BOOKSANITY,BOOKSANITY_LOST",
+4063,Museum,Read Highlights From The Book of Yoba,"BOOKSANITY,BOOKSANITY_LOST",
+4064,Museum,Read Marriage Guide for Farmers,"BOOKSANITY,BOOKSANITY_LOST",
+4065,Museum,"Read The Fisherman, Act II","BOOKSANITY,BOOKSANITY_LOST",
+4066,Museum,Read Technology Report!,"BOOKSANITY,BOOKSANITY_LOST",
+4067,Museum,Read Secrets of the Legendary Fish,"BOOKSANITY,BOOKSANITY_LOST",
+4068,Museum,Read Gunther Tunnel Notice,"BOOKSANITY,BOOKSANITY_LOST",
+4069,Museum,Read Note From Gunther,"BOOKSANITY,BOOKSANITY_LOST",
+4070,Museum,Read Goblins by M. Jasper,"BOOKSANITY,BOOKSANITY_LOST",
+4071,Museum,Read Secret Statues Acrostics,"BOOKSANITY,BOOKSANITY_LOST",
+4101,Clint's Blacksmith,Open Golden Coconut,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4102,Island West,Fishing Walnut 1,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4103,Island West,Fishing Walnut 2,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4104,Island North,Fishing Walnut 3,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4105,Island North,Fishing Walnut 4,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4106,Island Southeast,Fishing Walnut 5,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4107,Island East,Jungle Bush,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4108,Island East,Banana Altar,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4109,Leo's Hut,Leo's Tree,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4110,Island Shrine,Gem Birds Bush,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4111,Island Shrine,Gem Birds Shrine,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4112,Island West,Harvesting Walnut 1,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4113,Island West,Harvesting Walnut 2,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4114,Island West,Harvesting Walnut 3,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4115,Island West,Harvesting Walnut 4,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4116,Island West,Harvesting Walnut 5,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4117,Gourmand Frog Cave,Gourmand Frog Melon,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4118,Gourmand Frog Cave,Gourmand Frog Wheat,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4119,Gourmand Frog Cave,Gourmand Frog Garlic,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4120,Island West,Journal Scrap #6,"WALNUTSANITY,WALNUTSANITY_DIG",
+4121,Island West,Mussel Node Walnut 1,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4122,Island West,Mussel Node Walnut 2,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4123,Island West,Mussel Node Walnut 3,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4124,Island West,Mussel Node Walnut 4,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4125,Island West,Mussel Node Walnut 5,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4126,Shipwreck,Shipwreck Bush,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4127,Island West,Whack A Mole,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4128,Island West,Starfish Triangle,"WALNUTSANITY,WALNUTSANITY_DIG",
+4129,Island West,Starfish Diamond,"WALNUTSANITY,WALNUTSANITY_DIG",
+4130,Island West,X in the sand,"WALNUTSANITY,WALNUTSANITY_DIG",
+4131,Island West,Diamond Of Indents,"WALNUTSANITY,WALNUTSANITY_DIG",
+4132,Island West,Bush Behind Coconut Tree,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4133,Island West,Journal Scrap #4,"WALNUTSANITY,WALNUTSANITY_DIG",
+4134,Island West,Walnut Room Bush,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4135,Island West,Coast Bush,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4136,Island West,Tiger Slime Walnut,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4137,Island West,Bush Behind Mahogany Tree,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4138,Island West,Circle Of Grass,"WALNUTSANITY,WALNUTSANITY_DIG",
+4139,Island West,Below Colored Crystals Cave Bush,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4140,Colored Crystals Cave,Colored Crystals,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4141,Island West,Cliff Edge Bush,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4142,Island West,Diamond Of Pebbles,"WALNUTSANITY,WALNUTSANITY_DIG",
+4143,Island West,Farm Parrot Express Bush,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4144,Island West,Farmhouse Cliff Bush,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4145,Island North,Big Circle Of Stones,"WALNUTSANITY,WALNUTSANITY_DIG",
+4146,Island North,Grove Bush,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4147,Island North,Diamond Of Grass,"WALNUTSANITY,WALNUTSANITY_DIG",
+4148,Island North,Small Circle Of Stones,"WALNUTSANITY,WALNUTSANITY_DIG",
+4149,Island North,Patch Of Sand,"WALNUTSANITY,WALNUTSANITY_DIG",
+4150,Dig Site,Crooked Circle Of Stones,"WALNUTSANITY,WALNUTSANITY_DIG",
+4151,Dig Site,Above Dig Site Bush,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4152,Dig Site,Above Field Office Bush 1,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4153,Dig Site,Above Field Office Bush 2,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4154,Field Office,Complete Large Animal Collection,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4155,Field Office,Complete Snake Collection,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4156,Field Office,Complete Mummified Frog Collection,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4157,Field Office,Complete Mummified Bat Collection,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4158,Field Office,Purple Flowers Island Survey,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4159,Field Office,Purple Starfish Island Survey,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4160,Island North,Bush Behind Volcano Tree,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4161,Island North,Arc Of Stones,"WALNUTSANITY,WALNUTSANITY_DIG",
+4162,Island North,Protruding Tree Walnut,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4163,Island North,Journal Scrap #10,"WALNUTSANITY,WALNUTSANITY_DIG",
+4164,Island North,Northmost Point Circle Of Stones,"WALNUTSANITY,WALNUTSANITY_DIG",
+4165,Island North,Hidden Passage Bush,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4166,Volcano Secret Beach,Secret Beach Bush 1,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4167,Volcano Secret Beach,Secret Beach Bush 2,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4168,Volcano - Floor 5,Volcano Rocks Walnut 1,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4169,Volcano - Floor 5,Volcano Rocks Walnut 2,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4170,Volcano - Floor 10,Volcano Rocks Walnut 3,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4171,Volcano - Floor 10,Volcano Rocks Walnut 4,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4172,Volcano - Floor 10,Volcano Rocks Walnut 5,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4173,Volcano - Floor 5,Volcano Monsters Walnut 1,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4174,Volcano - Floor 5,Volcano Monsters Walnut 2,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4175,Volcano - Floor 10,Volcano Monsters Walnut 3,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4176,Volcano - Floor 10,Volcano Monsters Walnut 4,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4177,Volcano - Floor 10,Volcano Monsters Walnut 5,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4178,Volcano - Floor 5,Volcano Crates Walnut 1,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4179,Volcano - Floor 5,Volcano Crates Walnut 2,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4180,Volcano - Floor 10,Volcano Crates Walnut 3,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4181,Volcano - Floor 10,Volcano Crates Walnut 4,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4182,Volcano - Floor 10,Volcano Crates Walnut 5,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4183,Volcano - Floor 5,Volcano Common Chest Walnut,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4184,Volcano - Floor 10,Volcano Rare Chest Walnut,"WALNUTSANITY,WALNUTSANITY_REPEATABLE",
+4185,Volcano - Floor 10,Forge Entrance Bush,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4186,Volcano - Floor 10,Forge Exit Bush,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4187,Island North,Cliff Over Island South Bush,"WALNUTSANITY,WALNUTSANITY_BUSH",
+4188,Island Southeast,Starfish Tide Pool,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4189,Island Southeast,Diamond Of Yellow Starfish,"WALNUTSANITY,WALNUTSANITY_DIG",
+4190,Island Southeast,Mermaid Song,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4191,Pirate Cove,Pirate Darts 1,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4192,Pirate Cove,Pirate Darts 2,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4193,Pirate Cove,Pirate Darts 3,"WALNUTSANITY,WALNUTSANITY_PUZZLE",
+4194,Pirate Cove,Pirate Cove Patch Of Sand,"WALNUTSANITY,WALNUTSANITY_DIG",
 5001,Stardew Valley,Level 1 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
 5002,Stardew Valley,Level 2 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
 5003,Stardew Valley,Level 3 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
@@ -2585,7 +2907,7 @@ id,region,name,tags,mod_name
 7405,Farm,Craft Armor Elixir,CRAFTSANITY,Stardew Valley Expanded
 7406,Witch's Swamp,Craft Ginger Tincture,"CRAFTSANITY,GINGER_ISLAND",Distant Lands - Witch Swamp Overhaul
 7407,Farm,Craft Glass Path,CRAFTSANITY,Archaeology
-7408,Farm,Craft Glass Bazier,CRAFTSANITY,Archaeology
+7408,Farm,Craft Glass Brazier,CRAFTSANITY,Archaeology
 7409,Farm,Craft Glass Fence,CRAFTSANITY,Archaeology
 7410,Farm,Craft Bone Path,CRAFTSANITY,Archaeology
 7411,Farm,Craft Water Shifter,CRAFTSANITY,Archaeology
@@ -2603,13 +2925,23 @@ id,region,name,tags,mod_name
 7423,Farm,Craft T-Rex Skeleton L,CRAFTSANITY,Boarding House and Bus Stop Extension
 7424,Farm,Craft T-Rex Skeleton M,CRAFTSANITY,Boarding House and Bus Stop Extension
 7425,Farm,Craft T-Rex Skeleton R,CRAFTSANITY,Boarding House and Bus Stop Extension
+7426,Farm,Craft Restoration Table,CRAFTSANITY,Archaeology
+7427,Farm,Craft Rusty Path,CRAFTSANITY,Archaeology
+7428,Farm,Craft Rusty Brazier,CRAFTSANITY,Archaeology
+7429,Farm,Craft Lucky Ring,CRAFTSANITY,Archaeology
+7430,Farm,Craft Bone Fence,CRAFTSANITY,Archaeology
+7431,Farm,Craft Bouquet,CRAFTSANITY,Socializing Skill
+7432,Farm,Craft Trash Bin,CRAFTSANITY,Binning Skill
+7433,Farm,Craft Composter,CRAFTSANITY,Binning Skill
+7434,Farm,Craft Recycling Bin,CRAFTSANITY,Binning Skill
+7435,Farm,Craft Advanced Recycling Machine,CRAFTSANITY,Binning Skill
 7451,Adventurer's Guild,Magic Elixir Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Magic
 7452,Adventurer's Guild,Travel Core Recipe,CRAFTSANITY,Magic
 7453,Alesia Shop,Haste Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
 7454,Isaac Shop,Hero Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
 7455,Alesia Shop,Armor Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
 7501,Mountain,Missing Envelope,"STORY_QUEST",Ayeisha - The Postal Worker (Custom NPC)
-7502,Forest,Lost Emerald Ring,"STORY_QUEST",Ayeisha - The Postal Worker (Custom NPC)
+7502,Forest,Ayeisha's Lost Ring,"STORY_QUEST",Ayeisha - The Postal Worker (Custom NPC)
 7503,Forest,Mr.Ginger's request,"STORY_QUEST",Mister Ginger (cat npc)
 7504,Forest,Juna's Drink Request,"STORY_QUEST",Juna - Roommate NPC
 7505,Forest,Juna's BFF Request,"STORY_QUEST",Juna - Roommate NPC
@@ -2648,6 +2980,11 @@ id,region,name,tags,mod_name
 7563,Kitchen,Cook Pemmican,COOKSANITY,Distant Lands - Witch Swamp Overhaul
 7564,Kitchen,Cook Void Mint Tea,COOKSANITY,Distant Lands - Witch Swamp Overhaul
 7565,Kitchen,Cook Special Pumpkin Soup,COOKSANITY,Boarding House and Bus Stop Extension
+7566,Kitchen,Cook Digger's Delight,COOKSANITY,Archaeology
+7567,Kitchen,Cook Rocky Root Coffee,COOKSANITY,Archaeology
+7568,Kitchen,Cook Ancient Jello,COOKSANITY,Archaeology
+7569,Kitchen,Cook Grilled Cheese,COOKSANITY,Binning Skill
+7570,Kitchen,Cook Fish Casserole,COOKSANITY,Binning Skill
 7601,Bear Shop,Baked Berry Oatmeal Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 7602,Bear Shop,Flower Cookie Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 7603,Saloon,Big Bark Burger Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Stardew Valley Expanded
@@ -2668,6 +3005,11 @@ id,region,name,tags,mod_name
 7620,Mines Dwarf Shop,T-Rex Skeleton L Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
 7621,Mines Dwarf Shop,T-Rex Skeleton M Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
 7622,Mines Dwarf Shop,T-Rex Skeleton R Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
+7623,Farm,Digger's Delight Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
+7624,Farm,Rocky Root Coffee Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
+7625,Farm,Ancient Jello Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
+7627,Farm,Grilled Cheese Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Binning Skill
+7628,Farm,Fish Casserole Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Binning Skill
 7651,Alesia Shop,Tempered Galaxy Dagger,MANDATORY,Stardew Valley Expanded
 7652,Isaac Shop,Tempered Galaxy Sword,MANDATORY,Stardew Valley Expanded
 7653,Isaac Shop,Tempered Galaxy Hammer,MANDATORY,Stardew Valley Expanded
@@ -2697,7 +3039,6 @@ id,region,name,tags,mod_name
 7724,Mutant Bug Lair,Fishsanity: Water Grub,FISHSANITY,Stardew Valley Expanded
 7725,Crimson Badlands,Fishsanity: Undeadfish,FISHSANITY,Stardew Valley Expanded
 7726,Shearwater Bridge,Fishsanity: Kittyfish,FISHSANITY,Stardew Valley Expanded
-7727,Blue Moon Vineyard,Fishsanity: Dulse Seaweed,FISHSANITY,Stardew Valley Expanded
 7728,Witch's Swamp,Fishsanity: Void Minnow,FISHSANITY,Distant Lands - Witch Swamp Overhaul
 7729,Witch's Swamp,Fishsanity: Swamp Leech,FISHSANITY,Distant Lands - Witch Swamp Overhaul
 7730,Witch's Swamp,Fishsanity: Giant Horsehoe Crab,FISHSANITY,Distant Lands - Witch Swamp Overhaul
@@ -2714,15 +3055,15 @@ id,region,name,tags,mod_name
 8002,Shipping,Shipsanity: Travel Core,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Magic
 8003,Shipping,Shipsanity: Aegis Elixir,SHIPSANITY,Stardew Valley Expanded
 8004,Shipping,Shipsanity: Aged Blue Moon Wine,SHIPSANITY,Stardew Valley Expanded
-8005,Shipping,Shipsanity: Ancient Ferns Seed,SHIPSANITY,Stardew Valley Expanded
+8005,Shipping,Shipsanity: Ancient Fern Seed,SHIPSANITY,Stardew Valley Expanded
 8006,Shipping,Shipsanity: Ancient Fiber,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8007,Shipping,Shipsanity: Armor Elixir,SHIPSANITY,Stardew Valley Expanded
 8008,Shipping,Shipsanity: Baby Lunaloo,"SHIPSANITY,SHIPSANITY_FISH,GINGER_ISLAND",Stardew Valley Expanded
 8009,Shipping,Shipsanity: Baked Berry Oatmeal,SHIPSANITY,Stardew Valley Expanded
 8010,Shipping,Shipsanity: Barbarian Elixir,SHIPSANITY,Stardew Valley Expanded
-8011,Shipping,Shipsanity: Bearberrys,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
+8011,Shipping,Shipsanity: Bearberry,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8012,Shipping,Shipsanity: Big Bark Burger,SHIPSANITY,Stardew Valley Expanded
-8013,Shipping,Shipsanity: Big Conch,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
+8013,Shipping,Shipsanity: Conch,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8014,Shipping,Shipsanity: Blue Moon Wine,SHIPSANITY,Stardew Valley Expanded
 8015,Shipping,Shipsanity: Bonefish,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
 8016,Shipping,Shipsanity: Bull Trout,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
@@ -2730,8 +3071,7 @@ id,region,name,tags,mod_name
 8018,Shipping,Shipsanity: Clownfish,"SHIPSANITY,SHIPSANITY_FISH,GINGER_ISLAND",Stardew Valley Expanded
 8019,Shipping,Shipsanity: Daggerfish,"SHIPSANITY,SHIPSANITY_FISH,GINGER_ISLAND",Stardew Valley Expanded
 8020,Shipping,Shipsanity: Dewdrop Berry,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
-8021,Shipping,Shipsanity: Dried Sand Dollar,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
-8022,Shipping,Shipsanity: Dulse Seaweed,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
+8021,Shipping,Shipsanity: Sand Dollar,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8023,Shipping,Shipsanity: Ferngill Primrose,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8024,Shipping,Shipsanity: Flower Cookie,SHIPSANITY,Stardew Valley Expanded
 8025,Shipping,Shipsanity: Frog,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
@@ -2751,7 +3091,7 @@ id,region,name,tags,mod_name
 8040,Shipping,Shipsanity: King Salmon,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
 8050,Shipping,Shipsanity: Kittyfish,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
 8051,Shipping,Shipsanity: Lightning Elixir,SHIPSANITY,Stardew Valley Expanded
-8052,Shipping,Shipsanity: Lucky Four Leaf Clover,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
+8052,Shipping,Shipsanity: Four Leaf Clover,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8053,Shipping,Shipsanity: Lunaloo,"SHIPSANITY,SHIPSANITY_FISH,GINGER_ISLAND",Stardew Valley Expanded
 8054,Shipping,Shipsanity: Meteor Carp,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
 8055,Shipping,Shipsanity: Minnow,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
@@ -2774,7 +3114,7 @@ id,region,name,tags,mod_name
 8072,Shipping,Shipsanity: Shrub Seed,"SHIPSANITY,GINGER_ISLAND",Stardew Valley Expanded
 8073,Shipping,Shipsanity: Slime Berry,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT,GINGER_ISLAND",Stardew Valley Expanded
 8074,Shipping,Shipsanity: Slime Seed,"SHIPSANITY,GINGER_ISLAND",Stardew Valley Expanded
-8075,Shipping,Shipsanity: Smelly Rafflesia,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
+8075,Shipping,Shipsanity: Rafflesia,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8076,Shipping,Shipsanity: Sports Drink,SHIPSANITY,Stardew Valley Expanded
 8077,Shipping,Shipsanity: Stalk Seed,"SHIPSANITY,GINGER_ISLAND",Stardew Valley Expanded
 8078,Shipping,Shipsanity: Stamina Capsule,SHIPSANITY,Stardew Valley Expanded
@@ -2937,3 +3277,12 @@ id,region,name,tags,mod_name
 8235,Shipping,Shipsanity: Pterodactyl Claw,SHIPSANITY,Boarding House and Bus Stop Extension
 8236,Shipping,Shipsanity: Neanderthal Skull,SHIPSANITY,Boarding House and Bus Stop Extension
 8237,Shipping,Shipsanity: Pterodactyl R Wing Bone,SHIPSANITY,Boarding House and Bus Stop Extension
+8238,Shipping,Shipsanity: Scrap Rust,SHIPSANITY,Archaeology
+8239,Shipping,Shipsanity: Rusty Path,SHIPSANITY,Archaeology
+8241,Shipping,Shipsanity: Digger's Delight,SHIPSANITY,Archaeology
+8242,Shipping,Shipsanity: Rocky Root Coffee,SHIPSANITY,Archaeology
+8243,Shipping,Shipsanity: Ancient Jello,SHIPSANITY,Archaeology
+8244,Shipping,Shipsanity: Bone Fence,SHIPSANITY,Archaeology
+8245,Shipping,Shipsanity: Grilled Cheese,SHIPSANITY,Binning Skill
+8246,Shipping,Shipsanity: Fish Casserole,SHIPSANITY,Binning Skill
+8247,Shipping,Shipsanity: Snatcher Worm,SHIPSANITY,Stardew Valley Expanded
