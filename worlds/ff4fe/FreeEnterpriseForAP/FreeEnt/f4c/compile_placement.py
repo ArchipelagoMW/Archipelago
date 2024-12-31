@@ -1,6 +1,6 @@
 from . import compile_common
 from . import ff4struct
-from . import lark
+import lark
 
 class PlacementTransformer(lark.Transformer):
     def __init__(self, placement):

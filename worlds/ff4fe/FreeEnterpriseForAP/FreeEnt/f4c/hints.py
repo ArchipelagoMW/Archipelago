@@ -1,7 +1,7 @@
 import re
 
 from . import compile_common
-from . import lark
+import lark
 
 _hints = {}
 

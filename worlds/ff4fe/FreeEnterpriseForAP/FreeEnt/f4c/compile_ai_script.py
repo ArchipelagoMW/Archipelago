@@ -1,5 +1,5 @@
 from . import compile_common
-from . import lark
+import lark
 from . import consts
 from . import ai_common
 

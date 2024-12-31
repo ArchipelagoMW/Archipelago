@@ -1,5 +1,5 @@
 from . import compile_common
-from . import lark
+import lark
 from . import ff4struct
 
 class FormationTransformer(lark.Transformer):

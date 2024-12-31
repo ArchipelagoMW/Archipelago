@@ -17,7 +17,7 @@ placement_const_definition : number identifier
 
 batch_block : "batch" [number] _block_start event_command* _block_end
 
-cancel_marker : "cancel:"                                   -> ev_cancel
+cancel_marker : "cancel" ":"                                 -> ev_cancel
 
 !event_command : placement_specifier placement_command       -> evcmd_placement
               | "player" player_command                      -> evcmd_player
@@ -56,7 +56,8 @@ cancel_marker : "cancel:"                                   -> ev_cancel
               | "message" value [message_bank3_specifier]   -> evcmd_message
               | "set" flag_value
               | "clear" flag_value
-              | ["de"] "activate" npc_value                 -> evcmd_npc
+              | "activate" npc_value                        -> evcmd_npc
+              | "deactivate" npc_value                      -> evcmd_npc
               | "select" "item" item_value
               | "confirm" "message" value                   -> evcmd_confirm
               | "toggle" "tint" number

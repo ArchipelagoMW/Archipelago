@@ -1,10 +1,10 @@
 import os,inspect
-from . import lark
+import lark
 
 _ROOT_FAMILY = "__"
 _consts = {}
 
-_parser = lark.Lark('''
+_parser = lark.Lark(r'''
     start           : const_block*
     const_block     : "consts" "(" identifier ")" "{" const_def* "}"
     const_def       : number identifier

@@ -7,4 +7,4 @@ npc_block_item  : "sprite" sprite_value                                 -> sprit
                 | "default" "inactive"                                  -> inactive
                 | "eventcall" _block_start block_content* _block_end    -> eventcall
 
-?block_content : /[^{}\n\t\f\r ]*/
+?block_content : /[^{}\n\t\f\r ]+/
