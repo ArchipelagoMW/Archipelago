@@ -151,7 +151,7 @@ class ERPlacementState:
         self.pairings = []
         self.world = world
         self.coupled = coupled
-        self.collection_state = world.multiworld.get_all_state(False, True)
+        self.collection_state = world.multiworld.get_all_state(False, True, True)
 
     @property
     def placed_regions(self) -> set[Region]:
