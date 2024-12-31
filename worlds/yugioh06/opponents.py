@@ -1,9 +1,8 @@
 from typing import Dict, List, NamedTuple, Optional, Union
 
 from BaseClasses import MultiWorld
-from worlds.generic.Rules import CollectionRule
 
-from . import item_to_index, tier_1_opponents, yugioh06_difficulty
+from . import item_to_index, tier_1_opponents
 from .locations import special
 
 
@@ -163,7 +162,7 @@ challenge_opponents = [
 
 
 def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int], randomize: bool = False) -> List[
-    OpponentData]:
+     OpponentData]:
     opponents_table: List[OpponentData] = [
         # Tier 1
         OpponentData(0, "Kuriboh", [], 1, 1, 4064, 8000, "deck/LV1_kuriboh.ydc\x00\x00", 0),

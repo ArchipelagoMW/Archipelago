@@ -1,6 +1,6 @@
-# auto-generated
 from typing import Dict, List
 
+# auto-generated
 banlists: Dict[str, Dict[str, List[str]]] = {
     "no_banlist": {
         "Forbidden": [],

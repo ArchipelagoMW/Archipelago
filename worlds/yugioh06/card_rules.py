@@ -347,7 +347,7 @@ def set_card_rules(world):
             world.random.shuffle(rule)
             chosen_rule = None
             # chose a rule that uses cards in the starting cards.
-            # Only works as intended if a all elements in list have 1 card in main rule
+            # Only works as intended if an all elements in list have 1 card in main rule
             for r in rule:
                 rule_cards = []
                 if isinstance(r.cards, str):
@@ -758,7 +758,7 @@ def only_level():
     ]
     card_rules: List[CardRule] = []
     level_up_rule = InnerCardRule(["Level Up!"], 3)
-    # one pair and bunch of lose LV monsters
+    # one pair and  a bunch of lose LV monsters
     for pair in lv_pairs:
         inner_cards = list(lv_pairs)
         inner_cards.remove(pair)
@@ -1136,7 +1136,7 @@ raise_attack = [
     CardRule("Black Pendant", 1, additional_cards=InnerCardRule(
         lambda: find_cards_with(min_attack=2550), 1)),
     CardRule("Bladefly", 1, additional_cards=InnerCardRule(
-        lambda : find_cards_with(min_attack=2550, attribute="WIND"), 1)),
+        lambda: find_cards_with(min_attack=2550, attribute="WIND"), 1)),
     CardRule("Blast with Chain", 1, additional_cards=InnerCardRule(
         lambda: find_cards_with(min_attack=2550), 1)),
     CardRule("Bright Castle", 1, additional_cards=InnerCardRule(

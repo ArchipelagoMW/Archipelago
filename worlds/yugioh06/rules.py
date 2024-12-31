@@ -1,7 +1,6 @@
 from worlds.generic.Rules import add_rule
 
 from . import yugioh06_difficulty
-from .fusions import count_has_materials
 
 
 def set_rules(world):
@@ -130,7 +129,8 @@ def set_rules(world):
         # Events
         "Exodia": lambda state: state.has_all(world.progression_cards["Exodia"], player),
         "Can Exodia Win":
-            lambda state: state.has("Exodia", player) and state.has_all(world.progression_cards["Can Exodia Win"], player),
+            lambda state: state.has("Exodia", player) and state.has_all(world.progression_cards["Can Exodia Win"],
+                                                                        player),
         "Can Last Turn Win":
             lambda state: state.has_all(world.progression_cards["Can Last Turn Win"], player),
         "Can Yata Lock":

@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger("Client")
 
-rarity_sort_order  = {
+rarity_sort_order = {
     "Secret Rare Alt 1": 0,
     "Secret Rare Alt 2": 1,
     "Secret Rare Alt 3": 2,
@@ -215,7 +215,7 @@ class YuGiOh2006Client(BizHawkClient):
                     old_score = old_score[0][0]
                     new_score = old_score & 252 | 1
                     await bizhawk.guarded_write(
-                        ctx.bizhawk_ctx,[
+                        ctx.bizhawk_ctx, [
                             (cid * 4 + 0x6CC8, new_score.to_bytes(1, "little"), "EWRAM"),
                         ],
                         [
@@ -317,4 +317,3 @@ def parse_items(local_items: bytearray, items: List[NetworkItem]) -> bytearray:
             bit = index % 8
             array[byte] = array[byte] | (1 << bit)
     return array
-

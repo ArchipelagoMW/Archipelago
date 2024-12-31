@@ -1,10 +1,4 @@
-import csv
 from typing import NamedTuple, Dict, List
-
-import Utils
-from worlds.yugioh06 import banlists
-from worlds.yugioh06.boosterpack_contents import contents
-from worlds.yugioh06.boosterpacks_data import booster_pack_data, booster_card_id_to_name
 
 monster_types = {
     0x00: "None",

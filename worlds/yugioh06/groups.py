@@ -193,4 +193,3 @@ location_groups = {
     "Medium Challenge": medium_challenge,
     "Hard Challenge": hard_challenge
 }
-

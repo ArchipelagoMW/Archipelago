@@ -53,7 +53,7 @@ def create_chaos_packs(world: World):
             rares_in_pack = 0
             commons_in_pack = 0
             packs[in_pack] = {}
-        rarity = world.random.choices(all_rarities,[
+        rarity = world.random.choices(all_rarities, [
             pack_data[in_pack].commons - commons_in_pack,
             pack_data[in_pack].rares - rares_in_pack,
             pack_data[in_pack].super_rares - supers_in_pack,
