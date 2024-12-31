@@ -3241,7 +3241,7 @@ id,region,name,tags,mod_name
 8199,Shipping,Shipsanity: Hardwood Display,SHIPSANITY,Archaeology
 8200,Shipping,Shipsanity: Wooden Display,SHIPSANITY,Archaeology
 8201,Shipping,Shipsanity: Dwarf Gadget: Infinite Volcano Simulation,"SHIPSANITY,GINGER_ISLAND",Archaeology
-8202,Shipping,Shipsanity: Water Shifter,SHIPSANITY,Archaeology
+8202,Shipping,Shipsanity: Water Shifter,"SHIPSANITY,DEPRECATED",Archaeology
 8203,Shipping,Shipsanity: Brown Amanita,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Distant Lands - Witch Swamp Overhaul
 8204,Shipping,Shipsanity: Swamp Herb,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Distant Lands - Witch Swamp Overhaul
 8205,Shipping,Shipsanity: Void Mint Seeds,SHIPSANITY,Distant Lands - Witch Swamp Overhaul
