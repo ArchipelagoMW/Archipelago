@@ -114,14 +114,6 @@ class RaftWorld(World):
     def create_regions(self):
         create_regions(self.multiworld, self.player)
     
-    def get_pre_fill_items(self):
-        if self.options.island_frequency_locations.is_filling_frequencies_in_world():
-            return [self.create_item(frequency) for frequency in ("Vasagatan Frequency", "Balboa Island Frequency",
-                                                                  "Caravan Island Frequency", "Tangaroa Frequency",
-                                                                  "Varuna Point Frequency", "Temperance Frequency",
-                                                                  "Utopia Frequency")]
-        return []
-    
     def create_item_replaceAsNecessary(self, name: str) -> Item:
         isFrequency = "Frequency" in name
         shouldUseProgressive = bool((isFrequency and self.options.island_frequency_locations == self.options.island_frequency_locations.option_progressive)
