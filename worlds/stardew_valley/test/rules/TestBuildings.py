@@ -23,7 +23,7 @@ class TestBuildingLogic(SVTestBase):
         self.assertFalse(big_coop_blueprint_rule(self.multiworld.state),
                          f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
 
-        self.multiworld.state.collect(self.create_item("Progressive Coop"), prevent_sweep=False)
+        self.multiworld.state.collect(self.create_item("Progressive Coop"))
         self.assertTrue(big_coop_blueprint_rule(self.multiworld.state),
                         f"Rule is {repr(self.multiworld.get_location('Big Coop Blueprint', self.player).access_rule)}")
 
@@ -33,10 +33,10 @@ class TestBuildingLogic(SVTestBase):
         self.collect_lots_of_money()
         self.assertFalse(self.world.logic.region.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
 
-        self.multiworld.state.collect(self.create_item("Progressive Coop"), prevent_sweep=True)
+        self.multiworld.state.collect(self.create_item("Progressive Coop"))
         self.assertFalse(self.world.logic.region.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
 
-        self.multiworld.state.collect(self.create_item("Progressive Coop"), prevent_sweep=True)
+        self.multiworld.state.collect(self.create_item("Progressive Coop"))
         self.assertTrue(self.world.logic.region.can_reach_location("Deluxe Coop Blueprint")(self.multiworld.state))
 
     def test_big_shed_blueprint(self):
@@ -48,6 +48,6 @@ class TestBuildingLogic(SVTestBase):
         self.assertFalse(big_shed_rule(self.multiworld.state),
                          f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
 
-        self.multiworld.state.collect(self.create_item("Progressive Shed"), prevent_sweep=True)
+        self.multiworld.state.collect(self.create_item("Progressive Shed"))
         self.assertTrue(big_shed_rule(self.multiworld.state),
                         f"Rule is {repr(self.multiworld.get_location('Big Shed Blueprint', self.player).access_rule)}")
