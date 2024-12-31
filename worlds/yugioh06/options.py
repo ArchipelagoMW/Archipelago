@@ -1,8 +1,8 @@
 import typing
 from dataclasses import dataclass
 
-from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle, OptionDict, ItemDict, OptionList, \
-    OptionSet, ItemSet
+from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle, OptionDict
+from worlds.ladx.Options import DefaultOffToggle
 from worlds.yugioh06.card_data import get_all_valid_cards_set
 
 
@@ -187,10 +187,10 @@ class MoneyRewardMultiplier(Range):
     default = 20
 
 
-class NormalizeBoostersPacks(DefaultOnToggle):
+class NormalizeBoosterPackPrices(DefaultOnToggle):
     """If enabled every booster pack costs the same and has 5 cards per pack otherwise vanilla cost is used"""
 
-    display_name = "Normalize Booster Packs"
+    display_name = "Normalize Booste Pack Prices"
 
 
 class BoosterPackPrices(Range):
@@ -203,6 +203,11 @@ class BoosterPackPrices(Range):
     range_start = 1
     range_end = 3000
     default = 100
+
+
+class NormalizeBoosterPackRarities(DefaultOffToggle):
+    """All cards in packs are commons"""
+    display_name = "Normalize Booster Pack Rarities"
 
 
 class RandomizePackContents(Choice):
@@ -245,8 +250,9 @@ class Yugioh06Options(PerGameCommonOptions):
     number_of_challenges: NumberOfChallenges
     starting_money: StartingMoney
     money_reward_multiplier: MoneyRewardMultiplier
-    normalize_boosters_packs: NormalizeBoostersPacks
+    normalize_booster_pack_prices: NormalizeBoosterPackPrices
     booster_pack_prices: BoosterPackPrices
+    normalize_booster_pack_rarities: NormalizeBoosterPackRarities
     randomize_pack_contents: RandomizePackContents
     add_empty_banlist: AddEmptyBanList
     campaign_opponents_shuffle: CampaignOpponentsShuffle

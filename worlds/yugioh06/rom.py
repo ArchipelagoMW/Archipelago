@@ -10,9 +10,10 @@ from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 
 from worlds.AutoWorld import World
 from . import Theme_Duels, Limited_Duels, cards
+from .boosterpack_contents import contents
 from .boosterpacks_data import booster_pack_data, reverse_rarities
 from .items import item_to_index
-from .rom_values import banlist_ids, function_addresses, structure_deck_selection
+from .rom_values import banlist_ids, structure_deck_selection
 
 MD5Europe = "020411d3b08f5639eb8cb878283f84bf"
 MD5America = "b8a7c976b28172995fe9e465d654297a"
@@ -73,11 +74,21 @@ def write_tokens(world: World, patch: YGO06ProcedurePatch):
             pointer = data.pointer
             for card, rarity in world.booster_pack_contents[name].items():
                 card_data = cards[card]
+                if world.options.normalize_booster_pack_rarities:
+                    rarity = "Common"
                 patch.write_token(APTokenTypes.WRITE, pointer, struct.pack("<H", card_data.starter_id))
                 patch.write_token(APTokenTypes.WRITE, pointer + 2,
                                   struct.pack("<H", reverse_rarities[rarity] + card_data.art))
                 pointer += 4
 
+    elif world.options.normalize_booster_pack_rarities:
+        for name, data in booster_pack_data.items():
+            pointer = data.pointer
+            for card, rarity in contents[name].items():
+                card_data = cards[card]
+                patch.write_token(APTokenTypes.WRITE, pointer + 2,
+                                  struct.pack("<H", 0x0 + card_data.art))
+                pointer += 4
     # set banlist
     banlist = world.options.banlist
     patch.write_token(APTokenTypes.WRITE, 0xF4496, struct.pack("<B", banlist_ids.get(banlist.value)))
@@ -123,7 +134,7 @@ def write_tokens(world: World, patch: YGO06ProcedurePatch):
     patch.write_token(APTokenTypes.WRITE, 0xE70C, struct.pack("<B", world.options.money_reward_multiplier.value))
     patch.write_token(APTokenTypes.WRITE, 0xE6E4, struct.pack("<B", world.options.money_reward_multiplier.value))
     # normalize booster packs if option is set
-    if world.options.normalize_boosters_packs.value:
+    if world.options.normalize_booster_pack_prices.value:
         booster_pack_price = world.options.booster_pack_prices.value.to_bytes(2, "little")
         for booster in range(51):
             space = booster * 16
