@@ -20,11 +20,10 @@ from collections import defaultdict
 from typing import TYPE_CHECKING, Dict, List, Set, Tuple, cast
 
 from .data import static_logic as static_witness_logic
+from .data.definition_classes import ConnectionDefinition, WitnessRule
 from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 from .data.static_logic import StaticWitnessLogicObj
 from .data.utils import (
-    ConnectionDefinition,
-    WitnessRule,
     define_new_region,
     get_boat,
     get_caves_except_path_to_challenge_exclusion_list,

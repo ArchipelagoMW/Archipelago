@@ -3,6 +3,7 @@ from typing import Any, Dict, FrozenSet, List, Optional, Set
 
 from Utils import cache_argsless
 
+from .definition_classes import AreaDefinition, ConnectionDefinition, RegionDefinition, WitnessRule
 from .item_definition_classes import (
     CATEGORY_NAME_MAPPINGS,
     DoorItemDefinition,
@@ -12,8 +13,6 @@ from .item_definition_classes import (
     WeightedItemDefinition,
 )
 from .utils import (
-    ConnectionDefinition,
-    WitnessRule,
     define_new_region,
     get_items,
     get_sigma_expert_logic,
@@ -21,7 +20,7 @@ from .utils import (
     get_umbra_variety_logic,
     get_vanilla_logic,
     logical_or_witness_rules,
-    parse_lambda, RegionDefinition, AreaDefinition,
+    parse_lambda,
 )
 
 

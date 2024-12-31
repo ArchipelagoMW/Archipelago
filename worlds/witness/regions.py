@@ -10,8 +10,9 @@ from BaseClasses import Entrance, Region
 from worlds.generic.Rules import CollectionRule
 
 from .data import static_logic as static_witness_logic
+from .data.definition_classes import WitnessRule
 from .data.static_logic import StaticWitnessLogicObj
-from .data.utils import WitnessRule, optimize_witness_rule
+from .data.utils import optimize_witness_rule
 from .locations import WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
 

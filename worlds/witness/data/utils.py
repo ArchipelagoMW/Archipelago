@@ -1,40 +1,11 @@
-from dataclasses import dataclass, field
 from math import floor
 from pkgutil import get_data
 from random import Random
-from typing import Collection, FrozenSet, Iterable, List, NamedTuple, Optional, Set, Tuple, TypeVar
+from typing import Collection, FrozenSet, Iterable, List, Optional, Set, Tuple, TypeVar
+
+from worlds.witness.data.definition_classes import ConnectionDefinition, RegionDefinition, WitnessRule
 
 T = TypeVar("T")
-
-# A WitnessRule is just an or-chain of and-conditions.
-# It represents the set of all options that could fulfill this requirement.
-# E.g. if something requires "Dots or (Shapers and Stars)", it'd be represented as: {{"Dots"}, {"Shapers, "Stars"}}
-# {} is an unusable requirement.
-# {{}} is an always usable requirement.
-WitnessRule = FrozenSet[FrozenSet[str]]
-
-
-@dataclass
-class RegionDefinition:
-    name: str
-    short_name: str
-    logical_entities: List[str] = field(default_factory=list)
-    physical_entities: List[str] = field(default_factory=list)
-
-
-@dataclass
-class AreaDefinition:
-    name: str
-    regions: List[str] = field(default_factory=list)
-
-
-class ConnectionDefinition(NamedTuple):
-    target_region: str
-    traversal_rule: WitnessRule
-
-    @property
-    def can_be_traversed(self) -> bool:
-        return bool(self.traversal_rule)
 
 
 def cast_not_none(value: Optional[T]) -> T:
