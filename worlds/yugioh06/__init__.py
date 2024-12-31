@@ -1,7 +1,7 @@
 import logging
 import os
 import pkgutil
-from typing import Any, ClassVar, Dict, List, Set, TextIO
+from typing import Any, ClassVar, Dict, List, TextIO
 
 import settings
 from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
@@ -15,6 +15,7 @@ from .boosterpack_shuffle import create_shuffled_packs
 from .boosterpacks_data import booster_card_id_to_name
 from .card_data import CardData, cards, empty_card_data
 from .card_rules import set_card_rules
+from .groups import item_groups, location_groups
 from .items import (
     Banlist_Items,
     booster_packs,
@@ -24,10 +25,6 @@ from .items import (
     item_to_index,
     useful,
     tier_1_opponents,
-    tier_2_opponents,
-    tier_3_opponents,
-    tier_4_opponents,
-    tier_5_opponents, core_booster,
 )
 from .items import challenges as challenges
 from .locations import (
@@ -116,18 +113,8 @@ class Yugioh06World(World):
     for k, v in Required_Cards.items():
         location_name_to_id[k] = v + start_id
 
-    item_name_groups: Dict[str, Set[str]] = {
-        "Core Booster": set(core_booster),
-        "Campaign Boss Beaten": {"Tier 1 Beaten", "Tier 2 Beaten", "Tier 3 Beaten", "Tier 4 Beaten", "Tier 5 Beaten"},
-        "Challenge": set(challenges),
-        "Tier 1 Opponent": set(tier_1_opponents),
-        "Tier 2 Opponent": set(tier_2_opponents),
-        "Tier 3 Opponent": set(tier_3_opponents),
-        "Tier 4 Opponent": set(tier_4_opponents),
-        "Tier 5 Opponent": set(tier_5_opponents),
-        "Campaign Opponent": set(tier_1_opponents + tier_2_opponents + tier_3_opponents +
-                                 tier_4_opponents + tier_5_opponents)
-    }
+    item_name_groups = item_groups
+    location_name_groups = location_groups
 
     removed_challenges: List[str]
     starting_booster: str
