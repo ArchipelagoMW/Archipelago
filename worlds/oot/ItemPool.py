@@ -295,16 +295,14 @@ random = None
 
 def get_junk_pool(ootworld):
     junk_pool[:] = list(junk_pool_base)
-    if ootworld.junk_ice_traps == 'on': 
+    if ootworld.options.junk_ice_traps == 'on':
         junk_pool.append(('Ice Trap', 10))
-    elif ootworld.junk_ice_traps in ['mayhem', 'onslaught']:
+    elif ootworld.options.junk_ice_traps in ['mayhem', 'onslaught']:
         junk_pool[:] = [('Ice Trap', 1)]
     return junk_pool
 
 
-def get_junk_item(count=1, pool=None, plando_pool=None):
-    global random
-    
+def get_junk_item(rand, count=1, pool=None, plando_pool=None):
     if count < 1:
         raise ValueError("get_junk_item argument 'count' must be greater than 0.")
 
@@ -323,17 +321,17 @@ def get_junk_item(count=1, pool=None, plando_pool=None):
             raise RuntimeError("Not enough junk is available in the item pool to replace removed items.")
     else:
         junk_items, junk_weights = zip(*junk_pool)
-    return_pool.extend(random.choices(junk_items, weights=junk_weights, k=count))
+    return_pool.extend(rand.choices(junk_items, weights=junk_weights, k=count))
 
     return return_pool
 
 
-def replace_max_item(items, item, max):
+def replace_max_item(items, item, max, rand):
     count = 0
     for i,val in enumerate(items):
         if val == item:
             if count >= max:
-                items[i] = get_junk_item()[0]
+                items[i] = get_junk_item(rand)[0]
             count += 1
 
 
@@ -375,7 +373,7 @@ def get_pool_core(world):
             pending_junk_pool.append('Kokiri Sword')
         if world.shuffle_ocarinas:
             pending_junk_pool.append('Ocarina')
-        if world.shuffle_beans and world.multiworld.start_inventory[world.player].value.get('Magic Bean Pack', 0):
+        if world.shuffle_beans and world.options.start_inventory.value.get('Magic Bean Pack', 0):
             pending_junk_pool.append('Magic Bean Pack')
         if (world.gerudo_fortress != "open"
                 and world.shuffle_hideoutkeys in ['any_dungeon', 'overworld', 'keysanity', 'regional']):
@@ -450,7 +448,7 @@ def get_pool_core(world):
             else:
                 item = deku_scrubs_items[location.vanilla_item]
                 if isinstance(item, list):
-                    item = random.choices([i[0] for i in item], weights=[i[1] for i in item], k=1)[0]
+                    item = world.random.choices([i[0] for i in item], weights=[i[1] for i in item], k=1)[0]
                 shuffle_item = True
 
         # Kokiri Sword
@@ -489,7 +487,7 @@ def get_pool_core(world):
         # Cows
         elif location.vanilla_item == 'Milk':
             if world.shuffle_cows:
-                item = get_junk_item()[0]
+                item = get_junk_item(world.random)[0]
             shuffle_item = world.shuffle_cows
             if not shuffle_item:
                 location.show_in_spoiler = False
@@ -508,13 +506,13 @@ def get_pool_core(world):
                 item = 'Rutos Letter'
                 ruto_bottles -= 1
             else:
-                item = random.choice(normal_bottles)
+                item = world.random.choice(normal_bottles)
             shuffle_item = True
 
         # Magic Beans
         elif location.vanilla_item == 'Buy Magic Bean':
             if world.shuffle_beans:
-                item = 'Magic Bean Pack' if not world.multiworld.start_inventory[world.player].value.get('Magic Bean Pack', 0) else get_junk_item()[0]
+                item = 'Magic Bean Pack' if not world.options.start_inventory.value.get('Magic Bean Pack', 0) else get_junk_item(world.random)[0]
             shuffle_item = world.shuffle_beans
             if not shuffle_item:
                 location.show_in_spoiler = False
@@ -528,7 +526,7 @@ def get_pool_core(world):
         # Adult Trade Item
         elif location.vanilla_item == 'Pocket Egg':
             potential_trade_items = world.adult_trade_start if world.adult_trade_start else trade_items
-            item = random.choice(sorted(potential_trade_items))
+            item = world.random.choice(sorted(potential_trade_items))
             world.selected_adult_trade_item = item
             shuffle_item = True
 
@@ -541,7 +539,7 @@ def get_pool_core(world):
                 shuffle_item = False
                 location.show_in_spoiler = False
             if shuffle_item and world.gerudo_fortress == 'normal' and 'Thieves Hideout' in world.key_rings:
-                item = get_junk_item()[0] if location.name != 'Hideout 1 Torch Jail Gerudo Key' else 'Small Key Ring (Thieves Hideout)'
+                item = get_junk_item(world.random)[0] if location.name != 'Hideout 1 Torch Jail Gerudo Key' else 'Small Key Ring (Thieves Hideout)'
 
         # Freestanding Rupees and Hearts
         elif location.type in ['ActorOverride', 'Freestanding', 'RupeeTower']:
@@ -618,7 +616,7 @@ def get_pool_core(world):
                 elif dungeon.name in world.key_rings and not dungeon.small_keys:
                     item = dungeon.item_name("Small Key Ring")
                 elif dungeon.name in world.key_rings:
-                    item = get_junk_item()[0]
+                    item = get_junk_item(world.random)[0]
                     shuffle_item = True
             # Any other item in a dungeon.
             elif location.type in ["Chest", "NPC", "Song", "Collectable", "Cutscene", "BossHeart"]:
@@ -630,7 +628,7 @@ def get_pool_core(world):
                 if shuffle_setting in ['remove', 'startwith']:
                     world.multiworld.push_precollected(dungeon_collection[-1])
                     world.remove_from_start_inventory.append(dungeon_collection[-1].name)
-                    item = get_junk_item()[0]
+                    item = get_junk_item(world.random)[0]
                     shuffle_item = True
                 elif shuffle_setting in ['any_dungeon', 'overworld', 'regional']:
                     dungeon_collection[-1].priority = True
@@ -658,9 +656,9 @@ def get_pool_core(world):
         shop_non_item_count = len(world.shop_prices)
         shop_item_count = shop_slots_count - shop_non_item_count
 
-        pool.extend(random.sample(remain_shop_items, shop_item_count))
+        pool.extend(world.random.sample(remain_shop_items, shop_item_count))
         if shop_non_item_count:
-            pool.extend(get_junk_item(shop_non_item_count))
+            pool.extend(get_junk_item(world.random, shop_non_item_count))
 
     # Extra rupees for shopsanity.
     if world.shopsanity not in ['off', '0']:
@@ -706,19 +704,19 @@ def get_pool_core(world):
 
     if world.shuffle_ganon_bosskey in ['stones', 'medallions', 'dungeons', 'tokens', 'hearts', 'triforce']:
         placed_items['Gift from Sages'] = 'Boss Key (Ganons Castle)'
-        pool.extend(get_junk_item())
+        pool.extend(get_junk_item(world.random))
     else:
         placed_items['Gift from Sages'] = IGNORE_LOCATION
     world.get_location('Gift from Sages').show_in_spoiler = False
 
     if world.junk_ice_traps == 'off':
-        replace_max_item(pool, 'Ice Trap', 0)
+        replace_max_item(pool, 'Ice Trap', 0, world.random)
     elif world.junk_ice_traps == 'onslaught':
         for item in [item for item, weight in junk_pool_base] + ['Recovery Heart', 'Bombs (20)', 'Arrows (30)']:
-            replace_max_item(pool, item, 0)
+            replace_max_item(pool, item, 0, world.random)
 
     for item, maximum in item_difficulty_max[world.item_pool_value].items():
-        replace_max_item(pool, item, maximum)
+        replace_max_item(pool, item, maximum, world.random)
 
     # world.distribution.alter_pool(world, pool)
 
@@ -748,7 +746,7 @@ def get_pool_core(world):
             pending_item = pending_junk_pool.pop()
             if not junk_candidates:
                 raise RuntimeError("Not enough junk exists in item pool for %s (+%d others) to be added." % (pending_item, len(pending_junk_pool) - 1))
-            junk_item = random.choice(junk_candidates)
+            junk_item = world.random.choice(junk_candidates)
             junk_candidates.remove(junk_item)
             pool.remove(junk_item)
             pool.append(pending_item)

@@ -1,3 +1,4 @@
+import argparse
 import os
 import multiprocessing
 import logging
@@ -11,11 +12,12 @@ ModuleUpdate.update()
 # in case app gets imported by something like gunicorn
 import Utils
 import settings
+from Utils import get_file_safe_name
 
 if typing.TYPE_CHECKING:
     from flask import Flask
 
-Utils.local_path.cached_path = os.path.dirname(__file__) or "."  # py3.8 is not abs. remove "." when dropping 3.8
+Utils.local_path.cached_path = os.path.dirname(__file__)
 settings.no_gui = True
 configpath = os.path.abspath("config.yaml")
 if not os.path.exists(configpath):  # fall back to config.yaml in home
@@ -31,6 +33,15 @@ def get_app() -> "Flask":
         import yaml
         app.config.from_file(configpath, yaml.safe_load)
         logging.info(f"Updated config from {configpath}")
+    # inside get_app() so it's usable in systems like gunicorn, which do not run WebHost.py, but import it.
+    parser = argparse.ArgumentParser(allow_abbrev=False)
+    parser.add_argument('--config_override', default=None,
+                        help="Path to yaml config file that overrules config.yaml.")
+    args = parser.parse_known_args()[0]
+    if args.config_override:
+        import yaml
+        app.config.from_file(os.path.abspath(args.config_override), yaml.safe_load)
+        logging.info(f"Updated config from {args.config_override}")
     if not app.config["HOST_ADDRESS"]:
         logging.info("Getting public IP, as HOST_ADDRESS is empty.")
         app.config["HOST_ADDRESS"] = Utils.get_public_ipv4()
@@ -61,7 +72,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
     shutil.rmtree(base_target_path, ignore_errors=True)
     for game, world in worlds.items():
         # copy files from world's docs folder to the generated folder
-        target_path = os.path.join(base_target_path, game)
+        target_path = os.path.join(base_target_path, get_file_safe_name(game))
         os.makedirs(target_path, exist_ok=True)
 
         if world.zip_path:

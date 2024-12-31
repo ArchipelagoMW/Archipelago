@@ -15,7 +15,7 @@ from worlds.generic.Rules import add_rule, set_rule
 
 logger = logging.getLogger("Super Metroid")
 
-from .Options import sm_options
+from .Options import SMOptions
 from .Client import SMSNIClient
 from .Rom import get_base_rom_path, SM_ROM_MAX_PLAYERID, SM_ROM_PLAYERDATA_COUNT, SMDeltaPatch, get_sm_symbols
 import Utils
@@ -96,10 +96,11 @@ class SMWorld(World):
      a wide range of options to randomize Item locations, required skills and even the connections 
      between the main Areas!
     """
-
     game: str = "Super Metroid"
     topology_present = True
-    option_definitions = sm_options
+    options_dataclass = SMOptions
+    options: SMOptions
+      
     settings: typing.ClassVar[SMSettings]
 
     item_name_to_id = {value.Name: items_start_id + value.Id for key, value in ItemManager.Items.items() if value.Id != None}
@@ -129,27 +130,27 @@ class SMWorld(World):
         Logic.factory('vanilla')
 
         dummy_rom_file = Utils.user_path(SMSettings.RomFile.copy_to)  # actual rom set in generate_output
-        self.variaRando = VariaRandomizer(self.multiworld, dummy_rom_file, self.player)
+        self.variaRando = VariaRandomizer(self.options, dummy_rom_file, self.player)
         self.multiworld.state.smbm[self.player] = SMBoolManager(self.player, self.variaRando.maxDifficulty)
 
         # keeps Nothing items local so no player will ever pickup Nothing
         # doing so reduces contribution of this world to the Multiworld the more Nothing there is though
-        self.multiworld.local_items[self.player].value.add('Nothing')
-        self.multiworld.local_items[self.player].value.add('No Energy')
+        self.options.local_items.value.add('Nothing')
+        self.options.local_items.value.add('No Energy')
 
         if (self.variaRando.args.morphPlacement == "early"):
             self.multiworld.local_early_items[self.player]['Morph Ball'] = 1
 
-        self.remote_items = self.multiworld.remote_items[self.player]
+        self.remote_items = self.options.remote_items
 
         if (len(self.variaRando.randoExec.setup.restrictedLocs) > 0):
-            self.multiworld.accessibility[self.player].value = Accessibility.option_minimal
+            self.options.accessibility.value = Accessibility.option_minimal
             logger.warning(f"accessibility forced to 'minimal' for player {self.multiworld.get_player_name(self.player)} because of 'fun' settings")
     
     def create_items(self):
         itemPool = self.variaRando.container.itemPool
         self.startItems = [variaItem for item in self.multiworld.precollected_items[self.player] for variaItem in ItemManager.Items.values() if variaItem.Name == item.name]
-        if self.multiworld.start_inventory_removes_from_pool[self.player]:
+        if self.options.start_inventory_removes_from_pool:
             for item in self.startItems:
                 if (item in itemPool):
                     itemPool.remove(item)
@@ -312,15 +313,17 @@ class SMWorld(World):
         return super(SMWorld, self).remove(state, item)
 
     def create_item(self, name: str) -> Item:
-        item = next(x for x in ItemManager.Items.values() if x.Name == name)
-        return SMItem(item.Name, ItemClassification.progression if item.Class != 'Minor' else ItemClassification.filler, item.Type, self.item_name_to_id[item.Name],
+        item = next((x for x in ItemManager.Items.values() if x.Name == name), None)
+        if item:
+            return SMItem(item.Name, ItemClassification.progression if item.Class != 'Minor' else ItemClassification.filler, item.Type, self.item_name_to_id[item.Name],
                       player=self.player)
+        raise KeyError(f"Item {name} for {self.player_name} is invalid.")
 
     def get_filler_item_name(self) -> str:
-        if self.multiworld.random.randint(0, 100) < self.multiworld.minor_qty[self.player].value:
-            power_bombs = self.multiworld.power_bomb_qty[self.player].value
-            missiles = self.multiworld.missile_qty[self.player].value
-            super_missiles = self.multiworld.super_qty[self.player].value
+        if self.multiworld.random.randint(0, 100) < self.options.minor_qty.value:
+            power_bombs = self.options.power_bomb_qty.value
+            missiles = self.options.missile_qty.value
+            super_missiles = self.options.super_qty.value
             roll = self.multiworld.random.randint(1, power_bombs + missiles + super_missiles)
             if roll <= power_bombs:
                 return "Power Bomb"
@@ -633,7 +636,7 @@ class SMWorld(World):
         deathLink: List[ByteEdit] = [{
             "sym": symbols["config_deathlink"],
             "offset": 0,
-            "values": [self.multiworld.death_link[self.player].value]
+            "values": [self.options.death_link.value]
         }]
         remoteItem: List[ByteEdit] = [{
             "sym": symbols["config_remote_items"],
@@ -859,10 +862,7 @@ class SMWorld(World):
     def fill_slot_data(self): 
         slot_data = {}
         if not self.multiworld.is_race:
-            for option_name in self.option_definitions:
-                option = getattr(self.multiworld, option_name)[self.player]
-                slot_data[option_name] = option.value
-
+            slot_data = self.options.as_dict(*self.options_dataclass.type_hints)
             slot_data["Preset"] = { "Knows": {},
                                     "Settings": {"hardRooms": Settings.SettingsDict[self.player].hardRooms,
                                                  "bossesDifficulty": Settings.SettingsDict[self.player].bossesDifficulty,
@@ -887,14 +887,14 @@ class SMWorld(World):
         return slot_data
 
     def write_spoiler(self, spoiler_handle: TextIO):
-        if self.multiworld.area_randomization[self.player].value != 0:
+        if self.options.area_randomization.value != 0:
             spoiler_handle.write('\n\nArea Transitions:\n\n')
             spoiler_handle.write('\n'.join(['%s%s %s %s' % (f'{self.multiworld.get_player_name(self.player)}: '
                                                             if self.multiworld.players > 1 else '', src.Name,
                                                             '<=>',
                                                             dest.Name) for src, dest in self.variaRando.randoExec.areaGraph.InterAreaTransitions if not src.Boss]))
 
-        if self.multiworld.boss_randomization[self.player].value != 0:
+        if self.options.boss_randomization.value != 0:
             spoiler_handle.write('\n\nBoss Transitions:\n\n')
             spoiler_handle.write('\n'.join(['%s%s %s %s' % (f'{self.multiworld.get_player_name(self.player)}: '
                                                             if self.multiworld.players > 1 else '', src.Name,

@@ -14,6 +14,18 @@ class TestBase(unittest.TestCase):
             "Desert Northern Cliffs",  # on top of mountain, only reachable via OWG
             "Dark Death Mountain Bunny Descent Area"  # OWG Mountain descent
         },
+        # These Blasphemous regions are not reachable with default options
+        "Blasphemous": {
+            "D01Z04S13[SE]", # difficulty must be hard
+            "D01Z05S25[E]", # difficulty must be hard
+            "D02Z02S05[W]", # difficulty must be hard and purified_hand must be true
+            "D04Z01S06[E]", # purified_hand must be true
+            "D04Z02S02[NE]", # difficulty must be hard and purified_hand must be true
+            "D05Z01S11[SW]", # difficulty must be hard
+            "D06Z01S08[N]", # difficulty must be hard and purified_hand must be true
+            "D20Z02S11[NW]", # difficulty must be hard
+            "D20Z02S11[E]", # difficulty must be hard
+        },
         "Ocarina of Time": {
             "Prelude of Light Warp",  # Prelude is not progression by default
             "Serenade of Water Warp",  # Serenade is not progression by default
@@ -37,12 +49,10 @@ class TestBase(unittest.TestCase):
             unreachable_regions = self.default_settings_unreachable_regions.get(game_name, set())
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type)
-                excluded = multiworld.worlds[1].options.exclude_locations.value
                 state = multiworld.get_all_state(False)
                 for location in multiworld.get_locations():
-                    if location.name not in excluded:
-                        with self.subTest("Location should be reached", location=location.name):
-                            self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
+                    with self.subTest("Location should be reached", location=location.name):
+                        self.assertTrue(location.can_reach(state), f"{location.name} unreachable")
 
                 for region in multiworld.get_regions():
                     if region.name in unreachable_regions:
