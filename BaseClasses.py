@@ -7,10 +7,10 @@ import random
 import secrets
 from argparse import Namespace
 from collections import Counter, deque
-from collections.abc import Collection, MutableSequence
+from collections.abc import MutableSequence
 from enum import IntEnum, IntFlag
-from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Iterable, Iterator, List, Mapping, NamedTuple,
-                    Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING)
+from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Generic, Iterable, Iterator, List, Mapping, NamedTuple,
+                    Optional, Protocol, Set, Tuple, TypeVar, Union, TYPE_CHECKING)
 
 from typing_extensions import NotRequired, TypedDict
 
@@ -54,12 +54,12 @@ class HasNameAndPlayer(Protocol):
     player: int
 
 
-_T_Reg = typing.TypeVar("_T_Reg", bound="Region")
-_T_Ent = typing.TypeVar("_T_Ent", bound="Entrance")
-_T_Loc = typing.TypeVar("_T_Loc", bound="Location")
+_T_Reg = TypeVar("_T_Reg", bound="Region")
+_T_Ent = TypeVar("_T_Ent", bound="Entrance")
+_T_Loc = TypeVar("_T_Loc", bound="Location")
 
 
-class RegionManager(typing.Generic[_T_Reg, _T_Ent, _T_Loc]):
+class RegionManager(Generic[_T_Reg, _T_Ent, _T_Loc]):
     region_cache: Dict[str, _T_Reg]
     entrance_cache: Dict[str, _T_Ent]
     location_cache: Dict[str, _T_Loc]
@@ -110,19 +110,19 @@ class RegionManager(typing.Generic[_T_Reg, _T_Ent, _T_Loc]):
             return len(self.multiworld.get_regions())
         return len(self.region_cache.values())
 
-    def get_regions(self) -> typing.Iterable[_T_Reg]:
+    def get_regions(self) -> Iterable[_T_Reg]:
         return self.region_cache.values()
 
     def get_region(self, name: str) -> _T_Reg:
         return self.region_cache[name]
 
-    def get_locations(self) -> typing.Iterable[_T_Loc]:
+    def get_locations(self) -> Iterable[_T_Loc]:
         return self.location_cache.values()
 
     def get_location(self, name: str) -> _T_Loc:
         return self.location_cache[name]
 
-    def get_entrances(self) -> typing.Iterable[_T_Ent]:
+    def get_entrances(self) -> Iterable[_T_Ent]:
         return self.entrance_cache.values()
 
     def get_entrance(self, name: str) -> _T_Ent:
