@@ -121,13 +121,13 @@ class WitnessPlayerRegions:
             if region is None:
                 region_name = "Entry"
             else:
-                region_name = region["name"]
+                region_name = region.name
             order = self.reference_logic.ENTITIES_BY_HEX[event_item_and_entity[1]]["order"]
             event_locations_per_region[region_name][event_location] = order
 
         for region_name, region in regions_to_create.items():
             location_entities_for_this_region = [
-                self.reference_logic.ENTITIES_BY_HEX[entity] for entity in region["entities"]
+                self.reference_logic.ENTITIES_BY_HEX[entity] for entity in region.logical_entities
             ]
             locations_for_this_region = {
                 entity["checkName"]: entity["order"] for entity in location_entities_for_this_region
