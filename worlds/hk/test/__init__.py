@@ -1,7 +1,7 @@
 import typing
 from argparse import Namespace
 from BaseClasses import CollectionState, MultiWorld
-from Options import ItemLinks
+from Options import ItemLinks, Game
 from test.bases import WorldTestBase
 from worlds.AutoWorld import AutoWorldRegister, call_all
 from .. import HKWorld
@@ -32,7 +32,7 @@ class linkedTestHK():
         Create a multiworld with two players that share an itemlink
         """
         self.multiworld = MultiWorld(2)
-        self.multiworld.game = {1: self.game, 2: self.game}
+        self.multiworld.game = {1: Game.from_any(self.game), 2: Game.from_any(self.game)}
         self.multiworld.player_name = {1: "Linker 1", 2: "Linker 2"}
         self.multiworld.set_seed()
         args = Namespace()
