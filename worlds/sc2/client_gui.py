@@ -20,7 +20,7 @@ from worlds.sc2.item.item_descriptions import item_descriptions
 from worlds.sc2.mission_tables import lookup_id_to_mission, campaign_race_exceptions, \
     SC2Mission, SC2Race
 from worlds.sc2.locations import LocationType, lookup_location_id_to_type, lookup_location_id_to_flags
-from worlds.sc2.options import LocationInclusion
+from worlds.sc2.options import LocationInclusion, MissionOrderScouting
 from worlds.sc2 import SC2World
 
 
@@ -385,6 +385,14 @@ class SC2Manager(GameManager):
             tooltip += f"[b][color={COLOR_MISSION_IMPORTANT}]Uncollected locations[/color][/b]"
             last_location_type = LocationType.VICTORY
             victory_printed = False
+
+            if self.ctx.mission_order_scouting != MissionOrderScouting.option_none:
+                mission_available =  mission_id in available_missions
+
+                scoutable = self.is_scoutable(remaining_locations, mission_available, layout_locked, campaign_locked)
+            else:
+                scoutable = False
+
             for location_type, location_name, _ in remaining_locations:
                 if location_type in (LocationType.VICTORY, LocationType.VICTORY_CACHE) and victory_printed:
                     continue
@@ -400,6 +408,8 @@ class SC2Manager(GameManager):
                     victory_printed = True
                 else:
                     tooltip += f"\n- {location_name}"
+                if scoutable:
+                    tooltip += self.handle_scout_display(location_name)
             if len(plando_locations) > 0:
                 tooltip += f"\n[b]Plando:[/b]\n- "
                 tooltip += "\n- ".join(plando_locations)
@@ -463,6 +473,39 @@ class SC2Manager(GameManager):
         else:
             title += ""
         return title
+    
+    def is_scoutable(self, remaining_locations, mission_available: bool, layout_locked: bool, campaign_locked: bool) -> bool:
+        if self.ctx.mission_order_scouting == MissionOrderScouting.option_all:
+            return True
+        elif self.ctx.mission_order_scouting == MissionOrderScouting.option_campaign and not campaign_locked:
+            return True
+        elif self.ctx.mission_order_scouting == MissionOrderScouting.option_layout and not layout_locked:
+            return True
+        elif self.ctx.mission_order_scouting == MissionOrderScouting.option_available and mission_available:
+            return True
+        elif self.ctx.mission_order_scouting == MissionOrderScouting.option_completed and len([loc for loc in remaining_locations if loc[0] in (LocationType.VICTORY, LocationType.VICTORY_CACHE)]) == 0:
+            # Assuming that when a mission is completed, all victory location are removed 
+            return True
+        else:
+            return False
+
+
+    def handle_scout_display(self, location_name: str) -> str:
+        # Only one information is provided for the victory locations of a mission
+        if " Cache (" in location_name:
+            location_name = location_name.split(" Cache")[0]
+        item_classification_key = self.ctx.mission_item_classification[location_name]
+        if item_classification_key == ItemClassification.filler:
+            return " [color=00EEEE](Filler)[/color]"
+        if item_classification_key == ItemClassification.progression:
+            return " [color=AF99EF](Progression)[/color]"
+        elif item_classification_key == ItemClassification.useful:
+            return " [color=6D8BE8](Useful)[/color]"
+        elif item_classification_key == ItemClassification.trap:
+            return " [color=FA8072](Trap)[/color]"
+        else:
+            # Should not happen, but better safe than sory
+            return ""
 
 def start_gui(context: SC2Context):
     context.ui = SC2Manager(context)

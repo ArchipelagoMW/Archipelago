@@ -13,14 +13,17 @@ from .item.item_tables import (
 )
 from . import location_groups
 from .item import FilterItem, ItemFilterFlags, StarcraftItem, item_groups, item_names, item_tables, item_parents
-from .locations import get_locations, DEFAULT_LOCATION_LIST, get_location_types, get_location_flags, get_plando_locations
+from .locations import (
+	get_locations, DEFAULT_LOCATION_LIST, get_location_types, get_location_flags, 
+    get_plando_locations, LocationType, lookup_location_id_to_type
+)
 from .mission_order.layout_types import LayoutType, Gauntlet
 from .options import (
     get_option_value, LocationInclusion, KerriganLevelItemDistribution,
     KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
     get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options,
     GrantStoryTech, GenericUpgradeResearch, RequiredTactics,
-    upgrade_included_names, EnableVoidTrade, FillerRatio,
+    upgrade_included_names, EnableVoidTrade, FillerRatio, MissionOrderScouting,
 )
 from .rules import get_basic_units
 from . import settings
@@ -195,6 +198,25 @@ class SC2World(World):
 
         if SC2Campaign.HOTS not in enabled_campaigns:
             slot_data["kerrigan_presence"] = KerriganPresence.option_not_present
+
+        if self.options.mission_order_scouting != MissionOrderScouting.option_none:
+            mission_item_classification: Dict[str, ItemClassification] = {}
+            for location in self.multiworld.get_locations(self.player):
+                # Event do not hold items
+                if not location.is_event:
+                    if lookup_location_id_to_type[location.address] == LocationType.VICTORY:
+                        location_name = location.name
+                        mission_item_classification[location_name] = location.item.classification.as_flag()
+                    elif lookup_location_id_to_type[location.address] == LocationType.VICTORY_CACHE:
+                        # Ensure that if there are multiple items given for finishing a mission and that at least 
+                        # one is progressive, the flag kept is progressive.
+                        # Assuming that the location added are always after the basic one, which is true as long as 
+                        # VICTORY_CACHE_OFFSET is a positive integer.
+                        if mission_item_classification[location_name] != ItemClassification.progression:
+                            mission_item_classification[location_name] = location.item.classification.as_flag() 
+                    else:
+                        mission_item_classification[location.name] = location.item.classification.as_flag()
+            slot_data["mission_item_classification"] = mission_item_classification
 
         # Disable trade if there is no trade partner
         traders = [
