@@ -264,7 +264,6 @@ class ShiversWorld(World):
                     pool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 140 + i]))
             return pool
 
-
     def fill_slot_data(self) -> dict:
         return {
             "StoragePlacements": self.storage_placements,
