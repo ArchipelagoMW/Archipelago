@@ -34,20 +34,20 @@ class SerializableLocationData(TypedDict):
 
 
 class SerializableEntranceData(TypedDict):
-    # Name is not included because the data is returned as a dict keyed by name.
+    name: str
     parent_region: str | None
     connected_region: str | None
 
 
 class SerializableRegionData(TypedDict):
-    # Name is not included because the data is returned as a dict keyed by name.
+    name: str
     locations: list[str]
 
 
 class SerializableMultiWorldData(TypedDict):
     itempool: list[SerializableItemData]
-    regions: dict[int, dict[str, SerializableRegionData]]
-    entrances: dict[int, dict[str, SerializableEntranceData]]
+    regions: dict[int, list[SerializableRegionData]]
+    entrances: dict[int, list[SerializableEntranceData]]
     locations: dict[int, list[SerializableLocationData]]
     placements: dict[int, list[tuple[str, SerializableItemData | None]]]
     start_inventory: dict[int, list[SerializableItemData]]
@@ -82,11 +82,11 @@ def entrance_to_serializable(ent: Entrance) -> SerializableEntranceData:
     parent_region_name = parent_region.name if parent_region is not None else None
     connected_region = ent.connected_region
     connected_region_name = connected_region.name if connected_region is not None else None
-    return {"parent_region": parent_region_name, "connected_region": connected_region_name}
+    return {"name": ent.name, "parent_region": parent_region_name, "connected_region": connected_region_name}
 
 
 def region_to_serializable(reg: Region) -> SerializableRegionData:
-    return {"locations": [loc.name for loc in reg.locations]}
+    return {"name": reg.name, "locations": [loc.name for loc in reg.locations]}
 
 
 def options_to_serializable(multiworld: MultiWorld) -> dict[int, dict[str, str]]:
@@ -117,9 +117,9 @@ def multiworld_to_serializable(itempool_before_fill: list[Item], multiworld: Mul
 
     # The order that regions and entrances are added to the multiworld is not considered important, so are returned as
     # dictionaries.
-    regions = {player: {reg_name: region_to_serializable(reg) for reg_name, reg in regions.items()}
+    regions = {player: list(map(region_to_serializable, regions.values()))
                for player, regions in multiworld.regions.region_cache.items()}
-    entrances = {player: {ent_name: entrance_to_serializable(ent) for ent_name, ent in entrances.items()}
+    entrances = {player: list(map(entrance_to_serializable, entrances.values()))
                  for player, entrances in multiworld.regions.entrance_cache.items()}
 
     # Locations and the placed items at those locations are tested and serialized separately.
@@ -301,7 +301,7 @@ class TestDeterministicGeneration(TestCase):
                 self.assertIsInstance(data1, dict)
                 self.assertIsInstance(data2, dict)
                 self.assertEqual(data1.keys(), data2.keys())
-                if key in {"locations", "start_inventory"}:
+                if key in {"locations", "start_inventory", "regions", "entrances"}:
                     with self.subTest(key + " counts"):
                         for player, v1 in data1.items():
                             v2 = data2[player]
@@ -319,7 +319,7 @@ class TestDeterministicGeneration(TestCase):
                             # Placements lists are pre-sorted by name, so that not being in a nondeterministic order
                             # does not affect the comparison.
                             self.assertListEqual(v1, v2, f"{key} did not match for player: {player}")
-                elif key in {"options", "regions", "entrances"}:
+                elif key == "options":
                     with self.subTest(key):
                         for player, v1 in data1.items():
                             v2 = data2[player]
