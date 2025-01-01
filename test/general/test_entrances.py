@@ -28,7 +28,7 @@ class TestBase(unittest.TestCase):
 
                 for step in additional_steps:
                     with self.subTest("Step", step=step):
-                        call_all(multiworld, "steps")
+                        call_all(multiworld, step)
                         step_entrances = get_entrance_name_to_source_and_target_dict(multiworld.worlds[1])
 
                         self.assertEqual(
