@@ -12,7 +12,6 @@ class TestBase(unittest.TestCase):
                 for entrance in world.get_entrances()
             ]
 
-
         gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "connect_entrances")
         additional_steps = ("generate_basic", "pre_fill")
 
