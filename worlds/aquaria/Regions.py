@@ -1308,12 +1308,7 @@ class AquariaRegions:
         self.__add_abyss_regions_to_world()
         self.__add_body_regions_to_world()
 
-    def __init__(self, multiworld: MultiWorld, player: int):
-        """
-        Initialisation of the regions
-        """
-        self.multiworld = multiworld
-        self.player = player
+    def create_regions(self) -> None:
         self.__create_home_water_area()
         self.__create_energy_temple()
         self.__create_openwater()
@@ -1324,3 +1319,10 @@ class AquariaRegions:
         self.__create_abyss()
         self.__create_sunken_city()
         self.__create_body()
+
+    def __init__(self, multiworld: MultiWorld, player: int):
+        """
+        Initialisation of the regions
+        """
+        self.multiworld = multiworld
+        self.player = player

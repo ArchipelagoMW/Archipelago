@@ -11,10 +11,10 @@ class Dungeon(object):
         self.small_keys = []
         self.dungeon_items = []
 
-        for region in world.multiworld.regions:
-            if region.player == world.player and region.dungeon == self.name:
+        for region in world.regions:
+            if region.dungeon == self.name:
                 region.dungeon = self
-                self.regions.append(region)                
+                self.regions.append(region)
 
 
     def copy(self, new_world):

@@ -14,7 +14,7 @@ from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGa
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
-    from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
+    from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance, RegionManager
     from . import GamesPackage
     from settings import Group
 
@@ -297,6 +297,8 @@ class World(metaclass=AutoWorldRegister):
 
     origin_region_name: str = "Menu"
     """Name of the Region from which accessibility is tested."""
+    regions: "RegionManager"
+    """Regions for this world instance. Regions should be added to this, and not override it."""
 
     explicit_indirect_conditions: bool = True
     """If True, the world implementation is supposed to use MultiWorld.register_indirect_condition() correctly.
@@ -337,6 +339,8 @@ class World(metaclass=AutoWorldRegister):
         self.player = player
         self.random = Random(multiworld.random.getrandbits(64))
         multiworld.per_slot_randoms[player] = self.random
+        from BaseClasses import RegionManager
+        self.regions = RegionManager()
 
     def __getattr__(self, item: str) -> Any:
         if item == "settings":
@@ -532,19 +536,19 @@ class World(metaclass=AutoWorldRegister):
 
     # convenience methods
     def get_location(self, location_name: str) -> "Location":
-        return self.multiworld.get_location(location_name, self.player)
+        return self.regions.get_location(location_name)
 
     def get_locations(self) -> "Iterable[Location]":
         return self.multiworld.get_locations(self.player)
 
     def get_entrance(self, entrance_name: str) -> "Entrance":
-        return self.multiworld.get_entrance(entrance_name, self.player)
+        return self.regions.get_entrance(entrance_name)
 
     def get_entrances(self) -> "Iterable[Entrance]":
         return self.multiworld.get_entrances(self.player)
 
     def get_region(self, region_name: str) -> "Region":
-        return self.multiworld.get_region(region_name, self.player)
+        return self.regions.get_region(region_name)
 
     def get_regions(self) -> "Iterable[Region]":
         return self.multiworld.get_regions(self.player)

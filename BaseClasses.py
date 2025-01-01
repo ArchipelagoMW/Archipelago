@@ -7,10 +7,10 @@ import random
 import secrets
 from argparse import Namespace
 from collections import Counter, deque
-from collections.abc import Collection, MutableSequence
+from collections.abc import MutableSequence
 from enum import IntEnum, IntFlag
-from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Iterable, Iterator, List, Mapping, NamedTuple,
-                    Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING)
+from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Generic, Iterable, Iterator, List, Mapping, NamedTuple,
+                    Optional, Protocol, Set, Tuple, TypeVar, Union, TYPE_CHECKING)
 
 from typing_extensions import NotRequired, TypedDict
 
@@ -52,6 +52,81 @@ class ThreadBarrierProxy:
 class HasNameAndPlayer(Protocol):
     name: str
     player: int
+
+
+_T_Reg = TypeVar("_T_Reg", bound="Region")
+_T_Ent = TypeVar("_T_Ent", bound="Entrance")
+_T_Loc = TypeVar("_T_Loc", bound="Location")
+
+
+class RegionManager(Generic[_T_Reg, _T_Ent, _T_Loc]):
+    region_cache: Dict[str, _T_Reg]
+    entrance_cache: Dict[str, _T_Ent]
+    location_cache: Dict[str, _T_Loc]
+    multiworld: "MultiWorld"
+
+    def __init__(self, multiworld: "MultiWorld" = None):
+        # players is no longer needed. The multiworld is passed in here so we can reference the worlds' caches
+        # while they continue to use multiworld.regions
+        # TODO remove later
+        self.multiworld = multiworld
+        self.region_cache = {}
+        self.entrance_cache = {}
+        self.location_cache = {}
+
+    def __iadd__(self, other: Iterable[Region]):
+        self.extend(other)
+        return self
+
+    def append(self, region: Region):
+        # TODO
+        if self.multiworld is not None:
+            region_cache = self.multiworld.worlds[region.player].regions.region_cache
+        else:
+            region_cache = self.region_cache
+        assert region.name not in region_cache, f"{region.name} already exists in region cache."
+        region_cache[region.name] = region
+
+    def extend(self, regions: Iterable[Region]):
+        for region in regions:
+            # TODO
+            if self.multiworld is not None:
+                region_cache = self.multiworld.worlds[region.player].regions.region_cache
+            else:
+                region_cache = self.region_cache
+            assert region.name not in region_cache, f"{region.name} already exists in region cache."
+            region_cache[region.name] = region
+
+    def __iter__(self) -> Iterator[Region]:
+        # TODO
+        if self.multiworld is not None:
+            yield from self.multiworld.get_regions()
+        else:
+            yield from self.region_cache.values()
+
+    def __len__(self):
+        # TODO
+        if self.multiworld is not None:
+            return len(self.multiworld.get_regions())
+        return len(self.region_cache.values())
+
+    def get_regions(self) -> Iterable[_T_Reg]:
+        return self.region_cache.values()
+
+    def get_region(self, name: str) -> _T_Reg:
+        return self.region_cache[name]
+
+    def get_locations(self) -> Iterable[_T_Loc]:
+        return self.location_cache.values()
+
+    def get_location(self, name: str) -> _T_Loc:
+        return self.location_cache[name]
+
+    def get_entrances(self) -> Iterable[_T_Ent]:
+        return self.entrance_cache.values()
+
+    def get_entrance(self, name: str) -> _T_Ent:
+        return self.entrance_cache[name]
 
 
 class MultiWorld():
@@ -96,43 +171,6 @@ class MultiWorld():
         def __getitem__(self, player) -> bool:
             return self.rule(player)
 
-    class RegionManager:
-        region_cache: Dict[int, Dict[str, Region]]
-        entrance_cache: Dict[int, Dict[str, Entrance]]
-        location_cache: Dict[int, Dict[str, Location]]
-
-        def __init__(self, players: int):
-            self.region_cache = {player: {} for player in range(1, players+1)}
-            self.entrance_cache = {player: {} for player in range(1, players+1)}
-            self.location_cache = {player: {} for player in range(1, players+1)}
-
-        def __iadd__(self, other: Iterable[Region]):
-            self.extend(other)
-            return self
-
-        def append(self, region: Region):
-            assert region.name not in self.region_cache[region.player], \
-                f"{region.name} already exists in region cache."
-            self.region_cache[region.player][region.name] = region
-
-        def extend(self, regions: Iterable[Region]):
-            for region in regions:
-                assert region.name not in self.region_cache[region.player], \
-                    f"{region.name} already exists in region cache."
-                self.region_cache[region.player][region.name] = region
-
-        def add_group(self, new_id: int):
-            self.region_cache[new_id] = {}
-            self.entrance_cache[new_id] = {}
-            self.location_cache[new_id] = {}
-
-        def __iter__(self) -> Iterator[Region]:
-            for regions in self.region_cache.values():
-                yield from regions.values()
-
-        def __len__(self):
-            return sum(len(regions) for regions in self.region_cache.values())
-
     def __init__(self, players: int):
         # world-local random state is saved for multiple generations running concurrently
         self.random = ThreadBarrierProxy(random.Random())
@@ -140,7 +178,7 @@ class MultiWorld():
         self.player_types = {player: NetUtils.SlotType.player for player in self.player_ids}
         self.algorithm = 'balanced'
         self.groups = {}
-        self.regions = self.RegionManager(players)
+        self.regions = RegionManager(self)
         self.shops = []
         self.itempool = []
         self.seed = None
@@ -188,7 +226,6 @@ class MultiWorld():
                 return group_id, group
         new_id: int = self.players + len(self.groups) + 1
 
-        self.regions.add_group(new_id)
         self.game[new_id] = game
         self.player_types[new_id] = NetUtils.SlotType.group
         world_type = AutoWorld.AutoWorldRegister.world_types[game]
@@ -415,17 +452,20 @@ class MultiWorld():
     def world_name_lookup(self):
         return {self.player_name[player_id]: player_id for player_id in self.player_ids}
 
-    def get_regions(self, player: Optional[int] = None) -> Collection[Region]:
-        return self.regions if player is None else self.regions.region_cache[player].values()
+    def get_regions(self, player: Optional[int] = None) -> Iterable[Region]:
+        if player is not None:
+            return self.worlds[player].regions.get_regions()
+        return Utils.RepeatableChain(tuple(self.worlds[player].regions.get_regions()
+                                           for player in self.get_all_ids()))
 
     def get_region(self, region_name: str, player: int) -> Region:
-        return self.regions.region_cache[player][region_name]
+        return self.worlds[player].regions.get_region(region_name)
 
     def get_entrance(self, entrance_name: str, player: int) -> Entrance:
-        return self.regions.entrance_cache[player][entrance_name]
+        return self.worlds[player].regions.get_entrance(entrance_name)
 
     def get_location(self, location_name: str, player: int) -> Location:
-        return self.regions.location_cache[player][location_name]
+        return self.worlds[player].regions.get_location(location_name)
 
     def get_all_state(self, use_cache: bool, allow_partial_entrances: bool = False) -> CollectionState:
         cached = getattr(self, "_all_state", None)
@@ -488,9 +528,9 @@ class MultiWorld():
 
     def get_entrances(self, player: Optional[int] = None) -> Iterable[Entrance]:
         if player is not None:
-            return self.regions.entrance_cache[player].values()
-        return Utils.RepeatableChain(tuple(self.regions.entrance_cache[player].values()
-                                           for player in self.regions.entrance_cache))
+            return self.worlds[player].regions.get_entrances()
+        return Utils.RepeatableChain(tuple(self.worlds[player].regions.get_entrances()
+                                           for player in self.get_all_ids()))
 
     def register_indirect_condition(self, region: Region, entrance: Entrance):
         """Report that access to this Region can result in unlocking this Entrance,
@@ -499,9 +539,9 @@ class MultiWorld():
 
     def get_locations(self, player: Optional[int] = None) -> Iterable[Location]:
         if player is not None:
-            return self.regions.location_cache[player].values()
-        return Utils.RepeatableChain(tuple(self.regions.location_cache[player].values()
-                                           for player in self.regions.location_cache))
+            return self.worlds[player].regions.get_locations()
+        return Utils.RepeatableChain(tuple(self.worlds[player].regions.get_locations()
+                                           for player in self.get_all_ids()))
 
     def get_unfilled_locations(self, player: Optional[int] = None) -> List[Location]:
         return [location for location in self.get_locations(player) if location.item is None]
@@ -523,7 +563,7 @@ class MultiWorld():
                 valid_locations = [location.name for location in self.get_unfilled_locations(player)]
             else:
                 valid_locations = location_names
-            relevant_cache = self.regions.location_cache[player]
+            relevant_cache = self.worlds[player].regions.location_cache
             for location_name in valid_locations:
                 location = relevant_cache.get(location_name, None)
                 if location and location.item is None:
@@ -1063,9 +1103,9 @@ class Region:
     entrance_type: ClassVar[type[Entrance]] = Entrance
 
     class Register(MutableSequence):
-        region_manager: MultiWorld.RegionManager
+        region_manager: RegionManager
 
-        def __init__(self, region_manager: MultiWorld.RegionManager):
+        def __init__(self, region_manager: RegionManager):
             self._list = []
             self.region_manager = region_manager
 
@@ -1089,25 +1129,25 @@ class Region:
         def __delitem__(self, index: int) -> None:
             location: Location = self._list.__getitem__(index)
             self._list.__delitem__(index)
-            del(self.region_manager.location_cache[location.player][location.name])
+            del(self.region_manager.location_cache[location.name])
 
         def insert(self, index: int, value: Location) -> None:
-            assert value.name not in self.region_manager.location_cache[value.player], \
+            assert value.name not in self.region_manager.location_cache, \
                 f"{value.name} already exists in the location cache."
             self._list.insert(index, value)
-            self.region_manager.location_cache[value.player][value.name] = value
+            self.region_manager.location_cache[value.name] = value
 
     class EntranceRegister(Register):
         def __delitem__(self, index: int) -> None:
             entrance: Entrance = self._list.__getitem__(index)
             self._list.__delitem__(index)
-            del(self.region_manager.entrance_cache[entrance.player][entrance.name])
+            del (self.region_manager.entrance_cache[entrance.name])
 
         def insert(self, index: int, value: Entrance) -> None:
-            assert value.name not in self.region_manager.entrance_cache[value.player], \
+            assert value.name not in self.region_manager.entrance_cache, \
                 f"{value.name} already exists in the entrance cache."
             self._list.insert(index, value)
-            self.region_manager.entrance_cache[value.player][value.name] = value
+            self.region_manager.entrance_cache[value.name] = value
 
     _locations: LocationRegister[Location]
     _exits: EntranceRegister[Entrance]
@@ -1115,8 +1155,8 @@ class Region:
     def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: Optional[str] = None):
         self.name = name
         self.entrances = []
-        self._exits = self.EntranceRegister(multiworld.regions)
-        self._locations = self.LocationRegister(multiworld.regions)
+        self._exits = self.EntranceRegister(multiworld.worlds[player].regions)
+        self._locations = self.LocationRegister(multiworld.worlds[player].regions)
         self.multiworld = multiworld
         self._hint_text = hint
         self.player = player
