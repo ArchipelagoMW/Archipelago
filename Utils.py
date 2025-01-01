@@ -18,8 +18,8 @@ import warnings
 
 from argparse import Namespace
 from settings import Settings, get_settings
-from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
-from typing_extensions import TypeGuard
+from time import sleep
+from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
 
 try:
@@ -31,6 +31,7 @@ if typing.TYPE_CHECKING:
     import tkinter
     import pathlib
     from BaseClasses import Region
+    import multiprocessing
 
 
 def tuplize_version(version: str) -> Version:
@@ -46,7 +47,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.4.4"
+__version__ = "0.6.0"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -101,8 +102,7 @@ def cache_self1(function: typing.Callable[[S, T], RetType]) -> typing.Callable[[
 
     @functools.wraps(function)
     def wrap(self: S, arg: T) -> RetType:
-        cache: Optional[Dict[T, RetType]] = typing.cast(Optional[Dict[T, RetType]],
-                                                        getattr(self, cache_name, None))
+        cache: Optional[Dict[T, RetType]] = getattr(self, cache_name, None)
         if cache is None:
             res = function(self, arg)
             setattr(self, cache_name, {arg: res})
@@ -201,7 +201,7 @@ def cache_path(*path: str) -> str:
 def output_path(*path: str) -> str:
     if hasattr(output_path, 'cached_path'):
         return os.path.join(output_path.cached_path, *path)
-    output_path.cached_path = user_path(get_options()["general_options"]["output_path"])
+    output_path.cached_path = user_path(get_settings()["general_options"]["output_path"])
     path = os.path.join(output_path.cached_path, *path)
     os.makedirs(os.path.dirname(path), exist_ok=True)
     return path
@@ -209,10 +209,11 @@ def output_path(*path: str) -> str:
 
 def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
     if is_windows:
-        os.startfile(filename)
+        os.startfile(filename)  # type: ignore
     else:
         from shutil import which
         open_command = which("open") if is_macos else (which("xdg-open") or which("gnome-open") or which("kde-open"))
+        assert open_command, "Didn't find program for open_file! Please report this together with system details."
         subprocess.call([open_command, filename])
 
 
@@ -225,6 +226,9 @@ class UniqueKeyLoader(SafeLoader):
             if key in mapping:
                 logging.error(f"YAML duplicates sanity check failed{key_node.start_mark}")
                 raise KeyError(f"Duplicate key {key} found in YAML. Already found keys: {mapping}.")
+            if (str(key).startswith("+") and (str(key)[1:] in mapping)) or (f"+{key}" in mapping):
+                logging.error(f"YAML merge duplicates sanity check failed{key_node.start_mark}")
+                raise KeyError(f"Equivalent key {key} found in YAML. Already found keys: {mapping}.")
             mapping.add(key)
         return super().construct_mapping(node, deep)
 
@@ -297,21 +301,21 @@ def get_options() -> Settings:
     return get_settings()
 
 
-def persistent_store(category: str, key: typing.Any, value: typing.Any):
+def persistent_store(category: str, key: str, value: typing.Any):
     path = user_path("_persistent_storage.yaml")
-    storage: dict = persistent_load()
-    category = storage.setdefault(category, {})
-    category[key] = value
+    storage = persistent_load()
+    category_dict = storage.setdefault(category, {})
+    category_dict[key] = value
     with open(path, "wt") as f:
         f.write(dump(storage, Dumper=Dumper))
 
 
-def persistent_load() -> typing.Dict[str, dict]:
-    storage = getattr(persistent_load, "storage", None)
+def persistent_load() -> Dict[str, Dict[str, Any]]:
+    storage: Union[Dict[str, Dict[str, Any]], None] = getattr(persistent_load, "storage", None)
     if storage:
         return storage
     path = user_path("_persistent_storage.yaml")
-    storage: dict = {}
+    storage = {}
     if os.path.exists(path):
         try:
             with open(path, "r") as f:
@@ -320,7 +324,7 @@ def persistent_load() -> typing.Dict[str, dict]:
             logging.debug(f"Could not read store: {e}")
     if storage is None:
         storage = {}
-    persistent_load.storage = storage
+    setattr(persistent_load, "storage", storage)
     return storage
 
 
@@ -362,6 +366,7 @@ def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> N
         except Exception as e:
             logging.debug(f"Could not store data package: {e}")
 
+
 def get_default_adjuster_settings(game_name: str) -> Namespace:
     import LttPAdjuster
     adjuster_settings = Namespace()
@@ -380,7 +385,9 @@ def get_adjuster_settings(game_name: str) -> Namespace:
     default_settings = get_default_adjuster_settings(game_name)
 
     # Fill in any arguments from the argparser that we haven't seen before
-    return Namespace(**vars(adjuster_settings), **{k:v for k,v in vars(default_settings).items() if k not in vars(adjuster_settings)})
+    return Namespace(**vars(adjuster_settings), **{
+        k: v for k, v in vars(default_settings).items() if k not in vars(adjuster_settings)
+    })
 
 
 @cache_argsless
@@ -404,20 +411,21 @@ safe_builtins = frozenset((
 class RestrictedUnpickler(pickle.Unpickler):
     generic_properties_module: Optional[object]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(RestrictedUnpickler, self).__init__(*args, **kwargs)
         self.options_module = importlib.import_module("Options")
         self.net_utils_module = importlib.import_module("NetUtils")
         self.generic_properties_module = None
 
-    def find_class(self, module, name):
+    def find_class(self, module: str, name: str) -> type:
         if module == "builtins" and name in safe_builtins:
             return getattr(builtins, name)
         # used by MultiServer -> savegame/multidata
-        if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint", "SlotType", "NetworkSlot"}:
+        if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint",
+                                             "SlotType", "NetworkSlot", "HintStatus"}:
             return getattr(self.net_utils_module, name)
         # Options and Plando are unpickled by WebHost -> Generate
-        if module == "worlds.generic" and name in {"PlandoItem", "PlandoConnection"}:
+        if module == "worlds.generic" and name == "PlandoItem":
             if not self.generic_properties_module:
                 self.generic_properties_module = importlib.import_module("worlds.generic")
             return getattr(self.generic_properties_module, name)
@@ -428,13 +436,13 @@ class RestrictedUnpickler(pickle.Unpickler):
             else:
                 mod = importlib.import_module(module)
             obj = getattr(mod, name)
-            if issubclass(obj, self.options_module.Option):
+            if issubclass(obj, (self.options_module.Option, self.options_module.PlandoConnection)):
                 return obj
         # Forbid everything else.
         raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
 
 
-def restricted_loads(s):
+def restricted_loads(s: bytes) -> Any:
     """Helper function analogous to pickle.loads()."""
     return RestrictedUnpickler(io.BytesIO(s)).load()
 
@@ -452,6 +460,15 @@ class KeyedDefaultDict(collections.defaultdict):
     """defaultdict variant that uses the missing key as argument to default_factory"""
     default_factory: typing.Callable[[typing.Any], typing.Any]
 
+    def __init__(self,
+                 default_factory: typing.Callable[[Any], Any] = None,
+                 seq: typing.Union[typing.Mapping, typing.Iterable, None] = None,
+                 **kwargs):
+        if seq is not None:
+            super().__init__(default_factory, seq, **kwargs)
+        else:
+            super().__init__(default_factory, **kwargs)
+
     def __missing__(self, key):
         self[key] = value = self.default_factory(key)
         return value
@@ -468,9 +485,9 @@ def get_text_after(text: str, start: str) -> str:
 loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}
 
 
-def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
-                 log_format: str = "[%(name)s at %(asctime)s]: %(message)s",
-                 exception_logger: typing.Optional[str] = None):
+def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
+                 write_mode: str = "w", log_format: str = "[%(name)s at %(asctime)s]: %(message)s",
+                 add_timestamp: bool = False, exception_logger: typing.Optional[str] = None):
     import datetime
     loglevel: int = loglevel_mapping.get(loglevel, loglevel)
     log_folder = user_path("logs")
@@ -490,7 +507,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
     file_handler.setFormatter(logging.Formatter(log_format))
 
     class Filter(logging.Filter):
-        def __init__(self, filter_name, condition):
+        def __init__(self, filter_name: str, condition: typing.Callable[[logging.LogRecord], bool]) -> None:
             super().__init__(filter_name)
             self.condition = condition
 
@@ -498,10 +515,14 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
             return self.condition(record)
 
     file_handler.addFilter(Filter("NoStream", lambda record: not getattr(record,  "NoFile", False)))
+    file_handler.addFilter(Filter("NoCarriageReturn", lambda record: '\r' not in record.msg))
     root_logger.addHandler(file_handler)
     if sys.stdout:
+        formatter = logging.Formatter(fmt='[%(asctime)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
         stream_handler = logging.StreamHandler(sys.stdout)
         stream_handler.addFilter(Filter("NoFile", lambda record: not getattr(record, "NoStream", False)))
+        if add_timestamp:
+            stream_handler.setFormatter(formatter)
         root_logger.addHandler(stream_handler)
 
     # Relay unhandled exceptions to logger.
@@ -513,7 +534,8 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
                 sys.__excepthook__(exc_type, exc_value, exc_traceback)
                 return
             logging.getLogger(exception_logger).exception("Uncaught exception",
-                                                          exc_info=(exc_type, exc_value, exc_traceback))
+                                                          exc_info=(exc_type, exc_value, exc_traceback),
+                                                          extra={"NoStream": exception_logger is None})
             return orig_hook(exc_type, exc_value, exc_traceback)
 
         handle_exception._wrapped = True
@@ -536,12 +558,13 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
     import platform
     logging.info(
         f"Archipelago ({__version__}) logging initialized"
-        f" on {platform.platform()}"
+        f" on {platform.platform()} process {os.getpid()}"
         f" running Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+        f"{' (frozen)' if is_frozen() else ''}"
     )
 
 
-def stream_input(stream, queue):
+def stream_input(stream: typing.TextIO, queue: "asyncio.Queue[str]"):
     def queuer():
         while 1:
             try:
@@ -551,6 +574,8 @@ def stream_input(stream, queue):
             else:
                 if text:
                     queue.put_nowait(text)
+                else:
+                    sleep(0.01)  # non-blocking stream
 
     from threading import Thread
     thread = Thread(target=queuer, name=f"Stream handler for {stream.name}", daemon=True)
@@ -569,7 +594,7 @@ class VersionException(Exception):
     pass
 
 
-def chaining_prefix(index: int, labels: typing.Tuple[str]) -> str:
+def chaining_prefix(index: int, labels: typing.Sequence[str]) -> str:
     text = ""
     max_label = len(labels) - 1
     while index > max_label:
@@ -592,7 +617,7 @@ def format_SI_prefix(value, power=1000, power_labels=("", "k", "M", "G", "T", "P
     return f"{value.quantize(decimal.Decimal('1.00'))} {chaining_prefix(n, power_labels)}"
 
 
-def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: typing.Optional[int] = None) \
+def get_fuzzy_results(input_word: str, word_list: typing.Collection[str], limit: typing.Optional[int] = None) \
         -> typing.List[typing.Tuple[str, int]]:
     import jellyfish
 
@@ -600,22 +625,71 @@ def get_fuzzy_results(input_word: str, wordlist: typing.Sequence[str], limit: ty
         return (1 - jellyfish.damerau_levenshtein_distance(word1.lower(), word2.lower())
                 / max(len(word1), len(word2)))
 
-    limit: int = limit if limit else len(wordlist)
+    limit = limit if limit else len(word_list)
     return list(
         map(
             lambda container: (container[0], int(container[1]*100)),  # convert up to limit to int %
             sorted(
-                map(lambda candidate:
-                    (candidate,  get_fuzzy_ratio(input_word, candidate)),
-                    wordlist),
+                map(lambda candidate: (candidate, get_fuzzy_ratio(input_word, candidate)), word_list),
                 key=lambda element: element[1],
-                reverse=True)[0:limit]
+                reverse=True
+            )[0:limit]
         )
     )
 
 
-def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typing.Sequence[str]]], suggest: str = "") \
+def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bool, str]:
+    picks = get_fuzzy_results(input_text, possible_answers, limit=2)
+    if len(picks) > 1:
+        dif = picks[0][1] - picks[1][1]
+        if picks[0][1] == 100:
+            return picks[0][0], True, "Perfect Match"
+        elif picks[0][1] < 75:
+            return picks[0][0], False, f"Didn't find something that closely matches '{input_text}', " \
+                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
+        elif dif > 5:
+            return picks[0][0], True, "Close Match"
+        else:
+            return picks[0][0], False, f"Too many close matches for '{input_text}', " \
+                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
+    else:
+        if picks[0][1] > 90:
+            return picks[0][0], True, "Only Option Match"
+        else:
+            return picks[0][0], False, f"Didn't find something that closely matches '{input_text}', " \
+                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
+
+
+def get_input_text_from_response(text: str, command: str) -> typing.Optional[str]:
+    if "did you mean " in text:
+        for question in ("Didn't find something that closely matches",
+                         "Too many close matches"):
+            if text.startswith(question):
+                name = get_text_between(text, "did you mean '",
+                                        "'? (")
+                return f"!{command} {name}"
+    elif text.startswith("Missing: "):
+        return text.replace("Missing: ", "!hint_location ")
+    return None
+
+
+def is_kivy_running() -> bool:
+    if "kivy" in sys.modules:
+        from kivy.app import App
+        return App.get_running_app() is not None
+    return False
+
+
+def _mp_open_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
+    if is_kivy_running():
+        raise RuntimeError("kivy should not be running in multiprocess")
+    res.put(open_filename(*args))
+
+
+def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typing.Iterable[str]]], suggest: str = "") \
         -> typing.Optional[str]:
+    logging.info(f"Opening file input dialog for {title}.")
+
     def run(*args: str):
         return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
 
@@ -641,6 +715,13 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
                       f'This attempt was made because open_filename was used for "{title}".')
         raise e
     else:
+        if is_macos and is_kivy_running():
+            # on macOS, mixing kivy and tk does not work, so spawn a new process
+            # FIXME: performance of this is pretty bad, and we should (also) look into alternatives
+            from multiprocessing import Process, Queue
+            res: "Queue[typing.Optional[str]]" = Queue()
+            Process(target=_mp_open_filename, args=(res, title, filetypes, suggest)).start()
+            return res.get()
         try:
             root = tkinter.Tk()
         except tkinter.TclError:
@@ -648,6 +729,12 @@ def open_filename(title: str, filetypes: typing.Sequence[typing.Tuple[str, typin
         root.withdraw()
         return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
                                                   initialfile=suggest or None)
+
+
+def _mp_open_directory(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
+    if is_kivy_running():
+        raise RuntimeError("kivy should not be running in multiprocess")
+    res.put(open_directory(*args))
 
 
 def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
@@ -673,9 +760,16 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
         import tkinter.filedialog
     except Exception as e:
         logging.error('Could not load tkinter, which is likely not installed. '
-                      f'This attempt was made because open_filename was used for "{title}".')
+                      f'This attempt was made because open_directory was used for "{title}".')
         raise e
     else:
+        if is_macos and is_kivy_running():
+            # on macOS, mixing kivy and tk does not work, so spawn a new process
+            # FIXME: performance of this is pretty bad, and we should (also) look into alternatives
+            from multiprocessing import Process, Queue
+            res: "Queue[typing.Optional[str]]" = Queue()
+            Process(target=_mp_open_directory, args=(res, title, suggest)).start()
+            return res.get()
         try:
             root = tkinter.Tk()
         except tkinter.TclError:
@@ -687,12 +781,6 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
 def messagebox(title: str, text: str, error: bool = False) -> None:
     def run(*args: str):
         return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
-
-    def is_kivy_running():
-        if "kivy" in sys.modules:
-            from kivy.app import App
-            return App.get_running_app() is not None
-        return False
 
     if is_kivy_running():
         from kvui import MessageBox
@@ -713,7 +801,7 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         import ctypes
         style = 0x10 if error else 0x0
         return ctypes.windll.user32.MessageBoxW(0, text, title, style)
-    
+
     # fall back to tk
     try:
         import tkinter
@@ -729,7 +817,7 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         root.update()
 
 
-def title_sorted(data: typing.Sequence, key=None, ignore: typing.Set = frozenset(("a", "the"))):
+def title_sorted(data: typing.Iterable, key=None, ignore: typing.AbstractSet[str] = frozenset(("a", "the"))):
     """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""
     def sorter(element: Union[str, Dict[str, Any]]) -> str:
         if (not isinstance(element, str)):
@@ -772,28 +860,26 @@ def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = Non
     task.add_done_callback(_faf_tasks.discard)
 
 
-def deprecate(message: str):
+def deprecate(message: str, add_stacklevels: int = 0):
     if __debug__:
         raise Exception(message)
-    import warnings
-    warnings.warn(message)
+    warnings.warn(message, stacklevel=2 + add_stacklevels)
 
 
 class DeprecateDict(dict):
     log_message: str
     should_error: bool
 
-    def __init__(self, message, error: bool = False) -> None:
+    def __init__(self, message: str, error: bool = False) -> None:
         self.log_message = message
         self.should_error = error
         super().__init__()
 
     def __getitem__(self, item: Any) -> Any:
         if self.should_error:
-            deprecate(self.log_message)
+            deprecate(self.log_message, add_stacklevels=1)
         elif __debug__:
-            import warnings
-            warnings.warn(self.log_message)
+            warnings.warn(self.log_message, stacklevel=2)
         return super().__getitem__(item)
 
 
@@ -969,11 +1055,8 @@ class RepeatableChain:
         return sum(len(iterable) for iterable in self.iterable)
 
 
-def is_iterable_of_str(obj: object) -> TypeGuard[typing.Iterable[str]]:
-    """ but not a `str` (because technically, `str` is `Iterable[str]`) """
+def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]]:
+    """ `str` is `Iterable`, but that's not what we want """
     if isinstance(obj, str):
         return False
-    if not isinstance(obj, typing.Iterable):
-        return False
-    obj_it: typing.Iterable[object] = obj
-    return all(isinstance(v, str) for v in obj_it)
+    return isinstance(obj, typing.Iterable)

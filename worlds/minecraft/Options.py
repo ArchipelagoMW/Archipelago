@@ -1,5 +1,7 @@
-import typing
-from Options import Choice, Option, Toggle, DefaultOnToggle, Range, OptionList, DeathLink
+from Options import Choice, Toggle, DefaultOnToggle, Range, OptionList, DeathLink, PlandoConnections, \
+    PerGameCommonOptions
+from .Constants import region_info
+from dataclasses import dataclass
 
 
 class AdvancementGoal(Range):
@@ -54,7 +56,7 @@ class StructureCompasses(DefaultOnToggle):
     display_name = "Structure Compasses"
 
 
-class BeeTraps(Range): 
+class BeeTraps(Range):
     """Replaces a percentage of junk items with bee traps, which spawn multiple angered bees around every player when
     received."""
     display_name = "Bee Trap Percentage"
@@ -93,25 +95,49 @@ class SendDefeatedMobs(Toggle):
 
 
 class StartingItems(OptionList):
-    """Start with these items. Each entry should be of this format: {item: "item_name", amount: #, nbt: "nbt_string"}"""
+    """Start with these items. Each entry should be of this format: {item: "item_name", amount: #}
+    `item` can include components, and should be in an identical format to a `/give` command with
+    `"` escaped for json reasons.
+
+    `amount` is optional and will default to 1 if omitted.
+
+    example:
+    ```
+    starting_items: [
+        { "item": "minecraft:stick[minecraft:custom_name=\"{'text':'pointy stick'}\"]" },
+        { "item": "minecraft:arrow[minecraft:rarity=epic]", amount: 64 }
+    ]
+    ```
+    """
     display_name = "Starting Items"
 
 
-minecraft_options: typing.Dict[str, type(Option)] = {
-    "advancement_goal":                     AdvancementGoal,
-    "egg_shards_required":                  EggShardsRequired,
-    "egg_shards_available":                 EggShardsAvailable,
-    "required_bosses":                      BossGoal,
+class MCPlandoConnections(PlandoConnections):
+    entrances = set(connection[0] for connection in region_info["default_connections"])
+    exits = set(connection[1] for connection in region_info["default_connections"])
 
-    "shuffle_structures":                   ShuffleStructures,
-    "structure_compasses":                  StructureCompasses,
+    @classmethod
+    def can_connect(cls, entrance, exit):
+        if exit in region_info["illegal_connections"] and entrance in region_info["illegal_connections"][exit]:
+            return False
+        return True
 
-    "combat_difficulty":                    CombatDifficulty,
-    "include_hard_advancements":            HardAdvancements,
-    "include_unreasonable_advancements":    UnreasonableAdvancements,
-    "include_postgame_advancements":        PostgameAdvancements,
-    "bee_traps":                            BeeTraps,
-    "send_defeated_mobs":                   SendDefeatedMobs,
-    "death_link":                           DeathLink,
-    "starting_items":                       StartingItems,
-}
+
+@dataclass
+class MinecraftOptions(PerGameCommonOptions):
+    plando_connections: MCPlandoConnections
+    advancement_goal: AdvancementGoal
+    egg_shards_required: EggShardsRequired
+    egg_shards_available: EggShardsAvailable
+    required_bosses: BossGoal
+    shuffle_structures: ShuffleStructures
+    structure_compasses: StructureCompasses
+
+    combat_difficulty: CombatDifficulty
+    include_hard_advancements: HardAdvancements
+    include_unreasonable_advancements: UnreasonableAdvancements
+    include_postgame_advancements: PostgameAdvancements
+    bee_traps: BeeTraps
+    send_defeated_mobs: SendDefeatedMobs
+    death_link: DeathLink
+    starting_items: StartingItems

@@ -1,0 +1,27 @@
+{
+  "include": [
+    "type_check.py",
+    "../worlds/AutoSNIClient.py",
+    "../Patch.py"
+  ],
+
+  "exclude": [
+    "**/__pycache__"
+  ],
+
+  "stubPath": "../typings",
+
+  "typeCheckingMode": "strict",
+  "reportImplicitOverride": "error",
+  "reportMissingImports": true,
+  "reportMissingTypeStubs": true,
+
+  "pythonVersion": "3.10",
+  "pythonPlatform": "Windows",
+
+  "executionEnvironments": [
+    {
+      "root": ".."
+    }
+  ]
+}

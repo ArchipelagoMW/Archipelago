@@ -6,7 +6,7 @@ about 5 minutes to read.
 
 ## What are triggers?
 
-Triggers allow you to customize your game settings by allowing you to define one or many options which only occur under
+Triggers allow you to customize your game options by allowing you to define one or many options which only occur under
 specific conditions. These are essentially "if, then" statements for options in your game. A good example of what you
 can do with triggers is the [custom mercenary mode YAML
 ](https://github.com/alwaysintreble/Archipelago-yaml-dump/blob/main/Snippets/Mercenary%20Mode%20Snippet.yaml) that was
@@ -122,3 +122,41 @@ In this example (thanks to @Black-Sliver), if the `pupdunk` option is rolled, th
 again using the new options `normal`, `pupdunk_hard`, and `pupdunk_mystery`, and the exp modifier will be rerolled using
 new weights for 150 and 200. This allows for two more triggers that will only be used for the new `pupdunk_hard`
 and `pupdunk_mystery` options so that they will only be triggered on "pupdunk AND hard/mystery".
+
+## Adding or Removing from a List, Set, or Dict Option
+
+List, set, and dict options can additionally have values added to or removed from itself without overriding the existing
+option value by prefixing the option name in the trigger block with `+` (add) or `-` (remove). The exact behavior for 
+each will depend on the option type.
+
+- For sets, `+` will add the value(s) to the set and `-` will remove the value(s) from the set. Sets do not allow 
+  duplicates.
+- For lists, `+` will add new values(s) to the list and `-` will remove the first matching values(s) it comes across. 
+  Lists allow duplicate values.
+- For dicts, `+` will add the value(s) to the given key(s) inside the dict if it exists, or add it otherwise. `-` is the
+  inverse operation of addition (and negative values are allowed).
+
+For example:
+
+```yaml
+Super Metroid:
+  start_location: 
+    landing_site: 50
+    aqueduct: 50
+  start_hints:
+    - Morph Ball
+  start_inventory:
+    Power Bombs: 1
+  triggers:
+    - option_category: Super Metroid
+      option_name: start_location
+      option_result: aqueduct
+      options:
+        Super Metroid:
+          +start_hints:
+            - Gravity Suit
+```
+
+In this example, if the `start_location` option rolls `landing_site`, only a starting hint for Morph Ball will be 
+created. If `aqueduct` is rolled, a starting hint for Gravity Suit will also be created alongside the hint for Morph 
+Ball.

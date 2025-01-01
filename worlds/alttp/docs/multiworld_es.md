@@ -59,12 +59,13 @@ de multiworld puede tener diferentes opciones.
 
 ### Donde puedo obtener un fichero YAML?
 
-La página "[Generate Game](/games/A%20Link%20to%20the%20Past/player-settings)" en el sitio web te permite configurar tu
+La página "[Generate Game](/games/A%20Link%20to%20the%20Past/player-options)" en el sitio web te permite configurar tu
 configuración personal y descargar un fichero "YAML".
 
 ### Configuración YAML avanzada
 
-Una version mas avanzada del fichero Yaml puede ser creada usando la pagina ["Weighted settings"](/weighted-settings),
+Una version mas avanzada del fichero Yaml puede ser creada usando la pagina
+["Weighted settings"](/games/A Link to the Past/weighted-options),
 la cual te permite tener almacenadas hasta 3 preajustes. La pagina "Weighted Settings" tiene muchas opciones
 representadas con controles deslizantes. Esto permite elegir cuan probable los valores de una categoría pueden ser
 elegidos sobre otros de la misma.
@@ -86,7 +87,7 @@ Si quieres validar que tu fichero YAML para asegurarte que funciona correctament
 
 ## Generar una partida para un jugador
 
-1. Navega a [la pagina Generate game](/games/A%20Link%20to%20the%20Past/player-settings), configura tus opciones, haz
+1. Navega a [la pagina Generate game](/games/A%20Link%20to%20the%20Past/player-options), configura tus opciones, haz
    click en el boton "Generate game".
 2. Se te redigirá a una pagina "Seed Info", donde puedes descargar tu archivo de parche.
 3. Haz doble click en tu fichero de parche, y el emulador debería ejecutar tu juego automáticamente. Como el Cliente no

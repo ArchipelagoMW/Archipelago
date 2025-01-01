@@ -19,9 +19,9 @@ class WorldPosition:
 
     def get_position(self, random):
         if self.room_x is None or self.room_y is None:
-            return random.choice(standard_positions)
+            return self.room_id, random.choice(standard_positions)
         else:
-            return self.room_x, self.room_y
+            return self.room_id, (self.room_x, self.room_y)
 
 
 class LocationData:
@@ -46,24 +46,24 @@ class LocationData:
         self.needs_bat_logic: int = needs_bat_logic
         self.local_item: int = None
 
-    def get_position(self, random):
+    def get_random_position(self, random):
         if self.world_positions is None or len(self.world_positions) == 0:
             if self.room_id is None:
                 return None
-            self.room_x, self.room_y = random.choice(standard_positions)
-        if self.room_id is None:
+            x, y = random.choice(standard_positions)
+            return self.room_id, x, y
+        else:
             selected_pos = random.choice(self.world_positions)
-            self.room_id = selected_pos.room_id
-            self.room_x, self.room_y = selected_pos.get_position(random)
-        return self.room_x, self.room_y
+            room_id, (x, y) = selected_pos.get_position(random)
+            return self.get_random_room_id(random), x, y
 
-    def get_room_id(self, random):
+    def get_random_room_id(self, random):
         if self.world_positions is None or len(self.world_positions) == 0:
-            return None
+            if self.room_id is None:
+                return None
         if self.room_id is None:
             selected_pos = random.choice(self.world_positions)
-            self.room_id = selected_pos.room_id
-            self.room_x, self.room_y = selected_pos.get_position(random)
+            return selected_pos.room_id
         return self.room_id
 
 
@@ -97,7 +97,7 @@ def get_random_room_in_regions(regions: [str], random) -> int:
     possible_rooms = {}
     for locname in location_table:
         if location_table[locname].region in regions:
-            room = location_table[locname].get_room_id(random)
+            room = location_table[locname].get_random_room_id(random)
             if room is not None:
                 possible_rooms[room] = location_table[locname].room_id
     return random.choice(list(possible_rooms.keys()))

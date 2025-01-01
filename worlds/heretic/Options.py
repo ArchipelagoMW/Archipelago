@@ -1,6 +1,5 @@
-import typing
-
-from Options import AssembleOptions, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
+from Options import PerGameCommonOptions, Choice, Toggle, DeathLink, DefaultOnToggle, StartInventoryPool
+from dataclasses import dataclass
 
 
 class Goal(Choice):
@@ -17,14 +16,8 @@ class Goal(Choice):
 
 class Difficulty(Choice):
     """
-    Choose the difficulty option. Those match DOOM's difficulty options.
-    baby (I'm too young to die.) double ammos, half damage, less monsters or strength.
-    easy (Hey, not too rough.) less monsters or strength.
-    medium (Hurt me plenty.) Default.
-    hard (Ultra-Violence.) More monsters or strength.
-    nightmare (Nightmare!) Monsters attack more rapidly and respawn.
-
-    wet nurse (hou needeth a wet-nurse) - Fewer monsters and more items than medium. Damage taken is halved, and ammo pickups carry twice as much ammo. Any Quartz Flasks and Mystic Urns are automatically used when the player nears death.
+    Choose the game difficulty. These options match Heretic's skill levels.
+    wet nurse (Thou needeth a wet-nurse) - Fewer monsters and more items than medium. Damage taken is halved, and ammo pickups carry twice as much ammo. Any Quartz Flasks and Mystic Urns are automatically used when the player nears death.
     easy (Yellowbellies-r-us) - Fewer monsters and more items than medium.
     medium (Bringest them oneth) - Completely balanced, this is the standard difficulty level.
     hard (Thou art a smite-meister) - More monsters and fewer items than medium.
@@ -36,6 +29,11 @@ class Difficulty(Choice):
     option_medium = 2
     option_hard = 3
     option_black_plague = 4
+    alias_wn = 0
+    alias_yru = 1
+    alias_bto = 2
+    alias_sm = 3
+    alias_bp = 4
     default = 2
 
 
@@ -105,7 +103,7 @@ class StartWithMapScrolls(Toggle):
 class ResetLevelOnDeath(DefaultOnToggle):
     """When dying, levels are reset and monsters respawned. But inventory and checks are kept.
     Turning this setting off is considered easy mode. Good for new players that don't know the levels well."""
-    display_message="Reset level on death"
+    display_name = "Reset Level on Death"
 
     
 class CheckSanity(Toggle):
@@ -146,22 +144,22 @@ class Episode5(Toggle):
     display_name = "Episode 5"
 
 
-options: typing.Dict[str, AssembleOptions] = {
-    "start_inventory_from_pool": StartInventoryPool,
-    "goal": Goal,
-    "difficulty": Difficulty,
-    "random_monsters": RandomMonsters,
-    "random_pickups": RandomPickups,
-    "random_music": RandomMusic,
-    "allow_death_logic": AllowDeathLogic,
-    "pro": Pro,
-    "check_sanity": CheckSanity,
-    "start_with_map_scrolls": StartWithMapScrolls,
-    "reset_level_on_death": ResetLevelOnDeath,
-    "death_link": DeathLink,
-    "episode1": Episode1,
-    "episode2": Episode2,
-    "episode3": Episode3,
-    "episode4": Episode4,
-    "episode5": Episode5
-}
+@dataclass
+class HereticOptions(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
+    goal: Goal
+    difficulty: Difficulty
+    random_monsters: RandomMonsters
+    random_pickups: RandomPickups
+    random_music: RandomMusic
+    allow_death_logic: AllowDeathLogic
+    pro: Pro
+    check_sanity: CheckSanity
+    start_with_map_scrolls: StartWithMapScrolls
+    reset_level_on_death: ResetLevelOnDeath
+    death_link: DeathLink
+    episode1: Episode1
+    episode2: Episode2
+    episode3: Episode3
+    episode4: Episode4
+    episode5: Episode5

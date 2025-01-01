@@ -2,16 +2,19 @@
 
 ## Required Software
 
-- SNI from: [SNI Releases Page](https://github.com/alttpo/sni/releases)
-    - v0.0.59 or newer (included in Archipelago 0.2.1 setup)
-- Hardware or software capable of loading and playing SNES ROM files
-    - An emulator capable of connecting to SNI with ROM access. Any one of the following will work:
-        - snes9x-rr from: [snes9x-rr Releases Page](https://github.com/gocha/snes9x-rr/releases)
-        - BizHawk from: [TASVideos](https://tasvideos.org/BizHawk)
-        - bsnes-plus-nwa from: [bsnes-plus GitHub](https://github.com/black-sliver/bsnes-plus)
-        - RetroArch from: [RetroArch Website](https://retroarch.com?page=platforms). Or,
-    - Or SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), or other
-      compatible hardware.
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) (optional, but recommended).
+- [SNI](https://github.com/alttpo/sni/releases). This is automatically included with your Archipelago installation above.
+- SNI is not compatible with (Q)Usb2Snes.
+- Hardware or software capable of loading and playing SNES ROM files, including:
+    - An emulator capable of connecting to SNI
+      ([snes9x-nwa](https://github.com/Skarsnik/snes9x-emunwa/releases), [snes9x-rr](https://github.com/gocha/snes9x-rr/releases),
+      [BSNES-plus](https://github.com/black-sliver/bsnes-plus),
+      [BizHawk](http://tasvideos.org/BizHawk.html), or
+      [RetroArch](https://retroarch.com?page=platforms) 1.10.1 or newer)
+    - An SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), or other compatible hardware. **note:
+      modded SNES minis are currently not supported by SNI. Some users have claimed success with QUsb2Snes for this system,
+      but it is not supported.**
+- A modern web browser to run the client.
 - Your legally obtained Secret of Evermore US ROM file, probably named `Secret of Evermore (USA).sfc`
 
 ## Create a Config (.yaml) File
@@ -23,8 +26,8 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The Player Settings page on the website allows you to configure your personal settings and export a config file from
-them. Player settings page: [Secret of Evermore Player Settings PAge](/games/Secret%20of%20Evermore/player-settings)
+The Player Options page on the website allows you to configure your personal options and export a config file from
+them. Player options page: [Secret of Evermore Player Options Page](/games/Secret%20of%20Evermore/player-options)
 
 ### Verifying your config file
 
@@ -36,8 +39,8 @@ page: [YAML Validation page](/check)
 Stand-alone "Evermizer" has a way of balancing single-player games, but may not always be on par feature-wise. Head over
 to the [Evermizer Website](https://evermizer.com) if you want to try the official stand-alone, otherwise read below.
 
-1. Navigate to the Player Settings page, configure your options, and click the "Generate Game" button.
-    - Player Settings page: [Secret of Evermore Player Settings Page](/games/Secret%20of%20Evermore/player-settings)
+1. Navigate to the Player Options page, configure your options, and click the "Generate Game" button.
+    - Player Options page: [Secret of Evermore Player Options Page](/games/Secret%20of%20Evermore/player-options)
 2. You will be presented with a "Seed Info" page.
 3. Click the "Create New Room" link.
 4. You will be presented with a server page, from which you can download your patch file.
@@ -58,10 +61,15 @@ page: [Evermizer apbpatch Page](https://evermizer.com/apbpatch)
 
 ### Connect to SNI
 
-#### With an emulator
-
 Start SNI either from the Archipelago install folder or the stand-alone version. If this is its first time launching,
 you may be prompted to allow it to communicate through the Windows Firewall.
+
+#### With an emulator
+
+##### snes9x-nwa
+
+1. Click on the Network Menu and check **Enable Emu Network Control**
+2. Load your ROM file if it hasn't already been loaded.
 
 ##### snes9x-rr
 

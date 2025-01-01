@@ -8,7 +8,7 @@ class TestBase(unittest.TestCase):
     def test_create_item(self):
         """Test that a world can successfully create all items in its datapackage"""
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            proxy_world = world_type(None, 0)  # this is identical to MultiServer.py creating worlds
+            proxy_world = setup_solo_multiworld(world_type, ()).worlds[1]
             for item_name in world_type.item_name_to_id:
                 with self.subTest("Create Item", item_name=item_name, game_name=game_name):
                     item = proxy_world.create_item(item_name)
@@ -23,8 +23,10 @@ class TestBase(unittest.TestCase):
                 {"Pendants", "Crystals"},
             "Ocarina of Time":
                 {"medallions", "stones", "rewards", "logic_bottles"},
-            "Starcraft 2 Wings of Liberty":
-                {"Missions"},
+            "Starcraft 2":
+                {"Missions", "WoL Missions"},
+            "Yu-Gi-Oh! 2006":
+                {"Campaign Boss Beaten"}
         }
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game_name, game_name=game_name):
@@ -62,15 +64,6 @@ class TestBase(unittest.TestCase):
                 for item in multiworld.itempool:
                     self.assertIn(item.name, world_type.item_name_to_id)
 
-    def test_item_descriptions_have_valid_names(self):
-        """Ensure all item descriptions match an item name or item group name"""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            valid_names = world_type.item_names.union(world_type.item_name_groups)
-            for name in world_type.item_descriptions:
-                with self.subTest("Name should be valid", game=game_name, item=name):
-                    self.assertIn(name, valid_names,
-                                  "All item descriptions must match defined item names")
-
     def test_itempool_not_modified(self):
         """Test that worlds don't modify the itempool after `create_items`"""
         gen_steps = ("generate_early", "create_regions", "create_items")
@@ -87,3 +80,21 @@ class TestBase(unittest.TestCase):
                         call_all(multiworld, step)
                         self.assertEqual(created_items, multiworld.itempool,
                                          f"{game_name} modified the itempool during {step}")
+
+    def test_locality_not_modified(self):
+        """Test that worlds don't modify the locality of items after duplicates are resolved"""
+        gen_steps = ("generate_early", "create_regions", "create_items")
+        additional_steps = ("set_rules", "generate_basic", "pre_fill")
+        worlds_to_test = {game: world for game, world in AutoWorldRegister.world_types.items()}
+        for game_name, world_type in worlds_to_test.items():
+            with self.subTest("Game", game=game_name):
+                multiworld = setup_solo_multiworld(world_type, gen_steps)
+                local_items = multiworld.worlds[1].options.local_items.value.copy()
+                non_local_items = multiworld.worlds[1].options.non_local_items.value.copy()
+                for step in additional_steps:
+                    with self.subTest("step", step=step):
+                        call_all(multiworld, step)
+                        self.assertEqual(local_items, multiworld.worlds[1].options.local_items.value,
+                                         f"{game_name} modified local_items during {step}")
+                        self.assertEqual(non_local_items, multiworld.worlds[1].options.non_local_items.value,
+                                         f"{game_name} modified non_local_items during {step}")

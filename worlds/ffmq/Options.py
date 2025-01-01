@@ -1,4 +1,5 @@
-from Options import Choice, FreeText, Toggle, Range
+from Options import Choice, FreeText, Toggle, Range, PerGameCommonOptions
+from dataclasses import dataclass
 
 
 class Logic(Choice):
@@ -207,10 +208,10 @@ class CrestShuffle(Toggle):
 
 
 class MapShuffleSeed(FreeText):
-    """If this is a number, it will be used as a set seed number for Map, Crest, and Battlefield Reward shuffles.
+    """If this is a number, it will be used as a set seed number for Map, Crest, Battlefield Reward, and Companion shuffles.
     If this is "random" the seed will be chosen randomly. If it is any other text, it will be used as a seed group name.
     All players using the same seed group name will get the same shuffle results, as long as their Map Shuffle,
-    Crest Shuffle, and Shuffle Battlefield Rewards settings are the same."""
+    Crest Shuffle, Shuffle Battlefield Rewards, Companion Shuffle, and Kaeli's Mom settings are the same."""
     display_name = "Map Shuffle Seed"
     default = "random"
 
@@ -321,36 +322,36 @@ class KaelisMomFightsMinotaur(Toggle):
     default = 0
 
 
-option_definitions = {
-    "logic": Logic,
-    "brown_boxes": BrownBoxes,
-    "sky_coin_mode": SkyCoinMode,
-    "shattered_sky_coin_quantity": ShatteredSkyCoinQuantity,
-    "starting_weapon": StartingWeapon,
-    "progressive_gear": ProgressiveGear,
-    "leveling_curve": LevelingCurve,
-    "starting_companion": StartingCompanion,
-    "available_companions": AvailableCompanions,
-    "companions_locations": CompanionsLocations,
-    "kaelis_mom_fight_minotaur": KaelisMomFightsMinotaur,
-    "companion_leveling_type": CompanionLevelingType,
-    "companion_spellbook_type": CompanionSpellbookType,
-    "enemies_density": EnemiesDensity,
-    "enemies_scaling_lower": EnemiesScalingLower,
-    "enemies_scaling_upper": EnemiesScalingUpper,
-    "bosses_scaling_lower": BossesScalingLower,
-    "bosses_scaling_upper": BossesScalingUpper,
-    "enemizer_attacks": EnemizerAttacks,
-    "enemizer_groups": EnemizerGroups,
-    "shuffle_res_weak_types": ShuffleResWeakType,
-    "shuffle_enemies_position": ShuffleEnemiesPositions,
-    "progressive_formations": ProgressiveFormations,
-    "doom_castle_mode": DoomCastle,
-    "doom_castle_shortcut": DoomCastleShortcut,
-    "tweak_frustrating_dungeons": TweakFrustratingDungeons,
-    "map_shuffle": MapShuffle,
-    "crest_shuffle": CrestShuffle,
-    "shuffle_battlefield_rewards": ShuffleBattlefieldRewards,
-    "map_shuffle_seed": MapShuffleSeed,
-    "battlefields_battles_quantities": BattlefieldsBattlesQuantities,
-}
+@dataclass
+class FFMQOptions(PerGameCommonOptions):
+    logic: Logic
+    brown_boxes: BrownBoxes
+    sky_coin_mode: SkyCoinMode
+    shattered_sky_coin_quantity: ShatteredSkyCoinQuantity
+    starting_weapon: StartingWeapon
+    progressive_gear: ProgressiveGear
+    leveling_curve: LevelingCurve
+    starting_companion: StartingCompanion
+    available_companions: AvailableCompanions
+    companions_locations: CompanionsLocations
+    kaelis_mom_fight_minotaur: KaelisMomFightsMinotaur
+    companion_leveling_type: CompanionLevelingType
+    companion_spellbook_type: CompanionSpellbookType
+    enemies_density: EnemiesDensity
+    enemies_scaling_lower: EnemiesScalingLower
+    enemies_scaling_upper: EnemiesScalingUpper
+    bosses_scaling_lower: BossesScalingLower
+    bosses_scaling_upper: BossesScalingUpper
+    enemizer_attacks: EnemizerAttacks
+    enemizer_groups: EnemizerGroups
+    shuffle_res_weak_types: ShuffleResWeakType
+    shuffle_enemies_position: ShuffleEnemiesPositions
+    progressive_formations: ProgressiveFormations
+    doom_castle_mode: DoomCastle
+    doom_castle_shortcut: DoomCastleShortcut
+    tweak_frustrating_dungeons: TweakFrustratingDungeons
+    map_shuffle: MapShuffle
+    crest_shuffle: CrestShuffle
+    shuffle_battlefield_rewards: ShuffleBattlefieldRewards
+    map_shuffle_seed: MapShuffleSeed
+    battlefields_battles_quantities: BattlefieldsBattlesQuantities

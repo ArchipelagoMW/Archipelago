@@ -336,13 +336,15 @@ def create_regions(world, player):
                                                                              ['Turtle Rock Entrance to Pokey Room', 'Turtle Rock Entrance Gap Reverse']),
         create_dungeon_region(world, player, 'Turtle Rock (Pokey Room)', 'Turtle Rock', ['Turtle Rock - Pokey 1 Key Drop'], ['Turtle Rock (Pokey Room) (North)', 'Turtle Rock (Pokey Room) (South)']),
         create_dungeon_region(world, player, 'Turtle Rock (Chain Chomp Room)', 'Turtle Rock', ['Turtle Rock - Chain Chomps'], ['Turtle Rock (Chain Chomp Room) (North)', 'Turtle Rock (Chain Chomp Room) (South)']),
-        create_dungeon_region(world, player, 'Turtle Rock (Second Section)', 'Turtle Rock', ['Turtle Rock - Big Key Chest',  'Turtle Rock - Pokey 2 Key Drop'], ['Turtle Rock Ledge Exit (West)', 'Turtle Rock Chain Chomp Staircase', 'Turtle Rock Big Key Door']),
+        create_dungeon_region(world, player, 'Turtle Rock (Second Section)', 'Turtle Rock', ['Turtle Rock - Big Key Chest', 'Turtle Rock - Pokey 2 Key Drop'], ['Turtle Rock Chain Chomp Staircase', 'Turtle Rock Big Key Door', 'Turtle Rock Second Section Bomb Wall']),
+        create_dungeon_region(world, player, 'Turtle Rock (Second Section Bomb Wall)', 'Turtle Rock', None, ['Turtle Rock Ledge Exit (West)', 'Turtle Rock Second Section from Bomb Wall']),
         create_dungeon_region(world, player, 'Turtle Rock (Big Chest)', 'Turtle Rock', ['Turtle Rock - Big Chest'], ['Turtle Rock (Big Chest) (North)', 'Turtle Rock Ledge Exit (East)']),
         create_dungeon_region(world, player, 'Turtle Rock (Crystaroller Room)', 'Turtle Rock', ['Turtle Rock - Crystaroller Room'], ['Turtle Rock Dark Room Staircase', 'Turtle Rock Big Key Door Reverse']),
         create_dungeon_region(world, player, 'Turtle Rock (Dark Room)', 'Turtle Rock', None, ['Turtle Rock (Dark Room) (North)', 'Turtle Rock (Dark Room) (South)']),
+        create_dungeon_region(world, player, 'Turtle Rock (Eye Bridge Bomb Wall)', 'Turtle Rock', None, ['Turtle Rock Isolated Ledge Exit', 'Turtle Rock Eye Bridge from Bomb Wall']),
         create_dungeon_region(world, player, 'Turtle Rock (Eye Bridge)', 'Turtle Rock', ['Turtle Rock - Eye Bridge - Bottom Left', 'Turtle Rock - Eye Bridge - Bottom Right',
                                                                           'Turtle Rock - Eye Bridge - Top Left', 'Turtle Rock - Eye Bridge - Top Right'],
-                              ['Turtle Rock Dark Room (South)', 'Turtle Rock (Trinexx)', 'Turtle Rock Isolated Ledge Exit']),
+                              ['Turtle Rock Dark Room (South)', 'Turtle Rock (Trinexx)', 'Turtle Rock Eye Bridge Bomb Wall']),
         create_dungeon_region(world, player, 'Turtle Rock (Trinexx)', 'Turtle Rock', ['Turtle Rock - Boss', 'Turtle Rock - Prize']),
         create_dungeon_region(world, player, 'Palace of Darkness (Entrance)', 'Palace of Darkness', ['Palace of Darkness - Shooter Room'], ['Palace of Darkness Bridge Room', 'Palace of Darkness Bonk Wall', 'Palace of Darkness Exit']),
         create_dungeon_region(world, player, 'Palace of Darkness (Center)', 'Palace of Darkness', ['Palace of Darkness - The Arena - Bridge', 'Palace of Darkness - Stalfos Basement'],
@@ -404,7 +406,7 @@ def create_dungeon_region(world: MultiWorld, player: int, name: str, hint: str, 
 
 def _create_region(world: MultiWorld, player: int, name: str, type: LTTPRegionType, hint: str, locations=None,
                    exits=None):
-    from worlds.alttp.SubClasses import ALttPLocation
+    from .SubClasses import ALttPLocation
     ret = LTTPRegion(name, type, hint, player, world)
     if exits:
         for exit in exits:
@@ -758,7 +760,7 @@ location_table: typing.Dict[str,
      'Turtle Rock - Prize': (
          [0x120A7, 0x53F24, 0x53F25, 0x18005C, 0x180079, 0xC708], None, True, 'Turtle Rock')}
 
-from worlds.alttp.Shops import shop_table_by_location_id, shop_table_by_location
+from .Shops import shop_table_by_location_id, shop_table_by_location
 lookup_id_to_name = {data[0]: name for name, data in location_table.items() if type(data[0]) == int}
 lookup_id_to_name = {**lookup_id_to_name, **{data[1]: name for name, data in key_drop_data.items()}}
 lookup_id_to_name.update(shop_table_by_location_id)

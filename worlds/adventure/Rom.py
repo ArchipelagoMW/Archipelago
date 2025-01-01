@@ -7,7 +7,7 @@ from typing import Optional, Any
 import Utils
 from .Locations import AdventureLocation, LocationData
 from settings import get_settings
-from worlds.Files import APDeltaPatch, AutoPatchRegister, APContainer
+from worlds.Files import APPatch, AutoPatchRegister
 
 import bsdiff4
 
@@ -78,7 +78,7 @@ class BatNoTouchLocation:
         return ret_dict
 
 
-class AdventureDeltaPatch(APContainer, metaclass=AutoPatchRegister):
+class AdventureDeltaPatch(APPatch, metaclass=AutoPatchRegister):
     hash = ADVENTUREHASH
     game = "Adventure"
     patch_file_ending = ".apadvn"
@@ -86,9 +86,7 @@ class AdventureDeltaPatch(APContainer, metaclass=AutoPatchRegister):
 
     # locations: [], autocollect: [], seed_name: bytes,
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        patch_only = True
         if "autocollect" in kwargs:
-            patch_only = False
             self.foreign_items: [AdventureForeignItemInfo] = [AdventureForeignItemInfo(loc.short_location_id, loc.room_id, loc.room_x, loc.room_y)
                                   for loc in kwargs["locations"]]
 

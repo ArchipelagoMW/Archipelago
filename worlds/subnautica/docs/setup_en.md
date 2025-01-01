@@ -19,7 +19,7 @@
 Use the connect form in Subnautica's main menu to enter your connection information to connect to an Archipelago multiworld.
 Connection information consists of:
  - Host: the full url that you're trying to connect to, such as `archipelago.gg:38281`.
- - PlayerName: your name in the multiworld. Can also be called "slot name" and is the name you entered when creating your settings.
+ - PlayerName: your name in the multiworld. Can also be called "slot name" and is the name you entered when creating your options.
  - Password: optional password, leave blank if no password was set.
 
 After the connection is made, start a new game. You should start to see Archipelago chat messages to appear, such as a message announcing that you joined the multiworld.

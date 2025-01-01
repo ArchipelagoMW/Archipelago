@@ -79,7 +79,7 @@ description: Template Name
 # Ditt spelnamn. Mellanslag kommer bli omplacerad med understräck och det är en 16-karaktärsgräns.
 name: YourName
 game: Minecraft
-accessibility: locations
+accessibility: full
 progression_balancing: 0
 advancement_goal:
   few: 0
@@ -103,8 +103,6 @@ shuffle_structures:
   off: 0
 ```
 
-För mer detaljer om vad varje inställning gör, kolla standardinställningen `PlayerSettings.yaml` som kommer med
-Archipelago-installationen.
 
 ## Gå med i ett Multivärld-spel
 

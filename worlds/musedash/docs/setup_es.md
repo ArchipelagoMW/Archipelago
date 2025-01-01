@@ -2,7 +2,7 @@
 
 ## Enlaces rápidos
 - [Página Principal](../../../../games/Muse%20Dash/info/en)
-- [Página de Configuraciones](../../../../games/Muse%20Dash/player-settings)
+- [Página de Configuraciones](../../../../games/Muse%20Dash/player-options)
 
 ## Software Requerido
 
@@ -17,17 +17,18 @@
 ## Instalar el mod de Archipelago en Muse Dash
 
 1. Descarga [MelonLoader.Installer.exe](https://github.com/LavaGang/MelonLoader/releases/latest) y ejecutalo.
-2. Elije la pestaña "automated", haz clic en el botón "select" y busca tu `MuseDash.exe`. Luego haz clic en "install".
+2. Elije la pestaña "automated", haz clic en el botón "select" y busca tu `MuseDash.exe`.
   - Puedes encontrar la carpeta en Steam buscando el juego en tu biblioteca, haciendo clic derecho sobre el y elegir *Administrar→Ver archivos locales*.
   - Si haces clic en la barra superior que te indica la carpeta en la que estas, te dará la dirección de ésta para que puedas copiarla. Al pegar esa dirección en la ventana que **MelonLoader** abre, irá automaticamente a esa carpeta.
-3. Ejecuta el juego una vez, y espera hasta que aparezca la pantalla de inicio de Muse Dash antes de cerrarlo.
-4. Descarga la última version de [Muse Dash Archipelago Mod](https://github.com/DeamonHunter/ArchipelagoMuseDash/releases/latest) y extraelo en la nueva carpeta creada llamada `/Mods/`, localizada en la carpeta de instalación de Muse Dash.
+3. Desmarca "Latest" y selecciona v0.6.1. Luego haz clic en "install".
+4. Ejecuta el juego una vez, y espera hasta que aparezca la pantalla de inicio de Muse Dash antes de cerrarlo.
+5. Descarga la última version de [Muse Dash Archipelago Mod](https://github.com/DeamonHunter/ArchipelagoMuseDash/releases/latest) y extraelo en la nueva carpeta creada llamada `/Mods/`, localizada en la carpeta de instalación de Muse Dash.
   - Todos los archivos deben ir directamente en la carpeta `/Mods/`, y NO en una subcarpeta dentro de la carpeta `/Mods/`
 
 Si todo fue instalado correctamente, un botón aparecerá en la parte inferior derecha del juego una vez abierto, que te permitirá conectarte al servidor de Archipelago.
 
 ## Generar un juego MultiWorld
-1. Entra a la página de [configuraciones de jugador](/games/Muse%20Dash/player-settings) y configura las opciones del juego a tu gusto.
+1. Entra a la página de [configuraciones de jugador](/games/Muse%20Dash/player-options) y configura las opciones del juego a tu gusto.
 2. Genera tu archivo YAML y úsalo para generar un juego nuevo en el radomizer
   - (Instrucciones sobre como generar un juego en Archipelago disponibles en la [guía web de Archipelago en Inglés](/tutorial/Archipelago/setup/en))
 

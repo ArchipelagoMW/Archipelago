@@ -322,7 +322,7 @@ function processBlock(block)
                 end
             end
         end
-        if #itemsBlock ~= itemIndex then
+        if #itemsBlock > itemIndex then
             wU8(ITEM_INDEX, #itemsBlock)
         end
 

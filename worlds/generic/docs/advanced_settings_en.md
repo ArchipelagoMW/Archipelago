@@ -2,27 +2,27 @@
 This guide covers more the more advanced options available in YAML files. This guide is intended for the user who plans
 to edit their YAML file manually. This guide should take about 10 minutes to read.
 
-If you would like to generate a basic, fully playable YAML without editing a file, then visit the settings page for the
-game you intend to play. The weighted settings page can also handle most of the advanced settings discussed here.
+If you would like to generate a basic, fully playable YAML without editing a file, then visit the options page for the
+game you intend to play.
 
-The settings page can be found on the supported games page, just click the "Settings Page" link under the name of the
-game you would like. 
+The options page can be found on the supported games page, just click the "Options Page" link under the name of the
+game you would like.
+
 * Supported games page: [Archipelago Games List](/games)
-* Weighted settings page: [Archipelago Weighted Settings](/weighted-settings)
 
-Clicking on the "Export Settings" button at the bottom-left will provide you with a pre-filled YAML with your options.
-The player settings page also has a link to download a full template file for that game which will have every option
+Clicking on the "Export Options" button at the bottom-left will provide you with a pre-filled YAML with your options.
+The player options page also has a link to download a full template file for that game which will have every option
 possible for the game including some that don't display correctly on the site.
 
 ## YAML Overview
 
 The Archipelago system generates games using player configuration files as input. These are going to be YAML files and
-each world will have one of these containing their custom settings for the game that world will play.
+each world will have one of these containing their custom options for the game that world will play.
 
 ## YAML Formatting
 
 YAML files are a format of human-readable config files. The basic syntax of a yaml file will have a `root` node and then
-different levels of `nested` nodes that the generator reads in order to determine your settings.
+different levels of `nested` nodes that the generator reads in order to determine your options.
 
 To nest text, the correct syntax is to indent **two spaces over** from its root option. A YAML file can be edited with
 whatever text editor you choose to use though I personally recommend that you use Sublime Text. Sublime text
@@ -30,7 +30,8 @@ website: [SublimeText Website](https://www.sublimetext.com)
 
 This program out of the box supports the correct formatting for the YAML file, so you will be able to use the tab key
 and get proper highlighting for any potential errors made while editing the file. If using any other text editor you
-should ensure your indentation is done correctly with two spaces.
+should ensure your indentation is done correctly with two spaces. After editing your YAML file, you can validate it at
+the website's [validation page](/check).
 
 A typical YAML file will look like:
 
@@ -53,13 +54,13 @@ so `option_one_setting_one` is guaranteed to occur.
 
 For `nested_option_two`, `option_two_setting_one` will be rolled 14 times and `option_two_setting_two` will be rolled 43
 times against each other. This means `option_two_setting_two` will be more likely to occur, but it isn't guaranteed,
-adding more randomness and "mystery" to your settings. Every configurable setting supports weights.
+adding more randomness and "mystery" to your options. Every configurable setting supports weights.
 
 ## Root Options
 
 Currently, there are only a few options that are root options. Everything else should be nested within one of these root
 options or in some cases nested within other nested options. The only options that should exist in root
-are `description`, `name`, `game`, `requires`, and the name of the games you want settings for.
+are `description`, `name`, `game`, `requires`, and the name of the games you want options for.
 
 * `description` is ignored by the generator and is simply a good way for you to organize if you have multiple files
   using this to detail the intention of the file.
@@ -78,16 +79,16 @@ are `description`, `name`, `game`, `requires`, and the name of the games you wan
   different weights.
 
 * `requires` details different requirements from the generator for the YAML to work as you expect it to. Generally this
-  is good for detailing the version of Archipelago this YAML was prepared for as, if it is rolled on an older version,
-  settings may be missing and as such it will not work as expected. If any plando is used in the file then requiring it
+  is good for detailing the version of Archipelago this YAML was prepared for. If it is rolled on an older version,
+  options may be missing and as such it will not work as expected. If any plando is used in the file then requiring it
   here to ensure it will be used is good practice.
 
 ## Game Options
 
-One of your root settings will be the name of the game you would like to populate with settings. Since it is possible to
+One of your root options will be the name of the game you would like to populate with options. Since it is possible to
 give a weight to any option, it is possible to have one file that can generate a seed for you where you don't know which
 game you'll play. For these cases you'll want to fill the game options for every game that can be rolled by these
-settings. If a game can be rolled it **must** have a settings section even if it is empty.
+settings. If a game can be rolled it **must** have an options section even if it is empty.
 
 ### Universal Game Options
 
@@ -101,10 +102,10 @@ See the plando guide for more info on plando options. Plando
 guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
 
 * `accessibility` determines the level of access to the game the generation will expect you to have in order to reach
-  your completion goal. This supports `items`, `locations`, and `minimal` and is set to `locations` by default.
-    * `locations` will guarantee all locations are accessible in your world.
+  your completion goal. This supports `full`, `items`, and `minimal` and is set to `full` by default.
+    * `full` will guarantee all locations are accessible in your world.
     * `items` will guarantee you can acquire all logically relevant items in your world. Some items, such as keys, may
-      be self-locking.
+      be self-locking. This value only exists in and affects some worlds.
     * `minimal` will only guarantee that the seed is beatable. You will be guaranteed able to finish the seed logically
       but may not be able to access all locations or acquire all items. A good example of this is having a big key in
       the big chest in a dungeon in ALTTP making it impossible to get and finish the dungeon.
@@ -130,12 +131,13 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
   the location without using any hint points.
 * `start_location_hints` is the same as `start_hints` but for locations, allowing you to hint for the item contained
   there without using any hint points.
-* `exclude_locations` lets you define any locations that you don't want to do and during generation will force a "junk"
-  item which isn't necessary for progression to go in these locations.
-* `priority_locations` is the inverse of `exclude_locations`, forcing a progression item in the defined locations.
+* `exclude_locations` lets you define any locations that you don't want to do and prevents items classified as
+  "progression" or "useful" from being placed on them.
+* `priority_locations` lets you define any locations that you want to do and forces a progression item into these
+  locations.
 * `item_links` allows players to link their items into a group with the same item link name and game. The items declared
   in `item_pool` get combined and when an item is found for the group, all players in the group receive it. Item links
-  can also have local and non local items, forcing the items to either be placed within the worlds of the group or in
+  can also have local and non-local items, forcing the items to either be placed within the worlds of the group or in
   worlds outside the group. If players have a varying amount of a specific item in the link, the lowest amount from the
   players will be the amount put into the group.
 
@@ -275,12 +277,13 @@ one file, removing the need to manage separate files if one chooses to do so.
 
 As a precautionary measure, before submitting a multi-game yaml like this one in a synchronous/sync multiworld, please
 confirm that the other players in the multi are OK with what you are submitting, and please be fairly reasonable about
-the submission. (ie. Multiple long games (SMZ3, OoT, HK, etc.) for a game intended to be <2 hrs is not likely considered
+the submission. (i.e. Multiple long games (SMZ3, OoT, HK, etc.) for a game intended to be <2 hrs is not likely considered
 reasonable, but submitting a ChecksFinder alongside another game OR submitting multiple Slay the Spire runs is likely
 OK)
 
 To configure your file to generate multiple worlds, use 3 dashes `---` on an empty line to separate the ending of one
-world and the beginning of another world.
+world and the beginning of another world. You can also combine multiple files by uploading them to the
+[validation page](/check).
 
 ### Example
 
@@ -292,7 +295,7 @@ requires:
   version: 0.3.2
 Super Mario 64:
   progression_balancing: 50
-  accessibilty: items
+  accessibility: items
   EnableCoinStars: false
   StrictCapRequirements: true
   StrictCannonRequirements: true
@@ -312,7 +315,7 @@ name: Minecraft
 game: Minecraft
 Minecraft:
   progression_balancing: 50
-  accessibilty: items
+  accessibility: items
   advancement_goal: 40
   combat_difficulty: hard
   include_hard_advancements: false
@@ -338,7 +341,7 @@ game: ChecksFinder
 
 ChecksFinder: 
   progression_balancing: 50
-  accessibilty: items
+  accessibility: items
 ```
 
 The above example will generate 3 worlds - one Super Mario 64, one Minecraft, and one ChecksFinder.

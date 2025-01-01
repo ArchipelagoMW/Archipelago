@@ -85,6 +85,7 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
         """Close connection to a currently connected snes"""
         self.ctx.snes_reconnect_address = None
         self.ctx.cancel_snes_autoreconnect()
+        self.ctx.snes_state = SNESState.SNES_DISCONNECTED
         if self.ctx.snes_socket and not self.ctx.snes_socket.closed:
             async_start(self.ctx.snes_socket.close())
             return True
@@ -281,7 +282,7 @@ class SNESState(enum.IntEnum):
 
 
 def launch_sni() -> None:
-    sni_path = Utils.get_options()["sni_options"]["sni_path"]
+    sni_path = Utils.get_settings()["sni_options"]["sni_path"]
 
     if not os.path.isdir(sni_path):
         sni_path = Utils.local_path(sni_path)
@@ -564,16 +565,12 @@ async def snes_write(ctx: SNIContext, write_list: typing.List[typing.Tuple[int, 
         PutAddress_Request: SNESRequest = {"Opcode": "PutAddress", "Operands": [], 'Space': 'SNES'}
         try:
             for address, data in write_list:
-                while data:
-                    # Divide the write into packets of 256 bytes.
-                    PutAddress_Request['Operands'] = [hex(address)[2:], hex(min(len(data), 256))[2:]]
-                    if ctx.snes_socket is not None:
-                        await ctx.snes_socket.send(dumps(PutAddress_Request))
-                        await ctx.snes_socket.send(data[:256])
-                        address += 256
-                        data = data[256:]
-                    else:
-                        snes_logger.warning(f"Could not send data to SNES: {data}")
+                PutAddress_Request['Operands'] = [hex(address)[2:], hex(len(data))[2:]]
+                if ctx.snes_socket is not None:
+                    await ctx.snes_socket.send(dumps(PutAddress_Request))
+                    await ctx.snes_socket.send(data)
+                else:
+                    snes_logger.warning(f"Could not send data to SNES: {data}")
         except ConnectionClosed:
             return False
 
@@ -636,7 +633,13 @@ async def game_watcher(ctx: SNIContext) -> None:
         if not ctx.client_handler:
             continue
 
-        rom_validated = await ctx.client_handler.validate_rom(ctx)
+        try:
+            rom_validated = await ctx.client_handler.validate_rom(ctx)
+        except Exception as e:
+            snes_logger.error(f"An error occurred, see logs for details: {e}")
+            text_file_logger = logging.getLogger()
+            text_file_logger.exception(e)
+            rom_validated = False
 
         if not rom_validated or (ctx.auth and ctx.auth != ctx.rom):
             snes_logger.warning("ROM change detected, please reconnect to the multiworld server")
@@ -652,12 +655,18 @@ async def game_watcher(ctx: SNIContext) -> None:
 
         perf_counter = time.perf_counter()
 
-        await ctx.client_handler.game_watcher(ctx)
+        try:
+            await ctx.client_handler.game_watcher(ctx)
+        except Exception as e:
+            snes_logger.error(f"An error occurred, see logs for details: {e}")
+            text_file_logger = logging.getLogger()
+            text_file_logger.exception(e)
+            await snes_disconnect(ctx)
 
 
 async def run_game(romfile: str) -> None:
     auto_start = typing.cast(typing.Union[bool, str],
-                             Utils.get_options()["sni_options"].get("snes_rom_start", True))
+                             Utils.get_settings()["sni_options"].get("snes_rom_start", True))
     if auto_start is True:
         import webbrowser
         webbrowser.open(romfile)

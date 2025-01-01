@@ -21,7 +21,7 @@ an experience customized for their taste, and different players in the same mult
 
 ### Where do I get a YAML file?
 
-you can customize your settings by visiting the [Rogue Legacy Settings Page](/games/Rogue%20Legacy/player-settings).
+you can customize your options by visiting the [Rogue Legacy Options Page](/games/Rogue%20Legacy/player-options).
 
 ### Connect to the MultiServer
 

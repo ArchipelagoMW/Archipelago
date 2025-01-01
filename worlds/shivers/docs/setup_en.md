@@ -5,7 +5,7 @@
 
 - [Shivers (GOG version)](https://www.gog.com/en/game/shivers) or original disc
 - [ScummVM](https://www.scummvm.org/downloads/) version 2.7.0 or later
-- [Shivers Randomizer](https://www.speedrun.com/shivers/resources)
+- [Shivers Randomizer](https://github.com/GodlFire/Shivers-Randomizer-CSharp/releases/latest) Latest release version
 
 ## Setup ScummVM for Shivers
 
@@ -33,8 +33,8 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The Player Settings page on the website allows you to configure your personal settings and export a config file from
-them. Player settings page: [Shivers Player Settings Page](/games/Shivers/player-settings)
+The Player Options page on the website allows you to configure your personal options and export a config file from
+them. Player options page: [Shivers Player Options Page](/games/Shivers/player-options)
 
 ### Verifying your config file
 

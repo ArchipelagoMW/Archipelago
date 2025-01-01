@@ -65,7 +65,6 @@ class L2ACWorld(World):
         "Iris treasures": {name for name, data in l2ac_item_table.items() if data.type is ItemType.IRIS_TREASURE},
         "Party members": {name for name, data in l2ac_item_table.items() if data.type is ItemType.PARTY_MEMBER},
     }
-    data_version: ClassVar[int] = 2
     required_client_version: Tuple[int, int, int] = (0, 4, 4)
 
     # L2ACWorld specific properties
@@ -119,7 +118,7 @@ class L2ACWorld(World):
                 L2ACItem("Progressive chest access", ItemClassification.progression, None, self.player))
             chest_access.show_in_spoiler = False
             ancient_dungeon.locations.append(chest_access)
-        for iris in self.item_name_groups["Iris treasures"]:
+        for iris in sorted(self.item_name_groups["Iris treasures"]):
             treasure_name: str = f"Iris treasure {self.item_name_to_id[iris] - self.item_name_to_id['Iris sword'] + 1}"
             iris_treasure: Location = \
                 L2ACLocation(self.player, treasure_name, self.location_name_to_id[treasure_name], ancient_dungeon)
@@ -232,6 +231,7 @@ class L2ACWorld(World):
             rom_bytearray[0x280018:0x280018 + 1] = self.o.shuffle_party_members.unlock.to_bytes(1, "little")
             rom_bytearray[0x280019:0x280019 + 1] = self.o.shuffle_capsule_monsters.unlock.to_bytes(1, "little")
             rom_bytearray[0x28001A:0x28001A + 1] = self.o.shop_interval.value.to_bytes(1, "little")
+            rom_bytearray[0x28001B:0x28001B + 1] = self.o.inactive_exp_gain.value.to_bytes(1, "little")
             rom_bytearray[0x280030:0x280030 + 1] = self.o.goal.value.to_bytes(1, "little")
             rom_bytearray[0x28003D:0x28003D + 1] = self.o.death_link.value.to_bytes(1, "little")
             rom_bytearray[0x281200:0x281200 + 470] = self.get_capsule_cravings_table()
