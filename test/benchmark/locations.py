@@ -1,3 +1,6 @@
+from ..general import gen_steps
+
+
 def run_locations_benchmark():
     import argparse
     import logging
@@ -17,15 +20,6 @@ def run_locations_benchmark():
     logger = logging.getLogger("Benchmark")
 
     class BenchmarkRunner:
-        gen_steps: typing.Tuple[str, ...] = (
-            "generate_early",
-            "create_regions",
-            "create_items",
-            "set_rules",
-            "generate_basic",
-            "connect_entrances",
-            "pre_fill"
-        )
         rule_iterations: int = 100_000
 
         if sys.version_info >= (3, 9):
@@ -67,7 +61,7 @@ def run_locations_benchmark():
                     multiworld.set_options(args)
 
                     gc.collect()
-                    for step in self.gen_steps:
+                    for step in gen_steps:
                         with TimeIt(f"{game} step {step}", logger):
                             call_all(multiworld, step)
                             gc.collect()
