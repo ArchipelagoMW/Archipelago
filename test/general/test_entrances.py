@@ -23,7 +23,7 @@ class TestBase(unittest.TestCase):
 
                 self.assertTrue(
                     all(entrance[1] is not None and entrance[2] is not None for entrance in original_entrances),
-                    f"{game_name} had unconnected entrances after {step}"
+                    f"{game_name} had unconnected entrances after connect_entrances"
                 )
 
                 for step in additional_steps:
