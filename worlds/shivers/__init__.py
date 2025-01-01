@@ -249,19 +249,25 @@ class ShiversWorld(World):
         self.storage_placements = {location.name.replace("Storage: ", ""): location.item.name.replace(" DUPE", "") for
                                    location in storage_locs}
 
-    def get_pre_fill_items(self) -> List["Item"]:
+    def get_pre_fill_items(self) -> List[Item]:
         if self.options.full_pots == "pieces":
-            return [self.create_item(self.item_id_to_name[SHIVERS_ITEM_ID_OFFSET + i]) for i in range(20)]
+            return [self.create_item(name) for name, data in item_table.items() if
+                    data.type == ItemType.POT_DUPLICATE]
         elif self.options.full_pots == "complete":
-            return [self.create_item(self.item_id_to_name[SHIVERS_ITEM_ID_OFFSET + 20 + i]) for i in range(10)]
+            return [self.create_item(name) for name, data in item_table.items() if
+                    data.type == ItemType.POT_COMPELTE_DUPLICATE]
         else:
             pool = []
+            pieces = [self.create_item(name) for name, data in item_table.items() if
+                      data.type == ItemType.POT_DUPLICATE]
+            complete = [self.create_item(name) for name, data in item_table.items() if
+                        data.type == ItemType.POT_COMPELTE_DUPLICATE]
             for i in range(10):
                 if self.pot_completed_list[i] == 0:
-                    pool.extend([self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 70 + i]),
-                                 self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 80 + i])])
+                    pool.append(pieces[i])
+                    pool.append(pieces[i + 10])
                 else:
-                    pool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 140 + i]))
+                    pool.append(complete[i])
             return pool
 
     def fill_slot_data(self) -> dict:
