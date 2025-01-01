@@ -459,7 +459,7 @@ class DKC2StrictRules(DKC2Rules):
             LocationName.bramble_scramble_clear:
                 lambda state: self.can_hover(state) and self.can_climb(state) and self.has_squawks(state),
             LocationName.bramble_scramble_kong:
-                lambda state: self.can_hover(state) and self.can_climb(state) and self.has_squawks(state) and self.has_kannons(self),
+                lambda state: self.can_hover(state) and self.can_climb(state) and self.has_squawks(state) and self.has_kannons(state),
             LocationName.bramble_scramble_dk_coin:
                 lambda state: self.can_hover(state) and self.can_cartwheel(state) and self.can_climb(state) and 
                     self.has_squitter(state) and self.has_squawks(state) and self.has_kannons(state),
