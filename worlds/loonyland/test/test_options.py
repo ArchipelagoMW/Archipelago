@@ -16,10 +16,6 @@ class TestMinimalOptions(LoonylandTestBase):
         "death_link": DeathLink.option_false,
     }
 
-    def test_minimal_options(self) -> None:
-        #self.assertBeatable(True)
-        self.test_all_state_can_reach_everything()
-
 class TestMinimalOptionsBadges(LoonylandTestBase):
     options = {
         "win_condition": WinCondition.option_badges,
@@ -33,9 +29,6 @@ class TestMinimalOptionsBadges(LoonylandTestBase):
         "dolls": MonsterDolls.option_none,
         "death_link": DeathLink.option_false,
     }
-
-    def test_minimal_options(self) -> None:
-        self.test_all_state_can_reach_everything()
 
 
 class TestVanillaOptions(LoonylandTestBase):
@@ -52,9 +45,6 @@ class TestVanillaOptions(LoonylandTestBase):
         "death_link": DeathLink.option_false,
     }
 
-    def test_vanilla_options(self) -> None:
-        self.test_all_state_can_reach_everything()
-
 class TestFullOptionsEvil(LoonylandTestBase):
     options = {
         "win_condition": WinCondition.option_evilizer,
@@ -68,9 +58,6 @@ class TestFullOptionsEvil(LoonylandTestBase):
         "dolls": MonsterDolls.option_full,
         "death_link": DeathLink.option_false,
     }
-
-    def test_full_options_evil(self) -> None:
-        self.test_all_state_can_reach_everything()
 
 
 class TestFullOptionsBadges(LoonylandTestBase):
@@ -86,7 +73,4 @@ class TestFullOptionsBadges(LoonylandTestBase):
         "dolls": MonsterDolls.option_full,
         "death_link": DeathLink.option_false,
     }
-
-    def test_full_options_evil(self) -> None:
-        self.test_all_state_can_reach_everything()
 
