@@ -156,7 +156,7 @@ Options taking a choice of a number can also use a variety of `random` options t
   specified numbers, but with the specified weights
 
 Options defining a unique set of options can also make use of the prior `random` options to select a subset of possible 
-options. The resulting number is used as the number of items the set should contain.
+options. The resulting number is used as the number of random items the set should contain.
 
 ### Example
 
