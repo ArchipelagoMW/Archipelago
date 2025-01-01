@@ -688,6 +688,12 @@ class MultiWorld():
                     sphere.append(locations.pop(n))
 
             if not sphere:
+                if __debug__:
+                    from Fill import FillError
+                    raise FillError(
+                        f"Could not access required locations for accessibility check. Missing: {locations}",
+                        multiworld=self,
+                    )
                 # ran out of places and did not finish yet, quit
                 logging.warning(f"Could not access required locations for accessibility check."
                                 f" Missing: {locations}")
