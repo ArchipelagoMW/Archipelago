@@ -912,9 +912,9 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
 
     @classmethod
     def from_text(cls, text: str):
-        check_text = text.lower()
-        if "random" in check_text:
-            return cls({}, check_text)
+        check_text = text.lower().split(",")
+        if cls.valid_keys and len(check_text) == 1 and check_text[0].startswith("random"):
+            return cls({}, check_text[0])
         return cls([option.strip() for option in text.split(",")])
 
     @classmethod
