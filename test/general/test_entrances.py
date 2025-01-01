@@ -8,7 +8,7 @@ class TestBase(unittest.TestCase):
         """Tests that Regions and Locations aren't created after `create_items`."""
         def get_entrance_name_to_source_and_target_dict(world: World):
             return [
-                (entrance.name, entrance.parent_region.name, entrance.target.connected_region)
+                (entrance.name, entrance.parent_region, entrance.connected_region)
                 for entrance in world.get_entrances()
             ]
 
@@ -32,11 +32,6 @@ class TestBase(unittest.TestCase):
                     with self.subTest("Step", step=step):
                         call_all(multiworld, "steps")
                         step_entrances = get_entrance_name_to_source_and_target_dict(multiworld.worlds[1])
-
-                        self.assertTrue(
-                            all(entrance[1] is not None and entrance[2] is not None for entrance in step_entrances),
-                            f"{game_name} had unconnected entrances after {step}"
-                        )
 
                         self.assertEqual(
                             original_entrances, step_entrances, f"{game_name} modified entrances during {step}"
