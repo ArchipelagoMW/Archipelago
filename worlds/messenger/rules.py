@@ -1,4 +1,4 @@
-from typing import Dict, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import CollectionRule, add_rule, allow_self_locking_items
@@ -12,9 +12,9 @@ if TYPE_CHECKING:
 class MessengerRules:
     player: int
     world: "MessengerWorld"
-    connection_rules: Dict[str, CollectionRule]
-    region_rules: Dict[str, CollectionRule]
-    location_rules: Dict[str, CollectionRule]
+    connection_rules: dict[str, CollectionRule]
+    region_rules: dict[str, CollectionRule]
+    location_rules: dict[str, CollectionRule]
     maximum_price: int
     required_seals: int
 

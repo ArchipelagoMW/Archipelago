@@ -528,8 +528,8 @@ class PokemonRedBlueWorld(World):
         for sphere in multiworld.get_spheres():
             mon_locations_in_sphere = {}
             for location in sphere:
-                if (location.game == "Pokemon Red and Blue" and (location.item.name in poke_data.pokemon_data.keys()
-                                                                 or "Static " in location.item.name)
+                if (location.game == location.item.game == "Pokemon Red and Blue"
+                        and (location.item.name in poke_data.pokemon_data.keys() or "Static " in location.item.name)
                         and location.item.advancement):
                     key = (location.player, location.item.name)
                     if key in found_mons:

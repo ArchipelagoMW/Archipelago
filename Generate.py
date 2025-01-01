@@ -114,7 +114,14 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
                 os.path.join(args.player_files_path, fname) not in {args.meta_file_path, args.weights_file_path}:
             path = os.path.join(args.player_files_path, fname)
             try:
-                weights_cache[fname] = read_weights_yamls(path)
+                weights_for_file = []
+                for doc_idx, yaml in enumerate(read_weights_yamls(path)):
+                    if yaml is None:
+                        logging.warning(f"Ignoring empty yaml document #{doc_idx + 1} in {fname}")
+                    else:
+                        weights_for_file.append(yaml)
+                weights_cache[fname] = tuple(weights_for_file)
+                        
             except Exception as e:
                 raise ValueError(f"File {fname} is invalid. Please fix your yaml.") from e
 
@@ -453,6 +460,10 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
             raise Exception(f"Option {option_key} has to be in a game's section, not on its own.")
 
     ret.game = get_choice("game", weights)
+    if not isinstance(ret.game, str):
+        if ret.game is None:
+            raise Exception('"game" not specified')
+        raise Exception(f"Invalid game: {ret.game}")
     if ret.game not in AutoWorldRegister.world_types:
         from worlds import failed_world_loads
         picks = Utils.get_fuzzy_results(ret.game, list(AutoWorldRegister.world_types) + failed_world_loads, limit=1)[0]
