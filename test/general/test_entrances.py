@@ -5,7 +5,7 @@ from . import setup_solo_multiworld
 
 class TestBase(unittest.TestCase):
     def test_entrance_connection_steps(self):
-        """Tests that Regions and Locations aren't created after `create_items`."""
+        """Tests that Entrances are connected and not changed after connect_entrances."""
         def get_entrance_name_to_source_and_target_dict(world: World):
             return [
                 (entrance.name, entrance.parent_region, entrance.connected_region)
