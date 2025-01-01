@@ -134,7 +134,7 @@ def set_rules(world):
         "Can Last Turn Win":
             lambda state: state.has_all(world.progression_cards["Can Last Turn Win"], player),
         "Can Yata Lock":
-            lambda state: state.has_all(world.progression_cards["Can Yata Lock"], player),
+            lambda state: state.has_all(world.progression_cards["Can Yata Lock"], player) and state.has_any(["No Banlist", "Banlist September 2003"], player),
         "Can Stall with Monsters":
             lambda state: state.has_all(world.progression_cards["Can Stall with Monsters"], player),
         "Can Stall with ST":

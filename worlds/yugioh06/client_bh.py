@@ -2,12 +2,13 @@ import logging
 import math
 from typing import TYPE_CHECKING, List, Optional, Set
 
+import Utils
 from MultiServer import mark_raw
 from NetUtils import ClientStatus, NetworkItem
 
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
-from . import item_to_index, cards
+from . import item_to_index, cards, collection_id_to_name
 from .boosterpack_contents import BoosterCard
 from .boosterpacks_data import booster_pack_data, booster_card_id_to_name, rarities
 
@@ -46,15 +47,11 @@ def cmd_booster_pack(self, booster_name: str = ""):
     if self.ctx.game != "Yu-Gi-Oh! 2006":
         logger.warning("This command can only be used when playing Yu-Gi-Oh! 2006.")
         return
-    booster_name = booster_name.upper()
-    booster_found = False
-    for name in booster_pack_data.keys():
-        if name.upper() == booster_name:
-            booster_found = True
-            booster_name = name
-            break
-    if not booster_found:
-        logger.warning("Pack not found")
+    found_name, usable, response = Utils.get_intended_text(booster_name, booster_pack_data.keys())
+    if usable:
+        booster_name = found_name
+    else:
+        self.output(response)
         return
     client = self.ctx.client_handler
     assert isinstance(client, YuGiOh2006Client)
@@ -68,14 +65,11 @@ def cmd_search_card(self, card_name: str = ""):
     if self.ctx.game != "Yu-Gi-Oh! 2006":
         logger.warning("This command can only be used when playing Yu-Gi-Oh! 2006.")
         return
-    card_name = card_name.upper()
-    card_found = False
-    for name in cards.keys():
-        if name.upper() == card_name:
-            card_found = True
-            card_name = name
-    if not card_found:
-        logger.warning("Card not found")
+    found_name, usable, response = Utils.get_intended_text(card_name, cards.keys())
+    if usable:
+        card_name = found_name
+    else:
+        self.output(response)
         return
     client = self.ctx.client_handler
     assert isinstance(client, YuGiOh2006Client)
@@ -167,7 +161,7 @@ class YuGiOh2006Client(BizHawkClient):
                 [(0x5308, local_items, "EWRAM")],
             )
             money_received = 0
-            for item in ctx.items_received:
+            for item in list(ctx.items_received):
                 if item.item == item_to_index["5000DP"] + 5730000:
                     money_received += 1
             if money_received > amount_items:
@@ -197,14 +191,14 @@ class YuGiOh2006Client(BizHawkClient):
                             locs_to_send.add(location_id)
 
             # Send locations if there are any to send.
-            if locs_to_send != self.local_checked_locations:
+            if locs_to_send != set(self.local_checked_locations):
                 self.local_checked_locations = locs_to_send
 
                 if locs_to_send is not None:
                     await ctx.send_msgs([{"cmd": "LocationChecks", "locations": list(locs_to_send)}])
 
             # Set collected Challenges to complete
-            for location in ctx.checked_locations:
+            for location in set(ctx.checked_locations):
                 if location not in ctx.locations_checked:
                     cid = location - 5730038
                     old_score = await bizhawk.read(
@@ -266,7 +260,7 @@ class YuGiOh2006Client(BizHawkClient):
                         card_id = 0
                         name = "ERROR: " + name
                     amount = collection_data[(card_id - 1) * 2] & 0xF
-                    if cid in self.all_progression_cards:
+                    if card_id in self.all_progression_cards:
                         color = "blue"
                     elif name.startswith("ERROR"):
                         color = "red"
@@ -293,12 +287,28 @@ class YuGiOh2006Client(BizHawkClient):
                     boosterpack_data = raw_data[0]
                     for i in range(0, booster.cards_in_set):
                         cid = int.from_bytes(boosterpack_data[i * 4: i * 4 + 2], "little")
-                        if cid == card_data.starter_id:
-                            found_in_pack.append(name)
+                        rarity = rarities[int.from_bytes(boosterpack_data[i * 4 + 2: i * 4 + 4], "little")]
+                        artwork = 0
+                        if rarity.endswith(" Alt 1"):
+                            artwork = 1
+                        elif rarity.endswith(" Alt 2"):
+                            artwork = 2
+                        elif rarity.endswith(" Alt 3"):
+                            artwork = 3
+                        if cid == card_data.starter_id and artwork == card_data.art:
+                            found_in_pack.append(f"{name}: {rarity}")
                 if len(found_in_pack) > 0:
                     logger.info("Can be found in:")
                     for found_pack in found_in_pack:
                         logger.info(found_pack)
+                    raw_data = await bizhawk.read(
+                        ctx.bizhawk_ctx, [
+                            (0x8, 0x1042, "EWRAM")
+                        ]
+                    )
+                    collection_data = raw_data[0]
+                    amount = collection_data[(card_data.id - 1) * 2] & 0xF
+                    logger.info(f"You have {amount} copies of this card")
                 else:
                     logger.info("Cannot be found in any pack")
                 self.card_search = ""
