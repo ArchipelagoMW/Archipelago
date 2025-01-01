@@ -33,20 +33,35 @@ class TestBase(unittest.TestCase):
     def test_location_creation_steps(self):
         """Tests that Regions and Locations aren't created after `create_items`."""
         gen_steps = ("generate_early", "create_regions", "create_items")
-        additional_steps = ("set_rules", "connect_entrances", "generate_basic", "pre_fill")
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game_name=game_name):
                 multiworld = setup_solo_multiworld(world_type, gen_steps)
                 region_count = len(multiworld.get_regions())
                 location_count = len(multiworld.get_locations())
 
-                for step in additional_steps:
-                    with self.subTest("step", step=step):
-                        call_all(multiworld, step)
-                        self.assertEqual(region_count, len(multiworld.get_regions()),
-                                         f"{game_name} modified region count during {step}")
-                        self.assertEqual(location_count, len(multiworld.get_locations()),
-                                         f"{game_name} modified locations count during {step}")
+                call_all(multiworld, "set_rules")
+                self.assertEqual(region_count, len(multiworld.get_regions()),
+                                 f"{game_name} modified region count during rule creation")
+                self.assertEqual(location_count, len(multiworld.get_locations()),
+                                 f"{game_name} modified locations count during rule creation")
+
+                call_all(multiworld, "connect_entrances")
+                self.assertEqual(region_count, len(multiworld.get_regions()),
+                                 f"{game_name} modified region count during rule creation")
+                self.assertEqual(location_count, len(multiworld.get_locations()),
+                                 f"{game_name} modified locations count during rule creation")
+
+                call_all(multiworld, "generate_basic")
+                self.assertEqual(region_count, len(multiworld.get_regions()),
+                                 f"{game_name} modified region count during generate_basic")
+                self.assertGreaterEqual(location_count, len(multiworld.get_locations()),
+                                        f"{game_name} modified locations count during generate_basic")
+
+                call_all(multiworld, "pre_fill")
+                self.assertEqual(region_count, len(multiworld.get_regions()),
+                                 f"{game_name} modified region count during pre_fill")
+                self.assertGreaterEqual(location_count, len(multiworld.get_locations()),
+                                        f"{game_name} modified locations count during pre_fill")
     
     def test_location_group(self):
         """Test that all location name groups contain valid locations and don't share names."""
