@@ -20,12 +20,18 @@ class TestBase(unittest.TestCase):
             with self.subTest("Game", game_name=game_name):
                 multiworld = setup_solo_multiworld(world_type, gen_steps)
 
-                original_entrances = get_entrance_name_to_source_and_target_dict()
+                entrances = multiworld.get_entrances()
+                self.assertTrue(
+                    all(entrance.parent_region is not None and entrance.target is not None for entrance in entrances),
+                    f"{game_name} had unconnected entrances after connect_entrances."
+                )
+
+                original_entrances = get_entrance_name_to_source_and_target_dict(multiworld.worlds[1])
 
                 for step in additional_steps:
                     with self.subTest("Step", step=step):
                         call_all(multiworld, "steps")
-                        entrances_after_step = get_entrance_name_to_source_and_target_dict
+                        entrances_after_step = get_entrance_name_to_source_and_target_dict(multiworld.worlds[1])
                         self.assertEqual(
                             original_entrances, entrances_after_step, f"{game_name} modified entrances during {step}"
                         )
