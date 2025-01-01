@@ -168,18 +168,19 @@ class Yugioh06World(World):
                 self.removed_challenges = slot_data["removed challenges"]
                 self.starting_booster = slot_data["starting_booster"]
                 self.starting_opponent = slot_data["starting_opponent"]
-                self.progression_cards_in_start = [collection_id_to_name[cid] for cid in
+                if "progression_cards" in slot_data:
+                    self.progression_cards_in_start = [collection_id_to_name[cid] for cid in
                                                    slot_data["progression_cards_in_start"]]
-                self.progression_cards_in_booster = [collection_id_to_name[cid] for cid in
+                    self.progression_cards_in_booster = [collection_id_to_name[cid] for cid in
                                                      slot_data["progression_cards_in_booster"]]
-                for name, v in slot_data["progression_cards"].items():
-                    self.progression_cards[name] = [collection_id_to_name[cid] for cid in
+                    for name, v in slot_data["progression_cards"].items():
+                        self.progression_cards[name] = [collection_id_to_name[cid] for cid in
                                                     slot_data["progression_cards"][name]]
-                for name, content in slot_data["booster_pack_contents"].items():
-                    con = {}
-                    for cid in slot_data["booster_pack_contents"][name]:
-                        con[collection_id_to_name[cid]] = "Common"
-                    self.booster_pack_contents[name] = con
+                    for name, content in slot_data["booster_pack_contents"].items():
+                        con = {}
+                        for cid in slot_data["booster_pack_contents"][name]:
+                            con[collection_id_to_name[cid]] = "Common"
+                        self.booster_pack_contents[name] = con
 
         # set possible starting booster and opponent. Restrict them if you don't start with a standard booster
         if self.options.structure_deck.value > 5:
