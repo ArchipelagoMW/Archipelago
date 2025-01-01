@@ -945,7 +945,7 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
             elif self.random_str.startswith("random-range-"):
                 textsplit = self.random_str.split("-")
                 try:
-                    random_range = [int(textsplit[len(textsplit) - 2]), int(textsplit[len(textsplit) - 1])]
+                    random_range = [int(textsplit[-2]), int(textsplit[-1])]
                 except ValueError:
                     raise ValueError(f"Invalid random range {self.random_str} for option {self.__name__} "
                                      f"for player {player_name}")
