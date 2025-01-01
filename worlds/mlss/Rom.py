@@ -430,4 +430,4 @@ def desc_inject(world: "MLSSWorld", patch: MLSSProcedurePatch, location: Locatio
                 index = value.index(location.address) + 66
 
     dstring = f"{world.multiworld.player_name[item.player]}: {item.name}"
-    patch.write_token(APTokenTypes.WRITE, 0xD11000 + (index * 0x40), dstring.encode("UTF8"))
+    patch.write_token(APTokenTypes.WRITE, 0xD12000 + (index * 0x40), dstring.encode("UTF8"))
