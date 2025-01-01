@@ -1,6 +1,6 @@
 from typing import Optional
 
-from Fill import distribute_planned
+from Fill import parse_planned_blocks, distribute_planned_blocks
 from Options import PlandoItems
 from test.general import setup_solo_multiworld
 from worlds.AutoWorld import call_all
@@ -27,7 +27,9 @@ class PlandoTest(LADXTestBase):
             ("generate_early", "create_regions", "create_items", "set_rules", "generate_basic")
         )
         self.multiworld.worlds[1].options.plando_items = PlandoItems.from_any(self.options["plando_items"])
-        distribute_planned(self.multiworld)
+        self.multiworld.plando_item_blocks = parse_planned_blocks(self.multiworld)
+        distribute_planned_blocks(self.multiworld, [x for player in self.multiworld.plando_item_blocks
+                                           for x in self.multiworld.plando_item_blocks[player]])
         call_all(self.multiworld, "pre_fill")
         
     def test_planned(self):

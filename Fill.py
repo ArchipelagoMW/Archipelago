@@ -961,13 +961,13 @@ def resolve_early_locations_for_planned(multiworld: MultiWorld):
     swept_state = multiworld.state.copy()
     swept_state.sweep_for_advancements()
     reachable = frozenset(multiworld.get_reachable_locations(swept_state))
-    early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
-    non_early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
+    early_locations: typing.Dict[int, typing.List[Location]] = collections.defaultdict(list)
+    non_early_locations: typing.Dict[int, typing.List[Location]] = collections.defaultdict(list)
     for loc in multiworld.get_unfilled_locations():
         if loc in reachable:
-            early_locations[loc.player].append(loc.name)
+            early_locations[loc.player].append(loc)
         else:  # not reachable with swept state
-            non_early_locations[loc.player].append(loc.name)
+            non_early_locations[loc.player].append(loc)
 
     for player in multiworld.plando_item_blocks:
         for block in multiworld.plando_item_blocks[player]:
@@ -1036,9 +1036,8 @@ def distribute_planned_blocks(multiworld: MultiWorld, plando_blocks: typing.List
                 continue
             else:
                 is_real = item_candidates[0].code is not None
-            candidates = [candidate for candidate in multiworld.get_unfilled_locations_for_players(locations,
-                                                                                                   sorted(worlds))
-                          if bool(candidate.address) == is_real]
+            candidates = [candidate for candidate in locations if candidate.item is None
+                          and bool(candidate.address) == is_real]
             multiworld.random.shuffle(candidates)
             allstate = multiworld.get_all_state(False)
             mincount = placement["count"]["min"]
