@@ -19,8 +19,6 @@ class TestBase(unittest.TestCase):
             with self.subTest("Game", game_name=game_name):
                 multiworld = setup_solo_multiworld(world_type, gen_steps)
 
-                entrances = multiworld.get_entrances()
-
                 original_entrances = get_entrance_name_to_source_and_target_dict(multiworld.worlds[1])
 
                 self.assertTrue(
