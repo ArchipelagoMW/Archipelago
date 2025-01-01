@@ -225,6 +225,8 @@ class FreeText(Option[str]):
         else:
             raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
+    __hash__ = Option.__hash__
+
 
 class NumericOption(Option[int], numbers.Integral, abc.ABC):
     default = 0
@@ -1177,6 +1179,27 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
         return len(self.value)
 
 
+class Game(FreeText):
+    """The game you would like to play."""
+    display_name = "Game"
+    default = None
+
+    @classmethod
+    def from_text(cls, text: str) -> Game:
+        from Utils import get_fuzzy_results
+        from worlds import failed_world_loads
+        from worlds.AutoWorld import AutoWorldRegister
+        if text not in AutoWorldRegister.world_types:
+            picks = get_fuzzy_results(text, list(AutoWorldRegister.world_types) + failed_world_loads, limit=1)[0]
+            if picks[0] in failed_world_loads:
+                raise Exception(f"No functional world found to handle game {text}. "
+                                f"Did you mean '{picks[0]}' ({picks[1]}% sure)? "
+                                f"If so, it appears the world failed to initialize correctly.")
+            raise Exception(f"No world found to handle game {text}. Did you mean '{picks[0]}' ({picks[1]}% sure)? "
+                            f"Check your spelling or installation of that world.")
+        return cls(text)
+
+
 class Accessibility(Choice):
     """
     Set rules for reachability of your items/locations.
@@ -1242,6 +1265,11 @@ class OptionsMetaProperty(type):
     def type_hints(cls) -> typing.Dict[str, typing.Type[Option[typing.Any]]]:
         """Returns type hints of the class as a dictionary."""
         return typing.get_type_hints(cls)
+
+
+@dataclass
+class RootOnlyOptions(metaclass=OptionsMetaProperty):
+    game: Game
 
 
 @dataclass

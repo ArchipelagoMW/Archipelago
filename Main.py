@@ -253,12 +253,12 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     player_world: AutoWorld.World = multiworld.worlds[slot]
                     minimum_versions["server"] = max(minimum_versions["server"], player_world.required_server_version)
                     client_versions[slot] = player_world.required_client_version
-                    games[slot] = multiworld.game[slot]
-                    slot_info[slot] = NetUtils.NetworkSlot(names[0][slot - 1], multiworld.game[slot],
+                    games[slot] = multiworld.game[slot].value
+                    slot_info[slot] = NetUtils.NetworkSlot(names[0][slot - 1], games[slot],
                                                            multiworld.player_types[slot])
                 for slot, group in multiworld.groups.items():
-                    games[slot] = multiworld.game[slot]
-                    slot_info[slot] = NetUtils.NetworkSlot(group["name"], multiworld.game[slot], multiworld.player_types[slot],
+                    games[slot] = multiworld.game[slot].value
+                    slot_info[slot] = NetUtils.NetworkSlot(group["name"], games[slot], multiworld.player_types[slot],
                                                            group_members=sorted(group["players"]))
                 precollected_items = {player: [item.code for item in world_precollected if type(item.code) == int]
                                       for player, world_precollected in multiworld.precollected_items.items()}

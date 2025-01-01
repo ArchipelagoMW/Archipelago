@@ -426,7 +426,7 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
             player_option = option.from_any(option.default)  # call the from_any here to support default "random"
         setattr(ret, option_key, player_option)
     except Exception as e:
-        raise Options.OptionError(f"Error generating option {option_key} in {ret.game}") from e
+        raise Options.OptionError(f"Error generating option {option_key} in {ret.game}.") from e
     else:
         from worlds import AutoWorldRegister
         player_option.verify(AutoWorldRegister.world_types[ret.game], ret.name, plando_options)
@@ -459,23 +459,10 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         if option_key in weights and option_key not in Options.CommonOptions.type_hints:
             raise Exception(f"Option {option_key} has to be in a game's section, not on its own.")
 
-    ret.game = get_choice("game", weights)
-    if not isinstance(ret.game, str):
-        if ret.game is None:
-            raise Exception('"game" not specified')
-        raise Exception(f"Invalid game: {ret.game}")
-    if ret.game not in AutoWorldRegister.world_types:
-        from worlds import failed_world_loads
-        picks = Utils.get_fuzzy_results(ret.game, list(AutoWorldRegister.world_types) + failed_world_loads, limit=1)[0]
-        if picks[0] in failed_world_loads:
-            raise Exception(f"No functional world found to handle game {ret.game}. "
-                            f"Did you mean '{picks[0]}' ({picks[1]}% sure)? "
-                            f"If so, it appears the world failed to initialize correctly.")
-        raise Exception(f"No world found to handle game {ret.game}. Did you mean '{picks[0]}' ({picks[1]}% sure)? "
-                        f"Check your spelling or installation of that world.")
+    ret.game = Options.Game.from_any(get_choice("game", weights))
 
     if ret.game not in weights:
-        raise Exception(f"No game options for selected game \"{ret.game}\" found.")
+        raise Exception(f"No game options for \"{ret.game}\" found.")
 
     world_type = AutoWorldRegister.world_types[ret.game]
     game_weights = weights[ret.game]

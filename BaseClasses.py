@@ -83,7 +83,7 @@ class MultiWorld():
     start_location_hints: Dict[int, Options.StartLocationHints]
     item_links: Dict[int, Options.ItemLinks]
 
-    game: Dict[int, str]
+    game: Dict[int, Options.Game]
 
     random: random.Random
     per_slot_randoms: Utils.DeprecateDict[int, random.Random]
@@ -189,7 +189,7 @@ class MultiWorld():
         new_id: int = self.players + len(self.groups) + 1
 
         self.regions.add_group(new_id)
-        self.game[new_id] = game
+        self.game[new_id] = Options.Game.from_any(game)
         self.player_types[new_id] = NetUtils.SlotType.group
         world_type = AutoWorld.AutoWorldRegister.world_types[game]
         self.worlds[new_id] = world_type.create_group(self, new_id, players)
@@ -222,6 +222,9 @@ class MultiWorld():
         all_keys: Set[str] = {key for player in self.player_ids for key in
                               AutoWorld.AutoWorldRegister.world_types[self.game[player]].options_dataclass.type_hints}
         for option_key in all_keys:
+            # for now, root only options get directly assigned to the multiworld, and we don't want/need to override them
+            if option_key in Options.RootOnlyOptions.type_hints:
+                continue
             option = Utils.DeprecateDict(f"Getting options from multiworld is now deprecated. "
                                          f"Please use `self.options.{option_key}` instead.")
             option.update(getattr(args, option_key, {}))
@@ -260,7 +263,7 @@ class MultiWorld():
                         "players": {player: item_link["replacement_item"]},
                         "item_pool": set(item_link["item_pool"]),
                         "exclude": set(item_link.get("exclude", [])),
-                        "game": self.game[player],
+                        "game": self.game[player].value,
                         "local_items": set(item_link.get("local_items", [])),
                         "non_local_items": set(item_link.get("non_local_items", [])),
                         "link_replacement": replacement_prio.index(item_link["link_replacement"]),
