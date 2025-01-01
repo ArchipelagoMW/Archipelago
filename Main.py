@@ -148,9 +148,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     else:
         multiworld.worlds[1].options.non_local_items.value = set()
         multiworld.worlds[1].options.local_items.value = set()
-    
-    AutoWorld.call_all(multiworld, "generate_basic")
+
     AutoWorld.call_all(multiworld, "connect_entrances")
+    AutoWorld.call_all(multiworld, "generate_basic")
 
     # remove starting inventory from pool items.
     # Because some worlds don't actually create items during create_items this has to be as late as possible.
