@@ -837,7 +837,7 @@ def swap_location_item(location_1: Location, location_2: Location, check_locked:
     location_2.item.location = location_2
 
 
-def distribute_planned(multiworld: MultiWorld) -> None:
+def parse_planned_blocks(multiworld: MultiWorld) -> typing.Dict[int, typing.List[typing.Dict[str, typing.Any]]]:
     def warn(warning: str, force: typing.Union[bool, str]) -> None:
         if isinstance(force, bool):
             logging.warning(f"{warning}")
@@ -850,22 +850,12 @@ def distribute_planned(multiworld: MultiWorld) -> None:
         else:
             warn(warning, force)
 
-    swept_state = multiworld.state.copy()
-    swept_state.sweep_for_advancements()
-    reachable = frozenset(multiworld.get_reachable_locations(swept_state))
-    early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
-    non_early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
-    for loc in multiworld.get_unfilled_locations():
-        if loc in reachable:
-            early_locations[loc.player].append(loc.name)
-        else:  # not reachable with swept state
-            non_early_locations[loc.player].append(loc.name)
-
     world_name_lookup = multiworld.world_name_lookup
 
-    plando_blocks: typing.List[typing.Dict[str, typing.Any]] = []
+    plando_blocks: typing.Dict[int, typing.List[typing.Dict[str, typing.Any]]] = dict()
     player_ids = set(multiworld.player_ids)
     for player in player_ids:
+        plando_blocks[player] = []
         for block in multiworld.worlds[player].options.plando_items:
             new_block: typing.Dict[str, typing.Any] = {"player": player}
             if not isinstance(block.from_pool, bool):
@@ -925,21 +915,16 @@ def distribute_planned(multiworld: MultiWorld) -> None:
                 raise Exception(f"Plando 'locations' has to be a list, not {type(locations)} for player {player}.")
 
             locations_from_groups: typing.List[str] = []
+            resolved_locations: typing.List[Location] = []
             for target_player in worlds:
+                world_locations = multiworld.get_locations(target_player)
                 for group in multiworld.worlds[target_player].location_name_groups:
                     if group in locations:
                         locations_from_groups.extend(multiworld.worlds[target_player].location_name_groups[group])
-            if "early_locations" in locations:
-                locations.remove("early_locations")
-                for target_player in worlds:
-                    locations += early_locations[target_player]
-            if "non_early_locations" in locations:
-                locations.remove("non_early_locations")
-                for target_player in worlds:
-                    locations += non_early_locations[target_player]
-            locations += locations_from_groups
-
-            new_block["locations"] = list(dict.fromkeys(locations))
+                resolved_locations.extend(location for location in world_locations
+                                          if location.name in [*locations, *locations_from_groups])
+            new_block["locations"] = sorted(dict.fromkeys(locations))
+            new_block["resolved_locations"] = sorted(set(resolved_locations))
 
             new_block["count"] = block.count
             if not new_block["count"]:
@@ -968,20 +953,59 @@ def distribute_planned(multiworld: MultiWorld) -> None:
                                                                      new_block["count"]["max"])
 
             if new_block["count"]["target"] > 0:
-                plando_blocks.append(new_block)
+                plando_blocks[player].append(new_block)
+
+        return plando_blocks
+
+def resolve_early_locations_for_planned(multiworld: MultiWorld):
+    swept_state = multiworld.state.copy()
+    swept_state.sweep_for_advancements()
+    reachable = frozenset(multiworld.get_reachable_locations(swept_state))
+    early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
+    non_early_locations: typing.Dict[int, typing.List[str]] = collections.defaultdict(list)
+    for loc in multiworld.get_unfilled_locations():
+        if loc in reachable:
+            early_locations[loc.player].append(loc.name)
+        else:  # not reachable with swept state
+            non_early_locations[loc.player].append(loc.name)
+
+    for player in multiworld.plando_item_blocks:
+        for block in multiworld.plando_item_blocks[player]:
+            locations = block["locations"]
+            resolved_locations = block["resolved_locations"]
+            worlds = block["world"]
+            if "early_locations" in locations:
+                for target_player in worlds:
+                    resolved_locations += early_locations[target_player]
+            if "non_early_locations" in locations:
+                for target_player in worlds:
+                    resolved_locations += non_early_locations[target_player]
+
+def distribute_planned_blocks(multiworld: MultiWorld, plando_blocks: typing.List[typing.Dict[str, typing.Any]]):
+    def warn(warning: str, force: typing.Union[bool, str]) -> None:
+        if isinstance(force, bool):
+            logging.warning(f"{warning}")
+        else:
+            logging.debug(f"{warning}")
+
+    def failed(warning: str, force: typing.Union[bool, str]) -> None:
+        if force is True:
+            raise Exception(warning)
+        else:
+            warn(warning, force)
 
     # shuffle, but then sort blocks by number of locations minus number of items,
     # so less-flexible blocks get priority
     multiworld.random.shuffle(plando_blocks)
-    plando_blocks.sort(key=lambda block: (len(block["locations"]) - block["count"]["target"]
-                                          if len(block["locations"]) > 0
+    plando_blocks.sort(key=lambda block: (len(block["resolved_locations"]) - block["count"]["target"]
+                                          if len(block["resolved_locations"]) > 0
                                           else len(multiworld.get_unfilled_locations(player)) -
                                           block["count"]["target"]))
     for placement in plando_blocks:
         player = placement["player"]
         try:
             worlds = placement["world"]
-            locations = placement["locations"]
+            locations = placement["resolved_locations"]
             items = placement["items"]
             maxcount = placement["count"]["target"]
             from_pool = placement["from_pool"]

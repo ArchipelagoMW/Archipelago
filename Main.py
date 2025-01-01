@@ -11,8 +11,8 @@ from typing import Dict, List, Optional, Set, Tuple, Union
 
 import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
-from Fill import FillError, balance_multiworld_progression, distribute_items_restrictive, distribute_planned, \
-    flood_items
+from Fill import FillError, balance_multiworld_progression, distribute_items_restrictive, flood_items, \
+    parse_planned_blocks, distribute_planned_blocks, resolve_early_locations_for_planned
 from Options import StartInventoryPool
 from Utils import __version__, output_path, version_tuple, get_settings
 from settings import get_settings
@@ -148,7 +148,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     else:
         multiworld.worlds[1].options.non_local_items.value = set()
         multiworld.worlds[1].options.local_items.value = set()
-    
+
+    multiworld.plando_item_blocks = parse_planned_blocks(multiworld)
+
     AutoWorld.call_all(multiworld, "generate_basic")
 
     # remove starting inventory from pool items.
@@ -192,8 +194,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         multiworld._all_state = None
 
     logger.info("Running Item Plando.")
-
-    distribute_planned(multiworld)
+    resolve_early_locations_for_planned(multiworld)
+    distribute_planned_blocks(multiworld, [x for player in multiworld.plando_item_blocks
+                                           for x in multiworld.plando_item_blocks[player]])
 
     logger.info('Running Pre Main Fill.')
 
