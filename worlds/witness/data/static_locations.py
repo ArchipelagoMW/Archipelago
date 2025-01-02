@@ -1,6 +1,7 @@
-from typing import Dict, Set, cast
+from typing import Dict, List, Set, cast
 
 from . import static_logic as static_witness_logic
+from . import utils
 
 ID_START = 158000
 
@@ -453,6 +454,15 @@ ALL_LOCATIONS_TO_ID: Dict[str, int] = {}
 
 AREA_LOCATION_GROUPS: Dict[str, Set[str]] = {}
 
+POSSIBLE_LOCATIONS: Set[str] = set()
+
+EXTRA_LOCATIONS: List[str] = [
+    "Tutorial First Hallway Bend",
+    "Tutorial First Hallway Straight",
+    "Desert Surface 1",
+    "Desert Surface 2",
+]
+
 
 def get_id(entity_hex: str) -> int:
     """
@@ -488,3 +498,13 @@ for key, item in ALL_LOCATIONS_TO_IDS.items():
 for loc in ALL_LOCATIONS_TO_IDS:
     area = static_witness_logic.ENTITIES_BY_NAME[loc]["area"]["name"]
     AREA_LOCATION_GROUPS.setdefault(area, set()).add(loc)
+
+POSSIBLE_LOCATIONS |= GENERAL_LOCATIONS
+POSSIBLE_LOCATIONS.update(EXTRA_LOCATIONS)
+
+door_shuffle_line_gen = (line for line in utils.get_complex_doors())
+for line in door_shuffle_line_gen:
+    if line.startswith("Added Locations"):
+        break
+
+POSSIBLE_LOCATIONS.update([line.strip() for line in door_shuffle_line_gen])

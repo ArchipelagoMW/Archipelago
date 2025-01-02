@@ -5,7 +5,7 @@ import dataclasses
 from logging import error, warning
 from typing import Any, Dict, List, Optional, cast
 
-from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial
+from BaseClasses import CollectionState, Entrance, Location, LocationProgressType, Region, Tutorial
 
 from Options import OptionError, PerGameCommonOptions, Toggle
 from worlds.AutoWorld import WebWorld, World
@@ -14,6 +14,7 @@ from .data import static_items as static_witness_items
 from .data import static_locations as static_witness_locations
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import DoorItemDefinition, ItemData
+from .data.static_locations import POSSIBLE_LOCATIONS
 from .data.utils import cast_not_none, get_audio_logs
 from .hints import CompactHintData, create_all_hints, make_compact_hint_data, make_laser_hints
 from .locations import WitnessPlayerLocations
@@ -243,10 +244,8 @@ class WitnessWorld(World):
         # Then, add checks in order until the required amount of sphere 1 checks is met.
 
         extra_checks = [
-            ("Tutorial First Hallway Room", "Tutorial First Hallway Bend"),
-            ("Tutorial First Hallway", "Tutorial First Hallway Straight"),
-            ("Desert Outside", "Desert Surface 1"),
-            ("Desert Outside", "Desert Surface 2"),
+            (location, static_witness_logic.ENTITIES_BY_NAME[location]["region"]["name"])
+            for location in static_witness_locations.EXTRA_LOCATIONS
         ]
 
         for i in range(num_early_locs, needed_size):
@@ -261,6 +260,13 @@ class WitnessWorld(World):
                 f"""Location "{loc}" had to be added to {self.player_name}'s world
                 due to insufficient sphere 1 size."""
             )
+
+        # Ensure that POSSIBLE_LOCATIONS is exhaustive by failing on dev if any locations aren't in it
+        assert all(
+            location.name in POSSIBLE_LOCATIONS
+            for location in self.multiworld.get_locations(self.player)
+            if not location.is_event
+        ), "POSSIBLE_LOCATIONS is not exhaustive."
 
     def create_items(self) -> None:
         # Determine pool size.
@@ -328,6 +334,13 @@ class WitnessWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         already_hinted_locations = set()
+
+        # Excluded locations should never be hinted
+
+        already_hinted_locations |= {
+            location.name for location in self.multiworld.get_locations(self.player)
+            if location.progress_type == LocationProgressType.EXCLUDED
+        }
 
         # Laser hints
 
