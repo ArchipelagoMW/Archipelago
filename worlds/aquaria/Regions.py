@@ -545,6 +545,7 @@ class AquariaRegions:
         entrance = Entrance(self.player, self.get_entrance_name(source_region, destination_region), source_region)
         source_region.exits.append(entrance)
         entrance.connect(destination_region)
+
         if rule is not None:
             set_rule(entrance, rule)
 

@@ -212,7 +212,7 @@ class ItemNames:
     TRANSTURTLE_BODY = "Transturtle Final Boss"
     TRANSTURTLE_SIMON_SAYS = "Transturtle Simon Says"
     TRANSTURTLE_ARNASSI_RUINS = "Transturtle Arnassi Ruins"
-    DOOR_TO_CATHEDRAL = "Door to the Cathedral openned"
+    DOOR_TO_CATHEDRAL = "Door to the Cathedral opened"
     # Events name
     BODY_TONGUE_CLEARED = "Body Tongue cleared"
     HAS_SUN_CRYSTAL = "Has Sun Crystal"
