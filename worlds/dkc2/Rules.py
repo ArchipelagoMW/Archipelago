@@ -75,7 +75,10 @@ class DKC2Rules:
         return state.has(ItemName.krools_keep, self.player)
     
     def can_access_krock(self, state: CollectionState) -> bool:
-        return state.has_any_count({ItemName.the_flying_krock: 1, ItemName.boss_token: self.world.options.krock_boss_tokens.value}, self.player)
+        if self.world.options.krock_boss_tokens.value == 0:
+            return state.has(ItemName.the_flying_krock, self.player)
+        else:
+            return state.has(ItemName.boss_token, self.player, self.world.options.krock_boss_tokens.value)
     
     def can_access_lost_world_cauldron(self, state: CollectionState) -> bool:
         return state.has(ItemName.lost_world_cauldron, self.player)
@@ -1811,11 +1814,6 @@ class DKC2ExpertRules(DKC2Rules):
             
             LocationName.jungle_jinx_kong:
                 lambda state: (self.can_hover(state) or (self.can_cartwheel(state) and self.has_kannons(state))) and (
-                    self.can_carry(state) or self.has_both_kongs(state) 
-                ), 
-            LocationName.jungle_jinx_kong:
-                lambda state: self.can_cartwheel(state) and (
-                    self.has_kannons(state) or self.can_hover(state)) and (
                     self.can_carry(state) or self.has_both_kongs(state) 
                 ), 
             LocationName.jungle_jinx_dk_coin:
