@@ -527,6 +527,20 @@ class InGameHints(DefaultOnToggle):
     display_name = "In-game Hints"
 
 
+class TarinsGift(Choice):
+    """
+    [Local Progression] Forces Tarin's gift to be an item that immediately opens up local checks.
+    Has little effect in single player games, and isn't always necessary with randomized entrances.
+    [Bush Breaker] Forces Tarin's gift to be an item that can destroy bushes.
+    [Any Item] Tarin's gift can be any item for any world
+    """
+    display_name = "Tarin's Gift"
+    option_local_progression = 0
+    option_bush_breaker = 1
+    option_any_item = 2
+    default = option_local_progression
+
+
 class ForeignItemIcons(Choice):
     """
     Choose how to display foreign items.
@@ -558,6 +572,7 @@ ladx_option_groups = [
     OptionGroup("Miscellaneous", [
         TradeQuest,
         Rooster,
+        TarinsGift,
         Overworld,
         TrendyGame,
         InGameHints,
@@ -630,6 +645,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     text_mode: TextMode
     no_flash: NoFlash
     in_game_hints: InGameHints
+    tarins_gift: TarinsGift
     overworld: Overworld
 
     warp_improvements: Removed
