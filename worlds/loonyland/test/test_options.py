@@ -1,5 +1,15 @@
+from ..options import (
+    Badges,
+    DeathLink,
+    Difficulty,
+    LongChecks,
+    MonsterDolls,
+    MultipleSaves,
+    OverpoweredCheats,
+    Remix,
+    WinCondition,
+)
 from . import LoonylandTestBase
-from ..options import *
 
 
 class TestMinimalOptions(LoonylandTestBase):
@@ -15,6 +25,7 @@ class TestMinimalOptions(LoonylandTestBase):
         "dolls": MonsterDolls.option_none,
         "death_link": DeathLink.option_false,
     }
+
 
 class TestMinimalOptionsBadges(LoonylandTestBase):
     options = {
@@ -45,6 +56,7 @@ class TestVanillaOptions(LoonylandTestBase):
         "death_link": DeathLink.option_false,
     }
 
+
 class TestFullOptionsEvil(LoonylandTestBase):
     options = {
         "win_condition": WinCondition.option_evilizer,
@@ -73,4 +85,3 @@ class TestFullOptionsBadges(LoonylandTestBase):
         "dolls": MonsterDolls.option_full,
         "death_link": DeathLink.option_false,
     }
-

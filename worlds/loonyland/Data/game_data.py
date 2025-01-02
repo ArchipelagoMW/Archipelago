@@ -360,7 +360,9 @@ loony_item_table: dict[str, LLItem] = {
     "Cat": LLItem(ll_base_id + VAR_CAT, LLItemCat.ITEM, ItemClassification.progression),
     "Big Gem": LLItem(ll_base_id + VAR_GEM, LLItemCat.ITEM, ItemClassification.progression, 6),
     "100 Gems": LLItem(ll_base_id + VAR_ZOMBIEGEM, LLItemCat.ITEM, ItemClassification.filler),
-    "Triple Fire Gem": LLItem(ll_base_id + VAR_TRIPLEFIRE, LLItemCat.ITEM, ItemClassification.useful, flags=["PWR_BIG"]),
+    "Triple Fire Gem": LLItem(
+        ll_base_id + VAR_TRIPLEFIRE, LLItemCat.ITEM, ItemClassification.useful, flags=["PWR_BIG"]
+    ),
     "Happy Stick": LLItem(ll_base_id + VAR_TALISMAN, LLItemCat.ITEM, ItemClassification.progression),
     "Bat Statue": LLItem(ll_base_id + VAR_BATSTATUE, LLItemCat.ITEM, ItemClassification.progression, 4),
     "Lantern": LLItem(ll_base_id + VAR_LANTERN, LLItemCat.ITEM, ItemClassification.progression),
@@ -370,47 +372,106 @@ loony_item_table: dict[str, LLItem] = {
     "Disco Mode": LLItem(ll_base_id + CH_DISCO + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler),
     "Terror Mode": LLItem(ll_base_id + CH_TERROR + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
     "Surprise Mode": LLItem(ll_base_id + CH_SURPRISE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler),
-    "Quick Mode": LLItem(ll_base_id + CH_QUICK + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["PWR"]),
-    "Infinite Gems": LLItem(ll_base_id + CH_GEMS + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["LONG"]),
+    "Quick Mode": LLItem(
+        ll_base_id + CH_QUICK + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["PWR"]
+    ),
+    "Infinite Gems": LLItem(
+        ll_base_id + CH_GEMS + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["LONG"]
+    ),
     "Sidekick": LLItem(ll_base_id + CH_SIDEKICK + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful),
-    "Homing Shots": LLItem(ll_base_id + CH_HOMING + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["PWR"]),
-    "Ultimate Firepower": LLItem(ll_base_id + CH_MAXPOWER + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=["MULTISAVE"]),
+    "Homing Shots": LLItem(
+        ll_base_id + CH_HOMING + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["PWR"]
+    ),
+    "Ultimate Firepower": LLItem(
+        ll_base_id + CH_MAXPOWER + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=["MULTISAVE"]
+    ),
     "Vintage Mode": LLItem(ll_base_id + CH_VINTAGE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful),
-    "Play As Bonkula": LLItem(ll_base_id + CH_BONKULA + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=["MULTISAVE"]),
-    "Play As Toad": LLItem(ll_base_id + CH_TOAD + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=["MULTISAVE"]),
+    "Play As Bonkula": LLItem(
+        ll_base_id + CH_BONKULA + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=["MULTISAVE"]
+    ),
+    "Play As Toad": LLItem(
+        ll_base_id + CH_TOAD + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=["MULTISAVE"]
+    ),
     "Crystal Ball": LLItem(ll_base_id + CH_CRYSTAL + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful),
     "Radar": LLItem(ll_base_id + CH_RADAR + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
-    "Heavy Hitter": LLItem(ll_base_id + CH_HEAVYHIT + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["PWR_BIG"]),
-    "Rapid Fire": LLItem(ll_base_id + CH_RAPIDFIRE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=["PWR"]),
-    "Touch Of Death": LLItem(ll_base_id + CH_DEATH + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["PWR_MAX", "OP"]),
-    "All Access Pass": LLItem(ll_base_id + CH_ALLACCESS + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["MULTISAVE"]),
-    "Play As Swampdog": LLItem(ll_base_id + CH_SWAMPDOG + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["MULTISAVE", "LONG"]),
-    "Hardcore Mode": LLItem(ll_base_id + CH_HARDCORE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=["MULTISAVE"]),
+    "Heavy Hitter": LLItem(
+        ll_base_id + CH_HEAVYHIT + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["PWR_BIG"]
+    ),
+    "Rapid Fire": LLItem(
+        ll_base_id + CH_RAPIDFIRE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=["PWR"]
+    ),
+    "Touch Of Death": LLItem(
+        ll_base_id + CH_DEATH + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["PWR_MAX", "OP"]
+    ),
+    "All Access Pass": LLItem(
+        ll_base_id + CH_ALLACCESS + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["MULTISAVE"]
+    ),
+    "Play As Swampdog": LLItem(
+        ll_base_id + CH_SWAMPDOG + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["MULTISAVE", "LONG"]
+    ),
+    "Hardcore Mode": LLItem(
+        ll_base_id + CH_HARDCORE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=["MULTISAVE"]
+    ),
     "Save Anywhere": LLItem(ll_base_id + CH_SAVEANY + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful),
-    "Guided Shots": LLItem(ll_base_id + CH_GUIDED + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["PWR"]),
-    "Slo-Mo": LLItem(ll_base_id + CH_SLOMO + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["PWR_BIG"]),
-    "Combo-Bombo": LLItem(ll_base_id + CH_CORPSE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["PWR"]),
+    "Guided Shots": LLItem(
+        ll_base_id + CH_GUIDED + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["PWR"]
+    ),
+    "Slo-Mo": LLItem(
+        ll_base_id + CH_SLOMO + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["PWR_BIG"]
+    ),
+    "Combo-Bombo": LLItem(
+        ll_base_id + CH_CORPSE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["PWR"]
+    ),
     "Frog-o-rama": LLItem(ll_base_id + CH_FROGWPN + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler),
-    "Play As Witch": LLItem(ll_base_id + CH_WITCH + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["MULTISAVE", "LONG"]),
-    "Play As Werewolf": LLItem(ll_base_id + CH_WEREWOLF + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["MULTISAVE"]),
+    "Play As Witch": LLItem(
+        ll_base_id + CH_WITCH + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["MULTISAVE", "LONG"]
+    ),
+    "Play As Werewolf": LLItem(
+        ll_base_id + CH_WEREWOLF + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["MULTISAVE"]
+    ),
     "Enemy Overload": LLItem(ll_base_id + CH_RESPAWN + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
     "Kick The Cat!": LLItem(ll_base_id + CH_KICKCAT + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
-    "Infinite Survival": LLItem(ll_base_id + CH_RNDSURVIVAL + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
-    "Play As Summony": LLItem(ll_base_id + CH_SUMMON + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["MULTISAVE"]),
-    "Play As Ninja Girl": LLItem(ll_base_id + CH_THIEF + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["MULTISAVE"]),
-    "Molecular Dispersion": LLItem(ll_base_id + CH_WALLWALK + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["OP"]),
-    "Guaranteed Survival": LLItem(ll_base_id + CH_SUPERSURV + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["PWR_MAX", "OP"]),
+    "Infinite Survival": LLItem(
+        ll_base_id + CH_RNDSURVIVAL + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression
+    ),
+    "Play As Summony": LLItem(
+        ll_base_id + CH_SUMMON + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["MULTISAVE"]
+    ),
+    "Play As Ninja Girl": LLItem(
+        ll_base_id + CH_THIEF + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["MULTISAVE"]
+    ),
+    "Molecular Dispersion": LLItem(
+        ll_base_id + CH_WALLWALK + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["OP"]
+    ),
+    "Guaranteed Survival": LLItem(
+        ll_base_id + CH_SUPERSURV + AP_BADGEMOD,
+        LLItemCat.CHEAT,
+        ItemClassification.progression,
+        flags=["PWR_MAX", "OP"],
+    ),
     "Bend It Like Bouapha": LLItem(ll_base_id + CH_BEND + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
     "Stinky Farley": LLItem(ll_base_id + CH_STINKY + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
-    "Ultra Weapons Are Go!": LLItem(ll_base_id + CH_ULTRAWEAPON + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Ultra Weapons Are Go!": LLItem(
+        ll_base_id + CH_ULTRAWEAPON + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression
+    ),
     "Thorns Aura": LLItem(ll_base_id + CH_THORNS + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
-    "Monster Regeneration": LLItem(ll_base_id + CH_REGEN + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
+    "Monster Regeneration": LLItem(
+        ll_base_id + CH_REGEN + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression
+    ),
     "Farley Free Zone": LLItem(ll_base_id + CH_NOFARLEY + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
     "Bowling Access": LLItem(ll_base_id + MODE_BOWLING + AP_MODEMOD, LLItemCat.ACCESS, ItemClassification.progression),
-    "Survival Access": LLItem(ll_base_id + MODE_SURVIVAL + AP_MODEMOD, LLItemCat.ACCESS, ItemClassification.progression),
-    "Boss Bash Access": LLItem(ll_base_id + MODE_BOSSBASH + AP_MODEMOD, LLItemCat.ACCESS, ItemClassification.progression),
-    "Loony Ball Access": LLItem(ll_base_id + MODE_LOONYBALL + AP_MODEMOD, LLItemCat.ACCESS, ItemClassification.progression),
-    "Remix Access": LLItem(ll_base_id + MODE_REMIX + AP_MODEMOD, LLItemCat.ACCESS, ItemClassification.progression, flags=["REMIX"]),
+    "Survival Access": LLItem(
+        ll_base_id + MODE_SURVIVAL + AP_MODEMOD, LLItemCat.ACCESS, ItemClassification.progression
+    ),
+    "Boss Bash Access": LLItem(
+        ll_base_id + MODE_BOSSBASH + AP_MODEMOD, LLItemCat.ACCESS, ItemClassification.progression
+    ),
+    "Loony Ball Access": LLItem(
+        ll_base_id + MODE_LOONYBALL + AP_MODEMOD, LLItemCat.ACCESS, ItemClassification.progression
+    ),
+    "Remix Access": LLItem(
+        ll_base_id + MODE_REMIX + AP_MODEMOD, LLItemCat.ACCESS, ItemClassification.progression, flags=["REMIX"]
+    ),
     "Bat Doll": LLItem(ll_base_id + VAR_BATDOLL, LLItemCat.DOLL, ItemClassification.progression),
     "Skeleton Doll": LLItem(ll_base_id + VAR_SKELDOLL, LLItemCat.DOLL, ItemClassification.progression),
     "Frog Doll": LLItem(ll_base_id + VAR_FROGDOLL, LLItemCat.DOLL, ItemClassification.progression),
@@ -653,7 +714,9 @@ loonyland_location_table: dict[str, LLLocation] = {
     "Monster Poundin'": LLLocation(119, LLLocCat.BADGE, 5, "Menu", base_item="Hardcore Mode"),
     "Ghostbustin'": LLLocation(120, LLLocCat.BADGE, 6, "Haunted Tower Roof", base_item="Homing Shots"),
     "Lookin'": LLLocation(121, LLLocCat.BADGE, 7, "The Witch's Cabin", base_item="20/20 Vision"),
-    "Ultimate Victory": LLLocation(122, LLLocCat.BADGE, 8, "The Evilizer", flags=["POSTGAME"], base_item="Ultimate Firepower"),
+    "Ultimate Victory": LLLocation(
+        122, LLLocCat.BADGE, 8, "The Evilizer", flags=["POSTGAME"], base_item="Ultimate Firepower"
+    ),
     "Kickin'": LLLocation(123, LLLocCat.BADGE, 9, "Loony Ball", base_item="Surprise Mode"),
     "Boss Bashin'": LLLocation(124, LLLocCat.BADGE, 10, "Boss Bash", base_item="Combo-Bombo"),
     "Vampire Slayin'": LLLocation(125, LLLocCat.BADGE, 11, "The Heart Of Terror", base_item="Play As Bonkula"),
@@ -666,25 +729,53 @@ loonyland_location_table: dict[str, LLLocation] = {
     "Combo Plate": LLLocation(132, LLLocCat.BADGE, 18, "Menu", base_item="Radar"),
     "Cleanin' Up": LLLocation(133, LLLocCat.BADGE, 19, "Rocky Cliffs", base_item="Heavy Hitter"),
     "Findin'": LLLocation(134, LLLocCat.BADGE, 20, "The Wolf Den", base_item="Rapid Fire"),
-    "Extreme Survivin'": LLLocation(135, LLLocCat.BADGE, 21, "Survival", flags=["LONG_VANILLA_BADGES"], base_item="Touch Of Death"),
+    "Extreme Survivin'": LLLocation(
+        135, LLLocCat.BADGE, 21, "Survival", flags=["LONG_VANILLA_BADGES"], base_item="Touch Of Death"
+    ),
     "Huntin'": LLLocation(136, LLLocCat.BADGE, 22, "Halloween Hill", base_item="All Access Pass"),
-    "Advanced Winnin'": LLLocation(137, LLLocCat.BADGE, 23, "Menu", flags=["LONG", "POSTGAME"], base_item="Terror Mode"),
+    "Advanced Winnin'": LLLocation(
+        137, LLLocCat.BADGE, 23, "Menu", flags=["LONG", "POSTGAME"], base_item="Terror Mode"
+    ),
     "Survivin'": LLLocation(138, LLLocCat.BADGE, 24, "Survival", base_item="Save Anywhere"),
     "Puppy Poundin'": LLLocation(139, LLLocCat.BADGE, 25, "Larry's Lair", base_item="Guided Shots"),
-    "Mad Skeelz": LLLocation(140, LLLocCat.BADGE, 26, "The Evilizer", flags=["LONG_VANILLA_BADGES", "MULTISAVE", "POSTGAME"], base_item="Kick The Cat!"),
+    "Mad Skeelz": LLLocation(
+        140,
+        LLLocCat.BADGE,
+        26,
+        "The Evilizer",
+        flags=["LONG_VANILLA_BADGES", "MULTISAVE", "POSTGAME"],
+        base_item="Kick The Cat!",
+    ),
     "Frankenfryin'": LLLocation(141, LLLocCat.BADGE, 27, "Frankenjulie's Laboratory", base_item="Slo-Mo"),
     "Combo Magic": LLLocation(142, LLLocCat.BADGE, 28, "Survival", base_item="Infinite Survival"),
     "Hedge Clippin'": LLLocation(143, LLLocCat.BADGE, 29, "Slurpy Swamp Mud", base_item="Frog-o-rama"),
-    "R-R-R-Remix!": LLLocation(144, LLLocCat.BADGE, 30, "Menu", flags=["REMIX", "LONG", "POSTGAME"], base_item="Play As Summony"),
-    "Witchcraft": LLLocation(145, LLLocCat.BADGE, 31, "Menu", flags=["LONG", "MULTISAVE"], base_item="Play As Ninja Girl"),
-    "Ninjitsu": LLLocation(146, LLLocCat.BADGE, 32, "Menu", flags=["LONG_VANILLA_BADGES", "MULTISAVE"], base_item="Molecular Dispersion"),
+    "R-R-R-Remix!": LLLocation(
+        144, LLLocCat.BADGE, 30, "Menu", flags=["REMIX", "LONG", "POSTGAME"], base_item="Play As Summony"
+    ),
+    "Witchcraft": LLLocation(
+        145, LLLocCat.BADGE, 31, "Menu", flags=["LONG", "MULTISAVE"], base_item="Play As Ninja Girl"
+    ),
+    "Ninjitsu": LLLocation(
+        146, LLLocCat.BADGE, 32, "Menu", flags=["LONG_VANILLA_BADGES", "MULTISAVE"], base_item="Molecular Dispersion"
+    ),
     "Stayin' Alive": LLLocation(147, LLLocCat.BADGE, 33, "Survival", flags=["LONG"], base_item="Guaranteed Survival"),
     "Hooliganin'": LLLocation(148, LLLocCat.BADGE, 34, "Loony Ball", base_item="Bend It Like Bouapha"),
     "Swampdoggin'": LLLocation(149, LLLocCat.BADGE, 35, "Menu", flags=["LONG", "MULTISAVE"], base_item="Stinky Farley"),
     "Scorin'": LLLocation(150, LLLocCat.BADGE, 36, "The Evilizer", flags=["LONG"], base_item="Ultra Weapons Are Go!"),
-    "Brawlin'": LLLocation(151, LLLocCat.BADGE, 37, "Benny's Cocktails", flags=["LONG_VANILLA_BADGES", "OP"], base_item="Thorns Aura"),
-    "Minin' For Treasure": LLLocation(152, LLLocCat.BADGE, 38, "Menu", flags=["REMIX"], base_item="Monster Regeneration"),
-    "Digitally Masterin'": LLLocation(153, LLLocCat.BADGE, 39, "Menu", flags=["LONG", "REMIX", "MULTISAVE", "POSTGAME", "LONG_VANILLA_BADGES"], base_item="Farley Free Zone"),
+    "Brawlin'": LLLocation(
+        151, LLLocCat.BADGE, 37, "Benny's Cocktails", flags=["LONG_VANILLA_BADGES", "OP"], base_item="Thorns Aura"
+    ),
+    "Minin' For Treasure": LLLocation(
+        152, LLLocCat.BADGE, 38, "Menu", flags=["REMIX"], base_item="Monster Regeneration"
+    ),
+    "Digitally Masterin'": LLLocation(
+        153,
+        LLLocCat.BADGE,
+        39,
+        "Menu",
+        flags=["LONG", "REMIX", "MULTISAVE", "POSTGAME", "LONG_VANILLA_BADGES"],
+        base_item="Farley Free Zone",
+    ),
     "Tree Trimming Reward": LLLocation(154, LLLocCat.REWARD, VAR_TREEREWARD, "A Cabin Trees"),
     "Larry's Wife Reward": LLLocation(155, LLLocCat.REWARD, VAR_LARRYREWARD, "A Cabin Larry"),
     "Farmer Reward": LLLocation(156, LLLocCat.REWARD, VAR_CROPSREWARD, "Halloween Hill"),
@@ -719,16 +810,21 @@ def set_rules(multiworld, world):
         "Frankenjulie's Reward": lambda state: power_level(state, world, 10),
         "Tower: Barracks": lambda state: state.has("Bat Key", world.player),
         "PolterGuy's Reward": lambda state: power_level(state, world, 10),
-        "Tower Basement: DoorDoorDoorDoorDoorDoor": lambda state: state.has("Bat Key", world.player) and state.has("Skull Key", world.player) and state.has("Pumpkin Key", world.player),
+        "Tower Basement: DoorDoorDoorDoorDoorDoor": lambda state: state.has("Bat Key", world.player)
+        and state.has("Skull Key", world.player)
+        and state.has("Pumpkin Key", world.player),
         "Happy Stick: Reward": lambda state: power_level(state, world, 40),
         "Wolf Den: Pumpkin Door": lambda state: state.has("Pumpkin Key", world.player),
         "Wolf Den: Vine": lambda state: state.has("Fertilizer", world.player),
         "Under The Ravine: Left Vine": lambda state: state.has("Fertilizer", world.player),
         "Under The Ravine: Right Vine": lambda state: state.has("Fertilizer", world.player),
         "Creepy Caverns M: Pharaoh Bat Door": lambda state: state.has("Bat Key", world.player),
-        "Castle Vampy IV: Ballroom Right": lambda state: state.has("Ghost Potion", world.player) and can_kill_werewolves(state, world),
-        "Castle Vampy IV: Ballroom Left": lambda state: state.has("Ghost Potion", world.player) and can_kill_werewolves(state, world),
-        "Roof NW: Gutsy the Elder": lambda state: have_special_weapon_damage(state, world) and power_level(state, world, 20),
+        "Castle Vampy IV: Ballroom Right": lambda state: state.has("Ghost Potion", world.player)
+        and can_kill_werewolves(state, world),
+        "Castle Vampy IV: Ballroom Left": lambda state: state.has("Ghost Potion", world.player)
+        and can_kill_werewolves(state, world),
+        "Roof NW: Gutsy the Elder": lambda state: have_special_weapon_damage(state, world)
+        and power_level(state, world, 20),
         "Roof NE: Stoney the Elder": lambda state: power_level(state, world, 20),
         "Roof SW: Drippy the Elder": lambda state: power_level(state, world, 20),
         "Roof SE: Toasty the Elder": lambda state: power_level(state, world, 20),
@@ -745,31 +841,46 @@ def set_rules(multiworld, world):
         "Q: Beneath The Lake": lambda state: power_level(state, world, 10),
         "Q: A True Hero": lambda state: state.has("Fertilizer", world.player) and have_bombs(state, world),
         "Q: Silver Bullet": lambda state: can_cleanse_crypts(state, world) and state.has("Silver", world.player),
-        "Q: Hairy Larry": lambda state: state.can_reach_region("Larry's Lair", world.player) and power_level(state, world, 10),
-        "Q: Ghostbusting": lambda state: state.has("Doom Daisy", world.player) and state.has("Mushroom", world.player, 10),
+        "Q: Hairy Larry": lambda state: state.can_reach_region("Larry's Lair", world.player)
+        and power_level(state, world, 10),
+        "Q: Ghostbusting": lambda state: state.has("Doom Daisy", world.player)
+        and state.has("Mushroom", world.player, 10),
         "Q: The Haunted Tower": lambda state: power_level(state, world, 10),
         "Q: The Last Gate": lambda state: state.has("Vampire Bust", world.player, 8),
         "Q: The Collection": lambda state: can_do_collection(state, world),
-        "Greed": lambda state: state.can_reach_region("Castle Vampy IV", world.player) and power_level(state, world, 10),
-        "Monster Slayin'": lambda state: state.can_reach_region("Castle Vampy IV", world.player) and power_level(state, world, 10),
-        "Monster Poundin'": lambda state: state.can_reach_region("Castle Vampy IV", world.player) and power_level(state, world, 10),
+        "Greed": lambda state: state.can_reach_region("Castle Vampy IV", world.player)
+        and power_level(state, world, 10),
+        "Monster Slayin'": lambda state: state.can_reach_region("Castle Vampy IV", world.player)
+        and power_level(state, world, 10),
+        "Monster Poundin'": lambda state: state.can_reach_region("Castle Vampy IV", world.player)
+        and power_level(state, world, 10),
         "Animal Control": lambda state: can_kill_werewolves(state, world),
         "Cleanin' Up": lambda state: have_many_bombs(state, world),
         "Extreme Survivin'": lambda state: state.has("Terror Mode", world.player) and power_level(state, world, 30),
-        "Huntin'": lambda state: state.can_reach_region("Rocky Cliffs", world.player) and state.can_reach_region("Zombiton", world.player) and state.can_reach_region("Slurpy Swamp Mud", world.player) and can_kill_werewolves(state, world),
+        "Huntin'": lambda state: state.can_reach_region("Rocky Cliffs", world.player)
+        and state.can_reach_region("Zombiton", world.player)
+        and state.can_reach_region("Slurpy Swamp Mud", world.player)
+        and can_kill_werewolves(state, world),
         "Advanced Winnin'": lambda state: hundred_percent(state, world),
         "Mad Skeelz": lambda state: state.has("Terror Mode", world.player) and power_level(state, world, 30),
         "Hedge Clippin'": lambda state: state.can_reach_region("Vampy Land", world.player),
         "R-R-R-Remix!": lambda state: hundred_percent(state, world) and state.has("Remix Access", world.player),
-        "Witchcraft": lambda state: state.has("Play As Witch", world.player) and have_all_weapons(state, world) and state.can_reach_region("Castle Vampy IV", world.player),
-        "Ninjitsu": lambda state: state.has("Play As Ninja Girl", world.player) and have_all_weapons(state, world) and state.has("Infinite Gems", world.player),
+        "Witchcraft": lambda state: state.has("Play As Witch", world.player)
+        and have_all_weapons(state, world)
+        and state.can_reach_region("Castle Vampy IV", world.player),
+        "Ninjitsu": lambda state: state.has("Play As Ninja Girl", world.player)
+        and have_all_weapons(state, world)
+        and state.has("Infinite Gems", world.player),
         "Stayin' Alive": lambda state: state.has("Infinite Survival", world.player),
-        "Swampdoggin'": lambda state: state.has("Play As Swampdog", world.player) and state.can_reach_region("Castle Vampy IV", world.player),
+        "Swampdoggin'": lambda state: state.has("Play As Swampdog", world.player)
+        and state.can_reach_region("Castle Vampy IV", world.player),
         "Scorin'": lambda state: state.has("Boss Bash Access", world.player) and power_level(state, world, 30),
         "Brawlin'": lambda state: state.has("Touch Of Death", world.player),
-        "Minin' For Treasure": lambda state: state.can_reach_region("Abandoned Mines", world.player) and state.has("Remix Access", world.player),
+        "Minin' For Treasure": lambda state: state.can_reach_region("Abandoned Mines", world.player)
+        and state.has("Remix Access", world.player),
         "Digitally Masterin'": lambda state: have_39_badges(state, world),
-        "Larry's Wife Reward": lambda state: state.can_reach_region("Larry's Lair", world.player) and can_cleanse_crypts(state, world),
+        "Larry's Wife Reward": lambda state: state.can_reach_region("Larry's Lair", world.player)
+        and can_cleanse_crypts(state, world),
         "Farmer Reward": lambda state: can_cleanse_crypts(state, world),
         "Witch Mushroom Reward": lambda state: state.has("Mushroom", world.player, 10),
         "Mayor Reward": lambda state: can_cleanse_crypts(state, world),
@@ -792,9 +903,15 @@ def set_entrance_rules(multiworld, world):
         LLEntrance("Menu", "Halloween Hill", False),
         LLEntrance("Menu", "Bowling", False, lambda state: state.has("Bowling Access", world.player), flags=["MODE"]),
         LLEntrance("Menu", "Survival", False, lambda state: state.has("Survival Access", world.player), flags=["MODE"]),
-        LLEntrance("Menu", "Boss Bash", False, lambda state: state.has("Boss Bash Access", world.player), flags=["MODE"]),
-        LLEntrance("Menu", "Loony Ball", False, lambda state: state.has("Loony Ball Access", world.player), flags=["MODE"]),
-        LLEntrance("Menu", "Remix", False, lambda state: state.has("Remix Access", world.player), flags=["MODE", "REMIX"]),
+        LLEntrance(
+            "Menu", "Boss Bash", False, lambda state: state.has("Boss Bash Access", world.player), flags=["MODE"]
+        ),
+        LLEntrance(
+            "Menu", "Loony Ball", False, lambda state: state.has("Loony Ball Access", world.player), flags=["MODE"]
+        ),
+        LLEntrance(
+            "Menu", "Remix", False, lambda state: state.has("Remix Access", world.player), flags=["MODE", "REMIX"]
+        ),
         LLEntrance("Halloween Hill", "A Cabin Trees", True),
         LLEntrance("Halloween Hill", "The Witch's Cabin", True),
         LLEntrance("Halloween Hill", "Bonita's Cabin", True),
@@ -813,15 +930,21 @@ def set_entrance_rules(multiworld, world):
         LLEntrance("Zombiton", "A Messy Cabin", True),
         LLEntrance("Halloween Hill", "Rusty Crypt Entrance", True),
         LLEntrance("Halloween Hill", "Under The Lake Entrance", True, lambda state: state.has("Orb", world.player, 4)),
-        LLEntrance("Halloween Hill", "Haunted Tower Entrance", True, lambda state: state.has("Ghost Potion", world.player)),
+        LLEntrance(
+            "Halloween Hill", "Haunted Tower Entrance", True, lambda state: state.has("Ghost Potion", world.player)
+        ),
         LLEntrance("Rocky Cliffs", "Abandoned Mines Entrance", True),
         LLEntrance("Rocky Cliffs", "The Shrine Of Bombulus", True),
         LLEntrance("Rocky Cliffs", "A Gloomy Cavern Entrance", True, lambda state: have_light_source(state, world)),
         LLEntrance("Halloween Hill", "Happy Stick Woods", True, lambda state: state.has("Happy Stick", world.player)),
         LLEntrance("Zombiton", "A Cabin Larry", True),
         LLEntrance("Halloween Hill", "The Wolf Den Entrance", True),
-        LLEntrance("Rocky Cliffs", "Upper Creepy Caverns Left Warp", True, lambda state: state.has("Bombs", world.player)),
-        LLEntrance("Rocky Cliffs", "Creepy Caverns Left Bottom Warp", True, lambda state: have_light_source(state, world)),
+        LLEntrance(
+            "Rocky Cliffs", "Upper Creepy Caverns Left Warp", True, lambda state: state.has("Bombs", world.player)
+        ),
+        LLEntrance(
+            "Rocky Cliffs", "Creepy Caverns Left Bottom Warp", True, lambda state: have_light_source(state, world)
+        ),
         LLEntrance("Vampy Land", "Creepy Caverns Right Bottom Warp", True),
         LLEntrance("Vampy Land", "Castle Vampy", True),
         LLEntrance("Halloween Hill", "Cabin In The Woods", True),
@@ -864,27 +987,68 @@ def set_entrance_rules(multiworld, world):
         LLEntrance("Haunted Tower Entrance", "Haunted Tower", False),
         LLEntrance("Haunted Tower", "Haunted Basement Entrance", False),
         LLEntrance("Haunted Tower", "Haunted Tower Stairs Up", False),
-        LLEntrance("Haunted Tower", "Haunted Tower Stairs Down", False, lambda state: state.has("Bat Key", world.player) and state.has("Pumpkin Key", world.player) and state.has("Skull Key", world.player)),
+        LLEntrance(
+            "Haunted Tower",
+            "Haunted Tower Stairs Down",
+            False,
+            lambda state: state.has("Bat Key", world.player)
+            and state.has("Pumpkin Key", world.player)
+            and state.has("Skull Key", world.player),
+        ),
         LLEntrance("Haunted Tower Stairs Up", "Haunted Tower Floor 2 Entrance", True),
         LLEntrance("Haunted Tower Stairs Up", "Haunted Tower", False),
-        LLEntrance("Haunted Tower Stairs Down", "Haunted Tower", False, lambda state: state.has("Bat Key", world.player) and state.has("Pumpkin Key", world.player) and state.has("Skull Key", world.player)),
-        LLEntrance("Haunted Tower Stairs Down", "Haunted Basement Entrance", True, lambda state: have_light_source(state, world)),
+        LLEntrance(
+            "Haunted Tower Stairs Down",
+            "Haunted Tower",
+            False,
+            lambda state: state.has("Bat Key", world.player)
+            and state.has("Pumpkin Key", world.player)
+            and state.has("Skull Key", world.player),
+        ),
+        LLEntrance(
+            "Haunted Tower Stairs Down",
+            "Haunted Basement Entrance",
+            True,
+            lambda state: have_light_source(state, world),
+        ),
         LLEntrance("Haunted Tower Floor 2 Entrance", "Haunted Tower Stairs Up", True),
-        LLEntrance("Haunted Tower Floor 2 Entrance", "Haunted Tower Floor 2", False, lambda state: state.has("Ghost Potion", world.player)),
+        LLEntrance(
+            "Haunted Tower Floor 2 Entrance",
+            "Haunted Tower Floor 2",
+            False,
+            lambda state: state.has("Ghost Potion", world.player),
+        ),
         LLEntrance("Haunted Tower Floor 2", "Haunted Tower Floor 2 Entrance", False),
         LLEntrance("Haunted Tower Floor 2", "Haunted Tower Floor 2 Exit", False),
-        LLEntrance("Haunted Tower Floor 2 Exit", "Haunted Tower Floor 2", False, lambda state: state.has("Ghost Potion", world.player)),
+        LLEntrance(
+            "Haunted Tower Floor 2 Exit",
+            "Haunted Tower Floor 2",
+            False,
+            lambda state: state.has("Ghost Potion", world.player),
+        ),
         LLEntrance("Haunted Tower Floor 2 Exit", "Haunted Tower Floor 3 Entrance", True),
         LLEntrance("Haunted Tower Floor 3 Entrance", "Haunted Tower Floor 2 Exit", True),
-        LLEntrance("Haunted Tower Floor 3 Entrance", "Haunted Tower Floor 3", False, lambda state: state.has("Ghost Potion", world.player)),
+        LLEntrance(
+            "Haunted Tower Floor 3 Entrance",
+            "Haunted Tower Floor 3",
+            False,
+            lambda state: state.has("Ghost Potion", world.player),
+        ),
         LLEntrance("Haunted Tower Floor 3", "Haunted Tower Floor 3 Entrance", False),
         LLEntrance("Haunted Tower Floor 3", "Haunted Tower Floor 3 Exit", False),
-        LLEntrance("Haunted Tower Floor 3 Exit", "Haunted Tower Floor 3", False, lambda state: state.has("Ghost Potion", world.player)),
+        LLEntrance(
+            "Haunted Tower Floor 3 Exit",
+            "Haunted Tower Floor 3",
+            False,
+            lambda state: state.has("Ghost Potion", world.player),
+        ),
         LLEntrance("Haunted Tower Floor 3 Exit", "Haunted Tower Roof", True),
         LLEntrance("Haunted Tower Roof", "Halloween Hill", True),
         LLEntrance("Haunted Tower Roof", "Haunted Tower Floor 3", True),
         LLEntrance("Haunted Basement Entrance", "Haunted Tower Stairs Down", True),
-        LLEntrance("Haunted Basement Entrance", "Haunted Basement", False, lambda state: have_light_source(state, world)),
+        LLEntrance(
+            "Haunted Basement Entrance", "Haunted Basement", False, lambda state: have_light_source(state, world)
+        ),
         LLEntrance("Haunted Basement", "Haunted Basement Entrance", False),
         LLEntrance("Abandoned Mines Entrance", "Abandoned Mines", False, lambda state: have_light_source(state, world)),
         LLEntrance("Abandoned Mines Entrance", "Rocky Cliffs", True),
@@ -894,53 +1058,133 @@ def set_entrance_rules(multiworld, world):
         LLEntrance("A Gloomy Cavern Entrance", "Rocky Cliffs", True),
         LLEntrance("A Gloomy Cavern", "A Gloomy Cavern Entrance", False),
         LLEntrance("Happy Stick Woods", "Halloween Hill", True),
-        LLEntrance("The Wolf Den Entrance", "The Wolf Den", False, lambda state: can_kill_werewolves(state, world) and have_light_source(state, world)),
+        LLEntrance(
+            "The Wolf Den Entrance",
+            "The Wolf Den",
+            False,
+            lambda state: can_kill_werewolves(state, world) and have_light_source(state, world),
+        ),
         LLEntrance("The Wolf Den Entrance", "Halloween Hill", True),
         LLEntrance("The Wolf Den", "The Wolf Den Entrance", False),
         LLEntrance("The Wolf Den", "The Wolf Den Exit", False),
         LLEntrance("The Wolf Den Exit", "Larry's Lair", True),
-        LLEntrance("The Wolf Den Exit", "The Wolf Den", False, lambda state: can_kill_werewolves(state, world) and have_light_source(state, world)),
+        LLEntrance(
+            "The Wolf Den Exit",
+            "The Wolf Den",
+            False,
+            lambda state: can_kill_werewolves(state, world) and have_light_source(state, world),
+        ),
         LLEntrance("A Cabin Larry", "Zombiton", True),
-        LLEntrance("Upper Creepy Caverns Left Warp", "Rocky Cliffs", True, lambda state: state.has("Bombs", world.player)),
-        LLEntrance("Upper Creepy Caverns Left Warp", "Upper Creepy Caverns", False, lambda state: have_light_source(state, world)),
+        LLEntrance(
+            "Upper Creepy Caverns Left Warp", "Rocky Cliffs", True, lambda state: state.has("Bombs", world.player)
+        ),
+        LLEntrance(
+            "Upper Creepy Caverns Left Warp",
+            "Upper Creepy Caverns",
+            False,
+            lambda state: have_light_source(state, world),
+        ),
         LLEntrance("Upper Creepy Caverns", "Upper Creepy Caverns Left Warp", False),
-        LLEntrance("Upper Creepy Caverns Middle Warp", "Creepy Caverns Left Top Warp", True, lambda state: have_light_source(state, world)),
-        LLEntrance("Upper Creepy Caverns Middle Warp", "Upper Creepy Caverns", False, lambda state: have_light_source(state, world)),
+        LLEntrance(
+            "Upper Creepy Caverns Middle Warp",
+            "Creepy Caverns Left Top Warp",
+            True,
+            lambda state: have_light_source(state, world),
+        ),
+        LLEntrance(
+            "Upper Creepy Caverns Middle Warp",
+            "Upper Creepy Caverns",
+            False,
+            lambda state: have_light_source(state, world),
+        ),
         LLEntrance("Upper Creepy Caverns", "Upper Creepy Caverns Middle Warp", False),
-        LLEntrance("Upper Creepy Caverns Right Warp", "Creepy Caverns Middle Top Warp", True, lambda state: have_light_source(state, world)),
-        LLEntrance("Upper Creepy Caverns Right Warp", "Upper Creepy Caverns", False, lambda state: have_light_source(state, world)),
+        LLEntrance(
+            "Upper Creepy Caverns Right Warp",
+            "Creepy Caverns Middle Top Warp",
+            True,
+            lambda state: have_light_source(state, world),
+        ),
+        LLEntrance(
+            "Upper Creepy Caverns Right Warp",
+            "Upper Creepy Caverns",
+            False,
+            lambda state: have_light_source(state, world),
+        ),
         LLEntrance("Upper Creepy Caverns", "Upper Creepy Caverns Right Warp", False),
-        LLEntrance("Under The Ravine", "Creepy Caverns Middle Right Warp", True, lambda state: have_light_source(state, world)),
-        LLEntrance("Under The Ravine", "Creepy Caverns Right Left Warp", True, lambda state: have_light_source(state, world)),
+        LLEntrance(
+            "Under The Ravine", "Creepy Caverns Middle Right Warp", True, lambda state: have_light_source(state, world)
+        ),
+        LLEntrance(
+            "Under The Ravine", "Creepy Caverns Right Left Warp", True, lambda state: have_light_source(state, world)
+        ),
         LLEntrance("Creepy Caverns Left Bottom Warp", "Rocky Cliffs", True),
-        LLEntrance("Creepy Caverns Left Bottom Warp", "Creepy Caverns Left", False, lambda state: have_light_source(state, world)),
+        LLEntrance(
+            "Creepy Caverns Left Bottom Warp",
+            "Creepy Caverns Left",
+            False,
+            lambda state: have_light_source(state, world),
+        ),
         LLEntrance("Creepy Caverns Left", "Creepy Caverns Left Bottom Warp", False),
         LLEntrance("Creepy Caverns Left", "Creepy Caverns Left Top Warp", False),
-        LLEntrance("Creepy Caverns Left Top Warp", "Creepy Caverns Left", False, lambda state: have_light_source(state, world)),
+        LLEntrance(
+            "Creepy Caverns Left Top Warp", "Creepy Caverns Left", False, lambda state: have_light_source(state, world)
+        ),
         LLEntrance("Creepy Caverns Left Top Warp", "Upper Creepy Caverns Middle Warp", False),
         LLEntrance("Creepy Caverns Middle Top Warp", "Upper Creepy Caverns", True),
-        LLEntrance("Creepy Caverns Middle Top Warp", "Creepy Caverns Middle", False, lambda state: have_light_source(state, world)),
+        LLEntrance(
+            "Creepy Caverns Middle Top Warp",
+            "Creepy Caverns Middle",
+            False,
+            lambda state: have_light_source(state, world),
+        ),
         LLEntrance("Creepy Caverns Middle", "Creepy Caverns Middle Top Warp", False),
         LLEntrance("Creepy Caverns Middle", "Creepy Caverns Middle Right Warp", False),
-        LLEntrance("Creepy Caverns Middle Right Warp", "Under The Ravine", True, lambda state: power_level(state, world, 20)),
-        LLEntrance("Creepy Caverns Middle Right Warp", "Creepy Caverns Middle", False, lambda state: have_light_source(state, world)),
-        LLEntrance("Creepy Caverns Right Left Warp", "Under The Ravine", True, lambda state: power_level(state, world, 20)),
-        LLEntrance("Creepy Caverns Right Left Warp", "Creepy Caverns Right", False, lambda state: have_light_source(state, world)),
+        LLEntrance(
+            "Creepy Caverns Middle Right Warp", "Under The Ravine", True, lambda state: power_level(state, world, 20)
+        ),
+        LLEntrance(
+            "Creepy Caverns Middle Right Warp",
+            "Creepy Caverns Middle",
+            False,
+            lambda state: have_light_source(state, world),
+        ),
+        LLEntrance(
+            "Creepy Caverns Right Left Warp", "Under The Ravine", True, lambda state: power_level(state, world, 20)
+        ),
+        LLEntrance(
+            "Creepy Caverns Right Left Warp",
+            "Creepy Caverns Right",
+            False,
+            lambda state: have_light_source(state, world),
+        ),
         LLEntrance("Creepy Caverns Right", "Creepy Caverns Right Left Warp", False),
         LLEntrance("Creepy Caverns Right", "Creepy Caverns Right Bottom Warp", False),
-        LLEntrance("Creepy Caverns Right Bottom Warp", "Creepy Caverns Right", False, lambda state: have_light_source(state, world)),
+        LLEntrance(
+            "Creepy Caverns Right Bottom Warp",
+            "Creepy Caverns Right",
+            False,
+            lambda state: have_light_source(state, world),
+        ),
         LLEntrance("Creepy Caverns Right Bottom Warp", "Vampy Land", True),
         LLEntrance("Castle Vampy", "Halloween Hill", True),
-        LLEntrance("Castle Vampy", "Castle Vampy Skull Jail", False, lambda state: state.has("Skull Key", world.player)),
-        LLEntrance("Castle Vampy Skull Jail", "Castle Vampy", False, lambda state: state.has("Skull Key", world.player)),
+        LLEntrance(
+            "Castle Vampy", "Castle Vampy Skull Jail", False, lambda state: state.has("Skull Key", world.player)
+        ),
+        LLEntrance(
+            "Castle Vampy Skull Jail", "Castle Vampy", False, lambda state: state.has("Skull Key", world.player)
+        ),
         LLEntrance("Castle Vampy Skull Jail", "Castle Vampy II", True),
         LLEntrance("Castle Vampy", "Castle Vampy II NE", True, lambda state: state.has("Bat Statue", world.player, 4)),
         LLEntrance("Castle Vampy", "Castle Vampy II SE", True, lambda state: state.has("Bat Statue", world.player, 4)),
         LLEntrance("Castle Vampy", "Castle Vampy II SW", True, lambda state: state.has("Bat Statue", world.player, 4)),
         LLEntrance("Castle Vampy", "Castle Vampy II NW", True, lambda state: state.has("Bat Statue", world.player, 4)),
         LLEntrance("Castle Vampy II", "Castle Vampy Skull Jail", True),
-        LLEntrance("Castle Vampy II", "Castle Vampy II Bat Jail", False, lambda state: state.has("Bat Key", world.player)),
-        LLEntrance("Castle Vampy II Bat Jail", "Castle Vampy II", False, lambda state: state.has("Bat Key", world.player)),
+        LLEntrance(
+            "Castle Vampy II", "Castle Vampy II Bat Jail", False, lambda state: state.has("Bat Key", world.player)
+        ),
+        LLEntrance(
+            "Castle Vampy II Bat Jail", "Castle Vampy II", False, lambda state: state.has("Bat Key", world.player)
+        ),
         LLEntrance("Castle Vampy II Bat Jail", "Castle Vampy III", True),
         LLEntrance("Castle Vampy II NE", "Castle Vampy", True),
         LLEntrance("Castle Vampy II NE", "Castle Vampy III NE", True),
@@ -952,8 +1196,18 @@ def set_entrance_rules(multiworld, world):
         LLEntrance("Castle Vampy II NW", "Castle Vampy III NW", True),
         LLEntrance("Cabin In The Woods", "Halloween Hill", True),
         LLEntrance("Castle Vampy III", "Castle Vampy II Bat Jail", True),
-        LLEntrance("Castle Vampy III", "Castle Vampy III Pumpkin Jail", False, lambda state: state.has("Pumpkin Key", world.player)),
-        LLEntrance("Castle Vampy III Pumpkin Jail", "Castle Vampy III", False, lambda state: state.has("Pumpkin Key", world.player)),
+        LLEntrance(
+            "Castle Vampy III",
+            "Castle Vampy III Pumpkin Jail",
+            False,
+            lambda state: state.has("Pumpkin Key", world.player),
+        ),
+        LLEntrance(
+            "Castle Vampy III Pumpkin Jail",
+            "Castle Vampy III",
+            False,
+            lambda state: state.has("Pumpkin Key", world.player),
+        ),
         LLEntrance("Castle Vampy III Pumpkin Jail", "Castle Vampy IV", True),
         LLEntrance("Castle Vampy III NE", "Castle Vampy II NE", True),
         LLEntrance("Castle Vampy III NE", "Castle Vampy IV NE", True),
@@ -964,7 +1218,12 @@ def set_entrance_rules(multiworld, world):
         LLEntrance("Castle Vampy III NW", "Castle Vampy II NW", True),
         LLEntrance("Castle Vampy III NW", "Castle Vampy IV NW", True),
         LLEntrance("Castle Vampy IV", "Castle Vampy III Pumpkin Jail", True),
-        LLEntrance("Castle Vampy IV", "The Heart Of Terror Entrance", True, lambda state: state.has("Vampire Bust", world.player, 8)),
+        LLEntrance(
+            "Castle Vampy IV",
+            "The Heart Of Terror Entrance",
+            True,
+            lambda state: state.has("Vampire Bust", world.player, 8),
+        ),
         LLEntrance("Castle Vampy IV NE", "Castle Vampy III NE", True),
         LLEntrance("Castle Vampy IV NE", "Castle Vampy Roof NE", True),
         LLEntrance("Castle Vampy IV SE", "Castle Vampy III SE", True),
@@ -979,7 +1238,9 @@ def set_entrance_rules(multiworld, world):
         LLEntrance("Castle Vampy Roof SW", "Castle Vampy IV SW", True),
         LLEntrance("Castle Vampy Roof NW", "Castle Vampy IV NW", True),
         LLEntrance("The Evilizer", "Halloween Hill", True),
-        LLEntrance("The Heart Of Terror Entrance", "The Heart Of Terror", False, lambda state: have_light_source(state, world)),
+        LLEntrance(
+            "The Heart Of Terror Entrance", "The Heart Of Terror", False, lambda state: have_light_source(state, world)
+        ),
         LLEntrance("The Heart Of Terror", "The Evilizer", True),
         LLEntrance("The Heart Of Terror", "Empty Rooftop", True),
         LLEntrance("A Hidey-Hole", "Halloween Hill", True),
@@ -989,20 +1250,47 @@ def set_entrance_rules(multiworld, world):
         LLEntrance("Larry's Lair", "Halloween Hill", True),
         LLEntrance("Halloween Hill", "Slurpy Swamp Mud", False, lambda state: state.has("Boots", world.player)),
         LLEntrance("Slurpy Swamp Mud", "Halloween Hill", False, lambda state: state.has("Boots", world.player)),
-        LLEntrance("Slurpy Swamp Mud North Warp", "Slurpy Swamp Mud", False, lambda state: state.has("Boots", world.player)),
-        LLEntrance("Slurpy Swamp Mud East Warp", "Slurpy Swamp Mud", False, lambda state: state.has("Boots", world.player)),
+        LLEntrance(
+            "Slurpy Swamp Mud North Warp", "Slurpy Swamp Mud", False, lambda state: state.has("Boots", world.player)
+        ),
+        LLEntrance(
+            "Slurpy Swamp Mud East Warp", "Slurpy Swamp Mud", False, lambda state: state.has("Boots", world.player)
+        ),
         LLEntrance("Zombiton", "Halloween Hill", False),
         LLEntrance("Halloween Hill", "Zombiton", False, lambda state: state.has("All Access Pass", world.player)),
-        LLEntrance("Halloween Hill", "Rocky Cliffs", False, lambda state: state.has("Big Gem", world.player) or state.has("All Access Pass", world.player)),
-        LLEntrance("Rocky Cliffs", "Halloween Hill", False, lambda state: state.has("Big Gem", world.player) or state.has("All Access Pass", world.player)),
+        LLEntrance(
+            "Halloween Hill",
+            "Rocky Cliffs",
+            False,
+            lambda state: state.has("Big Gem", world.player) or state.has("All Access Pass", world.player),
+        ),
+        LLEntrance(
+            "Rocky Cliffs",
+            "Halloween Hill",
+            False,
+            lambda state: state.has("Big Gem", world.player) or state.has("All Access Pass", world.player),
+        ),
         LLEntrance("Vampy Land", "Halloween Hill", False, lambda state: state.has("All Access Pass", world.player)),
         LLEntrance("Halloween Hill", "Vampy Land", False, lambda state: state.has("All Access Pass", world.player)),
-        LLEntrance("Underground Tunnel", "Underground Tunnel Mud", False, lambda state: state.has("Boots", world.player)),
-        LLEntrance("Underground Tunnel Mud", "Underground Tunnel", False, lambda state: state.has("Boots", world.player)),
-        LLEntrance("Underground Tunnel Mud", "Underground Tunnel Zombie", False, lambda state: state.has("Boots", world.player)),
-        LLEntrance("Underground Tunnel Zombie", "Underground Tunnel Mud", False, lambda state: state.has("Boots", world.player) and state.has("All Access Pass", world.player)),
+        LLEntrance(
+            "Underground Tunnel", "Underground Tunnel Mud", False, lambda state: state.has("Boots", world.player)
+        ),
+        LLEntrance(
+            "Underground Tunnel Mud", "Underground Tunnel", False, lambda state: state.has("Boots", world.player)
+        ),
+        LLEntrance(
+            "Underground Tunnel Mud", "Underground Tunnel Zombie", False, lambda state: state.has("Boots", world.player)
+        ),
+        LLEntrance(
+            "Underground Tunnel Zombie",
+            "Underground Tunnel Mud",
+            False,
+            lambda state: state.has("Boots", world.player) and state.has("All Access Pass", world.player),
+        ),
         LLEntrance("Swamp Gas Cavern", "Swamp Gas Cavern Back", False, lambda state: state.has("Boots", world.player)),
-        LLEntrance("Swamp Gas Cavern Back", "Swamp Gas Cavern", False, lambda state: state.has("All Access Pass", world.player)),
+        LLEntrance(
+            "Swamp Gas Cavern Back", "Swamp Gas Cavern", False, lambda state: state.has("All Access Pass", world.player)
+        ),
     ]
     for region in multiworld.get_regions(world.player):
         for entry in loonyland_entrance_table:

@@ -1,5 +1,3 @@
-
-from BaseClasses import Item
 from test.bases import WorldTestBase
 from worlds.loonyland import LoonylandWorld
 
