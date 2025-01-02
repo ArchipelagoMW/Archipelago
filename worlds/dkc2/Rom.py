@@ -593,7 +593,8 @@ def generate_game_trivia(world: "DKC2World"):
         if len(world.multiworld.get_game_worlds(game)) != 0:
             games_in_session.add(game)
     for game in world.options.swanky_excluded_topics.value:
-        games_in_session.remove(game)
+        if game in games_in_session:
+            games_in_session.remove(game)
     for game in world.options.swanky_forced_topics.value:
         games_in_session.add(game)
     
