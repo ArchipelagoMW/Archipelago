@@ -316,8 +316,9 @@ def write_tokens(world: "MLSSWorld", patch: MLSSProcedurePatch) -> None:
 
     patch.write_token(APTokenTypes.WRITE, 0xD00003, bytes([world.options.xp_multiplier.value]))
 
-    patch.write_token(APTokenTypes.WRITE, 0xD00008, bytes([world.options.goal.value]))
-    patch.write_token(APTokenTypes.WRITE, 0xD00009, bytes([world.options.emblems_required.value]))
+    if world.options.goal == 1:
+        patch.write_token(APTokenTypes.WRITE, 0xD00008, bytes([world.options.goal.value]))
+        patch.write_token(APTokenTypes.WRITE, 0xD00009, bytes([world.options.emblems_required.value]))
 
     if world.options.tattle_hp:
         patch.write_token(APTokenTypes.WRITE, 0xD00000, bytes([0x1]))
