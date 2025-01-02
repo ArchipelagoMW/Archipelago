@@ -31,7 +31,7 @@ Uh oh
 
 ## What does another world's item look like in Loonyland?
 
-Its the archipelago logo, rendered as a cluster of colored gems
+It will look like the archipelago logo, rendered as a cluster of colored gems
 
 ## When the player receives an item, what happens?
 
@@ -39,5 +39,5 @@ A message pops up in the bottom left informing them of the item and who sent it.
 
 ## What are recommended options to tweak for beginners to the rando?
 
-When badges are added, start with them off
-Start on Normal difficulty, and move up to Hard when you want a challenge
+Playing with badges set to none and difficulty set to beginner/normal.
+Evilizer win con.
