@@ -7,6 +7,7 @@ from ..logic.logic import Logic
 from ..utils.doorsmanager import DoorsManager
 from ..utils.objectives import Objectives
 from ..utils.parameters import Knows, isKnows
+import copy
 import logging
 import sys
 
@@ -240,6 +241,17 @@ class SMBoolManager(object):
             return SMBool(True, difficulty, items = [items])
         else:
             return smboolFalse
+        
+    def __deepcopy__(self, memo=None):
+        cls = self.__class__
+        cp = cls.__new__(cls)
+        if memo is None:
+            memo = {}
+        memo[id(self)] = cp
+        for k, v in self.__dict__.items():
+            setattr(cp, k, copy.deepcopy(v, memo))
+        return cp
+
 
 class SMBoolManagerPlando(SMBoolManager):
     def __init__(self):
