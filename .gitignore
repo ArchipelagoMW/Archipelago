@@ -30,6 +30,7 @@
 *.apsave
 *.BIN
 *.puml
+/data/presets/*.kv
 
 setups
 build
