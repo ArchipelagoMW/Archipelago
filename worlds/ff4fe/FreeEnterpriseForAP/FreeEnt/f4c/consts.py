@@ -1,5 +1,6 @@
 import os,inspect
 import lark
+import Utils
 
 _ROOT_FAMILY = "__"
 _consts = {}
@@ -16,7 +17,7 @@ _parser = lark.Lark(r'''
 
     %import common.WS
     %ignore WS
-    ''')
+    ''', import_paths=[Utils.user_path("data", "ff4fe")])
 
 class ConstsTransformer(lark.Transformer):
     def hex_value(self, n):

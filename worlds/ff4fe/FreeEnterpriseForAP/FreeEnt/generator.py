@@ -14,7 +14,6 @@ import datetime
 import uuid
 import enum
 
-import pyaes
 
 from . import f4c
 
@@ -837,34 +836,7 @@ def build(romfile, options, force_recompile=False):
         unheadered_address=0x1FF000
         ))
 
-    # note areas of raw binary patches so that rescript can find them
-    bytes_patch_scripts = []
-    for bytes_patch in bytes_patches:
-        addr = bytes_patch.get_unheadered_address()
-        bytes_patch_scripts.append(f'// RAWPATCH:{addr:X},{len(bytes_patch.data):X}')
-    bytes_patch_scripts = '\n'.join(bytes_patch_scripts) + '\n'
-    embedded_script += bytes_patch_scripts
-    embedded_script_utf8 += bytes_patch_scripts.encode('utf-8')
 
-    zip_info = zipfile.ZipInfo(filename='script.f4c', date_time=(2000,1,1,0,0,0))
-    zip_info.compress_type = zipfile.ZIP_LZMA
-    zip_buffer = io.BytesIO()
-    report_zip = zipfile.ZipFile(zip_buffer, mode='w')
-    report_zip.writestr(zip_info, embedded_script_utf8)
-    report_zip.close()
-
-    zip_buffer.seek(0)
-    embedded_report = zip_buffer.read()
-
-    key = "EMBEDDED_REPORT_KEY-------------".encode("utf-8")
-    aes = pyaes.AESModeOfOperationCTR(key)
-    encrypted_report = aes.encrypt(embedded_report)
-
-    report_addr = 0x1FF000 - len(encrypted_report) - 4
-    scripts.append(f4c.BytesPatch(
-        encrypted_report + struct.pack('<L', len(encrypted_report)), 
-        unheadered_address=report_addr
-        ))
 
     compile_options = f4c.CompileOptions()
     compile_options.build_cache_path = options.cache_path

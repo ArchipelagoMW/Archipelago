@@ -6,6 +6,5 @@ chardet
 requests
 markdown
 javascripthon
-pyaes
 python-dotenv
 lark

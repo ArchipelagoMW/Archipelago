@@ -6,6 +6,4 @@ chardet
 requests
 markdown
 javascripthon
-pyaes
 python-dotenv
-PyGithub
