@@ -87,6 +87,21 @@ class SMZ3World(World):
         self.rom_name_available_event = threading.Event()
         self.locations: Dict[str, Location] = {}
         self.unreachable = []
+        self.junkItemsNames = [item.name for item in [
+            ItemType.Arrow,
+            ItemType.OneHundredRupees,
+            ItemType.TenArrows,
+            ItemType.ThreeBombs,
+            ItemType.OneRupee,
+            ItemType.FiveRupees,
+            ItemType.TwentyRupees,
+            ItemType.FiftyRupees,
+            ItemType.ThreeHundredRupees,
+            ItemType.ETank,
+            ItemType.Missile,
+            ItemType.Super,
+            ItemType.PowerBomb
+        ]]
         super().__init__(world, player)
 
     @classmethod
