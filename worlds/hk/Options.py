@@ -213,6 +213,7 @@ class MaximumEssencePrice(MinimumEssencePrice):
 class MinimumEggPrice(Range):
     """The minimum rancid egg price in the range of prices that an item should cost from Jiji.
     Only takes effect if the EggSlotShops option is greater than 0."""
+    rich_text_doc = False
     display_name = "Minimum Egg Price"
     range_start = 1
     range_end = 20
@@ -222,6 +223,7 @@ class MinimumEggPrice(Range):
 class MaximumEggPrice(MinimumEggPrice):
     """The maximum rancid egg price in the range of prices that an item should cost from Jiji.
     Only takes effect if the EggSlotShops option is greater than 0."""
+    rich_text_doc = False
     display_name = "Maximum Egg Price"
     default = 10
 
@@ -265,6 +267,7 @@ class RandomCharmCosts(NamedRange):
     Set to -1 or vanilla for vanilla costs.
     Set to -2 or shuffle to shuffle around the vanilla costs to different charms."""
 
+    rich_text_doc = False
     display_name = "Randomize Charm Notch Costs"
     range_start = 0
     range_end = 240
@@ -437,6 +440,7 @@ class Goal(Choice):
 class GrubHuntGoal(NamedRange):
     """The amount of grubs required to finish Grub Hunt.
     On 'All' any grubs from item links replacements etc. will be counted"""
+    rich_text_doc = False
     display_name = "Grub Hunt Goal"
     range_start = 1
     range_end = 46
@@ -446,7 +450,7 @@ class GrubHuntGoal(NamedRange):
 
 class WhitePalace(Choice):
     """
-    Whether or not to include White Palace or not.  Note: Even if excluded, the King Fragment check may still be
+    Whether or not to include White Palace or not. Note: Even if excluded, the King Fragment check may still be
     required if charms are vanilla.
     """
     display_name = "White Palace"
@@ -483,6 +487,7 @@ class DeathLinkShade(Choice):
     ** Self-death shade behavior is not changed; if a self-death normally creates a shade in vanilla, it will override
         your existing shade, if any.
     """
+    rich_text_doc = False
     option_vanilla = 0
     option_shadeless = 1
     option_shade = 2
@@ -497,6 +502,7 @@ class DeathLinkBreaksFragileCharms(Toggle):
     ** Self-death fragile charm behavior is not changed; if a self-death normally breaks fragile charms in vanilla, it
         will continue to do so.
     """
+    rich_text_doc = False
     display_name = "Deathlink Breaks Fragile Charms"
 
 
@@ -515,6 +521,7 @@ class CostSanity(Choice):
 
     These costs can be in Geo (except Grubfather, Seer and Eggshop), Grubs, Charms, Essence and/or Rancid Eggs
     """
+    rich_text_doc = False
     option_off = 0
     alias_no = 0
     option_on = 1
