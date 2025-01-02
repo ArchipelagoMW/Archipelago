@@ -19,9 +19,8 @@ from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
 from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
-from .options import StardewValleyOptions, Walnutsanity
-from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
-    Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity
+from .options import BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
+    Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, StardewValleyOptions, Walnutsanity
 from .stardew_rule import And, StardewRule, true_
 from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
@@ -69,7 +68,7 @@ def set_rules(world):
     set_entrance_rules(logic, multiworld, player, world_options)
     set_ginger_island_rules(logic, multiworld, player, world_options)
 
-    set_tool_rules(logic, multiworld, player, world_options)
+    set_tool_rules(logic, multiworld, player, world_content)
     set_skills_rules(logic, multiworld, player, world_content)
     set_bundle_rules(bundle_rooms, logic, multiworld, player, world_options)
     set_building_rules(logic, multiworld, player, world_options)
@@ -111,8 +110,8 @@ def set_isolated_locations_rules(logic: StardewLogic, multiworld, player):
                              logic.season.has(Season.spring))
 
 
-def set_tool_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
-    if not world_options.tool_progression & ToolProgression.option_progressive:
+def set_tool_rules(logic: StardewLogic, multiworld, player, content: StardewContent):
+    if not content.features.tool_progression.is_progressive:
         return
 
     MultiWorldRules.add_rule(multiworld.get_location("Purchase Fiberglass Rod", player),
@@ -281,13 +280,6 @@ def set_skull_cavern_floor_entrance_rules(logic, multiworld, player):
         set_entrance_rule(multiworld, player, dig_to_skull_floor(floor), rule)
 
 
-def set_blacksmith_entrance_rules(logic, multiworld, player):
-    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_copper, MetalBar.copper, ToolMaterial.copper)
-    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_iron, MetalBar.iron, ToolMaterial.iron)
-    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_gold, MetalBar.gold, ToolMaterial.gold)
-    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_iridium, MetalBar.iridium, ToolMaterial.iridium)
-
-
 def set_skill_entrance_rules(logic, multiworld, player, world_options: StardewValleyOptions):
     set_entrance_rule(multiworld, player, LogicEntrance.grow_spring_crops, logic.farming.has_farming_tools & logic.season.has_spring)
     set_entrance_rule(multiworld, player, LogicEntrance.grow_summer_crops, logic.farming.has_farming_tools & logic.season.has_summer)
@@ -304,6 +296,13 @@ def set_skill_entrance_rules(logic, multiworld, player, world_options: StardewVa
     set_entrance_rule(multiworld, player, LogicEntrance.grow_summer_fall_crops_in_fall, true_)
 
     set_entrance_rule(multiworld, player, LogicEntrance.fishing, logic.skill.can_get_fishing_xp)
+
+
+def set_blacksmith_entrance_rules(logic, multiworld, player):
+    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_copper, MetalBar.copper, ToolMaterial.copper)
+    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_iron, MetalBar.iron, ToolMaterial.iron)
+    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_gold, MetalBar.gold, ToolMaterial.gold)
+    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_iridium, MetalBar.iridium, ToolMaterial.iridium)
 
 
 def set_blacksmith_upgrade_rule(logic, multiworld, player, entrance_name: str, item_name: str, tool_material: str):
