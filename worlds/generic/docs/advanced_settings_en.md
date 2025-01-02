@@ -155,6 +155,16 @@ Options taking a choice of a number can also use a variety of `random` options t
 * `random-range-low-#-#`, `random-range-middle-#-#`, and `random-range-high-#-#` will choose a number at random from the
   specified numbers, but with the specified weights
 
+### References and Math in Options
+
+By placing "$(...)" around a value you can perform mathematical operation on the value you wrote, and text will be
+  resolved to the value of the option matching that text. random/random-range can NOT be placed directly inside the $(),
+  it must be placed on a referenced option. 
+
+  If you want to use a random value this way, you may either reference a default option that is set to random(-range-),
+  or create your own option for random-range-, but only specific/weighted values or random-range will work with custom
+  options since no values have been set for random to select from. For example: `custom_range: random-range-13-79`
+
 ### Example
 
 ```yaml
@@ -168,7 +178,8 @@ requires:
   version: 0.4.1
 A Link to the Past:
   accessibility: minimal
-  progression_balancing: 50
+  progression_balancing: "$(custom_range + crystals_needed_for_gt + 10)"
+  custom_range: random-range-middle-20-40
   smallkey_shuffle:
     original_dungeon: 1
     any_world: 1
@@ -231,8 +242,13 @@ Timespinner:
 * `requires` is set to required release version 0.3.2 or higher.
 * `accessibility` for both games is set to `minimal` which will set this seed to beatable only, so some locations and
   items may be completely inaccessible but the seed will still be completable.
-* `progression_balancing` for both games is set to 50, the default value, meaning we will likely receive important items
-  earlier, increasing the chance of having things to do.
+* `progression_balancing` for Timespinner is set to 50, the default value, meaning we will likely receive important 
+  items earlier, increasing the chance of having things to do. 
+  In `A Link to the Past` it is instead based on our custom_range option and our crystals_needed_for_gt option. 
+  `custom_range` is set to be a random number between 20 and 40 weighted towards the middle of that range. 
+  `crystals_needed_for_gt` will be a random value selected from all valid values as described below. 
+  So `progression_balancing` will be the result of adding those two values and 10 together, or between (20+0+10=30) and
+  (40+7+10=57).  
 * `A Link to the Past` defines a location for us to nest all the game options we would like to use for our
   game `A Link to the Past`.
 * `smallkey_shuffle` is an option for A Link to the Past which determines how dungeon small keys are shuffled. In this
