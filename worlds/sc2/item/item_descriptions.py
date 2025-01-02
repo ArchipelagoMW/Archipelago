@@ -378,9 +378,7 @@ item_descriptions = {
     """),
     item_names.THOR_PROGRESSIVE_IMMORTALITY_PROTOCOL: inspect.cleandoc("""
         Level 1: Allows destroyed Thors to be reconstructed on the field. Costs Vespene Gas.
-                 Blackhammers get Bulwark Field instead: Other nearby friendly ground units get +3 armor.
         Level 2: Thors are automatically reconstructed after falling for free.
-                 Improves Bulwark Field to provide 2 additional armor.
     """),
     item_names.LIBERATOR_ADVANCED_BALLISTICS: "Increases Liberator range by 3 in Defender Mode.",
     item_names.LIBERATOR_RAID_ARTILLERY: "Allows Liberators to attack structures while in Defender Mode.",
