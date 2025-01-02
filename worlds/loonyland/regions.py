@@ -2,7 +2,7 @@ from typing import NamedTuple
 
 from BaseClasses import Region
 
-from worlds.loonyland.options import Badges, LoonylandOptions, Remix
+from .options import Badges, LoonylandOptions, Remix
 
 
 class LoonylandRegion(Region):

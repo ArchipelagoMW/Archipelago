@@ -3,7 +3,7 @@ from typing import NamedTuple
 
 from BaseClasses import Item, ItemClassification
 
-from worlds.loonyland.options import (
+from .options import (
     Badges,
     LongChecks,
     LoonylandOptions,
