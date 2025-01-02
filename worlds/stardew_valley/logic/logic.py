@@ -39,6 +39,7 @@ from .season_logic import SeasonLogicMixin
 from .shipping_logic import ShippingLogicMixin
 from .skill_logic import SkillLogicMixin
 from .source_logic import SourceLogicMixin
+from .special_items_logic import SpecialItemsLogicMixin
 from .special_order_logic import SpecialOrderLogicMixin
 from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
@@ -80,6 +81,7 @@ from ..strings.region_names import Region, LogicRegion
 from ..strings.season_names import Season
 from ..strings.seed_names import Seed, TreeSeed
 from ..strings.skill_names import Skill
+from ..strings.special_item_names import SpecialItem
 from ..strings.tool_names import Tool, ToolMaterial
 from ..strings.villager_names import NPC
 from ..strings.wallet_item_names import Wallet
@@ -93,7 +95,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
                    CombatLogicMixin, MagicLogicMixin, MonsterLogicMixin, ToolLogicMixin, PetLogicMixin, QualityLogicMixin,
                    SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin, AbilityLogicMixin,
                    SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin, ModLogicMixin, HarvestingLogicMixin, SourceLogicMixin,
-                   RequirementLogicMixin, BookLogicMixin, GrindLogicMixin, FestivalLogicMixin, WalnutLogicMixin, GoalLogicMixin):
+                   RequirementLogicMixin, BookLogicMixin, GrindLogicMixin, FestivalLogicMixin, WalnutLogicMixin, GoalLogicMixin, SpecialItemsLogicMixin):
     player: int
     options: StardewValleyOptions
     content: StardewContent
@@ -150,6 +152,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             # | (self.ability.can_cook() & self.relationship.has_hearts(NPC.emily, 3) & self.has(Forageable.leek) & self.has(Forageable.dandelion) &
             # | (self.ability.can_cook() & self.relationship.has_hearts(NPC.jodi, 7) & self.has(AnimalProduct.cow_milk) & self.has(Ingredient.sugar)),
             AnimalProduct.any_egg: self.has_any(AnimalProduct.chicken_egg, AnimalProduct.duck_egg),
+            AnimalProduct.any_milk: self.has_any(AnimalProduct.cow_milk, AnimalProduct.goat_milk),
             AnimalProduct.brown_egg: self.animal.has_animal(Animal.chicken),
             AnimalProduct.chicken_egg: self.has_any(AnimalProduct.egg, AnimalProduct.brown_egg, AnimalProduct.large_egg, AnimalProduct.large_brown_egg),
             AnimalProduct.cow_milk: self.has_any(AnimalProduct.milk, AnimalProduct.large_milk),
@@ -203,7 +206,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Beverage.pina_colada: self.money.can_spend_at(Region.island_resort, 600),
             Beverage.triple_shot_espresso: self.has("Hot Java Ring"),
             Consumable.butterfly_powder: self.money.can_spend_at(Region.sewer, 20000),
-            Consumable.far_away_stone: self.region.can_reach(Region.mines_floor_100) & self.has(Artifact.ancient_doll),
             Consumable.fireworks_red: self.region.can_reach(Region.casino),
             Consumable.fireworks_purple: self.region.can_reach(Region.casino),
             Consumable.fireworks_green: self.region.can_reach(Region.casino),
@@ -271,6 +273,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Machine.crab_pot: self.skill.has_level(Skill.fishing, 3) & self.money.can_spend_at(Region.fish_shop, 1500),
             Machine.enricher: self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 20),
             Machine.pressure_nozzle: self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 20),
+            Machine.sewing_machine: (self.region.can_reach(Region.haley_house) & self.has(ArtisanGood.cloth)) | (self.received(Machine.sewing_machine) & self.region.can_reach(Region.secret_woods)),
             Material.cinder_shard: self.region.can_reach(Region.volcano_floor_5),
             Material.clay: self.region.can_reach_any((Region.farm, Region.beach, Region.quarry)) & self.tool.has_tool(Tool.hoe),
             Material.coal: self.mine.can_mine_in_the_mines_floor_41_80() | self.tool.has_tool(Tool.pan),
@@ -295,6 +298,9 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Ore.radioactive: self.ability.can_mine_perfectly() & self.region.can_reach(Region.qi_walnut_room),
             RetainingSoil.basic: self.money.can_spend_at(Region.pierre_store, 100),
             RetainingSoil.quality: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
+            SpecialItem.lucky_purple_shorts: self.special_items.has_purple_shorts(),
+            SpecialItem.trimmed_purple_shorts: self.has(SpecialItem.lucky_purple_shorts) & self.has(Machine.sewing_machine),
+            SpecialItem.far_away_stone: self.special_items.has_far_away_stone(),
             SpeedGro.basic: self.money.can_spend_at(Region.pierre_store, 100),
             SpeedGro.deluxe: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             Trash.broken_cd: self.fishing.can_crab_pot_anywhere,

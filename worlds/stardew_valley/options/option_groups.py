@@ -42,6 +42,7 @@ else:
             options.Craftsanity,
             options.Booksanity,
             options.Walnutsanity,
+            options.Secretsanity,
         ]),
         OptionGroup("Multipliers, Buffs and extra customization", [
             options.StartingMoney,

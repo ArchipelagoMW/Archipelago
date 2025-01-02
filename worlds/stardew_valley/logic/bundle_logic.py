@@ -9,7 +9,6 @@ from ..strings.currency_names import Currency
 from ..strings.machine_names import Machine
 from ..strings.quality_names import CropQuality, ForageQuality, FishQuality, ArtisanQuality
 from ..strings.quest_names import Quest
-from ..strings.region_names import Region
 
 
 class BundleLogicMixin(BaseLogicMixin):
@@ -24,7 +23,7 @@ class BundleLogic(BaseLogic):
         item_rules = []
         qualities = []
         time_to_grind = 0
-        can_speak_junimo = self.logic.region.can_reach(Region.wizard_tower)
+        can_speak_junimo = self.logic.action.can_speak_junimo()
         for bundle_item in bundle.items:
             if Currency.is_currency(bundle_item.get_item()):
                 return can_speak_junimo & self.logic.money.can_trade(bundle_item.get_item(), bundle_item.amount)

@@ -1,5 +1,6 @@
 class AnimalProduct:
     any_egg = "Any Egg"
+    any_milk = "Any Milk"
     brown_egg = "Egg (Brown)"
     chicken_egg = "Chicken Egg"
     cow_milk = "Cow Milk"

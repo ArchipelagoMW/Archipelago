@@ -73,6 +73,8 @@ class Group(enum.Enum):
     BOOK_POWER = enum.auto()
     LOST_BOOK = enum.auto()
     PLAYER_BUFF = enum.auto()
+    SIMPLE_SECRET = enum.auto()
+    FISHING_SECRET = enum.auto()
     # Mods
     MAGIC_SPELL = enum.auto()
     MOD_WARP = enum.auto()

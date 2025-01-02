@@ -3,8 +3,10 @@ from .base_logic import BaseLogic, BaseLogicMixin
 from ..stardew_rule import StardewRule, True_
 from ..strings.generic_names import Generic
 from ..strings.geode_names import Geode
+from ..strings.metal_names import Mineral
 from ..strings.region_names import Region
 from ..strings.tool_names import Tool
+from ..strings.tv_channel_names import Channel
 
 
 class ActionLogicMixin(BaseLogicMixin):
@@ -19,6 +21,9 @@ class ActionLogic(BaseLogic):
         tv_rule = True_()
         if channel is None:
             return tv_rule
+        if channel == Channel.sinister_signal:
+            sacrifice_rule = self.logic.relationship.has_children(1) & self.logic.region.can_reach(Region.witch_hut) & self.logic.has(Mineral.prismatic_shard)
+            return self.logic.received(channel) & tv_rule & sacrifice_rule
         return self.logic.received(channel) & tv_rule
 
     def can_pan_at(self, region: str, material: str) -> StardewRule:
@@ -31,3 +36,6 @@ class ActionLogic(BaseLogic):
         if geode == Generic.any:
             return blacksmith_access & self.logic.or_(*(self.logic.has(geode_type) for geode_type in geodes))
         return blacksmith_access & self.logic.has(geode)
+
+    def can_speak_junimo(self) -> StardewRule:
+        return self.logic.region.can_reach_all((Region.community_center, Region.wizard_tower))

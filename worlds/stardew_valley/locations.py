@@ -13,7 +13,7 @@ from .mods.mod_data import ModNames
 from .options import ExcludeGingerIsland, ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, \
     FestivalLocations, ElevatorProgression, BackpackProgression, FarmType
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
-from .options.options import BackpackSize
+from .options.options import BackpackSize, Secretsanity
 from .strings.backpack_tiers import Backpack
 from .strings.goal_names import Goal
 from .strings.quest_names import ModQuest, Quest
@@ -106,6 +106,12 @@ class LocationTags(enum.Enum):
     BOOKSANITY_POWER = enum.auto()
     BOOKSANITY_SKILL = enum.auto()
     BOOKSANITY_LOST = enum.auto()
+    SECRETSANITY = enum.auto()
+    SIMPLE_SECRET = enum.auto()
+    FISHING_SECRET = enum.auto()
+    DIFFICULT_SECRET = enum.auto()
+
+    BEACH_FARM = enum.auto()
     # Mods
     # Skill Mods
     LUCK_LEVEL = enum.auto()
@@ -494,6 +500,21 @@ def extend_walnutsanity_locations(randomized_locations: List[LocationData], opti
         randomized_locations.extend(locations_by_tag[LocationTags.WALNUTSANITY_REPEATABLE])
 
 
+def extend_secrets_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
+    if options.secretsanity == Secretsanity.option_none:
+        return
+
+    locations = []
+    if options.secretsanity >= Secretsanity.option_simple:
+        locations.extend(locations_by_tag[LocationTags.SIMPLE_SECRET])
+    if options.secretsanity >= Secretsanity.option_simple_and_fishing:
+        locations.extend(locations_by_tag[LocationTags.FISHING_SECRET])
+    if options.secretsanity >= Secretsanity.option_all:
+        locations.extend(locations_by_tag[LocationTags.DIFFICULT_SECRET])
+    locations = filter_disabled_locations(options, content, locations)
+    randomized_locations.extend(locations)
+
+
 def create_locations(location_collector: StardewLocationCollector,
                      bundle_rooms: List[BundleRoom],
                      options: StardewValleyOptions,
@@ -542,6 +563,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_quests_locations(randomized_locations, options, content)
     extend_book_locations(randomized_locations, content)
     extend_walnutsanity_locations(randomized_locations, options)
+    extend_secrets_locations(randomized_locations, options, content)
 
     # Mods
     extend_situational_quest_locations(randomized_locations, options)
@@ -554,12 +576,25 @@ def filter_deprecated_locations(locations: Iterable[LocationData]) -> Iterable[L
     return [location for location in locations if LocationTags.DEPRECATED not in location.tags]
 
 
-def filter_farm_type(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
+def filter_animals_quest(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
     # On Meadowlands, "Feeding Animals" replaces "Raising Animals"
     if options.farm_type == FarmType.option_meadowlands:
         return (location for location in locations if location.name != Quest.raising_animals)
     else:
         return (location for location in locations if location.name != Quest.feeding_animals)
+
+
+def filter_farm_exclusives(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
+    # Some locations are only on specific farms
+    if options.farm_type != FarmType.option_beach:
+        return (location for location in locations if LocationTags.BEACH_FARM not in location.tags)
+    return locations
+
+
+def filter_farm_type(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
+    animals_filter = filter_animals_quest(options, locations)
+    exclusives_filter = filter_farm_exclusives(options, animals_filter)
+    return exclusives_filter
 
 
 def filter_ginger_island(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:

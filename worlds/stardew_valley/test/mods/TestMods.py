@@ -78,6 +78,7 @@ class TestBaseItemGeneration(SVTestBase):
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
         options.Booksanity.internal_name: options.Booksanity.option_all,
         options.Walnutsanity.internal_name: options.Walnutsanity.preset_all,
+        options.Secretsanity.internal_name: options.Secretsanity.option_all,
         options.Mods.internal_name: frozenset(options.Mods.valid_keys)
     }
 
@@ -98,6 +99,7 @@ class TestNoGingerIslandModItemGeneration(SVTestBase):
         options.Chefsanity.internal_name: options.Chefsanity.option_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
         options.Booksanity.internal_name: options.Booksanity.option_all,
+        options.Secretsanity.internal_name: options.Secretsanity.option_all,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
         options.Mods.internal_name: frozenset(options.Mods.valid_keys)
     }

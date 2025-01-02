@@ -119,8 +119,8 @@ class TimeIt:
     def __exit__(self, exc_type, exc_val, exc_tb):
         if not self.end_timer:
             self.end_timer = time.perf_counter()
-        if self.logger:
-            self.logger.info(f"{self.dif:.4f} seconds in {self.name}.")
+        # if self.logger:
+        #     self.logger.info(f"{self.dif:.4f} seconds in {self.name}.")
 
 
 def change_home():

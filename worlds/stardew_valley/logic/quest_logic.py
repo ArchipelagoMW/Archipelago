@@ -17,6 +17,7 @@ from ..strings.monster_drop_names import Loot
 from ..strings.quest_names import Quest
 from ..strings.region_names import Region
 from ..strings.season_names import Season
+from ..strings.special_item_names import SpecialItem
 from ..strings.tool_names import Tool
 from ..strings.villager_names import NPC
 from ..strings.wallet_item_names import Wallet
@@ -47,7 +48,7 @@ class QuestLogic(BaseLogic):
             Quest.initiation: self.logic.mine.can_mine_in_the_mines_floor_1_40(),
             Quest.robins_lost_axe: self.logic.season.has(Season.spring) & self.logic.relationship.can_meet(NPC.robin),
             Quest.jodis_request: self.logic.season.has(Season.spring) & self.logic.has(Vegetable.cauliflower) & self.logic.relationship.can_meet(NPC.jodi),
-            Quest.mayors_shorts: self.logic.season.has(Season.summer) & self.logic.relationship.has_hearts(NPC.marnie, 2) &
+            Quest.mayors_shorts: self.logic.has(SpecialItem.lucky_purple_shorts) &
                                  self.logic.relationship.can_meet(NPC.lewis),
             Quest.blackberry_basket: self.logic.season.has(Season.fall) & self.logic.relationship.can_meet(NPC.linus) & self.logic.region.can_reach(
                 Region.tunnel_entrance),

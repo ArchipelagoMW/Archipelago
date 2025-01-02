@@ -66,6 +66,7 @@ class Entrance:
     town_to_alex_house = "Town to Alex's House"
     town_to_trailer = "Town to Trailer"
     town_to_mayor_manor = "Town to Mayor's Manor"
+    enter_shorts_maze = "Mayor's Manor to Purple Shorts Maze"
     town_to_sam_house = "Town to Sam's House"
     town_to_haley_house = "Town to Haley's House"
     town_to_sewer = "Town to Sewer"

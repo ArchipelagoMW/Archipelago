@@ -2,7 +2,7 @@ from collections import Counter
 
 from ..bases import SVTestBase
 from ... import options
-from ...options import ToolProgression, SeasonRandomization
+from ...options import ToolProgression, SeasonRandomization, Secretsanity
 from ...strings.entrance_names import Entrance
 from ...strings.region_names import Region
 from ...strings.tool_names import Tool, ToolMaterial
@@ -12,6 +12,7 @@ class TestProgressiveToolsLogic(SVTestBase):
     options = {
         ToolProgression.internal_name: ToolProgression.option_progressive,
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
+        Secretsanity.internal_name: Secretsanity.option_simple,
     }
 
     def test_sturgeon(self):

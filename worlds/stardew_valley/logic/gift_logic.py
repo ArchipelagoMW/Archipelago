@@ -1,4 +1,5 @@
 from functools import cached_property
+from typing import Union
 
 from .base_logic import BaseLogic, BaseLogicMixin
 from ..stardew_rule import StardewRule
