@@ -20,7 +20,6 @@ class LogicRegistry:
         self.museum_rules: Dict[str, StardewRule] = {}
         self.festival_rules: Dict[str, StardewRule] = {}
         self.quest_rules: Dict[str, StardewRule] = {}
-        self.building_rules: Dict[str, StardewRule] = {}
         self.special_order_rules: Dict[str, StardewRule] = {}
 
         self.sve_location_rules: Dict[str, StardewRule] = {}
