@@ -111,14 +111,12 @@ class Cups(Choice):
 
     Off: All cup locations are removed
     Cups: Phil, Pegasus, and Hercules cups are included
-    Hades Cup: Hades Cup is included in addition to Phil, Pegasus, and Hercules cups
-    Ice Titan: The Ice Titan boss is included in addition to Phil, Pegasus, Hercules, and Hades cups
+    Hades Cup: Hades Cup is included in addition to Phil, Pegasus, and Hercules cups. If Super Bosses are enabled, then Ice Titan is included
     """
     display_name = "Cups"
     option_off = 0
     option_cups = 1
     option_hades_cup = 2
-    option_ice_titan = 3
 
 class Goal(Choice):
     """

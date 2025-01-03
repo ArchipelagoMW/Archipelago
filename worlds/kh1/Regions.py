@@ -448,7 +448,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
         regions["Olympus Coliseum"].locations.append("Hercules Cup Defeat Cloud Event")
         regions["Olympus Coliseum"].locations.append("Hercules Cup Yellow Trinity Event")
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Olympia Chest")
-    if options.cups.current_key in ["hades_cup", "ice_titan"]:
+    if options.cups.current_key == "hades_cup":
         regions["Olympus Coliseum"].locations.append("Complete Hades Cup")
         regions["Olympus Coliseum"].locations.append("Complete Hades Cup Solo")
         regions["Olympus Coliseum"].locations.append("Complete Hades Cup Time Trial")
@@ -459,16 +459,16 @@ def create_regions(multiworld: MultiWorld, player: int, options):
         regions["Olympus Coliseum"].locations.append("Hades Cup Defeat Hades Event")
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Hades Ansem's Report 8")
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Gates Purple Jar After Defeating Hades")
-    if options.cups.current_key == "ice_titan":
+    if options.cups.current_key == "hades_cup" and (options.super_bosses or options.final_rest_door.current_key == "superbosses"):
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Ice Titan Diamond Dust Event")
-    if options.super_bosses:
+    if options.super_bosses or options.final_rest_door.current_key == "superbosses":
         regions["Neverland"].locations.append("Neverland Defeat Phantom Stop Event")
         regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Zantetsuken Event")
         regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Ansem's Report 11")
-    if options.super_bosses or options.goal.current_key == "sephiroth":
+    if options.super_bosses or options.goal.current_key == "sephiroth" or options.final_rest_door.current_key == "superbosses":
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Sephiroth Ansem's Report 12")
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Sephiroth One-Winged Angel Event")
-    if options.super_bosses or options.goal.current_key == "unknown":
+    if options.super_bosses or options.goal.current_key == "unknown" or options.final_rest_door.current_key == "superbosses":
         regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown Ansem's Report 13")
         regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown EXP Necklace Event")
     if options.jungle_slider:

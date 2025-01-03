@@ -113,7 +113,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "super_bosses": True,
         "atlantica": True,
         "hundred_acre_wood": True,
-        "cups": Cups.option_ice_titan,
+        "cups": Cups.option_hades_cup,
         "jungle_slider": True,
         "randomize_emblem_pieces": True,
         "randomize_postcards": RandomizePostcards.option_all,
