@@ -76,7 +76,7 @@ def set_rules(world):
         "Obtain all pieces of Exodia": lambda state: state.has("Exodia", player),
         "Obtain Final Countdown": lambda state: state.has_all(world.progression_cards["Obtain Final Countdown"],
                                                               player),
-        "Obtain Victory Dragon": lambda state: state.has_all(world.progression_cards["Obtain Final Countdown"], player),
+        "Obtain Victory Dragon": lambda state: state.has_all(world.progression_cards["Obtain Victory Dragon"], player),
         "Obtain Ojama Delta Hurricane and its required cards":
             lambda state: state.has("Ojama Delta Hurricane and required cards", player),
         "Obtain Huge Revolution and its required cards":
