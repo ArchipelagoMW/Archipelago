@@ -166,6 +166,7 @@ item_table: Dict[str, TunicItemData] = {
     "Ladders in Library": TunicItemData(IC.progression, 0, 148, "Ladders"),
     "Ladders in Lower Quarry": TunicItemData(IC.progression, 0, 149, "Ladders"),
     "Ladders in Swamp": TunicItemData(IC.progression, 0, 150, "Ladders"),
+    "Grass": TunicItemData(IC.filler, 0, 151),
 }
 
 # items to be replaced by fool traps
@@ -214,7 +215,7 @@ combat_items.extend(["Stick", "Sword", "Sword Upgrade", "Magic Wand", "Hero's La
 
 item_name_to_id: Dict[str, int] = {name: item_base_id + data.item_id_offset for name, data in item_table.items()}
 
-filler_items: List[str] = [name for name, data in item_table.items() if data.classification == IC.filler]
+filler_items: List[str] = [name for name, data in item_table.items() if data.classification == IC.filler and name != "Grass"]
 
 
 def get_item_group(item_name: str) -> str:
