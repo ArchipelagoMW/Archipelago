@@ -20,10 +20,10 @@ from collections import defaultdict
 from typing import TYPE_CHECKING, Dict, List, Set, Tuple, cast
 
 from .data import static_logic as static_witness_logic
+from .data.definition_classes import ConnectionDefinition, WitnessRule
 from .data.item_definition_classes import DoorItemDefinition, ItemCategory, ProgressiveItemDefinition
 from .data.static_logic import StaticWitnessLogicObj
 from .data.utils import (
-    WitnessRule,
     define_new_region,
     get_boat,
     get_caves_except_path_to_challenge_exclusion_list,
@@ -48,7 +48,7 @@ from .data.utils import (
     get_vault_exclusion_list,
     logical_and_witness_rules,
     logical_or_witness_rules,
-    parse_lambda,
+    parse_witness_rule,
 )
 from .entity_hunt import EntityHuntPicker
 
@@ -98,10 +98,10 @@ class WitnessPlayerLogic:
         elif self.DIFFICULTY == "none":
             self.REFERENCE_LOGIC = static_witness_logic.vanilla
 
-        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL: Dict[str, Set[Tuple[str, WitnessRule]]] = copy.deepcopy(
+        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL: Dict[str, List[ConnectionDefinition]] = copy.deepcopy(
             self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME
         )
-        self.CONNECTIONS_BY_REGION_NAME: Dict[str, Set[Tuple[str, WitnessRule]]] = copy.deepcopy(
+        self.CONNECTIONS_BY_REGION_NAME: Dict[str, List[ConnectionDefinition]] = copy.deepcopy(
             self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME
         )
         self.DEPENDENT_REQUIREMENTS_BY_HEX: Dict[str, Dict[str, WitnessRule]] = copy.deepcopy(
@@ -174,7 +174,7 @@ class WitnessPlayerLogic:
 
         entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity_hex]
 
-        if entity_obj["region"] is not None and entity_obj["region"]["name"] in self.UNREACHABLE_REGIONS:
+        if entity_obj["region"] is not None and entity_obj["region"].name in self.UNREACHABLE_REGIONS:
             return frozenset()
 
         # For the requirement of an entity, we consider two things:
@@ -264,7 +264,7 @@ class WitnessPlayerLogic:
                         new_items = theoretical_new_items
                         if dep_obj["region"] and entity_obj["region"] != dep_obj["region"]:
                             new_items = frozenset(
-                                frozenset(possibility | {dep_obj["region"]["name"]})
+                                frozenset(possibility | {dep_obj["region"].name})
                                 for possibility in new_items
                             )
 
@@ -353,11 +353,11 @@ class WitnessPlayerLogic:
             line_split = line.split(" - ")
 
             requirement = {
-                "entities": parse_lambda(line_split[1]),
+                "entities": parse_witness_rule(line_split[1]),
             }
 
             if len(line_split) > 2:
-                required_items = parse_lambda(line_split[2])
+                required_items = parse_witness_rule(line_split[2])
                 items_actually_in_the_game = [
                     item_name for item_name, item_definition in static_witness_logic.ALL_ITEMS.items()
                     if item_definition.category is ItemCategory.SYMBOL
@@ -388,33 +388,38 @@ class WitnessPlayerLogic:
             return
 
         if adj_type == "Region Changes":
-            new_region_and_options = define_new_region(line + ":")
+            new_region, connections = define_new_region(line + ":")
 
-            self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[new_region_and_options[0]["name"]] = new_region_and_options[1]
+            self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[new_region.name] = connections
 
             return
 
         if adj_type == "New Connections":
+            # This adjustment type does not actually reverse the connection if it could be reversed.
+            # If needed, this might be added later
             line_split = line.split(" - ")
             source_region = line_split[0]
             target_region = line_split[1]
             panel_set_string = line_split[2]
 
             for connection in self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region]:
-                if connection[0] == target_region:
+                if connection.target_region == target_region:
                     self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].remove(connection)
 
                     if panel_set_string == "TrueOneWay":
-                        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].add(
-                            (target_region, frozenset({frozenset(["TrueOneWay"])}))
-                        )
+                        # This means the connection can be completely replaced
+                        only_connection = ConnectionDefinition(target_region, frozenset({frozenset(["TrueOneWay"])}))
+                        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].append(only_connection)
                     else:
-                        new_lambda = logical_or_witness_rules([connection[1], parse_lambda(panel_set_string)])
-                        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].add((target_region, new_lambda))
+                        combined_rule = logical_or_witness_rules(
+                            [connection.traversal_rule, parse_witness_rule(panel_set_string)]
+                        )
+                        combined_connection = ConnectionDefinition(target_region, combined_rule)
+                        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].append(combined_connection)
                     break
             else:
-                new_conn = (target_region, parse_lambda(panel_set_string))
-                self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].add(new_conn)
+                new_connection = ConnectionDefinition(target_region, parse_witness_rule(panel_set_string))
+                self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].append(new_connection)
 
         if adj_type == "Added Locations":
             if "0x" in line:
@@ -735,7 +740,7 @@ class WitnessPlayerLogic:
                 next_region = regions_to_check.pop()
 
                 for region_exit in self.CONNECTIONS_BY_REGION_NAME[next_region]:
-                    target = region_exit[0]
+                    target = region_exit.target_region
 
                     if target in reachable_regions:
                         continue
@@ -783,7 +788,7 @@ class WitnessPlayerLogic:
 
             # First, entities in unreachable regions are obviously themselves unreachable.
             for region in new_unreachable_regions:
-                for entity in static_witness_logic.ALL_REGIONS_BY_NAME[region]["physical_entities"]:
+                for entity in static_witness_logic.ALL_REGIONS_BY_NAME[region].physical_entities:
                     # Never disable the Victory Location.
                     if entity == self.VICTORY_LOCATION:
                         continue
@@ -818,11 +823,11 @@ class WitnessPlayerLogic:
             if not new_unreachable_regions and not newly_discovered_disabled_entities:
                 return
 
-    def reduce_connection_requirement(self, connection: Tuple[str, WitnessRule]) -> WitnessRule:
+    def reduce_connection_requirement(self, connection: ConnectionDefinition) -> ConnectionDefinition:
         all_possibilities = []
 
         # Check each traversal option individually
-        for option in connection[1]:
+        for option in connection.traversal_rule:
             individual_entity_requirements: List[WitnessRule] = []
             for entity in option:
                 # If a connection requires solving a disabled entity, it is not valid.
@@ -840,7 +845,7 @@ class WitnessPlayerLogic:
                     entity_req = self.get_entity_requirement(entity)
 
                     if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"]:
-                        region_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"]["name"]
+                        region_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"].name
                         entity_req = logical_and_witness_rules([entity_req, frozenset({frozenset({region_name})})])
 
                     individual_entity_requirements.append(entity_req)
@@ -848,7 +853,7 @@ class WitnessPlayerLogic:
             # Merge all possible requirements into one DNF condition.
             all_possibilities.append(logical_and_witness_rules(individual_entity_requirements))
 
-        return logical_or_witness_rules(all_possibilities)
+        return ConnectionDefinition(connection.target_region, logical_or_witness_rules(all_possibilities))
 
     def make_dependency_reduced_checklist(self) -> None:
         """
@@ -881,14 +886,14 @@ class WitnessPlayerLogic:
 
         # Make independent region connection requirements based on the entities they require
         for region, connections in self.CONNECTIONS_BY_REGION_NAME_THEORETICAL.items():
-            new_connections = set()
+            new_connections = []
 
             for connection in connections:
-                overall_requirement = self.reduce_connection_requirement(connection)
+                reduced_connection = self.reduce_connection_requirement(connection)
 
                 # If there is a way to use this connection, add it.
-                if overall_requirement:
-                    new_connections.add((connection[0], overall_requirement))
+                if reduced_connection.can_be_traversed:
+                    new_connections.append(reduced_connection)
 
             self.CONNECTIONS_BY_REGION_NAME[region] = new_connections
 

@@ -486,5 +486,5 @@ for key, item in ALL_LOCATIONS_TO_IDS.items():
     ALL_LOCATIONS_TO_ID[key] = item
 
 for loc in ALL_LOCATIONS_TO_IDS:
-    area = static_witness_logic.ENTITIES_BY_NAME[loc]["area"]["name"]
+    area = static_witness_logic.ENTITIES_BY_NAME[loc]["area"].name
     AREA_LOCATION_GROUPS.setdefault(area, set()).add(loc)
