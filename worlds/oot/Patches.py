@@ -2200,7 +2200,7 @@ def patch_rom(world, rom):
                 elif world.shuffle_bosses != 'off':
                     vanilla_reward = world.get_location(boss_name).vanilla_item
                     vanilla_reward_location = world.multiworld.find_item(vanilla_reward, world.player) # hinted_dungeon_reward_locations[vanilla_reward.name]
-                    area = HintArea.at(vanilla_reward_location).text(world.clearer_hints, preposition=True)
+                    area = HintArea.at(vanilla_reward_location).text(world.hint_rng, world.clearer_hints, preposition=True)
                     compass_message = "\x13\x75\x08You found the \x05\x41Compass\x05\x40\x01for %s\x05\x40!\x01The %s can be found\x01%s!\x09" % (dungeon_name, vanilla_reward, area)
                 else:
                     boss_location = next(filter(lambda loc: loc.type == 'Boss', world.get_entrance(f'{dungeon} Boss Door -> {boss_name} Boss Room').connected_region.locations))
