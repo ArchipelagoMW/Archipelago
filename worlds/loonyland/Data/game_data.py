@@ -730,7 +730,12 @@ loonyland_location_table: dict[str, LLLocation] = {
     "Cleanin' Up": LLLocation(133, LLLocCat.BADGE, 19, "Rocky Cliffs", base_item="Heavy Hitter"),
     "Findin'": LLLocation(134, LLLocCat.BADGE, 20, "The Wolf Den", base_item="Rapid Fire"),
     "Extreme Survivin'": LLLocation(
-        135, LLLocCat.BADGE, 21, "Survival", flags=["LONG_VANILLA_BADGES"], base_item="Touch Of Death"
+        135,
+        LLLocCat.BADGE,
+        21,
+        "Survival",
+        flags=["LONG_VANILLA_BADGES", "VANILLA_POSTGAME"],
+        base_item="Touch Of Death",
     ),
     "Huntin'": LLLocation(136, LLLocCat.BADGE, 22, "Halloween Hill", base_item="All Access Pass"),
     "Advanced Winnin'": LLLocation(
@@ -763,7 +768,12 @@ loonyland_location_table: dict[str, LLLocation] = {
     "Swampdoggin'": LLLocation(149, LLLocCat.BADGE, 35, "Menu", flags=["LONG", "MULTISAVE"], base_item="Stinky Farley"),
     "Scorin'": LLLocation(150, LLLocCat.BADGE, 36, "The Evilizer", flags=["LONG"], base_item="Ultra Weapons Are Go!"),
     "Brawlin'": LLLocation(
-        151, LLLocCat.BADGE, 37, "Benny's Cocktails", flags=["LONG_VANILLA_BADGES", "OP"], base_item="Thorns Aura"
+        151,
+        LLLocCat.BADGE,
+        37,
+        "Benny's Cocktails",
+        flags=["LONG_VANILLA_BADGES", "OP", "VANILLA_POSTGAME"],
+        base_item="Thorns Aura",
     ),
     "Minin' For Treasure": LLLocation(
         152, LLLocCat.BADGE, 38, "Menu", flags=["REMIX"], base_item="Monster Regeneration"

@@ -49,7 +49,9 @@ class LLLocation(NamedTuple):
             return False
         if options.multisave == MultipleSaves.option_disabled and ("MULTISAVE" in self.flags):
             return False
-        if options.win_condition == WinCondition.option_evilizer and ("POSTGAME" in self.flags):
+        if options.win_condition == WinCondition.option_evilizer and (
+            "POSTGAME" in self.flags or ("VANILLA_POSTGAME" in self.flags and options.badges == Badges.option_vanilla)
+        ):
             return False
         if options.overpowered_cheats == OverpoweredCheats.option_excluded and "OP" in self.flags:
             return False

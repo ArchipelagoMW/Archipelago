@@ -3,6 +3,7 @@ from typing import NamedTuple
 from BaseClasses import Entrance
 
 from worlds.generic.Rules import CollectionRule
+
 from .options import Badges, LoonylandOptions, Remix
 
 

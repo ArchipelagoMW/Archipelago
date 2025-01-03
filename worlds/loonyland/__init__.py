@@ -94,6 +94,10 @@ class LoonylandWorld(World):
         return LoonylandItem(event, ItemClassification.progression, None, self.player)
 
     def create_regions(self) -> None:
+        # print(self.player_name)
+        # for key in LoonylandOptions.__annotations__:
+        #    print(key, getattr(self.options, key))
+
         for region_name, region_data in loonyland_region_table.items():
             if region_data.can_create(self.options):
                 region = Region(region_name, self.player, self.multiworld)
