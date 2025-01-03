@@ -50,6 +50,8 @@ class LLItem(NamedTuple):
             return False
         if options.multisave == MultipleSaves.option_disabled and ("MULTISAVE" in self.flags):
             return False
+        if "TORCH" in self.flags:
+            return False
         return True
 
     def in_logic(self, options: LoonylandOptions) -> bool:

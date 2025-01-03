@@ -42,13 +42,14 @@ class LoonylandWorld(World):
     access to ever more dangerous areas, all in an effort to find out
     what lies behind the madness going on in Halloween Hill.
     """
+
     game = "Loonyland"
     web = LoonylandWebWorld()
     options: LoonylandOptions
     options_dataclass = LoonylandOptions
     location_name_to_id = {name: data.id + loonyland_base_id for name, data in loonyland_location_table.items()}
     item_name_to_id = {name: data.id for name, data in loony_item_table.items()}
-    item_name_to_id["A Cool Filler Item"] = loonyland_base_id + 3000
+    item_name_to_id["Max Life and Gems"] = loonyland_base_id + 3000
 
     item_name_groups = {
         "physical_items": {name for name, data in loony_item_table.items() if data.category == LLItemCat.ITEM},
@@ -70,10 +71,10 @@ class LoonylandWorld(World):
     }
 
     def create_junk(self) -> LoonylandItem:
-        return LoonylandItem("A Cool Filler Item", ItemClassification.filler, loonyland_base_id + 3000, self.player)
+        return LoonylandItem("Max Life and Gems", ItemClassification.filler, loonyland_base_id + 3000, self.player)
 
     def create_item(self, name: str) -> LoonylandItem:
-        if name == "A Cool Filler Item":
+        if name == "Max Life and Gems":
             return self.create_junk()
         return LoonylandItem(
             name, loony_item_table[name].modified_classification(self.options), loony_item_table[name].id, self.player
@@ -87,7 +88,7 @@ class LoonylandWorld(World):
                     new_item = self.create_item(name)
                     item_pool.append(new_item)
 
-        junk_len = len(self.multiworld.get_unfilled_locations(self.player)) - len(item_pool)
+        junk_len = len(self.multiworld.get_unfilled_locations(self.player)) - len(item_pool) - 1
         if self.options.win_condition == WinCondition.option_evilizer:
             junk_len = junk_len - 1
         item_pool += [self.create_junk() for _ in range(junk_len)]
@@ -138,6 +139,10 @@ class LoonylandWorld(World):
 
         final_loc.place_locked_item(self.create_event("Victory"))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+
+        # force torch at curse the darkness
+        torch_loc = self.get_location("Q: Curse The Darkness")
+        torch_loc.place_locked_item(self.create_item("Torch"))
 
         # location rules
         set_rules(self.multiworld, self)

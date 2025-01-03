@@ -9,14 +9,9 @@ if TYPE_CHECKING:
 def have_light_source(state: CollectionState, world: "LoonylandWorld") -> bool:
     return (
         state.has("Lantern", world.player)
-        or (
-            state.has("Stick", world.player)
-            and state.has("Boots", world.player)
-            and state.can_reach_region("Swamp Gas Cavern", world.player)
-        )
-        or (state.has("20/20 Vision", world.player))
+        or state.has("Torch", world.player)
+        or state.has("20/20 Vision", world.player)
     )
-    # 20/20 when badges added
 
 
 def can_kill_werewolves(state: CollectionState, world: "LoonylandWorld") -> bool:
@@ -29,7 +24,6 @@ def have_bombs(state: CollectionState, world: "LoonylandWorld") -> bool:
         or state.has("Combo-Bombo", world.player)
         or state.has("Play As Werewolf", world.player)
     )
-    # or werewolf badge when badges are added
 
 
 def have_many_bombs(state: CollectionState, world: "LoonylandWorld") -> bool:

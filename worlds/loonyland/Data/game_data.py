@@ -480,6 +480,7 @@ loony_item_table: dict[str, LLItem] = {
     "Swampdog Doll": LLItem(ll_base_id + VAR_SWAMPDOLL, LLItemCat.DOLL, ItemClassification.progression),
     "Vampire Doll": LLItem(ll_base_id + VAR_VAMPDOLL, LLItemCat.DOLL, ItemClassification.progression),
     "Wolfman Doll": LLItem(ll_base_id + VAR_WOLFDOLL, LLItemCat.DOLL, ItemClassification.progression),
+    "Torch": LLItem(ll_base_id + VAR_TORCH, LLItemCat.ITEM, ItemClassification.progression, flags=["TORCH"]),
 }
 loonyland_region_table: dict[str, LLRegion] = {
     "Menu": LLRegion(False),
