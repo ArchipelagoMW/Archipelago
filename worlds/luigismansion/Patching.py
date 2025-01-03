@@ -46,11 +46,12 @@ def __get_item_name(item_data):
 def update_event_info(event_info, boo_checks: bool):
     # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
     # boss battles / grabbing boss keys, and various cutscenes etc.
-    events_to_remove = [11, 15, 35, 42, 54, 69, 70, 73, 80, 85, 91, 92, 93, 94]
+    events_to_remove = [11, 15, 35, 42, 54, 69, 70, 73, 80, 81, 85, 91, 92, 93, 94]
 
     # Only remove the boo checks if the player does not want them.
     if not boo_checks:
         events_to_remove = events_to_remove + [16, 47, 96]
+
     event_info.info_file_field_entries = list(filter(
         lambda info_entry: not info_entry["EventNo"] in events_to_remove, event_info.info_file_field_entries))
 
