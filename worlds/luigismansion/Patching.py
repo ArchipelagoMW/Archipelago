@@ -85,6 +85,10 @@ def update_event_info(event_info, boo_checks: bool):
         if x["EventNo"] == 65:
             x["disappear_flag"] = 10
 
+        # Removes the Mr. Bones requirement. He will spawn instantly
+        if x["EventNo"] == 23:
+            x["EventFlag"] = 0
+
         # Update the Washroom event trigger to be area entry based
         # Also updates the event disappear trigger to be flag 28
         # Also updates the EventFlag to 0, so this event always plays
