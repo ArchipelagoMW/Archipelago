@@ -74,14 +74,14 @@ def write_tokens(world: World, patch: YGO06ProcedurePatch):
             pointer = data.pointer
             for card, rarity in world.booster_pack_contents[name].items():
                 card_data = cards[card]
-                if world.options.normalize_booster_pack_rarities:
+                if world.options.normalize_booster_pack_rarities.value:
                     rarity = "Common"
                 patch.write_token(APTokenTypes.WRITE, pointer, struct.pack("<H", card_data.starter_id))
                 patch.write_token(APTokenTypes.WRITE, pointer + 2,
                                   struct.pack("<H", reverse_rarities[rarity] + card_data.art))
                 pointer += 4
 
-    elif world.options.normalize_booster_pack_rarities:
+    elif world.options.normalize_booster_pack_rarities.value:
         for name, data in booster_pack_data.items():
             pointer = data.pointer
             for card, rarity in contents[name].items():

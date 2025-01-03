@@ -97,6 +97,6 @@ def create_chaos_packs(world: World):
                 ultras_in_pack += 1
             elif rarity == "Secret Rare":
                 secrets_in_pack += 1
-            card = world.random.choice(all_cards)
+            card = world.random.choice([con for con in all_cards if con not in packs[in_pack]])
             packs[in_pack][card] = rarity
     return packs
