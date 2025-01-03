@@ -343,7 +343,7 @@ class LMWorld(World):
                                        v))
 
         # If sword mode is Start with Hero's Sword, then send the player a starting sword
-        if self.options.boo_radar == 1:
+        if self.options.boo_radar == 0:
             self.options.start_inventory.value["Boo Radar"] = (
                     self.options.start_inventory.value.get("Boo Radar", 0) + 1
             )

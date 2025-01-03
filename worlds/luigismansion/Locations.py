@@ -1,4 +1,4 @@
-from typing import NamedTuple, Optional, List, Dict
+from typing import NamedTuple, Optional, List
 
 from BaseClasses import Location, Region
 
@@ -10,6 +10,7 @@ class LMLocationData(NamedTuple):
     jmpentry: int = -1   # entry number on the jmp table it belongs to
     access: List[str] = [] # items required to access location, many special cases
     locked_item: Optional[str] = None
+    static_room_is: Optional[int] = None
     address: Optional[int] = None  # TODO: fill in once we discover how to check in DME for chest opening/knocking(?)
 
 
@@ -442,19 +443,19 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Kitchen Dishwasher": LMLocationData("Kitchen", 314, "Furniture", 82, []),
     "Kitchen L Light": LMLocationData("Kitchen", 315, "Furniture", 84, []),
     "Kitchen R Light": LMLocationData("Kitchen", 316, "Furniture", 85, []),
-    "Boneyard Dog Bowl": LMLocationData("Kitchen", 317, "Furniture", 97, []),
-    "Boneyard Faucet": LMLocationData("Kitchen", 318, "Furniture", 98, []),
-    "Boneyard Sign": LMLocationData("Kitchen", 319, "Furniture", 280, []),
-    "Graveyard Downspout": LMLocationData("Kitchen", 320, "Furniture", 186, []),
-    "Graveyard Big Tombstone": LMLocationData("Kitchen", 321, "Furniture", 181, []),
-    "Graveyard L Brazier": LMLocationData("Kitchen", 322, "Furniture", 182, []),
-    "Graveyard R Brazier": LMLocationData("Kitchen", 323, "Furniture", 183, []),
-    "Graveyard Tombstone 1": LMLocationData("Kitchen", 324, "Furniture", 175, []),
-    "Graveyard Tombstone 2": LMLocationData("Kitchen", 325, "Furniture", 176, []),
-    #"Graveyard Tombstone 3": LMLocationData("Kitchen", 326, "Furniture", 177, []),
-    "Graveyard Tombstone 4": LMLocationData("Kitchen", 327, "Furniture", 178, []),
-    "Graveyard Tombstone 5": LMLocationData("Kitchen", 328, "Furniture", 179, []),
-    "Graveyard Tombstone 6": LMLocationData("Kitchen", 329, "Furniture", 180, []),
+    "Boneyard Dog Bowl": LMLocationData("Boneyard", 317, "Furniture", 97, []),
+    "Boneyard Faucet": LMLocationData("Boneyard", 318, "Furniture", 98, []),
+    "Boneyard Sign": LMLocationData("Boneyard", 319, "Furniture", 280, []),
+    "Graveyard Downspout": LMLocationData("Graveyard", 320, "Furniture", 186, []),
+    "Graveyard Big Tombstone": LMLocationData("Graveyard", 321, "Furniture", 181, []),
+    "Graveyard L Brazier": LMLocationData("Graveyard", 322, "Furniture", 182, []),
+    "Graveyard R Brazier": LMLocationData("Graveyard", 323, "Furniture", 183, []),
+    "Graveyard Tombstone 1": LMLocationData("Graveyard", 324, "Furniture", 175, []),
+    "Graveyard Tombstone 2": LMLocationData("Graveyard", 325, "Furniture", 176, []),
+    #"Graveyard Tombstone 3": LMLocationData("Graveyard", 326, "Furniture", 177, []),
+    "Graveyard Tombstone 4": LMLocationData("Graveyard", 327, "Furniture", 178, []),
+    "Graveyard Tombstone 5": LMLocationData("Graveyard", 328, "Furniture", 179, []),
+    "Graveyard Tombstone 6": LMLocationData("Graveyard", 329, "Furniture", 180, []),
     "Courtyard Outhouse": LMLocationData("Courtyard", 330, "Furniture", 271, []),
     "Courtyard Male Statue": LMLocationData("Courtyard", 331, "Furniture", 274, []),
     "Courtyard Female Statue": LMLocationData("Courtyard", 332, "Furniture", 273, []),
