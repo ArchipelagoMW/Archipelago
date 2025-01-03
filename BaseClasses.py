@@ -197,6 +197,7 @@ class MultiWorld():
         self.worlds[new_id].collect = AutoWorld.World.collect.__get__(self.worlds[new_id])
         self.worlds[new_id].remove = AutoWorld.World.remove.__get__(self.worlds[new_id])
         self.player_name[new_id] = name
+        self.precollected_items[new_id] = []
 
         new_group = self.groups[new_id] = Group(name=name, game=game, players=players,
                                                 world=self.worlds[new_id])
