@@ -37,7 +37,7 @@ class LoonylandWebWorld(WebWorld):
 
 class LoonylandWorld(World):
     """
-    Loonyland: Halloween Hill is an This is an action-adventure game,
+    Loonyland: Halloween Hill is an action-adventure game,
     where you must explore to improve Loony's abilities and gain
     access to ever more dangerous areas, all in an effort to find out
     what lies behind the madness going on in Halloween Hill.
