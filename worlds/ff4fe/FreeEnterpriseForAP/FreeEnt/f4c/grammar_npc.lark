@@ -1,0 +1,10 @@
+npc_block_params : npc_value
+
+npc_block_body : npc_block_item*
+
+npc_block_item  : "sprite" sprite_value                                 -> sprite
+                | "default" "active"                                    -> active
+                | "default" "inactive"                                  -> inactive
+                | "eventcall" _block_start block_content* _block_end    -> eventcall
+
+?block_content : /[^{}\n\t\f\r ]+/

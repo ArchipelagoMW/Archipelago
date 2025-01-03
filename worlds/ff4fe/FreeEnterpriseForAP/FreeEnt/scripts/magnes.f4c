@@ -1,0 +1,346 @@
+//---------------------------------------------------------------------
+
+npc(#DarkElf)
+{
+    sprite #DarkElf
+    default active
+    eventcall {
+        if #DarkElfBattle1:
+            $81   //Dark Elf 'Fire2' battle
+        else:
+            $73   //Dark Elf 'Me Attack You' battle
+    }
+}
+
+// change Yang placement to our boss rando alternate
+placement($94 2)
+{
+    position 11 11
+    npc #fe_DynamicNPC
+    // %darkelf_slot sprite main palette%
+    // %end%
+    walking off
+    tangible
+    face down
+    turning on
+    marching on
+    speed 3
+}
+
+// Create TwinHarp NPC
+npc(#fe_TwinHarp)
+{
+    sprite #FlameTop
+    default inactive
+    eventcall { $28 } // map message 1
+}
+
+// override FlameTop tiles with harp graphic
+chr($dfe60 3bit) {
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000260000062000
+0000026212660000
+0000025454560000
+0000025353560000
+0000025151560000
+0000025353560000
+0000002266650000
+0000005555500000
+0000000000000000
+0000000000000000
+}
+
+placement($94 3)  //#CaveMagnesCrystalRoom
+{
+    npc #fe_TwinHarp
+    position 12 12
+    walking off
+    tangible
+    face down
+    palette 0
+    turning off
+    marching off
+    speed 1
+}
+
+
+
+event($73)  //Dark Elf 'Me Attack You' battle
+{
+    // do TwinHarp item check here instead
+    [#B #If #not_Item #item.TwinHarp] {
+        message $DB   // "Dark Elf:YOU CANNOT GO  ANY FURTHER."
+        fight $FC
+        [#B #EndEvent]
+    }
+
+    consts(placement) {
+        2   Yang1
+        3   Harp
+    }
+    // autodetected map #CaveMagnesCrystalRoom
+    message $DB   // "Dark Elf:YOU CANNOT GO  ANY FURTHER."
+    music #BossBattle
+    fight $E6
+    player face up
+    music #Hurry
+    pause 6
+    player lie down
+    pause 16
+    player invisible
+    consts(placement) {
+        0   Edward4
+        1   EdwardHarp2
+        2   Man4
+        3   Woman2
+    }
+    load map #ToroiaCastleHospital at 9 7 
+
+    p #Edward4 bow head
+    pause 8
+    p #Edward4 face down
+    pause 4
+    p #Edward4 face right
+    p #Edward4 move right
+    p #Edward4 move right
+    p #Edward4 lie down
+    batch 1 {
+        p #Man4 move down
+        p #Woman2 move down
+    }
+    p #Man4 move down
+    p #Man4 move down
+    p #Man4 move right
+    p #Man4 face up
+    p #Edward4 bow head
+    pause 4
+    p #Edward4 face down
+    pause 4
+    toggle music fade
+    player toggle turning
+    batch 1 {
+        p #Edward4 face right
+        p #Man4 move down
+        p #Woman2 move up
+    }
+    player toggle turning
+    p #Edward4 move right
+    p #Edward4 move right
+    p #Edward4 face up
+    batch 1 {
+        p #Man4 move up
+        p #Woman2 move down
+    }
+    batch 1 {
+        p #Man4 move up
+        p #Woman2 face right
+    }
+    p #Man4 face right
+    p #Edward4 move up
+    p #Edward4 move up
+    p #Edward4 bow head
+    pause 4
+    batch 1 {
+        p #Edward4 toggle visible
+        p #EdwardHarp2 toggle visible
+    }
+    music #Edward
+    pause 48
+    toggle screen fade
+    consts(placement) {
+        1   DarkElf
+        3   Harp
+        5   DarkElfSeal
+    }
+    load map #CaveMagnesCrystalRoom at 11 12 
+    player lie down
+    player visible
+    toggle screen fade
+    take item #TwinHarp
+    pause 4
+    p #Harp move left
+    p #Harp toggle visible
+    p #Harp move right
+    pause 4
+    message $DE   // "[harp]TwinHarp made a sound synchronizing the tune"
+    sound $5D
+    toggle tint $B7
+    batch 16 {
+        p #DarkElf toggle visible
+    }
+    screen blur
+    screen blur
+    batch 8 {
+        screen flash
+    }
+    toggle tint $00
+    pause 8
+    message $DF   // "[Edward]:Wield your sword_!  Dark Elf cannot control"
+    player bow head
+    pause 8
+    player face down
+    pause 8
+    clear status 
+    restore hp
+    restore mp
+    set #DarkElfBattle1
+    clear #DarkElfBattle2
+    activate #DarkElfSeal
+    activate #fe_TwinHarp
+    [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.twinharp]
+    p #DarkElfSeal toggle visible
+    player move down
+    player face up
+    [#B #Objectives_Tick #objective.quest_music]
+}
+
+event($81)  //Dark Elf 'Fire2' battle
+{
+    consts(placement) {
+        1   DarkElf
+        2   TrueForm
+        5   DarkElfSeal
+    }
+    // autodetected map #CaveMagnesCrystalRoom
+    map message 3  // "GRRR_ YOU_ YOU_!"
+    [#B #Rando_CheckFlag #randoflag.bosses]
+    [#B #If #Flag #flag.Result] {
+        map message 0 // ME CHANGE
+        sound #BlackMagic
+        batch 5 {
+            p #TrueForm toggle visible
+            p #DarkElf toggle visible
+        }
+        pause 4
+    }
+    [#B #Rando_BossBattle #rando.darkelf_slot]
+    music #None
+    [#B #Objectives_TickBossSlot #rando.darkelf_slot]
+    [#B #Rando_PostBossBattle #rando.darkelf_slot]
+    pause 8
+    message $E0   // "Dark Elf:W_ WHY DID THAT  MUSIC REACH HERE?"
+
+    [#B #If #Flag #flag.Result] {
+        batch 10 {
+            p #TrueForm toggle visible
+        }
+    }
+    [#B #If #not_Flag #flag.Result] {
+        batch 10 {
+            p #DarkElf toggle visible
+        }
+    }
+
+    sound $7E
+    batch 8 {
+        screen flash
+    }
+    [#B #If #Flag #flag.Result] {
+        p #TrueForm toggle visible
+    }
+    [#B #If #not_Flag #flag.Result] {
+        p #DarkElf toggle visible
+    }
+    music #Prelude fade in
+    pause 8
+    deactivate #DarkElf
+    deactivate #DarkElfSeal
+    p #DarkElfSeal toggle visible
+    vfx #PopWarpStack
+    vfx #PopWarpStack
+}
+
+event($74)  //Obtaining the Earth Crystal
+{
+    consts(placement) {
+        0   CaveMagnesCrystal
+    }
+    // autodetected map #CaveMagnesCrystalRoom
+
+    sound #Crystal
+    pause 12
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.magnes_item 0]
+    p #CaveMagnesCrystal toggle visible
+    deactivate #CaveMagnesCrystal
+    // %if ap_magnes_item%
+    music #DummyFanfare
+    message #ap_reward_slot.magnes_item
+    // %else%
+    message #msg.fe_ReceivedFanfare
+    // %end%
+    music #Prelude
+    [#B #Objectives_TickRewardSlot #reward_slot.magnes_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.magnes_item]
+    [#B #Objectives_Tick #objective.quest_magnes]
+}
+
+text(bank 1 message $DB) {
+Dark Elf:YOU CANNOT GO
+ ANY FURTHER.
+ YOU CANNOT TAKE MY
+ CRYSTAL!
+ YOU CANNOT USE METALLIC
+ WEAPONS.
+ YOU CANNOT DEFEAT ME.
+}
+
+text(bank 1 message $DE) {
+[harp]TwinHarp made a sound
+synchronizing the tune
+played by [Edward]!
+
+Dark Elf:WHAT!?  WHAT IS
+ THIS NASTY MUSIC!?
+ U-Ugh!
+}
+
+text(map #CaveMagnesCrystalRoom message $00) {
+Dark Elf: ME CHANGE!
+}
+
+text(map #CaveMagnes1F message $00) {
+Magnetic field in effect.
+}
+
+// "Erase" Cid NPC in Magnes crystal room
+
+placement($94 4)  //#CaveMagnesCrystalRoom
+{
+    npc #fe_None
+    position 0 0
+    intangible
+}
+
+// Alter messages in Dark Elf "we can't" fight
+
+ai_script($AA)
+{
+    pass
+    
+    pass
+    
+    pass
+    
+    message $09   // "DarkElf:ME ATTACK YOU!"
+    chain {
+        use #Fire2 on group
+        
+        use #Lit2 on group
+        
+        use #Ice2 on group
+    }
+    
+    use #Weak on group
+    
+    message $0B   // "[Cecil]:We can't_"
+    use #EndBattle
+}
+
+text(battle message $0B) {
+We can't_
+}

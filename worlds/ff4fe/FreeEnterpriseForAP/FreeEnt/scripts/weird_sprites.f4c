@@ -1,0 +1,80 @@
+event($7D)  //HP restoring pot
+{
+    toggle tint $87
+    [#B #Rando_LoadWackySprite 3 1]
+    sound #HealingPot
+    vfx #HealingPot
+    batch 8 {
+        screen flash
+    }
+    message $09   // "HP and status recovered!"
+    toggle tint $00
+    clear status 
+    restore hp
+}
+
+event($7E)  //MP restoring pot
+{
+    toggle tint $27
+    [#B #Rando_LoadWackySprite 4 1]
+    sound #HealingPot
+    vfx #HealingPot
+    batch 8 {
+        screen flash
+    }
+    message $15   // "MP recovered!"
+    toggle tint $00
+    restore mp
+}
+
+event($85)  //HP/MP/Status restoring pot
+{
+    toggle tint $87
+    [#B #Rando_LoadWackySprite 5 1]
+    sound #HealingPot
+    vfx #HealingPot
+    batch 8 {
+        screen flash
+    }
+    message $0A   // "HP and MP recovered!"
+    toggle tint $00
+    clear status 
+    restore hp
+    restore mp
+}
+
+npc(#Ball)
+{
+    // %weird_sprite ball%
+    // %end%
+}
+
+npc(#Lightning1)
+{
+    // %weird_sprite lightning%
+    // %end%    
+}
+
+npc(#Lightning2)
+{
+    // %weird_sprite lightning%
+    // %end%    
+}
+
+npc(#IceWall)
+{
+    // %weird_sprite ice%
+    // %end%
+}
+
+npc(#PalomStatue)
+{
+    // %weird_sprite palom_statue%
+    // %end%
+}
+
+npc(#PoromStatue)
+{
+    // %weird_sprite porom_statue%
+    // %end%    
+}

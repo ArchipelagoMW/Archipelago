@@ -1,0 +1,602 @@
+//--------------------------------------
+// main door
+
+npc(#DoubleDoor1)
+{
+    eventcall {
+        $A8   //Opening the Sealed Cave door
+    }
+}
+
+
+event($A8)  //Opening the Sealed Cave door
+{
+    consts(placement) {
+        4   Lightning2_A
+        5   Lightning2_B
+        6   Lightning2_C
+        7   Invisible2
+        8   DoubleDoor1
+    }
+    // autodetected map #SealedCaveEntrance
+    select item #Luca
+    toggle music fade
+    toggle tint $BA
+    sound #Electric
+    p #Lightning2_A toggle visible
+    p #Lightning2_B toggle visible
+    p #Lightning2_C toggle visible
+    p #Invisible2 toggle visible
+    pause 2
+    p #Lightning2_A toggle visible
+    p #Lightning2_B toggle visible
+    p #Lightning2_C toggle visible
+    p #Invisible2 toggle visible
+    batch 20 {
+        screen flash
+    }
+    batch 11 {
+        p #DoubleDoor1 toggle visible
+    }
+    music #None
+    music #Cave
+    toggle tint $00
+    [#B #Objectives_Tick #objective.quest_unlocksealedcave]
+    take item #Luca
+    set #OpenedSealedCave
+    deactivate #DoubleDoor1
+    [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.luca_key]
+}
+
+//--------------------------------------
+// trap doors
+
+text(bank 1 message $175) {
+[name $f0]:Trap Door!
+}
+
+event($B7)  //TrapDoor battle 3D
+{
+    consts(placement) {
+        0   DoubleDoor2
+    }
+    // autodetected map #SealedCave1F
+
+    // %trapdoor DoubleDoor2%
+    clear #Temp
+    [#B #If #Flag #flag.fe_EncountersOff]
+    {
+        set #Temp
+    }
+    // %end%
+
+    [#B #If #Flag #flag.Temp]
+    {
+        sound #Door
+        p #DoubleDoor2 toggle visible
+    }
+
+    [#B #If #not_Flag #flag.Temp]
+    {
+        message $175   // "[Cecil]:Trap Door!"
+        p #DoubleDoor2 toggle visible
+        fight $5C    
+    }
+
+    deactivate #DoubleDoor2
+    music #Cave
+}
+
+event($B8)  //TrapDoor battle 3E
+{
+    consts(placement) {
+        1   DoubleDoor3
+    }
+    // autodetected map #SealedCave1F
+
+    // %trapdoor DoubleDoor3%
+    clear #Temp
+    [#B #If #Flag #flag.fe_EncountersOff]
+    {
+        set #Temp
+    }
+    // %end%
+
+    [#B #If #Flag #flag.Temp]
+    {
+        sound #Door
+        p #DoubleDoor3 toggle visible
+    }
+
+    [#B #If #not_Flag #flag.Temp]
+    {
+        message $175   // "[Cecil]:Trap Door!"
+        p #DoubleDoor3 toggle visible
+        fight $5D
+    }
+
+    deactivate #DoubleDoor3
+    music #Cave
+}
+
+event($B9)  //TrapDoor battle 3F
+{
+    consts(placement) {
+        0   DoubleDoor4
+    }
+    // autodetected map #SealedCave2F
+
+    // %trapdoor DoubleDoor4%
+    clear #Temp
+    [#B #If #Flag #flag.fe_EncountersOff]
+    {
+        set #Temp
+    }
+    // %end%
+
+    [#B #If #Flag #flag.Temp]
+    {
+        sound #Door
+        p #DoubleDoor4 toggle visible
+    }
+
+    [#B #If #not_Flag #flag.Temp]
+    {
+        message $175   // "[Cecil]:Trap Door!"
+        p #DoubleDoor4 toggle visible
+        fight $5D   
+    }
+
+    deactivate #DoubleDoor4
+    music #Cave
+}
+
+event($BA)  //TrapDoor battle 40
+{
+    consts(placement) {
+        1   DoubleDoor5
+    }
+    // autodetected map #SealedCave2F
+
+    // %trapdoor DoubleDoor5%
+    clear #Temp
+    [#B #If #Flag #flag.fe_EncountersOff]
+    {
+        set #Temp
+    }
+    // %end%
+
+    [#B #If #Flag #flag.Temp]
+    {
+        sound #Door
+        p #DoubleDoor5 toggle visible
+    }
+
+    [#B #If #not_Flag #flag.Temp]
+    {
+        message $175   // "[Cecil]:Trap Door!"
+        p #DoubleDoor5 toggle visible
+        fight $5C    
+    }
+
+    deactivate #DoubleDoor5
+    music #Cave
+}
+
+event($BB)  //TrapDoor battle 41
+{
+    consts(placement) {
+        0   DoubleDoor6
+    }
+    // autodetected map #SealedCave3F
+
+    // %trapdoor DoubleDoor6%
+    clear #Temp
+    [#B #If #Flag #flag.fe_EncountersOff]
+    {
+        set #Temp
+    }
+    // %end%
+
+    [#B #If #Flag #flag.Temp]
+    {
+        sound #Door
+        p #DoubleDoor6 toggle visible
+    }
+
+    [#B #If #not_Flag #flag.Temp]
+    {
+        message $175   // "[Cecil]:Trap Door!"
+        p #DoubleDoor6 toggle visible
+        fight $5C    
+    }
+
+    deactivate #DoubleDoor6
+    music #Cave
+}
+
+event($BC)  //TrapDoor battle 42
+{
+    consts(placement) {
+        1   DoubleDoor7
+    }
+    // autodetected map #SealedCave3F
+
+    // %trapdoor DoubleDoor7%
+    clear #Temp
+    [#B #If #Flag #flag.fe_EncountersOff]
+    {
+        set #Temp
+    }
+    // %end%
+
+    [#B #If #Flag #flag.Temp]
+    {
+        sound #Door
+        p #DoubleDoor7 toggle visible
+    }
+
+    [#B #If #not_Flag #flag.Temp]
+    {
+        message $175   // "[Cecil]:Trap Door!"
+        p #DoubleDoor7 toggle visible
+        fight $5D
+    }
+
+    deactivate #DoubleDoor7
+    music #Cave
+}
+
+event($BD)  //TrapDoor battle 43
+{
+    consts(placement) {
+        2   DoubleDoor8
+    }
+    // autodetected map #SealedCave3F
+
+    // %trapdoor DoubleDoor8%
+    clear #Temp
+    [#B #If #Flag #flag.fe_EncountersOff]
+    {
+        set #Temp
+    }
+    // %end%
+
+    [#B #If #Flag #flag.Temp]
+    {
+        sound #Door
+        p #DoubleDoor8 toggle visible
+    }
+
+    [#B #If #not_Flag #flag.Temp]
+    {
+        message $175   // "[Cecil]:Trap Door!"
+        p #DoubleDoor8 toggle visible
+        fight $5C    
+    }
+
+    deactivate #DoubleDoor8
+    music #Cave
+}
+
+event($BE)  //TrapDoor battle 44
+{
+    consts(placement) {
+        3   DoubleDoor9
+    }
+    // autodetected map #SealedCave3F
+
+    // %trapdoor DoubleDoor9%
+    clear #Temp
+    [#B #If #Flag #flag.fe_EncountersOff]
+    {
+        set #Temp
+    }
+    // %end%
+
+    [#B #If #Flag #flag.Temp]
+    {
+        sound #Door
+        p #DoubleDoor9 toggle visible
+    }
+
+    [#B #If #not_Flag #flag.Temp]
+    {
+        message $175   // "[Cecil]:Trap Door!"
+        p #DoubleDoor9 toggle visible
+        fight $5F
+    }
+
+    deactivate #DoubleDoor9
+    music #Cave
+}
+
+event($BF)  //TrapDoor battle 45
+{
+    consts(placement) {
+        4   DoubleDoor10
+    }
+    // autodetected map #SealedCave3F
+
+    // %trapdoor DoubleDoor10%
+    clear #Temp
+    [#B #If #Flag #flag.fe_EncountersOff]
+    {
+        set #Temp
+    }
+    // %end%
+
+    [#B #If #Flag #flag.Temp]
+    {
+        sound #Door
+        p #DoubleDoor10 toggle visible
+    }
+
+    [#B #If #not_Flag #flag.Temp]
+    {
+        message $175   // "[Cecil]:Trap Door!"
+        p #DoubleDoor10 toggle visible
+        fight $5C    
+    }
+
+    deactivate #DoubleDoor10
+    music #Cave
+}
+
+event($C0)  //TrapDoor battle 46
+{
+    consts(placement) {
+        5   DoubleDoor11
+    }
+    // autodetected map #SealedCave3F
+
+    // %trapdoor DoubleDoor11%
+    clear #Temp
+    [#B #If #Flag #flag.fe_EncountersOff]
+    {
+        set #Temp
+    }
+    // %end%
+
+    [#B #If #Flag #flag.Temp]
+    {
+        sound #Door
+        p #DoubleDoor11 toggle visible
+    }
+
+    [#B #If #not_Flag #flag.Temp]
+    {
+        message $175   // "[Cecil]:Trap Door!"
+        p #DoubleDoor11 toggle visible
+        fight $5D
+    }
+
+    deactivate #DoubleDoor11
+    music #Cave
+}
+
+event($C1)  //TrapDoor battle 47
+{
+    consts(placement) {
+        6   DoubleDoor12
+    }
+    // autodetected map #SealedCave3F
+
+    // %trapdoor DoubleDoor12%
+    clear #Temp
+    [#B #If #Flag #flag.fe_EncountersOff]
+    {
+        set #Temp
+    }
+    // %end%
+
+    [#B #If #Flag #flag.Temp]
+    {
+        sound #Door
+        p #DoubleDoor12 toggle visible
+    }
+
+    [#B #If #not_Flag #flag.Temp]
+    {
+        message $175   // "[Cecil]:Trap Door!"
+        p #DoubleDoor12 toggle visible
+        fight $5C    
+    }
+
+    deactivate #DoubleDoor12
+    music #Cave
+}
+
+event($C2)  //TrapDoor battle 48
+{
+    consts(placement) {
+        0   DoubleDoor13
+    }
+    // autodetected map #SealedCave5F
+
+    // %trapdoor DoubleDoor13%
+    clear #Temp
+    [#B #If #Flag #flag.fe_EncountersOff]
+    {
+        set #Temp
+    }
+    // %end%
+
+    [#B #If #Flag #flag.Temp]
+    {
+        sound #Door
+        p #DoubleDoor13 toggle visible
+    }
+
+    [#B #If #not_Flag #flag.Temp]
+    {
+        message $175   // "[Cecil]:Trap Door!"
+        p #DoubleDoor13 toggle visible
+        fight $5D
+    }
+
+    deactivate #DoubleDoor13
+    music #Cave
+}
+
+event($C3)  //TrapDoor battle 49
+{
+    consts(placement) {
+        1   DoubleDoor14
+    }
+    // autodetected map #SealedCave5F
+
+    // %trapdoor DoubleDoor14%
+    clear #Temp
+    [#B #If #Flag #flag.fe_EncountersOff]
+    {
+        set #Temp
+    }
+    // %end%
+
+    [#B #If #Flag #flag.Temp]
+    {
+        sound #Door
+        p #DoubleDoor14 toggle visible
+    }
+
+    [#B #If #not_Flag #flag.Temp]
+    {
+        message $175   // "[Cecil]:Trap Door!"
+        p #DoubleDoor14 toggle visible
+        fight $5C    
+    }
+
+    deactivate #DoubleDoor14
+    music #Cave
+}
+
+event($C4)  //TrapDoor battle 4A
+{
+    consts(placement) {
+        0   DoubleDoor15
+    }
+    // autodetected map #SealedCave6F
+
+    // %trapdoor DoubleDoor15%
+    clear #Temp
+    [#B #If #Flag #flag.fe_EncountersOff]
+    {
+        set #Temp
+    }
+    // %end%
+
+    [#B #If #Flag #flag.Temp]
+    {
+        sound #Door
+        p #DoubleDoor15 toggle visible
+    }
+
+    [#B #If #not_Flag #flag.Temp]
+    {
+        message $175   // "[Cecil]:Trap Door!"
+        p #DoubleDoor15 toggle visible
+        fight $5C    
+    }
+
+    deactivate #DoubleDoor15
+    music #Cave
+}
+
+event($EC)  //TrapDoor battle 68
+{
+    consts(placement) {
+        0   DoubleDoor16
+    }
+    // autodetected map #SealedCaveDemonWallRoom
+
+    // %trapdoor DoubleDoor16%
+    clear #Temp
+    [#B #If #Flag #flag.fe_EncountersOff]
+    {
+        set #Temp
+    }
+    // %end%
+
+    [#B #If #Flag #flag.Temp]
+    {
+        sound #Door
+        p #DoubleDoor16 toggle visible
+    }
+
+    [#B #If #not_Flag #flag.Temp]
+    {
+        message $175   // "[Cecil]:Trap Door!"
+        p #DoubleDoor16 toggle visible
+        fight $5E
+    }
+
+    deactivate #DoubleDoor16
+    music #Cave
+}
+
+//---------------------------------------
+// Dark Crystal
+
+event($AF)  //Obtaining the Dark Crystal
+{
+    consts(placement) {
+        0   Crystal1
+    }
+    // hinted map #SealedCaveCrystalRoom
+    sound $7E
+    pause 12
+    p #Crystal1 toggle visible
+    deactivate #Crystal1
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.sealed_cave_item 0]
+    // %if ap_sealed_cave_item%
+    music #DummyFanfare
+    message #ap_reward_slot.sealed_cave_item
+    // %else%
+    message #msg.fe_ReceivedFanfare
+    // %end%
+    [#B #Objectives_TickRewardSlot #reward_slot.sealed_cave_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.sealed_cave_item]
+    set #GotDarkCrystal
+    music #Prelude
+}
+
+//-------------------------------------
+// EvilWall
+
+event($AA)  //Demon Wall battle
+{
+    player face down
+    toggle music fade
+    sound #Earthquake
+    toggle screen shake
+    pause 16
+    toggle screen shake
+    sound $5E
+    player face up
+    batch 50 {
+        screen up down
+    }
+    music #Hurry
+    [#B #Rando_BossBattle #rando.evilwall_slot]
+    
+    player face up
+    [#B #Objectives_TickBossSlot #rando.evilwall_slot]
+    [#B #Rando_PostBossBattle #rando.evilwall_slot]
+    [#B #Objectives_Tick #objective.quest_sealedcave]
+    music #Cave
+    set #DemonWallBattle
+    pause 4
+    player face down
+}
+
+
+//-------------------------------------
+// Remove Kain steal event
+
+trigger(#SealedCaveEntrance 1)
+{
+    delete
+}
+
+mapgrid($144 4 4) { 49 }

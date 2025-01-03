@@ -1,0 +1,633 @@
+//-----------------------------------------------------------------------------
+// create copies of common enemies used in boss fights and reassign formation
+// monsters accordingly
+
+formation($E1) {
+    monsters {
+        $A4 x 1   // MomBomb 
+        $D6 x 3   // Bomb    
+        $D7 x 3   // GrayBomb
+    }
+}
+text(monster name $D6) {Bomb}
+text(monster name $D7) {GrayBomb}
+
+monster($D6)   // Dummy -> Bomb    
+{
+    // %no free boss%
+    boss
+    // %end%
+
+    // %mombomb defaults%
+    level 14
+    hp 50
+    gp 80
+    xp 370
+    attack index $09
+    defense index $75
+    magic defense index $B5
+    speed index $06
+    // %end%
+    drop index $00
+    drop rate $00
+    attack sequence $01
+    resist status #Poison #Piggy #Mini #Toad
+    gfx {
+        size $01
+        palette $55
+        pointer $C133
+    }
+}
+
+monster($D7)   // Dummy -> GrayBomb
+{
+    // %no free boss%
+    boss
+    // %end%
+
+    // %mombomb defaults%
+    level 14
+    hp 100
+    gp 105
+    xp 450
+    attack index $11
+    defense index $63
+    magic defense index $A0
+    speed index $0A
+    // %end%
+    drop index $00
+    drop rate $00
+    attack sequence $01
+    resist status #Poison #Piggy #Mini #Toad
+    reaction sequence $02
+    gfx {
+        size $01
+        palette $56
+        pointer $C133
+    }
+}
+
+formation($F8)
+{
+    monsters {
+        $D9 x 1   // Weeper  
+        $DA x 1   // Imp Cap.
+        $DB x 1   // WaterHag
+    }
+}
+
+formation($F9)
+{
+    monsters {
+        $DC x 1   // Gargoyle
+    }
+}
+
+text(monster name $D9) {Weeper}
+text(monster name $DA) {Imp Cap.}
+text(monster name $DB) {WaterHag}
+text(monster name $DC) {Gargoyle}
+
+monster($D9)   // Dummy -> Weeper  
+{
+    // %no free boss%
+    boss
+    // %end%
+
+    // %fabulgauntlet defaults%
+    level 9
+    hp 100
+    gp 40
+    xp 160
+    attack index $08
+    defense index $6A
+    magic defense index $AB
+    speed index $09
+    spell power 144
+    // %end%
+    drop index $00
+    drop rate $00
+    attack sequence $00
+    race #Spirit
+    gfx {
+        size $05
+        palette $16
+        pointer $86FC
+    }
+}
+
+monster($DA)   // Dummy -> Imp Cap.
+{
+    // %no free boss%
+    boss
+    // %end%
+
+    // %fabulgauntlet defaults%
+    level 9
+    hp 37
+    gp 50
+    xp 190
+    attack index $06
+    defense index $60
+    magic defense index $A8
+    speed index $07
+    // %end%
+    drop index $00
+    drop rate $00
+    attack sequence $00
+    weak element none
+    gfx {
+        size $01
+        palette $1B
+        pointer $C103
+    }
+}
+
+monster($DB)   // Dummy -> WaterHag
+{
+    // %no free boss%
+    boss
+    // %end%
+
+    // %fabulgauntlet defaults%
+    level 8
+    hp 48
+    gp 40
+    xp 140
+    attack index $08
+    defense index $68
+    magic defense index $A8
+    speed index $0D
+    // %end%    
+    drop index $00
+    drop rate $00
+    attack sequence $00
+    weak element #Lit
+    race #Reptile
+    gfx {
+        size $02
+        palette $15
+        pointer $91B0
+    }
+}
+
+monster($DC)   // Dummy -> Gargoyle
+{
+    // %no free boss%
+    boss
+    // %end%
+
+    // %fabulgauntlet defaults%
+    level 12
+    hp 160
+    gp 100
+    xp 320
+    attack index $0E
+    defense index $6E
+    magic defense index $AD
+    speed index $09
+    drop index $00
+    drop rate $00
+    // %end%
+    attack sequence $2A
+    resist status #Piggy #Mini #Swoon
+    weak element #Holy #Air #Immune
+    race #Reptile
+    reaction sequence none
+    gfx {
+        size $06
+        palette $25
+        pointer $8EDC
+    }
+}
+
+formation($FA)
+{
+    monsters {
+        $DE x 2   // Guard   
+    }
+}
+text(monster name $DE) {Guard}
+
+monster($DE)   // Dummy -> Guard   
+{
+    // %no free boss%
+    boss
+    // %end%
+
+    // %guard defaults%
+    level 18
+    hp 200
+    gp 500
+    xp 720
+    attack index $17
+    defense index $6F
+    magic defense index $B2
+    speed index $0E
+    spell power 26
+    // %end%
+    drop index $00
+    drop rate $00
+    attack sequence $00
+    race #Mage
+    reaction sequence $3F
+    gfx {
+        size $04
+        palette $3A
+        pointer $8234
+    }
+}
+
+formation($100)
+{
+    monsters {
+        $DD x 3   // Dark Imp
+    }
+}
+text(monster name $DD) {Dark Imp}
+
+monster($DD)   // Dummy -> Dark Imp
+{
+    // %no free boss%
+    boss
+    // %end%
+
+    // %darkimp defaults%
+    level 16
+    hp 199
+    gp 45
+    xp 1940
+    attack index $20
+    defense index $60
+    magic defense index $A0
+    speed index $15
+    // %end%
+    drop index $00
+    drop rate $00
+    attack sequence $00
+    gfx {
+        size $01
+        palette $18
+        pointer $C103
+    }
+}
+
+//-----------------------------------------------------------------------------
+// create copy of final Fabul fight formation
+
+formation($DA)
+{
+    monsters {
+        $2D x 1   // General 
+        $2C x 2   // Fighter 
+    }
+    arrangement $0B
+    can't run
+    continue music
+    gfx bits 2
+    cursor graph $0C
+    not floating enemies
+}
+
+//-----------------------------------------------------------------------------
+// patch area where game looks up formation numbers for manual fanfare
+patch($0387d9 bus) { 80 F4 }
+patch($0387de bus) { 21 }
+
+patch($21f480 bus) {
+    // %randomizer fanfare formations%
+    DC 00 DD 00 E1 00 E7 00 A7 01 AF 01 B6 01
+    // %end%
+    FF
+}
+
+//-----------------------------------------------------------------------------
+// patch list of no-reward battles to remove bosses other than Lugae 1
+patch($9fd00) {
+    EB 00   // FloatEye from opening
+    F5 00   // Raven from opening
+    F0 00   // Yang Mt. Hobs autobattle
+    // F6 00   // D.Knight
+    // FA 00   // Yang guards
+    A9 01   // Lugae 1
+    // FE 00   // King/Queen Eblan
+    F3 00   // Tellah vs Golbez
+    B3 01   // Zemus
+    B4 01   // Zeromus vs Fusoya/Golbez
+    B7 01   // Zeromus
+    B8 01   // dummy formation
+    FF
+}
+
+//-----------------------------------------------------------------------------
+// add substitutions to AI scripts that change stats
+
+ai_script($94)
+{
+    message $43   // " Believe in yourself"
+    use #GhostDisappear
+    message $44   // " and be strong!"
+    condition 2
+    // %waterhag script defense change $60%
+    set defense index $60
+    // %end%
+}
+
+ai_script($A6)
+{
+    target self
+    use #Enemy_Remedy
+
+    // %kainazzo script defense change $7A%    
+    set defense index $7A
+    // %end%
+    condition 1
+    pass
+}
+
+ai_script($B7)
+{
+    chain {
+        // %valvalis script defense change $90%
+        set defense index $90
+        // %end%
+        // %valvalis script magic defense change $DE%
+        set magic defense index $DE
+        // %end%
+        pass
+        
+        condition 1
+        pass
+        
+        set sprite $16
+        pass
+    }
+}
+
+ai_script($B8)
+{
+    set sprite $15
+    condition 2
+    // %valvalis script defense change $60%
+    set defense index $60
+    // %end%
+    // %valvalis script magic defense change $B0%
+    set magic defense index $B0
+    // %end%
+    fight
+}
+
+
+ai_script(moon $26)
+{
+    // %wyvern script spell power change 12%
+    set spell power 12
+    // %end%
+    target self
+    use #Nuke
+    // %wyvern script spell power change 8%
+    set spell power 8
+    // %end%
+    wait
+    // %wyvern script spell power change 12%
+    set spell power 12
+    // %end%
+    target self
+    use #Nuke
+    // %wyvern script spell power change 8%
+    set spell power 8
+    // %end%
+    wait
+    // %wyvern script spell power change 12%
+    set spell power 12
+    // %end%
+    target self
+    use #Nuke
+    // %wyvern script spell power change 8%
+    set spell power 8
+    // %end%
+    wait
+    pass
+}
+
+ai_script(moon $27)
+{
+    // %wyvern script spell power change 6%
+    set spell power 6
+    // %end%
+    use #Enemy_MegaNuke
+}
+
+//------------------------------------------------------------------
+// Do WaterHag battle fixes here anyway because why not
+
+ai_script($93)
+{
+    use #GhostAnna
+    message $40   // "Anna:[Edward]!"
+    message $42   // "Anna:__ Fight, [Edward]!"
+    condition 1
+}
+
+ai_script($95)
+{
+    // %free boss%
+    message $45 next action   // "ARRRGH__!"
+    target self
+    use #Enemy_Vanish
+    // %end%
+
+    // %no free boss%
+    pass
+    // %end%
+}
+
+//------------------------------------------------------------------
+// use extra palettes generated by boss rando on relevant maps
+
+map(#Waterfall2F)               { npc palettes $02 $0c }
+map(#AntlionCaveNest)           { npc palettes $03 $0c }
+map(#MountHobsSummit)           { npc palettes $04 $0c }
+map(#Fabul)                     { npc palettes $05 $0c }
+map(#MountOrdealsSummit)        { npc palettes $06 $0c }  // default is Milon, load MilonZ through event
+map(#MountOrdealsMirrorRoom)    { npc palettes $08 $0c }
+map(#BaronInn)                  { npc palettes $0a $0c }  // default is guard, load Karate through event
+map(#BaronCastleLobby)          { npc palettes $0b $0c }
+map(#BaronCastleThroneRoom)     { npc palettes $0c $0c }
+map(#CaveMagnesCrystalRoom)     { npc palettes $0d $0c }
+map(#Zot5F)                     { npc palettes $0e $0c }
+map(#Zot6F)                     { npc palettes $06 $0d }  // use EvilWall's unused palette to set Golbez replacement here
+map(#ZotCommandCenter)          { npc palettes $0f $0c }
+map(#DwarfCastleThroneRoom)     { npc palettes $08 $0d }  // we use Leviatan's slot for the Calbrena in throne room
+map(#DwarfCastleCrystalRoom)    { npc palettes $01 $0d }  // default is Golbez, load Calbrena through event
+map(#BabilFloorLugae)           { npc palettes $02 $0d }  // need to apply Lugae palette
+map(#BabilFloorLugae2)          { npc palettes $02 $0d }  //   to both Lugae floors
+map(#BabilCannon)               { npc palettes $03 $0d }
+map(#CaveEblanExit)             { npc palettes $00 $0c }  // use DMist's slot for Rubicant in Cave Eblan
+map(#BabilB5)                   { npc palettes $05 $0d }  // default is Rubicant, load KQEblan through event
+map(#FeymarchLeviathanRoom)     { npc palettes $07 $0d }  // use Asura for both Asura and Leviathan
+map(#BaronCastleOdinRoom)       { npc palettes $09 $0d }
+map(#BahamutFloor)              { npc palettes $0a $0d }
+map(#GiantLung)                 { npc palettes $0b $0d }
+
+
+//------------------------------------------------------------------
+// support for enemies with XP > 65535
+
+msfpatch {
+    .addr $03ec9b
+        jml $=BreakXPLimit__Hook
+    
+}
+
+msfpatch {
+    BreakXPLimit__Hook:
+        lda $0ea1c1,x
+        cmp #$ff
+        bne $+BreakXPLimit__NormalCase
+        lda $0ea1c0,x
+        cmp #$f0
+        bcc $+BreakXPLimit__NormalCase
+
+        // XP values 0xFFF0 and up refer to a lookup table
+        //  at index (xp - 0xFFF0)
+
+        and #$0f
+        asl a
+        asl a
+        phx
+        tax
+
+        // load XP value from table and add to total
+        clc
+        lda $21f500,x
+        adc $3591
+        sta $3591
+        lda $21f501,x
+        adc $3592
+        sta $3592
+        lda $21f502,x
+        adc $3593
+        sta $3593
+        // assume there is no overflow :>
+        // return to original code after XP lookup/addition
+        plx
+        jml $03ecb7
+
+
+    BreakXPLimit__NormalCase:
+        // perform displaced instruction and
+        // return to original code
+        clc
+        lda $0ea1c0,x
+        jml $03ec9f
+
+}
+
+
+
+//------------------------------------------------------------------
+// There is a graphical glitch when we transform a monster in a back attack.
+// To fix it, in the transform graphics routine we check for back attack,
+// and if so, apply the X mirroring routine again before drawing again.
+msfpatch {
+    FixBackAttackTransform:
+        and #$3f
+        sta $f2b4,y
+
+        phy
+        pha
+        lda $6cc0   // check for back attack
+        beq $+FixBackAttackTransform_Return
+        jsl $01e9e1     // reapply layer mirror
+    FixBackAttackTransform_Return:
+        pla
+        ply
+        jml $02ccb3
+
+    .addr $02ccae
+        jml $=FixBackAttackTransform
+}
+
+
+//------------------------------------------------------------------
+// Fix EvilWall back attack
+msfpatch {
+    FixEvilWallBackAttack:
+        // need to reset $00-02 in case we used it for left-displacement
+        // of enemy BG layer
+        ldx #$6cfd
+        stx $00
+        ldx #$0012
+        stx $02
+
+        // simulate check from displaced code
+        lda $6cc0
+        beq $04
+        jml $01ea3c
+        jml $01ea68
+
+    .addr $01ea37
+        jml $=FixEvilWallBackAttack
+}
+
+//------------------------------------------------------------------
+// Override formation music settings during alt gauntlet
+
+msfpatch {
+    .addr $038111
+        jml $=FormationLoad__Hack
+
+    .new
+    FormationLoad__Hack:
+        // at this point, formation data has just been loaded into $299c-29a3
+        lda $_AltGauntlet__Indicator
+        beq $+NotAltGauntlet
+
+        // alt gauntlet: set backattack, if needed
+        bit #$40
+        beq $+NotBackAttack
+        lda $299c
+        ora #$08
+        sta $299c
+    %NotBackAttack:
+        // alt gauntlet: hack formation to be continue music and can't run
+        lda $29a2
+        ora #$0d
+        sta $29a2
+
+    %NotAltGauntlet:
+
+        // displaced and return
+        lda $299c
+        sta $29a4
+        jml $038117
+}
+
+msfpatch {
+    .addr $0387e4
+        jml $=AltGauntlet__FanfareCheck
+
+    .new
+    AltGauntlet__FanfareCheck:
+        stz $a9
+
+        lda $_AltGauntlet__Indicator
+        bit #$01            // check "is alt gauntlet active" bit
+        beq $+DoNormalCheck
+        bit #$02            // check "is not final battle" bit
+        bne $+DoNormalCheck
+
+        // is alt gauntlet final battle; check for indicator bit
+        bit #$80
+        beq $+DoNormalCheck
+    %PlayFanfare:
+        inc $a9
+        jml $0387fd
+
+    %DoNormalCheck:
+        // displaced
+        tdc
+        tay
+        jml $0387e8
+}

@@ -1,0 +1,52 @@
+// For can't lose battles, actually lose if party wipes
+
+msfpatch {
+    .addr $03a050
+        jml $=Permadeader
+
+    .new
+    Permadeader:
+        // can't lose bit is set; apply actual permadeath
+        stz $1680  // "alive" count
+        ldx #$0000
+        ldy #$0000
+    %LoopStart:
+        lda $2000,x
+        beq $+Next
+        inc $1680
+        lda $2003,x
+        and #$c0
+        beq $+Next
+
+        // %flag hero_challenge on%
+        //   the Hero is exempt from permadeath
+        lda $2000,x
+        and #$1f
+        cmp #$01
+        beq $+Next
+        // %end%
+        
+        // char is dead; copy-back status field so that Permadeath logic can work
+        dec $1680
+        lda $2003,x
+        sta $1003,y
+    %Next:
+        jsr $_Util__XPlus80
+        jsr $_Util__YPlus40
+        cpx #$0280
+        bcc $-LoopStart
+
+        lda $1680
+        bne $+SomeoneIsAlive
+
+        // no one still alive, actual gameover
+        lda #$80
+        bra $+HaveReturnValue
+
+    %SomeoneIsAlive:
+        jsl $=Permadeath  // actually apply permadeath effects
+        lda #$08
+    
+    %HaveReturnValue:
+        jml $03a056
+}

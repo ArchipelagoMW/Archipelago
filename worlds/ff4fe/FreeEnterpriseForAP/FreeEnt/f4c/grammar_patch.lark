@@ -1,0 +1,8 @@
+// ------------------------------------------------------------------------------------
+// Raw data patches
+
+patch_parameters : rom_address
+
+direct_patch_body : patch_byte*
+
+?patch_byte  : /[A-Fa-f0-9]{2}/

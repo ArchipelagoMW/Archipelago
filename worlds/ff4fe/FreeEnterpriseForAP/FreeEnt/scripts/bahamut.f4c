@@ -1,0 +1,81 @@
+npc(#Bahamut) {
+    sprite
+        // %bahamut_slot sprite main%
+        #sprite.Bahamut
+        // %end%
+
+    // remove Leviatan prerequisite
+    eventcall {
+        if #BahamutBattle:
+            $2C   //Map message 5 - "I have indeed seen your strength and will."
+        else:
+            $CF   //Bahamut battle
+    }
+}
+
+placement($15C 0) {
+    // %bahamut_slot sprite main palette%
+    // %end%
+}
+
+
+event($CF)  //Bahamut battle
+{
+    // autodetected map #BahamutFloor
+    toggle music fade
+    toggle tint $F7
+    [#B #Rando_BossBattle #rando.bahamut_slot]
+    [#B #Objectives_TickBossSlot #rando.bahamut_slot]
+    [#B #Rando_PostBossBattle #rando.bahamut_slot]
+    toggle tint $00
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.bahamut_item 0]
+    // %if ap_bahamut_item%
+    music #DummyFanfare
+    message #ap_reward_slot.bahamut_item
+    // %else%
+    message #msg.fe_ReceivedFanfare
+    // %end%
+    set #BahamutBattle
+    [#B #Objectives_TickRewardSlot #reward_slot.bahamut_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.bahamut_item]
+    music #None
+    [#B #Objectives_Tick #objective.quest_cavebahamut]
+    music #Feymarch fade in
+}
+
+// make behemoth triggers respect encounter toggle if set
+eventcall($56)
+{
+// %behemoth use toggle%
+    if #fe_EncountersOff:
+        $00   //(no event)
+// %end%
+    if not #BehemothBattle51:
+        $04   //Behemoth battle 51
+    else:
+        $00   //(no event)
+}
+
+eventcall($57)
+{
+// %behemoth use toggle%
+    if #fe_EncountersOff:
+        $00   //(no event)
+// %end%
+    if not #BehemothBattle52:
+        $05   //Behemoth battle 52
+    else:
+        $00   //(no event)
+}
+
+eventcall($59)
+{
+// %behemoth use toggle%
+    if #fe_EncountersOff:
+        $00   //(no event)
+// %end%
+    if not #BehemothBattle50:
+        $F3   //Behemoth battle 50
+    else:
+        $00   //(no event)
+}

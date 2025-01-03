@@ -1,0 +1,16 @@
+// patch out "customizer" title at top
+// and instead use code space to load default
+// cursor value
+msfpatch {
+    .addr $01d17f
+        lda #$08
+        sta $1ba7
+        nop
+
+    .addr $01d185
+        ldy #$_MenuData__EncounterSetting
+}
+
+// enlarge custom menu frame
+patch($01dd58 bus) { 44 00 18 17 }
+

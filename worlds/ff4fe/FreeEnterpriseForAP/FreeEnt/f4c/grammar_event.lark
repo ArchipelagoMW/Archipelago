@@ -1,0 +1,128 @@
+// ------------------------------------------------------------------------------------
+// Event scripts
+
+event_block_parameters : value
+
+event_block_body : event_script_item*
+
+?event_script_item : placement_consts_block
+                   | batch_block
+                   | cancel_marker
+                   | event_command
+                   | extension_command
+
+placement_consts_block : "consts" "(" "placement" ")" _block_start placement_const_definition* _block_end
+
+placement_const_definition : number identifier
+
+batch_block : "batch" [number] _block_start event_command* _block_end
+
+cancel_marker : "cancel" ":"                                 -> ev_cancel
+
+!event_command : placement_specifier placement_command       -> evcmd_placement
+              | "player" player_command                      -> evcmd_player
+              | "toggle" "screen" "shake"
+              | "screen" "flash"
+              | "screen" "blur"
+              | "moon" "travel"
+              | "fat" "chocobo"
+              | "open" "door"
+              | "screen" "up" "down"
+              | "toggle" "run"
+              | "toggle" "music" "fade"
+              | "namingway"
+              | "toggle" "screen" "fade"
+              | "toggle" "status" statuses
+              | "inn" value
+              | "party" "leader" actor_value
+              | "give" "hp" number                          -> evcmd_give_hp
+              | "restore" "hp"                              -> evcmd_restore_hp
+              | "give" "mp" number                          -> evcmd_give_mp
+              | "restore" "mp"                              -> evcmd_restore_mp
+              | "give" "item" item_value
+              | "take" "item" item_value
+              | "give" "spell" spellset_value spell_value
+              | "clear" "status" ["except" statuses]        -> evcmd_clear_status
+              | "give" "status" statuses
+              | "give" "gp" number
+              | "take" "gp" number
+              | "give" "actor" actor_value
+              | "take" "actor" actor_value
+              | "pause" number
+              | "fight" value
+              | "shop" value
+              | "event" "message" number
+              | "map" "message" number
+              | "message" value [message_bank3_specifier]   -> evcmd_message
+              | "set" flag_value
+              | "clear" flag_value
+              | "activate" npc_value                        -> evcmd_npc
+              | "deactivate" npc_value                      -> evcmd_npc
+              | "select" "item" item_value
+              | "confirm" "message" value                   -> evcmd_confirm
+              | "toggle" "tint" number
+              | "music" music_value [music_fade_in_specifier]  -> evcmd_music
+              | "sound" sound_value
+              | "vfx" vfx_value
+              | "load" "map" map_value "at" number number [facing_specifier] load_map_specifier*   -> evcmd_load_map
+
+facing_specifier : "facing" direction
+
+?load_map_specifier : no_transition_specifier
+                    | vehicle_specifier
+                    | no_launch_specifier
+
+?placement_specifier : "placement" placement_value
+                     | "p" placement_value
+
+?placement_value : number
+                 | "#" const_name  -> placement_const
+
+!placement_command  : "move" direction
+                    | "face" direction
+                    | "toggle" "visible"
+                    | "jump" "sideways"
+                    | "spin"
+                    | "spin" "jump"
+                    | "wave" "in"
+                    | "wave" "out"
+                    | "bow" "head"
+                    | "lie" "down"
+
+!player_command     : "move" direction
+                    | "face" direction
+                    | "invisible"
+                    | "visible"
+                    | "wave" "in"
+                    | "wave" "out"
+                    | "bow" "head"
+                    | "lie" "down"
+                    | "toggle" "turning"
+                    | "toggle" "spinning"
+
+statuses : status_value*
+
+message_bank3_specifier : "from" "bank" "3"
+
+music_fade_in_specifier : "fade" "in"
+
+no_transition_specifier : "no" "transition"
+
+!vehicle_specifier  : "on" "chocobo"
+                    | "on" "black" "chocobo"
+                    | "on" "hovercraft"
+                    | "on" "enterprise"
+                    | "on" "falcon"
+                    | "on" "big" "whale"
+                    | "on" "ship" ["2"]
+                    | "on" value
+
+no_launch_specifier : "no" "launch"
+
+extension_command : "[" extension_command_bytes "]" [extension_command_block]
+extension_command_bytes : eventext_value+
+extension_command_block : _block_start extension_command_block_item* _block_end
+
+?extension_command_block_item : event_command
+                              | extension_command
+                              | batch_block

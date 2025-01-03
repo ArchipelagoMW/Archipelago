@@ -1,0 +1,617 @@
+npc(#ZotKain) {
+    // %kain2_slot sprite%
+    sprite #dyn.AxKain2
+    // %end%
+}
+
+// Replace Golbez with boss in Golbez position
+npc(#Golbez2) {
+    sprite
+        // %golbez_slot sprite main%
+        #Golbez
+        // %end%
+}
+
+placement($9E 0)
+{
+    // %golbez_slot alt1 sprite main palette%
+    // %end%
+}
+
+//change other locked door to same NPC
+placement($9E 9)  //#Zot6F
+{
+    npc #ZotLockedDoor
+}
+
+event($7A)  //Top of Tower of Zot events
+{
+    consts(placement) {
+        0   Golbez2
+        1   ZotKain
+        2   Tellah1
+        3   Cid2
+        4   Yang1
+        5   Lightning1_A
+        6   Lightning1_B
+        7   Lightning1_C
+        8   Lightning1_D
+        9    ZotLockedDoorNorth
+        10   ZotLockedDoor
+    }
+    // autodetected map #Zot6F
+    music #Golbez
+    player move up
+    player move up
+    [#B #If #not_Item #item.EarthCrystal] {
+        pause 4
+        message $EC // find the crystal
+        player move down
+        player move down
+        player move down
+        [#B #EndEvent]
+    }
+
+    player move up
+    pause 6
+
+    sound #Crystal
+    message $ED  // handed over crystal
+    take item #EarthCrystal
+    [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.earth_crystal]
+
+    player toggle turning
+    toggle run
+    toggle tint $A7
+    sound #Thunder
+    batch 4 {
+        screen flash
+    }
+    batch 1 {
+        p #Lightning1_A toggle visible
+        player move down
+    }
+    batch 1 {
+        p #Lightning1_B toggle visible
+        player move down
+    }
+    batch 1 {
+        p #Lightning1_C toggle visible
+        player move down
+    }
+    batch 1 {
+        p #Lightning1_D toggle visible
+        player move down
+    }
+    p #Lightning1_A toggle visible
+    p #Lightning1_B toggle visible
+    p #Lightning1_C toggle visible
+    p #Lightning1_D toggle visible
+    player lie down
+    p #ZotKain move up
+    p #ZotKain lie down
+    player toggle turning
+    toggle run
+    toggle tint $00
+    pause 8
+    p #Golbez2 face up
+    pause 8
+    p #Golbez2 move up
+    p #Golbez2 toggle visible
+    toggle music fade
+
+    pause 12
+    player bow head
+    pause 8
+    player face down
+    pause 8
+    player move up
+    player move up
+    music #Sad
+
+    set #ZotEndAndDrill
+    deactivate #Golbez2
+
+    p #ZotLockedDoor toggle visible
+
+    // this check is necessary for preventing a b-to-jump softlock
+    [#B #If #not_Flag #flag.KainRegainedSenses] {
+        p #ZotLockedDoorNorth toggle visible
+    }
+
+}
+
+text(bank 1 message $EC) {
+Find me the Crystal of
+ Earth, then bring it
+ here.
+}
+
+text(bank 1 message $ED) {
+Handed over the Crystal
+of the Earth.
+}
+
+//-------------------------------------------------
+
+// change command center NPC to also be ZotKain
+placement($9F 11) {
+    npc #ZotKain
+}
+
+// set ropes
+placement($9F 2) {
+    npc #fe_DynamicNPC
+    palette 3
+}
+
+// set victim NPC
+placement($9F 5) {
+    // %rosa2_slot npc1%
+    npc #fe_DynamicNPC
+    // %end%
+    position 7 5
+    walking off
+    tangible
+    face down
+    turning off
+    marching on
+    speed 2
+    palette 0
+}
+
+
+// set Rosa NPC
+placement($9F 6) {
+    // %rosa2_slot npc1%
+    npc #fe_DynamicNPC
+    // %end%    
+}
+
+// cheat the ball so that if we come back, it's
+// in the chair
+placement($9F 10) {
+    position 7 5
+}
+
+// Put ropes over the NPC (this overwrites FlameBottom GFX)
+chr($dfec0 3bit) {
+    0000000000000000
+    0000000000000000
+    0000000000000000
+    0000000000000000
+    0000000000000000
+    0000000000000000
+    0000000000000000
+    1111111111111111
+    1432222222222341
+    1766666666666671
+    1432222222222341
+    1766666666666671
+    1432222222222341
+    1111111111111111
+    0000000000000000
+    0000000000000000
+}
+
+
+event($82)  //Kain regaining his senses
+{
+    consts(placement) {
+        1   ZotKain
+    }
+    // autodetected map #Zot6F
+    music #None
+    pause 4
+    set #Temp
+    p #ZotKain bow head
+    pause 8
+    p #ZotKain face down
+    pause 8
+    music #Hurry
+    p #ZotKain move down
+    batch 1 {
+        p #ZotKain move right
+        player face right
+    }
+    batch 1 {
+        p #ZotKain move right
+        player move right
+    }
+    batch 1 {
+        p #ZotKain move up
+        player move right
+    }
+    batch 1 {
+        p #ZotKain move up
+        player move up
+    }
+   
+    consts(placement) {
+        5   RosaTiedUpSick
+        6   Rosa1
+        2   Ropes
+        10   Ball
+        11   KainNormal
+    }
+
+    [#B #If #not_Flag #flag.Temp] {
+        deactivate #ZotKain
+    }
+
+    load map #ZotCommandCenter at 7 18 
+
+    batch {
+        p #RosaTiedUpSick toggle visible
+        p #Ropes toggle visible
+    }
+    batch 3 {
+        p #KainNormal move up
+        player move up
+        p #Ball move up
+    }
+    batch 6 {
+        p #KainNormal move up
+        player move up
+    }
+    player toggle turning
+    batch 1 {
+        p #KainNormal move left
+        player move up
+    }
+    batch 1 {
+        p #KainNormal face up
+        player move up
+    }
+    player move up
+    p #Ball move down
+    p #Ball move down
+    music $45
+    sound #Magnetize
+    batch 1 {
+        p #Ball move down
+        p #RosaTiedUpSick toggle visible
+        p #Ropes toggle visible
+        p #Rosa1 toggle visible
+        player face left
+    }
+    batch 1 {
+        player move down
+        p #Rosa1 move down
+    }
+    batch 1 {
+        player face up
+        p #Rosa1 face up
+    }
+    pause 14
+
+    clear #Temp
+    [#B #Rando_CheckFlag #randoflag.no_earned_characters]
+    [#B #If #not_Flag #flag.Result] {
+        set #Temp
+
+        batch 1 {
+            p #Rosa1 face right
+            player face left
+        }
+        pause 8
+        player face down
+        player toggle turning
+        batch 1 {
+            player move down
+            p #Rosa1 move right
+            p #KainNormal face right
+        }
+        batch 1 {
+            player move down
+            p #Rosa1 move down
+        }
+        batch 1 {
+            p #Rosa1 move down
+            p #KainNormal move right
+        }
+        batch 1 {
+            p #Rosa1 toggle visible
+            p #KainNormal move down
+        }
+        p #KainNormal toggle visible
+
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.zot_character_1 0]
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.zot_character_2 1]
+        message $1C9 // joined
+
+        music #LunarSubterrane
+
+        [#B #Objectives_TickRewardSlot #reward_slot.zot_character_1]
+        [#B #Objectives_TickRewardSlot #reward_slot.zot_character_2]
+        [#B #Rando_DeliverRewardFromSlot #reward_slot.zot_character_1]
+        [#B #Rando_DeliverRewardFromSlot #reward_slot.zot_character_2]
+    }
+
+    [#B #If #not_Flag #flag.Temp] {
+        batch 1 {
+            p #Rosa1 face down
+            player face left
+        }
+        [#B #SetPlacementSpeed 6 3]  // Rosa1
+        [#B #SetPlacementSpeed 11 3] // KainNormal
+        batch 1 {
+            p #Rosa1 spin jump
+            p #KainNormal spin jump
+        }
+        p #KainNormal face down
+        batch 1 {
+            p #Rosa1 move down
+            p #KainNormal move down
+            player face down
+        }
+        batch 1 {
+            p #KainNormal move right
+            p #Rosa1 move down
+        }
+        batch 1 {
+            p #KainNormal move down
+            p #Rosa1 move right
+        }
+        batch 6 {
+            p #KainNormal move down
+            p #Rosa1 move down
+        }
+        batch 1 {
+            p #KainNormal toggle visible
+            p #Rosa1 toggle visible
+        }
+        player toggle turning
+        batch 2 {
+            player move down
+        }
+
+        music #LunarSubterrane
+    }
+    
+    player face down
+    give spell #Rosa #Exit
+    deactivate #ZotKain
+    set #KainRegainedSenses
+}
+
+text(bank 1 message $1C9) {
+[name $e0] and [name $e1]
+joined![music $29][pause 40]
+}
+
+//-------------------------------------------------
+
+eventcall($28)
+{
+    if not #FoughtValvalis:
+        $7C   //Valvalis battle
+    else:
+        $00   //(no event)
+}
+
+placement($9F 4) {
+    npc #fe_DynamicNPC
+    // %valvalis_slot sprite main palette%
+    // %end%
+}
+
+// Remove "stop her spin!" messages
+ai_script($B9)
+{
+    pass
+}
+
+event($7C)  //Valvalis battle
+{
+    consts(placement) {
+        4   Valvalis
+        6   Rosa1
+    }
+    // autodetected map #ZotCommandCenter
+    toggle music fade
+    sound #Glow
+    toggle tint $B7
+    pause 4
+    player face left
+    pause 4
+    player face down
+    pause 4
+    player face right
+    pause 4
+    player face down
+    pause 4
+    music #Zot
+    pause 8
+    sound #Whirlpool
+    vfx #MistGathering
+    player face up
+    [#B #Rando_BossBattle #rando.valvalis_slot]
+    p #Valvalis toggle visible
+    music #None
+    [#B #Objectives_TickBossSlot #rando.valvalis_slot]
+    [#B #Rando_PostBossBattle #rando.valvalis_slot]
+    toggle tint $00
+    batch 9 {
+        p #Valvalis toggle visible
+    }
+    sound $7E
+    batch 10 {
+        screen flash
+    }
+    pause 6
+    sound #Earthquake
+    toggle screen shake
+    pause 8
+    player face left
+    pause 4
+    player face up
+    pause 4
+    player face right
+    pause 4
+    player face up
+    pause 4
+    sound #Explosion
+    toggle screen shake
+    batch 10 {
+        screen up down
+    }
+    toggle screen shake
+    pause 8
+    sound #Explosion
+    toggle screen shake
+    batch 10 {
+        screen up down
+    }
+    toggle screen shake
+    sound #Explosion
+    toggle screen shake
+    batch 10 {
+        screen up down
+    }
+    toggle screen shake
+    pause 8
+    sound #Earthquake
+    pause 4
+    player move down
+    pause 4
+    player wave in
+    pause 6
+    sound #WhiteMagic
+    toggle tint $8C
+    pause 4
+    sound #Exit
+    player face down
+    pause 2
+    player face left
+    pause 2
+    player face up
+    pause 2
+    player face right
+    pause 2
+    player face down
+    pause 1
+    player face left
+    pause 1
+    player face up
+    pause 1
+    player face right
+    pause 1
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    toggle run
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    toggle run
+    toggle screen shake
+    consts(placement) {
+        2   Rosa1_B
+        1   Kain1
+        3   Cid2
+        4   Yang1
+    }
+    load map #BaronCastleCecilRoom at 5 5 facing down
+    toggle run
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    player face left
+    player face up
+    player face right
+    toggle run
+    player face down
+    player face left
+    player face up
+    player face right
+    player face down
+    pause 1
+    player face left
+    pause 1
+    player face up
+    pause 1
+    player face right
+    pause 1
+    player face down
+    pause 2
+    player face left
+    pause 2
+    player face up
+    pause 2
+    player face right
+    pause 2
+    player face down
+    music #Baron
+    toggle tint $00
+    pause 8
+    player bow head
+    pause 12
+
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.zot_item 0]
+    player wave out
+    // %if ap_zot_item%
+    music #DummyFanfare
+    message #ap_reward_slot.zot_item
+    // %else%
+    message #msg.fe_Received
+    // %end%
+    sound #GetItem
+    [#B #Objectives_TickRewardSlot #reward_slot.zot_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.zot_item]
+    player move up
+    batch 4 {
+        player move left
+    }
+    player bow head
+    [#B #Objectives_Tick #objective.quest_zot]
+    toggle music fade
+    pause 4
+    toggle screen fade
+
+    clear status 
+    restore hp
+    restore mp
+    vfx #PutEnterpriseAtBaron
+    set #FoughtValvalis
+
+    music #Overworld fade in
+    load map #Overworld at 101 158
+    player face down
+    toggle screen fade
+
+}
+

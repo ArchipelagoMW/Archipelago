@@ -1,0 +1,154 @@
+msfpatch {
+    .addr $009788
+        jml $=TreasureAP__GetDialog
+        nop
+        nop
+}
+
+msfpatch {
+    .addr $0097BA
+        jml $=TreasureAP__GetGPDialog
+        nop
+        nop
+}
+
+msfpatch {
+    TreasureAP__GetDialog:
+        lda $08FC // load treasure index into x
+        sta $06
+        lda $1701
+        bne $+Moon
+        stz $07
+        bra $+Continue
+    %Moon:
+        lda #$01
+        sta $07
+    %Continue:
+        rep #$20
+        lda $06
+        asl a
+        clc
+        adc $06
+        tax
+        sep #$20
+        lda $348000,x // load bank into bank byte
+        sta $06DD
+        lda $348001,x // load dialog index into event bytes
+        sta $0608
+        lda $348002,x // load dialog index into event bytes
+        sta $0609
+
+        lda $0608
+        stz $0773
+        asl a
+        rol $0773
+        sta $0772
+        ldx $0772
+
+		lda $06DD
+		cmp #$01
+		beq $+Bank1
+		lda $13A500, x
+		sta $063D
+		lda $13A501, x
+		sta $063E
+		bra $+Finish
+	%Bank1:
+		lda $0609
+		cmp #$01
+		beq $+HiBank
+		lda $108000, x
+		sta $063D
+		lda $108001, x
+		sta $063E
+		bra $+Finish
+    %HiBank:
+        lda $108200, x
+		sta $063D
+		lda $108201, x
+		sta $063E
+	%Finish:
+		ldx $063D
+		stx $0772 // might be longcall vars instead
+        rep #$20
+        .mx 0x00
+        lda #$0000
+        sep #$20
+        .mx 0x20
+        ldy #$B0D1
+        jsl $=LongCall // displaced code
+
+        jml $00978C // pray it works
+}
+
+// Yes this is a duplicate of above save for the final jump back
+// We expanded the rom, I get to be wasteful like this.
+msfpatch {
+    TreasureAP__GetGPDialog:
+        lda $08FC // load treasure index into x
+        sta $06
+        lda $1701
+        bne $+Moon
+        stz $07
+        bra $+Continue
+    %Moon:
+        lda #$01
+        sta $07
+    %Continue:
+        rep #$20
+        lda $06
+        asl a
+        clc
+        adc $06
+        tax
+        sep #$20
+        lda $348000,x // load bank into bank byte
+        sta $06DD
+        lda $348001,x // load dialog index into event bytes
+        sta $0608
+        lda $348002,x // load dialog index into event bytes
+        sta $0609
+
+        lda $0608
+        stz $0773
+        asl a
+        rol $0773
+        sta $0772
+        ldx $0772
+
+		lda $06DD
+		cmp #$01
+		beq $+Bank1
+		lda $13A500, x
+		sta $063D
+		lda $13A501, x
+		sta $063E
+		bra $+Finish
+	%Bank1:
+		lda $0609
+		cmp #$01
+		beq $+HiBank
+		lda $108000, x
+		sta $063D
+		lda $108001, x
+		sta $063E
+		bra $+Finish
+    %HiBank:
+        lda $108200, x
+		sta $063D
+		lda $108201, x
+		sta $063E
+	%Finish:
+		ldx $063D
+		stx $0772 // might be longcall vars instead
+        rep #$20
+        .mx 0x00
+        lda #$0000
+        sep #$20
+        .mx 0x20
+        ldy #$B0D1
+        jsl $=LongCall // displaced code
+
+        jml $0097BE // pray it works
+}
+

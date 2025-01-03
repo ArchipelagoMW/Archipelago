@@ -1,0 +1,108 @@
+npc(#AntlionLeftClaw) {
+    sprite
+        // %antlion_slot sprite left%
+        #AntlionClawLeft
+        // %end%
+}
+
+npc(#AntlionRightClaw) {
+    sprite
+        // %antlion_slot sprite right%
+        #AntlionClawRight
+        // %end%
+}
+
+placement($79 2) {
+    // %antlion_slot sprite left palette%
+    // %end%
+}
+
+placement($79 3) {
+    // %antlion_slot sprite right palette%
+    // %end%
+}
+
+// create party leader placement for spin jump effect
+placement($79 0)  //#AntlionCaveNest
+{
+    npc #fe_PartyLeader
+    position 14 22
+    face down
+}
+
+event($45)  //Antlion battle
+{
+    consts(placement) {
+        0   PartyLeader
+        1   ChildRydia
+        2   AntlionLeftClaw
+        3   AntlionRightClaw
+    }
+    // autodetected map #AntlionCaveNest
+    player move down
+    player move down
+    player move down
+    sound #Quake
+    toggle screen shake
+    [#B #ReloadPlacementSprite 0] // in case party leader changed since entering room
+    pause 15
+    sound #HeavyDoor
+    batch 1 {
+        p #AntlionLeftClaw toggle visible
+        p #AntlionRightClaw toggle visible
+        p #PartyLeader toggle visible
+        player invisible
+    }
+    player toggle turning
+    toggle screen shake
+    music #None
+    sound $64
+    batch 1 {
+        p #AntlionLeftClaw move right
+        p #AntlionRightClaw move left
+        p #PartyLeader spin jump
+    }
+    batch 1 {
+        p #AntlionLeftClaw move left
+        p #AntlionRightClaw move right
+        p #PartyLeader move up
+        player move up
+    }
+    player toggle turning
+    batch {
+        p #PartyLeader toggle visible
+        player visible
+    }
+    pause 4
+    music #None
+    batch 1 {
+        p #AntlionLeftClaw toggle visible
+        p #AntlionRightClaw toggle visible
+    }
+    [#B #Rando_BossBattle #rando.antlion_slot]
+    pause 2
+    [#B #Objectives_TickBossSlot #rando.antlion_slot]
+    [#B #Rando_PostBossBattle #rando.antlion_slot]
+    player move down
+    pause 2
+    player bow head
+    pause 4
+    player wave in
+    // %if ap_antlion_item%
+    music #DummyFanfare
+    message #ap_reward_slot.antlion_item
+    // %else%
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.antlion_item 0]
+    message #msg.fe_ReceivedFanfare
+    // %end%
+    [#B #Objectives_TickRewardSlot #reward_slot.antlion_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.antlion_item]
+
+    player face down
+
+    set #DefeatedAntlion
+    [#B #Objectives_Tick #objective.quest_antlionnest]
+    music #Cave
+}
+
+

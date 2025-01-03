@@ -1,0 +1,46 @@
+map(#MountHobsWest) {
+    npc palettes $06 $05
+}
+
+placement($7E 8) {
+    palette 1
+    face up
+    position 15 25
+    marching off
+}
+
+
+event($51)
+{
+    // %hobs intro%
+    // (provided by randomizer)
+    // %end%
+
+    consts(placement) {
+        8  Imp
+    }
+
+    player toggle turning
+    p #Imp toggle visible
+    pause 8
+    p #Imp move up
+    p #Imp move up
+    
+    sound #Staff
+    p 2 toggle visible
+    sound #Staff
+    p 0 toggle visible
+    pause 8
+
+    p #Imp move down
+    p #Imp move down
+    p #Imp toggle visible
+    player toggle turning
+
+    // %hobs outro%
+    // (provided by randomizer)
+    // %end%
+
+    [#B #Return]
+}
+

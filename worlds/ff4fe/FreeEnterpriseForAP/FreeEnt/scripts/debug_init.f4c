@@ -1,0 +1,149 @@
+give spell #RydiaCall #Sylph
+give spell #RydiaCall #Baham
+
+give gp $fe
+give gp $fe
+give gp $fe
+give gp $fe
+give gp $fe
+give gp $fe
+give gp $fe
+give gp $fe
+give gp $fe
+
+//set #UnderworldOpen
+
+give item #Adamant
+
+give item #Legend
+set #fe_GotLegendSword
+
+give item #BlackRobe
+give item #Baron
+give item #FireBrand
+give item #Magma
+give item #Pass
+give item #TwinHarp
+give item #Crystal
+
+give item #fe_CustomWeapon
+
+//set #CarryingAroundChildRydia
+
+/*
+give item #CrossBow
+give item #WhiteArrow
+give item #Spoon
+give item #Spoon
+give item #Hermes
+give item #Luca
+give item #Pink
+give item #Spoon
+give item #SandRuby
+give item #Package
+//give item #DarkCrystal
+give item #Luca
+give item #Pass
+give item #Siren
+give item #Siren
+give item #Siren
+give item #Siren
+give item #BigBomb
+give item #BigBomb
+give item #BigBomb
+give item #BigBomb
+give spell #RydiaBlack #Stop
+*/
+
+//set #fe_GotDarkCrystal
+set #fe_GotPackage
+//set #fe_GotEarthCrystal
+
+give item #EarthCrystal
+give item #Magma
+give item #SandRuby
+
+//[#B #DebugFillShadowParty]
+
+set #CecilBecamePaladin
+[#B #Rando_PaladinizeCecil]
+
+// [#B #Rando_DeliverRewardFromSlot #reward_slot.baron_inn_character]
+// [#B #Rando_DeliverRewardFromSlot #reward_slot.mist_character]
+// [#B #Rando_DeliverRewardFromSlot #reward_slot.watery_pass_character]
+
+[#B #Rando_DeliverRewardFromSlot #reward_slot.watery_pass_character]
+[#B #Rando_DeliverRewardFromSlot #reward_slot.mysidia_character_1]
+[#B #Rando_DeliverRewardFromSlot #reward_slot.mysidia_character_2]
+
+give spell #RydiaCall #Indra
+//give item #Defense
+
+[#B #DebugBuff]
+
+//give actor #Fusoya
+
+    /*
+    give item #Bomb
+    give item #BigBomb
+    give item #Notus
+    give item #Boreas
+    give item #ThorRage
+    give item #ZeusRage
+    give item #Stardust
+    give item #Succubus
+    give item #Vampire
+    give item #Bacchus
+    give item #Hermes
+    give item #HrGlass1
+    give item #HrGlass2
+    give item #HrGlass3
+    give item #SilkWeb
+    give item #Illusion
+    give item #FireBomb
+    give item #Blizzard
+    give item #LitBolt
+    give item #StarVeil
+    give item #Kamikaze
+    give item #MoonVeil
+    give item #MuteBell
+    give item #GaiaDrum
+    give item #Crystal
+    give item #Coffin
+    give item #Grimoire
+    give item #Bestiary
+    give item #Alarm
+    give item #Unihorn
+    give item #Cure1
+    give item #Cure2
+    give item #Cure3
+    give item #Ether1
+    give item #Ether2
+    give item #Elixir
+    give item #Life
+    give item #Soft
+    give item #MaidKiss
+    give item #Mallet
+    give item #DietFood
+    give item #EchoNote
+    give item #EyeDrops
+    give item #Antidote
+    give item #Cross
+    give item #Heal
+    give item #Siren
+    give item #AuApple
+    give item #AgApple
+    give item #SomaDrop
+    give item #Tent
+    give item #Cabin
+    give item #Smut
+    give item #Exit
+    give item #DwarfBread
+    give item #Imp
+    give item #BombSummon
+    give item #Cockatrice
+    give item #Mage
+    give item #Carrot
+    give item #Pass
+    give item #Whistle
+    */

@@ -1,0 +1,273 @@
+// recode Select Item dialog so that if we ask for item FE, we instead
+// continue with the event no matter what item was selected. (We can
+// later check which item was selected using an If extension command.)
+
+msfpatch {
+    .addr $00eb2b
+        jml $=SelectItemDialog__Check
+}
+
+msfpatch {
+    SelectItemDialog__Check:
+        // Here because the user selected an item
+        // other than what the event wanted.
+        // A contains the requested item. When
+        // the event requests FE, we want to just
+        // continue with the event regardless
+        // of what was selected.
+        cmp #$FE
+        beq $+SelectItemDialog__IsSpecialCase
+
+        // displaced code
+        lda #$14
+        sta $b2
+        
+        // return to where we left off
+        jml $00eb2f
+
+    SelectItemDialog__IsSpecialCase:
+        // jump directly to "return from event command" line
+        jml $00eb3b
+}
+
+
+event($E2)  //Trading the Rat Tail for Adamant
+{
+    consts(placement) {
+        1   GrottoAdamantMiniWantsTails
+    }
+    // autodetected map #AdamantGrotto
+    map message 1  // "I don't wanna talk to you unless you have a tail for"
+    select item $FE
+
+    clear #Temp
+    [#B #If #SelectedItem #item.Rat] {
+        set #Temp
+        p #GrottoAdamantMiniWantsTails spin
+        p #GrottoAdamantMiniWantsTails face down
+        [#B #Objectives_Tick #objective.quest_traderat]
+        p #GrottoAdamantMiniWantsTails wave in
+        take item #Rat
+        // %if ap_rat_trade_item%
+        map message 2
+        music #DummyFanfare
+        message #ap_reward_slot.rat_trade_item
+        // %else%
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.rat_trade_item 0]
+        map message 2  // "It's a Rat Tail I have been looking for!"
+        // %end%
+        [#B #Objectives_TickRewardSlot #reward_slot.rat_trade_item]
+        [#B #Rando_DeliverRewardFromSlot #reward_slot.rat_trade_item]
+        [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.rat_tail]
+        music #Cave
+    }
+    [#B #If #SelectedItem #item.Pink] {
+        set #Temp
+        pause 4
+        p #GrottoAdamantMiniWantsTails spin
+        p #GrottoAdamantMiniWantsTails spin jump
+        take item #Pink
+        pause 4
+        [#B #Objectives_Tick #objective.quest_tradepink]
+        // %if ap_pink_trade_item%
+        map message 3
+        music #DummyFanfare
+        message #ap_reward_slot.pink_trade_item
+        // %else%
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.pink_trade_item 0]
+        map message 3  // "Oh! Oh! Oh! Legendary Pink Tail!!"
+        // %end%
+        [#B #Rando_DeliverRewardFromSlot #reward_slot.pink_trade_item]
+        [#B #Objectives_TickRewardSlot #reward_slot.pink_trade_item]
+        [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.pink_tail]
+        music #Cave
+    }
+
+    [#B #If #not_Flag #flag.Temp] {
+        message $14 // "nothing happened"
+    }
+}
+
+npc(#GrottoAdamantMiniWantsTails)
+{
+    eventcall {
+        $E2   //Trading the Rat Tail for Adamant
+    }
+}
+// %if ap_rat_trade_item%
+text(map #AdamantGrotto message $02) {
+It's a Rat Tail I have
+been looking for!
+Okay! Take this!
+}
+// %else%
+text(map #AdamantGrotto message $02) {
+It's a Rat Tail I have
+been looking for!
+Okay! Take this!
+
+Received [name $e0]![music $29][pause 40]
+}
+// %end%
+
+// %if ap_pink_trade_item%
+text(map #AdamantGrotto message $03) {
+Oh! Oh! Oh!
+Legendary Pink Tail!!
+Great!
+Take this!
+}
+// %else%
+text(map #AdamantGrotto message $03) {
+Oh! Oh! Oh!
+Legendary Pink Tail!!
+Great!
+Take this!
+Received [name $e0]![music $29][pause 40]
+}
+// %end%
+
+// GotAdamant flag is now unused
+// event $E3 is now unused
+
+//----------------------------------------------------------------------------------------------------
+
+npc(#Smithy)
+{
+    eventcall {
+        $EE   //Giving Adamant and Legend Sword to smithy
+    }
+}
+
+event($EE)  //Giving Adamant and Legend Sword to smithy
+{
+    consts(placement) {
+        0   Smithy
+        1   SleepingBubble3
+    }
+    // autodetected map #SmithyRoom
+    map message 0  // "I'm not going to make another sword!"
+    select item #Adamant
+
+    [#B #If #not_Flag #flag.fe_GotLegendSword] {
+        map message 3
+        [#B #EndEvent]
+    }
+
+    music #None
+    batch 1 {
+        p #SleepingBubble3 toggle visible
+        p #Smithy face right
+    }
+    deactivate #SleepingBubble3
+    activate #SmithyFinishedExcalibur
+    map message 1  // "This! The Adamant! "
+    sound #GetItem
+    map message 2  // "Handed the [lightsword]Legend."
+    music #Cid
+    pause 8
+    p #Smithy face down
+    p #Smithy spin
+    p #Smithy spin jump
+    p #Smithy spin jump
+    p #Smithy face right
+    p #Smithy jump sideways
+    p #Smithy jump sideways
+    batch 1 {
+        player face right
+        p #Smithy spin jump
+    }
+    batch 3 {
+        p #Smithy move right
+    }
+    p #Smithy spin
+    p #Smithy move up
+    p #Smithy spin jump
+    p #Smithy move right
+    p #Smithy toggle visible
+    deactivate #Smithy
+
+    // also get the shop at the same time because why not
+    activate #Dwarf32
+
+    set #GotExcalibur
+    take item #Adamant
+    take item #Legend
+}
+
+text(map #SmithyRoom message 3) {
+Mmm__ is that the Adamant?
+
+
+
+Couldn't be__ besides,
+it's of no use without
+a legendary sword to
+reforge__ Zzz__
+}
+
+text(map #SmithyRoom message $01) {
+This! The Adamant!
+
+
+
+As a token of my
+gratitude, I'll make your
+old sword into something
+special!
+}
+
+// make Excalibur immediately available without waiting
+npc(#SmithyFinishedExcalibur)
+{
+    eventcall {
+        if not #GotExcalibur2:
+            $E1   //Obtaining Excalibur
+        else:
+            $2D   //Map message 6 - "I've got my confidence back again!"
+    }
+}
+
+
+event($E1)  //Obtaining "Excalibur"
+{
+    // autodetected map #SmithyHouseMainFloor
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.forge_item 0]
+    map message 5  // "It's done! Here is the sacred sword,"
+
+    [#B #Rando_CheckFlag #randoflag.objective_mode_classicforge]
+    [#B #If #not_Flag #flag.Result] {
+        [#B #Objectives_TickRewardSlot #reward_slot.forge_item]
+        // %if ap_forge_item%
+        music #DummyFanfare
+        message #ap_reward_slot.forge_item
+        // %else%
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.forge_item 0]
+        message #msg.fe_ReceivedFanfare
+        // %end%
+        [#B #Rando_DeliverRewardFromSlot #reward_slot.forge_item]
+    }
+    [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.legend_sword]
+    [#B #Tracker_SetKeyItemUsed #tracker_key_item_index.adamant]
+    [#B #Objectives_Tick #objective.quest_forge]
+
+    set #GotExcalibur2
+    music #Town
+}
+
+//%flag objective_mode_classicforge off%
+text(map #SmithyHouseMainFloor message $05) {
+It's done!
+
+}
+//%end%
+
+//%flag objective_mode_classicforge on%
+text(map #SmithyHouseMainFloor message $05) {
+It's done!
+
+
+
+__I'm gonna keep it.
+}
+//%end%

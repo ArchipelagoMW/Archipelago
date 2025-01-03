@@ -1,0 +1,461 @@
+npc(#Baigan) { default inactive }
+npc(#CastleBaronSoldier5) { default inactive }
+npc(#CastleBaronSoldier6) { default inactive }
+npc(#Engineer1) { default inactive }
+npc(#Engineer2) { default inactive }
+npc(#BaronGuard) { default inactive }
+npc(#CastleBaronMysidiaBlackMage) { default inactive }
+npc(#CastleBaronMysidiaWhiteMage) { default inactive }
+npc(#CastleBaronBlackMage1) { default inactive }
+npc(#CastleBaronBlackMage2) { default inactive }
+npc(#CastleBaronBlackMage3) { default inactive }
+npc(#CastleBaronWhiteMage1) { default inactive }
+npc(#CastleBaronWhiteMage2) { default inactive }
+npc(#CastleBaronWhiteMage3) { default inactive }
+npc(#CastleBaronCaptain) { default inactive }
+
+// nullify old Cecil Maid placement (NPC reappropriated for King Fabul)
+placement($33 0)  //#BaronCastleWestTower2F
+{
+    npc #fe_None
+    position 0 0
+    intangible
+}
+
+// nullify CastleBaronBlackMage4 placement (repurposed NPC)
+placement($30 3)  //#BaronCastlePrison
+{
+    npc #fe_None
+    position 0 0
+    intangible
+    walking off
+}
+
+// erase Cid placement in Castle Baron
+placement($24 7)
+{
+    npc #fe_None
+    position 0 0
+    walking off
+    intangible
+}
+
+// erase Rosa placement in Baron Castle West Hall
+placement($2D 0)
+{
+    npc #fe_None
+    position 0 0
+    walking off
+    intangible
+}
+
+// erase Kain placement in Baron Castle Outer Court
+placement($2B 0)
+{
+    npc #fe_None
+    position 0 0
+    walking off
+    intangible
+}
+
+//Engineers mention that they don't give the hook
+npc(#Engineer1)
+{
+    eventcall {
+        $01   //Show first message
+        messages:
+            $0D
+    }
+}
+
+npc(#Engineer2)
+{
+    eventcall {
+        $01   //Show first message
+        messages:
+            $0D
+    }
+}
+
+text(map #BaronCastle message $0D) {
+We don't install the Hook
+in this game. You get that
+item after destroying the
+super cannon in the Tower
+of Bab-il, when you try to
+leave the tower. Spoiler!
+}
+
+// always enable path to the sewer
+trigger(#BaronCastle 19)
+{
+    teleport #SewerB1 at 14 3 facing down
+}
+
+
+//-----------------------------------------------------------------
+// Baigan
+
+placement($2A 4) {
+    // not using #Baigan npc because we keep that NPC
+    // separate for use in opening cutscene and for
+    // ending vignettes
+    npc #fe_DynamicNPC
+
+    // %baigan_slot sprite main palette%
+    // %end%
+}
+
+eventcall($03)
+{
+    if not #DefeatedBaigan:
+        $1A   //Baigan battle
+    else:
+        $00   //(no event)
+}
+
+event($1A)  //Baigan battle
+{
+    consts(placement) {
+        4   Baigan
+        5   Palom1
+        6   Porom1
+    }
+    // autodetected map #BaronCastleLobby
+    p #Baigan toggle visible
+    batch 2 {
+        p #Baigan move up
+    }
+    p #Baigan face left
+    player move right
+    pause 4
+    player move right
+    player move up
+    batch 5 {
+        player move up
+        p #Baigan move up
+    }
+    music #None
+    pause 6
+    player face down
+    pause 4
+    p #Baigan face right
+    pause 1
+    p #Baigan face left
+    pause 1
+    p #Baigan face up
+    pause 2
+    p #Baigan toggle visible
+    [#B #Rando_BossBattle #rando.baigan_slot]
+    player bow head
+    [#B #Objectives_TickBossSlot #rando.baigan_slot]
+    [#B #Rando_PostBossBattle #rando.baigan_slot]
+    music #Baron
+    pause 8
+    player face up
+    set #DefeatedBaigan
+}
+
+//-----------------------------------------------------------------
+// Antechamber walls closing-in event
+
+// turn captain into party leader NPC to make cutscene work
+placement($8A 10) {
+    npc #fe_PartyLeader
+    position 7 5
+    speed 3
+    marching off
+}
+
+//----------------------------------------------------------------
+// Kainazzo
+
+placement($2C 5) {
+    // %cid_slot npc1%
+    npc #fe_DynamicNPC
+    // %end%
+}
+
+npc(#Kainazzo) {
+    sprite 
+        // %kainazzo_slot sprite main%
+        #Kainazzo
+        // %end%
+}
+
+placement($2C 10) {
+    // %kainazzo_slot sprite main palette%
+    // %end%
+}
+
+// nullify Baigan placement in throne room so that he doesn't
+// appear in ending vignettes (he's unneeded anyway)
+placement($2C 3) {
+    npc #fe_None
+    position 0 0
+}
+
+event($1B)  //Kainazzo battle, losing twins
+{
+    consts(placement) {
+        0   KingBaron
+        1   BaronGuard_A
+        5   Cid2
+        6   Palom1
+        7   Porom1
+        8   Tellah1
+        9   Yang1
+        10   Kainazzo
+    }
+    // hinted map #BaronCastleThroneRoom
+    music #None
+    sound #Glow
+    toggle tint $38
+    music #Zot
+    batch 8 {
+        p #KingBaron toggle visible
+        p #Kainazzo toggle visible
+    }
+    sound $7E
+    batch 8 {
+        screen flash
+    }
+    p #Kainazzo toggle visible
+    p #KingBaron spin jump
+    p #KingBaron toggle visible
+    toggle tint $00
+    deactivate #KingBaron
+    pause 8
+    p #Kainazzo toggle visible
+    [#B #Rando_BossBattle #rando.kainazzo_slot]
+
+    music #None
+    [#B #Objectives_TickBossSlot #rando.kainazzo_slot]
+    [#B #Rando_PostBossBattle #rando.kainazzo_slot]
+    pause 8
+    clear #Temp
+    [#B #Rando_CheckFlag #randoflag.no_earned_characters]
+    [#B #If #not_Flag #flag.Result] {
+        set #Temp
+        sound #HeavyDoor
+        player face down
+        pause 12
+        music #Cid
+        p #Cid2 toggle visible
+        batch 3 {
+            p #Cid2 move up
+        }
+        pause 4
+        player move down
+        pause 4
+        p #Cid2 spin
+        p #Cid2 spin jump
+        p #Cid2 spin
+        pause 4
+        player move down
+        player move down
+        player move down
+        p #Cid2 toggle visible
+
+        sound #GetItem
+        [#B #Text_LoadRewardNameFromSlot #reward_slot.baron_castle_character 0]
+        message #msg.fe_Joined
+        [#B #Objectives_TickRewardSlot #reward_slot.baron_castle_character]
+        [#B #Rando_DeliverRewardFromSlot #reward_slot.baron_castle_character]
+    }
+
+    [#B #If #not_Flag #flag.Temp]{
+        player face down
+        batch 4 {
+            player move down
+        }
+        pause 4
+        player face left
+        pause 4
+        player face right
+        pause 4
+        player face down
+        pause 4
+    }
+
+    batch 4 {
+        player move down
+    }
+    sound #Door
+    player move down
+
+    consts(placement) {
+        1   Cid2
+        2   Palom1
+        3   Porom1
+        4   Tellah1
+        5   Yang1
+        6   PalomStatue
+        7   PoromStatue
+        10  PartyLeader
+    }
+    load map #BaronCastleAntechamber at 7 2 facing down
+    player move down
+    player move down
+    player move down
+    music #None
+    toggle tint $38
+    toggle tint $00
+    sound $5E
+    toggle screen shake
+    pause 8
+    player face left
+    pause 4
+    music #Hurry
+    sound #Thunder
+    vfx #BaronCastleAntechamberWall1
+    pause 5
+    sound $5E
+    player face right
+    pause 6
+    sound #Thunder
+    vfx #BaronCastleAntechamberWall2
+    pause 5
+    sound $5E
+    pause 6
+    player face down
+    sound #Thunder
+    vfx #BaronCastleAntechamberWall3
+    pause 5
+    sound $5E
+    p #PartyLeader toggle visible
+    player invisible
+    p #PartyLeader move up
+    p #PartyLeader face left
+    music #None
+    sound #HeavyDoor
+    p #PalomStatue toggle visible
+    pause 2
+    p #PartyLeader face right
+    sound #HeavyDoor
+    p #PoromStatue toggle visible
+    toggle screen shake
+    p #PartyLeader move down
+    p #PartyLeader wave out
+    pause 16
+
+    music #LunarSubterrane
+    load map #BaronCastleOuterCourt at 14 2 facing down no transition
+
+    sound #Door
+
+    player visible
+    player move down
+    player move down
+    player move down
+    batch 9 {
+        player move right
+    }
+    player move up
+    player move up
+    batch 4 {
+        player move right
+    }
+    player move down
+    player face right
+
+    pause 4
+    toggle screen shake
+    sound #Quake
+    pause 8
+    sound #HeavyDoor
+    toggle screen shake
+    player move right
+
+    consts(placement) {
+        0   Cid2
+        1   Tellah1
+        2   Yang1
+    }
+    load map #BaronEmptyThroneRoom at 30 3 facing down
+    player visible
+    batch 26 {
+        player move down
+    }
+    player face left
+    pause 4
+
+    // need this check in case baron castle is cleared
+    // before unlocking waterway, which can happen in pushbtojump
+    [#B #If #Flag #flag.fe_UnlockedSewer] {
+        // Take Baron key early so that it doesn't occupy
+        // space of new item
+        take item #Baron
+    }
+
+    music #None
+    // %if ap_baron_castle_item%
+    music #DummyFanfare
+    message #ap_reward_slot.baron_castle_item
+    // %else%
+    [#B #Text_LoadRewardNameFromSlot #reward_slot.baron_castle_item 0]
+    message #msg.fe_Received
+    sound #GetItem
+    // %end%
+
+    [#B #Objectives_TickRewardSlot #reward_slot.baron_castle_item]
+    [#B #Rando_DeliverRewardFromSlot #reward_slot.baron_castle_item]
+
+    player face down
+    pause 8
+
+    set #TwinsStone
+    [#B #Objectives_Tick #objective.quest_baroncastle]
+
+    deactivate #LockedDoorWeaponArmorShop
+    deactivate #BaronSoldier1
+    deactivate #BaronSoldier2
+    activate #CastleBaronSoldier6
+    activate #Engineer1
+    activate #Engineer2
+    activate #BaronGuard
+    activate #CastleBaronBlackMage1
+    activate #CastleBaronBlackMage2
+    activate #CastleBaronBlackMage3
+    activate #CastleBaronWhiteMage1
+    activate #CastleBaronWhiteMage2
+    activate #CastleBaronWhiteMage3
+    activate #CastleBaronCaptain
+    activate #PalomStatue
+    activate #PoromStatue
+
+    music #Overworld
+    load map #Overworld at 102 158
+}
+
+mapgrid($2c 29 29) {
+    0A 01
+}
+
+text(map #BaronCastleThroneRoom message $01) {X}
+
+text(map #BaronEmptyThroneRoom message $00) {X}
+
+
+// Replacement text for statues
+npc(#PalomStatue)
+{
+    eventcall {
+        $27 // map message 0
+    }
+}
+
+npc(#PoromStatue)
+{
+    eventcall {
+        $28 // map message 1
+    }
+}
+
+text(map #BaronCastleAntechamber message $00) {
+A stunning likeness.
+}
+
+text(map #BaronCastleAntechamber message $01) {
+The likeness is stunning.
+}

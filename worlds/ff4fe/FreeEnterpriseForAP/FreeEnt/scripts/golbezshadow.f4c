@@ -1,0 +1,172 @@
+// patch out the code that inits Rydia's actor in battle setup
+// for golbez fight
+
+patch($02e149 bus) { 4C 70 E1 }  // jmp $e170
+
+// -----------------------------------------------------------------
+// ai script rewrites
+
+ai_script($DF)
+{
+    // remove one pass from start of fight
+    pass
+
+    chain {
+        message $4A   // "Golbez:HA HA HA!"
+        pass
+        
+        message $4B   // " Is that it?"
+        pass
+        
+        message $4C   // " Now __!"
+        target all characters
+        use #Enemy_HoldGas
+        
+        message $4D   // " Wait till you see"
+        pass
+        
+        message $4E   // " the real terror!"
+        pass
+        
+        message $4F   // " Meal time, Shadow!"
+        use #Enemy_Call
+        
+        condition 1
+        pass
+    }
+}
+
+ai_script($E4)
+{
+    chain {
+        target $2a  // 2A is our custom handler that will target
+                    // a random living person iff there are at least
+                    // three party members alive
+        use #Enemy_Demolish
+        
+        target $2a
+        use #Enemy_Demolish
+        
+        target $2a
+        use #Enemy_Demolish
+    }
+    
+    chain {
+        use #InvincibleOff
+        
+        //use #SummonMistDragon
+        
+        //use #Unsure_KillShadow
+
+        target self
+        use #Enemy_Retreat
+    }
+}
+
+ai_script($E1)
+{
+    message $53   // he's full
+    target all characters
+    use #Enemy_Heal2
+    message $54   // let's finish this
+    music #DecisiveBattle
+    //use #ReturnRydia
+    condition 2
+}
+
+text(battle message $53) {
+Golbez:Guess he's full.
+}
+
+text(battle message $54) {
+Golbez:Let's end this.
+}
+
+
+// -----------------------------------------------------------------
+// create new targeting handler logic that allows Shadow to work
+
+msfpatch {
+    TargetExtension__Hook:
+        cmp #$2a
+        bcs $+TargetExtension__Start
+
+        // perform displaced instructions and return
+        sec
+        sbc #$16
+        asl a
+        jml $03b8cc
+
+    TargetExtension__Start:
+        cmp #$2a
+        bne $03
+        jmp $_TargetExtension__Shadow
+
+        // no special targets matched, do a default case
+    TargetExtension__Fail:        
+        jml $03bb89  // this is where other target handlers go
+                     // when their logic fails
+
+    TargetExtension__End:
+        jml $03bb88  // this is the empty "RTS" only handler
+
+    .addr 0x03b8c8
+        jml $=TargetExtension__Hook
+}
+
+// Shadow's targeting method is:
+//   - choose random party member if there are at least three alive
+//   - otherwise fail
+msfpatch {
+    TargetExtension__Shadow:
+        // step 1: count living party members
+        ldx #$0000
+        stz $ab
+        stz $af
+    TargetExtension__Shadow_CountLoopStart:
+        lda $af
+        tay
+        lda $3540,y
+        bne $+TargetExtension__Shadow_CountLoopNext
+        lda $2003,x
+        and #$c0
+        bne $+TargetExtension__Shadow_CountLoopNext
+        lda $2005,x
+        and #$82
+        bne $+TargetExtension__Shadow_CountLoopNext
+        lda $2006,x
+        bmi $+TargetExtension__Shadow_CountLoopNext
+
+        // unit is alive, count it
+        inc $ab
+        lda $ab
+        cmp #$0003
+        bcs $+TargetExtension__Shadow_Success
+
+    TargetExtension__Shadow_CountLoopNext:
+        inc $af
+        rep #$20
+        .mx 0x00
+        txa
+        clc
+        adc #$0080
+        tax
+        and #$00ff
+        sep #$20
+        .mx 0x20
+        cpx #$0280
+        bcc $-TargetExtension__Shadow_CountLoopStart
+
+        // not enough players alive; fail out
+        jmp $_TargetExtension__Fail
+
+    TargetExtension__Shadow_Success:
+        // enough players alive; target a random player
+        lda #$00
+        sta $af
+        lda #$04
+        sta $b0
+        lda #$ff
+        sta $ad
+        jml $03baac  // defer to existing random target handler
+}

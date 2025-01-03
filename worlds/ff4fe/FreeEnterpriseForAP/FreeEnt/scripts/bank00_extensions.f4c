@@ -1,0 +1,36 @@
+// code that is specifically injected into bank 00
+// lives in this file for organization.
+
+msfpatch {
+    .addr $00fd31
+
+    Bank00__PostMIABCheck:
+        lda $_Rewards__PendingDeliverySlot
+        beq $+Done
+        jsl $=Rewards__DeliverFromSlot
+        stz $_Rewards__PendingDeliverySlot
+    %Done:
+        jmp $80a0
+}
+
+
+
+// injected at end of Bank 00
+msfpatch {
+    .addr $00ffb5
+    Bank00LongCall:
+        // force return address onto stack
+        pea $ffba
+        // do long call
+        jmp ($0ffb)
+        // here should be address $00ffbb
+        rtl
+
+    .def Bank00LongCallAddr  $7e0ffb
+}
+
+msfpatch {
+    Bank00LongCallX:
+        stx $_Bank00LongCallAddr
+        jml $=Bank00LongCall
+}
