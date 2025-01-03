@@ -5267,74 +5267,67 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            ),
         make_location_data(SC2Mission.AMON_S_REACH_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 11500, LocationType.VICTORY,
                            lambda state: (
-                                   logic.terran_common_unit(state)
-                                   and logic.terran_competent_anti_air(state)
+                                   logic.terran_competent_comp(state)
                            )),
         make_location_data(SC2Mission.AMON_S_REACH_T.mission_name, "Close Solarite Reserve", SC2_RACESWAP_LOC_ID_OFFSET + 11501, LocationType.VANILLA),
         make_location_data(SC2Mission.AMON_S_REACH_T.mission_name, "North Solarite Reserve", SC2_RACESWAP_LOC_ID_OFFSET + 11502, LocationType.VANILLA,
                            lambda state: (
-                                   logic.terran_common_unit(state)
-                                   and logic.terran_competent_anti_air(state)
+                               logic.terran_competent_comp(state)
                            )),
         make_location_data(SC2Mission.AMON_S_REACH_T.mission_name, "East Solarite Reserve", SC2_RACESWAP_LOC_ID_OFFSET + 11503, LocationType.VANILLA,
                            lambda state: (
-                                   logic.terran_common_unit(state)
-                                   and logic.terran_competent_anti_air(state)
+                               logic.terran_competent_comp(state)
                            )),
         make_location_data(SC2Mission.AMON_S_REACH_T.mission_name, "West Launch Bay", SC2_RACESWAP_LOC_ID_OFFSET + 11504, LocationType.EXTRA,
                            lambda state: (
-                                   logic.terran_common_unit(state)
-                                   and logic.terran_competent_anti_air(state)
+                               logic.terran_competent_comp(state)
                            )),
         make_location_data(SC2Mission.AMON_S_REACH_T.mission_name, "South Launch Bay", SC2_RACESWAP_LOC_ID_OFFSET + 11505, LocationType.EXTRA,
                            lambda state: (
-                                   logic.terran_common_unit(state)
-                                   and logic.terran_competent_anti_air(state)
+                               logic.terran_competent_comp(state)
                            )),
         make_location_data(SC2Mission.AMON_S_REACH_T.mission_name, "Northwest Launch Bay", SC2_RACESWAP_LOC_ID_OFFSET + 11506, LocationType.EXTRA,
                            lambda state: (
-                                   logic.terran_common_unit(state)
-                                   and logic.terran_competent_anti_air(state)
+                               logic.terran_competent_comp(state)
                            )),
         make_location_data(SC2Mission.AMON_S_REACH_T.mission_name, "East Launch Bay", SC2_RACESWAP_LOC_ID_OFFSET + 11507, LocationType.EXTRA,
                            lambda state: (
-                                   logic.terran_common_unit(state)
-                                   and logic.terran_competent_anti_air(state)
+                               logic.terran_competent_comp(state)
                            )),
         make_location_data(SC2Mission.AMON_S_REACH_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 11600, LocationType.VICTORY,
                            lambda state: (
-                                   logic.zerg_common_unit(state)
+                                   logic.zerg_competent_comp(state)
                                    and logic.zerg_basic_kerriganless_anti_air(state)
                            )),
         make_location_data(SC2Mission.AMON_S_REACH_Z.mission_name, "Close Solarite Reserve", SC2_RACESWAP_LOC_ID_OFFSET + 11601, LocationType.VANILLA),
         make_location_data(SC2Mission.AMON_S_REACH_Z.mission_name, "North Solarite Reserve", SC2_RACESWAP_LOC_ID_OFFSET + 11602, LocationType.VANILLA,
                            lambda state: (
-                                   logic.zerg_common_unit(state)
+                                   logic.zerg_competent_comp(state)
                                    and logic.zerg_basic_kerriganless_anti_air(state)
                            )),
         make_location_data(SC2Mission.AMON_S_REACH_Z.mission_name, "East Solarite Reserve", SC2_RACESWAP_LOC_ID_OFFSET + 11603, LocationType.VANILLA,
                            lambda state: (
-                                   logic.zerg_common_unit(state)
+                                   logic.zerg_competent_comp(state)
                                    and logic.zerg_basic_kerriganless_anti_air(state)
                            )),
         make_location_data(SC2Mission.AMON_S_REACH_Z.mission_name, "West Launch Bay", SC2_RACESWAP_LOC_ID_OFFSET + 11604, LocationType.EXTRA,
                            lambda state: (
-                                   logic.zerg_common_unit(state)
+                                   logic.zerg_competent_comp(state)
                                    and logic.zerg_basic_kerriganless_anti_air(state)
                            )),
         make_location_data(SC2Mission.AMON_S_REACH_Z.mission_name, "South Launch Bay", SC2_RACESWAP_LOC_ID_OFFSET + 11605, LocationType.EXTRA,
                            lambda state: (
-                                   logic.zerg_common_unit(state)
+                                   logic.zerg_competent_comp(state)
                                    and logic.zerg_basic_kerriganless_anti_air(state)
                            )),
         make_location_data(SC2Mission.AMON_S_REACH_Z.mission_name, "Northwest Launch Bay", SC2_RACESWAP_LOC_ID_OFFSET + 11606, LocationType.EXTRA,
                            lambda state: (
-                                   logic.zerg_common_unit(state)
+                                   logic.zerg_competent_comp(state)
                                    and logic.zerg_basic_kerriganless_anti_air(state)
                            )),
         make_location_data(SC2Mission.AMON_S_REACH_Z.mission_name, "East Launch Bay", SC2_RACESWAP_LOC_ID_OFFSET + 11607, LocationType.EXTRA,
                            lambda state: (
-                                   logic.zerg_common_unit(state)
+                                   logic.zerg_competent_comp(state)
                                    and logic.zerg_basic_kerriganless_anti_air(state)
                            )),
         make_location_data(SC2Mission.LAST_STAND_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 11700, LocationType.VICTORY,
