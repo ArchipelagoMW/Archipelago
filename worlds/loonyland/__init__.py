@@ -36,8 +36,12 @@ class LoonylandWebWorld(WebWorld):
 
 
 class LoonylandWorld(World):
-    """The greatest game of all time."""
-
+    """
+    Loonyland: Halloween Hill is an This is an action-adventure game,
+    where you must explore to improve Loony's abilities and gain
+    access to ever more dangerous areas, all in an effort to find out
+    what lies behind the madness going on in Halloween Hill.
+    """
     game = "Loonyland"
     web = LoonylandWebWorld()
     options: LoonylandOptions
@@ -106,7 +110,7 @@ class LoonylandWorld(World):
         for loc_name, loc_data in loonyland_location_table.items():
             if not loc_data.can_create(self.options):
                 continue
-            region = self.multiworld.get_region(loc_data.region, self.player)
+            region = self.get_region(loc_data.region)
             new_loc = LoonylandLocation(self.player, loc_name, loc_data.id + loonyland_base_id, region)
             if not loc_data.in_logic(self.options):
                 new_loc.place_locked_item(self.create_event(loc_data.base_item))
@@ -119,7 +123,6 @@ class LoonylandWorld(World):
 
     def set_rules(self):
         # Completion condition.
-        # self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
         final_loc = None
         if self.options.win_condition == WinCondition.option_evilizer:
             final_loc = self.get_location("Q: Save Halloween Hill")
