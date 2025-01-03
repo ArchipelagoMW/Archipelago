@@ -1,0 +1,11 @@
+# Refer to ../docs/webhost configuration sample.yaml
+
+# We'll be hosting VIA gunicorn
+SELFHOST: false
+SELFLAUNCH: true
+JOB_THRESHOLD: 0
+
+# Maximum concurrent world gens
+GENERATORS: 8
+
+HOSTERS: 5
