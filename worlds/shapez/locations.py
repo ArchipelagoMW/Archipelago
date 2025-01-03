@@ -153,6 +153,10 @@ shapesanity_two_sided: Dict[str, str] = {}
 shapesanity_three_parts: Dict[str, str] = {}
 shapesanity_four_parts: Dict[str, str] = {}
 
+level_locations: List[str] = (["Level 1 Additional", "Level 20 Additional", "Level 20 Additional 2"]
+                              + [f"Level {x}" for x in range(1, max_levels_and_upgrades)])
+upgrade_locations: List[str] = [f"{cat} Upgrade Tier {roman(x)}"
+                                for cat in categories for x in range(2, max_levels_and_upgrades+1)]
 achievement_locations: List[str] = ["My eyes no longer hurt", "Painter", "Cutter", "Rotater", "Wait, they stack?",
                                     "Wires", "Storage", "Freedom", "The logo!", "To the moon", "It's piling up",
                                     "I'll use it later", "Efficiency 1", "Preparing to launch", "SpaceY",
@@ -164,13 +168,7 @@ achievement_locations: List[str] = ["My eyes no longer hurt", "Painter", "Cutter
                                     "MAM (Make Anything Machine)", "Perfectionist", "The next dimension", "Oops",
                                     "Copy-Pasta", "I've seen that before ...", "Memories from the past",
                                     "I need trains", "A bit early?", "GPS"]
-
-all_locations: List[str] = (["Level 1 Additional", "Level 20 Additional", "Level 20 Additional 2"]
-                            + [f"Level {x}" for x in range(1, max_levels_and_upgrades)]
-                            + [f"{cat} Upgrade Tier {roman(x)}"
-                               for cat in categories for x in range(2, max_levels_and_upgrades+1)]
-                            + achievement_locations
-                            + [f"Shapesanity {x}" for x in range(1, max_shapesanity+1)])
+shapesanity_locations: List[str] = [f"Shapesanity {x}" for x in range(1, max_shapesanity+1)]
 
 
 def init_shapesanity_pool() -> None:
