@@ -105,10 +105,10 @@ class LMWorld(World):
     options: LMOptions
 
     topology_present = True
-    item_name_to_id: ClassVar[Dict[str, int]] = {
+    item_name_to_id: ClassVar[dict[str, int]] = {
         name: LMItem.get_apid(data.code) for name, data in ALL_ITEMS_TABLE.items() if data.code is not None
     }
-    location_name_to_id: ClassVar[Dict[str, int]] = {
+    location_name_to_id: ClassVar[dict[str, int]] = {
         name: LMLocation.get_apid(data.code) for name, data in ALL_LOCATION_TABLE.items() if data.code is not None
     }
     settings: LuigisMansionSettings
