@@ -96,11 +96,6 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Deep Jungle"].locations.append("Deep Jungle Hippo's Lagoon Center Chest")
     regions["Deep Jungle"].locations.append("Deep Jungle Hippo's Lagoon Left Chest")
     regions["Deep Jungle"].locations.append("Deep Jungle Hippo's Lagoon Right Chest")
-    regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 10 Fruits")
-    regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 20 Fruits")
-    regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 30 Fruits")
-    regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 40 Fruits")
-    regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 50 Fruits")
     regions["Deep Jungle"].locations.append("Deep Jungle Seal Keyhole Jungle King Event")
     regions["Deep Jungle"].locations.append("Deep Jungle Seal Keyhole Red Trinity Event")
     regions["Deep Jungle"].locations.append("Deep Jungle Tent Chest")
@@ -474,6 +469,12 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     if options.super_bosses or options.goal.current_key == "unknown":
         regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown Ansem's Report 13")
         regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown EXP Necklace Event")
+    if options.jungle_slider:
+        regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 10 Fruits")
+        regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 20 Fruits")
+        regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 30 Fruits")
+        regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 40 Fruits")
+        regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 50 Fruits")
     for i in range(options.level_checks):
         regions["Levels"].locations.append("Level " + str(i+1).rjust(3, '0'))
     if options.goal.current_key == "final_ansem":
