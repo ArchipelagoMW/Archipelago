@@ -79,7 +79,7 @@ class TestIDs(unittest.TestCase):
                         world_type.location_name_to_id.values(),
                         "\nThese locations have an overlapping names with other locations its own world")
 
-                self.assertEqual(len(world_type.location_id_to_name), len(world_type.location_name_to_id))
+                self.assertEqual(len_location_id_to_name, len_location_name_to_id)
 
     def test_postgen_datapackage(self):
         """Generates a solo multiworld and checks that the datapackage is still valid"""
