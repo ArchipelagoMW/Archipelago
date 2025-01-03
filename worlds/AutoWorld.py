@@ -378,6 +378,10 @@ class World(metaclass=AutoWorldRegister):
         """Method for setting the rules on the World's regions and locations."""
         pass
 
+    def connect_entrances(self) -> None:
+        """Method to finalize the source and target regions of the World's entrances"""
+        pass
+
     def generate_basic(self) -> None:
         """
         Useful for randomizing things that don't affect logic but are better to be determined before the output stage.

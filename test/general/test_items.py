@@ -67,7 +67,7 @@ class TestBase(unittest.TestCase):
     def test_itempool_not_modified(self):
         """Test that worlds don't modify the itempool after `create_items`"""
         gen_steps = ("generate_early", "create_regions", "create_items")
-        additional_steps = ("set_rules", "generate_basic", "pre_fill")
+        additional_steps = ("set_rules", "connect_entrances", "generate_basic", "pre_fill")
         excluded_games = ("Links Awakening DX", "Ocarina of Time", "SMZ3")
         worlds_to_test = {game: world
                           for game, world in AutoWorldRegister.world_types.items() if game not in excluded_games}
@@ -84,7 +84,7 @@ class TestBase(unittest.TestCase):
     def test_locality_not_modified(self):
         """Test that worlds don't modify the locality of items after duplicates are resolved"""
         gen_steps = ("generate_early", "create_regions", "create_items")
-        additional_steps = ("set_rules", "generate_basic", "pre_fill")
+        additional_steps = ("set_rules", "connect_entrances", "generate_basic", "pre_fill")
         worlds_to_test = {game: world for game, world in AutoWorldRegister.world_types.items()}
         for game_name, world_type in worlds_to_test.items():
             with self.subTest("Game", game=game_name):

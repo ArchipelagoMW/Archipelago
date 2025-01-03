@@ -6,7 +6,7 @@ from worlds.AutoWorld import WebWorld, World
 from .Items import KH1Item, KH1ItemData, event_item_table, get_items_by_category, item_table, item_name_groups
 from .Locations import KH1Location, location_table, get_locations_by_category, location_name_groups
 from .Options import KH1Options, kh1_option_groups
-from .Regions import create_regions
+from .Regions import connect_entrances, create_regions
 from .Rules import set_rules
 from .Presets import kh1_option_presets
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
@@ -242,6 +242,9 @@ class KH1World(World):
 
     def create_regions(self):
         create_regions(self.multiworld, self.player, self.options)
+
+    def connect_entrances(self):
+        connect_entrances(self.multiworld, self.player)
     
     def generate_early(self):
         value_names = ["Reports to Open End of the World", "Reports to Open Final Rest Door", "Reports in Pool"]

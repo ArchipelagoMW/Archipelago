@@ -45,6 +45,12 @@ class TestBase(unittest.TestCase):
                 self.assertEqual(location_count, len(multiworld.get_locations()),
                                  f"{game_name} modified locations count during rule creation")
 
+                call_all(multiworld, "connect_entrances")
+                self.assertEqual(region_count, len(multiworld.get_regions()),
+                                 f"{game_name} modified region count during rule creation")
+                self.assertEqual(location_count, len(multiworld.get_locations()),
+                                 f"{game_name} modified locations count during rule creation")
+
                 call_all(multiworld, "generate_basic")
                 self.assertEqual(region_count, len(multiworld.get_regions()),
                                  f"{game_name} modified region count during generate_basic")
