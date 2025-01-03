@@ -1112,7 +1112,11 @@ class LowestMaximumSupply(Range):
 
 
 class FillerRatio(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
-    """Controls the relative probability of each filler item being generated over others."""
+    """
+    Controls the relative probability of each filler item being generated over others.
+    Items that are bound to specific race or option are automatically eliminated.
+    Kerrigan levels generated this way don't go against Kerrigan level item sum
+    """
     default = {
         item_names.STARTING_MINERALS: 1,
         item_names.STARTING_VESPENE: 1,
@@ -1120,6 +1124,7 @@ class FillerRatio(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         item_names.MAX_SUPPLY: 1,
         item_names.SHIELD_REGENERATION: 1,
         item_names.BUILDING_CONSTRUCTION_SPEED: 1,
+        item_names.KERRIGAN_LEVELS_1: 1,
         item_names.REDUCED_MAX_SUPPLY: 0,
     }
     simple_names = {
@@ -1136,6 +1141,8 @@ class FillerRatio(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         "construction speed": item_names.BUILDING_CONSTRUCTION_SPEED,
         "supply trap": item_names.REDUCED_MAX_SUPPLY,
         "reduced max supply": item_names.REDUCED_MAX_SUPPLY,
+        "kerrigan levels": item_names.KERRIGAN_LEVELS_1,
+        "kerrigan level": item_names.KERRIGAN_LEVELS_1,
     }
     supports_weighting = False
     display_name = "Filler Item Ratios"

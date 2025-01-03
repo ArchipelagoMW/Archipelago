@@ -485,7 +485,7 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
 
     kerrigan_is_present = (
             len(kerrigan_missions) > 0
-            and world.options.kerrigan_presence == KerriganPresence.option_vanilla
+            and world.options.kerrigan_presence in kerrigan_unit_available
             and SC2Campaign.HOTS in get_enabled_campaigns(world) # TODO: Kerrigan available all Zerg/Everywhere
     )
 
@@ -830,12 +830,20 @@ def set_up_filler_ratio(world: SC2World) -> None:
         MissionFlag.Protoss in mission_flags
         or (world.options.take_over_ai_allies and (MissionFlag.AiProtossAlly in mission_flags))
     )
+    include_kerrigan = (
+        MissionFlag.Kerrigan in mission_flags
+        and world.options.kerrigan_presence in kerrigan_unit_available
+    )
     if not include_protoss:
         world.filler_ratio.pop(item_names.SHIELD_REGENERATION, 0)
+    if not include_kerrigan:
+        world.filler_ratio.pop(item_names.KERRIGAN_LEVELS_1, 0)
     if sum(world.filler_ratio.values()) == 0:
         world.filler_ratio = FillerRatio.default.copy()
     if not include_protoss:
         world.filler_ratio.pop(item_names.SHIELD_REGENERATION, 0)
+    if not include_kerrigan:
+        world.filler_ratio.pop(item_names.KERRIGAN_LEVELS_1, 0)
 
 
 def get_random_first_mission(world: SC2World, mission_order: SC2MissionOrder) -> SC2Mission:
