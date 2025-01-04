@@ -717,8 +717,10 @@ TRAP_TABLE = {
     game.surfaces["nauvis"].build_enemy_base(game.forces["player"].get_spawn_position(game.get_surface(1)), 25)
 end,
 ["Evolution Trap"] = function ()
-    game.forces["enemy"].evolution_factor = game.forces["enemy"].evolution_factor + (TRAP_EVO_FACTOR * (1 - game.forces["enemy"].evolution_factor))
-    game.print({"", "New evolution factor:", game.forces["enemy"].evolution_factor})
+    local new_factor = game.forces["enemy"].get_evolution_factor("nauvis") +
+        (TRAP_EVO_FACTOR * (1 - game.forces["enemy"].get_evolution_factor("nauvis")))
+    game.forces["enemy"].set_evolution_factor(new_factor, "nauvis")
+    game.print({"", "New evolution factor:", new_factor})
 end,
 ["Teleport Trap"] = function ()
     for _, player in ipairs(game.forces["player"].players) do
