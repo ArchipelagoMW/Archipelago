@@ -138,6 +138,17 @@ def apply(env):
     treasure_assignment = TreasureAssignment(autosells)
 
     if env.options.ap_data is not None:
+
+        def check_junk_items(item_name, placement_data):
+            if placement_data.flag == "K":
+                return False
+            if item_name in env.options.ap_data["kept_items"]:
+                return False
+            if item_name in env.options.ap_data["junk_items"]:
+                return True
+            if placement_data.tier <= env.options.ap_data["junk_tier"]:
+                return True
+
         treasure_table_start = 0x1A0000
         for t in treasure_dbview:
             id = t.flag
@@ -170,7 +181,7 @@ def apply(env):
                 safe_player_name = re.sub(r"[^a-zA-Z0-9`\'.\-_!?%/:,\s]", "-", safe_player_name)
                 env.add_script(f'{script_text} {{Found {safe_player_name}\'s \n{safe_item_name}. }}')
             else:
-                if placement.tier <= env.options.ap_data["junk_tier"] and placement.flag != "K":
+                if check_junk_items(ap_item["item_data"]["name"], placement):
                     env.add_script(f'{script_text} {{Found your own\n{placement.name}.\nAutomatically converted\nto {price} GP.}}')
                 else:
                     env.add_script(f'{script_text} {{Found your own\n{placement.name}.}}')

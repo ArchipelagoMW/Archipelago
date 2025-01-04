@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from Options import (Toggle, Range, Choice, PerGameCommonOptions, DefaultOnToggle, StartInventoryPool, OptionGroup,
-                     OptionSet)
+                     OptionSet, ItemSet, Visibility)
 
 
 class ForgeTheCrystal(Toggle):
@@ -334,6 +334,15 @@ class StarterKitThree(Choice):
     option_random_kit = 26
     default = 0
 
+class JunkedItems(ItemSet):
+    """Items that will always be sold for GP regardless of your junk tier settings."""
+    display_name = "Junked Items"
+    visibility = Visibility.complex_ui
+
+class KeptItems(ItemSet):
+    """Items that will never be sold for GP regardless of your junk tier settings. Takes priority over Junked Items."""
+    visibility = Visibility.complex_ui
+
 @dataclass
 class FF4FEOptions(PerGameCommonOptions):
     ForgeTheCrystal: ForgeTheCrystal
@@ -370,6 +379,8 @@ class FF4FEOptions(PerGameCommonOptions):
     StarterKitOne: StarterKitOne
     StarterKitTwo: StarterKitTwo
     StarterKitThree: StarterKitThree
+    JunkedItems: JunkedItems
+    KeptItems: KeptItems
     start_inventory_from_pool: StartInventoryPool
 
 ff4fe_option_groups = [
