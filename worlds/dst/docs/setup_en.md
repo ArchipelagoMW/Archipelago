@@ -24,7 +24,7 @@
 - You may be prompted to choose a server playstyle for your world. If you're not sure which to pick, Relaxed is recommended.
     * Endless, Survival, and Wilderness are also fine if you want more of a challenge.
     * World resets and character resets are fine, though will reset your progress for the Survival goal if that's your victory condition.
-    * Light Out is only appropriate if you have only night enabled in your YAML.
+    * Lights Out is only appropriate if you have only night enabled in your YAML.
 - You may be prompted to choose whether or not to add Caves. Refer to the client if you don't remember.
     * It's also fine to always add Caves, even if your logic doesn't include it.
 - Click on the Mods tab. Enable Archipelago Randomizer, from the Server Mods category.
