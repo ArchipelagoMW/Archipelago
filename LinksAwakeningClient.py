@@ -659,32 +659,6 @@ class LinksAwakeningContext(CommonContext):
 
     item_id_lookup = get_locations_to_id()
 
-    async def reset_game_loop(self):
-        """
-        Reset anything needed for the game loop to begin again.
-        """
-        # TODO: cancel all client tasks
-        if not self.client.stop_bizhawk_spam:
-            logger.info("(Re)Starting game loop")
-        self.found_checks.clear()
-        # On restart of game loop, clear all checks, just in case we swapped ROMs
-        # this isn't totally neccessary, but is extra safety against cross-ROM contamination
-        self.client.recvd_checks.clear()
-        await self.client.wait_for_retroarch_connection()
-        await self.client.reset_auth()
-        # If we find ourselves with new auth after the reset, reconnect
-        if self.auth and self.client.auth != self.auth:
-            # It would be neat to reconnect here, but connection needs this loop to be running
-            logger.info("Detected new ROM, disconnecting...")
-            await self.disconnect()
-            continue
-
-        if not self.client.recvd_checks:
-            await self.sync()
-
-        await self.client.wait_and_init_tracker()
-        self.examine_collected_checks = True
-
     async def run_game_loop(self):
         def on_item_get(ladxr_checks):
             checks = [self.item_id_lookup[meta_to_name(
@@ -708,7 +682,27 @@ class LinksAwakeningContext(CommonContext):
 
         while True:
             try:
-                await self.reset_game_loop()
+                # TODO: cancel all client tasks
+                if not self.client.stop_bizhawk_spam:
+                    logger.info("(Re)Starting game loop")
+                self.found_checks.clear()
+                # On restart of game loop, clear all checks, just in case we swapped ROMs
+                # this isn't totally neccessary, but is extra safety against cross-ROM contamination
+                self.client.recvd_checks.clear()
+                await self.client.wait_for_retroarch_connection()
+                await self.client.reset_auth()
+                # If we find ourselves with new auth after the reset, reconnect
+                if self.auth and self.client.auth != self.auth:
+                    # It would be neat to reconnect here, but connection needs this loop to be running
+                    logger.info("Detected new ROM, disconnecting...")
+                    await self.disconnect()
+                    continue
+
+                if not self.client.recvd_checks:
+                    await self.sync()
+
+                await self.client.wait_and_init_tracker()
+                self.examine_collected_checks = True
 
                 while True:
                     await self.client.main_tick(on_item_get, victory, deathlink, collect)
