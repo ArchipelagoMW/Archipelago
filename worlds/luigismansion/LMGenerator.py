@@ -284,59 +284,23 @@ class LuigisMansionRandomizer:
                 self.update_custom_event(event_no, False, lines)
 
         lines = get_data(__name__, "data/custom_events/event36.txt").decode('utf-8')
-        match required_mario_item_count:
-            case 1:
-                lines = lines.replace("{CaseZero}", "<WINDOW>(0)<COLOR>(9)\n<SAY>You are missing the " +
-                                      "following #\\nof <COLOR>(2)Mario<Color>(0) items: " +
-                                      str(required_mario_item_count) + "\n<ANYKEY>\n<BGM>(7)")
-                lines = lines.replace("{CaseOne}", "<GENON>\"dm_uranai\"\n<FLAGON>(13)\n<BGM>(32)")
-                lines = lines.replace("{CaseTwo}", "<RAMDOMJMP>\"1\"")
-                lines = lines.replace("{CaseThree}", "<RAMDOMJMP>\"1\"")
-                lines = lines.replace("{CaseFour}", "<RAMDOMJMP>\"1\"")
-                lines = lines.replace("{CaseFive}", "<RAMDOMJMP>\"1\"")
-            case 2:
-                lines = lines.replace("{CaseZero}", "<WINDOW>(0)<COLOR>(9)\n<SAY>You are missing the " +
-                                      "following #\\nof <COLOR>(2)Mario<Color>(0) items: " +
-                                      str(required_mario_item_count) + "\n<ANYKEY>\n<BGM>(7)")
-                lines = lines.replace("{CaseOne}", "<RAMDOMJMP>\"0\"")
-                lines = lines.replace("{CaseTwo}", "<GENON>\"dm_uranai\"\n<FLAGON>(13)\n<BGM>(32)")
-                lines = lines.replace("{CaseThree}", "<RAMDOMJMP>\"2\"")
-                lines = lines.replace("{CaseFour}", "<RAMDOMJMP>\"2\"")
-                lines = lines.replace("{CaseFive}", "<RAMDOMJMP>\"2\"")
-            case 3:
-                lines = lines.replace("{CaseZero}", "<WINDOW>(0)<COLOR>(9)\n<SAY>You are missing the " +
-                                      "following #\\nof <COLOR>(2)Mario<Color>(0) items: " +
-                                      str(required_mario_item_count) + "\n<ANYKEY>\n<BGM>(7)")
-                lines = lines.replace("{CaseOne}", "<RAMDOMJMP>\"0\"")
-                lines = lines.replace("{CaseTwo}", "<RAMDOMJMP>\"0\"")
-                lines = lines.replace("{CaseThree}", "<GENON>\"dm_uranai\"\n<FLAGON>(13)\n<BGM>(32)")
-                lines = lines.replace("{CaseFour}", "<RAMDOMJMP>\"3\"")
-                lines = lines.replace("{CaseFive}", "<RAMDOMJMP>\"3\"")
-            case 4:
-                lines = lines.replace("{CaseZero}", "<WINDOW>(0)<COLOR>(9)\n<SAY>You are missing the " +
-                                      "following #\\nof <COLOR>(2)Mario<Color>(0) items: " +
-                                      str(required_mario_item_count) + "\n<ANYKEY>\n<BGM>(7)")
-                lines = lines.replace("{CaseOne}", "<RAMDOMJMP>\"0\"")
-                lines = lines.replace("{CaseTwo}", "<RAMDOMJMP>\"0\"")
-                lines = lines.replace("{CaseThree}", "<RAMDOMJMP>\"0\"")
-                lines = lines.replace("{CaseFour}", "<GENON>\"dm_uranai\"\n<FLAGON>(13)\n<BGM>(32)")
-                lines = lines.replace("{CaseFive}", "<RAMDOMJMP>\"4\"")
-            case 5:
-                lines = lines.replace("{CaseZero}", "<WINDOW>(0)<COLOR>(9)\n<SAY>You are missing the " +
-                                      "following #\\nof <COLOR>(2)Mario<Color>(0) items: " +
-                                      str(required_mario_item_count) + "\n<ANYKEY>\n<BGM>(7)")
-                lines = lines.replace("{CaseOne}", "<RAMDOMJMP>\"0\"")
-                lines = lines.replace("{CaseTwo}", "<RAMDOMJMP>\"0\"")
-                lines = lines.replace("{CaseThree}", "<RAMDOMJMP>\"0\"")
-                lines = lines.replace("{CaseFour}", "<RAMDOMJMP>\"0\"")
-                lines = lines.replace("{CaseFive}", "<GENON>\"dm_uranai\"\n<FLAGON>(13)\n<BGM>(32)")
-            case _:
-                lines = lines.replace("{CaseZero}", "<GENON>\"dm_uranai\"\n<FLAGON>(13)\n<BGM>(32)")
-                lines = lines.replace("{CaseOne}", "<RAMDOMJMP>\"0\"")
-                lines = lines.replace("{CaseTwo}", "<RAMDOMJMP>\"0\"")
-                lines = lines.replace("{CaseThree}", "<RAMDOMJMP>\"0\"")
-                lines = lines.replace("{CaseFour}", "<RAMDOMJMP>\"0\"")
-                lines = lines.replace("{CaseFive}", "<RAMDOMJMP>\"0\"")
+        lines = lines.replace("{CaseZero}", "<WINDOW>(0)<COLOR>(9)\n" +
+                              "<SAY>You are missing the following #\\nof <COLOR>(2)Mario<Color>(0) items: " +
+                              str(required_mario_item_count) + "\n<ANYKEY>\n<BGM>(7)")
+
+        cases_to_replace = ["", "{CaseOne}", "{CaseTwo}", "{CaseThree}", "{CaseFour}", "{CaseFive}"]
+        gen_on_string = "<GENON>\"dm_uranai\"\n<FLAGON>(13)\n<BGM>(32)"
+        ramdom_jmp_string = "<RAMDOMJMP>\"{0}\""
+
+        for i in range(1,6):
+            if i < required_mario_item_count:
+                lines = lines.replace(cases_to_replace[i], ramdom_jmp_string.format("0"))
+                continue
+            elif i == required_mario_item_count:
+                lines = lines.replace(cases_to_replace[i], gen_on_string)
+                continue
+            else:
+                lines = lines.replace(cases_to_replace[i], ramdom_jmp_string.format(str(required_mario_item_count)))
 
         self.update_custom_event("36", False, lines)
 
@@ -356,6 +320,7 @@ class LuigisMansionRandomizer:
             yield from self.gcm.export_disc_to_iso_with_changed_files(self.randomized_output_file_path)
 
     def update_custom_event(self, event_number: str, check_local_folder: bool, non_local_str=""):
+        #TODO update custom events to remove any camera files or anything else related. Also use the Template CSV to remove the CSVs from the game, reducing file sizes as needed.
         if not check_local_folder and not non_local_str:
             raise Exception("If the custom event does not exist in the local data folder, an event string must be " +
                             "provided to overwrite an existing event.")
