@@ -1702,8 +1702,7 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
                                 state.has(ItemName.knuckles_hammer_gloves, player) and
                                 state.has(ItemName.knuckles_sunglasses, player)))
         add_rule(multiworld.get_location(LocationName.eternal_engine_itembox_8, player),
-                 lambda state: (state.has(ItemName.tails_booster, player) and
-                                state.has(ItemName.tails_bazooka, player)))
+                 lambda state: state.has(ItemName.tails_booster, player))
         add_rule(multiworld.get_location(LocationName.crazy_gadget_itembox_8, player),
                  lambda state: (state.has(ItemName.sonic_bounce_bracelet, player) and
                                 state.has(ItemName.sonic_mystic_melody, player)))
@@ -1733,8 +1732,7 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
                                 state.has(ItemName.knuckles_hammer_gloves, player) and
                                 state.has(ItemName.knuckles_sunglasses, player)))
         add_rule(multiworld.get_location(LocationName.eternal_engine_itembox_9, player),
-                 lambda state: (state.has(ItemName.tails_booster, player) and
-                                state.has(ItemName.tails_bazooka, player)))
+                 lambda state: state.has(ItemName.tails_booster, player))
         add_rule(multiworld.get_location(LocationName.crazy_gadget_itembox_9, player),
                  lambda state: (state.has(ItemName.sonic_light_shoes, player) and
                                 state.has(ItemName.sonic_bounce_bracelet, player) and
@@ -1759,8 +1757,7 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
                                 state.has(ItemName.knuckles_hammer_gloves, player) and
                                 state.has(ItemName.knuckles_sunglasses, player)))
         add_rule(multiworld.get_location(LocationName.eternal_engine_itembox_10, player),
-                 lambda state: (state.has(ItemName.tails_booster, player) and
-                                state.has(ItemName.tails_bazooka, player)))
+                 lambda state: state.has(ItemName.tails_booster, player))
         add_rule(multiworld.get_location(LocationName.crazy_gadget_itembox_10, player),
                  lambda state: (state.has(ItemName.sonic_light_shoes, player) and
                                 state.has(ItemName.sonic_bounce_bracelet, player) and
@@ -2053,8 +2050,6 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
         add_rule(multiworld.get_location(LocationName.cosmic_wall_big, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
 
-        add_rule(multiworld.get_location(LocationName.cannon_core_big_1, player),
-                 lambda state: state.has(ItemName.tails_booster, player))
         add_rule(multiworld.get_location(LocationName.cannon_core_big_2, player),
                  lambda state: state.has(ItemName.tails_booster, player) and
                                state.has(ItemName.eggman_jet_engine, player))
@@ -2969,7 +2964,7 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, world: World, player:
 
         add_rule(multiworld.get_location(LocationName.mission_street_lifebox_2, player),
                  lambda state: (state.has(ItemName.tails_booster, player) and
-                                state.has(ItemName.tails_mystic_melody, player)))
+-                               state.has(ItemName.tails_mystic_melody, player)))
         add_rule(multiworld.get_location(LocationName.eternal_engine_lifebox_2, player),
                  lambda state: state.has(ItemName.tails_booster, player))
 
@@ -2985,7 +2980,8 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, world: World, player:
                                 state.has(ItemName.rouge_treasure_scope, player)))
 
         add_rule(multiworld.get_location(LocationName.meteor_herd_lifebox_3, player),
-                 lambda state: state.has(ItemName.knuckles_sunglasses, player))
+                 lambda state: (state.has(ItemName.knuckles_hammer_gloves, player) and
+                                state.has(ItemName.knuckles_sunglasses, player)))
         add_rule(multiworld.get_location(LocationName.crazy_gadget_lifebox_3, player),
                  lambda state: (state.has(ItemName.sonic_light_shoes, player) and
                                 state.has(ItemName.sonic_flame_ring, player)))
@@ -3124,7 +3120,8 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, world: World, player:
         add_rule(multiworld.get_location(LocationName.eternal_engine_itembox_6, player),
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(multiworld.get_location(LocationName.meteor_herd_itembox_6, player),
-                 lambda state: state.has(ItemName.knuckles_sunglasses, player))
+                 lambda state: (state.has(ItemName.knuckles_hammer_gloves, player) and
+                                state.has(ItemName.knuckles_sunglasses, player)))
 
         add_rule(multiworld.get_location(LocationName.egg_quarters_itembox_6, player),
                  lambda state: state.has(ItemName.rouge_mystic_melody, player))
@@ -3155,7 +3152,8 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, world: World, player:
         add_rule(multiworld.get_location(LocationName.eternal_engine_itembox_7, player),
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(multiworld.get_location(LocationName.meteor_herd_itembox_7, player),
-                 lambda state: state.has(ItemName.knuckles_sunglasses, player))
+                 lambda state: (state.has(ItemName.knuckles_hammer_gloves, player) and
+                                state.has(ItemName.knuckles_sunglasses, player)))
 
         add_rule(multiworld.get_location(LocationName.egg_quarters_itembox_7, player),
                  lambda state: state.has(ItemName.rouge_mystic_melody, player))
@@ -3440,6 +3438,8 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, world: World, player:
         add_rule(multiworld.get_location(LocationName.crazy_gadget_big, player),
                  lambda state: state.has(ItemName.sonic_light_shoes, player) and
                                state.has(ItemName.sonic_flame_ring, player))
+        add_rule(multiworld.get_location(LocationName.final_rush_big, player),
+                 lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
 
         add_rule(multiworld.get_location(LocationName.lost_colony_big, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
@@ -4006,8 +4006,6 @@ def set_mission_upgrade_rules_expert(multiworld: MultiWorld, world: World, playe
                  lambda state: state.has(ItemName.knuckles_shovel_claws, player))
         add_rule(multiworld.get_location(LocationName.hidden_base_lifebox_1, player),
                  lambda state: state.has(ItemName.tails_booster, player))
-        add_rule(multiworld.get_location(LocationName.death_chamber_lifebox_1, player),
-                 lambda state: state.has(ItemName.knuckles_shovel_claws, player))
         add_rule(multiworld.get_location(LocationName.eternal_engine_lifebox_1, player),
                  lambda state: state.has(ItemName.tails_booster, player))
 
@@ -4243,8 +4241,6 @@ def set_mission_upgrade_rules_expert(multiworld: MultiWorld, world: World, playe
         add_rule(multiworld.get_location(LocationName.cosmic_wall_itembox_22, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
 
-        add_rule(multiworld.get_location(LocationName.security_hall_itembox_23, player),
-                 lambda state: state.has(ItemName.rouge_iron_boots, player))
         add_rule(multiworld.get_location(LocationName.cosmic_wall_itembox_23, player),
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
 
@@ -4262,7 +4258,7 @@ def set_mission_upgrade_rules_expert(multiworld: MultiWorld, world: World, playe
 
     # Big Upgrade Requirements
     if world.options.bigsanity:
-        add_rule(multiworld.get_location(LocationName.metal_harbor_big, player), #TODO
+        add_rule(multiworld.get_location(LocationName.metal_harbor_big, player),
                  lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
         add_rule(multiworld.get_location(LocationName.mission_street_big, player),
                  lambda state: state.has(ItemName.tails_booster, player))
