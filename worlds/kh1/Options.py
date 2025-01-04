@@ -155,7 +155,7 @@ class FinalRestDoor(Choice):
     Reports: A certain number of Ansem's Reports are required, determined by the "Reports to Open Final Rest Door" option
     Puppies: Having all 99 puppies is required
     Postcards: Turning in all 10 postcards is required
-    Superbosses: Defeating Sephiroth, Unknown, Kurt Zisa, and Phantom are required
+    Superbosses: Defeating Sephiroth, Unknown, Kurt Zisa, and Phantom is required
     """
     display_name = "Final Rest Door"
     option_reports = 0
@@ -192,10 +192,10 @@ class RequiredPuppies(Choice):
 class Puppies(Choice):
     """
     Determines how dalmatian puppies are shuffled into the pool.
-    Full: All puppies are in one location
-    Triplets: Puppies are found in triplets just as they are in the base game
-    Individual: One puppy can be found per location
-    Vanilla: Puppies appear in triplets in the same location as the vanilla game
+    Full: All 99 puppies are found in a single item.
+    Triplets: Puppies are found in 33 triplet "Puppies" items anywhere in the multiworld.
+    Individual: Puppies are found in 99 individual "Puppy" items.
+    Vanilla: Puppies are found in triplets in the same locations as the vanilla game.
     """
     display_name = "Puppies"
     option_full = 0
@@ -394,7 +394,7 @@ class RandomizePostcards(Choice):
 
     All: All Postcards are randomized
     Chests: Only the 3 Postcards in chests are randomized
-    Vanilla: Postcards are in their original location
+    Vanilla: Postcards are in their original locations
     """
     display_name = "Randomize Postcards"
     option_all = 0
