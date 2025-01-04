@@ -1425,7 +1425,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     retinazor = add_boss_event("Retinazor", REGION.FOREST, lambda state: state.has(epic_combat.event, player))
     spazmatism = add_boss_event("Spazmatism", REGION.FOREST, lambda state: state.has(epic_combat.event, player))
     nightmare_werepig = add_boss_event("Nightmare Werepig", REGION.RUINS,
-        lambda state: state.has_all({advanced_boss_combat.event, pick_axe.event, speed_boost.optional_event}, player)
+        lambda state: state.has_all({advanced_boss_combat.event, pick_axe.event, cave_exploration.event, speed_boost.optional_event}, player)
     )
     scrappy_werepig = add_boss_event("Scrappy Werepig", REGION.RUINS, lambda state: state.has_all({nightmare_werepig.event, arena_building.event}, player))
     frostjaw = add_boss_event("Frostjaw", REGION.OCEAN, lambda state: state.has_all({advanced_boating.event, advanced_boss_combat.event, "Sea Fishing Rod"}, player))
@@ -1446,8 +1446,8 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     add_hermit_event("Hermit Island Plant 10 Flowers",                  lambda state: state.has_all({hermit_island.event, bug_catching.event}, player), butterfly.is_rule)
     add_hermit_event("Hermit Island Plant 8 Berry Bushes",              lambda state: state.has_all({hermit_island.event, digging.event}, player))
     add_hermit_event("Hermit Island Clear Underwater Salvageables",     lambda state: state.has_all({hermit_sea_quests.event, "Pinchin' Winch"}, player))
-    add_hermit_event("Hermit Island Kill Lure Plant",                   lambda state: state.has_all({hermit_island.event, seasons_passed_2.event}, player),
-                                                                        seasons_passed_2.is_progression)
+    add_hermit_event("Hermit Island Kill Lure Plant",                   combine_rules(hermit_island.rule, spring.rule, either_rule(autumn.rule, winter.rule, summer.rule)),
+                                                                        spring.is_rule and SEASON.NONSPRING in WHITELIST)
     add_hermit_event("Hermit Island Build Wooden Chair",                lambda state: state.has_all({hermit_island.event, "Sawhorse"}, player))
     add_hermit_event("Give Crabby Hermit Umbrella",                     combine_rules(
                                                                             lambda state: state.has_any({"Umbrella", "Pretty Parasol"}, player),
@@ -1650,7 +1650,8 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             "Banana Pop":                       lambda state: state.has_any({cave_exploration.event, moon_quay_exploration.event}, player),
             "Frozen Banana Daiquiri":           lambda state: state.has_any({cave_exploration.event, moon_quay_exploration.event}, player),
             "Banana Shake":                     lambda state: state.has_any({cave_exploration.event, moon_quay_exploration.event}, player),
-            "Ceviche":                          fishing.rule,
+            "Ceviche":                          either_rule(sea_fishing.rule,
+                                                (lambda state: state.has_all({cave_exploration.event, "Freshwater Fishing Rod"}, player)) if REGION.CAVE in WHITELIST else ALWAYS_FALSE),
             "Salsa Fresca":                     tomaroot_farming.rule,
             "Stuffed Pepper Poppers":           pepper_farming.rule,
             "California Roll":                  sea_fishing.rule,
@@ -1694,20 +1695,20 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             "Bone Bouillon":                    lambda state: state.has_all({hammering.event, onion_farming.event}, player),
             "Moqueca":                          lambda state: state.has_all({sea_fishing.event, tomaroot_farming.event}, player),
             # Farming
-            "Grow Giant Asparagus":             lambda state: FARMPLANT_SEASON_RULES["Asparagus"](state) and asparagus_farming.rule(state),
-            "Grow Giant Garlic":                lambda state: FARMPLANT_SEASON_RULES["Garlic"](state) and garlic_farming.rule(state),
-            "Grow Giant Pumpkin":               lambda state: FARMPLANT_SEASON_RULES["Pumpkin"](state) and pumpkin_farming.rule(state),
-            "Grow Giant Corn":                  lambda state: FARMPLANT_SEASON_RULES["Corn"](state) and corn_farming.rule(state),
-            "Grow Giant Onion":                 lambda state: FARMPLANT_SEASON_RULES["Onion"](state) and onion_farming.rule(state),
-            "Grow Giant Potato":                lambda state: FARMPLANT_SEASON_RULES["Potato"](state) and potato_farming.rule(state),
-            "Grow Giant Dragon Fruit":          lambda state: FARMPLANT_SEASON_RULES["Dragon Fruit"](state) and dragonfruit_farming.rule(state),
-            "Grow Giant Pomegranate":           lambda state: FARMPLANT_SEASON_RULES["Pomegranate"](state) and pomegranate_farming.rule(state),
-            "Grow Giant Eggplant":              lambda state: FARMPLANT_SEASON_RULES["Eggplant"](state) and eggplant_farming.rule(state),
-            "Grow Giant Toma Root":             lambda state: FARMPLANT_SEASON_RULES["Toma Root"](state) and tomaroot_farming.rule(state),
-            "Grow Giant Watermelon":            lambda state: FARMPLANT_SEASON_RULES["Watermelon"](state) and watermelon_farming.rule(state),
-            "Grow Giant Pepper":                lambda state: FARMPLANT_SEASON_RULES["Pepper"](state) and pepper_farming.rule(state),
-            "Grow Giant Durian":                lambda state: FARMPLANT_SEASON_RULES["Durian"](state) and durian_farming.rule(state),
-            "Grow Giant Carrot":                lambda state: FARMPLANT_SEASON_RULES["Carrot"](state) and carrot_farming.rule(state),
+            "Grow Giant Asparagus":             combine_rules(FARMPLANT_SEASON_RULES["Asparagus"], asparagus_farming.rule),
+            "Grow Giant Garlic":                combine_rules(FARMPLANT_SEASON_RULES["Garlic"], garlic_farming.rule),
+            "Grow Giant Pumpkin":               combine_rules(FARMPLANT_SEASON_RULES["Pumpkin"], pumpkin_farming.rule),
+            "Grow Giant Corn":                  combine_rules(FARMPLANT_SEASON_RULES["Corn"], corn_farming.rule),
+            "Grow Giant Onion":                 combine_rules(FARMPLANT_SEASON_RULES["Onion"], onion_farming.rule),
+            "Grow Giant Potato":                combine_rules(FARMPLANT_SEASON_RULES["Potato"], potato_farming.rule),
+            "Grow Giant Dragon Fruit":          combine_rules(FARMPLANT_SEASON_RULES["Dragon Fruit"], dragonfruit_farming.rule),
+            "Grow Giant Pomegranate":           combine_rules(FARMPLANT_SEASON_RULES["Pomegranate"], pomegranate_farming.rule),
+            "Grow Giant Eggplant":              combine_rules(FARMPLANT_SEASON_RULES["Eggplant"], eggplant_farming.rule),
+            "Grow Giant Toma Root":             combine_rules(FARMPLANT_SEASON_RULES["Toma Root"], tomaroot_farming.rule),
+            "Grow Giant Watermelon":            combine_rules(FARMPLANT_SEASON_RULES["Watermelon"], watermelon_farming.rule),
+            "Grow Giant Pepper":                combine_rules(FARMPLANT_SEASON_RULES["Pepper"], pepper_farming.rule),
+            "Grow Giant Durian":                combine_rules(FARMPLANT_SEASON_RULES["Durian"], durian_farming.rule),
+            "Grow Giant Carrot":                combine_rules(FARMPLANT_SEASON_RULES["Carrot"], carrot_farming.rule),
             # Research
             "Science (Nitre)":                  mining.rule,
             "Science (Salt Crystals)":          salt_crystals.rule,
@@ -1725,7 +1726,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             "Science (Ashes)":                  firestarting.rule,
             "Science (Cut Grass)":              ALWAYS_TRUE,
             "Science (Beefalo Horn)":           basic_combat.rule,
-            "Science (Beefalo Wool)":           basic_combat.rule if ADVANCED_PLAYER_BIAS else combine_rules(shaving.rule, either_rule(autumn.rule, winter.rule, summer.rule)),
+            "Science (Beefalo Wool)":           basic_combat.rule if not shaving.is_progression else combine_rules(shaving.rule, either_rule(autumn.rule, winter.rule, summer.rule)),
             "Science (Cactus Flower)":          ALWAYS_TRUE,
             "Science (Honeycomb)":              basic_combat.rule,
             "Science (Petals)":                 ALWAYS_TRUE,
