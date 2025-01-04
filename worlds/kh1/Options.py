@@ -101,12 +101,13 @@ class HundredAcreWood(Toggle):
 class SuperBosses(Toggle):
     """
     Toggle whether to include checks behind Super Bosses.
+    If Final Rest Door is set to Superbosses these locations are also included.
     """
     display_name = "Super Bosses"
 
 class Cups(Choice):
     """
-    Determines what cups to include checks behind completing.
+    Determines which cups have their locations added to the multiworld.
     Please note that the cup items will still appear in the multiworld even if set to off, as they are required to challenge Sephiroth.
 
     Off: All cup locations are removed
