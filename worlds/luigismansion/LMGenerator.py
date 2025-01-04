@@ -320,7 +320,7 @@ class LuigisMansionRandomizer:
             yield from self.gcm.export_disc_to_iso_with_changed_files(self.randomized_output_file_path)
 
     def update_custom_event(self, event_number: str, check_local_folder: bool, non_local_str=""):
-        #TODO update custom events to remove any camera files or anything else related. Also use the Template CSV to remove the CSVs from the game, reducing file sizes as needed.
+        #TODO update custom events to remove any camera files or anything else related.
         if not check_local_folder and not non_local_str:
             raise Exception("If the custom event does not exist in the local data folder, an event string must be " +
                             "provided to overwrite an existing event.")
@@ -340,9 +340,19 @@ class LuigisMansionRandomizer:
         next((info_files for info_files in custom_event.file_entries if
               info_files.name == "event" + event_number + ".txt")).data = lines
 
+        csv_lines = io.BytesIO(get_data(__name__, "data/custom_events/TemplateCSV.csv"))
+        next((info_files for info_files in custom_event.file_entries if
+              info_files.name == "message" + event_number + ".csv")).data = csv_lines
+
         custom_event.save_changes()
         self.gcm.changed_files["files/Event/event" + event_number + ".szp"] = (
             Yay0.compress(custom_event.data, 0))
+
+    def copy_existing_event(self, new_event_number: str):
+        event_path = "files/Event/event"+ new_event_number + ".szp"
+        data = self.gcm.read_file_data("files/Event/event16.szp")
+        self.gcm.add_new_file(event_path, data)
+        return self.get_arc(event_path)
 
 if __name__ == '__main__':
     unpacked_iso = LuigisMansionRandomizer("", "", None, False, True)
