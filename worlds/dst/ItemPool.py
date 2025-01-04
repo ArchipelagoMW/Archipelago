@@ -189,7 +189,7 @@ class DSTItemPool:
 
         # Fill up with junk items
         while len(item_pool) < len(world.multiworld.get_unfilled_locations(world.player)):
-            item_pool.append(world.create_item(world.get_filler_item_name()))
+            item_pool.append(self.create_item(world, world.get_filler_item_name()))
 
         if len(item_pool) > len(world.multiworld.get_unfilled_locations(world.player)):
             print(f"{world.multiworld.get_player_name(world.player)} (Don't Starve Together): Warning! More items than locations!")

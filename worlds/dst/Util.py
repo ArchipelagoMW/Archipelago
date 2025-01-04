@@ -119,9 +119,9 @@ def build_whitelist(options: DSTOptions) -> FrozenSet[str]:
         PHASE.DAY in _whitelist and SEASON.NONWINTER in _whitelist, # Plant flowers
         True, # Berry bushes
         True, # Clear underwater salvageables
-        SEASONS_PASSED.SEASONS_2 in _whitelist, # Lure plant
+        SEASON.SPRING in _whitelist and SEASON.NONSPRING in _whitelist, # Lure plant; Spawns when changing to or from spring
         True, # Wooden chair
-        SEASON.AUTUMN in _whitelist and SEASON.SPRING in _whitelist, # Umbrella
+        SEASON.AUTUMN in _whitelist or SEASON.SPRING in _whitelist, # Umbrella
         SEASON.WINTER in _whitelist, # Warm clothing
         SEASON.SUMMER in _whitelist, # Flower Salad
         SEASON.AUTUMN in _whitelist, # Fallounder
