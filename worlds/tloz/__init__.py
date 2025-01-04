@@ -296,6 +296,7 @@ class TLoZWorld(World):
                 placement_dict[location.name] = location.item.name
             else:
                 placement_dict[location.name] = "Rupee"
+                placement_dict[location.name + " Classification"] = location.item.classification
         entrance_randomizer_set = {}
         for screen, data in self.entrance_randomizer_set.items():
             entrance_randomizer_set[screen] = data[1]

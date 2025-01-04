@@ -228,6 +228,9 @@ class TLOZPatchExtension(APPatchExtension):
                 rom_data[secret_money_ids[location]] = item
                 continue
 
+            if "Classification" in location:
+                continue
+
             # Neither are boss defeat events
             if "Status" in location:
                 continue
@@ -242,7 +245,7 @@ class TLOZPatchExtension(APPatchExtension):
                 price_location = shop_price_location_ids[location]
                 item_price = item_prices[item]
                 if item == "Rupee":
-                    item_class = location.item.classification
+                    item_class = placements[location + " Classification"]
                     if item_class == ItemClassification.progression:
                         item_price = item_price * 2
                     elif item_class == ItemClassification.useful:
