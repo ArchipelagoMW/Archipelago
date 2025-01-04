@@ -146,6 +146,10 @@ def update_character_info(character_info, output_data):
         if x["create_name"] == "63_2":
             x["room_no"] = 63
 
+        # Remove King Boo in the hallway, since his event was removed.
+        if x["name"] == "dltelesa" and x["room_no"] == 68:
+            character_info.info_file_field_entries.remove(x)
+
 
 def update_observer_info(observer_info):
     for x in observer_info.info_file_field_entries:
