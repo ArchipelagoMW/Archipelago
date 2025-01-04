@@ -1160,8 +1160,6 @@ class AquariaRegions:
                                      self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BOSS_AREA_BEATING_LUMEREAN_GOD,
                                      self.player).item_rule = _item_not_advancement
-        self.multiworld.get_location(AquariaLocationNames.SUNKEN_CITY_BULB_ON_TOP_OF_THE_BOSS_AREA,
-                                     self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.HOME_WATERS_NAUTILUS_EGG,
                                      self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.ENERGY_TEMPLE_BLASTER_ROOM_BLASTER_EGG,
@@ -1172,24 +1170,11 @@ class AquariaRegions:
                                      self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.OCTOPUS_CAVE_DUMBO_EGG,
                                      self.player).item_rule = _item_not_advancement
-        self.multiworld.get_location(AquariaLocationNames.KING_JELLYFISH_CAVE_BULB_IN_THE_RIGHT_PATH_FROM_KING_JELLY,
-                                     self.player).item_rule = _item_not_advancement
-        self.multiworld.get_location(AquariaLocationNames.KING_JELLYFISH_CAVE_JELLYFISH_COSTUME,
-                                     self.player).item_rule = _item_not_advancement
-        self.multiworld.get_location(AquariaLocationNames.FINAL_BOSS_AREA_BULB_IN_THE_BOSS_THIRD_FORM_ROOM,
-                                     self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_FIRST_CLIFF_BULB,
                                      self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BOSS_PATH_SECOND_CLIFF_BULB,
                                      self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_BULB_AT_THE_TOP_OF_THE_WATERFALL,
-                                     self.player).item_rule = _item_not_advancement
-        self.multiworld.get_location(AquariaLocationNames.BUBBLE_CAVE_BULB_IN_THE_LEFT_CAVE_WALL,
-                                     self.player).item_rule = _item_not_advancement
-        self.multiworld.get_location(
-            AquariaLocationNames.BUBBLE_CAVE_BULB_IN_THE_RIGHT_CAVE_WALL_BEHIND_THE_ICE_CRYSTAL,
-            self.player).item_rule = _item_not_advancement
-        self.multiworld.get_location(AquariaLocationNames.BUBBLE_CAVE_VERSE_EGG,
                                      self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(
             AquariaLocationNames.KELP_FOREST_BOTTOM_LEFT_AREA_BULB_CLOSE_TO_THE_SPIRIT_CRYSTALS,
@@ -1197,8 +1182,6 @@ class AquariaRegions:
         self.multiworld.get_location(AquariaLocationNames.KELP_FOREST_BOTTOM_LEFT_AREA_WALKER_BABY,
                                      self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_SUN_KEY,
-                                     self.player).item_rule = _item_not_advancement
-        self.multiworld.get_location(AquariaLocationNames.THE_BODY_BOTTOM_AREA_MUTANT_COSTUME,
                                      self.player).item_rule = _item_not_advancement
         self.multiworld.get_location(AquariaLocationNames.SUN_TEMPLE_BULB_IN_THE_HIDDEN_ROOM_OF_THE_RIGHT_PART,
                                      self.player).item_rule = _item_not_advancement
