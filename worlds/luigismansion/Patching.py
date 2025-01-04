@@ -43,6 +43,8 @@ def __get_item_name(item_data):
     return "nothing"
 
 
+# TODO add support for new events to be added to the list. These new events will handle turning lights on in hallways
+# TODO after bosses are defeated.
 def update_event_info(event_info, boo_checks: bool):
     # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
     # boss battles / grabbing boss keys, and various cutscenes etc.

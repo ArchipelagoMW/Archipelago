@@ -226,6 +226,10 @@ class LuigisMansionRandomizer:
         self.dol.save_changes()
         self.gcm.changed_files["sys/main.dol"] = self.dol.data
 
+        # TODO Move into its own function?
+        # TODO Make Custom events to turn on lights after bosses are defeated. Use copy exiting event, then overwrite
+        # TODO the txt file with a custom one from "data/custom_event" folder. Used to turn on lights on in hallways
+        # TODO after bosses are defeated.
         # Get Output data required information
         bool_boo_checks = True if self.output_data["Options"]["boo_gates"] == 1 else False
         required_mario_item_count = int(self.output_data["Options"]["mario_items"])
@@ -320,7 +324,7 @@ class LuigisMansionRandomizer:
             yield from self.gcm.export_disc_to_iso_with_changed_files(self.randomized_output_file_path)
 
     def update_custom_event(self, event_number: str, check_local_folder: bool, non_local_str=""):
-        #TODO update custom events to remove any camera files or anything else related.
+        #TODO Update custom events to remove any camera files or anything else related.
         if not check_local_folder and not non_local_str:
             raise Exception("If the custom event does not exist in the local data folder, an event string must be " +
                             "provided to overwrite an existing event.")
