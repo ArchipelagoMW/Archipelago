@@ -1259,17 +1259,7 @@ def set_rules(kh1world):
                     "Crystal Trident"}, player)
                 and has_offensive_magic(state, player)
             ))
-    if options.cups:
-        add_rule(kh1world.get_location("Olympus Coliseum Defeat Hades Ansem's Report 8"),
-            lambda state: (
-                state.has_all({
-                    "Phil Cup",
-                    "Pegasus Cup",
-                    "Hercules Cup",
-                    "Entry Pass"}, player)
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
-                and has_defensive_tools(state, player)
-            ))
+    if options.cups.current_key != "off":
         add_rule(kh1world.get_location("Complete Phil Cup"),
             lambda state: (
                 state.has_all({
@@ -1326,6 +1316,40 @@ def set_rules(kh1world):
                     "Hercules Cup",
                     "Entry Pass"}, player)
                 and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
+            ))
+        add_rule(kh1world.get_location("Hercules Cup Defeat Cloud Event"),
+            lambda state: (
+                state.has_all({
+                    "Hercules Cup",
+                    "Entry Pass"}, player)
+                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
+            ))
+        add_rule(kh1world.get_location("Hercules Cup Yellow Trinity Event"),
+            lambda state: (
+                state.has_all({
+                    "Hercules Cup",
+                    "Entry Pass"}, player)
+                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
+            ))
+        add_rule(kh1world.get_location("Olympus Coliseum Olympia Chest"),
+            lambda state: (
+                state.has_all({
+                    "Phil Cup",
+                    "Pegasus Cup",
+                    "Hercules Cup",
+                    "Entry Pass"}, player)
+                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
+            ))
+    if options.cups.current_key == "hades_cup":
+        add_rule(kh1world.get_location("Olympus Coliseum Defeat Hades Ansem's Report 8"),
+            lambda state: (
+                state.has_all({
+                    "Phil Cup",
+                    "Pegasus Cup",
+                    "Hercules Cup",
+                    "Entry Pass"}, player)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
+                and has_defensive_tools(state, player)
             ))
         add_rule(kh1world.get_location("Complete Hades Cup"),
             lambda state: (
@@ -1407,20 +1431,17 @@ def set_rules(kh1world):
                 and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
             ))
-        add_rule(kh1world.get_location("Hercules Cup Defeat Cloud Event"),
+        add_rule(kh1world.get_location("Olympus Coliseum Gates Purple Jar After Defeating Hades"),
             lambda state: (
                 state.has_all({
+                    "Phil Cup",
+                    "Pegasus Cup",
                     "Hercules Cup",
                     "Entry Pass"}, player)
-                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
+                and has_defensive_tools(state, player)
             ))
-        add_rule(kh1world.get_location("Hercules Cup Yellow Trinity Event"),
-            lambda state: (
-                state.has_all({
-                    "Hercules Cup",
-                    "Entry Pass"}, player)
-                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
-            ))
+    if options.cups.current_key == "hades_cup" and (options.super_bosses or final_rest_door_requirement == "superbosses"):
         add_rule(kh1world.get_location("Olympus Coliseum Defeat Ice Titan Diamond Dust Event"),
             lambda state: (
                 state.has_all({
@@ -1432,26 +1453,7 @@ def set_rules(kh1world):
                 and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
             ))
-        add_rule(kh1world.get_location("Olympus Coliseum Gates Purple Jar After Defeating Hades"),
-            lambda state: (
-                state.has_all({
-                    "Phil Cup",
-                    "Pegasus Cup",
-                    "Hercules Cup",
-                    "Entry Pass"}, player)
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
-                and has_defensive_tools(state, player)
-            ))
-        add_rule(kh1world.get_location("Olympus Coliseum Olympia Chest"),
-            lambda state: (
-                state.has_all({
-                    "Phil Cup",
-                    "Pegasus Cup",
-                    "Hercules Cup",
-                    "Entry Pass"}, player)
-                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
-            ))
-    if options.super_bosses:
+    if options.super_bosses or final_rest_door_requirement == "superbosses":
         add_rule(kh1world.get_location("Neverland Defeat Phantom Stop Event"),
             lambda state: (
                 state.has("Green Trinity", player)
@@ -1470,7 +1472,7 @@ def set_rules(kh1world):
             lambda state: (
                 has_emblems(state, player, options.keyblades_unlock_chests) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) and has_defensive_tools(state, player) and state.has("Progressive Blizzard", player, 3)
             ))
-    if options.super_bosses or options.goal.current_key == "sephiroth":
+    if options.super_bosses or options.goal.current_key == "sephiroth" or final_rest_door_requirement == "superbosses":
         add_rule(kh1world.get_location("Olympus Coliseum Defeat Sephiroth Ansem's Report 12"),
             lambda state: (
                 state.has_all({
@@ -1491,7 +1493,7 @@ def set_rules(kh1world):
                 and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
             ))
-    if options.super_bosses or options.goal.current_key == "unknown":
+    if options.super_bosses or options.goal.current_key == "unknown" or final_rest_door_requirement == "superbosses":
         add_rule(kh1world.get_location("Hollow Bastion Defeat Unknown Ansem's Report 13"),
             lambda state: (
                 has_emblems(state, player, options.keyblades_unlock_chests)
