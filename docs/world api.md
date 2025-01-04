@@ -248,7 +248,8 @@ will all have the same ID. Name must not be numeric (must contain at least 1 let
 Other classifications include:
 
 * `filler`: a regular item or trash item
-* `useful`: generally quite useful, but not required for anything logical. Cannot be placed on excluded locations
+* `useful`: item that is especially useful. Cannot be placed on excluded or unreachable locations. When combined with
+another flag like "progression", it means "an especially useful progression item".
 * `trap`: negative impact on the player
 * `skip_balancing`: denotes that an item should not be moved to an earlier sphere for the purpose of balancing (to be
   combined with `progression`; see below)
@@ -699,9 +700,92 @@ When importing a file that defines a class that inherits from `worlds.AutoWorld.
 is automatically extended by the mixin's members. These members should be prefixed with the name of the implementing
 world since the namespace is shared with all other logic mixins.
 
-Some uses could be to add additional variables to the state object, or to have a custom state machine that gets modified
-with the state.
-Please do this with caution and only when necessary.
+LogicMixin is handy when your logic is more complex than one-to-one location-item relationships.  
+A game in which "The red key opens the red door" can just express this relationship through a one-line access rule.  
+But now, consider a game with a heavy focus on combat, where the main logical consideration is which enemies you can
+defeat with your current items.  
+There could be dozens of weapons, armor pieces, or consumables that each improve your ability to defeat
+specific enemies to varying degrees. It would be useful to be able to keep track of "defeatable enemies" as a state variable,
+and have this variable be recalculated as necessary based on newly collected/removed items.
+This is the capability of LogicMixin: Adding custom variables to state that get recalculated as necessary.
+
+In general, a LogicMixin class should have at least one mutable variable that is tracking some custom state per player,
+as well as `init_mixin` and `copy_mixin` functions so that this variable gets initialized and copied correctly when
+`CollectionState()` and `CollectionState.copy()` are called respectively.
+
+```python
+from BaseClasses import CollectionState, MultiWorld
+from worlds.AutoWorld import LogicMixin
+
+class MyGameState(LogicMixin):
+    mygame_defeatable_enemies: Dict[int, Set[str]]  # per player
+
+    def init_mixin(self, multiworld: MultiWorld) -> None:
+        # Initialize per player with the corresponding "nothing" value, such as 0 or an empty set.
+        # You can also use something like Collections.defaultdict
+        self.mygame_defeatable_enemies = {
+            player: set() for player in multiworld.get_game_players("My Game")
+        }
+
+    def copy_mixin(self, new_state: CollectionState) -> CollectionState:
+        # Be careful to make a "deep enough" copy here!
+        new_state.mygame_defeatable_enemies = {
+            player: enemies.copy() for player, enemies in self.mygame_defeatable_enemies.items()
+        }
+```
+
+After doing this, you can now access `state.mygame_defeatable_enemies[player]` from your access rules.
+
+Usually, doing this coincides with an override of `World.collect` and `World.remove`, where the custom state variable 
+gets recalculated when a relevant item is collected or removed.
+
+```python
+# __init__.py
+
+def collect(self, state: CollectionState, item: Item) -> bool:
+    change = super().collect(state, item)
+    if change and item in COMBAT_ITEMS:
+        state.mygame_defeatable_enemies[self.player] |= get_newly_unlocked_enemies(state)
+    return change
+
+def remove(self, state: CollectionState, item: Item) -> bool:
+    change = super().remove(state, item)
+    if change and item in COMBAT_ITEMS:
+        state.mygame_defeatable_enemies[self.player] -= get_newly_locked_enemies(state)
+    return change
+```
+
+Using LogicMixin can greatly slow down your code if you don't use it intelligently. This is because `collect`
+and `remove` are called very frequently during fill. If your `collect` & `remove` cause a heavy calculation
+every time, your code might end up being *slower* than just doing calculations in your access rules.
+
+One way to optimise recalculations is to make use of the fact that `collect` should only unlock things,
+and `remove` should only lock things.  
+In our example, we have two different functions: `get_newly_unlocked_enemies` and `get_newly_locked_enemies`.  
+`get_newly_unlocked_enemies` should only consider enemies that are *not already in the set*
+and check whether they were **unlocked**.  
+`get_newly_locked_enemies` should only consider enemies that are *already in the set*
+and check whether they **became locked**.
+
+Another impactful way to optimise LogicMixin is to use caching.  
+Your custom state variables don't actually need to be recalculated on every `collect` / `remove`, because there are
+often multiple calls to `collect` / `remove` between access rule calls. Thus, it would be much more efficient to hold
+off on recaculating until the an actual access rule call happens.  
+A common way to realize this is to define a `mygame_state_is_stale` variable that is set to True in `collect`, `remove`,
+and `init_mixin`. The calls to the actual recalculating functions are then moved to the start of the relevant
+access rules like this:
+
+```python
+def can_defeat_enemy(state: CollectionState, player: int, enemy: str) -> bool:
+    if state.mygame_state_is_stale[player]:
+        state.mygame_defeatable_enemies[player] = recalculate_defeatable_enemies(state)
+        state.mygame_state_is_stale[player] = False
+
+    return enemy in state.mygame_defeatable_enemies[player]
+```
+
+Only use LogicMixin if necessary. There are often other ways to achieve what it does, like making clever use of
+`state.prog_items`, using event items, pseudo-regions, etc.
 
 #### pre_fill
 

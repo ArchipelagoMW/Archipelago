@@ -79,6 +79,7 @@ Currently, the following games are supported:
 * Faxanadu
 * Saving Princess
 * Castlevania: Circle of the Moon
+* Inscryption
 * Wargroove 2
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
