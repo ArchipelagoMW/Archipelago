@@ -18,6 +18,17 @@ from .Locations import ALL_LOCATION_TABLE, LMLocation
 # filtered_location_list = list(filter(
         #lambda (key, named_tuple): named_tuple.ram_address_room_id == int_current_room, ALL_LOCATION_TABLE.items()))
 
+furniture_name_list: dict[int, dict[int, str]] = {
+    2: {
+        99: "Right Tall Candles",
+        100: "Left Tall Candles",
+        101: "Chandelier",
+        207: "Left Dresser",
+        208: "Covered Mirror",
+        270: "Ceiling Light by Heart Door"
+    }
+}
+
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
 )
@@ -72,9 +83,13 @@ FURNITURE_ID_TABLE_START = 0x80C0C898
 FURNITURE_INTERACTION_TABLE_START = 0x80C0C868
 
 # Backup Furniture IDs
-FURNITURE_MAIN_TABLE_ID = 0x803CD770
+FURNITURE_MAIN_TABLE_ID = 0x803CD768
 FURN_FLAG_OFFSET = 0x8C
 FURN_ID_OFFSET = 0xBC
+
+# Current Room ID and Offset
+ROOM_ID_ADDR = 0x803D8B7C
+ROOM_ID_OFFSET = 0x35C
 
 
 key_name_collection = [["", "Butler's Room", "", "Heart", "Fortune Teller", "Mirror Room", "", "Laundry Room"],
@@ -368,17 +383,26 @@ async def check_locations(ctx: LMContext):
                 if (bit_int & (1<<i)) > 0 and not boo_name_collection[boo_addr_pos][i] == "":
                     print("Boo Captured: '" + boo_name_collection[boo_addr_pos][i] + "'")
 
-    #if not LMContext.check_furn:
-        #for furniture_id_addr in range(0, 64, 4): # TODO find max amount of furniture pieces loaded in.
-        #    furniture_id = dolphin_memory_engine.read_word(
-        #        dolphin_memory_engine.follow_pointers(FURNITURE_MAIN_TABLE_ID, [FURN_ID_OFFSET]))
-        #    furniture_flag =  dolphin_memory_engine.read_word(
-        #        dolphin_memory_engine.follow_pointers(FURNITURE_MAIN_TABLE_ID, [FURN_FLAG_OFFSET]))
-        #    furniture_id = int.from_bytes(dolphin_memory_engine.read_bytes(FURNITURE_MAIN_TABLE_ID + FURN_ID_OFFSET + furniture_id_addr, 4))
-        #    furniture_flag = int.from_bytes(dolphin_memory_engine.read_bytes(FURNITURE_MAIN_TABLE_ID + FURN_FLAG_OFFSET + furniture_id_addr, 4))
+    if not LMContext.check_furn:
+        current_room_id = dolphin_memory_engine.read_word(
+            dolphin_memory_engine.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
+        for current_offset in range(0, 116, 4): # TODO find max amount of furniture pieces loaded in.
+            current_addr = FURNITURE_MAIN_TABLE_ID+current_offset
+            if dolphin_memory_engine.read_word(current_addr) != 0:
+                furniture_id = dolphin_memory_engine.read_word(
+                    dolphin_memory_engine.follow_pointers(current_addr, [FURN_ID_OFFSET]))
+                furniture_flag =  dolphin_memory_engine.read_word(
+                    dolphin_memory_engine.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
 
-        #    print(f"Offset: {str(FURNITURE_MAIN_TABLE_ID + FURN_ID_OFFSET + furniture_id_addr)}; ID: {furniture_id}; Flag: {furniture_flag}; Another ID: {furn_id}")
-        #LMContext.check_furn = True
+                if not furniture_name_list[current_room_id].__contains__(furniture_id):
+                    furniture_name = "N/A"
+                else:
+                    furniture_name = furniture_name_list[current_room_id][furniture_id]
+
+                print(f"Current Addr: {hex(current_addr)}; ID: {hex(furniture_id)}; Flag: {furniture_flag}; " +
+                      "Furniture Name: " + furniture_name)
+        LMContext.check_furn = True
+
         #if furniture_id in filtered_location_list:
             #furniture_state =
             #    int.from_bytes(dolphin_memory_engine.read_bytes(FURNITURE_INTERACTION_TABLE_START +
