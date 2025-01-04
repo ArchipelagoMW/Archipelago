@@ -222,6 +222,7 @@ class DKC2World(World):
         slot_data["level_connections"] = self.level_connections
         slot_data["boss_connections"] = self.boss_connections
         slot_data["goal"] = self.options.goal.value
+        slot_data["logic"] = self.options.logic.value
         slot_data["starting_kong"] = self.options.starting_kong.value
         slot_data["lost_world_rocks"] = self.options.lost_world_rocks.value
         slot_data["krock_boss_tokens"] = self.options.krock_boss_tokens.value
@@ -250,6 +251,7 @@ class DKC2World(World):
                 self.level_connections = passthrough["level_connections"]
                 self.boss_connections = passthrough["boss_connections"]
                 self.options.goal.value = passthrough["goal"]
+                self.options.logic.value = passthrough["logic"]
                 self.options.starting_kong.value = passthrough["starting_kong"]
                 self.options.lost_world_rocks.value = passthrough["lost_world_rocks"]
                 self.options.krock_boss_tokens.value = passthrough["krock_boss_tokens"]
