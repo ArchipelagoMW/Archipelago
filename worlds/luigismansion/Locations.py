@@ -9,9 +9,9 @@ class LMLocationData(NamedTuple):
     type: str  # type of randomization option/jmp table and group [Chest, Furniture, Furniture, Plant, Boo, GSpeedy (Gold Mouse), BSpeedy (Blue Ghost), Portrait, Toad]
     jmpentry: int = -1   # entry number on the jmp table it belongs to
     access: List[str] = [] # items required to access location, many special cases
+    in_game_room_id: Optional[int] = None
+    in_game_object_id: Optional[int] = None  # TODO: fill in once we discover how to check in DME for chest opening/knocking(?)
     locked_item: Optional[str] = None
-    static_room_is: Optional[int] = None
-    address: Optional[int] = None  # TODO: fill in once we discover how to check in DME for chest opening/knocking(?)
 
 
 class LMLocation(Location):
@@ -90,25 +90,25 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
 
 
     # Game Event Locations
-    "Breaker Box":     LMLocationData("Breaker Room", None, "Event", 0, [], "Blackout"),
+    "Breaker Box":     LMLocationData("Breaker Room", None, "Event", 0, [], locked_item="Blackout"),
     # LMLocationData('Nursery', 'Chauncey',  None),
     # LMLocationData('Graveyard', 'Bogmire',  None),
-    "Boolossus Boo 1":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
-    "Boolossus Boo 2":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
-    "Boolossus Boo 3":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
-    "Boolossus Boo 4":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
-    "Boolossus Boo 5":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
-    "Boolossus Boo 6":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
-    "Boolossus Boo 7":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
-    "Boolossus Boo 8":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
-    "Boolossus Boo 9":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
-    "Boolossus Boo 10": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
-    "Boolossus Boo 11": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
-    "Boolossus Boo 12": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
-    "Boolossus Boo 13": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
-    "Boolossus Boo 14": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
-    "Boolossus Boo 15": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], "Boo"),
-    "King Boo":         LMLocationData("Secret Altar", None, "Event", 0, [], "Mario's Painting", ),
+    "Boolossus Boo 1":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], locked_item="Boo"),
+    "Boolossus Boo 2":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], locked_item="Boo"),
+    "Boolossus Boo 3":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], locked_item="Boo"),
+    "Boolossus Boo 4":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], locked_item="Boo"),
+    "Boolossus Boo 5":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], locked_item="Boo"),
+    "Boolossus Boo 6":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], locked_item="Boo"),
+    "Boolossus Boo 7":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], locked_item="Boo"),
+    "Boolossus Boo 8":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], locked_item="Boo"),
+    "Boolossus Boo 9":  LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], locked_item="Boo"),
+    "Boolossus Boo 10": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], locked_item="Boo"),
+    "Boolossus Boo 11": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], locked_item="Boo"),
+    "Boolossus Boo 12": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], locked_item="Boo"),
+    "Boolossus Boo 13": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], locked_item="Boo"),
+    "Boolossus Boo 14": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], locked_item="Boo"),
+    "Boolossus Boo 15": LMLocationData("Balcony", None, "Event", 0, ["Ice Element Medal"], locked_item="Boo"),
+    "King Boo":         LMLocationData("Secret Altar", None, "Event", 0, [], locked_item="Mario's Painting"),
 }
 
 CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
