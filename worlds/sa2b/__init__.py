@@ -10,7 +10,7 @@ from .AestheticData import chao_name_conversion, sample_chao_names, totally_real
 from .GateBosses import get_gate_bosses, get_boss_rush_bosses, get_boss_name
 from .Items import SA2BItem, ItemData, item_table, upgrades_table, emeralds_table, junk_table, minigame_trap_table, item_groups, \
                    eggs_table, fruits_table, seeds_table, hats_table, animals_table, chaos_drives_table
-from .Locations import SA2BLocation, all_locations, setup_locations, chao_animal_event_location_table, black_market_location_table
+from .Locations import SA2BLocation, all_locations, location_groups, setup_locations, chao_animal_event_location_table, black_market_location_table
 from .Missions import get_mission_table, get_mission_count_table, get_first_and_last_cannons_core_missions, print_mission_orders_to_spoiler
 from .Names import ItemName, LocationName
 from .Options import SA2BOptions, sa2b_option_groups
@@ -62,6 +62,7 @@ class SA2BWorld(World):
     topology_present = False
 
     item_name_groups = item_groups
+    location_name_groups = location_groups
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
 
