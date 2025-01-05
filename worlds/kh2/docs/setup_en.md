@@ -35,7 +35,7 @@ Load these mods just like you loaded the GoA ROM mod during the KH2 Rando setup.
 
 <h3 style="text-transform:none";>Optional QoL Mods: AP QoL and Bear Skip</h3>
 
-`JaredWeakStrike/AP_QOL` Makes the Urns minigames must faster, Cavern of Remembrance orbs drop significantly more drive orbs for refilling dirve/leveling master form, skips the animation when using the bulky vendor RC, skips carpet escape auto scroller in Agrabah 2, and prevents the wardrobe in the Beasts Castle wardrobe push minigame from waking up while being pushed.
+`JaredWeakStrike/AP_QOL` Makes the Urns minigames must faster, Cavern of Remembrance orbs drop significantly more drive orbs for refilling drive/leveling master form, skips the animation when using the bulky vendor RC, skips carpet escape auto scroller in Agrabah 2, and prevents the wardrobe in the Beasts Castle wardrobe push minigame from waking up while being pushed.
 
 `shananas/BearSkip` Skips all minigames in 100 Acre Woods except the Spooky Cave minigame since there are chests in Spooky Cave you can only get during the minigame. For Spooky Cave Pooh is moved to the other side of the invisible wall that prevents you from using his RC to finish the minigame.
 
