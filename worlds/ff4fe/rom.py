@@ -2,6 +2,7 @@ import argparse
 import json
 import logging
 import os
+import pkgutil
 import tempfile
 
 from typing import TYPE_CHECKING
@@ -68,6 +69,7 @@ class FF4FEPatchExtension(APPatchExtension):
 
     @staticmethod
     def call_fe(caller, rom, placement_file):
+        FF4FEPatchExtension.copy_common_data_files()
         placements = json.loads(caller.get_file(placement_file))
         seed = placements["seed"]
         output_file = placements["output_file"]
@@ -99,6 +101,13 @@ class FF4FEPatchExtension(APPatchExtension):
             rom_data[ROM_NAME:ROM_NAME+20] = bytes(rom_name, encoding="utf-8")
             rom_data[junk_tier_byte:junk_tier_byte + 1] = bytes([junk_tier])
         return rom_data
+
+    @staticmethod
+    def copy_common_data_files():
+        for filename in ["common.lark", "lark.lark", "python.lark", "unicode.lark"]:
+            with open(os.path.join(Utils.user_path("data", "ff4fe"), filename), "w") as file:
+                existing_file = pkgutil.get_data(__name__, filename).decode()
+                file.write(existing_file)
 
 
 class FF4FEProcedurePatch(APProcedurePatch, APTokenMixin):

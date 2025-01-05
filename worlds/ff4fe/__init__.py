@@ -414,8 +414,8 @@ class FF4FEWorld(World):
         placement_dict["output_file"] = f'{self.multiworld.get_out_file_name_base(self.player)}' + '.sfc'
         placement_dict["flags"] = flags.create_flags_from_options(self.options, self.objective_count)
         placement_dict["junk_tier"] = self.options.JunkTier.value
-        placement_dict["junked_items"] = self.options.JunkedItems.value
-        placement_dict["kept_items"] = self.options.KeptItems.value
+        placement_dict["junked_items"] = list(self.options.JunkedItems.value)
+        placement_dict["kept_items"] = list(self.options.KeptItems.value)
         placement_dict["data_dir"] = Utils.user_path("data", "ff4fe")
 
         # Our actual patch is just a set of instructions and data for FE to use.
@@ -437,8 +437,8 @@ class FF4FEWorld(World):
             "ObjectiveReward": self.options.ObjectiveReward.current_key,
             "UnsafeKeyItemPlacement": self.options.UnsafeKeyItemPlacement.current_key,
             "ObjectivesRequired": self.options.RequiredObjectiveCount.value,
-            "JunkedItem": self.options.JunkedItems.value,
-            "KeptItems": self.options.KeptItems.value
+            "JunkedItem": list(self.options.JunkedItems.value),
+            "KeptItems": list(self.options.KeptItems.value)
         }
         return slot_data
 

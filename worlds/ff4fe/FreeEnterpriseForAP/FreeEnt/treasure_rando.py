@@ -144,7 +144,7 @@ def apply(env):
                 return False
             if item_name in env.options.ap_data["kept_items"]:
                 return False
-            if item_name in env.options.ap_data["junk_items"]:
+            if item_name in env.options.ap_data["junked_items"]:
                 return True
             if placement_data.tier <= env.options.ap_data["junk_tier"]:
                 return True

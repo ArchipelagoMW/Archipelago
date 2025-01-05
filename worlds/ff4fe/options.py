@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-
+from .items import sellable_item_names
 from Options import (Toggle, Range, Choice, PerGameCommonOptions, DefaultOnToggle, StartInventoryPool, OptionGroup,
                      OptionSet, ItemSet, Visibility)
 
@@ -334,13 +334,16 @@ class StarterKitThree(Choice):
     option_random_kit = 26
     default = 0
 
-class JunkedItems(ItemSet):
+class JunkedItems(OptionSet):
     """Items that will always be sold for GP regardless of your junk tier settings."""
     display_name = "Junked Items"
+    valid_keys = sorted(sellable_item_names)
     visibility = Visibility.complex_ui
 
-class KeptItems(ItemSet):
+class KeptItems(OptionSet):
     """Items that will never be sold for GP regardless of your junk tier settings. Takes priority over Junked Items."""
+    display_name = "Kept Items"
+    valid_keys = sorted(sellable_item_names)
     visibility = Visibility.complex_ui
 
 @dataclass
@@ -408,7 +411,9 @@ ff4fe_option_groups = [
         PassInShops,
         MinTier,
         MaxTier,
-        JunkTier
+        JunkTier,
+        JunkedItems,
+        KeptItems
     ]),
     OptionGroup("Challenge Flags", [
         HeroChallenge,
