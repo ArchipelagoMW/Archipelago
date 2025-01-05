@@ -1,6 +1,6 @@
 import logging
 from collections import deque
-from typing import Dict, Literal, Optional, Callable
+from typing import Callable, Dict, Literal, Optional, Set
 
 from .AutopelagoDefinitions import GAME_NAME, version_stamp, AutopelagoGameRequirement, AutopelagoAllRequirement, \
     AutopelagoAnyRequirement, AutopelagoAnyTwoRequirement, AutopelagoItemRequirement, item_key_to_name, \
@@ -97,8 +97,8 @@ class AutopelagoWorld(World):
     options_dataclass = ArchipelagoGameOptions
     options: ArchipelagoGameOptions
     victory_location: str
-    regions_in_scope: set[str]
-    locations_in_scope: set[str]
+    regions_in_scope: Set[str]
+    locations_in_scope: Set[str]
 
     # item_name_to_id and location_name_to_id must be filled VERY early, but seemingly only because
     # they are used in Main.main to log the ID ranges in use. if not for that, we probably could've
