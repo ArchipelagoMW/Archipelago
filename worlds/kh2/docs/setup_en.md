@@ -10,15 +10,17 @@
 `Kingdom Hearts II Final Mix` from the [Epic Games Store](https://store.epicgames.com/en-US/discover/kingdom-hearts) or [Steam](https://store.steampowered.com/app/2552430/KINGDOM_HEARTS_HD_1525_ReMIX/)
 
 - Follow this Guide to set up these requirements [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/)
-    1. `Version 3.3.0 or greater OpenKH Mod Manager with Panacea`
+    1. `Version 3.4.0 or greater OpenKH Mod Manager with Panacea`
     2. `Lua Backend from the OpenKH Mod Manager`
     3. `Install the mod KH2FM-Mods-Num/GoA-ROM-Edition using OpenKH Mod Manager`
 - Needed for Archipelago 
     1. [`ArchipelagoKH2Client.exe`](https://github.com/ArchipelagoMW/Archipelago/releases)
     2. `Install the Archipelago Companion mod from JaredWeakStrike/APCompanion using OpenKH Mod Manager`
-    3. `Install the Archipelago Quality Of Life mod from JaredWeakStrike/AP_QOL using OpenKH Mod Manager`
-    4. `Install the mod from KH2FM-Mods-equations19/auto-save using OpenKH Mod Manager`
+    3. `Install the mod from KH2FM-Mods-equations19/auto-save using OpenKH Mod Manager`
+    4. `Install the mod from KH2FM-Mods-equations19/KH2-Lua-Library using OpenKH Mod Manager`
     5. `AP Randomizer Seed`
+- Optional Quality of Life Mods for Archipelago
+    3. `Install the Archipelago Quality Of Life mod from JaredWeakStrike/AP_QOL using OpenKH Mod Manager`
 
 <h3 style="text-transform:none";>Required: Archipelago Companion Mod</h3>
 
@@ -26,9 +28,9 @@ Load this mod just like the <b>GoA ROM</b> you did during the KH2 Rando setup. `
 Have this mod second-highest priority below the .zip seed.<br>
 This mod is based upon Num's Garden of Assemblege Mod and requires it to work. Without Num this could not be possible. 
 
-<h3 style="text-transform:none";>Required: Auto Save Mod</h3>
+<h3 style="text-transform:none";>Required: Auto Save Mod and KH2 Lua Library</h3>
 
-Load this mod just like the GoA ROM you did during the KH2 Rando setup. `KH2FM-Mods-equations19/auto-save` Location doesn't matter, required in case of crashes. See [Best Practices](en#best-practices) on how to load the auto save
+Load these mods just like you loaded the GoA ROM mod during the KH2 Rando setup. `KH2FM-Mods-equations19/auto-save` and `KH2FM-Mods-equations19/KH2-Lua-Library` Location doesn't matter, required in case of crashes. See [Best Practices](en#best-practices) on how to load the auto save
 
 <h3 style="text-transform:none";>Installing A Seed</h3>
 
@@ -48,7 +50,7 @@ After Installing the seed click `Mod Loader -> Build/Build and Run`. Every slot 
 
 <h2 style="text-transform:none";>Using the KH2 Client</h2>
 
-Once you have started the game through OpenKH Mod Manager and are on the title screen run the [ArchipelagoKH2Client.exe](https://github.com/ArchipelagoMW/Archipelago/releases).<br>
+Once you have started the game through OpenKH Mod Manager and are in the Garden of Assemblade from a new save if starting a new run/room or loaded from a save if returning to a run. Run the [ArchipelagoKH2Client.exe](https://github.com/ArchipelagoMW/Archipelago/releases).<br>
 When you successfully connect to the server the client will automatically hook into the game to send/receive checks. <br>
 If the client ever loses connection to the game, it will also disconnect from the server and you will need to reconnect.<br> 
 `Make sure the game is open whenever you try to connect the client to the server otherwise it will immediately disconnect you.`<br>
@@ -110,7 +112,7 @@ This pack will handle logic, received items, checked locations and autotabbing f
 - Why did I not load into the correct visit?
     - You need to trigger a cutscene or visit The World That Never Was for it to register that you have received the item.
 - What versions of Kingdom Hearts 2 are supported?
-    - Currently the `only` supported versions are `Epic Games Version 1.0.0.9_WW` and `Steam Build Version 14716933`.
+    - Currently the `only` supported versions are `Epic Games Version 1.0.0.10_WW` and `Steam Build Version 15194255`.
 - Why am I getting wallpapered while going into a world for the first time?
     - Your `Lua Backend` was not configured correctly. Look over the step in the [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/) guide.
 - Why am I not getting magic?
