@@ -634,6 +634,11 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.route_101_3,
         LocationName.route_101_4,
         LocationName.route_101_5,
+        LocationName.route_101_itembox_1,
+        LocationName.route_101_itembox_2,
+        LocationName.route_101_itembox_3,
+        LocationName.route_101_itembox_4,
+        LocationName.route_101_itembox_5,
     ]
     route_101_region = create_region(multiworld, player, active_locations, LocationName.route_101_region,
                                      route_101_region_locations)
@@ -1704,6 +1709,9 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.route_280_3,
         LocationName.route_280_4,
         LocationName.route_280_5,
+        LocationName.route_280_itembox_1,
+        LocationName.route_280_itembox_2,
+        LocationName.route_280_itembox_3,
     ]
     route_280_region = create_region(multiworld, player, active_locations, LocationName.route_280_region,
                                      route_280_region_locations)
