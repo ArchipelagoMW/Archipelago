@@ -953,7 +953,10 @@ def visualize_regions(root_region: Region, file_name: str, *,
 
     Example usage in World code:
     from Utils import visualize_regions
-    visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml")
+    state = self.multiworld.get_all_state(False)
+    state.update_reachable_regions(self.player)
+    visualize_regions(self.get_region("Menu"), "my_world.puml", show_entrance_names=True,
+                      regions_to_highlight=state.reachable_regions[self.player])
 
     Example usage in Main code:
     from Utils import visualize_regions
