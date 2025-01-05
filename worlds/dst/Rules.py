@@ -214,7 +214,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         return add_event(event, REGION.OCEAN if is_rule else REGION.NONE, rule, "Crabby Hermit Friendship")
 
     # Misc rules
-    def has_survived_num_days (day_goal:int, state: CollectionState) -> bool:
+    def has_survived_num_days_rule(day_goal: int) -> Callable[[CollectionState], bool]:
         conditions = {basic_survival.event}
         if day_goal > 7: conditions.add(basic_exploration.event)
         if day_goal > 11: conditions.add(seasons_passed_half.event)
@@ -224,8 +224,8 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         if day_goal > 55: conditions.add(seasons_passed_3.event)
         if day_goal > 70: conditions.add(seasons_passed_4.event)
         if day_goal > 90: conditions.add(seasons_passed_5.event)
-
-        return state.has_all(conditions, player)
+        
+        return lambda state: state.has_all(conditions, player)
 
     # Create a cache to store progression item number later, since we don't know how many there are yet
     _prog_item_num_cache:Dict[float, int] = {}
@@ -1467,10 +1467,12 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
 
     survival_goal = add_event("Survival Goal", REGION.FOREST if options.goal.value == options.goal.option_survival else REGION.NONE,
         combine_rules(
-            lambda state: has_survived_num_days(options.days_to_survive.value, state),
-            (lambda state: state.has_all({advanced_boss_combat.event, basic_boating.optional_event, cave_exploration.optional_event}, player))
-            if options.days_to_survive.value < 21 # Generic non-seasonal goal
-            else ALWAYS_TRUE
+            has_survived_num_days_rule(options.days_to_survive.value),
+            (
+                (lambda state: state.has_all({advanced_boss_combat.event, basic_boating.optional_event, cave_exploration.optional_event}, player))
+                if options.days_to_survive.value < 21 # Generic non-seasonal goal
+                else ALWAYS_TRUE
+            )
         )
     )
 
@@ -1880,7 +1882,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             "Bottle Exchange (10)":             lambda state: state.count("Crabby Hermit Friendship", player) >= 8,
 
             # Experimental; Will probably won't keep at all
-            **{f"Survive {i} Days":             (lambda state: has_survived_num_days(i, state)) for i in range(1, 100)},
+            # **{f"Survive {i} Days":             has_survived_num_days_rule(i) for i in range(1, 100)},
         },
     }
 

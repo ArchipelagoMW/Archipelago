@@ -192,6 +192,10 @@ class DSTWorld(World):
         self.dst_itempool.decide_itempools(self)
 
     def create_item(self, name: str) -> Item:
+        """
+        Item creation function for DST, intended for external calls. Using this function directly will always produce a progression item.
+        If creating items within the world, use dst_itempool's create_items to get default classification.
+        """
         item = self.dst_itempool.create_item(self, name)
         item.classification = ItemClassification.progression # Force spawned items to be progression so they could be in logic
         return item
