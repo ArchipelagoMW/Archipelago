@@ -6,6 +6,6 @@ SELFLAUNCH: true
 JOB_THRESHOLD: 0
 
 # Maximum concurrent world gens
-GENERATORS: 8
+GENERATORS: 3
 
-HOSTERS: 5
+HOSTERS: 4
