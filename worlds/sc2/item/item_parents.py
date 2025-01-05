@@ -202,7 +202,7 @@ parent_present[parent_names.SUPPLICANT_AND_ASCENDANT] = AnyOf(
     main_item=item_names.ASCENDANT,
 )
 parent_present[parent_names.VOID_RAY_CLASS] = AnyOf(
-    (item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY, item_names.DAWNBRINGER),
+    (item_names.VOID_RAY, item_names.DESTROYER, item_names.INTERCESSOR, item_names.DAWNBRINGER),
     main_item=item_names.VOID_RAY,
 )
 parent_present[parent_names.ZEALOT_OR_SENTINEL_OR_CENTURION] = AnyOf(

@@ -1427,7 +1427,7 @@ class SC2Logic:
                 # Stargate
                 item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR,
                 item_names.SCOUT, item_names.ARBITER,
-                item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY,
+                item_names.VOID_RAY, item_names.DESTROYER, item_names.INTERCESSOR,
                 item_names.CARRIER, item_names.SKYLORD, item_names.TEMPEST,
                 item_names.MOTHERSHIP,
                 # Buildings
@@ -1466,7 +1466,7 @@ class SC2Logic:
     def protoss_anti_armor_anti_air(self, state: CollectionState) -> bool:
         return (
             self.protoss_competent_anti_air(state)
-            or state.has_any({item_names.SCOUT, item_names.WARP_RAY}, self.player)
+            or state.has(item_names.SCOUT, self.player)
             or (state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR}, self.player)
                 and state.has(item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS, self.player))
             or state.has_all({item_names.WRATHWALKER, item_names.WRATHWALKER_AERIAL_TRACKING}, self.player)
@@ -1503,7 +1503,7 @@ class SC2Logic:
                     or state.has_all((item_names.SKIRMISHER, item_names.SKIRMISHER_PEER_CONTEMPT), self.player)
                 )
                 and (
-                    state.has_any({item_names.SCOUT, item_names.WARP_RAY}, self.player)
+                    state.has(item_names.SCOUT, self.player)
                     or state.has_all({item_names.WRATHWALKER, item_names.WRATHWALKER_AERIAL_TRACKING}, self.player)
                 )
             )
@@ -1528,7 +1528,7 @@ class SC2Logic:
             state.has_any({
                 item_names.SCOUT, item_names.TEMPEST,
                 item_names.CARRIER, item_names.SKYLORD, item_names.TRIREME,
-                item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY, item_names.DAWNBRINGER,
+                item_names.VOID_RAY, item_names.DESTROYER, item_names.INTERCESSOR, item_names.DAWNBRINGER,
                 item_names.MOTHERSHIP,
             }, self.player)
             or self.protoss_has_blink(state)
@@ -1557,7 +1557,7 @@ class SC2Logic:
                 )
                 # handle brood lords and virophages
                 and (state.has_any({
-                        item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY,
+                        item_names.VOID_RAY, item_names.DESTROYER, item_names.INTERCESSOR,
                         item_names.TEMPEST
                     }, self.player)
                     or self.advanced_tactics and state.has_all({item_names.SCOUT, item_names.WARP_PRISM}, self.player)
@@ -1569,7 +1569,7 @@ class SC2Logic:
     def protoss_fleet(self, state: CollectionState) -> bool:
         return state.has_any({
             item_names.CARRIER, item_names.SKYLORD, item_names.TRIREME, item_names.TEMPEST, item_names.VOID_RAY,
-            item_names.DESTROYER, item_names.WARP_RAY, item_names.DAWNBRINGER
+            item_names.DESTROYER, item_names.INTERCESSOR, item_names.DAWNBRINGER
         }, self.player)
 
     def templars_return_phase_2_requirement(self, state: CollectionState) -> bool:
@@ -1678,7 +1678,7 @@ class SC2Logic:
         return (
             state.has_any({
                 item_names.ANNIHILATOR, item_names.ASCENDANT, item_names.TEMPEST, item_names.CARRIER,
-                item_names.SKYLORD, item_names.TRIREME, item_names.VOID_RAY, item_names.WARP_RAY,
+                item_names.SKYLORD, item_names.TRIREME, item_names.VOID_RAY,
                 item_names.WRATHWALKER, item_names.VANGUARD
             }, self.player)
             or (state.has(item_names.IMMORTAL, self.player)

@@ -639,7 +639,7 @@ protoss_ground_wa = [
 protoss_air_wa = [
     item_names.WARP_PRISM_PHASE_BLASTER,
     item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR, item_names.SKIRMISHER,
-    item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY, item_names.DAWNBRINGER,
+    item_names.VOID_RAY, item_names.DESTROYER, item_names.INTERCESSOR, item_names.DAWNBRINGER,
     item_names.CARRIER, item_names.SKYLORD, item_names.TRIREME,
     item_names.SCOUT, item_names.TEMPEST, item_names.MOTHERSHIP,
     item_names.ARBITER, item_names.ORACLE,
@@ -663,7 +663,7 @@ item_name_groups[ItemGroupNames.LOTV_UNITS] = lotv_units = [
 item_name_groups[ItemGroupNames.PROPHECY_UNITS] = prophecy_units = [
     item_names.ZEALOT, item_names.STALKER, item_names.HIGH_TEMPLAR, item_names.DARK_TEMPLAR,
     item_names.OBSERVER, item_names.COLOSSUS,
-    item_names.PHOENIX, item_names.WARP_RAY, item_names.CARRIER,
+    item_names.PHOENIX, item_names.VOID_RAY, item_names.CARRIER,
 ]
 item_name_groups[ItemGroupNames.PROPHECY_BUILDINGS] = prophecy_buildings = [
     item_names.PHOTON_CANNON,
@@ -684,7 +684,7 @@ item_name_groups[ItemGroupNames.ROBO_UNITS] = robo_units = [
 ]
 item_name_groups[ItemGroupNames.STARGATE_UNITS] = stargate_units = [
     item_names.PHOENIX, item_names.SKIRMISHER, item_names.MIRAGE, item_names.CORSAIR,
-    item_names.VOID_RAY, item_names.DESTROYER, item_names.WARP_RAY, item_names.DAWNBRINGER,
+    item_names.VOID_RAY, item_names.DESTROYER, item_names.INTERCESSOR, item_names.DAWNBRINGER,
     item_names.CARRIER, item_names.SKYLORD, item_names.TRIREME,
     item_names.TEMPEST, item_names.SCOUT, item_names.MOTHERSHIP,
     item_names.ARBITER, item_names.ORACLE,
