@@ -88,7 +88,6 @@ class AutopelagoRatCountRequirement(TypedDict):
 class AutopelagoLandmarkRegionDefinition(TypedDict):
     name: str
     unrandomized_item: str
-    reward_is_fixed: Optional[bool]
     requires: AutopelagoGameRequirement
     exits: Optional[List[str]]
 
@@ -152,15 +151,15 @@ def _gen_ids():
         next_id += 1
 
 
-item_name_to_auras: Dict[str, List[str]] = { 'Victory': [] }
+item_name_to_auras: Dict[str, List[str]] = {}
 generic_nonprogression_item_table: Dict[AutopelagoNonProgressionItemType, List[str]] = {'useful_nonprogression': [],
                                                                                         'trap': [], 'filler': []}
-item_name_to_classification: Dict[str, Optional[ItemClassification]] = { 'Victory': ItemClassification.progression }
+item_name_to_classification: Dict[str, Optional[ItemClassification]] = {}
 item_name_to_rat_count: Dict[str, int] = {}
 game_specific_nonprogression_items: Dict[str, Dict[AutopelagoNonProgressionItemType, List[str]]] = {}
-item_key_to_name: Dict[str, str] = { 'Victory': 'Victory' }
+item_key_to_name: Dict[str, str] = {}
 _item_id_gen = _gen_ids()
-item_name_to_id: Dict[str, Optional[int]] = { 'Victory': next(_item_id_gen) }
+item_name_to_id: Dict[str, int] = {}
 
 for k, v in ((k, v) for k, v in _defs['items'].items() if
              k not in {'rats', 'useful_nonprogression', 'trap', 'filler'}):
@@ -236,7 +235,6 @@ location_name_to_progression_item_name: Dict[str, str] = {}
 location_name_to_nonprogression_item: Dict[str, Literal['useful_nonprogression', 'filler']] = {}
 location_name_to_requirement: Dict[str, AutopelagoGameRequirement] = {}
 location_name_to_id: Dict[str, int] = {}
-location_names_with_fixed_rewards: Set[str] = set()
 _location_id_gen = _gen_ids()
 
 for k, curr_region in _defs['regions']['landmarks'].items():
@@ -246,8 +244,6 @@ for k, curr_region in _defs['regions']['landmarks'].items():
     location_name_to_requirement[_name] = curr_region['requires']
     exits: List[str] = curr_region['exits'] if 'exits' in curr_region else []
     autopelago_regions[k] = AutopelagoRegionDefinition(k, exits, [_name], curr_region['requires'], True)
-    if 'reward_is_fixed' in curr_region and curr_region['reward_is_fixed']:
-        location_names_with_fixed_rewards.add(_name)
 for rk, curr_region in _defs['regions']['fillers'].items():
     _locations: List[str] = []
     _cur = 1
@@ -367,6 +363,7 @@ def _visit_for_items(group_name: str, req: AutopelagoGameRequirement):
         req: AutopelagoAnyTwoRequirement
         for sub_req in req['any_two']:
             _visit_for_items(group_name, sub_req)
+
 
 q: Deque[Tuple[str, Optional[AutopelagoRegionDefinition], AutopelagoRegionDefinition]] = deque()
 q.append(('Sewer', None, autopelago_regions['Menu']))

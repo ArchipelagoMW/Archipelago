@@ -4,7 +4,7 @@
 version_stamp: '0.6.0'
 
 items:
-  blackbird: 'Lockheed SR-71 Blackbird'
+  moon_shoes: 'Moon Shoes'
   mongoose_in_a_combat_spacecraft:
     name: 'Mongoose in a Combat Spacecraft'
     flavor_text: 'Do an aileron roll!'
@@ -254,6 +254,7 @@ items:
     - ['Dreihander', [confident]]
     - ['A Reasonably Priced Textbook', [smart]]
     - ['Sandwich that is Literally One Mile Tall', [well_fed, well_fed, well_fed, well_fed, well_fed, well_fed, distracted]]
+    - ['Lockheed SR-71 Blackbird', [energized, energized, smart]]
 
 
 
@@ -613,32 +614,19 @@ items:
           - ['Treasure Chest with Several Stab Wounds', []]
 
 
-# reward the automatic 'Victory' item to win. one MUST be called 'Menu'
-# ability_check_with_dc is intended to make intuitive sense to those who are
-# familiar with the basic concept outlined on:
+# one MUST be called 'Menu'. ability_check_with_dc is intended to make intuitive
+# sense to those who are familiar with the basic concept outlined on:
 # https://www.5esrd.com/using-ability-scores#Ability_Checks so we can make the
 # game "feel" more "difficult" as the "player" enters the later stages.
 regions:
   landmarks:
-    moon_comma_the:
-      name: 'Moon, The'
-      flavor_text: 'I hope there''s enough of it to go around...'
-      unrandomized_item: Victory
-      reward_is_fixed: yes
-      requires:
-        item: blackbird
-      ability_check_dc: 1
-
     snakes_on_a_planet:
       name: 'Snakes on a Planet'
-      flavor_text: 'Actually, I don''t mind all these snakes. It''s the plane I''m after.'
-      unrandomized_item: blackbird
-      reward_is_fixed: yes
+      flavor_text: 'There sure are a heckin'' lot of snakes on this heckin'' planet...'
+      unrandomized_item: moon_shoes
       requires:
         item: mongoose_in_a_combat_spacecraft
       ability_check_dc: 24
-      exits:
-        - moon_comma_the
 
     asteroid_with_pants:
       name: 'Asteroid with Pants'

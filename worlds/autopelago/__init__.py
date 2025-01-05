@@ -1,15 +1,16 @@
 import logging
-from typing import Dict, Literal, Optional
+from collections import deque
+from typing import Dict, Literal, Optional, Callable
 
 from .AutopelagoDefinitions import GAME_NAME, version_stamp, AutopelagoGameRequirement, AutopelagoAllRequirement, \
     AutopelagoAnyRequirement, AutopelagoAnyTwoRequirement, AutopelagoItemRequirement, item_key_to_name, \
     AutopelagoRatCountRequirement, item_name_to_rat_count, location_name_to_id, location_name_to_requirement, \
     AutopelagoRegionDefinition, item_name_to_id, ItemClassification, item_name_to_classification, \
-    location_name_to_progression_item_name, location_names_with_fixed_rewards, game_specific_nonprogression_items, \
-    generic_nonprogression_item_table, total_available_rat_count, max_required_rat_count, \
-    AutopelagoNonProgressionItemType, autopelago_item_classification_of, location_name_to_nonprogression_item, \
-    autopelago_regions, item_name_groups, location_name_groups
-from .options import ArchipelagoGameOptions
+    location_name_to_progression_item_name, game_specific_nonprogression_items, generic_nonprogression_item_table, \
+    total_available_rat_count, max_required_rat_count, AutopelagoNonProgressionItemType, \
+    autopelago_item_classification_of, location_name_to_nonprogression_item, autopelago_regions, item_name_groups, \
+    location_name_groups
+from .options import ArchipelagoGameOptions, VictoryLocation
 
 from BaseClasses import CollectionState, Item, Location, MultiWorld, Region, Tutorial
 from worlds.AutoWorld import World, WebWorld
@@ -87,15 +88,17 @@ class AutopelagoWebWorld(WebWorld):
 
 
 class AutopelagoWorld(World):
-    '''
+    """
     An idle game, in the same vein as ArchipIDLE but intended to be more sophisticated.
-    '''
+    """
     game = GAME_NAME
     topology_present = False  # it's static, so setting this to True isn't actually helpful
-    data_version = 0
     web = AutopelagoWebWorld()
     options_dataclass = ArchipelagoGameOptions
     options: ArchipelagoGameOptions
+    victory_location: str
+    regions_in_scope: set[str]
+    locations_in_scope: set[str]
 
     # item_name_to_id and location_name_to_id must be filled VERY early, but seemingly only because
     # they are used in Main.main to log the ID ranges in use. if not for that, we probably could've
@@ -113,6 +116,29 @@ class AutopelagoWorld(World):
     # - location_descriptions
     # - hint_blacklist (should it include the goal item?)
 
+    def generate_early(self):
+        if self.options.victory_location == VictoryLocation.option_captured_goldfish:
+            self.victory_location = 'Captured Goldfish'
+        elif self.options.victory_location == VictoryLocation.option_secret_cache:
+            self.victory_location = 'Secret Cache'
+        else:
+            self.victory_location = 'Snakes on a Planet'
+
+        self.locations_in_scope = set()
+        q = deque(('Menu',))
+        self.regions_in_scope = {'Menu',}
+        while q:
+            r = autopelago_regions[q.popleft()]
+            locations_set = {l for l in r.locations}
+            self.locations_in_scope.update(locations_set)
+            if self.victory_location in locations_set:
+                continue
+            for next_exit in r.exits:
+                if next_exit in self.regions_in_scope:
+                    continue
+                self.regions_in_scope.add(next_exit)
+                q.append(next_exit)
+
     def create_item(self, name: str):
         item_id = item_name_to_id[name]
         classification = item_name_to_classification[name]
@@ -122,7 +148,7 @@ class AutopelagoWorld(World):
     def create_items(self):
         new_items = [self.create_item(item)
                      for location, item in location_name_to_progression_item_name.items()
-                     if location not in location_names_with_fixed_rewards]
+                     if location in self.locations_in_scope and item != 'Moon Shoes']
 
         # skip balancing for the pack_rat items that take us beyond the minimum limit
         rat_items = sorted(
@@ -154,7 +180,10 @@ class AutopelagoWorld(World):
                                                                                 generic_nonprogression_item_table}
         next_filler_becomes_trap = False
         nonprog_type: Literal['useful_nonprogression', 'filler', 'trap']
-        for nonprog_type in location_name_to_nonprogression_item.values():
+        for l, nonprog_type in location_name_to_nonprogression_item.items():
+            if l not in self.locations_in_scope:
+                continue
+
             if nonprog_type == 'filler':
                 if next_filler_becomes_trap:
                     nonprog_type = 'trap'
@@ -170,20 +199,27 @@ class AutopelagoWorld(World):
             category_to_next_offset[nonprog_type] += 1
 
     def create_regions(self):
-        new_regions = {r.key: AutopelagoRegion(r, self.player, self.multiworld) for r in autopelago_regions.values()}
+        victory_region = Region('Victory', self.player, self.multiworld)
+        self.multiworld.regions.append(victory_region)
+        self.multiworld.completion_condition[self.player] =\
+            lambda state: state.can_reach(victory_region)
+
+        new_regions = {r.key: AutopelagoRegion(r, self.player, self.multiworld)
+                       for key, r in autopelago_regions.items()
+                       if key in self.regions_in_scope}
         for r in new_regions.values():
             self.multiworld.regions.append(r)
             req = r.autopelago_definition.requires
-            for next_exit in r.autopelago_definition.exits:
-                rule = (lambda req_: lambda state: _is_satisfied(self.player, req_, state))(req)
-                r.connect(new_regions[next_exit], rule=None if _is_trivial(req) else rule)
-            for loc in r.locations:
-                if loc.name in location_names_with_fixed_rewards:
-                    item_name = location_name_to_progression_item_name[loc.name]
-                    loc.place_locked_item(self.create_item(item_name))
-
-        self.multiworld.completion_condition[self.player] =\
-            lambda state: state.has('Victory', self.player)
+            rule: Optional[Callable[[CollectionState], bool]]
+            rule = None if _is_trivial(req) \
+                else (lambda req_: lambda state: _is_satisfied(self.player, req_, state))(req)
+            if self.victory_location in r.autopelago_definition.locations:
+                r.connect(victory_region, rule=rule)
+                if self.options.victory_location == VictoryLocation.option_snakes_on_a_planet:
+                    r.locations[0].place_locked_item(self.create_item('Moon Shoes'))
+            else:
+                for next_exit in r.autopelago_definition.exits:
+                    r.connect(new_regions[next_exit], rule=rule)
 
     def get_filler_item_name(self):
         return "Monkey's Paw"
@@ -191,4 +227,5 @@ class AutopelagoWorld(World):
     def fill_slot_data(self):
         return {
             'version_stamp': version_stamp,
+            'victory_location_name': self.victory_location,
         }
