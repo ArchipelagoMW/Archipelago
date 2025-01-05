@@ -106,6 +106,9 @@ class DSTItemPool:
             self.nonfiller_itempool.append("Damage Bonus")
 
     def create_item(self, world:World, name: str) -> DSTItem:
+        """
+        Create an item for DST. Use this function instead of the world's create_item to get the correct classification.
+        """
         itemtype = (
             IC.progression if name in self.progression_items
             else item_data_table[name].type if name in item_name_to_id
