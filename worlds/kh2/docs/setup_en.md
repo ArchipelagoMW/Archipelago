@@ -20,7 +20,7 @@
     4. `Install the mod from KH2FM-Mods-equations19/KH2-Lua-Library using OpenKH Mod Manager`
     5. `AP Randomizer Seed`
 - Optional Quality of Life Mods for Archipelago
-    3. `Install the Archipelago Quality Of Life mod from JaredWeakStrike/AP_QOL using OpenKH Mod Manager`
+    1. `Install the Archipelago Quality Of Life mod from JaredWeakStrike/AP_QOL using OpenKH Mod Manager`
 
 <h3 style="text-transform:none";>Required: Archipelago Companion Mod</h3>
 
