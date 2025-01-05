@@ -20,7 +20,8 @@
     4. `Install the mod from KH2FM-Mods-equations19/KH2-Lua-Library using OpenKH Mod Manager`
     5. `AP Randomizer Seed`
 - Optional Quality of Life Mods for Archipelago
-    1. `Install the Archipelago Quality Of Life mod from JaredWeakStrike/AP_QOL using OpenKH Mod Manager`
+    1. `Optionally Install the Archipelago Quality Of Life mod from JaredWeakStrike/AP_QOL using OpenKH Mod Manager`
+    2. `Optionally Install the Quality Of Life mod from shananas/BearSkip using OpenKH Mod Manager`
 
 <h3 style="text-transform:none";>Required: Archipelago Companion Mod</h3>
 
@@ -31,6 +32,12 @@ This mod is based upon Num's Garden of Assemblege Mod and requires it to work. W
 <h3 style="text-transform:none";>Required: Auto Save Mod and KH2 Lua Library</h3>
 
 Load these mods just like you loaded the GoA ROM mod during the KH2 Rando setup. `KH2FM-Mods-equations19/auto-save` and `KH2FM-Mods-equations19/KH2-Lua-Library` Location doesn't matter, required in case of crashes. See [Best Practices](en#best-practices) on how to load the auto save
+
+<h3 style="text-transform:none";>Optional QoL Mods: AP QoL and Bear Skip</h3>
+
+`JaredWeakStrike/AP_QOL` Makes the Urns minigames must faster, Cavern of Remembrance orbs drop significantly more drive orbs for refilling dirve/leveling master form, skips the animation when using the bulky vendor RC, skips carpet escape auto scroller in Agrabah 2, and prevents the wardrobe in the Beasts Castle wardrobe push minigame from waking up while being pushed.
+
+`shananas/BearSkip` Skips all minigames in 100 Acre Woods except the Spooky Cave minigame since there are chests in spooky cave you can only get during the minigame. For spooky cave Pooh is moved to the other side of the invisible wall that prevents you from using his RC to finish the minigame.
 
 <h3 style="text-transform:none";>Installing A Seed</h3>
 
