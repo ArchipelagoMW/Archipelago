@@ -19,13 +19,67 @@ from .Locations import ALL_LOCATION_TABLE, LMLocation
         #lambda (key, named_tuple): named_tuple.ram_address_room_id == int_current_room, ALL_LOCATION_TABLE.items()))
 
 furniture_name_list: dict[int, dict[int, str]] = {
-    2: {
-        99: "Right Tall Candles",
-        100: "Left Tall Candles",
-        101: "Chandelier",
-        207: "Left Dresser",
-        208: "Covered Mirror",
-        270: "Ceiling Light by Heart Door"
+    2: { # Foyer
+        99: "Foyer Right Tall Candles",
+        100: "Foyer Left Tall Candles",
+        101: "Foyer Chandelier",
+        207: "Foyer Left Dresser",
+        208: "Foyer Covered Mirror",
+        270: "Foyer Ceiling Light by Heart Door"
+    },
+    31: { # Upper Foyer
+        335: "Left Jar in Upper Foyer",
+        336: "Right Jar in Upper Foyer"
+    },
+    34: { # Master Bedroom
+        360: "Master Bedroom Bed",
+        361: "Master Bedroom Left Painting (near back)",
+        362: "Master Bedroom Right Painting (closer to Entrance)",
+        363: "Master Bedroom Right Painting (near back)",
+        373: "Master Bedroom Ceiling fan",
+        375: "Master Bedroom Vanity",
+        376: "Master Bedroom Stool",
+        491: "Master Bedroom Dresser",
+        492: "Master Bedroom End Table",
+    },
+    35: { # Study
+        348: "Study Hat Rack",
+        349: "Study Large Lamp",
+        350: "Study Swivel Chair",
+        351: "Study Large Desk",
+        352: "Study Chandelier",
+        353: "Study Ship in a bottle",
+        354: "Study Bookshelf 1 (Far Left)",
+        355: "Study Bookshelf 2 (Second From Left)",
+        356: "Study Bookshelf 3 (Third From Left)",
+        357: "Study Bookshelf 4 (Third From Right)",
+        358: "Study Bookshelf 5 (Second From Right)",
+        359: "Study Bookshelf 6 (Far Right)",
+        503: "Study Openable Book (closer to Entrance)",
+        504: "Study Openable Book (near back)",
+        552: "Study Left Painting (near back)",
+        553: "Study Left Painting (closer to Entrance)",
+        554: "Study Right Painting (closer to Entrance)",
+        555: "Study Right Painting (near back)",
+        560: "Study Rocking Chair"
+    },
+    36: { # Parlor
+        337: "Parlor China Shelves",
+        338: "Parlor Dining Chair",
+        339: "Parlor Dining Table",
+        340: "Parlor Coffee Table",
+        341: "Parlor Love Seat",
+        342: "Parlor Chandelier",
+        343: "Parlor Left Painting (near back)",
+        344: "Parlor Left Painting (closer to Entrance)",
+        345: "Parlor Right Painting (closer to Entrance)",
+        346: "Parlor Right Painting (near back)",
+        347: "Parlor Center Painting",
+        489: "Parlor Right End Table",
+        490: "Parlor Right Lamp on End Table",
+        494: "Parlor Center Low Shelves",
+        511: "Parlor Left Candelabra",
+        512: "Parlor Right Candelabra"
     }
 }
 
@@ -63,6 +117,7 @@ CURR_MANSION_MAP_ID_ADDR = 0x804D80A4
 
 # This address lets us know if the game is playable and ready. This should have a value of 2
 CURR_PLAY_STATE_ADDR = 0x803A3AE4
+CURR_MAP_ID_ADDR = 0x804D7834
 
 # This address is used to check the stage name to verify the player is in-game before sending items.
 # CURR_STAGE_NAME_ADDR = 0x803C9D3C
@@ -128,9 +183,7 @@ boo_name_collection = [["Butler's Room Boo (PeekaBoo)", "Hidden Room Boo (GumBoo
                         "Boolossus Boo 11", "Boolossus Boo 12", "Boolossus Boo 13"],
                        ["Boolossus Boo 14", "Boolossus Boo 15", "", "", "", "", "", ""]]
 
-furniture_id_collection = [[],
-                           [],
-                           [{"0x63": "Right Tall Candles"}, {"0x64": "Left Tall Candles"}, {}, {}, {}]]
+luigi_recv_text = "Luigi was able to find: "
 
 
 def get_base_rom_path(file_name: str = "") -> str:
@@ -162,7 +215,7 @@ class LMCommandProcessor(ClientCommandProcessor):
 
 
 class LMContext(CommonContext):
-    check_furn = False # TODO Remove
+    checked_furniture = []
     command_processor = LMCommandProcessor
     game = "Luigi's Mansion"
     items_handling = 0b111
@@ -311,16 +364,16 @@ async def check_locations(ctx: LMContext):
             if (bit_int & (1<<i)) > 0:
                 match i:
                     case 5:
-                        print("Medal received: Fire")
+                        print(luigi_recv_text + "Fire")
                         continue
                     case 6:
-                        print("Medal received: Ice")
+                        print(luigi_recv_text + "Ice")
                         continue
                     case 7:
-                        print("Medal received: Water")
+                        print(luigi_recv_text + "Water")
                         continue
                     case _:
-                        print("Not supposed to be reached")
+                        print("ERROR: Not supposed to be reached")
                         continue
 
     mario_items_arr_one = dolphin_memory_engine.read_byte(MARIO_ITEMS_RECV_ONE_ADDR)
@@ -334,19 +387,19 @@ async def check_locations(ctx: LMContext):
             if (bit_int & (1<<i)) > 0:
                 match i:
                     case 4:
-                        print("Mario Item received: Hat")
+                        print(luigi_recv_text + "Mario's Hat")
                         continue
                     case 5:
-                        print("Mario Item received: Star")
+                        print(luigi_recv_text + "Mario's Star")
                         continue
                     case 6:
-                        print("Mario Item received: Glove")
+                        print(luigi_recv_text + "Mario's Glove")
                         continue
                     case 7:
-                        print("Mario Item received: Shoe")
+                        print(luigi_recv_text + "Mario's Shoe")
                         continue
                     case _:
-                        print("Not supposed to be reached")
+                        print("ERROR: Not supposed to be reached")
                         continue
 
     mario_items_arr_two = dolphin_memory_engine.read_byte(MARIO_ITEMS_RECV_TWO_ADDR)
@@ -357,7 +410,7 @@ async def check_locations(ctx: LMContext):
             bit_int = mario_items_arr_two
         ctx.mario_items_tracked[1] = mario_items_arr_two
         if (bit_int & (1 << 0)) > 0:
-            print("Mario Item received: Letter")
+            print(luigi_recv_text + "Mario's Letter")
 
     for key_addr_pos in range(10):
         current_keys_int = dolphin_memory_engine.read_byte(KEYS_BITFLD_ADDR + key_addr_pos)
@@ -369,7 +422,7 @@ async def check_locations(ctx: LMContext):
             ctx.keys_tracked[key_addr_pos] = current_keys_int
             for i in range(8):
                 if (bit_int & (1<<i)) > 0 and not key_name_collection[key_addr_pos][i] == "":
-                    print("Key Received: '" + key_name_collection[key_addr_pos][i] + " Key'")
+                    print(luigi_recv_text + "'" + key_name_collection[key_addr_pos][i] + " Key'")
 
     for boo_addr_pos in range(7):
         current_boos_int = dolphin_memory_engine.read_byte(BOOS_BITFLD_ADDR + boo_addr_pos)
@@ -381,27 +434,39 @@ async def check_locations(ctx: LMContext):
             ctx.boos_captured[boo_addr_pos] = current_boos_int
             for i in range(8):
                 if (bit_int & (1<<i)) > 0 and not boo_name_collection[boo_addr_pos][i] == "":
-                    print("Boo Captured: '" + boo_name_collection[boo_addr_pos][i] + "'")
+                    print("Luigi has captured the following Boo: '" + boo_name_collection[boo_addr_pos][i] + "'")
 
-    if not LMContext.check_furn:
-        current_room_id = dolphin_memory_engine.read_word(
-            dolphin_memory_engine.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
-        for current_offset in range(0, 116, 4): # TODO find max amount of furniture pieces loaded in.
+    current_room_id = dolphin_memory_engine.read_word(
+        dolphin_memory_engine.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
+
+    if furniture_name_list.keys().__contains__(current_room_id):
+        for current_offset in range(0, 424, 4): # TODO Validate this accounts for all furniture
+
             current_addr = FURNITURE_MAIN_TABLE_ID+current_offset
-            if dolphin_memory_engine.read_word(current_addr) != 0:
-                furniture_id = dolphin_memory_engine.read_word(
-                    dolphin_memory_engine.follow_pointers(current_addr, [FURN_ID_OFFSET]))
-                furniture_flag =  dolphin_memory_engine.read_word(
-                    dolphin_memory_engine.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
+            if dolphin_memory_engine.read_word(current_addr) == 0:
+                continue
 
-                if not furniture_name_list[current_room_id].__contains__(furniture_id):
-                    furniture_name = "N/A"
-                else:
-                    furniture_name = furniture_name_list[current_room_id][furniture_id]
+            furniture_flag =  dolphin_memory_engine.read_word(
+                dolphin_memory_engine.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
 
-                print(f"Current Addr: {hex(current_addr)}; ID: {hex(furniture_id)}; Flag: {furniture_flag}; " +
-                      "Furniture Name: " + furniture_name)
-        LMContext.check_furn = True
+            if furniture_flag == 0:
+                continue
+
+            furniture_id = dolphin_memory_engine.read_word(
+                dolphin_memory_engine.follow_pointers(current_addr, [FURN_ID_OFFSET]))
+
+            if not furniture_name_list[current_room_id].__contains__(furniture_id):
+                continue
+
+            furniture_name = furniture_name_list[current_room_id][furniture_id]
+
+            if LMContext.checked_furniture.__contains__(furniture_name):
+                continue
+
+            print(f"Luigi knocked on furniture {furniture_name} in Room #{str(current_room_id)}.\n"+
+                  f"Additional Debug Details: Current Addr: {hex(current_addr)}; Furniture ID: {hex(furniture_id)}; " +
+                  f"Flag Value: {furniture_flag}")
+            LMContext.checked_furniture.append(furniture_name)
 
         #if furniture_id in filtered_location_list:
             #furniture_state =
@@ -505,8 +570,19 @@ async def check_death(ctx: LMContext):
 
 
 def check_ingame():
-    return int.from_bytes(dolphin_memory_engine.read_bytes(CURR_PLAY_STATE_ADDR, 4)) == 2
-    # return True # read_string(CURR_STAGE_NAME_ADDR, 8) not in ["", "sea_T", "Name"] #TODO PLEASE GOD FIX ME
+    current_room_id = dolphin_memory_engine.read_word(
+        dolphin_memory_engine.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET])) if (
+            dolphin_memory_engine.read_word(ROOM_ID_ADDR) > 0) else 0
+    bool_in_main_map = 0 < current_room_id < 74
+
+    bool_in_boss_map = False
+    if not bool_in_main_map:
+        current_map_id = dolphin_memory_engine.read_word(CURR_MAP_ID_ADDR)
+        bool_in_boss_map = 0 < current_map_id < 14
+
+    int_play_state = dolphin_memory_engine.read_word(CURR_PLAY_STATE_ADDR)
+    return int_play_state == 2 and (bool_in_main_map or bool_in_boss_map)
+
 
 async def dolphin_sync_task(ctx: LMContext):
     logger.info("Starting Dolphin connector. Use /dolphin for status information.")
