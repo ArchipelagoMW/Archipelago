@@ -16,4 +16,5 @@
 <FLAGON>(73)
 <FLAGON>(75)
 <FRAMEEND>
+<BGM>(7)
 <END>
