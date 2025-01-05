@@ -11,7 +11,6 @@ class DLCMusicPacks(OptionSet):
     Note: The [Just As Planned] DLC contains all [Muse Plus] songs.
     """
     display_name = "DLC Packs"
-    default = {}
     valid_keys = [dlc for dlc in MuseDashCollections.DLC]
 
 
@@ -39,7 +38,7 @@ class AdditionalSongs(Range):
     - The final song count may be lower due to other settings.
     """
     range_start = 15
-    range_end = 534  # Note will probably not reach this high if any other settings are done.
+    range_end = 600  # Note will probably not reach this high if any other settings are done.
     default = 40
     display_name = "Additional Song Count"
 
@@ -142,7 +141,6 @@ class ChosenTraps(OptionSet):
     Note: SFX traps are only available if [Just as Planned] DLC songs are enabled.
     """
     display_name = "Chosen Traps"
-    default = {}
     valid_keys = {trap for trap in MuseDashCollections.trap_items.keys()}
 
 

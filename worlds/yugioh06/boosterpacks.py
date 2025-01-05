@@ -1,13 +1,13 @@
-from typing import Dict, Set
+from typing import Dict, List
 
-booster_contents: Dict[str, Set[str]] = {
-    "LEGEND OF B.E.W.D.": {
+booster_contents: Dict[str, List[str]] = {
+    "LEGEND OF B.E.W.D.": [
         "Exodia",
         "Dark Magician",
         "Polymerization",
         "Skull Servant"
-    },
-    "METAL RAIDERS": {
+    ],
+    "METAL RAIDERS": [
         "Petit Moth",
         "Cocoon of Evolution",
         "Time Wizard",
@@ -30,8 +30,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Solemn Judgment",
         "Dream Clown",
         "Heavy Storm"
-    },
-    "PHARAOH'S SERVANT": {
+    ],
+    "PHARAOH'S SERVANT": [
         "Beast of Talwar",
         "Jinzo",
         "Gearfried the Iron Knight",
@@ -43,8 +43,8 @@ booster_contents: Dict[str, Set[str]] = {
         "The Shallow Grave",
         "Nobleman of Crossout",
         "Magic Drain"
-    },
-    "PHARAONIC GUARDIAN": {
+    ],
+    "PHARAONIC GUARDIAN": [
         "Don Zaloog",
         "Reasoning",
         "Dark Snake Syndrome",
@@ -71,8 +71,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Book of Taiyou",
         "Dust Tornado",
         "Raigeki Break"
-    },
-    "SPELL RULER": {
+    ],
+    "SPELL RULER": [
         "Ritual",
         "Messenger of Peace",
         "Megamorph",
@@ -94,8 +94,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Senju of the Thousand Hands",
         "Sonic Bird",
         "Mystical Space Typhoon"
-    },
-    "LABYRINTH OF NIGHTMARE": {
+    ],
+    "LABYRINTH OF NIGHTMARE": [
         "Destiny Board",
         "Spirit Message 'I'",
         "Spirit Message 'N'",
@@ -119,8 +119,8 @@ booster_contents: Dict[str, Set[str]] = {
         "United We Stand",
         "Earthbound Spirit",
         "The Masked Beast"
-    },
-    "LEGACY OF DARKNESS": {
+    ],
+    "LEGACY OF DARKNESS": [
         "Last Turn",
         "Yata-Garasu",
         "Opticlops",
@@ -143,8 +143,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Maharaghi",
         "Susa Soldier",
         "Emergency Provisions",
-    },
-    "MAGICIAN'S FORCE": {
+    ],
+    "MAGICIAN'S FORCE": [
         "Huge Revolution",
         "Oppressed People",
         "United Resistance",
@@ -185,8 +185,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Royal Magical Library",
         "Spell Shield Type-8",
         "Tribute Doll",
-    },
-    "DARK CRISIS": {
+    ],
+    "DARK CRISIS": [
         "Final Countdown",
         "Ojama Green",
         "Dark Scorpion Combination",
@@ -213,8 +213,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Spell Reproduction",
         "Contract with the Abyss",
         "Dark Master - Zorc"
-    },
-    "INVASION OF CHAOS": {
+    ],
+    "INVASION OF CHAOS": [
         "Ojama Delta Hurricane",
         "Ojama Yellow",
         "Ojama Black",
@@ -241,8 +241,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Cursed Seal of the Forbidden Spell",
         "Stray Lambs",
         "Manju of the Ten Thousand Hands"
-    },
-    "ANCIENT SANCTUARY": {
+    ],
+    "ANCIENT SANCTUARY": [
         "Monster Gate",
         "Wall of Revealing Light",
         "Mystik Wok",
@@ -255,8 +255,8 @@ booster_contents: Dict[str, Set[str]] = {
         "King of the Swamp",
         "Enemy Controller",
         "Enchanting Fitting Room"
-    },
-    "SOUL OF THE DUELIST": {
+    ],
+    "SOUL OF THE DUELIST": [
         "Ninja Grandmaster Sasuke",
         "Mystic Swordsman LV2",
         "Mystic Swordsman LV4",
@@ -272,8 +272,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Level Up!",
         "Howling Insect",
         "Mobius the Frost Monarch"
-    },
-    "RISE OF DESTINY": {
+    ],
+    "RISE OF DESTINY": [
         "Homunculus the Alchemic Being",
         "Thestalos the Firestorm Monarch",
         "Roc from the Valley of Haze",
@@ -283,8 +283,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Ultimate Insect Lv3",
         "Divine Wrath",
         "Serial Spell"
-    },
-    "FLAMING ETERNITY": {
+    ],
+    "FLAMING ETERNITY": [
         "Insect Knight",
         "Chiron the Mage",
         "Granmarg the Rock Monarch",
@@ -297,8 +297,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Golem Sentry",
         "Rescue Cat",
         "Blade Rabbit"
-    },
-    "THE LOST MILLENIUM": {
+    ],
+    "THE LOST MILLENIUM": [
         "Ritual",
         "Megarock Dragon",
         "D.D. Survivor",
@@ -311,8 +311,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Elemental Hero Thunder Giant",
         "Aussa the Earth Charmer",
         "Brain Control"
-    },
-    "CYBERNETIC REVOLUTION": {
+    ],
+    "CYBERNETIC REVOLUTION": [
         "Power Bond",
         "Cyber Dragon",
         "Cyber Twin Dragon",
@@ -322,8 +322,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Miracle Fusion",
         "Elemental Hero Bubbleman",
         "Jerry Beans Man"
-    },
-    "ELEMENTAL ENERGY": {
+    ],
+    "ELEMENTAL ENERGY": [
         "V-Tiger Jet",
         "W-Wing Catapult",
         "VW-Tiger Catapult",
@@ -344,8 +344,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Elemental Hero Bladedge",
         "Pot of Avarice",
         "B.E.S. Tetran"
-    },
-    "SHADOW OF INFINITY": {
+    ],
+    "SHADOW OF INFINITY": [
         "Hamon, Lord of Striking Thunder",
         "Raviel, Lord of Phantasms",
         "Uria, Lord of Searing Flames",
@@ -357,8 +357,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Gokipon",
         "Demise, King of Armageddon",
         "Anteatereatingant"
-    },
-    "GAME GIFT COLLECTION": {
+    ],
+    "GAME GIFT COLLECTION": [
         "Ritual",
         "Valkyrion the Magna Warrior",
         "Alpha the Magnet Warrior",
@@ -383,8 +383,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Card Destruction",
         "Dark Magic Ritual",
         "Calamity of the Wicked"
-    },
-    "Special Gift Collection": {
+    ],
+    "Special Gift Collection": [
         "Gate Guardian",
         "Scapegoat",
         "Gil Garth",
@@ -398,8 +398,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Curse of Vampire",
         "Elemental Hero Flame Wingman",
         "Magician of Black Chaos"
-    },
-    "Fairy Collection": {
+    ],
+    "Fairy Collection": [
         "Silpheed",
         "Dunames Dark Witch",
         "Hysteric Fairy",
@@ -416,8 +416,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Asura Priest",
         "Manju of the Ten Thousand Hands",
         "Senju of the Thousand Hands"
-    },
-    "Dragon Collection": {
+    ],
+    "Dragon Collection": [
         "Victory D.",
         "Chaos Emperor Dragon - Envoy of the End",
         "Kaiser Glider",
@@ -434,16 +434,16 @@ booster_contents: Dict[str, Set[str]] = {
         "Troop Dragon",
         "Horus the Black Flame Dragon LV4",
         "Pitch-Dark Dragon"
-    },
-    "Warrior Collection A": {
+    ],
+    "Warrior Collection A": [
         "Gate Guardian",
         "Gearfried the Iron Knight",
         "Dimensional Warrior",
         "Command Knight",
         "The Last Warrior from Another Planet",
         "Dream Clown"
-    },
-    "Warrior Collection B": {
+    ],
+    "Warrior Collection B": [
         "Don Zaloog",
         "Dark Scorpion - Chick the Yellow",
         "Dark Scorpion - Meanae the Thorn",
@@ -467,8 +467,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Blade Knight",
         "Marauding Captain",
         "Toon Goblin Attack Force"
-    },
-    "Fiend Collection A": {
+    ],
+    "Fiend Collection A": [
         "Sangan",
         "Castle of Dark Illusions",
         "Barox",
@@ -480,8 +480,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Spear Cretin",
         "Versago the Destroyer",
         "Toon Summoned Skull"
-    },
-    "Fiend Collection B": {
+    ],
+    "Fiend Collection B": [
         "Raviel, Lord of Phantasms",
         "Yata-Garasu",
         "Helpoemer",
@@ -505,15 +505,15 @@ booster_contents: Dict[str, Set[str]] = {
         "Jowls of Dark Demise",
         "D. D. Trainer",
         "Earthbound Spirit"
-    },
-    "Machine Collection A": {
+    ],
+    "Machine Collection A": [
         "Cyber-Stein",
         "Mechanicalchaser",
         "Jinzo",
         "UFO Turtle",
         "Cyber-Tech Alligator"
-    },
-    "Machine Collection B": {
+    ],
+    "Machine Collection B": [
         "X-Head Cannon",
         "Y-Dragon Head",
         "Z-Metal Tank",
@@ -531,8 +531,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Red Gadget",
         "Yellow Gadget",
         "B.E.S. Tetran"
-    },
-    "Spellcaster Collection A": {
+    ],
+    "Spellcaster Collection A": [
         "Exodia",
         "Dark Sage",
         "Dark Magician",
@@ -544,8 +544,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Injection Fairy Lily",
         "Cosmo Queen",
         "Magician of Black Chaos"
-    },
-    "Spellcaster Collection B": {
+    ],
+    "Spellcaster Collection B": [
         "Jowgen the Spiritualist",
         "Tsukuyomi",
         "Manticore of Darkness",
@@ -574,8 +574,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Royal Magical Library",
         "Aussa the Earth Charmer",
 
-    },
-    "Zombie Collection": {
+    ],
+    "Zombie Collection": [
         "Skull Servant",
         "Regenerating Mummy",
         "Ryu Kokki",
@@ -590,8 +590,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Des Lacooda",
         "Wandering Mummy",
         "Royal Keeper"
-    },
-    "Special Monsters A": {
+    ],
+    "Special Monsters A": [
         "X-Head Cannon",
         "Y-Dragon Head",
         "Z-Metal Tank",
@@ -626,8 +626,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Fushi No Tori",
         "Maharaghi",
         "Susa Soldier"
-    },
-    "Special Monsters B": {
+    ],
+    "Special Monsters B": [
         "Polymerization",
         "Mystic Swordsman LV2",
         "Mystic Swordsman LV4",
@@ -656,8 +656,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Level Up!",
         "Ultimate Insect Lv3",
         "Ultimate Insect Lv5"
-    },
-    "Reverse Collection": {
+    ],
+    "Reverse Collection": [
         "Magical Merchant",
         "Castle of Dark Illusions",
         "Magician of Faith",
@@ -675,8 +675,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Spear Cretin",
         "Nobleman of Crossout",
         "Aussa the Earth Charmer"
-    },
-    "LP Recovery Collection": {
+    ],
+    "LP Recovery Collection": [
         "Mystik Wok",
         "Poison of the Old Man",
         "Hysteric Fairy",
@@ -691,8 +691,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Elemental Hero Steam Healer",
         "Fushi No Tori",
         "Emergency Provisions"
-    },
-    "Special Summon Collection A": {
+    ],
+    "Special Summon Collection A": [
         "Perfectly Ultimate Great Moth",
         "Dark Sage",
         "Polymerization",
@@ -726,8 +726,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Morphing Jar #2",
         "Spear Cretin",
         "Dark Magic Curtain"
-    },
-    "Special Summon Collection B": {
+    ],
+    "Special Summon Collection B": [
         "Monster Gate",
         "Chaos Emperor Dragon - Envoy of the End",
         "Ojama Trio",
@@ -756,8 +756,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Tribute Doll",
         "Enchanting Fitting Room",
         "Stray Lambs"
-    },
-    "Special Summon Collection C": {
+    ],
+    "Special Summon Collection C": [
         "Hamon, Lord of Striking Thunder",
         "Raviel, Lord of Phantasms",
         "Uria, Lord of Searing Flames",
@@ -782,13 +782,13 @@ booster_contents: Dict[str, Set[str]] = {
         "Ultimate Insect Lv5",
         "Rescue Cat",
         "Anteatereatingant"
-    },
-    "Equipment Collection": {
+    ],
+    "Equipment Collection": [
         "Megamorph",
         "Cestus of Dagla",
         "United We Stand"
-    },
-    "Continuous Spell/Trap A": {
+    ],
+    "Continuous Spell/Trap A": [
         "Destiny Board",
         "Spirit Message 'I'",
         "Spirit Message 'N'",
@@ -801,8 +801,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Solemn Wishes",
         "Embodiment of Apophis",
         "Toon World"
-    },
-    "Continuous Spell/Trap B": {
+    ],
+    "Continuous Spell/Trap B": [
         "Hamon, Lord of Striking Thunder",
         "Uria, Lord of Searing Flames",
         "Wave-Motion Cannon",
@@ -815,8 +815,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Skull Zoma",
         "Pitch-Black Power Stone",
         "Metal Reflect Slime"
-    },
-    "Quick/Counter Collection": {
+    ],
+    "Quick/Counter Collection": [
         "Mystik Wok",
         "Poison of the Old Man",
         "Scapegoat",
@@ -841,8 +841,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Book of Moon",
         "Serial Spell",
         "Mystical Space Typhoon"
-    },
-    "Direct Damage Collection": {
+    ],
+    "Direct Damage Collection": [
         "Hamon, Lord of Striking Thunder",
         "Chaos Emperor Dragon - Envoy of the End",
         "Dark Snake Syndrome",
@@ -868,8 +868,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Jowls of Dark Demise",
         "Stealth Bird",
         "Elemental Hero Bladedge",
-    },
-    "Direct Attack Collection": {
+    ],
+    "Direct Attack Collection": [
         "Victory D.",
         "Dark Scorpion Combination",
         "Spirit Reaper",
@@ -880,8 +880,8 @@ booster_contents: Dict[str, Set[str]] = {
         "Toon Mermaid",
         "Toon Summoned Skull",
         "Toon Dark Magician Girl"
-    },
-    "Monster Destroy Collection": {
+    ],
+    "Monster Destroy Collection": [
         "Hamon, Lord of Striking Thunder",
         "Inferno",
         "Ninja Grandmaster Sasuke",
@@ -912,12 +912,12 @@ booster_contents: Dict[str, Set[str]] = {
         "Offerings to the Doomed",
         "Divine Wrath",
         "Dream Clown"
-    },
+    ],
 }
 
 
 def get_booster_locations(booster: str) -> Dict[str, str]:
     return {
         f"{booster} {i}": content
-        for i, content in enumerate(booster_contents[booster])
+        for i, content in enumerate(booster_contents[booster], 1)
     }

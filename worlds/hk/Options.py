@@ -1,10 +1,12 @@
 import typing
 import re
+from dataclasses import make_dataclass
+
 from .ExtractedData import logic_options, starts, pool_options
 from .Rules import cost_terms
 from schema import And, Schema, Optional
 
-from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, NamedRange, DeathLink
+from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, NamedRange, DeathLink, PerGameCommonOptions
 from .Charms import vanilla_costs, names as charm_names
 
 if typing.TYPE_CHECKING:
@@ -75,7 +77,7 @@ option_docstrings = {
     "RandomizeLoreTablets": "Randomize Lore items into the itempool, one per Lore Tablet, and place randomized item "
                             "grants on the tablets themselves.\n    You must still read the tablet to get the item.",
     "PreciseMovement": "Places skips into logic which require extremely precise player movement, possibly without "
-                       "movement skills such as\n    dash or hook.",
+                       "movement skills such as\n    dash or claw.",
     "ProficientCombat": "Places skips into logic which require proficient combat, possibly with limited items.",
     "BackgroundObjectPogos": "Places skips into logic for locations which are reachable via pogoing off of "
                              "background objects.",
@@ -292,14 +294,39 @@ class RandomCharmCosts(NamedRange):
             return charms
 
 
+class CharmCost(Range):
+    range_end = 6
+
+
 class PlandoCharmCosts(OptionDict):
     """Allows setting a Charm's Notch costs directly, mapping {name: cost}.
     This is set after any random Charm Notch costs, if applicable."""
     display_name = "Charm Notch Cost Plando"
     valid_keys = frozenset(charm_names)
     schema = Schema({
-        Optional(name): And(int, lambda n: 6 >= n >= 0) for name in charm_names
+        Optional(name): And(int, lambda n: 6 >= n >= 0, error="Charm costs must be integers in the range 0-6.") for name in charm_names
         })
+
+    def __init__(self, value):
+        # To handle keys of random like other options, create an option instance from their values
+        # Additionally a vanilla keyword is added to plando individual charms to vanilla costs
+        # and default is disabled so as to not cause confusion
+        self.value = {}
+        for key, data in value.items():
+            if isinstance(data, str):
+                if data.lower() == "vanilla" and key in self.valid_keys:
+                    self.value[key] = vanilla_costs[charm_names.index(key)]
+                    continue
+                elif data.lower() == "default":
+                    # default is too easily confused with vanilla but actually 0
+                    # skip CharmCost resolution to fail schema afterwords
+                    self.value[key] = data
+                    continue
+            try:
+                self.value[key] = CharmCost.from_any(data).value
+            except ValueError as ex:
+                # will fail schema afterwords
+                self.value[key] = data
 
     def get_costs(self, charm_costs: typing.List[int]) -> typing.List[int]:
         for name, cost in self.value.items():
@@ -403,7 +430,18 @@ class Goal(Choice):
     option_radiance = 3
     option_godhome = 4
     option_godhome_flower = 5
+    option_grub_hunt = 6
     default = 0
+
+
+class GrubHuntGoal(NamedRange):
+    """The amount of grubs required to finish Grub Hunt.
+    On 'All' any grubs from item links replacements etc. will be counted"""
+    display_name = "Grub Hunt Goal"
+    range_start = 1
+    range_end = 46
+    special_range_names = {"all": -1}
+    default = 46
 
 
 class WhitePalace(Choice):
@@ -520,7 +558,7 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
     **{
         option.__name__: option
         for option in (
-            StartLocation, Goal, WhitePalace, ExtraPlatforms, AddUnshuffledLocations, StartingGeo,
+            StartLocation, Goal, GrubHuntGoal, WhitePalace, ExtraPlatforms, AddUnshuffledLocations, StartingGeo,
             DeathLink, DeathLinkShade, DeathLinkBreaksFragileCharms,
             MinimumGeoPrice, MaximumGeoPrice,
             MinimumGrubPrice, MaximumGrubPrice,
@@ -538,3 +576,5 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
     },
     **cost_sanity_weights
 }
+
+HKOptions = make_dataclass("HKOptions", [(name, option) for name, option in hollow_knight_options.items()], bases=(PerGameCommonOptions,))

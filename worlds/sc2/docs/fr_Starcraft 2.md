@@ -21,6 +21,14 @@ Les *items* sont trouvés en accomplissant du progrès dans les catégories suiv
 * Réussir des défis basés sur les succès du jeu de base, e.g. éliminer tous les *Zerg* dans la mission 
 *Devil's Playground*
 
+Dans la nomenclature d'Archipelago, il s'agit des *locations* où l'on peut trouver des *items*.
+Pour chaque *location*, incluant le fait de terminer une mission, il y a des règles qui définissent les *items* 
+nécessaires pour y accéder.
+Ces règles ont été conçues en assumant que *StarCraft 2* est joué à la difficulté *Brutal*.
+Étant donné que chaque *location* a ses propres règles, il est possible qu'un *item* nécessaire à la progression se 
+trouve dans une mission dont vous ne pouvez pas atteindre toutes les *locations* ou que vous ne pouvez pas terminer. 
+Cependant, il est toujours nécessaire de terminer une mission pour pouvoir accéder à de nouvelles missions.
+
 Ces catégories, outre la première, peuvent être désactivées dans les options du jeu. 
 Par exemple, vous pouvez désactiver le fait d'obtenir des *items*  lorsque des étapes importantes d'une mission sont 
 accomplies.
@@ -37,8 +45,13 @@ Archipelago*.
 
 ## Quel est le but de ce jeu quand il est *randomized*?
 
-Le but est de réussir la mission finale dans la disposition des missions (e.g. *blitz*, *grid*, etc.).
-Les choix faits dans le fichier *yaml* définissent la disposition des missions et comment elles sont mélangées.
+Le but est de réussir la mission finale du *mission order* (e.g. *blitz*, *grid*, etc.).
+Le fichier de configuration yaml permet de spécifier le *mission order*, lesquelles des quatre campagnes de 
+*StarCraft 2* peuvent être utilisées pour remplir le *mission order* et comment les missions sont distribuées dans le 
+*mission order*. 
+Étant donné que les deux premières options déterminent le nombre de missions dans un monde de *StarCraft 2*, elles 
+peuvent être utilisées pour moduler le temps nécessaire pour terminer le monde. 
+Notez que les missions d'évolution de Heart of the Swarm ne sont pas incluses dans le *randomizer*.
 
 ## Quelles sont les modifications non aléatoires comparativement à la version de base de *StarCraft 2*
 
@@ -93,3 +106,20 @@ mission de la chaîne qu'un autre joueur est en train d'entamer.
 l'accès à un *item* n'ont pas été accomplis.
 * `/set_path [path]` Permet de définir manuellement où *StarCraft 2* est installé ce qui est pertinent seulement si la 
 détection automatique de cette dernière échoue.
+
+Notez que le comportement de la commande `/received` a été modifié dans le client *StarCraft 2*.
+Dans le client *Common* d'Archipelago, elle renvoie la liste des *items* reçus dans l'ordre inverse de leur réception.
+Dans le client de *StarCraft 2*, la liste est divisée par races (i.e., *Any*, *Protoss*, *Terran*, et *Zerg*).
+De plus, les améliorations sont regroupées sous leurs unités/bâtiments correspondants.
+Un paramètre de filtrage peut aussi être fourni, e.g., `/received Thor`, pour limiter le nombre d'*items* affichés.
+Tous les *items* dont le nom, la race ou le nom de groupe contient le paramètre fourni seront affichés.
+
+## Problèmes connus
+
+- *StarCraft 2 Archipelago* ne supporte pas le chargement d'une sauvegarde. 
+Pour cette raison, il est recommandé de jouer à un niveau de difficulté inférieur à celui avec lequel vous êtes 
+normalement à l'aise.
+- *StarCraft 2 Archipelago* ne supporte pas le redémarrage d'une mission depuis le menu de *StarCraft 2*.
+Pour redémarrer une mission, utilisez le client de *StarCraft 2 Archipelago*.
+- Un rapport d'erreur est souvent généré lorsqu'une mission est fermée. 
+Cela n'affecte pas le jeu et peut être ignoré.

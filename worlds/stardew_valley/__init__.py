@@ -1,4 +1,5 @@
 import logging
+from random import Random
 from typing import Dict, Any, Iterable, Optional, Union, List, TextIO
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
@@ -14,10 +15,11 @@ from .locations import location_table, create_locations, LocationData, locations
 from .logic.bundle_logic import BundleLogic
 from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
-from .option_groups import sv_option_groups
-from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, BundlePrice, EnabledFillerBuffs, NumberOfMovementBuffs, \
-    BackpackProgression, BuildingProgression, ExcludeGingerIsland, TrapItems, EntranceRandomization, FarmType, Walnutsanity
-from .presets import sv_options_presets
+from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, EnabledFillerBuffs, NumberOfMovementBuffs, \
+    BuildingProgression, ExcludeGingerIsland, TrapItems, EntranceRandomization, FarmType, Walnutsanity
+from .options.forced_options import force_change_options_if_incompatible
+from .options.option_groups import sv_option_groups
+from .options.presets import sv_options_presets
 from .regions import create_regions
 from .rules import set_rules
 from .stardew_rule import True_, StardewRule, HasProgressionPercent, true_
@@ -27,15 +29,20 @@ from .strings.goal_names import Goal as GoalName
 from .strings.metal_names import Ore
 from .strings.region_names import Region as RegionName, LogicRegion
 
+logger = logging.getLogger(__name__)
+
+STARDEW_VALLEY = "Stardew Valley"
+UNIVERSAL_TRACKER_SEED_PROPERTY = "ut_seed"
+
 client_version = 0
 
 
 class StardewLocation(Location):
-    game: str = "Stardew Valley"
+    game: str = STARDEW_VALLEY
 
 
 class StardewItem(Item):
-    game: str = "Stardew Valley"
+    game: str = STARDEW_VALLEY
 
 
 class StardewWebWorld(WebWorld):
@@ -60,7 +67,7 @@ class StardewValleyWorld(World):
     Stardew Valley is an open-ended country-life RPG. You can farm, fish, mine, fight, complete quests,
     befriend villagers, and uncover dark secrets.
     """
-    game = "Stardew Valley"
+    game = STARDEW_VALLEY
     topology_present = False
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -85,36 +92,29 @@ class StardewValleyWorld(World):
     web = StardewWebWorld()
     modified_bundles: List[BundleRoom]
     randomized_entrances: Dict[str, str]
-    total_progression_items: int
 
-    # all_progression_items: Dict[str, int] # If you need to debug total_progression_items, uncommenting this will help tremendously
+    total_progression_items: int
+    excluded_from_total_progression_items: List[str] = [Event.received_walnuts]
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
         self.filler_item_pool_names = []
         self.total_progression_items = 0
-        # self.all_progression_items = dict()
+
+        # Taking the seed specified in slot data for UT, otherwise just generating the seed.
+        self.seed = getattr(multiworld, "re_gen_passthrough", {}).get(STARDEW_VALLEY, self.random.getrandbits(64))
+        self.random = Random(self.seed)
+
+    def interpret_slot_data(self, slot_data: Dict[str, Any]) -> Optional[int]:
+        # If the seed is not specified in the slot data, this mean the world was generated before Universal Tracker support.
+        seed = slot_data.get(UNIVERSAL_TRACKER_SEED_PROPERTY)
+        if seed is None:
+            logger.warning(f"World was generated before Universal Tracker support. Tracker might not be accurate.")
+        return seed
 
     def generate_early(self):
-        self.force_change_options_if_incompatible()
+        force_change_options_if_incompatible(self.options, self.player, self.player_name)
         self.content = create_content(self.options)
-
-    def force_change_options_if_incompatible(self):
-        goal_is_walnut_hunter = self.options.goal == Goal.option_greatest_walnut_hunter
-        goal_is_perfection = self.options.goal == Goal.option_perfection
-        goal_is_island_related = goal_is_walnut_hunter or goal_is_perfection
-        exclude_ginger_island = self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
-        if goal_is_island_related and exclude_ginger_island:
-            self.options.exclude_ginger_island.value = ExcludeGingerIsland.option_false
-            goal_name = self.options.goal.current_key
-            player_name = self.multiworld.player_name[self.player]
-            logging.warning(
-                f"Goal '{goal_name}' requires Ginger Island. Exclude Ginger Island setting forced to 'False' for player {self.player} ({player_name})")
-        if exclude_ginger_island and self.options.walnutsanity != Walnutsanity.preset_none:
-            self.options.walnutsanity.value = Walnutsanity.preset_none
-            player_name = self.multiworld.player_name[self.player]
-            logging.warning(
-                f"Walnutsanity requires Ginger Island. Ginger Island was excluded from {self.player} ({player_name})'s world, so walnutsanity was force disabled")
 
     def create_regions(self):
         def create_region(name: str, exits: Iterable[str]) -> Region:
@@ -122,7 +122,7 @@ class StardewValleyWorld(World):
             region.exits = [Entrance(self.player, exit_name, region) for exit_name in exits]
             return region
 
-        world_regions, world_entrances, self.randomized_entrances = create_regions(create_region, self.random, self.options)
+        world_regions, world_entrances, self.randomized_entrances = create_regions(create_region, self.random, self.options, self.content)
 
         self.logic = StardewLogic(self.player, self.options, self.content, world_regions.keys())
         self.modified_bundles = get_all_bundles(self.random,
@@ -154,14 +154,25 @@ class StardewValleyWorld(World):
                                for location in self.multiworld.get_locations(self.player)
                                if location.address is not None])
 
-        created_items = create_items(self.create_item, self.delete_item, locations_count, items_to_exclude, self.options, self.content,
-                                     self.random)
+        created_items = create_items(self.create_item, locations_count, items_to_exclude, self.options, self.content, self.random)
 
         self.multiworld.itempool += created_items
 
-        setup_early_items(self.multiworld, self.options, self.player, self.random)
+        setup_early_items(self.multiworld, self.options, self.content, self.player, self.random)
         self.setup_player_events()
         self.setup_victory()
+
+        # This is really a best-effort to get the total progression items count. It is mostly used to spread grinds across spheres are push back locations that
+        # only become available after months or years in game. In most cases, not having the exact count will not impact the logic.
+        #
+        # The actual total can be impacted by the start_inventory_from_pool, when items are removed from the pool but not from the total. The is also a bug
+        # with plando where additional progression items can be created without being accounted for, which impact the real amount of progression items. This can
+        # ultimately create unwinnable seeds where some items (like Blueberry seeds) are locked in Shipsanity: Blueberry, but world is deemed winnable as the
+        # winning rule only check the count of collected progression items.
+        self.total_progression_items += sum(1 for i in self.multiworld.precollected_items[self.player] if i.advancement)
+        self.total_progression_items += sum(1 for i in self.multiworld.get_filled_locations(self.player) if i.advancement)
+        self.total_progression_items += sum(1 for i in created_items if i.advancement)
+        self.total_progression_items -= 1  # -1 for the victory event
 
     def precollect_starting_season(self):
         if self.options.season_randomization == SeasonRandomization.option_progressive:
@@ -189,25 +200,10 @@ class StardewValleyWorld(World):
             self.multiworld.push_precollected(self.create_starting_item("Progressive Coop"))
 
     def setup_player_events(self):
-        self.setup_construction_events()
-        self.setup_quest_events()
         self.setup_action_events()
         self.setup_logic_events()
 
-    def setup_construction_events(self):
-        can_construct_buildings = LocationData(None, RegionName.carpenter, Event.can_construct_buildings)
-        self.create_event_location(can_construct_buildings, True_(), Event.can_construct_buildings)
-
-    def setup_quest_events(self):
-        start_dark_talisman_quest = LocationData(None, RegionName.railroad, Event.start_dark_talisman_quest)
-        self.create_event_location(start_dark_talisman_quest, self.logic.wallet.has_rusty_key(), Event.start_dark_talisman_quest)
-
     def setup_action_events(self):
-        can_ship_event = LocationData(None, LogicRegion.shipping, Event.can_ship_items)
-        self.create_event_location(can_ship_event, true_, Event.can_ship_items)
-        can_shop_pierre_event = LocationData(None, RegionName.pierre_store, Event.can_shop_at_pierre)
-        self.create_event_location(can_shop_pierre_event, true_, Event.can_shop_at_pierre)
-
         spring_farming = LocationData(None, LogicRegion.spring_farming, Event.spring_farming)
         self.create_event_location(spring_farming, true_, Event.spring_farming)
         summer_farming = LocationData(None, LogicRegion.summer_farming, Event.summer_farming)
@@ -255,7 +251,7 @@ class StardewValleyWorld(World):
                                        Event.victory)
         elif self.options.goal == Goal.option_greatest_walnut_hunter:
             self.create_event_location(location_table[GoalName.greatest_walnut_hunter],
-                                       self.logic.has_walnut(130),
+                                       self.logic.walnut.has_walnut(130),
                                        Event.victory)
         elif self.options.goal == Goal.option_protector_of_the_valley:
             self.create_event_location(location_table[GoalName.protector_of_the_valley],
@@ -302,13 +298,7 @@ class StardewValleyWorld(World):
         if override_classification is None:
             override_classification = item.classification
 
-        if override_classification == ItemClassification.progression:
-            self.total_progression_items += 1
         return StardewItem(item.name, override_classification, item.code, self.player)
-
-    def delete_item(self, item: Item):
-        if item.classification & ItemClassification.progression:
-            self.total_progression_items -= 1
 
     def create_starting_item(self, item: Union[str, ItemData]) -> StardewItem:
         if isinstance(item, str):
@@ -327,10 +317,6 @@ class StardewValleyWorld(World):
         location.access_rule = rule
         region.locations.append(location)
         location.place_locked_item(StardewItem(item, ItemClassification.progression, None, self.player))
-
-        # This is not ideal, but the rule count them so...
-        if item != Event.victory:
-            self.total_progression_items += 1
 
     def set_rules(self):
         set_rules(self)
@@ -413,6 +399,7 @@ class StardewValleyWorld(World):
         included_option_names: List[str] = [option_name for option_name in self.options_dataclass.type_hints if option_name not in excluded_option_names]
         slot_data = self.options.as_dict(*included_option_names)
         slot_data.update({
+            UNIVERSAL_TRACKER_SEED_PROPERTY: self.seed,
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
             "randomized_entrances": self.randomized_entrances,
             "modified_bundles": bundles,
@@ -423,15 +410,25 @@ class StardewValleyWorld(World):
 
     def collect(self, state: CollectionState, item: StardewItem) -> bool:
         change = super().collect(state, item)
-        if change:
-            state.prog_items[self.player][Event.received_walnuts] += self.get_walnut_amount(item.name)
-        return change
+        if not change:
+            return False
+
+        walnut_amount = self.get_walnut_amount(item.name)
+        if walnut_amount:
+            state.prog_items[self.player][Event.received_walnuts] += walnut_amount
+
+        return True
 
     def remove(self, state: CollectionState, item: StardewItem) -> bool:
         change = super().remove(state, item)
-        if change:
-            state.prog_items[self.player][Event.received_walnuts] -= self.get_walnut_amount(item.name)
-        return change
+        if not change:
+            return False
+
+        walnut_amount = self.get_walnut_amount(item.name)
+        if walnut_amount:
+            state.prog_items[self.player][Event.received_walnuts] -= walnut_amount
+
+        return True
 
     @staticmethod
     def get_walnut_amount(item_name: str) -> int:

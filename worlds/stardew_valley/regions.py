@@ -2,8 +2,9 @@ from random import Random
 from typing import Iterable, Dict, Protocol, List, Tuple, Set
 
 from BaseClasses import Region, Entrance
+from .content import content_packs, StardewContent
 from .mods.mod_regions import ModDataList, vanilla_connections_to_remove_by_mod
-from .options import EntranceRandomization, ExcludeGingerIsland, StardewValleyOptions, SkillProgression
+from .options import EntranceRandomization, ExcludeGingerIsland, StardewValleyOptions
 from .region_classes import RegionData, ConnectionData, RandomizationFlag, ModificationFlag
 from .strings.entrance_names import Entrance, LogicEntrance
 from .strings.region_names import Region, LogicRegion
@@ -87,7 +88,8 @@ vanilla_regions = [
     RegionData(Region.jotpk_world_3),
     RegionData(Region.junimo_kart_1, [Entrance.reach_junimo_kart_2]),
     RegionData(Region.junimo_kart_2, [Entrance.reach_junimo_kart_3]),
-    RegionData(Region.junimo_kart_3),
+    RegionData(Region.junimo_kart_3, [Entrance.reach_junimo_kart_4]),
+    RegionData(Region.junimo_kart_4),
     RegionData(Region.alex_house),
     RegionData(Region.trailer),
     RegionData(Region.mayor_house),
@@ -137,7 +139,8 @@ vanilla_regions = [
                [Entrance.island_west_to_islandfarmhouse, Entrance.island_west_to_gourmand_cave, Entrance.island_west_to_crystals_cave,
                 Entrance.island_west_to_shipwreck, Entrance.island_west_to_qi_walnut_room, Entrance.use_farm_obelisk, Entrance.parrot_express_jungle_to_docks,
                 Entrance.parrot_express_jungle_to_dig_site, Entrance.parrot_express_jungle_to_volcano, LogicEntrance.grow_spring_crops_on_island,
-                LogicEntrance.grow_summer_crops_on_island, LogicEntrance.grow_fall_crops_on_island, LogicEntrance.grow_winter_crops_on_island, LogicEntrance.grow_indoor_crops_on_island],
+                LogicEntrance.grow_summer_crops_on_island, LogicEntrance.grow_fall_crops_on_island, LogicEntrance.grow_winter_crops_on_island,
+                LogicEntrance.grow_indoor_crops_on_island],
                is_ginger_island=True),
     RegionData(Region.island_east, [Entrance.island_east_to_leo_hut, Entrance.island_east_to_island_shrine], is_ginger_island=True),
     RegionData(Region.island_shrine, is_ginger_island=True),
@@ -329,6 +332,7 @@ vanilla_connections = [
     ConnectionData(Entrance.play_junimo_kart, Region.junimo_kart_1),
     ConnectionData(Entrance.reach_junimo_kart_2, Region.junimo_kart_2),
     ConnectionData(Entrance.reach_junimo_kart_3, Region.junimo_kart_3),
+    ConnectionData(Entrance.reach_junimo_kart_4, Region.junimo_kart_4),
     ConnectionData(Entrance.town_to_sam_house, Region.sam_house,
                    flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.LEAD_TO_OPEN_AREA),
     ConnectionData(Entrance.town_to_haley_house, Region.haley_house,
@@ -536,7 +540,7 @@ def create_final_regions(world_options) -> List[RegionData]:
 def create_final_connections_and_regions(world_options) -> Tuple[Dict[str, ConnectionData], Dict[str, RegionData]]:
     regions_data: Dict[str, RegionData] = {region.name: region for region in create_final_regions(world_options)}
     connections = {connection.name: connection for connection in vanilla_connections}
-    connections = modify_connections_for_mods(connections, world_options.mods)
+    connections = modify_connections_for_mods(connections, sorted(world_options.mods.value))
     include_island = world_options.exclude_ginger_island == ExcludeGingerIsland.option_false
     return remove_ginger_island_regions_and_connections(regions_data, connections, include_island)
 
@@ -563,10 +567,8 @@ def remove_ginger_island_regions_and_connections(regions_by_name: Dict[str, Regi
     return connections, regions_by_name
 
 
-def modify_connections_for_mods(connections: Dict[str, ConnectionData], mods) -> Dict[str, ConnectionData]:
-    if mods is None:
-        return connections
-    for mod in mods.value:
+def modify_connections_for_mods(connections: Dict[str, ConnectionData], mods: Iterable) -> Dict[str, ConnectionData]:
+    for mod in mods:
         if mod not in ModDataList:
             continue
         if mod in vanilla_connections_to_remove_by_mod:
@@ -586,7 +588,7 @@ def modify_vanilla_regions(existing_region: RegionData, modified_region: RegionD
     return updated_region
 
 
-def create_regions(region_factory: RegionFactory, random: Random, world_options: StardewValleyOptions) \
+def create_regions(region_factory: RegionFactory, random: Random, world_options: StardewValleyOptions, content: StardewContent) \
         -> Tuple[Dict[str, Region], Dict[str, Entrance], Dict[str, str]]:
     entrances_data, regions_data = create_final_connections_and_regions(world_options)
     regions_by_name: Dict[str: Region] = {region_name: region_factory(region_name, regions_data[region_name].exits) for region_name in regions_data}
@@ -597,7 +599,7 @@ def create_regions(region_factory: RegionFactory, random: Random, world_options:
         if entrance.name in entrances_data
     }
 
-    connections, randomized_data = randomize_connections(random, world_options, regions_data, entrances_data)
+    connections, randomized_data = randomize_connections(random, world_options, content, regions_data, entrances_data)
 
     for connection in connections:
         if connection.name in entrances_by_name:
@@ -605,7 +607,7 @@ def create_regions(region_factory: RegionFactory, random: Random, world_options:
     return regions_by_name, entrances_by_name, randomized_data
 
 
-def randomize_connections(random: Random, world_options: StardewValleyOptions, regions_by_name: Dict[str, RegionData],
+def randomize_connections(random: Random, world_options: StardewValleyOptions, content: StardewContent, regions_by_name: Dict[str, RegionData],
                           connections_by_name: Dict[str, ConnectionData]) -> Tuple[List[ConnectionData], Dict[str, str]]:
     connections_to_randomize: List[ConnectionData] = []
     if world_options.entrance_randomization == EntranceRandomization.option_pelican_town:
@@ -620,7 +622,7 @@ def randomize_connections(random: Random, world_options: StardewValleyOptions, r
     elif world_options.entrance_randomization == EntranceRandomization.option_chaos:
         connections_to_randomize = [connections_by_name[connection] for connection in connections_by_name if
                                     RandomizationFlag.BUILDINGS in connections_by_name[connection].flag]
-        connections_to_randomize = remove_excluded_entrances(connections_to_randomize, world_options)
+        connections_to_randomize = remove_excluded_entrances(connections_to_randomize, content)
 
         # On Chaos, we just add the connections to randomize, unshuffled, and the client does it every day
         randomized_data_for_mod = {}
@@ -629,7 +631,7 @@ def randomize_connections(random: Random, world_options: StardewValleyOptions, r
             randomized_data_for_mod[connection.reverse] = connection.reverse
         return list(connections_by_name.values()), randomized_data_for_mod
 
-    connections_to_randomize = remove_excluded_entrances(connections_to_randomize, world_options)
+    connections_to_randomize = remove_excluded_entrances(connections_to_randomize, content)
     random.shuffle(connections_to_randomize)
     destination_pool = list(connections_to_randomize)
     random.shuffle(destination_pool)
@@ -644,12 +646,11 @@ def randomize_connections(random: Random, world_options: StardewValleyOptions, r
     return randomized_connections_for_generation, randomized_data_for_mod
 
 
-def remove_excluded_entrances(connections_to_randomize: List[ConnectionData], world_options: StardewValleyOptions) -> List[ConnectionData]:
-    exclude_island = world_options.exclude_ginger_island == ExcludeGingerIsland.option_true
-    if exclude_island:
+def remove_excluded_entrances(connections_to_randomize: List[ConnectionData], content: StardewContent) -> List[ConnectionData]:
+    # FIXME remove when regions are handled in content packs
+    if content_packs.ginger_island_content_pack.name not in content.registered_packs:
         connections_to_randomize = [connection for connection in connections_to_randomize if RandomizationFlag.GINGER_ISLAND not in connection.flag]
-    exclude_masteries = world_options.skill_progression != SkillProgression.option_progressive_with_masteries
-    if exclude_masteries:
+    if not content.features.skill_progression.are_masteries_shuffled:
         connections_to_randomize = [connection for connection in connections_to_randomize if RandomizationFlag.MASTERIES not in connection.flag]
 
     return connections_to_randomize

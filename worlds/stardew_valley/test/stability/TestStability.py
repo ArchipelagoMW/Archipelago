@@ -7,13 +7,8 @@ import unittest
 from BaseClasses import get_seed
 from .. import SVTestCase
 
-# There seems to be 4 bytes that appear at random at the end of the output, breaking the json... I don't know where they came from.
-BYTES_TO_REMOVE = 4
-
 # <function Location.<lambda> at 0x102ca98a0>
 lambda_regex = re.compile(r"^<function Location\.<lambda> at (.*)>$")
-# Python 3.10.2\r\n
-python_version_regex = re.compile(r"^Python (\d+)\.(\d+)\.(\d+)\s*$")
 
 
 class TestGenerationIsStable(SVTestCase):
@@ -24,14 +19,13 @@ class TestGenerationIsStable(SVTestCase):
         if self.skip_long_tests:
             raise unittest.SkipTest("Long tests disabled")
 
-        # seed = get_seed(33778671150797368040) # troubleshooting seed
-        seed = get_seed(74716545478307145559)
+        seed = get_seed()
 
         output_a = subprocess.check_output([sys.executable, '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])
         output_b = subprocess.check_output([sys.executable, '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])
 
-        result_a = json.loads(output_a[:-BYTES_TO_REMOVE])
-        result_b = json.loads(output_b[:-BYTES_TO_REMOVE])
+        result_a = json.loads(output_a)
+        result_b = json.loads(output_b)
 
         for i, ((room_a, bundles_a), (room_b, bundles_b)) in enumerate(zip(result_a["bundles"].items(), result_b["bundles"].items())):
             self.assertEqual(room_a, room_b, f"Bundle rooms at index {i} is different between both executions. Seed={seed}")
@@ -54,3 +48,6 @@ class TestGenerationIsStable(SVTestCase):
             # We check that the actual rule has the same order to make sure it is evaluated in the same order,
             #  so performance tests are repeatable as much as possible.
             self.assertEqual(rule_a, rule_b, f"Location rule of {location_a} at index {i} is different between both executions. Seed={seed}")
+
+        for key, value in result_a["slot_data"].items():
+            self.assertEqual(value, result_b["slot_data"][key], f"Slot data {key} is different between both executions. Seed={seed}")

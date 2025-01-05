@@ -1,8 +1,8 @@
 from ..game_content import ContentPack
 from ...data import villagers_data, fish_data
-from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource
+from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource, CompoundSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
-from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, SeasonRequirement
+from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
 from ...strings.book_names import Book
 from ...strings.crop_names import Fruit
@@ -229,8 +229,10 @@ pelican_town = ContentPack(
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.mapping_cave_systems: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
-            GenericSource(regions=Region.adventurer_guild_bedroom),
-            ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
+            CompoundSource(sources=(
+                GenericSource(regions=(Region.adventurer_guild_bedroom,)),
+                ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),
+            ))),
         Book.monster_compendium: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             CustomRuleSource(create_rule=lambda logic: logic.monster.can_kill_many(Generic.any)),
@@ -243,15 +245,12 @@ pelican_town = ContentPack(
             ShopSource(money_price=3000, shop_region=LogicRegion.bookseller_2),),
         Book.the_alleyway_buffet: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
-            GenericSource(regions=Region.town,
+            GenericSource(regions=(Region.town,),
                           other_requirements=(ToolRequirement(Tool.axe, ToolMaterial.iron), ToolRequirement(Tool.pickaxe, ToolMaterial.iron))),
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.the_art_o_crabbing: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
-            GenericSource(regions=Region.beach,
-                          other_requirements=(ToolRequirement(Tool.fishing_rod, ToolMaterial.iridium),
-                                              SkillRequirement(Skill.fishing, 6),
-                                              SeasonRequirement(Season.winter))),
+            CustomRuleSource(create_rule=lambda logic: logic.festival.has_squidfest_day_1_iridium_reward()),
             ShopSource(money_price=20000, shop_region=LogicRegion.bookseller_3),),
         Book.treasure_appraisal_guide: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
@@ -290,9 +289,6 @@ pelican_town = ContentPack(
         Book.woodcutters_weekly: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
             ShopSource(money_price=5000, shop_region=LogicRegion.bookseller_1),),
-        Book.queen_of_sauce_cookbook: (
-            Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
-            ShopSource(money_price=50000, shop_region=LogicRegion.bookseller_2),),  # Worst book ever
     },
     fishes=(
         fish_data.albacore,

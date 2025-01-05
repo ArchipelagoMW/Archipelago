@@ -293,7 +293,7 @@ class AggregatingStardewRule(BaseStardewRule, ABC):
 
     def __eq__(self, other):
         return (isinstance(other, type(self)) and self.combinable_rules == other.combinable_rules and
-                self.simplification_state.original_simplifiable_rules == self.simplification_state.original_simplifiable_rules)
+                self.simplification_state.original_simplifiable_rules == other.simplification_state.original_simplifiable_rules)
 
     def __hash__(self):
         if len(self.combinable_rules) + len(self.simplification_state.original_simplifiable_rules) > 5:
@@ -431,7 +431,7 @@ class Count(BaseStardewRule):
         return len(self.rules)
 
     def __repr__(self):
-        return f"Received {self.count} {repr(self.rules)}"
+        return f"Received {self.count} [{', '.join(f'{value}x {repr(rule)}' for rule, value in self.counter.items())}]"
 
 
 @dataclass(frozen=True)
