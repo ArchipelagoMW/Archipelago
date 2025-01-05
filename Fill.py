@@ -574,7 +574,7 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         more_items = items_counter - locations_counter
         for player in multiworld.player_ids:
             if more_locations[player]:
-                logging.warning(
+                logging.error(
                     f"Player {multiworld.get_player_name(player)} had {more_locations[player]} more locations than items.")
             elif more_items[player]:
                 logging.warning(
