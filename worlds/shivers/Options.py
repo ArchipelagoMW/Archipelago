@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 
 from Options import (
-    Choice, DefaultOnToggle, ItemDict, ItemSet, LocationSet, OptionGroup, PerGameCommonOptions, Range, Toggle,
+    Choice, DefaultOnToggle, ExcludeLocations, LocalItems, NonLocalItems, OptionGroup, PerGameCommonOptions,
+    PriorityLocations, Range, StartHints, StartInventory, StartLocationHints, Toggle,
 )
 from . import ItemType, item_table
 from .Constants import location_info
@@ -109,6 +110,13 @@ class FullPots(Choice):
     option_mixed = 2
 
 
+class IxupiCapturesPriority(DefaultOnToggle):
+    """
+    Ixupi captures are set to priority locations. This forces a progression item into these locations if possible.
+    """
+    display_name = "Ixupi Captures are Priority"
+
+
 class PuzzleCollectBehavior(Choice):
     """
     Defines what happens to puzzles on collect.
@@ -129,53 +137,38 @@ valid_item_keys = [name for name, data in item_table.items() if data.type != Ite
 valid_location_keys = [name for name in location_info["all_locations"] if name != "Mystery Solved"]
 
 
-class LocalItems(ItemSet):
-    """Forces these items to be in their native world."""
-    display_name = "Local Items"
-    rich_text_doc = True
+class ShiversLocalItems(LocalItems):
+    __doc__ = LocalItems.__doc__
     valid_keys = valid_item_keys
 
 
-class NonLocalItems(ItemSet):
-    """Forces these items to be outside their native world."""
-    display_name = "Non-local Items"
-    rich_text_doc = True
+class ShiversNonLocalItems(NonLocalItems):
+    __doc__ = NonLocalItems.__doc__
     valid_keys = valid_item_keys
 
 
-class StartInventory(ItemDict):
-    """Start with these items."""
-    verify_item_name = True
-    display_name = "Start Inventory"
-    rich_text_doc = True
+class ShiversStartInventory(StartInventory):
+    __doc__ = StartInventory.__doc__
     valid_keys = valid_item_keys
 
 
-class StartHints(ItemSet):
-    """Start with these item's locations prefilled into the ``!hint`` command."""
-    display_name = "Start Hints"
-    rich_text_doc = True
+class ShiversStartHints(StartHints):
+    __doc__ = StartHints.__doc__
     valid_keys = valid_item_keys
 
 
-class StartLocationHints(LocationSet):
-    """Start with these locations and their item prefilled into the ``!hint`` command."""
-    display_name = "Start Location Hints"
-    rich_text_doc = True
+class ShiversStartLocationHints(StartLocationHints):
+    __doc__ = StartLocationHints.__doc__
     valid_keys = valid_location_keys
 
 
-class ExcludeLocations(LocationSet):
-    """Prevent these locations from having an important item."""
-    display_name = "Excluded Locations"
-    rich_text_doc = True
+class ShiversExcludeLocations(ExcludeLocations):
+    __doc__ = ExcludeLocations.__doc__
     valid_keys = valid_location_keys
 
 
-class PriorityLocations(LocationSet):
-    """Prevent these locations from having an unimportant item."""
-    display_name = "Priority Locations"
-    rich_text_doc = True
+class ShiversPriorityLocations(PriorityLocations):
+    __doc__ = PriorityLocations.__doc__
     valid_keys = valid_location_keys
 
 
@@ -191,24 +184,27 @@ class ShiversOptions(PerGameCommonOptions):
     early_lightning: EarlyLightning
     location_pot_pieces: LocationPotPieces
     full_pots: FullPots
+    ixupi_captures_priority: IxupiCapturesPriority
     puzzle_collect_behavior: PuzzleCollectBehavior
-    local_items: LocalItems
-    non_local_items: NonLocalItems
-    start_inventory: StartInventory
-    start_hints: StartHints
-    start_location_hints: StartLocationHints
-    exclude_locations: ExcludeLocations
-    priority_locations: PriorityLocations
+    local_items: ShiversLocalItems
+    non_local_items: ShiversNonLocalItems
+    start_inventory: ShiversStartInventory
+    start_hints: ShiversStartHints
+    start_location_hints: ShiversStartLocationHints
+    exclude_locations: ShiversExcludeLocations
+    priority_locations: ShiversPriorityLocations
 
 
 shivers_option_groups = [
-    OptionGroup("Item & Location Options", [
-        LocalItems,
-        NonLocalItems,
-        StartInventory,
-        StartHints,
-        StartLocationHints,
-        ExcludeLocations,
-        PriorityLocations
-    ], True),
+    OptionGroup(
+        "Item & Location Options", [
+            ShiversLocalItems,
+            ShiversNonLocalItems,
+            ShiversStartInventory,
+            ShiversStartHints,
+            ShiversStartLocationHints,
+            ShiversExcludeLocations,
+            ShiversPriorityLocations
+        ], True,
+    ),
 ]
