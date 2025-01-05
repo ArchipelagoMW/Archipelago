@@ -348,9 +348,18 @@ class LuigisMansionRandomizer:
         next((info_files for info_files in custom_event.file_entries if
               info_files.name == "event" + event_number + ".txt")).data = lines
 
-        csv_lines = io.BytesIO(get_data(__name__, "data/custom_events/TemplateCSV.csv"))
-        next((info_files for info_files in custom_event.file_entries if
-              info_files.name == "message" + event_number + ".csv")).data = csv_lines
+        # Some events don't have a CSV, so no need to set it to blank lines
+        # TODO update this to not use a template CSV, as it is now blank.
+        updated_event_number = event_number
+        if event_number.startswith("0"):
+            updated_event_number = event_number[1:]
+        bool_csv_lines = any((info_files for info_files in custom_event.file_entries if
+              info_files.name == "message" + updated_event_number + ".csv"))
+
+        if bool_csv_lines:
+            csv_lines = io.BytesIO(get_data(__name__, "data/custom_events/TemplateCSV.csv"))
+            next((info_files for info_files in custom_event.file_entries if
+                  info_files.name == "message" + updated_event_number + ".csv")).data = csv_lines
 
         custom_event.save_changes()
         self.gcm.changed_files["files/Event/event" + event_number + ".szp"] = (
@@ -358,7 +367,7 @@ class LuigisMansionRandomizer:
 
     def copy_existing_event(self, new_event_number: str):
         event_path = "files/Event/event"+ new_event_number + ".szp"
-        data = self.gcm.read_file_data("files/Event/event16.szp")
+        data = self.gcm.read_file_data("files/Event/event64.szp")
         self.gcm.add_new_file(event_path, data)
         return self.get_arc(event_path)
 
