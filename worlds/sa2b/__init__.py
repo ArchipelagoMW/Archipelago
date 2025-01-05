@@ -14,6 +14,7 @@ from .Locations import SA2BLocation, all_locations, setup_locations, chao_animal
 from .Missions import get_mission_table, get_mission_count_table, get_first_and_last_cannons_core_missions, print_mission_orders_to_spoiler
 from .Names import ItemName, LocationName
 from .Options import SA2BOptions, sa2b_option_groups
+from .Presets import sa2b_options_presets
 from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate, gate_0_whitelist_regions, \
     gate_0_blacklist_regions
 from .Rules import set_rules
@@ -33,6 +34,7 @@ class SA2BWeb(WebWorld):
 
     tutorials = [setup_en]
     option_groups = sa2b_option_groups
+    options_presets = sa2b_options_presets
 
 
 def check_for_impossible_shuffle(shuffled_levels: typing.List[int], gate_0_range: int, multiworld: MultiWorld):
