@@ -46,7 +46,7 @@ class ItemFilterTests(Sc2SetupTestBase):
                 item_names.AVENGER: 1,
                 item_names.ARBITER: 1,
                 item_names.VOID_RAY: 1,
-                item_names.WARP_RAY: 1,
+                item_names.INTERCESSOR: 1,
                 item_names.DESTROYER: 1,
                 item_names.DAWNBRINGER: 1,
             },
