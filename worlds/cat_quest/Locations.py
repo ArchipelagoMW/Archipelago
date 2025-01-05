@@ -114,7 +114,7 @@ locations: List[Location] = [
         "id": base_id + 17,
         "inGameId": "greatspirit_one",
         "name": "I. The Servant of God",
-        "art": "water"
+        "art": "either"
     },
     {
         "id": base_id + 18,
@@ -348,25 +348,25 @@ locations: List[Location] = [
         "id": base_id + 53, 
         "inGameId": "magesold_one", 
         "name": "I. The Flying Bush", 
-        "art": "water"
+        "art": "either"
     },
     {
         "id": base_id + 54, 
         "inGameId": "magesold_two", 
         "name": "II. The Magic Tree", 
-        "art": "water"
+        "art": "either"
     },
     {
         "id": base_id + 55, 
         "inGameId": "magesold_three", 
         "name": "III. The Cult", 
-        "art": "water"
+        "art": "either"
     },
     {
         "id": base_id + 56, 
         "inGameId": "magesold_four", 
         "name": "IV. Dragonflight", 
-        "art": "water"
+        "art": "either"
     },
 
     # Dark Past Quests
@@ -438,7 +438,7 @@ locations: List[Location] = [
         "id": base_id + 67, 
         "inGameId": "furbidden_mystery", 
         "name": "The Furbidden History", 
-        "art": "water"
+        "art": "none"
     },
     {
         "id": base_id + 68, 
@@ -468,7 +468,7 @@ locations: List[Location] = [
         "id": base_id + 72, 
         "inGameId": "slashy_one", 
         "name": "The Forgotten Hero", 
-        "art": "water"
+        "art": "either"
     },
 
     # Catnip Cure Quests
