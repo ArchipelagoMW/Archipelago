@@ -97,6 +97,28 @@ class MMBN3World(World):
                     add_item_rule(loc, lambda item: not item.advancement)
                 region.locations.append(loc)
             self.multiworld.regions.append(region)
+
+        # Regions which contribute to explore score when accessible.
+        explore_score_region_names = (
+            RegionName.WWW_Island,
+            RegionName.SciLab_Overworld,
+            RegionName.SciLab_Cyberworld,
+            RegionName.Yoka_Overworld,
+            RegionName.Yoka_Cyberworld,
+            RegionName.Beach_Overworld,
+            RegionName.Beach_Cyberworld,
+            RegionName.Undernet,
+            RegionName.Deep_Undernet,
+            RegionName.Secret_Area,
+        )
+        explore_score_regions = [self.get_region(region_name) for region_name in explore_score_region_names]
+
+        # Entrances which use explore score in their logic need to register all the explore score regions as indirect
+        # conditions.
+        def register_explore_score_indirect_conditions(entrance):
+            for explore_score_region in explore_score_regions:
+                self.multiworld.register_indirect_condition(explore_score_region, entrance)
+
         for region_info in regions:
             region = name_to_region[region_info.name]
             for connection in region_info.connections:
@@ -119,6 +141,7 @@ class MMBN3World(World):
                     entrance.access_rule = lambda state: \
                         state.has(ItemName.CSciPas, self.player) or \
                         state.can_reach(RegionName.SciLab_Overworld, "Region", self.player)
+                    self.multiworld.register_indirect_condition(self.get_region(RegionName.SciLab_Overworld), entrance)
                 if connection == RegionName.Yoka_Cyberworld:
                     entrance.access_rule = lambda state: \
                         state.has(ItemName.CYokaPas, self.player) or \
@@ -126,16 +149,19 @@ class MMBN3World(World):
                             state.can_reach(RegionName.SciLab_Overworld, "Region", self.player) and
                             state.has(ItemName.Press, self.player)
                         )
+                    self.multiworld.register_indirect_condition(self.get_region(RegionName.SciLab_Overworld), entrance)
                 if connection == RegionName.Beach_Cyberworld:
                     entrance.access_rule = lambda state: state.has(ItemName.CBeacPas, self.player) and\
                         state.can_reach(RegionName.Yoka_Overworld, "Region", self.player)
-
+                    self.multiworld.register_indirect_condition(self.get_region(RegionName.Yoka_Overworld), entrance)
                 if connection == RegionName.Undernet:
                     entrance.access_rule = lambda state: self.explore_score(state) > 8 and\
                         state.has(ItemName.Press, self.player)
+                    register_explore_score_indirect_conditions(entrance)
                 if connection == RegionName.Secret_Area:
                     entrance.access_rule = lambda state: self.explore_score(state) > 12 and\
                         state.has(ItemName.Hammer, self.player)
+                    register_explore_score_indirect_conditions(entrance)
                 if connection == RegionName.WWW_Island:
                     entrance.access_rule = lambda state:\
                         state.has(ItemName.Progressive_Undernet_Rank, self.player, 8)

@@ -28,7 +28,7 @@ An Example `AP.json` file:
 
 ```
 {
-	"Url": "archipelago:12345",
+	"Url": "archipelago.gg:12345",
 	"SlotName": "Maddy",
 	"Password": ""
 }

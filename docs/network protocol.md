@@ -268,9 +268,11 @@ Additional arguments added to the [Set](#Set) package that triggered this [SetRe
 These packets are sent purely from client to server. They are not accepted by clients.
 
 * [Connect](#Connect)
+* [ConnectUpdate](#ConnectUpdate)
 * [Sync](#Sync)
 * [LocationChecks](#LocationChecks)
 * [LocationScouts](#LocationScouts)
+* [UpdateHint](#UpdateHint)
 * [StatusUpdate](#StatusUpdate)
 * [Say](#Say)
 * [GetDataPackage](#GetDataPackage)
@@ -341,6 +343,33 @@ This is useful in cases where an item appears in the game world, such as 'ledge 
 | locations | list\[int\] | The ids of the locations seen by the client. May contain any number of locations, even ones sent before; duplicates do not cause issues with the Archipelago server. |
 | create_as_hint | int | If non-zero, the scouted locations get created and broadcasted as a player-visible hint. <br/>If 2 only new hints are broadcast, however this does not remove them from the LocationInfo reply. |
 
+### UpdateHint
+Sent to the server to update the status of a Hint. The client must be the 'receiving_player' of the Hint, or the update fails.
+
+### Arguments
+| Name | Type | Notes |
+| ---- | ---- | ----- |
+| player | int | The ID of the player whose location is being hinted for. |
+| location | int | The ID of the location to update the hint for. If no hint exists for this location, the packet is ignored. |
+| status | [HintStatus](#HintStatus) | Optional. If included, sets the status of the hint to this status. Cannot set `HINT_FOUND`, or change the status from `HINT_FOUND`. |
+
+#### HintStatus
+An enumeration containing the possible hint states.
+
+```python
+import enum
+class HintStatus(enum.IntEnum):
+    HINT_FOUND = 0        # The location has been collected. Status cannot be changed once found.
+    HINT_UNSPECIFIED = 1  # The receiving player has not specified any status
+    HINT_NO_PRIORITY = 10 # The receiving player has specified that the item is unneeded
+    HINT_AVOID = 20       # The receiving player has specified that the item is detrimental
+    HINT_PRIORITY = 30    # The receiving player has specified that the item is needed
+```
+- Hints for items with `ItemClassification.trap` default to `HINT_AVOID`.
+- Hints created with `LocationScouts`, `!hint_location`, or similar (hinting a location) default to `HINT_UNSPECIFIED`.
+- Hints created with `!hint` or similar (hinting an item for yourself) default to `HINT_PRIORITY`.
+- Once a hint is collected, its' status is updated to `HINT_FOUND` automatically, and can no longer be changed.
+
 ### StatusUpdate
 Sent to the server to update on the sender's status. Examples include readiness or goal completion. (Example: defeated Ganon in A Link to the Past)
 
@@ -395,6 +424,7 @@ Some special keys exist with specific return data, all of them have the prefix `
 | item_name_groups_{game_name}     | dict\[str, list\[str\]\]      | item_name_groups belonging to the requested game.     |
 | location_name_groups_{game_name} | dict\[str, list\[str\]\]      | location_name_groups belonging to the requested game. |
 | client_status_{team}_{slot}      | [ClientStatus](#ClientStatus) | The current game status of the requested player.      |
+| race_mode                        | int                           | 0 if race mode is disabled, and 1 if it's enabled.    |
 
 ### Set
 Used to write data to the server's data storage, that data can then be shared across worlds or just saved for later. Values for keys in the data storage can be retrieved with a [Get](#Get) package, or monitored with a [SetNotify](#SetNotify) package.
@@ -510,7 +540,7 @@ In JSON this may look like:
 | ----- | ----- |
 | 0 | Nothing special about this item |
 | 0b001 | If set, indicates the item can unlock logical advancement |
-| 0b010 | If set, indicates the item is important but not in a way that unlocks advancement |
+| 0b010 | If set, indicates the item is especially useful |
 | 0b100 | If set, indicates the item is a trap |
 
 ### JSONMessagePart
@@ -524,6 +554,7 @@ class JSONMessagePart(TypedDict):
     color: Optional[str] # only available if type is a color
     flags: Optional[int] # only available if type is an item_id or item_name
     player: Optional[int] # only available if type is either item or location
+    hint_status: Optional[HintStatus] # only available if type is hint_status
 ```
 
 `type` is used to denote the intent of the message part. This can be used to indicate special information which may be rendered differently depending on client. How these types are displayed in Archipelago's ALttP client is not the end-all be-all. Other clients may choose to interpret and display these messages differently.
@@ -539,6 +570,7 @@ Possible values for `type` include:
 | location_id | Location ID, should be resolved to Location Name |
 | location_name | Location Name, not currently used over network, but supported by reference Clients. |
 | entrance_name | Entrance Name. No ID mapping exists. |
+| hint_status | The [HintStatus](#HintStatus) of the hint. Both `text` and `hint_status` are given. |
 | color | Regular text that should be colored. Only `type` that will contain `color` data. |
 
 
@@ -642,6 +674,7 @@ class Hint(typing.NamedTuple):
     found: bool
     entrance: str = ""
     item_flags: int = 0
+    status: HintStatus = HintStatus.HINT_UNSPECIFIED
 ```
 
 ### Data Package Contents
@@ -702,14 +735,18 @@ GameData is a **dict** but contains these keys and values. It's broken out into 
 | checksum            | str            | A checksum hash of this game's data.                                                                                          |
 
 ### Tags
-Tags are represented as a list of strings, the common Client tags follow:
+Tags are represented as a list of strings, the common client tags follow:
 
-| Name       | Notes                                                                                                                                                                                                              |
-|------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| AP         | Signifies that this client is a reference client, its usefulness is mostly in debugging to compare client behaviours more easily.                                                                                  |
-| DeathLink  | Client participates in the DeathLink mechanic, therefore will send and receive DeathLink bounce packets                                                                                                            |
-| Tracker    | Tells the server that this client will not send locations and is actually a Tracker. When specified and used with empty or null `game` in [Connect](#connect), game and game's version validation will be skipped. |
-| TextOnly   | Tells the server that this client will not send locations and is intended for chat. When specified and used with empty or null `game` in [Connect](#connect), game and game's version validation will be skipped.  |
+| Name      | Notes                                                                                                                                |
+|-----------|--------------------------------------------------------------------------------------------------------------------------------------|
+| AP        | Signifies that this client is a reference client, its usefulness is mostly in debugging to compare client behaviours more easily.    |
+| DeathLink | Client participates in the DeathLink mechanic, therefore will send and receive DeathLink bounce packets.                             |
+| HintGame  | Indicates the client is a hint game, made to send hints instead of locations. Special join/leave message,¹ `game` is optional.²      |
+| Tracker   | Indicates the client is a tracker, made to track instead of sending locations. Special join/leave message,¹ `game` is optional.²     |
+| TextOnly  | Indicates the client is a basic client, made to chat instead of sending locations. Special join/leave message,¹ `game` is optional.² |
+
+¹: When connecting or disconnecting, the chat message shows e.g. "tracking".\
+²: Allows `game` to be empty or null in [Connect](#connect). Game and version validation will then be skipped.
 
 ### DeathLink
 A special kind of Bounce packet that can be supported by any AP game. It targets the tag "DeathLink" and carries the following data:

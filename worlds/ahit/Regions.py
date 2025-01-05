@@ -740,17 +740,20 @@ def is_valid_first_act(world: "HatInTimeWorld", act: Region) -> bool:
 
 
 def connect_time_rift(world: "HatInTimeWorld", time_rift: Region, exit_region: Region):
-    i = 1
-    while i <= len(rift_access_regions[time_rift.name]):
+    for i, access_region in enumerate(rift_access_regions[time_rift.name], start=1):
+        # Matches the naming convention and iteration order in `create_rift_connections()`.
         name = f"{time_rift.name} Portal - Entrance {i}"
         entrance: Entrance
         try:
-            entrance = world.multiworld.get_entrance(name, world.player)
+            entrance = world.get_entrance(name)
+            # Reconnect the rift access region to the new exit region.
             reconnect_regions(entrance, entrance.parent_region, exit_region)
         except KeyError:
-            time_rift.connect(exit_region, name)
-
-        i += 1
+            # The original entrance to the time rift has been deleted by already reconnecting a telescope act to the
+            # time rift, so create a new entrance from the original rift access region to the new exit region.
+            # Normally, acts and time rifts are sorted such that time rifts are reconnected to acts/rifts first, but
+            # starting acts/rifts and act-plando can reconnect acts to time rifts before this happens.
+            world.get_region(access_region).connect(exit_region, name)
 
 
 def get_shuffleable_act_regions(world: "HatInTimeWorld") -> List[Region]:
@@ -968,40 +971,35 @@ def get_act_by_number(world: "HatInTimeWorld", chapter_name: str, num: int) -> R
 def create_thug_shops(world: "HatInTimeWorld"):
     min_items: int = world.options.NyakuzaThugMinShopItems.value
     max_items: int = world.options.NyakuzaThugMaxShopItems.value
-    count = -1
-    step = 0
-    old_name = ""
+
+    thug_location_counts: Dict[str, int] = {}
 
     for key, data in shop_locations.items():
-        if data.nyakuza_thug == "":
+        thug_name = data.nyakuza_thug
+        if thug_name == "":
+            # Different shop type.
             continue
 
-        if old_name != "" and old_name == data.nyakuza_thug:
+        if thug_name not in world.nyakuza_thug_items:
+            shop_item_count = world.random.randint(min_items, max_items)
+            world.nyakuza_thug_items[thug_name] = shop_item_count
+        else:
+            shop_item_count = world.nyakuza_thug_items[thug_name]
+
+        if shop_item_count <= 0:
             continue
 
-        try:
-            if world.nyakuza_thug_items[data.nyakuza_thug] <= 0:
-                continue
-        except KeyError:
-            pass
+        location_count = thug_location_counts.setdefault(thug_name, 0)
+        if location_count >= shop_item_count:
+            # Already created all the locations for this thug.
+            continue
 
-        if count == -1:
-            count = world.random.randint(min_items, max_items)
-            world.nyakuza_thug_items.setdefault(data.nyakuza_thug, count)
-            if count <= 0:
-                continue
-
-        if count >= 1:
-            region = world.multiworld.get_region(data.region, world.player)
-            loc = HatInTimeLocation(world.player, key, data.id, region)
-            region.locations.append(loc)
-            world.shop_locs.append(loc.name)
-
-            step += 1
-            if step >= count:
-                old_name = data.nyakuza_thug
-                step = 0
-                count = -1
+        # Create the shop location.
+        region = world.multiworld.get_region(data.region, world.player)
+        loc = HatInTimeLocation(world.player, key, data.id, region)
+        region.locations.append(loc)
+        world.shop_locs.append(loc.name)
+        thug_location_counts[thug_name] = location_count + 1
 
 
 def create_events(world: "HatInTimeWorld") -> int:
