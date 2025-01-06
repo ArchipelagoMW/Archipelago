@@ -46,7 +46,7 @@ class Wargroove2Level:
     victory_locations: List[str]
     has_ocean: bool = True
 
-    def __init__(self, name: str, file_name: str, location_rules: dict, victory_locations: List[str] = [],
+    def __init__(self, name: str, file_name: str, location_rules: dict, victory_locations: List[str] | None = None,
                  has_ocean: bool = True):
         self.name = name
         self.file_name = file_name
