@@ -837,7 +837,7 @@ CARRIER_REPAIR_DRONES                                   = "Repair Drones (Carrie
 SKYLORD_HYPERJUMP                                       = "Hyperjump (Skylord)"
 TRIREME_SOLAR_BEAM                                      = "Solar Beam (Trireme)"
 TEMPEST_DISINTEGRATION                                  = "Disintegration (Tempest)"
-# Scout
+SCOUT_EXPEDITIONARY_HULL                                = "Expeditionary Hull (Scout)"
 ARBITER_ABILITY_EFFICIENCY                              = "Ability Efficiency (Arbiter)"
 # Oracle
 MOTHERSHIP_INTEGRATED_POWER                             = "Integrated Power (Mothership)"
