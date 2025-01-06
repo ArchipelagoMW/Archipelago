@@ -445,6 +445,10 @@ end
 
 script.on_event(defines.events.on_player_main_inventory_changed, update_player_event)
 
+-- Update players when the cutscene is cancelled or finished.  (needed for skins_factored)
+script.on_event(defines.events.on_cutscene_cancelled, update_player_event)
+script.on_event(defines.events.on_cutscene_finished, update_player_event)
+
 function add_samples(force, name, count)
     local function add_to_table(t)
         if count <= 0 then
@@ -736,6 +740,13 @@ end,
 end,
 ["Atomic Rocket Trap"] = function ()
     fire_entity_at_players("atomic-rocket", 0.1)
+end,
+["Atomic Cliff Remover Trap"] = function ()
+    local cliffs = game.surfaces["nauvis"].find_entities_filtered{type = "cliff"}
+
+    if #cliffs > 0 then
+        fire_entity_at_entities("atomic-rocket", {cliffs[math.random(#cliffs)]}, 0.1)
+    end
 end,
 }
 
