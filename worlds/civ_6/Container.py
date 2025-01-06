@@ -131,11 +131,11 @@ def generate_new_items(world: 'CivVIWorld') -> str:
   </CivicPrereqs>
 
   <Civics_XP2>
-    {"".join([f'{tab}<Row CivicType="{location}" HiddenUntilPrereqComplete="true" RandomPrereqs="false"/>{nl}' for location in civics if world.options.hide_item_names])}
+    {"".join([f'{tab}<Row CivicType="{location.name}" HiddenUntilPrereqComplete="true" RandomPrereqs="false"/>{nl}' for location in civics if world.options.hide_item_names])}
   </Civics_XP2>
 
   <Technologies_XP2>
-    {"".join([f'{tab}<Row TechnologyType="{location}" HiddenUntilPrereqComplete="true" RandomPrereqs="false"/>{nl}' for location in techs if world.options.hide_item_names])}
+    {"".join([f'{tab}<Row TechnologyType="{location.name}" HiddenUntilPrereqComplete="true" RandomPrereqs="false"/>{nl}' for location in techs if world.options.hide_item_names])}
   </Technologies_XP2>
 
 </GameInfo>
