@@ -25,13 +25,9 @@ LEVEL_COUNT = 28
 FINAL_LEVEL_COUNT = 4
 
 
-def set_region_exit_rules(region: Region, world: "Wargroove2World", locations: List[str], operator: str = "or") -> None:
-    if operator == "or":
-        exit_rule = lambda state: any(
-            world.get_location(location).access_rule(state) for location in locations)
-    else:
-        exit_rule = lambda state: all(
-            world.get_location(location).access_rule(state) for location in locations)
+def set_region_exit_rules(region: Region, world: "Wargroove2World", locations: List[str]) -> None:
+    exit_rule = lambda state: any(
+        world.get_location(location).access_rule(state) for location in locations)
     for region_exit in region.exits:
         region_exit.access_rule = exit_rule
 
@@ -74,7 +70,7 @@ class Wargroove2Level:
             for i in range(1, total_locations):
                 set_rule(world.get_location(location_name + f" Extra {i}"), rule)
         region = world.get_region(self.region_name)
-        set_region_exit_rules(region, world, self.victory_locations, operator='and')
+        set_region_exit_rules(region, world, self.victory_locations)
 
     def define_region(self, name: str, world: "Wargroove2World", player: int, exits=None) -> Region:
         self.region_name = name
