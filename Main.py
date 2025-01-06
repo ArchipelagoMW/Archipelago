@@ -131,9 +131,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         multiworld.worlds[player].options.priority_locations.value -= multiworld.worlds[player].options.exclude_locations.value
         world_excluded_locations = set()
         for location_name in multiworld.worlds[player].options.priority_locations.value:
-            try:
-                location = multiworld.get_location(location_name, player)
-            except KeyError:
+            location = multiworld.get_location_if_available(location_name, player)
+            if not location:
                 continue
 
             if location.progress_type != LocationProgressType.EXCLUDED:
