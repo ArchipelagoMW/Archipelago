@@ -113,20 +113,20 @@ high_victory_checks_levels = [
         file_name="Cherrystone_Landing.json",
         location_rules={
             "Cherrystone Landing: Victory": lambda player: lambda
-                state: state.has_all(["Warship", "Barge", "Landing Event"], player),
+                state: state.has_all(("Warship", "Barge", "Landing Event"), player),
             "Cherrystone Landing: Smacked a Trebuchet": lambda player: lambda
-                state: state.has_all(["Warship", "Barge", "Landing Event", "Golem"], player),
+                state: state.has_all(("Warship", "Barge", "Landing Event", "Golem"), player),
             "Cherrystone Landing: Smacked a Fortified Village": lambda player: lambda
-                state: state.has_all(["Barge", "Landing Event", "Golem"], player)
+                state: state.has_all(("Barge", "Landing Event", "Golem"), player)
         }
     ),
     Wargroove2Level(
         name="Spire Fire",
         file_name="Spire_Fire.json",
         location_rules={
-            "Spire Fire: Victory": lambda player: lambda state: state.has_any(["Mage", "Witch"], player),
+            "Spire Fire: Victory": lambda player: lambda state: state.has_any(("Mage", "Witch"), player),
             "Spire Fire: Kill Enemy Sky Rider": lambda player: lambda state: state.has("Witch", player),
-            "Spire Fire: Win without losing your Dragon": lambda player: lambda state: state.has_any(["Mage", "Witch"], player)
+            "Spire Fire: Win without losing your Dragon": lambda player: lambda state: state.has_any(("Mage", "Witch"), player)
         },
         has_ocean=False
     ),
@@ -137,7 +137,7 @@ high_victory_checks_levels = [
             "Nuru's Vengeance: Victory": lambda player: lambda state: state.has("Knight", player),
             "Nuru's Vengeance: Defeat all Dogs": lambda player: lambda state: state.has("Knight", player),
             "Nuru's Vengeance: Spearman Destroys the Gate": lambda player: lambda
-                state: state.has_all(["Knight", "Spearman"], player)
+                state: state.has_all(("Knight", "Spearman"), player)
         },
         has_ocean=False
     ),
@@ -156,16 +156,16 @@ high_victory_checks_levels = [
         location_rules={
             "Den-Two-Away: Victory": lambda player: lambda state: state.has("Harpy", player),
             "Den-Two-Away: Commander Captures the Lumbermill": lambda player: lambda
-                state: state.has_all(["Harpy", "Balloon"], player),
+                state: state.has_all(("Harpy", "Balloon"), player),
         }
     ),
     Wargroove2Level(
         name="Skydiving",
         file_name="Skydiving.json",
         location_rules={
-            "Skydiving: Victory": lambda player: lambda state: state.has_all(["Balloon", "Airstrike Event"], player),
+            "Skydiving: Victory": lambda player: lambda state: state.has_all(("Balloon", "Airstrike Event"), player),
             "Skydiving: Dragon Defeats Stronghold": lambda player: lambda
-                state: state.has_all(["Balloon", "Airstrike Event", "Dragon"], player),
+                state: state.has_all(("Balloon", "Airstrike Event", "Dragon"), player),
         },
         has_ocean=False
     ),
@@ -173,10 +173,10 @@ high_victory_checks_levels = [
         name="Sunken Forest",
         file_name="Sunken_Forest.json",
         location_rules={
-            "Sunken Forest: Victory": lambda player: lambda state: state.has_any(["Mage", "Harpoon Ship"], player),
+            "Sunken Forest: Victory": lambda player: lambda state: state.has_any(("Mage", "Harpoon Ship"), player),
             "Sunken Forest: High Ground": lambda player: lambda state: state.has("Archer", player),
             "Sunken Forest: Coastal Siege": lambda player: lambda state:
-                state.has("Warship", player) and state.has_any(["Mage", "Harpoon Ship"], player),
+                state.has("Warship", player) and state.has_any(("Mage", "Harpoon Ship"), player),
         }
     ),
     Wargroove2Level(
@@ -184,9 +184,9 @@ high_victory_checks_levels = [
         file_name="Tenris_Mistake.json",
         location_rules={
             "Tenri's Mistake: Victory": lambda player: lambda state: state.has_any(
-                ["Balloon", "Air Trooper"], player),
+                ("Balloon", "Air Trooper"), player),
             "Tenri's Mistake: Mighty Barracks": lambda player: lambda
-                state: state.has_any(["Balloon", "Air Trooper"], player),
+                state: state.has_any(("Balloon", "Air Trooper"), player),
             "Tenri's Mistake: Commander Arrives": lambda player: lambda state: state.has("Balloon", player),
         }
     ),
@@ -194,9 +194,9 @@ high_victory_checks_levels = [
         name="Enmity Cliffs",
         file_name="Enmity_Cliffs.json",
         location_rules={
-            "Enmity Cliffs: Victory": lambda player: lambda state: state.has_all(["Spearman", "Bridges Event"], player),
+            "Enmity Cliffs: Victory": lambda player: lambda state: state.has_all(("Spearman", "Bridges Event"), player),
             "Enmity Cliffs: Spear Flood": lambda player: lambda state: state.has("Spearman", player),
-            "Enmity Cliffs: Across the Gap": lambda player: lambda state: state.has_any(["Archer", "Rifleman"], player),
+            "Enmity Cliffs: Across the Gap": lambda player: lambda state: state.has_any(("Archer", "Rifleman"), player),
         },
         has_ocean=False
     ),
@@ -207,9 +207,9 @@ high_victory_checks_levels = [
             "Terrible Tributaries: Victory": lambda player: lambda state: state.has(
                 "River Boat", player),
             "Terrible Tributaries: Swimming Knights": lambda player: lambda
-                state: state.has_all(["Merfolk", "River Boat"], player),
+                state: state.has_all(("Merfolk", "River Boat"), player),
             "Terrible Tributaries: Steal Code Names": lambda player: lambda
-                state: state.has_all(["Thief", "River Boat"], player),
+                state: state.has_all(("Thief", "River Boat"), player),
         }
     ),
     Wargroove2Level(
@@ -217,8 +217,8 @@ high_victory_checks_levels = [
         file_name="Beached.json",
         location_rules={
             "Beached: Victory": lambda player: lambda state: state.has("Knight", player),
-            "Beached: Turtle Power": lambda player: lambda state: state.has_all(["Turtle", "Knight"], player),
-            "Beached: Happy Turtle": lambda player: lambda state: state.has_all(["Turtle", "Knight"], player),
+            "Beached: Turtle Power": lambda player: lambda state: state.has_all(("Turtle", "Knight"), player),
+            "Beached: Happy Turtle": lambda player: lambda state: state.has_all(("Turtle", "Knight"), player),
         }
     ),
     Wargroove2Level(
@@ -237,9 +237,9 @@ high_victory_checks_levels = [
         location_rules={
             "Riflemen Blockade: Victory": lambda player: lambda state: state.has("Rifleman", player),
             "Riflemen Blockade: From the Mountains": lambda player: lambda
-                state: state.has_all(["Rifleman", "Harpy"], player),
+                state: state.has_all(("Rifleman", "Harpy"), player),
             "Riflemen Blockade: To the Road": lambda player: lambda
-                state: state.has_all(["Rifleman", "Dragon"], player),
+                state: state.has_all(("Rifleman", "Dragon"), player),
         },
         has_ocean=False
     ),
@@ -249,9 +249,9 @@ high_victory_checks_levels = [
         location_rules={
             "Towers of the Abyss: Victory": lambda player: lambda state: state.has("Ballista", player),
             "Towers of the Abyss: Siege Master": lambda player: lambda state:
-            state.has_all(["Ballista", "Trebuchet"], player),
+            state.has_all(("Ballista", "Trebuchet"), player),
             "Towers of the Abyss: Perfect Defense": lambda player: lambda state:
-            state.has_all(["Ballista", "Walls Event"], player),
+            state.has_all(("Ballista", "Walls Event"), player),
         },
         has_ocean=False
     ),
@@ -259,8 +259,8 @@ high_victory_checks_levels = [
         name="Kraken Strait",
         file_name="Kraken_Strait.json",
         location_rules={
-            "Kraken Strait: Victory": lambda player: lambda state: state.has_all(["Frog", "Kraken"], player),
-            "Kraken Strait: Well Defended": lambda player: lambda state: state.has_all(["Frog", "Kraken"], player),
+            "Kraken Strait: Victory": lambda player: lambda state: state.has_all(("Frog", "Kraken"), player),
+            "Kraken Strait: Well Defended": lambda player: lambda state: state.has_all(("Frog", "Kraken"), player),
             "Kraken Strait: Clipped Wings": lambda player: lambda state: state.has("Harpoon Ship", player),
         }
     ),
@@ -280,12 +280,12 @@ high_victory_checks_levels = [
         location_rules={
             "Gold Rush: Victory": lambda player: lambda state: state.has("Thief", player) and
                                                                             state.has_any(
-                                                                                ["Rifleman", "Merfolk", "Warship"],
+                                                                                ("Rifleman", "Merfolk", "Warship"),
                                                                                 player),
             "Gold Rush: Lumber Island": lambda player: lambda state: state.has_any(
-                ["Merfolk", "River Boat", "Barge"], player),
+                ("Merfolk", "River Boat", "Barge"), player),
             "Gold Rush: Starglass Rush": lambda player: lambda state: state.has_any(
-                ["River Boat", "Barge"], player),
+                ("River Boat", "Barge"), player),
         }
     ),
     Wargroove2Level(
@@ -302,10 +302,10 @@ high_victory_checks_levels = [
         file_name="Frantic_Inlet.json",
         location_rules={
             "Frantic Inlet: Victory": lambda player: lambda state: state.has(
-                "Turtle", player) and state.has_any(["Barge", "Knight"], player),
+                "Turtle", player) and state.has_any(("Barge", "Knight"), player),
             "Frantic Inlet: Plug the Gap": lambda player: lambda state: state.has("Spearman", player),
             "Frantic Inlet: Portal Detour": lambda player: lambda
-                state: state.has_all(["Turtle", "Barge"], player),
+                state: state.has_all(("Turtle", "Barge"), player),
         }
     ),
     Wargroove2Level(
@@ -313,23 +313,23 @@ high_victory_checks_levels = [
         file_name="Operation_Seagull.json",
         location_rules={
             "Operation Seagull: Victory": lambda player: lambda state: state.has(
-                "Merfolk", player) and state.has_any(["Harpoon Ship", "Witch"], player) and state.has_any(
-                ["Turtle", "Harpy"], player),
+                "Merfolk", player) and state.has_any(("Harpoon Ship", "Witch"), player) and state.has_any(
+                ("Turtle", "Harpy"), player),
             "Operation Seagull: Crack the Crystal": lambda player: lambda
-                state: state.has_any(["Warship", "Kraken"], player),
+                state: state.has_any(("Warship", "Kraken"), player),
             "Operation Seagull: Counter Break": lambda player: lambda
                 state: state.has("Dragon", player) and
-                             state.has_all(["Harpoon Ship", "Witch"], player),
+                             state.has_all(("Harpoon Ship", "Witch"), player),
         }
     ),
     Wargroove2Level(
         name="Air Support",
         file_name="Air_Support.json",
         location_rules={
-            "Air Support: Victory": lambda player: lambda state: state.has_all(["Dragon", "Bridges Event"], player),
-            "Air Support: Roadkill": lambda player: lambda state: state.has_all(["Dragon", "Bridges Event"], player),
+            "Air Support: Victory": lambda player: lambda state: state.has_all(("Dragon", "Bridges Event"), player),
+            "Air Support: Roadkill": lambda player: lambda state: state.has_all(("Dragon", "Bridges Event"), player),
             "Air Support: Flight Economy": lambda player: lambda
-                state: state.has_all(["Air Trooper", "Bridges Event"], player),
+                state: state.has_all(("Air Trooper", "Bridges Event"), player),
         }
     ),
     Wargroove2Level(
@@ -337,8 +337,8 @@ high_victory_checks_levels = [
         file_name="Fortification.json",
         location_rules={
             "Fortification: Victory": lambda player: lambda state: state.has_all(
-                ["Golem", "Walls Event"], player) and state.has_any(["Archer", "Trebuchet"], player),
-            "Fortification: Hyper Repair": lambda player: lambda state: state.has_all(["Golem", "Walls Event"], player),
+                ("Golem", "Walls Event"), player) and state.has_any(("Archer", "Trebuchet"), player),
+            "Fortification: Hyper Repair": lambda player: lambda state: state.has_all(("Golem", "Walls Event"), player),
             "Fortification: Defensive Artillery": lambda player: lambda state: state.has("Trebuchet", player),
         },
         has_ocean=False
@@ -349,7 +349,7 @@ high_victory_checks_levels = [
         location_rules={
             "A Ribbitting Time: Victory": lambda player: lambda state: state.has("Frog", player),
             "A Ribbitting Time: Leap Frog": lambda player: lambda state: state.has("Frog", player),
-            "A Ribbitting Time: Frogway Robbery": lambda player: lambda state: state.has_all(["Frog", "Thief"], player),
+            "A Ribbitting Time: Frogway Robbery": lambda player: lambda state: state.has_all(("Frog", "Thief"), player),
         }
     ),
     Wargroove2Level(
@@ -357,10 +357,10 @@ high_victory_checks_levels = [
         file_name="Precarious_Cliffs.json",
         location_rules={
             "Precarious Cliffs: Victory": lambda player: lambda state: state.has_all(
-                ["Airstrike Event", "Archer"], player),
+                ("Airstrike Event", "Archer"), player),
             "Precarious Cliffs: No Crit for You": lambda player: lambda state: state.has("Airstrike Event", player),
             "Precarious Cliffs: Out Ranged": lambda player: lambda
-                state: state.has_all(["Airstrike Event", "Archer"], player),
+                state: state.has_all(("Airstrike Event", "Archer"), player),
         },
         has_ocean=False
     ),
@@ -369,20 +369,20 @@ high_victory_checks_levels = [
         file_name="Split_Valley.json",
         location_rules={
             "Split Valley: Victory": lambda player: lambda state: state.has(
-                "Trebuchet", player) and state.has_any(["Bridges Event", "Air Trooper"], player),
+                "Trebuchet", player) and state.has_any(("Bridges Event", "Air Trooper"), player),
             "Split Valley: Longshot": lambda player: lambda state: state.has("Trebuchet", player),
             "Split Valley: Ranged Trinity": lambda player: lambda
-                state: state.has_all(["Trebuchet", "Archer", "Ballista"], player),
+                state: state.has_all(("Trebuchet", "Archer", "Ballista"), player),
         }
     ),
     Wargroove2Level(
         name="Bridge Brigade",
         file_name="Bridge_Brigade.json",
         location_rules={
-            "Bridge Brigade: Victory": lambda player: lambda state: state.has_all(["Warship", "Spearman"], player),
+            "Bridge Brigade: Victory": lambda player: lambda state: state.has_all(("Warship", "Spearman"), player),
             "Bridge Brigade: From the Depths": lambda player: lambda state: state.has("Kraken", player),
             "Bridge Brigade: Back to the Depths": lambda player: lambda state:
-            state.has_all(["Warship", "Spearman", "Kraken"], player),
+            state.has_all(("Warship", "Spearman", "Kraken"), player),
         },
         has_ocean=False
     ),
@@ -391,7 +391,7 @@ high_victory_checks_levels = [
         file_name="Grand_Theft_Village.json",
         location_rules={
             "Grand Theft Village: Victory": lambda player: lambda state: state.has(
-                "Thief", player) and state.has_any(["Mage", "Ballista"], player),
+                "Thief", player) and state.has_any(("Mage", "Ballista"), player),
             "Grand Theft Village: Stand Tall": lambda player: lambda state: state.has("Golem", player),
             "Grand Theft Village: Pillager": lambda player: lambda state: True,
         },
@@ -401,7 +401,7 @@ high_victory_checks_levels = [
         name="Wagon Freeway",
         file_name="Wagon_Freeway.json",
         location_rules={
-            "Wagon Freeway: Victory": lambda player: lambda state: state.has_all(["Wagon", "Spearman"], player),
+            "Wagon Freeway: Victory": lambda player: lambda state: state.has_all(("Wagon", "Spearman"), player),
             "Wagon Freeway: All Mine Now": lambda player: lambda state: True,
             "Wagon Freeway: Pigeon Carrier": lambda player: lambda state: state.has("Air Trooper", player),
         },
@@ -415,9 +415,9 @@ final_levels = [
         file_name="Disastrous_Crossing.json",
         location_rules={"Disastrous Crossing: Victory":
                             lambda player: lambda state: state.has_any(
-                                ["Merfolk", "River Boat"], player) and
+                                ("Merfolk", "River Boat"), player) and
                                                                       state.has_any(
-                                                                          ["Knight", "Kraken"],
+                                                                          ("Knight", "Kraken"),
                                                                           player)}
     ),
     Wargroove2Level(
@@ -425,22 +425,22 @@ final_levels = [
         file_name="Dark_Mirror.json",
         location_rules={
             "Dark Mirror: Victory": lambda player: lambda state: state.has(
-                "Archer", player) and state.has_any(["Mage", "Ballista"], player) and state.has_any(
-                ["Harpy", "Dragon"], player)},
+                "Archer", player) and state.has_any(("Mage", "Ballista"), player) and state.has_any(
+                ("Harpy", "Dragon"), player)},
         has_ocean=False
     ),
     Wargroove2Level(
         name="Doomed Metropolis",
         file_name="Doomed_Metropolis.json",
         location_rules={
-            "Doomed Metropolis: Victory": lambda player: lambda state: state.has_all(["Mage", "Knight"], player)},
+            "Doomed Metropolis: Victory": lambda player: lambda state: state.has_all(("Mage", "Knight"), player)},
         has_ocean=False
     ),
     Wargroove2Level(
         name="Dementia Castle",
         file_name="Dementia_Castle.json",
         location_rules={"Dementia Castle: Victory":
-                            lambda player: lambda state: state.has_all(["Merfolk", "Mage", "Golem", "Harpy"], player)}
+                            lambda player: lambda state: state.has_all(("Merfolk", "Mage", "Golem", "Harpy"), player)}
     ),
 ]
 
