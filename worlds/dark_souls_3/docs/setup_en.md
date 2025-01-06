@@ -80,10 +80,10 @@ things to keep in mind:
 
 ### Enemy randomizer issues
 
-The DS3 Archipelago randomizer uses [thefifthmatt's DS3 enemy randomizer]
+The DS3 Archipelago randomizer uses [thefifthmatt's DS3 enemy randomizer],
 essentially unchanged. Unfortunately, this randomizer has a few known issues,
 including enemy AI not working, enemies spawning in places they can't be killed,
-and in a few rare cases enemies spawning in ways that crash the game when they
+and, in a few rare cases, enemies spawning in ways that crash the game when they
 load. These bugs should be [reported upstream], but unfortunately the
 Archipelago devs can't help much with them.
 
@@ -111,7 +111,7 @@ launch it properly. If this is happening to you, make sure:
 * Steam is not running in administrator mode. To fix this, right-click
   `steam.exe` (by default this is in `C:\Program Files\Steam`), select
   "Properties", open the "Compatiblity" tab, and uncheck "Run this program as an
-  administrator").
+  administrator".
 
 * There is no `dinput8.dll` file in your DS3 game directory. This is the old way
   of installing mods, and it can interfere with the new ModEngine2 workflow.
