@@ -316,19 +316,22 @@ def set_rules(khrecomworld):
         lambda state: (
             state.has_any({
                 "World Card Monstro",
-                "World Card Atlantica"}, player)
+                "World Card Atlantica", 
+                "World Card Halloween Town"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 2 Heartless Search Ghost"),
         lambda state: (
             state.has_any({
                 "World Card Monstro",
-                "World Card Atlantica"}, player)
+                "World Card Atlantica", 
+                "World Card Halloween Town"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 3 Heartless Search Ghost"),
         lambda state: (
             state.has_any({
                 "World Card Monstro",
-                "World Card Atlantica"}, player)
+                "World Card Atlantica", 
+                "World Card Halloween Town"}, player)
         ))
     add_rule(khrecomworld.get_location("Defeat 1 Heartless Tornado Step"),
         lambda state: (
