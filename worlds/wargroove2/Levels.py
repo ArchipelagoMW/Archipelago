@@ -38,7 +38,7 @@ def set_region_exit_rules(region: Region, world: "Wargroove2World", locations: L
         region_exit.access_rule = exit_rule
 
 
-LocationRules = dict[str, Callable[[int], CollectionRule]]
+LocationRules = dict[str, Callable[[int], CollectionRule] | None]
 
 
 class Wargroove2Level:
@@ -62,12 +62,21 @@ class Wargroove2Level:
 
     def define_access_rules(self, world: "Wargroove2World", player: int, additional_rule=None) -> None:
         for location_name, rule_factory in self.location_rules.items():
-            if additional_rule is None:
-                rule = rule_factory(player)
+            if rule_factory is None:
+                if additional_rule is None:
+                    # No rules to set.
+                    continue
+                else:
+                    # Only the additional rule to set.
+                    rule = additional_rule
             else:
-                # Combine both rules into one function.
-                def rule(state, current_rule=rule_factory(player)):
-                    return current_rule(state) and additional_rule(state)
+                if additional_rule is None:
+                    # Only the location's rule to set.
+                    rule = rule_factory(player)
+                else:
+                    # Combine both rules into one function and set the combined function.
+                    def rule(state, current_rule=rule_factory(player)):
+                        return current_rule(state) and additional_rule(state)
 
             set_rule(world.get_location(location_name), rule)
             loc_id = location_table.get(location_name, 0)
@@ -393,7 +402,7 @@ high_victory_checks_levels = [
             "Grand Theft Village: Victory": lambda player: lambda state: state.has(
                 "Thief", player) and state.has_any(("Mage", "Ballista"), player),
             "Grand Theft Village: Stand Tall": lambda player: lambda state: state.has("Golem", player),
-            "Grand Theft Village: Pillager": lambda player: lambda state: True,
+            "Grand Theft Village: Pillager": None,
         },
         has_ocean=False
     ),
@@ -402,7 +411,7 @@ high_victory_checks_levels = [
         file_name="Wagon_Freeway.json",
         location_rules={
             "Wagon Freeway: Victory": lambda player: lambda state: state.has_all(("Wagon", "Spearman"), player),
-            "Wagon Freeway: All Mine Now": lambda player: lambda state: True,
+            "Wagon Freeway: All Mine Now": None,
             "Wagon Freeway: Pigeon Carrier": lambda player: lambda state: state.has("Air Trooper", player),
         },
         has_ocean=False
@@ -450,8 +459,8 @@ low_victory_checks_levels = [
         name="Swimming at the Docks",
         file_name="Swimming_at_the_Docks.json",
         location_rules={
-            "Swimming at the Docks: Victory": lambda player: lambda state: True,
-            "Swimming at the Docks: Dogs Counter Knights": lambda player: lambda state: True,
+            "Swimming at the Docks: Victory": None,
+            "Swimming at the Docks: Dogs Counter Knights": None,
             "Swimming at the Docks: Kayaking": lambda player: lambda state: state.has("River Boat", player),
         }
     ),
@@ -459,8 +468,8 @@ low_victory_checks_levels = [
         name="Ancient Discoveries",
         file_name="Ancient_Discoveries.json",
         location_rules={
-            "Ancient Discoveries: Victory": lambda player: lambda state: True,
-            "Ancient Discoveries: So many Choices": lambda player: lambda state: True,
+            "Ancient Discoveries: Victory": None,
+            "Ancient Discoveries: So many Choices": None,
             "Ancient Discoveries: Height Advantage": lambda player: lambda state: state.has("Golem", player),
         }
     ),
@@ -468,8 +477,8 @@ low_victory_checks_levels = [
         name="Observation Isle",
         file_name="Observation_Isle.json",
         location_rules={
-            "Observation Isle: Victory": lambda player: lambda state: True,
-            "Observation Isle: Become the Watcher": lambda player: lambda state: True,
+            "Observation Isle: Victory": None,
+            "Observation Isle: Become the Watcher": None,
             "Observation Isle: Execute the Watcher": lambda player: lambda state: state.has("Walls Event", player),
         }
     ),
@@ -477,8 +486,8 @@ low_victory_checks_levels = [
         name="Majestic Mountain",
         file_name="Majestic_Mountain.json",
         location_rules={
-            "Majestic Mountain: Victory": lambda player: lambda state: True,
-            "Majestic Mountain: Mountain Climbing": lambda player: lambda state: True,
+            "Majestic Mountain: Victory": None,
+            "Majestic Mountain: Mountain Climbing": None,
             "Majestic Mountain: Legend of the Mountains": lambda player: lambda state: state.has("Air Trooper", player),
         }
     ),
@@ -488,8 +497,8 @@ first_level = Wargroove2Level(
     name="Humble Beginnings Rebirth",
     file_name="",
     location_rules={
-        "Humble Beginnings Rebirth: Victory": lambda player: lambda state: True,
-        "Humble Beginnings Rebirth: Talk to Nadia": lambda player: lambda state: True,
-        "Humble Beginnings Rebirth: Good Dog": lambda player: lambda state: True
+        "Humble Beginnings Rebirth: Victory": None,
+        "Humble Beginnings Rebirth: Talk to Nadia": None,
+        "Humble Beginnings Rebirth: Good Dog": None
     }
 )
