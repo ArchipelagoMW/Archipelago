@@ -55,12 +55,16 @@ class Wargroove2Level:
         else:
             self.victory_locations = [name + ': Victory']
 
-    def define_access_rules(self, world: "Wargroove2World", player: int, additional_rule=lambda state: True) -> None:
+    def define_access_rules(self, world: "Wargroove2World", player: int, additional_rule=None) -> None:
         for location_name, rule_factory in self.location_rules.items():
-            def combined_rule(state, current_rule=rule_factory(player)):
-                return current_rule(state) and additional_rule(state)
+            if additional_rule is None:
+                rule = rule_factory(player)
+            else:
+                # Combine both rules into one function.
+                def rule(state, current_rule=rule_factory(player)):
+                    return current_rule(state) and additional_rule(state)
 
-            set_rule(world.get_location(location_name), combined_rule)
+            set_rule(world.get_location(location_name), rule)
             loc_id = location_table.get(location_name, 0)
             extras = 1
             if loc_id is not None and location_name.endswith("Victory"):
@@ -68,7 +72,7 @@ class Wargroove2Level:
             elif loc_id is not None:
                 extras = world.options.objective_locations.value
             for i in range(1, extras):
-                set_rule(world.get_location(location_name + f" Extra {i}"), combined_rule)
+                set_rule(world.get_location(location_name + f" Extra {i}"), rule)
         region = world.get_region(self.region_name)
         set_region_exit_rules(region, world, self.victory_locations, operator='and')
 
