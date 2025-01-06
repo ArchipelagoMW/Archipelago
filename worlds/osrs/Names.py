@@ -73,7 +73,7 @@ class ItemNames(str, Enum):
     South_Of_Varrock = "Area: South of Varrock"
     Central_Varrock = "Area: Central Varrock"
     Varrock_Palace = "Area: Varrock Palace"
-    East_Of_Varrock = "Area: East Varrock"
+    Lumberyard = "Area: Lumberyard"
     West_Varrock = "Area: West Varrock"
     Edgeville = "Area: Edgeville"
     Barbarian_Village = "Area: Barbarian Village"

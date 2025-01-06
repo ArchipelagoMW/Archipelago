@@ -8,7 +8,7 @@ region_rows = [
 	RegionRow('Lumbridge Swamp', 'Area: Lumbridge Swamp', ['Lumbridge', 'HAM Hideout', ], ['Bronze Ores', 'Coal Ore', 'Shrimp Spot', 'Meat', 'Goblin', 'Imps', 'Big Bones', 'Duck', ]),
 	RegionRow('HAM Hideout', 'Area: HAM Hideout', ['Lumbridge Farms West', 'Lumbridge', 'Lumbridge Swamp', 'Draynor Village', ], ['Goblin', ]),
 	RegionRow('Lumbridge Farms West', 'Area: Lumbridge Farms', ['Sourhog\'s Lair', 'HAM Hideout', 'Draynor Village', ], ['Sheep', 'Meat', 'Wheat', 'Windmill', 'Egg', 'Milk', 'Willow Tree', 'Imps', 'Potato', 'Haystack', ]),
-	RegionRow('Lumbridge Farms East', 'Area: Lumbridge Farms', ['Sout of Varrock', 'Lumbridge', ], ['Meat', 'Egg', 'Milk', 'Willow Tree', 'Goblin', 'Imps', 'Potato', ]),
+	RegionRow('Lumbridge Farms East', 'Area: Lumbridge Farms', ['South of Varrock', 'Lumbridge', ], ['Meat', 'Egg', 'Milk', 'Willow Tree', 'Goblin', 'Imps', 'Potato', ]),
 	RegionRow('Sourhog\'s Lair', 'Area: South of Varrock', ['Lumbridge Farms West', 'Draynor Manor Outskirts', ], ['', ]),
 	RegionRow('South of Varrock', 'Area: South of Varrock', ['Al Kharid', 'West Varrock', 'Central Varrock', 'Lumberyard', 'Lumbridge Farms East', 'Lumbridge', 'Barbarian Village', 'Edgeville', 'Wilderness', ], ['Sheep', 'Bronze Ores', 'Iron Ore', 'Silver Ore', 'Redberry Bush', 'Meat', 'Wheat', 'Oak Tree', 'Willow Tree', 'Canoe Tree', 'Guard', 'Imps', 'Clay Ore', 'Duck', ]),
 	RegionRow('Lumberyard', 'Area: Lumberyard', ['Wilderness', 'South of Varrock', 'Central Varrock', 'Varrock Palace', ], ['Guard', 'Bar', ]),

@@ -286,11 +286,30 @@ class OSRSWorld(World):
         self.create_and_add_location(index)
 
     def create_items(self) -> None:
+        filler_items = []
         for item_row in item_rows:
             if item_row.name != self.starting_area_item:
+                # If it's a filler item, set it aside for later
+                if item_row.progression == ItemClassification.filler:
+                    filler_items.append(item_row)
+                    continue
+
+                # If it starts with "Care Pack", only add it if Care Packs are enabled
+                if item_row.name.startswith("Care Pack"):
+                    if not self.options.enable_carepacks:
+                        continue
+
                 for c in range(item_row.amount):
                     item = self.create_item(item_row.name)
                     self.multiworld.itempool.append(item)
+        if self.options.enable_duds:
+            self.random.shuffle(filler_items)
+            filler_items = filler_items[0:self.options.dud_count]
+            for item_row in filler_items:
+                item = self.create_item(item_row.name)
+                self.multiworld.itempool.append(item)
+
+
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(

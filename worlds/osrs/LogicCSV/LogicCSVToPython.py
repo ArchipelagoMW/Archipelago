@@ -101,9 +101,9 @@ if __name__ == "__main__":
             row_line = "RegionRow("
             row_line += str_format(row[0])
             row_line += str_format(row[1])
-            connections = row[2].replace("'", "\\'")
+            connections = row[2]
             row_line += f"{str_list_to_py(connections.split(', '))}, "
-            resources = row[3].replace("'", "\\'")
+            resources = row[3]
             row_line += f"{str_list_to_py(resources.split(', '))})"
             reg_py_file.write(f"\t{row_line},\n")
 
@@ -183,7 +183,7 @@ if __name__ == "__main__":
     def str_list_to_py(str_list) -> str:
         ret_str = "["
         for s in str_list:
-            ret_str += f"'{s}', "
+            ret_str += str_format(s)
         ret_str += "]"
         return ret_str
 
