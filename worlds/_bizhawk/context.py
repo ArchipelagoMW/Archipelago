@@ -28,7 +28,7 @@ class AuthStatus(enum.IntEnum):
     AUTHENTICATED = 3
 
 
-class TextCategory(enum.StrEnum):
+class TextCategory(str, enum.Enum):
     ALL = "all"
     INCOMING = "incoming"
     OUTGOING = "outgoing"
