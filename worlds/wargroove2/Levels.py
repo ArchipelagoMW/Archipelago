@@ -1,6 +1,6 @@
 from typing import List, TYPE_CHECKING
 
-from BaseClasses import Region, Entrance, MultiWorld
+from BaseClasses import Region, Entrance
 from .Locations import location_table, Wargroove2Location
 from worlds.generic.Rules import set_rule
 
@@ -76,9 +76,9 @@ class Wargroove2Level:
         region = world.get_region(self.region_name)
         set_region_exit_rules(region, world, self.victory_locations, operator='and')
 
-    def define_region(self, name: str, multiworld: MultiWorld, player: int, exits=None) -> Region:
+    def define_region(self, name: str, world: "Wargroove2World", player: int, exits=None) -> Region:
         self.region_name = name
-        region = Region(name, player, multiworld)
+        region = Region(name, player, world.multiworld)
         if self.location_rules.keys():
             for location in self.location_rules.keys():
                 loc_id = location_table.get(location, 0)
@@ -86,9 +86,9 @@ class Wargroove2Level:
                 region.locations.append(wg2_location)
                 total_locations = 1
                 if loc_id is not None and location.endswith("Victory"):
-                    total_locations = multiworld.worlds[player].options.victory_locations.value
+                    total_locations = world.options.victory_locations.value
                 elif loc_id is not None:
-                    total_locations = multiworld.worlds[player].options.objective_locations.value
+                    total_locations = world.options.objective_locations.value
                 for i in range(1, total_locations):
                     extra_location = location + f" Extra {i}"
                     loc_id = location_table.get(extra_location, 0)
