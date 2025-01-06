@@ -66,3 +66,20 @@ class TestBase(unittest.TestCase):
                         for location in locations:
                             self.assertIn(location, world_type.location_name_to_id)
                         self.assertNotIn(group_name, world_type.location_name_to_id)
+
+    def test_location_locality_not_modified(self):
+        """Test that worlds don't modify the locality of locations after duplicates are resolved"""
+        gen_steps = ("generate_early", "create_regions", "create_items")
+        additional_steps = ("set_rules", "generate_basic", "pre_fill")
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            with self.subTest("Game", game=game_name):
+                multiworld = setup_solo_multiworld(world_type, gen_steps)
+                local_locations = multiworld.worlds[1].options.local_locations.value.copy()
+                non_local_locations = multiworld.worlds[1].options.non_local_locations.value.copy()
+                for step in additional_steps:
+                    with self.subTest("step", step=step):
+                        call_all(multiworld, step)
+                        self.assertEqual(local_locations, multiworld.worlds[1].options.local_locations.value,
+                                         f"{game_name} modified local_locations during {step}")
+                        self.assertEqual(non_local_locations, multiworld.worlds[1].options.non_local_locations.value,
+                                         f"{game_name} modified non_local_locations during {step}")
