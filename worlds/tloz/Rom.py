@@ -207,7 +207,7 @@ class TLOZPatchExtension(APPatchExtension):
     def apply_randomizer(caller, rom, placement_file):
         from worlds.tloz import (shop_price_location_ids, shop_locations, item_game_ids, location_ids,
                                  item_prices, secret_money_ids)
-        placements = json.loads(caller.get_file(placement_file))
+        placements: dict[str, any] = json.loads(caller.get_file(placement_file))
         with open(get_base_rom_path(), 'rb') as rom:
             rom_data = TLOZPatchExtension.apply_base_patch(rom)
             rom_data = TLOZPatchExtension.write_entrances(rom_data, placements["entrance_randomizer_set"])
@@ -245,7 +245,7 @@ class TLOZPatchExtension(APPatchExtension):
                 price_location = shop_price_location_ids[location]
                 item_price = item_prices[item]
                 if item == "Rupee":
-                    item_class = placements[location + " Classification"]
+                    item_class = placements.get(location + " Classification", ItemClassification.filler)
                     if item_class == ItemClassification.progression:
                         item_price = item_price * 2
                     elif item_class == ItemClassification.useful:
