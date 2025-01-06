@@ -81,8 +81,8 @@ class Wargroove2World(World):
         random.shuffle(non_starting_levels)
         self.level_list = low_victory_checks_levels_copy[0:4] + non_starting_levels
 
-        final_levels_no_ocean = list(level for level in final_levels if not level.has_ocean)
-        final_levels_ocean = list(level for level in final_levels if level.has_ocean)
+        final_levels_no_ocean = [level for level in final_levels if not level.has_ocean]
+        final_levels_ocean = [level for level in final_levels if level.has_ocean]
         random.shuffle(final_levels_no_ocean)
         random.shuffle(final_levels_ocean)
         non_north_levels = final_levels_ocean + final_levels_no_ocean[1:]
