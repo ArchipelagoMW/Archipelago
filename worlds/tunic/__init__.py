@@ -284,12 +284,14 @@ class TunicWorld(World):
 
             remove_filler(items_to_create[gold_hexagon])
 
-            for hero_relic in item_name_groups["Hero Relics"]:
+            # Sort for deterministic order
+            for hero_relic in sorted(item_name_groups["Hero Relics"]):
                 tunic_items.append(self.create_item(hero_relic, ItemClassification.useful))
                 items_to_create[hero_relic] = 0
 
         if not self.options.ability_shuffling:
-            for page in item_name_groups["Abilities"]:
+            # Sort for deterministic order
+            for page in sorted(item_name_groups["Abilities"]):
                 if items_to_create[page] > 0:
                     tunic_items.append(self.create_item(page, ItemClassification.useful))
                     items_to_create[page] = 0
