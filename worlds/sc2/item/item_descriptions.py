@@ -66,7 +66,7 @@ resource_efficiency_cost_reduction = {
     item_names.ARBITER:       (50, 0, 0),
     item_names.REAVER:        (100, 100, 2),
     DISPLAY_NAME_CLOAKED_ASSASSIN: (0, 50, 0),
-    item_names.SCOUT:         (125, 25, 1),
+    item_names.SCOUT:         (75, 25, 0),
     item_names.DESTROYER:     (50, 25, 1),
     DISPLAY_NAME_WORMS:       (50, 75, 0),
 
