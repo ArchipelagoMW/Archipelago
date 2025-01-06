@@ -715,8 +715,8 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
                     world.location_name_to_id[location.name] = id
                     world.location_id_to_name[id] = location.name
 
-        multiworld.local_locations[player1.id].value = set(names(player1.locations))
-        multiworld.local_locations[player2.id].value = set(names(player2.locations))
+        multiworld.worlds[player1.id].options.local_locations.value = set(names(player1.locations))
+        multiworld.worlds[player2.id].options.local_locations.value = set(names(player2.locations))
         locality_rules(multiworld)
 
         distribute_items_restrictive(multiworld)
@@ -740,8 +740,8 @@ class TestDistributeItemsRestrictive(unittest.TestCase):
                     world.location_name_to_id[location.name] = id
                     world.location_id_to_name[id] = location.name
 
-        multiworld.non_local_locations[player1.id].value = set(names(player1.locations))
-        multiworld.non_local_locations[player2.id].value = set(names(player2.locations))
+        multiworld.worlds[player1.id].options.non_local_locations.value = set(names(player1.locations))
+        multiworld.worlds[player2.id].options.non_local_locations.value = set(names(player2.locations))
         locality_rules(multiworld)
 
         distribute_items_restrictive(multiworld)

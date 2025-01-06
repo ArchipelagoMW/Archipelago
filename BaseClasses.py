@@ -1267,14 +1267,14 @@ class Location:
         self.address = address
         self.parent_region = parent
 
-    def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
+    def can_fill(self, state: CollectionState, item: Item, check_access: bool = True) -> bool:
         if self.always_allow(state, item):
-            options = state.multiworld.worlds[self.player].options
+            options = state.multiworld.worlds[item.player].options
             if item.name not in options.non_local_items and self.name not in options.non_local_locations:
                 return True
 
         return (
-            (self.progress_type != LocationProgressType.EXCLUDED or not (item.advancement or item.useful))
+            (self.progress_type != LocationProgressType.EXCLUDED or item.excludable)
             and self.item_rule(item)
             and (not check_access or self.can_reach(state))
         )

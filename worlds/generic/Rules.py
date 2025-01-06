@@ -29,6 +29,7 @@ def item_locality_needed(multiworld: MultiWorld) -> bool:
             return True
         if group["non_local_items"]:
             return True
+    return False
 
 
 def location_locality_needed(multiworld: MultiWorld) -> bool:
@@ -38,6 +39,7 @@ def location_locality_needed(multiworld: MultiWorld) -> bool:
             return True
         if multiworld.worlds[player].options.non_local_locations.value:
             return True
+    return False
 
 
 def locality_rules(multiworld: MultiWorld):
@@ -98,24 +100,26 @@ def locality_rules(multiworld: MultiWorld):
             local_func_cache = {}
             for loc_name in world.options.local_locations.value:
                 location = world.get_location_if_available(loc_name)
-                if not location: continue
+                if not location:
+                    continue
 
                 if location.item_rule in local_func_cache:
                     location.item_rule = local_func_cache[location.item_rule]
                 # empty rule that just returns True, overwrite
                 elif location.item_rule is location.__class__.item_rule:
                     local_func_cache[location.item_rule] = location.item_rule = \
-                        lambda i, player = player: i.player == player
+                        lambda i, p = player: i.player == p
                 # special rule, needs to also be fulfilled.
                 else:
                     local_func_cache[location.item_rule] = location.item_rule = \
-                        lambda i, player = player, old_rule = location.item_rule: \
-                        i.player == player and old_rule(i)
+                        lambda i, p = player, old_rule = location.item_rule: \
+                        i.player == p and old_rule(i)
 
             non_local_func_cache = {}
             for loc_name in world.options.non_local_locations.value:
                 location = world.get_location_if_available(loc_name)
-                if not location: continue
+                if not location:
+                    continue
 
                 location = world.get_location(loc_name)
                 if location.item_rule in non_local_func_cache:
@@ -123,18 +127,19 @@ def locality_rules(multiworld: MultiWorld):
                 # empty rule that just returns True, overwrite
                 elif location.item_rule is location.__class__.item_rule:
                     non_local_func_cache[location.item_rule] = location.item_rule = \
-                        lambda i, player = player: i.player != player
+                        lambda i, p = player: i.player != p
                 # special rule, needs to also be fulfilled.
                 else:
                     non_local_func_cache[location.item_rule] = location.item_rule = \
-                        lambda i, player = player, old_rule = location.item_rule: \
-                        i.player != player and old_rule(i)
+                        lambda i, p = player, old_rule = location.item_rule: \
+                        i.player != p and old_rule(i)
 
 
 def exclusion_rules(multiworld: MultiWorld, player: int, exclude_locations: typing.Set[str]) -> None:
     for loc_name in exclude_locations:
         location = multiworld.get_location_if_available(loc_name, player)
-        if not location: continue
+        if not location:
+            continue
 
         if not location.advancement:
             location.progress_type = LocationProgressType.EXCLUDED
