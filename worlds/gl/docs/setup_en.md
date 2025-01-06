@@ -49,8 +49,8 @@ Double-click on your `.apgl` file to start the ROM patch process. Once the proce
 This game uses its own custom client, named Gauntlet Legends Client.
 Retroarch is only emulator this client will accept.
 
-Once both the client and the emulator are started, you must connect them. Once your ROM is open in Retroach,
-as long as the client is open they will be connected to eachother.
+Once both the client and the emulator are started, you must connect them. Once your ROM is open in Retroarch,
+as long as the client is open they will be connected to each other.
 
 To connect the client to the multiserver simply put `<address>:<port>` on the textfield on top and press enter (if the
 server uses password, type in the bottom textfield `/connect <address>:<port> [password]`).

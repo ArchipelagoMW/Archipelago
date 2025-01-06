@@ -77,7 +77,6 @@ class RetroSocket:
             b = b""
             for s in data[2:]:
                 if "-1" in s:
-                    logger.info("-1 response")
                     raise Exception("Client tried to read from an invalid address or ROM is not open.")
                 b += bytes.fromhex(s)
             return b
@@ -701,16 +700,9 @@ class GauntletLegendsContext(CommonContext):
                     and location not in self.obelisk_locations)
                     or location.id in [item.location for item in self.useful]
             ]
-            logger.info(f"Item Locations: {len(self.item_locations)}")
             self.chest_locations = [
                 location for location in raw_locations
                 if location not in self.obelisk_locations and location not in self.item_locations]
-            logger.info(f"Chest Locations: {len(self.chest_locations)}")
-            max_value: int = self.glslotdata['max']
-            logger.info(f"Items: {len(self.item_locations)} Chests: {len(self.chest_locations)} Obelisks: {len(self.obelisk_locations)}")
-            logger.info(
-                f"Locations: {len([location for location in self.obelisk_locations + self.item_locations + self.chest_locations if location.difficulty <= max_value and location.id not in self.locations_checked])} Difficulty: { max_value if self.glslotdata['instant_max'] else self.difficulty}",
-            )
         except Exception:
             logger.error(traceback.format_exc())
 
@@ -932,7 +924,6 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                     ctx.in_portal = False
                     ctx.init_refactor = False
                     if not ctx.scaled:
-                        logger.info("Scaling level...")
                         await asyncio.sleep(0.2)
                         await ctx.scale()
                     loading = await ctx.check_loading()
@@ -940,7 +931,6 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                 if ctx.in_game:
                     ctx.level_loading = False
                     if not ctx.objects_loaded:
-                        logger.info("Loading Objects...")
                         await ctx.load_objects(ctx)
                         await asyncio.sleep(1)
                     status = await ctx.level_status(ctx)

@@ -35,6 +35,7 @@ Items that can be placed into locations:
 - Runestones
 - Obelisks
 - Mirror Shards
+- Death
 
 ## What does another world's item look like in Gauntlet Legends?
 
