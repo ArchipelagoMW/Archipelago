@@ -58,7 +58,6 @@ class SA2BWorld(World):
     options_dataclass = SA2BOptions
     options: SA2BOptions
     topology_present = False
-    data_version = 7
 
     item_name_groups = item_groups
     item_name_to_id = {name: data.code for name, data in item_table.items()}

@@ -1,4 +1,4 @@
-from typing import Dict, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import CollectionRule, add_rule, allow_self_locking_items
@@ -12,9 +12,9 @@ if TYPE_CHECKING:
 class MessengerRules:
     player: int
     world: "MessengerWorld"
-    connection_rules: Dict[str, CollectionRule]
-    region_rules: Dict[str, CollectionRule]
-    location_rules: Dict[str, CollectionRule]
+    connection_rules: dict[str, CollectionRule]
+    region_rules: dict[str, CollectionRule]
+    location_rules: dict[str, CollectionRule]
     maximum_price: int
     required_seals: int
 
@@ -220,6 +220,8 @@ class MessengerRules:
         }
 
         self.location_rules = {
+            # hq
+            "Money Wrench": self.can_shop,
             # ninja village
             "Ninja Village Seal - Tree House":
                 self.has_dart,
@@ -231,6 +233,8 @@ class MessengerRules:
                 self.is_aerobatic,
             "Autumn Hills Seal - Trip Saws":
                 self.has_wingsuit,
+            "Autumn Hills Seal - Double Swing Saws":
+                self.has_vertical,
             # forlorn temple
             "Forlorn Temple Seal - Rocket Maze":
                 self.has_vertical,
@@ -430,6 +434,8 @@ class MessengerHardRules(MessengerRules):
             {
                 "Autumn Hills Seal - Spike Ball Darts":
                     lambda state: self.has_vertical(state) and self.has_windmill(state) or self.is_aerobatic(state),
+                "Autumn Hills Seal - Double Swing Saws":
+                    lambda state: self.has_vertical(state) or self.can_destroy_projectiles(state),
                 "Bamboo Creek - Claustro":
                     self.has_wingsuit,
                 "Bamboo Creek Seal - Spike Ball Pits":

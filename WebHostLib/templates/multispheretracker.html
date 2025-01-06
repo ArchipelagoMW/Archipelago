@@ -1,0 +1,72 @@
+{% extends "tablepage.html" %}
+{% block head %}
+    {{ super() }}
+    <title>Multiworld Sphere Tracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for("static", filename="styles/tracker.css") }}" />
+    <script type="application/ecmascript" src="{{ url_for("static", filename="assets/trackerCommon.js") }}"></script>
+{% endblock %}
+
+{% block body %}
+    {% include "header/dirtHeader.html" %}
+
+    <div id="tracker-wrapper" data-tracker="{{ room.tracker | suuid }}">
+        <div id="tracker-header-bar">
+            <input placeholder="Search" id="search" />
+
+            <div class="info">
+                {% if tracker_data.get_spheres() %}
+                This tracker lists already found locations by their logical access sphere.
+                It ignores items that cannot be sent
+                and will therefore differ from the sphere numbers in the spoiler playthrough.
+                This tracker will automatically update itself periodically.
+                {% else %}
+                This Multiworld has no Sphere data, likely due to being too old, cannot display data.
+                {% endif %}
+            </div>
+        </div>
+
+        <div id="tables-container">
+        {%- for team, players in tracker_data.get_all_players().items() %}
+            <div class="table-wrapper">
+                <table id="checks-table" class="table non-unique-item-table">
+                    <thead>
+                        <tr>
+                            <th>Sphere</th>
+                            {#- Mimicking hint table header for familiarity. #}
+                            <th>Finder</th>
+                            <th>Receiver</th>
+                            <th>Item</th>
+                            <th>Location</th>
+                            <th>Game</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {%- for sphere in tracker_data.get_spheres() %}
+                    {%- set current_sphere = loop.index %}
+                    {%- for player, sphere_location_ids in sphere.items() %}
+                        {%- set checked_locations = tracker_data.get_player_checked_locations(team, player) %}
+                        {%- set finder_game = tracker_data.get_player_game(team, player) %}
+                        {%- set player_location_data = tracker_data.get_player_locations(team, player) %}
+                        {%- for location_id in sphere_location_ids.intersection(checked_locations) %}
+                        <tr>
+                            {%- set item_id, receiver, item_flags = player_location_data[location_id] %}
+                            {%- set receiver_game = tracker_data.get_player_game(team, receiver) %}
+                            <td>{{ current_sphere }}</td>
+                            <td>{{ tracker_data.get_player_name(team, player) }}</td>
+                            <td>{{ tracker_data.get_player_name(team, receiver) }}</td>
+                            <td>{{ tracker_data.item_id_to_name[receiver_game][item_id] }}</td>
+                            <td>{{ tracker_data.location_id_to_name[finder_game][location_id] }}</td>
+                            <td>{{ finder_game }}</td>
+                        </tr>
+                        {%- endfor %}
+
+                    {%- endfor %}
+                    {%- endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        {%- endfor -%}
+        </div>
+    </div>
+{% endblock %}

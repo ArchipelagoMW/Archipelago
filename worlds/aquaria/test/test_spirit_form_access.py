@@ -4,7 +4,9 @@ Date: Thu, 18 Apr 2024 18:45:56 +0000
 Description: Unit test used to test accessibility of locations with and without the spirit form
 """
 
-from worlds.aquaria.test import AquariaTestBase
+from . import AquariaTestBase
+from ..Items import ItemNames
+from ..Locations import AquariaLocationNames
 
 
 class SpiritFormAccessTest(AquariaTestBase):
@@ -13,24 +15,23 @@ class SpiritFormAccessTest(AquariaTestBase):
     def test_spirit_form_location(self) -> None:
         """Test locations that require spirit form"""
         locations = [
-            "The veil bottom area, bulb in the spirit path",
-            "Mithalas city castle, Trident head",
-            "Open water skeleton path, King skull",
-            "Kelp forest bottom left area, Walker baby",
-            "Abyss right area, bulb behind the rock in the whale room",
-            "The whale, Verse egg",
-            "Ice cave, bulb in the room to the right",
-            "Ice cave, First bulbs in the top exit room",
-            "Ice cave, Second bulbs in the top exit room",
-            "Ice cave, third bulbs in the top exit room",
-            "Ice cave, bulb in the left room",
-            "Bubble cave, bulb in the left cave wall",
-            "Bubble cave, bulb in the right cave wall (behind the ice cristal)",
-            "Bubble cave, Verse egg",
-            "Sunken city left area, Girl Costume",
-            "Beating Mantis Shrimp Prime",
-            "First secret",
-            "Arnassi ruins, Arnassi Armor",
+            AquariaLocationNames.THE_VEIL_BOTTOM_AREA_BULB_IN_THE_SPIRIT_PATH,
+            AquariaLocationNames.MITHALAS_CITY_CASTLE_TRIDENT_HEAD,
+            AquariaLocationNames.OPEN_WATERS_SKELETON_PATH_KING_SKULL,
+            AquariaLocationNames.KELP_FOREST_BOTTOM_LEFT_AREA_WALKER_BABY,
+            AquariaLocationNames.ABYSS_RIGHT_AREA_BULB_BEHIND_THE_ROCK_IN_THE_WHALE_ROOM,
+            AquariaLocationNames.THE_WHALE_VERSE_EGG,
+            AquariaLocationNames.ICE_CAVERN_BULB_IN_THE_ROOM_TO_THE_RIGHT,
+            AquariaLocationNames.ICE_CAVERN_FIRST_BULB_IN_THE_TOP_EXIT_ROOM,
+            AquariaLocationNames.ICE_CAVERN_SECOND_BULB_IN_THE_TOP_EXIT_ROOM,
+            AquariaLocationNames.ICE_CAVERN_THIRD_BULB_IN_THE_TOP_EXIT_ROOM,
+            AquariaLocationNames.ICE_CAVERN_BULB_IN_THE_LEFT_ROOM,
+            AquariaLocationNames.BUBBLE_CAVE_BULB_IN_THE_LEFT_CAVE_WALL,
+            AquariaLocationNames.BUBBLE_CAVE_BULB_IN_THE_RIGHT_CAVE_WALL_BEHIND_THE_ICE_CRYSTAL,
+            AquariaLocationNames.BUBBLE_CAVE_VERSE_EGG,
+            AquariaLocationNames.SUNKEN_CITY_LEFT_AREA_GIRL_COSTUME,
+            AquariaLocationNames.BEATING_MANTIS_SHRIMP_PRIME,
+            AquariaLocationNames.FIRST_SECRET,
         ]
-        items = [["Spirit form"]]
+        items = [[ItemNames.SPIRIT_FORM]]
         self.assertAccessDependency(locations, items)

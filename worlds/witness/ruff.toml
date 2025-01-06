@@ -1,10 +1,10 @@
 line-length = 120
 
 [lint]
-select = ["E", "F", "W", "I", "N", "Q", "UP", "RUF", "ISC", "T20"]
-ignore = ["RUF012", "RUF100"]
+select = ["C", "E", "F", "R", "W", "I", "N", "Q", "UP", "RUF", "ISC", "T20"]
+ignore = ["C9", "RUF012", "RUF100"]
 
-[per-file-ignores]
+[lint.per-file-ignores]
 # The way options definitions work right now, I am forced to break line length requirements.
 "options.py" = ["E501"]
 # The import list would just be so big if I imported every option individually in presets.py

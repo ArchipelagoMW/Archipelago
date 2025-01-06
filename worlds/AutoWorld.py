@@ -7,10 +7,10 @@ import sys
 import time
 from random import Random
 from dataclasses import make_dataclass
-from typing import (Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping, Optional, Set, TextIO, Tuple,
+from typing import (Any, Callable, ClassVar, Dict, FrozenSet, Iterable, List, Mapping, Optional, Set, TextIO, Tuple,
                     TYPE_CHECKING, Type, Union)
 
-from Options import item_and_loc_options, OptionGroup, PerGameCommonOptions
+from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
@@ -33,7 +33,10 @@ class AutoWorldRegister(type):
         # lazy loading + caching to minimize runtime cost
         if cls.__settings is None:
             from settings import get_settings
-            cls.__settings = get_settings()[cls.settings_key]
+            try:
+                cls.__settings = get_settings()[cls.settings_key]
+            except AttributeError:
+                return None
         return cls.__settings
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
@@ -123,8 +126,8 @@ class WebWorldRegister(type):
             assert group.options, "A custom defined Option Group must contain at least one Option."
             # catch incorrectly titled versions of the prebuilt groups so they don't create extra groups
             title_name = group.name.title()
-            if title_name in prebuilt_options:
-                group.name = title_name
+            assert title_name not in prebuilt_options or title_name == group.name, \
+                f"Prebuilt group name \"{group.name}\" must be \"{title_name}\""
 
             if group.name == "Item & Location Options":
                 assert not any(option in item_and_loc_options for option in group.options), \
@@ -223,6 +226,21 @@ class WebWorld(metaclass=WebWorldRegister):
     option_groups: ClassVar[List[OptionGroup]] = []
     """Ordered list of option groupings. Any options not set in a group will be placed in a pre-built "Game Options"."""
 
+    rich_text_options_doc = False
+    """Whether the WebHost should render Options' docstrings as rich text.
+
+    If this is True, Options' docstrings are interpreted as reStructuredText_,
+    the standard Python markup format. In the WebHost, they're rendered to HTML
+    so that lists, emphasis, and other rich text features are displayed
+    properly.
+
+    If this is False, the docstrings are instead interpreted as plain text, and
+    displayed as-is on the WebHost with whitespace preserved. For backwards
+    compatibility, this is the default.
+
+    .. _reStructuredText: https://docutils.sourceforge.io/rst.html
+    """
+
     location_descriptions: Dict[str, str] = {}
     """An optional map from location names (or location group names) to brief descriptions for users."""
 
@@ -258,18 +276,6 @@ class World(metaclass=AutoWorldRegister):
     location_name_groups: ClassVar[Dict[str, Set[str]]] = {}
     """maps location group names to sets of locations. Example: {"Sewer": {"Sewer Key Drop 1", "Sewer Key Drop 2"}}"""
 
-    data_version: ClassVar[int] = 0
-    """
-    Increment this every time something in your world's names/id mappings changes.
-
-    When this is set to 0, that world's DataPackage is considered in "testing mode", which signals to servers/clients
-    that it should not be cached, and clients should request that world's DataPackage every connection. Not
-    recommended for production-ready worlds.
-
-    Deprecated. Clients should utilize `checksum` to determine if DataPackage has changed since last connection and
-    request a new DataPackage, if necessary.
-    """
-
     required_client_version: Tuple[int, int, int] = (0, 1, 6)
     """
     override this if changes to a world break forward-compatibility of the client
@@ -277,7 +283,7 @@ class World(metaclass=AutoWorldRegister):
     future. Protocol level compatibility check moved to MultiServer.min_client_version.
     """
 
-    required_server_version: Tuple[int, int, int] = (0, 2, 4)
+    required_server_version: Tuple[int, int, int] = (0, 5, 0)
     """update this if the resulting multidata breaks forward-compatibility of the server"""
 
     hint_blacklist: ClassVar[FrozenSet[str]] = frozenset()
@@ -288,6 +294,14 @@ class World(metaclass=AutoWorldRegister):
 
     web: ClassVar[WebWorld] = WebWorld()
     """see WebWorld for options"""
+
+    origin_region_name: str = "Menu"
+    """Name of the Region from which accessibility is tested."""
+
+    explicit_indirect_conditions: bool = True
+    """If True, the world implementation is supposed to use MultiWorld.register_indirect_condition() correctly.
+    If False, everything is rechecked at every step, which is slower computationally, 
+    but may be desirable in complex/dynamic worlds."""
 
     multiworld: "MultiWorld"
     """autoset on creation. The MultiWorld object for the currently generating multiworld."""
@@ -331,7 +345,7 @@ class World(metaclass=AutoWorldRegister):
 
     # overridable methods that get called by Main.py, sorted by execution order
     # can also be implemented as a classmethod and called "stage_<original_name>",
-    # in that case the MultiWorld object is passed as an argument, and it gets called once for the entire multiworld.
+    # in that case the MultiWorld object is passed as the first argument, and it gets called once for the entire multiworld.
     # An example of this can be found in alttp as stage_pre_fill
 
     @classmethod
@@ -469,6 +483,7 @@ class World(metaclass=AutoWorldRegister):
         group = cls(multiworld, new_player_id)
         group.options = cls.options_dataclass(**{option_key: option.from_any(option.default)
                                                  for option_key, option in cls.options_dataclass.type_hints.items()})
+        group.options.accessibility = ItemsAccessibility(ItemsAccessibility.option_items)
 
         return group
 
@@ -519,11 +534,23 @@ class World(metaclass=AutoWorldRegister):
     def get_location(self, location_name: str) -> "Location":
         return self.multiworld.get_location(location_name, self.player)
 
+    def get_locations(self) -> "Iterable[Location]":
+        return self.multiworld.get_locations(self.player)
+
     def get_entrance(self, entrance_name: str) -> "Entrance":
         return self.multiworld.get_entrance(entrance_name, self.player)
 
+    def get_entrances(self) -> "Iterable[Entrance]":
+        return self.multiworld.get_entrances(self.player)
+
     def get_region(self, region_name: str) -> "Region":
         return self.multiworld.get_region(region_name, self.player)
+
+    def get_regions(self) -> "Iterable[Region]":
+        return self.multiworld.get_regions(self.player)
+
+    def push_precollected(self, item: Item) -> None:
+        self.multiworld.push_precollected(item)
 
     @property
     def player_name(self) -> str:
@@ -543,7 +570,6 @@ class World(metaclass=AutoWorldRegister):
             "item_name_to_id": cls.item_name_to_id,
             "location_name_groups": sorted_location_name_groups,
             "location_name_to_id": cls.location_name_to_id,
-            "version": cls.data_version,
         }
         res["checksum"] = data_package_checksum(res)
         return res

@@ -782,8 +782,8 @@ def get_nonnative_item_sprite(code: int) -> int:
 
 
 def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
-    local_random = world.per_slot_randoms[player]
     local_world = world.worlds[player]
+    local_random = local_world.random
 
     # patch items
 
@@ -1269,7 +1269,8 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         rom.write_int32(0x18020C, 0)  # starting time (in frames, sint32)
 
     # set up goals for treasure hunt
-    rom.write_int16(0x180163, local_world.treasure_hunt_required)
+    rom.write_int16(0x180163, max(0, local_world.treasure_hunt_required -
+                    sum(1 for item in world.precollected_items[player] if item.name == "Triforce Piece")))
     rom.write_bytes(0x180165, [0x0E, 0x28])  #  Triforce Piece Sprite
     rom.write_byte(0x180194, 1)  # Must turn in triforced pieces (instant win not enabled)
 
@@ -1372,7 +1373,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
                          'Golden Sword', 'Tempered Sword', 'Master Sword', 'Fighter Sword', 'Progressive Sword',
                          'Mirror Shield', 'Red Shield', 'Blue Shield', 'Progressive Shield',
                          'Red Mail', 'Blue Mail', 'Progressive Mail',
-                         'Magic Upgrade (1/4)', 'Magic Upgrade (1/2)'}:
+                         'Magic Upgrade (1/4)', 'Magic Upgrade (1/2)', 'Triforce Piece'}:
             continue
 
         set_table = {'Book of Mudora': (0x34E, 1), 'Hammer': (0x34B, 1), 'Bug Catching Net': (0x34D, 1),
@@ -1866,7 +1867,7 @@ def apply_oof_sfx(rom, oof: str):
 def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, sprite: str, oof: str, palettes_options,
                        world=None, player=1, allow_random_on_event=False, reduceflashing=False,
                        triforcehud: str = None, deathlink: bool = False, allowcollect: bool = False):
-    local_random = random if not world else world.per_slot_randoms[player]
+    local_random = random if not world else world.worlds[player].random
     disable_music: bool = not music
     # enable instant item menu
     if menuspeed == 'instant':
@@ -2196,8 +2197,9 @@ def write_string_to_rom(rom, target, string):
 
 def write_strings(rom, world, player):
     from . import ALTTPWorld
-    local_random = world.per_slot_randoms[player]
+
     w: ALTTPWorld = world.worlds[player]
+    local_random = w.random
 
     tt = TextTable()
     tt.removeUnwantedText()
@@ -2424,7 +2426,7 @@ def write_strings(rom, world, player):
     if world.worlds[player].has_progressive_bows and (w.difficulty_requirements.progressive_bow_limit >= 2 or (
             world.swordless[player] or world.glitches_required[player] == 'no_glitches')):
         prog_bow_locs = world.find_item_locations('Progressive Bow', player, True)
-        world.per_slot_randoms[player].shuffle(prog_bow_locs)
+        local_random.shuffle(prog_bow_locs)
         found_bow = False
         found_bow_alt = False
         while prog_bow_locs and not (found_bow and found_bow_alt):
@@ -2475,6 +2477,9 @@ def write_strings(rom, world, player):
     tt['sahasrahla_quest_have_master_sword'] = Sahasrahla2_texts[local_random.randint(0, len(Sahasrahla2_texts) - 1)]
     tt['blind_by_the_light'] = Blind_texts[local_random.randint(0, len(Blind_texts) - 1)]
 
+    triforce_pieces_required = max(0, w.treasure_hunt_required -
+                                   sum(1 for item in world.precollected_items[player] if item.name == "Triforce Piece"))
+
     if world.goal[player] in ['triforce_hunt', 'local_triforce_hunt']:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Get the Triforce Pieces.'
         tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
@@ -2482,16 +2487,16 @@ def write_strings(rom, world, player):
             tt['sign_ganon'] = 'Go find the Triforce pieces with your friends... Ganon is invincible!'
         else:
             tt['sign_ganon'] = 'Go find the Triforce pieces... Ganon is invincible!'
-        if w.treasure_hunt_required > 1:
+        if triforce_pieces_required > 1:
             tt['murahdahla'] = "Hello @. I\nam Murahdahla, brother of\nSahasrahla and Aginah. Behold the power of\n" \
                                "invisibility.\n\n\n\n… … …\n\nWait! you can see me? I knew I should have\n" \
                                "hidden in  a hollow tree. If you bring\n%d Triforce pieces out of %d, I can reassemble it." % \
-                               (w.treasure_hunt_required, w.treasure_hunt_total)
+                               (triforce_pieces_required, w.treasure_hunt_total)
         else:
             tt['murahdahla'] = "Hello @. I\nam Murahdahla, brother of\nSahasrahla and Aginah. Behold the power of\n" \
                                "invisibility.\n\n\n\n… … …\n\nWait! you can see me? I knew I should have\n" \
                                "hidden in  a hollow tree. If you bring\n%d Triforce piece out of %d, I can reassemble it." % \
-                               (w.treasure_hunt_required, w.treasure_hunt_total)
+                               (triforce_pieces_required, w.treasure_hunt_total)
     elif world.goal[player] in ['pedestal']:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Your goal is at the pedestal.'
         tt['ganon_phase_3_alt'] = 'Seriously? Go Away, I will not Die.'
@@ -2500,20 +2505,20 @@ def write_strings(rom, world, player):
         tt['ganon_fall_in'] = Ganon1_texts[local_random.randint(0, len(Ganon1_texts) - 1)]
         tt['ganon_fall_in_alt'] = 'You cannot defeat me until you finish your goal!'
         tt['ganon_phase_3_alt'] = 'Got wax in\nyour ears?\nI can not die!'
-        if w.treasure_hunt_required > 1:
+        if triforce_pieces_required > 1:
             if world.goal[player] == 'ganon_triforce_hunt' and world.players > 1:
                 tt['sign_ganon'] = 'You need to find %d Triforce pieces out of %d with your friends to defeat Ganon.' % \
-                                   (w.treasure_hunt_required, w.treasure_hunt_total)
+                                   (triforce_pieces_required, w.treasure_hunt_total)
             elif world.goal[player] in ['ganon_triforce_hunt', 'local_ganon_triforce_hunt']:
                 tt['sign_ganon'] = 'You need to find %d Triforce pieces out of %d to defeat Ganon.' % \
-                                   (w.treasure_hunt_required, w.treasure_hunt_total)
+                                   (triforce_pieces_required, w.treasure_hunt_total)
         else:
             if world.goal[player] == 'ganon_triforce_hunt' and world.players > 1:
                 tt['sign_ganon'] = 'You need to find %d Triforce piece out of %d with your friends to defeat Ganon.' % \
-                                   (w.treasure_hunt_required, w.treasure_hunt_total)
+                                   (triforce_pieces_required, w.treasure_hunt_total)
             elif world.goal[player] in ['ganon_triforce_hunt', 'local_ganon_triforce_hunt']:
                 tt['sign_ganon'] = 'You need to find %d Triforce piece out of %d to defeat Ganon.' % \
-                                   (w.treasure_hunt_required, w.treasure_hunt_total)
+                                   (triforce_pieces_required, w.treasure_hunt_total)
 
     tt['kakariko_tavern_fisherman'] = TavernMan_texts[local_random.randint(0, len(TavernMan_texts) - 1)]
 
@@ -2538,12 +2543,12 @@ def write_strings(rom, world, player):
         tt['menu_start_2'] = "{MENU}\n{SPEED0}\n≥@'s house\n Dark Chapel\n{CHOICE3}"
         tt['menu_start_3'] = "{MENU}\n{SPEED0}\n≥@'s house\n Dark Chapel\n Mountain Cave\n{CHOICE2}"
 
-    for at, text in world.plando_texts[player].items():
+    for at, text, _ in world.plando_texts[player]:
 
         if at not in tt:
             raise Exception(f"No text target \"{at}\" found.")
         else:
-            tt[at] = text
+            tt[at] = "\n".join(text)
 
     rom.write_bytes(0xE0000, tt.getBytes())
 

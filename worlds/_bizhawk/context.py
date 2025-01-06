@@ -151,21 +151,17 @@ class BizHawkClientContext(CommonContext):
                 return TextCategory.INCOMING
             else:
                 return TextCategory.OTHER
-
-    def run_gui(self):
-        from kvui import GameManager
-
-        class BizHawkManager(GameManager):
-            base_title = "Archipelago BizHawk Client"
-
-        self.ui = BizHawkManager(self)
-        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
     
     def on_print_json(self, args: Dict):
         super().on_print_json(args)
         if self.bizhawk_ctx.connection_status == ConnectionStatus.CONNECTED:
             if self._categorize_text(args) in self.text_passthrough_categories:
                 Utils.async_start(display_message(self.bizhawk_ctx, self.rawjsontotextparser(copy.deepcopy(args["data"]))))
+
+    def make_gui(self):
+        ui = super().make_gui()
+        ui.base_title = "Archipelago BizHawk Client"
+        return ui
 
     def on_package(self, cmd, args):
         if cmd == "Connected":
@@ -267,6 +263,7 @@ async def _game_watcher(ctx: BizHawkClientContext):
                 ctx.auth = None
                 ctx.username = None
                 ctx.client_handler = None
+                ctx.finished_game = False
                 await ctx.disconnect(False)
             ctx.rom_hash = rom_hash
 
@@ -276,7 +273,8 @@ async def _game_watcher(ctx: BizHawkClientContext):
 
                 if ctx.client_handler is None:
                     if not showed_no_handler_message:
-                        logger.info("No handler was found for this game")
+                        logger.info("No handler was found for this game. Double-check that the apworld is installed "
+                                    "correctly and that you loaded the right ROM file.")
                         showed_no_handler_message = True
                     continue
                 else:
@@ -340,11 +338,11 @@ async def _patch_and_run_game(patch_file: str):
         logger.exception(exc)
 
 
-def launch() -> None:
+def launch(*launch_args) -> None:
     async def main():
         parser = get_base_parser()
         parser.add_argument("patch_file", default="", type=str, nargs="?", help="Path to an Archipelago patch file")
-        args = parser.parse_args()
+        args = parser.parse_args(launch_args)
 
         ctx = BizHawkClientContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")

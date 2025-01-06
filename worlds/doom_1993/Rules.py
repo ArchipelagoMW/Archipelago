@@ -403,9 +403,8 @@ def set_episode4_rules(player, multiworld, pro):
         state.has("Chaingun", player, 1)) and       (state.has("Plasma gun", player, 1) or
         state.has("BFG9000", player, 1)))
     set_rule(multiworld.get_entrance("Hell Beneath (E4M1) Main -> Hell Beneath (E4M1) Blue", player), lambda state:
-        state.has("Shotgun", player, 1) or
-        state.has("Chaingun", player, 1) or
-        state.has("Hell Beneath (E4M1) - Blue skull key", player, 1))
+       (state.has("Hell Beneath (E4M1) - Blue skull key", player, 1)) and       (state.has("Shotgun", player, 1) or
+        state.has("Chaingun", player, 1)))
 
     # Perfect Hatred (E4M2)
     set_rule(multiworld.get_entrance("Hub -> Perfect Hatred (E4M2) Main", player), lambda state:
