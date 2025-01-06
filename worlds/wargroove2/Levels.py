@@ -26,8 +26,14 @@ FINAL_LEVEL_COUNT = 4
 
 
 def set_region_exit_rules(region: Region, world: "Wargroove2World", locations: List[str]) -> None:
-    exit_rule = lambda state: any(
-        world.get_location(location).access_rule(state) for location in locations)
+    rules = [world.get_location(location_name).access_rule for location_name in locations]
+
+    def exit_rule(state):
+        for rule in rules:
+            if rule(state):
+                return True
+        return False
+
     for region_exit in region.exits:
         region_exit.access_rule = exit_rule
 
