@@ -34,7 +34,7 @@ class CatQuestWorld(World):
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = CatQuestOptions
     options: CatQuestOptions
 
-    required_client_version = (0, 4, 4)
+    required_client_version = (0, 4, 0)
 
     def __init__(self, multiworld, player):
         super(CatQuestWorld, self).__init__(multiworld, player)
