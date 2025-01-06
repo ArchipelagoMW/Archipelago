@@ -66,12 +66,12 @@ class Wargroove2Level:
 
             set_rule(world.get_location(location_name), rule)
             loc_id = location_table.get(location_name, 0)
-            extras = 1
+            total_locations = 1
             if loc_id is not None and location_name.endswith("Victory"):
-                extras = world.options.victory_locations.value
+                total_locations = world.options.victory_locations.value
             elif loc_id is not None:
-                extras = world.options.objective_locations.value
-            for i in range(1, extras):
+                total_locations = world.options.objective_locations.value
+            for i in range(1, total_locations):
                 set_rule(world.get_location(location_name + f" Extra {i}"), rule)
         region = world.get_region(self.region_name)
         set_region_exit_rules(region, world, self.victory_locations, operator='and')
@@ -84,12 +84,12 @@ class Wargroove2Level:
                 loc_id = location_table.get(location, 0)
                 wg2_location = Wargroove2Location(player, location, loc_id, region)
                 region.locations.append(wg2_location)
-                extras = 1
+                total_locations = 1
                 if loc_id is not None and location.endswith("Victory"):
-                    extras = multiworld.worlds[player].options.victory_locations.value
+                    total_locations = multiworld.worlds[player].options.victory_locations.value
                 elif loc_id is not None:
-                    extras = multiworld.worlds[player].options.objective_locations.value
-                for i in range(1, extras):
+                    total_locations = multiworld.worlds[player].options.objective_locations.value
+                for i in range(1, total_locations):
                     extra_location = location + f" Extra {i}"
                     loc_id = location_table.get(extra_location, 0)
                     wg2_location = Wargroove2Location(player, extra_location, loc_id, region)
