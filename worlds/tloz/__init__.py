@@ -129,9 +129,9 @@ class TLoZWorld(World):
         if name == "Power Bracelet":
             return TLoZItem(
                 name,
-                item_table[name].classification
-                    if self.options.EntranceShuffle.value not in [2, 3, 5]
-                    else ItemClassification.progression,
+                    ItemClassification.progression
+                    if (self.options.EntranceShuffle.value in [2, 3, 5] and self.options.RandomizeWarpCaves)
+                    else item_table[name].classification,
                 self.item_name_to_id[name],
                 self.player)
         return TLoZItem(name, item_table[name].classification, self.item_name_to_id[name], self.player)

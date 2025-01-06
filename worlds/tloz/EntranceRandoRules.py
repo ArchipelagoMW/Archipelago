@@ -100,7 +100,7 @@ overworld_entrances_data = {
 }
 
 dungeon_entrances = [
-    "Screen 37", "Screen 3C", "Screen 74", "Screen 54", "Screen 0B", "Screen 22", "Screen 24", "Screen 6D", "Screen 05"
+    "Screen 37", "Screen 3C", "Screen 74", "Screen 45", "Screen 0B", "Screen 22", "Screen 42", "Screen 6D", "Screen 05"
 ]
 
 major_entrances = [  # Dungeon entrances, major item locations, take any caves.
