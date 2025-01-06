@@ -96,10 +96,10 @@ purposes.
 
 ### `launchmod_darksouls3.bat` isn't working
 
-Sometimes `launchmod_darksouls3.bat` will briefly flash a terminal onscreen and
-then terminate without actually starting the game. This is usually caused by
-some issue communicating with Steam either to find `DarkSoulsIII.exe` or to
-launch it properly. If this is happening to you, make sure:
+Sometimes `launchmod_darksouls3.bat` will briefly flash a terminal on your
+screen and then terminate without actually starting the game. This is usually
+caused by some issue communicating with Steam either to find `DarkSoulsIII.exe`
+or to launch it properly. If this is happening to you, make sure:
 
 * You have DS3 1.15.2 installed. This is the latest patch as of January 2025.
   (Note that older versions of Archipelago required an older patch, but that
