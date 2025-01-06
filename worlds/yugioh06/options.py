@@ -2,7 +2,6 @@ import typing
 from dataclasses import dataclass
 
 from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle, OptionDict
-from worlds.ladx.Options import DefaultOffToggle
 from worlds.yugioh06.card_data import get_all_valid_cards_set
 
 
@@ -205,7 +204,7 @@ class BoosterPackPrices(Range):
     default = 100
 
 
-class NormalizeBoosterPackRarities(DefaultOffToggle):
+class NormalizeBoosterPackRarities(Toggle):
     """All cards in packs are commons"""
     display_name = "Normalize Booster Pack Rarities"
 
