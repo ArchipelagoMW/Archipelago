@@ -66,10 +66,12 @@ class TLOZClient(BizHawkClient):
                 self.major_location_offsets["Magical Sword Grave"] = magical_sword_grave_location
                 self.major_location_offsets["Letter Cave"] = letter_cave_location
             await self.check_victory(ctx)
-            await self.location_check(ctx)
-            await self.received_items_check(ctx)
-            await self.resolve_shop_items(ctx)
-            await self.resolve_triforce_fragments(ctx)
+            game_mode = await self.read_ram_value(ctx, Rom.game_mode)
+            if game_mode == 0x05:
+                await self.location_check(ctx)
+                await self.received_items_check(ctx)
+                await self.resolve_shop_items(ctx)
+                await self.resolve_triforce_fragments(ctx)
 
         except bizhawk.RequestFailedError:
             # The connector didn't respond. Exit handler and return to main loop to reconnect
@@ -154,11 +156,13 @@ class TLOZClient(BizHawkClient):
 
     async def resolve_triforce_fragments(self, ctx):
         current_triforce_count = await self.read_ram_value(ctx, Rom.triforce_count)
-        current_triforce_byte = 0xFF >> (8 - current_triforce_count)
+        current_triforce_byte = 0xFF >> (8 - min(current_triforce_count, 8))
         await self.write(ctx, Rom.triforce_fragments, current_triforce_byte)
 
     async def write_item(self, ctx, item_name):
         item_game_id = Items.item_game_ids[item_name]
+        if item_name == "Bomb":
+            item_game_id = 0x29 # Hack to allow bombs to be shown being lifted.
         await self.write(ctx, Rom.item_to_lift, item_game_id)
         await self.write(ctx, Rom.item_lift_timer, 128) # 128 frames of lifting an item
         await self.write(ctx, Rom.sound_effect_queue, 4) # "Found secret" sound
@@ -186,7 +190,6 @@ class TLOZClient(BizHawkClient):
             current_max_bombs_value = await self.read_ram_value(ctx, Rom.max_bombs)
             await self.write(ctx, Rom.bombs, min(current_max_bombs_value, current_bombs_value + 4))
         elif item_name == "Bow":
-            current_bow_value = await self.read_ram_value(ctx, Rom.bow)
             await self.write(ctx, Rom.bow, 1)
         elif item_name == "Arrow":
             current_arrow_value = await self.read_ram_value(ctx, Rom.arrow)
@@ -196,10 +199,10 @@ class TLOZClient(BizHawkClient):
             await self.write(ctx, Rom.arrow, max(2, current_arrow_value))
         elif item_name == "Candle":
             current_candle_value = await self.read_ram_value(ctx, Rom.candle)
-            await self.write(ctx, Rom.arrow, max(1, current_candle_value))
+            await self.write(ctx, Rom.candle, max(1, current_candle_value))
         elif item_name == "Red Candle":
-            current_candle_value = await self.read_ram_value(ctx, Rom.arrow)
-            await self.write(ctx, Rom.arrow, max(2, current_candle_value))
+            current_candle_value = await self.read_ram_value(ctx, Rom.candle)
+            await self.write(ctx, Rom.candle, max(2, current_candle_value))
         elif item_name == "Recorder":
             await self.write(ctx, Rom.recorder, 1)
         elif item_name == "Water of Life (Blue)":
@@ -216,8 +219,9 @@ class TLOZClient(BizHawkClient):
             await self.write(ctx, Rom.raft, 1)
         elif item_name == "Blue Ring":
             current_ring_value = await self.read_ram_value(ctx, Rom.ring)
-            await self.write(ctx, Rom.ring, max(1, current_ring_value))
-            await bizhawk.write(ctx.bizhawk_ctx, [(0x0B92, [0x32], self.sram), (0x0804, [0x32], self.sram)])
+            if current_ring_value < 2:
+                await self.write(ctx, Rom.ring, max(1, current_ring_value))
+                await bizhawk.write(ctx.bizhawk_ctx, [(0x0B92, [0x32], self.sram), (0x0804, [0x32], self.sram)])
         elif item_name == "Red Ring":
             current_ring_value = await self.read_ram_value(ctx, Rom.ring)
             await self.write(ctx, Rom.ring, max(2, current_ring_value))
@@ -233,11 +237,11 @@ class TLOZClient(BizHawkClient):
         elif item_name == "Heart Container":
             current_heart_byte_value = await self.read_ram_value(ctx, Rom.heart_containers)
             current_container_count = min(((current_heart_byte_value & 0xF0) >> 4) + 1, 15)
-            current_hearts_count = min((current_heart_byte_value & 0xF0) + 1, 15)
+            current_hearts_count = min((current_heart_byte_value & 0x0F) + 1, 15)
             await self.write(ctx, Rom.heart_containers, (current_container_count << 4) | current_hearts_count)
         elif item_name == "Triforce Fragment":
             current_triforce_value = await self.read_ram_value(ctx, Rom.triforce_count)
-            await self.write(ctx, Rom.triforce_fragments, max(current_triforce_value + 1, 8))
+            await self.write(ctx, Rom.triforce_count, min(current_triforce_value + 1, 8))
         elif item_name == "Boomerang":
             await self.write(ctx, Rom.boomerang, 1)
         elif item_name == "Magical Boomerang":
@@ -246,20 +250,24 @@ class TLOZClient(BizHawkClient):
             await self.write(ctx, Rom.magical_shield, 1)
         elif item_name == "Recovery Heart":
             current_heart_byte_value = await self.read_ram_value(ctx, Rom.heart_containers)
-            current_container_count = min(((current_heart_byte_value & 0xF0) >> 4), 15)
-            current_hearts_count = current_heart_byte_value & 0xF0
+            current_container_count = ((current_heart_byte_value & 0xF0) >> 4)
+            current_hearts_count = current_heart_byte_value & 0x0F
             if current_hearts_count >= current_container_count:
                 await self.write(ctx, Rom.partial_hearts, 0xFF)
-            current_hearts_count = min(current_hearts_count + 1, 15)
-            await self.write(ctx, Rom.heart_containers, (current_container_count << 4) | current_hearts_count)
+                await self.write(ctx, Rom.heart_containers, (current_container_count << 4) | current_container_count)
+            else:
+                current_hearts_count = min(current_hearts_count + 1, 15)
+                await self.write(ctx, Rom.heart_containers, (current_container_count << 4) | current_hearts_count)
         elif item_name == "Fairy":
             current_heart_byte_value = await self.read_ram_value(ctx, Rom.heart_containers)
-            current_container_count = min(((current_heart_byte_value & 0xF0) >> 4), 15)
-            current_hearts_count = current_heart_byte_value & 0xF0
-            if current_hearts_count >= current_container_count:
+            current_container_count = ((current_heart_byte_value & 0xF0) >> 4)
+            current_hearts_count = current_heart_byte_value & 0x0F
+            if (current_hearts_count + 3) >= current_container_count:
                 await self.write(ctx, Rom.partial_hearts, 0xFF)
-            current_hearts_count = min(current_hearts_count + 3, 15)
-            await self.write(ctx, Rom.heart_containers, (current_container_count << 4) | current_hearts_count)
+                await self.write(ctx, Rom.heart_containers, (current_container_count << 4) | current_container_count)
+            else:
+                current_hearts_count = min(current_hearts_count + 3, 15)
+                await self.write(ctx, Rom.heart_containers, (current_container_count << 4) | current_hearts_count)
         elif item_name == "Clock":
             await self.write(ctx, Rom.clock, 1)
         elif item_name == "Five Rupees":
@@ -268,6 +276,8 @@ class TLOZClient(BizHawkClient):
         elif item_name == "Small Key":
             current_keys = await self.read_ram_value(ctx, Rom.keys)
             await self.write(ctx, Rom.keys, min(current_keys + 1, 255))
+        elif item_name == "Food":
+            await self.write(ctx, Rom.food, 1)
         else:
             print(item_name)
             raise Exception

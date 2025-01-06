@@ -347,6 +347,30 @@ class TLoZWorld(World):
             }
         return slot_data
 
+    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
+        """
+        Fill in additional entrance information text into locations, which is displayed when hinted.
+        structure is {player_id: {location_id: text}} You will need to insert your own player_id.
+        """
+        if self.options.EntranceShuffle > 0:
+            hint_data.update({self.player: {}})
+            for location in self.multiworld.get_locations(self.player):
+                if not location.address: # Skip events
+                    continue
+                if location.name == "Armos Knights": # Armos are always in the same spot.
+                    continue
+                if location.name == "Ocean Heart Container": # Same for the ocean HC
+                    continue
+                current_region = location.parent_region
+                entrances = [entrance for entrance in current_region.entrances
+                                 if entrance.parent_region.name == "Overworld"]
+                if len(entrances) > 0: # Dungeon location
+                    entrance = [entrance for entrance in current_region.entrances if "Screen" in entrance.name].pop()
+                    hint_data[self.player][location.address] = entrance.name[-9:]
+                else: # Cave location
+                    screens = [entrance.name[:9] for entrance in current_region.entrances]
+                    hint_data[self.player][location.address] = ", ".join(screens)
+
 
 class TLoZItem(Item):
     game = 'The Legend of Zelda'
