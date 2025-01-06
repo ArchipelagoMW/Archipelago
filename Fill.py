@@ -582,7 +582,7 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         if unfilled:
             raise FillError(
                 f"Unable to fill all locations.\n" +
-                f"Unfilled Locations({len(unfilled)}): {unfilled}"
+                f"Unfilled locations({len(unfilled)}): {unfilled}"
             )
         else:
             logging.warning(
