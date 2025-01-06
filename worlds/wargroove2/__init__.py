@@ -129,7 +129,7 @@ class Wargroove2World(World):
         victory = Wargroove2Item("Wargroove 2 Victory", self.player)
         for i in range(0, 4):
             final_level = self.final_levels[i]
-            self.get_location(final_level.victory_locations[0]).place_locked_item(victory)
+            self.get_location(final_level.victory_location).place_locked_item(victory)
         # Placing victory event at final location
         self.multiworld.completion_condition[self.player] = lambda state: \
             state.has("Wargroove 2 Victory", self.player, self.options.final_levels.value)

@@ -25,17 +25,10 @@ LEVEL_COUNT = 28
 FINAL_LEVEL_COUNT = 4
 
 
-def set_region_exit_rules(region: Region, world: "Wargroove2World", locations: List[str]) -> None:
-    rules = [world.get_location(location_name).access_rule for location_name in locations]
-
-    def exit_rule(state):
-        for rule in rules:
-            if rule(state):
-                return True
-        return False
-
+def set_region_exit_rules(region: Region, world: "Wargroove2World", victory_location_name: str) -> None:
+    victory_location = world.get_location(victory_location_name)
     for region_exit in region.exits:
-        region_exit.access_rule = exit_rule
+        region_exit.access_rule = victory_location.access_rule
 
 
 LocationRules = dict[str, Callable[[int], CollectionRule] | None]
@@ -46,19 +39,15 @@ class Wargroove2Level:
     file_name: str
     location_rules: LocationRules
     region_name: str
-    victory_locations: List[str]
+    victory_location: str
     has_ocean: bool = True
 
-    def __init__(self, name: str, file_name: str, location_rules: LocationRules,
-                 victory_locations: List[str] | None = None, has_ocean: bool = True):
+    def __init__(self, name: str, file_name: str, location_rules: LocationRules, has_ocean: bool = True):
         self.name = name
         self.file_name = file_name
         self.location_rules = location_rules
         self.has_ocean = has_ocean
-        if victory_locations:
-            self.victory_locations = victory_locations
-        else:
-            self.victory_locations = [name + ': Victory']
+        self.victory_location = name + ': Victory'
 
     def define_access_rules(self, world: "Wargroove2World", player: int, additional_rule=None) -> None:
         for location_name, rule_factory in self.location_rules.items():
@@ -88,7 +77,7 @@ class Wargroove2Level:
             for i in range(1, total_locations):
                 set_rule(world.get_location(location_name + f" Extra {i}"), rule)
         region = world.get_region(self.region_name)
-        set_region_exit_rules(region, world, self.victory_locations)
+        set_region_exit_rules(region, world, self.victory_location)
 
     def define_region(self, name: str, world: "Wargroove2World", player: int, exits=None) -> Region:
         self.region_name = name
