@@ -214,10 +214,13 @@ class MegaMan2Client(BizHawkClient):
     last_wily: Optional[int] = None  # default to wily 1
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
-        from worlds._bizhawk import RequestFailedError, read
+        from worlds._bizhawk import RequestFailedError, read, get_memory_size
         from . import MM2World
 
         try:
+            if (await get_memory_size(ctx.bizhawk_ctx, "PRG ROM")) < 0x3FFB0:
+                return False
+
             game_name, version = (await read(ctx.bizhawk_ctx, [(0x3FFB0, 21, "PRG ROM"),
                                                                (0x3FFC8, 3, "PRG ROM")]))
             if game_name[:3] != b"MM2" or version != bytes(MM2World.world_version):
