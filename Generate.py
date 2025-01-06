@@ -110,11 +110,18 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     player_files = {}
     for file in os.scandir(args.player_files_path):
         fname = file.name
-        if file.is_file() and not fname.startswith(".") and \
+        if file.is_file() and not fname.startswith(".") and not fname.lower().endswith(".ini") and \
                 os.path.join(args.player_files_path, fname) not in {args.meta_file_path, args.weights_file_path}:
             path = os.path.join(args.player_files_path, fname)
             try:
-                weights_cache[fname] = read_weights_yamls(path)
+                weights_for_file = []
+                for doc_idx, yaml in enumerate(read_weights_yamls(path)):
+                    if yaml is None:
+                        logging.warning(f"Ignoring empty yaml document #{doc_idx + 1} in {fname}")
+                    else:
+                        weights_for_file.append(yaml)
+                weights_cache[fname] = tuple(weights_for_file)
+                        
             except Exception as e:
                 raise ValueError(f"File {fname} is invalid. Please fix your yaml.") from e
 
@@ -453,6 +460,10 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
             raise Exception(f"Option {option_key} has to be in a game's section, not on its own.")
 
     ret.game = get_choice("game", weights)
+    if not isinstance(ret.game, str):
+        if ret.game is None:
+            raise Exception('"game" not specified')
+        raise Exception(f"Invalid game: {ret.game}")
     if ret.game not in AutoWorldRegister.world_types:
         from worlds import failed_world_loads
         picks = Utils.get_fuzzy_results(ret.game, list(AutoWorldRegister.world_types) + failed_world_loads, limit=1)[0]
@@ -489,7 +500,8 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     for option_key in game_weights:
         if option_key in {"triggers", *valid_keys}:
             continue
-        logging.warning(f"{option_key} is not a valid option name for {ret.game} and is not present in triggers.")
+        logging.warning(f"{option_key} is not a valid option name for {ret.game} and is not present in triggers "
+                        f"for player {ret.name}.")
     if PlandoOptions.items in plando_options:
         ret.plando_items = copy.deepcopy(game_weights.get("plando_items", []))
     if ret.game == "A Link to the Past":

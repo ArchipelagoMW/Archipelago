@@ -66,8 +66,9 @@ class Castlevania64Client(BizHawkClient):
             self.received_deathlinks += 1
             if "cause" in args["data"]:
                 cause = args["data"]["cause"]
-                if len(cause) > 88:
-                    cause = cause[0x00:0x89]
+                # Truncate the death cause message at 120 characters.
+                if len(cause) > 120:
+                    cause = cause[0:120]
             else:
                 cause = f"{args['data']['source']} killed you!"
             self.death_causes.append(cause)
@@ -146,8 +147,18 @@ class Castlevania64Client(BizHawkClient):
                         text_color = bytearray([0xA2, 0x0B])
                     else:
                         text_color = bytearray([0xA2, 0x02])
+
+                    # Get the item's player's name. If it's longer than 40 characters, truncate it at 40.
+                    # 35 should be the max number of characters in a server player name right now (16 for the original
+                    # name + 16 for the alias + 3 for the added parenthesis and space), but if it ever goes higher it
+                    # should be future-proofed now. No need to truncate CV64 items names because its longest item name
+                    # gets nowhere near the limit.
+                    player_name = ctx.player_names[next_item.player]
+                    if len(player_name) > 40:
+                        player_name = player_name[0:40]
+
                     received_text, num_lines = cv64_text_wrap(f"{ctx.item_names.lookup_in_game(next_item.item)}\n"
-                                                              f"from {ctx.player_names[next_item.player]}", 96)
+                                                              f"from {player_name}", 96)
                     await bizhawk.guarded_write(ctx.bizhawk_ctx,
                                                 [(0x389BE1, [next_item.item & 0xFF], "RDRAM"),
                                                  (0x18C0A8, text_color + cv64_string_to_bytearray(received_text, False),

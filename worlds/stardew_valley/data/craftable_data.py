@@ -1,7 +1,7 @@
 from typing import Dict, List, Optional
 
 from .recipe_source import RecipeSource, StarterSource, QueenOfSauceSource, ShopSource, SkillSource, FriendshipSource, ShopTradeSource, CutsceneSource, \
-    ArchipelagoSource, LogicSource, SpecialOrderSource, FestivalShopSource, QuestSource, MasterySource
+    ArchipelagoSource, LogicSource, SpecialOrderSource, FestivalShopSource, QuestSource, MasterySource, SkillCraftsanitySource
 from ..mods.mod_data import ModNames
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
@@ -61,6 +61,11 @@ def cutscene_recipe(name: str, region: str, friend: str, hearts: int, ingredient
 
 def skill_recipe(name: str, skill: str, level: int, ingredients: Dict[str, int], mod_name: Optional[str] = None) -> CraftingRecipe:
     source = SkillSource(skill, level)
+    return create_recipe(name, ingredients, source, mod_name)
+
+
+def skill_craftsanity_recipe(name: str, skill: str, level: int, ingredients: Dict[str, int], mod_name: Optional[str] = None) -> CraftingRecipe:
+    source = SkillCraftsanitySource(skill, level)
     return create_recipe(name, ingredients, source, mod_name)
 
 
@@ -249,7 +254,9 @@ bait_maker = skill_recipe(Machine.bait_maker, Skill.fishing, 6, {MetalBar.iron: 
 charcoal_kiln = skill_recipe(Machine.charcoal_kiln, Skill.foraging, 2, {Material.wood: 20, MetalBar.copper: 2})
 
 crystalarium = skill_recipe(Machine.crystalarium, Skill.mining, 9, {Material.stone: 99, MetalBar.gold: 5, MetalBar.iridium: 2, ArtisanGood.battery_pack: 1})
-furnace = skill_recipe(Machine.furnace, Skill.mining, 1, {Ore.copper: 20, Material.stone: 25})
+# In-Game, the Furnace recipe is completely unique. It is the only recipe that is obtained in a cutscene after doing a skill-related action.
+# So it has a custom source that needs both the craftsanity item from AP and the skill, if craftsanity is enabled.
+furnace = skill_craftsanity_recipe(Machine.furnace, Skill.mining, 1, {Ore.copper: 20, Material.stone: 25})
 geode_crusher = special_order_recipe(Machine.geode_crusher, SpecialOrder.cave_patrol, {MetalBar.gold: 2, Material.stone: 50, Mineral.diamond: 1})
 mushroom_log = skill_recipe(Machine.mushroom_log, Skill.foraging, 4, {Material.hardwood: 10, Material.moss: 10})
 heavy_tapper = ap_recipe(Machine.heavy_tapper, {Material.hardwood: 30, MetalBar.radioactive: 1})

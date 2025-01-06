@@ -168,6 +168,22 @@ class TunicPlandoConnections(PlandoConnections):
     duplicate_exits = True
 
 
+class CombatLogic(Choice):
+    """
+    If enabled, the player will logically require a combination of stat upgrade items and equipment to get some checks or navigate to some areas, with a goal of matching the vanilla combat difficulty.
+    The player may still be expected to run past enemies, reset aggro (by using a checkpoint or doing a scene transition), or find sneaky paths to checks.
+    This option marks many more items as progression and may force weapons much earlier than normal.
+    Bosses Only makes it so that additional combat logic is only added to the boss fights and the Gauntlet.
+    If disabled, the standard, looser logic is used. The standard logic does not include stat upgrades, just minimal weapon requirements, such as requiring a Sword or Magic Wand for Quarry, or not requiring a weapon for Swamp.
+    """
+    internal_name = "combat_logic"
+    display_name = "More Combat Logic"
+    option_off = 0
+    option_bosses_only = 1
+    option_on = 2
+    default = 0
+
+
 class LaurelsZips(Toggle):
     """
     Choose whether to include using the Hero's Laurels to zip through gates, doors, and tricky spots.
@@ -183,7 +199,7 @@ class IceGrappling(Choice):
     Easy includes ice grappling enemies that are in range without luring them. May include clips through terrain.
     Medium includes using ice grapples to push enemies through doors or off ledges without luring them. Also includes bringing an enemy over to the Temple Door to grapple through it.
     Hard includes luring or grappling enemies to get to where you want to go.
-    The Medium and Hard options will give the player the Torch to return to the Overworld checkpoint to avoid softlocks. Using the Torch is considered in logic.
+    Enabling any of these difficulty options will give the player the Torch to return to the Overworld checkpoint to avoid softlocks. Using the Torch is considered in logic.
     Note: You will still be expected to ice grapple to the slime in East Forest from below with this option off.
     """
     internal_name = "ice_grappling"
@@ -201,7 +217,7 @@ class LadderStorage(Choice):
     Easy includes uses of Ladder Storage to get to open doors over a long distance without too much difficulty. May include convenient elevation changes (going up Mountain stairs, stairs in front of Special Shop, etc.).
     Medium includes the above as well as changing your elevation using the environment and getting knocked down by melee enemies mid-LS.
     Hard includes the above as well as going behind the map to enter closed doors from behind, shooting a fuse with the magic wand to knock yourself down at close range, and getting into the Cathedral Secret Legend room mid-LS.
-    Enabling any of these difficulty options will give the player the Torch item to return to the Overworld checkpoint to avoid softlocks. Using the Torch is considered in logic.
+    Enabling any of these difficulty options will give the player the Torch to return to the Overworld checkpoint to avoid softlocks. Using the Torch is considered in logic.
     Opening individual chests while doing ladder storage is excluded due to tedium.
     Knocking yourself out of LS with a bomb is excluded due to the problematic nature of consumables in logic.
     """
@@ -216,7 +232,7 @@ class LadderStorage(Choice):
 
 class LadderStorageWithoutItems(Toggle):
     """
-    If disabled, you logically require Stick, Sword, or Magic Orb to perform Ladder Storage.
+    If disabled, you logically require Stick, Sword, Magic Orb, or Shield to perform Ladder Storage.
     If enabled, you will be expected to perform Ladder Storage without progression items.
     This can be done with the plushie code, a Golden Coin, Prayer, and many other options.
 
@@ -259,6 +275,7 @@ class TunicOptions(PerGameCommonOptions):
     hexagon_goal: HexagonGoal
     extra_hexagon_percentage: ExtraHexagonPercentage
     laurels_location: LaurelsLocation
+    combat_logic: CombatLogic
     lanternless: Lanternless
     maskless: Maskless
     laurels_zips: LaurelsZips
@@ -272,6 +289,7 @@ class TunicOptions(PerGameCommonOptions):
 
 tunic_option_groups = [
     OptionGroup("Logic Options", [
+        CombatLogic,
         Lanternless,
         Maskless,
         LaurelsZips,
