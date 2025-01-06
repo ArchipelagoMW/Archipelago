@@ -1,8 +1,8 @@
-from typing import List, TYPE_CHECKING
+from typing import List, TYPE_CHECKING, Callable
 
 from BaseClasses import Region, Entrance
 from .Locations import location_table, Wargroove2Location
-from worlds.generic.Rules import set_rule
+from worlds.generic.Rules import set_rule, CollectionRule
 
 if TYPE_CHECKING:
     from . import Wargroove2World
@@ -38,16 +38,19 @@ def set_region_exit_rules(region: Region, world: "Wargroove2World", locations: L
         region_exit.access_rule = exit_rule
 
 
+LocationRules = dict[str, Callable[[int], CollectionRule]]
+
+
 class Wargroove2Level:
     name: str
     file_name: str
-    location_rules: dict
+    location_rules: LocationRules
     region_name: str
     victory_locations: List[str]
     has_ocean: bool = True
 
-    def __init__(self, name: str, file_name: str, location_rules: dict, victory_locations: List[str] | None = None,
-                 has_ocean: bool = True):
+    def __init__(self, name: str, file_name: str, location_rules: LocationRules,
+                 victory_locations: List[str] | None = None, has_ocean: bool = True):
         self.name = name
         self.file_name = file_name
         self.location_rules = location_rules
