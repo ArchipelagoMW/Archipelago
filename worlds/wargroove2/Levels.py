@@ -68,7 +68,7 @@ class Wargroove2Level:
                         return current_rule(state) and additional_rule(state)
 
             set_rule(world.get_location(location_name), rule)
-            loc_id = location_table.get(location_name, 0)
+            loc_id = location_table[location_name]
             total_locations = 1
             if loc_id is not None and location_name.endswith("Victory"):
                 total_locations = world.options.victory_locations.value
@@ -84,7 +84,7 @@ class Wargroove2Level:
         region = Region(name, player, world.multiworld)
         if self.location_rules.keys():
             for location in self.location_rules.keys():
-                loc_id = location_table.get(location, 0)
+                loc_id = location_table[location]
                 wg2_location = Wargroove2Location(player, location, loc_id, region)
                 region.locations.append(wg2_location)
                 total_locations = 1
@@ -94,7 +94,7 @@ class Wargroove2Level:
                     total_locations = world.options.objective_locations.value
                 for i in range(1, total_locations):
                     extra_location = location + f" Extra {i}"
-                    loc_id = location_table.get(extra_location, 0)
+                    loc_id = location_table[extra_location]
                     wg2_location = Wargroove2Location(player, extra_location, loc_id, region)
                     region.locations.append(wg2_location)
 
