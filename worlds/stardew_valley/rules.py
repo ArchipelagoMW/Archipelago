@@ -106,24 +106,19 @@ def set_rules(world):
 
 
 def set_isolated_locations_rules(logic: StardewLogic, multiworld, player):
-    set_rule(multiworld.get_location("Galaxy Sword Shrine", player),
-             logic.has("Prismatic Shard"))
-    set_rule(multiworld.get_location("Krobus Stardrop", player),
-             logic.money.can_spend(20000))
-    set_rule(multiworld.get_location("Demetrius's Breakthrough", player),
-             logic.money.can_have_earned_total(25000))
+    set_location_rule(multiworld, player, "Galaxy Sword Shrine", logic.has("Prismatic Shard"))
+    set_location_rule(multiworld, player, "Krobus Stardrop", logic.money.can_spend(20000))
+    set_location_rule(multiworld, player, "Demetrius's Breakthrough", logic.money.can_have_earned_total(25000))
 
 
 def set_tool_rules(logic: StardewLogic, multiworld, player, content: StardewContent):
     if not content.features.tool_progression.is_progressive:
         return
 
-    set_rule(multiworld.get_location("Purchase Fiberglass Rod", player),
-             (logic.skill.has_level(Skill.fishing, 2) & logic.money.can_spend(1800)))
-    set_rule(multiworld.get_location("Purchase Iridium Rod", player),
-             (logic.skill.has_level(Skill.fishing, 6) & logic.money.can_spend(7500)))
+    set_location_rule(multiworld, player, "Purchase Fiberglass Rod", (logic.skill.has_level(Skill.fishing, 2) & logic.money.can_spend(1800)))
+    set_location_rule(multiworld, player, "Purchase Iridium Rod", (logic.skill.has_level(Skill.fishing, 6) & logic.money.can_spend(7500)))
 
-    set_rule(multiworld.get_location("Copper Pan Cutscene", player), logic.received("Glittering Boulder Removed"))
+    set_location_rule(multiworld, player, "Copper Pan Cutscene", logic.received("Glittering Boulder Removed"))
 
     materials = [None, "Copper", "Iron", "Gold", "Iridium"]
     tool = [Tool.hoe, Tool.pickaxe, Tool.axe, Tool.watering_can, Tool.trash_can, Tool.pan]
@@ -168,7 +163,7 @@ def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiw
         if bundle_room.name == CCRoom.abandoned_joja_mart or bundle_room.name == CCRoom.raccoon_requests:
             continue
         room_location = f"Complete {bundle_room.name}"
-        set_rule(multiworld.get_location(room_location, player), And(*room_rules))
+        set_location_rule(multiworld, player, room_location, And(*room_rules))
 
 
 def set_skills_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, content: StardewContent):
@@ -344,20 +339,15 @@ def set_ginger_island_rules(logic: StardewLogic, multiworld, player, world_optio
 
     set_boat_repair_rules(logic, multiworld, player)
     set_island_parrot_rules(logic, multiworld, player)
-    set_rule(multiworld.get_location("Open Professor Snail Cave", player),
-             logic.has(Bomb.cherry_bomb))
-    set_rule(multiworld.get_location("Complete Island Field Office", player),
-             logic.walnut.can_complete_field_office())
+    set_location_rule(multiworld, player, "Open Professor Snail Cave", logic.has(Bomb.cherry_bomb))
+    set_location_rule(multiworld, player, "Complete Island Field Office", logic.walnut.can_complete_field_office())
     set_walnut_rules(logic, multiworld, player, world_options)
 
 
 def set_boat_repair_rules(logic: StardewLogic, multiworld, player):
-    set_rule(multiworld.get_location("Repair Boat Hull", player),
-             logic.has(Material.hardwood))
-    set_rule(multiworld.get_location("Repair Boat Anchor", player),
-             logic.has(MetalBar.iridium))
-    set_rule(multiworld.get_location("Repair Ticket Machine", player),
-             logic.has(ArtisanGood.battery_pack))
+    set_location_rule(multiworld, player, "Repair Boat Hull", logic.has(Material.hardwood))
+    set_location_rule(multiworld, player, "Repair Boat Anchor", logic.has(MetalBar.iridium))
+    set_location_rule(multiworld, player, "Repair Ticket Machine", logic.has(ArtisanGood.battery_pack))
 
 
 def set_island_entrances_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
@@ -408,29 +398,18 @@ def set_island_parrot_rules(logic: StardewLogic, multiworld, player):
     has_5_walnut = logic.walnut.has_walnut(15)
     has_10_walnut = logic.walnut.has_walnut(40)
     has_20_walnut = logic.walnut.has_walnut(60)
-    set_rule(multiworld.get_location("Leo's Parrot", player),
-             has_walnut)
-    set_rule(multiworld.get_location("Island West Turtle", player),
-             has_10_walnut & logic.received("Island North Turtle"))
-    set_rule(multiworld.get_location("Island Farmhouse", player),
-             has_20_walnut)
-    set_rule(multiworld.get_location("Island Mailbox", player),
-             has_5_walnut & logic.received("Island Farmhouse"))
-    set_rule(multiworld.get_location(Transportation.farm_obelisk, player),
-             has_20_walnut & logic.received("Island Mailbox"))
-    set_rule(multiworld.get_location("Dig Site Bridge", player),
-             has_10_walnut & logic.received("Island West Turtle"))
-    set_rule(multiworld.get_location("Island Trader", player),
-             has_10_walnut & logic.received("Island Farmhouse"))
-    set_rule(multiworld.get_location("Volcano Bridge", player),
-             has_5_walnut & logic.received("Island West Turtle") &
-             logic.region.can_reach(Region.volcano_floor_10))
-    set_rule(multiworld.get_location("Volcano Exit Shortcut", player),
-             has_5_walnut & logic.received("Island West Turtle"))
-    set_rule(multiworld.get_location("Island Resort", player),
-             has_20_walnut & logic.received("Island Farmhouse"))
-    set_rule(multiworld.get_location(Transportation.parrot_express, player),
-             has_10_walnut)
+    set_location_rule(multiworld, player, "Leo's Parrot", has_walnut)
+    set_location_rule(multiworld, player, "Island West Turtle", has_10_walnut & logic.received("Island North Turtle"))
+    set_location_rule(multiworld, player, "Island Farmhouse", has_20_walnut)
+    set_location_rule(multiworld, player, "Island Mailbox", has_5_walnut & logic.received("Island Farmhouse"))
+    set_location_rule(multiworld, player, Transportation.farm_obelisk, has_20_walnut & logic.received("Island Mailbox"))
+    set_location_rule(multiworld, player, "Dig Site Bridge", has_10_walnut & logic.received("Island West Turtle"))
+    set_location_rule(multiworld, player, "Island Trader", has_10_walnut & logic.received("Island Farmhouse"))
+    set_location_rule(multiworld, player, "Volcano Bridge",
+                      has_5_walnut & logic.received("Island West Turtle") & logic.region.can_reach(Region.volcano_floor_10))
+    set_location_rule(multiworld, player, "Volcano Exit Shortcut", has_5_walnut & logic.received("Island West Turtle"))
+    set_location_rule(multiworld, player, "Island Resort", has_20_walnut & logic.received("Island Farmhouse"))
+    set_location_rule(multiworld, player, Transportation.parrot_express, has_10_walnut)
 
 
 def set_walnut_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
@@ -447,27 +426,27 @@ def set_walnut_puzzle_rules(logic: StardewLogic, multiworld, player, world_optio
     if WalnutsanityOptionName.puzzles not in world_options.walnutsanity:
         return
 
-    set_rule(multiworld.get_location("Walnutsanity: Open Golden Coconut", player), logic.has(Geode.golden_coconut))
-    set_rule(multiworld.get_location("Walnutsanity: Banana Altar", player), logic.has(Fruit.banana))
-    set_rule(multiworld.get_location("Walnutsanity: Leo's Tree", player), logic.tool.has_tool(Tool.axe))
-    set_rule(multiworld.get_location("Walnutsanity: Gem Birds Shrine", player), logic.has(Mineral.amethyst) & logic.has(Mineral.aquamarine) &
-             logic.has(Mineral.emerald) & logic.has(Mineral.ruby) & logic.has(Mineral.topaz) &
-             logic.region.can_reach_all((Region.island_north, Region.island_west, Region.island_east, Region.island_south)))
-    set_rule(multiworld.get_location("Walnutsanity: Gourmand Frog Melon", player), logic.has(Fruit.melon) & logic.region.can_reach(Region.island_west))
-    set_rule(multiworld.get_location("Walnutsanity: Gourmand Frog Wheat", player), logic.has(Vegetable.wheat) &
-             logic.region.can_reach(Region.island_west) & logic.region.can_reach_location("Walnutsanity: Gourmand Frog Melon"))
-    set_rule(multiworld.get_location("Walnutsanity: Gourmand Frog Garlic", player), logic.has(Vegetable.garlic) &
-             logic.region.can_reach(Region.island_west) & logic.region.can_reach_location("Walnutsanity: Gourmand Frog Wheat"))
-    set_rule(multiworld.get_location("Walnutsanity: Whack A Mole", player), logic.tool.has_tool(Tool.watering_can, ToolMaterial.iridium))
-    set_rule(multiworld.get_location("Walnutsanity: Complete Large Animal Collection", player), logic.walnut.can_complete_large_animal_collection())
-    set_rule(multiworld.get_location("Walnutsanity: Complete Snake Collection", player), logic.walnut.can_complete_snake_collection())
-    set_rule(multiworld.get_location("Walnutsanity: Complete Mummified Frog Collection", player), logic.walnut.can_complete_frog_collection())
-    set_rule(multiworld.get_location("Walnutsanity: Complete Mummified Bat Collection", player), logic.walnut.can_complete_bat_collection())
-    set_rule(multiworld.get_location("Walnutsanity: Purple Flowers Island Survey", player), logic.walnut.can_start_field_office)
-    set_rule(multiworld.get_location("Walnutsanity: Purple Starfish Island Survey", player), logic.walnut.can_start_field_office)
-    set_rule(multiworld.get_location("Walnutsanity: Protruding Tree Walnut", player), logic.combat.has_slingshot)
-    set_rule(multiworld.get_location("Walnutsanity: Starfish Tide Pool", player), logic.tool.has_fishing_rod(1))
-    set_rule(multiworld.get_location("Walnutsanity: Mermaid Song", player), logic.has(Furniture.flute_block))
+    set_location_rule(multiworld, player, "Walnutsanity: Open Golden Coconut", logic.has(Geode.golden_coconut))
+    set_location_rule(multiworld, player, "Walnutsanity: Banana Altar", logic.has(Fruit.banana))
+    set_location_rule(multiworld, player, "Walnutsanity: Leo's Tree", logic.tool.has_tool(Tool.axe))
+    set_location_rule(multiworld, player, "Walnutsanity: Gem Birds Shrine",
+                      logic.has_all(Mineral.amethyst, Mineral.aquamarine, Mineral.emerald, Mineral.ruby, Mineral.topaz)
+                      & logic.region.can_reach_all((Region.island_north, Region.island_west, Region.island_east, Region.island_south)))
+    set_location_rule(multiworld, player, "Walnutsanity: Gourmand Frog Melon", logic.has(Fruit.melon) & logic.region.can_reach(Region.island_west))
+    set_location_rule(multiworld, player, "Walnutsanity: Gourmand Frog Wheat",
+                      logic.has(Vegetable.wheat) & logic.region.can_reach(Region.island_west) & logic.region.can_reach_location("Walnutsanity: Gourmand Frog Melon"))
+    set_location_rule(multiworld, player, "Walnutsanity: Gourmand Frog Garlic",
+                      logic.has(Vegetable.garlic) & logic.region.can_reach(Region.island_west) & logic.region.can_reach_location("Walnutsanity: Gourmand Frog Wheat"))
+    set_location_rule(multiworld, player, "Walnutsanity: Whack A Mole", logic.tool.has_tool(Tool.watering_can, ToolMaterial.iridium))
+    set_location_rule(multiworld, player, "Walnutsanity: Complete Large Animal Collection", logic.walnut.can_complete_large_animal_collection())
+    set_location_rule(multiworld, player, "Walnutsanity: Complete Snake Collection", logic.walnut.can_complete_snake_collection())
+    set_location_rule(multiworld, player, "Walnutsanity: Complete Mummified Frog Collection", logic.walnut.can_complete_frog_collection())
+    set_location_rule(multiworld, player, "Walnutsanity: Complete Mummified Bat Collection", logic.walnut.can_complete_bat_collection())
+    set_location_rule(multiworld, player, "Walnutsanity: Purple Flowers Island Survey", logic.walnut.can_start_field_office)
+    set_location_rule(multiworld, player, "Walnutsanity: Purple Starfish Island Survey", logic.walnut.can_start_field_office)
+    set_location_rule(multiworld, player, "Walnutsanity: Protruding Tree Walnut", logic.combat.has_slingshot)
+    set_location_rule(multiworld, player, "Walnutsanity: Starfish Tide Pool", logic.tool.has_fishing_rod(1))
+    set_location_rule(multiworld, player, "Walnutsanity: Mermaid Song", logic.has(Furniture.flute_block))
 
 
 def set_walnut_bushes_rules(logic, multiworld, player, world_options):
@@ -867,8 +846,7 @@ def set_arcade_machine_rules(logic: StardewLogic, multiworld: MultiWorld, player
     set_entrance_rule(multiworld, player, Entrance.play_journey_of_the_prairie_king, logic.has("JotPK Small Buff"))
     set_entrance_rule(multiworld, player, Entrance.reach_jotpk_world_2, logic.has("JotPK Medium Buff"))
     set_entrance_rule(multiworld, player, Entrance.reach_jotpk_world_3, logic.has("JotPK Big Buff"))
-    set_rule(multiworld.get_location("Journey of the Prairie King Victory", player),
-             logic.has("JotPK Max Buff"))
+    set_location_rule(multiworld, player, "Journey of the Prairie King Victory", logic.has("JotPK Max Buff"))
 
 
 def set_secrets_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
@@ -876,76 +854,68 @@ def set_secrets_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, 
         return
 
     if world_options.secretsanity >= Secretsanity.option_simple:
-        set_rule(multiworld.get_location("Old Master Cannoli", player), logic.has(Fruit.sweet_gem_berry))
-        set_rule(multiworld.get_location("Pot Of Gold", player), logic.season.has(Season.spring))
-        set_rule(multiworld.get_location("Poison The Governor", player), logic.has(SpecialItem.lucky_purple_shorts))
-        set_rule(multiworld.get_location("Grange Display Bribe", player), logic.has(SpecialItem.lucky_purple_shorts))
-        set_rule(multiworld.get_location("Purple Lettuce", player), logic.has(SpecialItem.lucky_purple_shorts))
-        set_rule(multiworld.get_location("Make Marnie Laugh", player),
-                 logic.has(SpecialItem.trimmed_purple_shorts) &
-                 logic.relationship.can_meet(NPC.marnie))
-        set_rule(multiworld.get_location("Jumpscare Lewis", player),
-                 logic.has(SpecialItem.trimmed_purple_shorts) &
-                 logic.relationship.can_meet(NPC.lewis))
-        set_rule(multiworld.get_location("Confront Marnie", player), logic.relationship.can_gift_to(SpecialItem.lucky_purple_shorts, NPC.marnie))
-        set_rule(multiworld.get_location("Lucky Purple Bobber", player), logic.fishing.can_use_tackle(SpecialItem.lucky_purple_shorts))
-        set_rule(multiworld.get_location("Something For Santa", player), logic.season.has(Season.winter) & logic.has_any(AnimalProduct.any_milk, Meal.cookie))
-        set_rule(multiworld.get_location("Take In The Nature", player), logic.action.can_speak_junimo())
-        set_rule(multiworld.get_location("??HMTGF??", player), logic.has(Fish.super_cucumber))
-        set_rule(multiworld.get_location("??Pinky Lemon??", player), logic.has(ArtisanGood.duck_mayonnaise))
-        set_rule(multiworld.get_location("??Foroguemon??", player), logic.has(Meal.strange_bun) & logic.relationship.has_hearts(NPC.vincent, 2))
-        set_rule(multiworld.get_location("Galaxies Will Heed Your Cry", player), logic.wallet.can_speak_dwarf())
-        set_rule(multiworld.get_location("Junimo Plush", player), logic.has(Forageable.secret_note) & logic.time.has_lived_months(1))
-        set_rule(multiworld.get_location("Summon Bone Serpent", player), logic.has(ArtifactName.ancient_doll))
-        set_rule(multiworld.get_location("Meowmere", player), logic.has(SpecialItem.far_away_stone) & logic.region.can_reach(Region.wizard_basement))
-        set_rule(multiworld.get_location("A Familiar Tune", player), logic.relationship.can_meet(NPC.elliott))
-        set_rule(multiworld.get_location("Flubber Experiment", player),
-                 logic.relationship.can_get_married() & logic.building.has_building(Building.slime_hutch) & logic.has(Machine.slime_incubator))
-        set_rule(multiworld.get_location("Seems Fishy", player), logic.money.can_spend_at(Region.wizard_basement, 500))
-        set_rule(multiworld.get_location("What kind of monster is this?", player), logic.relationship.can_gift_to(Fish.mutant_carp, NPC.willy))
-        set_rule(multiworld.get_location("My mouth is watering already", player), logic.relationship.can_gift_to(Meal.magic_rock_candy, NPC.abigail))
-        set_rule(multiworld.get_location("A gift of lovely perfume", player), logic.relationship.can_gift_to(Consumable.monster_musk, NPC.krobus))
-        set_rule(multiworld.get_location("Where exactly does this juice come from?", player), logic.relationship.can_gift_to(AnimalProduct.cow_milk, NPC.dwarf))
+        set_location_rule(multiworld, player, "Old Master Cannoli", logic.has(Fruit.sweet_gem_berry))
+        set_location_rule(multiworld, player, "Pot Of Gold", logic.season.has(Season.spring))
+        set_location_rule(multiworld, player, "Poison The Governor", logic.has(SpecialItem.lucky_purple_shorts))
+        set_location_rule(multiworld, player, "Grange Display Bribe", logic.has(SpecialItem.lucky_purple_shorts))
+        set_location_rule(multiworld, player, "Purple Lettuce", logic.has(SpecialItem.lucky_purple_shorts))
+        set_location_rule(multiworld, player, "Make Marnie Laugh", logic.has(SpecialItem.trimmed_purple_shorts) & logic.relationship.can_meet(NPC.marnie))
+        set_location_rule(multiworld, player, "Jumpscare Lewis", logic.has(SpecialItem.trimmed_purple_shorts) & logic.relationship.can_meet(NPC.lewis))
+        set_location_rule(multiworld, player, "Confront Marnie", logic.relationship.can_gift_to(SpecialItem.lucky_purple_shorts, NPC.marnie))
+        set_location_rule(multiworld, player, "Lucky Purple Bobber", logic.fishing.can_use_tackle(SpecialItem.lucky_purple_shorts))
+        set_location_rule(multiworld, player, "Something For Santa", logic.season.has(Season.winter) & logic.has_any(AnimalProduct.any_milk, Meal.cookie))
+        set_location_rule(multiworld, player, "Take In The Nature", logic.action.can_speak_junimo())
+        set_location_rule(multiworld, player, "??HMTGF??", logic.has(Fish.super_cucumber))
+        set_location_rule(multiworld, player, "??Pinky Lemon??", logic.has(ArtisanGood.duck_mayonnaise))
+        set_location_rule(multiworld, player, "??Foroguemon??", logic.has(Meal.strange_bun) & logic.relationship.has_hearts(NPC.vincent, 2))
+        set_location_rule(multiworld, player, "Galaxies Will Heed Your Cry", logic.wallet.can_speak_dwarf())
+        set_location_rule(multiworld, player, "Junimo Plush", logic.has(Forageable.secret_note) & logic.time.has_lived_months(1))
+        set_location_rule(multiworld, player, "Summon Bone Serpent", logic.has(ArtifactName.ancient_doll))
+        set_location_rule(multiworld, player, "Meowmere", logic.has(SpecialItem.far_away_stone) & logic.region.can_reach(Region.wizard_basement))
+        set_location_rule(multiworld, player, "A Familiar Tune", logic.relationship.can_meet(NPC.elliott))
+        set_location_rule(multiworld, player, "Flubber Experiment",
+                          logic.relationship.can_get_married() & logic.building.has_building(Building.slime_hutch) & logic.has(Machine.slime_incubator))
+        set_location_rule(multiworld, player, "Seems Fishy", logic.money.can_spend_at(Region.wizard_basement, 500))
+        set_location_rule(multiworld, player, "What kind of monster is this?", logic.relationship.can_gift_to(Fish.mutant_carp, NPC.willy))
+        set_location_rule(multiworld, player, "My mouth is watering already", logic.relationship.can_gift_to(Meal.magic_rock_candy, NPC.abigail))
+        set_location_rule(multiworld, player, "A gift of lovely perfume", logic.relationship.can_gift_to(Consumable.monster_musk, NPC.krobus))
+        set_location_rule(multiworld, player, "Where exactly does this juice come from?", logic.relationship.can_gift_to(AnimalProduct.cow_milk, NPC.dwarf))
 
     if world_options.secretsanity >= Secretsanity.option_simple_and_fishing:
         if world_options.farm_type == FarmType.option_beach:
-            set_rule(multiworld.get_location("'Boat'", player), logic.fishing.can_fish_at(Region.farm))
+            set_location_rule(multiworld, player, "'Boat'", logic.fishing.can_fish_at(Region.farm))
         if world_options.exclude_ginger_island == ExcludeGingerIsland.option_false:
-            set_rule(multiworld.get_location("Foliage Print", player), logic.fishing.can_fish_at(Region.island_north))
-            set_rule(multiworld.get_location("Frog Hat", player), logic.fishing.can_fish_at(Region.gourmand_frog_cave))
-            set_rule(multiworld.get_location("Gourmand Statue", player), logic.fishing.can_fish_at(Region.pirate_cove))
-            set_rule(multiworld.get_location("'Physics 101'", player), logic.fishing.can_fish_at(Region.volcano_floor_10))
-            set_rule(multiworld.get_location("Lifesaver", player), logic.fishing.can_fish_at(Region.boat_tunnel))
-            set_rule(multiworld.get_location("Squirrel Figurine", player), logic.fishing.can_fish_at(Region.volcano_secret_beach))
-        set_rule(multiworld.get_location("Decorative Trash Can", player), logic.fishing.can_fish_at(Region.town))
-        set_rule(multiworld.get_location("Iridium Krobus", player), logic.fishing.can_fish_at(Region.forest))
-        set_rule(multiworld.get_location("Pyramid Decal", player), logic.fishing.can_fish_at(Region.desert))
-        set_rule(multiworld.get_location("'Vista'", player), logic.fishing.can_fish_at(Region.railroad))
-        set_rule(multiworld.get_location("Wall Basket", player), logic.fishing.can_fish_at(Region.secret_woods))
+            set_location_rule(multiworld, player, "Foliage Print", logic.fishing.can_fish_at(Region.island_north))
+            set_location_rule(multiworld, player, "Frog Hat", logic.fishing.can_fish_at(Region.gourmand_frog_cave))
+            set_location_rule(multiworld, player, "Gourmand Statue", logic.fishing.can_fish_at(Region.pirate_cove))
+            set_location_rule(multiworld, player, "'Physics 101'", logic.fishing.can_fish_at(Region.volcano_floor_10))
+            set_location_rule(multiworld, player, "Lifesaver", logic.fishing.can_fish_at(Region.boat_tunnel))
+            set_location_rule(multiworld, player, "Squirrel Figurine", logic.fishing.can_fish_at(Region.volcano_secret_beach))
+        set_location_rule(multiworld, player, "Decorative Trash Can", logic.fishing.can_fish_at(Region.town))
+        set_location_rule(multiworld, player, "Iridium Krobus", logic.fishing.can_fish_at(Region.forest))
+        set_location_rule(multiworld, player, "Pyramid Decal", logic.fishing.can_fish_at(Region.desert))
+        set_location_rule(multiworld, player, "'Vista'", logic.fishing.can_fish_at(Region.railroad))
+        set_location_rule(multiworld, player, "Wall Basket", logic.fishing.can_fish_at(Region.secret_woods))
 
     if world_options.secretsanity >= Secretsanity.option_all:
-        set_rule(multiworld.get_location("Free The Forsaken Souls", player), logic.action.can_watch(Channel.sinister_signal))
-        set_rule(multiworld.get_location("Thank the Devs", player), logic.received("Stardrop") & logic.money.can_spend_at(Region.wizard_basement, 500))
-        set_rule(multiworld.get_location("Annoy the Moon Man", player), logic.shipping.can_use_shipping_bin & logic.time.has_lived_months(6))
-        set_rule(multiworld.get_location("Strange Sighting", player),
-                 logic.region.can_reach_all((Region.bus_stop, Region.town)) & logic.time.has_lived_months(6))
-        set_rule(multiworld.get_location("Merperson Sighting", player), logic.region.can_reach(Region.beach) & logic.time.has_lived_months(2))
-        set_rule(multiworld.get_location("...Bigfoot?", player),
-                 logic.region.can_reach_all((Region.forest, Region.town, Region.secret_woods)) & logic.time.has_lived_months(4))
-        set_rule(multiworld.get_location("'Me me me me me me me me me me me me me me me me'", player),
-                 logic.region.can_reach(Region.railroad) & logic.tool.has_tool(Tool.scythe))
-        set_rule(multiworld.get_location("Secret Iridium Stackmaster Trophy", player), logic.grind.can_grind_item(10000, Material.wood))
+        set_location_rule(multiworld, player, "Free The Forsaken Souls", logic.action.can_watch(Channel.sinister_signal))
+        set_location_rule(multiworld, player, "Thank the Devs", logic.received("Stardrop") & logic.money.can_spend_at(Region.wizard_basement, 500))
+        set_location_rule(multiworld, player, "Annoy the Moon Man", logic.shipping.can_use_shipping_bin & logic.time.has_lived_months(6))
+        set_location_rule(multiworld, player, "Strange Sighting", logic.region.can_reach_all((Region.bus_stop, Region.town)) & logic.time.has_lived_months(6))
+        set_location_rule(multiworld, player, "Merperson Sighting", logic.region.can_reach(Region.beach) & logic.time.has_lived_months(2))
+        set_location_rule(multiworld, player, "...Bigfoot?",
+                          logic.region.can_reach_all((Region.forest, Region.town, Region.secret_woods)) & logic.time.has_lived_months(4))
+        set_location_rule(multiworld, player, "'Me me me me me me me me me me me me me me me me'",
+                          logic.region.can_reach(Region.railroad) & logic.tool.has_tool(Tool.scythe))
+        set_location_rule(multiworld, player, "Secret Iridium Stackmaster Trophy", logic.grind.can_grind_item(10000, Material.wood))
 
 
 def set_friendsanity_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, content: StardewContent):
     if not content.features.friendsanity.is_enabled:
         return
-    set_rule(multiworld.get_location("Spouse Stardrop", player),
-             logic.relationship.has_hearts_with_any_bachelor(13) & logic.relationship.can_get_married())
-    set_rule(multiworld.get_location("Have a Baby", player),
-             logic.relationship.can_reproduce(1))
-    set_rule(multiworld.get_location("Have Another Baby", player),
-             logic.relationship.can_reproduce(2))
+    set_location_rule(multiworld, player, "Spouse Stardrop", logic.relationship.has_hearts_with_any_bachelor(13))
+    set_location_rule(multiworld, player, "Have a Baby", logic.relationship.can_reproduce(1))
+    set_location_rule(multiworld, player, "Have Another Baby", logic.relationship.can_reproduce(2))
 
     for villager in content.villagers.values():
         for heart in content.features.friendsanity.get_randomized_hearts(villager):
@@ -961,74 +931,54 @@ def set_friendsanity_rules(logic: StardewLogic, multiworld: MultiWorld, player: 
 
 def set_deepwoods_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
     if ModNames.deepwoods in world_options.mods:
-        set_rule(multiworld.get_location("Breaking Up Deep Woods Gingerbread House", player),
-                 logic.tool.has_tool(Tool.axe, "Gold"))
-        set_rule(multiworld.get_location("Chop Down a Deep Woods Iridium Tree", player),
-                 logic.tool.has_tool(Tool.axe, "Iridium"))
+        set_location_rule(multiworld, player, "Breaking Up Deep Woods Gingerbread House", logic.tool.has_tool(Tool.axe, "Gold"))
+        set_location_rule(multiworld, player, "Chop Down a Deep Woods Iridium Tree", logic.tool.has_tool(Tool.axe, "Iridium"))
         set_entrance_rule(multiworld, player, DeepWoodsEntrance.use_woods_obelisk, logic.received("Woods Obelisk"))
         for depth in range(10, 100 + 10, 10):
             set_entrance_rule(multiworld, player, move_to_woods_depth(depth), logic.mod.deepwoods.can_chop_to_depth(depth))
-        set_rule(multiworld.get_location("The Sword in the Stone", player),
-                 logic.mod.deepwoods.can_pull_sword() & logic.mod.deepwoods.can_chop_to_depth(100))
+        set_location_rule(multiworld, player, "The Sword in the Stone", logic.mod.deepwoods.can_pull_sword() & logic.mod.deepwoods.can_chop_to_depth(100))
 
 
 def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
     if ModNames.magic not in world_options.mods:
         return
 
-    set_rule(multiworld.get_location("Analyze: Clear Debris", player),
-             (logic.tool.has_tool("Axe", "Basic") | logic.tool.has_tool("Pickaxe", "Basic")))
-    set_rule(multiworld.get_location("Analyze: Till", player),
-             logic.tool.has_tool("Hoe", "Basic"))
-    set_rule(multiworld.get_location("Analyze: Water", player),
-             logic.tool.has_tool("Watering Can", "Basic"))
-    set_rule(multiworld.get_location("Analyze All Toil School Locations", player),
-             (logic.tool.has_tool("Watering Can", "Basic") & logic.tool.has_tool("Hoe", "Basic")
-              & (logic.tool.has_tool("Axe", "Basic") | logic.tool.has_tool("Pickaxe", "Basic"))))
+    set_location_rule(multiworld, player, "Analyze: Clear Debris", logic.tool.has_tool("Axe") | logic.tool.has_tool("Pickaxe"))
+    set_location_rule(multiworld, player, "Analyze: Till", logic.tool.has_tool("Hoe"))
+    set_location_rule(multiworld, player, "Analyze: Water", logic.tool.has_tool("Watering Can"))
+    set_location_rule(multiworld, player, "Analyze All Toil School Locations",
+                      logic.tool.has_tool("Watering Can")
+                      & logic.tool.has_tool("Hoe")
+                      & (logic.tool.has_tool("Axe") | logic.tool.has_tool("Pickaxe")))
     # Do I *want* to add boots into logic when you get them even in vanilla without effort?  idk
-    set_rule(multiworld.get_location("Analyze: Evac", player),
-             logic.ability.can_mine_perfectly())
-    set_rule(multiworld.get_location("Analyze: Haste", player),
-             logic.has("Coffee"))
-    set_rule(multiworld.get_location("Analyze: Heal", player),
-             logic.has("Life Elixir"))
-    set_rule(multiworld.get_location("Analyze All Life School Locations", player),
-             (logic.has("Coffee") & logic.has("Life Elixir")
-              & logic.ability.can_mine_perfectly()))
-    set_rule(multiworld.get_location("Analyze: Descend", player),
-             logic.region.can_reach(Region.mines))
-    set_rule(multiworld.get_location("Analyze: Fireball", player),
-             logic.has("Fire Quartz"))
-    set_rule(multiworld.get_location("Analyze: Frostbolt", player),
-             logic.region.can_reach(Region.mines_floor_60) & logic.fishing.can_fish(85))
-    set_rule(multiworld.get_location("Analyze All Elemental School Locations", player),
-             logic.has("Fire Quartz") & logic.region.can_reach(Region.mines_floor_60) & logic.fishing.can_fish(85))
-    # set_rule(multiworld.get_location("Analyze: Lantern", player),)
-    set_rule(multiworld.get_location("Analyze: Tendrils", player),
-             logic.region.can_reach(Region.farm))
-    set_rule(multiworld.get_location("Analyze: Shockwave", player),
-             logic.has("Earth Crystal"))
-    set_rule(multiworld.get_location("Analyze All Nature School Locations", player),
-             (logic.has("Earth Crystal") & logic.region.can_reach("Farm"))),
-    set_rule(multiworld.get_location("Analyze: Meteor", player),
-             (logic.region.can_reach(Region.farm) & logic.time.has_lived_months(12))),
-    set_rule(multiworld.get_location("Analyze: Lucksteal", player),
-             logic.region.can_reach(Region.witch_hut))
-    set_rule(multiworld.get_location("Analyze: Bloodmana", player),
-             logic.region.can_reach(Region.mines_floor_100))
-    set_rule(multiworld.get_location("Analyze All Eldritch School Locations", player),
-             (logic.region.can_reach(Region.witch_hut) &
-              logic.region.can_reach(Region.mines_floor_100) &
-              logic.region.can_reach(Region.farm) & logic.time.has_lived_months(12)))
-    set_rule(multiworld.get_location("Analyze Every Magic School Location", player),
-             (logic.tool.has_tool("Watering Can", "Basic") & logic.tool.has_tool("Hoe", "Basic")
-              & (logic.tool.has_tool("Axe", "Basic") | logic.tool.has_tool("Pickaxe", "Basic")) &
-              logic.has("Coffee") & logic.has("Life Elixir")
-              & logic.ability.can_mine_perfectly() & logic.has("Earth Crystal") &
-              logic.has("Fire Quartz") & logic.fishing.can_fish(85) &
-              logic.region.can_reach(Region.witch_hut) &
-              logic.region.can_reach(Region.mines_floor_100) &
-              logic.region.can_reach(Region.farm) & logic.time.has_lived_months(12)))
+    set_location_rule(multiworld, player, "Analyze: Evac", logic.ability.can_mine_perfectly())
+    set_location_rule(multiworld, player, "Analyze: Haste", logic.has("Coffee"))
+    set_location_rule(multiworld, player, "Analyze: Heal", logic.has("Life Elixir"))
+    set_location_rule(multiworld, player, "Analyze All Life School Locations",
+                      logic.has_all("Coffee", "Life Elixir") & logic.ability.can_mine_perfectly())
+    set_location_rule(multiworld, player, "Analyze: Descend", logic.region.can_reach(Region.mines))
+    set_location_rule(multiworld, player, "Analyze: Fireball", logic.has("Fire Quartz"))
+    set_location_rule(multiworld, player, "Analyze: Frostbolt", logic.region.can_reach(Region.mines_floor_60) & logic.fishing.can_fish(85))
+    set_location_rule(multiworld, player, "Analyze All Elemental School Locations",
+                      logic.has("Fire Quartz") & logic.region.can_reach(Region.mines_floor_60) & logic.fishing.can_fish(85))
+    # add_rule(multiworld, player, "Analyze: Lantern", player),)
+    set_location_rule(multiworld, player, "Analyze: Tendrils", logic.region.can_reach(Region.farm))
+    set_location_rule(multiworld, player, "Analyze: Shockwave", logic.has("Earth Crystal"))
+    set_location_rule(multiworld, player, "Analyze All Nature School Locations", logic.has("Earth Crystal") & logic.region.can_reach("Farm")),
+    set_location_rule(multiworld, player, "Analyze: Meteor", logic.region.can_reach(Region.farm) & logic.time.has_lived_months(12)),
+    set_location_rule(multiworld, player, "Analyze: Lucksteal", logic.region.can_reach(Region.witch_hut))
+    set_location_rule(multiworld, player, "Analyze: Bloodmana", logic.region.can_reach(Region.mines_floor_100))
+    set_location_rule(multiworld, player, "Analyze All Eldritch School Locations",
+                      logic.region.can_reach_all((Region.witch_hut, Region.mines_floor_100, Region.farm)) & logic.time.has_lived_months(12))
+    set_location_rule(multiworld, player, "Analyze Every Magic School Location",
+                      logic.tool.has_tool("Watering Can")
+                      & logic.tool.has_tool("Hoe")
+                      & (logic.tool.has_tool("Axe") | logic.tool.has_tool("Pickaxe"))
+                      & logic.has_all("Coffee", "Life Elixir", "Earth Crystal", "Fire Quartz")
+                      & logic.ability.can_mine_perfectly()
+                      & logic.fishing.can_fish(85)
+                      & logic.region.can_reach_all((Region.witch_hut, Region.mines_floor_100, Region.farm))
+                      & logic.time.has_lived_months(12))
 
 
 def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
@@ -1104,3 +1054,7 @@ def set_many_island_entrances_rules(multiworld, player, entrance_rules: Dict[str
         return
     for entrance, rule in entrance_rules.items():
         set_entrance_rule(multiworld, player, entrance, rule)
+
+
+def set_location_rule(multiworld, player: int, location_name: str, rule: StardewRule) -> None:
+    set_rule(multiworld.get_location(location_name, player), rule)
