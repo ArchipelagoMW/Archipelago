@@ -2210,7 +2210,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         "Thulecite Wall":           ADVANCED_PLAYER_BIAS,
         "Potter's Wheel":           True,
         "Telltale Heart":           True,
-        "Magiluminescence":         ADVANCED_PLAYER_BIAS,
+        "Magiluminescence":         True,
         "Lantern":                  LIGHTING_LOGIC,
         "Miner Hat":                LIGHTING_LOGIC,
         "Boat Kit":                 True,
