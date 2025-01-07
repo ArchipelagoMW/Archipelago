@@ -1,5 +1,3 @@
-from typing import List
-
 from BaseClasses import CollectionState
 from .RegionBase import JakAndDaxterRegion
 from ..Options import EnableOrbsanity
@@ -8,7 +6,7 @@ from ..Rules import can_free_scout_flies, can_fight, can_reach_orbs_level
 
 
 # God help me... here we go.
-def build_regions(level_name: str, world: JakAndDaxterWorld) -> List[JakAndDaxterRegion]:
+def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxterRegion]:
     multiworld = world.multiworld
     options = world.options
     player = world.player

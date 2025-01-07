@@ -1,5 +1,3 @@
-from typing import List
-
 from .RegionBase import JakAndDaxterRegion
 from ..Options import EnableOrbsanity
 from .. import JakAndDaxterWorld
@@ -8,7 +6,7 @@ from ..locs import ScoutLocations as Scouts
 from worlds.generic.Rules import add_rule
 
 
-def build_regions(level_name: str, world: JakAndDaxterWorld) -> List[JakAndDaxterRegion]:
+def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxterRegion]:
     multiworld = world.multiworld
     options = world.options
     player = world.player
