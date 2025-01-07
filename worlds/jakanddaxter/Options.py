@@ -113,11 +113,10 @@ class LavaTubeCellCount(Range):
 
 
 class EnableOrderedCellCounts(DefaultOnToggle):
-    """Enable to reorder the Cell Count options in ascending order. This is useful if you choose to randomize
-    those options.
+    """Reorders the Cell Count requirements for vehicle sections to be in ascending order.
 
     For example, if Fire Canyon Cell Count, Mountain Pass Cell Count, and Lava Tube Cell Count are 60, 30, and 40
-    respectively, they will be reordered to 30, 40, and 60 respectively."""
+    respectively, they will be reordered to 30, 40, and 60."""
     display_name = "Enable Ordered Cell Counts"
 
 
