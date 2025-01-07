@@ -21,7 +21,7 @@ Triggers may be defined in either the root or in the relevant game sections. Gen
 bottom of the YAML for clear organization.
 
 Each trigger consists of four parts:
-- `option_category` specifies the section which the triggering option is defined in.
+- `option_catagory` specifies the section which the triggering option is defined in.
     - Example: `A Link to the Past`
     - This is the category the option is located in. If the option you're triggering off of is in root then you
       would use `null`, otherwise this is the game for which you want this option trigger to activate.
@@ -56,7 +56,7 @@ The above examples all together will end up looking like this:
 
   ```yaml
   triggers:
-    - option_category: A Link to the Past
+    - option_catagory: A Link to the Past
       option_name: shop_item_slots
       option_result: 15
       options:
@@ -72,7 +72,7 @@ For example:
 
   ```yaml
   triggers:
-    - option_category: Timespinner
+    - option_catagory: Timespinner
       option_name: SpecificKeycards
       option_result: true
       options:
@@ -90,7 +90,7 @@ For example:
 
   ```yaml
   triggers:
-    - option_category: Secret of Evermore
+    - option_catagory: Secret of Evermore
       option_name: doggomizer
       option_result: pupdunk
       options:
@@ -102,14 +102,14 @@ For example:
           exp_modifier:
             150: 50
             200: 50
-    - option_category: Secret of Evermore
+    - option_catagory: Secret of Evermore
       option_name: difficulty
       option_result: pupdunk_hard
       options:
         Secret of Evermore:
           fix_wings_glitch: false
           difficulty: hard
-    - option_category: Secret of Evermore
+    - option_catagory: Secret of Evermore
       option_name: difficulty
       option_result: pupdunk_mystery
       options:
@@ -148,7 +148,7 @@ Super Metroid:
   start_inventory:
     Power Bombs: 1
   triggers:
-    - option_category: Super Metroid
+    - option_catagory: Super Metroid
       option_name: start_location
       option_result: aqueduct
       options:
