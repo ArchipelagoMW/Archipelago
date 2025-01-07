@@ -1,10 +1,11 @@
 # Deploy Using Containers
 
 If you just want to play and there is a compiled version available on the [Archipelago releases page](https://github.com/ArchipelagoMW/Archipelago/releases), use that version.
-To build the full Archipelago software stack, refer to [Running From Source](docs/running%20from%20source.md).
+To build the full Archipelago software stack, refer to [Running From Source](running%20from%20source.md).
 Follow these steps to build and deploy a containerized instance of the web host software, optionally integrating [Gunicorn](https://gunicorn.org/) WSGI HTTP Server running behind the [nginx](https://nginx.org/) reverse proxy.
 
-## General
+
+## Building the Container Image
 
 What you'll need:
  * A container runtime engine such as:
@@ -17,10 +18,14 @@ Or:
 `podman build -t archipelago .`
 
 It is recommended to tag the image using `-t` to more easily identify the image and run it.
+
+
+## Running the Container
+
 Running the container can be performed using:
-`docker run archipelago --network host`
+`docker run --network host archipelago`
 Or:
-`podman run archipelago --network host`
+`podman run --network host archipelago`
 
 The Archipelago web host requires access to multiple ports in order to host game servers simultaneously. To simplify configuration for this purpose, specify `--network host`.
 
@@ -29,12 +34,11 @@ Given the default configuration, the website will be accessible at the hostname/
 See `docs/webhost configuration sample.yaml` for example.
 
 
+## Using Docker Compose
 
-## Container Orchestration
+An example [docker compose](../deploy/docker-compose.yml) file can be found in [deploy](../deploy), along with example configuration files used by the services it orchestrates. Using these files as-is will spin up two separate archipelago containers with special modifications to their runtime arguments, in addition to deploying an `nginx` reverse proxy container.
 
-An example [docker compose](../deploy/docker-compose.yml) file can be found in `../deploy/`, along with example configuration files used by the services it orchestrates. Using these files as-is will spin up two separate archipelago containers with special modifications to their runtime arguments, in addition to deploying an `nginx` reverse proxy container.
-
-To deploy in this manner, from the `deploy/` directory, run:
+To deploy in this manner, from the ["deploy"](../deploy) directory, run:
 `docker compose up -d`
 
 ### Services
@@ -51,7 +55,19 @@ The `docker-compose.yaml` file defines three services:
     * Directs all HTTP traffic from port 80 to the upstream service.
     * Exposed to the host on port 8080. This is where we can reach the website.
 
+### Configuration
+
 As these are examples, they can be copied and modified. For instance setting the value of `HOST_ADDRESS` in [example config](../deploy/example_config.yaml) to host machines local IP address, will expose the service to its local area network.
+
+The configuration files may be modified to handle for machine-specific optimizations, such as:
+  * Web pages responding too slowly
+    * Edit [the gunicorn config](../deploy/example_gunicorn.conf.py) to increase thread and/or worker count.
+  * Game generation stalls
+    * Increase the generator count in [selflaunch config](../deploy/example_selflaunch.yaml)
+  * Gameplay lags
+    * Increase the hoster count in [selflaunch config](../deploy/example_selflaunch.yaml)
+
+Changes made to `docker-compose.yaml` can be applied by running `docker compose up -d`, while those made to other files are applied by running `docker compose restart`.
 
 
 ## Windows
@@ -70,13 +86,5 @@ Enemizer is not currently available for `aarch64`.
 
 ## Optional: Git
 
-[Git](https://git-scm.com) is required to install some of the packages that Archipelago depends on.
-It may be possible to run Archipelago from source without it, at your own risk.
-
-It is also generally recommended to have Git installed and understand how to use it, especially if you're thinking about contributing.
-
-You can download the latest release of Git at [The downloads page on the Git website](https://git-scm.com/downloads).
-
-Beyond that, there are also graphical interfaces for Git that make it more accessible.
-For repositories on Github (such as this one), [Github Desktop](https://desktop.github.com) is one such option.
-PyCharm has a built-in version control integration that supports Git.
+Building the image requires a local copy of the ArchipelagoMW source code.
+Refer to [Running From Source](running%20from%20source.md#optional-git).
