@@ -121,7 +121,7 @@ class EnableOrderedCellCounts(DefaultOnToggle):
 
 
 class RequirePunchForKlaww(DefaultOnToggle):
-    """Enable to force the Punch move to come before Klaww. Disabling this setting may require Jak to fight Klaww
+    """Force the Punch move to come before Klaww. Disabling this setting may require Jak to fight Klaww
     and Gol and Maia by shooting yellow eco through his goggles. This only applies if "Enable Move Randomizer" is ON."""
     display_name = "Require Punch For Klaww"
 
