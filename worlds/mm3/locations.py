@@ -168,21 +168,22 @@ etank_1ups: Dict[str, Dict[str, Optional[int]]] = {
     "Wily Stage 3": {
         names.wily_3_c3: 0x890263,
         names.wily_3_c4: 0x890264,
-        names.wily_3_c9: 0x890269,
-        names.wily_3_c10: 0x89026A
+        names.wily_3_c10: 0x89026A,
+        names.wily_3_c11: 0x89026B
     },
     "Wily Stage 4": {
-        names.wily_4_c13: 0x890277,
+        names.wily_4_c10: 0x890275,
+        names.wily_4_c12: 0x890277,
     },
     "Wily Stage 5": {
-        names.wily_5_c3: 0x89027A,
-        names.wily_5_c4: 0x89027B,
+        names.wily_5_c3: 0x890282,
+        names.wily_5_c4: 0x890283,
     },
     "Wily Stage 6": {
-        names.wily_6_c1: 0x89027C,
-        names.wily_6_c2: 0x89027D,
-        names.wily_6_c5: 0x890280,
-        names.wily_6_c6: 0x890281,
+        names.wily_6_c1: 0x890284,
+        names.wily_6_c2: 0x890285,
+        names.wily_6_c5: 0x890288,
+        names.wily_6_c6: 0x890289,
     }
 }
 
@@ -302,29 +303,36 @@ energy_pickups: Dict[str, Dict[str, Optional[int]]] = {
         names.wily_3_c6: 0x890266,
         names.wily_3_c7: 0x890267,
         names.wily_3_c8: 0x890268,
+        names.wily_3_c9: 0x890269,
     },
     "Wily Stage 4": {
-        names.wily_4_c1: 0x89026B,
-        names.wily_4_c2: 0x89026C,
-        names.wily_4_c3: 0x89026D,
-        names.wily_4_c4: 0x89026E,
-        names.wily_4_c5: 0x89026F,
-        names.wily_4_c6: 0x890270,
-        names.wily_4_c7: 0x890271,
-        names.wily_4_c8: 0x890272,
-        names.wily_4_c9: 0x890273,
-        names.wily_4_c10: 0x890274,
-        names.wily_4_c11: 0x890275,
-        names.wily_4_c12: 0x890276,
+        names.wily_4_c1: 0x89026C,
+        names.wily_4_c2: 0x89026D,
+        names.wily_4_c3: 0x89026E,
+        names.wily_4_c4: 0x89026F,
+        names.wily_4_c5: 0x890270,
+        names.wily_4_c6: 0x890271,
+        names.wily_4_c7: 0x890272,
+        names.wily_4_c8: 0x890273,
+        names.wily_4_c9: 0x890274,
+        names.wily_4_c11: 0x890276,
+        names.wily_4_c13: 0x890278,
+        names.wily_4_c14: 0x890279,
+        names.wily_4_c15: 0x89027A,
+        names.wily_4_c16: 0x89027B,
+        names.wily_4_c17: 0x89027C,
+        names.wily_4_c18: 0x89027D,
+        names.wily_4_c19: 0x89027E,
+        names.wily_4_c20: 0x89027F,
     },
     "Wily Stage 5": {
-        names.wily_5_c1: 0x890278,
-        names.wily_5_c2: 0x890279,
+        names.wily_5_c1: 0x890280,
+        names.wily_5_c2: 0x890281,
     },
     "Wily Stage 6": {
-        names.wily_6_c3: 0x89027E,
-        names.wily_6_c4: 0x89027F,
-        names.wily_6_c7: 0x890282,
+        names.wily_6_c3: 0x890286,
+        names.wily_6_c4: 0x890287,
+        names.wily_6_c7: 0x89028A,
     }
 }
 
