@@ -933,7 +933,7 @@ def freeze_support() -> None:
 
 def visualize_regions(root_region: Region, file_name: str, *,
                       show_entrance_names: bool = False, show_locations: bool = True, show_other_regions: bool = True,
-                      linetype_ortho: bool = True, regions_to_highlight: set[Region] = None) -> None:
+                      linetype_ortho: bool = True, regions_to_highlight: set[Region] | None = None) -> None:
     """Visualize the layout of a world as a PlantUML diagram.
 
     :param root_region: The region from which to start the diagram from. (Usually the "Menu" region of your world.)
