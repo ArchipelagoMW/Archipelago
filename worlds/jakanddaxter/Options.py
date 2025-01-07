@@ -11,11 +11,9 @@ class EnableMoveRandomizer(Toggle):
 
 
 class EnableOrbsanity(Choice):
-    """Enable to include bundles of Precursor Orbs as an ordered list of progressive checks. Every time you collect the
-    chosen number of orbs, you will trigger the next release in the list.
+    """Include bundles of Precursor Orbs as checks. Every time you collect the chosen number of orbs, you will trigger another check.
 
-    "Per Level" means these lists are generated and populated for each level in the game. "Global" means there
-    is only one list for the entire game.
+    "Per Level" means bundles are for each level in the game. "Global" means bundles carry over level to level.
 
     This adds a number of Items and Locations to the pool inversely proportional to the size of the bundle.
     For example, if your bundle size is 20 orbs, you will add 100 items to the pool. If your bundle size is 250 orbs,
