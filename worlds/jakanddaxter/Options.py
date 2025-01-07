@@ -3,7 +3,7 @@ from Options import PerGameCommonOptions, StartInventoryPool, Toggle, Choice, Ra
 
 
 class EnableMoveRandomizer(Toggle):
-    """Enable to include movement options as items in the randomizer. Until you find his other moves, Jak is limited to
+    """Include movement options as items in the randomizer. Until you find his other moves, Jak is limited to
     running, swimming, single-jumping, and shooting yellow eco through his goggles.
 
     This adds 11 items to the pool."""
