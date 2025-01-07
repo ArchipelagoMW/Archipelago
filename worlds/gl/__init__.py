@@ -73,8 +73,6 @@ class GauntletLegendsWorld(World):
     settings: typing.ClassVar[GLSettings]
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
-    required_client_version = (0, 5, 0)
-    crc32: str = None
     death: List[Item] = []
 
     disabled_locations: typing.List[LocationData]

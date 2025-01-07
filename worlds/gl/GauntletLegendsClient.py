@@ -73,11 +73,10 @@ class RetroSocket:
         self.send(message)
         try:
             response = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 30000), 1.0)
-            data = response.decode().split(" ")
+            data = response.decode().strip("\n").split(" ")
             b = b""
             for s in data[2:]:
                 if "-1" in s:
-                    logger.info("-1 response")
                     raise Exception("Client tried to read from an invalid address or ROM is not open.")
                 b += bytes.fromhex(s)
             return b
@@ -535,6 +534,7 @@ class GauntletLegendsContext(CommonContext):
             self.slot = args["slot"]
             self.glslotdata = args["slot_data"]
             self.players = self.glslotdata["players"]
+            self.deathlink_enabled = self.glslotdata["death_link"]
             self.var_reset()
             logger.info(f"Players set to {self.players}.")
             logger.info("If this is incorrect, Use /players to set the number of people playing locally.")
@@ -630,88 +630,81 @@ class GauntletLegendsContext(CommonContext):
 
     # Prepare locations that are going to be in the currently loading level
     async def scout_locations(self, ctx: "GauntletLegendsContext") -> None:
-        level = await self.read_level()
-        if level in boss_level:
-            for i in range(4):
-                self.socket.send(
-                    message_format(
-                        WRITE,
-                        param_format(
-                            BOSS_ADDR + (0x10 * i), bytes([self.glslotdata["shards"][i][1], 0x0, self.glslotdata["shards"][i][0]]),
+        try:
+            level = await self.read_level()
+            if level in boss_level:
+                for i in range(4):
+                    self.socket.send(
+                        message_format(
+                            WRITE,
+                            param_format(
+                                BOSS_ADDR + (0x10 * i), bytes([self.glslotdata["shards"][i][1], 0x0, self.glslotdata["shards"][i][0]]),
+                            ),
                         ),
-                    ),
+                    )
+            if self.movement != 0x12:
+                level = [0x1, 0xF]
+            self.current_level = level
+            players = await self.active_players()
+            player_level = await self.player_level()
+            if self.clear_counts.get(str(level), 0) != 0:
+                self.difficulty = min(players + (min(player_level // vanilla[level[1]], 3)), 4)
+            else:
+                self.difficulty = players
+            _id = level[0]
+            if level[1] == 1:
+                _id = castle_id.index(level[0]) + 1
+            raw_locations = []
+            for location in [location for location in level_locations.get((level[1] << 4) + _id, []) if min(self.difficulty, self.glslotdata["max"]) >= location.difficulty]:
+                if "Chest" in location.name:
+                    if self.glslotdata["chests"]:
+                        raw_locations += [location]
+                elif "Barrel" in location.name and "Barrel of Gold" not in location.name:
+                    if self.glslotdata["barrels"]:
+                        raw_locations += [location]
+                elif "Mirror" not in location.name:
+                    raw_locations += [location]
+            if len(raw_locations) > 0:
+                await ctx.send_msgs(
+                    [
+                        {
+                            "cmd": "LocationScouts",
+                            "locations": [location.id for location in raw_locations],
+                            "create_as_hint": 0,
+                        },
+                    ],
                 )
-        if self.movement != 0x12:
-            level = [0x1, 0xF]
-        self.current_level = level
-        players = await self.active_players()
-        player_level = await self.player_level()
-        if self.clear_counts.get(str(level), 0) != 0:
-            self.difficulty = min(players + (min(player_level // vanilla[level[1]], 3)), 4)
-        else:
-            self.difficulty = players
-        _id = level[0]
-        if level[1] == 1:
-            _id = castle_id.index(level[0]) + 1
-        raw_locations = []
-        for location in [location for location in level_locations.get((level[1] << 4) + _id, []) if self.difficulty >= location.difficulty]:
-            if "Chest" in location.name:
-                if self.glslotdata["chests"]:
-                    raw_locations += [location]
-            elif "Barrel" in location.name and "Barrel of Gold" not in location.name:
-                if self.glslotdata["barrels"]:
-                    raw_locations += [location]
-            elif "Mirror" not in location.name:
-                raw_locations += [location]
-        if len(raw_locations) > 0:
-            await ctx.send_msgs(
-                [
-                    {
-                        "cmd": "LocationScouts",
-                        "locations": [
-                            location.id
-                            for location in [location for location in raw_locations if min(self.difficulty, self.glslotdata["max"]) >= location.difficulty]
-                        ],
-                        "create_as_hint": 0,
-                    },
-                ],
-            )
-            while len(self.location_scouts) == 0:
-                await asyncio.sleep(0.1)
-        self.obelisks = [
-            item
-            for item in self.location_scouts
-            if "Obelisk" in items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).item_name
-               and item.player == self.slot
-        ]
-        self.useful = [
-            item
-            for item in self.location_scouts
-            if "Obelisk" not in items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).item_name
-                and (items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).progression == ItemClassification.useful
-                or items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).progression == ItemClassification.progression)
-                and item.player == self.slot
-        ]
-        self.obelisk_locations = [
-            location for location in raw_locations if location.id in [item.location for item in self.obelisks]
-        ]
-        self.item_locations = [
-            location for location in raw_locations
-            if ("Chest" not in location.name
-                and ("Barrel" not in location.name or "Barrel of Gold" in location.name))
-                and location not in self.obelisk_locations
-                or location.id in [item.location for item in self.useful]
-        ]
-        logger.info(f"Item Locations: {len(self.item_locations)}")
-        self.chest_locations = [
-            location for location in raw_locations
-            if location not in self.obelisk_locations and location not in self.item_locations]
-        logger.info(f"Chest Locations: {len(self.chest_locations)}")
-        max_value: int = self.glslotdata['max']
-        logger.info(f"Items: {len(self.item_locations)} Chests: {len(self.chest_locations)} Obelisks: {len(self.obelisk_locations)}")
-        logger.info(
-            f"Locations: {len([location for location in self.obelisk_locations + self.item_locations + self.chest_locations if location.difficulty <= max_value and location.id not in self.locations_checked])} Difficulty: { max_value if self.glslotdata['instant_max'] else self.difficulty}",
-        )
+                while len(self.location_scouts) == 0:
+                    await asyncio.sleep(0.1)
+            self.obelisks = [
+                item
+                for item in self.location_scouts
+                if "Obelisk" in items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).item_name
+                   and item.player == self.slot
+            ]
+            self.useful = [
+                item
+                for item in self.location_scouts
+                if "Obelisk" not in items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).item_name
+                    and (items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).progression == ItemClassification.useful
+                    or items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).progression == ItemClassification.progression)
+                    and item.player == self.slot
+            ]
+            self.obelisk_locations = [
+                location for location in raw_locations if location.id in [item.location for item in self.obelisks]
+            ]
+            self.item_locations = [
+                location for location in raw_locations
+                if ("Chest" not in location.name
+                    and ("Barrel" not in location.name or "Barrel of Gold" in location.name)
+                    and location not in self.obelisk_locations)
+                    or location.id in [item.location for item in self.useful]
+            ]
+            self.chest_locations = [
+                location for location in raw_locations
+                if location not in self.obelisk_locations and location not in self.item_locations]
+        except Exception:
+            logger.error(traceback.format_exc())
 
     # Compare values of loaded objects to see if they have been collected
     # Sends locations out to server based on object lists read in obj_read()
@@ -815,6 +808,7 @@ class GauntletLegendsContext(CommonContext):
         self.chest_objects = []
         self.obelisk_locations = []
         self.obelisks = []
+        self.useful = []
         self.item_objects_init = []
         self.chest_objects_init = []
         self.in_game = False
@@ -930,14 +924,13 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                     ctx.in_portal = False
                     ctx.init_refactor = False
                     if not ctx.scaled:
-                        logger.info("Scaling level...")
                         await asyncio.sleep(0.2)
                         await ctx.scale()
-                    ctx.in_game = not await ctx.check_loading()
+                    loading = await ctx.check_loading()
+                    ctx.in_game = not loading
                 if ctx.in_game:
                     ctx.level_loading = False
                     if not ctx.objects_loaded:
-                        logger.info("Loading Objects...")
                         await ctx.load_objects(ctx)
                         await asyncio.sleep(1)
                     status = await ctx.level_status(ctx)
