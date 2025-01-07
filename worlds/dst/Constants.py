@@ -1,4 +1,4 @@
-VERSION:str = "1.2.2.1"
+VERSION:str = "1.2.2.2"
 ITEM_ID_OFFSET:int = 264000
 LOCATION_ID_OFFSET:int = 264000
 LOCATION_DAY_OFFSET = 266000
@@ -627,7 +627,7 @@ DSTAP_LOCATIONS = [
     [337,   "Mosling",                  "mossling",             [ "creature", "seasonal", "spring", "seasons_passed_2", "special_moosegoose" ] ],
     [338,   "Mush Gnome",               "mushgnome",            [ "creature", "cave" ] ],
     [339,   "Terrorclaw",               "oceanhorror",          [ "creature", "ocean", "deprecated" ] ],
-    [340,   "Pengull",                  "penguin",              [ "creature", "ocean", "seasonal", "winter" ] ],
+    [340,   "Pengull",                  "penguin",              [ "creature", "seasonal", "winter" ] ],
     [341,   "Gobbler",                  "perd",                 [ "creature", "day" ] ],
     [342,   "Pig Man",                  "pigman",               [ "creature", "peaceful" ] ],
     [343,   "Powder Monkey",            "powder_monkey",        [ "creature", "moonquay" ] ],
