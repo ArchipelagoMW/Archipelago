@@ -66,7 +66,6 @@ orb_item_table = {
 
 # These are special items representing unique unlocks in the world. Notice that their Item ID equals their
 # respective Location ID. Like scout flies, this is necessary for game<->archipelago communication.
-# TODO - These numbers of checks may be inaccurate post-region refactor.
 special_item_table = {
     5: "Fisherman's Boat",              # Unlocks Misty Island
     4: "Jungle Elevator",               # Unlocks the Forbidden Jungle Temple
