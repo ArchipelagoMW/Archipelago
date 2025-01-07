@@ -12,7 +12,7 @@ locations: List[Location] = [
     # Main Quests
     {
         "id": base_id + 1,
-        "inGameId": "MainQuest_001",
+        "inGameId": "MainQuest_001_PC",
         "name": "A Whole New World",
         "art": "none"
     },
