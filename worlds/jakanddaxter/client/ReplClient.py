@@ -6,7 +6,7 @@ import struct
 import random
 from dataclasses import dataclass
 from queue import Queue
-from typing import Dict, Optional, Callable
+from typing import Optional, Callable
 
 import pymem
 from pymem.exception import ProcessNotFound, ProcessError
@@ -52,7 +52,7 @@ class JakAndDaxterReplClient:
     gk_process: pymem.process = None
     goalc_process: pymem.process = None
 
-    item_inbox: Dict[int, NetworkItem] = {}
+    item_inbox: dict[int, NetworkItem] = {}
     inbox_index = 0
     json_message_queue: Queue[JsonMessageData] = queue.Queue()
 

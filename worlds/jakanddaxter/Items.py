@@ -68,18 +68,18 @@ orb_item_table = {
 # respective Location ID. Like scout flies, this is necessary for game<->archipelago communication.
 # TODO - These numbers of checks may be inaccurate post-region refactor.
 special_item_table = {
-    5: "Fisherman's Boat",              # Unlocks 14 checks in Misty Island
-    4: "Jungle Elevator",               # Unlocks 2 checks in Forbidden Jungle
-    2: "Blue Eco Switch",               # Unlocks 1 check in Jungle and 1 in Beach
-    17: "Flut Flut",                    # Unlocks 2 checks in Swamp and 2 in Snowy
-    33: "Warrior's Pontoons",           # Unlocks 14 checks in Swamp and everything post-Rock Village
-    105: "Snowy Mountain Gondola",      # Unlocks 15 checks in Snowy Mountain
-    60: "Yellow Eco Switch",            # Unlocks 1 check in Pass and 1 in Snowy
-    63: "Snowy Fort Gate",              # Unlocks 3 checks in Snowy Mountain
-    71: "Freed The Blue Sage",          # 1 of 3 unlocks for the final staircase and 2 checks in Citadel
-    72: "Freed The Red Sage",           # 1 of 3 unlocks for the final staircase and 2 checks in Citadel
-    73: "Freed The Yellow Sage",        # 1 of 3 unlocks for the final staircase and 2 checks in Citadel
-    70: "Freed The Green Sage",         # Unlocks the final elevator
+    5: "Fisherman's Boat",              # Unlocks Misty Island
+    4: "Jungle Elevator",               # Unlocks the Forbidden Jungle Temple
+    2: "Blue Eco Switch",               # Unlocks Blue Eco Vents
+    17: "Flut Flut",                    # Unlocks Flut Flut sections in Boggy Swamp and Snowy Mountain
+    33: "Warrior's Pontoons",           # Unlocks Boggy Swamp and everything post-Rock Village
+    105: "Snowy Mountain Gondola",      # Unlocks Snowy Mountain
+    60: "Yellow Eco Switch",            # Unlocks Yellow Eco Vents
+    63: "Snowy Fort Gate",              # Unlocks the Snowy Mountain Fort
+    71: "Freed The Blue Sage",          # 1 of 3 unlocks for the final staircase in Citadel
+    72: "Freed The Red Sage",           # 1 of 3 unlocks for the final staircase in Citadel
+    73: "Freed The Yellow Sage",        # 1 of 3 unlocks for the final staircase in Citadel
+    70: "Freed The Green Sage",         # Unlocks the final boss elevator in Citadel
 }
 
 # These are the move items for move randomizer. Notice that their Item ID equals some of the Orb Cache Location ID's.
@@ -96,7 +96,7 @@ move_item_table = {
     23348: "Punch",
     23349: "Punch Uppercut",
     23350: "Kick",
-    # 24038: "Orb Cache at End of Blast Furnace",  # TODO - IDK, we didn't need all of the orb caches for move rando.
+    # 24038: "Orb Cache at End of Blast Furnace",  # Hold onto these ID's for future use.
     # 24039: "Orb Cache at End of Launch Pad Room",
     # 24040: "Orb Cache at Start of Launch Pad Room",
 }

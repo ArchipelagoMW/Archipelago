@@ -10,7 +10,7 @@ import colorama
 import asyncio
 from asyncio import Task
 
-from typing import Set, Awaitable, Optional, List
+from typing import Set, Awaitable, Optional
 
 import pymem
 from pymem.exception import ProcessNotFound
@@ -219,11 +219,11 @@ class JakAndDaxterContext(CommonContext):
             self.repl.received_deathlink = True
             super().on_deathlink(data)
 
-    async def ap_inform_location_check(self, location_ids: List[int]):
+    async def ap_inform_location_check(self, location_ids: list[int]):
         message = [{"cmd": "LocationChecks", "locations": location_ids}]
         await self.send_msgs(message)
 
-    def on_location_check(self, location_ids: List[int]):
+    def on_location_check(self, location_ids: list[int]):
         create_task_log_exception(self.ap_inform_location_check(location_ids))
 
     async def ap_inform_finished_game(self):

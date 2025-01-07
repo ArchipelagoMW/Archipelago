@@ -133,15 +133,13 @@ This will show you a list of all the moves in the game.
 - Light blue items indicate you possess that move, as well as its prerequisites.
 
 ## What does Orbsanity do?
-If you enable Orbsanity, Precursor Orbs will be turned into ordered lists of progressive checks. Every time you collect 
-a "bundle" of the correct number of orbs, you will trigger the next release in the list. Likewise, these bundles of orbs 
-will be added to the item pool to be randomized. There are several options to change the difficulty of this challenge. 
+If you enable Orbsanity, bundles of Precursor Orbs will be turned into checks. Every time you collect the chosen number 
+of orbs, i.e. a "bundle," you will trigger another check. Likewise, the orbs will be added to the random item pool. 
+There are several options to change the difficulty of this challenge. 
 
-- "Per Level" Orbsanity means the lists of orb checks are generated and populated for each level in the game.
-    - (Geyser Rock, Sandover Village, etc.)
-- "Global" Orbsanity means there is only one list of checks for the entire game.
-    - It does not matter where you pick up the orbs, they all count toward the same list.
-- The options with "Bundle Size" in the name indicate how many orbs are in a "bundle." This adds a number of Items 
+- "Per Level" Orbsanity means the bundles are for each level in the game. (Geyser Rock, Sandover Village, etc.)
+- "Global" Orbsanity means orbs collected from any level count toward the next bundle.
+- The options with "Bundle Size" in the name indicate how many orbs are in a bundle. This adds a number of Items 
   and Locations to the pool inversely proportional to the size of the bundle.
     - For example, if your bundle size is 20 orbs, you will add 100 items to the pool. If your bundle size is 250 orbs,
       you will add 8 items to the pool.

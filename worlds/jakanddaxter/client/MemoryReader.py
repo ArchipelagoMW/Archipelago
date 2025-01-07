@@ -1,7 +1,7 @@
 import logging
 import random
 import struct
-from typing import ByteString, List, Callable, Optional
+from typing import ByteString, Callable, Optional
 import json
 import pymem
 from pymem import pattern
@@ -163,7 +163,7 @@ class JakAndDaxterMemoryReader:
     # The memory reader just needs the game running.
     gk_process: pymem.process = None
 
-    location_outbox: List[int] = []
+    location_outbox: list[int] = []
     outbox_index: int = 0
     finished_game: bool = False
 
@@ -327,7 +327,7 @@ class JakAndDaxterMemoryReader:
         await self.verify_memory_version()
         self.log_info(logger, msg)
 
-    def read_memory(self) -> List[int]:
+    def read_memory(self) -> list[int]:
         try:
             # Need to grab these first and convert to floats, see below.
             citizen_orb_amount = self.read_goal_address(citizen_orb_amount_offset, sizeof_float)

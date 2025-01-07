@@ -1,4 +1,4 @@
-from typing import Dict, Any, ClassVar, Tuple, Callable, Optional, Union, List
+from typing import Any, ClassVar, Callable, Optional, Union
 from math import ceil
 import Utils
 import settings
@@ -114,7 +114,7 @@ class JakAndDaxterWorld(World):
     """
     # ID, name, version
     game = jak1_name
-    required_client_version = (0, 4, 6)
+    required_client_version = (0, 6, 0)
 
     # Options
     settings: ClassVar[JakAndDaxterSettings]
@@ -199,7 +199,7 @@ class JakAndDaxterWorld(World):
     orb_bundle_item_name: str = ""
     orb_bundle_size: int = 0
     total_trade_orbs: int = 0
-    power_cell_thresholds: List[int] = []
+    power_cell_thresholds: list[int] = []
 
     # Handles various options validation, rules enforcement, and caching of important information.
     def generate_early(self) -> None:
@@ -212,7 +212,6 @@ class JakAndDaxterWorld(World):
         self.power_cell_thresholds.append(100)  # The 100 Power Cell Door.
 
         # Order the thresholds ascending and set the options values to the new order.
-        # TODO - How does this affect region access rules and other things?
         try:
             if self.options.enable_ordered_cell_counts:
                 self.power_cell_thresholds.sort()
@@ -265,8 +264,8 @@ class JakAndDaxterWorld(World):
     # Helper function to reuse some nasty if/else trees. This outputs a list of pairs of item count and classification.
     # For instance, not all 101 power cells need to be marked progression if you only need 72 to beat the game. So we
     # will have 72 Progression Power Cells, and 29 Filler Power Cells.
-    def item_type_helper(self, item) -> List[Tuple[int, ItemClass]]:
-        counts_and_classes: List[Tuple[int, ItemClass]] = []
+    def item_type_helper(self, item) -> list[tuple[int, ItemClass]]:
+        counts_and_classes: list[tuple[int, ItemClass]] = []
 
         # Make 101 Power Cells. We only want AP's Progression Fill routine to handle the amount of cells we need
         # to reach the furthest possible region. Even for early completion goals, all areas in the game must be
@@ -412,7 +411,7 @@ class JakAndDaxterWorld(World):
                 state.prog_items[self.player]["Reachable Orbs Fresh"] = False
         return change
 
-    def fill_slot_data(self) -> Dict[str, Any]:
+    def fill_slot_data(self) -> dict[str, Any]:
         return self.options.as_dict("enable_move_randomizer",
                                     "enable_orbsanity",
                                     "global_orbsanity_bundle_size",

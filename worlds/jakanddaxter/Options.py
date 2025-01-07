@@ -11,7 +11,8 @@ class EnableMoveRandomizer(Toggle):
 
 
 class EnableOrbsanity(Choice):
-    """Include bundles of Precursor Orbs as checks. Every time you collect the chosen number of orbs, you will trigger another check.
+    """Include bundles of Precursor Orbs as checks. Every time you collect the chosen number of orbs, you will trigger
+    another check.
 
     "Per Level" means bundles are for each level in the game. "Global" means bundles carry over level to level.
 
@@ -128,7 +129,7 @@ class RequirePunchForKlaww(DefaultOnToggle):
 
 # 222 is the absolute maximum because there are 9 citizen trades and 2000 orbs to trade (2000/9 = 222).
 class CitizenOrbTradeAmount(Range):
-    """Set the number of orbs you need to trade to ordinary citizens for a power cell (Mayor, Uncle, etc.).
+    """The number of orbs you need to trade to citizens for a power cell (Mayor, Uncle, etc.).
 
     Along with Oracle Orb Trade Amount, this setting cannot exceed the total number of orbs in the game (2000).
     The equation to determine the total number of trade orbs is (9 * Citizen Trades) + (6 * Oracle Trades).
@@ -143,7 +144,7 @@ class CitizenOrbTradeAmount(Range):
 
 # 333 is the absolute maximum because there are 6 oracle trades and 2000 orbs to trade (2000/6 = 333).
 class OracleOrbTradeAmount(Range):
-    """Set the number of orbs you need to trade to the Oracles for a power cell.
+    """The number of orbs you need to trade to the Oracles for a power cell.
 
     Along with Citizen Orb Trade Amount, this setting cannot exceed the total number of orbs in the game (2000).
     The equation to determine the total number of trade orbs is (9 * Citizen Trades) + (6 * Oracle Trades).
