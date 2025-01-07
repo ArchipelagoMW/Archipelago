@@ -232,7 +232,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
 
     def _handle_player_id(self, node: JSONMessagePart):
         player = int(node["text"])
-        node["color"] = 'magenta' if player == self.ctx.slot else 'yellow'
+        node["color"] = 'magenta' if self.ctx.slot_concerns_self(player) else 'yellow'
         node["text"] = self.ctx.player_names[player]
         return self._handle_color(node)
 
@@ -410,6 +410,8 @@ class _LocationStore(dict, typing.MutableMapping[int, typing.Dict[int, typing.Tu
         checked = state[team, slot]
         if not checked:
             # This optimizes the case where everyone connects to a fresh game at the same time.
+            if slot not in self:
+                raise KeyError(slot)
             return []
         return [location_id for
                 location_id in self[slot] if
