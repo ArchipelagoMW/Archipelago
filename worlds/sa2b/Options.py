@@ -242,11 +242,11 @@ class PongTrapWeight(BaseTrapWeight):
     display_name = "Pong Trap Weight"
 
 
-class PlatformerTrapWeight(BaseTrapWeight):
+class BreakoutTrapWeight(BaseTrapWeight):
     """
-    Likelihood of receiving a trap which forces you to play a Platformer minigame
+    Likelihood of receiving a trap which forces you to play a Breakout minigame
     """
-    display_name = "Platformer Trap Weight"
+    display_name = "Breakout Trap Weight"
 
 
 class FishingTrapWeight(BaseTrapWeight):
@@ -1186,7 +1186,7 @@ sa2b_option_groups = [
     ]),
     OptionGroup("Minigames", [
         PongTrapWeight,
-        PlatformerTrapWeight,
+        BreakoutTrapWeight,
         FishingTrapWeight,
         TriviaTrapWeight,
         PokemonTriviaTrapWeight,
@@ -1322,7 +1322,7 @@ class SA2BOptions(PerGameCommonOptions):
     controller_drift_trap_weight: ControllerDriftTrapWeight
     poison_trap_weight: PoisonTrapWeight
     pong_trap_weight: PongTrapWeight
-    platformer_trap_weight: PlatformerTrapWeight
+    breakout_trap_weight: BreakoutTrapWeight
     fishing_trap_weight: FishingTrapWeight
     trivia_trap_weight: TriviaTrapWeight
     pokemon_trivia_trap_weight: PokemonTriviaTrapWeight

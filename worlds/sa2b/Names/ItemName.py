@@ -67,7 +67,7 @@ controller_drift_trap = "Controller Drift Trap"
 poison_trap           = "Poison Trap"
 
 pong_trap            = "Pong Trap"
-platformer_trap      = "Platformer Trap"
+breakout_trap        = "Breakout Trap"
 fishing_trap         = "Fishing Trap"
 trivia_trap          = "Trivia Trap"
 pokemon_trivia_trap  = "Pokemon Trivia Trap"

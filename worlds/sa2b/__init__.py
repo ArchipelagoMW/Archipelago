@@ -166,7 +166,7 @@ class SA2BWorld(World):
                                  self.options.controller_drift_trap_weight.value + \
                                  self.options.poison_trap.value + \
                                  self.options.pong_trap_weight.value + \
-                                 self.options.platformer_trap_weight.value + \
+                                 self.options.breakout_trap_weight.value + \
                                  self.options.fishing_trap_weight.value + \
                                  self.options.trivia_trap_weight.value + \
                                  self.options.pokemon_trivia_trap_weight.value + \
@@ -185,7 +185,7 @@ class SA2BWorld(World):
                 self.options.controller_drift_trap_weight.value = 4
                 self.options.poison_trap.value = 4
                 self.options.pong_trap_weight.value = 4
-                self.options.platformer_trap_weight.value = 4
+                self.options.breakout_trap_weight.value = 4
                 self.options.fishing_trap_weight.value = 4
                 self.options.trivia_trap_weight.value = 4
                 self.options.pokemon_trivia_trap_weight.value = 4
@@ -345,7 +345,7 @@ class SA2BWorld(World):
         trap_weights += ([ItemName.controller_drift_trap] * self.options.controller_drift_trap_weight.value)
         trap_weights += ([ItemName.poison_trap] * self.options.poison_trap_weight.value)
         trap_weights += ([ItemName.pong_trap] * self.options.pong_trap_weight.value)
-        trap_weights += ([ItemName.platformer_trap] * self.options.platformer_trap_weight.value)
+        trap_weights += ([ItemName.breakout_trap] * self.options.breakout_trap_weight.value)
         trap_weights += ([ItemName.fishing_trap] * self.options.fishing_trap_weight.value)
         trap_weights += ([ItemName.trivia_trap] * self.options.trivia_trap_weight.value)
         trap_weights += ([ItemName.pokemon_trivia_trap] * self.options.pokemon_trivia_trap_weight.value)
@@ -574,7 +574,7 @@ class SA2BWorld(World):
         trap_data[0x3D] = self.options.poison_trap_weight.value
 
         trap_data[0x50] = self.options.pong_trap_weight.value
-        trap_data[0x51] = self.options.platformer_trap_weight.value
+        trap_data[0x51] = self.options.breakout_trap_weight.value
         trap_data[0x52] = self.options.fishing_trap_weight.value
         trap_data[0x53] = self.options.trivia_trap_weight.value
         trap_data[0x54] = self.options.pokemon_trivia_trap_weight.value
