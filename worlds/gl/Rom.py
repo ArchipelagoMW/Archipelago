@@ -256,9 +256,6 @@ def patch_trenches(data: LevelData) -> LevelData:
 
 # Zlib decompression with wbits set to -15
 def zdec(data):
-    """
-    Decompresses zlib archives used in Midway titles.
-    """
     decomp = zlib.decompressobj(-zlib.MAX_WBITS)
     output = bytearray()
     for i in range(0, len(data), 256):
@@ -269,11 +266,6 @@ def zdec(data):
 
 # Zlib compression with compression set to max and wbits set to -15
 def zenc(data):
-    """
-    Headerless zlib encoding scheme used across games.
-    Note you get much better compression routing through gzip
-    and stripping off the header and CRC.
-    """
     compress = zlib.compressobj(zlib.Z_BEST_COMPRESSION, zlib.DEFLATED, -zlib.MAX_WBITS)
     output = bytearray()
     for i in range(0, len(data), 256):
