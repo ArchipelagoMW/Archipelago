@@ -17,6 +17,10 @@ if TYPE_CHECKING:
     from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
     from . import GamesPackage
     from settings import Group
+    from typing import Literal
+    reason_type = Optional[Literal["item_link", "panic_fill", "start_inventory_from_pool", "world"]]
+else:
+    reason_type = Optional[str]
 
 perf_logger = logging.getLogger("performance")
 
@@ -527,7 +531,7 @@ class World(metaclass=AutoWorldRegister):
         return False
 
     # following methods should not need to be overridden.
-    def create_filler(self) -> "Item":
+    def create_filler(self, reason: reason_type = None) -> "Item":
         return self.create_item(self.get_filler_item_name())
 
     # convenience methods

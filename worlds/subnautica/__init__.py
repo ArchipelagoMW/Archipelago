@@ -142,7 +142,7 @@ class SubnauticaWorld(World):
 
         # resource bundle filler
         for _ in range(extras):
-            item = self.create_filler()
+            item = self.create_filler("world")
             item = cast(SubnauticaItem, item)
             pool.append(item)
 
