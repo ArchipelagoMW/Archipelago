@@ -92,6 +92,7 @@ class TunicWorld(World):
 
     using_ut: bool  # so we can check if we're using UT only once
     passthrough: Dict[str, Any]
+    ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
 
     def generate_early(self) -> None:
         if self.options.logic_rules >= LogicRules.option_no_major_glitches:
