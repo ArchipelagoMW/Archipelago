@@ -24,6 +24,7 @@ class DSTContext(CommonContext):
     lockable_items = set()
     dst_handler = None
     connected_to_ap = False
+    locations_hinted = set()
     _eventqueue:List[Dict] = []
 
     def __init__(self, server_address, password):
@@ -104,7 +105,10 @@ class DSTContext(CommonContext):
         }]))
 
     def send_hints_to_dst(self):
+        self.locations_hinted = set()
         for hint in self.stored_data.get(f"_read_hints_{self.team}_{self.slot}", []):
+            if self.slot == hint["finding_player"]:
+                self.locations_hinted.add(hint["location"])
             if hint["found"]:
                 continue
             self.dst_handler.enqueue({
@@ -284,16 +288,13 @@ class DSTContext(CommonContext):
 
             elif eventtype == "Hint": #I think this should be deterministic enough for races, does not account for manual hints
                 if len(self.missing_locations):
-                    valid = list(self.missing_locations.difference(self.locations_scouted))
+                    valid = list(self.missing_locations.difference(self.locations_hinted, set(self.slotdata.get("goal_locations", []))))
                     random.seed(self.seed_name + str(self.slot) + str(len(valid)))
                     valid.sort()
                     if len(valid):
-                        hint = random.choice(valid)
-                        self.locations_scouted.add(hint)
-                        await self.send_msgs([{"cmd": "Set",
-                                            "key": self.username + "_locations_scouted",
-                                            "operations": [{"operation": "replace", "value": self.locations_scouted}]}])
-                        await self.send_msgs([{"cmd": "LocationScouts", "locations": [hint], "create_as_hint": 2}])
+                        hint_id = random.choice(valid)
+                        self.locations_hinted.add(hint_id)
+                        await self.send_msgs([{"cmd": "LocationScouts", "locations": [hint_id], "create_as_hint": 2}])
 
             elif eventtype == "ScoutLocation":
                 loc_id = event.get("id")
