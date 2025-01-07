@@ -566,7 +566,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         (lambda state: state.has_all({pre_basic_boating.event, mining.event, basic_combat.event}, player)) if WEAPON_LOGIC
         else lambda state: state.has_all({pre_basic_boating.event, mining.event}, player)
     )
-    thulecite = add_event("Thulecite", REGION.DUALREGION,
+    thulecite = add_event("Thulecite", REGION.DUALREGION if REGION.OCEAN in WHITELIST else REGION.RUINS,
         combine_rules(
             (
                 (lambda state: state.has("Thulecite", player)) if LOCKED_INGREDIENTS_LOGIC and is_locked("Thulecite")
@@ -575,8 +575,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             (
                 (lambda state: state.has(ruins_exploration.event, player)) if REGION.RUINS in WHITELIST
                 else (lambda state: state.has(archive_exploration.event, player)) if REGION.ARCHIVE in WHITELIST
-                else (lambda state: state.has(sunken_chest.event, player)) if REGION.OCEAN in WHITELIST
-                else ALWAYS_FALSE # Player probably chose caves but not ruins or ocean
+                else (lambda state: state.has(sunken_chest.event, player))
             )
         ),
         hide_in_spoiler = True
@@ -1043,7 +1042,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     speed_boost = add_event("Speed Boost",
         (
             REGION.FOREST if SEASON.WINTER in WHITELIST
-            else REGION.DUALREGION if is_locked("Magiluminescence")
+            else REGION.DUALREGION if REGION.OCEAN in WHITELIST else REGION.RUINS if is_locked("Magiluminescence")
             else REGION.RUINS,
         ),
         either_rule(
