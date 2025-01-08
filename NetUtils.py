@@ -10,7 +10,7 @@ import websockets
 from Utils import ByValue, Version
 
 
-class HintStatus(enum.IntEnum):
+class HintStatus(ByValue, enum.IntEnum):
     HINT_FOUND = 0
     HINT_UNSPECIFIED = 1
     HINT_NO_PRIORITY = 10
