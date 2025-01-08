@@ -601,6 +601,9 @@ class LinksAwakeningContext(CommonContext):
     async def request_found_entrances(self):
         await self.send_msgs([{"cmd": "Get", "keys": [storage_key]}])
 
+        # Ask for updates so that players can co-op entrances in a seed  
+        await self.send_msgs([{"cmd": "SetNotify", "keys": [storage_key]}])  
+
     async def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
         if self.ENABLE_DEATHLINK:
             self.client.pending_deathlink = True
@@ -639,6 +642,9 @@ class LinksAwakeningContext(CommonContext):
         
         if cmd == "Retrieved" and self.magpie_enabled and storage_key in args["keys"]:
             self.client.gps_tracker.receive_found_entrances(args["keys"][storage_key])
+
+        if cmd == "SetReply" and self.magpie_enabled and args["key"] == storage_key:  
+            self.client.gps_tracker.receive_found_entrances(args["value"]) 
 
     async def sync(self):
         sync_msg = [{'cmd': 'Sync'}]

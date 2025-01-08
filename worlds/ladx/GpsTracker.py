@@ -13,6 +13,7 @@ class Entrance:
     name: str
     other_side_name: str = None
     changed: bool = False
+    known_to_server: bool = False
 
     def __init__(self, outdoor: int, indoor: int, name: str, indoor_address: int=None):
         self.outdoor_room = outdoor
@@ -20,9 +21,10 @@ class Entrance:
         self.indoor_address = indoor_address
         self.name = name
 
-    def map(self, other_side: str):
+    def map(self, other_side: str, known_to_server: bool = False):
         if other_side != self.other_side_name:
             self.changed = True
+            self.known_to_server = known_to_server
         
         self.other_side_name = other_side
 
@@ -247,9 +249,15 @@ class GpsTracker:
 
         await socket.send(json.dumps(message))
 
-        return message['entranceMap']
+        new_to_server = { 
+            entrance.name: entrance.other_side_name 
+            for entrance in new_entrances 
+            if not entrance.known_to_server 
+        } 
+ 
+        return new_to_server
 
     def receive_found_entrances(self, found_entrances: typing.Dict[str, str]):
         for entrance, destination in found_entrances.items():
             if entrance in self.entrances_by_name:
-                self.entrances_by_name[entrance].map(destination)
+                self.entrances_by_name[entrance].map(destination, known_to_server=True)
