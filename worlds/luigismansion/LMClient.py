@@ -10,78 +10,12 @@ import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus, NetworkItem
 from settings import get_settings, Settings
+from worlds.luigismansion import LMLocationData
 from .LMGenerator import LuigisMansionRandomizer
 
 from .Items import LOOKUP_ID_TO_NAME, ALL_ITEMS_TABLE
-from .Locations import ALL_LOCATION_TABLE, LMLocation
+from .Locations import ALL_LOCATION_TABLE, LMLocation, FURNITURE_LOCATION_TABLE
 
-# filtered_location_list = list(filter(
-        #lambda (key, named_tuple): named_tuple.ram_address_room_id == int_current_room, ALL_LOCATION_TABLE.items()))
-
-furniture_name_list: dict[int, dict[int, str]] = {
-    2: { # Foyer
-        99: "Foyer Right Tall Candles",
-        100: "Foyer Left Tall Candles",
-        101: "Foyer Chandelier",
-        207: "Foyer Left Dresser",
-        208: "Foyer Covered Mirror",
-        270: "Foyer Ceiling Light by Heart Door"
-    },
-    31: { # Upper Foyer
-        335: "Left Jar in Upper Foyer",
-        336: "Right Jar in Upper Foyer"
-    },
-    34: { # Master Bedroom
-        360: "Master Bedroom Bed",
-        361: "Master Bedroom Left Painting (near back)",
-        362: "Master Bedroom Right Painting (closer to Entrance)",
-        363: "Master Bedroom Right Painting (near back)",
-        373: "Master Bedroom Ceiling fan",
-        375: "Master Bedroom Vanity",
-        376: "Master Bedroom Stool",
-        491: "Master Bedroom Dresser",
-        492: "Master Bedroom End Table",
-    },
-    35: { # Study
-        348: "Study Hat Rack",
-        349: "Study Large Lamp",
-        350: "Study Swivel Chair",
-        351: "Study Large Desk",
-        352: "Study Chandelier",
-        353: "Study Ship in a bottle",
-        354: "Study Bookshelf 1 (Far Left)",
-        355: "Study Bookshelf 2 (Second From Left)",
-        356: "Study Bookshelf 3 (Third From Left)",
-        357: "Study Bookshelf 4 (Third From Right)",
-        358: "Study Bookshelf 5 (Second From Right)",
-        359: "Study Bookshelf 6 (Far Right)",
-        503: "Study Openable Book (closer to Entrance)",
-        504: "Study Openable Book (near back)",
-        552: "Study Left Painting (near back)",
-        553: "Study Left Painting (closer to Entrance)",
-        554: "Study Right Painting (closer to Entrance)",
-        555: "Study Right Painting (near back)",
-        560: "Study Rocking Chair"
-    },
-    36: { # Parlor
-        337: "Parlor China Shelves",
-        338: "Parlor Dining Chair",
-        339: "Parlor Dining Table",
-        340: "Parlor Coffee Table",
-        341: "Parlor Love Seat",
-        342: "Parlor Chandelier",
-        343: "Parlor Left Painting (near back)",
-        344: "Parlor Left Painting (closer to Entrance)",
-        345: "Parlor Right Painting (closer to Entrance)",
-        346: "Parlor Right Painting (near back)",
-        347: "Parlor Center Painting",
-        489: "Parlor Right End Table",
-        490: "Parlor Right Lamp on End Table",
-        494: "Parlor Center Low Shelves",
-        511: "Parlor Left Candelabra",
-        512: "Parlor Right Candelabra"
-    }
-}
 
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
@@ -439,34 +373,34 @@ async def check_locations(ctx: LMContext):
     current_room_id = dolphin_memory_engine.read_word(
         dolphin_memory_engine.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
 
-    if furniture_name_list.keys().__contains__(current_room_id):
+    furniture_name_list: dict[str, LMLocationData] = dict(filter(lambda item:
+                            item[1].in_game_room_id == current_room_id, FURNITURE_LOCATION_TABLE.items()))
+
+    if len(furniture_name_list.keys()) > 0:
         for current_offset in range(0, 424, 4): # TODO Validate this accounts for all furniture
-
             current_addr = FURNITURE_MAIN_TABLE_ID+current_offset
-            if dolphin_memory_engine.read_word(current_addr) == 0:
-                continue
 
-            furniture_flag =  dolphin_memory_engine.read_word(
-                dolphin_memory_engine.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
-
-            if furniture_flag == 0:
+            # Not within a valid range for a pointer
+            if  not (2147483648 <= dolphin_memory_engine.read_word(current_addr) <= 2172649471):
                 continue
 
             furniture_id = dolphin_memory_engine.read_word(
                 dolphin_memory_engine.follow_pointers(current_addr, [FURN_ID_OFFSET]))
+            furniture_flag =  dolphin_memory_engine.read_word(
+                dolphin_memory_engine.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
 
-            if not furniture_name_list[current_room_id].__contains__(furniture_id):
+            # ID is a valid piece of furniture in the room, has been interacted with, and not already tracked.
+            named_furniture = next(((key, value) for (key, value) in furniture_name_list.items() if
+                                value.jmpentry == furniture_id), None)
+            if named_furniture is None or furniture_flag == 0 or (
+                    LMContext.checked_furniture.__contains__(str(named_furniture[0]))):
                 continue
 
-            furniture_name = furniture_name_list[current_room_id][furniture_id]
-
-            if LMContext.checked_furniture.__contains__(furniture_name):
-                continue
-
-            print(f"Luigi knocked on furniture {furniture_name} in Room #{str(current_room_id)}.\n"+
+            print(f"Luigi knocked on furniture {named_furniture[0]} in Room #{str(current_room_id)}.\n"+
                   f"Additional Debug Details: Current Addr: {hex(current_addr)}; Furniture ID: {hex(furniture_id)}; " +
                   f"Flag Value: {furniture_flag}")
-            LMContext.checked_furniture.append(furniture_name)
+
+            LMContext.checked_furniture.append(named_furniture[0])
 
         #if furniture_id in filtered_location_list:
             #furniture_state =
@@ -570,18 +504,11 @@ async def check_death(ctx: LMContext):
 
 
 def check_ingame():
-    current_room_id = dolphin_memory_engine.read_word(
-        dolphin_memory_engine.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET])) if (
-            dolphin_memory_engine.read_word(ROOM_ID_ADDR) > 0) else 0
-    bool_in_main_map = 0 < current_room_id < 74
-
-    bool_in_boss_map = False
-    if not bool_in_main_map:
-        current_map_id = dolphin_memory_engine.read_word(CURR_MAP_ID_ADDR)
-        bool_in_boss_map = 0 < current_map_id < 14
+    current_map_id = dolphin_memory_engine.read_word(CURR_MAP_ID_ADDR)
+    bool_loaded_in_map = 0 < current_map_id < 14
 
     int_play_state = dolphin_memory_engine.read_word(CURR_PLAY_STATE_ADDR)
-    return int_play_state == 2 and (bool_in_main_map or bool_in_boss_map)
+    return int_play_state == 2 and bool_loaded_in_map
 
 
 async def dolphin_sync_task(ctx: LMContext):
