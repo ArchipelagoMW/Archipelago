@@ -94,6 +94,7 @@ This should be compatible with most other Don't Starve Together mods. Modded ite
 
 Known incompatibilities:
 - [API] Gem Core: May cause some issues with the crafting menu
+- Don't Starve Alone (Mod)
 
 ## Can this be played in multiplayer?
 
@@ -109,7 +110,8 @@ valid as playing the game on default settings.
 
 If you want an easier experience:
 - Do not enable caves or ocean regions in your YAML. Choose the survival goal, or choose Eye Of Terror as your goal boss.
-- Set Extra Damage Against Bosses to the highest setting in your YAML.
+- Set damage multipliers in the mod's configuration options.
+- Use the free-build crafting mode.
 - Set your server playstyle to Relaxed.
 - Play with mods.
 - Use the [Don't Starve Wiki](https://dontstarve.wiki.gg). Especially for Crock Pot recipes.
