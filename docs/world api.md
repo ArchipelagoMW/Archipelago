@@ -222,8 +222,8 @@ could also be progress in a research tree, or even something more abstract like 
 
 Each location has a `name` and an `address` (hereafter referred to as an `id`), is placed in a Region, has access rules,
 and has a classification. The name needs to be unique within each game and must not be numeric (must contain least 1
-letter or symbol). The ID needs to be unique across all games, and is best kept in the same range as the item IDs.
-Locations and items can share IDs, so typically a game's locations and items start at the same ID.
+letter or symbol). The ID needs to be unique across all locations within the game. 
+Locations and items can share IDs, and locations can share IDs with other games' locations.
 
 World-specific IDs must be in the range 1 to 2<sup>53</sup>-1; IDs ≤ 0 are global and reserved.
 
