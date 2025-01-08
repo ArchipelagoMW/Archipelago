@@ -1,4 +1,6 @@
 import json
+import os
+import pkgutil
 from pathlib import Path
 from typing import Dict, NamedTuple, List, Optional
 
@@ -20,11 +22,11 @@ class FF1Locations:
     def _populate_item_table_from_data(self):
         base_path = Path(__file__).parent
         file_path = (base_path / "data/locations.json").resolve()
-        with open(file_path) as file:
-            locations = json.load(file)
-            # Hardcode progression and categories for now
-            self._location_table = [LocationData(name, code) for name, code in locations.items()]
-            self._location_table_lookup = {item.name: item for item in self._location_table}
+        file = pkgutil.get_data(__name__, os.path.join("data", "locations.json"))
+        locations = json.loads(file)
+        # Hardcode progression and categories for now
+        self._location_table = [LocationData(name, code) for name, code in locations.items()]
+        self._location_table_lookup = {item.name: item for item in self._location_table}
 
     def _get_location_table(self) -> List[LocationData]:
         if not self._location_table or not self._location_table_lookup:

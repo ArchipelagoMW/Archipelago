@@ -1,4 +1,6 @@
 import json
+import os
+import pkgutil
 from pathlib import Path
 from typing import Dict, Set, NamedTuple, List
 
@@ -39,13 +41,13 @@ class FF1Items:
     def _populate_item_table_from_data(self):
         base_path = Path(__file__).parent
         file_path = (base_path / "data/items.json").resolve()
-        with open(file_path) as file:
-            items = json.load(file)
-            # Hardcode progression and categories for now
-            self._item_table = [ItemData(name, code, "FF1Item", ItemClassification.progression if name in
-                                FF1_PROGRESSION_LIST else ItemClassification.useful if name in FF1_USEFUL_LIST else
-                                ItemClassification.filler) for name, code in items.items()]
-            self._item_table_lookup = {item.name: item for item in self._item_table}
+        file = pkgutil.get_data(__name__, os.path.join("data", "items.json")).decode("utf-8")
+        items = json.loads(file)
+        # Hardcode progression and categories for now
+        self._item_table = [ItemData(name, code, "FF1Item", ItemClassification.progression if name in
+                            FF1_PROGRESSION_LIST else ItemClassification.useful if name in FF1_USEFUL_LIST else
+                            ItemClassification.filler) for name, code in items.items()]
+        self._item_table_lookup = {item.name: item for item in self._item_table}
 
     def _get_item_table(self) -> List[ItemData]:
         if not self._item_table or not self._item_table_lookup:
