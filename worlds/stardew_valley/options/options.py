@@ -772,6 +772,7 @@ if 'unittest' in sys.modules.keys() or 'pytest' in sys.modules.keys():
 
 class Mods(OptionSet):
     """List of mods that will be included in the shuffling."""
+    visibility = Visibility.all & ~Visibility.simple_ui
     internal_name = "mods"
     display_name = "Mods"
     valid_keys = {ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
