@@ -666,7 +666,7 @@ async def game_watcher(ctx: Wargroove2Context):
         sending: list = []
         victory = False
         await ctx.update_death_link(ctx.has_death_link)
-        for root, dirs, files in os.walk(ctx.game_communication_path):
+        for _root, _dirs, files in os.walk(ctx.game_communication_path):
             for file in files:
                 if file.find("send") > -1:
                     st = int(file.split("send", -1)[1])
