@@ -675,7 +675,7 @@ async def game_watcher(ctx: Wargroove2Context):
                     if loc_name is not None and loc_name.endswith("Victory"):
                         extras = ctx.victory_locations
                     elif loc_name is not None and \
-                            st < location_table["Humble Beginnings Rebirth: Talk to Nadia Extra 1"]:
+                            st < location_table["Humble Beginnings Rebirth: Talk to Nadia Extra 1"]:  # type: ignore
                         extras = ctx.objective_locations
                     for i in range(1, extras):
                         sending = sending + [location_table[loc_name + f" Extra {i}"]]
