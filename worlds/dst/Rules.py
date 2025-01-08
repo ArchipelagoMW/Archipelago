@@ -1059,7 +1059,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         (
             either_rule (
                 (
-                    (lambda state: state.has_all({"Lantern", "Rope"}, player)) if REGION.CAVE in WHITELIST
+                    (lambda state: state.has_all({"Lantern", "Rope", mining.event}, player)) if REGION.CAVE in WHITELIST
                     else (lambda state: state.has_all({"Lantern", "Rope", sea_fishing.event}, player)) # Skittersquids
                 ),
                 lambda state: (
@@ -2021,7 +2021,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
 
             # Season passed rules
             def get_season_passed_event() -> Optional[DSTRule]:
-                _season_passed_event:DSTRule = (
+                _season_passed_event:Optional[DSTRule] = (
                     seasons_passed_half if "seasons_passed_half" in location_data.tags
                     else seasons_passed_1 if "seasons_passed_1" in location_data.tags
                     else seasons_passed_2 if "seasons_passed_2" in location_data.tags

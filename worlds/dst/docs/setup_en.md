@@ -44,7 +44,7 @@
 - Once you load in and select your character, the client should automatically connect to DST and you can start playing!
 - Depending on your YAML's settings, your checks can include interacting with or killing creatures, researching at a Science Machine, and
   cooking dishes with a Crock Pot.
-- Most of your received items are recipes unlocks. Check your crafting menu for your items.
+- Most of your received items are recipe unlocks. Check your crafting menu for your items.
 - Once you've connected your world to Archipelgo for the first time, it's possible to continue even if not connected. Progress syncs when
   you connect to Archipelago again. However, offline progress is lost if you regenerate your world!
 - It is fine to play the same Archipelago slot on multiple worlds, even by multiple people at the same time.
