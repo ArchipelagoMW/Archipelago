@@ -12,15 +12,16 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
     main_area = JakAndDaxterRegion("Main Area", player, multiworld, level_name, 128)
     main_area.add_cell_locations([18, 21, 22])
 
-    # These 3 scout fly boxes can be broken by running with freely accessible blue eco.
-    main_area.add_fly_locations([327700, 20, 65556])
+    # These scout fly boxes can be broken by running with freely accessible blue eco.
+    # The 3 clusters by the Flut Flut egg can go surprisingly far.
+    main_area.add_fly_locations([327700, 20, 65556, 262164])
 
-    # These 2 scout fly boxes can be broken with the locked blue eco vent, or by normal combat tricks.
-    main_area.add_fly_locations([262164, 393236], access_rule=lambda state:
+    # This scout fly box can be broken with the locked blue eco vent, or by normal combat tricks.
+    main_area.add_fly_locations([393236], access_rule=lambda state:
                                 state.has("Blue Eco Switch", player)
                                 or can_free_scout_flies(state, player))
 
-    # No need for the blue eco vent for the orb caches.
+    # No need for the blue eco vent for either of the orb caches.
     main_area.add_cache_locations([12634, 12635])
 
     pelican = JakAndDaxterRegion("Pelican", player, multiworld, level_name, 0)

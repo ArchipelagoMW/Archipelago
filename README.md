@@ -33,7 +33,6 @@ Currently, the following games are supported:
 * Super Mario World
 * Pokémon Red and Blue
 * Hylics 2
-* Jak and Daxter: The Precursor Legacy
 * Overcooked! 2
 * Zillion
 * Lufia II Ancient Cave
@@ -81,6 +80,7 @@ Currently, the following games are supported:
 * Saving Princess
 * Castlevania: Circle of the Moon
 * Inscryption
+* Jak and Daxter: The Precursor Legacy
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled

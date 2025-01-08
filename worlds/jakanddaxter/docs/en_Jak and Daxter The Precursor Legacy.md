@@ -144,20 +144,18 @@ There are several options to change the difficulty of this challenge.
     - For example, if your bundle size is 20 orbs, you will add 100 items to the pool. If your bundle size is 250 orbs,
       you will add 8 items to the pool.
 
-### A WARNING ABOUT ORBSANITY OPTIONS
-
-Unlike other settings, you CANNOT alter Orbsanity options after you generate a seed and start a game. **If you turn 
-Orbsanity OFF in the middle of an Orbsanity game, you will have NO way of completing the orb checks.** This may cause
-you to miss important progression items and prevent you (and others) from completing the run.
-
-When you connect your text client to the Archipelago Server, the server will tell the game what settings were chosen
-for this seed, and the game will apply those settings automatically. You can verify (but DO NOT ALTER) these settings 
-by navigating to `Options`, then `Archipelago Options`, then `Seed Options`.
-
 ## I got soft-locked and can't leave, how do I get out of here?
 Open the game's menu, navigate to `Options`, then `Archipelago Options`, then `Warp To Home`. 
 Selecting this option will ask if you want to be teleported to Geyser Rock. From there, you can teleport back 
 to the nearest sage's hut to continue your journey.
+
+## How do I check my player options in-game?
+When you connect your text client to the Archipelago Server, the server will tell the game what options were chosen
+for this seed, and the game will apply those settings automatically. 
+
+You can verify these options by navigating to `Options`, then `Archipelago Options`, then `Seed Options`. **You can open 
+each option to verify them, but you should NOT alter them during a run.** This may cause you to miss important 
+progression items and prevent you (and others) from completing the run.
 
 ## How does the HUD work? What are the alternate modes? (I didn't know there were alternate modes!)
 The game's normal HUD shows you how many power cells, precursor orbs, and scout flies you currently have. But if you 

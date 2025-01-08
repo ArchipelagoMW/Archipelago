@@ -10,11 +10,12 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
     options = world.options
     player = world.player
 
-    main_area = JakAndDaxterRegion("Main Area", player, multiworld, level_name, 50)
+    main_area = JakAndDaxterRegion("Main Area", player, multiworld, level_name, 48)
     main_area.add_cell_locations([92, 93])
     main_area.add_fly_locations(Scouts.locGR_scoutTable.keys())  # All Flies here are accessible with blue eco.
 
-    cliff = JakAndDaxterRegion("Cliff", player, multiworld, level_name, 0)
+    # The last 2 orbs are barely gettable with the blue eco vent, but it's pushing accessibility. So I moved them here.
+    cliff = JakAndDaxterRegion("Cliff", player, multiworld, level_name, 2)
     cliff.add_cell_locations([94])
 
     main_area.connect(cliff, rule=lambda state:

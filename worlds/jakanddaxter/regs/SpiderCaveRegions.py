@@ -47,10 +47,10 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> list[JakAndDaxte
 
     scaffolding_level_two = JakAndDaxterRegion("Robot Scaffolding Level 2", player, multiworld, level_name, 4)
 
+    # Using the blue eco from the pole course, you can single jump to the scout fly up here.
     scaffolding_level_three = JakAndDaxterRegion("Robot Scaffolding Level 3", player, multiworld, level_name, 29)
     scaffolding_level_three.add_cell_locations([81])
-    scaffolding_level_three.add_fly_locations([65621], access_rule=lambda state:
-                                              can_free_scout_flies(state, player))   # Not shootable.
+    scaffolding_level_three.add_fly_locations([65621])
 
     pole_course = JakAndDaxterRegion("Pole Course", player, multiworld, level_name, 18)
     pole_course.add_cell_locations([82])
