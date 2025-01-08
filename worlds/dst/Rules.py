@@ -1059,7 +1059,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         (
             either_rule (
                 (
-                    (lambda state: state.has_all({"Lantern", "Rope"}, player)) if REGION.CAVE in WHITELIST
+                    (lambda state: state.has_all({"Lantern", "Rope", mining.event}, player)) if REGION.CAVE in WHITELIST
                     else (lambda state: state.has_all({"Lantern", "Rope", sea_fishing.event}, player)) # Skittersquids
                 ),
                 lambda state: (
