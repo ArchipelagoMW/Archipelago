@@ -14,7 +14,6 @@ if TYPE_CHECKING:
 
 
 base_id = 7000
-nes_logger = logging.getLogger("NES")
 logger = logging.getLogger("Client")
 
 
@@ -172,7 +171,7 @@ class FF1Client(BizHawkClient):
             if location not in ctx.locations_checked:
                 ctx.locations_checked.add(location)
                 location_name = ctx.location_names.lookup_in_game(location)
-                nes_logger.info(
+                logger.info(
                     f'New Check: {location_name} ({len(ctx.locations_checked)}/'
                     f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
                 await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [location]}])

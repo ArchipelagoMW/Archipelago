@@ -1,7 +1,5 @@
 import json
-import os
 import pkgutil
-from pathlib import Path
 from typing import Dict, Set, NamedTuple, List
 
 from BaseClasses import Item, ItemClassification
@@ -39,9 +37,7 @@ class FF1Items:
     _item_table_lookup: Dict[str, ItemData] = {}
 
     def _populate_item_table_from_data(self):
-        base_path = Path(__file__).parent
-        file_path = (base_path / "data/items.json").resolve()
-        file = pkgutil.get_data(__name__, os.path.join("data", "items.json")).decode("utf-8")
+        file = pkgutil.get_data(__name__, "data/items.json").decode("utf-8")
         items = json.loads(file)
         # Hardcode progression and categories for now
         self._item_table = [ItemData(name, code, "FF1Item", ItemClassification.progression if name in

@@ -1,7 +1,5 @@
 import json
-import os
 import pkgutil
-from pathlib import Path
 from typing import Dict, NamedTuple, List, Optional
 
 from BaseClasses import Region, Location, MultiWorld
@@ -20,9 +18,7 @@ class FF1Locations:
     _location_table_lookup: Dict[str, LocationData] = {}
 
     def _populate_item_table_from_data(self):
-        base_path = Path(__file__).parent
-        file_path = (base_path / "data/locations.json").resolve()
-        file = pkgutil.get_data(__name__, os.path.join("data", "locations.json"))
+        file = pkgutil.get_data(__name__, "data/locations.json")
         locations = json.loads(file)
         # Hardcode progression and categories for now
         self._location_table = [LocationData(name, code) for name, code in locations.items()]
