@@ -3,7 +3,7 @@ from __future__ import annotations
 import ModuleUpdate
 ModuleUpdate.update()
 
-from worlds.wargroove2.client import launch
+from worlds.wargroove2.Client import launch
 import Utils
 
 if __name__ == "__main__":
