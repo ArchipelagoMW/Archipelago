@@ -140,8 +140,8 @@ class TLOZClient(BizHawkClient):
 
 
     async def received_items_check(self, ctx):
-        items_received_count_low = await self.read_ram_value(ctx, Rom.items_obtained)
-        items_received_count_high = await self.read_ram_value(ctx, Rom.items_obtained + 1)
+        items_received_count_low = await self.read_ram_value(ctx, Rom.items_obtained_low)
+        items_received_count_high = await self.read_ram_value(ctx, Rom.items_obtained_high + 1) & 0b00000111
         items_received_count = list([items_received_count_low, items_received_count_high])
         items_received_count_value = int.from_bytes(items_received_count, "little")
         if items_received_count_value < len(ctx.items_received):
@@ -149,7 +149,11 @@ class TLOZClient(BizHawkClient):
             current_item_id = current_item.item
             current_item_name = ctx.item_names.lookup_in_game(current_item_id, ctx.game)
             await self.write_item(ctx, current_item_name)
-            await self.write(ctx, Rom.items_obtained, items_received_count_value + 1)
+            items_received_count_value += 1
+            new_items_received_count_low = items_received_count_value % 256
+            new_items_received_count_high = items_received_count_value // 256
+            await self.write(ctx, Rom.items_obtained_low, new_items_received_count_low)
+            await self.write(ctx, Rom.items_obtained_high, new_items_received_count_high)
 
     async def resolve_shop_items(self, ctx):
         pass

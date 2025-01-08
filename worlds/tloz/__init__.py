@@ -130,7 +130,7 @@ class TLoZWorld(World):
             return TLoZItem(
                 name,
                     ItemClassification.progression
-                    if (self.options.EntranceShuffle.value in [2, 3, 5] and self.options.RandomizeWarpCaves)
+                    if (self.options.EntranceShuffle.value > 1 and self.options.RandomizeWarpCaves)
                     else item_table[name].classification,
                 self.item_name_to_id[name],
                 self.player)

@@ -160,11 +160,12 @@ def create_entrance_randomizer_set(world: World):
     elif world.options.EntranceShuffle.value == 3:
         shuffled_entrances = [*open_entrances]
     elif world.options.EntranceShuffle.value == 4:
-        shuffled_entrances = [*major_entrances, *open_entrances]
+        shuffled_entrances = list({*major_entrances, *open_entrances})
     elif world.options.EntranceShuffle.value == 5:
         shuffled_entrances = [*all_entrances]
     if world.options.RandomizeWarpCaves == True:
         shuffled_entrances.extend(warp_caves)
+    shuffled_entrances = sorted(shuffled_entrances)
     screens = [screen for screen in overworld_entrances.keys()
                    if screen in shuffled_entrances and should_shuffle_warp_cave(screen, world)]
     destinations = [data[1] for screen, data in overworld_entrances.items()
