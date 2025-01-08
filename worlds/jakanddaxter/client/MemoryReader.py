@@ -1,7 +1,7 @@
 import logging
 import random
 import struct
-from typing import ByteString, Callable, Optional
+from typing import ByteString, Callable
 import json
 import pymem
 from pymem import pattern
@@ -297,7 +297,7 @@ class JakAndDaxterMemoryReader:
         if not self.connected:
             self.log_error(logger, "The Memory Reader is not connected!")
 
-        memory_version: Optional[int] = None
+        memory_version: int | None = None
         try:
             memory_version = self.read_goal_address(memory_version_offset, sizeof_uint32)
             if memory_version == expected_memory_version:

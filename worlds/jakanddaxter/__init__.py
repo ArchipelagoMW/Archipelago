@@ -1,4 +1,4 @@
-from typing import Any, ClassVar, Callable, Optional, Union
+from typing import Any, ClassVar, Callable
 from math import ceil
 import Utils
 import settings
@@ -66,8 +66,8 @@ class JakAndDaxterSettings(settings.Group):
 
     root_directory: RootDirectory = RootDirectory(
         "%programfiles%/OpenGOAL-Launcher/features/jak1/mods/JakMods/archipelagoal")
-    auto_detect_root_directory: Union[AutoDetectRootDirectory, bool] = True
-    enforce_friendly_options: Union[EnforceFriendlyOptions, bool] = True
+    auto_detect_root_directory: AutoDetectRootDirectory | bool = True
+    enforce_friendly_options: EnforceFriendlyOptions | bool = True
 
 
 class JakAndDaxterWebWorld(WebWorld):
@@ -195,7 +195,7 @@ class JakAndDaxterWorld(World):
 
     # These functions and variables are Options-driven, keep them as instance variables here so that we don't clog up
     # the seed generation routines with options checking. So we set these once, and then just use them as needed.
-    can_trade: Callable[[CollectionState, int, Optional[int]], bool]
+    can_trade: Callable[[CollectionState, int, int | None], bool]
     orb_bundle_item_name: str = ""
     orb_bundle_size: int = 0
     total_trade_orbs: int = 0

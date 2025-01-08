@@ -10,7 +10,7 @@ import colorama
 import asyncio
 from asyncio import Task
 
-from typing import Set, Awaitable, Optional
+from typing import Set, Awaitable
 
 import pymem
 from pymem.exception import ProcessNotFound
@@ -90,7 +90,7 @@ class JakAndDaxterContext(CommonContext):
     repl_task: asyncio.Task
     memr_task: asyncio.Task
 
-    def __init__(self, server_address: Optional[str], password: Optional[str]) -> None:
+    def __init__(self, server_address: str | None, password: str | None) -> None:
         self.repl = JakAndDaxterReplClient(self.on_log_error,
                                            self.on_log_warn,
                                            self.on_log_success,
@@ -175,10 +175,10 @@ class JakAndDaxterContext(CommonContext):
 
     async def json_to_game_text(self, args: dict):
         if "type" in args and args["type"] in {"ItemSend"}:
-            my_item_name: Optional[str] = None
-            my_item_finder: Optional[str] = None
-            their_item_name: Optional[str] = None
-            their_item_owner: Optional[str] = None
+            my_item_name: str | None = None
+            my_item_finder: str | None = None
+            their_item_name: str | None = None
+            their_item_owner: str | None = None
 
             item = args["item"]
             recipient = args["receiving"]

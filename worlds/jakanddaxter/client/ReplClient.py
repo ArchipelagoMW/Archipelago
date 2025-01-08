@@ -6,7 +6,7 @@ import struct
 import random
 from dataclasses import dataclass
 from queue import Queue
-from typing import Optional, Callable
+from typing import Callable
 
 import pymem
 from pymem.exception import ProcessNotFound, ProcessError
@@ -30,10 +30,10 @@ logger = logging.getLogger("ReplClient")
 
 @dataclass
 class JsonMessageData:
-    my_item_name: Optional[str] = None
-    my_item_finder: Optional[str] = None
-    their_item_name: Optional[str] = None
-    their_item_owner: Optional[str] = None
+    my_item_name: str | None = None
+    my_item_finder: str | None = None
+    their_item_name: str | None = None
+    their_item_owner: str | None = None
 
 
 class JakAndDaxterReplClient:
