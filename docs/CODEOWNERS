@@ -81,6 +81,9 @@
 # Hylics 2
 /worlds/hylics2/ @TRPG0
 
+# Inscryption
+/worlds/inscryption/ @DrBibop @Glowbuzz
+
 # Jak and Daxter: The Precursor Legacy
 /worlds/jakanddaxter/ @massimilianodelliubaldini
 
@@ -152,7 +155,7 @@
 /worlds/saving_princess/ @LeonarthCG
 
 # Shivers
-/worlds/shivers/ @GodlFire
+/worlds/shivers/ @GodlFire @korydondzila
 
 # A Short Hike
 /worlds/shorthike/ @chandler05 @BrandenEK
