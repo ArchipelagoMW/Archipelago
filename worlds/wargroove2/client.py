@@ -265,7 +265,7 @@ class Wargroove2Context(CommonContext):
                         f.write(f"{item_count}")
                     f.close()
 
-                print_filename = f"AP_{str(network_item.item)}.item.print"
+                print_filename = f"AP_{network_item.item}.item.print"
                 print_path = os.path.join(self.game_communication_path, print_filename)
                 if not os.path.isfile(print_path):
                     open(print_path, 'w').close()
