@@ -8,8 +8,7 @@ from typing import List
 from BaseClasses import get_seed
 from Fill import distribute_items_restrictive, balance_multiworld_progression
 from worlds import AutoWorld
-from .. import SVTestCase, minimal_locations_maximal_items, setup_multiworld, default_6_x_x, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x, \
-    default_6_x_x_with_vanilla_tools
+from .. import SVTestCase, minimal_locations_maximal_items, setup_multiworld, default_6_x_x, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x
 
 assert default_6_x_x
 assert allsanity_no_mods_6_x_x
@@ -137,33 +136,6 @@ def size_name(number_players):
 class TestDefaultOptions(SVPerformanceTestCase):
     acceptable_time_per_player = 2
     options = default_6_x_x()
-    results = []
-
-    def test_solo(self):
-        number_players = 1
-        multiworld_options = [self.options] * number_players
-        self.performance_test_multiworld(multiworld_options)
-
-    def test_duo(self):
-        number_players = 2
-        multiworld_options = [self.options] * number_players
-        self.performance_test_multiworld(multiworld_options)
-
-    def test_5_player(self):
-        number_players = 5
-        multiworld_options = [self.options] * number_players
-        self.performance_test_multiworld(multiworld_options)
-
-    @unittest.skip
-    def test_10_player(self):
-        number_players = 10
-        multiworld_options = [self.options] * number_players
-        self.performance_test_multiworld(multiworld_options)
-
-
-class TestDefaultOptionsVanillaTools(SVPerformanceTestCase):
-    acceptable_time_per_player = 2
-    options = default_6_x_x_with_vanilla_tools()
     results = []
 
     def test_solo(self):

@@ -98,42 +98,6 @@ def allsanity_mods_6_x_x():
     return allsanity
 
 
-def default_6_x_x_with_vanilla_tools():
-    return {
-        options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.default,
-        options.BackpackProgression.internal_name: options.BackpackProgression.default,
-        options.Booksanity.internal_name: options.Booksanity.default,
-        options.BuildingProgression.internal_name: options.BuildingProgression.default,
-        options.BundlePrice.internal_name: options.BundlePrice.default,
-        options.BundleRandomization.internal_name: options.BundleRandomization.default,
-        options.Chefsanity.internal_name: options.Chefsanity.default,
-        options.Cooksanity.internal_name: options.Cooksanity.default,
-        options.Craftsanity.internal_name: options.Craftsanity.default,
-        options.Cropsanity.internal_name: options.Cropsanity.default,
-        options.ElevatorProgression.internal_name: options.ElevatorProgression.default,
-        options.EntranceRandomization.internal_name: options.EntranceRandomization.default,
-        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.default,
-        options.FestivalLocations.internal_name: options.FestivalLocations.default,
-        options.Fishsanity.internal_name: options.Fishsanity.default,
-        options.Friendsanity.internal_name: options.Friendsanity.default,
-        options.FriendsanityHeartSize.internal_name: options.FriendsanityHeartSize.default,
-        options.Goal.internal_name: options.Goal.default,
-        options.Mods.internal_name: options.Mods.default,
-        options.Monstersanity.internal_name: options.Monstersanity.default,
-        options.Museumsanity.internal_name: options.Museumsanity.default,
-        options.NumberOfMovementBuffs.internal_name: options.NumberOfMovementBuffs.default,
-        options.EnabledFillerBuffs.internal_name: options.EnabledFillerBuffs.default,
-        options.QuestLocations.internal_name: options.QuestLocations.default,
-        options.SeasonRandomization.internal_name: options.SeasonRandomization.default,
-        options.Shipsanity.internal_name: options.Shipsanity.default,
-        options.SkillProgression.internal_name: options.SkillProgression.default,
-        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.default,
-        options.ToolProgression.internal_name: options.ToolProgression.option_vanilla,
-        options.TrapItems.internal_name: options.TrapItems.default,
-        options.Walnutsanity.internal_name: options.Walnutsanity.default
-    }
-
-
 def get_minsanity_options():
     return {
         options.ArcadeMachineLocations.internal_name: options.ArcadeMachineLocations.option_disabled,

@@ -126,9 +126,7 @@ def choose_skill_progression(skill_progression_option: options.SkillProgression)
 
 
 def choose_tool_progression(tool_option: options.ToolProgression, skill_option: options.SkillProgression) -> tool_progression.ToolProgressionFeature:
-    if (tool_option == options.ToolProgression.option_vanilla
-            or tool_option == options.ToolProgression.option_vanilla_cheap
-            or tool_option == options.ToolProgression.option_vanilla_very_cheap):
+    if tool_option.is_vanilla:
         return tool_progression.ToolProgressionVanilla()
 
     tools_distribution = tool_progression.get_tools_distribution(
@@ -136,9 +134,7 @@ def choose_tool_progression(tool_option: options.ToolProgression, skill_option: 
         skill_masteries_enabled=skill_option == options.SkillProgression.option_progressive_with_masteries,
     )
 
-    if (tool_option == options.ToolProgression.option_progressive
-            or tool_option == options.ToolProgression.option_progressive_cheap
-            or tool_option == options.ToolProgression.option_progressive_very_cheap):
+    if tool_option.is_progressive:
         return tool_progression.ToolProgressionProgressive(tools_distribution)
 
     raise ValueError(f"No tool progression feature mapped to {str(tool_option.value)}")

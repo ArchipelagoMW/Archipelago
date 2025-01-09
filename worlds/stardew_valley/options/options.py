@@ -246,6 +246,14 @@ class ToolProgression(Choice):
     option_progressive_cheap = 0b011  # 3
     option_progressive_very_cheap = 0b101  # 5
 
+    @property
+    def is_vanilla(self):
+        return not self.is_progressive
+    
+    @property
+    def is_progressive(self):
+        return bool(self.value & 0b001)
+
 
 class ElevatorProgression(Choice):
     """Shuffle the elevator?
