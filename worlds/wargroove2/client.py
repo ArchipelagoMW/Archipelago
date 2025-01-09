@@ -67,7 +67,6 @@ class Wargroove2Context(CommonContext):
     victory_locations: int = 1
     objective_locations: int = 1
     has_death_link: bool = False
-    has_death_link: bool = False
     final_levels: int = 1
     level_shuffle_seed: int = 0
     slot_data: dict
