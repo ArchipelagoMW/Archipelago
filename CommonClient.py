@@ -703,12 +703,13 @@ class CommonContext:
 
     def make_gui(self) -> typing.Type["kvui.GameManager"]:
         """
-        To return the Kivy App class needed for run_gui so it can be overridden before being built
-        Common changes are changing base_title to update the window title of the client and
-        updating logging_pairs to automatically make new tabs that can be filled with their respective logger
-        
-        ex. logging_pairs.append(("Foo", "Bar"))
-        will add a "Bar" tab which follows the logger returned from logging.getLogger("Foo")
+        To return the Kivy `App` class needed for `run_gui` so it can be overridden before being built
+
+        Common changes are changing `base_title` to update the window title of the client and
+        updating `logging_pairs` to automatically make new tabs that can be filled with their respective logger.
+
+        ex. `logging_pairs.append(("Foo", "Bar"))`
+        will add a "Bar" tab which follows the logger returned from `logging.getLogger("Foo")`
         """
         from kvui import GameManager
 
