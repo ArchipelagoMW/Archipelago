@@ -1,7 +1,9 @@
-from typing import List, Optional, Dict, Union
+from collections import defaultdict
+from dataclasses import dataclass
+from typing import Optional, Dict
 from BaseClasses import Location, Region
 
-from .Data import CivicPrereqData, TechPrereqData, get_boosts_data, get_new_civics_data, get_new_techs_data
+from .Data import get_boosts_data, get_new_civics_data, get_new_techs_data
 
 from .Enum import CivVICheckType, EraType
 
@@ -22,46 +24,39 @@ GOODY_HUT_LOCATION_NAMES = [
 ]
 
 
+@dataclass
 class CivVILocationData:
-    game: str = "Civilization VI"
     name: str
     cost: int
     uiTreeRow: int
     civ_id: int
-    code: int
     era_type: str
     location_type: CivVICheckType
-    pre_reqs: Optional[List[Union[CivicPrereqData, TechPrereqData]]]
 
-    def __init__(self, name: str, cost: int, uiTreeRow: int, id: int, era_type: str, location_type: CivVICheckType):
-        self.name = name
-        self.cost = cost
-        self.uiTreeRow = uiTreeRow
-        self.civ_id = id
-        self.code = id + CIV_VI_AP_LOCATION_ID_BASE
-        self.era_type = era_type
-        self.location_type = location_type
+    game: str = "Civilization VI"
+
+    @property
+    def code(self):
+        return self.civ_id + CIV_VI_AP_LOCATION_ID_BASE
 
 
 class CivVILocation(Location):
     game: str = "Civilization VI"
     location_type: CivVICheckType
 
-    def __init__(self, player: int, name: str = "", address: Optional[int] = None, parent: Optional[Region] = None):
+    def __init__(
+        self,
+        player: int,
+        name: str = "",
+        address: Optional[int] = None,
+        parent: Optional[Region] = None,
+    ):
         super().__init__(player, name, address, parent)
         category = name.split("_")[0]
-        if category == "TECH":
-            self.location_type = CivVICheckType.TECH
-        elif category == "CIVIC":
-            self.location_type = CivVICheckType.CIVIC
-        elif category == "ERA":
-            self.location_type = CivVICheckType.ERA
-        elif category == "GOODY":
-            self.location_type = CivVICheckType.GOODY
-        elif category == "BOOST":
-            self.location_type = CivVICheckType.BOOST
-        else:
+        if "victory" in category:
             self.location_type = CivVICheckType.EVENT
+        else:
+            self.location_type = CivVICheckType(category)
 
 
 def generate_flat_location_table() -> Dict[str, CivVILocationData]:
@@ -96,49 +91,65 @@ def generate_era_location_table() -> Dict[str, Dict[str, CivVILocationData]]:
     """
 
     new_techs = get_new_techs_data()
-    era_locations: Dict[str, Dict[str, CivVILocationData]] = {}
+    era_locations: Dict[str, Dict[str, CivVILocationData]] = defaultdict(dict)
     id_base = 0
-# Techs
+    # Techs
     for data in new_techs:
         era_type = data["EraType"]
-        if era_type not in era_locations:
-            era_locations[era_type] = {}
-
         era_locations[era_type][data["Type"]] = CivVILocationData(
-            data["Type"], data["Cost"], data["UITreeRow"], id_base, era_type, CivVICheckType.TECH)
+            data["Type"],
+            data["Cost"],
+            data["UITreeRow"],
+            id_base,
+            era_type,
+            CivVICheckType.TECH,
+        )
         id_base += 1
-# Civics
+    # Civics
     new_civics = get_new_civics_data()
 
     for data in new_civics:
         era_type = data["EraType"]
-        if era_type not in era_locations:
-            era_locations[era_type] = {}
         era_locations[era_type][data["Type"]] = CivVILocationData(
-            data["Type"], data["Cost"], data["UITreeRow"], id_base, era_type, CivVICheckType.CIVIC)
+            data["Type"],
+            data["Cost"],
+            data["UITreeRow"],
+            id_base,
+            era_type,
+            CivVICheckType.CIVIC,
+        )
         id_base += 1
 
-# Eras
-    eras = list(EraType)
-    for i in range(len(EraType)):
-        location_era = eras[i].name
+    # Eras
+    for era in EraType:
 
-        if location_era == "ERA_ANCIENT":
+        if era == EraType.ERA_ANCIENT:
             continue
 
-        era_locations[location_era][location_era] = CivVILocationData(
-            location_era, 0, 0, id_base, location_era, CivVICheckType.ERA)
+        era_locations[era.name][era.name] = CivVILocationData(
+            era.name, 0, 0, id_base, era.name, CivVICheckType.ERA
+        )
         id_base += 1
-# Goody Huts, defaults to 10 goody huts as location checks (rarely will a player get more than this)
+
+    # Goody Huts, defaults to 10 goody huts as location checks (rarely will a player get more than this)
     for i in range(10):
-        era_locations[EraType.ERA_ANCIENT.value]["GOODY_HUT_" + str(i + 1)] = CivVILocationData(
-            "GOODY_HUT_" + str(i + 1), 0, 0, id_base, EraType.ERA_ANCIENT.value, CivVICheckType.GOODY)
+        era_locations[EraType.ERA_ANCIENT.value]["GOODY_HUT_" + str(i + 1)] = (
+            CivVILocationData(
+                "GOODY_HUT_" + str(i + 1),
+                0,
+                0,
+                id_base,
+                EraType.ERA_ANCIENT.value,
+                CivVICheckType.GOODY,
+            )
+        )
         id_base += 1
-# Boosts
+    # Boosts
     boosts = get_boosts_data()
     for boost in boosts:
         location = CivVILocationData(
-            boost.Type, 0, 0, id_base, boost.EraType, CivVICheckType.BOOST)
+            boost.Type, 0, 0, id_base, boost.EraType, CivVICheckType.BOOST
+        )
         era_locations["ERA_ANCIENT"][boost.Type] = location
         id_base += 1
 

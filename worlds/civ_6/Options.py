@@ -66,7 +66,7 @@ class PreHintItems(OptionSet):
     """
 
     display_name = "Tech/Civic Tree pre-hinted Items"
-    valid_keys = [classificaiton.value for classificaiton in CivVIHintClassification]  # type: ignore
+    valid_keys = {classification.value for classification in CivVIHintClassification}  # type: ignore
 
 
 class HideItemNames(Toggle):

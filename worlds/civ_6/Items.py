@@ -15,7 +15,6 @@ from .ProgressiveDistricts import get_flat_progressive_districts
 if TYPE_CHECKING:
     from . import CivVIWorld
 
-_items_by_civ_name: Dict[str, "CivVIItemData"] = {}
 
 CIV_VI_AP_ITEM_ID_BASE = 5041000
 
@@ -94,7 +93,7 @@ class CivVIItemData:
     code: int
     cost: int
     item_type: CivVICheckType
-    progression_name: Optional[str]
+    progressive_name: Optional[str]
     civ_name: Optional[str]
     era: Optional[EraType]
 
@@ -106,7 +105,7 @@ class CivVIItemData:
         item_type: CivVICheckType,
         id_offset: int,
         classification: ItemClassification,
-        progression_name: Optional[str],
+        progressive_name: Optional[str],
         civ_name: Optional[str] = None,
         era: Optional[EraType] = None,
     ):
@@ -116,7 +115,7 @@ class CivVIItemData:
         self.code = civ_vi_id + CIV_VI_AP_ITEM_ID_BASE + id_offset
         self.cost = cost
         self.item_type = item_type
-        self.progression_name = progression_name
+        self.progressive_name = progressive_name
         self.civ_name = civ_name
         self.era = era
 
@@ -148,20 +147,22 @@ def format_item_name(name: str) -> str:
     return " ".join([part.capitalize() for part in name_parts])
 
 
+_items_by_civ_name: Dict[str, CivVIItemData] = {}
+
+
 def get_item_by_civ_name(
     item_name: str, item_table: Dict[str, "CivVIItemData"]
 ) -> "CivVIItemData":
     """Gets the names of the items in the item_table"""
-    global _items_by_civ_name
     if not _items_by_civ_name:
-        _items_by_civ_name = {
-            item.civ_name: item for item in item_table.values() if item.civ_name
-        }
+        for item in item_table.values():
+            if item.civ_name:
+                _items_by_civ_name[item.civ_name] = item
 
-    item = _items_by_civ_name.get(item_name, None)
-    if not item:
-        raise Exception(f"Item {item_name} not found in item_table")
-    return item
+    try:
+        return _items_by_civ_name[item_name]
+    except KeyError as e:
+        raise KeyError(f"Item {item_name} not found in item_table") from e
 
 
 def _generate_tech_items(
@@ -178,10 +179,10 @@ def _generate_tech_items(
         civ_name = tech["Type"]
         if civ_name in required_items:
             classification = ItemClassification.progression
-        progression_name = None
+        progressive_name = None
         check_type = CivVICheckType.TECH
         if civ_name in progressive_items.keys():
-            progression_name = format_item_name(progressive_items[civ_name])
+            progressive_name = format_item_name(progressive_items[civ_name])
 
         tech_table[name] = CivVIItemData(
             name=name,
@@ -190,7 +191,7 @@ def _generate_tech_items(
             item_type=check_type,
             id_offset=id_base,
             classification=classification,
-            progression_name=progression_name,
+            progressive_name=progressive_name,
             civ_name=civ_name,
             era=EraType(tech["EraType"]),
         )
@@ -210,11 +211,11 @@ def _generate_civics_items(
     for civic in existing_civics:
         name = civic["Name"]
         civ_name = civic["Type"]
-        progression_name = None
+        progressive_name = None
         check_type = CivVICheckType.CIVIC
 
         if civ_name in progressive_items.keys():
-            progression_name = format_item_name(progressive_items[civ_name])
+            progressive_name = format_item_name(progressive_items[civ_name])
 
         classification = ItemClassification.useful
         if civ_name in required_items:
@@ -227,7 +228,7 @@ def _generate_civics_items(
             item_type=check_type,
             id_offset=id_base,
             classification=classification,
-            progression_name=progression_name,
+            progressive_name=progressive_name,
             civ_name=civ_name,
             era=EraType(civic["EraType"]),
         )
@@ -255,7 +256,7 @@ def _generate_progressive_district_items(id_base: int) -> Dict[str, CivVIItemDat
             item_type=CivVICheckType.PROGRESSIVE_DISTRICT,
             id_offset=id_base,
             classification=classification,
-            progression_name=None,
+            progressive_name=None,
             civ_name=item_name,
         )
         progressive_id_base += 1
@@ -274,7 +275,7 @@ def _generate_progressive_era_items(id_base: int) -> Dict[str, CivVIItemData]:
         item_type=CivVICheckType.ERA,
         id_offset=id_base,
         classification=ItemClassification.progression,
-        progression_name=None,
+        progressive_name=None,
         civ_name="PROGRESSIVE_ERA",
     )
     return era_table
@@ -295,7 +296,7 @@ def _generate_goody_hut_items(id_base: int) -> Dict[str, CivVIItemData]:
             item_type=CivVICheckType.GOODY,
             id_offset=id_base,
             classification=ItemClassification.filler,
-            progression_name=None,
+            progressive_name=None,
             civ_name=value.civ_name,
         )
         goody_base += 1

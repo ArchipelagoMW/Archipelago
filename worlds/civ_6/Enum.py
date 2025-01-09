@@ -24,7 +24,6 @@ class CivVICheckType(Enum):
     BOOST = "BOOST"
     EVENT = "EVENT"
 
-
 class CivVIHintClassification(Enum):
     PROGRESSION = "Progression"
     USEFUL = "Useful"

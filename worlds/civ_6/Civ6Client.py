@@ -253,10 +253,13 @@ async def handle_receive_items(ctx: CivVIContext, last_received_index_override: 
 
 
 async def handle_check_goal_complete(ctx: CivVIContext):
+    if ctx.finished_game:
+        return
     result = await ctx.game_interface.check_victory()
     if result:
         logger.info("Sending Victory to server!")
         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+        ctx.finished_game = True
 
 
 async def _handle_game_ready(ctx: CivVIContext):

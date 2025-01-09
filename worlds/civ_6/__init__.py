@@ -111,8 +111,8 @@ class CivVIWorld(World):
             item_to_create = item_name
             item: CivVIItemData = self.item_table[item_name]
             if self.options.progression_style != "none":
-                if item.progression_name:
-                    item_to_create = self.item_table[item.progression_name].name
+                if item.progressive_name:
+                    item_to_create = self.item_table[item.progressive_name].name
 
             self.multiworld.itempool += [self.create_item(
                 item_to_create)]
