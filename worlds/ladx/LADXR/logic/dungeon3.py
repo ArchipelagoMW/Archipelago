@@ -5,16 +5,16 @@ from ..locations.all import *
 
 class Dungeon3:
     def __init__(self, options, world_setup, r):
-        entrance = Location(dungeon=3)
+        entrance = Location("D3 Entrance", dungeon=3)
         dungeon3_reverse_eye = Location(dungeon=3).add(DungeonChest(0x153)).connect(entrance, PEGASUS_BOOTS) # Right side reverse eye
-        area2 = Location(dungeon=3).connect(entrance, POWER_BRACELET)
+        area2 = Location("D3 After Pot Door", dungeon=3).connect(entrance, POWER_BRACELET)
         Location(dungeon=3).add(DungeonChest(0x151)).connect(area2, r.attack_hookshot_powder)  # First chest with key
         area2.add(DungeonChest(0x14F))  # Second chest with slime
-        area3 = Location(dungeon=3).connect(area2, OR(r.attack_hookshot_powder, PEGASUS_BOOTS)) # need to kill slimes to continue or pass through left path
+        area3 = Location("D3 After Zol Chest", dungeon=3).connect(area2, OR(r.attack_hookshot_powder, PEGASUS_BOOTS)) # need to kill slimes to continue or pass through left path
         dungeon3_zol_stalfos = Location(dungeon=3).add(DungeonChest(0x14E)).connect(area3, AND(PEGASUS_BOOTS, r.attack_skeleton))  # 3th chest requires killing the slime behind the crystal pillars
 
         # now we can go 4 directions,
-        area_up = Location(dungeon=3).connect(area3, AND(KEY3, FOUND(KEY3, 8)))
+        area_up = Location("D3 North Room", dungeon=3).connect(area3, AND(KEY3, FOUND(KEY3, 8)))
         dungeon3_north_key_drop = Location(dungeon=3).add(DroppedKey(0x154)).connect(area_up, r.attack_skeleton) # north key drop
         if options.owlstatues == "both" or options.owlstatues == "dungeon":
             Location(dungeon=3).add(OwlStatue(0x154)).connect(area_up, STONE_BEAK3)
@@ -23,17 +23,18 @@ class Dungeon3:
         area_up.connect(dungeon3_raised_blocks_north, r.hit_switch, one_way=True) # hit switch to reach north chest
         area_up.connect(dungeon3_raised_blocks_east, r.hit_switch, one_way=True) # hit switch to reach east chest
         
-        area_left = Location(dungeon=3).connect(area3, AND(KEY3, FOUND(KEY3, 8)))
+        area_left = Location("D3 West Room", dungeon=3).connect(area3, AND(KEY3, FOUND(KEY3, 8)))
         area_left_key_drop = Location(dungeon=3).add(DroppedKey(0x155)).connect(area_left, r.attack_hookshot) # west key drop (no longer requires feather to get across hole), can use boomerang to knock owls into pit
 
-        area_down = Location(dungeon=3).connect(area3, AND(KEY3, FOUND(KEY3, 8)))
+        area_down = Location("D3 South Room", dungeon=3).connect(area3, AND(KEY3, FOUND(KEY3, 8)))
         dungeon3_south_key_drop = Location(dungeon=3).add(DroppedKey(0x158)).connect(area_down, r.attack_hookshot) # south keydrop, can use boomerang to knock owls into pit
 
-        area_right = Location(dungeon=3).connect(area3, AND(KEY3, FOUND(KEY3, 4)))  # We enter the top part of the map here.
+        area_right = Location("D3 East Room", dungeon=3).connect(area3, AND(KEY3, FOUND(KEY3, 4)))  # We enter the top part of the map here.
         Location(dungeon=3).add(DroppedKey(0x14D)).connect(area_right, r.attack_hookshot_powder)  # key after the stairs.
 
         dungeon3_nightmare_key_chest = Location(dungeon=3).add(DungeonChest(0x147)).connect(area_right, AND(BOMB, FEATHER, PEGASUS_BOOTS))  # nightmare key chest
-        dungeon3_post_dodongo_chest = Location(dungeon=3).add(DungeonChest(0x146)).connect(area_right, AND(r.attack_hookshot_powder, r.miniboss_requirements[world_setup.miniboss_mapping[2]]))  # boots after the miniboss
+        dungeon3_miniboss_room = Location("D3 Miniboss Room", dungeon=3).connect(area_right, r.attack_hookshot_powder)
+        dungeon3_post_dodongo_chest = Location(dungeon=3).add(DungeonChest(0x146)).connect(dungeon3_miniboss_room, r.miniboss_requirements[world_setup.miniboss_mapping[2]])  # boots after the miniboss
         compass_chest = Location(dungeon=3).add(DungeonChest(0x142)).connect(area_right, OR(SWORD, BOMB, AND(SHIELD, r.attack_hookshot_powder))) # bomb only activates with sword, bomb or shield
         dungeon3_3_bombite_room = Location(dungeon=3).add(DroppedKey(0x141)).connect(compass_chest, BOMB) # 3 bombite room
         Location(dungeon=3).add(DroppedKey(0x148)).connect(area_right, r.attack_no_boomerang) # 2 zol 2 owl drop key
@@ -41,16 +42,17 @@ class Dungeon3:
         if options.owlstatues == "both" or options.owlstatues == "dungeon":
             Location(dungeon=3).add(OwlStatue(0x140), OwlStatue(0x147)).connect(area_right, STONE_BEAK3)
 
-        towards_boss1 = Location(dungeon=3).connect(area_right, AND(KEY3, FOUND(KEY3, 5)))
-        towards_boss2 = Location(dungeon=3).connect(towards_boss1, AND(KEY3, FOUND(KEY3, 6)))
-        towards_boss3 = Location(dungeon=3).connect(towards_boss2, AND(KEY3, FOUND(KEY3, 7)))
-        towards_boss4 = Location(dungeon=3).connect(towards_boss3, AND(KEY3, FOUND(KEY3, 8)))
+        towards_boss1 = Location("D3 Boss Path 1", dungeon=3).connect(area_right, AND(KEY3, FOUND(KEY3, 5)))
+        towards_boss2 = Location("D3 Boss Path 2", dungeon=3).connect(towards_boss1, AND(KEY3, FOUND(KEY3, 6)))
+        towards_boss3 = Location("D3 Boss Path 3", dungeon=3).connect(towards_boss2, AND(KEY3, FOUND(KEY3, 7)))
+        towards_boss4 = Location("D3 Boss Path 4", dungeon=3).connect(towards_boss3, AND(KEY3, FOUND(KEY3, 8)))
 
         # Just the whole area before the boss, requirements for the boss itself and the rooms before it are the same.
         pre_boss = Location(dungeon=3).connect(towards_boss4, AND(r.attack_no_boomerang, FEATHER, PEGASUS_BOOTS))
         pre_boss.add(DroppedKey(0x15B))
 
-        boss = Location(dungeon=3).add(HeartContainer(0x15A), Instrument(0x159)).connect(pre_boss, AND(NIGHTMARE_KEY3, r.boss_requirements[world_setup.boss_mapping[2]]))
+        boss_room = Location("D3 Boss Room", dungeon=3).connect(pre_boss, NIGHTMARE_KEY3)
+        boss = Location(dungeon=3).add(HeartContainer(0x15A), Instrument(0x159)).connect(boss_room, r.boss_requirements[world_setup.boss_mapping[2]])
 
         if options.logic == 'hard' or options.logic == 'glitched' or options.logic == 'hell':
             dungeon3_3_bombite_room.connect(area_right, BOOMERANG) # 3 bombite room from the left side, grab item with boomerang
@@ -84,7 +86,7 @@ class Dungeon3:
 
 class NoDungeon3:
     def __init__(self, options, world_setup, r):
-        entrance = Location(dungeon=3)
+        entrance = Location("D3 Entrance", dungeon=3)
         Location(dungeon=3).add(HeartContainer(0x15A), Instrument(0x159)).connect(entrance, AND(POWER_BRACELET, r.boss_requirements[
             world_setup.boss_mapping[2]]))
 
