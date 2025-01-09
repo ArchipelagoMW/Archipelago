@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from worlds.AutoWorld import LogicMixin
 from .Levels import first_level
 if TYPE_CHECKING:
     from . import Wargroove2World
