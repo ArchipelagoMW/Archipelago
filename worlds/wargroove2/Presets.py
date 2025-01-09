@@ -1,6 +1,6 @@
 from typing import Dict, Any
 
-from .Options import *
+from .Options import CommanderChoice
 
 wargroove2_option_presets: Dict[str, Dict[str, Any]] = {
     "Easy": {

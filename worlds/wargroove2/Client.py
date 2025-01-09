@@ -11,7 +11,7 @@ import Utils
 import json
 import logging
 import ModuleUpdate
-from typing import Tuple, List, Iterable, Dict
+from typing import Tuple, List, Iterable, Dict, Any
 
 from settings import get_settings
 from . import Wargroove2World
@@ -70,9 +70,8 @@ class Wargroove2Context(CommonContext):
     has_death_link: bool = False
     final_levels: int = 1
     level_shuffle_seed: int = 0
-    slot_data: dict
+    slot_data: dict[str, Any]
     stored_finale_key: str = ""
-    completed_final_regions: list = []
     faction_item_ids = {
         'Starter': 0,
         'Cherrystone': 252034,
@@ -133,7 +132,6 @@ class Wargroove2Context(CommonContext):
                     print_error_and_close("Wargroove2Client couldn't find Wargoove 2 mod and save files in install!")
                 with open(file_paths[i], 'wb') as f:
                     f.write(file_data)
-                    f.close()
         else:
             print_error_and_close("Wargroove2Client couldn't detect system type. "
                                   "Unable to infer required game_communication_path")
@@ -145,7 +143,6 @@ class Wargroove2Context(CommonContext):
                 f.write(f"DeathLink: {text}")
             else:
                 f.write(f"DeathLink: Received from {data['source']}")
-            f.close()
         super(Wargroove2Context, self).on_deathlink(data)
 
     async def server_auth(self, password_requested: bool = False):
@@ -196,11 +193,10 @@ class Wargroove2Context(CommonContext):
                 self.starting_groove_multiplier = self.slot_data["groove_boost"]
                 self.income_boost_multiplier = self.slot_data["income_boost"]
                 self.commander_defense_boost_multiplier = self.slot_data["commander_defense_boost"]
-                f.close()
             for ss in self.checked_locations:
                 filename = f"send{ss}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-                    f.close()
+                    pass
 
             self.stored_finale_key = f"wargroove_2_{self.slot}_{self.team}"
             self.set_notify(self.stored_finale_key)
@@ -213,7 +209,6 @@ class Wargroove2Context(CommonContext):
                 filename = f"seed{i}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.write(str(random.randint(0, 4294967295)))
-                    f.close()
             for i in range(0, LEVEL_COUNT):
                 filename = f"AP_{i + 1}.map"
                 level_file_name = self.slot_data[f"Level File #{i}"]
@@ -223,7 +218,6 @@ class Wargroove2Context(CommonContext):
                 else:
                     with open(os.path.join(self.game_communication_path, filename), 'wb') as f:
                         f.write(file_data)
-                        f.close()
             for i in range(0, FINAL_LEVEL_COUNT):
                 filename = f"AP_{i + LEVEL_COUNT + 1}.map"
                 level_file_name = self.slot_data[f"Final Level File #{i}"]
@@ -233,7 +227,6 @@ class Wargroove2Context(CommonContext):
                 else:
                     with open(os.path.join(self.game_communication_path, filename), 'wb') as f:
                         f.write(file_data)
-                        f.close()
 
         if cmd in {"RoomInfo"}:
             self.seed_name = args["seed_name"]
@@ -262,7 +255,6 @@ class Wargroove2Context(CommonContext):
                         f.write(f"{item_count * self.starting_groove_multiplier}")
                     else:
                         f.write(f"{item_count}")
-                    f.close()
 
                 print_filename = f"AP_{network_item.item}.item.print"
                 print_path = os.path.join(self.game_communication_path, print_filename)
@@ -273,7 +265,6 @@ class Wargroove2Context(CommonContext):
                                 self.item_names.lookup_in_slot(network_item.item) +
                                 " from " +
                                 self.player_names[network_item.player])
-                        f.close()
             self.update_commander_data()
             self.ui.update_ui()
 
@@ -282,7 +273,7 @@ class Wargroove2Context(CommonContext):
                 for ss in self.checked_locations:
                     filename = f"send{ss}"
                     with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-                        f.close()
+                        pass
             self.ui.update_ui()
 
         if cmd in {"Retrieved"}:
@@ -397,7 +388,8 @@ class Wargroove2Context(CommonContext):
                         level_name = self.ctx.slot_data[region_name]
                         level_name_text = f"\n{level_name}"
                         for location_name in level_rules[level_name].keys():
-                            is_beatable = level_rules[level_name][location_name](region_filter, self.ctx.slot)()
+                            rule_factory = level_rules[level_name][location_name]
+                            is_beatable = rule_factory is None or rule_factory(self.ctx.slot)(region_filter)
                             is_fully_beaten = is_fully_beaten and \
                                               location_table[location_name] in self.ctx.checked_locations
                             if location_name.endswith(": Victory"):
@@ -471,7 +463,7 @@ class Wargroove2Context(CommonContext):
                                                                               self.ctx.slot):
                     level_name_text = f"\n{final_level_1_name}"
                     is_beatable = final_level_rules[final_level_1_name] \
-                        [f"{final_level_1_name}: Victory"](region_filter, self.ctx.slot)()
+                        [f"{final_level_1_name}: Victory"](self.ctx.slot)(region_filter)
                     if is_beatable:
                         status_color = (0.6, 0.6, 0.2, 1)
                     else:
@@ -488,7 +480,7 @@ class Wargroove2Context(CommonContext):
                                                                               self.ctx.slot):
                     level_name_text = f"\n{final_level_2_name}"
                     is_beatable = final_level_rules[final_level_2_name] \
-                        [f"{final_level_2_name}: Victory"](region_filter, self.ctx.slot)()
+                        [f"{final_level_2_name}: Victory"](self.ctx.slot)(region_filter)
                     if is_beatable:
                         status_color = (0.6, 0.6, 0.2, 1)
                     else:
@@ -505,7 +497,7 @@ class Wargroove2Context(CommonContext):
                                                                               self.ctx.slot):
                     level_name_text = f"\n{final_level_3_name}"
                     is_beatable = final_level_rules[final_level_3_name] \
-                        [f"{final_level_3_name}: Victory"](region_filter, self.ctx.slot)()
+                        [f"{final_level_3_name}: Victory"](self.ctx.slot)(region_filter)
                     if is_beatable:
                         status_color = (0.6, 0.6, 0.2, 1)
                     else:
@@ -522,7 +514,7 @@ class Wargroove2Context(CommonContext):
                                                                               self.ctx.slot):
                     level_name_text = f"\n{final_level_4_name}"
                     is_beatable = final_level_rules[final_level_4_name] \
-                        [f"{final_level_4_name}: Victory"](region_filter, self.ctx.slot)()
+                        [f"{final_level_4_name}: Victory"](self.ctx.slot)(region_filter)
                     if is_beatable:
                         status_color = (0.6, 0.6, 0.2, 1)
                     else:
@@ -661,7 +653,7 @@ async def game_watcher(ctx: Wargroove2Context):
                 sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
             await ctx.send_msgs(sync_msg)
             ctx.syncing = False
-        sending: list = []
+        sending: set = set()
         victory = False
         await ctx.update_death_link(ctx.has_death_link)
         for _root, _dirs, files in os.walk(ctx.game_communication_path):
@@ -676,8 +668,8 @@ async def game_watcher(ctx: Wargroove2Context):
                             st < location_table["Humble Beginnings Rebirth: Talk to Nadia Extra 1"]:  # type: ignore
                         extras = ctx.objective_locations
                     for i in range(1, extras):
-                        sending.append(location_table[loc_name + f" Extra {i}"])
-                    sending.append(st)
+                        sending.add(location_table[loc_name + f" Extra {i}"])
+                    sending.add(st)
 
                     os.remove(os.path.join(ctx.game_communication_path, file))
                 if file == "deathLinkSend" and ctx.has_death_link:
@@ -685,7 +677,6 @@ async def game_watcher(ctx: Wargroove2Context):
                         failed_mission = f.read()
                         if ctx.slot is not None:
                             await ctx.send_death(f"{ctx.player_names[ctx.slot]} failed {failed_mission}")
-                            f.close()
                     os.remove(os.path.join(ctx.game_communication_path, file))
                 if file == "victory":
                     with open(os.path.join(ctx.game_communication_path, file), 'r') as f:
@@ -711,11 +702,10 @@ async def game_watcher(ctx: Wargroove2Context):
                                     f"{completed_levels}")
                         if final_levels_won >= ctx.final_levels:
                             victory = True
-                        f.close()
                     os.remove(os.path.join(ctx.game_communication_path, file))
                     ctx.ui.update_levels()
         ctx.locations_checked = sending
-        message = [{"cmd": 'LocationChecks', "locations": sending}]
+        message = [{"cmd": "LocationChecks", "locations": list(sending)}]
         await ctx.send_msgs(message)
         if not ctx.finished_game and victory:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
