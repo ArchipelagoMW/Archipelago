@@ -8,7 +8,7 @@ import time
 from random import Random
 from dataclasses import make_dataclass
 from typing import (Any, Callable, ClassVar, Dict, FrozenSet, Iterable, List, Mapping, Optional, Set, TextIO, Tuple,
-                    TYPE_CHECKING, Type, Union)
+                    TYPE_CHECKING, Type, Union, get_args)
 
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
 from BaseClasses import CollectionState
@@ -83,6 +83,13 @@ class AutoWorldRegister(type):
 
         # construct class
         new_class = super().__new__(mcs, name, bases, dct)
+
+        if "settings" in new_class.__annotations__:
+            settings_cls = get_args(new_class.__annotations__["settings"])
+            if settings_cls and not settings_cls[0].__annotations__:
+                raise Exception(f"{name} has defined an empty settings.Group which is not appropritate, "
+                                "leave as default if no settings are required")
+
         if "game" in dct:
             if dct["game"] in AutoWorldRegister.world_types:
                 raise RuntimeError(f"""Game {dct["game"]} already registered.""")
