@@ -4,7 +4,7 @@ from ..locations.all import *
 
 
 class Dungeon8:
-    def __init__(self, options, world_setup, r, *, back_entrance_heartpiece=0x000):
+    def __init__(self, options, world_setup, r, *, back_entrance_heartpiece=True):
         entrance = Location("D8 Entrance", dungeon=8)
         entrance_up = Location("D8 North of Entrance", dungeon=8).connect(entrance, FEATHER)
         entrance_left = Location("D8 After Hinox", dungeon=8).connect(entrance, AND(r.miniboss_requirements["HINOX"], r.attack_hookshot_no_bomb)) # past hinox
