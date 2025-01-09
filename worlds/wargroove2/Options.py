@@ -44,10 +44,11 @@ class GrooveBoost(Range):
 
 
 class LevelShuffleSeed(Range):
-    """What seed to use for level shuffling. 0 uses the multiworld seed."""
+    """What seed to use for level shuffling. 0 uses the world seed."""
     display_name = "Level Shuffle Seed"
     range_start = 0
     range_end = 0xFFFFFFFF
+    random = 0
     default = 0
 
 
