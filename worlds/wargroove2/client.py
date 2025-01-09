@@ -246,7 +246,6 @@ class Wargroove2Context(CommonContext):
 
                 # Newly-obtained items
                 if not os.path.isfile(path):
-                    open(path, 'w').close()
                     # Announcing commander unlocks
                     item_name = self.item_names.lookup_in_slot(network_item.item)
                     if item_name in faction_table.keys():
