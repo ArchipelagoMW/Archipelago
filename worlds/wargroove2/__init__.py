@@ -108,7 +108,7 @@ class Wargroove2World(World):
                 item = Wargroove2Item(name, self.player)
                 pool.append(item)
 
-        for i in range(0, 5):
+        for _ in range(5):
             pool.append(Wargroove2Item("Commander Defense Boost", self.player))
             pool.append(Wargroove2Item("Income Boost", self.player))
 
