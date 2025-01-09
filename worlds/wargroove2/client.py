@@ -376,7 +376,7 @@ class Wargroove2Context(CommonContext):
                 return levels_layout
 
             def update_levels(self):
-                received_names = [item_id_name[item.item] for item in self.ctx.items_received]
+                received_names = {item_id_name[item.item] for item in self.ctx.items_received}
                 levels = low_victory_checks_levels + high_victory_checks_levels
                 level_rules = {level.name: level.location_rules for level in levels}
                 region_filter = Wargroove2LogicFilter(received_names)
