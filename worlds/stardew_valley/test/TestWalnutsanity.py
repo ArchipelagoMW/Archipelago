@@ -1,5 +1,5 @@
 from . import SVTestBase
-from ..options import ExcludeGingerIsland, Walnutsanity
+from ..options import ExcludeGingerIsland, Walnutsanity, ToolProgression
 from ..strings.ap_names.ap_option_names import WalnutsanityOptionName
 
 
@@ -7,6 +7,7 @@ class TestWalnutsanityNone(SVTestBase):
     options = {
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
         Walnutsanity: Walnutsanity.preset_none,
+        ToolProgression: ToolProgression.option_progressive,
     }
 
     def test_no_walnut_locations(self):
