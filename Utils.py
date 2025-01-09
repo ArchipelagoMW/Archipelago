@@ -515,7 +515,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
             return self.condition(record)
 
     file_handler.addFilter(Filter("NoStream", lambda record: not getattr(record,  "NoFile", False)))
-    file_handler.addFilter(Filter("NoCarriageReturn", lambda record: '\r' not in record.msg))
+    file_handler.addFilter(Filter("NoCarriageReturn", lambda record: '\r' not in str(record.msg)))
     root_logger.addHandler(file_handler)
     if sys.stdout:
         formatter = logging.Formatter(fmt='[%(asctime)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
