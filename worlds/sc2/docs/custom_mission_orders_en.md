@@ -14,6 +14,7 @@
     - [Goal](#goal)
     - [Exit](#exit)
     - [Entry rules](#entry-rules)
+    - [Unique progression track](#unique-progression-track)
     - [Difficulty](#difficulty)
     - [Mission Pool](#mission-pool)
   - [Campaign Options](#campaign-options)
@@ -391,6 +392,20 @@ You can also use one of the following key items for this purpose:
 
 These keys will never be used by the generator unless you specify them yourself.
 
+There is also a special type of key:
+```yaml
+entry_rules:
+  - items:
+      # These two forms are equivalent
+      Progressive Key: 5
+      Progressive Key 5: 1
+```
+Progressive keys come in two forms: `Progressive Key: <track>` and `Progressive Key <track>: 1`. In the latter form the item amount is ignored. Their track is used to group them, so all progressive keys with track 1 belong together, as do all with track 2, and so on. Item rules using progressive keys are sorted by how far into the mission order they appear and have their required amounts set automatically so that deeper rules require more keys, with each track of progressive keys performing its own sorting.
+
+Note that if any Item rule within a track belongs to a mission, the generator will accept ties, in which case the affected rules will require the same number of progressive keys. If a track only contains Item rules belonging to layouts and campaigns, the track will be sorted in definition order (top to bottom in your YAML), so there will be no ties.
+
+If you would prefer not to manually specify the track, use the [`unique_progression_track`](#unique-progression-track) option.
+
 The Beat and Count rules both require a list of scopes. This list accepts addresses towards other parts of the mission order.
 
 The basic form of an address is `<Campaign>/<Layout>/<Mission>`, where `<Campaign>` and `<Layout>` are the definition names (not `display_names`!) of a campaign and a layout within that campaign, and `<Mission>` is the index of a mission slot in that layout or an index function for the layout's type. See the section on your layout's type to find valid indices and functions.
@@ -483,6 +498,38 @@ Below are examples of the available entry rules:
           amount: 1
 ```
 As this last example shows, the Subrule rule is a powerful tool for making arbitrarily complex requirements. Put plainly, the example accomplishes the following: To unlock the `Complicated Access` layout, either beat 5 missions in both the `Wings of Liberty` campaign and the `Some Missions` layout, or beat 10 missions across both of them.
+
+---
+### Unique progression track
+```yaml
+# For campaigns and layouts
+unique_progression_track: 0
+```
+This option specifically affects Item entry rules using progressive keys. Progressive keys used by children of this campaign/layout that are on the given track will automatically be put on a track that is unique to the container instead.
+```yaml
+  custom_mission_order:
+    First Column:
+      type: column
+      size: 3
+      unique_progression_track: 0 # Default
+      missions:
+        - index: [1, 2]
+          entry_rules:
+          - items:
+              Progressive Key: 0
+    Second Column:
+      type: column
+      size: 3
+      unique_progression_track: 0 # Default
+      missions:
+        - index: [1, 2]
+          entry_rules:
+          - items:
+              Progressive Key: 0
+```
+In this example the two columns will use separate progressive keys for their missions.
+
+In the case that a mission slot uses a progressive key whose track matches the `unique_progression_track` of both its containing layout and campaign, the key will use the layout's unique track and not the campaign's. To avoid this behavior simply use different `unique_progression_track` values for the layout and campaign.
 
 ---
 ### Difficulty
@@ -608,7 +655,7 @@ See the following section for available presets.
 
 ## Campaign Presets
 
-There are two kinds of presets: Static presets that are based on vanilla campaigns, and scripted preset that dynamically create a complex campaign based on extra required options.
+There are two kinds of presets: Static presets that are based on vanilla campaigns, and scripted presets that dynamically create a complex campaign based on extra required options.
 
 ---
 ### Static Presets
@@ -649,6 +696,9 @@ The `keys` option accepts these possible values:
 - `none` (default), which does not add any Key Item rules to the preset.
 - `layouts`, which adds Key Item rules to layouts besides the preset's left-most layout, in addition to their regular entry rules.
 - `missions`, which adds Key Item rules to missions besides the preset's starter mission, in addition to their regular entry rules.
+- `progressive_layouts`, which adds Progressive Key Item rules to layouts besides the preset's left-most layout, in addition to their regular entry rules. These progressive keys use track 0, with presets using the default `unique_progression_track: 0`.
+- `progressive_missions`, which adds Progressive Key Item rules to missions besides the preset's starter mission, in addition to their regular entry rules. These progressive keys use track 1 and do not make use of `unique_progression_track`.
+- `progressive_per_layout`, which adds Progressive Key Item rules to all missions within each layout besides the preset's left-most one. These progressive keys use track 0, with presets and their layouts using the default `unique_progression_track: 0`.
 
 ---
 ### Golden Path
@@ -669,6 +719,9 @@ Golden Path also accepts a `keys` option, which works like the same option for s
 - `none` (default), which does not add any Key Item rules to the preset.
 - `layouts`, which adds Key Item rules to all side columns, in addition to their regular entry rules.
 - `missions`, which adds Key Item rules to missions besides the preset's starter mission, in addition to their regular entry rules.
+- `progressive_layouts`, which adds Progressive Key Item rules to all side columns, in addition to their regular entry rules. These progressive keys use track 0, with this preset using the default `unique_progression_track: 0`.
+- `progressive_missions`, which adds Progressive Key Item rules to missions besides the preset's starter mission, in addition to their regular entry rules. These progressive keys use track 1 and do not make use of `unique_progression_track`.
+- `progressive_per_layout`, which adds Progressive Key Item rules to all missions within each side column. These progressive keys use track 0, with this preset and its layouts using the default `unique_progression_track: 0`.
 
 ## Layout Options
 

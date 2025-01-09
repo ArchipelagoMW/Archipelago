@@ -180,6 +180,12 @@ def create_static_mission_order(world: 'SC2World', mission_order_type: int, miss
         keys = "missions"
     elif key_mode_option == KeyMode.option_questlines:
         keys = "layouts"
+    elif key_mode_option == KeyMode.option_progressive_missions:
+        keys = "progressive_missions"
+    elif key_mode_option == KeyMode.option_progressive_questlines:
+        keys = "progressive_layouts"
+    elif key_mode_option == KeyMode.option_progressive_per_questline:
+        keys = "progressive_per_layout"
     else:
         keys = "none"
     
@@ -377,6 +383,12 @@ def make_golden_path(world: 'SC2World', size: int) -> Dict[str, Dict[str, Any]]:
         keys = "missions"
     elif key_mode == KeyMode.option_questlines:
         keys = "layouts"
+    elif key_mode == KeyMode.option_progressive_missions:
+        keys = "progressive_missions"
+    elif key_mode == KeyMode.option_progressive_questlines:
+        keys = "progressive_layouts"
+    elif key_mode == KeyMode.option_progressive_per_questline:
+        keys = "progressive_per_layout"
     else:
         keys = "none"
     
@@ -445,6 +457,11 @@ def create_dynamic_mission_order(world: 'SC2World', mission_order_type: int, mis
     if key_mode == KeyMode.option_missions:
         mission_order[list(mission_order.keys())[0]]["missions"] = [
             { "index": "all", "entry_rules": [{ "items": { "Key": 1 }}] },
+            { "index": "entrances", "entry_rules": [] }
+        ]
+    elif key_mode == KeyMode.option_progressive_missions:
+        mission_order[list(mission_order.keys())[0]]["missions"] = [
+            { "index": "all", "entry_rules": [{ "items": { "Progressive Key": 1 }}] },
             { "index": "entrances", "entry_rules": [] }
         ]
     

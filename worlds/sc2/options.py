@@ -181,15 +181,23 @@ class KeyMode(Choice):
     """
     Optionally creates Key items that must be found in the multiworld to unlock parts of the mission order,
     in addition to any regular requirements a mission may have.
+
+    "Questline" options will only work for Vanilla, Vanilla Shuffled, Mini Campaign, and Golden Path mission orders.
+
     Disabled: Don't create any keys.
     Questlines: Create keys for questlines besides the starter ones, eg. "Colonist (Wings of Liberty) Questline Key".
-    Only works for Vanilla, Vanilla Shuffled, Mini Campaign, and Golden Path mission orders.
     Missions: Create keys for missions besides the starter ones, eg. "Zero Hour Mission Key".
+    Progressive Questlines: Create one type of progressive key for questlines within each campaign, eg. "Progressive Key #1".
+    Progressive Missions: Create one type of progressive key for all missions, "Progressive Mission Key".
+    Progressive Per Questline: All questlines besides the starter ones get a unique progressive key for their missions, eg. "Progressive Key #1".
     """
     display_name = "Key Mode"
     option_disabled = 0
     option_questlines = 1
     option_missions = 2
+    option_progressive_questlines = 3
+    option_progressive_missions = 4
+    option_progressive_per_questline = 5
     default = option_disabled
 
 

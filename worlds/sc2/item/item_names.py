@@ -888,12 +888,15 @@ NOTHING                     = "Nothing"
 PROGRESSIVE_ORBITAL_COMMAND         = "Progressive Orbital Command (Deprecated)"
 
 # Keys
-_TEMPLATE_MISSION_KEY            = "{} Mission Key"
-_TEMPLATE_NAMED_LAYOUT_KEY       = "{} ({}) Questline Key"
-_TEMPLATE_NUMBERED_LAYOUT_KEY    = "Questline Key #{}"
-_TEMPLATE_NAMED_CAMPAIGN_KEY     = "{} Campaign Key"
-_TEMPLATE_NUMBERED_CAMPAIGN_KEY  = "Campaign Key #{}"
-_TEMPLATE_FLAVOR_KEY             = "{} Key"
+_TEMPLATE_MISSION_KEY               = "{} Mission Key"
+_TEMPLATE_NAMED_LAYOUT_KEY          = "{} ({}) Questline Key"
+_TEMPLATE_NUMBERED_LAYOUT_KEY       = "Questline Key #{}"
+_TEMPLATE_NAMED_CAMPAIGN_KEY        = "{} Campaign Key"
+_TEMPLATE_NUMBERED_CAMPAIGN_KEY     = "Campaign Key #{}"
+_TEMPLATE_FLAVOR_KEY                = "{} Key"
+PROGRESSIVE_MISSION_KEY             = "Progressive Mission Key"
+PROGRESSIVE_QUESTLINE_KEY           = "Progressive Questline Key"
+_TEMPLATE_PROGRESSIVE_KEY           = "Progressive Key #{}"
 
 # Names for flavor keys, feel free to add more, but add them to the Custom Mission Order docs too
 # These will never be randomly created by the generator

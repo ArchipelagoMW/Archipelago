@@ -157,7 +157,7 @@ class CountMissionsEntryRule(EntryRule):
     def _get_depth(self, beaten_missions: Set[SC2MOGenMission]) -> int:
         sorted_missions = sorted(beaten_missions.intersection(self.missions_to_count), key = lambda mission: mission.min_depth)
         mission_depth = max(mission.min_depth for mission in sorted_missions[:self.target_amount])
-        return max(mission_depth, self.target_amount - 1)
+        return max(mission_depth, self.target_amount - 1) # -1 because depth is zero-based but amount is one-based
 
     def to_lambda(self, player: int) -> Callable[[CollectionState], bool]:
         return lambda state: self.target_amount <= sum(state.has(mission.beat_item(), player) for mission in self.missions_to_count)
@@ -250,7 +250,7 @@ class SubRuleEntryRule(EntryRule):
         filtered_rules = [rule for rule in self.rules_to_check if rule.get_depth(beaten_missions) > -1]
         sorted_rules = sorted(filtered_rules, key = lambda rule: rule.get_depth(beaten_missions))
         required_depth = max(rule.get_depth(beaten_missions) for rule in sorted_rules[:self.target_amount])
-        return max(required_depth, self.target_amount - 1, self.min_depth)
+        return max(required_depth, self.min_depth)
 
     def to_lambda(self, player: int) -> Callable[[CollectionState], bool]:
         sub_lambdas = [rule.to_lambda(player) for rule in self.rules_to_check]
