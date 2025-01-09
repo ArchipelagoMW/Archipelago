@@ -246,7 +246,6 @@ class Wargroove2Context(CommonContext):
 
                 # Newly-obtained items
                 if not os.path.isfile(path):
-                    open(path, 'w').close()
                     # Announcing commander unlocks
                     item_name = self.item_names.lookup_in_slot(network_item.item)
                     if item_name in faction_table.keys():
@@ -265,7 +264,7 @@ class Wargroove2Context(CommonContext):
                         f.write(f"{item_count}")
                     f.close()
 
-                print_filename = f"AP_{str(network_item.item)}.item.print"
+                print_filename = f"AP_{network_item.item}.item.print"
                 print_path = os.path.join(self.game_communication_path, print_filename)
                 if not os.path.isfile(print_path):
                     open(print_path, 'w').close()
@@ -665,7 +664,7 @@ async def game_watcher(ctx: Wargroove2Context):
         sending: list = []
         victory = False
         await ctx.update_death_link(ctx.has_death_link)
-        for root, dirs, files in os.walk(ctx.game_communication_path):
+        for _root, _dirs, files in os.walk(ctx.game_communication_path):
             for file in files:
                 if file.find("send") > -1:
                     st = int(file.split("send", -1)[1])
@@ -674,11 +673,11 @@ async def game_watcher(ctx: Wargroove2Context):
                     if loc_name is not None and loc_name.endswith("Victory"):
                         extras = ctx.victory_locations
                     elif loc_name is not None and \
-                            st < location_table["Humble Beginnings Rebirth: Talk to Nadia Extra 1"]:
+                            st < location_table["Humble Beginnings Rebirth: Talk to Nadia Extra 1"]:  # type: ignore
                         extras = ctx.objective_locations
                     for i in range(1, extras):
-                        sending = sending + [location_table[loc_name + f" Extra {i}"]]
-                    sending = sending + [st]
+                        sending.append(location_table[loc_name + f" Extra {i}"])
+                    sending.append(st)
 
                     os.remove(os.path.join(ctx.game_communication_path, file))
                 if file == "deathLinkSend" and ctx.has_death_link:
