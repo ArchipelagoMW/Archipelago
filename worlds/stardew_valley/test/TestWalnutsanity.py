@@ -1,5 +1,5 @@
 from . import SVTestBase
-from ..options import ExcludeGingerIsland, Walnutsanity, ToolProgression
+from ..options import ExcludeGingerIsland, Walnutsanity, ToolProgression, SkillProgression
 from ..strings.ap_names.ap_option_names import WalnutsanityOptionName
 
 
@@ -7,6 +7,7 @@ class TestWalnutsanityNone(SVTestBase):
     options = {
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
         Walnutsanity: Walnutsanity.preset_none,
+        SkillProgression: ToolProgression.option_progressive,
         ToolProgression: ToolProgression.option_progressive,
     }
 
@@ -26,7 +27,7 @@ class TestWalnutsanityNone(SVTestBase):
         self.collect("Island Obelisk")
         self.collect("Island West Turtle")
         self.collect("Progressive House")
-        items = self.collect("5 Golden Walnuts", 10)
+        self.collect("5 Golden Walnuts", 10)
 
         self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
         self.collect("Island North Turtle")
@@ -51,6 +52,8 @@ class TestWalnutsanityPuzzles(SVTestBase):
     options = {
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
         Walnutsanity: frozenset({WalnutsanityOptionName.puzzles}),
+        SkillProgression: ToolProgression.option_progressive,
+        ToolProgression: ToolProgression.option_progressive,
     }
 
     def test_only_puzzle_walnut_locations(self):
@@ -204,7 +207,7 @@ class TestWalnutsanityAll(SVTestBase):
         self.assertTrue(self.multiworld.state.can_reach_location("Parrot Express", self.player))
         self.remove(items)
         self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
-        items = self.collect("5 Golden Walnuts", 4)
-        items = self.collect("3 Golden Walnuts", 6)
-        items = self.collect("Golden Walnut", 2)
+        self.collect("5 Golden Walnuts", 4)
+        self.collect("3 Golden Walnuts", 6)
+        self.collect("Golden Walnut", 2)
         self.assertTrue(self.multiworld.state.can_reach_location("Parrot Express", self.player))
