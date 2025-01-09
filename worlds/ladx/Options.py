@@ -285,12 +285,16 @@ class MusicChangeCondition(Choice):
 # [One hit KO] You die on a single hit, always."""),
 
 
-class StealingInLogic(DefaultOffToggle, LADXROption):
+class Stealing(Choice, LADXROption):
     """
     Puts stealing from the shop in logic if the player has a sword.
     """
-    display_name = "Stealing in Logic"
+    display_name = "Stealing"
     ladxr_name = "steal"
+    option_in_logic = 1
+    option_out_of_logic = 2
+    option_disabled = 3
+    default = option_out_of_logic
 
 
 class Bowwow(Choice):
@@ -527,7 +531,7 @@ ladx_option_groups = [
     OptionGroup("Miscellaneous", [
         TradeQuest,
         Rooster,
-        StealingInLogic,
+        Stealing,
         TrendyGame,
         InGameHints,
         NagMessages,
@@ -586,7 +590,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     nag_messages: NagMessages
     ap_title_screen: APTitleScreen
     boots_controls: BootsControls
-    stealing_in_logic: StealingInLogic
+    stealing: Stealing
     in_game_hints: InGameHints
 
     warp_improvements: Removed

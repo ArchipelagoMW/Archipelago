@@ -40,7 +40,7 @@ class World:
         self._addEntrance("start_house", mabe_village, start_house, None)
 
         shop = Location("Shop")
-        if options.steal:
+        if options.steal == "inlogic":
             Location().add(ShopItem(0)).connect(shop, OR(COUNT("RUPEES", 500), SWORD))
             Location().add(ShopItem(1)).connect(shop, OR(COUNT("RUPEES", 1480), SWORD))
         else:

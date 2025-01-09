@@ -161,8 +161,12 @@ Note, some entrances can lead into water, use the warp-to-home from the save&qui
 [Oracle] Less iframes and heath from drops. Bombs damage yourself. Water damages you without flippers. No piece of power or acorn.
 [Hero] Switch version hero mode, double damage, no heart/fairy drops.
 [One hit KO] You die on a single hit, always."""),
-            Setting('steal', 'Gameplay', 't', 'Stealing from the shop', default=False,
-                description='Toggle if stealing is in logic.'),
+            Setting('steal', 'Gameplay', 't', 'Stealing from the shop',
+                options=[('inlogic', 'a', 'In logic'), ('disabled', 'n', 'Disabled'), ('outoflogic', '', 'Out of logic')], default='outoflogic',
+                description="""Effects when you can steal from the shop and if it is in logic.
+[Normal] requires the sword before you can steal.
+[Always] you can always steal from the shop
+[Never] you can never steal from the shop."""),
             Setting('bowwow', 'Special', 'g', 'Good boy mode', options=[('normal', '', 'Disabled'), ('always', 'a', 'Enabled'), ('swordless', 's', 'Enabled (swordless)')], default='normal',
                 description='Allows BowWow to be taken into any area, damage bosses and more enemies. If enabled you always start with bowwow. Swordless option removes the swords from the game and requires you to beat the game without a sword and just bowwow.'),
             Setting('overworld', 'Special', 'O', 'Overworld', options=[('normal', '', 'Normal'), ('dungeondive', 'D', 'Dungeon dive'), ('nodungeons', 'N', 'No dungeons'), ('random', 'R', 'Randomized')], default='normal',
@@ -282,7 +286,7 @@ Note, some entrances can lead into water, use the warp-to-home from the save&qui
         if self.goal in ("bingo", "bingo-full"):
             req("overworld", "normal", "Bingo goal does not work with dungeondive")
             req("accessibility", "all", "Bingo goal needs 'all' accessibility")
-            dis("steal", "never", "default", "With bingo goal, stealing should be allowed")
+            dis("steal", "disabled", "default", "With bingo goal, stealing should be allowed")
             dis("boss", "random", "shuffle", "With bingo goal, bosses need to be on normal or shuffle")
             dis("miniboss", "random", "shuffle", "With bingo goal, minibosses need to be on normal or shuffle")
         if self.overworld == "dungeondive":

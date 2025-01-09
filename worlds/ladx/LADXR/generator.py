@@ -231,6 +231,12 @@ def generateRom(args, world: "LinksAwakeningWorld"):
         # The default rom has this build in, just need to set a flag and we get this save.
         rom.patch(0, 0x0003, "00", "01")
 
+    # Patch the sword check on the shopkeeper turning around.
+    if world.ladxr_settings.steal == 'disabled':
+        rom.patch(4, 0x36F9, "FA4EDB", "3E0000")
+    #elif world.ladxr_settings.steal == 'always':
+    #    rom.patch(4, 0x36F9, "FA4EDB", "3E0100")
+
     if world.ladxr_settings.hpmode == 'inverted':
         patches.health.setStartHealth(rom, 9)
     elif world.ladxr_settings.hpmode == '1':
