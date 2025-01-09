@@ -1717,9 +1717,6 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             for location in self.ctx.uncollected_locations_in_mission(lookup_id_to_mission[self.mission_id])
             if (location % VICTORY_MODULO) < VICTORY_CACHE_OFFSET
         ]
-        if 0 not in result:
-            # Signal that victory should always send a notification for winning
-            result.append(0)
         return result
 
     def missions_beaten_count(self) -> int:
