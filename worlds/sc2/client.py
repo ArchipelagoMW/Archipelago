@@ -1678,7 +1678,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                         
                         # Old slots don't have locations on goal
                         if not send_victory or self.ctx.slot_data_version >= 4:
-                            print("Mission Completed")
+                            sc2_logger.info("Mission Completed")
                             location_ids = self.ctx.mission_id_to_location_ids[self.mission_id]
                             victory_locations += sorted([
                                 get_location_id(self.mission_id, location_id)
@@ -1713,12 +1713,12 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
     def get_uncollected_objectives(self) -> typing.List[int]:
         result = [
-            location % VICTORY_MODULO for location in
-            self.ctx.uncollected_locations_in_mission(lookup_id_to_mission[self.mission_id])
+            location % VICTORY_MODULO
+            for location in self.ctx.uncollected_locations_in_mission(lookup_id_to_mission[self.mission_id])
+            if (location % VICTORY_MODULO) < VICTORY_CACHE_OFFSET
         ]
-        if self.mission_id in self.ctx.final_mission_ids and not self.ctx.finished_game and 0 not in result:
-            # Goal isn't a regular location or the goal location has been collected and the game haven't been goaled yet.
-            # Mark victory as uncollected so the goal can be sent back by the game
+        if 0 not in result:
+            # Signal that victory should always send a notification for winning
             result.append(0)
         return result
 
