@@ -1,6 +1,5 @@
 from . import SVTestBase
 from ..options import ExcludeGingerIsland, Booksanity, Shipsanity
-from ..strings.ap_names.ap_option_names import OptionName
 from ..strings.book_names import Book, LostBook
 
 power_books = [Book.animal_catalogue, Book.book_of_mysteries,

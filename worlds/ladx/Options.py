@@ -278,11 +278,21 @@ class MusicChangeCondition(Choice):
 # [Start with 1] normal game, you just start with 1 heart instead of 3.
 # [Low max] replace heart containers with heart pieces."""),
 
-#             Setting('hardmode', 'Gameplay', 'X', 'Hard mode', options=[('none', '', 'Disabled'), ('oracle', 'O', 'Oracle'), ('hero', 'H', 'Hero'), ('ohko', '1', 'One hit KO')], default='none',
-#                 description="""
-# [Oracle] Less iframes and heath from drops. Bombs damage yourself. Water damages you without flippers. No piece of power or acorn.
-# [Hero] Switch version hero mode, double damage, no heart/fairy drops.
-# [One hit KO] You die on a single hit, always."""),
+
+class HardMode(Choice, LADXROption):
+    """
+    [Oracle] Less iframes and health from drops. Bombs damage yourself. Water damages you without flippers. No piece of power or acorn.
+    [Hero] Switch version hero mode, double damage, no heart/fairy drops.
+    [One hit KO] You die on a single hit, always.
+    """
+    display_name = "Hard Mode"
+    ladxr_name = "hardmode"
+    option_none = 0
+    option_oracle = 1
+    option_hero = 2
+    option_ohko = 3
+    default = option_none
+
 
 
 class Stealing(Choice, LADXROption):
@@ -310,49 +320,61 @@ class Bowwow(Choice):
 
 class Overworld(Choice, LADXROption):
     """
-    [Dungeon Dive] Create a different overworld where all the dungeons are directly accessible and almost no chests are located in the overworld.
-    [Tiny dungeons] All dungeons only consist of a boss fight and a instrument reward. Rest of the dungeon is removed.
+    [Open Mabe] Replaces rock on the east side of Mabe Village with bushes, allowing access to Ukuku Prairie without Power Bracelet.
     """
     display_name = "Overworld"
     ladxr_name = "overworld"
     option_normal = 0
-    option_dungeon_dive = 1
-    option_tiny_dungeons = 2
-    # option_shuffled = 3
+    option_open_mabe = 1
     default = option_normal
 
 
 # Setting('superweapons', 'Special', 'q', 'Enable super weapons', default=False,
 #    description='All items will be more powerful, faster, harder, bigger stronger. You name it.'),
-# Setting('quickswap', 'User options', 'Q', 'Quickswap', options=[('none', '', 'Disabled'), ('a', 'a', 'Swap A button'), ('b', 'b', 'Swap B button')], default='none',
-#    description='Adds that the select button swaps with either A or B. The item is swapped with the top inventory slot. The map is not available when quickswap is enabled.',
-#    aesthetic=True),
-#             Setting('textmode', 'User options', 'f', 'Text mode', options=[('fast', '', 'Fast'), ('default', 'd', 'Normal'), ('none', 'n', 'No-text')], default='fast',
-#                 description="""[Fast] makes text appear twice as fast.
-# [No-Text] removes all text from the game""", aesthetic=True),
-#             Setting('lowhpbeep', 'User options', 'p', 'Low HP beeps', options=[('none', 'D', 'Disabled'), ('slow', 'S', 'Slow'), ('default', 'N', 'Normal')], default='slow',
-#                 description='Slows or disables the low health beeping sound', aesthetic=True),
-#             Setting('noflash', 'User options', 'l', 'Remove flashing lights', default=True,
-#                 description='Remove the flashing light effects from Mamu, shopkeeper and MadBatter. Useful for capture cards and people that are sensitive for these things.',
-#                 aesthetic=True),
-#             Setting('nagmessages', 'User options', 'S', 'Show nag messages', default=False,
-#                 description='Enables the nag messages normally shown when touching stones and crystals',
-#                 aesthetic=True),
-#             Setting('gfxmod', 'User options', 'c', 'Graphics', options=gfx_options, default='',
-#                 description='Generally affects at least Link\'s sprite, but can alter any graphics in the game',
-#                 aesthetic=True),
-#             Setting('linkspalette', 'User options', 'C', "Link's color",
-#                 options=[('-1', '-', 'Normal'), ('0', '0', 'Green'), ('1', '1', 'Yellow'), ('2', '2', 'Red'), ('3', '3', 'Blue'),
-#                          ('4', '4', '?? A'), ('5', '5', '?? B'), ('6', '6', '?? C'), ('7', '7', '?? D')], default='-1', aesthetic=True,
-#                 description="""Allows you to force a certain color on link.
-# [Normal] color of link depends on the tunic.
-# [Green/Yellow/Red/Blue] forces link into one of these colors.
-# [?? A/B/C/D] colors of link are usually inverted and color depends on the area you are in."""),
-#             Setting('music', 'User options', 'M', 'Music', options=[('', '', 'Default'), ('random', 'r', 'Random'), ('off', 'o', 'Disable')], default='',
-#                 description="""
-# [Random] Randomizes overworld and dungeon music'
-# [Disable] no music in the whole game""",
-#                 aesthetic=True),
+
+
+class Quickswap(Choice, LADXROption):
+    """
+    Adds that the SELECT button swaps with either A or B. The item is swapped with the top inventory slot. The map is not available when quickswap is enabled.
+    """
+    display_name = "Quickswap"
+    ladxr_name = "quickswap"
+    option_none = 0
+    option_a = 1
+    option_b = 2
+    default = option_none
+
+
+class TextMode(Choice, LADXROption):
+    """
+    [Fast] Makes text appear twice as fast
+    """
+    display_name = "Text Mode"
+    ladxr_name = "textmode"
+    option_normal = 0
+    option_fast = 1
+    default = option_fast
+
+
+class LowHpBeep(Choice, LADXROption):
+    """
+    Slows or disables the low health beeping sound.
+    """
+    display_name = "Low HP Beep"
+    ladxr_name = "lowhpbeep"
+    option_default = 0
+    option_slow = 1
+    option_none = 2
+    default = option_default
+
+
+class NoFlash(DefaultOnToggle, LADXROption):
+    """
+    Remove the flashing light effects from Mamu, shopkeeper and MadBatter. Useful for capture cards and people that are sensitive to these things.
+    """
+    display_name = "No Flash"
+    ladxr_name = "noflash"
+
 
 class BootsControls(Choice):
     """
@@ -512,6 +534,18 @@ class InGameHints(DefaultOnToggle):
     display_name = "In-game Hints"
 
 
+class ForeignItemIcons(Choice):
+    """
+    Choose how to display foreign items.
+    [Guess By Name] Foreign items can look like any Link's Awakening item.
+    [Indicate Progression] Foreign items are either a Piece of Power (progression) or Guardian Acorn (non-progression).
+    """
+    display_name = "Foreign Item Icons"
+    option_guess_by_name = 0
+    option_indicate_progression = 1
+    default = option_guess_by_name
+
+
 ladx_option_groups = [
     OptionGroup("Goal Options", [
         Goal,
@@ -532,9 +566,12 @@ ladx_option_groups = [
         TradeQuest,
         Rooster,
         Stealing,
+        Overworld,
         TrendyGame,
         InGameHints,
         NagMessages,
+        Quickswap,
+        HardMode,
         BootsControls
     ]),
     OptionGroup("Experimental", [
@@ -545,10 +582,14 @@ ladx_option_groups = [
         LinkPalette,
         Palette,
         TextShuffle,
+        ForeignItemIcons,
         APTitleScreen,
         GfxMod,
         Music,
-        MusicChangeCondition
+        MusicChangeCondition,
+        LowHpBeep,
+        TextMode,
+        NoFlash,
     ])
 ]
 
@@ -579,6 +620,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     gfxmod: GfxMod
     palette: Palette
     text_shuffle: TextShuffle
+    foreign_item_icons: ForeignItemIcons
     shuffle_nightmare_keys: ShuffleNightmareKeys
     shuffle_small_keys: ShuffleSmallKeys
     shuffle_maps: ShuffleMaps
@@ -591,7 +633,13 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     ap_title_screen: APTitleScreen
     boots_controls: BootsControls
     stealing: Stealing
+    quickswap: Quickswap
+    hard_mode: HardMode
+    low_hp_beep: LowHpBeep
+    text_mode: TextMode
+    no_flash: NoFlash
     in_game_hints: InGameHints
+    overworld: Overworld
 
     warp_improvements: Removed
     additional_warp_points: Removed
