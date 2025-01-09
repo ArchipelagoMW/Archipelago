@@ -678,8 +678,8 @@ async def game_watcher(ctx: Wargroove2Context):
                             st < location_table["Humble Beginnings Rebirth: Talk to Nadia Extra 1"]:  # type: ignore
                         extras = ctx.objective_locations
                     for i in range(1, extras):
-                        sending = sending + [location_table[loc_name + f" Extra {i}"]]
-                    sending = sending + [st]
+                        sending.append(location_table[loc_name + f" Extra {i}"])
+                    sending.append(st)
 
                     os.remove(os.path.join(ctx.game_communication_path, file))
                 if file == "deathLinkSend" and ctx.has_death_link:
