@@ -152,8 +152,15 @@ def home_path(*path: str) -> str:
     if hasattr(home_path, 'cached_path'):
         pass
     elif sys.platform.startswith('linux'):
-        home_path.cached_path = os.path.expanduser('~/Archipelago')
-        os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
+        xdg_data_home = os.getenv('XDG_DATA_HOME', os.path.expanduser('~/.local/share'))
+        home_path.cached_path = xdg_data_home + '/Archipelago'
+        if not os.path.isdir(home_path.cached_path):
+            legacy_home_path = os.path.expanduser('~/Archipelago')
+            if os.path.isdir(legacy_home_path):
+                os.renames(legacy_home_path, home_path.cached_path)
+                os.symlink(home_path.cached_path, legacy_home_path)
+            else:
+                os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
     else:
         # not implemented
         home_path.cached_path = local_path()  # this will generate the same exceptions we got previously
