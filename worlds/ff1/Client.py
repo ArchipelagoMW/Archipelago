@@ -98,7 +98,7 @@ class FF1Client(BizHawkClient):
         # Resetting these in case of switching ROMs
         self.consumable_stack_amounts = None
         self.weapons_queue = deque()
-        self.armor_queue = deque
+        self.armor_queue = deque()
 
         return True
 
