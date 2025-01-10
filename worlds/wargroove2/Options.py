@@ -48,7 +48,6 @@ class LevelShuffleSeed(Range):
     display_name = "Level Shuffle Seed"
     range_start = 0
     range_end = 0xFFFFFFFF
-    random = 0
     default = 0
 
 
