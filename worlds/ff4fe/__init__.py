@@ -436,9 +436,7 @@ class FF4FEWorld(World):
             "AdditionalObjectives": self.options.AdditionalObjectives.value,
             "ObjectiveReward": self.options.ObjectiveReward.current_key,
             "UnsafeKeyItemPlacement": self.options.UnsafeKeyItemPlacement.current_key,
-            "ObjectivesRequired": self.options.RequiredObjectiveCount.value,
-            "JunkedItem": list(self.options.JunkedItems.value),
-            "KeptItems": list(self.options.KeptItems.value)
+            "ObjectivesRequired": self.options.RequiredObjectiveCount.value
         }
         return slot_data
 

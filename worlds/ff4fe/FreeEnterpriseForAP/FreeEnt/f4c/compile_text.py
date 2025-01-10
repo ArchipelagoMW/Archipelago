@@ -1,4 +1,3 @@
-import lark
 from . import compile_common
 from . import consts
 from . import ff4struct

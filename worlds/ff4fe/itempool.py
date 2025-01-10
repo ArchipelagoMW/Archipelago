@@ -68,7 +68,7 @@ def get_chosen_character(world: World):
     if world.options.HeroChallenge.current_key != "none":
         option_value = str(world.options.HeroChallenge.current_key)
         if option_value == "random_character":
-            chosen_character = world.random.choice(items.characters)
+            chosen_character = world.random.choice([character_choice for character_choice in items.characters if character_choice != "None"])
         else:
             chosen_character = option_value.capitalize()
     else:

@@ -27,6 +27,8 @@ class FF4FEClient(SNIClient):
         self.key_items_with_flags = None
         self.json_doc = None
         self.flags = None
+        self.junked_items = None
+        self.kept_items = None
 
     async def validate_rom(self, ctx: SNIContext) -> bool:
         from SNIClient import snes_read
@@ -51,7 +53,6 @@ class FF4FEClient(SNIClient):
         from SNIClient import snes_flush_writes
         # We check victory before the connection check because victory is set in a cutscene.
         # Thus, we would no longer be in a "valid" state to send or receive items.
-        await self.check_victory(ctx)
         if await self.connection_check(ctx) == False:
             return
         await self.location_check(ctx)
@@ -86,6 +87,35 @@ class FF4FEClient(SNIClient):
             from . import FF4FEWorld
             self.key_items_with_flags = {item: id for item, id in FF4FEWorld.item_name_to_id.items()
                 if item in Rom.special_flag_key_items.keys()}
+
+        if self.junked_items is None:
+            junked_items_length_data = await snes_read(ctx, Rom.junked_items_length_byte, 1)
+            if junked_items_length_data is None:
+                return
+            junked_items_array_length = junked_items_length_data[0]
+            junked_items_array_data = await snes_read(ctx, Rom.junked_items_array_start, junked_items_array_length)
+            if junked_items_array_data is None:
+                return
+            self.junked_items = []
+            for item_byte in junked_items_array_data:
+                item_data = [item for item in items.all_items if item.fe_id == item_byte].pop()
+                self.junked_items.append(item_data.name)
+
+        if self.kept_items is None:
+            kept_items_length_data = await snes_read(ctx, Rom.kept_items_length_byte, 1)
+            if kept_items_length_data is None:
+                return
+            kept_items_array_length = kept_items_length_data[0]
+            kept_items_array_data = await snes_read(ctx, Rom.kept_items_array_start, kept_items_array_length)
+            if kept_items_array_data is None:
+                return
+            self.kept_items = []
+            for item_byte in kept_items_array_data:
+                item_data = [item for item in items.all_items if item.fe_id == item_byte].pop()
+                self.kept_items.append(item_data.name)
+
+
+        await self.check_victory(ctx)
 
         # If we're not in a safe state, _don't do anything_.
         for sentinel in Rom.sentinel_addresses:
@@ -263,7 +293,7 @@ class FF4FEClient(SNIClient):
                 return
         # Any item that hits our junk tier settings is automatically sold.
         if item_received_name in items.sellable_item_names and item_received.location >= 0:
-            if item_received_game_data.tier <= junk_tier_data[0]:
+            if self.check_junk_item(item_received_game_data, junk_tier_data[0]):
                 # The Time is Money wacky prevents us from getting cash through any means other than time.
                 time_is_money = False if time_is_money_data[0] != 0 else True
                 # Item sale prices are capped at 127000 GP.
@@ -355,6 +385,11 @@ class FF4FEClient(SNIClient):
                     # Which is bad.
                     hook_received_value = hook_received_value & Rom.airship_flyable_flag[1]
                     snes_buffered_write(ctx, flag_byte, bytes([hook_received_value]))
+                    drill_attached_data = await snes_read(ctx, Rom.drill_attached_flag[0], 1)
+                    if drill_attached_data is None:
+                        return
+                    drill_attached_value = drill_attached_data[0]
+                    snes_buffered_write(ctx, Rom.drill_attached_flag[0], bytes([drill_attached_value | Rom.drill_attached_flag[1]]))
                 elif key_items_flag_byte is None:
                     flag_bit = Rom.special_flag_key_items[key_item][1]
                     key_item_received_data = await snes_read(ctx, flag_byte, 1)
@@ -379,6 +414,12 @@ class FF4FEClient(SNIClient):
             snes_buffered_write(ctx, Rom.key_items_tracker_start_location + i, bytes([new_tracker_bytes[i]]))
         snes_buffered_write(ctx, Rom.key_items_found_location, bytes([len(key_items_collected)]))
 
+    def check_junk_item(self, item_received_game_data, junk_tier):
+        if item_received_game_data.name in self.kept_items:
+            return False
+        if item_received_game_data.name in self.junked_items:
+            return True
+        return item_received_game_data.tier <= junk_tier
 
 
     def increment_items_received(self, ctx, items_received_amount):

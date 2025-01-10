@@ -11,6 +11,7 @@ import Utils
 from settings import get_settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APPatchExtension
 from .FreeEnterpriseForAP.FreeEnt.cmd_make import MakeCommand
+from .items import all_items
 
 if TYPE_CHECKING:
     from . import FF4FEWorld
@@ -42,6 +43,10 @@ key_items_found_location = 0xF51578
 gp_byte_location = 0xF516A0
 gp_byte_size = 3
 junk_tier_byte = 0x1FFC00
+junked_items_length_byte = 0x1FFC01
+junked_items_array_start = 0x1FFD00
+kept_items_length_byte = 0x1FFC02
+kept_items_array_start = 0x1FFE00
 
 sell_value_byte = 0x00C951
 
@@ -57,6 +62,7 @@ special_flag_key_items = {
 }
 
 airship_flyable_flag = (0xF51286, 0b11111011)
+drill_attached_flag = (0xF51287, 0b00100000)
 
 def get_base_rom_as_bytes() -> bytes:
     with open(get_settings().ff4fe_options.rom_file, "rb") as infile:
@@ -69,17 +75,14 @@ class FF4FEPatchExtension(APPatchExtension):
 
     @staticmethod
     def call_fe(caller, rom, placement_file):
-        FF4FEPatchExtension.copy_common_data_files()
         placements = json.loads(caller.get_file(placement_file))
         seed = placements["seed"]
         output_file = placements["output_file"]
         rom_name = placements["rom_name"]
         flags = placements["flags"]
-        junk_tier = 1
-        try:
-            junk_tier = placements["junk_tier"]
-        except KeyError:
-            junk_tier = 1
+        junk_tier = placements["junk_tier"]
+        junked_items = placements["junked_items"]
+        kept_items = placements["kept_items"]
         placements = json.dumps(json.loads(caller.get_file(placement_file)))
         cmd = MakeCommand()
         parser = argparse.ArgumentParser()
@@ -100,14 +103,15 @@ class FF4FEPatchExtension(APPatchExtension):
             rom_data = bytearray(file.read())
             rom_data[ROM_NAME:ROM_NAME+20] = bytes(rom_name, encoding="utf-8")
             rom_data[junk_tier_byte:junk_tier_byte + 1] = bytes([junk_tier])
+            rom_data[junked_items_length_byte] = len(junked_items)
+            rom_data[kept_items_length_byte] = len(kept_items)
+            for i, item_name in enumerate(junked_items):
+                item_id = [item for item in all_items if item.name == item_name].pop().fe_id
+                rom_data[junked_items_array_start + i] = item_id
+            for i, item_name in enumerate(kept_items):
+                item_id = [item for item in all_items if item.name == item_name].pop().fe_id
+                rom_data[kept_items_array_start + i] = item_id
         return rom_data
-
-    @staticmethod
-    def copy_common_data_files():
-        for filename in ["common.lark", "lark.lark", "python.lark", "unicode.lark"]:
-            with open(os.path.join(Utils.user_path("data", "ff4fe"), filename), "w") as file:
-                existing_file = pkgutil.get_data(__name__, filename).decode()
-                file.write(existing_file)
 
 
 class FF4FEProcedurePatch(APProcedurePatch, APTokenMixin):

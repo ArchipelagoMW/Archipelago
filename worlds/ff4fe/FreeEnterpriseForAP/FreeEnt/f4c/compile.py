@@ -7,7 +7,6 @@ import time
 import random
 import hashlib
 
-import lark
 from . import ff4bin
 from . import consts
 from .bytes_patch import BytesPatch

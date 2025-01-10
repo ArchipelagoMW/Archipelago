@@ -1,8 +1,11 @@
+import pkgutil
 import re
 import os
 import math
 import hashlib
 import pickle
+
+import Utils
 
 try:
     from . import ff4struct
@@ -52,8 +55,8 @@ def _extract_part(value, part):
 def _load_parser():
     global _msf_parser
     if _msf_parser is None:
-        with open(os.path.join(os.path.dirname(__file__), "grammar_myselfpatch.lark"), 'r') as infile:
-            _msf_parser = lark.Lark(infile.read(), maybe_placeholders=False)
+        infile = pkgutil.get_data(__name__, "grammar_myselfpatch.lark").decode("utf-8")
+        _msf_parser = lark.Lark(infile, maybe_placeholders=False, import_paths=[Utils.user_path("data", "ff4fe")])
 
     global _expr_transformer
     if _expr_transformer is None:

@@ -1,9 +1,18 @@
 import os,inspect
+import pathlib
+import pkgutil
+
 import lark
 import Utils
 
 _ROOT_FAMILY = "__"
 _consts = {}
+
+pathlib.Path(Utils.user_path("data", "ff4fe")).mkdir(parents=True, exist_ok=True)
+for filename in ["common.lark", "lark.lark", "python.lark", "unicode.lark"]:
+    with open(os.path.join(Utils.user_path("data", "ff4fe"), filename), "w") as file:
+        existing_file = pkgutil.get_data(__name__, filename).decode()
+        file.write(existing_file)
 
 _parser = lark.Lark(r'''
     start           : const_block*

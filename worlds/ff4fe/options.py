@@ -338,13 +338,13 @@ class JunkedItems(OptionSet):
     """Items that will always be sold for GP regardless of your junk tier settings."""
     display_name = "Junked Items"
     valid_keys = sorted(sellable_item_names)
-    visibility = Visibility.complex_ui
+    visibility = Visibility.complex_ui | Visibility.template | Visibility.spoiler
 
 class KeptItems(OptionSet):
     """Items that will never be sold for GP regardless of your junk tier settings. Takes priority over Junked Items."""
     display_name = "Kept Items"
     valid_keys = sorted(sellable_item_names)
-    visibility = Visibility.complex_ui
+    visibility = Visibility.complex_ui | Visibility.template | Visibility.spoiler
 
 @dataclass
 class FF4FEOptions(PerGameCommonOptions):
