@@ -140,7 +140,7 @@ class TunicWorld(World):
                 self.options.hexagon_quest.value = self.passthrough["hexagon_quest"]
                 self.options.entrance_rando.value = self.passthrough["entrance_rando"]
                 self.options.shuffle_ladders.value = self.passthrough["shuffle_ladders"]
-                self.options.grass_randomizer.value = passthrough.get("grass_randomizer", 0)
+                self.options.grass_randomizer.value = self.passthrough.get("grass_randomizer", 0)
                 self.options.fixed_shop.value = self.options.fixed_shop.option_false
                 self.options.laurels_location.value = self.options.laurels_location.option_anywhere
                 self.options.combat_logic.value = self.passthrough["combat_logic"]
