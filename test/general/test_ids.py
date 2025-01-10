@@ -54,11 +54,11 @@ class TestIDs(unittest.TestCase):
                     self.assertCountEqual(
                         world_type.item_id_to_name.values(), 
                         world_type.item_name_to_id.keys(),
-                        "\nThese items have an overlapping ids with other items its own world")
+                        "\nThese items have overlapping ids with other items in its own world")
                     self.assertCountEqual(
                         world_type.item_id_to_name.keys(), 
                         world_type.item_name_to_id.values(),
-                        "\nThese items have an overlapping names with other items its own world")
+                        "\nThese items have overlapping names with other items in its own world")
                     
                 self.assertEqual(len_item_id_to_name, len_item_name_to_id)
 
@@ -73,11 +73,11 @@ class TestIDs(unittest.TestCase):
                     self.assertCountEqual(
                         world_type.location_id_to_name.values(), 
                         world_type.location_name_to_id.keys(),
-                        "\nThese locations have an overlapping ids with other locations its own world")
+                        "\nThese locations have overlapping ids with other locations in its own world")
                     self.assertCountEqual(
                         world_type.location_id_to_name.keys(), 
                         world_type.location_name_to_id.values(),
-                        "\nThese locations have an overlapping names with other locations its own world")
+                        "\nThese locations have overlapping names with other locations in its own world")
 
                 self.assertEqual(len_location_id_to_name, len_location_name_to_id)
 
