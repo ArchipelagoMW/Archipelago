@@ -85,7 +85,7 @@ class LingoWorld(World):
                 state.collect(self.create_item(self.player_logic.forced_good_item), True)
 
             all_locations = self.multiworld.get_locations(self.player)
-            state.sweep_for_events(locations=all_locations)
+            state.sweep_for_advancements(locations=all_locations)
 
             unreachable_locations = [location for location in all_locations
                                      if not state.can_reach_location(location.name, self.player)]

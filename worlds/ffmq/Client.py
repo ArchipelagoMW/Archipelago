@@ -47,6 +47,17 @@ def get_flag(data, flag):
     bit = int(0x80 / (2 ** (flag % 8)))
     return (data[byte] & bit) > 0
 
+def validate_read_state(data1, data2):
+    validation_array = bytes([0x01, 0x46, 0x46, 0x4D, 0x51, 0x52])
+
+    if data1 is None or data2 is None:
+        return False
+    for i in range(6):
+        if data1[i] != validation_array[i] or data2[i] != validation_array[i]:
+            return False;
+    return True
+    
+   
 
 class FFMQClient(SNIClient):
     game = "Final Fantasy Mystic Quest"
@@ -67,11 +78,11 @@ class FFMQClient(SNIClient):
     async def game_watcher(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
-        check_1 = await snes_read(ctx, 0xF53749, 1)
+        check_1 = await snes_read(ctx, 0xF53749, 6)
         received = await snes_read(ctx, RECEIVED_DATA[0], RECEIVED_DATA[1])
         data = await snes_read(ctx, READ_DATA_START, READ_DATA_END - READ_DATA_START)
-        check_2 = await snes_read(ctx, 0xF53749, 1)
-        if check_1 != b'\x01' or check_2 != b'\x01':
+        check_2 = await snes_read(ctx, 0xF53749, 6)
+        if not validate_read_state(check_1, check_2):
             return
 
         def get_range(data_range):

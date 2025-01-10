@@ -114,6 +114,7 @@ class Region:
     junimo_kart_1 = "Junimo Kart 1"
     junimo_kart_2 = "Junimo Kart 2"
     junimo_kart_3 = "Junimo Kart 3"
+    junimo_kart_4 = "Junimo Kart 4"
     mines_floor_5 = "The Mines - Floor 5"
     mines_floor_10 = "The Mines - Floor 10"
     mines_floor_15 = "The Mines - Floor 15"

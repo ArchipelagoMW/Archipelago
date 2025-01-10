@@ -8,7 +8,7 @@ from BaseClasses import Item, Location
 from settings import get_settings
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
 from .Items import item_table
-from .Locations import shop, badge, pants, location_table, hidden, all_locations
+from .Locations import shop, badge, pants, location_table, all_locations
 
 if TYPE_CHECKING:
     from . import MLSSWorld
@@ -88,7 +88,7 @@ class MLSSPatchExtension(APPatchExtension):
             return rom
         stream = io.BytesIO(rom)
 
-        for location in all_locations:
+        for location in [location for location in all_locations if location.itemType == 0]:
             stream.seek(location.id - 6)
             b = stream.read(1)
             if b[0] == 0x10 and options["block_visibility"] == 1:
@@ -133,7 +133,7 @@ class MLSSPatchExtension(APPatchExtension):
         stream = io.BytesIO(rom)
         random.seed(options["seed"] + options["player"])
 
-        if options["randomize_bosses"] == 1 or (options["randomize_bosses"] == 2) and options["randomize_enemies"] == 0:
+        if options["randomize_bosses"] == 1 or (options["randomize_bosses"] == 2 and options["randomize_enemies"] == 0):
             raw = []
             for pos in bosses:
                 stream.seek(pos + 1)
@@ -164,6 +164,7 @@ class MLSSPatchExtension(APPatchExtension):
 
         enemies_raw = []
         groups = []
+        boss_groups = []
 
         if options["randomize_enemies"] == 0:
             return stream.getvalue()
@@ -171,7 +172,7 @@ class MLSSPatchExtension(APPatchExtension):
         if options["randomize_bosses"] == 2:
             for pos in bosses:
                 stream.seek(pos + 1)
-                groups += [stream.read(0x1F)]
+                boss_groups += [stream.read(0x1F)]
 
         for pos in enemies:
             stream.seek(pos + 8)
@@ -221,12 +222,19 @@ class MLSSPatchExtension(APPatchExtension):
             groups += [raw]
             chomp = False
 
-        random.shuffle(groups)
         arr = enemies
         if options["randomize_bosses"] == 2:
             arr += bosses
+            groups += boss_groups
+
+        random.shuffle(groups)
 
         for pos in arr:
+            if arr[-1] in boss_groups:
+                stream.seek(pos)
+                temp = stream.read(1)
+                stream.seek(pos)
+                stream.write(bytes([temp[0] | 0x8]))
             stream.seek(pos + 1)
             stream.write(groups.pop())
 
@@ -320,20 +328,9 @@ def write_tokens(world: "MLSSWorld", patch: MLSSProcedurePatch) -> None:
             patch.write_token(APTokenTypes.WRITE, address + 3, bytes([world.random.randint(0x0, 0x26)]))
 
     for location_name in location_table.keys():
-        if (
-            (world.options.skip_minecart and "Minecart" in location_name and "After" not in location_name)
-            or (world.options.castle_skip and "Bowser" in location_name)
-            or (world.options.disable_surf and "Surf Minigame" in location_name)
-            or (world.options.harhalls_pants and "Harhall's" in location_name)
-        ):
+        if location_name in world.disabled_locations:
             continue
-        if (world.options.chuckle_beans == 0 and "Digspot" in location_name) or (
-            world.options.chuckle_beans == 1 and location_table[location_name] in hidden
-        ):
-            continue
-        if not world.options.coins and "Coin" in location_name:
-            continue
-        location = world.multiworld.get_location(location_name, world.player)
+        location = world.get_location(location_name)
         item = location.item
         address = [address for address in all_locations if address.name == location.name]
         item_inject(world, patch, location.address, address[0].itemType, item)

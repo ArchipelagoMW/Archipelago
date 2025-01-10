@@ -235,7 +235,7 @@ class RAGameboy():
 
     def check_command_response(self, command: str, response: bytes):
         if command == "VERSION":
-            ok = re.match("\d+\.\d+\.\d+", response.decode('ascii')) is not None
+            ok = re.match(r"\d+\.\d+\.\d+", response.decode('ascii')) is not None
         else:
             ok = response.startswith(command.encode())
         if not ok:
@@ -467,6 +467,8 @@ class LinksAwakeningContext(CommonContext):
 
     def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str], magpie: typing.Optional[bool]) -> None:
         self.client = LinksAwakeningClient()
+        self.slot_data = {}
+
         if magpie:
             self.magpie_enabled = True
             self.magpie = MagpieBridge()
@@ -564,6 +566,8 @@ class LinksAwakeningContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
+            self.slot_data = args.get("slot_data", {})
+            
         # TODO - use watcher_event
         if cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], start=args["index"]):
@@ -628,6 +632,7 @@ class LinksAwakeningContext(CommonContext):
                             self.magpie.set_checks(self.client.tracker.all_checks)
                             await self.magpie.set_item_tracker(self.client.item_tracker)
                             await self.magpie.send_gps(self.client.gps_tracker)
+                            self.magpie.slot_data = self.slot_data
                         except Exception:
                             # Don't let magpie errors take out the client
                             pass

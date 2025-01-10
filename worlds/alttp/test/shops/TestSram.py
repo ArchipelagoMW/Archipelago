@@ -1,5 +1,5 @@
 from worlds.alttp.Shops import shop_table
-from test.TestBase import TestBase
+from test.bases import TestBase
 
 
 class TestSram(TestBase):

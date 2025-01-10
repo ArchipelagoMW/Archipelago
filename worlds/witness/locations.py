@@ -19,7 +19,7 @@ class WitnessPlayerLocations:
     def __init__(self, world: "WitnessWorld", player_logic: WitnessPlayerLogic) -> None:
         """Defines locations AFTER logic changes due to options"""
 
-        self.PANEL_TYPES_TO_SHUFFLE = {"General", "Laser"}
+        self.PANEL_TYPES_TO_SHUFFLE = {"General", "Good Boi"}
         self.CHECK_LOCATIONS = static_witness_locations.GENERAL_LOCATIONS.copy()
 
         if world.options.shuffle_discarded_panels:
@@ -44,28 +44,22 @@ class WitnessPlayerLocations:
 
         self.CHECK_LOCATIONS = self.CHECK_LOCATIONS - {
             static_witness_logic.ENTITIES_BY_HEX[entity_hex]["checkName"]
-            for entity_hex in player_logic.COMPLETELY_DISABLED_ENTITIES | player_logic.PRECOMPLETED_LOCATIONS
+            for entity_hex in player_logic.COMPLETELY_DISABLED_ENTITIES
         }
 
         self.CHECK_PANELHEX_TO_ID = {
             static_witness_logic.ENTITIES_BY_NAME[ch]["entity_hex"]: static_witness_locations.ALL_LOCATIONS_TO_ID[ch]
             for ch in self.CHECK_LOCATIONS
-            if static_witness_logic.ENTITIES_BY_NAME[ch]["entityType"] in self.PANEL_TYPES_TO_SHUFFLE
+            if static_witness_logic.ENTITIES_BY_NAME[ch]["locationType"] in self.PANEL_TYPES_TO_SHUFFLE
         }
-
-        dog_hex = static_witness_logic.ENTITIES_BY_NAME["Town Pet the Dog"]["entity_hex"]
-        dog_id = static_witness_locations.ALL_LOCATIONS_TO_ID["Town Pet the Dog"]
-        self.CHECK_PANELHEX_TO_ID[dog_hex] = dog_id
 
         self.CHECK_PANELHEX_TO_ID = dict(
             sorted(self.CHECK_PANELHEX_TO_ID.items(), key=lambda item: item[1])
         )
 
-        event_locations = set(player_logic.USED_EVENT_NAMES_BY_HEX)
-
         self.EVENT_LOCATION_TABLE = {
-            static_witness_locations.get_event_name(entity_hex): None
-            for entity_hex in event_locations
+            event_location: None
+            for event_location in player_logic.EVENT_ITEM_PAIRS
         }
 
         check_dict = {

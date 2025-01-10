@@ -238,15 +238,6 @@ class DS3ItemData:
             ds3_code = cast(int, self.ds3_code) + level,
             filler = False,
         )
-    
-    def __hash__(self) -> int:
-        return (self.name, self.ds3_code).__hash__()
-    
-    def __eq__(self, other: Any) -> bool:
-        if isinstance(other, self.__class__):
-            return self.name == other.name and self.ds3_code == other.ds3_code
-        else:
-            return False
 
 
 class DarkSouls3Item(Item):
