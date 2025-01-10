@@ -1048,19 +1048,23 @@ def handle_url_arg(args: "argparse.Namespace",
     Parse the url arg "archipelago://name:pass@host:port" from launcher into correct launch args for CommonClient
     If alternate data is required the urlparse response is saved back to args.url if valid
     """
-    if args.url:
-        url = urllib.parse.urlparse(args.url)
-        if url.scheme == "archipelago":
-            args.url = url
-            args.connect = url.netloc
-            if url.username:
-                args.name = urllib.parse.unquote(url.username)
-            if url.password:
-                args.password = urllib.parse.unquote(url.password)
-        else:
-            if not parser:
-                parser = get_base_parser()
-            parser.error(f"bad url, found {args.url}, expected url in form of archipelago://archipelago.gg:38281")
+    if not args.url:
+        return args
+        
+    url = urllib.parse.urlparse(args.url)
+    if url.scheme != "archipelago":
+        if not parser:
+            parser = get_base_parser()
+        parser.error(f"bad url, found {args.url}, expected url in form of archipelago://archipelago.gg:38281")
+        return args
+
+    args.url = url
+    args.connect = url.netloc
+    if url.username:
+        args.name = urllib.parse.unquote(url.username)
+    if url.password:
+        args.password = urllib.parse.unquote(url.password)
+
     return args
 
 
