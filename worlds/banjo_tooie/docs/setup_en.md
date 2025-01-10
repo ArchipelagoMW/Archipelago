@@ -19,7 +19,8 @@ Our implementation also supports the Everdrive 3.0 and X7. (USB Support)
         - Linux: https://ftdichip.com/wp-content/uploads/2022/07/libftd2xx-x86_64-1.4.27.tgz
     - For Everdrive 3.0, the OS version needs to be 3.06 to be compatible.
     - The Nintendo 64 Expansion Pak is required
--   Grab the latest release from https://github.com/jjjj12212/Archipelago-BanjoTooie
+-   Grab the latest release from https://github.com/jjjj12212/AP_Banjo-Tooie/releases
+    - This includes the binaries for the banjo_tooie_everdrive_connector
 -   A Banjo-Tooie ROM (USA ONLY).
 
 ## Configuring BizHawk
@@ -40,49 +41,35 @@ This will create some visual artifacts however, it should not affect gameplay.
 
 ## Configuring Everdrive
 
-For those who wish to play this randomizer on Actual N64 Hardware:
+For those who wish to play this randomizer on actual N64 Hardware:
 - You will need a USB connection between the PC that will have the Banjo-Tooie Client Running and the Everdrive
 - Install the USB driver on the PC that will be connecting to the everdrive
     - Windows: https://ftdichip.com/wp-content/uploads/2021/08/CDM212364_Setup.zip
     - Linux 64-bit: https://ftdichip.com/wp-content/uploads/2022/07/libftd2xx-x86_64-1.4.27.tgz
 - For Everdrive 3.0, the OS version needs to be 3.06 to be compatible.
 
-## Prerequisite
 
-## How to Install - Server Side
-- Install banjo_tooie.apworld
-
-## Generate your world
-- Familiarize yourself on how Archipelago works. Here is a guide to learn how to generate your world: https://archipelago.gg/tutorial/Archipelago/setup/en#on-your-local-installation
-- In quick summary:
-    - Generate your YAML template either using the Archipelago Launcher Or using our template here: https://github.com/jjjj12212/Archipelago-BanjoTooie/blob/main/yaml-template/template.yaml
-    - Put your YAML in the Players folder
-    - In the Archipelago Launcher, click Generate to generate the world
-    - Once generated, click Host and select your world in the Archipelago\Output folder.
-
-## How to install / Setup - Client Side PC Emulation
-
-- Copy data/lua/banjo_tooie_connector.lua into data/lua in your existing Archipelago
-- Install banjo_tooie.apworld
-- If you are new to Archipelago, you need to Generate your world if you are playing solo or hosting a multiworld.
-    - Look at section "Generate your world"
-- Run Launcher.exe and select Banjo-Tooie Client
+## How to Setup - Everdrive
+- Run ArchipelagoLauncher.exe and select Banjo-Tooie Client
 - If this is your first time running this version, it will prompt for your Banjo-Tooie (US) ROM
-- The patched rom is located in your Archipelago root folder
-- Connect the Archipelago Client with the server.
-- To connect the client to the multiserver simply put  `<address>:<port>`  on the textfield on top and press `connect` (if the server uses password, then it will prompt after connection).
-- Open Bizhawk (2.9.1+) and open your patched Banjo-Tooie (US) game
-- Once you are in the game title menu or game select screen, apply the banjo_tooie_connector lua script (drag and drop)
-
-## How to install / Setup - Client Side Everdrive
+- The patched rom is located in your Archipelago root folder 
+    - The exact path is also printed on the Banjo-Tooie Client
+    - You can also click "Browse Files" in the Launcher which will take you to this folder
+- Load the patched version of the ROM on your everdrive sd card
 - The Everdrive will need to have a USB connection to the PC that will be running the Banjo-Tooie Client.
-- Install the banjo_tooie.apworld
-- If you are new to Archipelago, you need to Setup the Server Side & Generate your world if you are playing solo or hosting a multiworld.
-    - Look at section "Generate your world"
-- Run Launcher.exe and select Banjo-Tooie Client
-- If this is your first time running this version, it will prompt for your Banjo-Tooie (US) ROM
-- The patched rom is located in your Archipelago root folder
+- Open the banjo_tooie_everdrive_connector.exe (you have to do this before you connect the Banjo-Tooie Client with Archipelago)
+    - If you are on Linux, run Banjo_Tooie_everdrive_connector_linux instead
 - Run the patched Banjo-Tooie Rom on the everdrive
-- Open the Banjo_Tooie_Connector.exe (you have to do this before you connect the Banjo-Tooie Client with Archipelago)
 - Connect the Archipelago Client with the server. (The Banjo_Tooie_Connector window should say Connection Established)
 - To connect the client to the multiserver simply put  `<address>:<port>`  on the textfield on top and press `connect` (if the server uses password, then it will prompt after connection).
+
+## How to Setup - PC Emulation
+- Run Launcher.exe and select Banjo-Tooie Client
+- If this is your first time running this version, it will prompt for your Banjo-Tooie (US) ROM
+- The patched rom is located in your Archipelago root folder
+    - The exact path is also printed on the Banjo-Tooie Client
+    - You can also click "Browse Files" in the Launcher which will take you to this folder
+- Connect the Archipelago Client with the server.
+    - To connect the client to the multiserver simply put  `<address>:<port>`  on the textfield on top and press `connect` (if the server uses password, then it will prompt after connection).
+- Open Bizhawk (2.9.1+) and open your patched Banjo-Tooie (US) game
+- Once you are in the game title menu or game select screen, apply the banjo_tooie_connector lua script (drag and drop)
