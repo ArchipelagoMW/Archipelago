@@ -14,7 +14,7 @@ from worlds.luigismansion import LMLocationData
 from .LMGenerator import LuigisMansionRandomizer
 
 from .Items import LOOKUP_ID_TO_NAME, ALL_ITEMS_TABLE
-from .Locations import ALL_LOCATION_TABLE, LMLocation, FURNITURE_LOCATION_TABLE
+from .Locations import ALL_LOCATION_TABLE, LMLocation
 
 
 CONNECTION_REFUSED_GAME_STATUS = (
@@ -373,8 +373,8 @@ async def check_locations(ctx: LMContext):
     current_room_id = dolphin_memory_engine.read_word(
         dolphin_memory_engine.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
 
-    furniture_name_list: dict[str, LMLocationData] = dict(filter(lambda item:
-                            item[1].in_game_room_id == current_room_id, FURNITURE_LOCATION_TABLE.items()))
+    furniture_name_list: dict[str, LMLocationData] = dict(filter(lambda item: (item[1].type == "Furniture" or
+        item[1].type == "Plant") and item[1].in_game_room_id == current_room_id, ALL_LOCATION_TABLE.items()))
 
     if len(furniture_name_list.keys()) > 0:
         for current_offset in range(0, 424, 4): # TODO Validate this accounts for all furniture
