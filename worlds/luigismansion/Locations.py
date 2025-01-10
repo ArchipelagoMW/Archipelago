@@ -56,13 +56,13 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "1F Washroom Toilet": LMLocationData("1F Washroom", 4, "Furniture", 233, [], 16),
     "Fortune Teller Candles": LMLocationData("Fortune-Teller's Room", 6, "Freestanding", 4, ["Fire Element Medal"]),
     "Laundry Washing Machine": LMLocationData("Laundry Room", 7, "Furniture", 187, [], 5),
-    #"Hidden Room Large Chest L": LMLocationData("Hidden Room", 9, "Furniture", 243, [], 1),
-    #"Hidden Room Large Chest C": LMLocationData("Hidden Room", 10, "Furniture", 241, [], 1),
-    #"Hidden Room Large Chest R": LMLocationData("Hidden Room", 11, "Furniture", 242, [], 1),
-    #"Hidden Room Small Chest L Floor": LMLocationData("Hidden Room", 12, "Furniture", 245, [], 1),
+    #"Hidden Room Large Chest L": LMLocationData("Hidden Room", 9, "Furniture", 243, [], 1), Prevents Ghosts Spawn
+    #"Hidden Room Large Chest C": LMLocationData("Hidden Room", 10, "Furniture", 241, [], 1), Prevents Ghosts Spawn
+    #"Hidden Room Large Chest R": LMLocationData("Hidden Room", 11, "Furniture", 242, [], 1), Prevents Ghosts Spawn
+    #"Hidden Room Small Chest L Floor": LMLocationData("Hidden Room", 12, "Furniture", 245, [], 1), Prevents Ghosts Spawn
     "Hidden Room Small Chest R Floor": LMLocationData("Hidden Room", 13, "Furniture", 244, [], 1),
     "Hidden Room Small Chest L Shelf": LMLocationData("Hidden Room", 14, "Furniture", 246, [], 1),
-    #"Hidden Room Small Chest R Shelf": LMLocationData("Hidden Room", 15, "Furniture", 247, [], 1),
+    #"Hidden Room Small Chest R Shelf": LMLocationData("Hidden Room", 15, "Furniture", 247, [], 1), Prevents Ghosts Spawn
     "Rec Room Treadmill Key": LMLocationData("Rec Room", 18, "Furniture", 106, [], 23),
     "Courtyard Birdhouse": LMLocationData("Courtyard", 20, "Furniture", 146, [], 24),
     "Observatory Mario Star": LMLocationData("Observatory", 24, "Special", -1, []),  # special event, unknown location
@@ -71,17 +71,17 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Sealed Room SW Shelf Chest": LMLocationData("Sealed Room", 31, "Furniture", 531, [], 37),
     "Sealed Room SE Shelf Chest": LMLocationData("Sealed Room", 32, "Furniture", 535, [], 37),
     "Sealed Room Table Chest": LMLocationData("Sealed Room", 33, "Furniture", 533, [], 37),
-    #"Sealed Room Lower Big Chest": LMLocationData("Sealed Room", 34, "Furniture", 529, [], 37),
+    #"Sealed Room Lower Big Chest": LMLocationData("Sealed Room", 34, "Furniture", 529, [], 37), Prevents Ghosts Spawn
     "Sealed Room Upper L Big Chest": LMLocationData("Sealed Room", 35, "Furniture", 528, [], 37),
-    #"Sealed Room Upper C Big Chest": LMLocationData("Sealed Room", 36, "Furniture", 527, [], 37),
+    #"Sealed Room Upper C Big Chest": LMLocationData("Sealed Room", 36, "Furniture", 527, [], 37), Prevents Ghosts Spawn
     "Sealed Room Upper R Big Chest": LMLocationData("Sealed Room", 37, "Furniture", 530, [], 37),
-    #"Armory 4th Gray Chest": LMLocationData("Armory", 38, "Furniture", 651, [], 51),
+    #"Armory 4th Gray Chest": LMLocationData("Armory", 38, "Furniture", 651, [], 51), Prevents Ghosts Spawn
     "Armory 1st Gray Chest": LMLocationData("Armory", 39, "Furniture", 652, [], 51),
-    #"Armory 5th Gray Chest": LMLocationData("Armory", 40, "Furniture", 653, [], 51),
+    #"Armory 5th Gray Chest": LMLocationData("Armory", 40, "Furniture", 653, [], 51), Prevents Ghosts Spawn
     "Armory 2nd Gray Chest": LMLocationData("Armory", 41, "Furniture", 654, [], 51),
     "Armory 3rd Gray Chest": LMLocationData("Armory", 42, "Furniture", 655, [], 51),
-    #"Telephone Room C Chest": LMLocationData("Telephone Room", 43, "Furniture", 680, [], 53),
-    #"Telephone Room R1 Chest": LMLocationData("Telephone Room", 44, "Furniture", 681, [], 53),
+    #"Telephone Room C Chest": LMLocationData("Telephone Room", 43, "Furniture", 680, [], 53), Prevents Ghosts Spawn
+    #"Telephone Room R1 Chest": LMLocationData("Telephone Room", 44, "Furniture", 681, [], 53), Prevents Ghosts Spawn
     "Telephone Room R2 Chest": LMLocationData("Telephone Room", 45, "Furniture", 682, [], 53),
 
     # "Storage Room Cage": LMLocationData("Storage Room", 712, "Special", -1, []),
@@ -319,7 +319,6 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "1F Bathroom Bathtub": LMLocationData("1F Bathroom", 198, "Furniture", 166, [], 21),
     "1F Bathroom Shelf": LMLocationData("1F Bathroom", 199, "Furniture", 304, [], 21),
     "1F Washroom Toilet Paper": LMLocationData("1F Washroom", 200, "Furniture", 269, [], 16),
-    "1F Washroom Toilet": LMLocationData("1F Washroom", 717, "Furniture", 233, [], 16),
     "1F Washroom Sink": LMLocationData("1F Washroom", 707, "Furniture", 89, [], 16),
     "1F Washroom Mirror": LMLocationData("1F Washroom", 201, "Furniture", 234, [], 16),
     "1F Washroom Picture": LMLocationData("1F Washroom", 202, "Furniture", 235, [], 16),
