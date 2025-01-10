@@ -73,6 +73,12 @@ class Carsanity(Toggle):
     """
     display_name = "Carsanity"
 
+class Checkpointsanity(Toggle):
+    """
+    Whether riding on cars grants location checks
+    """
+    display_name = "Checkpointsanity"
+
 
 class BadelineChaserSource(Choice):
     """
@@ -119,6 +125,7 @@ celeste_64_option_groups = [
         Friendsanity,
         Signsanity,
         Carsanity,
+        Checkpointsanity,
     ]),
     OptionGroup("Badeline Chasers", [
         BadelineChaserSource,
@@ -142,6 +149,7 @@ class Celeste64Options(PerGameCommonOptions):
     friendsanity: Friendsanity
     signsanity: Signsanity
     carsanity: Carsanity
+    checkpointsanity: Checkpointsanity
 
     badeline_chaser_source: BadelineChaserSource
     badeline_chaser_frequency: BadelineChaserFrequency

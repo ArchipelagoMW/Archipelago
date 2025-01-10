@@ -1,11 +1,13 @@
 from copy import deepcopy
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 from BaseClasses import ItemClassification, Location, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from .Items import Celeste64Item, unlockable_item_data_table, move_item_data_table, item_data_table, item_table
+from .Items import Celeste64Item, unlockable_item_data_table, move_item_data_table, item_data_table,\
+                                  checkpoint_item_data_table, item_table
 from .Locations import Celeste64Location, strawberry_location_data_table, friend_location_data_table,\
-                                          sign_location_data_table, car_location_data_table, location_table
+                                          sign_location_data_table, car_location_data_table, checkpoint_location_data_table,\
+                                          location_table
 from .Names import ItemName, LocationName
 from .Options import Celeste64Options, celeste_64_option_groups
 
@@ -42,6 +44,7 @@ class Celeste64World(World):
     # Instance Data
     strawberries_required: int
     active_logic_mapping: Dict[str, List[List[str]]]
+    active_region_logic_mapping: Dict[Tuple[str], List[List[str]]]
     goal_logic_mapping: Dict[str, List[List[str]]]
 
 
@@ -96,6 +99,16 @@ class Celeste64World(World):
                           for name in move_items_for_itempool
                           if name not in self.options.start_inventory]
 
+        if self.options.checkpointsanity:
+            location_count += 10
+            item_pool += [self.create_item(name)
+                          for name in checkpoint_item_data_table.keys()
+                          if name not in self.options.start_inventory]
+        else:
+            for item_name in checkpoint_item_data_table.keys():
+                checkpoint_loc: Location = self.multiworld.get_location(item_name, self.player)
+                checkpoint_loc.place_locked_item(self.create_item(item_name))
+
         real_total_strawberries: int = min(self.options.total_strawberries.value, location_count - len(item_pool))
         self.strawberries_required = int(real_total_strawberries * (self.options.strawberries_required_percentage / 100))
 
@@ -140,7 +153,13 @@ class Celeste64World(World):
                     if location_data.region == region_name
                 }, Celeste64Location)
 
-            region.add_exits(region_data_table[region_name].connecting_regions)
+            region.add_locations({
+                location_name: location_data.address for location_name, location_data in checkpoint_location_data_table.items()
+                if location_data.region == region_name
+            }, Celeste64Location)
+
+            from .Rules import connect_region
+            connect_region(self, region, region_data_table[region_name].connecting_regions)
 
 
     def get_filler_item_name(self) -> str:

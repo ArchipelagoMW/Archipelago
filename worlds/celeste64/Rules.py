@@ -1,23 +1,27 @@
-from typing import Dict, List
+from typing import Dict, List, Tuple, Callable
 
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, Region
 from worlds.generic.Rules import set_rule
 
 from . import Celeste64World
-from .Names import ItemName, LocationName
+from .Names import ItemName, LocationName, RegionName
 
 
 def set_rules(world: Celeste64World):
     if world.options.logic_difficulty == "standard":
         if world.options.move_shuffle:
             world.active_logic_mapping = location_standard_moves_logic
+            world.active_region_logic_mapping = region_standard_moves_logic
         else:
             world.active_logic_mapping = location_standard_logic
+            world.active_region_logic_mapping = region_standard_logic
     else:
         if world.options.move_shuffle:
             world.active_logic_mapping = location_hard_moves_logic
+            world.active_region_logic_mapping = region_hard_moves_logic
         else:
             world.active_logic_mapping = location_hard_logic
+            world.active_region_logic_mapping = region_hard_logic
 
     for location in world.multiworld.get_locations(world.player):
         set_rule(location, lambda state, location=location: location_rule(state, world, location.name))
@@ -320,6 +324,58 @@ location_hard_moves_logic: Dict[str, List[List[str]]] = {
                          [ItemName.breakables, ItemName.air_dash]],
 }
 
+# TODO: Region Connection Logic
+region_standard_logic: Dict[Tuple[str], List[List[str]]] = {
+    (RegionName.intro_islands, RegionName.granny_island): [[]], # Free
+
+    (RegionName.granny_island, RegionName.highway_island): [[ItemName.dash_refill]],
+    (RegionName.granny_island, RegionName.nw_girders_island): [[ItemName.traffic_block]],
+    (RegionName.granny_island, RegionName.badeline_tower_lower): [[ItemName.dash_refill]],
+    (RegionName.granny_island, RegionName.se_house_island): [[ItemName.double_dash_refill]],
+    
+    (RegionName.highway_island, RegionName.granny_island): [[ItemName.traffic_block], [ItemName.dash_refill]],
+    (RegionName.highway_island, RegionName.ne_feathers_island): [[ItemName.feather]],
+    (RegionName.highway_island, RegionName.nw_girders_island): [[ItemName.cannot_access]],
+    
+    (RegionName.nw_girders_island, RegionName.highway_island): [[ItemName.traffic_block]],
+    
+    (RegionName.ne_feathers_island, RegionName.se_house_island): [[]], # Free
+    (RegionName.ne_feathers_island, RegionName.highway_island): [[ItemName.feather]],
+    (RegionName.ne_feathers_island, RegionName.badeline_tower_lower): [[ItemName.feather]],
+    (RegionName.ne_feathers_island, RegionName.badeline_tower_upper): [[ItemName.feather]],
+    
+    (RegionName.se_house_island, RegionName.ne_feathers_island): [[]], # Free
+    (RegionName.se_house_island, RegionName.granny_island): [[ItemName.traffic_block, ItemName.double_dash_refill]],
+    (RegionName.se_house_island, RegionName.badeline_tower_lower): [[ItemName.double_dash_refill]],
+    
+    (RegionName.badeline_tower_lower, RegionName.se_house_island): [[ItemName.cannot_access]],
+    (RegionName.badeline_tower_lower, RegionName.ne_feathers_island): [[ItemName.breakables, ItemName.feather]],
+    (RegionName.badeline_tower_lower, RegionName.granny_island): [[ItemName.cannot_access]],
+    (RegionName.badeline_tower_lower, RegionName.badeline_tower_upper): [[ItemName.cannot_access]],
+    
+    (RegionName.badeline_tower_upper, RegionName.badeline_island): [[]],
+    (RegionName.badeline_tower_upper, RegionName.badeline_tower_lower): [[]], # Free
+    (RegionName.badeline_tower_upper, RegionName.se_house_island): [[]], # Free
+    (RegionName.badeline_tower_upper, RegionName.ne_feathers_island): [[]], # Free
+    (RegionName.badeline_tower_upper, RegionName.granny_island): [[ItemName.dash_refill]],
+    
+    (RegionName.badeline_island, RegionName.badeline_tower_upper): [[]], # Free
+    (RegionName.badeline_island, RegionName.granny_island): [[]], # Free
+    (RegionName.badeline_island, RegionName.highway_island): [[]], # Free
+}
+
+region_standard_moves_logic: Dict[Tuple[str], List[List[str]]] = {
+
+}
+
+region_hard_logic: Dict[Tuple[str], List[List[str]]] = {
+
+}
+
+region_hard_moves_logic: Dict[Tuple[str], List[List[str]]] = {
+
+}
+
 
 def location_rule(state: CollectionState, world: Celeste64World, loc: str) -> bool:
 
@@ -327,6 +383,18 @@ def location_rule(state: CollectionState, world: Celeste64World, loc: str) -> bo
         return True
 
     for possible_access in world.active_logic_mapping[loc]:
+        if state.has_all(possible_access, world.player):
+            return True
+
+    return False
+
+def region_connection_rule(state: CollectionState, world: Celeste64World, source_reg: str, dest_reg: str) -> bool:
+    connection: Tuple[str] = (source_reg, dest_reg)
+
+    if connection not in world.active_region_logic_mapping:
+        return True
+
+    for possible_access in world.active_region_logic_mapping[connection]:
         if state.has_all(possible_access, world.player):
             return True
 
@@ -341,3 +409,14 @@ def goal_rule(state: CollectionState, world: Celeste64World) -> bool:
             return True
 
     return False
+
+def connect_region(world: Celeste64World, region: Region, dest_regions: List[str]):
+
+    rules: Dict[str, Callable[[CollectionState], bool]] = {}
+
+    for dest_region in dest_regions:
+        rules[dest_region] = lambda state, dest_region=dest_region: region_connection_rule(state, world, region.name, dest_region)
+
+    region.add_exits(dest_regions, rules)
+
+    pass
