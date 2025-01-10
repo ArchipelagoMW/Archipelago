@@ -9,7 +9,7 @@ from . import items
 from . import locations
 from . import creatures
 from . import options
-from .items import item_table, group_items, items_by_type, ItemType
+from .items import item_table, group_items
 from .rules import set_rules
 
 
