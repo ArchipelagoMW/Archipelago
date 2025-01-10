@@ -95,6 +95,10 @@ class FF1Client(BizHawkClient):
         ctx.game = self.game
         ctx.items_handling = 0b111
         ctx.want_slot_data = True
+        # Resetting these in case of switching ROMs
+        self.consumable_stack_amounts = None
+        self.weapons_queue = deque()
+        self.armor_queue = deque
 
         return True
 
@@ -109,16 +113,17 @@ class FF1Client(BizHawkClient):
                 if self.consumable_stack_amounts is None:
                     self.consumable_stack_amounts = {}
                     self.consumable_stack_amounts["Shard"] = 1
-                    self.consumable_stack_amounts["Tent"] = (await self.read_rom(ctx, 0x47400, 1))[0] + 1
-                    self.consumable_stack_amounts["Cabin"] = (await self.read_rom(ctx, 0x47401, 1))[0] + 1
-                    self.consumable_stack_amounts["House"] = (await self.read_rom(ctx, 0x47402, 1))[0] + 1
-                    self.consumable_stack_amounts["Heal"] = (await self.read_rom(ctx, 0x47403, 1))[0] + 1
-                    self.consumable_stack_amounts["Pure"] = (await self.read_rom(ctx, 0x47404, 1))[0] + 1
-                    self.consumable_stack_amounts["Soft"] = (await self.read_rom(ctx, 0x47405, 1))[0] + 1
-                    self.consumable_stack_amounts["Ext1"] = (await self.read_rom(ctx, 0x47406, 1))[0] + 1
-                    self.consumable_stack_amounts["Ext2"] = (await self.read_rom(ctx, 0x47407, 1))[0] + 1
-                    self.consumable_stack_amounts["Ext3"] = (await self.read_rom(ctx, 0x47408, 1))[0] + 1
-                    self.consumable_stack_amounts["Ext4"] = (await self.read_rom(ctx, 0x47409, 1))[0] + 1
+                    other_consumable_amounts = await self.read_rom(ctx, 0x47400, 10)
+                    self.consumable_stack_amounts["Tent"] = other_consumable_amounts[0] + 1
+                    self.consumable_stack_amounts["Cabin"] = other_consumable_amounts[1] + 1
+                    self.consumable_stack_amounts["House"] = other_consumable_amounts[2] + 1
+                    self.consumable_stack_amounts["Heal"] = other_consumable_amounts[3] + 1
+                    self.consumable_stack_amounts["Pure"] = other_consumable_amounts[4] + 1
+                    self.consumable_stack_amounts["Soft"] = other_consumable_amounts[5] + 1
+                    self.consumable_stack_amounts["Ext1"] = other_consumable_amounts[6] + 1
+                    self.consumable_stack_amounts["Ext2"] = other_consumable_amounts[7] + 1
+                    self.consumable_stack_amounts["Ext3"] = other_consumable_amounts[8] + 1
+                    self.consumable_stack_amounts["Ext4"] = other_consumable_amounts[9] + 1
 
                 await self.location_check(ctx)
                 await self.received_items_check(ctx)
@@ -279,14 +284,14 @@ class FF1Client(BizHawkClient):
 
     async def read_ram_value(self, ctx, location):
         value = ((await bizhawk.read(ctx.bizhawk_ctx, [(location, 1, self.wram)]))[0])
-        return int.from_bytes(value)
+        return int.from_bytes(value, "little")
 
     async def read_sram_values(self, ctx, location, size):
         return (await bizhawk.read(ctx.bizhawk_ctx, [(location, size, self.sram)]))[0]
 
     async def read_sram_value(self, ctx, location):
         value = ((await bizhawk.read(ctx.bizhawk_ctx, [(location, 1, self.sram)]))[0])
-        return int.from_bytes(value)
+        return int.from_bytes(value, "little")
 
     async def read_rom(self, ctx, location, size):
         return (await bizhawk.read(ctx.bizhawk_ctx, [(location, size, self.rom)]))[0]

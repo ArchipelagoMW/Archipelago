@@ -14,7 +14,7 @@
 
 1. Download and install the latest version of Archipelago.
     1. On Windows, download Setup.Archipelago.<HighestVersion\>.exe and run it
-2. Assign EmuHawk or higher as your default program for launching `.nes` files.
+2. Assign EmuHawk as your default program for launching `.nes` files.
     1. Extract your BizHawk folder to your Desktop, or somewhere you will remember. Below are optional additional steps
        for loading ROMs more conveniently
         1. Right-click on a ROM file and select **Open with...**
