@@ -274,9 +274,8 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
             shop_count = 8
 
     # for universal tracker, we want to skip shop gen since it's essentially full plando
-    if hasattr(world.multiworld, "re_gen_passthrough"):
-        if "TUNIC" in world.multiworld.re_gen_passthrough:
-            shop_count = 0
+    if world.using_ut:
+        shop_count = 0
 
     for _ in range(shop_count):
         # 6 of the shops have south exits, 2 of them have west exits

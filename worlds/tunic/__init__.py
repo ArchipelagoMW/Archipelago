@@ -162,9 +162,9 @@ class TunicWorld(World):
                 self.options.hexagon_quest.value = self.passthrough["hexagon_quest"]
                 self.options.entrance_rando.value = self.passthrough["entrance_rando"]
                 self.options.shuffle_ladders.value = self.passthrough["shuffle_ladders"]
-                self.options.grass_randomizer.value = self.passthrough["grass_randomizer"]
+                self.options.grass_randomizer.value = self.passthrough.get("grass_randomizer", 0)
                 self.options.entrance_layout.value = EntranceLayout.option_standard
-                self.options.decoupled = self.passthrough["decoupled"]
+                self.options.decoupled = self.passthrough.get("decoupled", 0)
                 self.options.laurels_location.value = LaurelsLocation.option_anywhere
                 self.options.combat_logic.value = self.passthrough["combat_logic"]
             else:
