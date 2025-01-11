@@ -83,7 +83,7 @@ class RequiredBossesRandomizer:
             )
 
         # Finish selecting required bosses.
-        required_dungeons.update(self.multiworld.random.sample(list(remaining_dungeon_options), num_remaining))
+        required_dungeons.update(self.world.random.sample(list(remaining_dungeon_options), num_remaining))
 
         # Exclude locations that are not in the dungeon of a required boss.
         banned_dungeons = dungeon_names - required_dungeons

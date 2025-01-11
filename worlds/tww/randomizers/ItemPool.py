@@ -76,7 +76,7 @@ def generate_itempool(world: "TWWWorld") -> None:
 
     # Create the pool of the remaining shuffled items.
     items = item_factory(pool, world)
-    multiworld.random.shuffle(items)
+    world.random.shuffle(items)
 
     multiworld.itempool += items
 
@@ -127,8 +127,8 @@ def get_pool_core(world: "TWWWorld") -> tuple[list[str], list[str]]:
     num_items_left_to_place -= len(progression_pool)
 
     # Assign the remaining items to item pools in the world.
-    world.multiworld.random.shuffle(useful_pool)
-    world.multiworld.random.shuffle(filler_pool)
+    world.random.shuffle(useful_pool)
+    world.random.shuffle(filler_pool)
     world.useful_pool = useful_pool
     world.filler_pool = filler_pool
 
