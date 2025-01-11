@@ -371,5 +371,3 @@ for basename, substring in _simple_groups:
     for itemname in ITEM_TABLE:
         if substring in itemname:
             item_name_groups[basename].add(itemname)
-
-del _simple_groups
