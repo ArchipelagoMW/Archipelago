@@ -377,7 +377,7 @@ async def check_locations(ctx: LMContext):
         item[1].type == "Plant") and item[1].in_game_room_id == current_room_id, ALL_LOCATION_TABLE.items()))
 
     if len(furniture_name_list.keys()) > 0:
-        for current_offset in range(0, 424, 4): # TODO Validate this accounts for all furniture
+        for current_offset in range(0, 712, 4): # TODO Validate this accounts for all furniture
             current_addr = FURNITURE_MAIN_TABLE_ID+current_offset
 
             # Not within a valid range for a pointer
