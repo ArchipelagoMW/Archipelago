@@ -7,7 +7,7 @@ La [page d'options pour ce jeu](../player-options) contient toutes les options p
 ## Que fait la randomisation dans ce jeu ?
 
 - Mélange la majorité des items collectables, les habiletés, l'ouverture des gares de trains et Chuffy
-- L'habileté d'appeler Chuffy avant que celui-ci ne soit battu
+- Permet l'habileté d'appeler Chuffy avant que celui-ci ne soit battu
 - Saute la majorité des cinématiques et des dialogues
 - Saute Tower of Tragedy
 - Raccourcis les mini-jeux longs
