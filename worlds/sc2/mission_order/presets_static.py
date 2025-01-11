@@ -780,7 +780,10 @@ def _build_static_preset(preset: Dict[str, Any], options: Dict[str, Any]) -> Dic
                     for slot in layout["missions"]:
                         slot.pop("mission_pool", ())
     else:
-        raise ValueError(f"Preset option \"missions\" received unknown value \"{missions}\".")
+        raise ValueError(
+            f"Preset option \"missions\" received unknown value \"{missions}\".\n"
+            "Valid values are: random, vanilla, vanilla_shuffled"
+        )
     
     # Key rule selection
     keys = options.pop("keys", "none")
@@ -796,6 +799,36 @@ def _build_static_preset(preset: Dict[str, Any], options: Dict[str, Any]) -> Dic
         for layout in preset.values():
             if type(layout) == dict and "entry_rules" in layout:
                 layout["entry_rules"] = _remove_key_rules(layout["entry_rules"])
+    elif keys == "progressive_layouts":
+        # remove keys from mission entry rules, replace keys in layout entry rules with unique-track keys
+        for layout in preset.values():
+            if type(layout) == dict:
+                if "entry_rules" in layout:
+                    layout["entry_rules"] = _make_key_rules_progressive(layout["entry_rules"], 0)
+                if "missions" in layout:
+                    for slot in layout["missions"]:
+                        if "entry_rules" in slot:
+                            slot["entry_rules"] = _remove_key_rules(slot["entry_rules"])
+    elif keys == "progressive_missions":
+        # remove keys from layout entry rules, replace keys in mission entry rules
+        for layout in preset.values():
+            if type(layout) == dict:
+                if "entry_rules" in layout:
+                    layout["entry_rules"] = _remove_key_rules(layout["entry_rules"])
+                if "missions" in layout:
+                    for slot in layout["missions"]:
+                        if "entry_rules" in slot:
+                            slot["entry_rules"] = _make_key_rules_progressive(slot["entry_rules"], 1)
+    elif keys == "progressive_per_layout":
+        # remove keys from layout entry rules, replace keys in mission entry rules with unique-track keys
+        # specifically ignore layouts that have no entry rules (and are thus the first of their campaign)
+        for layout in preset.values():
+            if type(layout) == dict and "entry_rules" in layout:
+                layout["entry_rules"] = _remove_key_rules(layout["entry_rules"])
+                if "missions" in layout:
+                    for slot in layout["missions"]:
+                        if "entry_rules" in slot:
+                            slot["entry_rules"] = _make_key_rules_progressive(slot["entry_rules"], 0)
     elif keys == "none":
         # remove keys from both layout and mission entry rules
         for layout in preset.values():
@@ -807,12 +840,27 @@ def _build_static_preset(preset: Dict[str, Any], options: Dict[str, Any]) -> Dic
                         if "entry_rules" in slot:
                             slot["entry_rules"] = _remove_key_rules(slot["entry_rules"])
     else:
-        raise ValueError(f"Preset option \"keys\" received unknown value \"{keys}\".")
+        raise ValueError(
+            f"Preset option \"keys\" received unknown value \"{keys}\".\n"
+            "Valid values are: none, missions, layouts, progressive_missions, progressive_layouts, progressive_per_layout"
+        )
     
     return preset
 
 def _remove_key_rules(entry_rules: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     return [rule for rule in entry_rules if not ("items" in rule and "Key" in rule["items"])]
+
+def _make_key_rules_progressive(entry_rules: List[Dict[str, Any]], track: int) -> List[Dict[str, Any]]:
+    for rule in entry_rules:
+        if "items" in rule and "Key" in rule["items"]:
+            new_items: Dict[str, Any] = {}
+            for (item, amount) in rule["items"].items():
+                if item == "Key":
+                    new_items["Progressive Key"] = track
+                else:
+                    new_items[item] = amount
+            rule["items"] = new_items
+    return entry_rules
 
 def static_preset(preset: Dict[str, Any]) -> Callable[[Dict[str, Any]], Dict[str, Any]]:
     return lambda options: _build_static_preset(copy.deepcopy(preset), options)

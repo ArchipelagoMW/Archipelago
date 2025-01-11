@@ -24,6 +24,7 @@ from .presets_scripted import make_golden_path
 
 
 GENERIC_KEY_NAME = "Key".casefold()
+GENERIC_PROGRESSIVE_KEY_NAME = "Progressive Key".casefold()
 
 
 STR_OPTION_VALUES: Dict[str, Dict[str, Any]] = {
@@ -101,14 +102,15 @@ class CustomMissionOrder(OptionDict):
             "display_name": "null",
             "unique_name": False,
             "entry_rules": [],
+            "unique_progression_track": 0,
             "goal": True,
             "min_difficulty": "relative",
             "max_difficulty": "relative",
-            "single_layout_campaign": False,
             GLOBAL_ENTRY: {
                 "display_name": "null",
                 "unique_name": False,
                 "entry_rules": [],
+                "unique_progression_track": 0,
                 "goal": False,
                 "exit": False,
                 "mission_pool": ["all missions"],
@@ -128,6 +130,7 @@ class CustomMissionOrder(OptionDict):
             "display_name": [str],
             "unique_name": bool,
             "entry_rules": [EntryRule],
+            "unique_progression_track": int,
             "goal": bool,
             "min_difficulty": Difficulty,
             "max_difficulty": Difficulty,
@@ -143,6 +146,7 @@ class CustomMissionOrder(OptionDict):
                 "exit": bool,
                 "goal": bool,
                 "entry_rules": [EntryRule],
+                "unique_progression_track": int,
                 # Mission pool options
                 "mission_pool": {int},
                 "min_difficulty": Difficulty,
@@ -182,9 +186,11 @@ class CustomMissionOrder(OptionDict):
                 # Single-layout campaigns are not allowed to declare more layouts
                 single_layout = {key: val for (key, val) in yaml_value[campaign].items() if type(val) != dict}
                 yaml_value[campaign] = {campaign: single_layout}
-                # Campaign should inherit layout goal status
+                # Campaign should inherit certain values from the layout
                 if not "goal" in single_layout or not single_layout["goal"]:
                     yaml_value[campaign]["goal"] = False
+                if "unique_progression_track" in single_layout:
+                    yaml_value[campaign]["unique_progression_track"] = single_layout["unique_progression_track"]
                 # Hide campaign name for single-layout campaigns
                 yaml_value[campaign]["display_name"] = ""
             yaml_value[campaign]["single_layout_campaign"] = single_layout_campaign
@@ -202,6 +208,7 @@ class CustomMissionOrder(OptionDict):
             layout_keys = [key for (key, val) in yaml_value[campaign].items() if type(val) == dict]
             layouts = {key: yaml_value[campaign].pop(key) for key in layout_keys}
             preset_option_keys = [key for key in yaml_value[campaign] if key not in self.default["Default Campaign"]]
+            preset_option_keys.remove("single_layout_campaign")
             preset_options = {key: yaml_value[campaign].pop(key) for key in preset_option_keys}
 
             # Resolve preset
@@ -347,7 +354,7 @@ def _resolve_entry_rule(option_value: Dict[str, Any]) -> Dict[str, Any]:
         resolved["items"] = {}
         for item in resolved_items:
             if item not in item_table:
-                if item.casefold() == GENERIC_KEY_NAME:
+                if item.casefold() == GENERIC_KEY_NAME or item.casefold().startswith(GENERIC_PROGRESSIVE_KEY_NAME):
                     resolved["items"][item] = max(0, resolved_items[item])
                     continue
                 raise ValueError(f"Item rule contains \"{item}\", which is not a valid item name.")

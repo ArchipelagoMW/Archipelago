@@ -12,7 +12,7 @@ from ..item import item_names
 from .layout_types import LayoutType
 from .entry_rules import EntryRule, SubRuleEntryRule, CountMissionsEntryRule, BeatMissionsEntryRule, SubRuleRuleData, ItemEntryRule
 from .mission_pools import SC2MOGenMissionPools, Difficulty, modified_difficulty_thresholds
-from .options import GENERIC_KEY_NAME
+from .options import GENERIC_KEY_NAME, GENERIC_PROGRESSIVE_KEY_NAME
 from .. import rules
 
 if TYPE_CHECKING:
@@ -55,7 +55,14 @@ class MissionOrderNode(ABC):
     @abstractmethod
     def get_key_name(self) -> str:
         raise NotImplementedError
-
+    
+    @abstractmethod
+    def get_min_depth(self) -> int:
+        raise NotImplementedError
+    
+    @abstractmethod
+    def get_address_to_node(self) -> str:
+        raise NotImplementedError
 
 class SC2MissionOrder(MissionOrderNode):
     """
@@ -198,6 +205,12 @@ class SC2MissionOrder(MissionOrderNode):
     def get_key_name(self) -> str:
         return super().get_key_name()  # type: ignore
 
+    def get_min_depth(self) -> int:
+        return super().get_min_depth()  # type: ignore
+    
+    def get_address_to_node(self):
+        return self.campaigns[0].get_address_to_node() + "/.."
+
     def make_connections(self, world: 'SC2World'):
         names: Dict[str, int] = {}
         for campaign in self.campaigns:
@@ -336,7 +349,7 @@ class SC2MissionOrder(MissionOrderNode):
             items: Dict[str, int] = data["items"]
             has_generic_key = False
             for (item, amount) in items.items():
-                if item.casefold() == GENERIC_KEY_NAME:
+                if item.casefold() == GENERIC_KEY_NAME or item.casefold().startswith(GENERIC_PROGRESSIVE_KEY_NAME):
                     has_generic_key = True
                     continue # Don't try to lock the generic key
                 if item in self.items_to_lock:
@@ -425,7 +438,7 @@ class SC2MissionOrder(MissionOrderNode):
             locked_ids = [locked for locked in locked_ids if locked != mission_id]
             mission = lookup_id_to_mission[mission_id]
             if mission in self.mission_pools.get_used_missions():
-                raise ValueError(f"Mission slot at address \"{mission_slot.get_address_to_mission()}\" tried to plando an already plando'd mission.")
+                raise ValueError(f"Mission slot at address \"{mission_slot.get_address_to_node()}\" tried to plando an already plando'd mission.")
             self.mission_pools.pull_specific_mission(mission)
             mission_slot.set_mission(world, mission, locations_per_region, location_cache)
             regions.append(mission_slot.region)
@@ -476,7 +489,7 @@ class SC2MissionOrder(MissionOrderNode):
                 all_slots.remove(goal_slot)
             except IndexError:
                 raise IndexError(
-                    f"Slot at address \"{goal_slot.get_address_to_mission()}\" ran out of possible missions to place "
+                    f"Slot at address \"{goal_slot.get_address_to_node()}\" ran out of possible missions to place "
                     f"with {len(all_slots)} empty slots remaining."
                 )
 
@@ -490,7 +503,7 @@ class SC2MissionOrder(MissionOrderNode):
                 remaining_count -= 1
             except IndexError:
                 raise IndexError(
-                    f"Slot at address \"{goal_slot.get_address_to_mission()}\" ran out of possible missions to place "
+                    f"Slot at address \"{goal_slot.get_address_to_node()}\" ran out of possible missions to place "
                     f"with {remaining_count} empty slots remaining."
                 )
 
@@ -499,6 +512,7 @@ class SC2MissionOrder(MissionOrderNode):
     def resolve_generic_keys(self) -> None:
         layout_numbered_keys = 1
         campaign_numbered_keys = 1
+        progression_tracks: Dict[int, List[Tuple[MissionOrderNode, ItemEntryRule]]] = {}
         for (node, item_rules) in self.keys_to_resolve.items():
             key_name = node.get_key_name()
             # Generic keys in mission slots should always resolve to an existing key
@@ -511,17 +525,158 @@ class SC2MissionOrder(MissionOrderNode):
                 campaign_numbered_keys += 1
 
             for item_rule in item_rules:
+                # Swap regular generic key names for the node's proper key name
                 item_rule.items_to_check = {
                     key_name if item_name.casefold() == GENERIC_KEY_NAME else item_name: amount
                     for (item_name, amount) in item_rule.items_to_check.items()
                 }
-                self.items_to_lock[key_name] = max(item_rule.items_to_check[key_name], self.items_to_lock.get(key_name, 0))
+                # Only lock the key if it was actually placed in this rule
+                if key_name in item_rule.items_to_check:
+                    self.items_to_lock[key_name] = max(item_rule.items_to_check[key_name], self.items_to_lock.get(key_name, 0))
+
+                # Sort progressive keys by their given track
+                for (item_name, amount) in item_rule.items_to_check.items():
+                    if item_name.casefold() == GENERIC_PROGRESSIVE_KEY_NAME:
+                        progression_tracks.setdefault(amount, []).append((node, item_rule))
+                    elif item_name.casefold().startswith(GENERIC_PROGRESSIVE_KEY_NAME):
+                        track_string = item_name.split()[-1]
+                        try:
+                            track = int(track_string)
+                            progression_tracks.setdefault(track, []).append((node, item_rule))
+                        except ValueError:
+                            raise ValueError(
+                                f"Progression track \"{track_string}\" for progressive key \"{item_name}: {amount}\" is not a valid number. "
+                                "Valid formats are:\n"
+                                f"- {GENERIC_PROGRESSIVE_KEY_NAME.title()}: X\n"
+                                f"- {GENERIC_PROGRESSIVE_KEY_NAME.title()} X: 1"
+                            )
+        
+        def find_progressive_keys(item_rule: ItemEntryRule, track_to_find: int) -> List[str]:
+            return [
+                item_name for (item_name, amount) in item_rule.items_to_check.items()
+                if (item_name.casefold() == GENERIC_PROGRESSIVE_KEY_NAME and amount == track_to_find) or (
+                    item_name.casefold().startswith(GENERIC_PROGRESSIVE_KEY_NAME) and
+                    item_name.split()[-1] == str(track_to_find)
+                )
+            ]
+
+        def replace_progressive_keys(item_rule: ItemEntryRule, track_to_replace: int, new_key_name: str, new_key_amount: int):
+            keys_to_replace = find_progressive_keys(item_rule, track_to_replace)
+            new_items_to_check: Dict[str, int] = {}
+            for (item_name, amount) in item_rule.items_to_check.items():
+                if item_name in keys_to_replace:
+                    new_items_to_check[new_key_name] = new_key_amount
+                else:
+                    new_items_to_check[item_name] = amount
+            item_rule.items_to_check = new_items_to_check
+
+        # Change progressive keys to be unique for missions and layouts that request it
+        want_unique: Dict[MissionOrderNode, List[Tuple[MissionOrderNode, ItemEntryRule]]] = {}
+        empty_tracks: List[int] = []
+        for track in progression_tracks:
+            # Sort keys to change by layout
+            new_unique_tracks: Dict[MissionOrderNode, List[Tuple[MissionOrderNode, ItemEntryRule]]] = {}
+            for (node, item_rule) in progression_tracks[track]:
+                if isinstance(node, SC2MOGenMission):
+                    # Unique tracks for layouts take priority over campaigns
+                    if node.parent().option_unique_progression_track == track:
+                        new_unique_tracks.setdefault(node.parent(), []).append((node, item_rule))
+                    elif node.parent().parent().option_unique_progression_track == track:
+                        new_unique_tracks.setdefault(node.parent().parent(), []).append((node, item_rule))
+                elif isinstance(node, SC2MOGenLayout) and node.parent().option_unique_progression_track == track:
+                    new_unique_tracks.setdefault(node.parent(), []).append((node, item_rule))
+            # Remove found keys from their original progression track
+            for (container_node, rule_list) in new_unique_tracks.items():
+                for node_and_rule in rule_list:
+                    progression_tracks[track].remove(node_and_rule)
+                want_unique.setdefault(container_node, []).extend(rule_list)
+            if len(progression_tracks[track]) == 0:
+                empty_tracks.append(track)
+        for track in empty_tracks:
+            progression_tracks.pop(track)
+        
+        # Make sure all tracks that can't have keys have been taken care of
+        invalid_tracks: List[int] = [track for track in progression_tracks if track < 1 or track > len(SC2Mission)]
+        if len(invalid_tracks) > 0:
+            affected_key_list: Dict[MissionOrderNode, List[str]] = {}
+            for track in invalid_tracks:
+                for (node, item_rule) in progression_tracks[track]:
+                    affected_key_list.setdefault(node, []).extend(
+                        f"{key}: {item_rule.items_to_check[key]}" for key in find_progressive_keys(item_rule, track)
+                    )
+            affected_key_list_string = "\n- " + "\n- ".join(
+                f"{node.get_address_to_node()}: {affected_keys}"
+                for (node, affected_keys) in affected_key_list.items()
+            )
+            raise ValueError(
+                "Some item rules contain progressive keys with invalid tracks:" +
+                affected_key_list_string +
+                f"\nPossible solutions are changing the tracks of affected keys to be in the range from 1 to {len(SC2Mission)}, "
+                "or changing the unique_progression_track of containing campaigns/layouts to match the invalid tracks."
+            )
+
+        # Assign new free progression tracks to nodes in definition order
+        next_free = 1
+        nodes_to_assign = list(want_unique.keys())
+        while len(want_unique) > 0:
+            while next_free in progression_tracks:
+                next_free += 1
+            container_node = nodes_to_assign.pop(0)
+            progression_tracks[next_free] = want_unique.pop(container_node)
+            # Replace the affected keys in nodes with their correct counterparts
+            key_name = f"{GENERIC_PROGRESSIVE_KEY_NAME} {next_free}"
+            for (node, item_rule) in progression_tracks[next_free]:
+                # It's guaranteed by the sorting above that the container is either a layout or a campaign
+                replace_progressive_keys(item_rule, container_node.option_unique_progression_track, key_name, 1)
+
+        # Give progressive keys a more fitting name if there's only one track and they all apply to the same type of node
+        progressive_flavor_name: Union[str, None] = None
+        if len(progression_tracks) == 1:
+            if all(isinstance(node, SC2MOGenLayout) for rule_list in progression_tracks.values() for (node, _) in rule_list):
+                progressive_flavor_name = item_names.PROGRESSIVE_QUESTLINE_KEY
+            elif all(isinstance(node, SC2MOGenMission) for rule_list in progression_tracks.values() for (node, _) in rule_list):
+                progressive_flavor_name = item_names.PROGRESSIVE_MISSION_KEY
+        
+        for (track, rule_list) in progression_tracks.items():
+            key_name = item_names._TEMPLATE_PROGRESSIVE_KEY.format(track) if progressive_flavor_name is None else progressive_flavor_name
+            # Determine order in which the rules should unlock
+            ordered_item_rules: List[List[ItemEntryRule]] = []
+            if not any(isinstance(node, SC2MOGenMission) for (node, _) in rule_list):
+                # No rule on this track belongs to a mission, so the rules can be kept in definition order
+                ordered_item_rules = [[item_rule] for (_, item_rule) in rule_list]
+            else:
+                # At least one rule belongs to a mission
+                # Sort rules by the depth of their nodes, ties get the same amount of keys
+                depth_to_rules: Dict[int, List[ItemEntryRule]] = {}
+                for (node, item_rule) in rule_list:
+                    depth_to_rules.setdefault(node.get_min_depth(), []).append(item_rule)
+                ordered_item_rules = [depth_to_rules[depth] for depth in sorted(depth_to_rules.keys())]
+            
+            # Assign correct progressive keys to each rule
+            for (position, item_rules) in enumerate(ordered_item_rules):
+                for item_rule in item_rules:
+                    keys_to_replace = [
+                        item_name for (item_name, amount) in item_rule.items_to_check.items()
+                        if (item_name.casefold() == GENERIC_PROGRESSIVE_KEY_NAME and amount == track) or (
+                            item_name.casefold().startswith(GENERIC_PROGRESSIVE_KEY_NAME) and
+                            item_name.split()[-1] == str(track)
+                        )
+                    ]
+                    new_items_to_check: Dict[str, int] = {}
+                    for (item_name, amount) in item_rule.items_to_check.items():
+                        if item_name in keys_to_replace:
+                            new_items_to_check[key_name] = position + 1
+                        else:
+                            new_items_to_check[item_name] = amount
+                    item_rule.items_to_check = new_items_to_check
+            self.items_to_lock[key_name] = len(ordered_item_rules)
 
 class SC2MOGenCampaign(MissionOrderNode):
     option_name: str # name of this campaign
     option_display_name: List[str]
     option_unique_name: bool
     option_entry_rules: List[Dict[str, Any]]
+    option_unique_progression_track: int # progressive keys under this campaign and on this track will be changed to a unique track
     option_goal: bool # whether this campaign is required to beat the game
     # minimum difficulty of this campaign
     # 'relative': based on the median distance of the first mission
@@ -548,6 +703,7 @@ class SC2MOGenCampaign(MissionOrderNode):
         self.option_unique_name = data["unique_name"]
         self.option_goal = data["goal"]
         self.option_entry_rules = data["entry_rules"]
+        self.option_unique_progression_track = data["unique_progression_track"]
         self.option_min_difficulty = data["min_difficulty"]
         self.option_max_difficulty = data["max_difficulty"]
         self.option_single_layout_campaign = data["single_layout_campaign"]
@@ -623,6 +779,12 @@ class SC2MOGenCampaign(MissionOrderNode):
     
     def get_key_name(self) -> str:
         return item_names._TEMPLATE_NAMED_CAMPAIGN_KEY.format(self.get_visual_name())
+    
+    def get_min_depth(self) -> int:
+        return self.min_depth
+    
+    def get_address_to_node(self) -> str:
+        return f"{self.option_name}"
 
     def get_slot_data(self) -> CampaignSlotData:
         if self.important_beat_event:
@@ -649,6 +811,7 @@ class SC2MOGenLayout(MissionOrderNode):
     option_missions: List[Dict[str, Any]]
 
     option_entry_rules: List[Dict[str, Any]]
+    option_unique_progression_track: int # progressive keys under this layout and on this track will be changed to a unique track
 
     # minimum difficulty of this layout
     # 'relative': based on the median distance of the first mission
@@ -680,6 +843,7 @@ class SC2MOGenLayout(MissionOrderNode):
         self.option_mission_pool = data.pop("mission_pool")
         self.option_missions = data.pop("missions")
         self.option_entry_rules = data.pop("entry_rules")
+        self.option_unique_progression_track = data.pop("unique_progression_track")
         self.option_min_difficulty = data.pop("min_difficulty")
         self.option_max_difficulty = data.pop("max_difficulty")
         self.missions = []
@@ -875,6 +1039,15 @@ class SC2MOGenLayout(MissionOrderNode):
     
     def get_key_name(self) -> str:
         return item_names._TEMPLATE_NAMED_LAYOUT_KEY.format(self.get_visual_name(), self.parent().get_visual_name())
+    
+    def get_min_depth(self) -> int:
+        return self.min_depth
+    
+    def get_address_to_node(self) -> str:
+        campaign = self.parent()
+        if campaign.option_single_layout_campaign:
+            return f"{self.option_name}"
+        return self.parent().get_address_to_node() + f"/{self.option_name}"
 
     def get_slot_data(self) -> LayoutSlotData:
         mission_slots = [
@@ -981,15 +1154,15 @@ class SC2MOGenMission(MissionOrderNode):
     def get_key_name(self) -> str:
         return item_names._TEMPLATE_MISSION_KEY.format(self.mission.mission_name)
     
-    def get_address_to_mission(self) -> str:
+    def get_min_depth(self) -> int:
+        return self.min_depth
+    
+    def get_address_to_node(self) -> str:
         layout = self.parent()
         assert layout is not None
         index = layout.missions.index(self)
-        campaign = layout.parent()
-        if campaign.option_single_layout_campaign:
-            return f"{layout.option_name}/{index}"
-        return f"{campaign.option_name}/{layout.option_name}/{index}"
-    
+        return layout.get_address_to_node() + f"/{index}"
+
     def make_connections(self, world: 'SC2World', used_names: Dict[str, int]):
         player = world.player
         self_rule = self.entry_rule.to_lambda(player)

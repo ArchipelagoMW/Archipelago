@@ -2038,6 +2038,22 @@ named_campaign_key_item_table = {
                  classification=ItemClassification.progression, quantity=0)
     for (i, campaign_name) in enumerate(campaign_names)
 }
+# Numbered progressive keys (key offset + 6000 - 6999)
+numbered_progressive_keys = {
+    item_names._TEMPLATE_PROGRESSIVE_KEY.format(number + 1):
+        ItemData(number + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 6, FactionlessItemType.Keys, 0, SC2Race.ANY,
+                 classification=ItemClassification.progression, quantity=0)
+    for number in range(len(SC2Mission))
+}
+# Special keys (key offset + 7000 - 7999)
+special_keys = {
+    item_names.PROGRESSIVE_MISSION_KEY:
+        ItemData(0 + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 7, FactionlessItemType.Keys, 0, SC2Race.ANY,
+                 classification=ItemClassification.progression, quantity=0),
+    item_names.PROGRESSIVE_QUESTLINE_KEY:
+        ItemData(1 + SC2_KEY_ITEM_ID_OFFSET + SC2_KEY_ITEM_SECTION_SIZE * 7, FactionlessItemType.Keys, 0, SC2Race.ANY,
+                 classification=ItemClassification.progression, quantity=0),
+}
 key_item_table = {}
 key_item_table.update(mission_key_item_table)
 key_item_table.update(numbered_layout_key_item_table)
@@ -2045,6 +2061,8 @@ key_item_table.update(numbered_campaign_key_item_table)
 key_item_table.update(flavor_key_item_table)
 key_item_table.update(named_layout_key_item_table)
 key_item_table.update(named_campaign_key_item_table)
+key_item_table.update(numbered_progressive_keys)
+key_item_table.update(special_keys)
 item_table.update(key_item_table)
 
 def get_item_table():
