@@ -90,6 +90,10 @@ class TunicWorld(World):
     item_link_locations: Dict[int, Dict[str, List[Tuple[int, str]]]] = {}
     player_item_link_locations: Dict[str, List[Location]]
 
+    using_ut: bool  # so we can check if we're using UT only once
+    passthrough: Dict[str, Any]
+    ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
+
     def generate_early(self) -> None:
         if self.options.logic_rules >= LogicRules.option_no_major_glitches:
             self.options.laurels_zips.value = LaurelsZips.option_true
@@ -113,23 +117,28 @@ class TunicWorld(World):
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "TUNIC" in self.multiworld.re_gen_passthrough:
-                passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
-                self.options.start_with_sword.value = passthrough["start_with_sword"]
-                self.options.keys_behind_bosses.value = passthrough["keys_behind_bosses"]
-                self.options.sword_progression.value = passthrough["sword_progression"]
-                self.options.ability_shuffling.value = passthrough["ability_shuffling"]
-                self.options.laurels_zips.value = passthrough["laurels_zips"]
-                self.options.ice_grappling.value = passthrough["ice_grappling"]
-                self.options.ladder_storage.value = passthrough["ladder_storage"]
-                self.options.ladder_storage_without_items = passthrough["ladder_storage_without_items"]
-                self.options.lanternless.value = passthrough["lanternless"]
-                self.options.maskless.value = passthrough["maskless"]
-                self.options.hexagon_quest.value = passthrough["hexagon_quest"]
-                self.options.entrance_rando.value = passthrough["entrance_rando"]
-                self.options.shuffle_ladders.value = passthrough["shuffle_ladders"]
+                self.using_ut = True
+                self.passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
+                self.options.start_with_sword.value = self.passthrough["start_with_sword"]
+                self.options.keys_behind_bosses.value = self.passthrough["keys_behind_bosses"]
+                self.options.sword_progression.value = self.passthrough["sword_progression"]
+                self.options.ability_shuffling.value = self.passthrough["ability_shuffling"]
+                self.options.laurels_zips.value = self.passthrough["laurels_zips"]
+                self.options.ice_grappling.value = self.passthrough["ice_grappling"]
+                self.options.ladder_storage.value = self.passthrough["ladder_storage"]
+                self.options.ladder_storage_without_items = self.passthrough["ladder_storage_without_items"]
+                self.options.lanternless.value = self.passthrough["lanternless"]
+                self.options.maskless.value = self.passthrough["maskless"]
+                self.options.hexagon_quest.value = self.passthrough["hexagon_quest"]
+                self.options.entrance_rando.value = self.passthrough["entrance_rando"]
+                self.options.shuffle_ladders.value = self.passthrough["shuffle_ladders"]
                 self.options.fixed_shop.value = self.options.fixed_shop.option_false
                 self.options.laurels_location.value = self.options.laurels_location.option_anywhere
-                self.options.combat_logic.value = passthrough["combat_logic"]
+                self.options.combat_logic.value = self.passthrough["combat_logic"]
+            else:
+                self.using_ut = False
+        else:
+            self.using_ut = False
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
@@ -284,12 +293,14 @@ class TunicWorld(World):
 
             remove_filler(items_to_create[gold_hexagon])
 
-            for hero_relic in item_name_groups["Hero Relics"]:
+            # Sort for deterministic order
+            for hero_relic in sorted(item_name_groups["Hero Relics"]):
                 tunic_items.append(self.create_item(hero_relic, ItemClassification.useful))
                 items_to_create[hero_relic] = 0
 
         if not self.options.ability_shuffling:
-            for page in item_name_groups["Abilities"]:
+            # Sort for deterministic order
+            for page in sorted(item_name_groups["Abilities"]):
                 if items_to_create[page] > 0:
                     tunic_items.append(self.create_item(page, ItemClassification.useful))
                     items_to_create[page] = 0
@@ -329,12 +340,10 @@ class TunicWorld(World):
         self.ability_unlocks = randomize_ability_unlocks(self.random, self.options)
 
         # stuff for universal tracker support, can be ignored for standard gen
-        if hasattr(self.multiworld, "re_gen_passthrough"):
-            if "TUNIC" in self.multiworld.re_gen_passthrough:
-                passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
-                self.ability_unlocks["Pages 24-25 (Prayer)"] = passthrough["Hexagon Quest Prayer"]
-                self.ability_unlocks["Pages 42-43 (Holy Cross)"] = passthrough["Hexagon Quest Holy Cross"]
-                self.ability_unlocks["Pages 52-53 (Icebolt)"] = passthrough["Hexagon Quest Icebolt"]
+        if self.using_ut:
+            self.ability_unlocks["Pages 24-25 (Prayer)"] = self.passthrough["Hexagon Quest Prayer"]
+            self.ability_unlocks["Pages 42-43 (Holy Cross)"] = self.passthrough["Hexagon Quest Holy Cross"]
+            self.ability_unlocks["Pages 52-53 (Icebolt)"] = self.passthrough["Hexagon Quest Icebolt"]
 
         # Ladders and Combat Logic uses ER rules with vanilla connections for easier maintenance
         if self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic:
