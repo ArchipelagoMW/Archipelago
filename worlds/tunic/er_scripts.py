@@ -696,7 +696,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     # then randomly connect the remaining portals to each other
     final_pair_number = 0
     while len(two_plus) > 0:
-        if world.using_ut::
+        if world.using_ut:
             break
         final_pair_number += 1
         if final_pair_number > 10000:
