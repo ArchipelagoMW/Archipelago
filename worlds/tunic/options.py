@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict, Any
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
-                     PerGameCommonOptions, OptionGroup, Visibility)
+                     PerGameCommonOptions, OptionGroup, Visibility, NamedRange)
 from .er_data import portal_mapping
 
 
@@ -162,19 +162,23 @@ class GrassRandomizer(Toggle):
     display_name = "Grass Randomizer"
 
 
-class LocalFill(Range):
+class LocalFill(NamedRange):
     """
-    Choose the percentage of your filler/trap items that will be kept local or distributed to other TUNIC players with Grass Randomizer enabled.
-    To keep things balanced, this option must be set to 95% or higher. The host can remove this restriction by turning off the limit_grass_rando setting in host.yaml.
+    Choose the percentage of your filler/trap items that will be kept local or distributed to other TUNIC players with this option enabled.
+    If you have Grass Randomizer enabled, this option must be set to 95% or higher to avoid flooding the item pool. The host can remove this restriction by turning off the limit_grass_rando setting in host.yaml.
+    This option defaults to 95% if you have Grass Randomizer enabled, and to 0% otherwise.
     This option ignores items placed in your local_items or non_local_items.
-    This option does nothing in single player games or if Grass Randomizer is not enabled.
+    This option does nothing in single player games.
     """
     internal_name = "local_fill"
     display_name = "Local Fill Percent"
     range_start = 0
     range_end = 100
-    default = 95
-    visibility = Visibility.template | Visibility.complex_ui | Visibility.spoiler 
+    special_range_names = {
+        "default": -1
+    }
+    default = -1
+    visibility = Visibility.template | Visibility.complex_ui | Visibility.spoiler
 
 
 class TunicPlandoConnections(PlandoConnections):
