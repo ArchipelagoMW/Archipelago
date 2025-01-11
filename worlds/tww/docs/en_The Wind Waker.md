@@ -33,9 +33,9 @@ randomizers, Link **will not** hold the item above his head.
 
 ## I need help! What do I do?
 
-Refer to the [FAQ](https://lagolunatic.github.io/wwrando/faq/) first. Then, try the troubleshooting steps in the setup
-guide. If you are still stuck, please ask in the Wind Waker thread (under `future-game-design`) in the Archipelago
-server.
+Refer to the [FAQ](https://lagolunatic.github.io/wwrando/faq/) first. Then, try the troubleshooting steps in the
+[setup guide](/tutorial/The%20Wind%20Waker/setup/en). If you are still stuck, please ask in the Wind Waker channel in
+the Archipelago server.
 
 ## Known issues
 
@@ -48,8 +48,7 @@ server.
 - The Heart Piece count in item get messages will be off by one. This does not affect gameplay.
 - It has been reported that item links can be buggy. Nothing game-breaking, but do be aware of it.
 
-Feel free to report any other issues in the Wind Waker thread in the Archipelago server! I'll take a look and see what I
-can do. Suggestions for improvements are also welcome.
+Feel free to report any other issues or suggest improvements in the Wind Waker channel in the Archipelago server!
 
 ## Planned Features
 
