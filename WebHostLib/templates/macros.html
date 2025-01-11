@@ -50,6 +50,9 @@
                             {% elif patch.game == "Final Fantasy Mystic Quest" %}
                             <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
                                 Download APMQ File...</a>
+                            {% elif patch.game == "The Wind Waker" %}
+                            <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
+                                Download APTWW File...</a>
                             {% else %}
                                 No file to download for this game.
                             {% endif %}
