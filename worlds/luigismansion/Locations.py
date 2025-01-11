@@ -526,8 +526,8 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Astral Hall Candlabra 3": LMLocationData("Astral Hall", 406, "Furniture", 449, [], 43),
     "Astral Hall Candlabra 4": LMLocationData("Astral Hall", 407, "Furniture", 450, [], 43),
     "Astral Hall Candlabra 5": LMLocationData("Astral Hall", 408, "Furniture", 451, [], 43),
-    #        LMLocationData('Observatory', 'Observatory Dresser', 8397), room 44, can't determine which furniture is correct
-    #        LMLocationData('Observatory', 'Observatory Chair', 8398),   room 44, can't determine which furniture is correct
+    "Observatory Dresser":    LMLocationData("Observatory", 717, "Furniture", 469, [], 44),
+    "Observatory Chair":      LMLocationData("Observatory", 718, "Furniture", 470, [], 44),
     "Billiards Room Pool Table": LMLocationData("Billiards Room", 409, "Furniture", 147, [], 12),
     "Billiards Room Chess Table": LMLocationData("Billiards Room", 410, "Furniture", 148, [], 12),
     "Billiards Room C Chair": LMLocationData("Billiards Room", 411, "Furniture", 149, [], 12),
