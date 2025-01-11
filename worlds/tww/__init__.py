@@ -10,9 +10,10 @@ from BaseClasses import Item
 from BaseClasses import ItemClassification as IC
 from BaseClasses import MultiWorld, Region, Tutorial
 from Options import Toggle
+from Utils import local_path
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_item_rule
-from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
+from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, icon_paths, launch_subprocess
 
 from . import Macros
 from .Items import ISLAND_NUMBER_TO_CHART_NAME, ITEM_TABLE, TWWItem, item_name_groups
@@ -37,7 +38,7 @@ from .randomizers.ItemPool import generate_itempool
 from .randomizers.RequiredBosses import RequiredBossesRandomizer
 from .Rules import set_rules
 
-VERSION: tuple[int, int, int] = (2, 6, 1)
+VERSION: tuple[int, int, int] = (3, 0, 0)
 
 
 def run_client() -> None:
@@ -52,9 +53,14 @@ def run_client() -> None:
 
 components.append(
     Component(
-        "The Wind Waker Client", func=run_client, component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".aptww")
+        "The Wind Waker Client",
+        func=run_client,
+        component_type=Type.CLIENT,
+        file_identifier=SuffixIdentifier(".aptww"),
+        icon="The Wind Waker",
     )
 )
+icon_paths["The Wind Waker"] = local_path("data", "tww_sail.png")
 
 
 class TWWWeb(WebWorld):

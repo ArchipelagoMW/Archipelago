@@ -64,6 +64,7 @@ can do. Suggestions for improvements are also welcome.
 
 This randomizer would not be possible without the help from:
 
+- BigSharkZ: (icon artwork)
 - Celeste (Maëlle): (logic and typo fixes, additional programming)
 - CrainWWR: (multiworld and Dolphin memory assistance, additional programming)
 - Cyb3R: (reference for `TWWClient`)
@@ -76,3 +77,6 @@ This randomizer would not be possible without the help from:
 - Necrofitz: (additional documentation)
 - Ouro: (tracker support)
 - Tubamann: (additional programming)
+
+The Archipelago logo © 2022 by Krista Corkos and Christopher Wilson, licensed under
+[CC BY-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/).
