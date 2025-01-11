@@ -211,7 +211,7 @@ class GpsTracker:
 
     last_location_message = {}
     async def send_location(self, socket: WebSocketServerProtocol) -> None:
-        if self.room is None: 
+        if self.room is None or self.room_same_for < 1: 
             return
 
         message = {
