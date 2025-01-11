@@ -340,15 +340,15 @@ class TWWWorld(World):
                 )
 
     @classmethod
-    def stage_pre_fill(cls, world: MultiWorld) -> None:
+    def stage_pre_fill(cls, multiworld: MultiWorld) -> None:
         """
         Class method used to correctly place dungeon items for The Wind Waker worlds.
 
-        :param world: The MultiWorld.
+        :param multiworld: The MultiWorld.
         """
         from .randomizers.Dungeons import fill_dungeons_restrictive
 
-        fill_dungeons_restrictive(world)
+        fill_dungeons_restrictive(multiworld)
 
     def generate_output(self, output_directory: str) -> None:
         """
