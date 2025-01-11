@@ -514,6 +514,10 @@ class LinksAwakeningContext(CommonContext):
     magpie_task = None
     won = False
 
+    @property 
+    def slot_storage_key(self): 
+        return f"{self.slot_info[self.slot].name}_{storage_key}"
+
     def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str], magpie: typing.Optional[bool]) -> None:
         self.client = LinksAwakeningClient()
         self.slot_data = {}
@@ -563,7 +567,7 @@ class LinksAwakeningContext(CommonContext):
         # Store the entrances we find on the server for future sessions
         message = [{
             "cmd": "Set",
-            "key": storage_key,
+            "key": self.slot_storage_key,
             "default": {},
             "want_reply": False,
             "operations": [{"operation": "update", "value": entrances}],
@@ -599,10 +603,10 @@ class LinksAwakeningContext(CommonContext):
             self.won = True
     
     async def request_found_entrances(self):
-        await self.send_msgs([{"cmd": "Get", "keys": [storage_key]}])
+        await self.send_msgs([{"cmd": "Get", "keys": [self.slot_storage_key]}])
 
         # Ask for updates so that players can co-op entrances in a seed  
-        await self.send_msgs([{"cmd": "SetNotify", "keys": [storage_key]}])  
+        await self.send_msgs([{"cmd": "SetNotify", "keys": [self.slot_storage_key]}])  
 
     async def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
         if self.ENABLE_DEATHLINK:
@@ -640,11 +644,11 @@ class LinksAwakeningContext(CommonContext):
             for index, item in enumerate(args["items"], start=args["index"]):
                 self.client.recvd_checks[index] = item
         
-        if cmd == "Retrieved" and self.magpie_enabled and storage_key in args["keys"]:
-            self.client.gps_tracker.receive_found_entrances(args["keys"][storage_key])
+        if cmd == "Retrieved" and self.magpie_enabled and self.slot_storage_key in args["keys"]:
+            self.client.gps_tracker.receive_found_entrances(args["keys"][self.slot_storage_key])
 
-        if cmd == "SetReply" and self.magpie_enabled and args["key"] == storage_key:  
-            self.client.gps_tracker.receive_found_entrances(args["value"]) 
+        if cmd == "SetReply" and self.magpie_enabled and args["key"] == self.slot_storage_key:
+            self.client.gps_tracker.receive_found_entrances(args["value"])
 
     async def sync(self):
         sync_msg = [{'cmd': 'Sync'}]
