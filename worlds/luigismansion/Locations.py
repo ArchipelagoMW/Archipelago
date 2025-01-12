@@ -493,7 +493,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "2F Rear Hallway Vase 6": LMLocationData("2F Rear Hallway", 375, "Furniture", 524, [], 46),
     "2F Washroom Water Tank (above Toilet)": LMLocationData("2F Washroom", 376, "Furniture", 445, [], 45),
     "2F Washroom Mirror": LMLocationData("2F Washroom", 377, "Furniture", 544, [], 45),
-    #"2F Washroom Toilet": LMLocationData("2F Washroom", 378, "Furniture", 443, [], 45), Prevents Ghost Spawn
+    #"2F Washroom Toilet": LMLocationData("2F Washroom", 378, "Furniture", 443, [], 45), Prevents Ghost Spawns
     "2F Washroom Shelf": LMLocationData("2F Washroom", 379, "Furniture", 438, [], 45),
     "2F Washroom Radiator": LMLocationData("2F Washroom", 380, "Furniture", 441, [], 45),
     "2F Washroom Picture": LMLocationData("2F Washroom", 381, "Furniture", 444, [], 45),
@@ -554,14 +554,14 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Safari Room L Light": LMLocationData("Safari Room", 436, "Furniture", 631, [], 55),
     "Safari Room R Light": LMLocationData("Safari Room", 437, "Furniture", 632, [], 55),
     "Safari Room L Deer Head": LMLocationData("Safari Room", 438, "Furniture", 635, [], 55),
-    #"Safari Room C Deer Head": LMLocationData("Safari Room", 439, "Furniture", 630, [], 55), Prevents Ghosts spawning
+    #"Safari Room C Deer Head": LMLocationData("Safari Room", 439, "Furniture", 630, [], 55), Prevents Ghost Spawns
     "Safari Room R Deer Head": LMLocationData("Safari Room", 440, "Furniture", 634, [], 55),
     "Safari Room Leopard Chest Box": LMLocationData("Safari Room", 433, "Furniture", 633, [], 55),
     "Balcony L Bench": LMLocationData("Balcony", 441, "Furniture", 617, [], 62),
     "Balcony R Bench": LMLocationData("Balcony", 442, "Furniture", 618, [], 62),
     "Balcony L Statue": LMLocationData("Balcony", 443, "Furniture", 621, [], 62),
     "Balcony R Statue": LMLocationData("Balcony", 444, "Furniture", 620, [], 62),
-    #"Breaker Room Table": LMLocationData("Breaker Room", 445, "Furniture", 44, [], 69),
+    #"Breaker Room Table": LMLocationData("Breaker Room", 445, "Furniture", 44, [], 69), Prevents Speedy Spirit Spawn
     "Breaker Room Ceiling Light": LMLocationData("Breaker Room", 446, "Furniture", 43, [], 69),
     "Breaker Room Metal Drum L": LMLocationData("Breaker Room", 447, "Furniture", 45, [], 69),
     "Breaker Room Metal Drum R": LMLocationData("Breaker Room", 448, "Furniture", 46, [], 69),
@@ -578,9 +578,9 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Breaker Room Barrel (top row, closest to back Wall)": LMLocationData("Breaker Room", 459, "Furniture", 57, [], 69),
     "Cellar Ceiling Light": LMLocationData("Cellar", 460, "Furniture", 4, [], 66),
     "Cellar Crate (along back wall)": LMLocationData("Cellar", 461, "Furniture", 12, [], 66),
-    #"Cellar Crate 1": LMLocationData("Cellar", 462, "Furniture", 67, [], 66), Prevents Ghosts from spawning
-    #"Cellar Barrel 1": LMLocationData("Cellar", 463, "Furniture", 5, [], 66), Prevents Ghosts from spawning
-    #"Cellar Barrel 2": LMLocationData("Cellar", 464, "Furniture", 6, [], 66), Prevents Ghosts from spawning
+    #"Cellar Crate 1": LMLocationData("Cellar", 462, "Furniture", 67, [], 66), Prevents Ghost Spawns
+    #"Cellar Barrel 1": LMLocationData("Cellar", 463, "Furniture", 5, [], 66), Prevents Ghost Spawns
+    #"Cellar Barrel 2": LMLocationData("Cellar", 464, "Furniture", 6, [], 66), Prevents Ghost Spawns
     "Cellar Center Shelf Boxes": LMLocationData("Cellar", 465, "Furniture", 19, [], 66),
     "Cellar Center High Shelf": LMLocationData("Cellar", 466, "Furniture", 13, [], 66),
     "Cellar Center Middle Shelf": LMLocationData("Cellar", 467, "Furniture", 15, [], 66),
@@ -639,10 +639,10 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Armory Armor Suit (middle, left)": LMLocationData("Armory", 519, "Furniture", 644, [], 51),
     "Armory Armor Suit (middle, second from left)": LMLocationData("Armory", 520, "Furniture", 645, [], 51),
     "Armory Armor Suit L (right side)": LMLocationData("Armory", 521, "Furniture", 646, [], 51),
-    #"Armory Armor Suit 6": LMLocationData("Armory", 522, "Furniture", 647, [], 51),
-    #"Armory Armor Suit 7": LMLocationData("Armory", 523, "Furniture", 648, [], 51),
-    #"Armory Armor Suit 8": LMLocationData("Armory", 524, "Furniture", 649, [], 51),
-    #"Armory Armor Suit 9": LMLocationData("Armory", 525, "Furniture", 650, [], 51),
+    #"Armory Armor Suit 6": LMLocationData("Armory", 522, "Furniture", 647, [], 51), Prevents Ghost Spawns
+    #"Armory Armor Suit 7": LMLocationData("Armory", 523, "Furniture", 648, [], 51), Prevents Ghost Spawns
+    #"Armory Armor Suit 8": LMLocationData("Armory", 524, "Furniture", 649, [], 51), Prevents Ghost Spawns
+    #"Armory Armor Suit 9": LMLocationData("Armory", 525, "Furniture", 650, [], 51), Prevents Ghost Spawns
     "Armory Ceiling Light": LMLocationData("Armory", 526, "Furniture", 636, [], 51),
     "Armory Wall Shield": LMLocationData("Armory", 527, "Furniture", 637, [], 51),
     "Armory Crates (near Ceramics Door)": LMLocationData("Armory", 528, "Furniture", 638, [], 51),
@@ -720,13 +720,13 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Artist's Studio Biff Bust": LMLocationData("Artist's Studio", 600, "Furniture", 686, [], 60),
     "Artist's Studio Brick Pile": LMLocationData("Artist's Studio", 601, "Furniture", 687, [], 60),
     "Artist's Studio Art Piece Shelves": LMLocationData("Artist's Studio", 602, "Furniture", 688, [], 60),
-    # "Artist's Studio Gold Ghost Easel": LMLocationData("Artist's Studio", 603, "Furniture", 691, [], 60),
-    # "Artist's Studio Pink Ghost Easel": LMLocationData("Artist's Studio", 604, "Furniture", 692, [], 60),
-    # "Artist's Studio Blue Ghost Easel": LMLocationData("Artist's Studio", 605, "Furniture", 693, [], 60),
-    # "Artist's Studio Red Ghost Easel": LMLocationData("Artist's Studio", 606, "Furniture", 694, [], 60),
-    # "Artist's Studio Shy Guy Ghost Easel": LMLocationData("Artist's Studio", 607, "Furniture", 695, [], 60),
-    # "Artist's Studio Green Ghost Easel": LMLocationData("Artist's Studio", 608, "Furniture", 696, [], 60),
-    # "Artist's Studio Purple Ghost Easel": LMLocationData("Artist's Studio", 609, "Furniture", 697, [], 60),
+    # "Artist's Studio Gold Ghost Easel": LMLocationData("Artist's Studio", 603, "Furniture", 691, [], 60), Prevents Ghost Spawns
+    # "Artist's Studio Pink Ghost Easel": LMLocationData("Artist's Studio", 604, "Furniture", 692, [], 60), Prevents Ghost Spawns
+    # "Artist's Studio Blue Ghost Easel": LMLocationData("Artist's Studio", 605, "Furniture", 693, [], 60), Prevents Ghost Spawns
+    # "Artist's Studio Red Ghost Easel": LMLocationData("Artist's Studio", 606, "Furniture", 694, [], 60), Prevents Ghost Spawns
+    # "Artist's Studio Shy Guy Ghost Easel": LMLocationData("Artist's Studio", 607, "Furniture", 695, [], 60), Prevents Ghost Spawns
+    # "Artist's Studio Green Ghost Easel": LMLocationData("Artist's Studio", 608, "Furniture", 696, [], 60), Prevents Ghost Spawns
+    # "Artist's Studio Purple Ghost Easel": LMLocationData("Artist's Studio", 609, "Furniture", 697, [], 60), Prevents Ghost Spawns
     "Secret Altar Brazier (near front, closest to 4th Wall)": LMLocationData("Secret Altar", 610, "Furniture", 28, [], 73),
     "Secret Altar Brazier (near front, away from 4th Wall)": LMLocationData("Secret Altar", 611, "Furniture", 29, [], 73),
     # "Secret Altar R Chandelier": LMLocationData("Secret Altar", 612, "Furniture", 40, [], 73), Cannot access
