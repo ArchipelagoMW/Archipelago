@@ -298,13 +298,13 @@ async def check_locations(ctx: LMContext):
             if (bit_int & (1<<i)) > 0:
                 match i:
                     case 5:
-                        print(luigi_recv_text + "Fire")
+                        print(luigi_recv_text + "Fire Elemental Medal")
                         continue
                     case 6:
-                        print(luigi_recv_text + "Ice")
+                        print(luigi_recv_text + "Ice Elemental Medal")
                         continue
                     case 7:
-                        print(luigi_recv_text + "Water")
+                        print(luigi_recv_text + "Water Elemental Medal")
                         continue
                     case _:
                         print("ERROR: Not supposed to be reached")
