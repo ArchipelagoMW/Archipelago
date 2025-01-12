@@ -230,7 +230,7 @@ class SMZ3World(World):
         self.multiworld.itempool += itemPool
 
     def set_rules(self):
-        # SM G4 is logically required to access Ganon's Tower in SMZ3
+        # SM G4 is logically required to complete Ganon's Tower
         self.multiworld.completion_condition[self.player] = lambda state: \
             self.smz3World.GetRegion("Ganon's Tower").CanEnter(state.smz3state[self.player]) and \
             self.smz3World.GetRegion("Ganon's Tower").TowerAscend(state.smz3state[self.player]) and \
