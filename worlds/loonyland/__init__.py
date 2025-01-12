@@ -134,7 +134,7 @@ class LoonylandWorld(World):
             final_loc = LoonylandLocation(
                 self.player, str(self.options.badges_required.value) + " Badges Earned", None, self.get_region("Menu")
             )
-            final_loc.access_rule = lambda state: have_x_badges(state, self, self.options.badges_required.value)
+            final_loc.access_rule = lambda state: have_x_badges(state, self.player, self.options.badges_required.value)
             self.get_region("Menu").locations.append(final_loc)
         else:  # no win con
             final_loc = self.get_location("Swamp: Outside Luniton")
