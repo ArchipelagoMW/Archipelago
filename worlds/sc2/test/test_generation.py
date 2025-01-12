@@ -297,6 +297,9 @@ class TestItemFiltering(Sc2SetupTestBase):
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
             'accessibility': 'locations',
             'vanilla_items_only': True,
+            # Move the unit nerf items from the start inventory to the pool,
+            # else this option could push non-vanilla items past this test
+            'nerf_unit_baselines': True,
         }
         self.generate_world(world_options)
         world_items = [(item.name, item_tables.item_table[item.name]) for item in self.multiworld.itempool]
