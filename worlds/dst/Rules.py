@@ -1992,6 +1992,8 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
                     add_rule(location, think_tank.rule)
                 elif "ancient" in location_data.tags:
                     add_rule(location, ancient_altar.rule)
+                elif "hermitcrab" in location_data.tags:
+                    add_rule(location, pre_basic_boating.rule) # Getting bottles from ocean
 
             elif "farming" in location_data.tags:
                 add_rule(location, advanced_farming.rule)
