@@ -680,7 +680,7 @@ class VariaRandomizer:
             #dumpErrorMsg(args.output, self.randoExec.errorMsg)
             raise Exception("Can't generate " + self.fileName + " with the given parameters: {}".format(self.randoExec.errorMsg))
 
-    def PatchRom(self, outputFilename, customPrePatchApply = None, customPostPatchApply = None):
+    def PatchRom(self, customPrePatchApply = None, customPostPatchApply = None) -> RomPatcher:
         args = self.args
         optErrMsgs = self.optErrMsgs
 
@@ -758,9 +758,9 @@ class VariaRandomizer:
             # args.output is not None: generate local json named args.output
             if args.rom is not None:
                 # patch local rom
-                romFileName = args.rom
-                shutil.copyfile(romFileName, outputFilename)
-                romPatcher = RomPatcher(settings=patcherSettings, romFileName=outputFilename, magic=args.raceMagic, player=self.player)
+                # romFileName = args.rom
+                # shutil.copyfile(romFileName, outputFilename)
+                romPatcher = RomPatcher(settings=patcherSettings, magic=args.raceMagic, player=self.player)
             else:
                 romPatcher = RomPatcher(settings=patcherSettings, magic=args.raceMagic)
 
@@ -779,24 +779,12 @@ class VariaRandomizer:
                 #msg = randoExec.errorMsg
                 msg = ''
 
-            if args.rom is None: # web mode
-                data = romPatcher.romFile.data
-                self.fileName = '{}.sfc'.format(self.fileName)
-                data["fileName"] = self.fileName
-                # error msg in json to be displayed by the web site
-                data["errorMsg"] = msg
-                # replaced parameters to update stats in database
-                if len(self.forcedArgs) > 0:
-                    data["forcedArgs"] = self.forcedArgs
-                with open(outputFilename, 'w') as jsonFile:
-                    json.dump(data, jsonFile)
-            else: # CLI mode
-                if msg != "":
-                    print(msg)
+            return romPatcher
+
         except Exception as e:
             import traceback
             traceback.print_exc(file=sys.stdout)
-            raise Exception("Error patching {}: ({}: {})".format(outputFilename, type(e).__name__, e))
+            raise Exception("Error patching: ({}: {})".format(type(e).__name__, e))
             #dumpErrorMsg(args.output, msg)
 
 #        if stuck == True:
