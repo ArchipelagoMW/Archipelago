@@ -4,9 +4,9 @@
 
 - Cat Quest from: [Steam](https://store.steampowered.com/app/593280/Cat_Quest/)
     - Other store platforms have not been tested but should work.
-- Cat Quest Randomizer from: [GitHub](https://github.com/Nikkilites/CatQuest-Randomizer)
+- Cat Quest Randomizer from: [GitHub](https://github.com/Nikkilites/CatQuest-Randomizer/releases)
 - BepInEx from: [GitHub](https://github.com/BepInEx/BepInEx/releases)
-- Cat Quest World from: [GitHub](https://github.com/Nikkilites/Archipelago-CatQuest)
+- Cat Quest World from: [GitHub](https://github.com/Nikkilites/Archipelago-CatQuest/releases)
 
 ## Installation
 
