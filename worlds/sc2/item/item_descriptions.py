@@ -1049,9 +1049,9 @@ item_descriptions = {
     item_names.ARBITER_ABILITY_EFFICIENCY: "Arbiter War Council upgrade. Reduces the energy cost of Recall by 50 and Stasis Field by 100.",
     # Oracle
     item_names.MOTHERSHIP_INTEGRATED_POWER: "Mothership War Council upgrade. Allows Motherships to move at full speed outside pylon power.",
-    item_names.OPPRESSOR_VULCAN_BLASTER: "Oppressor War Council upgrade.  " + _ability_desc("Oppressors","Vulcan Blaster", "Activates a powerful short range anti-ground weapon for a limited time. Greatly reduces movement and turning speed, and disables other weapons while active."),
-    item_names.CALADRIUS_CORONA_BEAM: "Caladrius War Council upgrade.  " + _ability_desc("Caladrius","Corona Beam", "A channeling beam that drains up to 100 of your shield to deal up to 200 damage over time to a single target."),
-    item_names.MISTWING_PHANTOM_DASH: "Mist Wing War Council upgrade.  " + _ability_desc("Mist Wings","Phantom Dash", "Dash forward to cover some distance quickly. Deals damage in a line if the Mist Wing is cloaked."),
+    item_names.OPPRESSOR_VULCAN_BLASTER: "Oppressor War Council upgrade. " + _ability_desc("Oppressors","Vulcan Blaster", "Activates a powerful short range anti-ground weapon for a limited time. Greatly reduces movement and turning speed, and disables other weapons while active."),
+    item_names.CALADRIUS_CORONA_BEAM: "Caladrius War Council upgrade. " + _ability_desc("Caladrius","Corona Beam", "A channeling beam that drains up to 100 of your shield to deal up to 200 damage over time to a single target."),
+    item_names.MISTWING_PHANTOM_DASH: "Mist Wing War Council upgrade. " + _ability_desc("Mist Wings","Phantom Dash", "Dash forward to cover some distance quickly. Deals damage in a line if the Mist Wing is cloaked."),
 
     
     item_names.SOA_CHRONO_SURGE: "The Spear of Adun increases a target structure's unit warp in and research speeds by +1000% for 20 seconds.",
