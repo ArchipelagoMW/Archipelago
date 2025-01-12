@@ -815,9 +815,9 @@ class ALTTPWorld(World):
         if not self.multiworld.is_race:
             prizes = {}
             bosses = {
-                'Ganons Tower - bottom': self.dungeons['Ganons Tower'].bosses['bottom'].name,
-                'Ganons Tower - middle': self.dungeons['Ganons Tower'].bosses['middle'].name,
-                'Ganons Tower - top': self.dungeons['Ganons Tower'].bosses['top'].name
+                "Ganons Tower - bottom": self.dungeons["Ganons Tower"].bosses["bottom"].name,
+                "Ganons Tower - middle": self.dungeons["Ganons Tower"].bosses["middle"].name,
+                "Ganons Tower - top": self.dungeons["Ganons Tower"].bosses["top"].name
             }
             # all of these option are NOT used by the SNI- or Text-Client.
             # they are used by the alttp-poptracker pack (https://github.com/StripesOO7/alttp-ap-poptracker-pack)
@@ -834,20 +834,20 @@ class ALTTPWorld(World):
             ]
 
             for dungeon in self.dungeons.keys():
-                if dungeon not in ['Hyrule Castle', 'Ganons Tower', "Agahnims Tower"]:
+                if dungeon not in ["Hyrule Castle", "Ganons Tower", "Agahnims Tower"]:
                     bosses[dungeon] = self.dungeons[dungeon].boss.name
 
                     if dungeon == "Thieves Town":
                         dungeon = "Thieves\' Town"
-                    prizes[dungeon] = self.get_location(location_name=dungeon+" - Prize").item.name
+                    prizes[dungeon] = self.get_location(f"{dungeon} - Prize").item.name
 
             slot_data = {option_name: getattr(self.multiworld, option_name)[self.player].value for option_name in
                          slot_options}
             slot_data.update({
-                'mm_medalion': self.required_medallions[0],
-                'tr_medalion': self.required_medallions[1],
+                "mm_medalion": self.required_medallions[0],
+                "tr_medalion": self.required_medallions[1],
                 "bosses": bosses,
-                "prizes": prizes
+                "prizes": prizes,
                 }
             )
         return slot_data
