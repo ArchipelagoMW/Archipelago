@@ -1188,10 +1188,34 @@ class OOTWorld(World):
 
     def fill_slot_data(self):
         self.collectible_flags_available.wait()
+        prizes = {}
+        bosses = {}
+        for location in [
+            'Links Pocket',
+            'Queen Gohma',
+            'King Dodongo',
+            'Barinade',
+            'Phantom Ganon',
+            'Volvagia',
+            'Morpha',
+            'Bongo Bongo',
+            'Twinrova',
+            # 'Ganon',
+        ]:
+            if not location == 'Links Pocket':
+                entrance = self.get_region(region_name=location+" Boss Room").entrances
+                entrance = entrance[0].name
+                dungeon = entrance[:str(entrance).index(" Boss Door")]
+            else:
+                dungeon = "Start"
+            prizes[self.get_location(location_name=location).item.name] = dungeon
+            bosses[dungeon] = location
 
         slot_data = {
             'collectible_override_flags': self.collectible_override_flags,
-            'collectible_flag_offsets': self.collectible_flag_offsets
+            'collectible_flag_offsets': self.collectible_flag_offsets,
+            'prizes': prizes,
+            'bosses': bosses
         }
         slot_data.update(self.options.as_dict(
             "open_forest", "open_kakariko", "open_door_of_time", "zora_fountain", "gerudo_fortress",
