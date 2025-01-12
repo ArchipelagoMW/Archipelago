@@ -9,7 +9,7 @@ from .Locations import Celeste64Location, strawberry_location_data_table, friend
                                           sign_location_data_table, car_location_data_table, checkpoint_location_data_table,\
                                           location_table
 from .Names import ItemName, LocationName
-from .Options import Celeste64Options, celeste_64_option_groups
+from .Options import Celeste64Options, celeste_64_option_groups, resolve_options
 
 
 class Celeste64WebWorld(WebWorld):
@@ -47,6 +47,13 @@ class Celeste64World(World):
     active_region_logic_mapping: Dict[Tuple[str], List[List[str]]]
     goal_logic_mapping: Dict[str, List[List[str]]]
 
+    madeline_one_dash_hair_color: int
+    madeline_two_dash_hair_color: int
+    madeline_no_dash_hair_color: int
+    madeline_feather_hair_color: int
+
+    def generate_early(self) -> None:
+        resolve_options(self)
 
     def create_item(self, name: str) -> Celeste64Item:
         # Only make required amount of strawberries be Progression
@@ -181,6 +188,10 @@ class Celeste64World(World):
             "signsanity": self.options.signsanity.value,
             "carsanity": self.options.carsanity.value,
             "checkpointsanity": self.options.checkpointsanity.value,
+            "madeline_one_dash_hair_color": self.madeline_one_dash_hair_color,
+            "madeline_two_dash_hair_color": self.madeline_two_dash_hair_color,
+            "madeline_no_dash_hair_color": self.madeline_no_dash_hair_color,
+            "madeline_feather_hair_color": self.madeline_feather_hair_color,
             "badeline_chaser_source": self.options.badeline_chaser_source.value,
             "badeline_chaser_frequency": self.options.badeline_chaser_frequency.value,
             "badeline_chaser_speed": self.options.badeline_chaser_speed.value,
