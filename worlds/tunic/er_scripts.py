@@ -177,7 +177,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     logic_tricks: Tuple[bool, int, int] = (laurels_zips, ice_grappling, ladder_storage)
 
     # marking that you don't immediately have laurels
-    if laurels_location == "10_fairies" and not hasattr(world.multiworld, "re_gen_passthrough"):
+    if laurels_location == "10_fairies" and not world.using_ut:
         has_laurels = False
 
     shop_count = 6
@@ -191,9 +191,8 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                 break
 
     # If using Universal Tracker, restore portal_map. Could be cleaner, but it does not matter for UT even a little bit
-    if hasattr(world.multiworld, "re_gen_passthrough"):
-        if "TUNIC" in world.multiworld.re_gen_passthrough:
-            portal_map = portal_mapping.copy()
+    if world.using_ut:
+        portal_map = portal_mapping.copy()
 
     # create separate lists for dead ends and non-dead ends
     for portal in portal_map:
@@ -232,25 +231,24 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         plando_connections = world.seed_groups[world.options.entrance_rando.value]["plando"]
 
     # universal tracker support stuff, don't need to care about region dependency
-    if hasattr(world.multiworld, "re_gen_passthrough"):
-        if "TUNIC" in world.multiworld.re_gen_passthrough:
-            plando_connections.clear()
-            # universal tracker stuff, won't do anything in normal gen
-            for portal1, portal2 in world.multiworld.re_gen_passthrough["TUNIC"]["Entrance Rando"].items():
-                portal_name1 = ""
-                portal_name2 = ""
+    if world.using_ut:
+        plando_connections.clear()
+        # universal tracker stuff, won't do anything in normal gen
+        for portal1, portal2 in world.passthrough["Entrance Rando"].items():
+            portal_name1 = ""
+            portal_name2 = ""
 
-                for portal in portal_mapping:
-                    if portal.scene_destination() == portal1:
-                        portal_name1 = portal.name
-                        # connected_regions.update(add_dependent_regions(portal.region, logic_rules))
-                    if portal.scene_destination() == portal2:
-                        portal_name2 = portal.name
-                        # connected_regions.update(add_dependent_regions(portal.region, logic_rules))
-                # shops have special handling
-                if not portal_name2 and portal2 == "Shop, Previous Region_":
-                    portal_name2 = "Shop Portal"
-                plando_connections.append(PlandoConnection(portal_name1, portal_name2, "both"))
+            for portal in portal_mapping:
+                if portal.scene_destination() == portal1:
+                    portal_name1 = portal.name
+                    # connected_regions.update(add_dependent_regions(portal.region, logic_rules))
+                if portal.scene_destination() == portal2:
+                    portal_name2 = portal.name
+                    # connected_regions.update(add_dependent_regions(portal.region, logic_rules))
+            # shops have special handling
+            if not portal_name2 and portal2 == "Shop, Previous Region_":
+                portal_name2 = "Shop Portal"
+            plando_connections.append(PlandoConnection(portal_name1, portal_name2, "both"))
 
     non_dead_end_regions = set()
     for region_name, region_info in world.er_regions.items():
@@ -362,7 +360,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         # if we have plando connections, our connected regions may change somewhat
         connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks)
 
-    if fixed_shop and not hasattr(world.multiworld, "re_gen_passthrough"):
+    if fixed_shop and not world.using_ut:
         portal1 = None
         for portal in two_plus:
             if portal.scene_destination() == "Overworld Redux, Windmill_":
@@ -392,7 +390,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     fail_count = 0
     while len(connected_regions) < len(non_dead_end_regions):
         # if this is universal tracker, just break immediately and move on
-        if hasattr(world.multiworld, "re_gen_passthrough"):
+        if world.using_ut:
             break
         # if the connected regions length stays unchanged for too long, it's stuck in a loop
         # should, hopefully, only ever occur if someone plandos connections poorly
@@ -445,9 +443,8 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
             random_object.shuffle(two_plus)
 
     # for universal tracker, we want to skip shop gen
-    if hasattr(world.multiworld, "re_gen_passthrough"):
-        if "TUNIC" in world.multiworld.re_gen_passthrough:
-            shop_count = 0
+    if world.using_ut:
+        shop_count = 0
     
     for i in range(shop_count):
         portal1 = two_plus.pop()
@@ -462,7 +459,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     # connect dead ends to random non-dead ends
     # none of the key events are in dead ends, so we don't need to do gate_before_switch
     while len(dead_ends) > 0:
-        if hasattr(world.multiworld, "re_gen_passthrough"):
+        if world.using_ut:
             break
         portal1 = two_plus.pop()
         portal2 = dead_ends.pop()
@@ -470,7 +467,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     # then randomly connect the remaining portals to each other
     # every region is accessible, so gate_before_switch is not necessary
     while len(two_plus) > 1:
-        if hasattr(world.multiworld, "re_gen_passthrough"):
+        if world.using_ut:
             break
         portal1 = two_plus.pop()
         portal2 = two_plus.pop()

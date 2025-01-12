@@ -531,7 +531,8 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         if progitempool:
             raise FillError(
                 f"Not enough locations for progression items. "
-                f"There are {len(progitempool)} more progression items than there are available locations.",
+                f"There are {len(progitempool)} more progression items than there are available locations.\n"
+                f"Unfilled locations:\n{multiworld.get_unfilled_locations()}.",
                 multiworld=multiworld,
             )
         accessibility_corrections(multiworld, multiworld.state, defaultlocations)
