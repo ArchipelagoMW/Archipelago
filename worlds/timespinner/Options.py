@@ -53,6 +53,55 @@ class BossRando(Choice):
     option_unscaled = 2
     alias_true = 1
 
+class BossRandoType(Choice):
+    "Sets what type of boss shuffling occurs."
+    display_name = "Boss Randomization Type"
+    option_shuffle = 0
+    option_chaos = 1
+    option_singularity = 2
+    option_manual = 3
+
+class BossRandoOverrides(OptionDict):
+    """Manual mapping of bosses to the boss they will be replaced with. Bosses that you don't specify will be the
+    vanilla boss."""
+    schema = Schema({
+        Optional("FelineSentry"): str,
+        Optional("Varndagroth"): str,
+        Optional("AzureQueen"): str,
+        Optional("GoldenIdol"): str,
+        Optional("Aelana"): str,
+        Optional("Maw"): str,
+        Optional("Cantoran"): str,
+        Optional("Genza"): str,
+        Optional("Nuvius"): str,
+        Optional("Vol"): str,
+        Optional("Prince"): str,
+        Optional("Xarion"): str,
+        Optional("Ravenlord"): str,
+        Optional("Ifrit"): str,
+        Optional("Sandman"): str,
+        Optional("Nightmare"): str
+    })
+    display_name = "Boss Rando Overrides"
+    default = {
+        "FelineSentry": "FelineSentry",
+        "Varndagroth": "Varndagroth",
+        "AzureQueen": "AzureQueen",
+        "GoldenIdol": "GoldenIdol",
+        "Aelana": "Aelana",
+        "Maw": "Maw",
+        "Cantoran": "Cantoran",
+        "Genza": "Genza",
+        "Nuvius": "Nuvius",
+        "Vol": "Vol",
+        "Prince": "Prince",
+        "Xarion": "Xarion",
+        "Ravenlord": "Ravenlord",
+        "Ifrit": "Ifrit",
+        "Sandman": "Sandman",
+        "Nightmare": "Nightmare"
+    }
+
 class EnemyRando(Choice):
     "Wheter enemies will be randomized, and if their damage/hp should be scaled."
     display_name = "Enemy Randomization"
@@ -391,6 +440,8 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     cantoran: Cantoran
     lore_checks: LoreChecks
     boss_rando: BossRando
+    boss_rando_type: BossRandoType
+    boss_rando_overrides: BossRandoOverrides
     enemy_rando: EnemyRando
     damage_rando: DamageRando
     damage_rando_overrides: DamageRandoOverrides
@@ -417,6 +468,11 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     prism_break: PrismBreak
     trap_chance: TrapChance
     traps: Traps
+
+class HiddenBossRandoOverrides(BossRandoOverrides):
+    """Manual mapping of bosses to the boss they will be replaced with. Bosses that you don't specify will be the
+    vanilla boss."""
+    visibility = Visibility.none
 
 class HiddenDamageRandoOverrides(DamageRandoOverrides): 
     """Manual +/-/normal odds for an orb. Put 0 if you don't want a certain nerf or buff to be a possibility. Orbs that
@@ -460,6 +516,8 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
     Cantoran: hidden(Cantoran) # type: ignore
     LoreChecks: hidden(LoreChecks) # type: ignore
     BossRando: hidden(BossRando) # type: ignore
+    BossRandoType: hidden(BossRandoType) # type: ignore
+    BossRandoOverrides: HiddenBossRandoOverrides # type: ignore
     EnemyRando: hidden(EnemyRando) # type: ignore
     DamageRando: hidden(DamageRando) # type: ignore
     DamageRandoOverrides: HiddenDamageRandoOverrides
@@ -535,6 +593,13 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
         if self.EnemyRando != EnemyRando.default and \
             self.enemy_rando == EnemyRando.default:
             self.enemy_rando.value = self.EnemyRando.value
+        if self.BossRandoType != BossRandoType.default and \
+            self.boss_rando_type == BossRandoType.default:
+            self.boss_rando_type.value = self.BossRandoType.value
+            self.has_replaced_options.value = Toggle.option_true
+        if self.BossRandoOverrides != BossRandoOverrides.default and \
+            self.boss_rando_overrides == BossRandoOverrides.default:
+            self.boss_rando_overrides.value = self.BossRandoOverrides.value
             self.has_replaced_options.value = Toggle.option_true
         if self.DamageRando != DamageRando.default and \
             self.damage_rando == DamageRando.default:
