@@ -396,7 +396,7 @@ async def check_locations(ctx: LMContext):
                     LMContext.checked_furniture.__contains__(str(named_furniture[0]))):
                 continue
 
-            print(f"Luigi knocked on furniture {named_furniture[0]} in Room #{str(current_room_id)}.\n"+
+            logger.info(f"Luigi knocked on furniture {named_furniture[0]} in Room #{str(current_room_id)}.\n"+
                   f"Additional Debug Details: Current Addr: {hex(current_addr)}; Furniture ID: {hex(furniture_id)}; " +
                   f"Flag Value: {furniture_flag}")
 
