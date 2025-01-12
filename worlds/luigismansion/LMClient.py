@@ -63,6 +63,7 @@ GIVE_ITEM_ARRAY_ADDR = 0x803FE868
 # This is the address that holds the player's slot name.
 # This way, the player does not have to manually authenticate their slot name.
 SLOT_NAME_ADDR = 0x80314660
+SLOT_NAME_STR_LENGTH = 0x10
 
 # This address contains the starting point of furniture ID table, where each 4 bytes would contain the furniture ID
 FURNITURE_ID_TABLE_START = 0x80C0C898
@@ -370,47 +371,38 @@ async def check_locations(ctx: LMContext):
                 if (bit_int & (1<<i)) > 0 and not boo_name_collection[boo_addr_pos][i] == "":
                     print("Luigi has captured the following Boo: '" + boo_name_collection[boo_addr_pos][i] + "'")
 
-    current_room_id = dolphin_memory_engine.read_word(
-        dolphin_memory_engine.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
+    if 2147483648 <= dolphin_memory_engine.read_word(ROOM_ID_ADDR) <= 2172649471:
+        current_room_id = dolphin_memory_engine.read_word(
+            dolphin_memory_engine.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
 
-    furniture_name_list: dict[str, LMLocationData] = dict(filter(lambda item: (item[1].type == "Furniture" or
-        item[1].type == "Plant") and item[1].in_game_room_id == current_room_id, ALL_LOCATION_TABLE.items()))
+        furniture_name_list: dict[str, LMLocationData] = dict(filter(lambda item: (item[1].type == "Furniture" or
+            item[1].type == "Plant") and item[1].in_game_room_id == current_room_id, ALL_LOCATION_TABLE.items()))
 
-    if len(furniture_name_list.keys()) > 0:
-        for current_offset in range(0, 712, 4): # TODO Validate this accounts for all furniture
-            current_addr = FURNITURE_MAIN_TABLE_ID+current_offset
+        if len(furniture_name_list.keys()) > 0:
+            for current_offset in range(0, 712, 4): # TODO Validate this accounts for all furniture
+                current_addr = FURNITURE_MAIN_TABLE_ID+current_offset
 
-            # Not within a valid range for a pointer
-            if  not (2147483648 <= dolphin_memory_engine.read_word(current_addr) <= 2172649471):
-                continue
+                # Not within a valid range for a pointer
+                if  not (2147483648 <= dolphin_memory_engine.read_word(current_addr) <= 2172649471):
+                    continue
 
-            furniture_id = dolphin_memory_engine.read_word(
-                dolphin_memory_engine.follow_pointers(current_addr, [FURN_ID_OFFSET]))
-            furniture_flag =  dolphin_memory_engine.read_word(
-                dolphin_memory_engine.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
+                furniture_id = dolphin_memory_engine.read_word(
+                    dolphin_memory_engine.follow_pointers(current_addr, [FURN_ID_OFFSET]))
+                furniture_flag =  dolphin_memory_engine.read_word(
+                    dolphin_memory_engine.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
 
-            # ID is a valid piece of furniture in the room, has been interacted with, and not already tracked.
-            named_furniture = next(((key, value) for (key, value) in furniture_name_list.items() if
-                                value.jmpentry == furniture_id), None)
-            if named_furniture is None or furniture_flag == 0 or (
-                    LMContext.checked_furniture.__contains__(str(named_furniture[0]))):
-                continue
+                # ID is a valid piece of furniture in the room, has been interacted with, and not already tracked.
+                named_furniture = next(((key, value) for (key, value) in furniture_name_list.items() if
+                                    value.jmpentry == furniture_id), None)
+                if named_furniture is None or furniture_flag == 0 or (
+                        LMContext.checked_furniture.__contains__(str(named_furniture[0]))):
+                    continue
 
-            logger.info(f"Luigi knocked on furniture {named_furniture[0]} in Room #{str(current_room_id)}.\n"+
-                  f"Additional Debug Details: Current Addr: {hex(current_addr)}; Furniture ID: {hex(furniture_id)}; " +
-                  f"Flag Value: {furniture_flag}")
+                logger.info(f"Luigi knocked on furniture '{named_furniture[0]}' in In Game Room #{str(current_room_id)}.\n"+
+                      f"Additional Debug Details: Current Addr: {hex(current_addr)}; Furniture ID: {hex(furniture_id)}; " +
+                      f"Flag Value: {furniture_flag}")
 
-            LMContext.checked_furniture.append(named_furniture[0])
-
-        #if furniture_id in filtered_location_list:
-            #furniture_state =
-            #    int.from_bytes(dolphin_memory_engine.read_bytes(FURNITURE_INTERACTION_TABLE_START +
-            #                                                    furniture_id_addr, 4)
-            #if furniture_state == 0:
-            #    continue
-            # print("You interacted with " + filtered_location_list[current_index])
-            # Add to interacted locations.
-
+                LMContext.checked_furniture.append(named_furniture[0])
 
     # for location, data in ALL_LOCATION_TABLE.items():
     #     checked = False
@@ -528,7 +520,7 @@ async def dolphin_sync_task(ctx: LMContext):
                     await check_locations(ctx)
                 else:
                     if not ctx.auth:
-                        ctx.auth = read_string(SLOT_NAME_ADDR, 0x40)
+                        ctx.auth = read_string(SLOT_NAME_ADDR, SLOT_NAME_STR_LENGTH)
                     if ctx.awaiting_rom:
                         await ctx.server_auth()
                         # if not ctx.auth:
