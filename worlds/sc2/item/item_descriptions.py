@@ -876,7 +876,7 @@ item_descriptions = {
     item_names.SCOUT: "Versatile high-speed fighter. Has a powerful anti-armoured air attack and a weaker anti-ground attack.",
     item_names.OPPRESSOR: "Tal'Darim Scout variant. Has a weaker air attack, but a stronger ground attack. Can use the Vulcan Blaster ability.",
     item_names.CALADRIUS: "Purifier Scout variant. Has no ground attack, but a stronger air attack, which can be upgraded to hit multiple targets. Can use the Corona Beam ability.",
-    item_names.MISTWING: "Nerazim Scout variant. Nerazim Scout variant. Specialized stealth fighter. Can use the Cloak, Phantom Dash and Pilot (Transport) abilities.",
+    item_names.MISTWING: "Nerazim Scout variant. Specialized stealth fighter. Can use the Cloak, Phantom Dash and Pilot (Transport) abilities.",
     item_names.TEMPEST: "Siege artillery craft. Attacks from long range. Can use the Disintegration ability.",
     item_names.MOTHERSHIP: "Ultimate Protoss vessel. Can use the Vortex and Mass Recall abilities.",
     item_names.ARBITER: "Army support craft. Has the Stasis Field and Recall abilities. Cloaks nearby units.",
