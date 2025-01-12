@@ -188,6 +188,10 @@ class TWWWorld(World):
         """
         options = self.options
 
+        # Only randomize secret cave inner entrances if both puzzle secret caves and combat secret caves are enabled.
+        if not (options.progression_puzzle_secret_caves and options.progression_combat_secret_caves):
+            options.randomize_secret_cave_inner_entrances.value = False
+
         # Determine which locations are progression and which are not from options.
         self.progress_locations, self.nonprogress_locations = self._determine_progress_and_nonprogress_locations()
 
