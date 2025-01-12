@@ -734,12 +734,16 @@ def flag_user_excluded_item_sets(world: SC2World, item_list: List[FilterItem]) -
             vanilla_nonprogressive_count[item.name] += 1
 
 def flag_war_council_items(world: SC2World, item_list: List[FilterItem]) -> None:
-    """Excludes / start-inventories items based on `nerf_unit_baselines` option"""
+    """Excludes / start-inventories items based on `nerf_unit_baselines` option.
+    Will skip items that are excluded by other sources."""
     if world.options.nerf_unit_baselines:
         return
 
     for item in item_list:
-        if item.data.type in (ProtossItemType.War_Council, ProtossItemType.War_Council_2):
+        if (
+            item.data.type in (ProtossItemType.War_Council, ProtossItemType.War_Council_2)
+            and not ItemFilterFlags.Excluded & item.flags
+        ):
             item.flags |= ItemFilterFlags.StartInventory
 
 
