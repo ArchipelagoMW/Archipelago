@@ -182,6 +182,24 @@ class TWWWorld(World):
 
         return progress_locations, nonprogress_locations
 
+    def _get_classification_name(self, classification: IC) -> str:
+        """
+        Return a string representation of the item's highest-order classification.
+
+        :param classification: The item's classification.
+        :return: A string representation of the item's highest classification. The order of classification is
+        progression > trap > useful > filler.
+        """
+
+        if IC.progression in classification:
+            return "progression"
+        elif IC.trap in classification:
+            return "trap"
+        elif IC.useful in classification:
+            return "useful"
+        else:
+            return "filler"
+
     def generate_early(self) -> None:
         """
         Run before any general steps of the MultiWorld other than options.
@@ -402,7 +420,7 @@ class TWWWorld(World):
                         "player": location.item.player,
                         "name": location.item.name,
                         "game": location.item.game,
-                        "classification": location.item.classification.name,
+                        "classification": self._get_classification_name(location.item.classification),
                     }
                 else:
                     item_info = {"name": "Nothing", "game": "The Wind Waker", "classification": "filler"}
