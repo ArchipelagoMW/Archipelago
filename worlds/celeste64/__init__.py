@@ -107,10 +107,12 @@ class Celeste64World(World):
                           if name not in self.options.start_inventory]
 
         if self.options.checkpointsanity:
-            location_count += 10
+            location_count += 9
+            goal_checkpoint_loc: Location = self.multiworld.get_location(LocationName.checkpoint_10, self.player)
+            goal_checkpoint_loc.place_locked_item(self.create_item(ItemName.checkpoint_10))
             item_pool += [self.create_item(name)
                           for name in checkpoint_item_data_table.keys()
-                          if name not in self.options.start_inventory]
+                          if name not in self.options.start_inventory and name != ItemName.checkpoint_10]
         else:
             for item_name in checkpoint_item_data_table.keys():
                 checkpoint_loc: Location = self.multiworld.get_location(item_name, self.player)
