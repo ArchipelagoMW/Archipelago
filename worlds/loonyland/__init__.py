@@ -14,6 +14,7 @@ from .Data.game_data import (
 from .Data.game_data import (
     ll_base_id as loonyland_base_id,
 )
+from .flags import LLFlags
 from .items import LLItemCat, LoonylandItem
 from .locations import LLLocCat, LoonylandLocation
 from .options import LoonylandOptions, WinCondition
@@ -61,9 +62,9 @@ class LoonylandWorld(World):
             for name, data in loony_item_table.items()
             if VAR_WBOMBS <= data.id - loonyland_base_id <= VAR_WHOTPANTS
         },
-        "power": {name for name, data in loony_item_table.items() if "PWR" in data.flags},
-        "power_big": {name for name, data in loony_item_table.items() if "PWR_BIG" in data.flags},
-        "power_max": {name for name, data in loony_item_table.items() if "PWR_MAX" in data.flags},
+        "power": {name for name, data in loony_item_table.items() if LLFlags.PWR in data.flags},
+        "power_big": {name for name, data in loony_item_table.items() if LLFlags.PWR_BIG in data.flags},
+        "power_max": {name for name, data in loony_item_table.items() if LLFlags.PWR_MAX in data.flags},
     }
 
     location_name_groups = {

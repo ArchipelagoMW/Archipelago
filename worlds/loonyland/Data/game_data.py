@@ -2,6 +2,7 @@
 from BaseClasses import ItemClassification
 from worlds.generic.Rules import CollectionRule, add_rule
 from worlds.loonyland.entrances import LLEntrance
+from worlds.loonyland.flags import LLFlags
 from worlds.loonyland.items import LLItem, LLItemCat
 from worlds.loonyland.locations import LLLocation, LLLocCat
 from worlds.loonyland.regions import LLRegion
@@ -334,10 +335,10 @@ MODE_BOWLING = 3
 MODE_BADGES = 4
 MODE_REMIX = 5
 loony_item_table: dict[str, LLItem] = {
-    "Heart": LLItem(ll_base_id + VAR_HEART, LLItemCat.ITEM, ItemClassification.useful, 20, flags=["PWR"]),
-    "Lightning": LLItem(ll_base_id + VAR_LIGHTNING, LLItemCat.ITEM, ItemClassification.useful, 10, flags=["PWR"]),
-    "Arrow": LLItem(ll_base_id + VAR_ARROW, LLItemCat.ITEM, ItemClassification.useful, 10, flags=["PWR"]),
-    "Pants": LLItem(ll_base_id + VAR_PANTS, LLItemCat.ITEM, ItemClassification.useful, 10, flags=["PWR"]),
+    "Heart": LLItem(ll_base_id + VAR_HEART, LLItemCat.ITEM, ItemClassification.useful, 20, flags=LLFlags.PWR),
+    "Lightning": LLItem(ll_base_id + VAR_LIGHTNING, LLItemCat.ITEM, ItemClassification.useful, 10, flags=LLFlags.PWR),
+    "Arrow": LLItem(ll_base_id + VAR_ARROW, LLItemCat.ITEM, ItemClassification.useful, 10, flags=LLFlags.PWR),
+    "Pants": LLItem(ll_base_id + VAR_PANTS, LLItemCat.ITEM, ItemClassification.useful, 10, flags=LLFlags.PWR),
     "Mushroom": LLItem(ll_base_id + VAR_MUSHROOM, LLItemCat.ITEM, ItemClassification.progression, 10),
     "Orb": LLItem(ll_base_id + VAR_MYSORB, LLItemCat.ITEM, ItemClassification.progression, 4),
     "Bombs": LLItem(ll_base_id + VAR_WBOMBS, LLItemCat.ITEM, ItemClassification.progression),
@@ -361,73 +362,85 @@ loony_item_table: dict[str, LLItem] = {
     "Big Gem": LLItem(ll_base_id + VAR_GEM, LLItemCat.ITEM, ItemClassification.progression, 6),
     "100 Gems": LLItem(ll_base_id + VAR_ZOMBIEGEM, LLItemCat.ITEM, ItemClassification.filler),
     "Triple Fire Gem": LLItem(
-        ll_base_id + VAR_TRIPLEFIRE, LLItemCat.ITEM, ItemClassification.useful, flags=["PWR_BIG"]
+        ll_base_id + VAR_TRIPLEFIRE, LLItemCat.ITEM, ItemClassification.useful, flags=LLFlags.PWR_BIG
     ),
     "Happy Stick": LLItem(ll_base_id + VAR_TALISMAN, LLItemCat.ITEM, ItemClassification.progression),
     "Bat Statue": LLItem(ll_base_id + VAR_BATSTATUE, LLItemCat.ITEM, ItemClassification.progression, 4),
     "Lantern": LLItem(ll_base_id + VAR_LANTERN, LLItemCat.ITEM, ItemClassification.progression),
-    "Reflect Gem": LLItem(ll_base_id + VAR_REFLECT, LLItemCat.ITEM, ItemClassification.useful, flags=["PWR_BIG"]),
+    "Reflect Gem": LLItem(ll_base_id + VAR_REFLECT, LLItemCat.ITEM, ItemClassification.useful, flags=LLFlags.PWR_BIG),
     "Silver Sling": LLItem(ll_base_id + VAR_SILVERSLING, LLItemCat.ITEM, ItemClassification.progression),
     "20/20 Vision": LLItem(ll_base_id + CH_LIGHT + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
     "Disco Mode": LLItem(ll_base_id + CH_DISCO + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler),
     "Terror Mode": LLItem(ll_base_id + CH_TERROR + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
     "Surprise Mode": LLItem(ll_base_id + CH_SURPRISE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler),
     "Quick Mode": LLItem(
-        ll_base_id + CH_QUICK + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["PWR"]
+        ll_base_id + CH_QUICK + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=LLFlags.PWR
     ),
     "Infinite Gems": LLItem(
-        ll_base_id + CH_GEMS + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["LONG"]
+        ll_base_id + CH_GEMS + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=LLFlags.LONG
     ),
     "Sidekick": LLItem(ll_base_id + CH_SIDEKICK + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful),
     "Homing Shots": LLItem(
-        ll_base_id + CH_HOMING + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["PWR"]
+        ll_base_id + CH_HOMING + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=LLFlags.PWR
     ),
     "Ultimate Firepower": LLItem(
-        ll_base_id + CH_MAXPOWER + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=["MULTISAVE"]
+        ll_base_id + CH_MAXPOWER + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=LLFlags.MULTISAVE
     ),
     "Vintage Mode": LLItem(ll_base_id + CH_VINTAGE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful),
     "Play As Bonkula": LLItem(
-        ll_base_id + CH_BONKULA + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=["MULTISAVE"]
+        ll_base_id + CH_BONKULA + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=LLFlags.MULTISAVE
     ),
     "Play As Toad": LLItem(
-        ll_base_id + CH_TOAD + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=["MULTISAVE"]
+        ll_base_id + CH_TOAD + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=LLFlags.MULTISAVE
     ),
     "Crystal Ball": LLItem(ll_base_id + CH_CRYSTAL + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful),
     "Radar": LLItem(ll_base_id + CH_RADAR + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
     "Heavy Hitter": LLItem(
-        ll_base_id + CH_HEAVYHIT + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["PWR_BIG"]
+        ll_base_id + CH_HEAVYHIT + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=LLFlags.PWR_BIG
     ),
     "Rapid Fire": LLItem(
-        ll_base_id + CH_RAPIDFIRE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=["PWR"]
+        ll_base_id + CH_RAPIDFIRE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=LLFlags.PWR
     ),
     "Touch Of Death": LLItem(
-        ll_base_id + CH_DEATH + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["PWR_MAX", "OP"]
+        ll_base_id + CH_DEATH + AP_BADGEMOD,
+        LLItemCat.CHEAT,
+        ItemClassification.progression,
+        flags=LLFlags.PWR_MAX | LLFlags.OP,
     ),
     "All Access Pass": LLItem(
-        ll_base_id + CH_ALLACCESS + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["MULTISAVE"]
+        ll_base_id + CH_ALLACCESS + AP_BADGEMOD,
+        LLItemCat.CHEAT,
+        ItemClassification.progression,
+        flags=LLFlags.MULTISAVE,
     ),
     "Play As Swampdog": LLItem(
-        ll_base_id + CH_SWAMPDOG + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["MULTISAVE", "LONG"]
+        ll_base_id + CH_SWAMPDOG + AP_BADGEMOD,
+        LLItemCat.CHEAT,
+        ItemClassification.useful,
+        flags=LLFlags.MULTISAVE | LLFlags.LONG,
     ),
     "Hardcore Mode": LLItem(
-        ll_base_id + CH_HARDCORE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=["MULTISAVE"]
+        ll_base_id + CH_HARDCORE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler, flags=LLFlags.MULTISAVE
     ),
     "Save Anywhere": LLItem(ll_base_id + CH_SAVEANY + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful),
     "Guided Shots": LLItem(
-        ll_base_id + CH_GUIDED + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["PWR"]
+        ll_base_id + CH_GUIDED + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=LLFlags.PWR
     ),
     "Slo-Mo": LLItem(
-        ll_base_id + CH_SLOMO + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["PWR_BIG"]
+        ll_base_id + CH_SLOMO + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=LLFlags.PWR_BIG
     ),
     "Combo-Bombo": LLItem(
-        ll_base_id + CH_CORPSE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["PWR"]
+        ll_base_id + CH_CORPSE + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=LLFlags.PWR
     ),
     "Frog-o-rama": LLItem(ll_base_id + CH_FROGWPN + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.filler),
     "Play As Witch": LLItem(
-        ll_base_id + CH_WITCH + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.useful, flags=["MULTISAVE", "LONG"]
+        ll_base_id + CH_WITCH + AP_BADGEMOD,
+        LLItemCat.CHEAT,
+        ItemClassification.useful,
+        flags=LLFlags.MULTISAVE | LLFlags.LONG,
     ),
     "Play As Werewolf": LLItem(
-        ll_base_id + CH_WEREWOLF + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["MULTISAVE"]
+        ll_base_id + CH_WEREWOLF + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=LLFlags.MULTISAVE
     ),
     "Enemy Overload": LLItem(ll_base_id + CH_RESPAWN + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
     "Kick The Cat!": LLItem(ll_base_id + CH_KICKCAT + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
@@ -435,19 +448,19 @@ loony_item_table: dict[str, LLItem] = {
         ll_base_id + CH_RNDSURVIVAL + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression
     ),
     "Play As Summony": LLItem(
-        ll_base_id + CH_SUMMON + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["MULTISAVE"]
+        ll_base_id + CH_SUMMON + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=LLFlags.MULTISAVE
     ),
     "Play As Ninja Girl": LLItem(
-        ll_base_id + CH_THIEF + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["MULTISAVE"]
+        ll_base_id + CH_THIEF + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=LLFlags.MULTISAVE
     ),
     "Molecular Dispersion": LLItem(
-        ll_base_id + CH_WALLWALK + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=["OP"]
+        ll_base_id + CH_WALLWALK + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression, flags=LLFlags.OP
     ),
     "Guaranteed Survival": LLItem(
         ll_base_id + CH_SUPERSURV + AP_BADGEMOD,
         LLItemCat.CHEAT,
         ItemClassification.progression,
-        flags=["PWR_MAX", "OP"],
+        flags=LLFlags.PWR_MAX | LLFlags.OP,
     ),
     "Bend It Like Bouapha": LLItem(ll_base_id + CH_BEND + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
     "Stinky Farley": LLItem(ll_base_id + CH_STINKY + AP_BADGEMOD, LLItemCat.CHEAT, ItemClassification.progression),
@@ -470,7 +483,7 @@ loony_item_table: dict[str, LLItem] = {
         ll_base_id + MODE_LOONYBALL + AP_MODEMOD, LLItemCat.ACCESS, ItemClassification.progression
     ),
     "Remix Access": LLItem(
-        ll_base_id + MODE_REMIX + AP_MODEMOD, LLItemCat.ACCESS, ItemClassification.progression, flags=["REMIX"]
+        ll_base_id + MODE_REMIX + AP_MODEMOD, LLItemCat.ACCESS, ItemClassification.progression, flags=LLFlags.REMIX
     ),
     "Bat Doll": LLItem(ll_base_id + VAR_BATDOLL, LLItemCat.DOLL, ItemClassification.progression),
     "Skeleton Doll": LLItem(ll_base_id + VAR_SKELDOLL, LLItemCat.DOLL, ItemClassification.progression),
@@ -480,7 +493,7 @@ loony_item_table: dict[str, LLItem] = {
     "Swampdog Doll": LLItem(ll_base_id + VAR_SWAMPDOLL, LLItemCat.DOLL, ItemClassification.progression),
     "Vampire Doll": LLItem(ll_base_id + VAR_VAMPDOLL, LLItemCat.DOLL, ItemClassification.progression),
     "Wolfman Doll": LLItem(ll_base_id + VAR_WOLFDOLL, LLItemCat.DOLL, ItemClassification.progression),
-    "Torch": LLItem(ll_base_id + VAR_TORCH, LLItemCat.ITEM, ItemClassification.progression, flags=["TORCH"]),
+    "Torch": LLItem(ll_base_id + VAR_TORCH, LLItemCat.ITEM, ItemClassification.progression, flags=LLFlags.TORCH),
 }
 loonyland_region_table: dict[str, LLRegion] = {
     "Menu": LLRegion(False),
@@ -586,11 +599,11 @@ loonyland_region_table: dict[str, LLRegion] = {
     "Swampdog Lair": LLRegion(True),
     "Swampdog Lair Entrance": LLRegion(False, "Swampdog Lair"),
     "Larry's Lair": LLRegion(True),
-    "Bowling": LLRegion(False, flags=["MODE"]),
-    "Survival": LLRegion(False, flags=["MODE"]),
-    "Boss Bash": LLRegion(False, flags=["MODE"]),
-    "Loony Ball": LLRegion(False, flags=["MODE"]),
-    "Remix": LLRegion(False, flags=["MODE", "REMIX"]),
+    "Bowling": LLRegion(False, flags=LLFlags.MODE),
+    "Survival": LLRegion(False, flags=LLFlags.MODE),
+    "Boss Bash": LLRegion(False, flags=LLFlags.MODE),
+    "Loony Ball": LLRegion(False, flags=LLFlags.MODE),
+    "Remix": LLRegion(False, flags=LLFlags.MODE | LLFlags.REMIX),
 }
 loonyland_location_table: dict[str, LLLocation] = {
     "Swamp: Mud Path": LLLocation(0, LLLocCat.PICKUP, 0, "Slurpy Swamp Mud"),
@@ -706,17 +719,17 @@ loonyland_location_table: dict[str, LLLocation] = {
     "Q: The Haunted Tower": LLLocation(110, LLLocCat.QUEST, 16, "Haunted Tower Roof"),
     "Q: The Last Gate": LLLocation(111, LLLocCat.QUEST, 17, "Castle Vampy IV"),
     "Q: The Rescue": LLLocation(112, LLLocCat.QUEST, 18, "A Gloomy Cavern"),
-    "Q: The Collection": LLLocation(113, LLLocCat.QUEST, 19, "A Cabin Collector", flags=["DOLL"]),
-    "Evil Smashin'": LLLocation(114, LLLocCat.BADGE, 0, "The Evilizer", flags=["POSTGAME"], base_item="Quick Mode"),
+    "Q: The Collection": LLLocation(113, LLLocCat.QUEST, 19, "A Cabin Collector", flags=LLFlags.DOLL),
+    "Evil Smashin'": LLLocation(114, LLLocCat.BADGE, 0, "The Evilizer", flags=LLFlags.POSTGAME, base_item="Quick Mode"),
     "Bowlin'": LLLocation(115, LLLocCat.BADGE, 1, "Bowling", base_item="Disco Mode"),
     "Vandalizin'": LLLocation(116, LLLocCat.BADGE, 2, "Zombiton", base_item="Vintage Mode"),
-    "Greed": LLLocation(117, LLLocCat.BADGE, 3, "Menu", flags=["LONG"], base_item="Infinite Gems"),
-    "Monster Slayin'": LLLocation(118, LLLocCat.BADGE, 4, "Menu", flags=["LONG"], base_item="Sidekick"),
+    "Greed": LLLocation(117, LLLocCat.BADGE, 3, "Menu", flags=LLFlags.LONG, base_item="Infinite Gems"),
+    "Monster Slayin'": LLLocation(118, LLLocCat.BADGE, 4, "Menu", flags=LLFlags.LONG, base_item="Sidekick"),
     "Monster Poundin'": LLLocation(119, LLLocCat.BADGE, 5, "Menu", base_item="Hardcore Mode"),
     "Ghostbustin'": LLLocation(120, LLLocCat.BADGE, 6, "Haunted Tower Roof", base_item="Homing Shots"),
     "Lookin'": LLLocation(121, LLLocCat.BADGE, 7, "The Witch's Cabin", base_item="20/20 Vision"),
     "Ultimate Victory": LLLocation(
-        122, LLLocCat.BADGE, 8, "The Evilizer", flags=["POSTGAME"], base_item="Ultimate Firepower"
+        122, LLLocCat.BADGE, 8, "The Evilizer", flags=LLFlags.POSTGAME, base_item="Ultimate Firepower"
     ),
     "Kickin'": LLLocation(123, LLLocCat.BADGE, 9, "Loony Ball", base_item="Surprise Mode"),
     "Boss Bashin'": LLLocation(124, LLLocCat.BADGE, 10, "Boss Bash", base_item="Combo-Bombo"),
@@ -726,7 +739,7 @@ loonyland_location_table: dict[str, LLLocation] = {
     "Animal Control": LLLocation(128, LLLocCat.BADGE, 14, "The Wolf Den", base_item="Play As Werewolf"),
     "Annoyance": LLLocation(129, LLLocCat.BADGE, 15, "The Witch's Cabin", base_item="Play As Toad"),
     "Civic Duty": LLLocation(130, LLLocCat.BADGE, 16, "A Gloomy Cavern", base_item="Enemy Overload"),
-    "Winnin'": LLLocation(131, LLLocCat.BADGE, 17, "The Evilizer", flags=["POSTGAME"], base_item="Crystal Ball"),
+    "Winnin'": LLLocation(131, LLLocCat.BADGE, 17, "The Evilizer", flags=LLFlags.POSTGAME, base_item="Crystal Ball"),
     "Combo Plate": LLLocation(132, LLLocCat.BADGE, 18, "Menu", base_item="Radar"),
     "Cleanin' Up": LLLocation(133, LLLocCat.BADGE, 19, "Rocky Cliffs", base_item="Heavy Hitter"),
     "Findin'": LLLocation(134, LLLocCat.BADGE, 20, "The Wolf Den", base_item="Rapid Fire"),
@@ -735,12 +748,12 @@ loonyland_location_table: dict[str, LLLocation] = {
         LLLocCat.BADGE,
         21,
         "Survival",
-        flags=["LONG_VANILLA_BADGES", "VANILLA_POSTGAME"],
+        flags=LLFlags.LONG_VANILLA_BADGES | LLFlags.VANILLA_POSTGAME,
         base_item="Touch Of Death",
     ),
     "Huntin'": LLLocation(136, LLLocCat.BADGE, 22, "Halloween Hill", base_item="All Access Pass"),
     "Advanced Winnin'": LLLocation(
-        137, LLLocCat.BADGE, 23, "Menu", flags=["LONG", "POSTGAME"], base_item="Terror Mode"
+        137, LLLocCat.BADGE, 23, "Menu", flags=LLFlags.LONG | LLFlags.POSTGAME, base_item="Terror Mode"
     ),
     "Survivin'": LLLocation(138, LLLocCat.BADGE, 24, "Survival", base_item="Save Anywhere"),
     "Puppy Poundin'": LLLocation(139, LLLocCat.BADGE, 25, "Larry's Lair", base_item="Guided Shots"),
@@ -749,42 +762,58 @@ loonyland_location_table: dict[str, LLLocation] = {
         LLLocCat.BADGE,
         26,
         "The Evilizer",
-        flags=["LONG_VANILLA_BADGES", "MULTISAVE", "POSTGAME"],
+        flags=LLFlags.LONG_VANILLA_BADGES | LLFlags.MULTISAVE | LLFlags.POSTGAME,
         base_item="Kick The Cat!",
     ),
     "Frankenfryin'": LLLocation(141, LLLocCat.BADGE, 27, "Frankenjulie's Laboratory", base_item="Slo-Mo"),
     "Combo Magic": LLLocation(142, LLLocCat.BADGE, 28, "Survival", base_item="Infinite Survival"),
     "Hedge Clippin'": LLLocation(143, LLLocCat.BADGE, 29, "Slurpy Swamp Mud", base_item="Frog-o-rama"),
     "R-R-R-Remix!": LLLocation(
-        144, LLLocCat.BADGE, 30, "Menu", flags=["REMIX", "LONG", "POSTGAME"], base_item="Play As Summony"
+        144,
+        LLLocCat.BADGE,
+        30,
+        "Menu",
+        flags=LLFlags.REMIX | LLFlags.LONG | LLFlags.POSTGAME,
+        base_item="Play As Summony",
     ),
     "Witchcraft": LLLocation(
-        145, LLLocCat.BADGE, 31, "Menu", flags=["LONG", "MULTISAVE"], base_item="Play As Ninja Girl"
+        145, LLLocCat.BADGE, 31, "Menu", flags=LLFlags.LONG | LLFlags.MULTISAVE, base_item="Play As Ninja Girl"
     ),
     "Ninjitsu": LLLocation(
-        146, LLLocCat.BADGE, 32, "Menu", flags=["LONG_VANILLA_BADGES", "MULTISAVE"], base_item="Molecular Dispersion"
+        146,
+        LLLocCat.BADGE,
+        32,
+        "Menu",
+        flags=LLFlags.LONG_VANILLA_BADGES | LLFlags.MULTISAVE,
+        base_item="Molecular Dispersion",
     ),
-    "Stayin' Alive": LLLocation(147, LLLocCat.BADGE, 33, "Survival", flags=["LONG"], base_item="Guaranteed Survival"),
+    "Stayin' Alive": LLLocation(
+        147, LLLocCat.BADGE, 33, "Survival", flags=LLFlags.LONG, base_item="Guaranteed Survival"
+    ),
     "Hooliganin'": LLLocation(148, LLLocCat.BADGE, 34, "Loony Ball", base_item="Bend It Like Bouapha"),
-    "Swampdoggin'": LLLocation(149, LLLocCat.BADGE, 35, "Menu", flags=["LONG", "MULTISAVE"], base_item="Stinky Farley"),
-    "Scorin'": LLLocation(150, LLLocCat.BADGE, 36, "The Evilizer", flags=["LONG"], base_item="Ultra Weapons Are Go!"),
+    "Swampdoggin'": LLLocation(
+        149, LLLocCat.BADGE, 35, "Menu", flags=LLFlags.LONG | LLFlags.MULTISAVE, base_item="Stinky Farley"
+    ),
+    "Scorin'": LLLocation(
+        150, LLLocCat.BADGE, 36, "The Evilizer", flags=LLFlags.LONG, base_item="Ultra Weapons Are Go!"
+    ),
     "Brawlin'": LLLocation(
         151,
         LLLocCat.BADGE,
         37,
         "Benny's Cocktails",
-        flags=["LONG_VANILLA_BADGES", "OP", "VANILLA_POSTGAME"],
+        flags=LLFlags.LONG_VANILLA_BADGES | LLFlags.OP | LLFlags.VANILLA_POSTGAME,
         base_item="Thorns Aura",
     ),
     "Minin' For Treasure": LLLocation(
-        152, LLLocCat.BADGE, 38, "Menu", flags=["REMIX"], base_item="Monster Regeneration"
+        152, LLLocCat.BADGE, 38, "Menu", flags=LLFlags.REMIX, base_item="Monster Regeneration"
     ),
     "Digitally Masterin'": LLLocation(
         153,
         LLLocCat.BADGE,
         39,
         "Menu",
-        flags=["LONG", "REMIX", "MULTISAVE", "POSTGAME", "LONG_VANILLA_BADGES"],
+        flags=LLFlags.LONG | LLFlags.REMIX | LLFlags.MULTISAVE | LLFlags.POSTGAME | LLFlags.LONG_VANILLA_BADGES,
         base_item="Farley Free Zone",
     ),
     "Tree Trimming Reward": LLLocation(154, LLLocCat.REWARD, VAR_TREEREWARD, "A Cabin Trees"),
@@ -912,16 +941,24 @@ def set_rules(multiworld, world):
 def set_entrance_rules(multiworld, world):
     loonyland_entrance_table: list[LLEntrance] = [
         LLEntrance("Menu", "Halloween Hill", False),
-        LLEntrance("Menu", "Bowling", False, lambda state: state.has("Bowling Access", world.player), flags=["MODE"]),
-        LLEntrance("Menu", "Survival", False, lambda state: state.has("Survival Access", world.player), flags=["MODE"]),
         LLEntrance(
-            "Menu", "Boss Bash", False, lambda state: state.has("Boss Bash Access", world.player), flags=["MODE"]
+            "Menu", "Bowling", False, lambda state: state.has("Bowling Access", world.player), flags=LLFlags.MODE
         ),
         LLEntrance(
-            "Menu", "Loony Ball", False, lambda state: state.has("Loony Ball Access", world.player), flags=["MODE"]
+            "Menu", "Survival", False, lambda state: state.has("Survival Access", world.player), flags=LLFlags.MODE
         ),
         LLEntrance(
-            "Menu", "Remix", False, lambda state: state.has("Remix Access", world.player), flags=["MODE", "REMIX"]
+            "Menu", "Boss Bash", False, lambda state: state.has("Boss Bash Access", world.player), flags=LLFlags.MODE
+        ),
+        LLEntrance(
+            "Menu", "Loony Ball", False, lambda state: state.has("Loony Ball Access", world.player), flags=LLFlags.MODE
+        ),
+        LLEntrance(
+            "Menu",
+            "Remix",
+            False,
+            lambda state: state.has("Remix Access", world.player),
+            flags=LLFlags.MODE | LLFlags.REMIX,
         ),
         LLEntrance("Halloween Hill", "A Cabin Trees", True),
         LLEntrance("Halloween Hill", "The Witch's Cabin", True),

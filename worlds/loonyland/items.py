@@ -3,6 +3,7 @@ from typing import NamedTuple
 
 from BaseClasses import Item, ItemClassification
 
+from .flags import LLFlags
 from .options import (
     Badges,
     LongChecks,
@@ -37,20 +38,20 @@ class LLItem(NamedTuple):
     category: LLItemCat
     classification: ItemClassification
     frequency: int = 1
-    flags: list[str] = []
+    flags: LLFlags = LLFlags.NONE
 
     def can_create(self, options: LoonylandOptions) -> bool:
         if (self.category == LLItemCat.CHEAT and options.badges == Badges.option_vanilla) or (
             self.category == LLItemCat.DOLL and options.dolls == MonsterDolls.option_vanilla
         ):
             return False
-        if options.overpowered_cheats == OverpoweredCheats.option_excluded and "OP" in self.flags:
+        if options.overpowered_cheats == OverpoweredCheats.option_excluded and LLFlags.OP in self.flags:
             return False
-        if options.remix == Remix.option_excluded and ("REMIX" in self.flags):
+        if options.remix == Remix.option_excluded and (LLFlags.REMIX in self.flags):
             return False
-        if options.multisave == MultipleSaves.option_disabled and ("MULTISAVE" in self.flags):
+        if options.multisave == MultipleSaves.option_disabled and (LLFlags.MULTISAVE in self.flags):
             return False
-        if "TORCH" in self.flags:
+        if LLFlags.TORCH in self.flags:
             return False
         return True
 
@@ -69,13 +70,13 @@ class LLItem(NamedTuple):
                 return ItemClassification.progression
             if self.category == LLItemCat.DOLL:  # 100%
                 return ItemClassification.progression
-            if "LONG" in self.flags:  # items that are required for long checks
+            if LLFlags.LONG in self.flags:  # items that are required for long checks
                 return ItemClassification.progression
         if options.badges == Badges.option_none:
             if self.category == LLItemCat.ACCESS:
                 return ItemClassification.filler
         if (
-            "PWR" in self.flags or "PWR_BIG" in self.flags or "PWR_MAX" in self.flags
+            LLFlags.PWR in self.flags or LLFlags.PWR_BIG in self.flags or LLFlags.PWR_MAX in self.flags
         ):  # need to be able to kill bosses, eventually an option for this
             return ItemClassification.progression
 
