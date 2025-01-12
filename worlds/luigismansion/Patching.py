@@ -1,6 +1,5 @@
 from random import randrange, choice
 
-
 # Converts AP readable name to in-game name
 def __get_item_name(item_data):
     if item_data["door_id"] != 0:
@@ -424,6 +423,26 @@ def __set_key_info_entry(key_info_single_entry, item_data):
 
 
 def update_furniture_info(furniture_info, item_appear_info, output_data):
+    # TODO Check 1F Hallway Painting, Ballroom, Storage, 1F Bathroom, Fortune Teller, Mirror, Laundry, Butler's
+    # TODO Hidden Room, Conservatory, Dinning, Kitchen, Tea Room, Rec Room, 1F-2F Stairs, 2F Bathoom, 2F Washroom
+    # TODO Nana's Room
+    # TODO Foyer Heart Lamp is 270
+    # Adjust the item spawn height based on if the item spawns from the ceiling or high up on the wall.
+    # Otherwise items are sent into the floor above or out of bounds, which makes it almost impossible to get.
+    ceiling_furniture_list = [4, 43, 62, 63, 76, 77, 81, 84, 85, 91, 92, 101, 137, 156, 158, 159, 163, 173, 174,
+        189, 190, 195, 199, 200, 228, 240, 266, 310, 342, 347, 348, 352, 354, 355, 356, 357, 358, 359, 373, 374,
+        378, 379, 380, 381, 399, 423, 426, 445, 446, 454, 459, 460, 463, 467, 485, 547, 595, 596, 631, 632, 636,
+        657, 671, 672]
+    medium_height_furniture_list = [0, 1, 104, 124, 125, 210, 232, 234, 235, 264, 265, 270, 275, 276, 340, 341,
+        342, 343, 344, 345, 346, 347, 353, 361, 362, 363, 368, 369, 370, 388, 389, 397, 411, 418, 438, 444, 520,
+        526, 544, 552, 553, 554, 555, 557, 602, 603, 634, 635]
+    for furniture_jmp_id in (ceiling_furniture_list+medium_height_furniture_list):
+        current_y_offset = furniture_info.info_file_field_entries[furniture_jmp_id]["item_offset_y"]
+        adjust_y_offset = 125.0
+        if furniture_jmp_id in ceiling_furniture_list:
+            adjust_y_offset += 100.0
+        furniture_info.info_file_field_entries[furniture_jmp_id]["item_offset_y"] = current_y_offset - adjust_y_offset
+
     for x in furniture_info.info_file_field_entries:
         # If this is a book/bookshelf, set it to just shake, no book interaction.
         # Make sure to exclude Nana's knit ball bowl so they can drop on the floor properly.
@@ -434,19 +453,9 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
         # if furniture_info_entry.info_file_field_entries.index(x) in {692, 693, 694, 695, 696, 697}:
             # x["move"] = 0
 
-    # List of furniture names that tend to spawn items up high or potentially out of bounds.
-    higher_up_furniture = ["Painting", "Fan", "Mirror", "Picture", "Chandelier", "Food Shelf",
-                           "Projection Room L Light", "Projection Room R Light", "Kitchen L Light", "Kitchen R Light"]
-
     for item_name, item_data in output_data["Locations"].items():
         if not (item_data["type"] == "Furniture" or item_data["type"] == "Plant"):
             continue
-
-        # Update any furniture up high to spawn items at a lower y offset
-        # Otherwise items are sent into the floor above or out of bounds, which makes it almost impossible to get.
-        if any(high_furniture in item_name for high_furniture in higher_up_furniture):
-            current_y_offset = furniture_info.info_file_field_entries[item_data["loc_enum"]]["item_offset_y"]
-            furniture_info.info_file_field_entries[item_data["loc_enum"]]["item_offset_y"]= current_y_offset-50.0
 
         actor_item_name = __get_item_name(item_data)
 
