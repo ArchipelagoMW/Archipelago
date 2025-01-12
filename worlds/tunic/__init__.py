@@ -13,7 +13,7 @@ from .grass import grass_location_table, grass_location_name_to_id, grass_locati
 from .breakables import breakable_location_name_to_id, breakable_location_groups, breakable_location_table
 from .er_data import portal_mapping, RegionInfo, tunic_er_regions
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
-                      LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage, EntranceLayout,
+                      LaurelsLocation, LaurelsZips, IceGrappling, LadderStorage, EntranceLayout,
                       check_options, LocalFill)
 from .combat_logic import area_data, CombatState
 from worlds.AutoWorld import WebWorld, World

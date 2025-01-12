@@ -330,24 +330,6 @@ class LadderStorageWithoutItems(Toggle):
     display_name = "Ladder Storage without Items"
 
 
-class LogicRules(Choice):
-    """
-    This option has been superseded by the individual trick options.
-    If set to nmg, it will set Ice Grappling to medium and Laurels Zips on.
-    If set to ur, it will do nmg as well as set Ladder Storage to medium.
-    It is here to avoid breaking old yamls, and will be removed at a later date.
-    """
-    visibility = Visibility.none
-    internal_name = "logic_rules"
-    display_name = "Logic Rules"
-    option_restricted = 0
-    option_no_major_glitches = 1
-    alias_nmg = 1
-    option_unrestricted = 2
-    alias_ur = 2
-    default = 0
-
-
 class BreakableShuffle(Toggle):
     """
     Turns approximately 250 breakable objects in the game into checks.
