@@ -258,6 +258,9 @@ class GpsTracker:
         return new_to_server
 
     def receive_found_entrances(self, found_entrances: typing.Dict[str, str]):
+        if not found_entrances:
+            return
+
         for entrance, destination in found_entrances.items():
             if entrance in self.entrances_by_name:
                 self.entrances_by_name[entrance].map(destination, known_to_server=True)
