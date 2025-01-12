@@ -1,4 +1,4 @@
-# A Short Hike Multiworld Setup Guide
+# Cat Quest Multiworld Setup Guide
 
 ## Required Software
 
