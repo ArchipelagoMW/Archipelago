@@ -9,7 +9,7 @@ import time
 import dataclasses
 from typing import Dict, List, TypedDict
 
-from Utils import local_path, user_path
+from Utils import local_path, user_path, is_frozen
 
 local_folder = os.path.dirname(__file__)
 user_folder = user_path("worlds") if user_path() != local_path() else user_path("custom_worlds")
@@ -80,6 +80,8 @@ class WorldSource:
                     if hasattr(importer, "exec_module"):
                         importer.exec_module(mod)
             elif not self.relative:
+                if is_frozen():
+                    raise Exception("Cannot load unpacked worlds from custom_worlds.")
                 basename = os.path.basename(self.path)
                 spec = importlib.util.spec_from_file_location('worlds.' + basename, os.path.join(self.resolved_path, "__init__.py"))
                 mod = importlib.util.module_from_spec(spec)
