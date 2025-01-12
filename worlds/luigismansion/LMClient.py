@@ -62,7 +62,7 @@ GIVE_ITEM_ARRAY_ADDR = 0x803FE868
 
 # This is the address that holds the player's slot name.
 # This way, the player does not have to manually authenticate their slot name.
-# SLOT_NAME_ADDR = 0x803FE88C
+SLOT_NAME_ADDR = 0x80314660
 
 # This address contains the starting point of furniture ID table, where each 4 bytes would contain the furniture ID
 FURNITURE_ID_TABLE_START = 0x80C0C898
@@ -527,15 +527,13 @@ async def dolphin_sync_task(ctx: LMContext):
                     await give_items(ctx)
                     await check_locations(ctx)
                 else:
-                    # if not ctx.auth:
-                        # logger.info('Enter slot name:')
-                        # ctx.auth = await ctx.console_input()
-                        # ctx.auth = read_string(SLOT_NAME_ADDR, 0x40)
+                    if not ctx.auth:
+                        ctx.auth = read_string(SLOT_NAME_ADDR, 0x40)
                     if ctx.awaiting_rom:
                         await ctx.server_auth()
-                        if not ctx.auth:
-                            logger.info('Enter slot name:')
-                            ctx.auth = await ctx.console_input()
+                        # if not ctx.auth:
+                            # logger.info('Enter slot name:')
+                            # ctx.auth = await ctx.console_input()
                 await asyncio.sleep(0.1)
             else:
                 if ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:

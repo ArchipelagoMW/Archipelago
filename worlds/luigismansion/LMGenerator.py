@@ -139,47 +139,6 @@ class LuigisMansionRandomizer:
                 jmp_file.data = jmp_info_file.info_file_entry.data
                 break
 
-    # Updates various DOL Offsets per the desired changes of the AP user
-    def update_dol_offsets(self):
-        # Walk Speed
-        if self.output_data["Options"]["walk_speed"] == 0:
-            walk_speed = 16784
-        elif self.output_data["Options"]["walk_speed"] == 1:
-            walk_speed = 16850
-        else:
-            walk_speed = 16950
-        self.dol.data.seek(0x396538)
-        self.dol.data.write(struct.pack(">H", walk_speed))
-
-        # Vacuum Speed
-        if any("Poltergust 4000" in key for key in self.output_data["Options"]["start_inventory"]):
-            vac_speed = [0x38, 0x00, 0x00, 0x0F]
-        else:
-            vac_speed = [0x80, 0x0D, 0x01, 0x60]
-        self.dol.data.seek(0x7EA28)
-        self.dol.data.write(struct.pack(">BBBB", *vac_speed))
-
-        # Fix Boos to properly spawn
-        self.dol.data.seek(0x12DCC9)
-        boo_data = [0x00, 0x00, 0x05]
-        self.dol.data.write(struct.pack(">BBB", *boo_data))
-
-        # Turn off pickup animations
-        if self.output_data["Options"]["pickup_animation"] == 1:
-            pickup_val = [0x01]
-        else:
-            pickup_val = [0x02]
-        self.dol.data.seek(0xCD39B)
-        self.dol.data.write(struct.pack(">B", *pickup_val))
-
-        # Turn off luigi scare animations
-        if self.output_data["Options"]["fear_animation"] == 1:
-            scare_val = [0x00]
-        else:
-            scare_val = [0x44]
-        self.dol.data.seek(0x396578)
-        self.dol.data.write(struct.pack(">B", *scare_val))
-
     # Updates all jmp tables in the map2.szp file.
     def update_maptwo_jmp_tables(self):
         # Get Output data required information
@@ -317,15 +276,50 @@ class LuigisMansionRandomizer:
         for _, _ in self.export_files_from_memory():  # next_progress_text, files_done
             continue # percentage_done = files_done/len(self.gcm.files_by_path)
 
-    # If Export to disc is true, Exports the entire file/directory contents of the ISO to specified folder
-    # Otherwise, creates a direct ISO file.
-    def export_files_from_memory(self):
-        if self.export_disc_to_folder:
-            output_folder_path = os.path.join(
-                Path(self.randomized_output_file_path).parent, "%s Randomized Exported" % RANDOMIZER_NAME)
-            yield from self.gcm.export_disc_to_folder_with_changed_files(output_folder_path)
+    # Updates various DOL Offsets per the desired changes of the AP user
+    def update_dol_offsets(self):
+        # Walk Speed
+        if self.output_data["Options"]["walk_speed"] == 0:
+            walk_speed = 16784
+        elif self.output_data["Options"]["walk_speed"] == 1:
+            walk_speed = 16850
         else:
-            yield from self.gcm.export_disc_to_iso_with_changed_files(self.randomized_output_file_path)
+            walk_speed = 16950
+        self.dol.data.seek(0x396538)
+        self.dol.data.write(struct.pack(">H", walk_speed))
+
+        # Vacuum Speed
+        if any("Poltergust 4000" in key for key in self.output_data["Options"]["start_inventory"]):
+            vac_speed = [0x38, 0x00, 0x00, 0x0F]
+        else:
+            vac_speed = [0x80, 0x0D, 0x01, 0x60]
+        self.dol.data.seek(0x7EA28)
+        self.dol.data.write(struct.pack(">BBBB", *vac_speed))
+
+        # Fix Boos to properly spawn
+        self.dol.data.seek(0x12DCC9)
+        boo_data = [0x00, 0x00, 0x05]
+        self.dol.data.write(struct.pack(">BBB", *boo_data))
+
+        # Turn off pickup animations
+        if self.output_data["Options"]["pickup_animation"] == 1:
+            pickup_val = [0x01]
+        else:
+            pickup_val = [0x02]
+        self.dol.data.seek(0xCD39B)
+        self.dol.data.write(struct.pack(">B", *pickup_val))
+
+        # Turn off luigi scare animations
+        if self.output_data["Options"]["fear_animation"] == 1:
+            scare_val = [0x00]
+        else:
+            scare_val = [0x44]
+        self.dol.data.seek(0x396578)
+        self.dol.data.write(struct.pack(">B", *scare_val))
+
+        lm_player_name = str(self.output_data["Name"]).strip()
+        self.dol.data.seek(0x311660)
+        self.dol.data.write(struct.pack(str(len(lm_player_name)) + "s", lm_player_name.encode()))
 
     def update_custom_event(self, event_number: str, check_local_folder: bool, non_local_str=""):
         #TODO Update custom events to remove any camera files or anything else related.
@@ -370,6 +364,17 @@ class LuigisMansionRandomizer:
         data = self.gcm.read_file_data("files/Event/event64.szp")
         self.gcm.add_new_file(event_path, data)
         return self.get_arc(event_path)
+
+
+    # If Export to disc is true, Exports the entire file/directory contents of the ISO to specified folder
+    # Otherwise, creates a direct ISO file.
+    def export_files_from_memory(self):
+        if self.export_disc_to_folder:
+            output_folder_path = os.path.join(
+                Path(self.randomized_output_file_path).parent, "%s Randomized Exported" % RANDOMIZER_NAME)
+            yield from self.gcm.export_disc_to_folder_with_changed_files(output_folder_path)
+        else:
+            yield from self.gcm.export_disc_to_iso_with_changed_files(self.randomized_output_file_path)
 
 if __name__ == '__main__':
     unpacked_iso = LuigisMansionRandomizer("", "", None, False, True)
