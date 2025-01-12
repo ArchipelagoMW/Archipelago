@@ -729,12 +729,20 @@ item_name_groups[ItemGroupNames.LOTV_GLOBAL_UPGRADES] = lotv_global_upgrades = [
     item_names.GUARDIAN_SHELL,
     item_names.RECONSTRUCTION_BEAM,
 ]
+lotv_war_council_upgrades = [
+    item_name for item_name, item_data in item_tables.item_table.items()
+    if (
+        item_data.type in (item_tables.ProtossItemType.War_Council, item_tables.ProtossItemType.War_Council_2)
+        and item_data.parent in item_name_groups[ItemGroupNames.LOTV_UNITS]
+    )
+]
 item_name_groups[ItemGroupNames.LOTV_ITEMS] = vanilla_lotv_items = (
     lotv_units
     + protoss_buildings
     + lotv_soa_items
     + lotv_global_upgrades
     + protoss_generic_upgrades
+    + lotv_war_council_upgrades
 )
 
 item_name_groups[ItemGroupNames.VANILLA_ITEMS] = vanilla_items = (
