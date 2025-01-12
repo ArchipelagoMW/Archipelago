@@ -165,7 +165,7 @@ async def get_memory_size(ctx: BizHawkContext, domain: str) -> int:
     res = (await send_requests(ctx, [{"type": "MEMORY_SIZE", "domain": domain}]))[0]
 
     if res["type"] != "MEMORY_SIZE_RESPONSE":
-        raise SyncError(f"Expected response of type MEMORY_SIZE but got {res['type']}")
+        raise SyncError(f"Expected response of type MEMORY_SIZE_RESPONSE but got {res['type']}")
 
     return res["value"]
 
