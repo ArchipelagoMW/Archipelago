@@ -140,7 +140,7 @@ class ALTTPWorld(World):
     item_name_groups = item_name_groups
     location_name_groups = {
         "Blind's Hideout": {"Blind's Hideout - Top", "Blind's Hideout - Left", "Blind's Hideout - Right",
-                           "Blind's Hideout - Far Left", "Blind's Hideout - Far Right"},
+                            "Blind's Hideout - Far Left", "Blind's Hideout - Far Right"},
         "Kakariko Well": {"Kakariko Well - Top", "Kakariko Well - Left", "Kakariko Well - Middle",
                           "Kakariko Well - Right", "Kakariko Well - Bottom"},
         "Mini Moldorm Cave": {"Mini Moldorm Cave - Far Left", "Mini Moldorm Cave - Left", "Mini Moldorm Cave - Right",
