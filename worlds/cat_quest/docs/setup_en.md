@@ -14,7 +14,7 @@
 
 2. Start Cat Quest once so that BepInEx can create its required configuration files.
 
-3. After BepInEx has been installed and configured, download the Cat Quest Randomizer extract the files into a folder. 
+3. After BepInEx has been installed and configured, download the Cat Quest Randomizer and unpack the files into a folder. 
 
 - Move the dll files into the `\BepInEx\plugins` folder.
 - Move the `ArchipelagoRandomizer` folder to your Cat Quest root folder.
