@@ -613,9 +613,11 @@ end)
 
 if bizhawk_major < 2 or (bizhawk_major == 2 and bizhawk_minor < 7) then
     print("Must use BizHawk 2.7.0 or newer")
-elseif bizhawk_major > 2 or (bizhawk_major == 2 and bizhawk_minor > 9) then
-    print("Warning: This version of BizHawk is newer than this script. If it doesn't work, consider downgrading to 2.9.")
 else
+    if bizhawk_major > 2 or (bizhawk_major == 2 and bizhawk_minor > 10) then
+        print("Warning: This version of BizHawk is newer than this script. If it doesn't work, consider downgrading to 2.10.")
+    end
+
     if emu.getsystemid() == "NULL" then
         print("No ROM is loaded. Please load a ROM.")
         while emu.getsystemid() == "NULL" do
