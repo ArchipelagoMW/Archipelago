@@ -180,6 +180,7 @@ class Celeste64World(World):
             "friendsanity": self.options.friendsanity.value,
             "signsanity": self.options.signsanity.value,
             "carsanity": self.options.carsanity.value,
+            "checkpointsanity": self.options.checkpointsanity.value,
             "badeline_chaser_source": self.options.badeline_chaser_source.value,
             "badeline_chaser_frequency": self.options.badeline_chaser_frequency.value,
             "badeline_chaser_speed": self.options.badeline_chaser_speed.value,
