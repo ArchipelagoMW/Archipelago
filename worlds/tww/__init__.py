@@ -10,7 +10,6 @@ from BaseClasses import Item
 from BaseClasses import ItemClassification as IC
 from BaseClasses import MultiWorld, Region, Tutorial
 from Options import Toggle
-from Utils import local_path
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_item_rule
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, icon_paths, launch_subprocess
@@ -60,7 +59,7 @@ components.append(
         icon="The Wind Waker",
     )
 )
-icon_paths["The Wind Waker"] = local_path("data", "tww_sail.png")
+icon_paths["The Wind Waker"] = "ap:worlds.tww/assets/icon.png"
 
 
 class TWWWeb(WebWorld):
