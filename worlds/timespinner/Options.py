@@ -469,11 +469,6 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     trap_chance: TrapChance
     traps: Traps
 
-class HiddenBossRandoOverrides(BossRandoOverrides):
-    """Manual mapping of bosses to the boss they will be replaced with. Bosses that you don't specify will be the
-    vanilla boss."""
-    visibility = Visibility.none
-
 class HiddenDamageRandoOverrides(DamageRandoOverrides): 
     """Manual +/-/normal odds for an orb. Put 0 if you don't want a certain nerf or buff to be a possibility. Orbs that
     you don't specify will roll with 1/1/1 as odds"""
@@ -516,8 +511,6 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
     Cantoran: hidden(Cantoran) # type: ignore
     LoreChecks: hidden(LoreChecks) # type: ignore
     BossRando: hidden(BossRando) # type: ignore
-    BossRandoType: hidden(BossRandoType) # type: ignore
-    BossRandoOverrides: HiddenBossRandoOverrides # type: ignore
     EnemyRando: hidden(EnemyRando) # type: ignore
     DamageRando: hidden(DamageRando) # type: ignore
     DamageRandoOverrides: HiddenDamageRandoOverrides
@@ -593,14 +586,6 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
         if self.EnemyRando != EnemyRando.default and \
             self.enemy_rando == EnemyRando.default:
             self.enemy_rando.value = self.EnemyRando.value
-        if self.BossRandoType != BossRandoType.default and \
-            self.boss_rando_type == BossRandoType.default:
-            self.boss_rando_type.value = self.BossRandoType.value
-            self.has_replaced_options.value = Toggle.option_true
-        if self.BossRandoOverrides != BossRandoOverrides.default and \
-            self.boss_rando_overrides == BossRandoOverrides.default:
-            self.boss_rando_overrides.value = self.BossRandoOverrides.value
-            self.has_replaced_options.value = Toggle.option_true
         if self.DamageRando != DamageRando.default and \
             self.damage_rando == DamageRando.default:
             self.damage_rando.value = self.DamageRando.value
