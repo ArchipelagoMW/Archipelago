@@ -168,6 +168,22 @@ class TunicPlandoConnections(PlandoConnections):
     duplicate_exits = True
 
 
+class CombatLogic(Choice):
+    """
+    If enabled, the player will logically require a combination of stat upgrade items and equipment to get some checks or navigate to some areas, with a goal of matching the vanilla combat difficulty.
+    The player may still be expected to run past enemies, reset aggro (by using a checkpoint or doing a scene transition), or find sneaky paths to checks.
+    This option marks many more items as progression and may force weapons much earlier than normal.
+    Bosses Only makes it so that additional combat logic is only added to the boss fights and the Gauntlet.
+    If disabled, the standard, looser logic is used. The standard logic does not include stat upgrades, just minimal weapon requirements, such as requiring a Sword or Magic Wand for Quarry, or not requiring a weapon for Swamp.
+    """
+    internal_name = "combat_logic"
+    display_name = "More Combat Logic"
+    option_off = 0
+    option_bosses_only = 1
+    option_on = 2
+    default = 0
+
+
 class LaurelsZips(Toggle):
     """
     Choose whether to include using the Hero's Laurels to zip through gates, doors, and tricky spots.
@@ -259,6 +275,7 @@ class TunicOptions(PerGameCommonOptions):
     hexagon_goal: HexagonGoal
     extra_hexagon_percentage: ExtraHexagonPercentage
     laurels_location: LaurelsLocation
+    combat_logic: CombatLogic
     lanternless: Lanternless
     maskless: Maskless
     laurels_zips: LaurelsZips
@@ -272,6 +289,7 @@ class TunicOptions(PerGameCommonOptions):
 
 tunic_option_groups = [
     OptionGroup("Logic Options", [
+        CombatLogic,
         Lanternless,
         Maskless,
         LaurelsZips,

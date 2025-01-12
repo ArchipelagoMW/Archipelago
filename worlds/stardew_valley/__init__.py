@@ -21,10 +21,9 @@ from .options.presets import sv_options_presets
 from .options.worlds_group import apply_most_restrictive_options
 from .regions import create_regions
 from .rules import set_rules
-from .stardew_rule import True_, StardewRule, HasProgressionPercent, true_
+from .stardew_rule import True_, StardewRule, HasProgressionPercent
 from .strings.ap_names.event_names import Event
 from .strings.goal_names import Goal as GoalName
-from .strings.region_names import LogicRegion
 
 logger = logging.getLogger(__name__)
 
@@ -166,7 +165,7 @@ class StardewValleyWorld(World):
         self.multiworld.itempool += created_items
 
         setup_early_items(self.multiworld, self.options, self.content, self.player, self.random)
-        self.setup_player_events()
+        self.setup_logic_events()
         self.setup_victory()
 
         # This is really a best-effort to get the total progression items count. It is mostly used to spread grinds across spheres are push back locations that
@@ -205,20 +204,6 @@ class StardewValleyWorld(World):
     def precollect_farm_type_items(self):
         if self.options.farm_type == FarmType.option_meadowlands and self.options.building_progression & BuildingProgression.option_progressive:
             self.multiworld.push_precollected(self.create_starting_item("Progressive Coop"))
-
-    def setup_player_events(self):
-        self.setup_action_events()
-        self.setup_logic_events()
-
-    def setup_action_events(self):
-        spring_farming = LocationData(None, LogicRegion.spring_farming, Event.spring_farming)
-        self.create_event_location(spring_farming, true_, Event.spring_farming)
-        summer_farming = LocationData(None, LogicRegion.summer_farming, Event.summer_farming)
-        self.create_event_location(summer_farming, true_, Event.summer_farming)
-        fall_farming = LocationData(None, LogicRegion.fall_farming, Event.fall_farming)
-        self.create_event_location(fall_farming, true_, Event.fall_farming)
-        winter_farming = LocationData(None, LogicRegion.winter_farming, Event.winter_farming)
-        self.create_event_location(winter_farming, true_, Event.winter_farming)
 
     def setup_logic_events(self):
         def register_event(name: str, region: str, rule: StardewRule):
