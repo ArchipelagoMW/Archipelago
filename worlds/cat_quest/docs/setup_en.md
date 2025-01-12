@@ -21,4 +21,4 @@
 
 ## Connecting
 
-To be written
+As of now, connecting happens automatically with the playername "Nikki". It connects to localhost only. This is temporary
