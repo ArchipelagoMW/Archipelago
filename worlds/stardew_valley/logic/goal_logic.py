@@ -32,27 +32,27 @@ class GoalLogic(BaseLogic[StardewLogic]):
     def can_finish_grandpa_evaluation(self) -> StardewRule:
         # https://stardewvalleywiki.com/Grandpa
         rules_worth_a_point = [
-            self.logic.money.can_have_earned_total(50_000),  # 50 000g
-            self.logic.money.can_have_earned_total(100_000),  # 100 000g
-            self.logic.money.can_have_earned_total(200_000),  # 200 000g
-            self.logic.money.can_have_earned_total(300_000),  # 300 000g
-            self.logic.money.can_have_earned_total(500_000),  # 500 000g
-            self.logic.money.can_have_earned_total(1_000_000),  # 1 000 000g first point
-            self.logic.money.can_have_earned_total(1_000_000),  # 1 000 000g second point
-            self.logic.skill.has_total_level(30),  # Total Skills: 30
-            self.logic.skill.has_total_level(50),  # Total Skills: 50
-            self.logic.museum.can_complete_museum(),  # Completing the museum for a point
+            self.logic.money.can_have_earned_total(50_000),
+            self.logic.money.can_have_earned_total(100_000),
+            self.logic.money.can_have_earned_total(200_000),
+            self.logic.money.can_have_earned_total(300_000),
+            self.logic.money.can_have_earned_total(500_000),
+            self.logic.money.can_have_earned_total(1_000_000),  # first point
+            self.logic.money.can_have_earned_total(1_000_000),  # second point
+            self.logic.skill.has_total_level(30),
+            self.logic.skill.has_total_level(50),
+            self.logic.museum.can_complete_museum(),
             # Catching every fish not expected
             # Shipping every item not expected
             self.logic.relationship.can_get_married() & self.logic.building.has_house(2),
             self.logic.relationship.has_hearts_with_n(5, 8),  # 5 Friends
             self.logic.relationship.has_hearts_with_n(10, 8),  # 10 friends
             self.logic.pet.has_pet_hearts(5),  # Max Pet
-            self.logic.bundle.can_complete_community_center,  # Community Center Completion
-            self.logic.bundle.can_complete_community_center,  # CC Ceremony first point
-            self.logic.bundle.can_complete_community_center,  # CC Ceremony second point
-            self.logic.received(Wallet.skull_key),  # Skull Key obtained
-            self.logic.wallet.has_rusty_key(),  # Rusty key obtained
+            self.logic.bundle.can_complete_community_center,  # 1 point for Community Center Completion
+            self.logic.bundle.can_complete_community_center,  # Ceremony first point
+            self.logic.bundle.can_complete_community_center,  # Ceremony second point
+            self.logic.received(Wallet.skull_key),
+            self.logic.wallet.has_rusty_key(),
         ]
         return self.logic.count(12, *rules_worth_a_point)
 
@@ -136,7 +136,7 @@ class GoalLogic(BaseLogic[StardewLogic]):
     def can_complete_legend(self) -> StardewRule:
         return self.logic.money.can_have_earned_total(10_000_000)
 
-    def can_complete_mystery_of_the_star_drop(self) -> StardewRule:
+    def can_complete_mystery_of_the_stardrop(self) -> StardewRule:
         other_rules = []
         number_of_stardrops_to_receive = 0
         number_of_stardrops_to_receive += 1  # The Mines level 100
@@ -164,10 +164,7 @@ class GoalLogic(BaseLogic[StardewLogic]):
         if ModNames.deepwoods in self.options.mods:  # Petting the Unicorn
             number_of_stardrops_to_receive += 1
 
-        if not other_rules:
-            return self.logic.received("Stardrop", number_of_stardrops_to_receive)
-
-        return self.logic.received("Stardrop", number_of_stardrops_to_receive) & self.logic.and_(*other_rules)
+        return self.logic.received("Stardrop", number_of_stardrops_to_receive) & self.logic.and_(*other_rules, allow_empty=True)
 
     def can_complete_allsanity(self) -> StardewRule:
         return self.logic.has_progress_percent(100)

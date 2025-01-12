@@ -275,7 +275,7 @@ class StardewValleyWorld(World):
                                        Event.victory)
         elif self.options.goal == Goal.option_mystery_of_the_stardrops:
             self.create_event_location(location_table[GoalName.mystery_of_the_stardrops],
-                                       self.logic.goal.can_complete_mystery_of_the_star_drop(),
+                                       self.logic.goal.can_complete_mystery_of_the_stardrop(),
                                        Event.victory)
         elif self.options.goal == Goal.option_allsanity:
             self.create_event_location(location_table[GoalName.allsanity],

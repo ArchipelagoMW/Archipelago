@@ -53,8 +53,14 @@ class HasLogicMixin(BaseLogic[None]):
         return Count(rules, count)
 
     @staticmethod
-    def and_(*rules: StardewRule) -> StardewRule:
-        assert rules, "Can't create a And conditions without rules"
+    def and_(*rules: StardewRule, allow_empty: bool = False) -> StardewRule:
+        """
+        :param rules: The rules to combine
+        :param allow_empty: If True, return true_ when no rules are given. Otherwise, raise an error.
+        """
+        if not rules:
+            assert allow_empty, "Can't create a And conditions without rules"
+            return true_
 
         if len(rules) == 1:
             return rules[0]
@@ -62,8 +68,14 @@ class HasLogicMixin(BaseLogic[None]):
         return And(*rules)
 
     @staticmethod
-    def or_(*rules: StardewRule) -> StardewRule:
-        assert rules, "Can't create a Or conditions without rules"
+    def or_(*rules: StardewRule, allow_empty: bool = False) -> StardewRule:
+        """
+          :param rules: The rules to combine
+          :param allow_empty: If True, return false_ when no rules are given. Otherwise, raise an error.
+          """
+        if not rules:
+            assert allow_empty, "Can't create a Or conditions without rules"
+            return false_
 
         if len(rules) == 1:
             return rules[0]
