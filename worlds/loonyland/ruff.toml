@@ -4,6 +4,3 @@ line-length = 120
 select = ["C", "E", "F", "R", "W", "I", "N", "Q", "UP", "RUF", "ISC", "T20"]
 ignore = ["C9", "RUF012", "RUF100"]
 
-[lint.per-file-ignores]
-# The way options definitions work right now, world devs are forced to break line length requirements.
-"options.py" = ["E501"]

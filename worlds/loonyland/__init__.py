@@ -21,14 +21,15 @@ from .rules import have_x_badges
 
 
 class LoonylandWebWorld(WebWorld):
+    rich_text_options_doc = True
     theme = "dirt"
 
     setup_en = Tutorial(
         tutorial_name="Start Guide",
         description="A guide to playing Loonyland.",
         language="English",
-        file_name="guide_en.md",
-        link="guide/en",
+        file_name="setup_en.md",
+        link="setup/en",
         authors=["AutomaticFrenzy"],
     )
 
