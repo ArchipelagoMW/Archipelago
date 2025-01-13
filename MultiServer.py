@@ -393,7 +393,7 @@ class Context:
 
         self.slot_info = decoded_obj["slot_info"]
         self.games = {slot: slot_info.game for slot, slot_info in self.slot_info.items()}
-        self.groups = {slot: slot_info.group_members for slot, slot_info in self.slot_info.items()
+        self.groups = {slot: set(slot_info.group_members) for slot, slot_info in self.slot_info.items()
                        if slot_info.type == SlotType.group}
 
         self.clients = {0: {}}
