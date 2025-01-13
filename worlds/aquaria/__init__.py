@@ -105,6 +105,13 @@ class AquariaWorld(World):
         self.ingredients_substitution = []
         self.exclude = []
 
+    def generate_early(self) -> None:
+        """
+        Run before any general steps of the MultiWorld other than options. Useful for getting and adjusting option
+        results and determining layouts for entrance rando etc. start inventory gets pushed after this step.
+        """
+        self.regions = AquariaRegions(self.multiworld, self.player)
+
     def create_regions(self) -> None:
         """
         Create every Region in `regions`
@@ -127,13 +134,6 @@ class AquariaWorld(World):
         result = AquariaItem(name, classification, data.id, self.player)
 
         return result
-
-    def generate_early(self) -> None:
-        """
-        Run before any general steps of the MultiWorld other than options. Useful for getting and adjusting option
-        results and determining layouts for entrance rando etc. start inventory gets pushed after this step.
-        """
-        self.regions = AquariaRegions(self.multiworld, self.player)
 
     def __pre_fill_item(self, item_name: str, location_name: str, precollected,
                         itemClassification: ItemClassification = ItemClassification.useful) -> None:
