@@ -1206,9 +1206,9 @@ def distribute_local_nonprogression(multiworld: MultiWorld,
         unplaced_items, unfilled_unexcluded_locations = fast_fill(multiworld, player_local_items, player_unf_unexcl_locs)
         if len(unplaced_items) > 0:
             raise FillError(f"Not enough unfilled locations for player {multiworld.player_name[player]} with "
-                            f"{sphere_1_percent_to_reserve}% of sphere 1 reserved to fit local non-progression. Either reduce the "
-                            f"amount of local items in your YAML or reduce the percentage of reserved sphere 1 "
-                            f"locations in host.yaml.")
+                            f"{sphere_1_percent_to_reserve}% of sphere 1 reserved to fit local non-progression. Either "
+                            f"reduce the amount of local items in your YAML or reduce the percentage of reserved sphere"
+                            f" 1 locations in host.yaml.")
         # add any unused locations back to the full location list
         locations.extend(reserved_locs)
         locations.extend(unfilled_excluded_locations)
