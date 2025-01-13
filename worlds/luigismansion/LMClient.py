@@ -27,42 +27,37 @@ CONNECTION_LOST_STATUS = "Dolphin connection was lost. Please restart your emula
 CONNECTION_CONNECTED_STATUS = "Dolphin connected successfully."
 CONNECTION_INITIAL_STATUS = "Dolphin connection has not been initiated."
 
-# This address is used to check/set the player's health for DeathLink. TODO CORRECT FOR LM
+# This address is used to check/set the player's health for DeathLink.
 CURR_HEALTH_ADDR = 0x803D8B40
 CURR_HEALTH_OFFSET = 0xB8
 
-# This address (and its 7 other offsets) are used to check if the player captured any boos
+# This address (and its other offsets) are used to check if the player captured any boos
 BOOS_BITFLD_ADDR = 0x803D5E04
 BOOS_BITFLD_COUNT = 7
 
-# This address (and its 9 other offsets) are used to check if the player has received keys to any doors in the mansion.
+# This address (and its other offsets) are used to check if the player has received keys to any doors in the mansion.
 KEYS_BITFLD_ADDR = 0x803D5E14
 KEYS_BITFLD_COUNT = 10
 
-# Address used to check if the elemental medals are received.
+# This address used to give Luigi the elemental medals, if they are received.
 MEDALS_RECV_ADDR = 0x803D5DB2 # Bits Fire 5, Ice 6, Water 7
 
-# Addresses used to check if the mario items are received
+# This address used to give Luigi the mario items, if they are received
 MARIO_ITEMS_RECV_ONE_ADDR = 0x803D5DBB # Bits Hat 4, Star 5, Glove 6, Shoe 7
 MARIO_ITEMS_RECV_TWO_ADDR = 0x803D5DBC # Bit Letter 0
 
-# # This address contains the current stage ID.
-CURR_MANSION_MAP_ID_ADDR = 0x804D80A4
-
-# This address lets us know if the game is playable and ready. This should have a value of 2
+# This Play State address lets us know if the game is playable and ready. This should have a value of 2
+# Map ID is used to confirm Luigi is loading into the Mansion or one of the boss maps.
 CURR_PLAY_STATE_ADDR = 0x803A3AE4
 CURR_MAP_ID_ADDR = 0x804D7834
-
-# This is an array of length 0x10 where each element is a byte and contains item IDs for items to give the player.
-# 0xFF represents no item. The array is read and cleared every frame.
-GIVE_ITEM_ARRAY_ADDR = 0x803FE868
 
 # This is the address that holds the player's slot name.
 # This way, the player does not have to manually authenticate their slot name.
 SLOT_NAME_ADDR = 0x80314660
 SLOT_NAME_STR_LENGTH = 0x10
 
-# This main address table contains the main address used for currently loaded in Furniture.
+# This Furniture address table contains the first address used for currently loaded in Furniture.
+# Since multiple rooms can be loaded into the background, several hundred addresses must be checked.
 # Flag Offset will contain whether the current piece of furniture has been interacted with or not.
 # This flag follows the 2 rooms away rule and resets between reloading the game / save file.
 # A Flag with value 0x00 indicates no interaction, 0x01 indicates its been interacted with and either dropped something
@@ -72,9 +67,13 @@ FURNITURE_ADDR_COUNT = 712
 FURN_FLAG_OFFSET = 0x8C
 FURN_ID_OFFSET = 0xBC
 
-# Current Room ID and Offset
+# This
 ROOM_ID_ADDR = 0x803D8B7C
 ROOM_ID_OFFSET = 0x35C
+
+# This is an array of length 0x10 where each element is a byte and contains item IDs for items to give the player.
+# 0xFF represents no item. The array is read and cleared every frame.
+# GIVE_ITEM_ARRAY_ADDR = 0x803FE868
 
 
 key_name_collection = [["", "Butler's Room", "", "Heart", "Fortune Teller", "Mirror Room", "", "Laundry Room"],
@@ -234,18 +233,19 @@ def _give_death(ctx: LMContext):
 def _give_item(ctx: LMContext, item_name: str) -> bool:
     if not check_ingame():  # or dolphin_memory_engine.read_byte(CURR_STAGE_ID_ADDR) == 0xFF:
         return False
+    return False
 
-    item_id = ALL_ITEMS_TABLE[item_name].item_id
+    #item_id = ALL_ITEMS_TABLE[item_name].item_id
 
     # Loop through the give item array, placing the item in an empty slot
-    for idx in range(ctx.len_give_item_array):
-        slot = dme.read_byte(GIVE_ITEM_ARRAY_ADDR + idx)
-        if slot == 0xFF:
-            dme.write_byte(GIVE_ITEM_ARRAY_ADDR + idx, item_id)
-            return True
+    #for idx in range(ctx.len_give_item_array):
+    #    slot = dme.read_byte(GIVE_ITEM_ARRAY_ADDR + idx)
+    #    if slot == 0xFF:
+    #        dme.write_byte(GIVE_ITEM_ARRAY_ADDR + idx, item_id)
+    #        return True
 
     # Unable to place the item in the array, so return `False`
-    return False
+    #return False
 
 
 # TODO CORRECT FOR LM
