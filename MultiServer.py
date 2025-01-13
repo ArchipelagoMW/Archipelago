@@ -1786,7 +1786,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             ctx.clients[team][slot].append(client)
             client.version = args['version']
             client.tags = args['tags']
-            client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags
+            client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags or "HintGame" in client.tags
             connected_packet = {
                 "cmd": "Connected",
                 "team": client.team, "slot": client.slot,
@@ -1942,9 +1942,14 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             ctx.save()
             ctx.on_changed_hints(client.team, hint.finding_player)
             ctx.on_changed_hints(client.team, hint.receiving_player)
-        
+
         elif cmd == 'StatusUpdate':
-            update_client_status(ctx, client, args["status"])
+            if args["status"] == ClientStatus.CLIENT_GOAL and client.no_locations:
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
+                                              "text": "Trackers can't register Goal Comple",
+                                              "original_cmd": cmd}])
+            else:
+                update_client_status(ctx, client, args["status"])
 
         elif cmd == 'Say':
             if "text" not in args or type(args["text"]) is not str or not args["text"].isprintable():
