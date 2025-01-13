@@ -429,8 +429,8 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
     # TODO Foyer Heart Lamp is 270
     # Adjust the item spawn height based on if the item spawns from the ceiling or high up on the wall.
     # Otherwise items are sent into the floor above or out of bounds, which makes it almost impossible to get.
-    ceiling_furniture_list = [4, 43, 62, 63, 76, 77, 81, 84, 85, 91, 92, 101, 137, 156, 158, 159, 163, 173, 174,
-        189, 190, 195, 199, 200, 228, 240, 266, 310, 342, 347, 348, 352, 354, 355, 356, 357, 358, 359, 373, 374,
+    ceiling_furniture_list = [4, 43, 62, 63, 76, 77, 81, 84, 85, 91, 92, 101, 110, 111, 137, 156, 158, 159, 163,
+        173, 174, 189, 190, 195, 199, 200, 228, 240, 266, 310, 342, 352, 354, 355, 356, 357, 358, 359, 373, 374,
         378, 379, 380, 381, 399, 423, 426, 445, 446, 454, 459, 460, 463, 467, 485, 547, 595, 596, 631, 632, 636,
         657, 671, 672]
     medium_height_furniture_list = [0, 1, 104, 124, 125, 210, 232, 234, 235, 264, 265, 270, 275, 276, 340, 341,
