@@ -27,9 +27,24 @@ CONNECTION_LOST_STATUS = "Dolphin connection was lost. Please restart your emula
 CONNECTION_CONNECTED_STATUS = "Dolphin connected successfully."
 CONNECTION_INITIAL_STATUS = "Dolphin connection has not been initiated."
 
+
+# This is the address that holds the player's slot name.
+# This way, the player does not have to manually authenticate their slot name.
+SLOT_NAME_ADDR = 0x80314660
+SLOT_NAME_STR_LENGTH = 0x10
+
+# This Play State address lets us know if the game is playable and ready. This should have a value of 2
+# Map ID is used to confirm Luigi is loading into the Mansion or one of the boss maps.
+CURR_PLAY_STATE_ADDR = 0x803A3AE4
+CURR_MAP_ID_ADDR = 0x804D7834
+
 # This address is used to check/set the player's health for DeathLink.
 CURR_HEALTH_ADDR = 0x803D8B40
 CURR_HEALTH_OFFSET = 0xB8
+
+# This address is used to track which room Luigi is in within the main mansion map (Map2)
+ROOM_ID_ADDR = 0x803D8B7C
+ROOM_ID_OFFSET = 0x35C
 
 # This address (and its other offsets) are used to check if the player captured any boos
 BOOS_BITFLD_ADDR = 0x803D5E04
@@ -46,16 +61,6 @@ MEDALS_RECV_ADDR = 0x803D5DB2 # Bits Fire 5, Ice 6, Water 7
 MARIO_ITEMS_RECV_ONE_ADDR = 0x803D5DBB # Bits Hat 4, Star 5, Glove 6, Shoe 7
 MARIO_ITEMS_RECV_TWO_ADDR = 0x803D5DBC # Bit Letter 0
 
-# This Play State address lets us know if the game is playable and ready. This should have a value of 2
-# Map ID is used to confirm Luigi is loading into the Mansion or one of the boss maps.
-CURR_PLAY_STATE_ADDR = 0x803A3AE4
-CURR_MAP_ID_ADDR = 0x804D7834
-
-# This is the address that holds the player's slot name.
-# This way, the player does not have to manually authenticate their slot name.
-SLOT_NAME_ADDR = 0x80314660
-SLOT_NAME_STR_LENGTH = 0x10
-
 # This Furniture address table contains the first address used for currently loaded in Furniture.
 # Since multiple rooms can be loaded into the background, several hundred addresses must be checked.
 # Flag Offset will contain whether the current piece of furniture has been interacted with or not.
@@ -67,9 +72,7 @@ FURNITURE_ADDR_COUNT = 712
 FURN_FLAG_OFFSET = 0x8C
 FURN_ID_OFFSET = 0xBC
 
-# This address is used to track which room Luigi is in within the main mansion map (Map2)
-ROOM_ID_ADDR = 0x803D8B7C
-ROOM_ID_OFFSET = 0x35C
+
 
 # This is an array of length 0x10 where each element is a byte and contains item IDs for items to give the player.
 # 0xFF represents no item. The array is read and cleared every frame.
@@ -391,6 +394,7 @@ async def check_locations(ctx: LMContext):
                       f"Flag Value: {furniture_flag}")
 
                 LMContext.checked_furniture.append(named_furniture[0])
+
 
     # for location, data in ALL_LOCATION_TABLE.items():
     #     checked = False
