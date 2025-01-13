@@ -137,7 +137,7 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     If this is False, the docstring is instead interpreted as plain text, and
     displayed as-is on the WebHost with whitespace preserved.
 
-    If this is None, it inherits the value of `World.rich_text_options_doc`. For
+    If this is None, it inherits the value of `WebWorld.rich_text_options_doc`. For
     backwards compatibility, this defaults to False, but worlds are encouraged to
     set it to True and use reStructuredText for their Option documentation.
 
