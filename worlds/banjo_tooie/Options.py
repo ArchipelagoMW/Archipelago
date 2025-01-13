@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from Options import Toggle, DeathLink, PerGameCommonOptions, Choice, DefaultOnToggle, Range, StartInventoryPool, FreeText
 
-class EnableMultiWorldMoveList(DefaultOnToggle):
+class RandomizeBTMoveList(DefaultOnToggle):
     """Jamjars & Roysten Movelist are locked behind the MultiWorld."""
     display_name = "Banjo-Tooie Movelist"
 
@@ -130,7 +130,7 @@ class JamjarsSiloCosts(Choice):
     option_progressive = 2
     default = 0
 
-class EnableMultiWorldBKMoveList(Choice):
+class RandomizeBKMoveList(Choice):
     """Banjo-Kazooie's Movelist is locked behind  the MultiWorld.
     Mcjiggy Special - Talon Trot and Tall Jump are removed from the pool."""
     display_name = "Banjo-Kazooie Movelist"
@@ -155,7 +155,7 @@ class ProgressiveShoes(Toggle):
     """Stilt Stride to Turbo Trainers to Spring Boots to Claw Climber Boots. Randomize Moves and Randomize BK Moves are required."""
     display_name = "Progressive Kazooie Shoes"
 
-class ProgressiveSwimming(Choice):
+class ProgressiveWaterTraining(Choice):
     """Basic: Dive to Double Air to Faster Swimming.
     Advanced: Dive to Sub Aqua Aiming to Talon Torpedo to Double Air to Faster Swimming.
     Randomize Moves and Randomize BK Moves are required."""
@@ -185,19 +185,19 @@ class EnableCheatoRewards(DefaultOnToggle):
     """Cheato rewards you with a cheat and an additional randomized reward. Use Cheato Pages as Filler cannot be enabled if this is enabled."""
     display_name = "Cheato Rewards"
 
-class EnableMultiWorldJinjos(DefaultOnToggle):
+class RandomizeJinjos(DefaultOnToggle):
     """Jinjos have fled to other worlds. Other players need to return them home."""
     display_name = "Randomize Jinjos"
 
-class EnableMultiWorldDoubloons(Toggle):
+class RandomizeDoubloons(Toggle):
     """Jolly Roger's Doubloons are scattered across the MultiWorld."""
     display_name = "Randomize Doubloons"
 
-class EnableMultiWorldCheatoPages(DefaultOnToggle):
+class RandomizeCheatoPages(DefaultOnToggle):
     """Cheato pages are scattered across the MultiWorld."""
     display_name = "Randomize Cheato Pages"
 
-class EnableMultiWorldHoneycombs(DefaultOnToggle):
+class RandomizeHoneycombs(DefaultOnToggle):
     """Honeycombs are scattered across the MultiWorld."""
     display_name = "Randomize Honeycombs"
 
@@ -205,24 +205,24 @@ class EnableHoneyBRewards(DefaultOnToggle):
     """Honey B gives you health and an additional randomized reward."""
     display_name = "Honey B Rewards"
 
-class EnableMultiWorldGlowbos(DefaultOnToggle):
+class RandomizeGlowbos(DefaultOnToggle):
     """Glowbos are scattered across the MultiWorld."""
     display_name = "Randomize Glowbos"
 
-class EnableMultiWorldTrebleClefs(DefaultOnToggle):
+class RandomizeTrebleClefs(DefaultOnToggle):
     """Treble Clefs are scattered across the MultiWorld."""
     display_name = "Randomize Treble Clefs"
 
-class EnableMultiWorldTrainStationSwitches(Toggle):
+class RandomizeTrainStationSwitches(Toggle):
     """Train Stations are scattered across the MultiWorld."""
     display_name = "Randomize Train Station Switches"
 
-class EnableMultiWorldChuffyTrain(Toggle):
+class RandomizeChuffyTrain(Toggle):
     """Chuffy is lost somewhere in the MultiWorld. 
     Once received, you can call Chuffy at any unlocked station without defeating Old King Coal."""
     display_name = "Chuffy as a Randomized AP Item"
 
-class EnableMultiWorldNotes(Toggle):
+class RandomizeNotes(Toggle):
     """Note Nests are scattered across the MultiWorld."""
     display_name = "Randomize Note Nests"
 
@@ -248,7 +248,7 @@ class Traps(Toggle):
     """Swaps out the Big-O-Pants with Traps!"""
     display_name = "Traps"
 
-class EnableMultiWorldDinoRoar(Toggle):
+class RandomizeWorldDinoRoar(Toggle):
     """Baby T-Rex Roar's is lost across the MultiWorld. Other players need to help him learn to ROAR!"""
     display_name = "Baby T-Rex Roar"
 
@@ -336,7 +336,7 @@ class RandomizeStopnSwap(Toggle):
     """Mystery Eggs, their rewards, and the Ice Key are scattered across the MultiWorld."""
     display_name = "Randomize Stop n Swap"
 
-class SkipToT(Choice):
+class TowerOfTragedy(Choice):
     """Choose whether to play the full quiz, start at round 3, or skip it."""
     display_name = "Tower of Tragedy Quiz"
     option_full = 0
@@ -457,32 +457,32 @@ class BanjoTooieOptions(PerGameCommonOptions):
     game_length: GameLength
     custom_worlds:CustomWorlds
 
-    randomize_moves: EnableMultiWorldMoveList
+    randomize_moves: RandomizeBTMoveList
     jamjars_silo_costs: JamjarsSiloCosts
-    randomize_bk_moves: EnableMultiWorldBKMoveList
+    randomize_bk_moves: RandomizeBKMoveList
     egg_behaviour:EggsBehaviour
 
     progressive_beak_buster: ProgressiveBeakBuster
     progressive_shoes: ProgressiveShoes
-    progressive_water_training: ProgressiveSwimming
+    progressive_water_training: ProgressiveWaterTraining
     progressive_flight:ProgressiveFlight
     progressive_egg_aiming:ProgressiveEggAim
     progressive_bash_attack: ProgressiveBashAttack
 
-    randomize_notes: EnableMultiWorldNotes
-    randomize_treble: EnableMultiWorldTrebleClefs
+    randomize_notes: RandomizeNotes
+    randomize_treble: RandomizeTrebleClefs
     extra_trebleclefs_count: TrebleclefNotes
     bass_clef_amount: BassClefNotes
 
-    randomize_jinjos: EnableMultiWorldJinjos
-    randomize_doubloons: EnableMultiWorldDoubloons
-    randomize_cheato: EnableMultiWorldCheatoPages
+    randomize_jinjos: RandomizeJinjos
+    randomize_doubloons: RandomizeDoubloons
+    randomize_cheato: RandomizeCheatoPages
     cheato_rewards: EnableCheatoRewards
-    randomize_honeycombs: EnableMultiWorldHoneycombs
+    randomize_honeycombs: RandomizeHoneycombs
     honeyb_rewards: EnableHoneyBRewards
-    randomize_glowbos: EnableMultiWorldGlowbos
+    randomize_glowbos: RandomizeGlowbos
     randomize_stop_n_swap: RandomizeStopnSwap
-    randomize_dino_roar: EnableMultiWorldDinoRoar
+    randomize_dino_roar: RandomizeWorldDinoRoar
     nestsanity: EnableNestsanity
     
     traps: Traps
@@ -494,8 +494,8 @@ class BanjoTooieOptions(PerGameCommonOptions):
     transform_trap_weight: TransformTrapWeight
     squish_trap_weight: SquishTrapWeight
     
-    randomize_stations: EnableMultiWorldTrainStationSwitches
-    randomize_chuffy: EnableMultiWorldChuffyTrain
+    randomize_stations: RandomizeTrainStationSwitches
+    randomize_chuffy: RandomizeChuffyTrain
     jingaling_jiggy: KingJingalingHasJiggy
     skip_puzzles: SkipPuzzles
     randomize_worlds: RandomizeWorlds
@@ -505,7 +505,7 @@ class BanjoTooieOptions(PerGameCommonOptions):
     open_silos: Silos
 
     speed_up_minigames: SpeedUpMinigames
-    skip_tower_of_tragedy: SkipToT
+    tower_of_tragedy: TowerOfTragedy
     skip_klungo: SkipKlungo
     dialog_character:DialogCharacters
 

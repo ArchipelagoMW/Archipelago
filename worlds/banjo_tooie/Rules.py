@@ -129,7 +129,7 @@ class BanjoTooieRules:
         ]
         
 
-        if self.world.options.skip_puzzles == True:
+        if self.world.options.skip_puzzles:
             
             self.access_rules = {
                 locationName.W1: lambda state: self.WorldUnlocks_req(state, 1230944),
@@ -188,7 +188,7 @@ class BanjoTooieRules:
                 locationName.MUMBOTKNJINJO9: lambda state: state.has(itemName.BKJINJO, self.player, 9),
             }
 
-        if self.world.options.cheato_rewards.value == True:
+        if self.world.options.cheato_rewards:
             self.cheato_rewards_rules = {
                 locationName.CHEATOR1: lambda state: self.reach_cheato(state, 5),
                 locationName.CHEATOR2: lambda state: self.reach_cheato(state, 10),
@@ -197,7 +197,7 @@ class BanjoTooieRules:
                 locationName.CHEATOR5: lambda state: self.reach_cheato(state, 25),
             }
 
-        if self.world.options.honeyb_rewards.value == True:
+        if self.world.options.honeyb_rewards:
             self.honeyb_rewards_rules = {
                 locationName.HONEYBR1: lambda state: state.has(itemName.HONEY, self.player, 1) and self.talon_trot(state),
                 locationName.HONEYBR2: lambda state: state.has(itemName.HONEY, self.player, 4) and self.talon_trot(state),
@@ -6139,7 +6139,7 @@ class BanjoTooieRules:
             hasAttack = self.blue_eggs(state) or self.grenade_eggs(state) or self.ice_eggs(state) or self.beak_barge(state) or self.roll(state)\
             or self.air_rat_a_tat_rap(state) or self.ground_rat_a_tat_rap(state) or self.breegull_bash(state)
 
-        if self.world.options.randomize_chuffy == False:
+        if not self.world.options.randomize_chuffy:
             return self.mumboGGM(state) and state.can_reach_region(regionName.GM, self.player) and self.ggm_to_chuffy(state) and hasAttack
         else:
             return state.has(itemName.CHUFFY, self.player) and hasAttack
@@ -6379,7 +6379,7 @@ class BanjoTooieRules:
     
 
     def mt_jiggy(self, state: CollectionState) -> bool: #1
-        if self.world.worlds_randomized == True:
+        if self.world.worlds_randomized:
             return state.has(itemName.MTA, self.player)
         else:
             amt = self.world.randomize_worlds[regionName.MT]
@@ -6459,7 +6459,7 @@ class BanjoTooieRules:
         return logic
     
     def gm_jiggy(self, state: CollectionState) -> bool: #4
-        if self.world.worlds_randomized == True:
+        if self.world.worlds_randomized:
             return state.has(itemName.GGA, self.player)
         else:
             amt = self.world.randomize_worlds[regionName.GM]
@@ -6539,21 +6539,21 @@ class BanjoTooieRules:
         return logic
     
     def ww_jiggy(self, state: CollectionState) -> bool: #8
-        if self.world.worlds_randomized == True:
+        if self.world.worlds_randomized:
             return state.has(itemName.WWA, self.player)
         else:
             amt = self.world.randomize_worlds[regionName.WW]
             return state.has(itemName.JIGGY, self.player, amt)
     
     def jrl_jiggy(self, state: CollectionState) -> bool: #14
-        if self.world.worlds_randomized == True:
+        if self.world.worlds_randomized:
             return state.has(itemName.JRA, self.player)
         else:
             amt = self.world.randomize_worlds[regionName.JR]
             return state.has(itemName.JIGGY, self.player, amt)
     
     def tdl_jiggy(self, state: CollectionState) -> bool: #20
-        if self.world.worlds_randomized == True:
+        if self.world.worlds_randomized:
             return state.has(itemName.TDA, self.player)
         else:
             amt = self.world.randomize_worlds[regionName.TL]
@@ -6561,14 +6561,14 @@ class BanjoTooieRules:
 
     
     def gi_jiggy(self, state: CollectionState) -> bool: #28
-        if self.world.worlds_randomized == True:
+        if self.world.worlds_randomized:
             return state.has(itemName.GIA, self.player)
         else:
             amt = self.world.randomize_worlds[regionName.GIO]
             return state.has(itemName.JIGGY, self.player, amt)
         
     def ck_jiggy(self, state: CollectionState) -> bool: #55
-        if self.world.worlds_randomized == True:
+        if self.world.worlds_randomized:
             return state.has(itemName.CKA, self.player)
         else:
             amt = self.world.randomize_worlds[regionName.CK]
@@ -7256,12 +7256,12 @@ class BanjoTooieRules:
             logic = self.talon_torpedo(state) and self.dive(state)
         elif self.world.options.logic_type == 1 : # normal
             logic = self.talon_torpedo(state)\
-                    and (self.world.options.nestsanity.value == False or self.dive(state) or self.beak_buster(state))
+                    and (not self.world.options.nestsanity or self.dive(state) or self.beak_buster(state))
         elif self.world.options.logic_type == 2: # advanced
             logic = self.talon_torpedo(state)\
-                    and (self.world.options.nestsanity.value == False or self.dive(state) or self.beak_buster(state))
+                    and (not self.world.options.nestsanity or self.dive(state) or self.beak_buster(state))
         elif self.world.options.logic_type == 3: # glitched
-            logic = (self.world.options.nestsanity.value == False or self.dive(state) or self.beak_buster(state))
+            logic = (not self.world.options.nestsanity or self.dive(state) or self.beak_buster(state))
         return logic
 
     def tdl_to_hatch(self, state: CollectionState) -> bool:
@@ -7372,21 +7372,21 @@ class BanjoTooieRules:
         return logic
     
     def hfp_jiggy(self, state: CollectionState) -> bool: # 36
-        if self.world.worlds_randomized == True:
+        if self.world.worlds_randomized:
             return state.has(itemName.HFA, self.player)
         else:
             amt = self.world.randomize_worlds[regionName.HP]
             return state.has(itemName.JIGGY, self.player, amt)
     
     def ccl_jiggy(self, state: CollectionState) -> bool: # 45
-        if self.world.worlds_randomized == True:
+        if self.world.worlds_randomized:
             return state.has(itemName.CCA, self.player)
         else:
             amt = self.world.randomize_worlds[regionName.CC]
             return state.has(itemName.JIGGY, self.player, amt)
     
     def HFP_hot_water_cooled(self, state) -> bool:
-        if self.world.options.backdoors.value == True:
+        if self.world.options.backdoors.value :
             return state.can_reach_region(regionName.HP, self.player) and\
                self.split_up(state) and\
                (self.dive(state) or self.shack_pack(state))
@@ -8109,12 +8109,12 @@ class BanjoTooieRules:
             forbid_item(self.world.multiworld.get_location(locationName.JRLDB8, self.player), item, self.player)
             forbid_item(self.world.multiworld.get_location(locationName.JRLDB7, self.player), item, self.player)
 
-        if self.world.options.cheato_rewards.value == True:
+        if self.world.options.cheato_rewards:
             for location, rules in self.cheato_rewards_rules.items():
                 cheato = self.world.multiworld.get_location(location, self.player)
                 set_rule(cheato, rules)
         
-        if self.world.options.honeyb_rewards.value == True:
+        if self.world.options.honeyb_rewards:
             for location, rules in self.honeyb_rewards_rules.items():
                 honeyb = self.world.multiworld.get_location(location, self.player)
                 set_rule(honeyb, rules)

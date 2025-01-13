@@ -1,6 +1,7 @@
 from math import ceil, floor
 import random
 from multiprocessing import Process
+from Options import DeathLink
 import settings
 import typing
 from jinja2 import Environment, FileSystemLoader
@@ -8,7 +9,7 @@ from typing import Dict, Any
 from .Items import BanjoTooieItem, all_item_table, all_group_table
 from .Locations import BanjoTooieLocation, LocationData, all_location_table, MTLoc_Table, GMLoc_table, WWLoc_table, JRLoc_table, TLLoc_table, GILoc_table, HPLoc_table, CCLoc_table, MumboTokenGames_table, MumboTokenBoss_table, MumboTokenJinjo_table
 from .Regions import create_regions, connect_regions
-from .Options import BanjoTooieOptions
+from .Options import BanjoTooieOptions, EggsBehaviour, JamjarsSiloCosts, LogicType, ProgressiveEggAim, ProgressiveWaterTraining, RandomizeBKMoveList, TowerOfTragedy, VictoryCondition
 from .Rules import BanjoTooieRules
 from .Names import itemName, locationName, regionName
 from .WorldOrder import WorldRandomize
@@ -99,9 +100,9 @@ class BanjoTooieWorld(World):
         banjoItem = all_item_table.get(itemname)
         if banjoItem.type == 'progress':
             if banjoItem.btid == self.item_code(itemName.JIGGY):
-                if hasattr(self.multiworld, "generation_is_fake") == False: 
+                if not hasattr(self.multiworld, "generation_is_fake"):
                     maxJiggy = max(self.randomize_worlds.values())
-                    if self.options.open_hag1 == False:
+                    if not self.options.open_hag1:
                         maxJiggy = max(maxJiggy, 70)
 
                     extraJiggys = (90 - maxJiggy)/2
@@ -114,8 +115,8 @@ class BanjoTooieWorld(World):
                     self.jiggy_counter += 1
                 else:
                     item_classification = ItemClassification.progression
-            elif banjoItem.btid == self.item_code(itemName.NOTE) and self.options.randomize_notes.value == True:
-                if hasattr(self.multiworld, "generation_is_fake") == False:
+            elif banjoItem.btid == self.item_code(itemName.NOTE) and self.options.randomize_notes:
+                if not hasattr(self.multiworld, "generation_is_fake"):
                     total_clefs = 20 * (self.options.extra_trebleclefs_count.value + 9) + 10 * self.options.bass_clef_amount.value
                     progression_five_packs = int(max(0, max(self.jamjars_siloname_costs.values())-total_clefs)/5)
                     useful_five_packs = floor((900-total_clefs-progression_five_packs*5)/5/2)
@@ -135,11 +136,11 @@ class BanjoTooieWorld(World):
             item_classification = ItemClassification.progression_skip_balancing
         if banjoItem.type == 'useful':
             if banjoItem.btid == self.item_code(itemName.PAGES): # Cheato pages
-                if self.options.cheato_rewards.value == True:
+                if self.options.cheato_rewards:
                     item_classification = ItemClassification.progression
                 else:
                     item_classification = ItemClassification.filler
-            elif  banjoItem.btid == self.item_code(itemName.HONEY) and self.options.honeyb_rewards.value == True: #Honeycombs
+            elif  banjoItem.btid == self.item_code(itemName.HONEY) and self.options.honeyb_rewards: #Honeycombs
                 item_classification = ItemClassification.progression
             else:
                 item_classification = ItemClassification.useful
@@ -168,16 +169,16 @@ class BanjoTooieWorld(World):
         trap_big_pants_counter = 0
         removed_enests = 0
         removed_fnests = 0
-        if self.options.cheato_rewards.value == True and self.options.randomize_bk_moves.value == 0:
+        if self.options.cheato_rewards and not self.options.randomize_bk_moves:
             for i in range(5):
                 trap_big_pants_counter += 1
-        if self.options.honeyb_rewards.value == True and self.options.randomize_bk_moves.value == 0: #10 if both options are on
+        if self.options.honeyb_rewards.value and not self.options.randomize_bk_moves.value: #10 if both options are on
             for i in range(5):
                 trap_big_pants_counter += 1
         if self.options.randomize_bk_moves.value == 1: # 2 moves won't be added to the pool
             for i in range(2):
                 trap_big_pants_counter += 1
-        if self.options.randomize_bk_moves.value == 0: # No moves added, fills for the Jiggy Chunks, Dino Kids
+        if not self.options.randomize_bk_moves: # No moves added, fills for the Jiggy Chunks, Dino Kids
             for i in range(6):
                 trap_big_pants_counter += 1
         if self.options.bass_clef_amount.value > 0:
@@ -185,12 +186,12 @@ class BanjoTooieWorld(World):
                 trap_big_pants_counter += 1
         if self.options.extra_trebleclefs_count.value > 0:
             for i in range(self.options.extra_trebleclefs_count.value*3): #adds an additional big-o-pants for each bass clef
-                if self.options.victory_condition.value == 5 and \
+                if self.options.victory_condition.value == VictoryCondition.option_token_hunt and \
                 (((self.options.bass_clef_amount.value*2) + (self.options.extra_trebleclefs_count.value*4)) >= 130) and \
                 i == (self.options.extra_trebleclefs_count.value*3 - 15):
                     break
                 trap_big_pants_counter += 1
-        if self.options.traps.value == 1 and self.options.nestsanity.value == True:
+        if self.options.traps and self.options.nestsanity:
             total_nests = all_item_table[itemName.ENEST].qty + all_item_table[itemName.FNEST].qty
             
             removed_nests = int(total_nests * self.options.traps_nests_ratio.value / 100)
@@ -198,12 +199,12 @@ class BanjoTooieWorld(World):
             removed_fnests = removed_nests - removed_enests
             
             trap_big_pants_counter += removed_nests + all_item_table[itemName.GNEST].qty
-        elif self.options.nestsanity.value == True: # nestsanity with no traps, remove gnests
+        elif self.options.nestsanity: # nestsanity with no traps, remove gnests
             trap_big_pants_counter += all_item_table[itemName.GNEST].qty
 
-        if self.options.traps.value == True:
+        if self.options.traps:
             trap_list = self.random.choices(['gnests', 'ttrap', 'strap', 'trtrap', 'sqtrap'], weights = [
-                self.options.golden_eggs_weight.value if self.options.nestsanity.value == True else 0,
+                self.options.golden_eggs_weight.value if self.options.nestsanity else 0,
                 self.options.trip_trap_weight.value,
                 self.options.slip_trap_weight.value,
                 self.options.transform_trap_weight.value,
@@ -214,15 +215,15 @@ class BanjoTooieWorld(World):
         for name,id in all_item_table.items():
             item = self.create_item(name)
             if self.item_filter(item):
-                if item.code == self.item_code(itemName.JIGGY) and self.kingjingalingjiggy == True:
+                if item.code == self.item_code(itemName.JIGGY) and self.kingjingalingjiggy:
                     for i in range(id.qty - 1): #note the -1 in the count here. King Took one already.
-                        if self.options.randomize_jinjos == False and self.jiggy_counter > 81:
+                        if not self.options.randomize_jinjos and self.jiggy_counter > 81:
                             break
                         else:
                             itempool += [self.create_item(name)]
                 else:
                     # Mumbo Token Hunt Item Amt
-                    if item.code == self.item_code(itemName.MUMBOTOKEN) and self.options.victory_condition.value == 5:
+                    if item.code == self.item_code(itemName.MUMBOTOKEN) and self.options.victory_condition.value == VictoryCondition.option_token_hunt:
                         for i in range(15):
                             itempool += [self.create_item(name)]
                     # EO Mumbo Token Hunt Item Amt
@@ -262,7 +263,7 @@ class BanjoTooieWorld(World):
                         count = id.qty
                         count -= ((self.options.bass_clef_amount.value*2) + (self.options.extra_trebleclefs_count.value*4))
                         for i in range(count):
-                            if self.options.victory_condition.value == 5:
+                            if self.options.victory_condition.value == VictoryCondition.option_token_hunt:
                                 if (count - self.notecounter) < 15 and count >= 15:
                                     break #sub in for Mumbo Tokens up to 15
                             itempool += [self.create_item(name)]
@@ -281,11 +282,11 @@ class BanjoTooieWorld(World):
                             itempool += [self.create_item(name)]
                     else:
                         for i in range(id.qty):
-                            if self.options.randomize_jinjos == False and self.jiggy_counter > 81 and item.code == self.item_code(itemName.JIGGY):
+                            if not self.options.randomize_jinjos and self.jiggy_counter > 81 and item.code == self.item_code(itemName.JIGGY):
                                 break
                             else:
                                 itempool += [self.create_item(name)]
-            elif item.code == self.item_code(itemName.PBASH) and item.code == self.starting_attack and self.options.progressive_bash_attack.value == 1: #we only need 1 more Progressive Bash Attack
+            elif item.code == self.item_code(itemName.PBASH) and item.code == self.starting_attack and self.options.progressive_bash_attack: #we only need 1 more Progressive Bash Attack
                 itempool += [self.create_item(name)] #only creates 1 progressive bash attack
             elif self.check_starting_progressive(item) > 0:
                 for i in range(self.check_starting_progressive(item)):
@@ -294,7 +295,7 @@ class BanjoTooieWorld(World):
             self.multiworld.itempool.append(item)
 
     def item_filter(self, item: Item) -> Item:
-        if(item.code == self.item_code(itemName.JIGGY) and self.kingjingalingjiggy == False and self.options.jingaling_jiggy == True):
+        if(item.code == self.item_code(itemName.JIGGY) and not self.kingjingalingjiggy and self.options.jingaling_jiggy):
             #Below give the king a guarentee Jiggy if option is set
             self.get_location(self.location_id_to_name[1230685]).place_locked_item(item)
             self.kingjingalingjiggy = True
@@ -303,40 +304,40 @@ class BanjoTooieWorld(World):
         if item.code == 0: #Events
             return False
         
-        if(item.code == self.item_code(itemName.DOUBLOON) and self.options.randomize_doubloons == False) :
+        if(item.code == self.item_code(itemName.DOUBLOON) and not self.options.randomize_doubloons) :
             return False
         
-        if(item.code == self.item_code(itemName.PAGES) and self.options.randomize_cheato.value == False) : # Added later in Prefill
+        if(item.code == self.item_code(itemName.PAGES) and not self.options.randomize_cheato.value) : # Added later in Prefill
             return False
         
-        if(item.code == self.item_code(itemName.HONEY) and self.options.randomize_honeycombs == False) : # Added later in Prefill
+        if(item.code == self.item_code(itemName.HONEY) and not self.options.randomize_honeycombs) : # Added later in Prefill
             return False
         
-        if(item.code in range(self.item_code(itemName.GGRAB), self.item_code(itemName.AMAZEOGAZE) + 1) and self.options.randomize_moves == False) : #range you need to add +1 to the end. 
+        if(item.code in range(self.item_code(itemName.GGRAB), self.item_code(itemName.AMAZEOGAZE) + 1) and not self.options.randomize_moves) : #range you need to add +1 to the end. 
             return False
         
-        if(item.code in range(self.item_code(itemName.HUMBAMT), self.item_code(itemName.HUMBAIH) + 1) and self.options.randomize_glowbos == False) : #range you need to add +1 to the end.
+        if(item.code in range(self.item_code(itemName.HUMBAMT), self.item_code(itemName.HUMBAIH) + 1) and not self.options.randomize_glowbos) : #range you need to add +1 to the end.
             return False
         
-        if(item.code in range(self.item_code(itemName.MUMBOMT), self.item_code(itemName.MUMBOIH) + 1) and self.options.randomize_glowbos == False) : #range you need to add +1 to the end.
+        if(item.code in range(self.item_code(itemName.MUMBOMT), self.item_code(itemName.MUMBOIH) + 1) and not self.options.randomize_glowbos) : #range you need to add +1 to the end.
             return False
 
-        if(item.code in range(self.item_code(itemName.WJINJO), self.item_code(itemName.BKJINJO) + 1) and self.options.randomize_jinjos == False) :#range you need to add +1 to the end.
+        if(item.code in range(self.item_code(itemName.WJINJO), self.item_code(itemName.BKJINJO) + 1) and not self.options.randomize_jinjos) :#range you need to add +1 to the end.
             return False
         
-        if(item.code == self.item_code(itemName.TREBLE) and self.options.randomize_treble.value == False):
+        if(item.code == self.item_code(itemName.TREBLE) and not self.options.randomize_treble.value):
             return False
         
-        if item.code == self.item_code(itemName.CHUFFY) and self.options.randomize_chuffy == False:
+        if item.code == self.item_code(itemName.CHUFFY) and not self.options.randomize_chuffy:
             return False
         
-        if item.code in range(self.item_code(itemName.TRAINSWGI), self.item_code(itemName.TRAINSWWW) + 1) and self.options.randomize_stations == False:
+        if item.code in range(self.item_code(itemName.TRAINSWGI), self.item_code(itemName.TRAINSWWW) + 1) and not self.options.randomize_stations:
             return False
         
-        if item.code == self.item_code(itemName.NOTE) and self.options.randomize_notes == False: #Notes
+        if item.code == self.item_code(itemName.NOTE) and not self.options.randomize_notes: #Notes
             return False
         
-        if item.code == self.item_code(itemName.MUMBOTOKEN) and self.options.victory_condition != 5: #Mumbo Tokens for Mini Game and Boss Hunt and Jinjo Fam
+        if item.code == self.item_code(itemName.MUMBOTOKEN) and self.options.victory_condition != VictoryCondition.option_token_hunt: #Mumbo Tokens for Mini Game and Boss Hunt and Jinjo Fam
             return False
         
         # if item.code == self.item_code(itemName.IKEY) and self.options.warp_traps == 0: 
@@ -347,93 +348,94 @@ class BanjoTooieWorld(World):
             return False
         
         #from itemName.IKEY to itemName.PMEGG inclusive
-        if item.code in range(self.item_code(itemName.IKEY), self.item_code(itemName.PMEGG) + 1) and self.options.randomize_stop_n_swap == False:
+        if item.code in range(self.item_code(itemName.IKEY), self.item_code(itemName.PMEGG) + 1) and not self.options.randomize_stop_n_swap:
             return False
 
         #from itemName.DIVE, to itemName.BBOMB inclusive
-        if item.code in range(self.item_code(itemName.DIVE), self.item_code(itemName.BBOMB) + 1) and self.options.randomize_bk_moves.value == 0:
+        if item.code in range(self.item_code(itemName.DIVE), self.item_code(itemName.BBOMB) + 1) and self.options.randomize_bk_moves.value == RandomizeBKMoveList.option_none:
             return False
-        elif (item.code == self.item_code(itemName.TTROT) or item.code == self.item_code(itemName.TJUMP)) and self.options.randomize_bk_moves.value == 1: # talon trot and tall jump not in pool
+        elif (item.code == self.item_code(itemName.TTROT) or item.code == self.item_code(itemName.TJUMP)) and self.options.randomize_bk_moves.value == RandomizeBKMoveList.option_mcjiggy_special: # talon trot and tall jump not in pool
             return False
         
         if item.code == self.item_code(itemName.GNEST) and\
-            (self.options.nestsanity.value == False or self.options.traps.value == False): #Golden egg nests
+            (not self.options.nestsanity or not self.options.traps.value): #Golden egg nests
             return False
-        if item.code == self.item_code(itemName.ENEST) and self.options.nestsanity.value == False: #egg nests
+        if item.code == self.item_code(itemName.ENEST) and not self.options.nestsanity.value: #egg nests
             return False
-        if item.code == self.item_code(itemName.FNEST) and self.options.nestsanity.value == False: #Feather nests
+        if item.code == self.item_code(itemName.FNEST) and not self.options.nestsanity.value: #Feather nests
             return False
         
         # if item.code == self.item_code(itemName.NONE) and self.options.cheato_rewards.value == False and self.options.honeyb_rewards.value == False:
         #     return False
-        if item.code == self.item_code(itemName.NONE) and self.options.randomize_bk_moves.value == 2 \
+        if item.code == self.item_code(itemName.NONE) and self.options.randomize_bk_moves.value == RandomizeBKMoveList.option_all \
             and (self.options.bass_clef_amount.value == 0 and self.options.extra_trebleclefs_count.value == 0):
             return False
-        if item.code == self.item_code(itemName.NONE) and self.options.traps.value == True:
+        if item.code == self.item_code(itemName.NONE) and self.options.traps.value:
             return False
         
-        if (item.code == self.item_code(itemName.TTRAP) or item.code == self.item_code(itemName.STRAP) or item.code == self.item_code(itemName.TRTRAP) or item.code == self.item_code(itemName.SQTRAP)) and self.options.traps.value == False:
+        if (item.code == self.item_code(itemName.TTRAP) or item.code == self.item_code(itemName.STRAP) or \
+            item.code == self.item_code(itemName.TRTRAP) or item.code == self.item_code(itemName.SQTRAP)) and not self.options.traps:
             return False
         
-        if self.options.progressive_beak_buster.value == True and (item.code == self.item_code(itemName.BBUST) or item.code == self.item_code(itemName.BDRILL)):
+        if self.options.progressive_beak_buster and (item.code == self.item_code(itemName.BBUST) or item.code == self.item_code(itemName.BDRILL)):
             return False
         
-        if item.code == self.item_code(itemName.PBBUST) and self.options.progressive_beak_buster.value == False:
+        if item.code == self.item_code(itemName.PBBUST) and not self.options.progressive_beak_buster:
             return False
         
-        if item.code == self.item_code(itemName.PFLIGHT) and self.options.progressive_flight.value == False:
+        if item.code == self.item_code(itemName.PFLIGHT) and not self.options.progressive_flight.value:
             return False
         
-        if item.code == self.item_code(itemName.PEGGAIM) and self.options.progressive_egg_aiming.value != 1:
+        if item.code == self.item_code(itemName.PEGGAIM) and self.options.progressive_egg_aiming.value != ProgressiveEggAim.option_basic:
             return False
         
-        if item.code == self.item_code(itemName.PAEGGAIM) and self.options.progressive_egg_aiming.value != 2:
+        if item.code == self.item_code(itemName.PAEGGAIM) and self.options.progressive_egg_aiming.value != ProgressiveEggAim.option_advanced:
             return False
         
-        if item.code == self.item_code(itemName.PASWIM) and self.options.progressive_water_training.value != 2:
+        if item.code == self.item_code(itemName.PASWIM) and self.options.progressive_water_training.value != ProgressiveWaterTraining.option_advanced:
             return False
         
-        if self.options.egg_behaviour.value != 1 and item.code == self.item_code(itemName.BEGGS): #remove blue eggs in pool
+        if self.options.egg_behaviour.value != EggsBehaviour.option_random_starting_egg and item.code == self.item_code(itemName.BEGGS): #remove blue eggs in pool
             return False
-        if self.options.egg_behaviour.value == 2 and (item.code == self.item_code(itemName.FEGGS) or item.code == self.item_code(itemName.GEGGS) or item.code == self.item_code(itemName.IEGGS) \
-            or item.code == self.item_code(itemName.CEGGS)):
+        if self.options.egg_behaviour.value == EggsBehaviour.option_progressive_eggs and (item.code == self.item_code(itemName.FEGGS) or\
+            item.code == self.item_code(itemName.GEGGS) or item.code == self.item_code(itemName.IEGGS) or item.code == self.item_code(itemName.CEGGS)):
             return False
-        if item.code == self.item_code(itemName.PBEGGS) and self.options.egg_behaviour.value != 2:
+        if item.code == self.item_code(itemName.PBEGGS) and self.options.egg_behaviour.value != EggsBehaviour.option_progressive_eggs:
             return False
-        if self.options.egg_behaviour.value == 1 and item.code == self.starting_egg: #Already has this egg in inventory
+        if self.options.egg_behaviour.value == EggsBehaviour.option_random_starting_egg and item.code == self.starting_egg: #Already has this egg in inventory
             return False
         
-        if self.options.progressive_shoes.value == True and (item.code == self.item_code(itemName.SSTRIDE) or item.code == self.item_code(itemName.TTRAIN) \
+        if self.options.progressive_shoes and (item.code == self.item_code(itemName.SSTRIDE) or item.code == self.item_code(itemName.TTRAIN) \
             or item.code == self.item_code(itemName.SPRINGB) or item.code == self.item_code(itemName.CLAWBTS)):
             return False
-        if item.code == self.item_code(itemName.PSHOES) and self.options.progressive_shoes.value == False:
+        if item.code == self.item_code(itemName.PSHOES) and not self.options.progressive_shoes.value:
             return False
         
-        if self.options.progressive_water_training.value != 0 and (item.code == self.item_code(itemName.DIVE) or item.code == self.item_code(itemName.DAIR) \
+        if self.options.progressive_water_training.value != ProgressiveWaterTraining.option_none and (item.code == self.item_code(itemName.DIVE) or item.code == self.item_code(itemName.DAIR) \
             or item.code == self.item_code(itemName.FSWIM)):
             return False
-        if self.options.progressive_water_training.value == 2 and (item.code == self.item_code(itemName.AUQAIM) or item.code == self.item_code(itemName.TTORP)):
+        if self.options.progressive_water_training.value == ProgressiveWaterTraining.option_advanced and (item.code == self.item_code(itemName.AUQAIM) or item.code == self.item_code(itemName.TTORP)):
             return False
-        if item.code == self.item_code(itemName.PSWIM) and self.options.progressive_water_training.value != 1:
-            return False
-        
-        if self.options.progressive_flight.value == True and (item.code == self.item_code(itemName.FPAD) or item.code == self.item_code(itemName.BBOMB) or item.code == self.item_code(itemName.AIREAIM)):
+        if item.code == self.item_code(itemName.PSWIM) and self.options.progressive_water_training.value != ProgressiveWaterTraining.option_basic:
             return False
         
-        if self.options.progressive_egg_aiming.value != 0 and (item.code == self.item_code(itemName.EGGAIM) or item.code == self.item_code(itemName.EGGSHOOT)):
+        if self.options.progressive_flight and (item.code == self.item_code(itemName.FPAD) or item.code == self.item_code(itemName.BBOMB) or item.code == self.item_code(itemName.AIREAIM)):
+            return False
+        
+        if self.options.progressive_egg_aiming.value != ProgressiveEggAim.option_none and (item.code == self.item_code(itemName.EGGAIM) or item.code == self.item_code(itemName.EGGSHOOT)):
             return False 
-        if self.options.progressive_egg_aiming.value == 2 and (item.code == self.item_code(itemName.AMAZEOGAZE) or item.code == self.item_code(itemName.BBLASTER)):
+        if self.options.progressive_egg_aiming.value == ProgressiveEggAim.option_advanced and (item.code == self.item_code(itemName.AMAZEOGAZE) or item.code == self.item_code(itemName.BBLASTER)):
             return False
         
-        if self.options.progressive_bash_attack.value == True and (item.code == self.item_code(itemName.BBASH) or item.code == self.item_code(itemName.GRAT)):
+        if self.options.progressive_bash_attack and (item.code == self.item_code(itemName.BBASH) or item.code == self.item_code(itemName.GRAT)):
             return False
-        if item.code == self.item_code(itemName.PBASH) and self.options.progressive_bash_attack.value == False:
+        if item.code == self.item_code(itemName.PBASH) and not self.options.progressive_bash_attack:
             return False
         
-        if item.code == self.item_code(itemName.ROAR) and self.options.randomize_dino_roar.value == False:
+        if item.code == self.item_code(itemName.ROAR) and not self.options.randomize_dino_roar.value:
             return False
 
-        if self.options.randomize_bk_moves.value != 0 and item.code == self.starting_attack: #Already has this attack in inventory
+        if self.options.randomize_bk_moves.value != RandomizeBKMoveList.option_none and item.code == self.starting_attack: #Already has this attack in inventory
             return False
 
         return True
@@ -449,71 +451,74 @@ class BanjoTooieWorld(World):
         self.pre_fill_me()
 
     def generate_early(self) -> None:
-        if self.options.randomize_worlds.value == True and self.options.randomize_bk_moves.value != 0 and self.options.logic_type == 0:
+        if self.options.randomize_worlds and self.options.randomize_bk_moves.value != RandomizeBKMoveList.option_none and self.options.logic_type == LogicType.option_intended:
             raise ValueError("Randomize Worlds and Randomize BK Moves is not compatible with Beginner Logic.")
-        if self.options.randomize_notes == False and self.options.randomize_worlds.value == True and self.options.randomize_bk_moves.value != 0:
+        if not self.options.randomize_notes and self.options.randomize_worlds and self.options.randomize_bk_moves.value != RandomizeBKMoveList.option_none:
             if self.multiworld.players == 1:
                 raise ValueError("Randomize Notes is required for Randomize BK Moves and Randomize Worlds enabled.")
-        if self.options.randomize_notes == False and (self.options.extra_trebleclefs_count.value != 0 and self.options.bass_clef_amount.value != 0):
+        if not self.options.randomize_notes and (self.options.extra_trebleclefs_count.value != 0 and self.options.bass_clef_amount.value != 0):
             raise ValueError("Randomize Notes is required to add extra Treble Clefs or Bass Clefs")
-        if self.options.progressive_beak_buster.value == True and (self.options.randomize_bk_moves.value == False or self.options.randomize_moves == False):
+        if self.options.progressive_beak_buster and (not self.options.randomize_bk_moves.value or not self.options.randomize_moves):
             raise ValueError("You cannot have progressive Beak Buster without randomizing moves and randomizing BK moves")
-        if self.options.egg_behaviour.value == 1 and (self.options.randomize_bk_moves.value == False or self.options.randomize_moves == False):
+        if self.options.egg_behaviour.value == EggsBehaviour.option_random_starting_egg and (not self.options.randomize_bk_moves.value or not self.options.randomize_moves):
             raise ValueError("You cannot have Randomize Starting Egg without randomizing moves and randomizing BK moves")
-        elif self.options.egg_behaviour.value == 2 and (self.options.randomize_moves == False):
+        elif self.options.egg_behaviour.value == EggsBehaviour.option_progressive_eggs and not self.options.randomize_moves:
             raise ValueError("You cannot have progressive Eggs without randomizing moves")
-        if self.options.progressive_shoes.value == True and (self.options.randomize_bk_moves.value == False or self.options.randomize_moves == False):
+        if self.options.progressive_shoes and (not self.options.randomize_bk_moves.value or not self.options.randomize_moves):
             raise ValueError("You cannot have progressive Shoes without randomizing moves and randomizing BK moves")
-        if self.options.progressive_water_training.value != 0 and (self.options.randomize_bk_moves.value == False or self.options.randomize_moves == False):
+        if self.options.progressive_water_training.value != ProgressiveWaterTraining.option_none and (self.options.randomize_bk_moves.value == RandomizeBKMoveList.option_none or not self.options.randomize_moves):
             raise ValueError("You cannot have progressive Water Training without randomizing moves and randomizing BK moves")
-        if self.options.progressive_flight.value == True and (self.options.randomize_bk_moves.value == False or self.options.randomize_moves == False):
+        if self.options.progressive_flight and (not self.options.randomize_bk_moves.value or not self.options.randomize_moves):
             raise ValueError("You cannot have progressive flight without randomizing moves and randomizing BK moves")
-        if self.options.progressive_egg_aiming.value != 0 and (self.options.randomize_bk_moves.value == False or self.options.randomize_moves == False):
+        if self.options.progressive_egg_aiming.value != ProgressiveEggAim.option_none and (not self.options.randomize_bk_moves.value or not self.options.randomize_moves):
             raise ValueError("You cannot have progressive egg aiming without randomizing moves and randomizing BK moves")
-        if self.options.progressive_bash_attack.value == True and (self.options.randomize_stop_n_swap.value == False or self.options.randomize_moves == False):
+        if self.options.progressive_bash_attack and (not self.options.randomize_stop_n_swap.value or not self.options.randomize_moves):
             raise ValueError("You cannot have progressive bash attack without randomizing Stop N Swap and randomizing BK moves")
-        if self.options.randomize_moves == False and self.options.jamjars_silo_costs.value != 0:
+        if not self.options.randomize_moves and self.options.jamjars_silo_costs.value != JamjarsSiloCosts.option_vanilla:
             raise ValueError("You cannot change the silo costs without randomizing Jamjars' moves.")
-        if self.options.open_hag1.value == False and self.options.victory_condition.value == 4:
+        if not self.options.open_hag1.value and self.options.victory_condition.value == VictoryCondition.option_wonderwing_challenge:
             self.options.open_hag1.value = True
-        if self.options.egg_behaviour.value == 1:
+
+
+        if self.options.egg_behaviour.value == EggsBehaviour.option_random_starting_egg:
             eggs = list([itemName.BEGGS, itemName.FEGGS, itemName.GEGGS, itemName.IEGGS, itemName.CEGGS])
             self.random.shuffle(eggs)
             starting_egg = self.create_item(eggs[0])
             self.multiworld.push_precollected(starting_egg)
             banjoItem = all_item_table.get(eggs[0])
             self.starting_egg = banjoItem.btid
-        if self.options.egg_behaviour.value == 0 or self.options.egg_behaviour.value == 2:
+        else:
             starting_egg = self.create_item(itemName.BEGGS)
             self.multiworld.push_precollected(starting_egg)
             banjoItem = all_item_table.get(itemName.BEGGS)
             self.starting_egg = banjoItem.btid
-        if self.options.randomize_bk_moves.value != 0:
+
+        if self.options.randomize_bk_moves.value != RandomizeBKMoveList.option_none:
             chosen_attack: str
             base_attacks: list
-            if self.options.logic_type == 0:
-                if self.options.progressive_egg_aiming.value == 1 :
+            if self.options.logic_type == LogicType.option_intended:
+                if self.options.progressive_egg_aiming.value == ProgressiveEggAim.option_basic:
                     base_attacks = [itemName.PEGGAIM, itemName.BBARGE, itemName.ROLL, itemName.ARAT]
-                elif self.options.progressive_egg_aiming.value == 2:
+                elif self.options.progressive_egg_aiming.value == ProgressiveEggAim.option_advanced:
                     base_attacks = [itemName.PAEGGAIM, itemName.BBARGE, itemName.ROLL, itemName.ARAT]
                 else:
                     base_attacks = [itemName.EGGSHOOT, itemName.EGGAIM, itemName.BBARGE, itemName.ROLL, itemName.ARAT]
-            if self.options.logic_type == 1:
-                if self.options.progressive_egg_aiming.value == 1 :
+            if self.options.logic_type == LogicType.option_easy_tricks:
+                if self.options.progressive_egg_aiming.value == ProgressiveEggAim.option_basic:
                     base_attacks = [itemName.PEGGAIM, itemName.BBARGE, itemName.ROLL, itemName.ARAT, itemName.WWING]
-                elif self.options.progressive_egg_aiming.value == 2:
+                elif self.options.progressive_egg_aiming.value == ProgressiveEggAim.option_advanced:
                     base_attacks = [itemName.PAEGGAIM, itemName.BBARGE, itemName.ROLL, itemName.ARAT, itemName.WWING]
                 else:
                     base_attacks = [itemName.EGGSHOOT, itemName.EGGAIM, itemName.BBARGE, itemName.ROLL, itemName.ARAT, itemName.WWING]
             else:
-                if self.options.progressive_egg_aiming.value == 1 :
+                if self.options.progressive_egg_aiming.value == ProgressiveEggAim.option_basic:
                     base_attacks = [itemName.PEGGAIM, itemName.BBARGE, itemName.ROLL, itemName.ARAT, itemName.WWING]
-                elif self.options.progressive_egg_aiming.value == 2:
+                elif self.options.progressive_egg_aiming.value == ProgressiveEggAim.option_advanced:
                     base_attacks = [itemName.PAEGGAIM, itemName.BBARGE, itemName.ROLL, itemName.ARAT, itemName.WWING]
                 else:
                     base_attacks = [itemName.EGGSHOOT, itemName.EGGAIM, itemName.BBARGE, itemName.ROLL, itemName.ARAT, itemName.WWING]
-                base_attacks.append(itemName.PBASH if self.options.progressive_bash_attack.value == 1 else itemName.GRAT)
-                base_attacks.append(itemName.PBBUST if self.options.progressive_beak_buster.value == True else itemName.BBUST)
+                base_attacks.append(itemName.PBASH if self.options.progressive_bash_attack else itemName.GRAT)
+                base_attacks.append(itemName.PBBUST if self.options.progressive_beak_buster else itemName.BBUST)
             chosen_attack = self.random.choice(base_attacks)
 
             starting_attack = self.create_item(chosen_attack)
@@ -527,42 +532,42 @@ class BanjoTooieWorld(World):
         return rules.set_rules()
     
     def pre_fill_me(self) -> None:
-        if self.options.randomize_honeycombs.value == False:
+        if not self.options.randomize_honeycombs:
             self.banjo_pre_fills(itemName.HONEY, "Honeycomb", False)
                     
-        if self.options.randomize_cheato.value == False:
+        if not self.options.randomize_cheato:
             self.banjo_pre_fills(itemName.PAGES, "Cheato Page", False)
 
-        if self.options.randomize_doubloons.value == False:
+        if not self.options.randomize_doubloons:
             self.banjo_pre_fills(itemName.DOUBLOON, "Doubloon", False)
 
-        if self.options.randomize_moves.value == False:
+        if not self.options.randomize_moves:
             self.banjo_pre_fills("Moves", None, True)
 
-        if self.options.randomize_dino_roar.value == False:
+        if not self.options.randomize_dino_roar:
             self.banjo_pre_fills("Dino", None, True)
 
-        if self.options.randomize_glowbos.value == False:
+        if not self.options.randomize_glowbos:
             self.banjo_pre_fills("Magic", None, True)
 
-        if self.options.randomize_treble.value == False:
+        if not self.options.randomize_treble:
             self.banjo_pre_fills(itemName.TREBLE, "Treble Clef", False)
         
-        if self.options.randomize_stations.value == False:
+        if not self.options.randomize_stations:
             self.banjo_pre_fills("Stations", None, True)
 
-        if self.options.randomize_chuffy.value == False:
+        if not self.options.randomize_chuffy:
             self.banjo_pre_fills(itemName.CHUFFY, "Chuffy", False)
 
-        if self.options.randomize_notes.value == False:
+        if not self.options.randomize_notes:
             self.banjo_pre_fills(itemName.NOTE, "Note", False)
 
-        if self.options.randomize_stop_n_swap.value == False:
+        if not self.options.randomize_stop_n_swap:
             self.banjo_pre_fills("StopnSwap", None, True)
 
-        if self.worlds_randomized == False and self.options.skip_puzzles.value == True:
+        if not self.worlds_randomized and self.options.skip_puzzles:
             self.banjo_pre_fills("Access", None, True)
-        elif self.worlds_randomized == True:
+        elif self.worlds_randomized:
             world_num = 1
             for world, amt in self.randomize_worlds.items():
                 if world == regionName.GIO:
@@ -586,21 +591,27 @@ class BanjoTooieWorld(World):
                     self.get_location("World "+ str(world_num) +" Unlocked").place_locked_item(item)
                     world_num = world_num + 1
         
-        if self.options.victory_condition.value == 1 or self.options.victory_condition.value == 4:
+        if self.options.victory_condition.value == VictoryCondition.option_minigame_hunt\
+            or self.options.victory_condition.value == VictoryCondition.option_wonderwing_challenge:
+
             item = self.create_item(itemName.MUMBOTOKEN)
             for location_name in MumboTokenGames_table.keys():
                 self.get_location(location_name).place_locked_item(item)
         
-        if self.options.victory_condition.value == 2 or self.options.victory_condition.value == 4:
+        if self.options.victory_condition.value == VictoryCondition.option_boss_hunt\
+            or self.options.victory_condition.value == VictoryCondition.option_wonderwing_challenge:
+
             item = self.create_item(itemName.MUMBOTOKEN)
             for location_name in MumboTokenBoss_table.keys():
                 self.get_location(location_name).place_locked_item(item)
-        if self.options.victory_condition.value == 3 or self.options.victory_condition.value == 4:
+
+        if self.options.victory_condition.value == VictoryCondition.option_jinjo_hunt\
+            or self.options.victory_condition.value == VictoryCondition.option_wonderwing_challenge:
             item = self.create_item(itemName.MUMBOTOKEN)
             for location_name in MumboTokenJinjo_table.keys():
                 self.get_location(location_name).place_locked_item(item)
         
-        elif self.options.randomize_jinjos.value == False:
+        elif not self.options.randomize_jinjos:
             item = self.create_item(itemName.JIGGY)
             self.get_location(locationName.JIGGYIH1).place_locked_item(item)
             self.get_location(locationName.JIGGYIH2).place_locked_item(item)
@@ -612,7 +623,7 @@ class BanjoTooieWorld(World):
             self.get_location(locationName.JIGGYIH8).place_locked_item(item)
             self.get_location(locationName.JIGGYIH9).place_locked_item(item)
 
-        if self.options.randomize_jinjos.value == False:
+        if not self.options.randomize_jinjos:
             item = self.create_item(itemName.WJINJO)
             self.get_location(locationName.JINJOJR5).place_locked_item(item)
 
@@ -743,16 +754,16 @@ class BanjoTooieWorld(World):
         btoptions = {}
         btoptions["player_name"] = self.multiworld.player_name[self.player]
         btoptions["seed"] = self.random.randint(12212, 9090763)
-        btoptions["deathlink"] = "true" if self.options.death_link.value == 1 else "false"
-        if self.options.skip_tower_of_tragedy == 1:
+        btoptions["deathlink"] = "true" if self.options.death_link.value == DeathLink.option_true else "false"
+        if self.options.tower_of_tragedy == TowerOfTragedy.option_skip:
             btoptions["skip_tot"] = "true"
-        elif self.options.skip_tower_of_tragedy == 2:
+        elif self.options.tower_of_tragedy == TowerOfTragedy.option_round_3:
             btoptions["skip_tot"] = "round 3"
         else:
             btoptions["skip_tot"] = "false"
         btoptions['honeycomb'] = "true" if self.options.randomize_honeycombs == 1 else "false"
         btoptions['honeyb_rewards'] = "true" if self.options.honeyb_rewards == 1 else "false"
-        btoptions['pages'] = "true" if self.options.randomize_cheato.value == True else "false"
+        btoptions['pages'] = "true" if self.options.randomize_cheato else "false"
         btoptions['cheato_rewards'] = "true" if self.options.cheato_rewards == 1 else "false"
         btoptions['moves'] = "true" if self.options.randomize_moves == 1 else "false"
         btoptions['roar'] = "true" if self.options.randomize_dino_roar == 1 else "false"
@@ -787,7 +798,7 @@ class BanjoTooieWorld(World):
         btoptions['progressive_water_training'] = int(self.options.progressive_water_training.value)
         btoptions['progressive_bash_attack'] = "true" if self.options.progressive_bash_attack == 1 else "false"
         btoptions['progressive_egg_aim'] = int(self.options.progressive_egg_aiming.value)
-        btoptions['progressive_flight'] = "true" if self.options.progressive_flight.value == True else "false"
+        btoptions['progressive_flight'] = "true" if self.options.progressive_flight else "false"
 
         btoptions['starting_egg'] = int(self.starting_egg)
         btoptions['starting_attack'] = int(self.starting_attack)
@@ -828,7 +839,7 @@ class BanjoTooieWorld(World):
             else:
                 return level
 
-        if self.options.randomize_world_loading_zone.value == False:
+        if not self.options.randomize_world_loading_zone:
             return
 
         hints = {}

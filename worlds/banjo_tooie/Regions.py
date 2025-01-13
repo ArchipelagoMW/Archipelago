@@ -1,6 +1,7 @@
 import copy
 import typing
 from BaseClasses import Region
+from worlds.banjo_tooie.Options import VictoryCondition
 
 from .Names import regionName, locationName, itemName
 from .Locations import BanjoTooieLocation
@@ -1140,36 +1141,31 @@ def create_regions(self):
         region_map[regionName.IOHJV].append(locationName.MUMBOTKNJINJO8)
         region_map[regionName.IOHJV].append(locationName.MUMBOTKNJINJO9)
 
-    if self.options.cheato_rewards.value == True:
+    if self.options.cheato_rewards:
         region_map[regionName.SMGL].append(locationName.CHEATOR1)
         region_map[regionName.SMGL].append(locationName.CHEATOR2)
         region_map[regionName.SMGL].append(locationName.CHEATOR3)
         region_map[regionName.SMGL].append(locationName.CHEATOR4)
         region_map[regionName.SMGL].append(locationName.CHEATOR5)
 
-    if self.options.honeyb_rewards.value == True:
+    if self.options.honeyb_rewards:
         region_map[regionName.IOHPL].append(locationName.HONEYBR1)
         region_map[regionName.IOHPL].append(locationName.HONEYBR2)
         region_map[regionName.IOHPL].append(locationName.HONEYBR3)
         region_map[regionName.IOHPL].append(locationName.HONEYBR4)
         region_map[regionName.IOHPL].append(locationName.HONEYBR5)
 
-    if self.options.nestsanity.value == True:
+    if self.options.nestsanity:
         for region, locations in nest_map.items():
             for location in locations:
                 region_map[region].append(location)
 
 
-    multiworld.regions += [create_region(multiworld, player, active_locations, region, locations) for region, locations in
-                           region_map.items()]
+    self.multiworld.regions.extend(create_region(self.multiworld, self.player,\
+          active_locations, region, locations) for region, locations in region_map.items())
     
-    if self.options.victory_condition == 0:
-        multiworld.get_location(locationName.HAG1, player).place_locked_item(
-         	self.create_event_item(itemName.VICTORY))
-        
-    if self.options.victory_condition == 4:
-        multiworld.get_location(locationName.HAG1, player).place_locked_item(
-         	self.create_event_item(itemName.VICTORY))
+    if self.options.victory_condition in (VictoryCondition.option_hag1, VictoryCondition.option_wonderwing_challenge):
+        self.multiworld.get_location(locationName.HAG1, player).place_locked_item(self.create_event_item(itemName.VICTORY))
 
 
 def create_region(multiworld, player: int, active_locations, name: str, locations=None):

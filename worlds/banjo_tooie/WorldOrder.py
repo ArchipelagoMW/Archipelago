@@ -225,14 +225,14 @@ def handle_early_moves(world: BanjoTooieWorld) -> None:
     if world.options.randomize_bk_moves.value == 2: # Guaranteed silo to first level, but getting enough stuff in levels is still hard sometimes.
         # MT, GGM, WW Easy
 
-        if actual_first_level == regionName.JR and world.options.randomize_doubloons.value == False:
+        if actual_first_level == regionName.JR and not world.options.randomize_doubloons:
             move_lst = [itemName.TJUMP, itemName.FFLIP, itemName.TTROT]
             move = world.random.choice(move_lst)
             world.multiworld.early_items[world.player][move] = 1
 
         # TDL Easy
 
-        if first_level == regionName.GIO and world.options.randomize_world_loading_zone.value == False: # Moves to enter the train.
+        if first_level == regionName.GIO and not world.options.randomize_world_loading_zone: # Moves to enter the train.
             world.multiworld.early_items[world.player][itemName.CHUFFY] = 1
             world.multiworld.early_items[world.player][itemName.TRAINSWGI] = 1
             world.multiworld.early_items[world.player][itemName.CLIMB] = 1
@@ -245,7 +245,7 @@ def handle_early_moves(world: BanjoTooieWorld) -> None:
             world.multiworld.early_items[world.player][move] = 1
 
         if actual_first_level == regionName.CC:
-            if world.options.progressive_flight.value == True:
+            if world.options.progressive_flight:
                 move_lst = [itemName.SPLITUP, itemName.PFLIGHT]
             else:
                 move_lst = [itemName.SPLITUP, itemName.FPAD]
