@@ -151,11 +151,21 @@ async def ping(ctx: BizHawkContext) -> None:
 
 
 async def get_hash(ctx: BizHawkContext) -> str:
-    """Gets the system name for the currently loaded ROM"""
+    """Gets the hash value of the currently loaded ROM"""
     res = (await send_requests(ctx, [{"type": "HASH"}]))[0]
 
     if res["type"] != "HASH_RESPONSE":
         raise SyncError(f"Expected response of type HASH_RESPONSE but got {res['type']}")
+
+    return res["value"]
+
+
+async def get_memory_size(ctx: BizHawkContext, domain: str) -> int:
+    """Gets the size in bytes of the specified memory domain"""
+    res = (await send_requests(ctx, [{"type": "MEMORY_SIZE", "domain": domain}]))[0]
+
+    if res["type"] != "MEMORY_SIZE_RESPONSE":
+        raise SyncError(f"Expected response of type MEMORY_SIZE_RESPONSE but got {res['type']}")
 
     return res["value"]
 
