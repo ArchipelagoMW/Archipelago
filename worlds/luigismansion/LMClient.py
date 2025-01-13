@@ -33,6 +33,7 @@ CURR_HEALTH_OFFSET = 0xB8
 
 # This address (and its 7 other offsets) are used to check if the player captured any boos
 BOOS_BITFLD_ADDR = 0x803D5E04
+BOOS_BITFLD_COUNT = 7
 
 # This address (and its 9 other offsets) are used to check if the player has received keys to any doors in the mansion.
 KEYS_BITFLD_ADDR = 0x803D5E14
@@ -348,7 +349,7 @@ async def check_locations(ctx: LMContext):
                 if (bit_int & (1<<i)) > 0 and not key_name_collection[key_addr_pos][i] == "":
                     print(luigi_recv_text + "'" + key_name_collection[key_addr_pos][i] + " Key'")
 
-    for boo_addr_pos in range(7):
+    for boo_addr_pos in range(BOOS_BITFLD_COUNT):
         current_boos_int = dme.read_byte(BOOS_BITFLD_ADDR + boo_addr_pos)
         if current_boos_int != ctx.boos_captured[boo_addr_pos]:
             if ctx.boos_captured[boo_addr_pos] > 0:
