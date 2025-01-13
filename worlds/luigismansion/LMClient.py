@@ -10,8 +10,8 @@ import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus, NetworkItem
 from settings import get_settings, Settings
-from worlds.luigismansion import LMLocationData
-from worlds.luigismansion.data.Enum import RoomID
+from . import LMLocationData
+from .data.Enum import RoomID
 from .LMGenerator import LuigisMansionRandomizer
 
 from .Items import LOOKUP_ID_TO_NAME, ALL_ITEMS_TABLE
@@ -355,7 +355,7 @@ async def check_locations(ctx: LMContext):
         if (bit_int & (1 << 0)) > 0:
             print(luigi_recv_text + "Mario's Letter")
 
-    for key_addr_pos in range(KEYS_BITFLD_COUNT):
+    for key_addr_pos in range(0, KEYS_BITFLD_COUNT):
         current_keys_int = dme.read_byte(KEYS_BITFLD_ADDR + key_addr_pos)
         if current_keys_int != ctx.keys_tracked[key_addr_pos]:
             if ctx.keys_tracked[key_addr_pos] > 0:
@@ -367,7 +367,7 @@ async def check_locations(ctx: LMContext):
                 if (bit_int & (1<<i)) > 0 and not key_name_collection[key_addr_pos][i] == "":
                     print(luigi_recv_text + "'" + key_name_collection[key_addr_pos][i] + " Key'")
 
-    for boo_addr_pos in range(BOOS_BITFLD_COUNT):
+    for boo_addr_pos in range(0, BOOS_BITFLD_COUNT):
         current_boos_int = dme.read_byte(BOOS_BITFLD_ADDR + boo_addr_pos)
         if current_boos_int != ctx.boos_captured[boo_addr_pos]:
             if ctx.boos_captured[boo_addr_pos] > 0:
@@ -407,7 +407,7 @@ async def check_locations(ctx: LMContext):
 
             LMContext.checked_furniture.append(named_furniture[0])
 
-    for curr_room_state_addr in range(ROOM_STATE_COUNT):
+    for curr_room_state_addr in range(0, ROOM_STATE_COUNT):
         curr_room_state_int = dme.read_byte(ROOM_STATE_ADDR + curr_room_state_addr)
         if curr_room_state_int != ctx.room_interactions[curr_room_state_addr]:
             if ctx.room_interactions[curr_room_state_addr] > 0:
@@ -415,7 +415,7 @@ async def check_locations(ctx: LMContext):
             else:
                 bit_int = curr_room_state_int
             ctx.room_interactions[curr_room_state_addr] = curr_room_state_int
-            for i in range(3):
+            for i in range(0, 3):
                 if (bit_int & (1<<i)) > 0:
                     match i:
                         case 0:
