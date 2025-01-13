@@ -60,9 +60,6 @@ GIVE_ITEM_ARRAY_ADDR = 0x803FE868
 SLOT_NAME_ADDR = 0x80314660
 SLOT_NAME_STR_LENGTH = 0x10
 
-# This address contains the starting point of furniture ID table, where each 4 bytes would contain the furniture ID
-FURNITURE_ID_TABLE_START = 0x80C0C898
-
 # This address contains the starting point of furniture interaction table, where 0 represent not interacted with,
 # 1 represents means it's been activated, and 2 has something to do with Mario
 FURNITURE_INTERACTION_TABLE_START = 0x80C0C868
