@@ -1,4 +1,5 @@
 import os
+import zipfile
 from base64 import b64encode
 from collections.abc import Mapping
 from dataclasses import fields
@@ -11,6 +12,7 @@ from BaseClasses import ItemClassification as IC
 from BaseClasses import MultiWorld, Region, Tutorial
 from Options import Toggle
 from worlds.AutoWorld import WebWorld, World
+from worlds.Files import APContainer, AutoPatchRegister
 from worlds.generic.Rules import add_item_rule
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, icon_paths, launch_subprocess
 
@@ -60,6 +62,31 @@ components.append(
     )
 )
 icon_paths["The Wind Waker"] = "ap:worlds.tww/assets/icon.png"
+
+
+class TWWContainer(APContainer, metaclass=AutoPatchRegister):
+    """
+    This class defines the container file for The Wind Waker.
+    """
+
+    game: str = "The Wind Waker"
+    patch_file_ending: str = ".aptww"
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        if "data" in kwargs:
+            self.data = kwargs["data"]
+            del kwargs["data"]
+
+        super().__init__(*args, **kwargs)
+
+    def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
+        """
+        Write the contents of the container file.
+        """
+        super().write_contents(opened_zipfile)
+
+        # Record the data for the game under the key `plando`.
+        opened_zipfile.writestr("plando", b64encode(bytes(yaml.safe_dump(self.data, sort_keys=False), "utf-8")))
 
 
 class TWWWeb(WebWorld):
@@ -435,9 +462,15 @@ class TWWWorld(World):
                 output_data["Entrances"][entrance.parent_region.name] = entrance.connected_region.name
 
         # Output the plando details to file.
-        file_path = os.path.join(output_directory, f"{multiworld.get_out_file_name_base(player)}.aptww")
-        with open(file_path, "wb") as f:
-            f.write(b64encode(bytes(yaml.safe_dump(output_data, sort_keys=False), "utf-8")))
+        aptww = TWWContainer(
+            path=os.path.join(
+                output_directory, f"{multiworld.get_out_file_name_base(player)}{TWWContainer.patch_file_ending}"
+            ),
+            player=player,
+            player_name=self.player_name,
+            data=output_data,
+        )
+        aptww.write()
 
     def extend_hint_information(self, hint_data: dict[int, dict[int, str]]) -> None:
         """

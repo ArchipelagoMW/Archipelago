@@ -27,8 +27,8 @@ world. Once you're happy with your settings, provide the room host with your YAM
 ## Connecting to a Room
 
 The multiworld host will provide you a link to download your `aptww` file or a zip file containing everyone's files. The
-`aptww` file should be named `AP_XXXXX_P#_<name>.aptww`, where `XXXXX` is the room ID, `#` is your player ID, and
-`<name>` is your player name. The host should also provide you with the room's server name and port number.
+`aptww` file should be named `P#_<name>_XXXXX.aptww`, where `#` is your player ID, `<name>` is your player name, and
+`XXXXX` is the room ID. The host should also provide you with the room's server name and port number.
 
 Once you do, follow these steps to connect to the room:
 1. Run the TWW AP Randomizer Build. If this is the first time you've opened the randomizer, you'll need to specify the
