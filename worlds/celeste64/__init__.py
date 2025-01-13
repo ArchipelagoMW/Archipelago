@@ -45,7 +45,6 @@ class Celeste64World(World):
     strawberries_required: int
     active_logic_mapping: Dict[str, List[List[str]]]
     active_region_logic_mapping: Dict[Tuple[str], List[List[str]]]
-    goal_logic_mapping: Dict[str, List[List[str]]]
 
     madeline_one_dash_hair_color: int
     madeline_two_dash_hair_color: int

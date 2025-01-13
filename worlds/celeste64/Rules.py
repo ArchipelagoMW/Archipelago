@@ -26,29 +26,9 @@ def set_rules(world: Celeste64World):
     for location in world.multiworld.get_locations(world.player):
         set_rule(location, lambda state, location=location: location_rule(state, world, location.name))
 
-    if world.options.logic_difficulty == "standard":
-        if world.options.move_shuffle:
-            world.goal_logic_mapping = goal_standard_moves_logic
-        else:
-            world.goal_logic_mapping = goal_standard_logic
-    else:
-        if world.options.move_shuffle:
-            world.goal_logic_mapping = goal_hard_moves_logic
-        else:
-            world.goal_logic_mapping = goal_hard_logic
-
     # Completion condition.
-    world.multiworld.completion_condition[world.player] = lambda state: goal_rule(state, world)
-
-
-goal_standard_logic: List[List[str]] = [[ItemName.feather, ItemName.traffic_block, ItemName.breakables, ItemName.double_dash_refill]]
-goal_hard_logic: List[List[str]] = [[]]
-goal_standard_moves_logic: List[List[str]] = [[ItemName.double_dash_refill, ItemName.feather, ItemName.traffic_block, ItemName.breakables, ItemName.air_dash, ItemName.climb]]
-goal_hard_moves_logic: List[List[str]] = [[ItemName.double_dash_refill, ItemName.feather, ItemName.traffic_block, ItemName.breakables, ItemName.air_dash, ItemName.climb],
-                                          [ItemName.traffic_block, ItemName.air_dash, ItemName.skid_jump],
-                                          [ItemName.ground_dash, ItemName.air_dash, ItemName.skid_jump],
-                                          [ItemName.feather, ItemName.traffic_block, ItemName.air_dash],
-                                          [ItemName.traffic_block, ItemName.ground_dash, ItemName.air_dash]]
+    goal_region: Region = world.multiworld.get_region(RegionName.badeline_island, world.player)
+    world.multiworld.completion_condition[world.player] = lambda state: state.can_reach(goal_region)
 
 
 location_standard_logic: Dict[str, List[List[str]]] = {
@@ -322,7 +302,6 @@ region_hard_moves_logic: Dict[Tuple[str], List[List[str]]] = {
 
 
 def location_rule(state: CollectionState, world: Celeste64World, loc: str) -> bool:
-
     if loc not in world.active_logic_mapping:
         return True
 
@@ -344,18 +323,7 @@ def region_connection_rule(state: CollectionState, world: Celeste64World, source
 
     return False
 
-def goal_rule(state: CollectionState, world: Celeste64World) -> bool:
-    if not state.has(ItemName.strawberry, world.player, world.strawberries_required):
-        return False
-
-    for possible_access in world.goal_logic_mapping:
-        if state.has_all(possible_access, world.player):
-            return True
-
-    return False
-
 def connect_region(world: Celeste64World, region: Region, dest_regions: List[str]):
-
     rules: Dict[str, Callable[[CollectionState], bool]] = {}
 
     for dest_region in dest_regions:
