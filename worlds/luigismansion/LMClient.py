@@ -67,7 +67,7 @@ FURNITURE_ADDR_COUNT = 712
 FURN_FLAG_OFFSET = 0x8C
 FURN_ID_OFFSET = 0xBC
 
-# This
+# This address is used to track which room Luigi is in within the main mansion map (Map2)
 ROOM_ID_ADDR = 0x803D8B7C
 ROOM_ID_OFFSET = 0x35C
 
