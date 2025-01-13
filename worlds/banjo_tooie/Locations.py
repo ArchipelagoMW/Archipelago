@@ -5,7 +5,7 @@ from .Names import locationName
 
 class BanjoTooieLocation(Location):
     game: str = "Banjo-Tooie"
-    
+
 class LocationData(typing.NamedTuple):
     #last good ID: 1231482 (NESTIH64)
     #12C770 pointer instead (1230704)
@@ -92,11 +92,11 @@ JVLoc_table = {
     locationName.NESTIH15: LocationData(1231049),
     locationName.NESTIH16: LocationData(1231050),
     locationName.NESTIH17: LocationData(1231051),
-    
+
 }
 
 MTLoc_Table = {
-    locationName.JINJOMT1: LocationData(1230551, 0x39, 4), 
+    locationName.JINJOMT1: LocationData(1230551, 0x39, 4),
     locationName.JINJOMT2: LocationData(1230552, 0x39, 5),
     locationName.JINJOMT3: LocationData(1230553, 0x39, 6),
     locationName.JINJOMT4: LocationData(1230554, 0x39, 7),
@@ -257,7 +257,7 @@ GMLoc_table = {
     locationName.CHUNK3:    LocationData(1231004, 0x7D, 2),
 
 
-    
+
     locationName.NESTGM1: LocationData(1231139),
     locationName.NESTGM2: LocationData(1231140),
     locationName.NESTGM3: LocationData(1231141),
@@ -304,7 +304,7 @@ PGLoc_table = {
     locationName.NOTEIH6:   LocationData(1230933, 0x96, 4, 'Note'),
     locationName.NOTEIH7:   LocationData(1230934, 0x96, 5, 'Note'),
     locationName.NOTEIH8:   LocationData(1230935, 0x96, 6, 'Note'),
-    
+
     locationName.NESTIH34: LocationData(1231068),
     locationName.NESTIH35: LocationData(1231069),
     locationName.NESTIH36: LocationData(1231070),
@@ -800,7 +800,7 @@ HPLoc_table = {
     locationName.NOTEHFP14:  LocationData(1230909, 0x93, 2, 'Note'),
     locationName.NOTEHFP15:  LocationData(1230910, 0x93, 3, 'Note'),
     locationName.NOTEHFP16:  LocationData(1230911, 0x93, 4, 'Note'),
-    
+
 
     locationName.NESTHP1: LocationData(1231392),
     locationName.NESTHP2: LocationData(1231393),
@@ -973,7 +973,7 @@ IHWLLoc_table = {
     locationName.NOTEIH14:   LocationData(1230941, 0x97, 4, 'Note'),
     locationName.NOTEIH15:   LocationData(1230942, 0x97, 5, 'Note'),
     locationName.NOTEIH16:   LocationData(1230943, 0x97, 6, 'Note'),
-    
+
     locationName.NESTIH48: LocationData(1231082),
     locationName.NESTIH49: LocationData(1231083),
     locationName.NESTIH50: LocationData(1231084),
@@ -1005,7 +1005,7 @@ IHCTLoc_table = {
     locationName.NOTEIH10:   LocationData(1230937, 0x97, 0, 'Note'),
     locationName.NOTEIH11:   LocationData(1230938, 0x97, 1, 'Note'),
     locationName.NOTEIH12:   LocationData(1230939, 0x97, 2, 'Note'),
-    
+
     locationName.NESTIH40: LocationData(1231074),
     locationName.NESTIH41: LocationData(1231075),
     locationName.NESTIH42: LocationData(1231076),

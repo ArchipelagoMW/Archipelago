@@ -53,7 +53,7 @@ This will create some visual artifacts however, it should not affect gameplay.
 ## Playing on Everdrive
 - Run ArchipelagoLauncher.exe and select Banjo-Tooie Client
 - If this is your first time running this version, it will prompt for your Banjo-Tooie (US) ROM
-- The patched rom is located in your Archipelago root folder 
+- The patched rom is located in your Archipelago root folder
     - The exact path is also printed on the Banjo-Tooie Client
     - You can also click "Browse Files" in the Launcher which will take you to this folder
 - Load the patched version of the ROM on your everdrive sd card

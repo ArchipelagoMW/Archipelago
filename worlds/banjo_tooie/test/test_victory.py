@@ -6,13 +6,13 @@ from .. import all_item_table, all_group_table
 # and the game is beatable.
 class TokenTest(BanjoTooieTestBase):
     mumbo_token_location_group = {}
-    
+
     def test_mumbo_tokens(self, amt = 0) -> None:
         mumbo_tokens = 0
         for item in self.world.multiworld.itempool:
             if "Mumbo Token" == item.name:
                 mumbo_tokens += 1
-        
+
         for location in self.mumbo_token_location_group:
             try:
                 if "Mumbo Token" == self.world.multiworld.get_location(location, self.player).item.name:
@@ -103,7 +103,7 @@ class TestVictoryMiniGamesEasy(TokenTest):
         locationName.MUMBOTKNGAME13,
         locationName.MUMBOTKNGAME14,
         locationName.MUMBOTKNGAME15
-    } 
+    }
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(len(self.mumbo_token_location_group))
     def test_all_state_can_reach_everything(self):
@@ -130,7 +130,7 @@ class TestVictoryMiniGamesNormal(TokenTest):
         locationName.MUMBOTKNGAME13,
         locationName.MUMBOTKNGAME14,
         locationName.MUMBOTKNGAME15
-    } 
+    }
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(len(self.mumbo_token_location_group))
     def test_all_state_can_reach_everything(self):
@@ -157,7 +157,7 @@ class TestVictoryMiniGamesAdvance(TokenTest):
         locationName.MUMBOTKNGAME13,
         locationName.MUMBOTKNGAME14,
         locationName.MUMBOTKNGAME15
-    } 
+    }
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(len(self.mumbo_token_location_group))
     def test_all_state_can_reach_everything(self):
@@ -184,7 +184,7 @@ class TestVictoryMiniGamesGlitch(TokenTest):
         locationName.MUMBOTKNGAME13,
         locationName.MUMBOTKNGAME14,
         locationName.MUMBOTKNGAME15
-    } 
+    }
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(len(self.mumbo_token_location_group))
     def test_all_state_can_reach_everything(self):
@@ -205,7 +205,7 @@ class TestVictoryBossesEasy(TokenTest):
         locationName.MUMBOTKNBOSS6,
         locationName.MUMBOTKNBOSS7,
         locationName.MUMBOTKNBOSS8
-    } 
+    }
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(len(self.mumbo_token_location_group))
     def test_all_state_can_reach_everything(self):
@@ -225,7 +225,7 @@ class TestVictoryBossesNormal(TokenTest):
         locationName.MUMBOTKNBOSS6,
         locationName.MUMBOTKNBOSS7,
         locationName.MUMBOTKNBOSS8
-    } 
+    }
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(len(self.mumbo_token_location_group))
     def test_all_state_can_reach_everything(self):
@@ -245,7 +245,7 @@ class TestVictoryBossesAdvance(TokenTest):
         locationName.MUMBOTKNBOSS6,
         locationName.MUMBOTKNBOSS7,
         locationName.MUMBOTKNBOSS8
-    } 
+    }
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(len(self.mumbo_token_location_group))
     def test_all_state_can_reach_everything(self):
@@ -265,7 +265,7 @@ class TestVictoryBossesGlitch(TokenTest):
         locationName.MUMBOTKNBOSS6,
         locationName.MUMBOTKNBOSS7,
         locationName.MUMBOTKNBOSS8
-    } 
+    }
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(len(self.mumbo_token_location_group))
     def test_all_state_can_reach_everything(self):
@@ -287,7 +287,7 @@ class TestVictoryJinjoEasy(TokenTest):
         locationName.MUMBOTKNJINJO7,
         locationName.MUMBOTKNJINJO8,
         locationName.MUMBOTKNJINJO9,
-    } 
+    }
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(len(self.mumbo_token_location_group))
     def test_all_state_can_reach_everything(self):
@@ -308,7 +308,7 @@ class TestVictoryJinjoNormal(TokenTest):
         locationName.MUMBOTKNJINJO7,
         locationName.MUMBOTKNJINJO8,
         locationName.MUMBOTKNJINJO9,
-    } 
+    }
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(len(self.mumbo_token_location_group))
     def test_all_state_can_reach_everything(self):
@@ -329,7 +329,7 @@ class TestVictoryJinjoAdvance(TokenTest):
         locationName.MUMBOTKNJINJO7,
         locationName.MUMBOTKNJINJO8,
         locationName.MUMBOTKNJINJO9,
-    } 
+    }
 
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(len(self.mumbo_token_location_group))
@@ -351,7 +351,7 @@ class TestVictoryJinjoGlitch(TokenTest):
         locationName.MUMBOTKNJINJO7,
         locationName.MUMBOTKNJINJO8,
         locationName.MUMBOTKNJINJO9,
-    } 
+    }
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(len(self.mumbo_token_location_group))
     def test_all_state_can_reach_everything(self):
@@ -395,7 +395,7 @@ class TestVictoryWonderWingEasy(TokenTest):
         locationName.MUMBOTKNJINJO7,
         locationName.MUMBOTKNJINJO8,
         locationName.MUMBOTKNJINJO9,
-    } 
+    }
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(len(self.mumbo_token_location_group))
     def test_all_state_can_reach_everything(self):
@@ -439,7 +439,7 @@ class TestVictoryWonderWingNormal(TokenTest):
         locationName.MUMBOTKNJINJO7,
         locationName.MUMBOTKNJINJO8,
         locationName.MUMBOTKNJINJO9,
-    } 
+    }
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(len(self.mumbo_token_location_group))
     def test_all_state_can_reach_everything(self):
@@ -483,7 +483,7 @@ class TestVictoryWonderWingAdvance(TokenTest):
         locationName.MUMBOTKNJINJO7,
         locationName.MUMBOTKNJINJO8,
         locationName.MUMBOTKNJINJO9,
-    } 
+    }
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(len(self.mumbo_token_location_group))
     def test_all_state_can_reach_everything(self):
@@ -527,7 +527,7 @@ class TestVictoryWonderWingGlitch(TokenTest):
         locationName.MUMBOTKNJINJO7,
         locationName.MUMBOTKNJINJO8,
         locationName.MUMBOTKNJINJO9,
-    } 
+    }
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(len(self.mumbo_token_location_group))
     def test_all_state_can_reach_everything(self):

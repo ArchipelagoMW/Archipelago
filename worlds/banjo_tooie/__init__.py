@@ -34,9 +34,9 @@ class BanjoTooieWeb(WebWorld):
         "setup_en.md",
         "setup/en",
         ["Beebaleen"])
-    
+
     tutorials = [setup]
-    
+
 
 class BanjoTooieWorld(World):
     """
@@ -45,7 +45,7 @@ class BanjoTooieWorld(World):
     the game features three-dimensional worlds consisting of various platforming challenges and puzzles, with a notable
     increased focus on puzzle-solving over the worlds of Banjo-Kazooie.
     """
-    
+
     game: str = "Banjo-Tooie"
     web = BanjoTooieWeb()
     topology_present = True
@@ -70,7 +70,7 @@ class BanjoTooieWorld(World):
         "Access": all_group_table["levelaccess"],
         "Dino": all_group_table["dino"]
     }
-        
+
     options_dataclass =  BanjoTooieOptions
     options: BanjoTooieOptions
 
@@ -91,7 +91,7 @@ class BanjoTooieWorld(World):
         self.jamjars_siloname_costs = {}
         self.jamjars_silo_costs = {}
         super(BanjoTooieWorld, self).__init__(world, player)
-        
+
     def item_code(self, itemname: str) -> int:
         return all_item_table[itemname].btid
 
@@ -99,7 +99,7 @@ class BanjoTooieWorld(World):
         banjoItem = all_item_table.get(itemname)
         if banjoItem.type == 'progress':
             if banjoItem.btid == self.item_code(itemName.JIGGY):
-                if hasattr(self.multiworld, "generation_is_fake") == False: 
+                if hasattr(self.multiworld, "generation_is_fake") == False:
                     maxJiggy = max(self.randomize_worlds.values())
                     if self.options.open_hag1 == False:
                         maxJiggy = max(maxJiggy, 70)
@@ -146,7 +146,7 @@ class BanjoTooieWorld(World):
 
         if banjoItem.type == 'filler':
             item_classification = ItemClassification.filler
-        
+
         if banjoItem.type == 'trap':
             item_classification = ItemClassification.trap
 
@@ -161,7 +161,7 @@ class BanjoTooieWorld(World):
         item_classification = ItemClassification.progression
         created_item = BanjoTooieItem(name, item_classification, None, self.player)
         return created_item
-    
+
     def create_items(self) -> None:
         itempool = []
         ############## START OF TRAP / BIG O PANTS COUNTER #######################################
@@ -192,11 +192,11 @@ class BanjoTooieWorld(World):
                 trap_big_pants_counter += 1
         if self.options.traps.value == 1 and self.options.nestsanity.value == True:
             total_nests = all_item_table[itemName.ENEST].qty + all_item_table[itemName.FNEST].qty
-            
+
             removed_nests = int(total_nests * self.options.traps_nests_ratio.value / 100)
             removed_enests = int(all_item_table[itemName.ENEST].qty * self.options.traps_nests_ratio.value / 100)
             removed_fnests = removed_nests - removed_enests
-            
+
             trap_big_pants_counter += removed_nests + all_item_table[itemName.GNEST].qty
         elif self.options.nestsanity.value == True: # nestsanity with no traps, remove gnests
             trap_big_pants_counter += all_item_table[itemName.GNEST].qty
@@ -247,7 +247,7 @@ class BanjoTooieWorld(World):
                         for i in range(trap_list.count('gnests')):
                             itempool += [self.create_item(name)]
                     #end of none qty logic
-                    
+
                     #nests removal for nestsanity and nest traps
                     elif item.code == self.item_code(itemName.ENEST):
                         for i in range(all_item_table[item.name].qty - removed_enests):
@@ -256,9 +256,9 @@ class BanjoTooieWorld(World):
                         for i in range(all_item_table[item.name].qty - removed_fnests):
                             itempool += [self.create_item(name)]
                     #end of nest removal for nest traps
-                    
+
                     #notes - extra other notes
-                    elif item.code == self.item_code(itemName.NOTE): 
+                    elif item.code == self.item_code(itemName.NOTE):
                         count = id.qty
                         count -= ((self.options.bass_clef_amount.value*2) + (self.options.extra_trebleclefs_count.value*4))
                         for i in range(count):
@@ -267,7 +267,7 @@ class BanjoTooieWorld(World):
                                     break #sub in for Mumbo Tokens up to 15
                             itempool += [self.create_item(name)]
 
-                    #treble - extra trebles 
+                    #treble - extra trebles
                     elif item.code == self.item_code(itemName.TREBLE) and self.options.extra_trebleclefs_count.value > 0: #add more Trebles
                         count = id.qty
                         count += self.options.extra_trebleclefs_count.value
@@ -299,53 +299,53 @@ class BanjoTooieWorld(World):
             self.get_location(self.location_id_to_name[1230685]).place_locked_item(item)
             self.kingjingalingjiggy = True
             return True #doesn't need to be in the Pool.
-        
+
         if item.code == 0: #Events
             return False
-        
+
         if(item.code == self.item_code(itemName.DOUBLOON) and self.options.randomize_doubloons == False) :
             return False
-        
+
         if(item.code == self.item_code(itemName.PAGES) and self.options.randomize_cheato.value == False) : # Added later in Prefill
             return False
-        
+
         if(item.code == self.item_code(itemName.HONEY) and self.options.randomize_honeycombs == False) : # Added later in Prefill
             return False
-        
-        if(item.code in range(self.item_code(itemName.GGRAB), self.item_code(itemName.AMAZEOGAZE) + 1) and self.options.randomize_moves == False) : #range you need to add +1 to the end. 
+
+        if(item.code in range(self.item_code(itemName.GGRAB), self.item_code(itemName.AMAZEOGAZE) + 1) and self.options.randomize_moves == False) : #range you need to add +1 to the end.
             return False
-        
+
         if(item.code in range(self.item_code(itemName.HUMBAMT), self.item_code(itemName.HUMBAIH) + 1) and self.options.randomize_glowbos == False) : #range you need to add +1 to the end.
             return False
-        
+
         if(item.code in range(self.item_code(itemName.MUMBOMT), self.item_code(itemName.MUMBOIH) + 1) and self.options.randomize_glowbos == False) : #range you need to add +1 to the end.
             return False
 
         if(item.code in range(self.item_code(itemName.WJINJO), self.item_code(itemName.BKJINJO) + 1) and self.options.randomize_jinjos == False) :#range you need to add +1 to the end.
             return False
-        
+
         if(item.code == self.item_code(itemName.TREBLE) and self.options.randomize_treble.value == False):
             return False
-        
+
         if item.code == self.item_code(itemName.CHUFFY) and self.options.randomize_chuffy == False:
             return False
-        
+
         if item.code in range(self.item_code(itemName.TRAINSWGI), self.item_code(itemName.TRAINSWWW) + 1) and self.options.randomize_stations == False:
             return False
-        
+
         if item.code == self.item_code(itemName.NOTE) and self.options.randomize_notes == False: #Notes
             return False
-        
+
         if item.code == self.item_code(itemName.MUMBOTOKEN) and self.options.victory_condition != 5: #Mumbo Tokens for Mini Game and Boss Hunt and Jinjo Fam
             return False
-        
-        # if item.code == self.item_code(itemName.IKEY) and self.options.warp_traps == 0: 
+
+        # if item.code == self.item_code(itemName.IKEY) and self.options.warp_traps == 0:
         #     return False
-        
+
         # from itemName.MTA to itemName.CKA inclusive
         if item.code in range(self.item_code(itemName.MTA), self.item_code(itemName.CKA) + 1):
             return False
-        
+
         #from itemName.IKEY to itemName.PMEGG inclusive
         if item.code in range(self.item_code(itemName.IKEY), self.item_code(itemName.PMEGG) + 1) and self.options.randomize_stop_n_swap == False:
             return False
@@ -355,7 +355,7 @@ class BanjoTooieWorld(World):
             return False
         elif (item.code == self.item_code(itemName.TTROT) or item.code == self.item_code(itemName.TJUMP)) and self.options.randomize_bk_moves.value == 1: # talon trot and tall jump not in pool
             return False
-        
+
         if item.code == self.item_code(itemName.GNEST) and\
             (self.options.nestsanity.value == False or self.options.traps.value == False): #Golden egg nests
             return False
@@ -363,7 +363,7 @@ class BanjoTooieWorld(World):
             return False
         if item.code == self.item_code(itemName.FNEST) and self.options.nestsanity.value == False: #Feather nests
             return False
-        
+
         # if item.code == self.item_code(itemName.NONE) and self.options.cheato_rewards.value == False and self.options.honeyb_rewards.value == False:
         #     return False
         if item.code == self.item_code(itemName.NONE) and self.options.randomize_bk_moves.value == 2 \
@@ -371,28 +371,28 @@ class BanjoTooieWorld(World):
             return False
         if item.code == self.item_code(itemName.NONE) and self.options.traps.value == True:
             return False
-        
+
         if (item.code == self.item_code(itemName.TTRAP) or item.code == self.item_code(itemName.STRAP) or item.code == self.item_code(itemName.TRTRAP) or item.code == self.item_code(itemName.SQTRAP)) and self.options.traps.value == False:
             return False
-        
+
         if self.options.progressive_beak_buster.value == True and (item.code == self.item_code(itemName.BBUST) or item.code == self.item_code(itemName.BDRILL)):
             return False
-        
+
         if item.code == self.item_code(itemName.PBBUST) and self.options.progressive_beak_buster.value == False:
             return False
-        
+
         if item.code == self.item_code(itemName.PFLIGHT) and self.options.progressive_flight.value == False:
             return False
-        
+
         if item.code == self.item_code(itemName.PEGGAIM) and self.options.progressive_egg_aiming.value != 1:
             return False
-        
+
         if item.code == self.item_code(itemName.PAEGGAIM) and self.options.progressive_egg_aiming.value != 2:
             return False
-        
+
         if item.code == self.item_code(itemName.PASWIM) and self.options.progressive_water_training.value != 2:
             return False
-        
+
         if self.options.egg_behaviour.value != 1 and item.code == self.item_code(itemName.BEGGS): #remove blue eggs in pool
             return False
         if self.options.egg_behaviour.value == 2 and (item.code == self.item_code(itemName.FEGGS) or item.code == self.item_code(itemName.GEGGS) or item.code == self.item_code(itemName.IEGGS) \
@@ -402,13 +402,13 @@ class BanjoTooieWorld(World):
             return False
         if self.options.egg_behaviour.value == 1 and item.code == self.starting_egg: #Already has this egg in inventory
             return False
-        
+
         if self.options.progressive_shoes.value == True and (item.code == self.item_code(itemName.SSTRIDE) or item.code == self.item_code(itemName.TTRAIN) \
             or item.code == self.item_code(itemName.SPRINGB) or item.code == self.item_code(itemName.CLAWBTS)):
             return False
         if item.code == self.item_code(itemName.PSHOES) and self.options.progressive_shoes.value == False:
             return False
-        
+
         if self.options.progressive_water_training.value != 0 and (item.code == self.item_code(itemName.DIVE) or item.code == self.item_code(itemName.DAIR) \
             or item.code == self.item_code(itemName.FSWIM)):
             return False
@@ -416,20 +416,20 @@ class BanjoTooieWorld(World):
             return False
         if item.code == self.item_code(itemName.PSWIM) and self.options.progressive_water_training.value != 1:
             return False
-        
+
         if self.options.progressive_flight.value == True and (item.code == self.item_code(itemName.FPAD) or item.code == self.item_code(itemName.BBOMB) or item.code == self.item_code(itemName.AIREAIM)):
             return False
-        
+
         if self.options.progressive_egg_aiming.value != 0 and (item.code == self.item_code(itemName.EGGAIM) or item.code == self.item_code(itemName.EGGSHOOT)):
-            return False 
+            return False
         if self.options.progressive_egg_aiming.value == 2 and (item.code == self.item_code(itemName.AMAZEOGAZE) or item.code == self.item_code(itemName.BBLASTER)):
             return False
-        
+
         if self.options.progressive_bash_attack.value == True and (item.code == self.item_code(itemName.BBASH) or item.code == self.item_code(itemName.GRAT)):
             return False
         if item.code == self.item_code(itemName.PBASH) and self.options.progressive_bash_attack.value == False:
             return False
-        
+
         if item.code == self.item_code(itemName.ROAR) and self.options.randomize_dino_roar.value == False:
             return False
 
@@ -437,10 +437,10 @@ class BanjoTooieWorld(World):
             return False
 
         return True
-    
+
     def check_starting_progressive(self, item: Item) -> int:
         if item.code == self.starting_attack and (item.code in range(1230828, 1230833) or item.code in range(1230782, 1230786)):
-            return all_item_table[item.name].qty - 1 
+            return all_item_table[item.name].qty - 1
         return 0
 
     def create_regions(self) -> None:
@@ -525,11 +525,11 @@ class BanjoTooieWorld(World):
     def set_rules(self) -> None:
         rules = Rules.BanjoTooieRules(self)
         return rules.set_rules()
-    
+
     def pre_fill_me(self) -> None:
         if self.options.randomize_honeycombs.value == False:
             self.banjo_pre_fills(itemName.HONEY, "Honeycomb", False)
-                    
+
         if self.options.randomize_cheato.value == False:
             self.banjo_pre_fills(itemName.PAGES, "Cheato Page", False)
 
@@ -547,7 +547,7 @@ class BanjoTooieWorld(World):
 
         if self.options.randomize_treble.value == False:
             self.banjo_pre_fills(itemName.TREBLE, "Treble Clef", False)
-        
+
         if self.options.randomize_stations.value == False:
             self.banjo_pre_fills("Stations", None, True)
 
@@ -585,12 +585,12 @@ class BanjoTooieWorld(World):
                 else:
                     self.get_location("World "+ str(world_num) +" Unlocked").place_locked_item(item)
                     world_num = world_num + 1
-        
+
         if self.options.victory_condition.value == 1 or self.options.victory_condition.value == 4:
             item = self.create_item(itemName.MUMBOTOKEN)
             for location_name in MumboTokenGames_table.keys():
                 self.get_location(location_name).place_locked_item(item)
-        
+
         if self.options.victory_condition.value == 2 or self.options.victory_condition.value == 4:
             item = self.create_item(itemName.MUMBOTOKEN)
             for location_name in MumboTokenBoss_table.keys():
@@ -599,7 +599,7 @@ class BanjoTooieWorld(World):
             item = self.create_item(itemName.MUMBOTOKEN)
             for location_name in MumboTokenJinjo_table.keys():
                 self.get_location(location_name).place_locked_item(item)
-        
+
         elif self.options.randomize_jinjos.value == False:
             item = self.create_item(itemName.JIGGY)
             self.get_location(locationName.JIGGYIH1).place_locked_item(item)
@@ -737,7 +737,7 @@ class BanjoTooieWorld(World):
             spoiler_handle.write('\n\tJamjars\' Silo Costs:')
             for silo, cost in world.worlds[player].jamjars_siloname_costs.items():
                     spoiler_handle.write(f"\n\t\t{silo}: {cost}")
-            
+
 
     def fill_slot_data(self) -> Dict[str, Any]:
         btoptions = {}
@@ -841,5 +841,5 @@ class BanjoTooieWorld(World):
         add_loading_zone_information(hints, GILoc_table, get_entrance(regionName.GIO))
         add_loading_zone_information(hints, HPLoc_table, get_entrance(regionName.HP))
         add_loading_zone_information(hints, CCLoc_table, get_entrance(regionName.CC))
-        
+
         hint_data.update({self.player: hints})

@@ -3,12 +3,12 @@ from . import BanjoTooieTestBase
 from ..Names import locationName, itemName, regionName
 
 class Jinjo(BanjoTooieTestBase):
-    
+
     def item_pool(self) -> None:
         jinjo_count = 0
         jinjo_counter = 0
 
-        for jinjo in self.world.item_name_groups["Jinjo"]:   
+        for jinjo in self.world.item_name_groups["Jinjo"]:
             banjoItem = all_item_table.get(jinjo)
             jinjo_count += banjoItem.qty
             for item in self.world.multiworld.itempool:
@@ -16,18 +16,18 @@ class Jinjo(BanjoTooieTestBase):
                     jinjo_counter += 1
 
         assert jinjo_count == jinjo_counter
-    
+
     def disabled_item_pool(self) -> None:
         jinjo_counter = 0
 
-        for jinjo in self.world.item_name_groups["Jinjo"]:    
+        for jinjo in self.world.item_name_groups["Jinjo"]:
             for item in self.world.multiworld.itempool:
                 if jinjo == item.name:
                     print(f"Item: {jinjo} Should be here!")
                     jinjo_counter += 1
 
         assert 0 == jinjo_counter
-    
+
     def prefills(self) -> None:
         jinjos = 0
         placed_correctly = 0
@@ -127,7 +127,7 @@ class Jinjo(BanjoTooieTestBase):
                     location_item = self.multiworld.get_location(locationName.JINJOIH5, self.player).item.name
                     if location_item == name:
                         placed_correctly += 1
-                elif name == itemName.PJINJO:      
+                elif name == itemName.PJINJO:
                     location_item = self.multiworld.get_location(locationName.JINJOMT1, self.player).item.name
                     if location_item == name:
                         placed_correctly += 1
@@ -183,7 +183,7 @@ class Jinjo(BanjoTooieTestBase):
             except:
                 print(f"Issue with Item: {name} Please Investigate")
                 placed_correctly += 0
-        assert jinjos == placed_correctly 
+        assert jinjos == placed_correctly
 
 
 class TestJinjoEnabledEasy(Jinjo):
@@ -199,7 +199,7 @@ class TestJinjoEnabledEasy(Jinjo):
         return super().test_empty_state_can_reach_something()
     def test_fill(self):
         return super().test_fill()
-    
+
 class TestJinjoEnabledNormal(Jinjo):
     options = {
         'randomize_jinjos': 'true',
@@ -213,7 +213,7 @@ class TestJinjoEnabledNormal(Jinjo):
         return super().test_empty_state_can_reach_something()
     def test_fill(self):
         return super().test_fill()
-    
+
 class TestJinjoEnabledAdvance(Jinjo):
     options = {
         'randomize_jinjos': 'true',
@@ -227,7 +227,7 @@ class TestJinjoEnabledAdvance(Jinjo):
         return super().test_empty_state_can_reach_something()
     def test_fill(self):
         return super().test_fill()
-    
+
 class TestJinjoEnabledGitch(Jinjo):
     options = {
         'randomize_jinjos': 'true',
@@ -241,7 +241,7 @@ class TestJinjoEnabledGitch(Jinjo):
         return super().test_empty_state_can_reach_something()
     def test_fill(self):
         return super().test_fill()
-    
+
 
 class TestJinjoDisabledEasy(Jinjo):
     options = {
@@ -259,7 +259,7 @@ class TestJinjoDisabledEasy(Jinjo):
         return super().test_empty_state_can_reach_something()
     def test_fill(self):
         return super().test_fill()
-    
+
 class TestJinjoDisabledNormal(Jinjo):
     options = {
         'randomize_jinjos': 'false',
@@ -276,7 +276,7 @@ class TestJinjoDisabledNormal(Jinjo):
         return super().test_empty_state_can_reach_something()
     def test_fill(self):
         return super().test_fill()
-    
+
 class TestJinjoDisabledAdvance(Jinjo):
     options = {
         'randomize_jinjos': 'false',

@@ -15,12 +15,12 @@ else:
 
 def WorldRandomize(world: BanjoTooieWorld) -> None:
     # Universal Tracker Magic
-    if hasattr(world.multiworld, "re_gen_passthrough"): 
+    if hasattr(world.multiworld, "re_gen_passthrough"):
         if "Banjo-Tooie" in world.multiworld.re_gen_passthrough:
             passthrough = world.multiworld.re_gen_passthrough["Banjo-Tooie"]
             world.randomize_worlds = passthrough['world_order']
             world.randomize_order = passthrough['world_keys']
-            world.worlds_randomized = bool(passthrough['worlds'] == 'true') 
+            world.worlds_randomized = bool(passthrough['worlds'] == 'true')
             world.starting_egg = passthrough['starting_egg']
             world.starting_attack = passthrough['starting_attack']
             world.single_silo = passthrough['first_silo']
@@ -46,7 +46,7 @@ def randomize_level_order(world: BanjoTooieWorld) -> None:
             regionName.GIO: 1230949,
             regionName.HP:  1230950,
             regionName.CC:  1230951,
-            regionName.CK:  1230952 
+            regionName.CK:  1230952
         }
     else:
         if world.options.randomize_world_loading_zone:
@@ -61,11 +61,11 @@ def randomize_level_order(world: BanjoTooieWorld) -> None:
             world.randomize_order.update({regionName.CK: 1230952})
 
 def generate_world_order(world: BanjoTooieWorld, worlds: List[str]) -> List[str]:
-    
+
     bad_first_worlds = set()
     # Fewer than 4 collectibles to get progressive Claw Clambers.
     if world.options.progressive_shoes.value:
-        bad_first_worlds.add(regionName.CK) 
+        bad_first_worlds.add(regionName.CK)
     # Not enough collectibles in the overworld to get to Quag
     if world.options.randomize_bk_moves.value != 2 and world.options.open_silos.value == 0:
         bad_first_worlds.update([regionName.GIO, regionName.CK])
@@ -73,7 +73,7 @@ def generate_world_order(world: BanjoTooieWorld, worlds: List[str]) -> List[str]
     if world.options.randomize_bk_moves.value == 1 and world.options.open_silos.value == 0\
         and world.options.nestsanity.value == 0:
         bad_first_worlds.update([regionName.CC, regionName.TL])
-        
+
     world1 = world.random.choice([w for w in worlds if w not in bad_first_worlds])
     # The 2nd world needs to be not too hard to access from the first world.
     easy_2nd_worlds = {
@@ -88,14 +88,14 @@ def generate_world_order(world: BanjoTooieWorld, worlds: List[str]) -> List[str]
         regionName.HP:  [regionName.MT, regionName.GM, regionName.JR],
         # Same thing with GI here.
         regionName.CC: [regionName.MT, regionName.GM, regionName.WW, regionName.TL] if world.options.progressive_shoes.value else [regionName.MT, regionName.GM, regionName.WW, regionName.GIO, regionName.TL],
-        regionName.CK:  [regionName.MT, regionName.GM, regionName.GIO, regionName.TL, regionName.CC] 
+        regionName.CK:  [regionName.MT, regionName.GM, regionName.GIO, regionName.TL, regionName.CC]
     }
     world2 = world.random.choice(easy_2nd_worlds[world1])
     left_worlds = [w for w in worlds if w not in [world1, world2]]
     world.random.shuffle(left_worlds)
-    
+
     worlds = [world1] + [world2] + left_worlds
-    
+
     return worlds
 
 def set_level_costs(world: BanjoTooieWorld) -> None:
@@ -111,10 +111,10 @@ def set_level_costs(world: BanjoTooieWorld) -> None:
 
     if len(custom_costs) < 9:
         raise ValueError("Custom Costs has too few levels.")
-    
+
     if len(custom_costs) > 9:
         raise ValueError("Custom Costs has too many levels.")
-    
+
     for i in range(len(custom_costs)):
         try:
             int(custom_costs[i])
@@ -127,7 +127,7 @@ def set_level_costs(world: BanjoTooieWorld) -> None:
             raise ValueError("Custom Cost for world "+str(i+1)+" can't be negative.")
         if custom_costs[i] > level_cost_max[i]:
             raise ValueError("Custom Cost for world "+str(i+1)+" is too high.")
-    
+
 
     # custom_costs = [
     #     world.options.world_1.value,
@@ -163,12 +163,12 @@ def randomize_entrance_loading_zones(world: BanjoTooieWorld) -> None:
     else:
         good_levels = [l for l in randomizable_levels if l not in [regionName.CK, regionName.GIO]]
         level1 = world.random.choice(good_levels)
-        
+
         rest_levels = [l for l in randomizable_levels if l != level1]
         world.random.shuffle(rest_levels)
-        
+
         randomized_levels = [level1] + rest_levels
-        
+
         world.loading_zones = {randomizable_levels[i]: randomized_levels[i] for i in range(len(randomizable_levels))}
 
 
@@ -178,7 +178,7 @@ def choose_unlocked_silos(world: BanjoTooieWorld) -> None:
 
     elif world.options.randomize_bk_moves.value == 2 and world.options.randomize_worlds.value == 0 and world.options.open_silos.value == 0:
         world.single_silo = "NONE"
-        
+
     elif world.options.open_silos.value == 2:
         world.single_silo = "ALL"
 
@@ -251,7 +251,7 @@ def handle_early_moves(world: BanjoTooieWorld) -> None:
                 move_lst = [itemName.SPLITUP, itemName.FPAD]
             move = world.random.choice(move_lst)
             world.multiworld.early_items[world.player][move] = 1
-        
+
         if first_level == regionName.CK: # CK can't be first if progressive shoes.
                 world.multiworld.early_items[world.player][itemName.CLAWBTS] = 1
 
@@ -392,6 +392,6 @@ def generate_jamjars_costs(world: BanjoTooieWorld) -> None:
             actual_level = world.loading_zones[world_entrance]
             for silo in moves_per_world[actual_level]:
                 world.jamjars_siloname_costs.update({silo: move_costs.pop()})
-            
+
     for name, value in world.jamjars_siloname_costs.items():
         world.jamjars_silo_costs[all_location_table[name].btid] = value

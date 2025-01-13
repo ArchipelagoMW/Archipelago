@@ -7,24 +7,24 @@ class AdvMoves(BanjoTooieTestBase):
         adv_move_count = len(self.world.item_name_groups["Moves"])
         adv_count = 0
 
-        for adv_move in self.world.item_name_groups["Moves"]:    
+        for adv_move in self.world.item_name_groups["Moves"]:
             for item in self.world.multiworld.itempool:
                 if adv_move == item.name:
                     adv_count += 1
 
         assert adv_move_count == adv_count
-    
+
     def disabled_item_pool(self) -> None:
         adv_count = 0
 
-        for adv_move in self.world.item_name_groups["Moves"]:    
+        for adv_move in self.world.item_name_groups["Moves"]:
             for item in self.world.multiworld.itempool:
                 if adv_move == item.name:
                     print(f"Item: {adv_move} Should be here!")
                     adv_count += 1
 
         assert 0 == adv_count
-    
+
     def prefills(self) -> None:
         adv_items = 0
         placed_correctly = 0
@@ -68,7 +68,7 @@ class TestAdvMovesEnabledNormal(AdvMoves):
         return super().test_empty_state_can_reach_something()
     def test_fill(self):
         return super().test_fill()
-    
+
 class TestAdvMovesEnabledAdvance(AdvMoves):
     options = {
         'randomized_moves': 'true',
@@ -82,7 +82,7 @@ class TestAdvMovesEnabledAdvance(AdvMoves):
         return super().test_empty_state_can_reach_something()
     def test_fill(self):
         return super().test_fill()
-    
+
 class TestAdvMovesEnabledGitch(AdvMoves):
     options = {
         'randomized_moves': 'true',
@@ -96,8 +96,8 @@ class TestAdvMovesEnabledGitch(AdvMoves):
         return super().test_empty_state_can_reach_something()
     def test_fill(self):
         return super().test_fill()
-    
-    
+
+
 class TestAdvMovesDisabledEasy(AdvMoves):
     options = {
         'randomize_moves': 'false',

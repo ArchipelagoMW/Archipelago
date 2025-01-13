@@ -51,7 +51,7 @@ BANJOTOOIEREGIONS: typing.Dict[str, typing.List[str]] = {
     ],
     regionName.MT:       [
         locationName.JIGGYGM6,
-        locationName.JINJOMT1, 
+        locationName.JINJOMT1,
         locationName.JINJOMT2,
         locationName.JINJOMT3,
         locationName.JINJOMT4,
@@ -93,7 +93,7 @@ BANJOTOOIEREGIONS: typing.Dict[str, typing.List[str]] = {
         locationName.NOTEMT13,
         locationName.NOTEMT14,
         locationName.NOTEMT15,
-        locationName.NOTEMT16    
+        locationName.NOTEMT16
     ],
     regionName.IOHPL:    [
         locationName.JINJOIH4,
@@ -155,11 +155,11 @@ BANJOTOOIEREGIONS: typing.Dict[str, typing.List[str]] = {
         locationName.JINJOGM1,
     ],
     regionName.GMFD: [],
-    regionName.CHUFFY: 
+    regionName.CHUFFY:
     [
         locationName.JIGGYGM1,
         locationName.CHUFFY
- 
+
     ],
     regionName.IOHPG:   [
         locationName.GEGGS,
@@ -283,10 +283,10 @@ BANJOTOOIEREGIONS: typing.Dict[str, typing.List[str]] = {
         locationName.NOTEJRL13,
         locationName.NOTEJRL14,
         locationName.NOTEJRL15,
-        locationName.NOTEJRL16 
+        locationName.NOTEJRL16
     ],
     regionName.JRU: [
-        locationName.JINJOGI3,     
+        locationName.JINJOGI3,
         locationName.JIGGYJR10,
         locationName.CHEATOJR2,
         locationName.NOTEJRL4,
@@ -419,7 +419,7 @@ BANJOTOOIEREGIONS: typing.Dict[str, typing.List[str]] = {
         locationName.HONEYCGI1,
         locationName.GLOWBOGI2,
         locationName.NOTEGI15,
-        locationName.NOTEGI16,        
+        locationName.NOTEGI16,
     ],
     regionName.GI3B: [
         locationName.JINJOGI4,
@@ -756,7 +756,7 @@ NEST_REGIONS: typing.Dict[str, typing.List[str]] = {
     ],
     regionName.WWA51NESTS:   [
       locationName.NESTWW5,
-      locationName.NESTWW6,  
+      locationName.NESTWW6,
     ],
     regionName.IOHCT:   [
       locationName.NESTIH40,
@@ -953,7 +953,7 @@ NEST_REGIONS: typing.Dict[str, typing.List[str]] = {
       locationName.NESTGI37,
       locationName.NESTGI38,
       locationName.NESTGI39,
-      locationName.NESTGI40,      
+      locationName.NESTGI40,
     ],
     regionName.GI3B: [
       locationName.NESTGI41,
@@ -990,7 +990,7 @@ NEST_REGIONS: typing.Dict[str, typing.List[str]] = {
       locationName.NESTGI1,
       locationName.NESTGI2,
       locationName.NESTGI3,
-      
+
       locationName.NESTGI26,
 
       locationName.NESTGI31,
@@ -1094,7 +1094,7 @@ NEST_REGIONS: typing.Dict[str, typing.List[str]] = {
       locationName.NESTCC50,
     ],
 }
-    
+
 def create_regions(self):
     multiworld = self.multiworld
     player = self.player
@@ -1162,11 +1162,11 @@ def create_regions(self):
 
     multiworld.regions += [create_region(multiworld, player, active_locations, region, locations) for region, locations in
                            region_map.items()]
-    
+
     if self.options.victory_condition == 0:
         multiworld.get_location(locationName.HAG1, player).place_locked_item(
          	self.create_event_item(itemName.VICTORY))
-        
+
     if self.options.victory_condition == 4:
         multiworld.get_location(locationName.HAG1, player).place_locked_item(
          	self.create_event_item(itemName.VICTORY))
@@ -1203,7 +1203,7 @@ def connect_regions(self):
 
     region_WH = self.get_region(regionName.IOHWH)
     region_WH.add_exits({regionName.MTE, regionName.IOHPL},
-                        {regionName.MTE: lambda state: rules.mt_jiggy(state), 
+                        {regionName.MTE: lambda state: rules.mt_jiggy(state),
                          regionName.IOHPL: lambda state: rules.WH_to_PL(state)})
 
     region_MT = self.get_region(regionName.MT)
@@ -1211,17 +1211,17 @@ def connect_regions(self):
                         {regionName.TL_HATCH: lambda state: rules.jiggy_treasure_chamber(state),\
                         regionName.GM: lambda state: rules.dilberta_free(state),
                         regionName.HP: lambda state: rules.mt_hfp_backdoor(state)})
-    
+
     region_HATCH = self.get_region(regionName.TL_HATCH)
     region_HATCH.add_exits({regionName.TL},
                         {regionName.TL: lambda state: rules.hatch_to_TDL(state)})
 
     region_PL = self.get_region(regionName.IOHPL)
     region_PL.add_exits({regionName.GGME, regionName.IOHPG, regionName.IOHCT},
-                        {regionName.GGME: lambda state: rules.PL_to_GGM(state), 
+                        {regionName.GGME: lambda state: rules.PL_to_GGM(state),
                          regionName.IOHPG: lambda state: rules.PL_to_PG(state),
                         regionName.IOHCT: lambda state: rules.split_up(state)})
-    
+
     region_GM = self.get_region(regionName.GM)
     region_GM.add_exits({regionName.GMWSJT, regionName.CHUFFY, regionName.GMFD}, {
                         regionName.GMWSJT: lambda state: rules.can_access_water_storage_jinjo_from_GGM(state),
@@ -1229,23 +1229,23 @@ def connect_regions(self):
                         regionName.GMFD: lambda state: rules.humbaGGM(state),
                         regionName.WW: lambda state: rules.ggm_to_ww(state)
                         })
-  
+
     region_GMWSJT = self.get_region(regionName.GMWSJT)
     region_GMWSJT.add_exits({regionName.GM}, {})
-    
+
     region_PG = self.get_region(regionName.IOHPG)
     region_PG.add_exits({regionName.WWE, regionName.IOHPGU, regionName.IOHPL}, {
                           regionName.WWE: lambda state: rules.ww_jiggy(state),
                           regionName.IOHPGU: lambda state: rules.dive(state),
                           regionName.IOHPL: lambda state: rules.PG_to_PL(state)
                         })
-    
+
     region_PGU = self.get_region(regionName.IOHPGU)
     region_PGU.add_exits({regionName.IOHWL, regionName.IOHPG}, {
                             regionName.IOHPG: lambda state: rules.PGU_to_PG(state),
                             regionName.IOHWL: lambda state: rules.talon_torpedo(state),
                           })
-    
+
     region_WW = self.get_region(regionName.WW)
     region_WW.add_exits({regionName.CHUFFY, regionName.TL, regionName.GMFD, regionName.WWA51NESTS},
                         {regionName.CHUFFY: lambda state: rules.can_beat_king_coal(state) and rules.ww_to_chuffy(state),
@@ -1260,15 +1260,15 @@ def connect_regions(self):
          regionName.JRLE: lambda state: rules.jrl_jiggy(state),
          regionName.CHUFFY: lambda state: rules.can_beat_king_coal(state) and rules.ioh_to_chuffy(state),
          regionName.IOHPL: lambda state: rules.PG_to_PL(state)})
-  
+
     region_JR = self.get_region(regionName.JR)
     region_JR.add_exits({regionName.JRU},
                         {regionName.JRU: lambda state: rules.can_dive_in_JRL(state)})
-    
+
     region_JRU = self.get_region(regionName.JRU)
     region_JRU.add_exits({regionName.JRU2},
                         {regionName.JRU2: lambda state: rules.can_reach_atlantis(state)})
-    
+
     region_JRU2 = self.get_region(regionName.JRU2)
     region_JRU2.add_exits({regionName.GMWSJT},
                         {regionName.GMWSJT: lambda state: rules.can_access_water_storage_jinjo_from_JRL(state)})
@@ -1285,7 +1285,7 @@ def connect_regions(self):
                          regionName.IOHQM: lambda state: rules.springy_step_shoes(state),
                          regionName.TDLE: lambda state: rules.tdl_jiggy(state),
                          regionName.CCLE: lambda state: rules.ccl_jiggy(state)})
-    
+
     region_TL = self.get_region(regionName.TL)
     region_TL.add_exits({regionName.TL_HATCH, regionName.WW, regionName.CHUFFY, regionName.WWA51NESTS},
                         {regionName.WW: lambda state: rules.TDL_to_WW(state),
@@ -1293,19 +1293,19 @@ def connect_regions(self):
                          regionName.TL_HATCH: lambda state: rules.tdl_to_hatch(state),
                          regionName.WWA51NESTS: lambda state: rules.a51_nests_from_TDL(state),
                          })
-    
+
     region_QM = self.get_region(regionName.IOHQM)
     region_QM.add_exits({regionName.GIE, regionName.IOHWL, regionName.CKE},
                         {regionName.GIE: lambda state: rules.gi_jiggy(state),
                          regionName.IOHWL: lambda state: rules.QM_to_WL(state),
                          regionName.CKE: lambda state: rules.quag_to_CK(state)})
-    
+
     region_GIO = self.get_region(regionName.GIO)
     region_GIO.add_exits({regionName.GI1, regionName.GIOB, regionName.GI5},
                         {regionName.GI1: lambda state: rules.outside_gi_to_floor1(state),
                          regionName.GIOB: lambda state: rules.outside_gi_to_outside_back(state),
                          regionName.GI5: lambda state: rules.outside_gi_to_floor_5(state)})
-    
+
     region_GIOB = self.get_region(regionName.GIOB)
     region_GIOB.add_exits({regionName.GIO, regionName.GI2, regionName.GI3, regionName.GI4, regionName.GI5},
                         {regionName.GIO: lambda state: rules.climb(state),
@@ -1314,33 +1314,33 @@ def connect_regions(self):
                          regionName.GI4: lambda state: rules.outside_gi_back_to_floor_4(state),
                          regionName.GI5: lambda state: rules.outside_gi_back_to_floor_5(state)
                          })
-    
+
     region_GIES = self.get_region(regionName.GIES)
     region_GIES.add_exits({regionName.GI1, regionName.GI2, regionName.GI3, regionName.GI4},
                         {regionName.GI1: lambda state: rules.elevator_shaft_to_floor_1(state),
                          regionName.GI2: lambda state: rules.elevator_shaft_to_em(state),
                          regionName.GI3: lambda state: rules.elevator_shaft_to_boiler_plant(state),
                          regionName.GI4: lambda state: rules.elevator_shaft_to_floor_4(state)})
-    
+
     region_GI1 = self.get_region(regionName.GI1)
     region_GI1.add_exits({regionName.GIO, regionName.GIES, regionName.GI2, regionName.GI5, regionName.CHUFFY},
                         {regionName.GIO: lambda state: rules.split_up(state),
                          regionName.GI2: lambda state: rules.F1_to_F2(state), # TODO: 1 to 3 and 1 to 4, maybe
                          regionName.GI5: lambda state: rules.F1_to_F5(state),
                          regionName.CHUFFY: lambda state: rules.can_beat_king_coal(state) and rules.gi_to_chuffy(state)})
-    
+
     region_GI2 = self.get_region(regionName.GI2)
     region_GI2.add_exits({regionName.GIOB, regionName.GI1, regionName.GI2EM, regionName.GI3},
                         {regionName.GI1: lambda state: rules.F2_to_F1(state),
                          regionName.GI2EM: lambda state: rules.floor_2_to_em_room(state),
                          regionName.GI3: lambda state: rules.F2_to_F3(state)
                          })
-    
+
     region_GI2EM = self.get_region(regionName.GI2)
     region_GI2EM.add_exits({regionName.GIES},
                         {regionName.GIES: lambda state: rules.floor_2_em_room_to_elevator_shaft(state)
                          })
-    
+
     region_GI3 = self.get_region(regionName.GI3)
     region_GI3.add_exits({regionName.GIOB, regionName.GI2, regionName.GI3B, regionName.GI4, regionName.GI5}, {
                             regionName.GIOB: lambda state: rules.floor_3_to_outside_back(state),
@@ -1349,10 +1349,10 @@ def connect_regions(self):
                             regionName.GI4: lambda state: rules.F3_to_F4(state),
                             regionName.GI5: lambda state: rules.floor_3_to_floor_5(state),
                             })
-    
+
     region_GI3B = self.get_region(regionName.GI3B)
     region_GI3B.add_exits({regionName.GI3, regionName.GIES}, {
-                            regionName.GIES: lambda state: rules.elevator_door(state), 
+                            regionName.GIES: lambda state: rules.elevator_door(state),
                           })
 
     region_GI4 = self.get_region(regionName.GI4)
@@ -1362,7 +1362,7 @@ def connect_regions(self):
                             regionName.GI4B: lambda state: rules.floor_4_to_floor_4_back(state),
                             regionName.GI5: lambda state: rules.floor_4_to_floor_5(state),
                             })
-    
+
     region_GI4B = self.get_region(regionName.GI4B)
     region_GI4B.add_exits({regionName.GIES, regionName.GI4}, {
                             regionName.GIES: lambda state: rules.floor_4_back_to_elevator_shaft(state)
@@ -1373,11 +1373,11 @@ def connect_regions(self):
                             regionName.GI1:  lambda state: rules.floor_5_to_floor_1(state),
                             regionName.GI3B: lambda state: rules.floor_5_to_boiler_plant(state)
                             })
-    
+
     region_CK = self.get_region(regionName.CK)
     region_CK.add_exits({regionName.H1},
                         {regionName.H1: lambda state: rules.check_hag1_options(state)})
-    
+
     region_chuffy = self.get_region(regionName.CHUFFY)
     region_chuffy.add_exits({regionName.GM, regionName.WW, regionName.IOHCT, regionName.TL,regionName.GI1,regionName.HP},
                         {regionName.GM: lambda state: state.has(itemName.CHUFFY, player),
@@ -1387,7 +1387,7 @@ def connect_regions(self):
                          regionName.GI1: lambda state: state.has(itemName.CHUFFY, player) and state.has(itemName.TRAINSWGI, player),
                          regionName.HP: lambda state: state.has(itemName.CHUFFY, player) and state.has(itemName.TRAINSWHP1, player)
                          })
-    
+
     region_mt_entrance = self.get_region(regionName.MTE)
     region_mt_entrance.add_exits({regionName.IOHWH}, {regionName.IOHWH: lambda state: rules.MT_to_WH(state)})
 
@@ -1441,7 +1441,7 @@ def connect_regions(self):
             region_actual_world_entrance.add_exits({overworld_entrance}, {overworld_entrance: lambda state: rules.GGM_to_PL(state)})
         else:
             region_actual_world_entrance.add_exits({overworld_entrance})
-            
+
 
     # Silos
     silo = self.single_silo
@@ -1451,4 +1451,4 @@ def connect_regions(self):
         region_JV.add_exits({regionName.IOHPL, regionName.IOHCT, regionName.IOHPG, regionName.IOHWL, regionName.IOHQM})
     else: # The value is a region name of the overworld.
         region_JV.add_exits({silo})
-    
+
