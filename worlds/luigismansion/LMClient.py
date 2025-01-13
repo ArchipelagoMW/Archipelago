@@ -293,6 +293,9 @@ async def check_locations(ctx: LMContext):
     # switches_bitfield = int.from_bytes(dolphin_memory_engine.read_bytes(SWITCHES_BITFLD_ADDR, 10))
     # pickups_bitfield = dolphin_memory_engine.read_word(PICKUPS_BITFLD_ADDR)
 
+    if not 2147483648 <= dme.read_word(ROOM_ID_ADDR) <= 2172649471:
+        return
+
     temp_medals_watch = dme.read_byte(MEDALS_RECV_ADDR)
     if temp_medals_watch != ctx.medals_tracked:
         if ctx.medals_tracked > 0:
@@ -376,35 +379,33 @@ async def check_locations(ctx: LMContext):
                 if (bit_int & (1<<i)) > 0 and not boo_name_collection[boo_addr_pos][i] == "":
                     print("Luigi has captured the following Boo: '" + boo_name_collection[boo_addr_pos][i] + "'")
 
-    if 2147483648 <= dme.read_word(ROOM_ID_ADDR) <= 2172649471:
-        current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
+    current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
+    furniture_name_list: dict[str, LMLocationData] = dict(filter(lambda item: (item[1].type == "Furniture" or
+        item[1].type == "Plant") and item[1].in_game_room_id == current_room_id, ALL_LOCATION_TABLE.items()))
 
-        furniture_name_list: dict[str, LMLocationData] = dict(filter(lambda item: (item[1].type == "Furniture" or
-            item[1].type == "Plant") and item[1].in_game_room_id == current_room_id, ALL_LOCATION_TABLE.items()))
+    if len(furniture_name_list.keys()) > 0:
+        for current_offset in range(0, FURNITURE_ADDR_COUNT, 4): # TODO Validate this accounts for all furniture
+            current_addr = FURNITURE_MAIN_TABLE_ID+current_offset
 
-        if len(furniture_name_list.keys()) > 0:
-            for current_offset in range(0, FURNITURE_ADDR_COUNT, 4): # TODO Validate this accounts for all furniture
-                current_addr = FURNITURE_MAIN_TABLE_ID+current_offset
+            # Not within a valid range for a pointer
+            if  not (2147483648 <= dme.read_word(current_addr) <= 2172649471):
+                continue
 
-                # Not within a valid range for a pointer
-                if  not (2147483648 <= dme.read_word(current_addr) <= 2172649471):
-                    continue
+            furniture_id = dme.read_word(dme.follow_pointers(current_addr, [FURN_ID_OFFSET]))
+            furniture_flag =  dme.read_word(dme.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
 
-                furniture_id = dme.read_word(dme.follow_pointers(current_addr, [FURN_ID_OFFSET]))
-                furniture_flag =  dme.read_word(dme.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
+            # ID is a valid piece of furniture in the room, has been interacted with, and not already tracked.
+            named_furniture = next(((key, value) for (key, value) in furniture_name_list.items() if
+                                value.jmpentry == furniture_id), None)
+            if named_furniture is None or furniture_flag == 0 or (
+                    LMContext.checked_furniture.__contains__(str(named_furniture[0]))):
+                continue
 
-                # ID is a valid piece of furniture in the room, has been interacted with, and not already tracked.
-                named_furniture = next(((key, value) for (key, value) in furniture_name_list.items() if
-                                    value.jmpentry == furniture_id), None)
-                if named_furniture is None or furniture_flag == 0 or (
-                        LMContext.checked_furniture.__contains__(str(named_furniture[0]))):
-                    continue
+            logger.info(f"Luigi knocked on furniture '{named_furniture[0]}' in In Game Room #{str(current_room_id)}.\n"+
+                  f"Additional Debug Details: Current Addr: {hex(current_addr)}; Furniture ID: {hex(furniture_id)}; " +
+                  f"Flag Value: {furniture_flag}")
 
-                logger.info(f"Luigi knocked on furniture '{named_furniture[0]}' in In Game Room #{str(current_room_id)}.\n"+
-                      f"Additional Debug Details: Current Addr: {hex(current_addr)}; Furniture ID: {hex(furniture_id)}; " +
-                      f"Flag Value: {furniture_flag}")
-
-                LMContext.checked_furniture.append(named_furniture[0])
+            LMContext.checked_furniture.append(named_furniture[0])
 
     for curr_room_state_addr in range(ROOM_STATE_COUNT):
         curr_room_state_int = dme.read_byte(ROOM_STATE_ADDR + curr_room_state_addr)
