@@ -93,7 +93,7 @@ class AquariaWorld(World):
     options: AquariaOptions
     "Every options of the world"
 
-    regions: AquariaRegions
+    regions: AquariaRegions | None
     "Used to manage Regions"
 
     exclude: List[str]
@@ -101,7 +101,7 @@ class AquariaWorld(World):
     def __init__(self, multiworld: MultiWorld, player: int):
         """Initialisation of the Aquaria World"""
         super(AquariaWorld, self).__init__(multiworld, player)
-        self.regions = AquariaRegions(multiworld, player)
+        self.regions = None
         self.ingredients_substitution = []
         self.exclude = []
 
@@ -127,6 +127,13 @@ class AquariaWorld(World):
         result = AquariaItem(name, classification, data.id, self.player)
 
         return result
+
+    def generate_early(self) -> None:
+        """
+        Run before any general steps of the MultiWorld other than options. Useful for getting and adjusting option
+        results and determining layouts for entrance rando etc. start inventory gets pushed after this step.
+        """
+        self.regions = AquariaRegions(self.multiworld, self.player)
 
     def __pre_fill_item(self, item_name: str, location_name: str, precollected,
                         itemClassification: ItemClassification = ItemClassification.useful) -> None:
