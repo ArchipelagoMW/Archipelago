@@ -24,20 +24,22 @@ def get_prereqs_for_era(
     era_required_items = get_era_required_items_data()[end_era.value].copy()
 
     # If we are excluding progressive items, we need to remove them from the list of expected items (TECH_BRONZE_WORKING won't be here since it will be PROGRESSIVE_ENCAMPMENT)
-    if exclude_progressive_items:
-        flat_progressive_items = get_flat_progressive_districts()
-        prereqs_without_progressive_items: List[str] = []
-        for item in era_required_items:
-            if item in flat_progressive_items:
-                continue
-            prereqs_without_progressive_items.append(item)
-
+    if not exclude_progressive_items:  # guard clause to save an indent depth
         return [
-            get_item_by_civ_name(prereq, item_table)
-            for prereq in prereqs_without_progressive_items
+            get_item_by_civ_name(prereq, item_table) for prereq in era_required_items
         ]
 
-    return [get_item_by_civ_name(prereq, item_table) for prereq in era_required_items]
+    flat_progressive_items = get_flat_progressive_districts()
+    prereqs_without_progressive_items: List[str] = []
+    for item in era_required_items:
+        if item in flat_progressive_items:
+            continue
+        prereqs_without_progressive_items.append(item)
+
+    return [
+        get_item_by_civ_name(prereq, item_table)
+        for prereq in prereqs_without_progressive_items
+    ]
 
 
 def has_required_progressive_districts(
