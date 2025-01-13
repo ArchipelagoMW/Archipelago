@@ -5,29 +5,23 @@ from typing import Dict, Any, Iterable, Optional, Union, List, TextIO
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
-from . import rules
 from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles
-from .content import content_packs, StardewContent, unpack_content, create_content
+from .content import StardewContent, create_content
 from .early_items import setup_early_items
 from .items import item_table, create_items, ItemData, Group, items_by_group, get_all_filler_items, remove_limited_amount_packs
 from .locations import location_table, create_locations, LocationData, locations_by_tag
-from .logic.bundle_logic import BundleLogic
 from .logic.logic import StardewLogic
-from .logic.time_logic import MAX_MONTHS
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, EnabledFillerBuffs, NumberOfMovementBuffs, \
-    BuildingProgression, ExcludeGingerIsland, TrapItems, EntranceRandomization, FarmType, Walnutsanity
+    BuildingProgression, ExcludeGingerIsland, TrapItems, EntranceRandomization, FarmType
 from .options.forced_options import force_change_options_if_incompatible
 from .options.option_groups import sv_option_groups
 from .options.presets import sv_options_presets
 from .regions import create_regions
 from .rules import set_rules
-from .stardew_rule import True_, StardewRule, HasProgressionPercent, true_
+from .stardew_rule import True_, StardewRule, HasProgressionPercent
 from .strings.ap_names.event_names import Event
-from .strings.entrance_names import Entrance as EntranceName
 from .strings.goal_names import Goal as GoalName
-from .strings.metal_names import Ore
-from .strings.region_names import Region as RegionName, LogicRegion
 
 logger = logging.getLogger(__name__)
 
@@ -159,7 +153,7 @@ class StardewValleyWorld(World):
         self.multiworld.itempool += created_items
 
         setup_early_items(self.multiworld, self.options, self.content, self.player, self.random)
-        self.setup_player_events()
+        self.setup_logic_events()
         self.setup_victory()
 
         # This is really a best-effort to get the total progression items count. It is mostly used to spread grinds across spheres are push back locations that
@@ -198,20 +192,6 @@ class StardewValleyWorld(World):
     def precollect_farm_type_items(self):
         if self.options.farm_type == FarmType.option_meadowlands and self.options.building_progression & BuildingProgression.option_progressive:
             self.multiworld.push_precollected(self.create_starting_item("Progressive Coop"))
-
-    def setup_player_events(self):
-        self.setup_action_events()
-        self.setup_logic_events()
-
-    def setup_action_events(self):
-        spring_farming = LocationData(None, LogicRegion.spring_farming, Event.spring_farming)
-        self.create_event_location(spring_farming, true_, Event.spring_farming)
-        summer_farming = LocationData(None, LogicRegion.summer_farming, Event.summer_farming)
-        self.create_event_location(summer_farming, true_, Event.summer_farming)
-        fall_farming = LocationData(None, LogicRegion.fall_farming, Event.fall_farming)
-        self.create_event_location(fall_farming, true_, Event.fall_farming)
-        winter_farming = LocationData(None, LogicRegion.winter_farming, Event.winter_farming)
-        self.create_event_location(winter_farming, true_, Event.winter_farming)
 
     def setup_logic_events(self):
         def register_event(name: str, region: str, rule: StardewRule):
