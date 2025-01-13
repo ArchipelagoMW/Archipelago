@@ -23,7 +23,6 @@ def can_buy(state: CollectionState, item: str, player: int) -> bool:
                shop in state.multiworld.shops)
 
 
-    
 def can_shoot_arrows(state: CollectionState, player: int, count: int = 0) -> bool:
     if state.multiworld.worlds[player].options.retro_bow:
         return (state.has('Bow', player) or state.has('Silver Bow', player)) and can_buy(state, 'Single Arrow', player)
@@ -179,7 +178,6 @@ def has_fire_source(state: CollectionState, player: int) -> bool:
 
 def can_melt_things(state: CollectionState, player: int) -> bool:
     return state.has('Fire Rod', player) or \
-
         (state.has('Bombos', player) and
          (state.multiworld.worlds[player].options.swordless or
           has_sword(state, player)))
