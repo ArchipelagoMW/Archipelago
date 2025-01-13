@@ -486,7 +486,8 @@ def distribute_early_items(multiworld: MultiWorld,
 
 
 def distribute_items_restrictive(multiworld: MultiWorld,
-                                 panic_method: typing.Literal["swap", "raise", "start_inventory"] = "swap") -> None:
+                                 panic_method: typing.Literal["swap", "raise", "start_inventory"] = "swap",
+                                 sphere_1_percent_to_reserve = 0) -> None:
     assert all(item.location is None for item in multiworld.itempool), (
         "At the start of distribute_items_restrictive, "
         "there are items in the multiworld itempool that are already placed on locations:\n"
@@ -500,6 +501,8 @@ def distribute_items_restrictive(multiworld: MultiWorld,
     multiworld.random.shuffle(itempool)
 
     fill_locations, itempool = distribute_early_items(multiworld, fill_locations, itempool)
+    fill_locations, itempool = distribute_local_nonprogression(multiworld, fill_locations, itempool,
+                                                               sphere_1_percent_to_reserve)
 
     progitempool: typing.List[Item] = []
     usefulitempool: typing.List[Item] = []
@@ -608,8 +611,7 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         if progitempool:
             raise FillError(
                 f"Not enough locations for progression items. "
-                f"There are {len(progitempool)} more progression items than there are available locations.\n"
-                f"Unfilled locations:\n{multiworld.get_unfilled_locations()}.",
+                f"There are {len(progitempool)} more progression items than there are available locations.",
                 multiworld=multiworld,
             )
         accessibility_corrections(multiworld, multiworld.state, defaultlocations)
@@ -647,26 +649,6 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         items_counter.update(item.player for item in unplaced)
         print_data = {"items": items_counter, "locations": locations_counter}
         logging.info(f"Per-Player counts: {print_data})")
-
-        more_locations = locations_counter - items_counter
-        more_items = items_counter - locations_counter
-        for player in multiworld.player_ids:
-            if more_locations[player]:
-                logging.error(
-                    f"Player {multiworld.get_player_name(player)} had {more_locations[player]} more locations than items.")
-            elif more_items[player]:
-                logging.warning(
-                    f"Player {multiworld.get_player_name(player)} had {more_items[player]} more items than locations.")
-        if unfilled:
-            raise FillError(
-                f"Unable to fill all locations.\n" +
-                f"Unfilled locations({len(unfilled)}): {unfilled}"
-            )
-        else:
-            logging.warning(
-                f"Unable to place all items.\n" +
-                f"Unplaced items({len(unplaced)}): {unplaced}"
-            )
 
 
 def flood_items(multiworld: MultiWorld) -> None:
@@ -1163,3 +1145,73 @@ def distribute_planned_blocks(multiworld: MultiWorld, plando_blocks: list[Plando
         except Exception as e:
             raise Exception(
                 f"Error running plando for player {player} ({multiworld.player_name[player]})") from e
+
+
+def distribute_local_nonprogression(multiworld: MultiWorld,
+                                    locations: typing.List[Location],
+                                    itempool: typing.List[Item],
+                                    sphere_1_percent_to_reserve: int) \
+        -> typing.Tuple[typing.List[Location], typing.List[Item]]:
+    # Theory:
+    # for each world:
+    #    get list of local items
+    #    filter list for non-progression
+    #    get list of unfilled locations
+    #    filter out x% of sphere 1 locations
+    #    shuffle both lists and fast fill
+    base_state = multiworld.state.copy()
+    base_state.sweep_for_advancements(locations=(loc for loc in multiworld.get_filled_locations() if loc.address is None))
+    for player in multiworld.player_ids:
+        local_items: typing.Set[str] = multiworld.worlds[player].options.local_items.value
+        if len(local_items) == 0:
+            continue
+        # split itempool into this player's local items and everything else
+        player_local_items: typing.List[Item] = [item for item in itempool if item.player == player and
+                                                 not item.advancement and
+                                                 item.name in local_items]
+        if len(player_local_items) == 0:
+            continue
+        itempool = [item for item in itempool if item.player != player or item.advancement or item.name not in local_items]
+        # split the local items into useful and non-useful
+        player_local_useful: typing.List[Item] = [item for item in player_local_items if item.useful]
+        player_local_nonuseful: typing.List[Item] = [item for item in player_local_items if not item.useful]
+        # split the locations into this player's non-priority locations and everywhere else
+        player_unf_locs: typing.List[Location] = [loc for loc in locations if loc.player == player and
+                                                  loc.progress_type != loc.progress_type.PRIORITY]
+        locations = [loc for loc in locations if loc.player != player or loc.progress_type == loc.progress_type.PRIORITY]
+        # determine sphere 1 non-excluded locations
+        sphere_1_indicies: typing.List[int] = []
+        for i, loc in enumerate(player_unf_locs):
+            if loc.can_reach(base_state) and loc.progress_type != loc.progress_type.EXCLUDED:
+                sphere_1_indicies.append(i)
+        # reserve a fixed amount of them
+        sphere_1_size: int = len(sphere_1_indicies)
+        # equiv. to ceiling quotient, i.e. round up
+        amt_to_reserve: int = -((sphere_1_size * sphere_1_percent_to_reserve) // -100)
+        indicies_to_reserve: typing.Set[int] = set(multiworld.random.sample(sphere_1_indicies, amt_to_reserve))
+        reserved_locs: typing.List[Location] = [loc for i, loc in enumerate(player_unf_locs) if i in indicies_to_reserve]
+        player_unf_locs = [loc for i, loc in enumerate(player_unf_locs) if i not in indicies_to_reserve]
+        # split any non-reserved locations into excluded and non-excluded
+        player_unf_excl_locs = [loc for loc in player_unf_locs if loc.progress_type == loc.progress_type.EXCLUDED]
+        player_unf_unexcl_locs = [loc for loc in player_unf_locs if loc.progress_type != loc.progress_type.EXCLUDED]
+        # put local nonuseful items on excluded locations
+        multiworld.random.shuffle(player_local_nonuseful)
+        multiworld.random.shuffle(player_unf_excl_locs)
+        unplaced_items, unfilled_excluded_locations = fast_fill(multiworld, player_local_nonuseful, player_unf_excl_locs)
+        # recombine any nonuseful items remaining with the useful items
+        player_local_items = player_local_useful + unplaced_items
+        # put remaining local items (including useful ones) onto non-excluded locations
+        multiworld.random.shuffle(player_local_items)
+        multiworld.random.shuffle(player_unf_unexcl_locs)
+        unplaced_items, unfilled_unexcluded_locations = fast_fill(multiworld, player_local_items, player_unf_unexcl_locs)
+        if len(unplaced_items) > 0:
+            raise FillError(f"Not enough unfilled locations for player {multiworld.player_name[player]} with "
+                            f"{sphere_1_percent_to_reserve}% of sphere 1 reserved to fit local non-progression. Either reduce the "
+                            f"amount of local items in your YAML or reduce the percentage of reserved sphere 1 "
+                            f"locations in host.yaml.")
+        # add any unused locations back to the full location list
+        locations.extend(reserved_locs)
+        locations.extend(unfilled_excluded_locations)
+        locations.extend(unfilled_unexcluded_locations)
+
+    return locations, itempool

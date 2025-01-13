@@ -198,7 +198,8 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
     if multiworld.algorithm == 'flood':
         flood_items(multiworld)  # different algo, biased towards early game progress items
     elif multiworld.algorithm == 'balanced':
-        distribute_items_restrictive(multiworld, get_settings().generator.panic_method)
+        distribute_items_restrictive(multiworld, get_settings().generator.panic_method,
+                                     get_settings().generator.sphere_1_percent_reserved_locations)
 
     AutoWorld.call_all(multiworld, 'post_fill')
 
