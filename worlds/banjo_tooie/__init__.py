@@ -58,6 +58,7 @@ class BanjoTooieWorld(World):
         item_name_to_id[name] = data.btid
 
     location_name_to_id = {name: data.btid for name, data in all_location_table.items()}
+    location_name_to_group = {name: data.group for name, data in all_location_table.items()}
 
     item_name_groups = {
         # "Jiggy": all_group_table["jiggy"],
@@ -99,7 +100,10 @@ class BanjoTooieWorld(World):
         if banjoItem.type == 'progress':
             if banjoItem.btid == self.item_code(itemName.JIGGY):
                 if hasattr(self.multiworld, "generation_is_fake") == False: 
-                    maxJiggy = max(self.randomize_worlds.values()) if (self.randomize_worlds and self.options.open_hag1 == True) else 70
+                    maxJiggy = max(self.randomize_worlds.values())
+                    if self.options.open_hag1 == False:
+                        maxJiggy = max(maxJiggy, 70)
+
                     extraJiggys = (90 - maxJiggy)/2
                     if self.jiggy_counter > (maxJiggy+extraJiggys):
                         item_classification = ItemClassification.filler
@@ -187,19 +191,24 @@ class BanjoTooieWorld(World):
                     break
                 trap_big_pants_counter += 1
         if self.options.traps.value == 1 and self.options.nestsanity.value == True:
-            total_nests = all_item_table[itemName.ENEST].qty + all_item_table[itemName.FNEST].qty - 23
+            total_nests = all_item_table[itemName.ENEST].qty + all_item_table[itemName.FNEST].qty
+            
             removed_nests = int(total_nests * self.options.traps_nests_ratio.value / 100)
-            removed_enests = int((all_item_table[itemName.ENEST].qty-16) * self.options.traps_nests_ratio.value / 100)
-            removed_fnests = removed_nests - (removed_enests)
-            removed_enests += 16 #golden eggs
-            removed_fnests += 7 # golden eggs
-            trap_big_pants_counter += removed_nests
+            removed_enests = int(all_item_table[itemName.ENEST].qty * self.options.traps_nests_ratio.value / 100)
+            removed_fnests = removed_nests - removed_enests
+            
+            trap_big_pants_counter += removed_nests + all_item_table[itemName.GNEST].qty
+        elif self.options.nestsanity.value == True: # nestsanity with no traps, remove gnests
+            trap_big_pants_counter += all_item_table[itemName.GNEST].qty
+
         if self.options.traps.value == True:
-            trup = divmod(trap_big_pants_counter, 4)
-            ttrap_qty = trup[0] + (1 if trup[1] >= 1 else 0)
-            strap_qty = trup[0] + (1 if trup[1] >= 2 else 0)
-            trtrap_qty = trup[0] + (1 if trup[1] >= 3 else 0)
-            sqtrap_qty = trup[0]
+            trap_list = self.random.choices(['gnests', 'ttrap', 'strap', 'trtrap', 'sqtrap'], weights = [
+                self.options.golden_eggs_weight.value if self.options.nestsanity.value == True else 0,
+                self.options.trip_trap_weight.value,
+                self.options.slip_trap_weight.value,
+                self.options.transform_trap_weight.value,
+                self.options.squish_trap_weight.value,
+            ], k = trap_big_pants_counter)
 
         ############## END OF TRAP / BIG O PANTS COUNTER #######################################
         for name,id in all_item_table.items():
@@ -207,7 +216,7 @@ class BanjoTooieWorld(World):
             if self.item_filter(item):
                 if item.code == self.item_code(itemName.JIGGY) and self.kingjingalingjiggy == True:
                     for i in range(id.qty - 1): #note the -1 in the count here. King Took one already.
-                        if self.options.randomize_jinjos == False and self.jiggy_counter > 80:
+                        if self.options.randomize_jinjos == False and self.jiggy_counter > 81:
                             break
                         else:
                             itempool += [self.create_item(name)]
@@ -223,18 +232,20 @@ class BanjoTooieWorld(World):
                        for i in range(trap_big_pants_counter):
                             itempool += [self.create_item(name)]
                     elif item.code == self.item_code(itemName.TTRAP):
-                        for i in range(ttrap_qty):
+                        for i in range(trap_list.count('ttrap')):
                             itempool += [self.create_item(name)]
                     elif item.code == self.item_code(itemName.STRAP):
-                        for i in range(strap_qty):
+                        for i in range(trap_list.count('strap')):
                             itempool += [self.create_item(name)]
                     elif item.code == self.item_code(itemName.TRTRAP):
-                        for i in range(trtrap_qty):
+                        for i in range(trap_list.count('trtrap')):
                             itempool += [self.create_item(name)]
                     elif item.code == self.item_code(itemName.SQTRAP):
-                        for i in range(sqtrap_qty):
+                        for i in range(trap_list.count('sqtrap')):
                             itempool += [self.create_item(name)]
-
+                    elif item.code == self.item_code(itemName.GNEST):
+                        for i in range(trap_list.count('gnests')):
+                            itempool += [self.create_item(name)]
                     #end of none qty logic
                     
                     #nests removal for nestsanity and nest traps
@@ -243,9 +254,6 @@ class BanjoTooieWorld(World):
                             itempool += [self.create_item(name)]
                     elif item.code == self.item_code(itemName.FNEST):
                         for i in range(all_item_table[item.name].qty - removed_fnests):
-                            itempool += [self.create_item(name)]
-                    elif item.code == self.item_code(itemName.GNEST) and self.options.traps.value == True:
-                        for i in range(23):
                             itempool += [self.create_item(name)]
                     #end of nest removal for nest traps
                     
@@ -348,7 +356,8 @@ class BanjoTooieWorld(World):
         elif (item.code == self.item_code(itemName.TTROT) or item.code == self.item_code(itemName.TJUMP)) and self.options.randomize_bk_moves.value == 1: # talon trot and tall jump not in pool
             return False
         
-        if item.code == self.item_code(itemName.GNEST) and self.options.nestsanity.value == False: #Golden egg nests
+        if item.code == self.item_code(itemName.GNEST) and\
+            (self.options.nestsanity.value == False or self.options.traps.value == False): #Golden egg nests
             return False
         if item.code == self.item_code(itemName.ENEST) and self.options.nestsanity.value == False: #egg nests
             return False
@@ -522,7 +531,7 @@ class BanjoTooieWorld(World):
             self.banjo_pre_fills(itemName.HONEY, "Honeycomb", False)
                     
         if self.options.randomize_cheato.value == False:
-            self.banjo_pre_fills(itemName.PAGES, "Page", False)
+            self.banjo_pre_fills(itemName.PAGES, "Cheato Page", False)
 
         if self.options.randomize_doubloons.value == False:
             self.banjo_pre_fills(itemName.DOUBLOON, "Doubloon", False)
@@ -697,7 +706,7 @@ class BanjoTooieWorld(World):
     def get_filler_item_name(self) -> str:
         return itemName.NONE
 
-    def banjo_pre_fills(self, itemNameOrGroup: str, locationFindCriteria: str, useGroup: bool ) -> None:
+    def banjo_pre_fills(self, itemNameOrGroup: str, group: str, useGroup: bool ) -> None:
         if useGroup:
             for group_name, item_info in self.item_name_groups.items():
                 if group_name == itemNameOrGroup:
@@ -710,7 +719,7 @@ class BanjoTooieWorld(World):
         else:
             for name, id in self.location_name_to_id.items():
                 item = self.create_item(itemNameOrGroup)
-                if name.find(locationFindCriteria) != -1:
+                if self.location_name_to_group[name] == group:
                     # self.multiworld.get_location(name, self.player).place_locked_item(item)
                     location = self.multiworld.get_location(name, self.player)
                     location.place_locked_item(item)

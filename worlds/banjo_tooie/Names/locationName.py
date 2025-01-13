@@ -986,7 +986,7 @@ NESTGI66 = "GI Floor 1: Waste Disposal Water Pump Feather Nest"
 
 NESTGI67 = "GI Floor 4: Clinker's Cavern Green Room Egg Nest 1"
 NESTGI68 = "GI Floor 4: Clinker's Cavern Green Room Egg Nest 2"
-NESTGI69 = "GI Floor 4: Clinker's Cavern Raising Scaffolding Room Bottom Egg Nest & Knuckles"
+NESTGI69 = "GI Floor 4: Clinker's Cavern Raising Scaffolding Room Bottom Egg Nest"
 NESTGI70 = "GI Floor 4: Clinker's Cavern Valve Room Egg Nest"
 NESTGI71 = "GI Floor 4: Clinker's Cavern Near Window Egg Nest"
 NESTGI72 = "GI Floor 4: Clinker's Cavern Raising Scaffolding Room Top Egg Nest"

@@ -170,9 +170,9 @@ rando_key_table = {
 }
 
 nest_table= {
-    itemName.GNEST:           ItemData(1230805,   0, "trap", ""),
-    itemName.ENEST:           ItemData(1230806,   331, "filler", ""),
-    itemName.FNEST:           ItemData(1230807,   142, "filler", ""),
+    itemName.GNEST:           ItemData(1230805,   23, "trap", ""),
+    itemName.ENEST:           ItemData(1230806,   315, "filler", ""),
+    itemName.FNEST:           ItemData(1230807,   135, "filler", ""),
 }
 
 

@@ -263,7 +263,47 @@ class TrapsToNestRatio(Range):
     range_start = 0
     range_end = 100
     default = 0
+    
+class GoldenEggsWeight(Range):
+    """The weight of Golden Eggs in the trap pool.
+    Requires Traps and Nestsanity to have an effect"""
+    display_name = "Golden Eggs Weight"
+    range_start = 0
+    range_end = 100
+    default = 40
 
+class TripTrapWeight(Range):
+    """The weight of Trip Traps in the trap pool.
+    Requires Traps to have an effect"""
+    display_name = "Trip Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 40
+    
+class SlipTrapWeight(Range):
+    """The weight of Slip Traps in the trap pool.
+    Requires Traps to have an effect"""
+    display_name = "Slip Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 40
+    
+class TransformTrapWeight(Range):
+    """The weight of Transform Traps in the trap pool.
+    Requires Traps to have an effect"""
+    display_name = "Transform Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 40
+    
+class SquishTrapWeight(Range):
+    """The weight of Squish Traps in the trap pool.
+    Requires Traps to have an effect"""
+    display_name = "Squish Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 20
+    
 class KingJingalingHasJiggy(DefaultOnToggle):
     """King Jingaling will always have a Jiggy for you."""
     display_name = "King Jingaling Jiggy"
@@ -444,9 +484,16 @@ class BanjoTooieOptions(PerGameCommonOptions):
     randomize_stop_n_swap: RandomizeStopnSwap
     randomize_dino_roar: EnableMultiWorldDinoRoar
     nestsanity: EnableNestsanity
+    
     traps: Traps
     traps_nests_ratio: TrapsToNestRatio
 
+    golden_eggs_weight: GoldenEggsWeight
+    trip_trap_weight: TripTrapWeight
+    slip_trap_weight: SlipTrapWeight
+    transform_trap_weight: TransformTrapWeight
+    squish_trap_weight: SquishTrapWeight
+    
     randomize_stations: EnableMultiWorldTrainStationSwitches
     randomize_chuffy: EnableMultiWorldChuffyTrain
     jingaling_jiggy: KingJingalingHasJiggy

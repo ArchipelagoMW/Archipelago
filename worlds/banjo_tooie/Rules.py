@@ -831,10 +831,10 @@ class BanjoTooieRules:
             locationName.NESTTL25:    lambda state: self.enter_tdl_train_station(state),
             locationName.NESTTL26:    lambda state: self.enter_tdl_train_station(state),
 
-            locationName.NESTTL27:    lambda state: self.oogle_boogles_open(state),
-            locationName.NESTTL28:    lambda state: self.oogle_boogles_open(state),
-            locationName.NESTTL29:    lambda state: self.oogle_boogles_open(state),
-            locationName.NESTTL30:    lambda state: self.oogle_boogles_open(state),
+            locationName.NESTTL27:    lambda state: self.access_oogle_boogle(state),
+            locationName.NESTTL28:    lambda state: self.access_oogle_boogle(state),
+            locationName.NESTTL29:    lambda state: self.access_oogle_boogle(state),
+            locationName.NESTTL30:    lambda state: self.access_oogle_boogle(state),
 
             locationName.NESTTL31:    lambda state: self.nest_mountain_flight_pad(state),
             locationName.NESTTL32:    lambda state: self.nest_mountain_flight_pad(state),
@@ -1721,19 +1721,19 @@ class BanjoTooieRules:
     def jiggy_oogle_boogle(self, state: CollectionState) -> bool:
         logic = True
         if self.world.options.logic_type == 0: # beginner
-            logic = self.oogle_boogles_open(state) and self.fire_eggs(state) and \
+            logic = self.access_oogle_boogle(state) and self.fire_eggs(state) and \
                     self.smuggle_food(state) and self.grip_grab(state) and \
                     self.bill_drill(state) and self.spring_pad(state)
         elif self.world.options.logic_type == 1: # normal
-            logic = self.oogle_boogles_open(state) and self.has_fire(state) and \
+            logic = self.access_oogle_boogle(state) and self.has_fire(state) and \
                     self.smuggle_food(state) and self.grip_grab(state) and \
                     self.bill_drill(state) and self.spring_pad(state)
         elif self.world.options.logic_type == 2: # advanced
-            logic = self.oogle_boogles_open(state) and self.has_fire(state) and \
+            logic = self.access_oogle_boogle(state) and self.has_fire(state) and \
                     self.grip_grab(state) and self.bill_drill(state) and self.smuggle_food(state)\
                     and self.spring_pad(state)
         elif self.world.options.logic_type == 3: # glitched
-            logic = (self.oogle_boogles_open(state) or self.clockwork_warp(state))\
+            logic = (self.access_oogle_boogle(state) or self.clockwork_warp(state))\
                     and self.has_fire(state) and self.grip_grab(state) and self.bill_drill(state) and self.smuggle_food(state) and self.spring_pad(state)
         return logic
 
@@ -1768,19 +1768,19 @@ class BanjoTooieRules:
         logic = True
         if self.world.options.logic_type == 0: # beginner
             logic = self.can_beat_terry(state) and self.hatch(state) and \
-                    self.taxi_pack(state) and self.oogle_boogles_open(state)\
+                    self.taxi_pack(state) and self.access_oogle_boogle(state)\
                     and self.flight_pad(state) and self.climb(state) and self.spring_pad(state)
         elif self.world.options.logic_type == 1: # normal
             logic = self.can_beat_terry(state) and self.hatch(state) and \
-                    self.taxi_pack(state) and self.oogle_boogles_open(state)\
+                    self.taxi_pack(state) and self.access_oogle_boogle(state)\
                     and self.flight_pad(state) and self.climb(state) and self.spring_pad(state)
         elif self.world.options.logic_type == 2: # advanced
             logic = self.can_beat_terry(state) and self.hatch(state) and \
-                    self.taxi_pack(state) and self.oogle_boogles_open(state)\
+                    self.taxi_pack(state) and self.access_oogle_boogle(state)\
                     and self.flight_pad(state) and self.climb(state) and self.spring_pad(state)
         elif self.world.options.logic_type == 3: # glitched
             logic = self.can_beat_terry(state) and self.hatch(state) and \
-                    self.taxi_pack(state) and self.oogle_boogles_open(state)\
+                    self.taxi_pack(state) and self.access_oogle_boogle(state)\
                     and self.flight_pad(state) and self.climb(state) and self.spring_pad(state)
         return logic
     
@@ -5328,21 +5328,21 @@ class BanjoTooieRules:
             logic = self.climb(state)
         elif self.world.options.logic_type == 1: # normal
             logic = self.climb(state)\
-                    or state.can_reach_region(regionName.GI1, self.player) and (self.split_up(state) and self.tall_jump(state) or self.leg_spring(state))\
-                    or state.can_reach_region(regionName.GI2, self.player) and (self.floor_2_split_up(state) and (self.tall_jump(state) or self.leg_spring(state)))\
+                    or state.can_reach_region(regionName.GI1, self.player) and self.leg_spring(state)\
+                    or state.can_reach_region(regionName.GI2, self.player) and self.floor_2_split_up(state) and self.leg_spring(state)\
                     or state.can_reach_region(regionName.GI5, self.player)
         elif self.world.options.logic_type == 2: # advanced
             logic = self.climb(state)\
                     or state.can_reach_region(regionName.GIOB, self.player) and self.claw_clamber_boots(state)\
-                    or state.can_reach_region(regionName.GI1, self.player) and (self.split_up(state) and self.tall_jump(state) or self.leg_spring(state))\
-                    or state.can_reach_region(regionName.GI2, self.player) and (self.floor_2_split_up(state) and (self.tall_jump(state) or self.leg_spring(state)))\
+                    or state.can_reach_region(regionName.GI1, self.player) and self.leg_spring(state)\
+                    or state.can_reach_region(regionName.GI2, self.player) and self.floor_2_split_up(state) and self.leg_spring(state)\
                     or state.can_reach_region(regionName.GI5, self.player)\
                     or self.clockwork_shot(state)
         elif self.world.options.logic_type == 3: # glitched
             logic = self.climb(state)\
                     or state.can_reach_region(regionName.GIOB, self.player) and self.claw_clamber_boots(state)\
-                    or state.can_reach_region(regionName.GI1, self.player) and (self.split_up(state) and self.tall_jump(state) or self.leg_spring(state))\
-                    or state.can_reach_region(regionName.GI2, self.player) and (self.floor_2_split_up(state) and (self.tall_jump(state) or self.leg_spring(state)))\
+                    or state.can_reach_region(regionName.GI1, self.player) and self.leg_spring(state)\
+                    or state.can_reach_region(regionName.GI2, self.player) and self.floor_2_split_up(state) and self.leg_spring(state)\
                     or state.can_reach_region(regionName.GI5, self.player)\
                     or self.clockwork_shot(state)
         return logic
@@ -6226,6 +6226,19 @@ class BanjoTooieRules:
 
     def oogle_boogles_open(self, state) -> bool:
         return self.humbaTDL(state) and self.mumboTDL(state)
+    
+    def access_oogle_boogle(self, state) -> bool:
+        if self.world.options.logic_type == 0: # beginner
+            logic = self.oogle_boogles_open(state) or state.can_reach_region(regionName.WW, self.player) and self.ww_tdl_backdoor(state)
+        elif self.world.options.logic_type == 1: # normal
+            logic = self.oogle_boogles_open(state) or state.can_reach_region(regionName.WW, self.player) and self.ww_tdl_backdoor(state)
+        elif self.world.options.logic_type == 2: # advanced
+            logic = self.oogle_boogles_open(state) or state.can_reach_region(regionName.WW, self.player) and self.ww_tdl_backdoor(state)
+        elif self.world.options.logic_type == 3: # glitched
+            logic = self.oogle_boogles_open(state)\
+                    or state.can_reach_region(regionName.WW, self.player) and self.ww_tdl_backdoor(state)\
+                    or self.clockwork_warp(state)
+        return logic
 
     def enter_GI(self, state: CollectionState) -> bool:
         return self.can_beat_king_coal(state) or self.claw_clamber_boots(state)
@@ -6610,8 +6623,9 @@ class BanjoTooieRules:
             logic = self.check_humba_magic(state, itemName.HUMBAMT) and self.check_mumbo_magic(state, itemName.MUMBOMT) and \
                    self.backdoors_enabled(state)
         elif self.world.options.logic_type == 3: # glitched
-            logic = self.check_humba_magic(state, itemName.HUMBAMT) and self.check_mumbo_magic(state, itemName.MUMBOMT) and \
-                   self.backdoors_enabled(state)
+            logic = (self.check_humba_magic(state, itemName.HUMBAMT) and self.check_mumbo_magic(state, itemName.MUMBOMT)\
+                        or self.MT_flight_pad(state) and self.beak_bomb(state))\
+                    and self.backdoors_enabled(state)
         return logic
 
 
