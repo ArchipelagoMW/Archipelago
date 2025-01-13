@@ -592,9 +592,9 @@ def global_rules(multiworld: MultiWorld, player: int):
              lambda state: can_kill_most_things(state, player, 8) and has_fire_source(state, player) and state.multiworld.get_entrance('Ganons Tower Torch Rooms', player).parent_region.dungeon.bosses['middle'].can_defeat(state))
     set_rule(multiworld.get_location('Ganons Tower - Mini Helmasaur Key Drop', player), lambda state: can_kill_most_things(state, player, 1))
     set_rule(multiworld.get_location('Ganons Tower - Pre-Moldorm Chest', player),
-             lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7))
+             lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 7) and can_use_bombs(state, player))
     set_rule(multiworld.get_entrance('Ganons Tower Moldorm Door', player),
-             lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 8))
+             lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 8) and can_use_bombs(state, player))
     set_rule(multiworld.get_entrance('Ganons Tower Moldorm Gap', player),
              lambda state: state.has('Hookshot', player) and state.multiworld.get_entrance('Ganons Tower Moldorm Gap', player).parent_region.dungeon.bosses['top'].can_defeat(state))
     set_defeat_dungeon_boss_rule(multiworld.get_location('Agahnim 2', player))
