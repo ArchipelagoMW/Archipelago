@@ -38,7 +38,7 @@ SLOT_NAME_STR_LENGTH = 0x10
 CURR_PLAY_STATE_ADDR = 0x803A3AE4
 CURR_MAP_ID_ADDR = 0x804D7834
 
-# This address is used to check/set the player's health for DeathLink.
+# This address is used to check/set the player's health for DeathLink. (2 bytes / Half word)
 CURR_HEALTH_ADDR = 0x803D8B40
 CURR_HEALTH_OFFSET = 0xB8
 
@@ -46,33 +46,33 @@ CURR_HEALTH_OFFSET = 0xB8
 ROOM_ID_ADDR = 0x803D8B7C
 ROOM_ID_OFFSET = 0x35C
 
-# This address (and its other offsets) are used to check if the player captured any boos
+# This address (and its other offsets) are used to check if the player captured any boos (1 byte each)
 BOOS_BITFLD_ADDR = 0x803D5E04
 BOOS_BITFLD_COUNT = 7
 
-# This address (and its other offsets) are used to check if the player has received keys to any doors in the mansion.
+# This address (and its other offsets) are used to check if the player has received keys to any doors in the
+# main mansion map (Map2). Each address is 1 byte each.
 KEYS_BITFLD_ADDR = 0x803D5E14
 KEYS_BITFLD_COUNT = 10
 
-# This address used to give Luigi the elemental medals, if they are received.
+# This singular address is used to give Luigi the elemental medals, if they are received.
 MEDALS_RECV_ADDR = 0x803D5DB2 # Bits Fire 5, Ice 6, Water 7
 
-# This address used to give Luigi the mario items, if they are received
+# This singular address is used to give Luigi the mario items, if they are received
 MARIO_ITEMS_RECV_ONE_ADDR = 0x803D5DBB # Bits Hat 4, Star 5, Glove 6, Shoe 7
 MARIO_ITEMS_RECV_TWO_ADDR = 0x803D5DBC # Bit Letter 0
 
-# This Furniture address table contains the first address used for currently loaded in Furniture.
+# This Furniture address table contains the start of the addresses used for currently loaded in Furniture.
 # Since multiple rooms can be loaded into the background, several hundred addresses must be checked.
+# Each furniture flag and ID are 4 Bytes / Word.
 # Flag Offset will contain whether the current piece of furniture has been interacted with or not.
 # This flag follows the 2 rooms away rule and resets between reloading the game / save file.
-# A Flag with value 0x00 indicates no interaction, 0x01 indicates its been interacted with and either dropped something
-# or had dust, and 0x02 indicates an important item, such as a Mario Item or Elemental Medal.
+# A Flag with value 0x00 indicates no interaction, 0x01 indicates it has been interacted with and has either
+# dropped something or had dust, and 0x02 indicates an important item, such as a Mario Item or Elemental Medal.
 FURNITURE_MAIN_TABLE_ID = 0x803CD768
 FURNITURE_ADDR_COUNT = 712
 FURN_FLAG_OFFSET = 0x8C
 FURN_ID_OFFSET = 0xBC
-
-
 
 # This is an array of length 0x10 where each element is a byte and contains item IDs for items to give the player.
 # 0xFF represents no item. The array is read and cleared every frame.
