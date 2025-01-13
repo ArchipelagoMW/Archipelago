@@ -586,6 +586,7 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
         if self.EnemyRando != EnemyRando.default and \
             self.enemy_rando == EnemyRando.default:
             self.enemy_rando.value = self.EnemyRando.value
+            self.has_replaced_options.value = Toggle.option_true
         if self.DamageRando != DamageRando.default and \
             self.damage_rando == DamageRando.default:
             self.damage_rando.value = self.DamageRando.value
