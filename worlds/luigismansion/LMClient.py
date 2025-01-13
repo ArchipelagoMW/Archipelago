@@ -51,9 +51,6 @@ CURR_MANSION_MAP_ID_ADDR = 0x804D80A4
 CURR_PLAY_STATE_ADDR = 0x803A3AE4
 CURR_MAP_ID_ADDR = 0x804D7834
 
-# This address is used to check the stage name to verify the player is in-game before sending items.
-# CURR_STAGE_NAME_ADDR = 0x803C9D3C
-
 # This is an array of length 0x10 where each element is a byte and contains item IDs for items to give the player.
 # 0xFF represents no item. The array is read and cleared every frame.
 GIVE_ITEM_ARRAY_ADDR = 0x803FE868
