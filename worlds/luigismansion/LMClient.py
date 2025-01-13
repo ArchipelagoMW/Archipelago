@@ -11,6 +11,7 @@ from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser,
 from NetUtils import ClientStatus, NetworkItem
 from settings import get_settings, Settings
 from worlds.luigismansion import LMLocationData
+from worlds.luigismansion.data.Enum import RoomID
 from .LMGenerator import LuigisMansionRandomizer
 
 from .Items import LOOKUP_ID_TO_NAME, ALL_ITEMS_TABLE
@@ -73,6 +74,15 @@ FURNITURE_MAIN_TABLE_ID = 0x803CD768
 FURNITURE_ADDR_COUNT = 712
 FURN_FLAG_OFFSET = 0x8C
 FURN_ID_OFFSET = 0xBC
+
+# This address (and its other Offsets) are used to check if the player has completed actions within a given room.
+# Each of these roms are 2 bytes / Half word.
+# There are 73 rooms total, but the Mansion walls bordering Graveyard or Courtyard are excluded here.
+# Bit0 indicates player has entered the room at least once.
+# Bit1 indicates the lights have been turned on for that room.
+# Bit2 indicates chest in that room has been opened (if applicable)
+ROOM_STATE_ADDR = 0x803CDF51
+ROOM_STATE_COUNT = 71
 
 # This is an array of length 0x10 where each element is a byte and contains item IDs for items to give the player.
 # 0xFF represents no item. The array is read and cleared every frame.
@@ -175,10 +185,11 @@ class LMContext(CommonContext):
         self.len_give_item_array = 0x10
 
         # Jake temp custom variables
-        self.keys_tracked = [-1] * 10
+        self.keys_tracked = [-1] * KEYS_BITFLD_COUNT
         self.medals_tracked = -1
         self.mario_items_tracked = [-1] * 2
-        self.boos_captured = [-1] * 7
+        self.boos_captured = [-1] * BOOS_BITFLD_COUNT
+        self.room_interactions = [-1] * ROOM_STATE_COUNT
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.auth = None
@@ -395,6 +406,25 @@ async def check_locations(ctx: LMContext):
 
                 LMContext.checked_furniture.append(named_furniture[0])
 
+    for curr_room_state_addr in range(ROOM_STATE_COUNT):
+        curr_room_state_int = dme.read_byte(ROOM_STATE_ADDR + curr_room_state_addr)
+        if curr_room_state_int != ctx.room_interactions[curr_room_state_addr]:
+            if ctx.room_interactions[curr_room_state_addr] > 0:
+                bit_int = curr_room_state_int ^ ctx.boos_captured[curr_room_state_addr]
+            else:
+                bit_int = curr_room_state_int
+            ctx.room_interactions[curr_room_state_addr] = curr_room_state_int
+            for i in range(3):
+                if (bit_int & (1<<i)) > 0:
+                    match i:
+                        case 0:
+                            print("Luigi has entered room '" + str(RoomID(curr_room_state_int).name) + "'")
+                        case 1:
+                            print("Luigi has turned lights on in room '" + str(RoomID(curr_room_state_int).name) + "'")
+                        case 2:
+                            print("Luigi opened chest in room '" + str(RoomID(curr_room_state_int).name) + "'")
+                        case _:
+                            print("ERROR: Should Never be reached")
 
     # for location, data in ALL_LOCATION_TABLE.items():
     #     checked = False
