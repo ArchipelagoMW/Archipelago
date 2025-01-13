@@ -35,9 +35,9 @@ class BanjoTooieWeb(WebWorld):
         "setup_en.md",
         "setup/en",
         ["Beebaleen"])
-    
+
     tutorials = [setup]
-    
+
 
 class BanjoTooieWorld(World):
     """
@@ -46,7 +46,7 @@ class BanjoTooieWorld(World):
     the game features three-dimensional worlds consisting of various platforming challenges and puzzles, with a notable
     increased focus on puzzle-solving over the worlds of Banjo-Kazooie.
     """
-    
+
     game: str = "Banjo-Tooie"
     web = BanjoTooieWeb()
     topology_present = True
@@ -71,7 +71,7 @@ class BanjoTooieWorld(World):
         "Access": all_group_table["levelaccess"],
         "Dino": all_group_table["dino"]
     }
-        
+
     options_dataclass =  BanjoTooieOptions
     options: BanjoTooieOptions
 
@@ -92,7 +92,7 @@ class BanjoTooieWorld(World):
         self.jamjars_siloname_costs = {}
         self.jamjars_silo_costs = {}
         super(BanjoTooieWorld, self).__init__(world, player)
-        
+
     def item_code(self, itemname: str) -> int:
         return all_item_table[itemname].btid
 
@@ -100,7 +100,7 @@ class BanjoTooieWorld(World):
         banjoItem = all_item_table.get(itemname)
         if banjoItem.type == 'progress':
             if banjoItem.btid == self.item_code(itemName.JIGGY):
-                if not hasattr(self.multiworld, "generation_is_fake"):
+                if hasattr(self.multiworld, "generation_is_fake") == False:
                     maxJiggy = max(self.randomize_worlds.values())
                     if not self.options.open_hag1:
                         maxJiggy = max(maxJiggy, 70)
@@ -147,7 +147,7 @@ class BanjoTooieWorld(World):
 
         if banjoItem.type == 'filler':
             item_classification = ItemClassification.filler
-        
+
         if banjoItem.type == 'trap':
             item_classification = ItemClassification.trap
 
@@ -162,7 +162,7 @@ class BanjoTooieWorld(World):
         item_classification = ItemClassification.progression
         created_item = BanjoTooieItem(name, item_classification, None, self.player)
         return created_item
-    
+
     def create_items(self) -> None:
         itempool = []
         ############## START OF TRAP / BIG O PANTS COUNTER #######################################
@@ -193,11 +193,11 @@ class BanjoTooieWorld(World):
                 trap_big_pants_counter += 1
         if self.options.traps and self.options.nestsanity:
             total_nests = all_item_table[itemName.ENEST].qty + all_item_table[itemName.FNEST].qty
-            
+
             removed_nests = int(total_nests * self.options.traps_nests_ratio.value / 100)
             removed_enests = int(all_item_table[itemName.ENEST].qty * self.options.traps_nests_ratio.value / 100)
             removed_fnests = removed_nests - removed_enests
-            
+
             trap_big_pants_counter += removed_nests + all_item_table[itemName.GNEST].qty
         elif self.options.nestsanity: # nestsanity with no traps, remove gnests
             trap_big_pants_counter += all_item_table[itemName.GNEST].qty
@@ -248,7 +248,7 @@ class BanjoTooieWorld(World):
                         for i in range(trap_list.count('gnests')):
                             itempool += [self.create_item(name)]
                     #end of none qty logic
-                    
+
                     #nests removal for nestsanity and nest traps
                     elif item.code == self.item_code(itemName.ENEST):
                         for i in range(all_item_table[item.name].qty - removed_enests):
@@ -257,9 +257,9 @@ class BanjoTooieWorld(World):
                         for i in range(all_item_table[item.name].qty - removed_fnests):
                             itempool += [self.create_item(name)]
                     #end of nest removal for nest traps
-                    
+
                     #notes - extra other notes
-                    elif item.code == self.item_code(itemName.NOTE): 
+                    elif item.code == self.item_code(itemName.NOTE):
                         count = id.qty
                         count -= ((self.options.bass_clef_amount.value*2) + (self.options.extra_trebleclefs_count.value*4))
                         for i in range(count):
@@ -268,7 +268,7 @@ class BanjoTooieWorld(World):
                                     break #sub in for Mumbo Tokens up to 15
                             itempool += [self.create_item(name)]
 
-                    #treble - extra trebles 
+                    #treble - extra trebles
                     elif item.code == self.item_code(itemName.TREBLE) and self.options.extra_trebleclefs_count.value > 0: #add more Trebles
                         count = id.qty
                         count += self.options.extra_trebleclefs_count.value
@@ -300,7 +300,7 @@ class BanjoTooieWorld(World):
             self.get_location(self.location_id_to_name[1230685]).place_locked_item(item)
             self.kingjingalingjiggy = True
             return True #doesn't need to be in the Pool.
-        
+
         if item.code == 0: #Events
             return False
         
@@ -339,14 +339,14 @@ class BanjoTooieWorld(World):
         
         if item.code == self.item_code(itemName.MUMBOTOKEN) and self.options.victory_condition != VictoryCondition.option_token_hunt: #Mumbo Tokens for Mini Game and Boss Hunt and Jinjo Fam
             return False
-        
-        # if item.code == self.item_code(itemName.IKEY) and self.options.warp_traps == 0: 
+
+        # if item.code == self.item_code(itemName.IKEY) and self.options.warp_traps == 0:
         #     return False
-        
+
         # from itemName.MTA to itemName.CKA inclusive
         if item.code in range(self.item_code(itemName.MTA), self.item_code(itemName.CKA) + 1):
             return False
-        
+
         #from itemName.IKEY to itemName.PMEGG inclusive
         if item.code in range(self.item_code(itemName.IKEY), self.item_code(itemName.PMEGG) + 1) and not self.options.randomize_stop_n_swap:
             return False
@@ -356,7 +356,7 @@ class BanjoTooieWorld(World):
             return False
         elif (item.code == self.item_code(itemName.TTROT) or item.code == self.item_code(itemName.TJUMP)) and self.options.randomize_bk_moves.value == RandomizeBKMoveList.option_mcjiggy_special: # talon trot and tall jump not in pool
             return False
-        
+
         if item.code == self.item_code(itemName.GNEST) and\
             (not self.options.nestsanity or not self.options.traps.value): #Golden egg nests
             return False
@@ -364,7 +364,7 @@ class BanjoTooieWorld(World):
             return False
         if item.code == self.item_code(itemName.FNEST) and not self.options.nestsanity.value: #Feather nests
             return False
-        
+
         # if item.code == self.item_code(itemName.NONE) and self.options.cheato_rewards.value == False and self.options.honeyb_rewards.value == False:
         #     return False
         if item.code == self.item_code(itemName.NONE) and self.options.randomize_bk_moves.value == RandomizeBKMoveList.option_all \
@@ -439,10 +439,10 @@ class BanjoTooieWorld(World):
             return False
 
         return True
-    
+
     def check_starting_progressive(self, item: Item) -> int:
         if item.code == self.starting_attack and (item.code in range(1230828, 1230833) or item.code in range(1230782, 1230786)):
-            return all_item_table[item.name].qty - 1 
+            return all_item_table[item.name].qty - 1
         return 0
 
     def create_regions(self) -> None:
@@ -530,7 +530,7 @@ class BanjoTooieWorld(World):
     def set_rules(self) -> None:
         rules = Rules.BanjoTooieRules(self)
         return rules.set_rules()
-    
+
     def pre_fill_me(self) -> None:
         if not self.options.randomize_honeycombs:
             self.banjo_pre_fills(itemName.HONEY, "Honeycomb", False)
@@ -748,7 +748,7 @@ class BanjoTooieWorld(World):
             spoiler_handle.write('\n\tJamjars\' Silo Costs:')
             for silo, cost in world.worlds[player].jamjars_siloname_costs.items():
                     spoiler_handle.write(f"\n\t\t{silo}: {cost}")
-            
+
 
     def fill_slot_data(self) -> Dict[str, Any]:
         btoptions = {}

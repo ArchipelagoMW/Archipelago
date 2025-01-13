@@ -10,7 +10,7 @@ class ItemData(typing.NamedTuple):
     btid: int = 0
     qty: int = 0
     type: str = ""
-    default_location: str = "" 
+    default_location: str = ""
 
 
 
@@ -72,7 +72,7 @@ bk_moves_table = {
     itemName.DIVE:          ItemData(1230810, 1, "progress", ""),
     itemName.FPAD:          ItemData(1230811, 1, "progress", ""),
     itemName.FFLIP:         ItemData(1230812, 1, "progress", ""),
-    itemName.EGGSHOOT:      ItemData(1230813, 1, "progress", ""),     
+    itemName.EGGSHOOT:      ItemData(1230813, 1, "progress", ""),
     itemName.ROLL:          ItemData(1230814, 1, "progress", ""),
     itemName.TTROT:         ItemData(1230815, 1, "progress", ""),
     itemName.TJUMP:         ItemData(1230816, 1, "progress", ""),

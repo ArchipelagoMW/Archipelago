@@ -38,7 +38,7 @@ CKE = "Cauldron Keep - Main Entrance"
 SMBH = "Spiral Mountain - Banjo's House"
 SMGL = "Spiral Mountain - Gruntilda's Lair"
 SMBW = "Spiral Mountain - Behind Waterfall"
-SM   = "Spiral Mountain" 
+SM   = "Spiral Mountain"
 SMDT = "Sprial Mountain - Digger Tunnel"
 
 MT = "Mayahem Temple"

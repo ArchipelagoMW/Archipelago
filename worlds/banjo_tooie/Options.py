@@ -165,7 +165,7 @@ class ProgressiveWaterTraining(Choice):
     option_advanced = 2
 
 class ProgressiveEggAim(Choice):
-    """Basic: Third Person Egg Shooting to Egg Aim. 
+    """Basic: Third Person Egg Shooting to Egg Aim.
     Advanced: Third Person Egg Shooting to Amaze-O-Gaze to Egg Aim to Breegull Blaster.
     Randomize Moves and Randomize BK Moves are required."""
     display_name = "Progressive Egg Aim"
@@ -255,7 +255,7 @@ class RandomizeWorldDinoRoar(Toggle):
 class EnableNestsanity(Toggle):
     """Eggs and feather nests give checks when you collect them for the first time. They behave as regular egg nests after they have been collected."""
     display_name = "Nestsanity"
-    
+
 class TrapsToNestRatio(Range):
     """Select a percentage of feather and egg nests items to be replaced with trap items
     Requires Traps and Nestsanity to have an effect."""
@@ -263,7 +263,7 @@ class TrapsToNestRatio(Range):
     range_start = 0
     range_end = 100
     default = 0
-    
+
 class GoldenEggsWeight(Range):
     """The weight of Golden Eggs in the trap pool.
     Requires Traps and Nestsanity to have an effect"""
@@ -279,7 +279,7 @@ class TripTrapWeight(Range):
     range_start = 0
     range_end = 100
     default = 40
-    
+
 class SlipTrapWeight(Range):
     """The weight of Slip Traps in the trap pool.
     Requires Traps to have an effect"""
@@ -287,7 +287,7 @@ class SlipTrapWeight(Range):
     range_start = 0
     range_end = 100
     default = 40
-    
+
 class TransformTrapWeight(Range):
     """The weight of Transform Traps in the trap pool.
     Requires Traps to have an effect"""
@@ -295,7 +295,7 @@ class TransformTrapWeight(Range):
     range_start = 0
     range_end = 100
     default = 40
-    
+
 class SquishTrapWeight(Range):
     """The weight of Squish Traps in the trap pool.
     Requires Traps to have an effect"""
@@ -303,7 +303,7 @@ class SquishTrapWeight(Range):
     range_start = 0
     range_end = 100
     default = 20
-    
+
 class KingJingalingHasJiggy(DefaultOnToggle):
     """King Jingaling will always have a Jiggy for you."""
     display_name = "King Jingaling Jiggy"
@@ -346,7 +346,7 @@ class TowerOfTragedy(Choice):
 
 class LogicType(Choice):
     """Choose your logic difficulty and difficulty of tricks you are expected to perform to reach certain areas.
-    Please be aware that if you plan on randomizing worlds with BK Moves in the pool, you cannot use "intended" logic.""" 
+    Please be aware that if you plan on randomizing worlds with BK Moves in the pool, you cannot use "intended" logic."""
     display_name = "Logic Type"
     option_intended = 0
     option_easy_tricks = 1
@@ -421,7 +421,7 @@ class GameLength(Choice):
     custom: You pick when worlds open
     """
     display_name = "World Requirements"
-    option_quick = 0 
+    option_quick = 0
     option_normal = 1
     option_long = 2
     option_custom = 3
@@ -484,7 +484,7 @@ class BanjoTooieOptions(PerGameCommonOptions):
     randomize_stop_n_swap: RandomizeStopnSwap
     randomize_dino_roar: RandomizeWorldDinoRoar
     nestsanity: EnableNestsanity
-    
+
     traps: Traps
     traps_nests_ratio: TrapsToNestRatio
 
