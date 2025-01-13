@@ -4,7 +4,7 @@ import time
 import traceback
 from typing import Any, Optional
 
-import dolphin_memory_engine
+import dolphin_memory_engine as dme
 
 import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
@@ -28,10 +28,8 @@ CONNECTION_CONNECTED_STATUS = "Dolphin connected successfully."
 CONNECTION_INITIAL_STATUS = "Dolphin connection has not been initiated."
 
 # This address is used to check/set the player's health for DeathLink. TODO CORRECT FOR LM
-CURR_HEALTH_ADDR = 0x803C4C0A
-BOOLOSSUS_HEALTH_ADDR = 0x8113442D
-BOWSER_HEALTH_ADDR = 0x811BBEC5
-BASE_HEALTH_ADDR = 0x81349A0D
+CURR_HEALTH_ADDR = 0x803D8B40
+CURR_HEALTH_OFFSET = 0xB8
 
 # This address (and its 7 other offsets) are used to check if the player captured any boos
 BOOS_BITFLD_ADDR = 0x803D5E04
@@ -119,6 +117,17 @@ boo_name_collection = [["Butler's Room Boo (PeekaBoo)", "Hidden Room Boo (GumBoo
                        ["Boolossus Boo 14", "Boolossus Boo 15", "", "", "", "", "", ""]]
 
 luigi_recv_text = "Luigi was able to find: "
+
+def read_short(console_address: int):
+    return int.from_bytes(dme.read_bytes(console_address, 2))
+
+
+def write_short(console_address: int, value: int):
+    dme.write_bytes(console_address, value.to_bytes(2))
+
+
+def read_string(console_address: int, strlen: int):
+    return dme.read_bytes(console_address, strlen).decode().strip("\0")
 
 
 def get_base_rom_path(file_name: str = "") -> str:
@@ -215,28 +224,13 @@ class LMContext(CommonContext):
         self.ui = LMManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
-def read_short(console_address: int):
-    return int.from_bytes(dolphin_memory_engine.read_bytes(console_address, 2))
-
-
-def write_short(console_address: int, value: int):
-    dolphin_memory_engine.write_bytes(console_address, value.to_bytes(2))
-
-
-def read_string(console_address: int, strlen: int):
-    return dolphin_memory_engine.read_bytes(console_address, strlen).decode().strip("\0")
-
 
 # TODO CORRECT FOR LM
 def _give_death(ctx: LMContext):
-    if (
-            ctx.slot
-            and dolphin_memory_engine.is_hooked()
-            and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS
-            and check_ingame()
-    ):
+    if (ctx.slot and dme.is_hooked()
+        and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS and check_ingame()):
         ctx.has_send_death = True
-        write_short(CURR_HEALTH_ADDR, 0)
+        write_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]), 0)
 
 
 # TODO CORRECT FOR LM
@@ -248,9 +242,9 @@ def _give_item(ctx: LMContext, item_name: str) -> bool:
 
     # Loop through the give item array, placing the item in an empty slot
     for idx in range(ctx.len_give_item_array):
-        slot = dolphin_memory_engine.read_byte(GIVE_ITEM_ARRAY_ADDR + idx)
+        slot = dme.read_byte(GIVE_ITEM_ARRAY_ADDR + idx)
         if slot == 0xFF:
-            dolphin_memory_engine.write_byte(GIVE_ITEM_ARRAY_ADDR + idx, item_id)
+            dme.write_byte(GIVE_ITEM_ARRAY_ADDR + idx, item_id)
             return True
 
     # Unable to place the item in the array, so return `False`
@@ -288,7 +282,7 @@ async def check_locations(ctx: LMContext):
     # switches_bitfield = int.from_bytes(dolphin_memory_engine.read_bytes(SWITCHES_BITFLD_ADDR, 10))
     # pickups_bitfield = dolphin_memory_engine.read_word(PICKUPS_BITFLD_ADDR)
 
-    temp_medals_watch = dolphin_memory_engine.read_byte(MEDALS_RECV_ADDR)
+    temp_medals_watch = dme.read_byte(MEDALS_RECV_ADDR)
     if temp_medals_watch != ctx.medals_tracked:
         if ctx.medals_tracked > 0:
             bit_int = temp_medals_watch ^ ctx.medals_tracked
@@ -311,7 +305,7 @@ async def check_locations(ctx: LMContext):
                         print("ERROR: Not supposed to be reached")
                         continue
 
-    mario_items_arr_one = dolphin_memory_engine.read_byte(MARIO_ITEMS_RECV_ONE_ADDR)
+    mario_items_arr_one = dme.read_byte(MARIO_ITEMS_RECV_ONE_ADDR)
     if mario_items_arr_one != ctx.mario_items_tracked[0]:
         if ctx.mario_items_tracked[0] > 0:
             bit_int = mario_items_arr_one ^ ctx.mario_items_tracked[0]
@@ -337,7 +331,7 @@ async def check_locations(ctx: LMContext):
                         print("ERROR: Not supposed to be reached")
                         continue
 
-    mario_items_arr_two = dolphin_memory_engine.read_byte(MARIO_ITEMS_RECV_TWO_ADDR)
+    mario_items_arr_two = dme.read_byte(MARIO_ITEMS_RECV_TWO_ADDR)
     if mario_items_arr_two != ctx.mario_items_tracked[1]:
         if ctx.mario_items_tracked[1] > 0:
             bit_int = mario_items_arr_two ^ ctx.mario_items_tracked[1]
@@ -348,7 +342,7 @@ async def check_locations(ctx: LMContext):
             print(luigi_recv_text + "Mario's Letter")
 
     for key_addr_pos in range(10):
-        current_keys_int = dolphin_memory_engine.read_byte(KEYS_BITFLD_ADDR + key_addr_pos)
+        current_keys_int = dme.read_byte(KEYS_BITFLD_ADDR + key_addr_pos)
         if current_keys_int != ctx.keys_tracked[key_addr_pos]:
             if ctx.keys_tracked[key_addr_pos] > 0:
                 bit_int = current_keys_int ^ ctx.keys_tracked[key_addr_pos]
@@ -360,7 +354,7 @@ async def check_locations(ctx: LMContext):
                     print(luigi_recv_text + "'" + key_name_collection[key_addr_pos][i] + " Key'")
 
     for boo_addr_pos in range(7):
-        current_boos_int = dolphin_memory_engine.read_byte(BOOS_BITFLD_ADDR + boo_addr_pos)
+        current_boos_int = dme.read_byte(BOOS_BITFLD_ADDR + boo_addr_pos)
         if current_boos_int != ctx.boos_captured[boo_addr_pos]:
             if ctx.boos_captured[boo_addr_pos] > 0:
                 bit_int = current_boos_int ^ ctx.boos_captured[boo_addr_pos]
@@ -371,9 +365,8 @@ async def check_locations(ctx: LMContext):
                 if (bit_int & (1<<i)) > 0 and not boo_name_collection[boo_addr_pos][i] == "":
                     print("Luigi has captured the following Boo: '" + boo_name_collection[boo_addr_pos][i] + "'")
 
-    if 2147483648 <= dolphin_memory_engine.read_word(ROOM_ID_ADDR) <= 2172649471:
-        current_room_id = dolphin_memory_engine.read_word(
-            dolphin_memory_engine.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
+    if 2147483648 <= dme.read_word(ROOM_ID_ADDR) <= 2172649471:
+        current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
 
         furniture_name_list: dict[str, LMLocationData] = dict(filter(lambda item: (item[1].type == "Furniture" or
             item[1].type == "Plant") and item[1].in_game_room_id == current_room_id, ALL_LOCATION_TABLE.items()))
@@ -383,13 +376,11 @@ async def check_locations(ctx: LMContext):
                 current_addr = FURNITURE_MAIN_TABLE_ID+current_offset
 
                 # Not within a valid range for a pointer
-                if  not (2147483648 <= dolphin_memory_engine.read_word(current_addr) <= 2172649471):
+                if  not (2147483648 <= dme.read_word(current_addr) <= 2172649471):
                     continue
 
-                furniture_id = dolphin_memory_engine.read_word(
-                    dolphin_memory_engine.follow_pointers(current_addr, [FURN_ID_OFFSET]))
-                furniture_flag =  dolphin_memory_engine.read_word(
-                    dolphin_memory_engine.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
+                furniture_id = dme.read_word(dme.follow_pointers(current_addr, [FURN_ID_OFFSET]))
+                furniture_flag =  dme.read_word(dme.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
 
                 # ID is a valid piece of furniture in the room, has been interacted with, and not already tracked.
                 named_furniture = next(((key, value) for (key, value) in furniture_name_list.items() if
@@ -477,17 +468,15 @@ async def check_locations(ctx: LMContext):
     #     await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
 
 
-# TODO CORRECT FOR LM
+# TODO Validate this works
 async def check_alive():
-    cur_health = read_short(CURR_HEALTH_ADDR)
-    return cur_health > 0
+    lm_curr_health = read_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]))
+    return lm_curr_health > 0
 
 
-# TODO CORRECT FOR LM
 async def check_death(ctx: LMContext):
     if check_ingame():
-        cur_health = read_short(CURR_HEALTH_ADDR)
-        if cur_health <= 0:
+        if not check_alive():
             if not ctx.has_send_death and time.time() >= ctx.last_death_link + 3:
                 ctx.has_send_death = True
                 await ctx.send_death(ctx.player_names[ctx.slot] + " scared themselves to death.")
@@ -496,10 +485,10 @@ async def check_death(ctx: LMContext):
 
 
 def check_ingame():
-    current_map_id = dolphin_memory_engine.read_word(CURR_MAP_ID_ADDR)
+    current_map_id = dme.read_word(CURR_MAP_ID_ADDR)
     bool_loaded_in_map = 0 < current_map_id < 14
 
-    int_play_state = dolphin_memory_engine.read_word(CURR_PLAY_STATE_ADDR)
+    int_play_state = dme.read_word(CURR_PLAY_STATE_ADDR)
     return int_play_state == 2 and bool_loaded_in_map
 
 
@@ -507,7 +496,7 @@ async def dolphin_sync_task(ctx: LMContext):
     logger.info("Starting Dolphin connector. Use /dolphin for status information.")
     while not ctx.exit_event.is_set():
         try:
-            if dolphin_memory_engine.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
+            if dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
                 if not check_ingame():
                     # Reset give item array while not in game
                     # dolphin_memory_engine.write_bytes(GIVE_ITEM_ARRAY_ADDR, bytes([0xFF] * ctx.len_give_item_array))
@@ -523,21 +512,18 @@ async def dolphin_sync_task(ctx: LMContext):
                         ctx.auth = read_string(SLOT_NAME_ADDR, SLOT_NAME_STR_LENGTH)
                     if ctx.awaiting_rom:
                         await ctx.server_auth()
-                        # if not ctx.auth:
-                            # logger.info('Enter slot name:')
-                            # ctx.auth = await ctx.console_input()
                 await asyncio.sleep(0.1)
             else:
                 if ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
                     logger.info("Connection to Dolphin lost, reconnecting...")
                     ctx.dolphin_status = CONNECTION_LOST_STATUS
                 logger.info("Attempting to connect to Dolphin...")
-                dolphin_memory_engine.hook()
-                if dolphin_memory_engine.is_hooked():
+                dme.hook()
+                if dme.is_hooked():
                     if read_string(0x80000000, 6) != "GLME01":
                         logger.info(CONNECTION_REFUSED_GAME_STATUS)
                         ctx.dolphin_status = CONNECTION_REFUSED_GAME_STATUS
-                        dolphin_memory_engine.un_hook()
+                        dme.un_hook()
                         await asyncio.sleep(5)
                     else:
                         logger.info(CONNECTION_CONNECTED_STATUS)
@@ -550,7 +536,7 @@ async def dolphin_sync_task(ctx: LMContext):
                     await asyncio.sleep(5)
                     continue
         except Exception:
-            dolphin_memory_engine.un_hook()
+            dme.un_hook()
             logger.info("Connection to Dolphin failed, attempting again in 5 seconds...")
             logger.error(traceback.format_exc())
             ctx.dolphin_status = CONNECTION_LOST_STATUS
