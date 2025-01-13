@@ -15,7 +15,6 @@ class Celeste64LocationData(NamedTuple):
     region: str
     address: Optional[int] = None
 
-# TODO: Move these locations to correct new regions
 
 strawberry_location_data_table: Dict[str, Celeste64LocationData] = {
     LocationName.strawberry_1:  Celeste64LocationData(RegionName.intro_islands,        celeste_64_base_id + 0x00),
