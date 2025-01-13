@@ -36,6 +36,7 @@ BOOS_BITFLD_ADDR = 0x803D5E04
 
 # This address (and its 9 other offsets) are used to check if the player has received keys to any doors in the mansion.
 KEYS_BITFLD_ADDR = 0x803D5E14
+KEYS_BITFLD_COUNT = 10
 
 # Address used to check if the elemental medals are received.
 MEDALS_RECV_ADDR = 0x803D5DB2 # Bits Fire 5, Ice 6, Water 7
@@ -335,7 +336,7 @@ async def check_locations(ctx: LMContext):
         if (bit_int & (1 << 0)) > 0:
             print(luigi_recv_text + "Mario's Letter")
 
-    for key_addr_pos in range(10):
+    for key_addr_pos in range(KEYS_BITFLD_COUNT):
         current_keys_int = dme.read_byte(KEYS_BITFLD_ADDR + key_addr_pos)
         if current_keys_int != ctx.keys_tracked[key_addr_pos]:
             if ctx.keys_tracked[key_addr_pos] > 0:
