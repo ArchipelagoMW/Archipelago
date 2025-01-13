@@ -2,20 +2,18 @@ import asyncio
 import os
 import time
 import traceback
+import Utils
 from typing import Any, Optional
 
 import dolphin_memory_engine as dme
 
-import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus, NetworkItem
 from settings import get_settings, Settings
-from . import LMLocationData
-from .data.Enum import RoomID
 from .LMGenerator import LuigisMansionRandomizer
 
 from .Items import LOOKUP_ID_TO_NAME, ALL_ITEMS_TABLE
-from .Locations import ALL_LOCATION_TABLE, LMLocation
+from .Locations import ALL_LOCATION_TABLE, LMLocation, LMLocationData
 
 
 CONNECTION_REFUSED_GAME_STATUS = (
@@ -81,7 +79,7 @@ FURN_ID_OFFSET = 0xBC
 # Bit0 indicates player has entered the room at least once.
 # Bit1 indicates the lights have been turned on for that room.
 # Bit2 indicates chest in that room has been opened (if applicable)
-ROOM_STATE_ADDR = 0x803CDF51
+ROOM_STATE_ADDR = 0x803CDF50
 ROOM_STATE_COUNT = 71
 
 # This is an array of length 0x10 where each element is a byte and contains item IDs for items to give the player.
@@ -124,6 +122,81 @@ boo_name_collection = [["Butler's Room Boo (PeekaBoo)", "Hidden Room Boo (GumBoo
                        ["Boolossus Boo 6", "Boolossus Boo 7", "Boolossus Boo 8", "Boolossus Boo 9", "Boolossus Boo 10",
                         "Boolossus Boo 11", "Boolossus Boo 12", "Boolossus Boo 13"],
                        ["Boolossus Boo 14", "Boolossus Boo 15", "", "", "", "", "", ""]]
+
+room_name_list = {
+    0: "Butler",
+    1: "HiddenRoom",
+    2: "Foyer",
+    3: "FortuneTellersRoom",
+    4: "MirrorRoom",
+    5: "LaundryRoom",
+    6: "Area2Hallway",
+    7: "Area2HallwayNear1FBathroom",
+    8: "Kitchen",
+    9: "DinningRoom",
+    10: "BallRoom",
+    11: "Backyard",
+    12: "BilliardsRoom",
+    13: "ProjectionRoom",
+    14: "StorageRoom",
+    15: "AtticHallwayFrom2F",
+    16: "Graveyard",
+    17: "1FWashroomd",
+    18: "Area2HallwayNearConservatory",
+    19: "StairsF1toF2",
+    20: "1FBathroom",
+    21: "Conservatory",
+    22: "RecRoom",
+    23: "Courtyard",
+    24: "Nursery",
+    25: "TheTwinsRoom",
+    26: "Area3HallwayNearAstral",
+    27: "SittingRoom",
+    28: "GuestRoom",
+    29: "Area1Hallway",
+    30: "UpperFoyer",
+    31: "Area3HallwayNearSittingRoom",
+    32: "2FtoAtticStairwell",
+    33: "MasterBedroom",
+    34: "Study",
+    35: "Parlor",
+    36: "SealedRoom",
+    37: "2FBalcony",
+    38: "WardrobeRoom",
+    39: "Anteroom",
+    40: "AstralHall",
+    41: "Observatory",
+    42: "2FWashroom",
+    43: "Area3HallwayEntrance",
+    44: "Area3HallwayNearNana",
+    45: "2FBathroom",
+    46: "NanasRoom",
+    47: "TeaRoom",
+    48: "Armory",
+    49: "AtticHallwayWestNearArmory",
+    50: "TelephoneRoom",
+    51: "AtticHallwayEastNearSafariRoom",
+    52: "SafariRoom",
+    53: "Area2HallwayNearDiningRoom",
+    54: "AtticHallwayWestNearBooBalcony",
+    55: "CeramicsRoom",
+    56: "ClockworkRoom",
+    57: "ArtistStudio",
+    58: "AtticHallwayEastNearArtistsStudio",
+    59: "BigBooBalcony",
+    60: "Roof",
+    61: "ColdStorageRoom",
+    62: "BasementHallwayNearColdStorage",
+    63: "Cellar",
+    64: "Area3HallwayNearSealed",
+    65: "StairsF1toBasement",
+    66: "PipeRoom",
+    67: "BreakerRoom",
+    68: "HallwaytoSecretAltar",
+    69: "BottomOfWell",
+    70: "SecretAltar",
+    71: "BasementHallwayNearPipeRoom"
+}
 
 luigi_recv_text = "Luigi was able to find: "
 
@@ -408,24 +481,28 @@ async def check_locations(ctx: LMContext):
             LMContext.checked_furniture.append(named_furniture[0])
 
     for curr_room_state_addr in range(0, ROOM_STATE_COUNT):
-        curr_room_state_int = dme.read_byte(ROOM_STATE_ADDR + curr_room_state_addr)
+        curr_room_state_int = read_short(ROOM_STATE_ADDR + (curr_room_state_addr*2))
         if curr_room_state_int != ctx.room_interactions[curr_room_state_addr]:
             if ctx.room_interactions[curr_room_state_addr] > 0:
                 bit_int = curr_room_state_int ^ ctx.boos_captured[curr_room_state_addr]
             else:
                 bit_int = curr_room_state_int
             ctx.room_interactions[curr_room_state_addr] = curr_room_state_int
+            room_name = next(room_name_list[key] for key in room_name_list.keys() if key == curr_room_state_addr)
+
             for i in range(0, 3):
                 if (bit_int & (1<<i)) > 0:
                     match i:
                         case 0:
-                            print("Luigi has entered room '" + str(RoomID(curr_room_state_int).name) + "'")
+                            print("Luigi has entered room '" + room_name + "'")
                         case 1:
-                            print("Luigi has turned lights on in room '" + str(RoomID(curr_room_state_int).name) + "'")
+                            print("Luigi has turned lights on in room '" + room_name + "'")
                         case 2:
-                            print("Luigi opened chest in room '" + str(RoomID(curr_room_state_int).name) + "'")
+                            print("Luigi opened chest in room '" + room_name + "'")
                         case _:
                             print("ERROR: Should Never be reached")
+
+            continue
 
     # for location, data in ALL_LOCATION_TABLE.items():
     #     checked = False
