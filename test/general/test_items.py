@@ -1,5 +1,6 @@
 import unittest
 
+from BaseClasses import CollectionState
 from worlds.AutoWorld import AutoWorldRegister, call_all
 from . import setup_solo_multiworld
 
@@ -10,8 +11,8 @@ class TestBase(unittest.TestCase):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             multiworld = setup_solo_multiworld(world_type, steps=("generate_early", "create_regions", "create_items"))
             proxy_world = multiworld.worlds[1]
-            empty_prog_items = multiworld.state.prog_items.copy()
             for item_name in world_type.item_name_to_id:
+                test_state = CollectionState(multiworld)
                 with self.subTest("Create Item", item_name=item_name, game_name=game_name):
                     item = proxy_world.create_item(item_name)
 
@@ -20,21 +21,18 @@ class TestBase(unittest.TestCase):
 
                 if item.advancement:
                     with self.subTest("Item State Collect", item_name=item_name, game_name=game_name):
-                        multiworld.state.collect(item, True)
+                        test_state.collect(item, True)
 
                     with self.subTest("Item State Remove", item_name=item_name, game_name=game_name):
-                        multiworld.state.remove(item)
+                        test_state.remove(item)
 
-                        self.assertEqual(multiworld.state.prog_items, empty_prog_items,
+                        self.assertEqual(test_state.prog_items, multiworld.state.prog_items,
                                          "Item Collect -> Remove should restore empty state.")
                 else:
                     with self.subTest("Item State Collect No Change", item_name=item_name, game_name=game_name):
                         # Non-Advancement should not modify state.
-                        base_state = multiworld.state.prog_items.copy()
-                        multiworld.state.collect(item)
-                        self.assertEqual(base_state, multiworld.state.prog_items)
-
-                multiworld.state.prog_items = empty_prog_items
+                        test_state.collect(item)
+                        self.assertEqual(test_state.prog_items, multiworld.state.prog_items)
 
     def test_item_name_group_has_valid_item(self):
         """Test that all item name groups contain valid items. """
