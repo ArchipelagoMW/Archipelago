@@ -221,7 +221,7 @@ class LMContext(CommonContext):
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
 
-# TODO CORRECT FOR LM
+# TODO Validate this works
 def _give_death(ctx: LMContext):
     if (ctx.slot and dme.is_hooked()
         and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS and check_ingame()):
