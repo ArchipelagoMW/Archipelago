@@ -173,7 +173,12 @@ location_hard_moves_logic: Dict[str, List[List[str]]] = {
 
 
 region_standard_logic: Dict[Tuple[str], List[List[str]]] = {
-    (RegionName.intro_islands, RegionName.granny_island): [[]],
+    (RegionName.forsaken_city, RegionName.granny_island):        [[ItemName.checkpoint_2], [ItemName.checkpoint_3], [ItemName.checkpoint_4]],
+    (RegionName.forsaken_city, RegionName.highway_island):       [[ItemName.checkpoint_5], [ItemName.checkpoint_6]],
+    (RegionName.forsaken_city, RegionName.ne_feathers_island):   [[ItemName.checkpoint_7]],
+    (RegionName.forsaken_city, RegionName.se_house_island):      [[ItemName.checkpoint_8]],
+    (RegionName.forsaken_city, RegionName.badeline_tower_upper): [[ItemName.checkpoint_9]],
+    (RegionName.forsaken_city, RegionName.badeline_island):      [[ItemName.checkpoint_10]],
 
     (RegionName.granny_island, RegionName.highway_island): [[ItemName.dash_refill]],
     (RegionName.granny_island, RegionName.nw_girders_island): [[ItemName.traffic_block]],
@@ -186,12 +191,10 @@ region_standard_logic: Dict[Tuple[str], List[List[str]]] = {
     
     (RegionName.nw_girders_island, RegionName.highway_island): [[ItemName.traffic_block]],
     
-    (RegionName.ne_feathers_island, RegionName.se_house_island): [[]],
     (RegionName.ne_feathers_island, RegionName.highway_island): [[ItemName.feather]],
     (RegionName.ne_feathers_island, RegionName.badeline_tower_lower): [[ItemName.feather]],
     (RegionName.ne_feathers_island, RegionName.badeline_tower_upper): [[ItemName.feather]],
     
-    (RegionName.se_house_island, RegionName.ne_feathers_island): [[]],
     (RegionName.se_house_island, RegionName.granny_island): [[ItemName.traffic_block, ItemName.double_dash_refill]],
     (RegionName.se_house_island, RegionName.badeline_tower_lower): [[ItemName.double_dash_refill]],
     
@@ -201,21 +204,28 @@ region_standard_logic: Dict[Tuple[str], List[List[str]]] = {
     (RegionName.badeline_tower_lower, RegionName.badeline_tower_upper): [[ItemName.cannot_access]],
     
     (RegionName.badeline_tower_upper, RegionName.badeline_island): [[ItemName.double_dash_refill, ItemName.feather, ItemName.traffic_block, ItemName.breakables]],
-    (RegionName.badeline_tower_upper, RegionName.badeline_tower_lower): [[]],
-    (RegionName.badeline_tower_upper, RegionName.se_house_island): [[]],
-    (RegionName.badeline_tower_upper, RegionName.ne_feathers_island): [[]],
     (RegionName.badeline_tower_upper, RegionName.granny_island): [[ItemName.dash_refill]],
-    
-    (RegionName.badeline_island, RegionName.badeline_tower_upper): [[]],
-    (RegionName.badeline_island, RegionName.granny_island): [[]],
-    (RegionName.badeline_island, RegionName.highway_island): [[]],
 }
 
 region_hard_logic: Dict[Tuple[str], List[List[str]]] = {
+    (RegionName.forsaken_city, RegionName.granny_island):        [[ItemName.checkpoint_2], [ItemName.checkpoint_3], [ItemName.checkpoint_4]],
+    (RegionName.forsaken_city, RegionName.highway_island):       [[ItemName.checkpoint_5], [ItemName.checkpoint_6]],
+    (RegionName.forsaken_city, RegionName.ne_feathers_island):   [[ItemName.checkpoint_7]],
+    (RegionName.forsaken_city, RegionName.se_house_island):      [[ItemName.checkpoint_8]],
+    (RegionName.forsaken_city, RegionName.badeline_tower_upper): [[ItemName.checkpoint_9]],
+    (RegionName.forsaken_city, RegionName.badeline_island):      [[ItemName.checkpoint_10]],
+
     # No Items are required for region access with these options.
 }
 
 region_standard_moves_logic: Dict[Tuple[str], List[List[str]]] = {
+    (RegionName.forsaken_city, RegionName.granny_island):        [[ItemName.checkpoint_2], [ItemName.checkpoint_3], [ItemName.checkpoint_4]],
+    (RegionName.forsaken_city, RegionName.highway_island):       [[ItemName.checkpoint_5], [ItemName.checkpoint_6]],
+    (RegionName.forsaken_city, RegionName.ne_feathers_island):   [[ItemName.checkpoint_7]],
+    (RegionName.forsaken_city, RegionName.se_house_island):      [[ItemName.checkpoint_8]],
+    (RegionName.forsaken_city, RegionName.badeline_tower_upper): [[ItemName.checkpoint_9]],
+    (RegionName.forsaken_city, RegionName.badeline_island):      [[ItemName.checkpoint_10]],
+
     (RegionName.intro_islands, RegionName.granny_island): [[ItemName.ground_dash],
                                                            [ItemName.air_dash],
                                                            [ItemName.skid_jump],
@@ -232,12 +242,10 @@ region_standard_moves_logic: Dict[Tuple[str], List[List[str]]] = {
     
     (RegionName.nw_girders_island, RegionName.highway_island): [[ItemName.traffic_block]],
     
-    (RegionName.ne_feathers_island, RegionName.se_house_island): [[]],
     (RegionName.ne_feathers_island, RegionName.highway_island): [[ItemName.feather]],
     (RegionName.ne_feathers_island, RegionName.badeline_tower_lower): [[ItemName.feather]],
     (RegionName.ne_feathers_island, RegionName.badeline_tower_upper): [[ItemName.climb, ItemName.air_dash, ItemName.feather]],
     
-    (RegionName.se_house_island, RegionName.ne_feathers_island): [[]],
     (RegionName.se_house_island, RegionName.granny_island): [[ItemName.air_dash, ItemName.traffic_block, ItemName.double_dash_refill]],
     (RegionName.se_house_island, RegionName.badeline_tower_lower): [[ItemName.air_dash, ItemName.double_dash_refill]],
     
@@ -247,56 +255,42 @@ region_standard_moves_logic: Dict[Tuple[str], List[List[str]]] = {
     (RegionName.badeline_tower_lower, RegionName.badeline_tower_upper): [[ItemName.cannot_access]],
     
     (RegionName.badeline_tower_upper, RegionName.badeline_island): [[ItemName.air_dash, ItemName.climb, ItemName.double_dash_refill, ItemName.feather, ItemName.traffic_block, ItemName.breakables]],
-    (RegionName.badeline_tower_upper, RegionName.badeline_tower_lower): [[]],
     (RegionName.badeline_tower_upper, RegionName.se_house_island): [[ItemName.air_dash], [ItemName.ground_dash]],
     (RegionName.badeline_tower_upper, RegionName.ne_feathers_island): [[ItemName.air_dash], [ItemName.ground_dash]],
     (RegionName.badeline_tower_upper, RegionName.granny_island): [[ItemName.dash_refill]],
     
     (RegionName.badeline_island, RegionName.badeline_tower_upper): [[ItemName.air_dash], [ItemName.ground_dash]],
-    (RegionName.badeline_island, RegionName.granny_island): [[]],
-    (RegionName.badeline_island, RegionName.highway_island): [[]],
 }
 
 region_hard_moves_logic: Dict[Tuple[str], List[List[str]]] = {
-    (RegionName.intro_islands, RegionName.granny_island): [[]],
+    (RegionName.forsaken_city, RegionName.granny_island):        [[ItemName.checkpoint_2], [ItemName.checkpoint_3], [ItemName.checkpoint_4]],
+    (RegionName.forsaken_city, RegionName.highway_island):       [[ItemName.checkpoint_5], [ItemName.checkpoint_6]],
+    (RegionName.forsaken_city, RegionName.ne_feathers_island):   [[ItemName.checkpoint_7]],
+    (RegionName.forsaken_city, RegionName.se_house_island):      [[ItemName.checkpoint_8]],
+    (RegionName.forsaken_city, RegionName.badeline_tower_upper): [[ItemName.checkpoint_9]],
+    (RegionName.forsaken_city, RegionName.badeline_island):      [[ItemName.checkpoint_10]],
 
-    (RegionName.granny_island, RegionName.highway_island): [[]],
     (RegionName.granny_island, RegionName.nw_girders_island): [[ItemName.traffic_block]],
     (RegionName.granny_island, RegionName.badeline_tower_lower): [[ItemName.air_dash], [ItemName.ground_dash]],
     (RegionName.granny_island, RegionName.se_house_island): [[ItemName.air_dash, ItemName.double_dash_refill], [ItemName.ground_dash]],
     
-    (RegionName.highway_island, RegionName.granny_island): [[]],
-    (RegionName.highway_island, RegionName.ne_feathers_island): [],
     (RegionName.highway_island, RegionName.nw_girders_island): [[ItemName.air_dash, ItemName.ground_dash]],
     
     (RegionName.nw_girders_island, RegionName.highway_island): [[ItemName.traffic_block], [ItemName.air_dash, ItemName.ground_dash]],
     
-    (RegionName.ne_feathers_island, RegionName.se_house_island): [[]],
     (RegionName.ne_feathers_island, RegionName.highway_island): [[ItemName.feather], [ItemName.air_dash], [ItemName.ground_dash], [ItemName.skid_jump]],
     (RegionName.ne_feathers_island, RegionName.badeline_tower_lower): [[ItemName.feather], [ItemName.air_dash], [ItemName.ground_dash]],
     (RegionName.ne_feathers_island, RegionName.badeline_tower_upper): [[ItemName.feather]],
     
-    (RegionName.se_house_island, RegionName.ne_feathers_island): [[]],
     (RegionName.se_house_island, RegionName.granny_island): [[ItemName.traffic_block]],
     (RegionName.se_house_island, RegionName.badeline_tower_lower): [[ItemName.air_dash], [ItemName.ground_dash]],
-    
-    (RegionName.badeline_tower_lower, RegionName.se_house_island): [[]],
-    (RegionName.badeline_tower_lower, RegionName.ne_feathers_island): [[]],
-    (RegionName.badeline_tower_lower, RegionName.granny_island): [[]],
-    (RegionName.badeline_tower_lower, RegionName.badeline_tower_upper): [[]],
     
     (RegionName.badeline_tower_upper, RegionName.badeline_island): [[ItemName.air_dash, ItemName.climb, ItemName.feather, ItemName.traffic_block],
                                                                     [ItemName.air_dash, ItemName.climb, ItemName.feather, ItemName.skid_jump],
                                                                     [ItemName.air_dash, ItemName.climb, ItemName.ground_dash, ItemName.traffic_block],
                                                                     [ItemName.air_dash, ItemName.climb, ItemName.ground_dash, ItemName.skid_jump]],
-    (RegionName.badeline_tower_upper, RegionName.badeline_tower_lower): [[]],
-    (RegionName.badeline_tower_upper, RegionName.se_house_island): [[]],
-    (RegionName.badeline_tower_upper, RegionName.ne_feathers_island): [[]],
-    (RegionName.badeline_tower_upper, RegionName.granny_island): [[]],
-    
+
     (RegionName.badeline_island, RegionName.badeline_tower_upper): [[ItemName.air_dash], [ItemName.ground_dash]],
-    (RegionName.badeline_island, RegionName.granny_island): [[]],
-    (RegionName.badeline_island, RegionName.highway_island): [[]],
 }
 
 
