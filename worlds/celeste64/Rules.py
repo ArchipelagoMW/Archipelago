@@ -27,9 +27,7 @@ def set_rules(world: Celeste64World):
         set_rule(location, lambda state, location=location: location_rule(state, world, location.name))
 
     # Completion condition.
-    goal_region: Region = world.multiworld.get_region(RegionName.badeline_island, world.player)
-    world.multiworld.completion_condition[world.player] = lambda state: state.can_reach(goal_region)
-
+    world.multiworld.completion_condition[world.player] = lambda state: goal_rule(state, world)
 
 location_standard_logic: Dict[str, List[List[str]]] = {
     LocationName.strawberry_4:  [[ItemName.traffic_block, ItemName.breakables]],
@@ -172,6 +170,7 @@ location_hard_moves_logic: Dict[str, List[List[str]]] = {
     LocationName.car_2: [[ItemName.breakables, ItemName.ground_dash],
                          [ItemName.breakables, ItemName.air_dash]],
 }
+
 
 region_standard_logic: Dict[Tuple[str], List[List[str]]] = {
     (RegionName.intro_islands, RegionName.granny_island): [[]],
@@ -322,6 +321,13 @@ def region_connection_rule(state: CollectionState, world: Celeste64World, source
             return True
 
     return False
+
+def goal_rule(state: CollectionState, world: Celeste64World) -> bool:
+    if not state.has(ItemName.strawberry, world.player, world.strawberries_required):
+        return False
+
+    goal_region: Region = world.multiworld.get_region(RegionName.badeline_island, world.player)
+    return state.can_reach(goal_region)
 
 def connect_region(world: Celeste64World, region: Region, dest_regions: List[str]):
     rules: Dict[str, Callable[[CollectionState], bool]] = {}
