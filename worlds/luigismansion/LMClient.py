@@ -62,12 +62,13 @@ GIVE_ITEM_ARRAY_ADDR = 0x803FE868
 SLOT_NAME_ADDR = 0x80314660
 SLOT_NAME_STR_LENGTH = 0x10
 
-# This address contains the starting point of furniture interaction table, where 0 represent not interacted with,
-# 1 represents means it's been activated, and 2 has something to do with Mario
-FURNITURE_INTERACTION_TABLE_START = 0x80C0C868
-
-# Backup Furniture IDs
+# This main address table contains the main address used for currently loaded in Furniture.
+# Flag Offset will contain whether the current piece of furniture has been interacted with or not.
+# This flag follows the 2 rooms away rule and resets between reloading the game / save file.
+# A Flag with value 0x00 indicates no interaction, 0x01 indicates its been interacted with and either dropped something
+# or had dust, and 0x02 indicates an important item, such as a Mario Item or Elemental Medal.
 FURNITURE_MAIN_TABLE_ID = 0x803CD768
+FURNITURE_ADDR_COUNT = 712
 FURN_FLAG_OFFSET = 0x8C
 FURN_ID_OFFSET = 0xBC
 
@@ -368,7 +369,7 @@ async def check_locations(ctx: LMContext):
             item[1].type == "Plant") and item[1].in_game_room_id == current_room_id, ALL_LOCATION_TABLE.items()))
 
         if len(furniture_name_list.keys()) > 0:
-            for current_offset in range(0, 712, 4): # TODO Validate this accounts for all furniture
+            for current_offset in range(0, FURNITURE_ADDR_COUNT, 4): # TODO Validate this accounts for all furniture
                 current_addr = FURNITURE_MAIN_TABLE_ID+current_offset
 
                 # Not within a valid range for a pointer
