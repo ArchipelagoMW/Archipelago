@@ -1,7 +1,6 @@
 from BaseClasses import Item
 import typing
-from .Names import itemName
-from .Names import locationName
+from .Names import itemName, locationName
 
 
 class BanjoTooieItem(Item):
@@ -176,7 +175,7 @@ nest_table= {
 }
 
 
-all_item_table = {
+all_item_table: dict[str, ItemData] = {
     **moves_table,
     **jinjo_table,
     **level_progress_table,
@@ -192,7 +191,7 @@ all_item_table = {
     **nest_table
 }
 
-all_group_table = {
+all_group_table: dict[str, dict[str, ItemData]] = {
     'jiggy': jiggy_table,
     'jinjo': jinjo_table,
     'misc': misc_collectable_table,

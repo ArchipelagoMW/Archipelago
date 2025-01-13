@@ -1,26 +1,26 @@
 # Banjo-Tooie
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
 
 - Randomize the majority of collectable items, unlockable moves, train stations & Chuffy
-- Call Chuffy to any unlocked station without being required to defeat Old King Coal first
+- If Chuffy is randomized, you can call Chuffy to any unlocked station without being required to defeat Old King Coal first
 - Skip majority of cutscenes and dialog
-- Skippable Tower of Tragedy Game Show
-- Shorten long mini-games
-- Randomize jamjar silo costs
-- Customizable world costs
-- Skip Klungo 1 & 2
+- Option to skip the Tower of Tragedy Game Show
+- Option to shorten long mini-games
+- Option to randomize jamjar silo costs
+- Option to customize world costs
+- Option to skip Klungo 1 & 2
 - Prison Code Door is always open
-- Allows for instant transformation once Mumbo Skull or Humba Wigwam as been taged by Banjo-Kazooie
-- Customizable dialog character when receiving certain items
+- Allows for instant transformation once Mumbo Skull or Humba Wigwam as been tagged by Banjo & Kazooie
+- Option to customize the dialog character when receiving certain items
 - Pause menu contains a new Arhipelago Menu
-- Randomize opening of worlds order and randomize world entrances
-- If nestanity is enabled, all un-collected nests has the Archipelago logo
+- Options to randomize opening of worlds order and randomize world entrances
+- Option to add nest to the list of locations. If it's active, all un-collected nests have the Archipelago logo as their texture
 
 ## What items and locations can get shuffled?
 

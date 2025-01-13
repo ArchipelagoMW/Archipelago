@@ -1102,7 +1102,7 @@ def create_regions(self):
     region_map = copy.deepcopy(BANJOTOOIEREGIONS)
     nest_map = copy.deepcopy(NEST_REGIONS)
 
-    if multiworld.worlds[player].options.victory_condition.value == 1 or multiworld.worlds[player].options.victory_condition.value == 4:
+    if self.options.victory_condition.value == 1 or self.options.victory_condition.value == 4:
         region_map[regionName.MT].append(locationName.MUMBOTKNGAME1)
         region_map[regionName.GM].append(locationName.MUMBOTKNGAME2)
         region_map[regionName.WW].append(locationName.MUMBOTKNGAME3)
@@ -1119,7 +1119,7 @@ def create_regions(self):
         region_map[regionName.CC].append(locationName.MUMBOTKNGAME14)
         region_map[regionName.CC].append(locationName.MUMBOTKNGAME15)
 
-    if multiworld.worlds[player].options.victory_condition.value == 2 or multiworld.worlds[player].options.victory_condition.value == 4:
+    if self.options.victory_condition.value == 2 or self.options.victory_condition.value == 4:
         region_map[regionName.MT].append(locationName.MUMBOTKNBOSS1)
         region_map[regionName.CHUFFY].append(locationName.MUMBOTKNBOSS2)
         region_map[regionName.WW].append(locationName.MUMBOTKNBOSS3)
@@ -1129,7 +1129,7 @@ def create_regions(self):
         region_map[regionName.HP].append(locationName.MUMBOTKNBOSS7)
         region_map[regionName.CC].append(locationName.MUMBOTKNBOSS8)
 
-    if multiworld.worlds[player].options.victory_condition.value == 3 or multiworld.worlds[player].options.victory_condition.value == 4:
+    if self.options.victory_condition.value == 3 or self.options.victory_condition.value == 4:
         region_map[regionName.IOHJV].append(locationName.MUMBOTKNJINJO1)
         region_map[regionName.IOHJV].append(locationName.MUMBOTKNJINJO2)
         region_map[regionName.IOHJV].append(locationName.MUMBOTKNJINJO3)
@@ -1140,21 +1140,21 @@ def create_regions(self):
         region_map[regionName.IOHJV].append(locationName.MUMBOTKNJINJO8)
         region_map[regionName.IOHJV].append(locationName.MUMBOTKNJINJO9)
 
-    if multiworld.worlds[player].options.cheato_rewards.value == True:
+    if self.options.cheato_rewards.value == True:
         region_map[regionName.SMGL].append(locationName.CHEATOR1)
         region_map[regionName.SMGL].append(locationName.CHEATOR2)
         region_map[regionName.SMGL].append(locationName.CHEATOR3)
         region_map[regionName.SMGL].append(locationName.CHEATOR4)
         region_map[regionName.SMGL].append(locationName.CHEATOR5)
 
-    if multiworld.worlds[player].options.honeyb_rewards.value == True:
+    if self.options.honeyb_rewards.value == True:
         region_map[regionName.IOHPL].append(locationName.HONEYBR1)
         region_map[regionName.IOHPL].append(locationName.HONEYBR2)
         region_map[regionName.IOHPL].append(locationName.HONEYBR3)
         region_map[regionName.IOHPL].append(locationName.HONEYBR4)
         region_map[regionName.IOHPL].append(locationName.HONEYBR5)
 
-    if multiworld.worlds[player].options.nestsanity.value == True:
+    if self.options.nestsanity.value == True:
         for region, locations in nest_map.items():
             for location in locations:
                 region_map[region].append(location)
@@ -1163,13 +1163,13 @@ def create_regions(self):
     multiworld.regions += [create_region(multiworld, player, active_locations, region, locations) for region, locations in
                            region_map.items()]
     
-    if multiworld.worlds[player].options.victory_condition == 0:
+    if self.options.victory_condition == 0:
         multiworld.get_location(locationName.HAG1, player).place_locked_item(
-         	multiworld.worlds[player].create_event_item(itemName.VICTORY))
+         	self.create_event_item(itemName.VICTORY))
         
-    if multiworld.worlds[player].options.victory_condition == 4:
+    if self.options.victory_condition == 4:
         multiworld.get_location(locationName.HAG1, player).place_locked_item(
-         	multiworld.worlds[player].create_event_item(itemName.VICTORY))
+         	self.create_event_item(itemName.VICTORY))
 
 
 def create_region(multiworld, player: int, active_locations, name: str, locations=None):
@@ -1189,40 +1189,40 @@ def connect_regions(self):
     player = self.player
     rules = BanjoTooieRules(self)
 
-    region_menu = multiworld.get_region("Menu", player)
+    region_menu = self.get_region("Menu")
     region_menu.add_exits({regionName.SM})
 
-    region_SM = multiworld.get_region(regionName.SM, player)
+    region_SM = self.get_region(regionName.SM)
     region_SM.add_exits({regionName.IOHJV, regionName.SMGL},{
                           regionName.IOHJV: lambda state: rules.canGetPassedKlungo(state),
                           regionName.SMGL: lambda state: rules.SM_to_GL(state)
                         })
 
-    region_JV = multiworld.get_region(regionName.IOHJV, player)
+    region_JV = self.get_region(regionName.IOHJV)
     region_JV.add_exits({regionName.IOHWH})
 
-    region_WH = multiworld.get_region(regionName.IOHWH, player)
+    region_WH = self.get_region(regionName.IOHWH)
     region_WH.add_exits({regionName.MTE, regionName.IOHPL},
                         {regionName.MTE: lambda state: rules.mt_jiggy(state), 
                          regionName.IOHPL: lambda state: rules.WH_to_PL(state)})
 
-    region_MT = multiworld.get_region(regionName.MT, player)
+    region_MT = self.get_region(regionName.MT)
     region_MT.add_exits({regionName.TL_HATCH, regionName.GM, regionName.HP},
                         {regionName.TL_HATCH: lambda state: rules.jiggy_treasure_chamber(state),\
                         regionName.GM: lambda state: rules.dilberta_free(state),
                         regionName.HP: lambda state: rules.mt_hfp_backdoor(state)})
     
-    region_HATCH = multiworld.get_region(regionName.TL_HATCH, player)
+    region_HATCH = self.get_region(regionName.TL_HATCH)
     region_HATCH.add_exits({regionName.TL},
                         {regionName.TL: lambda state: rules.hatch_to_TDL(state)})
 
-    region_PL = multiworld.get_region(regionName.IOHPL, player)
+    region_PL = self.get_region(regionName.IOHPL)
     region_PL.add_exits({regionName.GGME, regionName.IOHPG, regionName.IOHCT},
                         {regionName.GGME: lambda state: rules.PL_to_GGM(state), 
                          regionName.IOHPG: lambda state: rules.PL_to_PG(state),
                         regionName.IOHCT: lambda state: rules.split_up(state)})
     
-    region_GM = multiworld.get_region(regionName.GM, player)
+    region_GM = self.get_region(regionName.GM)
     region_GM.add_exits({regionName.GMWSJT, regionName.CHUFFY, regionName.GMFD}, {
                         regionName.GMWSJT: lambda state: rules.can_access_water_storage_jinjo_from_GGM(state),
                         regionName.CHUFFY: lambda state: rules.can_beat_king_coal(state) and rules.ggm_to_chuffy(state),
@@ -1230,23 +1230,23 @@ def connect_regions(self):
                         regionName.WW: lambda state: rules.ggm_to_ww(state)
                         })
   
-    region_GMWSJT = multiworld.get_region(regionName.GMWSJT, player)
+    region_GMWSJT = self.get_region(regionName.GMWSJT)
     region_GMWSJT.add_exits({regionName.GM}, {})
     
-    region_PG = multiworld.get_region(regionName.IOHPG, player)
+    region_PG = self.get_region(regionName.IOHPG)
     region_PG.add_exits({regionName.WWE, regionName.IOHPGU, regionName.IOHPL}, {
                           regionName.WWE: lambda state: rules.ww_jiggy(state),
                           regionName.IOHPGU: lambda state: rules.dive(state),
                           regionName.IOHPL: lambda state: rules.PG_to_PL(state)
                         })
     
-    region_PGU = multiworld.get_region(regionName.IOHPGU, player)
+    region_PGU = self.get_region(regionName.IOHPGU)
     region_PGU.add_exits({regionName.IOHWL, regionName.IOHPG}, {
                             regionName.IOHPG: lambda state: rules.PGU_to_PG(state),
-                            regionName.IOHWL: lambda state: state.has(itemName.TTORP, player) or state.has(itemName.PASWIM, player, 3)
+                            regionName.IOHWL: lambda state: rules.talon_torpedo(state),
                           })
     
-    region_WW = multiworld.get_region(regionName.WW, player)
+    region_WW = self.get_region(regionName.WW)
     region_WW.add_exits({regionName.CHUFFY, regionName.TL, regionName.GMFD, regionName.WWA51NESTS},
                         {regionName.CHUFFY: lambda state: rules.can_beat_king_coal(state) and rules.ww_to_chuffy(state),
                         regionName.TL: lambda state: rules.ww_tdl_backdoor(state),
@@ -1254,39 +1254,39 @@ def connect_regions(self):
                         regionName.WWA51NESTS: lambda state: rules.a51_nests_from_WW(state),
                         })
 
-    region_IOHCT = multiworld.get_region(regionName.IOHCT, player)
+    region_IOHCT = self.get_region(regionName.IOHCT)
     region_IOHCT.add_exits({regionName.IOHCT_HFP_ENTRANCE, regionName.HFPE, regionName.JRLE, regionName.CHUFFY, regionName.IOHPL},
         {regionName.HFPE:lambda state: rules.hfp_jiggy(state),
          regionName.JRLE: lambda state: rules.jrl_jiggy(state),
          regionName.CHUFFY: lambda state: rules.can_beat_king_coal(state) and rules.ioh_to_chuffy(state),
          regionName.IOHPL: lambda state: rules.PG_to_PL(state)})
   
-    region_JR = multiworld.get_region(regionName.JR, player)
+    region_JR = self.get_region(regionName.JR)
     region_JR.add_exits({regionName.JRU},
                         {regionName.JRU: lambda state: rules.can_dive_in_JRL(state)})
     
-    region_JRU = multiworld.get_region(regionName.JRU, player)
+    region_JRU = self.get_region(regionName.JRU)
     region_JRU.add_exits({regionName.JRU2},
                         {regionName.JRU2: lambda state: rules.can_reach_atlantis(state)})
     
-    region_JRU2 = multiworld.get_region(regionName.JRU2, player)
+    region_JRU2 = self.get_region(regionName.JRU2)
     region_JRU2.add_exits({regionName.GMWSJT},
                         {regionName.GMWSJT: lambda state: rules.can_access_water_storage_jinjo_from_JRL(state)})
 
-    region_HP = multiworld.get_region(regionName.HP, player)
+    region_HP = self.get_region(regionName.HP)
     region_HP.add_exits({regionName.MT, regionName.JR, regionName.CHUFFY},
                         {regionName.MT: lambda state: rules.HFP_to_MT(state),
                          regionName.JR: lambda state: rules.HFP_to_JRL(state),
                          regionName.CHUFFY: lambda state: rules.can_beat_king_coal(state) and rules.hfp_to_chuffy(state)})
 
-    region_IOHWL = multiworld.get_region(regionName.IOHWL, player)
+    region_IOHWL = self.get_region(regionName.IOHWL)
     region_IOHWL.add_exits({regionName.IOHPGU, regionName.IOHQM, regionName.TDLE, regionName.CCLE},
                         {regionName.IOHPGU: lambda state: rules.WL_to_PGU(state),
                          regionName.IOHQM: lambda state: rules.springy_step_shoes(state),
                          regionName.TDLE: lambda state: rules.tdl_jiggy(state),
                          regionName.CCLE: lambda state: rules.ccl_jiggy(state)})
     
-    region_TL = multiworld.get_region(regionName.TL, player)
+    region_TL = self.get_region(regionName.TL)
     region_TL.add_exits({regionName.TL_HATCH, regionName.WW, regionName.CHUFFY, regionName.WWA51NESTS},
                         {regionName.WW: lambda state: rules.TDL_to_WW(state),
                          regionName.CHUFFY: lambda state: rules.can_beat_king_coal(state) and rules.tdl_to_chuffy(state),
@@ -1294,19 +1294,19 @@ def connect_regions(self):
                          regionName.WWA51NESTS: lambda state: rules.a51_nests_from_TDL(state),
                          })
     
-    region_QM = multiworld.get_region(regionName.IOHQM, player)
+    region_QM = self.get_region(regionName.IOHQM)
     region_QM.add_exits({regionName.GIE, regionName.IOHWL, regionName.CKE},
                         {regionName.GIE: lambda state: rules.gi_jiggy(state),
                          regionName.IOHWL: lambda state: rules.QM_to_WL(state),
                          regionName.CKE: lambda state: rules.quag_to_CK(state)})
     
-    region_GIO = multiworld.get_region(regionName.GIO, player)
+    region_GIO = self.get_region(regionName.GIO)
     region_GIO.add_exits({regionName.GI1, regionName.GIOB, regionName.GI5},
                         {regionName.GI1: lambda state: rules.outside_gi_to_floor1(state),
                          regionName.GIOB: lambda state: rules.outside_gi_to_outside_back(state),
                          regionName.GI5: lambda state: rules.outside_gi_to_floor_5(state)})
     
-    region_GIOB = multiworld.get_region(regionName.GIOB, player)
+    region_GIOB = self.get_region(regionName.GIOB)
     region_GIOB.add_exits({regionName.GIO, regionName.GI2, regionName.GI3, regionName.GI4, regionName.GI5},
                         {regionName.GIO: lambda state: rules.climb(state),
                          regionName.GI2: lambda state: rules.outside_gi_back_to_floor2(state),
@@ -1315,33 +1315,33 @@ def connect_regions(self):
                          regionName.GI5: lambda state: rules.outside_gi_back_to_floor_5(state)
                          })
     
-    region_GIES = multiworld.get_region(regionName.GIES, player)
+    region_GIES = self.get_region(regionName.GIES)
     region_GIES.add_exits({regionName.GI1, regionName.GI2, regionName.GI3, regionName.GI4},
                         {regionName.GI1: lambda state: rules.elevator_shaft_to_floor_1(state),
                          regionName.GI2: lambda state: rules.elevator_shaft_to_em(state),
                          regionName.GI3: lambda state: rules.elevator_shaft_to_boiler_plant(state),
                          regionName.GI4: lambda state: rules.elevator_shaft_to_floor_4(state)})
     
-    region_GI1 = multiworld.get_region(regionName.GI1, player)
+    region_GI1 = self.get_region(regionName.GI1)
     region_GI1.add_exits({regionName.GIO, regionName.GIES, regionName.GI2, regionName.GI5, regionName.CHUFFY},
                         {regionName.GIO: lambda state: rules.split_up(state),
                          regionName.GI2: lambda state: rules.F1_to_F2(state), # TODO: 1 to 3 and 1 to 4, maybe
                          regionName.GI5: lambda state: rules.F1_to_F5(state),
                          regionName.CHUFFY: lambda state: rules.can_beat_king_coal(state) and rules.gi_to_chuffy(state)})
     
-    region_GI2 = multiworld.get_region(regionName.GI2, player)
+    region_GI2 = self.get_region(regionName.GI2)
     region_GI2.add_exits({regionName.GIOB, regionName.GI1, regionName.GI2EM, regionName.GI3},
                         {regionName.GI1: lambda state: rules.F2_to_F1(state),
                          regionName.GI2EM: lambda state: rules.floor_2_to_em_room(state),
                          regionName.GI3: lambda state: rules.F2_to_F3(state)
                          })
     
-    region_GI2EM = multiworld.get_region(regionName.GI2, player)
+    region_GI2EM = self.get_region(regionName.GI2)
     region_GI2EM.add_exits({regionName.GIES},
                         {regionName.GIES: lambda state: rules.floor_2_em_room_to_elevator_shaft(state)
                          })
     
-    region_GI3 = multiworld.get_region(regionName.GI3, player)
+    region_GI3 = self.get_region(regionName.GI3)
     region_GI3.add_exits({regionName.GIOB, regionName.GI2, regionName.GI3B, regionName.GI4, regionName.GI5}, {
                             regionName.GIOB: lambda state: rules.floor_3_to_outside_back(state),
                             regionName.GI2: lambda state: rules.F3_to_F2(state),
@@ -1350,12 +1350,12 @@ def connect_regions(self):
                             regionName.GI5: lambda state: rules.floor_3_to_floor_5(state),
                             })
     
-    region_GI3B = multiworld.get_region(regionName.GI3B, player)
+    region_GI3B = self.get_region(regionName.GI3B)
     region_GI3B.add_exits({regionName.GI3, regionName.GIES}, {
                             regionName.GIES: lambda state: rules.elevator_door(state), 
                           })
 
-    region_GI4 = multiworld.get_region(regionName.GI4, player)
+    region_GI4 = self.get_region(regionName.GI4)
     region_GI4.add_exits({regionName.GIOB, regionName.GI3, regionName.GI4B, regionName.GI5}, {
                             regionName.GIOB: lambda state: rules.floor_4_to_outside_back(state),
                             regionName.GI3: lambda state: rules.floor_4_to_floor_3(state),
@@ -1363,22 +1363,22 @@ def connect_regions(self):
                             regionName.GI5: lambda state: rules.floor_4_to_floor_5(state),
                             })
     
-    region_GI4B = multiworld.get_region(regionName.GI4B, player)
+    region_GI4B = self.get_region(regionName.GI4B)
     region_GI4B.add_exits({regionName.GIES, regionName.GI4}, {
                             regionName.GIES: lambda state: rules.floor_4_back_to_elevator_shaft(state)
                             })
 
-    region_GI5 = multiworld.get_region(regionName.GI5, player)
+    region_GI5 = self.get_region(regionName.GI5)
     region_GI5.add_exits({regionName.GI1, regionName.GI3, regionName.GI3B, regionName.GI4}, { # If you can fly and reach the roof, you have access to floor 3 and 4.
                             regionName.GI1:  lambda state: rules.floor_5_to_floor_1(state),
                             regionName.GI3B: lambda state: rules.floor_5_to_boiler_plant(state)
                             })
     
-    region_CK = multiworld.get_region(regionName.CK, player)
+    region_CK = self.get_region(regionName.CK)
     region_CK.add_exits({regionName.H1},
                         {regionName.H1: lambda state: rules.check_hag1_options(state)})
     
-    region_chuffy = multiworld.get_region(regionName.CHUFFY, player)
+    region_chuffy = self.get_region(regionName.CHUFFY)
     region_chuffy.add_exits({regionName.GM, regionName.WW, regionName.IOHCT, regionName.TL,regionName.GI1,regionName.HP},
                         {regionName.GM: lambda state: state.has(itemName.CHUFFY, player),
                          regionName.WW: lambda state: state.has(itemName.CHUFFY, player) and state.has(itemName.TRAINSWWW, player),
@@ -1388,33 +1388,33 @@ def connect_regions(self):
                          regionName.HP: lambda state: state.has(itemName.CHUFFY, player) and state.has(itemName.TRAINSWHP1, player)
                          })
     
-    region_mt_entrance = multiworld.get_region(regionName.MTE, player)
+    region_mt_entrance = self.get_region(regionName.MTE)
     region_mt_entrance.add_exits({regionName.IOHWH}, {regionName.IOHWH: lambda state: rules.MT_to_WH(state)})
 
-    region_ggm_entrance = multiworld.get_region(regionName.GGME, player)
+    region_ggm_entrance = self.get_region(regionName.GGME)
     region_ggm_entrance.add_exits({regionName.IOHPL}, {regionName.IOHPL: lambda state: rules.escape_ggm_loading_zone(state)})
 
-    region_ww_entrance = multiworld.get_region(regionName.WWE, player)
+    region_ww_entrance = self.get_region(regionName.WWE)
     region_ww_entrance.add_exits({regionName.IOHPG}, {regionName.IOHPG: lambda state: rules.ww_jiggy(state)})
 
-    region_jrl_entrance = multiworld.get_region(regionName.JRLE, player)
+    region_jrl_entrance = self.get_region(regionName.JRLE)
     region_jrl_entrance.add_exits({regionName.IOHCT}, {regionName.IOHCT: lambda state: rules.JRL_to_CT(state)})
 
-    region_tdl_entrance = multiworld.get_region(regionName.TDLE, player)
+    region_tdl_entrance = self.get_region(regionName.TDLE)
     region_tdl_entrance.add_exits({regionName.IOHWL}, {regionName.IOHWL: lambda state: rules.TDL_to_IOHWL(state)})
 
-    region_gi_entrance = multiworld.get_region(regionName.GIE, player)
+    region_gi_entrance = self.get_region(regionName.GIE)
     region_gi_entrance.add_exits({regionName.IOHQM}, {regionName.IOHQM: lambda state: rules.gi_jiggy(state)})
 
-    region_hfp_entrance = multiworld.get_region(regionName.HFPE, player)
+    region_hfp_entrance = self.get_region(regionName.HFPE)
     region_hfp_entrance.add_exits({regionName.IOHCT_HFP_ENTRANCE, regionName.IOHCT},
                                   {regionName.IOHCT_HFP_ENTRANCE: lambda state: rules.HFP_to_CTHFP(state),
                                    regionName.IOHCT: lambda state: rules.backdoors_enabled(state)})
 
-    region_ccl_entrance = multiworld.get_region(regionName.CCLE, player)
+    region_ccl_entrance = self.get_region(regionName.CCLE)
     region_ccl_entrance.add_exits({regionName.IOHWL}, {regionName.IOHWL: lambda state: rules.CCL_to_WL(state)})
 
-    region_ck_entrance = multiworld.get_region(regionName.CKE, player)
+    region_ck_entrance = self.get_region(regionName.CKE)
     region_ck_entrance.add_exits({regionName.IOHQM}, {regionName.IOHQM: lambda state: rules.CK_to_Quag(state)})
 
     # World entrance randomisation (and exits)
@@ -1432,10 +1432,10 @@ def connect_regions(self):
     for starting_zone, actual_world in self.loading_zones.items():
         overworld_entrance = entrance_lookup[starting_zone]
 
-        region_overworld_entrance = multiworld.get_region(overworld_entrance, player)
+        region_overworld_entrance = self.get_region(overworld_entrance)
         region_overworld_entrance.add_exits({actual_world})
 
-        region_actual_world_entrance = multiworld.get_region(actual_world, player)
+        region_actual_world_entrance = self.get_region(actual_world)
 
         if actual_world == regionName.GM:
             region_actual_world_entrance.add_exits({overworld_entrance}, {overworld_entrance: lambda state: rules.GGM_to_PL(state)})

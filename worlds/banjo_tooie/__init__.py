@@ -6,7 +6,7 @@ import typing
 from jinja2 import Environment, FileSystemLoader
 from typing import Dict, Any
 from .Items import BanjoTooieItem, all_item_table, all_group_table
-from .Locations import BanjoTooieLocation, LocationData, all_location_table, MTLoc_Table, GMLoc_table, WWLoc_table, JRLoc_table, TLLoc_table, GILoc_table, HPLoc_table, CCLoc_table
+from .Locations import BanjoTooieLocation, LocationData, all_location_table, MTLoc_Table, GMLoc_table, WWLoc_table, JRLoc_table, TLLoc_table, GILoc_table, HPLoc_table, CCLoc_table, MumboTokenGames_table, MumboTokenBoss_table, MumboTokenJinjo_table
 from .Regions import create_regions, connect_regions
 from .Options import BanjoTooieOptions
 from .Rules import BanjoTooieRules
@@ -116,7 +116,7 @@ class BanjoTooieWorld(World):
                     item_classification = ItemClassification.progression
             elif banjoItem.btid == self.item_code(itemName.NOTE) and self.options.randomize_notes.value == True:
                 if hasattr(self.multiworld, "generation_is_fake") == False:
-                    total_clefs = 20 * (self.options.extra_trebleclefs_count.value + 9) + 10 * self.options.bassclef_amount.value
+                    total_clefs = 20 * (self.options.extra_trebleclefs_count.value + 9) + 10 * self.options.bass_clef_amount.value
                     progression_five_packs = int(max(0, max(self.jamjars_siloname_costs.values())-total_clefs)/5)
                     useful_five_packs = floor((900-total_clefs-progression_five_packs*5)/5/2)
                     # filler_five_packs = ceil((900-total_clefs-progression_five_packs*5)/5/2)
@@ -180,13 +180,13 @@ class BanjoTooieWorld(World):
         if self.options.randomize_bk_moves.value == 0: # No moves added, fills for the Jiggy Chunks, Dino Kids
             for i in range(6):
                 trap_big_pants_counter += 1
-        if self.options.bassclef_amount.value > 0:
-            for i in range(self.options.bassclef_amount.value): #adds an additional big-o-pants for each bassclef
+        if self.options.bass_clef_amount.value > 0:
+            for i in range(self.options.bass_clef_amount.value): #adds an additional big-o-pants for each bass clef
                 trap_big_pants_counter += 1
         if self.options.extra_trebleclefs_count.value > 0:
-            for i in range(self.options.extra_trebleclefs_count.value*3): #adds an additional big-o-pants for each bassclef
+            for i in range(self.options.extra_trebleclefs_count.value*3): #adds an additional big-o-pants for each bass clef
                 if self.options.victory_condition.value == 5 and \
-                (((self.options.bassclef_amount.value*2) + (self.options.extra_trebleclefs_count.value*4)) >= 130) and \
+                (((self.options.bass_clef_amount.value*2) + (self.options.extra_trebleclefs_count.value*4)) >= 130) and \
                 i == (self.options.extra_trebleclefs_count.value*3 - 15):
                     break
                 trap_big_pants_counter += 1
@@ -260,7 +260,7 @@ class BanjoTooieWorld(World):
                     #notes - extra other notes
                     elif item.code == self.item_code(itemName.NOTE): 
                         count = id.qty
-                        count -= ((self.options.bassclef_amount.value*2) + (self.options.extra_trebleclefs_count.value*4))
+                        count -= ((self.options.bass_clef_amount.value*2) + (self.options.extra_trebleclefs_count.value*4))
                         for i in range(count):
                             if self.options.victory_condition.value == 5:
                                 if (count - self.notecounter) < 15 and count >= 15:
@@ -273,10 +273,10 @@ class BanjoTooieWorld(World):
                         count += self.options.extra_trebleclefs_count.value
                         for i in range(count):
                             itempool += [self.create_item(name)]
-                    #bassclef - extra bassclef
-                    elif item.code == self.item_code(itemName.BASS) and self.options.bassclef_amount.value > 0: #add Bassclefs
+                    #bass clef - extra bass clef
+                    elif item.code == self.item_code(itemName.BASS) and self.options.bass_clef_amount.value > 0: #add Bass clefs
                         count = id.qty
-                        count += self.options.bassclef_amount.value
+                        count += self.options.bass_clef_amount.value
                         for i in range(count):
                             itempool += [self.create_item(name)]
                     else:
@@ -296,7 +296,7 @@ class BanjoTooieWorld(World):
     def item_filter(self, item: Item) -> Item:
         if(item.code == self.item_code(itemName.JIGGY) and self.kingjingalingjiggy == False and self.options.jingaling_jiggy == True):
             #Below give the king a guarentee Jiggy if option is set
-            self.multiworld.get_location(self.location_id_to_name[1230685], self.player).place_locked_item(item)
+            self.get_location(self.location_id_to_name[1230685]).place_locked_item(item)
             self.kingjingalingjiggy = True
             return True #doesn't need to be in the Pool.
         
@@ -367,7 +367,7 @@ class BanjoTooieWorld(World):
         # if item.code == self.item_code(itemName.NONE) and self.options.cheato_rewards.value == False and self.options.honeyb_rewards.value == False:
         #     return False
         if item.code == self.item_code(itemName.NONE) and self.options.randomize_bk_moves.value == 2 \
-            and (self.options.bassclef_amount.value == 0 and self.options.extra_trebleclefs_count.value == 0):
+            and (self.options.bass_clef_amount.value == 0 and self.options.extra_trebleclefs_count.value == 0):
             return False
         if item.code == self.item_code(itemName.NONE) and self.options.traps.value == True:
             return False
@@ -454,7 +454,7 @@ class BanjoTooieWorld(World):
         if self.options.randomize_notes == False and self.options.randomize_worlds.value == True and self.options.randomize_bk_moves.value != 0:
             if self.multiworld.players == 1:
                 raise ValueError("Randomize Notes is required for Randomize BK Moves and Randomize Worlds enabled.")
-        if self.options.randomize_notes == False and (self.options.extra_trebleclefs_count.value != 0 and self.options.bassclef_amount.value != 0):
+        if self.options.randomize_notes == False and (self.options.extra_trebleclefs_count.value != 0 and self.options.bass_clef_amount.value != 0):
             raise ValueError("Randomize Notes is required to add extra Treble Clefs or Bass Clefs")
         if self.options.progressive_beak_buster.value == True and (self.options.randomize_bk_moves.value == False or self.options.randomize_moves == False):
             raise ValueError("You cannot have progressive Beak Buster without randomizing moves and randomizing BK moves")
@@ -572,136 +572,109 @@ class BanjoTooieWorld(World):
                 else:
                     item = self.create_item(world)
                 if world_num == 10:
-                    self.multiworld.get_location("Boss Unlocked").place_locked_item(item)
+                    self.get_location("Boss Unlocked").place_locked_item(item)
                 else:
-                    self.multiworld.get_location("World "+ str(world_num) +" Unlocked", self.player).place_locked_item(item)
+                    self.get_location("World "+ str(world_num) +" Unlocked").place_locked_item(item)
                     world_num = world_num + 1
         else:
             world_num = 1
             for world, amt in self.randomize_worlds.items():
                 item = self.create_item(itemName.NONE)
                 if world_num == 10:
-                    self.multiworld.get_location("Boss Unlocked").place_locked_item(item)
+                    self.get_location("Boss Unlocked").place_locked_item(item)
                 else:
-                    self.multiworld.get_location("World "+ str(world_num) +" Unlocked", self.player).place_locked_item(item)
+                    self.get_location("World "+ str(world_num) +" Unlocked").place_locked_item(item)
                     world_num = world_num + 1
         
         if self.options.victory_condition.value == 1 or self.options.victory_condition.value == 4:
             item = self.create_item(itemName.MUMBOTOKEN)
-            self.multiworld.get_location(locationName.MUMBOTKNGAME1, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNGAME2, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNGAME3, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNGAME4, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNGAME5, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNGAME6, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNGAME7, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNGAME8, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNGAME9, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNGAME10, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNGAME11, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNGAME12, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNGAME13, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNGAME14, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNGAME15, self.player).place_locked_item(item)
+            for location_name in MumboTokenGames_table.keys():
+                self.get_location(location_name).place_locked_item(item)
         
         if self.options.victory_condition.value == 2 or self.options.victory_condition.value == 4:
             item = self.create_item(itemName.MUMBOTOKEN)
-            self.multiworld.get_location(locationName.MUMBOTKNBOSS1, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNBOSS2, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNBOSS3, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNBOSS4, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNBOSS5, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNBOSS6, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNBOSS7, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNBOSS8, self.player).place_locked_item(item)
-
+            for location_name in MumboTokenBoss_table.keys():
+                self.get_location(location_name).place_locked_item(item)
         if self.options.victory_condition.value == 3 or self.options.victory_condition.value == 4:
             item = self.create_item(itemName.MUMBOTOKEN)
-            self.multiworld.get_location(locationName.MUMBOTKNJINJO1, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNJINJO2, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNJINJO3, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNJINJO4, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNJINJO5, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNJINJO6, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNJINJO7, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNJINJO8, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.MUMBOTKNJINJO9, self.player).place_locked_item(item)
+            for location_name in MumboTokenJinjo_table.keys():
+                self.get_location(location_name).place_locked_item(item)
         
         elif self.options.randomize_jinjos.value == False:
             item = self.create_item(itemName.JIGGY)
-            self.multiworld.get_location(locationName.JIGGYIH1, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JIGGYIH2, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JIGGYIH3, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JIGGYIH4, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JIGGYIH5, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JIGGYIH6, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JIGGYIH7, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JIGGYIH8, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JIGGYIH9, self.player).place_locked_item(item)
+            self.get_location(locationName.JIGGYIH1).place_locked_item(item)
+            self.get_location(locationName.JIGGYIH2).place_locked_item(item)
+            self.get_location(locationName.JIGGYIH3).place_locked_item(item)
+            self.get_location(locationName.JIGGYIH4).place_locked_item(item)
+            self.get_location(locationName.JIGGYIH5).place_locked_item(item)
+            self.get_location(locationName.JIGGYIH6).place_locked_item(item)
+            self.get_location(locationName.JIGGYIH7).place_locked_item(item)
+            self.get_location(locationName.JIGGYIH8).place_locked_item(item)
+            self.get_location(locationName.JIGGYIH9).place_locked_item(item)
 
         if self.options.randomize_jinjos.value == False:
             item = self.create_item(itemName.WJINJO)
-            self.multiworld.get_location(locationName.JINJOJR5, self.player).place_locked_item(item)
+            self.get_location(locationName.JINJOJR5).place_locked_item(item)
 
             item = self.create_item(itemName.OJINJO)
-            self.multiworld.get_location(locationName.JINJOWW4, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOHP2, self.player).place_locked_item(item)
+            self.get_location(locationName.JINJOWW4).place_locked_item(item)
+            self.get_location(locationName.JINJOHP2).place_locked_item(item)
 
             item = self.create_item(itemName.YJINJO)
-            self.multiworld.get_location(locationName.JINJOWW3, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOHP4, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOHP3, self.player).place_locked_item(item)
+            self.get_location(locationName.JINJOWW3).place_locked_item(item)
+            self.get_location(locationName.JINJOHP4).place_locked_item(item)
+            self.get_location(locationName.JINJOHP3).place_locked_item(item)
 
             item = self.create_item(itemName.BRJINJO)
-            self.multiworld.get_location(locationName.JINJOGM1, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOJR2, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOTL2, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOTL5, self.player).place_locked_item(item)
+            self.get_location(locationName.JINJOGM1).place_locked_item(item)
+            self.get_location(locationName.JINJOJR2).place_locked_item(item)
+            self.get_location(locationName.JINJOTL2).place_locked_item(item)
+            self.get_location(locationName.JINJOTL5).place_locked_item(item)
 
             item = self.create_item(itemName.GJINJO)
-            self.multiworld.get_location(locationName.JINJOWW5, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOJR1, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOTL4, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOGI2, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOHP1, self.player).place_locked_item(item)
+            self.get_location(locationName.JINJOWW5).place_locked_item(item)
+            self.get_location(locationName.JINJOJR1).place_locked_item(item)
+            self.get_location(locationName.JINJOTL4).place_locked_item(item)
+            self.get_location(locationName.JINJOGI2).place_locked_item(item)
+            self.get_location(locationName.JINJOHP1).place_locked_item(item)
 
             item = self.create_item(itemName.RJINJO)
-            self.multiworld.get_location(locationName.JINJOMT2, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOMT3, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOMT5, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOJR3, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOJR4, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOWW2, self.player).place_locked_item(item)
+            self.get_location(locationName.JINJOMT2).place_locked_item(item)
+            self.get_location(locationName.JINJOMT3).place_locked_item(item)
+            self.get_location(locationName.JINJOMT5).place_locked_item(item)
+            self.get_location(locationName.JINJOJR3).place_locked_item(item)
+            self.get_location(locationName.JINJOJR4).place_locked_item(item)
+            self.get_location(locationName.JINJOWW2).place_locked_item(item)
 
             item = self.create_item(itemName.BLJINJO)
-            self.multiworld.get_location(locationName.JINJOGM3, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOTL1, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOHP5, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOCC2, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOIH1, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOIH4, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOIH5, self.player).place_locked_item(item)
+            self.get_location(locationName.JINJOGM3).place_locked_item(item)
+            self.get_location(locationName.JINJOTL1).place_locked_item(item)
+            self.get_location(locationName.JINJOHP5).place_locked_item(item)
+            self.get_location(locationName.JINJOCC2).place_locked_item(item)
+            self.get_location(locationName.JINJOIH1).place_locked_item(item)
+            self.get_location(locationName.JINJOIH4).place_locked_item(item)
+            self.get_location(locationName.JINJOIH5).place_locked_item(item)
 
             item = self.create_item(itemName.PJINJO)
-            self.multiworld.get_location(locationName.JINJOMT1, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOGM5, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOCC1, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOCC3, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOCC5, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOIH2, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOIH3, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOGI4, self.player).place_locked_item(item)
+            self.get_location(locationName.JINJOMT1).place_locked_item(item)
+            self.get_location(locationName.JINJOGM5).place_locked_item(item)
+            self.get_location(locationName.JINJOCC1).place_locked_item(item)
+            self.get_location(locationName.JINJOCC3).place_locked_item(item)
+            self.get_location(locationName.JINJOCC5).place_locked_item(item)
+            self.get_location(locationName.JINJOIH2).place_locked_item(item)
+            self.get_location(locationName.JINJOIH3).place_locked_item(item)
+            self.get_location(locationName.JINJOGI4).place_locked_item(item)
 
             item = self.create_item(itemName.BKJINJO)
-            self.multiworld.get_location(locationName.JINJOMT4, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOGM2, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOGM4, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOWW1, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOTL3, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOGI1, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOGI5, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOCC4, self.player).place_locked_item(item)
-            self.multiworld.get_location(locationName.JINJOGI3, self.player).place_locked_item(item)
+            self.get_location(locationName.JINJOMT4).place_locked_item(item)
+            self.get_location(locationName.JINJOGM2).place_locked_item(item)
+            self.get_location(locationName.JINJOGM4).place_locked_item(item)
+            self.get_location(locationName.JINJOWW1).place_locked_item(item)
+            self.get_location(locationName.JINJOTL3).place_locked_item(item)
+            self.get_location(locationName.JINJOGI1).place_locked_item(item)
+            self.get_location(locationName.JINJOGI5).place_locked_item(item)
+            self.get_location(locationName.JINJOCC4).place_locked_item(item)
+            self.get_location(locationName.JINJOGI3).place_locked_item(item)
 
     def get_filler_item_name(self) -> str:
         return itemName.NONE
@@ -714,14 +687,14 @@ class BanjoTooieWorld(World):
                         item = self.create_item(name)
                         banjoItem = all_item_table.get(name)
                         # self.multiworld.get_location(banjoItem.defualt_location, self.player).place_locked_item(item)
-                        location = self.multiworld.get_location(banjoItem.default_location, self.player)
+                        location = self.get_location(banjoItem.default_location)
                         location.place_locked_item(item)
         else:
             for name, id in self.location_name_to_id.items():
                 item = self.create_item(itemNameOrGroup)
                 if self.location_name_to_group[name] == group:
                     # self.multiworld.get_location(name, self.player).place_locked_item(item)
-                    location = self.multiworld.get_location(name, self.player)
+                    location = self.get_location(name)
                     location.place_locked_item(item)
 
     @classmethod
@@ -822,8 +795,6 @@ class BanjoTooieWorld(World):
         btoptions['loading_zones'] = self.loading_zones
         btoptions['silo_option'] = int(self.options.open_silos.value)
         btoptions['version'] = self.version
-        btoptions['bassclef_amount'] = int(self.options.bassclef_amount.value)
-        btoptions['extra_trebleclefs_count'] = int(self.options.extra_trebleclefs_count.value)
         btoptions['jamjars_siloname_costs'] = self.jamjars_siloname_costs
         btoptions['jamjars_silo_costs'] = self.jamjars_silo_costs
         btoptions['jamjars_silo_option'] = int(self.options.jamjars_silo_costs.value)

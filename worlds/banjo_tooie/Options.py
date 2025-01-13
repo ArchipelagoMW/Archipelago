@@ -2,11 +2,11 @@ from dataclasses import dataclass
 from Options import Toggle, DeathLink, PerGameCommonOptions, Choice, DefaultOnToggle, Range, StartInventoryPool, FreeText
 
 class EnableMultiWorldMoveList(DefaultOnToggle):
-    """Jamjars & Roysten Movelist are locked between the MultiWorld. Other players need to unlock Banjo's Moves."""
-    display_name = "Jamjars' Movelist"
+    """Jamjars & Roysten Movelist are locked behind the MultiWorld."""
+    display_name = "Banjo-Tooie Movelist"
 
 class DialogCharacters(Choice):
-    """Change the Character that announces your obtained moves, worlds, etc."""
+    """Change the character that announces your obtained moves, worlds, etc."""
     display_name = "Dialog Character"
     option_GLOWBO = 0
     option_JIGGY = 1
@@ -131,9 +131,9 @@ class JamjarsSiloCosts(Choice):
     default = 0
 
 class EnableMultiWorldBKMoveList(Choice):
-    """Banjo-Kazooie's Movelist is locked between the MultiWorld. Other players need to unlock Banjo's Moves.
-    Mcjiggy Special - No Talon Trot and Tall Jump in the Pool """
-    display_name = "BK Original Movelist"
+    """Banjo-Kazooie's Movelist is locked behind  the MultiWorld.
+    Mcjiggy Special - Talon Trot and Tall Jump are removed from the pool."""
+    display_name = "Banjo-Kazooie Movelist"
     option_none = 0
     option_mcjiggy_special = 1
     option_all = 2
@@ -145,7 +145,7 @@ class ProgressiveBeakBuster(Toggle):
 
 class EggsBehaviour(Choice):
     """Change the way Eggs work in Banjo-Tooie. Randomize Moves and Randomize BK Moves are required."""
-    display_name = "Banjo-Tooie Eggs"
+    display_name = "Egg Behaviour"
     option_start_with_blue_eggs = 0
     option_random_starting_egg = 1
     option_progressive_eggs = 2
@@ -156,8 +156,8 @@ class ProgressiveShoes(Toggle):
     display_name = "Progressive Kazooie Shoes"
 
 class ProgressiveSwimming(Choice):
-    """Set to Basic: Dive to Double Air to Faster Swimming.
-    Set to Advanced: Dive to Sub Aqua Aiming to Talon Torpedo to Double Air to Faster Swimming.
+    """Basic: Dive to Double Air to Faster Swimming.
+    Advanced: Dive to Sub Aqua Aiming to Talon Torpedo to Double Air to Faster Swimming.
     Randomize Moves and Randomize BK Moves are required."""
     display_name = "Progressive Water Training"
     option_none = 0
@@ -165,8 +165,8 @@ class ProgressiveSwimming(Choice):
     option_advanced = 2
 
 class ProgressiveEggAim(Choice):
-    """Set to Basic: Third Person Egg Shooting to Egg Aim. 
-    Set to Advanced: Third Person Egg Shooting to Amaze-O-Gaze to Egg Aim to Breegull Blaster.
+    """Basic: Third Person Egg Shooting to Egg Aim. 
+    Advanced: Third Person Egg Shooting to Amaze-O-Gaze to Egg Aim to Breegull Blaster.
     Randomize Moves and Randomize BK Moves are required."""
     display_name = "Progressive Egg Aim"
     option_none = 0
@@ -182,7 +182,7 @@ class ProgressiveBashAttack(Toggle):
     display_name = "Progressive Bash Attack"
 
 class EnableCheatoRewards(DefaultOnToggle):
-    """Cheato rewards you with a cheat and an additional randomized reward. Use Cheato Pages as Filler cannot be set if this is enabled."""
+    """Cheato rewards you with a cheat and an additional randomized reward. Use Cheato Pages as Filler cannot be enabled if this is enabled."""
     display_name = "Cheato Rewards"
 
 class EnableMultiWorldJinjos(DefaultOnToggle):
@@ -220,17 +220,17 @@ class EnableMultiWorldTrainStationSwitches(Toggle):
 class EnableMultiWorldChuffyTrain(Toggle):
     """Chuffy is lost somewhere in the MultiWorld. 
     Once received, you can call Chuffy at any unlocked station without defeating Old King Coal."""
-    display_name = "Chuffy as a randomized AP Item"
+    display_name = "Chuffy as a Randomized AP Item"
 
 class EnableMultiWorldNotes(Toggle):
     """Note Nests are scattered across the MultiWorld."""
     display_name = "Randomize Note Nests"
 
-class BassclefNotes(Range):
-    """Convert some 5 notes into Bassclefs (10 notes). How many notes do you want converted?
-       Be aware that 1 bassclef removes two 5 notes and adds an additional Big-O-Pants.
+class BassClefNotes(Range):
+    """Convert some 5 notes into Bass Clefs (10 notes). How many notes do you want converted?
+       Be aware that 1 bass Clef removes two 5 notes and adds an additional Big-O-Pants.
        Randomize Notes is required."""
-    display_name = "Bassclefs (10 notes) Amount"
+    display_name = "Bass Clefs (10 notes) Amount"
     range_start = 0
     range_end = 30
     default = 0
@@ -249,15 +249,15 @@ class Traps(Toggle):
     display_name = "Traps"
 
 class EnableMultiWorldDinoRoar(Toggle):
-    """Baby T-Rex Roar is lost across the MultiWorld. Other players need to help him learn to ROAR!"""
+    """Baby T-Rex Roar's is lost across the MultiWorld. Other players need to help him learn to ROAR!"""
     display_name = "Baby T-Rex Roar"
 
 class EnableNestsanity(Toggle):
-    """Eggs and feather nests give checks when you collect them for the first time. They behave as regular egg nests the other times."""
+    """Eggs and feather nests give checks when you collect them for the first time. They behave as regular egg nests after they have been collected."""
     display_name = "Nestsanity"
     
 class TrapsToNestRatio(Range):
-    """Select a percentage of all feather and egg nests items to be replaced with trap items
+    """Select a percentage of feather and egg nests items to be replaced with trap items
     Requires Traps and Nestsanity to have an effect."""
     display_name = "Traps to Nests Ratio"
     range_start = 0
@@ -313,19 +313,19 @@ class SkipPuzzles(DefaultOnToggle):
     display_name = "Skip Puzzles"
 
 class Backdoors(Toggle):
-    """Opens many one way switches on game start, allowing for more backdoor access to levels.
-    The following gates are preopened: MT>TDL, MT>HFP, GGM>WW, WW>TDL
-    For MT>TDL only the gate accessed from TDL's side is opened and for GGM>WW the boulders are still unexploded
-    The bridge from HFPs entrance is pre-moved to allow secondary access to clifftop
-    George is also pre-dropped to make HFP>JRL more accessible"""
+    """Opens many one-way switches on game start, allowing for more backdoor access to levels.
+    The following gates are preopened: MT -> TDL, MT -> HFP, GGM -> WW, WW -> TDL.
+    For MT -> TDL, only the gate accessed from TDL's side is opened. For GGM -> WW, the boulders are still intact.
+    The bridge from HFP's entrance is pre-moved to allow secondary access to Cliff Top.
+    George is pre-dropped to make HFP -> JRL more accessible."""
     display_name = "Open Backdoors"
 
 class OpenHag1(DefaultOnToggle):
-    """HAG 1 boss fight is opened when Cauldron Keep is opened. Only 55 jiggies are needed to win."""
+    """HAG 1 boss fight is opened when Cauldron Keep is opened, requiring fewer Jiggies to win."""
     display_name = "HAG 1 Open"
 
 class RandomizeWorlds(Toggle):
-    """Worlds will open in a randomized order. Randomized Moves and Puzzle Skip Required."""
+    """Worlds will open in a randomized order. Randomized Moves and Skip Puzzle Required."""
     display_name = "Randomize Worlds"
 
 class RandomizeWorldZones(Toggle):
@@ -355,7 +355,7 @@ class LogicType(Choice):
     default = 0
 
 class Silos(Choice):
-    """Choose if you want IoH Silos to be closed, randomly open 1 or enable all. If you enabled Randomized Worlds with BK Moves randomized and
+    """Choose if you want IoH Silos to be closed, randomly open 1, or enable all. If you enabled Randomized Worlds with BK Moves randomized and
        silos set to none, it will be enforced to one."""
     display_name = "Open Silos"
     option_none = 0
@@ -364,14 +364,14 @@ class Silos(Choice):
     default = 0
 
 class VictoryCondition(Choice):
-    """Choose which victory condition you want
-    HAG1: Unlock the HAG1 fight and defeat Gruntilda
-    Minigame Hunt: Clear the 14 minigames and the final Canary Mary race in Cloud Cuckcoo Land to collect Mumbo Tokens
-    Boss Hunt: Kill the 8 world bosses and collect their Mumbo Tokens
-    Jinjo Family Rescue: Rescue Jinjo Families to collect their prized Mumbo Tokens
-    Wonderwing Challenge: Collect all 32 Mumbo Tokens across all boss fights, mini games and every Jinjo family
+    """Choose the victory condition.
+    HAG1: Unlock the HAG1 fight and defeat Gruntilda.
+    Minigame Hunt: Clear the 14 minigames and the final Canary Mary race in Cloud Cuckcoo Land to collect Mumbo Tokens.
+    Boss Hunt: Defeat the 8 world bosses and collect their Mumbo Tokens.
+    Jinjo Family Rescue: Rescue Jinjo Families to collect their prized Mumbo Tokens.
+    Wonderwing Challenge: Collect all 32 Mumbo Tokens across all boss fights, mini games, and every Jinjo family
         to gain access to HAG1 and Defeat Grunty. The Ultimate Banjo Tooie experience!!
-    Token Hunt: Mumbo's Tokens are scattered around the world. Help him find them"""
+    Token Hunt: Mumbo's Tokens are scattered around the world. Help him find them!"""
     display_name = "Victory Condition"
     option_hag1 = 0
     option_minigame_hunt = 1
@@ -383,7 +383,7 @@ class VictoryCondition(Choice):
 
 class MinigameHuntLength(Range):
     """How many Mumbo Tokens are needed to clear the Minigame Hunt.
-    Choose a value between 1 and 15"""
+    Choose a value between 1 and 15."""
     display_name = "Minigame Hunt Length"
     range_start = 1
     range_end = 15
@@ -391,7 +391,7 @@ class MinigameHuntLength(Range):
 
 class BossHuntLength(Range):
     """How many Mumbo Tokens are needed to clear the Boss Hunt.
-    Choose a value between 1 and 8"""
+    Choose a value between 1 and 8."""
     display_name = "Boss Hunt Length"
     range_start = 1
     range_end = 8
@@ -414,11 +414,11 @@ class TokenHuntLength(Range):
     default = 5
 
 class GameLength(Choice):
-    """Choose how quickly the worlds open between each over.
-    quick: Worlds opens at 1, 3, 6, 10, 15, 21, 28, 36, and 44 Jiggys
-    normal: Worlds opens at 1, 4, 8, 14, 20, 28, 36, 45, and 55 Jiggys
-    long: Worlds opens at 1, 8, 16, 25, 34, 43, 52, 61, and 70 Jiggys
-    custom: You pick when they open
+    """Choose how quickly the worlds open.
+    quick: Worlds open  at 1, 3, 6, 10, 15, 21, 28, 36, and 44 Jiggys
+    normal: Worlds open  at 1, 4, 8, 14, 20, 28, 36, 45, and 55 Jiggys
+    long: Worlds open  at 1, 8, 16, 25, 34, 43, 52, 61, and 70 Jiggys
+    custom: You pick when worlds open
     """
     display_name = "World Requirements"
     option_quick = 0 
@@ -429,9 +429,9 @@ class GameLength(Choice):
     default = 1
 
 class CustomWorlds(FreeText):
-    """Enter a list of jiggy requirements you want for each world unlock. Max values of each world are: 1,20,30,40,50,60,70,80,90
-    Enter your custom world jiggy requirement list"""
-    display_name = "Custom world cost list"
+    """Enter a list of jiggy requirements you want for each world unlock. Max values of each world are: 1,20,30,40,50,60,70,80,90.
+    This option only functions if the World Requirements option is set to custom."""
+    display_name = "Custom World Cost List"
     default = "1,4,8,14,20,28,36,45,55"
 
 class SpeedUpMinigames(DefaultOnToggle):
@@ -472,7 +472,7 @@ class BanjoTooieOptions(PerGameCommonOptions):
     randomize_notes: EnableMultiWorldNotes
     randomize_treble: EnableMultiWorldTrebleClefs
     extra_trebleclefs_count: TrebleclefNotes
-    bassclef_amount: BassclefNotes
+    bass_clef_amount: BassClefNotes
 
     randomize_jinjos: EnableMultiWorldJinjos
     randomize_doubloons: EnableMultiWorldDoubloons
