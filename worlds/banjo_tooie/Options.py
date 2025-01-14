@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from Options import Toggle, DeathLink, PerGameCommonOptions, Choice, DefaultOnToggle, Range, StartInventoryPool, FreeText
 
 class RandomizeBTMoveList(DefaultOnToggle):
-    """Jamjars & Roysten Movelist are locked behind the MultiWorld."""
-    display_name = "Banjo-Tooie Movelist"
+    """Jamjars' & Roysten's Movelist are randomized."""
+    display_name = "Randomize Banjo-Tooie Movelist"
 
 class DialogCharacters(Choice):
     """Change the character that announces your obtained moves, worlds, etc."""
@@ -131,7 +131,7 @@ class JamjarsSiloCosts(Choice):
     default = 0
 
 class RandomizeBKMoveList(Choice):
-    """Banjo-Kazooie's Movelist is locked behind the MultiWorld.
+    """Banjo-Kazooie's Movelist are randomized.
     Mcjiggy Special - Talon Trot and Tall Jump are removed from the pool."""
     display_name = "Banjo-Kazooie Movelist"
     option_none = 0
@@ -144,7 +144,7 @@ class ProgressiveBeakBuster(Toggle):
     display_name = "Progressive Beak Buster"
 
 class EggsBehaviour(Choice):
-    """Change the way Eggs work in Banjo-Tooie. Randomize Moves and Randomize BK Moves are required."""
+    """Change the way Eggs work. Randomize Moves and Randomize BK Moves are required."""
     display_name = "Egg Behaviour"
     option_start_with_blue_eggs = 0
     option_random_starting_egg = 1
@@ -182,7 +182,8 @@ class ProgressiveBashAttack(Toggle):
     display_name = "Progressive Bash Attack"
 
 class EnableCheatoRewards(DefaultOnToggle):
-    """Cheato rewards you with a cheat and an additional randomized reward. Use Cheato Pages as Filler cannot be enabled if this is enabled."""
+    """Cheato rewards you with a cheat and an additional randomized reward. 
+    Cheato Pages are set to progression when this setting is enabled."""
     display_name = "Cheato Rewards"
 
 class RandomizeJinjos(DefaultOnToggle):
@@ -190,15 +191,15 @@ class RandomizeJinjos(DefaultOnToggle):
     display_name = "Randomize Jinjos"
 
 class RandomizeDoubloons(Toggle):
-    """Jolly Roger's Doubloons are scattered across the MultiWorld."""
+    """Jolly Roger's Doubloons are randomized."""
     display_name = "Randomize Doubloons"
 
 class RandomizeCheatoPages(DefaultOnToggle):
-    """Cheato pages are scattered across the MultiWorld."""
+    """Cheato pages are randomized."""
     display_name = "Randomize Cheato Pages"
 
 class RandomizeHoneycombs(DefaultOnToggle):
-    """Honeycombs are scattered across the MultiWorld."""
+    """Honeycombs are randomized."""
     display_name = "Randomize Honeycombs"
 
 class EnableHoneyBRewards(DefaultOnToggle):
@@ -206,29 +207,29 @@ class EnableHoneyBRewards(DefaultOnToggle):
     display_name = "Honey B Rewards"
 
 class RandomizeGlowbos(DefaultOnToggle):
-    """Glowbos are scattered across the MultiWorld."""
+    """Glowbos are randomized."""
     display_name = "Randomize Glowbos"
 
 class RandomizeTrebleClefs(DefaultOnToggle):
-    """Treble Clefs are scattered across the MultiWorld."""
+    """Treble Clefs are randomized."""
     display_name = "Randomize Treble Clefs"
 
 class RandomizeTrainStationSwitches(Toggle):
-    """Train Stations are scattered across the MultiWorld."""
+    """Train Stations are randomized."""
     display_name = "Randomize Train Station Switches"
 
 class RandomizeChuffyTrain(Toggle):
-    """Chuffy is lost somewhere in the MultiWorld.
+    """Chuffy is randomized.
     Once received, you can call Chuffy at any unlocked station without defeating Old King Coal."""
     display_name = "Chuffy as a Randomized AP Item"
 
 class RandomizeNotes(Toggle):
-    """Note Nests are scattered across the MultiWorld."""
+    """Note Nests are randomized."""
     display_name = "Randomize Note Nests"
 
 class BassClefNotes(Range):
     """Convert some 5 notes into Bass Clefs (10 notes). How many notes do you want converted?
-       Be aware that 1 bass Clef removes two 5 notes and adds an additional Big-O-Pants.
+       Be aware that 1 Bass Clef removes two 5 notes and adds an additional Big-O-Pants.
        Randomize Notes is required."""
     display_name = "Bass Clefs (10 notes) Amount"
     range_start = 0
@@ -236,10 +237,10 @@ class BassClefNotes(Range):
     default = 0
 
 class TrebleclefNotes(Range):
-    """Convert some 5 notes into Trebleclefs (20 notes). How many notes do you want converted?
-       Be aware that 1 Trebleclef removes four 5 notes and adds three additional Big-O-Pants.
+    """Convert some 5 notes into Treble Clefs (20 notes). How many notes do you want converted?
+       Be aware that 1 Treble Clef removes four 5 notes and adds three additional Big-O-Pants.
        Randomize Notes is required."""
-    display_name = "Add additional Trebleclefs (20 notes) Amount"
+    display_name = "Add additional Treble Clefs (20 notes) Amount"
     range_start = 0
     range_end = 21
     default = 0
@@ -257,7 +258,7 @@ class EnableNestsanity(Toggle):
     display_name = "Nestsanity"
 
 class TrapsToNestRatio(Range):
-    """Select a percentage of feather and egg nests items to be replaced with trap items
+    """Select a percentage of feather and egg nests items to be replaced with trap items.
     Requires Traps and Nestsanity to have an effect."""
     display_name = "Traps to Nests Ratio"
     range_start = 0
@@ -325,7 +326,7 @@ class OpenHag1(DefaultOnToggle):
     display_name = "HAG 1 Open"
 
 class RandomizeWorlds(Toggle):
-    """Worlds will open in a randomized order. Randomized Moves and Skip Puzzles Required."""
+    """Worlds will open in a randomized order. Randomized Moves and Skip Puzzles required."""
     display_name = "Randomize Worlds"
 
 class RandomizeWorldZones(Toggle):
