@@ -42,8 +42,6 @@ def __get_item_name(item_data):
     return "nothing"
 
 
-# TODO add support for new events to be added to the list. These new events will handle turning lights on in hallways
-# TODO after bosses are defeated.
 def update_event_info(event_info, boo_checks: bool):
     # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
     # boss battles / grabbing boss keys, and various cutscenes etc.
@@ -128,6 +126,116 @@ def update_event_info(event_info, boo_checks: bool):
             x["EventLock"] = 1
             x["PlayerStop"] = 1
             x["EventLoad"] = 0
+
+    # Add our new custom events for turning on hallway lights
+    # This one enables the hallway after beating Chauncey
+    event_info.info_file_field_entries.append({
+        "name": "event",
+        "CharacterName": "(null)",
+        "pos_x": -3000.000000,
+        "pos_y": 550.000000,
+        "pos_z": -815.000000,
+        "dir_x": 0.000000,
+        "dir_y": 0.000000,
+        "dir_z": 0.000000,
+        "scale_x": 0.000000,
+        "scale_y": 0.000000,
+        "scale_z": 0.000000,
+        "EventNo": 102,
+        "EventArea": 100,
+        "EventFlag": 46,
+        "EventTime": 0,
+        "EventTime2": 0,
+        "EventTime3": 0,
+        "EventTime4": 0,
+        "EventLoad": 1,
+        "disappear_flag": 0,
+        "event_parameter": 0,
+        "EventIf": 2,
+        "EventLock": 0,
+        "PlayerStop": 1,
+    })
+    # This one enables the hallway after beating Bogmire
+    event_info.info_file_field_entries.append({
+        "name": "event",
+        "CharacterName": "(null)",
+        "pos_x": 1130.000000,
+        "pos_y": 0.000000,
+        "pos_z": -1860.000000,
+        "dir_x": 0.000000,
+        "dir_y": 0.000000,
+        "dir_z": 0.000000,
+        "scale_x": 0.000000,
+        "scale_y": 0.000000,
+        "scale_z": 0.000000,
+        "EventNo": 103,
+        "EventArea": 100,
+        "EventFlag": 67,
+        "EventTime": 0,
+        "EventTime2": 0,
+        "EventTime3": 0,
+        "EventTime4": 0,
+        "EventLoad": 1,
+        "disappear_flag": 0,
+        "event_parameter": 0,
+        "EventIf": 2,
+        "EventLock": 0,
+        "PlayerStop": 1,
+    })
+    # This one enables the hallway after beating Boolossus (East Side)
+    event_info.info_file_field_entries.append({
+        "name": "event",
+        "CharacterName": "(null)",
+        "pos_x": 1800.000000,
+        "pos_y": 1200.000000,
+        "pos_z": -2600.000000,
+        "dir_x": 0.000000,
+        "dir_y": 0.000000,
+        "dir_z": 0.000000,
+        "scale_x": 0.000000,
+        "scale_y": 0.000000,
+        "scale_z": 0.000000,
+        "EventNo": 104,
+        "EventArea": 100,
+        "EventFlag": 81,
+        "EventTime": 0,
+        "EventTime2": 0,
+        "EventTime3": 0,
+        "EventTime4": 0,
+        "EventLoad": 1,
+        "disappear_flag": 0,
+        "event_parameter": 0,
+        "EventIf": 2,
+        "EventLock": 0,
+        "PlayerStop": 1,
+    })
+    # This one enables the hallway after beating Boolossus (West Side)
+    event_info.info_file_field_entries.append({
+        "name": "event",
+        "CharacterName": "(null)",
+        "pos_x": -1800.000000,
+        "pos_y": 1200.000000,
+        "pos_z": -2600.000000,
+        "dir_x": 0.000000,
+        "dir_y": 0.000000,
+        "dir_z": 0.000000,
+        "scale_x": 0.000000,
+        "scale_y": 0.000000,
+        "scale_z": 0.000000,
+        "EventNo": 104,
+        "EventArea": 100,
+        "EventFlag": 81,
+        "EventTime": 0,
+        "EventTime2": 0,
+        "EventTime3": 0,
+        "EventTime4": 0,
+        "EventLoad": 1,
+        "disappear_flag": 0,
+        "event_parameter": 0,
+        "EventIf": 2,
+        "EventLock": 0,
+        "PlayerStop": 1,
+    })
 
 def update_character_info(character_info, output_data):
     # Removes useless cutscene objects and the vacuum in the Parlor under the closet.

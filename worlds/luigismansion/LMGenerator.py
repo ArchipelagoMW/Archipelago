@@ -267,6 +267,13 @@ class LuigisMansionRandomizer:
 
         self.update_custom_event("36", False, lines)
 
+        # Copy in our newly custom events for hallway light changes
+        # Update all custom events
+        new_list_events = ["102", "103", "104"]
+        for new_custom_event in new_list_events:
+            self.copy_existing_event(new_custom_event)
+            self.update_custom_event(new_custom_event, True, "", True)
+
         # TODO After updating all events, randomize music for all events.
         list_of_bad_music = [13, 17, 21, 24, 28, 41]
         random.randint(0, 52)
@@ -321,26 +328,31 @@ class LuigisMansionRandomizer:
         self.dol.data.seek(0x311660)
         self.dol.data.write(struct.pack(str(len(lm_player_name)) + "s", lm_player_name.encode()))
 
-    def update_custom_event(self, event_number: str, check_local_folder: bool, non_local_str=""):
+    def update_custom_event(self, event_number: str, check_local_folder: bool, non_local_str="", custom_made: bool = False):
         #TODO Update custom events to remove any camera files or anything else related.
         if not check_local_folder and not non_local_str:
             raise Exception("If the custom event does not exist in the local data folder, an event string must be " +
                             "provided to overwrite an existing event.")
+        if not custom_made:
+            custom_event = self.get_arc("files/Event/event" + event_number + ".szp")
+            name_to_find = "event" + event_number + ".txt"
+        else:
+            custom_event = self.get_arc("files/Event/event64.szp")
+            name_to_find = "event64.txt"
+            next((info_files for info_files in custom_event.file_entries if
+                  info_files.name == name_to_find)).name = "event" + event_number + ".txt"
+            name_to_find = "event" + event_number + ".txt"
 
-        custom_event = self.get_arc("files/Event/event" + event_number + ".szp")
 
-        if not any (info_files for info_files in custom_event.file_entries if
-                                        info_files.name == "event" + event_number + ".txt"):
-            raise Exception("Unable to find an info file with name 'event" + event_number +
-                            ".txt' in provided RAC file.")
+        if not any (info_files for info_files in custom_event.file_entries if info_files.name == name_to_find):
+            raise Exception(f"Unable to find an info file with name '{name_to_find}' in provided RARC file.")
 
         if check_local_folder:
-            lines = io.BytesIO(get_data(__name__, "data/custom_events/event" + event_number + ".txt"))
+            lines = io.BytesIO(get_data(__name__, f"data/custom_events/{name_to_find}"))
         else:
             lines = io.BytesIO(non_local_str.encode('utf-8'))
 
-        next((info_files for info_files in custom_event.file_entries if
-              info_files.name == "event" + event_number + ".txt")).data = lines
+        next((info_files for info_files in custom_event.file_entries if info_files.name == name_to_find)).data = lines
 
         # Some events don't have a CSV, so no need to set it to blank lines
         # TODO update this to not use a template CSV, as it is now blank.
@@ -363,7 +375,7 @@ class LuigisMansionRandomizer:
         event_path = "files/Event/event"+ new_event_number + ".szp"
         data = self.gcm.read_file_data("files/Event/event64.szp")
         self.gcm.add_new_file(event_path, data)
-        return self.get_arc(event_path)
+        return
 
 
     # If Export to disc is true, Exports the entire file/directory contents of the ISO to specified folder
