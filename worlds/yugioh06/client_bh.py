@@ -199,7 +199,7 @@ class YuGiOh2006Client(BizHawkClient):
 
             # Set collected Challenges to complete
             for location in set(ctx.checked_locations):
-                if location not in ctx.locations_checked:
+                if location not in ctx.locations_checked and 5730037 < location < 57300129:
                     cid = location - 5730038
                     old_score = await bizhawk.read(
                         ctx.bizhawk_ctx, [
