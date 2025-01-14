@@ -460,7 +460,7 @@ class MegaMan3Client(BizHawkClient):
 
         # get our relevant bytes
         (robot_masters_unlocked, robot_masters_defeated, doc_robo_unlocked, doc_robo_defeated,
-         rush_acquired, received_items, completed_stages, # consumable_checks,
+         rush_acquired, received_items, completed_stages, consumable_checks,
             e_tanks, lives, weapon_energy, health, state, bar_state, current_stage,
             energy_link_packet, last_wily) = await read(ctx.bizhawk_ctx, [
                 (MM3_ROBOT_MASTERS_UNLOCKED, 1, "RAM"),
@@ -470,7 +470,7 @@ class MegaMan3Client(BizHawkClient):
                 (MM3_RUSH_RECEIVED, 1, "RAM"),
                 (MM3_RECEIVED_ITEMS, 1, "RAM"),
                 (MM3_COMPLETED_STAGES, 0x1, "RAM"),
-                # (MM3_CONSUMABLES, 1, "RAM"),
+                (MM3_CONSUMABLES, 16, "RAM"), # Could be more but 16 definitely catches all current
                 (MM3_E_TANKS, 1, "RAM"),
                 (MM3_LIVES, 1, "RAM"),
                 (MM3_WEAPON_ENERGY, 11, "RAM"),
@@ -561,21 +561,21 @@ class MegaMan3Client(BizHawkClient):
 
         if energy_link_packet[0]:
             pickup = energy_link_packet[0]
-            if pickup in (0x76, 0x77):
+            if pickup in (0x64, 0x65):
                 # Health pickups
-                if pickup == 0x77:
+                if pickup == 0x65:
                     value = 2
                 else:
                     value = 10
                 exchange_rate = HP_EXCHANGE_RATE
-            elif pickup in (0x78, 0x79):
+            elif pickup in (0x66, 0x67):
                 # Weapon Energy
-                if pickup == 0x79:
+                if pickup == 0x67:
                     value = 2
                 else:
                     value = 10
                 exchange_rate = WEAPON_EXCHANGE_RATE
-            elif pickup == 0x7B:
+            elif pickup == 0x69:
                 # 1-Up
                 value = 1
                 exchange_rate = ONEUP_EXCHANGE_RATE
@@ -727,12 +727,13 @@ class MegaMan3Client(BizHawkClient):
         if completed_stages[0] & 0x80 and 0x89000F not in ctx.checked_locations:
             new_checks.append(0x89000F)
 
-        # for consumable in MM3_CONSUMABLE_TABLE:
-        #    if consumable not in ctx.checked_locations:
-        #        is_checked = consumable_checks[MM2_CONSUMABLE_TABLE[consumable][0]] \
-        #                     & MM2_CONSUMABLE_TABLE[consumable][1]
-        #        if is_checked:
-        #            new_checks.append(consumable)
+        if bar_state[0] == 0x80:  # currently in stage
+            for consumable in MM3_CONSUMABLE_TABLE[current_stage[0]]:
+                consumable_info = MM3_CONSUMABLE_TABLE[current_stage[0]][consumable]
+                if consumable not in ctx.checked_locations:
+                    is_checked = consumable_checks[consumable_info[0]] & (1 << consumable_info[1])
+                    if is_checked:
+                        new_checks.append(consumable)
 
         for new_check_id in new_checks:
             ctx.locations_checked.add(new_check_id)

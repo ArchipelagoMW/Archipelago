@@ -11,6 +11,7 @@ from .rules import minimum_weakness_requirement, bosses
 
 from .text import MM3TextEntry
 from .color import get_colors_for_item, write_palette_shuffle
+from .options import Consumables
 
 if TYPE_CHECKING:
     from . import MM3World
@@ -112,7 +113,7 @@ enemy_addresses: Dict[str, int] = {
 }
 
 # addresses printed when assembling basepatch
-# consumables_ptr: int = 0x3F2FE
+consumables_ptr: int = 0x7FDEA
 wily_4_ptr: int = 0x7F57C
 # energylink_ptr: int = 0x3F46B
 
@@ -268,16 +269,15 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
                 damage[weapon] = 256 + damage[weapon]
             patch.write_byte(enemy_weakness_ptrs[weapon] + enemy_addresses[enemy], damage[weapon])
 
-    if world.options.consumables != world.options.consumables.option_all:
-        pass
-        # value_a = 0x7C
-        # value_b = 0x76
-        # if world.options.consumables == world.options.consumables.option_1up_etank:
-        #    value_b = 0x7A
-        # else:
-        #    value_a = 0x7A
-        # patch.write_byte(consumables_ptr - 3, value_a)
-        # patch.write_byte(consumables_ptr + 1, value_b)
+    if world.options.consumables != Consumables.option_all:
+        value_a = 0x64
+        value_b = 0x69
+        if world.options.consumables in (Consumables.option_none, Consumables.option_1up_etank):
+            value_a = 0x67
+        if world.options.consumables in (Consumables.option_none, Consumables.option_weapon_health):
+            value_b = 0x67
+        patch.write_byte(consumables_ptr - 3, value_a)
+        patch.write_byte(consumables_ptr + 1, value_b)
 
     patch.write_byte(wily_4_ptr + 1, world.options.wily_4_requirement.value)
 
