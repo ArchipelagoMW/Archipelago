@@ -1096,7 +1096,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         prize_replacements[0xE1] = 0xDA  # 5 Arrows -> Blue Rupee
         prize_replacements[0xE2] = 0xDB  # 10 Arrows -> Red Rupee
 
-    if local_world.options.shuffle_prizes.value in ("general", "both"):
+    if local_world.options.shuffle_prizes in ("general", "both"):
         # shuffle prize packs
         prizes = [0xD8, 0xD8, 0xD8, 0xD8, 0xD9, 0xD8, 0xD8, 0xD9, 0xDA, 0xD9, 0xDA, 0xDB, 0xDA, 0xD9, 0xDA, 0xDA, 0xE0,
                   0xDF, 0xDF, 0xDA, 0xE0, 0xDF, 0xD8, 0xDF,
@@ -1158,7 +1158,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
             byte = int(rom.read_byte(address))
             rom.write_byte(address, prize_replacements.get(byte, byte))
 
-    if local_world.options.shuffle_prizes.value in ("bonk", "both"):
+    if local_world.options.shuffle_prizes in ("bonk", "both"):
         # set bonk prizes
         bonk_prizes = [0x79, 0xE3, 0x79, 0xAC, 0xAC, 0xE0, 0xDC, 0xAC, 0xE3, 0xE3, 0xDA, 0xE3, 0xDA, 0xD8, 0xAC,
                        0xAC, 0xE3, 0xD8, 0xE3, 0xE3, 0xE3, 0xE3, 0xE3, 0xE3, 0xDC, 0xDB, 0xE3, 0xDA, 0x79, 0x79,

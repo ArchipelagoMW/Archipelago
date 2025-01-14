@@ -229,22 +229,22 @@ def generate_itempool(world):
     if world.options.item_pool.current_key not in difficulties:
         raise NotImplementedError(f"Diffulty {world.options.item_pool}")
     if world.options.goal not in ('ganon', 'pedestal', 'bosses', 'triforce_hunt', 'local_triforce_hunt',
-                                       'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'crystals',
-                                       'ganon_pedestal'):
+                                  'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'crystals',
+                                  'ganon_pedestal'):
         raise NotImplementedError(f"Goal {world.options.goal} for player {player}")
     if world.options.mode not in ('open', 'standard', 'inverted'):
         raise NotImplementedError(f"Mode {world.options.mode} for player {player}")
-    if world.options.timer.value not in (False, 'display', 'timed', 'timed_ohko', 'ohko', 'timed_countdown'):
+    if world.options.timer not in (False, 'display', 'timed', 'timed_ohko', 'ohko', 'timed_countdown'):
         raise NotImplementedError(f"Timer {world.options.timer} for player {player}")
 
-    if world.options.timer.value in ['ohko', 'timed_ohko']:
+    if world.options.timer in ['ohko', 'timed_ohko']:
         world.can_take_damage = False
-    if world.options.goal.value in ['pedestal', 'triforce_hunt', 'local_triforce_hunt']:
+    if world.options.goal in ['pedestal', 'triforce_hunt', 'local_triforce_hunt']:
         multiworld.push_item(multiworld.get_location('Ganon', player), item_factory('Nothing', world), False)
     else:
         multiworld.push_item(multiworld.get_location('Ganon', player), item_factory('Triforce', world), False)
 
-    if world.options.goal.value in ['triforce_hunt', 'local_triforce_hunt']:
+    if world.options.goal in ['triforce_hunt', 'local_triforce_hunt']:
         region = multiworld.get_region('Light World', player)
 
         loc = ALttPLocation(player, "Murahdahla", parent=region)

@@ -90,7 +90,7 @@ def underworld_glitches_rules(world, player):
     # We need to be able to s+q to old man, then go to either Mire or Hera at either Hera or GT. 
     # First we require a certain type of entrance shuffle, then build the rule from its pieces. 
     if not world.worlds[player].options.swamp_patch_required:
-        if world.worlds[player].options.entrance_shuffle.value in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
+        if world.worlds[player].options.entrance_shuffle in ['vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed']:
             rule_map = {
                 'Misery Mire (Entrance)': (lambda state: True),
                 'Tower of Hera (Bottom)': (lambda state: state.can_reach('Tower of Hera Big Key Door', 'Entrance', player))

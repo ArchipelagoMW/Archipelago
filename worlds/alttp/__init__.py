@@ -296,9 +296,9 @@ class ALTTPWorld(World):
         multiworld = self.multiworld
 
         self.fix_trock_doors = (self.options.entrance_shuffle != 'vanilla' or self.options.mode == 'inverted')
-        self.fix_skullwoods_exit = self.options.entrance_shuffle.value not in ['vanilla', 'simple', 'restricted', 'dungeons_simple']
-        self.fix_palaceofdarkness_exit = self.options.entrance_shuffle.value not in ['dungeons_simple', 'vanilla', 'simple', 'restricted']
-        self.fix_trock_exit = self.options.entrance_shuffle.value not in ['vanilla', 'simple', 'restricted', 'dungeons_simple']
+        self.fix_skullwoods_exit = self.options.entrance_shuffle not in ['vanilla', 'simple', 'restricted', 'dungeons_simple']
+        self.fix_palaceofdarkness_exit = self.options.entrance_shuffle not in ['dungeons_simple', 'vanilla', 'simple', 'restricted']
+        self.fix_trock_exit = self.options.entrance_shuffle not in ['vanilla', 'simple', 'restricted', 'dungeons_simple']
 
         # fairy bottle fills
         bottle_options = [
@@ -325,8 +325,7 @@ class ALTTPWorld(World):
         # system for sharing ER layouts
         self.er_seed = str(multiworld.random.randint(0, 2 ** 64))
 
-        if (self.options.entrance_shuffle != "vanilla"
-                and self.options.entrance_shuffle_seed != "random"):
+        if self.options.entrance_shuffle != "vanilla" and self.options.entrance_shuffle_seed != "random":
             shuffle = self.options.entrance_shuffle.current_key
             if shuffle == "vanilla":
                 self.er_seed = "vanilla"
@@ -335,7 +334,8 @@ class ALTTPWorld(World):
                     shuffle, self.options.entrance_shuffle_seed,
                     self.options.retro_caves,
                     self.options.mode,
-                    self.options.glitches_required))
+                    self.options.glitches_required
+                ))
             else:  # not a race or group seed, use set seed as is.
                 self.er_seed = int(self.options.entrance_shuffle_seed)
         elif self.options.entrance_shuffle == "vanilla":
@@ -344,11 +344,11 @@ class ALTTPWorld(World):
         for dungeon_item in ["small_key_shuffle", "big_key_shuffle", "compass_shuffle", "map_shuffle"]:
             option = getattr(self.options, dungeon_item)
             if option == "own_world":
-                self.options.local_items |= self.item_name_groups[option.item_name_group]
+                self.options.local_items.value |= self.item_name_groups[option.item_name_group]
             elif option == "different_world":
-                self.options.non_local_items |= self.item_name_groups[option.item_name_group]
+                self.options.non_local_items.value |= self.item_name_groups[option.item_name_group]
                 if self.options.mode == "standard":
-                    self.options.non_local_items -= {"Small Key (Hyrule Castle)"}
+                    self.options.non_local_items.value -= {"Small Key (Hyrule Castle)"}
             elif option.in_dungeon:
                 self.dungeon_local_item_names |= self.item_name_groups[option.item_name_group]
                 if option == "original_dungeon":
@@ -359,7 +359,7 @@ class ALTTPWorld(World):
         self.difficulty_requirements = difficulties[self.options.item_pool.current_key]
 
         # enforce pre-defined local items.
-        if self.options.goal.value in ["local_triforce_hunt", "local_ganon_triforce_hunt"]:
+        if self.options.goal in ["local_triforce_hunt", "local_ganon_triforce_hunt"]:
             self.options.local_items.value.add('Triforce Piece')
 
         # Not possible to place crystals outside boss prizes yet (might as well make it consistent with pendants too).
@@ -379,8 +379,8 @@ class ALTTPWorld(World):
         create_shops(multiworld, player)
         self.create_dungeons()
 
-        if (self.options.glitches_required.value not in ["no_glitches", "minor_glitches"] and
-                self.options.entrance_shuffle.value in [
+        if (self.options.glitches_required not in ["no_glitches", "minor_glitches"] and
+                self.options.entrance_shuffle in [
                     "vanilla", "dungeons_simple", "dungeons_full", "simple", "restricted", "full"]):
             self.fix_fake_world = False
 
