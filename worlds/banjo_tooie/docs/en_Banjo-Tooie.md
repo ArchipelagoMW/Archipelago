@@ -16,7 +16,7 @@ config file.
 - Option to customize world costs
 - Option to skip Klungo 1 & 2
 - Prison Code Door is always open
-- Allows for instant transformation once Mumbo Skull or Humba Wigwam as been tagged by Banjo & Kazooie
+- Allows for instant transformation once Mumbo Skull or Humba Wigwam have been tagged by Banjo & Kazooie
 - Option to customize the dialog character when receiving certain items
 - Pause menu contains a new Arhipelago Menu
 - Options to randomize opening of worlds order and randomize world entrances
