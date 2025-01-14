@@ -774,12 +774,14 @@ disabled_mods = {ModNames.deepwoods, ModNames.magic,
                  ModNames.wellwick, ModNames.shiko, ModNames.delores, ModNames.riley,
                  ModNames.boarding_house}
 
+enabled_mods = all_mods.difference(disabled_mods)
+
 
 class Mods(OptionSet):
     """List of mods that will be included in the shuffling."""
     internal_name = "mods"
     display_name = "Mods"
-    valid_keys = all_mods.difference(disabled_mods)
+    valid_keys = enabled_mods
     # In tests, we keep even the disabled mods active, because we expect some of them to eventually get updated for SV 1.6
     # In that case, we want to maintain content and logic for them, and therefore keep testing them
     if 'unittest' in sys.modules.keys() or 'pytest' in sys.modules.keys():
