@@ -140,7 +140,7 @@ class BanjoTooieWorld(World):
                     item_classification = ItemClassification.progression
                 else:
                     item_classification = ItemClassification.filler
-            elifbanjoItem.btid == self.item_code(itemName.HONEY) and self.options.honeyb_rewards: #Honeycombs
+            elif banjoItem.btid == self.item_code(itemName.HONEY) and self.options.honeyb_rewards: #Honeycombs
                 item_classification = ItemClassification.progression
             else:
                 item_classification = ItemClassification.useful
