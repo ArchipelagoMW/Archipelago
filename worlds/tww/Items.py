@@ -240,7 +240,7 @@ ITEM_TABLE: dict[str, TWWItemData] = {
     "Silver Rupee":            TWWItemData("Item",      IC.useful,                     127, 20, 0x0F),
     "Rainbow Rupee":           TWWItemData("Item",      IC.useful,                     128,  1, 0xB8),
 
-    "Piece of Heart":          TWWItemData("Item",      IC.filler,                     129, 44, 0x07),
+    "Piece of Heart":          TWWItemData("Item",      IC.useful,                     129, 44, 0x07),
     "Heart Container":         TWWItemData("Item",      IC.useful,                     130,  6, 0x08),
 
     "DRC Big Key":             TWWItemData("Big Key",   IC.progression,                131,  1, 0x14),
