@@ -509,7 +509,7 @@ class TWWWorld(World):
         """
         # TODO: Calculate nonprogress items dynamically
         adjusted_classification = None
-        if not self.options.progression_big_octos_gunboats and name == "Progressive Quiver":
+        if not self.options.progression_big_octos_gunboats and name == "Quiver Capacity Upgrade":
             adjusted_classification = IC.useful
         if self.options.sword_mode == "swords_optional" and name == "Progressive Sword":
             adjusted_classification = IC.useful

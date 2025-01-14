@@ -128,7 +128,7 @@ def has_light_arrows(state: CollectionState, player: int) -> bool:
 
 
 def has_any_wallet_upgrade(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Wallet", player, 1)
+    return state.has("Wallet Capacity Upgrade", player, 1)
 
 
 def has_picto_box(state: CollectionState, player: int) -> bool:
@@ -140,19 +140,19 @@ def has_deluxe_picto_box(state: CollectionState, player: int) -> bool:
 
 
 def has_60_bomb_bomb_bag(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Bomb Bag", player, 1)
+    return state.has("Bomb Bag Capacity Upgrade", player, 1)
 
 
 def has_99_bomb_bomb_bag(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Bomb Bag", player, 2)
+    return state.has("Bomb Bag Capacity Upgrade", player, 2)
 
 
 def has_60_arrow_quiver(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Quiver", player, 1)
+    return state.has("Quiver Capacity Upgrade", player, 1)
 
 
 def has_99_arrow_quiver(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Quiver", player, 2)
+    return state.has("Quiver Capacity Upgrade", player, 2)
 
 
 def has_magic_meter(state: CollectionState, player: int) -> bool:
