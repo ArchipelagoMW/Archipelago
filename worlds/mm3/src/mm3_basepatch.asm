@@ -165,6 +165,10 @@ BreakManSelect:
   JSR ApplyLastWily
   NOP
 
+%org($BE22, $1D)
+ConsumableHook:
+  JMP CheckConsumable
+
 %org($A000, $1E)
 db $21, $A1, $0C, "PLACEHOLDER 1"
 db $21, $C1, $0C, "PLACEHOLDER 2"
@@ -676,6 +680,8 @@ Wily4Comparison:
   STA $EC
   RTS
 
+; out of space here :(
+
 %org($FDBA, $3F)
 WeaponReceived:
   TAX
@@ -690,3 +696,17 @@ WeaponReceived:
   STA $F5
   JSR $FF6B
   RTS
+
+CheckConsumable:
+  STA $0150, Y
+  LDA $0320, X
+  CMP #$64
+  BMI .Return
+  print "Consumables (replace 67): ", hex(realbase())
+  CMP #$69
+  BPL .Return
+  LDA #$00
+  STA $0300, X
+  JMP $BE49
+  .Return:
+  JMP $BE25
