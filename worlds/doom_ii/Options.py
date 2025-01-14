@@ -153,7 +153,6 @@ class BackpackCount(Range):
 class MaxAmmoBullets(Range):
     """Set the starting ammo capacity for bullets."""
     display_name = "Max Ammo - Bullets"
-    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 200
     range_end = 999
     default = 200
@@ -162,7 +161,6 @@ class MaxAmmoBullets(Range):
 class MaxAmmoShells(Range):
     """Set the starting ammo capacity for shotgun shells."""
     display_name = "Max Ammo - Shells"
-    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 50
     range_end = 999
     default = 50
@@ -171,7 +169,6 @@ class MaxAmmoShells(Range):
 class MaxAmmoRockets(Range):
     """Set the starting ammo capacity for rockets."""
     display_name = "Max Ammo - Rockets"
-    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 50
     range_end = 999
     default = 50
@@ -180,7 +177,6 @@ class MaxAmmoRockets(Range):
 class MaxAmmoEnergyCells(Range):
     """Set the starting ammo capacity for energy cells."""
     display_name = "Max Ammo - Energy Cells"
-    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 300
     range_end = 999
     default = 300
@@ -189,7 +185,6 @@ class MaxAmmoEnergyCells(Range):
 class AddedAmmoBullets(Range):
     """Set the amount of bullet capacity added when collecting a backpack or capacity upgrade."""
     display_name = "Added Ammo - Bullets"
-    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 20
     range_end = 999
     default = 200
@@ -198,7 +193,6 @@ class AddedAmmoBullets(Range):
 class AddedAmmoShells(Range):
     """Set the amount of shotgun shell capacity added when collecting a backpack or capacity upgrade."""
     display_name = "Added Ammo - Shells"
-    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 5
     range_end = 999
     default = 50
@@ -207,7 +201,6 @@ class AddedAmmoShells(Range):
 class AddedAmmoRockets(Range):
     """Set the amount of rocket capacity added when collecting a backpack or capacity upgrade."""
     display_name = "Added Ammo - Rockets"
-    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 5
     range_end = 999
     default = 50
@@ -216,7 +209,6 @@ class AddedAmmoRockets(Range):
 class AddedAmmoEnergyCells(Range):
     """Set the amount of energy cell capacity added when collecting a backpack or capacity upgrade."""
     display_name = "Added Ammo - Energy Cells"
-    visibility = Visibility.all ^ Visibility.spoiler
     range_start = 30
     range_end = 999
     default = 300
