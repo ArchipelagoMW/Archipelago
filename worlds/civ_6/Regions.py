@@ -3,105 +3,34 @@ from BaseClasses import CollectionState, LocationProgressType, Region
 from worlds.generic.Rules import set_rule
 from .Data import (
     get_boosts_data,
-    get_era_required_items_data,
-    get_progressive_districts_data,
 )
-from .Items import CivVIItemData, format_item_name, get_item_by_civ_name
 from .Enum import EraType
 from .Locations import GOODY_HUT_LOCATION_NAMES, CivVILocation
-from .ProgressiveDistricts import get_flat_progressive_districts
 
 if TYPE_CHECKING:
     from . import CivVIWorld
 
 
-def get_prereqs_for_era(
-    end_era: EraType,
-    exclude_progressive_items: bool,
-    item_table: Dict[str, CivVIItemData],
-) -> List[CivVIItemData]:
-    """Gets the specific techs/civics that are required for the specified era"""
-    era_required_items = get_era_required_items_data()[end_era.value].copy()
-
-    # If we are excluding progressive items, we need to remove them from the list of expected items (TECH_BRONZE_WORKING won't be here since it will be PROGRESSIVE_ENCAMPMENT)
-    if not exclude_progressive_items:  # guard clause to save an indent depth
-        return [
-            get_item_by_civ_name(prereq, item_table) for prereq in era_required_items
-        ]
-
-    flat_progressive_items = get_flat_progressive_districts()
-    prereqs_without_progressive_items: List[str] = []
-    for item in era_required_items:
-        if item in flat_progressive_items:
-            continue
-        prereqs_without_progressive_items.append(item)
-
-    return [
-        get_item_by_civ_name(prereq, item_table)
-        for prereq in prereqs_without_progressive_items
-    ]
-
-
-def has_required_progressive_districts(
-    state: CollectionState, era: EraType, player: int
-) -> bool:
-    """If player has progressive items enabled, it will count how many progressive techs it should have, otherwise return the default array"""
-    progressive_districts = get_progressive_districts_data()
-
-    item_table = state.multiworld.worlds[player].item_table
-    # Verify we can still reach non progressive items
-    all_previous_items_no_progressives = get_prereqs_for_era(era, True, item_table)
-    if not state.has_all(
-        [item.name for item in all_previous_items_no_progressives], player
-    ):
-        return False
-
-    # Verify we have the correct amount of progressive items
-    all_previous_items = get_prereqs_for_era(era, False, item_table)
-    required_counts: Dict[str, int] = {}
-
-    for key, value in progressive_districts.items():
-        required_counts[key] = 0
-        for item in all_previous_items:
-            if item.civ_name in value:
-                required_counts[key] += 1
-
-    return state.has_all_counts(
-        {format_item_name(key): value for key, value in required_counts.items()}, player
-    )
-
-
-def has_required_progressive_eras(
-    state: CollectionState, era: EraType, player: int
-) -> bool:
-    """Checks, for the given era, how many are required to proceed to the next era. Ancient = 0, Classical = 1, etc."""
-    if era == EraType.ERA_FUTURE or era == EraType.ERA_INFORMATION:
-        return True
-
-    eras = [e.value for e in EraType]
-    era_index = eras.index(era.value)
-    return state.has(format_item_name("PROGRESSIVE_ERA"), player, era_index + 1)
-
-
 def has_required_items(
     state: CollectionState, era: EraType, world: "CivVIWorld"
 ) -> bool:
-    player = world.player
-    has_progressive_districts = world.options.progression_style != "none"
-    has_progressive_eras = world.options.progression_style == "eras_and_districts"
+    # Progressive Eras
+    if world.options.progression_style == "eras_and_districts" and not state.has(
+        "Progressive Era", world.player, world.era_required_progressive_era_counts[era]
+    ):
+        return False
 
-    if has_progressive_districts:
-        required_items = has_required_progressive_districts(state, era, player)
-    else:
-        era_required_items = [
-            get_item_by_civ_name(item, world.item_table).name
-            for item in get_era_required_items_data()[era.value]
-        ]
-        required_items = state.has_all(era_required_items, player)
+    #  Non Progressive Items (all items for era if no progressive districts)
+    if not state.has_all(world.era_required_non_progressive_items[era], world.player):
+        return False
 
-    return required_items and (
-        not has_progressive_eras or has_required_progressive_eras(state, era, player)
-    )
+    # Progressive Items (if any)
+    if world.options.progression_style != "none" and not state.has_all_counts(
+        world.era_required_progressive_items_counts[era], world.player
+    ):
+        return False
+
+    return True
 
 
 def create_regions(world: "CivVIWorld"):

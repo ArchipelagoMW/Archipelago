@@ -10,19 +10,31 @@ from . import CivVITestBase
 
 def collect_items_for_era(test: CivVITestBase, era: EraType) -> None:
     era_required_items = get_era_required_items_data()
-    items = [get_item_by_civ_name(item, test.world.item_table).name for item in era_required_items[era.value]]
+    items = [
+        get_item_by_civ_name(item, test.world.item_table).name
+        for item in era_required_items[era.value]
+    ]
     test.collect_by_name(items)
 
 
 def collect_items_for_era_progressive(test: CivVITestBase, era: EraType) -> None:
     era_progression_items = get_era_required_items_data()
     progressive_items = convert_items_to_progressive_items(
-        era_progression_items[era.value])
-    items = [get_item_by_civ_name(item, test.world.item_table).name for item in progressive_items]
-    test.collect_by_name(items)
+        era_progression_items[era.value]
+    )
+    items = [
+        get_item_by_civ_name(item, test.world.item_table).name
+        for item in progressive_items
+    ]
+    for item in items:
+        test.collect(test.get_item_by_name(item))
 
 
-def verify_eras_accessible(test: CivVITestBase, state: CollectionState, collect_func: Callable[[CivVITestBase, EraType], None]) -> None:
+def verify_eras_accessible(
+    test: CivVITestBase,
+    state: CollectionState,
+    collect_func: Callable[[CivVITestBase, EraType], None],
+) -> None:
     """Collect for an era, then check if the next era is accessible and the one after that is not"""
     for era in EraType:
         if era == EraType.ERA_ANCIENT:
@@ -39,7 +51,7 @@ def verify_eras_accessible(test: CivVITestBase, state: CollectionState, collect_
         EraType.ERA_MODERN,
         EraType.ERA_ATOMIC,
         EraType.ERA_INFORMATION,
-        EraType.ERA_FUTURE
+        EraType.ERA_FUTURE,
     ]
 
     for i in range(len(eras) - 1):
@@ -94,10 +106,22 @@ class TestProgressiveDistrictRequirements(CivVITestBase):
 
     def test_progressive_districts_are_required(self) -> None:
         state = self.multiworld.state
-        self.collect_all_but(["Progressive Holy Site"])
+        self.collect_all_but(["Progressive Encampment"])
         self.assertFalse(state.can_reach("ERA_CLASSICAL", "Region", self.player))
-        self.collect_by_name(["Progressive Holy Site"])
+        self.assertFalse(state.can_reach("ERA_RENAISSANCE", "Region", self.player))
+        self.assertFalse(state.can_reach("ERA_MODERN", "Region", self.player))
+
+        self.collect(self.get_item_by_name("Progressive Encampment"))
         self.assertTrue(state.can_reach("ERA_CLASSICAL", "Region", self.player))
+        self.assertFalse(state.can_reach("ERA_RENAISSANCE", "Region", self.player))
+        self.assertFalse(state.can_reach("ERA_MODERN", "Region", self.player))
+
+        self.collect(self.get_item_by_name("Progressive Encampment"))
+        self.assertTrue(state.can_reach("ERA_RENAISSANCE", "Region", self.player))
+        self.assertFalse(state.can_reach("ERA_MODERN", "Region", self.player))
+
+        self.collect(self.get_item_by_name("Progressive Encampment"))
+        self.assertTrue(state.can_reach("ERA_MODERN", "Region", self.player))
 
 
 class TestProgressiveEraRequirements(CivVITestBase):
@@ -112,11 +136,9 @@ class TestProgressiveEraRequirements(CivVITestBase):
         def check_eras_accessible(eras: List[EraType]):
             for era in EraType:
                 if era in eras:
-                    self.assertTrue(state.can_reach(
-                        era.value, "Region", self.player))
+                    self.assertTrue(state.can_reach(era.value, "Region", self.player))
                 else:
-                    self.assertFalse(state.can_reach(
-                        era.value, "Region", self.player))
+                    self.assertFalse(state.can_reach(era.value, "Region", self.player))
 
         progresive_era_item = self.get_item_by_name("Progressive Era")
         accessible_eras = [EraType.ERA_ANCIENT]
@@ -167,11 +189,9 @@ class TestProgressiveEraRequirementsWithBoostsanity(CivVITestBase):
         def check_eras_accessible(eras: List[EraType]):
             for era in EraType:
                 if era in eras:
-                    self.assertTrue(state.can_reach(
-                        era.value, "Region", self.player))
+                    self.assertTrue(state.can_reach(era.value, "Region", self.player))
                 else:
-                    self.assertFalse(state.can_reach(
-                        era.value, "Region", self.player))
+                    self.assertFalse(state.can_reach(era.value, "Region", self.player))
 
         progresive_era_item = self.get_item_by_name("Progressive Era")
         accessible_eras = [EraType.ERA_ANCIENT]
