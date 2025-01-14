@@ -1848,7 +1848,6 @@ big_location_table = {
     LocationName.white_jungle_big_1: 0xFF1B18,
     LocationName.sky_rail_big: 0xFF1B1A,
     LocationName.mad_space_big: 0xFF1B1B,
-    LocationName.cosmic_wall_big: 0xFF1B1C,
     LocationName.final_chase_big: 0xFF1B1D,
 
     LocationName.cannon_core_big_1: 0xFF1B1E,
@@ -3675,7 +3674,6 @@ cosmic_wall_region_locations = [
     LocationName.cosmic_wall_itembox_25,
     LocationName.cosmic_wall_itembox_26,
     LocationName.cosmic_wall_itembox_27,
-    LocationName.cosmic_wall_big,
     LocationName.cosmic_wall_upgrade,
 ]
 

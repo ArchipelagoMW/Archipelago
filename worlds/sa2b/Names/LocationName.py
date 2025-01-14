@@ -1298,7 +1298,6 @@ cosmic_wall_itembox_24 = "Cosmic Wall - Item Box 24"
 cosmic_wall_itembox_25 = "Cosmic Wall - Item Box 25"
 cosmic_wall_itembox_26 = "Cosmic Wall - Item Box 26"
 cosmic_wall_itembox_27 = "Cosmic Wall - Item Box 27"
-cosmic_wall_big        = "Cosmic Wall - Big"
 cosmic_wall_upgrade    = "Cosmic Wall - Upgrade"
 
 # Rouge Mission Definitions
