@@ -141,6 +141,8 @@ class LinksAwakeningWorld(World):
         self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.ladxr_settings, self.random).toDict()
 
     def generate_early(self) -> None:
+        self.dungeon_item_types = {
+        }
         for dungeon_item_type in ["maps", "compasses", "small_keys", "nightmare_keys", "stone_beaks", "instruments"]:
             option_name = "shuffle_" + dungeon_item_type
             option: DungeonItemShuffle = getattr(self.options, option_name)
