@@ -576,20 +576,14 @@ class BanjoTooieWorld(World):
                     item = self.create_item(itemName.JRA)
                 else:
                     item = self.create_item(world)
-                if world_num == 10:
-                    self.get_location("Boss Unlocked").place_locked_item(item)
-                else:
-                    self.get_location("World "+ str(world_num) +" Unlocked").place_locked_item(item)
-                    world_num = world_num + 1
+                self.get_location("World "+ str(world_num) +" Unlocked").place_locked_item(item)
+                world_num = world_num + 1
         else:
             world_num = 1
             for world, amt in self.randomize_worlds.items():
                 item = self.create_item(itemName.NONE)
-                if world_num == 10:
-                    self.get_location("Boss Unlocked").place_locked_item(item)
-                else:
-                    self.get_location("World "+ str(world_num) +" Unlocked").place_locked_item(item)
-                    world_num = world_num + 1
+                self.get_location("World "+ str(world_num) +" Unlocked").place_locked_item(item)
+                world_num = world_num + 1
 
         if self.options.victory_condition.value == VictoryCondition.option_minigame_hunt\
             or self.options.victory_condition.value == VictoryCondition.option_wonderwing_challenge:
@@ -829,8 +823,8 @@ class BanjoTooieWorld(World):
             for data in locations.values():
                 hint_information.update({data.btid: entrance})
 
+        #used for Lua/C++ client reasons
         def get_entrance(level: str):
-            # TODO: Fix level names here too
             level = list(self.loading_zones.keys())[list(self.loading_zones.values()).index(level)]
             if level == regionName.JR:
                 return "Jolly Roger's Lagoon"
