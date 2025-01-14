@@ -58,8 +58,8 @@ class RequiredBosses(OptionSet):
     Eye Of Terror - Night
     Retinazor - Night
     Spazmatism - Night
-    Nightmare Werepig - Cave
-    Scrappy Werepig - Cave
+    Nightmare Werepig - Cave (Full)
+    Scrappy Werepig - Cave (Full)
     Ancient Fuelweaver - Cave (Full), Night
     Celestial Champion - Ocean (Full)
     """

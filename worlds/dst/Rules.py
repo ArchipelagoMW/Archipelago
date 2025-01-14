@@ -68,6 +68,9 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     player = dst_world.player
     options:DSTOptions = dst_world.options
 
+    # I don't know if this is something I want to make an option for, so we'll just have priority locations controlled by this
+    USE_PRIORITY_TAGS = False
+
     WHITELIST = Util.build_whitelist(options)
     EXISTING_LOCATIONS = {location.name for location in multiworld.get_locations(player)}
     SEASON_HELPER_ITEMS = {name for name, data in item_data_table.items() if "seasonhelper" in data.tags}
@@ -765,12 +768,13 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         else ALWAYS_TRUE
     )
     nonperishable_quick_healing = add_event("Nonperishable Quick Healing", REGION.FOREST,
-        (
+        either_rule(
             lambda state: (
                 state.has_all({"Healing Salve", firestarting.event, mining.event}, player) # Ash and rocks
                 or state.has_all({"Honey Poultice", "Papyrus", honey_farming.event}, player)
-                or (WEAPON_LOGIC and state.has_all({"Bat Bat", purple_gem.event, batilisk.event}, player))
-            )
+            ),
+            (lambda state: state.has_all({"Bat Bat", purple_gem.event, batilisk.event}, player)) if WEAPON_LOGIC
+            else ALWAYS_FALSE
         ) if HEALING_LOGIC
         else ALWAYS_TRUE
     )
@@ -780,13 +784,14 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
         hide_in_spoiler = True
     )
     slow_healing = add_event("Slow Healing", REGION.FOREST,
-        (
+        # TODO: Wickerbottom can't sleep
+        either_rule(
             lambda state: (
                 state.has_all({"Tent", "Rope"}, player)
                 or state.has_all({"Siesta Lean-to", "Rope", "Boards", chopping.event}, player)
-                or (REGION.CAVE in WHITELIST and state.has_all({"Rope", "Straw Roll", "Fur Roll", mining.event, basic_combat.event, basic_sanity_management.event}, player))
-            )
-            # TODO: Wickerbottom can't sleep
+            ),
+            lambda state: state.has_all({"Rope", "Straw Roll", "Fur Roll", mining.event, basic_combat.event}, player) if REGION.CAVE in WHITELIST
+            else ALWAYS_FALSE
         ) if HEALING_LOGIC
         else ALWAYS_TRUE,
         hide_in_spoiler = True
@@ -1148,7 +1153,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
                         or state.has(potato_farming.event, player) # Farming potato
                     )
                 )
-            ) if REGION.MOONSTORM
+            ) if REGION.MOONSTORM in WHITELIST
             else ALWAYS_FALSE
         )
     )
@@ -1578,7 +1583,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             "Snurtle":                          cave_exploration.rule,
             "Ewecus":                           lambda state: state.has_all({advanced_combat.event, advanced_exploration.event}, player),
             "Spider":                           (lambda state: state.has("Trap", player)) if PEACEFUL_LOGIC else ALWAYS_TRUE,
-            "Dangling Depth Dweller":           combine_rules((lambda state: state.has("Trap", player)) if PEACEFUL_LOGIC else ALWAYS_TRUE, ruins_exploration.rule),
+            "Dangling Depth Dweller":           combine_rules((lambda state: state.has("Trap", player)) if PEACEFUL_LOGIC else ALWAYS_TRUE, basic_combat.rule, cave_exploration.rule),
             "Cave Spider":                      combine_rules((lambda state: state.has("Trap", player)) if PEACEFUL_LOGIC else ALWAYS_TRUE, basic_combat.rule, cave_exploration.rule),
             "Nurse Spider":                     combine_rules((lambda state: state.has("Trap", player)) if PEACEFUL_LOGIC else ALWAYS_TRUE, advanced_combat.rule),
             "Shattered Spider":                 combine_rules((lambda state: state.has("Trap", player)) if PEACEFUL_LOGIC else ALWAYS_TRUE, basic_combat.rule, lunar_island.rule),
@@ -1754,7 +1759,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             "Science (Frazzled Wires)":         (lambda state: state.has_all({ruins_exploration.event, hammering.event}, player)) if REGION.RUINS in WHITELIST
                                                 else (lambda state: state.has_all({digging.event, basic_sanity_management.event}, player)),
             "Science (Charcoal)":               charcoal.rule,
-            "Science (Butter)":                 butter.rule, # Excluded
+            "Science (Butter)":                 butter.rule,
             "Science (Asparagus)":              asparagus_farming.rule,
             "Science (Garlic)":                 garlic_farming.rule,
             "Science (Pumpkin)":                pumpkin_farming.rule,
@@ -1807,7 +1812,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
                                                 and state.has_any({dusk.event, night.event, hammering.event, deconstruction_staff.event}, player)),
             "Magic (Mosquito Sack)":            swamp_exploration.rule,
             "Magic (Spider Gland)":             ALWAYS_TRUE,
-            "Magic (Monster Jerky)":            (lambda state: state.has_all({"Drying Rack", "Rope", charcoal.event}, player)) if BASE_MAKING_LOGIC else charcoal.rule, # Excluded
+            "Magic (Monster Jerky)":            (lambda state: state.has_all({"Drying Rack", "Rope", charcoal.event}, player)) if BASE_MAKING_LOGIC else charcoal.rule,
             "Magic (Pig Skin)":                 lambda state: state.has_any({hammering.event, deconstruction_staff.event}, player) or state.has_all({day.event, basic_combat.event}, player),
             "Magic (Batilisk Wing)":            batilisk.rule,
             "Magic (Stinger)":                  ALWAYS_TRUE,
@@ -1887,7 +1892,7 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
 
     excluded:Set[str] = set()
     no_advancement:Set[str] = set()
-    progression_required_bosses:Set = set()
+    progression_required_bosses:Set[str] = set()
 
     if options.goal.value != options.goal.option_survival:
         _required_bosses = frozenset(options.required_bosses.value)
@@ -1920,7 +1925,6 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
     # Set location rules
     for location_name, rule in rules_lookup["location_rules"].items():
         Util.assert_rule(rule, multiworld) # DEBUG
-        assert callable(rule), f"Invalid rule for {location_name}"
 
         if not location_name in location_data_table:
             continue
@@ -1936,25 +1940,28 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
                     required = True
                     break
 
-            if required:
+            if required and USE_PRIORITY_TAGS:
                 multiworld.priority_locations[player].value.add(location_name)
-            elif ("priority" in location_data.tags
-            or (options.boss_fill_items.value == options.boss_fill_items.option_priority and "boss" in location_data.tags and not "excluded" in location_data.tags)
+            elif (
+                ("priority" in location_data.tags and USE_PRIORITY_TAGS)
+                or (options.boss_fill_items.value == options.boss_fill_items.option_priority and "boss" in location_data.tags)
             ):
                 # Prioritize generic priority tag
                 multiworld.priority_locations[player].value.add(location_name)
 
             # Exclude from having progression items if it meets the conditions
-            if not required and ("excluded" in location_data.tags
-            or (options.boss_fill_items.value == options.boss_fill_items.option_filler and "boss" in location_data.tags)
-            or (options.boss_fill_items.value == options.boss_fill_items.option_filler and "raidboss" in location_data.tags)
-            or (not ADVANCED_PLAYER_BIAS and "advanced" in location_data.tags)
-            or (not EXPERT_PLAYER_BIAS and "expert" in location_data.tags)
+            if not required and (
+                   (options.boss_fill_items.value == options.boss_fill_items.option_filler and "boss" in location_data.tags)
+                or (options.boss_fill_items.value == options.boss_fill_items.option_filler and "raidboss" in location_data.tags)
             ):
                 excluded.add(location_name)
 
-            # Diallow progression for rng locations
-            if "rng" in location_data.tags:
+            # Disallow progression for rng or advanced locations
+            if (
+                "rng" in location_data.tags
+                or (not ADVANCED_PLAYER_BIAS and "advanced" in location_data.tags)
+                # or (not EXPERT_PLAYER_BIAS and "expert" in location_data.tags) # There's no expert tags rn
+            ):
                 no_advancement.add(location_name)
 
             if not UNLOCKABLE_SEASON_LOGIC and "seasonal" in location_data.tags:
@@ -1992,6 +1999,8 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
                     add_rule(location, think_tank.rule)
                 elif "ancient" in location_data.tags:
                     add_rule(location, ancient_altar.rule)
+                elif "hermitcrab" in location_data.tags:
+                    add_rule(location, pre_basic_boating.rule) # Getting bottles from ocean
 
             elif "farming" in location_data.tags:
                 add_rule(location, advanced_farming.rule)
