@@ -126,7 +126,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     AutoWorld.call_all(multiworld, "create_items")
 
     logger.info('Calculating Access Rules.')
-
     AutoWorld.call_all(multiworld, "set_rules")
 
     for player in multiworld.player_ids:
