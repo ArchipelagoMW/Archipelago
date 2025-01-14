@@ -1946,7 +1946,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         elif cmd == 'StatusUpdate':
             if args["status"] == ClientStatus.CLIENT_GOAL and client.no_locations:
                 await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
-                                              "text": "Trackers can't register Goal Comple",
+                                              "text": "Trackers can't register Goal Complete",
                                               "original_cmd": cmd}])
             else:
                 update_client_status(ctx, client, args["status"])
