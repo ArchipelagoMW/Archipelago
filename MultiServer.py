@@ -749,7 +749,6 @@ class Context:
             if not hint.found or only_new:
                 # since hints are bidirectional, finding player and receiving player,
                 # we can check once if hint already exists
-
                 if hint not in self.hints[team, hint.finding_player]:
                     self.hints[team, hint.finding_player].add(hint)
                     new_hint_events.add(hint.finding_player)
