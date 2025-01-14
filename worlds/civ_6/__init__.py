@@ -103,6 +103,7 @@ class CivVIWorld(World):
     era_required_non_progressive_items: Dict[EraType, List[str]] = {}
     era_required_progressive_items_counts: Dict[EraType, Dict[str, int]] = {}
     era_required_progressive_era_counts: Dict[EraType, int] = {}
+    item_by_civ_name: Dict[str, str]
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -118,9 +119,15 @@ class CivVIWorld(World):
     def generate_early(self) -> None:
         flat_progressive_items = get_flat_progressive_districts()
         progressive_districts = get_progressive_districts_data()
-        eras_list = [e.value for e in EraType]
+
+        self.item_by_civ_name = {
+            item.civ_name: get_item_by_civ_name(item.civ_name, self.item_table).name
+            for item in self.item_table.values()
+            if item.civ_name
+        }
 
         previous_era_counts = None
+        eras_list = [e.value for e in EraType]
         for era in EraType:
             # Initialize era_required_progressive_era_counts
             era_index = eras_list.index(era.value)
@@ -154,7 +161,7 @@ class CivVIWorld(World):
                     ] += 1
                 else:
                     self.era_required_non_progressive_items[era].append(
-                        get_item_by_civ_name(item, self.item_table).name
+                        self.item_by_civ_name[item]
                     )
 
             previous_era_counts = self.era_required_progressive_items_counts[era].copy()
