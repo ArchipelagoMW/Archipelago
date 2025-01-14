@@ -171,9 +171,6 @@ class APPlayerContainer(APContainer):
             "player": self.player,
             "player_name": self.player_name,
             "game": self.game,
-            # minimum version of patch system expected for patching to be successful
-            "compatible_version": 5,
-            "version": container_version,
         })
         return manifest
 
