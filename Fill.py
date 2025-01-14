@@ -531,7 +531,8 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         if progitempool:
             raise FillError(
                 f"Not enough locations for progression items. "
-                f"There are {len(progitempool)} more progression items than there are available locations.",
+                f"There are {len(progitempool)} more progression items than there are available locations.\n"
+                f"Unfilled locations:\n{multiworld.get_unfilled_locations()}.",
                 multiworld=multiworld,
             )
         accessibility_corrections(multiworld, multiworld.state, defaultlocations)
@@ -569,6 +570,26 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         items_counter.update(item.player for item in unplaced)
         print_data = {"items": items_counter, "locations": locations_counter}
         logging.info(f"Per-Player counts: {print_data})")
+
+        more_locations = locations_counter - items_counter
+        more_items = items_counter - locations_counter
+        for player in multiworld.player_ids:
+            if more_locations[player]:
+                logging.error(
+                    f"Player {multiworld.get_player_name(player)} had {more_locations[player]} more locations than items.")
+            elif more_items[player]:
+                logging.warning(
+                    f"Player {multiworld.get_player_name(player)} had {more_items[player]} more items than locations.")
+        if unfilled:
+            raise FillError(
+                f"Unable to fill all locations.\n" +
+                f"Unfilled locations({len(unfilled)}): {unfilled}"
+            )
+        else:
+            logging.warning(
+                f"Unable to place all items.\n" +
+                f"Unplaced items({len(unplaced)}): {unplaced}"
+            )
 
 
 def flood_items(multiworld: MultiWorld) -> None:

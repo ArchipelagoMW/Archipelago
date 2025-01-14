@@ -323,7 +323,7 @@ def set_location_rules(world: "TunicWorld") -> None:
 
     # Beneath the Vault
     set_rule(world.get_location("Beneath the Fortress - Bridge"),
-             lambda state: has_melee(state, player) or state.has_any({laurels, fire_wand}, player))
+             lambda state: has_melee(state, player) or state.has_any((laurels, fire_wand, ice_dagger, gun), player))
     set_rule(world.get_location("Beneath the Fortress - Obscured Behind Waterfall"),
              lambda state: has_melee(state, player) and has_lantern(state, world))
 
