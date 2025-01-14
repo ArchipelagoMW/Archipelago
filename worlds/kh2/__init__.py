@@ -2,7 +2,7 @@ import logging
 from typing import List
 
 from BaseClasses import Tutorial, ItemClassification
-from Fill import fill_restrictive
+from Fill import fast_fill
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 from worlds.AutoWorld import World, WebWorld
 from .Items import *
@@ -101,7 +101,18 @@ class KH2World(World):
             if ability in self.goofy_ability_dict and self.goofy_ability_dict[ability] >= 1:
                 self.goofy_ability_dict[ability] -= 1
 
-        slot_data = self.options.as_dict("Goal", "FinalXemnas", "LuckyEmblemsRequired", "BountyRequired")
+        slot_data = self.options.as_dict(
+            "Goal", 
+            "FinalXemnas", 
+            "LuckyEmblemsRequired", 
+            "BountyRequired",
+            "FightLogic",
+            "FinalFormLogic",
+            "AutoFormLogic",
+            "LevelDepth",
+            "DonaldGoofyStatsanity",
+            "CorSkipToggle"
+        )
         slot_data.update({
             "hitlist":                [],  # remove this after next update
             "PoptrackerVersionCheck": 4.3,
@@ -276,7 +287,7 @@ class KH2World(World):
 
     def pre_fill(self):
         """
-        Plandoing Events and Fill_Restrictive for donald,goofy and sora
+        Plandoing Events and Fast_Fill for donald,goofy and sora
         """
         self.donald_pre_fill()
         self.goofy_pre_fill()
@@ -420,9 +431,10 @@ class KH2World(World):
         Fills keyblade slots with abilities determined on player's setting
         """
         keyblade_locations = [self.multiworld.get_location(location, self.player) for location in Keyblade_Slots.keys()]
-        state = self.multiworld.get_all_state(False)
         keyblade_ability_pool_copy = self.keyblade_ability_pool.copy()
-        fill_restrictive(self.multiworld, state, keyblade_locations, keyblade_ability_pool_copy, True, True, allow_excluded=True)
+        fast_fill(self.multiworld, keyblade_ability_pool_copy, keyblade_locations)
+        for location in keyblade_locations:
+            location.locked = True
 
     def starting_invo_verify(self):
         """
