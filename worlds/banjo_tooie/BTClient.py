@@ -125,7 +125,7 @@ class BanjoTooieContext(CommonContext):
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
-        self.game = 'Banjo-Tooie'
+        self.game = "Banjo-Tooie"
         self.n64_streams: (StreamReader, StreamWriter) = None # type: ignore
         self.n64_sync_task = None
         self.n64_status = CONNECTION_INITIAL_STATUS
@@ -232,8 +232,8 @@ class BanjoTooieContext(CommonContext):
         asyncio.create_task(apply_patch())
 
     def on_package(self, cmd, args):
-        if cmd == 'Connected':
-            self.slot_data = args.get('slot_data', None)
+        if cmd == "Connected":
+            self.slot_data = args.get("slot_data", None)
             if version != self.slot_data["version"]:
                 logger.error("Your Banjo-Tooie AP does not match with the generated world.")
                 logger.error("Your version: "+version+" | Generated version: "+self.slot_data["version"])
@@ -249,10 +249,6 @@ class BanjoTooieContext(CommonContext):
                     break
             async_start(run_game(os.path.join(archipelago_root, "Banjo-Tooie-AP"+game_append_version+".n64")))
             self.n64_sync_task = asyncio.create_task(n64_sync_task(self), name="N64 Sync")
-        # elif cmd == 'Print':
-            # msg = args['text']
-            # if ': !' not in msg:
-            #     self._set_message(msg, SYSTEM_MESSAGE_ID)
         elif cmd == "ReceivedItems":
             if self.startup == False:
                 for item in args["items"]:
@@ -289,7 +285,7 @@ class BanjoTooieContext(CommonContext):
                     for id, data in enumerate(args["data"]):
                         if id == 0:
                             continue
-                        if "type" in data and data['type'] == "player_id":
+                        if "type" in data and data["type"] == "player_id":
                             to_player = self.player_names[int(data["text"])]
                             break
                     item_name = self.item_names.lookup_in_slot(int(args["data"][2]["text"]))
@@ -306,7 +302,7 @@ class BanjoTooieContext(CommonContext):
                 for id, data in enumerate(args["data"]):
                         if id == 0:
                             continue
-                        if "type" in data and data['type'] == "player_id":
+                        if "type" in data and data["type"] == "player_id":
                             to_player = self.player_names[int(data["text"])]
                             break
                 item_name = self.item_names.lookup_in_slot(int(args["data"][2]["text"]))
@@ -372,7 +368,7 @@ def get_slot_payload(ctx: BanjoTooieContext):
             "slot_mystery": ctx.slot_data["mystery"],
             "slot_worlds": ctx.slot_data["worlds"],
             "slot_world_order": ctx.slot_data["world_order"],
-            "slot_keys": ctx.slot_data['world_keys'],
+            "slot_keys": ctx.slot_data["world_keys"],
             "slot_skip_klungo": ctx.slot_data["skip_klungo"],
             "slot_goal_type": ctx.slot_data["goal_type"],
             "slot_minigame_hunt_length": ctx.slot_data["minigame_hunt_length"],
@@ -382,9 +378,9 @@ def get_slot_payload(ctx: BanjoTooieContext):
             "slot_version": version,
             "slot_silo_costs": ctx.slot_data["jamjars_silo_costs"],
             "slot_open_silo": ctx.slot_data["first_silo"],
-            "slot_zones": ctx.slot_data['loading_zones'],
-            "slot_dialog_character": ctx.slot_data['dialog_character'],
-            "slot_nestsanity": ctx.slot_data['nestsanity']
+            "slot_zones": ctx.slot_data["loading_zones"],
+            "slot_dialog_character": ctx.slot_data["dialog_character"],
+            "slot_nestsanity": ctx.slot_data["nestsanity"]
         })
     ctx.sendSlot = False
     return payload
@@ -393,7 +389,7 @@ def get_slot_payload(ctx: BanjoTooieContext):
 async def parse_payload(payload: dict, ctx: BanjoTooieContext, force: bool):
 
     # Refuse to do anything if ROM is detected as changed
-    if ctx.auth and payload['playerName'] != ctx.auth:
+    if ctx.auth and payload["playerName"] != ctx.auth:
         logger.warning("ROM change detected. Disconnecting and reconnecting...")
         ctx.deathlink_enabled = False
         ctx.deathlink_client_override = False
@@ -403,42 +399,41 @@ async def parse_payload(payload: dict, ctx: BanjoTooieContext, force: bool):
         ctx.movelist_table = {}
         ctx.deathlink_pending = False
         ctx.deathlink_sent_this_death = False
-        ctx.auth = payload['playerName']
+        ctx.auth = payload["playerName"]
         await ctx.send_connect()
         return
 
     # Turn on deathlink if it is on, and if the client hasn't overriden it
-    if payload['deathlinkActive'] and ctx.deathlink_enabled and not ctx.deathlink_client_override:
+    if payload["deathlinkActive"] and ctx.deathlink_enabled and not ctx.deathlink_client_override:
         await ctx.update_death_link(True)
         ctx.deathlink_enabled = True
 
     # Locations handling
-    #locations = payload['locations']
-    demo = payload['DEMO']
-    chuffy = payload['chuffy']
-    treblelist = payload['treble']
-    stationlist = payload['stations']
-    mystery = payload['mystery']
-    roystenlist = payload['roysten']
-    jinjofamlist = payload['jinjofam']
-    jinjolist = payload['jinjos']
-    pageslist = payload['pages']
-    honeycomblist = payload['honeycomb']
-    glowbolist = payload['glowbo']
-    doubloonlist = payload['doubloon']
-    noteslist = payload['notes']
-    movelist = payload['unlocked_moves']
-    hag = payload['hag']
-    cheatorewardslist = payload['cheato_rewards']
-    honeybrewardslist = payload['honeyb_rewards']
-    jiggychunklist = payload['jiggy_chunks']
-    goggles = payload['goggles']
-    jiggylist = payload['jiggies']
-    dino_kids = payload['dino_kids']
-    nests = payload['nests']
-    roar_obtain = payload['roar']
-    worldslist = payload['worlds']
-    banjo_map = payload['banjo_map']
+    demo = payload["DEMO"]
+    chuffy = payload["chuffy"]
+    treblelist = payload["treble"]
+    stationlist = payload["stations"]
+    mystery = payload["mystery"]
+    roystenlist = payload["roysten"]
+    jinjofamlist = payload["jinjofam"]
+    jinjolist = payload["jinjos"]
+    pageslist = payload["pages"]
+    honeycomblist = payload["honeycomb"]
+    glowbolist = payload["glowbo"]
+    doubloonlist = payload["doubloon"]
+    noteslist = payload["notes"]
+    movelist = payload["unlocked_moves"]
+    hag = payload["hag"]
+    cheatorewardslist = payload["cheato_rewards"]
+    honeybrewardslist = payload["honeyb_rewards"]
+    jiggychunklist = payload["jiggy_chunks"]
+    goggles = payload["goggles"]
+    jiggylist = payload["jiggies"]
+    dino_kids = payload["dino_kids"]
+    nests = payload["nests"]
+    roar_obtain = payload["roar"]
+    worldslist = payload["worlds"]
+    banjo_map = payload["banjo_map"]
 
     # The Lua JSON library serializes an empty table into a list instead of a dict. Verify types for safety:
     # if isinstance(locations, list):
@@ -692,7 +687,7 @@ async def parse_payload(payload: dict, ctx: BanjoTooieContext, force: bool):
 
     # Deathlink handling
     if ctx.deathlink_enabled:
-        if payload['isDead']: #Banjo died
+        if payload["isDead"]: #Banjo died
             ctx.deathlink_pending = False
             if not ctx.deathlink_sent_this_death:
                 ctx.deathlink_sent_this_death = True
@@ -789,16 +784,16 @@ async def n64_sync_task(ctx: BanjoTooieContext):
                 try:
                     data = await asyncio.wait_for(reader.readline(), timeout=10)
                     data_decoded = json.loads(data.decode())
-                    reported_version = data_decoded.get('scriptVersion', 0)
-                    getSlotData = data_decoded.get('getSlot', 0)
+                    reported_version = data_decoded.get("scriptVersion", 0)
+                    getSlotData = data_decoded.get("getSlot", 0)
                     if getSlotData == True:
                         ctx.sendSlot = True
                     elif reported_version >= script_version:
-                        if ctx.game is not None and 'jiggies' in data_decoded:
+                        if ctx.game is not None and "jiggies" in data_decoded:
                             # Not just a keep alive ping, parse
                             async_start(parse_payload(data_decoded, ctx, False))
                         if not ctx.auth:
-                            ctx.auth = data_decoded['playerName']
+                            ctx.auth = data_decoded["playerName"]
                             if ctx.awaiting_rom:
                                 await ctx.server_auth(False)
                     else:
@@ -851,12 +846,12 @@ async def n64_sync_task(ctx: BanjoTooieContext):
                 continue
 
 def read_file(path):
-    with open(path, 'rb') as fi:
+    with open(path, "rb") as fi:
         data = fi.read()
     return data
 
 def write_file(path, data):
-    with open(path, 'wb') as fi:
+    with open(path, "wb") as fi:
         fi.write(data)
 
 def swap(data):
@@ -896,10 +891,10 @@ def openFile(resource: str, mode: str = "rb", encoding: str = None):
         zip_path = pathlib.Path(filename[:filename.index(apworldExt) + len(apworldExt)])
         with zipfile.ZipFile(zip_path) as zf:
             zipFilePath = game + resource
-            if mode == 'rb':
-                return zf.open(zipFilePath, 'r')
+            if mode == "rb":
+                return zf.open(zipFilePath, "r")
             else:
-                return io.TextIOWrapper(zf.open(zipFilePath, 'r'), encoding)
+                return io.TextIOWrapper(zf.open(zipFilePath, "r"), encoding)
     else:
         return open(os.path.join(pathlib.Path(__file__).parent, resource), mode, encoding=encoding)
 
@@ -938,5 +933,5 @@ def main():
     colorama.deinit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

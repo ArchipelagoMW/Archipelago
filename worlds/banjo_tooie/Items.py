@@ -192,14 +192,14 @@ all_item_table: dict[str, ItemData] = {
 }
 
 all_group_table: dict[str, dict[str, ItemData]] = {
-    'jiggy': jiggy_table,
-    'jinjo': jinjo_table,
-    'misc': misc_collectable_table,
-    'moves': moves_table,
-    'magic': level_progress_table,
-    'stations': stations_table,
-    'levelaccess': rando_key_table,
-    'token': token_table,
+    "jiggy": jiggy_table,
+    "jinjo": jinjo_table,
+    "misc": misc_collectable_table,
+    "moves": moves_table,
+    "magic": level_progress_table,
+    "stations": stations_table,
+    "levelaccess": rando_key_table,
+    "token": token_table,
     "stopnswap": stop_n_swap_table,
     "bk_moves": bk_moves_table,
     "dino": dino_table,

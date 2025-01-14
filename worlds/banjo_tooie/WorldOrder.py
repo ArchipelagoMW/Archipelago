@@ -18,14 +18,14 @@ def WorldRandomize(world: BanjoTooieWorld) -> None:
     if hasattr(world.multiworld, "re_gen_passthrough"):
         if "Banjo-Tooie" in world.multiworld.re_gen_passthrough:
             passthrough = world.multiworld.re_gen_passthrough["Banjo-Tooie"]
-            world.randomize_worlds = passthrough['world_order']
-            world.randomize_order = passthrough['world_keys']
-            world.worlds_randomized = bool(passthrough['worlds'] == 'true')
-            world.starting_egg = passthrough['starting_egg']
-            world.starting_attack = passthrough['starting_attack']
-            world.single_silo = passthrough['first_silo']
-            world.jamjars_siloname_costs = passthrough['jamjars_siloname_costs']
-            world.loading_zones = passthrough['loading_zones']
+            world.randomize_worlds = passthrough["world_order"]
+            world.randomize_order = passthrough["world_keys"]
+            world.worlds_randomized = bool(passthrough["worlds"] == "true")
+            world.starting_egg = passthrough["starting_egg"]
+            world.starting_attack = passthrough["starting_attack"]
+            world.single_silo = passthrough["first_silo"]
+            world.jamjars_siloname_costs = passthrough["jamjars_siloname_costs"]
+            world.loading_zones = passthrough["loading_zones"]
     else:
         randomize_level_order(world)
         set_level_costs(world)
