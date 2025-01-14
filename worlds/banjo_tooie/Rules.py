@@ -2457,7 +2457,7 @@ class BanjoTooieRules:
     def honeycomb_jrl_pipes(self, state: CollectionState) -> bool:
         logic = True
         if self.world.options.logic_type == 0: # beginner
-            logic = (self.has_explosives(state) or  self.bill_drill(state)) and \
+            logic = (self.has_explosives(state) or self.bill_drill(state)) and \
                     self.grip_grab(state) and self.spring_pad(state) and self.talon_trot(state)
         elif self.world.options.logic_type == 1: # normal
             logic = ((self.has_explosives(state) or self.bill_drill(state))\
@@ -3640,18 +3640,18 @@ class BanjoTooieRules:
             logic = self.hfp_top(state) and (
                 (self.small_elevation(state) or self.beak_buster(state)) and (self.fire_eggs(state) or self.has_explosives(state) or self.bill_drill(state) or self.dragon_kazooie(state))\
                 or (self.check_mumbo_magic(state, itemName.MUMBOHP) and self.tall_jump(state))\
-                or self.split_up(state) and (self.tall_jump(state) and  self.leg_spring(state)) and (self.fire_eggs(state) or self.has_explosives(state)))
+                or self.split_up(state) and (self.tall_jump(state) and self.leg_spring(state)) and (self.fire_eggs(state) or self.has_explosives(state)))
         elif self.world.options.logic_type == 2: # advanced
             logic = self.hfp_top(state) and (
                 (self.small_elevation(state) or self.beak_buster(state)) and (self.fire_eggs(state) or self.has_explosives(state) or self.bill_drill(state) or self.dragon_kazooie(state))\
                 or (self.check_mumbo_magic(state, itemName.MUMBOHP) and self.tall_jump(state))\
-                or self.split_up(state) and (self.tall_jump(state) and  self.leg_spring(state)) and (self.fire_eggs(state) or self.has_explosives(state))\
+                or self.split_up(state) and (self.tall_jump(state) and self.leg_spring(state)) and (self.fire_eggs(state) or self.has_explosives(state))\
                 or self.clockwork_shot(state))
         elif self.world.options.logic_type == 3: # glitched
             logic = self.hfp_top(state) and (
                 (self.small_elevation(state) or self.beak_buster(state)) and (self.fire_eggs(state) or self.has_explosives(state) or self.bill_drill(state) or self.dragon_kazooie(state))\
                 or (self.check_mumbo_magic(state, itemName.MUMBOHP) and self.tall_jump(state))\
-                or self.split_up(state) and (self.tall_jump(state) and  self.leg_spring(state)) and (self.fire_eggs(state) or self.has_explosives(state))\
+                or self.split_up(state) and (self.tall_jump(state) and self.leg_spring(state)) and (self.fire_eggs(state) or self.has_explosives(state))\
                 or self.clockwork_shot(state))
         return logic
 

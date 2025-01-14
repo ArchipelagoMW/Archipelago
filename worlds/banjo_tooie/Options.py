@@ -131,7 +131,7 @@ class JamjarsSiloCosts(Choice):
     default = 0
 
 class RandomizeBKMoveList(Choice):
-    """Banjo-Kazooie's Movelist is locked behind  the MultiWorld.
+    """Banjo-Kazooie's Movelist is locked behind the MultiWorld.
     Mcjiggy Special - Talon Trot and Tall Jump are removed from the pool."""
     display_name = "Banjo-Kazooie Movelist"
     option_none = 0
@@ -249,7 +249,7 @@ class Traps(Toggle):
     display_name = "Traps"
 
 class RandomizeWorldDinoRoar(Toggle):
-    """Baby T-Rex Roar's is lost across the MultiWorld. Other players need to help him learn to ROAR!"""
+    """Baby T-Rex's Roar is lost across the MultiWorld. Other players need to help him learn to ROAR!"""
     display_name = "Baby T-Rex Roar"
 
 class EnableNestsanity(Toggle):
@@ -325,7 +325,7 @@ class OpenHag1(DefaultOnToggle):
     display_name = "HAG 1 Open"
 
 class RandomizeWorlds(Toggle):
-    """Worlds will open in a randomized order. Randomized Moves and Skip Puzzle Required."""
+    """Worlds will open in a randomized order. Randomized Moves and Skip Puzzles Required."""
     display_name = "Randomize Worlds"
 
 class RandomizeWorldZones(Toggle):
@@ -415,9 +415,9 @@ class TokenHuntLength(Range):
 
 class GameLength(Choice):
     """Choose how quickly the worlds open.
-    quick: Worlds open  at 1, 3, 6, 10, 15, 21, 28, 36, and 44 Jiggys
-    normal: Worlds open  at 1, 4, 8, 14, 20, 28, 36, 45, and 55 Jiggys
-    long: Worlds open  at 1, 8, 16, 25, 34, 43, 52, 61, and 70 Jiggys
+    quick: Worlds open at 1, 3, 6, 10, 15, 21, 28, 36, and 44 Jiggys
+    normal: Worlds open at 1, 4, 8, 14, 20, 28, 36, 45, and 55 Jiggys
+    long: Worlds open at 1, 8, 16, 25, 34, 43, 52, 61, and 70 Jiggys
     custom: You pick when worlds open
     """
     display_name = "World Requirements"

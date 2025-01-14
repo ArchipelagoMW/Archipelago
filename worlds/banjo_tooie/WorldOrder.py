@@ -209,12 +209,12 @@ def handle_early_moves(world: BanjoTooieWorld) -> None:
 
     # A silo to the first world is not given.
     if world.options.randomize_bk_moves.value != 2 and world.single_silo == "NONE":
-        if  first_level != regionName.MT and world.options.logic_type != 2:
+        if first_level != regionName.MT and world.options.logic_type != 2:
             world.multiworld.early_items[world.player][itemName.GGRAB] = 1
 
-            if  first_level == regionName.WW:
+            if first_level == regionName.WW:
                 early_fire_eggs(world)
-            if  first_level == regionName.JR or first_level == regionName.HP:
+            if first_level == regionName.JR or first_level == regionName.HP:
                 world.multiworld.early_items[world.player][itemName.SPLITUP] = 1
             if first_level == regionName.TL or first_level == regionName.CC:
                 early_fire_eggs(world)
