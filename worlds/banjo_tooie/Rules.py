@@ -8107,12 +8107,6 @@ class BanjoTooieRules:
 
         set_rule(self.world.multiworld.get_location(locationName.ROARDINO, self.player), lambda state: self.bargasaurus_roar(state))
 
-        for item in self.moves_forbid:
-            #The Doubloons near Wing Wack Silo
-            forbid_item(self.world.multiworld.get_location(locationName.JRLDB10, self.player), item, self.player)
-            forbid_item(self.world.multiworld.get_location(locationName.JRLDB9, self.player), item, self.player)
-            forbid_item(self.world.multiworld.get_location(locationName.JRLDB8, self.player), item, self.player)
-            forbid_item(self.world.multiworld.get_location(locationName.JRLDB7, self.player), item, self.player)
 
         if self.world.options.cheato_rewards:
             for location, rules in self.cheato_rewards_rules.items():
