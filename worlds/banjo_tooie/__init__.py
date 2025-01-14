@@ -583,13 +583,13 @@ class BanjoTooieWorld(World):
                 else:
                     item = self.create_item(world)
                 self.get_location("World "+ str(world_num) +" Unlocked").place_locked_item(item)
-                world_num = world_num + 1
+                world_num += 1
         else:
             world_num = 1
             for world, amt in self.randomize_worlds.items():
                 item = self.create_item(itemName.NONE)
                 self.get_location("World "+ str(world_num) +" Unlocked").place_locked_item(item)
-                world_num = world_num + 1
+                world_num += 1
 
         if self.options.victory_condition.value == VictoryCondition.option_minigame_hunt\
             or self.options.victory_condition.value == VictoryCondition.option_wonderwing_challenge:

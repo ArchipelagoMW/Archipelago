@@ -133,7 +133,7 @@ class JamjarsSiloCosts(Choice):
 class RandomizeBKMoveList(Choice):
     """Banjo-Kazooie's Movelist are randomized.
     Mcjiggy Special - Talon Trot and Tall Jump are removed from the pool."""
-    display_name = "Banjo-Kazooie Movelist"
+    display_name = "Randomize Banjo-Kazooie Movelist"
     option_none = 0
     option_mcjiggy_special = 1
     option_all = 2
