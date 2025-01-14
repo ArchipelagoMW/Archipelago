@@ -182,7 +182,7 @@ class ProgressiveBashAttack(Toggle):
     display_name = "Progressive Bash Attack"
 
 class EnableCheatoRewards(DefaultOnToggle):
-    """Cheato rewards you with a cheat and an additional randomized reward. 
+    """Cheato rewards you with a cheat and an additional randomized reward.
     Cheato Pages are set to progression when this setting is enabled."""
     display_name = "Cheato Rewards"
 
