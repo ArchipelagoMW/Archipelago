@@ -4,7 +4,7 @@ from ..Names import locationName, itemName, regionName
 
 class Jinjo(BanjoTooieTestBase):
 
-    def item_pool(self) -> None:
+    def _item_pool(self) -> None:
         jinjo_count = 0
         jinjo_counter = 0
 
@@ -17,7 +17,7 @@ class Jinjo(BanjoTooieTestBase):
 
         assert jinjo_count == jinjo_counter
 
-    def disabled_item_pool(self) -> None:
+    def _disabled_item_pool(self) -> None:
         jinjo_counter = 0
 
         for jinjo in self.world.item_name_groups["Jinjo"]:
@@ -28,7 +28,7 @@ class Jinjo(BanjoTooieTestBase):
 
         assert 0 == jinjo_counter
 
-    def prefills(self) -> None:
+    def _prefills(self) -> None:
         jinjos = 0
         placed_correctly = 0
         for name in self.world.item_name_groups["Jinjo"]:
@@ -192,13 +192,8 @@ class TestJinjoEnabledEasy(Jinjo):
         'logic_type': 0
     }
     def test_item_pool(self) -> None:
-        super().item_pool()
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
-    def test_empty_state_can_reach_something(self):
-        return super().test_empty_state_can_reach_something()
-    def test_fill(self):
-        return super().test_fill()
+        super()._item_pool()
+
 
 class TestJinjoEnabledNormal(Jinjo):
     options = {
@@ -206,13 +201,8 @@ class TestJinjoEnabledNormal(Jinjo):
         'logic_type': 1
     }
     def test_item_pool(self) -> None:
-        super().item_pool()
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
-    def test_empty_state_can_reach_something(self):
-        return super().test_empty_state_can_reach_something()
-    def test_fill(self):
-        return super().test_fill()
+        super()._item_pool()
+
 
 class TestJinjoEnabledAdvance(Jinjo):
     options = {
@@ -220,13 +210,8 @@ class TestJinjoEnabledAdvance(Jinjo):
         'logic_type': 2
     }
     def test_item_pool(self) -> None:
-        super().item_pool()
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
-    def test_empty_state_can_reach_something(self):
-        return super().test_empty_state_can_reach_something()
-    def test_fill(self):
-        return super().test_fill()
+        super()._item_pool()
+
 
 class TestJinjoEnabledGitch(Jinjo):
     options = {
@@ -234,13 +219,8 @@ class TestJinjoEnabledGitch(Jinjo):
         'logic_type': 3
     }
     def test_item_pool(self) -> None:
-        super().item_pool()
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
-    def test_empty_state_can_reach_something(self):
-        return super().test_empty_state_can_reach_something()
-    def test_fill(self):
-        return super().test_fill()
+        super()._item_pool()
+
 
 
 class TestJinjoDisabledEasy(Jinjo):
@@ -248,65 +228,45 @@ class TestJinjoDisabledEasy(Jinjo):
         'randomize_jinjos': 'false',
         'logic_type': 0
     }
-    def test_item_pool(self) -> None:
-        super().disabled_item_pool()
+    def test_disabled_item_pool(self) -> None:
+        super()._disabled_item_pool()
 
     def test_prefills(self) -> None:
-        super().prefills()
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
-    def test_empty_state_can_reach_something(self):
-        return super().test_empty_state_can_reach_something()
-    def test_fill(self):
-        return super().test_fill()
+        super()._prefills()
+
 
 class TestJinjoDisabledNormal(Jinjo):
     options = {
         'randomize_jinjos': 'false',
         'logic_type': 1
     }
-    def test_item_pool(self) -> None:
-        super().disabled_item_pool()
+    def test_disabled_item_pool(self) -> None:
+        super()._disabled_item_pool()
 
     def test_prefills(self) -> None:
-        super().prefills()
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
-    def test_empty_state_can_reach_something(self):
-        return super().test_empty_state_can_reach_something()
-    def test_fill(self):
-        return super().test_fill()
+        super()._prefills()
+
 
 class TestJinjoDisabledAdvance(Jinjo):
     options = {
         'randomize_jinjos': 'false',
         'logic_type': 2
     }
-    def test_item_pool(self) -> None:
-        super().disabled_item_pool()
+    def test_disabled_item_pooll(self) -> None:
+        super()._disabled_item_pool()
 
     def test_prefills(self) -> None:
-        super().prefills()
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
-    def test_empty_state_can_reach_something(self):
-        return super().test_empty_state_can_reach_something()
-    def test_fill(self):
-        return super().test_fill()
+        super()._prefills()
+
 
 class TestJinjoDisabledGlitch(Jinjo):
     options = {
         'randomize_jinjos': 'false',
         'logic_type': 3
     }
-    def test_item_pool(self) -> None:
-        super().disabled_item_pool()
+    def test_disabled_item_pool(self) -> None:
+        super()._disabled_item_pool()
 
     def test_prefills(self) -> None:
-        super().prefills()
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
-    def test_empty_state_can_reach_something(self):
-        return super().test_empty_state_can_reach_something()
-    def test_fill(self):
-        return super().test_fill()
+        super()._prefills()
+

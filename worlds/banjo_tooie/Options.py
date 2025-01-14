@@ -218,7 +218,7 @@ class RandomizeTrainStationSwitches(Toggle):
     display_name = "Randomize Train Station Switches"
 
 class RandomizeChuffyTrain(Toggle):
-    """Chuffy is lost somewhere in the MultiWorld. 
+    """Chuffy is lost somewhere in the MultiWorld.
     Once received, you can call Chuffy at any unlocked station without defeating Old King Coal."""
     display_name = "Chuffy as a Randomized AP Item"
 
@@ -249,7 +249,7 @@ class Traps(Toggle):
     display_name = "Traps"
 
 class RandomizeWorldDinoRoar(Toggle):
-    """Baby T-Rex Roar's is lost across the MultiWorld. Other players need to help him learn to ROAR!"""
+    """Baby T-Rex's Roar is lost across the MultiWorld. Other players need to help him learn to ROAR!"""
     display_name = "Baby T-Rex Roar"
 
 class EnableNestsanity(Toggle):
@@ -325,7 +325,7 @@ class OpenHag1(DefaultOnToggle):
     display_name = "HAG 1 Open"
 
 class RandomizeWorlds(Toggle):
-    """Worlds will open in a randomized order. Randomized Moves and Skip Puzzle Required."""
+    """Worlds will open in a randomized order. Randomized Moves and Skip Puzzles Required."""
     display_name = "Randomize Worlds"
 
 class RandomizeWorldZones(Toggle):
@@ -415,9 +415,9 @@ class TokenHuntLength(Range):
 
 class GameLength(Choice):
     """Choose how quickly the worlds open.
-    quick: Worlds open  at 1, 3, 6, 10, 15, 21, 28, 36, and 44 Jiggys
-    normal: Worlds open  at 1, 4, 8, 14, 20, 28, 36, 45, and 55 Jiggys
-    long: Worlds open  at 1, 8, 16, 25, 34, 43, 52, 61, and 70 Jiggys
+    quick: Worlds open at 1, 3, 6, 10, 15, 21, 28, 36, and 44 Jiggys
+    normal: Worlds open at 1, 4, 8, 14, 20, 28, 36, 45, and 55 Jiggys
+    long: Worlds open at 1, 8, 16, 25, 34, 43, 52, 61, and 70 Jiggys
     custom: You pick when worlds open
     """
     display_name = "World Requirements"
@@ -493,7 +493,7 @@ class BanjoTooieOptions(PerGameCommonOptions):
     slip_trap_weight: SlipTrapWeight
     transform_trap_weight: TransformTrapWeight
     squish_trap_weight: SquishTrapWeight
-    
+
     randomize_stations: RandomizeTrainStationSwitches
     randomize_chuffy: RandomizeChuffyTrain
     jingaling_jiggy: KingJingalingHasJiggy

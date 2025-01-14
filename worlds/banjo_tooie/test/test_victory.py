@@ -7,7 +7,10 @@ from .. import all_item_table, all_group_table
 class TokenTest(BanjoTooieTestBase):
     mumbo_token_location_group = {}
 
-    def test_mumbo_tokens(self, amt = 0) -> None:
+    def test_mumbo_tokens(self, amt = None) -> None:
+        if amt == None:
+            amt = len(self.mumbo_token_location_group)
+
         mumbo_tokens = 0
         for item in self.world.multiworld.itempool:
             if "Mumbo Token" == item.name:
@@ -33,8 +36,6 @@ class TestVictoryHAG1Easy(TokenTest):
     }
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(0)
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
 
 class TestVictoryHAG1Normal(TokenTest):
     options = {
@@ -48,8 +49,6 @@ class TestVictoryHAG1Normal(TokenTest):
     }
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(0)
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
 
 class TestVictoryHAG1Advance(TokenTest):
     options = {
@@ -63,8 +62,6 @@ class TestVictoryHAG1Advance(TokenTest):
     }
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(0)
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
 
 class TestVictoryHAG1Glitch(TokenTest):
     options = {
@@ -78,9 +75,6 @@ class TestVictoryHAG1Glitch(TokenTest):
     }
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(0)
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
-
 
 class TestVictoryMiniGamesEasy(TokenTest):
     options = {
@@ -104,10 +98,6 @@ class TestVictoryMiniGamesEasy(TokenTest):
         locationName.MUMBOTKNGAME14,
         locationName.MUMBOTKNGAME15
     }
-    def test_mumbo_tokens(self) -> None:
-        super().test_mumbo_tokens(len(self.mumbo_token_location_group))
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
 
 class TestVictoryMiniGamesNormal(TokenTest):
     options = {
@@ -131,10 +121,6 @@ class TestVictoryMiniGamesNormal(TokenTest):
         locationName.MUMBOTKNGAME14,
         locationName.MUMBOTKNGAME15
     }
-    def test_mumbo_tokens(self) -> None:
-        super().test_mumbo_tokens(len(self.mumbo_token_location_group))
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
 
 class TestVictoryMiniGamesAdvance(TokenTest):
     options = {
@@ -158,10 +144,6 @@ class TestVictoryMiniGamesAdvance(TokenTest):
         locationName.MUMBOTKNGAME14,
         locationName.MUMBOTKNGAME15
     }
-    def test_mumbo_tokens(self) -> None:
-        super().test_mumbo_tokens(len(self.mumbo_token_location_group))
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
 
 class TestVictoryMiniGamesGlitch(TokenTest):
     options = {
@@ -185,11 +167,6 @@ class TestVictoryMiniGamesGlitch(TokenTest):
         locationName.MUMBOTKNGAME14,
         locationName.MUMBOTKNGAME15
     }
-    def test_mumbo_tokens(self) -> None:
-        super().test_mumbo_tokens(len(self.mumbo_token_location_group))
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
-
 
 class TestVictoryBossesEasy(TokenTest):
     options = {
@@ -206,10 +183,6 @@ class TestVictoryBossesEasy(TokenTest):
         locationName.MUMBOTKNBOSS7,
         locationName.MUMBOTKNBOSS8
     }
-    def test_mumbo_tokens(self) -> None:
-        super().test_mumbo_tokens(len(self.mumbo_token_location_group))
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
 
 class TestVictoryBossesNormal(TokenTest):
     options = {
@@ -226,10 +199,6 @@ class TestVictoryBossesNormal(TokenTest):
         locationName.MUMBOTKNBOSS7,
         locationName.MUMBOTKNBOSS8
     }
-    def test_mumbo_tokens(self) -> None:
-        super().test_mumbo_tokens(len(self.mumbo_token_location_group))
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
 
 class TestVictoryBossesAdvance(TokenTest):
     options = {
@@ -246,10 +215,6 @@ class TestVictoryBossesAdvance(TokenTest):
         locationName.MUMBOTKNBOSS7,
         locationName.MUMBOTKNBOSS8
     }
-    def test_mumbo_tokens(self) -> None:
-        super().test_mumbo_tokens(len(self.mumbo_token_location_group))
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
 
 class TestVictoryBossesGlitch(TokenTest):
     options = {
@@ -266,11 +231,6 @@ class TestVictoryBossesGlitch(TokenTest):
         locationName.MUMBOTKNBOSS7,
         locationName.MUMBOTKNBOSS8
     }
-    def test_mumbo_tokens(self) -> None:
-        super().test_mumbo_tokens(len(self.mumbo_token_location_group))
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
-
 
 class TestVictoryJinjoEasy(TokenTest):
     options = {
@@ -288,10 +248,6 @@ class TestVictoryJinjoEasy(TokenTest):
         locationName.MUMBOTKNJINJO8,
         locationName.MUMBOTKNJINJO9,
     }
-    def test_mumbo_tokens(self) -> None:
-        super().test_mumbo_tokens(len(self.mumbo_token_location_group))
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
 
 class TestVictoryJinjoNormal(TokenTest):
     options = {
@@ -309,10 +265,6 @@ class TestVictoryJinjoNormal(TokenTest):
         locationName.MUMBOTKNJINJO8,
         locationName.MUMBOTKNJINJO9,
     }
-    def test_mumbo_tokens(self) -> None:
-        super().test_mumbo_tokens(len(self.mumbo_token_location_group))
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
 
 class TestVictoryJinjoAdvance(TokenTest):
     options = {
@@ -331,11 +283,6 @@ class TestVictoryJinjoAdvance(TokenTest):
         locationName.MUMBOTKNJINJO9,
     }
 
-    def test_mumbo_tokens(self) -> None:
-        super().test_mumbo_tokens(len(self.mumbo_token_location_group))
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
-
 class TestVictoryJinjoGlitch(TokenTest):
     options = {
         'victory_condition': 3,
@@ -352,10 +299,6 @@ class TestVictoryJinjoGlitch(TokenTest):
         locationName.MUMBOTKNJINJO8,
         locationName.MUMBOTKNJINJO9,
     }
-    def test_mumbo_tokens(self) -> None:
-        super().test_mumbo_tokens(len(self.mumbo_token_location_group))
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
 
 class TestVictoryWonderWingEasy(TokenTest):
     options = {
@@ -396,10 +339,6 @@ class TestVictoryWonderWingEasy(TokenTest):
         locationName.MUMBOTKNJINJO8,
         locationName.MUMBOTKNJINJO9,
     }
-    def test_mumbo_tokens(self) -> None:
-        super().test_mumbo_tokens(len(self.mumbo_token_location_group))
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
 
 class TestVictoryWonderWingNormal(TokenTest):
     options = {
@@ -440,10 +379,6 @@ class TestVictoryWonderWingNormal(TokenTest):
         locationName.MUMBOTKNJINJO8,
         locationName.MUMBOTKNJINJO9,
     }
-    def test_mumbo_tokens(self) -> None:
-        super().test_mumbo_tokens(len(self.mumbo_token_location_group))
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
 
 class TestVictoryWonderWingAdvance(TokenTest):
     options = {
@@ -484,10 +419,6 @@ class TestVictoryWonderWingAdvance(TokenTest):
         locationName.MUMBOTKNJINJO8,
         locationName.MUMBOTKNJINJO9,
     }
-    def test_mumbo_tokens(self) -> None:
-        super().test_mumbo_tokens(len(self.mumbo_token_location_group))
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()
 
 class TestVictoryWonderWingGlitch(TokenTest):
     options = {
@@ -528,7 +459,3 @@ class TestVictoryWonderWingGlitch(TokenTest):
         locationName.MUMBOTKNJINJO8,
         locationName.MUMBOTKNJINJO9,
     }
-    def test_mumbo_tokens(self) -> None:
-        super().test_mumbo_tokens(len(self.mumbo_token_location_group))
-    def test_all_state_can_reach_everything(self):
-        return super().test_all_state_can_reach_everything()

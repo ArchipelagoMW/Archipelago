@@ -203,9 +203,9 @@ def handle_early_moves(world: BanjoTooieWorld) -> None:
         if  first_level != regionName.MT and world.options.logic_type != LogicType.option_easy_tricks:
             world.multiworld.early_items[world.player][itemName.GGRAB] = 1
 
-            if  first_level == regionName.WW:
+            if first_level == regionName.WW:
                 early_fire_eggs(world)
-            if  first_level == regionName.JR or first_level == regionName.HP:
+            if first_level == regionName.JR or first_level == regionName.HP:
                 world.multiworld.early_items[world.player][itemName.SPLITUP] = 1
             if first_level == regionName.TL or first_level == regionName.CC:
                 early_fire_eggs(world)

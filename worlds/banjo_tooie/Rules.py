@@ -3651,13 +3651,13 @@ class BanjoTooieRules:
             logic = self.hfp_top(state) and (
                 (self.small_elevation(state) or self.beak_buster(state)) and (self.fire_eggs(state) or self.has_explosives(state) or self.bill_drill(state) or self.dragon_kazooie(state))\
                 or (self.check_mumbo_magic(state, itemName.MUMBOHP) and self.tall_jump(state))\
-                or self.split_up(state) and (self.tall_jump(state) and  self.leg_spring(state)) and (self.fire_eggs(state) or self.has_explosives(state))\
+                or self.split_up(state) and (self.tall_jump(state) and self.leg_spring(state)) and (self.fire_eggs(state) or self.has_explosives(state))\
                 or self.clockwork_shot(state))
         elif self.world.options.logic_type == LogicType.option_glitches:
             logic = self.hfp_top(state) and (
                 (self.small_elevation(state) or self.beak_buster(state)) and (self.fire_eggs(state) or self.has_explosives(state) or self.bill_drill(state) or self.dragon_kazooie(state))\
                 or (self.check_mumbo_magic(state, itemName.MUMBOHP) and self.tall_jump(state))\
-                or self.split_up(state) and (self.tall_jump(state) and  self.leg_spring(state)) and (self.fire_eggs(state) or self.has_explosives(state))\
+                or self.split_up(state) and (self.tall_jump(state) and self.leg_spring(state)) and (self.fire_eggs(state) or self.has_explosives(state))\
                 or self.clockwork_shot(state))
         return logic
 
@@ -8118,7 +8118,7 @@ class BanjoTooieRules:
             for location, rules in self.cheato_rewards_rules.items():
                 cheato = self.world.multiworld.get_location(location, self.player)
                 set_rule(cheato, rules)
-        
+
         if self.world.options.honeyb_rewards:
             for location, rules in self.honeyb_rewards_rules.items():
                 honeyb = self.world.multiworld.get_location(location, self.player)
