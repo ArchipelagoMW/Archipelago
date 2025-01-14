@@ -186,9 +186,6 @@ class LuigisMansionRandomizer:
         self.gcm.changed_files["sys/main.dol"] = self.dol.data
 
         # TODO Move into its own function?
-        # TODO Make Custom events to turn on lights after bosses are defeated. Use copy exiting event, then overwrite
-        # TODO the txt file with a custom one from "data/custom_event" folder. Used to turn on lights on in hallways
-        # TODO after bosses are defeated.
         # Get Output data required information
         bool_boo_checks = True if self.output_data["Options"]["boo_gates"] == 1 else False
         required_mario_item_count = int(self.output_data["Options"]["mario_items"])
