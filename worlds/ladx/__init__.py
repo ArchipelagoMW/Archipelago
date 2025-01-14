@@ -502,7 +502,7 @@ class LinksAwakeningWorld(World):
         return change
 
     # Same fill choices and weights used in LADXR.itempool.__randomizeRupees
-    filler_choices = ('Bomb', 'Single Arrow', '10 Arrows', 'Magic Powder', 'Medicine')
+    filler_choices = ("Bomb", "Single Arrow", "10 Arrows", "Magic Powder", "Medicine")
     filler_weights = ( 10,     5,              10,          10,             1)
 
     def get_filler_item_name(self) -> str:
