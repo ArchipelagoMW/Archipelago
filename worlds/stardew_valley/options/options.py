@@ -779,6 +779,7 @@ enabled_mods = all_mods.difference(disabled_mods)
 
 class Mods(OptionSet):
     """List of mods that will be included in the shuffling."""
+    visibility = Visibility.all & ~Visibility.simple_ui
     internal_name = "mods"
     display_name = "Mods"
     valid_keys = enabled_mods
