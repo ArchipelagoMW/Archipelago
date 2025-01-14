@@ -29,14 +29,21 @@ components.append(Component("Banjo-Tooie Client", func=run_client, component_typ
 
 #NOTE! For Backward Compatability, don't use type str|None. multi types not allowed on older Pythons
 class BanjoTooieWeb(WebWorld):
-    setup = Tutorial("Setup Banjo-Tooie",
+    setup_en = Tutorial("Setup Banjo-Tooie",
         """A guide to setting up Archipelago Banjo-Tooie on your computer.""",
         "English",
         "setup_en.md",
         "setup/en",
         ["Beebaleen"])
+    
+    setup_fr = Tutorial("Setup Banjo-Tooie",
+        """A guide to setting up Archipelago Banjo-Tooie on your computer.""",
+        "French",
+        "setup_fr.md",
+        "setup/fr",
+        ["g0goTBC"])
 
-    tutorials = [setup]
+    tutorials = [setup_en, setup_fr]
 
 
 class BanjoTooieWorld(World):
