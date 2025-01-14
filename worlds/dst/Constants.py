@@ -1,4 +1,4 @@
-VERSION:str = "1.2.2.2"
+VERSION:str = "1.2.2.3"
 ITEM_ID_OFFSET:int = 264000
 LOCATION_ID_OFFSET:int = 264000
 LOCATION_DAY_OFFSET = 266000
@@ -485,7 +485,7 @@ DSTAP_LOCATIONS = [
     [108,   "Honey Ham",                "honeyham",                 [ "cooking", "meat" ] ],
     [109,   "Dragonpie",                "dragonpie",                [ "cooking", "veggie", "spring", "summer", "seasons_passed_1" ] ],
     [110,   "Kabobs",                   "kabobs",                   [ "cooking", "meat" ] ],
-    [111,   "Mandrake Soup",            "mandrakesoup",             [ "cooking", "veggie", "advanced" ] ],
+    [111,   "Mandrake Soup",            "mandrakesoup",             [ "cooking", "veggie" ] ],
     [112,   "Bacon and Eggs",           "baconeggs",                [ "cooking", "meat" ] ],
     [113,   "Meatballs",                "meatballs",                [ "cooking", "meat" ] ],
     [114,   "Meaty Stew",               "bonestew",                 [ "cooking", "meat" ] ],
@@ -496,7 +496,7 @@ DSTAP_LOCATIONS = [
     [119,   "Fruit Medley",             "fruitmedley",              [ "cooking", "veggie", "special_fruits" ] ],
     [120,   "Fish Tacos",               "fishtacos",                [ "cooking", "meat", "special_corn" ] ],
     [121,   "Waffles",                  "waffles",                  [ "cooking", "veggie", "rng", "day", "nonwinter" ] ],
-    [122,   "Monster Lasagna",          "monsterlasagna",           [ "cooking", "meat", "advanced" ] ],
+    [122,   "Monster Lasagna",          "monsterlasagna",           [ "cooking", "meat" ] ],
     [123,   "Powdercake",               "powcake",                  [ "cooking", "veggie", "special_corn" ] ],
     [124,   "Unagi",                    "unagi",                    [ "cooking", "meat", "ruins" ] ],
     [125,   "Wet Goop",                 "wetgoop",                  [ "cooking", "other" ] ],
@@ -636,9 +636,9 @@ DSTAP_LOCATIONS = [
     [346,   "Rabbit",                   "rabbit",               [ "creature", "peaceful" ] ],
     [347,   "Redbird",                  "robin",                [ "creature", "nonwinter", "peaceful", "day", "dusk" ] ],
     [348,   "Snowbird",                 "robin_winter",         [ "creature", "seasonal", "winter" , "peaceful", "day", "dusk" ] ],
-    [349,   "Rock Lobster",             "rocky",                [ "creature", "cave", "advanced", "peaceful" ] ],
+    [349,   "Rock Lobster",             "rocky",                [ "creature", "cave", "peaceful" ] ],
     [350,   "Clockwork Rook",           "rook",                 [ "creature", "ruins", "priority" ] ],
-    [351,   "Rockjaw",                  "shark",                [ "creature", "ocean", "advanced", "rng" ] ],
+    [351,   "Rockjaw",                  "shark",                [ "creature", "ocean", "rng" ] ],
     [352,   "Slurper",                  "slurper",              [ "creature", "ruins" ] ],
     [353,   "Slurtle",                  "slurtle",              [ "creature", "cave" ] ],
     [354,   "Snurtle",                  "snurtle",              [ "creature", "cave", "rng" ] ],
@@ -787,7 +787,7 @@ DSTAP_LOCATIONS = [
     [625,   "Magic (Bunny Puff)",               "manrabbit_tail",           [ "research", "magic", "tier_1", "cave" ] ],
     [626,   "Magic (Mosquito Sack)",            "mosquitosack",             [ "research", "magic", "tier_1", "nonwinter", "dusk", "night" ] ],
     [627,   "Magic (Spider Gland)",             "spidergland",              [ "research", "magic", "tier_1" ] ],
-    [628,   "Magic (Monster Jerky)",            "monstermeat_dried",        [ "research", "magic", "tier_2", "excluded" ] ],
+    [628,   "Magic (Monster Jerky)",            "monstermeat_dried",        [ "research", "magic", "tier_2" ] ],
     [629,   "Magic (Pig Skin)",                 "pigskin",                  [ "research", "magic", "tier_2" ] ],
     [630,   "Magic (Batilisk Wing)",            "batwing",                  [ "research", "magic", "tier_2", "cave" ] ],
     [631,   "Magic (Stinger)",                  "stinger",                  [ "research", "magic", "tier_1" ] ],
