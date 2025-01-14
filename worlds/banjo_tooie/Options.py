@@ -218,7 +218,7 @@ class RandomizeTrainStationSwitches(Toggle):
     display_name = "Randomize Train Station Switches"
 
 class RandomizeChuffyTrain(Toggle):
-    """Chuffy is lost somewhere in the MultiWorld. 
+    """Chuffy is lost somewhere in the MultiWorld.
     Once received, you can call Chuffy at any unlocked station without defeating Old King Coal."""
     display_name = "Chuffy as a Randomized AP Item"
 
@@ -377,7 +377,7 @@ class VictoryCondition(Choice):
     option_minigame_hunt = 1
     option_boss_hunt = 2
     option_jinjo_family_rescue = 3
-    option_wonder_wing_challenge = 4
+    option_wonderwing_challenge = 4
     option_token_hunt = 5
     default = 0
 
@@ -493,7 +493,7 @@ class BanjoTooieOptions(PerGameCommonOptions):
     slip_trap_weight: SlipTrapWeight
     transform_trap_weight: TransformTrapWeight
     squish_trap_weight: SquishTrapWeight
-    
+
     randomize_stations: RandomizeTrainStationSwitches
     randomize_chuffy: RandomizeChuffyTrain
     jingaling_jiggy: KingJingalingHasJiggy

@@ -1163,8 +1163,8 @@ def create_regions(self):
 
     self.multiworld.regions.extend(create_region(self.multiworld, self.player,\
           active_locations, region, locations) for region, locations in region_map.items())
-    
-    if self.options.victory_condition in (VictoryCondition.option_hag1, VictoryCondition.option_wonder_wing_challenge):
+
+    if self.options.victory_condition in (VictoryCondition.option_hag1, VictoryCondition.option_wonderwing_challenge):
         self.multiworld.get_location(locationName.HAG1, player).place_locked_item(self.create_event_item(itemName.VICTORY))
 
 

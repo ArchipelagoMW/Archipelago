@@ -303,40 +303,40 @@ class BanjoTooieWorld(World):
 
         if item.code == 0: #Events
             return False
-        
+
         if(item.code == self.item_code(itemName.DOUBLOON) and not self.options.randomize_doubloons) :
             return False
-        
+
         if(item.code == self.item_code(itemName.PAGES) and not self.options.randomize_cheato.value) : # Added later in Prefill
             return False
-        
+
         if(item.code == self.item_code(itemName.HONEY) and not self.options.randomize_honeycombs) : # Added later in Prefill
             return False
-        
-        if(item.code in range(self.item_code(itemName.GGRAB), self.item_code(itemName.AMAZEOGAZE) + 1) and not self.options.randomize_moves) : #range you need to add +1 to the end. 
+
+        if(item.code in range(self.item_code(itemName.GGRAB), self.item_code(itemName.AMAZEOGAZE) + 1) and not self.options.randomize_moves) : #range you need to add +1 to the end.
             return False
-        
+
         if(item.code in range(self.item_code(itemName.HUMBAMT), self.item_code(itemName.HUMBAIH) + 1) and not self.options.randomize_glowbos) : #range you need to add +1 to the end.
             return False
-        
+
         if(item.code in range(self.item_code(itemName.MUMBOMT), self.item_code(itemName.MUMBOIH) + 1) and not self.options.randomize_glowbos) : #range you need to add +1 to the end.
             return False
 
         if(item.code in range(self.item_code(itemName.WJINJO), self.item_code(itemName.BKJINJO) + 1) and not self.options.randomize_jinjos) :#range you need to add +1 to the end.
             return False
-        
+
         if(item.code == self.item_code(itemName.TREBLE) and not self.options.randomize_treble.value):
             return False
-        
+
         if item.code == self.item_code(itemName.CHUFFY) and not self.options.randomize_chuffy:
             return False
-        
+
         if item.code in range(self.item_code(itemName.TRAINSWGI), self.item_code(itemName.TRAINSWWW) + 1) and not self.options.randomize_stations:
             return False
-        
+
         if item.code == self.item_code(itemName.NOTE) and not self.options.randomize_notes: #Notes
             return False
-        
+
         if item.code == self.item_code(itemName.MUMBOTOKEN) and self.options.victory_condition != VictoryCondition.option_token_hunt: #Mumbo Tokens for Mini Game and Boss Hunt and Jinjo Fam
             return False
 
@@ -372,29 +372,29 @@ class BanjoTooieWorld(World):
             return False
         if item.code == self.item_code(itemName.NONE) and self.options.traps.value:
             return False
-        
+
         if (item.code == self.item_code(itemName.TTRAP) or item.code == self.item_code(itemName.STRAP) or \
             item.code == self.item_code(itemName.TRTRAP) or item.code == self.item_code(itemName.SQTRAP)) and not self.options.traps:
             return False
-        
+
         if self.options.progressive_beak_buster and (item.code == self.item_code(itemName.BBUST) or item.code == self.item_code(itemName.BDRILL)):
             return False
-        
+
         if item.code == self.item_code(itemName.PBBUST) and not self.options.progressive_beak_buster:
             return False
-        
+
         if item.code == self.item_code(itemName.PFLIGHT) and not self.options.progressive_flight.value:
             return False
-        
+
         if item.code == self.item_code(itemName.PEGGAIM) and self.options.progressive_egg_aiming.value != ProgressiveEggAim.option_basic:
             return False
-        
+
         if item.code == self.item_code(itemName.PAEGGAIM) and self.options.progressive_egg_aiming.value != ProgressiveEggAim.option_advanced:
             return False
-        
+
         if item.code == self.item_code(itemName.PASWIM) and self.options.progressive_water_training.value != ProgressiveWaterTraining.option_advanced:
             return False
-        
+
         if self.options.egg_behaviour.value != EggsBehaviour.option_random_starting_egg and item.code == self.item_code(itemName.BEGGS): #remove blue eggs in pool
             return False
         if self.options.egg_behaviour.value == EggsBehaviour.option_progressive_eggs and (item.code == self.item_code(itemName.FEGGS) or\
@@ -404,13 +404,13 @@ class BanjoTooieWorld(World):
             return False
         if self.options.egg_behaviour.value == EggsBehaviour.option_random_starting_egg and item.code == self.starting_egg: #Already has this egg in inventory
             return False
-        
+
         if self.options.progressive_shoes and (item.code == self.item_code(itemName.SSTRIDE) or item.code == self.item_code(itemName.TTRAIN) \
             or item.code == self.item_code(itemName.SPRINGB) or item.code == self.item_code(itemName.CLAWBTS)):
             return False
         if item.code == self.item_code(itemName.PSHOES) and not self.options.progressive_shoes.value:
             return False
-        
+
         if self.options.progressive_water_training.value != ProgressiveWaterTraining.option_none and (item.code == self.item_code(itemName.DIVE) or item.code == self.item_code(itemName.DAIR) \
             or item.code == self.item_code(itemName.FSWIM)):
             return False
@@ -418,20 +418,20 @@ class BanjoTooieWorld(World):
             return False
         if item.code == self.item_code(itemName.PSWIM) and self.options.progressive_water_training.value != ProgressiveWaterTraining.option_basic:
             return False
-        
+
         if self.options.progressive_flight and (item.code == self.item_code(itemName.FPAD) or item.code == self.item_code(itemName.BBOMB) or item.code == self.item_code(itemName.AIREAIM)):
             return False
-        
+
         if self.options.progressive_egg_aiming.value != ProgressiveEggAim.option_none and (item.code == self.item_code(itemName.EGGAIM) or item.code == self.item_code(itemName.EGGSHOOT)):
-            return False 
+            return False
         if self.options.progressive_egg_aiming.value == ProgressiveEggAim.option_advanced and (item.code == self.item_code(itemName.AMAZEOGAZE) or item.code == self.item_code(itemName.BBLASTER)):
             return False
-        
+
         if self.options.progressive_bash_attack and (item.code == self.item_code(itemName.BBASH) or item.code == self.item_code(itemName.GRAT)):
             return False
         if item.code == self.item_code(itemName.PBASH) and not self.options.progressive_bash_attack:
             return False
-        
+
         if item.code == self.item_code(itemName.ROAR) and not self.options.randomize_dino_roar.value:
             return False
 
@@ -534,7 +534,7 @@ class BanjoTooieWorld(World):
     def pre_fill_me(self) -> None:
         if not self.options.randomize_honeycombs:
             self.banjo_pre_fills(itemName.HONEY, "Honeycomb", False)
-                    
+
         if not self.options.randomize_cheato:
             self.banjo_pre_fills(itemName.PAGES, "Cheato Page", False)
 
@@ -552,7 +552,7 @@ class BanjoTooieWorld(World):
 
         if not self.options.randomize_treble:
             self.banjo_pre_fills(itemName.TREBLE, "Treble Clef", False)
-        
+
         if not self.options.randomize_stations:
             self.banjo_pre_fills("Stations", None, True)
 
@@ -590,14 +590,14 @@ class BanjoTooieWorld(World):
                 else:
                     self.get_location("World "+ str(world_num) +" Unlocked").place_locked_item(item)
                     world_num = world_num + 1
-        
+
         if self.options.victory_condition.value == VictoryCondition.option_minigame_hunt\
             or self.options.victory_condition.value == VictoryCondition.option_wonderwing_challenge:
 
             item = self.create_item(itemName.MUMBOTOKEN)
             for location_name in MumboTokenGames_table.keys():
                 self.get_location(location_name).place_locked_item(item)
-        
+
         if self.options.victory_condition.value == VictoryCondition.option_boss_hunt\
             or self.options.victory_condition.value == VictoryCondition.option_wonderwing_challenge:
 
@@ -605,12 +605,12 @@ class BanjoTooieWorld(World):
             for location_name in MumboTokenBoss_table.keys():
                 self.get_location(location_name).place_locked_item(item)
 
-        if self.options.victory_condition.value == VictoryCondition.option_jinjo_hunt\
+        if self.options.victory_condition.value == VictoryCondition.option_jinjo_family_rescue\
             or self.options.victory_condition.value == VictoryCondition.option_wonderwing_challenge:
             item = self.create_item(itemName.MUMBOTOKEN)
             for location_name in MumboTokenJinjo_table.keys():
                 self.get_location(location_name).place_locked_item(item)
-        
+
         elif not self.options.randomize_jinjos:
             item = self.create_item(itemName.JIGGY)
             self.get_location(locationName.JIGGYIH1).place_locked_item(item)
@@ -852,5 +852,5 @@ class BanjoTooieWorld(World):
         add_loading_zone_information(hints, GILoc_table, get_entrance(regionName.GIO))
         add_loading_zone_information(hints, HPLoc_table, get_entrance(regionName.HP))
         add_loading_zone_information(hints, CCLoc_table, get_entrance(regionName.CC))
-        
+
         hint_data.update({self.player: hints})

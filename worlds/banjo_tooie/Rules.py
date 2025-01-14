@@ -8112,7 +8112,7 @@ class BanjoTooieRules:
             for location, rules in self.cheato_rewards_rules.items():
                 cheato = self.world.multiworld.get_location(location, self.player)
                 set_rule(cheato, rules)
-        
+
         if self.world.options.honeyb_rewards:
             for location, rules in self.honeyb_rewards_rules.items():
                 honeyb = self.world.multiworld.get_location(location, self.player)
