@@ -14,7 +14,6 @@ if TYPE_CHECKING:
 
 
 base_id = 7000
-nes_logger = logging.getLogger("NES")
 logger = logging.getLogger("Client")
 
 class TLOZClient(BizHawkClient):
@@ -34,6 +33,7 @@ class TLOZClient(BizHawkClient):
         try:
             # Check ROM name/patch version
             rom_name = ((await bizhawk.read(ctx.bizhawk_ctx, [(Rom.ROM_NAME - 0x10, 3, self.rom)]))[0]).decode("ascii")
+            logger.info(rom_name)
             if rom_name != "LOZ":
                 return False  # Not a MYGAME ROM
         except bizhawk.RequestFailedError:
@@ -132,7 +132,7 @@ class TLOZClient(BizHawkClient):
             if location not in ctx.locations_checked:
                 ctx.locations_checked.add(location)
                 location_name = ctx.location_names.lookup_in_game(location)
-                nes_logger.info(
+                logger.info(
                     f'New Check: {location_name} ({len(ctx.locations_checked)}/'
                     f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
                 await ctx.send_msgs([{"cmd": "LocationChecks", "locations": [location]}])
@@ -141,7 +141,7 @@ class TLOZClient(BizHawkClient):
 
     async def received_items_check(self, ctx):
         items_received_count_low = await self.read_ram_value(ctx, Rom.items_obtained_low)
-        items_received_count_high = await self.read_ram_value(ctx, Rom.items_obtained_high + 1) & 0b00000111
+        items_received_count_high = await self.read_ram_value(ctx, Rom.items_obtained_high)
         items_received_count = list([items_received_count_low, items_received_count_high])
         items_received_count_value = int.from_bytes(items_received_count, "little")
         if items_received_count_value < len(ctx.items_received):
