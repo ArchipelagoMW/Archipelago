@@ -54,7 +54,13 @@ class BossRando(Choice):
     alias_true = 1
 
 class BossRandoType(Choice):
-    "Sets what type of boss shuffling occurs."
+    """
+    Sets what type of boss shuffling occurs.
+    Shuffle: Bosses will be shuffled amongst each other
+    Chaos: Bosses will be randomized with the chance of duplicate bosses
+    Singularity: All bosses will be replaced with a single boss
+    Manual: Bosses will be placed according to the Boss Rando Overrides setting
+    """
     display_name = "Boss Randomization Type"
     option_shuffle = 0
     option_chaos = 1
