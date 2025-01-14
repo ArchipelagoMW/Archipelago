@@ -400,7 +400,7 @@ class BanjoTooieWorld(World):
         if self.options.egg_behaviour.value == EggsBehaviour.option_progressive_eggs and (item.code == self.item_code(itemName.FEGGS) or\
             item.code == self.item_code(itemName.GEGGS) or item.code == self.item_code(itemName.IEGGS) or item.code == self.item_code(itemName.CEGGS)):
             return False
-        if item.code == self.item_code(itemName.PBEGGS) and self.options.egg_behaviour.value != EggsBehaviour.option_progressive_eggs:
+        if item.code == self.item_code(itemName.PEGGS) and self.options.egg_behaviour.value != EggsBehaviour.option_progressive_eggs:
             return False
         if self.options.egg_behaviour.value == EggsBehaviour.option_random_starting_egg and item.code == self.starting_egg: #Already has this egg in inventory
             return False

@@ -123,7 +123,7 @@ class DialogCharacters(Choice):
     default = 110
 
 class JamjarsSiloCosts(Choice):
-    """Change how many notes it takes to use Jamjars' move silos. Requires Jamjars' movelist to be changed."""
+    """Change how many notes it takes to use Jamjars' move silos. Requires the Banjo-Tooie move list to be randomized."""
     display_name = "Jamjars' Silo Costs"
     option_vanilla = 0
     option_randomize = 1
@@ -131,7 +131,7 @@ class JamjarsSiloCosts(Choice):
     default = 0
 
 class RandomizeBKMoveList(Choice):
-    """Banjo-Kazooie's Movelist is locked behind  the MultiWorld.
+    """Banjo-Kazooie's Movelist is locked behind the MultiWorld.
     Mcjiggy Special - Talon Trot and Tall Jump are removed from the pool."""
     display_name = "Banjo-Kazooie Movelist"
     option_none = 0
@@ -354,7 +354,7 @@ class LogicType(Choice):
     option_glitches = 3
     default = 0
 
-class Silos(Choice):
+class OpenSilos(Choice):
     """Choose if you want IoH Silos to be closed, randomly open 1, or enable all. If you enabled Randomized Worlds with BK Moves randomized and
        silos set to none, it will be enforced to one."""
     display_name = "Open Silos"
@@ -377,7 +377,7 @@ class VictoryCondition(Choice):
     option_minigame_hunt = 1
     option_boss_hunt = 2
     option_jinjo_family_rescue = 3
-    option_wonder_wing_challenge = 4
+    option_wonderwing_challenge = 4
     option_token_hunt = 5
     default = 0
 
@@ -460,12 +460,12 @@ class BanjoTooieOptions(PerGameCommonOptions):
     randomize_moves: RandomizeBTMoveList
     jamjars_silo_costs: JamjarsSiloCosts
     randomize_bk_moves: RandomizeBKMoveList
-    egg_behaviour:EggsBehaviour
+    egg_behaviour: EggsBehaviour
 
     progressive_beak_buster: ProgressiveBeakBuster
     progressive_shoes: ProgressiveShoes
     progressive_water_training: ProgressiveWaterTraining
-    progressive_flight:ProgressiveFlight
+    progressive_flight: ProgressiveFlight
     progressive_egg_aiming:ProgressiveEggAim
     progressive_bash_attack: ProgressiveBashAttack
 
@@ -502,7 +502,7 @@ class BanjoTooieOptions(PerGameCommonOptions):
     randomize_world_loading_zone: RandomizeWorldZones
     open_hag1: OpenHag1
     backdoors:Backdoors
-    open_silos: Silos
+    open_silos: OpenSilos
 
     speed_up_minigames: SpeedUpMinigames
     tower_of_tragedy: TowerOfTragedy

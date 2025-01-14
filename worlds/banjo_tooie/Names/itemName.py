@@ -75,7 +75,7 @@ BBOMB       = "Beak Bomb"
 EGGSHOOT    = "Third Person Egg Shooting"
 
 PBBUST       = "Progressive Beak Buster"
-PBEGGS       = "Progressive Eggs"
+PEGGS       = "Progressive Eggs"
 PSHOES       = "Progressive Shoes"
 PSWIM       = "Progressive Water Training"
 PBASH       = "Progressive Bash Attack"

@@ -1103,7 +1103,8 @@ def create_regions(self):
     region_map = copy.deepcopy(BANJOTOOIEREGIONS)
     nest_map = copy.deepcopy(NEST_REGIONS)
 
-    if self.options.victory_condition.value == 1 or self.options.victory_condition.value == 4:
+    if self.options.victory_condition.value == VictoryCondition.option_minigame_hunt\
+      or self.options.victory_condition.value == VictoryCondition.option_wonderwing_challenge:
         region_map[regionName.MT].append(locationName.MUMBOTKNGAME1)
         region_map[regionName.GM].append(locationName.MUMBOTKNGAME2)
         region_map[regionName.WW].append(locationName.MUMBOTKNGAME3)
@@ -1120,7 +1121,8 @@ def create_regions(self):
         region_map[regionName.CC].append(locationName.MUMBOTKNGAME14)
         region_map[regionName.CC].append(locationName.MUMBOTKNGAME15)
 
-    if self.options.victory_condition.value == 2 or self.options.victory_condition.value == 4:
+    if self.options.victory_condition.value == VictoryCondition.option_boss_hunt\
+      or self.options.victory_condition.value == VictoryCondition.option_wonderwing_challenge:
         region_map[regionName.MT].append(locationName.MUMBOTKNBOSS1)
         region_map[regionName.CHUFFY].append(locationName.MUMBOTKNBOSS2)
         region_map[regionName.WW].append(locationName.MUMBOTKNBOSS3)
@@ -1130,7 +1132,8 @@ def create_regions(self):
         region_map[regionName.HP].append(locationName.MUMBOTKNBOSS7)
         region_map[regionName.CC].append(locationName.MUMBOTKNBOSS8)
 
-    if self.options.victory_condition.value == 3 or self.options.victory_condition.value == 4:
+    if self.options.victory_condition.value == VictoryCondition.option_jinjo_family_rescue\
+      or self.options.victory_condition.value == VictoryCondition.option_wonderwing_challenge:
         region_map[regionName.IOHJV].append(locationName.MUMBOTKNJINJO1)
         region_map[regionName.IOHJV].append(locationName.MUMBOTKNJINJO2)
         region_map[regionName.IOHJV].append(locationName.MUMBOTKNJINJO3)
@@ -1164,7 +1167,7 @@ def create_regions(self):
     self.multiworld.regions.extend(create_region(self.multiworld, self.player,\
           active_locations, region, locations) for region, locations in region_map.items())
     
-    if self.options.victory_condition in (VictoryCondition.option_hag1, VictoryCondition.option_wonder_wing_challenge):
+    if self.options.victory_condition in (VictoryCondition.option_hag1, VictoryCondition.option_wonderwing_challenge):
         self.multiworld.get_location(locationName.HAG1, player).place_locked_item(self.create_event_item(itemName.VICTORY))
 
 
@@ -1172,9 +1175,9 @@ def create_region(multiworld, player: int, active_locations, name: str, location
     ret = Region(name, player, multiworld)
     if locations:
         loc_to_id = {loc: active_locations.get(loc, 0) for loc in locations if active_locations.get(loc, None)}
-        if multiworld.worlds[player].options.victory_condition == 0 and locationName.HAG1 in locations:
+        if multiworld.worlds[player].options.victory_condition == VictoryCondition.option_hag1 and locationName.HAG1 in locations:
             ret.add_locations({locationName.HAG1: None})
-        elif multiworld.worlds[player].options.victory_condition == 4 and locationName.HAG1 in locations:
+        elif multiworld.worlds[player].options.victory_condition == VictoryCondition.option_wonderwing_challenge and locationName.HAG1 in locations:
             ret.add_locations({locationName.HAG1: None})
         else:
             ret.add_locations(loc_to_id, BanjoTooieLocation)
