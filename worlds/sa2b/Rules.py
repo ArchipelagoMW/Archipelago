@@ -1389,6 +1389,8 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
         add_rule(multiworld.get_location(LocationName.mission_street_lifebox_2, player),
                  lambda state: (state.has(ItemName.tails_booster, player) and
                                 state.has(ItemName.tails_mystic_melody, player)))
+        add_rule(multiworld.get_location(LocationName.pyramid_cave_lifebox_2, player),
+                 lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
         add_rule(multiworld.get_location(LocationName.eternal_engine_lifebox_2, player),
                  lambda state: (state.has(ItemName.tails_booster, player) and
                                 state.has(ItemName.tails_bazooka, player)))
