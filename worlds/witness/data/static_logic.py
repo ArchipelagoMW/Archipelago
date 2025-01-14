@@ -72,7 +72,8 @@ class StaticWitnessLogicObj:
                     "id": int(location_id),
                     "entityType": "Easter Egg",
                     "locationType": "Easter Egg",
-                    "area": correct_area
+                    "area": correct_area,
+                    "order": len(self.ENTITIES_BY_HEX),
                 }
 
                 self.ENTITIES_BY_NAME[self.ENTITIES_BY_HEX[entity_hex]["checkName"]] = self.ENTITIES_BY_HEX[entity_hex]
@@ -101,7 +102,8 @@ class StaticWitnessLogicObj:
                 "id": int(location_id),
                 "entityType": "Easter Egg Total",
                 "locationType": "Easter Egg Total",
-                "area": easter_egg_area
+                "area": easter_egg_area,
+                "order": len(self.ENTITIES_BY_HEX),
             }
 
             self.ENTITIES_BY_NAME[self.ENTITIES_BY_HEX[entity_hex]["checkName"]] = self.ENTITIES_BY_HEX[entity_hex]
