@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING
 
 from worlds.banjo_tooie.Options import EggsBehaviour, LogicType, VictoryCondition
 from .Names import regionName, itemName, locationName
-from .Items import BanjoTooieItem, bk_moves_table
 from worlds.generic.Rules import add_rule, set_rule, forbid_item, add_item_rule
 
 # I don't know what is going on here, but it works.

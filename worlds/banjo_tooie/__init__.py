@@ -4,7 +4,6 @@ from multiprocessing import Process
 from Options import DeathLink
 import settings
 import typing
-from jinja2 import Environment, FileSystemLoader
 from typing import Dict, Any
 from .Items import BanjoTooieItem, all_item_table, all_group_table
 from .Locations import BanjoTooieLocation, LocationData, all_location_table, MTLoc_Table, GMLoc_table, WWLoc_table, JRLoc_table, TLLoc_table, GILoc_table, HPLoc_table, CCLoc_table, MumboTokenGames_table, MumboTokenBoss_table, MumboTokenJinjo_table
