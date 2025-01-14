@@ -8155,7 +8155,7 @@ class BanjoTooieRules:
                 set_rule(tokens, rules)
             self.world.multiworld.completion_condition[self.player] = lambda state: state.has(itemName.MUMBOTOKEN, self.player, 32) \
             and self.check_hag1_options(state)
-        elif self.world.options.victory_condition == VictoryCondition.token_hunt_length:
+        elif self.world.options.victory_condition == VictoryCondition.option_token_hunt:
             self.world.multiworld.completion_condition[self.player] = lambda state: state.has(itemName.MUMBOTOKEN, self.player, self.world.options.token_hunt_length.value)
         else:
             self.world.multiworld.completion_condition[self.player] = lambda state: state.has("Kick Around", self.player)
