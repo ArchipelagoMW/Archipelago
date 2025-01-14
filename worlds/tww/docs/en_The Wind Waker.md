@@ -50,6 +50,23 @@ the Archipelago server.
 
 Feel free to report any other issues or suggest improvements in the Wind Waker channel in the Archipelago server!
 
+## Tips and Tricks
+
+### Where are dungeon secrets found in the dungeons?
+
+[This document](https://docs.google.com/document/d/1LrjGr6W9970XEA-pzl8OhwnqMqTbQaxCX--M-kdsLos/edit?usp=sharing) has
+images of each of the dungeon secrets.
+
+### What exactly do the obscure and precise difficulty options do?
+
+The `logic_obscurity` and `logic_precision` options modify the randomizer's logic to put various tricks and techniques
+into logic.
+[This document](https://docs.google.com/spreadsheets/d/14ToE1SvNr9yRRqU4GK2qxIsuDUs9Edegik3wUbLtzH8/edit?usp=sharing)
+neatly lists the changes that are made. The options are progressive, so, for instance, hard obscure difficulty includes
+both normal and hard obscure tricks. Some changes require a combination of both options. For example, to put having the
+Forsaken Fortress cannons blow the door up for you into logic requires both obscure and precise difficulty to be set to
+at least normal.
+
 ## Planned Features
 
 - Dynamic CTMC based on enabled options
@@ -65,6 +82,7 @@ This randomizer would not be possible without the help from:
 
 - BigSharkZ: (icon artwork)
 - Celeste (Maëlle): (logic and typo fixes, additional programming)
+- Chavu: (logic difficulty document)
 - CrainWWR: (multiworld and Dolphin memory assistance, additional programming)
 - Cyb3R: (reference for `TWWClient`)
 - DeamonHunter: (additional programming)
@@ -75,6 +93,7 @@ This randomizer would not be possible without the help from:
 - Mysteryem: (tracker support, additional programming)
 - Necrofitz: (additional documentation)
 - Ouro: (tracker support)
+- tal (matzahTalSoup): (dungeon secrets guide)
 - Tubamann: (additional programming)
 
 The Archipelago logo © 2022 by Krista Corkos and Christopher Wilson, licensed under
