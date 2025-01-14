@@ -1786,7 +1786,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             ctx.clients[team][slot].append(client)
             client.version = args['version']
             client.tags = args['tags']
-            client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags or "HintGame" in client.tags
+            client.no_locations = bool(client.tags & _non_game_messages.keys())
             connected_packet = {
                 "cmd": "Connected",
                 "team": client.team, "slot": client.slot,
@@ -1858,7 +1858,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 old_tags = client.tags
                 client.tags = args["tags"]
                 if set(old_tags) != set(client.tags):
-                    client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags
+                    client.no_locations = bool(client.tags & _non_game_messages.keys())
                     ctx.broadcast_text_all(
                         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has changed tags "
                         f"from {old_tags} to {client.tags}.",
