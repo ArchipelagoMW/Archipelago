@@ -454,7 +454,7 @@ def get_price(multiworld, item, player: int, price_type=None):
     if item:
         # This is for a shop's regular inventory, the item is already determined, and we will decide the price here
         price = item["price"]
-        if multiworld.randomize_shop_prices[player]:
+        if multiworld.worlds[player].options.randomize_shop_prices:
             adjust = 2 if price < 100 else 5
             price = int((price / adjust) * (0.5 + multiworld.worlds[player].random.random() * 1.5)) * adjust
         multiworld.worlds[player].random.shuffle(price_types)
