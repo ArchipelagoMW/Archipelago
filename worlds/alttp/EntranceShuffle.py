@@ -546,10 +546,10 @@ def link_entrances(world, player):
         raise NotImplementedError(
             f'{world.worlds[player].options.entrance_shuffle} Shuffling not supported yet. Player {world.get_player_name(player)}')
 
-    if world.worlds[player].options.glitches_required.value in ['overworld_glitches', 'hybrid_major_glitches', 'no_logic']:
+    if world.worlds[player].options.glitches_required in ['overworld_glitches', 'hybrid_major_glitches', 'no_logic']:
         overworld_glitch_connections(world, player)
         # mandatory hybrid major glitches connections
-        if world.worlds[player].options.glitches_required.value in ['hybrid_major_glitches', 'no_logic']:
+        if world.worlds[player].options.glitches_required in ['hybrid_major_glitches', 'no_logic']:
             underworld_glitch_connections(world, player)
 
     # check for swamp palace fix

@@ -102,7 +102,7 @@ def KholdstareDefeatRule(state, player: int) -> bool:
                     state.has('Fire Rod', player) or
                     (
                             state.has('Bombos', player) and
-                            (has_sword(state, player) or state.multiworld.swordless[player])
+                            (has_sword(state, player) or state.multiworld.worlds[player].options.swordless)
                     )
             ) and
             (
@@ -111,7 +111,7 @@ def KholdstareDefeatRule(state, player: int) -> bool:
                     (
                             state.has('Fire Rod', player) and
                             state.has('Bombos', player) and
-                            state.multiworld.swordless[player] and
+                            state.multiworld.worlds[player].options.swordless and
                             can_extend_magic(state, player, 16)
                     )
             )

@@ -2411,7 +2411,7 @@ def write_strings(rom, world, player):
     tt['ganon_phase_3_no_silvers'] = 'Did you find the silver arrows%s' % silverarrow_hint
     tt['ganon_phase_3_no_silvers_alt'] = 'Did you find the silver arrows%s' % silverarrow_hint
     if world.worlds[player].has_progressive_bows and (w.difficulty_requirements.progressive_bow_limit >= 2 or (
-            world.swordless[player] or world.glitches_required[player] == 'no_glitches')):
+            world.worlds[player].options.swordless or world.worlds[player].options.glitches_required == 'no_glitches')):
         prog_bow_locs = world.find_item_locations('Progressive Bow', player, True)
         local_random.shuffle(prog_bow_locs)
         found_bow = False

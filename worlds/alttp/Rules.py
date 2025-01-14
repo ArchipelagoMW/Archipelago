@@ -83,7 +83,7 @@ def set_rules(world):
         fake_flipper_rules(world, player)
         forbid_bomb_jump_requirements(world, player)
     else:
-        raise NotImplementedError(f'Not implemented yet: Logic - {world.options.glitches_required}')
+        raise NotImplementedError(f'Not implemented yet: Logic - {world.worlds[player].options.glitches_required}')
 
     if world.worlds[player].options.goal == 'bosses':
         # require all bosses to beat ganon
