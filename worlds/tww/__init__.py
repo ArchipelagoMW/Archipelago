@@ -549,14 +549,15 @@ class TWWWorld(World):
             return TWWItem(name, self.player, ITEM_TABLE[name], self.determine_item_classification(name))
         raise KeyError(f"Invalid item name: {name}")
 
-    def get_filler_item_name(self) -> str:
+    def get_filler_item_name(self, strict: bool = True) -> str:
         """
         This method is called when the item pool needs to be filled with additional items to match the location count.
 
+        :param strict: Whether the item should be one strictly classified as filler. Defaults to `True`.
         :return: The name of a filler item from this world.
         """
         # If there are still useful items to place, place those first.
-        if len(self.useful_pool) > 0:
+        if not strict and len(self.useful_pool) > 0:
             return self.useful_pool.pop()
 
         # If there are still vanilla filler items to place, place those first.
@@ -564,8 +565,11 @@ class TWWWorld(World):
             return self.filler_pool.pop()
 
         # Use the same weights for filler items used in the base randomizer.
-        filler_consumables = ["Yellow Rupee", "Red Rupee", "Purple Rupee", "Orange Rupee", "Joy Pendant"]
-        filler_weights = [3, 7, 10, 15, 3]
+        filler_consumables = ["Yellow Rupee", "Red Rupee", "Purple Rupee", "Joy Pendant"]
+        filler_weights = [3, 7, 10, 3]
+        if not strict:
+            filler_consumables.append("Orange Rupee")
+            filler_weights.append(15)
         return self.multiworld.random.choices(filler_consumables, weights=filler_weights, k=1)[0]
 
     def get_pre_fill_items(self) -> list[Item]:

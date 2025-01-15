@@ -110,8 +110,22 @@ def get_pool_core(world: "TWWWorld") -> tuple[list[str], list[str]]:
             else:
                 filler_pool.extend([item] * data.quantity)
 
-    # The number of items in the item pool should be the same as the number of locations in the world.
-    num_items_left_to_place = len(world.multiworld.get_locations(world.player)) - 1
+    # Assign useful and filler items to item pools in the world.
+    world.random.shuffle(useful_pool)
+    world.random.shuffle(filler_pool)
+    world.useful_pool = useful_pool
+    world.filler_pool = filler_pool
+
+    # Add filler items to place into excluded locations.
+    pool.extend([world.get_filler_item_name() for _ in world.options.exclude_locations])
+
+    # The remaining of items left to place should be the same as the number of non-excluded locations in the world.
+    nonexcluded_locations = [
+        location
+        for location in world.multiworld.get_locations(world.player)
+        if location.name not in world.options.exclude_locations
+    ]
+    num_items_left_to_place = len(nonexcluded_locations) - 1
 
     # Account for the dungeon items that have already been created.
     for dungeon in world.dungeons.values():
@@ -126,12 +140,6 @@ def get_pool_core(world: "TWWWorld") -> tuple[list[str], list[str]]:
     pool.extend(progression_pool)
     num_items_left_to_place -= len(progression_pool)
 
-    # Assign the remaining items to item pools in the world.
-    world.random.shuffle(useful_pool)
-    world.random.shuffle(filler_pool)
-    world.useful_pool = useful_pool
-    world.filler_pool = filler_pool
-
     # If the player starts with a sword, add one to the precollected items list and remove one from the item pool.
     if world.options.sword_mode == "start_with_sword":
         precollected_items.append("Progressive Sword")
@@ -144,7 +152,7 @@ def get_pool_core(world: "TWWWorld") -> tuple[list[str], list[str]]:
             pool.remove("Progressive Sword")
 
     # Place useful items, then filler items to fill out the remaining locations.
-    pool.extend([world.get_filler_item_name() for _ in range(num_items_left_to_place)])
+    pool.extend([world.get_filler_item_name(strict=False) for _ in range(num_items_left_to_place)])
 
     return pool, precollected_items
 
