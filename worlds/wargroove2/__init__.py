@@ -20,11 +20,11 @@ from worlds.LauncherComponents import Component, components, Type, launch_subpro
 
 
 def launch_client():
-    from .client import launch
+    from .Client import launch
     launch_subprocess(launch, name="Wargroove2Client")
 
 
-components.append(Component("Wargroove 2 Client", "Wargroove2Client", func=launch_client, component_type=Type.CLIENT))
+components.append(Component("Wargroove 2 Client", game_name="Wargroove 2", func=launch_client, component_type=Type.CLIENT))
 
 
 class Wargroove2Settings(settings.Group):
