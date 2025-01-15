@@ -461,8 +461,7 @@ class CommonContext:
 
     async def check_locations(self, locations: typing.Collection[int]) -> set[int]:
         """Send new location checks to the server. Returns set of actually new locations that were send."""
-        locations = set(locations)
-        locations.update(self.missing_locations)
+        locations = set(locations) & self.missing_locations
         if locations:
             await self.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(locations)}])
         return locations
