@@ -1,6 +1,6 @@
 from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set
 from logging import warning
-from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState, LocationProgressType
+from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from .items import (item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names,
                     combat_items)
 from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations, sphere_one
@@ -93,11 +93,10 @@ class TunicWorld(World):
     shop_num: int = 1  # need to make it so that you can walk out of shops, but also that they aren't all connected
     er_regions: Dict[str, RegionInfo]  # absolutely needed so outlet regions work
 
-    # for the local_fill option -- grass and non-grass option worlds get their own pools
-    grass_fill: List[TunicItem]
-    non_grass_fill: List[TunicItem]
-    grass_fill_locations: List[Location]
-    non_grass_fill_locations: List[Location]
+    # for the local_fill option
+    fill_items: List[TunicItem]
+    fill_locations: List[TunicLocation]
+    amount_to_local_fill: int
 
     # so we only loop the multiworld locations once
     # if these are locations instead of their info, it gives a memory leak error
@@ -372,17 +371,7 @@ class TunicWorld(World):
                 self.slot_data_items.append(tunic_item)
 
         # pull out the filler so that we can place it manually during pre_fill
-        self.grass_fill = []
-        self.grass_fill_locations = []
-        self.non_grass_fill = []
-        self.non_grass_fill_locations = []
-        # grass and non-grass get their own pools
-        if self.options.grass_randomizer:
-            filler = self.grass_fill
-            fill_locations = self.grass_fill_locations
-        else:
-            filler = self.non_grass_fill
-            fill_locations = self.non_grass_fill_locations
+        self.fill_items = []
         if self.options.local_fill > 0 and self.multiworld.players > 1:
             # skip items marked local or non-local, let fill deal with them in its own way
             # discard grass from non_local if it's meant to be limited
@@ -397,22 +386,28 @@ class TunicWorld(World):
                     all_filler.append(tunic_item)
                 else:
                     non_filler.append(tunic_item)
-            amount_to_local_fill = int(self.options.local_fill.value * len(all_filler) / 100)
+            self.amount_to_local_fill = int(self.options.local_fill.value * len(all_filler) / 100)
+            self.fill_items += all_filler[:self.amount_to_local_fill]
+            del all_filler[:self.amount_to_local_fill]
+            tunic_items = all_filler + non_filler
+
+        self.multiworld.itempool += tunic_items
+
+    def pre_fill(self) -> None:
+        self.fill_locations = []
+
+        if self.options.local_fill > 0 and self.multiworld.players > 1:
             # we need to reserve a couple locations so that we don't fill up every sphere 1 location
             reserved_locations: Set[str] = set(self.random.sample(sphere_one, 2))
             viable_locations = [loc for loc in self.multiworld.get_unfilled_locations(self.player)
                                 if loc.name not in reserved_locations
-                                or loc.progress_type is not LocationProgressType.EXCLUDED
-                                or loc.name in self.options.priority_locations.value]
-            amount_to_local_fill = min(amount_to_local_fill, len(viable_locations))
-            self.random.shuffle(all_filler)
-            filler += all_filler[:amount_to_local_fill]
-            del all_filler[:amount_to_local_fill]
-            self.random.shuffle(viable_locations)
-            fill_locations += viable_locations[:amount_to_local_fill]
-            tunic_items = all_filler + non_filler
+                                and loc.name not in self.options.priority_locations.value]
 
-        self.multiworld.itempool += tunic_items
+            if len(viable_locations) < self.amount_to_local_fill:
+                raise OptionError(f"TUNIC: Not enough locations for local_fill option for {self.player_name}. "
+                                  f"This is likely due to excess plando or priority locations.")
+
+            self.fill_locations += viable_locations
 
     @classmethod
     def stage_pre_fill(cls, multiworld: MultiWorld) -> None:
@@ -424,21 +419,23 @@ class TunicWorld(World):
             grass_fill_locations: List[Location] = []
             non_grass_fill_locations: List[Location] = []
             for world in tunic_fill_worlds:
-                grass_fill.extend(world.grass_fill)
-                non_grass_fill.extend(world.non_grass_fill)
-                grass_fill_locations.extend(world.grass_fill_locations)
-                non_grass_fill_locations.extend(world.non_grass_fill_locations)
+                if world.options.grass_randomizer:
+                    grass_fill.extend(world.fill_items)
+                    grass_fill_locations.extend(world.fill_locations)
+                else:
+                    non_grass_fill.extend(world.fill_items)
+                    non_grass_fill_locations.extend(world.fill_locations)
 
             multiworld.random.shuffle(grass_fill)
             multiworld.random.shuffle(non_grass_fill)
             multiworld.random.shuffle(grass_fill_locations)
             multiworld.random.shuffle(non_grass_fill_locations)
 
-            for loc in grass_fill_locations:
-                multiworld.push_item(loc, grass_fill.pop(), collect=False)
+            for filler_item in grass_fill:
+                multiworld.push_item(grass_fill_locations.pop(), filler_item, collect=False)
 
-            for loc in non_grass_fill_locations:
-                multiworld.push_item(loc, non_grass_fill.pop(), collect=False)
+            for filler_item in non_grass_fill:
+                multiworld.push_item(non_grass_fill_locations.pop(), filler_item, collect=False)
 
     def create_regions(self) -> None:
         self.tunic_portal_pairs = {}
