@@ -1,7 +1,7 @@
 from BaseClasses import Region, Entrance, Tutorial, ItemClassification
 from .Items import ChecksFinderItem, item_table
 from .Locations import ChecksFinderLocation, advancement_table
-from Options import PerGameCommonOptions
+from .Options import ChecksFinderOptions
 from .Rules import set_rules, set_completion_rules
 from worlds.AutoWorld import World, WebWorld
 
@@ -25,7 +25,7 @@ class ChecksFinderWorld(World):
     You win when you get all your items and beat the last board!
     """
     game = "ChecksFinder"
-    options_dataclass = PerGameCommonOptions
+    options_dataclass = ChecksFinderOptions
     web = ChecksFinderWeb()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
@@ -67,6 +67,7 @@ class ChecksFinderWorld(World):
             "player_id": self.player,
             "client_version": client_version,
             "race": self.multiworld.is_race,
+            "deathlink": self.options.death_link.value
         }
 
     def create_item(self, name: str) -> ChecksFinderItem:
