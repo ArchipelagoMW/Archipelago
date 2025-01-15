@@ -109,13 +109,16 @@ weapon_costs = {
 }
 
 
-def can_defeat_enough_rbms(state: "CollectionState", player: int, required: int) -> bool:
+def can_defeat_enough_rbms(state: "CollectionState", player: int,
+                           required: int, boss_requirements: Dict[int, List[int]]):
     can_defeat = 0
-
-    for boss in robot_masters:
-        if state.has(robot_masters[boss], player):
-            can_defeat += 1
-    return can_defeat >= required
+    for boss, reqs in boss_requirements.items():
+        if boss in robot_masters:
+            if state.has_all(map(lambda x: weapons_to_name[x], reqs), player):
+                can_defeat += 1
+                if can_defeat >= required:
+                    return True
+    return False
 
 
 def has_rush_vertical(state: "CollectionState", player: int):
@@ -124,6 +127,10 @@ def has_rush_vertical(state: "CollectionState", player: int):
 
 def can_traverse_long_water(state: "CollectionState", player: int):
     return state.has_any([names.rush_marine, names.rush_jet], player)
+
+
+def has_any_rush(state: "CollectionState", player: int):
+    return state.has_any([names.rush_coil, names.rush_jet, names.rush_marine], player)
 
 
 def has_rush_jet(state: "CollectionState", player: int):
@@ -171,13 +178,6 @@ def set_rules(world: "MM3World") -> None:
                         # Gamma and Wily Machine need all weaknesses present, so allow
                     elif 4 > world.weapon_damage[weapon][i] > 0:
                         world.weapon_damage[weapon][i] = 0
-            # handle special cases
-            for boss in range(22):
-                for weapon in range(1, 9):
-                    if (0 < world.weapon_damage[weapon][boss] < minimum_weakness_requirement[weapon] and
-                            not any(world.weapon_damage[i][boss] >= minimum_weakness_requirement[weapon]
-                                    for i in range(1, 8) if i != weapon)):
-                        world.weapon_damage[weapon][boss] = minimum_weakness_requirement[weapon]
 
     for p_boss in world.options.plando_weakness:
         for p_weapon in world.options.plando_weakness[p_boss]:
@@ -190,6 +190,14 @@ def set_rules(world: "MM3World") -> None:
             world.weapon_damage[weapons_to_id[p_weapon]][bosses[p_boss]] \
                 = world.options.plando_weakness[p_boss][p_weapon]
 
+    # handle special cases
+    for boss in range(22):
+        for weapon in range(1, 9):
+            if (0 < world.weapon_damage[weapon][boss] < minimum_weakness_requirement[weapon] and
+                    not any(world.weapon_damage[i][boss] >= minimum_weakness_requirement[weapon]
+                            for i in range(1, 8) if i != weapon)):
+                world.weapon_damage[weapon][boss] = minimum_weakness_requirement[weapon]
+
     if world.weapon_damage[0][world.options.starting_robot_master.value] < 1:
         world.weapon_damage[0][world.options.starting_robot_master.value] = 1
 
@@ -199,14 +207,22 @@ def set_rules(world: "MM3World") -> None:
     weapon_energy = {key: float(0x1C) for key in weapon_costs}
     weapon_boss = {boss: {weapon: world.weapon_damage[weapon][boss] for weapon in world.weapon_damage}
                    for boss in range(8)}
-    flexibility = [(sum(1 if weapon_boss[boss][weapon] > 0 else 0 for weapon in range(9)) *
-                    sum(weapon_boss[boss].values()), boss) for boss in weapon_boss]
-    for _, boss in sorted(flexibility):
+    flexibility = {
+        boss: (
+                sum(damage_value > 0 for damage_value in
+                    weapon_damages.values())  # Amount of weapons that hit this boss
+                * sum(weapon_damages.values())  # Overall damage that those weapons do
+        )
+        for boss, weapon_damages in weapon_boss.items()
+    }
+    flexibility = sorted(flexibility, key=flexibility.get)  # Fast way to sort dict by value
+    used_weapons = {i: set() for i in range(8)}
+    for boss in flexibility:
         boss_damage = weapon_boss[boss]
         weapon_weight = {weapon: (weapon_energy[weapon] / damage) if damage else 0 for weapon, damage in
-                         boss_damage.items() if weapon_energy[weapon]}
+                         boss_damage.items() if weapon_energy[weapon] > 0}
         while boss_health[boss] > 0:
-            if boss_damage[0]:
+            if boss_damage[0] > 0:
                 boss_health[boss] = 0  # if we can buster, we should buster
                 continue
             highest, wp = max(zip(weapon_weight.values(), weapon_weight.keys()))
@@ -215,6 +231,7 @@ def set_rules(world: "MM3World") -> None:
                 used = ceil(boss_health[boss] / boss_damage[wp])
                 weapon_energy[wp] -= weapon_costs[wp] * used
                 boss_health[boss] = 0
+                used_weapons[boss].add(wp)
             elif highest <= 0:
                 # we are out of weapons that can actually damage the boss
                 # so find the weapon that has the most uses, and apply that as an additional weakness
@@ -223,15 +240,19 @@ def set_rules(world: "MM3World") -> None:
                                    if weapon != 0)
                 world.weapon_damage[wp][boss] = minimum_weakness_requirement[wp]
                 used = min(int(weapon_energy[wp] // weapon_costs[wp]),
-                           ceil(boss_health[boss] // minimum_weakness_requirement[wp]))
+                           ceil(boss_health[boss] / minimum_weakness_requirement[wp]))
                 weapon_energy[wp] -= weapon_costs[wp] * used
                 boss_health[boss] -= int(used * minimum_weakness_requirement[wp])
                 weapon_weight.pop(wp)
+                used_weapons[boss].add(wp)
             else:
                 # drain the weapon and continue
                 boss_health[boss] -= int(uses * boss_damage[wp])
                 weapon_energy[wp] -= weapon_costs[wp] * uses
                 weapon_weight.pop(wp)
+                used_weapons[boss].add(wp)
+
+        world.wily_4_weapons = {boss: sorted(weapons) for boss, weapons in used_weapons.items()}
 
     for i, boss_locations in zip(range(22), [
         needle_man_locations,
@@ -278,7 +299,8 @@ def set_rules(world: "MM3World") -> None:
 
     # Need to defeat x amount of robot masters for Wily 4
     add_rule(world.multiworld.get_location(names.wily_stage_4, world.player),
-             lambda state: can_defeat_enough_rbms(state, world.player, world.options.wily_4_requirement.value))
+             lambda state: can_defeat_enough_rbms(state, world.player, world.options.wily_4_requirement.value,
+                                                  world.wily_4_weapons))
 
     # Handle Doc Robo stage connections
     for entrance, location in (("To Doc Robot (Needle) - Crash", names.doc_air),
@@ -293,9 +315,7 @@ def set_rules(world: "MM3World") -> None:
         add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
 
     for location in gemini_man_locations:
-        add_rule(world.get_location(location), lambda state: state.has_any([names.rush_coil, names.rush_jet,
-                                                                            names.rush_marine],
-                                                                           world.player))
+        add_rule(world.get_location(location), lambda state: has_any_rush(state, world.player))
 
     add_rule(world.get_entrance("To Doc Robot (Spark) - Metal"),
              lambda state: has_rush_vertical(state, world.player) and
@@ -324,6 +344,8 @@ def set_rules(world: "MM3World") -> None:
         add_rule(world.get_location(names.gemini_man_c3),
                  lambda state: has_rush_vertical(state, world.player)
                                or state.has_any([names.gemini_laser, names.shadow_blade], world.player))
+        for location in (names.gemini_man_c6, names.gemini_man_c7, names.gemini_man_c10):
+            add_rule(world.get_location(location), lambda state: has_any_rush(state, world.player))
         for location in etank_1ups["Hard Man Stage"]:
             add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
         add_rule(world.get_location(names.top_man_c6), lambda state: has_rush_vertical(state, world.player))
@@ -343,6 +365,8 @@ def set_rules(world: "MM3World") -> None:
         add_rule(world.get_location(names.gemini_man_c2), lambda state: has_rush_vertical(state, world.player))
         add_rule(world.get_location(names.gemini_man_c4), lambda state: has_rush_vertical(state, world.player))
         add_rule(world.get_location(names.gemini_man_c5), lambda state: has_rush_vertical(state, world.player))
+        for location in (names.gemini_man_c8, names.gemini_man_c9):
+            add_rule(world.get_location(location), lambda state: has_any_rush(state, world.player))
         for location in energy_pickups["Hard Man Stage"]:
             if location == names.hard_man_c1:
                 continue

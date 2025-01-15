@@ -100,6 +100,7 @@ class MM3World(World):
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
         self.weapon_damage = weapon_damage.copy()
+        self.wily_4_weapons: Dict[int, List[int]] = {}
 
     def create_regions(self) -> None:
         menu = MM3Region("Menu", self.player, self.multiworld)
@@ -230,27 +231,3 @@ class MM3World(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
-    def collect(self, state: "CollectionState", item: "Item") -> bool:
-        change = super().collect(state, item)
-        if change and item.name in self.item_name_groups["Weapons"]:
-            # need to evaluate robot master access
-            weapon = next((wp for wp in weapons_to_name if weapons_to_name[wp] == item.name), None)
-            if weapon:
-                for rbm in robot_masters:
-                    if self.weapon_damage[weapon][rbm] >= minimum_weakness_requirement[weapon]:
-                        state.prog_items[self.player][robot_masters[rbm]] = 1
-        return change
-
-    def remove(self, state: "CollectionState", item: "Item") -> bool:
-        change = super().remove(state, item)
-        if change and item.name in self.item_name_groups["Weapons"]:
-            removed_weapon = next((weapons_to_name[weapon] == item.name for weapon in weapons_to_name), None)
-            received_weapons = {weapon for weapon in weapons_to_name
-                                if weapons_to_name[weapon] in state.prog_items[self.player]}
-            if removed_weapon:
-                for rbm in robot_masters:
-                    if self.weapon_damage[removed_weapon][rbm] > 0 and not any(self.weapon_damage[wp][rbm] >
-                                                                               minimum_weakness_requirement[wp]
-                                                                               for wp in received_weapons):
-                        state.prog_items[self.player][robot_masters[rbm]] = 0
-        return change
