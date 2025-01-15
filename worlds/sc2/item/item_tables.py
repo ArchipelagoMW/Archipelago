@@ -1061,6 +1061,12 @@ item_table = {
     item_names.WIDOW_MINE_DEMOLITION_ARMAMENTS:
         ItemData(763 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 17, SC2Race.TERRAN,
                  parent=item_names.WIDOW_MINE),
+    item_names.SENSOR_TOWER_ASSISTIVE_TARGETING:
+        ItemData(764 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 18, SC2Race.TERRAN,
+                 parent=item_names.SENSOR_TOWER),
+    item_names.SENSOR_TOWER_ENHANCED_VISION:
+        ItemData(765 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 19, SC2Race.TERRAN,
+                 parent=item_names.SENSOR_TOWER),
 
     # Filler items to fill remaining spots
     item_names.STARTING_MINERALS:

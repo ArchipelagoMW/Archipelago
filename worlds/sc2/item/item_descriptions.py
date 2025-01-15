@@ -128,9 +128,8 @@ item_descriptions = {
     """),
     item_names.BANSHEE: "Tactical-strike aircraft.",
     item_names.BATTLECRUISER: "Powerful warship.",
-    item_names.GHOST: inspect.cleandoc("""
-        Infiltration unit. Can use Snipe and Cloak abilities. Can also call down Tactical Nukes.
-    """),
+    item_names.GHOST:
+        "Infiltration unit. Can use Snipe and Cloak abilities. Can also call down Tactical Nukes.",
     item_names.SPECTRE: inspect.cleandoc("""
         Infiltration unit. Can use Ultrasonic Pulse, Psionic Lash, and Cloak. 
         Can also call down Tactical Nukes.
@@ -149,18 +148,11 @@ item_descriptions = {
         Attacks deal splash damage in a small area around the target. 
         Widow Mine is revealed when Sentinel Missile is on cooldown.
     """),
-    item_names.CYCLONE: inspect.cleandoc("""
-        Mobile assault vehicle. Can use Lock On to quickly fire while moving.
-    """),
-    item_names.HERC: inspect.cleandoc("""
-        Front-line infantry. Can use Grapple.
-    """),
-    item_names.WARHOUND: inspect.cleandoc("""
-        Anti-vehicle mech. Haywire missiles do bonus damage to mechanical units.
-    """),
-    item_names.DOMINION_TROOPER: inspect.cleandoc("""
-        General-purpose infantry. Can be outfitted with weapons for different combat situations.
-    """),
+    item_names.CYCLONE: "Mobile assault vehicle. Can use Lock On to quickly fire while moving.",
+    item_names.HERC: "Front-line infantry. Can use Grapple.",
+    item_names.WARHOUND: "Anti-vehicle mech. Haywire missiles do bonus damage to mechanical units.",
+    item_names.DOMINION_TROOPER:
+        "General-purpose infantry. Can be outfitted with weapons for different combat situations.",
     item_names.PRIDE_OF_AUGUSTRGRAD: "Powerful Royal Guard warship.",
     item_names.SKY_FURY: inspect.cleandoc("""
         Durable Royal Guard support flyer. Loaded with strong anti-capital air missiles. 
@@ -482,6 +474,8 @@ item_descriptions = {
     item_names.DEVASTATOR_TURRET_ANTI_ARMOR_MUNITIONS: "Increases Devastator Turret damage to armored targets by 10.",
     item_names.DEVASTATOR_TURRET_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.DEVASTATOR_TURRET),
     item_names.MISSILE_TURRET_RESOURCE_EFFICENCY: _get_resource_efficiency_desc(item_names.MISSILE_TURRET),
+    item_names.SENSOR_TOWER_ASSISTIVE_TARGETING: "Sensor Towers increase the attack range of defensive buildings in their sensor range.",
+    item_names.SENSOR_TOWER_ENHANCED_VISION: "Sensor Towers gain +10 sight range.",
     item_names.SCIENCE_VESSEL_TACTICAL_JUMP: "Allows Science Vessels to warp to a target location anywhere on the map.",
     item_names.LIBERATOR_COMPRESSED_ROCKET_FUEL: "Increases Liberator attack range in Fighter mode by 4.",
     item_names.BATTLECRUISER_FIELD_ASSIST_TARGETING_SYSTEM: "Battlecruisers increase the attack range of nearby friendly ground units by 1.",
