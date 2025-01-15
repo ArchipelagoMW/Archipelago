@@ -169,6 +169,10 @@ BreakManSelect:
 ConsumableHook:
   JMP CheckConsumable
 
+%org($BE32, $1D)
+EnergyLinkHook:
+  JSR EnergyLink
+
 %org($A000, $1E)
 db $21, $A1, $0C, "PLACEHOLDER 1"
 db $21, $C1, $0C, "PLACEHOLDER 2"
@@ -710,3 +714,15 @@ CheckConsumable:
   JMP $BE49
   .Return:
   JMP $BE25
+
+EnergyLink:
+  print "Energylink: ", hex(realbase())
+  LDA #$01
+  BEQ .Return
+  TYA
+  STA !energylink_packet
+  LDA #$49
+  STA $00
+  .Return:
+  LDA $BDEC, Y
+  RTS

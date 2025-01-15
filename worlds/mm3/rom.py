@@ -115,7 +115,7 @@ enemy_addresses: Dict[str, int] = {
 # addresses printed when assembling basepatch
 consumables_ptr: int = 0x7FDEA
 wily_4_ptr: int = 0x7F57C
-# energylink_ptr: int = 0x3F46B
+energylink_ptr: int = 0x7FDF9
 
 
 class RomData:
@@ -258,9 +258,9 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
                 enemy_weaknesses[enemy][0] = 1
             elif enemy == "Jamacy 2":
                 # bruh
-                if not enemy_weaknesses[enemy][8]:
+                if not enemy_weaknesses[enemy][8] > 0:
                     enemy_weaknesses[enemy][8] = 1
-                if not enemy_weaknesses[enemy][3]:
+                if not enemy_weaknesses[enemy][3] > 0:
                     enemy_weaknesses[enemy][3] = 1
 
     for enemy, damage in enemy_weaknesses.items():
@@ -282,8 +282,7 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
     patch.write_byte(wily_4_ptr + 1, world.options.wily_4_requirement.value)
 
     if world.options.energy_link:
-        pass
-        # patch.write_byte(energylink_ptr + 1, 1)
+        patch.write_byte(energylink_ptr + 1, 1)
 
     if world.options.reduce_flashing:
         pass
