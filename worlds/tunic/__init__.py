@@ -143,6 +143,9 @@ class TunicWorld(World):
                 self.options.entrance_rando.value = self.passthrough["entrance_rando"]
                 self.options.shuffle_ladders.value = self.passthrough["shuffle_ladders"]
                 self.options.entrance_layout.value = EntranceLayout.option_standard
+                if ("ziggurat2020_3, ziggurat2020_1_zig2_skip" in self.passthrough["Entrance Rando"].keys()
+                        or "ziggurat2020_3, ziggurat2020_1_zig2_skip" in self.passthrough["Entrance Rando"].values()):
+                    self.options.entrance_layout.value = EntranceLayout.option_fixed_shop
                 self.options.decoupled = self.passthrough.get("decoupled", 0)
                 self.options.laurels_location.value = LaurelsLocation.option_anywhere
                 self.options.combat_logic.value = self.passthrough["combat_logic"]
