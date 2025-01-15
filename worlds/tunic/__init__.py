@@ -380,7 +380,7 @@ class TunicWorld(World):
             all_filler: List[TunicItem] = []
             non_filler: List[TunicItem] = []
             for tunic_item in tunic_items:
-                if (tunic_item.classification in [ItemClassification.filler, ItemClassification.trap]
+                if (tunic_item.excludable
                         and tunic_item.name not in self.options.local_items
                         and tunic_item.name not in self.options.non_local_items):
                     all_filler.append(tunic_item)
