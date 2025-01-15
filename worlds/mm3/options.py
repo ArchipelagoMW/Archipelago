@@ -119,7 +119,7 @@ class WeaknessPlando(OptionDict):
     display_name = "Plando Weaknesses"
     schema = Schema({
         Optional(And(str, Use(str.title), lambda s: s in bosses)): {
-            And(str, Use(str.title), lambda s: s in weapons_to_id): And(int, lambda i: i in range(-1, 14))
+            And(str, Use(str.title), lambda s: s in weapons_to_id): And(int, lambda i: i in range(0, 14))
         }
     })
     default = {}
