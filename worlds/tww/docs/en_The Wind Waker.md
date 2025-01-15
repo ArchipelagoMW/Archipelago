@@ -67,6 +67,26 @@ both normal and hard obscure tricks. Some changes require a combination of both 
 Forsaken Fortress cannons blow the door up for you into logic requires both obscure and precise difficulty to be set to
 at least normal.
 
+### What are the different options presets?
+
+A few presets are available on the [player options page](../player-options) for your convenience.
+
+- **Tournament S7**: These are (as close to as possible) the settings used in the WWR Racing Server's
+  [Season 7 Tournament](https://docs.google.com/document/d/1mJj7an-DvpYilwNt-DdlFOy1fz5_NMZaPZvHeIekplc).
+  The preset features 3 required bosses and hard obscurity difficulty, and while the list of enabled progression options
+  may seem intimidating, the preset also excludes several locations.
+- **Miniblins 2024**: These are the settings used in the WWR Racing Server's
+  [2024 Season of Minblins](https://docs.google.com/document/d/1vasz1dzEeOIkm8dBN0YhQqAw9bT0H9bpyUl8_co-dBs). This
+  preset is great if you're new to Wind Waker! There aren't too many locations in the world, and you only need to
+  complete two dungeons. You also start with many convenience items such as double magic, an Empty Bottle, and six
+  hearts.
+- **Mixed Pools**: These are the settings used in the WWR Racing Server's
+  [Mixed Pools Co-op Tournament](https://docs.google.com/document/d/1YGPTtEgP978TIi0PUAD792OtZbE2jBQpI8XCAy63qpg). This
+  preset features full entrance rando and includes many locations behind a randomized entrance. There are also a bunch
+  of overworld locations, as these settings were intended to be played in a two-person co-op team. The preset also has 6
+  required bosses, but since entrance pools are randomized, the bosses could be found anywhere! Check your Sea Chart to
+  find out which island the bosses are on.
+
 ## Planned Features
 
 - Dynamic CTMC based on enabled options

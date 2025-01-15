@@ -58,7 +58,7 @@ tww_options_presets: dict[str, dict[str, Any]] = {
             "Seven-Star Isles - Big Octo",
         ],
     },
-    "Miniblins S2": {
+    "Miniblins 2024": {
         "progression_dungeon_secrets": True,
         "progression_mail": True,
         "progression_expensive_purchases": False,
