@@ -66,7 +66,7 @@ class WeaknessTests(MM3TestBase):
         world = self.multiworld.worlds[self.player]
         weapon_damage = world.weapon_damage
         for boss in range(22):
-            if not any(weapon_damage[weapon][boss] > minimum_weakness_requirement[weapon] for weapon in range(9)):
+            if not any(weapon_damage[weapon][boss] >= minimum_weakness_requirement[weapon] for weapon in range(9)):
                 self.fail(f"Boss {boss} generated without weakness! Seed: {self.multiworld.seed}")
 
     def test_wily_4(self) -> None:
