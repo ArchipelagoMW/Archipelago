@@ -20,6 +20,7 @@ from . import Macros
 from .Items import ISLAND_NUMBER_TO_CHART_NAME, ITEM_TABLE, TWWItem, item_name_groups
 from .Locations import LOCATION_TABLE, TWWFlag, TWWLocation
 from .Options import TWWOptions, tww_option_groups
+from .Presets import tww_options_presets
 from .randomizers.Charts import ISLAND_NUMBER_TO_NAME, ChartRandomizer
 from .randomizers.Dungeons import Dungeon, create_dungeons
 from .randomizers.Entrances import (
@@ -107,6 +108,7 @@ class TWWWeb(WebWorld):
         )
     ]
     theme = "ocean"
+    options_presets = tww_options_presets
     option_groups = tww_option_groups
     rich_text_options_doc = True
 
