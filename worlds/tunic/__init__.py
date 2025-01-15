@@ -163,6 +163,7 @@ class TunicWorld(World):
                 self.options.entrance_rando.value = self.passthrough["entrance_rando"]
                 self.options.shuffle_ladders.value = self.passthrough["shuffle_ladders"]
                 self.options.grass_randomizer.value = self.passthrough.get("grass_randomizer", 0)
+                self.options.breakable_shuffle.value = self.passthrough.get("breakable_shuffle", 0)
                 self.options.entrance_layout.value = EntranceLayout.option_standard
                 if ("ziggurat2020_3, ziggurat2020_1_zig2_skip" in self.passthrough["Entrance Rando"].keys()
                         or "ziggurat2020_3, ziggurat2020_1_zig2_skip" in self.passthrough["Entrance Rando"].values()):
