@@ -924,7 +924,7 @@ def distribute_planned(multiworld: MultiWorld) -> None:
                 worlds = {world_name_lookup[target_world]}
             block['world'] = worlds
 
-            items: list[str] = []
+            items: list[str] | dict[str, int] | str = []
             if "items" in block:
                 items = block["items"]
                 if 'count' not in block:
@@ -947,7 +947,7 @@ def distribute_planned(multiworld: MultiWorld) -> None:
                 items = [items]
             block['items'] = items
 
-            locations: list[str] = []
+            locations: list[str] | dict[str, int] | str = []
             if 'location' in block:
                 locations = block['location']  # just allow 'location' to keep old yamls compatible
             elif 'locations' in block:
