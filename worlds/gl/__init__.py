@@ -26,7 +26,6 @@ def launch_client(*args):
 components.append(
     Component(
         "Gauntlet Legends Client",
-        "GauntletLegendsClient",
         func=launch_client,
         component_type=Type.CLIENT,
         file_identifier=SuffixIdentifier(".apgl"),
