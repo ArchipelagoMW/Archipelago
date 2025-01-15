@@ -177,10 +177,10 @@ class MLSSPatchExtension(APPatchExtension):
         for pos in enemies:
             stream.seek(pos + 8)
             for _ in range(6):
-                enemy = int.from_bytes(stream.read(1))
+                enemy = int.from_bytes(stream.read(1), "little")
                 if enemy > 0:
                     stream.seek(1, 1)
-                    flag = int.from_bytes(stream.read(1))
+                    flag = int.from_bytes(stream.read(1), "little")
                     if flag == 0x7:
                         break
                     if flag in [0x0, 0x2, 0x4]:
@@ -196,12 +196,12 @@ class MLSSPatchExtension(APPatchExtension):
             stream.seek(pos + 8)
 
             for _ in range(6):
-                enemy = int.from_bytes(stream.read(1))
+                enemy = int.from_bytes(stream.read(1), "little")
                 if enemy > 0 and enemy not in Data.flying and enemy not in Data.pestnut:
                     if enemy == 0x52:
                         chomp = True
                     stream.seek(1, 1)
-                    flag = int.from_bytes(stream.read(1))
+                    flag = int.from_bytes(stream.read(1), "little")
                     if flag not in [0x0, 0x2, 0x4]:
                         stream.seek(1, 1)
                         continue
