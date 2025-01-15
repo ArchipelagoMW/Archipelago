@@ -11,7 +11,7 @@ from ..strings.craftable_names import Bomb, Fence, Sprinkler, WildSeeds, Floor, 
 from ..strings.crop_names import Fruit, Vegetable
 from ..strings.currency_names import Currency
 from ..strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
-from ..strings.fish_names import Fish, WaterItem, ModTrash
+from ..strings.fish_names import Fish, WaterItem, ModTrash, Trash
 from ..strings.flower_names import Flower
 from ..strings.food_names import Meal
 from ..strings.forageable_names import Forageable, SVEForage, DistantLandsForageable, Mushroom
@@ -377,5 +377,13 @@ composter = skill_recipe(ModMachine.composter, ModSkill.binning, 4, {Material.wo
 recycling_bin = skill_recipe(ModMachine.recycling_bin, ModSkill.binning, 7, {MetalBar.iron: 3, Material.fiber: 10, MetalBar.gold: 2}, ModNames.binning_skill)
 advanced_recycling_machine = skill_recipe(ModMachine.advanced_recycling_machine, ModSkill.binning, 9,
                                           {MetalBar.iridium: 5, ArtisanGood.battery_pack: 2, MetalBar.quartz: 10}, ModNames.binning_skill)
+
+coppper_slot_machine = skill_recipe(ModMachine.copper_slot_machine, ModSkill.luck, 2, {MetalBar.copper: 15, Material.stone: 1, Material.wood: 1,
+                                                                                       Material.fiber: 1, Material.sap: 1, Loot.slime: 1,
+                                                                                       Forageable.salmonberry: 1, Material.clay: 1, Trash.joja_cola: 1}, ModNames.luck_skill)
+
+gold_slot_machine = skill_recipe(ModMachine.gold_slot_machine, ModSkill.luck, 4, {MetalBar.gold: 15, ModMachine.copper_slot_machine: 1}, ModNames.luck_skill)
+iridium_slot_machine = skill_recipe(ModMachine.iridium_slot_machine, ModSkill.luck, 4, {MetalBar.iridium: 15, ModMachine.gold_slot_machine: 1}, ModNames.luck_skill)
+radioactive_slot_machine = skill_recipe(ModMachine.radioactive_slot_machine, ModSkill.luck, 4, {MetalBar.radioactive: 15, ModMachine.iridium_slot_machine: 1}, ModNames.luck_skill)
 
 all_crafting_recipes_by_name = {recipe.item: recipe for recipe in all_crafting_recipes}
