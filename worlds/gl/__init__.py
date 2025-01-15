@@ -20,7 +20,6 @@ from .Rules import set_rules
 
 def launch_client(*args):
     from .GauntletLegendsClient import launch
-
     launch_subprocess(launch, name="GauntletLegendsClient")
 
 
