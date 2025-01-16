@@ -2,8 +2,8 @@ from typing import ClassVar, Dict, Any, Type
 from BaseClasses import Region, Location, Item, Tutorial
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
-from .Items import items, base_id
 from .Locations import locations
+from .Items import items, filler_items, base_id
 from .Rules import create_rules
 from .Options import CatQuestOptions
 
@@ -40,7 +40,7 @@ class CatQuestWorld(World):
         super(CatQuestWorld, self).__init__(multiworld, player)
 
     def get_filler_item_name(self) -> str:
-        return "500 Exp"
+        return self.random.choice(filler_items)
 
     def create_item(self, name: str) -> "CatQuestItem":
         item_id: int = self.item_name_to_id[name]
@@ -58,7 +58,7 @@ class CatQuestWorld(World):
                 for i in range(count):
                     self.multiworld.itempool.append(self.create_item(item["name"]))
 
-        junk = 45
+        junk = 29
         self.multiworld.itempool += [self.create_item(self.get_filler_item_name()) for _ in range(junk)]
 
     def create_regions(self) -> None:
