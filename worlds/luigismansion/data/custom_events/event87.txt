@@ -1,0 +1,8 @@
+<BGM>(43)
+<WINDOW>(0)<COLOR>(14)
+<SAY>Please don't spray me with water...
+<WAIT>(60)
+<CLOSEWINDOW>(0)
+<BGM>(7)
+<END>
+

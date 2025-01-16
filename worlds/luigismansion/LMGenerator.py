@@ -192,7 +192,7 @@ class LuigisMansionRandomizer:
 
         # Update all custom events
         list_events = ["03", "04", "12", "17", "22", "24", "29", "32", "33", "35", "38", "44", "45", "50",
-                       "61", "63", "64", "65", "66", "67", "68", "71", "72", "82", "89"]
+                       "61", "63", "64", "65", "66", "67", "68", "71", "72", "82", "86", "87", "89"]
         for custom_event in list_events:
             self.update_custom_event(custom_event, True)
 
