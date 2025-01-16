@@ -22,6 +22,7 @@ items: List[Item] = [
     {"name": "Cattrap", "id": base_id + 6, "inGameId": "skill.cattrap", "count": 1, "classification": ItemClassification.useful},
     {"name": "Purrserk", "id": base_id + 7, "inGameId": "skill.purrserk", "count": 1, "classification": ItemClassification.useful},
     {"name": "Astropaw", "id": base_id + 8, "inGameId": "skill.astropaw", "count": 1, "classification": ItemClassification.useful},
+    {"name": "Freezepaw", "id": base_id + 8, "inGameId": "skill.freezepaw", "count": 1, "classification": ItemClassification.useful},
     
     # Golden Key
     {"name": "Golden Key", "id": base_id + 9, "inGameId": "key.golden", "count": 1, "classification": ItemClassification.useful},
