@@ -268,7 +268,7 @@ def changeMiniBosses(rom, mapping):
     """), ASM("""
         ld  a, [hl]
         sub $08
-        ld  [hl], a
+        ld  [hl], a    
         ld  hl, $C2D0
         add hl, bc
         ld  [hl], b ; b is always zero here
