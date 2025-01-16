@@ -18,13 +18,6 @@ def get_world_theme(game_name: str):
     return 'grass'
 
 
-@app.before_request
-def register_session():
-    session.permanent = True  # technically 31 days after the last visit
-    if not session.get("_id", None):
-        session["_id"] = uuid4()  # uniquely identify each session without needing a login
-
-
 @app.errorhandler(404)
 @app.errorhandler(jinja2.exceptions.TemplateNotFound)
 def page_not_found(err):
@@ -77,7 +70,13 @@ def faq(lang: str):
     return render_template(
         "markdown_document.html",
         title="Frequently Asked Questions",
-        html_from_markdown=markdown.markdown(document,  extensions=["mdx_breakless_lists"]),
+        html_from_markdown=markdown.markdown(
+            document,
+            extensions=["toc", "mdx_breakless_lists"],
+            extension_configs={
+                "toc": {"anchorlink": True}
+            }
+        ),
     )
 
 
@@ -90,7 +89,13 @@ def glossary(lang: str):
     return render_template(
         "markdown_document.html",
         title="Glossary",
-        html_from_markdown=markdown.markdown(document,  extensions=["mdx_breakless_lists"]),
+        html_from_markdown=markdown.markdown(
+            document,
+            extensions=["toc", "mdx_breakless_lists"],
+            extension_configs={
+                "toc": {"anchorlink": True}
+            }
+        ),
     )
 
 

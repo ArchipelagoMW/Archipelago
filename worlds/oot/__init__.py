@@ -582,8 +582,7 @@ class OOTWorld(World):
                     new_exit = OOTEntrance(self.player, self.multiworld, '%s -> %s' % (new_region.name, exit), new_region)
                     new_exit.vanilla_connected_region = exit
                     new_exit.rule_string = rule
-                    if self.options.logic_rules != 'no_logic':
-                        self.parser.parse_spot_rule(new_exit)
+                    self.parser.parse_spot_rule(new_exit)
                     if new_exit.never:
                         logger.debug('Dropping unreachable exit: %s', new_exit.name)
                     else:
@@ -1348,22 +1347,8 @@ class OOTWorld(World):
     def get_locations(self):
         return self.multiworld.get_locations(self.player)
 
-    def get_location(self, location):
-        return self.multiworld.get_location(location, self.player)
-
-    def get_region(self, region_name):
-        try:
-            return self._regions_cache[region_name]
-        except KeyError:
-            ret = self.multiworld.get_region(region_name, self.player)
-            self._regions_cache[region_name] = ret
-            return ret
-
     def get_entrances(self):
         return self.multiworld.get_entrances(self.player)
-
-    def get_entrance(self, entrance):
-        return self.multiworld.get_entrance(entrance, self.player)
 
     def is_major_item(self, item: OOTItem):
         if item.type == 'Token':

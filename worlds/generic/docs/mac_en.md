@@ -2,8 +2,8 @@
 Archipelago does not have a compiled release on macOS. However, it is possible to run from source code on macOS. This guide expects you to have some experience with running software from the terminal.
 ## Prerequisite Software
 Here is a list of software to install and source code to download.
-1. Python 3.9 "universal2" or newer from the [macOS Python downloads page](https://www.python.org/downloads/macos/).
-   **Python 3.11 is not supported yet.**
+1. Python 3.10 "universal2" or newer from the [macOS Python downloads page](https://www.python.org/downloads/macos/).
+   **Python 3.13 is not supported yet.**
 2. Xcode from the [macOS App Store](https://apps.apple.com/us/app/xcode/id497799835).
 3. The source code from the [Archipelago releases page](https://github.com/ArchipelagoMW/Archipelago/releases).
 4. The asset with darwin in the name from the [SNI Github releases page](https://github.com/alttpo/sni/releases).

@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
 from MultiServer import CommandProcessor
 from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
-                      RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, SlotType)
+                      RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes, HintStatus, SlotType)
 from Utils import Version, stream_input, async_start
 from worlds import network_data_package, AutoWorldRegister
 import os
@@ -388,7 +388,6 @@ class CommonContext:
 
         self.item_names = self.NameLookupDict(self, "item")
         self.location_names = self.NameLookupDict(self, "location")
-        self.versions = {}
         self.checksums = {}
 
         self.jsontotextparser = JSONtoTextParser(self)
@@ -445,6 +444,7 @@ class CommonContext:
             await self.server.socket.close()
         if self.server_task is not None:
             await self.server_task
+        self.ui.update_hints()
 
     async def send_msgs(self, msgs: typing.List[typing.Any]) -> None:
         """ `msgs` JSON serializable """
@@ -584,10 +584,16 @@ class CommonContext:
             await self.ui_task
         if self.input_task:
             self.input_task.cancel()
-
+    
+    # Hints
+    def update_hint(self, location: int, finding_player: int, status: typing.Optional[HintStatus]) -> None:
+        msg = {"cmd": "UpdateHint", "location": location, "player": finding_player}
+        if status is not None:
+            msg["status"] = status
+        async_start(self.send_msgs([msg]), name="update_hint")
+    
     # DataPackage
     async def prepare_data_package(self, relevant_games: typing.Set[str],
-                                   remote_date_package_versions: typing.Dict[str, int],
                                    remote_data_package_checksums: typing.Dict[str, str]):
         """Validate that all data is present for the current multiworld.
         Download, assimilate and cache missing data from the server."""
@@ -596,34 +602,27 @@ class CommonContext:
 
         needed_updates: typing.Set[str] = set()
         for game in relevant_games:
-            if game not in remote_date_package_versions and game not in remote_data_package_checksums:
+            if game not in remote_data_package_checksums:
                 continue
 
-            remote_version: int = remote_date_package_versions.get(game, 0)
             remote_checksum: typing.Optional[str] = remote_data_package_checksums.get(game)
             self.current_checksum[game] = remote_checksum
 
-            if remote_version == 0 and not remote_checksum:  # custom data package and no checksum for this game
+            if not remote_checksum:  # custom data package and no checksum for this game
                 needed_updates.add(game)
                 continue
 
-            cached_version: int = self.versions.get(game, 0)
             cached_checksum: typing.Optional[str] = self.checksums.get(game)
             # no action required if cached version is new enough
-            if (not remote_checksum and (remote_version > cached_version or remote_version == 0)) \
-                    or remote_checksum != cached_checksum:
-                local_version: int = network_data_package["games"].get(game, {}).get("version", 0)
+            if remote_checksum != cached_checksum:
                 local_checksum: typing.Optional[str] = network_data_package["games"].get(game, {}).get("checksum")
-                if ((remote_checksum or remote_version <= local_version and remote_version != 0)
-                        and remote_checksum == local_checksum):
+                if remote_checksum == local_checksum:
                     self.update_game(network_data_package["games"][game], game)
                 else:
                     cached_game = Utils.load_data_package_for_checksum(game, remote_checksum)
-                    cache_version: int = cached_game.get("version", 0)
                     cache_checksum: typing.Optional[str] = cached_game.get("checksum")
                     # download remote version if cache is not new enough
-                    if (not remote_checksum and (remote_version > cache_version or remote_version == 0)) \
-                            or remote_checksum != cache_checksum:
+                    if remote_checksum != cache_checksum:
                         needed_updates.add(game)
                     else:
                         self.update_game(cached_game, game)
@@ -633,7 +632,6 @@ class CommonContext:
     def update_game(self, game_package: dict, game: str):
         self.item_names.update_game(game, game_package["item_name_to_id"])
         self.location_names.update_game(game, game_package["location_name_to_id"])
-        self.versions[game] = game_package.get("version", 0)
         self.checksums[game] = game_package.get("checksum")
 
     def update_data_package(self, data_package: dict):
@@ -762,6 +760,11 @@ class CommonContext:
 
     def run_cli(self):
         if sys.stdin:
+            if sys.stdin.fileno() != 0:
+                from multiprocessing import parent_process
+                if parent_process():
+                    return  # ignore MultiProcessing pipe
+
             # steam overlay breaks when starting console_loop
             if 'gameoverlayrenderer' in os.environ.get('LD_PRELOAD', ''):
                 logger.info("Skipping terminal input, due to conflicting Steam Overlay detected. Please use GUI only.")
@@ -912,9 +915,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
                         logger.info('    %s (Player %d)' % (network_player.alias, network_player.slot))
 
             # update data package
-            data_package_versions = args.get("datapackage_versions", {})
             data_package_checksums = args.get("datapackage_checksums", {})
-            await ctx.prepare_data_package(set(args["games"]), data_package_versions, data_package_checksums)
+            await ctx.prepare_data_package(set(args["games"]), data_package_checksums)
 
             await ctx.server_auth(args['password'])
 

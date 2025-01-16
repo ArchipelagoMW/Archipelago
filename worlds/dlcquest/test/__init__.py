@@ -4,7 +4,7 @@ from typing import Dict, FrozenSet, Tuple, Any
 from argparse import Namespace
 
 from BaseClasses import MultiWorld
-from test.TestBase import WorldTestBase
+from test.bases import WorldTestBase
 from .. import DLCqworld
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from worlds.AutoWorld import call_all
