@@ -145,9 +145,8 @@ launcher, manually add the `.apworld` file to the `custom_worlds` folder of your
 the file itself. After adding a new world, it will function like the worlds that are already packaged with 
 Archipelago.
 
-We strongly recommend that you make sure that the source of the `.apworld` is trustworthy before playing with a new 
-world. The `#future-game-design` forum in the [Archipelago Discord server](https://discord.gg/8Z65BR2) 
-contains trusted APWorlds that are not part of the Archipelago installation.
+We strongly recommend that you make sure that the source of the `.apworld` is safe and trustworthy before playing with a 
+custom world.
 
 ## Hosting an Archipelago Server
 
