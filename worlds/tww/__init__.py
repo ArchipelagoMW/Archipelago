@@ -252,8 +252,6 @@ class TWWWorld(World):
                 else:
                     self.options.local_items.value |= self.dungeon_local_item_names
 
-    create_dungeons = create_dungeons
-
     def setup_base_regions(self) -> None:
         """
         Create and connect all the necessary regions in the multiworld and establish the access rules for entrances.
@@ -324,7 +322,7 @@ class TWWWorld(World):
             self.nonprogress_locations |= self.boss_reqs.banned_locations
 
         # Create the dungeon classes.
-        self.create_dungeons()
+        create_dungeons(self)
 
         # Assign each location to their region.
         # Progress locations are sorted for deterministic results.
