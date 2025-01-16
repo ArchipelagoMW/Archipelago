@@ -309,13 +309,13 @@ class TunicOptions(PerGameCommonOptions):
     hexagon_quest: HexagonQuest
     hexagon_goal: HexagonGoal
     extra_hexagon_percentage: ExtraHexagonPercentage
+    grass_randomizer: GrassRandomizer
     breakable_shuffle: BreakableShuffle
+    local_fill: LocalFill
     laurels_location: LaurelsLocation
     combat_logic: CombatLogic
     lanternless: Lanternless
     maskless: Maskless
-    grass_randomizer: GrassRandomizer
-    local_fill: LocalFill
     laurels_zips: LaurelsZips
     ice_grappling: IceGrappling
     ladder_storage: LadderStorage
