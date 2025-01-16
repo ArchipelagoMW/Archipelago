@@ -560,4 +560,3 @@ def sort_portals(portal_pairs: Dict[Portal, Portal]) -> Dict[str, str]:
                 sorted_pairs[portal1.name] = portal2.name
                 break
     return sorted_pairs
-

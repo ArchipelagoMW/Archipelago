@@ -1,7 +1,8 @@
 from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set
 from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
-from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
+from .items import (item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names,
+                    combat_items)
 from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations, sphere_one
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
 from .er_rules import set_er_location_rules
@@ -174,7 +175,11 @@ class TunicWorld(World):
             self.player_location_table.update(grass_location_name_to_id)
 
         if self.options.breakable_shuffle:
-            self.player_location_table.update(breakable_location_name_to_id)
+            if self.options.entrance_rando:
+                self.player_location_table.update(breakable_location_name_to_id)
+            else:
+                self.player_location_table.update({name: num for name, num in breakable_location_name_to_id.items()
+                                                   if not name.startswith("Purgatory")})
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
@@ -264,7 +269,9 @@ class TunicWorld(World):
 
         # creating these after the fool traps are made mostly so we don't have to mess with it
         if self.options.breakable_shuffle:
-            for _ in breakable_location_table:
+            for _, loc_data in breakable_location_table.items():
+                if not self.options.entrance_rando and loc_data.er_region == "Purgatory":
+                    continue
                 items_to_create[f"Money x{self.random.randint(1, 5)}"] += 1
 
         if self.options.start_with_sword:
