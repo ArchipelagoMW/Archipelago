@@ -404,6 +404,7 @@ class TunicWorld(World):
             if len(viable_locations) < self.amount_to_local_fill:
                 raise OptionError(f"TUNIC: Not enough locations for local_fill option for {self.player_name}. "
                                   f"This is likely due to excess plando or priority locations.")
+            self.random.shuffle(viable_locations)
             self.fill_locations = viable_locations[:self.amount_to_local_fill]
 
     @classmethod
