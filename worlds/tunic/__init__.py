@@ -95,7 +95,7 @@ class TunicWorld(World):
 
     # for the local_fill option
     fill_items: List[TunicItem]
-    fill_locations: List[TunicLocation]
+    fill_locations: List[Location]
     amount_to_local_fill: int
 
     # so we only loop the multiworld locations once
@@ -404,8 +404,7 @@ class TunicWorld(World):
             if len(viable_locations) < self.amount_to_local_fill:
                 raise OptionError(f"TUNIC: Not enough locations for local_fill option for {self.player_name}. "
                                   f"This is likely due to excess plando or priority locations.")
-            self.fill_locations = []
-            self.fill_locations += viable_locations[:self.amount_to_local_fill]
+            self.fill_locations = viable_locations[:self.amount_to_local_fill]
 
     @classmethod
     def stage_pre_fill(cls, multiworld: MultiWorld) -> None:
