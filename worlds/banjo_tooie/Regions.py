@@ -1097,7 +1097,6 @@ NEST_REGIONS: typing.Dict[str, typing.List[str]] = {
 }
 
 def create_regions(self):
-    multiworld = self.multiworld
     player = self.player
     active_locations = self.location_name_to_id
     region_map = copy.deepcopy(BANJOTOOIEREGIONS)
