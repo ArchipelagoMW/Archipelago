@@ -138,7 +138,8 @@ class LinksAwakeningWorld(World):
         world_setup = LADXRWorldSetup()
         world_setup.randomize(self.ladxr_settings, self.random)
         self.ladxr_logic = LADXRLogic(configuration_options=self.ladxr_settings, world_setup=world_setup)
-        self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.ladxr_settings, self.random).toDict()
+        self.ladxr_itempool = LADXRItemPool(self.ladxr_logic, self.ladxr_settings, self.random, bool(self.options.stabilize_item_pool)).toDict()
+
 
     def generate_early(self) -> None:
         self.dungeon_item_types = {
@@ -225,7 +226,7 @@ class LinksAwakeningWorld(World):
             for _ in range(count):
                 if item_name in exclude:
                     exclude.remove(item_name)  # this is destructive. create unique list above
-                    self.multiworld.itempool.append(self.create_item("Nothing"))
+                    self.multiworld.itempool.append(self.create_item(self.get_filler_item_name()))
                 else:
                     item = self.create_item(item_name)
 
@@ -499,8 +500,14 @@ class LinksAwakeningWorld(World):
             state.prog_items[self.player]["RUPEES"] -= self.rupees[item.name]
         return change
 
+    # Same fill choices and weights used in LADXR.itempool.__randomizeRupees
+    filler_choices = ("Bomb", "Single Arrow", "10 Arrows", "Magic Powder", "Medicine")
+    filler_weights = ( 10,     5,              10,          10,             1)
+
     def get_filler_item_name(self) -> str:
-        return "Nothing"
+        if self.options.stabilize_item_pool:
+            return "Nothing"
+        return self.random.choices(self.filler_choices, self.filler_weights)[0]
 
     def fill_slot_data(self):
         slot_data = {}
