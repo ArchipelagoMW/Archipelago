@@ -967,10 +967,10 @@ item_table = {
         ItemData(617 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Progressive, 4, SC2Race.TERRAN, quantity=3,
                  classification= ItemClassification.progression),
     item_names.HIVE_MIND_EMULATOR:
-        ItemData(618 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Building, 5, SC2Race.TERRAN,
+        ItemData(618 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 21, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
     item_names.PSI_DISRUPTER:
-        ItemData(619 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Building, 6, SC2Race.TERRAN,
+        ItemData(619 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 18, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
     item_names.STRUCTURE_ARMOR:
         ItemData(620 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 9, SC2Race.TERRAN),
@@ -990,6 +990,18 @@ item_table = {
         ItemData(627 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 16, SC2Race.TERRAN),
     item_names.FUSION_CORE_FUSION_REACTOR:
         ItemData(628 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 17, SC2Race.TERRAN),
+    item_names.SONIC_DISRUPTER:
+        ItemData(629 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 19, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
+    item_names.KHALAI_DISRUPTER:
+        ItemData(630 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 20, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
+    item_names.KHALAI_TAKEOVER:
+        ItemData(631 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 22, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
+    item_names.BRAINWASHING:
+        ItemData(632 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 23, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
 
     # WoL Protoss
     item_names.ZEALOT:

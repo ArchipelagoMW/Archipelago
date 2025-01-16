@@ -56,8 +56,8 @@ MISSILE_TURRET                      = "Missile Turret"
 SENSOR_TOWER                        = "Sensor Tower"
 PLANETARY_FORTRESS                  = "Planetary Fortress"
 PERDITION_TURRET                    = "Perdition Turret"
-HIVE_MIND_EMULATOR                  = "Hive Mind Emulator"
-PSI_DISRUPTER                       = "Psi Disrupter"
+# HIVE_MIND_EMULATOR                  = "Hive Mind Emulator"# moved to Lab / Global upgrades
+# PSI_DISRUPTER                       = "Psi Disrupter"     # moved to Lab / Global upgrades
 DEVASTATOR_TURRET                   = "Devastator Turret"
 
 # Terran Weapon / Armor Upgrades
@@ -119,6 +119,12 @@ MERCENARY_MUNITIONS                   = "Mercenary Munitions (Terran)"
 FAST_DELIVERY                         = "Fast Delivery (Terran/Zerg)"
 RAPID_REINFORCEMENT                   = "Rapid Reinforcement (Terran/Zerg)"
 FUSION_CORE_FUSION_REACTOR            = "Fusion Reactor (Fusion Core)"
+PSI_DISRUPTER                         = "Psi Disrupter"  
+KHALAI_DISRUPTER                      = "Khalai Disrupter"  
+SONIC_DISRUPTER                       = "Sonic Disrupter"  
+HIVE_MIND_EMULATOR                    = "Hive Mind Emulator"
+BRAINWASHING                          = "Brainwashing"
+KHALAI_TAKEOVER                       = "Khalai Takeover"
 
 # Terran Unit Upgrades
 BANSHEE_HYPERFLIGHT_ROTORS                         = "Hyperflight Rotors (Banshee)"

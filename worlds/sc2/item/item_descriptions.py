@@ -528,8 +528,12 @@ item_descriptions = {
         Allows Terran mechanical units to regenerate health while not in combat.
         Each level increases life regeneration speed.
     """),
-    item_names.HIVE_MIND_EMULATOR: "Defensive structure. Can permanently Mind Control Zerg units.",
-    item_names.PSI_DISRUPTER: "Defensive structure. Slows the attack and movement speeds of all nearby Zerg units.",
+    item_names.HIVE_MIND_EMULATOR: "Unlocks the Hive Mind Emulator defensive structure, and allows it to permanently Mind Control Zerg units.",
+    item_names.KHALAI_TAKEOVER: "Unlocks the Hive Mind Emulator defensive structure, and allows it to permanently Mind Control Protoss units.",
+    item_names.BRAINWASHING: "Unlocks the Hive Mind Emulator defensive structure, and allows it to permanently Mind Control Terran units.",
+    item_names.PSI_DISRUPTER: "Unlocks the Psi Disrupter defensive structure, and allows it to slow the attack and movement speeds of all nearby Zerg units.",
+    item_names.KHALAI_DISRUPTER: "Unlocks the Psi Disrupter defensive structure, and allows it to slow the attack and movement speeds of all nearby Protoss units.",
+    item_names.SONIC_DISRUPTER: "Unlocks the Psi Disrupter defensive structure, and allows it to slow the attack and movement speeds of all nearby Terran units.",
     item_names.DEVASTATOR_TURRET: "Defensive structure. Deals increased damage to armored targets. Attacks ground units.",
     item_names.STRUCTURE_ARMOR: "Increases armor of all Terran structures by 2.",
     item_names.HI_SEC_AUTO_TRACKING: "Increases attack range of all Terran structures by 1.",
