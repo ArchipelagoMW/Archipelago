@@ -210,7 +210,8 @@ class TWWWorld(World):
 
         return progress_locations, nonprogress_locations
 
-    def _get_classification_name(self, classification: IC) -> str:
+    @staticmethod
+    def _get_classification_name(classification: IC) -> str:
         """
         Return a string representation of the item's highest-order classification.
 
