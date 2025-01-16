@@ -918,7 +918,7 @@ item_descriptions = {
     item_names.CALADRIUS_STRUCTURE_TARGETING: "Allows Caladrius to hit ground structures with their anti-air missiles.",
     item_names.CALADRIUS_SOLARITE_REACTOR: "If the Caladrius is low on shields, it recovers shields quickly for a short time.",
     item_names.MISTWING_NULL_SHROUD: "Cloak no longer drains energy (but still prevents base energy regeneration). The Mist Wing becomes undetectable for 5 seconds upon cloaking.",
-    item_names.MISTWING_PILOT: _ability_desc("Mistwings","Pilot"," can transport one unit as an additional pilot. A pilot grants a small bonus to damage and armor"),
+    item_names.MISTWING_PILOT: _ability_desc("Mistwings","Pilot","can transport one unit as an additional pilot. A pilot grants a small bonus to damage and armor"),
     item_names.TEMPEST_TECTONIC_DESTABILIZERS: "Tempests deal increased damage to buildings.",
     item_names.TEMPEST_QUANTIC_REACTOR: "Tempests deal increased damage to massive units.",
     item_names.TEMPEST_GRAVITY_SLING: "Tempests gain +8 range against air targets and +8 cast range.",
