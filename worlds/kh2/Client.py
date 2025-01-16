@@ -348,14 +348,14 @@ class KH2Context(CommonContext):
             if "KeybladeAbilities" in self.kh2slotdata.keys():
                 sora_ability_dict = self.kh2slotdata["KeybladeAbilities"]
                 # sora ability to slot
-                for k, v in sora_ability_dict.items():
+                for k in sora_ability_dict.keys():
                     self.AbilityQuantityDict[k] = sora_ability_dict[k]
                 # itemid:[slots that are available for that item]
                 donald_ability_dict = self.kh2slotdata["StaffAbilities"]
-                for k, v in donald_ability_dict.items():
+                for k in donald_ability_dict.keys():
                     self.AbilityQuantityDict[k] = donald_ability_dict[k]
                 goofy_ability_dict = self.kh2slotdata["ShieldAbilities"]
-                for k, v in goofy_ability_dict.items():
+                for k in goofy_ability_dict.keys():
                     self.AbilityQuantityDict[k] = goofy_ability_dict[k]
 
             all_weapon_location_id = []
