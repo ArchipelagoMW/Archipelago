@@ -66,7 +66,7 @@ resource_efficiency_cost_reduction = {
     item_names.ARBITER:       (50, 0, 0),
     item_names.REAVER:        (100, 100, 2),
     DISPLAY_NAME_CLOAKED_ASSASSIN: (0, 50, 0),
-    item_names.SCOUT:         (125, 25, 1),
+    item_names.SCOUT:         (75, 25, 0),
     item_names.DESTROYER:     (50, 25, 1),
     DISPLAY_NAME_WORMS:       (50, 75, 0),
 
@@ -1045,7 +1045,7 @@ item_descriptions = {
     item_names.SKYLORD_HYPERJUMP: "Skylord War Council upgrade. " + _ability_desc("Skylords", "Hyperjump", "teleports the skylord to any location on the map"),
     item_names.TRIREME_SOLAR_BEAM: "Trireme War Council upgrade. Triremes gain an anti-air laser attack that deals more damage over time.",
     item_names.TEMPEST_DISINTEGRATION: "Tempest War Council upgrade. " + _ability_desc("Tempests", "Disintegration", "deals 500 damage to a target unit or structure over 20 seconds"),
-    # Scout
+    item_names.SCOUT_EXPEDITIONARY_HULL: "Scout War Council upgrade. Scouts gain +25 shields, +50 health, +1 shield armor, and reduced shield regeneration delay.",
     item_names.ARBITER_ABILITY_EFFICIENCY: "Arbiter War Council upgrade. Reduces the energy cost of Recall by 50 and Stasis Field by 100.",
     # Oracle
     item_names.MOTHERSHIP_INTEGRATED_POWER: "Mothership War Council upgrade. Allows Motherships to move at full speed outside pylon power.",
