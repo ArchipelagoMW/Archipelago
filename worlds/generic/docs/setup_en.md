@@ -146,7 +146,7 @@ the file itself. After adding a new world, it will function like the worlds that
 Archipelago.
 
 We strongly recommend that you make sure that the source of the `.apworld` is trustworthy before playing with a new 
-world. For instance, the `#future-game-design` forum in the [Archipelago Discord server](https://discord.gg/8Z65BR2) 
+world. The `#future-game-design` forum in the [Archipelago Discord server](https://discord.gg/8Z65BR2) 
 contains trusted APWorlds that are not part of the Archipelago installation.
 
 ## Hosting an Archipelago Server
