@@ -402,6 +402,25 @@ class EnableVoidTrade(Toggle):
     display_name = "Enable Void Trade"
 
 
+class VoidTradeAgeLimit(Choice):
+    """
+    Determines the maximum allowed age for units you can receive from Void Trade.
+    Units that are older than your choice will still be available to other players, but not to you.
+
+    This does not put a time limit on units you send to other players. Your own units are only affected by other players' choices for this option.
+    """
+    display_name = "Void Trade Age Limit"
+    option_disabled = 0
+    option_1_week = 1
+    option_1_day = 2
+    option_4_hours = 3
+    option_2_hours = 4
+    option_1_hour = 5
+    option_30_minutes = 6
+    option_5_minutes = 7
+    default = option_30_minutes
+
+
 class GenericUpgradeMissions(Range):
     """
     Determines the percentage of missions in the mission order that must be completed before
@@ -1234,6 +1253,7 @@ class Starcraft2Options(PerGameCommonOptions):
     starter_unit: StarterUnit
     required_tactics: RequiredTactics
     enable_void_trade: EnableVoidTrade
+    void_trade_age_limit: VoidTradeAgeLimit
     ensure_generic_items: EnsureGenericItems
     min_number_of_upgrades: MinNumberOfUpgrades
     max_number_of_upgrades: MaxNumberOfUpgrades
@@ -1465,3 +1485,13 @@ upgrade_included_names: Dict[int, Set[str]] = {
     }
 }
 
+# Mapping trade age limit options to their millisecond equivalents
+void_trade_age_limits_ms: Dict[int, int] = {
+    VoidTradeAgeLimit.option_5_minutes: 1000 * 60 * 5,
+    VoidTradeAgeLimit.option_30_minutes: 1000 * 60 * 30,
+    VoidTradeAgeLimit.option_1_hour: 1000 * 60 * 60,
+    VoidTradeAgeLimit.option_2_hours: 1000 * 60 * 60 * 2,
+    VoidTradeAgeLimit.option_4_hours: 1000 * 60 * 60 * 4,
+    VoidTradeAgeLimit.option_1_day: 1000 * 60 * 60 * 24,
+    VoidTradeAgeLimit.option_1_week: 1000 * 60 * 60 * 24 * 7,
+}
