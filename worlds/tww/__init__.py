@@ -16,7 +16,6 @@ from worlds.Files import APContainer, AutoPatchRegister
 from worlds.generic.Rules import add_item_rule
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, icon_paths, launch_subprocess
 
-from . import Macros
 from .Items import ISLAND_NUMBER_TO_CHART_NAME, ITEM_TABLE, TWWItem, item_name_groups
 from .Locations import LOCATION_TABLE, TWWFlag, TWWLocation
 from .Options import TWWOptions, tww_option_groups
@@ -26,14 +25,8 @@ from .randomizers.Dungeons import Dungeon, create_dungeons
 from .randomizers.Entrances import (
     ALL_ENTRANCES,
     ALL_EXITS,
-    BOSS_ENTRANCES,
     BOSS_EXIT_TO_DUNGEON,
-    DUNGEON_ENTRANCES,
-    FAIRY_FOUNTAIN_ENTRANCES,
-    MINIBOSS_ENTRANCES,
     MINIBOSS_EXIT_TO_DUNGEON,
-    SECRET_CAVE_ENTRANCES,
-    SECRET_CAVE_INNER_ENTRANCES,
     EntranceRandomizer,
 )
 from .randomizers.ItemPool import generate_itempool
