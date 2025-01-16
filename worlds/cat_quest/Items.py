@@ -46,6 +46,9 @@ items: List[Item] = [
     {"name": "100K Exp", "id": base_id + 20, "inGameId": "exp.100000", "count": 1, "classification": ItemClassification.filler},
 ]
 
+filler_items: List[Item] = [
     # Balancing filler
+    {"name": "500 Gold", "id": base_id + 12, "inGameId": "gold.500", "count": 0, "classification": ItemClassification.filler},
     {"name": "500 Exp", "id": base_id + 21, "inGameId": "exp.500", "count": 0, "classification": ItemClassification.filler},
+    {"name": "1000 Exp", "id": base_id + 21, "inGameId": "exp.1000", "count": 0, "classification": ItemClassification.filler},
 ]
