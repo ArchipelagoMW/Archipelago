@@ -1,9 +1,9 @@
 from typing import ClassVar, Dict, Any, Type
-from BaseClasses import Region, Location, Item, Tutorial
+from BaseClasses import Region, Location, Item, Tutorial, LocationProgressType
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
-from .Locations import locations
 from .Items import items, filler_items, base_id
+from .Locations import locations, endgame_locations
 from .Rules import create_rules
 from .Options import CatQuestOptions
 
@@ -30,6 +30,7 @@ class CatQuestWorld(World):
 
     item_name_to_id = {item["name"]: item["id"] for item in items}
     location_name_to_id = {loc["name"]: loc["id"] for loc in locations}
+    end_location_name_to_id = {loc["name"]: loc["id"] for loc in endgame_locations}
     
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = CatQuestOptions
     options: CatQuestOptions
@@ -65,10 +66,15 @@ class CatQuestWorld(World):
         menu_region = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu_region)
         
-        main_region = Region("Felingard", self.player, self.multiworld)
+        main_region = Region("Main", self.player, self.multiworld)
 
         for loc in self.location_name_to_id.keys():
             main_region.locations.append(CatQuestLocation(self.player, loc, self.location_name_to_id[loc], main_region))
+        
+        for loc in self.end_location_name_to_id.keys():
+            cq_loc = CatQuestLocation(self.player, loc, self.end_location_name_to_id[loc], main_region)
+            cq_loc.progress_type = LocationProgressType.EXCLUDED
+            main_region.locations.append(cq_loc)
 
         self.multiworld.regions.append(main_region)
 
