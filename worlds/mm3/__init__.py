@@ -161,7 +161,7 @@ class MM3World(World):
             total_checks += 33
         if self.options.consumables in (self.options.consumables.option_weapon_health,
                                         self.options.consumables.option_all):
-            total_checks += 105
+            total_checks += 106
         remaining = total_checks - len(itempool)
         itempool.extend([self.create_item(name)
                          for name in self.multiworld.random.choices(list(filler_item_weights.keys()),
