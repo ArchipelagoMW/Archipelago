@@ -1,7 +1,6 @@
 from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set
 from logging import warning
-from BaseClasses import (Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState,
-                         LocationProgressType)
+from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from .items import (item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names,
                     combat_items)
 from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations, sphere_one
@@ -484,7 +483,7 @@ class TunicWorld(World):
                 raise OptionError(f"TUNIC: Not enough locations for local_fill option for {self.player_name}. "
                                   f"This is likely due to excess plando or priority locations.")
 
-            self.fill_locations += viable_locations
+            self.fill_locations += viable_locations[:self.amount_to_local_fill]
 
     @classmethod
     def stage_pre_fill(cls, multiworld: MultiWorld) -> None:
