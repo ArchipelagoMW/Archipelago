@@ -17,7 +17,7 @@ items: List[Item] = [
 
     # Skills
     {"name": "Flamepurr", "id": base_id + 3, "inGameId": "skill.flamepurr", "count": 1, "classification": ItemClassification.useful},
-    {"name": "Healing Paw", "id": base_id + 4, "inGameId": "skill.healing", "count": 1, "classification": ItemClassification.useful},
+    {"name": "Healing Paw", "id": base_id + 4, "inGameId": "skill.healing_paw", "count": 1, "classification": ItemClassification.useful},
     {"name": "Lightnyan", "id": base_id + 5, "inGameId": "skill.lightnyan", "count": 1, "classification": ItemClassification.useful},
     {"name": "Cattrap", "id": base_id + 6, "inGameId": "skill.cattrap", "count": 1, "classification": ItemClassification.useful},
     {"name": "Purrserk", "id": base_id + 7, "inGameId": "skill.purrserk", "count": 1, "classification": ItemClassification.useful},
