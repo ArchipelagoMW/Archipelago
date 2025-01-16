@@ -143,13 +143,13 @@ class TestConditions(NamedTuple):
         return cls.new(False, access_regions, required_items, required_clearable_acts, options)
 
     @classmethod
-    def always_all_difficulties(cls,
-                                access_regions: Union[Iterable[Union[Iterable[str], str]], str, None],
-                                required_items: Union[Iterable[Union[Iterable[str], str]], str, None] = None,
-                                required_clearable_acts: Union[Iterable[str], str, None] = None,
-                                min_difficulty: Literal[None, "moderate", "hard", "expert"] = None,
-                                max_difficulty: Literal["normal", "moderate", "hard", None] = None,
-                                **options: Hashable) -> "List[TestConditions]":
+    def always_on_difficulties(cls,
+                               access_regions: Union[Iterable[Union[Iterable[str], str]], str, None],
+                               required_items: Union[Iterable[Union[Iterable[str], str]], str, None] = None,
+                               required_clearable_acts: Union[Iterable[str], str, None] = None,
+                               min_difficulty: Literal[None, "moderate", "hard", "expert"] = None,
+                               max_difficulty: Literal["normal", "moderate", "hard", None] = None,
+                               **options: Hashable) -> "List[TestConditions]":
         # Specifying a `min_difficulty` of "normal" or a `max_difficulty` of "expert" would be redundant, so they are
         # not present in the type hints and are chosen when no argument is provided.
         if min_difficulty is None:
@@ -163,7 +163,7 @@ class TestConditions(NamedTuple):
 
         conditions_list = []
         if "LogicDifficulty" in options:
-            raise RuntimeError("LogicDifficulty should not be provided when using always_all_difficulties, use the"
+            raise RuntimeError("LogicDifficulty should not be provided when using always_on_difficulties, use the"
                                " `min_difficulty` and `max_difficulty` arguments instead.")
         difficulties = ("normal", "moderate", "hard", "expert")
         start = difficulties.index(min_difficulty_)
@@ -183,15 +183,15 @@ class TestConditions(NamedTuple):
         return cls.new(True, access_regions, collect_all_but_items, required_clearable_acts, options)
 
     @classmethod
-    def never_all_difficulties(cls,
-                               access_regions: Union[Iterable[Union[Iterable[str], str]], str, None],
-                               collect_all_but_items: Union[Iterable[Union[Iterable[str], str]], str, None] = None,
-                               required_clearable_acts: Union[Iterable[str], str, None] = None,
-                               max_difficulty: Literal["normal", "moderate", "hard", "expert"] = "expert",
-                               **options: Hashable) -> "List[TestConditions]":
+    def never_on_difficulties(cls,
+                              access_regions: Union[Iterable[Union[Iterable[str], str]], str, None],
+                              collect_all_but_items: Union[Iterable[Union[Iterable[str], str]], str, None] = None,
+                              required_clearable_acts: Union[Iterable[str], str, None] = None,
+                              max_difficulty: Literal["normal", "moderate", "hard", "expert"] = "expert",
+                              **options: Hashable) -> "List[TestConditions]":
         conditions_list = []
         if "LogicDifficulty" in options:
-            raise RuntimeError("LogicDifficulty should not be provided when using never_all_difficulties, use the"
+            raise RuntimeError("LogicDifficulty should not be provided when using never_on_difficulties, use the"
                                "`max_difficulty` argument instead.")
         for difficulty in ("normal", "moderate", "hard", "expert"):
             conditions = cls.never(access_regions, collect_all_but_items, required_clearable_acts,
