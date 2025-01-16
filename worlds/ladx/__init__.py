@@ -313,7 +313,6 @@ class LinksAwakeningWorld(World):
                 collection_state.collect(item)
                 return len(collection_state.reachable_regions[self.player]) > reachable_count
 
-            start_loc = self.get_location("Tarin's Gift (Mabe Village)")
             start_items = [item for item in itempool if is_possible_start_item(item)]
             self.random.shuffle(start_items)
 
