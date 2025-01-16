@@ -633,7 +633,7 @@ class EntranceRandomizer:
                 ),
             )
 
-        if self.world.options.required_bosses:
+        if __debug__ and self.world.options.required_bosses:
             # Ensure we didn't accidentally place a banned boss and a required boss on the same island.
             banned_island_names = set(
                 self.get_entrance_zone_for_boss(boss_name) for boss_name in self.world.boss_reqs.banned_bosses
