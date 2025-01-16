@@ -88,8 +88,9 @@ class TestSpotLogic(HatInTimeTestBase):
     def cached_item_pool_advancement_lookup(self):
         self._cached_item_from_pool_lookup = None
 
-    # TODO: Use special items in the tests that represent the time pieces for a specific chapter and swap them out the
-    #  special items for the correct number of time pieces during the test.
+    # todo: Instead of setting chapter costs to pre-determined values, use special items in the tests that represent the
+    #  time pieces for a specific chapter and swap them out the special items for the correct number of time pieces
+    #  during the test.
     def world_setup(self, seed: Optional[int] = None) -> None:
         """
         In addition to the standard world setup:
@@ -227,8 +228,7 @@ class TestSpotLogic(HatInTimeTestBase):
     def collect_all_from_pool_but_and_sweep(self, item_names: Union[str, Iterable[str]],
                                             state: CollectionState) -> None:
         """
-        Collect all items from the item pool whose names are not in `item_names` and then sweep to pick up placed
-        locations.
+        Collect all items from the item pool whose names are not in `item_names` and then sweep to pick up placed items.
 
         The main purpose of this function is as a replacement for WorldTestBase.collect_all_but() that does not collect
         unreachable event items for cases where logic checks for state having collected an event item placed in a region
@@ -258,6 +258,7 @@ class TestSpotLogic(HatInTimeTestBase):
         """
         Test that with access to the given regions, and any of the sets of possible items, the location is inaccessible.
         """
+        # There are multiple contexts to enter and undo upon leaving the context, so use an ExitStack.
         with ExitStack() as exit_stack:
             # Grant access to all the specified regions. Other regions that these regions connect to may indirectly
             # become accessible.
@@ -288,6 +289,7 @@ class TestSpotLogic(HatInTimeTestBase):
             required_regions = list(required_regions)
             for i in range(len(required_regions)):
                 skipped_region = required_regions[i]
+                # There are multiple contexts to enter and undo upon leaving the context, so use an ExitStack.
                 with ExitStack() as exit_stack:
                     # Ensure the skipped region is inaccessible by temporarily blocking all entrances that connect to it.
                     exit_stack.enter_context(mock_no_region_access(self.world, skipped_region))
@@ -299,6 +301,7 @@ class TestSpotLogic(HatInTimeTestBase):
                     self.assertFalse(spot.can_reach(state), f"{spot.name} should not be reachable without access to"
                                                             f" region {skipped_region}")
 
+        # There are multiple contexts to enter and undo upon leaving the context, so use an ExitStack.
         with ExitStack() as exit_stack:
             for region in required_regions:
                 exit_stack.enter_context(mock_region_access(self.world, region))
@@ -340,6 +343,7 @@ class TestSpotLogic(HatInTimeTestBase):
 
     def validate_options(self, options_tests_pairs: Iterable[Tuple[TestOptions, List[SpotTest]]]):
         # Validate that each option exists and has a valid value.
+        # This prevents typing an incorrect option name or value in one of the tests.
         ahit_options_type_hints: Dict[str, Type[Option]] = HatInTimeWorld.options_dataclass.type_hints
         all_ahit_option_keys = ahit_options_type_hints.keys()
         already_checked_options: Set[Tuple[str, Hashable]] = set()
@@ -380,9 +384,10 @@ class TestSpotLogic(HatInTimeTestBase):
                 else:
                     test_spots = [SpotData(spot_type, loc) for loc in locations_raw]
                 for conditions in conditions_list:
+                    # Ignore all options matching the base options.
                     options = {k: v for k, v in conditions.options.items() if base_options.get(k) != v}
                     if spot_type == "RandomizedRegion":
-                        # Run the test with each act randomization option.
+                        # Add a test for each act randomization option.
                         for act_rando in ("false", "light", "insanity"):
                             if base_options.get("ActRandomizer") != act_rando:
                                 act_rando_options = options.copy()
@@ -390,8 +395,14 @@ class TestSpotLogic(HatInTimeTestBase):
                             else:
                                 # Not going to modify, so no need to copy.
                                 act_rando_options = options
+                            # dict is not hashable, but a frozenset of the dict's items is when all the dict's values
+                            # are hashable.
                             options_key = frozenset(act_rando_options.items())
-                            spot_tests = options_key_to_options_tests_pairs.setdefault(options_key, (act_rando_options, []))[1]
+                            if options_key in options_key_to_options_tests_pairs:
+                                _act_rando_options, spot_tests = options_key_to_options_tests_pairs[options_key]
+                            else:
+                                spot_tests = []
+                                options_key_to_options_tests_pairs[options_key] = (act_rando_options, spot_tests)
                             spot_tests.append(SpotTest(test_spots, conditions))
                     else:
                         options_key = frozenset(options.items())

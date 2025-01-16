@@ -1,9 +1,18 @@
-from typing import Dict, Tuple, List, Hashable, Iterable, TypeVar
+from typing import Dict, Tuple, List, Hashable, TypeVar
 
 from .. import Items
 from ..Types import ChapterIndex
 
 from .logic_test_helpers import TestConditions, TestData, SpotType
+
+"""
+All the different logic tests to check.
+
+Tests try to avoid testing the logic of the internal structure of the world, focusing on a starting point (region) and
+what items should be required to reach specific locations from that starting point. For that reason, there are few tests
+for individual entrances and no tests specifically checking event items used for logic, such as `TOD Access` and
+`AFR Access`.
+"""
 
 BASE_WORLD_OPTIONS = {
     # Disable entrance randomization for simplicity.
