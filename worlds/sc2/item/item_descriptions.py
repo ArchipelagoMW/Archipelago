@@ -874,6 +874,9 @@ item_descriptions = {
     item_names.INTERCESSOR: "Support craft. Applies a stacking slow, and targets with maximum slow stacks take increased damage from all sources.",
     item_names.DAWNBRINGER: "Flying Anti-Surface Assault Ship. Attacks in an area around the target. Attack count increases as it continues firing.",
     item_names.SCOUT: "Versatile high-speed fighter. Has a powerful anti-armoured air attack and a weaker anti-ground attack.",
+    item_names.OPPRESSOR: "Tal'Darim Scout variant. Has a weaker air attack, but a stronger ground attack. Can use the Vulcan Blaster ability.",
+    item_names.CALADRIUS: "Purifier Scout variant. Has no ground attack, but a stronger air attack, which can be upgraded to hit multiple targets. Can use the Corona Beam ability.",
+    item_names.MISTWING: "Nerazim Scout variant. Specialized stealth fighter. Can use the Cloak, Phantom Dash and Pilot (Transport) abilities.",
     item_names.TEMPEST: "Siege artillery craft. Attacks from long range. Can use the Disintegration ability.",
     item_names.MOTHERSHIP: "Ultimate Protoss vessel. Can use the Vortex and Mass Recall abilities.",
     item_names.ARBITER: "Army support craft. Has the Stasis Field and Recall abilities. Cloaks nearby units.",
@@ -906,11 +909,18 @@ item_descriptions = {
     item_names.DRAGOON_TRILLIC_COMPRESSION_SYSTEM: "Dragoons gain +20 life and their shield regeneration rate is doubled. Allows Dragoons to regenerate shields in combat.",
     item_names.DRAGOON_SINGULARITY_CHARGE: "Increases Dragoon range by +2.",
     item_names.DRAGOON_ENHANCED_STRIDER_SERVOS: "Increases Dragoon movement speed.",
-    item_names.SCOUT_COMBAT_SENSOR_ARRAY: "Scouts gain +3 range against air and +1 range against ground.",
+    item_names.SCOUT_COMBAT_SENSOR_ARRAY: "All Scout variants gain increased range against air and ground.",
     item_names.SCOUT_APIAL_SENSORS: "Scouts gain increased sight range.",
-    item_names.SCOUT_GRAVITIC_THRUSTERS: "Scouts gain increased movement speed.",
-    item_names.SCOUT_ADVANCED_PHOTON_BLASTERS: "Scouts gain increased damage against ground targets.",
+    item_names.SCOUT_GRAVITIC_THRUSTERS: "All Scout variants gain increased movement speed.",
+    item_names.SCOUT_ADVANCED_PHOTON_BLASTERS: "Scouts, Oppressors and Mist Wings gain increased damage against ground targets.",
     item_names.SCOUT_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.SCOUT),
+    item_names.OPPRESSOR_OPTIMIZED_LOGISTICS: "Oppressors gain increased training and warp-in speed.",
+    item_names.OPPRESSOR_ARMOR_MELTING_BLASTERS: "Oppressor ground weapons gain bonus damage to armored targets. Allows Vulcan Blaster to hit structures.",
+    item_names.CALADRIUS_SIDE_MISSILES: "Caladrius can hit up to 4 additional air targets with their missiles.",
+    item_names.CALADRIUS_STRUCTURE_TARGETING: "Allows Caladrius to hit ground structures with their anti-air missiles.",
+    item_names.CALADRIUS_SOLARITE_REACTOR: "If the Caladrius is low on shields, it recovers shields quickly for a short time.",
+    item_names.MISTWING_NULL_SHROUD: "Cloak no longer drains energy (but still prevents base energy regeneration). The Mist Wing becomes undetectable for 5 seconds upon cloaking.",
+    item_names.MISTWING_PILOT: _ability_desc("Mistwings","Pilot","The Mist Wing can transport one unit as an additional pilot. A pilot grants a small bonus to damage and armor."),
     item_names.TEMPEST_TECTONIC_DESTABILIZERS: "Tempests deal increased damage to buildings.",
     item_names.TEMPEST_QUANTIC_REACTOR: "Tempests deal increased damage to massive units.",
     item_names.TEMPEST_GRAVITY_SLING: "Tempests gain +8 range against air targets and +8 cast range.",
@@ -1039,6 +1049,11 @@ item_descriptions = {
     item_names.ARBITER_ABILITY_EFFICIENCY: "Arbiter War Council upgrade. Reduces the energy cost of Recall by 50 and Stasis Field by 100.",
     # Oracle
     item_names.MOTHERSHIP_INTEGRATED_POWER: "Mothership War Council upgrade. Allows Motherships to move at full speed outside pylon power.",
+    item_names.OPPRESSOR_VULCAN_BLASTER: "Oppressor War Council upgrade. " + _ability_desc("Oppressors","Vulcan Blaster", "Activates a powerful short range anti-ground weapon for a limited time. Greatly reduces movement and turning speed, and disables other weapons while active."),
+    item_names.CALADRIUS_CORONA_BEAM: "Caladrius War Council upgrade. " + _ability_desc("Caladrius","Corona Beam", "A channeling beam that drains up to 100 of your shield to deal up to 200 damage over time to a single target."),
+    item_names.MISTWING_PHANTOM_DASH: "Mist Wing War Council upgrade. " + _ability_desc("Mist Wings","Phantom Dash", "Dash forward to cover some distance quickly. Deals damage in a line if the Mist Wing is cloaked."),
+
+    
     item_names.SOA_CHRONO_SURGE: "The Spear of Adun increases a target structure's unit warp in and research speeds by +1000% for 20 seconds.",
     item_names.SOA_PROGRESSIVE_PROXY_PYLON: inspect.cleandoc("""
         Level 1: The Spear of Adun quickly warps in a Pylon to a target location.
