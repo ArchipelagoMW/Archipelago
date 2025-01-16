@@ -541,6 +541,13 @@ class TarinsGift(Choice):
     default = option_local_progression
 
 
+class StabilizeItemPool(DefaultOffToggle):
+    """
+    By default, rupees in the item pool may be randomly swapped with bombs, arrows, powders, or capacity upgrades. This option disables that swapping, which is useful for plando.
+    """
+    display_name = "Stabilize Item Pool"
+
+
 class ForeignItemIcons(Choice):
     """
     Choose how to display foreign items.
@@ -577,6 +584,7 @@ ladx_option_groups = [
         TrendyGame,
         InGameHints,
         NagMessages,
+        StabilizeItemPool,
         Quickswap,
         HardMode,
         BootsControls
@@ -647,6 +655,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     in_game_hints: InGameHints
     tarins_gift: TarinsGift
     overworld: Overworld
+    stabilize_item_pool: StabilizeItemPool
 
     warp_improvements: Removed
     additional_warp_points: Removed
