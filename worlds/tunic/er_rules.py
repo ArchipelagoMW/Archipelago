@@ -557,7 +557,6 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Dark Tomb Upper"].connect(
         connecting_region=regions["Dark Tomb Entry Point"])
 
-    # ice grapple through the wall, get the little secret sound to trigger
     regions["Dark Tomb Upper"].connect(
         connecting_region=regions["Dark Tomb Main"],
         rule=lambda state: has_ladder("Ladder in Dark Tomb", state, world)
