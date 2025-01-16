@@ -293,7 +293,7 @@ class AggregatingStardewRule(BaseStardewRule, ABC):
 
     def __eq__(self, other):
         return (isinstance(other, type(self)) and self.combinable_rules == other.combinable_rules and
-                self.simplification_state.original_simplifiable_rules == self.simplification_state.original_simplifiable_rules)
+                self.simplification_state.original_simplifiable_rules == other.simplification_state.original_simplifiable_rules)
 
     def __hash__(self):
         if len(self.combinable_rules) + len(self.simplification_state.original_simplifiable_rules) > 5:
