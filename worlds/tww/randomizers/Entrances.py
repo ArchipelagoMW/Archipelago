@@ -618,9 +618,9 @@ class EntranceRandomizer:
         For all entrance-exit pairs, this function adds a connection with the appropriate access rule to the world.
         """
 
-        def get_access_rule(region: str) -> str:
-            snake_case_region = region.lower().replace("'", "").replace(" ", "_")
-            return f"can_access_{snake_case_region}"
+        def get_access_rule(entrance: ZoneEntrance) -> str:
+            snake_case_region = entrance.entrance_name.lower().replace("'", "").replace(" ", "_")
+            return getattr(Macros, f"can_access_{snake_case_region}")
 
         # Connect each entrance-exit pair in the multiworld with the access rule for the entrance.
         for zone_entrance, zone_exit in self.done_entrances_to_exits.items():
@@ -628,9 +628,7 @@ class EntranceRandomizer:
             exit_region = self.world.get_region(zone_exit.unique_name)
             entrance_region.connect(
                 exit_region,
-                rule=lambda state, entrance=entrance_region.name: getattr(Macros, get_access_rule(entrance))(
-                    state, self.player
-                ),
+                rule=lambda state, rule=get_access_rule(zone_entrance): rule(state, self.player),
             )
 
         if __debug__ and self.world.options.required_bosses:

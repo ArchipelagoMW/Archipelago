@@ -35,6 +35,7 @@ from .randomizers.Entrances import (
     SECRET_CAVE_ENTRANCES,
     SECRET_CAVE_INNER_ENTRANCES,
     EntranceRandomizer,
+    ZoneEntrance,
 )
 from .randomizers.ItemPool import generate_itempool
 from .randomizers.RequiredBosses import RequiredBossesRandomizer
@@ -258,9 +259,9 @@ class TWWWorld(World):
         Create and connect all the necessary regions in the multiworld and establish the access rules for entrances.
         """
 
-        def get_access_rule(region: str) -> str:
-            snake_case_region = region.lower().replace("'", "").replace(" ", "_")
-            return f"can_access_{snake_case_region}"
+        def get_access_rule(zone_entrance: ZoneEntrance) -> str:
+            snake_case_region = zone_entrance.entrance_name.lower().replace("'", "").replace(" ", "_")
+            return getattr(Macros, f"can_access_{snake_case_region}")
 
         multiworld = self.multiworld
         player = self.player
@@ -279,9 +280,7 @@ class TWWWorld(World):
         for entrance in DUNGEON_ENTRANCES + SECRET_CAVE_ENTRANCES + FAIRY_FOUNTAIN_ENTRANCES:
             great_sea_region.connect(
                 self.get_region(entrance.entrance_name),
-                rule=lambda state, entrance=entrance.entrance_name: getattr(Macros, get_access_rule(entrance))(
-                    state, player
-                ),
+                rule=lambda state, rule=get_access_rule(entrance): rule(state, player),
             )
 
         # Connect nested regions with their parent region.
@@ -293,9 +292,7 @@ class TWWWorld(World):
             parent_region = self.get_region(parent_region_name)
             parent_region.connect(
                 self.get_region(entrance.entrance_name),
-                rule=lambda state, entrance=entrance.entrance_name: getattr(Macros, get_access_rule(entrance))(
-                    state, player
-                ),
+                rule=lambda state, rule=get_access_rule(entrance): rule(state, player),
             )
 
     def create_regions(self) -> None:
