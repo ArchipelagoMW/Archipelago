@@ -97,6 +97,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
 
             spot_to_fill: typing.Optional[Location] = None
 
+
             # if minimal accessibility, only check whether location is reachable if game not beatable
             if multiworld.worlds[item_to_place.player].options.accessibility == Accessibility.option_minimal:
                 perform_access_check = not multiworld.has_beaten_game(maximum_exploration_state,
@@ -108,9 +109,28 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
             for i, location in enumerate(locations):
                 if (not single_player_placement or location.player == item_to_place.player) \
                         and location.can_fill(maximum_exploration_state, item_to_place, perform_access_check):
+                    index_to_push_back: int = -1
+                    if location.item is not None:
+                        # assumption: this is local filler that can be safely re-placed
+                        # this could be quite slow, but should only happen in cases with lots of local items and
+                        # restrictive starts
+                        for j, filler_location in enumerate(locations):
+                            if filler_location.item is None and \
+                               filler_location.can_fill(maximum_exploration_state, location.item, False):
+                                # because filler_location is an empty spot, j < i, so we need to pop i first
+                                # ergo, save this index for later, but set the item now
+                                index_to_push_back = j
+                                multiworld.push_item(filler_location, location.item, False)
+                                break
+                        else:
+                            # can't move this filler to any other location
+                            continue
+
                     # popping by index is faster than removing by content,
                     spot_to_fill = locations.pop(i)
                     # skipping a scan for the element
+                    if index_to_push_back >= 0:
+                        locations.append(locations.pop(index_to_push_back))
                     break
 
             else:
@@ -259,7 +279,7 @@ def remaining_fill(multiworld: MultiWorld,
                    itempool: typing.List[Item],
                    name: str = "Remaining", 
                    move_unplaceable_to_start_inventory: bool = False,
-                   check_location_can_fill: bool = False) -> None:
+                   check_location_can_fill: bool = False) -> typing.List[Location]:
     unplaced_items: typing.List[Item] = []
     placements: typing.List[Location] = []
     swapped_items: typing.Counter[typing.Tuple[int, str]] = Counter()
@@ -351,6 +371,7 @@ def remaining_fill(multiworld: MultiWorld,
                             f"{', '.join(str(place) for place in placements)}", multiworld=multiworld)
 
     itempool.extend(unplaced_items)
+    return placements
 
 
 def fast_fill(multiworld: MultiWorld,
@@ -486,8 +507,7 @@ def distribute_early_items(multiworld: MultiWorld,
 
 
 def distribute_items_restrictive(multiworld: MultiWorld,
-                                 panic_method: typing.Literal["swap", "raise", "start_inventory"] = "swap",
-                                 sphere_1_percent_to_reserve = 0) -> None:
+                                 panic_method: typing.Literal["swap", "raise", "start_inventory"] = "swap") -> None:
     assert all(item.location is None for item in multiworld.itempool), (
         "At the start of distribute_items_restrictive, "
         "there are items in the multiworld itempool that are already placed on locations:\n"
@@ -501,8 +521,7 @@ def distribute_items_restrictive(multiworld: MultiWorld,
     multiworld.random.shuffle(itempool)
 
     fill_locations, itempool = distribute_early_items(multiworld, fill_locations, itempool)
-    fill_locations, itempool = distribute_local_nonprogression(multiworld, fill_locations, itempool,
-                                                               sphere_1_percent_to_reserve)
+    fill_locations, itempool = distribute_local_nonprogression(multiworld, fill_locations, itempool)
 
     progitempool: typing.List[Item] = []
     usefulitempool: typing.List[Item] = []
@@ -620,6 +639,10 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         if location.item:
             location.locked = True
     del mark_for_locking, lock_later
+
+    # need to filter out locations with local filler now
+    excludedlocations = [location for location in excludedlocations if location.item is None]
+    defaultlocations = [location for location in defaultlocations if location.item is None]
 
     inaccessible_location_rules(multiworld, multiworld.state, defaultlocations)
 
@@ -1149,69 +1172,32 @@ def distribute_planned_blocks(multiworld: MultiWorld, plando_blocks: list[Plando
 
 def distribute_local_nonprogression(multiworld: MultiWorld,
                                     locations: typing.List[Location],
-                                    itempool: typing.List[Item],
-                                    sphere_1_percent_to_reserve: int) \
+                                    itempool: typing.List[Item]) \
         -> typing.Tuple[typing.List[Location], typing.List[Item]]:
-    # Theory:
-    # for each world:
-    #    get list of local items
-    #    filter list for non-progression
-    #    get list of unfilled locations
-    #    filter out x% of sphere 1 locations
-    #    shuffle both lists and fast fill
-    base_state = multiworld.state.copy()
-    base_state.sweep_for_advancements(locations=(loc for loc in multiworld.get_filled_locations() if loc.address is None))
-    for player in multiworld.player_ids:
-        local_items: typing.Set[str] = multiworld.worlds[player].options.local_items.value
-        if len(local_items) == 0:
-            continue
-        # split itempool into this player's local items and everything else
-        player_local_items: typing.List[Item] = [item for item in itempool if item.player == player and
-                                                 not item.advancement and
-                                                 item.name in local_items]
-        if len(player_local_items) == 0:
-            continue
-        itempool = [item for item in itempool if item.player != player or item.advancement or item.name not in local_items]
-        # split the local items into useful and non-useful
-        player_local_useful: typing.List[Item] = [item for item in player_local_items if item.useful]
-        player_local_nonuseful: typing.List[Item] = [item for item in player_local_items if not item.useful]
-        # split the locations into this player's non-priority locations and everywhere else
-        player_unf_locs: typing.List[Location] = [loc for loc in locations if loc.player == player and
-                                                  loc.progress_type != loc.progress_type.PRIORITY]
-        locations = [loc for loc in locations if loc.player != player or loc.progress_type == loc.progress_type.PRIORITY]
-        # determine sphere 1 non-excluded locations
-        sphere_1_indicies: typing.List[int] = []
-        for i, loc in enumerate(player_unf_locs):
-            if loc.can_reach(base_state) and loc.progress_type != loc.progress_type.EXCLUDED:
-                sphere_1_indicies.append(i)
-        # reserve a fixed amount of them
-        sphere_1_size: int = len(sphere_1_indicies)
-        # equiv. to ceiling quotient, i.e. round up
-        amt_to_reserve: int = -((sphere_1_size * sphere_1_percent_to_reserve) // -100)
-        indicies_to_reserve: typing.Set[int] = set(multiworld.random.sample(sphere_1_indicies, amt_to_reserve))
-        reserved_locs: typing.List[Location] = [loc for i, loc in enumerate(player_unf_locs) if i in indicies_to_reserve]
-        player_unf_locs = [loc for i, loc in enumerate(player_unf_locs) if i not in indicies_to_reserve]
-        # split any non-reserved locations into excluded and non-excluded
-        player_unf_excl_locs = [loc for loc in player_unf_locs if loc.progress_type == loc.progress_type.EXCLUDED]
-        player_unf_unexcl_locs = [loc for loc in player_unf_locs if loc.progress_type != loc.progress_type.EXCLUDED]
-        # put local nonuseful items on excluded locations
-        multiworld.random.shuffle(player_local_nonuseful)
-        multiworld.random.shuffle(player_unf_excl_locs)
-        unplaced_items, unfilled_excluded_locations = fast_fill(multiworld, player_local_nonuseful, player_unf_excl_locs)
-        # recombine any nonuseful items remaining with the useful items
-        player_local_items = player_local_useful + unplaced_items
-        # put remaining local items (including useful ones) onto non-excluded locations
-        multiworld.random.shuffle(player_local_items)
-        multiworld.random.shuffle(player_unf_unexcl_locs)
-        unplaced_items, unfilled_unexcluded_locations = fast_fill(multiworld, player_local_items, player_unf_unexcl_locs)
-        if len(unplaced_items) > 0:
-            raise FillError(f"Not enough unfilled locations for player {multiworld.player_name[player]} with "
-                            f"{sphere_1_percent_to_reserve}% of sphere 1 reserved to fit local non-progression. Either "
-                            f"reduce the amount of local items in your YAML or reduce the percentage of reserved sphere"
-                            f" 1 locations in host.yaml.")
-        # add any unused locations back to the full location list
-        locations.extend(reserved_locs)
-        locations.extend(unfilled_excluded_locations)
-        locations.extend(unfilled_unexcluded_locations)
-
+    # call remaining_fill early on local items, but sort the list of locations filled this way to the back of the list
+    # instead of popping them entirely
+    local_nonprogression_items: typing.List[Item] = []
+    new_itempool: typing.List[Item] = []
+    for item in itempool:
+        if not item.advancement and item.name in multiworld.worlds[item.player].options.local_items.value:
+            local_nonprogression_items.append(item)
+        else:
+            new_itempool.append(item)
+    non_priority_locations: typing.List[Location] = []
+    priority_locations: typing.List[Location] = []
+    for location in locations:
+        if location.progress_type == location.progress_type.PRIORITY:
+            priority_locations.append(location)
+        else:
+            non_priority_locations.append(location)
+    placements: typing.List[Location] = remaining_fill(multiworld, non_priority_locations, local_nonprogression_items,
+                                                       "Local non-progression placement")
+    # local_nonprogression_items should be empty now
+    if local_nonprogression_items:
+        # this should only be happening if the world has a lot of strict
+        raise FillError("Not enough available locations for all local filler. Reduce the amount of local items or "
+                        "priority locations in your YAMLs.")
+    itempool = new_itempool
+    # place the filled locations at the back of the list
+    locations = [*priority_locations, *non_priority_locations, *placements]
     return locations, itempool
