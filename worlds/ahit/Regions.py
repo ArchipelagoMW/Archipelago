@@ -947,6 +947,16 @@ def get_shuffled_region(world: "HatInTimeWorld", region: str) -> str:
                     return name
 
 
+def get_region_shuffled_to(world: "HatInTimeWorld", region: str) -> str:
+    if world.options.ActRandomizer:
+        original_ci: str = chapter_act_info[region]
+        shuffled_ci = world.act_connections[original_ci]
+        return next(act_name for act_name, ci in chapter_act_info.items()
+                    if ci == shuffled_ci)
+    else:
+        return region
+
+
 def get_region_location_count(world: "HatInTimeWorld", region_name: str, included_only: bool = True) -> int:
     count = 0
     region = world.multiworld.get_region(region_name, world.player)
