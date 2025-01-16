@@ -623,11 +623,23 @@ class EntranceRandomizer:
             return getattr(Macros, f"can_access_{snake_case_region}")
 
         # Connect each entrance-exit pair in the multiworld with the access rule for the entrance.
+        # The Great Sea is the parent_region for many entrances, so get it in advance.
+        great_sea_region = self.world.get_region("The Great Sea")
         for zone_entrance, zone_exit in self.done_entrances_to_exits.items():
-            entrance_region = self.world.get_region(zone_entrance.entrance_name)
-            exit_region = self.world.get_region(zone_exit.unique_name)
-            entrance_region.connect(
+            # Get the parent region of the entrance.
+            if zone_entrance.island_name is not None:
+                # Entrances with an `island_name` are found in The Great Sea.
+                parent_region = great_sea_region
+            else:
+                # All other entrances must be nested within some other region.
+                parent_region = self.world.get_region(zone_entrance.nested_in.unique_name)
+            exit_region_name = zone_exit.unique_name
+            exit_region = self.world.get_region(exit_region_name)
+            parent_region.connect(
                 exit_region,
+                # The default name uses the "parent_region -> connecting_region", but the parent_region would not be
+                # useful for spoiler paths or debugging, so use the entrance name at the start.
+                f"{zone_entrance.entrance_name} -> {exit_region_name}",
                 rule=lambda state, rule=get_access_rule(zone_entrance): rule(state, self.player),
             )
 

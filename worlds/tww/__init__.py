@@ -35,7 +35,6 @@ from .randomizers.Entrances import (
     SECRET_CAVE_ENTRANCES,
     SECRET_CAVE_INNER_ENTRANCES,
     EntranceRandomizer,
-    ZoneEntrance,
 )
 from .randomizers.ItemPool import generate_itempool
 from .randomizers.RequiredBosses import RequiredBossesRandomizer
@@ -256,12 +255,9 @@ class TWWWorld(World):
 
     def setup_base_regions(self) -> None:
         """
-        Create and connect all the necessary regions in the multiworld and establish the access rules for entrances.
+        Create all the necessary regions in the multiworld. Connections between regions are added later, after any
+        entrance randomization.
         """
-
-        def get_access_rule(zone_entrance: ZoneEntrance) -> str:
-            snake_case_region = zone_entrance.entrance_name.lower().replace("'", "").replace(" ", "_")
-            return getattr(Macros, f"can_access_{snake_case_region}")
 
         multiworld = self.multiworld
         player = self.player
@@ -271,29 +267,8 @@ class TWWWorld(World):
         multiworld.regions.append(great_sea_region)
 
         # Add all randomizable regions.
-        for _entrance in ALL_ENTRANCES:
-            multiworld.regions.append(Region(_entrance.entrance_name, player, multiworld))
         for _exit in ALL_EXITS:
             multiworld.regions.append(Region(_exit.unique_name, player, multiworld))
-
-        # Connect the dungeon, secret caves, and fairy fountain regions to the "The Great Sea" region.
-        for entrance in DUNGEON_ENTRANCES + SECRET_CAVE_ENTRANCES + FAIRY_FOUNTAIN_ENTRANCES:
-            great_sea_region.connect(
-                self.get_region(entrance.entrance_name),
-                rule=lambda state, rule=get_access_rule(entrance): rule(state, player),
-            )
-
-        # Connect nested regions with their parent region.
-        for entrance in MINIBOSS_ENTRANCES + BOSS_ENTRANCES + SECRET_CAVE_INNER_ENTRANCES:
-            parent_region_name = entrance.entrance_name.split(" in ")[-1]
-            # Consider Hyrule Castle and Forsaken Fortress as part of The Great Sea (regions are not randomizable).
-            if parent_region_name in ["Hyrule Castle", "Forsaken Fortress"]:
-                parent_region_name = "The Great Sea"
-            parent_region = self.get_region(parent_region_name)
-            parent_region.connect(
-                self.get_region(entrance.entrance_name),
-                rule=lambda state, rule=get_access_rule(entrance): rule(state, player),
-            )
 
     def create_regions(self) -> None:
         """
@@ -451,13 +426,8 @@ class TWWWorld(World):
                 output_data["Locations"][location.name] = item_info
 
         # Output the mapping of entrances to exits.
-        all_entrance_names = [en.entrance_name for en in ALL_ENTRANCES]
-        entrances = multiworld.get_entrances(player)
-        for entrance in entrances:
-            assert entrance.parent_region is not None
-            if entrance.parent_region.name in all_entrance_names:
-                assert entrance.connected_region is not None
-                output_data["Entrances"][entrance.parent_region.name] = entrance.connected_region.name
+        for zone_entrance, zone_exit in self.entrances.done_entrances_to_exits.items():
+            output_data["Entrances"][zone_entrance.entrance_name] = zone_exit.unique_name
 
         # Output the plando details to file.
         aptww = TWWContainer(
