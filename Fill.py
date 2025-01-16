@@ -1191,7 +1191,7 @@ def distribute_local_nonprogression(multiworld: MultiWorld,
         else:
             non_priority_locations.append(location)
     placements: typing.List[Location] = remaining_fill(multiworld, non_priority_locations, local_nonprogression_items,
-                                                       "Local non-progression placement")
+                                                       "Local non-progression placement", False, True)
     # local_nonprogression_items should be empty now
     if local_nonprogression_items:
         # this should only be happening if the world has a lot of strict
