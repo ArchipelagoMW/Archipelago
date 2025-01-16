@@ -218,7 +218,8 @@ class MM3World(World):
             "weapon_damage": self.weapon_damage
         }
 
-    def interpret_slot_data(self, slot_data: Dict[str, Any]) -> Dict[str, Any]:
+    @staticmethod
+    def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
         local_weapon = {int(key): value for key, value in slot_data["weapon_damage"].items()}
         return {"weapon_damage": local_weapon}
 

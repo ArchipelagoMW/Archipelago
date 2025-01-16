@@ -6,7 +6,7 @@ from .locations import (needle_man_locations, magnet_man_locations, gemini_man_l
                         doc_air_locations, doc_crash_locations, doc_flash_locations, doc_bubble_locations,
                         doc_wood_locations, doc_heat_locations, doc_metal_locations, doc_quick_locations,
                         wily_1_locations, wily_2_locations, wily_3_locations, wily_5_locations,
-                        wily_6_locations, energy_pickups, etank_1ups)
+                        wily_6_locations, energy_pickups, etank_1ups, break_man_location)
 from worlds.generic.Rules import add_rule
 
 if TYPE_CHECKING:
@@ -77,11 +77,11 @@ minimum_weakness_requirement: Dict[int, int] = {
     0: 1,  # Mega Buster is free
     1: 1,  # 112 shots of Needle Cannon
     2: 2,  # 14 shots of Magnet Missile
-    3: 1,  # 28 shots of Gemini Laser
+    3: 2,  # 14 shots of Gemini Laser
     4: 2,  # 14 uses of Hard Knuckle
     5: 4,  # an unknown amount of Top Spin (4 means you should be able to be fine)
     6: 1,  # 56 uses of Search Snake
-    7: 2,  # 14 uses of Spark Shot
+    7: 2,  # 14 functional uses of Spark Shot (fires in twos)
     8: 1,  # 56 uses of Shadow Blade
 }
 
@@ -100,7 +100,7 @@ weapon_costs = {
     0: 0,
     1: 0.25,
     2: 2,
-    3: 1,
+    3: 2,
     4: 2,
     5: 7,  # Not really, but we can really only rely on Top for one RBM
     6: 0.5,
@@ -271,6 +271,7 @@ def set_rules(world: "MM3World") -> None:
         doc_bubble_locations,
         doc_wood_locations,
         doc_heat_locations,
+        break_man_location,
         wily_1_locations,
         wily_2_locations,
         wily_3_locations,
