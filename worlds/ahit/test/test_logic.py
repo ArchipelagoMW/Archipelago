@@ -14,7 +14,7 @@ from ..Rules import act_connections
 from .. import HatInTimeWorld
 
 from .logic_test_helpers import (
-    block_access, Spot, SpotData, TestOptions, TestConditions,
+    block_access, Spot, SpotData, TestOptions, AnyOptions, TestConditions,
     mock_region_access, mock_no_region_access, mock_can_clear_acts, mock_can_clear_all_acts
 )
 from . import logic_test_data
@@ -353,28 +353,36 @@ class TestSpotLogic(HatInTimeTestBase):
             if invalid_options:
                 self.fail(f"No such options {sorted(invalid_options)} for tests {tests}")
             failed_options = []
-            for option_pair in options.items():
-                if option_pair in already_checked_options:
+            for option_key, option_value in options.items():
+                if isinstance(option_value, dict):
+                    hashable_value = frozenset(cast(dict[str, str], option_value).items())
+                    hashable_option_pair = (option_key, hashable_value)
+                else:
+                    # Everything else should be hashable. `frozenset` can be used in place of `set`, and `tuple` can be
+                    # used in place of `list`.
+                    hashable_option_pair = (option_key, option_value)
+
+                if hashable_option_pair in already_checked_options:
                     continue
-                option_key, option_value = option_pair
+
                 option_type = ahit_options_type_hints[option_key]
                 try:
                     option_type.from_any(option_value)
                 except KeyError:
                     failed_options.append(dict(option_key=option_key, option_value=option_value))
-                already_checked_options.add(option_pair)
+                already_checked_options.add(hashable_option_pair)
             if failed_options:
                 self.fail(f"Could not parse option values for {failed_options} for tests {tests}")
 
     @staticmethod
-    def get_grouped_test_data() -> Iterable[Tuple[TestOptions, List[SpotTest]]]:
+    def get_grouped_test_data() -> Iterable[Tuple[AnyOptions, List[SpotTest]]]:
         """
         Group test data by unique sets of options.
 
         Grouping by options reduces the number of worlds that must be set up to run the tests because each unique set of
         options can share a single world.
         """
-        options_key_to_options_tests_pairs: Dict[UniqueTestOptionsKey, Tuple[TestOptions, List[SpotTest]]] = {}
+        options_key_to_options_tests_pairs: Dict[UniqueTestOptionsKey, Tuple[AnyOptions, List[SpotTest]]] = {}
         base_options = logic_test_data.BASE_WORLD_OPTIONS
         test_spots: List[SpotData]
         for spot_type, test_data in logic_test_data.ALL_TESTS:
@@ -387,17 +395,39 @@ class TestSpotLogic(HatInTimeTestBase):
                     # Ignore all options matching the base options.
                     options = {k: v for k, v in conditions.options.items() if base_options.get(k) != v}
                     if spot_type == "RandomizedRegion":
+                        # Insanity act randomization can create alternate routes to reach the target region if the
+                        # access region(s) contain Time Rift entrances. These need to be blocked off to prevent false
+                        # positives/negatives. We do this by plando-ing dead-end acts/time rifts onto these entrances,
+                        # so that they cannot form connections that can reach the region being tested through
+                        # alternative means.
+                        hashable_insanity_act_plando = cast(frozenset[tuple[str, str]] | None,
+                                                            options.get("_InsanityActPlando"))
+                        if hashable_insanity_act_plando is not None:
+                            del options["_InsanityActPlando"]
+
                         # Add a test for each act randomization option.
                         for act_rando in ("false", "light", "insanity"):
-                            if base_options.get("ActRandomizer") != act_rando:
-                                act_rando_options = options.copy()
-                                act_rando_options.update(dict(ActRandomizer=act_rando))
+                            if (base_options.get("ActRandomizer") != act_rando
+                                    or (act_rando == "insanity" and hashable_insanity_act_plando is not None)):
+                                hashable_act_rando_options = options.copy()
+                                hashable_act_rando_options.update(dict(ActRandomizer=act_rando))
                             else:
                                 # Not going to modify, so no need to copy.
-                                act_rando_options = options
+                                hashable_act_rando_options = options
                             # dict is not hashable, but a frozenset of the dict's items is when all the dict's values
                             # are hashable.
-                            options_key = frozenset(act_rando_options.items())
+                            options_key = frozenset(hashable_act_rando_options.items())
+
+                            # Use a new variable for the new type now that it is guaranteed that only hashable values
+                            # went into creating `options_key`.
+                            act_rando_options = cast(AnyOptions, hashable_act_rando_options)
+                            if act_rando == "insanity" and hashable_insanity_act_plando is not None:
+                                # Add ActPlando to the options.
+                                insanity_act_plando = dict(hashable_insanity_act_plando)
+                                options_key |= hashable_insanity_act_plando
+                                assert "ActPlando" not in act_rando_options
+                                act_rando_options["ActPlando"] = insanity_act_plando
+
                             if options_key in options_key_to_options_tests_pairs:
                                 _act_rando_options, spot_tests = options_key_to_options_tests_pairs[options_key]
                             else:

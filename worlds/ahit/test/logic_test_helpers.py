@@ -1,5 +1,5 @@
 from contextlib import contextmanager
-from typing import Literal, Union, Dict, Hashable, NamedTuple, cast, Sequence, Iterable, Tuple, List
+from typing import Literal, Union, Dict, Hashable, NamedTuple, cast, Sequence, Iterable, Tuple, List, Any
 
 from .. import HatInTimeWorld, Regions
 from .. import Rules as HatInTimeRules
@@ -14,6 +14,8 @@ SpotType = Literal["Location", "Entrance", "Region", "RandomizedRegion"]
 Spot = Union[Location, Entrance, Region]
 # For grouping purposes, all option values must currently be hashable.
 TestOptions = Dict[str, Hashable]
+# Real options can contain dictionaries, lists and sets, which are not hashable.
+AnyOptions = Dict[str, Any]
 
 
 class SpotData(NamedTuple):
@@ -272,3 +274,16 @@ def mock_can_clear_all_acts():
     finally:
         # Restore the old function.
         HatInTimeRules.can_clear_required_act = original
+
+
+def hashable_vanilla_act_plando(*act_names: str) -> frozenset[tuple[str, str]]:
+    """
+    To properly test insanity act plando, it is sometimes necessary to prevent the act randomization from being able to
+    create an alternate path to reach the region that is being tested.
+
+    Options used in tests need to be hashable so that tests requiring the same options can be grouped together, so this
+    returns a frozenset(tuple[str, str]), which can be reconstructed into an ActPlando dict later on.
+    """
+    # {entrance_name: act_to_place}
+    act_plando_dict = {name: name for name in act_names}
+    return frozenset(act_plando_dict.items())

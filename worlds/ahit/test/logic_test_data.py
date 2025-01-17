@@ -3,7 +3,7 @@ from typing import Dict, Tuple, List, Hashable, TypeVar
 from .. import Items
 from ..Types import ChapterIndex
 
-from .logic_test_helpers import TestConditions, TestData, SpotType
+from .logic_test_helpers import TestConditions, TestData, SpotType, hashable_vanilla_act_plando
 
 """
 All the different logic tests to check.
@@ -1030,7 +1030,12 @@ RANDOMIZED_REGION_TEST_DATA: TestData = {
         *always_on_difficulties("Alpine Free Roam", [("Hookshot Badge", "Zipline Unlock - The Windmill Path")], UmbrellaLogic=False),
         *always_on_difficulties("Alpine Free Roam", [("Hookshot Badge", "Umbrella")], ShuffleAlpineZiplines=False),
         *always_on_difficulties("Alpine Free Roam", "Hookshot Badge", UmbrellaLogic=False, ShuffleAlpineZiplines=False),
-        *never_on_difficulties("The Illness has Spread"),
+        # The Time Rift - Alpine Skyline entrance could lead to Alpine Free Roam in insanity act randomizer and would be
+        # accessible if all items were collected, so ensure it is not accessible by not collecting the Crayon Relics.
+        # An alternative would be using the ActPlando option to make Time Rift - Alpine Skyline vanilla or some other
+        # dead-end act that is not Alpine Free Roam, but this is slower for testing purposes because each unique
+        # combination of options requires a new test world to be created.
+        *never_on_difficulties("The Illness has Spread", collect_all_but_items=[Items.relic_groups["Crayon"]]),
     ],
     # Access to the time rift is unlocked by completing The Twilight Bell.
     # The tests for "-> The Twilight Bell" and "Act Completion (The Twilight Bell)" go over more of the combinations of
@@ -1051,7 +1056,8 @@ RANDOMIZED_REGION_TEST_DATA: TestData = {
         *never_on_difficulties("Alpine Free Roam", ["Zipline Unlock - The Twilight Bell Path", "Umbrella"]),
         *never_on_difficulties("Alpine Free Roam", "Zipline Unlock - The Twilight Bell Path", UmbrellaLogic=False),
         *never_on_difficulties("Alpine Free Roam", "Umbrella", ShuffleAlpineZiplines=False),
-        *never_on_difficulties("The Illness has Spread"),
+        # Prevent access to the Time Rift - Alpine Skyline entrance like the test for Time Rift - Curly Tail Trail.
+        *never_on_difficulties("The Illness has Spread", collect_all_but_items=[Items.relic_groups["Crayon"]]),
     ],
     # The entrance to this Purple Time Rift was previously missing the Hookshot Badge and Umbrella (with umbrella logic)
     # requirements when accessed from Alpine Free Roam.
@@ -1062,7 +1068,11 @@ RANDOMIZED_REGION_TEST_DATA: TestData = {
     ],
     "Time Rift - Balcony": add_options(EnableDLC1=True, to=[
         *always_on_difficulties("Cruise Ship", None, "The Arctic Cruise - Finale"),
-        *always_on_difficulties("Bon Voyage!", "Hookshot Badge", "The Arctic Cruise - Finale"),
+        # The Time Rift - Deep Sea entrance could lead to Ship Shape or Rock the Boat in insanity act randomizer.
+        # Because this test is an 'always' test, its items are expected to always be required, so the test would fail if
+        # it was made to always require the Cake relics, so Time Rift - Deep Sea is ActPlando-ed to be vanilla instead.
+        *always_on_difficulties("Bon Voyage!", "Hookshot Badge", "The Arctic Cruise - Finale",
+                                _InsanityActPlando=hashable_vanilla_act_plando("Time Rift - Deep Sea")),
         *always_on_difficulties(["Ship Shape", "Rock the Boat"], None, "The Arctic Cruise - Finale"),
     ]),
     "Time Rift - Deep Sea": add_options(EnableDLC1=True, to=[
