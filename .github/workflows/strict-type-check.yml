@@ -15,7 +15,7 @@ on:
       - "**.pyi"
 
 jobs:
-  pyright:
+  type-check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,8 +26,8 @@ jobs:
 
       - name: "Install dependencies"
         run: |
-          python -m pip install --upgrade pip pyright==1.1.358
+          python -m pip install --upgrade pip pyright==1.1.369 mypy==1.10.1
           python ModuleUpdate.py --append "WebHostLib/requirements.txt" --force --yes
 
-      - name: "pyright: strict check on specific files"
+      - name: "type check: strict check on specific files"
         run: python .github/type_check.py
