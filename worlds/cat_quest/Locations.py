@@ -160,6 +160,12 @@ locations: List[Location] = [
         "name": "The Fourth Day of Kitmas", 
         "art": "water"
     },
+    {
+        "id": base_id + 25, 
+        "inGameId": "kitmas_five", 
+        "name": "Mewry Kitmas!", 
+        "art": "water"
+    },
 
     # Missing Quests
     {
@@ -429,6 +435,12 @@ locations: List[Location] = [
         "art": "water"
     },
     {
+        "id": base_id + 67, 
+        "inGameId": "furbidden_mystery", 
+        "name": "The Furbidden History", 
+        "art": "none"
+    },
+    {
         "id": base_id + 68, 
         "inGameId": "golden_key", 
         "name": "The Golden Key", 
@@ -446,7 +458,18 @@ locations: List[Location] = [
         "name": "The Pawtato Mystery", 
         "art": "water"
     },
-
+    {
+        "id": base_id + 71, 
+        "inGameId": "advertising_one", 
+        "name": "Everyone's invited!", 
+        "art": "flight"
+    },
+    {
+        "id": base_id + 72, 
+        "inGameId": "slashy_one", 
+        "name": "The Forgotten Hero", 
+        "art": "either"
+    },
 
     # Catnip Cure Quests
     {
@@ -489,34 +512,6 @@ locations: List[Location] = [
         "id": base_id + 79, 
         "inGameId": "resolution_A", 
         "name": "IV. The Twin Resolution", 
-        "art": "none"
-    }
-]
-
-endgame_locations: List[Location] = [
-    # Endgame Quests
-    {
-        "id": base_id + 25, 
-        "inGameId": "kitmas_five", 
-        "name": "Mewry Kitmas!", 
-        "art": "water"
-    },
-    {
-        "id": base_id + 71, 
-        "inGameId": "advertising_one", 
-        "name": "Everyone's invited!", 
-        "art": "flight"
-    },
-    {
-        "id": base_id + 72, 
-        "inGameId": "slashy_one", 
-        "name": "The Forgotten Hero", 
-        "art": "either"
-    },
-    {
-        "id": base_id + 67, 
-        "inGameId": "furbidden_mystery", 
-        "name": "The Furbidden History", 
         "art": "none"
     }
 ]
