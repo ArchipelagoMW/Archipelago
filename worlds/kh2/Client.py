@@ -345,33 +345,12 @@ class KH2Context(CommonContext):
             self.lookup_id_to_item = {v: k for k, v in self.kh2_item_name_to_id.items()}
             self.ability_code_list = [self.kh2_item_name_to_id[item] for item in exclusion_item_table["Ability"]]
 
-            if "keyblade_abilities" in self.kh2slotdata.keys():
-                sora_ability_dict = self.kh2slotdata["KeybladeAbilities"]
+            if "KeybladeAbilities" in self.kh2slotdata.keys():
                 # sora ability to slot
+                self.AbilityQuantityDict.update(self.kh2slotdata["KeybladeAbilities"])
                 # itemid:[slots that are available for that item]
-                for k, v in sora_ability_dict.items():
-                    if v >= 1:
-                        if k not in self.sora_ability_to_slot.keys():
-                            self.sora_ability_to_slot[k] = []
-                        for _ in range(sora_ability_dict[k]):
-                            self.sora_ability_to_slot[k].append(self.kh2_seed_save_cache["SoraInvo"][0])
-                            self.kh2_seed_save_cache["SoraInvo"][0] -= 2
-                donald_ability_dict = self.kh2slotdata["StaffAbilities"]
-                for k, v in donald_ability_dict.items():
-                    if v >= 1:
-                        if k not in self.donald_ability_to_slot.keys():
-                            self.donald_ability_to_slot[k] = []
-                        for _ in range(donald_ability_dict[k]):
-                            self.donald_ability_to_slot[k].append(self.kh2_seed_save_cache["DonaldInvo"][0])
-                            self.kh2_seed_save_cache["DonaldInvo"][0] -= 2
-                goofy_ability_dict = self.kh2slotdata["ShieldAbilities"]
-                for k, v in goofy_ability_dict.items():
-                    if v >= 1:
-                        if k not in self.goofy_ability_to_slot.keys():
-                            self.goofy_ability_to_slot[k] = []
-                        for _ in range(goofy_ability_dict[k]):
-                            self.goofy_ability_to_slot[k].append(self.kh2_seed_save_cache["GoofyInvo"][0])
-                            self.kh2_seed_save_cache["GoofyInvo"][0] -= 2
+                self.AbilityQuantityDict.update(self.kh2slotdata["StaffAbilities"])
+                self.AbilityQuantityDict.update(self.kh2slotdata["ShieldAbilities"])
 
             all_weapon_location_id = []
             for weapon_location in all_weapon_slot:
@@ -525,27 +504,7 @@ class KH2Context(CommonContext):
                 if itemname not in self.kh2_seed_save_cache["AmountInvo"]["Ability"]:
                     self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname] = []
                     #  appending the slot that the ability should be in
-                # for non beta. remove after 4.3
-                if "PoptrackerVersion" in self.kh2slotdata:
-                    if self.kh2slotdata["PoptrackerVersionCheck"] < 4.3:
-                        if (itemname in self.sora_ability_set
-                            and len(self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname]) < self.item_name_to_data[itemname].quantity) \
-                                and self.kh2_seed_save_cache["SoraInvo"][1] > 0x254C:
-                            ability_slot = self.kh2_seed_save_cache["SoraInvo"][1]
-                            self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
-                            self.kh2_seed_save_cache["SoraInvo"][1] -= 2
-                        elif itemname in self.donald_ability_set:
-                            ability_slot = self.kh2_seed_save_cache["DonaldInvo"][1]
-                            self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
-                            self.kh2_seed_save_cache["DonaldInvo"][1] -= 2
-                        else:
-                            ability_slot = self.kh2_seed_save_cache["GoofyInvo"][1]
-                            self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
-                            self.kh2_seed_save_cache["GoofyInvo"][1] -= 2
-                        if ability_slot in self.front_ability_slots:
-                            self.front_ability_slots.remove(ability_slot)
-
-                elif len(self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname]) < \
+                if len(self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname]) < \
                         self.AbilityQuantityDict[itemname]:
                     if itemname in self.sora_ability_set:
                         ability_slot = self.kh2_seed_save_cache["SoraInvo"][0]
