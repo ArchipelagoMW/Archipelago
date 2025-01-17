@@ -444,7 +444,7 @@ class Context:
 
         self.slot_info = decoded_obj["slot_info"]
         self.games = {slot: slot_info.game for slot, slot_info in self.slot_info.items()}
-        self.groups = {slot: slot_info.group_members for slot, slot_info in self.slot_info.items()
+        self.groups = {slot: set(slot_info.group_members) for slot, slot_info in self.slot_info.items()
                        if slot_info.type == SlotType.group}
 
         self.clients = {0: {}}
@@ -743,16 +743,17 @@ class Context:
                 concerns[player].append(data)
             if not hint.local and data not in concerns[hint.finding_player]:
                 concerns[hint.finding_player].append(data)
-            # remember hints in all cases
 
-            # since hints are bidirectional, finding player and receiving player,
-            # we can check once if hint already exists
-            if hint not in self.hints[team, hint.finding_player]:
-                self.hints[team, hint.finding_player].add(hint)
-                new_hint_events.add(hint.finding_player)
-                for player in self.slot_set(hint.receiving_player):
-                    self.hints[team, player].add(hint)
-                    new_hint_events.add(player)
+            # only remember hints that were not already found at the time of creation
+            if not hint.found:
+                # since hints are bidirectional, finding player and receiving player,
+                # we can check once if hint already exists
+                if hint not in self.hints[team, hint.finding_player]:
+                    self.hints[team, hint.finding_player].add(hint)
+                    new_hint_events.add(hint.finding_player)
+                    for player in self.slot_set(hint.receiving_player):
+                        self.hints[team, player].add(hint)
+                        new_hint_events.add(player)
 
             self.logger.info("Notice (Team #%d): %s" % (team + 1, format_hint(self, team, hint)))
         for slot in new_hint_events:
@@ -975,9 +976,13 @@ def get_status_string(ctx: Context, team: int, tag: str):
         tagged = len([client for client in ctx.clients[team][slot] if tag in client.tags])
         completion_text = f"({len(ctx.location_checks[team, slot])}/{len(ctx.locations[slot])})"
         tag_text = f" {tagged} of which are tagged {tag}" if connected and tag else ""
-        goal_text = " and has finished." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_GOAL else "."
+        status_text = (
+            " and has finished." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_GOAL else
+            " and is ready." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_READY else
+            "."
+            )
         text += f"\n{ctx.get_aliased_name(team, slot)} has {connected} connection{'' if connected == 1 else 's'}" \
-                f"{tag_text}{goal_text} {completion_text}"
+                f"{tag_text}{status_text} {completion_text}"
     return text
 
 
@@ -1883,7 +1888,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             for location in args["locations"]:
                 if type(location) is not int:
                     await ctx.send_msgs(client,
-                                        [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts',
+                                        [{'cmd': 'InvalidPacket', "type": "arguments",
+                                          "text": 'Locations has to be a list of integers',
                                           "original_cmd": cmd}])
                     return
 
@@ -1910,7 +1916,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             hint = ctx.get_hint(client.team, player, location)
             if not hint:
                 return  # Ignored safely
-            if hint.receiving_player != client.slot:
+            if client.slot not in ctx.slot_set(hint.receiving_player):
                 await ctx.send_msgs(client,
                                     [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'UpdateHint: No Permission',
                                       "original_cmd": cmd}])
@@ -1924,6 +1930,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 await ctx.send_msgs(client,
                                     [{'cmd': 'InvalidPacket', "type": "arguments",
                                       "text": 'UpdateHint: Invalid Status', "original_cmd": cmd}])
+                return
+            if status == HintStatus.HINT_FOUND:
+                await ctx.send_msgs(client,
+                                    [{'cmd': 'InvalidPacket', "type": "arguments",
+                                      "text": 'UpdateHint: Cannot manually update status to "HINT_FOUND"', "original_cmd": cmd}])
                 return
             new_hint = new_hint.re_prioritize(ctx, status)
             if hint == new_hint:
@@ -2374,6 +2385,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--cert_key', help="Path to SSL Certificate Key file")
     parser.add_argument('--loglevel', default=defaults["loglevel"],
                         choices=['debug', 'info', 'warning', 'error', 'critical'])
+    parser.add_argument('--logtime', help="Add timestamps to STDOUT",
+                        default=defaults["logtime"], action='store_true')
     parser.add_argument('--location_check_points', default=defaults["location_check_points"], type=int)
     parser.add_argument('--hint_cost', default=defaults["hint_cost"], type=int)
     parser.add_argument('--disable_item_cheat', default=defaults["disable_item_cheat"], action='store_true')
@@ -2454,7 +2467,9 @@ def load_server_cert(path: str, cert_key: typing.Optional[str]) -> "ssl.SSLConte
 
 
 async def main(args: argparse.Namespace):
-    Utils.init_logging("Server", loglevel=args.loglevel.lower())
+    Utils.init_logging(name="Server",
+                       loglevel=args.loglevel.lower(),
+                       add_timestamp=args.logtime)
 
     ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
                   args.hint_cost, not args.disable_item_cheat, args.release_mode, args.collect_mode,
