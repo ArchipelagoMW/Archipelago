@@ -195,7 +195,7 @@ class GauntletLegendsWorld(World):
             elif self.options.traps_frequency == "extreme" and ItemClassification.trap in item.progression:
                 freq *= 5
 
-            if item.item_name == "Anti-Death Halo" and "Death" not in skipped_items and self.options.traps_frequency is not "normal":
+            if item.item_name == "Anti-Death Halo" and "Death" not in skipped_items and self.options.traps_frequency != "normal":
                 freq *= 2
             if item.item_name == "Death":
                 trap_count += freq
