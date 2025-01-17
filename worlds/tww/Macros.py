@@ -2,27 +2,27 @@ from BaseClasses import CollectionState
 
 
 def can_play_winds_requiem(state: CollectionState, player: int) -> bool:
-    return state.has("Wind Waker", player) and state.has("Wind's Requiem", player)
+    return state.has_all(["Wind Waker", "Wind's Requiem"], player)
 
 
 def can_play_ballad_of_gales(state: CollectionState, player: int) -> bool:
-    return state.has("Wind Waker", player) and state.has("Ballad of Gales", player)
+    return state.has_all(["Wind Waker", "Ballad of Gales"], player)
 
 
 def can_play_command_melody(state: CollectionState, player: int) -> bool:
-    return state.has("Wind Waker", player) and state.has("Command Melody", player)
+    return state.has_all(["Wind Waker", "Command Melody"], player)
 
 
 def can_play_earth_gods_lyric(state: CollectionState, player: int) -> bool:
-    return state.has("Wind Waker", player) and state.has("Earth God's Lyric", player)
+    return state.has_all(["Wind Waker", "Earth God's Lyric"], player)
 
 
 def can_play_wind_gods_aria(state: CollectionState, player: int) -> bool:
-    return state.has("Wind Waker", player) and state.has("Wind God's Aria", player)
+    return state.has_all(["Wind Waker", "Wind God's Aria"], player)
 
 
 def can_play_song_of_passing(state: CollectionState, player: int) -> bool:
-    return state.has("Wind Waker", player) and state.has("Song of Passing", player)
+    return state.has_all(["Wind Waker", "Song of Passing"], player)
 
 
 def can_fan_with_deku_leaf(state: CollectionState, player: int) -> bool:
@@ -203,11 +203,7 @@ def can_reach_dragon_roost_cavern_boss_stairs(state: CollectionState, player: in
 
 
 def can_reach_tower_of_the_gods_second_floor(state: CollectionState, player: int) -> bool:
-    return (
-        state.has("Bombs", player)
-        and state.has("TotG Small Key", player, 1)
-        and can_defeat_yellow_chuchus(state, player)
-    )
+    return state.has_all(["Bombs", "TotG Small Key"], player) and can_defeat_yellow_chuchus(state, player)
 
 
 def can_reach_tower_of_the_gods_third_floor(state: CollectionState, player: int) -> bool:
@@ -287,9 +283,7 @@ def can_reach_earth_temple_third_crypt(state: CollectionState, player: int) -> b
     return (
         can_reach_earth_temple_redead_hub_room(state, player)
         and (can_play_command_melody(state, player) or can_aim_mirror_shield(state, player))
-        and state.has("Power Bracelets", player)
-        and state.has("Skull Hammer", player)
-        and state.has("ET Small Key", player, 3)
+        and state.has_all_counts({"Power Bracelets": 1, "Skull Hammer": 1, "ET Small Key": 3}, player)
         and (can_defeat_red_bubbles(state, player) or state._tww_precise_2(player))
         and can_play_command_melody(state, player)
         and can_aim_mirror_shield(state, player)
@@ -396,15 +390,14 @@ def can_access_dungeon_entrance_on_headstone_island(state: CollectionState, play
 
 
 def can_access_dungeon_entrance_on_gale_isle(state: CollectionState, player: int) -> bool:
-    return state.has("Iron Boots", player) and state.has("Skull Hammer", player)
+    return state.has_all(["Iron Boots", "Skull Hammer"], player)
 
 
 def can_access_miniboss_entrance_in_forbidden_woods(state: CollectionState, player: int) -> bool:
     return (
         can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
-        and state.has("Grappling Hook", player)
-        and state.has("FW Small Key", player, 1)
+        and state.has_all(["Grappling Hook", "FW Small Key"], player)
     )
 
 
@@ -474,11 +467,9 @@ def can_access_boss_entrance_in_earth_temple(state: CollectionState, player: int
 def can_access_boss_entrance_in_wind_temple(state: CollectionState, player: int) -> bool:
     return (
         can_reach_wind_temple_tall_basement_room(state, player)
-        and state.has("Hookshot", player)
-        and state.has("Iron Boots", player)
+        and state.has_all(["Hookshot", "Iron Boots", "WT Big Key"], player)
         and can_play_command_melody(state, player)
         and can_play_wind_gods_aria(state, player)
-        and state.has("WT Big Key", player)
     )
 
 
@@ -502,9 +493,7 @@ def can_access_secret_cave_entrance_on_ice_ring_isle(state: CollectionState, pla
 
 
 def can_access_secret_cave_entrance_on_private_oasis(state: CollectionState, player: int) -> bool:
-    return (
-        state.has("Delivery Bag", player) and state.has("Cabana Deed", player) and state.has("Grappling Hook", player)
-    )
+    return state.has_all(["Delivery Bag", "Cabana Deed", "Grappling Hook"], player)
 
 
 def can_access_secret_cave_entrance_on_needle_rock_isle(state: CollectionState, player: int) -> bool:
@@ -552,7 +541,7 @@ def can_access_secret_cave_entrance_on_rock_spire_isle(state: CollectionState, p
 
 
 def can_access_secret_cave_entrance_on_shark_island(state: CollectionState, player: int) -> bool:
-    return state.has("Iron Boots", player) and state.has("Skull Hammer", player)
+    return state.has_all(["Iron Boots", "Skull Hammer"], player)
 
 
 def can_access_secret_cave_entrance_on_cliff_plateau_isles(state: CollectionState, player: int) -> bool:
@@ -709,8 +698,7 @@ def can_defeat_puppet_ganon(state: CollectionState, player: int) -> bool:
 def can_reach_and_defeat_ganondorf(state: CollectionState, player: int) -> bool:
     return (
         can_reach_and_defeat_puppet_ganon(state, player)
-        and state.has("Grappling Hook", player)
-        and state.has("Hookshot", player)
+        and state.has_all(["Grappling Hook", "Hookshot"], player)
         and can_defeat_ganondorf(state, player)
     )
 
@@ -734,112 +722,108 @@ def can_get_fairies(state: CollectionState, player: int) -> bool:
 
 
 def can_farm_knights_crests(state: CollectionState, player: int) -> bool:
-    return (
-        state.has("Grappling Hook", player)
-        and state.has("Spoils Bag", player)
-        and (
-            # (Can Access Item Location "Ice Ring Isle - Inner Cave - Chest")
-            (state.can_reach_region("Ice Ring Isle Inner Cave", player) and has_fire_arrows(state, player))
-            # | (Can Access Item Location "Outset Island - Savage Labyrinth - Floor 30")
-            or (
-                state.can_reach_region("Savage Labyrinth", player)
-                and can_defeat_keese(state, player)
-                and can_defeat_miniblins(state, player)
-                and can_defeat_red_chuchus(state, player)
-                and can_defeat_magtails(state, player)
-                and can_defeat_fire_keese(state, player)
-                and can_defeat_peahats(state, player)
-                and can_defeat_green_chuchus(state, player)
-                and can_defeat_boko_babas(state, player)
-                and can_defeat_mothulas(state, player)
-                and can_defeat_winged_mothulas(state, player)
-                and can_defeat_wizzrobes(state, player)
-                and can_defeat_armos(state, player)
-                and can_defeat_yellow_chuchus(state, player)
-                and can_defeat_red_bubbles(state, player)
-                and can_defeat_darknuts(state, player)
-                and can_play_winds_requiem(state, player)
-                and (
-                    state.has("Grappling Hook", player)
-                    or has_heros_sword(state, player)
-                    or state.has("Skull Hammer", player)
-                )
+    return state.has_all(["Grappling Hook", "Spoils Bag"], player) and (
+        # (Can Access Item Location "Ice Ring Isle - Inner Cave - Chest")
+        (state.can_reach_region("Ice Ring Isle Inner Cave", player) and has_fire_arrows(state, player))
+        # | (Can Access Item Location "Outset Island - Savage Labyrinth - Floor 30")
+        or (
+            state.can_reach_region("Savage Labyrinth", player)
+            and can_defeat_keese(state, player)
+            and can_defeat_miniblins(state, player)
+            and can_defeat_red_chuchus(state, player)
+            and can_defeat_magtails(state, player)
+            and can_defeat_fire_keese(state, player)
+            and can_defeat_peahats(state, player)
+            and can_defeat_green_chuchus(state, player)
+            and can_defeat_boko_babas(state, player)
+            and can_defeat_mothulas(state, player)
+            and can_defeat_winged_mothulas(state, player)
+            and can_defeat_wizzrobes(state, player)
+            and can_defeat_armos(state, player)
+            and can_defeat_yellow_chuchus(state, player)
+            and can_defeat_red_bubbles(state, player)
+            and can_defeat_darknuts(state, player)
+            and can_play_winds_requiem(state, player)
+            and (
+                state.has("Grappling Hook", player)
+                or has_heros_sword(state, player)
+                or state.has("Skull Hammer", player)
             )
-            # | (Can Access Item Location "Earth Temple - Big Key Chest" & Can Defeat Darknuts Easily)
-            or (
-                state.can_reach_region("Earth Temple", player)
-                and can_reach_earth_temple_many_mirrors_room(state, player)
-                and state.has("Power Bracelets", player)
-                and can_play_command_melody(state, player)
-                and can_aim_mirror_shield(state, player)
-                and (
-                    can_defeat_blue_bubbles(state, player)
-                    or (has_heros_bow(state, player) and state._tww_obscure_1(player))
-                    or (
-                        (
-                            has_heros_sword(state, player)
-                            or has_any_master_sword(state, player)
-                            or state.has("Skull Hammer", player)
-                        )
-                        and state._tww_obscure_1(player)
-                        and state._tww_precise_1(player)
-                    )
-                )
-                and can_defeat_darknuts_easily(state, player)
-            )
-            # | (Can Access Item Location "Wind Temple - Big Key Chest" & Can Defeat Darknuts Easily)
-            or (
-                state.can_reach_region("Wind Temple", player)
-                and can_reach_wind_temple_kidnapping_room(state, player)
-                and state.has("Iron Boots", player)
-                and can_fan_with_deku_leaf(state, player)
-                and can_play_wind_gods_aria(state, player)
-                and can_defeat_darknuts_easily(state, player)
-            )
-            # | (Can Access Item Location "Shark Island - Cave")
-            or (state.can_reach_region("Shark Island Secret Cave", player) and can_defeat_miniblins(state, player))
-            # | (Can Access Item Location "Stone Watcher Island - Cave" & Can Defeat Darknuts Easily)
-            or (
-                state.can_reach_region("Stone Watcher Island Secret Cave", player)
-                and can_defeat_armos(state, player)
-                and can_defeat_wizzrobes(state, player)
-                and can_play_winds_requiem(state, player)
-                and can_defeat_darknuts_easily(state, player)
-            )
-            # | (Can Access Item Location "Overlook Island - Cave" & Can Defeat Darknuts Easily)
-            or (
-                state.can_reach_region("Overlook Island Secret Cave", player)
-                and can_defeat_stalfos(state, player)
-                and can_defeat_wizzrobes(state, player)
-                and can_defeat_red_chuchus(state, player)
-                and can_defeat_green_chuchus(state, player)
-                and can_defeat_keese(state, player)
-                and can_defeat_fire_keese(state, player)
-                and can_defeat_morths(state, player)
-                and can_defeat_kargarocs(state, player)
-                and can_play_winds_requiem(state, player)
-                and can_defeat_darknuts_easily(state, player)
-            )
-            # | (Can Access Hyrule)
-            or can_access_hyrule(state, player)
         )
+        # | (Can Access Item Location "Earth Temple - Big Key Chest" & Can Defeat Darknuts Easily)
+        or (
+            state.can_reach_region("Earth Temple", player)
+            and can_reach_earth_temple_many_mirrors_room(state, player)
+            and state.has("Power Bracelets", player)
+            and can_play_command_melody(state, player)
+            and can_aim_mirror_shield(state, player)
+            and (
+                can_defeat_blue_bubbles(state, player)
+                or (has_heros_bow(state, player) and state._tww_obscure_1(player))
+                or (
+                    (
+                        has_heros_sword(state, player)
+                        or has_any_master_sword(state, player)
+                        or state.has("Skull Hammer", player)
+                    )
+                    and state._tww_obscure_1(player)
+                    and state._tww_precise_1(player)
+                )
+            )
+            and can_defeat_darknuts_easily(state, player)
+        )
+        # | (Can Access Item Location "Wind Temple - Big Key Chest" & Can Defeat Darknuts Easily)
+        or (
+            state.can_reach_region("Wind Temple", player)
+            and can_reach_wind_temple_kidnapping_room(state, player)
+            and state.has("Iron Boots", player)
+            and can_fan_with_deku_leaf(state, player)
+            and can_play_wind_gods_aria(state, player)
+            and can_defeat_darknuts_easily(state, player)
+        )
+        # | (Can Access Item Location "Shark Island - Cave")
+        or (state.can_reach_region("Shark Island Secret Cave", player) and can_defeat_miniblins(state, player))
+        # | (Can Access Item Location "Stone Watcher Island - Cave" & Can Defeat Darknuts Easily)
+        or (
+            state.can_reach_region("Stone Watcher Island Secret Cave", player)
+            and can_defeat_armos(state, player)
+            and can_defeat_wizzrobes(state, player)
+            and can_play_winds_requiem(state, player)
+            and can_defeat_darknuts_easily(state, player)
+        )
+        # | (Can Access Item Location "Overlook Island - Cave" & Can Defeat Darknuts Easily)
+        or (
+            state.can_reach_region("Overlook Island Secret Cave", player)
+            and can_defeat_stalfos(state, player)
+            and can_defeat_wizzrobes(state, player)
+            and can_defeat_red_chuchus(state, player)
+            and can_defeat_green_chuchus(state, player)
+            and can_defeat_keese(state, player)
+            and can_defeat_fire_keese(state, player)
+            and can_defeat_morths(state, player)
+            and can_defeat_kargarocs(state, player)
+            and can_play_winds_requiem(state, player)
+            and can_defeat_darknuts_easily(state, player)
+        )
+        # | (Can Access Hyrule)
+        or can_access_hyrule(state, player)
     )
 
 
 def can_farm_joy_pendants(state: CollectionState, player: int) -> bool:
-    return state.has("Grappling Hook", player) and state.has("Spoils Bag", player)
+    return state.has_all(["Grappling Hook", "Spoils Bag"], player)
 
 
 def can_farm_skull_necklaces(state: CollectionState, player: int) -> bool:
-    return state.has("Grappling Hook", player) and state.has("Spoils Bag", player)
+    return state.has_all(["Grappling Hook", "Spoils Bag"], player)
 
 
 def can_farm_golden_feathers(state: CollectionState, player: int) -> bool:
-    return state.has("Grappling Hook", player) and state.has("Spoils Bag", player)
+    return state.has_all(["Grappling Hook", "Spoils Bag"], player)
 
 
 def can_farm_green_chu_jelly(state: CollectionState, player: int) -> bool:
-    return state.has("Grappling Hook", player) and state.has("Spoils Bag", player)
+    return state.has_all(["Grappling Hook", "Spoils Bag"], player)
 
 
 def can_obtain_15_blue_chu_jelly(state: CollectionState, player: int) -> bool:
