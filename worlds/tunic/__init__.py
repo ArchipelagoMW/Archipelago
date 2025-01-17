@@ -83,7 +83,7 @@ class TunicWorld(World):
     location_name_groups = location_name_groups
     for group_name, members in grass_location_name_groups.items():
         location_name_groups.setdefault(group_name, set()).update(members)
-    for group_name, members in breakable_location_name_groups.items():
+    for group_name, members in breakable_location_groups.items():
         location_name_groups.setdefault(group_name, set()).update(members)
 
     item_name_to_id = item_name_to_id
