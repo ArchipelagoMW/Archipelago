@@ -10,15 +10,6 @@ from .Locations import all_locations, chimeras_keep, dragons_lair, gates_of_the_
 if typing.TYPE_CHECKING:
     from . import GauntletLegendsWorld
 
-
-def prog_count(state, player, diff):
-    count = 0
-    for i in range(1, 14):
-        if state.has(f"Runestone {i}", player):
-            count += 1
-    return count >= diff
-
-
 def set_rules(world: "GauntletLegendsWorld"):
     obelisks = [item.item_name for item in item_list if "Obelisk" in item.item_name]
 
@@ -42,7 +33,6 @@ def set_rules(world: "GauntletLegendsWorld"):
                     if location.name not in world.disabled_locations:
                         add_rule(
                             world.get_location(location.name),
-                            lambda state, level_id_=level_id >> 4, difficulty=location.difficulty - 1: prog_count(
-                                state, world.player, difficulty_lambda[level_id_][difficulty],
-                            ),
-                        )
+                            lambda state, level_id_=level_id >> 4, difficulty=location.difficulty - 1:
+                            state.prog_items[world.player]["stones"] >= difficulty_lambda[level_id_][difficulty],
+                            )

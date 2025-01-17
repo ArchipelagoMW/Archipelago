@@ -1,6 +1,7 @@
 import typing
 
 from BaseClasses import Entrance, Region
+from .Items import item_list
 
 from .Locations import (
     GLLocation,
@@ -30,6 +31,7 @@ from .Locations import (
     venomous_spire,
     volcanic_cavern,
     yeti,
+    LocationData
 )
 
 if typing.TYPE_CHECKING:
@@ -101,92 +103,56 @@ def connect_regions(world: "GauntletLegendsWorld"):
     connect(world, names, "Menu", "Lost Cave")
     connect(world, names, "Menu", "Volcanic Caverns")
     connect(world, names, "Menu", "Dragon's Lair")
-    connect(
-        world,
-        names,
-        "Menu",
-        "Castle Courtyard",
+    connect(world, names, "Menu", "Castle Courtyard",
         lambda state: state.has("Mountain Obelisk 1", world.player)
         and state.has("Mountain Obelisk 2", world.player)
-        and state.has("Mountain Obelisk 3", world.player),
+        and state.has("Mountain Obelisk 3", world.player)
     )
     connect(world, names, "Castle Courtyard", "Dungeon of Torment")
     connect(world, names, "Castle Courtyard", "Tower Armory")
     connect(world, names, "Castle Courtyard", "Castle Treasury")
     connect(world, names, "Castle Courtyard", "Chimera's Keep")
-    connect(
-        world,
-        names,
-        "Menu",
-        "Poisonous Fields",
+    connect(world, names, "Menu", "Poisonous Fields",
         lambda state: state.has("Castle Obelisk 1", world.player)
-        and state.has("Castle Obelisk 2", world.player),
+        and state.has("Castle Obelisk 2", world.player)
     )
     connect(world, names, "Poisonous Fields", "Haunted Cemetery")
     connect(world, names, "Poisonous Fields", "Venomous Spire")
     connect(world, names, "Poisonous Fields", "Toxic Air Ship")
     connect(world, names, "Toxic Air Ship", "Vat of the Plague Fiend")
-    connect(
-        world,
-        names,
-        "Menu",
-        "Arctic Docks",
+    connect(world, names, "Menu", "Arctic Docks",
         lambda state: state.has("Town Obelisk 1", world.player)
-        and state.has("Town Obelisk 2", world.player),
+        and state.has("Town Obelisk 2", world.player)
     )
     connect(world, names, "Arctic Docks", "Frozen Camp")
     connect(world, names, "Arctic Docks", "Crystal Mine")
     connect(world, names, "Arctic Docks", "Erupting Fissure")
     connect(world, names, "Erupting Fissure", "Yeti")
-    connect(
-        world,
-        names,
-        "Menu",
-        "Desecrated Temple",
+    connect(world, names, "Menu", "Desecrated Temple",
         lambda state: state.has("Dragon Mirror Shard", world.player)
         and state.has("Chimera Mirror Shard", world.player)
         and state.has("Plague Fiend Mirror Shard", world.player)
-        and state.has("Yeti Mirror Shard", world.player),
+        and state.has("Yeti Mirror Shard", world.player)
     )
     connect(world, names, "Desecrated Temple", "Battle Trenches")
     connect(world, names, "Desecrated Temple", "Battle Towers")
     connect(world, names, "Desecrated Temple", "Infernal Fortress")
-    connect(
-        world,
-        names,
-        "Menu",
-        "Gates of the Underworld",
-        lambda state: state.has("Runestone 1", world.player)
-        and state.has("Runestone 2", world.player)
-        and state.has("Runestone 3", world.player)
-        and state.has("Runestone 4", world.player)
-        and state.has("Runestone 5", world.player)
-        and state.has("Runestone 6", world.player)
-        and state.has("Runestone 7", world.player)
-        and state.has("Runestone 8", world.player)
-        and state.has("Runestone 9", world.player)
-        and state.has("Runestone 10", world.player)
-        and state.has("Runestone 11", world.player)
-        and state.has("Runestone 12", world.player)
-        and state.has("Runestone 13", world.player),
+    connect(world, names, "Menu", "Gates of the Underworld",
+        lambda state: state.has_all([item.item_name for item in item_list if "Runestone" in item.item_name], world.player)
     )
 
 
-def create_region(world: "GauntletLegendsWorld", name, locations):
+def create_region(world: "GauntletLegendsWorld", name: str, locations: list[LocationData]):
     reg = Region(name, world.player, world.multiworld)
-    for location in locations:
-        if location.name not in world.disabled_locations:
-            loc = GLLocation(world.player, location.name, location.id, reg)
-            reg.locations.append(loc)
+    reg.add_locations({loc.name: loc.id for loc in locations if loc.name not in world.disabled_locations}, GLLocation)
     world.multiworld.regions.append(reg)
 
 
-def connect(
-    world: "GauntletLegendsWorld",
-    used_names: typing.Dict[str, int],
-    source: str,
-    target: str,
-    rule: typing.Optional[typing.Callable] = None,
+def connect(world: "GauntletLegendsWorld",
+            used_names: typing.Dict[str, int],
+            source: str,
+            target: str,
+            rule: typing.Optional[typing.Callable] = None,
 ):
     source_region = world.multiworld.get_region(source, world.player)
     target_region = world.multiworld.get_region(target, world.player)

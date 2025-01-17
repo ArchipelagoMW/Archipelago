@@ -2,7 +2,7 @@ import os
 import typing
 
 import settings
-from BaseClasses import ItemClassification, Tutorial, Item, Location
+from BaseClasses import ItemClassification, Tutorial, Item, Location, CollectionState
 from Fill import fast_fill
 from typing import List
 
@@ -20,7 +20,7 @@ from .Rules import set_rules
 
 def launch_client(*args):
     from .GauntletLegendsClient import launch
-    launch_subprocess(launch, name="GauntletLegendsClient")
+    launch_subprocess(launch, name="GauntletLegendsClient", args=args)
 
 
 components.append(
@@ -34,7 +34,6 @@ components.append(
 
 
 class GauntletLegendsWebWorld(WebWorld):
-    settings_page = "games/gl/info/en"
     theme = "partyTime"
     tutorials = [
         Tutorial(
@@ -71,67 +70,54 @@ class GauntletLegendsWorld(World):
     settings: typing.ClassVar[GLSettings]
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
-    death: List[Item] = []
+    death: List[Item]
 
-    disabled_locations: typing.List[LocationData]
+    disabled_locations: typing.Set[LocationData] = set()
 
     def generate_early(self) -> None:
+        self.death = []
         self.options.max_difficulty_value.value = max(self.options.max_difficulty_value.value, self.options.local_players.value)
 
     def create_regions(self) -> None:
-        self.disabled_locations = []
-        if self.options.chests_barrels == 0:
+        if self.options.chests_barrels == "none":
             self.disabled_locations += [
                 location.name
                 for location in all_locations
                 if "Chest" in location.name or ("Barrel" in location.name and "Barrel of Gold" not in location.name)
-                and location.name not in self.disabled_locations
             ]
-        elif self.options.chests_barrels == 1:
+        elif self.options.chests_barrels == "all_chests":
             self.disabled_locations += [
                 location.name
                 for location in all_locations
                 if "Barrel" in location.name and "Barrel of Gold" not in location.name
-                and location.name not in self.disabled_locations
             ]
-        elif self.options.chests_barrels == 2:
-            self.disabled_locations += [location.name for location in all_locations if "Chest" in location.name and location.name not in self.disabled_locations]
+        elif self.options.chests_barrels == "all_barrels":
+            self.disabled_locations += [location.name for location in all_locations if "Chest" in location.name]
 
         if self.options.max_difficulty_toggle:
             self.disabled_locations += [location.name for location in all_locations
-                                        if location.difficulty > self.options.max_difficulty_value
-                                        and location.name not in self.disabled_locations]
+                                        if location.difficulty > self.options.max_difficulty_value]
 
         create_regions(self)
         connect_regions(self)
         if not self.options.infinite_keys:
-            item = self.create_item("Key")
-            self.get_location("Valley of Fire - Key 1").place_locked_item(item)
-            self.get_location("Valley of Fire - Key 5").place_locked_item(item)
+            self.lock_item("Valley of Fire - Key 1", "Key")
+            self.lock_item("Valley of Fire - Key 5", "Key")
+
         if self.options.obelisks == 0:
-            item = self.create_item("Mountain Obelisk 1")
-            self.get_location("Valley of Fire - Obelisk").place_locked_item(item)
-            item = self.create_item("Mountain Obelisk 2")
-            self.get_location("Dagger Peak - Obelisk").place_locked_item(item)
-            item = self.create_item("Mountain Obelisk 3")
-            self.get_location("Cliffs of Desolation - Obelisk").place_locked_item(item)
-            item = self.create_item("Castle Obelisk 1")
-            self.get_location("Castle Courtyard - Obelisk").place_locked_item(item)
-            item = self.create_item("Castle Obelisk 2")
-            self.get_location("Dungeon of Torment - Obelisk").place_locked_item(item)
-            item = self.create_item("Town Obelisk 1")
-            self.get_location("Poisoned Fields - Obelisk").place_locked_item(item)
-            item = self.create_item("Town Obelisk 2")
-            self.get_location("Haunted Cemetery - Obelisk").place_locked_item(item)
+            self.lock_item("Valley of Fire - Obelisk", "Mountain Obelisk 1")
+            self.lock_item("Dagger Peak - Obelisk", "Mountain Obelisk 2")
+            self.lock_item("Cliffs of Desolation - Obelisk", "Mountain Obelisk 3")
+            self.lock_item("Castle Courtyard - Obelisk", "Castle Obelisk 1")
+            self.lock_item("Dungeon of Torment - Obelisk", "Castle Obelisk 2")
+            self.lock_item("Poisoned Fields - Obelisk", "Town Obelisk 1")
+            self.lock_item("Haunted Cemetery - Obelisk", "Town Obelisk 2")
+
         if self.options.mirror_shards == 0:
-            item = self.create_item("Dragon Mirror Shard")
-            self.get_location("Dragon's Lair - Dragon Mirror Shard").place_locked_item(item)
-            item = self.create_item("Chimera Mirror Shard")
-            self.get_location("Chimera's Keep - Chimera Mirror Shard").place_locked_item(item)
-            item = self.create_item("Plague Fiend Mirror Shard")
-            self.get_location("Vat of the Plague Fiend - Plague Fiend Mirror Shard").place_locked_item(item)
-            item = self.create_item("Yeti Mirror Shard")
-            self.get_location("Yeti's Cavern - Yeti Mirror Shard").place_locked_item(item)
+            self.lock_item("Dragon's Lair - Dragon Mirror Shard", "Dragon Mirror Shard")
+            self.lock_item("Chimera's Keep - Chimera Mirror Shard", "Chimera Mirror Shard")
+            self.lock_item("Vat of the Plague Fiend - Plague Fiend Mirror Shard", "Plague Fiend Mirror Shard")
+            self.lock_item("Yeti's Cavern - Yeti Mirror Shard", "Yeti Mirror Shard")
 
     def fill_slot_data(self) -> dict:
         dshard = self.get_location("Dragon's Lair - Dragon Mirror Shard").item
@@ -169,60 +155,49 @@ class GauntletLegendsWorld(World):
         # First add in all progression and useful items
         required_items = []
         precollected = [item for item in item_list if item in self.multiworld.precollected_items[self.player]]
-        for item in item_list:
-            if item.progression != ItemClassification.filler and item.progression != ItemClassification.trap and item not in precollected:
-                if "Obelisk" in item.item_name and self.options.obelisks == 0:
-                    continue
-                if "Mirror" in item.item_name and self.options.mirror_shards == 0:
-                    continue
+        skipped_items = [item for item in item_list if ("Key" in item.item_name and self.options.infinite_keys)
+                                                        or ("Boots" in item.item_name and self.options.permanent_speed)
+                                                        or ("Poison" in item.item_name and (self.options.traps_choice == "only_death" or self.options.traps_choice == "none_active"))
+                                                        or ("Death" in item.item_name and (self.options.traps_choice == "only_fruit" or self.options.traps_choice == "none_active"))
+                                                        or ("Obelisk" in item.item_name and self.options.obelisks == 0)
+                                                        or ("Mirror" in item.item_name and self.options.mirror_shards == 0)]
+        for item in [item_ for item_ in item_list if ItemClassification.progression in item_.progression or ItemClassification.useful in item_.progression and item_ not in precollected and item_ not in skipped_items]:
                 freq = item_frequencies.get(item.item_name, 1)
                 required_items += [item.item_name for _ in range(freq)]
 
-        for item_name in required_items:
-            self.multiworld.itempool.append(self.create_item(item_name))
+        self.multiworld.itempool += [self.create_item(item_name) for item_name in required_items]
 
         # Then, get a random amount of fillers until we have as many items as we have locations
         filler_items = []
         trap_count = 0
-        for item in item_list:
-            if item.progression == ItemClassification.filler or item.progression == ItemClassification.trap:
-                if "Key" in item.item_name and self.options.infinite_keys:
-                    continue
-                if "Boots" in item.item_name and self.options.permanent_speed:
-                    continue
-                if "Poison" in item.item_name and (self.options.traps_choice.value == self.options.traps_choice.option_only_death or self.options.traps_choice.value == self.options.traps_choice.option_none_active):
-                    continue
-                if "Death" in item.item_name and (self.options.traps_choice.value == self.options.traps_choice.option_only_fruit or self.options.traps_choice.value == self.options.traps_choice.option_none_active):
-                    continue
+        for item in [item_ for item_ in item_list if ItemClassification.progression not in item_.progression or ItemClassification.useful not in item_.progression]:
 
-                freq = item_frequencies.get(item.item_name, 1) + (30 if self.options.infinite_keys else 0) + (5 if self.options.permanent_speed else 0)
+            freq = item_frequencies.get(item.item_name, 1) + (30 if self.options.infinite_keys else 0) + (5 if self.options.permanent_speed else 0)
+            if item.item_name == "Invulnerability" or item.item_name == "Anti-Death Halo":
+                freq = item_frequencies.get(item.item_name, 1)
 
-                if self.options.traps_frequency.value == self.options.traps_frequency.option_large and item.progression == ItemClassification.trap:
-                    freq *= 2
-                elif self.options.traps_frequency.value == self.options.traps_frequency.option_extreme and item.progression == ItemClassification.trap:
-                    freq *= 5
+            if self.options.traps_frequency == "large" and ItemClassification.trap in item.progression:
+                freq *= 2
+            elif self.options.traps_frequency == "extreme" and ItemClassification.trap in item.progression:
+                freq *= 5
 
-                if item.item_name == "Invulnerability" or item.item_name == "Anti-Death Halo":
-                    freq = item_frequencies.get(item.item_name, 1)
-                if item.item_name == "Anti-Death Halo" and (self.options.traps_choice.value == self.options.traps_choice.option_only_death or self.options.traps_choice.value == self.options.traps_choice.option_all_active) and self.options.traps_frequency.value == self.options.traps_frequency.option_extreme:
-                    freq *= 2
-                if item.item_name == "Death":
-                    trap_count += freq
-                    self.death = []
-                    for i in range(freq):
-                        self.death += [self.create_item(item.item_name)]
-                else:
-                    filler_items += [item.item_name for _ in range(freq)]
+            if item.item_name == "Anti-Death Halo" and (self.options.traps_choice.value == self.options.traps_choice.option_only_death or self.options.traps_choice.value == self.options.traps_choice.option_all_active) and self.options.traps_frequency.value == self.options.traps_frequency.option_extreme:
+                freq *= 2
+            if item.item_name == "Death":
+                trap_count += freq
+                for i in range(freq):
+                    self.death += [self.create_item(item.item_name)]
+            else:
+                filler_items += [item.item_name for _ in range(freq)]
 
         remaining = len(all_locations) - len(required_items) - len(self.disabled_locations) - trap_count - (2 if not self.options.infinite_keys else 0)
         if self.options.obelisks == 0:
             remaining -= 7
         if self.options.mirror_shards == 0:
             remaining -= 4
-        for i in range(remaining):
-            filler_item_name = self.multiworld.random.choice(filler_items)
-            self.multiworld.itempool.append(self.create_item(filler_item_name))
-            filler_items.remove(filler_item_name)
+        self.random.shuffle(filler_items)
+        for item in filler_items[:remaining]:
+            self.multiworld.itempool.append(self.create_item(item))
 
     def set_rules(self) -> None:
         set_rules(self)
@@ -238,6 +213,22 @@ class GauntletLegendsWorld(World):
     def create_item(self, name: str) -> GLItem:
         item = item_table[name]
         return GLItem(item.item_name, item.progression, item.code, self.player)
+
+    def lock_item(self, location: str, item_name: str):
+        item = self.create_item(item_name)
+        self.get_location(location).place_locked_item(item)
+
+    def collect(self, state: "CollectionState", item: "Item") -> bool:
+        change = super().collect(state, item)
+        if change and "Runestone" in item.name:
+            state.prog_items[item.player]["stones"] += 1
+        return change
+
+    def remove(self, state: "CollectionState", item: "Item") -> bool:
+        change = super().collect(state, item)
+        if change and "Runestone" in item.name:
+            state.prog_items[item.player]["stones"] -= 1
+        return change
 
     def generate_output(self, output_directory: str) -> None:
         patch = GLProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
