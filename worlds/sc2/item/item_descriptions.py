@@ -903,7 +903,7 @@ item_descriptions = {
     item_names.ADEPT_PHASE_BULWARK: "Increases Adept shield maximum by +50.",
     item_names.STALKER_INSTIGATOR_SLAYER_DISINTEGRATING_PARTICLES: "Increases weapon damage of Stalkers, Instigators, and Slayers.",
     item_names.STALKER_INSTIGATOR_SLAYER_PARTICLE_REFLECTION: "Attacks fired by Stalkers, Instigators, and Slayers have a chance to bounce to additional targets for reduced damage.",
-    item_names.INSTIGATOR_BLINK_OVERDRIVE: "Instigators gain +2 maximum blink charges and +2 blink range.",
+    item_names.INSTIGATOR_BLINK_OVERDRIVE: "Instigators gain +2 maximum blink charges and +1 blink range.",
     item_names.DRAGOON_HIGH_IMPACT_PHASE_DISRUPTORS: "Dragoons deal increased damage.",
     item_names.DRAGOON_TRILLIC_COMPRESSION_SYSTEM: "Dragoons gain +20 life and their shield regeneration rate is doubled. Allows Dragoons to regenerate shields in combat.",
     item_names.DRAGOON_SINGULARITY_CHARGE: "Increases Dragoon range by +2.",
