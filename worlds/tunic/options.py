@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict, Any
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
-                     PerGameCommonOptions, OptionGroup, Visibility)
+                     PerGameCommonOptions, OptionGroup, Visibility, NamedRange)
 from .er_data import portal_mapping
 
 
@@ -29,7 +29,7 @@ class KeysBehindBosses(Toggle):
     display_name = "Keys Behind Bosses"
 
 
-class AbilityShuffling(Toggle):
+class AbilityShuffling(DefaultOnToggle):
     """
     Locks the usage of Prayer, Holy Cross*, and the Icebolt combo until the relevant pages of the manual have been found.
     If playing Hexagon Quest, abilities are instead randomly unlocked after obtaining 25%, 50%, and 75% of the required Hexagon goal amount.
@@ -154,6 +154,33 @@ class ShuffleLadders(Toggle):
     display_name = "Shuffle Ladders"
 
 
+class GrassRandomizer(Toggle):
+    """
+    Turns over 6,000 blades of grass and bushes in the game into checks.
+    """
+    internal_name = "grass_randomizer"
+    display_name = "Grass Randomizer"
+
+
+class LocalFill(NamedRange):
+    """
+    Choose the percentage of your filler/trap items that will be kept local or distributed to other TUNIC players with this option enabled.
+    If you have Grass Randomizer enabled, this option must be set to 95% or higher to avoid flooding the item pool. The host can remove this restriction by turning off the limit_grass_rando setting in host.yaml.
+    This option defaults to 95% if you have Grass Randomizer enabled, and to 0% otherwise.
+    This option ignores items placed in your local_items or non_local_items.
+    This option does nothing in single player games.
+    """
+    internal_name = "local_fill"
+    display_name = "Local Fill Percent"
+    range_start = 0
+    range_end = 100
+    special_range_names = {
+        "default": -1
+    }
+    default = -1
+    visibility = Visibility.template | Visibility.complex_ui | Visibility.spoiler
+
+
 class TunicPlandoConnections(PlandoConnections):
     """
     Generic connection plando. Format is:
@@ -263,18 +290,25 @@ class LogicRules(Choice):
 @dataclass
 class TunicOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
+
     sword_progression: SwordProgression
     start_with_sword: StartWithSword
     keys_behind_bosses: KeysBehindBosses
     ability_shuffling: AbilityShuffling
-    shuffle_ladders: ShuffleLadders
-    entrance_rando: EntranceRando
-    fixed_shop: FixedShop
     fool_traps: FoolTraps
+    laurels_location: LaurelsLocation
+
     hexagon_quest: HexagonQuest
     hexagon_goal: HexagonGoal
     extra_hexagon_percentage: ExtraHexagonPercentage
-    laurels_location: LaurelsLocation
+
+    shuffle_ladders: ShuffleLadders
+    grass_randomizer: GrassRandomizer
+    local_fill: LocalFill
+
+    entrance_rando: EntranceRando
+    fixed_shop: FixedShop
+
     combat_logic: CombatLogic
     lanternless: Lanternless
     maskless: Maskless
@@ -282,10 +316,11 @@ class TunicOptions(PerGameCommonOptions):
     ice_grappling: IceGrappling
     ladder_storage: LadderStorage
     ladder_storage_without_items: LadderStorageWithoutItems
+
     plando_connections: TunicPlandoConnections
 
     logic_rules: LogicRules
-      
+
 
 tunic_option_groups = [
     OptionGroup("Logic Options", [

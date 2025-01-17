@@ -110,6 +110,7 @@ class KH2Context(CommonContext):
             18: TWTNW_Checks,
             #  255: {},  # starting screen
         }
+        self.last_world_int = -1
         # 0x2A09C00+0x40 is the sve anchor. +1 is the last saved room
         # self.sveroom = 0x2A09C00 + 0x41
         # 0 not in battle 1 in yellow battle 2 red battle #short
@@ -345,33 +346,12 @@ class KH2Context(CommonContext):
             self.lookup_id_to_item = {v: k for k, v in self.kh2_item_name_to_id.items()}
             self.ability_code_list = [self.kh2_item_name_to_id[item] for item in exclusion_item_table["Ability"]]
 
-            if "keyblade_abilities" in self.kh2slotdata.keys():
-                sora_ability_dict = self.kh2slotdata["KeybladeAbilities"]
+            if "KeybladeAbilities" in self.kh2slotdata.keys():
                 # sora ability to slot
+                self.AbilityQuantityDict.update(self.kh2slotdata["KeybladeAbilities"])
                 # itemid:[slots that are available for that item]
-                for k, v in sora_ability_dict.items():
-                    if v >= 1:
-                        if k not in self.sora_ability_to_slot.keys():
-                            self.sora_ability_to_slot[k] = []
-                        for _ in range(sora_ability_dict[k]):
-                            self.sora_ability_to_slot[k].append(self.kh2_seed_save_cache["SoraInvo"][0])
-                            self.kh2_seed_save_cache["SoraInvo"][0] -= 2
-                donald_ability_dict = self.kh2slotdata["StaffAbilities"]
-                for k, v in donald_ability_dict.items():
-                    if v >= 1:
-                        if k not in self.donald_ability_to_slot.keys():
-                            self.donald_ability_to_slot[k] = []
-                        for _ in range(donald_ability_dict[k]):
-                            self.donald_ability_to_slot[k].append(self.kh2_seed_save_cache["DonaldInvo"][0])
-                            self.kh2_seed_save_cache["DonaldInvo"][0] -= 2
-                goofy_ability_dict = self.kh2slotdata["ShieldAbilities"]
-                for k, v in goofy_ability_dict.items():
-                    if v >= 1:
-                        if k not in self.goofy_ability_to_slot.keys():
-                            self.goofy_ability_to_slot[k] = []
-                        for _ in range(goofy_ability_dict[k]):
-                            self.goofy_ability_to_slot[k].append(self.kh2_seed_save_cache["GoofyInvo"][0])
-                            self.kh2_seed_save_cache["GoofyInvo"][0] -= 2
+                self.AbilityQuantityDict.update(self.kh2slotdata["StaffAbilities"])
+                self.AbilityQuantityDict.update(self.kh2slotdata["ShieldAbilities"])
 
             all_weapon_location_id = []
             for weapon_location in all_weapon_slot:
@@ -408,13 +388,15 @@ class KH2Context(CommonContext):
     async def checkWorldLocations(self):
         try:
             currentworldint = self.kh2_read_byte(self.Now)
-            await self.send_msgs([{
-                "cmd":     "Set", "key": "Slot: " + str(self.slot) + " :CurrentWorld",
-                "default": 0, "want_reply": True, "operations": [{
-                    "operation": "replace",
-                    "value":     currentworldint
-                }]
-            }])
+            if self.last_world_int != currentworldint:
+                self.last_world_int = currentworldint
+                await self.send_msgs([{
+                    "cmd":     "Set", "key": "Slot: " + str(self.slot) + " :CurrentWorld",
+                    "default": 0, "want_reply": False, "operations": [{
+                        "operation": "replace",
+                        "value":     currentworldint
+                    }]
+                }])
             if currentworldint in self.worldid_to_locations:
                 curworldid = self.worldid_to_locations[currentworldint]
                 for location, data in curworldid.items():
@@ -525,27 +507,7 @@ class KH2Context(CommonContext):
                 if itemname not in self.kh2_seed_save_cache["AmountInvo"]["Ability"]:
                     self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname] = []
                     #  appending the slot that the ability should be in
-                # for non beta. remove after 4.3
-                if "PoptrackerVersion" in self.kh2slotdata:
-                    if self.kh2slotdata["PoptrackerVersionCheck"] < 4.3:
-                        if (itemname in self.sora_ability_set
-                            and len(self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname]) < self.item_name_to_data[itemname].quantity) \
-                                and self.kh2_seed_save_cache["SoraInvo"][1] > 0x254C:
-                            ability_slot = self.kh2_seed_save_cache["SoraInvo"][1]
-                            self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
-                            self.kh2_seed_save_cache["SoraInvo"][1] -= 2
-                        elif itemname in self.donald_ability_set:
-                            ability_slot = self.kh2_seed_save_cache["DonaldInvo"][1]
-                            self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
-                            self.kh2_seed_save_cache["DonaldInvo"][1] -= 2
-                        else:
-                            ability_slot = self.kh2_seed_save_cache["GoofyInvo"][1]
-                            self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
-                            self.kh2_seed_save_cache["GoofyInvo"][1] -= 2
-                        if ability_slot in self.front_ability_slots:
-                            self.front_ability_slots.remove(ability_slot)
-
-                elif len(self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname]) < \
+                if len(self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname]) < \
                         self.AbilityQuantityDict[itemname]:
                     if itemname in self.sora_ability_set:
                         ability_slot = self.kh2_seed_save_cache["SoraInvo"][0]
@@ -845,7 +807,7 @@ class KH2Context(CommonContext):
             logger.info("line 840")
 
 
-def finishedGame(ctx: KH2Context, message):
+def finishedGame(ctx: KH2Context):
     if ctx.kh2slotdata['FinalXemnas'] == 1:
         if not ctx.final_xemnas and ctx.kh2_read_byte(ctx.Save + all_world_locations[LocationName.FinalXemnas].addrObtained) \
                 & 0x1 << all_world_locations[LocationName.FinalXemnas].bitIndex > 0:
@@ -877,8 +839,9 @@ def finishedGame(ctx: KH2Context, message):
     elif ctx.kh2slotdata['Goal'] == 2:
         # for backwards compat
         if "hitlist" in ctx.kh2slotdata:
+            locations = ctx.sending
             for boss in ctx.kh2slotdata["hitlist"]:
-                if boss in message[0]["locations"]:
+                if boss in locations:
                     ctx.hitlist_bounties += 1
         if ctx.hitlist_bounties >= ctx.kh2slotdata["BountyRequired"] or ctx.kh2_seed_save_cache["AmountInvo"]["Amount"]["Bounty"] >= ctx.kh2slotdata["BountyRequired"]:
             if ctx.kh2_read_byte(ctx.Save + 0x36B3) < 1:
@@ -919,11 +882,12 @@ async def kh2_watcher(ctx: KH2Context):
                 await asyncio.create_task(ctx.verifyChests())
                 await asyncio.create_task(ctx.verifyItems())
                 await asyncio.create_task(ctx.verifyLevel())
-                message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
-                if finishedGame(ctx, message) and not ctx.kh2_finished_game:
+                if finishedGame(ctx) and not ctx.kh2_finished_game:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                     ctx.kh2_finished_game = True
-                await ctx.send_msgs(message)
+                if ctx.sending:
+                    message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
+                    await ctx.send_msgs(message)
             elif not ctx.kh2connected and ctx.serverconneced:
                 logger.info("Game Connection lost. waiting 15 seconds until trying to reconnect.")
                 ctx.kh2 = None
