@@ -30,7 +30,7 @@ randomizer. Here are some of the more important ones:
 - The Wally catching tutorial is skipped
 - All text is instant and, with an option, can be automatically progressed by holding A
 - When a Repel runs out, you will be prompted to use another
-- Many more minor improvements…
+- [Many more minor improvements…](/tutorial/Pokemon%20Emerald/rom_changes/en)
 
 ## Where is my starting inventory?
 
