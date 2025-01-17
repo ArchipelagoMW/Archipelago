@@ -750,8 +750,7 @@ end,
 end,
 ["Inventory Spill Trap"] = function ()
     for _, player in ipairs(game.forces["player"].players) do
-        current_character = player.character
-        spill_character_inventory(current_character)
+        spill_character_inventory(player.character)
     end
 end,
 }
