@@ -391,7 +391,7 @@ class TestSpotLogic(HatInTimeTestBase):
                         for act_rando in ("false", "light", "insanity"):
                             if base_options.get("ActRandomizer") != act_rando:
                                 act_rando_options = options.copy()
-                                options.update(dict(ActRandomizer=act_rando))
+                                act_rando_options.update(dict(ActRandomizer=act_rando))
                             else:
                                 # Not going to modify, so no need to copy.
                                 act_rando_options = options
