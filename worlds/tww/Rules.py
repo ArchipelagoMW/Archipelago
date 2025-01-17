@@ -102,8 +102,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists("Outset Island - Jabun's Cave", lambda state: state.has("Bombs", player))
     set_rule_if_exists(
-        "Outset Island - Dig up Black Soil",
-        lambda state: state.has_all(["Bait Bag", "Power Bracelets"], player) and can_buy_bait(state, player),
+        "Outset Island - Dig up Black Soil", lambda state: state.has_all(["Bait Bag", "Power Bracelets"], player)
     )
     set_rule_if_exists(
         "Outset Island - Savage Labyrinth - Floor 30",
@@ -201,18 +200,15 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists("Windfall Island - House of Wealth Chest", lambda state: True)
     set_rule_if_exists(
         "Windfall Island - Maggie's Father - Give 20 Skull Necklaces",
-        lambda state: rescued_aryll(state, player)
-        and state.has("Spoils Bag", player)
-        and can_farm_skull_necklaces(state, player),
+        lambda state: state.has("Spoils Bag", player) and can_farm_skull_necklaces(state, player),
     )
-    set_rule_if_exists("Windfall Island - Maggie - Free Item", lambda state: rescued_aryll(state, player))
+    set_rule_if_exists("Windfall Island - Maggie - Free Item", lambda state: True)
     set_rule_if_exists(
         "Windfall Island - Maggie - Delivery Reward",
-        lambda state: rescued_aryll(state, player) and state.has_all(["Delivery Bag", "Moblin's Letter"], player),
+        lambda state: state.has_all(["Delivery Bag", "Moblin's Letter"], player),
     )
     set_rule_if_exists(
-        "Windfall Island - Cafe Bar - Postman",
-        lambda state: rescued_aryll(state, player) and state.has_all(["Delivery Bag", "Maggie's Letter"], player),
+        "Windfall Island - Cafe Bar - Postman", lambda state: state.has_all(["Delivery Bag", "Maggie's Letter"], player)
     )
     set_rule_if_exists(
         "Windfall Island - Kreeb - Light Up Lighthouse",
@@ -232,29 +228,22 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists("Windfall Island - 80 Rupee Auction", lambda state: True)
     set_rule_if_exists(
         "Windfall Island - Zunari - Stock Exotic Flower in Zunari's Shop",
-        lambda state: rescued_aryll(state, player) and state.has("Delivery Bag", player),
+        lambda state: state.has("Delivery Bag", player),
     )
-    set_rule_if_exists(
-        "Windfall Island - Sam - Decorate the Town",
-        lambda state: rescued_aryll(state, player) and state.has("Delivery Bag", player),
-    )
+    set_rule_if_exists("Windfall Island - Sam - Decorate the Town", lambda state: state.has("Delivery Bag", player))
     # set_rule_if_exists(
-    #     "Windfall Island - Kane - Place Shop Guru Statue on Gate",
-    #     lambda state: rescued_aryll(state, player) and state.has("Delivery Bag", player),
+    #     "Windfall Island - Kane - Place Shop Guru Statue on Gate", lambda state: state.has("Delivery Bag", player)
     # )
     # set_rule_if_exists(
-    #     "Windfall Island - Kane - Place Postman Statue on Gate",
-    #     lambda state: rescued_aryll(state, player) and state.has("Delivery Bag", player),
+    #     "Windfall Island - Kane - Place Postman Statue on Gate", lambda state: state.has("Delivery Bag", player)
     # )
     # set_rule_if_exists(
-    #     "Windfall Island - Kane - Place Six Flags on Gate",
-    #     lambda state: rescued_aryll(state, player) and state.has("Delivery Bag", player),
+    #     "Windfall Island - Kane - Place Six Flags on Gate", lambda state: state.has("Delivery Bag", player)
     # )
     # set_rule_if_exists(
-    #     "Windfall Island - Kane - Place Six Idols on Gate",
-    #     lambda state: rescued_aryll(state, player) and state.has("Delivery Bag", player),
+    #     "Windfall Island - Kane - Place Six Idols on Gate", lambda state: state.has("Delivery Bag", player)
     # )
-    set_rule_if_exists("Windfall Island - Mila - Follow the Thief", lambda state: rescued_aryll(state, player))
+    set_rule_if_exists("Windfall Island - Mila - Follow the Thief", lambda state: True)
     set_rule_if_exists("Windfall Island - Battlesquid - First Prize", lambda state: True)
     set_rule_if_exists("Windfall Island - Battlesquid - Second Prize", lambda state: True)
     set_rule_if_exists("Windfall Island - Battlesquid - Under 20 Shots Prize", lambda state: True)
@@ -282,9 +271,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists(
         "Dragon Roost Island - Chest on Top of Boulder",
-        lambda state: state.has_any(["Boomerang", "Bombs"], player)
-        or has_heros_bow(state, player)
-        or (state.has("Bait Bag", player) and can_buy_hyoi_pears(state, player)),
+        lambda state: state.has_any(["Boomerang", "Bombs", "Bait Bag"], player) or has_heros_bow(state, player),
     )
     set_rule_if_exists(
         "Dragon Roost Island - Fly Across Platforms Around Island",
@@ -465,8 +452,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists(
         "Forbidden Woods - Tingle Statue Chest",
         lambda state: can_fly_with_deku_leaf_indoors(state, player)
-        and state.has_all(["Grappling Hook", "Boomerang"], player)
-        and (has_tingle_bombs(state, player) or can_activate_tingle_bomb_triggers_without_tingle_tuner(state, player)),
+        and state.has_all(["Grappling Hook", "Boomerang"], player),
     )
     set_rule_if_exists(
         "Forbidden Woods - Chest in Locked Tree Trunk",
@@ -514,13 +500,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists(
         "Tower of the Gods - Stone Tablet",
-        lambda state: can_reach_tower_of_the_gods_second_floor(state, player)
-        and (
-            can_bring_east_servant_of_the_tower(state, player)
-            or can_bring_west_servant_of_the_tower(state, player)
-            or can_bring_north_servant_of_the_tower(state, player)
-        )
-        and state.has("Wind Waker", player),
+        lambda state: can_reach_tower_of_the_gods_second_floor(state, player) and state.has("Wind Waker", player),
     )
     set_rule_if_exists("Tower of the Gods - Darknut Miniboss Room", lambda state: can_defeat_darknuts(state, player))
     set_rule_if_exists(
@@ -603,10 +583,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists("Ice Ring Isle - Inner Cave - Chest", lambda state: has_fire_arrows(state, player))
 
     # Headstone Island
-    set_rule_if_exists(
-        "Headstone Island - Top of the Island",
-        lambda state: state.has("Bait Bag", player) and can_buy_hyoi_pears(state, player),
-    )
+    set_rule_if_exists("Headstone Island - Top of the Island", lambda state: state.has("Bait Bag", player))
     set_rule_if_exists("Headstone Island - Submarine", lambda state: can_defeat_bombchus(state, player))
 
     # Earth Temple
@@ -852,9 +829,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists(
         "Mailbox - Letter from Grandma",
-        lambda state: state.has("Empty Bottle", player)
-        and can_get_fairies(state, player)
-        and can_play_song_of_passing(state, player),
+        lambda state: state.has("Empty Bottle", player) and can_play_song_of_passing(state, player),
     )
     set_rule_if_exists(
         "Mailbox - Letter from Aryll",
@@ -864,8 +839,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists(
         "Mailbox - Letter from Tingle",
-        lambda state: rescued_tingle(state, player)
-        and has_any_wallet_upgrade(state, player)
+        lambda state: has_any_wallet_upgrade(state, player)
         and state.can_reach_region("Helmaroc King Boss Arena", player)
         and can_defeat_helmaroc_king(state, player)
         and can_play_song_of_passing(state, player),
@@ -875,10 +849,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists("The Great Sea - Beedle's Shop Ship - 20 Rupee Item", lambda state: True)
     set_rule_if_exists("The Great Sea - Salvage Corp Gift", lambda state: True)
     set_rule_if_exists("The Great Sea - Cyclos", lambda state: has_heros_bow(state, player))
-    set_rule_if_exists(
-        "The Great Sea - Goron Trading Reward",
-        lambda state: rescued_aryll(state, player) and state.has("Delivery Bag", player),
-    )
+    set_rule_if_exists("The Great Sea - Goron Trading Reward", lambda state: state.has("Delivery Bag", player))
     set_rule_if_exists(
         "The Great Sea - Withered Trees",
         lambda state: can_access_forest_haven(state, player)
@@ -918,9 +889,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists("Spectacle Island - Barrel Shooting - Second Prize", lambda state: True)
 
     # Needle Rock Isle
-    set_rule_if_exists(
-        "Needle Rock Isle - Chest", lambda state: state.has("Bait Bag", player) and can_buy_hyoi_pears(state, player)
-    )
+    set_rule_if_exists("Needle Rock Isle - Chest", lambda state: state.has("Bait Bag", player))
     set_rule_if_exists("Needle Rock Isle - Cave", lambda state: has_fire_arrows(state, player))
     set_rule_if_exists(
         "Needle Rock Isle - Golden Gunboat", lambda state: state.has_all(["Bombs", "Grappling Hook"], player)
@@ -1071,15 +1040,15 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists("Rock Spire Isle - Cave", lambda state: True)
     set_rule_if_exists(
         "Rock Spire Isle - Beedle's Special Shop Ship - 500 Rupee Item",
-        lambda state: has_any_wallet_upgrade(state, player) and can_farm_lots_of_rupees(state, player),
+        lambda state: has_any_wallet_upgrade(state, player),
     )
     set_rule_if_exists(
         "Rock Spire Isle - Beedle's Special Shop Ship - 950 Rupee Item",
-        lambda state: has_any_wallet_upgrade(state, player) and can_farm_lots_of_rupees(state, player),
+        lambda state: has_any_wallet_upgrade(state, player),
     )
     set_rule_if_exists(
         "Rock Spire Isle - Beedle's Special Shop Ship - 900 Rupee Item",
-        lambda state: has_any_wallet_upgrade(state, player) and can_farm_lots_of_rupees(state, player),
+        lambda state: has_any_wallet_upgrade(state, player),
     )
     set_rule_if_exists(
         "Rock Spire Isle - Western Lookout Platform - Destroy the Cannons",

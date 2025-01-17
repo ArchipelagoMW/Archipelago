@@ -69,14 +69,6 @@ def can_destroy_seeds_hanging_by_vines(state: CollectionState, player: int) -> b
     return state.has_any(["Boomerang", "Bombs", "Hookshot"], player) or has_heros_bow(state, player)
 
 
-def can_buy_bait(state: CollectionState, player: int) -> bool:
-    return True
-
-
-def can_buy_hyoi_pears(state: CollectionState, player: int) -> bool:
-    return True
-
-
 def has_heros_sword(state: CollectionState, player: int) -> bool:
     return not state._tww_in_swordless_mode(player) and state.has("Progressive Sword", player, 1)
 
@@ -157,10 +149,6 @@ def has_tingle_bombs(state: CollectionState, player: int) -> bool:
     return state.has("Bombs", player) or (state._tww_tuner_logic_enabled(player) and state.has("Tingle Tuner", player))
 
 
-def can_activate_tingle_bomb_triggers_without_tingle_tuner(state: CollectionState, player: int) -> bool:
-    return True
-
-
 def can_reach_outset_island_upper_level(state: CollectionState, player: int) -> bool:
     return can_cut_down_outset_trees(state, player) or (
         can_fly_with_deku_leaf_outdoors(state, player) and state._tww_obscure_1(player)
@@ -194,15 +182,10 @@ def can_reach_tower_of_the_gods_second_floor(state: CollectionState, player: int
 def can_reach_tower_of_the_gods_third_floor(state: CollectionState, player: int) -> bool:
     return (
         can_reach_tower_of_the_gods_second_floor(state, player)
-        and can_bring_east_servant_of_the_tower(state, player)
         and can_bring_west_servant_of_the_tower(state, player)
         and can_bring_north_servant_of_the_tower(state, player)
         and state.has("Wind Waker", player)
     )
-
-
-def can_bring_east_servant_of_the_tower(state: CollectionState, player: int) -> bool:
-    return True
 
 
 def can_bring_west_servant_of_the_tower(state: CollectionState, player: int) -> bool:
@@ -502,7 +485,7 @@ def can_access_secret_cave_entrance_on_overlook_island(state: CollectionState, p
 
 
 def can_access_secret_cave_entrance_on_birds_peak_rock(state: CollectionState, player: int) -> bool:
-    return state.has("Bait Bag", player) and can_buy_hyoi_pears(state, player)
+    return state.has("Bait Bag", player)
 
 
 def can_access_secret_cave_entrance_on_pawprint_isle(state: CollectionState, player: int) -> bool:
@@ -694,18 +677,6 @@ def can_defeat_ganondorf(state: CollectionState, player: int) -> bool:
     )
 
 
-def rescued_aryll(state: CollectionState, player: int) -> bool:
-    return True
-
-
-def rescued_tingle(state: CollectionState, player: int) -> bool:
-    return True
-
-
-def can_get_fairies(state: CollectionState, player: int) -> bool:
-    return True
-
-
 def can_farm_knights_crests(state: CollectionState, player: int) -> bool:
     return state.has_all(["Grappling Hook", "Spoils Bag"], player) and (
         # (Can Access Item Location "Ice Ring Isle - Inner Cave - Chest")
@@ -823,10 +794,6 @@ def can_obtain_15_blue_chu_jelly(state: CollectionState, player: int) -> bool:
         )
         and state.has("Spoils Bag", player)
     )
-
-
-def can_farm_lots_of_rupees(state: CollectionState, player: int) -> bool:
-    return True
 
 
 def can_defeat_bokoblins(state: CollectionState, player: int) -> bool:
@@ -1156,7 +1123,7 @@ def can_defeat_freshwater_octoroks(state: CollectionState, player: int) -> bool:
 
 
 def can_defeat_saltwater_octoroks(state: CollectionState, player: int) -> bool:
-    return state.has_any(["Boomerang", "Hookshot"], player) or has_heros_bow(state, player) 
+    return state.has_any(["Boomerang", "Hookshot"], player) or has_heros_bow(state, player)
 
 
 def can_defeat_beamos(state: CollectionState, player: int) -> bool:
@@ -1234,7 +1201,3 @@ def can_cut_grass(state: CollectionState, player: int) -> bool:
 
 def can_sword_fight_with_orca(state: CollectionState, player: int) -> bool:
     return has_heros_sword(state, player) or state._tww_in_swordless_mode(player)
-
-
-def todo(state: CollectionState, player: int) -> bool:
-    return False
