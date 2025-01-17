@@ -160,7 +160,7 @@ class TunicWorld(World):
                 self.options.lanternless.value = self.passthrough["lanternless"]
                 self.options.maskless.value = self.passthrough["maskless"]
                 self.options.hexagon_quest.value = self.passthrough["hexagon_quest"]
-                self.options.hexagon_quest_ability_type.value = self.passthrough["hexagon_quest_ability_type"]
+                self.options.hexagon_quest_ability_type.value = self.passthrough.get("hexagon_quest_ability_type", 0)
                 self.options.entrance_rando.value = self.passthrough["entrance_rando"]
                 self.options.shuffle_ladders.value = self.passthrough["shuffle_ladders"]
                 self.options.grass_randomizer.value = self.passthrough.get("grass_randomizer", 0)
