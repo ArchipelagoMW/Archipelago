@@ -236,7 +236,6 @@ class YuGiOh2006Client(BizHawkClient):
 
             # send collection tracking
             if self.collection_changed:
-                logger.info(self.collection_state)
                 await ctx.send_msgs([{
                     "cmd": "Set",
                     "key": f"ygo06_collection_{ctx.team}_{ctx.slot}",
