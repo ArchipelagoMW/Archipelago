@@ -346,7 +346,7 @@ def create_enemy_events(world: "HatInTimeWorld"):
 
 def set_enemy_rules(world: "HatInTimeWorld"):
     no_tourist = "Camera Tourist" in world.excluded_dws or "Camera Tourist" in world.excluded_bonuses
-    difficulty: Difficulty = Difficulty(world.options.LogicDifficulty)
+    difficulty = get_difficulty(world)
 
     for enemy, regions in hit_list.items():
         if no_tourist and enemy in bosses:
