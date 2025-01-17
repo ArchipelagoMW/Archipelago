@@ -36,7 +36,7 @@ class KeysBehindBosses(Toggle):
     display_name = "Keys Behind Bosses"
 
 
-class AbilityShuffling(Toggle):
+class AbilityShuffling(DefaultOnToggle):
     """
     Locks the usage of Prayer, Holy Cross*, and the Icebolt combo until the relevant pages of the manual have been found.
     If playing Hexagon Quest, abilities are instead randomly unlocked after obtaining 25%, 50%, and 75% of the required
