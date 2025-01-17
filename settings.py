@@ -7,6 +7,7 @@ import os
 import os.path
 import shutil
 import sys
+import types
 import typing
 import warnings
 from enum import IntEnum
@@ -162,8 +163,13 @@ class Group:
             else:
                 # assign value, try to upcast to type hint
                 annotation = self.get_type_hints().get(k, None)
-                candidates = [] if annotation is None else \
-                    typing.get_args(annotation) if typing.get_origin(annotation) is Union else [annotation]
+                candidates = (
+                    [] if annotation is None else (
+                        typing.get_args(annotation)
+                        if typing.get_origin(annotation) in (Union, types.UnionType)
+                        else [annotation]
+                    )
+                )
                 none_type = type(None)
                 for cls in candidates:
                     assert isinstance(cls, type), f"{self.__class__.__name__}.{k}: type {cls} not supported in settings"
@@ -593,6 +599,7 @@ class ServerOptions(Group):
     savefile: Optional[str] = None
     disable_save: bool = False
     loglevel: str = "info"
+    logtime: bool = False
     server_password: Optional[ServerPassword] = None
     disable_item_cheat: Union[DisableItemCheat, bool] = False
     location_check_points: LocationCheckPoints = LocationCheckPoints(1)

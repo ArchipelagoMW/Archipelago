@@ -21,6 +21,17 @@ class TestOptions(unittest.TestCase):
                 self.assertFalse(hasattr(world_type, "options"),
                                  f"Unexpected assignment to {world_type.__name__}.options!")
 
+    def test_duplicate_options(self) -> None:
+        """Tests that a world doesn't reuse the same option class."""
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            with self.subTest(game=game_name):
+                seen_options = set()
+                for option in world_type.options_dataclass.type_hints.values():
+                    if not option.visibility:
+                        continue
+                    self.assertFalse(option in seen_options, f"{option} found in assigned options multiple times.")
+                    seen_options.add(option)
+
     def test_item_links_name_groups(self):
         """Tests that item links successfully unfold item_name_groups"""
         item_link_groups = [
@@ -67,4 +78,4 @@ class TestOptions(unittest.TestCase):
             if not world_type.hidden:
                 for option_key, option in world_type.options_dataclass.type_hints.items():
                     with self.subTest(game=gamename, option=option_key):
-                        pickle.dumps(option(option.default))
+                        pickle.dumps(option.from_any(option.default))

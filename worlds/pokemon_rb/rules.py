@@ -94,6 +94,9 @@ def set_rules(multiworld, world, player):
 
         "Route 22 - Trainer Parties": lambda state: state.has("Oak's Parcel", player),
 
+        "Victory Road 1F - Top Item": lambda state: logic.can_strength(state, world, player),
+        "Victory Road 1F - Left Item": lambda state: logic.can_strength(state, world, player),
+
         # # Rock Tunnel
         "Rock Tunnel 1F - PokeManiac": lambda state: logic.rock_tunnel(state, world, player),
         "Rock Tunnel 1F - Hiker 1": lambda state: logic.rock_tunnel(state, world, player),
