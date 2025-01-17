@@ -16,7 +16,7 @@ for individual entrances and no tests specifically checking event items used for
 
 BASE_WORLD_OPTIONS = {
     # Disable entrance randomization for simplicity.
-    "ActRandomizer": False,
+    "ActRandomizer": "false",
     # With no act randomization, starts other than Chapter 1 can put items into start inventory.
     # The time piece costs for each chapter are overwritten in world_setup() to fixed values.
     "StartingChapter": 1,
