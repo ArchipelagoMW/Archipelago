@@ -68,6 +68,7 @@ def set_card_rules(world):
         "Max Damage Bonus":
             CardRule(["Wave-Motion Cannon", "Megamorph", "United We Stand",
                       "Mage Power"], 1),
+        "Tribute Summon Bonus": CardRule(cards=lambda: find_cards_with(min_level=5, max_level=6), min_amount=1),
         "Fusion Summon Bonus": any_fusion(world),
         "Ritual Summon Bonus": any_ritual(),
         "Low LP Bonus":
@@ -79,6 +80,7 @@ def set_card_rules(world):
         "Effect Damage Only Bonus":
             [CardRule(["Solar Flare Dragon", "UFO Turtle"], 2, "each"),
              CardRule(["Wave-Motion Cannon"], 3)],
+        "Opponent's Turn Finish Bonus": opponents_turn(),
         "No More Cards Bonus":
             CardRule(["Morphing Jar", "Morphing Jar #2", "Needle Worm"], 1,
                      additional_cards=InnerCardRule(["The Shallow Grave", "Spear Cretin"], 2)),
@@ -146,7 +148,7 @@ def set_card_rules(world):
         "Exodia":
             CardRule(["Exodia the Forbidden One", "Left Arm of the Forbidden One",
                       "Right Arm of the Forbidden One", "Left Leg of the Forbidden One",
-                      "Right Leg of the Forbidden One", "Heart of the Underdog"], min_amount=1,
+                      "Right Leg of the Forbidden One"], min_amount=1,
                      amount_protocol="each"),
         "Can Exodia Win":
             CardRule(["Heart of the Underdog"], min_amount=1,

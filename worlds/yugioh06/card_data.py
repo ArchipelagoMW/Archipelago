@@ -6538,7 +6538,6 @@ collection_id_to_name = {
     2074: "Fault Zone",
     2075: "Homunculus Gold",
     2076: "The Ancient Sun Helios",
-    2076: "The Ancient Sun Helios",
     2077: "Helios Duo Megiste",
     2078: "Helios Tris Megiste",
     2079: "Elemental Hero Neos",

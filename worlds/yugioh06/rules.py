@@ -39,7 +39,8 @@ def set_rules(world):
         "No Damage Bonus": lambda state: state.has_group("Campaign Boss Beaten", player, 3),
         "Low Deck Bonus": lambda state: state.has("Can Self Mill", player),
         "Extremely Low Deck Bonus": lambda state: state.has("Can Self Mill", player),
-        "Opponent's Turn Finish Bonus": lambda state: state.has_group("Campaign Boss Beaten", player, 3),
+        "Opponent's Turn Finish Bonus": lambda state:state.has_all(
+            world.progression_cards["Opponent's Turn Finish Bonus"], player),
         "Exactly 0 LP Bonus": lambda state: state.has_group("Campaign Boss Beaten", player, 3),
         "Reversal Finish Bonus": lambda state: state.has_group("Campaign Boss Beaten", player, 3),
         "Quick Finish Bonus": lambda state: state.has("Quick-Finish", player) or
@@ -51,6 +52,7 @@ def set_rules(world):
                                                                   player),
         "Konami Bonus": lambda state: state.has_all(world.progression_cards["Konami Bonus"], player),
         "Max Damage Bonus": lambda state: state.has_all(world.progression_cards["Max Damage Bonus"], player),
+        "Tribute Summon Bonus": lambda state: state.has_all(world.progression_cards["Tribute Summon Bonus"], player),
         "Fusion Summon Bonus": lambda state: state.has_all(world.progression_cards["Fusion Summon Bonus"], player),
         "Ritual Summon Bonus": lambda state: state.has_all(world.progression_cards["Ritual Summon Bonus"], player),
         "Over 20000 LP Bonus": lambda state: state.has("Can Gain LP Every Turn", player) and state.has(
