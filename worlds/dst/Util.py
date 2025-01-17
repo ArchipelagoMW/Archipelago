@@ -96,10 +96,6 @@ def build_whitelist(options: DSTOptions) -> FrozenSet[str]:
     if len(_whitelist.intersection({SEASON.AUTUMN, SEASON.WINTER, SEASON.SUMMER})): _whitelist.add(SEASON.NONSPRING)
     if len(_whitelist.intersection({SEASON.AUTUMN, SEASON.WINTER, SEASON.SPRING})): _whitelist.add(SEASON.NONSUMMER)
 
-
-    # Force more time in logic for farming locations
-    if options.farming_locations.value: _whitelist.update({SEASONS_PASSED.SEASONS_HALF, SEASONS_PASSED.SEASONS_1})
-
     # Region
     _whitelist.update({REGION.MENU, REGION.FOREST})
     if options.cave_regions.value >= options.cave_regions.option_light: _whitelist.add(REGION.CAVE)
@@ -109,6 +105,10 @@ def build_whitelist(options: DSTOptions) -> FrozenSet[str]:
     if options.ocean_regions.value >= options.ocean_regions.option_full: _whitelist.add(REGION.MOONSTORM)
     if REGION.CAVE in _whitelist or REGION.OCEAN in _whitelist: _whitelist.add(REGION.DUALREGION)
     if REGION.CAVE in _whitelist and REGION.OCEAN in _whitelist: _whitelist.add(REGION.BOTHREGIONS)
+
+    # Force more time in logic for farming locations, and moonstorm too since potato is required for astroggles
+    if options.farming_locations.value or REGION.MOONSTORM in _whitelist:
+        _whitelist.update({SEASONS_PASSED.SEASONS_HALF, SEASONS_PASSED.SEASONS_1})
 
     # Hermit Crab Friendship (Min reachable 7)
     _HERMIT_FRIENDSHIP_CONDITIONS = [

@@ -205,7 +205,7 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
         if region_data.connecting_regions:
             for exit_name in region_data.connecting_regions:
                 if exit_name in WHITELIST:
-                    entrance = Entrance(player, exit_name, region)
+                    entrance = Entrance(player, f"{region_name} -> {exit_name}", region)
                     entrance.connect(multiworld.get_region(exit_name, player))
                     region.exits.append(entrance)
 

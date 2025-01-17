@@ -1,4 +1,4 @@
-VERSION:str = "1.2.2.3"
+VERSION:str = "1.2.2.4"
 ITEM_ID_OFFSET:int = 264000
 LOCATION_ID_OFFSET:int = 264000
 LOCATION_DAY_OFFSET = 266000
@@ -632,7 +632,7 @@ DSTAP_LOCATIONS = [
     [342,   "Pig Man",                  "pigman",               [ "creature", "peaceful" ] ],
     [343,   "Powder Monkey",            "powder_monkey",        [ "creature", "moonquay" ] ],
     [344,   "Prime Mate",               "prime_mate",           [ "creature", "moonquay" ] ],
-    [345,   "Puffin",                   "puffin",               [ "creature", "ocean", "peaceful", "day" ] ],
+    [345,   "Puffin",                   "puffin",               [ "creature", "ocean", "peaceful", "day", "dusk" ] ],
     [346,   "Rabbit",                   "rabbit",               [ "creature", "peaceful" ] ],
     [347,   "Redbird",                  "robin",                [ "creature", "nonwinter", "peaceful", "day", "dusk" ] ],
     [348,   "Snowbird",                 "robin_winter",         [ "creature", "seasonal", "winter" , "peaceful", "day", "dusk" ] ],
@@ -762,7 +762,7 @@ DSTAP_LOCATIONS = [
     # Magic (601-700)
     [601,   "Magic (Blue Gem)",                 "bluegem",                  [ "research", "magic", "tier_1" ] ],
     [602,   "Magic (Living Log)",               "livinglog",                [ "research", "magic", "tier_2" ] ],
-    [603,   "Magic (Glommer's Goop)",           "glommerfuel",              [ "research", "magic", "tier_1", "seasonal", "seasons_passed_half" ] ],
+    [603,   "Magic (Glommer's Goop)",           "glommerfuel",              [ "research", "magic", "tier_1", "seasonal", "seasons_passed_half", "night" ] ],
     [604,   "Magic (Dark Petals)",              "petals_evil",              [ "research", "magic", "tier_2" ] ],
     [605,   "Magic (Red Gem)",                  "redgem",                   [ "research", "magic", "tier_2" ] ],
     [606,   "Magic (Slurper Pelt)",             "slurper_pelt",             [ "research", "magic", "tier_2", "ruins" ] ],
@@ -795,7 +795,7 @@ DSTAP_LOCATIONS = [
     [633,   "Magic (Green Cap)",                "green_cap",                [ "research", "magic", "tier_1" ] ],
     [634,   "Magic (Blue Cap)",                 "blue_cap",                 [ "research", "magic", "tier_1" ] ],
     [635,   "Magic (Red Cap)",                  "red_cap",                  [ "research", "magic", "tier_1" ] ],
-    [636,   "Magic (Iridescent Gem)",           "opalpreciousgem",          [ "research", "magic", "tier_1", "ruins", "nounlock", "advanced", "seasons_passed_half" ] ],
+    [636,   "Magic (Iridescent Gem)",           "opalpreciousgem",          [ "research", "magic", "tier_1", "ruins", "nounlock", "advanced", "seasons_passed_half", "night" ] ],
     [637,   "Magic (Desert Stone)",             "townportaltalisman",       [ "research", "magic", "tier_2", "seasonal", "summer" ] ],
     [638,   "Magic (Naked Nostrils)",           "batnose",                  [ "research", "magic", "tier_2", "cave" ] ],
     [639,   "Magic (Frog Legs)",                "froglegs",                 [ "research", "magic", "tier_2", "day", "nonwinter" ] ],
