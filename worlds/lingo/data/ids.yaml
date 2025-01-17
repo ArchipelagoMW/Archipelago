@@ -17,6 +17,7 @@ special_items:
   Iceland Trap: 444411
   Atbash Trap: 444412
   Puzzle Skip: 444413
+  Speed Boost: 444680
 panels:
   Starting Room:
     HI: 444400
