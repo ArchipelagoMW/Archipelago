@@ -1,5 +1,6 @@
 from dataclasses import fields, Field, dataclass
 from typing import *
+from datetime import timedelta
 
 from Options import (
     Choice, Toggle, DefaultOnToggle, OptionSet, Range,
@@ -1487,11 +1488,11 @@ upgrade_included_names: Dict[int, Set[str]] = {
 
 # Mapping trade age limit options to their millisecond equivalents
 void_trade_age_limits_ms: Dict[int, int] = {
-    VoidTradeAgeLimit.option_5_minutes: 1000 * 60 * 5,
-    VoidTradeAgeLimit.option_30_minutes: 1000 * 60 * 30,
-    VoidTradeAgeLimit.option_1_hour: 1000 * 60 * 60,
-    VoidTradeAgeLimit.option_2_hours: 1000 * 60 * 60 * 2,
-    VoidTradeAgeLimit.option_4_hours: 1000 * 60 * 60 * 4,
-    VoidTradeAgeLimit.option_1_day: 1000 * 60 * 60 * 24,
-    VoidTradeAgeLimit.option_1_week: 1000 * 60 * 60 * 24 * 7,
+    VoidTradeAgeLimit.option_5_minutes: 1000 * int(timedelta(minutes = 5).total_seconds()),
+    VoidTradeAgeLimit.option_30_minutes: 1000 * int(timedelta(minutes = 30).total_seconds()),
+    VoidTradeAgeLimit.option_1_hour: 1000 * int(timedelta(hours = 1).total_seconds()),
+    VoidTradeAgeLimit.option_2_hours: 1000 * int(timedelta(hours = 2).total_seconds()),
+    VoidTradeAgeLimit.option_4_hours: 1000 * int(timedelta(hours = 4).total_seconds()),
+    VoidTradeAgeLimit.option_1_day: 1000 * int(timedelta(days = 1).total_seconds()),
+    VoidTradeAgeLimit.option_1_week: 1000 * int(timedelta(weeks = 1).total_seconds()),
 }
