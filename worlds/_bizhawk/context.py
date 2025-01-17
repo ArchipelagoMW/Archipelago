@@ -241,7 +241,7 @@ def _patch_and_run_game(patch_file: str):
         return {}
 
 
-def launch(*launch_args) -> None:
+def launch(*launch_args: str) -> None:
     async def main():
         parser = get_base_parser()
         parser.add_argument("patch_file", default="", type=str, nargs="?", help="Path to an Archipelago patch file")
