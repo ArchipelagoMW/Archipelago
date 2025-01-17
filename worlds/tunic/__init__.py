@@ -160,6 +160,7 @@ class TunicWorld(World):
                 self.options.lanternless.value = self.passthrough["lanternless"]
                 self.options.maskless.value = self.passthrough["maskless"]
                 self.options.hexagon_quest.value = self.passthrough["hexagon_quest"]
+                self.options.hexagon_quest_ability_type.value = self.passthrough["hexagon_quest_ability_type"]
                 self.options.entrance_rando.value = self.passthrough["entrance_rando"]
                 self.options.shuffle_ladders.value = self.passthrough["shuffle_ladders"]
                 self.options.grass_randomizer.value = self.passthrough.get("grass_randomizer", 0)
@@ -521,7 +522,7 @@ class TunicWorld(World):
         self.ability_unlocks = randomize_ability_unlocks(self)
 
         # stuff for universal tracker support, can be ignored for standard gen
-        if self.using_ut:
+        if self.using_ut and self.options.hexagon_quest_ability_type == "hexagons":
             self.ability_unlocks["Pages 24-25 (Prayer)"] = self.passthrough["Hexagon Quest Prayer"]
             self.ability_unlocks["Pages 42-43 (Holy Cross)"] = self.passthrough["Hexagon Quest Holy Cross"]
             self.ability_unlocks["Pages 52-53 (Icebolt)"] = self.passthrough["Hexagon Quest Icebolt"]
