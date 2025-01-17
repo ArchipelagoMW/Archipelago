@@ -123,9 +123,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         and can_defeat_red_bubbles(state, player)
         and can_defeat_darknuts(state, player)
         and can_play_winds_requiem(state, player)
-        and (
-            state.has("Grappling Hook", player) or has_heros_sword(state, player) or state.has("Skull Hammer", player)
-        ),
+        and (state.has_any(["Grappling Hook", "Skull Hammer"], player) or has_heros_sword(state, player)),
     )
     set_rule_if_exists(
         "Outset Island - Savage Labyrinth - Floor 50",
@@ -145,7 +143,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         and can_defeat_red_bubbles(state, player)
         and can_defeat_darknuts(state, player)
         and can_play_winds_requiem(state, player)
-        and (state.has("Grappling Hook", player) or has_heros_sword(state, player) or state.has("Skull Hammer", player))
+        and (state.has_any(["Grappling Hook", "Skull Hammer"], player) or has_heros_sword(state, player))
         and can_aim_mirror_shield(state, player)
         and can_defeat_redeads(state, player)
         and can_defeat_blue_bubbles(state, player)
@@ -284,10 +282,9 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists(
         "Dragon Roost Island - Chest on Top of Boulder",
-        lambda state: has_heros_bow(state, player)
-        or (state.has("Bait Bag", player) and can_buy_hyoi_pears(state, player))
-        or state.has("Boomerang", player)
-        or state.has("Bombs", player),
+        lambda state: state.has_any(["Boomerang", "Bombs"], player)
+        or has_heros_bow(state, player)
+        or (state.has("Bait Bag", player) and can_buy_hyoi_pears(state, player)),
     )
     set_rule_if_exists(
         "Dragon Roost Island - Fly Across Platforms Around Island",
@@ -620,7 +617,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         "Earth Temple - Behind Curtain In Warp Pot Room",
         lambda state: can_play_command_melody(state, player)
         and has_fire_arrows(state, player)
-        and (state.has("Boomerang", player) or state.has("Hookshot", player)),
+        and state.has_any(["Boomerang", "Hookshot"], player),
     )
     set_rule_if_exists(
         "Earth Temple - Transparent Chest in First Crypt",
@@ -673,7 +670,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         lambda state: can_reach_earth_temple_redead_hub_room(state, player)
         and (can_play_command_melody(state, player) or can_aim_mirror_shield(state, player))
         and has_fire_arrows(state, player)
-        and (state.has("Boomerang", player) or state.has("Hookshot", player)),
+        and state.has_any(["Boomerang", "Hookshot"], player),
     )
     set_rule_if_exists(
         "Earth Temple - Chest in Third Crypt", lambda state: can_reach_earth_temple_third_crypt(state, player)
@@ -840,22 +837,12 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     # set_rule_if_exists(
     #     "Mailbox - Beedle's Silver Membership Reward",
-    #     lambda state: (
-    #         state.has("Bait Bag", player)
-    #         or state.has("Bombs", player)
-    #         or has_heros_bow(state, player)
-    #         or state.has("Empty Bottle", player)
-    #     )
+    #     lambda state: (state.has_any(["Bait Bag", "Bombs", "Empty Bottle"], player) or has_heros_bow(state, player))
     #     and can_play_song_of_passing(state, player),
     # )
     # set_rule_if_exists(
     #     "Mailbox - Beedle's Gold Membership Reward",
-    #     lambda state: (
-    #         state.has("Bait Bag", player)
-    #         or state.has("Bombs", player)
-    #         or has_heros_bow(state, player)
-    #         or state.has("Empty Bottle", player)
-    #     )
+    #     lambda state: (state.has_any(["Bait Bag", "Bombs", "Empty Bottle"], player) or has_heros_bow(state, player))
     #     and can_play_song_of_passing(state, player),
     # )
     set_rule_if_exists(
