@@ -505,9 +505,9 @@ class TunicWorld(World):
     def write_spoiler_header(self, spoiler_handle: TextIO):
         if self.options.hexagon_quest and self.options.ability_shuffling:
             spoiler_handle.write('Ability Unlocks (Hexagon Quest):\n')
-            for key in self.ability_unlocks:
+            for ability in self.ability_unlocks:
                 # Remove parentheses for better readability
-                spoiler_handle.write(f'{key[key.find("(")+1:key.find(")")]}: {self.ability_unlocks[key]} Gold Questagons\n')
+                spoiler_handle.write(f'{ability[ability.find("(")+1:ability.find(")")]}: {self.ability_unlocks[ability]} Gold Questagons\n')
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
         if self.options.entrance_rando:
