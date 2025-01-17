@@ -111,7 +111,9 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         and has_magic_meter(state, player),
     )
     # set_rule_if_exists("Outset Island - Orca - Hit 500 Times", lambda state: can_sword_fight_with_orca(state, player))
-    set_rule_if_exists("Outset Island - Great Fairy", lambda state: can_access_outset_fairy_fountain(state, player))
+    set_rule_if_exists(
+        "Outset Island - Great Fairy", lambda state: state.can_reach_region("Outset Fairy Fountain", player)
+    )
     set_rule_if_exists("Outset Island - Jabun's Cave", lambda state: state.has("Bombs", player))
     set_rule_if_exists(
         "Outset Island - Dig up Black Soil",
@@ -121,8 +123,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists(
         "Outset Island - Savage Labyrinth - Floor 30",
-        lambda state: can_access_savage_labyrinth(state, player)
-        and can_defeat_keese(state, player)
+        lambda state: can_defeat_keese(state, player)
         and can_defeat_miniblins(state, player)
         and can_defeat_red_chuchus(state, player)
         and can_defeat_magtails(state, player)
@@ -144,8 +145,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists(
         "Outset Island - Savage Labyrinth - Floor 50",
-        lambda state: can_access_savage_labyrinth(state, player)
-        and can_defeat_keese(state, player)
+        lambda state: can_defeat_keese(state, player)
         and can_defeat_miniblins(state, player)
         and can_defeat_red_chuchus(state, player)
         and can_defeat_magtails(state, player)
@@ -317,73 +317,45 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists("Dragon Roost Island - Rito Aerie - Mail Sorting", lambda state: True)
     set_rule_if_exists(
         "Dragon Roost Island - Secret Cave",
-        lambda state: can_access_dragon_roost_island_secret_cave(state, player)
-        and can_defeat_keese(state, player)
-        and can_defeat_red_chuchus(state, player),
+        lambda state: can_defeat_keese(state, player) and can_defeat_red_chuchus(state, player),
     )
 
     # Dragon Roost Cavern
-    set_rule_if_exists("Dragon Roost Cavern - First Room", lambda state: can_access_dragon_roost_cavern(state, player))
+    set_rule_if_exists("Dragon Roost Cavern - First Room", lambda state: True)
     set_rule_if_exists(
-        "Dragon Roost Cavern - Alcove With Water Jugs",
-        lambda state: can_access_dragon_roost_cavern(state, player) and state.has("DRC Small Key", player, 1),
+        "Dragon Roost Cavern - Alcove With Water Jugs", lambda state: state.has("DRC Small Key", player, 1)
     )
     set_rule_if_exists(
-        "Dragon Roost Cavern - Water Jug on Upper Shelf",
-        lambda state: can_access_dragon_roost_cavern(state, player) and state.has("DRC Small Key", player, 1),
+        "Dragon Roost Cavern - Water Jug on Upper Shelf", lambda state: state.has("DRC Small Key", player, 1)
     )
-    set_rule_if_exists(
-        "Dragon Roost Cavern - Boarded Up Chest",
-        lambda state: can_access_dragon_roost_cavern(state, player) and state.has("DRC Small Key", player, 1),
-    )
+    set_rule_if_exists("Dragon Roost Cavern - Boarded Up Chest", lambda state: state.has("DRC Small Key", player, 1))
     set_rule_if_exists(
         "Dragon Roost Cavern - Chest Across Lava Pit",
-        lambda state: can_access_dragon_roost_cavern(state, player)
-        and state.has("DRC Small Key", player, 2)
+        lambda state: state.has("DRC Small Key", player, 2)
         and (
             state.has("Grappling Hook", player)
             or can_fly_with_deku_leaf_indoors(state, player)
             or (state.has("Hookshot", player) and state._tww_obscure_1(player))
         ),
     )
+    set_rule_if_exists("Dragon Roost Cavern - Rat Room", lambda state: state.has("DRC Small Key", player, 2))
     set_rule_if_exists(
-        "Dragon Roost Cavern - Rat Room",
-        lambda state: can_access_dragon_roost_cavern(state, player) and state.has("DRC Small Key", player, 2),
+        "Dragon Roost Cavern - Rat Room Boarded Up Chest", lambda state: state.has("DRC Small Key", player, 2)
     )
-    set_rule_if_exists(
-        "Dragon Roost Cavern - Rat Room Boarded Up Chest",
-        lambda state: can_access_dragon_roost_cavern(state, player) and state.has("DRC Small Key", player, 2),
-    )
-    set_rule_if_exists(
-        "Dragon Roost Cavern - Bird's Nest",
-        lambda state: can_access_dragon_roost_cavern(state, player) and state.has("DRC Small Key", player, 3),
-    )
-    set_rule_if_exists(
-        "Dragon Roost Cavern - Dark Room",
-        lambda state: can_access_dragon_roost_cavern(state, player) and state.has("DRC Small Key", player, 4),
-    )
+    set_rule_if_exists("Dragon Roost Cavern - Bird's Nest", lambda state: state.has("DRC Small Key", player, 3))
+    set_rule_if_exists("Dragon Roost Cavern - Dark Room", lambda state: state.has("DRC Small Key", player, 4))
     set_rule_if_exists(
         "Dragon Roost Cavern - Tingle Chest in Hub Room",
-        lambda state: can_access_dragon_roost_cavern(state, player)
-        and state.has("DRC Small Key", player, 4)
-        and has_tingle_bombs(state, player),
+        lambda state: state.has("DRC Small Key", player, 4) and has_tingle_bombs(state, player),
     )
     set_rule_if_exists(
-        "Dragon Roost Cavern - Pot on Upper Shelf in Pot Room",
-        lambda state: can_access_dragon_roost_cavern(state, player) and state.has("DRC Small Key", player, 4),
+        "Dragon Roost Cavern - Pot on Upper Shelf in Pot Room", lambda state: state.has("DRC Small Key", player, 4)
     )
-    set_rule_if_exists(
-        "Dragon Roost Cavern - Pot Room Chest",
-        lambda state: can_access_dragon_roost_cavern(state, player) and state.has("DRC Small Key", player, 4),
-    )
-    set_rule_if_exists(
-        "Dragon Roost Cavern - Miniboss",
-        lambda state: can_access_dragon_roost_cavern(state, player) and state.has("DRC Small Key", player, 4),
-    )
+    set_rule_if_exists("Dragon Roost Cavern - Pot Room Chest", lambda state: state.has("DRC Small Key", player, 4))
+    set_rule_if_exists("Dragon Roost Cavern - Miniboss", lambda state: state.has("DRC Small Key", player, 4))
     set_rule_if_exists(
         "Dragon Roost Cavern - Under Rope Bridge",
-        lambda state: can_access_dragon_roost_cavern(state, player)
-        and state.has("DRC Small Key", player, 4)
+        lambda state: state.has("DRC Small Key", player, 4)
         and (state.has("Grappling Hook", player) or can_fly_with_deku_leaf_outdoors(state, player)),
     )
     set_rule_if_exists(
@@ -410,10 +382,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         "Dragon Roost Cavern - Boss Stairs Right Pot",
         lambda state: can_reach_dragon_roost_cavern_boss_stairs(state, player),
     )
-    set_rule_if_exists(
-        "Dragon Roost Cavern - Gohma Heart Container",
-        lambda state: can_access_gohma_boss_arena(state, player) and can_defeat_gohma(state, player),
-    )
+    set_rule_if_exists("Dragon Roost Cavern - Gohma Heart Container", lambda state: can_defeat_gohma(state, player))
 
     # Forest Haven
     set_rule_if_exists(
@@ -452,74 +421,60 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
 
     # Forbidden Woods
-    set_rule_if_exists("Forbidden Woods - First Room", lambda state: can_access_forbidden_woods(state, player))
+    set_rule_if_exists("Forbidden Woods - First Room", lambda state: True)
     set_rule_if_exists(
         "Forbidden Woods - Inside Hollow Tree's Mouth",
-        lambda state: can_access_forbidden_woods(state, player)
-        and (can_defeat_door_flowers(state, player) or can_defeat_boko_babas(state, player)),
+        lambda state: (can_defeat_door_flowers(state, player) or can_defeat_boko_babas(state, player)),
     )
     set_rule_if_exists(
         "Forbidden Woods - Climb to Top Using Boko Baba Bulbs",
-        lambda state: can_access_forbidden_woods(state, player)
-        and can_fly_with_deku_leaf_indoors(state, player)
-        and can_defeat_door_flowers(state, player),
+        lambda state: can_fly_with_deku_leaf_indoors(state, player) and can_defeat_door_flowers(state, player),
     )
     set_rule_if_exists(
-        "Forbidden Woods - Pot High Above Hollow Tree",
-        lambda state: can_access_forbidden_woods(state, player) and can_fly_with_deku_leaf_indoors(state, player),
+        "Forbidden Woods - Pot High Above Hollow Tree", lambda state: can_fly_with_deku_leaf_indoors(state, player)
     )
     set_rule_if_exists(
         "Forbidden Woods - Hole in Tree",
-        lambda state: can_access_forbidden_woods(state, player)
-        and can_fly_with_deku_leaf_indoors(state, player)
-        and can_defeat_boko_babas(state, player),
+        lambda state: can_fly_with_deku_leaf_indoors(state, player) and can_defeat_boko_babas(state, player),
     )
     set_rule_if_exists(
         "Forbidden Woods - Morth Pit",
-        lambda state: can_access_forbidden_woods(state, player)
-        and can_fly_with_deku_leaf_indoors(state, player)
+        lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
         and state.has("Grappling Hook", player),
     )
     set_rule_if_exists(
         "Forbidden Woods - Vine Maze Left Chest",
-        lambda state: can_access_forbidden_woods(state, player)
-        and can_fly_with_deku_leaf_indoors(state, player)
+        lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
         and state.has("Grappling Hook", player),
     )
     set_rule_if_exists(
         "Forbidden Woods - Vine Maze Right Chest",
-        lambda state: can_access_forbidden_woods(state, player)
-        and can_fly_with_deku_leaf_indoors(state, player)
+        lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
         and state.has("Grappling Hook", player),
     )
     set_rule_if_exists(
         "Forbidden Woods - Highest Pot in Vine Maze",
-        lambda state: can_access_forbidden_woods(state, player)
-        and can_fly_with_deku_leaf_indoors(state, player)
+        lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
         and state.has("Grappling Hook", player),
     )
     set_rule_if_exists(
         "Forbidden Woods - Tall Room Before Miniboss",
-        lambda state: can_access_forbidden_woods(state, player)
-        and can_fly_with_deku_leaf_indoors(state, player)
+        lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
         and state.has("Grappling Hook", player)
         and state.has("FW Small Key", player, 1)
         and (can_defeat_peahats(state, player) or state._tww_precise_2(player)),
     )
     set_rule_if_exists(
-        "Forbidden Woods - Mothula Miniboss Room",
-        lambda state: can_access_forbidden_woods_miniboss_arena(state, player)
-        and can_defeat_winged_mothulas(state, player),
+        "Forbidden Woods - Mothula Miniboss Room", lambda state: can_defeat_winged_mothulas(state, player)
     )
     set_rule_if_exists(
         "Forbidden Woods - Past Seeds Hanging by Vines",
-        lambda state: can_access_forbidden_woods(state, player)
-        and can_fly_with_deku_leaf_indoors(state, player)
+        lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
         and state.has("Grappling Hook", player)
         and state.has("FW Small Key", player, 1)
@@ -528,77 +483,55 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists(
         "Forbidden Woods - Chest Across Red Hanging Flower",
-        lambda state: can_access_forbidden_woods(state, player)
-        and can_fly_with_deku_leaf_indoors(state, player)
+        lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
         and state.has("Grappling Hook", player)
         and state.has("Boomerang", player),
     )
     set_rule_if_exists(
         "Forbidden Woods - Tingle Statue Chest",
-        lambda state: can_access_forbidden_woods(state, player)
-        and can_fly_with_deku_leaf_indoors(state, player)
+        lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and state.has("Grappling Hook", player)
         and state.has("Boomerang", player)
         and (has_tingle_bombs(state, player) or can_activate_tingle_bomb_triggers_without_tingle_tuner(state, player)),
     )
     set_rule_if_exists(
         "Forbidden Woods - Chest in Locked Tree Trunk",
-        lambda state: can_access_forbidden_woods(state, player)
-        and can_fly_with_deku_leaf_indoors(state, player)
+        lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
         and state.has("Grappling Hook", player)
         and state.has("Boomerang", player),
     )
     set_rule_if_exists(
         "Forbidden Woods - Big Key Chest",
-        lambda state: can_access_forbidden_woods(state, player)
-        and can_fly_with_deku_leaf_indoors(state, player)
+        lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
         and state.has("Grappling Hook", player)
         and state.has("Boomerang", player),
     )
     set_rule_if_exists(
         "Forbidden Woods - Double Mothula Room",
-        lambda state: can_access_forbidden_woods(state, player)
-        and can_fly_with_deku_leaf_indoors(state, player)
+        lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
         and (can_defeat_door_flowers(state, player) or state.has("Grappling Hook", player))
         and can_defeat_mothulas(state, player),
     )
     set_rule_if_exists(
-        "Forbidden Woods - Kalle Demos Heart Container",
-        lambda state: can_access_kalle_demos_boss_arena(state, player) and can_defeat_kalle_demos(state, player),
+        "Forbidden Woods - Kalle Demos Heart Container", lambda state: can_defeat_kalle_demos(state, player)
     )
 
     # Greatfish Isle
     set_rule_if_exists("Greatfish Isle - Hidden Chest", lambda state: can_fly_with_deku_leaf_outdoors(state, player))
 
     # Tower of the Gods
-    set_rule_if_exists(
-        "Tower of the Gods - Chest Behind Bombable Walls",
-        lambda state: can_access_tower_of_the_gods(state, player) and state.has("Bombs", player),
-    )
-    set_rule_if_exists(
-        "Tower of the Gods - Pot Behind Bombable Walls",
-        lambda state: can_access_tower_of_the_gods(state, player) and state.has("Bombs", player),
-    )
-    set_rule_if_exists(
-        "Tower of the Gods - Hop Across Floating Boxes", lambda state: can_access_tower_of_the_gods(state, player)
-    )
-    set_rule_if_exists(
-        "Tower of the Gods - Light Two Torches",
-        lambda state: can_access_tower_of_the_gods(state, player) and state.has("Bombs", player),
-    )
-    set_rule_if_exists(
-        "Tower of the Gods - Skulls Room Chest",
-        lambda state: can_access_tower_of_the_gods(state, player) and state.has("Bombs", player),
-    )
+    set_rule_if_exists("Tower of the Gods - Chest Behind Bombable Walls", lambda state: state.has("Bombs", player))
+    set_rule_if_exists("Tower of the Gods - Pot Behind Bombable Walls", lambda state: state.has("Bombs", player))
+    set_rule_if_exists("Tower of the Gods - Hop Across Floating Boxes", lambda state: True)
+    set_rule_if_exists("Tower of the Gods - Light Two Torches", lambda state: state.has("Bombs", player))
+    set_rule_if_exists("Tower of the Gods - Skulls Room Chest", lambda state: state.has("Bombs", player))
     set_rule_if_exists(
         "Tower of the Gods - Shoot Eye Above Skulls Room Chest",
-        lambda state: can_access_tower_of_the_gods(state, player)
-        and state.has("Bombs", player)
-        and has_heros_bow(state, player),
+        lambda state: state.has("Bombs", player) and has_heros_bow(state, player),
     )
     set_rule_if_exists(
         "Tower of the Gods - Tingle Statue Chest",
@@ -618,10 +551,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         )
         and state.has("Wind Waker", player),
     )
-    set_rule_if_exists(
-        "Tower of the Gods - Darknut Miniboss Room",
-        lambda state: can_access_tower_of_the_gods_miniboss_arena(state, player) and can_defeat_darknuts(state, player),
-    )
+    set_rule_if_exists("Tower of the Gods - Darknut Miniboss Room", lambda state: can_defeat_darknuts(state, player))
     set_rule_if_exists(
         "Tower of the Gods - Second Chest Guarded by Armos Knights",
         lambda state: can_reach_tower_of_the_gods_second_floor(state, player)
@@ -648,16 +578,10 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists(
         "Tower of the Gods - Big Key Chest", lambda state: can_reach_tower_of_the_gods_third_floor(state, player)
     )
-    set_rule_if_exists(
-        "Tower of the Gods - Gohdan Heart Container",
-        lambda state: can_access_gohdan_boss_arena(state, player) and can_defeat_gohdan(state, player),
-    )
+    set_rule_if_exists("Tower of the Gods - Gohdan Heart Container", lambda state: can_defeat_gohdan(state, player))
 
     # Hyrule
-    set_rule_if_exists(
-        "Hyrule - Master Sword Chamber",
-        lambda state: can_access_master_sword_chamber(state, player) and can_defeat_mighty_darknuts(state, player),
-    )
+    set_rule_if_exists("Hyrule - Master Sword Chamber", lambda state: can_defeat_mighty_darknuts(state, player))
 
     # Forsaken Fortress
     set_rule_if_exists(
@@ -683,8 +607,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         "Forsaken Fortress - Chest on Bed", lambda state: can_get_inside_forsaken_fortress(state, player)
     )
     set_rule_if_exists(
-        "Forsaken Fortress - Helmaroc King Heart Container",
-        lambda state: can_access_helmaroc_king_boss_arena(state, player) and can_defeat_helmaroc_king(state, player),
+        "Forsaken Fortress - Helmaroc King Heart Container", lambda state: can_defeat_helmaroc_king(state, player)
     )
 
     # Mother and Child Isles
@@ -693,10 +616,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
 
     # Fire Mountain
-    set_rule_if_exists(
-        "Fire Mountain - Cave - Chest",
-        lambda state: can_access_fire_mountain_secret_cave(state, player) and can_defeat_magtails(state, player),
-    )
+    set_rule_if_exists("Fire Mountain - Cave - Chest", lambda state: can_defeat_magtails(state, player))
     set_rule_if_exists("Fire Mountain - Lookout Platform Chest", lambda state: True)
     set_rule_if_exists(
         "Fire Mountain - Lookout Platform - Destroy the Cannons", lambda state: can_destroy_cannons(state, player)
@@ -708,13 +628,8 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
 
     # Ice Ring Isle
     set_rule_if_exists("Ice Ring Isle - Frozen Chest", lambda state: has_fire_arrows(state, player))
-    set_rule_if_exists(
-        "Ice Ring Isle - Cave - Chest", lambda state: can_access_ice_ring_isle_secret_cave(state, player)
-    )
-    set_rule_if_exists(
-        "Ice Ring Isle - Inner Cave - Chest",
-        lambda state: can_access_ice_ring_isle_inner_cave(state, player) and has_fire_arrows(state, player),
-    )
+    set_rule_if_exists("Ice Ring Isle - Cave - Chest", lambda state: True)
+    set_rule_if_exists("Ice Ring Isle - Inner Cave - Chest", lambda state: has_fire_arrows(state, player))
 
     # Headstone Island
     set_rule_if_exists(
@@ -725,13 +640,11 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
 
     # Earth Temple
     set_rule_if_exists(
-        "Earth Temple - Transparent Chest In Warp Pot Room",
-        lambda state: can_access_earth_temple(state, player) and can_play_command_melody(state, player),
+        "Earth Temple - Transparent Chest In Warp Pot Room", lambda state: can_play_command_melody(state, player)
     )
     set_rule_if_exists(
         "Earth Temple - Behind Curtain In Warp Pot Room",
-        lambda state: can_access_earth_temple(state, player)
-        and can_play_command_melody(state, player)
+        lambda state: can_play_command_melody(state, player)
         and has_fire_arrows(state, player)
         and (state.has("Boomerang", player) or state.has("Hookshot", player)),
     )
@@ -764,8 +677,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists(
         "Earth Temple - Stalfos Miniboss Room",
-        lambda state: can_access_earth_temple_miniboss_arena(state, player)
-        and (can_defeat_stalfos(state, player) or state.has("Hookshot", player)),
+        lambda state: can_defeat_stalfos(state, player) or state.has("Hookshot", player),
     )
     set_rule_if_exists(
         "Earth Temple - Tingle Statue Chest",
@@ -829,20 +741,15 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         )
         and can_defeat_darknuts(state, player),
     )
-    set_rule_if_exists(
-        "Earth Temple - Jalhalla Heart Container",
-        lambda state: can_access_jalhalla_boss_arena(state, player) and can_defeat_jalhalla(state, player),
-    )
+    set_rule_if_exists("Earth Temple - Jalhalla Heart Container", lambda state: can_defeat_jalhalla(state, player))
 
     # Wind Temple
     set_rule_if_exists(
-        "Wind Temple - Chest Between Two Dirt Patches",
-        lambda state: can_access_wind_temple(state, player) and can_play_command_melody(state, player),
+        "Wind Temple - Chest Between Two Dirt Patches", lambda state: can_play_command_melody(state, player)
     )
     set_rule_if_exists(
         "Wind Temple - Behind Stone Head in Hidden Upper Room",
-        lambda state: can_access_wind_temple(state, player)
-        and can_play_command_melody(state, player)
+        lambda state: can_play_command_melody(state, player)
         and state.has("Iron Boots", player)
         and can_fly_with_deku_leaf_indoors(state, player)
         and state.has("Hookshot", player),
@@ -911,9 +818,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists(
         "Wind Temple - Wizzrobe Miniboss Room",
-        lambda state: can_access_wind_temple_miniboss_arena(state, player)
-        and can_defeat_darknuts(state, player)
-        and can_remove_peahat_armor(state, player),
+        lambda state: can_defeat_darknuts(state, player) and can_remove_peahat_armor(state, player),
     )
     set_rule_if_exists(
         "Wind Temple - Chest at Top of Hub Room", lambda state: can_activate_wind_temple_giant_fan(state, player)
@@ -929,10 +834,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         and can_defeat_wizzrobes(state, player)
         and can_defeat_morths(state, player),
     )
-    set_rule_if_exists(
-        "Wind Temple - Molgera Heart Container",
-        lambda state: can_access_molgera_boss_arena(state, player) and can_defeat_molgera(state, player),
-    )
+    set_rule_if_exists("Wind Temple - Molgera Heart Container", lambda state: can_defeat_molgera(state, player))
 
     # Ganon's Tower
     set_rule_if_exists(
@@ -958,7 +860,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         "Mailbox - Letter from Baito",
         lambda state: state.has("Delivery Bag", player)
         and state.has("Note to Mom", player)
-        and can_access_jalhalla_boss_arena(state, player)
+        and state.can_reach_region("Jalhalla Boss Arena", player)
         and can_defeat_jalhalla(state, player),
     )
     set_rule_if_exists("Mailbox - Letter from Komali's Father", lambda state: state.has("Farore's Pearl", player))
@@ -988,7 +890,8 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     # )
     set_rule_if_exists(
         "Mailbox - Letter from Orca",
-        lambda state: can_access_kalle_demos_boss_arena(state, player) and can_defeat_kalle_demos(state, player),
+        lambda state: state.can_reach_region("Kalle Demos Boss Arena", player)
+        and can_defeat_kalle_demos(state, player),
     )
     set_rule_if_exists(
         "Mailbox - Letter from Grandma",
@@ -998,7 +901,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists(
         "Mailbox - Letter from Aryll",
-        lambda state: can_access_helmaroc_king_boss_arena(state, player)
+        lambda state: state.can_reach_region("Helmaroc King Boss Arena", player)
         and can_defeat_helmaroc_king(state, player)
         and can_play_song_of_passing(state, player),
     )
@@ -1006,7 +909,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         "Mailbox - Letter from Tingle",
         lambda state: rescued_tingle(state, player)
         and has_any_wallet_upgrade(state, player)
-        and can_access_helmaroc_king_boss_arena(state, player)
+        and state.can_reach_region("Helmaroc King Boss Arena", player)
         and can_defeat_helmaroc_king(state, player)
         and can_play_song_of_passing(state, player),
     )
@@ -1024,7 +927,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         lambda state: can_access_forest_haven(state, player)
         and state.has("Empty Bottle", player)
         and can_play_ballad_of_gales(state, player)
-        and can_access_cliff_plateau_isles_inner_cave(state, player),
+        and state.can_reach_region("Cliff Plateau Isles Inner Cave", player),
     )
     set_rule_if_exists(
         "The Great Sea - Ghost Ship",
@@ -1042,14 +945,11 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         lambda state: state.has("Hookshot", player) or can_fly_with_deku_leaf_outdoors(state, player),
     )
     set_rule_if_exists(
-        "Private Oasis - Cabana Labyrinth - Lower Floor Chest",
-        lambda state: can_access_cabana_labyrinth(state, player) and state.has("Skull Hammer", player),
+        "Private Oasis - Cabana Labyrinth - Lower Floor Chest", lambda state: state.has("Skull Hammer", player)
     )
     set_rule_if_exists(
         "Private Oasis - Cabana Labyrinth - Upper Floor Chest",
-        lambda state: can_access_cabana_labyrinth(state, player)
-        and state.has("Skull Hammer", player)
-        and can_play_winds_requiem(state, player),
+        lambda state: state.has("Skull Hammer", player) and can_play_winds_requiem(state, player),
     )
     set_rule_if_exists(
         "Private Oasis - Big Octo",
@@ -1064,10 +964,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists(
         "Needle Rock Isle - Chest", lambda state: state.has("Bait Bag", player) and can_buy_hyoi_pears(state, player)
     )
-    set_rule_if_exists(
-        "Needle Rock Isle - Cave",
-        lambda state: can_access_needle_rock_isle_secret_cave(state, player) and has_fire_arrows(state, player),
-    )
+    set_rule_if_exists("Needle Rock Isle - Cave", lambda state: has_fire_arrows(state, player))
     set_rule_if_exists(
         "Needle Rock Isle - Golden Gunboat",
         lambda state: state.has("Bombs", player) and state.has("Grappling Hook", player),
@@ -1077,8 +974,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists("Angular Isles - Peak", lambda state: True)
     set_rule_if_exists(
         "Angular Isles - Cave",
-        lambda state: can_access_angular_isles_secret_cave(state, player)
-        and can_aim_mirror_shield(state, player)
+        lambda state: can_aim_mirror_shield(state, player)
         and (can_fly_with_deku_leaf_indoors(state, player) or state.has("Hookshot", player)),
     )
 
@@ -1086,16 +982,14 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists("Boating Course - Raft", lambda state: True)
     set_rule_if_exists(
         "Boating Course - Cave",
-        lambda state: can_access_boating_course_secret_cave(state, player)
-        and can_hit_diamond_switches_at_range(state, player)
+        lambda state: can_hit_diamond_switches_at_range(state, player)
         and (can_defeat_miniblins_easily(state, player) or state._tww_precise_2(player)),
     )
 
     # Stone Watcher Island
     set_rule_if_exists(
         "Stone Watcher Island - Cave",
-        lambda state: can_access_stone_watcher_island_secret_cave(state, player)
-        and can_defeat_armos(state, player)
+        lambda state: can_defeat_armos(state, player)
         and can_defeat_wizzrobes(state, player)
         and can_defeat_darknuts(state, player)
         and can_play_winds_requiem(state, player),
@@ -1118,8 +1012,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     # Overlook Island
     set_rule_if_exists(
         "Overlook Island - Cave",
-        lambda state: can_access_overlook_island_secret_cave(state, player)
-        and can_defeat_stalfos(state, player)
+        lambda state: can_defeat_stalfos(state, player)
         and can_defeat_wizzrobes(state, player)
         and can_defeat_red_chuchus(state, player)
         and can_defeat_green_chuchus(state, player)
@@ -1132,31 +1025,22 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
 
     # Bird's Peak Rock
-    set_rule_if_exists(
-        "Bird's Peak Rock - Cave",
-        lambda state: can_access_birds_peak_rock_secret_cave(state, player) and can_play_winds_requiem(state, player),
-    )
+    set_rule_if_exists("Bird's Peak Rock - Cave", lambda state: can_play_winds_requiem(state, player))
 
     # Pawprint Isle
+    set_rule_if_exists("Pawprint Isle - Chuchu Cave - Chest", lambda state: True)
     set_rule_if_exists(
-        "Pawprint Isle - Chuchu Cave - Chest", lambda state: can_access_pawprint_isle_chuchu_cave(state, player)
+        "Pawprint Isle - Chuchu Cave - Behind Left Boulder", lambda state: can_move_boulders(state, player)
     )
     set_rule_if_exists(
-        "Pawprint Isle - Chuchu Cave - Behind Left Boulder",
-        lambda state: can_access_pawprint_isle_chuchu_cave(state, player) and can_move_boulders(state, player),
+        "Pawprint Isle - Chuchu Cave - Behind Right Boulder", lambda state: can_move_boulders(state, player)
     )
     set_rule_if_exists(
-        "Pawprint Isle - Chuchu Cave - Behind Right Boulder",
-        lambda state: can_access_pawprint_isle_chuchu_cave(state, player) and can_move_boulders(state, player),
-    )
-    set_rule_if_exists(
-        "Pawprint Isle - Chuchu Cave - Scale the Wall",
-        lambda state: can_access_pawprint_isle_chuchu_cave(state, player) and state.has("Grappling Hook", player),
+        "Pawprint Isle - Chuchu Cave - Scale the Wall", lambda state: state.has("Grappling Hook", player)
     )
     set_rule_if_exists(
         "Pawprint Isle - Wizzrobe Cave",
-        lambda state: can_access_pawprint_isle_wizzrobe_cave(state, player)
-        and can_defeat_wizzrobes_at_range(state, player)
+        lambda state: can_defeat_wizzrobes_at_range(state, player)
         and can_defeat_fire_keese(state, player)
         and can_defeat_magtails(state, player)
         and can_defeat_red_chuchus(state, player)
@@ -1168,9 +1052,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists("Pawprint Isle - Lookout Platform - Defeat the Enemies", lambda state: True)
 
     # Thorned Fairy Island
-    set_rule_if_exists(
-        "Thorned Fairy Island - Great Fairy", lambda state: can_access_thorned_fairy_fountain(state, player)
-    )
+    set_rule_if_exists("Thorned Fairy Island - Great Fairy", lambda state: True)
     set_rule_if_exists(
         "Thorned Fairy Island - Northeastern Lookout Platform - Destroy the Cannons",
         lambda state: can_destroy_cannons(state, player),
@@ -1181,24 +1063,18 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
 
     # Eastern Fairy Island
-    set_rule_if_exists(
-        "Eastern Fairy Island - Great Fairy", lambda state: can_access_eastern_fairy_fountain(state, player)
-    )
+    set_rule_if_exists("Eastern Fairy Island - Great Fairy", lambda state: True)
     set_rule_if_exists(
         "Eastern Fairy Island - Lookout Platform - Defeat the Cannons and Enemies",
         lambda state: can_destroy_cannons(state, player),
     )
 
     # Western Fairy Island
-    set_rule_if_exists(
-        "Western Fairy Island - Great Fairy", lambda state: can_access_western_fairy_fountain(state, player)
-    )
+    set_rule_if_exists("Western Fairy Island - Great Fairy", lambda state: True)
     set_rule_if_exists("Western Fairy Island - Lookout Platform", lambda state: True)
 
     # Southern Fairy Island
-    set_rule_if_exists(
-        "Southern Fairy Island - Great Fairy", lambda state: can_access_southern_fairy_fountain(state, player)
-    )
+    set_rule_if_exists("Southern Fairy Island - Great Fairy", lambda state: True)
     set_rule_if_exists(
         "Southern Fairy Island - Lookout Platform - Destroy the Northwest Cannons",
         lambda state: can_destroy_cannons(state, player) and can_fly_with_deku_leaf_outdoors(state, player),
@@ -1209,9 +1085,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
 
     # Northern Fairy Island
-    set_rule_if_exists(
-        "Northern Fairy Island - Great Fairy", lambda state: can_access_northern_fairy_fountain(state, player)
-    )
+    set_rule_if_exists("Northern Fairy Island - Great Fairy", lambda state: True)
     set_rule_if_exists("Northern Fairy Island - Submarine", lambda state: True)
 
     # Tingle Island
@@ -1225,29 +1099,20 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
 
     # Diamond Steppe Island
-    set_rule_if_exists(
-        "Diamond Steppe Island - Warp Maze Cave - First Chest",
-        lambda state: can_access_diamond_steppe_island_warp_maze_cave(state, player),
-    )
-    set_rule_if_exists(
-        "Diamond Steppe Island - Warp Maze Cave - Second Chest",
-        lambda state: can_access_diamond_steppe_island_warp_maze_cave(state, player),
-    )
+    set_rule_if_exists("Diamond Steppe Island - Warp Maze Cave - First Chest", lambda state: True)
+    set_rule_if_exists("Diamond Steppe Island - Warp Maze Cave - Second Chest", lambda state: True)
     set_rule_if_exists(
         "Diamond Steppe Island - Big Octo",
         lambda state: can_defeat_big_octos(state, player) and state.has("Grappling Hook", player),
     )
 
     # Bomb Island
-    set_rule_if_exists(
-        "Bomb Island - Cave",
-        lambda state: can_access_bomb_island_secret_cave(state, player) and can_stun_magtails(state, player),
-    )
+    set_rule_if_exists("Bomb Island - Cave", lambda state: can_stun_magtails(state, player))
     set_rule_if_exists("Bomb Island - Lookout Platform - Defeat the Enemies", lambda state: True)
     set_rule_if_exists("Bomb Island - Submarine", lambda state: True)
 
     # Rock Spire Isle
-    set_rule_if_exists("Rock Spire Isle - Cave", lambda state: can_access_rock_spire_isle_secret_cave(state, player))
+    set_rule_if_exists("Rock Spire Isle - Cave", lambda state: True)
     set_rule_if_exists(
         "Rock Spire Isle - Beedle's Special Shop Ship - 500 Rupee Item",
         lambda state: has_any_wallet_upgrade(state, player) and can_farm_lots_of_rupees(state, player),
@@ -1275,23 +1140,15 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
 
     # Shark Island
-    set_rule_if_exists(
-        "Shark Island - Cave",
-        lambda state: can_access_shark_island_secret_cave(state, player) and can_defeat_miniblins(state, player),
-    )
+    set_rule_if_exists("Shark Island - Cave", lambda state: can_defeat_miniblins(state, player))
 
     # Cliff Plateau Isles
     set_rule_if_exists(
         "Cliff Plateau Isles - Cave",
-        lambda state: can_access_cliff_plateau_isles_secret_cave(state, player)
-        and (
-            can_defeat_boko_babas(state, player)
-            or (state.has("Grappling Hook", player) and state._tww_obscure_1(player) and state._tww_precise_1(player))
-        ),
+        lambda state: can_defeat_boko_babas(state, player)
+        or (state.has("Grappling Hook", player) and state._tww_obscure_1(player) and state._tww_precise_1(player)),
     )
-    set_rule_if_exists(
-        "Cliff Plateau Isles - Highest Isle", lambda state: can_access_cliff_plateau_isles_inner_cave(state, player)
-    )
+    set_rule_if_exists("Cliff Plateau Isles - Highest Isle", lambda state: True)
     set_rule_if_exists("Cliff Plateau Isles - Lookout Platform", lambda state: True)
 
     # Crescent Moon Island
@@ -1306,9 +1163,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists(
         "Horseshoe Island - Cave",
-        lambda state: can_access_horseshoe_island_secret_cave(state, player)
-        and can_defeat_mothulas(state, player)
-        and can_defeat_winged_mothulas(state, player),
+        lambda state: can_defeat_mothulas(state, player) and can_defeat_winged_mothulas(state, player),
     )
     set_rule_if_exists("Horseshoe Island - Northwestern Lookout Platform", lambda state: True)
     set_rule_if_exists("Horseshoe Island - Southeastern Lookout Platform", lambda state: True)
@@ -1328,10 +1183,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
 
     # Star Island
-    set_rule_if_exists(
-        "Star Island - Cave",
-        lambda state: can_access_star_island_secret_cave(state, player) and can_defeat_magtails(state, player),
-    )
+    set_rule_if_exists("Star Island - Cave", lambda state: can_defeat_magtails(state, player))
     set_rule_if_exists("Star Island - Lookout Platform", lambda state: True)
 
     # Star Belt Archipelago

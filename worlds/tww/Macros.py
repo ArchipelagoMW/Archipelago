@@ -186,34 +186,25 @@ def can_access_forest_of_fairies(state: CollectionState, player: int) -> bool:
 
 
 def can_reach_dragon_roost_cavern_gaping_maw(state: CollectionState, player: int) -> bool:
-    return (
-        can_access_dragon_roost_cavern(state, player)
-        and state.has("DRC Small Key", player, 1)
-        and (
-            (state.has("DRC Small Key", player, 4) and can_cut_down_hanging_drc_platform(state, player))
-            or (can_fly_with_deku_leaf_indoors(state, player) and state._tww_obscure_2(player))
-            or (has_ice_arrows(state, player) and state._tww_obscure_2(player) and state._tww_precise_1(player))
-        )
+    return state.has("DRC Small Key", player, 1) and (
+        (state.has("DRC Small Key", player, 4) and can_cut_down_hanging_drc_platform(state, player))
+        or (can_fly_with_deku_leaf_indoors(state, player) and state._tww_obscure_2(player))
+        or (has_ice_arrows(state, player) and state._tww_obscure_2(player) and state._tww_precise_1(player))
     )
 
 
 def can_reach_dragon_roost_cavern_boss_stairs(state: CollectionState, player: int) -> bool:
-    return (
-        can_access_dragon_roost_cavern(state, player)
-        and state.has("DRC Small Key", player, 4)
-        and (
-            state.has("Grappling Hook", player)
-            or can_fly_with_deku_leaf_indoors(state, player)
-            or state.has("Hookshot", player)
-            or has_ice_arrows(state, player)
-        )
+    return state.has("DRC Small Key", player, 4) and (
+        state.has("Grappling Hook", player)
+        or can_fly_with_deku_leaf_indoors(state, player)
+        or state.has("Hookshot", player)
+        or has_ice_arrows(state, player)
     )
 
 
 def can_reach_tower_of_the_gods_second_floor(state: CollectionState, player: int) -> bool:
     return (
-        can_access_tower_of_the_gods(state, player)
-        and state.has("Bombs", player)
+        state.has("Bombs", player)
         and state.has("TotG Small Key", player, 1)
         and can_defeat_yellow_chuchus(state, player)
     )
@@ -251,8 +242,7 @@ def can_bring_north_servant_of_the_tower(state: CollectionState, player: int) ->
 
 def can_reach_earth_temple_sun_statue_room(state: CollectionState, player: int) -> bool:
     return (
-        can_access_earth_temple(state, player)
-        and can_play_command_melody(state, player)
+        can_play_command_melody(state, player)
         and can_defeat_red_chuchus(state, player)
         and can_defeat_green_chuchus(state, player)
         and can_defeat_dark_chuchus(state, player)
@@ -316,8 +306,7 @@ def can_reach_earth_temple_many_mirrors_room(state: CollectionState, player: int
 
 def can_reach_wind_temple_kidnapping_room(state: CollectionState, player: int) -> bool:
     return (
-        can_access_wind_temple(state, player)
-        and can_play_command_melody(state, player)
+        can_play_command_melody(state, player)
         and state.has("Iron Boots", player)
         and can_fly_with_deku_leaf_indoors(state, player)
     )
@@ -410,34 +399,9 @@ def can_access_dungeon_entrance_on_gale_isle(state: CollectionState, player: int
     return state.has("Iron Boots", player) and state.has("Skull Hammer", player)
 
 
-def can_access_dragon_roost_cavern(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Dragon Roost Cavern", player)
-
-
-def can_access_forbidden_woods(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Forbidden Woods", player)
-
-
-def can_access_tower_of_the_gods(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Tower of the Gods", player)
-
-
-def can_access_forsaken_fortress(state: CollectionState, player: int) -> bool:
-    return can_access_dungeon_entrance_in_forsaken_fortress_sector(state, player)
-
-
-def can_access_earth_temple(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Earth Temple", player)
-
-
-def can_access_wind_temple(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Wind Temple", player)
-
-
 def can_access_miniboss_entrance_in_forbidden_woods(state: CollectionState, player: int) -> bool:
     return (
-        can_access_forbidden_woods(state, player)
-        and can_fly_with_deku_leaf_indoors(state, player)
+        can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
         and state.has("Grappling Hook", player)
         and state.has("FW Small Key", player, 1)
@@ -464,34 +428,13 @@ def can_access_miniboss_entrance_in_hyrule_castle(state: CollectionState, player
     return can_access_hyrule(state, player)
 
 
-def can_access_forbidden_woods_miniboss_arena(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Forbidden Woods Miniboss Arena", player)
-
-
-def can_access_tower_of_the_gods_miniboss_arena(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Tower of the Gods Miniboss Arena", player)
-
-
-def can_access_earth_temple_miniboss_arena(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Earth Temple Miniboss Arena", player)
-
-
-def can_access_wind_temple_miniboss_arena(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Wind Temple Miniboss Arena", player)
-
-
-def can_access_master_sword_chamber(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Master Sword Chamber", player)
-
-
 def can_access_boss_entrance_in_dragon_roost_cavern(state: CollectionState, player: int) -> bool:
     return can_reach_dragon_roost_cavern_boss_stairs(state, player) and state.has("DRC Big Key", player)
 
 
 def can_access_boss_entrance_in_forbidden_woods(state: CollectionState, player: int) -> bool:
     return (
-        can_access_forbidden_woods(state, player)
-        and can_fly_with_deku_leaf_indoors(state, player)
+        can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
         and (can_defeat_door_flowers(state, player) or state.has("Grappling Hook", player))
         and can_defeat_mothulas(state, player)
@@ -537,30 +480,6 @@ def can_access_boss_entrance_in_wind_temple(state: CollectionState, player: int)
         and can_play_wind_gods_aria(state, player)
         and state.has("WT Big Key", player)
     )
-
-
-def can_access_gohma_boss_arena(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Gohma Boss Arena", player)
-
-
-def can_access_kalle_demos_boss_arena(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Kalle Demos Boss Arena", player)
-
-
-def can_access_gohdan_boss_arena(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Gohdan Boss Arena", player)
-
-
-def can_access_helmaroc_king_boss_arena(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Helmaroc King Boss Arena", player)
-
-
-def can_access_jalhalla_boss_arena(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Jalhalla Boss Arena", player)
-
-
-def can_access_molgera_boss_arena(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Molgera Boss Arena", player)
 
 
 def can_access_secret_cave_entrance_on_outset_island(state: CollectionState, player: int) -> bool:
@@ -648,104 +567,12 @@ def can_access_secret_cave_entrance_on_star_island(state: CollectionState, playe
     return can_move_boulders(state, player)
 
 
-def can_access_savage_labyrinth(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Savage Labyrinth", player)
-
-
-def can_access_dragon_roost_island_secret_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Dragon Roost Island Secret Cave", player)
-
-
-def can_access_fire_mountain_secret_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Fire Mountain Secret Cave", player)
-
-
-def can_access_ice_ring_isle_secret_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Ice Ring Isle Secret Cave", player)
-
-
-def can_access_cabana_labyrinth(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Cabana Labyrinth", player)
-
-
-def can_access_needle_rock_isle_secret_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Needle Rock Isle Secret Cave", player)
-
-
-def can_access_angular_isles_secret_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Angular Isles Secret Cave", player)
-
-
-def can_access_boating_course_secret_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Boating Course Secret Cave", player)
-
-
-def can_access_stone_watcher_island_secret_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Stone Watcher Island Secret Cave", player)
-
-
-def can_access_overlook_island_secret_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Overlook Island Secret Cave", player)
-
-
-def can_access_birds_peak_rock_secret_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Bird's Peak Rock Secret Cave", player)
-
-
-def can_access_pawprint_isle_chuchu_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Pawprint Isle Chuchu Cave", player)
-
-
-def can_access_pawprint_isle_wizzrobe_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Pawprint Isle Wizzrobe Cave", player)
-
-
-def can_access_diamond_steppe_island_warp_maze_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Diamond Steppe Island Warp Maze Cave", player)
-
-
-def can_access_bomb_island_secret_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Bomb Island Secret Cave", player)
-
-
-def can_access_rock_spire_isle_secret_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Rock Spire Isle Secret Cave", player)
-
-
-def can_access_shark_island_secret_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Shark Island Secret Cave", player)
-
-
-def can_access_cliff_plateau_isles_secret_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Cliff Plateau Isles Secret Cave", player)
-
-
-def can_access_horseshoe_island_secret_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Horseshoe Island Secret Cave", player)
-
-
-def can_access_star_island_secret_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Star Island Secret Cave", player)
-
-
 def can_access_inner_entrance_in_ice_ring_isle_secret_cave(state: CollectionState, player: int) -> bool:
-    return can_access_ice_ring_isle_secret_cave(state, player) and state.has("Iron Boots", player)
+    return state.has("Iron Boots", player)
 
 
 def can_access_inner_entrance_in_cliff_plateau_isles_secret_cave(state: CollectionState, player: int) -> bool:
-    return (
-        can_access_cliff_plateau_isles_secret_cave(state, player)
-        and can_defeat_boko_babas(state, player)
-        and can_fly_with_deku_leaf_indoors(state, player)
-    )
-
-
-def can_access_ice_ring_isle_inner_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Ice Ring Isle Inner Cave", player)
-
-
-def can_access_cliff_plateau_isles_inner_cave(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Cliff Plateau Isles Inner Cave", player)
+    return can_defeat_boko_babas(state, player) and can_fly_with_deku_leaf_indoors(state, player)
 
 
 def can_access_fairy_fountain_entrance_on_outset_island(state: CollectionState, player: int) -> bool:
@@ -770,30 +597,6 @@ def can_access_fairy_fountain_entrance_on_southern_fairy_island(state: Collectio
 
 def can_access_fairy_fountain_entrance_on_northern_fairy_island(state: CollectionState, player: int) -> bool:
     return True
-
-
-def can_access_outset_fairy_fountain(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Outset Fairy Fountain", player)
-
-
-def can_access_thorned_fairy_fountain(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Thorned Fairy Fountain", player)
-
-
-def can_access_eastern_fairy_fountain(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Eastern Fairy Fountain", player)
-
-
-def can_access_western_fairy_fountain(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Western Fairy Fountain", player)
-
-
-def can_access_southern_fairy_fountain(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Southern Fairy Fountain", player)
-
-
-def can_access_northern_fairy_fountain(state: CollectionState, player: int) -> bool:
-    return state.can_reach_region("Northern Fairy Fountain", player)
 
 
 def can_get_past_forsaken_fortress_gate(state: CollectionState, player: int) -> bool:
@@ -936,10 +739,10 @@ def can_farm_knights_crests(state: CollectionState, player: int) -> bool:
         and state.has("Spoils Bag", player)
         and (
             # (Can Access Item Location "Ice Ring Isle - Inner Cave - Chest")
-            (can_access_ice_ring_isle_inner_cave(state, player) and has_fire_arrows(state, player))
+            (state.can_reach_region("Ice Ring Isle Inner Cave", player) and has_fire_arrows(state, player))
             # | (Can Access Item Location "Outset Island - Savage Labyrinth - Floor 30")
             or (
-                can_access_savage_labyrinth(state, player)
+                state.can_reach_region("Savage Labyrinth", player)
                 and can_defeat_keese(state, player)
                 and can_defeat_miniblins(state, player)
                 and can_defeat_red_chuchus(state, player)
@@ -964,7 +767,8 @@ def can_farm_knights_crests(state: CollectionState, player: int) -> bool:
             )
             # | (Can Access Item Location "Earth Temple - Big Key Chest" & Can Defeat Darknuts Easily)
             or (
-                can_reach_earth_temple_many_mirrors_room(state, player)
+                state.can_reach_region("Earth Temple", player)
+                and can_reach_earth_temple_many_mirrors_room(state, player)
                 and state.has("Power Bracelets", player)
                 and can_play_command_melody(state, player)
                 and can_aim_mirror_shield(state, player)
@@ -985,17 +789,18 @@ def can_farm_knights_crests(state: CollectionState, player: int) -> bool:
             )
             # | (Can Access Item Location "Wind Temple - Big Key Chest" & Can Defeat Darknuts Easily)
             or (
-                can_reach_wind_temple_kidnapping_room(state, player)
+                state.can_reach_region("Wind Temple", player)
+                and can_reach_wind_temple_kidnapping_room(state, player)
                 and state.has("Iron Boots", player)
                 and can_fan_with_deku_leaf(state, player)
                 and can_play_wind_gods_aria(state, player)
                 and can_defeat_darknuts_easily(state, player)
             )
             # | (Can Access Item Location "Shark Island - Cave")
-            or (can_access_shark_island_secret_cave(state, player) and can_defeat_miniblins(state, player))
+            or (state.can_reach_region("Shark Island Secret Cave", player) and can_defeat_miniblins(state, player))
             # | (Can Access Item Location "Stone Watcher Island - Cave" & Can Defeat Darknuts Easily)
             or (
-                can_access_stone_watcher_island_secret_cave(state, player)
+                state.can_reach_region("Stone Watcher Island Secret Cave", player)
                 and can_defeat_armos(state, player)
                 and can_defeat_wizzrobes(state, player)
                 and can_play_winds_requiem(state, player)
@@ -1003,7 +808,7 @@ def can_farm_knights_crests(state: CollectionState, player: int) -> bool:
             )
             # | (Can Access Item Location "Overlook Island - Cave" & Can Defeat Darknuts Easily)
             or (
-                can_access_overlook_island_secret_cave(state, player)
+                state.can_reach_region("Overlook Island Secret Cave", player)
                 and can_defeat_stalfos(state, player)
                 and can_defeat_wizzrobes(state, player)
                 and can_defeat_red_chuchus(state, player)
@@ -1050,7 +855,7 @@ def can_obtain_15_blue_chu_jelly(state: CollectionState, player: int) -> bool:
                 can_access_secret_cave_entrance_on_shark_island(state, player)
                 and can_fly_with_deku_leaf_outdoors(state, player)
             )
-            or can_access_cliff_plateau_isles_inner_cave(state, player)
+            or state.can_reach_region("Cliff Plateau Isles Inner Cave", player)
             or can_fan_with_deku_leaf(state, player)
             or can_access_secret_cave_entrance_on_boating_course(state, player)
         )
