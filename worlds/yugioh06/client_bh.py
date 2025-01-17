@@ -1,6 +1,6 @@
 import logging
 import math
-from typing import TYPE_CHECKING, List, Optional, Set
+from typing import TYPE_CHECKING, List, Optional, Set, Dict
 
 import Utils
 from MultiServer import mark_raw
@@ -39,7 +39,6 @@ rarity_sort_order = {
     "Common Alt 3": 18,
     "Common": 19,
 }
-
 
 @mark_raw
 def cmd_booster_pack(self, booster_name: str = ""):
@@ -87,6 +86,9 @@ class YuGiOh2006Client(BizHawkClient):
     print_pack: str = ""
     card_search: str = ""
     all_progression_cards: List[int] = []
+    progression_in_booster: List[int] = []
+    collection_state: Dict[int, int] = {}
+    collection_changed = False
 
     def __init__(self) -> None:
         super().__init__()
@@ -131,6 +133,8 @@ class YuGiOh2006Client(BizHawkClient):
         if cmd == 'Connected':
             if 'all_progression_cards' in args['slot_data'] and args['slot_data']['all_progression_cards']:
                 self.all_progression_cards = args['slot_data']['all_progression_cards']
+            if 'progression_cards_in_booster' in args['slot_data'] and args['slot_data']['progression_cards_in_booster']:
+                self.progression_in_booster = args['slot_data']['progression_cards_in_booster']
         super().on_package(ctx, cmd, args)
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
@@ -143,6 +147,7 @@ class YuGiOh2006Client(BizHawkClient):
                     (0x5308, 32, "EWRAM"),
                     (0x5325, 1, "EWRAM"),
                     (0x6C38, 4, "EWRAM"),
+                    (0x8, 0x1042, "EWRAM")
                 ],
             )
             game_state = read_state[0].decode("utf-8")
@@ -150,6 +155,7 @@ class YuGiOh2006Client(BizHawkClient):
             items = read_state[2]
             amount_items = int.from_bytes(read_state[3], "little")
             money = int.from_bytes(read_state[4], "little")
+            collection = read_state[5]
 
             # make sure save was created
             if game_state != "YWCT2006":
@@ -199,7 +205,7 @@ class YuGiOh2006Client(BizHawkClient):
 
             # Set collected Challenges to complete
             for location in set(ctx.checked_locations):
-                if location not in ctx.locations_checked and 5730037 < location < 5730129:
+                if location not in self.local_checked_locations and 5730037 < location < 5730129:
                     cid = location - 5730038
                     old_score = await bizhawk.read(
                         ctx.bizhawk_ctx, [
@@ -220,6 +226,25 @@ class YuGiOh2006Client(BizHawkClient):
             # Send game clear if the fifth tier 5 campaign opponent was beaten.
             if not ctx.finished_game and locations[18] & (1 << 5) != 0:
                 await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+
+            # prepare collection tracking
+            for card_id in self.progression_in_booster:
+                amount = collection[(card_id - 1) * 2] & 0xF
+                if amount > 0 and (card_id not in self.collection_state or not self.collection_state[card_id]):
+                    self.collection_state[card_id] = amount
+                    self.collection_changed = True
+
+            # send collection tracking
+            if self.collection_changed:
+                logger.info(self.collection_state)
+                await ctx.send_msgs([{
+                    "cmd": "Set",
+                    "key": f"ygo06_collection_{ctx.team}_{ctx.slot}",
+                    "default": {},
+                    "want_reply": False,
+                    "operations": [{"operation": "update", "value": self.collection_state}],
+                }])
+                self.collection_changed = False
 
             # print booster contents command
             if self.print_pack != "":
