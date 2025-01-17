@@ -1732,7 +1732,8 @@ def set_rules(dst_world: World, itempool:DSTItemPool) -> None:
             "Science (Ashes)":                  firestarting.rule,
             "Science (Cut Grass)":              ALWAYS_TRUE,
             "Science (Beefalo Horn)":           basic_combat.rule,
-            "Science (Beefalo Wool)":           basic_combat.rule if not shaving.is_progression else combine_rules(shaving.rule, either_rule(autumn.rule, winter.rule, summer.rule)),
+            "Science (Beefalo Wool)":           basic_combat.rule if not shaving.is_progression or not SEASON.NONSPRING in WHITELIST
+                                                else combine_rules(shaving.rule, either_rule(autumn.rule, winter.rule, summer.rule)),
             "Science (Cactus Flower)":          ALWAYS_TRUE,
             "Science (Honeycomb)":              basic_combat.rule,
             "Science (Petals)":                 ALWAYS_TRUE,
