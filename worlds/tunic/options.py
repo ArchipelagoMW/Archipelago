@@ -5,7 +5,7 @@ from typing import Dict, Any, TYPE_CHECKING
 from decimal import Decimal, ROUND_HALF_UP
 
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
-                     PerGameCommonOptions, OptionGroup, Visibility)
+                     PerGameCommonOptions, OptionGroup, Visibility, NamedRange)
 from .er_data import portal_mapping
 if TYPE_CHECKING:
     from . import TunicWorld
@@ -180,6 +180,33 @@ class ShuffleLadders(Toggle):
     display_name = "Shuffle Ladders"
 
 
+class GrassRandomizer(Toggle):
+    """
+    Turns over 6,000 blades of grass and bushes in the game into checks.
+    """
+    internal_name = "grass_randomizer"
+    display_name = "Grass Randomizer"
+
+
+class LocalFill(NamedRange):
+    """
+    Choose the percentage of your filler/trap items that will be kept local or distributed to other TUNIC players with this option enabled.
+    If you have Grass Randomizer enabled, this option must be set to 95% or higher to avoid flooding the item pool. The host can remove this restriction by turning off the limit_grass_rando setting in host.yaml.
+    This option defaults to 95% if you have Grass Randomizer enabled, and to 0% otherwise.
+    This option ignores items placed in your local_items or non_local_items.
+    This option does nothing in single player games.
+    """
+    internal_name = "local_fill"
+    display_name = "Local Fill Percent"
+    range_start = 0
+    range_end = 100
+    special_range_names = {
+        "default": -1
+    }
+    default = -1
+    visibility = Visibility.template | Visibility.complex_ui | Visibility.spoiler
+
+
 class TunicPlandoConnections(PlandoConnections):
     """
     Generic connection plando. Format is:
@@ -305,6 +332,8 @@ class TunicOptions(PerGameCommonOptions):
     combat_logic: CombatLogic
     lanternless: Lanternless
     maskless: Maskless
+    grass_randomizer: GrassRandomizer
+    local_fill: LocalFill
     laurels_zips: LaurelsZips
     ice_grappling: IceGrappling
     ladder_storage: LadderStorage
