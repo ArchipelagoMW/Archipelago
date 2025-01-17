@@ -36,54 +36,40 @@ class TWWLogic(LogicMixin):
         return all(self.can_reach_location(loc, player) for loc in required_boss_item_locations)
 
     def _tww_rematch_bosses_skipped(self, player: int) -> bool:
-        return self.multiworld.worlds[player].options.skip_rematch_bosses
+        return self.multiworld.worlds[player].logic_rematch_bosses_skipped
 
     def _tww_in_swordless_mode(self, player: int) -> bool:
-        return self.multiworld.worlds[player].options.sword_mode in ("swords_optional", "swordless")
+        return self.multiworld.worlds[player].logic_in_swordless_mode
 
     def _tww_outside_swordless_mode(self, player: int) -> bool:
-        return self.multiworld.worlds[player].options.sword_mode not in ("swords_optional", "swordless")
+        return not self.multiworld.worlds[player].logic_in_swordless_mode
 
     def _tww_in_required_bosses_mode(self, player: int) -> bool:
-        return self.multiworld.worlds[player].options.required_bosses
+        return self.multiworld.worlds[player].logic_in_required_bosses_mode
 
     def _tww_outside_required_bosses_mode(self, player: int) -> bool:
-        return not self.multiworld.worlds[player].options.required_bosses
+        return not self.multiworld.worlds[player].logic_in_required_bosses_mode
 
     def _tww_obscure_1(self, player: int) -> bool:
-        return (
-            self.multiworld.worlds[player].options.logic_obscurity == "normal"
-            or self.multiworld.worlds[player].options.logic_obscurity == "hard"
-            or self.multiworld.worlds[player].options.logic_obscurity == "very_hard"
-        )
+        return self.multiworld.worlds[player].logic_obscure_1
 
     def _tww_obscure_2(self, player: int) -> bool:
-        return (
-            self.multiworld.worlds[player].options.logic_obscurity == "hard"
-            or self.multiworld.worlds[player].options.logic_obscurity == "very_hard"
-        )
+        return self.multiworld.worlds[player].logic_obscure_2
 
     def _tww_obscure_3(self, player: int) -> bool:
-        return self.multiworld.worlds[player].options.logic_obscurity == "very_hard"
+        return self.multiworld.worlds[player].logic_obscure_3
 
     def _tww_precise_1(self, player: int) -> bool:
-        return (
-            self.multiworld.worlds[player].options.logic_precision == "normal"
-            or self.multiworld.worlds[player].options.logic_precision == "hard"
-            or self.multiworld.worlds[player].options.logic_precision == "very_hard"
-        )
+        return self.multiworld.worlds[player].logic_precise_1
 
     def _tww_precise_2(self, player: int) -> bool:
-        return (
-            self.multiworld.worlds[player].options.logic_precision == "hard"
-            or self.multiworld.worlds[player].options.logic_precision == "very_hard"
-        )
+        return self.multiworld.worlds[player].logic_precise_2
 
     def _tww_precise_3(self, player: int) -> bool:
-        return self.multiworld.worlds[player].options.logic_precision == "very_hard"
+        return self.multiworld.worlds[player].logic_precise_3
 
     def _tww_tuner_logic_enabled(self, player: int) -> bool:
-        return self.multiworld.worlds[player].options.enable_tuner_logic
+        return self.multiworld.worlds[player].logic_tuner_logic_enabled
 
 
 def set_rules(world: "TWWWorld") -> None:  # noqa: F405
