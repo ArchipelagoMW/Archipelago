@@ -118,5 +118,22 @@ item_frequencies: typing.Dict[str, int] = {
     "Poison Fruit": 50,
 }
 
+obelisks = [
+    "Mountain Obelisk 1",
+    "Mountain Obelisk 2",
+    "Mountain Obelisk 3",
+    "Town Obelisk 1",
+    "Town Obelisk 2",
+    "Castle Obelisk 1",
+    "Castle Obelisk 2"
+]
+
+mirror_shards = [
+    "Dragon Mirror Shard",
+    "Chimera Mirror Shard",
+    "Yeti Mirror Shard",
+    "Plague Fiend Mirror Shard"
+]
+
 item_table: typing.Dict[str, ItemData] = {item.item_name: item for item in item_list}
 items_by_id: typing.Dict[int, ItemData] = {item.code: item for item in item_list}

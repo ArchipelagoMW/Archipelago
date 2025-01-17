@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, PerGameCommonOptions, StartInventoryPool, Toggle, Range
+from Options import Choice, PerGameCommonOptions, StartInventoryPool, Toggle, Range, DeathLinkMixin
 
 
 class PlayerCount(Range):
@@ -139,13 +139,6 @@ class TrapsFrequency(Choice):
     default = 0
 
 
-class DeathLink(Toggle):
-    """
-    When you die, everyone dies. Of course the reverse is true too.
-    """
-    display_name = "Death Link"
-
-
 class UnlockCharacterOne(Choice):
     """
     Unlock a secret character for Player 1 from the start.
@@ -211,7 +204,7 @@ class UnlockCharacterFour(Choice):
 
 
 @dataclass
-class GLOptions(PerGameCommonOptions):
+class GLOptions(DeathLinkMixin, PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     local_players: PlayerCount
     chests_barrels: ChestBarrels
@@ -224,7 +217,6 @@ class GLOptions(PerGameCommonOptions):
     permanent_speed: PermaSpeed
     traps_choice: TrapsChoice
     traps_frequency: TrapsFrequency
-    death_link: DeathLink
     unlock_character_one: UnlockCharacterOne
     unlock_character_two: UnlockCharacterTwo
     unlock_character_three: UnlockCharacterThree

@@ -10,7 +10,7 @@ from worlds.AutoWorld import WebWorld, World
 
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
 from .Arrays import item_dict
-from .Items import GLItem, item_frequencies, item_list, item_table
+from .Items import GLItem, item_frequencies, item_list, item_table, obelisks, mirror_shards
 from .Locations import LocationData, all_locations, location_table
 from .Options import GLOptions
 from .Regions import connect_regions, create_regions
@@ -72,9 +72,10 @@ class GauntletLegendsWorld(World):
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
     death: List[Item]
 
-    disabled_locations: typing.Set[LocationData] = set()
+    disabled_locations: typing.Set[LocationData]
 
     def generate_early(self) -> None:
+        self.disabled_locations = set()
         self.death = []
         self.options.max_difficulty_value.value = max(self.options.max_difficulty_value.value, self.options.local_players.value)
 
@@ -155,22 +156,35 @@ class GauntletLegendsWorld(World):
         # First add in all progression and useful items
         required_items = []
         precollected = [item for item in item_list if item in self.multiworld.precollected_items[self.player]]
-        skipped_items = [item for item in item_list if ("Key" in item.item_name and self.options.infinite_keys)
-                                                        or ("Boots" in item.item_name and self.options.permanent_speed)
-                                                        or ("Poison" in item.item_name and (self.options.traps_choice == "only_death" or self.options.traps_choice == "none_active"))
-                                                        or ("Death" in item.item_name and (self.options.traps_choice == "only_fruit" or self.options.traps_choice == "none_active"))
-                                                        or ("Obelisk" in item.item_name and self.options.obelisks == 0)
-                                                        or ("Mirror" in item.item_name and self.options.mirror_shards == 0)]
-        for item in [item_ for item_ in item_list if ItemClassification.progression in item_.progression or ItemClassification.useful in item_.progression and item_ not in precollected and item_ not in skipped_items]:
-                freq = item_frequencies.get(item.item_name, 1)
-                required_items += [item.item_name for _ in range(freq)]
+        skipped_items = set()
+        if self.options.infinite_keys:
+            skipped_items.add("Key")
+        if self.options.permanent_speed:
+            skipped_items.add("Boots")
+        if self.options.traps_choice == "only_death" or self.options.traps_choice == "none_active":
+            skipped_items.add("Poison Fruit")
+        if self.options.traps_choice == "only_fruit" or self.options.traps_choice == "none_active":
+            skipped_items.add("Death")
+        if self.options.obelisks == 0:
+            skipped_items.update(obelisks)
+        if self.options.mirror_shards == 0:
+            skipped_items.update(mirror_shards)
+        for item in [item_ for item_ in item_list
+                     if (ItemClassification.progression in item_.progression
+                     or ItemClassification.useful in item_.progression)
+                     and item_ not in precollected
+                     and item_ not in skipped_items]:
+            freq = item_frequencies.get(item.item_name, 1)
+            required_items += [item.item_name for _ in range(freq)]
 
         self.multiworld.itempool += [self.create_item(item_name) for item_name in required_items]
 
         # Then, get a random amount of fillers until we have as many items as we have locations
         filler_items = []
         trap_count = 0
-        for item in [item_ for item_ in item_list if ItemClassification.progression not in item_.progression or ItemClassification.useful not in item_.progression]:
+        for item in [item_ for item_ in item_list
+                     if ItemClassification.progression not in item_.progression
+                     or ItemClassification.useful not in item_.progression]:
 
             freq = item_frequencies.get(item.item_name, 1) + (30 if self.options.infinite_keys else 0) + (5 if self.options.permanent_speed else 0)
             if item.item_name == "Invulnerability" or item.item_name == "Anti-Death Halo":
@@ -181,7 +195,7 @@ class GauntletLegendsWorld(World):
             elif self.options.traps_frequency == "extreme" and ItemClassification.trap in item.progression:
                 freq *= 5
 
-            if item.item_name == "Anti-Death Halo" and (self.options.traps_choice.value == self.options.traps_choice.option_only_death or self.options.traps_choice.value == self.options.traps_choice.option_all_active) and self.options.traps_frequency.value == self.options.traps_frequency.option_extreme:
+            if item.item_name == "Anti-Death Halo" and "Death" not in skipped_items and self.options.traps_frequency is not "normal":
                 freq *= 2
             if item.item_name == "Death":
                 trap_count += freq

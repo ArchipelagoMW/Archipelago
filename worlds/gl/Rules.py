@@ -34,5 +34,5 @@ def set_rules(world: "GauntletLegendsWorld"):
                         add_rule(
                             world.get_location(location.name),
                             lambda state, level_id_=level_id >> 4, difficulty=location.difficulty - 1:
-                            state.prog_items[world.player]["stones"] >= difficulty_lambda[level_id_][difficulty],
+                            state.has("stones", world.player, difficulty_lambda[level_id_][difficulty])
                             )

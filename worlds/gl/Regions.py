@@ -104,41 +104,41 @@ def connect_regions(world: "GauntletLegendsWorld"):
     connect(world, names, "Menu", "Volcanic Caverns")
     connect(world, names, "Menu", "Dragon's Lair")
     connect(world, names, "Menu", "Castle Courtyard",
-        lambda state: state.has("Mountain Obelisk 1", world.player)
-        and state.has("Mountain Obelisk 2", world.player)
-        and state.has("Mountain Obelisk 3", world.player)
+            lambda state: state.has("Mountain Obelisk 1", world.player)
+            and state.has("Mountain Obelisk 2", world.player)
+            and state.has("Mountain Obelisk 3", world.player)
     )
     connect(world, names, "Castle Courtyard", "Dungeon of Torment")
     connect(world, names, "Castle Courtyard", "Tower Armory")
     connect(world, names, "Castle Courtyard", "Castle Treasury")
     connect(world, names, "Castle Courtyard", "Chimera's Keep")
     connect(world, names, "Menu", "Poisonous Fields",
-        lambda state: state.has("Castle Obelisk 1", world.player)
-        and state.has("Castle Obelisk 2", world.player)
+            lambda state: state.has("Castle Obelisk 1", world.player)
+            and state.has("Castle Obelisk 2", world.player)
     )
     connect(world, names, "Poisonous Fields", "Haunted Cemetery")
     connect(world, names, "Poisonous Fields", "Venomous Spire")
     connect(world, names, "Poisonous Fields", "Toxic Air Ship")
     connect(world, names, "Toxic Air Ship", "Vat of the Plague Fiend")
     connect(world, names, "Menu", "Arctic Docks",
-        lambda state: state.has("Town Obelisk 1", world.player)
-        and state.has("Town Obelisk 2", world.player)
+            lambda state: state.has("Town Obelisk 1", world.player)
+            and state.has("Town Obelisk 2", world.player)
     )
     connect(world, names, "Arctic Docks", "Frozen Camp")
     connect(world, names, "Arctic Docks", "Crystal Mine")
     connect(world, names, "Arctic Docks", "Erupting Fissure")
     connect(world, names, "Erupting Fissure", "Yeti")
     connect(world, names, "Menu", "Desecrated Temple",
-        lambda state: state.has("Dragon Mirror Shard", world.player)
-        and state.has("Chimera Mirror Shard", world.player)
-        and state.has("Plague Fiend Mirror Shard", world.player)
-        and state.has("Yeti Mirror Shard", world.player)
+            lambda state: state.has("Dragon Mirror Shard", world.player)
+            and state.has("Chimera Mirror Shard", world.player)
+            and state.has("Plague Fiend Mirror Shard", world.player)
+            and state.has("Yeti Mirror Shard", world.player)
     )
     connect(world, names, "Desecrated Temple", "Battle Trenches")
     connect(world, names, "Desecrated Temple", "Battle Towers")
     connect(world, names, "Desecrated Temple", "Infernal Fortress")
     connect(world, names, "Menu", "Gates of the Underworld",
-        lambda state: state.has_all([item.item_name for item in item_list if "Runestone" in item.item_name], world.player)
+            lambda state: state.has_all([item.item_name for item in item_list if "Runestone" in item.item_name], world.player)
     )
 
 
@@ -164,10 +164,4 @@ def connect(world: "GauntletLegendsWorld",
         used_names[target] += 1
         name = target + (" " * used_names[target])
 
-    connection = Entrance(world.player, name, source_region)
-
-    if rule:
-        connection.access_rule = rule
-
-    source_region.exits.append(connection)
-    connection.connect(target_region)
+    source_region.connect(target_region, name, rule)
