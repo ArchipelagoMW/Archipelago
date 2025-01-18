@@ -190,19 +190,12 @@ def modify_dungeon_location_rules(locations: list[Location], dungeon_specific: s
     :param dungeon_specific: Set of dungeon-specific item constraints.
     """
     for location in locations:
-        orig_rule = location.item_rule
         if dungeon_specific:
-            # Restrict dungeon items to be in their own dungeons.
             dungeon = location.dungeon
+            orig_rule = location.item_rule
             location.item_rule = lambda item, dungeon=dungeon, orig_rule=orig_rule: (
                 not (item.player, item.name) in dungeon_specific or item.dungeon is dungeon
             ) and orig_rule(item)
-        else:
-            # Restrict dungeon items to be in any dungeon in the player's local world.
-            player = location.player
-            location.item_rule = lambda item, player=player, orig_rule=orig_rule: (item.player == player) and orig_rule(
-                item
-            )
 
 
 def fill_dungeons_restrictive(multiworld: MultiWorld) -> None:
