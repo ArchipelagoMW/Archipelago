@@ -284,6 +284,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                              destination=str(portal_num), tag="_", direction=shop_dir)
         create_shop_region(world, regions, portal_num)
         dead_ends.append(shop_portal)
+        dead_end_direction_tracker[shop_portal.direction] += 1
 
     connected_regions: Set[str] = set()
     # make better start region stuff when/if implementing random start
@@ -500,6 +501,15 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
             # okay now that we're done with all of that nonsense, we can finally make the portal pair
             portal_pairs[portal1] = portal2
 
+            if portal1_dead_end:
+                dead_end_direction_tracker[portal1.direction] -= 1
+            else:
+                two_plus_direction_tracker[portal1.direction] -= 1
+            if portal2_dead_end:
+                dead_end_direction_tracker[portal2.direction] -= 1
+            else:
+                two_plus_direction_tracker[portal2.direction] -= 1
+
         # if we have plando connections, our connected regions may change somewhat
         connected_regions = update_reachable_regions(connected_regions, traversal_reqs, has_laurels, logic_tricks)
 
@@ -549,7 +559,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
     backup_portal_pairs = portal_pairs.copy()
     backup_two_plus = two_plus.copy()
     backup_two_plus_direction_tracker = two_plus_direction_tracker.copy()
-    direction_fail_count = 0
+    rare_failure_count = 0
 
     portal1 = None
     portal2 = None
@@ -567,22 +577,25 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                 raise Exception(f"Failed to pair regions. Check plando connections for {player_name} for errors. "
                                 f"Unconnected regions: {non_dead_end_regions - connected_regions}.\n"
                                 f"Unconnected portals: {[portal.name for portal in two_plus]}")
-            if (fail_count > 100 and world.options.entrance_layout == EntranceLayout.option_direction_pairs
-                    and not decoupled):
+            if (fail_count > 100 and not decoupled
+                    and (world.options.entrance_layout == EntranceLayout.option_direction_pairs or waterfall_plando)):
                 # in direction pairs, we may run into a case where we run out of pairable directions
                 # since we need to ensure the dead ends will have something to connect to
+                # or if fairy cave is plando'd, it may run into an issue where it is trying to get access to 2 separate
+                # areas at once to give access to laurels
                 # so, this is basically just resetting entrance pairing
-                # seems to get triggered maybe 1 in 500 gens (when none of the trick logic is enabled)
+                # this should be very rare, so this fail-safe shouldn't be covering up for an actual solution
+                # this should never happen in decoupled, since it's entirely too flexible for that
                 portal_pairs = backup_portal_pairs.copy()
                 two_plus = two_plus2 = backup_two_plus.copy()
                 two_plus_direction_tracker = backup_two_plus_direction_tracker.copy()
                 random_object.shuffle(two_plus)
                 connected_regions = backup_connected_regions.copy()
-                direction_fail_count += 1
+                rare_failure_count += 1
                 fail_count = 0
 
-                if direction_fail_count > 10:
-                    raise Exception(f"Failed to pair regions due to direction pairing issues for {player_name}. "
+                if rare_failure_count > 100:
+                    raise Exception(f"Failed to pair regions due to rare pairing issues for {player_name}. "
                                     f"Unconnected regions: {non_dead_end_regions - connected_regions}.\n"
                                     f"Unconnected portals: {[portal.name for portal in two_plus]}")
         else:
@@ -653,12 +666,12 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                 break
 
         if not portal2:
-            if entrance_layout == EntranceLayout.option_direction_pairs:
+            if entrance_layout == EntranceLayout.option_direction_pairs or waterfall_plando:
                 # portal1 doesn't have a valid direction pair yet, throw it back and start over
                 two_plus.append(portal1)
                 continue
             else:
-                raise Exception("TUNIC: Failed to pair portals at second part of first phase.")
+                raise Exception(f"TUNIC: Failed to pair portals at second part of first phase for {world.player_name}.")
 
         # once we have both portals, connect them and add the new region(s) to connected_regions
         if not has_laurels and "Secret Gathering Place" in connected_regions:
@@ -691,7 +704,7 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
             dead_ends.remove(portal2)
             break
         else:
-            raise Exception(f"Failed to pair {portal2.name} with anything in two_plus")
+            raise Exception(f"Failed to pair {portal2.name} with anything in two_plus for player {world.player_name}.")
 
     # then randomly connect the remaining portals to each other
     final_pair_number = 0
