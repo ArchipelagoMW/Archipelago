@@ -73,8 +73,6 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
     # With a low number of players, try to keep the total number of items in the batch from being too small, to prevent
     # fills with few players from creating lots of very small batches.
     min_total_items_per_batch = 40
-
-    # one_item_per_player=True batch constants:
     # Gradually increase the number of items placed in each batch until only the player with the largest item pool has
     # items remaining, at which point, place 2% of their original item pool in each batch. Most fills won't go above
     # `min_batch_size`, so this is mostly to account for progression fill with worlds with very large numbers of
@@ -91,12 +89,6 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
     if num_players > 0 and min_batch_size * num_players < min_total_items_per_batch:
         min_batch_size = min_total_items_per_batch // num_players
 
-    # one_item_per_player=False batch constants:
-    # Attempt to put 2% of the items to place into each batch.
-    single_item_placement_batch_size = round(total * 0.02)
-    # Ensure there are at least as many items in the batch as the minimum.
-    single_item_placement_batch_size = max(min_total_items_per_batch, single_item_placement_batch_size)
-
     # Per-batch variables:
     # The base state for the current batch. Collects all items yet to be placed which are not part of the current batch.
     batch_base_state: typing.Optional[CollectionState] = None
@@ -108,114 +100,77 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
     batched_placements_remaining = 0
     # The items remaining to be placed in the current batch.
     batch_item_pool: typing.List[Item] = []
-
-    # one_item_per_player=True per-batch variables
     # Indicates how many empty spaces for items there are, per player, in the current batch.
     batch_empty_spaces: typing.Dict[int, int] = {}
 
-    # one_item_per_player=False per-batch variables
-    # Used when placing items one at a time to determine the order that items are placed.
-    placement_order_iter: typing.Iterator[int] = iter(())  # dummy value to prevent reference before assignment warnings
+    # one_item_per_player=False per-batch variables:
+    # The number of items, per-player, remaining in the batch. Decreased whenever an item is placed, increased whenever
+    # an item is un-placed due to swap and there was empty space in the batch to add into the batch.
+    items_per_player_in_batch: typing.Dict[int, int] = {}
 
     while any(reachable_items.values()) and locations:
         if batched_placements_remaining <= 0:
             # Create a new batch.
 
-            if one_item_per_player:
-                # Calculate the number of items, per player, to place in the new batch.
+            # Calculate the number of items, per player, to place in the new batch.
 
-                # Get the count of and individual lengths of non-empty remaining items pools.
-                nonzero_remaining_per_player = [len(items) for items in reachable_items.values() if items]
-                num_players_with_remaining_items = len(nonzero_remaining_per_player)
+            # Get the count of and individual lengths of non-empty remaining items pools.
+            nonzero_remaining_per_player = [len(items) for items in reachable_items.values() if items]
+            num_players_with_remaining_items = len(nonzero_remaining_per_player)
 
-                if num_players_with_remaining_items == 0:
-                    # No more items to place.
-                    break
+            if num_players_with_remaining_items == 0:
+                # No more items to place.
+                break
 
-                # Find the length of the largest remaining item pool.
-                largest_remaining = max(nonzero_remaining_per_player)
-                if num_players_with_remaining_items > 1:
-                    # Adjust the batch size by the ratio of the average remaining item pool length to the largest remaining
-                    # item pool length.
-                    # Find the average length of the remaining item pools.
-                    average_remaining = sum(nonzero_remaining_per_player) / num_players_with_remaining_items
-                    # As the average remaining item pool length approaches the largest remaining item pool length, the batch
-                    # size approaches `max_one_item_per_player_batch_size`.
-                    batch_size_float = max_one_item_per_player_batch_size * average_remaining / largest_remaining
-                else:
-                    batch_size_float = max_one_item_per_player_batch_size
-
-                # Round to the nearest integer.
-                batch_size = round(batch_size_float)
-                # Limit the minimum number of items per player in the batch.
-                batch_size = max(min_batch_size, batch_size)
-                # Don't make the batch larger than the largest remaining item pool.
-                batch_size = min(batch_size, largest_remaining)
-
-                # Set per-batch variables.
-
-                batched_placements_remaining = batch_size
-
-                # If a player has fewer items remaining than the size of the batch, then that player has some empty spaces
-                # for items in the batch. This allows for items belonging to that player, that were displaced by a swap, to
-                # be added to the current batch until the spaces are used up.
-                batch_empty_spaces = {player: batch_size - min(len(player_items), batch_size)
-                                      for player, player_items in reachable_items.items()}
-
-                # Iterate the first `batch_size` items of each player's remaining items into a list of all items that will
-                # be placed in the current batch.
-                # Items to place are picked from the end of each player's item pool, so, to get the items in the order they
-                # will be placed, the item pools must be iterated in reverse.
-                item_iters = [reversed(items) for items in reachable_items.values() if items]
-                batch_item_pool = [item for item_iter in item_iters
-                                   for item in itertools.islice(item_iter, batch_size)]
-
-                # Collect the remaining items, which won't be placed in this batch, into a copy of `base_state` and make
-                # that the base state for the batch.
-                batch_base_state = base_state.copy()
-                for item_iter in item_iters:
-                    for item in item_iter:
-                        batch_base_state.collect(item, True)
+            # Find the length of the largest remaining item pool.
+            largest_remaining = max(nonzero_remaining_per_player)
+            if num_players_with_remaining_items > 1:
+                # Adjust the batch size by the ratio of the average remaining item pool length to the largest remaining
+                # item pool length.
+                # Find the average length of the remaining item pools.
+                average_remaining = sum(nonzero_remaining_per_player) / num_players_with_remaining_items
+                # As the average remaining item pool length approaches the largest remaining item pool length, the batch
+                # size approaches `max_one_item_per_player_batch_size`.
+                batch_size_float = max_one_item_per_player_batch_size * average_remaining / largest_remaining
             else:
-                # Only 1 item will be placed at a time.
+                batch_size_float = max_one_item_per_player_batch_size
 
-                # Calculate the number of items to place in the batch.
-                # Ensure there are no more items in the batch than items remaining in the item pool
-                batch_size = min(len(item_pool), single_item_placement_batch_size)
+            # Round to the nearest integer.
+            batch_size = round(batch_size_float)
+            # Limit the minimum number of items per player in the batch.
+            batch_size = max(min_batch_size, batch_size)
+            # Don't make the batch larger than the largest remaining item pool.
+            batch_size = min(batch_size, largest_remaining)
 
-                if batch_size == 0:
-                    # There are no items remaining to place.
-                    break
+            # Set per-batch variables.
 
-                # Pick a random sample of `batch_size` items to place in this batch, by the player they belong to.
-                players = list(reachable_items.keys())
-                item_counts = list(map(len, reachable_items.values()))
-                assert sum(item_counts) == len(item_pool)
-                placement_order = multiworld.random.sample(population=players, counts=item_counts, k=batch_size)
+            # If a player has fewer items remaining than the size of the batch, then that player has some empty spaces
+            # for items in the batch. This allows for items belonging to that player, that were displaced by a swap, to
+            # be added to the current batch until the spaces are used up.
+            batch_empty_spaces = {player: batch_size - min(len(player_items), batch_size)
+                                  for player, player_items in reachable_items.items()}
 
-                # Count how many items are going to be placed per-player, in this batch.
-                placement_counts = Counter(placement_order)
+            # Iterate the first `batch_size` items of each player's remaining items into a list of all items that will
+            # be placed in the current batch.
+            # Items to place are picked from the end of each player's item pool, so, to get the items in the order they
+            # will be placed, the item pools must be iterated in reverse.
+            item_iters = [reversed(items) for items in reachable_items.values() if items]
+            batch_item_pool = [item for item_iter in item_iters
+                               for item in itertools.islice(item_iter, batch_size)]
 
-                # Set per-batch variables.
+            # Collect the remaining items, which won't be placed in this batch, into a copy of `base_state` and make
+            # that the base state for the batch.
+            batch_base_state = base_state.copy()
+            for item_iter in item_iters:
+                for item in item_iter:
+                    batch_base_state.collect(item, True)
 
-                item_iters_by_player = {player: reversed(items) for player, items in reachable_items.items() if items}
-                batch_item_pool = [item for player, item_iter in item_iters_by_player.items()
-                                   for item in itertools.islice(item_iter, placement_counts[player])]
-
-                # Collect the remaining items, which won't be placed in this batch, into a copy of `base_state` and make
-                # that the base state for the batch.
-                batch_base_state = base_state.copy()
-                for item_iter in item_iters_by_player.values():
-                    for item in item_iter:
-                        batch_base_state.collect(item, True)
-
-                # 1 item will be placed at a time, so the number of placements is the same as the batch size.
-                batched_placements_remaining = len(batch_item_pool)
-
-                placement_order_iter = iter(placement_order)
-                # There are no empty spaces when placing 1 item at a time. An empty Counter() returns `0` for a missing
-                # key, so this will act as if there are always `0` empty spaces per player.
-                batch_empty_spaces = Counter()
+            if not one_item_per_player:
+                items_per_player_in_batch = {player: batch_size - empty_spaces
+                                             for player, empty_spaces in batch_empty_spaces.items()}
+                batched_placements_remaining = sum(items_per_player_in_batch.values())
+            else:
+                batched_placements_remaining = batch_size
 
             # If there was an existing batch sweep state, it must be re-created because it will have collected items
             # that are being placed in the current batch. The placement loop is responsible for creating the sweep state
@@ -228,7 +183,9 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                               for items in reachable_items.values() if items]
         else:
             # grab the next item
-            next_player = next(placement_order_iter)
+            choices = [player for player, remaining_items in items_per_player_in_batch.items() if remaining_items > 0]
+            next_player = multiworld.random.choice(choices)
+            items_per_player_in_batch[next_player] -= 1
             items_to_place = [reachable_items[next_player].pop()]
         for item in items_to_place:
             for p, batch_pool_item in enumerate(batch_item_pool):
@@ -353,6 +310,8 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                                     # the item into the current batch.
                                     batch_item_pool.append(placed_item)
                                     batch_empty_spaces[placed_item.player] = empty_spaces_for_items - 1
+                                    if not one_item_per_player:
+                                        items_per_player_in_batch[placed_item.player] += 1
                                 else:
                                     # There are no empty spaces in the current batch for this player, so the item will
                                     # need to be placed in a different batch.
