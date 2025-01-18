@@ -1886,7 +1886,7 @@ location_tables: Dict[str, List[DS3LocationData]] = {
         DS3LocationData("AL: Twinkling Titanite - lizard after light cathedral #2",
                         "Twinkling Titanite", lizard=True),
         DS3LocationData("AL: Aldrich's Ruby - dark cathedral, miniboss", "Aldrich's Ruby",
-                        miniboss=True),  # Deep Accursed drop
+                        miniboss=True, missable=True),  # Deep Accursed drop
         DS3LocationData("AL: Aldrich Faithful - water reserves, talk to McDonnel", "Aldrich Faithful",
                         hidden=True),  # Behind illusory wall
 
