@@ -332,6 +332,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                                     batch_empty_spaces[placed_item.player] = empty_spaces_for_items - 1
                                     if not one_item_per_player:
                                         items_per_player_in_batch[placed_item.player] += 1
+                                        batched_placements_remaining += 1
                                 else:
                                     # There are no empty spaces in the current batch for this player, so the item will
                                     # need to be placed in a different batch.
