@@ -102,6 +102,8 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
     batch_empty_spaces: typing.Dict[int, int] = {}
     # The items remaining to be placed in the current batch.
     batch_item_pool: typing.List[Item] = []
+    # Used when placing items one at a time to determine the order that items are placed.
+    placement_order_iter: typing.Iterator[int] = iter(())  # dummy value to prevent reference before assignment warnings
 
     while any(reachable_items.values()) and locations:
         if batched_placements_remaining <= 0:
