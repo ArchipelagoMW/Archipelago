@@ -18,7 +18,7 @@ pero no tiene soporte.**
 
 ## Procedimiento de instalación
 
-1. Descarga e instala (Archipelago)[https://github.com/ArchipelagoMW/Archipelago/releases/latest].
+1. Descarga e instala [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases/latest).
    **El archivo del instalador se encuentra en la sección de assets al final de la información de version**.
 2. La primera vez que realices una generación local o parchees tu juego, se te pedirá que ubiques tu archivo ROM base.
    Este es tu archivo ROM de Link to the Past japonés. Esto sólo debe hacerse una vez.
