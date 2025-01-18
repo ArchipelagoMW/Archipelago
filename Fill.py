@@ -163,6 +163,8 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                     for item in item_iter:
                         batch_base_state.collect(item, True)
             else:
+                # Only 1 item will be placed at a time.
+
                 # Calculate the number of items to place in the batch.
 
                 # Attempt to put 2% of the items to place into each batch.
@@ -176,6 +178,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                     # There are no items remaining to place.
                     break
 
+                # Pick a random sample of items to place in this batch, by the player they belong to.
                 population = []
                 counts = []
                 for player, items in reachable_items.items():
@@ -184,10 +187,12 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                         population.append(player)
                         counts.append(num_items)
                 assert sum(counts) == len(item_pool)
-
                 placement_order = multiworld.random.sample(population, k=batch_size, counts=counts)
 
+                # Count how many items are going to be placed per-player, in this batch.
                 placement_counts = Counter(placement_order)
+
+                # Set per-batch variables.
 
                 item_iters_by_player = {player: reversed(items) for player, items in reachable_items.items() if items}
                 batch_item_pool = [item for player, item_iter in item_iters_by_player.items()
@@ -200,6 +205,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                     for item in item_iter:
                         batch_base_state.collect(item, True)
 
+                # 1 item will be placed at a time, so the number of placements is the same as the batch size.
                 batched_placements_remaining = len(batch_item_pool)
 
                 placement_order_iter = iter(placement_order)
