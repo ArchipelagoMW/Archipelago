@@ -6,7 +6,6 @@ import traceback
 from typing import List, Optional
 
 import Patch
-import Utils
 from BaseClasses import ItemClassification
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus, NetworkItem
@@ -161,6 +160,7 @@ class GauntletLegendsCommandProcessor(ClientCommandProcessor):
         logger.info(f"Retroarch Connected Status: {self.ctx.retro_connected}")
 
     def _cmd_deathlink_toggle(self):
+        """Toggle Deathlink on or off"""
         self.ctx.deathlink_enabled = not self.ctx.deathlink_enabled
         self.ctx.update_death_link(self.ctx.deathlink_enabled)
         logger.info(f"Deathlink {'Enabled.' if self.ctx.deathlink_enabled else 'Disabled.'}")
@@ -721,7 +721,7 @@ class GauntletLegendsContext(CommonContext):
             if ob:
                 acquired += [self.obelisk_locations[j].id]
         for k, obj in enumerate(self.chest_objects):
-            if int.from_bytes(obj.raw[8:12], "little") != int.from_bytes(self.chest_objects_init[k].raw[8:12], "little"):
+            if int.from_bytes(obj.raw[0x30:0x34], "little") != 0:
                 if self.chest_locations[k].id not in self.locations_checked:
                     acquired += [self.chest_locations[k].id]
         paused = await self.paused()
