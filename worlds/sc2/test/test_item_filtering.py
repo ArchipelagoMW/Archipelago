@@ -3,7 +3,8 @@ Unit tests for item filtering like pool_filter.py
 """
 
 from .test_base import Sc2SetupTestBase
-from ..item import item_tables, item_groups, item_names, item_parents
+from ..item import item_groups, item_names
+from .. import options
 from ..mission_tables import SC2Race
 
 class ItemFilterTests(Sc2SetupTestBase):
@@ -41,7 +42,6 @@ class ItemFilterTests(Sc2SetupTestBase):
                 item_names.ZEALOT: 1,
                 # Exclude more items to make space
                 item_names.WRATHWALKER: 1,
-                item_names.SENTRY: 1,
                 item_names.ENERGIZER: 1,
                 item_names.AVENGER: 1,
                 item_names.ARBITER: 1,
@@ -54,6 +54,7 @@ class ItemFilterTests(Sc2SetupTestBase):
             'required_tactics': 'standard',
             'selected_races': 'protoss',
             'mission_order': 'grid',
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
         }
         self.generate_world(world_options)
         self.assertTrue(self.multiworld.itempool)
