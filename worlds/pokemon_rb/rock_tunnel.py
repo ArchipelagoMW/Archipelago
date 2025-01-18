@@ -243,12 +243,19 @@ def randomize_rock_tunnel(data, random):
         r = random.randint(r, 6)
         if r == 6:
             #late open
-            r2 = random.randint(0, 2)
-            floor(1 + (r2 * 2), 14)
-            floor(2 + (r2 * 2), 14)
+            if random.randint(0, 1):
+                floor(1, 14)
+                floor(2, 14)
+            else:
+                floor(3, 14)
+                floor(4, 14)
         elif r == 5:
-            floor(6, 12)
-            floor(6, 13)
+            if random.randint(0,1):
+                floor(6, 12)
+                floor(6, 13)
+            else:
+                floor(5, 14)
+                floor(6, 14)
         elif r == 4:
             if random.randint(0, 1):
                 floor(6, 11)
