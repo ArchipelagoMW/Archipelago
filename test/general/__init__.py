@@ -12,7 +12,7 @@ gen_steps = (
     "set_rules",
     "connect_entrances",
     "generate_basic",
-    "pre_fill"
+    "pre_fill",
 )
 
 
