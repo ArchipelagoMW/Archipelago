@@ -1,7 +1,7 @@
 from typing import Dict, List, Optional
 
 from .recipe_source import RecipeSource, StarterSource, QueenOfSauceSource, ShopSource, SkillSource, FriendshipSource, ShopTradeSource, CutsceneSource, \
-    ArchipelagoSource, LogicSource, SpecialOrderSource, FestivalShopSource, QuestSource, MasterySource
+    ArchipelagoSource, LogicSource, SpecialOrderSource, FestivalShopSource, QuestSource, MasterySource, SkillCraftsanitySource
 from ..mods.mod_data import ModNames
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
@@ -11,7 +11,7 @@ from ..strings.craftable_names import Bomb, Fence, Sprinkler, WildSeeds, Floor, 
 from ..strings.crop_names import Fruit, Vegetable
 from ..strings.currency_names import Currency
 from ..strings.fertilizer_names import Fertilizer, RetainingSoil, SpeedGro
-from ..strings.fish_names import Fish, WaterItem, ModTrash
+from ..strings.fish_names import Fish, WaterItem, ModTrash, Trash
 from ..strings.flower_names import Flower
 from ..strings.food_names import Meal
 from ..strings.forageable_names import Forageable, SVEForage, DistantLandsForageable, Mushroom
@@ -61,6 +61,11 @@ def cutscene_recipe(name: str, region: str, friend: str, hearts: int, ingredient
 
 def skill_recipe(name: str, skill: str, level: int, ingredients: Dict[str, int], mod_name: Optional[str] = None) -> CraftingRecipe:
     source = SkillSource(skill, level)
+    return create_recipe(name, ingredients, source, mod_name)
+
+
+def skill_craftsanity_recipe(name: str, skill: str, level: int, ingredients: Dict[str, int], mod_name: Optional[str] = None) -> CraftingRecipe:
+    source = SkillCraftsanitySource(skill, level)
     return create_recipe(name, ingredients, source, mod_name)
 
 
@@ -249,7 +254,9 @@ bait_maker = skill_recipe(Machine.bait_maker, Skill.fishing, 6, {MetalBar.iron: 
 charcoal_kiln = skill_recipe(Machine.charcoal_kiln, Skill.foraging, 2, {Material.wood: 20, MetalBar.copper: 2})
 
 crystalarium = skill_recipe(Machine.crystalarium, Skill.mining, 9, {Material.stone: 99, MetalBar.gold: 5, MetalBar.iridium: 2, ArtisanGood.battery_pack: 1})
-furnace = skill_recipe(Machine.furnace, Skill.mining, 1, {Ore.copper: 20, Material.stone: 25})
+# In-Game, the Furnace recipe is completely unique. It is the only recipe that is obtained in a cutscene after doing a skill-related action.
+# So it has a custom source that needs both the craftsanity item from AP and the skill, if craftsanity is enabled.
+furnace = skill_craftsanity_recipe(Machine.furnace, Skill.mining, 1, {Ore.copper: 20, Material.stone: 25})
 geode_crusher = special_order_recipe(Machine.geode_crusher, SpecialOrder.cave_patrol, {MetalBar.gold: 2, Material.stone: 50, Mineral.diamond: 1})
 mushroom_log = skill_recipe(Machine.mushroom_log, Skill.foraging, 4, {Material.hardwood: 10, Material.moss: 10})
 heavy_tapper = ap_recipe(Machine.heavy_tapper, {Material.hardwood: 30, MetalBar.radioactive: 1})
@@ -370,5 +377,13 @@ composter = skill_recipe(ModMachine.composter, ModSkill.binning, 4, {Material.wo
 recycling_bin = skill_recipe(ModMachine.recycling_bin, ModSkill.binning, 7, {MetalBar.iron: 3, Material.fiber: 10, MetalBar.gold: 2}, ModNames.binning_skill)
 advanced_recycling_machine = skill_recipe(ModMachine.advanced_recycling_machine, ModSkill.binning, 9,
                                           {MetalBar.iridium: 5, ArtisanGood.battery_pack: 2, MetalBar.quartz: 10}, ModNames.binning_skill)
+
+coppper_slot_machine = skill_recipe(ModMachine.copper_slot_machine, ModSkill.luck, 2, {MetalBar.copper: 15, Material.stone: 1, Material.wood: 1,
+                                                                                       Material.fiber: 1, Material.sap: 1, Loot.slime: 1,
+                                                                                       Forageable.salmonberry: 1, Material.clay: 1, Trash.joja_cola: 1}, ModNames.luck_skill)
+
+gold_slot_machine = skill_recipe(ModMachine.gold_slot_machine, ModSkill.luck, 4, {MetalBar.gold: 15, ModMachine.copper_slot_machine: 1}, ModNames.luck_skill)
+iridium_slot_machine = skill_recipe(ModMachine.iridium_slot_machine, ModSkill.luck, 4, {MetalBar.iridium: 15, ModMachine.gold_slot_machine: 1}, ModNames.luck_skill)
+radioactive_slot_machine = skill_recipe(ModMachine.radioactive_slot_machine, ModSkill.luck, 4, {MetalBar.radioactive: 15, ModMachine.iridium_slot_machine: 1}, ModNames.luck_skill)
 
 all_crafting_recipes_by_name = {recipe.item: recipe for recipe in all_crafting_recipes}
