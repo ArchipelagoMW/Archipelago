@@ -70,6 +70,11 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
     # Pick no fewer than this many items per player for each batch, unless that player does not have enough items
     # remaining. This is a magic number and will typically be used for most batches.
     min_batch_size = 5
+    # With a low number of players, try to keep the total number of items in the batch from being too small, to prevent
+    # fills with few players from creating lots of very small batches.
+    min_total_items_per_batch = 40
+
+    # one_item_per_player=True batch constants:
     # Gradually increase the number of items placed in each batch until only the player with the largest item pool has
     # items remaining, at which point, place 2% of their original item pool in each batch. Most fills won't go above
     # `min_batch_size`, so this is mostly to account for progression fill with worlds with very large numbers of
@@ -81,13 +86,16 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
     # 975-1024 items: 20
     # etc.
     largest_player_pool = max(map(len, reachable_items.values()), default=0)
-    max_batch_size = largest_player_pool * 0.02
-    # With a low number of players, try to keep the total number of items in the batch from being too small, to prevent
-    # fills with few players from creating lots of very small batches.
-    min_total_items_per_batch = 40
+    max_one_item_per_player_batch_size = largest_player_pool * 0.02
     num_players = len(reachable_items)
     if num_players > 0 and min_batch_size * num_players < min_total_items_per_batch:
         min_batch_size = min_total_items_per_batch // num_players
+
+    # one_item_per_player=False batch constants:
+    # Attempt to put 2% of the items to place into each batch.
+    single_item_placement_batch_size = round(total * 0.02)
+    # Ensure there are at least as many items in the batch as the minimum.
+    single_item_placement_batch_size = max(min_total_items_per_batch, single_item_placement_batch_size)
 
     # Per-batch variables:
     # The base state for the current batch. Collects all items yet to be placed which are not part of the current batch.
@@ -98,10 +106,14 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
     # The number of remaining placements in the current batch. Once this reaches zero, a new batch is
     # created.
     batched_placements_remaining = 0
-    # Indicates how many empty spaces for items there are, per player, in the current batch.
-    batch_empty_spaces: typing.Dict[int, int] = {}
     # The items remaining to be placed in the current batch.
     batch_item_pool: typing.List[Item] = []
+
+    # one_item_per_player=True per-batch variables
+    # Indicates how many empty spaces for items there are, per player, in the current batch.
+    batch_empty_spaces: typing.Dict[int, int] = {}
+
+    # one_item_per_player=False per-batch variables
     # Used when placing items one at a time to determine the order that items are placed.
     placement_order_iter: typing.Iterator[int] = iter(())  # dummy value to prevent reference before assignment warnings
 
@@ -128,10 +140,10 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                     # Find the average length of the remaining item pools.
                     average_remaining = sum(nonzero_remaining_per_player) / num_players_with_remaining_items
                     # As the average remaining item pool length approaches the largest remaining item pool length, the batch
-                    # size approaches `max_batch_size`.
-                    batch_size_float = max_batch_size * average_remaining / largest_remaining
+                    # size approaches `max_one_item_per_player_batch_size`.
+                    batch_size_float = max_one_item_per_player_batch_size * average_remaining / largest_remaining
                 else:
-                    batch_size_float = max_batch_size
+                    batch_size_float = max_one_item_per_player_batch_size
 
                 # Round to the nearest integer.
                 batch_size = round(batch_size_float)
@@ -168,13 +180,8 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                 # Only 1 item will be placed at a time.
 
                 # Calculate the number of items to place in the batch.
-
-                # Attempt to put 2% of the items to place into each batch.
-                batch_size = round(total * 0.02)
-                # Ensure there are at least as many items in the batch as the minimum.
-                batch_size = max(min_total_items_per_batch, batch_size)
                 # Ensure there are no more items in the batch than items remaining in the item pool
-                batch_size = min(len(item_pool), batch_size)
+                batch_size = min(len(item_pool), single_item_placement_batch_size)
 
                 if batch_size == 0:
                     # There are no items remaining to place.
