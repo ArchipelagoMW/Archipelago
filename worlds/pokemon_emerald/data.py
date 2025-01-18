@@ -397,13 +397,13 @@ def _init() -> None:
         label = []
         for word in map_name[4:].split("_"):
             # 1F, B1F, 2R, etc.
-            re_match = re.match("^B?\d+[FRP]$", word)
+            re_match = re.match(r"^B?\d+[FRP]$", word)
             if re_match:
                 label.append(word)
                 continue
 
             # Route 103, Hall 1, House 5, etc.
-            re_match = re.match("^([A-Z]+)(\d+)$", word)
+            re_match = re.match(r"^([A-Z]+)(\d+)$", word)
             if re_match:
                 label.append(re_match.group(1).capitalize())
                 label.append(re_match.group(2).lstrip("0"))
@@ -1458,9 +1458,6 @@ def _init() -> None:
     # Create warp map
     for warp, destination in extracted_data["warps"].items():
         data.warp_map[warp] = None if destination == "" else destination
-
-        if encoded_warp not in data.warp_map:
-            data.warp_map[encoded_warp] = None
 
     # Create trainer data
     for i, trainer_json in enumerate(extracted_data["trainers"]):
