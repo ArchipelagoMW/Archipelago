@@ -2,14 +2,14 @@ import hashlib
 import json
 import os
 import zipfile
-from typing import Optional, Any
-
-import Utils
-from .Locations import AdventureLocation, LocationData
-from settings import get_settings
-from worlds.Files import APPatch, AutoPatchRegister
+from typing import Any
 
 import bsdiff4
+
+import Utils
+from settings import get_settings
+from worlds.Files import APPatch, AutoPatchRegister
+from .Locations import LocationData
 
 ADVENTUREHASH: str = "157bddb7192754a45372be196797f284"
 
@@ -86,9 +86,7 @@ class AdventureDeltaPatch(APPatch, metaclass=AutoPatchRegister):
 
     # locations: [], autocollect: [], seed_name: bytes,
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        patch_only = True
         if "autocollect" in kwargs:
-            patch_only = False
             self.foreign_items: [AdventureForeignItemInfo] = [AdventureForeignItemInfo(loc.short_location_id, loc.room_id, loc.room_x, loc.room_y)
                                   for loc in kwargs["locations"]]
 
