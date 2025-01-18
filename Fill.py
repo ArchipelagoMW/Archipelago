@@ -107,6 +107,9 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
     # The number of items, per-player, remaining in the batch. Decreased whenever an item is placed, increased whenever
     # an item is un-placed due to swap and there was empty space in the batch to add into the batch.
     items_per_player_in_batch: typing.Dict[int, int] = {}
+    # Special value carried over from the previous batch indicating which player needs to place an item at the start of
+    # the next batch.
+    next_player_override: typing.Optional[int] = None
 
     while any(reachable_items.values()) and locations:
         if batched_placements_remaining <= 0:
@@ -183,10 +186,27 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                               for items in reachable_items.values() if items]
         else:
             # grab the next item
-            choices = [player for player, remaining_items in items_per_player_in_batch.items() if remaining_items > 0]
-            next_player = multiworld.random.choice(choices)
-            items_per_player_in_batch[next_player] -= 1
+            if next_player_override is None:
+                next_player = multiworld.random.choice([player for player, items in reachable_items.items() if items])
+                player_remaining_items_in_batch = items_per_player_in_batch[next_player]
+
+                if player_remaining_items_in_batch == 0:
+                    # This player still has items to place, but their items in the batch have been exhausted.
+                    # A new batch needs to be built. This prevents unfairness in picked items at the boundary between
+                    # two batches.
+                    batched_placements_remaining = 0
+                    next_player_override = next_player
+                    continue
+            else:
+                # We are starting a new batch because we tried to pick an item that was not in the previous batch.
+                next_player = next_player_override
+                # Clear the override.
+                next_player_override = None
+                player_remaining_items_in_batch = items_per_player_in_batch[next_player]
+                assert player_remaining_items_in_batch > 0
+
             items_to_place = [reachable_items[next_player].pop()]
+            items_per_player_in_batch[next_player] = player_remaining_items_in_batch - 1
         for item in items_to_place:
             for p, batch_pool_item in enumerate(batch_item_pool):
                 if batch_pool_item is item:
