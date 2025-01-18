@@ -62,3 +62,7 @@ death_trap = "Instant Death Trap"
 # Junk
 red_balloon = "1-Up Balloon"
 banana_coin = "Banana Coin"
+dk_barrel = "Instant DK Barrel"
+
+# Energy Link
+extractinator = "Banana Extractinator"

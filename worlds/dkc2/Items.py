@@ -72,9 +72,11 @@ progression_table = {
     ItemName.skull_kart:            ItemData(STARTING_ID + 0x0025, ItemClassification.progression),
 }
 
-junk_table = {
+misc_table = {
     ItemName.banana_coin:           ItemData(STARTING_ID + 0x0030, ItemClassification.filler),
     ItemName.red_balloon:           ItemData(STARTING_ID + 0x0031, ItemClassification.filler),
+    ItemName.dk_barrel:             ItemData(STARTING_ID + 0x0032, ItemClassification.filler),
+    ItemName.extractinator:         ItemData(STARTING_ID + 0x0033, ItemClassification.useful),
 }
 
 trap_table = {
@@ -137,7 +139,7 @@ item_table = {
     **progression_table,
     **hints_table,
     **trap_table,
-    **junk_table,
+    **misc_table,
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}

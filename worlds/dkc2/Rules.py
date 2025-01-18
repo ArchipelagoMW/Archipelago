@@ -297,7 +297,7 @@ class DKC2StrictRules(DKC2Rules):
             LocationName.kannons_klaim_kong:
                 lambda state: self.can_carry(state) and self.has_kannons(state) and self.can_hover(state),
             LocationName.kannons_klaim_dk_coin:
-                lambda state: self.can_hover(state) and self.can_cartwheel(state),
+                lambda state: self.can_hover(state),
             LocationName.kannons_klaim_bonus_1:
                 lambda state: self.can_use_diddy_barrels(state) and self.can_use_dixie_barrels(state) and
                     self.can_hover(state),
@@ -394,7 +394,7 @@ class DKC2StrictRules(DKC2Rules):
             LocationName.rattle_battle_dk_coin:
                 lambda state: self.has_rattly(state) and self.has_kannons(state),
             LocationName.rattle_battle_bonus_1:
-                lambda state: self.has_kannons(state) and self.can_team_attack(state) and self.can_hover(state),
+                lambda state: self.can_team_attack(state) and self.can_hover(state),
             LocationName.rattle_battle_bonus_2:
                 self.has_rattly,
             LocationName.rattle_battle_bonus_3:
@@ -728,6 +728,917 @@ class DKC2StrictRules(DKC2Rules):
 
             LocationName.krocodile_core_clear:
                 lambda state: self.can_carry(state) and self.can_hover(state) and self.has_diddy(state),
+                
+            LocationName.pirate_panic_banana_coin_1:
+                lambda state: self.can_team_attack(state) and self.has_kannons(state),
+            LocationName.pirate_panic_banana_bunch_1:
+                self.true,
+            LocationName.pirate_panic_red_balloon:
+                self.true,
+            LocationName.pirate_panic_banana_coin_2:
+                self.can_team_attack,
+            LocationName.pirate_panic_banana_coin_3:
+                self.true,
+            LocationName.pirate_panic_green_balloon:
+                self.has_rambi,
+
+            LocationName.mainbrace_mayhem_banana_bunch_1:
+                lambda state: self.can_climb(state) and (
+                    self.can_hover(state) or self.can_cartwheel(state)
+                ),
+            LocationName.mainbrace_mayhem_banana_coin_1:
+                self.can_climb,
+            LocationName.mainbrace_mayhem_banana_coin_2:
+                self.can_climb,
+            LocationName.mainbrace_mayhem_green_balloon:
+                self.can_climb,
+            LocationName.mainbrace_mayhem_banana_bunch_2:
+                lambda state: self.can_climb(state) and self.can_team_attack(state),
+            LocationName.mainbrace_mayhem_banana_coin_3:
+                lambda state: self.can_climb(state) and self.can_team_attack(state),
+            LocationName.mainbrace_mayhem_banana_bunch_3:
+                lambda state: self.can_climb(state) and self.can_team_attack(state),
+
+            LocationName.gangplank_galley_banana_bunch_1:
+                lambda state: self.can_cling(state) and (
+                    self.can_hover(state) or (self.has_diddy(state) and self.can_cartwheel(state))
+                ),
+            LocationName.gangplank_galley_banana_bunch_2:
+                self.can_carry,
+            LocationName.gangplank_galley_red_balloon_1:
+                self.can_carry,
+            LocationName.gangplank_galley_banana_bunch_3:
+                lambda state: self.can_cling(state) and self.can_team_attack(state) and self.has_kannons(state),
+            LocationName.gangplank_galley_banana_coin_1:
+                self.can_carry,
+            LocationName.gangplank_galley_banana_bunch_4:
+                lambda state: self.can_cling(state) and self.has_kannons(state),
+            LocationName.gangplank_galley_banana_coin_2:
+                lambda state: self.can_cling(state) and self.has_kannons(state),
+            LocationName.gangplank_galley_banana_bunch_5:
+                lambda state: self.can_cling(state) and self.has_kannons(state),
+            LocationName.gangplank_galley_banana_bunch_6:
+                lambda state: self.can_cling(state) and self.can_carry(state),
+            LocationName.gangplank_galley_banana_bunch_7:
+                self.can_cling,
+            LocationName.gangplank_galley_red_balloon_2:
+                 lambda state: self.can_cling(state) and self.has_invincibility(state) and self.can_carry(state),
+
+            LocationName.lockjaws_locker_banana_coin_1:
+                self.true,
+            LocationName.lockjaws_locker_banana_bunch_1:
+                self.true,
+            LocationName.lockjaws_locker_banana_coin_2:
+                self.true,
+            LocationName.lockjaws_locker_banana_bunch_2:
+                self.can_swim,
+            LocationName.lockjaws_locker_banana_coin_3:
+                self.can_swim,
+            LocationName.lockjaws_locker_banana_coin_4:
+                self.can_swim,
+            LocationName.lockjaws_locker_banana_coin_5:
+                self.can_swim,
+            LocationName.lockjaws_locker_banana_bunch_3:
+                self.can_swim,
+            LocationName.lockjaws_locker_red_balloon:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.lockjaws_locker_banana_coin_6:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.lockjaws_locker_banana_coin_7:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.lockjaws_locker_banana_coin_8:
+                self.can_swim,
+            LocationName.lockjaws_locker_banana_bunch_4:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+
+            LocationName.topsail_trouble_red_balloon_1:
+                lambda state: self.has_rattly(state) or (self.can_team_attack(state) and self.can_cling(state)),
+            LocationName.topsail_trouble_red_balloon_2:
+                lambda state: self.can_carry(state) and (self.has_rattly(state) or (self.can_team_attack(state) and self.can_cling(state))),
+            LocationName.topsail_trouble_banana_bunch_1:
+                lambda state: self.can_climb(state) and self.can_carry and (
+                    self.can_team_attack(state) or
+                    self.has_rattly(state) or 
+                    (self.can_cling(state) and self.has_kannons(state))
+                ),
+            LocationName.topsail_trouble_banana_bunch_2:
+                lambda state: self.has_rattly(state) or (self.can_team_attack(state) and self.can_cling(state)),
+            LocationName.topsail_trouble_banana_coin_1:
+                lambda state: self.has_rattly(state) or (self.can_team_attack(state) and self.can_cling(state)),
+            LocationName.topsail_trouble_banana_coin_2:
+                self.has_rattly,
+            LocationName.topsail_trouble_banana_bunch_3:
+                lambda state: self.can_climb(state) and (
+                    self.can_team_attack(state) or
+                    self.has_rattly(state) or 
+                    (self.can_cling(state) and self.has_kannons(state))
+                ),
+            LocationName.topsail_trouble_banana_coin_3:
+                lambda state: self.can_climb(state) and (
+                    self.can_team_attack(state) or
+                    self.has_rattly(state) or 
+                    (self.can_cling(state) and self.has_kannons(state))
+                ),
+            LocationName.topsail_trouble_banana_coin_4:
+                lambda state: self.can_climb(state) and self.can_carry and (
+                    self.can_team_attack(state) or
+                    self.has_rattly(state) or 
+                    (self.can_cling(state) and self.has_kannons(state))
+                ),
+            LocationName.topsail_trouble_blue_balloon:
+                lambda state: self.can_climb(state) and self.can_team_attack(state),
+
+            LocationName.krows_nest_banana_coin_1:
+                self.can_team_attack,
+            LocationName.krows_nest_banana_coin_2:
+                self.can_team_attack,
+
+            LocationName.hot_head_hop_green_balloon:
+                lambda state: self.can_carry(state) and self.can_team_attack(state),
+            LocationName.hot_head_hop_banana_coin_1:
+                self.can_carry,
+            LocationName.hot_head_hop_banana_bunch_1:
+                self.can_carry,
+            LocationName.hot_head_hop_banana_coin_2:
+                self.has_squitter,
+            LocationName.hot_head_hop_banana_bunch_2:
+                self.has_squitter,
+            LocationName.hot_head_hop_banana_bunch_3:
+                self.has_squitter,
+            LocationName.hot_head_hop_banana_coin_3:
+                self.has_squitter,
+            LocationName.hot_head_hop_banana_coin_4:
+                self.has_squitter,
+            LocationName.hot_head_hop_red_balloon:
+                lambda state: self.has_squitter(state) and self.has_kannons(state),
+
+            LocationName.kannons_klaim_banana_bunch_1:
+                lambda state: self.has_kannons(state) and self.can_cling(state) and self.can_hover(state),
+            LocationName.kannons_klaim_banana_coin_1:
+                lambda state: self.can_carry(state) and self.has_kannons(state),
+            LocationName.kannons_klaim_banana_coin_2:
+                lambda state: self.can_carry(state) and self.has_kannons(state) and self.can_hover(state),
+            LocationName.kannons_klaim_banana_coin_3:
+                lambda state: self.can_carry(state) and self.has_kannons(state) and self.can_use_diddy_barrels(state),
+
+            LocationName.lava_lagoon_banana_coin_1:
+                lambda state: self.can_swim(state) and self.has_clapper(state),
+            LocationName.lava_lagoon_banana_coin_2:
+                lambda state: self.can_swim(state) and self.has_clapper(state),
+            LocationName.lava_lagoon_banana_bunch_1:
+                lambda state: self.can_swim(state) and self.has_clapper(state),
+            LocationName.lava_lagoon_banana_coin_3:
+                lambda state: self.can_swim(state) and self.has_clapper(state),
+            LocationName.lava_lagoon_banana_bunch_2:
+                lambda state: self.can_swim(state) and self.has_clapper(state),
+            LocationName.lava_lagoon_banana_coin_4:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state),
+            LocationName.lava_lagoon_banana_coin_5:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and 
+                    self.has_kannons(state) and self.has_invincibility(state),
+            LocationName.lava_lagoon_banana_bunch_3:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and 
+                    self.has_kannons(state) and self.has_invincibility(state),
+            LocationName.lava_lagoon_banana_coin_6:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state) and 
+                    self.has_invincibility(state) and self.has_enguarde(state),
+            LocationName.lava_lagoon_banana_coin_7:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state) and 
+                    self.has_invincibility(state) and self.has_enguarde(state),
+            LocationName.lava_lagoon_red_balloon_1:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state) and 
+                    self.has_invincibility(state) and self.has_enguarde(state),
+            LocationName.lava_lagoon_banana_bunch_4:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state) and 
+                    self.has_invincibility(state) and self.has_enguarde(state),
+            LocationName.lava_lagoon_banana_bunch_5:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state) and 
+                    self.has_invincibility(state) and self.has_enguarde(state),
+            LocationName.lava_lagoon_banana_coin_8:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state) and 
+                    self.has_invincibility(state) and self.has_enguarde(state),
+            LocationName.lava_lagoon_banana_coin_9:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state) and 
+                    self.has_invincibility(state) and self.has_enguarde(state),
+            LocationName.lava_lagoon_banana_coin_10:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state) and 
+                    self.has_invincibility(state) and self.has_enguarde(state) and self.can_team_attack(state),
+
+            LocationName.red_hot_ride_banana_bunch_1:
+                self.true,
+            LocationName.red_hot_ride_banana_coin_1:
+                self.can_team_attack,
+            LocationName.red_hot_ride_banana_coin_2:
+                self.can_team_attack,
+            LocationName.red_hot_ride_banana_bunch_2:
+                self.can_carry,
+            LocationName.red_hot_ride_banana_coin_3:
+                lambda state: self.can_carry(state) and self.has_rambi(state),
+            LocationName.red_hot_ride_banana_bunch_3:
+                lambda state: (self.can_carry(state) or self.can_team_attack(state)) and self.has_rambi(state),
+            LocationName.red_hot_ride_banana_coin_4:
+                lambda state: (self.can_carry(state) or self.can_team_attack(state)) and self.has_rambi(state),
+            LocationName.red_hot_ride_banana_coin_5:
+                lambda state: self.can_carry(state) and self.has_rambi(state),
+            LocationName.red_hot_ride_banana_coin_6:
+                lambda state: self.can_carry(state) and self.has_rambi(state),
+            LocationName.red_hot_ride_banana_bunch_4:
+                lambda state: self.can_carry(state) and self.has_rambi(state),
+
+            LocationName.squawks_shaft_banana_coin_1:
+                self.can_cartwheel,
+            LocationName.squawks_shaft_banana_bunch_1:
+                self.has_kannons,
+            LocationName.squawks_shaft_banana_coin_2:
+                lambda state: self.has_kannons(state) and self.can_carry(state) and (
+                    self.can_cartwheel(state) or 
+                    self.can_hover(state)
+                ),
+            LocationName.squawks_shaft_banana_bunch_2:
+                self.has_kannons,
+            LocationName.squawks_shaft_red_balloon_1:
+                lambda state: self.has_kannons(state) and self.can_carry(state) and self.can_cartwheel(state), 
+            LocationName.squawks_shaft_banana_coin_3:
+                lambda state: self.has_kannons(state) and self.can_use_dixie_barrels(state),
+            LocationName.squawks_shaft_banana_coin_4:
+                lambda state: self.has_kannons(state) and self.can_use_dixie_barrels(state),
+            LocationName.squawks_shaft_banana_coin_5:
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
+            LocationName.squawks_shaft_banana_coin_6:
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
+            LocationName.squawks_shaft_banana_coin_7:
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
+            LocationName.squawks_shaft_banana_bunch_3:
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
+            LocationName.squawks_shaft_banana_bunch_4:
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
+
+            LocationName.kleevers_kiln_banana_coin_1:
+                lambda state: self.can_cling(state) and self.can_carry(state) and self.has_both_kongs(state) and 
+                    self.can_hover(state),
+            LocationName.kleevers_kiln_banana_coin_2:
+                lambda state: self.can_cling(state) and self.can_carry(state) and self.has_both_kongs(state) and 
+                    self.can_hover(state),
+
+            LocationName.barrel_bayou_banana_bunch_1:
+                self.can_team_attack,
+            LocationName.barrel_bayou_banana_coin_1:
+                lambda state: self.has_controllable_barrels(state) and self.has_rambi(state),
+            LocationName.barrel_bayou_banana_bunch_2:
+                lambda state: self.has_controllable_barrels(state) and self.has_rambi(state),
+            LocationName.barrel_bayou_green_balloon:
+                lambda state: self.has_controllable_barrels(state) and self.has_rambi(state) and self.can_carry(state),
+            LocationName.barrel_bayou_banana_coin_2:
+                lambda state: self.has_controllable_barrels(state) and self.has_rambi(state),
+            LocationName.barrel_bayou_banana_bunch_3:
+                lambda state: self.has_controllable_barrels(state) and self.has_rambi(state) and 
+                    self.has_kannons(state) and self.can_team_attack(state),
+
+            LocationName.glimmers_galleon_banana_coin_1:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_coin_2:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_bunch_1:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_bunch_2:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_bunch_3:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_red_balloon:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_bunch_4:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_coin_3:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_bunch_5:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_coin_4:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_bunch_6:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_bunch_7:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_coin_5:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_bunch_8:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_coin_6:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_bunch_9:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_bunch_10:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_bunch_11:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_bunch_12:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_coin_7:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_coin_8:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_bunch_13:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_coin_9:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_bunch_14:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+            LocationName.glimmers_galleon_banana_coin_10:
+                lambda state: self.can_swim(state) and self.has_glimmer(state),
+
+            LocationName.krockhead_klamber_red_balloon_1:
+                lambda state: self.can_team_attack(state) and self.can_carry(state),
+            LocationName.krockhead_klamber_banana_coin_1:
+                lambda state: self.can_team_attack(state) and self.can_cartwheel(state),
+            LocationName.krockhead_klamber_banana_coin_2:
+                self.can_climb,
+            LocationName.krockhead_klamber_red_balloon_2:
+                lambda state: self.can_climb(state) and self.can_team_attack(state) and self.has_kannons(state) and 
+                    self.has_squitter(state),
+            LocationName.krockhead_klamber_banana_coin_3:
+                lambda state: self.can_climb(state) and self.has_kannons(state),
+
+            LocationName.rattle_battle_banana_coin_1:
+                self.has_kannons,
+            LocationName.rattle_battle_banana_bunch_1:
+                self.has_kannons,
+            LocationName.rattle_battle_banana_bunch_2:
+                self.has_rattly,
+            LocationName.rattle_battle_banana_coin_2:
+                self.has_rattly,
+            LocationName.rattle_battle_banana_coin_3:
+                self.has_rattly,
+            LocationName.rattle_battle_banana_bunch_3:
+                self.has_rattly,
+            LocationName.rattle_battle_banana_bunch_4:
+                self.has_rattly,
+
+            LocationName.slime_climb_banana_coin_1:
+                self.can_cartwheel,
+            LocationName.slime_climb_banana_coin_2:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_swim(state) and 
+                    self.can_cartwheel(state),
+            LocationName.slime_climb_banana_bunch_1:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_swim(state) and 
+                    self.can_cartwheel(state),
+            LocationName.slime_climb_banana_bunch_2:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_swim(state),
+            LocationName.slime_climb_banana_coin_3:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_swim(state) and 
+                    self.can_cartwheel(state),
+            LocationName.slime_climb_banana_bunch_3:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_swim(state) and 
+                    self.can_cartwheel(state) and self.can_hover(state),
+            LocationName.slime_climb_banana_bunch_4:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_swim(state) and 
+                    self.can_cartwheel(state) and self.can_hover(state),
+
+            LocationName.bramble_blast_banana_bunch_1:
+                self.can_team_attack,
+            LocationName.bramble_blast_banana_bunch_2:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_bunch_3:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_coin_1:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_bunch_4:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_bunch_5:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_coin_2:
+                self.has_kannons,
+            LocationName.bramble_blast_red_balloon:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_bunch_6:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_bunch_7:
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
+            LocationName.bramble_blast_banana_bunch_8:
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
+            LocationName.bramble_blast_banana_bunch_9:
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
+
+            LocationName.hornet_hole_banana_bunch_1:
+                lambda state: self.can_team_attack(state) and self.can_cling(state),
+            LocationName.hornet_hole_banana_coin_1:
+                lambda state: self.can_team_attack(state) and self.can_cling(state),
+            LocationName.hornet_hole_banana_bunch_2:
+                lambda state: self.can_team_attack(state) and self.can_cling(state),
+            LocationName.hornet_hole_banana_coin_2:
+                self.true,
+            LocationName.hornet_hole_green_balloon_1:
+                self.can_carry,
+            LocationName.hornet_hole_banana_coin_3:
+                lambda state: self.can_hover(state) and self.can_team_attack(state) and self.has_squitter(state) and 
+                    self.has_kannons(state) and self.can_cling(state),
+            LocationName.hornet_hole_banana_bunch_3:
+                lambda state: self.can_hover(state) and self.can_team_attack(state) and self.has_squitter(state) and 
+                    self.has_kannons(state) and self.can_cling(state),
+            LocationName.hornet_hole_banana_coin_4:
+                lambda state: self.can_hover(state) and self.can_team_attack(state) and self.has_squitter(state) and 
+                    self.has_kannons(state) and self.can_cling(state),
+            LocationName.hornet_hole_banana_bunch_4:
+                lambda state: self.can_hover(state) and self.can_team_attack(state) and self.has_squitter(state) and 
+                    self.has_kannons(state) and self.can_cling(state),
+            LocationName.hornet_hole_banana_bunch_5:
+                lambda state: self.can_hover(state) and self.can_team_attack(state) and self.has_squitter(state) and 
+                    self.has_kannons(state) and self.can_cling(state),
+            LocationName.hornet_hole_red_balloon_1:
+                lambda state: self.can_hover(state) and self.can_team_attack(state) and self.has_squitter(state) and 
+                    self.has_kannons(state) and self.can_cling(state),
+
+            LocationName.target_terror_banana_bunch_1:
+                lambda state: self.has_kannons(state) and self.has_skull_kart(state),
+            LocationName.target_terror_banana_bunch_2:
+                lambda state: self.has_kannons(state) and self.has_skull_kart(state) and self.has_squawks(state),
+            LocationName.target_terror_red_balloon:
+                lambda state: self.has_kannons(state) and self.has_skull_kart(state),
+
+            LocationName.bramble_scramble_banana_bunch_1:
+                self.has_kannons,
+            LocationName.bramble_scramble_banana_bunch_2:
+                 lambda state: self.can_carry(state) and self.has_both_kongs(state) and self.can_climb(state),
+            LocationName.bramble_scramble_banana_coin_1:
+                lambda state: self.can_hover(state) and self.can_climb(state) and self.can_team_attack(state) and
+                    self.has_invincibility(state) and self.has_kannons(state),
+            LocationName.bramble_scramble_banana_coin_2:
+                lambda state: self.can_hover(state) and self.can_climb(state) and self.can_team_attack(state) and
+                    self.has_invincibility(state) and self.has_kannons(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_coin_3:
+                lambda state: self.can_hover(state) and self.can_climb(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_bunch_3:
+                lambda state: self.can_hover(state) and self.can_climb(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_bunch_4:
+                lambda state: self.can_hover(state) and self.can_climb(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_coin_4:
+                lambda state: self.can_hover(state) and self.can_climb(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_coin_5:
+                lambda state: self.can_hover(state) and self.can_climb(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_bunch_5:
+                lambda state: self.can_hover(state) and self.can_climb(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_coin_6:
+                lambda state: self.can_hover(state) and self.can_cartwheel(state) and self.can_climb(state) and 
+                    self.has_squitter(state) and self.has_squawks(state) and self.has_kannons(state),
+            LocationName.bramble_scramble_banana_coin_7:
+                lambda state: self.can_hover(state) and self.can_cartwheel(state) and self.can_climb(state) and 
+                    self.has_squitter(state) and self.has_squawks(state) and self.has_kannons(state),
+            LocationName.bramble_scramble_banana_coin_8:
+                lambda state: self.can_hover(state) and self.can_cartwheel(state) and self.can_climb(state) and 
+                    self.has_squitter(state) and self.has_squawks(state) and self.has_kannons(state),
+            LocationName.bramble_scramble_blue_balloon:
+                lambda state: self.can_hover(state) and self.can_cartwheel(state) and self.can_climb(state) and 
+                    self.has_squitter(state) and self.has_squawks(state) and self.has_kannons(state),
+            LocationName.bramble_scramble_red_balloon:
+                lambda state: self.can_hover(state) and self.can_cartwheel(state) and self.can_climb(state) and 
+                    self.has_squitter(state) and self.has_squawks(state) and self.has_kannons(state),
+
+            LocationName.rickety_race_banana_coin:
+                self.has_skull_kart,
+
+            LocationName.mudhole_marsh_banana_coin_1:
+                self.true,
+            LocationName.mudhole_marsh_banana_bunch_1:
+                lambda state: self.can_cling(state) and self.can_carry(state),
+            LocationName.mudhole_marsh_banana_coin_2:
+                lambda state: self.can_cling(state) and self.can_carry(state) and self.can_team_attack(state) and 
+                    self.has_invincibility(state),
+            LocationName.mudhole_marsh_banana_coin_3:
+                lambda state: self.can_cling(state) and self.can_carry(state) and self.can_team_attack(state) and 
+                    self.has_invincibility(state) and self.can_climb(state),
+            LocationName.mudhole_marsh_banana_coin_4:
+                lambda state: self.can_cling(state) and self.can_carry(state) and self.can_team_attack(state) and 
+                    self.has_invincibility(state) and self.can_climb(state) and self.can_cartwheel(state),
+            LocationName.mudhole_marsh_banana_coin_5:
+                lambda state: self.can_cling(state) and self.can_carry(state) and self.can_team_attack(state) and 
+                    self.has_invincibility(state) and self.can_climb(state),
+
+            LocationName.rambi_rumble_banana_coin_1:
+                self.can_hover,
+            LocationName.rambi_rumble_banana_bunch_1:
+                self.can_hover,
+            LocationName.rambi_rumble_banana_bunch_2:
+                lambda state: self.can_cling(state) and self.has_kannons(state) and 
+                    self.can_hover(state),
+            LocationName.rambi_rumble_banana_coin_2:
+                lambda state: self.can_cling(state) and self.has_kannons(state) and 
+                    self.can_hover(state) and self.can_team_attack(state),
+            LocationName.rambi_rumble_banana_bunch_3:
+                lambda state: self.can_cling(state) and self.has_kannons(state) and 
+                    self.can_hover(state) and self.has_rambi(state),
+
+            LocationName.king_zing_sting_banana_coin_1:
+                self.true,
+            LocationName.king_zing_sting_banana_coin_2:
+                self.true,
+
+            LocationName.ghostly_grove_banana_bunch_1:
+                self.true,
+            LocationName.ghostly_grove_red_balloon:
+                self.can_carry,
+            LocationName.ghostly_grove_banana_bunch_2:
+                self.true,
+            LocationName.ghostly_grove_banana_coin_1:
+                lambda state: self.can_climb(state) and self.can_cartwheel(state),
+            LocationName.ghostly_grove_banana_bunch_3:
+                self.can_climb,
+            LocationName.ghostly_grove_banana_bunch_4:
+                self.can_climb,
+            LocationName.ghostly_grove_banana_coin_2:
+                self.can_climb,
+
+            LocationName.haunted_hall_banana_bunch_1:
+                self.true,
+            LocationName.haunted_hall_banana_bunch_2:
+                self.true,
+            LocationName.haunted_hall_banana_coin_1:
+                self.can_cartwheel,
+            LocationName.haunted_hall_banana_coin_2:
+                self.has_skull_kart,
+            LocationName.haunted_hall_banana_coin_3:
+                self.has_skull_kart,
+
+            LocationName.gusty_glade_banana_coin_1:
+                self.can_team_attack,
+            LocationName.gusty_glade_banana_coin_2:
+                self.can_cartwheel,
+            LocationName.gusty_glade_blue_balloon:
+                lambda state: self.can_team_attack(state) and self.has_rattly(state),
+            LocationName.gusty_glade_banana_coin_3:
+                lambda state: self.can_cling(state) and self.has_kannons(state) and self.can_cartwheel(state),
+
+            LocationName.parrot_chute_panic_banana_coin_1:
+                lambda state: self.has_squawks(state) and self.can_carry(state),
+            LocationName.parrot_chute_panic_banana_coin_2:
+                self.has_squawks,
+            LocationName.parrot_chute_panic_banana_bunch_1:
+                self.has_squawks,
+            LocationName.parrot_chute_panic_banana_coin_3:
+                self.has_squawks,
+            LocationName.parrot_chute_panic_banana_bunch_2:
+                self.has_squawks,
+            LocationName.parrot_chute_panic_banana_coin_4:
+                self.has_squawks,
+            LocationName.parrot_chute_panic_banana_coin_5:
+                lambda state: self.has_squawks(state) and self.has_controllable_barrels(state) and self.can_team_attack(state),
+
+            LocationName.web_woods_banana_coin_1:
+                self.can_team_attack,
+            LocationName.web_woods_banana_coin_2:
+                lambda state: self.can_team_attack(state) and self.can_carry(state),
+            LocationName.web_woods_green_balloon_1:
+                lambda state: self.can_team_attack(state) and self.can_carry(state) and self.has_kannons(state),
+            LocationName.web_woods_banana_bunch_1:
+                self.can_carry,
+            LocationName.web_woods_banana_bunch_2:
+                self.can_cartwheel,
+            LocationName.web_woods_banana_bunch_3:
+                self.has_squitter,
+            LocationName.web_woods_banana_coin_3:
+                self.has_squitter,
+            LocationName.web_woods_banana_coin_4:
+                self.has_squitter,
+            LocationName.web_woods_banana_coin_5:
+                self.has_squitter,
+            LocationName.web_woods_green_balloon_2:
+                lambda state: self.has_squitter(state) and self.can_team_attack(state),
+
+            LocationName.kreepy_krow_banana_coin_1:
+                lambda state: self.has_kannons(state) and self.can_climb(state) and self.can_cling(state) and 
+                    self.can_carry(state) and self.has_both_kongs(state),
+            LocationName.kreepy_krow_banana_coin_2:
+                lambda state: self.has_kannons(state) and self.can_climb(state) and self.can_cling(state) and 
+                    self.can_carry(state) and self.has_both_kongs(state),
+
+            LocationName.arctic_abyss_banana_coin_1:
+                lambda state: self.can_team_attack(state) and (self.can_cartwheel(state) or self.can_hover(state)),
+            LocationName.arctic_abyss_banana_bunch_1:
+                lambda state: self.can_team_attack(state) and (self.can_cartwheel(state) or self.can_hover(state)),
+            LocationName.arctic_abyss_banana_bunch_2:
+                lambda state: self.can_team_attack(state) and (self.can_cartwheel(state) or self.can_hover(state)),
+            LocationName.arctic_abyss_banana_bunch_3:
+                lambda state: self.can_team_attack(state) and (self.can_cartwheel(state) or self.can_hover(state)),
+            LocationName.arctic_abyss_banana_bunch_4:
+                self.can_swim,
+            LocationName.arctic_abyss_banana_coin_2:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.arctic_abyss_banana_coin_3:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.arctic_abyss_banana_coin_4:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.arctic_abyss_banana_bunch_5:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.arctic_abyss_banana_coin_5:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.arctic_abyss_banana_bunch_6:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.arctic_abyss_banana_bunch_7:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.arctic_abyss_red_balloon_1:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.arctic_abyss_red_balloon_2:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+
+            LocationName.windy_well_banana_coin_1:
+                self.can_carry,
+            LocationName.windy_well_banana_coin_2:
+                lambda state: self.can_cling(state) and self.can_carry(state),
+            LocationName.windy_well_banana_coin_3:
+                lambda state: self.can_cling(state) and self.can_carry(state),
+            LocationName.windy_well_banana_bunch_1:
+                lambda state: self.has_kannons(state) and self.can_cling(state) and self.can_carry(state) and 
+                    self.can_cartwheel(state),
+            LocationName.windy_well_banana_bunch_2:
+                lambda state: self.has_kannons(state) and self.can_cling(state) and self.can_carry(state) and 
+                    self.can_cartwheel(state),
+            LocationName.windy_well_banana_coin_4:
+                lambda state: self.has_kannons(state) and self.can_cling(state) and self.can_carry(state),
+            LocationName.windy_well_banana_bunch_3:
+                lambda state: self.has_kannons(state) and self.can_cling(state) and self.can_carry(state),
+            LocationName.windy_well_red_balloon:
+                lambda state: self.has_kannons(state) and self.can_cling(state) and self.can_carry(state) and 
+                    self.has_both_kongs(state),
+            LocationName.windy_well_banana_bunch_4:
+                lambda state: self.has_kannons(state) and self.can_cling(state) and self.can_carry(state) and 
+                    self.has_both_kongs(state) and self.has_squawks(state),
+
+            LocationName.castle_crush_banana_coin_1:
+                lambda state: self.has_rambi(state) and self.can_carry(state) and 
+                    self.has_both_kongs(state),
+            LocationName.castle_crush_banana_bunch_1:
+                lambda state: self.has_rambi(state) and self.can_carry(state) and 
+                    self.has_both_kongs(state),
+            LocationName.castle_crush_banana_bunch_2:
+                lambda state: self.has_rambi(state) and self.can_carry(state) and 
+                    self.has_both_kongs(state),
+            LocationName.castle_crush_banana_coin_2:
+                lambda state: self.has_rambi(state) and self.can_carry(state) and 
+                    self.has_both_kongs(state),
+            LocationName.castle_crush_banana_bunch_3:
+                lambda state: self.has_rambi(state) and self.can_carry(state) and 
+                    self.has_both_kongs(state),
+            LocationName.castle_crush_banana_bunch_4:
+                lambda state: self.has_rambi(state) and self.can_carry(state) and 
+                    self.has_both_kongs(state),
+            LocationName.castle_crush_banana_bunch_5:
+                lambda state: self.has_rambi(state) and self.can_carry(state) and 
+                    self.has_both_kongs(state) and self.can_cartwheel(state),
+            LocationName.castle_crush_banana_coin_3:
+                lambda state: self.has_rambi(state) and self.can_carry(state) and 
+                    self.has_both_kongs(state) and self.can_cartwheel(state),
+            LocationName.castle_crush_banana_bunch_6:
+                lambda state: self.has_rambi(state) and self.can_carry(state) and 
+                    self.has_both_kongs(state) and self.can_cartwheel(state),
+
+            LocationName.clappers_cavern_banana_coin_1:
+                self.has_clapper,
+            LocationName.clappers_cavern_banana_bunch_1:
+                lambda state: self.has_clapper(state) and self.can_swim(state) and self.has_kannons(state) and 
+                    self.has_enguarde(state),
+            LocationName.clappers_cavern_banana_bunch_2:
+                lambda state: self.has_clapper(state) and self.can_swim(state) and self.has_kannons(state) and 
+                    self.has_enguarde(state),
+            LocationName.clappers_cavern_banana_bunch_3:
+                lambda state: self.has_clapper(state) and self.can_swim(state) and self.has_kannons(state) and 
+                    self.has_enguarde(state),
+            LocationName.clappers_cavern_banana_coin_2:
+                lambda state: self.has_clapper(state) and self.can_swim(state) and self.has_kannons(state) and 
+                    self.has_enguarde(state),
+            LocationName.clappers_cavern_banana_bunch_4:
+                lambda state: self.has_clapper(state) and self.can_swim(state) and self.has_kannons(state) and 
+                    self.has_enguarde(state),
+            LocationName.clappers_cavern_banana_coin_3:
+                lambda state: self.has_clapper(state) and self.can_swim(state) and self.has_kannons(state) and 
+                    self.has_enguarde(state) and self.can_team_attack(state) and self.has_invincibility(state),
+            LocationName.clappers_cavern_banana_coin_4:
+                lambda state: self.has_clapper(state) and self.can_swim(state) and self.has_kannons(state) and 
+                    self.has_enguarde(state) and self.can_team_attack(state) and self.has_invincibility(state),
+            LocationName.clappers_cavern_banana_coin_5:
+                lambda state: self.has_clapper(state) and self.can_swim(state) and self.has_kannons(state) and 
+                    self.has_enguarde(state) and self.can_team_attack(state) and self.has_invincibility(state),
+
+            LocationName.chain_link_chamber_banana_coin_1:
+                self.can_climb,
+            LocationName.chain_link_chamber_banana_bunch_1:
+                self.can_climb,
+            LocationName.chain_link_chamber_banana_bunch_2:
+                self.can_climb,
+            LocationName.chain_link_chamber_banana_bunch_3:
+                lambda state: self.can_climb(state) and self.can_carry(state),
+            LocationName.chain_link_chamber_banana_coin_2:
+                lambda state: self.can_climb(state) and self.can_cling(state) and self.has_kannons(state) and 
+                    self.has_controllable_barrels(state) and self.has_invincibility(state),
+            LocationName.chain_link_chamber_banana_bunch_4:
+                lambda state: self.can_climb(state) and self.can_cling(state) and self.has_kannons(state) and 
+                    self.has_controllable_barrels(state) and self.has_invincibility(state),
+            LocationName.chain_link_chamber_banana_coin_3:
+                lambda state: self.can_climb(state) and self.can_cling(state) and self.has_kannons(state) and 
+                    self.has_controllable_barrels(state) and self.has_invincibility(state),
+            LocationName.chain_link_chamber_banana_coin_4:
+                lambda state: self.can_climb(state) and self.can_cling(state) and self.has_kannons(state) and 
+                    self.has_controllable_barrels(state) and self.has_invincibility(state),
+
+            LocationName.toxic_tower_banana_bunch_1:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_bunch_2:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_bunch_3:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_bunch_4:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_bunch_5:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_bunch_6:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_bunch_7:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_coin_1:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_coin_2:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_coin_3:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_coin_4:
+                lambda state: self.has_rattly(state) and self.has_squawks(state) and self.has_kannons(state),
+            LocationName.toxic_tower_banana_coin_5:
+                lambda state: self.has_rattly(state) and self.has_squawks(state) and self.has_kannons(state),
+            LocationName.toxic_tower_banana_bunch_8:
+                lambda state: self.has_rattly(state) and self.has_squawks(state) and self.has_kannons(state),
+            LocationName.toxic_tower_banana_bunch_9:
+                lambda state: self.has_rattly(state) and self.has_squawks(state) and self.has_kannons(state),
+            LocationName.toxic_tower_green_balloon:
+                lambda state: self.has_rattly(state) and self.has_squawks(state) and self.has_kannons(state) and self.has_squitter(state),
+
+            LocationName.stronghold_showdown_banana_coin_1:
+                self.can_team_attack,
+            LocationName.stronghold_showdown_red_balloon:
+                self.can_team_attack,
+            LocationName.stronghold_showdown_banana_coin_2:
+                self.can_team_attack,
+
+            LocationName.screechs_sprint_banana_coin_1:
+                self.can_cartwheel,
+            LocationName.screechs_sprint_banana_bunch_1:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state),
+            LocationName.screechs_sprint_banana_coin_2:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state),
+            LocationName.screechs_sprint_banana_coin_3:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_red_balloon:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_banana_bunch_2:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state) and self.has_kannons(state),
+            LocationName.screechs_sprint_banana_bunch_3:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_banana_coin_4:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_banana_coin_5:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_banana_coin_6:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_banana_coin_7:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_banana_coin_8:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_banana_bunch_4:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_banana_bunch_5:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_banana_bunch_6:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+
+            LocationName.jungle_jinx_banana_bunch_1:
+                self.true,
+            LocationName.jungle_jinx_banana_bunch_2:
+                self.true,
+            LocationName.jungle_jinx_banana_coin_1:
+                self.can_hover,
+            LocationName.jungle_jinx_banana_coin_2:
+                self.can_cartwheel,
+            LocationName.jungle_jinx_banana_coin_3:
+                lambda state: self.can_cartwheel(state) and self.has_kannons(state),
+            LocationName.jungle_jinx_banana_coin_4:
+                lambda state: self.can_cartwheel(state) and self.has_kannons(state) and self.can_team_attack(state),
+            LocationName.jungle_jinx_banana_coin_5:
+                lambda state: self.can_cartwheel(state) and self.has_kannons(state),
+
+            LocationName.black_ice_battle_banana_bunch_1:
+                lambda state: self.can_carry(state) and self.can_cartwheel(state),
+            LocationName.black_ice_battle_red_balloon_1:
+                self.can_carry,
+            LocationName.black_ice_battle_red_balloon_2:
+                self.can_carry,
+            LocationName.black_ice_battle_red_balloon_3:
+                self.can_carry,
+            LocationName.black_ice_battle_banana_bunch_2:
+                self.can_carry,
+            LocationName.black_ice_battle_banana_coin_1:
+                self.can_carry,
+            LocationName.black_ice_battle_banana_bunch_3:
+                lambda state: self.can_carry(state) and self.can_team_attack(state),
+
+            LocationName.klobber_karnage_banana_coin_1:
+                self.true,
+            LocationName.klobber_karnage_banana_bunch_1:
+                self.can_cartwheel,
+            LocationName.klobber_karnage_banana_bunch_2:
+                self.can_cartwheel,
+            LocationName.klobber_karnage_banana_coin_2:
+                self.can_cartwheel,
+            LocationName.klobber_karnage_banana_bunch_3:
+                self.can_cartwheel,
+            LocationName.klobber_karnage_banana_coin_3:
+                lambda state: self.can_cartwheel(state) and self.can_use_diddy_barrels(state) and 
+                    self.has_controllable_barrels(state),
+            LocationName.klobber_karnage_banana_bunch_4:
+                lambda state: self.can_cartwheel(state) and self.can_use_diddy_barrels(state) and 
+                    self.can_use_dixie_barrels(state) and self.has_controllable_barrels(state),
+            LocationName.klobber_karnage_banana_bunch_5:
+                lambda state: self.can_cartwheel(state) and self.can_use_diddy_barrels(state) and 
+                    self.can_use_dixie_barrels(state) and self.has_controllable_barrels(state) and 
+                    self.has_kannons(state),
+            LocationName.klobber_karnage_banana_bunch_6:
+                lambda state: self.can_cartwheel(state) and self.can_use_diddy_barrels(state) and 
+                    self.can_use_dixie_barrels(state) and self.has_controllable_barrels(state) and 
+                    self.has_kannons(state),
+            LocationName.klobber_karnage_banana_bunch_7:
+                lambda state: self.can_cartwheel(state) and self.can_use_diddy_barrels(state) and 
+                    self.can_use_dixie_barrels(state) and self.has_controllable_barrels(state) and 
+                    self.has_kannons(state),
+            LocationName.klobber_karnage_banana_coin_4:
+                lambda state: self.can_cartwheel(state) and self.can_use_diddy_barrels(state) and 
+                    self.can_use_dixie_barrels(state) and self.has_controllable_barrels(state) and 
+                    self.has_kannons(state),
+            LocationName.klobber_karnage_red_balloon:
+                lambda state: self.can_cartwheel(state) and self.can_use_diddy_barrels(state) and 
+                    self.can_use_dixie_barrels(state) and self.has_controllable_barrels(state) and 
+                    self.has_kannons(state),
+
+            LocationName.fiery_furnace_banana_bunch_1:
+                self.can_team_attack,
+            LocationName.fiery_furnace_banana_bunch_2:
+                self.can_team_attack,
+            LocationName.fiery_furnace_banana_bunch_3:
+                self.can_team_attack,
+            LocationName.fiery_furnace_banana_bunch_4:
+                lambda state: self.has_controllable_barrels(state) and self.can_team_attack(state),
+            LocationName.fiery_furnace_banana_coin_1:
+                lambda state: self.has_controllable_barrels(state) and self.can_team_attack(state) and 
+                    self.can_cartwheel(state),
+            LocationName.fiery_furnace_banana_coin_2:
+                lambda state: self.has_controllable_barrels(state) and self.can_team_attack(state) and 
+                    self.can_cartwheel(state),
+            LocationName.fiery_furnace_banana_bunch_5:
+                lambda state: self.has_controllable_barrels(state) and self.can_team_attack(state) and 
+                    self.can_cartwheel(state),
+
+            LocationName.animal_antics_banana_bunch_1:
+                lambda state: self.has_both_kongs(state) and self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state),
+            LocationName.animal_antics_banana_bunch_2:
+                lambda state: self.has_both_kongs(state) and self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state) and self.has_squitter(state),
+            LocationName.animal_antics_banana_coin_1:
+                lambda state: self.has_both_kongs(state) and self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state) and self.has_squitter(state),
+            LocationName.animal_antics_banana_coin_2:
+                lambda state: self.has_both_kongs(state) and self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state) and self.has_squitter(state) and 
+                    self.has_squawks(state) and self.has_kannons(state),
+            LocationName.animal_antics_banana_bunch_3:
+                lambda state: self.has_both_kongs(state) and self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state) and self.has_squitter(state) and 
+                    self.has_squawks(state) and self.has_kannons(state),
+            LocationName.animal_antics_banana_bunch_4:
+                lambda state: self.has_both_kongs(state) and self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state) and self.has_squitter(state) and 
+                    self.has_squawks(state) and self.has_kannons(state),
+            LocationName.animal_antics_banana_coin_3:
+                lambda state: self.has_both_kongs(state) and self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state) and self.has_squitter(state) and 
+                    self.has_squawks(state) and self.has_kannons(state),
+            LocationName.animal_antics_banana_coin_4:
+                lambda state: self.has_both_kongs(state) and self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state) and self.has_squitter(state) and 
+                    self.has_squawks(state) and self.has_kannons(state),
+            LocationName.animal_antics_red_balloon:
+                lambda state: self.has_both_kongs(state) and self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state) and self.has_squitter(state) and 
+                    self.has_squawks(state) and self.has_kannons(state),
+            LocationName.animal_antics_banana_coin_5:
+                lambda state: self.has_both_kongs(state) and self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state) and self.has_squitter(state) and 
+                    self.has_squawks(state)  and self.has_kannons(state) and self.has_rattly(state),
         }
 
     def set_dkc2_rules(self) -> None:
@@ -817,7 +1728,7 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.hot_head_hop_bonus_2:
                 self.has_squitter,
             LocationName.hot_head_hop_bonus_3:
-                lambda state: self.has_squitter(state) and self.has_kannons(state),
+                self.has_squitter,
 
             LocationName.kannons_klaim_clear:
                 lambda state: self.can_carry(state) and self.has_kannons(state),
@@ -826,8 +1737,9 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.kannons_klaim_dk_coin:
                 lambda state: self.can_hover(state) or self.can_cartwheel(state),
             LocationName.kannons_klaim_bonus_1:
-                lambda state: self.can_use_diddy_barrels(state) and self.can_use_dixie_barrels(state) and
-                    self.can_hover(state),
+                lambda state: self.can_use_diddy_barrels(state) and self.can_use_dixie_barrels(state) and (
+                    self.can_hover(state) or self.can_cartwheel(state)
+                ),
             LocationName.kannons_klaim_bonus_2:
                 lambda state: self.can_carry(state) and self.can_team_attack(state) and self.has_kannons(state),
             LocationName.kannons_klaim_bonus_3:
@@ -918,7 +1830,7 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.rattle_battle_dk_coin:
                 lambda state: self.has_rattly(state) and self.has_kannons(state),
             LocationName.rattle_battle_bonus_1:
-                lambda state: self.has_kannons(state) and self.can_team_attack(state) and
+                lambda state: self.can_team_attack(state) and
                     (self.can_hover(state) or self.can_cartwheel(state)),
             LocationName.rattle_battle_bonus_2:
                 self.has_rattly,
@@ -1266,6 +2178,909 @@ class DKC2LooseRules(DKC2Rules):
 
             LocationName.krocodile_core_clear:
                 self.can_carry,
+                
+            LocationName.pirate_panic_banana_coin_1:
+                lambda state: self.can_team_attack(state) and self.has_kannons(state),
+            LocationName.pirate_panic_banana_bunch_1:
+                self.true,
+            LocationName.pirate_panic_red_balloon:
+                self.true,
+            LocationName.pirate_panic_banana_coin_2:
+                self.can_team_attack,
+            LocationName.pirate_panic_banana_coin_3:
+                self.true,
+            LocationName.pirate_panic_green_balloon:
+                self.has_rambi,
+
+            LocationName.mainbrace_mayhem_banana_bunch_1:
+                lambda state: self.can_climb(state) and (
+                    self.can_hover(state) or self.can_cartwheel(state)
+                ),
+            LocationName.mainbrace_mayhem_banana_coin_1:
+                self.can_climb,
+            LocationName.mainbrace_mayhem_banana_coin_2:
+                self.can_climb,
+            LocationName.mainbrace_mayhem_green_balloon: 
+                self.can_climb,
+            LocationName.mainbrace_mayhem_banana_bunch_2:
+                lambda state: self.can_climb(state) and self.can_team_attack(state),
+            LocationName.mainbrace_mayhem_banana_coin_3:
+                lambda state: self.can_climb(state) and self.can_team_attack(state),
+            LocationName.mainbrace_mayhem_banana_bunch_3:
+                lambda state: self.can_climb(state) and self.can_team_attack(state),
+
+            LocationName.gangplank_galley_banana_bunch_1:
+                lambda state: self.can_cling(state) and (
+                    self.can_hover(state) or (self.has_diddy(state) and self.can_cartwheel(state))
+                ),
+            LocationName.gangplank_galley_banana_bunch_2:
+                self.can_carry,
+            LocationName.gangplank_galley_red_balloon_1:
+                self.can_carry,
+            LocationName.gangplank_galley_banana_bunch_3:
+                lambda state: self.can_team_attack(state) and self.has_kannons(state),
+            LocationName.gangplank_galley_banana_coin_1:
+                self.can_carry,
+            LocationName.gangplank_galley_banana_bunch_4:
+                lambda state: self.can_cling(state) and self.has_kannons(state),
+            LocationName.gangplank_galley_banana_coin_2:
+                lambda state: self.can_cling(state) and self.has_kannons(state),
+            LocationName.gangplank_galley_banana_bunch_5:
+                lambda state: self.can_cling(state) and self.has_kannons(state),
+            LocationName.gangplank_galley_banana_bunch_6:
+                lambda state: self.can_carry(state) and (self.can_cling(state) or self.can_hover(state) or self.can_cartwheel(state)) ,
+            LocationName.gangplank_galley_banana_bunch_7:
+                lambda state: self.can_hover(state) or self.can_cling(state),
+            LocationName.gangplank_galley_red_balloon_2:
+                 lambda state: self.can_cling(state) and self.can_carry(state) and (self.can_team_attack(state) or self.has_invincibility(state)) ,
+
+            LocationName.lockjaws_locker_banana_coin_1:
+                self.true,
+            LocationName.lockjaws_locker_banana_bunch_1:
+                self.true,
+            LocationName.lockjaws_locker_banana_coin_2:
+                self.true,
+            LocationName.lockjaws_locker_banana_bunch_2:
+                lambda state: self.can_swim(state) or self.can_hover(state) or self.can_cartwheel(state),
+            LocationName.lockjaws_locker_banana_coin_3:
+                self.can_swim,
+            LocationName.lockjaws_locker_banana_coin_4:
+                self.can_swim,
+            LocationName.lockjaws_locker_banana_coin_5:
+                self.can_swim,
+            LocationName.lockjaws_locker_banana_bunch_3:
+                self.can_swim,
+            LocationName.lockjaws_locker_red_balloon:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.lockjaws_locker_banana_coin_6:
+                lambda state: self.can_swim(state),
+            LocationName.lockjaws_locker_banana_coin_7:
+                lambda state: self.can_swim(state),
+            LocationName.lockjaws_locker_banana_coin_8:
+                self.can_swim,
+            LocationName.lockjaws_locker_banana_bunch_4:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+
+            LocationName.topsail_trouble_red_balloon_1:
+                lambda state: self.has_rattly(state) or self.can_team_attack(state) or self.can_cling(state),
+            LocationName.topsail_trouble_red_balloon_2:
+                lambda state: self.can_carry(state) and (
+                    self.has_rattly(state) or self.can_team_attack(state) or self.can_cling(state)
+                ),
+            LocationName.topsail_trouble_banana_bunch_1:
+                lambda state: self.can_carry and (
+                    self.can_team_attack(state) or
+                    self.has_rattly(state) or 
+                    (self.can_cling(state) and self.has_kannons(state))
+                ),
+            LocationName.topsail_trouble_banana_bunch_2:
+                lambda state: self.has_rattly(state) or self.can_team_attack(state),
+            LocationName.topsail_trouble_banana_coin_1:
+                lambda state: self.has_rattly(state) or self.can_team_attack(state),
+            LocationName.topsail_trouble_banana_coin_2:
+                self.has_rattly,
+            LocationName.topsail_trouble_banana_bunch_3:
+                lambda state: self.can_climb(state) and (
+                    self.can_team_attack(state) or
+                    self.has_rattly(state) or 
+                    (self.can_cling(state) and self.has_kannons(state))
+                ),
+            LocationName.topsail_trouble_banana_coin_3:
+                lambda state: self.can_climb(state) and (
+                    self.can_team_attack(state) or
+                    self.has_rattly(state) or 
+                    (self.can_cling(state) and self.has_kannons(state))
+                ),
+            LocationName.topsail_trouble_banana_coin_4:
+                lambda state: self.can_climb(state) and self.can_carry and (
+                    self.can_team_attack(state) or
+                    self.has_rattly(state) or 
+                    (self.can_cling(state) and self.has_kannons(state))
+                ),
+            LocationName.topsail_trouble_blue_balloon:
+                lambda state: self.can_climb(state) and self.can_team_attack(state) ,
+
+            LocationName.krows_nest_banana_coin_1:
+                self.can_team_attack,
+            LocationName.krows_nest_banana_coin_2:
+                self.can_team_attack,
+
+            LocationName.hot_head_hop_green_balloon:
+                lambda state: self.can_carry(state) and self.can_team_attack(state),
+            LocationName.hot_head_hop_banana_coin_1:
+                self.can_carry,
+            LocationName.hot_head_hop_banana_bunch_1:
+                self.can_carry,
+            LocationName.hot_head_hop_banana_coin_2:
+                lambda state: self.has_squitter(state) or self.can_team_attack(state),
+            LocationName.hot_head_hop_banana_bunch_2:
+                self.has_squitter,
+            LocationName.hot_head_hop_banana_bunch_3:
+                self.has_squitter,
+            LocationName.hot_head_hop_banana_coin_3:
+                self.has_squitter,
+            LocationName.hot_head_hop_banana_coin_4:
+                self.has_squitter,
+            LocationName.hot_head_hop_red_balloon:
+                self.has_squitter,
+
+            LocationName.kannons_klaim_banana_bunch_1:
+                lambda state: self.has_kannons(state) and self.can_cling(state),
+            LocationName.kannons_klaim_banana_coin_1:
+                lambda state: self.has_kannons(state),
+            LocationName.kannons_klaim_banana_coin_2:
+                lambda state: self.has_kannons(state) and (self.can_cartwheel(state) or self.can_hover(state)),
+            LocationName.kannons_klaim_banana_coin_3:
+                lambda state: self.has_kannons(state) and self.can_use_diddy_barrels(state),
+
+            LocationName.lava_lagoon_banana_coin_1:
+                lambda state: self.can_swim(state) and self.has_clapper(state),
+            LocationName.lava_lagoon_banana_coin_2:
+                lambda state: self.can_swim(state) and self.has_clapper(state),
+            LocationName.lava_lagoon_banana_bunch_1:
+                lambda state: self.can_swim(state) and self.has_clapper(state),
+            LocationName.lava_lagoon_banana_coin_3:
+                lambda state: self.can_swim(state) and self.has_clapper(state),
+            LocationName.lava_lagoon_banana_bunch_2:
+                lambda state: self.can_swim(state) and self.has_clapper(state),
+            LocationName.lava_lagoon_banana_coin_4:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state),
+            LocationName.lava_lagoon_banana_coin_5:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and 
+                    self.has_kannons(state) and self.has_invincibility(state),
+            LocationName.lava_lagoon_banana_bunch_3:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and 
+                    self.has_kannons(state),
+            LocationName.lava_lagoon_banana_coin_6:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state),
+            LocationName.lava_lagoon_banana_coin_7:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state),
+            LocationName.lava_lagoon_red_balloon_1:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state) and 
+                    self.has_invincibility(state) and self.has_enguarde(state),
+            LocationName.lava_lagoon_banana_bunch_4:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state) and 
+                    self.has_invincibility(state) and self.has_enguarde(state),
+            LocationName.lava_lagoon_banana_bunch_5:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state),
+            LocationName.lava_lagoon_banana_coin_8:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state),
+            LocationName.lava_lagoon_banana_coin_9:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state),
+            LocationName.lava_lagoon_banana_coin_10:
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state) and 
+                    self.can_team_attack(state),
+
+            LocationName.red_hot_ride_banana_bunch_1:
+                self.true,
+            LocationName.red_hot_ride_banana_coin_1:
+                self.true,
+            LocationName.red_hot_ride_banana_coin_2:
+                self.true,
+            LocationName.red_hot_ride_banana_bunch_2:
+                self.can_carry,
+            LocationName.red_hot_ride_banana_coin_3:
+                lambda state: self.can_carry(state) or self.has_rambi(state),
+            LocationName.red_hot_ride_banana_bunch_3:
+                self.true,
+            LocationName.red_hot_ride_banana_coin_4:
+                self.true,
+            LocationName.red_hot_ride_banana_coin_5:
+                lambda state: self.can_carry(state) or self.has_rambi(state),
+            LocationName.red_hot_ride_banana_coin_6:
+                lambda state: self.can_carry(state),
+            LocationName.red_hot_ride_banana_bunch_4:
+                self.true,
+
+            LocationName.squawks_shaft_banana_coin_1:
+                self.can_cartwheel,
+            LocationName.squawks_shaft_banana_bunch_1:
+                self.has_kannons,
+            LocationName.squawks_shaft_banana_coin_2:
+                lambda state: self.has_kannons(state) and self.can_carry(state) and (
+                    self.can_cartwheel(state) or 
+                    self.can_hover(state)
+                ),
+            LocationName.squawks_shaft_banana_bunch_2:
+                self.has_kannons,
+            LocationName.squawks_shaft_red_balloon_1:
+                lambda state: self.has_kannons(state) and self.can_carry(state) and self.can_cartwheel(state), 
+            LocationName.squawks_shaft_banana_coin_3:
+                lambda state: self.has_kannons(state) and self.can_use_dixie_barrels(state),
+            LocationName.squawks_shaft_banana_coin_4:
+                lambda state: self.has_kannons(state) and self.can_use_dixie_barrels(state),
+            LocationName.squawks_shaft_banana_coin_5:
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
+            LocationName.squawks_shaft_banana_coin_6:
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
+            LocationName.squawks_shaft_banana_coin_7:
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
+            LocationName.squawks_shaft_banana_bunch_3:
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
+            LocationName.squawks_shaft_banana_bunch_4:
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
+
+            LocationName.kleevers_kiln_banana_coin_1:
+                lambda state: self.can_cling(state) and self.can_carry(state) and 
+                    self.can_hover(state),
+            LocationName.kleevers_kiln_banana_coin_2:
+                lambda state: self.can_cling(state) and self.can_carry(state) and 
+                    self.can_hover(state),
+
+            LocationName.barrel_bayou_banana_bunch_1:
+                self.can_team_attack,
+            LocationName.barrel_bayou_banana_coin_1:
+                lambda state: self.has_controllable_barrels(state) and self.has_rambi(state),
+            LocationName.barrel_bayou_banana_bunch_2:
+                self.has_controllable_barrels,
+            LocationName.barrel_bayou_green_balloon:
+                lambda state: self.has_controllable_barrels(state) and self.can_carry(state),
+            LocationName.barrel_bayou_banana_coin_2:
+                lambda state: self.has_controllable_barrels(state) and self.has_kannons(state),
+            LocationName.barrel_bayou_banana_bunch_3:
+                lambda state: self.has_controllable_barrels(state) and 
+                    self.has_kannons(state) and self.can_team_attack(state),
+
+            LocationName.glimmers_galleon_banana_coin_1:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_coin_2:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_1:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_2:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_3:
+                self.can_swim,
+            LocationName.glimmers_galleon_red_balloon:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_4:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_coin_3:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_5:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_coin_4:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_6:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_7:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_coin_5:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_8:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_coin_6:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_9:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_10:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_11:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_12:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_coin_7:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_coin_8:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_13:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_coin_9:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_14:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_coin_10:
+                self.can_swim,
+
+            LocationName.krockhead_klamber_red_balloon_1:
+                lambda state: self.can_team_attack(state) and self.can_carry(state),
+            LocationName.krockhead_klamber_banana_coin_1:
+                lambda state: self.can_team_attack(state) and self.can_cartwheel(state),
+            LocationName.krockhead_klamber_banana_coin_2:
+                self.can_climb,
+            LocationName.krockhead_klamber_red_balloon_2:
+                lambda state: self.can_climb(state) and self.can_team_attack(state) and self.has_squitter(state),
+            LocationName.krockhead_klamber_banana_coin_3:
+                self.can_climb,
+
+            LocationName.rattle_battle_banana_coin_1:
+                self.has_kannons,
+            LocationName.rattle_battle_banana_bunch_1:
+                self.has_kannons,
+            LocationName.rattle_battle_banana_bunch_2:
+                self.has_rattly,
+            LocationName.rattle_battle_banana_coin_2:
+                self.has_rattly,
+            LocationName.rattle_battle_banana_coin_3:
+                self.has_rattly,
+            LocationName.rattle_battle_banana_bunch_3:
+                self.has_rattly,
+            LocationName.rattle_battle_banana_bunch_4:
+                self.has_rattly,
+
+            LocationName.slime_climb_banana_coin_1:
+                self.can_cartwheel,
+            LocationName.slime_climb_banana_coin_2:
+                lambda state: self.can_climb(state) and self.can_swim(state) and 
+                    self.can_cartwheel(state),
+            LocationName.slime_climb_banana_bunch_1:
+                lambda state: self.can_climb(state) and self.can_swim(state) and 
+                    self.can_cartwheel(state),
+            LocationName.slime_climb_banana_bunch_2:
+                lambda state: self.can_climb(state) and self.can_swim(state),
+            LocationName.slime_climb_banana_coin_3:
+                lambda state: self.can_climb(state) and self.can_swim(state) and 
+                    self.can_cartwheel(state),
+            LocationName.slime_climb_banana_bunch_3:
+                lambda state: self.can_climb(state) and self.can_swim(state) and 
+                    self.can_cartwheel(state) and self.can_hover(state),
+            LocationName.slime_climb_banana_bunch_4:
+                lambda state: self.can_climb(state) and self.can_swim(state) and 
+                    self.can_cartwheel(state) and self.can_hover(state),
+
+            LocationName.bramble_blast_banana_bunch_1:
+                self.can_team_attack,
+            LocationName.bramble_blast_banana_bunch_2:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_bunch_3:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_coin_1:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_bunch_4:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_bunch_5:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_coin_2:
+                self.has_kannons,
+            LocationName.bramble_blast_red_balloon:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_bunch_6:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_bunch_7:
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
+            LocationName.bramble_blast_banana_bunch_8:
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
+            LocationName.bramble_blast_banana_bunch_9:
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
+
+            LocationName.hornet_hole_banana_bunch_1:
+                lambda state: self.can_team_attack(state) and self.can_cling(state),
+            LocationName.hornet_hole_banana_coin_1:
+                lambda state: self.can_team_attack(state) and self.can_cling(state),
+            LocationName.hornet_hole_banana_bunch_2:
+                lambda state: self.can_team_attack(state) and self.can_cling(state),
+            LocationName.hornet_hole_banana_coin_2:
+                self.true,
+            LocationName.hornet_hole_green_balloon_1:
+                self.can_carry,
+            LocationName.hornet_hole_banana_coin_3:
+                lambda state: self.can_team_attack(state) and self.has_squitter(state) and 
+                    self.can_cling(state),
+            LocationName.hornet_hole_banana_bunch_3:
+                lambda state: self.can_team_attack(state) and self.has_squitter(state) and 
+                    self.can_cling(state),
+            LocationName.hornet_hole_banana_coin_4:
+                lambda state: self.can_team_attack(state) and self.has_squitter(state) and 
+                    self.can_cling(state),
+            LocationName.hornet_hole_banana_bunch_4:
+                lambda state: self.can_team_attack(state) and self.has_squitter(state) and 
+                    self.can_cling(state),
+            LocationName.hornet_hole_banana_bunch_5:
+                lambda state: self.can_team_attack(state) and self.has_squitter(state) and 
+                    self.can_cling(state),
+            LocationName.hornet_hole_red_balloon_1:
+                lambda state: self.can_team_attack(state) and self.has_squitter(state) and 
+                    self.can_cling(state),
+
+            LocationName.target_terror_banana_bunch_1:
+                lambda state: self.has_kannons(state) and self.has_skull_kart(state),
+            LocationName.target_terror_banana_bunch_2:
+                lambda state: self.has_kannons(state) and self.has_skull_kart(state) and self.has_squawks(state),
+            LocationName.target_terror_red_balloon:
+                lambda state: self.has_kannons(state) and self.has_skull_kart(state),
+
+            LocationName.bramble_scramble_banana_bunch_1:
+                self.true,
+            LocationName.bramble_scramble_banana_bunch_2:
+                lambda state: self.can_carry(state) and self.has_both_kongs(state) and self.can_climb(state),
+            LocationName.bramble_scramble_banana_coin_1:
+                lambda state: self.can_climb(state) and self.can_team_attack(state) and
+                    self.has_invincibility(state) and self.has_kannons(state),
+            LocationName.bramble_scramble_banana_coin_2:
+                lambda state: self.can_climb(state) and self.can_team_attack(state) and
+                    self.has_invincibility(state) and self.has_kannons(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_coin_3:
+                lambda state: self.can_climb(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_bunch_3:
+                lambda state: self.can_climb(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_bunch_4:
+                lambda state: self.can_climb(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_coin_4:
+                lambda state: self.can_climb(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_coin_5:
+                lambda state: self.can_climb(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_bunch_5:
+                lambda state: self.can_climb(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_coin_6:
+                lambda state: self.can_cartwheel(state) and self.can_climb(state) and 
+                    self.has_squitter(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_coin_7:
+                lambda state: self.can_cartwheel(state) and self.can_climb(state) and 
+                    self.has_squitter(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_coin_8:
+                lambda state: self.can_cartwheel(state) and self.can_climb(state) and 
+                    self.has_squitter(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_blue_balloon:
+                lambda state: self.can_cartwheel(state) and self.can_climb(state) and 
+                    self.has_squitter(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_red_balloon:
+                lambda state: self.can_cartwheel(state) and self.can_climb(state) and 
+                    self.has_squitter(state) and self.has_squawks(state),
+
+            LocationName.rickety_race_banana_coin:
+                self.has_skull_kart,
+
+            LocationName.mudhole_marsh_banana_coin_1:
+                self.true,
+            LocationName.mudhole_marsh_banana_bunch_1:
+                lambda state: self.can_cling(state) and self.can_carry(state),
+            LocationName.mudhole_marsh_banana_coin_2:
+                lambda state: self.can_cling(state) and self.can_carry(state) and self.can_team_attack(state) and 
+                    self.has_invincibility(state),
+            LocationName.mudhole_marsh_banana_coin_3:
+                lambda state: self.can_cling(state) and self.can_carry(state) and self.can_team_attack(state) and 
+                    self.can_climb(state),
+            LocationName.mudhole_marsh_banana_coin_4:
+                lambda state: self.can_cling(state) and self.can_carry(state) and self.can_team_attack(state) and 
+                    self.can_climb(state) and self.can_cartwheel(state),
+            LocationName.mudhole_marsh_banana_coin_5:
+                lambda state: self.can_cling(state) and self.can_carry(state) and self.can_team_attack(state) and 
+                    self.can_climb(state),
+
+            LocationName.rambi_rumble_banana_coin_1:
+                self.can_hover,
+            LocationName.rambi_rumble_banana_bunch_1:
+                self.can_hover,
+            LocationName.rambi_rumble_banana_bunch_2:
+                lambda state: self.can_cling(state) and self.has_kannons(state),
+            LocationName.rambi_rumble_banana_coin_2:
+                lambda state: self.can_cling(state) and self.has_kannons(state) and self.can_team_attack(state),
+            LocationName.rambi_rumble_banana_bunch_3:
+                lambda state: self.can_cling(state) and self.has_kannons(state) and 
+                    self.has_rambi(state),
+
+            LocationName.king_zing_sting_banana_coin_1:
+                self.true,
+            LocationName.king_zing_sting_banana_coin_2:
+                self.true,
+
+            LocationName.ghostly_grove_banana_bunch_1:
+                self.true,
+            LocationName.ghostly_grove_red_balloon:
+                self.can_carry,
+            LocationName.ghostly_grove_banana_bunch_2:
+                self.true,
+            LocationName.ghostly_grove_banana_coin_1:
+                lambda state: self.can_climb(state) and self.can_cartwheel(state),
+            LocationName.ghostly_grove_banana_bunch_3:
+                self.can_climb,
+            LocationName.ghostly_grove_banana_bunch_4:
+                self.can_climb,
+            LocationName.ghostly_grove_banana_coin_2:
+                self.can_climb,
+
+            LocationName.haunted_hall_banana_bunch_1:
+                self.true,
+            LocationName.haunted_hall_banana_bunch_2:
+                self.true,
+            LocationName.haunted_hall_banana_coin_1:
+                self.can_cartwheel,
+            LocationName.haunted_hall_banana_coin_2:
+                self.has_skull_kart,
+            LocationName.haunted_hall_banana_coin_3:
+                self.has_skull_kart,
+
+            LocationName.gusty_glade_banana_coin_1:
+                self.can_team_attack,
+            LocationName.gusty_glade_banana_coin_2:
+                self.can_cartwheel,
+            LocationName.gusty_glade_blue_balloon:
+                lambda state: self.can_team_attack(state) and self.has_rattly(state),
+            LocationName.gusty_glade_banana_coin_3:
+                lambda state: self.can_cling(state) and self.has_kannons(state) and self.can_cartwheel(state),
+
+            LocationName.parrot_chute_panic_banana_coin_1:
+                lambda state: self.has_squawks(state) and self.can_carry(state),
+            LocationName.parrot_chute_panic_banana_coin_2:
+                self.has_squawks,
+            LocationName.parrot_chute_panic_banana_bunch_1:
+                self.has_squawks,
+            LocationName.parrot_chute_panic_banana_coin_3:
+                self.has_squawks,
+            LocationName.parrot_chute_panic_banana_bunch_2:
+                self.has_squawks,
+            LocationName.parrot_chute_panic_banana_coin_4:
+                self.has_squawks,
+            LocationName.parrot_chute_panic_banana_coin_5:
+                lambda state: self.has_squawks(state) and self.has_controllable_barrels(state)
+                    and (self.can_team_attack(state) or self.can_cartwheel(state)),
+
+            LocationName.web_woods_banana_coin_1:
+                self.can_team_attack,
+            LocationName.web_woods_banana_coin_2:
+                lambda state: self.can_team_attack(state) and self.can_carry(state),
+            LocationName.web_woods_green_balloon_1:
+                lambda state: self.can_team_attack(state) and self.can_carry(state) and self.has_kannons(state),
+            LocationName.web_woods_banana_bunch_1:
+                self.can_cartwheel,
+            LocationName.web_woods_banana_bunch_2:
+                self.can_carry,
+            LocationName.web_woods_banana_bunch_3:
+                self.has_squitter,
+            LocationName.web_woods_banana_coin_3:
+                self.has_squitter,
+            LocationName.web_woods_banana_coin_4:
+                self.has_squitter,
+            LocationName.web_woods_banana_coin_5:
+                self.has_squitter,
+            LocationName.web_woods_green_balloon_2:
+                lambda state: self.has_squitter(state) and self.can_team_attack(state),
+
+            LocationName.kreepy_krow_banana_coin_1:
+                lambda state: self.has_kannons(state) and self.can_climb(state) and self.can_cling(state) and 
+                    self.can_carry(state),
+            LocationName.kreepy_krow_banana_coin_2:
+                lambda state: self.has_kannons(state) and self.can_climb(state) and self.can_cling(state) and 
+                    self.can_carry(state),
+
+            LocationName.arctic_abyss_banana_coin_1:
+                lambda state: self.can_team_attack(state) and (self.can_cartwheel(state) or self.can_hover(state)),
+            LocationName.arctic_abyss_banana_bunch_1:
+                lambda state: self.can_team_attack(state) and (self.can_cartwheel(state) or self.can_hover(state)),
+            LocationName.arctic_abyss_banana_bunch_2:
+                lambda state: self.can_team_attack(state) and (self.can_cartwheel(state) or self.can_hover(state)),
+            LocationName.arctic_abyss_banana_bunch_3:
+                lambda state: self.can_team_attack(state) and (self.can_cartwheel(state) or self.can_hover(state)),
+            LocationName.arctic_abyss_banana_bunch_4:
+                self.can_swim,
+            LocationName.arctic_abyss_banana_coin_2:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.arctic_abyss_banana_coin_3:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.arctic_abyss_banana_coin_4:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.arctic_abyss_banana_bunch_5:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.arctic_abyss_banana_coin_5:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.arctic_abyss_banana_bunch_6:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.arctic_abyss_banana_bunch_7:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.arctic_abyss_red_balloon_1:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+            LocationName.arctic_abyss_red_balloon_2:
+                lambda state: self.can_swim(state) and self.has_enguarde(state),
+
+            LocationName.windy_well_banana_coin_1:
+                self.true,
+            LocationName.windy_well_banana_coin_2:
+                self.can_cling,
+            LocationName.windy_well_banana_coin_3:
+                self.can_cling,
+            LocationName.windy_well_banana_bunch_1:
+                lambda state: self.has_kannons(state) and self.can_cling(state) and self.can_carry(state),
+            LocationName.windy_well_banana_bunch_2:
+                lambda state: self.has_kannons(state) and self.can_cling(state) and self.can_carry(state),
+            LocationName.windy_well_banana_coin_4:
+                lambda state: self.can_cling(state) and self.can_carry(state),
+            LocationName.windy_well_banana_bunch_3:
+                lambda state: self.can_cling(state) and self.can_carry(state),
+            LocationName.windy_well_red_balloon:
+                lambda state: self.can_cling(state) and self.can_carry(state),
+            LocationName.windy_well_banana_bunch_4:
+                lambda state: self.can_cling(state) and self.can_carry(state) and 
+                    self.has_squawks(state),
+
+            LocationName.castle_crush_banana_coin_1:
+                lambda state: self.has_rambi(state) and self.can_carry(state) and 
+                    self.has_both_kongs(state),
+            LocationName.castle_crush_banana_bunch_1:
+                lambda state: self.has_rambi(state) and self.can_carry(state) and 
+                    self.has_both_kongs(state),
+            LocationName.castle_crush_banana_bunch_2:
+                lambda state: self.has_rambi(state) and self.can_carry(state) and 
+                    self.has_both_kongs(state),
+            LocationName.castle_crush_banana_coin_2:
+                lambda state: self.has_rambi(state) and self.can_carry(state) and 
+                    self.has_both_kongs(state),
+            LocationName.castle_crush_banana_bunch_3:
+                lambda state: self.can_carry(state) and 
+                    self.has_both_kongs(state),
+            LocationName.castle_crush_banana_bunch_4:
+                lambda state: self.can_carry(state) and 
+                    self.has_both_kongs(state),
+            LocationName.castle_crush_banana_bunch_5:
+                lambda state: self.can_carry(state) and 
+                    self.has_both_kongs(state) and self.can_cartwheel(state),
+            LocationName.castle_crush_banana_coin_3:
+                lambda state: self.can_carry(state) and 
+                    self.has_both_kongs(state) and self.can_cartwheel(state),
+            LocationName.castle_crush_banana_bunch_6:
+                lambda state: self.can_carry(state) and 
+                    self.has_both_kongs(state) and self.can_cartwheel(state),
+
+            LocationName.clappers_cavern_banana_coin_1:
+                self.has_clapper,
+            LocationName.clappers_cavern_banana_bunch_1:
+                lambda state: self.has_clapper(state) and self.can_swim(state) and self.has_kannons(state),
+            LocationName.clappers_cavern_banana_bunch_2:
+                lambda state: self.has_clapper(state) and self.can_swim(state) and self.has_kannons(state),
+            LocationName.clappers_cavern_banana_bunch_3:
+                lambda state: self.has_clapper(state) and self.can_swim(state) and self.has_kannons(state),
+            LocationName.clappers_cavern_banana_coin_2:
+                lambda state: self.has_clapper(state) and self.can_swim(state) and self.has_kannons(state),
+            LocationName.clappers_cavern_banana_bunch_4:
+                lambda state: self.has_clapper(state) and self.can_swim(state) and self.has_kannons(state) and 
+                    self.has_enguarde(state),
+            LocationName.clappers_cavern_banana_coin_3:
+                lambda state: self.has_clapper(state) and self.can_swim(state) and self.has_kannons(state) and 
+                    self.can_team_attack(state) and self.has_invincibility(state),
+            LocationName.clappers_cavern_banana_coin_4:
+                lambda state: self.has_clapper(state) and self.can_swim(state) and self.has_kannons(state) and 
+                    self.can_team_attack(state) and self.has_invincibility(state),
+            LocationName.clappers_cavern_banana_coin_5:
+                lambda state: self.has_clapper(state) and self.can_swim(state) and self.has_kannons(state) and 
+                    self.can_team_attack(state) and self.has_invincibility(state),
+
+            LocationName.chain_link_chamber_banana_coin_1:
+                self.can_climb,
+            LocationName.chain_link_chamber_banana_bunch_1:
+                self.can_climb,
+            LocationName.chain_link_chamber_banana_bunch_2:
+                self.can_climb,
+            LocationName.chain_link_chamber_banana_bunch_3:
+                lambda state: self.can_climb(state) and self.can_carry(state),
+            LocationName.chain_link_chamber_banana_coin_2:
+                lambda state: self.can_climb(state) and 
+                    (self.can_cling(state) or (self.has_kannons(state) and 
+                    self.has_controllable_barrels(state))),
+            LocationName.chain_link_chamber_banana_bunch_4:
+                lambda state: self.can_climb(state) and 
+                    (self.can_cling(state) or (self.has_kannons(state) and 
+                    self.has_controllable_barrels(state))),
+            LocationName.chain_link_chamber_banana_coin_3:
+                lambda state: self.can_climb(state) and 
+                    (self.can_cling(state) or (self.has_kannons(state) and 
+                    self.has_controllable_barrels(state))),
+            LocationName.chain_link_chamber_banana_coin_4:
+                lambda state: self.can_climb(state) and 
+                    (self.can_cling(state) or (self.has_kannons(state) and 
+                    self.has_controllable_barrels(state))),
+            
+            LocationName.toxic_tower_banana_bunch_1:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_bunch_2:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_bunch_3:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_bunch_4:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_bunch_5:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_bunch_6:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_bunch_7:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_coin_1:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_coin_2:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_coin_3:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_coin_4:
+                lambda state: self.has_rattly(state) and self.has_squawks(state),
+            LocationName.toxic_tower_banana_coin_5:
+                lambda state: self.has_rattly(state) and self.has_squawks(state),
+            LocationName.toxic_tower_banana_bunch_8:
+                lambda state: self.has_rattly(state) and self.has_squawks(state),
+            LocationName.toxic_tower_banana_bunch_9:
+                lambda state: self.has_rattly(state) and self.has_squawks(state),
+            LocationName.toxic_tower_green_balloon:
+                lambda state: self.has_rattly(state) and self.has_squawks(state) and (self.has_diddy(state) or self.can_climb(state)),
+
+            LocationName.stronghold_showdown_banana_coin_1:
+                self.can_team_attack,
+            LocationName.stronghold_showdown_red_balloon:
+                self.can_team_attack,
+            LocationName.stronghold_showdown_banana_coin_2:
+                self.can_team_attack,
+
+            LocationName.screechs_sprint_banana_coin_1:
+                self.can_cartwheel,
+            LocationName.screechs_sprint_banana_bunch_1:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state),
+            LocationName.screechs_sprint_banana_coin_2:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state),
+            LocationName.screechs_sprint_banana_coin_3:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_red_balloon:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_banana_bunch_2:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state) and self.has_kannons(state),
+            LocationName.screechs_sprint_banana_bunch_3:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_banana_coin_4:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_banana_coin_5:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_banana_coin_6:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_banana_coin_7:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_banana_coin_8:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_banana_bunch_4:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_banana_bunch_5:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+            LocationName.screechs_sprint_banana_bunch_6:
+                lambda state: self.can_climb(state) and self.can_carry(state) and self.can_cartwheel(state) and 
+                    self.has_squawks(state),
+
+            LocationName.jungle_jinx_banana_bunch_1:
+                self.true,
+            LocationName.jungle_jinx_banana_bunch_2:
+                self.true,
+            LocationName.jungle_jinx_banana_coin_1:
+                self.can_hover,
+            LocationName.jungle_jinx_banana_coin_2:
+                self.can_cartwheel,
+            LocationName.jungle_jinx_banana_coin_3:
+                lambda state: self.can_cartwheel(state) and self.has_kannons(state),
+            LocationName.jungle_jinx_banana_coin_4:
+                lambda state: self.can_cartwheel(state) and self.has_kannons(state) and self.can_team_attack(state),
+            LocationName.jungle_jinx_banana_coin_5:
+                lambda state: self.can_cartwheel(state) and self.has_kannons(state),
+
+            LocationName.black_ice_battle_banana_bunch_1:
+                lambda state: self.can_carry(state) and self.can_cartwheel(state),
+            LocationName.black_ice_battle_red_balloon_1:
+                self.true,
+            LocationName.black_ice_battle_red_balloon_2:
+                self.true,
+            LocationName.black_ice_battle_red_balloon_3:
+                self.can_carry,
+            LocationName.black_ice_battle_banana_bunch_2:
+                self.true,
+            LocationName.black_ice_battle_banana_coin_1:
+                self.true,
+            LocationName.black_ice_battle_banana_bunch_3:
+                self.can_carry,
+
+            LocationName.klobber_karnage_banana_coin_1:
+                self.true,
+            LocationName.klobber_karnage_banana_bunch_1:
+                self.can_cartwheel,
+            LocationName.klobber_karnage_banana_bunch_2:
+                self.can_cartwheel,
+            LocationName.klobber_karnage_banana_coin_2:
+                self.can_cartwheel,
+            LocationName.klobber_karnage_banana_bunch_3:
+                self.can_cartwheel,
+            LocationName.klobber_karnage_banana_coin_3:
+                lambda state: self.can_cartwheel(state) and self.can_use_diddy_barrels(state) and 
+                    self.has_controllable_barrels(state),
+            LocationName.klobber_karnage_banana_bunch_4:
+                lambda state: self.can_cartwheel(state) and self.can_use_diddy_barrels(state) and 
+                    self.can_use_dixie_barrels(state) and self.has_controllable_barrels(state),
+            LocationName.klobber_karnage_banana_bunch_5:
+                lambda state: self.can_cartwheel(state) and self.can_use_diddy_barrels(state) and 
+                    self.can_use_dixie_barrels(state) and self.has_controllable_barrels(state) and 
+                    self.has_kannons(state),
+            LocationName.klobber_karnage_banana_bunch_6:
+                lambda state: self.can_cartwheel(state) and self.can_use_diddy_barrels(state) and 
+                    self.can_use_dixie_barrels(state) and self.has_controllable_barrels(state) and 
+                    self.has_kannons(state),
+            LocationName.klobber_karnage_banana_bunch_7:
+                lambda state: self.can_cartwheel(state) and self.can_use_diddy_barrels(state) and 
+                    self.can_use_dixie_barrels(state) and self.has_controllable_barrels(state) and 
+                    self.has_kannons(state),
+            LocationName.klobber_karnage_banana_coin_4:
+                lambda state: self.can_cartwheel(state) and self.can_use_diddy_barrels(state) and 
+                    self.can_use_dixie_barrels(state) and self.has_controllable_barrels(state) and 
+                    self.has_kannons(state),
+            LocationName.klobber_karnage_red_balloon:
+                lambda state: self.can_cartwheel(state) and self.can_use_diddy_barrels(state) and 
+                    self.can_use_dixie_barrels(state) and self.has_controllable_barrels(state) and 
+                    self.has_kannons(state),
+
+            LocationName.fiery_furnace_banana_bunch_1:
+                self.can_team_attack,
+            LocationName.fiery_furnace_banana_bunch_2:
+                self.can_team_attack,
+            LocationName.fiery_furnace_banana_bunch_3:
+                self.can_team_attack,
+            LocationName.fiery_furnace_banana_bunch_4:
+                lambda state: self.has_controllable_barrels(state) and self.can_team_attack(state),
+            LocationName.fiery_furnace_banana_coin_1:
+                lambda state: self.has_controllable_barrels(state) and self.can_team_attack(state) and 
+                    self.can_cartwheel(state),
+            LocationName.fiery_furnace_banana_coin_2:
+                lambda state: self.has_controllable_barrels(state) and self.can_team_attack(state) and 
+                    self.can_cartwheel(state),
+            LocationName.fiery_furnace_banana_bunch_5:
+                lambda state: self.has_controllable_barrels(state) and self.can_team_attack(state) and 
+                    self.can_cartwheel(state),
+
+            LocationName.animal_antics_banana_bunch_1:
+                lambda state: self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state),
+            LocationName.animal_antics_banana_bunch_2:
+                lambda state: self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state) and self.has_squitter(state),
+            LocationName.animal_antics_banana_coin_1:
+                lambda state: self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state) and self.has_squitter(state),
+            LocationName.animal_antics_banana_coin_2:
+                lambda state: self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state) and self.has_squitter(state) and 
+                    self.has_squawks(state) and self.has_kannons(state),
+            LocationName.animal_antics_banana_bunch_3:
+                lambda state: self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state) and self.has_squitter(state) and 
+                    self.has_squawks(state) and self.has_kannons(state),
+            LocationName.animal_antics_banana_bunch_4:
+                lambda state: self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state) and self.has_squitter(state) and 
+                    self.has_squawks(state) and self.has_kannons(state),
+            LocationName.animal_antics_banana_coin_3:
+                lambda state: self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state) and self.has_squitter(state) and 
+                    self.has_squawks(state) and self.has_kannons(state),
+            LocationName.animal_antics_banana_coin_4:
+                lambda state: self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state) and self.has_squitter(state) and 
+                    self.has_squawks(state) and self.has_kannons(state),
+            LocationName.animal_antics_red_balloon:
+                lambda state: self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state) and self.has_squitter(state) and 
+                    self.has_squawks(state) and self.has_kannons(state),
+            LocationName.animal_antics_banana_coin_5:
+                lambda state: self.has_rambi(state) and 
+                    self.has_enguarde(state) and self.can_swim(state) and self.has_squitter(state) and 
+                    self.has_squawks(state)  and self.has_kannons(state) and self.has_rattly(state),
         }
 
     def set_dkc2_rules(self) -> None:
@@ -1469,8 +3284,7 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.rattle_battle_dk_coin:
                 lambda state: self.has_rattly(state) and self.has_kannons(state),
             LocationName.rattle_battle_bonus_1:
-                lambda state: self.has_kannons(state) and self.can_hover(state) and self.can_team_attack(state) and 
-                self.can_cartwheel(state),
+                lambda state: self.can_team_attack(state) and (self.can_hover(state) or self.can_cartwheel(state)),
             LocationName.rattle_battle_bonus_2:
                 self.has_rattly,
             LocationName.rattle_battle_bonus_3:
@@ -1518,9 +3332,7 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.hornet_hole_bonus_2:
                 lambda state: self.can_cling(state) and self.can_team_attack(state),
             LocationName.hornet_hole_bonus_3:
-                lambda state: self.can_cling(state) and 
-                    self.can_team_attack(state) and 
-                    self.has_squitter(state),
+                lambda state: self.can_team_attack(state) and self.has_squitter(state) and (self.can_cling(state) or self.has_both_kongs(state)),
 
             LocationName.target_terror_clear:
                 lambda state: self.has_kannons(state) and self.has_skull_kart(state),
@@ -1538,14 +3350,14 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.bramble_scramble_kong:
                 lambda state: self.can_climb(state) and self.has_squawks(state) and self.has_kannons(state),
             LocationName.bramble_scramble_dk_coin:
-                lambda state: self.can_cartwheel(state) and self.can_climb(state) and 
-                    self.has_squitter(state) and self.has_squawks(state),
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    self.has_both_kongs(state) or (self.can_cartwheel(state) and self.has_squitter(state))
+                ),
             LocationName.bramble_scramble_bonus_1:
                 lambda state: self.can_climb(state) and self.has_squawks(state) and ((
                     self.can_team_attack(state) and self.has_invincibility(state)
                     ) or (
-                    self.can_hover(state) and self.has_kannons(state) and self.has_diddy(state) and
-                    self.has_dixie(state)
+                    self.can_hover(state) and self.has_kannons(state) and self.has_both_kongs(state)
                     )
                 ),
 
@@ -1561,35 +3373,48 @@ class DKC2ExpertRules(DKC2Rules):
                     and self.can_hover(state),
 
             LocationName.mudhole_marsh_clear:
-                lambda state: self.can_cling(state) and (
-                    self.can_climb(state) or self.can_hover(state)
+                lambda state: (self.can_cling(state) and 
+                    (self.can_climb(state) or self.can_hover(state)))
+                    or (self.can_hover(state) and self.can_team_attack(state)
+                        and self.has_both_kongs(state) and self.can_cartwheel(state)
                 ),
             LocationName.mudhole_marsh_kong:
-                lambda state: self.can_cling(state) and self.can_carry(state) and (
-                    self.can_climb(state) or self.can_hover(state)
+                lambda state: self.can_carry(state) and (
+                    (self.can_cling(state) and 
+                    (self.can_climb(state) or self.can_hover(state)))
+                    or (self.can_hover(state) and self.can_team_attack(state)
+                        and self.has_both_kongs(state) and self.can_cartwheel(state))
                 ),
             LocationName.mudhole_marsh_dk_coin:
-                lambda state: self.can_cling(state) and (
-                    self.can_climb(state) or self.can_hover(state)
+                lambda state: (self.can_cling(state) and 
+                    (self.can_climb(state) or self.can_hover(state)))
+                    or (self.can_hover(state) and self.can_team_attack(state)
+                        and self.has_both_kongs(state) and self.can_cartwheel(state)
                 ),
             LocationName.mudhole_marsh_bonus_1:
-                lambda state: self.can_cling(state) and self.can_team_attack(state),
+                lambda state: self.can_team_attack(state) and ((self.can_cling(state) and 
+                    (self.can_climb(state) or self.can_hover(state)))
+                    or (self.can_hover(state) and self.has_both_kongs(state) and self.can_cartwheel(state))
+                ),
             LocationName.mudhole_marsh_bonus_2:
-                lambda state: self.can_cling(state) and self.can_carry(state) and (
-                    self.can_climb(state) or self.can_hover(state)
+                lambda state: self.can_carry(state) and (
+                    (self.can_cling(state) and 
+                    (self.can_climb(state) or self.can_hover(state)))
+                    or (self.can_hover(state) and self.can_team_attack(state)
+                        and self.has_both_kongs(state) and self.can_cartwheel(state))
                 ),
 
             LocationName.rambi_rumble_clear:
-                lambda state: self.can_cling(state) and self.has_kannons(state) and self.has_rambi(state),
+                lambda state: (self.can_cling(state) or (self.has_diddy(state) and self.can_cartwheel(state)))  and self.has_kannons(state) and self.has_rambi(state),
             LocationName.rambi_rumble_kong:
-                lambda state: self.can_cling(state) and self.has_kannons(state) and self.has_rambi(state) and ( 
+                lambda state: (self.can_cling(state) or (self.has_diddy(state) and self.can_cartwheel(state))) and self.has_kannons(state) and self.has_rambi(state) and ( 
                     self.can_cartwheel(state) or self.can_team_attack(state)),
             LocationName.rambi_rumble_dk_coin:
                 lambda state: self.can_cling(state) and self.has_kannons(state),
             LocationName.rambi_rumble_bonus_1:
                 lambda state: self.can_cling(state) and self.has_kannons(state),
             LocationName.rambi_rumble_bonus_2:
-                lambda state: self.can_cling(state) and self.has_kannons(state) and self.has_rambi(state),
+                lambda state: (self.can_cling(state) or (self.has_diddy(state) and self.can_cartwheel(state))) and self.has_kannons(state) and self.has_rambi(state),
 
             LocationName.king_zing_sting_clear:
                 self.has_squawks,
@@ -1601,12 +3426,13 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.ghostly_grove_kong:
                 lambda state: self.can_climb(state) and self.can_carry(state),
             LocationName.ghostly_grove_dk_coin:
-                lambda state:  self.can_climb(state) and self.can_team_attack(state) and (
-                    self.can_hover(state) or (self.can_cartwheel(state) and self.has_diddy(state))
+                lambda state:  (self.can_climb(state) and (
+                    (self.can_cartwheel(state) and self.has_diddy(state)) or self.can_hover(state))
+                    ) or ((self.can_team_attack(state) or self.has_both_kongs(state)) and self.can_hover(state)
                 ),
             LocationName.ghostly_grove_bonus_1:
-            lambda state: self.can_carry(state) and (
-                    self.can_climb(state) and self.can_team_attack(state)
+            lambda state: self.can_carry(state) and 
+                    (self.can_climb(state) or ((self.can_team_attack(state) or self.has_both_kongs(state)) and self.can_hover(state))
                 ),
             LocationName.ghostly_grove_bonus_2:
                 self.can_climb,
@@ -1718,23 +3544,23 @@ class DKC2ExpertRules(DKC2Rules):
                 lambda state: self.can_carry(state) and self.can_cling(state) and self.has_squawks(state),
 
             LocationName.castle_crush_clear:
-                lambda state: (self.can_hover or self.can_cartwheel(state)) or self.has_both_kongs(state),
+                lambda state: (self.can_hover(state) or self.can_cartwheel(state)) or self.has_both_kongs(state),
             LocationName.castle_crush_kong:
-                lambda state: self.can_hover or (self.can_cartwheel(state) or self.has_both_kongs(state)),
+                lambda state: self.can_hover(state) or (self.can_cartwheel(state) or self.has_both_kongs(state)),
             LocationName.castle_crush_dk_coin:
                 lambda state: self.has_squawks(state) and (
-                    self.can_hover or (self.can_cartwheel(state) or self.has_both_kongs(state)),
+                    self.can_hover(state) or (self.can_cartwheel(state) or self.has_both_kongs(state)),
                 ),
             LocationName.castle_crush_bonus_1:
                 lambda state: self.has_rambi(state) and self.has_both_kongs(state) and  self.can_carry(state),
             LocationName.castle_crush_bonus_2:
                 lambda state: self.can_carry(state) and self.has_squawks(state) and (
                     self.has_both_kongs(state) or 
-                    (self.can_hover or self.can_cartwheel(state))
+                    (self.can_hover(state) or self.can_cartwheel(state))
                 ),
 
             LocationName.clappers_cavern_clear:
-                lambda state: self.has_clapper(state) and self.has_kannons(state) and ((
+                lambda state: self.has_kannons(state) and (self.has_clapper(state) or (self.can_hover(state) and self.can_swim(state) and self.has_both_kongs(state))) and ((
                     self.can_cling(state) and 
                         (self.has_enguarde(state) or self.can_swim(state))
                     ) or (
@@ -1742,7 +3568,7 @@ class DKC2ExpertRules(DKC2Rules):
                     )
                 ),
             LocationName.clappers_cavern_kong:
-                lambda state: self.has_clapper(state) and self.has_kannons(state) and ((
+                lambda state: self.has_kannons(state) and (self.has_clapper(state) or (self.can_hover(state) and self.can_swim(state) and self.has_both_kongs(state))) and ((
                     self.can_cling(state) and 
                         (self.has_enguarde(state) or self.can_swim(state))
                     ) or (
@@ -1754,7 +3580,7 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.clappers_cavern_bonus_1:
                 lambda state: self.can_cling(state) and self.can_team_attack(state),
             LocationName.clappers_cavern_bonus_2:
-                lambda state: self.has_clapper(state) and self.has_kannons(state) and self.has_enguarde(state),
+                lambda state: self.has_kannons(state) and (self.has_clapper(state) or (self.can_hover(state) and self.can_swim(state))) and self.has_enguarde(state),
 
             LocationName.chain_link_chamber_clear:
                 lambda state: self.can_climb(state) and (
@@ -1789,15 +3615,15 @@ class DKC2ExpertRules(DKC2Rules):
 
             LocationName.screechs_sprint_clear:
                 lambda state: self.can_climb(state) and self.has_squawks(state) and (
-                    self.can_team_attack(state) or self.can_cartwheel(state)
+                    self.can_team_attack(state) or self.can_cartwheel(state) or self.has_both_kongs(state)
                 ),
             LocationName.screechs_sprint_kong:
                 lambda state: self.can_climb(state) and self.has_squawks(state) and (
-                    self.can_team_attack(state) or self.can_cartwheel(state)
+                    self.can_team_attack(state) or self.can_cartwheel(state) or self.has_both_kongs(state)
                 ),
             LocationName.screechs_sprint_dk_coin:
                 lambda state: self.can_climb(state) and self.has_squawks(state) and (
-                    self.can_team_attack(state) or self.can_cartwheel(state)
+                    self.can_team_attack(state) or self.can_cartwheel(state) or self.has_both_kongs(state)
                 ),
             LocationName.screechs_sprint_bonus_1:
                 lambda state: self.can_climb(state) and 
@@ -1822,9 +3648,9 @@ class DKC2ExpertRules(DKC2Rules):
                 ), 
 
             LocationName.black_ice_battle_kong:
-                self.can_carry,
+                lambda state: self.can_carry(state) or self.has_both_kongs(state),
             LocationName.black_ice_battle_dk_coin:
-                self.can_carry,
+                lambda state: self.can_carry(state) or self.has_both_kongs(state),
 
             LocationName.klobber_karnage_clear:
                 lambda state: self.can_use_diddy_barrels(state) and 
@@ -1895,6 +3721,1028 @@ class DKC2ExpertRules(DKC2Rules):
 
             LocationName.krocodile_core_clear:
                 self.can_carry,
+                
+            LocationName.pirate_panic_banana_coin_1:
+                lambda state: self.can_team_attack(state) and self.has_kannons(state),
+            LocationName.pirate_panic_banana_bunch_1:
+                self.true,
+            LocationName.pirate_panic_red_balloon:
+                self.true,
+            LocationName.pirate_panic_banana_coin_2:
+                lambda state: self.can_team_attack(state) or self.can_carry(state) or self.has_rambi(state),
+            LocationName.pirate_panic_banana_coin_3:
+                self.true,
+            LocationName.pirate_panic_green_balloon:
+                self.has_rambi,
+
+            LocationName.mainbrace_mayhem_banana_bunch_1:
+                self.can_cartwheel,
+            LocationName.mainbrace_mayhem_banana_coin_1:
+                lambda state: self.can_climb(state) or self.can_team_attack(state),
+            LocationName.mainbrace_mayhem_banana_coin_2:
+                lambda state: self.can_climb(state) or self.can_team_attack(state),
+            LocationName.mainbrace_mayhem_green_balloon:
+                self.can_climb,
+            LocationName.mainbrace_mayhem_banana_bunch_2:
+                lambda state: self.can_climb(state) and self.can_team_attack(state),
+            LocationName.mainbrace_mayhem_banana_coin_3:
+                lambda state: self.can_climb(state) and self.can_team_attack(state),
+            LocationName.mainbrace_mayhem_banana_bunch_3:
+                lambda state: self.can_climb(state) and self.can_team_attack(state),
+
+            LocationName.gangplank_galley_banana_bunch_1:
+                lambda state: self.can_hover(state) or (
+                    self.can_cling(state) and (
+                        (self.has_diddy(state) and self.can_cartwheel(state)) 
+                        or self.can_team_attack(state))
+                    ),
+            LocationName.gangplank_galley_banana_bunch_2:
+                self.can_carry,
+            LocationName.gangplank_galley_red_balloon_1:
+                self.can_carry,
+            LocationName.gangplank_galley_banana_bunch_3:
+                self.can_team_attack,
+            LocationName.gangplank_galley_banana_coin_1:
+                self.can_carry,
+            LocationName.gangplank_galley_banana_bunch_4:
+                lambda state: self.can_hover(state) or self.has_kannons(state),
+            LocationName.gangplank_galley_banana_coin_2:
+                self.has_kannons,
+            LocationName.gangplank_galley_banana_bunch_5:
+                lambda state: self.can_hover(state) or self.has_kannons(state),
+            LocationName.gangplank_galley_banana_bunch_6:
+                lambda state: self.can_carry(state) and (self.can_hover(state) or self.can_cartwheel(state) or self.can_cling(state)),
+            LocationName.gangplank_galley_banana_bunch_7:
+                lambda state: self.can_hover(state) or self.can_cling(state),
+            LocationName.gangplank_galley_red_balloon_2:
+                lambda state: self.can_carry(state) and (self.can_hover(state) or self.can_cling(state)),
+
+
+            LocationName.lockjaws_locker_banana_coin_1:
+                self.true,
+            LocationName.lockjaws_locker_banana_bunch_1:
+                self.true,
+            LocationName.lockjaws_locker_banana_coin_2:
+                self.true,
+            LocationName.lockjaws_locker_banana_bunch_2:
+                lambda state: self.can_swim(state) or self.can_hover(state) or self.can_cartwheel(state),
+            LocationName.lockjaws_locker_banana_coin_3:
+                lambda state: self.can_swim(state) or self.can_team_attack(state),
+            LocationName.lockjaws_locker_banana_coin_4:
+                lambda state: self.can_swim(state) or (
+                    self.has_enguarde(state) and self.can_team_attack(state) and self.can_hover(state)
+                ),
+            LocationName.lockjaws_locker_banana_coin_5:
+                lambda state: self.can_swim(state) or (
+                    self.has_enguarde(state) and self.can_team_attack(state) and self.can_hover(state)
+                ),
+            LocationName.lockjaws_locker_banana_bunch_3:
+                lambda state: self.can_swim(state) or (
+                    self.has_enguarde(state) and self.can_team_attack(state) and self.can_hover(state)
+                ),
+            LocationName.lockjaws_locker_red_balloon:
+                lambda state: self.has_enguarde(state) and (
+                    self.can_swim(state) or (self.can_team_attack(state) and self.can_hover(state))
+                ),
+            LocationName.lockjaws_locker_banana_coin_6:
+                self.can_swim,
+            LocationName.lockjaws_locker_banana_coin_7:
+                self.can_swim,
+            LocationName.lockjaws_locker_banana_coin_8:
+                self.can_swim,
+            LocationName.lockjaws_locker_banana_bunch_4:
+                lambda state: self.has_enguarde(state) and self.can_swim(state),
+
+            LocationName.topsail_trouble_red_balloon_1:
+                lambda state: self.has_rattly(state) or self.can_team_attack(state) or self.can_cling(state),
+            LocationName.topsail_trouble_red_balloon_2:
+                lambda state: self.can_carry(state) and (
+                    self.has_rattly(state) or self.can_team_attack(state) or self.can_cling(state)
+                ),
+            LocationName.topsail_trouble_banana_bunch_1:
+                lambda state: self.has_rattly(state) or self.can_team_attack(state) or (
+                    self.can_cling(state) and self.has_kannons(state)
+                ),
+            LocationName.topsail_trouble_banana_bunch_2:
+                lambda state: self.has_rattly(state) or self.can_team_attack(state),
+            LocationName.topsail_trouble_banana_coin_1:
+                lambda state: self.has_rattly(state) or self.can_team_attack(state),
+            LocationName.topsail_trouble_banana_coin_2:
+                self.has_rattly,
+            LocationName.topsail_trouble_banana_bunch_3:
+                lambda state: self.can_climb(state) and (
+                    self.has_rattly(state) or self.can_team_attack(state) or (
+                        self.can_cling(state) and self.has_kannons(state))
+                    ),
+            LocationName.topsail_trouble_banana_coin_3:
+                lambda state: self.can_climb(state) and (
+                    self.has_rattly(state) or self.can_team_attack(state) or (
+                        self.can_cling(state) and self.has_kannons(state))
+                    ),
+            LocationName.topsail_trouble_banana_coin_4:
+                lambda state: self.can_climb(state) and (
+                    self.has_rattly(state) or self.can_team_attack(state) or (
+                        self.can_cling(state) and self.has_kannons(state))
+                    ),
+            LocationName.topsail_trouble_blue_balloon:
+                lambda state: self.can_climb(state) and (self.can_team_attack(state) or 
+                    (self.has_both_kongs(state) and self.can_hover(state) and 
+                        (self.has_rattly(state) or (self.can_cling(state) and self.has_kannons(state))))
+                    ),
+
+            LocationName.krows_nest_banana_coin_1:
+                self.true,
+            LocationName.krows_nest_banana_coin_2:
+                self.true,
+
+            LocationName.hot_head_hop_green_balloon:
+                self.can_carry,
+            LocationName.hot_head_hop_banana_coin_1:
+                self.can_carry,
+            LocationName.hot_head_hop_banana_bunch_1:
+                self.can_carry,
+            LocationName.hot_head_hop_banana_coin_2:
+                lambda state: self.has_squitter(state) or self.can_team_attack(state) or self.can_carry(state),
+            LocationName.hot_head_hop_banana_bunch_2:
+                self.has_squitter,
+            LocationName.hot_head_hop_banana_bunch_3:
+                self.has_squitter,
+            LocationName.hot_head_hop_banana_coin_3:
+                lambda state: self.has_squitter(state) or self.can_hover(state) or self.has_both_kongs(state),
+            LocationName.hot_head_hop_banana_coin_4:
+                lambda state: self.has_squitter(state) or self.can_hover(state) or (
+                    self.has_kannons(state) and (self.has_both_kongs(state) or self.can_cartwheel(state))),
+            LocationName.hot_head_hop_red_balloon:
+                self.has_squitter,
+
+            LocationName.kannons_klaim_banana_bunch_1:
+                lambda state: self.has_kannons(state) or self.can_team_attack(state),
+            LocationName.kannons_klaim_banana_coin_1:
+                self.has_kannons,
+            LocationName.kannons_klaim_banana_coin_2:
+                lambda state: self.has_kannons(state) and (self.can_team_attack(state) or self.can_cartwheel(state)),
+            LocationName.kannons_klaim_banana_coin_3:
+                self.has_kannons,
+
+            LocationName.lava_lagoon_banana_coin_1:
+                lambda state: self.has_clapper(state) or self.has_both_kongs(state),
+            LocationName.lava_lagoon_banana_coin_2:
+                lambda state: self.has_clapper(state) or self.has_both_kongs(state),
+            LocationName.lava_lagoon_banana_bunch_1:
+                lambda state: self.has_clapper(state) or self.has_both_kongs(state),
+            LocationName.lava_lagoon_banana_coin_3:
+                lambda state: self.has_clapper(state) and (self.can_swim(state) or self.has_both_kongs(state)),
+            LocationName.lava_lagoon_banana_bunch_2:
+                lambda state: self.has_clapper(state) and self.can_swim(state),
+            LocationName.lava_lagoon_banana_coin_4:
+                lambda state: self.has_clapper(state) and self.can_swim(state),
+            LocationName.lava_lagoon_banana_coin_5:
+                lambda state: self.has_clapper(state) and self.can_swim(state),
+            LocationName.lava_lagoon_banana_bunch_3:
+                lambda state: self.has_clapper(state) and self.can_swim(state),
+            LocationName.lava_lagoon_banana_coin_6:
+                lambda state: self.has_clapper(state) and self.can_swim(state),
+            LocationName.lava_lagoon_banana_coin_7:
+                lambda state: self.has_clapper(state) and self.can_swim(state),
+            LocationName.lava_lagoon_red_balloon_1:
+                lambda state: self.has_clapper(state) and self.can_swim(state) and self.has_enguarde(state),
+            LocationName.lava_lagoon_banana_bunch_4:
+                lambda state: self.has_clapper(state) and self.can_swim(state) and self.has_enguarde(state) and self.can_carry(state),
+            LocationName.lava_lagoon_banana_bunch_5:
+                lambda state: self.has_clapper(state) and self.can_swim(state),
+            LocationName.lava_lagoon_banana_coin_8:
+                lambda state: self.has_clapper(state) and self.can_swim(state),
+            LocationName.lava_lagoon_banana_coin_9:
+                lambda state: self.has_clapper(state) and self.can_swim(state),
+            LocationName.lava_lagoon_banana_coin_10:
+                lambda state: self.has_clapper(state) and self.can_swim(state),
+
+            LocationName.red_hot_ride_banana_bunch_1:
+                self.true,
+            LocationName.red_hot_ride_banana_coin_1:
+                self.true,
+            LocationName.red_hot_ride_banana_coin_2:
+                self.true,
+            LocationName.red_hot_ride_banana_bunch_2:
+                self.true,
+            LocationName.red_hot_ride_banana_coin_3:
+                self.true,
+            LocationName.red_hot_ride_banana_bunch_3:
+                self.true,
+            LocationName.red_hot_ride_banana_coin_4:
+                self.true,
+            LocationName.red_hot_ride_banana_coin_5:
+                self.has_rambi,
+            LocationName.red_hot_ride_banana_coin_6:
+                self.true,
+            LocationName.red_hot_ride_banana_bunch_4:
+                self.true,
+
+            LocationName.squawks_shaft_banana_coin_1:
+                self.true,
+            LocationName.squawks_shaft_banana_bunch_1:
+                lambda state: self.can_team_attack(state) or self.has_kannons(state),
+            LocationName.squawks_shaft_banana_coin_2:
+                lambda state: self.can_carry(state) and self.has_kannons(state),
+            LocationName.squawks_shaft_banana_bunch_2:
+                self.has_kannons,
+            LocationName.squawks_shaft_red_balloon_1:
+                lambda state: self.can_carry(state) and self.has_kannons(state),
+            LocationName.squawks_shaft_banana_coin_3:
+                self.has_kannons,
+            LocationName.squawks_shaft_banana_coin_4:
+                self.has_kannons,
+            LocationName.squawks_shaft_banana_coin_5:
+                lambda state: self.has_squawks(state) and self.has_kannons(state),
+            LocationName.squawks_shaft_banana_coin_6:
+                lambda state: self.has_squawks(state) and self.has_kannons(state),
+            LocationName.squawks_shaft_banana_coin_7:
+                lambda state: self.has_squawks(state) and self.has_kannons(state),
+            LocationName.squawks_shaft_banana_bunch_3:
+                lambda state: self.has_squawks(state) and self.has_kannons(state),
+            LocationName.squawks_shaft_banana_bunch_4:
+                lambda state: self.has_squawks(state) and self.has_kannons(state),
+
+            LocationName.kleevers_kiln_banana_coin_1:
+                lambda state: self.can_cling(state) and self.can_hover(state) and self.can_carry(state),
+            LocationName.kleevers_kiln_banana_coin_2:
+                lambda state: self.can_cling(state) and self.can_hover(state) and self.can_carry(state),
+
+            LocationName.barrel_bayou_banana_bunch_1:
+                lambda state: self.can_team_attack(state) or self.has_both_kongs(state),
+            LocationName.barrel_bayou_banana_coin_1:
+                self.has_controllable_barrels,
+            LocationName.barrel_bayou_banana_bunch_2:
+                self.has_controllable_barrels,
+            LocationName.barrel_bayou_green_balloon:
+                lambda state: self.has_controllable_barrels(state) and self.can_carry(state) and (
+                    self.has_kannons(state) or self.can_hover(state)
+                    ),
+            LocationName.barrel_bayou_banana_coin_2:
+                lambda state: self.has_controllable_barrels(state) and self.has_kannons(state),
+            LocationName.barrel_bayou_banana_bunch_3:
+                lambda state: self.has_controllable_barrels(state) and self.has_kannons(state),
+
+            LocationName.glimmers_galleon_banana_coin_1:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_coin_2:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_1:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_2:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_3:
+                self.can_swim,
+            LocationName.glimmers_galleon_red_balloon:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_4:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_coin_3:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_5:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_coin_4:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_6:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_7:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_coin_5:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_8:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_coin_6:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_9:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_10:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_11:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_12:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_coin_7:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_coin_8:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_13:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_coin_9:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_bunch_14:
+                self.can_swim,
+            LocationName.glimmers_galleon_banana_coin_10:
+                self.can_swim,
+                
+            LocationName.krockhead_klamber_red_balloon_1:
+                lambda state: self.has_both_kongs(state) and self.can_carry(state),
+            LocationName.krockhead_klamber_banana_coin_1:
+                lambda state: self.can_carry(state) and self.can_cartwheel(state) and self.has_both_kongs(state),
+            LocationName.krockhead_klamber_banana_coin_2:
+                lambda state: (self.can_cartwheel(state) and self.can_hover(state) and self.has_both_kongs(state)) or self.can_climb(state),
+            LocationName.krockhead_klamber_red_balloon_2:
+                lambda state: self.can_climb(state) and self.can_team_attack(state) and self.has_squitter(state),
+            LocationName.krockhead_klamber_banana_coin_3:
+                self.can_climb,
+
+            LocationName.rattle_battle_banana_coin_1:
+                lambda state: self.can_team_attack(state) or self.has_kannons(state),
+            LocationName.rattle_battle_banana_bunch_1:
+                lambda state: self.can_team_attack(state) or self.has_kannons(state),
+            LocationName.rattle_battle_banana_bunch_2:
+                self.has_rattly,
+            LocationName.rattle_battle_banana_coin_2:
+                self.has_rattly,
+            LocationName.rattle_battle_banana_coin_3:
+                self.has_rattly,
+            LocationName.rattle_battle_banana_bunch_3:
+                self.has_rattly,
+            LocationName.rattle_battle_banana_bunch_4:
+                self.has_rattly,
+
+            LocationName.slime_climb_banana_coin_1:
+                self.true,
+            LocationName.slime_climb_banana_coin_2:
+                self.can_climb,
+            LocationName.slime_climb_banana_bunch_1:
+                self.can_climb,
+            LocationName.slime_climb_banana_bunch_2:
+                self.can_climb,
+            LocationName.slime_climb_banana_coin_3:
+                self.can_climb,
+            LocationName.slime_climb_banana_bunch_3:
+                lambda state: self.can_climb(state) and (self.has_both_kongs(state) or self.can_swim(state)),
+            LocationName.slime_climb_banana_bunch_4:
+                lambda state: self.can_climb(state) and (self.has_both_kongs(state) or self.can_swim(state)),
+
+            LocationName.bramble_blast_banana_bunch_1:
+                self.can_team_attack,
+            LocationName.bramble_blast_banana_bunch_2:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_bunch_3:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_coin_1:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_bunch_4:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_bunch_5:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_coin_2:
+                self.has_kannons,
+            LocationName.bramble_blast_red_balloon:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_bunch_6:
+                self.has_kannons,
+            LocationName.bramble_blast_banana_bunch_7:
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
+            LocationName.bramble_blast_banana_bunch_8:
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
+            LocationName.bramble_blast_banana_bunch_9:
+                lambda state: self.has_kannons(state) and self.has_squawks(state),
+
+            LocationName.hornet_hole_banana_bunch_1:
+                lambda state: self.can_team_attack(state) and self.can_cling(state),
+            LocationName.hornet_hole_banana_coin_1:
+                lambda state: self.can_team_attack(state) and self.can_cling(state),
+            LocationName.hornet_hole_banana_bunch_2:
+                lambda state: self.can_team_attack(state) and self.can_cling(state),
+            LocationName.hornet_hole_banana_coin_2:
+                self.true,
+            LocationName.hornet_hole_green_balloon_1:
+                self.can_carry,
+            LocationName.hornet_hole_banana_coin_3:
+                self.true,
+            LocationName.hornet_hole_banana_bunch_3:
+                lambda state: self.can_team_attack(state) and self.has_squitter(state) and (self.can_cling(state) or self.has_both_kongs(state)),
+            LocationName.hornet_hole_banana_coin_4:
+                lambda state: self.can_team_attack(state) and self.has_squitter(state) and (self.can_cling(state) or self.has_both_kongs(state)),
+            LocationName.hornet_hole_banana_bunch_4:
+                lambda state: self.can_team_attack(state) and self.has_squitter(state) and (self.can_cling(state) or self.has_both_kongs(state)),
+            LocationName.hornet_hole_banana_bunch_5:
+                lambda state: self.can_team_attack(state) or self.has_both_kongs(state),
+            LocationName.hornet_hole_red_balloon_1:
+                lambda state: self.can_team_attack(state) and self.has_squitter(state) and (self.can_cling(state) or self.has_both_kongs(state)),
+
+            LocationName.target_terror_banana_bunch_1:
+                lambda state: self.has_kannons(state) and self.has_skull_kart(state),
+            LocationName.target_terror_banana_bunch_2:
+                lambda state: self.has_kannons(state) and self.has_skull_kart(state) and self.has_squawks(state),
+            LocationName.target_terror_red_balloon:
+                lambda state: self.has_kannons(state) and self.has_skull_kart(state),
+
+            LocationName.bramble_scramble_banana_bunch_1:
+                self.true,
+            LocationName.bramble_scramble_banana_bunch_2:
+                 lambda state: self.can_carry(state) and self.has_both_kongs(state) and self.can_climb(state),
+            LocationName.bramble_scramble_banana_coin_1:
+                lambda state: self.can_climb(state) and self.has_kannons(state) and ((
+                    self.can_team_attack(state) and self.has_invincibility(state)
+                    ) or (
+                    self.can_hover(state) and self.has_both_kongs(state)
+                    )
+                ),
+            LocationName.bramble_scramble_banana_coin_2:
+                lambda state: self.can_climb(state) and self.has_squawks(state) and ((
+                    self.can_team_attack(state) and self.has_invincibility(state)
+                    ) or (
+                    self.can_hover(state) and self.has_kannons(state) and self.has_both_kongs(state)
+                    )
+                ),
+            LocationName.bramble_scramble_banana_coin_3:
+                lambda state: self.can_climb(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_bunch_3:
+                lambda state: self.can_climb(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_bunch_4:
+                lambda state: self.can_climb(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_coin_4:
+                lambda state: self.can_climb(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_coin_5:
+                lambda state: self.can_climb(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_bunch_5:
+                lambda state: self.can_climb(state) and self.has_squawks(state),
+            LocationName.bramble_scramble_banana_coin_6:
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    self.has_both_kongs(state) or (self.can_cartwheel(state) and self.has_squitter(state))
+                ),
+            LocationName.bramble_scramble_banana_coin_7:
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    self.has_both_kongs(state) or (self.can_cartwheel(state) and self.has_squitter(state))
+                ),
+            LocationName.bramble_scramble_banana_coin_8:
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    self.has_both_kongs(state) or (self.can_cartwheel(state) and self.has_squitter(state))
+                ),
+            LocationName.bramble_scramble_blue_balloon:
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    self.has_both_kongs(state) or (self.can_cartwheel(state) and self.has_squitter(state))
+                ),
+            LocationName.bramble_scramble_red_balloon:
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    self.has_both_kongs(state) or (self.can_cartwheel(state) and self.has_squitter(state))
+                ),
+
+            LocationName.rickety_race_banana_coin:
+                self.has_skull_kart,
+
+            LocationName.mudhole_marsh_banana_coin_1:
+                self.true,
+            LocationName.mudhole_marsh_banana_bunch_1:
+                lambda state: self.can_carry(state) and (
+                    (self.can_cling(state) and 
+                    (self.can_climb(state) or self.can_hover(state)))
+                    or (self.can_hover(state) and self.can_team_attack(state) and self.has_both_kongs(state))
+                ),
+            LocationName.mudhole_marsh_banana_coin_2:
+                lambda state: self.can_carry(state) and (
+                    (self.can_cling(state) and 
+                    (self.can_climb(state) or self.can_hover(state)))
+                    or (self.can_hover(state) and self.can_team_attack(state)
+                        and self.has_both_kongs(state) and self.can_cartwheel(state))
+                ),
+            LocationName.mudhole_marsh_banana_coin_3:
+                 lambda state: (self.can_cling(state) and 
+                    (self.can_climb(state) or self.can_hover(state)))
+                    or (self.can_hover(state) and self.can_team_attack(state) 
+                        and self.has_both_kongs(state) and self.can_cartwheel(state)
+                ),
+            LocationName.mudhole_marsh_banana_coin_4:
+                lambda state: (self.can_cling(state) and 
+                    (self.can_climb(state) or self.can_hover(state)))
+                    or (self.can_hover(state) and self.can_team_attack(state) 
+                        and self.has_both_kongs(state) and self.can_cartwheel(state)
+                ),
+            LocationName.mudhole_marsh_banana_coin_5:
+                lambda state: (self.can_cling(state) and 
+                    (self.can_climb(state) or self.can_hover(state)))
+                    or (self.can_hover(state) and self.can_team_attack(state) 
+                        and self.has_both_kongs(state) and self.can_cartwheel(state)
+                ),
+
+            LocationName.rambi_rumble_banana_coin_1:
+                self.true,
+            LocationName.rambi_rumble_banana_bunch_1:
+                self.true,
+            LocationName.rambi_rumble_banana_bunch_2:
+                lambda state: (self.has_diddy(state) and self.can_cartwheel(state)) or (self.can_cling(state) and self.has_kannons(state)),
+            LocationName.rambi_rumble_banana_coin_2:
+                lambda state: self.can_cling(state) and self.has_kannons(state),
+            LocationName.rambi_rumble_banana_bunch_3:
+                lambda state: (self.can_cling(state) or (self.has_diddy(state) and self.can_cartwheel(state))) and self.has_kannons(state) and self.has_rambi(state),
+
+            LocationName.king_zing_sting_banana_coin_1:
+                self.true,
+            LocationName.king_zing_sting_banana_coin_2:
+                self.true,
+
+            LocationName.ghostly_grove_banana_bunch_1:
+                self.true,
+            LocationName.ghostly_grove_red_balloon:
+                self.can_carry,
+            LocationName.ghostly_grove_banana_bunch_2:
+                self.true,
+            LocationName.ghostly_grove_banana_coin_1:
+                lambda state: (self.can_climb(state) or (
+                    (self.can_team_attack(state) or self.has_both_kongs(state)) and self.can_hover(state))
+                ),
+            LocationName.ghostly_grove_banana_bunch_3:
+                self.can_climb,
+            LocationName.ghostly_grove_banana_bunch_4:
+                lambda state: self.can_climb(state) or (
+                    self.can_team_attack(state) and self.can_hover(state)
+                ),
+            LocationName.ghostly_grove_banana_coin_2:
+                self.can_climb,
+
+            LocationName.haunted_hall_banana_bunch_1:
+                self.true,
+            LocationName.haunted_hall_banana_bunch_2:
+                self.true,
+            LocationName.haunted_hall_banana_coin_1:
+                self.true,
+            LocationName.haunted_hall_banana_coin_2:
+                self.has_skull_kart,
+            LocationName.haunted_hall_banana_coin_3:
+                self.has_skull_kart,
+
+            LocationName.gusty_glade_banana_coin_1:
+                self.can_team_attack,
+            LocationName.gusty_glade_banana_coin_2:
+                self.true,
+            LocationName.gusty_glade_blue_balloon:
+                lambda state: self.can_team_attack(state) and self.has_rattly(state),
+            LocationName.gusty_glade_banana_coin_3:
+                lambda state: self.can_cling(state) and self.has_kannons(state),
+
+            LocationName.parrot_chute_panic_banana_coin_1:
+                lambda state: self.can_carry(state) or self.can_team_attack(state),
+            LocationName.parrot_chute_panic_banana_coin_2:
+                lambda state: (self.has_both_kongs(state) and self.can_hover(state)) or self.has_squawks(state),
+            LocationName.parrot_chute_panic_banana_bunch_1:
+                lambda state: (self.has_both_kongs(state) and self.can_hover(state)) or self.has_squawks(state),
+            LocationName.parrot_chute_panic_banana_coin_3:
+                self.has_squawks,
+            LocationName.parrot_chute_panic_banana_bunch_2:
+                self.has_squawks,
+            LocationName.parrot_chute_panic_banana_coin_4:
+                self.has_squawks,
+            LocationName.parrot_chute_panic_banana_coin_5:
+                lambda state: self.has_squawks(state) and self.has_controllable_barrels(state)
+                    and (self.can_team_attack(state) or self.can_cartwheel(state)),
+
+            LocationName.web_woods_banana_coin_1:
+                lambda state: self.can_team_attack(state) or 
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or
+                    (self.has_dixie(state) and self.can_hover(state)),
+            LocationName.web_woods_banana_coin_2:
+                lambda state: self.can_carry(state) and 
+                    (self.can_team_attack(state) or 
+                    (self.has_diddy(state) and self.can_cartwheel(state)) or
+                    (self.has_dixie(state) and self.can_hover(state))
+                ),
+            LocationName.web_woods_green_balloon_1:
+                lambda state: self.can_carry(state) and (self.can_team_attack(state) or self.has_kannons(state)),
+            LocationName.web_woods_banana_bunch_1:
+                self.true,
+            LocationName.web_woods_banana_bunch_2:
+                self.true,
+            LocationName.web_woods_banana_bunch_3:
+                self.has_squitter,
+            LocationName.web_woods_banana_coin_3:
+                self.has_squitter,
+            LocationName.web_woods_banana_coin_4:
+                self.has_squitter,
+            LocationName.web_woods_banana_coin_5:
+                self.has_squitter,
+            LocationName.web_woods_green_balloon_2:
+                lambda state: self.has_squitter(state) and self.can_team_attack(state),
+
+            LocationName.kreepy_krow_banana_coin_1:
+                lambda state: self.can_cling(state) and self.can_climb(state) and self.has_kannons(state) and self.can_carry(state),
+            LocationName.kreepy_krow_banana_coin_2:
+                lambda state: self.can_cling(state) and self.can_climb(state) and self.has_kannons(state) and self.can_carry(state),
+
+            LocationName.arctic_abyss_banana_coin_1:
+                lambda state: (self.has_diddy(state) and self.can_cartwheel(state)) or 
+                    (self.has_dixie(state) and self.can_hover(state)),
+            LocationName.arctic_abyss_banana_bunch_1:
+                lambda state: (self.has_diddy(state) and self.can_cartwheel(state)) or 
+                    (self.has_dixie(state) and self.can_hover(state)),
+            LocationName.arctic_abyss_banana_bunch_2:
+                lambda state: (self.has_diddy(state) and self.can_cartwheel(state)) or 
+                    (self.has_dixie(state) and self.can_hover(state)),
+            LocationName.arctic_abyss_banana_bunch_3:
+                lambda state: (self.has_diddy(state) and self.can_cartwheel(state)) or 
+                    (self.has_dixie(state) and self.can_hover(state)),
+            LocationName.arctic_abyss_banana_bunch_4:
+                lambda state: self.can_swim(state) or 
+                    (self.has_enguarde(state) and 
+                        ((self.has_diddy(state) and self.can_cartwheel(state)) or 
+                        (self.has_dixie(state) and self.can_hover(state)))
+                    ),
+            LocationName.arctic_abyss_banana_coin_2:
+                lambda state: self.can_swim(state) or 
+                    (self.has_enguarde(state) and 
+                        ((self.has_diddy(state) and self.can_cartwheel(state)) or 
+                        (self.has_dixie(state) and self.can_hover(state)))
+                    ),
+            LocationName.arctic_abyss_banana_coin_3:
+                lambda state: self.can_swim(state) or 
+                    (self.has_enguarde(state) and 
+                        ((self.has_diddy(state) and self.can_cartwheel(state)) or 
+                        (self.has_dixie(state) and self.can_hover(state)))
+                    ),
+            LocationName.arctic_abyss_banana_coin_4:
+                lambda state: self.can_swim(state) or 
+                    (self.has_enguarde(state) and 
+                        ((self.has_diddy(state) and self.can_cartwheel(state)) or 
+                        (self.has_dixie(state) and self.can_hover(state)))
+                    ),
+            LocationName.arctic_abyss_banana_bunch_5:
+                lambda state: self.can_swim(state) or 
+                    (self.has_enguarde(state) and 
+                        ((self.has_diddy(state) and self.can_cartwheel(state)) or 
+                        (self.has_dixie(state) and self.can_hover(state)))
+                    ),
+            LocationName.arctic_abyss_banana_coin_5:
+                lambda state: self.can_swim(state) or 
+                    (self.has_enguarde(state) and 
+                        ((self.has_diddy(state) and self.can_cartwheel(state)) or 
+                        (self.has_dixie(state) and self.can_hover(state)))
+                    ),
+            LocationName.arctic_abyss_banana_bunch_6:
+                lambda state: self.can_swim(state) or 
+                    (self.has_enguarde(state) and 
+                        ((self.has_diddy(state) and self.can_cartwheel(state)) or 
+                        (self.has_dixie(state) and self.can_hover(state)))
+                    ),
+            LocationName.arctic_abyss_banana_bunch_7:
+                lambda state: self.can_swim(state) or 
+                    (self.has_enguarde(state) and 
+                        ((self.has_diddy(state) and self.can_cartwheel(state)) or 
+                        (self.has_dixie(state) and self.can_hover(state)))
+                    ),
+            LocationName.arctic_abyss_red_balloon_1:
+                lambda state: self.has_enguarde(state) and 
+                    (self.can_swim(state) or (
+                        (self.has_diddy(state) and self.can_cartwheel(state)) or 
+                            (self.has_dixie(state) and self.can_hover(state))
+                        )
+                    ),
+            LocationName.arctic_abyss_red_balloon_2:
+                lambda state: self.can_swim(state) or 
+                    (self.has_enguarde(state) and 
+                        ((self.has_diddy(state) and self.can_cartwheel(state)) or 
+                        (self.has_dixie(state) and self.can_hover(state)))
+                    ),
+
+            LocationName.windy_well_banana_coin_1:
+                self.true,
+            LocationName.windy_well_banana_coin_2:
+                self.can_cling,
+            LocationName.windy_well_banana_coin_3:
+                self.can_cling,
+            LocationName.windy_well_banana_bunch_1:
+                lambda state: self.can_cling(state) and 
+                    (self.has_kannons(state) or self.can_team_attack(state)),
+            LocationName.windy_well_banana_bunch_2:
+                lambda state: self.can_cling(state) and 
+                    (self.has_kannons(state) or self.can_team_attack(state)),
+            LocationName.windy_well_banana_coin_4:
+                self.can_cling,
+            LocationName.windy_well_banana_bunch_3:
+                self.can_cling,
+            LocationName.windy_well_red_balloon:
+                self.can_cling,
+            LocationName.windy_well_banana_bunch_4:
+                lambda state: self.can_cling(state) and self.has_squawks(state) and self.can_carry(state),
+
+            LocationName.castle_crush_banana_coin_1:
+                self.true,
+            LocationName.castle_crush_banana_bunch_1:
+                self.true,
+            LocationName.castle_crush_banana_bunch_2:
+                self.true,
+            LocationName.castle_crush_banana_coin_2:
+                self.true,
+            LocationName.castle_crush_banana_bunch_3:
+                lambda state: self.has_rambi(state) and self.has_both_kongs(state) and  self.can_carry(state),
+            LocationName.castle_crush_banana_bunch_4:
+                self.true,
+            LocationName.castle_crush_banana_bunch_5:
+                lambda state: self.has_both_kongs(state) or 
+                    (self.can_hover(state) or self.can_cartwheel(state)),
+            LocationName.castle_crush_banana_coin_3:
+                lambda state: self.can_carry(state) and (
+                    self.has_both_kongs(state) or 
+                        (self.can_hover(state) or self.can_cartwheel(state))
+                    ),
+            LocationName.castle_crush_banana_bunch_6:
+                lambda state: self.can_carry(state) and (
+                    self.has_both_kongs(state) or 
+                        (self.can_hover(state) or self.can_cartwheel(state))
+                    ),
+
+            LocationName.clappers_cavern_banana_coin_1:
+                lambda state: self.has_clapper(state) or (self.can_hover(state) and self.can_swim(state)),
+            LocationName.clappers_cavern_banana_bunch_1:
+                lambda state: self.has_kannons(state) and (self.has_clapper(state) or (self.can_hover(state) and self.can_swim(state))) and 
+                    (self.can_swim(state) or self.has_enguarde(state)),
+            LocationName.clappers_cavern_banana_bunch_2:
+                lambda state: self.has_kannons(state) and (self.has_clapper(state) or (self.can_hover(state) and self.can_swim(state))) and 
+                    (self.can_swim(state) or self.has_enguarde(state)),
+            LocationName.clappers_cavern_banana_bunch_3:
+                lambda state: self.has_kannons(state) and (self.has_clapper(state) or (self.can_hover(state) and self.can_swim(state))) and 
+                    (self.can_swim(state) or self.has_enguarde(state)),
+            LocationName.clappers_cavern_banana_coin_2:
+                lambda state: self.has_kannons(state) and (self.has_clapper(state) or (self.can_hover(state) and self.can_swim(state))) and 
+                    (self.can_swim(state) or self.has_enguarde(state)),
+            LocationName.clappers_cavern_banana_bunch_4:
+                lambda state: self.has_kannons(state) and (self.has_clapper(state) or (self.can_hover(state) and self.can_swim(state))) and self.has_enguarde(state),
+            LocationName.clappers_cavern_banana_coin_3:
+                lambda state: self.has_kannons(state) and (self.has_clapper(state) or (self.can_hover(state) and self.can_swim(state))) and 
+                    (self.can_swim(state) or self.has_enguarde(state)) and (
+                        (self.can_team_attack(state) and self.has_invincibility(state)) or self.has_both_kongs(state)),
+            LocationName.clappers_cavern_banana_coin_4:
+                lambda state: self.has_kannons(state) and self.has_clapper(state) and 
+                    (self.can_swim(state) or self.has_enguarde(state)) and (
+                        (self.can_team_attack(state) and self.has_invincibility(state)) or self.has_both_kongs(state)),
+            LocationName.clappers_cavern_banana_coin_5:
+                lambda state: self.has_kannons(state) and self.has_clapper(state) and 
+                    (self.can_swim(state) or self.has_enguarde(state)) and (
+                        (self.can_team_attack(state) and self.has_invincibility(state)) or self.has_both_kongs(state)),
+
+            LocationName.chain_link_chamber_banana_coin_1:
+                self.can_climb,
+            LocationName.chain_link_chamber_banana_bunch_1:
+                self.can_climb,
+            LocationName.chain_link_chamber_banana_bunch_2:
+                self.can_climb,
+            LocationName.chain_link_chamber_banana_bunch_3:
+                lambda state: self.can_climb(state) and self.can_carry(state),
+            LocationName.chain_link_chamber_banana_coin_2:
+                lambda state: self.can_climb(state) and 
+                    (self.can_cling(state) or (self.has_kannons(state) and 
+                    self.has_controllable_barrels(state))),
+            LocationName.chain_link_chamber_banana_bunch_4:
+                lambda state: self.can_climb(state) and 
+                    (self.can_cling(state) or (self.has_kannons(state) and 
+                    self.has_controllable_barrels(state))),
+            LocationName.chain_link_chamber_banana_coin_3:
+                lambda state: self.can_climb(state) and 
+                    (self.can_cling(state) or (self.has_kannons(state) and 
+                    self.has_controllable_barrels(state))),
+            LocationName.chain_link_chamber_banana_coin_4:
+                lambda state: self.can_climb(state) and 
+                    (self.can_cling(state) or (self.has_kannons(state) and 
+                    self.has_controllable_barrels(state))),
+
+            LocationName.toxic_tower_banana_bunch_1:
+                lambda state: self.has_rattly(state) or self.can_team_attack(state),
+            LocationName.toxic_tower_banana_bunch_2:
+                lambda state: self.has_rattly(state) or self.can_team_attack(state),
+            LocationName.toxic_tower_banana_bunch_3:
+                lambda state: self.has_rattly(state) or self.can_team_attack(state),
+            LocationName.toxic_tower_banana_bunch_4:
+                lambda state: self.has_rattly(state) or self.can_team_attack(state),
+            LocationName.toxic_tower_banana_bunch_5:
+                lambda state: self.has_rattly(state) or self.can_team_attack(state),
+            LocationName.toxic_tower_banana_bunch_6:
+                lambda state: self.has_rattly(state) or self.can_team_attack(state),
+            LocationName.toxic_tower_banana_bunch_7:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_coin_1:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_coin_2:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_coin_3:
+                self.has_rattly,
+            LocationName.toxic_tower_banana_coin_4:
+                lambda state: self.has_rattly(state) and self.has_squawks(state),
+            LocationName.toxic_tower_banana_coin_5:
+                lambda state: self.has_rattly(state) and self.has_squawks(state),
+            LocationName.toxic_tower_banana_bunch_8:
+                lambda state: self.has_rattly(state) and self.has_squawks(state),
+            LocationName.toxic_tower_banana_bunch_9:
+                lambda state: self.has_rattly(state) and self.has_squawks(state),
+            LocationName.toxic_tower_green_balloon:
+                lambda state: self.has_rattly(state) and self.has_squawks(state) and (self.has_diddy(state) or self.can_climb(state)),
+
+            LocationName.stronghold_showdown_banana_coin_1:
+                self.can_team_attack,
+            LocationName.stronghold_showdown_red_balloon:
+                self.can_team_attack,
+            LocationName.stronghold_showdown_banana_coin_2:
+                self.can_team_attack,
+
+            LocationName.screechs_sprint_banana_coin_1:
+                self.true,
+            LocationName.screechs_sprint_banana_bunch_1:
+                self.can_carry,
+            LocationName.screechs_sprint_banana_coin_2:
+                self.can_climb,
+            LocationName.screechs_sprint_banana_coin_3:
+                lambda state: self.can_climb(state) and (
+                    ((self.has_squawks(state) or self.has_both_kongs(state)) and (
+                    self.can_hover(state) or self.can_cartwheel(state))
+                    ) or self.can_team_attack(state)
+                ),
+            LocationName.screechs_sprint_red_balloon:
+                lambda state: self.can_climb(state) and (
+                    ((self.has_squawks(state) or self.has_both_kongs(state)) and (
+                    self.can_hover(state) or self.can_cartwheel(state))
+                    ) or self.can_team_attack(state)
+                ),
+            LocationName.screechs_sprint_banana_bunch_2:
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    self.can_team_attack(state) or self.can_cartwheel(state) or self.can_hover(state) or self.has_both_kongs(state)
+                ),
+            LocationName.screechs_sprint_banana_bunch_3:
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    self.can_team_attack(state) or self.can_cartwheel(state) or self.can_hover(state) or self.has_both_kongs(state)
+                ),
+            LocationName.screechs_sprint_banana_coin_4:
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    self.can_team_attack(state) or self.can_cartwheel(state) or self.can_hover(state) or self.has_both_kongs(state)
+                ),
+            LocationName.screechs_sprint_banana_coin_5:
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    self.can_team_attack(state) or self.can_cartwheel(state) or self.can_hover(state) or self.has_both_kongs(state)
+                ),
+            LocationName.screechs_sprint_banana_coin_6:
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    self.can_team_attack(state) or self.can_cartwheel(state) or self.can_hover(state) or self.has_both_kongs(state)
+                ),
+            LocationName.screechs_sprint_banana_coin_7:
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    self.can_team_attack(state) or self.can_cartwheel(state) or self.can_hover(state) or self.has_both_kongs(state)
+                ),
+            LocationName.screechs_sprint_banana_coin_8:
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    self.can_team_attack(state) or self.can_cartwheel(state) or self.can_hover(state) or self.has_both_kongs(state)
+                ),
+            LocationName.screechs_sprint_banana_bunch_4:
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    self.can_team_attack(state) or self.can_cartwheel(state) or self.can_hover(state) or self.has_both_kongs(state)
+                ),
+            LocationName.screechs_sprint_banana_bunch_5:
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    self.can_team_attack(state) or self.can_cartwheel(state) or self.can_hover(state) or self.has_both_kongs(state)
+                ),
+            LocationName.screechs_sprint_banana_bunch_6:
+                lambda state: self.can_climb(state) and self.has_squawks(state) and (
+                    self.can_team_attack(state) or self.can_cartwheel(state) or self.can_hover(state) or self.has_both_kongs(state)
+                ),
+
+            LocationName.jungle_jinx_banana_bunch_1:
+                self.true,
+            LocationName.jungle_jinx_banana_bunch_2:
+                self.true,
+            LocationName.jungle_jinx_banana_coin_1:
+                self.true,
+            LocationName.jungle_jinx_banana_coin_2:
+                self.true,
+            LocationName.jungle_jinx_banana_coin_3:
+                lambda state: self.can_hover(state) or self.has_kannons(state),
+            LocationName.jungle_jinx_banana_coin_4:
+                lambda state: self.can_hover(state) or self.has_kannons(state),
+            LocationName.jungle_jinx_banana_coin_5:
+                lambda state: self.can_hover(state) or self.has_kannons(state),
+
+            LocationName.black_ice_battle_banana_bunch_1:
+                lambda state: self.can_hover(state) or self.has_both_kongs(state) or self.can_carry(state) or self.can_cartwheel(state),
+            LocationName.black_ice_battle_red_balloon_1:
+                self.true,
+            LocationName.black_ice_battle_red_balloon_2:
+                self.true,
+            LocationName.black_ice_battle_red_balloon_3:
+                self.can_carry,
+            LocationName.black_ice_battle_banana_bunch_2:
+                self.true,
+            LocationName.black_ice_battle_banana_coin_1:
+                self.true,
+            LocationName.black_ice_battle_banana_bunch_3:
+                lambda state: self.can_carry(state) or self.has_both_kongs(state),
+
+            LocationName.klobber_karnage_banana_coin_1:
+                self.true,
+            LocationName.klobber_karnage_banana_bunch_1:
+                self.true,
+            LocationName.klobber_karnage_banana_bunch_2:
+                self.true,
+            LocationName.klobber_karnage_banana_coin_2:
+                self.true,
+            LocationName.klobber_karnage_banana_bunch_3:
+                self.true,
+            LocationName.klobber_karnage_banana_coin_3:
+                self.true,
+            LocationName.klobber_karnage_banana_bunch_4:
+                self.has_controllable_barrels,
+            LocationName.klobber_karnage_banana_bunch_5:
+                lambda state: self.has_controllable_barrels(state) and 
+                    (self.has_both_kongs(state) or (self.can_use_dixie_barrels (state) and self.can_use_diddy_barrels(state))
+                ),
+            LocationName.klobber_karnage_banana_bunch_6:
+                lambda state: self.has_controllable_barrels(state) and 
+                    (self.has_both_kongs(state) or (self.can_use_dixie_barrels (state) and self.can_use_diddy_barrels(state))
+                ),
+            LocationName.klobber_karnage_banana_bunch_7:
+                lambda state: self.has_controllable_barrels(state) and 
+                    (self.has_both_kongs(state) or (self.can_use_dixie_barrels (state) and self.can_use_diddy_barrels(state))
+                ),
+            LocationName.klobber_karnage_banana_coin_4:
+                lambda state: self.has_controllable_barrels(state) and 
+                    (self.has_both_kongs(state) or (self.can_use_dixie_barrels (state) and self.can_use_diddy_barrels(state))
+                ),
+            LocationName.klobber_karnage_red_balloon:
+                lambda state: self.has_controllable_barrels(state) and (self.can_cartwheel(state) or self.can_hover(state)) and
+                    (self.has_both_kongs(state) or (self.can_use_dixie_barrels (state) and self.can_use_diddy_barrels(state))
+                ),
+
+            LocationName.fiery_furnace_banana_bunch_1:
+                lambda state: self.can_team_attack(state) or (self.can_cartwheel(state) and self.can_hover(state)),
+            LocationName.fiery_furnace_banana_bunch_2:
+                lambda state: self.can_team_attack(state) or (self.can_cartwheel(state) and self.can_hover(state)),
+            LocationName.fiery_furnace_banana_bunch_3:
+                lambda state: self.can_team_attack(state) or (self.can_cartwheel(state) and self.can_hover(state)),
+            LocationName.fiery_furnace_banana_bunch_4:
+                lambda state: self.can_cartwheel(state) or self.can_hover(state) or self.has_controllable_barrels(state),
+            LocationName.fiery_furnace_banana_coin_1:
+                self.has_controllable_barrels,
+            LocationName.fiery_furnace_banana_coin_2:
+                self.has_controllable_barrels,
+            LocationName.fiery_furnace_banana_bunch_5:
+                lambda state: self.can_cartwheel(state) or self.can_hover(state) or self.has_controllable_barrels(state),
+
+            LocationName.animal_antics_banana_bunch_1:
+                lambda state: self.can_swim(state) and self.has_enguarde(state) and (
+                        self.has_rambi(state) or (
+                            self.can_hover(state) and self.can_team_attack(state)
+                        )
+                    ),
+            LocationName.animal_antics_banana_bunch_2:
+                lambda state: self.can_swim(state) and
+                        self.has_squitter and self.has_enguarde(state) and (
+                        self.has_rambi(state) or (
+                            self.can_hover(state) and self.can_team_attack(state)
+                        )
+                    ),
+            LocationName.animal_antics_banana_coin_1:
+                lambda state: self.can_swim(state) and 
+                        self.has_squitter and self.has_enguarde(state) and (
+                        self.has_rambi(state) or (
+                            self.can_hover(state) and self.can_team_attack(state)
+                        )
+                    ),
+            LocationName.animal_antics_banana_coin_2:
+                lambda state: self.can_swim(state) and self.has_kannons(state) and
+                        self.has_squitter and self.has_enguarde(state) and (
+                        self.has_rambi(state) or (
+                            self.can_hover(state) and self.can_team_attack(state)
+                        )
+                    ),
+            LocationName.animal_antics_banana_bunch_3:
+                lambda state: self.can_swim(state) and self.has_kannons(state) and
+                        self.has_squitter and self.has_enguarde(state) and (
+                        self.has_rambi(state) or (
+                            self.can_hover(state) and self.can_team_attack(state)
+                        )
+                    ),
+            LocationName.animal_antics_banana_bunch_4:
+                lambda state: self.can_swim(state) and self.has_kannons(state) and
+                        self.has_squitter and self.has_enguarde(state) and (
+                        self.has_rambi(state) or (
+                            self.can_hover(state) and self.can_team_attack(state)
+                        )
+                    ),
+            LocationName.animal_antics_banana_coin_3:
+                lambda state: self.can_swim(state) and self.has_kannons(state) and
+                        self.has_squitter and self.has_enguarde(state) and (
+                        self.has_rambi(state) or (
+                            self.can_hover(state) and self.can_team_attack(state)
+                        )
+                    ),
+            LocationName.animal_antics_banana_coin_4:
+                lambda state: self.can_swim(state) and self.has_kannons(state) and
+                        self.has_squitter and self.has_enguarde(state) and (
+                        self.has_rambi(state) or (
+                            self.can_hover(state) and self.can_team_attack(state)
+                        )
+                    ),
+            LocationName.animal_antics_red_balloon:
+                lambda state: self.can_swim(state) and self.has_kannons(state) and
+                        self.has_squitter and self.has_enguarde(state) and (
+                        self.has_rambi(state) or (
+                            self.can_hover(state) and self.can_team_attack(state)
+                        )
+                    ),
+            LocationName.animal_antics_banana_coin_5:
+                lambda state: self.can_swim(state) and self.has_kannons(state) and
+                        self.has_squitter and self.has_enguarde(state) and (
+                        self.has_rambi(state) or (
+                            self.can_hover(state) and self.can_team_attack(state)
+                        )
+                    ),
+
         }
 
     def set_dkc2_rules(self) -> None:

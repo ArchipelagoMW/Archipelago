@@ -16,6 +16,7 @@ from .Items import item_groups
 from .Text import string_to_bytes, goal_texts
 from .Levels import level_map
 from .Options import Goal
+from .Aesthetics import get_palette_bytes, diddy_palettes, dixie_palettes, player_palette_set_offsets
 from Options import OptionError
 
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
@@ -102,8 +103,9 @@ trap_data = {
     STARTING_ID + 0x0041: [0x42, 0x00], # Reverse Trap
     STARTING_ID + 0x0042: [0x44, 0x00], # Damage Trap
     STARTING_ID + 0x0043: [0x46, 0x00], # Instant Death Trap
+    STARTING_ID + 0x0032: [0x48, 0x00], # Instant DK Barrel (not a trap, but this system works better lol)
+    STARTING_ID + 0x0033: [0x4C, 0x00], # Banana Extractinator (not a trap, but this system works better lol)
 }
-
 
 class DKC2PatchExtension(APPatchExtension):
     game = "Donkey Kong Country 2"
@@ -247,7 +249,7 @@ class DKC2PatchExtension(APPatchExtension):
         
         for idx in range(0, 82, 2):
             offset = int.from_bytes(hint_offsets[idx:idx+2], "little")
-            pointer = offset + (write_addr & 0xFFFF)
+            pointer = offset + write_addr & 0xFFFF
             rom[addr+idx:addr+idx+2] = bytearray(pointer.to_bytes(2, "little"))
 
         write_addr = write_addr + size
@@ -284,8 +286,6 @@ class DKC2PatchExtension(APPatchExtension):
             idy += 2
             pointer = offset + (write_addr & 0xFFFF)
             rom[addr+idx:addr+idx+2] = bytearray(pointer.to_bytes(2, "little"))
-
-        print (f"{write_addr:06X}")
 
         return bytes(rom[:-3])
 
@@ -339,6 +339,15 @@ def patch_rom(world: "DKC2World", patch: DKC2ProcedurePatch):
 
     # Death link enable
     patch.write_byte(0x3DFF98, world.options.death_link.value)
+    patch.write_byte(0x3DFF99, world.options.energy_link.value)
+
+    # Options write
+    patch.write_byte(0x3DFF9A, world.options.dk_coin_checks.value)
+    patch.write_byte(0x3DFF9B, world.options.kong_checks.value)
+    patch.write_byte(0x3DFF9C, world.options.balloonsanity.value)
+    patch.write_byte(0x3DFF9D, world.options.coinsanity.value)
+    patch.write_byte(0x3DFF9E, world.options.bananasanity.value)
+    patch.write_byte(0x3DFF9F, world.options.swanky_checks.value)
 
     # Write starting inventory
     patch.write_byte(0x3DFF80, world.options.starting_kong.value)
@@ -401,6 +410,8 @@ def patch_rom(world: "DKC2World", patch: DKC2ProcedurePatch):
     compute_cranky_hints(world, patch)
     compute_wrinkly_hints(world, patch)
 
+    adjust_palettes(world, patch)
+
     # Save shuffled levels data
     patch.write_file("levels.bin", json.dumps(world.rom_connections).encode("UTF-8"))
 
@@ -418,7 +429,7 @@ def compute_cranky_hints(world: "DKC2World", patch: DKC2ProcedurePatch):
             "Krocodile Kore" in location.name:
             continue
         level_name = location.name.split(" - ")[0]
-        location_type = location.name.split(" - ")[1].split(" #")[0]
+        location_type = location.name.split(" - ")[1].split(" #")[0].split("(")[0].strip()
         bonus_num = 0
         if "Swanky" in location.name:
             level_name = "Swanky Trivia"
@@ -624,6 +635,44 @@ def generate_game_trivia(world: "DKC2World"):
                           f" * HARD:   {trivia_hard_count}")
     
     return games_in_session
+
+
+def adjust_palettes(world: "DKC2World", patch: DKC2ProcedurePatch):
+    palette_options = {
+        "Diddy": world.options.palette_diddy_active.current_key,
+        "Diddy Inactive": world.options.palette_diddy_inactive.current_key,
+        "Diddy Invincible": world.options.palette_diddy_invincible.current_key,
+        "Diddy Frozen": world.options.palette_diddy_frozen.current_key,
+        "Diddy Reversed": world.options.palette_diddy_reversed.current_key,
+        "Diddy Slow": world.options.palette_diddy_slow.current_key,
+        "Dixie": world.options.palette_dixie_active.current_key,
+        "Dixie Inactive":  world.options.palette_dixie_inactive.current_key,
+        "Dixie Invincible": world.options.palette_dixie_invincible.current_key,
+        "Dixie Frozen": world.options.palette_dixie_frozen.current_key,
+        "Dixie Reversed": world.options.palette_dixie_reversed.current_key,
+        "Dixie Slow": world.options.palette_dixie_slow.current_key,
+    }
+    player_custom_palettes = world.options.player_palettes
+    player_palette_filters = world.options.player_palette_filters
+    for palette_set, offset in player_palette_set_offsets.items():
+        palette_option = palette_options[palette_set]
+        if "Diddy" in palette_set:
+            palette = diddy_palettes[palette_option]
+        else:
+            palette = dixie_palettes[palette_option]
+
+        if palette_set in player_custom_palettes.keys():
+            if len(player_custom_palettes[palette_set]) == 0x0F:
+                palette = player_custom_palettes[palette_set]
+            else:
+                print (f"[{world.multiworld.player_name[world.player]}] Custom palette set for {palette_set} doesn't have exactly 15 colors. Falling back to the selected preset ({palette_option})")
+        
+        if palette_set in player_palette_filters:
+            filter_option = player_palette_filters[palette_set]
+        else:
+            filter_option = 0
+        data = get_palette_bytes(palette, filter_option)
+        patch.write_bytes(offset, data)
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:

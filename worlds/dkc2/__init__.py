@@ -6,12 +6,11 @@ import threading
 import pkgutil
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
-from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
-from .Items import DKC2Item, ItemData, item_table, junk_table, item_groups
-from .Locations import DKC2Location, setup_locations, all_locations, location_groups
+from .Items import DKC2Item, item_table, misc_table, item_groups
+from .Locations import setup_locations, all_locations, location_groups
 from .Regions import create_regions, connect_regions
-from .Names import ItemName, LocationName, EventName
+from .Names import ItemName, LocationName
 from .Options import DKC2Options, Logic, StartingKong, Goal, dkc2_option_groups
 from .Client import DKC2SNIClient
 from .Levels import generate_level_list, level_map, location_id_to_level_id
@@ -90,6 +89,12 @@ class DKC2World(World):
             total_required_locations += 39
         if self.options.swanky_checks:
             total_required_locations += 18
+        if self.options.balloonsanity:
+            total_required_locations += 38
+        if self.options.coinsanity:
+            total_required_locations += 172
+        if self.options.bananasanity:
+            total_required_locations += 157
 
         # Set starting kong
         if self.options.starting_kong == StartingKong.option_diddy:
@@ -118,6 +123,9 @@ class DKC2World(World):
         itempool += [self.create_item(ItemName.lost_world_gulch)]
         itempool += [self.create_item(ItemName.lost_world_keep)]
 
+        if self.options.energy_link:
+            itempool += [self.create_item(ItemName.extractinator) for _ in range(3)]
+
         for item in item_groups["Abilities"]:
             if item in self.options.shuffle_abilities.value:
                 itempool += [self.create_item(item)]
@@ -139,6 +147,8 @@ class DKC2World(World):
         if self.options.goal in {Goal.option_kompletionist, Goal.option_lost_world}:
             for _ in range(self.options.lost_world_rocks.value):
                 itempool.append(self.create_item(ItemName.lost_world_rock))
+            for _ in range(self.options.extra_lost_world_rocks.value):
+                itempool.append(self.create_item(ItemName.lost_world_rock, ItemClassification.useful))
 
         # Add hint currency items into the pool
         itempool += [self.create_item(ItemName.kremkoins) for _ in range(28)]
@@ -163,8 +173,9 @@ class DKC2World(World):
 
         # Add junk items into the pool
         junk_weights = []
-        junk_weights += ([ItemName.red_balloon] * 30)
-        junk_weights += ([ItemName.banana_coin] * 20)
+        junk_weights += ([ItemName.dk_barrel] * 40)
+        junk_weights += ([ItemName.red_balloon] * 35)
+        junk_weights += ([ItemName.banana_coin] * 25)
 
         junk_pool = []
         for _ in range(junk_count):
@@ -232,6 +243,10 @@ class DKC2World(World):
         slot_data["kong_checks"] = self.options.kong_checks.value
         slot_data["dk_coin_checks"] = self.options.dk_coin_checks.value
         slot_data["swanky_checks"] = self.options.swanky_checks.value
+        slot_data["balloonsanity"] = self.options.balloonsanity.value
+        slot_data["coinsanity"] = self.options.coinsanity.value
+        slot_data["bananasanity"] = self.options.bananasanity.value
+        slot_data["energy_link"] = self.options.energy_link.value
 
         return slot_data
 
@@ -261,6 +276,9 @@ class DKC2World(World):
                 self.options.kong_checks.value = passthrough["kong_checks"]
                 self.options.dk_coin_checks.value = passthrough["dk_coin_checks"]
                 self.options.swanky_checks.value = passthrough["swanky_checks"]
+                self.options.balloonsanity.value = passthrough["balloonsanity"]
+                self.options.coinsanity.value = passthrough["coinsanity"]
+                self.options.bananasanity.value = passthrough["bananasanity"]
 
 
     def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
@@ -275,6 +293,12 @@ class DKC2World(World):
                     continue
                 if "DK Coin" in loc_name and not self.options.dk_coin_checks:
                     continue
+                if "Banana Coin" in loc_name and not self.options.coinsanity:
+                    continue
+                if "Balloon" in loc_name and not self.options.balloonsanity:
+                    continue
+                if "Banana Bunch" in loc_name and not self.options.bananasanity:
+                    continue
                 location = self.multiworld.get_location(loc_name, self.player)
                 er_hint_data[location.address] = level_map[map_spot]
         
@@ -282,7 +306,7 @@ class DKC2World(World):
 
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(list(junk_table.keys()))
+        return self.random.choice(list(misc_table.keys()))
 
 
     def generate_output(self, output_directory: str):

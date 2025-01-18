@@ -218,6 +218,7 @@ cranky_location_text = {
         [
            #"********************************"
             "",
+            "",
             "Answer correctly to Swanky",
         ],
         [
@@ -237,6 +238,136 @@ cranky_location_text = {
             "",
             "Swanky at WORLD",
             "wants a few questions answered"
+        ],
+    ],
+    "Banana Coin": [
+        [
+           #"********************************"
+            "",
+            "Get yourself a little bit rich",
+            "at WORLD",
+        ],
+        [
+           #"********************************"
+            "Collect a golden metal",
+            "with a banana image",
+            "in LEVEL",
+        ],
+        [
+           #"********************************"
+            "",
+            "Bring some cash from",
+            "LEVEL",
+        ],
+    ],
+    "Red Balloon": [
+        [
+           #"********************************"
+            "",
+            "Get a red balloon",
+            "in WORLD",
+        ],
+        [
+           #"********************************"
+            "",
+            "Obtain a device with air inside",
+            "in WORLD",
+        ],
+        [
+           #"********************************"
+            "",
+            "Obtain a device with air inside",
+            "in LEVEL",
+        ],
+        [
+           #"********************************"
+            "",
+            "Find a 1-Up balloon",
+            "in LEVEL",
+        ],
+    ],
+    "Green Balloon": [
+        [
+           #"********************************"
+            "",
+            "Get a green balloon",
+            "in WORLD",
+        ],
+        [
+           #"********************************"
+            "",
+            "Obtain a round green object",
+            "in WORLD",
+        ],
+        [
+           #"********************************"
+            "",
+            "Obtain a round green object",
+            "in LEVEL",
+        ],
+        [
+           #"********************************"
+            "",
+            "Find a 2-Up balloon",
+            "in LEVEL",
+        ],
+    ],
+    "Blue Balloon": [
+        [
+           #"********************************"
+            "",
+            "Get a blue balloon",
+            "in WORLD",
+        ],
+        [
+           #"********************************"
+            "The most precious and rare",
+            "floating device",
+            "from WORLD",
+        ],
+        [
+           #"********************************"
+            "The most precious and rare",
+            "floating device",
+            "from LEVEL",
+        ],
+        [
+           #"********************************"
+            "",
+            "Find a 3-Up balloon",
+            "in LEVEL",
+        ],
+    ],
+    "Banana Bunch": [
+        [
+           #"********************************"
+            "Someone told me that you",
+            "need to get some bananas",
+            "in LEVEL",
+        ],
+        [
+           #"********************************"
+            "",
+            "Collect a yellow floating",
+            "object at WORLD",
+        ],
+        [
+           #"********************************"
+            "Collect a delicious floating",
+            "that rotates on its own axis",
+            "in LEVEL",
+        ],
+        [
+           #"********************************"
+            "",
+            "Get a bundle of bananas",
+            "at WORLD",
+        ],
+        [
+           #"********************************"
+            "",
+            "Collect a bundle of bananas",
+            "at LEVEL",
         ],
     ],
 }
@@ -514,7 +645,7 @@ wrinkly_hint_text = [
     [
         #"********************************"
         "",
-        "PLAYER's world has"
+        "PLAYER's world has",
         "one of your important items at",
         "LOCATION",
     ],
