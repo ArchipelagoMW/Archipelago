@@ -221,12 +221,11 @@ def fill_dungeons_restrictive(multiworld: MultiWorld) -> None:
             multiworld.random.shuffle(locations)
 
             # Dungeon-locked items have to be placed first so as not to run out of space for dungeon-locked items.
-            # Subsort in the order Small Key, Big Key, Other before placing dungeon items.
-            sort_order = {"Small Key": 3, "Big Key": 2}
+            # Subsort in the order Big Key, Small Key, Other before placing dungeon items.
+            sort_order = {"Big Key": 3, "Small Key": 2}
             in_dungeon_items.sort(
                 key=lambda item: sort_order.get(item.type, 1)
-                + (5 if (item.player, item.name) in dungeon_specific else 0),
-                reverse=True,
+                + (5 if (item.player, item.name) in dungeon_specific else 0)
             )
 
             # Construct a partial `all_state` that contains only the items from `get_pre_fill_items` that aren't in a
