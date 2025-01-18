@@ -17,8 +17,6 @@ from hashlib import sha3_512
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple, Union
 
-import worlds.Files
-
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 requirement = 'cx-Freeze==7.2.0'
 try:
@@ -375,6 +373,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         os.makedirs(self.buildfolder / "Players" / "Templates", exist_ok=True)
         from Options import generate_yaml_templates
         from worlds.AutoWorld import AutoWorldRegister
+        from worlds.Files import APWorldContainer
         from Utils import version
         assert not non_apworlds - set(AutoWorldRegister.world_types), \
             f"Unknown world {non_apworlds - set(AutoWorldRegister.world_types)} designated for .apworld"
@@ -391,7 +390,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
                 # this method creates an apworld that cannot be moved to a different OS or minor python version,
                 # which should be ok
                 zip_path = self.libfolder / "worlds" / (file_name + ".apworld")
-                apworld = worlds.Files.APWorldContainer(str(zip_path))
+                apworld = APWorldContainer(str(zip_path))
                 apworld.minimum_ap_version = version
                 apworld.maximum_ap_version = version
                 apworld.game = worldtype.game
