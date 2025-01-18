@@ -178,16 +178,11 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                     # There are no items remaining to place.
                     break
 
-                # Pick a random sample of items to place in this batch, by the player they belong to.
-                population = []
-                counts = []
-                for player, items in reachable_items.items():
-                    num_items = len(items)
-                    if num_items > 0:
-                        population.append(player)
-                        counts.append(num_items)
-                assert sum(counts) == len(item_pool)
-                placement_order = multiworld.random.sample(population, k=batch_size, counts=counts)
+                # Pick a random sample of `batch_size` items to place in this batch, by the player they belong to.
+                players = list(reachable_items.keys())
+                item_counts = list(map(len, reachable_items.values()))
+                assert sum(item_counts) == len(item_pool)
+                placement_order = multiworld.random.sample(population=players, counts=item_counts, k=batch_size)
 
                 # Count how many items are going to be placed per-player, in this batch.
                 placement_counts = Counter(placement_order)
