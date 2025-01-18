@@ -331,10 +331,11 @@ class TunicWorld(World):
 
             remove_filler(items_to_create[gold_hexagon])
 
-            # Sort for deterministic order
-            for hero_relic in sorted(item_name_groups["Hero Relics"]):
-                tunic_items.append(self.create_item(hero_relic, ItemClassification.useful))
-                items_to_create[hero_relic] = 0
+            if not self.options.combat_logic:
+                # Sort for deterministic order
+                for hero_relic in sorted(item_name_groups["Hero Relics"]):
+                    tunic_items.append(self.create_item(hero_relic, ItemClassification.useful))
+                    items_to_create[hero_relic] = 0
 
         if not self.options.ability_shuffling:
             # Sort for deterministic order
