@@ -4,15 +4,13 @@ from BaseClasses import ItemClassification
 from worlds.generic.Rules import add_rule, forbid_item
 
 from .Arrays import difficulty_lambda, level_locations, no_obelisks
-from .Items import item_list
+from .Items import item_list, obelisks
 from .Locations import all_locations, chimeras_keep, dragons_lair, gates_of_the_underworld
 
 if typing.TYPE_CHECKING:
     from . import GauntletLegendsWorld
 
 def set_rules(world: "GauntletLegendsWorld"):
-    obelisks = [item.item_name for item in item_list if "Obelisk" in item.item_name]
-
     for location in [
         location
         for location in all_locations

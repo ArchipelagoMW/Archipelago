@@ -445,12 +445,12 @@ difficulty_convert: Dict[int, int] = {0x2: 0, 0x1: 10, 0x7: 20, 0x9: 30, 0xF: 35
 # Runestones required to access difficulties
 # Used in Rules.py for access calculation
 difficulty_lambda: Dict[int, List[int]] = {
-    0x2: [0, 1, 2, 3],
-    0x1: [0, 3, 4, 5],
-    0x7: [0, 6, 7, 8],
-    0x9: [0, 6, 7, 8],
+    0x2: [0, 0, 1, 2],
+    0x1: [0, 1, 2, 3],
+    0x7: [0, 3, 4, 5],
+    0x9: [0, 5, 6, 7],
     0xF: [0, 7, 8, 9],
-    0x11: [0, 9, 10, 11],
+    0x11: [0, 7, 8, 9],
     0x8: [0, 13, 13, 13],
 }
 

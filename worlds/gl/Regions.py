@@ -138,7 +138,7 @@ def connect_regions(world: "GauntletLegendsWorld"):
     connect(world, names, "Desecrated Temple", "Battle Towers")
     connect(world, names, "Desecrated Temple", "Infernal Fortress")
     connect(world, names, "Menu", "Gates of the Underworld",
-            lambda state: state.has_all([item.item_name for item in item_list if "Runestone" in item.item_name], world.player)
+            lambda state: state.has("stones", world.player, 13)
     )
 
 

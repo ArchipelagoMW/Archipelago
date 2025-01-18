@@ -72,7 +72,7 @@ class GauntletLegendsWorld(World):
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
     death: List[Item]
 
-    disabled_locations: typing.Set[LocationData]
+    disabled_locations: typing.Set[str]
 
     def generate_early(self) -> None:
         self.disabled_locations = set()
@@ -81,23 +81,23 @@ class GauntletLegendsWorld(World):
 
     def create_regions(self) -> None:
         if self.options.chests_barrels == "none":
-            self.disabled_locations += [
+            self.disabled_locations.update([
                 location.name
                 for location in all_locations
                 if "Chest" in location.name or ("Barrel" in location.name and "Barrel of Gold" not in location.name)
-            ]
+            ])
         elif self.options.chests_barrels == "all_chests":
-            self.disabled_locations += [
+            self.disabled_locations.update([
                 location.name
                 for location in all_locations
                 if "Barrel" in location.name and "Barrel of Gold" not in location.name
-            ]
+            ])
         elif self.options.chests_barrels == "all_barrels":
-            self.disabled_locations += [location.name for location in all_locations if "Chest" in location.name]
+            self.disabled_locations.update([location.name for location in all_locations if "Chest" in location.name])
 
         if self.options.max_difficulty_toggle:
-            self.disabled_locations += [location.name for location in all_locations
-                                        if location.difficulty > self.options.max_difficulty_value]
+            self.disabled_locations.update([location.name for location in all_locations
+                                        if location.difficulty > self.options.max_difficulty_value])
 
         create_regions(self)
         connect_regions(self)
@@ -184,7 +184,8 @@ class GauntletLegendsWorld(World):
         trap_count = 0
         for item in [item_ for item_ in item_list
                      if ItemClassification.progression not in item_.progression
-                     or ItemClassification.useful not in item_.progression]:
+                     and ItemClassification.useful not in item_.progression
+                     and item_.item_name not in skipped_items]:
 
             freq = item_frequencies.get(item.item_name, 1) + (30 if self.options.infinite_keys else 0) + (5 if self.options.permanent_speed else 0)
             if item.item_name == "Invulnerability" or item.item_name == "Anti-Death Halo":
