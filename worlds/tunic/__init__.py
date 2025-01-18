@@ -278,7 +278,7 @@ class TunicWorld(World):
                 self.get_location("Secret Gathering Place - 10 Fairy Reward").place_locked_item(laurels)
             items_to_create["Hero's Laurels"] = 0
 
-        if self.options.grass_randomizer:
+        if self.options.grass_randomizer and not self.options.start_with_sword:
             items_to_create["Grass"] = len(grass_location_table)
             tunic_items.append(self.create_item("Glass Cannon", ItemClassification.progression))
             items_to_create["Glass Cannon"] = 0
