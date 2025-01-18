@@ -27,7 +27,6 @@ def run_locations_benchmark():
             "pre_fill",
         )
 
-
         rule_iterations: int = 100_000
 
         if sys.version_info >= (3, 9):
