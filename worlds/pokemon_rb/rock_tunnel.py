@@ -267,6 +267,10 @@ def randomize_rock_tunnel(data, random):
                     single(9, 11)
                 else:
                     floor(9, 11)
+            if 31 in (current_map[8][6],current_map[8][7]):
+                # (6,7) or (7,7) are tall
+                floor(6, 10)
+                wide(7, 9)
         elif r == 3:
             floor(9, 9)
             floor(9, 10)
