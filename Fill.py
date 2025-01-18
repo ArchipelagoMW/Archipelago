@@ -168,12 +168,12 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                 for item in item_iter:
                     batch_base_state.collect(item, True)
 
-            if not one_item_per_player:
+            if one_item_per_player:
+                batched_placements_remaining = batch_size
+            else:
                 items_per_player_in_batch = {player: batch_size - empty_spaces
                                              for player, empty_spaces in batch_empty_spaces.items()}
                 batched_placements_remaining = sum(items_per_player_in_batch.values())
-            else:
-                batched_placements_remaining = batch_size
 
             # If there was an existing batch sweep state, it must be re-created because it will have collected items
             # that are being placed in the current batch. The placement loop is responsible for creating the sweep state
