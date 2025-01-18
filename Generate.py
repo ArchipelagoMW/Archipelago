@@ -114,7 +114,14 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
                 os.path.join(args.player_files_path, fname) not in {args.meta_file_path, args.weights_file_path}:
             path = os.path.join(args.player_files_path, fname)
             try:
-                weights_cache[fname] = read_weights_yamls(path)
+                weights_for_file = []
+                for doc_idx, yaml in enumerate(read_weights_yamls(path)):
+                    if yaml is None:
+                        logging.warning(f"Ignoring empty yaml document #{doc_idx + 1} in {fname}")
+                    else:
+                        weights_for_file.append(yaml)
+                weights_cache[fname] = tuple(weights_for_file)
+                        
             except Exception as e:
                 raise ValueError(f"File {fname} is invalid. Please fix your yaml.") from e
 
@@ -431,7 +438,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
 
-    valid_keys = set()
+    valid_keys = {"triggers"}
     if "triggers" in weights:
         weights = roll_triggers(weights, weights["triggers"], valid_keys)
 
@@ -490,14 +497,22 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     for option_key, option in world_type.options_dataclass.type_hints.items():
         handle_option(ret, game_weights, option_key, option, plando_options)
         valid_keys.add(option_key)
-    for option_key in game_weights:
-        if option_key in {"triggers", *valid_keys}:
-            continue
-        logging.warning(f"{option_key} is not a valid option name for {ret.game} and is not present in triggers.")
+
+    # TODO remove plando_items after moving it to the options system
+    valid_keys.add("plando_items")
     if PlandoOptions.items in plando_options:
         ret.plando_items = copy.deepcopy(game_weights.get("plando_items", []))
     if ret.game == "A Link to the Past":
+        # TODO there are still more LTTP options not on the options system
+        valid_keys |= {"sprite_pool", "sprite", "random_sprite_on_event"}
         roll_alttp_settings(ret, game_weights)
+
+    # log a warning for options within a game section that aren't determined as valid
+    for option_key in game_weights:
+        if option_key in valid_keys:
+            continue
+        logging.warning(f"{option_key} is not a valid option name for {ret.game} and is not present in triggers "
+                        f"for player {ret.name}.")
 
     return ret
 

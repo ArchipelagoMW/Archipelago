@@ -1,24 +1,24 @@
-from Options import Toggle, Range, Choice, DeathLink, ItemSet, OptionSet, PerGameCommonOptions, OptionGroup, Removed
+from Options import Toggle, Range, Choice, DeathLink, OptionSet, PerGameCommonOptions, OptionGroup, Removed
 from dataclasses import dataclass
 
 from .MuseDashCollection import MuseDashCollections
+from .MuseDashData import SONG_DATA
 
 
 class DLCMusicPacks(OptionSet):
     """
     Choose which DLC Packs will be included in the pool of chooseable songs.
-    
+
     Note: The [Just As Planned] DLC contains all [Muse Plus] songs.
     """
     display_name = "DLC Packs"
-    default = {}
     valid_keys = [dlc for dlc in MuseDashCollections.DLC]
 
 
 class StreamerModeEnabled(Toggle):
     """
     In Muse Dash, an option named 'Streamer Mode' removes songs which may trigger copyright issues when streaming.
-    
+
     If this is enabled, only songs available under Streamer Mode will be available for randomization.
     """
     display_name = "Streamer Mode Only Songs"
@@ -70,7 +70,7 @@ class DifficultyMode(Choice):
 class DifficultyModeOverrideMin(Range):
     """
     Ensures that 1 difficulty has at least 1 this value or higher per song.
-    
+
     Note: Difficulty Mode must be set to Manual.
     """
     display_name = "Manual Difficulty Min"
@@ -83,7 +83,7 @@ class DifficultyModeOverrideMin(Range):
 class DifficultyModeOverrideMax(Range):
     """
     Ensures that 1 difficulty has at least 1 this value or lower per song.
-    
+
     Note: Difficulty Mode must be set to Manual.
     """
     display_name = "Manual Difficulty Max"
@@ -115,7 +115,7 @@ class GradeNeeded(Choice):
 class MusicSheetCountPercentage(Range):
     """
     Controls how many music sheets are added to the pool based on the number of songs, including starting songs.
-    
+
     Higher numbers leads to more consistent game lengths, but will cause individual music sheets to be less important.
     """
     range_start = 10
@@ -138,11 +138,10 @@ class ChosenTraps(OptionSet):
     - Traps last the length of a song, or until you die.
     - VFX Traps consist of visual effects that play over the song. (i.e. Grayscale.)
     - SFX Traps consist of changing your sfx setting to one possibly more annoying sfx.
-    
+
     Note: SFX traps are only available if [Just as Planned] DLC songs are enabled.
     """
     display_name = "Chosen Traps"
-    default = {}
     valid_keys = {trap for trap in MuseDashCollections.trap_items.keys()}
 
 
@@ -154,24 +153,26 @@ class TrapCountPercentage(Range):
     display_name = "Trap Percentage"
 
 
-class IncludeSongs(ItemSet):
+class SongSet(OptionSet):
+    valid_keys = SONG_DATA.keys()
+
+
+class IncludeSongs(SongSet):
     """
     These songs will be guaranteed to show up within the seed.
     - You must have the DLC enabled to play these songs.
     - Difficulty options will not affect these songs.
     - If there are too many included songs, this will act as a whitelist ignoring song difficulty.
     """
-    verify_item_name = True
     display_name = "Include Songs"
 
 
-class ExcludeSongs(ItemSet):
+class ExcludeSongs(SongSet):
     """
     These songs will be guaranteed to not show up within the seed.
-    
+
     Note: Does not affect songs within the "Include Songs" list.
     """
-    verify_item_name = True
     display_name = "Exclude Songs"
 
 
@@ -213,7 +214,7 @@ class MuseDashOptions(PerGameCommonOptions):
     death_link: DeathLink
     include_songs: IncludeSongs
     exclude_songs: ExcludeSongs
-    
+
     # Removed
     allow_just_as_planned_dlc_songs: Removed
     available_trap_types: Removed
