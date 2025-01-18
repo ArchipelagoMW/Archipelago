@@ -40,7 +40,7 @@ from kivy.core.image import ImageLoader, ImageLoaderBase, ImageData
 from kivy.base import ExceptionHandler, ExceptionManager
 from kivy.clock import Clock
 from kivy.factory import Factory
-from kivy.properties import BooleanProperty, ObjectProperty
+from kivy.properties import BooleanProperty, ObjectProperty, NumericProperty
 from kivy.metrics import dp
 from kivy.effects.scroll import ScrollEffect
 from kivy.uix.widget import Widget
@@ -64,6 +64,7 @@ from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.animation import Animation
 from kivy.uix.popup import Popup
+from kivy.uix.dropdown import DropDown
 from kivy.uix.image import AsyncImage
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
@@ -304,6 +305,50 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
     def apply_selection(self, rv, index, is_selected):
         """ Respond to the selection of items in the view. """
         self.selected = is_selected
+
+        
+class AutocompleteHintInput(TextInput):
+    min_chars = NumericProperty(3)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self.dropdown = DropDown()
+        self.dropdown.bind(on_select=lambda instance, x: setattr(self, 'text', x))
+        self.bind(on_text_validate=self.on_message)
+
+    def on_message(self, instance):
+        App.get_running_app().commandprocessor("!hint "+instance.text)
+
+    def on_text(self, instance, value):
+        if len(value) >= self.min_chars:
+            self.dropdown.clear_widgets()
+            ctx: context_type = App.get_running_app().ctx
+            if not ctx.game:
+                return
+            item_names = ctx.item_names._game_store[ctx.game].values()
+
+            def on_press(button: Button):
+                split_text = MarkupLabel(text=button.text).markup
+                return self.dropdown.select("".join(text_frag for text_frag in split_text
+                                                    if not text_frag.startswith("[")))
+            lowered = value.lower()
+            for item_name in item_names:
+                try:
+                    index = item_name.lower().index(lowered)
+                except ValueError:
+                    pass  # substring not found
+                else:
+                    text = escape_markup(item_name)
+                    text = text[:index] + "[b]" + text[index:index+len(value)]+"[/b]"+text[index+len(value):]
+                    btn = Button(text=text, size_hint_y=None, height=dp(30), markup=True)
+                    btn.bind(on_release=on_press)
+                    self.dropdown.add_widget(btn)
+            if not self.dropdown.attach_to:
+                self.dropdown.open(self)
+        else:
+            self.dropdown.dismiss()
+
 
 class HintLabel(RecycleDataViewBehavior, BoxLayout):
     selected = BooleanProperty(False)
@@ -570,8 +615,10 @@ class GameManager(App):
                 # show Archipelago tab if other logging is present
                 self.tabs.add_widget(panel)
 
-        hint_panel = self.add_client_tab("Hints", HintLog(self.json_to_kivy_parser))
+        hint_panel = self.add_client_tab("Hints", HintLayout())
+        self.hint_log = HintLog(self.json_to_kivy_parser)
         self.log_panels["Hints"] = hint_panel.content
+        hint_panel.content.add_widget(self.hint_log)
 
         if len(self.logging_pairs) == 1:
             self.tabs.default_tab_text = "Archipelago"
@@ -698,7 +745,7 @@ class GameManager(App):
 
     def update_hints(self):
         hints = self.ctx.stored_data.get(f"_read_hints_{self.ctx.team}_{self.ctx.slot}", [])
-        self.log_panels["Hints"].refresh_hints(hints)
+        self.hint_log.refresh_hints(hints)
 
     # default F1 keybind, opens a settings menu, that seems to break the layout engine once closed
     def open_settings(self, *largs):
@@ -753,6 +800,17 @@ class UILog(RecycleView):
                 element.height = element.texture_size[1]
 
 
+class HintLayout(BoxLayout):
+    orientation = "vertical"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        boxlayout = BoxLayout(orientation="horizontal", size_hint_y=None, height=dp(30))
+        boxlayout.add_widget(Label(text="New Hint:", size_hint_x=None, size_hint_y=None, height=dp(30)))
+        boxlayout.add_widget(AutocompleteHintInput())
+        self.add_widget(boxlayout)
+
+        
 status_names: typing.Dict[HintStatus, str] = {
     HintStatus.HINT_FOUND: "Found",
     HintStatus.HINT_UNSPECIFIED: "Unspecified",
@@ -767,6 +825,7 @@ status_colors: typing.Dict[HintStatus, str] = {
     HintStatus.HINT_AVOID: "salmon",
     HintStatus.HINT_PRIORITY: "plum",
 }
+
 
 
 class HintLog(RecycleView):

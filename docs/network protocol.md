@@ -540,7 +540,7 @@ In JSON this may look like:
 | ----- | ----- |
 | 0 | Nothing special about this item |
 | 0b001 | If set, indicates the item can unlock logical advancement |
-| 0b010 | If set, indicates the item is important but not in a way that unlocks advancement |
+| 0b010 | If set, indicates the item is especially useful |
 | 0b100 | If set, indicates the item is a trap |
 
 ### JSONMessagePart
