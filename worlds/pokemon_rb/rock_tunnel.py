@@ -186,7 +186,9 @@ def randomize_rock_tunnel(data, random):
         r = random.choice([1, 3])
         floor(12, r)
         floor(12, r + 1)
-
+        if current_map[4][12] + current_map[5][12] == 2:
+            # (12,4) and (12,5) are floor
+            wide(11,4)
     elif c == 2:
         r = random.randint(0, 6)
         if r == 0:
