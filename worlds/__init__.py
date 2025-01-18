@@ -177,6 +177,7 @@ if apworlds:
             else:
                 apworld_source.load()
     load_apworlds()
+    del load_apworlds
 
 del apworlds
 
