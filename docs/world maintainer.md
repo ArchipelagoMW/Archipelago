@@ -26,8 +26,17 @@ Unless these are shared between multiple people, we expect the following from ea
 ### Adding a World
 
 When we merge your world into the core Archipelago repository, you automatically become world maintainer unless you
-nominate someone else (i.e. there are multiple devs). You can define who is allowed to approve changes to your world
-in the [CODEOWNERS](/docs/CODEOWNERS) document.
+nominate someone else (i.e. there are multiple devs).
+
+### Being added as a maintainer to an existing implementation
+
+At any point, a world maintainer can approve the addition of another maintainer to their world.  
+In order to do this, either an existing maintainer or the new maintainer must open a PR updating the
+[CODEOWNERS](/docs/CODEOWNERS) file.  
+This change must be approved by all existing maintainers of the affected world, the new maintainer candidate, and
+one core maintainer.  
+To help the core team review the change, information about the new maintainer and their contributions should be
+included in the PR description.
 
 ### Getting Voted
 
@@ -35,7 +44,7 @@ When a world is unmaintained, the [core maintainers](https://github.com/orgs/Arc
 can vote for a new maintainer if there is a candidate.
 For a vote to pass, the majority of participating core maintainers must vote in the affirmative.
 The time limit is 1 week, but can end early if the majority is reached earlier.
-Voting shall be conducted on Discord in #archipelago-dev.
+Voting shall be conducted on Discord in #ap-core-dev.
 
 ## Dropping out
 
@@ -51,7 +60,7 @@ for example when they become unreachable.
 For a vote to pass, the majority of participating core maintainers must vote in the affirmative.
 The time limit is 2 weeks, but can end early if the majority is reached earlier AND the world maintainer was pinged and
 made their case or was pinged and has been unreachable for more than 2 weeks already.
-Voting shall be conducted on Discord in #archipelago-dev. Commits that are a direct result of the voting shall include
+Voting shall be conducted on Discord in #ap-core-dev. Commits that are a direct result of the voting shall include
 date, voting members and final result in the commit message.
 
 ## Handling of Unmaintained Worlds

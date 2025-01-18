@@ -105,8 +105,8 @@ function on_player_changed_position(event)
     end
     local target_direction = exit_table[outbound_direction]
 
-	local target_position = {(CHUNK_OFFSET[target_direction][1] + last_x_chunk) * 32 + 16,
-							 (CHUNK_OFFSET[target_direction][2] + last_y_chunk) * 32 + 16}
+    local target_position = {(CHUNK_OFFSET[target_direction][1] + last_x_chunk) * 32 + 16,
+                             (CHUNK_OFFSET[target_direction][2] + last_y_chunk) * 32 + 16}
     target_position = character.surface.find_non_colliding_position(character.prototype.name,
                                                                     target_position, 32, 0.5)
     if target_position ~= nil then
@@ -134,40 +134,96 @@ end
 
 script.on_event(defines.events.on_player_changed_position, on_player_changed_position)
 {% endif %}
-
+function count_energy_bridges()
+    local count = 0
+    for i, bridge in pairs(storage.energy_link_bridges) do
+        if validate_energy_link_bridge(i, bridge) then
+            count = count + 1 + (bridge.quality.level * 0.3)
+        end
+    end
+    return count
+end
+function get_energy_increment(bridge)
+    return ENERGY_INCREMENT + (ENERGY_INCREMENT * 0.3 * bridge.quality.level)
+end
 function on_check_energy_link(event)
     --- assuming 1 MJ increment and 5MJ battery:
     --- first 2 MJ request fill, last 2 MJ push energy, middle 1 MJ does nothing
     if event.tick % 60 == 30 then
-        local surface = game.get_surface(1)
         local force = "player"
-        local bridges = surface.find_entities_filtered({name="ap-energy-bridge", force=force})
-        local bridgecount = table_size(bridges)
-        global.forcedata[force].energy_bridges = bridgecount
-        if global.forcedata[force].energy == nil then
-            global.forcedata[force].energy = 0
+        local bridges = storage.energy_link_bridges
+        local bridgecount = count_energy_bridges()
+        storage.forcedata[force].energy_bridges = bridgecount
+        if storage.forcedata[force].energy == nil then
+            storage.forcedata[force].energy = 0
         end
-        if global.forcedata[force].energy < ENERGY_INCREMENT * bridgecount * 5 then
-            for i, bridge in ipairs(bridges) do
-                if bridge.energy > ENERGY_INCREMENT*3 then
-                    global.forcedata[force].energy = global.forcedata[force].energy + (ENERGY_INCREMENT * ENERGY_LINK_EFFICIENCY)
-                    bridge.energy = bridge.energy - ENERGY_INCREMENT
+        if storage.forcedata[force].energy < ENERGY_INCREMENT * bridgecount * 5 then
+            for i, bridge in pairs(bridges) do
+                if validate_energy_link_bridge(i, bridge) then
+                    energy_increment = get_energy_increment(bridge)
+                    if bridge.energy > energy_increment*3 then
+                        storage.forcedata[force].energy = storage.forcedata[force].energy + (energy_increment * ENERGY_LINK_EFFICIENCY)
+                        bridge.energy = bridge.energy - energy_increment
+                    end
                 end
             end
         end
-        for i, bridge in ipairs(bridges) do
-            if global.forcedata[force].energy < ENERGY_INCREMENT then
-                break
-            end
-            if bridge.energy < ENERGY_INCREMENT*2 and global.forcedata[force].energy > ENERGY_INCREMENT then
-                global.forcedata[force].energy = global.forcedata[force].energy - ENERGY_INCREMENT
-                bridge.energy = bridge.energy + ENERGY_INCREMENT
+        for i, bridge in pairs(bridges) do
+            if validate_energy_link_bridge(i, bridge) then
+                energy_increment = get_energy_increment(bridge)
+                if storage.forcedata[force].energy < energy_increment and bridge.quality.level == 0 then
+                    break
+                end
+                if bridge.energy < energy_increment*2 and storage.forcedata[force].energy > energy_increment then
+                    storage.forcedata[force].energy = storage.forcedata[force].energy - energy_increment
+                    bridge.energy = bridge.energy + energy_increment
+                end
             end
         end
     end
 end
+function string_starts_with(str, start)
+    return str:sub(1, #start) == start
+end
+function validate_energy_link_bridge(unit_number, entity)
+    if not entity then
+        if storage.energy_link_bridges[unit_number] == nil then return false end
+        storage.energy_link_bridges[unit_number] = nil
+        return false
+    end
+    if not entity.valid then
+        if storage.energy_link_bridges[unit_number] == nil then return false end
+        storage.energy_link_bridges[unit_number] = nil
+        return false
+    end
+    return true
+end
+function on_energy_bridge_constructed(entity)
+    if entity and entity.valid then
+        if string_starts_with(entity.prototype.name, "ap-energy-bridge") then
+            storage.energy_link_bridges[entity.unit_number] = entity
+        end
+    end
+end
+function on_energy_bridge_removed(entity)
+    if string_starts_with(entity.prototype.name, "ap-energy-bridge") then
+        if storage.energy_link_bridges[entity.unit_number] == nil then return end
+        storage.energy_link_bridges[entity.unit_number] = nil
+    end
+end
 if (ENERGY_INCREMENT) then
     script.on_event(defines.events.on_tick, on_check_energy_link)
+
+    script.on_event({defines.events.on_built_entity}, function(event) on_energy_bridge_constructed(event.entity) end)
+    script.on_event({defines.events.on_robot_built_entity}, function(event) on_energy_bridge_constructed(event.entity) end)
+    script.on_event({defines.events.on_entity_cloned}, function(event) on_energy_bridge_constructed(event.destination) end)
+
+    script.on_event({defines.events.script_raised_revive}, function(event) on_energy_bridge_constructed(event.entity) end)
+    script.on_event({defines.events.script_raised_built}, function(event) on_energy_bridge_constructed(event.entity) end)
+
+    script.on_event({defines.events.on_entity_died}, function(event) on_energy_bridge_removed(event.entity) end)
+    script.on_event({defines.events.on_player_mined_entity}, function(event) on_energy_bridge_removed(event.entity) end)
+    script.on_event({defines.events.on_robot_mined_entity}, function(event) on_energy_bridge_removed(event.entity) end)
 end
 
 {% if not imported_blueprints -%}
@@ -186,23 +242,41 @@ function check_spawn_silo(force)
         local surface = game.get_surface(1)
         local spawn_position = force.get_spawn_position(surface)
         spawn_entity(surface, force, "rocket-silo", spawn_position.x, spawn_position.y, 80, true, true)
+        spawn_entity(surface, force, "cargo-landing-pad", spawn_position.x, spawn_position.y, 80, true, true)
     end
 end
 
 function check_despawn_silo(force)
-    if not force.players or #force.players < 1 and force.get_entity_count("rocket-silo") > 0 then
-        local surface = game.get_surface(1)
-        local spawn_position = force.get_spawn_position(surface)
-        local x1 = spawn_position.x - 41
-        local x2 = spawn_position.x + 41
-        local y1 = spawn_position.y - 41
-        local y2 = spawn_position.y + 41
-        local silos = surface.find_entities_filtered{area = { {x1, y1}, {x2, y2} },
-                                                     name = "rocket-silo",
-                                                     force = force}
-        for i,silo in ipairs(silos) do
-            silo.destructible = true
-            silo.destroy()
+    if not force.players or #force.players < 1 then
+        if force.get_entity_count("rocket-silo") > 0 then
+            local surface = game.get_surface(1)
+            local spawn_position = force.get_spawn_position(surface)
+            local x1 = spawn_position.x - 41
+            local x2 = spawn_position.x + 41
+            local y1 = spawn_position.y - 41
+            local y2 = spawn_position.y + 41
+            local silos = surface.find_entities_filtered{area = { {x1, y1}, {x2, y2} },
+                                                         name = "rocket-silo",
+                                                         force = force}
+            for i, silo in ipairs(silos) do
+                silo.destructible = true
+                silo.destroy()
+            end
+        end
+        if force.get_entity_count("cargo-landing-pad") > 0 then
+            local surface = game.get_surface(1)
+            local spawn_position = force.get_spawn_position(surface)
+            local x1 = spawn_position.x - 41
+            local x2 = spawn_position.x + 41
+            local y1 = spawn_position.y - 41
+            local y2 = spawn_position.y + 41
+            local pads = surface.find_entities_filtered{area = { {x1, y1}, {x2, y2} },
+                                                        name = "cargo-landing-pad",
+                                                        force = force}
+            for i, pad in ipairs(pads) do
+                pad.destructible = true
+                pad.destroy()
+            end
         end
     end
 end
@@ -214,19 +288,18 @@ function on_force_created(event)
     if type(event.force) == "string" then  -- should be of type LuaForce
         force = game.forces[force]
     end
-    force.research_queue_enabled = true
     local data = {}
     data['earned_samples'] = {{ dict_to_lua(starting_items) }}
     data["victory"] = 0
     data["death_link_tick"] = 0
     data["energy"] = 0
     data["energy_bridges"] = 0
-    global.forcedata[event.force] = data
+    storage.forcedata[event.force] = data
 {%- if silo == 2 %}
     check_spawn_silo(force)
 {%- endif %}
-{%- for tech_name in useless_technologies %}
-    force.technologies.{{ tech_name }}.researched = true
+{%- for tech_name in removed_technologies %}
+    force.technologies["{{ tech_name }}"].researched = true
 {%- endfor %}
 end
 script.on_event(defines.events.on_force_created, on_force_created)
@@ -236,7 +309,7 @@ function on_force_destroyed(event)
 {%- if silo == 2 %}
     check_despawn_silo(event.force)
 {%- endif %}
-    global.forcedata[event.force.name] = nil
+    storage.forcedata[event.force.name] = nil
 end
 
 function on_runtime_mod_setting_changed(event)
@@ -267,8 +340,8 @@ function on_player_created(event)
     -- FIXME: This (probably) fires before any other mod has a chance to change the player's force
     -- For now, they will (probably) always be on the 'player' force when this event fires.
     local data = {}
-    data['pending_samples'] = table.deepcopy(global.forcedata[player.force.name]['earned_samples'])
-    global.playerdata[player.index] = data
+    data['pending_samples'] = table.deepcopy(storage.forcedata[player.force.name]['earned_samples'])
+    storage.playerdata[player.index] = data
     update_player(player.index)  -- Attempt to send pending free samples, if relevant.
 {%- if silo == 2 %}
     check_spawn_silo(game.players[event.player_index].force)
@@ -287,14 +360,19 @@ end
 script.on_event(defines.events.on_player_changed_force, on_player_changed_force)
 
 function on_player_removed(event)
-    global.playerdata[event.player_index] = nil
+    storage.playerdata[event.player_index] = nil
 end
 script.on_event(defines.events.on_player_removed, on_player_removed)
 
 function on_rocket_launched(event)
-    if event.rocket and event.rocket.valid and global.forcedata[event.rocket.force.name]['victory'] == 0 then
-        if event.rocket.get_item_count("satellite") > 0 or GOAL == 0 then
-            global.forcedata[event.rocket.force.name]['victory'] = 1
+    if event.rocket and event.rocket.valid and storage.forcedata[event.rocket.force.name]['victory'] == 0 then
+        satellite_count = 0
+        cargo_pod = event.rocket.cargo_pod
+        if cargo_pod then
+            satellite_count = cargo_pod.get_item_count("satellite")
+        end
+        if satellite_count > 0 or GOAL == 0 then
+            storage.forcedata[event.rocket.force.name]['victory'] = 1
             dumpInfo(event.rocket.force)
             game.set_game_state
             {
@@ -318,7 +396,7 @@ function update_player(index)
     if not character or not character.valid then
         return
     end
-    local data = global.playerdata[index]
+    local data = storage.playerdata[index]
     local samples = data['pending_samples']
     local sent
     --player.print(serpent.block(data['pending_samples']))
@@ -327,14 +405,17 @@ function update_player(index)
     for name, count in pairs(samples) do
         stack.name = name
         stack.count = count
-        if game.item_prototypes[name] then
+        if script.active_mods["quality"] then
+            stack.quality = "{{ free_sample_quality_name }}"
+        end
+        if prototypes.item[name] then
             if character.can_insert(stack) then
                 sent = character.insert(stack)
             else
                 sent = 0
             end
             if sent > 0 then
-                player.print("Received " .. sent .. "x [item=" .. name .. "]")
+                player.print("Received " .. sent .. "x [item=" .. name .. ",quality={{ free_sample_quality_name }}]")
                 data.suppress_full_inventory_message = false
             end
             if sent ~= count then               -- Couldn't full send.
@@ -364,6 +445,10 @@ end
 
 script.on_event(defines.events.on_player_main_inventory_changed, update_player_event)
 
+-- Update players when the cutscene is cancelled or finished.  (needed for skins_factored)
+script.on_event(defines.events.on_cutscene_cancelled, update_player_event)
+script.on_event(defines.events.on_cutscene_finished, update_player_event)
+
 function add_samples(force, name, count)
     local function add_to_table(t)
         if count <= 0 then
@@ -372,19 +457,20 @@ function add_samples(force, name, count)
         end
         t[name] = (t[name] or 0) + count
     end
-    -- Add to global table of earned samples for future new players
-    add_to_table(global.forcedata[force.name]['earned_samples'])
+    -- Add to storage table of earned samples for future new players
+    add_to_table(storage.forcedata[force.name]['earned_samples'])
     -- Add to existing players
     for _, player in pairs(force.players) do
-        add_to_table(global.playerdata[player.index]['pending_samples'])
+        add_to_table(storage.playerdata[player.index]['pending_samples'])
         update_player(player.index)
     end
 end
 
 script.on_init(function()
     {% if not imported_blueprints %}set_permissions(){% endif %}
-    global.forcedata = {}
-    global.playerdata = {}
+    storage.forcedata = {}
+    storage.playerdata = {}
+    storage.energy_link_bridges = {}
     -- Fire dummy events for all currently existing forces.
     local e = {}
     for name, _ in pairs(game.forces) do
@@ -420,12 +506,12 @@ script.on_event(defines.events.on_research_finished, function(event)
         if FREE_SAMPLES == 0 then
             return  -- Nothing else to do
         end
-        if not technology.effects then
+        if not technology.prototype.effects then
             return  -- No technology effects, so nothing to do.
         end
-        for _, effect in pairs(technology.effects) do
+        for _, effect in pairs(technology.prototype.effects) do
             if effect.type == "unlock-recipe" then
-                local recipe = game.recipe_prototypes[effect.recipe]
+                local recipe = prototypes.recipe[effect.recipe]
                 for _, result in pairs(recipe.products) do
                     if result.type == "item" and result.amount then
                         local name = result.name
@@ -477,7 +563,7 @@ function kill_players(force)
 end
 
 function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
-    local prototype = game.entity_prototypes[name]
+    local prototype = prototypes.entity[name]
     local args = {  -- For can_place_entity and place_entity
         name = prototype.name,
         position = {x = x, y = y},
@@ -537,7 +623,7 @@ function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
             }
             local entities = surface.find_entities_filtered {
                 area = collision_area,
-                collision_mask = prototype.collision_mask
+                collision_mask = prototype.collision_mask.layers
             }
             local can_place = true
             for _, entity in pairs(entities) do
@@ -560,6 +646,9 @@ function spawn_entity(surface, force, name, x, y, radius, randomize, avoid_ores)
                 end
                 args.build_check_type = defines.build_check_type.script
                 args.create_build_effect_smoke = false
+                if script.active_mods["quality"] then
+                    args.quality = "{{ free_sample_quality_name }}"
+                end
                 new_entity = surface.create_entity(args)
                 if new_entity then
                     new_entity.destructible = false
@@ -585,7 +674,7 @@ script.on_event(defines.events.on_entity_died, function(event)
     end
 
     local force = event.entity.force
-    global.forcedata[force.name].death_link_tick = game.tick
+    storage.forcedata[force.name].death_link_tick = game.tick
     dumpInfo(force)
     kill_players(force)
 end, {LuaEntityDiedEventFilter = {["filter"] = "name", ["name"] = "character"}})
@@ -600,7 +689,7 @@ commands.add_command("ap-sync", "Used by the Archipelago client to get progress 
         force = game.players[call.player_index].force
     end
     local research_done = {}
-    local forcedata = chain_lookup(global, "forcedata", force.name)
+    local forcedata = chain_lookup(storage, "forcedata", force.name)
     local data_collection = {
         ["research_done"] = research_done,
         ["victory"] = chain_lookup(forcedata, "victory"),
@@ -616,7 +705,7 @@ commands.add_command("ap-sync", "Used by the Archipelago client to get progress 
             research_done[tech_name] = tech.researched
         end
     end
-    rcon.print(game.table_to_json({["slot_name"] = SLOT_NAME, ["seed_name"] = SEED_NAME, ["info"] = data_collection}))
+    rcon.print(helpers.table_to_json({["slot_name"] = SLOT_NAME, ["seed_name"] = SEED_NAME, ["info"] = data_collection}))
 end)
 
 commands.add_command("ap-print", "Used by the Archipelago client to print messages", function (call)
@@ -628,8 +717,10 @@ TRAP_TABLE = {
     game.surfaces["nauvis"].build_enemy_base(game.forces["player"].get_spawn_position(game.get_surface(1)), 25)
 end,
 ["Evolution Trap"] = function ()
-    game.forces["enemy"].evolution_factor = game.forces["enemy"].evolution_factor + (TRAP_EVO_FACTOR * (1 - game.forces["enemy"].evolution_factor))
-    game.print({"", "New evolution factor:", game.forces["enemy"].evolution_factor})
+    local new_factor = game.forces["enemy"].get_evolution_factor("nauvis") +
+        (TRAP_EVO_FACTOR * (1 - game.forces["enemy"].get_evolution_factor("nauvis")))
+    game.forces["enemy"].set_evolution_factor(new_factor, "nauvis")
+    game.print({"", "New evolution factor:", new_factor})
 end,
 ["Teleport Trap"] = function ()
     for _, player in ipairs(game.forces["player"].players) do
@@ -652,19 +743,33 @@ end,
 ["Atomic Rocket Trap"] = function ()
     fire_entity_at_players("atomic-rocket", 0.1)
 end,
+["Atomic Cliff Remover Trap"] = function ()
+    local cliffs = game.surfaces["nauvis"].find_entities_filtered{type = "cliff"}
+
+    if #cliffs > 0 then
+        fire_entity_at_entities("atomic-rocket", {cliffs[math.random(#cliffs)]}, 0.1)
+    end
+end,
 }
 
 commands.add_command("ap-get-technology", "Grant a technology, used by the Archipelago Client.", function(call)
-    if global.index_sync == nil then
-        global.index_sync = {}
+    if storage.index_sync == nil then
+        storage.index_sync = {}
     end
     local tech
     local force = game.forces["player"]
+    if call.parameter == nil then
+        game.print("ap-get-technology is only to be used by the Archipelago Factorio Client")
+        return
+    end
     chunks = split(call.parameter, "\t")
     local item_name = chunks[1]
     local index = chunks[2]
     local source = chunks[3] or "Archipelago"
-    if index == -1 then -- for coop sync and restoring from an older savegame
+    if index == nil then
+        game.print("ap-get-technology is only to be used by the Archipelago Factorio Client")
+        return
+    elseif index == -1 then -- for coop sync and restoring from an older savegame
         tech = force.technologies[item_name]
         if tech.researched ~= true then
             game.print({"", "Received [technology=" .. tech.name .. "] as it is already checked."})
@@ -673,8 +778,8 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
         end
         return
     elseif progressive_technologies[item_name] ~= nil then
-        if global.index_sync[index] ~= item_name then -- not yet received prog item
-            global.index_sync[index] = item_name
+        if storage.index_sync[index] ~= item_name then -- not yet received prog item
+            storage.index_sync[index] = item_name
             local tech_stack = progressive_technologies[item_name]
             for _, item_name in ipairs(tech_stack) do
                 tech = force.technologies[item_name]
@@ -689,7 +794,7 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
     elseif force.technologies[item_name] ~= nil then
         tech = force.technologies[item_name]
         if tech ~= nil then
-            global.index_sync[index] = tech
+            storage.index_sync[index] = tech
             if tech.researched ~= true then
                 game.print({"", "Received [technology=" .. tech.name .. "] from ", source})
                 game.play_sound({path="utility/research_completed"})
@@ -697,8 +802,8 @@ commands.add_command("ap-get-technology", "Grant a technology, used by the Archi
             end
         end
     elseif TRAP_TABLE[item_name] ~= nil then
-        if global.index_sync[index] ~= item_name then -- not yet received trap
-            global.index_sync[index] = item_name
+        if storage.index_sync[index] ~= item_name then -- not yet received trap
+            storage.index_sync[index] = item_name
             game.print({"", "Received ", item_name, " from ", source})
             TRAP_TABLE[item_name]()
         end
@@ -709,7 +814,7 @@ end)
 
 
 commands.add_command("ap-rcon-info", "Used by the Archipelago client to get information", function(call)
-    rcon.print(game.table_to_json({
+    rcon.print(helpers.table_to_json({
         ["slot_name"] = SLOT_NAME,
         ["seed_name"] = SEED_NAME,
         ["death_link"] = DEATH_LINK,
@@ -719,7 +824,7 @@ end)
 
 
 {% if allow_cheats -%}
-commands.add_command("ap-spawn-silo", "Attempts to spawn a silo around 0,0", function(call)
+commands.add_command("ap-spawn-silo", "Attempts to spawn a silo and cargo landing pad around 0,0", function(call)
     spawn_entity(game.player.surface, game.player.force, "rocket-silo", 0, 0, 80, true, true)
 end)
 {% endif -%}
@@ -735,7 +840,7 @@ end)
 commands.add_command("ap-energylink", "Used by the Archipelago client to manage Energy Link", function(call)
     local change = tonumber(call.parameter or "0")
     local force = "player"
-    global.forcedata[force].energy = global.forcedata[force].energy + change
+    storage.forcedata[force].energy = storage.forcedata[force].energy + change
 end)
 
 commands.add_command("energy-link", "Print the status of the Archipelago energy link.", function(call)

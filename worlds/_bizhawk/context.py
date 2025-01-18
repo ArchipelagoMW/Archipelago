@@ -59,14 +59,10 @@ class BizHawkClientContext(CommonContext):
         self.bizhawk_ctx = BizHawkContext()
         self.watcher_timeout = 0.5
 
-    def run_gui(self):
-        from kvui import GameManager
-
-        class BizHawkManager(GameManager):
-            base_title = "Archipelago BizHawk Client"
-
-        self.ui = BizHawkManager(self)
-        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+    def make_gui(self):
+        ui = super().make_gui()
+        ui.base_title = "Archipelago BizHawk Client"
+        return ui
 
     def on_package(self, cmd, args):
         if cmd == "Connected":
@@ -235,19 +231,26 @@ async def _run_game(rom: str):
         )
 
 
-async def _patch_and_run_game(patch_file: str):
+def _patch_and_run_game(patch_file: str):
     try:
         metadata, output_file = Patch.create_rom_file(patch_file)
         Utils.async_start(_run_game(output_file))
+        return metadata
     except Exception as exc:
         logger.exception(exc)
+        return {}
 
 
-def launch() -> None:
+def launch(*launch_args: str) -> None:
     async def main():
         parser = get_base_parser()
         parser.add_argument("patch_file", default="", type=str, nargs="?", help="Path to an Archipelago patch file")
-        args = parser.parse_args()
+        args = parser.parse_args(launch_args)
+
+        if args.patch_file != "":
+            metadata = _patch_and_run_game(args.patch_file)
+            if "server" in metadata:
+                args.connect = metadata["server"]
 
         ctx = BizHawkClientContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
@@ -255,9 +258,6 @@ def launch() -> None:
         if gui_enabled:
             ctx.run_gui()
         ctx.run_cli()
-
-        if args.patch_file != "":
-            Utils.async_start(_patch_and_run_game(args.patch_file))
 
         watcher_task = asyncio.create_task(_game_watcher(ctx), name="GameWatcher")
 

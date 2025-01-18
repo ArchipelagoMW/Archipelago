@@ -53,8 +53,10 @@ You can also use the Universal Tracker (by Faris and qwint) to find a complete l
 ## What should I know regarding logic?
 In general:
 - Nighttime is not considered in logic. Every check in the game is obtainable during the day.
+- Bushes are not considered in logic. It is assumed that the player will find a way past them, whether it is with a sword, a bomb, fire, luring an enemy, etc. There is also an option in the in-game randomizer settings menu to clear some of the early bushes.
 - The Cathedral is accessible during the day by using the Hero's Laurels to reach the Overworld fuse near the Swamp entrance.
 - The Secret Legend chest at the Cathedral can be obtained during the day by opening the Holy Cross door from the outside.
+- For the Ice Grappling, Ladder Storage, and Laurels Zips options, there is [this document](https://docs.google.com/document/d/1SFZBfsqZWH1_EAV9zyZobvrBcvCd3_54JP3iVnJ8rUg/edit?usp=sharing) that shows the individual applications of these tricks in logic.
 
 For the Entrance Randomizer:
 - Activating a fuse to turn on a yellow teleporter pad also activates its counterpart in the Far Shore.
@@ -81,8 +83,11 @@ Notes:
 - The Entrance Randomizer option must be enabled for it to work.
 - The `direction` field is not supported. Connections are always coupled.
 - For a list of entrance names, check `er_data.py` in the TUNIC world folder or generate a game with the Entrance Randomizer option enabled and check the spoiler log.
-- There is no limit to the number of Shops hard-coded into place.
-- If you have more than one shop in a scene, you may be wrong warped when exiting a shop.
-- If you have a shop in every scene, and you have an odd number of shops, it will error out.
+- There is no limit to the number of Shops you can plando.
 
 See the [Archipelago Plando Guide](../../../tutorial/Archipelago/plando/en) for more information on Plando and Connection Plando.
+
+## Is there anything else I should know?
+You can go to [The TUNIC Randomizer Website](https://rando.tunic.run/) for a list of randomizer features as well as some helpful tips.
+You can use the Fairy Seeking Spell (ULU RDR) to locate the nearest unchecked location.
+You can use the Entrance Seeking Spell (RDR ULU) to locate the nearest unused entrance.

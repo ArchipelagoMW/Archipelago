@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import logging
 import os
 import random
 import string
+import sys
 import urllib.parse
 import urllib.request
 from collections import Counter
@@ -15,21 +17,16 @@ import ModuleUpdate
 
 ModuleUpdate.update()
 
-import copy
 import Utils
 import Options
 from BaseClasses import seeddigits, get_seed, PlandoOptions
-from Main import main as ERmain
-from settings import get_settings
 from Utils import parse_yamls, version_tuple, __version__, tuplize_version
-from worlds.alttp.EntranceRandomizer import parse_arguments
-from worlds.AutoWorld import AutoWorldRegister
-from worlds import failed_world_loads
 
 
 def mystery_argparse():
-    options = get_settings()
-    defaults = options.generator
+    from settings import get_settings
+    settings = get_settings()
+    defaults = settings.generator
 
     parser = argparse.ArgumentParser(description="CMD Generation Interface, defaults come from host.yaml.")
     parser.add_argument('--weights_file_path', default=defaults.weights_file_path,
@@ -41,15 +38,15 @@ def mystery_argparse():
     parser.add_argument('--seed', help='Define seed number to generate.', type=int)
     parser.add_argument('--multi', default=defaults.players, type=lambda value: max(int(value), 1))
     parser.add_argument('--spoiler', type=int, default=defaults.spoiler)
-    parser.add_argument('--outputpath', default=options.general_options.output_path,
+    parser.add_argument('--outputpath', default=settings.general_options.output_path,
                         help="Path to output folder. Absolute or relative to cwd.")  # absolute or relative to cwd
     parser.add_argument('--race', action='store_true', default=defaults.race)
     parser.add_argument('--meta_file_path', default=defaults.meta_file_path)
     parser.add_argument('--log_level', default='info', help='Sets log level')
-    parser.add_argument('--yaml_output', default=0, type=lambda value: max(int(value), 0),
-                        help='Output rolled mystery results to yaml up to specified number (made for async multiworld)')
-    parser.add_argument('--plando', default=defaults.plando_options,
-                        help='List of options that can be set manually. Can be combined, for example "bosses, items"')
+    parser.add_argument("--csv_output", action="store_true",
+                        help="Output rolled player options to csv (made for async multiworld).")
+    parser.add_argument("--plando", default=defaults.plando_options,
+                        help="List of options that can be set manually. Can be combined, for example \"bosses, items\"")
     parser.add_argument("--skip_prog_balancing", action="store_true",
                         help="Skip progression balancing step during generation.")
     parser.add_argument("--skip_output", action="store_true",
@@ -61,20 +58,23 @@ def mystery_argparse():
     if not os.path.isabs(args.meta_file_path):
         args.meta_file_path = os.path.join(args.player_files_path, args.meta_file_path)
     args.plando: PlandoOptions = PlandoOptions.from_option_string(args.plando)
-    return args, options
+    return args
 
 
 def get_seed_name(random_source) -> str:
     return f"{random_source.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
 
 
-def main(args=None, callback=ERmain):
+def main(args=None) -> Tuple[argparse.Namespace, int]:
+    # __name__ == "__main__" check so unittests that already imported worlds don't trip this.
+    if __name__ == "__main__" and "worlds" in sys.modules:
+        raise Exception("Worlds system should not be loaded before logging init.")
+
     if not args:
-        args, options = mystery_argparse()
-    else:
-        options = get_settings()
+        args = mystery_argparse()
 
     seed = get_seed(args.seed)
+
     Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
     random.seed(seed)
     seed_name = get_seed_name(random)
@@ -110,11 +110,18 @@ def main(args=None, callback=ERmain):
     player_files = {}
     for file in os.scandir(args.player_files_path):
         fname = file.name
-        if file.is_file() and not fname.startswith(".") and \
+        if file.is_file() and not fname.startswith(".") and not fname.lower().endswith(".ini") and \
                 os.path.join(args.player_files_path, fname) not in {args.meta_file_path, args.weights_file_path}:
             path = os.path.join(args.player_files_path, fname)
             try:
-                weights_cache[fname] = read_weights_yamls(path)
+                weights_for_file = []
+                for doc_idx, yaml in enumerate(read_weights_yamls(path)):
+                    if yaml is None:
+                        logging.warning(f"Ignoring empty yaml document #{doc_idx + 1} in {fname}")
+                    else:
+                        weights_for_file.append(yaml)
+                weights_cache[fname] = tuple(weights_for_file)
+                        
             except Exception as e:
                 raise ValueError(f"File {fname} is invalid. Please fix your yaml.") from e
 
@@ -143,6 +150,9 @@ def main(args=None, callback=ERmain):
         raise Exception(f"No weights found. "
                         f"Provide a general weights file ({args.weights_file_path}) or individual player files. "
                         f"A mix is also permitted.")
+
+    from worlds.AutoWorld import AutoWorldRegister
+    from worlds.alttp.EntranceRandomizer import parse_arguments
     erargs = parse_arguments(['--multi', str(args.multi)])
     erargs.seed = seed
     erargs.plando_options = args.plando
@@ -152,6 +162,8 @@ def main(args=None, callback=ERmain):
     erargs.outputpath = args.outputpath
     erargs.skip_prog_balancing = args.skip_prog_balancing
     erargs.skip_output = args.skip_output
+    erargs.name = {}
+    erargs.csv_output = args.csv_output
 
     settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
         {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.sameoptions else None)
@@ -199,7 +211,7 @@ def main(args=None, callback=ERmain):
 
                     if path == args.weights_file_path:  # if name came from the weights file, just use base player name
                         erargs.name[player] = f"Player{player}"
-                    elif not erargs.name[player]:  # if name was not specified, generate it from filename
+                    elif player not in erargs.name:  # if name was not specified, generate it from filename
                         erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
                     erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
 
@@ -212,29 +224,7 @@ def main(args=None, callback=ERmain):
     if len(set(name.lower() for name in erargs.name.values())) != len(erargs.name):
         raise Exception(f"Names have to be unique. Names: {Counter(name.lower() for name in erargs.name.values())}")
 
-    if args.yaml_output:
-        import yaml
-        important = {}
-        for option, player_settings in vars(erargs).items():
-            if type(player_settings) == dict:
-                if all(type(value) != list for value in player_settings.values()):
-                    if len(player_settings.values()) > 1:
-                        important[option] = {player: value for player, value in player_settings.items() if
-                                             player <= args.yaml_output}
-                    else:
-                        logging.debug(f"No player settings defined for option '{option}'")
-
-            else:
-                if player_settings != "":  # is not empty name
-                    important[option] = player_settings
-                else:
-                    logging.debug(f"No player settings defined for option '{option}'")
-        if args.outputpath:
-            os.makedirs(args.outputpath, exist_ok=True)
-        with open(os.path.join(args.outputpath if args.outputpath else ".", f"generate_{seed_name}.yaml"), "wt") as f:
-            yaml.dump(important, f)
-
-    return callback(erargs, seed)
+    return erargs, seed
 
 
 def read_weights_yamls(path) -> Tuple[Any, ...]:
@@ -359,6 +349,8 @@ def update_weights(weights: dict, new_weights: dict, update_type: str, name: str
 
 
 def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
+    from worlds import AutoWorldRegister
+
     if not game:
         return get_choice(option_key, category_dict)
     if game in AutoWorldRegister.world_types:
@@ -436,14 +428,17 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
     except Exception as e:
         raise Options.OptionError(f"Error generating option {option_key} in {ret.game}") from e
     else:
+        from worlds import AutoWorldRegister
         player_option.verify(AutoWorldRegister.world_types[ret.game], ret.name, plando_options)
 
 
 def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.bosses):
+    from worlds import AutoWorldRegister
+
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
 
-    valid_keys = set()
+    valid_keys = {"triggers"}
     if "triggers" in weights:
         weights = roll_triggers(weights, weights["triggers"], valid_keys)
 
@@ -465,7 +460,12 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
             raise Exception(f"Option {option_key} has to be in a game's section, not on its own.")
 
     ret.game = get_choice("game", weights)
+    if not isinstance(ret.game, str):
+        if ret.game is None:
+            raise Exception('"game" not specified')
+        raise Exception(f"Invalid game: {ret.game}")
     if ret.game not in AutoWorldRegister.world_types:
+        from worlds import failed_world_loads
         picks = Utils.get_fuzzy_results(ret.game, list(AutoWorldRegister.world_types) + failed_world_loads, limit=1)[0]
         if picks[0] in failed_world_loads:
             raise Exception(f"No functional world found to handle game {ret.game}. "
@@ -497,14 +497,22 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     for option_key, option in world_type.options_dataclass.type_hints.items():
         handle_option(ret, game_weights, option_key, option, plando_options)
         valid_keys.add(option_key)
-    for option_key in game_weights:
-        if option_key in {"triggers", *valid_keys}:
-            continue
-        logging.warning(f"{option_key} is not a valid option name for {ret.game} and is not present in triggers.")
+
+    # TODO remove plando_items after moving it to the options system
+    valid_keys.add("plando_items")
     if PlandoOptions.items in plando_options:
-        ret.plando_items = game_weights.get("plando_items", [])
+        ret.plando_items = copy.deepcopy(game_weights.get("plando_items", []))
     if ret.game == "A Link to the Past":
+        # TODO there are still more LTTP options not on the options system
+        valid_keys |= {"sprite_pool", "sprite", "random_sprite_on_event"}
         roll_alttp_settings(ret, game_weights)
+
+    # log a warning for options within a game section that aren't determined as valid
+    for option_key in game_weights:
+        if option_key in valid_keys:
+            continue
+        logging.warning(f"{option_key} is not a valid option name for {ret.game} and is not present in triggers "
+                        f"for player {ret.name}.")
 
     return ret
 
@@ -537,7 +545,9 @@ def roll_alttp_settings(ret: argparse.Namespace, weights):
 if __name__ == '__main__':
     import atexit
     confirmation = atexit.register(input, "Press enter to close.")
-    multiworld = main()
+    erargs, seed = main()
+    from Main import main as ERmain
+    multiworld = ERmain(erargs, seed)
     if __debug__:
         import gc
         import sys

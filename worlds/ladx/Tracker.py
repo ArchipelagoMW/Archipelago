@@ -1,4 +1,4 @@
-from worlds.ladx.LADXR.checkMetadata import checkMetadataTable
+from .LADXR.checkMetadata import checkMetadataTable
 import json
 import logging
 import websockets
@@ -149,6 +149,8 @@ class MagpieBridge:
     item_tracker = None
     ws = None
     features = []
+    slot_data = {}
+
     async def handler(self, websocket):
         self.ws = websocket
         while True:
@@ -163,6 +165,9 @@ class MagpieBridge:
                     await self.send_all_inventory()
                 if "checks" in self.features:
                     await self.send_all_checks()
+                if "slot_data" in self.features:
+                    await self.send_slot_data(self.slot_data)
+
     # Translate renamed IDs back to LADXR IDs
     @staticmethod
     def fixup_id(the_id):
@@ -222,6 +227,18 @@ class MagpieBridge:
             return
         await gps.send_location(self.ws)
 
+    async def send_slot_data(self, slot_data):
+        if not self.ws:
+            return
+
+        logger.debug("Sending slot_data to magpie.")
+        message = {
+            "type": "slot_data",
+            "slot_data": slot_data
+        }
+
+        await self.ws.send(json.dumps(message))
+
     async def serve(self):
         async with websockets.serve(lambda w: self.handler(w), "", 17026, logger=logger):
             await asyncio.Future()  # run forever
@@ -237,4 +254,3 @@ class MagpieBridge:
                 await self.send_all_inventory()
         else:
             await self.send_inventory_diffs()
-

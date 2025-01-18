@@ -10,8 +10,7 @@ from .region_logic import RegionLogicMixin
 from ..locations import LocationTags, locations_by_tag
 from ..options import ExcludeGingerIsland, Shipsanity
 from ..options import SpecialOrderLocations
-from ..stardew_rule import StardewRule, And
-from ..strings.ap_names.event_names import Event
+from ..stardew_rule import StardewRule
 from ..strings.building_names import Building
 
 
@@ -29,13 +28,13 @@ class ShippingLogic(BaseLogic[Union[ReceivedLogicMixin, ShippingLogicMixin, Buil
 
     @cache_self1
     def can_ship(self, item: str) -> StardewRule:
-        return self.logic.received(Event.can_ship_items) & self.logic.has(item)
+        return self.logic.shipping.can_use_shipping_bin & self.logic.has(item)
 
     def can_ship_everything(self) -> StardewRule:
         shipsanity_prefix = "Shipsanity: "
         all_items_to_ship = []
         exclude_island = self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
-        exclude_qi = self.options.special_order_locations != SpecialOrderLocations.option_board_qi
+        exclude_qi = not (self.options.special_order_locations & SpecialOrderLocations.value_qi)
         mod_list = self.options.mods.value
         for location in locations_by_tag[LocationTags.SHIPSANITY_FULL_SHIPMENT]:
             if exclude_island and LocationTags.GINGER_ISLAND in location.tags:
@@ -49,7 +48,7 @@ class ShippingLogic(BaseLogic[Union[ReceivedLogicMixin, ShippingLogicMixin, Buil
 
     def can_ship_everything_in_slot(self, all_location_names_in_slot: List[str]) -> StardewRule:
         if self.options.shipsanity == Shipsanity.option_none:
-            return self.can_ship_everything()
+            return self.logic.shipping.can_ship_everything()
 
         rules = [self.logic.building.has_building(Building.shipping_bin)]
 
@@ -57,4 +56,4 @@ class ShippingLogic(BaseLogic[Union[ReceivedLogicMixin, ShippingLogicMixin, Buil
             if shipsanity_location.name not in all_location_names_in_slot:
                 continue
             rules.append(self.logic.region.can_reach_location(shipsanity_location.name))
-        return And(*rules)
+        return self.logic.and_(*rules)

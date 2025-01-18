@@ -19,7 +19,7 @@
             {% for id, name in option.name_lookup.items() %}
                 {% if name != 'random' %}
                     {% if option.default != 'random' %}
-                        {{ RangeRow(option_name, option, option.get_option_name(id), name, False, name if option.get_option_name(option.default)|lower == name else None) }}
+                        {{ RangeRow(option_name, option, option.get_option_name(id), name, False, name if option.default == id else None) }}
                     {% else %}
                         {{ RangeRow(option_name, option, option.get_option_name(id), name) }}
                     {% endif %}
@@ -41,19 +41,19 @@
             The following values have special meanings, and may fall outside the normal range.
             <ul>
                 {% for name, value in option.special_range_names.items() %}
-                    <li>{{ value }}: {{ name }}</li>
+                    <li>{{ value }}: {{ name|replace("_", " ")|title }}</li>
                 {% endfor %}
             </ul>
         {% endif %}
         <div class="add-option-div">
             <input type="number" class="range-option-value" data-option="{{ option_name }}" />
-            <button class="add-range-option-button" data-option="{{ option_name }}">Add</button>
+            <button type="button" class="add-range-option-button" data-option="{{ option_name }}">Add</button>
         </div>
     </div>
     <table class="range-rows" data-option="{{ option_name }}">
         <tbody>
             {{ RangeRow(option_name, option, option.range_start, option.range_start, True) }}
-            {% if option.range_start < option.default < option.range_end %}
+            {% if option.default is number and option.range_start < option.default < option.range_end %}
                 {{ RangeRow(option_name, option, option.default, option.default, True) }}
             {% endif %}
             {{ RangeRow(option_name, option, option.range_end, option.range_end, True) }}
@@ -72,7 +72,7 @@
         This option allows custom values only. Please enter your desired values below.
         <div class="custom-value-wrapper">
             <input class="custom-value" data-option="{{ option_name }}" placeholder="Custom Value" />
-            <button data-option="{{ option_name }}">Add</button>
+            <button type="button" data-option="{{ option_name }}">Add</button>
         </div>
         <table>
             <tbody>
@@ -89,7 +89,7 @@
         Custom values are also allowed for this option. To create one, enter it into the input box below.
         <div class="custom-value-wrapper">
             <input class="custom-value" data-option="{{ option_name }}" placeholder="Custom Value" />
-            <button data-option="{{ option_name }}">Add</button>
+            <button type="button" data-option="{{ option_name }}">Add</button>
         </div>
     </div>
     <table>
@@ -97,7 +97,7 @@
             {% for id, name in option.name_lookup.items() %}
                 {% if name != 'random' %}
                     {% if option.default != 'random' %}
-                        {{ RangeRow(option_name, option, option.get_option_name(id), name, False, name if option.get_option_name(option.default)|lower == name else None) }}
+                        {{ RangeRow(option_name, option, option.get_option_name(id), name, False, name if option.default == id else None) }}
                     {% else %}
                         {{ RangeRow(option_name, option, option.get_option_name(id), name) }}
                     {% endif %}
@@ -138,7 +138,7 @@
                     id="{{ option_name }}-{{ key }}"
                     name="{{ option_name }}||{{ key }}"
                     value="1"
-                    checked="{{ "checked" if key in option.default else "" }}"
+                    {{ "checked" if key in option.default }}
                 />
                 <label for="{{ option_name }}-{{ key }}">
                     {{ key }}

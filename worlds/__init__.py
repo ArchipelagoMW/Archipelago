@@ -66,14 +66,12 @@ class WorldSource:
             start = time.perf_counter()
             if self.is_zip:
                 importer = zipimport.zipimporter(self.resolved_path)
-                if hasattr(importer, "find_spec"):  # new in Python 3.10
-                    spec = importer.find_spec(os.path.basename(self.path).rsplit(".", 1)[0])
-                    assert spec, f"{self.path} is not a loadable module"
-                    mod = importlib.util.module_from_spec(spec)
-                else:  # TODO: remove with 3.8 support
-                    mod = importer.load_module(os.path.basename(self.path).rsplit(".", 1)[0])
+                spec = importer.find_spec(os.path.basename(self.path).rsplit(".", 1)[0])
+                assert spec, f"{self.path} is not a loadable module"
+                mod = importlib.util.module_from_spec(spec)
 
                 mod.__package__ = f"worlds.{mod.__package__}"
+
                 mod.__name__ = f"worlds.{mod.__name__}"
                 sys.modules[mod.__name__] = mod
                 with warnings.catch_warnings():
@@ -128,3 +126,4 @@ from .AutoWorld import AutoWorldRegister
 network_data_package: DataPackage = {
     "games": {world_name: world.get_data_package_data() for world_name, world in AutoWorldRegister.world_types.items()},
 }
+

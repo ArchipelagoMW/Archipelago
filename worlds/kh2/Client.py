@@ -110,18 +110,26 @@ class KH2Context(CommonContext):
             18: TWTNW_Checks,
             #  255: {},  # starting screen
         }
+        self.last_world_int = -1
         # 0x2A09C00+0x40 is the sve anchor. +1 is the last saved room
         # self.sveroom = 0x2A09C00 + 0x41
         # 0 not in battle 1 in yellow battle 2 red battle #short
         # self.inBattle = 0x2A0EAC4 + 0x40
         # self.onDeath = 0xAB9078
         # PC Address anchors
-        self.Now = 0x0714DB8
-        self.Save = 0x09A70B0
+        # self.Now = 0x0714DB8 old address
+        # epic addresses
+        self.Now = 0x0716DF8
+        self.Save = 0x09A92F0
+        self.Journal = 0x743260
+        self.Shop = 0x743350
+        self.Slot1 = 0x2A22FD8
         # self.Sys3 = 0x2A59DF0
         # self.Bt10 = 0x2A74880
         # self.BtlEnd = 0x2A0D3E0
-        self.Slot1 = 0x2A20C98
+        # self.Slot1 = 0x2A20C98 old address
+
+        self.kh2_game_version = None  # can be egs or steam
 
         self.chest_set = set(exclusion_table["Chests"])
         self.keyblade_set = set(CheckDupingItems["Weapons"]["Keyblades"])
@@ -227,6 +235,9 @@ class KH2Context(CommonContext):
 
     def kh2_write_int(self, address, value):
         self.kh2.write_int(self.kh2.base_address + address, value)
+
+    def kh2_read_string(self, address, length):
+        return self.kh2.read_string(self.kh2.base_address + address, length)
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"RoomInfo"}:
@@ -335,42 +346,37 @@ class KH2Context(CommonContext):
             self.lookup_id_to_item = {v: k for k, v in self.kh2_item_name_to_id.items()}
             self.ability_code_list = [self.kh2_item_name_to_id[item] for item in exclusion_item_table["Ability"]]
 
-            if "keyblade_abilities" in self.kh2slotdata.keys():
-                sora_ability_dict = self.kh2slotdata["KeybladeAbilities"]
+            if "KeybladeAbilities" in self.kh2slotdata.keys():
                 # sora ability to slot
+                self.AbilityQuantityDict.update(self.kh2slotdata["KeybladeAbilities"])
                 # itemid:[slots that are available for that item]
-                for k, v in sora_ability_dict.items():
-                    if v >= 1:
-                        if k not in self.sora_ability_to_slot.keys():
-                            self.sora_ability_to_slot[k] = []
-                        for _ in range(sora_ability_dict[k]):
-                            self.sora_ability_to_slot[k].append(self.kh2_seed_save_cache["SoraInvo"][0])
-                            self.kh2_seed_save_cache["SoraInvo"][0] -= 2
-                donald_ability_dict = self.kh2slotdata["StaffAbilities"]
-                for k, v in donald_ability_dict.items():
-                    if v >= 1:
-                        if k not in self.donald_ability_to_slot.keys():
-                            self.donald_ability_to_slot[k] = []
-                        for _ in range(donald_ability_dict[k]):
-                            self.donald_ability_to_slot[k].append(self.kh2_seed_save_cache["DonaldInvo"][0])
-                            self.kh2_seed_save_cache["DonaldInvo"][0] -= 2
-                goofy_ability_dict = self.kh2slotdata["ShieldAbilities"]
-                for k, v in goofy_ability_dict.items():
-                    if v >= 1:
-                        if k not in self.goofy_ability_to_slot.keys():
-                            self.goofy_ability_to_slot[k] = []
-                        for _ in range(goofy_ability_dict[k]):
-                            self.goofy_ability_to_slot[k].append(self.kh2_seed_save_cache["GoofyInvo"][0])
-                            self.kh2_seed_save_cache["GoofyInvo"][0] -= 2
+                self.AbilityQuantityDict.update(self.kh2slotdata["StaffAbilities"])
+                self.AbilityQuantityDict.update(self.kh2slotdata["ShieldAbilities"])
 
             all_weapon_location_id = []
             for weapon_location in all_weapon_slot:
                 all_weapon_location_id.append(self.kh2_loc_name_to_id[weapon_location])
             self.all_weapon_location_id = set(all_weapon_location_id)
+
             try:
                 self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
-                logger.info("You are now auto-tracking")
-                self.kh2connected = True
+                if self.kh2_game_version is None:
+                    if self.kh2_read_string(0x09A9830, 4) == "KH2J":
+                        self.kh2_game_version = "STEAM"
+                        self.Now = 0x0717008
+                        self.Save = 0x09A9830
+                        self.Slot1 = 0x2A23518
+                        self.Journal = 0x7434E0
+                        self.Shop = 0x7435D0
+
+                    elif self.kh2_read_string(0x09A92F0, 4) == "KH2J":
+                        self.kh2_game_version = "EGS"
+                    else:
+                        self.kh2_game_version = None
+                        logger.info("Your game version is out of date. Please update your game via The Epic Games Store or Steam.")
+                if self.kh2_game_version is not None:
+                    logger.info(f"You are now auto-tracking. {self.kh2_game_version}")
+                    self.kh2connected = True
 
             except Exception as e:
                 if self.kh2connected:
@@ -382,13 +388,15 @@ class KH2Context(CommonContext):
     async def checkWorldLocations(self):
         try:
             currentworldint = self.kh2_read_byte(self.Now)
-            await self.send_msgs([{
-                "cmd":     "Set", "key": "Slot: " + str(self.slot) + " :CurrentWorld",
-                "default": 0, "want_reply": True, "operations": [{
-                    "operation": "replace",
-                    "value":     currentworldint
-                }]
-            }])
+            if self.last_world_int != currentworldint:
+                self.last_world_int = currentworldint
+                await self.send_msgs([{
+                    "cmd":     "Set", "key": "Slot: " + str(self.slot) + " :CurrentWorld",
+                    "default": 0, "want_reply": False, "operations": [{
+                        "operation": "replace",
+                        "value":     currentworldint
+                    }]
+                }])
             if currentworldint in self.worldid_to_locations:
                 curworldid = self.worldid_to_locations[currentworldint]
                 for location, data in curworldid.items():
@@ -499,27 +507,7 @@ class KH2Context(CommonContext):
                 if itemname not in self.kh2_seed_save_cache["AmountInvo"]["Ability"]:
                     self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname] = []
                     #  appending the slot that the ability should be in
-                # for non beta. remove after 4.3
-                if "PoptrackerVersion" in self.kh2slotdata:
-                    if self.kh2slotdata["PoptrackerVersionCheck"] < 4.3:
-                        if (itemname in self.sora_ability_set
-                            and len(self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname]) < self.item_name_to_data[itemname].quantity) \
-                                and self.kh2_seed_save_cache["SoraInvo"][1] > 0x254C:
-                            ability_slot = self.kh2_seed_save_cache["SoraInvo"][1]
-                            self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
-                            self.kh2_seed_save_cache["SoraInvo"][1] -= 2
-                        elif itemname in self.donald_ability_set:
-                            ability_slot = self.kh2_seed_save_cache["DonaldInvo"][1]
-                            self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
-                            self.kh2_seed_save_cache["DonaldInvo"][1] -= 2
-                        else:
-                            ability_slot = self.kh2_seed_save_cache["GoofyInvo"][1]
-                            self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
-                            self.kh2_seed_save_cache["GoofyInvo"][1] -= 2
-                        if ability_slot in self.front_ability_slots:
-                            self.front_ability_slots.remove(ability_slot)
-
-                elif len(self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname]) < \
+                if len(self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname]) < \
                         self.AbilityQuantityDict[itemname]:
                     if itemname in self.sora_ability_set:
                         ability_slot = self.kh2_seed_save_cache["SoraInvo"][0]
@@ -589,8 +577,8 @@ class KH2Context(CommonContext):
         # if journal=-1 and shop = 5 then in shop
         # if journal !=-1 and shop = 10 then journal
 
-        journal = self.kh2_read_short(0x741230)
-        shop = self.kh2_read_short(0x741320)
+        journal = self.kh2_read_short(self.Journal)
+        shop = self.kh2_read_short(self.Shop)
         if (journal == -1 and shop == 5) or (journal != -1 and shop == 10):
             # print("your in the shop")
             sellable_dict = {}
@@ -599,8 +587,8 @@ class KH2Context(CommonContext):
                 amount = self.kh2_read_byte(self.Save + itemdata.memaddr)
                 sellable_dict[itemName] = amount
             while (journal == -1 and shop == 5) or (journal != -1 and shop == 10):
-                journal = self.kh2_read_short(0x741230)
-                shop = self.kh2_read_short(0x741320)
+                journal = self.kh2_read_short(self.Journal)
+                shop = self.kh2_read_short(self.Shop)
                 await asyncio.sleep(0.5)
             for item, amount in sellable_dict.items():
                 itemdata = self.item_name_to_data[item]
@@ -750,7 +738,7 @@ class KH2Context(CommonContext):
                 item_data = self.item_name_to_data[item_name]
                 amount_of_items = 0
                 amount_of_items += self.kh2_seed_save_cache["AmountInvo"]["Magic"][item_name]
-                if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items and self.kh2_read_byte(0x741320) in {10, 8}:
+                if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items and self.kh2_read_byte(self.Shop) in {10, 8}:
                     self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
 
             for item_name in master_stat:
@@ -802,7 +790,7 @@ class KH2Context(CommonContext):
                                 self.kh2_write_byte(self.Save + 0x2502, current_item_slots + 1)
                             elif self.base_item_slots + amount_of_items < 8:
                                 self.kh2_write_byte(self.Save + 0x2502, self.base_item_slots + amount_of_items)
-                                
+
                 # if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items \
                 #        and self.kh2_read_byte(self.Slot1 + 0x1B2) >= 5 and \
                 #        self.kh2_read_byte(self.Save + 0x23DF) & 0x1 << 3 > 0 and self.kh2_read_byte(0x741320) in {10, 8}:
@@ -819,7 +807,7 @@ class KH2Context(CommonContext):
             logger.info("line 840")
 
 
-def finishedGame(ctx: KH2Context, message):
+def finishedGame(ctx: KH2Context):
     if ctx.kh2slotdata['FinalXemnas'] == 1:
         if not ctx.final_xemnas and ctx.kh2_read_byte(ctx.Save + all_world_locations[LocationName.FinalXemnas].addrObtained) \
                 & 0x1 << all_world_locations[LocationName.FinalXemnas].bitIndex > 0:
@@ -851,8 +839,9 @@ def finishedGame(ctx: KH2Context, message):
     elif ctx.kh2slotdata['Goal'] == 2:
         # for backwards compat
         if "hitlist" in ctx.kh2slotdata:
+            locations = ctx.sending
             for boss in ctx.kh2slotdata["hitlist"]:
-                if boss in message[0]["locations"]:
+                if boss in locations:
                     ctx.hitlist_bounties += 1
         if ctx.hitlist_bounties >= ctx.kh2slotdata["BountyRequired"] or ctx.kh2_seed_save_cache["AmountInvo"]["Amount"]["Bounty"] >= ctx.kh2slotdata["BountyRequired"]:
             if ctx.kh2_read_byte(ctx.Save + 0x36B3) < 1:
@@ -893,11 +882,12 @@ async def kh2_watcher(ctx: KH2Context):
                 await asyncio.create_task(ctx.verifyChests())
                 await asyncio.create_task(ctx.verifyItems())
                 await asyncio.create_task(ctx.verifyLevel())
-                message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
-                if finishedGame(ctx, message) and not ctx.kh2_finished_game:
+                if finishedGame(ctx) and not ctx.kh2_finished_game:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                     ctx.kh2_finished_game = True
-                await ctx.send_msgs(message)
+                if ctx.sending:
+                    message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
+                    await ctx.send_msgs(message)
             elif not ctx.kh2connected and ctx.serverconneced:
                 logger.info("Game Connection lost. waiting 15 seconds until trying to reconnect.")
                 ctx.kh2 = None
@@ -905,8 +895,23 @@ async def kh2_watcher(ctx: KH2Context):
                     await asyncio.sleep(15)
                     ctx.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
                     if ctx.kh2 is not None:
-                        logger.info("You are now auto-tracking")
-                        ctx.kh2connected = True
+                        if ctx.kh2_game_version is None:
+                            if ctx.kh2_read_string(0x09A9830, 4) == "KH2J":
+                                ctx.kh2_game_version = "STEAM"
+                                ctx.Now = 0x0717008
+                                ctx.Save = 0x09A9830
+                                ctx.Slot1 = 0x2A23518
+                                ctx.Journal = 0x7434E0
+                                ctx.Shop = 0x7435D0
+
+                            elif ctx.kh2_read_string(0x09A92F0, 4) == "KH2J":
+                                ctx.kh2_game_version = "EGS"
+                            else:
+                                ctx.kh2_game_version = None
+                                logger.info("Your game version is out of date. Please update your game via The Epic Games Store or Steam.")
+                        if ctx.kh2_game_version is not None:
+                            logger.info(f"You are now auto-tracking {ctx.kh2_game_version}")
+                            ctx.kh2connected = True
         except Exception as e:
             if ctx.kh2connected:
                 ctx.kh2connected = False

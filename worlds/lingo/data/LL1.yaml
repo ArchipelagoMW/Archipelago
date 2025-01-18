@@ -1,6 +1,13 @@
 ---
   # This file is an associative array where the keys are region names. Rooms
-  # have four properties: entrances, panels, doors, and paintings.
+  # have a number of properties:
+  # - entrances
+  # - panels
+  # - doors
+  # - panel_doors
+  # - paintings
+  # - progression
+  # - sunwarps
   #
   # entrances is an array of regions from which this room can be accessed. The
   # key of each entry is the room that can access this one. The value is a list
@@ -13,7 +20,7 @@
   # room that the door is in. The room name may be omitted if the door is
   # located in the current room.
   #
-  # panels is an array of panels in the room. The key of the array is an
+  # panels is a named array of panels in the room. The key of the array is an
   # arbitrary name for the panel. Panels can have the following fields:
   # - id:            The internal ID of the panel in the LINGO map
   # - required_room: In addition to having access to this room, the player must
@@ -45,7 +52,7 @@
   # - hunt:          If True, the tracker will show this panel even when it is
   #                  not a check. Used for hunts like the Number Hunt.
   #
-  # doors is an array of doors associated with this room. When door
+  # doors is a named array of doors associated with this room. When door
   # randomization is enabled, each of these is an item. The key is a name that
   # will be displayed as part of the item's name. Doors can have the following
   # fields:
@@ -78,6 +85,18 @@
   # - event:          Denotes that the door is event only. This is similar to
   #                   setting both skip_location and skip_item.
   #
+  # panel_doors is a named array of "panel doors" associated with this room.
+  # When panel door shuffle is enabled, each of these becomes an item, and those
+  # items block access to the listed panels. The key is a name for internal
+  # reference only. Panel doors can have the following fields:
+  # - panels:       Required. This is the set of panels that are blocked by this
+  #                 panel door.
+  # - item_name:    Overrides the name of the item generated for this panel
+  #                 door. If not specified, the item name will be generated from
+  #                 the room name and the name(s) of the panel(s).
+  # - panel_group:  When region grouping is enabled, all panel doors with the
+  #                 same group will be covered by a single item.
+  #
   # paintings is an array of paintings in the room. This is used for painting
   # shuffling.
   # - id:             The internal painting ID from the LINGO map.
@@ -104,6 +123,14 @@
   #                   Use "req_blocked_when_no_doors" instead if it would be
   #                   fine in door shuffle mode.
   # - move:           Denotes that the painting is able to move.
+  #
+  # progression is a named array of items that define an ordered set of items.
+  # progression items do not have any true connection to the rooms that they
+  # are defined in, but it is best to place them in a thematically appropriate
+  # room. The key for a progression entry is the name of the item that will be
+  # created. A progression entry is a dictionary with one or both of a "doors"
+  # key and a "panel_doors" key. These fields should be lists of doors or
+  # panel doors that will be contained in this progressive item.
   #
   # sunwarps is an array of sunwarps in the room. This is used for sunwarp
   # shuffling.
@@ -140,6 +167,15 @@
         painting: True
       The Colorful:
         painting: True
+      Welcome Back Area:
+        room: Welcome Back Area
+        door: Shortcut to Starting Room
+      Second Room:
+        door: Main Door
+      Hidden Room:
+        door: Back Right Door
+      Rhyme Room (Looped Square):
+        door: Rhyme Room Entrance
     panels:
       HI:
         id: Entry Room/Panel_hi_hi
@@ -184,6 +220,10 @@
             panel: RACECAR (Black)
           - room: The Tenacious
             panel: SOLOS (Black)
+    panel_doors:
+      HIDDEN:
+        panels:
+          - HIDDEN
     paintings:
       - id: arrows_painting
         exit_only: True
@@ -294,6 +334,10 @@
             panel: SOLOS (Black)
           - room: Hub Room
             panel: RAT
+    panel_doors:
+      OPEN:
+        panels:
+          - OPEN
     paintings:
       - id: owl_painting
         orientation: north
@@ -308,7 +352,13 @@
     panels:
       Achievement:
         id: Countdown Panels/Panel_seeker_seeker
-        required_room: Hidden Room
+        # The Seeker uniquely has the property that 1) it can be entered (through the Pilgrim Room) without opening the
+        # front door in panels mode door shuffle, and 2) the front door panel is part of the CDP. This necessitates this
+        # required_panel clause, because the entrance panel needs to be solvable for the achievement even if an
+        # alternate entrance to the room is used.
+        required_panel:
+          room: Hidden Room
+          panel: OPEN
         tag: forbid
         check: True
         achievement: The Seeker
@@ -432,7 +482,9 @@
       Crossroads:
         door: Crossroads Entrance
       The Tenacious:
-        door: Tenacious Entrance
+        - door: Tenacious Entrance
+        - room: The Tenacious
+          door: Shortcut to Hub Room
       Near Far Area: True
       Hedge Maze:
         door: Shortcut to Hedge Maze
@@ -528,6 +580,23 @@
         item_group: Achievement Room Entrances
         panels:
           - OPEN
+    panel_doors:
+      ORDER:
+        panels:
+          - ORDER
+      SLAUGHTER:
+        panel_group: Tenacious Entrance Panels
+        panels:
+          - SLAUGHTER
+      TRACE:
+        panels:
+          - TRACE
+      RAT:
+        panels:
+          - RAT
+      OPEN:
+        panels:
+          - OPEN
     paintings:
       - id: maze_painting
         orientation: west
@@ -599,12 +668,13 @@
         item_name: "6 Sunwarp"
     progression:
       Progressive Pilgrimage:
-        - 1 Sunwarp
-        - 2 Sunwarp
-        - 3 Sunwarp
-        - 4 Sunwarp
-        - 5 Sunwarp
-        - 6 Sunwarp
+        doors:
+          - 1 Sunwarp
+          - 2 Sunwarp
+          - 3 Sunwarp
+          - 4 Sunwarp
+          - 5 Sunwarp
+          - 6 Sunwarp
   Pilgrim Antechamber:
     # The entrances to this room are special. When pilgrimage is enabled, we use a special access rule to determine
     # whether a pilgrimage can succeed. When pilgrimage is disabled, the sun painting will be added to the pool.
@@ -870,6 +940,26 @@
             panel: DRAWL + RUNS
           - room: Owl Hallway
             panel: READS + RUST
+          - room: Ending Area
+            panel: THE END
+    panel_doors:
+      DECAY:
+        panel_group: Tenacious Entrance Panels
+        panels:
+          - DECAY
+      NOPE:
+        panels:
+          - NOPE
+      WE ROT:
+        panels:
+          - WE ROT
+      WORDS SWORD:
+        panels:
+          - WORDS
+          - SWORD
+      BEND HI:
+        panels:
+          - BEND HI
     paintings:
       - id: eye_painting
         disable: True
@@ -884,6 +974,14 @@
         direction: exit
         entrance_indicator_pos: [ -17, 2.5, -41.01 ]
         orientation: north
+    progression:
+      Progressive Suits Area:
+        panel_doors:
+          - WORDS SWORD
+          - room: Lost Area
+            panel_door: LOST
+          - room: Amen Name Area
+            panel_door: AMEN NAME
   Lost Area:
     entrances:
       Outside The Agreeable:
@@ -906,6 +1004,11 @@
           - Shuffle Room Area Doors/Door_lost_shuffle_1
           - Shuffle Room Area Doors/Door_lost_shuffle_2
         location_name: Crossroads - LOST Pair
+        panels:
+          - LOST (1)
+          - LOST (2)
+    panel_doors:
+      LOST:
         panels:
           - LOST (1)
           - LOST (2)
@@ -939,6 +1042,11 @@
     doors:
       Exit:
         id: Shuffle Room Area Doors/Door_mean
+        panels:
+          - AMEN
+          - NAME
+    panel_doors:
+      AMEN NAME:
         panels:
           - AMEN
           - NAME
@@ -1045,6 +1153,13 @@
           - LEVEL (White)
           - RACECAR (White)
           - SOLOS (White)
+    panel_doors:
+      Black Palindromes:
+        item_name: The Tenacious - Black Palindromes (Panels)
+        panels:
+          - LEVEL (Black)
+          - RACECAR (Black)
+          - SOLOS (Black)
   Near Far Area:
     entrances:
       Hub Room: True
@@ -1070,6 +1185,21 @@
         panels:
           - NEAR
           - FAR
+    panel_doors:
+      NEAR FAR:
+        item_name: Symmetry Room - NEAR, FAR (Panels)
+        panel_group: Symmetry Room Panels
+        panels:
+          - NEAR
+          - FAR
+    progression:
+      Progressive Symmetry Room:
+        panel_doors:
+          - NEAR FAR
+          - room: Warts Straw Area
+            panel_door: WARTS STRAW
+          - room: Leaf Feel Area
+            panel_door: LEAF FEEL
   Warts Straw Area:
     entrances:
       Near Far Area:
@@ -1097,6 +1227,13 @@
         panels:
           - WARTS
           - STRAW
+    panel_doors:
+      WARTS STRAW:
+        item_name: Symmetry Room - WARTS, STRAW (Panels)
+        panel_group: Symmetry Room Panels
+        panels:
+          - WARTS
+          - STRAW
   Leaf Feel Area:
     entrances:
       Warts Straw Area:
@@ -1121,6 +1258,13 @@
         door_group: Symmetry Doors
         item_name: Symmetry Room - Leaf Feel Door
         location_name: Symmetry Room - LEAF, FEEL
+        panels:
+          - LEAF
+          - FEEL
+    panel_doors:
+      LEAF FEEL:
+        item_name: Symmetry Room - LEAF, FEEL (Panels)
+        panel_group: Symmetry Room Panels
         panels:
           - LEAF
           - FEEL
@@ -1232,6 +1376,20 @@
         panels:
           - room: Color Hunt
             panel: PURPLE
+    panel_doors:
+      MASSACRED:
+        panel_group: Tenacious Entrance Panels
+        panels:
+          - MASSACRED
+      BLACK:
+        panels:
+          - BLACK
+      CLOSE:
+        panels:
+          - CLOSE
+      RIGHT:
+        panels:
+          - RIGHT
     paintings:
       - id: eyes_yellow_painting
         orientation: east
@@ -1278,6 +1436,14 @@
       Lookout Entrance:
         id: Cross Room Doors/Door_missing
         location_name: Outside The Agreeable - Lookout Panels
+        panels:
+          - NORTH
+          - WINTER
+          - DIAMONDS
+          - FIRE
+    panel_doors:
+      Lookout:
+        item_name: Compass Room Panels
         panels:
           - NORTH
           - WINTER
@@ -1392,6 +1558,8 @@
         room: Owl Hallway
         door: Shortcut to Hedge Maze
       Roof: True
+      The Incomparable:
+        door: Observant Entrance
     panels:
       DOWN:
         id: Maze Room/Panel_down_up
@@ -1499,6 +1667,10 @@
           - HIDE (3)
           - room: Outside The Agreeable
             panel: HIDE
+    panel_doors:
+      DOWN:
+        panels:
+          - DOWN
   The Perceptive:
     entrances:
       Starting Room:
@@ -1520,6 +1692,10 @@
         check: True
         exclude_reduce: True
         tag: botwhite
+    panel_doors:
+      GAZE:
+        panels:
+          - GAZE
     paintings:
       - id: garden_painting_tower
         orientation: north
@@ -1561,9 +1737,10 @@
           - EAT
     progression:
       Progressive Fearless:
-        - Second Floor
-        - room: The Fearless (Second Floor)
-          door: Third Floor
+        doors:
+          - Second Floor
+          - room: The Fearless (Second Floor)
+            door: Third Floor
   The Fearless (Second Floor):
     entrances:
       The Fearless (First Floor):
@@ -1658,6 +1835,10 @@
         tag: forbid
         required_door:
           door: Stairs
+        required_panel:
+          - panel: FOUR (1)
+          - panel: FOUR (2)
+          - panel: SIX
         achievement: The Observant
       FOUR (1):
         id: Look Room/Panel_four_back
@@ -1771,15 +1952,31 @@
         door_group: Observant Doors
         panels:
           - SIX
+    panel_doors:
+      BACKSIDE:
+        item_name: The Observant - Backside Entrance Panels
+        panel_group: Backside Entrance Panels
+        panels:
+          - FOUR (1)
+          - FOUR (2)
+      STAIRS:
+        panels:
+          - SIX
   The Incomparable:
     entrances:
       The Observant:
         warp: True
-      Eight Room: True
+      Eight Room:
+        # It is possible to get to the second floor warpless, but there are no warpless exits from the second floor,
+        # meaning that this connection is essentially always a warp for the purposes of Pilgrimage.
+        warp: True
       Eight Alcove:
         door: Eight Door
       Orange Tower Sixth Floor:
         painting: True
+      Hedge Maze:
+        room: Hedge Maze
+        door: Observant Entrance
     panels:
       Achievement:
         id: Countdown Panels/Panel_incomparable_incomparable
@@ -1787,9 +1984,12 @@
         check: True
         tag: forbid
         required_room:
-          - Elements Area
-          - Courtyard
           - Eight Room
+        required_panel:
+          - room: Courtyard
+            panel: I
+          - room: Elements Area
+            panel: A
         achievement: The Incomparable
       A (One):
         id: Strand Room/Panel_blank_a
@@ -1854,6 +2054,27 @@
             panel: I
           - room: Elements Area
             panel: A
+      Eight Door (Outside The Initiated):
+        id: Red Blue Purple Room Area Doors/Door_a_strands2
+        item_name: Outside The Initiated - Eight Door
+        item_group: Achievement Room Entrances
+        skip_location: True
+        panels:
+          - room: The Incomparable
+            panel: I (Seven)
+          - room: Courtyard
+            panel: I
+          - room: Elements Area
+            panel: A
+    panel_doors:
+      Giant Sevens:
+        item_name: Giant Seven Panels
+        panels:
+          - I (Seven)
+          - room: Courtyard
+            panel: I
+          - room: Elements Area
+            panel: A
     paintings:
       - id: crown_painting
         orientation: east
@@ -1863,8 +2084,8 @@
         room: The Incomparable
         door: Eight Door
       Outside The Initiated:
-        room: Outside The Initiated
-        door: Eight Door
+        room: The Incomparable
+        door: Eight Door (Outside The Initiated)
     paintings:
       - id: eight_painting2
         orientation: north
@@ -1961,14 +2182,31 @@
             panel: DRAWL + RUNS
           - room: Owl Hallway
             panel: READS + RUST
+    panel_doors:
+      Access:
+        item_name: Orange Tower Panels
+        panels:
+          - room: Orange Tower First Floor
+            panel: DADS + ALE
+          - room: Outside The Undeterred
+            panel: ART + ART
+          - room: Orange Tower Third Floor
+            panel: DEER + WREN
+          - room: Orange Tower Fourth Floor
+            panel: LEARNS + UNSEW
+          - room: Orange Tower Fifth Floor
+            panel: DRAWL + RUNS
+          - room: Owl Hallway
+            panel: READS + RUST
     progression:
       Progressive Orange Tower:
-        - Second Floor
-        - Third Floor
-        - Fourth Floor
-        - Fifth Floor
-        - Sixth Floor
-        - Seventh Floor
+        doors:
+          - Second Floor
+          - Third Floor
+          - Fourth Floor
+          - Fifth Floor
+          - Sixth Floor
+          - Seventh Floor
   Orange Tower First Floor:
     entrances:
       Hub Room:
@@ -2011,6 +2249,10 @@
           - SALT
           - room: Directional Gallery
             panel: PEPPER
+    panel_doors:
+      SECRET:
+        panels:
+          - SECRET
     sunwarps:
       - dots: 4
         direction: enter
@@ -2163,6 +2405,10 @@
         id: Shuffle Room Area Doors/Door_hotcrust_shortcuts
         panels:
           - HOT CRUSTS
+    panel_doors:
+      HOT CRUSTS:
+        panels:
+          - HOT CRUSTS
     sunwarps:
       - dots: 5
         direction: enter
@@ -2277,6 +2523,12 @@
         panels:
           - SIZE (Small)
           - SIZE (Big)
+    panel_doors:
+      SIZE:
+        item_name: Orange Tower Fifth Floor - SIZE Panels
+        panels:
+          - SIZE (Small)
+          - SIZE (Big)
     paintings:
       - id: hi_solved_painting3
         orientation: south
@@ -2313,7 +2565,7 @@
         orientation: east
       - id: hi_solved_painting
         orientation: west
-  Orange Tower Seventh Floor:
+  Ending Area:
     entrances:
       Orange Tower Sixth Floor:
         room: Orange Tower
@@ -2325,6 +2577,18 @@
         check: True
         tag: forbid
         non_counting: True
+        location_name: Orange Tower Seventh Floor - THE END
+    doors:
+      End:
+        event: True
+        panels:
+          - THE END
+  Orange Tower Seventh Floor:
+    entrances:
+      Ending Area:
+        room: Ending Area
+        door: End
+    panels:
       THE MASTER:
         # We will set up special rules for this in code.
         id: Countdown Panels/Panel_master_master
@@ -2608,6 +2872,15 @@
           - SECOND
           - THIRD
           - FOURTH
+    panel_doors:
+      FIRST SECOND THIRD FOURTH:
+        item_name: Courtyard - Ordinal Panels
+        panel_group: Backside Entrance Panels
+        panels:
+          - FIRST
+          - SECOND
+          - THIRD
+          - FOURTH
   The Colorful (White):
     entrances:
       Courtyard: True
@@ -2623,6 +2896,12 @@
         item_name: The Colorful - White Door
         door_group: Colorful Doors
         location_name: The Colorful - White
+        panels:
+          - BEGIN
+    panel_doors:
+      BEGIN:
+        item_name: The Colorful - BEGIN (Panel)
+        panel_group: Colorful Panels
         panels:
           - BEGIN
   The Colorful (Black):
@@ -2645,6 +2924,12 @@
         door_group: Colorful Doors
         panels:
           - FOUND
+    panel_doors:
+      FOUND:
+        item_name: The Colorful - FOUND (Panel)
+        panel_group: Colorful Panels
+        panels:
+          - FOUND
   The Colorful (Red):
     entrances:
       The Colorful (Black):
@@ -2663,6 +2948,12 @@
         item_name: The Colorful - Red Door
         location_name: The Colorful - Red
         door_group: Colorful Doors
+        panels:
+          - LOAF
+    panel_doors:
+      LOAF:
+        item_name: The Colorful - LOAF (Panel)
+        panel_group: Colorful Panels
         panels:
           - LOAF
   The Colorful (Yellow):
@@ -2685,6 +2976,12 @@
         door_group: Colorful Doors
         panels:
           - CREAM
+    panel_doors:
+      CREAM:
+        item_name: The Colorful - CREAM (Panel)
+        panel_group: Colorful Panels
+        panels:
+          - CREAM
   The Colorful (Blue):
     entrances:
       The Colorful (Yellow):
@@ -2703,6 +3000,12 @@
         item_name: The Colorful - Blue Door
         location_name: The Colorful - Blue
         door_group: Colorful Doors
+        panels:
+          - SUN
+    panel_doors:
+      SUN:
+        item_name: The Colorful - SUN (Panel)
+        panel_group: Colorful Panels
         panels:
           - SUN
   The Colorful (Purple):
@@ -2725,6 +3028,12 @@
         door_group: Colorful Doors
         panels:
           - SPOON
+    panel_doors:
+      SPOON:
+        item_name: The Colorful - SPOON (Panel)
+        panel_group: Colorful Panels
+        panels:
+          - SPOON
   The Colorful (Orange):
     entrances:
       The Colorful (Purple):
@@ -2743,6 +3052,12 @@
         item_name: The Colorful - Orange Door
         location_name: The Colorful - Orange
         door_group: Colorful Doors
+        panels:
+          - LETTERS
+    panel_doors:
+      LETTERS:
+        item_name: The Colorful - LETTERS (Panel)
+        panel_group: Colorful Panels
         panels:
           - LETTERS
   The Colorful (Green):
@@ -2765,6 +3080,12 @@
         door_group: Colorful Doors
         panels:
           - WALLS
+    panel_doors:
+      WALLS:
+        item_name: The Colorful - WALLS (Panel)
+        panel_group: Colorful Panels
+        panels:
+          - WALLS
   The Colorful (Brown):
     entrances:
       The Colorful (Green):
@@ -2785,6 +3106,12 @@
         door_group: Colorful Doors
         panels:
           - IRON
+    panel_doors:
+      IRON:
+        item_name: The Colorful - IRON (Panel)
+        panel_group: Colorful Panels
+        panels:
+          - IRON
   The Colorful (Gray):
     entrances:
       The Colorful (Brown):
@@ -2803,6 +3130,12 @@
         item_name: The Colorful - Gray Door
         location_name: The Colorful - Gray
         door_group: Colorful Doors
+        panels:
+          - OBSTACLE
+    panel_doors:
+      OBSTACLE:
+        item_name: The Colorful - OBSTACLE (Panel)
+        panel_group: Colorful Panels
         panels:
           - OBSTACLE
   The Colorful:
@@ -2843,26 +3176,48 @@
         orientation: north
     progression:
       Progressive Colorful:
-        - room: The Colorful (White)
-          door: Progress Door
-        - room: The Colorful (Black)
-          door: Progress Door
-        - room: The Colorful (Red)
-          door: Progress Door
-        - room: The Colorful (Yellow)
-          door: Progress Door
-        - room: The Colorful (Blue)
-          door: Progress Door
-        - room: The Colorful (Purple)
-          door: Progress Door
-        - room: The Colorful (Orange)
-          door: Progress Door
-        - room: The Colorful (Green)
-          door: Progress Door
-        - room: The Colorful (Brown)
-          door: Progress Door
-        - room: The Colorful (Gray)
-          door: Progress Door
+        doors:
+          - room: The Colorful (White)
+            door: Progress Door
+          - room: The Colorful (Black)
+            door: Progress Door
+          - room: The Colorful (Red)
+            door: Progress Door
+          - room: The Colorful (Yellow)
+            door: Progress Door
+          - room: The Colorful (Blue)
+            door: Progress Door
+          - room: The Colorful (Purple)
+            door: Progress Door
+          - room: The Colorful (Orange)
+            door: Progress Door
+          - room: The Colorful (Green)
+            door: Progress Door
+          - room: The Colorful (Brown)
+            door: Progress Door
+          - room: The Colorful (Gray)
+            door: Progress Door
+        panel_doors:
+          - room: The Colorful (White)
+            panel_door: BEGIN
+          - room: The Colorful (Black)
+            panel_door: FOUND
+          - room: The Colorful (Red)
+            panel_door: LOAF
+          - room: The Colorful (Yellow)
+            panel_door: CREAM
+          - room: The Colorful (Blue)
+            panel_door: SUN
+          - room: The Colorful (Purple)
+            panel_door: SPOON
+          - room: The Colorful (Orange)
+            panel_door: LETTERS
+          - room: The Colorful (Green)
+            panel_door: WALLS
+          - room: The Colorful (Brown)
+            panel_door: IRON
+          - room: The Colorful (Gray)
+            panel_door: OBSTACLE
   Welcome Back Area:
     entrances:
       Starting Room:
@@ -2935,6 +3290,10 @@
         door_group: Hedge Maze Doors
         panels:
           - STRAYS
+    panel_doors:
+      STRAYS:
+        panels:
+          - STRAYS
     paintings:
       - id: arrows_painting_8
         orientation: south
@@ -2968,7 +3327,8 @@
         room: Art Gallery
         door: Exit
       Eight Alcove:
-        door: Eight Door
+        room: The Incomparable
+        door: Eight Door (Outside The Initiated)
       The Optimistic: True
     panels:
       SEVEN (1):
@@ -3121,17 +3481,13 @@
             panel: GREEN
           - room: Outside The Agreeable
             panel: PURPLE
-      Eight Door:
-        id: Red Blue Purple Room Area Doors/Door_a_strands2
-        item_group: Achievement Room Entrances
-        skip_location: True
+    panel_doors:
+      UNCOVER:
         panels:
-          - room: The Incomparable
-            panel: I (Seven)
-          - room: Courtyard
-            panel: I
-          - room: Elements Area
-            panel: A
+          - UNCOVER
+      OXEN:
+        panels:
+          - OXEN
     paintings:
       - id: clock_painting_5
         orientation: east
@@ -3265,7 +3621,6 @@
         door: Traveled Entrance
       Color Hallways:
         door: Color Hallways Entrance
-        warp: True
     panels:
       Achievement:
         id: Countdown Panels/Panel_traveled_traveled
@@ -3502,6 +3857,13 @@
           - RISE (Sunrise)
           - ZEN
           - SON
+    panel_doors:
+      UNOPEN:
+        panels:
+          - UNOPEN
+      BEGIN:
+        panels:
+          - BEGIN
     paintings:
       - id: pencil_painting2
         orientation: west
@@ -3797,6 +4159,34 @@
         item_group: Achievement Room Entrances
         panels:
           - ZERO
+    panel_doors:
+      ZERO:
+        panels:
+          - ZERO
+      PEN:
+        panels:
+          - PEN
+      TWO:
+        item_name: Two Panels
+        panels:
+          - TWO (1)
+          - TWO (2)
+      THREE:
+        item_name: Three Panels
+        panels:
+          - THREE (1)
+          - THREE (2)
+          - THREE (3)
+      FOUR:
+        item_name: Four Panels
+        panels:
+          - FOUR
+          - room: Hub Room
+            panel: FOUR
+          - room: Dead End Area
+            panel: FOUR
+          - room: The Traveled
+            panel: FOUR
     paintings:
       - id: maze_painting_3
         enter_only: True
@@ -3972,6 +4362,10 @@
             panel: FIVE (1)
           - room: Directional Gallery
             panel: FIVE (2)
+      First Six:
+        event: True
+        panels:
+          - SIX
       Sevens:
         id:
           - Count Up Room Area Doors/Door_seven_hider
@@ -4080,12 +4474,109 @@
             panel: NINE
           - room: Elements Area
             panel: NINE
+    panel_doors:
+      FIVE:
+        item_name: Five Panels
+        panels:
+          - FIVE
+          - room: Outside The Agreeable
+            panel: FIVE (1)
+          - room: Outside The Agreeable
+            panel: FIVE (2)
+          - room: Directional Gallery
+            panel: FIVE (1)
+          - room: Directional Gallery
+            panel: FIVE (2)
+      SIX:
+        item_name: Six Panels
+        panels:
+          - SIX
+          - room: Outside The Bold
+            panel: SIX
+          - room: Directional Gallery
+            panel: SIX (1)
+          - room: Directional Gallery
+            panel: SIX (2)
+          - room: The Bearer (East)
+            panel: SIX
+          - room: The Bearer (South)
+            panel: SIX
+      SEVEN:
+        item_name: Seven Panels
+        panels:
+          - SEVEN
+          - room: Directional Gallery
+            panel: SEVEN
+          - room: Knight Night Exit
+            panel: SEVEN (1)
+          - room: Knight Night Exit
+            panel: SEVEN (2)
+          - room: Knight Night Exit
+            panel: SEVEN (3)
+          - room: Outside The Initiated
+            panel: SEVEN (1)
+          - room: Outside The Initiated
+            panel: SEVEN (2)
+      EIGHT:
+        item_name: Eight Panels
+        panels:
+          - EIGHT
+          - room: Directional Gallery
+            panel: EIGHT
+          - room: The Eyes They See
+            panel: EIGHT
+          - room: Dead End Area
+            panel: EIGHT
+          - room: Crossroads
+            panel: EIGHT
+          - room: Hot Crusts Area
+            panel: EIGHT
+          - room: Art Gallery
+            panel: EIGHT
+          - room: Outside The Initiated
+            panel: EIGHT
+      NINE:
+        item_name: Nine Panels
+        panels:
+          - NINE
+          - room: Directional Gallery
+            panel: NINE
+          - room: Amen Name Area
+            panel: NINE
+          - room: Yellow Backside Area
+            panel: NINE
+          - room: Outside The Initiated
+            panel: NINE
+          - room: Outside The Bold
+            panel: NINE
+          - room: Rhyme Room (Cross)
+            panel: NINE
+          - room: Orange Tower Fifth Floor
+            panel: NINE
+          - room: Elements Area
+            panel: NINE
     paintings:
       - id: smile_painting_5
         enter_only: True
         orientation: east
         required_door:
           door: Eights
+    progression:
+      Progressive Number Hunt:
+        panel_doors:
+          - room: Outside The Undeterred
+            panel_door: TWO
+          - room: Outside The Undeterred
+            panel_door: THREE
+          - room: Outside The Undeterred
+            panel_door: FOUR
+          - FIVE
+          - SIX
+          - SEVEN
+          - EIGHT
+          - NINE
+          - room: Outside The Undeterred
+            panel_door: ZERO
   Directional Gallery:
     entrances:
       Outside The Agreeable:
@@ -4173,7 +4664,7 @@
         tag: midorange
         required_door:
           room: Number Hunt
-          door: Sixes
+          door: First Six
       PARANOID:
         id: Backside Room/Panel_paranoid_paranoid
         tag: midwhite
@@ -4181,7 +4672,7 @@
         exclude_reduce: True
         required_door:
           room: Number Hunt
-          door: Sixes
+          door: First Six
       YELLOW:
         id: Color Arrow Room/Panel_yellow_afar
         tag: midwhite
@@ -4244,6 +4735,11 @@
         panels:
           - room: Color Hunt
             panel: YELLOW
+    panel_doors:
+      TURN LEARN:
+        panels:
+          - TURN
+          - LEARN
     paintings:
       - id: smile_painting_7
         orientation: south
@@ -4255,7 +4751,7 @@
         move: True
         required_door:
           room: Number Hunt
-          door: Sixes
+          door: First Six
       - id: boxes_painting
         orientation: south
       - id: cherry_painting
@@ -4322,6 +4818,34 @@
         id: Rock Room Doors/Door_hint
         panels:
           - EXIT
+    panel_doors:
+      EXIT:
+        panels:
+          - EXIT
+      RED:
+        panel_group: Color Hunt Panels
+        panels:
+          - RED
+      BLUE:
+        panel_group: Color Hunt Panels
+        panels:
+          - BLUE
+      YELLOW:
+        panel_group: Color Hunt Panels
+        panels:
+          - YELLOW
+      ORANGE:
+        panel_group: Color Hunt Panels
+        panels:
+          - ORANGE
+      PURPLE:
+        panel_group: Color Hunt Panels
+        panels:
+          - PURPLE
+      GREEN:
+        panel_group: Color Hunt Panels
+        panels:
+          - GREEN
     paintings:
       - id: arrows_painting_7
         orientation: east
@@ -4459,6 +4983,14 @@
         event: True
         panels:
           - HEART
+    panel_doors:
+      FARTHER:
+        panel_group: Backside Entrance Panels
+        panels:
+          - FARTHER
+      MIDDLE:
+        panels:
+          - MIDDLE
   The Bearer (East):
     entrances:
       Cross Tower (East): True
@@ -5311,6 +5843,11 @@
         item_name: Knight Night Room - Exit
         panels:
           - TRUSTED
+    panel_doors:
+      TRUSTED:
+        item_name: Knight Night Room - TRUSTED (Panel)
+        panels:
+          - TRUSTED
   Knight Night Exit:
     entrances:
       Knight Night (Outer Ring):
@@ -5995,6 +6532,10 @@
         item_group: Achievement Room Entrances
         panels:
           - SHRINK
+    panel_doors:
+      SHRINK:
+        panels:
+          - SHRINK
   The Wondrous (Doorknob):
     entrances:
       Outside The Wondrous:
@@ -6206,18 +6747,36 @@
           - KEEP
           - BAILEY
           - TOWER
+    panel_doors:
+      CASTLE:
+        item_name: Hallway Room - First Room Panels
+        panel_group: Hallway Room Panels
+        panels:
+          - WALL
+          - KEEP
+          - BAILEY
+          - TOWER
     paintings:
       - id: panda_painting
         orientation: south
     progression:
       Progressive Hallway Room:
-        - Exit
-        - room: Hallway Room (2)
-          door: Exit
-        - room: Hallway Room (3)
-          door: Exit
-        - room: Hallway Room (4)
-          door: Exit
+        doors:
+          - Exit
+          - room: Hallway Room (2)
+            door: Exit
+          - room: Hallway Room (3)
+            door: Exit
+          - room: Hallway Room (4)
+            door: Exit
+        panel_doors:
+          - CASTLE
+          - room: Hallway Room (2)
+            panel_door: COUNTERCLOCKWISE
+          - room: Hallway Room (3)
+            panel_door: TRANSFORMATION
+          - room: Hallway Room (4)
+            panel_door: WHEELBARROW
   Hallway Room (2):
     entrances:
       Hallway Room (1):
@@ -6251,6 +6810,15 @@
         id: Red Blue Purple Room Area Doors/Door_room_3
         location_name: Hallway Room - Second Room
         door_group: Hallway Room Doors
+        panels:
+          - WISE
+          - CLOCK
+          - ER
+          - COUNT
+    panel_doors:
+      COUNTERCLOCKWISE:
+        item_name: Hallway Room - Second Room Panels
+        panel_group: Hallway Room Panels
         panels:
           - WISE
           - CLOCK
@@ -6294,6 +6862,15 @@
           - FORM
           - A
           - SHUN
+    panel_doors:
+      TRANSFORMATION:
+        item_name: Hallway Room - Third Room Panels
+        panel_group: Hallway Room Panels
+        panels:
+          - TRANCE
+          - FORM
+          - A
+          - SHUN
   Hallway Room (4):
     entrances:
       Hallway Room (3):
@@ -6316,6 +6893,12 @@
         panels:
           - WHEEL
         include_reduce: True
+    panel_doors:
+      WHEELBARROW:
+        item_name: Hallway Room - WHEEL
+        panel_group: Hallway Room Panels
+        panels:
+          - WHEEL
   Elements Area:
     entrances:
       Roof: True
@@ -6390,6 +6973,10 @@
         panels:
           - room: The Wanderer
             panel: Achievement
+    panel_doors:
+      WANDERLUST:
+        panels:
+          - WANDERLUST
   The Wanderer:
     entrances:
       Outside The Wanderer:
@@ -6531,6 +7118,10 @@
         item_group: Achievement Room Entrances
         panels:
           - ORDER
+    panel_doors:
+      ORDER:
+        panels:
+          - ORDER
     paintings:
       - id: smile_painting_3
         orientation: west
@@ -6544,10 +7135,11 @@
         orientation: south
     progression:
       Progressive Art Gallery:
-        - Second Floor
-        - Third Floor
-        - Fourth Floor
-        - Fifth Floor
+        doors:
+          - Second Floor
+          - Third Floor
+          - Fourth Floor
+          - Fifth Floor
   Art Gallery (Second Floor):
     entrances:
       Art Gallery:
@@ -7069,6 +7661,8 @@
       LEAP:
         id: Double Room/Panel_leap_leap
         tag: midwhite
+        required_door:
+          door: Door to Cross
     doors:
       Door to Cross:
         id: Double Room Area Doors/Door_room_4a
@@ -7259,8 +7853,8 @@
         id: Panel Room/Panel_broomed_bedroom
         colors: yellow
         tag: midyellow
-        required_door:
-          door: Excavation
+        required_panel:
+          panel: WALL (1)
       LAYS:
         id: Panel Room/Panel_lays_maze
         colors: purple
@@ -7287,12 +7881,23 @@
       Excavation:
         event: True
         panels:
-          - WALL (1)
+          - STAIRS
       Cellar Exit:
         id:
           - Tower Room Area Doors/Door_panel_basement
           - Tower Room Area Doors/Door_panel_basement2
         panels:
+          - BASE
+    panel_doors:
+      STAIRS:
+        panel_group: Room Room Panels
+        panels:
+          - STAIRS
+      Colors:
+        panel_group: Room Room Panels
+        panels:
+          - BROOMED
+          - LAYS
           - BASE
   Cellar:
     entrances:
@@ -7329,6 +7934,11 @@
         id: Clock Room Area Doors/Door_time_start
         item_name: The Wise - Entrance
         item_group: Achievement Room Entrances
+        panels:
+          - KITTEN
+          - CAT
+    panel_doors:
+      KITTEN CAT:
         panels:
           - KITTEN
           - CAT
@@ -7584,6 +8194,10 @@
         id: Red Blue Purple Room Area Doors/Door_chemistry_lab
         item_name: The Scientific - Entrance
         item_group: Achievement Room Entrances
+        panels:
+          - OPEN
+    panel_doors:
+      OPEN:
         panels:
           - OPEN
   The Scientific:

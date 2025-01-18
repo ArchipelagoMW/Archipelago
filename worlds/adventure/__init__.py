@@ -1,33 +1,23 @@
-import base64
 import copy
-import itertools
 import math
 import os
-import settings
 import typing
-from enum import IntFlag
-from typing import Any, ClassVar, Dict, List, Optional, Set, Tuple
+from typing import ClassVar, Dict, Optional, Tuple
 
-from BaseClasses import Entrance, Item, ItemClassification, MultiWorld, Region, Tutorial, \
-    LocationProgressType
+import settings
+from BaseClasses import Item, ItemClassification, MultiWorld, Tutorial, LocationProgressType
 from Utils import __version__
-from Options import AssembleOptions
 from worlds.AutoWorld import WebWorld, World
-from Fill import fill_restrictive
-from worlds.generic.Rules import add_rule, set_rule
-from .Options import adventure_option_definitions, DragonRandoType, DifficultySwitchA, DifficultySwitchB
-from .Rom import get_base_rom_bytes, get_base_rom_path, AdventureDeltaPatch, apply_basepatch, \
-    AdventureAutoCollectLocation
+from worlds.LauncherComponents import Component, components, SuffixIdentifier
 from .Items import item_table, ItemData, nothing_item_id, event_table, AdventureItem, standard_item_max
 from .Locations import location_table, base_location_id, LocationData, get_random_room_in_regions
 from .Offsets import static_item_data_location, items_ram_start, static_item_element_size, item_position_table, \
     static_first_dragon_index, connector_port_offset, yorgle_speed_data_location, grundle_speed_data_location, \
     rhindle_speed_data_location, item_ram_addresses, start_castle_values, start_castle_offset
+from .Options import DragonRandoType, DifficultySwitchA, DifficultySwitchB, AdventureOptions
 from .Regions import create_regions
+from .Rom import get_base_rom_bytes, get_base_rom_path, AdventureDeltaPatch, apply_basepatch, AdventureAutoCollectLocation
 from .Rules import set_rules
-
-
-from worlds.LauncherComponents import Component, components, SuffixIdentifier
 
 # Adventure
 components.append(Component('Adventure Client', 'AdventureClient', file_identifier=SuffixIdentifier('.apadvn')))
@@ -109,7 +99,7 @@ class AdventureWorld(World):
     game: ClassVar[str] = "Adventure"
     web: ClassVar[WebWorld] = AdventureWeb()
 
-    option_definitions: ClassVar[Dict[str, AssembleOptions]] = adventure_option_definitions
+    options_dataclass = AdventureOptions
     settings: ClassVar[AdventureSettings]
     item_name_to_id: ClassVar[Dict[str, int]] = {name: data.id for name, data in item_table.items()}
     location_name_to_id: ClassVar[Dict[str, int]] = {name: data.location_id for name, data in location_table.items()}
@@ -149,18 +139,18 @@ class AdventureWorld(World):
             bytearray(f"ADVENTURE{__version__.replace('.', '')[:3]}_{self.player}_{self.multiworld.seed}", "utf8")[:21]
         self.rom_name.extend([0] * (21 - len(self.rom_name)))
 
-        self.dragon_rando_type = self.multiworld.dragon_rando_type[self.player].value
-        self.dragon_slay_check = self.multiworld.dragon_slay_check[self.player].value
-        self.connector_multi_slot = self.multiworld.connector_multi_slot[self.player].value
-        self.yorgle_speed = self.multiworld.yorgle_speed[self.player].value
-        self.yorgle_min_speed = self.multiworld.yorgle_min_speed[self.player].value
-        self.grundle_speed = self.multiworld.grundle_speed[self.player].value
-        self.grundle_min_speed = self.multiworld.grundle_min_speed[self.player].value
-        self.rhindle_speed = self.multiworld.rhindle_speed[self.player].value
-        self.rhindle_min_speed = self.multiworld.rhindle_min_speed[self.player].value
-        self.difficulty_switch_a = self.multiworld.difficulty_switch_a[self.player].value
-        self.difficulty_switch_b = self.multiworld.difficulty_switch_b[self.player].value
-        self.start_castle = self.multiworld.start_castle[self.player].value
+        self.dragon_rando_type = self.options.dragon_rando_type.value
+        self.dragon_slay_check = self.options.dragon_slay_check.value
+        self.connector_multi_slot = self.options.connector_multi_slot.value
+        self.yorgle_speed = self.options.yorgle_speed.value
+        self.yorgle_min_speed = self.options.yorgle_min_speed.value
+        self.grundle_speed = self.options.grundle_speed.value
+        self.grundle_min_speed = self.options.grundle_min_speed.value
+        self.rhindle_speed = self.options.rhindle_speed.value
+        self.rhindle_min_speed = self.options.rhindle_min_speed.value
+        self.difficulty_switch_a = self.options.difficulty_switch_a.value
+        self.difficulty_switch_b = self.options.difficulty_switch_b.value
+        self.start_castle = self.options.start_castle.value
         self.created_items = 0
 
         if self.dragon_slay_check == 0:
@@ -227,7 +217,7 @@ class AdventureWorld(World):
         extra_filler_count = num_locations - self.created_items
 
         # traps would probably go here, if enabled
-        freeincarnate_max = self.multiworld.freeincarnate_max[self.player].value
+        freeincarnate_max = self.options.freeincarnate_max.value
         actual_freeincarnates = min(extra_filler_count, freeincarnate_max)
         self.multiworld.itempool += [self.create_item("Freeincarnate") for _ in range(actual_freeincarnates)]
         self.created_items += actual_freeincarnates
@@ -247,7 +237,7 @@ class AdventureWorld(World):
                 self.created_items += 1
 
     def create_regions(self) -> None:
-        create_regions(self.multiworld, self.player, self.dragon_rooms)
+        create_regions(self.options, self.multiworld, self.player, self.dragon_rooms)
 
     set_rules = set_rules
 
@@ -354,7 +344,7 @@ class AdventureWorld(World):
         auto_collect_locations: [AdventureAutoCollectLocation] = []
         local_item_to_location: {int, int} = {}
         bat_no_touch_locs: [LocationData] = []
-        bat_logic: int = self.multiworld.bat_logic[self.player].value
+        bat_logic: int = self.options.bat_logic.value
         try:
             rom_deltas: { int, int } = {}
             self.place_dragons(rom_deltas)
@@ -421,7 +411,7 @@ class AdventureWorld(World):
                 item_position_data_start = get_item_position_data_start(unplaced_item.table_index)
                 rom_deltas[item_position_data_start] = 0xff
 
-            if self.multiworld.connector_multi_slot[self.player].value:
+            if self.options.connector_multi_slot.value:
                 rom_deltas[connector_port_offset] = (self.player & 0xff)
             else:
                 rom_deltas[connector_port_offset] = 0
@@ -445,7 +435,7 @@ class AdventureWorld(World):
     # end of ordered Main.py calls
 
     def create_item(self, name: str) -> Item:
-        item_data: ItemData = item_table.get(name)
+        item_data: ItemData = item_table[name]
         return AdventureItem(name, item_data.classification, item_data.id, self.player)
 
     def create_event(self, name: str, classification: ItemClassification) -> Item:
