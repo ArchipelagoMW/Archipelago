@@ -192,6 +192,11 @@ FAIRY_FOUNTAIN_EXITS: list[ZoneExit] = [
     ZoneExit("Northern Fairy Fountain", zone_name="Northern Fairy Island"),
 ]
 
+DUNGEON_INNER_EXITS: list[ZoneExit] = (
+    MINIBOSS_EXITS
+    + BOSS_EXITS
+)
+
 ALL_ENTRANCES: list[ZoneEntrance] = (
     DUNGEON_ENTRANCES
     + MINIBOSS_ENTRANCES
@@ -398,12 +403,12 @@ class EntranceRandomizer:
         # Keep miniboss and boss entrances vanilla in non-required bosses' dungeons.
         for zone_entrance in relevant_entrances.copy():
             zone_exit = self.done_entrances_to_exits[zone_entrance]
-            if zone_exit in self.banned_exits and zone_exit in MINIBOSS_EXITS + BOSS_EXITS:
+            if zone_exit in self.banned_exits and zone_exit in DUNGEON_INNER_EXITS:
                 relevant_entrances.remove(zone_entrance)
             else:
                 del self.done_entrances_to_exits[zone_entrance]
         for zone_exit in relevant_exits.copy():
-            if zone_exit in self.banned_exits and zone_exit in MINIBOSS_EXITS + BOSS_EXITS:
+            if zone_exit in self.banned_exits and zone_exit in DUNGEON_INNER_EXITS:
                 relevant_exits.remove(zone_exit)
             else:
                 del self.done_exits_to_entrances[zone_exit]
