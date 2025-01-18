@@ -187,26 +187,18 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
 
                 placement_order = multiworld.random.sample(population, k=batch_size, counts=counts)
 
-                if batch_size != len(item_pool):
-                    placement_counts = Counter(placement_order)
+                placement_counts = Counter(placement_order)
 
-                    item_iters_by_player = {player: reversed(items) for player, items in reachable_items.items() if items}
-                    batch_item_pool = [item for player, item_iter in item_iters_by_player.items()
-                                       for item in itertools.islice(item_iter, placement_counts[player])]
+                item_iters_by_player = {player: reversed(items) for player, items in reachable_items.items() if items}
+                batch_item_pool = [item for player, item_iter in item_iters_by_player.items()
+                                   for item in itertools.islice(item_iter, placement_counts[player])]
 
-                    # Collect the remaining items, which won't be placed in this batch, into a copy of `base_state` and make
-                    # that the base state for the batch.
-                    batch_base_state = base_state.copy()
-                    for item_iter in item_iters_by_player.values():
-                        for item in item_iter:
-                            batch_base_state.collect(item, True)
-                else:
-                    # Everything remaining is being placed, so we can be more optimized.
-                    batch_item_pool = [item for items in reachable_items.values()
-                                       for item in items]
-                    # There are no remaining items that won't be placed in this batch, so the batch's base_state is just
-                    # a copy of `base_state`.
-                    batch_base_state = base_state.copy()
+                # Collect the remaining items, which won't be placed in this batch, into a copy of `base_state` and make
+                # that the base state for the batch.
+                batch_base_state = base_state.copy()
+                for item_iter in item_iters_by_player.values():
+                    for item in item_iter:
+                        batch_base_state.collect(item, True)
 
                 batched_placements_remaining = len(batch_item_pool)
 
