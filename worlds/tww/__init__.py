@@ -269,23 +269,6 @@ class TWWWorld(World):
         self.logic_precise_1 = self.logic_precise_2 or self.options.logic_precision == "normal"
         self.logic_tuner_logic_enabled = bool(self.options.enable_tuner_logic.value)
 
-    def setup_base_regions(self) -> None:
-        """
-        Create all the necessary regions in the multiworld. Connections between regions are added later, after any
-        entrance randomization.
-        """
-
-        multiworld = self.multiworld
-        player = self.player
-
-        # "The Great Sea" region contains all locations that are not in a randomizable region.
-        great_sea_region = Region("The Great Sea", player, multiworld)
-        multiworld.regions.append(great_sea_region)
-
-        # Add all randomizable regions.
-        for _exit in ALL_EXITS:
-            multiworld.regions.append(Region(_exit.unique_name, player, multiworld))
-
     def create_regions(self) -> None:
         """
         Create and connect regions for the The Wind Waker world.
@@ -296,10 +279,17 @@ class TWWWorld(World):
         Finally, the flags for sunken treasure locations are updated as appropriate, and the entrances are randomized
         if that option is enabled.
         """
-        self.setup_base_regions()
-
+        multiworld = self.multiworld
         player = self.player
         options = self.options
+
+        # "The Great Sea" region contains all locations that are not in a randomizable region.
+        great_sea_region = Region("The Great Sea", player, multiworld)
+        multiworld.regions.append(great_sea_region)
+
+        # Add all randomizable regions.
+        for _exit in ALL_EXITS:
+            multiworld.regions.append(Region(_exit.unique_name, player, multiworld))
 
         # Set up sunken treasure locations, randomizing the charts if necessary.
         self.charts.setup_progress_sunken_treasure_locations()
