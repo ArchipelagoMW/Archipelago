@@ -1992,6 +1992,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             args["cmd"] = "SetReply"
             value = ctx.stored_data.get(args["key"], args.get("default", 0))
             args["original_value"] = copy.copy(value)
+            args["slot"] = client.slot
             for operation in args["operations"]:
                 func = modify_functions[operation["operation"]]
                 value = func(value, operation["value"])
