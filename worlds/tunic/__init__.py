@@ -244,6 +244,9 @@ class TunicWorld(World):
         # if item_data.combat_ic is None, it'll take item_data.classification instead
         itemclass: ItemClassification = ((item_data.combat_ic if self.options.combat_logic else None)
                                          or item_data.classification)
+        # UT uses create_item when you receive an item, so these need to be progression too
+        if self.using_ut and name in ("Glass Cannon", "Shield"):
+            classification = ItemClassification.progression
         return TunicItem(name, classification or itemclass, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
