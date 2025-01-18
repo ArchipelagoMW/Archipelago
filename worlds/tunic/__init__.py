@@ -301,6 +301,9 @@ class TunicWorld(World):
         # if item_data.combat_ic is None, it'll take item_data.classification instead
         itemclass: ItemClassification = ((item_data.combat_ic if self.options.combat_logic else None)
                                          or item_data.classification)
+        # UT uses create_item when you receive an item, so these need to be progression too
+        if self.using_ut and name in ("Glass Cannon", "Shield"):
+            classification = ItemClassification.progression
         return TunicItem(name, classification or itemclass, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
@@ -348,8 +351,9 @@ class TunicWorld(World):
 
         if self.options.grass_randomizer:
             items_to_create["Grass"] = len(grass_location_table)
-            tunic_items.append(self.create_item("Glass Cannon", ItemClassification.progression))
-            items_to_create["Glass Cannon"] = 0
+            if not self.options.start_with_sword:
+                tunic_items.append(self.create_item("Glass Cannon", ItemClassification.progression))
+                items_to_create["Glass Cannon"] = 0
             for grass_location in excluded_grass_locations:
                 self.get_location(grass_location).place_locked_item(self.create_item("Grass"))
             items_to_create["Grass"] -= len(excluded_grass_locations)
@@ -410,10 +414,11 @@ class TunicWorld(World):
 
             remove_filler(items_to_create[gold_hexagon])
 
-            # Sort for deterministic order
-            for hero_relic in sorted(item_name_groups["Hero Relics"]):
-                tunic_items.append(self.create_item(hero_relic, ItemClassification.useful))
-                items_to_create[hero_relic] = 0
+            if not self.options.combat_logic:
+                # Sort for deterministic order
+                for hero_relic in sorted(item_name_groups["Hero Relics"]):
+                    tunic_items.append(self.create_item(hero_relic, ItemClassification.useful))
+                    items_to_create[hero_relic] = 0
 
         if not self.options.ability_shuffling:
             # Sort for deterministic order
