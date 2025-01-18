@@ -177,7 +177,11 @@ def randomize_rock_tunnel(data, random):
         if random.randint(0, 1):
             floor(10, 7)
             floor(11, 7)
-            tall(random.randint(12, 17), 8)
+            if current_map[10][13]==1:
+                # (13,10) is floor
+                tall(random.randint(14, 16), 8)
+            else:
+                tall(random.randint(12, 16), 8)
         else:
             floor(12, 5)
             floor(12, 6)
