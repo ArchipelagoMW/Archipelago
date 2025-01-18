@@ -35,7 +35,8 @@ from .options import (
     VanillaLocations,
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
-    SpearOfAdunAutonomouslyCastPresentInNoBuild, EnableVoidTrade, DifficultyDamageModifier, MissionOrderScouting
+    SpearOfAdunAutonomouslyCastPresentInNoBuild, EnableVoidTrade, VoidTradeAgeLimit, void_trade_age_limits_ms,
+    DifficultyDamageModifier, MissionOrderScouting
 )
 from .mission_order.structs import CampaignSlotData, LayoutSlotData, MissionSlotData, MissionEntryRules
 from .mission_order.entry_rules import SubRuleRuleData, CountMissionsRuleData
@@ -403,6 +404,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             ConfigurableOptionInfo('skip_cutscenes', 'skip_cutscenes', options.SkipCutscenes),
             ConfigurableOptionInfo('enable_morphling', 'enable_morphling', options.EnableMorphling, can_break_logic=True),
             ConfigurableOptionInfo('difficulty_damage_modifier', 'difficulty_damage_modifier', options.DifficultyDamageModifier),
+            ConfigurableOptionInfo('void_trade_age_limit', 'trade_age_limit', options.VoidTradeAgeLimit),
         )
 
         WARNING_COLOUR = "salmon"
@@ -635,6 +637,7 @@ class SC2Context(CommonContext):
         self.nova_covert_ops_only = False
         self.kerrigan_levels_per_mission_completed = 0
         self.trade_enabled: int = EnableVoidTrade.default
+        self.trade_age_limit: int = VoidTradeAgeLimit.default
         self.trade_underway: bool = False
         self.trade_latest_reply: typing.Optional[dict] = None
         self.trade_reply_event = asyncio.Event()
@@ -795,6 +798,7 @@ class SC2Context(CommonContext):
             self.lowest_maximum_supply = args["slot_data"].get("lowest_maximum_supply", options.LowestMaximumSupply.default)
             self.nova_covert_ops_only = args["slot_data"].get("nova_covert_ops_only", False)
             self.trade_enabled = args["slot_data"].get("enable_void_trade", EnableVoidTrade.option_false)
+            self.trade_age_limit = args["slot_data"].get("void_trade_age_limit", VoidTradeAgeLimit.default)
             self.difficulty_damage_modifier = args["slot_data"].get("difficulty_damage_modifier", DifficultyDamageModifier.option_true)
             self.mission_order_scouting = args["slot_data"].get("mission_order_scouting", MissionOrderScouting.option_none)
             self.mission_item_classification = args["slot_data"].get("mission_item_classification", None)
@@ -1019,7 +1023,7 @@ class SC2Context(CommonContext):
             lock = int(time.time_ns() / 1000000)
 
             # Make sure we're not past the waiting limit
-            # SC2 needs to be notified within 10 minutes (training time of the dummy units)
+            # SC2 needs to be notified within 10 minutes of game time (training time of the dummy units)
             if self.trade_lock_start is not None:
                 if self.last_bot.time - self.trade_lock_start >= TRADE_LOCK_WAIT_LIMIT:
                     self.trade_lock_wait = 0
@@ -1104,12 +1108,21 @@ class SC2Context(CommonContext):
             if slot != TRADE_DATASTORAGE_LOCK \
                 and slot != self.trade_storage_slot()
         ]
-        available_units: typing.List[typing.Tuple[str, str]] = []
+        # Filter out trades that are too old
+        if self.trade_age_limit != VoidTradeAgeLimit.option_disabled:
+            trade_time = reply["value"][TRADE_DATASTORAGE_LOCK]
+            allowed_age = void_trade_age_limits_ms[self.trade_age_limit]
+            is_young_enough = lambda send_time: trade_time - send_time <= allowed_age
+        else:
+            is_young_enough = lambda _: True
+        available_units: typing.List[typing.Tuple[str, str, int]] = []
         available_counts: typing.List[int] = []
         for slot in allowed_slots:
-            for (unit, count) in reply["value"][slot].items():
-                available_units.append((unit, slot))
-                available_counts.append(count)
+            for (send_time, units) in reply["value"][slot].items():
+                if is_young_enough(int(send_time)):
+                    for (unit, count) in units.items():
+                        available_units.append((unit, slot, send_time))
+                        available_counts.append(count)
 
         # Pick units to receive
         # If there's not enough units in total, just pick as many as possible
@@ -1128,14 +1141,17 @@ class SC2Context(CommonContext):
         # Build response data
         unit_counts: typing.Dict[str, int] = {}
         slots_to_update: typing.Dict[str, typing.Dict[str, int]] = {}
-        for (unit, slot) in units:
+        for (unit, slot, send_time) in units:
             unit_counts[unit] = unit_counts.get(unit, 0) + 1
             if slot not in slots_to_update:
                 slots_to_update[slot] = copy.deepcopy(reply["value"][slot])
-            slots_to_update[slot][unit] -= 1
+            slots_to_update[slot][send_time][unit] -= 1
             # Clean up units that were removed completely
-            if slots_to_update[slot][unit] == 0:
-                slots_to_update[slot].pop(unit)
+            if slots_to_update[slot][send_time][unit] == 0:
+                slots_to_update[slot][send_time].pop(unit)
+            # Clean up trades that were completely exhausted
+            if len(slots_to_update[slot][send_time]) == 0:
+                slots_to_update[slot].pop(send_time)
 
         await self.send_msgs([
             {   # Update server storage
@@ -1164,10 +1180,15 @@ class SC2Context(CommonContext):
             self.trade_response = "?TradeFail Void Trade failed: Could not communicate with server. Your units remain."
             return None
         
-        # Update the storage with the new units
-        data: typing.Dict[str, int] = copy.deepcopy(reply["value"].get(self.trade_storage_slot(), {}))
+        # Create a storage entry for the time the trade was confirmed
+        trade_time = reply["value"][TRADE_DATASTORAGE_LOCK]
+        storage_entry = {}
         for unit in units:
-            data[unit] = data.get(unit, 0) + 1
+            storage_entry[unit] = storage_entry.get(unit, 0) + 1
+        
+        # Update the storage with the new units
+        data: typing.Dict[int, typing.Dict[str, int]] = copy.deepcopy(reply["value"].get(self.trade_storage_slot(), {}))
+        data[trade_time] = storage_entry
         
         await self.send_msgs([
             {   # Send the updated data
