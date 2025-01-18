@@ -6,7 +6,7 @@ checking or launching the client, otherwise it will probably cause circular impo
 import asyncio
 import enum
 import subprocess
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, logger, gui_enabled
 import Patch
@@ -44,7 +44,7 @@ class BizHawkClientContext(CommonContext):
     auth_status: AuthStatus
     password_requested: bool
     client_handler: Optional[BizHawkClient]
-    slot_data: Optional[Dict[str, Any]] = None
+    slot_data: Optional[dict[str, Any]] = None
     rom_hash: Optional[str] = None
     bizhawk_ctx: BizHawkContext
 
