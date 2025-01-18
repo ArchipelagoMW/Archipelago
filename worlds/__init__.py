@@ -131,6 +131,7 @@ from .AutoWorld import AutoWorldRegister
 if apworlds:
     # encapsulation for namespace / gc purposes
     def load_apworlds() -> None:
+        global apworlds
         from .Files import APWorldContainer, InvalidDataError
         core_compatible: list[tuple[WorldSource, APWorldContainer]] = []
 
