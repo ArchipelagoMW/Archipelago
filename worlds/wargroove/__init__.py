@@ -9,6 +9,15 @@ from .Regions import create_regions
 from .Rules import set_rules
 from worlds.AutoWorld import World, WebWorld
 from .Options import WargrooveOptions
+from worlds.LauncherComponents import Component, components, Type, launch_subprocess
+
+
+def launch_client():
+    from .Client import launch
+    launch_subprocess(launch, name="WargrooveClient")
+
+
+components.append(Component("Wargroove Client", game_name="Wargroove", func=launch_client, component_type=Type.CLIENT))
 
 
 class WargrooveSettings(settings.Group):
@@ -55,6 +64,7 @@ class WargrooveWorld(World):
             'commander_defense_boost': self.options.commander_defense_boost.value,
             'can_choose_commander': self.options.commander_choice.value != 0,
             'commander_choice': self.options.commander_choice.value,
+            'death_link': self.options.death_link.value,
             'starting_groove_multiplier': 20  # Backwards compatibility in case this ever becomes an option
         }
 

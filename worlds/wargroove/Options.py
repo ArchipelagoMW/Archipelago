@@ -1,6 +1,6 @@
 import typing
 from dataclasses import dataclass
-from Options import Choice, Option, Range, PerGameCommonOptions
+from Options import Choice, Range, PerGameCommonOptions, DeathLink, StartInventoryPool
 
 
 class IncomeBoost(Range):
@@ -36,3 +36,5 @@ class WargrooveOptions(PerGameCommonOptions):
     income_boost: IncomeBoost
     commander_defense_boost: CommanderDefenseBoost
     commander_choice: CommanderChoice
+    death_link: DeathLink
+    start_inventory_from_pool: StartInventoryPool

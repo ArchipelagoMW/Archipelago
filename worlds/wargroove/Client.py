@@ -2,14 +2,15 @@ from __future__ import annotations
 
 import atexit
 import os
+import pkgutil
 import sys
 import asyncio
 import random
-import shutil
+import typing
 from typing import Tuple, List, Iterable, Dict
 
-from worlds.wargroove import WargrooveWorld
-from worlds.wargroove.Items import item_table, faction_table, CommanderData, ItemData
+from . import WargrooveWorld
+from .Items import item_table, faction_table, CommanderData, ItemData
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -21,7 +22,7 @@ import logging
 if __name__ == "__main__":
     Utils.init_logging("WargrooveClient", exception_logger="Client")
 
-from NetUtils import NetworkItem, ClientStatus
+from NetUtils import ClientStatus
 from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProcessor, \
     CommonContext, server_loop
 
@@ -58,6 +59,7 @@ class WargrooveContext(CommonContext):
     commander_defense_boost_multiplier: int = 0
     income_boost_multiplier: int = 0
     starting_groove_multiplier: float
+    has_death_link: bool = False
     faction_item_ids = {
         'Starter': 0,
         'Cherrystone': 52025,
@@ -78,31 +80,51 @@ class WargrooveContext(CommonContext):
         self.syncing = False
         self.awaiting_bridge = False
         # self.game_communication_path: files go in this path to pass data between us and the actual game
-        if "appdata" in os.environ:
-            options = Utils.get_options()
-            root_directory = os.path.join(options["wargroove_options"]["root_directory"])
-            data_directory = os.path.join("lib", "worlds", "wargroove", "data")
-            dev_data_directory = os.path.join("worlds", "wargroove", "data")
-            appdata_wargroove = os.path.expandvars(os.path.join("%APPDATA%", "Chucklefish", "Wargroove"))
-            if not os.path.isfile(os.path.join(root_directory, "win64_bin", "wargroove64.exe")):
-                print_error_and_close("WargrooveClient couldn't find wargroove64.exe. "
-                                      "Unable to infer required game_communication_path")
-            self.game_communication_path = os.path.join(root_directory, "AP")
-            if not os.path.exists(self.game_communication_path):
-                os.makedirs(self.game_communication_path)
-            self.remove_communication_files()
-            atexit.register(self.remove_communication_files)
-            if not os.path.isdir(appdata_wargroove):
-                print_error_and_close("WargrooveClient couldn't find Wargoove in appdata!"
-                                      "Boot Wargroove and then close it to attempt to fix this error")
-            if not os.path.isdir(data_directory):
-                data_directory = dev_data_directory
-            if not os.path.isdir(data_directory):
-                print_error_and_close("WargrooveClient couldn't find Wargoove mod and save files in install!")
-            shutil.copytree(data_directory, appdata_wargroove, dirs_exist_ok=True)
-        else:
-            print_error_and_close("WargrooveClient couldn't detect system type. "
+        options = Utils.get_settings()
+        root_directory = os.path.join(options["wargroove_options"]["root_directory"])
+        appdata_wargroove = os.path.expandvars(os.path.join(os.environ['appdata'], "Chucklefish", "Wargroove"))
+        if not os.path.isfile(os.path.join(root_directory, "win64_bin", "wargroove64.exe")):
+            print_error_and_close("WargrooveClient couldn't find wargroove64.exe. "
                                   "Unable to infer required game_communication_path")
+        self.game_communication_path = os.path.join(root_directory, "AP")
+        if not os.path.exists(self.game_communication_path):
+            os.makedirs(self.game_communication_path)
+        self.remove_communication_files()
+        atexit.register(self.remove_communication_files)
+        if not os.path.isdir(appdata_wargroove):
+            print_error_and_close("WargrooveClient couldn't find Wargoove in appdata!"
+                                  "Boot Wargroove and then close it to attempt to fix this error")
+        mods_directory = os.path.join(appdata_wargroove, "mods", "ArchipelagoMod")
+        save_directory = os.path.join(appdata_wargroove, "save")
+
+        # Wargroove doesn't always create the mods directory, so we have to do it
+        if not os.path.isdir(mods_directory):
+            os.makedirs(mods_directory)
+        resources = [os.path.join("data", "mods", "ArchipelagoMod", "maps.dat"),
+                     os.path.join("data", "mods", "ArchipelagoMod", "mod.dat"),
+                     os.path.join("data", "mods", "ArchipelagoMod", "modAssets.dat"),
+                     os.path.join("data", "save", "campaign-c40a6e5b0cdf86ddac03b276691c483d.cmp"),
+                     os.path.join("data", "save", "campaign-c40a6e5b0cdf86ddac03b276691c483d.cmp.bak")]
+        file_paths = [os.path.join(mods_directory, "maps.dat"),
+                      os.path.join(mods_directory, "mod.dat"),
+                      os.path.join(mods_directory, "modAssets.dat"),
+                      os.path.join(save_directory, "campaign-c40a6e5b0cdf86ddac03b276691c483d.cmp"),
+                      os.path.join(save_directory, "campaign-c40a6e5b0cdf86ddac03b276691c483d.cmp.bak")]
+        for i in range(0, len(resources)):
+            file_data = pkgutil.get_data("worlds.wargroove", resources[i])
+            if file_data is None:
+                print_error_and_close("WargrooveClient couldn't find Wargoove mod and save files in install!")
+            with open(file_paths[i], 'wb') as f:
+                f.write(file_data)
+
+    def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
+        with open(os.path.join(self.game_communication_path, "deathLinkReceive"), 'w+') as f:
+            text = data.get("cause", "")
+            if text:
+                f.write(f"DeathLink: {text}")
+            else:
+                f.write(f"DeathLink: Received from {data['source']}")
+        super(WargrooveContext, self).on_deathlink(data)
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -138,20 +160,20 @@ class WargrooveContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
+            slot_data = args["slot_data"]
+            self.has_death_link = slot_data["death_link"]
             filename = f"AP_settings.json"
             with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-                slot_data = args["slot_data"]
-                json.dump(args["slot_data"], f)
+                json.dump(slot_data, f)
                 self.can_choose_commander = slot_data["can_choose_commander"]
                 print('can choose commander:', self.can_choose_commander)
                 self.starting_groove_multiplier = slot_data["starting_groove_multiplier"]
                 self.income_boost_multiplier = slot_data["income_boost"]
                 self.commander_defense_boost_multiplier = slot_data["commander_defense_boost"]
-                f.close()
             for ss in self.checked_locations:
                 filename = f"send{ss}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-                    f.close()
+                    pass
             self.update_commander_data()
             self.ui.update_tracker()
 
@@ -161,7 +183,7 @@ class WargrooveContext(CommonContext):
                 filename = f"seed{i}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.write(str(random.randint(0, 4294967295)))
-                    f.close()
+                    pass
 
         if cmd in {"RoomInfo"}:
             self.seed_name = args["seed_name"]
@@ -189,7 +211,6 @@ class WargrooveContext(CommonContext):
                         f.write(f"{item_count * self.commander_defense_boost_multiplier}")
                     else:
                         f.write(f"{item_count}")
-                    f.close()
 
                 print_filename = f"AP_{str(network_item.item)}.item.print"
                 print_path = os.path.join(self.game_communication_path, print_filename)
@@ -200,7 +221,6 @@ class WargrooveContext(CommonContext):
                                 self.item_names.lookup_in_game(network_item.item) +
                                 " from " +
                                 self.player_names[network_item.player])
-                        f.close()
             self.update_commander_data()
             self.ui.update_tracker()
 
@@ -209,7 +229,7 @@ class WargrooveContext(CommonContext):
                 for ss in self.checked_locations:
                     filename = f"send{ss}"
                     with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-                        f.close()
+                        pass
 
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
@@ -401,8 +421,15 @@ async def game_watcher(ctx: WargrooveContext):
             ctx.syncing = False
         sending = []
         victory = False
+        await ctx.update_death_link(ctx.has_death_link)
         for root, dirs, files in os.walk(ctx.game_communication_path):
             for file in files:
+                if file == "deathLinkSend" and ctx.has_death_link:
+                    with open(os.path.join(ctx.game_communication_path, file), 'r') as f:
+                        failed_mission = f.read()
+                        if ctx.slot is not None:
+                            await ctx.send_death(f"{ctx.player_names[ctx.slot]} failed {failed_mission}")
+                    os.remove(os.path.join(ctx.game_communication_path, file))
                 if file.find("send") > -1:
                     st = file.split("send", -1)[1]
                     sending = sending+[(int(st))]
@@ -424,7 +451,7 @@ def print_error_and_close(msg):
     Utils.messagebox("Error", msg, error=True)
     sys.exit(1)
 
-if __name__ == '__main__':
+def launch():
     async def main(args):
         ctx = WargrooveContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
