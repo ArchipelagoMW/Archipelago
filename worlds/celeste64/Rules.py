@@ -21,7 +21,12 @@ def set_rules(world: Celeste64World):
     # Completion condition.
     world.multiworld.completion_condition[world.player] = lambda state: goal_rule(state, world)
 
+
 location_standard_moves_logic: Dict[str, List[List[str]]] = {
+    LocationName.strawberry_1:  [[ItemName.ground_dash],
+                                 [ItemName.air_dash],
+                                 [ItemName.skid_jump],
+                                 [ItemName.climb]],
     LocationName.strawberry_3:  [[ItemName.air_dash],
                                  [ItemName.skid_jump]],
     LocationName.strawberry_4:  [[ItemName.traffic_block, ItemName.breakables, ItemName.air_dash]],
@@ -57,8 +62,8 @@ location_standard_moves_logic: Dict[str, List[List[str]]] = {
     LocationName.sign_2: [[ItemName.breakables, ItemName.ground_dash],
                           [ItemName.breakables, ItemName.air_dash]],
 
-    LocationName.car_2: [[ItemName.breakables, ItemName.ground_dash],
-                         [ItemName.breakables, ItemName.air_dash]],
+    LocationName.car_2: [[ItemName.breakables, ItemName.ground_dash, ItemName.climb],
+                         [ItemName.breakables, ItemName.air_dash, ItemName.climb]],
 }
 
 location_hard_moves_logic: Dict[str, List[List[str]]] = {
@@ -100,8 +105,8 @@ location_hard_moves_logic: Dict[str, List[List[str]]] = {
                                  [ItemName.cassette, ItemName.feather, ItemName.climb]],
     LocationName.strawberry_29: [[ItemName.cassette, ItemName.dash_refill, ItemName.air_dash, ItemName.skid_jump],
                                  [ItemName.cassette, ItemName.ground_dash, ItemName.air_dash]],
-    LocationName.strawberry_30: [[ItemName.cassette, ItemName.dash_refill, ItemName.traffic_block, ItemName.breakables, ItemName.air_dash, ItemName.climb, ItemName.skid_jump],
-                                 [ItemName.cassette, ItemName.dash_refill, ItemName.traffic_block, ItemName.breakables, ItemName.spring, ItemName.air_dash, ItemName.climb]],
+    LocationName.strawberry_30: [[ItemName.cassette, ItemName.dash_refill, ItemName.double_dash_refill, ItemName.traffic_block, ItemName.breakables, ItemName.air_dash, ItemName.climb, ItemName.skid_jump],
+                                 [ItemName.cassette, ItemName.dash_refill, ItemName.double_dash_refill, ItemName.traffic_block, ItemName.breakables, ItemName.spring, ItemName.air_dash, ItemName.climb]],
 
     LocationName.sign_2: [[ItemName.breakables, ItemName.ground_dash],
                           [ItemName.breakables, ItemName.air_dash]],
@@ -223,5 +228,3 @@ def connect_region(world: Celeste64World, region: Region, dest_regions: List[str
         rules[dest_region] = lambda state, dest_region=dest_region: region_connection_rule(state, world, region.name, dest_region)
 
     region.add_exits(dest_regions, rules)
-
-    pass
