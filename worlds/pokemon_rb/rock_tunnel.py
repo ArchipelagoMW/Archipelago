@@ -227,6 +227,9 @@ def randomize_rock_tunnel(data, random):
             #early block
             wide(13, random.randint(2, 5))
             tall(random.randint(14, 15), 1)
+            if not 1 in (current_map[1][14],current_map[2][13]):
+                # wide(13,2) and tall(14,1) overlap
+                single(13,2)
         elif r == 1:
             if random.randint(0, 1):
                 tall(16, 5)
