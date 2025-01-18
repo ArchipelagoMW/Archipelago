@@ -101,7 +101,7 @@ class ResourceSinkPoints(NamedRange):
 class HardDriveProgressionLimit(Range):
     """
     How many Hard Drives can contain progression items.
-    Hard Drives above this count cannot contain progression, but can still be useful.
+    Hard Drives above this count cannot contain progression, but can still be Useful.
     
     There are 118 total hard drives.
     """
@@ -244,7 +244,7 @@ class TrapSelectionOverride(OptionSet):
 class EnergyLink(Toggle):
     """
     Allow transferring energy to and from other worlds using the Power Storage building.
-    0% of the energy is lost in the transfer.
+    No energy is lost in the transfer on Satisfactory's side, but other worlds may have other settings.
     """
     display_name = "EnergyLink"
 
