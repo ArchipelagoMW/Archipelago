@@ -22,8 +22,10 @@ class TestAuroraVineyard(SVTestBase):
     }
 
     def test_need_tablet_to_do_quest(self):
-        self.collect("Starfruit Seeds", 1)
-        self.collect("Summer", 1)
+        self.collect("Starfruit Seeds")
+        self.collect("Bus Repair")
+        self.collect("Shipping Bin")
+        self.collect("Summer")
         location_name = ModQuest.AuroraVineyard
         location = self.multiworld.get_location(location_name, self.player)
         self.assert_reach_location_false(location, self.multiworld.state)
@@ -31,8 +33,10 @@ class TestAuroraVineyard(SVTestBase):
         self.assert_reach_location_true(location, self.multiworld.state)
 
     def test_need_quest_to_go_downstairs(self):
-        self.collect("Starfruit Seeds", 1)
-        self.collect("Summer", 1)
+        self.collect("Starfruit Seeds")
+        self.collect("Bus Repair")
+        self.collect("Summer")
+        self.collect("Shipping Bin")
         region_name = SVERegion.aurora_vineyard_basement
         region = self.multiworld.get_region(region_name, self.player)
         self.assertFalse(region.can_reach(self.multiworld.state))
