@@ -10,7 +10,7 @@ import base64
 import enum
 import json
 import sys
-from typing import Any, Optional, Sequence
+from typing import Any, Sequence
 
 
 BIZHAWK_SOCKET_PORT_RANGE_START = 43055
@@ -44,10 +44,10 @@ class SyncError(Exception):
 
 
 class BizHawkContext:
-    streams: Optional[tuple[asyncio.StreamReader, asyncio.StreamWriter]]
+    streams: tuple[asyncio.StreamReader, asyncio.StreamWriter] | None
     connection_status: ConnectionStatus
     _lock: asyncio.Lock
-    _port: Optional[int]
+    _port: int | None
 
     def __init__(self) -> None:
         self.streams = None
@@ -234,7 +234,7 @@ async def set_message_interval(ctx: BizHawkContext, value: float) -> None:
 
 
 async def guarded_read(ctx: BizHawkContext, read_list: Sequence[tuple[int, int, str]],
-                       guard_list: Sequence[tuple[int, Sequence[int], str]]) -> Optional[list[bytes]]:
+                       guard_list: Sequence[tuple[int, Sequence[int], str]]) -> list[bytes] | None:
     """Reads an array of bytes at 1 or more addresses if and only if every byte in guard_list matches its expected
     value.
 

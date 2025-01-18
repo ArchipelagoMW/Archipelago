@@ -5,7 +5,7 @@ A module containing the BizHawkClient base class and metaclass
 from __future__ import annotations
 
 import abc
-from typing import TYPE_CHECKING, Any, ClassVar, Optional, Union
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
 
@@ -54,7 +54,7 @@ class AutoBizHawkClientRegister(abc.ABCMeta):
         return new_class
 
     @staticmethod
-    async def get_handler(ctx: "BizHawkClientContext", system: str) -> Optional[BizHawkClient]:
+    async def get_handler(ctx: "BizHawkClientContext", system: str) -> BizHawkClient | None:
         for systems, handlers in AutoBizHawkClientRegister.game_handlers.items():
             if system in systems:
                 for handler in handlers.values():
@@ -65,13 +65,13 @@ class AutoBizHawkClientRegister(abc.ABCMeta):
 
 
 class BizHawkClient(abc.ABC, metaclass=AutoBizHawkClientRegister):
-    system: ClassVar[Union[str, tuple[str, ...]]]
+    system: ClassVar[str | tuple[str, ...]]
     """The system(s) that the game this client is for runs on"""
 
     game: ClassVar[str]
     """The game this client is for"""
 
-    patch_suffix: ClassVar[Optional[Union[str, tuple[str, ...]]]]
+    patch_suffix: ClassVar[str | tuple[str, ...] | None]
     """The file extension(s) this client is meant to open and patch (e.g. ".apz3")"""
 
     @abc.abstractmethod
