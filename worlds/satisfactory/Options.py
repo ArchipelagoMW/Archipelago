@@ -103,7 +103,7 @@ class HardDriveProgressionLimit(Range):
     How many Hard Drives can contain progression items.
     Hard Drives above this count cannot contain progression, but can still be Useful.
     
-    There are 118 total hard drives.
+    There are 118 total hard drives in the world and the current implementation supports up to 100 progression hard drives.
     """
     display_name = "Hard Drive Progression Items"
     default = 20
@@ -230,7 +230,7 @@ class TrapSelectionPreset(ChoiceMap):
         "Nicholas Cage": ["Trap: Hatcher", "Trap: Elite Hatcher", "Trap: Not the Bees"],
         "Fallout": ["Trap: Doggo with Nuke Nobelisk", "Trap: Nuclear Hog", "Trap: Nuclear Waste Drop", "Trap: Plutonium Waste Drop", "Bundle: Uranium", "Bundle: Uranium Fuel Rod", "Bundle: Uranium Waste", "Bundle: Plutonium Fuel Rod", "Bundle: Plutonium Waste", "Bundle: Ficsonium", "Bundle: Ficsonium Fuel Rod"],
     }
-    default="Normal"
+    # default="Normal" # TODO `default` doesn't do anything, default is always the first `choices` value. if uncommented it messes up the template file generation (caps mismatch)
 
 class TrapSelectionOverride(OptionSet):
     """
@@ -330,7 +330,7 @@ class StartingInventoryPreset(ChoiceMap):
         "Foundations": _default_plus_foundations_starting_items,
         "Foundation Lover": _foundation_lover_starting_items
     }
-    default = "Archipelago"
+    # default = "Archipelago" # TODO `default` doesn't do anything, default is always the first `choices` value. if uncommented it messes up the template file generation (caps mismatch)
 
 class GoalSelection(OptionSet):
     """
