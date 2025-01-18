@@ -20,7 +20,7 @@ class TotalStrawberries(Range):
     """
     display_name = "Total Strawberries"
     range_start = 0
-    range_end = 46
+    range_end = 55
     default = 20
 
 class StrawberriesRequiredPercentage(Range):
@@ -77,7 +77,9 @@ class Carsanity(Toggle):
 
 class Checkpointsanity(Toggle):
     """
-    Whether riding on cars grants location checks
+    Whether activating Checkpoints grants location checks
+
+    Activating this will also shuffle items into the pool which allow usage and warping to each Checkpoint
     """
     display_name = "Checkpointsanity"
 
