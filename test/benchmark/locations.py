@@ -22,9 +22,9 @@ def run_locations_benchmark():
             "create_regions",
             "create_items",
             "set_rules",
-            "connect_entrances
+            "connect_entrances",
             "generate_basic",
-            "pre_fill"
+            "pre_fill",
         )
 
 
