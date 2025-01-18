@@ -29,6 +29,7 @@ blue_hexagon = "Blue Questagon"
 gold_hexagon = "Gold Questagon"
 
 # "Quarry - [East] Bombable Wall" is excluded from this list since it has slightly different rules
+# Cube Cave's is also excluded since it's also special since it's an entrance, not a chest
 bomb_walls = ["East Forest - Bombable Wall", "Eastern Vault Fortress - [East Wing] Bombable Wall",
               "Overworld - [Central] Bombable Wall", "Overworld - [Southwest] Bombable Wall Near Fountain",
               "Quarry - [West] Upper Area Bombable Wall", "Ruined Atoll - [Northwest] Bombable Wall"]
