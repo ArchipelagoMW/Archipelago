@@ -104,6 +104,9 @@ class Celeste64World(World):
             item_pool += [self.create_item(name)
                           for name in move_items_for_itempool
                           if name not in self.options.start_inventory]
+        else:
+            for start_move in move_item_data_table.keys():
+                self.multiworld.push_precollected(self.create_item(start_move))
 
         if self.options.checkpointsanity:
             location_count += 9
