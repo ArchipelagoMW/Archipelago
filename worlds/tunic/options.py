@@ -316,31 +316,38 @@ class LogicRules(Choice):
 @dataclass
 class TunicOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
+
     sword_progression: SwordProgression
     start_with_sword: StartWithSword
     keys_behind_bosses: KeysBehindBosses
     ability_shuffling: AbilityShuffling
-    shuffle_ladders: ShuffleLadders
-    entrance_rando: EntranceRando
-    fixed_shop: FixedShop
     fool_traps: FoolTraps
+    laurels_location: LaurelsLocation
+
     hexagon_quest: HexagonQuest
     hexagon_goal: HexagonGoal
     extra_hexagon_percentage: ExtraHexagonPercentage
     hexagon_quest_ability_type: HexagonQuestAbilityUnlockType
-    laurels_location: LaurelsLocation
+
+    shuffle_ladders: ShuffleLadders
+    grass_randomizer: GrassRandomizer
+    local_fill: LocalFill
+
+    entrance_rando: EntranceRando
+    fixed_shop: FixedShop
+
     combat_logic: CombatLogic
     lanternless: Lanternless
     maskless: Maskless
-    grass_randomizer: GrassRandomizer
-    local_fill: LocalFill
     laurels_zips: LaurelsZips
     ice_grappling: IceGrappling
     ladder_storage: LadderStorage
     ladder_storage_without_items: LadderStorageWithoutItems
+
     plando_connections: TunicPlandoConnections
+
     logic_rules: LogicRules
-      
+
 
 tunic_option_groups = [
     OptionGroup("Hexagon Quest Options", [
