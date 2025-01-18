@@ -262,7 +262,11 @@ def randomize_rock_tunnel(data, random):
                 floor(7, 11)
             else:
                 floor(8, 11)
-                floor(9, 11)
+                if current_map[12][10]==32:
+                    # (10,12) is wide
+                    single(9, 11)
+                else:
+                    floor(9, 11)
         elif r == 3:
             floor(9, 9)
             floor(9, 10)
