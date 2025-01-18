@@ -412,6 +412,7 @@ class TWWWorld(World):
         }
 
         # Output which item has been placed at each location.
+        output_locations = output_data["Locations"]
         locations = multiworld.get_locations(player)
         for location in locations:
             if location.name != "Defeat Ganondorf":
@@ -424,11 +425,12 @@ class TWWWorld(World):
                     }
                 else:
                     item_info = {"name": "Nothing", "game": "The Wind Waker", "classification": "filler"}
-                output_data["Locations"][location.name] = item_info
+                output_locations[location.name] = item_info
 
         # Output the mapping of entrances to exits.
+        output_entrances = output_data["Entrances"]
         for zone_entrance, zone_exit in self.entrances.done_entrances_to_exits.items():
-            output_data["Entrances"][zone_entrance.entrance_name] = zone_exit.unique_name
+            output_entrances[zone_entrance.entrance_name] = zone_exit.unique_name
 
         # Output the plando details to file.
         aptww = TWWContainer(
