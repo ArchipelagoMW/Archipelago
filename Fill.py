@@ -93,7 +93,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
     # The base state for the current batch. Collects all items yet to be placed which are not part of the current batch.
     batch_base_state: typing.Optional[CollectionState] = None
     # The sweep state for the current batch. Starts from `batch_base_state` and then sweeps to collect items from
-    # reachable locations. If a swap changes the item at a location it has collected from, the state must be re-created.
+    # reachable locations. If a swap changes the item at a location it has collected from, the state may be re-created.
     batch_sweep_state: typing.Optional[CollectionState] = None
     # The number of remaining placements in the current batch. Once this reaches zero, a new batch is
     # created.
@@ -317,12 +317,6 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                                 # cleanup at the end to hopefully get better errors
                                 cleanup_required = True
 
-                                # If that batch's sweep state has collected the item from the swapped location, the
-                                # state is now invalid and must be re-created.
-                                if (batch_sweep_state is not None
-                                        and spot_to_fill in batch_sweep_state.advancements):
-                                    batch_sweep_state = None
-
                                 # Determine if the displaced item can be added to the current batch.
                                 empty_spaces_for_items = batch_empty_spaces[placed_item.player]
                                 if empty_spaces_for_items > 0:
@@ -333,6 +327,13 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                                     if not one_item_per_player:
                                         items_per_player_in_batch[placed_item.player] += 1
                                         batched_placements_remaining += 1
+                                    # If that batch's sweep state has collected the item from the swapped location, the
+                                    # state is now invalid. It must be re-created because it has collected the displaced
+                                    # item and the displaced item is now in `batch_item_pool`, so the next
+                                    # `maximum_exploration_state` would end up collecting the displaced item twice.
+                                    if (batch_sweep_state is not None
+                                            and spot_to_fill in batch_sweep_state.advancements):
+                                        batch_sweep_state = None
                                 else:
                                     # There are no empty spaces in the current batch for this player, so the item will
                                     # need to be placed in a different batch.
@@ -341,9 +342,29 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                                     # criteria, so collect the item.
                                     batch_base_state.collect(placed_item, True)
                                     # The batch's sweep state is swept from the batch's base state, so it needs to
-                                    # collect the item too.
+                                    # collect the item too, but only if it had not already collected it.
                                     if batch_sweep_state is not None:
-                                        batch_sweep_state.collect(placed_item, True)
+                                        if spot_to_fill not in batch_sweep_state.advancements:
+                                            # The sweep state had not already collected the un-placed item by sweeping,
+                                            # so collect the item.
+                                            batch_sweep_state.collect(placed_item, True)
+                                        else:
+                                            # The batch's sweep state had already collected the displaced item from
+                                            # `spot_to_fill`.
+                                            # Rather than destroying the batch's sweep state, it can be adjusted.
+                                            # Collect the item being placed if `spot_to_fill` is still reachable.
+                                            if spot_to_fill.can_reach(batch_sweep_state):
+                                                # This is slightly faster than removing `spot_to_fill` from the state's
+                                                # collected advancement locations and making future maximum exploration
+                                                # states sweep to pick up `item_to_place`.
+                                                batch_sweep_state.collect(item_to_place, True)
+                                            else:
+                                                # In rare cases, `spot_to_fill` was only reachable because of the item
+                                                # that was placed at it, e.g. self-locking keys.
+                                                # Future sweeps will have to retry `spot_to_fill`, so remove it from the
+                                                # state's set of collected advancement locations.
+                                                batch_sweep_state.advancements.remove(spot_to_fill)
+
                                 break
 
                         # Item can't be placed here, restore original item
