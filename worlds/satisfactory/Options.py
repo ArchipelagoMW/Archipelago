@@ -62,6 +62,7 @@ class ElevatorTier(NamedRange):
 class ResourceSinkPoints(NamedRange):
     """
     Sink an amount of items totalling this amount of points to finish.
+    This setting is a *point count*, not a *coupon* count!
     Does nothing if *AWESOME Sink Points* goal is not enabled.
 
     In the base game, it takes 347 coupons to unlock every non-repeatable purchase, or 1895 coupons to purchase every non-producible item.
