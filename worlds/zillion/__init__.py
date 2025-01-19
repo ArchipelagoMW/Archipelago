@@ -24,6 +24,7 @@ from .patch import ZillionPatch
 from zilliandomizer.system import System
 from zilliandomizer.logic_components.items import RESCUE, items as zz_items, Item as ZzItem
 from zilliandomizer.logic_components.locations import Location as ZzLocation, Req
+from zilliandomizer.map_gen.region_maker import DEAD_END_SUFFIX
 from zilliandomizer.options import Chars
 
 from worlds.AutoWorld import World, WebWorld
@@ -172,6 +173,7 @@ class ZillionWorld(World):
         self.logic_cache = logic_cache
         w = self.multiworld
         self.my_locations = []
+        dead_end_locations: list[ZillionLocation] = []
 
         self.zz_system.randomizer.place_canister_gun_reqs()
         # low probability that place_canister_gun_reqs() results in empty 1st sphere
@@ -224,6 +226,16 @@ class ZillionWorld(World):
                     here.locations.append(loc)
                     self.my_locations.append(loc)
 
+                    if ((
+                        zz_here.name.endswith(DEAD_END_SUFFIX)
+                    ) or (
+                        (self.options.map_gen.value != self.options.map_gen.option_full) and
+                        (loc.name in self.options.priority_dead_ends.vanilla_dead_ends)
+                    ) or (
+                        loc.name in self.options.priority_dead_ends.always_dead_ends
+                    )):
+                        dead_end_locations.append(loc)
+
             for zz_dest in zz_here.connections.keys():
                 dest_name = "Menu" if zz_dest.name == "start" else zz_reg_name_to_reg_name(zz_dest.name)
                 dest = all_regions[dest_name]
@@ -233,6 +245,8 @@ class ZillionWorld(World):
 
                 queue.append(zz_dest)
             done.add(here.name)
+        if self.options.priority_dead_ends.value:
+            self.options.priority_locations.value |= {loc.name for loc in dead_end_locations}
 
     @override
     def create_items(self) -> None:
