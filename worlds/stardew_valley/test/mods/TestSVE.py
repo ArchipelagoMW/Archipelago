@@ -1,15 +1,6 @@
-import random
-
-from BaseClasses import get_seed
-from .. import SVTestBase, SVTestCase, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x, solo_multiworld, \
-    fill_dataclass_with_default
-from ..assertion import ModAssertMixin, WorldAssertMixin
-from ... import items, Group, ItemClassification, create_content
+from .. import SVTestBase
 from ... import options
-from ...items import items_by_group
 from ...mods.mod_data import ModNames
-from ...options import SkillProgression, Walnutsanity
-from ...regions import RandomizationFlag, randomize_connections, create_final_connections_and_regions
 from ...strings.ap_names.mods.mod_items import SVEQuestItem
 from ...strings.quest_names import ModQuest
 from ...strings.region_names import SVERegion
