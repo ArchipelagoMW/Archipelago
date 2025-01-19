@@ -566,6 +566,7 @@ class PriorityHintLocations(LocationSet):
         "Mountainside Vault Box",
         "Mountainside Discard",
         "Tunnels Theater Flowers EP",
+        "Boat Desert EP",
         "Boat Shipwreck Green EP",
         "Quarry Stoneworks Control Room Left",
     }
