@@ -895,6 +895,8 @@ OPTIMIZED_ORDNANCE          = "Optimized Ordnance (Protoss)"
 KHALAI_INGENUITY            = "Khalai Ingenuity (Protoss)"
 AMPLIFIED_ASSIMILATORS      = "Amplified Assimilators (Protoss)"
 PROGRESSIVE_WARP_RELOCATE   = "Progressive Warp Relocate (Protoss)"
+PROBE_WARPIN                = "Probe Warpin (Protoss)"
+ELDER_PROBES                = "Elder Probes (Protoss)"
 
 # Filler items
 STARTING_MINERALS           = "Additional Starting Minerals"

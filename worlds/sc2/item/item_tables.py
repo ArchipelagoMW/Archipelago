@@ -2034,6 +2034,10 @@ item_table = {
     item_names.PROGRESSIVE_WARP_RELOCATE:
         ItemData(813 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Progressive, 2, SC2Race.PROTOSS, quantity=2,
                  classification=ItemClassification.progression),
+    item_names.PROBE_WARPIN:
+        ItemData(814 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Solarite_Core, 13, SC2Race.PROTOSS),
+    item_names.ELDER_PROBES:
+        ItemData(815 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Solarite_Core, 14, SC2Race.PROTOSS),
 }
 
 # Add keys to item table
