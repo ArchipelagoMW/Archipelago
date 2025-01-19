@@ -259,6 +259,58 @@ BOSS_EXIT_TO_DUNGEON: dict[str, str] = {
     "Molgera Boss Arena":       "Wind Temple",
 }
 
+VANILLA_ENTRANCES_TO_EXITS: dict[str, str] = {
+    "Dungeon Entrance on Dragon Roost Island": "Dragon Roost Cavern",
+    "Dungeon Entrance in Forest Haven Sector": "Forbidden Woods",
+    "Dungeon Entrance in Tower of the Gods Sector": "Tower of the Gods",
+    "Dungeon Entrance on Headstone Island": "Earth Temple",
+    "Dungeon Entrance on Gale Isle": "Wind Temple",
+
+    "Miniboss Entrance in Forbidden Woods": "Forbidden Woods Miniboss Arena",
+    "Miniboss Entrance in Tower of the Gods": "Tower of the Gods Miniboss Arena",
+    "Miniboss Entrance in Earth Temple": "Earth Temple Miniboss Arena",
+    "Miniboss Entrance in Wind Temple": "Wind Temple Miniboss Arena",
+    "Miniboss Entrance in Hyrule Castle": "Master Sword Chamber",
+
+    "Boss Entrance in Dragon Roost Cavern": "Gohma Boss Arena",
+    "Boss Entrance in Forbidden Woods": "Kalle Demos Boss Arena",
+    "Boss Entrance in Tower of the Gods": "Gohdan Boss Arena",
+    "Boss Entrance in Forsaken Fortress": "Helmaroc King Boss Arena",
+    "Boss Entrance in Earth Temple": "Jalhalla Boss Arena",
+    "Boss Entrance in Wind Temple": "Molgera Boss Arena",
+
+    "Secret Cave Entrance on Outset Island": "Savage Labyrinth",
+    "Secret Cave Entrance on Dragon Roost Island": "Dragon Roost Island Secret Cave",
+    "Secret Cave Entrance on Fire Mountain": "Fire Mountain Secret Cave",
+    "Secret Cave Entrance on Ice Ring Isle": "Ice Ring Isle Secret Cave",
+    "Secret Cave Entrance on Private Oasis": "Cabana Labyrinth",
+    "Secret Cave Entrance on Needle Rock Isle": "Needle Rock Isle Secret Cave",
+    "Secret Cave Entrance on Angular Isles": "Angular Isles Secret Cave",
+    "Secret Cave Entrance on Boating Course": "Boating Course Secret Cave",
+    "Secret Cave Entrance on Stone Watcher Island": "Stone Watcher Island Secret Cave",
+    "Secret Cave Entrance on Overlook Island": "Overlook Island Secret Cave",
+    "Secret Cave Entrance on Bird's Peak Rock": "Bird's Peak Rock Secret Cave",
+    "Secret Cave Entrance on Pawprint Isle": "Pawprint Isle Chuchu Cave",
+    "Secret Cave Entrance on Pawprint Isle Side Isle": "Pawprint Isle Wizzrobe Cave",
+    "Secret Cave Entrance on Diamond Steppe Island": "Diamond Steppe Island Warp Maze Cave",
+    "Secret Cave Entrance on Bomb Island": "Bomb Island Secret Cave",
+    "Secret Cave Entrance on Rock Spire Isle": "Rock Spire Isle Secret Cave",
+    "Secret Cave Entrance on Shark Island": "Shark Island Secret Cave",
+    "Secret Cave Entrance on Cliff Plateau Isles": "Cliff Plateau Isles Secret Cave",
+    "Secret Cave Entrance on Horseshoe Island": "Horseshoe Island Secret Cave",
+    "Secret Cave Entrance on Star Island": "Star Island Secret Cave",
+
+    "Inner Entrance in Ice Ring Isle Secret Cave": "Ice Ring Isle Inner Cave",
+    "Inner Entrance in Cliff Plateau Isles Secret Cave": "Cliff Plateau Isles Inner Cave",
+
+    "Fairy Fountain Entrance on Outset Island": "Outset Fairy Fountain",
+    "Fairy Fountain Entrance on Thorned Fairy Island": "Thorned Fairy Fountain",
+    "Fairy Fountain Entrance on Eastern Fairy Island": "Eastern Fairy Fountain",
+    "Fairy Fountain Entrance on Western Fairy Island": "Western Fairy Fountain",
+    "Fairy Fountain Entrance on Southern Fairy Island": "Southern Fairy Fountain",
+    "Fairy Fountain Entrance on Northern Fairy Island": "Northern Fairy Fountain",
+}
+
 
 class EntranceRandomizer:
     """
@@ -279,63 +331,10 @@ class EntranceRandomizer:
         self.zone_exit_to_logically_dependent_item_locations: dict[ZoneExit, list[str]] = defaultdict(list)
         self.register_mappings_between_item_locations_and_zone_exits()
 
-        # Default entrances connections to be used if the entrance randomizer is not on.
-        self.entrance_connections: dict[str, str] = {
-            "Dungeon Entrance on Dragon Roost Island": "Dragon Roost Cavern",
-            "Dungeon Entrance in Forest Haven Sector": "Forbidden Woods",
-            "Dungeon Entrance in Tower of the Gods Sector": "Tower of the Gods",
-            "Dungeon Entrance on Headstone Island": "Earth Temple",
-            "Dungeon Entrance on Gale Isle": "Wind Temple",
-
-            "Miniboss Entrance in Forbidden Woods": "Forbidden Woods Miniboss Arena",
-            "Miniboss Entrance in Tower of the Gods": "Tower of the Gods Miniboss Arena",
-            "Miniboss Entrance in Earth Temple": "Earth Temple Miniboss Arena",
-            "Miniboss Entrance in Wind Temple": "Wind Temple Miniboss Arena",
-            "Miniboss Entrance in Hyrule Castle": "Master Sword Chamber",
-
-            "Boss Entrance in Dragon Roost Cavern": "Gohma Boss Arena",
-            "Boss Entrance in Forbidden Woods": "Kalle Demos Boss Arena",
-            "Boss Entrance in Tower of the Gods": "Gohdan Boss Arena",
-            "Boss Entrance in Forsaken Fortress": "Helmaroc King Boss Arena",
-            "Boss Entrance in Earth Temple": "Jalhalla Boss Arena",
-            "Boss Entrance in Wind Temple": "Molgera Boss Arena",
-
-            "Secret Cave Entrance on Outset Island": "Savage Labyrinth",
-            "Secret Cave Entrance on Dragon Roost Island": "Dragon Roost Island Secret Cave",
-            "Secret Cave Entrance on Fire Mountain": "Fire Mountain Secret Cave",
-            "Secret Cave Entrance on Ice Ring Isle": "Ice Ring Isle Secret Cave",
-            "Secret Cave Entrance on Private Oasis": "Cabana Labyrinth",
-            "Secret Cave Entrance on Needle Rock Isle": "Needle Rock Isle Secret Cave",
-            "Secret Cave Entrance on Angular Isles": "Angular Isles Secret Cave",
-            "Secret Cave Entrance on Boating Course": "Boating Course Secret Cave",
-            "Secret Cave Entrance on Stone Watcher Island": "Stone Watcher Island Secret Cave",
-            "Secret Cave Entrance on Overlook Island": "Overlook Island Secret Cave",
-            "Secret Cave Entrance on Bird's Peak Rock": "Bird's Peak Rock Secret Cave",
-            "Secret Cave Entrance on Pawprint Isle": "Pawprint Isle Chuchu Cave",
-            "Secret Cave Entrance on Pawprint Isle Side Isle": "Pawprint Isle Wizzrobe Cave",
-            "Secret Cave Entrance on Diamond Steppe Island": "Diamond Steppe Island Warp Maze Cave",
-            "Secret Cave Entrance on Bomb Island": "Bomb Island Secret Cave",
-            "Secret Cave Entrance on Rock Spire Isle": "Rock Spire Isle Secret Cave",
-            "Secret Cave Entrance on Shark Island": "Shark Island Secret Cave",
-            "Secret Cave Entrance on Cliff Plateau Isles": "Cliff Plateau Isles Secret Cave",
-            "Secret Cave Entrance on Horseshoe Island": "Horseshoe Island Secret Cave",
-            "Secret Cave Entrance on Star Island": "Star Island Secret Cave",
-
-            "Inner Entrance in Ice Ring Isle Secret Cave": "Ice Ring Isle Inner Cave",
-            "Inner Entrance in Cliff Plateau Isles Secret Cave": "Cliff Plateau Isles Inner Cave",
-
-            "Fairy Fountain Entrance on Outset Island": "Outset Fairy Fountain",
-            "Fairy Fountain Entrance on Thorned Fairy Island": "Thorned Fairy Fountain",
-            "Fairy Fountain Entrance on Eastern Fairy Island": "Eastern Fairy Fountain",
-            "Fairy Fountain Entrance on Western Fairy Island": "Western Fairy Fountain",
-            "Fairy Fountain Entrance on Southern Fairy Island": "Southern Fairy Fountain",
-            "Fairy Fountain Entrance on Northern Fairy Island": "Northern Fairy Fountain",
-        }
-
         self.done_entrances_to_exits: dict[ZoneEntrance, ZoneExit] = {}
         self.done_exits_to_entrances: dict[ZoneExit, ZoneEntrance] = {}
 
-        for entrance_name, exit_name in self.entrance_connections.items():
+        for entrance_name, exit_name in VANILLA_ENTRANCES_TO_EXITS.items():
             zone_entrance = ZoneEntrance.all[entrance_name]
             zone_exit = ZoneExit.all[exit_name]
             self.done_entrances_to_exits[zone_entrance] = zone_exit
@@ -387,7 +386,7 @@ class EntranceRandomizer:
             # If dungeon entrances are not randomized, `islands_with_a_banned_dungeon` can be initialized early since
             # it's preset and won't be updated later since we won't randomize the dungeon entrances.
             for en in DUNGEON_ENTRANCES:
-                if self.entrance_connections[en.entrance_name] in self.world.boss_reqs.banned_dungeons:
+                if self.done_entrances_to_exits[en].unique_name in self.world.boss_reqs.banned_dungeons:
                     assert en.island_name is not None
                     self.islands_with_a_banned_dungeon.add(en.island_name)
 
@@ -597,7 +596,6 @@ class EntranceRandomizer:
             zone_exit = self.multiworld.random.choice(possible_remaining_exits)
             remaining_exits.remove(zone_exit)
 
-            self.entrance_connections[zone_entrance.entrance_name] = zone_exit.unique_name
             self.done_entrances_to_exits[zone_entrance] = zone_exit
             self.done_exits_to_entrances[zone_exit] = zone_entrance
 
