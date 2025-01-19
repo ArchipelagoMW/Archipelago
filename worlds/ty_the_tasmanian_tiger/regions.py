@@ -1,4 +1,14 @@
-class Ty1LevelCode(enum.Enum):
+import typing
+from enum import Enum
+
+from BaseClasses import MultiWorld, Region
+from worlds.ty_the_tasmanian_tiger import Ty1Options
+
+
+class Ty1Region(Region):
+    subregions: typing.List[Region] = []
+
+class Ty1LevelCode(Enum):
     Z1 = 0
     A1 = 4
     A2 = 5
@@ -79,19 +89,11 @@ def connect_regions(world: MultiWorld, player: int, source: str, target: str, ru
     target_region = world.get_region(target, player)
     return source_region.connect(target_region, rule=rule)
 
-
-def create_region(name: str, player: int, world: MultiWorld) -> Ty1Region:
-    region = Ty1Region(name, player, world)
-    world.regions.append(region)
-    return region
-
 def set_subregion_access_rule(world, player, region_name: str, rule):
     world.get_entrance(world, player, region_name).access_rule = rule
 
-
 def create_default_locs(reg: Region, default_locs: dict):
     create_locs(reg, *default_locs.keys())
-
 
 def create_locs(reg: Region, *locs: str):
     reg.locations += [Ty1Location(reg.player, loc_name, location_table[loc_name], reg) for loc_name in locs]

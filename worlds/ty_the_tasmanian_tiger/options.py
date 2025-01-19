@@ -21,11 +21,44 @@ class Goal(Choice):
     option_completion = 3
     default = 0
 
+class LogicDifficulty(Choice):
+    """
+    What set of logic to use
+
+    Standard: The logic assumes elemental rangs are required to enter hubs
+
+    Advanced: Assumes hubs may be entered early and elemental rangs are optional.
+    """
+    display_name = "Logic Difficulty"
+    option_standard = 0
+    option_advanced = 1
+    default = 0
+
+class ProgressiveElementals(Toggle):
+    """
+    Determines if elemental rangs are a progressive check
+    """
+    display_name = "Progressive Elemental Rangs"
+    default = True
+
+class StartWithBoom(Choice):
+    """
+    Determines if Ty starts with his boomerang
+    """
+    display_name = ("Start With Boomerang")
+    default = True
+
 class LevelShuffle(Toggle):
     """
     Determines whether the levels that portals lead to will be shuffled
     """
     display_name = "Level Shuffle"
+
+class BossShuffle(Toggle):
+    """
+    Determines whether the first three bosses will be shuffled
+    """
+    display_name = "Boss Shuffle"
 
 class LevelUnlockStyle(Choice):
     """
@@ -37,7 +70,7 @@ class LevelUnlockStyle(Choice):
 
     Vanilla Bosses: The first level is unlocked from the start. Bosses are unlocked via vanilla hub Thunder Egg counts. All other levels are unlocked via checks
     """
-    display_name = "Vanilla Boss Unlock"
+    display_name = "Level Unlock Style"
     option_vanilla = 0
     option_checks = 1
     option_vanilla_bosses = 2
@@ -48,6 +81,15 @@ class ProgressiveLevel(Toggle):
     Determines if level unlocks are progressive (only if levels are check based)
     """
     default = True
+
+class HubThunderEggCounts(Range):
+    """
+    If bosses are unlocked via vanilla hub Thunder Egg counts, required count per hub can be set here
+    """
+    display_name = "Hub Thunder Egg Requirement"
+    range_start = 0
+    range_end = 24
+    default = 17
 
 class Cogsanity(Choice):
     """
@@ -97,20 +139,6 @@ class Attributesanity(Choice):
     option_none = 2
     default = 0
 
-class StartWithBoom(Choice):
-    """
-    Determines if Ty starts with his boomerang
-    """
-    display_name = ("Start With Boomerang")
-    default = True
-
-class ProgressiveElementals(Toggle):
-    """
-    Determines if elemental rangs are a progressive check
-    """
-    display_name = "Progressive Elemental Rangs"
-    default = True
-
 class Framesanity(Choice):
     """
     Determines how collecting Picture Frames grants checks
@@ -135,28 +163,6 @@ class JunkFillPercentage(Range):
     range_start = 0
     range_end = 100
     default = 50
-
-class HubThunderEggCounts(Range):
-    """
-    If bosses are unlocked via vanilla hub Thunder Egg counts, required count per hub can be set here
-    """
-    display_name = "Hub Thunder Egg Requirement"
-    range_start = 0
-    range_end = 24
-    default = 17
-
-class LogicDifficulty(Choice):
-    """
-    What set of logic to use
-
-    Standard: The logic assumes elemental rangs are required to enter hubs
-
-    Advanced: Assumes hubs may be entered early and elemental rangs are optional.
-    """
-    display_name = "Logic Difficulty"
-    option_standard = 0
-    option_advanced = 1
-    default = 0
 
 
 ty1_option_groups = [
@@ -192,6 +198,7 @@ class Ty1Options(PerGameCommonOptions):
     start_with_boom: StartWithBoom
 
     level_shuffle: LevelShuffle
+    boss_shuffle: BossShuffle
     level_unlock_style: LevelUnlockStyle
     progressive_level: ProgressiveLevel
     hub_te_counts: HubThunderEggCounts

@@ -5,18 +5,11 @@ import logging
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
 
-from .AestheticData import chao_name_conversion, sample_chao_names, totally_real_item_names, \
-                           all_exits, all_destinations, multi_rooms, single_rooms, room_to_exits_map, exit_to_room_map, valid_kindergarten_exits
-from .GateBosses import get_gate_bosses, get_boss_rush_bosses, get_boss_name
-from .Items import SA2BItem, ItemData, item_table, upgrades_table, emeralds_table, junk_table, trap_table, item_groups, \
-                   eggs_table, fruits_table, seeds_table, hats_table, animals_table, chaos_drives_table
-from .Locations import SA2BLocation, all_locations, setup_locations, chao_animal_event_location_table, black_market_location_table
-from .Missions import get_mission_table, get_mission_count_table, get_first_and_last_cannons_core_missions
-from .Names import ItemName, LocationName
+from .items import Ty1Item, ItemData, ty1_item_table
+from .locations import ty1_locations
 from .options import Ty1Options, ty1_option_groups
-from .Regions import create_regions, shuffleable_regions, connect_regions, LevelGate, gate_0_whitelist_regions, \
-    gate_0_blacklist_regions
-from .Rules import set_rules
+from .regions import create_regions, connect_regions, ty1_levels, Ty1LevelCode
+#from .Rules import set_rules
 
 
 class Ty1Web(WebWorld):
@@ -34,22 +27,6 @@ class Ty1Web(WebWorld):
     tutorials = [setup_en]
     option_groups = ty1_option_groups
 
-
-def check_for_impossible_shuffle(shuffled_levels: typing.List[int], gate_0_range: int, multiworld: MultiWorld):
-    blacklist_level_count = 0
-
-    for i in range(gate_0_range):
-        if shuffled_levels[i] in gate_0_blacklist_regions:
-            blacklist_level_count += 1
-
-    if blacklist_level_count == gate_0_range:
-        index_to_swap = multiworld.random.randint(0, gate_0_range)
-        for i in range(len(shuffled_levels)):
-            if shuffled_levels[i] in gate_0_whitelist_regions:
-                shuffled_levels[i], shuffled_levels[index_to_swap] = shuffled_levels[index_to_swap], shuffled_levels[i]
-                break
-
-
 class Ty1World(World):
     """
     Ty the Tasmanian Tiger is a 3D platformer collectathon created by Australian developers Krome Studios. Play as Ty and travel the Australian outback to snowy mountains to defeat Boss Cass and rescue your family from The Dreaming.
@@ -59,113 +36,39 @@ class Ty1World(World):
     options: Ty1Options
     topology_present = True
 
-    item_name_groups = item_groups
-    item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = all_locations
-
     location_table: typing.Dict[str, int]
+    portal_map: typing.Dict[int, int]
+    thegg_per_hub: int
+    region_thegg_map: typing.Dict[int, int]
+    boss_map: typing.Dict[int, int]
 
-    mission_map: typing.Dict[int, int]
-    mission_count_map: typing.Dict[int, int]
-    emblems_for_cannons_core: int
-    region_emblem_map: typing.Dict[int, int]
-    gate_costs: typing.Dict[int, int]
-    gate_bosses: typing.Dict[int, int]
-    boss_rush_map: typing.Dict[int, int]
-    black_market_costs: typing.Dict[int, int]
-
-    web = SA2BWeb()
+    web = Ty1Web()
 
     def fill_slot_data(self) -> dict:
         return {
             "ModVersion": 100,
             "Goal": self.options.goal.value,
-            "MusicMap": self.generate_music_data(),
-            "VoiceMap": self.generate_voice_data(),
-            "DefaultEggMap": self.generate_chao_egg_data(),
-            "DefaultChaoNameMap": self.generate_chao_name_data(),
-            "MissionMap": self.mission_map,
-            "MissionCountMap": self.mission_count_map,
-            "MusicShuffle": self.options.music_shuffle.value,
-            "Narrator": self.options.narrator.value,
-            "MinigameTrapDifficulty": self.options.minigame_trap_difficulty.value,
-            "RingLoss": self.options.ring_loss.value,
-            "RingLink": self.options.ring_link.value,
-            "RequiredRank": self.options.required_rank.value,
-            "ChaoKeys": self.options.keysanity.value,
-            "Whistlesanity": self.options.whistlesanity.value,
-            "GoldBeetles": self.options.beetlesanity.value,
-            "OmochaoChecks": self.options.omosanity.value,
-            "AnimalChecks": self.options.animalsanity.value,
-            "KartRaceChecks": self.options.kart_race_checks.value,
-            "ChaoStadiumChecks": self.options.chao_stadium_checks.value,
-            "ChaoRaceDifficulty": self.options.chao_race_difficulty.value,
-            "ChaoKarateDifficulty": self.options.chao_karate_difficulty.value,
-            "ChaoStats": self.options.chao_stats.value,
-            "ChaoStatsFrequency": self.options.chao_stats_frequency.value,
-            "ChaoStatsStamina": self.options.chao_stats_stamina.value,
-            "ChaoStatsHidden": self.options.chao_stats_hidden.value,
-            "ChaoAnimalParts": self.options.chao_animal_parts.value,
-            "ChaoKindergarten": self.options.chao_kindergarten.value,
-            "BlackMarketSlots": self.options.black_market_slots.value,
-            "BlackMarketData": self.generate_black_market_data(),
-            "BlackMarketUnlockCosts": self.black_market_costs,
-            "BlackMarketUnlockSetting": self.options.black_market_unlock_costs.value,
-            "ChaoERLayout": self.generate_er_layout(),
+            "LogicDifficulty": self.options.logic_difficulty,
+            "ProgressiveElementals": self.options.progressive_elementals,
+            "StartWithBoom": self.options.start_with_boom,
+            "LevelShuffle": self.options.level_shuffle,
+            "PortalMap": self.portal_map,
+            "BossShuffle": self.options.boss_shuffle,
+            "BossMap": self.boss_map,
+            "LevelUnlockStyle": self.options.level_unlock_style,
+            "ProgressiveLevel": self.options.progressive_level,
+            "HubTheggCounts": self.options.hub_te_counts,
+            "RegionTheggMap": self.region_thegg_map,
+            "Cogsanity": self.options.cogsanity.value,
+            "Bilbysanity": self.options.bilbysanity.value,
+            "Attributesanity": self.options.attributesanity.value,
+            "Framesanity": self.options.framesanity.value,
             "DeathLink": self.options.death_link.value,
-            "EmblemPercentageForCannonsCore": self.options.emblem_percentage_for_cannons_core.value,
-            "RequiredCannonsCoreMissions": self.options.required_cannons_core_missions.value,
-            "NumberOfLevelGates": self.options.number_of_level_gates.value,
-            "LevelGateDistribution": self.options.level_gate_distribution.value,
-            "EmblemsForCannonsCore": self.emblems_for_cannons_core,
-            "RegionEmblemMap": self.region_emblem_map,
-            "GateCosts": self.gate_costs,
-            "GateBosses": self.gate_bosses,
-            "BossRushMap": self.boss_rush_map,
             "PlayerNum": self.player,
         }
 
     def generate_early(self):
-        if self.options.goal.value == 3:
-            # Turn off everything else for Grand Prix goal
-            self.options.number_of_level_gates.value = 0
-            self.options.emblem_percentage_for_cannons_core.value = 0
-
-            self.options.chao_race_difficulty.value = 0
-            self.options.chao_karate_difficulty.value = 0
-            self.options.chao_stats.value = 0
-            self.options.chao_animal_parts.value = 0
-            self.options.chao_kindergarten.value = 0
-            self.options.black_market_slots.value = 0
-
-            self.options.junk_fill_percentage.value = 100
-            self.options.trap_fill_percentage.value = 100
-            self.options.omochao_trap_weight.value = 0
-            self.options.timestop_trap_weight.value = 0
-            self.options.confusion_trap_weight.value = 0
-            self.options.tiny_trap_weight.value = 0
-            self.options.gravity_trap_weight.value = 0
-            self.options.ice_trap_weight.value = 0
-            self.options.slow_trap_weight.value = 0
-            self.options.cutscene_trap_weight.value = 0
-
-            valid_trap_weights = self.options.exposition_trap_weight.value + \
-                                 self.options.reverse_trap_weight.value + \
-                                 self.options.pong_trap_weight.value
-
-            if valid_trap_weights == 0:
-                self.options.exposition_trap_weight.value = 4
-                self.options.reverse_trap_weight.value = 4
-                self.options.pong_trap_weight.value = 4
-
-            if self.options.kart_race_checks.value == 0:
-                self.options.kart_race_checks.value = 2
-
-            self.gate_bosses = {}
-            self.boss_rush_map = {}
-        else:
-            self.gate_bosses   = get_gate_bosses(self.multiworld, self)
-            self.boss_rush_map = get_boss_rush_bosses(self.multiworld, self)
+    # Do Nothing
 
     def create_regions(self):
         self.mission_map       = get_mission_table(self.multiworld, self, self.player)
