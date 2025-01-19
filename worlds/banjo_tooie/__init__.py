@@ -751,68 +751,63 @@ class BanjoTooieWorld(World):
 
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        btoptions = {}
+        btoptions = self.options.as_dict(
+            "death_link", #deathlink, now int
+            "logic_type", #good and matches
+            "victory_condition", #goal_type and matches
+            "minigame_hunt_length", #good and matches
+            "boss_hunt_length", #good and matches
+            "jinjo_family_rescue_length", #good and matches
+            "token_hunt_length", #good and matches
+            "randomize_moves", #moves, now int
+            "randomize_bk_moves", #bk_moves and matches
+            "egg_behaviour", #good and matches
+            "progressive_beak_buster", #good, now int
+            "progressive_shoes", #good, now int
+            "progressive_water_training", #good and matches
+            "progressive_flight", #good, now int
+            "progressive_egg_aiming", #good and matches
+            "progressive_bash_attack", #good, now int
+            "randomize_notes", #notes, now int
+            "randomize_treble", #trebleclef, now int
+            "randomize_jinjos", #jinjo, now int
+            "randomize_doubloons", #doubloons, now int
+            "randomize_cheato", #pages, now int
+            "cheato_rewards", #matches, now int
+            "randomize_honeycombs", #honeycomb, now int
+            "honeyb_rewards", #matches, now int
+            "randomize_glowbos", #magic, now int
+            "randomize_stop_n_swap", #mystery, now int
+            "randomize_dino_roar", #roar, now int
+            "nestsanity", #matches, now int
+            "randomize_stations", #stations, now int
+            "randomize_chuffy", #chuffy, now int
+            "skip_puzzles", #matches, now int
+            "open_hag1", #matches, now int
+            "backdoors", #matches, now int
+            "open_silos", #silo_option and matches
+            "speed_up_minigames", #minigames, now int
+            "tower_of_tragedy", #skip_tot, now int
+            "skip_klungo", #matches, now int
+            "dialog_character") #matches and matches
+
         btoptions["player_name"] = self.multiworld.player_name[self.player]
         btoptions["seed"] = self.random.randint(12212, 9090763)
-        btoptions["deathlink"] = "true" if self.options.death_link == DeathLink.option_true else "false"
-        if self.options.tower_of_tragedy == TowerOfTragedy.option_skip:
-            btoptions["skip_tot"] = "true"
-        elif self.options.tower_of_tragedy == TowerOfTragedy.option_round_3:
-            btoptions["skip_tot"] = "round 3"
-        else:
-            btoptions["skip_tot"] = "false"
-        btoptions["honeycomb"] = "true" if self.options.randomize_honeycombs else "false"
-        btoptions["honeyb_rewards"] = "true" if self.options.honeyb_rewards else "false"
-        btoptions["pages"] = "true" if self.options.randomize_cheato else "false"
-        btoptions["cheato_rewards"] = "true" if self.options.cheato_rewards else "false"
-        btoptions["moves"] = "true" if self.options.randomize_moves else "false"
-        btoptions["roar"] = "true" if self.options.randomize_dino_roar else "false"
-        btoptions["bk_moves"] = int(self.options.randomize_bk_moves)
-        btoptions["doubloons"] = "true" if self.options.randomize_doubloons else "false"
-        btoptions["magic"] = "true" if self.options.randomize_glowbos else "false"
-        btoptions["minigames"] = "skip" if self.options.speed_up_minigames else "full"
-        btoptions["trebleclef"] = "true" if self.options.randomize_treble else "false"
-        btoptions["skip_puzzles"] = "true" if self.options.skip_puzzles else "false"
-        btoptions["backdoors"] = "true" if self.options.backdoors else "false"
-        btoptions["open_hag1"] = "true" if self.options.open_hag1 else "false"
-        btoptions["stations"] = "true" if self.options.randomize_stations else "false"
-        btoptions["chuffy"] = "true" if self.options.randomize_chuffy else "false"
-        btoptions["jinjo"] = "true" if self.options.randomize_jinjos else "false"
-        btoptions["notes"] = "true" if self.options.randomize_notes else "false"
+
         btoptions["worlds"] = "true" if self.worlds_randomized else "false"
         btoptions["world_order"] = self.randomize_worlds
         btoptions["world_keys"] = self.randomize_order
-
-        btoptions["mystery"] = "true" if self.options.randomize_stop_n_swap else "false"
-        btoptions["goal_type"] = int(self.options.victory_condition)
-        btoptions["minigame_hunt_length"] = int(self.options.minigame_hunt_length)
-        btoptions["boss_hunt_length"] = int(self.options.boss_hunt_length)
-        btoptions["jinjo_family_rescue_length"] = int(self.options.jinjo_family_rescue_length)
-        btoptions["token_hunt_length"] = int(self.options.token_hunt_length)
-        btoptions["logic_type"] = int(self.options.logic_type)
-        # btoptions["warp_traps"] = int(self.options.warp_traps)
-        btoptions["skip_klungo"] = "true" if self.options.skip_klungo else "false"
-        btoptions["progressive_beak_buster"] = "true" if self.options.progressive_beak_buster else "false"
-        btoptions["egg_behaviour"] = int(self.options.egg_behaviour)
-        btoptions["progressive_shoes"] = "true" if self.options.progressive_shoes else "false"
-        btoptions["progressive_water_training"] = int(self.options.progressive_water_training)
-        btoptions["progressive_bash_attack"] = "true" if self.options.progressive_bash_attack else "false"
-        btoptions["progressive_egg_aim"] = int(self.options.progressive_egg_aiming)
-        btoptions["progressive_flight"] = "true" if self.options.progressive_flight else "false"
+        btoptions["loading_zones"] = self.loading_zones
 
         btoptions["starting_egg"] = int(self.starting_egg)
         btoptions["starting_attack"] = int(self.starting_attack)
         btoptions["first_silo"] = self.single_silo
-        btoptions["loading_zones"] = self.loading_zones
-        btoptions["silo_option"] = int(self.options.open_silos)
+
         btoptions["version"] = self.version
+        
         btoptions["jamjars_siloname_costs"] = self.jamjars_siloname_costs
-        btoptions["jamjars_silo_costs"] = self.jamjars_silo_costs
+        btoptions["jamjars_silo_costs"] = self.jamjars_silo_costs #table of silo costs
         btoptions["jamjars_silo_option"] = int(self.options.jamjars_silo_costs)
-
-        btoptions["dialog_character"] = int(self.options.dialog_character)
-
-        btoptions["nestsanity"] = "true" if self.options.nestsanity else "false"
         return btoptions
 
     # for the universal tracker, doesn't get called in standard gen

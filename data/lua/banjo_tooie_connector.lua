@@ -55,7 +55,7 @@ local DEBUGLVL2 = false
 local DEBUGLVL3 = false
 local AP_TIMEOUT_COUNTER = 0
 
-local MINIGAMES = ""
+local MINIGAMES = false
 local TOKEN_ANNOUNCE = false;
 local SNEAK = false;
 
@@ -6872,7 +6872,7 @@ function process_slot(block)
     then
         DIALOG_CHARACTER = block['slot_dialog_character']
     end
-    if block['slot_deathlink'] ~= nil and block['slot_deathlink'] ~= "false"
+    if block['slot_deathlink'] ~= nil and block['slot_deathlink'] ~= 0
     then
         DEATH_LINK = true
     end
@@ -6884,34 +6884,14 @@ function process_slot(block)
     then
         ACTIVATE_TEXT_OVERLAY = true
     end
-    if block['slot_skip_tot'] ~= nil and block['slot_skip_tot'] ~= ""
+    if block['slot_tower_of_tragedy'] ~= nil
     then
-        SKIP_TOT = block['slot_skip_tot']
-        if block['slot_skip_tot'] == "false"
-        then
-            BTH:setSettingToT(0)
-        elseif block['slot_skip_tot'] == "true"
-        then
-            BTH:setSettingToT(1)
-        else
-            BTH:setSettingToT(2)
-        end
+        SKIP_TOT = block['slot_tower_of_tragedy']
+        BTH:setSettingToT(SKIP_TOT)
     end
-    if block['slot_honeycomb'] ~= nil and block['slot_honeycomb'] ~= "false"
+    if block['slot_randomize_bk_moves'] ~= nil
     then
-        ENABLE_AP_HONEYCOMB = true
-    end
-	if block['slot_pages'] ~= nil and block['slot_pages'] ~= "false"
-    then
-        ENABLE_AP_PAGES = true
-    end
-    if block['slot_moves'] ~= nil and block['slot_moves'] ~= "false"
-    then
-        ENABLE_AP_MOVES = true
-    end
-    if block['slot_bkmoves'] ~= nil and block['slot_bkmoves'] ~= "false"
-    then
-        ENABLE_AP_BK_MOVES = block['slot_bkmoves']
+        ENABLE_AP_BK_MOVES = block['slot_randomize_bk_moves']
         if ENABLE_AP_BK_MOVES == 0
         then
             BTH:setItem(ITEM_TABLE["AP_ITEM_DIVE"], 1)
@@ -6938,53 +6918,44 @@ function process_slot(block)
             BTH:setItem(ITEM_TABLE["AP_ITEM_TTROT"], 1)
         end
     end
-    if block['slot_cheatorewards'] ~= nil and block['slot_cheatorewards'] ~= "false"
+    if block['slot_speed_up_minigames'] ~= nil and block['slot_speed_up_minigames'] ~= 0
     then
-        ENABLE_AP_CHEATO_REWARDS = true
-    end
-    if block['slot_honeybrewards'] ~= nil and block['slot_honeybrewards'] ~= "false"
-    then
-        ENABLE_AP_HONEYB_REWARDS = true
-    end
-    if block['slot_minigames'] ~= nil and block['slot_minigames'] ~= ""
-    then
-        MINIGAMES = block['slot_minigames']
-        if MINIGAMES == "skip"
+        MINIGAMES = true
+        if MINIGAMES == true
         then
             BTH:setSettingMinigames(1)
         end
     end
-    if block['slot_skip_puzzles'] ~= nil and block['slot_skip_puzzles'] ~= "false"
+    if block['slot_skip_puzzles'] ~= nil and block['slot_skip_puzzles'] ~= 0
     then
         SKIP_PUZZLES = true
         BTH:setSettingPuzzle(1)
     end
-    if block['slot_backdoors'] ~= nil and block['slot_backdoors'] ~= "false"
+    if block['slot_backdoors'] ~= nil and block['slot_backdoors'] ~= 0
     then
         BACKDOORS = true
         BTH:setSettingBackdoors(1)
     end
-    if block['slot_skip_klungo'] ~= nil and block['slot_skip_klungo'] ~= "false"
+    if block['slot_skip_klungo'] ~= nil and block['slot_skip_klungo'] ~= 0
     then
-        SKIP_KLUNGO = true
         BTH:setSettingKlungo(1)
     end
-    if block['slot_goal_type'] ~= nil and block['slot_goal_type'] ~= ""
+    if block['slot_victory_condition'] ~= nil and block['slot_victory_condition'] ~= ""
     then
-        GOAL_TYPE = block['slot_goal_type']
+        GOAL_TYPE = block['slot_victory_condition']
         BTH:setVictoryCondition(GOAL_TYPE)
     end
-    if block['slot_open_hag1'] ~= nil and block['slot_open_hag1'] ~= "false"
+    if block['slot_open_hag1'] ~= nil and block['slot_open_hag1'] ~= 0
     then
         OPEN_HAG1 = true
         hag1_open()
     end
-    if block['slot_chuffy'] ~= nil and block['slot_chuffy'] ~= "false"
+    if block['slot_chuffy'] ~= nil and block['slot_chuffy'] ~= 0
     then
         ENABLE_AP_CHUFFY = true
         BTH:setSettingChuffy(1)
     end
-    if block['slot_nestsanity'] ~= nil and block['slot_nestsanity'] ~= "false"
+    if block['slot_nestsanity'] ~= nil and block['slot_nestsanity'] ~= 0
     then
         BTH:setSettingNestsanity(1)
     end

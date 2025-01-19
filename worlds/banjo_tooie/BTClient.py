@@ -240,7 +240,7 @@ class BanjoTooieContext(CommonContext):
                 # self.event_invalid_game()
                 raise Exception("Your Banjo-Tooie AP does not match with the generated world.\n" +
                                 "Your version: "+version+" | Generated version: "+self.slot_data["version"])
-            self.deathlink_enabled = self.slot_data["deathlink"]
+            self.deathlink_enabled = bool(self.slot_data["death_link"])
             fpath = pathlib.Path(__file__)
             archipelago_root = None
             for i in range(0, 5,+1) :
@@ -348,29 +348,18 @@ def get_slot_payload(ctx: BanjoTooieContext):
             "slot_player": ctx.slot_data["player_name"],
             "slot_seed": ctx.slot_data["seed"],
             "slot_deathlink": ctx.deathlink_enabled,
-            "slot_skip_tot": ctx.slot_data["skip_tot"],
-            "slot_honeycomb": ctx.slot_data["honeycomb"],
-            "slot_pages": ctx.slot_data["pages"],
-            "slot_moves": ctx.slot_data["moves"],
-            "slot_bkmoves": ctx.slot_data["bk_moves"],
-            "slot_cheatorewards": ctx.slot_data["cheato_rewards"],
-            "slot_honeybrewards": ctx.slot_data["honeyb_rewards"],
-            "slot_doubloon": ctx.slot_data["doubloons"],
-            "slot_minigames": ctx.slot_data["minigames"],
-            "slot_treble": ctx.slot_data["trebleclef"],
+            "slot_tower_of_tragedy": ctx.slot_data["tower_of_tragedy"],
+            "slot_randomize_bk_moves": ctx.slot_data["randomize_bk_moves"],
+            "slot_speed_up_minigames": ctx.slot_data["speed_up_minigames"],
             "slot_skip_puzzles": ctx.slot_data["skip_puzzles"],
             "slot_backdoors": ctx.slot_data["backdoors"],
             "slot_open_hag1": ctx.slot_data["open_hag1"],
-            "slot_stations": ctx.slot_data["stations"],
-            "slot_chuffy": ctx.slot_data["chuffy"],
-            "slot_jinjo": ctx.slot_data["jinjo"],
-            "slot_notes": ctx.slot_data["notes"],
-            "slot_mystery": ctx.slot_data["mystery"],
+            "slot_randomize_chuffy": ctx.slot_data["randomize_chuffy"],
             "slot_worlds": ctx.slot_data["worlds"],
             "slot_world_order": ctx.slot_data["world_order"],
             "slot_keys": ctx.slot_data["world_keys"],
             "slot_skip_klungo": ctx.slot_data["skip_klungo"],
-            "slot_goal_type": ctx.slot_data["goal_type"],
+            "slot_victory_condition": ctx.slot_data["victory_condition"],
             "slot_minigame_hunt_length": ctx.slot_data["minigame_hunt_length"],
             "slot_boss_hunt_length": ctx.slot_data["boss_hunt_length"],
             "slot_jinjo_family_rescue_length": ctx.slot_data["jinjo_family_rescue_length"],
@@ -603,9 +592,9 @@ async def parse_payload(payload: dict, ctx: BanjoTooieContext, force: bool):
                     if value == True:
                         locs1.append(int(locationId))
         #Mumbo Tokens
-        if ctx.slot_data["goal_type"] == 1 or ctx.slot_data["goal_type"] == 2 or \
-                    ctx.slot_data["goal_type"] == 3 or ctx.slot_data["goal_type"] == 4:
-                    locs1 = mumbo_tokens_loc(locs1, ctx.slot_data["goal_type"])
+        if ctx.slot_data["victory_condition"] == 1 or ctx.slot_data["victory_condition"] == 2 or \
+                    ctx.slot_data["victory_condition"] == 3 or ctx.slot_data["victory_condition"] == 4:
+                    locs1 = mumbo_tokens_loc(locs1, ctx.slot_data["victory_condition"])
 
         if len(locs1) > 0:
             await ctx.send_msgs([{
@@ -620,7 +609,7 @@ async def parse_payload(payload: dict, ctx: BanjoTooieContext, force: bool):
                 }])
         #GAME VICTORY
         #Beat Hag-1
-        if hag == True and (ctx.slot_data["goal_type"] == 0 or ctx.slot_data["goal_type"] == 4) and not ctx.finished_game:
+        if hag == True and (ctx.slot_data["victory_condition"] == 0 or ctx.slot_data["victory_condition"] == 4) and not ctx.finished_game:
             await ctx.send_msgs([{
                 "cmd": "StatusUpdate",
                 "status": 30
@@ -629,14 +618,14 @@ async def parse_payload(payload: dict, ctx: BanjoTooieContext, force: bool):
             ctx._set_message("You have completed your goal", None)
 
         #Mumbo Tokens
-        if (ctx.slot_data["goal_type"] == 1 or ctx.slot_data["goal_type"] == 2) and not ctx.finished_game:
+        if (ctx.slot_data["victory_condition"] == 1 or ctx.slot_data["victory_condition"] == 2) and not ctx.finished_game:
             mumbo_tokens = 0
             for networkItem in ctx.items_received:
                 if networkItem.item == 1230798:
                     mumbo_tokens += 1
-                    if ((ctx.slot_data["goal_type"] == 1 and mumbo_tokens >= ctx.slot_data["minigame_hunt_length"]) or
-                        (ctx.slot_data["goal_type"] == 2 and mumbo_tokens >= ctx.slot_data["boss_hunt_length"]) or
-                        (ctx.slot_data["goal_type"] == 3 and mumbo_tokens >= ctx.slot_data["jinjo_family_rescue_length"])):
+                    if ((ctx.slot_data["victory_condition"] == 1 and mumbo_tokens >= ctx.slot_data["minigame_hunt_length"]) or
+                        (ctx.slot_data["victory_condition"] == 2 and mumbo_tokens >= ctx.slot_data["boss_hunt_length"]) or
+                        (ctx.slot_data["victory_condition"] == 3 and mumbo_tokens >= ctx.slot_data["jinjo_family_rescue_length"])):
                         await ctx.send_msgs([{
                             "cmd": "StatusUpdate",
                             "status": 30
@@ -644,7 +633,7 @@ async def parse_payload(payload: dict, ctx: BanjoTooieContext, force: bool):
                         ctx.finished_game = True
                         ctx._set_message("You have completed your goal", None)
 
-        if (ctx.current_map == 401 and ctx.slot_data["goal_type"] == 5 and not ctx.finished_game):
+        if (ctx.current_map == 401 and ctx.slot_data["victory_condition"] == 5 and not ctx.finished_game):
             mumbo_tokens = 0
             for networkItem in ctx.items_received:
                 if networkItem.item == 1230798:
@@ -656,7 +645,7 @@ async def parse_payload(payload: dict, ctx: BanjoTooieContext, force: bool):
                         }])
                         ctx.finished_game = True
 
-        if (ctx.current_map == 401 and ctx.slot_data["goal_type"] == 3 and not ctx.finished_game):
+        if (ctx.current_map == 401 and ctx.slot_data["victory_condition"] == 3 and not ctx.finished_game):
             mumbo_tokens = 0
             for networkItem in ctx.items_received:
                 if networkItem.item == 1230798:
