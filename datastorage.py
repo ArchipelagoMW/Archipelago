@@ -74,14 +74,15 @@ class DataStorage:
             raise InvalidArgumentsException(str(e))
         return key
 
-    def set(self, set_cmd: Dict[str, Any]) -> Dict[str, Any]:
+    def set(self, client_slot: int | None, set_cmd: Dict[str, Any]) -> Dict[str, Any]:
         key = self.validate_and_get_key(set_cmd)
         value = self.data.get(key, set_cmd.get("default", 0))
         on_error = set_cmd.get("on_error", "raise")
 
         set_cmd.update({
             "cmd": "SetReply",
-            "original_value": copy.copy(value)
+            "original_value": copy.copy(value),
+            "slot": client_slot
         })
 
         try:

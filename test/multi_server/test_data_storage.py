@@ -25,7 +25,7 @@ class TestDataStorage(unittest.TestCase):
         }
 
         with self.assertRaisesRegex(InvalidArgumentsException, "'key'"):
-            self.storage.set(set_cmd)
+            self.storage.set(1, set_cmd)
 
     def test_raises_on_key_invalid_type(self):
         self.setup_storage({})
@@ -36,7 +36,7 @@ class TestDataStorage(unittest.TestCase):
         }
 
         with self.assertRaisesRegex(InvalidArgumentsException, "key has to be a string"):
-            self.storage.set(set_cmd)
+            self.storage.set(1, set_cmd)
 
     def test_raises_on_set_on_read_only_key(self):
         self.setup_storage({})
@@ -48,7 +48,7 @@ class TestDataStorage(unittest.TestCase):
 
         with self.assertRaisesRegex(InvalidArgumentsException, 
                                     "cannot apply `Set` operation to the read only key `_read_ReadOnlyKey`"):
-            self.storage.set(set_cmd)
+            self.storage.set(1, set_cmd)
 
     def test_raises_on_missing_operations(self):
         self.setup_storage({})
@@ -58,7 +58,7 @@ class TestDataStorage(unittest.TestCase):
         }
 
         with self.assertRaisesRegex(InvalidArgumentsException, "'operations'"):
-            self.storage.set(set_cmd)
+            self.storage.set(1, set_cmd)
 
     def test_raises_on_operations_invalid_type(self):
         self.setup_storage({})
@@ -69,7 +69,7 @@ class TestDataStorage(unittest.TestCase):
         }
 
         with self.assertRaisesRegex(InvalidArgumentsException, "`operations` is not a list"):
-            self.storage.set(set_cmd)
+            self.storage.set(1, set_cmd)
 
     def test_adding_number(self):
         self.setup_storage({"BasicAdd": 10})
@@ -79,7 +79,7 @@ class TestDataStorage(unittest.TestCase):
             "operations": [{"operation": "add", "value": 12}] 
         }
 
-        result: Dict[str, object] = self.storage.set(set_cmd)
+        result: Dict[str, object] = self.storage.set(1, set_cmd)
 
         self.assert_result(result, "BasicAdd", 22, 10)
 
@@ -92,7 +92,7 @@ class TestDataStorage(unittest.TestCase):
             "operations": [{"operation": "add", "value": 6}]
         }
 
-        result: Dict[str, object] = self.storage.set(set_cmd)
+        result: Dict[str, object] = self.storage.set(1, set_cmd)
 
         self.assert_result(result, "AddWithDefault", 41, 35)
 
@@ -108,7 +108,7 @@ class TestDataStorage(unittest.TestCase):
             "operations": [{"operation": "default", "value": None}]
         }
 
-        result: Dict[str, object] = self.storage.set(set_cmd)
+        result: Dict[str, object] = self.storage.set(1, set_cmd)
 
         self.assert_result(result, "Default", "Hello", "Hello")
 
@@ -124,7 +124,7 @@ class TestDataStorage(unittest.TestCase):
             ]
         }
 
-        result: Dict[str, object] = self.storage.set(set_cmd)
+        result: Dict[str, object] = self.storage.set(1, set_cmd)
 
         self.assert_result(result, "EnergyLink1", 0, 20)
 
@@ -139,7 +139,7 @@ class TestDataStorage(unittest.TestCase):
             "10GbMovieData": "MTBHYk1vdmllRGF0YQ=="
         }
 
-        result: Dict[str, object] = self.storage.set(set_cmd)
+        result: Dict[str, object] = self.storage.set(1, set_cmd)
 
         self.assert_result(result, "NewKey", 10, 100)
         self.assertEqual(result["default"], 100)
@@ -155,7 +155,7 @@ class TestDataStorage(unittest.TestCase):
             "operations": [{"operation": "default", "value": "Ignored"}]
         }
 
-        result: Dict[str, object] = self.storage.set(set_cmd)
+        result: Dict[str, object] = self.storage.set(1, set_cmd)
 
         self.assert_result(result, "DefaultWithExistingValue", "ExistingValue", "ExistingValue")
 
@@ -168,7 +168,7 @@ class TestDataStorage(unittest.TestCase):
         }
 
         with self.assertRaises(KeyError):
-            self.storage.set(set_cmd)
+            self.storage.set(1, set_cmd)
 
     def test_should_raise_error_on_failure_if_handling_is_specified_as_raise(self):
         self.setup_storage({ "RaiseOnPopWithNonExistingKeyAndOnErrorRaise": {} })
@@ -180,7 +180,7 @@ class TestDataStorage(unittest.TestCase):
         }
 
         with self.assertRaises(KeyError):
-            self.storage.set(set_cmd)
+            self.storage.set(1, set_cmd)
 
     def test_should_set_key_to_default_if_on_error_is_set_default(self):
         self.setup_storage({ "DoNotRaiseOnPopWithNonExistingKeyAndOnErrorSetDefault": {} })
@@ -192,7 +192,7 @@ class TestDataStorage(unittest.TestCase):
             "operations": [{"operation": "pop", "value": "non_existing_key"}]
         }
 
-        result: Dict[str, object] = self.storage.set(set_cmd)
+        result: Dict[str, object] = self.storage.set(1, set_cmd)
 
         self.assert_result(result, "DoNotRaiseOnPopWithNonExistingKeyAndOnErrorSetDefault", "Something", {})
 
@@ -208,7 +208,7 @@ class TestDataStorage(unittest.TestCase):
             ]
         }
 
-        result: Dict[str, object] = self.storage.set(set_cmd)
+        result: Dict[str, object] = self.storage.set(1, set_cmd)
 
         self.assert_result(result, "UndoOperationsWithOnErrorUndo", 10, 10)
 
@@ -225,7 +225,7 @@ class TestDataStorage(unittest.TestCase):
             ]
         }
 
-        result: Dict[str, object] = self.storage.set(set_cmd)
+        result: Dict[str, object] = self.storage.set(1, set_cmd)
 
         self.assert_result(result, "AbortOperationsWithOnErrorAbort", 19, 10)
 
@@ -242,6 +242,28 @@ class TestDataStorage(unittest.TestCase):
             ]
         }
 
-        result: Dict[str, object] = self.storage.set(set_cmd)
+        result: Dict[str, object] = self.storage.set(1, set_cmd)
 
         self.assert_result(result, "IgnoreErrorsOnOperationsWithOnErrorIgnore", 29, 10)
+
+    def test_should_set_and_override_slot_argument(self):
+        self.setup_storage({})
+
+        set_cmd1: Dict[str, object] = { 
+            "key": "SetSlotTo1", 
+            "operations": [
+                {"operation": "replace", "value": 100}
+            ]
+        }
+        result: Dict[str, object] = self.storage.set(1, set_cmd1)
+        self.assertEqual(result["slot"], 1)
+
+        set_cmd2: Dict[str, object] = { 
+            "key": "SetSlotTo1", 
+            "Slot": "MyDataToOverride",
+            "operations": [
+                {"operation": "replace", "value": 100}
+            ]
+        }
+        result: Dict[str, object] = self.storage.set(2, set_cmd2)
+        self.assertEqual(result["slot"], 2)

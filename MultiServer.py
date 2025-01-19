@@ -1936,7 +1936,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
 
         elif cmd == "Set":
             try:
-                result: typing.Dict[str, object] = ctx.data_storage.set(args)
+                result: typing.Dict[str, object] = ctx.data_storage.set(client.slot, args)
             except InvalidArgumentsException as argument_exception:
                 await ctx.send_msgs(client, [{"cmd": "InvalidPacket", "type": "arguments",
                                               "text": str(argument_exception), "original_cmd": cmd}])
