@@ -119,8 +119,13 @@ class ZillionWorld(World):
     """
     my_locations: list[ZillionLocation] = []
     """ This is kind of a cache to avoid iterating through all the multiworld locations in logic. """
-    slot_data_ready: threading.Event
-    """ This event is set in `generate_output` when the data is ready for `fill_slot_data` """
+    finalized_gen_data: GenData | None
+    """ Finalized generation data needed by `generate_output` and by `fill_slot_data`. """
+    item_locations_finalization_lock: threading.Lock
+    """
+    This lock is used in `generate_output` and `fill_slot_data` to ensure synchronized access to `finalized_gen_data`,
+    so that whichever is run first can finalize the item locations while the other waits.
+    """
     logic_cache: ZillionLogicCache | None = None
 
     def __init__(self, world: MultiWorld, player: int) -> None:
@@ -128,7 +133,8 @@ class ZillionWorld(World):
         self.logger = logging.getLogger("Zillion")
         self.lsi = ZillionWorld.LogStreamInterface(self.logger)
         self.zz_system = System()
-        self.slot_data_ready = threading.Event()
+        self.finalized_gen_data = None
+        self.item_locations_finalization_lock = threading.Lock()
 
     def _make_item_maps(self, start_char: Chars) -> None:
         _id_to_name, _id_to_zz_id, id_to_zz_item = make_id_to_others(start_char)
@@ -305,6 +311,19 @@ class ZillionWorld(World):
 
         self.zz_system.post_fill()
 
+    def finalize_item_locations_thread_safe(self) -> GenData:
+        """
+        Call self.finalize_item_locations() and cache the result in a thread-safe manner so that either
+        `generate_output` or `fill_slot_data` can finalize item locations without concern for which of the two functions
+        is called first.
+        """
+        # The lock is acquired when entering the context manager and released when exiting the context manager.
+        with self.item_locations_finalization_lock:
+            # If generation data has yet to be finalized, finalize it.
+            if self.finalized_gen_data is None:
+                self.finalized_gen_data = self.finalize_item_locations()
+        return self.finalized_gen_data
+
     def finalize_item_locations(self) -> GenData:
         """
         sync zilliandomizer item locations with AP item locations
@@ -363,12 +382,7 @@ class ZillionWorld(World):
     def generate_output(self, output_directory: str) -> None:
         """This method gets called from a threadpool, do not use multiworld.random here.
         If you need any last-second randomization, use self.random instead."""
-        try:
-            gen_data = self.finalize_item_locations()
-        except BaseException:
-            raise
-        finally:
-            self.slot_data_ready.set()
+        gen_data = self.finalize_item_locations_thread_safe()
 
         out_file_base = self.multiworld.get_out_file_name_base(self.player)
 
@@ -392,9 +406,7 @@ class ZillionWorld(World):
         # TODO: tell client which canisters are keywords
         # so it can open and get those when restoring doors
 
-        self.slot_data_ready.wait()
-        assert self.zz_system.randomizer, "didn't get randomizer from generate_early"
-        game = self.zz_system.get_game()
+        game = self.finalize_item_locations_thread_safe().zz_game
         return get_slot_info(game.regions, game.char_order[0], game.loc_name_2_pretty)
 
     # end of ordered Main.py calls
