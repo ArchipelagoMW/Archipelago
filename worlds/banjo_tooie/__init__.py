@@ -104,6 +104,8 @@ class BanjoTooieWorld(World):
 
     def create_item(self, itemname: str) -> Item:
         banjoItem = all_item_table.get(itemname)
+        if not banjoItem:
+            raise Exception(f"{itemname} is not a valid item name for Banjo-Tooie")
         if banjoItem.type == "progress":
             if banjoItem.btid == self.item_code(itemName.JIGGY):
                 if not hasattr(self.multiworld, "generation_is_fake"):
@@ -297,8 +299,7 @@ class BanjoTooieWorld(World):
             elif self.check_starting_progressive(item) > 0:
                 for i in range(self.check_starting_progressive(item)):
                     itempool += [item]
-        for item in itempool:
-            self.multiworld.itempool.append(item)
+        self.multiworld.itempool.extend(itempool)
 
     def item_filter(self, item: Item) -> Item:
         if(item.code == self.item_code(itemName.JIGGY) and not self.kingjingalingjiggy and self.options.jingaling_jiggy):
