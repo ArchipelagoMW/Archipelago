@@ -300,15 +300,18 @@ class TunicWorld(World):
         item_data = item_table[name]
         # evaluate alternate classifications based on options
         # it'll choose whichever classification isn't None first in this if else tree
-        itemclass: ItemClassification = ((item_data.combat_ic if self.options.combat_logic else None)
-                                         or (ItemClassification.progression | ItemClassification.useful
-                                             if name == "Glass Cannon" and self.options.grass_randomizer
-                                             and not self.options.start_with_sword else None)
-                                         or (ItemClassification.progression
-                                             if name == "Shield" and self.options.ladder_storage
-                                             and not self.options.ladder_storage_without_items else None)
-                                         or item_data.classification)
-        return TunicItem(name, classification or itemclass, self.item_name_to_id[name], self.player)
+        itemclass: ItemClassification = (
+                classification
+                or (item_data.combat_ic if self.options.combat_logic else None)
+                or (ItemClassification.progression | ItemClassification.useful
+                    if name == "Glass Cannon" and self.options.grass_randomizer
+                    and not self.options.start_with_sword else None)
+                or (ItemClassification.progression
+                    if name == "Shield" and self.options.ladder_storage
+                    and not self.options.ladder_storage_without_items else None)
+                or item_data.classification
+        )
+        return TunicItem(name, itemclass, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
         tunic_items: List[TunicItem] = []
