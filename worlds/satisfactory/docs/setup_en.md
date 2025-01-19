@@ -49,8 +49,11 @@ YAML Validator page: [Yaml Validation Page](/mysterycheck)
 
 ### Starting Inventory
 
-TODO talk about how you can use the Plando? Weighted Options? Manual yaml editing? page to edit your starting inventory,
-giving yourself specific technologies (ex. splitters/mergers) and item bundles (ex. start with extra ) out of the gates.
+The Player Settings page provides a few options for controlling what materials you start with
+and when certain key technologies are unlocked.
+
+Advanced users can use Plando, Weighted Options, and manual yaml editing to further configure the starting inventory.
+If you don't wish to use these techniques, consider using a Satisfactory's Advanced Game Settings to spawn the items you desire.
 
 ### Advanced Configuration
 
@@ -70,28 +73,26 @@ to futher customize their experience.
 ### Defining Some Terms
 
 In Archipelago, multiple Satisfactory worlds may be played simultaneously.
-Each of these worlds must be hosted by a Satisfactory game client, each of which is connected to the Archipelago Server.
-
-<!-- In Archipelago, multiple Satisfactory worlds may be played simultaneously.
-Each of these worlds must be hosted by a Satisfactory Server which is connected to the Archipelago Server via the Archipelago mod. -->
+Each of these worlds must be hosted by a Satisfactory Server which is connected to the Archipelago Server via the Archipelago mod.
 
 This guide uses the following terms to refer to the software:
 
 - **Archipelago Server** - The central Archipelago server, which connects all games to each other.
-<!-- - **Satisfactory Server** - The Satisfactory instance which will be used to host, and potentially also play, the game. It must be supplied with the Archipelago Server connection details. Any number of Satisfactory Clients may connect to this server. -->
-<!-- - **Satisfactory Client** - The Satisfactory instance with which additional players can use to connect to the same Satisfactory world. They must also have the Archipelago mod installed, but require no configuration. -->
-- **Satisfactory Client** - The Satisfactory instance which will be used to host, and play, the game.
+- **Satisfactory Server** - The Satisfactory instance (game client or dedicated server) which will be used to host the game.
+  It must be supplied with the Archipelago Server connection details.
+  Any number of Satisfactory Clients may connect to this server.
+- **Satisfactory Client** - The Satisfactory instance (game client) with which additional players can use to connect to the same Satisfactory world.
+  They must also have the Archipelago mod installed, but require no configuration.
 
 It is important to note that the Satisfactory Archipelago mod
-is not yet compatible with dedicated servers or in-game multiplayer.
-Each Satisfactory world must be hosted and played by an individual player.
+is not yet compatible with Linux dedicated servers - only Windows dedicated servers are supported.
 
 ### Installing Satisfactory
 
 Purchase and install Satisfactory via one the sources linked [above](#required-software).
 Launch the game at least once to ensure that the Mod Manager can detect the game's install location.
 
-Make sure that you are running the correct branch of the game (Early Access or Experimental) that Archipelago supports.
+Make sure that you are running the correct branch of the game (Release or Experimental) that Archipelago supports.
 Learn how to switch branches here:
 [Satisfactory Modding Documentation FAQ: Switching Branches](https://docs.ficsit.app/satisfactory-modding/latest/faq.html#_how_do_i_get_the_experimental_or_early_access_branch_of_the_game)
 
@@ -116,7 +117,9 @@ Once on the mod page, click the "Install" link in the Latest Versions card.
 
 The Mod Manager will install all required dependency mods for you with no additional action required.
 
-As soon as you have the relevant mods installed, you do not need to launch the game through the Mod Manager - desktop shortcuts, Steam, Epic. etc. will all launch the game with mods still loaded.
+As soon as you have the relevant mods installed,
+you do not need to launch the game through the Mod Manager -
+desktop shortcuts, Steam, Epic. etc. will all launch the game with mods still loaded.
 
 ### Installing Additional Mods
 
@@ -142,7 +145,7 @@ You can hover over the fields in the menu for more information and example value
 - **Debug Mode**: Don't enable it unless the developers ask you to when reporting problems.
 - **Force override settings in save**: Leave false for now. It is useful when the server changed ports. Read its tooltip for more info.
 
-Note that the Satisfactory Client does _not_ need a copy of your Archipelago config file.
+Note that the Satisfactory Server/Client does _not_ need a copy of your Archipelago config file.
 The mod communicates with the Archipelago Server, which already has your config file,
 to generate the required content at runtime.
 
@@ -173,8 +176,6 @@ TODO implement filter_item_sends and bridge_chat_out mentioned in the Factorio g
 
 ## Troubleshooting
 
-TODO what is the scope of this section? How much do we help with vs. sending people somewhere else
-
 - If you are having trouble connecting to the Archipelago server,
   make sure you have entered the correct server address and port.
   The server port may have changed if the room went to sleep.
@@ -184,10 +185,10 @@ TODO what is the scope of this section? How much do we help with vs. sending peo
 - If you encounter a game crash, please report it to us via the [Satisfactory Modding Discord](https://discord.ficsit.app).
   Please include the following information:
   - What you were doing when the crash occurred.
-  <!-- - If you were a Satisfactory multiplayer host or client, and if you were playing on a dedicated server. -->
+  - If you were a Satisfactory multiplayer host or client, and if you were playing on a dedicated server.
   - Use the Mod Manager to generate a debug zip and attach that file.
    [Satisfactory Modding Documentation FAQ: Generating a debug zip](https://docs.ficsit.app/satisfactory-modding/latest/faq.html#_where_can_i_find_the_games_log_files)
-  - Attach your Archipelago config file to your report.
+  - Attach your Archipelago config file and spoiler to your report.
 
 ## Additional Resources
 

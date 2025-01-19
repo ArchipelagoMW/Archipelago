@@ -15,29 +15,22 @@ contains all the options you need to configure and export a config file.
 
 In Satisfactory, the HUB Milestones and MAM Research Nodes are shuffled,
 causing technologies to be obtained in a non-standard order.
-The costs of unlocking these technologies are also shuffled.
+Hard Drive scanning results also contain Archipelago items,
+meaning alternate recipes could now become part of your required progression path.
 There are also a few new purchases in the AWESOME Shop.
-An alternate recipe you've never used before may end up required to progress, for example.
-
-<!-- TODO
-Hard Drive scanning results are also optionally shuffled,
-meaning that scanning a Hard Drive will result in a selection between 3 random items.
--->
 
 ## What is the goal of Satisfactory?
 
 The player can choose from a number of goals using their YAML settings:
 
 - Complete a certain [Space Elevator](https://satisfactory.wiki.gg/wiki/Space_Elevator) tier
-<!-- TODO  with optionally randomized required items -->
 - Supply items to the [AWESOME Sink](https://satisfactory.wiki.gg/wiki/AWESOME_Sink) totalling a configurable amount of points to finish.
 
-In the current implementation, selecting multiple goals
-requires completion of any one goal to complete the slot.
+You can select whether completing your slot requires one or all goals to be met.
 
 ## What Satisfactory items can appear in other players' worlds?
 
-Satisfactory's technologies are removed from the HUB and MAM and placed into other players' worlds.
+Satisfactory's technologies are removed from the HUB, MAM, and Hard Drives and placed into other players' worlds.
 When those technologies are found, they are sent back to Satisfactory
 along with, optionally, free samples of those technologies.
 
@@ -63,6 +56,14 @@ in your player settings.
 A resource bundle is a package of items received as a check from another world.
 They must be collected by constructing an Archipelago Portal.
 For example, `Bundle: Jetpack` would contain a single jetpack.
+
+## What is a Trap?
+
+Traps are items intended to disrupt the player that replace non-progression filler items.
+Satisfactory's traps currently include spawning disruptive creatures or sending inconvenient items to your Archipelago Portal.
+The player settings page gives full control over which traps are enabled,
+how many traps replace filler items,
+as well as some pre-selected groups of themed traps.
 
 ## What does another world's item look like in Satisfactory?
 
@@ -91,8 +92,8 @@ In Satisfactory, if enabled in the player settings, all base-game Power Storage 
 They will deposit surplus produced energy and draw energy from the shared storage when needed.
 
 Just like the base game, there is no limit to the discharge/draw rate of one building,
-and each Power Storage provides TODO MW of charging throughput.
-The shared storage has unlimited capacity, but TODO% of energy is lost during depositing.
+and each Power Storage provides 100 MW of charging throughput.
+The shared storage has unlimited capacity, and no energy is lost during depositing.
 The amount of energy currently in the shared storage is displayed in the Archipelago client
 and appears in the Power Storage building UI.
 
@@ -110,13 +111,6 @@ You can build multiple portals or use faster belts to increase their bandwith.
 However, they currently have no filtering capabilities,
 so you must deal with this problem when handling their output items.
 
-## What is a Trap?
-
-You can optionally enable that some Traps be mixed into the item pool.
-Traps are items that will instantly trigger some sort of surprise on the player when received.
-Their severity varies from annoyance to killing the player.
-A few traps are included in the default options.
-
 ## Where do I run Archipelago commands?
 
 You can use the game's build-in chat menu.
@@ -130,14 +124,17 @@ You may wish to launch the Archipelago Text Client and use it to run commands in
 
 ## Multiplayer and Dedicated Servers
 
-It is possible to host a Satisfactory Archipelago Slot using the game's built in host-and-play multiplayer, allowing other Satisfactory players to join in constructing your factory.
-This experience is wonderfull - but there are few things not yet properly working for multiplayer
-* Death-links do not kill clients
-* Starting inventory for clients is missing
+It is possible to host a Satisfactory Archipelago Slot using the game's built in multiplayer,
+allowing other Satisfactory players to join in constructing your factory.
+This experience is wonderful - but there are few things not yet properly working for multiplayer:
+
+- Death-links do not kill clients
+- Starting inventory for clients is missing
+
 Remember that client players must have the same mods installed as the host player to join,
 however, they do not need to configure Archipelago connection settings.
 
-Dedicated server support is only working for windows at the moment.
+Dedicated server support is only working for Windows at the moment.
 
 ## Additional Mods
 
@@ -167,7 +164,7 @@ The following mods are known to work with Archipelago:
 
 <!-- Nog's Chat currently broken -->
 <!-- - [Nog's Chat](https://ficsit.app/mod/NogsChat) - Easily repeat past chat messages, improving the user experience of running Archipelago commands in the game's chat window. -->
-- [The FICSIT Information Tool](https://ficsit.app/mod/TFIT) - View how many Sink Points items are worth and how points-profitable recipes are. Helpful for the AWESOME Points goal.
+- [TFIT - FICSIT Information Tool](https://ficsit.app/mod/TFIT) - View how many Sink Points items are worth and how points-profitable recipes are. Helpful for the AWESOME Points goal.
 - [Faster Manual Crafting Redux](https://ficsit.app/mod/FasterManualCraftingRedux) - Reduce the early game manual crafting grind with a manual crafting speed that ramps up as you craft larger batches at once.
 <!-- TODO Test these  -->
 <!-- - [Infinite Zoop](https://ficsit.app/mod/InfiniteZoop) - Adds a research tree in the MAM where you can improve your Zoop capacity. Also enables multi-row & column Wall and Foundation construction.  -->
