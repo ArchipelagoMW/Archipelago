@@ -8,14 +8,12 @@ from worlds.generic.Rules import add_rule, set_rule, forbid_item, add_item_rule
 # I don't know what is going on here, but it works.
 if TYPE_CHECKING:
     from . import BanjoTooieWorld
-else:
-    BanjoTooieWorld = object
 
 # Shamelessly Stolen from KH2 :D
 
 class BanjoTooieRules:
     player: int
-    world: BanjoTooieWorld
+    world: "BanjoTooieWorld"
     region_rules = {}
     #can_transform = {}
     mumbo_magic = []
@@ -28,7 +26,7 @@ class BanjoTooieRules:
     # kazooie_moves = []
     jiggy_rules = {}
 
-    def __init__(self, world: BanjoTooieWorld) -> None:
+    def __init__(self, world: "BanjoTooieWorld") -> None:
         self.player = world.player
         self.world = world
 
