@@ -18,5 +18,5 @@
 
 ## Connecting
 
-You connect by opening the `ArchipelagoRandomizer` folder, and adding your player and room information.
+You connect by opening `...\ArchipelagoRandomizer\SaveData\RoomInfo.json`, and adding your player and room information.
 It should follow the format that the file already has
