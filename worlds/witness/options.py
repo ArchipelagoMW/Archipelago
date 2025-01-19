@@ -628,7 +628,7 @@ class PriorityHintsPercentageOutOfPossible(Range):
     This option is set to 50%.
     This means that the amount of Priority Hints is capped at 15, because only 50% of available Priority Hints are allowed to be used.
     """
-    display_name = "Maximum Priortiy Hints (out of possible Priority Hints)"
+    display_name = "Maximum Priority Hints (out of possible Priority Hints)"
 
     range_start = 0
     range_end = 100
