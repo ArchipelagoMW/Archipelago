@@ -91,6 +91,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
 
     # Per-batch variables:
     # The base state for the current batch. Collects all items yet to be placed which are not part of the current batch.
+    # Should never be `None` after the first batch has been created.
     batch_base_state: typing.Optional[CollectionState] = None
     # The sweep state for the current batch. Starts from `batch_base_state` and then sweeps to collect items from
     # reachable locations. If a swap changes the item at a location it has collected from, the state may be re-created.
@@ -223,6 +224,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
 
         # Create the initial batch sweep state or recreate it if it was destroyed by a swap.
         if batch_sweep_state is None:
+            assert batch_base_state is not None, "A batch should always exist once placements have started"
             # `locations=None` defaults to `multiworld.get_filled_locations()`, so only get it once for both the batch
             # sweep state and the maximum exploration state.
             if explore_locations is None:
