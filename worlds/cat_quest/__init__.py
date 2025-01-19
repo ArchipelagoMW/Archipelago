@@ -30,6 +30,7 @@ class CatQuestWorld(World):
 
     item_name_to_id = {item["name"]: item["id"] for item in items}
     location_name_to_id = {loc["name"]: loc["id"] for loc in locations}
+    location_name_to_progress_type = {loc["name"]: loc["progress_type"] for loc in locations}
     filler_item_names = [item["name"] for item in filler_items]
     
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = CatQuestOptions
@@ -69,7 +70,9 @@ class CatQuestWorld(World):
         main_region = Region("Felingard", self.player, self.multiworld)
 
         for loc in self.location_name_to_id.keys():
-            main_region.locations.append(CatQuestLocation(self.player, loc, self.location_name_to_id[loc], main_region))
+            cqloc = CatQuestLocation(self.player, loc, self.location_name_to_id[loc], main_region)
+            cqloc.progress_type = self.location_name_to_progress_type[loc]
+            main_region.locations.append(cqloc)
 
         self.multiworld.regions.append(main_region)
 
