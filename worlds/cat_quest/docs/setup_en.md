@@ -14,11 +14,9 @@
 
 2. Start Cat Quest once so that BepInEx can create its required configuration files.
 
-3. After BepInEx has been installed and configured, download the Cat Quest Randomizer and unpack the files into a folder. 
-
-- Move the dll files into the `\BepInEx\plugins` folder.
-- Move the `ArchipelagoRandomizer` folder to your Cat Quest root folder.
+3. After BepInEx has been installed and configured, download the Cat Quest Randomizer and unpack the files into the root folder. 
 
 ## Connecting
 
-As of now, connecting happens automatically with the playername "Nikki". It connects to localhost only. This is temporary
+You connect by opening the `ArchipelagoRandomizer` folder, and adding your player and room information.
+It should follow the format that the file already has
