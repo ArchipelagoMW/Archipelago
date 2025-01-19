@@ -30,6 +30,7 @@ class CatQuestWorld(World):
 
     item_name_to_id = {item["name"]: item["id"] for item in items}
     location_name_to_id = {loc["name"]: loc["id"] for loc in locations}
+    filler_item_names = [item["name"] for item in filler_items]
     
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = CatQuestOptions
     options: CatQuestOptions
@@ -40,7 +41,7 @@ class CatQuestWorld(World):
         super(CatQuestWorld, self).__init__(multiworld, player)
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(filler_items)
+        return self.random.choice(self.filler_item_names)
 
     def create_item(self, name: str) -> "CatQuestItem":
         item_id: int = self.item_name_to_id[name]
