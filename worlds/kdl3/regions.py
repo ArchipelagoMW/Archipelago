@@ -57,7 +57,7 @@ def generate_valid_level(world: "KDL3World", level: int, stage: int,
 
 def generate_rooms(world: "KDL3World", level_regions: Dict[int, Region]) -> None:
     level_names = {location_name.level_names[level]: level for level in location_name.level_names}
-    room_data = orjson.loads(get_data(__name__, os.path.join("data", "Rooms.json")))
+    room_data = orjson.loads(get_data(__name__, "data/Rooms.json"))
     rooms: Dict[str, KDL3Room] = dict()
     for room_entry in room_data:
         room = KDL3Room(room_entry["name"], world.player, world.multiworld, None, room_entry["level"],

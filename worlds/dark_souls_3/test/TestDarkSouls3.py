@@ -1,4 +1,4 @@
-from test.TestBase import WorldTestBase
+from test.bases import WorldTestBase
 
 from worlds.dark_souls_3.Items import item_dictionary
 from worlds.dark_souls_3.Locations import location_tables

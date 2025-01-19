@@ -93,7 +93,7 @@ def download_SNI() -> None:
     platform_name = platform.system().lower()
     machine_name = platform.machine().lower()
     # force amd64 on macos until we have universal2 sni, otherwise resolve to GOARCH
-    machine_name = "amd64" if platform_name == "darwin" else machine_to_go.get(machine_name, machine_name)
+    machine_name = "universal" if platform_name == "darwin" else machine_to_go.get(machine_name, machine_name)
     with urllib.request.urlopen("https://api.github.com/repos/alttpo/sni/releases/latest") as request:
         data = json.load(request)
     files = data["assets"]
@@ -104,11 +104,13 @@ def download_SNI() -> None:
         download_url: str = file["browser_download_url"]
         machine_match = download_url.rsplit("-", 1)[1].split(".", 1)[0] == machine_name
         if platform_name in download_url and machine_match:
+            source_url = download_url
             # prefer "many" builds
             if "many" in download_url:
-                source_url = download_url
                 break
-            source_url = download_url
+            # prefer the correct windows or windows7 build
+            if platform_name == "windows" and ("windows7" in download_url) == (sys.version_info < (3, 9)):
+                break
 
     if source_url and source_url.endswith(".zip"):
         with urllib.request.urlopen(source_url) as download:
@@ -319,7 +321,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
                                   f"{ex}\nPlease close all AP instances and delete manually.")
 
         # regular cx build
-        self.buildtime = datetime.datetime.utcnow()
+        self.buildtime = datetime.datetime.now(datetime.timezone.utc)
         super().run()
 
         # manually copy built modules to lib folder. cx_Freeze does not know they exist.
@@ -630,9 +632,9 @@ cx_Freeze.setup(
             "packages": ["worlds", "kivy", "cymem", "websockets"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
-                         "pandas"],
+                         "pandas", "zstandard"],
             "zip_include_packages": ["*"],
-            "zip_exclude_packages": ["worlds", "sc2", "orjson"],  # TODO: remove orjson here once we drop py3.8 support
+            "zip_exclude_packages": ["worlds", "sc2"],
             "include_files": [],  # broken in cx 6.14.0, we use more special sauce now
             "include_msvcr": False,
             "replace_paths": ["*."],
