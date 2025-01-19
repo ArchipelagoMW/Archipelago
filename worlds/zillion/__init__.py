@@ -9,8 +9,7 @@ import logging
 
 from typing_extensions import override
 
-from BaseClasses import ItemClassification, LocationProgressType, \
-    MultiWorld, Item, CollectionState, Entrance, Tutorial
+from BaseClasses import LocationProgressType, MultiWorld, Item, CollectionState, Entrance, Tutorial
 
 from .gen_data import GenData
 from .logic import ZillionLogicCache
@@ -19,7 +18,7 @@ from .options import ZillionOptions, validate, z_option_groups
 from .id_maps import ZillionSlotInfo, get_slot_info, item_name_to_id as _item_name_to_id, \
     loc_name_to_id as _loc_name_to_id, make_id_to_others, \
     zz_reg_name_to_reg_name, base_id
-from .item import ZillionItem
+from .item import ZillionItem, get_classification
 from .patch import ZillionPatch
 
 from zilliandomizer.system import System
@@ -422,12 +421,8 @@ class ZillionWorld(World):
             self.logger.warning("warning: called `create_item` without calling `generate_early` first")
         assert self.id_to_zz_item, "failed to get item maps"
 
-        classification = ItemClassification.filler
         zz_item = self.id_to_zz_item[item_id]
-        if zz_item.required:
-            classification = ItemClassification.progression
-            if not zz_item.is_progression:
-                classification = ItemClassification.progression_skip_balancing
+        classification = get_classification(name, zz_item, self._item_counts)
 
         z_item = ZillionItem(name, classification, item_id, self.player, zz_item)
         return z_item
