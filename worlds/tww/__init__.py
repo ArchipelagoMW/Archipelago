@@ -339,11 +339,14 @@ class TWWWorld(World):
         set_rules(self)
 
         # Ban the Bait Bag slot from having bait.
+        # Beedle's shop does not work correctly if the same item is in multiple slots in the same shop.
         if "The Great Sea - Beedle's Shop Ship - 20 Rupee Item" in self.progress_locations:
             beedle_20 = self.get_location("The Great Sea - Beedle's Shop Ship - 20 Rupee Item")
             add_item_rule(beedle_20, lambda item: item.name not in ["All-Purpose Bait", "Hyoi Pear"])
 
-        # Also, the same item should not appear more than once on the Rock Spire Isle shop ship.
+        # For the same reason, the same item should not appear more than once on the Rock Spire Isle shop ship.
+        # All non-TWW items use the same item (Father's Letter), so at most one non-TWW item can appear in the shop.
+        # The rest must be (unique, but not necessarily local) TWW items.
         locations = [f"Rock Spire Isle - Beedle's Special Shop Ship - {v} Rupee Item" for v in [500, 950, 900]]
         if all(loc in self.progress_locations for loc in locations):
             rock_spire_shop_ship_locations = [self.get_location(location_name) for location_name in locations]
