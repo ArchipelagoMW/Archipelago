@@ -459,6 +459,13 @@ class CommonContext:
         await self.send_msgs([payload])
         await self.send_msgs([{"cmd": "Get", "keys": ["_read_race_mode"]}])
 
+    async def check_locations(self, locations: typing.Collection[int]) -> set[int]:
+        """Send new location checks to the server. Returns the set of actually new locations that were sent."""
+        locations = set(locations) & self.missing_locations
+        if locations:
+            await self.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(locations)}])
+        return locations
+
     async def console_input(self) -> str:
         if self.ui:
             self.ui.focus_textinput()
