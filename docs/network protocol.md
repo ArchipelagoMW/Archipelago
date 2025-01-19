@@ -261,6 +261,7 @@ Sent to clients in response to a [Set](#Set) package if want_reply was set to tr
 | key            | str  | The key that was updated.                                                                  |
 | value          | any  | The new value for the key.                                                                 |
 | original_value | any  | The value the key had before it was updated. Not present on "_read" prefixed special keys. |
+| slot           | int  | The slot that originally sent the Set package causing this change.                         |
 
 Additional arguments added to the [Set](#Set) package that triggered this [SetReply](#SetReply) will also be passed along.
 
@@ -540,7 +541,7 @@ In JSON this may look like:
 | ----- | ----- |
 | 0 | Nothing special about this item |
 | 0b001 | If set, indicates the item can unlock logical advancement |
-| 0b010 | If set, indicates the item is important but not in a way that unlocks advancement |
+| 0b010 | If set, indicates the item is especially useful |
 | 0b100 | If set, indicates the item is a trap |
 
 ### JSONMessagePart
@@ -554,6 +555,7 @@ class JSONMessagePart(TypedDict):
     color: Optional[str] # only available if type is a color
     flags: Optional[int] # only available if type is an item_id or item_name
     player: Optional[int] # only available if type is either item or location
+    hint_status: Optional[HintStatus] # only available if type is hint_status
 ```
 
 `type` is used to denote the intent of the message part. This can be used to indicate special information which may be rendered differently depending on client. How these types are displayed in Archipelago's ALttP client is not the end-all be-all. Other clients may choose to interpret and display these messages differently.
@@ -569,6 +571,7 @@ Possible values for `type` include:
 | location_id | Location ID, should be resolved to Location Name |
 | location_name | Location Name, not currently used over network, but supported by reference Clients. |
 | entrance_name | Entrance Name. No ID mapping exists. |
+| hint_status | The [HintStatus](#HintStatus) of the hint. Both `text` and `hint_status` are given. |
 | color | Regular text that should be colored. Only `type` that will contain `color` data. |
 
 
