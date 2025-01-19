@@ -669,10 +669,9 @@ class EntranceRandomizer:
             if loc_name == "The Great Sea - Withered Trees":
                 # This location isn't inside a zone exit, but it does logically require the player to be able to reach
                 # a different item location inside one.
-                for sub_loc_name in ["Cliff Plateau Isles - Highest Isle"]:
-                    sub_zone_exit = self.get_zone_exit_for_item_location(sub_loc_name)
-                    if sub_zone_exit is not None:
-                        self.zone_exit_to_logically_dependent_item_locations[sub_zone_exit].append(loc_name)
+                sub_zone_exit = self.get_zone_exit_for_item_location("Cliff Plateau Isles - Highest Isle")
+                if sub_zone_exit is not None:
+                    self.zone_exit_to_logically_dependent_item_locations[sub_zone_exit].append(loc_name)
 
     def get_all_entrance_sets_to_be_randomized(
         self,
