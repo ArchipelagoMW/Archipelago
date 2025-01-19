@@ -950,7 +950,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                     checking = await ctx.location_loop()
                     if len(checking) > 0:
                         ctx.locations_checked += checking
-                        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": checking}])
+                        await ctx.check_locations(checking)
                 await asyncio.sleep(0.1)
             except TimeoutError:
                 logger.info("Connection Timed Out, Reconnecting")
