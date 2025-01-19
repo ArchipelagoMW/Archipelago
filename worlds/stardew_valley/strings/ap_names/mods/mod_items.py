@@ -19,6 +19,7 @@ class SkillLevel:
 
 class SVEQuestItem:
     aurora_vineyard_tablet = "Aurora Vineyard Tablet"
+    aurora_vineyard_reclamation = "Aurora Vineyard Reclamation"
     iridium_bomb = "Iridium Bomb"
     void_soul = "Void Spirit Peace Agreement"
     kittyfish_spell = "Kittyfish Spell"
