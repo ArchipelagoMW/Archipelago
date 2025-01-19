@@ -1,4 +1,5 @@
-from typing import Dict, NamedTuple, Set, Optional
+from typing import Dict, NamedTuple, Set, Optional, List
+from .grass import grass_location_table
 
 
 class TunicLocationData(NamedTuple):
@@ -41,7 +42,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Dark Tomb - Skulls Chest": TunicLocationData("Dark Tomb", "Dark Tomb Upper"),
     "Dark Tomb - Spike Maze Near Stairs": TunicLocationData("Dark Tomb", "Dark Tomb Main"),
     "Dark Tomb - 1st Laser Room Obscured": TunicLocationData("Dark Tomb", "Dark Tomb Main"),
-    "Guardhouse 2 - Upper Floor": TunicLocationData("East Forest", "Guard House 2 Upper"),
+    "Guardhouse 2 - Upper Floor": TunicLocationData("East Forest", "Guard House 2 Upper after bushes"),
     "Guardhouse 2 - Bottom Floor Secret": TunicLocationData("East Forest", "Guard House 2 Lower"),
     "Guardhouse 1 - Upper Floor Obscured": TunicLocationData("East Forest", "Guard House 1 East"),
     "Guardhouse 1 - Upper Floor": TunicLocationData("East Forest", "Guard House 1 East"),
@@ -320,7 +321,27 @@ hexagon_locations: Dict[str, str] = {
     "Blue Questagon": "Rooted Ziggurat Lower - Hexagon Blue",
 }
 
-location_name_to_id: Dict[str, int] = {name: location_base_id + index for index, name in enumerate(location_table)}
+sphere_one: List[str] = [
+    "Overworld - [Central] Chest Across From Well",
+    "Overworld - [Northwest] Chest Near Quarry Gate",
+    "Overworld - [Northwest] Shadowy Corner Chest",
+    "Overworld - [Southwest] Chest Guarded By Turret",
+    "Overworld - [Southwest] South Chest Near Guard",
+    "Overworld - [Southwest] Obscured in Tunnel to Beach",
+    "Overworld - [Northwest] Chest Near Turret",
+    "Overworld - [Northwest] Page By Well",
+    "Overworld - [West] Chest Behind Moss Wall",
+    "Overworld - [Southwest] Key Pickup",
+    "Overworld - [West] Key Pickup",
+    "Overworld - [West] Obscured Behind Windmill",
+    "Overworld - [West] Obscured Near Well",
+    "Overworld - [West] Page On Teleporter"
+]
+
+standard_location_name_to_id: Dict[str, int] = {name: location_base_id + index for index, name in enumerate(location_table)}
+
+all_locations = location_table.copy()
+all_locations.update(grass_location_table)
 
 location_name_groups: Dict[str, Set[str]] = {}
 for loc_name, loc_data in location_table.items():
