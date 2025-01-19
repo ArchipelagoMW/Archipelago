@@ -21,13 +21,7 @@ from .Options import TWWOptions, tww_option_groups
 from .Presets import tww_options_presets
 from .randomizers.Charts import ISLAND_NUMBER_TO_NAME, ChartRandomizer
 from .randomizers.Dungeons import Dungeon, create_dungeons
-from .randomizers.Entrances import (
-    ALL_ENTRANCES,
-    ALL_EXITS,
-    BOSS_EXIT_TO_DUNGEON,
-    MINIBOSS_EXIT_TO_DUNGEON,
-    EntranceRandomizer,
-)
+from .randomizers.Entrances import ALL_EXITS, BOSS_EXIT_TO_DUNGEON, MINIBOSS_EXIT_TO_DUNGEON, EntranceRandomizer
 from .randomizers.ItemPool import generate_itempool
 from .randomizers.RequiredBosses import RequiredBossesRandomizer
 from .Rules import set_rules
@@ -574,13 +568,9 @@ class TWWWorld(World):
         slot_data = self.options.as_dict(*self.options_dataclass.type_hints)
 
         # Add entrances to `slot_data`. This is the same data that is written to the .aptww file.
-        all_entrance_names = [en.entrance_name for en in ALL_ENTRANCES]
         entrances = {
-            entrance.parent_region.name: entrance.connected_region.name
-            for entrance in self.multiworld.get_entrances(self.player)
-            if entrance.parent_region is not None
-            and entrance.connected_region is not None
-            and entrance.parent_region.name in all_entrance_names
+            zone_entrance.entrance_name: zone_exit.unique_name
+            for zone_entrance, zone_exit in self.entrances.done_entrances_to_exits.items()
         }
         slot_data["entrances"] = entrances
 
