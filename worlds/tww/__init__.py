@@ -136,8 +136,6 @@ class TWWWorld(World):
 
     create_items = generate_itempool
 
-    set_rules = set_rules
-
     logic_rematch_bosses_skipped: bool
     logic_in_swordless_mode: bool
     logic_in_required_bosses_mode: bool
@@ -333,10 +331,13 @@ class TWWWorld(World):
         # Connect the regions in the multiworld. Randomize entrances to exits if the option is set.
         self.entrances.randomize_entrances()
 
-    def pre_fill(self) -> None:
+    def set_rules(self) -> None:
         """
-        Apply special fill rules before the fill stage.
+        Set access and item rules on locations.
         """
+        # Set the access rules for all progression locations.
+        set_rules(self)
+
         # Ban the Bait Bag slot from having bait.
         if "The Great Sea - Beedle's Shop Ship - 20 Rupee Item" in self.progress_locations:
             beedle_20 = self.get_location("The Great Sea - Beedle's Shop Ship - 20 Rupee Item")
