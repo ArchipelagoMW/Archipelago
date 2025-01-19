@@ -2,8 +2,8 @@ from typing import ClassVar, Dict, Any, Type
 from BaseClasses import Region, Location, Item, Tutorial
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
-from .Items import items, base_id
 from .Locations import locations
+from .Items import items, filler_items, base_id
 from .Rules import create_rules
 from .Options import CatQuestOptions
 
@@ -30,6 +30,8 @@ class CatQuestWorld(World):
 
     item_name_to_id = {item["name"]: item["id"] for item in items}
     location_name_to_id = {loc["name"]: loc["id"] for loc in locations}
+    location_name_to_progress_type = {loc["name"]: loc["progress_type"] for loc in locations}
+    filler_item_names = [item["name"] for item in filler_items]
     
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = CatQuestOptions
     options: CatQuestOptions
@@ -40,7 +42,7 @@ class CatQuestWorld(World):
         super(CatQuestWorld, self).__init__(multiworld, player)
 
     def get_filler_item_name(self) -> str:
-        return "500 Exp"
+        return self.random.choice(self.filler_item_names)
 
     def create_item(self, name: str) -> "CatQuestItem":
         item_id: int = self.item_name_to_id[name]
@@ -58,7 +60,7 @@ class CatQuestWorld(World):
                 for i in range(count):
                     self.multiworld.itempool.append(self.create_item(item["name"]))
 
-        junk = 45
+        junk = 29
         self.multiworld.itempool += [self.create_item(self.get_filler_item_name()) for _ in range(junk)]
 
     def create_regions(self) -> None:
@@ -68,7 +70,9 @@ class CatQuestWorld(World):
         main_region = Region("Felingard", self.player, self.multiworld)
 
         for loc in self.location_name_to_id.keys():
-            main_region.locations.append(CatQuestLocation(self.player, loc, self.location_name_to_id[loc], main_region))
+            cqloc = CatQuestLocation(self.player, loc, self.location_name_to_id[loc], main_region)
+            cqloc.progress_type = self.location_name_to_progress_type[loc]
+            main_region.locations.append(cqloc)
 
         self.multiworld.regions.append(main_region)
 
