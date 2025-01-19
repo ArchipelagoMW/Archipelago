@@ -12,10 +12,11 @@ Royal Arts, Skills, The Golden Key, Gold and Exp can appear in other players' wo
 
 ## What does another world's item look like in Cat Quest?
 
-You find other world's items by completing quests, and the item will appear upon completion.
+You find other world's items by completing quests.
+As of now, you will have to use your client to see which item you got.
 
 ## Can I have more than one save at a time?
 
 No, unfortunately only one save slot is available for use in Cat Quest.
 Starting a new save will erase the old one _permanently_.
-If you want to save your actual vanilla save game, please do so before starting
+If you want to save your actual vanilla save game, please do so before starting.
