@@ -169,6 +169,7 @@ class JakAndDaxterWorld(World):
         "Scout Flies - SC": set(Scouts.locSC_scoutTable.values()),
         "Scout Flies - SM": set(Scouts.locSM_scoutTable.values()),
         "Scout Flies - LT": set(Scouts.locLT_scoutTable.values()),
+        "Scout Flies - GMC": set(Scouts.locGMC_scoutTable.values()),
         "Specials": set(special_location_table.values()),
         "Orb Caches": set(cache_location_table.values()),
         "Precursor Orbs": set(orb_location_table.values()),
