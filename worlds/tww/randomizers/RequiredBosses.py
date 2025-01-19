@@ -24,10 +24,10 @@ class RequiredBossesRandomizer:
         self.multiworld = world.multiworld
 
         self.required_boss_item_locations: list[str] = []
-        self.required_dungeons: list[str] = []
+        self.required_dungeons: set[str] = set()
         self.required_bosses: list[str] = []
         self.banned_locations: set[str] = set()
-        self.banned_dungeons: list[str] = []
+        self.banned_dungeons: set[str] = set()
         self.banned_bosses: list[str] = []
 
     def validate_boss_options(self, options: TWWOptions) -> None:
@@ -117,5 +117,5 @@ class RequiredBossesRandomizer:
                 self.required_bosses.append(boss_name)
             else:
                 self.banned_bosses.append(boss_name)
-        self.required_dungeons = list(required_dungeons)
-        self.banned_dungeons = list(banned_dungeons)
+        self.required_dungeons = required_dungeons
+        self.banned_dungeons = banned_dungeons
