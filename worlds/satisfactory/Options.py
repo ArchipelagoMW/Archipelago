@@ -106,7 +106,7 @@ class HardDriveProgressionLimit(Range):
     There are 118 total hard drives.
     """
     display_name = "Hard Drive Progression Items"
-    default = 0
+    default = 20
     range_start = 0
     range_end = 100
 

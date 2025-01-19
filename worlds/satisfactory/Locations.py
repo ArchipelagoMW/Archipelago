@@ -162,11 +162,14 @@ class DropPod(LocationData):
             # without you just going to have to figure it your yourself
 
             def logic_rule(state: CollectionState):
-                return not unlocked_by or state_logic and state_logic.can_produce(state, unlocked_by)
+                return not unlocked_by or (state_logic
+                        and state_logic.can_produce(state, unlocked_by)
+                        and state_logic.can_build(state, "MAM"))
 
             return logic_rule
 
-        super().__init__(get_region(data.gassed, data.radioactive), f"Hard drive random check {locationId - 1338600}", locationId,
+        super().__init__(
+            get_region(data.gassed, data.radioactive), f"Hard drive random check {locationId - 1338600}", locationId,
                 non_progression = not can_hold_progression, rule = get_rule(data.item, data.power))
 
 
