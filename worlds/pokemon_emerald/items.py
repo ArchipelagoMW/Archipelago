@@ -1,7 +1,7 @@
 """
 Classes and functions related to AP items for Pokemon Emerald
 """
-from typing import Dict, FrozenSet, Optional
+from typing import Dict, FrozenSet, Set, Optional
 
 from BaseClasses import Item, ItemClassification
 
@@ -44,30 +44,6 @@ def create_item_label_to_code_map() -> Dict[str, int]:
         label_to_code_map[attributes.label] = offset_item_value(item_value)
 
     return label_to_code_map
-
-
-ITEM_GROUPS = {
-    "Badges": {
-        "Stone Badge", "Knuckle Badge",
-        "Dynamo Badge", "Heat Badge",
-        "Balance Badge", "Feather Badge",
-        "Mind Badge", "Rain Badge",
-    },
-    "HMs": {
-        "HM01 Cut", "HM02 Fly",
-        "HM03 Surf", "HM04 Strength",
-        "HM05 Flash", "HM06 Rock Smash",
-        "HM07 Waterfall", "HM08 Dive",
-    },
-    "HM01": {"HM01 Cut"},
-    "HM02": {"HM02 Fly"},
-    "HM03": {"HM03 Surf"},
-    "HM04": {"HM04 Strength"},
-    "HM05": {"HM05 Flash"},
-    "HM06": {"HM06 Rock Smash"},
-    "HM07": {"HM07 Waterfall"},
-    "HM08": {"HM08 Dive"},
-}
 
 
 def get_item_classification(item_code: int) -> ItemClassification:

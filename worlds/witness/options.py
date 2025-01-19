@@ -2,10 +2,23 @@ from dataclasses import dataclass
 
 from schema import And, Schema
 
-from Options import Choice, DefaultOnToggle, OptionDict, OptionGroup, PerGameCommonOptions, Range, Toggle, Visibility
+from Options import (
+    Choice,
+    DefaultOnToggle,
+    LocationSet,
+    OptionDict,
+    OptionError,
+    OptionGroup,
+    OptionSet,
+    PerGameCommonOptions,
+    Range,
+    Toggle,
+    Visibility,
+)
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
+from .entity_hunt import ALL_HUNTABLE_PANELS
 
 
 class DisableNonRandomizedPuzzles(Toggle):
@@ -257,6 +270,16 @@ class PanelHuntDiscourageSameAreaFactor(Range):
     default = 40
 
 
+class PanelHuntPlando(LocationSet):
+    """
+    Specify specific hunt panels you want for your panel hunt game.
+    """
+
+    display_name = "Panel Hunt Plando"
+
+    valid_keys = [static_witness_logic.ENTITIES_BY_HEX[panel_hex]["checkName"] for panel_hex in ALL_HUNTABLE_PANELS]
+
+
 class PuzzleRandomization(Choice):
     """
     Puzzles in this randomizer are randomly generated. This option changes the difficulty/types of puzzles.
@@ -294,12 +317,33 @@ class ChallengeLasers(Range):
     default = 11
 
 
-class ElevatorsComeToYou(Toggle):
+class ElevatorsComeToYou(OptionSet):
     """
-    If on, the Quarry Elevator, Bunker Elevator and Swamp Long Bridge will "come to you" if you approach them.
-    This does actually affect logic as it allows unintended backwards / early access into these areas.
+    In vanilla, some bridges/elevators come to you if you walk up to them when they are not currently there.
+    However, there are some that don't. Notably, this prevents Quarry Elevator from being a logical access method into Quarry, because you can send it away without riding ot and then permanently be locked out of using it.
+
+    This option allows you to change specific elevators/bridges to "come to you" as well.
+
+    - Quarry Elevator: Makes the Quarry Elevator come down when you approach it from lower Quarry and back up when you approach it from above
+    - Swamp Long Bridge: Rotates the side you approach it from towards you, but also rotates the other side away
+    - Bunker Elevator: Makes the Bunker Elevator come to any floor that you approach it from, meaning it can be accessed from the roof immediately
     """
-    display_name = "All Bridges & Elevators come to you"
+
+    # Used to be a toggle
+    @classmethod
+    def from_text(cls, text: str):
+        if text.lower() in {"off", "0", "false", "none", "null", "no"}:
+            raise OptionError('elevators_come_to_you is an OptionSet now. The equivalent of "false" is {}')
+        if text.lower() in {"on", "1", "true", "yes"}:
+            raise OptionError(
+                f'elevators_come_to_you is an OptionSet now. The equivalent of "true" is {set(cls.valid_keys)}'
+            )
+        return super().from_text(text)
+
+    display_name = "Elevators come to you"
+
+    valid_keys = frozenset({"Quarry Elevator", "Swamp Long Bridge", "Bunker Elevator"})
+    default = frozenset({"Quarry Elevator"})
 
 
 class TrapPercentage(Range):
@@ -445,6 +489,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     panel_hunt_required_percentage: PanelHuntRequiredPercentage
     panel_hunt_postgame: PanelHuntPostgame
     panel_hunt_discourage_same_area_factor: PanelHuntDiscourageSameAreaFactor
+    panel_hunt_plando: PanelHuntPlando
     early_caves: EarlyCaves
     early_symbol_item: EarlySymbolItem
     elevators_come_to_you: ElevatorsComeToYou
@@ -473,6 +518,7 @@ witness_option_groups = [
         PanelHuntTotal,
         PanelHuntPostgame,
         PanelHuntDiscourageSameAreaFactor,
+        PanelHuntPlando,
     ], start_collapsed=True),
     OptionGroup("Locations", [
         ShuffleDiscardedPanels,
