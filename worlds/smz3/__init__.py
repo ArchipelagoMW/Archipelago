@@ -217,6 +217,10 @@ class SMZ3World(World):
         SMZ3World.location_names = frozenset(self.smz3World.locationLookup.keys())
 
         self.multiworld.state.smz3state[self.player] = TotalSMZ3Item.Progression([])
+
+        if not self.smz3World.Config.Keysanity:
+            # Dungeons items here are not in the itempool and will be prefilled locally so they must stay local
+            self.options.non_local_items.value -= frozenset(item_name for item_name in self.item_names if TotalSMZ3Item.Item.IsNameDungeonItem(item_name))
     
     def create_items(self):
         self.dungeon = TotalSMZ3Item.Item.CreateDungeonPool(self.smz3World)
@@ -233,8 +237,6 @@ class SMZ3World(World):
             progressionItems = self.progression + self.dungeon + self.keyCardsItems + self.SmMapsItems
         else:
             progressionItems = self.progression
-            # Dungeons items here are not in the itempool and will be prefilled locally so they must stay local
-            self.options.non_local_items.value -= frozenset(item_name for item_name in self.item_names if TotalSMZ3Item.Item.IsNameDungeonItem(item_name))
             for item in self.keyCardsItems:
                 self.multiworld.push_precollected(SMZ3Item(item.Type.name, ItemClassification.filler, item.Type, self.item_name_to_id[item.Type.name], self.player, item))
 
