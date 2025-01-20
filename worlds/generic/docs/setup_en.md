@@ -148,6 +148,14 @@ Archipelago.
 We strongly recommend that you make sure that the source of the `.apworld` is safe and trustworthy before playing with a 
 custom world.
 
+#### Adding alternate versions of included worlds
+
+If you want to play with an alternate version of a game that is already included in Archipelago, you will need to manually
+replace the original `.apworld`. To do so, go to your Archipelago installation folder and navigate to the `lib/worlds` 
+directory. Then, create a backup of the `.apworld` or the folder corresponding to the game you want to play an alternate 
+version of. Finally, replace the base `.apworld` (or folder) with the alternate `.apworld`. If you want to play the original
+again, replace the alternate version with your backup.
+
 ## Hosting an Archipelago Server
 
 When a multiworld seed is generated, the multidata will be output as a `.archipelago`. If the game was generated locally,
