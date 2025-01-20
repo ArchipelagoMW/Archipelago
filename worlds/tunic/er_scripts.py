@@ -734,6 +734,10 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
             raise Exception("Something went wrong with the remaining two plus portals. Contact the TUNIC rando devs.")
         portal_pairs[portal1] = portal2
 
+    if len(two_plus2) > 0:
+        raise Exception(f"TUNIC: Something went horribly wrong in ER for {world.player_name}. "
+                        f"Please contact the TUNIC rando devs.")
+
     return portal_pairs
 
 
