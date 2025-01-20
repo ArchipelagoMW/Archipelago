@@ -20,7 +20,7 @@ class ItemFilterTests(Sc2SetupTestBase):
         }
         self.generate_world(world_options)
         self.assertTrue(self.multiworld.itempool)
-        races = {mission.mission.race for mission in self.world.custom_mission_order.get_missions()}
+        races = {mission.race for mission in self.world.custom_mission_order.get_used_missions()}
         self.assertIn(SC2Race.TERRAN, races)
         self.assertNotIn(SC2Race.ZERG, races)
         self.assertNotIn(SC2Race.PROTOSS, races)
