@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Set, Callable, Dict, List, Union, TYPE_CHECKING, Any
+from typing import Set, Callable, Dict, List, Union, TYPE_CHECKING, Any, NamedTuple
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
@@ -8,7 +8,7 @@ from ..item.item_tables import item_table
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
-    from .structs import SC2MOGenMission, MissionEntryRules
+    from .nodes import SC2MOGenMission
 
 
 class EntryRule(ABC):
@@ -362,6 +362,11 @@ class SubRuleRuleData(RuleData):
             # should be allowed to try again at a later point
             seen_rules.remove(self.rule_id)
         return success
+
+class MissionEntryRules(NamedTuple):
+    mission_rule: SubRuleRuleData
+    layout_rule: SubRuleRuleData
+    campaign_rule: SubRuleRuleData
 
 
 class ItemEntryRule(EntryRule):

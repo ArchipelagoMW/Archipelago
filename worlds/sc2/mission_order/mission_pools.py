@@ -5,7 +5,7 @@ from ..mission_tables import SC2Mission, lookup_id_to_mission, MissionFlag, SC2C
 from worlds.AutoWorld import World
 
 if TYPE_CHECKING:
-    from .structs import SC2MOGenMission
+    from .nodes import SC2MOGenMission
 
 class Difficulty(IntEnum):
     RELATIVE = 0
