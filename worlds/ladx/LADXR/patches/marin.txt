@@ -241,7 +241,6 @@ Nothing unusual here, just a completely normal LADX game, Mister Nintendo.
 Remember:\n1) Play Vanilla\n2) Play Solo Rando\n3) Play Multi
 Is :) a good item?
 What version do we have anyway? 0.6.9?
-Hello. LADX is currently looking for a new maintainer. Please apply within.
 So, what &newgames are coming in the next AP version?
 Is !remaining fixed yet?
 Remember the APocalypse. Never forget the rooms we lost that day.
