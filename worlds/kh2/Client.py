@@ -346,31 +346,29 @@ class KH2Context(CommonContext):
         if cmd in {"DataPackage"}:
             if "Kingdom Hearts 2" in args["data"]["games"]:
                 self.data_package_kh2_cache(args)
+            if "KeybladeAbilities" in self.kh2slotdata.keys():
+                # sora ability to slot
+                self.AbilityQuantityDict.update(self.kh2slotdata["KeybladeAbilities"])
+                # itemid:[slots that are available for that item]
+                self.AbilityQuantityDict.update(self.kh2slotdata["StaffAbilities"])
+                self.AbilityQuantityDict.update(self.kh2slotdata["ShieldAbilities"])
 
-    
-        if "KeybladeAbilities" in self.kh2slotdata.keys():
-            # sora ability to slot
-            self.AbilityQuantityDict.update(self.kh2slotdata["KeybladeAbilities"])
-            # itemid:[slots that are available for that item]
-            self.AbilityQuantityDict.update(self.kh2slotdata["StaffAbilities"])
-            self.AbilityQuantityDict.update(self.kh2slotdata["ShieldAbilities"])
+            all_weapon_location_id = []
+            for weapon_location in all_weapon_slot:
+                all_weapon_location_id.append(self.kh2_loc_name_to_id[weapon_location])
+            self.all_weapon_location_id = set(all_weapon_location_id)
 
-        all_weapon_location_id = []
-        for weapon_location in all_weapon_slot:
-            all_weapon_location_id.append(self.kh2_loc_name_to_id[weapon_location])
-        self.all_weapon_location_id = set(all_weapon_location_id)
+            try:
+                if not self.kh2:
+                    self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
+                    self.get_addresses()
 
-        try:
-            self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
-            self.get_addresses()
-
-        except Exception as e:
-            if self.kh2connected:
-                self.kh2connected = False
-            logger.info("Game is not open.")
-        self.serverconneced = True
-
-        asyncio.create_task(self.send_msgs([{'cmd': 'Sync'}]))
+            except Exception as e:
+                if self.kh2connected:
+                    self.kh2connected = False
+                logger.info("Game is not open.")
+            self.serverconneced = True
+            asyncio.create_task(self.send_msgs([{'cmd': 'Sync'}]))
 
     def data_package_kh2_cache(self, args):
         self.kh2_loc_name_to_id = args["data"]["games"]["Kingdom Hearts 2"]["location_name_to_id"]
@@ -489,6 +487,9 @@ class KH2Context(CommonContext):
     async def give_item(self, item, location):
         try:
             # todo: ripout all the itemtype stuff and just have one dictionary. the only thing that needs to be tracked from the server/local is abilites
+            #sleep so we can get the datapackage and not miss any items that were sent to us while we didnt have our item id dicts
+            while not self.lookup_id_to_item:
+                await asyncio.sleep(0.5)
             itemname = self.lookup_id_to_item[item]
             itemdata = self.item_name_to_data[itemname]
             # itemcode = self.kh2_item_name_to_id[itemname]
@@ -832,15 +833,16 @@ class KH2Context(CommonContext):
                         else:
                             with open(hk2memaddresses_path, 'r') as f:
                                 self.mem_json = json.load(f)
-                        for key in self.mem_json.keys():
+                        if self.mem_json:
+                            for key in self.mem_json.keys():
 
-                            if self.kh2_read_string(eval(self.mem_json[key]["GameVersionCheck"]), 4) == "KH2J":
-                                self.Now = eval(self.mem_json[key]["Now"])
-                                self.Save=eval(self.mem_json[key]["Save"])
-                                self.Slot1 = eval(self.mem_json[key]["Slot1"])
-                                self.Journal = eval(self.mem_json[key]["Journal"])
-                                self.Shop = eval(self.mem_json[key]["Shop"])
-                                self.kh2_game_version = self.mem_json[key]["GameVersionCheck"]
+                                if self.kh2_read_string(eval(self.mem_json[key]["GameVersionCheck"]), 4) == "KH2J":
+                                    self.Now = eval(self.mem_json[key]["Now"])
+                                    self.Save=eval(self.mem_json[key]["Save"])
+                                    self.Slot1 = eval(self.mem_json[key]["Slot1"])
+                                    self.Journal = eval(self.mem_json[key]["Journal"])
+                                    self.Shop = eval(self.mem_json[key]["Shop"])
+                                    self.kh2_game_version = self.mem_json[key]["GameVersionCheck"]
 
             if self.kh2_game_version is not None:
                 logger.info(f"You are now auto-tracking {self.kh2_game_version}")
