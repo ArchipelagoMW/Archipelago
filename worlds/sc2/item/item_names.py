@@ -718,6 +718,7 @@ ADEPT_PHASE_BULWARK                                     = "Phase Bulwark (Adept)
 STALKER_INSTIGATOR_SLAYER_DISINTEGRATING_PARTICLES      = "Disintegrating Particles (Stalker/Instigator/Slayer)"
 STALKER_INSTIGATOR_SLAYER_PARTICLE_REFLECTION           = "Particle Reflection (Stalker/Instigator/Slayer)"
 INSTIGATOR_BLINK_OVERDRIVE                              = "Blink Overdrive (Instigator)"
+INSTIGATOR_RECONSTRUCTION                               = "Reconstruction (Instigator)"
 DRAGOON_HIGH_IMPACT_PHASE_DISRUPTORS                    = "High Impact Phase Disruptor (Dragoon)"
 DRAGOON_TRILLIC_COMPRESSION_SYSTEM                      = "Trillic Compression System (Dragoon)"
 DRAGOON_SINGULARITY_CHARGE                              = "Singularity Charge (Dragoon)"
