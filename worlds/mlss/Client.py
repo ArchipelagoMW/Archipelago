@@ -269,7 +269,7 @@ class MLSSClient(BizHawkClient):
                 self.local_checked_locations = locs_to_send
 
                 if locs_to_send is not None:
-                    await ctx.send_msgs([{"cmd": "LocationChecks", "locations": list(locs_to_send)}])
+                    await ctx.check_locations(locs_to_send)
 
         except bizhawk.RequestFailedError:
             # Exit handler and return to main loop to reconnect.
