@@ -524,25 +524,26 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         dead_ends.append(shop_portal)
 
     if entrance_layout == EntranceLayout.option_fixed_shop and not world.using_ut:
-        portal1 = None
+        windmill = None
         for portal in two_plus:
             if portal.scene_destination() == "Overworld Redux, Windmill_":
-                portal1 = portal
+                windmill = portal
                 break
-        if not portal1:
+        if not windmill:
             raise Exception(f"Failed to do Fixed Shop option for Entrance Layout. "
                             f"Did {player_name} plando the Windmill Shop entrance?")
 
         portal_num = get_shop_num(world)
-        portal2 = Portal(name=f"Shop Portal {portal_num}", region=f"Shop {portal_num}",
-                         destination=str(portal_num), tag="_", direction=Direction.south)
+        shop = Portal(name=f"Shop Portal {portal_num}", region=f"Shop {portal_num}",
+                      destination=str(portal_num), tag="_", direction=Direction.south)
         create_shop_region(world, regions, portal_num)
 
-        portal_pairs[portal1] = portal2
-        two_plus.remove(portal1)
+        portal_pairs[windmill] = shop
+        two_plus.remove(windmill)
         if decoupled:
-            two_plus2.append(portal2)
-            non_dead_end_regions.add(portal2.region)
+            two_plus.append(shop)
+            non_dead_end_regions.add(shop.region)
+            connected_regions.add(shop.region)
 
     # use the seed given in the options to shuffle the portals
     if isinstance(world.options.entrance_rando.value, str):
@@ -730,6 +731,10 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
         if portal2 is None:
             raise Exception("Something went wrong with the remaining two plus portals. Contact the TUNIC rando devs.")
         portal_pairs[portal1] = portal2
+
+    if len(two_plus) > 0 or len(two_plus2) > 0:
+        raise Exception(f"TUNIC: Something went horribly wrong in ER for {world.player_name}. "
+                        f"Please contact the TUNIC rando devs.")
 
     return portal_pairs
 
