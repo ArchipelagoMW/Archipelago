@@ -187,8 +187,12 @@ class LuigisMansionRandomizer:
 
         # TODO Move into its own function?
         # Get Output data required information
-        bool_boo_checks = True if self.output_data["Options"]["boo_gates"] == 1 else False
-        required_mario_item_count = int(self.output_data["Options"]["mario_items"])
+        bool_boo_checks: bool = True if self.output_data["Options"]["boo_gates"] == 1 else False
+        required_mario_item_count: int = int(self.output_data["Options"]["mario_items"])
+        bool_randomize_music: bool = True if self.output_data["Options"]["random_music"] == 1 else False
+        washroom_boo_count: int = int(self.output_data["Options"]["washroom_boo_count"])
+        balcony_boo_count: int = int(self.output_data["Options"]["balcony_boo_count"])
+        final_boo_count: int = int(self.output_data["Options"]["final_boo_count"])
 
         # Update all custom events
         list_events = ["03", "04", "12", "17", "22", "24", "29", "32", "33", "35", "38", "44", "45", "50",
@@ -224,11 +228,11 @@ class LuigisMansionRandomizer:
                 required_boo_count = 0
                 match event_no:
                     case "16":
-                        required_boo_count = self.output_data["Options"]["final_boo_count"]
+                        required_boo_count = final_boo_count
                     case "47":
-                        required_boo_count = self.output_data["Options"]["washroom_boo_count"]
+                        required_boo_count = washroom_boo_count
                     case "96":
-                        required_boo_count = self.output_data["Options"]["balcony_boo_count"]
+                        required_boo_count = balcony_boo_count
 
                 min_boo_count = 0 if required_boo_count - 20 <= 0 else required_boo_count - 20
                 second_boo_count = 0 if required_boo_count - 15 <= 0 else required_boo_count - 15
@@ -272,8 +276,11 @@ class LuigisMansionRandomizer:
             self.update_custom_event(new_custom_event, True, "", True)
 
         # TODO After updating all events, randomize music for all events.
-        list_of_bad_music = [13, 17, 21, 24, 28, 41]
-        random.randint(0, 52)
+        if bool_randomize_music:
+            list_of_bad_music = [-1, 13, 17, 21, 24, 28, 41]
+            int_music_selection: int = -1
+            while int_music_selection in list_of_bad_music:
+                int_music_selection = random.randint(0, 52)
 
         # Generator function to combine all necessary files into an ISO file.
         # Returned information is ignored. # Todo Maybe there is something better to put here?
