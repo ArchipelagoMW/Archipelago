@@ -866,3 +866,38 @@ class TestItemFiltering(Sc2SetupTestBase):
 
         self.assertIn(item_names.STARTING_MINERALS, itempool)
         self.assertIn(item_names.REDUCED_MAX_SUPPLY, itempool)
+    
+    def test_weapon_armor_upgrade_items_capped_by_max_upgrade_level(self) -> None:
+        MAX_LEVEL = 3
+        world_options = {
+            'locked_items': {
+                item_groups.ItemGroupNames.TERRAN_GENERIC_UPGRADES: MAX_LEVEL,
+                item_groups.ItemGroupNames.ZERG_GENERIC_UPGRADES: MAX_LEVEL,
+                item_groups.ItemGroupNames.PROTOSS_GENERIC_UPGRADES: MAX_LEVEL + 1,
+            },
+            'max_upgrade_level': MAX_LEVEL,
+            'mission_order': options.MissionOrder.option_grid,
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+            'generic_upgrade_items': options.GenericUpgradeItems.option_bundle_weapon_and_armor
+        }
+
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+        upgrade_item_counts: Dict[str, int] = {}
+        for item_name in itempool:
+            if item_tables.item_table[item_name].type in (
+                item_tables.TerranItemType.Upgrade,
+                item_tables.ZergItemType.Upgrade,
+                item_tables.ProtossItemType.Upgrade,
+            ):
+                upgrade_item_counts[item_name] = upgrade_item_counts.get(item_name, 0) + 1
+        expected_result = {
+            item_names.PROGRESSIVE_TERRAN_ARMOR_UPGRADE: MAX_LEVEL,
+            item_names.PROGRESSIVE_TERRAN_WEAPON_UPGRADE: MAX_LEVEL,
+            item_names.PROGRESSIVE_ZERG_ARMOR_UPGRADE: MAX_LEVEL,
+            item_names.PROGRESSIVE_ZERG_WEAPON_UPGRADE: MAX_LEVEL,
+            item_names.PROGRESSIVE_PROTOSS_ARMOR_UPGRADE: MAX_LEVEL + 1,
+            item_names.PROGRESSIVE_PROTOSS_WEAPON_UPGRADE: MAX_LEVEL + 1,
+        }
+        self.assertDictEqual(expected_result, upgrade_item_counts)
+

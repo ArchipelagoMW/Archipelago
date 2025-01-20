@@ -768,6 +768,7 @@ item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = [
     item_names.KERRIGAN_APOCALYPSE,
     item_names.KERRIGAN_DROP_PODS,
     item_names.KERRIGAN_SPAWN_LEVIATHAN,
+    item_names.KERRIGAN_IMMOBILIZATION_WAVE,
 
     item_names.REAVER_RESOURCE_EFFICIENCY,
     item_names.SOA_TIME_STOP,

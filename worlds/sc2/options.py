@@ -422,6 +422,14 @@ class VoidTradeAgeLimit(Choice):
     default = option_30_minutes
 
 
+class MaxUpgradeLevel(Range):
+    """Controls the maximum number of weapon/armor upgrades that can be found or unlocked."""
+    display_name = "Maximum upgrade level"
+    range_start = 3
+    range_end = 5
+    default = 3
+
+
 class GenericUpgradeMissions(Range):
     """
     Determines the percentage of missions in the mission order that must be completed before
@@ -480,6 +488,7 @@ class GenericUpgradeItems(Choice):
 
 class VanillaItemsOnly(Toggle):
     """If turned on, the item pool is limited only to items that appear in the main 3 vanilla campaigns.
+    Weapon/Armour upgrades are unaffected; use max_upgrade_level to control maximum level.
     locked_items may override these exclusions."""
     display_name = "Vanilla Items Only"
 
@@ -1055,8 +1064,8 @@ class MissionOrderScouting(Choice):
     None: Never provide information
     Completed: Only for missions that were completed 
     Available: Only for missions that are available to play
-    Layout: Only for missions that are in a acessible layout (e.g. Char, Mar Sara, etc.)
-    Campaign: Only for missions that are in a acessible campaign (e.g. WoL, HotS, etc.)
+    Layout: Only for missions that are in an accessible layout (e.g. Char, Mar Sara, etc.)
+    Campaign: Only for missions that are in an accessible campaign (e.g. WoL, HotS, etc.)
     All: All missions
     """
     display_name = "Mission Order Scouting"
@@ -1258,6 +1267,7 @@ class Starcraft2Options(PerGameCommonOptions):
     ensure_generic_items: EnsureGenericItems
     min_number_of_upgrades: MinNumberOfUpgrades
     max_number_of_upgrades: MaxNumberOfUpgrades
+    max_upgrade_level: MaxUpgradeLevel
     generic_upgrade_missions: GenericUpgradeMissions
     generic_upgrade_research: GenericUpgradeResearch
     generic_upgrade_items: GenericUpgradeItems

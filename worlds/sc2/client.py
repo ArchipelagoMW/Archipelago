@@ -30,7 +30,7 @@ from .item.item_groups import item_name_groups, unlisted_item_name_groups
 from . import options
 from .options import (
     MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, EnableMorphling,
-    GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions,
+    GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, MaxUpgradeLevel,
     LocationInclusion, ExtraLocations, MasteryLocations, SpeedrunLocations, PreventativeLocations, ChallengeLocations,
     VanillaLocations,
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
@@ -394,6 +394,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             # but that's edge case enough I don't think we should warn about it.
             ConfigurableOptionInfo('soa_passive_presence', 'spear_of_adun_autonomously_cast_ability_presence', options.SpearOfAdunAutonomouslyCastAbilityPresence),
             ConfigurableOptionInfo('soa_passives_in_nobuilds', 'spear_of_adun_autonomously_cast_present_in_no_build', options.SpearOfAdunAutonomouslyCastPresentInNoBuild),
+            ConfigurableOptionInfo('max_upgrade_level', 'max_upgrade_level', options.MaxUpgradeLevel, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('minerals_per_item', 'minerals_per_item', options.MineralsPerItem, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('gas_per_item', 'vespene_per_item', options.VespenePerItem, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('supply_per_item', 'starting_supply_per_item', options.StartingSupplyPerItem, ConfigurableOptionType.INTEGER),
@@ -608,6 +609,7 @@ class SC2Context(CommonContext):
         self.announcements: queue.Queue = queue.Queue()
         self.sc2_run_task: typing.Optional[asyncio.Task] = None
         self.missions_unlocked: bool = False  # allow launching missions ignoring requirements
+        self.max_upgrade_level: int = MaxUpgradeLevel.default
         self.generic_upgrade_missions = 0
         self.generic_upgrade_research = 0
         self.generic_upgrade_items = 0
@@ -774,6 +776,7 @@ class SC2Context(CommonContext):
                 args["slot_data"].get("player_color_nova", ColorChoice.option_dark_grey)
             )
             self.generic_upgrade_missions = args["slot_data"].get("generic_upgrade_missions", GenericUpgradeMissions.default)
+            self.max_upgrade_level = args["slot_data"].get("max_upgrade_level", MaxUpgradeLevel.default)
             self.generic_upgrade_items = args["slot_data"].get("generic_upgrade_items", GenericUpgradeItems.option_individual_items)
             self.generic_upgrade_research = args["slot_data"].get("generic_upgrade_research", GenericUpgradeResearch.option_vanilla)
             self.kerrigan_presence = args["slot_data"].get("kerrigan_presence", KerriganPresence.option_vanilla)
@@ -1363,7 +1366,8 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
         total_missions = sum(len(column) for campaign in ctx.custom_mission_order for layout in campaign.layouts for column in layout.missions)
         num_missions = int((ctx.generic_upgrade_missions / 100) * total_missions)
         completed = len([mission_id for mission_id in ctx.mission_id_to_location_ids if ctx.is_mission_completed(mission_id)])
-        upgrade_count = min(completed // num_missions, WEAPON_ARMOR_UPGRADE_MAX_LEVEL) if num_missions > 0 else WEAPON_ARMOR_UPGRADE_MAX_LEVEL
+        upgrade_count = min(completed // num_missions, ctx.max_upgrade_level) if num_missions > 0 else ctx.max_upgrade_level
+        upgrade_count = min(upgrade_count, WEAPON_ARMOR_UPGRADE_MAX_LEVEL)
 
         # Equivalent to "Progressive Weapon/Armor Upgrade" item
         global_upgrades: typing.Set[str] = upgrade_included_names[GenericUpgradeItems.option_bundle_all]

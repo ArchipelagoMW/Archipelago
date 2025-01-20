@@ -5,7 +5,7 @@ import unittest
 from typing import List, Set, Iterable
 
 from BaseClasses import ItemClassification, MultiWorld
-from Options import *  # Mandatory
+import Options as CoreOptions
 from worlds.sc2 import options, locations
 from worlds.sc2.item import item_tables
 
@@ -81,6 +81,8 @@ class TestWorld:
             if isinstance(field_class, str):
                 if field_class in globals():
                     field_class = globals()[field_class]
+                else:
+                    field_class = CoreOptions.__dict__[field.type]
             defaults[option_name] = field_class(options.get_option_value(None, option_name))
         self.options: options.Starcraft2Options = options.Starcraft2Options(**defaults)
 
