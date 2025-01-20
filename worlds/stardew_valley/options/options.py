@@ -4,9 +4,9 @@ from dataclasses import dataclass
 from typing import Protocol, ClassVar
 
 from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, Visibility
-from .mods.mod_data import ModNames
-from .strings.ap_names.ap_option_names import OptionName
-from .strings.bundle_names import all_cc_bundle_names
+from ..mods.mod_data import ModNames
+from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName
+from ..strings.bundle_names import all_cc_bundle_names
 
 
 class StardewValleyOption(Protocol):
@@ -582,8 +582,10 @@ class Walnutsanity(OptionSet):
     """
     internal_name = "walnutsanity"
     display_name = "Walnutsanity"
-    valid_keys = frozenset({OptionName.walnutsanity_puzzles, OptionName.walnutsanity_bushes, OptionName.walnutsanity_dig_spots,
-                            OptionName.walnutsanity_repeatables, })
+    valid_keys = frozenset({
+        WalnutsanityOptionName.puzzles, WalnutsanityOptionName.bushes, WalnutsanityOptionName.dig_spots,
+        WalnutsanityOptionName.repeatables,
+    })
     preset_none = frozenset()
     preset_all = valid_keys
     default = preset_none
@@ -622,12 +624,14 @@ class EnabledFillerBuffs(OptionSet):
     """
     internal_name = "enabled_filler_buffs"
     display_name = "Enabled Filler Buffs"
-    valid_keys = frozenset({OptionName.buff_luck, OptionName.buff_damage, OptionName.buff_defense, OptionName.buff_immunity, OptionName.buff_health,
-                            OptionName.buff_energy, OptionName.buff_bite, OptionName.buff_fish_trap, OptionName.buff_fishing_bar})
-                            # OptionName.buff_quality, OptionName.buff_glow}) # Disabled these two buffs because they are too hard to make on the mod side
+    valid_keys = frozenset({
+        BuffOptionName.luck, BuffOptionName.damage, BuffOptionName.defense, BuffOptionName.immunity, BuffOptionName.health,
+        BuffOptionName.energy, BuffOptionName.bite, BuffOptionName.fish_trap, BuffOptionName.fishing_bar,
+    })
+    # OptionName.buff_quality, OptionName.buff_glow}) # Disabled these two buffs because they are too hard to make on the mod side
     preset_none = frozenset()
     preset_all = valid_keys
-    default = frozenset({OptionName.buff_luck, OptionName.buff_defense, OptionName.buff_bite})
+    default = frozenset({BuffOptionName.luck, BuffOptionName.defense, BuffOptionName.bite})
 
 
 class ExcludeGingerIsland(Toggle):
@@ -753,6 +757,14 @@ class Gifting(Toggle):
     default = 1
 
 
+all_mods = {ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
+            ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
+            ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
+            ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
+            ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
+            ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator, ModNames.sve, ModNames.distant_lands,
+            ModNames.alecto, ModNames.lacey, ModNames.boarding_house}
+
 # These mods have been disabled because either they are not updated for the current supported version of Stardew Valley,
 # or we didn't find the time to validate that they work or fix compatibility issues if they do.
 # Once a mod is validated to be functional, it can simply be removed from this list
@@ -762,22 +774,19 @@ disabled_mods = {ModNames.deepwoods, ModNames.magic,
                  ModNames.wellwick, ModNames.shiko, ModNames.delores, ModNames.riley,
                  ModNames.boarding_house}
 
-
-if 'unittest' in sys.modules.keys() or 'pytest' in sys.modules.keys():
-    disabled_mods = {}
+enabled_mods = all_mods.difference(disabled_mods)
 
 
 class Mods(OptionSet):
     """List of mods that will be included in the shuffling."""
+    visibility = Visibility.all & ~Visibility.simple_ui
     internal_name = "mods"
     display_name = "Mods"
-    valid_keys = {ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
-                  ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
-                  ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
-                  ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
-                  ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
-                  ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator, ModNames.sve, ModNames.distant_lands,
-                  ModNames.alecto, ModNames.lacey, ModNames.boarding_house}.difference(disabled_mods)
+    valid_keys = enabled_mods
+    # In tests, we keep even the disabled mods active, because we expect some of them to eventually get updated for SV 1.6
+    # In that case, we want to maintain content and logic for them, and therefore keep testing them
+    if 'unittest' in sys.modules.keys() or 'pytest' in sys.modules.keys():
+        valid_keys = all_mods
 
 
 class BundlePlando(OptionSet):
