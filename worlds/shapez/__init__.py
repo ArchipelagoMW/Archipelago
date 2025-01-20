@@ -74,11 +74,14 @@ class ShapezWorld(World):
                                                               + achievement_locations + shapesanity_locations, base_id)}
     item_name_groups = {
         "Main Buildings": {"Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"},
+        "Processing Buildings": {key for key in buildings_processing},
         "Goal Buildings": {"Cutter", "Rotator", "Painter", "Rotator (CCW)", "Color Mixer", "Stacker", "Quad Cutter",
                            "Double Painter", "Quad Painter", "Wires", "Switch", "Constant Signal"},
         "Most Useful Buildings": {"Balancer", "Tunnel", "Tunnel Tier II", "Compact Merger", "Compact Splitter", "Trash",
                                   "Chaining Extractor"},
         "Most Important Buildings": {key for key in belt_and_extractor},
+        "Top Row Buildings": {key for key in buildings_top_row},
+        "Wires Layer Buildings": {key for key in buildings_wires},
         "Gameplay Mechanics": {"Blueprints", "Wires"},
         "Upgrades": {f"{size} {cat} Upgrade" for cat in categories for size in ["Big", "Small"]},
         **{f"{cat} Upgrades": {f"Big {cat} Upgrade", f"Small {cat} Upgrade"} for cat in categories},
