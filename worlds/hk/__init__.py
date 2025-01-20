@@ -209,7 +209,7 @@ class HKWorld(World):
         # defaulting so completion condition isn't incorrect before pre_fill
         self.grub_count = (
             46 if options.GrubHuntGoal == GrubHuntGoal.special_range_names["all"]
-            else options.GrubHuntGoal
+            else options.GrubHuntGoal.value
             )
         self.grub_player_count = {self.player: self.grub_count}
 
