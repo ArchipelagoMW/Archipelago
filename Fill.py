@@ -504,10 +504,11 @@ def distribute_items_restrictive(multiworld: MultiWorld,
                          single_player_placement=single_player, swap=False, on_place=mark_for_locking,
                          name="Priority", one_item_per_player=True, allow_partial=True)
 
-        # retry with one_item_per_player off because some priority fills can fail to fill with that optimization
-        fill_restrictive(multiworld, multiworld.state, prioritylocations, progitempool,
-                         single_player_placement=single_player, swap=False, on_place=mark_for_locking,
-                         name="Priority Retry", one_item_per_player=False)
+        if prioritylocations:
+            # retry with one_item_per_player off because some priority fills can fail to fill with that optimization
+            fill_restrictive(multiworld, multiworld.state, prioritylocations, progitempool,
+                            single_player_placement=single_player, swap=False, on_place=mark_for_locking,
+                            name="Priority Retry", one_item_per_player=False)
         accessibility_corrections(multiworld, multiworld.state, prioritylocations, progitempool)
         defaultlocations = prioritylocations + defaultlocations
 
