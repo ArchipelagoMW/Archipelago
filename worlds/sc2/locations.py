@@ -229,6 +229,18 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                     or logic.terran_competent_anti_air(state))),
             flags=LocationFlag.PREVENTATIVE
         ),
+        make_location_data(SC2Mission.EVACUATION.mission_name, "Western Zerg Base", SC2WOL_LOC_ID_OFFSET + 407, LocationType.MASTERY,
+            lambda state: (
+                logic.terran_common_unit(state)
+                and logic.terran_base_trasher(state)
+                and logic.terran_competent_anti_air(state))
+        ),
+        make_location_data(SC2Mission.EVACUATION.mission_name, "Eastern Zerg Base", SC2WOL_LOC_ID_OFFSET + 408, LocationType.MASTERY,
+            lambda state: (
+                logic.terran_common_unit(state)
+                and logic.terran_base_trasher(state)
+                and logic.terran_competent_anti_air(state))
+        ),
         make_location_data(SC2Mission.OUTBREAK.mission_name, "Victory", SC2WOL_LOC_ID_OFFSET + 500, LocationType.VICTORY,
             logic.terran_outbreak_requirement
         ),
@@ -2484,6 +2496,16 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 )),
             flags=LocationFlag.PREVENTATIVE
         ),
+        make_location_data(SC2Mission.EVACUATION_Z.mission_name, "Western Zerg Base", SC2_RACESWAP_LOC_ID_OFFSET + 707, LocationType.MASTERY,
+            lambda state: (
+                logic.zerg_common_unit_competent_aa(state)
+                and logic.zerg_base_buster(state))
+        ),
+        make_location_data(SC2Mission.EVACUATION_Z.mission_name, "Eastern Zerg Base", SC2_RACESWAP_LOC_ID_OFFSET + 708, LocationType.MASTERY,
+            lambda state: (
+                logic.zerg_common_unit_competent_aa(state)
+                and logic.zerg_base_buster(state))
+        ),
         make_location_data(SC2Mission.EVACUATION_P.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 800, LocationType.VICTORY,
             lambda state: (
                 logic.protoss_common_unit(state)
@@ -2508,6 +2530,12 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                     or logic.protoss_competent_anti_air(state)
                 )),
             flags=LocationFlag.PREVENTATIVE
+        ),
+        make_location_data(SC2Mission.EVACUATION_P.mission_name, "Western Zerg Base", SC2_RACESWAP_LOC_ID_OFFSET + 807, LocationType.MASTERY,
+            logic.protoss_competent_comp
+        ),
+        make_location_data(SC2Mission.EVACUATION_P.mission_name, "Eastern Zerg Base", SC2_RACESWAP_LOC_ID_OFFSET + 808, LocationType.MASTERY,
+            logic.protoss_competent_comp
         ),
         make_location_data(SC2Mission.OUTBREAK_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 900, LocationType.VICTORY,
             lambda state: (

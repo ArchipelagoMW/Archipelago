@@ -66,7 +66,7 @@ resource_efficiency_cost_reduction = {
     item_names.ARBITER:       (50, 0, 0),
     item_names.REAVER:        (100, 100, 2),
     DISPLAY_NAME_CLOAKED_ASSASSIN: (0, 50, 0),
-    item_names.SCOUT:         (125, 25, 1),
+    item_names.SCOUT:         (75, 25, 0),
     item_names.DESTROYER:     (50, 25, 1),
     DISPLAY_NAME_WORMS:       (50, 75, 0),
 
@@ -128,9 +128,8 @@ item_descriptions = {
     """),
     item_names.BANSHEE: "Tactical-strike aircraft.",
     item_names.BATTLECRUISER: "Powerful warship.",
-    item_names.GHOST: inspect.cleandoc("""
-        Infiltration unit. Can use Snipe and Cloak abilities. Can also call down Tactical Nukes.
-    """),
+    item_names.GHOST:
+        "Infiltration unit. Can use Snipe and Cloak abilities. Can also call down Tactical Nukes.",
     item_names.SPECTRE: inspect.cleandoc("""
         Infiltration unit. Can use Ultrasonic Pulse, Psionic Lash, and Cloak. 
         Can also call down Tactical Nukes.
@@ -149,18 +148,11 @@ item_descriptions = {
         Attacks deal splash damage in a small area around the target. 
         Widow Mine is revealed when Sentinel Missile is on cooldown.
     """),
-    item_names.CYCLONE: inspect.cleandoc("""
-        Mobile assault vehicle. Can use Lock On to quickly fire while moving.
-    """),
-    item_names.HERC: inspect.cleandoc("""
-        Front-line infantry. Can use Grapple.
-    """),
-    item_names.WARHOUND: inspect.cleandoc("""
-        Anti-vehicle mech. Haywire missiles do bonus damage to mechanical units.
-    """),
-    item_names.DOMINION_TROOPER: inspect.cleandoc("""
-        General-purpose infantry. Can be outfitted with weapons for different combat situations.
-    """),
+    item_names.CYCLONE: "Mobile assault vehicle. Can use Lock On to quickly fire while moving.",
+    item_names.HERC: "Front-line infantry. Can use Grapple.",
+    item_names.WARHOUND: "Anti-vehicle mech. Haywire missiles do bonus damage to mechanical units.",
+    item_names.DOMINION_TROOPER:
+        "General-purpose infantry. Can be outfitted with weapons for different combat situations.",
     item_names.PRIDE_OF_AUGUSTRGRAD: "Powerful Royal Guard warship.",
     item_names.SKY_FURY: inspect.cleandoc("""
         Durable Royal Guard support flyer. Loaded with strong anti-capital air missiles. 
@@ -482,6 +474,8 @@ item_descriptions = {
     item_names.DEVASTATOR_TURRET_ANTI_ARMOR_MUNITIONS: "Increases Devastator Turret damage to armored targets by 10.",
     item_names.DEVASTATOR_TURRET_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.DEVASTATOR_TURRET),
     item_names.MISSILE_TURRET_RESOURCE_EFFICENCY: _get_resource_efficiency_desc(item_names.MISSILE_TURRET),
+    item_names.SENSOR_TOWER_ASSISTIVE_TARGETING: "Sensor Towers increase the attack range of defensive buildings in their direct sight range.",
+    item_names.SENSOR_TOWER_ENHANCED_VISION: "Sensor Towers gain +10 sight range and +5 radar range.",
     item_names.SCIENCE_VESSEL_TACTICAL_JUMP: "Allows Science Vessels to warp to a target location anywhere on the map.",
     item_names.LIBERATOR_COMPRESSED_ROCKET_FUEL: "Increases Liberator attack range in Fighter mode by 4.",
     item_names.BATTLECRUISER_FIELD_ASSIST_TARGETING_SYSTEM: "Battlecruisers increase the attack range of nearby friendly ground units by 1.",
@@ -534,8 +528,12 @@ item_descriptions = {
         Allows Terran mechanical units to regenerate health while not in combat.
         Each level increases life regeneration speed.
     """),
-    item_names.HIVE_MIND_EMULATOR: "Defensive structure. Can permanently Mind Control Zerg units.",
-    item_names.PSI_DISRUPTER: "Defensive structure. Slows the attack and movement speeds of all nearby Zerg units.",
+    item_names.HIVE_MIND_EMULATOR: "Unlocks the Hive Mind Emulator defensive structure, and allows it to permanently Mind Control Zerg units.",
+    item_names.KHALAI_TAKEOVER: "Unlocks the Hive Mind Emulator defensive structure, and allows it to permanently Mind Control Protoss units.",
+    item_names.BRAINWASHING: "Unlocks the Hive Mind Emulator defensive structure, and allows it to permanently Mind Control Terran units.",
+    item_names.PSI_DISRUPTER: "Unlocks the Psi Disrupter defensive structure, and allows it to slow the attack and movement speeds of all nearby Zerg units.",
+    item_names.KHALAI_DISRUPTER: "Unlocks the Psi Disrupter defensive structure, and allows it to slow the attack and movement speeds of all nearby Protoss units.",
+    item_names.SONIC_DISRUPTER: "Unlocks the Psi Disrupter defensive structure, and allows it to slow the attack and movement speeds of all nearby Terran units.",
     item_names.DEVASTATOR_TURRET: "Defensive structure. Deals increased damage to armored targets. Attacks ground units.",
     item_names.STRUCTURE_ARMOR: "Increases armor of all Terran structures by 2.",
     item_names.HI_SEC_AUTO_TRACKING: "Increases attack range of all Terran structures by 1.",
@@ -874,6 +872,9 @@ item_descriptions = {
     item_names.INTERCESSOR: "Support craft. Applies a stacking slow, and targets with maximum slow stacks take increased damage from all sources.",
     item_names.DAWNBRINGER: "Flying Anti-Surface Assault Ship. Attacks in an area around the target. Attack count increases as it continues firing.",
     item_names.SCOUT: "Versatile high-speed fighter. Has a powerful anti-armoured air attack and a weaker anti-ground attack.",
+    item_names.OPPRESSOR: "Tal'Darim Scout variant. Has a weaker air attack, but a stronger ground attack. Can use the Vulcan Blaster ability.",
+    item_names.CALADRIUS: "Purifier Scout variant. Has no ground attack, but a stronger air attack, which can be upgraded to hit multiple targets. Can use the Corona Beam ability.",
+    item_names.MISTWING: "Nerazim Scout variant. Specialized stealth fighter. Can use the Cloak, Phantom Dash and Pilot (Transport) abilities.",
     item_names.TEMPEST: "Siege artillery craft. Attacks from long range. Can use the Disintegration ability.",
     item_names.MOTHERSHIP: "Ultimate Protoss vessel. Can use the Vortex and Mass Recall abilities.",
     item_names.ARBITER: "Army support craft. Has the Stasis Field and Recall abilities. Cloaks nearby units.",
@@ -902,15 +903,23 @@ item_descriptions = {
     item_names.ADEPT_PHASE_BULWARK: "Increases Adept shield maximum by +50.",
     item_names.STALKER_INSTIGATOR_SLAYER_DISINTEGRATING_PARTICLES: "Increases weapon damage of Stalkers, Instigators, and Slayers.",
     item_names.STALKER_INSTIGATOR_SLAYER_PARTICLE_REFLECTION: "Attacks fired by Stalkers, Instigators, and Slayers have a chance to bounce to additional targets for reduced damage.",
+    item_names.INSTIGATOR_BLINK_OVERDRIVE: "Instigators gain +2 maximum blink charges and +1 blink range.",
     item_names.DRAGOON_HIGH_IMPACT_PHASE_DISRUPTORS: "Dragoons deal increased damage.",
     item_names.DRAGOON_TRILLIC_COMPRESSION_SYSTEM: "Dragoons gain +20 life and their shield regeneration rate is doubled. Allows Dragoons to regenerate shields in combat.",
     item_names.DRAGOON_SINGULARITY_CHARGE: "Increases Dragoon range by +2.",
     item_names.DRAGOON_ENHANCED_STRIDER_SERVOS: "Increases Dragoon movement speed.",
-    item_names.SCOUT_COMBAT_SENSOR_ARRAY: "Scouts gain +3 range against air and +1 range against ground.",
+    item_names.SCOUT_COMBAT_SENSOR_ARRAY: "All Scout variants gain increased range against air and ground.",
     item_names.SCOUT_APIAL_SENSORS: "Scouts gain increased sight range.",
-    item_names.SCOUT_GRAVITIC_THRUSTERS: "Scouts gain increased movement speed.",
-    item_names.SCOUT_ADVANCED_PHOTON_BLASTERS: "Scouts gain increased damage against ground targets.",
+    item_names.SCOUT_GRAVITIC_THRUSTERS: "All Scout variants gain increased movement speed.",
+    item_names.SCOUT_ADVANCED_PHOTON_BLASTERS: "Scouts, Oppressors and Mist Wings gain increased damage against ground targets.",
     item_names.SCOUT_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.SCOUT),
+    item_names.OPPRESSOR_OPTIMIZED_LOGISTICS: "Oppressors gain increased training and warp-in speed.",
+    item_names.OPPRESSOR_ARMOR_MELTING_BLASTERS: "Oppressor ground weapons gain bonus damage to armored targets. Allows Vulcan Blaster to hit structures.",
+    item_names.CALADRIUS_SIDE_MISSILES: "Caladrius can hit up to 4 additional air targets with their missiles.",
+    item_names.CALADRIUS_STRUCTURE_TARGETING: "Allows Caladrius to hit ground structures with their anti-air missiles.",
+    item_names.CALADRIUS_SOLARITE_REACTOR: "If the Caladrius is low on shields, it recovers shields quickly for a short time.",
+    item_names.MISTWING_NULL_SHROUD: "Cloak no longer drains energy (but still prevents base energy regeneration). The Mist Wing becomes undetectable for 5 seconds upon cloaking.",
+    item_names.MISTWING_PILOT: _ability_desc("Mistwings", "Pilot", "can transport one unit as an additional pilot. A pilot grants a small bonus to damage and armor"),
     item_names.TEMPEST_TECTONIC_DESTABILIZERS: "Tempests deal increased damage to buildings.",
     item_names.TEMPEST_QUANTIC_REACTOR: "Tempests deal increased damage to massive units.",
     item_names.TEMPEST_GRAVITY_SLING: "Tempests gain +8 range against air targets and +8 cast range.",
@@ -998,7 +1007,7 @@ item_descriptions = {
         item_names.SENTINEL),
     item_names.STALKER_PHASE_REACTOR: "Stalker War Council upgrade. Stalkers restore 80 shields over 5 seconds after they Blink.",
     item_names.DRAGOON_PHALANX_SUIT: "Dragoon War Council upgrade. Dragoons gain +1 range, move slightly faster, and can form tighter formations.",
-    item_names.INSTIGATOR_MODERNIZED_SERVOS: "Instigator War Council upgrade. Instigators move 20% faster.",
+    item_names.INSTIGATOR_MODERNIZED_SERVOS: "Instigator War Council upgrade. Instigators move 28% faster.",
     item_names.ADEPT_DISRUPTIVE_TRANSFER: "Adept War Council upgrade. Adept shades apply a debuff to enemies they touch, increasing damage taken by +5.",
     item_names.SLAYER_PHASE_BLINK: "Slayer War Council upgrade. Slayers can now blink. After blinking, the Slayer's next attack within 8 seconds deals double damage.",
     item_names.AVENGER_KRYHAS_CLOAK: "Avenger War Council upgrade. Avengers are now permanently cloaked.",
@@ -1035,10 +1044,15 @@ item_descriptions = {
     item_names.SKYLORD_HYPERJUMP: "Skylord War Council upgrade. " + _ability_desc("Skylords", "Hyperjump", "teleports the skylord to any location on the map"),
     item_names.TRIREME_SOLAR_BEAM: "Trireme War Council upgrade. Triremes gain an anti-air laser attack that deals more damage over time.",
     item_names.TEMPEST_DISINTEGRATION: "Tempest War Council upgrade. " + _ability_desc("Tempests", "Disintegration", "deals 500 damage to a target unit or structure over 20 seconds"),
-    # Scout
+    item_names.SCOUT_EXPEDITIONARY_HULL: "Scout War Council upgrade. Scouts gain +25 shields, +50 health, +1 shield armor, and reduced shield regeneration delay.",
     item_names.ARBITER_ABILITY_EFFICIENCY: "Arbiter War Council upgrade. Reduces the energy cost of Recall by 50 and Stasis Field by 100.",
     # Oracle
     item_names.MOTHERSHIP_INTEGRATED_POWER: "Mothership War Council upgrade. Allows Motherships to move at full speed outside pylon power.",
+    item_names.OPPRESSOR_VULCAN_BLASTER: "Oppressor War Council upgrade. " + _ability_desc("Oppressors", "Vulcan Blaster", "activates a powerful short range anti-ground weapon for a limited time. Greatly reduces movement and turning speed, and disables other weapons while active"),
+    item_names.CALADRIUS_CORONA_BEAM: "Caladrius War Council upgrade. " + _ability_desc("Caladrius", "Corona Beam", "channels a beam that drains up to 100 of the Caladrius' shields to deal up to 200 damage over time to a single target"),
+    item_names.MISTWING_PHANTOM_DASH: "Mist Wing War Council upgrade. " + _ability_desc("Mist Wings", "Phantom Dash", "dashes forward to cover some distance quickly. Deals damage in a line if the Mist Wing is cloaked"),
+
+    
     item_names.SOA_CHRONO_SURGE: "The Spear of Adun increases a target structure's unit warp in and research speeds by +1000% for 20 seconds.",
     item_names.SOA_PROGRESSIVE_PROXY_PYLON: inspect.cleandoc("""
         Level 1: The Spear of Adun quickly warps in a Pylon to a target location.

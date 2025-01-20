@@ -2,7 +2,7 @@ from typing import Set, Dict, Any, List, Tuple, Union, Optional, Callable, TYPE_
 import logging
 
 from BaseClasses import Location, Region, Entrance
-from ..mission_tables import SC2Mission, lookup_name_to_mission, lookup_id_to_mission
+from ..mission_tables import SC2Mission, MissionFlag, lookup_name_to_mission, lookup_id_to_mission
 from ..item.item_tables import named_layout_key_item_table, named_campaign_key_item_table
 from ..item import item_names
 from .. import rules
@@ -402,13 +402,34 @@ def create_region(
         target_victory_cache_locations = slot.option_victory_cache
     victory_cache_locations = 0
 
+    # If the first mission is a build mission,
+    # require a unit everywhere except one location in the easiest category
+    mission_needs_unit = False
+    unit_given = False
+    easiest_category = LocationType.MASTERY
+    if slot is not None and slot.min_depth == 0:
+        mission = lookup_name_to_mission.get(region.name)
+        if mission is not None and MissionFlag.NoBuild not in mission.flags:
+            mission_needs_unit = True
+            for location_data in locations_per_region.get(name, ()):
+                if location_data.type == LocationType.VICTORY:
+                    pass
+                elif location_data.type < easiest_category:
+                    easiest_category = location_data.type
+            if easiest_category >= LocationType.CHALLENGE:
+                easiest_category = LocationType.VICTORY
+
     for location_data in locations_per_region.get(name, ()):
         if location_data.type == LocationType.VICTORY_CACHE:
             if victory_cache_locations >= target_victory_cache_locations:
                 continue
             victory_cache_locations += 1
         if world.options.required_tactics.value == world.options.required_tactics.option_any_units:
-            location = create_minimal_logic_location(world.player, location_data, region, location_cache, min(slot.min_depth, 5))
+            if mission_needs_unit and not unit_given and location_data.type == easiest_category:
+                location = create_minimal_logic_location(world.player, location_data, region, location_cache, 0)
+                unit_given = True
+            else:
+                location = create_minimal_logic_location(world.player, location_data, region, location_cache, min(slot.min_depth, 5) + mission_needs_unit)
         else:
             location = create_location(world.player, location_data, region, location_cache)
         region.locations.append(location)

@@ -209,6 +209,14 @@ parent_present[parent_names.ZEALOT_OR_SENTINEL_OR_CENTURION] = AnyOf(
     (item_names.ZEALOT, item_names.SENTINEL, item_names.CENTURION),
     main_item=item_names.ZEALOT,
 )
+parent_present[parent_names.SCOUT_CLASS] = AnyOf(
+    (item_names.SCOUT, item_names.OPPRESSOR, item_names.CALADRIUS, item_names.MISTWING),
+    main_item=item_names.SCOUT,
+)
+parent_present[parent_names.SCOUT_OR_OPPRESSOR_OR_MISTWING] = AnyOf(
+    (item_names.SCOUT, item_names.OPPRESSOR, item_names.MISTWING),
+    main_item=item_names.SCOUT,
+)
 parent_present[parent_names.PROTOSS_STATIC_DEFENSE] = AnyOf(
     (item_names.NEXUS_OVERCHARGE, item_names.PHOTON_CANNON, item_names.KHAYDARIN_MONOLITH, item_names.SHIELD_BATTERY),
     main_item=item_names.PHOTON_CANNON,
