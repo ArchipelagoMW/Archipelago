@@ -34,7 +34,6 @@ from .data.utils import (
     get_discard_exclusion_list,
     get_early_caves_list,
     get_early_caves_start_list,
-    get_elevators_come_to_you,
     get_entity_hunt,
     get_ep_all_individual,
     get_ep_easy,
@@ -83,6 +82,7 @@ class WitnessPlayerLogic:
         self.PARENT_ITEM_COUNT_PER_BASE_ITEM: Dict[str, int] = defaultdict(lambda: 1)
         self.PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
         self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
+        self.FORBIDDEN_DOORS: Set[str] = set()
 
         self.STARTING_INVENTORY: Set[str] = set()
 
@@ -193,8 +193,9 @@ class WitnessPlayerLogic:
         for subset in these_items:
             self.BASE_PROGESSION_ITEMS_ACTUALLY_IN_THE_GAME.update(subset)
 
-        # Handle door entities (door shuffle)
-        if entity_hex in self.DOOR_ITEMS_BY_ID:
+        # If this entity is opened by a door item that exists in the itempool, add that item to its requirements.
+        # Also, remove any original power requirements this entity might have had.
+        if entity_hex in self.DOOR_ITEMS_BY_ID and entity_hex not in self.FORBIDDEN_DOORS:
             # If this entity is opened by a door item that exists in the itempool, add that item to its requirements.
             door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[entity_hex]})
 
@@ -329,6 +330,10 @@ class WitnessPlayerLogic:
                 for entity_hex in entity_hexes:
                     if entity_hex in self.DOOR_ITEMS_BY_ID and item_name in self.DOOR_ITEMS_BY_ID[entity_hex]:
                         self.DOOR_ITEMS_BY_ID[entity_hex].remove(item_name)
+
+        if adj_type == "Forbidden Doors":
+            entity_hex = line[:7]
+            self.FORBIDDEN_DOORS.add(entity_hex)
 
         if adj_type == "Starting Inventory":
             self.STARTING_INVENTORY.add(line)
@@ -626,8 +631,29 @@ class WitnessPlayerLogic:
         if world.options.early_caves == "add_to_pool" and not remote_doors:
             adjustment_linesets_in_order.append(get_early_caves_list())
 
-        if world.options.elevators_come_to_you:
-            adjustment_linesets_in_order.append(get_elevators_come_to_you())
+        if "Quarry Elevator" in world.options.elevators_come_to_you:
+            adjustment_linesets_in_order.append([
+                "New Connections:",
+                "Quarry - Quarry Elevator - TrueOneWay",
+                "Outside Quarry - Quarry Elevator - TrueOneWay",
+            ])
+        if "Bunker Elevator" in world.options.elevators_come_to_you:
+            adjustment_linesets_in_order.append([
+                "New Connections:",
+                "Outside Bunker - Bunker Elevator - TrueOneWay",
+            ])
+        if "Swamp Long Bridge" in world.options.elevators_come_to_you:
+            adjustment_linesets_in_order.append([
+                "New Connections:",
+                "Outside Swamp - Swamp Long Bridge - TrueOneWay",
+                "Swamp Near Boat - Swamp Long Bridge - TrueOneWay",
+                "Requirement Changes:",
+                "0x035DE - 0x17E2B - True",  # Swamp Purple Sand Bottom EP
+            ])
+        # if "Town Maze Rooftop Bridge" in world.options.elevators_come_to_you:
+        #     adjustment_linesets_in_order.append([
+        #         "New Connections:"
+        #         "Town Red Rooftop - Town Maze Rooftop - TrueOneWay"
 
         if world.options.victory_condition == "panel_hunt":
             adjustment_linesets_in_order.append(get_entity_hunt())
@@ -684,7 +710,7 @@ class WitnessPlayerLogic:
 
                 self.make_single_adjustment(current_adjustment_type, line)
 
-        for entity_id in self.COMPLETELY_DISABLED_ENTITIES:
+        for entity_id in self.COMPLETELY_DISABLED_ENTITIES | self.FORBIDDEN_DOORS:
             if entity_id in self.DOOR_ITEMS_BY_ID:
                 del self.DOOR_ITEMS_BY_ID[entity_id]
 
@@ -901,7 +927,6 @@ class WitnessPlayerLogic:
 
         # Gather quick references to relevant options
         eps_shuffled = world.options.shuffle_EPs
-        come_to_you = world.options.elevators_come_to_you
         difficulty = world.options.puzzle_randomization
         discards_shuffled = world.options.shuffle_discarded_panels
         boat_shuffled = world.options.shuffle_boat
@@ -912,6 +937,9 @@ class WitnessPlayerLogic:
         doors = world.options.shuffle_doors
         shortbox_req = world.options.mountain_lasers
         longbox_req = world.options.challenge_lasers
+
+        swamp_bridge_comes_to_you = "Swamp Long Bridge" in world.options.elevators_come_to_you
+        quarry_elevator_comes_to_you = "Quarry Elevator" in world.options.elevators_come_to_you
 
         # Make some helper booleans so it is easier to follow what's going on
         mountain_upper_is_in_postgame = (
@@ -930,8 +958,8 @@ class WitnessPlayerLogic:
             "0x17D02": eps_shuffled,  # Windmill Turn Control
             "0x0368A": symbols_shuffled or door_panels,  # Quarry Stoneworks Stairs Door
             "0x3865F": symbols_shuffled or door_panels or eps_shuffled,  # Quarry Boathouse 2nd Barrier
-            "0x17CC4": come_to_you or eps_shuffled,  # Quarry Elevator Panel
-            "0x17E2B": come_to_you and boat_shuffled or eps_shuffled,  # Swamp Long Bridge
+            "0x17CC4": quarry_elevator_comes_to_you or eps_shuffled,  # Quarry Elevator Panel
+            "0x17E2B": swamp_bridge_comes_to_you and boat_shuffled or eps_shuffled,  # Swamp Long Bridge
             "0x0CF2A": False,  # Jungle Monastery Garden Shortcut
             "0x0364E": False,  # Monastery Laser Shortcut Door
             "0x03713": remote_doors,  # Monastery Laser Shortcut Panel
@@ -964,7 +992,7 @@ class WitnessPlayerLogic:
         Makes event-item pairs for entities with associated events, unless these entities are disabled.
         """
 
-        self.ALWAYS_EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION] = "Victory"
+        self.USED_EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION].append("Victory")
 
         for event_hex, event_name in self.ALWAYS_EVENT_NAMES_BY_HEX.items():
             self.USED_EVENT_NAMES_BY_HEX[event_hex].append(event_name)

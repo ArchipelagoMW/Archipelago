@@ -15,9 +15,9 @@ from .data.game_item import ItemTag
 from .logic.logic_event import all_events
 from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
-    BuildingProgression, SkillProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
+    BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
     Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, EnabledFillerBuffs
-from .strings.ap_names.ap_option_names import OptionName
+from .strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.buff_names import Buff
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
@@ -169,14 +169,14 @@ def get_too_many_items_error_message(locations_count: int, items_count: int) -> 
     return f"There should be at least as many locations [{locations_count}] as there are mandatory items [{items_count}]"
 
 
-def create_items(item_factory: StardewItemFactory, item_deleter: StardewItemDeleter, locations_count: int, items_to_exclude: List[Item],
+def create_items(item_factory: StardewItemFactory, locations_count: int, items_to_exclude: List[Item],
                  options: StardewValleyOptions, content: StardewContent, random: Random) -> List[Item]:
     items = []
     unique_items = create_unique_items(item_factory, options, content, random)
 
-    remove_items(item_deleter, items_to_exclude, unique_items)
+    remove_items(items_to_exclude, unique_items)
 
-    remove_items_if_no_room_for_them(item_deleter, unique_items, locations_count, random)
+    remove_items_if_no_room_for_them(unique_items, locations_count, random)
 
     items += unique_items
     logger.debug(f"Created {len(unique_items)} unique items")
@@ -192,14 +192,13 @@ def create_items(item_factory: StardewItemFactory, item_deleter: StardewItemDele
     return items
 
 
-def remove_items(item_deleter: StardewItemDeleter, items_to_remove, items):
+def remove_items(items_to_remove, items):
     for item in items_to_remove:
         if item in items:
             items.remove(item)
-            item_deleter(item)
 
 
-def remove_items_if_no_room_for_them(item_deleter: StardewItemDeleter, unique_items: List[Item], locations_count: int, random: Random):
+def remove_items_if_no_room_for_them(unique_items: List[Item], locations_count: int, random: Random):
     if len(unique_items) <= locations_count:
         return
 
@@ -212,7 +211,7 @@ def remove_items_if_no_room_for_them(item_deleter: StardewItemDeleter, unique_it
         logger.debug(f"Player has more items than locations, trying to remove {number_of_items_to_remove} random filler items")
     assert len(removable_items) >= number_of_items_to_remove, get_too_many_items_error_message(locations_count, len(unique_items))
     items_to_remove = random.sample(removable_items, number_of_items_to_remove)
-    remove_items(item_deleter, items_to_remove, unique_items)
+    remove_items(items_to_remove, unique_items)
 
 
 def create_unique_items(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, random: Random) -> List[Item]:
@@ -227,8 +226,8 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_weapons(item_factory, options, items)
     items.append(item_factory("Skull Key"))
     create_elevators(item_factory, options, items)
-    create_tools(item_factory, options, items)
-    create_skills(item_factory, options, items)
+    create_tools(item_factory, options, content, items)
+    create_skills(item_factory, content, items)
     create_wizard_buildings(item_factory, options, items)
     create_carpenter_buildings(item_factory, options, items)
     items.append(item_factory("Railroad Boulder Removed"))
@@ -317,7 +316,7 @@ def create_elevators(item_factory: StardewItemFactory, options: StardewValleyOpt
         items.extend([item_factory(item) for item in ["Progressive Skull Cavern Elevator"] * 8])
 
 
-def create_tools(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+def create_tools(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
     if options.tool_progression & ToolProgression.option_progressive:
         for item_data in items_by_group[Group.PROGRESSIVE_TOOLS]:
             name = item_data.name
@@ -326,28 +325,29 @@ def create_tools(item_factory: StardewItemFactory, options: StardewValleyOptions
                 items.append(item_factory(item_data, ItemClassification.useful))
             else:
                 items.extend([item_factory(item) for item in [item_data] * 4])
-        if options.skill_progression == SkillProgression.option_progressive_with_masteries:
+
+        if content.features.skill_progression.are_masteries_shuffled:
+            # Masteries add another tier to the scythe and the fishing rod
             items.append(item_factory("Progressive Scythe"))
             items.append(item_factory("Progressive Fishing Rod"))
+
+    # The golden scythe is always randomized
     items.append(item_factory("Progressive Scythe"))
 
 
-def create_skills(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if options.skill_progression == SkillProgression.option_vanilla:
+def create_skills(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
+    skill_progression = content.features.skill_progression
+    if not skill_progression.is_progressive:
         return
 
-    for item in items_by_group[Group.SKILL_LEVEL_UP]:
-        if item.mod_name not in options.mods and item.mod_name is not None:
-            continue
-        items.extend(item_factory(item) for item in [item.name] * 10)
+    for skill in content.skills.values():
+        items.extend(item_factory(skill.level_name) for _ in skill_progression.get_randomized_level_names_by_level(skill))
 
-    if options.skill_progression != SkillProgression.option_progressive_with_masteries:
-        return
+        if skill_progression.is_mastery_randomized(skill):
+            items.append(item_factory(skill.mastery_name))
 
-    for item in items_by_group[Group.SKILL_MASTERY]:
-        if item.mod_name not in options.mods and item.mod_name is not None:
-            continue
-        items.append(item_factory(item))
+    if skill_progression.are_masteries_shuffled:
+        items.append(item_factory(Wallet.mastery_of_the_five_ways))
 
 
 def create_wizard_buildings(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
@@ -538,16 +538,16 @@ def create_walnuts(item_factory: StardewItemFactory, options: StardewValleyOptio
     num_penta_walnuts = 1
     # https://stardewvalleywiki.com/Golden_Walnut
     # Totals should be accurate, but distribution is slightly offset to make room for baseline walnuts
-    if OptionName.walnutsanity_puzzles in walnutsanity:  # 61
+    if WalnutsanityOptionName.puzzles in walnutsanity:  # 61
         num_single_walnuts += 6  # 6
         num_triple_walnuts += 5  # 15
         num_penta_walnuts += 8  # 40
-    if OptionName.walnutsanity_bushes in walnutsanity:  # 25
+    if WalnutsanityOptionName.bushes in walnutsanity:  # 25
         num_single_walnuts += 16  # 16
         num_triple_walnuts += 3  # 9
-    if OptionName.walnutsanity_dig_spots in walnutsanity:  # 18
+    if WalnutsanityOptionName.dig_spots in walnutsanity:  # 18
         num_single_walnuts += 18  # 18
-    if OptionName.walnutsanity_repeatables in walnutsanity:  # 33
+    if WalnutsanityOptionName.repeatables in walnutsanity:  # 33
         num_single_walnuts += 30  # 30
         num_triple_walnuts += 1  # 3
 
@@ -833,27 +833,27 @@ def get_all_filler_items(include_traps: bool, exclude_ginger_island: bool) -> Li
 
 def get_allowed_player_buffs(buff_option: EnabledFillerBuffs) -> List[ItemData]:
     allowed_buffs = []
-    if OptionName.buff_luck in buff_option:
+    if BuffOptionName.luck in buff_option:
         allowed_buffs.append(item_table[Buff.luck])
-    if OptionName.buff_damage in buff_option:
+    if BuffOptionName.damage in buff_option:
         allowed_buffs.append(item_table[Buff.damage])
-    if OptionName.buff_defense in buff_option:
+    if BuffOptionName.defense in buff_option:
         allowed_buffs.append(item_table[Buff.defense])
-    if OptionName.buff_immunity in buff_option:
+    if BuffOptionName.immunity in buff_option:
         allowed_buffs.append(item_table[Buff.immunity])
-    if OptionName.buff_health in buff_option:
+    if BuffOptionName.health in buff_option:
         allowed_buffs.append(item_table[Buff.health])
-    if OptionName.buff_energy in buff_option:
+    if BuffOptionName.energy in buff_option:
         allowed_buffs.append(item_table[Buff.energy])
-    if OptionName.buff_bite in buff_option:
+    if BuffOptionName.bite in buff_option:
         allowed_buffs.append(item_table[Buff.bite_rate])
-    if OptionName.buff_fish_trap in buff_option:
+    if BuffOptionName.fish_trap in buff_option:
         allowed_buffs.append(item_table[Buff.fish_trap])
-    if OptionName.buff_fishing_bar in buff_option:
+    if BuffOptionName.fishing_bar in buff_option:
         allowed_buffs.append(item_table[Buff.fishing_bar])
-    if OptionName.buff_quality in buff_option:
+    if BuffOptionName.quality in buff_option:
         allowed_buffs.append(item_table[Buff.quality])
-    if OptionName.buff_glow in buff_option:
+    if BuffOptionName.glow in buff_option:
         allowed_buffs.append(item_table[Buff.glow])
     return allowed_buffs
 

@@ -716,9 +716,7 @@ def addWarpImprovements(rom, extra_warps):
 
     # Allow cursor to move over black squares
     # This allows warping to undiscovered areas - a fine cheat, but needs a check for wOverworldRoomStatus in the warp code
-    CHEAT_WARP_ANYWHERE = False
-    if CHEAT_WARP_ANYWHERE:
-        rom.patch(0x01, 0x1AE8, None, ASM("jp $5AF5"))
+    rom.patch(0x01, 0x1AE8, None, ASM("jp $5AF5"))
 
     # This disables the arrows around the selection bubble
     #rom.patch(0x01, 0x1B6F, None, ASM("ret"), fill_nop=True)
@@ -797,8 +795,14 @@ def addWarpImprovements(rom, extra_warps):
 TeleportHandler:
 
     ld  a, [$DBB4] ; Load the current selected tile
-    ; TODO: check if actually revealed so we can have free movement
-    ; Check cursor against different tiles to see if we are selecting a warp
+    ld   hl, wOverworldRoomStatus
+    ld   e, a                                     ; $5D38: $5F
+    ld   d, $00                                   ; $5D39: $16 $00
+    add  hl, de                                   ; $5D3B: $19
+    ld   a, [hl]
+    and  $80
+    jr z, exit
+    ld  a, [$DBB4] ; Load the current selected tile
     {warp_jump}
     jr exit
 
