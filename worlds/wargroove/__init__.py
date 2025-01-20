@@ -8,7 +8,7 @@ from .Locations import location_table
 from .Regions import create_regions
 from .Rules import set_rules
 from worlds.AutoWorld import World, WebWorld
-from .Options import WargrooveOptions
+from .Options import WargrooveOptions, wargroove_option_groups
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 
 
@@ -40,6 +40,8 @@ class WargrooveWeb(WebWorld):
         "wargroove/en",
         ["Fly Sniper"]
     )]
+
+    option_groups = wargroove_option_groups
 
 
 class WargrooveWorld(World):
