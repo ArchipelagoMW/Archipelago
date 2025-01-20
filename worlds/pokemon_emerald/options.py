@@ -786,11 +786,7 @@ class RandomizeFanfares(Toggle):
 
 
 class PokemonEmeraldDeathLink(DeathLink):
-    """
-    When you die, everyone who enabled death link dies. Of course, the reverse is true too.
-
-    In Pokemon Emerald, whiting out sends a death and receiving a death causes you to white out.
-    """
+    __doc__ = DeathLink.__doc__ + "\n\n    In Pokemon Emerald, whiting out sends a death and receiving a death causes you to white out."
 
 
 class WonderTrading(DefaultOnToggle):
