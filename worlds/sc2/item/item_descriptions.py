@@ -1085,6 +1085,8 @@ item_descriptions = {
         Level 1: Protoss structures can be moved anywhere within pylon power after a brief delay. Max 3 charges, shared globally.
         Level 2: No longer consumes or requires charges.
     """),
+    item_names.PROBE_WARPIN: "You can warp in additonal Probes from your Nexus to any visible location within a Pylon's power field. Has a 30 second cooldown and can store up to 2 charges.",
+    item_names.ELDER_PROBES: "You can warp in a group of 5 Elder Probes, tougher builders from the Brood War. Can only be used once.",
 }
 
 # Key descriptions
