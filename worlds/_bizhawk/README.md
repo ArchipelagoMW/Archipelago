@@ -171,7 +171,8 @@ associate the file extension with Archipelago.
 `validate_rom` is called to figure out whether a given ROM belongs to your client. It will only be called when a ROM is
 running on a system you specified in your `system` class variable. Take extra care here, because your code will run
 against ROMs that you have no control over. If you're reading an address deep in ROM, you might want to check the size
-of ROM before you attempt to read it using `get_memory_size`.
+of ROM before you attempt to read it using `get_memory_size`. If you decide to claim this ROM as yours, this is where
+you should do setup for things like `items_handling`.
 
 `game_watcher` is the "main loop" of your client where you should be checking memory and sending new items to the ROM.
 `BizHawkClient` will make sure that your `game_watcher` only runs when your client has validated the ROM, and will do
