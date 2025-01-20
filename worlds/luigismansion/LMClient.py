@@ -141,7 +141,7 @@ room_name_list = {
     14: "StorageRoom",
     15: "AtticHallwayFrom2F",
     16: "Graveyard",
-    17: "1FWashroomd",
+    17: "1FWashroom",
     18: "Area2HallwayNearConservatory",
     19: "StairsF1toF2",
     20: "1FBathroom",
