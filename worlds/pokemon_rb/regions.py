@@ -257,23 +257,19 @@ map_ids = {
 }
 
 town_map_coords = {
-    "Route 2-SW": ("Viridian Forest South Gate to Route 2-SW", 2, 4, (3,), "Viridian Forest", 4),  #ViridianForestName
-    "Route 2-NE": ("Diglett's Cave Route 2 to Route 2-NE", 3, 4, (48,), "Diglett's Cave", 5),  #DiglettsCaveName
-    "Route 4-W": ("Mt Moon 1F to Route 4-W", 6, 2, (5,), "Mt Moon 1F", 8),  #MountMoonName
-    "Cerulean City-Cave": ("Cerulean Cave 1F-SE to Cerulean City-Cave", 9, 1, (54,), "Cerulean Cave 1F", 11),
-    #CeruleanCaveName
-    "Vermilion City-Dock": ("Vermilion Dock to Vermilion City-Dock", 9, 10, (19,), "S.S. Anne 1F", 17),  #SSAnneName
-    "Route 10-N": ("Rock Tunnel 1F-NE 1 to Route 10-N", 14, 3, (13, 57), "Rock Tunnel Pokemon Center", 19),
-    #RockTunnelName
-    "Lavender Town": ("Pokemon Tower 1F to Lavender Town", 15, 5, (27,), "Pokemon Tower 2F", 22),  #PokemonTowerName
-    "Celadon Game Corner-Hidden Stairs": (
-    "Rocket Hideout B1F to Celadon Game Corner-Hidden Stairs", 7, 5, (50,), "Rocket Hideout B1F", 26),  #RocketHQName
-    "Saffron City-Silph": ("Silph Co 1F to Saffron City-Silph", 10, 5, (51, 58), "Silph Co 2F", 28),  #SilphCoName
-    "Route 20-IE": ("Seafoam Islands 1F to Route 20-IE", 5, 15, (32,), "Seafoam Islands B1F", 40),  #SeafoamIslandsName
-    "Cinnabar Island-M": ("Pokemon Mansion 1F to Cinnabar Island-M", 2, 15, (35, 52), "Pokemon Mansion 1F", 43),
-    #PokemonMansionName
-    "Route 23-C": ("Victory Road 1F-S to Route 23-C", 0, 4, (20, 45, 49), "Victory Road 1F", 47),  #VictoryRoadName
-    "Route 10-P": ("Power Plant to Route 10-P", 15, 4, (14,), "Power Plant", 49),  #PowerPlantName
+    "Route 2-SW": ("Viridian Forest South Gate to Route 2-SW", 2, 4, (3,), "Viridian Forest", 4), #ViridianForestName
+    "Route 2-NE": ("Diglett's Cave Route 2 to Route 2-NE", 3, 4, (48,), "Diglett's Cave", 5), #DiglettsCaveName
+    "Route 4-W": ("Mt Moon 1F to Route 4-W", 6, 2, (5,), "Mt Moon 1F", 8), #MountMoonName
+    "Cerulean City-Cave": ("Cerulean Cave 1F-SE to Cerulean City-Cave", 9, 1, (54,), "Cerulean Cave 1F", 11), #CeruleanCaveName
+    "Vermilion City-Dock": ("Vermilion Dock to Vermilion City-Dock", 9, 10, (19,), "S.S. Anne 1F", 17), #SSAnneName
+    "Route 10-N": ("Rock Tunnel 1F-NE 1 to Route 10-N", 14, 3, (13, 57), "Rock Tunnel Pokemon Center", 19), #RockTunnelName
+    "Lavender Town": ("Pokemon Tower 1F to Lavender Town", 15, 5, (27,), "Pokemon Tower 2F", 22), #PokemonTowerName
+    "Celadon Game Corner-Hidden Stairs": ("Rocket Hideout B1F to Celadon Game Corner-Hidden Stairs", 7, 5, (50,), "Rocket Hideout B1F", 26), #RocketHQName
+    "Saffron City-Silph": ("Silph Co 1F to Saffron City-Silph", 10, 5, (51, 58), "Silph Co 2F", 28), #SilphCoName
+    "Route 20-IE": ("Seafoam Islands 1F to Route 20-IE", 5, 15, (32,), "Seafoam Islands B1F", 40), #SeafoamIslandsName
+    "Cinnabar Island-M": ("Pokemon Mansion 1F to Cinnabar Island-M", 2, 15, (35, 52), "Pokemon Mansion 1F", 43), #PokemonMansionName
+    "Route 23-C": ("Victory Road 1F-S to Route 23-C", 0, 4, (20, 45, 49), "Victory Road 1F", 47), #VictoryRoadName
+    "Route 10-P": ("Power Plant to Route 10-P", 15, 4, (14,), "Power Plant", 49), #PowerPlantName
 }
 
 warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishing': [], 'Fossil Level': [],
@@ -476,29 +472,29 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
              'Pokemon Mansion 3F-Wild': [], 'Pokemon Mansion 2F-Wild': [], 'Pokemon Mansion 3F': [
         {'address': 'Warps_PokemonMansion3F', 'id': 1, 'to': {'map': 'Pokemon Mansion 2F', 'id': 3}}],
              'Pokemon Mansion 3F-SE': [
-                 {'address': 'Warps_PokemonMansion3F', 'id': 2, 'to': {'map': 'Pokemon Mansion 2F-E', 'id': 2}}, ],
+                 {'address': 'Warps_PokemonMansion3F', 'id': 2, 'to': {'map': 'Pokemon Mansion 2F-E', 'id': 2}},],
              'Pokemon Mansion 3F-SW': [
                  {'address': 'Warps_PokemonMansion3F', 'id': 0, 'to': {'map': 'Pokemon Mansion 2F', 'id': 1}}],
              'Pokemon Mansion B1F': [
                  {'address': 'Warps_PokemonMansionB1F', 'id': 0, 'to': {'map': 'Pokemon Mansion 1F-SE', 'id': 5}}],
              'Rock Tunnel 1F-NE 1': [{'address': 'Warps_RockTunnel1F', 'id': 0, 'to': {'map': 'Route 10-N', 'id': 1}}],
              'Rock Tunnel 1F-NE 2':
-                 [{'address': 'Warps_RockTunnel1F', 'id': 4,
-                   'to': {'map': 'Rock Tunnel B1F-E 1', 'id': 0}}], 'Rock Tunnel 1F-NW 1': [
+                                   [{'address': 'Warps_RockTunnel1F', 'id': 4,
+                                    'to': {'map': 'Rock Tunnel B1F-E 1', 'id': 0}}], 'Rock Tunnel 1F-NW 1': [
         {'address': 'Warps_RockTunnel1F', 'id': 5, 'to': {'map': 'Rock Tunnel B1F-E 2', 'id': 1}}],
              'Rock Tunnel 1F-NW 2': [
-                 {'address': 'Warps_RockTunnel1F', 'id': 6, 'to': {'map': 'Rock Tunnel B1F-W 1', 'id': 2}}],
+        {'address': 'Warps_RockTunnel1F', 'id': 6, 'to': {'map': 'Rock Tunnel B1F-W 1', 'id': 2}}],
              'Rock Tunnel 1F-S 1': [{'address': 'Warps_RockTunnel1F', 'id': 2, 'to': {'map': 'Route 10-S', 'id': 2}}],
              'Rock Tunnel 1F-S 2': [
-                 {'address': 'Warps_RockTunnel1F', 'id': 7,
-                  'to': {'map': 'Rock Tunnel B1F-W 2', 'id': 3}}], 'Rock Tunnel 1F-Wild': [],
+                                  {'address': 'Warps_RockTunnel1F', 'id': 7,
+                                   'to': {'map': 'Rock Tunnel B1F-W 2', 'id': 3}}], 'Rock Tunnel 1F-Wild': [],
              'Rock Tunnel B1F-Wild': [],
              'Rock Tunnel 1F-NE': [], 'Rock Tunnel 1F-NW': [], 'Rock Tunnel 1F-S': [], 'Rock Tunnel B1F-E': [],
              'Rock Tunnel B1F-W': [],
              'Seafoam Islands 1F': [
-                 {'address': 'Warps_SeafoamIslands1F', 'id': (2, 3), 'to': {'map': 'Route 20-IE', 'id': 1}},
-                 {'address': 'Warps_SeafoamIslands1F', 'id': 4, 'to': {'map': 'Seafoam Islands B1F', 'id': 1}},
-                 {'address': 'Warps_SeafoamIslands1F', 'id': 5, 'to': {'map': 'Seafoam Islands B1F-NE', 'id': 6}}],
+        {'address': 'Warps_SeafoamIslands1F', 'id': (2, 3), 'to': {'map': 'Route 20-IE', 'id': 1}},
+        {'address': 'Warps_SeafoamIslands1F', 'id': 4, 'to': {'map': 'Seafoam Islands B1F', 'id': 1}},
+        {'address': 'Warps_SeafoamIslands1F', 'id': 5, 'to': {'map': 'Seafoam Islands B1F-NE', 'id': 6}}],
              'Seafoam Islands B1F-Wild': [], 'Seafoam Islands 1F-Wild': [], 'Seafoam Islands 1F-SE': [
         {'address': 'Warps_SeafoamIslands1F', 'id': (0, 1), 'to': {'map': 'Route 20-IW', 'id': 0}},
         {'address': 'Warps_SeafoamIslands1F', 'id': 6, 'to': {'map': 'Seafoam Islands B1F-SE', 'id': 4}}],
@@ -598,7 +594,7 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
              'Cerulean Cave B1F-E': [], 'Rock Tunnel B1F-E 1': [
         {'address': 'Warps_RockTunnelB1F', 'id': 0, 'to': {'map': 'Rock Tunnel 1F-NE 2', 'id': 4}}],
              'Rock Tunnel B1F-E 2': [
-                 {'address': 'Warps_RockTunnelB1F', 'id': 1, 'to': {'map': 'Rock Tunnel 1F-NW 1', 'id': 5}}],
+        {'address': 'Warps_RockTunnelB1F', 'id': 1, 'to': {'map': 'Rock Tunnel 1F-NW 1', 'id': 5}}],
              'Rock Tunnel B1F-W 1': [
                  {'address': 'Warps_RockTunnelB1F', 'id': 2, 'to': {'map': 'Rock Tunnel 1F-NW 2', 'id': 6}}],
              'Rock Tunnel B1F-W 2': [
@@ -629,17 +625,17 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
              'Seafoam Islands B3F': [
                  {'address': 'Warps_SeafoamIslandsB3F', 'id': 0, 'to': {'map': 'Seafoam Islands B2F-SW', 'id': 1}},
                  {'address': 'Warps_SeafoamIslandsB3F', 'id': 1, 'to': {'map': 'Seafoam Islands B4F', 'id': 2}}
-             ], 'Seafoam Islands B3F-SE': [
+                 ], 'Seafoam Islands B3F-SE': [
         {'address': 'Warps_SeafoamIslandsB3F', 'id': 4, 'to': {'map': 'Seafoam Islands B2F-SE', 'id': 6}}],
              'Seafoam Islands B3F-Wild': [], 'Seafoam Islands B3F-NE': [
         {'address': 'Warps_SeafoamIslandsB3F', 'id': 2, 'to': {'map': 'Seafoam Islands B4F', 'id': 3}},
         {'address': 'Warps_SeafoamIslandsB3F', 'id': 3, 'to': {'map': 'Seafoam Islands B2F-NE', 'id': 4}}],
              'Seafoam Islands B4F-W': [],
              'Seafoam Islands B4F': [
-                 {'address': 'Warps_SeafoamIslandsB4F', 'id': 2,
-                  'to': {'map': 'Seafoam Islands B3F', 'id': 1}},
-                 {'address': 'Warps_SeafoamIslandsB4F', 'id': 3,
-                  'to': {'map': 'Seafoam Islands B3F-NE', 'id': 2}}],
+                                     {'address': 'Warps_SeafoamIslandsB4F', 'id': 2,
+                                      'to': {'map': 'Seafoam Islands B3F', 'id': 1}},
+                                     {'address': 'Warps_SeafoamIslandsB4F', 'id': 3,
+                                      'to': {'map': 'Seafoam Islands B3F-NE', 'id': 2}}],
              'Route 7': [{'address': 'Warps_Route7', 'id': 3, 'to': {'map': 'Route 7 Gate-W', 'id': (0, 1)}},
                          {'address': 'Warps_Route7', 'id': 4, 'to': {'map': 'Underground Path Route 7', 'id': 0}}],
              'Route 7-E': [{'address': 'Warps_Route7', 'id': (0, 1), 'to': {'map': 'Route 7 Gate-E', 'id': (2, 3)}}],
@@ -1210,6 +1206,7 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                                               {'address': 'Warps_AgathasRoom', 'id': (2, 3),
                                                'to': {'map': "Indigo Plateau Lance's Room", 'id': 0}}]}
 
+
 silph_co_warps = [
     'Silph Co 4F to Silph Co 10F-SE', 'Silph Co 4F to Silph Co 10F', 'Silph Co 4F-N to Silph Co 6F',
     'Silph Co 4F-N to Silph Co 10F-SE', 'Silph Co 5F to Silph Co 7F-SE', 'Silph Co 5F to Silph Co 9F',
@@ -1241,8 +1238,7 @@ saffron_gym_warps = [
 entrance_only = [
     "Route 4-W to Mt Moon 1F", "Saffron City-G to Saffron Gym-S", "Saffron City-Copycat to Saffron Copycat's House 1F",
     "Saffron City-Pidgey to Saffron Pidgey House", "Celadon Game Corner-Hidden Stairs to Rocket Hideout B1F"
-                                                   "Cinnabar Island-M to Pokemon Mansion 1F",
-    "Mt Moon B2F to Mt Moon B1F-W", "Silph Co 7F-NW to Silph Co 11F-W",
+    "Cinnabar Island-M to Pokemon Mansion 1F", "Mt Moon B2F to Mt Moon B1F-W", "Silph Co 7F-NW to Silph Co 11F-W",
     "Viridian City-G", "Cerulean City-Cave to Cerulean Cave 1F-SE", "Cerulean City-T to Cerulean Trashed House",
     "Route 10-P to Power Plant", "S.S. Anne 2F to S.S. Anne Captain's Room", "Pewter City-M to Pewter Museum 1F-E",
     "Pokemon Mansion 1F-SE to Cinnabar Island-M", "Cinnabar Island-G to Cinnabar Gym",
@@ -1272,6 +1268,7 @@ pokemarts = ['Viridian Pokemart to Viridian City', 'Pewter Pokemart to Pewter Ci
              'Vermilion Pokemart to Vermilion City', 'Saffron Pokemart to Saffron City',
              'Fuchsia Pokemart to Fuchsia City', 'Cinnabar Pokemart to Cinnabar Island']
 
+
 safe_rooms = ["Rival's House to Pallet Town",
               'Vermilion Trade House to Vermilion City',
               'Viridian School House to Viridian City', 'Viridian Nickname House to Viridian City',
@@ -1290,7 +1287,7 @@ safe_rooms = ["Rival's House to Pallet Town",
               'Vermilion Old Rod House to Vermilion City', 'Daycare to Route 5',
               'Route 12 Super Rod House to Route 12-S', 'Vermilion Pokemon Fan Club to Vermilion City',
               "Fuchsia Bill's Grandpa's House to Fuchsia City", "Fuchsia Warden's House to Fuchsia City",
-              'Fuchsia Meeting Room to Fuchsia City', ]
+              'Fuchsia Meeting Room to Fuchsia City',]
 
 insanity_safe_rooms = [
     'Cinnabar Lab Trade Room to Cinnabar Lab',
@@ -1382,6 +1379,7 @@ connecting_interior_dungeon_entrances = [
     ['Route 23-C to Victory Road 1F-S', 'Route 23-N to Victory Road 2F-E'],
 ]
 
+
 connecting_interiors = [
     ["Underground Path Route 5 to Route 5", "Underground Path Route 6 to Route 6"],
     ["Underground Path Route 7 to Route 7", "Underground Path Route 8 to Route 8"],
@@ -1412,7 +1410,7 @@ connecting_interior_entrances = [
     ['Cerulean City-Badge House Backyard to Cerulean Badge House',
      'Cerulean City to Cerulean Badge House'],
     ['Cerulean City-Outskirts to Cerulean Trashed House',
-     'Cerulean City-T to Cerulean Trashed House', ],
+     'Cerulean City-T to Cerulean Trashed House',],
     ['Fuchsia City-Good Rod House Backyard to Fuchsia Good Rod House', 'Fuchsia City to Fuchsia Good Rod House'],
     ['Route 11-C to Route 11 Gate 1F', 'Route 11-E to Route 11 Gate 1F'],
     ['Route 12-L to Route 12 Gate 1F', 'Route 12-N to Route 12 Gate 1F'],
@@ -1423,7 +1421,7 @@ connecting_interior_entrances = [
     ['Route 5 to Route 5 Gate-N', 'Route 5-S to Route 5 Gate-S'],
     ['Route 6-N to Route 6 Gate-N', 'Route 6 to Route 6 Gate-S'],
     ['Route 7 to Route 7 Gate-W', 'Route 7-E to Route 7 Gate-E'],
-    ['Route 8-W to Route 8 Gate-W', 'Route 8 to Route 8 Gate-E', ],
+    ['Route 8-W to Route 8 Gate-W', 'Route 8 to Route 8 Gate-E',],
     ['Route 23-S to Route 22 Gate-N', 'Route 22 to Route 22 Gate-S']
 ]
 
@@ -1527,11 +1525,9 @@ def create_regions(world):
         locations_per_region.setdefault(location.region, [])
         # The check for list is so that we don't try to check the item table with a list as a key
         if location.inclusion(world, player) and (isinstance(location.original_item, list) or
-                                                  not (world.options.key_items_only and item_table[
-                                                      location.original_item].classification
-                                                       not in (ItemClassification.progression,
-                                                               ItemClassification.progression_skip_balancing) and not
-                                                       location.event)):
+                                                  not (world.options.key_items_only and item_table[location.original_item].classification
+                                                       not in (ItemClassification.progression, ItemClassification.progression_skip_balancing) and not
+                location.event)):
             location_object = PokemonRBLocation(player, location.name, location.address, location.rom_address,
                                                 location.type, location.level, location.level_address)
             locations_per_region[location.region].append(location_object)
@@ -1583,18 +1579,6 @@ def create_regions(world):
                     world.item_pool.append(item)
 
     world.random.shuffle(world.item_pool)
-    if not world.options.key_items_only:
-        if "Player's House 2F - Player's PC" in world.options.exclude_locations:
-            acceptable_item = lambda item: item.excludable
-        elif "Player's House 2F - Player's PC" in world.options.priority_locations:
-            acceptable_item = lambda item: item.advancement
-        else:
-            acceptable_item = lambda item: True
-        for i, item in enumerate(world.item_pool):
-            if acceptable_item(item):
-                world.pc_item = world.item_pool.pop(i)
-                break
-
     advancement_items = [item.name for item in world.item_pool if item.advancement] \
                         + [item.name for item in world.multiworld.precollected_items[world.player] if
                            item.advancement]
@@ -1629,22 +1613,19 @@ def create_regions(world):
     connect(multiworld, player, "Menu", "Pokedex", one_way=True)
     connect(multiworld, player, "Menu", "Evolution", one_way=True)
     connect(multiworld, player, "Menu", "Fossil", lambda state: logic.fossil_checks(state,
-                                                                                    world.options.second_fossil_check_condition.value,
-                                                                                    player), one_way=True)
+        world.options.second_fossil_check_condition.value, player), one_way=True)
     connect(multiworld, player, "Pallet Town", "Route 1")
     connect(multiworld, player, "Route 1", "Viridian City")
     connect(multiworld, player, "Viridian City", "Route 22")
-    connect(multiworld, player, "Route 22", "Route 22-F",
-            lambda state: state.has("Defeat Viridian Gym Giovanni", player), one_way=True)
+    connect(multiworld, player, "Route 22", "Route 22-F", lambda state: state.has("Defeat Viridian Gym Giovanni", player), one_way=True)
     connect(multiworld, player, "Route 2-SW", "Route 2-Grass", one_way=True)
     connect(multiworld, player, "Route 2-NW", "Route 2-Grass", one_way=True)
     connect(multiworld, player, "Route 22 Gate-S", "Route 22 Gate-N",
             lambda state: logic.has_badges(state, world.options.route_22_gate_condition.value, player))
-    connect(multiworld, player, "Route 23-Grass", "Route 23-C",
-            lambda state: logic.has_badges(state, world.options.victory_road_condition.value, player))
+    connect(multiworld, player, "Route 23-Grass", "Route 23-C", lambda state: logic.has_badges(state, world.options.victory_road_condition.value, player))
     connect(multiworld, player, "Route 23-Grass", "Route 23-S", lambda state: logic.can_surf(state, world, player))
     connect(multiworld, player, "Viridian City-N", "Viridian City-G", lambda state:
-    logic.has_badges(state, world.options.viridian_gym_condition.value, player))
+                     logic.has_badges(state, world.options.viridian_gym_condition.value, player))
     connect(multiworld, player, "Route 2-SW", "Route 2-SE", lambda state: logic.can_cut(state, world, player))
     connect(multiworld, player, "Route 2-NW", "Route 2-NE", lambda state: logic.can_cut(state, world, player))
     connect(multiworld, player, "Route 2-E", "Route 2-NE", lambda state: logic.can_cut(state, world, player))
@@ -1652,15 +1633,12 @@ def create_regions(world):
     connect(multiworld, player, "Route 2-NW", "Pewter City")
     connect(multiworld, player, "Pewter City", "Pewter City-E")
     connect(multiworld, player, "Pewter City-M", "Pewter City", one_way=True)
-    connect(multiworld, player, "Pewter City", "Pewter City-M", lambda state: logic.can_cut(state, world, player),
-            one_way=True)
-    connect(multiworld, player, "Pewter City-E", "Route 3", lambda state: logic.route(state, world, player),
-            one_way=True)
+    connect(multiworld, player, "Pewter City", "Pewter City-M", lambda state: logic.can_cut(state, world, player), one_way=True)
+    connect(multiworld, player, "Pewter City-E", "Route 3", lambda state: logic.route(state, world, player), one_way=True)
     connect(multiworld, player, "Route 3", "Pewter City-E", one_way=True)
     connect(multiworld, player, "Route 4-W", "Route 3")
     connect(multiworld, player, "Route 24", "Cerulean City-Water", lambda state: logic.can_surf(state, world, player))
-    connect(multiworld, player, "Cerulean City-Water", "Route 4-Lass",
-            lambda state: logic.can_surf(state, world, player), one_way=True)
+    connect(multiworld, player, "Cerulean City-Water", "Route 4-Lass", lambda state: logic.can_surf(state, world, player), one_way=True)
     connect(multiworld, player, "Mt Moon B2F", "Mt Moon B2F-Wild", one_way=True)
     connect(multiworld, player, "Mt Moon B2F-NE", "Mt Moon B2F-Wild", one_way=True)
     connect(multiworld, player, "Mt Moon B2F-C", "Mt Moon B2F-Wild", one_way=True)
@@ -1670,171 +1648,104 @@ def create_regions(world):
     connect(multiworld, player, "Cerulean City", "Route 24")
     connect(multiworld, player, "Cerulean City", "Cerulean City-T", lambda state: state.has("Help Bill", player))
     connect(multiworld, player, "Cerulean City-Outskirts", "Cerulean City", one_way=True)
-    connect(multiworld, player, "Cerulean City", "Cerulean City-Outskirts",
-            lambda state: logic.can_cut(state, world, player), one_way=True)
+    connect(multiworld, player, "Cerulean City", "Cerulean City-Outskirts", lambda state: logic.can_cut(state, world, player), one_way=True)
     connect(multiworld, player, "Cerulean City-Outskirts", "Route 9", lambda state: logic.can_cut(state, world, player))
     connect(multiworld, player, "Cerulean City-Outskirts", "Route 5")
-    connect(multiworld, player, "Cerulean Cave B1F", "Cerulean Cave B1F-E",
-            lambda state: logic.can_surf(state, world, player), one_way=True)
+    connect(multiworld, player, "Cerulean Cave B1F", "Cerulean Cave B1F-E", lambda state: logic.can_surf(state, world, player), one_way=True)
     connect(multiworld, player, "Route 24", "Route 25")
     connect(multiworld, player, "Route 9", "Route 10-N")
     connect(multiworld, player, "Route 10-N", "Route 10-C", lambda state: logic.can_surf(state, world, player))
-    connect(multiworld, player, "Route 10-C", "Route 10-P",
-            lambda state: state.has("Plant Key", player) or not world.options.extra_key_items.value)
-    connect(multiworld, player, "Pallet Town", "Pallet/Viridian Fishing", lambda state: state.has("Super Rod", player),
-            one_way=True)
-    connect(multiworld, player, "Viridian City", "Pallet/Viridian Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Route 22", "Route 22 Fishing", lambda state: state.has("Super Rod", player),
-            one_way=True)
-    connect(multiworld, player, "Route 24", "Route 24/25/Cerulean/Cerulean Gym Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Route 25", "Route 24/25/Cerulean/Cerulean Gym Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Cerulean City", "Route 24/25/Cerulean/Cerulean Gym Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Cerulean Gym", "Route 24/25/Cerulean/Cerulean Gym Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Route 6", "Route 6/11/Vermilion/Dock Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Route 11", "Route 6/11/Vermilion/Dock Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Vermilion City", "Route 6/11/Vermilion/Dock Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Vermilion Dock", "Route 6/11/Vermilion/Dock Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Route 10-N", "Route 10/Celadon Fishing", lambda state: state.has("Super Rod", player),
-            one_way=True)
-    connect(multiworld, player, "Route 10-C", "Route 10/Celadon Fishing", lambda state: state.has("Super Rod", player),
-            one_way=True)
-    connect(multiworld, player, "Celadon City", "Route 10/Celadon Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Safari Zone Center-NW", "Safari Zone Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Safari Zone Center-NE", "Safari Zone Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Safari Zone Center-S", "Safari Zone Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Safari Zone West", "Safari Zone Fishing", lambda state: state.has("Super Rod", player),
-            one_way=True)
-    connect(multiworld, player, "Safari Zone West-NW", "Safari Zone Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Safari Zone East", "Safari Zone Fishing", lambda state: state.has("Super Rod", player),
-            one_way=True)
-    connect(multiworld, player, "Safari Zone North", "Safari Zone Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Route 12-N", "Route 12/13/17/18 Fishing", lambda state: state.has("Super Rod", player),
-            one_way=True)
-    connect(multiworld, player, "Route 12-S", "Route 12/13/17/18 Fishing", lambda state: state.has("Super Rod", player),
-            one_way=True)
-    connect(multiworld, player, "Route 13", "Route 12/13/17/18 Fishing", lambda state: state.has("Super Rod", player),
-            one_way=True)
-    connect(multiworld, player, "Route 13-E", "Route 12/13/17/18 Fishing", lambda state: state.has("Super Rod", player),
-            one_way=True)
-    connect(multiworld, player, "Route 17", "Route 12/13/17/18 Fishing", lambda state: state.has("Super Rod", player),
-            one_way=True)
-    connect(multiworld, player, "Route 18-W", "Route 12/13/17/18 Fishing", lambda state: state.has("Super Rod", player),
-            one_way=True)
-    connect(multiworld, player, "Route 21", "Sea Routes/Cinnabar/Seafoam Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Cinnabar Island", "Sea Routes/Cinnabar/Seafoam Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Route 20-IW", "Sea Routes/Cinnabar/Seafoam Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Route 20-IE", "Sea Routes/Cinnabar/Seafoam Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Route 19-N", "Sea Routes/Cinnabar/Seafoam Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Seafoam Islands B3F", "Sea Routes/Cinnabar/Seafoam Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Seafoam Islands B4F", "Sea Routes/Cinnabar/Seafoam Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Route 23-S", "Route 23/Cerulean Cave Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Route 23-Grass", "Route 23/Cerulean Cave Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Cerulean Cave 1F-SE", "Route 23/Cerulean Cave Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Cerulean Cave 1F-NE", "Route 23/Cerulean Cave Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Cerulean Cave 1F-N", "Route 23/Cerulean Cave Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Cerulean Cave 1F-SW", "Route 23/Cerulean Cave Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Cerulean Cave B1F", "Route 23/Cerulean Cave Fishing",
-            lambda state: state.has("Super Rod", player), one_way=True)
-    connect(multiworld, player, "Fuchsia City", "Fuchsia Fishing", lambda state: state.has("Super Rod", player),
-            one_way=True)
-    connect(multiworld, player, "Pallet Town", "Old Rod Fishing", lambda state: state.has("Old Rod", player),
-            one_way=True)
-    connect(multiworld, player, "Pallet Town", "Good Rod Fishing", lambda state: state.has("Good Rod", player),
-            one_way=True)
-    connect(multiworld, player, "Cinnabar Lab Fossil Room", "Fossil Level",
-            lambda state: logic.fossil_checks(state, 1, player), one_way=True)
-    connect(multiworld, player, "Route 5 Gate-N", "Route 5 Gate-S",
-            lambda state: logic.can_pass_guards(state, world, player))
-    connect(multiworld, player, "Route 6 Gate-N", "Route 6 Gate-S",
-            lambda state: logic.can_pass_guards(state, world, player))
-    connect(multiworld, player, "Route 7 Gate-W", "Route 7 Gate-E",
-            lambda state: logic.can_pass_guards(state, world, player))
-    connect(multiworld, player, "Route 8 Gate-W", "Route 8 Gate-E",
-            lambda state: logic.can_pass_guards(state, world, player))
+    connect(multiworld, player, "Route 10-C", "Route 10-P", lambda state: state.has("Plant Key", player) or not world.options.extra_key_items.value)
+    connect(multiworld, player, "Pallet Town", "Pallet/Viridian Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Viridian City", "Pallet/Viridian Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 22", "Route 22 Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 24", "Route 24/25/Cerulean/Cerulean Gym Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 25", "Route 24/25/Cerulean/Cerulean Gym Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Cerulean City", "Route 24/25/Cerulean/Cerulean Gym Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Cerulean Gym", "Route 24/25/Cerulean/Cerulean Gym Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 6", "Route 6/11/Vermilion/Dock Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 11", "Route 6/11/Vermilion/Dock Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Vermilion City", "Route 6/11/Vermilion/Dock Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Vermilion Dock", "Route 6/11/Vermilion/Dock Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 10-N", "Route 10/Celadon Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 10-C", "Route 10/Celadon Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Celadon City", "Route 10/Celadon Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Safari Zone Center-NW", "Safari Zone Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Safari Zone Center-NE", "Safari Zone Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Safari Zone Center-S", "Safari Zone Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Safari Zone West", "Safari Zone Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Safari Zone West-NW", "Safari Zone Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Safari Zone East", "Safari Zone Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Safari Zone North", "Safari Zone Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 12-N", "Route 12/13/17/18 Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 12-S", "Route 12/13/17/18 Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 13", "Route 12/13/17/18 Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 13-E", "Route 12/13/17/18 Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 17", "Route 12/13/17/18 Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 18-W", "Route 12/13/17/18 Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 21", "Sea Routes/Cinnabar/Seafoam Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Cinnabar Island", "Sea Routes/Cinnabar/Seafoam Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 20-IW", "Sea Routes/Cinnabar/Seafoam Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 20-IE", "Sea Routes/Cinnabar/Seafoam Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 19-N", "Sea Routes/Cinnabar/Seafoam Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Seafoam Islands B3F", "Sea Routes/Cinnabar/Seafoam Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Seafoam Islands B4F", "Sea Routes/Cinnabar/Seafoam Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 23-S", "Route 23/Cerulean Cave Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Route 23-Grass", "Route 23/Cerulean Cave Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Cerulean Cave 1F-SE", "Route 23/Cerulean Cave Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Cerulean Cave 1F-NE", "Route 23/Cerulean Cave Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Cerulean Cave 1F-N", "Route 23/Cerulean Cave Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Cerulean Cave 1F-SW", "Route 23/Cerulean Cave Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Cerulean Cave B1F", "Route 23/Cerulean Cave Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Fuchsia City", "Fuchsia Fishing", lambda state: state.has("Super Rod", player), one_way=True)
+    connect(multiworld, player, "Pallet Town", "Old Rod Fishing", lambda state: state.has("Old Rod", player), one_way=True)
+    connect(multiworld, player, "Pallet Town", "Good Rod Fishing", lambda state: state.has("Good Rod", player), one_way=True)
+    connect(multiworld, player, "Cinnabar Lab Fossil Room", "Fossil Level", lambda state: logic.fossil_checks(state, 1, player), one_way=True)
+    connect(multiworld, player, "Route 5 Gate-N", "Route 5 Gate-S", lambda state: logic.can_pass_guards(state, world, player))
+    connect(multiworld, player, "Route 6 Gate-N", "Route 6 Gate-S", lambda state: logic.can_pass_guards(state, world, player))
+    connect(multiworld, player, "Route 7 Gate-W", "Route 7 Gate-E", lambda state: logic.can_pass_guards(state, world, player))
+    connect(multiworld, player, "Route 8 Gate-W", "Route 8 Gate-E", lambda state: logic.can_pass_guards(state, world, player))
     connect(multiworld, player, "Saffron City", "Route 5-S")
     connect(multiworld, player, "Saffron City", "Route 6-N")
     connect(multiworld, player, "Saffron City", "Route 7-E")
     connect(multiworld, player, "Saffron City", "Route 8-W")
-    connect(multiworld, player, "Saffron City", "Saffron City-Copycat",
-            lambda state: state.has("Silph Co Liberated", player))
-    connect(multiworld, player, "Saffron City", "Saffron City-Pidgey",
-            lambda state: state.has("Silph Co Liberated", player))
+    connect(multiworld, player, "Saffron City", "Saffron City-Copycat", lambda state: state.has("Silph Co Liberated", player))
+    connect(multiworld, player, "Saffron City", "Saffron City-Pidgey", lambda state: state.has("Silph Co Liberated", player))
     connect(multiworld, player, "Saffron City", "Saffron City-G", lambda state: state.has("Silph Co Liberated", player))
     connect(multiworld, player, "Saffron City", "Saffron City-Silph", lambda state: state.has("Fuji Saved", player))
     connect(multiworld, player, "Route 6", "Vermilion City")
-    connect(multiworld, player, "Vermilion City", "Vermilion City-G",
-            lambda state: logic.can_surf(state, world, player) or logic.can_cut(state, world, player))
+    connect(multiworld, player, "Vermilion City", "Vermilion City-G", lambda state: logic.can_surf(state, world, player) or logic.can_cut(state, world, player))
     connect(multiworld, player, "Vermilion City", "Vermilion City-Dock", lambda state: state.has("S.S. Ticket", player))
     connect(multiworld, player, "Vermilion City", "Route 11")
     connect(multiworld, player, "Route 12-N", "Route 12-S", lambda state: logic.can_surf(state, world, player))
     connect(multiworld, player, "Route 12-W", "Route 11-E")
     connect(multiworld, player, "Route 12-W", "Route 12-N", lambda state: state.has("Poke Flute", player))
     connect(multiworld, player, "Route 12-W", "Route 12-S", lambda state: state.has("Poke Flute", player))
-    connect(multiworld, player, "Route 12-S", "Route 12-Grass", lambda state: logic.can_cut(state, world, player),
-            one_way=True)
+    connect(multiworld, player, "Route 12-S", "Route 12-Grass", lambda state: logic.can_cut(state, world, player), one_way=True)
     connect(multiworld, player, "Route 12-L", "Lavender Town")
     connect(multiworld, player, "Route 10-S", "Lavender Town")
     connect(multiworld, player, "Route 8", "Lavender Town")
-    connect(multiworld, player, "Pokemon Tower 6F", "Pokemon Tower 6F-S",
-            lambda state: state.has("Silph Scope", player) or (
-                        state.has("Buy Poke Doll", player) and world.options.poke_doll_skip))
-    connect(multiworld, player, "Route 8", "Route 8-Grass", lambda state: logic.can_cut(state, world, player),
-            one_way=True)
+    connect(multiworld, player, "Pokemon Tower 6F", "Pokemon Tower 6F-S", lambda state: state.has("Silph Scope", player) or (state.has("Buy Poke Doll", player) and world.options.poke_doll_skip))
+    connect(multiworld, player, "Route 8", "Route 8-Grass", lambda state: logic.can_cut(state, world, player), one_way=True)
     connect(multiworld, player, "Route 7", "Celadon City")
     connect(multiworld, player, "Celadon City", "Celadon City-G", lambda state: logic.can_cut(state, world, player))
     connect(multiworld, player, "Celadon City", "Route 16-E")
-    connect(multiworld, player, "Route 18 Gate 1F-W", "Route 18 Gate 1F-E",
-            lambda state: state.has("Bicycle", player) or world.options.bicycle_gate_skips == "in_logic")
-    connect(multiworld, player, "Route 16 Gate 1F-W", "Route 16 Gate 1F-E",
-            lambda state: state.has("Bicycle", player) or world.options.bicycle_gate_skips == "in_logic")
+    connect(multiworld, player, "Route 18 Gate 1F-W", "Route 18 Gate 1F-E", lambda state: state.has("Bicycle", player) or world.options.bicycle_gate_skips == "in_logic")
+    connect(multiworld, player, "Route 16 Gate 1F-W", "Route 16 Gate 1F-E", lambda state: state.has("Bicycle", player) or world.options.bicycle_gate_skips == "in_logic")
     connect(multiworld, player, "Route 16-E", "Route 16-NE", lambda state: logic.can_cut(state, world, player))
     connect(multiworld, player, "Route 16-E", "Route 16-C", lambda state: state.has("Poke Flute", player))
     connect(multiworld, player, "Route 17", "Route 16-SW")
     connect(multiworld, player, "Route 17", "Route 18-W")
     # connect(multiworld, player, "Pokemon Mansion 2F", "Pokemon Mansion 2F-NW", one_way=True)
-    connect(multiworld, player, "Safari Zone Gate-S", "Safari Zone Gate-N",
-            lambda state: state.has("Safari Pass", player) or not world.options.extra_key_items.value, one_way=True)
+    connect(multiworld, player, "Safari Zone Gate-S", "Safari Zone Gate-N", lambda state: state.has("Safari Pass", player) or not world.options.extra_key_items.value, one_way=True)
     connect(multiworld, player, "Fuchsia City", "Route 15-W")
     connect(multiworld, player, "Fuchsia City", "Route 18-E")
     connect(multiworld, player, "Route 15", "Route 14")
-    connect(multiworld, player, "Route 14", "Route 15-N", lambda state: logic.can_cut(state, world, player),
-            one_way=True)
-    connect(multiworld, player, "Route 14", "Route 14-Grass", lambda state: logic.can_cut(state, world, player),
-            one_way=True)
-    connect(multiworld, player, "Route 13", "Route 13-Grass", lambda state: logic.can_cut(state, world, player),
-            one_way=True)
+    connect(multiworld, player, "Route 14", "Route 15-N", lambda state: logic.can_cut(state, world, player), one_way=True)
+    connect(multiworld, player, "Route 14", "Route 14-Grass", lambda state: logic.can_cut(state, world, player), one_way=True)
+    connect(multiworld, player, "Route 13", "Route 13-Grass", lambda state: logic.can_cut(state, world, player), one_way=True)
     connect(multiworld, player, "Route 14", "Route 13")
-    connect(multiworld, player, "Route 13", "Route 13-E",
-            lambda state: logic.can_strength(state, world, player) or logic.can_surf(state, world,
-                                                                                     player) or not world.options.extra_strength_boulders.value)
+    connect(multiworld, player, "Route 13", "Route 13-E", lambda state: logic.can_strength(state, world, player) or logic.can_surf(state, world, player) or not world.options.extra_strength_boulders.value)
     connect(multiworld, player, "Route 12-S", "Route 13-E")
     connect(multiworld, player, "Fuchsia City", "Route 19-N")
     connect(multiworld, player, "Route 19-N", "Route 19-S", lambda state: logic.can_surf(state, world, player))
@@ -1845,23 +1756,17 @@ def create_regions(world):
     connect(multiworld, player, "Route 20-E", "Route 19/20-Water", one_way=True)
     connect(multiworld, player, "Route 20-W", "Route 19/20-Water", one_way=True)
     connect(multiworld, player, "Route 19-S", "Route 19/20-Water", one_way=True)
-    connect(multiworld, player, "Safari Zone West-NW", "Safari Zone West",
-            lambda state: logic.can_surf(state, world, player))
+    connect(multiworld, player, "Safari Zone West-NW", "Safari Zone West", lambda state: logic.can_surf(state, world, player))
     connect(multiworld, player, "Safari Zone West", "Safari Zone West-Wild", one_way=True)
     connect(multiworld, player, "Safari Zone West-NW", "Safari Zone West-Wild", one_way=True)
-    connect(multiworld, player, "Safari Zone Center-NW", "Safari Zone Center-C",
-            lambda state: logic.can_surf(state, world, player))
-    connect(multiworld, player, "Safari Zone Center-NE", "Safari Zone Center-C",
-            lambda state: logic.can_surf(state, world, player))
-    connect(multiworld, player, "Safari Zone Center-S", "Safari Zone Center-C",
-            lambda state: logic.can_surf(state, world, player))
+    connect(multiworld, player, "Safari Zone Center-NW", "Safari Zone Center-C", lambda state: logic.can_surf(state, world, player))
+    connect(multiworld, player, "Safari Zone Center-NE", "Safari Zone Center-C", lambda state: logic.can_surf(state, world, player))
+    connect(multiworld, player, "Safari Zone Center-S", "Safari Zone Center-C", lambda state: logic.can_surf(state, world, player))
     connect(multiworld, player, "Safari Zone Center-S", "Safari Zone Center-Wild", one_way=True)
     connect(multiworld, player, "Safari Zone Center-NW", "Safari Zone Center-Wild", one_way=True)
     connect(multiworld, player, "Safari Zone Center-NE", "Safari Zone Center-Wild", one_way=True)
-    connect(multiworld, player, "Victory Road 3F-S", "Victory Road 3F",
-            lambda state: logic.can_strength(state, world, player))
-    connect(multiworld, player, "Victory Road 3F-SE", "Victory Road 3F-S",
-            lambda state: logic.can_strength(state, world, player), one_way=True)
+    connect(multiworld, player, "Victory Road 3F-S", "Victory Road 3F", lambda state: logic.can_strength(state, world, player))
+    connect(multiworld, player, "Victory Road 3F-SE", "Victory Road 3F-S", lambda state: logic.can_strength(state, world, player), one_way=True)
     connect(multiworld, player, "Victory Road 3F", "Victory Road 3F-Wild", one_way=True)
     connect(multiworld, player, "Victory Road 3F-SE", "Victory Road 3F-Wild", one_way=True)
     connect(multiworld, player, "Victory Road 3F-S", "Victory Road 3F-Wild", one_way=True)
@@ -1870,15 +1775,10 @@ def create_regions(world):
     connect(multiworld, player, "Victory Road 2F-C", "Victory Road 2F-Wild", one_way=True)
     connect(multiworld, player, "Victory Road 2F-E", "Victory Road 2F-Wild", one_way=True)
     connect(multiworld, player, "Victory Road 2F-SE", "Victory Road 2F-Wild", one_way=True)
-    connect(multiworld, player, "Victory Road 2F-W", "Victory Road 2F-C",
-            lambda state: logic.can_strength(state, world, player), one_way=True)
-    connect(multiworld, player, "Victory Road 2F-NW", "Victory Road 2F-W",
-            lambda state: logic.can_strength(state, world, player), one_way=True)
-    connect(multiworld, player, "Victory Road 2F-C", "Victory Road 2F-SE",
-            lambda state: logic.can_strength(state, world, player) and state.has("Victory Road Boulder", player),
-            one_way=True)
-    connect(multiworld, player, "Victory Road 1F-S", "Victory Road 1F",
-            lambda state: logic.can_strength(state, world, player))
+    connect(multiworld, player, "Victory Road 2F-W", "Victory Road 2F-C", lambda state: logic.can_strength(state, world, player), one_way=True)
+    connect(multiworld, player, "Victory Road 2F-NW", "Victory Road 2F-W", lambda state: logic.can_strength(state, world, player), one_way=True)
+    connect(multiworld, player, "Victory Road 2F-C", "Victory Road 2F-SE", lambda state: logic.can_strength(state, world, player) and state.has("Victory Road Boulder", player), one_way=True)
+    connect(multiworld, player, "Victory Road 1F-S", "Victory Road 1F", lambda state: logic.can_strength(state, world, player))
     connect(multiworld, player, "Victory Road 1F", "Victory Road 1F-Wild", one_way=True)
     connect(multiworld, player, "Victory Road 1F-S", "Victory Road 1F-Wild", one_way=True)
     connect(multiworld, player, "Mt Moon B1F-W", "Mt Moon B1F-Wild", one_way=True)
@@ -1900,88 +1800,50 @@ def create_regions(world):
     connect(multiworld, player, "Seafoam Islands B3F", "Seafoam Islands B3F-Wild", one_way=True)
     connect(multiworld, player, "Seafoam Islands B3F-NE", "Seafoam Islands B3F-Wild", one_way=True)
     connect(multiworld, player, "Seafoam Islands B3F-SE", "Seafoam Islands B3F-Wild", one_way=True)
-    connect(multiworld, player, "Seafoam Islands B4F", "Seafoam Islands B4F-W",
-            lambda state: logic.can_surf(state, world, player), one_way=True)
+    connect(multiworld, player, "Seafoam Islands B4F", "Seafoam Islands B4F-W", lambda state: logic.can_surf(state, world, player), one_way=True)
     connect(multiworld, player, "Seafoam Islands B4F-W", "Seafoam Islands B4F", one_way=True)
-    connect(multiworld, player, "Seafoam Islands B3F", "Seafoam Islands B3F-SE",
-            lambda state: logic.can_surf(state, world, player) and logic.can_strength(state, world,
-                                                                                      player) and state.has(
-                "Seafoam Exit Boulder", player, 6))
-    connect(multiworld, player, "Viridian City", "Viridian City-N",
-            lambda state: state.has("Oak's Parcel", player) or world.options.old_man.value == 2 or logic.can_cut(state,
-                                                                                                                 world,
-                                                                                                                 player))
-    connect(multiworld, player, "Route 11", "Route 11-C",
-            lambda state: logic.can_strength(state, world, player) or not world.options.extra_strength_boulders)
+    connect(multiworld, player, "Seafoam Islands B3F", "Seafoam Islands B3F-SE", lambda state: logic.can_surf(state, world, player) and logic.can_strength(state, world, player) and state.has("Seafoam Exit Boulder", player, 6))
+    connect(multiworld, player, "Viridian City", "Viridian City-N", lambda state: state.has("Oak's Parcel", player) or world.options.old_man.value == 2 or logic.can_cut(state, world, player))
+    connect(multiworld, player, "Route 11", "Route 11-C", lambda state: logic.can_strength(state, world, player) or not world.options.extra_strength_boulders)
     connect(multiworld, player, "Cinnabar Island", "Cinnabar Island-G", lambda state: state.has("Secret Key", player))
-    connect(multiworld, player, "Cinnabar Island", "Cinnabar Island-M",
-            lambda state: state.has("Mansion Key", player) or not world.options.extra_key_items.value)
+    connect(multiworld, player, "Cinnabar Island", "Cinnabar Island-M", lambda state: state.has("Mansion Key", player) or not world.options.extra_key_items.value)
     connect(multiworld, player, "Route 21", "Cinnabar Island", lambda state: logic.can_surf(state, world, player))
     connect(multiworld, player, "Pallet Town", "Route 21", lambda state: logic.can_surf(state, world, player))
-    connect(multiworld, player, "Celadon Gym", "Celadon Gym-C", lambda state: logic.can_cut(state, world, player),
-            one_way=True)
-    connect(multiworld, player, "Celadon Game Corner", "Celadon Game Corner-Hidden Stairs",
-            lambda state: (not world.options.extra_key_items) or state.has("Hideout Key", player), one_way=True)
+    connect(multiworld, player, "Celadon Gym", "Celadon Gym-C", lambda state: logic.can_cut(state, world, player), one_way=True)
+    connect(multiworld, player, "Celadon Game Corner", "Celadon Game Corner-Hidden Stairs", lambda state: (not world.options.extra_key_items) or state.has("Hideout Key", player), one_way=True)
     connect(multiworld, player, "Celadon Game Corner-Hidden Stairs", "Celadon Game Corner", one_way=True)
     connect(multiworld, player, "Rocket Hideout B1F-SE", "Rocket Hideout B1F", one_way=True)
-    connect(multiworld, player, "Indigo Plateau Lobby", "Indigo Plateau Lobby-N",
-            lambda state: logic.has_badges(state, world.options.elite_four_badges_condition.value,
-                                           player) and logic.has_pokemon(state,
-                                                                         world.options.elite_four_pokedex_condition.total,
-                                                                         player) and logic.has_key_items(state,
-                                                                                                         world.options.elite_four_key_items_condition.total,
-                                                                                                         player) and (
-                              state.has("Pokedex", player,
-                                        int(world.options.elite_four_pokedex_condition.total > 1) * world.options.require_pokedex.value)))
+    connect(multiworld, player, "Indigo Plateau Lobby", "Indigo Plateau Lobby-N", lambda state: logic.has_badges(state, world.options.elite_four_badges_condition.value, player) and logic.has_pokemon(state, world.options.elite_four_pokedex_condition.total, player) and logic.has_key_items(state, world.options.elite_four_key_items_condition.total, player) and (state.has("Pokedex", player, int(world.options.elite_four_pokedex_condition.total > 1) * world.options.require_pokedex.value)))
     connect(multiworld, player, "Pokemon Mansion 3F", "Pokemon Mansion 3F-Wild", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 3F-SW", "Pokemon Mansion 3F-Wild", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 3F-SE", "Pokemon Mansion 3F-Wild", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 2F-E", "Pokemon Mansion 2F-Wild", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 1F-SE", "Pokemon Mansion 1F-Wild", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 1F", "Pokemon Mansion 1F-Wild", one_way=True)
-    connect(multiworld, player, "Rock Tunnel 1F-S 1", "Rock Tunnel 1F-S",
-            lambda state: logic.rock_tunnel(state, world, player))
-    connect(multiworld, player, "Rock Tunnel 1F-S 2", "Rock Tunnel 1F-S",
-            lambda state: logic.rock_tunnel(state, world, player))
-    connect(multiworld, player, "Rock Tunnel 1F-NW 1", "Rock Tunnel 1F-NW",
-            lambda state: logic.rock_tunnel(state, world, player))
-    connect(multiworld, player, "Rock Tunnel 1F-NW 2", "Rock Tunnel 1F-NW",
-            lambda state: logic.rock_tunnel(state, world, player))
-    connect(multiworld, player, "Rock Tunnel 1F-NE 1", "Rock Tunnel 1F-NE",
-            lambda state: logic.rock_tunnel(state, world, player))
-    connect(multiworld, player, "Rock Tunnel 1F-NE 2", "Rock Tunnel 1F-NE",
-            lambda state: logic.rock_tunnel(state, world, player))
-    connect(multiworld, player, "Rock Tunnel B1F-W 1", "Rock Tunnel B1F-W",
-            lambda state: logic.rock_tunnel(state, world, player))
-    connect(multiworld, player, "Rock Tunnel B1F-W 2", "Rock Tunnel B1F-W",
-            lambda state: logic.rock_tunnel(state, world, player))
-    connect(multiworld, player, "Rock Tunnel B1F-E 1", "Rock Tunnel B1F-E",
-            lambda state: logic.rock_tunnel(state, world, player))
-    connect(multiworld, player, "Rock Tunnel B1F-E 2", "Rock Tunnel B1F-E",
-            lambda state: logic.rock_tunnel(state, world, player))
-    connect(multiworld, player, "Rock Tunnel 1F-S", "Rock Tunnel 1F-Wild",
-            lambda state: logic.rock_tunnel(state, world, player), one_way=True)
-    connect(multiworld, player, "Rock Tunnel 1F-NW", "Rock Tunnel 1F-Wild",
-            lambda state: logic.rock_tunnel(state, world, player), one_way=True)
-    connect(multiworld, player, "Rock Tunnel 1F-NE", "Rock Tunnel 1F-Wild",
-            lambda state: logic.rock_tunnel(state, world, player), one_way=True)
-    connect(multiworld, player, "Rock Tunnel B1F-W", "Rock Tunnel B1F-Wild",
-            lambda state: logic.rock_tunnel(state, world, player), one_way=True)
-    connect(multiworld, player, "Rock Tunnel B1F-E", "Rock Tunnel B1F-Wild",
-            lambda state: logic.rock_tunnel(state, world, player), one_way=True)
+    connect(multiworld, player, "Rock Tunnel 1F-S 1", "Rock Tunnel 1F-S", lambda state: logic.rock_tunnel(state, world, player))
+    connect(multiworld, player, "Rock Tunnel 1F-S 2", "Rock Tunnel 1F-S", lambda state: logic.rock_tunnel(state, world, player))
+    connect(multiworld, player, "Rock Tunnel 1F-NW 1", "Rock Tunnel 1F-NW", lambda state: logic.rock_tunnel(state, world, player))
+    connect(multiworld, player, "Rock Tunnel 1F-NW 2", "Rock Tunnel 1F-NW", lambda state: logic.rock_tunnel(state, world, player))
+    connect(multiworld, player, "Rock Tunnel 1F-NE 1", "Rock Tunnel 1F-NE", lambda state: logic.rock_tunnel(state, world, player))
+    connect(multiworld, player, "Rock Tunnel 1F-NE 2", "Rock Tunnel 1F-NE", lambda state: logic.rock_tunnel(state, world, player))
+    connect(multiworld, player, "Rock Tunnel B1F-W 1", "Rock Tunnel B1F-W", lambda state: logic.rock_tunnel(state, world, player))
+    connect(multiworld, player, "Rock Tunnel B1F-W 2", "Rock Tunnel B1F-W", lambda state: logic.rock_tunnel(state, world, player))
+    connect(multiworld, player, "Rock Tunnel B1F-E 1", "Rock Tunnel B1F-E", lambda state: logic.rock_tunnel(state, world, player))
+    connect(multiworld, player, "Rock Tunnel B1F-E 2", "Rock Tunnel B1F-E", lambda state: logic.rock_tunnel(state, world, player))
+    connect(multiworld, player, "Rock Tunnel 1F-S", "Rock Tunnel 1F-Wild", lambda state: logic.rock_tunnel(state, world, player), one_way=True)
+    connect(multiworld, player, "Rock Tunnel 1F-NW", "Rock Tunnel 1F-Wild", lambda state: logic.rock_tunnel(state, world, player), one_way=True)
+    connect(multiworld, player, "Rock Tunnel 1F-NE", "Rock Tunnel 1F-Wild", lambda state: logic.rock_tunnel(state, world, player), one_way=True)
+    connect(multiworld, player, "Rock Tunnel B1F-W", "Rock Tunnel B1F-Wild", lambda state: logic.rock_tunnel(state, world, player), one_way=True)
+    connect(multiworld, player, "Rock Tunnel B1F-E", "Rock Tunnel B1F-Wild", lambda state: logic.rock_tunnel(state, world, player), one_way=True)
     connect(multiworld, player, "Cerulean Cave 1F-SE", "Cerulean Cave 1F-Wild", one_way=True)
     connect(multiworld, player, "Cerulean Cave 1F-SW", "Cerulean Cave 1F-Wild", one_way=True)
     connect(multiworld, player, "Cerulean Cave 1F-NE", "Cerulean Cave 1F-Wild", one_way=True)
     connect(multiworld, player, "Cerulean Cave 1F-N", "Cerulean Cave 1F-Wild", one_way=True)
     connect(multiworld, player, "Cerulean Cave 1F-NW", "Cerulean Cave 1F-Wild", one_way=True)
-    connect(multiworld, player, "Cerulean Cave 1F-SE", "Cerulean Cave 1F-Water",
-            lambda state: logic.can_surf(state, world, player))
-    connect(multiworld, player, "Cerulean Cave 1F-SW", "Cerulean Cave 1F-Water",
-            lambda state: logic.can_surf(state, world, player))
-    connect(multiworld, player, "Cerulean Cave 1F-N", "Cerulean Cave 1F-Water",
-            lambda state: logic.can_surf(state, world, player))
-    connect(multiworld, player, "Cerulean Cave 1F-NE", "Cerulean Cave 1F-Water",
-            lambda state: logic.can_surf(state, world, player))
+    connect(multiworld, player, "Cerulean Cave 1F-SE", "Cerulean Cave 1F-Water", lambda state: logic.can_surf(state, world, player))
+    connect(multiworld, player, "Cerulean Cave 1F-SW", "Cerulean Cave 1F-Water", lambda state: logic.can_surf(state, world, player))
+    connect(multiworld, player, "Cerulean Cave 1F-N", "Cerulean Cave 1F-Water", lambda state: logic.can_surf(state, world, player))
+    connect(multiworld, player, "Cerulean Cave 1F-NE", "Cerulean Cave 1F-Water", lambda state: logic.can_surf(state, world, player))
     connect(multiworld, player, "Pokemon Mansion 3F", "Pokemon Mansion 3F-SE", one_way=True)
     connect(multiworld, player, "Silph Co 2F", "Silph Co 2F-NW", lambda state: logic.card_key(state, 2, player))
     connect(multiworld, player, "Silph Co 2F", "Silph Co 2F-SW", lambda state: logic.card_key(state, 2, player))
@@ -1994,119 +1856,65 @@ def create_regions(world):
     connect(multiworld, player, "Silph Co 6F", "Silph Co 6F-SW", lambda state: logic.card_key(state, 6, player))
     connect(multiworld, player, "Silph Co 7F", "Silph Co 7F-E", lambda state: logic.card_key(state, 7, player))
     connect(multiworld, player, "Silph Co 7F-SE", "Silph Co 7F-E", lambda state: logic.card_key(state, 7, player))
-    connect(multiworld, player, "Silph Co 8F", "Silph Co 8F-W", lambda state: logic.card_key(state, 8, player),
-            one_way=True, name="Silph Co 8F to Silph Co 8F-W (Card Key)")
-    connect(multiworld, player, "Silph Co 8F-W", "Silph Co 8F", lambda state: logic.card_key(state, 8, player),
-            one_way=True, name="Silph Co 8F-W to Silph Co 8F (Card Key)")
+    connect(multiworld, player, "Silph Co 8F", "Silph Co 8F-W", lambda state: logic.card_key(state, 8, player), one_way=True, name="Silph Co 8F to Silph Co 8F-W (Card Key)")
+    connect(multiworld, player, "Silph Co 8F-W", "Silph Co 8F", lambda state: logic.card_key(state, 8, player), one_way=True, name="Silph Co 8F-W to Silph Co 8F (Card Key)")
     connect(multiworld, player, "Silph Co 9F", "Silph Co 9F-SW", lambda state: logic.card_key(state, 9, player))
     connect(multiworld, player, "Silph Co 9F-NW", "Silph Co 9F-SW", lambda state: logic.card_key(state, 9, player))
     connect(multiworld, player, "Silph Co 10F", "Silph Co 10F-SE", lambda state: logic.card_key(state, 10, player))
     connect(multiworld, player, "Silph Co 11F-W", "Silph Co 11F-C", lambda state: logic.card_key(state, 11, player))
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-1F",
-            lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-2F",
-            lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-3F",
-            lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-4F",
-            lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-5F",
-            lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-6F",
-            lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-7F",
-            lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-8F",
-            lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-9F",
-            lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-10F",
-            lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-11F",
-            lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Rocket Hideout Elevator", "Rocket Hideout Elevator-B1F",
-            lambda state: state.has("Lift Key", player))
-    connect(multiworld, player, "Rocket Hideout Elevator", "Rocket Hideout Elevator-B2F",
-            lambda state: state.has("Lift Key", player))
-    connect(multiworld, player, "Rocket Hideout Elevator", "Rocket Hideout Elevator-B4F",
-            lambda state: state.has("Lift Key", player))
-    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-1F",
-            lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-2F",
-            lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-3F",
-            lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-4F",
-            lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-5F",
-            lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-1F", lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-2F", lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-3F", lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-4F", lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-5F", lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-6F", lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-7F", lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-8F", lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-9F", lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-10F", lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-11F", lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Rocket Hideout Elevator", "Rocket Hideout Elevator-B1F", lambda state: state.has("Lift Key", player))
+    connect(multiworld, player, "Rocket Hideout Elevator", "Rocket Hideout Elevator-B2F", lambda state: state.has("Lift Key", player))
+    connect(multiworld, player, "Rocket Hideout Elevator", "Rocket Hideout Elevator-B4F", lambda state: state.has("Lift Key", player))
+    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-1F", lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-2F", lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-3F", lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-4F", lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-5F", lambda state: (not world.options.all_elevators_locked) or state.has("Lift Key", player)),
     connect(multiworld, player, "Route 23-N", "Indigo Plateau")
     connect(multiworld, player, "Cerulean City-Water", "Cerulean City-Cave", lambda state:
     logic.has_badges(state, world.options.cerulean_cave_badges_condition.value, player) and
-    logic.has_key_items(state, world.options.cerulean_cave_key_items_condition.total, player) and logic.can_surf(state,
-                                                                                                                 world,
-                                                                                                                 player))
+    logic.has_key_items(state, world.options.cerulean_cave_key_items_condition.total, player) and logic.can_surf(state, world, player))
 
     # access to any part of a city will enable flying to the Pokemon Center
-    connect(multiworld, player, "Cerulean City-Cave", "Cerulean City",
-            lambda state: logic.can_fly(state, world, player), one_way=True)
-    connect(multiworld, player, "Cerulean City-Badge House Backyard", "Cerulean City",
-            lambda state: logic.can_fly(state, world, player), one_way=True)
-    connect(multiworld, player, "Cerulean City-T", "Cerulean City", lambda state: logic.can_fly(state, world, player),
-            one_way=True, name="Cerulean City-T to Cerulean City (Fly)")
-    connect(multiworld, player, "Fuchsia City-Good Rod House Backyard", "Fuchsia City",
-            lambda state: logic.can_fly(state, world, player), one_way=True)
-    connect(multiworld, player, "Saffron City-G", "Saffron City", lambda state: logic.can_fly(state, world, player),
-            one_way=True, name="Saffron City-G to Saffron City (Fly)")
-    connect(multiworld, player, "Saffron City-Pidgey", "Saffron City",
-            lambda state: logic.can_fly(state, world, player), one_way=True,
-            name="Saffron City-Pidgey to Saffron City (Fly)")
-    connect(multiworld, player, "Saffron City-Silph", "Saffron City", lambda state: logic.can_fly(state, world, player),
-            one_way=True, name="Saffron City-Silph to Saffron City (Fly)")
-    connect(multiworld, player, "Saffron City-Copycat", "Saffron City",
-            lambda state: logic.can_fly(state, world, player), one_way=True,
-            name="Saffron City-Copycat to Saffron City (Fly)")
-    connect(multiworld, player, "Celadon City-G", "Celadon City", lambda state: logic.can_fly(state, world, player),
-            one_way=True, name="Celadon City-G to Celadon City (Fly)")
-    connect(multiworld, player, "Vermilion City-G", "Vermilion City", lambda state: logic.can_fly(state, world, player),
-            one_way=True, name="Vermilion City-G to Vermilion City (Fly)")
-    connect(multiworld, player, "Vermilion City-Dock", "Vermilion City",
-            lambda state: logic.can_fly(state, world, player), one_way=True,
-            name="Vermilion City-Dock to Vermilion City (Fly)")
-    connect(multiworld, player, "Cinnabar Island-G", "Cinnabar Island",
-            lambda state: logic.can_fly(state, world, player), one_way=True,
-            name="Cinnabar Island-G to Cinnabar Island (Fly)")
-    connect(multiworld, player, "Cinnabar Island-M", "Cinnabar Island",
-            lambda state: logic.can_fly(state, world, player), one_way=True,
-            name="Cinnabar Island-M to Cinnabar Island (Fly)")
+    connect(multiworld, player, "Cerulean City-Cave", "Cerulean City", lambda state: logic.can_fly(state, world, player), one_way=True)
+    connect(multiworld, player, "Cerulean City-Badge House Backyard", "Cerulean City", lambda state: logic.can_fly(state, world, player), one_way=True)
+    connect(multiworld, player, "Cerulean City-T", "Cerulean City", lambda state: logic.can_fly(state, world, player), one_way=True, name="Cerulean City-T to Cerulean City (Fly)")
+    connect(multiworld, player, "Fuchsia City-Good Rod House Backyard", "Fuchsia City", lambda state: logic.can_fly(state, world, player), one_way=True)
+    connect(multiworld, player, "Saffron City-G", "Saffron City", lambda state: logic.can_fly(state, world, player), one_way=True, name="Saffron City-G to Saffron City (Fly)")
+    connect(multiworld, player, "Saffron City-Pidgey", "Saffron City", lambda state: logic.can_fly(state, world, player), one_way=True, name="Saffron City-Pidgey to Saffron City (Fly)")
+    connect(multiworld, player, "Saffron City-Silph", "Saffron City", lambda state: logic.can_fly(state, world, player), one_way=True, name="Saffron City-Silph to Saffron City (Fly)")
+    connect(multiworld, player, "Saffron City-Copycat", "Saffron City", lambda state: logic.can_fly(state, world, player), one_way=True, name="Saffron City-Copycat to Saffron City (Fly)")
+    connect(multiworld, player, "Celadon City-G", "Celadon City", lambda state: logic.can_fly(state, world, player), one_way=True, name="Celadon City-G to Celadon City (Fly)")
+    connect(multiworld, player, "Vermilion City-G", "Vermilion City", lambda state: logic.can_fly(state, world, player), one_way=True, name="Vermilion City-G to Vermilion City (Fly)")
+    connect(multiworld, player, "Vermilion City-Dock", "Vermilion City", lambda state: logic.can_fly(state, world, player), one_way=True, name="Vermilion City-Dock to Vermilion City (Fly)")
+    connect(multiworld, player, "Cinnabar Island-G", "Cinnabar Island", lambda state: logic.can_fly(state, world, player), one_way=True, name="Cinnabar Island-G to Cinnabar Island (Fly)")
+    connect(multiworld, player, "Cinnabar Island-M", "Cinnabar Island", lambda state: logic.can_fly(state, world, player), one_way=True, name="Cinnabar Island-M to Cinnabar Island (Fly)")
 
     # drops
-    connect(multiworld, player, "Seafoam Islands 1F", "Seafoam Islands B1F", one_way=True,
-            name="Seafoam Islands 1F to Seafoam Islands B1F (Drop)")
-    connect(multiworld, player, "Seafoam Islands 1F", "Seafoam Islands B1F-NE", one_way=True,
-            name="Seafoam Islands 1F to Seafoam Islands B1F-NE (Drop)")
-    connect(multiworld, player, "Seafoam Islands B1F", "Seafoam Islands B2F-NW", one_way=True,
-            name="Seafoam Islands 1F to Seafoam Islands B2F-NW (Drop)")
+    connect(multiworld, player, "Seafoam Islands 1F", "Seafoam Islands B1F", one_way=True, name="Seafoam Islands 1F to Seafoam Islands B1F (Drop)")
+    connect(multiworld, player, "Seafoam Islands 1F", "Seafoam Islands B1F-NE", one_way=True, name="Seafoam Islands 1F to Seafoam Islands B1F-NE (Drop)")
+    connect(multiworld, player, "Seafoam Islands B1F", "Seafoam Islands B2F-NW", one_way=True, name="Seafoam Islands 1F to Seafoam Islands B2F-NW (Drop)")
     connect(multiworld, player, "Seafoam Islands B1F-NE", "Seafoam Islands B2F-NE", one_way=True)
-    connect(multiworld, player, "Seafoam Islands B2F-NW", "Seafoam Islands B3F",
-            lambda state: logic.can_strength(state, world, player) and state.has("Seafoam Exit Boulder", player, 6),
-            one_way=True)
-    connect(multiworld, player, "Seafoam Islands B2F-NE", "Seafoam Islands B3F",
-            lambda state: logic.can_strength(state, world, player) and state.has("Seafoam Exit Boulder", player, 6),
-            one_way=True)
-    connect(multiworld, player, "Seafoam Islands B2F-NW", "Seafoam Islands B3F-SE",
-            lambda state: logic.can_strength(state, world, player) and state.has("Seafoam Exit Boulder", player, 6),
-            one_way=True)
-    connect(multiworld, player, "Seafoam Islands B2F-NE", "Seafoam Islands B3F-SE",
-            lambda state: logic.can_strength(state, world, player) and state.has("Seafoam Exit Boulder", player, 6),
-            one_way=True)
+    connect(multiworld, player, "Seafoam Islands B2F-NW", "Seafoam Islands B3F", lambda state: logic.can_strength(state, world, player) and state.has("Seafoam Exit Boulder", player, 6), one_way=True)
+    connect(multiworld, player, "Seafoam Islands B2F-NE", "Seafoam Islands B3F", lambda state: logic.can_strength(state, world, player) and state.has("Seafoam Exit Boulder", player, 6), one_way=True)
+    connect(multiworld, player, "Seafoam Islands B2F-NW", "Seafoam Islands B3F-SE", lambda state: logic.can_strength(state, world, player) and state.has("Seafoam Exit Boulder", player, 6), one_way=True)
+    connect(multiworld, player, "Seafoam Islands B2F-NE", "Seafoam Islands B3F-SE", lambda state: logic.can_strength(state, world, player) and state.has("Seafoam Exit Boulder", player, 6), one_way=True)
     # If you haven't dropped the boulders, you'll go straight to B4F
     connect(multiworld, player, "Seafoam Islands B2F-NW", "Seafoam Islands B4F-W", one_way=True)
     connect(multiworld, player, "Seafoam Islands B2F-NE", "Seafoam Islands B4F-W", one_way=True)
-    connect(multiworld, player, "Seafoam Islands B3F", "Seafoam Islands B4F", one_way=True,
-            name="Seafoam Islands B1F to Seafoam Islands B4F (Drop)")
-    connect(multiworld, player, "Seafoam Islands B3F", "Seafoam Islands B4F-W",
-            lambda state: logic.can_surf(state, world, player), one_way=True)
+    connect(multiworld, player, "Seafoam Islands B3F", "Seafoam Islands B4F", one_way=True, name="Seafoam Islands B1F to Seafoam Islands B4F (Drop)")
+    connect(multiworld, player, "Seafoam Islands B3F", "Seafoam Islands B4F-W", lambda state: logic.can_surf(state, world, player), one_way=True)
     connect(multiworld, player, "Pokemon Mansion 3F-SE", "Pokemon Mansion 2F", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 3F-SE", "Pokemon Mansion 1F-SE", one_way=True)
     connect(multiworld, player, "Victory Road 3F-S", "Victory Road 2F-C", one_way=True)
@@ -2177,7 +1985,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                     entrance_data['to']['map']):
                 shuffle = False
             elif (f"{region.name} to {entrance_data['to']['map']}" if "name" not in entrance_data else
-            entrance_data["name"]) in silph_co_warps + saffron_gym_warps:
+                    entrance_data["name"]) in silph_co_warps + saffron_gym_warps:
                 if world.options.warp_tile_shuffle:
                     shuffle = True
                     if world.options.warp_tile_shuffle == "mixed" and world.options.door_shuffle == "full":
@@ -2190,10 +1998,9 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 shuffle = False
             if shuffle:
                 entrance = PokemonRBWarp(player, f"{region.name} to {entrance_data['to']['map']}" if "name" not in
-                                                                                                     entrance_data else
-                entrance_data["name"], region, entrance_data["id"],
+                                         entrance_data else entrance_data["name"], region, entrance_data["id"],
                                          entrance_data["address"], entrance_data["flags"] if "flags" in
-                                                                                             entrance_data else "")
+                                         entrance_data else "")
                 if interior and world.options.door_shuffle == "full":
                     full_interiors.append(entrance)
                 else:
@@ -2243,7 +2050,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                                         "Pokemon Mansion 3F-SE to Pokemon Mansion 2F-E"))
                 forced_connections.add(("Pokemon Mansion 2F to Pokemon Mansion 3F",
                                         world.random.choice(mansion_stair_destinations + mansion_dead_ends
-                                                            + ["Pokemon Mansion B1F to Pokemon Mansion 1F-SE"])))
+                                                                 + ["Pokemon Mansion B1F to Pokemon Mansion 1F-SE"])))
                 if world.options.door_shuffle == "full":
                     forced_connections.add(("Pokemon Mansion 1F to Pokemon Mansion 2F",
                                             "Pokemon Mansion 3F to Pokemon Mansion 2F"))
@@ -2255,7 +2062,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                                         "Pokemon Mansion B1F to Pokemon Mansion 1F-SE"))
                 forced_connections.add(("Pokemon Mansion 2F to Pokemon Mansion 3F",
                                         world.random.choice(mansion_stair_destinations
-                                                            + [mansion_dead_ends[dead_end ^ 1]])))
+                                                                 + [mansion_dead_ends[dead_end ^ 1]])))
             else:
                 forced_connections.add(("Pokemon Mansion 3F-SE to Pokemon Mansion 2F-E",
                                         mansion_dead_ends[r]))
@@ -2263,7 +2070,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                                         mansion_dead_ends[r ^ 1]))
                 forced_connections.add(("Pokemon Mansion 2F to Pokemon Mansion 3F",
                                         world.random.choice(mansion_stair_destinations
-                                                            + ["Pokemon Mansion B1F to Pokemon Mansion 1F-SE"])))
+                                                                 + ["Pokemon Mansion B1F to Pokemon Mansion 1F-SE"])))
 
             if world.options.door_shuffle in ("insanity", "decoupled"):
                 usable_safe_rooms += insanity_safe_rooms
@@ -2272,15 +2079,14 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
         pallet_safe_room = safe_rooms_sample[-1]
 
         for a, b in zip(world.random.sample(["Pallet Town to Player's House 1F", "Pallet Town to Oak's Lab",
-                                             "Pallet Town to Rival's House"], 3), ["Oak's Lab to Pallet Town",
-                                                                                   "Player's House 1F to Pallet Town",
-                                                                                   pallet_safe_room]):
+                                                  "Pallet Town to Rival's House"], 3), ["Oak's Lab to Pallet Town",
+                                                  "Player's House 1F to Pallet Town", pallet_safe_room]):
             one_way_forced_connections.add((a, b))
 
         if world.options.door_shuffle == "decoupled":
             for a, b in zip(["Oak's Lab to Pallet Town", "Player's House 1F to Pallet Town", pallet_safe_room],
                             world.random.sample(["Pallet Town to Player's House 1F", "Pallet Town to Oak's Lab",
-                                                 "Pallet Town to Rival's House"], 3)):
+                                                      "Pallet Town to Rival's House"], 3)):
                 one_way_forced_connections.add((a, b))
 
         for a, b in zip(safari_zone_houses, safe_rooms_sample):
@@ -2314,7 +2120,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
 
             elif "Pokemart" not in pallet_safe_room:
                 one_way_forced_connections.add((world.random.choice(initial_doors), world.random.choice(
-                    [mart for mart in pokemarts if mart not in safe_rooms_sample])))
+                        [mart for mart in pokemarts if mart not in safe_rooms_sample])))
 
     if world.options.warp_tile_shuffle == "shuffle" or (world.options.warp_tile_shuffle == "mixed"
                                                         and world.options.door_shuffle
@@ -2324,7 +2130,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
         # and the final 11F-W warp. As long as the two 7F-NW warps aren't connected to each other, everything should
         # always be reachable.
         warps.sort(key=lambda i: 0 if i == "Silph Co 7F-NW to Silph Co 3F-C" else
-        2 if i == "Silph Co 7F-NW to Silph Co 11F-W" else 1)
+                   2 if i == "Silph Co 7F-NW to Silph Co 11F-W" else 1)
         while warps:
             forced_connections.add((warps.pop(), warps.pop(),))
 
@@ -2373,15 +2179,13 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
         elif entrance_a in full_interiors:
             full_interiors.remove(entrance_a)
         else:
-            raise DoorShuffleException(
-                "Attempted to force connection with entrance not in any entrance pool, likely because it tried to force an entrance to connect twice.")
+            raise DoorShuffleException("Attempted to force connection with entrance not in any entrance pool, likely because it tried to force an entrance to connect twice.")
         if entrance_b in entrances:
             entrances.remove(entrance_b)
         elif entrance_b in full_interiors:
             full_interiors.remove(entrance_b)
         else:
-            raise DoorShuffleException(
-                "Attempted to force connection with entrance not in any entrance pool, likely because it tried to force an entrance to connect twice.")
+            raise DoorShuffleException("Attempted to force connection with entrance not in any entrance pool, likely because it tried to force an entrance to connect twice.")
         if world.options.door_shuffle == "decoupled":
             dc_destinations.remove(entrance_a)
             dc_destinations.remove(entrance_b)
@@ -2440,13 +2244,13 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
         interiors = connecting_interiors.copy()
         world.random.shuffle(interiors)
         while ((connecting_interiors[2] in (interiors[2], interiors[10], interiors[11])  # Dept Store at Dept Store
-                # or Rt 16 Gate S or N
+                                                                                         # or Rt 16 Gate S or N
                 and (interiors[11] in connecting_interiors[13:17]  # Saffron Gate at Rt 16 Gate S
                      or interiors[12] in connecting_interiors[13:17]))  # Saffron Gate at Rt 18 Gate
-               and interiors[15] in connecting_interiors[13:17]  # Saffron Gate at Rt 7 Gate
-               and interiors[1] in connecting_interiors[13:17]  # Saffron Gate at Rt 7-8 Underground Path
-               and (not world.options.tea) and world.fly_map != "Celadon City"
-               and world.town_map_fly_map != "Celadon City"):
+                and interiors[15] in connecting_interiors[13:17]  # Saffron Gate at Rt 7 Gate
+                and interiors[1] in connecting_interiors[13:17]  # Saffron Gate at Rt 7-8 Underground Path
+                and (not world.options.tea) and world.fly_map != "Celadon City"
+                and world.town_map_fly_map != "Celadon City"):
             world.random.shuffle(interiors)
 
         connect_connecting_interiors(interiors, connecting_interior_entrances)
@@ -2473,10 +2277,8 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
 
             # Can get Fly access from Pewter City gym and fly beyond Pewter/Cinnabar
             if world.fly_map not in ("Pallet Town", "Viridian City", "Cinnabar Island",
-                                     "Indigo Plateau") and world.town_map_fly_map not in ("Pallet Town",
-                                                                                          "Viridian City",
-                                                                                          "Cinnabar Island",
-                                                                                          "Indigo Plateau"):
+                    "Indigo Plateau") and world.town_map_fly_map not in ("Pallet Town",
+                    "Viridian City", "Cinnabar Island", "Indigo Plateau"):
                 return False
 
             # Route 3 condition is boulder badge but Mt Moon entrance leads to safe dungeons or Rock Tunnel
@@ -2488,7 +2290,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             # Any badge can land in Pewter City, so the only problematic dungeon at Mt Moon is Seafoam Islands since
             # it requires two badges
             if (((world.options.route_3_condition == "defeat_brock" and gyms[0] == placed_gyms[0])
-                 or world.options.route_3_condition not in ("defeat_brock", "boulder_badge"))
+                    or world.options.route_3_condition not in ("defeat_brock", "boulder_badge"))
                     and placed_connecting_interior_dungeons[2] != unsafe_connecting_interior_dungeons[0]):
                 return False
 
@@ -2509,9 +2311,8 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             if (gyms[0] == placed_gyms[1]  # Pewter Gym in Cerulean City
                     and interiors[0] in connecting_interiors[13:17]  # Saffron Gate at Underground Path North South
                     and interiors[13] in connecting_interiors[13:17]  # Saffron Gate at Route 5 Saffron Gate
-                    and multi_purpose_dungeons[0] == placed_connecting_interior_dungeons[
-                        4]  # Pokémon Mansion at Rock Tunnel, which is
-                    and (not world.options.tea)  # not traversable backwards
+                    and multi_purpose_dungeons[0] == placed_connecting_interior_dungeons[4]  # Pokémon Mansion at Rock Tunnel, which is
+                    and (not world.options.tea)                                         # not traversable backwards
                     and world.options.route_3_condition == "defeat_brock"
                     and world.fly_map != "Cerulean City"
                     and world.town_map_fly_map != "Cerulean City"):
@@ -2564,8 +2365,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                                 full_interiors.remove(entrance_b)
                                 break
                         else:
-                            raise DoorShuffleException(
-                                "No non-dead end interior sections found in Pokemon Red and Blue door shuffle.")
+                            raise DoorShuffleException("No non-dead end interior sections found in Pokemon Red and Blue door shuffle.")
                         break
                 else:
                     break
@@ -2665,7 +2465,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             check_warps.remove(e)
             for location in region.locations:
                 if location.item and location.item.name in relevant_events and \
-                        adds_reachable_entrances(location.item):
+                                 adds_reachable_entrances(location.item):
                     return False
             while check_warps:
                 warp = check_warps.pop()
@@ -2724,9 +2524,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                     # reached except by connecting directly to it.
                     entrances.sort(key=lambda e: e.name not in unreachable_outdoor_entrances)
                     if entrances[0].name in unreachable_outdoor_entrances and len([entrance for entrance
-                                                                                   in reachable_entrances if
-                                                                                   not outdoor_map(
-                                                                                       entrance.parent_region.name)]) > 1:
+                            in reachable_entrances if not outdoor_map(entrance.parent_region.name)]) > 1:
                         find_dead_end = True
 
                 if world.options.door_shuffle == "decoupled":
@@ -2735,8 +2533,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                     destinations = [entrance for entrance in entrances if outdoor_map(entrance.parent_region.name) is
                                     not is_outdoor_map]
                     if not destinations:
-                        raise DoorShuffleException(
-                            "Ran out of connectable destinations in Pokemon Red and Blue door shuffle")
+                        raise DoorShuffleException("Ran out of connectable destinations in Pokemon Red and Blue door shuffle")
                 else:
                     destinations = entrances
 
