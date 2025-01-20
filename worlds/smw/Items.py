@@ -75,3 +75,27 @@ item_table = {
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
+
+
+trap_value_to_name: typing.Dict[int, str] = {
+    0xBC0013: ItemName.ice_trap,
+    0xBC0014: ItemName.stun_trap,
+    0xBC0015: ItemName.literature_trap,
+    0xBC0016: ItemName.timer_trap,
+    0xBC001C: ItemName.reverse_controls_trap,
+    0xBC001D: ItemName.thwimp_trap,
+}
+
+trap_name_to_value: typing.Dict[str, int] = {
+    # Our native Traps
+    ItemName.ice_trap:               0xBC0013,
+    ItemName.stun_trap:              0xBC0014, 
+    ItemName.literature_trap:        0xBC0015, 
+    ItemName.timer_trap:             0xBC0016, 
+    ItemName.reverse_controls_trap:  0xBC001C, 
+    ItemName.thwimp_trap:            0xBC001D, 
+
+    # Common other trap names
+    "Chaos Control Trap": 0xBC0014,  # Stun Trap
+    "Freeze Trap":        0xBC0014,  # Stun Trap
+}

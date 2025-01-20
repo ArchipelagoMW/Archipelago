@@ -398,6 +398,13 @@ class StartingLifeCount(Range):
     default = 5
 
 
+class TrapLink(Toggle):
+    """
+    Whether your received traps are linked to other players
+    """
+    display_name = "Trap Link"
+
+
 smw_option_groups = [
     OptionGroup("Goal Options", [
         Goal,
@@ -447,6 +454,7 @@ smw_option_groups = [
 @dataclass
 class SMWOptions(PerGameCommonOptions):
     death_link: DeathLink
+    trap_link: TrapLink
     goal: Goal
     bosses_required: BossesRequired
     max_yoshi_egg_cap: NumberOfYoshiEggs
