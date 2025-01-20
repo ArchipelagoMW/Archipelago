@@ -26,6 +26,10 @@ Da das Spiel einen eingebauten Mod-Loader hat, musst du nur die "shapezipelago@X
 Ordner kopieren. Wenn du nicht weißt, wo dieser ist, dann öffne das Spiel, drücke auf "MODS" und schließlich auf
 "MODORDNER ÖFFNEN".
 
+Du solltest (egal ob vor oder nach der Installation) die Einstellungen des Spiels öffnen und `HINWEISE & TUTORIALS` im 
+Reiter `BENUTZEROBERFLÄCHE` ausschalten, da sie sonst den Upgrade-Shop verstecken wird, bis du ein paar Level 
+abgeschlossen hast.
+
 ## Erstellen deiner YAML-Datei
 
 ### Was ist eine YAML-Datei und wofür brauche ich die?

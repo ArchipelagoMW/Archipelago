@@ -22,8 +22,11 @@
 
 ## Installation
 
-As the game has a built-in mod loader, all you need to do is copy the "shapezipelago@X.X.X.js" mod file into the mods
-folder. If you don't know where that is, open the game, click on "MODS", and then "OPEN MODS FOLDER".
+As the game has a built-in mod loader, all you need to do is copy the `shapezipelago@X.X.X.js` mod file into the mods
+folder. If you don't know where that is, open the game, click on `MODS`, and then `OPEN MODS FOLDER`.
+
+It is recommended to go into the settings of the game and disable `HINTS & TUTORIALS` in the `USER INTERFACE` tab, as 
+this setting will disable the upgrade shop until you complete a few levels.
 
 ## Configuring your YAML file
 
