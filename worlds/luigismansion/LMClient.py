@@ -484,7 +484,7 @@ async def check_locations(ctx: LMContext):
         curr_room_state_int = read_short(ROOM_STATE_ADDR + (curr_room_state_addr*2))
         if curr_room_state_int != ctx.room_interactions[curr_room_state_addr]:
             if ctx.room_interactions[curr_room_state_addr] > 0:
-                bit_int = curr_room_state_int ^ ctx.boos_captured[curr_room_state_addr]
+                bit_int = curr_room_state_int ^ ctx.room_interactions[curr_room_state_addr]
             else:
                 bit_int = curr_room_state_int
             ctx.room_interactions[curr_room_state_addr] = curr_room_state_int
