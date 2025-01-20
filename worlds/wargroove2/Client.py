@@ -661,13 +661,13 @@ async def game_watcher(ctx: Wargroove2Context):
                 if file.find("send") > -1:
                     st = int(file.split("send", -1)[1])
                     loc_name = location_id_name[st]
-                    extras = 1
+                    total_locations = 1
                     if loc_name is not None and loc_name.endswith("Victory"):
-                        extras = ctx.victory_locations
+                        total_locations = ctx.victory_locations
                     elif loc_name is not None and \
                             st < location_table["Humble Beginnings Rebirth: Talk to Nadia Extra 1"]:  # type: ignore
-                        extras = ctx.objective_locations
-                    for i in range(1, extras):
+                        total_locations = ctx.objective_locations
+                    for i in range(1, total_locations):
                         sending.add(location_table[loc_name + f" Extra {i}"])
                     sending.add(st)
 
