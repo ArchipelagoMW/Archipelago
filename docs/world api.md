@@ -490,6 +490,9 @@ In addition, the following methods can be implemented and are called in this ord
   after this step. Locations cannot be moved to different regions after this step.
 * `set_rules(self)`
   called to set access and item rules on locations and entrances.
+* `connect_entrances(self)`
+  by the end of this step, all entrances must exist and be connected to their source and target regions.
+  Entrance randomization should be done here.
 * `generate_basic(self)`
   player-specific randomization that does not affect logic can be done here.
 * `pre_fill(self)`, `fill_hook(self)` and `post_fill(self)`
