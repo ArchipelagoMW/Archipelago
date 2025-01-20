@@ -97,6 +97,9 @@ The shared storage has unlimited capacity, and no energy is lost during depositi
 The amount of energy currently in the shared storage is displayed in the Archipelago client
 and appears in the Power Storage building UI.
 
+You can find a list of Energy Link compatible games on the
+[Archipelago Discord](https://discord.com/channels/731205301247803413/1010929117748809758/1174728119568048130).
+
 ## What is the Archipelago Portal?
 
 The Archipelago Portal is a building that serves multiple purposes:
@@ -104,12 +107,27 @@ The Archipelago Portal is a building that serves multiple purposes:
 - Collecting received "Resource Bundle"-type items.
 - Transfering items within your Satisfactory world
 - Transfering items between multiple Satisfactory worlds
-- Gifting items to other games that support the Archipelago Gifting system.
+- Gifting items to other games that support the **Archipelago Gifting** system.
 
 The building requires power to operate.
 You can build multiple portals or use faster belts to increase their bandwith.
 However, they currently have no filtering capabilities,
 so you must deal with this problem when handling their output items.
+
+You can find a list of Gifting compatible games on the
+[Archipelago Discord](https://discord.com/channels/731205301247803413/1134306496042258482/1247617772993908891).
+
+## How do Hard Drives work?
+
+All Hard Drive contents (alternate recipes) have been moved into the normal Archipelago progression.
+The scan time has been reduced from 10 minutes to 3 seconds.
+Researching a Hard Drive instead contains a random Archipelago item.
+The "Hard Drive Progression Items" option controls how many hard drives contain progression items,
+the rest are filler.
+
+Unlike the base game, Archipelago hard drive results have no hard progression requirements.
+The random contents selection system prefers to pick items earlier in progression,
+but keeping unselected Hard Drives in the Hard Drive Library will force later progression items to be presented.
 
 ## Where do I run Archipelago commands?
 
