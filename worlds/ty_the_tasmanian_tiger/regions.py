@@ -1,12 +1,10 @@
 import typing
 from enum import Enum
 
-from BaseClasses import MultiWorld, Region
+from BaseClasses import MultiWorld, Region, Entrance, LocationProgressType
 from worlds.ty_the_tasmanian_tiger import Ty1Options
+from worlds.ty_the_tasmanian_tiger.locations import Ty1Location, ty1_location_table
 
-
-class Ty1Region(Region):
-    subregions: typing.List[Region] = []
 
 class Ty1LevelCode(Enum):
     Z1 = 0
@@ -43,7 +41,7 @@ ty1_levels: typing.Dict[Ty1LevelCode, str] = {
     Ty1LevelCode.C2: "Beyond the Black Stump",
     Ty1LevelCode.C3: "Rex Marks the Spot",
     Ty1LevelCode.C4: "Fluffy's Fjord",
-    Ty1LevelCode.D1: "Credits"
+    Ty1LevelCode.D1: "Credits",
     Ty1LevelCode.D2: "Cass' Crest",
     Ty1LevelCode.E1: "Cass' Pass",
     Ty1LevelCode.E2: "Final Battle",
@@ -62,7 +60,9 @@ region_groups = {
 def create_regions(world: MultiWorld, options: Ty1Options, player: int):
     # Create main menu and base regions
     create_region("Menu", player, world, "Main Menu")
-    create_region("Rainbow Cliffs", player, world)
+    regZ1 = create_region("Rainbow Cliffs", player, world)
+    if options.attributesanity is 0 or 1:
+        create_loc(regZ1, "Attribute - Extra Health", LocationProgressType.DEFAULT)
 
     # Create and connect grouped regions
     for group_name, levels in region_groups.items():
@@ -79,8 +79,8 @@ def create_regions(world: MultiWorld, options: Ty1Options, player: int):
     connect_regions(world, player, ty1_levels[Ty1LevelCode.D1], ty1_levels[Ty1LevelCode.Z1]) # Credits -> RC
     connect_regions(world, player, ty1_levels[Ty1LevelCode.D2], ty1_levels[Ty1LevelCode.Z1]) # Crest -> RC
 
-def create_region(name: str, player: int, world: MultiWorld, description: str = "") -> Ty1Region:
-    region = Ty1Region(name, player, world, description)
+def create_region(name: str, player: int, world: MultiWorld, description: str = "") -> Region:
+    region = Region(name, player, world, description)
     world.regions.append(region)
     return region
 
@@ -92,8 +92,5 @@ def connect_regions(world: MultiWorld, player: int, source: str, target: str, ru
 def set_subregion_access_rule(world, player, region_name: str, rule):
     world.get_entrance(world, player, region_name).access_rule = rule
 
-def create_default_locs(reg: Region, default_locs: dict):
-    create_locs(reg, *default_locs.keys())
-
-def create_locs(reg: Region, *locs: str):
-    reg.locations += [Ty1Location(reg.player, loc_name, location_table[loc_name], reg) for loc_name in locs]
+def create_loc(reg: Region, loc_name: str, progress_type: LocationProgressType):
+    reg.locations += [Ty1Location(loc_name, progress_type, ty1_location_table[loc_name], reg.player)]
