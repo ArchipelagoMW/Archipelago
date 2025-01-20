@@ -148,7 +148,7 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
 
     # Connect Menu to rest of regions
     regions["Menu"].connect(regions["Main"], "Transportation",
-                            lambda state: state.has("Extractor", player) and
+                            lambda state: state.has_any(["Extractor", "Chaining Extractor"], player) and
                                           state.has_any(["Belt", "Compact Merger", "Compact Splitter"], player))
 
     # Connect Main to achievement regions
