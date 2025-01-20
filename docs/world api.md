@@ -243,7 +243,9 @@ progression. Progression items will be assigned to locations with higher priorit
 and satisfy progression balancing.
 
 The name needs to be unique within each game, meaning if you need to create multiple items with the same name, they
-will all have the same ID. Name must not be numeric (must contain at least 1 letter or symbol).
+will all have the same ID. Name must not be numeric (must contain at least 1 letter or symbol). 
+The ID thus also needs to be unique across all items with different names within the game. 
+Items and locations can share IDs, and items can share IDs with other games' items.
 
 Other classifications include:
 
