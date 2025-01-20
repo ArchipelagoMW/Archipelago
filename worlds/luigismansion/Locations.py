@@ -494,7 +494,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "2F Washroom Water Tank (above Toilet)": LMLocationData("2F Washroom", 376, "Furniture", 445, [], 45),
     "2F Washroom Mirror": LMLocationData("2F Washroom", 377, "Furniture", 544, [], 45),
     #"2F Washroom Toilet": LMLocationData("2F Washroom", 378, "Furniture", 443, [], 45), # TODO Prevents Ghost Spawns
-    "2F Washroom Shelf": LMLocationData("2F Washroom", 379, "Furniture", 438, [], 45), #TODO what is this???
+    "2F Washroom Shelf": LMLocationData("2F Washroom", 379, "Furniture", 438, [], 45),
     "2F Washroom Radiator": LMLocationData("2F Washroom", 380, "Furniture", 441, [], 45),
     "2F Washroom Picture": LMLocationData("2F Washroom", 381, "Furniture", 444, [], 45),
     "2F Washroom Toilet Paper": LMLocationData("2F Washroom", 382, "Furniture", 439, [], 45),
