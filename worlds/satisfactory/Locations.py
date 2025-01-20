@@ -146,7 +146,7 @@ class DropPod(LocationData):
             locationId: int, tier: int, can_hold_progression: bool):
 
         # drop pod locations are unlocked by hard drives, there is currently no direct mapping between location and hard drive
-        # we currently do not know how many hdd require gass or radioactive protection
+        # we currently do not know how many hdd require gas or radioactive protection
         # coordinates are for us to reference them, there is no real link between coordinate and check
         def get_region(gassed: Optional[bool], radioactive: Optional[bool]) -> str:
             #if radioactive:
@@ -308,7 +308,7 @@ class Locations():
         ]
 
     def get_locations_for_data_package(self) -> Dict[str, int]:
-        "Must include all posiable location names and thier id's"
+        "Must include all possible location names and their id's"
 
         location_table = self.get_base_location_table()
         location_table.extend(self.get_hub_locations())
