@@ -488,9 +488,7 @@ class ALTTPWorld(World):
         world = self.multiworld
         player = self.player
         all_state = world.get_all_state(use_cache=True)
-        crystals = [self.create_item(name) for name in
-                    ['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4',
-                     'Crystal 7', 'Crystal 5', 'Crystal 6']]
+        crystals = [self.create_item(name) for name in ['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6']]
         crystal_locations = [world.get_location('Turtle Rock - Prize', player),
                              world.get_location('Eastern Palace - Prize', player),
                              world.get_location('Desert Palace - Prize', player),
@@ -667,11 +665,9 @@ class ALTTPWorld(World):
         for player in multiworld.get_game_players("A Link to the Past"):
             world = multiworld.worlds[player]
             if not world.ganonstower_vanilla or \
-                    world.options.glitches_required.current_key in {'overworld_glitches', 'hybrid_major_glitches',
-                                                                    "no_logic"}:
+                    world.options.glitches_required.current_key in {'overworld_glitches', 'hybrid_major_glitches', "no_logic"}:
                 pass
-            elif 'triforce_hunt' in world.options.goal.current_key and (
-                    'local' in world.options.goal.current_key or multiworld.players == 1):
+            elif 'triforce_hunt' in world.options.goal.current_key and ('local' in world.options.goal.current_key or multiworld.players == 1):
                 trash_counts[player] = multiworld.random.randint(world.options.crystals_needed_for_gt * 2,
                                                             world.options.crystals_needed_for_gt * 4)
             else:

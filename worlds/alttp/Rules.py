@@ -455,7 +455,8 @@ def global_rules(multiworld: MultiWorld, player: int):
                 ('Ice Palace - Hammer Block Key Drop', player),
                 ('Ice Palace - Big Key Chest', player),
                 ('Ice Palace - Map Chest', player)])
-            else state._lttp_has_key('Small Key (Ice Palace)', player, 6))) and (world.can_take_damage or state.has('Hookshot', player) or state.has('Cape', player) or state.has('Cane of Byrna', player)))
+            else state._lttp_has_key('Small Key (Ice Palace)', player, 6))) and (
+            world.can_take_damage or state.has('Hookshot', player) or state.has('Cape', player) or state.has('Cane of Byrna', player)))
     set_rule(multiworld.get_entrance('Ice Palace (East Top)', player), lambda state: can_lift_rocks(state, player) and state.has('Hammer', player))
 
     set_rule(multiworld.get_entrance('Misery Mire Entrance Gap', player), lambda state: (state.has('Pegasus Boots', player) or state.has('Hookshot', player)) and (has_sword(state, player) or state.has('Fire Rod', player) or state.has('Ice Rod', player) or state.has('Hammer', player) or state.has('Cane of Somaria', player) or can_shoot_arrows(state, player)))  # need to defeat wizzrobes, bombs don't work ...
@@ -1219,7 +1220,7 @@ def set_trock_key_rules(world, player):
 
     if world.worlds[player].options.accessibility != 'full':
         set_always_allow(world.get_location('Turtle Rock - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Turtle Rock)' and item.player == player
-                                                                                                        and state.can_reach(state.multiworld.get_region('Turtle Rock (Second Section)', player)))
+                and state.can_reach(state.multiworld.get_region('Turtle Rock (Second Section)', player)))
 
 
 def set_big_bomb_rules(world, player):
