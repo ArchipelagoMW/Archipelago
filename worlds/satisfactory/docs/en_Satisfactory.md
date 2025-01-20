@@ -119,15 +119,18 @@ You can find a list of Gifting compatible games on the
 
 ## How do Hard Drives work?
 
-All Hard Drive contents (alternate recipes) have been moved into the normal Archipelago progression.
-The scan time has been reduced from 10 minutes to 3 seconds.
-Researching a Hard Drive instead contains a random Archipelago item.
-The "Hard Drive Progression Items" option controls how many hard drives contain progression items,
-the rest are filler.
+All base game Hard Drive contents (alternate recipes) have been moved into the normal Archipelago pool.
+Instead, Hard Drives can contain Archipelago items from a dedicated "Hard Drive" pool.
+Scanning a drive presents a choice between 2 items from the pool,
+and the scan time has been reduced from 10 minutes to 3 seconds.
 
-Unlike the base game, Archipelago hard drive results have no hard progression requirements.
+Unlike the base game, Archipelago hard drive results have no hard progression requirements,
+other than access to the MAM itself.
 The random contents selection system prefers to pick items earlier in progression,
 but keeping unselected Hard Drives in the Hard Drive Library will force later progression items to be presented.
+
+The "Hard Drive Progression Items" option controls how many Hard Drives contain progression items,
+the rest are filler or useful.
 
 ## Where do I run Archipelago commands?
 
