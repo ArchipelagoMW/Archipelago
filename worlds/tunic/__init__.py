@@ -411,7 +411,7 @@ class TunicWorld(World):
     def stage_pre_fill(cls, multiworld: MultiWorld) -> None:
         tunic_fill_worlds: List[TunicWorld] = [world for world in multiworld.get_game_worlds("TUNIC")
                                                if world.options.local_fill.value > 0]
-        if tunic_fill_worlds and self.multiworld.players > 1:
+        if tunic_fill_worlds and multiworld.players > 1:
             grass_fill: List[TunicItem] = []
             non_grass_fill: List[TunicItem] = []
             grass_fill_locations: List[Location] = []
