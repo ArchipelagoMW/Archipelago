@@ -394,6 +394,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             # but that's edge case enough I don't think we should warn about it.
             ConfigurableOptionInfo('soa_passive_presence', 'spear_of_adun_autonomously_cast_ability_presence', options.SpearOfAdunAutonomouslyCastAbilityPresence),
             ConfigurableOptionInfo('soa_passives_in_nobuilds', 'spear_of_adun_autonomously_cast_present_in_no_build', options.SpearOfAdunAutonomouslyCastPresentInNoBuild),
+            ConfigurableOptionInfo('max_upgrade_level', 'max_upgrade_level', options.MaxUpgradeLevel, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('minerals_per_item', 'minerals_per_item', options.MineralsPerItem, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('gas_per_item', 'vespene_per_item', options.VespenePerItem, ConfigurableOptionType.INTEGER),
             ConfigurableOptionInfo('supply_per_item', 'starting_supply_per_item', options.StartingSupplyPerItem, ConfigurableOptionType.INTEGER),
