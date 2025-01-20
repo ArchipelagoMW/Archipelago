@@ -1,32 +1,27 @@
 import logging
 from random import Random
-from typing import Dict, Any, Iterable, Optional, Union, List, TextIO
+from typing import Dict, Any, Iterable, Optional, List, TextIO
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
-from Options import PerGameCommonOptions, Accessibility
+from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
-from . import rules
 from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles
-from .content import content_packs, StardewContent, unpack_content, create_content
+from .content import StardewContent, create_content
 from .early_items import setup_early_items
 from .items import item_table, create_items, ItemData, Group, items_by_group, get_all_filler_items, remove_limited_amount_packs
 from .locations import location_table, create_locations, LocationData, locations_by_tag
-from .logic.bundle_logic import BundleLogic
 from .logic.logic import StardewLogic
-from .logic.time_logic import MAX_MONTHS
-from .option_groups import sv_option_groups
-from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, BundlePrice, EnabledFillerBuffs, NumberOfMovementBuffs, \
-    BackpackProgression, BuildingProgression, ExcludeGingerIsland, TrapItems, EntranceRandomization, FarmType, Walnutsanity
-from .presets import sv_options_presets
+from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, EnabledFillerBuffs, NumberOfMovementBuffs, \
+    BuildingProgression, ExcludeGingerIsland, TrapItems, EntranceRandomization, FarmType
+from .options.forced_options import force_change_options_if_incompatible
+from .options.option_groups import sv_option_groups
+from .options.presets import sv_options_presets
 from .regions import create_regions
 from .rules import set_rules
-from .stardew_rule import True_, StardewRule, HasProgressionPercent, true_
+from .stardew_rule import True_, StardewRule, HasProgressionPercent
 from .strings.ap_names.event_names import Event
-from .strings.entrance_names import Entrance as EntranceName
 from .strings.goal_names import Goal as GoalName
-from .strings.metal_names import Ore
-from .strings.region_names import Region as RegionName, LogicRegion
 
 logger = logging.getLogger(__name__)
 
@@ -93,7 +88,6 @@ class StardewValleyWorld(World):
     randomized_entrances: Dict[str, str]
 
     total_progression_items: int
-    excluded_from_total_progression_items: List[str] = [Event.received_walnuts]
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -112,35 +106,8 @@ class StardewValleyWorld(World):
         return seed
 
     def generate_early(self):
-        self.force_change_options_if_incompatible()
+        force_change_options_if_incompatible(self.options, self.player, self.player_name)
         self.content = create_content(self.options)
-
-    def force_change_options_if_incompatible(self):
-        goal_is_walnut_hunter = self.options.goal == Goal.option_greatest_walnut_hunter
-        goal_is_perfection = self.options.goal == Goal.option_perfection
-        goal_is_island_related = goal_is_walnut_hunter or goal_is_perfection
-        exclude_ginger_island = self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
-
-        if goal_is_island_related and exclude_ginger_island:
-            self.options.exclude_ginger_island.value = ExcludeGingerIsland.option_false
-            goal_name = self.options.goal.current_key
-            logger.warning(
-                f"Goal '{goal_name}' requires Ginger Island. Exclude Ginger Island setting forced to 'False' for player {self.player} ({self.player_name})")
-
-        if exclude_ginger_island and self.options.walnutsanity != Walnutsanity.preset_none:
-            self.options.walnutsanity.value = Walnutsanity.preset_none
-            logger.warning(
-                f"Walnutsanity requires Ginger Island. Ginger Island was excluded from {self.player} ({self.player_name})'s world, so walnutsanity was force disabled")
-
-        if goal_is_perfection and self.options.accessibility == Accessibility.option_minimal:
-            self.options.accessibility.value = Accessibility.option_full
-            logger.warning(
-                f"Goal 'Perfection' requires full accessibility. Accessibility setting forced to 'Full' for player {self.player} ({self.player_name})")
-
-        elif self.options.goal == Goal.option_allsanity and self.options.accessibility == Accessibility.option_minimal:
-            self.options.accessibility.value = Accessibility.option_full
-            logger.warning(
-                f"Goal 'Allsanity' requires full accessibility. Accessibility setting forced to 'Full' for player {self.player} ({self.player_name})")
 
     def create_regions(self):
         def create_region(name: str, exits: Iterable[str]) -> Region:
@@ -185,7 +152,7 @@ class StardewValleyWorld(World):
         self.multiworld.itempool += created_items
 
         setup_early_items(self.multiworld, self.options, self.content, self.player, self.random)
-        self.setup_player_events()
+        self.setup_logic_events()
         self.setup_victory()
 
         # This is really a best-effort to get the total progression items count. It is mostly used to spread grinds across spheres are push back locations that
@@ -208,7 +175,7 @@ class StardewValleyWorld(World):
 
         if self.options.season_randomization == SeasonRandomization.option_disabled:
             for season in season_pool:
-                self.multiworld.push_precollected(self.create_starting_item(season))
+                self.multiworld.push_precollected(self.create_item(season))
             return
 
         if [item for item in self.multiworld.precollected_items[self.player]
@@ -218,26 +185,12 @@ class StardewValleyWorld(World):
         if self.options.season_randomization == SeasonRandomization.option_randomized_not_winter:
             season_pool = [season for season in season_pool if season.name != "Winter"]
 
-        starting_season = self.create_starting_item(self.random.choice(season_pool))
+        starting_season = self.create_item(self.random.choice(season_pool))
         self.multiworld.push_precollected(starting_season)
 
     def precollect_farm_type_items(self):
         if self.options.farm_type == FarmType.option_meadowlands and self.options.building_progression & BuildingProgression.option_progressive:
-            self.multiworld.push_precollected(self.create_starting_item("Progressive Coop"))
-
-    def setup_player_events(self):
-        self.setup_action_events()
-        self.setup_logic_events()
-
-    def setup_action_events(self):
-        spring_farming = LocationData(None, LogicRegion.spring_farming, Event.spring_farming)
-        self.create_event_location(spring_farming, true_, Event.spring_farming)
-        summer_farming = LocationData(None, LogicRegion.summer_farming, Event.summer_farming)
-        self.create_event_location(summer_farming, true_, Event.summer_farming)
-        fall_farming = LocationData(None, LogicRegion.fall_farming, Event.fall_farming)
-        self.create_event_location(fall_farming, true_, Event.fall_farming)
-        winter_farming = LocationData(None, LogicRegion.winter_farming, Event.winter_farming)
-        self.create_event_location(winter_farming, true_, Event.winter_farming)
+            self.multiworld.push_precollected(self.create_item("Progressive Coop"))
 
     def setup_logic_events(self):
         def register_event(name: str, region: str, rule: StardewRule):
@@ -317,7 +270,7 @@ class StardewValleyWorld(World):
     def get_all_location_names(self) -> List[str]:
         return list(location.name for location in self.multiworld.get_locations(self.player))
 
-    def create_item(self, item: Union[str, ItemData], override_classification: ItemClassification = None) -> StardewItem:
+    def create_item(self, item: str | ItemData, override_classification: ItemClassification = None) -> StardewItem:
         if isinstance(item, str):
             item = item_table[item]
 
@@ -325,12 +278,6 @@ class StardewValleyWorld(World):
             override_classification = item.classification
 
         return StardewItem(item.name, override_classification, item.code, self.player)
-
-    def create_starting_item(self, item: Union[str, ItemData]) -> StardewItem:
-        if isinstance(item, str):
-            item = item_table[item]
-
-        return StardewItem(item.name, item.classification, item.code, self.player)
 
     def create_event_location(self, location_data: LocationData, rule: StardewRule = None, item: Optional[str] = None):
         if rule is None:
@@ -439,9 +386,19 @@ class StardewValleyWorld(World):
         if not change:
             return False
 
+        player_state = state.prog_items[self.player]
+
+        received_progression_count = player_state[Event.received_progression_item]
+        received_progression_count += 1
+        if self.total_progression_items:
+            # Total progression items is not set until all items are created, but collect will be called during the item creation when an item is precollected.
+            # We can't update the percentage if we don't know the total progression items, can't divide by 0.
+            player_state[Event.received_progression_percent] = received_progression_count * 100 // self.total_progression_items
+        player_state[Event.received_progression_item] = received_progression_count
+
         walnut_amount = self.get_walnut_amount(item.name)
         if walnut_amount:
-            state.prog_items[self.player][Event.received_walnuts] += walnut_amount
+            player_state[Event.received_walnuts] += walnut_amount
 
         return True
 
@@ -450,9 +407,18 @@ class StardewValleyWorld(World):
         if not change:
             return False
 
+        player_state = state.prog_items[self.player]
+
+        received_progression_count = player_state[Event.received_progression_item]
+        received_progression_count -= 1
+        if self.total_progression_items:
+            # We can't update the percentage if we don't know the total progression items, can't divide by 0.
+            player_state[Event.received_progression_percent] = received_progression_count * 100 // self.total_progression_items
+        player_state[Event.received_progression_item] = received_progression_count
+
         walnut_amount = self.get_walnut_amount(item.name)
         if walnut_amount:
-            state.prog_items[self.player][Event.received_walnuts] -= walnut_amount
+            player_state[Event.received_walnuts] -= walnut_amount
 
         return True
 
