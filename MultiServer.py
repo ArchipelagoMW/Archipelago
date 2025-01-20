@@ -1567,7 +1567,6 @@ class ClientMessageProcessor(CommonCommandProcessor):
         auto_status = HintStatus.HINT_UNSPECIFIED if for_location else HintStatus.HINT_PRIORITY
         if self.ctx.hint_cost > 100:
             self.output("Sorry, hints are disabled.")
-            hints = []
             return True
         elif not input_text:
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
