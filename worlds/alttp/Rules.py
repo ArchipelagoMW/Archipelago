@@ -108,7 +108,7 @@ def set_rules(world):
     # GT Entrance may be required for Turtle Rock for OWG and < 7 required
     ganons_tower = world.get_entrance('Inverted Ganons Tower' if world.worlds[player].options.mode == 'inverted' else 'Ganons Tower', player)
     if (world.worlds[player].options.crystals_needed_for_gt == 7
-            and not (world.worlds[player].options.glitches_required.value
+            and not (world.worlds[player].options.glitches_required
                      in ['overworld_glitches', 'hybrid_major_glitches', 'no_logic']
                      and world.worlds[player].options.mode != 'inverted')):
         set_rule(ganons_tower, lambda state: False)

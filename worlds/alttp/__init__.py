@@ -305,7 +305,7 @@ class ALTTPWorld(World):
             "Bottle (Red Potion)", "Bottle (Green Potion)", "Bottle (Blue Potion)",
             "Bottle (Bee)", "Bottle (Good Bee)"
         ]
-        if self.options.item_pool.value not in ["hard", "expert"]:
+        if self.options.item_pool not in ["hard", "expert"]:
             bottle_options.append("Bottle (Fairy)")
         self.waterfall_fairy_bottle_fill = self.random.choice(bottle_options)
         self.pyramid_fairy_bottle_fill = self.random.choice(bottle_options)
@@ -331,13 +331,13 @@ class ALTTPWorld(World):
                 self.er_seed = "vanilla"
             elif (not self.options.entrance_shuffle_seed.value.isdigit()) or multiworld.is_race:
                 self.er_seed = get_same_seed(multiworld, (
-                    shuffle, self.options.entrance_shuffle_seed,
+                    shuffle, self.options.entrance_shuffle_seed.value,
                     self.options.retro_caves,
                     self.options.mode,
                     self.options.glitches_required
                 ))
             else:  # not a race or group seed, use set seed as is.
-                self.er_seed = int(self.options.entrance_shuffle_seed)
+                self.er_seed = int(self.options.entrance_shuffle_seed.value)
         elif self.options.entrance_shuffle == "vanilla":
             self.er_seed = "vanilla"
 
@@ -523,7 +523,7 @@ class ALTTPWorld(World):
         if self.options.mode == 'standard' and self.options.small_key_shuffle \
                 and self.options.small_key_shuffle != small_key_shuffle.option_universal and \
                 self.options.small_key_shuffle != small_key_shuffle.option_own_dungeons:
-            self.multiworld.local_early_items[self.player]["Small Key (Hyrule Castle)"] = 1
+            world.local_early_items[player]["Small Key (Hyrule Castle)"] = 1
 
     @classmethod
     def stage_pre_fill(cls, world):
@@ -820,8 +820,7 @@ class ALTTPWorld(World):
                             "triforce_pieces_available", "triforce_pieces_extra",
             ]
 
-            slot_data = {option_name: getattr(self.options, option_name).value for option_name in
-                         slot_options}
+            slot_data = {option_name: getattr(self.options, option_name).value for option_name in slot_options}
 
             slot_data.update({
                 'mm_medalion': self.required_medallions[0],

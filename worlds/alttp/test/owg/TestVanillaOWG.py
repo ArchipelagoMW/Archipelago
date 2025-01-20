@@ -12,7 +12,7 @@ class TestVanillaOWG(TestBase, LTTPTestBase):
     def setUp(self):
         self.world_setup()
         self.multiworld.worlds[1].difficulty_requirements = difficulties['normal']
-        self.multiworld.worlds[1].options.glitches_required.value = GlitchesRequired.from_any("overworld_glitches")
+        self.multiworld.worlds[1].options.glitches_required = GlitchesRequired.from_any("overworld_glitches")
         self.multiworld.worlds[1].options.bombless_start.value = True
         self.multiworld.worlds[1].options.shuffle_capacity_upgrades.value = 2
         self.multiworld.worlds[1].er_seed = 0

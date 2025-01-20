@@ -315,7 +315,7 @@ def generate_itempool(world):
             placed_items["Link's Uncle"] = starting_weapon
             pool.remove(starting_weapon)
         if (placed_items["Link's Uncle"] in ['Bow', 'Progressive Bow', 'Bombs (10)', 'Bomb Upgrade (+10)',
-                                            'Bomb Upgrade (50)', 'Cane of Somaria', 'Cane of Byrna'] and world.options.enemy_health.value not in ['default', 'easy']):
+                                            'Bomb Upgrade (50)', 'Cane of Somaria', 'Cane of Byrna'] and world.options.enemy_health not in ['default', 'easy']):
             if world.options.bombless_start and "Bomb Upgrade" not in placed_items["Link's Uncle"]:
                 if 'Bow' in placed_items["Link's Uncle"]:
                     world.escape_assist.append('arrows')
