@@ -222,8 +222,8 @@ could also be progress in a research tree, or even something more abstract like 
 
 Each location has a `name` and an `address` (hereafter referred to as an `id`), is placed in a Region, has access rules,
 and has a classification. The name needs to be unique within each game and must not be numeric (must contain least 1
-letter or symbol). The ID needs to be unique across all games, and is best kept in the same range as the item IDs.
-Locations and items can share IDs, so typically a game's locations and items start at the same ID.
+letter or symbol). The ID needs to be unique across all locations within the game. 
+Locations and items can share IDs, and locations can share IDs with other games' locations.
 
 World-specific IDs must be in the range 1 to 2<sup>53</sup>-1; IDs ≤ 0 are global and reserved.
 
@@ -243,7 +243,9 @@ progression. Progression items will be assigned to locations with higher priorit
 and satisfy progression balancing.
 
 The name needs to be unique within each game, meaning if you need to create multiple items with the same name, they
-will all have the same ID. Name must not be numeric (must contain at least 1 letter or symbol).
+will all have the same ID. Name must not be numeric (must contain at least 1 letter or symbol). 
+The ID thus also needs to be unique across all items with different names within the game. 
+Items and locations can share IDs, and items can share IDs with other games' items.
 
 Other classifications include:
 
@@ -490,6 +492,9 @@ In addition, the following methods can be implemented and are called in this ord
   after this step. Locations cannot be moved to different regions after this step.
 * `set_rules(self)`
   called to set access and item rules on locations and entrances.
+* `connect_entrances(self)`
+  by the end of this step, all entrances must exist and be connected to their source and target regions.
+  Entrance randomization should be done here.
 * `generate_basic(self)`
   player-specific randomization that does not affect logic can be done here.
 * `pre_fill(self)`, `fill_hook(self)` and `post_fill(self)`
@@ -835,14 +840,16 @@ def generate_output(self, output_directory: str) -> None:
 
 ### Slot Data
 
-If the game client needs to know information about the generated seed, a preferred method of transferring the data
-is through the slot data. This is filled with the `fill_slot_data` method of your world by returning
-a `dict` with `str` keys that can be serialized with json.
-But, to not waste resources, it should be limited to data that is absolutely necessary. Slot data is sent to your client
-once it has successfully [connected](network%20protocol.md#connected).
+If a client or tracker needs to know information about the generated seed, a preferred method of transferring the data 
+is through the slot data. This is filled with the `fill_slot_data` method of your world by returning a `dict` with 
+`str` keys that can be serialized with json. However, to not waste resources, it should be limited to data that is 
+absolutely necessary. Slot data is sent to your client once it has successfully 
+[connected](network%20protocol.md#connected).
+
 If you need to know information about locations in your world, instead of propagating the slot data, it is preferable
-to use [LocationScouts](network%20protocol.md#locationscouts), since that data already exists on the server. The most
-common usage of slot data is sending option results that the client needs to be aware of.
+to use [LocationScouts](network%20protocol.md#locationscouts), since that data already exists on the server. Adding 
+item/location pairs is unnecessary since the AP server already retains and freely gives that information to clients 
+that request it. The most common usage of slot data is sending option results that the client needs to be aware of.
 
 ```python
 def fill_slot_data(self) -> Dict[str, Any]:
