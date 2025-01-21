@@ -46,6 +46,7 @@ class MultiworldTestBase(TestCase):
                     stage_callable = getattr(world_type, f"stage_{step}", None)
                     if stage_callable:
                         stage_callable(self.multiworld)
+                self.multiworld.completed_world_stages.append(step)
 
 
 @unittest.skip("too slow for main")
