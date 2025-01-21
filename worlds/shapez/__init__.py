@@ -256,8 +256,7 @@ class ShapezWorld(World):
                           self.item_name_to_id[name], self.player)
 
     def get_filler_item_name(self) -> str:
-        # For now, when the multiworld needs to create additional fillers, they should only be bundles
-        return list(bundles.keys())[self.random.randint(0, len(bundles)-1)]
+        return filler(self.random.random())
 
     def append_shapesanity(self, name: str) -> None:
         """This method is given as a parameter when creating the locations for shapesanity."""
