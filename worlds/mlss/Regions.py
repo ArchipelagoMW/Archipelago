@@ -91,7 +91,7 @@ def connect_regions(world: "MLSSWorld"):
     connect(world, names, "Main Area", "BaseUltraRocks", lambda state: StateLogic.ultra(state, world.player))
     connect(world, names, "Main Area", "Chucklehuck Woods", lambda state: StateLogic.brooch(state, world.player))
     connect(world, names, "Main Area", "BooStatue", lambda state: StateLogic.canCrash(state, world.player))
-    if world.options.goal == 1:
+    if world.options.goal == "emblem_hunt":
         if world.options.castle_skip:
             connect(world, names, "Main Area", "Cackletta's Soul",
                     lambda state: state.has("Beanstar Emblem", world.player, world.options.emblems_required.value))
@@ -224,7 +224,7 @@ def connect_regions(world: "MLSSWorld"):
     connect(world, names, "Surfable", "Oasis")
     connect(world, names, "Surfable", "JokesEntrance", lambda state: StateLogic.fire(state, world.player))
     connect(world, names, "JokesMain", "PostJokes", lambda state: StateLogic.postJokes(state, world.player, world.options.goal.value))
-    if not world.options.castle_skip and not world.options.goal.value == 1:
+    if not world.options.castle_skip and world.options.goal != "emblem_hunt":
         connect(world, names, "PostJokes", "Bowser's Castle")
         connect(
             world,
@@ -234,7 +234,7 @@ def connect_regions(world: "MLSSWorld"):
             lambda state: StateLogic.canMini(state, world.player) and StateLogic.thunder(state, world.player),
         )
         connect(world, names, "Bowser's Castle Mini", "Cackletta's Soul")
-    elif not world.options.goal == 1:
+    elif world.options.goal != "emblem_hunt":
         connect(world, names, "PostJokes", "Cackletta's Soul")
     connect(world, names, "Chucklehuck Woods", "Winkle", lambda state: StateLogic.canDash(state, world.player))
     connect(

@@ -32,7 +32,9 @@ def set_rules(world: "MLSSWorld", excluded):
                 add_rule(
                     world.get_location(location.name),
                     lambda state: (StateLogic.brooch(state, world.player) and StateLogic.fruits(state, world.player)
-                                   and (StateLogic.hammers(state, world.player) or StateLogic.fire(state, world.player) or StateLogic.thunder(state, world.player)))
+                                   and (StateLogic.hammers(state, world.player)
+                                   or StateLogic.fire(state, world.player)
+                                   or StateLogic.thunder(state, world.player)))
                                    or StateLogic.rose(state, world.player),
                 )
         if location.itemType != 0 and location.name not in excluded:
@@ -781,7 +783,7 @@ def set_rules(world: "MLSSWorld", excluded):
         add_rule(
             world.get_location(LocationName.GwarharLagoonFirstUnderwaterAreaRoom2CoinBlock),
             lambda state: StateLogic.canDash(state, world.player)
-                            and (StateLogic.membership(state, world.player) or StateLogic.surfable(state, world.player)),
+                          and (StateLogic.membership(state, world.player) or StateLogic.surfable(state, world.player)),
         )
         add_rule(
             world.get_location(LocationName.JokesEndSecondFloorWestRoomCoinBlock),

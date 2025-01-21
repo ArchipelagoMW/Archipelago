@@ -1,3 +1,6 @@
+from worlds.mlss.Options import Goal
+
+
 def canDig(state, player):
     return state.has("Green Goblet", player) and state.has("Hammers", player)
 
@@ -106,7 +109,7 @@ def surfable(state, player):
 
 
 def postJokes(state, player, goal):
-    if goal == 0:
+    if goal == Goal.option_vanilla: # Logic for beating jokes end without beanstar emblems
         return (
         surfable(state, player)
         and canDig(state, player)
@@ -117,7 +120,7 @@ def postJokes(state, player, goal):
         and rose(state, player)
         and canDash(state, player)
         )
-    else:
+    else: # Logic for beating jokes end with beanstar emblems
         return (
         surfable(state, player)
         and canDig(state, player)

@@ -117,7 +117,7 @@ class MLSSWorld(World):
             if item.classification != ItemClassification.filler and item.classification != ItemClassification.skip_balancing:
                 freq = item_frequencies.get(item.itemName, 1)
                 if item.itemName == "Beanstar Emblem":
-                    freq = (0 if self.options.goal != 1 else self.options.emblems_amount)
+                    freq = (0 if self.options.goal != "emblem_hunt" else self.options.emblems_amount)
                 if item in precollected:
                     freq = max(freq - precollected.count(item), 0)
                 if self.options.disable_harhalls_pants and "Harhall's" in item.itemName:

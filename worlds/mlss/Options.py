@@ -274,7 +274,6 @@ class ChuckleBeans(Choice):
 
 class Goal(Choice):
     """
-
     Vanilla: Complete jokes end with the required items and defeat Birdo to unlock Bowser's Castle.
 
     Emblem Hunt: Find required amount of Beanstar Emblems to gain access to Bowser's Castle.
