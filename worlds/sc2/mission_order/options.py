@@ -1,3 +1,7 @@
+"""
+Contains the Custom Mission Order option. Also validates the option value, so generation can assume the data matches the specification.
+"""
+
 from __future__ import annotations
 import random
 
@@ -25,7 +29,6 @@ from .presets_scripted import make_golden_path
 
 GENERIC_KEY_NAME = "Key".casefold()
 GENERIC_PROGRESSIVE_KEY_NAME = "Progressive Key".casefold()
-
 
 STR_OPTION_VALUES: Dict[str, Dict[str, Any]] = {
     "type": {
@@ -334,20 +337,24 @@ def _resolve_string_option(option: str, option_value: Union[List[str], str]) -> 
 
 def _resolve_entry_rule(option_value: Dict[str, Any]) -> Dict[str, Any]:
     resolved: Dict[str, Any] = {}
+    mutually_exclusive: List[str] = []
     if "amount" in option_value:
         resolved["amount"] = _resolve_potential_range(option_value["amount"])
     if "scope" in option_value:
+        mutually_exclusive.append("scope")
         # A scope may be a list or a single address
         if type(option_value["scope"]) == list:
             resolved["scope"] = [str(subscope) for subscope in option_value["scope"]]
         else:
             resolved["scope"] = [str(option_value["scope"])]
     if "rules" in option_value:
+        mutually_exclusive.append("rules")
         resolved["rules"] = [_resolve_entry_rule(subrule) for subrule in option_value["rules"]]
         # Make sure sub-rule rules have a specified amount
         if not "amount" in option_value:
             resolved["amount"] = -1
     if "items" in option_value:
+        mutually_exclusive.append("items")
         option_items: Dict[str, Any] = option_value["items"]
         resolved_items = {item: int(_resolve_potential_range(str(amount))) for (item, amount) in option_items.items()}
         resolved_items = _resolve_item_names(resolved_items)
@@ -367,6 +374,12 @@ def _resolve_entry_rule(option_value: Dict[str, Any]) -> Dict[str, Any]:
             else:
                 final_amount = amount
             resolved["items"][item] = final_amount
+    if len(mutually_exclusive) > 1:
+        raise ValueError(
+            "Entry rule contains too many identifiers.\n"
+            f"Rule: {option_value}\n"
+            f"Remove all but one of these entries: {mutually_exclusive}"
+        )
     return resolved
 
 

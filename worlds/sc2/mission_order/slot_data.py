@@ -1,3 +1,8 @@
+"""
+Houses the data structures representing a mission order in slot data.
+Creating these is handled by the nodes they represent in .nodes.py.
+"""
+
 from __future__ import annotations
 from typing import List
 from dataclasses import dataclass

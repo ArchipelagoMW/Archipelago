@@ -1,3 +1,9 @@
+"""
+Contains the complex data manipulation functions for mission order generation and Archipelago region creation.
+Incoming data is validated to match specifications in .options.py.
+The functions here are called from ..regions.py.
+"""
+
 from typing import Set, Dict, Any, List, Tuple, Union, Optional, Callable, TYPE_CHECKING
 import logging
 
@@ -16,6 +22,7 @@ if TYPE_CHECKING:
     from .. import SC2World
 
 def resolve_unlocks(mission_order: SC2MOGenMissionOrder):
+    """Parses a mission order's entry rule dicts into entry rule objects."""
     rolling_rule_id = 0
     for campaign in mission_order.campaigns:
         entry_rule = {
@@ -43,7 +50,9 @@ def resolve_unlocks(mission_order: SC2MOGenMissionOrder):
                     mission.entry_rule.target_amount += 1
                     mission.entry_rule.rules_to_check.append(CountMissionsEntryRule(mission.prev, 1, mission.prev))
 
+
 def dict_to_entry_rule(mission_order: SC2MOGenMissionOrder, data: Dict[str, Any], start_node: MissionOrderNode, rule_id: int = -1) -> EntryRule:
+    """Tries to create an entry rule object from an entry rule dict. The structure of these dicts is validated in .options.py."""
     if "items" in data:
         items: Dict[str, int] = data["items"]
         has_generic_key = False
@@ -81,14 +90,16 @@ def dict_to_entry_rule(mission_order: SC2MOGenMissionOrder, data: Dict[str, Any]
             exits = obj.get_exits()
             if len(exits) == 0:
                 raise ValueError(
-                    f"Address \"{address}\" found an unbeatable object. " +
+                    f"Address \"{address}\" found an unbeatable object. "
                     "This should mean the address contains \"..\" too often."
                 )
             missions.extend(exits)
         return BeatMissionsEntryRule(missions, visual_reqs)
     raise ValueError(f"Invalid data for entry rule: {data}")
 
+
 def resolve_address(mission_order: SC2MOGenMissionOrder, address: str, start_node: MissionOrderNode) -> List[MissionOrderNode]:
+    """Tries to find a node in the mission order by following the given address."""
     if address.startswith("../") or address == "..":
         # Relative address, starts from searching object
         cursor = start_node
@@ -116,14 +127,20 @@ def resolve_address(mission_order: SC2MOGenMissionOrder, address: str, start_nod
             cursor = result[0]
         if cursor == start_node:
             raise ValueError(
-                f"Address \"{address_so_far}\" (from \"{address}\") returned to original object. " + 
+                f"Address \"{address_so_far}\" (from \"{address}\") returned to original object. "
                 "This is not allowed to avoid circular requirements."
             )
     return [cursor]
 
+
 ########################
 
+
 def fill_depths(mission_order: SC2MOGenMissionOrder) -> None:
+    """
+    Flood-fills the mission order by following its entry rules to determine the depth of all nodes.
+    This also ensures theoretical total accessibility of all nodes, but this is allowed to be violated by item placement and the accessibility setting.
+    """
     accessible_campaigns: Set[SC2MOGenCampaign] = {campaign for campaign in mission_order.campaigns if campaign.is_always_unlocked()}
     next_campaigns: Set[SC2MOGenCampaign] = set(mission_order.campaigns).difference(accessible_campaigns)
 
@@ -212,9 +229,12 @@ def fill_depths(mission_order: SC2MOGenMissionOrder) -> None:
         campaign.max_depth = max(layout.max_depth for layout in campaign.layouts)
     mission_order.max_depth = max(campaign.max_depth for campaign in mission_order.campaigns)
 
+
 ########################
 
+
 def resolve_difficulties(mission_order: SC2MOGenMissionOrder) -> None:
+    """Determines the concrete difficulty of all mission slots."""
     for campaign in mission_order.campaigns:
         for layout in campaign.layouts:
             if layout.option_min_difficulty == Difficulty.RELATIVE:
@@ -261,12 +281,15 @@ def resolve_difficulties(mission_order: SC2MOGenMissionOrder) -> None:
                         mission.option_difficulty = layout_thresholds[thresholds[-1]]
                 mission_order.sorted_missions[mission.option_difficulty].append(mission)
 
+
 ########################
+
 
 def fill_missions(
         mission_order: SC2MOGenMissionOrder, mission_pools: SC2MOGenMissionPools,
         world: 'SC2World', locked_missions: List[str], locations: Tuple['LocationData', ...], location_cache: List[Location]
 ) -> None:
+    """Places missions in all non-empty mission slots. Also responsible for creating Archipelago regions & locations for placed missions."""
     locations_per_region = get_locations_per_region(locations)
     regions: List[Region] = [create_region(world, locations_per_region, location_cache, "Menu")]
     locked_ids = [lookup_name_to_mission[mission].id for mission in locked_missions]
@@ -355,6 +378,7 @@ def fill_missions(
 
     world.multiworld.regions += regions
 
+
 def get_locations_per_region(locations: Tuple['LocationData', ...]) -> Dict[str, List['LocationData']]:
     per_region: Dict[str, List['LocationData']] = {}
 
@@ -363,6 +387,7 @@ def get_locations_per_region(locations: Tuple['LocationData', ...]) -> Dict[str,
 
     return per_region
 
+
 def create_location(player: int, location_data: 'LocationData', region: Region,
                     location_cache: List[Location]) -> Location:
     location = Location(player, location_data.name, location_data.code, region)
@@ -370,6 +395,7 @@ def create_location(player: int, location_data: 'LocationData', region: Region,
 
     location_cache.append(location)
     return location
+
 
 def create_minimal_logic_location(
     player: int, location_data: 'LocationData', region: Region, location_cache: List[Location], unit_count: int = 0,
@@ -385,6 +411,7 @@ def create_minimal_logic_location(
         location.access_rule = rules.has_race_units(player, unit_count, mission.race)
     location_cache.append(location)
     return location
+
 
 def create_region(
     world: 'SC2World',
@@ -436,9 +463,12 @@ def create_region(
 
     return region
 
+
 ########################
 
+
 def make_connections(mission_order: SC2MOGenMissionOrder, world: 'SC2World'):
+    """Creates Archipelago entrances between missions and creates access rules for the generator from entry rule objects."""
     names: Dict[str, int] = {}
     player = world.player
     for campaign in mission_order.campaigns:
@@ -463,6 +493,7 @@ def make_connections(mission_order: SC2MOGenMissionOrder, world: 'SC2World'):
                         connect(world, names, "Menu", mission.mission.mission_name,
                                 lambda state, unlock_rule=unlock_rule: unlock_rule(state))
 
+
 def connect(world: 'SC2World', used_names: Dict[str, int], source: str, target: str,
             rule: Optional[Callable] = None):
     source_region = world.get_region(source)
@@ -483,9 +514,16 @@ def connect(world: 'SC2World', used_names: Dict[str, int], source: str, target: 
     source_region.exits.append(connection)
     connection.connect(target_region)
 
+
 ########################
 
+
 def resolve_generic_keys(mission_order: SC2MOGenMissionOrder) -> None:
+    """
+    Replaces placeholder keys in Item entry rules with their concrete counterparts.
+    Specifically this handles placing named keys into missions and vanilla campaigns/layouts,
+    and assigning correct progression tracks to progressive keys.
+    """
     layout_numbered_keys = 1
     campaign_numbered_keys = 1
     progression_tracks: Dict[int, List[Tuple[MissionOrderNode, ItemEntryRule]]] = {}

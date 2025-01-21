@@ -1,3 +1,8 @@
+"""
+Contains the data structures that make up a mission order.
+Data in these structures is validated in .options.py and manipulated by .generation.py.
+"""
+
 from __future__ import annotations
 from typing import Dict, Set, Callable, List, Any, Type, Optional, Union, TYPE_CHECKING
 from weakref import ref, ReferenceType
@@ -23,7 +28,7 @@ class MissionOrderNode(ABC):
     def get_parent(self, address_so_far: str, full_address: str) -> MissionOrderNode:
         if self.parent is None:
             raise ValueError(
-                f"Address \"{address_so_far}\" (from \"{full_address}\") could not find a parent object. " +
+                f"Address \"{address_so_far}\" (from \"{full_address}\") could not find a parent object. "
                 "This should mean the address contains \"..\" too often."
             )
         return self.parent()
@@ -60,9 +65,10 @@ class MissionOrderNode(ABC):
     def get_address_to_node(self) -> str:
         raise NotImplementedError
 
+
 class SC2MOGenMissionOrder(MissionOrderNode):
     """
-    The top-level data structure for mission orders. Contains helper functions for getting data about generated missions.
+    The top-level data structure for mission orders.
     """
     campaigns: List[SC2MOGenCampaign]
     sorted_missions: Dict[Difficulty, List[SC2MOGenMission]]
@@ -163,6 +169,7 @@ class SC2MOGenMissionOrder(MissionOrderNode):
     
     def get_address_to_node(self):
         return self.campaigns[0].get_address_to_node() + "/.."
+
 
 class SC2MOGenCampaign(MissionOrderNode):
     option_name: str # name of this campaign
@@ -278,6 +285,7 @@ class SC2MOGenCampaign(MissionOrderNode):
             exits,
             [asdict(layout.get_slot_data()) for layout in self.layouts]
         )
+
 
 class SC2MOGenLayout(MissionOrderNode):
     option_name: str # name of this layout
@@ -500,6 +508,7 @@ class SC2MOGenLayout(MissionOrderNode):
             exits,
             mission_slots
         )
+
 
 class SC2MOGenMission(MissionOrderNode):
     option_goal: bool  # whether this mission is required to beat the game
