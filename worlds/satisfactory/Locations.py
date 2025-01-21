@@ -162,9 +162,8 @@ class DropPod(LocationData):
             # without you just going to have to figure it your yourself
 
             def logic_rule(state: CollectionState):
-                return not unlocked_by or (state_logic
-                        and state_logic.can_produce(state, unlocked_by)
-                        and state_logic.can_build(state, "MAM"))
+                return state_logic.can_build(state, "MAM") and (
+                    (not unlocked_by) or (state_logic and state_logic.can_produce(state, unlocked_by)))
 
             return logic_rule
 
