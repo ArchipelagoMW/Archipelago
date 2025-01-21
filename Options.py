@@ -904,7 +904,7 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
     supports_weighting = False
     random_str = None
 
-    def __init__(self, value: typing.Iterable[str], random_str: str = None):
+    def __init__(self, value: typing.Iterable[str], random_str: str | None = None):
         self.value = set(deepcopy(value))
         if random_str:
             self.random_str = random_str
