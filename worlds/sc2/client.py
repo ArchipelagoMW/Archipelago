@@ -697,6 +697,15 @@ class SC2Context(CommonContext):
             self.all_in_choice = args["slot_data"]["all_in_map"]
             self.slot_data_version = args["slot_data"].get("version", 2)
 
+            if str(SC2World.settings.disable_forced_camera).casefold() == 'true':
+                self.disable_forced_camera = DisableForcedCamera.option_true
+            elif str(SC2World.settings.disable_forced_camera).casefold() == 'false':
+                self.disable_forced_camera = DisableForcedCamera.option_false
+            if str(SC2World.settings.skip_cutscenes).casefold() == 'true':
+                self.skip_cutscenes = SkipCutscenes.option_true
+            elif str(SC2World.settings.skip_cutscenes).casefold() == 'false':
+                self.skip_cutscenes = SkipCutscenes.option_false
+
             if self.slot_data_version < 4:
                 # Maintaining backwards compatibility with older slot data
                 slot_req_table: dict = args["slot_data"]["mission_req"]

@@ -15,10 +15,16 @@ class Starcraft2Settings(settings.Group):
         """Defines the colour of zerg mission buttons in the launcher in rgb format (3 elements ranging from 0 to 1)"""
     class ProtossButtonColor(list):
         """Defines the colour of protoss mission buttons in the launcher in rgb format (3 elements ranging from 0 to 1)"""
+    class DisableForcedCamera(str):
+        """Overrides the disable forced-camera slot option. Possible values: `true`, `false`, `default`. Default uses slot value"""
+    class SkipCutscenes(str):
+        """Overrides the skip cutscenes slot option. Possible values: `true`, `false`, `default`. Default uses slot value"""
 
     window_width = WindowWidth(1080)
     window_height = WindowHeight(720)
     game_windowed_mode: Union[GameWindowedMode, bool] = False
+    disable_forced_camera = DisableForcedCamera('default')
+    skip_cutscenes = SkipCutscenes('default')
     terran_button_color = TerranButtonColor([0.0838, 0.2898, 0.2346])
     zerg_button_color = ZergButtonColor([0.345, 0.22425, 0.12765])
     protoss_button_color = ProtossButtonColor([0.18975, 0.2415, 0.345])
