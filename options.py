@@ -109,7 +109,7 @@ class OpenDoors(Choice):
     option_off = 0
     option_closed_diva = 1
     option_open = 2
-    default = option_off
+    default = option_closed_diva
 
 
 class Portal(Choice):
