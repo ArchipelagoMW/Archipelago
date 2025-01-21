@@ -842,7 +842,7 @@ class KH2Context(CommonContext):
                                     self.Slot1 = eval(self.mem_json[key]["Slot1"])
                                     self.Journal = eval(self.mem_json[key]["Journal"])
                                     self.Shop = eval(self.mem_json[key]["Shop"])
-                                    self.kh2_game_version = self.mem_json[key]["GameVersionCheck"]
+                                    self.kh2_game_version = key
 
             if self.kh2_game_version is not None:
                 logger.info(f"You are now auto-tracking {self.kh2_game_version}")
