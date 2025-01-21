@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Dict, List, Optional, Set, Union
 from BaseClasses import CollectionState, LocationProgressType, Region
-from worlds.generic.Rules import set_rule
+from worlds.generic.Rules import add_rule, set_rule
 from .Data import (
     get_boosts_data,
 )
@@ -11,26 +11,26 @@ if TYPE_CHECKING:
     from . import CivVIWorld
 
 
-def has_required_items(
+def has_progressive_eras(
     state: CollectionState, era: EraType, world: "CivVIWorld"
 ) -> bool:
-    # Progressive Eras
-    if world.options.progression_style == "eras_and_districts" and not state.has(
+    return state.has(
         "Progressive Era", world.player, world.era_required_progressive_era_counts[era]
-    ):
-        return False
+    )
 
-    #  Non Progressive Items (all items for era if no progressive districts)
-    if not state.has_all(world.era_required_non_progressive_items[era], world.player):
-        return False
 
-    # Progressive Items (if any)
-    if world.options.progression_style != "none" and not state.has_all_counts(
+def has_non_progressive_items(
+    state: CollectionState, era: EraType, world: "CivVIWorld"
+) -> bool:
+    return state.has_all(world.era_required_non_progressive_items[era], world.player)
+
+
+def has_progressive_items(
+    state: CollectionState, era: EraType, world: "CivVIWorld"
+) -> bool:
+    return state.has_all_counts(
         world.era_required_progressive_items_counts[era], world.player
-    ):
-        return False
-
-    return True
+    )
 
 
 def create_regions(world: "CivVIWorld"):
@@ -45,6 +45,7 @@ def create_regions(world: "CivVIWorld"):
     }
 
     regions: List[Region] = []
+    previous_era: EraType = EraType.ERA_ANCIENT
     for era in EraType:
         era_region = Region(era.value, world.player, world.multiworld)
         era_locations: Dict[str, Optional[int]] = {}
@@ -59,64 +60,46 @@ def create_regions(world: "CivVIWorld"):
         regions.append(era_region)
         world.multiworld.regions.append(era_region)
 
-    menu.connect(world.get_region(EraType.ERA_ANCIENT.value))
+        # Connect era to previous era if not ancient era
+        if era == EraType.ERA_ANCIENT:
+            menu.connect(world.get_region(EraType.ERA_ANCIENT.value))
+            continue
 
-    world.get_region(EraType.ERA_ANCIENT.value).connect(
-        world.get_region(EraType.ERA_CLASSICAL.value),
-        None,
-        lambda state: has_required_items(state, EraType.ERA_ANCIENT, world),
-    )
+        connection = world.get_region(previous_era.value).connect(
+            world.get_region(era.value)
+        )
 
-    world.get_region(EraType.ERA_CLASSICAL.value).connect(
-        world.get_region(EraType.ERA_MEDIEVAL.value),
-        None,
-        lambda state: has_required_items(state, EraType.ERA_CLASSICAL, world),
-    )
+        #  Access rules for eras
+        add_rule(
+            connection,
+            lambda state, previous_era=previous_era, world=world: has_non_progressive_items(
+                state, previous_era, world
+            ),
+        )
+        if world.options.progression_style == "eras_and_districts":
+            add_rule(
+                connection,
+                lambda state, previous_era=previous_era, world=world: has_progressive_eras(
+                    state, previous_era, world
+                ),
+            )
+        if world.options.progression_style != "none":
+            add_rule(
+                connection,
+                lambda state, previous_era=previous_era, world=world: has_progressive_items(
+                    state, previous_era, world
+                ),
+            )
+        previous_era = era
 
-    world.get_region(EraType.ERA_MEDIEVAL.value).connect(
-        world.get_region(EraType.ERA_RENAISSANCE.value),
-        None,
-        lambda state: has_required_items(state, EraType.ERA_MEDIEVAL, world),
-    )
-
-    world.get_region(EraType.ERA_RENAISSANCE.value).connect(
-        world.get_region(EraType.ERA_INDUSTRIAL.value),
-        None,
-        lambda state: has_required_items(state, EraType.ERA_RENAISSANCE, world),
-    )
-
-    world.get_region(EraType.ERA_INDUSTRIAL.value).connect(
-        world.get_region(EraType.ERA_MODERN.value),
-        None,
-        lambda state: has_required_items(state, EraType.ERA_INDUSTRIAL, world),
-    )
-
-    world.get_region(EraType.ERA_MODERN.value).connect(
-        world.get_region(EraType.ERA_ATOMIC.value),
-        None,
-        lambda state: has_required_items(state, EraType.ERA_MODERN, world),
-    )
-
-    world.get_region(EraType.ERA_ATOMIC.value).connect(
-        world.get_region(EraType.ERA_INFORMATION.value),
-        None,
-        lambda state: has_required_items(state, EraType.ERA_ATOMIC, world),
-    )
-
-    future_era = world.get_region(EraType.ERA_INFORMATION.value)
-    future_era.connect(
-        world.get_region(EraType.ERA_FUTURE.value),
-        None,
-        lambda state: has_required_items(state, EraType.ERA_INFORMATION, world),
-    )
-
+    future_era = world.get_region(EraType.ERA_FUTURE.value)
     victory = CivVILocation(world.player, "Complete a victory type", None, future_era)
     victory.place_locked_item(world.create_event("Victory"))
     future_era.locations.append(victory)
 
     set_rule(
         victory,
-        lambda state: state.can_reach(EraType.ERA_FUTURE.value, "Region", world.player),
+        lambda state: state.can_reach_region(EraType.ERA_FUTURE.value, world.player),
     )
 
     world.multiworld.completion_condition[world.player] = lambda state: state.has(

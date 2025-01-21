@@ -189,9 +189,15 @@ class TestProgressiveEraRequirementsWithBoostsanity(CivVITestBase):
         def check_eras_accessible(eras: List[EraType]):
             for era in EraType:
                 if era in eras:
-                    self.assertTrue(state.can_reach(era.value, "Region", self.player))
+                    self.assertTrue(
+                        state.can_reach(era.value, "Region", self.player),
+                        "Failed for era: " + era.value,
+                    )
                 else:
-                    self.assertFalse(state.can_reach(era.value, "Region", self.player))
+                    self.assertFalse(
+                        state.can_reach(era.value, "Region", self.player),
+                        "Failed for era: " + era.value,
+                    )
 
         progresive_era_item = self.get_item_by_name("Progressive Era")
         accessible_eras = [EraType.ERA_ANCIENT]

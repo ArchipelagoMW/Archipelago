@@ -1,3 +1,4 @@
+from collections import defaultdict
 import math
 import os
 from typing import Any, Dict, List, Set
@@ -9,7 +10,6 @@ from worlds.generic.Rules import forbid_item
 from .Data import (
     get_boosts_data,
     get_era_required_items_data,
-    get_progressive_districts_data,
 )
 
 from .Rules import create_boost_rules
@@ -118,7 +118,6 @@ class CivVIWorld(World):
 
     def generate_early(self) -> None:
         flat_progressive_items = get_flat_progressive_districts()
-        progressive_districts = get_progressive_districts_data()
 
         self.item_by_civ_name = {
             item.civ_name: get_item_by_civ_name(item.civ_name, self.item_table).name
@@ -138,9 +137,7 @@ class CivVIWorld(World):
             )
 
             # Initialize era_required_progressive_items_counts
-            self.era_required_progressive_items_counts[era] = {
-                format_item_name(item): 0 for item in progressive_districts.keys()
-            }
+            self.era_required_progressive_items_counts[era] = defaultdict(int)
 
             if previous_era_counts:
                 self.era_required_progressive_items_counts[era].update(
