@@ -50,7 +50,7 @@ class TestBase(unittest.TestCase):
 
                 def patched_get_all_state(use_cache: bool, allow_partial_entrances: bool = False):
                     self.assertTrue(allow_partial_entrances, (
-                        "Before the connect_entrances step, other worlds might still have partial entrances. "
+                        "Before the connect_entrances step finishes, other worlds might still have partial entrances. "
                         "As such, any call to get_all_state must use allow_partial_entrances = True."
                     ))
 
