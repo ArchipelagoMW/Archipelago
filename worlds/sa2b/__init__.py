@@ -98,7 +98,7 @@ class SA2BWorld(World):
             "RingLink": self.options.ring_link.value,
             "TrapLink": self.options.trap_link.value,
             "RequiredRank": self.options.required_rank.value,
-            "MinigameMadnessAmount": self.options.minigame_madness_amount.value,
+            "MinigameMadnessAmount": self.options.minigame_madness_requirement.value,
             "LogicDifficulty": self.options.logic_difficulty.value,
             "ChaoKeys": self.options.keysanity.value,
             "Whistlesanity": self.options.whistlesanity.value,
@@ -251,13 +251,21 @@ class SA2BWorld(World):
             if self.options.goal.value in [8]:
                 available_locations: int = total_required_locations - len(itempool) - self.options.number_of_level_gates.value
 
-                while (self.options.minigame_madness_amount.value * len(minigame_trap_table)) > available_locations:
-                    self.options.minigame_madness_amount.value -= 1
+                while (self.options.minigame_madness_requirement.value * len(minigame_trap_table)) > available_locations:
+                    self.options.minigame_madness_requirement.value -= 1
+
+                while (self.options.minigame_madness_minimum.value * len(minigame_trap_table)) > available_locations:
+                    self.options.minigame_madness_minimum.value -= 1
+
+                traps_to_create: int = max(self.options.minigame_madness_minimum.value, self.options.minigame_madness_requirement.value)
 
                 # Minigame Madness
                 for item in {**minigame_trap_table}:
-                    for _ in range(self.options.minigame_madness_amount.value):
-                        itempool.append(self.create_item(item, ItemClassification.progression | ItemClassification.trap))
+                    for i in range(traps_to_create):
+                        classification: ItemClassification = ItemClassification.trap
+                        if i < self.options.minigame_madness_requirement.value:
+                            classification |= ItemClassification.progression
+                        itempool.append(self.create_item(item, classification))
 
             # Black Market
             itempool += [self.create_item(ItemName.market_token) for _ in range(self.options.black_market_slots.value)]

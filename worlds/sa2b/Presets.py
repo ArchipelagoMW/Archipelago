@@ -144,7 +144,8 @@ chao_centric = {
 allsanity_no_chao = {
     "goal": Goal.option_cannons_core_boss_rush,
     "boss_rush_shuffle": BossRushShuffle.option_chaos,
-    "minigame_madness_amount": MinigameMadnessAmount.range_end,
+    "minigame_madness_requirement": MinigameMadnessRequirement.range_end,
+    "minigame_madness_minimum": MinigameMadnessMinimum.range_end,
     "max_emblem_cap": MaximumEmblemCap.range_end,
 
     "mission_shuffle": True,
@@ -246,7 +247,8 @@ allsanity_no_chao = {
 allsanity = {
     "goal": Goal.option_cannons_core_boss_rush,
     "boss_rush_shuffle": BossRushShuffle.option_chaos,
-    "minigame_madness_amount": MinigameMadnessAmount.range_end,
+    "minigame_madness_requirement": MinigameMadnessRequirement.range_end,
+    "minigame_madness_minimum": MinigameMadnessMinimum.range_end,
     "max_emblem_cap": MaximumEmblemCap.range_end,
 
     "mission_shuffle": True,
@@ -360,7 +362,8 @@ allsanity = {
 all_random = {
     "goal": "random",
     "boss_rush_shuffle": "random",
-    "minigame_madness_amount": "random",
+    "minigame_madness_requirement": "random",
+    "minigame_madness_minimum": "random",
     "logic_difficulty": "random",
     "required_rank": "random",
     "max_emblem_cap": "random",

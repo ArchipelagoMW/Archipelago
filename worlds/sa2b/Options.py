@@ -112,18 +112,28 @@ class GateBossPlando(PlandoBosses):
     option_plando = 0
 
 
-class MinigameMadnessAmount(Range):
+class MinigameMadnessRequirement(Range):
     """
     Determines how many of each Minigame Trap must be won (for Minigame Madness goal)
 
-    At least this many of each trap will be created as "Progression Traps", regardless of other trap option selections
-
     Receiving this many of a Minigame Trap will allow you to replay that minigame at-will in the Chao World lobby
     """
-    display_name = "Minigame Madness Trap Amount"
+    display_name = "Minigame Madness Trap Requirement"
     range_start = 1
     range_end = 10
     default = 3
+
+
+class MinigameMadnessMinimum(Range):
+    """
+    Determines the minimum number of each Minigame Trap that are created (for Minigame Madness goal)
+
+    At least this many of each trap will be created as "Progression Traps", regardless of other trap option selections
+    """
+    display_name = "Minigame Madness Trap Minimum"
+    range_start = 1
+    range_end = 10
+    default = 5
 
 
 class BaseTrapWeight(Choice):
@@ -1127,7 +1137,8 @@ sa2b_option_groups = [
     OptionGroup("General Options", [
         Goal,
         BossRushShuffle,
-        MinigameMadnessAmount,
+        MinigameMadnessRequirement,
+        MinigameMadnessMinimum,
         LogicDifficulty,
         RequiredRank,
         MaximumEmblemCap,
@@ -1267,7 +1278,8 @@ sa2b_option_groups = [
 class SA2BOptions(PerGameCommonOptions):
     goal: Goal
     boss_rush_shuffle: BossRushShuffle
-    minigame_madness_amount: MinigameMadnessAmount
+    minigame_madness_requirement: MinigameMadnessRequirement
+    minigame_madness_minimum: MinigameMadnessMinimum
     gate_boss_plando: GateBossPlando
     logic_difficulty: LogicDifficulty
     required_rank: RequiredRank
