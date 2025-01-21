@@ -760,6 +760,7 @@ item_name_groups[ItemGroupNames.WAR_COUNCIL] = [
 item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = [
     item_names.SIEGE_TANK_GRADUATING_RANGE,
     item_names.SIEGE_TANK_RESOURCE_EFFICIENCY,
+    item_names.RAVEN_HUNTER_SEEKER_WEAPON,
     item_names.BATTLECRUISER_ATX_LASER_BATTERY,
     item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL,
     item_names.MECHANICAL_KNOW_HOW,
@@ -770,7 +771,6 @@ item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = [
     item_names.KERRIGAN_SPAWN_LEVIATHAN,
     item_names.KERRIGAN_IMMOBILIZATION_WAVE,
 
-    item_names.REAVER_RESOURCE_EFFICIENCY,
     item_names.SOA_TIME_STOP,
     item_names.SOA_SOLAR_LANCE,
     # Note: This is more an issue of having multiple ults at the same time, rather than solar bombardment in particular.
