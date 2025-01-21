@@ -1011,7 +1011,7 @@ def resolve_early_locations_for_planned(multiworld: MultiWorld):
             block.count["target"] = multiworld.random.randint(block.count["min"],
                                                                      block.count["max"])
 
-            if block.count["target"]:
+            if not block.count["target"]:
                 removed.append(block)
 
         for block in removed:
