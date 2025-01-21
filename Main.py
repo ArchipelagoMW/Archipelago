@@ -150,6 +150,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     if multiworld.players > 1:
         locality_rules(multiworld)
 
+    AutoWorld.call_all(multiworld, "connect_entrances")
     AutoWorld.call_all(multiworld, "generate_basic")
 
     # remove starting inventory from pool items.
