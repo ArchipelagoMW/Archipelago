@@ -1,5 +1,4 @@
 import unittest
-
 from worlds.AutoWorld import AutoWorldRegister, call_all, World
 from . import setup_solo_multiworld
 
@@ -38,7 +37,8 @@ class TestBase(unittest.TestCase):
 
     def test_all_state_before_connect_entrances(self):
         """Before connect_entrances, Entrance objects may be unconnected.
-        Thus, we test that get_all_state is performed with allow_partial_entrances if used before connect_entrances."""
+        Thus, we test that get_all_state is performed with allow_partial_entrances if used before or during
+        connect_entrances."""
 
         gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "connect_entrances")
 
