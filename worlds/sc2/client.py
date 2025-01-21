@@ -706,7 +706,6 @@ class SC2Context(CommonContext):
         elif str(SC2World.settings.skip_cutscenes).casefold() == 'false':
             self.skip_cutscenes = SkipCutscenes.option_false
 
-
     def on_package(self, cmd: str, args: dict) -> None:
         if cmd == "Connected":
             # Set up the trade storage
