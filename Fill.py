@@ -915,7 +915,7 @@ def parse_planned_blocks(multiworld: MultiWorld) -> typing.Dict[int, typing.List
                 worlds = {world_name_lookup[target_world]}
             new_block.worlds = worlds
 
-            items: typing.Union[typing.List[str], typing.Dict[str, typing.Any], str] = block.items
+            items: typing.Union[typing.List[str], typing.Dict[str, typing.Any]] = block.items
             if isinstance(items, dict):
                 item_list: typing.List[str] = []
                 for key, value in items.items():
@@ -923,8 +923,6 @@ def parse_planned_blocks(multiworld: MultiWorld) -> typing.Dict[int, typing.List
                         value = multiworld.itempool.count(multiworld.worlds[player].create_item(key))
                     item_list += [key] * value
                 items = item_list
-            if isinstance(items, str):
-                items = [items]
             new_block.items = items
 
             locations: typing.List[str] = block.locations

@@ -1480,6 +1480,8 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                             items = [items]
                         elif not isinstance(items, dict):
                             raise Exception(f"Plando 'item' has to be string or dictionary, not {type(items)}.")
+                    if isinstance(items, str):
+                        items = [items]
                     locations = item.get("locations", [])
                     if not locations:
                         locations = item.get("location", [])
