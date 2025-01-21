@@ -192,6 +192,8 @@ def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
 
     call_stage(multiworld, method_name, *args)
 
+    multiworld.completed_world_stages.append(method_name)
+
 
 def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
     world_types = {multiworld.worlds[player].__class__ for player in multiworld.player_ids}

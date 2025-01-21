@@ -68,6 +68,8 @@ class MultiWorld():
     precollected_items: Dict[int, List[Item]]
     state: CollectionState
 
+    completed_world_stages: List[str]
+
     plando_options: PlandoOptions
     early_items: Dict[int, Dict[str, int]]
     local_early_items: Dict[int, Dict[str, int]]
@@ -173,6 +175,7 @@ class MultiWorld():
         self.per_slot_randoms = Utils.DeprecateDict("Using per_slot_randoms is now deprecated. Please use the "
                                                     "world's random object instead (usually self.random)")
         self.plando_options = PlandoOptions.none
+        self.completed_world_stages = []
 
     def get_all_ids(self) -> Tuple[int, ...]:
         return self.player_ids + tuple(self.groups)
@@ -428,6 +431,11 @@ class MultiWorld():
         return self.regions.location_cache[player][location_name]
 
     def get_all_state(self, use_cache: bool, allow_partial_entrances: bool = False) -> CollectionState:
+        assert allow_partial_entrances or "connect_entrances" in self.completed_world_stages, (
+            "Before the end of connect_entrances, get_all_state must be called with allow_partial_entrances = True. "
+            "This is because other worlds may still have dangling entrances."
+        )
+
         cached = getattr(self, "_all_state", None)
         if use_cache and cached:
             return cached.copy()
