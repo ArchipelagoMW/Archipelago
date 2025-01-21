@@ -941,7 +941,7 @@ def parse_planned_blocks(multiworld: MultiWorld) -> typing.Dict[int, typing.List
                 resolved_locations.extend(location for location in world_locations
                                           if location.name in [*locations, *locations_from_groups])
             new_block.locations = sorted(dict.fromkeys(locations))
-            new_block.locations = sorted(set(resolved_locations))
+            new_block.resolved_locations = sorted(set(resolved_locations))
 
             count = block.count
             if not count:
