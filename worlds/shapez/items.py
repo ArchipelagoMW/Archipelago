@@ -1,10 +1,11 @@
 from typing import Dict, Callable
 
 from BaseClasses import Item, ItemClassification as IClass
+from .data.strings import GOALS, ITEMS, OTHER
 
 
 def is_mam_achievement_included(goal: str, achievements: bool, early_useful: str) -> IClass:
-    return IClass.progression if achievements and (not goal == "vanilla") else IClass.useful
+    return IClass.progression if achievements and (not goal == GOALS.vanilla) else IClass.useful
 
 
 def is_achievements_included(goal: str, achievements: bool, early_useful: str) -> IClass:
@@ -12,7 +13,7 @@ def is_achievements_included(goal: str, achievements: bool, early_useful: str) -
 
 
 def is_goal_efficiency_iii(goal: str, achievements: bool, early_useful: str) -> IClass:
-    return IClass.progression if goal == "efficiency_iii" else IClass.useful
+    return IClass.progression if goal == GOALS.efficiency_iii else IClass.useful
 
 
 def always_progression(goal: str, achievements: bool, early_useful: str) -> IClass:
@@ -36,86 +37,86 @@ def always_trap(goal: str, achievements: bool, early_useful: str) -> IClass:
 # Some buildings are not needed to complete the game, but are "logically needed" for the "MAM" achievement.
 
 buildings_processing: Dict[str, Callable[[str, bool, str], IClass]] = {
-    "Cutter": always_progression,
-    "Rotator": always_progression,
-    "Painter": always_progression,
-    "Rotator (CCW)": always_progression,
-    "Color Mixer": always_progression,
-    "Stacker": always_progression,
-    "Quad Cutter": always_progression,
-    "Double Painter": always_progression,
-    "Rotator (180°)": always_progression,
-    "Quad Painter": always_progression
+    ITEMS.cutter: always_progression,
+    ITEMS.cutter_quad: always_progression,
+    ITEMS.rotator: always_progression,
+    ITEMS.rotator_ccw: always_progression,
+    ITEMS.rotator_180: always_progression,
+    ITEMS.stacker: always_progression,
+    ITEMS.painter: always_progression,
+    ITEMS.painter_double: always_progression,
+    ITEMS.painter_quad: always_progression,
+    ITEMS.color_mixer: always_progression,
 }
 
 buildings_routing: Dict[str, Callable[[str, bool, str], IClass]] = {
-    "Balancer": always_progression,
-    "Tunnel": always_progression,
-    "Compact Merger": always_progression,
-    "Tunnel Tier II": is_mam_achievement_included,
-    "Compact Splitter": always_progression
+    ITEMS.balancer: always_progression,
+    ITEMS.comp_merger: always_progression,
+    ITEMS.comp_splitter: always_progression,
+    ITEMS.tunnel: always_progression,
+    ITEMS.tunnel_tier_ii: is_mam_achievement_included,
 }
 
 buildings_other: Dict[str, Callable[[str, bool, str], IClass]] = {
-    "Trash": always_progression,
-    "Chaining Extractor": always_useful
+    ITEMS.trash: always_progression,
+    ITEMS.extractor_chain: always_useful
 }
 
 buildings_top_row: Dict[str, Callable[[str, bool, str], IClass]] = {
-    "Belt Reader": is_mam_achievement_included,
-    "Storage": is_achievements_included,
-    "Switch": always_progression,
-    "Item Filter": is_mam_achievement_included,
-    "Display": always_useful
+    ITEMS.belt_reader: is_mam_achievement_included,
+    ITEMS.storage: is_achievements_included,
+    ITEMS.switch: always_progression,
+    ITEMS.item_filter: is_mam_achievement_included,
+    ITEMS.display: always_useful
 }
 
 buildings_wires: Dict[str, Callable[[str, bool, str], IClass]] = {
-    "Wires": always_progression,
-    "Constant Signal": always_progression,
-    "Logic Gates": is_mam_achievement_included,
-    "Virtual Processing": is_mam_achievement_included
+    ITEMS.wires: always_progression,
+    ITEMS.const_signal: always_progression,
+    ITEMS.logic_gates: is_mam_achievement_included,
+    ITEMS.virtual_proc: is_mam_achievement_included
 }
 
 gameplay_unlocks: Dict[str, Callable[[str, bool, str], IClass]] = {
-    "Blueprints": is_achievements_included
+    ITEMS.blueprints: is_achievements_included
 }
 
 upgrades: Dict[str, Callable[[str, bool, str], IClass]] = {
-    "Big Belt Upgrade": is_goal_efficiency_iii,
-    "Big Miner Upgrade": always_useful,
-    "Big Processors Upgrade": always_useful,
-    "Big Painting Upgrade": always_useful,
-    "Small Belt Upgrade": always_filler,
-    "Small Miner Upgrade": always_filler,
-    "Small Processors Upgrade": always_filler,
-    "Small Painting Upgrade": always_filler
+    ITEMS.upgrade_big_belt: is_goal_efficiency_iii,
+    ITEMS.upgrade_big_miner: always_useful,
+    ITEMS.upgrade_big_proc: always_useful,
+    ITEMS.upgrade_big_paint: always_useful,
+    ITEMS.upgrade_small_belt: always_filler,
+    ITEMS.upgrade_small_miner: always_filler,
+    ITEMS.upgrade_small_proc: always_filler,
+    ITEMS.upgrade_small_paint: always_filler
 }
 
 bundles: Dict[str, Callable[[str, bool, str], IClass]] = {
-    "Blueprint Shapes Bundle": always_filler,
-    "Level Shapes Bundle": always_filler,
-    "Upgrade Shapes Bundle": always_filler
+    ITEMS.bundle_blueprint: always_filler,
+    ITEMS.bundle_level: always_filler,
+    ITEMS.bundle_upgrade: always_filler
 }
 
 standard_traps: Dict[str, Callable[[str, bool, str], IClass]] = {
-    "Locked Building Trap": always_trap,
-    "Throttled Building Trap": always_trap,
-    "Malfunctioning Trap": always_trap
+    ITEMS.trap_locked: always_trap,
+    ITEMS.trap_throttled: always_trap,
+    ITEMS.trap_malfunction: always_trap
 }
 
 random_draining_trap: Dict[str, Callable[[str, bool, str], IClass]] = {
-    "Inventory Draining Trap": always_trap
+    ITEMS.trap_draining_inv: always_trap
 }
 
 split_draining_traps: Dict[str, Callable[[str, bool, str], IClass]] = {
-    "Blueprint Shapes Draining Trap": always_trap,
-    "Level Shapes Draining Trap": always_trap,
-    "Upgrade Shapes Draining Trap": always_trap
+    ITEMS.trap_draining_blueprint: always_trap,
+    ITEMS.trap_draining_level: always_trap,
+    ITEMS.trap_draining_upgrade: always_trap
 }
 
 belt_and_extractor: Dict[str, Callable[[str, bool, str], IClass]] = {
-    "Belt": always_progression,
-    "Extractor": always_progression
+    ITEMS.belt: always_progression,
+    ITEMS.extractor: always_progression
 }
 
 item_table: Dict[str, Callable[[str, bool, str], IClass]] = {
@@ -134,17 +135,17 @@ item_table: Dict[str, Callable[[str, bool, str], IClass]] = {
 }
 
 big_upgrades = [
-    "Big Belt Upgrade",
-    "Big Miner Upgrade",
-    "Big Processors Upgrade",
-    "Big Painting Upgrade"
+    ITEMS.upgrade_big_belt,
+    ITEMS.upgrade_big_miner,
+    ITEMS.upgrade_big_proc,
+    ITEMS.upgrade_big_paint
 ]
 
 small_upgrades = [
-    "Small Belt Upgrade",
-    "Small Miner Upgrade",
-    "Small Processors Upgrade",
-    "Small Painting Upgrade"
+    ITEMS.upgrade_small_belt,
+    ITEMS.upgrade_small_miner,
+    ITEMS.upgrade_small_proc,
+    ITEMS.upgrade_small_paint
 ]
 
 
@@ -154,7 +155,7 @@ def trap(random: float, split_draining: bool) -> str:
     if random_value >= 1:
         return list(standard_traps.keys())[int(random_value)-1]
     else:
-        return "Inventory Draining Trap" \
+        return ITEMS.trap_draining_inv \
             if not split_draining else list(split_draining_traps.keys())[int(random_value*3)]
 
 
@@ -168,7 +169,7 @@ def filler(random: float) -> str:
         return list(bundles.keys())[int((random-0.66)*len(bundles)/0.34)]
 
 
-item_descriptions = {
+item_descriptions = {  # TODO replace keys with global strings
     "Balancer": "A routing building, that can merge two belts into one, split a belt in two, " +
                 "or balance the items of two belts",
     "Tunnel": "A routing building consisting of two parts, that allows for gaps in belts",
@@ -227,4 +228,4 @@ item_descriptions = {
 
 
 class ShapezItem(Item):
-    game = "shapez"
+    game = OTHER.game_name

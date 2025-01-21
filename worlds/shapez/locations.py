@@ -2,9 +2,10 @@ from random import Random
 from typing import List, Tuple, Dict, Optional, Callable
 
 from BaseClasses import Location, LocationProgressType, Region
+from .data.strings import CATEGORY, LOCATIONS, REGIONS, OPTIONS, GOALS, OTHER
 from .options import max_shapesanity, max_levels_and_upgrades
 
-categories = ["Belt", "Miner", "Processors", "Painting"]
+categories = [CATEGORY.belt, CATEGORY.miner, CATEGORY.processors, CATEGORY.painting]
 
 translate: List[Tuple[int, str]] = [
     (1000, "M"),
@@ -33,7 +34,7 @@ def roman(num: int) -> str:
     return rom
 
 
-location_description = {
+location_description = {  # TODO change keys to global strings
     "Level 1": "Levels are completed by delivering certain shapes in certain amounts to the hub. The required shape "
                "and amount for the current level are always displayed on the hub.",
     "Level 1 Additional": "In the vanilla game, levels 1 and 20 have unlock more than one building.",
@@ -153,22 +154,25 @@ shapesanity_two_sided: Dict[str, str] = {}
 shapesanity_three_parts: Dict[str, str] = {}
 shapesanity_four_parts: Dict[str, str] = {}
 
-level_locations: List[str] = (["Level 1 Additional", "Level 20 Additional", "Level 20 Additional 2"]
-                              + [f"Level {x}" for x in range(1, max_levels_and_upgrades)])
-upgrade_locations: List[str] = [f"{cat} Upgrade Tier {roman(x)}"
+level_locations: List[str] = ([LOCATIONS.level(1, 1), LOCATIONS.level(20, 1), LOCATIONS.level(20, 2)]
+                              + [LOCATIONS.level(x) for x in range(1, max_levels_and_upgrades)])
+upgrade_locations: List[str] = [LOCATIONS.upgrade(cat, roman(x))
                                 for cat in categories for x in range(2, max_levels_and_upgrades+1)]
-achievement_locations: List[str] = ["My eyes no longer hurt", "Painter", "Cutter", "Rotater", "Wait, they stack?",
-                                    "Wires", "Storage", "Freedom", "The logo!", "To the moon", "It's piling up",
-                                    "I'll use it later", "Efficiency 1", "Preparing to launch", "SpaceY",
-                                    "Stack overflow", "It's a mess", "Faster", "Even faster", "Get rid of them",
-                                    "It's been a long time", "Addicted", "Can't stop", "Is this the end?",
-                                    "Getting into it", "Now it's easy", "Computer Guy", "Speedrun Master",
-                                    "Speedrun Novice", "Not an idle game", "Efficiency 2", "Branding specialist 1",
-                                    "Branding specialist 2", "King of Inefficiency", "It's so slow",
-                                    "MAM (Make Anything Machine)", "Perfectionist", "The next dimension", "Oops",
-                                    "Copy-Pasta", "I've seen that before ...", "Memories from the past",
-                                    "I need trains", "A bit early?", "GPS"]
-shapesanity_locations: List[str] = [f"Shapesanity {x}" for x in range(1, max_shapesanity+1)]
+achievement_locations: List[str] = [LOCATIONS.my_eyes, LOCATIONS.painter, LOCATIONS.cutter, LOCATIONS.rotater,
+                                    LOCATIONS.wait_they_stack, LOCATIONS.wires, LOCATIONS.storage, LOCATIONS.freedom,
+                                    LOCATIONS.the_logo, LOCATIONS.to_the_moon, LOCATIONS.its_piling_up,
+                                    LOCATIONS.use_it_later, LOCATIONS.efficiency_1, LOCATIONS.preparing_to_launch,
+                                    LOCATIONS.spacey, LOCATIONS.stack_overflow, LOCATIONS.its_a_mess, LOCATIONS.faster,
+                                    LOCATIONS.even_faster, LOCATIONS.get_rid_of_them, LOCATIONS.a_long_time,
+                                    LOCATIONS.addicted, LOCATIONS.cant_stop, LOCATIONS.is_this_the_end,
+                                    LOCATIONS.getting_into_it, LOCATIONS.now_its_easy, LOCATIONS.computer_guy,
+                                    LOCATIONS.speedrun_master, LOCATIONS.speedrun_novice, LOCATIONS.not_idle_game,
+                                    LOCATIONS.efficiency_2, LOCATIONS.branding_1,
+                                    LOCATIONS.branding_2, LOCATIONS.king_of_inefficiency, LOCATIONS.its_so_slow,
+                                    LOCATIONS.mam, LOCATIONS.perfectionist, LOCATIONS.next_dimension, LOCATIONS.oops,
+                                    LOCATIONS.copy_pasta, LOCATIONS.ive_seen_that_before, LOCATIONS.memories,
+                                    LOCATIONS.i_need_trains, LOCATIONS.a_bit_early, LOCATIONS.gps]
+shapesanity_locations: List[str] = [LOCATIONS.shapesanity(x) for x in range(1, max_shapesanity+1)]
 
 
 def init_shapesanity_pool() -> None:
@@ -188,88 +192,88 @@ def addlevels(maxlevel: int, logictype: str,
 
     # Level 1 is always directly accessible
     locations: Dict[str, Tuple[str, LocationProgressType]] \
-        = {"Level 1": ("Main", LocationProgressType.PRIORITY),
-           "Level 1 Additional": ("Main", LocationProgressType.PRIORITY)}
-    level_regions = ["Main", "Levels with 1 Building", "Levels with 2 Buildings", "Levels with 3 Buildings",
-                     "Levels with 4 Buildings", "Levels with 5 Buildings"]
+        = {LOCATIONS.level(1): (REGIONS.main, LocationProgressType.PRIORITY),
+           LOCATIONS.level(1, 1): (REGIONS.main, LocationProgressType.PRIORITY)}
+    level_regions = [REGIONS.main, REGIONS.levels_1, REGIONS.levels_2, REGIONS.levels_3,
+                     REGIONS.levels_4, REGIONS.levels_5]
 
     def f(name: str, region: str, progress: LocationProgressType = LocationProgressType.DEFAULT) -> None:
         locations[name] = (region, progress)
 
-    if logictype.startswith("vanilla"):
-        f("Level 20 Additional", "Levels with 5 Buildings")
-        f("Level 20 Additional 2", "Levels with 5 Buildings")
-        f("Level 2", "Levels with 1 Building")
-        f("Level 3", "Levels with 1 Building")
-        f("Level 4", "Levels with 1 Building")
-        f("Level 5", "Levels with 2 Buildings")
-        f("Level 6", "Levels with 2 Buildings")
-        f("Level 7", "Levels with 3 Buildings")
-        f("Level 8", "Levels with 3 Buildings")
-        f("Level 9", "Levels with 4 Buildings")
-        f("Level 10", "Levels with 4 Buildings")
+    if logictype.startswith(OPTIONS.logic_vanilla):
+        f(LOCATIONS.level(20, 1), REGIONS.levels_5)
+        f(LOCATIONS.level(20, 2), REGIONS.levels_5)
+        f(LOCATIONS.level(2), REGIONS.levels_1)
+        f(LOCATIONS.level(3), REGIONS.levels_1)
+        f(LOCATIONS.level(4), REGIONS.levels_1)
+        f(LOCATIONS.level(5), REGIONS.levels_2)
+        f(LOCATIONS.level(6), REGIONS.levels_2)
+        f(LOCATIONS.level(7), REGIONS.levels_3)
+        f(LOCATIONS.level(8), REGIONS.levels_3)
+        f(LOCATIONS.level(9), REGIONS.levels_4)
+        f(LOCATIONS.level(10), REGIONS.levels_4)
         for x in range(11, maxlevel+1):
-            f(f"Level {x}", "Levels with 5 Buildings")
+            f(LOCATIONS.level(x), REGIONS.levels_5)
 
-    elif logictype.startswith("stretched"):
+    elif logictype.startswith(OPTIONS.logic_stretched):
         phaselength = maxlevel//6
-        f("Level 20 Additional", level_regions[20//phaselength])
-        f("Level 20 Additional 2", level_regions[20//phaselength])
+        f(LOCATIONS.level(20, 1), level_regions[20//phaselength])
+        f(LOCATIONS.level(20, 2), level_regions[20//phaselength])
         for x in range(2, phaselength):
-            f(f"Level {x}", "Main")
+            f(LOCATIONS.level(x), REGIONS.main)
         for x in range(phaselength, phaselength*2):
-            f(f"Level {x}", "Levels with 1 Building")
+            f(LOCATIONS.level(x), REGIONS.levels_1)
         for x in range(phaselength*2, phaselength*3):
-            f(f"Level {x}", "Levels with 2 Buildings")
+            f(LOCATIONS.level(x), REGIONS.levels_2)
         for x in range(phaselength*3, phaselength*4):
-            f(f"Level {x}", "Levels with 3 Buildings")
+            f(LOCATIONS.level(x), REGIONS.levels_3)
         for x in range(phaselength*4, phaselength*5):
-            f(f"Level {x}", "Levels with 4 Buildings")
+            f(LOCATIONS.level(x), REGIONS.levels_4)
         for x in range(phaselength*5, maxlevel+1):
-            f(f"Level {x}", "Levels with 5 Buildings")
+            f(LOCATIONS.level(x), REGIONS.levels_5)
 
-    elif logictype.startswith("quick"):
-        f("Level 20 Additional", "Levels with 5 Buildings")
-        f("Level 20 Additional 2", "Levels with 5 Buildings")
-        f("Level 2", "Levels with 1 Building")
-        f("Level 3", "Levels with 2 Buildings")
-        f("Level 4", "Levels with 3 Buildings")
-        f("Level 5", "Levels with 4 Buildings")
+    elif logictype.startswith(OPTIONS.logic_quick):
+        f(LOCATIONS.level(20, 1), REGIONS.levels_5)
+        f(LOCATIONS.level(20, 2), REGIONS.levels_5)
+        f(LOCATIONS.level(2), REGIONS.levels_1)
+        f(LOCATIONS.level(3), REGIONS.levels_2)
+        f(LOCATIONS.level(4), REGIONS.levels_3)
+        f(LOCATIONS.level(5), REGIONS.levels_4)
         for x in range(6, maxlevel+1):
-            f(f"Level {x}", "Levels with 5 Buildings")
+            f(LOCATIONS.level(x), REGIONS.levels_5)
 
-    elif logictype.startswith("random_steps"):
+    elif logictype.startswith(OPTIONS.logic_random_steps):
         next_level = 2
         for phase in range(5):
             for x in range(random_logic_phase_length[phase]):
-                f(f"Level {next_level+x}", level_regions[phase])
+                f(LOCATIONS.level(next_level+x), level_regions[phase])
             next_level += random_logic_phase_length[phase]
             if next_level > 20:
-                f("Level 20 Additional", level_regions[phase])
-                f("Level 20 Additional 2", level_regions[phase])
+                f(LOCATIONS.level(20, 1), level_regions[phase])
+                f(LOCATIONS.level(20, 2), level_regions[phase])
         for x in range(next_level, maxlevel+1):
-            f(f"Level {x}", "Levels with 5 Buildings")
+            f(LOCATIONS.level(x), REGIONS.levels_5)
         if next_level <= 20:
-            f("Level 20 Additional", "Levels with 5 Buildings")
-            f("Level 20 Additional 2", "Levels with 5 Buildings")
+            f(LOCATIONS.level(20, 1), REGIONS.levels_5)
+            f(LOCATIONS.level(20, 2), REGIONS.levels_5)
 
-    elif logictype == "hardcore":
-        f("Level 20 Additional", "Levels with 5 Buildings")
-        f("Level 20 Additional 2", "Levels with 5 Buildings")
+    elif logictype == OPTIONS.logic_hardcore:
+        f(LOCATIONS.level(20, 1), REGIONS.levels_5)
+        f(LOCATIONS.level(20, 2), REGIONS.levels_5)
         for x in range(2, maxlevel+1):
-            f(f"Level {x}", "Levels with 5 Buildings")
+            f(LOCATIONS.level(x), REGIONS.levels_5)
 
-    elif logictype == "dopamine":
-        f("Level 20 Additional", "Levels with 2 Buildings")
-        f("Level 20 Additional 2", "Levels with 2 Buildings")
+    elif logictype == OPTIONS.logic_dopamine:
+        f(LOCATIONS.level(20, 1), REGIONS.levels_2)
+        f(LOCATIONS.level(20, 2), REGIONS.levels_2)
         for x in range(2, maxlevel+1):
-            f(f"Level {x}", "Levels with 2 Buildings")
+            f(LOCATIONS.level(x), REGIONS.levels_2)
 
-    elif logictype == "dopamine_overflow":
-        f("Level 20 Additional", "Main")
-        f("Level 20 Additional 2", "Main")
+    elif logictype == OPTIONS.logic_dopamine_overflow:
+        f(LOCATIONS.level(20, 1), REGIONS.main)
+        f(LOCATIONS.level(20, 2), REGIONS.main)
         for x in range(2, maxlevel+1):
-            f(f"Level {x}", "Main")
+            f(LOCATIONS.level(x), REGIONS.main)
 
     else:
         raise Exception(f"Illegal level logic type {logictype}")
@@ -283,73 +287,80 @@ def addupgrades(finaltier: int, logictype: str,
     If shape requirements are not randomized, give logic type 0."""
 
     locations: Dict[str, Tuple[str, LocationProgressType]] = {}
-    upgrade_regions = ["Main", "Upgrades with 1 Building", "Upgrades with 2 Buildings", "Upgrades with 3 Buildings",
-                       "Upgrades with 4 Buildings", "Upgrades with 5 Buildings"]
+    upgrade_regions = [REGIONS.main, REGIONS.upgrades_1, REGIONS.upgrades_2, REGIONS.upgrades_3,
+                       REGIONS.upgrades_4, REGIONS.upgrades_5]
 
     def f(name: str, region: str, progress: LocationProgressType = LocationProgressType.DEFAULT) -> None:
         locations[name] = (region, progress)
 
-    if logictype == "vanilla_like":
-        f("Belt Upgrade Tier II", "Main")
-        f("Miner Upgrade Tier II", "Main")
-        f("Processors Upgrade Tier II", "Main")
-        f("Painting Upgrade Tier II", "Upgrades with 3 Buildings")
-        f("Belt Upgrade Tier III", "Upgrades with 2 Buildings")
-        f("Miner Upgrade Tier III", "Upgrades with 2 Buildings")
-        f("Processors Upgrade Tier III", "Upgrades with 1 Building")
-        f("Painting Upgrade Tier III", "Upgrades with 3 Buildings")
+    if logictype == OPTIONS.logic_vanilla_like:
+        f(LOCATIONS.upgrade(CATEGORY.belt, "II"), REGIONS.main)
+        f(LOCATIONS.upgrade(CATEGORY.miner, "II"), REGIONS.main)
+        f(LOCATIONS.upgrade(CATEGORY.processors, "II"), REGIONS.main)
+        f(LOCATIONS.upgrade(CATEGORY.painting, "II"), REGIONS.upgrades_3)
+        f(LOCATIONS.upgrade(CATEGORY.belt, "III"), REGIONS.upgrades_2)
+        f(LOCATIONS.upgrade(CATEGORY.miner, "III"), REGIONS.upgrades_2)
+        f(LOCATIONS.upgrade(CATEGORY.processors, "III"), REGIONS.upgrades_1)
+        f(LOCATIONS.upgrade(CATEGORY.painting, "III"), REGIONS.upgrades_3)
         for x in range(4, finaltier+1):
             tier = roman(x)
             for cat in categories:
-                f(f"{cat} Upgrade Tier {tier}", "Upgrades with 5 Buildings")
+                f(LOCATIONS.upgrade(cat, tier), REGIONS.upgrades_5)
 
-    elif logictype == "linear":
-        for cat in categories:
-            for x in range(2, 7):
-                f(f"{cat} Upgrade Tier {roman(x)}", upgrade_regions[x-2])
-            for x in range(7, finaltier+1):
-                f(f"{cat} Upgrade Tier {roman(x)}", "Upgrades with 5 Buildings")
-
-    elif logictype == "category":
+    elif logictype == OPTIONS.logic_linear:
         for x in range(2, 7):
-            f(f"Belt Upgrade Tier {roman(x)}", "Main")
-            f(f"Miner Upgrade Tier {roman(x)}", "Main")
-        for x in range(7, finaltier + 1):
-            f(f"Belt Upgrade Tier {roman(x)}", "Upgrades with 5 Buildings")
-            f(f"Miner Upgrade Tier {roman(x)}", "Upgrades with 5 Buildings")
-        f("Processors Upgrade Tier II", "Upgrades with 1 Building")
-        f("Processors Upgrade Tier III", "Upgrades with 2 Buildings")
-        f("Processors Upgrade Tier IV", "Upgrades with 2 Buildings")
-        f("Processors Upgrade Tier V", "Upgrades with 3 Buildings")
-        f("Processors Upgrade Tier VI", "Upgrades with 3 Buildings")
+            tier = roman(x)
+            for cat in categories:
+                f(LOCATIONS.upgrade(cat, tier), upgrade_regions[x-2])
         for x in range(7, finaltier+1):
-            f(f"Processors Upgrade Tier {roman(x)}", "Upgrades with 5 Buildings")
-        for x in range(2, 4):
-            f(f"Painting Upgrade Tier {roman(x)}", "Upgrades with 4 Buildings")
-        for x in range(4, finaltier+1):
-            f(f"Painting Upgrade Tier {roman(x)}", "Upgrades with 5 Buildings")
+            tier = roman(x)
+            for cat in categories:
+                f(LOCATIONS.upgrade(cat, tier), REGIONS.upgrades_5)
 
-    elif logictype == "category_random":
+    elif logictype == OPTIONS.logic_category:
+        for x in range(2, 7):
+            tier = roman(x)
+            f(LOCATIONS.upgrade(CATEGORY.belt, tier), REGIONS.main)
+            f(LOCATIONS.upgrade(CATEGORY.miner, tier), REGIONS.main)
+        for x in range(7, finaltier + 1):
+            tier = roman(x)
+            f(LOCATIONS.upgrade(CATEGORY.belt, tier), REGIONS.upgrades_5)
+            f(LOCATIONS.upgrade(CATEGORY.miner, tier), REGIONS.upgrades_5)
+        f(LOCATIONS.upgrade(CATEGORY.processors, "II"), REGIONS.upgrades_1)
+        f(LOCATIONS.upgrade(CATEGORY.processors, "III"), REGIONS.upgrades_2)
+        f(LOCATIONS.upgrade(CATEGORY.processors, "IV"), REGIONS.upgrades_2)
+        f(LOCATIONS.upgrade(CATEGORY.processors, "V"), REGIONS.upgrades_3)
+        f(LOCATIONS.upgrade(CATEGORY.processors, "VI"), REGIONS.upgrades_3)
+        for x in range(7, finaltier+1):
+            f(LOCATIONS.upgrade(CATEGORY.processors, roman(x)), REGIONS.upgrades_5)
+        for x in range(2, 4):
+            f(LOCATIONS.upgrade(CATEGORY.painting, roman(x)), REGIONS.upgrades_4)
+        for x in range(4, finaltier+1):
+            f(LOCATIONS.upgrade(CATEGORY.painting, roman(x)), REGIONS.upgrades_5)
+
+    elif logictype == OPTIONS.logic_category_random:
         for x in range(2, 6):
             tier = roman(x)
-            f(f"Belt Upgrade Tier {tier}", upgrade_regions[category_random_logic_amounts["belt"]])
-            f(f"Miner Upgrade Tier {tier}", upgrade_regions[category_random_logic_amounts["miner"]])
-            f(f"Processors Upgrade Tier {tier}", upgrade_regions[category_random_logic_amounts["processors"]])
-            f(f"Painting Upgrade Tier {tier}", upgrade_regions[category_random_logic_amounts["painting"]])
+            f(LOCATIONS.upgrade(CATEGORY.belt, tier),
+              upgrade_regions[category_random_logic_amounts[CATEGORY.belt_low]])
+            f(LOCATIONS.upgrade(CATEGORY.miner, tier),
+              upgrade_regions[category_random_logic_amounts[CATEGORY.miner_low]])
+            f(LOCATIONS.upgrade(CATEGORY.processors, tier),
+              upgrade_regions[category_random_logic_amounts[CATEGORY.processors_low]])
+            f(LOCATIONS.upgrade(CATEGORY.painting, tier),
+              upgrade_regions[category_random_logic_amounts[CATEGORY.painting_low]])
         for x in range(6, finaltier+1):
             tier = roman(x)
-            f(f"Belt Upgrade Tier {tier}", "Upgrades with 5 Buildings")
-            f(f"Miner Upgrade Tier {tier}", "Upgrades with 5 Buildings")
-            f(f"Processors Upgrade Tier {tier}", "Upgrades with 5 Buildings")
-            f(f"Painting Upgrade Tier {tier}", "Upgrades with 5 Buildings")
+            for cat in categories:
+                f(LOCATIONS.upgrade(cat, tier), REGIONS.upgrades_5)
 
     else:  # logictype == hardcore
         for cat in categories:
-            f(f"{cat} Upgrade Tier II", "Main")
+            f(LOCATIONS.upgrade(cat, "II"), REGIONS.main)
         for x in range(3, finaltier+1):
             tier = roman(x)
             for cat in categories:
-                f(f"{cat} Upgrade Tier {tier}", "Upgrades with 5 Buildings")
+                f(LOCATIONS.upgrade(cat, tier), REGIONS.upgrades_5)
 
     return locations
 
@@ -361,68 +372,72 @@ def addachievements(excludesoftlock: bool, excludelong: bool, excludeprogressive
     """Returns a dictionary with all achievement locations based on player options."""
 
     locations: Dict[str, Tuple[str, LocationProgressType]] = dict()
-    upgrade_regions = ["Main", "Upgrades with 1 Building", "Upgrades with 2 Buildings", "Upgrades with 3 Buildings",
-                       "Upgrades with 4 Buildings", "Upgrades with 5 Buildings"]
+    upgrade_regions = [REGIONS.main, REGIONS.upgrades_1, REGIONS.upgrades_2, REGIONS.upgrades_3,
+                       REGIONS.upgrades_4, REGIONS.upgrades_5]
 
     def f(name: str, region: str, alias: str, progress: LocationProgressType = LocationProgressType.DEFAULT):
         locations[name] = (region, progress)
         add_alias(name, alias)
 
-    f("My eyes no longer hurt", "Menu", "Activate dark mode")
-    f("Painter", "Painted Shape Achievements", "Paint a shape (no Quad Painter)")
-    f("Cutter", "Cut Shape Achievements", "Cut a shape (no Quad Cutter)")
-    f("Rotater", "Rotated Shape Achievements", "Rotate a shape clock wise")
-    f("Wait, they stack?", "Stacked Shape Achievements", "Stack a shape")
-    f("Storage", "Stored Shape Achievements", "Store a shape in the storage")
-    f("The logo!", "All Buildings Shapes", "Produce the shapez logo")
-    f("To the moon", "All Buildings Shapes", "Produce the rocket shape")
-    f("It's piling up", "All Buildings Shapes", "100k blueprint shapes")
-    f("I'll use it later", "All Buildings Shapes", "1 million blueprint shapes")
-    f("Efficiency 1", "All Buildings Shapes", "25 blueprints shapes / second")
-    f("Preparing to launch", "All Buildings Shapes", "10 rocket shapes / second")
-    f("SpaceY", "All Buildings Shapes", "20 rocket shapes / second")
+    f(LOCATIONS.my_eyes, REGIONS.menu, "Activate dark mode")
+    f(LOCATIONS.painter, REGIONS.paint, "Paint a shape (no Quad Painter)")
+    f(LOCATIONS.cutter, REGIONS.cut, "Cut a shape (no Quad Cutter)")
+    f(LOCATIONS.rotater, REGIONS.rotate, "Rotate a shape clock wise")
+    f(LOCATIONS.wait_they_stack, REGIONS.stack, "Stack a shape")
+    f(LOCATIONS.storage, REGIONS.store, "Store a shape in the storage")
+    f(LOCATIONS.the_logo, REGIONS.all_buildings, "Produce the shapez logo")
+    f(LOCATIONS.to_the_moon, REGIONS.all_buildings, "Produce the rocket shape")
+    f(LOCATIONS.its_piling_up, REGIONS.all_buildings, "100k blueprint shapes")
+    f(LOCATIONS.use_it_later, REGIONS.all_buildings, "1 million blueprint shapes")
+    f(LOCATIONS.efficiency_1, REGIONS.all_buildings, "25 blueprints shapes / second")
+    f(LOCATIONS.preparing_to_launch, REGIONS.all_buildings, "10 rocket shapes / second")
+    f(LOCATIONS.spacey, REGIONS.all_buildings, "20 rocket shapes / second")
 
-    f("Stack overflow", "Stacked Shape Achievements", "4 layers shape")
-    f("It's a mess", "Main", "100 different shapes in hub")
-    f("Get rid of them", "Trashed Shape Achievements", "1000 shapes trashed")
-    f("Getting into it", "Menu", "1 hour")
-    f("Now it's easy", "Blueprint Achievements", "Place a blueprint")
-    f("Computer Guy", "Wiring Achievements", "Place 5000 wires")
-    f("Efficiency 2", "All Buildings Shapes", "50 blueprints shapes / second")
-    f("Branding specialist 1", "All Buildings Shapes", "25 logo shapes / second")
-    f("Branding specialist 2", "All Buildings Shapes", "50 logo shapes / second")
-    f("Perfectionist", "Main", "Destroy more than 1000 objects at once")
-    f("The next dimension", "Wiring Achievements", "Open the wires layer")
-    f("Oops", "Main", "Deliver an irrelevant shape")
-    f("Copy-Pasta", "Blueprint Achievements", "Place a 1000 buildings blueprint")
-    f("I've seen that before ...", "All Buildings Shapes", "Produce RgRyRbRr")
-    f("Memories from the past", "All Buildings Shapes", "Produce WrRgWrRg:CwCrCwCr:SgSgSgSg")
-    f("I need trains", "Main", "Have a 500 tiles belt")
-    f("GPS", "Menu", "15 map markers")
+    f(LOCATIONS.stack_overflow, REGIONS.stack, "4 layers shape")
+    f(LOCATIONS.its_a_mess, REGIONS.main, "100 different shapes in hub")
+    f(LOCATIONS.get_rid_of_them, REGIONS.trash, "1000 shapes trashed")
+    f(LOCATIONS.getting_into_it, REGIONS.menu, "1 hour")
+    f(LOCATIONS.now_its_easy, REGIONS.blueprint, "Place a blueprint")
+    f(LOCATIONS.computer_guy, REGIONS.wiring, "Place 5000 wires")
+    f(LOCATIONS.efficiency_2, REGIONS.all_buildings, "50 blueprints shapes / second")
+    f(LOCATIONS.branding_1, REGIONS.all_buildings, "25 logo shapes / second")
+    f(LOCATIONS.branding_2, REGIONS.all_buildings, "50 logo shapes / second")
+    f(LOCATIONS.perfectionist, REGIONS.main, "Destroy more than 1000 objects at once")
+    f(LOCATIONS.next_dimension, REGIONS.wiring, "Open the wires layer")
+    f(LOCATIONS.oops, REGIONS.main, "Deliver an irrelevant shape")
+    f(LOCATIONS.copy_pasta, REGIONS.blueprint, "Place a 1000 buildings blueprint")
+    f(LOCATIONS.ive_seen_that_before, REGIONS.all_buildings, "Produce RgRyRbRr")
+    f(LOCATIONS.memories, REGIONS.all_buildings, "Produce WrRgWrRg:CwCrCwCr:SgSgSgSg")
+    f(LOCATIONS.i_need_trains, REGIONS.main, "Have a 500 tiles belt")
+    f(LOCATIONS.gps, REGIONS.menu, "15 map markers")
+
     # Achievements that depend on upgrades
-    f("Even faster", "Upgrades with 5 Buildings", "All upgrades on tier VIII")
-    if upgradelogictype == "linear":
-        f("Faster", "Upgrades with 3 Buildings", "All upgrades on tier V")
-    elif upgradelogictype == "category_random":
-        f("Faster", upgrade_regions[
-            max(category_random_logic_amounts["belt"], category_random_logic_amounts["miner"],
-                category_random_logic_amounts["processors"], category_random_logic_amounts["painting"])
+    f(LOCATIONS.even_faster, REGIONS.upgrades_5, "All upgrades on tier VIII")
+    if upgradelogictype == OPTIONS.logic_linear:
+        f(LOCATIONS.faster, REGIONS.upgrades_3, "All upgrades on tier V")
+    elif upgradelogictype == OPTIONS.logic_category_random:
+        f(LOCATIONS.faster, upgrade_regions[
+            max(category_random_logic_amounts[CATEGORY.belt_low],
+                category_random_logic_amounts[CATEGORY.miner_low],
+                category_random_logic_amounts[CATEGORY.processors_low],
+                category_random_logic_amounts[CATEGORY.painting_low])
         ], "All upgrades on tier V")
     else:
-        f("Faster", "Upgrades with 5 Buildings", "All upgrades on tier V")
+        f(LOCATIONS.faster, REGIONS.upgrades_5, "All upgrades on tier V")
+
     # Achievements that depend on the level
-    f("Wires", presentlocations["Level 20"][0], "Complete level 20")
-    if not goal == "vanilla":
-        f("Freedom", presentlocations["Level 26"][0], "Complete level 26")
-        f("MAM (Make Anything Machine)", "MAM needed", "Complete any level > 26 without modifications")
+    f(LOCATIONS.wires, presentlocations[LOCATIONS.level(20)][0], "Complete level 20")
+    if not goal == GOALS.vanilla:
+        f(LOCATIONS.freedom, presentlocations[LOCATIONS.level(26)][0], "Complete level 26")
+        f(LOCATIONS.mam, REGIONS.mam, "Complete any level > 26 without modifications")
     if maxlevel >= 50:
-        f("Can't stop", presentlocations["Level 50"][0], "Reach level 50")
-    elif not goal == "vanilla":
-        f("Can't stop", "Levels with 5 Buildings", "Reach level 50")
+        f(LOCATIONS.cant_stop, presentlocations[LOCATIONS.level(50)][0], "Reach level 50")
+    elif not goal == GOALS.vanilla:
+        f(LOCATIONS.cant_stop, REGIONS.levels_5, "Reach level 50")
     if maxlevel >= 100:
-        f("Is this the end?", presentlocations["Level 100"][0], "Reach level 100")
-    elif not goal == "vanilla":
-        f("Is this the end?", "Levels with 5 Buildings", "Reach level 100")
+        f(LOCATIONS.is_this_the_end, presentlocations[LOCATIONS.level(100)][0], "Reach level 100")
+    elif not goal == GOALS.vanilla:
+        f(LOCATIONS.is_this_the_end, REGIONS.levels_5, "Reach level 100")
 
     if excludeprogressive:
         unreasonable_type = LocationProgressType.EXCLUDED
@@ -430,17 +445,22 @@ def addachievements(excludesoftlock: bool, excludelong: bool, excludeprogressive
         unreasonable_type = LocationProgressType.DEFAULT
 
     if not excludesoftlock:
-        f("Speedrun Master", presentlocations["Level 12"][0], "Complete level 12 in under 30 min", unreasonable_type)
-        f("Speedrun Novice", presentlocations["Level 12"][0], "Complete level 12 in under 60 min", unreasonable_type)
-        f("Not an idle game", presentlocations["Level 12"][0], "Complete level 12 in under 120 min", unreasonable_type)
-        f("It's so slow", presentlocations["Level 12"][0],
+        f(LOCATIONS.speedrun_master, presentlocations[LOCATIONS.level(12)][0],
+          "Complete level 12 in under 30 min", unreasonable_type)
+        f(LOCATIONS.speedrun_novice, presentlocations[LOCATIONS.level(12)][0],
+          "Complete level 12 in under 60 min", unreasonable_type)
+        f(LOCATIONS.not_idle_game, presentlocations[LOCATIONS.level(12)][0],
+          "Complete level 12 in under 120 min", unreasonable_type)
+        f(LOCATIONS.its_so_slow, presentlocations[LOCATIONS.level(12)][0],
           "Complete level 12 without upgrading belts", unreasonable_type)
-        f("King of Inefficiency", presentlocations["Level 14"][0], "No ccw rotator until level 14", unreasonable_type)
-        f("A bit early?", "All Buildings Shapes", "Produce logo shape before level 18", unreasonable_type)
+        f(LOCATIONS.king_of_inefficiency, presentlocations[LOCATIONS.level(14)][0],
+          "No ccw rotator until level 14", unreasonable_type)
+        f(LOCATIONS.a_bit_early, REGIONS.all_buildings,
+          "Produce logo shape before level 18", unreasonable_type)
 
     if not excludelong:
-        f("It's been a long time", "Menu", "10 hours")
-        f("Addicted", "Menu", "20 hours")
+        f(LOCATIONS.a_long_time, REGIONS.menu, "10 hours")
+        f(LOCATIONS.addicted, REGIONS.menu, "20 hours")
 
     return locations
 
@@ -459,10 +479,10 @@ def addshapesanity(amount: int, random: Random, append_shapesanity: Callable[[st
 
     # Always have at least 4 shapesanity checks because of sphere 1 usefulls + both hardcore logic
     shapes_list = list(shapesanity_simple.items())
-    f("Shapesanity 1", "Shapesanity Full Uncolored", "Uncolored Circle")
-    f("Shapesanity 2", "Shapesanity Full Uncolored", "Uncolored Square")
-    f("Shapesanity 3", "Shapesanity Full Uncolored", "Uncolored Star")
-    f("Shapesanity 4", "Shapesanity East Windmill Uncolored", "Uncolored Windmill")
+    f(LOCATIONS.shapesanity(1), REGIONS.sanity(REGIONS.full, REGIONS.uncol), REGIONS.uncol_circle)
+    f(LOCATIONS.shapesanity(2), REGIONS.sanity(REGIONS.full, REGIONS.uncol), REGIONS.uncol_square)
+    f(LOCATIONS.shapesanity(3), REGIONS.sanity(REGIONS.full, REGIONS.uncol), REGIONS.uncol_star)
+    f(LOCATIONS.shapesanity(4), REGIONS.sanity(REGIONS.east_wind, REGIONS.uncol), REGIONS.uncol_wind)
 
     # The pool switches dynamically depending on if either it's ratio or limit is reached
     switched = 0
@@ -481,9 +501,9 @@ def addshapesanity(amount: int, random: Random, append_shapesanity: Callable[[st
             switched = 4
         x = random.randint(0, len(shapes_list)-1)
         next_shape = shapes_list.pop(x)
-        included_shapes[f"Shapesanity {counting+1}"] = (next_shape[1], LocationProgressType.DEFAULT)
+        included_shapes[LOCATIONS.shapesanity(counting+1)] = (next_shape[1], LocationProgressType.DEFAULT)
         append_shapesanity(next_shape[0])
-        add_alias(f"Shapesanity {counting+1}", next_shape[0])
+        add_alias(LOCATIONS.shapesanity(counting+1), next_shape[0])
 
     return included_shapes
 
@@ -502,13 +522,13 @@ def addshapesanity_ut(shapesanity_names: List[str], add_alias: Callable[[str,str
                 break
         else:
             raise ValueError(f"Could not find shapesanity name {name}")
-        included_shapes[f"Shapesanity {len(included_shapes)+1}"] = (next_shape, LocationProgressType.DEFAULT)
-        add_alias(f"Shapesanity {len(included_shapes)}", name)
+        included_shapes[LOCATIONS.shapesanity(len(included_shapes)+1)] = (next_shape, LocationProgressType.DEFAULT)
+        add_alias(LOCATIONS.shapesanity(len(included_shapes)), name)
     return included_shapes
 
 
 class ShapezLocation(Location):
-    game = "shapez"
+    game = OTHER.game_name
 
     def __init__(self, player: int, name: str, address: Optional[int], region: Region,
                  progress_type: LocationProgressType):
