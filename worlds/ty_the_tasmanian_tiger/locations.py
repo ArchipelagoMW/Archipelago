@@ -1,5 +1,7 @@
-from BaseClasses import Location, LocationProgressType
-from worlds.ty_the_tasmanian_tiger import ty1_levels, Ty1LevelCode
+from BaseClasses import Location, LocationProgressType, Region
+from worlds.ty_the_tasmanian_tiger import ty1_levels, Ty1LevelCode, Ty1Options
+from collections import namedtuple
+
 
 class Ty1Location:
     game: str = "Ty the Tasmanian Tiger"
@@ -7,476 +9,157 @@ class Ty1Location:
     def __init__(self, name, progress_type: LocationProgressType, code: int = None, player: int = None):
         super(Ty1Location, self).__init__(name, progress_type, code, player)
 
+A1_THEGGS = ["Collect 300 Opals", "Find 5 Bilbies", "Time Attack", "Glide The Gap", "Rang The Frills", "Rock Jump", "Super Chomp", "Lower The Platforms"]
+A2_THEGGS = ["Collect 300 Opals", "Find 5 Bilbies", "Wombat Race", "Truck Trouble", "Bounce Tree", "Drive Me Batty", "Turkey Chase", "Log Climb"]
+A3_THEGGS = ["Collect 300 Opals", "Find 5 Bilbies", "Race Rex", "Where's Elle?", "Aurora's Kids", "Quicksand Coconuts", "Ship Wreck", "Nest Egg"]
+B1_THEGGS = ["Collect 300 Opals", "Find 5 Bilbies", "Time Attack", "Home, Sweet, Home", "Heat Dennis' House", "Tag Team Turkeys", "Ty Diving", "Neddy The Bully"]
+B2_THEGGS = ["Collect 300 Opals", "Find 5 Bilbies", "Time Attack", "Koala Chaos", "The Old Mill", "Trap The Yabby", "Musical Icicle", "Snowy Peak"]
+B3_THEGGS = ["Collect 300 Opals", "Find 5 Bilbies", "Time Attack", "Emu Roundup", "Frill Frenzy", "Fire Fight", "Toxic Trouble", "Secret Thunder Egg"]
+C1_THEGGS = ["Collect 300 Opals", "Find 5 Bilbies", "Time Attack", "Lenny The Lyrebird", "Fiery Furnace", "Water Worries", "Muddy Towers", "Gantry Glide"]
+C2_THEGGS = ["Collect 300 Opals", "Find 5 Bilbies", "Wombat Rematch", "Koala Crisis", "Cable Car Capers", "Flame Frills", "Catch Boonie", "Pillar Ponder"]
+C3_THEGGS = ["Collect 300 Opals", "Find 5 Bilbies", "Race Rex", "Treasure Hunt", "Parrot Beard's Booty", "Frill Boat Battle", "Geyser Hop", "Volcanic Panic"]
 
-a1_locs = {
-    "Two Up - Collect 300 Opals": 0x8750108,
-    "Two Up - Find 5 Bilbies": 0x8750109,
-    "Two Up - Time Attack": 0x8750102,
-    "Two Up - Glide The Gap": 0x8750103,
-    "Two Up - Rang The Frills": 0x8750104,
-    "Two Up - Rock Jump": 0x8750105,
-    "Two Up - Super Chomp": 0x8750106,
-    "Two Up - Lower The Platforms": 0x8750107,
-    "Two Up - Golden Cog 1": 0x8750148,
-    "Two Up - Golden Cog 2": 0x8750149,
-    "Two Up - Golden Cog 3": 0x875014A,
-    "Two Up - Golden Cog 4": 0x875014B,
-    "Two Up - Golden Cog 5": 0x875014C,
-    "Two Up - Golden Cog 6": 0x875014D,
-    "Two Up - Golden Cog 7": 0x875014E,
-    "Two Up - Golden Cog 8": 0x875014F,
-    "Two Up - Golden Cog 9": 0x8750151,
-    "Two Up - Golden Cog 10": 0x8750152,
-    "Two Up - All Golden Cogs": 0x87501A3,
-    "Two Up - Bilby Dad": 0x87501AC,
-    "Two Up - Bilby Mum": 0x87501AD,
-    "Two Up - Bilby Boy": 0x87501AE,
-    "Two Up - Bilby Girl": 0x87501AF,
-    "Two Up - Bilby Grandma": 0x87501B0,
-    "Two Up - PF 1": 0x87501E2,
-    "Two Up - PF 2": 0x87501E3,
-    "Two Up - PF 3": 0x87501E4,
-    "Two Up - PF 4": 0x87501E5,
-    "Two Up - PF 5": 0x87501E6,
-    "Two Up - PF 6": 0x87501E7,
-    "Two Up - PF 7": 0x87501E8,
-    "Two Up - All Picture Frames": 0x8750258,
-    "Attribute - Second Rang": 0x8750012,
-}
+LocationTuple = namedtuple('Location', ['name', 'id'])
 
+def create_locations(level_region: Region, level_code: Ty1LevelCode, options: Ty1Options):
+    level_locs = ty1_location_table[ty1_levels[level_code]]
+    if "thunder_eggs" in level_locs:
+        for i in range(len(level_locs["thunder_eggs"])):
+            if i is 1 and options.bilbysanity == 0:
+                continue
+            create_loc(level_region, level_locs["thunder_eggs"][i].name, level_locs["thunder_eggs"][i].id, LocationProgressType.DEFAULT)
+    if "bilbies" in level_locs and options.bilbysanity is not 2:
+        for bilby_loc in level_locs["bilbies"]:
+            create_loc(level_region, bilby_loc.name, bilby_loc.id, LocationProgressType.DEFAULT)
+    if "golden_cogs" in level_locs:
+        if options.cogsanity is 0:
+            for cog_loc in level_locs["golden_cogs"]:
+                create_loc(level_region, cog_loc.name, cog_loc.id, LocationProgressType.DEFAULT)
+        if options.cogsanity is 1 and "cog_completion" in level_locs:
+            create_loc(level_region, level_locs["cog_completion"][0].name, level_locs["cog_completion"][0].id, LocationProgressType.DEFAULT)
+    if "picture_frames" in level_locs:
+        if options.framesanity is 0:
+            for frame_loc in level_locs["picture_frames"]:
+                create_loc(level_region, frame_loc.name, frame_loc.id, LocationProgressType.DEFAULT)
+        if options.framesanity is 1 and "frame_completion" in level_locs:
+            create_loc(level_region, level_locs["frame_completion"][0].name, level_locs["frame_completion"][0].id, LocationProgressType.DEFAULT)
+    if "attributes" in level_locs:
+        if options.attributesanity is not 2:
+            for attr_loc in level_locs["attributes"]:
+                create_loc(level_region, attr_loc.name, attr_loc.id, LocationProgressType.DEFAULT)
+    if "elemental_rangs" in level_locs:
+        if options.attributesanity is 1:
+            for elem_loc in level_locs["elemental_rangs"]:
+                create_loc(level_region, elem_loc.name, elem_loc.id, LocationProgressType.DEFAULT)
+    if "talismans" in level_locs:
+        for tali_loc in level_locs["talismans"]:
+            create_loc(level_region, tali_loc.name, tali_loc.id, LocationProgressType.DEFAULT)
 
-a2_locs = {
-    "WitP - Collect 300 Opals": 0x8750108,
-    "WitP - Find 5 Bilbies": 0x8750109,
-    "WitP - Wombat Race": 0x875010A,
-    "WitP - Truck Trouble": 0x875010B,
-    "WitP - Bounce Tree": 0x875010C,
-    "WitP - Drive Me Batty": 0x875010D,
-    "WitP - Turkey Chase": 0x875010E,
-    "WitP - Log Climb": 0x875010F,
-    "WitP - Golden Cog 1": 0x8750153,
-    "WitP - Golden Cog 2": 0x8750154,
-    "WitP - Golden Cog 3": 0x8750155,
-    "WitP - Golden Cog 4": 0x8750156,
-    "WitP - Golden Cog 5": 0x8750157,
-    "WitP - Golden Cog 6": 0x8750158,
-    "WitP - Golden Cog 7": 0x8750159,
-    "WitP - Golden Cog 8": 0x875015A,
-    "WitP - Golden Cog 9": 0x875015B,
-    "WitP - Golden Cog 10": 0x875015C,
-    "WitP - All Golden Cogs": 0x87501A4,
-    "WitP - Bilby Dad": 0x87501B1,
-    "WitP - Bilby Mum": 0x87501B2,
-    "WitP - Bilby Boy": 0x87501B3,
-    "WitP - Bilby Girl": 0x87501B4,
-    "WitP - Bilby Grandma": 0x87501B5,
-    "WitP - PF 1": 0x87501E9,
-    "WitP - PF 2": 0x87501EA,
-    "WitP - PF 3": 0x87501EB,
-    "WitP - PF 4": 0x87501EC,
-    "WitP - PF 5": 0x87501ED,
-    "WitP - PF 6": 0x87501EE,
-    "WitP - All Picture Frames": 0x8750259,
-}
-
-
-a3_locs = {
-    "Ship Rex - Collect 300 Opals": 0x8750110,
-    "Ship Rex - Find 5 Bilbies": 0x8750111,
-    "Ship Rex - Race Rex": 0x8750112,
-    "Ship Rex - Where's Elle?": 0x8750113,
-    "Ship Rex - Aurora's Kids": 0x8750114,
-    "Ship Rex - Quicksand Coconuts": 0x8750115,
-    "Ship Rex - Ship Wreck": 0x8750116,
-    "Ship Rex - Nest Egg": 0x8750117,
-    "Ship Rex - Golden Cog 1": 0x875015D,
-    "Ship Rex - Golden Cog 2": 0x875015E,
-    "Ship Rex - Golden Cog 3": 0x875015F,
-    "Ship Rex - Golden Cog 4": 0x8750160,
-    "Ship Rex - Golden Cog 5": 0x8750161,
-    "Ship Rex - Golden Cog 6": 0x8750162,
-    "Ship Rex - Golden Cog 7": 0x8750163,
-    "Ship Rex - Golden Cog 8": 0x8750164,
-    "Ship Rex - Golden Cog 9": 0x8750165,
-    "Ship Rex - Golden Cog 10": 0x8750166,
-    "Ship Rex - All Golden Cogs": 0x87501A5,
-    "Ship Rex - Bilby Dad": 0x87501B6,
-    "Ship Rex - Bilby Mum": 0x87501B7,
-    "Ship Rex - Bilby Boy": 0x87501B8,
-    "Ship Rex - Bilby Girl": 0x87501B9,
-    "Ship Rex - Bilby Grandma": 0x87501BA,
-    "Ship Rex - PF 1": 0x87501EF,
-    "Ship Rex - PF 2": 0x87501F0,
-    "Ship Rex - PF 3": 0x87501F1,
-    "Ship Rex - PF 4": 0x87501F2,
-    "Ship Rex - PF 5": 0x87501F3,
-    "Ship Rex - PF 6": 0x87501F4,
-    "Ship Rex - PF 7": 0x87501F5,
-    "Ship Rex - PF 8": 0x87501F6,
-    "Ship Rex - PF 9": 0x87501F7,
-    "Ship Rex - All Picture Frames": 0x875025A,
-    "Attribute - Swim & Dive": 0x8750010,
-    "Attribute - Aquarang": 0x8750018,
-}
-
-
-a4_locs = {
-    "Frog Talisman": 0x8750261,
-}
-
-
-b1_locs = {
-    "BotRT - Collect 300 Opals": 0x8750118,
-    "BotRT - Find 5 Bilbies": 0x8750119,
-    "BotRT - Time Attack": 0x875011A,
-    "BotRT - Home, Sweet, Home": 0x875011B,
-    "BotRT - Heat Dennis' House": 0x875011C,
-    "BotRT - Tag Team Turkeys": 0x875011D,
-    "BotRT - Ty Diving": 0x875011E,
-    "BotRT - Neddy The Bully": 0x875011F,
-    "BotRT - Golden Cog 1": 0x8750167,
-    "BotRT - Golden Cog 2": 0x8750168,
-    "BotRT - Golden Cog 3": 0x8750169,
-    "BotRT - Golden Cog 4": 0x875016A,
-    "BotRT - Golden Cog 5": 0x875016B,
-    "BotRT - Golden Cog 6": 0x875016C,
-    "BotRT - Golden Cog 7": 0x875016D,
-    "BotRT - Golden Cog 8": 0x875016E,
-    "BotRT - Golden Cog 9": 0x875016F,
-    "BotRT - Golden Cog 10": 0x8750170,
-    "BotRT - All Golden Cogs": 0x87501A6,
-    "BotRT - Bilby Dad": 0x87501BB,
-    "BotRT - Bilby Mum": 0x87501BC,
-    "BotRT - Bilby Boy": 0x87501BD,
-    "BotRT - Bilby Girl": 0x87501BE,
-    "BotRT - Bilby Grandma": 0x87501BF,
-    "BotRT - PF 1": 0x87501F8,
-    "BotRT - PF 2": 0x87501F9,
-    "BotRT - PF 3": 0x87501FA,
-    "BotRT - PF 4": 0x87501FB,
-    "BotRT - PF 5": 0x87501FC,
-    "BotRT - PF 6": 0x87501FD,
-    "BotRT - PF 7": 0x87501FE,
-    "BotRT - PF 8": 0x87501FF,
-    "BotRT - PF 9": 0x8750200,
-    "BotRT - PF 10": 0x8750201,
-    "BotRT - PF 11": 0x8750202,
-    "BotRT - PF 12": 0x8750203,
-    "BotRT - PF 13": 0x8750204,
-    "BotRT - PF 14": 0x8750205,
-    "BotRT - PF 15": 0x8750206,
-    "BotRT - PF 16": 0x8750207,
-    "BotRT - PF 17": 0x8750208,
-    "BotRT - PF 18": 0x8750209,
-    "BotRT - PF 19": 0x875020A,
-    "BotRT - PF 20": 0x875020B,
-    "BotRT - All Picture Frames": 0x875025B,
-}
-
-
-b2_locs = {
-    "Snow Worries - Collect 300 Opals": 0x8750120,
-    "Snow Worries - Find 5 Bilbies": 0x8750121,
-    "Snow Worries - Time Attack": 0x8750122,
-    "Snow Worries - Koala Chaos": 0x8750123,
-    "Snow Worries - The Old Mill": 0x8750124,
-    "Snow Worries - Trap The Yabby": 0x8750125,
-    "Snow Worries - Musical Icicle": 0x8750126,
-    "Snow Worries - Snowy Peak": 0x8750127,
-    "Snow Worries - Golden Cog 1": 0x8750171,
-    "Snow Worries - Golden Cog 2": 0x8750172,
-    "Snow Worries - Golden Cog 3": 0x8750173,
-    "Snow Worries - Golden Cog 4": 0x8750174,
-    "Snow Worries - Golden Cog 5": 0x8750175,
-    "Snow Worries - Golden Cog 6": 0x8750176,
-    "Snow Worries - Golden Cog 7": 0x8750177,
-    "Snow Worries - Golden Cog 8": 0x8750178,
-    "Snow Worries - Golden Cog 9": 0x8750179,
-    "Snow Worries - Golden Cog 10": 0x875017A,
-    "Snow Worries - All Golden Cogs": 0x87501A7,
-    "Snow Worries - Bilby Dad": 0x87501C0,
-    "Snow Worries - Bilby Mum": 0x87501C1,
-    "Snow Worries - Bilby Boy": 0x87501C2,
-    "Snow Worries - Bilby Girl": 0x87501C3,
-    "Snow Worries - Bilby Grandma": 0x87501C4,
-    "Snow Worries - PF 1": 0x875020C,
-    "Snow Worries - PF 2": 0x875020D,
-    "Snow Worries - PF 3": 0x875020E,
-    "Snow Worries - PF 4": 0x875020F,
-    "Snow Worries - PF 5": 0x8750210,
-    "Snow Worries - PF 6": 0x8750211,
-    "Snow Worries - PF 7": 0x8750212,
-    "Snow Worries - PF 8": 0x8750213,
-    "Snow Worries - PF 9": 0x8750214,
-    "Snow Worries - PF 10": 0x8750215,
-    "Snow Worries - PF 11": 0x8750216,
-    "Snow Worries - PF 12": 0x8750217,
-    "Snow Worries - PF 13": 0x8750218,
-    "Snow Worries - PF 14": 0x8750219,
-    "Snow Worries - PF 15": 0x875021A,
-    "Snow Worries - PF 16": 0x875021B,
-    "Snow Worries - PF 17": 0x875021C,
-    "Snow Worries - PF 18": 0x875021D,
-    "Snow Worries - PF 19": 0x875021E,
-    "Snow Worries - PF 20": 0x875021F,
-    "Snow Worries - PF 21": 0x8750220,
-    "Snow Worries - PF 22": 0x8750221,
-    "Snow Worries - PF 23": 0x8750222,
-    "Snow Worries - PF 24": 0x8750223,
-    "Snow Worries - All Picture Frames": 0x875025C,
-}
-
-
-b3_locs = {
-    "Outback Safari - Collect 300 Opals": 0x8750128,
-    "Outback Safari - Find 5 Bilbies": 0x8750129,
-    "Outback Safari - Time Attack": 0x875012A,
-    "Outback Safari - Emu Roundup": 0x875012B,
-    "Outback Safari - Frill Frenzy": 0x875012C,
-    "Outback Safari - Fire Fight": 0x875012D,
-    "Outback Safari - Toxic Trouble": 0x875012E,
-    "Outback Safari - Secret Thunder Egg": 0x875012F,
-    "Outback Safari - Golden Cog 1": 0x875017B,
-    "Outback Safari - Golden Cog 2": 0x875017C,
-    "Outback Safari - Golden Cog 3": 0x875017D,
-    "Outback Safari - Golden Cog 4": 0x875017E,
-    "Outback Safari - Golden Cog 5": 0x875017F,
-    "Outback Safari - Golden Cog 6": 0x8750180,
-    "Outback Safari - Golden Cog 7": 0x8750181,
-    "Outback Safari - Golden Cog 8": 0x8750182,
-    "Outback Safari - Golden Cog 9": 0x8750183,
-    "Outback Safari - Golden Cog 10": 0x8750184,
-    "Outback Safari - All Golden Cogs": 0x87501A8,
-    "Outback Safari - Bilby Dad": 0x87501C5,
-    "Outback Safari - Bilby Mum": 0x87501C6,
-    "Outback Safari - Bilby Boy": 0x87501C7,
-    "Outback Safari - Bilby Girl": 0x87501C8,
-    "Outback Safari - Bilby Grandma": 0x87501C9,
-    "Outback Safari - All Picture Frames": 0x875025D,
-}
-
-
-d4_locs = {
-    "Platypus Talisman": 0x8750261,
-}
-
-
-c1_locs = {
-    "LLPoF - Collect 300 Opals": 0x8750130,
-    "LLPoF - Find 5 Bilbies": 0x8750131,
-    "LLPoF - Time Attack": 0x8750132,
-    "LLPoF - Lenny The Lyrebird": 0x8750133,
-    "LLPoF - Fiery Furnace": 0x8750134,
-    "LLPoF - Water Worries": 0x8750135,
-    "LLPoF - Muddy Towers": 0x8750136,
-    "LLPoF - Gantry Glide": 0x8750137,
-    "LLPoF - Golden Cog 1": 0x8750185,
-    "LLPoF - Golden Cog 2": 0x8750186,
-    "LLPoF - Golden Cog 3": 0x8750187,
-    "LLPoF - Golden Cog 4": 0x8750188,
-    "LLPoF - Golden Cog 5": 0x8750189,
-    "LLPoF - Golden Cog 6": 0x875018A,
-    "LLPoF - Golden Cog 7": 0x875018B,
-    "LLPoF - Golden Cog 8": 0x875018C,
-    "LLPoF - Golden Cog 9": 0x875018D,
-    "LLPoF - Golden Cog 10": 0x875018E,
-    "LLPoF - All Golden Cogs": 0x87501A9,
-    "LLPoF - Bilby Dad": 0x87501CA,
-    "LLPoF - Bilby Mum": 0x87501CB,
-    "LLPoF - Bilby Boy": 0x87501CC,
-    "LLPoF - Bilby Girl": 0x87501CD,
-    "LLPoF - Bilby Grandma": 0x87501CE,
-    "LLPoF - PF 1": 0x8750224,
-    "LLPoF - PF 2": 0x8750225,
-    "LLPoF - PF 3": 0x8750226,
-    "LLPoF - PF 4": 0x8750227,
-    "LLPoF - PF 5": 0x8750228,
-    "LLPoF - All Picture Frames": 0x875025E,
-}
-
-
-c2_locs = {
-    "BtBS - Collect 300 Opals": 0x8750138,
-    "BtBS - Find 5 Bilbies": 0x8750139,
-    "BtBS - Wombat Rematch": 0x875013A,
-    "BtBS - Koala Crisis": 0x875013B,
-    "BtBS - Cable Car Capers": 0x875013C,
-    "BtBS - Flame Frills": 0x875013D,
-    "BtBS - Catch Boonie": 0x875013E,
-    "BtBS - Pillar Ponder": 0x875013F,
-    "BtBS - Golden Cog 1": 0x875018F,
-    "BtBS - Golden Cog 2": 0x8750190,
-    "BtBS - Golden Cog 3": 0x8750191,
-    "BtBS - Golden Cog 4": 0x8750192,
-    "BtBS - Golden Cog 5": 0x8750193,
-    "BtBS - Golden Cog 6": 0x8750194,
-    "BtBS - Golden Cog 7": 0x8750195,
-    "BtBS - Golden Cog 8": 0x8750196,
-    "BtBS - Golden Cog 9": 0x8750197,
-    "BtBS - Golden Cog 10": 0x8750198,
-    "BtBS - All Golden Cogs": 0x87501AA,
-    "BtBS - Bilby Dad": 0x87501CF,
-    "BtBS - Bilby Mum": 0x87501D0,
-    "BtBS - Bilby Boy": 0x87501D1,
-    "BtBS - Bilby Girl": 0x87501D2,
-    "BtBS - Bilby Grandma": 0x87501D3,
-    "BtBS - PF 1": 0x8750229,
-    "BtBS - PF 2": 0x875022A,
-    "BtBS - PF 3": 0x875022B,
-    "BtBS - PF 4": 0x875022C,
-    "BtBS - PF 5": 0x875022D,
-    "BtBS - PF 6": 0x875022E,
-    "BtBS - PF 7": 0x875022F,
-    "BtBS - PF 8": 0x8750230,
-    "BtBS - PF 9": 0x8750231,
-    "BtBS - PF 10": 0x8750232,
-    "BtBS - PF 11": 0x8750233,
-    "BtBS - PF 12": 0x8750234,
-    "BtBS - PF 13": 0x8750235,
-    "BtBS - PF 14": 0x8750236,
-    "BtBS - PF 15": 0x8750237,
-    "BtBS - PF 16": 0x8750238,
-    "BtBS - PF 17": 0x8750239,
-    "BtBS - PF 18": 0x875023A,
-    "BtBS - PF 19": 0x875023B,
-    "BtBS - PF 20": 0x875023C,
-    "BtBS - PF 21": 0x875023D,
-    "BtBS - PF 22": 0x875023E,
-    "BtBS - PF 23": 0x875023F,
-    "BtBS - PF 24": 0x8750240,
-    "BtBS - PF 25": 0x8750241,
-    "BtBS - PF 26": 0x8750242,
-    "BtBS - PF 27": 0x8750243,
-    "BtBS - PF 28": 0x8750244,
-    "BtBS - PF 29": 0x8750245,
-    "BtBS - All Picture Frames": 0x875025F,
-}
-
-
-c3_locs = {
-    "RMtS - Collect 300 Opals": 0x8750140,
-    "RMtS - Find 5 Bilbies": 0x8750141,
-    "RMtS - Race Rex": 0x8750142,
-    "RMtS - Treasure Hunt": 0x8750143,
-    "RMtS - Parrot Beard's Booty": 0x8750144,
-    "RMtS - Frill Boat Battle": 0x8750145,
-    "RMtS - Geyser Hop": 0x8750146,
-    "RMtS - Volcanic Panic": 0x8750147,
-    "RMtS - Golden Cog 1": 0x8750199,
-    "RMtS - Golden Cog 2": 0x875019A,
-    "RMtS - Golden Cog 3": 0x875019B,
-    "RMtS - Golden Cog 4": 0x875019C,
-    "RMtS - Golden Cog 5": 0x875019D,
-    "RMtS - Golden Cog 6": 0x875019E,
-    "RMtS - Golden Cog 7": 0x875019F,
-    "RMtS - Golden Cog 8": 0x87501A0,
-    "RMtS - Golden Cog 9": 0x87501A1,
-    "RMtS - Golden Cog 10": 0x87501A2,
-    "RMtS - All Golden Cogs": 0x87501AB,
-    "RMtS - Bilby Dad": 0x87501D4,
-    "RMtS - Bilby Mum": 0x87501D5,
-    "RMtS - Bilby Boy": 0x87501D6,
-    "RMtS - Bilby Girl": 0x87501D7,
-    "RMtS - Bilby Grandma": 0x87501D8,
-    "RMtS - PF 1": 0x8750246,
-    "RMtS - PF 2": 0x8750247,
-    "RMtS - PF 3": 0x8750248,
-    "RMtS - PF 4": 0x8750249,
-    "RMtS - PF 5": 0x875024A,
-    "RMtS - PF 6": 0x875024B,
-    "RMtS - PF 7": 0x875024C,
-    "RMtS - PF 8": 0x875024D,
-    "RMtS - PF 9": 0x875024E,
-    "RMtS - PF 10": 0x875024F,
-    "RMtS - PF 11": 0x8750250,
-    "RMtS - PF 12": 0x8750251,
-    "RMtS - PF 13": 0x8750252,
-    "RMtS - PF 14": 0x8750253,
-    "RMtS - PF 15": 0x8750254,
-    "RMtS - PF 16": 0x8750255,
-    "RMtS - PF 17": 0x8750256,
-    "RMtS - PF 18": 0x8750257,
-    "RMtS - All Picture Frames": 0x8750260,
-}
-
-
-c4_locs = {
-    "Cockatoo Talisman": 0x8750261,
-}
-
-
-d1_locs = {
-    
-}
-
-
-d2_locs = {
-    "Dingo Talisman": 0x8750261,
-}
-
-
-e1_locs = {
-    
-}
-
-
-e2_locs = {
-    
-}
-
-
-e3_locs = {
-    
-}
-
-
-e4_locs = {
-    "Tiger Talisman": 0x8750261,
-    "Attribute - Doomarang": 0x875001F,
-}
-
-
-z1_locs = {
-    "Rainbow Cliffs - PF 1": 0x87501D9,
-    "Rainbow Cliffs - PF 2": 0x87501DA,
-    "Rainbow Cliffs - PF 3": 0x87501DB,
-    "Rainbow Cliffs - PF 4": 0x87501DC,
-    "Rainbow Cliffs - PF 5": 0x87501DD,
-    "Rainbow Cliffs - PF 6": 0x87501DE,
-    "Rainbow Cliffs - PF 7": 0x87501DF,
-    "Rainbow Cliffs - PF 8": 0x87501E0,
-    "Rainbow Cliffs - PF 9": 0x87501E1,
-    "Attribute - Extra Health": 0x8750013,
-    "Attribute - Flamerang": 0x8750015,
-    "Attribute - Frostyrang": 0x8750016,
-    "Attribute - Zappyrang": 0x8750017,
-    "Attribute - Zoomerang": 0x8750019,
-    "Attribute - Multirang": 0x875001A,
-    "Attribute - Infrarang": 0x875001B,
-    "Attribute - Megarang": 0x875001C,
-    "Attribute - Kaboomarang": 0x875001D,
-    "Attribute - Chronorang": 0x875001E,
-}
-
+def create_loc(reg: Region, loc_name: str, loc_code: int, progress_type: LocationProgressType):
+    reg.locations += [Ty1Location(loc_name, progress_type, loc_code, reg.player)]
 
 ty1_location_table = {
-    ty1_levels[Ty1LevelCode.A1]: a1_locs,
-    ty1_levels[Ty1LevelCode.A2]: a2_locs,
-    ty1_levels[Ty1LevelCode.A3]: a3_locs,
-    ty1_levels[Ty1LevelCode.A4]: a4_locs,
-    ty1_levels[Ty1LevelCode.B1]: b1_locs,
-    ty1_levels[Ty1LevelCode.B2]: b2_locs,
-    ty1_levels[Ty1LevelCode.B3]: b3_locs,
-    ty1_levels[Ty1LevelCode.D4]: d4_locs,
-    ty1_levels[Ty1LevelCode.C1]: c1_locs,
-    ty1_levels[Ty1LevelCode.C2]: c2_locs,
-    ty1_levels[Ty1LevelCode.C3]: c3_locs,
-    ty1_levels[Ty1LevelCode.C4]: c4_locs,
-    ty1_levels[Ty1LevelCode.D1]: d1_locs,
-    ty1_levels[Ty1LevelCode.D2]: d2_locs,
-    ty1_levels[Ty1LevelCode.E1]: e1_locs,
-    ty1_levels[Ty1LevelCode.E2]: e2_locs,
-    ty1_levels[Ty1LevelCode.E3]: e3_locs,
-    ty1_levels[Ty1LevelCode.E4]: e4_locs,
-    ty1_levels[Ty1LevelCode.Z1]: z1_locs
+    "Two Up": {
+        "thunder_eggs": [LocationTuple(f"Two Up - {egg}", 0x8750100 + i) for i, egg in enumerate(A1_THEGGS)],
+        "golden_cogs": [LocationTuple(f"Two Up - Golden Cog {i + 1}", 0x8750148 + i) for i in range(10)],
+        "bilbies": [LocationTuple(f"Two Up - Bilby {name}", 0x87501AC + i) for i, name in enumerate(["Dad", "Mum", "Boy", "Girl", "Grandma"])],
+        "picture_frames": [LocationTuple(f"Two Up - PF {i + 1}", 0x87501E2 + i) for i in range(7)],
+        "attributes": [LocationTuple("Attribute - Second Rang", 0x8750012)],
+        "cog_completion": [LocationTuple("Two Up - All Golden Cogs", 0x87501A3)],
+        "frame_completion": [LocationTuple("Two Up - All Picture Frames", 0x8750258)]
+    },
+    "Walk in the Park": {
+        "thunder_eggs": [LocationTuple(f"WitP - {egg}", 0x8750108 + i) for i, egg in enumerate(A2_THEGGS)],
+        "golden_cogs": [LocationTuple(f"WitP - Golden Cog {i + 1}", 0x8750153 + i) for i in range(10)],
+        "bilbies": [LocationTuple(f"WitP - Bilby {name}", 0x87501B1 + i) for i, name in enumerate(["Dad", "Mum", "Boy", "Girl", "Grandma"])],
+        "picture_frames": [LocationTuple(f"WitP - PF {i + 1}", 0x87501E9 + i) for i in range(6)],
+        "cog_completion": [LocationTuple("WitP - All Golden Cogs", 0x87501A4)],
+        "frame_completion": [LocationTuple("WitP - All Picture Frames", 0x8750259)]
+    },
+    "Ship Rex": {
+        "thunder_eggs": [LocationTuple(f"Ship Rex - {egg}", 0x8750110 + i) for i, egg in enumerate(A3_THEGGS)],
+        "golden_cogs": [LocationTuple(f"Ship Rex - Golden Cog {i + 1}", 0x875015D + i) for i in range(10)],
+        "bilbies": [LocationTuple(f"Ship Rex - Bilby {name}", 0x87501B6 + i) for i, name in enumerate(["Dad", "Mum", "Boy", "Girl", "Grandma"])],
+        "picture_frames": [LocationTuple(f"Ship Rex - PF {i + 1}", 0x87501EF + i) for i in range(9)],
+        "attributes": [LocationTuple("Attribute - Swim", 0x8750010)],
+        "cog_completion": [LocationTuple("Ship Rex - All Golden Cogs", 0x87501A5)],
+        "frame_completion": [LocationTuple("Ship Rex - All Picture Frames", 0x875025A)]
+    },
+    "Bull's Pen": {
+        "talismans": [LocationTuple("Frog Talisman", 0x8750261)]
+    },
+    "Bridge on the River Ty": {
+        "thunder_eggs": [LocationTuple(f"BotRT - {egg}", 0x8750118 + i) for i, egg in enumerate(B1_THEGGS)],
+        "golden_cogs": [LocationTuple(f"BotRT - Golden Cog {i + 1}", 0x8750167 + i) for i in range(10)],
+        "bilbies": [LocationTuple(f"BotRT - Bilby {name}", 0x87501BB + i) for i, name in enumerate(["Dad", "Mum", "Boy", "Girl", "Grandma"])],
+        "picture_frames": [LocationTuple(f"BotRT - PF {i + 1}", 0x87501F8 + i) for i in range(20)],
+        "attributes": [LocationTuple("Attribute - Dive", 0x8750011)],
+        "cog_completion": [LocationTuple("BotRT - All Golden Cogs", 0x87501A6)],
+        "frame_completion": [LocationTuple("BotRT - All Picture Frames", 0x875025B)]
+    },
+    "Snow Worries": {
+        "thunder_eggs": [LocationTuple(f"Snow Worries - {egg}", 0x8750120 + i) for i, egg in enumerate(B2_THEGGS)],
+        "golden_cogs": [LocationTuple(f"Snow Worries - Golden Cog {i + 1}", 0x8750171 + i) for i in range(10)],
+        "bilbies": [LocationTuple(f"Snow Worries - Bilby {name}", 0x87501C0 + i) for i, name in enumerate(["Dad", "Mum", "Boy", "Girl", "Grandma"])],
+        "picture_frames": [LocationTuple(f"Snow Worries - PF {i + 1}", 0x875020C + i) for i in range(24)],
+        "cog_completion": [LocationTuple("Snow Worries - All Golden Cogs", 0x87501A7)],
+        "frame_completion": [LocationTuple("Snow Worries - All Picture Frames", 0x875025C)]
+    },
+    "Outback Safari": {
+        "thunder_eggs": [LocationTuple(f"Outback Safari - {egg}", 0x8750128 + i) for i, egg in enumerate(B3_THEGGS)],
+        "golden_cogs": [LocationTuple(f"Outback Safari - Golden Cog {i + 1}", 0x875017B + i) for i in range(10)],
+        "bilbies": [LocationTuple(f"Outback Safari - Bilby {name}", 0x87501C5 + i) for i, name in enumerate(["Dad", "Mum", "Boy", "Girl", "Grandma"])],
+        "cog_completion": [LocationTuple("Outback Safari - All Golden Cogs", 0x87501A8)]
+    },
+    "Crikey's Cove": {
+        "talismans": [LocationTuple("Platypus Talisman", 0x8750262)]
+    },
+    "Lyre, Lyre Pants on Fire": {
+        "thunder_eggs": [LocationTuple(f"LLPoF - {egg}", 0x8750130 + i) for i, egg in enumerate(C1_THEGGS)],
+        "golden_cogs": [LocationTuple(f"LLPoF - Golden Cog {i + 1}", 0x8750185 + i) for i in range(10)],
+        "bilbies": [LocationTuple(f"LLPoF - Bilby {name}", 0x87501CA + i) for i, name in enumerate(["Dad", "Mum", "Boy", "Girl", "Grandma"])],
+        "picture_frames": [LocationTuple(f"LLPoF - PF {i + 1}", 0x8750224 + i) for i in range(5)],
+        "cog_completion": [LocationTuple("LLPoF - All Golden Cogs", 0x87501A9)],
+        "frame_completion": [LocationTuple("LLPoF - All Picture Frames", 0x875025D)]
+    },
+    "Beyond the Black Stump": {
+        "thunder_eggs": [LocationTuple(f"BtBS - {egg}", 0x8750138 + i) for i, egg in enumerate(C2_THEGGS)],
+        "golden_cogs": [LocationTuple(f"BtBS - Golden Cog {i + 1}", 0x875018F + i) for i in range(10)],
+        "bilbies": [LocationTuple(f"BtBS - Bilby {name}", 0x87501CF + i) for i, name in enumerate(["Dad", "Mum", "Boy", "Girl", "Grandma"])],
+        "picture_frames": [LocationTuple(f"BtBS - PF {i + 1}", 0x8750229 + i) for i in range(29)],
+        "cog_completion": [LocationTuple("BtBS - All Golden Cogs", 0x87501AA)],
+        "frame_completion": [LocationTuple("BtBS - All Picture Frames", 0x875025E)]
+    },
+    "Rex Marks the Spot": {
+        "thunder_eggs": [LocationTuple(f"RMtS - {egg}", 0x8750140 + i) for i, egg in enumerate(C3_THEGGS)],
+        "golden_cogs": [LocationTuple(f"RMtS - Golden Cog {i + 1}", 0x8750199 + i) for i in range(10)],
+        "bilbies": [LocationTuple(f"RMtS - Bilby {name}", 0x87501D4 + i) for i, name in enumerate(["Dad", "Mum", "Boy", "Girl", "Grandma"])],
+        "picture_frames": [LocationTuple(f"RMtS - PF {i + 1}", 0x8750246 + i) for i in range(18)],
+        "cog_completion": [LocationTuple("RMtS - All Golden Cogs", 0x87501AB)],
+        "frame_completion": [LocationTuple("RMtS - All Picture Frames", 0x875025F)]
+    },
+    "Fluffy's Fjord": {
+        "talismans": [LocationTuple("Cockatoo Talisman", 0x8750263)]
+    },
+    "Cass' Crest": {
+        "talismans": [LocationTuple("Dingo Talisman", 0x8750264)]
+    },
+    "Final Battle": {
+        "talismans": [LocationTuple("Tiger Talisman", 0x8750265)],
+        "attributes": [LocationTuple("Attribute - Doomerang", 0x875001F)]
+    },
+    "Rainbow Cliffs": {
+        "picture_frames": [LocationTuple(f"Rainbow Cliffs - PF {i + 1}", 0x87501D9 + i) for i in range(9)],
+        "set_completion": [LocationTuple("Rainbow Cliffs - All Picture Frames", 0x8750260)],
+        "elemental_rangs": [LocationTuple("Attribute - Flamerang", 0x8750015),
+                            LocationTuple("Attribute - Frostyrang", 0x8750016),
+                            LocationTuple("Attribute - Zappyrang", 0x8750017)],
+        "attributes": [LocationTuple("Attribute - Extra Health", 0x8750013),
+                       LocationTuple("Attribute - Zoomerang", 0x8750019),
+                       LocationTuple("Attribute - Multirang", 0x875001A),
+                       LocationTuple("Attribute - Infrarang", 0x875001B),
+                       LocationTuple("Attribute - Megarang", 0x875001C),
+                       LocationTuple("Attribute - Kaboomarang", 0x875001D),
+                       LocationTuple("Attribute - Chronorang", 0x875001E)]
+    },
 }

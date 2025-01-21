@@ -3,7 +3,7 @@ from enum import Enum
 
 from BaseClasses import MultiWorld, Region, Entrance, LocationProgressType
 from worlds.ty_the_tasmanian_tiger import Ty1Options
-from worlds.ty_the_tasmanian_tiger.locations import Ty1Location, ty1_location_table
+from worlds.ty_the_tasmanian_tiger.locations import Ty1Location, ty1_location_table, create_locations
 
 
 class Ty1LevelCode(Enum):
@@ -61,8 +61,7 @@ def create_regions(world: MultiWorld, options: Ty1Options, player: int):
     # Create main menu and base regions
     create_region("Menu", player, world, "Main Menu")
     regZ1 = create_region("Rainbow Cliffs", player, world)
-    if options.attributesanity is 0 or 1:
-        create_loc(regZ1, "Attribute - Extra Health", LocationProgressType.DEFAULT)
+    create_locations(regZ1, Ty1LevelCode.Z1, options)
 
     # Create and connect grouped regions
     for group_name, levels in region_groups.items():
@@ -70,6 +69,7 @@ def create_regions(world: MultiWorld, options: Ty1Options, player: int):
         connect_regions(world, player, "Rainbow Cliffs", group_region.name)
         for level_code in levels:
             level_region = create_region(ty1_levels[level_code], player, world)
+            create_locations(level_region, level_code, options)
             connect_regions(world, player, group_region.name, level_region.name)
 
     # Additional connections
@@ -91,6 +91,3 @@ def connect_regions(world: MultiWorld, player: int, source: str, target: str, ru
 
 def set_subregion_access_rule(world, player, region_name: str, rule):
     world.get_entrance(world, player, region_name).access_rule = rule
-
-def create_loc(reg: Region, loc_name: str, progress_type: LocationProgressType):
-    reg.locations += [Ty1Location(loc_name, progress_type, ty1_location_table[loc_name], reg.player)]

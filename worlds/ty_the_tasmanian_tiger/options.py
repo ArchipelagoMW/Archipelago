@@ -126,11 +126,11 @@ class Bilbysanity(Choice):
 class Attributesanity(Choice):
     """
     Determines how rangs and abilities grant checks
-    
-    Skip Elementals: All rangs and abilities except elemental rangs grant checks (avoids double check from talismans) (11 Locations)
-    
+
+    Skip Elementals: All rangs and abilities except elemental rangs grant checks (avoids double check from talismans) (12 Locations)
+
     All: All rangs and abilities grant checks (15 Locations)
-    
+
     None: Rangs and abilities do not grant any checks
     """
     display_name = ("Attributesanity")
