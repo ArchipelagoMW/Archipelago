@@ -369,11 +369,13 @@ class ShapezWorld(World):
             SLOTDATA.rand_upgrade_logic: self.upgrade_logic_type,
             SLOTDATA.throughput_levels_ratio: self.options.throughput_levels_ratio.value,
             SLOTDATA.comp_growth_gradient: self.options.complexity_growth_gradient.value,
-            SLOTDATA.same_late: bool(self.options.same_late_upgrade_requirements)
+            SLOTDATA.same_late: bool(self.options.same_late_upgrade_requirements),
+            SLOTDATA.toolbar_shuffling: bool(self.options.toolbar_shuffling),
         }
 
         return {**level_logic_data, **upgrade_logic_data, **option_data, **logic_type_random_data,
-                **logic_type_cat_random_data, SLOTDATA.seed: self.client_seed, SLOTDATA.shapesanity: self.shapesanity_names}
+                **logic_type_cat_random_data, SLOTDATA.seed: self.client_seed,
+                SLOTDATA.shapesanity: self.shapesanity_names}
 
     def interpret_slot_data(self, slot_data: Dict[str, Any]) -> Dict[str, Any]:
         """Helper function for Universal Tracker"""

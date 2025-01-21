@@ -16,6 +16,7 @@ class SLOTDATA:
     throughput_levels_ratio = "throughput_levels_ratio"
     comp_growth_gradient = "complexity_growth_gradient"
     same_late = "same_late_upgrade_requirements"
+    toolbar_shuffling = "toolbar_shuffling"
     seed = "seed"
     shapesanity = "shapesanity"
 

@@ -267,6 +267,14 @@ class SplitInventoryDrainingTrap(Toggle):
     default = False
 
 
+class ToolbarShuffling(Toggle):
+    """If set to true, the toolbars (main and wires layer) will be shuffled (including bottom and top row).
+    However, keybindings will still select the same building to place."""
+    display_name = "Toolbar Shuffling"
+    rich_text_doc = True
+    default = True
+
+
 @dataclass
 class ShapezOptions(PerGameCommonOptions):
     goal: Goal
@@ -289,3 +297,4 @@ class ShapezOptions(PerGameCommonOptions):
     shapesanity_amount: ShapesanityAmount
     traps_percentage: TrapsProbability
     split_inventory_draining_trap: SplitInventoryDrainingTrap
+    toolbar_shuffling: ToolbarShuffling
