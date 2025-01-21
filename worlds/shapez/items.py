@@ -101,7 +101,8 @@ bundles: Dict[str, Callable[[str, bool, str], IClass]] = {
 standard_traps: Dict[str, Callable[[str, bool, str], IClass]] = {
     ITEMS.trap_locked: always_trap,
     ITEMS.trap_throttled: always_trap,
-    ITEMS.trap_malfunction: always_trap
+    ITEMS.trap_malfunction: always_trap,
+    ITEMS.trap_inflation: always_trap,
 }
 
 random_draining_trap: Dict[str, Callable[[str, bool, str], IClass]] = {
@@ -151,6 +152,7 @@ small_upgrades = [
 
 def trap(random: float, split_draining: bool) -> str:
     """Returns a random trap item."""
+    # Even if the inventory draining trap is split, it should have the same probability as all other traps
     random_value = (len(standard_traps)+1)*random
     if random_value >= 1:
         return list(standard_traps.keys())[int(random_value)-1]
@@ -220,6 +222,8 @@ item_descriptions = {  # TODO replace keys with global strings
     "Locked Building Trap": "Locks a random building from being placed for 15-60 seconds",
     "Throttled Building Trap": "Halves the speed of a random building for 15-60 seconds",
     "Malfunctioning Trap": "Makes a random building process items incorrectly for 15-60 seconds",
+    "Inflation Trap": "Permanently increases the required shapes multiplier by 1. "
+                      "In other words: Permanently increases required shapes by 10% of the standard amount.",
     "Belt": "One of the most important buildings in the game, that transports your shapes and colors from one " +
             "place to another",
     "Extractor": "One of the most important buildings in the game, that extracts shapes from those randomly " +

@@ -237,6 +237,7 @@ class ITEMS:
     trap_locked = "Locked Building Trap"
     trap_throttled = "Throttled Building Trap"
     trap_malfunction = "Malfunctioning Trap"
+    trap_inflation = "Inflation Trap"
     trap_draining_inv = "Inventory Draining Trap"
     trap_draining_blueprint = "Blueprint Shapes Draining Trap"
     trap_draining_level = "Level Shapes Draining Trap"
