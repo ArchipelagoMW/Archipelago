@@ -59,7 +59,7 @@ class TestImplemented(unittest.TestCase):
             if gamename not in ("Archipelago", "Sudoku", "Final Fantasy", "Test Game"):
                 with self.subTest(gamename):
                     multiworld = setup_solo_multiworld(world_type, ("generate_early", "create_regions", "create_items",
-                                                                    "set_rules", "generate_basic"))
+                                                                    "set_rules", "connect_entrances", "generate_basic"))
                     allstate = multiworld.get_all_state(False)
                     locations = multiworld.get_locations()
                     reachable = multiworld.get_reachable_locations(allstate)
