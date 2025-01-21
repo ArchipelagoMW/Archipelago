@@ -431,7 +431,12 @@ class MultiWorld():
         return self.regions.location_cache[player][location_name]
 
     def get_all_state(self, use_cache: bool, allow_partial_entrances: bool = False) -> CollectionState:
-        assert allow_partial_entrances or "connect_entrances" in self.completed_world_stages, (
+        assert (
+            allow_partial_entrances
+            or "connect_entrances" in self.completed_world_stages
+            or "generate_basic" in self.completed_world_stages
+            # Worlds have unit tests that don't call connect_entrances because they were written before it was added
+        ), (
             "Before the end of connect_entrances, get_all_state must be called with allow_partial_entrances = True. "
             "This is because other worlds may still have dangling entrances."
         )
