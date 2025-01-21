@@ -1888,7 +1888,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             for location in args["locations"]:
                 if type(location) is not int:
                     await ctx.send_msgs(client,
-                                        [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts',
+                                        [{'cmd': 'InvalidPacket', "type": "arguments",
+                                          "text": 'Locations has to be a list of integers',
                                           "original_cmd": cmd}])
                     return
 
@@ -1991,6 +1992,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             args["cmd"] = "SetReply"
             value = ctx.stored_data.get(args["key"], args.get("default", 0))
             args["original_value"] = copy.copy(value)
+            args["slot"] = client.slot
             for operation in args["operations"]:
                 func = modify_functions[operation["operation"]]
                 value = func(value, operation["value"])
