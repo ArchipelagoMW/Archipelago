@@ -944,13 +944,16 @@ def parse_planned_blocks(multiworld: MultiWorld) -> typing.Dict[int, typing.List
             new_block.locations = sorted(set(resolved_locations))
 
             count = block.count
+            if not count:
+                count = len(new_block.items)
             if isinstance(count, int):
                 count = {"min": count, "max": count}
             if "min" not in count:
                 count["min"] = 0
             if "max" not in count:
-                count["max"] = count["min"]
+                count["max"] = len(new_block.items)
 
+            new_block.count = count
             plando_blocks[player].append(new_block)
 
         return plando_blocks
@@ -1031,10 +1034,10 @@ def distribute_planned_blocks(multiworld: MultiWorld, plando_blocks: typing.List
     # shuffle, but then sort blocks by number of locations minus number of items,
     # so less-flexible blocks get priority
     multiworld.random.shuffle(plando_blocks)
-    plando_blocks.sort(key=lambda block: (len(block["resolved_locations"]) - block["count"]["target"]
-                                          if len(block["resolved_locations"]) > 0
-                                          else len(multiworld.get_unfilled_locations(player)) -
-                                          block["count"]["target"]))
+    plando_blocks.sort(key=lambda block: (len(block.resolved_locations) - block.count["target"]
+                                          if len(block.resolved_locations) > 0
+                                          else len(multiworld.get_unfilled_locations(block.player)) -
+                                          block.count["target"]))
     for placement in plando_blocks:
         player = placement.player
         try:
