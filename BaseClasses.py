@@ -9,8 +9,9 @@ from argparse import Namespace
 from collections import Counter, deque
 from collections.abc import Collection, MutableSequence
 from enum import IntEnum, IntFlag
-from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Iterable, Iterator, List, Mapping, NamedTuple,
+from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Iterable, Iterator, List, Literal, Mapping, NamedTuple,
                     Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING)
+import dataclasses
 
 from typing_extensions import NotRequired, TypedDict
 
@@ -54,6 +55,18 @@ class HasNameAndPlayer(Protocol):
     player: int
 
 
+@dataclasses.dataclass
+class PlandoItemBlock:
+    player: int
+    from_pool: bool
+    force: Union[bool, Literal["silent"]]
+    worlds: Set[int] = dataclasses.field(default_factory=set)
+    items: List[str] = dataclasses.field(default_factory=list)
+    locations: List[str] = dataclasses.field(default_factory=list)
+    resolved_locations: List[Location] = dataclasses.field(default_factory=list)
+    count: Dict[str, int] = dataclasses.field(default_factory=dict)
+
+
 class MultiWorld():
     debug_types = False
     player_name: Dict[int, str]
@@ -83,7 +96,7 @@ class MultiWorld():
     start_location_hints: Dict[int, Options.StartLocationHints]
     item_links: Dict[int, Options.ItemLinks]
 
-    plando_item_blocks: Dict[int, Any]
+    plando_item_blocks: Dict[int, List[PlandoItemBlock]]
 
     game: Dict[int, str]
 

@@ -4,7 +4,7 @@ import logging
 import typing
 from collections import Counter, deque
 
-from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld
+from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, PlandoItemBlock
 from Options import Accessibility
 
 from worlds.AutoWorld import call_all
@@ -837,7 +837,7 @@ def swap_location_item(location_1: Location, location_2: Location, check_locked:
     location_2.item.location = location_2
 
 
-def parse_planned_blocks(multiworld: MultiWorld) -> typing.Dict[int, typing.List[typing.Dict[str, typing.Any]]]:
+def parse_planned_blocks(multiworld: MultiWorld) -> typing.Dict[int, typing.List[PlandoItemBlock]]:
     def warn(warning: str, force: typing.Union[bool, str]) -> None:
         if isinstance(force, bool):
             logging.warning(f"{warning}")
@@ -852,14 +852,12 @@ def parse_planned_blocks(multiworld: MultiWorld) -> typing.Dict[int, typing.List
 
     world_name_lookup = multiworld.world_name_lookup
 
-    plando_blocks: typing.Dict[int, typing.List[typing.Dict[str, typing.Any]]] = dict()
+    plando_blocks: typing.Dict[int, typing.List[PlandoItemBlock]] = dict()
     player_ids = set(multiworld.player_ids)
     for player in player_ids:
         plando_blocks[player] = []
         for block in multiworld.worlds[player].options.plando_items:
-            new_block: typing.Dict[str, typing.Any] = {"player": player}
-            new_block["from_pool"] = block.from_pool
-            new_block["force"] = block.force
+            new_block: PlandoItemBlock = PlandoItemBlock(player, block.from_pool, block.force)
             target_world = block.world
             if target_world is False or multiworld.players == 1:  # target own world
                 worlds: typing.Set[int] = {player}
@@ -888,9 +886,9 @@ def parse_planned_blocks(multiworld: MultiWorld) -> typing.Dict[int, typing.List
                            block.force)
                     continue
                 worlds = {world_name_lookup[target_world]}
-            new_block["world"] = worlds
+            new_block.worlds = worlds
 
-            items: typing.Union[typing.List[str], typing.Dict[str, typing.Any]] = block.items
+            items: typing.Union[typing.List[str], typing.Dict[str, typing.Any], str] = block.items
             if isinstance(items, dict):
                 item_list: typing.List[str] = []
                 for key, value in items.items():
@@ -900,13 +898,11 @@ def parse_planned_blocks(multiworld: MultiWorld) -> typing.Dict[int, typing.List
                 items = item_list
             if isinstance(items, str):
                 items = [items]
-            new_block["items"] = items
+            new_block.items = items
 
             locations: typing.List[str] = block.locations
             if isinstance(locations, str):
                 locations = [locations]
-            elif not isinstance(locations, list):
-                raise Exception(f"Plando 'locations' has to be a list, not {type(locations)} for player {player}.")
 
             locations_from_groups: typing.List[str] = []
             resolved_locations: typing.List[Location] = []
@@ -917,41 +913,35 @@ def parse_planned_blocks(multiworld: MultiWorld) -> typing.Dict[int, typing.List
                         locations_from_groups.extend(multiworld.worlds[target_player].location_name_groups[group])
                 resolved_locations.extend(location for location in world_locations
                                           if location.name in [*locations, *locations_from_groups])
-            new_block["locations"] = sorted(dict.fromkeys(locations))
-            new_block["resolved_locations"] = sorted(set(resolved_locations))
+            new_block.locations = sorted(dict.fromkeys(locations))
+            new_block.locations = sorted(set(resolved_locations))
 
-            new_block["count"] = block.count
-            if not new_block["count"]:
-                new_block["count"] = (min(len(new_block["items"]), len(new_block["locations"])) if
-                                      len(new_block["locations"]) > 0 else len(new_block["items"]))
-            if isinstance(new_block["count"], int):
-                new_block["count"] = {"min": new_block["count"], "max": new_block["count"]}
-            if "min" not in new_block["count"]:
-                new_block["count"]["min"] = 0
-            if "max" not in new_block["count"]:
-                new_block["count"]["max"] = (min(len(new_block["items"]), len(new_block["locations"])) if
-                                             len(new_block["locations"]) > 0 else len(new_block["items"]))
-            if new_block["count"]["max"] > len(new_block["items"]):
-                count = new_block["count"]["max"]
-                failed(f"Plando count {count} greater than items specified", block.force)
-                new_block["count"]["max"] = len(new_block["items"])
-                if new_block["count"]["min"] > len(new_block["items"]):
-                    new_block["count"]["min"] = len(new_block["items"])
-            if new_block["count"]["max"] > len(new_block["locations"]) > 0:
-                count = new_block["count"]["max"]
-                failed(f"Plando count {count} greater than locations specified", block.force)
-                new_block["count"]["max"] = len(new_block["locations"])
-                if new_block["count"]["min"] > len(new_block["locations"]):
-                    new_block["count"]["min"] = len(new_block["locations"])
-            new_block["count"]["target"] = multiworld.random.randint(new_block["count"]["min"],
-                                                                     new_block["count"]["max"])
+            count = block.count
+            if isinstance(count, int):
+                count = {"min": count, "max": count}
+            if "min" not in count:
+                count["min"] = 0
+            if "max" not in count:
+                count["max"] = count["min"]
 
-            if new_block["count"]["target"] > 0:
-                plando_blocks[player].append(new_block)
+            plando_blocks[player].append(new_block)
 
         return plando_blocks
 
+
 def resolve_early_locations_for_planned(multiworld: MultiWorld):
+    def warn(warning: str, force: typing.Union[bool, str]) -> None:
+        if isinstance(force, bool):
+            logging.warning(f"{warning}")
+        else:
+            logging.debug(f"{warning}")
+
+    def failed(warning: str, force: typing.Union[bool, str]) -> None:
+        if force is True:
+            raise Exception(warning)
+        else:
+            warn(warning, force)
+
     swept_state = multiworld.state.copy()
     swept_state.sweep_for_advancements()
     reachable = frozenset(multiworld.get_reachable_locations(swept_state))
@@ -964,10 +954,11 @@ def resolve_early_locations_for_planned(multiworld: MultiWorld):
             non_early_locations[loc.player].append(loc)
 
     for player in multiworld.plando_item_blocks:
+        removed = []
         for block in multiworld.plando_item_blocks[player]:
-            locations = block["locations"]
-            resolved_locations = block["resolved_locations"]
-            worlds = block["world"]
+            locations = block.locations
+            resolved_locations = block.resolved_locations
+            worlds = block.worlds
             if "early_locations" in locations:
                 for target_player in worlds:
                     resolved_locations += early_locations[target_player]
@@ -975,7 +966,29 @@ def resolve_early_locations_for_planned(multiworld: MultiWorld):
                 for target_player in worlds:
                     resolved_locations += non_early_locations[target_player]
 
-def distribute_planned_blocks(multiworld: MultiWorld, plando_blocks: typing.List[typing.Dict[str, typing.Any]]):
+            if block.count["max"] > len(block.items):
+                count = block.count["max"]
+                failed(f"Plando count {count} greater than items specified", block.force)
+                block.count["max"] = len(block.items)
+                if block.count["min"] > len(block.items):
+                    block.count["min"] = len(block.items)
+            if block.count["max"] > len(block.resolved_locations) > 0:
+                count = block.count["max"]
+                failed(f"Plando count {count} greater than locations specified", block.force)
+                block.count["max"] = len(block.resolved_locations)
+                if block.count["min"] > len(block.resolved_locations):
+                    block.count["min"] = len(block.resolved_locations)
+            block.count["target"] = multiworld.random.randint(block.count["min"],
+                                                                     block.count["max"])
+
+            if block.count["target"]:
+                removed.append(block)
+
+        for block in removed:
+            multiworld.plando_item_blocks[player].remove(block)
+
+
+def distribute_planned_blocks(multiworld: MultiWorld, plando_blocks: typing.List[PlandoItemBlock]):
     def warn(warning: str, force: typing.Union[bool, str]) -> None:
         if isinstance(force, bool):
             logging.warning(f"{warning}")
@@ -996,13 +1009,13 @@ def distribute_planned_blocks(multiworld: MultiWorld, plando_blocks: typing.List
                                           else len(multiworld.get_unfilled_locations(player)) -
                                           block["count"]["target"]))
     for placement in plando_blocks:
-        player = placement["player"]
+        player = placement.player
         try:
-            worlds = placement["world"]
-            locations = placement["resolved_locations"]
-            items = placement["items"]
-            maxcount = placement["count"]["target"]
-            from_pool = placement["from_pool"]
+            worlds = placement.worlds
+            locations = placement.resolved_locations
+            items = placement.items
+            maxcount = placement.count["target"]
+            from_pool = placement.from_pool
 
             item_candidates = []
             if from_pool:
@@ -1011,7 +1024,7 @@ def distribute_planned_blocks(multiworld: MultiWorld, plando_blocks: typing.List
                     candidate = next((i for i in instances if i.name == item), None)
                     if candidate is None:
                         warn(f"Could not remove {item} from pool for {multiworld.player_name[player]} as "
-                             f"it's already missing from it", placement["force"])
+                             f"it's already missing from it", placement.force)
                         candidate = multiworld.worlds[player].create_item(item)
                     else:
                         multiworld.itempool.remove(candidate)
@@ -1026,7 +1039,7 @@ def distribute_planned_blocks(multiworld: MultiWorld, plando_blocks: typing.List
                        f"event items and non-event items. "
                        f"Event items: {[item for item in item_candidates if item.code is None]}, "
                        f"Non-event items: {[item for item in item_candidates if item.code is not None]}",
-                       placement["force"])
+                       placement.force)
                 continue
             else:
                 is_real = item_candidates[0].code is not None
@@ -1034,7 +1047,7 @@ def distribute_planned_blocks(multiworld: MultiWorld, plando_blocks: typing.List
                           and bool(candidate.address) == is_real]
             multiworld.random.shuffle(candidates)
             allstate = multiworld.get_all_state(False)
-            mincount = placement["count"]["min"]
+            mincount = placement.count["min"]
             allowed_margin = len(item_candidates) - mincount
             fill_restrictive(multiworld, allstate, candidates, item_candidates, lock=True,
                              allow_partial=True, name="Plando Main Fill")
@@ -1044,7 +1057,7 @@ def distribute_planned_blocks(multiworld: MultiWorld, plando_blocks: typing.List
                        f"of {mincount + allowed_margin} item(s) "
                        f"for {multiworld.player_name[player]}, "
                        f"remaining items: {item_candidates}",
-                       placement["force"])
+                       placement.force)
             if from_pool:
                 multiworld.itempool.extend([item for item in item_candidates if item.code is not None])
         except Exception as e:

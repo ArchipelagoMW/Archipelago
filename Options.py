@@ -1428,7 +1428,7 @@ class ItemLinks(OptionList):
 
 @dataclass(frozen=True)
 class PlandoItem:
-    items: list[str] | dict[str, typing.Any]
+    items: list[str] | str | dict[str, typing.Any]
     locations: list[str]
     world: int | str | bool | None | typing.Iterable[str] | set[int] = False
     from_pool: bool = True
