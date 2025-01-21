@@ -42,7 +42,9 @@ def mystery_argparse():
                         help="Path to output folder. Absolute or relative to cwd.")  # absolute or relative to cwd
     parser.add_argument('--race', action='store_true', default=defaults.race)
     parser.add_argument('--meta_file_path', default=defaults.meta_file_path)
-    parser.add_argument('--log_level', default='info', help='Sets log level')
+    parser.add_argument('--log_level', default=defaults.loglevel, help='Sets log level')
+    parser.add_argument('--log_time', help="Add timestamps to STDOUT",
+                        default=defaults.logtime, action='store_true')
     parser.add_argument("--csv_output", action="store_true",
                         help="Output rolled player options to csv (made for async multiworld).")
     parser.add_argument("--plando", default=defaults.plando_options,
@@ -75,7 +77,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
 
     seed = get_seed(args.seed)
 
-    Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
+    Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level, add_timestamp=args.log_time)
     random.seed(seed)
     seed_name = get_seed_name(random)
 
@@ -432,7 +434,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
 
-    valid_keys = set()
+    valid_keys = {"triggers"}
     if "triggers" in weights:
         weights = roll_triggers(weights, weights["triggers"], valid_keys)
 
@@ -496,7 +498,16 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
             continue
         logging.warning(f"{option_key} is not a valid option name for {ret.game} and is not present in triggers.")
     if ret.game == "A Link to the Past":
+        # TODO there are still more LTTP options not on the options system
+        valid_keys |= {"sprite_pool", "sprite", "random_sprite_on_event"}
         roll_alttp_settings(ret, game_weights)
+
+    # log a warning for options within a game section that aren't determined as valid
+    for option_key in game_weights:
+        if option_key in valid_keys:
+            continue
+        logging.warning(f"{option_key} is not a valid option name for {ret.game} and is not present in triggers "
+                        f"for player {ret.name}.")
 
     return ret
 

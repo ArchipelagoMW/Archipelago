@@ -16,7 +16,7 @@ class ShiversWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["GodlFire", "Mathx2"]
+        ["GodlFire", "Cynbel_Terreus"]
     )]
     option_groups = shivers_option_groups
 
@@ -40,6 +40,20 @@ class ShiversWorld(World):
 
     def generate_early(self):
         self.pot_completed_list = []
+
+        # Pot piece shuffle location:
+        if self.options.location_pot_pieces == "own_world":
+            self.options.local_items.value |= {name for name, data in item_table.items() if
+                                               data.type in [ItemType.POT, ItemType.POT_COMPLETE]}
+        elif self.options.location_pot_pieces == "different_world":
+            self.options.non_local_items.value |= {name for name, data in item_table.items() if
+                                                   data.type in [ItemType.POT, ItemType.POT_COMPLETE]}
+
+        # Ixupi captures priority locations:
+        if self.options.ixupi_captures_priority:
+            self.options.priority_locations.value |= (
+                {name for name in self.location_names if name.startswith('Ixupi Captured')}
+            )
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]
@@ -194,14 +208,6 @@ class ShiversWorld(World):
             ["Heal", "Easier Lyre"], weights=[95, 5], k=filler_needed
         ))
 
-        # Pot piece shuffle location:
-        if self.options.location_pot_pieces == "own_world":
-            self.options.local_items.value |= {name for name, data in item_table.items() if
-                                               data.type in [ItemType.POT, ItemType.POT_COMPLETE]}
-        elif self.options.location_pot_pieces == "different_world":
-            self.options.non_local_items.value |= {name for name, data in item_table.items() if
-                                                   data.type in [ItemType.POT, ItemType.POT_COMPLETE]}
-
         self.multiworld.itempool += item_pool
 
     def pre_fill(self) -> None:
@@ -220,13 +226,13 @@ class ShiversWorld(World):
                               data.type == ItemType.POT_DUPLICATE]
         elif self.options.full_pots == "complete":
             storage_items += [self.create_item(name) for name, data in item_table.items() if
-                              data.type == ItemType.POT_COMPELTE_DUPLICATE]
+                              data.type == ItemType.POT_COMPLETE_DUPLICATE]
             storage_items += [self.create_item("Empty") for _ in range(10)]
         else:
             pieces = [self.create_item(name) for name, data in item_table.items() if
                       data.type == ItemType.POT_DUPLICATE]
             complete = [self.create_item(name) for name, data in item_table.items() if
-                        data.type == ItemType.POT_COMPELTE_DUPLICATE]
+                        data.type == ItemType.POT_COMPLETE_DUPLICATE]
             for i in range(10):
                 # Pieces
                 if self.pot_completed_list[i] == 0:
