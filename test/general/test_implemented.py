@@ -38,7 +38,7 @@ class TestImplemented(unittest.TestCase):
     def test_slot_data(self):
         """Tests that if a world creates slot data, it's json serializable."""
         # has an await for generate_output which isn't being called
-        excluded_games = ("Ocarina of Time")
+        excluded_games = ("Ocarina of Time",)
         worlds_to_test = {game: world
                           for game, world in AutoWorldRegister.world_types.items() if game not in excluded_games}
         for game_name, world_type in worlds_to_test.items():
