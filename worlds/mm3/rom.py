@@ -281,8 +281,7 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
 
     patch.write_byte(wily_4_ptr + 1, world.options.wily_4_requirement.value)
 
-    if world.options.energy_link:
-        patch.write_byte(energylink_ptr + 1, 1)
+    patch.write_byte(energylink_ptr + 1, 1)
 
     if world.options.reduce_flashing:
         pass
