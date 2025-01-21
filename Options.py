@@ -1484,6 +1484,10 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                     world = item.get("world", False)
                     from_pool = item.get("from_pool", True)
                     force = item.get("force", "silent")
+                    if not isinstance(from_pool, bool):
+                        raise Exception(f"Plando 'from_pool' has to be true or false, not {from_pool!r}.")
+                    if not (isinstance(force, bool) or force == "silent"):
+                        raise Exception(f"Plando `force` has to be true or false or `silent`, not {force!r}.")
                     value.append(PlandoItem(items, locations, world, from_pool, force, count, percentage))
             elif isinstance(item, PlandoItem):
                 if roll_percentage(item.percentage):

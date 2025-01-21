@@ -858,15 +858,9 @@ def parse_planned_blocks(multiworld: MultiWorld) -> typing.Dict[int, typing.List
         plando_blocks[player] = []
         for block in multiworld.worlds[player].options.plando_items:
             new_block: typing.Dict[str, typing.Any] = {"player": player}
-            if not isinstance(block.from_pool, bool):
-                raise Exception(f"Plando 'from_pool' has to be boolean, not {type(block.from_pool)} for player {player}.")
             new_block["from_pool"] = block.from_pool
             new_block["force"] = block.force
             target_world = block.world
-
-            if not (isinstance(block.force, bool) or block.force == "silent"):
-                raise Exception(f"Plando `force` has to be boolean or `silent`, not {block.force} for player {player}")
-
             if target_world is False or multiworld.players == 1:  # target own world
                 worlds: typing.Set[int] = {player}
             elif target_world is True:  # target any worlds besides own
