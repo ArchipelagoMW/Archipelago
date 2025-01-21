@@ -64,7 +64,7 @@ class MLSSWorld(World):
     def generate_early(self) -> None:
         self.disabled_locations = set()
         if self.options.emblems_amount.value < self.options.emblems_required.value:
-            self.options.emblems_amount = self.options.emblems_required
+            self.options.emblems_amount.value = self.options.emblems_required.value
             logging.warning("Number of emblems required is greater than the number of emblems available. Adjusting value.")
         if self.options.skip_minecart:
             self.disabled_locations.update([LocationName.HoohooMountainBaseMinecartCaveDigspot])
