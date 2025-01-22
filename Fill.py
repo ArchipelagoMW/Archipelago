@@ -521,7 +521,6 @@ def distribute_items_restrictive(multiworld: MultiWorld,
     multiworld.random.shuffle(itempool)
 
     fill_locations, itempool = distribute_early_items(multiworld, fill_locations, itempool)
-    fill_locations, itempool = distribute_local_nonprogression(multiworld, fill_locations, itempool)
 
     progitempool: typing.List[Item] = []
     usefulitempool: typing.List[Item] = []
@@ -555,6 +554,11 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         lock_later.append(location)
 
     single_player = multiworld.players == 1 and not multiworld.groups
+
+    if not single_player:
+        usefulitempool, filleritempool = distribute_local_nonprogression(multiworld, excludedlocations,
+                                                                         defaultlocations, prioritylocations,
+                                                                         usefulitempool, filleritempool)
 
     if prioritylocations:
         regular_progression = []
@@ -1171,33 +1175,48 @@ def distribute_planned_blocks(multiworld: MultiWorld, plando_blocks: list[Plando
 
 
 def distribute_local_nonprogression(multiworld: MultiWorld,
-                                    locations: typing.List[Location],
-                                    itempool: typing.List[Item]) \
-        -> typing.Tuple[typing.List[Location], typing.List[Item]]:
+                                    excluded_locations: typing.List[Location],
+                                    default_locations: typing.List[Location],
+                                    priority_locations: typing.List[Location],
+                                    useful_itempool: typing.List[Item],
+                                    filler_itempool: typing.List[Item]) \
+        -> typing.Tuple[typing.List[Item], typing.List[Item]]:
     # call remaining_fill early on local items, but sort the list of locations filled this way to the back of the list
     # instead of popping them entirely
+    # modifies the three location lists in place, and returns unplaced useful and filler items
     local_nonprogression_items: typing.List[Item] = []
-    new_itempool: typing.List[Item] = []
-    for item in itempool:
+    # fill local filler on local excluded locations first
+    new_filler_itempool: typing.List[Item] = []
+    for item in filler_itempool:
         if not item.advancement and item.name in multiworld.worlds[item.player].options.local_items.value:
             local_nonprogression_items.append(item)
         else:
-            new_itempool.append(item)
-    non_priority_locations: typing.List[Location] = []
-    priority_locations: typing.List[Location] = []
-    for location in locations:
-        if location.progress_type == location.progress_type.PRIORITY:
-            priority_locations.append(location)
+            new_filler_itempool.append(item)
+    excluded_placements: typing.List[Location] = remaining_fill(multiworld, excluded_locations,
+                                                                local_nonprogression_items,
+                                                                "Local non-progression excluded placement", False, True)
+    # then add local useful to remaining local items and fill in default locations
+    new_useful_itempool: typing.List[Item] = []
+    for item in useful_itempool:
+        if not item.advancement and item.name in multiworld.worlds[item.player].options.local_items.value:
+            local_nonprogression_items.append(item)
         else:
-            non_priority_locations.append(location)
-    placements: typing.List[Location] = remaining_fill(multiworld, non_priority_locations, local_nonprogression_items,
-                                                       "Local non-progression placement", False, True)
-    # local_nonprogression_items should be empty now
+            new_useful_itempool.append(item)
+    default_placements: typing.List[Location] = remaining_fill(multiworld, default_locations, local_nonprogression_items,
+                                                               "Local non-progression default placement", False, True)
+    priority_placements: typing.List[Location] = []
+    # then if there are still local items, fill into priority locations
     if local_nonprogression_items:
-        # this should only be happening if the world has a lot of strict
-        raise FillError("Not enough available locations for all local filler. Reduce the amount of local items or "
-                        "priority locations in your YAMLs.")
-    itempool = new_itempool
+        priority_placements = remaining_fill(multiworld, priority_locations, local_nonprogression_items,
+                                             "Local non-progression priority placement", False, True)
+    # if, somehow, there are still items, then error out, because there's no saving it
+    if local_nonprogression_items:
+        # this should only be happening if the world has a lot of strict item rules
+        raise FillError("Not enough available locations for all local non-progression. Reduce the amount of local items"
+                        " in your YAMLs.")
+
     # place the filled locations at the back of the list
-    locations = [*priority_locations, *non_priority_locations, *placements]
-    return locations, itempool
+    excluded_locations.extend(excluded_placements)
+    default_locations.extend(default_placements)
+    priority_locations.extend(priority_placements)
+    return new_useful_itempool, new_filler_itempool
