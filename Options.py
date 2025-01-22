@@ -1436,7 +1436,7 @@ class ItemLinks(OptionList):
 
 @dataclass(frozen=True)
 class PlandoItem:
-    items: list[str] | str | dict[str, typing.Any]
+    items: list[str] | dict[str, typing.Any]
     locations: list[str]
     world: int | str | bool | None | typing.Iterable[str] | set[int] = False
     from_pool: bool = True
@@ -1447,7 +1447,7 @@ class PlandoItem:
 
 class PlandoItems(Option[typing.List[PlandoItem]]):
     """Generic items plando."""
-    default = ()
+    default = []
     supports_weighting = False
     display_name = "Plando Items"
 
@@ -1458,28 +1458,28 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
     @classmethod
     def from_any(cls, data: typing.Any) -> Option[typing.List[PlandoItem]]:
         if not isinstance(data, typing.Iterable):
-            raise Exception(f"Cannot create plando items from non-Iterable type, got {type(data)}")
+            raise OptionError(f"Cannot create plando items from non-Iterable type, got {type(data)}")
 
         value: typing.List[PlandoItem] = []
         for item in data:
             if isinstance(item, typing.Mapping):
                 percentage = item.get("percentage", 100)
                 if not isinstance(percentage, int):
-                    raise Exception(f"Plando `percentage` has to be int, not {type(percentage)}.")
+                    raise OptionError(f"Plando `percentage` has to be int, not {type(percentage)}.")
                 if not (0 <= percentage <= 100):
-                    raise Exception(f"Plando `percentage` has to be between 0 and 100 (inclusive) not {percentage}.")
+                    raise OptionError(f"Plando `percentage` has to be between 0 and 100 (inclusive) not {percentage}.")
                 if roll_percentage(percentage):
                     count = item.get("count", False)
                     items = item.get("items", [])
                     if not items:
                         items = item.get("item", None)  # explicitly throw an error here if not present
                         if not items:
-                            raise Exception("You must specify at least one item to place items with plando.")
+                            raise OptionError("You must specify at least one item to place items with plando.")
                         count = 1
                         if isinstance(items, str):
                             items = [items]
                         elif not isinstance(items, dict):
-                            raise Exception(f"Plando 'item' has to be string or dictionary, not {type(items)}.")
+                            raise OptionError(f"Plando 'item' has to be string or dictionary, not {type(items)}.")
                     if isinstance(items, str):
                         items = [items]
                     locations = item.get("locations", [])
@@ -1490,20 +1490,20 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                         if isinstance(locations, str):
                             locations = [locations]
                         if not isinstance(locations, list):
-                            raise Exception(f"Plando `location` has to be string or list, not {type(locations)}")
+                            raise OptionError(f"Plando `location` has to be string or list, not {type(locations)}")
                     world = item.get("world", False)
                     from_pool = item.get("from_pool", True)
                     force = item.get("force", "silent")
                     if not isinstance(from_pool, bool):
-                        raise Exception(f"Plando 'from_pool' has to be true or false, not {from_pool!r}.")
+                        raise OptionError(f"Plando 'from_pool' has to be true or false, not {from_pool!r}.")
                     if not (isinstance(force, bool) or force == "silent"):
-                        raise Exception(f"Plando `force` has to be true or false or `silent`, not {force!r}.")
+                        raise OptionError(f"Plando `force` has to be true or false or `silent`, not {force!r}.")
                     value.append(PlandoItem(items, locations, world, from_pool, force, count, percentage))
             elif isinstance(item, PlandoItem):
                 if roll_percentage(item.percentage):
                     value.append(item)
             else:
-                raise Exception(f"Cannot create plando item from non-Dict type, got {type(item)}.")
+                raise OptionError(f"Cannot create plando item from non-Dict type, got {type(item)}.")
         return cls(value)
 
     def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
@@ -1518,6 +1518,11 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
         else:
             # filter down item groups
             for plando in self.value:
+                # confirm a valid count
+                if isinstance(plando.count, dict):
+                    if "min" in plando.count and "max" in plando.count:
+                        if plando.count["min"] > plando.count["max"]:
+                            raise OptionError("Plando cannot have count `min` greater than `max`.")
                 items_copy = plando.items.copy()
                 if isinstance(plando.items, dict):
                     for item in items_copy:
@@ -1526,7 +1531,7 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                             group = sorted(world.item_name_groups[item])
                             for group_item in group:
                                 if group_item in plando.items:
-                                    raise Exception(f"Plando `items` contains both \"{group_item}\" and the group "
+                                    raise OptionError(f"Plando `items` contains both \"{group_item}\" and the group "
                                                     f"\"{item}\" which contains it. It cannot have both.")
                             plando.items.update({key: value for key in group})
                 else:
