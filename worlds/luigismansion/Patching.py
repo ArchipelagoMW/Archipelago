@@ -260,6 +260,10 @@ def update_character_info(character_info, output_data):
         if x["name"] == "dltelesa" and x["room_no"] == 68:
             character_info.info_file_field_entries.remove(x)
 
+        # Remove Miss Petunia to never disappear, unless captured.
+        if x["name"] == "fat" and x["room_no"] == 45:
+            x["disappear_flag"] = 0
+
 
 def update_observer_info(observer_info):
     for x in observer_info.info_file_field_entries:
