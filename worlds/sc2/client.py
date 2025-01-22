@@ -29,7 +29,7 @@ from .item import item_names, item_parents
 from .item.item_groups import item_name_groups, unlisted_item_name_groups
 from . import options
 from .options import (
-    MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, EnableMorphling,
+    MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, EnableMorphling, GameDifficulty,
     GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, MaxUpgradeLevel,
     LocationInclusion, ExtraLocations, MasteryLocations, SpeedrunLocations, PreventativeLocations, ChallengeLocations,
     VanillaLocations,
@@ -381,6 +381,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         LOGIC_WARNING = f"  *Note changing this may result in logically unbeatable games*\n"
 
         configurable_options = (
+            ConfigurableOptionInfo('speed', 'game_speed', options.GameSpeed),
             ConfigurableOptionInfo('kerrigan_presence', 'kerrigan_presence', options.KerriganPresence, can_break_logic=True),
             ConfigurableOptionInfo('kerrigan_level_cap', 'kerrigan_total_level_cap', options.KerriganTotalLevelCap, ConfigurableOptionType.INTEGER, can_break_logic=True),
             ConfigurableOptionInfo('kerrigan_mission_level_cap', 'kerrigan_levels_per_mission_completed_cap', options.KerriganLevelsPerMissionCompletedCap, ConfigurableOptionType.INTEGER),
@@ -673,6 +674,37 @@ class SC2Context(CommonContext):
     
     def trade_storage_slot(self) -> str:
         return f"{TRADE_DATASTORAGE_SLOT}{self.slot}"
+    
+    def _apply_host_settings_to_options(self) -> None:
+        if str(SC2World.settings.game_difficulty).casefold() == 'casual':
+            self.difficulty = GameDifficulty.option_casual
+        elif str(SC2World.settings.game_difficulty).casefold() == 'normal':
+            self.difficulty = GameDifficulty.option_normal
+        elif str(SC2World.settings.game_difficulty).casefold() == 'hard':
+            self.difficulty = GameDifficulty.option_hard
+        elif str(SC2World.settings.game_difficulty).casefold() == 'brutal':
+            self.difficulty = GameDifficulty.option_brutal
+
+        if str(SC2World.settings.game_speed).casefold() == 'slower':
+            self.game_speed = GameSpeed.option_slower
+        elif str(SC2World.settings.game_speed).casefold() == 'slow':
+            self.game_speed = GameSpeed.option_slow
+        elif str(SC2World.settings.game_speed).casefold() == 'normal':
+            self.game_speed = GameSpeed.option_normal
+        elif str(SC2World.settings.game_speed).casefold() == 'fast':
+            self.game_speed = GameSpeed.option_fast
+        elif str(SC2World.settings.game_speed).casefold() == 'faster':
+            self.game_speed = GameSpeed.option_faster
+
+        if str(SC2World.settings.disable_forced_camera).casefold() == 'true':
+            self.disable_forced_camera = DisableForcedCamera.option_true
+        elif str(SC2World.settings.disable_forced_camera).casefold() == 'false':
+            self.disable_forced_camera = DisableForcedCamera.option_false
+
+        if str(SC2World.settings.skip_cutscenes).casefold() == 'true':
+            self.skip_cutscenes = SkipCutscenes.option_true
+        elif str(SC2World.settings.skip_cutscenes).casefold() == 'false':
+            self.skip_cutscenes = SkipCutscenes.option_false
 
     def on_package(self, cmd: str, args: dict) -> None:
         if cmd == "Connected":
@@ -696,6 +728,8 @@ class SC2Context(CommonContext):
             self.skip_cutscenes = args["slot_data"].get("skip_cutscenes", SkipCutscenes.default)
             self.all_in_choice = args["slot_data"]["all_in_map"]
             self.slot_data_version = args["slot_data"].get("version", 2)
+
+            self._apply_host_settings_to_options()
 
             if self.slot_data_version < 4:
                 # Maintaining backwards compatibility with older slot data
