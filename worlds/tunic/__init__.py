@@ -78,7 +78,8 @@ class TunicWorld(World):
     settings: ClassVar[TunicSettings]
     item_name_groups = item_name_groups
     location_name_groups = location_name_groups
-    location_name_groups.update(grass_location_name_groups)
+    for group_name, members in grass_location_name_groups.items():
+        location_name_groups.setdefault(group_name, set()).update(members)
 
     item_name_to_id = item_name_to_id
     location_name_to_id = standard_location_name_to_id.copy()
@@ -95,7 +96,7 @@ class TunicWorld(World):
 
     # for the local_fill option
     fill_items: List[TunicItem]
-    fill_locations: List[TunicLocation]
+    fill_locations: List[Location]
     amount_to_local_fill: int
 
     # so we only loop the multiworld locations once
@@ -331,10 +332,11 @@ class TunicWorld(World):
 
             remove_filler(items_to_create[gold_hexagon])
 
-            # Sort for deterministic order
-            for hero_relic in sorted(item_name_groups["Hero Relics"]):
-                tunic_items.append(self.create_item(hero_relic, ItemClassification.useful))
-                items_to_create[hero_relic] = 0
+            if not self.options.combat_logic:
+                # Sort for deterministic order
+                for hero_relic in sorted(item_name_groups["Hero Relics"]):
+                    tunic_items.append(self.create_item(hero_relic, ItemClassification.useful))
+                    items_to_create[hero_relic] = 0
 
         if not self.options.ability_shuffling:
             # Sort for deterministic order
@@ -394,8 +396,6 @@ class TunicWorld(World):
         self.multiworld.itempool += tunic_items
 
     def pre_fill(self) -> None:
-        self.fill_locations = []
-
         if self.options.local_fill > 0 and self.multiworld.players > 1:
             # we need to reserve a couple locations so that we don't fill up every sphere 1 location
             reserved_locations: Set[str] = set(self.random.sample(sphere_one, 2))
@@ -406,14 +406,14 @@ class TunicWorld(World):
             if len(viable_locations) < self.amount_to_local_fill:
                 raise OptionError(f"TUNIC: Not enough locations for local_fill option for {self.player_name}. "
                                   f"This is likely due to excess plando or priority locations.")
-
-            self.fill_locations += viable_locations
+            self.random.shuffle(viable_locations)
+            self.fill_locations = viable_locations[:self.amount_to_local_fill]
 
     @classmethod
     def stage_pre_fill(cls, multiworld: MultiWorld) -> None:
         tunic_fill_worlds: List[TunicWorld] = [world for world in multiworld.get_game_worlds("TUNIC")
                                                if world.options.local_fill.value > 0]
-        if tunic_fill_worlds:
+        if tunic_fill_worlds and multiworld.players > 1:
             grass_fill: List[TunicItem] = []
             non_grass_fill: List[TunicItem] = []
             grass_fill_locations: List[Location] = []

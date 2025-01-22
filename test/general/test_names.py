@@ -3,7 +3,7 @@ from worlds.AutoWorld import AutoWorldRegister
 
 
 class TestNames(unittest.TestCase):
-    def test_item_names_format(self):
+    def test_item_names_format(self) -> None:
         """Item names must not be all numeric in order to differentiate between ID and name in !hint"""
         for gamename, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game=gamename):
@@ -11,7 +11,7 @@ class TestNames(unittest.TestCase):
                     self.assertFalse(item_name.isnumeric(),
                                      f"Item name \"{item_name}\" is invalid. It must not be numeric.")
 
-    def test_location_name_format(self):
+    def test_location_name_format(self) -> None:
         """Location names must not be all numeric in order to differentiate between ID and name in !hint_location"""
         for gamename, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game=gamename):
