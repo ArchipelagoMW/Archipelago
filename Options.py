@@ -1447,7 +1447,7 @@ class PlandoItem:
 
 class PlandoItems(Option[typing.List[PlandoItem]]):
     """Generic items plando."""
-    default = []
+    default = ()
     supports_weighting = False
     display_name = "Plando Items"
 
