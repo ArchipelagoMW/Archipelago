@@ -109,29 +109,22 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
 }
 
 CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
-    "Guest Room Clear Chest": LMLocationData("Guest Room", 46, "Chest", 17,
-                                            ["Water Element Medal"]),
+    "Guest Room Clear Chest": LMLocationData("Guest Room", 46, "Chest", 17, ["Water Element Medal"]),
     "Parlor Clear Chest": LMLocationData("Parlor", 47, "Chest", 20, []),
     "Laundry Clear Chest": LMLocationData("Laundry Room", 710, "Chest", 4, []),
-    "Cold Storage Clear Chest": LMLocationData("Cold Storage", 48, "Chest", 33,
-                                              ["Fire Element Medal"]),
+    "Cold Storage Clear Chest": LMLocationData("Cold Storage", 48, "Chest", 33, ["Fire Element Medal"]),
     "Breaker Room Clear Chest": LMLocationData("Breaker Room", 49, "Chest", 36, ["Blackout"]),
     "Twins' Room Clear Chest": LMLocationData("Twins' Room", 25, "Chest", 25, []),  # requires any kind of element medal
     "Billiards Room Clear Chest": LMLocationData("Billiards Room", 26, "Chest", 9, []),
-    "Balcony Clear Chest": LMLocationData("Balcony", 27, "Chest", 31,
-                                              ["Ice Element Medal"]),
-    "Ceramics Studio Clear Chest": LMLocationData("Ceramics Studio", 28, "Chest", 30,
-                                                ["Ice Element Medal"]),
+    "Balcony Clear Chest": LMLocationData("Balcony", 27, "Chest", 31,  ["Ice Element Medal"]),
+    "Ceramics Studio Clear Chest": LMLocationData("Ceramics Studio", 28, "Chest", 30, ["Ice Element Medal"]),
     "The Well Key": LMLocationData("The Well", 21, "Freestanding", 0, []),  # keyinfo event
-    "2F Bathroom Clear Chest": LMLocationData("2F Bathroom", 22, "Chest", 24,
-                                             ["Ice Element Medal"]),
+    "2F Bathroom Clear Chest": LMLocationData("2F Bathroom", 22, "Chest", 24, ["Ice Element Medal"]),
     "Nana's Room Clear Chest": LMLocationData("Nana's Room", 23, "Chest", 25, []),
     "Rec Room Clear Chest": LMLocationData("Rec Room", 19, "Chest", 13, []),
     "Conservatory Clear Chest": LMLocationData("Conservatory", 16, "Chest", 12, []),
-    "Dining Room Clear Chest": LMLocationData("Dining Room", 17, "Chest", 6,
-                                             ["Fire Element Medal"]),
-    "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0,
-                                        ["Fire Element Medal"]),
+    "Dining Room Clear Chest": LMLocationData("Dining Room", 17, "Chest", 6, ["Fire Element Medal"]),
+    "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0,  ["Fire Element Medal"]),
     "Fortune Teller Clear Chest": LMLocationData("Fortune-Teller's Room", 5, "Chest", 2, []), #requires player chosen amount
     "Wardrobe Clear Chest": LMLocationData("Wardrobe", 0, "Chest", 22, ["Blackout"]), #TODO not spawning after Grimmly
     "Study Clear Chest": LMLocationData("Study", 1, "Chest", 19, []),
