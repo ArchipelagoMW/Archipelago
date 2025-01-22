@@ -78,7 +78,7 @@ location_hard_moves_logic: Dict[str, List[List[str]]] = {
                                  [ItemName.breakables, ItemName.air_dash]],
     LocationName.strawberry_14: [[ItemName.feather, ItemName.air_dash],
                                  [ItemName.air_dash, ItemName.climb],
-                                 [ItemName.double_dash_refills, ItemName.air_dash]],
+                                 [ItemName.double_dash_refill, ItemName.air_dash]],
     LocationName.strawberry_15: [[ItemName.feather],
                                  [ItemName.ground_dash, ItemName.air_dash]],
     LocationName.strawberry_17: [[ItemName.double_dash_refill, ItemName.traffic_block]],
