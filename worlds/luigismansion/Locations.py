@@ -459,7 +459,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Rec Room SW Crest": LMLocationData("Rec Room", 340, "Furniture", 112, [], 23),
     "Rec Room NW Crest": LMLocationData("Rec Room", 341, "Furniture", 113, [], 23),
     "Rec Room SE Crest": LMLocationData("Rec Room", 342, "Furniture", 114, [], 23),
-    "Rec Room NE Crest": LMLocationData("Rec Room", 717, "Furniture", 115, [], 23),
+    "Rec Room NE Crest": LMLocationData("Rec Room", 719, "Furniture", 115, [], 23),
     "Rec Room L Sandbag": LMLocationData("Rec Room", 344, "Furniture", 253, [], 23),
     "Rec Room R Sandbag": LMLocationData("Rec Room", 345, "Furniture", 252, [], 23),
     "Rec Room C Sandbag": LMLocationData("Rec Room", 346, "Furniture", 251, [], 23),
