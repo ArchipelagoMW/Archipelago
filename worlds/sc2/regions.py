@@ -11,8 +11,10 @@ from .options import (
     GridTwoStartPositions, KeyMode, EnableMissionRaceBalancing
 )
 from .mission_order.options import CustomMissionOrder
-from .mission_order.structs import SC2MissionOrder, Difficulty
+from .mission_order import SC2MissionOrder
+from .mission_order.nodes import SC2MOGenMissionOrder, Difficulty
 from .mission_order.mission_pools import SC2MOGenMissionPools
+from .mission_order.generation import resolve_unlocks, fill_depths, resolve_difficulties, fill_missions, make_connections, resolve_generic_keys
 
 if TYPE_CHECKING:
     from . import SC2World
@@ -46,23 +48,23 @@ def create_mission_order(
             mission_order_dict = mission_order_option
         else:
             mission_order_dict = CustomMissionOrder(mission_order_option).value
-    mission_order = SC2MissionOrder(world, mission_pools, mission_order_dict)
+    mission_order = SC2MOGenMissionOrder(world, mission_order_dict)
 
     # Set up requirements for individual parts of the mission order
-    mission_order.resolve_unlocks()
+    resolve_unlocks(mission_order)
     
     # Ensure total accessibilty and resolve relative difficulties
-    mission_order.fill_depths()
-    mission_order.resolve_difficulties()
+    fill_depths(mission_order)
+    resolve_difficulties(mission_order)
     
     # Build the mission order
-    mission_order.fill_missions(world, [], locations, location_cache) # TODO set locked missions
-    mission_order.make_connections(world)
+    fill_missions(mission_order, mission_pools, world, [], locations, location_cache) # TODO set locked missions
+    make_connections(mission_order, world)
 
     # Fill in Key requirements now that missions are placed
-    mission_order.resolve_generic_keys()
+    resolve_generic_keys(mission_order)
     
-    return mission_order
+    return SC2MissionOrder(mission_order, mission_pools)
 
 def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
     # Mission pool changes

@@ -38,8 +38,8 @@ from .options import (
     SpearOfAdunAutonomouslyCastPresentInNoBuild, EnableVoidTrade, VoidTradeAgeLimit, void_trade_age_limits_ms,
     DifficultyDamageModifier, MissionOrderScouting
 )
-from .mission_order.structs import CampaignSlotData, LayoutSlotData, MissionSlotData, MissionEntryRules
-from .mission_order.entry_rules import SubRuleRuleData, CountMissionsRuleData
+from .mission_order.slot_data import CampaignSlotData, LayoutSlotData, MissionSlotData
+from .mission_order.entry_rules import SubRuleRuleData, CountMissionsRuleData, MissionEntryRules
 from .mission_tables import MissionFlag
 from .transfer_data import normalized_unit_types
 from . import SC2World

@@ -4,7 +4,7 @@ import math
 from abc import ABC, abstractmethod
 
 if TYPE_CHECKING:
-    from .structs import SC2MOGenMission
+    from .nodes import SC2MOGenMission
 
 class LayoutType(ABC):
     size: int

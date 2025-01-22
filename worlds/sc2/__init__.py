@@ -32,7 +32,7 @@ from .mission_tables import (
     SC2Campaign, SC2Mission, SC2Race, MissionFlag, lookup_name_to_mission, lookup_id_to_mission
 )
 from .regions import create_mission_order
-from .mission_order.structs import SC2MissionOrder
+from .mission_order import SC2MissionOrder
 
 logger = logging.getLogger("Starcraft 2")
 
@@ -260,7 +260,7 @@ class SC2World(World):
         :param hint_data:
         """
         hint_data[self.player] = {}
-        for campaign in self.custom_mission_order.campaigns:
+        for campaign in self.custom_mission_order.mission_order_node.campaigns:
             for layout in campaign.layouts:
                 columns = layout.layout_type.get_visual_layout()
                 is_single_row_layout = max([len(column) for column in columns]) == 1
