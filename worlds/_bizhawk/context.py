@@ -236,9 +236,10 @@ def _patch_and_run_game(patch_file: str):
         metadata, output_file = Patch.create_rom_file(patch_file)
         Utils.async_start(_run_game(output_file))
         return metadata
-    except Exception as e:
-        Utils.messagebox('Error', str(e), True)
-        raise
+    except Exception as exc:
+        logger.exception(exc)
+        Utils.messagebox("Error Patching Game", str(e), True)
+        return {}
 
 
 def launch(*launch_args: str) -> None:
