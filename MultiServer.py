@@ -119,11 +119,12 @@ def get_saving_second(seed_name: str, interval: int = 60) -> int:
 
 class Client(Endpoint):
     version = Version(0, 0, 0)
-    tags: typing.List[str] = []
+    tags: typing.List[str]
     remote_items: bool
     remote_start_inventory: bool
     no_items: bool
     no_locations: bool
+    no_text: bool
 
     def __init__(self, socket: websockets.WebSocketServerProtocol, ctx: Context):
         super().__init__(socket)
@@ -175,6 +176,7 @@ class Context:
                       "compatibility": int}
     # team -> slot id -> list of clients authenticated to slot.
     clients: typing.Dict[int, typing.Dict[int, typing.List[Client]]]
+    endpoints: list[Client]
     locations: LocationStore  # typing.Dict[int, typing.Dict[int, typing.Tuple[int, int, int]]]
     location_checks: typing.Dict[typing.Tuple[int, int], typing.Set[int]]
     hints_used: typing.Dict[typing.Tuple[int, int], int]
@@ -364,18 +366,28 @@ class Context:
             return True
 
     def broadcast_all(self, msgs: typing.List[dict]):
-        msgs = self.dumper(msgs)
-        endpoints = (endpoint for endpoint in self.endpoints if endpoint.auth)
-        async_start(self.broadcast_send_encoded_msgs(endpoints, msgs))
+        msg_is_text = all(msg["cmd"] == "PrintJSON" for msg in msgs)
+        data = self.dumper(msgs)
+        endpoints = (
+            endpoint
+            for endpoint in self.endpoints
+            if endpoint.auth and not (msg_is_text and endpoint.no_text)
+        )
+        async_start(self.broadcast_send_encoded_msgs(endpoints, data))
 
     def broadcast_text_all(self, text: str, additional_arguments: dict = {}):
         self.logger.info("Notice (all): %s" % text)
         self.broadcast_all([{**{"cmd": "PrintJSON", "data": [{ "text": text }]}, **additional_arguments}])
 
     def broadcast_team(self, team: int, msgs: typing.List[dict]):
-        msgs = self.dumper(msgs)
-        endpoints = (endpoint for endpoint in itertools.chain.from_iterable(self.clients[team].values()))
-        async_start(self.broadcast_send_encoded_msgs(endpoints, msgs))
+        msg_is_text = all(msg["cmd"] == "PrintJSON" for msg in msgs)
+        data = self.dumper(msgs)
+        endpoints = (
+            endpoint
+            for endpoint in itertools.chain.from_iterable(self.clients[team].values())
+            if not (msg_is_text and endpoint.no_text)
+        )
+        async_start(self.broadcast_send_encoded_msgs(endpoints, data))
 
     def broadcast(self, endpoints: typing.Iterable[Client], msgs: typing.List[dict]):
         msgs = self.dumper(msgs)
@@ -389,13 +401,13 @@ class Context:
         await on_client_disconnected(self, endpoint)
 
     def notify_client(self, client: Client, text: str, additional_arguments: dict = {}):
-        if not client.auth:
+        if not client.auth or client.no_text:
             return
         self.logger.info("Notice (Player %s in team %d): %s" % (client.name, client.team + 1, text))
         async_start(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}]))
 
     def notify_client_multiple(self, client: Client, texts: typing.List[str], additional_arguments: dict = {}):
-        if not client.auth:
+        if not client.auth or client.no_text:
             return
         async_start(self.send_msgs(client,
                                    [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}
@@ -760,7 +772,7 @@ class Context:
             self.on_new_hint(team, slot)
         for slot, hint_data in concerns.items():
             if recipients is None or slot in recipients:
-                clients = self.clients[team].get(slot)
+                clients = filter(lambda c: not c.no_text, self.clients[team].get(slot, []))
                 if not clients:
                     continue
                 client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player != slot)]
@@ -1787,7 +1799,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             ctx.clients[team][slot].append(client)
             client.version = args['version']
             client.tags = args['tags']
-            client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags
+            client.no_locations = "TextOnly" in client.tags or "Tracker" in client.tags
+            # set NoText for old PopTracker clients that predate the tag to save traffic
+            client.no_text = "NoText" in client.tags or ("PopTracker" in client.tags and client.version < (0, 5, 1))
             connected_packet = {
                 "cmd": "Connected",
                 "team": client.team, "slot": client.slot,
@@ -1860,6 +1874,9 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 client.tags = args["tags"]
                 if set(old_tags) != set(client.tags):
                     client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags
+                    client.no_text = "NoText" in client.tags or (
+                        "PopTracker" in client.tags and client.version < (0, 5, 1)
+                    )
                     ctx.broadcast_text_all(
                         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has changed tags "
                         f"from {old_tags} to {client.tags}.",
