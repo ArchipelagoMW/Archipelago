@@ -246,9 +246,7 @@ class LMWorld(World):
             for location, data in PORTRAIT_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
                 entry = LMLocation(self.player, location, region, data)
-                if entry.code == 624:
-                    add_rule(entry, lambda state: state.has_group("Medal", self.player), "and")
-                elif entry.code == 627:
+                if entry.code == 627:
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
                 if len(entry.access) != 0:
@@ -268,9 +266,7 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 if self.options.boo_gates == 1 and self.options.boo_radar != 2:
                     add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
-                if entry.code == 675:
-                    add_rule(entry, lambda state: state.has_group("Medal", self.player), "and")
-                elif entry.code == 679:
+                if entry.code == 679:
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
                 if len(entry.access) != 0:
@@ -293,9 +289,7 @@ class LMWorld(World):
                 entry.place_locked_item(Item("Boo", ItemClassification.progression, None, self.player))
                 if self.options.boo_gates == 1 and self.options.boo_radar != 2:
                     add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
-                if entry.code == 675:
-                    add_rule(entry, lambda state: state.has_group("Medal", self.player), "and")
-                elif entry.code == 679:
+                if entry.code == 679:
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
                 if len(entry.access) != 0:
@@ -415,8 +409,6 @@ class LMWorld(World):
                         item.player == self.player and item.type != "Money" and item.type != "Trap" and item.type != "Medal"))
             if entry.code == 5:
                 add_rule(entry, lambda state: state.has_group("Mario Item", self.player, self.options.mario_items))
-            elif entry.code == 25:
-                add_rule(entry, lambda state: state.has_group("Medal", self.player))
             if len(entry.access) != 0:
                 for item in entry.access:
                     if item == "Fire Element Medal":
