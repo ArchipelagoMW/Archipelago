@@ -269,12 +269,12 @@ class LMContext(CommonContext):
         await super().disconnect(allow_autoreconnect)
 
     def on_package(self, cmd: str, args: dict):
-        if cmd == "Connected":
+        if cmd == "Connected": # On Connect
             self.items_received_2 = []
             self.last_rcvd_index = -1
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
-        if cmd == "ReceivedItems":
+        if cmd == "ReceivedItems": # On Receive Item from Server
             if args["index"] >= self.last_rcvd_index:
                 self.last_rcvd_index = args["index"]
                 for item in args["items"]:
