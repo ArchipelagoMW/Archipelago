@@ -52,7 +52,7 @@ After Installing the seed click "Mod Loader -> Build/Build and Run". Every slot 
 
 <h2 style="text-transform:none";>What the Mod Manager Should Look Like.</h2>
 
-![image](https://i.imgur.com/Si4oZ8w.png)
+![image](https://i.imgur.com/N0WJ8Qn.png)
 
 
 <h2 style="text-transform:none";>Using the KH2 Client</h2>
