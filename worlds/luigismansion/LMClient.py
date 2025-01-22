@@ -380,13 +380,13 @@ async def check_locations(ctx: LMContext):
             if (bit_int & (1<<i)) > 0:
                 match i:
                     case 5:
-                        print(luigi_recv_text + "Fire Elemental Medal")
+                        logger.info(luigi_recv_text + "Fire Elemental Medal")
                         continue
                     case 6:
-                        print(luigi_recv_text + "Ice Elemental Medal")
+                        logger.info(luigi_recv_text + "Ice Elemental Medal")
                         continue
                     case 7:
-                        print(luigi_recv_text + "Water Elemental Medal")
+                        logger.info(luigi_recv_text + "Water Elemental Medal")
                         continue
                     case _:
                         print("ERROR: Not supposed to be reached")
@@ -403,16 +403,16 @@ async def check_locations(ctx: LMContext):
             if (bit_int & (1<<i)) > 0:
                 match i:
                     case 4:
-                        print(luigi_recv_text + "Mario's Hat")
+                        logger.info(luigi_recv_text + "Mario's Hat")
                         continue
                     case 5:
-                        print(luigi_recv_text + "Mario's Star")
+                        logger.info(luigi_recv_text + "Mario's Star")
                         continue
                     case 6:
-                        print(luigi_recv_text + "Mario's Glove")
+                        logger.info(luigi_recv_text + "Mario's Glove")
                         continue
                     case 7:
-                        print(luigi_recv_text + "Mario's Shoe")
+                        logger.info(luigi_recv_text + "Mario's Shoe")
                         continue
                     case _:
                         print("ERROR: Not supposed to be reached")
@@ -426,7 +426,7 @@ async def check_locations(ctx: LMContext):
             bit_int = mario_items_arr_two
         ctx.mario_items_tracked[1] = mario_items_arr_two
         if (bit_int & (1 << 0)) > 0:
-            print(luigi_recv_text + "Mario's Letter")
+            logger.info(luigi_recv_text + "Mario's Letter")
 
     for key_addr_pos in range(0, KEYS_BITFLD_COUNT):
         current_keys_int = dme.read_byte(KEYS_BITFLD_ADDR + key_addr_pos)
@@ -438,7 +438,7 @@ async def check_locations(ctx: LMContext):
             ctx.keys_tracked[key_addr_pos] = current_keys_int
             for i in range(8):
                 if (bit_int & (1<<i)) > 0 and not key_name_collection[key_addr_pos][i] == "":
-                    print(luigi_recv_text + "'" + key_name_collection[key_addr_pos][i] + " Key'")
+                    logger.info(luigi_recv_text + "'" + key_name_collection[key_addr_pos][i] + " Key'")
 
     for boo_addr_pos in range(0, BOOS_BITFLD_COUNT):
         current_boos_int = dme.read_byte(BOOS_BITFLD_ADDR + boo_addr_pos)
@@ -450,7 +450,7 @@ async def check_locations(ctx: LMContext):
             ctx.boos_captured[boo_addr_pos] = current_boos_int
             for i in range(8):
                 if (bit_int & (1<<i)) > 0 and not boo_name_collection[boo_addr_pos][i] == "":
-                    print("Luigi has captured the following Boo: '" + boo_name_collection[boo_addr_pos][i] + "'")
+                    logger.info("Luigi has captured the following Boo: '" + boo_name_collection[boo_addr_pos][i] + "'")
 
     current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
     furniture_name_list: dict[str, LMLocationData] = dict(filter(lambda item: (item[1].type == "Furniture" or
@@ -494,11 +494,11 @@ async def check_locations(ctx: LMContext):
                 if (bit_int & (1<<i)) > 0:
                     match i:
                         case 0:
-                            print("Luigi has entered room '" + room_name + "'")
+                            logger.info("Luigi has entered room '" + room_name + "'")
                         case 1:
-                            print("Luigi has turned lights on in room '" + room_name + "'")
+                            logger.info("Luigi has turned lights on in room '" + room_name + "'")
                         case 2:
-                            print("Luigi opened chest in room '" + room_name + "'")
+                            logger.info("Luigi opened chest in room '" + room_name + "'")
                         case _:
                             print("ERROR: Should Never be reached")
 
