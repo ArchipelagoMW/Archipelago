@@ -28,9 +28,11 @@ ModuleUpdate.update()
 
 if typing.TYPE_CHECKING:
     import ssl
+    from NetUtils import ServerConnection
 
-import websockets
 import colorama
+import websockets
+from websockets.extensions.permessage_deflate import PerMessageDeflate
 try:
     # ponyorm is a requirement for webhost, not default server, so may not be importable
     from pony.orm.dbapiprovider import OperationalError
@@ -126,7 +128,7 @@ class Client(Endpoint):
     no_locations: bool
     no_text: bool
 
-    def __init__(self, socket: websockets.WebSocketServerProtocol, ctx: Context):
+    def __init__(self, socket: "ServerConnection", ctx: Context) -> None:
         super().__init__(socket)
         self.auth = False
         self.team = None
@@ -831,7 +833,7 @@ def update_aliases(ctx: Context, team: int):
             async_start(ctx.send_encoded_msgs(client, cmd))
 
 
-async def server(websocket, path: str = "/", ctx: Context = None):
+async def server(websocket: "ServerConnection", path: str = "/", ctx: Context = None) -> None:
     client = Client(websocket, ctx)
     ctx.endpoints.append(client)
 
@@ -922,6 +924,10 @@ async def on_client_joined(ctx: Context, client: Client):
                               "If your client supports it, "
                               "you may have additional local commands you can list with /help.",
                       {"type": "Tutorial"})
+    if not any(isinstance(extension, PerMessageDeflate) for extension in client.socket.extensions):
+        ctx.notify_client(client, "Warning: your client does not support compressed websocket connections! "
+                                  "It may stop working in the future. If you are a player, please report this to the"
+                                  "client's developer.")
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
 

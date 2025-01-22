@@ -47,6 +47,9 @@ Packets are simple JSON lists in which any number of ordered network commands ca
 
 An object can contain the "class" key, which will tell the content data type, such as "Version" in the following example.
 
+Websocket connections should support per-message compression. Uncompressed connections are deprecated and may stop
+working in the future.
+
 Example:
 ```javascript
 [{"cmd": "RoomInfo", "version": {"major": 0, "minor": 1, "build": 3, "class": "Version"}, "tags": ["WebHost"], ... }]
