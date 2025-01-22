@@ -42,7 +42,7 @@
             A list of all games you have generated can be found on the <a href="/user-content">User Content Page</a>.
             <br />
             You may also download the
-            <a href="/static/generated/configs/{{ world_name }}.yaml">template file for this game</a>.
+            <a href="/static/generated/configs/{{ world_name | get_file_safe_name }}.yaml">template file for this game</a>.
         </p>
 
         <form id="options-form" method="post" enctype="application/x-www-form-urlencoded" action="generate-yaml">
