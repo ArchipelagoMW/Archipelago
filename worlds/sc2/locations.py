@@ -596,7 +596,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 or logic.terran_basic_anti_air(state)
                     and (logic.terran_common_unit(state) or state.has(item_names.REAPER, player)))
         ),
-        make_location_data(SC2Mission.DEVILS_PLAYGROUND.mission_name, "East Reapers", SC2WOL_LOC_ID_OFFSET + 1307, LocationType.CHALLENGE,
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND.mission_name, "East Reapers", SC2WOL_LOC_ID_OFFSET + 1307, LocationType.EXTRA,
             lambda state: (
                 logic.terran_basic_anti_air(state)
                 and (adv_tactics
@@ -3284,7 +3284,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 or logic.zerg_basic_kerriganless_anti_air(state)
                     and (logic.zerg_common_unit(state) or state.has(item_names.HUNTERLING, player)))
         ),
-        make_location_data(SC2Mission.DEVILS_PLAYGROUND_Z.mission_name, "East Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 2507, LocationType.CHALLENGE,
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_Z.mission_name, "East Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 2507, LocationType.EXTRA,
             lambda state: (
                 logic.zerg_basic_kerriganless_anti_air(state)
                 and (adv_tactics
@@ -3318,7 +3318,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 or logic.protoss_basic_anti_air(state)
                     and logic.protoss_common_unit(state))
         ),
-        make_location_data(SC2Mission.DEVILS_PLAYGROUND_P.mission_name, "East Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 2607, LocationType.CHALLENGE,
+        make_location_data(SC2Mission.DEVILS_PLAYGROUND_P.mission_name, "East Reinforcements", SC2_RACESWAP_LOC_ID_OFFSET + 2607, LocationType.EXTRA,
             lambda state: (
                 logic.protoss_basic_anti_air(state)
                 and (adv_tactics
