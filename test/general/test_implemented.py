@@ -117,3 +117,12 @@ class TestImplemented(unittest.TestCase):
                                       f"\nUnexpectedly reachable locations in sphere {sphere_num}:"
                                       f"\n{reachable_only_with_explicit}")
                 self.fail("Unreachable")
+
+    def test_no_items_or_locations_or_regions_submitted_in_init(self):
+        """Test that worlds don't submit items/locations/regions to the multiworld in __init__"""
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            with self.subTest("Game", game=game_name):
+                multiworld = setup_solo_multiworld(world_type, ())
+                self.assertEqual(len(multiworld.itempool), 0)
+                self.assertEqual(len(multiworld.get_locations()), 0)
+                self.assertEqual(len(multiworld.get_regions()), 0)
