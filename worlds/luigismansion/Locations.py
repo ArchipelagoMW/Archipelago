@@ -133,7 +133,7 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0,
                                         ["Fire Element Medal"]),
     "Fortune Teller Clear Chest": LMLocationData("Fortune-Teller's Room", 5, "Chest", 2, []), #requires player chosen amount
-    "Wardrobe Clear Chest": LMLocationData("Wardrobe", 0, "Chest-Blackout", 22, ["Blackout"]),
+    "Wardrobe Clear Chest": LMLocationData("Wardrobe", 0, "Chest", 22, ["Blackout"]), #TODO not spawning after Grimmly
     "Study Clear Chest": LMLocationData("Study", 1, "Chest", 19, []),
     "Master Bedroom Clear Chest": LMLocationData("Master Bedroom", 2, "Chest", 18, []),
     "Nursery Clear Chest": LMLocationData("Nursery", 3, "Chest", 15, []),
