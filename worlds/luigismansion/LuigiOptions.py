@@ -2,7 +2,6 @@ from dataclasses import dataclass
 
 from Options import Toggle, Range, Option, PerGameCommonOptions, Choice, StartInventoryPool
 
-
 # Will look into feasibility of options later.
 
 class LuigiWalkSpeed(Choice):
