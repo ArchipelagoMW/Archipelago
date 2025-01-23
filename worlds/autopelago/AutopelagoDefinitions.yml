@@ -1,7 +1,7 @@
 # This file exists in both the client and the server projects.
 # Please make sure that it matches in both places.
 
-version_stamp: '0.7.0'
+version_stamp: '0.8.0'
 
 items:
   moon_shoes: 'Moon Shoes'
@@ -34,7 +34,7 @@ items:
     name: 'Red Matador''s Cape'
     flavor_text: 'For not taking the bull by the horns.'
   pharaoh_not_anti_mummy_spray:
-    name: 'Pharaoh-Not® Anti-Mummy Spray'
+    name: 'Pharaoh-Not Anti-Mummy Spray'
     flavor_text: 'Curse-free or your money back!'
     auras_granted: [confident]
   pile_of_scrap_metal_in_the_shape_of_a_rocket_ship:
@@ -288,6 +288,8 @@ items:
         'Minecraft':
           - ['Pie of Ender', [well_fed]]
           - ['Structure Compass (Cheese Wheel)', [smart]]
+          - ['Enchanted Netherite Fishing Rod', [confident]]
+          - ['Carbonated Potion of Swiftness II', [energized]]
 
         'Pokemon Emerald':
           - ['Aqua Branded Water Bottle', [well_fed]]
@@ -308,6 +310,8 @@ items:
           - ['Pendant of Dim Sum', [well_fed]]
           - ['Pendant of Flour', [well_fed]]
           - ['Pendant of Porridge', [well_fed]]
+          - ['Titan''s Cooking Mitts', [stylish]]
+          - ['Validation Rupee', [confident]]
 
         'Factorio':
           - ['Cheese Science Pack', [well_fed]]
@@ -316,6 +320,8 @@ items:
           - ['Charging Chuck''s Helmet', [confident]]
           - ['Koopa Soup', [well_fed]]
           - ['Pea Switch', [well_fed]]
+          - ['Plain Donut', [well_fed]]
+          - ['Golden Warp Pipe', [energized]]
 
         'Dark Souls III':
           - ['Severely Scorched Sword', [confident]]
@@ -323,6 +329,42 @@ items:
 
         'Yacht Dice':
           - ['Block of Swiss Carved Like A Die', [well_fed]]
+
+        'Celeste 64':
+          - ['One Raspberry', [well_fed]]
+          - ['Theo''s Winter Coat', [stylish]]
+
+        'DOOM 1993':
+          - ['Misplaced Keycard', [lucky]]
+
+        'OpenRCT2':
+          - ['Cheese Stall', [well_fed]]
+          - name: '1 Rat Guest'
+            rat_count: 1
+
+        'Links Awakening DX':
+          - ['Salad of the Wind Fish', [well_fed]]
+          - ['Frog''s Song of Soup', [well_fed]]
+          - ['Manbo''s Mango', [well_fed]]
+
+        'Pseudoregalia':
+          - ['20-Bean Casserole', [well_fed, well_fed]]
+
+        'Slay the Spire':
+          - ['Unmatched Power', [confident]]
+
+        'Sonic Adventure DX':
+          - name: 'Big the Rat'
+            rat_count: 1
+
+        'Super Metroid':
+          - ['Morphing Hamster Ball', [confident]]
+          - ['Soup or Missile', [well_fed, confident]]
+          - ['Mice Beam', [confident]]
+
+        'Yoshi''s Island':
+          - ['Barbecued Goonie Wings', [well_fed]]
+          - ['3 Shy Guy Omelette', [well_fed]]
 
   trap:
     - ['Half of a Worm', [upset_tummy]]
@@ -408,9 +450,16 @@ items:
 
         'Minecraft':
           - ['Villager''s Birthday Party Invitation', [distracted]]
+          - ['Redstone Tutorial', [distracted]]
+          - ['An Apple Covered in Actual Gold', [upset_tummy]]
+          - ['Potion of Bad Omen V', [unlucky]]
+          - ['Half-Cut Tree', [distracted]]
+          - ['Regressive Pickaxe', [sluggish]]
 
         'Ocarina of Time':
           - ['Overly-Talkative Fairy in a Bottle', [distracted]]
+          - ['Spoiled Lon Lon Milk', [upset_tummy]]
+          - ['Unhappy Mask Salesman', [startled]]
 
         'Pokemon Emerald':
           - ['Rabid Zigzagoon', [startled]]
@@ -422,6 +471,7 @@ items:
 
         'A Link to the Past':
           - ['Cabbage-Colored Boulder', [startled]]
+          - ['Third Red Crystal', [conspiratorial]]
 
         'Factorio':
           - ['Eau de Pollution', [sluggish]]
@@ -431,9 +481,45 @@ items:
 
         'Super Mario World':
           - ['Goomba Goo', [sluggish]]
+          - ['Wandering MechaKoopa', [startled]]
+          - ['An Unfortunately Placed Hidden Block', [startled]]
 
         'Yacht Dice':
           - ['Words of Discouragement', [sluggish]]
+
+        'Celeste 64':
+          - ['Permafrosted Strawberry', [upset_tummy]]
+
+        'DOOM 1993':
+          - ['Monster Closet', [startled]]
+
+        'OpenRCT2':
+          - ['Mouse Convention', [startled, distracted]]
+          - ['Wooden Wild Rat Coaster', [distracted]]
+
+        'Links Awakening DX':
+          - ['Poorly Tuned Wind Marimba', [unlucky]]
+          - ['Malfunctioning Trendy Game Claw', [distracted]]
+
+        'Slay the Spire':
+          - ['Exhausting Card', [sluggish]]
+
+        'Sonic Adventure DX':
+          - ['Oh No!', [startled]]
+          - ['Oh No?', [unlucky]]
+          - ['Oh No...', [sluggish]]
+
+        'Super Mario 64':
+          - ['Red-Hatted Monkey', [distracted]]
+          - ['Green Demon', [startled]]
+
+        'Super Metroid':
+          - ['Lo-Jump Boots', [sluggish]]
+          - ['Wandering Metroid', [startled]]
+
+        'Yoshi''s Island':
+          - ['Touched Fuzzy, Got Dizzy', [distracted, sluggish]]
+          - ['Hungry Poochy', [startled]]
 
   filler:
     - ['Empty Snail Shell', []]
@@ -577,10 +663,19 @@ items:
           - ['Gnawing III Book', []]
           - ['Progressive Cheesecrafting', []]
           - ['Netherite Bed', []]
+          - ['Shattered Ender Pearl', []]
+          - ['Spawn Egg (Cheese Golem)', []]
 
         'Super Mario World':
           - ['Dinosaur Land Travel Brochure', []]
           - ['Reznor Nail Clippings', []]
+          - ['Iggy Koopa''s Rubber Ball', []]
+          - ['Wendy Koopa''s Hula Hoop', []]
+          - ['Lemmy Koopa''s Decommissioned Doppelgangers', []]
+          - ['Larry Koopa''s Pet Block-snake', []]
+          - ['Morton Koopa''s Exercise Ball-and-Chain', []]
+          - ['Ludwig von Koopa''s Piano', []]
+          - ['Roy Koopa''s Backup Sunglasses', []]
 
         'Ocarina of Time':
           - ['Broken Boss Key', []]
@@ -594,10 +689,14 @@ items:
           - ['Ninth Red Coin', []]
           - ['Key to the Castle''s Bathroom', []]
           - ['0.5x A Presses', []]
+          - ['Cannon Unlock PPK (Princess Peach''s Kitchen)', []]
 
         'A Link to the Past':
           - ['The Spoon Pearl', []]
           - ['Agahnim''s Shiny Ball', []]
+          - ['The Green Mail', []]
+          - ['Half Bottle of Pink Hair Dye', []]
+          - ['REALLY Small Key to Hyrule Castle' []]
 
         'Factorio':
           - ['Bottleneck', []]
@@ -612,6 +711,26 @@ items:
         'Dark Souls III':
           - ['Soul of a Cinder Block', []]
           - ['Treasure Chest with Several Stab Wounds', []]
+
+        'Celeste 64':
+          - ['Malfunctioning Cassette Tape', []]
+          - ['Photograph of Celeste Mountain', []]
+
+        'OpenRCT2':
+          - ['Allow Brie Removal', []]
+
+        'Links Awakening DX':
+          - ['Pocket Full of Koho Lint', []]
+          - ['Tortoise-Shaped Rock', []]
+
+        'Sonic Adventure DX':
+          - ['Frog with a Tail', []]
+
+        'Super Metroid':
+          - ['Empty E-Tank', []]
+
+        'Yoshi''s Island':
+          - ['Mouthful of Watermelon Seeds', []]
 
 
 # one MUST be called 'Menu'. ability_check_with_dc is intended to make intuitive
