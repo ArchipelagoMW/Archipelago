@@ -121,7 +121,7 @@ class BalconyBooCount(Range):
     """Set the number of Boos required to reach the Balcony. 0 = Starts Open"""
     display_name = "Balcony Boo Count"
     range_start = 0
-    range_end = 35
+    range_end = 36
     default = 20
 
 
