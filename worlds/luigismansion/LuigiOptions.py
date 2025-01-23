@@ -40,7 +40,12 @@ class SpeedySpirits(Toggle):
 
 
 class StartWithBooRadar(Choice):
-    """Start with Boo Radar"""
+    """
+    Start with Boo Radar
+    0 = Start with Boo Radar
+    1 = Boo Radar in pool
+    2 = No Boo Radar - Boo Gates and Boosanity will be disabled if excluded
+    """
     display_name = "Boo Radar"
     option_start_with = 0
     option_include = 1
