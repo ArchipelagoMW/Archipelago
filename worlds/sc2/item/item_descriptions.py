@@ -1041,7 +1041,7 @@ item_descriptions = {
     item_names.INTERCESSOR_LIMINAL_MAGNIFIERS: "Intercessor War Council upgrade. Intercessor slow now also applies to structures.",
     item_names.DAWNBRINGER_SOLARITE_LENS: "Dawnbringer War Council upgrade. Dawnbringers gain +2 range.",
     item_names.CARRIER_REPAIR_DRONES: "Carrier War Council upgrade. Carriers gain 2 repair drones which heal nearby mechanical units.",
-    item_names.SKYLORD_HYPERJUMP: "Skylord War Council upgrade. " + _ability_desc("Skylords", "Hyperjump", "teleports the skylord to any location on the map"),
+    item_names.SKYLORD_JUMP: "Skylord War Council upgrade. " + _ability_desc("Skylords", "Jump", "instantly teleports the Skylord a short distance"),
     item_names.TRIREME_SOLAR_BEAM: "Trireme War Council upgrade. Triremes gain an anti-air laser attack that deals more damage over time.",
     item_names.TEMPEST_DISINTEGRATION: "Tempest War Council upgrade. " + _ability_desc("Tempests", "Disintegration", "deals 500 damage to a target unit or structure over 20 seconds"),
     item_names.SCOUT_EXPEDITIONARY_HULL: "Scout War Council upgrade. Scouts gain +25 shields, +50 health, +1 shield armor, and reduced shield regeneration delay.",
