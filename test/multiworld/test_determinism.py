@@ -426,6 +426,9 @@ class TestDeterministicGeneration(TestCase):
 
         This test generates a different seed in-between two generations of the same seed and ensures that the two
         generations of the same seed produced identical results.
+
+        Failing this test often means that a world will not generate correctly when there are multiple worlds of that
+        game in one multiworld.
         """
         for game, world_type in AutoWorldRegister.world_types.items():
             seed, initial_multiworld_data = self.get_initial_multiworld(game)
