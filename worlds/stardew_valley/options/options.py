@@ -249,10 +249,10 @@ class ToolProgression(Choice):
     @property
     def is_vanilla(self):
         return not self.is_progressive
-    
+
     @property
     def is_progressive(self):
-        return bool(self.value & 0b001)
+        return bool(self.value & self.option_progressive)
 
 
 class ElevatorProgression(Choice):
