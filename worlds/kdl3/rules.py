@@ -334,8 +334,8 @@ def set_rules(world: "KDL3World") -> None:
                                      "Level 4 Boss - Defeated", "Level 5 Boss - Defeated"],
                                     location_name.level_names.keys()):
             set_rule(world.get_location(boss_flag),
-                     lambda state: state.has(f"{level} - Stage Completion", world.player,
-                                             world.options.ow_boss_requirement.value))
+                     lambda state, lvl=level: state.has(f"{lvl} - Stage Completion", world.player,
+                                                        world.options.ow_boss_requirement.value))
 
     set_rule(world.multiworld.get_entrance("To Level 6", world.player),
              lambda state: state.has("Heart Star", world.player, world.required_heart_stars))
