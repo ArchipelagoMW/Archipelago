@@ -38,6 +38,8 @@ def __get_item_name(item_data):
             return "itembomb"
         case "Ice Trap":
             return "ice"
+        case "Banana Trap":
+            return "banana"
 
     return "nothing"
 
@@ -830,7 +832,7 @@ def __get_chest_size_from_item(item_name):
         case "Large Heart":
             return 1
 
-        case "Poison Mushroom" | "Bomb" | "Ice Trap" | "Gold Diamond":
+        case "Poison Mushroom" | "Bomb" | "Ice Trap" | "Gold Diamond" | "Banana Trap":
             return 2
 
         case "Fire Element Medal" | "Water Element Medal" | "Ice Element Medal":
@@ -844,7 +846,7 @@ def __get_chest_size_from_item(item_name):
 # For every key found in the generation output, add an entry for it in "iteminfotable".
 def update_item_info_table(item_info, output_data):
     # Adds the special items so they can spawn in furniture or chests.
-    items_to_add = ["rdiamond", "itembomb", "ice", "mstar"]
+    items_to_add = ["rdiamond", "itembomb", "ice", "mstar", "banana"]
     for new_item in items_to_add:
         __add_info_item(item_info, None, info_item_name=new_item)
 
@@ -896,7 +898,7 @@ def __get_key_name(door_id):
 def update_item_appear_table(item_appear_info, output_data):
     # Add the special items, so they can be spawned from treasure chests or furniture in game.
     items_to_add = ["mkinoko", "itembomb", "ice", "elffst", "elwfst", "elifst", "mstar", "mglove", "mshoes",
-                    "rdiamond", "mheart", "lheart", "move_mheart"]
+                    "rdiamond", "mheart", "lheart", "move_mheart", "banana"]
     for new_item in items_to_add:
         __add_appear_item(item_appear_info, new_item)
 
@@ -994,7 +996,7 @@ def __get_item_chest_visual(item_name):
 
         case "Fire Element Medal" | "Bomb":
             return "rtakara1"
-        case "Water Element Medal" | "Poison Mushroom":
+        case "Water Element Medal" | "Poison Mushroom" | "Banana Trap":
             return "btakara1"
         case "Ice Element Medal" | "Ice Trap":
             return "wtakara1"
