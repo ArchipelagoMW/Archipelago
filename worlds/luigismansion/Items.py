@@ -136,6 +136,21 @@ BOO_ITEM_TABLE: dict[str, LMItemData] = {
     "Cellar Boo (Booripedes)": LMItemData("Boo Item", 95, IC.progression),
     "Pipe Room  Boo (Booffant)": LMItemData("Boo Item", 96, IC.progression),
     "Breaker Room Boo (Boo B. Hatch)": LMItemData("Boo Item", 97, IC.progression),
+    "Boolossus Boo 1": LMItemData("Boo Item", 98, IC.progression),
+    "Boolossus Boo 2": LMItemData("Boo Item", 99, IC.progression),
+    "Boolossus Boo 3": LMItemData("Boo Item", 100, IC.progression),
+    "Boolossus Boo 4": LMItemData("Boo Item", 101, IC.progression),
+    "Boolossus Boo 5": LMItemData("Boo Item", 102, IC.progression),
+    "Boolossus Boo 6": LMItemData("Boo Item", 103, IC.progression),
+    "Boolossus Boo 7": LMItemData("Boo Item", 104, IC.progression),
+    "Boolossus Boo 8": LMItemData("Boo Item", 105, IC.progression),
+    "Boolossus Boo 9": LMItemData("Boo Item", 107, IC.progression),
+    "Boolossus Boo 10": LMItemData("Boo Item", 108, IC.progression),
+    "Boolossus Boo 11": LMItemData("Boo Item", 109, IC.progression),
+    "Boolossus Boo 12": LMItemData("Boo Item", 110, IC.progression),
+    "Boolossus Boo 13": LMItemData("Boo Item", 111, IC.progression),
+    "Boolossus Boo 14": LMItemData("Boo Item", 112, IC.progression),
+    "Boolossus Boo 15": LMItemData("Boo Item", 113, IC.progression)
 }
 
 filler_items: Dict[str, LMItemData] = {
