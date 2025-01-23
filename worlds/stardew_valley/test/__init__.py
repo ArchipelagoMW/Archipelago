@@ -15,6 +15,7 @@ from .options.utils import fill_namespace_with_default, parse_class_option_keys,
 from .. import StardewValleyWorld, options, StardewItem, StardewRule
 from ..logic.time_logic import MONTH_COEFFICIENT
 from ..options import StardewValleyOption
+from ..options.options import enabled_mods
 
 logger = logging.getLogger(__name__)
 
@@ -97,6 +98,12 @@ def allsanity_no_mods_6_x_x():
 def allsanity_mods_6_x_x():
     allsanity = allsanity_no_mods_6_x_x()
     allsanity.update({options.Mods.internal_name: frozenset(options.Mods.valid_keys)})
+    return allsanity
+
+
+def allsanity_mods_6_x_x_exclude_disabled():
+    allsanity = allsanity_no_mods_6_x_x()
+    allsanity.update({options.Mods.internal_name: frozenset(enabled_mods)})
     return allsanity
 
 

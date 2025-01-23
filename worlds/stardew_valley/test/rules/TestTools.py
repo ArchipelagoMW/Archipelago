@@ -1,7 +1,7 @@
 from collections import Counter
 
 from .. import SVTestBase
-from ... import Event, options
+from ... import options
 from ...options import ToolProgression, SeasonRandomization
 from ...strings.entrance_names import Entrance
 from ...strings.region_names import Region
@@ -73,12 +73,10 @@ class TestProgressiveToolsLogic(SVTestBase):
         self.assert_location_can_be_reached("Old Master Cannoli")
 
         self.remove(fall)
-        self.remove(self.create_item(Event.fall_farming))
         self.assert_location_cannot_be_reached("Old Master Cannoli")
         self.remove(tuesday)
 
         green_house = self.create_item("Greenhouse")
-        self.collect(self.create_item(Event.fall_farming))
         self.multiworld.state.collect(green_house)
         self.assert_location_cannot_be_reached("Old Master Cannoli")
 
@@ -87,7 +85,6 @@ class TestProgressiveToolsLogic(SVTestBase):
         self.assert_location_can_be_reached("Old Master Cannoli")
 
         self.remove(green_house)
-        self.remove(self.create_item(Event.fall_farming))
         self.assert_location_cannot_be_reached("Old Master Cannoli")
         self.remove(friday)
 
