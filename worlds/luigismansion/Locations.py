@@ -785,7 +785,7 @@ BOO_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Study Boo": LMLocationData("Study", 672, "Boo", 18, []),
     "Master Bedroom Boo": LMLocationData("Master Bedroom", 673, "Boo", 17, []),
     "Nursery Boo": LMLocationData("Nursery", 674, "Boo", 13, []),
-    "Twins' Room Boo": LMLocationData("Twins' Room", 675, "Boo", 14, []),  # Requires state.has_group "Medal", 1
+    "Twins' Room Boo": LMLocationData("Twins' Room", 675, "Boo", 14, []),
     "Laundry Room Boo": LMLocationData("Laundry Room", 676, "Boo", 4, []),
     "Butler's Room Boo": LMLocationData("Butler's Room", 677, "Boo", 0, ["Fire Element Medal"]),
     "Hidden Room Boo": LMLocationData("Hidden Room", 678, "Boo", 1, []),

@@ -17,7 +17,7 @@ class LMItem(Item):
     game: str = "Luigi's Mansion"
     doorid: Optional[int] = None
 
-    def __init__(self, name: str, player: int, data: LMItemData, force_nonprogress: bool):
+    def __init__(self, name: str, player: int, data: LMItemData, force_nonprogress: bool = False):
         adjusted_classification = IC.filler if force_nonprogress else data.classification
         super(LMItem, self).__init__(name, adjusted_classification, LMItem.get_apid(data.code), player)
 

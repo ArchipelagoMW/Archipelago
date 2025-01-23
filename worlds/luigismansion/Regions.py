@@ -28,7 +28,7 @@ GHOST_TO_ROOM = {
     "Mirror Room": "No Element",
     "Graveyard": "No Element",
     "Anteroom": "No Element",
-    "Sitting Room": "Fire" # Fire
+    "Sitting Room": "Fire"  # Fire
 }
 
 
@@ -93,7 +93,8 @@ def connect_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "1F Hallway", "Conservatory", "Conservatory Key", 21)
     connect(multiworld, player, "1F Hallway", "Billiards Room", "Billiards Key", 17)
     connect(multiworld, player, "1F Hallway", "1F Washroom", "1F Washroom Key", 20,
-            lambda state: state.has_group("Boo", player, multiworld.worlds[player].options.washroom_boo_count))
+            lambda state: state.has_group("Boo", player, multiworld.worlds[player].options.washroom_boo_count)
+                          or state.has("Boo", player, multiworld.worlds[player].options.washroom_boo_count))
     connect(multiworld, player, "1F Hallway", "Ballroom", "Ballroom Key", 15)
     connect(multiworld, player, "1F Hallway", "Dining Room", "Dining Room Key", 14)
     connect(multiworld, player, "1F Hallway", "Laundry Room", "Laundry Key", 7)
@@ -130,7 +131,8 @@ def connect_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "Safari Room", "3F Right Hallway", "3F Right Hallway Key", 55)
     connect(multiworld, player, "3F Right Hallway", "Artist's Studio", "Art Studio Key", 63)
     connect(multiworld, player, "3F Right Hallway", "Balcony", "Balcony Key", 62,
-            lambda state: state.has_group("Boo", player, multiworld.worlds[player].options.balcony_boo_count))
+            lambda state: state.has_group("Boo", player, multiworld.worlds[player].options.balcony_boo_count)
+                          or state.has("Boo", player, multiworld.worlds[player].options.balcony_boo_count))
     connect(multiworld, player, "Balcony", "3F Left Hallway", "Diamond Key", 59,
             lambda state: Rules.can_fst_ice(state, player))
     connect(multiworld, player, "3F Left Hallway", "Armory", "Armory Key", 51)
@@ -146,7 +148,8 @@ def connect_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "Basement Hallway", "Pipe Room", "Pipe Room Key", 69)
     connect(multiworld, player, "Basement Hallway", "Spade Hallway", "Spade Hallway Key", 70)
     connect(multiworld, player, "Spade Hallway", "Secret Altar", "Spade Key", 72,
-            lambda state: state.has_group("Boo", player, multiworld.worlds[player].options.final_boo_count))
+            lambda state: state.has_group("Boo", player, multiworld.worlds[player].options.final_boo_count)
+                          or state.has("Boo", player, multiworld.worlds[player].options.final_boo_count))
 
 
 REGION_LIST = {
