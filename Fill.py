@@ -954,7 +954,7 @@ def parse_planned_blocks(multiworld: MultiWorld) -> typing.Dict[int, typing.List
             new_block.count = count
             plando_blocks[player].append(new_block)
 
-        return plando_blocks
+    return plando_blocks
 
 
 def resolve_early_locations_for_planned(multiworld: MultiWorld):
