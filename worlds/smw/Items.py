@@ -97,5 +97,12 @@ trap_name_to_value: typing.Dict[str, int] = {
 
     # Common other trap names
     "Chaos Control Trap": 0xBC0014,  # Stun Trap
+    "Confuse Trap":       0xBC001C,  # Reverse Trap
     "Freeze Trap":        0xBC0014,  # Stun Trap
+    "Frozen Trap":        0xBC0014,  # Stun Trap
+    "Paralyze Trap":      0xBC0014,  # Stun Trap
+    "Reversal Trap":      0xBC001C,  # Reverse Trap
+    "Fuzzy Trap":         0xBC001C,  # Reverse Trap
+    "Confusion Trap":     0xBC001C,  # Reverse Trap
+    "Confound Trap":      0xBC001C,  # Reverse Trap
 }
