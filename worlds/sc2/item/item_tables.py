@@ -991,8 +991,8 @@ item_table = {
         ItemData(624 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 13, SC2Race.TERRAN),
     item_names.MERCENARY_MUNITIONS:
         ItemData(625 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 14, SC2Race.TERRAN),
-    item_names.FAST_DELIVERY:
-        ItemData(626 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 15, SC2Race.TERRAN),
+    item_names.PROGRESSIVE_FAST_DELIVERY:
+        ItemData(626 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Progressive_2, 8, SC2Race.TERRAN, quantity=2),
     item_names.RAPID_REINFORCEMENT:
         ItemData(627 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 16, SC2Race.TERRAN),
     item_names.FUSION_CORE_FUSION_REACTOR:
@@ -1671,6 +1671,10 @@ item_table = {
     item_names.MACROSCOPIC_RECUPERATION: ItemData(707 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 13, SC2Race.ZERG),
     item_names.BIOMECHANICAL_STOCKPILING: ItemData(708 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 14, SC2Race.ZERG),
     item_names.BROODLING_PACKING: ItemData(709 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 15, SC2Race.ZERG),
+    item_names.CELL_DIVISION: ItemData(710 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 16, SC2Race.ZERG),
+    item_names.SELF_SUFFICIENT: ItemData(711 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 17, SC2Race.ZERG),
+    item_names.UNRESTRICTED_MUTATION: ItemData(712 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Evolution_Pit, 18, SC2Race.ZERG),
+    item_names.PROGRESSIVE_EVOLUTIONARY_LEAP: ItemData(713 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Progressive, 6, SC2Race.ZERG, quantity=2),
 
     # Morphs
     item_names.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT: ItemData(800 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 6, SC2Race.ZERG, classification=ItemClassification.progression, parent=parent_names.MORPH_SOURCE_AIR),
