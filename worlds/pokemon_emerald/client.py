@@ -287,7 +287,7 @@ class PokemonEmeraldClient(BizHawkClient):
                     pokedex_caught_bytes = read_result[0]
 
             game_clear = False
-            local_checked_locations = set()
+            local_checked_locations: set[int] = set()
             local_set_events = {flag_name: False for flag_name in TRACKER_EVENT_FLAGS}
             local_found_key_items = {location_name: False for location_name in KEY_LOCATION_FLAGS}
             defeated_legendaries = {legendary_name: False for legendary_name in LEGENDARY_NAMES.values()}
@@ -350,10 +350,7 @@ class PokemonEmeraldClient(BizHawkClient):
                 self.local_checked_locations = local_checked_locations
 
                 if local_checked_locations is not None:
-                    await ctx.send_msgs([{
-                        "cmd": "LocationChecks",
-                        "locations": list(local_checked_locations),
-                    }])
+                    await ctx.check_locations(local_checked_locations)
 
             # Send game clear
             if not ctx.finished_game and game_clear:
