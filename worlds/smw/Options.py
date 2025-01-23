@@ -398,6 +398,13 @@ class StartingLifeCount(Range):
     default = 5
 
 
+class RingLink(Toggle):
+    """
+    Whether your in-level coin gain/loss is linked to other players
+    """
+    display_name = "Ring Link"
+
+
 class TrapLink(Toggle):
     """
     Whether your received traps are linked to other players
@@ -454,6 +461,7 @@ smw_option_groups = [
 @dataclass
 class SMWOptions(PerGameCommonOptions):
     death_link: DeathLink
+    ring_link: RingLink
     trap_link: TrapLink
     goal: Goal
     bosses_required: BossesRequired

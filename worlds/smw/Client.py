@@ -44,10 +44,12 @@ SMW_HIDDEN_1UP_ACTIVE_ADDR   = ROM_START + 0x01BFA9
 SMW_BONUS_BLOCK_ACTIVE_ADDR  = ROM_START + 0x01BFAA
 SMW_BLOCKSANITY_ACTIVE_ADDR  = ROM_START + 0x01BFAB
 SMW_TRAP_LINK_ACTIVE_ADDR    = ROM_START + 0x01BFB7
+SMW_RING_LINK_ACTIVE_ADDR    = ROM_START + 0x01BFB8
 
 
 SMW_GAME_STATE_ADDR       = WRAM_START + 0x100
 SMW_MARIO_STATE_ADDR      = WRAM_START + 0x71
+SMW_COIN_COUNT_ADDR       = WRAM_START + 0xDBF
 SMW_BOSS_STATE_ADDR       = WRAM_START + 0xD9B
 SMW_ACTIVE_BOSS_ADDR      = WRAM_START + 0x13FC
 SMW_CURRENT_LEVEL_ADDR    = WRAM_START + 0x13BF
@@ -119,6 +121,9 @@ class SMWSNIClient(SNIClient):
         if "tags" not in args:
             return
 
+        if not hasattr(self, "instance_id"):
+            self.instance_id = time.time()
+
         source_name = args["data"]["source"]
         if "TrapLink" in ctx.tags and "TrapLink" in args["tags"] and source_name != ctx.slot_info[ctx.slot].name:
             trap_name: str = args["data"]["trap_name"]
@@ -129,9 +134,13 @@ class SMWSNIClient(SNIClient):
             self.priority_trap = NetworkItem(trap_name_to_value[trap_name], None, None)
             self.priority_trap_message = generate_received_trap_link_text(trap_name, source_name)
             self.priority_trap_message_str = f"Received linked {trap_name} from {source_name}"
+        elif "RingLink" in ctx.tags and "RingLink" in args["tags"] and source_name != self.instance_id:
+            if not hasattr(self, "pending_ring_link"):
+                self.pending_ring_link = 0
+            self.pending_ring_link += args["data"]["amount"]
 
     async def send_trap_link(self, ctx: SNIClient, trap_name: str):
-        if "TrapLink" not in ctx.tags:
+        if "TrapLink" not in ctx.tags or ctx.slot == None:
             return
 
         await ctx.send_msgs([{
@@ -143,6 +152,28 @@ class SMWSNIClient(SNIClient):
             }
         }])
         snes_logger.info(f"Sent linked {trap_name}")
+
+    async def send_ring_link(self, ctx: SNIClient, amount: int):
+        from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
+
+        if "RingLink" not in ctx.tags or ctx.slot == None:
+            return
+
+        game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)
+        if game_state[0] != 0x14:
+            return
+
+        if not hasattr(self, "instance_id"):
+            self.instance_id = time.time()
+
+        await ctx.send_msgs([{
+            "cmd": "Bounce", "tags": ["RingLink"],
+            "data": {
+                "time": time.time(),
+                "source": self.instance_id,
+                "amount": amount
+            }
+        }])
 
 
     async def validate_rom(self, ctx):
@@ -172,6 +203,11 @@ class SMWSNIClient(SNIClient):
         trap_link = await snes_read(ctx, SMW_TRAP_LINK_ACTIVE_ADDR, 1)
         if trap_link and bool(trap_link[0] & 0b1):
             ctx.tags.add("TrapLink")
+            await ctx.send_msgs([{"cmd": "ConnectUpdate", "tags": ctx.tags}])
+
+        ring_link = await snes_read(ctx, SMW_RING_LINK_ACTIVE_ADDR, 1)
+        if ring_link and bool(ring_link[0] & 0b1):
+            ctx.tags.add("RingLink")
             await ctx.send_msgs([{"cmd": "ConnectUpdate", "tags": ctx.tags}])
 
         if ctx.rom != rom_name:
@@ -365,6 +401,57 @@ class SMWSNIClient(SNIClient):
                 self.add_message_to_queue(message)
 
 
+    async def handle_ring_link(self, ctx):
+        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+
+        if "RingLink" not in ctx.tags:
+            return
+
+        if not hasattr(self, "prev_coins"):
+            self.prev_coins = 0
+
+        curr_coins_byte = await snes_read(ctx, SMW_COIN_COUNT_ADDR, 0x1)
+        curr_coins = curr_coins_byte[0]
+
+        if curr_coins < self.prev_coins:
+            # Coins rolled over from 1-Up
+            curr_coins += 100
+
+        coins_diff = curr_coins - self.prev_coins
+        if coins_diff > 0:
+            await self.send_ring_link(ctx, coins_diff)
+            self.prev_coins = curr_coins % 100
+
+        new_coins = curr_coins
+        if not hasattr(self, "pending_ring_link"):
+            self.pending_ring_link = 0
+
+        if self.pending_ring_link != 0:
+            new_coins += self.pending_ring_link
+            new_coins = max(new_coins, 0)
+
+            new_1_ups = 0
+            while new_coins >= 100:
+                new_1_ups += 1
+                new_coins -= 100
+
+            if new_1_ups > 0:
+                curr_lives_inc_byte = await snes_read(ctx, WRAM_START + 0x18E4, 0x1)
+                curr_lives_inc = curr_lives_inc_byte[0]
+                new_lives_inc = curr_lives_inc + new_1_ups
+                snes_buffered_write(ctx, WRAM_START + 0x18E4, bytes([new_lives_inc]))
+
+            snes_buffered_write(ctx, SMW_COIN_COUNT_ADDR, bytes([new_coins]))
+            if self.pending_ring_link > 0:
+                snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([0x01]))
+            else:
+                snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([0x2A]))
+            self.pending_ring_link = 0
+            self.prev_coins = new_coins
+
+            await snes_flush_writes(ctx)
+
+
     async def game_watcher(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
         
@@ -425,6 +512,7 @@ class SMWSNIClient(SNIClient):
 
         await self.handle_message_queue(ctx)
         await self.handle_trap_queue(ctx)
+        await self.handle_ring_link(ctx)
 
         new_checks = []
         event_data = await snes_read(ctx, SMW_EVENT_ROM_DATA, 0x60)
