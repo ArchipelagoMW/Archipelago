@@ -12,7 +12,7 @@ class FillWithDetermination(Toggle):
 class VictoryLocation(Choice):
     """Optionally moves the final victory location earlier to reduce the number of locations in the multiworld.
 
-    - **Snakes on a Planet (default):** The game goes all the way to the moon. This gives the longest game.
+    - **Snakes on a Planet (default):** The game goes all the way to "Moon, The". This gives the longest game.
     - **Secret Cache**: The game stops at the end of Cool World. This gives the middlest-length game.
     - **Captured Goldfish**: The game stops at the end of The Sewers. This gives the shortest game."""
     display_name = "Victory Location"
