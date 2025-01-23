@@ -1188,7 +1188,7 @@ def distribute_local_nonprogression(multiworld: MultiWorld,
     # fill local filler on local excluded locations first
     new_filler_itempool: typing.List[Item] = []
     for item in filler_itempool:
-        if not item.advancement and item.name in multiworld.worlds[item.player].options.local_items.value:
+        if item.name in multiworld.worlds[item.player].options.local_items.value:
             local_nonprogression_items.append(item)
         else:
             new_filler_itempool.append(item)
@@ -1198,7 +1198,7 @@ def distribute_local_nonprogression(multiworld: MultiWorld,
     # then add local useful to remaining local items and fill in default locations
     new_useful_itempool: typing.List[Item] = []
     for item in useful_itempool:
-        if not item.advancement and item.name in multiworld.worlds[item.player].options.local_items.value:
+        if item.name in multiworld.worlds[item.player].options.local_items.value:
             local_nonprogression_items.append(item)
         else:
             new_useful_itempool.append(item)
