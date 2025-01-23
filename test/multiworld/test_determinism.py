@@ -1,5 +1,6 @@
+from operator import itemgetter
 import random
-from typing import TypedDict, ClassVar
+from typing import TypedDict, ClassVar, Callable, Any
 from unittest import TestCase
 
 # Imported before importing from Fill to prevent circular imports in spawned processes, when run as part of the full
@@ -26,30 +27,29 @@ class SerializableItemData(TypedDict):
 
 
 class SerializableLocationData(TypedDict):
-    name: str
     address: int | None
     # progress_type could be stored as an int instead, but for the simplicity of providing better test output, it is
     # left as a LocationProgressType.
     progress_type: LocationProgressType
+    item: SerializableItemData | None
 
 
 class SerializableEntranceData(TypedDict):
-    name: str
     parent_region: str | None
     connected_region: str | None
 
 
 class SerializableRegionData(TypedDict):
-    name: str
+    # While often the same, locations can be added to regions in an order independent of the order the locations were
+    # created.
     locations: list[str]
 
 
 class SerializableMultiWorldData(TypedDict):
     itempool: list[SerializableItemData]
-    regions: dict[int, list[SerializableRegionData]]
-    entrances: dict[int, list[SerializableEntranceData]]
-    locations: dict[int, list[SerializableLocationData]]
-    placements: dict[int, list[tuple[str, SerializableItemData | None]]]
+    regions: dict[int, dict[str, SerializableRegionData]]
+    entrances: dict[int, dict[str, SerializableEntranceData]]
+    locations: dict[int, dict[str, SerializableLocationData]]
     start_inventory: dict[int, list[SerializableItemData]]
     options: dict[int, dict[str, str]]
 
@@ -69,12 +69,17 @@ def item_to_serializable(item: Item, item_memo: dict[int, SerializableItemData])
         return to_return
 
 
-def location_to_serializable(loc: Location) -> SerializableLocationData:
+def location_to_serializable(loc: Location, item_memo: dict[int, SerializableItemData]) -> SerializableLocationData:
     # ALttP does not play by the rules and sets some location addresses to `list[int]` instead of `int | None`.
     address = loc.address
     if address is not None and type(address) is not int:
         address = None
-    return {"name": loc.name, "address": address, "progress_type": loc.progress_type}
+
+    if loc.item is None:
+        item = None
+    else:
+        item = item_to_serializable(loc.item, item_memo)
+    return {"address": address, "progress_type": loc.progress_type, "item": item}
 
 
 def entrance_to_serializable(ent: Entrance) -> SerializableEntranceData:
@@ -82,11 +87,11 @@ def entrance_to_serializable(ent: Entrance) -> SerializableEntranceData:
     parent_region_name = parent_region.name if parent_region is not None else None
     connected_region = ent.connected_region
     connected_region_name = connected_region.name if connected_region is not None else None
-    return {"name": ent.name, "parent_region": parent_region_name, "connected_region": connected_region_name}
+    return {"parent_region": parent_region_name, "connected_region": connected_region_name}
 
 
 def region_to_serializable(reg: Region) -> SerializableRegionData:
-    return {"name": reg.name, "locations": [loc.name for loc in reg.locations]}
+    return {"locations": [loc.name for loc in reg.locations]}
 
 
 def options_to_serializable(multiworld: MultiWorld) -> dict[int, dict[str, str]]:
@@ -117,31 +122,14 @@ def multiworld_to_serializable(itempool_before_fill: list[Item], multiworld: Mul
 
     # The order that regions and entrances are added to the multiworld is not considered important, so are returned as
     # dictionaries.
-    regions = {player: list(map(region_to_serializable, regions.values()))
+    regions = {player: {region.name: region_to_serializable(region) for region in regions.values()}
                for player, regions in multiworld.regions.region_cache.items()}
-    entrances = {player: list(map(entrance_to_serializable, entrances.values()))
+    entrances = {player: {entrance.name: entrance_to_serializable(entrance) for entrance in entrances.values()}
                  for player, entrances in multiworld.regions.entrance_cache.items()}
 
     # Locations and the placed items at those locations are tested and serialized separately.
-    locations: dict[int, list[SerializableLocationData]] = {}
-    placements: dict[int, list[tuple[str, SerializableItemData | None]]] = {}
-    for player, player_locations in multiworld.regions.location_cache.items():
-        locations_list = locations[player] = []
-
-        placements_list = placements[player] = []
-
-        for loc_name, loc in player_locations.items():
-            locations_list.append(location_to_serializable(loc))
-            item = loc.item
-            if item is not None:
-                serializable_item = item_to_serializable(item, item_memo)
-            else:
-                serializable_item = None
-            placements_list.append((loc_name, serializable_item))
-        # Ignore ordering of locations for the placements list. Failures of deterministic location order will be
-        # presented through the locations_list.
-        # A list is preferred to a dict due to more useful test output when the test fails.
-        placements_list.sort(key=lambda t: t[0])
+    locations = {player: {loc.name: location_to_serializable(loc, item_memo) for loc in locations.values()}
+                 for player, locations in multiworld.regions.location_cache.items()}
 
     # Items that were in the item pool typically won't end up precollected_items, but it is possible, so `item_memo`
     # is still passed as an argument.
@@ -153,7 +141,6 @@ def multiworld_to_serializable(itempool_before_fill: list[Item], multiworld: Mul
         "regions": regions,
         "entrances": entrances,
         "locations": locations,
-        "placements": placements,
         "start_inventory": precollected_items,
         "options": options_to_serializable(multiworld),
     }
@@ -277,55 +264,104 @@ class TestDeterministicGeneration(TestCase):
         self.fail("Dictionaries were not equal, but they somehow had all the same keys and values."
                   + "" if msg is None else f" : {msg}")
 
-    def assertMultiWorldsEquivalent(self, m1: SerializableMultiWorldData, m2: SerializableMultiWorldData):
+    def assertDictKeysEqual(self, d1: dict, d2: dict, msg=None):
+        # Provides better failure output than comparing dict keys directly.
+        self.assertEqual(set(d1.keys()), set(d2.keys()), msg)
+
+    def assertRegionsEqual(self, r1: dict[str, SerializableRegionData], r2: dict[str, SerializableRegionData]):
+        self.assertDictKeysEqual(r1, r2, "The were different regions in each multiworld")
+        regions_with_locations_out_of_order = []
+        for name, r1_data in r1.items():
+            r1_locations = r1_data["locations"]
+            r2_locations = r2[name]["locations"]
+            self.assertEqual(set(r1_locations), set(r2_locations),
+                             f"The locations in region '{name}' were not the same")
+            if r1_locations != r2_locations:
+                regions_with_locations_out_of_order.append(name)
+
+        # Getting to here means all regions have the same content, but possibly in a different order.
+
+        if regions_with_locations_out_of_order:
+            # We still want to know if the regions themselves are in the same order after this, so run within a subTest.
+            with self.subTest("region .locations order"):
+                self.assertEqual([], regions_with_locations_out_of_order,
+                                 "The locations in all regions were the same, but in different orders for some"
+                                 " regions.")
+            order_fail_message = ("Regions were the same, but in different orders and with locations in different"
+                                  " orders")
+        else:
+            order_fail_message = "Regions were the same, but in different orders"
+        self.assertEqual(tuple(r1.keys()), tuple(r2.keys()), order_fail_message)
+
+    def assertLocationsEqual(self, l1: dict[str, SerializableLocationData], l2: dict[str, SerializableLocationData]):
+        self.assertDictKeysEqual(l1, l2, "The were different locations in each multiworld")
+
+        # Compare only "address" and "progress_type" to start with because they are much less likely to differ.
+        fields = ("address", "progress_type")
+        getter = itemgetter(*fields)
+        l1_filtered = {k: dict(zip(fields, getter(v))) for k, v in l1.items()}
+        l2_filtered = {k: dict(zip(fields, getter(v))) for k, v in l2.items()}
+        self.assertDictEqualDiffMismatchedOnly(l1_filtered, l2_filtered, "The locations in the multiworld")
+
+        # Even if the locations are in different orders, it is common for the placements to end up the same anyway.
+        sorted_placements1 = []
+        sorted_placements2 = []
+        for name in sorted(l1.keys()):
+            sorted_placements1.append({name: l1[name]["item"]})
+            sorted_placements2.append({name: l2[name]["item"]})
+        self.assertEqual(sorted_placements1, sorted_placements2, "Placed items did not match")
+
+        self.assertEqual(tuple(l1.keys()), tuple(l2.keys()),
+                         "Locations and the items placed at them were the same, but in different orders")
+
+    def assertEntrancesEqual(self, e1: dict[str, SerializableEntranceData], e2: dict[str, SerializableEntranceData]):
+        self.assertDictKeysEqual(e1, e2, "There were different entrances in each multiworld")
+        # Entrances are unlikely to have a different parent_region or connected_region, so check each entrance one
+        # at a time.
+        self.assertDictEqualDiffMismatchedOnly(e1, e2, "Entrances were not the same")
+        self.assertEqual(tuple(e1.keys()), tuple(e2.keys()), "Entrances were the same, but in different orders")
+
+    def assertItemsEqual(self, i1: list[SerializableItemData], i2: list[SerializableItemData]):
+        self.assertCountEqual(i1, i2, "Item counts did not match")
+        self.assertEqual(i1, i2, "Items were the same, but in different orders")
+
+    def assertOptionsEqual(self, o1: dict[str, str], o2: dict[str, str]):
+        self.assertDictEqualDiffMismatchedOnly(o1, o2, "Options did not match")
+
+    def assertMultiWorldsEqual(self, m1: SerializableMultiWorldData, m2: SerializableMultiWorldData):
         # Options are checked first because differences in rolled options are likely to affect the rest of generation.
-        # Placements are checked last because they are likely to be affected by all previously checked parts.
-        keys = ("options", "itempool", "start_inventory", "regions", "entrances", "locations", "placements")
-        for key in keys:
+        # Locations are checked last because the items placed at them are likely to be affected by all previously
+        # checked parts.
+        key_to_assert_func: dict[str, Callable[[Any, Any], None] | None] = {
+            "options": self.assertOptionsEqual,
+            "itempool": None,
+            "start_inventory": self.assertItemsEqual,
+            "regions": self.assertRegionsEqual,
+            "entrances": self.assertEntrancesEqual,
+            "locations": self.assertLocationsEqual,
+        }
+        for key, assert_func in key_to_assert_func.items():
             # Type checkers see `key` as str, rather than one of the valid string literals, so disable the inspection.
             data1 = m1[key]  # type: ignore
             data2 = m2[key]  # type: ignore
             # Iterate dictionaries with list values because comparing lists for equality produces better output than
             # comparing dictionaries for equality when the test fails.
             if key == "itempool":
-                self.assertIsInstance(data1, list)
-                self.assertIsInstance(data2, list)
-                # These lists are not pre-sorted, so check the counts of each element first.
-                with self.subTest(key + " counts"):
-                    self.assertCountEqual(data1, data2, f"{key} counts did not match")
-                    # Now check that the order is the same by checking for equality.
-                    with self.subTest(key + " order"):
-                        self.assertListEqual(data1, data2, f"{key} order did not match")
+                with self.subTest(key):
+                    self.assertItemsEqual(data1, data2)
             else:
                 # All other serializable data should be dicts keyed by player ID.
                 self.assertIsInstance(data1, dict)
                 self.assertIsInstance(data2, dict)
-                self.assertEqual(data1.keys(), data2.keys())
-                if key in {"locations", "start_inventory", "regions", "entrances"}:
-                    with self.subTest(key + " counts"):
+                self.assertEqual(data1.keys(), data2.keys(), "The multiworlds have a different number of players")
+                if assert_func is not None:
+                    with self.subTest(key):
                         for player, v1 in data1.items():
-                            v2 = data2[player]
-                            # The order of these lists is important, so they are provided in their original order.
-                            self.assertCountEqual(v1, v2, f"{key} counts did not match for player: {player}")
-                        with self.subTest(key + " order"):
-                            # Now check that the order is the same by checking for equality.
-                            for player, v1 in data1.items():
+                            with self.subTest(key, player=player):
                                 v2 = data2[player]
-                                self.assertListEqual(v1, v2, f"{key} order did not match for player: {player}")
-                elif key == "placements":
-                    with self.subTest(key):
-                        for player, v1 in data1.items():
-                            v2 = data2[player]
-                            # Placements lists are pre-sorted by name, so that not being in a nondeterministic order
-                            # does not affect the comparison.
-                            self.assertListEqual(v1, v2, f"{key} did not match for player: {player}")
-                elif key == "options":
-                    with self.subTest(key):
-                        for player, v1 in data1.items():
-                            v2 = data2[player]
-                            self.assertDictEqualDiffMismatchedOnly(v1, v2, f"{key} did not match for player: {player}")
+                                assert_func(v1, v2)
                 else:
-                    self.fail(f"Unexpected key: '{key}'")
+                    self.fail(f"No assertion function found to handle key: '{key}'")
 
     def test_hash_determinism(self) -> None:
         """
@@ -379,7 +415,7 @@ class TestDeterministicGeneration(TestCase):
                     # fill can take even longer, so 10 seconds should be an ample timeout for even the worst solo
                     # generations.
                     data_from_other_process = future.result(timeout=10.0)
-                    self.assertMultiWorldsEquivalent(initial_multiworld_data, data_from_other_process)
+                    self.assertMultiWorldsEqual(initial_multiworld_data, data_from_other_process)
 
     def test_shared_state_determinism(self) -> None:
         """
@@ -406,7 +442,7 @@ class TestDeterministicGeneration(TestCase):
                 setup_multiworld(world_type, gen_steps)
 
                 secondary_multiworld_data = TestDeterministicGeneration._new_multiworld_to_serializable_data(game, seed)
-                self.assertMultiWorldsEquivalent(initial_multiworld_data, secondary_multiworld_data)
+                self.assertMultiWorldsEqual(initial_multiworld_data, secondary_multiworld_data)
 
     def test_random_module_usage_determinism(self) -> None:
         """
@@ -446,4 +482,4 @@ class TestDeterministicGeneration(TestCase):
                 call_all(multiworld, "post_fill")
 
                 secondary_multiworld_data = multiworld_to_serializable(itempool_copy, multiworld)
-                self.assertMultiWorldsEquivalent(initial_multiworld_data, secondary_multiworld_data)
+                self.assertMultiWorldsEqual(initial_multiworld_data, secondary_multiworld_data)
