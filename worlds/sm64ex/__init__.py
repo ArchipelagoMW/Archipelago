@@ -222,6 +222,14 @@ class SM64World(World):
         # Write calculated star costs to spoiler.
         star_cost_spoiler_header = '\n\n' + self.player_name + ' Star Costs for Super Mario 64:\n\n'
         spoiler_handle.write(star_cost_spoiler_header)
-        star_cost_key_maxlen = len(max(self.star_costs, key=len))
-        for star, cost in self.star_costs.items():
+        # - Reformat star costs dictionary in spoiler to be a bit more readable.
+        star_costs_spoiler = self.star_costs.copy()
+        star_costs_spoiler['First Floor Big Star Door'] = star_costs_spoiler.pop('FirstBowserDoorCost')
+        star_costs_spoiler['Basement Big Star Door'] = star_costs_spoiler.pop('BasementDoorCost')
+        star_costs_spoiler['Second Floor Big Star Door'] = star_costs_spoiler.pop('SecondFloorDoorCost')
+        star_costs_spoiler['MIPS 1'] = star_costs_spoiler.pop('MIPS1Cost')
+        star_costs_spoiler['MIPS 2'] = star_costs_spoiler.pop('MIPS2Cost')
+        star_costs_spoiler['Endless Stairs'] = star_costs_spoiler.pop('StarsToFinish')
+        star_cost_key_maxlen = len(max(star_costs_spoiler, key=len))
+        for star, cost in star_costs_spoiler.items():
             spoiler_handle.write(f"{star:{star_cost_key_maxlen}s} = {cost}\n")
