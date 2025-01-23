@@ -374,6 +374,7 @@ class DKC2SNIClient(SNIClient):
                     recv_index -= 1
                     return
                 currency = int.from_bytes(currency, "little")
+                currency &= 0x00FF
                 if currency < 99:
                     currency += 1
                     snes_buffered_write(ctx, addr, currency.to_bytes(1, "little"))
