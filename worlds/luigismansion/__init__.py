@@ -14,7 +14,7 @@ from worlds.generic.Rules import add_item_rule
 from Options import OptionGroup
 
 # Relative Imports
-from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items, ALL_ITEMS_TABLE
+from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items, ALL_ITEMS_TABLE, BOO_ITEM_TABLE
 from .Locations import *
 from .LuigiOptions import LMOptions
 from .Hints import get_hints_by_option
@@ -441,9 +441,12 @@ class LMWorld(World):
 
     def create_items(self):
         exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
-        if not self.options.boosanity:
-            for _ in range(35):
-                exclude += ["Boo"]
+        if self.options.boosanity:
+            for item, data in BOO_ITEM_TABLE.items():
+                copies_to_place = 1
+                copies_to_place = 0 if copies_to_place - exclude.count(item) <= 0 else 1 - exclude.count(item)
+                for _ in range(copies_to_place):
+                    self.itempool.append(self.create_item(item))
         if self.options.good_vacuum == 2:
             exclude += ["Poltergust 4000"]
         if self.options.boo_radar == 2:
@@ -451,7 +454,11 @@ class LMWorld(World):
         for item, data in ITEM_TABLE.items():
             if data.doorid in self.open_doors.keys() and self.open_doors[data.doorid] == 1:
                 exclude += [item]
-            copies_to_place = data.quantity - exclude.count(item)
+            if data.code == 49:
+                copies_to_place = 5
+            else:
+                copies_to_place = 1
+            copies_to_place = 0 if copies_to_place - exclude.count(item) <= 0 else copies_to_place - exclude.count(item)
             for _ in range(copies_to_place):
                 self.itempool.append(self.create_item(item))
         # Calculate the number of additional filler items to create to fill all locations
