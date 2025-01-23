@@ -444,7 +444,7 @@ class Context:
 
         self.slot_info = decoded_obj["slot_info"]
         self.games = {slot: slot_info.game for slot, slot_info in self.slot_info.items()}
-        self.groups = {slot: slot_info.group_members for slot, slot_info in self.slot_info.items()
+        self.groups = {slot: set(slot_info.group_members) for slot, slot_info in self.slot_info.items()
                        if slot_info.type == SlotType.group}
 
         self.clients = {0: {}}
@@ -743,16 +743,17 @@ class Context:
                 concerns[player].append(data)
             if not hint.local and data not in concerns[hint.finding_player]:
                 concerns[hint.finding_player].append(data)
-            # remember hints in all cases
 
-            # since hints are bidirectional, finding player and receiving player,
-            # we can check once if hint already exists
-            if hint not in self.hints[team, hint.finding_player]:
-                self.hints[team, hint.finding_player].add(hint)
-                new_hint_events.add(hint.finding_player)
-                for player in self.slot_set(hint.receiving_player):
-                    self.hints[team, player].add(hint)
-                    new_hint_events.add(player)
+            # only remember hints that were not already found at the time of creation
+            if not hint.found:
+                # since hints are bidirectional, finding player and receiving player,
+                # we can check once if hint already exists
+                if hint not in self.hints[team, hint.finding_player]:
+                    self.hints[team, hint.finding_player].add(hint)
+                    new_hint_events.add(hint.finding_player)
+                    for player in self.slot_set(hint.receiving_player):
+                        self.hints[team, player].add(hint)
+                        new_hint_events.add(player)
 
             self.logger.info("Notice (Team #%d): %s" % (team + 1, format_hint(self, team, hint)))
         for slot in new_hint_events:
@@ -1887,7 +1888,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             for location in args["locations"]:
                 if type(location) is not int:
                     await ctx.send_msgs(client,
-                                        [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'LocationScouts',
+                                        [{'cmd': 'InvalidPacket', "type": "arguments",
+                                          "text": 'Locations has to be a list of integers',
                                           "original_cmd": cmd}])
                     return
 
@@ -1914,7 +1916,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             hint = ctx.get_hint(client.team, player, location)
             if not hint:
                 return  # Ignored safely
-            if hint.receiving_player != client.slot:
+            if client.slot not in ctx.slot_set(hint.receiving_player):
                 await ctx.send_msgs(client,
                                     [{'cmd': 'InvalidPacket', "type": "arguments", "text": 'UpdateHint: No Permission',
                                       "original_cmd": cmd}])
@@ -1990,6 +1992,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             args["cmd"] = "SetReply"
             value = ctx.stored_data.get(args["key"], args.get("default", 0))
             args["original_value"] = copy.copy(value)
+            args["slot"] = client.slot
             for operation in args["operations"]:
                 func = modify_functions[operation["operation"]]
                 value = func(value, operation["value"])
