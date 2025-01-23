@@ -78,7 +78,8 @@ class TunicWorld(World):
     settings: ClassVar[TunicSettings]
     item_name_groups = item_name_groups
     location_name_groups = location_name_groups
-    location_name_groups.update(grass_location_name_groups)
+    for group_name, members in grass_location_name_groups.items():
+        location_name_groups.setdefault(group_name, set()).update(members)
 
     item_name_to_id = item_name_to_id
     location_name_to_id = standard_location_name_to_id.copy()
@@ -331,10 +332,11 @@ class TunicWorld(World):
 
             remove_filler(items_to_create[gold_hexagon])
 
-            # Sort for deterministic order
-            for hero_relic in sorted(item_name_groups["Hero Relics"]):
-                tunic_items.append(self.create_item(hero_relic, ItemClassification.useful))
-                items_to_create[hero_relic] = 0
+            if not self.options.combat_logic:
+                # Sort for deterministic order
+                for hero_relic in sorted(item_name_groups["Hero Relics"]):
+                    tunic_items.append(self.create_item(hero_relic, ItemClassification.useful))
+                    items_to_create[hero_relic] = 0
 
         if not self.options.ability_shuffling:
             # Sort for deterministic order
@@ -411,7 +413,7 @@ class TunicWorld(World):
     def stage_pre_fill(cls, multiworld: MultiWorld) -> None:
         tunic_fill_worlds: List[TunicWorld] = [world for world in multiworld.get_game_worlds("TUNIC")
                                                if world.options.local_fill.value > 0]
-        if tunic_fill_worlds:
+        if tunic_fill_worlds and multiworld.players > 1:
             grass_fill: List[TunicItem] = []
             non_grass_fill: List[TunicItem] = []
             grass_fill_locations: List[Location] = []
