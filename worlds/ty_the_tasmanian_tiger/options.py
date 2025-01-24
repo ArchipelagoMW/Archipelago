@@ -34,16 +34,15 @@ class LogicDifficulty(Choice):
     option_advanced = 1
     default = 0
 
-class ProgressiveElementals(Toggle):
+class ProgressiveElementals(DefaultOnToggle):
     """
     Determines if elemental rangs are a progressive check
     """
     display_name = "Progressive Elemental Rangs"
-    default = True
 
-class StartWithBoom(Choice):
+class StartWithBoom(DefaultOnToggle):
     """
-    Determines if Ty starts with his boomerang
+    Determines if Ty starts with his boomerang (only for progressive elementals)
     """
     display_name = ("Start With Boomerang")
     default = True
@@ -76,11 +75,11 @@ class LevelUnlockStyle(Choice):
     option_vanilla_bosses = 2
     default = 1
 
-class ProgressiveLevel(Toggle):
+class ProgressiveLevel(DefaultOnToggle):
     """
     Determines if level unlocks are progressive (only if levels are check based)
     """
-    default = True
+    display_name = "Progressive Level"
 
 class HubThunderEggCounts(Range):
     """
@@ -133,7 +132,7 @@ class Attributesanity(Choice):
 
     None: Rangs and abilities do not grant any checks
     """
-    display_name = ("Attributesanity")
+    display_name = "Attributesanity"
     option_skip_elementals = 0
     option_all = 1
     option_none = 2
@@ -143,16 +142,16 @@ class Framesanity(Choice):
     """
     Determines how collecting Picture Frames grants checks
 
-    Per Level: Collecting all frames in a level grants a check (9 Locations - Bonus Worlds not included)
-
     All: Every frame grants a check (127 Locations - Bonus Worlds not included)
+
+    Per Level: Collecting all frames in a level grants a check (9 Locations - Bonus Worlds not included)
 
     None: Frames do not grant any checks
     """
     display_name = "Framesanity"
-    option_none = 0
+    option_all = 0
     option_per_level = 1
-    option_all = 2
+    option_none = 2
     default = 0
 
 class JunkFillPercentage(Range):
@@ -187,8 +186,10 @@ ty1_option_groups = [
     OptionGroup("Junk", [
         JunkFillPercentage,
     ]),
+    OptionGroup("Death Link", [
+        DeathLink
+    ]),
 ]
-
 
 @dataclass
 class Ty1Options(PerGameCommonOptions):
