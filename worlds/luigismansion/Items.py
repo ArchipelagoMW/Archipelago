@@ -153,7 +153,6 @@ BOO_ITEM_TABLE: dict[str, LMItemData] = {
     "Boolossus Boo 15": LMItemData("Boo", 116, IC.progression, 0, 0x803D5E0A, 1),
 }
 
-#TODO Support Money again
 filler_items: Dict[str, LMItemData] = {
     # "10 Coins": LMItemData("Money", 52, IC.filler),
     # "10 Bills": LMItemData("Money", 53, IC.filler),
