@@ -77,6 +77,8 @@ class LAClientConstants:
     # Unused
     # ROMWorldID = 0x0055
     # ROMConnectorVersion = 0x0056
+    wInventoryAppearing = 0xC14F
+    wDialogState = 0xC19F
     wAddHealthBuffer = 0xDB93
     wSubtractHealthBuffer = 0xDB94
     # RO: We should only act if this is higher then 6, as it indicates that the game is running normally
@@ -456,23 +458,6 @@ class LinksAwakeningClient():
         current_health = (await self.gameboy.read_memory_cache([LAClientConstants.wLinkHealth]))[LAClientConstants.wLinkHealth]
         health_to_remove = (await self.gameboy.read_memory_cache([LAClientConstants.wSubtractHealthBuffer]))[LAClientConstants.wSubtractHealthBuffer]
 
-        if self.deathlink_status == 'pending':
-            self.gameboy.write_memory(LAClientConstants.wAddHealthBuffer, [0]) # Stop any health gain
-            self.gameboy.write_memory(LAClientConstants.wLinkHealth, [1]) #  Almost dead
-            self.gameboy.write_memory(LAClientConstants.wSubtractHealthBuffer, [1]) # Deal remaining damage this way to trigger medicine
-            self.deathlink_status = 'in_progress'
-        elif self.deathlink_status == 'in_progress':
-            if not current_health: # Died from deathlink
-                self.deathlink_status = 'complete'
-                self.fix_trade_items()
-            elif not health_to_remove: # Survived deathlink (medicine)
-                self.deathlink_status = None
-        elif not self.deathlink_status and not current_health: # Died naturally
-            await deathlink_cb()
-            self.deathlink_status = 'complete'
-        elif self.deathlink_status == 'complete' and current_health:
-            self.deathlink_status = None
-
         if await self.is_victory():
             await win_cb()
 
@@ -482,6 +467,28 @@ class LinksAwakeningClient():
         if recv_index in self.recvd_checks:
             item = self.recvd_checks[recv_index]
             await self.recved_item_from_ap(item.item, item.location, item.player, recv_index)
+
+        if self.deathlink_status == 'pending':
+            inventory_appearing = (await self.gameboy.read_memory_cache([LAClientConstants.wInventoryAppearing]))[LAClientConstants.wInventoryAppearing]
+            dialog_state = (await self.gameboy.read_memory_cache([LAClientConstants.wDialogState]))[LAClientConstants.wDialogState]
+            gameplay_type = (await self.gameboy.read_memory_cache([LAClientConstants.wGameplayType]))[LAClientConstants.wGameplayType]
+            GAMEPLAY_WORLD = 0x0B
+            if not inventory_appearing and not dialog_state and gameplay_type is GAMEPLAY_WORLD:
+                self.gameboy.write_memory(LAClientConstants.wAddHealthBuffer, [0]) # Stop any health gain
+                self.gameboy.write_memory(LAClientConstants.wLinkHealth, [1]) #  Almost dead
+                self.gameboy.write_memory(LAClientConstants.wSubtractHealthBuffer, [1]) # Deal remaining damage this way to trigger medicine
+                self.deathlink_status = 'in_progress'
+        elif self.deathlink_status == 'in_progress':
+            if not current_health: # Died from deathlink
+                self.deathlink_status = 'complete'
+                # self.fix_trade_items()
+            elif not health_to_remove: # Survived deathlink (medicine)
+                self.deathlink_status = None
+        elif not self.deathlink_status and not current_health: # Died naturally
+            await deathlink_cb()
+            self.deathlink_status = 'complete'
+        elif self.deathlink_status == 'complete' and current_health:
+            self.deathlink_status = None
 
 
 all_tasks = set()
