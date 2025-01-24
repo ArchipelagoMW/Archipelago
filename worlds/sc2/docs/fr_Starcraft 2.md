@@ -131,13 +131,14 @@ Tous les *items* dont le nom, la race ou le nom de groupe contient le paramètre
 
 ### *Collect on goal completion*
 
-L'une des options par défaut des *multiworlds* est qu'une fois qu'un monde a atteint son objectif final, il collecte  
+L'une des options par défaut des *multiworlds* est qu'une fois qu'un monde a atteint son objectif final, il collecte 
 tous ses *items*, incluant ceux dans les autres mondes.
-Cette option est définie lors de la génération du *multiworld* et ne peut pas être modifiée par la suite.
 Si vous ne souhaitez pas que cela se produise, vous devez demander à la personne générant le *multiworld* de changer 
 l'option *Collect Permission*.
 Si la génération n'est pas effectuée via le site web, la personne qui effectue la génération doit modifier l'option 
 correspondante dans son fichier *host.yaml* avant la génération.
+Si le *multiworld* a déjà été généré, l'hôte peut utiliser la commande `/option collect_mode [valeur]` pour modifier 
+cette option.
 
 ## Problèmes connus
 

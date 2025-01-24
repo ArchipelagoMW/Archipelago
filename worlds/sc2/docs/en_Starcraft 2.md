@@ -117,11 +117,12 @@ Every item whose name, race, or group name contains the provided parameter will 
 
 One of the default options of multiworlds is that once a world has achieved its goal, it collects its items from all 
 other worlds. 
-This is set when the multiworld is generated and it cannot be modified afterward. 
 If you do not want this to happen, you should ask the person generating the multiworld to set the `Collect Permission` 
 option to something else, e.g., manual. 
 If the generation is not done via the website, the person that does the generation should modify the corresponding 
 option in their `host.yaml` file prior to generation. 
+If the multiworld has already been generated, the host can use the command `/option collect_mode [value]` to change 
+this option.
 
 ## Known issues
 
