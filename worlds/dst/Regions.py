@@ -1,5 +1,6 @@
 from typing import Dict, List, NamedTuple, Set
 from BaseClasses import MultiWorld, Region, Entrance, ItemClassification
+from Options import OptionError
 from .Locations import location_data_table, DSTLocation
 from .ItemPool import DSTItemPool
 from .Options import DSTOptions
@@ -11,6 +12,7 @@ class DSTRegionData(NamedTuple):
     locations: List[str] = []
 
 def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, itempool:DSTItemPool):
+    world = multiworld.worlds[player]
     REGION_DATA_TABLE: Dict[str, DSTRegionData] = {
         REGION.MENU:         DSTRegionData([REGION.FOREST], []),
         REGION.FOREST:       DSTRegionData([REGION.CAVE, REGION.OCEAN], []),
@@ -160,7 +162,7 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
 
     for _, group in RESEARCH_GROUPS.items():
         # Shuffle groups!
-        multiworld.random.shuffle(group)
+        world.random.shuffle(group)
 
         # Guarantee 4 of each group
         for _ in range(4):
@@ -177,7 +179,7 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
         remaining_research += group
 
     # And shuffle again!
-    multiworld.random.shuffle(remaining_research)
+    world.random.shuffle(remaining_research)
 
     # Make locations until there's nothing to place left
     while location_num_left_to_place > 0 and len(remaining_research):
@@ -213,16 +215,18 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
     EXISTING_LOCATIONS = [location.name for location in multiworld.get_locations(player)]
     # Verify goal boss is added
     for bossname in BOSS_DEFEAT_LOCATIONS:
-        assert bossname in EXISTING_LOCATIONS, \
-            f"{multiworld.get_player_name(player)} (Don't Starve Together): {bossname} does not exist in the regions selected in your yaml! " +\
-            (
-                "Not enough conditions possible to befriend Crabby Hermit. Add more seasons and day phases!" if (
-                    (bossname == "Crab King" or bossname == "Celestial Champion")
-                    and REGION.OCEAN in WHITELIST and not SPECIAL_TAGS.HERMIT_10 in WHITELIST
-                ) else "Make sure you select the correct regions for your goal, or choose auto or full!"
+        if not bossname in EXISTING_LOCATIONS:
+            raise OptionError(f"{world.player_name} (Don't Starve Together): {bossname} does not exist in the regions selected in your yaml! " +\
+                (
+                    "Not enough conditions possible to befriend Crabby Hermit. Add more seasons and day phases!" if (
+                        (bossname == "Crab King" or bossname == "Celestial Champion")
+                        and REGION.OCEAN in WHITELIST and not SPECIAL_TAGS.HERMIT_10 in WHITELIST
+                    ) else "Make sure you select the correct regions for your goal, or choose auto or full!"
+                )
             )
+            
 
     # Fill boss locations with prefill items
     for bossname, fillitem in BOSS_PREFILLS.items():
         if bossname in EXISTING_LOCATIONS:
-            multiworld.get_location(bossname, player).place_locked_item(itempool.create_item(multiworld.worlds[player], fillitem))
+            world.get_location(bossname).place_locked_item(itempool.create_item(world, fillitem))

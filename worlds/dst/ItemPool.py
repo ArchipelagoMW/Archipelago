@@ -150,7 +150,7 @@ class DSTItemPool:
                     items_by_classification["filler"].append(item)
 
         for _list in items_by_classification.values():
-            world.multiworld.random.shuffle(_list) # In case of overflow, shuffle so our overflows are random
+            world.random.shuffle(_list) # In case of overflow, shuffle so our overflows are random
 
         unfilled_locations = world.multiworld.get_unfilled_locations(world.player)
         num_total_locations = len(unfilled_locations)
@@ -205,7 +205,7 @@ class DSTItemPool:
         regulartrap_chance = float(options.trap_items.value) / 100
         seasontrap_chance = float(options.season_trap_items.value) / 100
         trap_percent = max(regulartrap_chance, seasontrap_chance)
-        roll = world.multiworld.random.random()
+        roll = world.random.random()
         # Decide if we get a trap, and split chance between the two kinds
         target_pool = (
             self.filler_items if roll >= trap_percent
@@ -213,7 +213,7 @@ class DSTItemPool:
             else self.seasontrap_items
         )
         if len(target_pool) > 0:
-            return world.multiworld.random.choice(target_pool)
+            return world.random.choice(target_pool)
         return "20 Health"
 
     def set_progression_items(self, progression_dict:Dict[str, bool]):
