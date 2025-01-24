@@ -14,7 +14,7 @@ tunic_regions: dict[str, tuple[str]] = {
     "Eastern Vault Fortress": ("Beneath the Vault",),
     "Beneath the Vault": ("Eastern Vault Fortress",),
     "Quarry Back": ("Quarry",),
-    "Quarry": ("Monastery", "Lower Quarry",),
+    "Quarry": ("Monastery", "Lower Quarry"),
     "Monastery": tuple(),
     "Lower Quarry": ("Rooted Ziggurat",),
     "Rooted Ziggurat": tuple(),
