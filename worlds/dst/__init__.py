@@ -2,6 +2,7 @@ from typing import Dict, Set, List, Iterable
 
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
+from Options import OptionError
 from .Options import DSTOptions, dontstarvetogether_option_groups, dontstarvetogether_option_presets
 from . import Regions, Rules, ItemPool, Util
 from .Constants import VERSION, PHASE, SEASON, SEASONS_PASSED, SPECIAL_TAGS
@@ -120,8 +121,9 @@ class DSTWorld(World):
                     # May be an invalid selection for settings; choose from everything
                     boss_pool = build_boss_pool({k for k in self.options.required_bosses.valid_keys if k != "Random"})
 
-                assert len(boss_pool), f"{self.multiworld.get_player_name(self.player)} (Don't Starve Together): "\
-                "No valid boss can be selected from player settings."
+                if not len(boss_pool):
+                    raise OptionError(f"{self.player_name} (Don't Starve Together): "\
+                    "No valid boss can be selected from player settings.")
 
                 # Pick random boss from the boss pool
                 self.options.required_bosses.value.clear()

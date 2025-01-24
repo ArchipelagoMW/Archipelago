@@ -369,7 +369,7 @@ def parse_request(req_bytes:bytes):
             datastr = datastr[:-3]
         return json.loads(datastr)
     except AssertionError:
-        raise DSTInvalidRequest("Assertion failed!")
+        raise DSTInvalidRequest("Invalid request")
     except Exception as e:
         print(f"Bad parse: {e}")
         print(req_bytes)
