@@ -63,6 +63,7 @@ class MaxCombatLevel(Range):
     The highest combat level of monster to possibly be assigned as a task.
     If set to 0, no combat tasks will be generated.
     """
+    display_name = "Max Required Enemy Combat Level"
     range_start = 0
     range_end = 1520
     default = 50
@@ -74,6 +75,7 @@ class MaxCombatTasks(Range):
     If set to 0, no combat tasks will be generated.
     This only determines the maximum possible, fewer than the maximum could be assigned.
     """
+    display_name = "Max Combat Task Count"
     range_start = 0
     range_end = MAX_COMBAT_TASKS
     default = MAX_COMBAT_TASKS
@@ -85,6 +87,7 @@ class CombatTaskWeight(Range):
     Weights of all Task Types will be compared against each other, a task with 50 weight
     is twice as likely to appear as one with 25.
     """
+    display_name = "Combat Task Weight"
     range_start = 0
     range_end = 99
     default = 50
@@ -95,6 +98,7 @@ class MaxPrayerLevel(Range):
     The highest Prayer requirement of any task generated.
     If set to 0, no Prayer tasks will be generated.
     """
+    display_name = "Max Required Prayer Level"
     range_start = 0
     range_end = 99
     default = 50
@@ -106,6 +110,7 @@ class MaxPrayerTasks(Range):
     If set to 0, no Prayer tasks will be generated.
     This only determines the maximum possible, fewer than the maximum could be assigned.
     """
+    display_name = "Max Prayer Task Count"
     range_start = 0
     range_end = MAX_PRAYER_TASKS
     default = MAX_PRAYER_TASKS
@@ -117,6 +122,7 @@ class PrayerTaskWeight(Range):
     Weights of all Task Types will be compared against each other, a task with 50 weight
     is twice as likely to appear as one with 25.
     """
+    display_name = "Prayer Task Weight"
     range_start = 0
     range_end = 99
     default = 50
@@ -127,6 +133,7 @@ class MaxMagicLevel(Range):
     The highest Magic requirement of any task generated.
     If set to 0, no Magic tasks will be generated.
     """
+    display_name = "Max Required Magic Level"
     range_start = 0
     range_end = 99
     default = 50
@@ -138,6 +145,7 @@ class MaxMagicTasks(Range):
     If set to 0, no Magic tasks will be generated.
     This only determines the maximum possible, fewer than the maximum could be assigned.
     """
+    display_name = "Max Magic Task Count"
     range_start = 0
     range_end = MAX_MAGIC_TASKS
     default = MAX_MAGIC_TASKS
@@ -149,6 +157,7 @@ class MagicTaskWeight(Range):
     Weights of all Task Types will be compared against each other, a task with 50 weight
     is twice as likely to appear as one with 25.
     """
+    display_name = "Magic Task Weight"
     range_start = 0
     range_end = 99
     default = 50
@@ -159,6 +168,7 @@ class MaxRunecraftLevel(Range):
     The highest Runecraft requirement of any task generated.
     If set to 0, no Runecraft tasks will be generated.
     """
+    display_name = "Max Required Runecraft Level"
     range_start = 0
     range_end = 99
     default = 50
@@ -170,6 +180,7 @@ class MaxRunecraftTasks(Range):
     If set to 0, no Runecraft tasks will be generated.
     This only determines the maximum possible, fewer than the maximum could be assigned.
     """
+    display_name = "Max Runecraft Task Count"
     range_start = 0
     range_end = MAX_RUNECRAFT_TASKS
     default = MAX_RUNECRAFT_TASKS
@@ -181,6 +192,7 @@ class RunecraftTaskWeight(Range):
     Weights of all Task Types will be compared against each other, a task with 50 weight
     is twice as likely to appear as one with 25.
     """
+    display_name = "Runecraft Task Weight"
     range_start = 0
     range_end = 99
     default = 50
@@ -191,6 +203,7 @@ class MaxCraftingLevel(Range):
     The highest Crafting requirement of any task generated.
     If set to 0, no Crafting tasks will be generated.
     """
+    display_name = "Max Required Crafting Level"
     range_start = 0
     range_end = 99
     default = 50
@@ -202,6 +215,7 @@ class MaxCraftingTasks(Range):
     If set to 0, no Crafting tasks will be generated.
     This only determines the maximum possible, fewer than the maximum could be assigned.
     """
+    display_name = "Max Crafting Task Count"
     range_start = 0
     range_end = MAX_CRAFTING_TASKS
     default = MAX_CRAFTING_TASKS
@@ -213,6 +227,7 @@ class CraftingTaskWeight(Range):
     Weights of all Task Types will be compared against each other, a task with 50 weight
     is twice as likely to appear as one with 25.
     """
+    display_name = "Crafting Task Weight"
     range_start = 0
     range_end = 99
     default = 50
@@ -223,6 +238,7 @@ class MaxMiningLevel(Range):
     The highest Mining requirement of any task generated.
     If set to 0, no Mining tasks will be generated.
     """
+    display_name = "Max Required Mining Level"
     range_start = 0
     range_end = 99
     default = 50
@@ -234,6 +250,7 @@ class MaxMiningTasks(Range):
     If set to 0, no Mining tasks will be generated.
     This only determines the maximum possible, fewer than the maximum could be assigned.
     """
+    display_name = "Max Mining Task Count"
     range_start = 0
     range_end = MAX_MINING_TASKS
     default = MAX_MINING_TASKS
@@ -245,6 +262,7 @@ class MiningTaskWeight(Range):
     Weights of all Task Types will be compared against each other, a task with 50 weight
     is twice as likely to appear as one with 25.
     """
+    display_name = "Mining Task Weight"
     range_start = 0
     range_end = 99
     default = 50
@@ -255,6 +273,7 @@ class MaxSmithingLevel(Range):
     The highest Smithing requirement of any task generated.
     If set to 0, no Smithing tasks will be generated.
     """
+    display_name = "Max Required Smithing Level"
     range_start = 0
     range_end = 99
     default = 50
@@ -266,6 +285,7 @@ class MaxSmithingTasks(Range):
     If set to 0, no Smithing tasks will be generated.
     This only determines the maximum possible, fewer than the maximum could be assigned.
     """
+    display_name = "Max Smithing Task Count"
     range_start = 0
     range_end = MAX_SMITHING_TASKS
     default = MAX_SMITHING_TASKS
@@ -277,6 +297,7 @@ class SmithingTaskWeight(Range):
     Weights of all Task Types will be compared against each other, a task with 50 weight
     is twice as likely to appear as one with 25.
     """
+    display_name = "Smithing Task Weight"
     range_start = 0
     range_end = 99
     default = 50
@@ -287,6 +308,7 @@ class MaxFishingLevel(Range):
     The highest Fishing requirement of any task generated.
     If set to 0, no Fishing tasks will be generated.
     """
+    display_name = "Max Required Fishing Level"
     range_start = 0
     range_end = 99
     default = 50
@@ -298,6 +320,7 @@ class MaxFishingTasks(Range):
     If set to 0, no Fishing tasks will be generated.
     This only determines the maximum possible, fewer than the maximum could be assigned.
     """
+    display_name = "Max Fishing Task Count"
     range_start = 0
     range_end = MAX_FISHING_TASKS
     default = MAX_FISHING_TASKS
@@ -309,6 +332,7 @@ class FishingTaskWeight(Range):
     Weights of all Task Types will be compared against each other, a task with 50 weight
     is twice as likely to appear as one with 25.
     """
+    display_name = "Fishing Task Weight"
     range_start = 0
     range_end = 99
     default = 50
@@ -319,6 +343,7 @@ class MaxCookingLevel(Range):
     The highest Cooking requirement of any task generated.
     If set to 0, no Cooking tasks will be generated.
     """
+    display_name = "Max Required Cooking Level"
     range_start = 0
     range_end = 99
     default = 50
@@ -330,6 +355,7 @@ class MaxCookingTasks(Range):
     If set to 0, no Cooking tasks will be generated.
     This only determines the maximum possible, fewer than the maximum could be assigned.
     """
+    display_name = "Max Cooking Task Count"
     range_start = 0
     range_end = MAX_COOKING_TASKS
     default = MAX_COOKING_TASKS
@@ -341,6 +367,7 @@ class CookingTaskWeight(Range):
     Weights of all Task Types will be compared against each other, a task with 50 weight
     is twice as likely to appear as one with 25.
     """
+    display_name = "Cooking Task Weight"
     range_start = 0
     range_end = 99
     default = 50
@@ -351,6 +378,7 @@ class MaxFiremakingLevel(Range):
     The highest Firemaking requirement of any task generated.
     If set to 0, no Firemaking tasks will be generated.
     """
+    display_name = "Max Required Firemaking Level"
     range_start = 0
     range_end = 99
     default = 50
@@ -362,6 +390,7 @@ class MaxFiremakingTasks(Range):
     If set to 0, no Firemaking tasks will be generated.
     This only determines the maximum possible, fewer than the maximum could be assigned.
     """
+    display_name = "Max Firemaking Task Count"
     range_start = 0
     range_end = MAX_FIREMAKING_TASKS
     default = MAX_FIREMAKING_TASKS
@@ -373,6 +402,7 @@ class FiremakingTaskWeight(Range):
     Weights of all Task Types will be compared against each other, a task with 50 weight
     is twice as likely to appear as one with 25.
     """
+    display_name = "Firemaking Task Weight"
     range_start = 0
     range_end = 99
     default = 50
@@ -383,6 +413,7 @@ class MaxWoodcuttingLevel(Range):
     The highest Woodcutting requirement of any task generated.
     If set to 0, no Woodcutting tasks will be generated.
     """
+    display_name = "Max Required Woodcutting Level"
     range_start = 0
     range_end = 99
     default = 50
@@ -394,6 +425,7 @@ class MaxWoodcuttingTasks(Range):
     If set to 0, no Woodcutting tasks will be generated.
     This only determines the maximum possible, fewer than the maximum could be assigned.
     """
+    display_name = "Max Woodcutting Task Count"
     range_start = 0
     range_end = MAX_WOODCUTTING_TASKS
     default = MAX_WOODCUTTING_TASKS
@@ -405,6 +437,7 @@ class WoodcuttingTaskWeight(Range):
     Weights of all Task Types will be compared against each other, a task with 50 weight
     is twice as likely to appear as one with 25.
     """
+    display_name = "Woodcutting Task Weight"
     range_start = 0
     range_end = 99
     default = 50
@@ -416,6 +449,7 @@ class MinimumGeneralTasks(Range):
     General progression tasks will be used to fill out any holes caused by having fewer possible tasks than needed, so
     there is no maximum.
     """
+    display_name = "Minimum General Task Count"
     range_start = 0
     range_end = NON_QUEST_LOCATION_COUNT
     default = 10
@@ -427,6 +461,7 @@ class GeneralTaskWeight(Range):
     Weights of all Task Types will be compared against each other, a task with 50 weight
     is twice as likely to appear as one with 25.
     """
+    display_name = "General Task Weight"
     range_start = 0
     range_end = 99
     default = 50

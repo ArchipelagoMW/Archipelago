@@ -14,7 +14,7 @@ from .data import static_items as static_witness_items
 from .data import static_locations as static_witness_locations
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import DoorItemDefinition, ItemData
-from .data.utils import get_audio_logs
+from .data.utils import cast_not_none, get_audio_logs
 from .hints import CompactHintData, create_all_hints, make_compact_hint_data, make_laser_hints
 from .locations import WitnessPlayerLocations
 from .options import TheWitnessOptions, witness_option_groups
@@ -50,18 +50,20 @@ class WitnessWorld(World):
     topology_present = False
     web = WitnessWebWorld()
 
+    origin_region_name = "Entry"
+
     options_dataclass = TheWitnessOptions
     options: TheWitnessOptions
 
     item_name_to_id = {
         # ITEM_DATA doesn't have any event items in it
-        name: cast(int, data.ap_code) for name, data in static_witness_items.ITEM_DATA.items()
+        name: cast_not_none(data.ap_code) for name, data in static_witness_items.ITEM_DATA.items()
     }
     location_name_to_id = static_witness_locations.ALL_LOCATIONS_TO_ID
     item_name_groups = static_witness_items.ITEM_GROUPS
     location_name_groups = static_witness_locations.AREA_LOCATION_GROUPS
 
-    required_client_version = (0, 4, 5)
+    required_client_version = (0, 5, 1)
 
     player_logic: WitnessPlayerLogic
     player_locations: WitnessPlayerLocations
@@ -78,11 +80,12 @@ class WitnessWorld(World):
 
     def _get_slot_data(self) -> Dict[str, Any]:
         return {
-            "seed": self.random.randrange(0, 1000000),
+            "seed": self.options.puzzle_randomization_seed.value,
             "victory_location": int(self.player_logic.VICTORY_LOCATION, 16),
             "panelhex_to_id": self.player_locations.CHECK_PANELHEX_TO_ID,
             "item_id_to_door_hexes": static_witness_items.get_item_to_door_mappings(),
-            "door_hexes_in_the_pool": self.player_items.get_door_ids_in_pool(),
+            "door_items_in_the_pool": self.player_items.get_door_item_ids_in_pool(),
+            "doors_that_shouldnt_be_locked": [int(h, 16) for h in self.player_logic.FORBIDDEN_DOORS],
             "symbols_not_in_the_game": self.player_items.get_symbol_ids_not_in_pool(),
             "disabled_entities": [int(h, 16) for h in self.player_logic.COMPLETELY_DISABLED_ENTITIES],
             "hunt_entities": [int(h, 16) for h in self.player_logic.HUNT_ENTITIES],
@@ -148,7 +151,8 @@ class WitnessWorld(World):
         )
         self.player_regions: WitnessPlayerRegions = WitnessPlayerRegions(self.player_locations, self)
 
-        self.log_ids_to_hints = {}
+        self.log_ids_to_hints: Dict[int, CompactHintData] = {}
+        self.laser_ids_to_hints: Dict[int, CompactHintData] = {}
 
         self.determine_sufficient_progression()
 
@@ -204,11 +208,10 @@ class WitnessWorld(World):
             ]
             if early_items:
                 random_early_item = self.random.choice(early_items)
-                if (
-                    self.options.puzzle_randomization == "sigma_expert"
-                    or self.options.victory_condition == "panel_hunt"
-                ):
-                    # In Expert and Panel Hunt, only tag the item as early, rather than forcing it onto the gate.
+                mode = self.options.puzzle_randomization
+                if mode == "sigma_expert" or mode == "umbra_variety" or self.options.victory_condition == "panel_hunt":
+                    # In Expert and Variety, only tag the item as early, rather than forcing it onto the gate.
+                    # Same with panel hunt, since the Tutorial Gate Open panel is used for something else
                     self.multiworld.local_early_items[self.player][random_early_item] = 1
                 else:
                     # Force the item onto the tutorial gate check and remove it from our random pool.
@@ -255,7 +258,7 @@ class WitnessWorld(World):
             self.get_region(region).add_locations({loc: self.location_name_to_id[loc]})
 
             warning(
-                f"""Location "{loc}" had to be added to {self.player_name}'s world 
+                f"""Location "{loc}" had to be added to {self.player_name}'s world
                 due to insufficient sphere 1 size."""
             )
 
@@ -324,9 +327,6 @@ class WitnessWorld(World):
                 self.options.local_items.value.add(item_name)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        self.log_ids_to_hints: Dict[int, CompactHintData] = {}
-        self.laser_ids_to_hints: Dict[int, CompactHintData] = {}
-
         already_hinted_locations = set()
 
         # Laser hints
@@ -337,7 +337,7 @@ class WitnessWorld(World):
             for item_name, hint in laser_hints.items():
                 item_def = cast(DoorItemDefinition, static_witness_logic.ALL_ITEMS[item_name])
                 self.laser_ids_to_hints[int(item_def.panel_id_hexes[0], 16)] = make_compact_hint_data(hint, self.player)
-                already_hinted_locations.add(cast(Location, hint.location))
+                already_hinted_locations.add(cast_not_none(hint.location))
 
         # Audio Log Hints
 
