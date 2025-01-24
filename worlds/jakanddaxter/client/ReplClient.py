@@ -36,6 +36,18 @@ class JsonMessageData:
     their_item_owner: str | None = None
 
 
+ALLOWED_CHARACTERS = frozenset({
+    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+    "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+    "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d",
+    "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
+    "o", "p", "q", "r", "s", "t", "u", "v", "w", "x",
+    "y", "z", " ", "!", ":", ",", ".", "/", "?", "-",
+    "=", "+",
+})
+
+
 class JakAndDaxterReplClient:
     ip: str
     port: int
@@ -246,12 +258,12 @@ class JakAndDaxterReplClient:
         msg += f"   Did you hear the success audio cue?"
         self.log_info(logger, msg)
 
-    # To properly display in-game text, it must be alphanumeric and uppercase.
-    # I also only allotted 32 bytes to each string in OpenGOAL, so we must truncate.
+    # To properly display in-game text, it must be a valid character, all lowercase letters must be uppercase,
+    # and it must be wrapped in double quotes (for the REPL command). I also only allotted 32 bytes to each string
+    # in OpenGOAL, so we must truncate.
     @staticmethod
     def sanitize_game_text(text: str) -> str:
-        result = "".join(c for c in text if (c in {"-", " "} or c.isalnum()))
-        result = result[:32].upper()
+        result = "".join([c if c in ALLOWED_CHARACTERS else "?" for c in text[:32]]).upper()
         return f"\"{result}\""
 
     # Pushes a JsonMessageData object to the json message queue to be processed during the repl main_tick
