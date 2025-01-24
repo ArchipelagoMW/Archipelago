@@ -15,7 +15,6 @@ class LMItemData(NamedTuple):
 
 class LMItem(Item):
     game: str = "Luigi's Mansion"
-    doorid: Optional[int] = None
 
     def __init__(self, name: str, player: int, data: LMItemData, force_nonprogress: bool = False):
         adjusted_classification = IC.filler if force_nonprogress else data.classification
@@ -23,7 +22,6 @@ class LMItem(Item):
 
         self.type = data.type
         self.item_id = data.code
-        self.doorid = data.doorid
 
     @staticmethod
     def get_apid(code: int):
