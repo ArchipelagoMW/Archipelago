@@ -160,7 +160,7 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
 
     for _, group in RESEARCH_GROUPS.items():
         # Shuffle groups!
-        multiworld.random.shuffle(group)
+        multiworld.worlds[player].random.shuffle(group)
 
         # Guarantee 4 of each group
         for _ in range(4):
@@ -177,7 +177,7 @@ def create_regions(multiworld: MultiWorld, player: int, options:DSTOptions, item
         remaining_research += group
 
     # And shuffle again!
-    multiworld.random.shuffle(remaining_research)
+    multiworld.worlds[player].random.shuffle(remaining_research)
 
     # Make locations until there's nothing to place left
     while location_num_left_to_place > 0 and len(remaining_research):

@@ -125,7 +125,7 @@ class DSTWorld(World):
 
                 # Pick random boss from the boss pool
                 self.options.required_bosses.value.clear()
-                self.options.required_bosses.value.add(self.multiworld.random.choice(boss_pool))
+                self.options.required_bosses.value.add(self.random.choice(boss_pool))
 
 
             # Set valid auto regions for selected bosses
