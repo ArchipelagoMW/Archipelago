@@ -242,10 +242,18 @@ class TunicWorld(World):
 
     def create_item(self, name: str, classification: ItemClassification = None) -> TunicItem:
         item_data = item_table[name]
-        # if item_data.combat_ic is None, it'll take item_data.classification instead
-        itemclass: ItemClassification = ((item_data.combat_ic if self.options.combat_logic else None)
+        # evaluate alternate classifications based on options
+        # it'll choose whichever classification isn't None first in this if else tree
+        itemclass: ItemClassification = (classification
+                                         or (item_data.combat_ic if self.options.combat_logic else None)
+                                         or (ItemClassification.progression | ItemClassification.useful
+                                             if name == "Glass Cannon" and self.options.grass_randomizer
+                                             and not self.options.start_with_sword else None)
+                                         or (ItemClassification.progression | ItemClassification.useful
+                                             if name == "Shield" and self.options.ladder_storage
+                                             and not self.options.ladder_storage_without_items else None)
                                          or item_data.classification)
-        return TunicItem(name, classification or itemclass, self.item_name_to_id[name], self.player)
+        return TunicItem(name, itemclass, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
         tunic_items: List[TunicItem] = []
@@ -278,8 +286,6 @@ class TunicWorld(World):
 
         if self.options.grass_randomizer:
             items_to_create["Grass"] = len(grass_location_table)
-            tunic_items.append(self.create_item("Glass Cannon", ItemClassification.progression))
-            items_to_create["Glass Cannon"] = 0
             for grass_location in excluded_grass_locations:
                 self.get_location(grass_location).place_locked_item(self.create_item("Grass"))
             items_to_create["Grass"] -= len(excluded_grass_locations)
@@ -350,11 +356,6 @@ class TunicWorld(World):
             if items_to_create[page] > 0:
                 tunic_items.append(self.create_item(page, ItemClassification.progression | ItemClassification.useful))
                 items_to_create[page] = 0
-
-        # logically relevant if you have ladder storage enabled
-        if self.options.ladder_storage and not self.options.ladder_storage_without_items:
-            tunic_items.append(self.create_item("Shield", ItemClassification.progression))
-            items_to_create["Shield"] = 0
 
         if self.options.maskless:
             tunic_items.append(self.create_item("Scavenger Mask", ItemClassification.useful))
