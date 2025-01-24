@@ -755,7 +755,8 @@ class KH2Context(CommonContext):
             for item_name in master_stat:
                 amount_of_items = 0
                 amount_of_items += self.kh2_seed_save_cache["AmountInvo"]["StatIncrease"][item_name]
-                if self.kh2_read_byte(self.Slot1 + 0x1B2) >= 5:
+                # checking if they talked to the computer to give them these
+                if self.kh2_read_byte(self.Slot1 + 0x1B2) >= 5 and (self.kh2_read_byte(self.Save + 0x1D27) & 0x1 << 3) > 0:
                     if item_name == ItemName.MaxHPUp:
                         if self.kh2_read_byte(self.Save + 0x2498) < 3:  # Non-Critical
                             Bonus = 5

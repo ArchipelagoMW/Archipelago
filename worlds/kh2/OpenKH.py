@@ -368,6 +368,22 @@ def patch_kh2(self, output_directory):
                     }
                 ]
             },
+                'name':   'msg/us/he.bar',
+                'multi':  [
+                    {
+                        'name': 'msg/fr/he.bar'
+                    },
+                    {
+                        'name': 'msg/gr/he.bar'
+                    {
+                        'name': 'msg/it/he.bar'
+                    },
+                    {
+                        'name': 'msg/sp/he.bar'
+                    }
+                ],
+                    }
+            },
         ],
         'title':  'Randomizer Seed'
     }
@@ -411,6 +427,30 @@ def patch_kh2(self, output_directory):
             'en': f"Your Level Depth is {self.options.LevelDepth.current_option_name}"
         }
     ]
+        {
+            'id': 15121,  # poster name
+            'en': f"Game Options"
+        },
+        {
+            'id': 15122,
+            'en': f"Fight Logic is {self.options.FightLogic.current_option_name}\n"
+                  f"Auto Form Logic is {self.options.AutoFormLogic.current_option_name}\n"
+                  f"Final Form Logic is {self.options.FinalFormLogic.current_option_name}"
+        }
+
+    ]
+    self.cups_text = [
+        {
+            'id': 4043,
+        },
+        {
+            'en': f"CupsToggle: {self.options.Cups.current_option_name}"
+        },
+            'id': 4045,
+            'en': f"CupsToggle: {self.options.Cups.current_option_name}"
+        },
+    ]
+
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
 
     self.mod_yml["title"] = f"Randomizer Seed {mod_name}"
@@ -423,7 +463,8 @@ def patch_kh2(self, output_directory):
         "FmlvList.yml": yaml.dump(self.formattedFmlv, line_break="\n"),
         "mod.yml":      yaml.dump(self.mod_yml, line_break="\n"),
         "po.yml":       yaml.dump(self.pooh_text, line_break="\n"),
-        "sys.yml":      yaml.dump(self.level_depth_text, line_break="\n"),
+        "sys.yml":      yaml.dump(self.level_depth_text + self.fight_and_form_text, line_break="\n"),
+        "he.yml":       yaml.dump(self.cups_text, line_break="\n")
     }
 
     mod = KH2Container(openkhmod, mod_dir, output_directory, self.player,
