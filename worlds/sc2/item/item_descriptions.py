@@ -606,6 +606,7 @@ item_descriptions = {
     item_names.INFESTED_MISSILE_TURRET: "Anti-air defensive structure. Detects cloaked units and can uproot.",
     item_names.INFESTED_SIEGE_TANK: "Siege tank. Can uproot itself to provide mobile tank support.",
     item_names.INFESTED_DIAMONDBACK: "Fast, high-damage attacker. Can attack while moving and can bring flying units to the ground.",
+    item_names.INFESTED_BULLFROG: "Grounded transport. Launches itself through the air, dealing damage and unloading cargo on impact.",
     item_names.INFESTED_BANSHEE: "Tactical-strike aircraft. Can cloak and can be upgraded to burrow.",
     item_names.INFESTED_LIBERATOR: "Anti-Air flying attacker. Attacks deal high area-damage.",
     item_names.PROGRESSIVE_ZERG_MELEE_ATTACK: GENERIC_UPGRADE_TEMPLATE.format("damage", ZERG, "melee ground units"),
@@ -754,6 +755,10 @@ item_descriptions = {
         Level 1: Infested Diamondbacks gain the Fungal Snare ability, allowing them to temporarily ground flying units.
         Level 2: Infested Diamondback Fungal Snare ability cooldown reduced by 15 seconds.
     """),
+    item_names.BULLFROG_WILD_MUTATION: "Infested Bullfrogs grant themselves and their cargo temporary health and an attack speed boost on impact.",
+    item_names.BULLFROG_RANGE: "Infested Bullfrog leap gains +3 range, and unload-leap gains +6 range.",
+    item_names.BULLFROG_BROODLINGS: "Infested Bullfrogs spawn two broodlings on impact, in addition to unloading their cargo.",
+    item_names.BULLFROG_HARD_IMPACT: "Infested Bullfrogs deal more damage and stun longer on impact.",
     item_names.INFESTED_BANSHEE_BRACED_EXOSKELETON: "Infested Banshees gain +100 life.",
     item_names.INFESTED_BANSHEE_RAPID_HIBERNATION: "Infested Banshees regenerate 20 life and energy per second while burrowed.",
     item_names.INFESTED_BANSHEE_ADVANCED_TARGETING_OPTICS: "Infested Banshees gain +2 range while cloaked.",
