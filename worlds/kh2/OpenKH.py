@@ -368,6 +368,7 @@ def patch_kh2(self, output_directory):
                     }
                 ]
             },
+            {
                 'name':   'msg/us/he.bar',
                 'multi':  [
                     {
@@ -375,6 +376,7 @@ def patch_kh2(self, output_directory):
                     },
                     {
                         'name': 'msg/gr/he.bar'
+                    },
                     {
                         'name': 'msg/it/he.bar'
                     },
@@ -382,7 +384,20 @@ def patch_kh2(self, output_directory):
                         'name': 'msg/sp/he.bar'
                     }
                 ],
+                'method': 'binarc',
+                'source': [
+                    {
+                        'name':   'he',
+                        'type':   'list',
+                        'method': 'kh2msg',
+                        'source': [
+                            {
+                                'name':     'he.yml',
+                                'language': 'en'
+                            }
+                        ]
                     }
+                ]
             },
         ],
         'title':  'Randomizer Seed'
@@ -427,6 +442,7 @@ def patch_kh2(self, output_directory):
             'en': f"Your Level Depth is {self.options.LevelDepth.current_option_name}"
         }
     ]
+    self.fight_and_form_text = [
         {
             'id': 15121,  # poster name
             'en': f"Game Options"
@@ -442,10 +458,13 @@ def patch_kh2(self, output_directory):
     self.cups_text = [
         {
             'id': 4043,
-        },
-        {
             'en': f"CupsToggle: {self.options.Cups.current_option_name}"
         },
+        {
+            'id': 4044,
+            'en': f"CupsToggle: {self.options.Cups.current_option_name}"
+        },
+        {
             'id': 4045,
             'en': f"CupsToggle: {self.options.Cups.current_option_name}"
         },
