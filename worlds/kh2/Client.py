@@ -1,4 +1,5 @@
 import ModuleUpdate
+import Utils
 
 ModuleUpdate.update()
 
@@ -23,6 +24,7 @@ class KH2Context(CommonContext):
 
     def __init__(self, server_address, password):
         super(KH2Context, self).__init__(server_address, password)
+
         self.goofy_ability_to_slot = dict()
         self.donald_ability_to_slot = dict()
         self.all_weapon_location_id = None
@@ -35,6 +37,7 @@ class KH2Context(CommonContext):
         self.serverconneced = False
         self.item_name_to_data = {name: data for name, data, in item_dictionary_table.items()}
         self.location_name_to_data = {name: data for name, data, in all_locations.items()}
+        self.kh2_data_package = {}
         self.kh2_loc_name_to_id = None
         self.kh2_item_name_to_id = None
         self.lookup_id_to_item = None
@@ -244,7 +247,7 @@ class KH2Context(CommonContext):
         return self.kh2.read_string(self.kh2.base_address + address, length)
 
     def on_package(self, cmd: str, args: dict):
-        if cmd in {"RoomInfo"}:
+        if cmd == "RoomInfo":
             self.kh2seedname = args['seed_name']
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
@@ -284,13 +287,21 @@ class KH2Context(CommonContext):
                     # self.locations_checked = set(self.kh2_seed_save_cache["LocationsChecked"])
             # self.serverconneced = True
 
-        if cmd in {"Connected"}:
-            asyncio.create_task(self.send_msgs([{"cmd": "GetDataPackage", "games": ["Kingdom Hearts 2"]}]))
+        if cmd == "Connected":
             self.kh2slotdata = args['slot_data']
-            # self.kh2_local_items = {int(location): item for location, item in self.kh2slotdata["LocalItems"].items()}
+
+            self.kh2_data_package = Utils.load_data_package_for_checksum("Kingdom Hearts 2", self.checksums["Kingdom Hearts 2"])
+            #self.kh2_data_package = {}
+            if "location_name_to_id" in self.kh2_data_package:
+                self.data_package_kh2_cache(self.kh2_data_package["location_name_to_id"],
+                        self.kh2_data_package["item_name_to_id"])
+                self.connect_to_game()
+            else:
+                asyncio.create_task(self.send_msgs([{"cmd": "GetDataPackage", "games": ["Kingdom Hearts 2"]}]))
+
             self.locations_checked = set(args["checked_locations"])
 
-        if cmd in {"ReceivedItems"}:
+        if cmd == "ReceivedItems":
             # 0x2546
             # 0x2658
             # 0x276A
@@ -338,42 +349,44 @@ class KH2Context(CommonContext):
                 for item in args['items']:
                     asyncio.create_task(self.give_item(item.item, item.location))
 
-        if cmd in {"RoomUpdate"}:
+        if cmd == "RoomUpdate":
             if "checked_locations" in args:
                 new_locations = set(args["checked_locations"])
                 self.locations_checked |= new_locations
 
-        if cmd in {"DataPackage"}:
+        if cmd == "DataPackage":
             if "Kingdom Hearts 2" in args["data"]["games"]:
-                self.data_package_kh2_cache(args)
-            if "KeybladeAbilities" in self.kh2slotdata.keys():
-                # sora ability to slot
-                self.AbilityQuantityDict.update(self.kh2slotdata["KeybladeAbilities"])
-                # itemid:[slots that are available for that item]
-                self.AbilityQuantityDict.update(self.kh2slotdata["StaffAbilities"])
-                self.AbilityQuantityDict.update(self.kh2slotdata["ShieldAbilities"])
-
-            all_weapon_location_id = []
-            for weapon_location in all_weapon_slot:
-                all_weapon_location_id.append(self.kh2_loc_name_to_id[weapon_location])
-            self.all_weapon_location_id = set(all_weapon_location_id)
-
-            try:
-                if not self.kh2:
-                    self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
-                    self.get_addresses()
-
-            except Exception as e:
-                if self.kh2connected:
-                    self.kh2connected = False
-                logger.info("Game is not open.")
-            self.serverconneced = True
+                self.data_package_kh2_cache(
+                        args["data"]["games"]["Kingdom Hearts 2"]["location_name_to_id"],
+                        args["data"]["games"]["Kingdom Hearts 2"]["item_name_to_id"])
+            self.connect_to_game()
             asyncio.create_task(self.send_msgs([{'cmd': 'Sync'}]))
 
-    def data_package_kh2_cache(self, args):
-        self.kh2_loc_name_to_id = args["data"]["games"]["Kingdom Hearts 2"]["location_name_to_id"]
+    def connect_to_game(self):
+        if "KeybladeAbilities" in self.kh2slotdata.keys():
+            # sora ability to slot
+            self.AbilityQuantityDict.update(self.kh2slotdata["KeybladeAbilities"])
+            # itemid:[slots that are available for that item]
+            self.AbilityQuantityDict.update(self.kh2slotdata["StaffAbilities"])
+            self.AbilityQuantityDict.update(self.kh2slotdata["ShieldAbilities"])
+
+        self.all_weapon_location_id = {self.kh2_loc_name_to_id[loc] for loc in all_weapon_slot}
+
+        try:
+            if not self.kh2:
+                self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
+                self.get_addresses()
+
+        except Exception as e:
+            if self.kh2connected:
+                self.kh2connected = False
+            logger.info("Game is not open.")
+        self.serverconneced = True
+
+    def data_package_kh2_cache(self, loc_to_id, item_to_id):
+        self.kh2_loc_name_to_id = loc_to_id
         self.lookup_id_to_location = {v: k for k, v in self.kh2_loc_name_to_id.items()}
-        self.kh2_item_name_to_id = args["data"]["games"]["Kingdom Hearts 2"]["item_name_to_id"]
+        self.kh2_item_name_to_id = item_to_id
         self.lookup_id_to_item = {v: k for k, v in self.kh2_item_name_to_id.items()}
         self.ability_code_list = [self.kh2_item_name_to_id[item] for item in exclusion_item_table["Ability"]]
 
@@ -808,7 +821,6 @@ class KH2Context(CommonContext):
     def get_addresses(self):
         if not self.kh2connected and self.kh2 is not None:
             if self.kh2_game_version is None:
-
                 if self.kh2_read_string(0x09A9830, 4) == "KH2J":
                     self.kh2_game_version = "STEAM"
                     self.Now = 0x0717008
@@ -835,10 +847,9 @@ class KH2Context(CommonContext):
                                 self.mem_json = json.load(f)
                         if self.mem_json:
                             for key in self.mem_json.keys():
-
                                 if self.kh2_read_string(eval(self.mem_json[key]["GameVersionCheck"]), 4) == "KH2J":
                                     self.Now = eval(self.mem_json[key]["Now"])
-                                    self.Save=eval(self.mem_json[key]["Save"])
+                                    self.Save = eval(self.mem_json[key]["Save"])
                                     self.Slot1 = eval(self.mem_json[key]["Slot1"])
                                     self.Journal = eval(self.mem_json[key]["Journal"])
                                     self.Shop = eval(self.mem_json[key]["Shop"])
