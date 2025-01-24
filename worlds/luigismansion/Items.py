@@ -143,7 +143,7 @@ BOO_ITEM_TABLE: dict[str, LMItemData] = {
     "Boolossus Boo 5": LMItemData("Boo", 102, IC.progression),
     "Boolossus Boo 6": LMItemData("Boo", 103, IC.progression),
     "Boolossus Boo 7": LMItemData("Boo", 104, IC.progression),
-    "Boolossus Boo 8": LMItemData("Boo", 105, IC.progression),
+    "Boolossus Boo 8": LMItemData("Boo", 114, IC.progression),
     "Boolossus Boo 9": LMItemData("Boo", 107, IC.progression),
     "Boolossus Boo 10": LMItemData("Boo", 108, IC.progression),
     "Boolossus Boo 11": LMItemData("Boo", 109, IC.progression),
