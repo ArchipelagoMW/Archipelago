@@ -61,7 +61,7 @@ class Component:
 processes = weakref.WeakSet()
 
 
-def launch_subprocess(func: Callable, name: str = None, args: Tuple[str, ...] = ()) -> None:
+def launch_subprocess(func: Callable, name: str | None = None, args: Tuple[str, ...] = ()) -> None:
     global processes
     import multiprocessing
     process = multiprocessing.Process(target=func, name=name, args=args)
@@ -69,7 +69,7 @@ def launch_subprocess(func: Callable, name: str = None, args: Tuple[str, ...] = 
     processes.add(process)
 
 
-def launch(func: Callable, name: str = None, args: Tuple[str, ...] = ()) -> None:
+def launch(func: Callable, name: str | None = None, args: Tuple[str, ...] = ()) -> None:
     from Utils import is_kivy_running
     if is_kivy_running():
         launch_subprocess(func, name, args)
