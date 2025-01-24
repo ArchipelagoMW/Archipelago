@@ -59,6 +59,7 @@ class DSTContext(CommonContext):
 
     def on_dst_connect_to_ap(self):
         "When the client connects to both DST and AP"
+        print("Sending randomizer data to DST.")
         self.dst_handler.enqueue({
             "datatype": "State",
             "connected": True,
@@ -477,6 +478,7 @@ class DSTHandler():
                 if conn:
                     await loop.sock_sendall(conn, DSTResponse({"datatype": "Error"}, 500).response)
                 next_ping_time = 1.0
+                self.connected = False
             finally:
                 if conn:
                     conn.shutdown(socket.SHUT_RDWR)
