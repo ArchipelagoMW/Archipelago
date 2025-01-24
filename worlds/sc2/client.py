@@ -1249,11 +1249,20 @@ class CompatItemHolder(typing.NamedTuple):
     quantity: int = 1
 
 
+def parse_uri(uri: str) -> str:
+    if "://" in uri:
+        uri = uri.split("://", 1)[1]
+    return uri.split('?', 1)[0]
+
+
 async def main():
     multiprocessing.freeze_support()
     parser = get_base_parser()
     parser.add_argument('--name', default=None, help="Slot Name to connect as.")
-    args = parser.parse_args()
+    args, uri = parser.parse_known_args()
+
+    if uri and uri[0].startswith('archipelago://'):
+        args.connect = parse_uri(' '.join(uri))
 
     ctx = SC2Context(args.connect, args.password)
     ctx.auth = args.name
