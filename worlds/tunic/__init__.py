@@ -1,4 +1,4 @@
-from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set
+from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set, TextIO
 from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from .items import (item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names,
@@ -501,6 +501,13 @@ class TunicWorld(World):
         if change and self.options.combat_logic and item.name in combat_items:
             state.tunic_need_to_reset_combat_from_remove[self.player] = True
         return change
+
+    def write_spoiler_header(self, spoiler_handle: TextIO):
+        if self.options.hexagon_quest and self.options.ability_shuffling:
+            spoiler_handle.write("\nAbility Unlocks (Hexagon Quest):\n")
+            for ability in self.ability_unlocks:
+                # Remove parentheses for better readability
+                spoiler_handle.write(f'{ability[ability.find("(")+1:ability.find(")")]}: {self.ability_unlocks[ability]} Gold Questagons\n')
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
         if self.options.entrance_rando:
