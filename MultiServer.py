@@ -1082,7 +1082,7 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
             ctx.logger.info('(Team #%d) %s sent %s to %s (%s)' % (
                 team + 1, ctx.player_names[(team, slot)], ctx.item_names[ctx.slot_info[target_player].game][item_id],
                 ctx.player_names[(team, target_player)], ctx.location_names[ctx.slot_info[slot].game][location]))
-            if len(info_texts) == 140:
+            if len(info_texts) >= 140:
                 # split into chunks that are close to compression window of 64K but not too big on the wire
                 # (roughly 1300-2600 bytes after compression depending on repetitiveness)
                 ctx.broadcast_team(team, info_texts)
