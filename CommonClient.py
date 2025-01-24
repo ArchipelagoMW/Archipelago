@@ -31,6 +31,7 @@ import ssl
 
 if typing.TYPE_CHECKING:
     import kvui
+    import argparse
 
 logger = logging.getLogger("Client")
 
@@ -458,6 +459,13 @@ class CommonContext:
             payload.update(kwargs)
         await self.send_msgs([payload])
         await self.send_msgs([{"cmd": "Get", "keys": ["_read_race_mode"]}])
+
+    async def check_locations(self, locations: typing.Collection[int]) -> set[int]:
+        """Send new location checks to the server. Returns the set of actually new locations that were sent."""
+        locations = set(locations) & self.missing_locations
+        if locations:
+            await self.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(locations)}])
+        return locations
 
     async def console_input(self) -> str:
         if self.ui:
@@ -1041,6 +1049,32 @@ def get_base_parser(description: typing.Optional[str] = None):
     return parser
 
 
+def handle_url_arg(args: "argparse.Namespace",
+                   parser: "typing.Optional[argparse.ArgumentParser]" = None) -> "argparse.Namespace":
+    """
+    Parse the url arg "archipelago://name:pass@host:port" from launcher into correct launch args for CommonClient
+    If alternate data is required the urlparse response is saved back to args.url if valid
+    """
+    if not args.url:
+        return args
+        
+    url = urllib.parse.urlparse(args.url)
+    if url.scheme != "archipelago":
+        if not parser:
+            parser = get_base_parser()
+        parser.error(f"bad url, found {args.url}, expected url in form of archipelago://archipelago.gg:38281")
+        return args
+
+    args.url = url
+    args.connect = url.netloc
+    if url.username:
+        args.name = urllib.parse.unquote(url.username)
+    if url.password:
+        args.password = urllib.parse.unquote(url.password)
+
+    return args
+
+
 def run_as_textclient(*args):
     class TextContext(CommonContext):
         # Text Mode to use !hint and such with games that have no text entry
@@ -1082,17 +1116,7 @@ def run_as_textclient(*args):
     parser.add_argument("url", nargs="?", help="Archipelago connection url")
     args = parser.parse_args(args)
 
-    # handle if text client is launched using the "archipelago://name:pass@host:port" url from webhost
-    if args.url:
-        url = urllib.parse.urlparse(args.url)
-        if url.scheme == "archipelago":
-            args.connect = url.netloc
-            if url.username:
-                args.name = urllib.parse.unquote(url.username)
-            if url.password:
-                args.password = urllib.parse.unquote(url.password)
-        else:
-            parser.error(f"bad url, found {args.url}, expected url in form of archipelago://archipelago.gg:38281")
+    args = handle_url_arg(args, parser=parser)
 
     # use colorama to display colored text highlighting on windows
     colorama.init()
