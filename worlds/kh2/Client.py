@@ -357,8 +357,8 @@ class KH2Context(CommonContext):
         if cmd == "DataPackage":
             if "Kingdom Hearts 2" in args["data"]["games"]:
                 self.data_package_kh2_cache(
-                        args["data"]["games"]["Kingdom Hearts 2"]["location_name_to_id"],
-                        args["data"]["games"]["Kingdom Hearts 2"]["item_name_to_id"])
+                    args["data"]["games"]["Kingdom Hearts 2"]["location_name_to_id"],
+                    args["data"]["games"]["Kingdom Hearts 2"]["item_name_to_id"])
             self.connect_to_game()
             asyncio.create_task(self.send_msgs([{'cmd': 'Sync'}]))
 
