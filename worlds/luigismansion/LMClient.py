@@ -45,22 +45,6 @@ CURR_HEALTH_OFFSET = 0xB8
 ROOM_ID_ADDR = 0x803D8B7C
 ROOM_ID_OFFSET = 0x35C
 
-# This address (and its other offsets) are used to check if the player captured any boos (1 byte each)
-BOOS_BITFLD_ADDR = 0x803D5E04
-BOOS_BITFLD_COUNT = 7
-
-# This address (and its other offsets) are used to check if the player has received keys to any doors in the
-# main mansion map (Map2). Each address is 1 byte each.
-KEYS_BITFLD_ADDR = 0x803D5E14
-KEYS_BITFLD_COUNT = 10
-
-# This singular address is used to give Luigi the elemental medals, if they are received.
-MEDALS_RECV_ADDR = 0x803D5DB2 # Bits Fire 5, Ice 6, Water 7
-
-# This singular address is used to give Luigi the mario items, if they are received
-MARIO_ITEMS_RECV_ONE_ADDR = 0x803D5DBB # Bits Hat 4, Star 5, Glove 6, Shoe 7
-MARIO_ITEMS_RECV_TWO_ADDR = 0x803D5DBC # Bit Letter 0
-
 # This Furniture address table contains the start of the addresses used for currently loaded in Furniture.
 # Since multiple rooms can be loaded into the background, several hundred addresses must be checked.
 # Each furniture flag and ID are 4 Bytes / Word.
@@ -85,43 +69,6 @@ ROOM_STATE_COUNT = 71
 # This is an array of length 0x10 where each element is a byte and contains item IDs for items to give the player.
 # 0xFF represents no item. The array is read and cleared every frame.
 # GIVE_ITEM_ARRAY_ADDR = 0x803FE868
-
-
-key_name_collection = [["", "Butler's Room", "", "Heart", "Fortune Teller", "Mirror Room", "", "Laundry Room"],
-                       ["", "Stairs 1F - BF", "Boneyard", "Kitchen", "", "", "Dinning Room", "Ball Room"],
-                       ["Storage Room", "Billiards Room", "Projection Room", "", "1F Washroom", "Conservatory", "",
-                            "1F Bathroom"],
-                       ["Stairs 1F - 2F", "Rec Room", "", "Nursery", "Twin's Room", "Sitting Room", "Guest Room",
-                            "Master Bedroom"],
-                       ["Study", "Family Hallway (2F)", "Parlor", "", "", "", "Anteroom", ""],
-                       ["Observatory", "2F Balcony", "Spade", "Wardrobe Room", "Astral Hall", "2F Washroom", "",
-                            "Tea Room"],
-                       ["2F Bathroom", "Nana's Room", "Ceramics Room", "Armory", "Telephone Room", "Clockwork Room",
-                            "", "3F Hallway"],
-                       ["Safari Room", "", "", "Diamond", "", "", "Big Balcony", "Artist's Studio"],
-                       ["", "Cold Storage", "", "BF Hallway", "Cellar", "Pipe Room", "King Boo Hallway",
-                            "Breaker Room"],
-                       ["Secret Altar", "", "1F Shortcut", "2F Hallway", "", "", "", ""]]
-
-
-boo_name_collection = [["Butler's Room Boo (PeekaBoo)", "Hidden Room Boo (GumBoo)", "Fortune Teller Boo (Booigi)",
-                        "Mirror Room Boo (Kung Boo)", "Laundry Room Boo (Boogie)", "Kitchen Boo (Booligan)",
-                        "Dining Room Boo (Boodacious)", "Ball Room Boo (Boo La La)"],
-                       ["Billiards Boo (Boohoo)", "Projection Room Boo (ShamBoo)", "Storage Room Boo (Game Boo)",
-                        "Conservatory Boo (Boomeo)", "Rec Room Boo (Booregard)", "Nursery Boo (TurBoo)",
-                        "Twin's Room Boo (Booris)", "Sitting Room Boo (Boolivia)"],
-                       ["Guest Room (Boonita)", "Master Bedroom Boo (Boolicious)", "Study Boo (TaBoo)",
-                        "Parlor Boo (BamBoo)", "Wardrobe Boo (GameBoo Advance)", "Anteroom  Boo (Bootha)",
-                        "Astral Boo (Boonswoggle)", "Nana's Room (LamBooger)"],
-                       ["Tea Room (Mr. Boojangles)", "Armory Boo (Underboo)", "Telephone Room Boo (Boomerang)",
-                        "Safari Room Boo (Little Boo Peep)", "Ceramics Studio (TamBoorine)",
-                        "Clockwork Room Boo (Booscaster)", "Artist's Studio Boo (Bootique)",
-                        "Cold Storage Boo (Boolderdash)"],
-                       ["Cellar Boo (Booripedes)", "Pipe Room  Boo (Booffant)", "Breaker Room Boo (Boo B. Hatch)",
-                        "Boolossus Boo 1", "Boolossus Boo 2", "Boolossus Boo 3", "Boolossus Boo 4", "Boolossus Boo 5"],
-                       ["Boolossus Boo 6", "Boolossus Boo 7", "Boolossus Boo 8", "Boolossus Boo 9", "Boolossus Boo 10",
-                        "Boolossus Boo 11", "Boolossus Boo 12", "Boolossus Boo 13"],
-                       ["Boolossus Boo 14", "Boolossus Boo 15", "", "", "", "", "", ""]]
 
 room_name_list = {
     0: "Butler",
@@ -258,10 +205,6 @@ class LMContext(CommonContext):
         self.len_give_item_array = 0x10
 
         # Jake temp custom variables
-        self.keys_tracked = [-1] * KEYS_BITFLD_COUNT
-        self.medals_tracked = -1
-        self.mario_items_tracked = [-1] * 2
-        self.boos_captured = [-1] * BOOS_BITFLD_COUNT
         self.room_interactions = [-1] * ROOM_STATE_COUNT
 
     async def disconnect(self, allow_autoreconnect: bool = False):
@@ -368,89 +311,6 @@ async def check_locations(ctx: LMContext):
 
     if not 2147483648 <= dme.read_word(ROOM_ID_ADDR) <= 2172649471:
         return
-
-    temp_medals_watch = dme.read_byte(MEDALS_RECV_ADDR)
-    if temp_medals_watch != ctx.medals_tracked:
-        if ctx.medals_tracked > 0:
-            bit_int = temp_medals_watch ^ ctx.medals_tracked
-        else:
-            bit_int = temp_medals_watch
-        ctx.medals_tracked = temp_medals_watch
-        for i in range(5,8,1):
-            if (bit_int & (1<<i)) > 0:
-                match i:
-                    case 5:
-                        logger.info(luigi_recv_text + "Fire Elemental Medal")
-                        continue
-                    case 6:
-                        logger.info(luigi_recv_text + "Ice Elemental Medal")
-                        continue
-                    case 7:
-                        logger.info(luigi_recv_text + "Water Elemental Medal")
-                        continue
-                    case _:
-                        print("ERROR: Not supposed to be reached")
-                        continue
-
-    mario_items_arr_one = dme.read_byte(MARIO_ITEMS_RECV_ONE_ADDR)
-    if mario_items_arr_one != ctx.mario_items_tracked[0]:
-        if ctx.mario_items_tracked[0] > 0:
-            bit_int = mario_items_arr_one ^ ctx.mario_items_tracked[0]
-        else:
-            bit_int = mario_items_arr_one
-        ctx.mario_items_tracked[0] = mario_items_arr_one
-        for i in range(4,8,1):
-            if (bit_int & (1<<i)) > 0:
-                match i:
-                    case 4:
-                        logger.info(luigi_recv_text + "Mario's Hat")
-                        continue
-                    case 5:
-                        logger.info(luigi_recv_text + "Mario's Star")
-                        continue
-                    case 6:
-                        logger.info(luigi_recv_text + "Mario's Glove")
-                        continue
-                    case 7:
-                        logger.info(luigi_recv_text + "Mario's Shoe")
-                        continue
-                    case _:
-                        print("ERROR: Not supposed to be reached")
-                        continue
-
-    mario_items_arr_two = dme.read_byte(MARIO_ITEMS_RECV_TWO_ADDR)
-    if mario_items_arr_two != ctx.mario_items_tracked[1]:
-        if ctx.mario_items_tracked[1] > 0:
-            bit_int = mario_items_arr_two ^ ctx.mario_items_tracked[1]
-        else:
-            bit_int = mario_items_arr_two
-        ctx.mario_items_tracked[1] = mario_items_arr_two
-        if (bit_int & (1 << 0)) > 0:
-            logger.info(luigi_recv_text + "Mario's Letter")
-
-    for key_addr_pos in range(0, KEYS_BITFLD_COUNT):
-        current_keys_int = dme.read_byte(KEYS_BITFLD_ADDR + key_addr_pos)
-        if current_keys_int != ctx.keys_tracked[key_addr_pos]:
-            if ctx.keys_tracked[key_addr_pos] > 0:
-                bit_int = current_keys_int ^ ctx.keys_tracked[key_addr_pos]
-            else:
-                bit_int = current_keys_int
-            ctx.keys_tracked[key_addr_pos] = current_keys_int
-            for i in range(8):
-                if (bit_int & (1<<i)) > 0 and not key_name_collection[key_addr_pos][i] == "":
-                    logger.info(luigi_recv_text + "'" + key_name_collection[key_addr_pos][i] + " Key'")
-
-    for boo_addr_pos in range(0, BOOS_BITFLD_COUNT):
-        current_boos_int = dme.read_byte(BOOS_BITFLD_ADDR + boo_addr_pos)
-        if current_boos_int != ctx.boos_captured[boo_addr_pos]:
-            if ctx.boos_captured[boo_addr_pos] > 0:
-                bit_int = current_boos_int ^ ctx.boos_captured[boo_addr_pos]
-            else:
-                bit_int = current_boos_int
-            ctx.boos_captured[boo_addr_pos] = current_boos_int
-            for i in range(8):
-                if (bit_int & (1<<i)) > 0 and not boo_name_collection[boo_addr_pos][i] == "":
-                    logger.info("Luigi has captured the following Boo: '" + boo_name_collection[boo_addr_pos][i] + "'")
 
     current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
     furniture_name_list: dict[str, LMLocationData] = dict(filter(lambda item: (item[1].type == "Furniture" or
