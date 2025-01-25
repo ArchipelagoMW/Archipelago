@@ -49,12 +49,16 @@ class CATEGORY:
     miner = "Miner"
     processors = "Processors"
     painting = "Painting"
+    random = "Random"
     belt_low = "belt"
     miner_low = "miner"
     processors_low = "processors"
     painting_low = "painting"
     big = "Big"
     small = "Small"
+    gigantic = "Gigantic"
+    rising = "Rising"
+    demonic = "Demonic"
 
 
 class OPTIONS:
@@ -225,10 +229,32 @@ class ITEMS:
     upgrade_small_miner = "Small Miner Upgrade"
     upgrade_small_proc = "Small Processors Upgrade"
     upgrade_small_paint = "Small Painting Upgrade"
+    upgrade_gigantic_belt = "Gigantic Belt Upgrade"
+    upgrade_gigantic_miner = "Gigantic Miner Upgrade"
+    upgrade_gigantic_proc = "Gigantic Processors Upgrade"
+    upgrade_gigantic_paint = "Gigantic Painting Upgrade"
+    upgrade_rising_belt = "Rising Belt Upgrade"
+    upgrade_rising_miner = "Rising Miner Upgrade"
+    upgrade_rising_proc = "Rising Processors Upgrade"
+    upgrade_rising_paint = "Rising Painting Upgrade"
+    trap_upgrade_belt = "Belt Upgrade Trap"
+    trap_upgrade_miner = "Miner Upgrade Trap"
+    trap_upgrade_proc = "Processors Upgrade Trap"
+    trap_upgrade_paint = "Painting Upgrade Trap"
+    trap_upgrade_demonic_belt = "Demonic Belt Upgrade Trap"
+    trap_upgrade_demonic_miner = "Demonic Miner Upgrade Trap"
+    trap_upgrade_demonic_proc = "Demonic Processors Upgrade Trap"
+    trap_upgrade_demonic_paint = "Demonic Painting Upgrade Trap"
+    upgrade_big_random = "Big Random Upgrade"
+    upgrade_small_random = "Small Random Upgrade"
 
     @staticmethod
     def upgrade(size: str, category: str) -> str:
         return f"{size} {category} Upgrade"
+
+    @staticmethod
+    def trap_upgrade(category: str, size: str = "") -> str:
+        return f"{size} {category} Upgrade Trap".strip()
 
     bundle_blueprint = "Blueprint Shapes Bundle"
     bundle_level = "Level Shapes Bundle"

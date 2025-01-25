@@ -1,4 +1,4 @@
-from typing import Dict, Callable
+from typing import Dict, Callable, Any, List
 
 from BaseClasses import Item, ItemClassification as IClass
 from .data.strings import GOALS, ITEMS, OTHER
@@ -92,6 +92,30 @@ upgrades: Dict[str, Callable[[str, bool, str], IClass]] = {
     ITEMS.upgrade_small_paint: always_filler
 }
 
+whacky_upgrades: Dict[str, Callable[[str, bool, str], IClass]] = {
+    ITEMS.upgrade_gigantic_belt: is_goal_efficiency_iii,
+    ITEMS.upgrade_gigantic_miner: always_useful,
+    ITEMS.upgrade_gigantic_proc: always_useful,
+    ITEMS.upgrade_gigantic_paint: always_useful,
+    ITEMS.upgrade_rising_belt: is_goal_efficiency_iii,
+    ITEMS.upgrade_rising_miner: always_useful,
+    ITEMS.upgrade_rising_proc: always_useful,
+    ITEMS.upgrade_rising_paint: always_useful,
+    ITEMS.upgrade_big_random: always_useful,
+    ITEMS.upgrade_small_random: always_filler,
+}
+
+whacky_upgrade_traps: Dict[str, Callable[[str, bool, str], IClass]] = {
+    ITEMS.trap_upgrade_belt: always_trap,
+    ITEMS.trap_upgrade_miner: always_trap,
+    ITEMS.trap_upgrade_proc: always_trap,
+    ITEMS.trap_upgrade_paint: always_trap,
+    ITEMS.trap_upgrade_demonic_belt: always_trap,
+    ITEMS.trap_upgrade_demonic_miner: always_trap,
+    ITEMS.trap_upgrade_demonic_proc: always_trap,
+    ITEMS.trap_upgrade_demonic_paint: always_trap,
+}
+
 bundles: Dict[str, Callable[[str, bool, str], IClass]] = {
     ITEMS.bundle_blueprint: always_filler,
     ITEMS.bundle_level: always_filler,
@@ -128,6 +152,8 @@ item_table: Dict[str, Callable[[str, bool, str], IClass]] = {
     **buildings_wires,
     **gameplay_unlocks,
     **upgrades,
+    **whacky_upgrades,
+    **whacky_upgrade_traps,
     **bundles,
     **standard_traps,
     **random_draining_trap,
@@ -150,28 +176,44 @@ small_upgrades = [
 ]
 
 
-def trap(random: float, split_draining: bool) -> str:
-    """Returns a random trap item."""
-    # Even if the inventory draining trap is split, it should have the same probability as all other traps
-    random_value = (len(standard_traps)+1)*random
-    if random_value >= 1:
-        return list(standard_traps.keys())[int(random_value)-1]
-    else:
-        return ITEMS.trap_draining_inv \
-            if not split_draining else list(split_draining_traps.keys())[int(random_value*3)]
-
-
-def filler(random: float) -> str:
+def filler(random: float, whacky_allowed: bool) -> str:
     """Returns a random filler item."""
-    if random < 0.16:  # These float values are intentionally just estimates of 1/6 and 2/3
-        return big_upgrades[int(random*4/0.16)]
-    elif random < 0.66:
-        return small_upgrades[int((random-0.16)*4/0.5)]  # Yes, I want this calculation to be written that way
-    else:
-        return list(bundles.keys())[int((random-0.66)*len(bundles)/0.34)]
+    bundles_list = [*bundles]
+    return random_choice_nested(random, [
+        small_upgrades,
+        [
+            bundles_list,
+            bundles_list,
+            [
+                big_upgrades,
+                [*whacky_upgrades] if whacky_allowed else big_upgrades,
+            ],
+        ],
+    ])
 
 
-item_descriptions = {  # TODO replace keys with global strings
+def trap(random: float, split_draining: bool, whacky_allowed: bool) -> str:
+    """Returns a random trap item."""
+    pool = [
+        *standard_traps,
+        ITEMS.trap_draining_inv if not split_draining else [*split_draining_traps],
+    ]
+    if whacky_allowed:
+        pool.append([*whacky_upgrade_traps])
+    return random_choice_nested(random, pool)
+
+
+def random_choice_nested(random: float, nested: List[Any]) -> Any:
+    """Helper function for getting a random element from a nested list."""
+    current: Any = nested
+    while isinstance(current, List):
+        index_float = random*len(current)
+        current = current[int(index_float)]
+        random = index_float-int(index_float)
+    return current
+
+
+item_descriptions = {  # TODO replace keys with global strings and update with whacky upgrades
     "Balancer": "A routing building, that can merge two belts into one, split a belt in two, " +
                 "or balance the items of two belts",
     "Tunnel": "A routing building consisting of two parts, that allows for gaps in belts",

@@ -35,9 +35,10 @@ Make-Anything-Machine (MAM).
 - Unlock blueprints
 - Big upgrade improvements (adds 1 to the multiplier)
 - Small upgrade improvements (adds .1 to the multiplier)
+- Other unusual upgrade improvements (optional)
 - Different shapes bundles
 - Inventory draining traps
-- Different traps afflicting random buildings
+- Different traps afflicting random buildings and game mechanics
 
 ## What is considered a location check?
 

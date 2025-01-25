@@ -9,7 +9,8 @@ options_presets = {
         "include_achievements": True,
         "exclude_softlock_achievements": False,
         "exclude_long_playtime_achievements": False,
-        "shapesanity_amount": 4
+        "shapesanity_amount": 4,
+        "toolbar_shuffling": False,
     },
     "Minimum checks": {
         "goal": "vanilla",
@@ -42,6 +43,7 @@ options_presets = {
         "randomize_level_logic": "hardcore",
         "randomize_upgrade_logic": "hardcore",
         "include_achievements": False,
-        "shapesanity_amount": 4
+        "shapesanity_amount": 4,
+        "include_whacky_upgrades": True,
     }
 }

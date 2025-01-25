@@ -3,6 +3,7 @@ from typing import Dict, Tuple, List
 from BaseClasses import Region, MultiWorld, LocationProgressType, ItemClassification, CollectionState
 from . import ShapezItem
 from .locations import ShapezLocation
+from .data.strings import ITEMS
 from worlds.generic.Rules import add_rule
 
 shapesanity_processing = ["Full", "Half", "Piece", "Stitched", "East Windmill", "Half-Half",
@@ -97,6 +98,19 @@ def can_make_half_shape(state: CollectionState, player: int) -> bool:
     return has_cutter(state, player) or state.has_all(["Quad Cutter", "Stacker"], player)
 
 
+def has_8x_belt_multiplier(state: CollectionState, player: int) -> bool:
+    # One gigantic upgrade (+10) is enough
+    if state.has(ITEMS.upgrade_gigantic_belt, player):
+        return True
+    multiplier = 1.0
+    # Rising upgrades do the least improvement if received before other upgrades
+    for _ in range(state.count(ITEMS.upgrade_rising_belt, player)):
+        multiplier *= 2
+    multiplier += state.count(ITEMS.upgrade_big_belt, player)
+    multiplier += state.count(ITEMS.upgrade_small_belt, player)*0.1
+    return multiplier >= 8
+
+
 def has_logic_list_building(state: CollectionState, player: int, buildings: List[str], index: int,
                             includeuseful: bool) -> bool:
 
@@ -142,7 +156,7 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
     goal_location = ShapezLocation(player, "Goal", None, goal_region, LocationProgressType.DEFAULT)
     goal_location.place_locked_item(ShapezItem("Goal", ItemClassification.progression_skip_balancing, None, player))
     if goal == "efficiency_iii":
-        add_rule(goal_location, lambda state: state.has("Big Belt Upgrade", player, 7))
+        add_rule(goal_location, lambda state: has_8x_belt_multiplier(state, player))
     goal_region.locations.append(goal_location)
     multiworld.completion_condition[player] = lambda state: state.has("Goal", player)
 

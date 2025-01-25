@@ -85,11 +85,18 @@ class ShapezWorld(World):
         "Top Row Buildings": {*buildings_top_row},
         "Wires Layer Buildings": {*buildings_wires},
         "Gameplay Mechanics": {ITEMS.blueprints, ITEMS.wires},
-        "Upgrades": {ITEMS.upgrade(size, cat)
-                     for size in {CATEGORY.big, CATEGORY.small}
-                     for cat in {CATEGORY.belt, CATEGORY.miner, CATEGORY.processors, CATEGORY.painting}},
-        **{f"{cat} Upgrades": {ITEMS.upgrade(size, cat)
-                               for size in {CATEGORY.big, CATEGORY.small}}
+        "Upgrades": {*{ITEMS.upgrade(size, cat)
+                       for size in {CATEGORY.big, CATEGORY.small, CATEGORY.gigantic, CATEGORY.rising}
+                       for cat in {CATEGORY.belt, CATEGORY.miner, CATEGORY.processors, CATEGORY.painting}},
+                     *{ITEMS.trap_upgrade(cat, size)
+                       for cat in {CATEGORY.belt, CATEGORY.miner, CATEGORY.processors, CATEGORY.painting}
+                       for size in {"", CATEGORY.demonic}},
+                     *{ITEMS.upgrade(size, CATEGORY.random)
+                       for size in {CATEGORY.big, CATEGORY.small}}},
+        **{f"{cat} Upgrades": {*{ITEMS.upgrade(size, cat)
+                                 for size in {CATEGORY.big, CATEGORY.small, CATEGORY.gigantic, CATEGORY.rising}},
+                               *{ITEMS.trap_upgrade(cat, size)
+                                 for size in {"", CATEGORY.demonic}}}
            for cat in {CATEGORY.belt, CATEGORY.miner, CATEGORY.processors, CATEGORY.painting}},
         "Bundles": {*bundles},
         "Traps": {*standard_traps, *random_draining_trap, *split_draining_traps},
@@ -104,7 +111,7 @@ class ShapezWorld(World):
                                     LOCATIONS.my_eyes, LOCATIONS.its_a_mess, LOCATIONS.getting_into_it,
                                     LOCATIONS.perfectionist, LOCATIONS.oops, LOCATIONS.i_need_trains, LOCATIONS.gps,
                                     LOCATIONS.a_long_time, LOCATIONS.addicted,
-                                    LOCATIONS.shapesanity(1), LOCATIONS.shapesanity(2), LOCATIONS.shapesanity(3)}
+                                    LOCATIONS.shapesanity(1), LOCATIONS.shapesanity(2), LOCATIONS.shapesanity(3)},
     }
 
     def __init__(self, multiworld: MultiWorld, player: int):
@@ -256,7 +263,7 @@ class ShapezWorld(World):
                           self.item_name_to_id[name], self.player)
 
     def get_filler_item_name(self) -> str:
-        return filler(self.random.random())
+        return filler(self.random.random(), bool(self.options.include_whacky_upgrades))
 
     def append_shapesanity(self, name: str) -> None:
         """This method is given as a parameter when creating the locations for shapesanity."""
@@ -327,14 +334,16 @@ class ShapezWorld(World):
         # Get value from traps probability option and convert to float
         traps_probability = self.options.traps_percentage/100
         split_draining = bool(self.options.split_inventory_draining_trap)
+        whacky_trap_allowed = (bool(self.options.include_whacky_upgrades)
+                               and not self.options.goal == GOALS.efficiency_iii)
         # Fill remaining locations with fillers
         for x in range(self.location_count - len(included_items)):
             if self.random.random() < traps_probability:
                 # Fill with trap
-                included_items.append(self.create_item(trap(self.random.random(), split_draining)))
+                included_items.append(self.create_item(trap(self.random.random(), split_draining, whacky_trap_allowed)))
             else:
                 # Fil with random filler item
-                included_items.append(self.create_item(filler(self.random.random())))
+                included_items.append(self.create_item(self.get_filler_item_name()))
 
         # Add correct number of items to itempool
         self.multiworld.itempool += included_items

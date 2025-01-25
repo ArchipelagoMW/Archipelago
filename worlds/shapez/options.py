@@ -31,7 +31,7 @@ class Goal(Choice):
 
 
 class GoalAmount(NamedRange):
-    """Specify, what level or tier (when either MAM or even fasterer is chosen as goal) is required to reach the goal.
+    """Specify, what level or tier (when either MAM or Even Fasterer is chosen as goal) is required to reach the goal.
 
     If MAM is set as the goal, this has to be set to 27 or more. Else it will raise an error."""
     display_name = "Goal amount"
@@ -259,6 +259,14 @@ class TrapsProbability(NamedRange):
     }
 
 
+class IncludeWhackyUpgrades(Toggle):
+    """Includes some very unusual upgrade items in generation (and logic), that greatly increase or decrease building
+    speeds. If the goal is set to Efficiency III, decreasing upgrades (aka traps) will always be disabled."""
+    display_name = "Include Whacky Upgrades"
+    rich_text_doc = True
+    default = False
+
+
 class SplitInventoryDrainingTrap(Toggle):
     """If set to true, the inventory draining trap will be split into level, upgrade, and blueprint draining traps
     instead of executing as one of those 3 randomly."""
@@ -296,5 +304,6 @@ class ShapezOptions(PerGameCommonOptions):
     exclude_progression_unreasonable: ExcludeProgressionUnreasonable
     shapesanity_amount: ShapesanityAmount
     traps_percentage: TrapsProbability
+    include_whacky_upgrades: IncludeWhackyUpgrades
     split_inventory_draining_trap: SplitInventoryDrainingTrap
     toolbar_shuffling: ToolbarShuffling

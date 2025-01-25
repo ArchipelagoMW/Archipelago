@@ -35,9 +35,10 @@ empfohlen, eine Maschine zu bauen, die alles automatisch herstellt ("Make-Anythi
 - Blaupausen freischalten
 - Große Upgrades (addiert 1 zum Geschwindigkeitsmultiplikator)
 - Kleine Upgrades (addiert 0.1 zum Geschwindigkeitsmultiplikator)
+- Andere ungewöhnliche Upgrades (optional)
 - Verschiedene Bündel, die bestimmte Formen enthalten
 - Fallen, die bestimmte Formen aus dem Zentrum dränieren (ja, das Wort gibt es)
-- Fallen, die zufällige Gebäude betreffen
+- Fallen, die zufällige Gebäude oder andere Spielmechaniken betreffen
 
 ## Was ist eine Location / ein Check?
 

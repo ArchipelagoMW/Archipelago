@@ -2,6 +2,7 @@ from unittest import TestCase
 
 from test.bases import WorldTestBase
 from .. import options_presets, ShapezWorld
+from ..data.strings import GOALS
 from ..options import max_levels_and_upgrades, max_shapesanity
 
 
@@ -69,6 +70,13 @@ class ShapezTestBase(WorldTestBase):
                          f"shapesanity locations ({locations_length}).")
         self.assertTrue("Uncolored Circle" in self.world.shapesanity_names,
                         "Uncolored Circle is guaranteed but was not found in shapesanity_names.")
+
+    def test_efficiency_iii_no_softlock(self):
+        if self.world.options.goal == GOALS.efficiency_iii:
+            for item in self.multiworld.itempool:
+                self.assertFalse(item.name.endswith("Upgrade Trap"),
+                                 "Item pool contains an upgrade trap, which could make the efficiency_iii goal "
+                                 "unreachable if collected.")
 
 
 class TestGlobalOptionsImport(TestCase):
@@ -150,6 +158,7 @@ class TestAllRelevantOptions3(ShapezTestBase):
         "exclude_long_playtime_achievements": True,
         "shapesanity_amount": "random",
         "traps_percentage": 100,
+        "include_whacky_upgrades": True,
         "split_inventory_draining_trap": True
     }
 
@@ -167,7 +176,8 @@ class TestAllRelevantOptions4(ShapezTestBase):
         "exclude_softlock_achievements": True,
         "exclude_long_playtime_achievements": True,
         "shapesanity_amount": "random",
-        "traps_percentage": "random"
+        "traps_percentage": "random",
+        "include_whacky_upgrades": True,
     }
 
 
