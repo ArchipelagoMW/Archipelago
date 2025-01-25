@@ -308,6 +308,7 @@ async def check_locations(ctx: LMContext):
     # switches_bitfield = int.from_bytes(dolphin_memory_engine.read_bytes(SWITCHES_BITFLD_ADDR, 10))
     # pickups_bitfield = dolphin_memory_engine.read_word(PICKUPS_BITFLD_ADDR)
 
+    #TODO Temporarily here as checks only exist in the main mansion at this time. When bosses are added, need to adjust this.
     if not 2147483648 <= dme.read_word(ROOM_ID_ADDR) <= 2172649471:
         return
 
