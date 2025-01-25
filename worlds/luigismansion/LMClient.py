@@ -251,7 +251,6 @@ class LMContext(CommonContext):
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
 
-# TODO Validate this works
 def _give_death(ctx: LMContext):
     if (ctx.slot and dme.is_hooked()
         and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS and check_ingame()):
@@ -350,18 +349,8 @@ async def check_locations(ctx: LMContext):
             ctx.room_interactions[curr_room_state_addr] = curr_room_state_int
             room_name = next(room_name_list[key] for key in room_name_list.keys() if key == curr_room_state_addr)
 
-            for i in range(0, 3):
-                if (bit_int & (1<<i)) > 0:
-                    match i:
-                        case 0:
-                            logger.info("Luigi has entered room '" + room_name + "'")
-                        case 1:
-                            logger.info("Luigi has turned lights on in room '" + room_name + "'")
-                        case 2:
-                            logger.info("Luigi opened chest in room '" + room_name + "'")
-                        case _:
-                            print("ERROR: Should Never be reached")
-
+            if (bit_int & (1<<3)) > 0:
+                logger.info("Luigi opened chest in room '" + room_name + "'")
             continue
 
     # for location, data in ALL_LOCATION_TABLE.items():
@@ -437,7 +426,6 @@ async def check_locations(ctx: LMContext):
     #     await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
 
 
-# TODO Validate this works
 async def check_alive():
     lm_curr_health = read_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]))
     return lm_curr_health > 0
