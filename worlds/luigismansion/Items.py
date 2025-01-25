@@ -39,7 +39,7 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Parlor Key": LMItemData("Door Key", 4, IC.progression, 34, address=0x803D5E18, itembit=2),
     "Anteroom Key": LMItemData("Door Key", 5, IC.progression, 38, address=0x803D5E18, itembit=6),
     "Wardrobe Key": LMItemData("Door Key", 6, IC.progression, 43, address=0x803D5E19, itembit=3),
-    "Family Hallway Key": LMItemData("Door Key", 7, IC.progression, 33, address=0x803D5E18, itembit=1),
+    "2F Front Hallway Key": LMItemData("Door Key", 7, IC.progression, 33, address=0x803D5E18, itembit=1), #TODO Family Hallway Key
     "Master Bedroom Key": LMItemData("Door Key", 8, IC.progression, 31, address=0x803D5E17, itembit=7),
     "Nursery Key": LMItemData("Door Key", 9, IC.progression, 27, address=0x803D5E17, itembit=3),
     "Twins Bedroom Key": LMItemData("Door Key", 10, IC.progression, 28, address=0x803D5E17, itembit=4),
@@ -47,13 +47,13 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Storage Room Key": LMItemData("Door Key", 12, IC.progression, 16, address=0x803D5E16, itembit=0),
     "Fortune Teller Key": LMItemData("Door Key", 13, IC.progression, 4, address=0x803D5E14, itembit=4),
     "Laundry Key": LMItemData("Door Key", 14, IC.progression, 7, address=0x803D5E14, itembit=7),
-    "1F - 2F Stairwell (Lower Door) Key": LMItemData("Door Key", 15, IC.progression, 74, address=0x803D5E1D, itembit=2),
+    "Lower 2F Stairwell Key": LMItemData("Door Key", 15, IC.progression, 74, address=0x803D5E1D, itembit=2), # TODO 1F - 2F Stairwell (Lower Door) Key
     "Conservatory Key": LMItemData("Door Key", 16, IC.progression, 21, address=0x803D5E16, itembit=5),
     "Dining Room Key": LMItemData("Door Key", 17, IC.progression, 14, address=0x803D5E15, itembit=6),
     "North Rec Room Key": LMItemData("Door Key", 18, IC.progression, 25, address=0x803D5E17, itembit=1),
     "Billiards Key": LMItemData("Door Key", 19, IC.progression, 17, address=0x803D5E16, itembit=1),
-    "North Safari Key": LMItemData("Door Key", 20, IC.progression, 56, address=0x803D5E1B, itembit=0),
-    "Boolossus Balcony (East Side) Key": LMItemData("Door Key", 21, IC.progression, 62, address=0x803D5E1B, itembit=6),
+    "Safari Key": LMItemData("Door Key", 20, IC.progression, 56, address=0x803D5E1B, itembit=0), #TODO North Safari Key
+    "Balcony Key": LMItemData("Door Key", 21, IC.progression, 62, address=0x803D5E1B, itembit=6), #TODO Boolossus Balcony East Side Key
     "Breaker Key": LMItemData("Door Key", 22, IC.progression, 71, address=0x803D5E1C, itembit=7),
     "Cellar Key": LMItemData("Door Key", 23, IC.progression, 68, address=0x803D5E1C, itembit=4),
     "Clockwork Key": LMItemData("Door Key", 24, IC.progression, 53, address=0x803D5E1A, itembit=5),
@@ -61,7 +61,7 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Sitting Room Key": LMItemData("Door Key", 26, IC.progression, 29, address=0x803D5E17, itembit=5),
     "Pipe Room Key": LMItemData("Door Key", 27, IC.progression, 69, address=0x803D5E1C, itembit=5),
     "Cold Storage Key": LMItemData("Door Key", 28, IC.progression, 65, address=0x803D5E1C, itembit=1),
-    "Artist's Studio Key": LMItemData("Door Key", 29, IC.progression, 63, address=0x803D5E1B, itembit=7),
+    "Art Studio Key": LMItemData("Door Key", 29, IC.progression, 63, address=0x803D5E1B, itembit=7), #TODO Artist's Studio Key
     "Wardrobe Balcony Key": LMItemData("Door Key", 30, IC.progression, 41, address=0x803D5E19, itembit=1),
     "Study Key": LMItemData("Door Key", 31, IC.progression, 32, address=0x803D5E18, itembit=0),
     "Basement Stairwell Key": LMItemData("Door Key", 32, IC.progression, 9, address=0x803D5E15, itembit=1),
@@ -74,19 +74,19 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Butler's Room Key": LMItemData("Door Key", 39, IC.progression, 1, address=0x803D5E14, itembit=1),
     "Tea Room Key": LMItemData("Door Key", 40, IC.progression, 47, address=0x803D5E19, itembit=7),
     "South Rec Room Key": LMItemData("Door Key", 41, IC.progression, 24, address=0x803D5E17, itembit=0),
-    "1F - 2F Stairwell (Upper Door) Key": LMItemData("Door Key", 42, IC.progression, itembit=75),
+    "Upper 2F Stairwell Key": LMItemData("Door Key", 42, IC.progression, itembit=75), #TODO 1F - 2F Stairwell (Upper Door) Key
     "2F Bathroom Key": LMItemData("Door Key", 43, IC.progression, 48, address=0x803D5E1A, itembit=0),
     "2F Washroom Key": LMItemData("Door Key", 44, IC.progression, 45, address=0x803D5E19, itembit=5),
     "Nana's Room Key": LMItemData("Door Key", 45, IC.progression, 49, address=0x803D5E1A, itembit=1),
     "Astral Hall Key": LMItemData("Door Key", 46, IC.progression, 44, address=0x803D5E19, itembit=4),
     "Observatory Key": LMItemData("Door Key", 47, IC.progression, 40, address=0x803D5E19, itembit=0),
     "Guest Room Key": LMItemData("Door Key", 48, IC.progression, 30, address=0x803D5E17, itembit=6),
-    "West Safari Hallway Key": LMItemData("Door Key", 49, IC.progression, 55, address=0x803D5E1A, itembit=7),
+    "3F Right Hallway Key": LMItemData("Door Key", 49, IC.progression, 55, address=0x803D5E1A, itembit=7), #TODO West Safari Hallway Key
     "Telephone Room Key": LMItemData("Door Key", 50, IC.progression, 52, address=0x803D5E1A, itembit=4),
     "Ceramics Studio Key": LMItemData("Door Key", 51, IC.progression, 50, address=0x803D5E1A, itembit=2),
     "Breaker Room Key": LMItemData("Door Key", 52, IC.progression, 71, address=0x803D5E1C, itembit=7),
     "Basement Hallway Key": LMItemData("Door Key", 53, IC.progression, 67, address=0x803D5E1C, itembit=3),
-    "Secret Altar Hallway Key": LMItemData("Door Key", 54, IC.progression, 70, address=0x803D5E1C, itembit=6),
+    "Spade Hallway Key": LMItemData("Door Key", 54, IC.progression, 70, address=0x803D5E1C, itembit=6),
     "Fire Element Medal": LMItemData("Medal", 55, IC.progression, address=0x803D5DB2, itembit=5),
     "Water Element Medal": LMItemData("Medal", 56, IC.progression, address=0x803D5DB2, itembit=7),
     "Ice Element Medal": LMItemData("Medal", 57, IC.progression, address=0x803D5DB2, itembit=6),
