@@ -349,7 +349,7 @@ async def check_locations(ctx: LMContext):
             ctx.room_interactions[curr_room_state_addr] = curr_room_state_int
             room_name = next(room_name_list[key] for key in room_name_list.keys() if key == curr_room_state_addr)
 
-            if (bit_int & (1<<3)) > 0:
+            if (bit_int & (1<<2)) > 0:
                 logger.info("Luigi opened chest in room '" + room_name + "'")
             continue
 
