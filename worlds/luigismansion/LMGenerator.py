@@ -248,23 +248,17 @@ class LuigisMansionRandomizer:
                 self.update_custom_event(event_no, False, lines)
 
         lines = get_data(__name__, "data/custom_events/event36.txt").decode('utf-8')
-        lines = lines.replace("{CaseZero}", "<WINDOW>(0)<COLOR>(9)\n" +
-                              "<SAY>You are missing the following #\\nof <COLOR>(2)Mario<Color>(0) items: " +
-                              str(required_mario_item_count) + "\n<ANYKEY>\n<BGM>(7)")
+        lines = lines.replace("{MarioCount}", str(required_mario_item_count))
 
-        cases_to_replace = ["", "{CaseOne}", "{CaseTwo}", "{CaseThree}", "{CaseFour}", "{CaseFive}"]
-        gen_on_string = "<GENON>\"dm_uranai\"\n<FLAGON>(13)\n<BGM>(32)"
-        ramdom_jmp_string = "<RAMDOMJMP>\"{0}\""
+        cases_to_replace = ["{CaseZero}", "{CaseOne}", "{CaseTwo}", "{CaseThree}", "{CaseFour}", "{CaseFive}"]
+        str_good_end = "\"GoodEnd\""
+        str_bad_end = "\"MissingItems\""
 
-        for i in range(1,6):
-            if i < required_mario_item_count:
-                lines = lines.replace(cases_to_replace[i], ramdom_jmp_string.format("0"))
-                continue
-            elif i == required_mario_item_count:
-                lines = lines.replace(cases_to_replace[i], gen_on_string)
-                continue
+        for i in range(0,6):
+            if i >= required_mario_item_count:
+                lines = lines.replace(cases_to_replace[i], str_good_end)
             else:
-                lines = lines.replace(cases_to_replace[i], ramdom_jmp_string.format(str(required_mario_item_count)))
+                lines = lines.replace(cases_to_replace[i], str_bad_end)
 
         self.update_custom_event("36", False, lines)
 
