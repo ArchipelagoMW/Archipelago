@@ -725,13 +725,20 @@ class FreeFlyLocation(Toggle):
     """
     display_name = "Free Fly Location"
 
+
 class FreeFlyBlacklist(OptionSet):
     """
     Disables specific locations as valid free fly locations.
+
     Has no effect if Free Fly Location is disabled.
     """
     display_name = "Free Fly Blacklist"
     valid_keys = [
+        "Littleroot Town",
+        "Oldale Town",
+        "Petalburg City",
+        "Rustboro City",
+        "Dewford Town",
         "Slateport City",
         "Mauville City",
         "Verdanturf Town",
@@ -743,6 +750,14 @@ class FreeFlyBlacklist(OptionSet):
         "Sootopolis City",
         "Ever Grande City",
     ]
+    default = [
+        "Littleroot Town",
+        "Oldale Town",
+        "Petalburg City",
+        "Rustboro City",
+        "Dewford Town",
+    ]
+
 
 class HmRequirements(Choice):
     """
