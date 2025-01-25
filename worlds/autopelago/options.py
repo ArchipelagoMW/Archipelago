@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Toggle, PerGameCommonOptions, Choice
+from Options import Toggle, PerGameCommonOptions, Choice, OptionSet
 
 
 class FillWithDetermination(Toggle):
@@ -22,7 +22,37 @@ class VictoryLocation(Choice):
     default = 0
 
 
+class EnabledBuffs(OptionSet):
+    """Enables various buffs that affect how the rat behaves. All are enabled by default.
+    Well Fed: Gets more done
+    Lucky: One free success
+    Energized: Moves faster
+    Stylish: Better RNG
+    Confident: Ignore a trap
+    Smart: Next check is progression-tier
+    """
+    display_name = "Enabled Buffs"
+    valid_keys = frozenset({"Well Fed", "Lucky", "Energized", "Stylish", "Confident", "Smart"})
+    default = frozenset({"Well Fed", "Lucky", "Energized", "Stylish", "Confident", "Smart"})
+
+
+class EnabledTraps(OptionSet):
+    """Enables various traps that affect how the rat behaves. All are enabled by default.
+    Upset Tummy: Gets less done
+    Unlucky: Worse RNG
+    Sluggish: Moves slower
+    Distracted: Skip a "step"
+    Startled: Run towards start
+    Conspiratorial: Next check is trap-tier
+    """
+    display_name = "Enabled Traps"
+    valid_keys = frozenset({"Upset Tummy", "Unlucky", "Sluggish", "Distracted", "Startled", "Conspiratorial"})
+    default = frozenset({"Upset Tummy", "Unlucky", "Sluggish", "Distracted", "Startled", "Conspiratorial"})
+
+
 @dataclass
 class ArchipelagoGameOptions(PerGameCommonOptions):
     fill_with_determination: FillWithDetermination
     victory_location: VictoryLocation
+    enabled_buffs: EnabledBuffs
+    enabled_traps: EnabledTraps
