@@ -102,7 +102,7 @@ class TunicWorld(World):
 
     # for the local_fill option
     fill_items: List[TunicItem]
-    fill_locations: List[TunicLocation]
+    fill_locations: List[Location]
     amount_to_local_fill: int
 
     # so we only loop the multiworld locations once
@@ -475,8 +475,6 @@ class TunicWorld(World):
         self.multiworld.itempool += tunic_items
 
     def pre_fill(self) -> None:
-        self.fill_locations = []
-
         if self.options.local_fill > 0 and self.multiworld.players > 1:
             # we need to reserve a couple locations so that we don't fill up every sphere 1 location
             reserved_locations: Set[str] = set(self.random.sample(sphere_one, 2))
@@ -487,14 +485,14 @@ class TunicWorld(World):
             if len(viable_locations) < self.amount_to_local_fill:
                 raise OptionError(f"TUNIC: Not enough locations for local_fill option for {self.player_name}. "
                                   f"This is likely due to excess plando or priority locations.")
-
-            self.fill_locations += viable_locations[:self.amount_to_local_fill]
+            self.random.shuffle(viable_locations)
+            self.fill_locations = viable_locations[:self.amount_to_local_fill]
 
     @classmethod
     def stage_pre_fill(cls, multiworld: MultiWorld) -> None:
         tunic_fill_worlds: List[TunicWorld] = [world for world in multiworld.get_game_worlds("TUNIC")
                                                if world.options.local_fill.value > 0]
-        if tunic_fill_worlds:
+        if tunic_fill_worlds and multiworld.players > 1:
             grass_fill: List[TunicItem] = []
             non_grass_fill: List[TunicItem] = []
             grass_fill_locations: List[Location] = []
@@ -584,9 +582,8 @@ class TunicWorld(World):
         return change
 
     def write_spoiler_header(self, spoiler_handle: TextIO):
-        if (self.options.hexagon_quest and self.options.ability_shuffling
-                and self.options.hexagon_quest_ability_type == "hexagons"):
-            spoiler_handle.write('Ability Unlocks (Hexagon Quest):\n')
+        if self.options.hexagon_quest and self.options.ability_shuffling:
+            spoiler_handle.write("\nAbility Unlocks (Hexagon Quest):\n")
             for ability in self.ability_unlocks:
                 # Remove parentheses for better readability
                 spoiler_handle.write(f'{ability[ability.find("(")+1:ability.find(")")]}: {self.ability_unlocks[ability]} Gold Questagons\n')

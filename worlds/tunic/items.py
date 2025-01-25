@@ -48,6 +48,7 @@ item_table: Dict[str, TunicItemData] = {
     "Gun": TunicItemData(IC.progression | IC.useful, 1, 30, "Weapons"),
     "Shield": TunicItemData(IC.useful, 1, 31, combat_ic=IC.progression | IC.useful),
     "Dath Stone": TunicItemData(IC.useful, 1, 32),
+    "Torch": TunicItemData(IC.useful, 0, 156),
     "Hourglass": TunicItemData(IC.useful, 1, 33),
     "Old House Key": TunicItemData(IC.progression, 1, 34, "Keys"),
     "Key": TunicItemData(IC.progression, 2, 35, "Keys"),
