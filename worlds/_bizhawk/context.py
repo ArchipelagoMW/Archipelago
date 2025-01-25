@@ -6,7 +6,7 @@ checking or launching the client, otherwise it will probably cause circular impo
 import asyncio
 import enum
 import subprocess
-from typing import Any, Dict, Optional
+from typing import Any
 
 from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, logger, gui_enabled
 import Patch
@@ -43,15 +43,15 @@ class BizHawkClientContext(CommonContext):
     command_processor = BizHawkClientCommandProcessor
     auth_status: AuthStatus
     password_requested: bool
-    client_handler: Optional[BizHawkClient]
-    slot_data: Optional[Dict[str, Any]] = None
-    rom_hash: Optional[str] = None
+    client_handler: BizHawkClient | None
+    slot_data: dict[str, Any] | None = None
+    rom_hash: str | None = None
     bizhawk_ctx: BizHawkContext
 
     watcher_timeout: float
     """The maximum amount of time the game watcher loop will wait for an update from the server before executing"""
 
-    def __init__(self, server_address: Optional[str], password: Optional[str]):
+    def __init__(self, server_address: str | None, password: str | None):
         super().__init__(server_address, password)
         self.auth_status = AuthStatus.NOT_AUTHENTICATED
         self.password_requested = False
