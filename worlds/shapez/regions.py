@@ -1,7 +1,7 @@
 from typing import Dict, Tuple, List
 
 from BaseClasses import Region, MultiWorld, LocationProgressType, ItemClassification, CollectionState
-from . import ShapezItem
+from .items import ShapezItem
 from .locations import ShapezLocation
 from .data.strings import ITEMS
 from worlds.generic.Rules import add_rule

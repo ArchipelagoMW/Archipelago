@@ -1,34 +1,35 @@
 from typing import Dict, Callable, Any, List
 
 from BaseClasses import Item, ItemClassification as IClass
+from .options import ShapezOptions
 from .data.strings import GOALS, ITEMS, OTHER
 
 
-def is_mam_achievement_included(goal: str, achievements: bool, early_useful: str) -> IClass:
-    return IClass.progression if achievements and (not goal == GOALS.vanilla) else IClass.useful
+def is_mam_achievement_included(options: ShapezOptions) -> IClass:
+    return IClass.progression if options.include_achievements and (not options.goal == GOALS.vanilla) else IClass.useful
 
 
-def is_achievements_included(goal: str, achievements: bool, early_useful: str) -> IClass:
-    return IClass.progression if achievements else IClass.useful
+def is_achievements_included(options: ShapezOptions) -> IClass:
+    return IClass.progression if options.include_achievements else IClass.useful
 
 
-def is_goal_efficiency_iii(goal: str, achievements: bool, early_useful: str) -> IClass:
-    return IClass.progression if goal == GOALS.efficiency_iii else IClass.useful
+def is_goal_efficiency_iii(options: ShapezOptions) -> IClass:
+    return IClass.progression if options.goal == GOALS.efficiency_iii else IClass.useful
 
 
-def always_progression(goal: str, achievements: bool, early_useful: str) -> IClass:
+def always_progression(options: ShapezOptions) -> IClass:
     return IClass.progression
 
 
-def always_useful(goal: str, achievements: bool, early_useful: str) -> IClass:
+def always_useful(options: ShapezOptions) -> IClass:
     return IClass.useful
 
 
-def always_filler(goal: str, achievements: bool, early_useful: str) -> IClass:
+def always_filler(options: ShapezOptions) -> IClass:
     return IClass.filler
 
 
-def always_trap(goal: str, achievements: bool, early_useful: str) -> IClass:
+def always_trap(options: ShapezOptions) -> IClass:
     return IClass.trap
 
 
@@ -36,7 +37,7 @@ def always_trap(goal: str, achievements: bool, early_useful: str) -> IClass:
 # would be unreasonably complicated and time-consuming.
 # Some buildings are not needed to complete the game, but are "logically needed" for the "MAM" achievement.
 
-buildings_processing: Dict[str, Callable[[str, bool, str], IClass]] = {
+buildings_processing: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.cutter: always_progression,
     ITEMS.cutter_quad: always_progression,
     ITEMS.rotator: always_progression,
@@ -49,7 +50,7 @@ buildings_processing: Dict[str, Callable[[str, bool, str], IClass]] = {
     ITEMS.color_mixer: always_progression,
 }
 
-buildings_routing: Dict[str, Callable[[str, bool, str], IClass]] = {
+buildings_routing: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.balancer: always_progression,
     ITEMS.comp_merger: always_progression,
     ITEMS.comp_splitter: always_progression,
@@ -57,12 +58,12 @@ buildings_routing: Dict[str, Callable[[str, bool, str], IClass]] = {
     ITEMS.tunnel_tier_ii: is_mam_achievement_included,
 }
 
-buildings_other: Dict[str, Callable[[str, bool, str], IClass]] = {
+buildings_other: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.trash: always_progression,
     ITEMS.extractor_chain: always_useful
 }
 
-buildings_top_row: Dict[str, Callable[[str, bool, str], IClass]] = {
+buildings_top_row: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.belt_reader: is_mam_achievement_included,
     ITEMS.storage: is_achievements_included,
     ITEMS.switch: always_progression,
@@ -70,18 +71,18 @@ buildings_top_row: Dict[str, Callable[[str, bool, str], IClass]] = {
     ITEMS.display: always_useful
 }
 
-buildings_wires: Dict[str, Callable[[str, bool, str], IClass]] = {
+buildings_wires: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.wires: always_progression,
     ITEMS.const_signal: always_progression,
     ITEMS.logic_gates: is_mam_achievement_included,
     ITEMS.virtual_proc: is_mam_achievement_included
 }
 
-gameplay_unlocks: Dict[str, Callable[[str, bool, str], IClass]] = {
+gameplay_unlocks: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.blueprints: is_achievements_included
 }
 
-upgrades: Dict[str, Callable[[str, bool, str], IClass]] = {
+upgrades: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.upgrade_big_belt: is_goal_efficiency_iii,
     ITEMS.upgrade_big_miner: always_useful,
     ITEMS.upgrade_big_proc: always_useful,
@@ -92,7 +93,7 @@ upgrades: Dict[str, Callable[[str, bool, str], IClass]] = {
     ITEMS.upgrade_small_paint: always_filler
 }
 
-whacky_upgrades: Dict[str, Callable[[str, bool, str], IClass]] = {
+whacky_upgrades: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.upgrade_gigantic_belt: is_goal_efficiency_iii,
     ITEMS.upgrade_gigantic_miner: always_useful,
     ITEMS.upgrade_gigantic_proc: always_useful,
@@ -105,7 +106,7 @@ whacky_upgrades: Dict[str, Callable[[str, bool, str], IClass]] = {
     ITEMS.upgrade_small_random: always_filler,
 }
 
-whacky_upgrade_traps: Dict[str, Callable[[str, bool, str], IClass]] = {
+whacky_upgrade_traps: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.trap_upgrade_belt: always_trap,
     ITEMS.trap_upgrade_miner: always_trap,
     ITEMS.trap_upgrade_proc: always_trap,
@@ -116,35 +117,35 @@ whacky_upgrade_traps: Dict[str, Callable[[str, bool, str], IClass]] = {
     ITEMS.trap_upgrade_demonic_paint: always_trap,
 }
 
-bundles: Dict[str, Callable[[str, bool, str], IClass]] = {
+bundles: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.bundle_blueprint: always_filler,
     ITEMS.bundle_level: always_filler,
     ITEMS.bundle_upgrade: always_filler
 }
 
-standard_traps: Dict[str, Callable[[str, bool, str], IClass]] = {
+standard_traps: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.trap_locked: always_trap,
     ITEMS.trap_throttled: always_trap,
     ITEMS.trap_malfunction: always_trap,
     ITEMS.trap_inflation: always_trap,
 }
 
-random_draining_trap: Dict[str, Callable[[str, bool, str], IClass]] = {
+random_draining_trap: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.trap_draining_inv: always_trap
 }
 
-split_draining_traps: Dict[str, Callable[[str, bool, str], IClass]] = {
+split_draining_traps: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.trap_draining_blueprint: always_trap,
     ITEMS.trap_draining_level: always_trap,
     ITEMS.trap_draining_upgrade: always_trap
 }
 
-belt_and_extractor: Dict[str, Callable[[str, bool, str], IClass]] = {
+belt_and_extractor: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.belt: always_progression,
     ITEMS.extractor: always_progression
 }
 
-item_table: Dict[str, Callable[[str, bool, str], IClass]] = {
+item_table: Dict[str, Callable[[ShapezOptions], IClass]] = {
     **buildings_processing,
     **buildings_routing,
     **buildings_other,

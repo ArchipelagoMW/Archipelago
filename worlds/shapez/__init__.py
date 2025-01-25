@@ -257,10 +257,7 @@ class ShapezWorld(World):
                 self.category_random_logic_amounts[cat] = self.random.randint(0, 5)
 
     def create_item(self, name: str) -> Item:
-        return ShapezItem(name, item_table[name](self.options.goal.current_key,
-                                                 bool(self.options.include_achievements),
-                                                 self.options.early_balancer_tunnel_and_trash.current_key),
-                          self.item_name_to_id[name], self.player)
+        return ShapezItem(name, item_table[name](self.options), self.item_name_to_id[name], self.player)
 
     def get_filler_item_name(self) -> str:
         return filler(self.random.random(), bool(self.options.include_whacky_upgrades))
