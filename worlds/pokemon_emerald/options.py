@@ -725,6 +725,24 @@ class FreeFlyLocation(Toggle):
     """
     display_name = "Free Fly Location"
 
+class FreeFlyBlacklist(OptionSet):
+    """
+    Disables specific locations as valid free fly locations.
+    Has no effect if Free Fly Location is disabled.
+    """
+    display_name = "Free Fly Blacklist"
+    valid_keys = [
+        "Slateport City",
+        "Mauville City",
+        "Verdanturf Town",
+        "Fallarbor Town",
+        "Lavaridge Town",
+        "Fortree City",
+        "Lilycove City",
+        "Mossdeep City",
+        "Sootopolis City",
+        "Ever Grande City",
+    ]
 
 class HmRequirements(Choice):
     """
@@ -876,6 +894,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     extra_bumpy_slope: ExtraBumpySlope
     modify_118: ModifyRoute118
     free_fly_location: FreeFlyLocation
+    free_fly_blacklist: FreeFlyBlacklist
     hm_requirements: HmRequirements
 
     turbo_a: TurboA

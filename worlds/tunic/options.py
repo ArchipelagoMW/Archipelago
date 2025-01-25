@@ -29,7 +29,7 @@ class KeysBehindBosses(Toggle):
     display_name = "Keys Behind Bosses"
 
 
-class AbilityShuffling(Toggle):
+class AbilityShuffling(DefaultOnToggle):
     """
     Locks the usage of Prayer, Holy Cross*, and the Icebolt combo until the relevant pages of the manual have been found.
     If playing Hexagon Quest, abilities are instead randomly unlocked after obtaining 25%, 50%, and 75% of the required Hexagon goal amount.
@@ -173,7 +173,7 @@ class LocalFill(NamedRange):
     internal_name = "local_fill"
     display_name = "Local Fill Percent"
     range_start = 0
-    range_end = 100
+    range_end = 98
     special_range_names = {
         "default": -1
     }
@@ -290,30 +290,37 @@ class LogicRules(Choice):
 @dataclass
 class TunicOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
+
     sword_progression: SwordProgression
     start_with_sword: StartWithSword
     keys_behind_bosses: KeysBehindBosses
     ability_shuffling: AbilityShuffling
-    shuffle_ladders: ShuffleLadders
-    entrance_rando: EntranceRando
-    fixed_shop: FixedShop
     fool_traps: FoolTraps
+    laurels_location: LaurelsLocation
+
     hexagon_quest: HexagonQuest
     hexagon_goal: HexagonGoal
     extra_hexagon_percentage: ExtraHexagonPercentage
-    laurels_location: LaurelsLocation
+
+    shuffle_ladders: ShuffleLadders
+    grass_randomizer: GrassRandomizer
+    local_fill: LocalFill
+
+    entrance_rando: EntranceRando
+    fixed_shop: FixedShop
+
     combat_logic: CombatLogic
     lanternless: Lanternless
     maskless: Maskless
-    grass_randomizer: GrassRandomizer
-    local_fill: LocalFill
     laurels_zips: LaurelsZips
     ice_grappling: IceGrappling
     ladder_storage: LadderStorage
     ladder_storage_without_items: LadderStorageWithoutItems
+
     plando_connections: TunicPlandoConnections
+
     logic_rules: LogicRules
-      
+
 
 tunic_option_groups = [
     OptionGroup("Logic Options", [
