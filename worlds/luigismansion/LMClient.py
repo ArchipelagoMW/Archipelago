@@ -308,51 +308,49 @@ async def check_locations(ctx: LMContext):
     # switches_bitfield = int.from_bytes(dolphin_memory_engine.read_bytes(SWITCHES_BITFLD_ADDR, 10))
     # pickups_bitfield = dolphin_memory_engine.read_word(PICKUPS_BITFLD_ADDR)
 
-    #TODO Temporarily here as checks only exist in the main mansion at this time. When bosses are added, need to adjust this.
-    if not 2147483648 <= dme.read_word(ROOM_ID_ADDR) <= 2172649471:
-        return
+    current_map_id = get_map_id()
+    if current_map_id == 2:
+        current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
+        furniture_name_list: dict[str, LMLocationData] = dict(filter(lambda item: (item[1].type == "Furniture" or
+            item[1].type == "Plant") and item[1].in_game_room_id == current_room_id, ALL_LOCATION_TABLE.items()))
 
-    current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
-    furniture_name_list: dict[str, LMLocationData] = dict(filter(lambda item: (item[1].type == "Furniture" or
-        item[1].type == "Plant") and item[1].in_game_room_id == current_room_id, ALL_LOCATION_TABLE.items()))
+        if len(furniture_name_list.keys()) > 0:
+            for current_offset in range(0, FURNITURE_ADDR_COUNT, 4): # TODO Validate this accounts for all furniture
+                current_addr = FURNITURE_MAIN_TABLE_ID+current_offset
 
-    if len(furniture_name_list.keys()) > 0:
-        for current_offset in range(0, FURNITURE_ADDR_COUNT, 4): # TODO Validate this accounts for all furniture
-            current_addr = FURNITURE_MAIN_TABLE_ID+current_offset
+                # Not within a valid range for a pointer
+                if  not check_if_addr_is_pointer(current_addr):
+                    continue
 
-            # Not within a valid range for a pointer
-            if  not (2147483648 <= dme.read_word(current_addr) <= 2172649471):
+                furniture_id = dme.read_word(dme.follow_pointers(current_addr, [FURN_ID_OFFSET]))
+                furniture_flag =  dme.read_word(dme.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
+
+                # ID is a valid piece of furniture in the room, has been interacted with, and not already tracked.
+                named_furniture = next(((key, value) for (key, value) in furniture_name_list.items() if
+                                    value.jmpentry == furniture_id), None)
+                if named_furniture is None or furniture_flag == 0 or (
+                        LMContext.checked_furniture.__contains__(str(named_furniture[0]))):
+                    continue
+
+                logger.info("Luigi knocked on furniture '{named_furniture[0]}' In Game Room #" +
+                            f"{str(current_room_id)}.\nAdditional Debug Details: Current Addr: {hex(current_addr)}; " +
+                            f"Furniture ID: {hex(furniture_id)}; Flag Value: {furniture_flag}")
+
+                LMContext.checked_furniture.append(named_furniture[0])
+
+        for curr_room_state_addr in range(0, ROOM_STATE_COUNT):
+            curr_room_state_int = read_short(ROOM_STATE_ADDR + (curr_room_state_addr*2))
+            if curr_room_state_int != ctx.room_interactions[curr_room_state_addr]:
+                if ctx.room_interactions[curr_room_state_addr] > 0:
+                    bit_int = curr_room_state_int ^ ctx.room_interactions[curr_room_state_addr]
+                else:
+                    bit_int = curr_room_state_int
+                ctx.room_interactions[curr_room_state_addr] = curr_room_state_int
+                room_name = next(room_name_list[key] for key in room_name_list.keys() if key == curr_room_state_addr)
+
+                if (bit_int & (1<<2)) > 0:
+                    logger.info("Luigi opened chest in room '" + room_name + "'")
                 continue
-
-            furniture_id = dme.read_word(dme.follow_pointers(current_addr, [FURN_ID_OFFSET]))
-            furniture_flag =  dme.read_word(dme.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
-
-            # ID is a valid piece of furniture in the room, has been interacted with, and not already tracked.
-            named_furniture = next(((key, value) for (key, value) in furniture_name_list.items() if
-                                value.jmpentry == furniture_id), None)
-            if named_furniture is None or furniture_flag == 0 or (
-                    LMContext.checked_furniture.__contains__(str(named_furniture[0]))):
-                continue
-
-            logger.info(f"Luigi knocked on furniture '{named_furniture[0]}' in In Game Room #{str(current_room_id)}.\n"+
-                  f"Additional Debug Details: Current Addr: {hex(current_addr)}; Furniture ID: {hex(furniture_id)}; " +
-                  f"Flag Value: {furniture_flag}")
-
-            LMContext.checked_furniture.append(named_furniture[0])
-
-    for curr_room_state_addr in range(0, ROOM_STATE_COUNT):
-        curr_room_state_int = read_short(ROOM_STATE_ADDR + (curr_room_state_addr*2))
-        if curr_room_state_int != ctx.room_interactions[curr_room_state_addr]:
-            if ctx.room_interactions[curr_room_state_addr] > 0:
-                bit_int = curr_room_state_int ^ ctx.room_interactions[curr_room_state_addr]
-            else:
-                bit_int = curr_room_state_int
-            ctx.room_interactions[curr_room_state_addr] = curr_room_state_int
-            room_name = next(room_name_list[key] for key in room_name_list.keys() if key == curr_room_state_addr)
-
-            if (bit_int & (1<<2)) > 0:
-                logger.info("Luigi opened chest in room '" + room_name + "'")
-            continue
 
     # for location, data in ALL_LOCATION_TABLE.items():
     #     checked = False
@@ -426,11 +424,15 @@ async def check_locations(ctx: LMContext):
     # if locations_checked:
     #     await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
 
+def get_map_id():
+    return dme.read_word(CURR_MAP_ID_ADDR)
+
+def check_if_addr_is_pointer(addr: int):
+    return 2147483648 <= dme.read_word(addr) <= 2172649471
 
 async def check_alive():
     lm_curr_health = read_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]))
     return lm_curr_health > 0
-
 
 async def check_death(ctx: LMContext):
     if check_ingame():
@@ -443,8 +445,12 @@ async def check_death(ctx: LMContext):
 
 
 def check_ingame():
-    current_map_id = dme.read_word(CURR_MAP_ID_ADDR)
-    bool_loaded_in_map = 0 < current_map_id < 14
+    current_map_id = get_map_id()
+    if current_map_id == 2:
+        # If this is NOT a pointer, then either we are on another map (aka boss fight) or game is not fully loaded.
+        bool_loaded_in_map = check_if_addr_is_pointer(ROOM_ID_ADDR)
+    else:
+        bool_loaded_in_map = 0 < current_map_id < 14
 
     int_play_state = dme.read_word(CURR_PLAY_STATE_ADDR)
     return int_play_state == 2 and bool_loaded_in_map
