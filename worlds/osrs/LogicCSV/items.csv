@@ -31,52 +31,52 @@ Area: Wilderness,1,progression,Area,"""11836,11835,11834,11833,11832,11831,12092
 Progressive Armor,6,progression,Item,1452,0
 Progressive Weapons,6,progression,Item,1449,0
 Progressive Tools,6,useful,Item,1492,0
-Progressive Ranged Weapons,3,useful,Item,1465,0
+Progressive Ranged Weapon,3,useful,Item,1465,0
 Progressive Ranged Armor,3,useful,Item,1481,0
-Progressive Magic,2,useful,Item,1450,0
-An Invitation to the Gielinor Games,1,filler,,,
-Settled's Crossbow,1,filler,,,
-The Stone of Jas,1,filler,,,
-Nieve's Phone Number,1,filler,,,
-Hannanie's Lost Sanity,1,filler,,,
-XP Waste,1,filler,,,
-Ten Free Pulls on the Squeal of Fortune,1,filler,,,
-Project Zanaris Beta Invite,1,filler,,,
-A Funny Feeling You Would Have Been Followed,1,filler,,,
-An Ominous Prediction From Gnome Child,1,filler,,,
-A Logic Error,1,filler,,,
-The Warding Skill,1,filler,,,
-"A 1/2500 Chance At Your Very Own Pet Baron Sucellus, Redeemable at your Local Duke, Some Restrictions May Apply",1,filler,,,
-A Suspicious Email From Iagex.com Asking for your Password,1,filler,,,
-A Review on that Pull Request You've Been Waiting On,1,filler,,,
-Fifty Billion RS3 GP (Worthless),1,filler,,,
-Mod Ash's Coffee Cup,1,filler,,,
-An Embarrasing Photo of Zammorak at the Christmas Party,1,filler,,,
-Another Bug To Report,1,filler,,,
-1-Up Mushroom,1,filler,,,
-Empty White Hallways,1,filler,,,
-The City of Menaphos,1,filler,,,
-A Ratcatchers Dialogue Rewrite,1,filler,,,
-"""Nostalgia""",1,filler,,,
-A Hornless Unicorn,1,filler,,,
-The Ability To Use ::bank,1,filler,,,
-Free Haircut at the Falador Hairdresser,1,filler,,,
-Nothing Interesting Happens,1,filler,,,
-Why Fletch?,1,filler,,,
-Evolution of Combat,1,filler,,,
-"Care Pack: 10,000 GP",1,useful,,,
-Care Pack: 90 Steel Nails,1,useful,,,
-Care Pack: 25 Swordfish,1,useful,,,
-Care Pack: 50 Lobsters,1,useful,,,
-Care Pack: 100 Law Runes,1,useful,,,
-Care Pack: 300 Each Elemental Rune,1,useful,,,
-Care Pack: 100 Chaos Runes,1,useful,,,
-Care Pack: 100 Death Runes,1,useful,,,
-Care Pack: 100 Oak Logs,1,useful,,,
-Care Pack: 50 Willow Logs,1,useful,,,
-Care Pack: 50 Bronze Bars,1,useful,,,
-Care Pack: 200 Iron Ore,1,useful,,,
-Care Pack: 100 Coal Ore,1,useful,,,
-Care Pack: 100 Raw Trout,1,useful,,,
-Care Pack: 200 Leather,1,useful,,,
-Care Pack: 25 Energy Potion (4),6,useful,,,
+Progressive Magic Spell,2,useful,Item,1450,0
+An Invitation to the Gielinor Games,1,filler,Junk,783,0
+Settled's Crossbow,1,filler,Junk,783,0
+The Stone of Jas,1,filler,Junk,783,0
+Nieve's Phone Number,1,filler,Junk,783,0
+Hannanie's Lost Sanity,1,filler,Junk,783,0
+XP Waste,1,filler,Junk,783,0
+Ten Free Pulls on the Squeal of Fortune,1,filler,Junk,783,0
+Project Zanaris Beta Invite,1,filler,Junk,783,0
+A Funny Feeling You Would Have Been Followed,1,filler,Junk,783,0
+An Ominous Prediction From Gnome Child,1,filler,Junk,783,0
+A Logic Error,1,filler,Junk,783,0
+The Warding Skill,1,filler,Junk,783,0
+"A 1/2500 Chance At Your Very Own Pet Baron Sucellus, Redeemable at your Local Duke, Some Restrictions May Apply",1,filler,Junk,783,0
+A Suspicious Email From Iagex.com Asking for your Password,1,filler,Junk,783,0
+A Review on that Pull Request You've Been Waiting On,1,filler,Junk,783,0
+Fifty Billion RS3 GP (Worthless),1,filler,Junk,783,0
+Mod Ash's Coffee Cup,1,filler,Junk,783,0
+An Embarrasing Photo of Zammorak at the Christmas Party,1,filler,Junk,783,0
+Another Bug To Report,1,filler,Junk,783,0
+1-Up Mushroom,1,filler,Junk,783,0
+Empty White Hallways,1,filler,Junk,783,0
+The City of Menaphos,1,filler,Junk,783,0
+A Ratcatchers Dialogue Rewrite,1,filler,Junk,783,0
+"""Nostalgia""",1,filler,Junk,783,0
+A Hornless Unicorn,1,filler,Junk,783,0
+The Ability To Use ::bank,1,filler,Junk,783,0
+Free Haircut at the Falador Hairdresser,1,filler,Junk,783,0
+Nothing Interesting Happens,1,filler,Junk,783,0
+Why Fletch?,1,filler,Junk,783,0
+Evolution of Combat,1,filler,Junk,783,0
+"Care Pack: 10,000 GP",1,useful,CarePack,1531,0
+Care Pack: 90 Steel Nails,1,useful,CarePack,1531,0
+Care Pack: 25 Swordfish,1,useful,CarePack,1531,0
+Care Pack: 50 Lobsters,1,useful,CarePack,1531,0
+Care Pack: 100 Law Runes,1,useful,CarePack,1531,0
+Care Pack: 300 Each Elemental Rune,1,useful,CarePack,1531,0
+Care Pack: 100 Chaos Runes,1,useful,CarePack,1531,0
+Care Pack: 100 Death Runes,1,useful,CarePack,1531,0
+Care Pack: 100 Oak Logs,1,useful,CarePack,1531,0
+Care Pack: 50 Willow Logs,1,useful,CarePack,1531,0
+Care Pack: 50 Bronze Bars,1,useful,CarePack,1531,0
+Care Pack: 200 Iron Ore,1,useful,CarePack,1531,0
+Care Pack: 100 Coal Ore,1,useful,CarePack,1531,0
+Care Pack: 100 Raw Trout,1,useful,CarePack,1531,0
+Care Pack: 200 Leather,1,useful,CarePack,1531,0
+Care Pack: 25 Energy Potion (4),6,useful,CarePack,1531,0
