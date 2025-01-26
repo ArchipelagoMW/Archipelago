@@ -5,7 +5,7 @@ from datetime import timedelta
 from Options import (
     Choice, Toggle, DefaultOnToggle, OptionSet, Range,
     PerGameCommonOptions, Option, VerifyKeys, StartInventory,
-    is_iterable_except_str,
+    is_iterable_except_str, OptionGroup
 )
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
@@ -1313,6 +1313,108 @@ class Starcraft2Options(PerGameCommonOptions):
     mission_order_scouting: MissionOrderScouting
 
     custom_mission_order: CustomMissionOrder
+
+option_groups = [
+    OptionGroup("Difficulty Settings", [
+        GameDifficulty,
+        GameSpeed,
+        # VanillaItemsOnly,
+        StarterUnit,
+        RequiredTactics,
+        NerfUnitBaselines,
+        MissionBias,
+    ]),
+    OptionGroup("Primary Campaign Settings", [
+        MissionOrder,
+        MaximumCampaignSize,
+        EnableWolMissions,
+        EnableProphecyMissions,
+        EnableHotsMissions,
+        EnableLotVPrologueMissions,
+        EnableLotVMissions,
+        EnableEpilogueMissions,
+        EnableNCOMissions,
+        EnableRaceSwapVariants,
+        ShuffleNoBuild,
+    ]),
+    OptionGroup("Optional Campaign Settings", [
+        ShuffleCampaigns,
+        AllInMap,
+        GridTwoStartPositions,
+        SelectRaces,
+        ExcludeVeryHardMissions,
+        EnableMissionRaceBalancing,
+    ]),
+    OptionGroup("Unit Upgrades", [
+        EnsureGenericItems,
+        MinNumberOfUpgrades,
+        MaxNumberOfUpgrades,
+        MaxUpgradeLevel,
+        GenericUpgradeMissions,
+        GenericUpgradeResearch,
+        GenericUpgradeItems,
+    ]),
+    OptionGroup("Kerrigan", [
+        KerriganPresence,
+        GrantStoryLevels,
+        KerriganLevelsPerMissionCompleted,
+        KerriganLevelsPerMissionCompletedCap,
+        KerriganLevelItemSum,
+        KerriganLevelItemDistribution,
+        KerriganTotalLevelCap,
+        StartPrimaryAbilities,
+        KerriganPrimalStatus,
+    ]),
+    OptionGroup("Spear of Adun", [
+        SpearOfAdunPresence,
+        SpearOfAdunPresentInNoBuild,
+        SpearOfAdunAutonomouslyCastAbilityPresence,
+        SpearOfAdunAutonomouslyCastPresentInNoBuild,
+    ]),
+    OptionGroup("Race Specific Options", [
+        EnableMorphling,
+    ]),
+    OptionGroup("Check Locations", [
+        VictoryCache,
+        VanillaLocations,
+        ExtraLocations,
+        ChallengeLocations,
+        MasteryLocations,
+        SpeedrunLocations,
+        PreventativeLocations,
+    ]),
+    OptionGroup("Filler Options", [
+        FillerPercentage,
+        MineralsPerItem,
+        VespenePerItem,
+        StartingSupplyPerItem,
+        MaximumSupplyPerItem,
+        MaximumSupplyReductionPerItem,
+        LowestMaximumSupply,
+        FillerRatio,
+    ]),
+    OptionGroup("Inclusions & Exclusions", [
+        LockedItems,
+        ExcludedItems,
+        UnexcludedItems,
+        ExcludedMissions,
+    ]),
+    OptionGroup("Advanced Gameplay", [
+        DifficultyDamageModifier,
+        KeyMode,
+        TakeOverAIAllies,
+        EnableVoidTrade,
+        VoidTradeAgeLimit,
+        GrantStoryTech,
+    ]),
+    OptionGroup("Cosmetics", [
+        PlayerColorTerranRaynor,
+        PlayerColorProtoss,
+        PlayerColorZerg,
+        PlayerColorZergPrimal,
+        PlayerColorNova,
+    ])
+]
 
 def get_option_value(world: Union['SC2World', None], name: str) -> int:
     """

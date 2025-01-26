@@ -23,7 +23,7 @@ from .options import (
     KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
     get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options,
     GrantStoryTech, GenericUpgradeResearch, RequiredTactics,
-    upgrade_included_names, EnableVoidTrade, FillerRatio, MissionOrderScouting,
+    upgrade_included_names, EnableVoidTrade, FillerRatio, MissionOrderScouting, option_groups,
 )
 from .rules import get_basic_units
 from . import settings
@@ -65,6 +65,7 @@ class Starcraft2WebWorld(WebWorld):
     )
 
     tutorials = [setup_en, setup_fr, custom_mission_orders_en]
+    option_groups = option_groups
 
 
 class SC2World(World):
