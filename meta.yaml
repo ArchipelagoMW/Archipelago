@@ -1,0 +1,39 @@
+# This file has to be in the Players folder to take effect, keeping the "meta.yaml" name
+# A meta file rolls its own set of options first
+# The result will then overwrite each player's option in that particular field
+# For example, if a meta.yaml fast_ganon result is rolled, every player will have that fast_ganon goal
+# There is the special case of null, which ignores that part of the meta.yaml,
+# allowing for a chance for that meta to not take effect
+meta_description: Meta-Mystery file with the intention of having similar-length completion times for a hopefully better experience
+null:
+  progression_balancing: # Progression balancing tries to make sure that the player has *something* towards any players goal in each "sphere"
+    normal: 0 # Force every player into default progression balancing
+    disabled: 0 # Force every player out of progression balancing, then prepare for a lot of logical BK
+    null: 1 # Let players decide via their own progression_balancing setting in their yaml, defaulting to 50
+A Link to the Past:
+  goals:
+    ganon: 100 # Climb GT, defeat Agahnim 2, and then kill Ganon
+    fast_ganon: 250 # Only killing Ganon is required. The hole is always open. However, items may still be placed in GT
+    dungeons: 50 # Defeat the boss of all dungeons, including Agahnim's tower and GT (Aga 2)
+    pedestal: 100 # Pull the Triforce from the Master Sword pedestal
+    triforce-hunt: 5 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then turn them in to Murahadala in front of Hyrule Castle
+    local_triforce_hunt: 5 # Collect 20 of 30 Triforce pieces spread throughout your world, then turn them in to Murahadala in front of Hyrule Castle
+    ganon_triforce_hunt: 10 # Collect 20 of 30 Triforce pieces spread throughout the worlds, then kill Ganon
+    local_ganon_triforce_hunt: 10 # Collect 20 of 30 Triforce pieces spread throughout your world, then kill Ganon
+    ganon_pedestal: 10 # Pull the Master Sword pedestal, then kill Ganon
+    null: 0 # Maintain individual goals
+  mode:
+    standard: 10
+    open: 60
+    inverted: 10
+    null: 10 # Maintain individual world states
+  triforce_pieces_mode: #Determine how to calculate the extra available triforce pieces.
+    extra: 0 # available = triforce_pieces_extra + triforce_pieces_required
+    percentage: 0 # available = (triforce_pieces_percentage /100) * triforce_pieces_required
+    available: 50 # available = triforce_pieces_available
+  triforce_pieces_available: # Set to how many triforces pieces are available to collect in the world. Default is 30. Max is 90, Min is 1
+    # Format "pieces: chance"
+    30: 50
+  triforce_pieces_required: # Set to how many out of X triforce pieces you need to win the game in a triforce hunt. Default is 20. Max is 90, Min is 1
+    # Format "pieces: chance"
+    25: 50

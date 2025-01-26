@@ -314,7 +314,7 @@ def set_card_rules(world):
         "TD45 Big Damage at once":
             CardRule(["Wave-Motion Cannon"], 3),
         "TD46 XYZ In the House":
-            CardRule("Dimension Fusion", 3),
+            CardRule(["Dimension Fusion", "Return from the Different Dimension"], 3),
         "TD47 Spell Counter":
             CardRule("Pitch-Black Power Stone", 3,
                      additional_cards=InnerCardRule([
@@ -966,7 +966,7 @@ def monster_removal():
         "Exiled Force",
         "Lightning Vortex",
     ]
-    return CardRule(unlimted_removal, 5, "total", InnerCardRule(limited_removal, 1, "each"))
+    return CardRule(unlimted_removal, 5, "total", InnerCardRule(limited_removal, 1))
 
 
 def non_spell_monster_removal():
@@ -1110,7 +1110,7 @@ def find_cards_with(min_attack: int = None, max_attack: int = None, min_defence:
             continue
         if attribute and card.attribute != attribute:
             continue
-        if types and card_type not in types:
+        if types and card.type not in types:
             continue
         if card_type and card.card_type != card_type:
             continue
@@ -1174,7 +1174,7 @@ raise_attack = [
     CardRule("Lightning Blade", 1, additional_cards=InnerCardRule(
         lambda: find_cards_with(min_attack=2250, types=["Warrior"]), 1)),
     CardRule("Limiter Removal", 1, additional_cards=InnerCardRule(
-        lambda: find_cards_with(min_attack=1550, types=["Limiter Removal"]), 1)),
+        lambda: find_cards_with(min_attack=1550, types=["Machine"]), 1)),
     CardRule("Little Chimera", 1, additional_cards=InnerCardRule(
         lambda: find_cards_with(min_attack=2550, attribute="FIRE"), 1)),
     CardRule("Luminous Spark", 1, additional_cards=InnerCardRule(

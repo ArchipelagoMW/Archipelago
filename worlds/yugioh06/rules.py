@@ -153,9 +153,9 @@ def set_rules(world):
         "LD01 All except Level 4 forbidden":
             lambda state: state.has_all(world.progression_cards["LD01 All except Level 4 forbidden"], player),
         "LD02 Medium/high Level forbidden":
-            lambda state: True,
+            lambda state: state.has_all(world.progression_cards["LD02 Medium/high Level forbidden"], player),
         "LD03 ATK 1500 or more forbidden":
-            lambda state: True,
+            lambda state: state.has_all(world.progression_cards["LD03 ATK 1500 or more forbidden"], player),
         "LD04 Flip Effects forbidden":
             lambda state: True,
         "LD05 Tributes forbidden":
