@@ -256,7 +256,7 @@ class KH2Context(CommonContext):
 
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
-            if not os.path.exists(kh2_seed_save_path_join):
+            if not os.path.exists(self.kh2_seed_save_path_join):
                 self.kh2_seed_save = {
                     "Levels":        {
                         "SoraLevel":   0,
