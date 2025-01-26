@@ -2,6 +2,9 @@ import asyncio
 import os
 import time
 import traceback
+
+from Cython.Utils import is_cython_generated_file
+
 import Utils
 from typing import Any, Optional
 
@@ -10,6 +13,7 @@ import dolphin_memory_engine as dme
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus, NetworkItem
 from settings import get_settings, Settings
+from worlds.luigismansion import LMItem
 from .LMGenerator import LuigisMansionRandomizer
 
 from .Items import LOOKUP_ID_TO_NAME, ALL_ITEMS_TABLE
@@ -57,11 +61,11 @@ FURNITURE_ADDR_COUNT = 760
 FURN_FLAG_OFFSET = 0x8C
 FURN_ID_OFFSET = 0xBC
 
-# This is an array of length 0x10 where each element is a byte and contains item IDs for items to give the player.
-# 0xFF represents no item. The array is read and cleared every frame.
-# GIVE_ITEM_ARRAY_ADDR = 0x803FE868
+# This is a short of length 0x02 which contains the last received index of the item that was given to Luigi
+# This index is updated every time a new item is received.
+# TODO in theory we should validate this is saved and maintained in the ROM. If so, then this will always be up to date.
+LAST_GIVE_ITEM_ADDR = 0x80314670
 
-luigi_recv_text = "Luigi was able to find: "
 
 def read_short(console_address: int):
     return int.from_bytes(dme.read_bytes(console_address, 2))
@@ -106,18 +110,18 @@ class LMCommandProcessor(ClientCommandProcessor):
 class LMContext(CommonContext):
     command_processor = LMCommandProcessor
     game = "Luigi's Mansion"
-    items_handling = 0b111
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
-        self.items_received_2: list[tuple[NetworkItem, int]] = []
+
         self.dolphin_sync_task = None
         self.dolphin_status = CONNECTION_INITIAL_STATUS
         self.awaiting_rom = False
-        self.last_rcvd_index = -1
         self.has_send_death = False
 
-        self.len_give_item_array = 0x10
+        # Used for handling received items to the client.
+        self.local_items_received: list[tuple[NetworkItem, int]] = []
+        self.last_rcvd_index = -1
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.auth = None
@@ -125,7 +129,7 @@ class LMContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected": # On Connect
-            self.items_received_2 = []
+            self.local_items_received = []
             self.last_rcvd_index = -1
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
@@ -133,9 +137,9 @@ class LMContext(CommonContext):
             if args["index"] >= self.last_rcvd_index:
                 self.last_rcvd_index = args["index"]
                 for item in args["items"]:
-                    self.items_received_2.append((item, self.last_rcvd_index))
+                    self.local_items_received.append((item, self.last_rcvd_index))
                     self.last_rcvd_index += 1
-            self.items_received_2.sort(key=lambda v: v[1])
+            self.local_items_received.sort(key=lambda v: v[1])
 
     def on_deathlink(self, data: dict[str, Any]):
         super().on_deathlink(data)
@@ -176,45 +180,27 @@ def check_if_addr_is_pointer(addr: int):
     return 2147483648 <= dme.read_word(addr) <= 2172649471
 
 
-# TODO CORRECT FOR LM
-def _give_item(ctx: LMContext, item_name: str) -> bool:
-    if not check_ingame():  # or dolphin_memory_engine.read_byte(CURR_STAGE_ID_ADDR) == 0xFF:
-        return False
-    return False
-
-    #item_id = ALL_ITEMS_TABLE[item_name].item_id
-
-    # Loop through the give item array, placing the item in an empty slot
-    #for idx in range(ctx.len_give_item_array):
-    #    slot = dme.read_byte(GIVE_ITEM_ARRAY_ADDR + idx)
-    #    if slot == 0xFF:
-    #        dme.write_byte(GIVE_ITEM_ARRAY_ADDR + idx, item_id)
-    #        return True
-
-    # Unable to place the item in the array, so return `False`
-    #return False
-
-
-# TODO CORRECT FOR LM
+# TODO Validate this works
 async def give_items(ctx: LMContext):
+    # Only try to give items if we are in game and alive.
+    if not (check_ingame() and check_alive()):
+        return
+
+    # Only update new items that have come since it was last received.
+    in_game_last_idx = read_short(LAST_GIVE_ITEM_ADDR)
+    if not ctx.last_rcvd_index > in_game_last_idx:
+        return
+
+    for item, idx in ctx.local_items_received:
+        _ , loc_data = next((_, locData) for (_, locData) in ALL_ITEMS_TABLE.items()
+                                  if locData.code == LMItem.get_apid(item.item))
+        item_val = dme.read_byte(loc_data.ram_address)
+        dme.write_byte(loc_data.ram_address, (item_val | (1 << loc_data.itembit)))
+
+    write_short(LAST_GIVE_ITEM_ADDR, ctx.last_rcvd_index)
     return
-    #if check_ingame() and dolphin_memory_engine.read_byte(CURR_STAGE_ID_ADDR) != 0xFF:
-        # Read the expected index of the player, which is the index of the latest item they've received
-        # expected_idx = read_short(EXPECTED_INDEX_ADDR)
-        #
-        # # Loop through items to give
-        # for item, idx in ctx.items_received_2:
-        #     # If the index of the item is greater than the expected index of the player, give the player the item
-        #     if expected_idx <= idx:
-        #         # Attempt to give the item and increment the expected index
-        #         while not _give_item(ctx, LOOKUP_ID_TO_NAME[item.item]):
-        #             await asyncio.sleep(0.01)
-        #
-        #         # Increment the expected index
-        #         write_short(EXPECTED_INDEX_ADDR, idx + 1)
 
 
-# TODO CORRECT FOR LM
 async def check_locations(ctx: LMContext):
     list_types_to_skip_currently = ["BSpeedy", "Portrait", "Event", "Toad", "Boo"]
 
@@ -278,6 +264,14 @@ async def check_locations(ctx: LMContext):
     locations_checked = ctx.locations_checked.difference(ctx.checked_locations)
     if locations_checked:
         await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
+
+    # TODO Send game clear
+    #if not ctx.finished_game and game_clear:
+    #    ctx.finished_game = True
+    #    await ctx.send_msgs([{
+    #        "cmd": "StatusUpdate",
+    #        "status": ClientStatus.CLIENT_GOAL,
+    #    }])
     return
 
 
