@@ -1338,6 +1338,7 @@ option_groups = [
         ShuffleNoBuild,
     ]),
     OptionGroup("Optional Campaign Settings", [
+        KeyMode,
         ShuffleCampaigns,
         AllInMap,
         GridTwoStartPositions,
@@ -1401,7 +1402,6 @@ option_groups = [
     ]),
     OptionGroup("Advanced Gameplay", [
         DifficultyDamageModifier,
-        KeyMode,
         TakeOverAIAllies,
         EnableVoidTrade,
         VoidTradeAgeLimit,
