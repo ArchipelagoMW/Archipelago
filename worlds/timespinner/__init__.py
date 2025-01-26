@@ -126,6 +126,7 @@ class TimespinnerWorld(World):
             "UnchainedKeys": self.options.unchained_keys.value,
             "PresentAccessWithWheelAndSpindle": self.options.back_to_the_future.value,
             "PrismBreak": self.options.prism_break.value,
+            "LockKeyAmadeus": self.options.lock_key_amadeus.value,
             "Traps": self.options.traps.value,
             "DeathLink": self.options.death_link.value,
             "StinkyMaw": True,
@@ -304,6 +305,9 @@ class TimespinnerWorld(World):
         elif name in {"Laser Access A", "Laser Access I", "Laser Access M"} \
                 and not self.options.prism_break:
             item.classification = ItemClassification.filler
+        elif name in {"Lab Access Genza", "Lab Access Experiment", "Lab Access Research", "Lab Access Dynamo"} \
+                and not self.options.lock_key_amadeus:
+            item.classification = ItemClassification.filler
 
         return item
 
@@ -340,6 +344,12 @@ class TimespinnerWorld(World):
             excluded_items.add('Laser Access A')
             excluded_items.add('Laser Access I')
             excluded_items.add('Laser Access M')
+
+        if not self.options.lock_key_amadeus:
+            excluded_items.add('Lab Access Genza')
+            excluded_items.add('Lab Access Experiment')
+            excluded_items.add('Lab Access Research')
+            excluded_items.add('Lab Access Dynamo')
 
         for item in self.multiworld.precollected_items[self.player]:
             if item.name not in self.item_name_groups['UseItem']:

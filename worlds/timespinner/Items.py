@@ -203,7 +203,11 @@ item_table: Dict[str, ItemData] = {
     'Laser Access I': ItemData('Relic', 1337191, progression=True),
     'Laser Access M': ItemData('Relic', 1337192, progression=True),
     'Throw Stun Trap': ItemData('Trap', 1337193, 0, trap=True),
-    # 1337194 - 1337248 Reserved
+    'Lab Access Genza': ItemData('Lab Access', 1337194, progression=True),
+    'Lab Access Experiment': ItemData('Lab Access', 1337195, progression=True),
+    'Lab Access Research': ItemData('Lab Access', 1337196, progression=True),
+    'Lab Access Dynamo': ItemData('Lab Access', 1337197, progression=True),
+    # 1337198 - 1337248 Reserved
     'Max Sand': ItemData('Stat', 1337249, 14)
 }
 

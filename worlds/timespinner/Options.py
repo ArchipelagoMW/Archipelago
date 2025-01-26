@@ -378,6 +378,10 @@ class PrismBreak(Toggle):
     """Adds 3 Laser Access items to the item pool to remove the lasers blocking the military hangar area
     instead of needing to beat the Golden Idol, Aelana, and The Maw."""
     display_name = "Prism Break"
+    
+class LockKeyAmadeus(Toggle):
+    """Lasers in Amadeus' Laboratory are disabled via items, rather than by de-powering the lab. Experiments will spawn in the lab."""
+    display_name = "Lock Key Amadeus"
 
 @dataclass
 class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
@@ -416,6 +420,7 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     unchained_keys: UnchainedKeys
     back_to_the_future: PresentAccessWithWheelAndSpindle
     prism_break: PrismBreak
+    lock_key_amadeus: LockKeyAmadeus
     trap_chance: TrapChance
     traps: Traps
 
@@ -484,6 +489,7 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
     UnchainedKeys: hidden(UnchainedKeys) # type: ignore
     PresentAccessWithWheelAndSpindle: hidden(PresentAccessWithWheelAndSpindle) # type: ignore
     PrismBreak: hidden(PrismBreak) # type: ignore
+    LockKeyAmadeus: hidden(LockKeyAmadeus) # type: ignore
     TrapChance: hidden(TrapChance) # type: ignore
     Traps: HiddenTraps # type: ignore
     DeathLink: HiddenDeathLink # type: ignore
@@ -625,6 +631,10 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
         if self.PrismBreak != PrismBreak.default and \
             self.prism_break == PrismBreak.default:
             self.prism_break.value = self.PrismBreak.value
+            self.has_replaced_options.value = Toggle.option_true
+        if self.LockKeyAmadeus != LockKeyAmadeus.default and \
+            self.lock_key_amadeus == LockKeyAmadeus.default:
+            self.lock_key_amadeus.value = self.LockKeyAmadeus.value
             self.has_replaced_options.value = Toggle.option_true
         if self.TrapChance != TrapChance.default and \
             self.trap_chance == TrapChance.default:
