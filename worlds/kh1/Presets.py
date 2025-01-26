@@ -3,14 +3,13 @@ from typing import Any, Dict
 from .Options import *
 
 kh1_option_presets: Dict[str, Dict[str, Any]] = {
-    # Standard playthrough where your goal is to defeat Ansem, reaching him by acquiring enough reports.
+    # Standard playthrough where your goal is to defeat Ansem, reaching him by acquiring enough lucky emblems.
     "Final Ansem": {
-        "goal": Goal.option_final_ansem,
-        "end_of_the_world_unlock": EndoftheWorldUnlock.option_reports,
-        "final_rest_door": FinalRestDoor.option_reports,
-        "required_reports_eotw": 7,
-        "required_reports_door": 10,
-        "reports_in_pool": 13,
+        "final_rest_door_key": FinalRestDoorKey.option_lucky_emblems,
+        "end_of_the_world_unlock": EndoftheWorldUnlock.option_lucky_emblems,
+        "required_lucky_emblems_eotw": 7,
+        "required_lucky_emblems_door": 10,
+        "lucky_emblems_in_pool": 13,
         "required_postcards": 10,
         "required_puppies": 99,
         
@@ -23,7 +22,8 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "randomize_postcards": RandomizePostcards.option_all,
         
         "exp_multiplier": 48,
-        "level_checks": 100,
+        "level_checks": 99,
+        "slot_2_level_checks": 33,
         "force_stats_on_levels": 1,
         "strength_increase": 24,
         "defense_increase": 24,
@@ -34,10 +34,16 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "item_slot_increase": 3,
         
         "keyblades_unlock_chests": False,
-        "keyblade_stats": KeybladeStats.option_randomize,
+        "keyblade_stats": KeybladeStats.option_shuffle,
         "bad_starting_weapons": False,
         "keyblade_max_str": 14,
         "keyblade_min_str": 3,
+        "keyblade_max_crit_rate": 200,
+        "keyblade_min_crit_rate": 0,
+        "keyblade_max_crit_str": 16,
+        "keyblade_min_crit_str": 0,
+        "keyblade_max_recoil": 90,
+        "keyblade_min_recoil": 1,
         "keyblade_max_mp": 3,
         "keyblade_min_mp": -2,
         
@@ -49,16 +55,16 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "extra_shared_abilities": False,
         "exp_zero_in_pool": False,
         "donald_death_link": False,
-        "goofy_death_link": False
+        "goofy_death_link": False,
+        "remote_items": True
     },
     # Puppies are found individually, and the goal is to return them all.
     "Puppy Hunt": {
-        "goal": Goal.option_puppies,
+        "final_rest_door_key": FinalRestDoorKey.option_puppies,
         "end_of_the_world_unlock": EndoftheWorldUnlock.option_item,
-        "final_rest_door": FinalRestDoor.option_puppies,
-        "required_reports_eotw": 13,
-        "required_reports_door": 13,
-        "reports_in_pool": 13,
+        "required_lucky_emblems_eotw": 13,
+        "required_lucky_emblems_door": 13,
+        "lucky_emblems_in_pool": 13,
         "required_postcards": 10,
         "required_puppies": 99,
         
@@ -71,7 +77,8 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "randomize_postcards": RandomizePostcards.option_all,
         
         "exp_multiplier": 48,
-        "level_checks": 100,
+        "level_checks": 99,
+        "slot_2_level_checks": 33,
         "force_stats_on_levels": 1,
         "strength_increase": 24,
         "defense_increase": 24,
@@ -82,10 +89,16 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "item_slot_increase": 3,
         
         "keyblades_unlock_chests": False,
-        "keyblade_stats": KeybladeStats.option_randomize,
+        "keyblade_stats": KeybladeStats.option_shuffle,
         "bad_starting_weapons": False,
         "keyblade_max_str": 14,
         "keyblade_min_str": 3,
+        "keyblade_max_crit_rate": 200,
+        "keyblade_min_crit_rate": 0,
+        "keyblade_max_crit_str": 16,
+        "keyblade_min_crit_str": 0,
+        "keyblade_max_recoil": 90,
+        "keyblade_min_recoil": 1,
         "keyblade_max_mp": 3,
         "keyblade_min_mp": -2,
         
@@ -97,16 +110,16 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "extra_shared_abilities": False,
         "exp_zero_in_pool": False,
         "donald_death_link": False,
-        "goofy_death_link": False
+        "goofy_death_link": False,
+        "remote_items": True
     },
     # Advanced playthrough with most settings on.
     "Advanced": {
-        "goal": Goal.option_final_ansem,
-        "end_of_the_world_unlock": EndoftheWorldUnlock.option_reports,
-        "final_rest_door": FinalRestDoor.option_reports,
-        "required_reports_eotw": 7,
-        "required_reports_door": 10,
-        "reports_in_pool": 13,
+        "final_rest_door_key": FinalRestDoorKey.option_lucky_emblems,
+        "end_of_the_world_unlock": EndoftheWorldUnlock.option_lucky_emblems,
+        "required_lucky_emblems_eotw": 7,
+        "required_lucky_emblems_door": 10,
+        "lucky_emblems_in_pool": 13,
         "required_postcards": 10,
         "required_puppies": 99,
         
@@ -119,7 +132,8 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "randomize_postcards": RandomizePostcards.option_all,
         
         "exp_multiplier": 48,
-        "level_checks": 100,
+        "level_checks": 99,
+        "slot_2_level_checks": 33,
         "force_stats_on_levels": 1,
         "strength_increase": 24,
         "defense_increase": 24,
@@ -130,10 +144,16 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "item_slot_increase": 3,
         
         "keyblades_unlock_chests": True,
-        "keyblade_stats": KeybladeStats.option_randomize,
+        "keyblade_stats": KeybladeStats.option_shuffle,
         "bad_starting_weapons": True,
         "keyblade_max_str": 14,
         "keyblade_min_str": 3,
+        "keyblade_max_crit_rate": 200,
+        "keyblade_min_crit_rate": 0,
+        "keyblade_max_crit_str": 16,
+        "keyblade_min_crit_str": 0,
+        "keyblade_max_recoil": 90,
+        "keyblade_min_recoil": 1,
         "keyblade_max_mp": 3,
         "keyblade_min_mp": -2,
         
@@ -145,16 +165,16 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "extra_shared_abilities": True,
         "exp_zero_in_pool": True,
         "donald_death_link": False,
-        "goofy_death_link": False
+        "goofy_death_link": False,
+        "remote_items": True
     },
     # Playthrough meant to enhance the level 1 experience.
     "Level 1": {
-        "goal": Goal.option_final_ansem,
-        "end_of_the_world_unlock": EndoftheWorldUnlock.option_reports,
-        "final_rest_door": FinalRestDoor.option_reports,
-        "required_reports_eotw": 7,
-        "required_reports_door": 10,
-        "reports_in_pool": 13,
+        "final_rest_door_key": FinalRestDoorKey.option_lucky_emblems,
+        "end_of_the_world_unlock": EndoftheWorldUnlock.option_lucky_emblems,
+        "required_lucky_emblems_eotw": 7,
+        "required_lucky_emblems_door": 10,
+        "lucky_emblems_in_pool": 13,
         "required_postcards": 10,
         "required_puppies": 99,
         
@@ -168,6 +188,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         
         "exp_multiplier": 16,
         "level_checks": 0,
+        "slot_2_level_checks": 0,
         "force_stats_on_levels": 101,
         "strength_increase": 0,
         "defense_increase": 0,
@@ -177,10 +198,16 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "item_slot_increase": 5,
         
         "keyblades_unlock_chests": False,
-        "keyblade_stats": KeybladeStats.option_randomize,
+        "keyblade_stats": KeybladeStats.option_shuffle,
         "bad_starting_weapons": False,
         "keyblade_max_str": 14,
         "keyblade_min_str": 3,
+        "keyblade_max_crit_rate": 200,
+        "keyblade_min_crit_rate": 0,
+        "keyblade_max_crit_str": 16,
+        "keyblade_min_crit_str": 0,
+        "keyblade_max_recoil": 90,
+        "keyblade_min_recoil": 1,
         "keyblade_max_mp": 3,
         "keyblade_min_mp": -2,
         
@@ -192,6 +219,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "extra_shared_abilities": False,
         "exp_zero_in_pool": False,
         "donald_death_link": False,
-        "goofy_death_link": False
+        "goofy_death_link": False,
+        "remote_items": True
     }
 }

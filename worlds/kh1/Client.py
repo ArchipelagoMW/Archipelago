@@ -15,6 +15,7 @@ ModuleUpdate.update()
 import Utils
 death_link = False
 item_num = 1
+remote_location_ids = []
 
 logger = logging.getLogger("Client")
 
@@ -166,6 +167,9 @@ class KH1Context(CommonContext):
                 with open(os.path.join(self.game_communication_path, key + ".cfg"), 'w') as f:
                     f.write(str(args['slot_data'][key]))
                     f.close()
+                if key == "remote_location_ids":
+                    global remote_location_ids
+                    remote_location_ids = args['slot_data'][key]
                     
             ###Support Legacy Games
             if "Required Reports" in list(args['slot_data'].keys()) and "required_reports_eotw" not in list(args['slot_data'].keys()):
@@ -182,16 +186,19 @@ class KH1Context(CommonContext):
             if start_index != len(self.items_received):
                 global item_num
                 for item in args['items']:
+                    print(NetworkItem(*item).location)
+                    print(NetworkItem(*item).player)
                     found = False
                     item_filename = f"AP_{str(item_num)}.item"
                     for filename in os.listdir(self.game_communication_path):
                         if filename == item_filename:
                             found = True
                     if not found:
-                        with open(os.path.join(self.game_communication_path, item_filename), 'w') as f:
-                            f.write(str(NetworkItem(*item).item) + "\n" + str(NetworkItem(*item).location) + "\n" + str(NetworkItem(*item).player))
-                            f.close()
-                            item_num = item_num + 1
+                        if (NetworkItem(*item).player == self.slot and (NetworkItem(*item).location in remote_location_ids) or (NetworkItem(*item).location < 0)) or NetworkItem(*item).player != self.slot:
+                            with open(os.path.join(self.game_communication_path, item_filename), 'w') as f:
+                                f.write(str(NetworkItem(*item).item) + "\n" + str(NetworkItem(*item).location) + "\n" + str(NetworkItem(*item).player))
+                                f.close()
+                                item_num = item_num + 1
 
         if cmd in {"RoomUpdate"}:
             if "checked_locations" in args:

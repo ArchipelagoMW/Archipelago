@@ -6,8 +6,8 @@ class StrengthIncrease(Range):
     """
     Determines the number of Strength Increases to add to the multiworld.
     
-    The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
-    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
+    The randomizer will add all stat ups defined here into a pool and choose up to 99 to add to the multiworld.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 99 total) are chosen at random.
     """
     display_name = "STR Increases"
     range_start = 0
@@ -18,8 +18,8 @@ class DefenseIncrease(Range):
     """
     Determines the number of Defense Increases to add to the multiworld.
     
-    The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
-    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
+    The randomizer will add all stat ups defined here into a pool and choose up to 99 to add to the multiworld.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 99 total) are chosen at random.
     """
     display_name = "DEF Increases"
     range_start = 0
@@ -30,8 +30,8 @@ class HPIncrease(Range):
     """
     Determines the number of HP Increases to add to the multiworld.
     
-    The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
-    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
+    The randomizer will add all stat ups defined here into a pool and choose up to 99 to add to the multiworld.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 99 total) are chosen at random.
     """
     display_name = "HP Increases"
     range_start = 0
@@ -42,8 +42,8 @@ class APIncrease(Range):
     """
     Determines the number of AP Increases to add to the multiworld.
     
-    The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
-    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
+    The randomizer will add all stat ups defined here into a pool and choose up to 99 to add to the multiworld.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 99 total) are chosen at random.
     """
     display_name = "AP Increases"
     range_start = 0
@@ -54,8 +54,8 @@ class MPIncrease(Range):
     """
     Determines the number of MP Increases to add to the multiworld.
     
-    The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
-    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
+    The randomizer will add all stat ups defined here into a pool and choose up to 99 to add to the multiworld.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 99 total) are chosen at random.
     """
     display_name = "MP Increases"
     range_start = 0
@@ -66,8 +66,8 @@ class AccessorySlotIncrease(Range):
     """
     Determines the number of Accessory Slot Increases to add to the multiworld.
     
-    The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
-    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
+    The randomizer will add all stat ups defined here into a pool and choose up to 99 to add to the multiworld.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 99 total) are chosen at random.
     """
     display_name = "Accessory Slot Increases"
     range_start = 0
@@ -78,8 +78,8 @@ class ItemSlotIncrease(Range):
     """
     Determines the number of Item Slot Increases to add to the multiworld.
     
-    The randomizer will add all stat ups defined here into a pool and choose up to 100 to add to the multiworld.
-    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 100 total) are chosen at random.
+    The randomizer will add all stat ups defined here into a pool and choose up to 99 to add to the multiworld.
+    Accessory Slot Increases and Item Slot Increases are prioritized first, then the remaining items (up to 99 total) are chosen at random.
     """
     display_name = "Item Slot Increases"
     range_start = 0
@@ -111,9 +111,9 @@ class Cups(Toggle):
     """
     display_name = "Cups"
 
-class Goal(Choice):
+class FinalRestDoorKey(Choice):
     """
-    Determines when victory is achieved in your playthrough.
+    Determines what grants the player the Final Rest Door Key.
     
     Sephiroth: Defeat Sephiroth
     Unknown: Defeat Unknown
@@ -122,11 +122,11 @@ class Goal(Choice):
     Puppies: Rescue and return an amount of puppies in Traverse Town
     Final Rest: Open the chest in End of the World Final Rest
     """
-    display_name = "Goal"
+    display_name = "Final Rest Door Key"
     option_sephiroth = 0
     option_unknown = 1
     option_postcards = 2
-    option_final_ansem = 3
+    option_lucky_emblems = 3
     option_puppies = 4
     option_final_rest = 5
     default = 3
@@ -135,29 +135,15 @@ class EndoftheWorldUnlock(Choice):
     """Determines how End of the World is unlocked.
     
     Item: You can receive an item called "End of the World" which unlocks the world
-    Reports: A certain amount of reports are required to unlock End of the World, which is defined in your options"""
+    Lucky Emblems: A certain amount of lucky emblems are required to unlock End of the World, which is defined in your options"""
     display_name = "End of the World Unlock"
     option_item = 0
-    option_reports = 1
+    option_lucky_emblems = 1
     default = 1
-
-class FinalRestDoor(Choice):
-    """Determines what conditions need to be met to manifest the door in Final Rest, allowing the player to challenge Ansem.
-    
-    Reports: A certain number of Ansem's Reports are required, determined by the "Reports to Open Final Rest Door" option
-    Puppies: Having all 99 puppies is required
-    Postcards: Turning in all 10 postcards is required
-    Superbosses: Defeating Sephiroth, Unknown, Kurt Zisa, and Phantom are required
-    """
-    display_name = "Final Rest Door"
-    option_reports = 0
-    option_puppies = 1
-    option_postcards = 2
-    option_superbosses = 3
 
 class RequiredPostcards(Range):
     """
-    If your goal is set to "Postcards", defines how many postcards are needed to achieve victory.
+    If "Final Rest Door Key" is set to "Postcards", defines how many postcards are required.
     """
     display_name = "Required Postcards"
     default = 8
@@ -166,7 +152,7 @@ class RequiredPostcards(Range):
 
 class RequiredPuppies(Choice):
     """
-    If your goal is set to "Puppies", defines how many puppies are needed to achieve victory.
+    If "Final Rest Door Key" is set to "Puppies", defines how many puppies are required.
     """
     display_name = "Required Puppies"
     default = 80
@@ -214,29 +200,29 @@ class EXPMultiplier(NamedRange):
         "8x": default * 8,
     }
 
-class RequiredReportsEotW(Range):
+class RequiredLuckyEmblemsEotW(Range):
     """
-    If End of the World Unlock is set to "Reports", determines the number of Ansem's Reports required to open End of the World.
+    If End of the World Unlock is set to "Lucky Emblems", determines the number of Lucky Emblems required.
     """
-    display_name = "Reports to Open End of the World"
+    display_name = "Lucky Emblems to Open End of the World"
     default = 4
     range_start = 0
     range_end = 13
 
-class RequiredReportsDoor(Range):
+class RequiredLuckyEmblemsDoor(Range):
     """
-    If Final Rest Door is set to "Reports", determines the number of Ansem's Reports required to manifest the door in Final Rest to challenge Ansem.
+    If Final Rest Door Key is set to "Lucky Emblems", determines the number of Lucky Emblems required.
     """
-    display_name = "Reports to Open Final Rest Door"
+    display_name = "Lucky Emblems to Open Final Rest Door"
     default = 4
     range_start = 0
     range_end = 13
 
-class ReportsInPool(Range):
+class LuckyEmblemsInPool(Range):
     """
-    Determines the number of Ansem's Reports in the item pool.
+    Determines the number of Lucky Emblems in the item pool.
     """
-    display_name = "Reports in Pool"
+    display_name = "Lucky Emblems in Pool"
     default = 4
     range_start = 0
     range_end = 13
@@ -271,6 +257,60 @@ class KeybladeMaxStrength(Range):
     range_start = 0
     range_end = 20
 
+class KeybladeMinCritRateBonus(Range):
+    """
+    Determines the minimum Crit Rate bonus a keyblade can have.
+    """
+    display_name = "Keyblade Minimum Crit Rate Bonus"
+    default = 0
+    range_start = 0
+    range_end = 200
+
+class KeybladeMaxCritRateBonus(Range):
+    """
+    Determines the maximum Crit Rate bonus a keyblade can have.
+    """
+    display_name = "Keyblade Maximum Crit Rate Bonus"
+    default = 200
+    range_start = 0
+    range_end = 200
+
+class KeybladeMinCritSTRBonus(Range):
+    """
+    Determines the minimum Crit STR bonus a keyblade can have.
+    """
+    display_name = "Keyblade Minimum Crit Rate Bonus"
+    default = 0
+    range_start = 0
+    range_end = 16
+
+class KeybladeMaxCritSTRBonus(Range):
+    """
+    Determines the maximum Crit STR bonus a keyblade can have.
+    """
+    display_name = "Keyblade Maximum Crit Rate Bonus"
+    default = 16
+    range_start = 0
+    range_end = 16
+
+class KeybladeMinRecoil(Range):
+    """
+    Determines the minimum recoil a keyblade can have.
+    """
+    display_name = "Keyblade Minimum Recoil"
+    default = 1
+    range_start = 1
+    range_end = 90
+
+class KeybladeMaxRecoil(Range):
+    """
+    Determines the maximum recoil a keyblade can have.
+    """
+    display_name = "Keyblade Maximum Recoil"
+    default = 90
+    range_start = 1
+    range_end = 90
+
 class KeybladeMinMP(Range):
     """
     Determines the minimum MP bonus a keyblade can have.
@@ -294,23 +334,23 @@ class LevelChecks(Range):
     Determines the maximum level for which checks can be obtained.
     """
     display_name = "Level Checks"
-    default = 100
+    default = 99
     range_start = 0
-    range_end = 100
+    range_end = 99
 
 class ForceStatsOnLevels(NamedRange):
     """
     If this value is less than the value for Level Checks, this determines the minimum level from which only stat ups are obtained at level up locations.
-    For example, if you want to be able to find any multiworld item from levels 1-50, then just stat ups for levels 51-100, set this value to 51.
+    For example, if you want to be able to find any multiworld item from levels 2-50, then just stat ups for levels 51-100, set this value to 51.
     """
     display_name = "Force Stats on Level Starting From"
-    default = 1
+    default = 2
     range_start = 1
     range_end = 101
     special_range_names = {
         "none": 101,
         "multiworld-to-level-50": 51,
-        "all": 1
+        "all": 2
     }
 
 class BadStartingWeapons(Toggle):
@@ -319,15 +359,21 @@ class BadStartingWeapons(Toggle):
     """
     display_name = "Bad Starting Weapons"
 
+class DeathLink(Toggle):
+    """
+    If Sora is KO'ed, the other players with "Death Link" on will also be KO'ed.
+    The opposite is also true.
+    """
+
 class DonaldDeathLink(Toggle):
     """
-    If Donald is KO'ed, so is Sora.  If Death Link is toggled on in your client, this will send a death to everyone.
+    If Donald is KO'ed, so is Sora.  If "Death Link" is on this will send a death to everyone.
     """
     display_name = "Donald Death Link"
 
 class GoofyDeathLink(Toggle):
     """
-    If Goofy is KO'ed, so is Sora.  If Death Link is toggled on in your client, this will send a death to everyone.
+    If Goofy is KO'ed, so is Sora.  If "Death Link" is on, this will send a death to everyone.
     """
     display_name = "Goofy Death Link"
 
@@ -414,14 +460,31 @@ class StartingTools(DefaultOnToggle):
     """
     display_name = "Starting Tools"
 
+class RemoteItems(DefaultOnToggle):
+    """
+    Determines if items can be placed on locations in your own world in such a way that will force them to be remote items.
+    This includes placing abilities or stats on static events, or placing stats in chests, rewards, or events.
+    If this is on, you're expected to be connected to the AP server, even to receive your own items.
+    """
+    display_name = "Remote Items"
+
+class Slot2LevelChecks(Range):
+    """
+    Determines how many levels have an additional item.  Usually, this item is an ability.
+    If Remote Items is OFF, this checks will only contain abilities.
+    """
+    display_name = "Slot 2 Level Checks"
+    default = 10
+    range_start = 0
+    range_end = 33
+
 @dataclass
 class KH1Options(PerGameCommonOptions):
-    goal: Goal
+    final_rest_door_key: FinalRestDoorKey
     end_of_the_world_unlock: EndoftheWorldUnlock
-    final_rest_door: FinalRestDoor
-    required_reports_eotw: RequiredReportsEotW
-    required_reports_door: RequiredReportsDoor
-    reports_in_pool: ReportsInPool
+    required_lucky_emblems_eotw: RequiredLuckyEmblemsEotW
+    required_lucky_emblems_door: RequiredLuckyEmblemsDoor
+    lucky_emblems_in_pool: LuckyEmblemsInPool
     required_postcards: RequiredPostcards
     required_puppies: RequiredPuppies
     super_bosses: SuperBosses
@@ -444,9 +507,16 @@ class KH1Options(PerGameCommonOptions):
     bad_starting_weapons: BadStartingWeapons
     keyblade_min_str: KeybladeMinStrength
     keyblade_max_str: KeybladeMaxStrength
+    keyblade_min_crit_rate: KeybladeMinCritRateBonus
+    keyblade_max_crit_rate: KeybladeMaxCritRateBonus
+    keyblade_min_crit_str: KeybladeMinCritSTRBonus
+    keyblade_max_crit_str: KeybladeMaxCritSTRBonus
+    keyblade_min_recoil: KeybladeMinRecoil
+    keyblade_max_recoil: KeybladeMaxRecoil
     keyblade_min_mp: KeybladeMinMP
     keyblade_max_mp: KeybladeMaxMP
     level_checks: LevelChecks
+    slot_2_level_checks: Slot2LevelChecks
     force_stats_on_levels: ForceStatsOnLevels
     strength_increase: StrengthIncrease
     defense_increase: DefenseIncrease
@@ -458,15 +528,15 @@ class KH1Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     jungle_slider: JungleSlider
     starting_tools: StartingTools
+    remote_items: RemoteItems
 
 kh1_option_groups = [
     OptionGroup("Goal", [
-        Goal,
+        FinalRestDoorKey,
         EndoftheWorldUnlock,
-        FinalRestDoor,
-        RequiredReportsDoor,
-        RequiredReportsEotW,
-        ReportsInPool,
+        RequiredLuckyEmblemsDoor,
+        RequiredLuckyEmblemsEotW,
+        LuckyEmblemsInPool,
         RequiredPostcards,
         RequiredPuppies,
     ]),
@@ -482,6 +552,7 @@ kh1_option_groups = [
     OptionGroup("Levels", [
         EXPMultiplier,
         LevelChecks,
+        Slot2LevelChecks,
         ForceStatsOnLevels,
         StrengthIncrease,
         DefenseIncrease,
@@ -497,6 +568,12 @@ kh1_option_groups = [
         BadStartingWeapons,
         KeybladeMaxStrength,
         KeybladeMinStrength,
+        KeybladeMinCritRateBonus,
+        KeybladeMaxCritRateBonus,
+        KeybladeMinCritSTRBonus,
+        KeybladeMaxCritSTRBonus,
+        KeybladeMinRecoil,
+        KeybladeMaxRecoil,
         KeybladeMaxMP,
         KeybladeMinMP,
     ]),
@@ -510,5 +587,6 @@ kh1_option_groups = [
         EXPZeroInPool,
         DonaldDeathLink,
         GoofyDeathLink,
+        RemoteItems,
     ])
 ]

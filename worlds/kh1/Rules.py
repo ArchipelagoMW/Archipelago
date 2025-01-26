@@ -1,10 +1,13 @@
 from BaseClasses import CollectionState
-from worlds.generic.Rules import add_rule
+from worlds.generic.Rules import add_rule, add_item_rule
 from math import ceil
+from BaseClasses import ItemClassification
+
+from .Locations import KH1Location, location_table
+from .Items import KH1Item, item_table, get_items_by_type
 
 SINGLE_PUPPIES = ["Puppy " + str(i).rjust(2,"0") for i in range(1,100)]
 TRIPLE_PUPPIES = ["Puppies " + str(3*(i-1)+1).rjust(2, "0") + "-" + str(3*(i-1)+3).rjust(2, "0") for i in range(1,34)]
-TORN_PAGES = ["Torn Page " + str(i) for i in range(1,6)]
 WORLDS =    ["Wonderland", "Olympus Coliseum", "Deep Jungle", "Agrabah",      "Monstro",      "Atlantica", "Halloween Town", "Neverland",  "Hollow Bastion", "End of the World"]
 KEYBLADES = ["Lady Luck",  "Olympia",          "Jungle King", "Three Wishes", "Wishing Star", "Crabclaw",  "Pumpkinhead",    "Fairy Harp", "Divine Rose",    "Oblivion"]
 
@@ -26,16 +29,13 @@ def has_emblems(state: CollectionState, player: int, keyblades_unlock_chests: bo
         "Hollow Bastion"}, player) and has_x_worlds(state, player, 5, keyblades_unlock_chests)
 
 def has_puppies_all(state: CollectionState, player: int, puppies_required: int) -> bool:
-    return state.has("All Puppies", player)
+    return state.has("Puppy", player)
 
 def has_puppies_triplets(state: CollectionState, player: int, puppies_required: int) -> bool:
-    return state.has_from_list_unique(TRIPLE_PUPPIES, player, ceil(puppies_required / 3))
+    return state.has("Puppy", player, ceil(puppies_required / 3))
 
 def has_puppies_individual(state: CollectionState, player: int, puppies_required: int) -> bool:
-    return state.has_from_list_unique(SINGLE_PUPPIES, player, puppies_required)
-
-def has_torn_pages(state: CollectionState, player: int, pages_required: int) -> bool:
-    return state.count_from_list_unique(TORN_PAGES, player) >= pages_required
+    return state.has("Puppy", player, puppies_required)
 
 def has_all_arts(state: CollectionState, player: int) -> bool:
     return state.has_all({"Fire Arts", "Blizzard Arts", "Thunder Arts", "Cure Arts", "Gravity Arts", "Stop Arts", "Aero Arts"}, player)
@@ -56,28 +56,14 @@ def has_all_magic_lvx(state: CollectionState, player: int, level) -> bool:
 def has_offensive_magic(state: CollectionState, player: int) -> bool:
     return state.has_any({"Progressive Fire", "Progressive Blizzard", "Progressive Thunder", "Progressive Gravity", "Progressive Stop"}, player)
 
-def has_reports(state: CollectionState, player: int, eotw_required_reports: int) -> bool:
-    return state.has_group_unique("Reports", player, eotw_required_reports)
+def has_lucky_emblems(state: CollectionState, player: int, required_amt: int) -> bool:
+    return state.has("Lucky Emblem", player, required_amt)
 
-def has_final_rest_door(state: CollectionState, player: int, final_rest_door_requirement: str, final_rest_door_required_reports: int, keyblades_unlock_chests: bool, puppies_choice: str):
-    if final_rest_door_requirement == "reports":
-        return state.has_group_unique("Reports", player, final_rest_door_required_reports)
-    if final_rest_door_requirement == "puppies":
-        if puppies_choice == "individual":
-            return has_puppies_individual(state, player, 99)
-        if puppies_choice == "triplets" or puppies_choice == "vanilla":
-            return has_puppies_triplets(state, player, 99)
-        return has_puppies_all(state, player, 99)
-    if final_rest_door_requirement == "postcards":
-        return state.has("Postcard", player, 10)
-    if final_rest_door_requirement == "superbosses":
-        return (
-                state.has_all({"Olympus Coliseum", "Neverland", "Agrabah", "Hollow Bastion", "Green Trinity", "Phil Cup", "Pegasus Cup", "Hercules Cup", "Entry Pass"}, player)
-                and has_emblems(state, player, keyblades_unlock_chests)
-                and has_all_magic_lvx(state, player, 2)
-                and has_defensive_tools(state, player)
-                and has_x_worlds(state, player, 7, keyblades_unlock_chests)
-            )
+def has_final_rest_door(state: CollectionState, player: int, final_rest_door_requirement: str, final_rest_door_required_lucky_emblems: int, keyblades_unlock_chests: bool, puppies_choice: str):
+    if final_rest_door_requirement == "lucky_emblems":
+        return state.has("Lucky Emblem", player, final_rest_door_required_lucky_emblems)
+    else:
+        return state.has("Final Door Key", player)
 
 def has_defensive_tools(state: CollectionState, player: int) -> bool:
     return (
@@ -99,12 +85,12 @@ def has_oogie_manor(state: CollectionState, player: int, advanced_logic: bool) -
         )
 
 def set_rules(kh1world):
-    multiworld                       = kh1world.multiworld
-    player                           = kh1world.player
-    options                          = kh1world.options
-    eotw_required_reports            = kh1world.determine_reports_required_to_open_end_of_the_world()
-    final_rest_door_required_reports = kh1world.determine_reports_required_to_open_final_rest_door()
-    final_rest_door_requirement      = kh1world.options.final_rest_door.current_key
+    multiworld                             = kh1world.multiworld
+    player                                 = kh1world.player
+    options                                = kh1world.options
+    eotw_required_lucky_emblems            = kh1world.determine_lucky_emblems_required_to_open_end_of_the_world()
+    final_rest_door_required_lucky_emblems = kh1world.determine_lucky_emblems_required_to_open_final_rest_door()
+    final_rest_door_requirement            = kh1world.options.final_rest_door_key.current_key
     
     has_puppies = has_puppies_individual
     if kh1world.options.puppies == "triplets" or kh1world.options.puppies == "vanilla":
@@ -1005,9 +991,9 @@ def set_rules(kh1world):
         lambda state: state.has("Slides", player))
     add_rule(kh1world.get_location("Wonderland Bizarre Room Navi-G Piece Event"),
         lambda state: state.has("Footprints", player))
-    add_rule(kh1world.get_location("Traverse Town Synth Log"),
+    add_rule(kh1world.get_location("Traverse Town Synth Item 1"),
         lambda state: (
-            state.has("Empty Bottle", player, 6)
+            state.has("Orichalcum", player, 6)
             and
             (
                 state.has("Green Trinity", player)
@@ -1015,9 +1001,9 @@ def set_rules(kh1world):
                 or (options.advanced_logic and state.has("High Jump", player, 2))
             )
         ))
-    add_rule(kh1world.get_location("Traverse Town Synth Cloth"),
+    add_rule(kh1world.get_location("Traverse Town Synth Item 2"),
         lambda state: (
-            state.has("Empty Bottle", player, 6)
+            state.has("Orichalcum", player, 6)
             and
             (
                 state.has("Green Trinity", player)
@@ -1025,9 +1011,9 @@ def set_rules(kh1world):
                 or (options.advanced_logic and state.has("High Jump", player, 2))
             )
         ))
-    add_rule(kh1world.get_location("Traverse Town Synth Rope"),
+    add_rule(kh1world.get_location("Traverse Town Synth Item 3"),
         lambda state: (
-            state.has("Empty Bottle", player, 6)
+            state.has("Orichalcum", player, 6)
             and
             (
                 state.has("Green Trinity", player)
@@ -1035,9 +1021,9 @@ def set_rules(kh1world):
                 or (options.advanced_logic and state.has("High Jump", player, 2))
             )
         ))
-    add_rule(kh1world.get_location("Traverse Town Synth Seagull Egg"),
+    add_rule(kh1world.get_location("Traverse Town Synth Item 4"),
         lambda state: (
-            state.has("Empty Bottle", player, 6)
+            state.has("Orichalcum", player, 6)
             and
             (
                 state.has("Green Trinity", player)
@@ -1045,9 +1031,9 @@ def set_rules(kh1world):
                 or (options.advanced_logic and state.has("High Jump", player, 2))
             )
         ))
-    add_rule(kh1world.get_location("Traverse Town Synth Fish"),
+    add_rule(kh1world.get_location("Traverse Town Synth Item 5"),
         lambda state: (
-            state.has("Empty Bottle", player, 6)
+            state.has("Orichalcum", player, 6)
             and
             (
                 state.has("Green Trinity", player)
@@ -1055,9 +1041,9 @@ def set_rules(kh1world):
                 or (options.advanced_logic and state.has("High Jump", player, 2))
             )
         ))
-    add_rule(kh1world.get_location("Traverse Town Synth Mushroom"),
+    add_rule(kh1world.get_location("Traverse Town Synth Item 6"),
         lambda state: (
-            state.has("Empty Bottle", player, 6)
+            state.has("Orichalcum", player, 6)
             and
             (
                 state.has("Green Trinity", player)
@@ -1130,10 +1116,41 @@ def set_rules(kh1world):
         lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
     add_rule(kh1world.get_location("Hollow Bastion Library Speak to Aerith Cure"),
         lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+    add_rule(kh1world.get_location("Traverse Town 1st District Blue Trinity by Exit Door"),
+        lambda state: state.has("Blue Trinity", player))
+    add_rule(kh1world.get_location("Traverse Town 3rd District Blue Trinity"),
+        lambda state: state.has("Blue Trinity", player))
+    add_rule(kh1world.get_location("Traverse Town Magician's Study Blue Trinity"),
+        lambda state: (
+            state.has_all({
+                "Blue Trinity",
+                "Progressive Fire"}, player)
+            ))
+    add_rule(kh1world.get_location("Wonderland Lotus Forest Blue Trinity in Alcove"),
+        lambda state: state.has("Blue Trinity", player))
+    add_rule(kh1world.get_location("Wonderland Lotus Forest Blue Trinity by Moving Boulder"),
+        lambda state: state.has("Blue Trinity", player))
+    add_rule(kh1world.get_location("Agrabah Bazaar Blue Trinity"),
+        lambda state: state.has("Blue Trinity", player))
+    add_rule(kh1world.get_location("Monstro Mouth Blue Trinity"),
+        lambda state: state.has("Blue Trinity", player))
+    add_rule(kh1world.get_location("Monstro Chamber 5 Blue Trinity"),
+        lambda state: state.has("Blue Trinity", player))
+    add_rule(kh1world.get_location("Hollow Bastion Great Crest Blue Trinity"),
+        lambda state: (
+            state.has("Blue Trinity", player)
+            and has_emblems(state, player, options.keyblades_unlock_chests)
+        ))
+    add_rule(kh1world.get_location("Hollow Bastion Dungeon Blue Trinity"),
+        lambda state: state.has("Blue Trinity", player))
+    add_rule(kh1world.get_location("Deep Jungle Treetop Green Trinity"),
+        lambda state: state.has("Green Trinity", player))
+    add_rule(kh1world.get_location("Agrabah Cave of Wonders Treasure Room Red Trinity"),
+        lambda state: state.has("Red Trinity", player))
     if options.hundred_acre_wood:
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Left Cliff Chest"),
             lambda state: (
-                has_torn_pages(state, player, 4)
+                state.has("Torn Page", player, 4)
                 and
                 (
                     state.has("High Jump", player)
@@ -1142,7 +1159,7 @@ def set_rules(kh1world):
             ))
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Right Tree Alcove Chest"),
             lambda state: (
-                has_torn_pages(state, player, 4)
+                state.has("Torn Page", player, 4)
                 and
                 (
                     state.has("High Jump", player)
@@ -1150,12 +1167,12 @@ def set_rules(kh1world):
                 )
             ))
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Under Giant Pot Chest"),
-            lambda state: has_torn_pages(state, player, 4))
+            lambda state: state.has("Torn Page", player, 4))
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 1"),
-            lambda state: has_torn_pages(state, player, 4))
+            lambda state: state.has("Torn Page", player, 4))
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 2"),
             lambda state: (
-                has_torn_pages(state, player, 4)
+                state.has("Torn Page", player, 4)
                 and
                 (
                     state.has("High Jump", player)
@@ -1164,7 +1181,7 @@ def set_rules(kh1world):
             ))
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 3"),
             lambda state: (
-                has_torn_pages(state, player, 4)
+                state.has("Torn Page", player, 4)
                 and
                 (
                     state.has("High Jump", player)
@@ -1173,7 +1190,7 @@ def set_rules(kh1world):
             ))
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 4"),
             lambda state: (
-                has_torn_pages(state, player, 4)
+                state.has("Torn Page", player, 4)
                 and
                 (
                     state.has("High Jump", player)
@@ -1182,7 +1199,7 @@ def set_rules(kh1world):
             ))
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 5"),
             lambda state: (
-                has_torn_pages(state, player, 4)
+                state.has("Torn Page", player, 4)
                 and
                 (
                     state.has("High Jump", player)
@@ -1190,24 +1207,24 @@ def set_rules(kh1world):
                 )
             ))
         add_rule(kh1world.get_location("100 Acre Wood Pooh's House Owl Cheer"),
-            lambda state: has_torn_pages(state, player, 5))
+            lambda state: state.has("Torn Page", player, 5))
         add_rule(kh1world.get_location("100 Acre Wood Convert Torn Page 1"),
-            lambda state: has_torn_pages(state, player, 1))
+            lambda state: state.has("Torn Page", player, 1))
         add_rule(kh1world.get_location("100 Acre Wood Convert Torn Page 2"),
-            lambda state: has_torn_pages(state, player, 2))
+            lambda state: state.has("Torn Page", player, 2))
         add_rule(kh1world.get_location("100 Acre Wood Convert Torn Page 3"),
-            lambda state: has_torn_pages(state, player, 3))
+            lambda state: state.has("Torn Page", player, 3))
         add_rule(kh1world.get_location("100 Acre Wood Convert Torn Page 4"),
-            lambda state: has_torn_pages(state, player, 4))
+            lambda state: state.has("Torn Page", player, 4))
         add_rule(kh1world.get_location("100 Acre Wood Convert Torn Page 5"),
-            lambda state: has_torn_pages(state, player, 5))
+            lambda state: state.has("Torn Page", player, 5))
         add_rule(kh1world.get_location("100 Acre Wood Pooh's House Start Fire"),
-            lambda state: has_torn_pages(state, player, 3))
+            lambda state: state.has("Torn Page", player, 3))
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Break Log"),
-            lambda state: has_torn_pages(state, player, 4))
+            lambda state: state.has("Torn Page", player, 4))
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Fall Through Top of Tree Next to Pooh"),
             lambda state: (
-                has_torn_pages(state, player, 4)
+                state.has("Torn Page", player, 4)
                 and
                 (
                     state.has("High Jump", player)
@@ -1510,16 +1527,20 @@ def set_rules(kh1world):
             lambda state: state.has("Slides", player))
         add_rule(kh1world.get_location("Deep Jungle Jungle Slider 50 Fruits"),
             lambda state: state.has("Slides", player))
-    for i in range(options.level_checks):
-        add_rule(kh1world.get_location("Level " + str(i+1).rjust(3,'0')),
+    for i in range(1,options.level_checks+1):
+        add_rule(kh1world.get_location("Level " + str(i+1).rjust(3,'0') + " (Slot 1)"),
             lambda state, level_num=i: (
                 has_x_worlds(state, player, min(((level_num//10)*2), 8), options.keyblades_unlock_chests)
             ))
-    if options.goal.current_key == "final_ansem":
-        add_rule(kh1world.get_location("Final Ansem"),
-            lambda state: (
-                has_final_rest_door(state, player, final_rest_door_requirement, final_rest_door_required_reports, options.keyblades_unlock_chests, options.puppies)
-            ))
+        if i+1 in kh1world.get_slot_2_levels():
+            add_rule(kh1world.get_location("Level " + str(i+1).rjust(3,'0') + " (Slot 2)"),
+                lambda state, level_num=i: (
+                    has_x_worlds(state, player, min(((level_num//10)*2), 8), options.keyblades_unlock_chests)
+                ))
+    add_rule(kh1world.get_location("Final Ansem"),
+        lambda state: (
+            has_final_rest_door(state, player, final_rest_door_requirement, final_rest_door_required_lucky_emblems, options.keyblades_unlock_chests, options.puppies)
+        ))
     if options.keyblades_unlock_chests:
         add_rule(kh1world.get_location("Traverse Town 1st District Candle Puzzle Chest"),
             lambda state: state.has("Lionheart", player))
@@ -1964,6 +1985,47 @@ def set_rules(kh1world):
                 lambda state: state.has("Oathkeeper", player))
     
     
+    for location in location_table.keys():
+        try:
+            kh1world.get_location(location)
+        except KeyError:
+            continue
+        if not options.remote_items:
+            if location_table[location].type == "Chest":
+                add_item_rule(kh1world.get_location(location),
+                    lambda i: (i.player != player or i.name not in get_items_by_type("Stats").keys()))
+            if location_table[location].type == "Reward":
+                add_item_rule(kh1world.get_location(location),
+                    lambda i: (i.player != player or i.name not in get_items_by_type("Stats").keys()))
+            if location_table[location].type == "Static":
+                add_item_rule(kh1world.get_location(location),
+                    lambda i: (i.player != player or i.name in get_items_by_type("Item").keys()))
+            if location_table[location].type == "Level Slot 1":
+                add_item_rule(kh1world.get_location(location),
+                    lambda i: (i.player != player or i.name in get_items_by_type("Stats").keys()))
+            if location_table[location].type == "Level Slot 2":
+                add_item_rule(kh1world.get_location(location),
+                    lambda i: (i.player != player or (i.name not in get_items_by_type("Item").keys() and i.name not in get_items_by_type("Shared Ability").keys())))
+            if location_table[location].type == "Synth":
+                add_item_rule(kh1world.get_location(location),
+                    lambda i: (i.player != player or (i.name in get_items_by_type("Item").keys())))
+        if location_table[location].type == "Prize":
+            add_item_rule(kh1world.get_location(location),
+                lambda i: (
+                    i.player == player 
+                    and i.name in get_items_by_type("Item").keys()
+                    and i.name not in ["Puppy", "Lucky Emblem"]
+                    and
+                    (
+                        (
+                            item_table[i.name].max_quantity == 1
+                            and item_table[i.name].classification != ItemClassification.filler
+                        )
+                        or item_table[i.name].classification == ItemClassification.filler
+                    )
+                ))
+
+    
     add_rule(kh1world.get_entrance("Wonderland"),
         lambda state: state.has("Wonderland", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests))
     add_rule(kh1world.get_entrance("Olympus Coliseum"),
@@ -1984,7 +2046,7 @@ def set_rules(kh1world):
     add_rule(kh1world.get_entrance("Hollow Bastion"),
         lambda state: state.has("Hollow Bastion", player) and has_x_worlds(state, player, 5, options.keyblades_unlock_chests))
     add_rule(kh1world.get_entrance("End of the World"),
-        lambda state: has_x_worlds(state, player, 7, options.keyblades_unlock_chests) and (has_reports(state, player, eotw_required_reports) or state.has("End of the World", player)))
+        lambda state: has_x_worlds(state, player, 7, options.keyblades_unlock_chests) and (has_lucky_emblems(state, player, eotw_required_lucky_emblems) or state.has("End of the World", player)))
     add_rule(kh1world.get_entrance("100 Acre Wood"),
         lambda state: state.has("Progressive Fire", player))
 

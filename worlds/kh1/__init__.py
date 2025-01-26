@@ -9,31 +9,32 @@ from .Options import KH1Options, kh1_option_groups
 from .Regions import create_regions
 from .Rules import set_rules
 from .Presets import kh1_option_presets
+from .GenerateJSON import generate_json
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 
 VANILLA_KEYBLADE_STATS = [
-    "3,0",
-    "1,0",
-    "1,0",
-    "1,0",
-    "0,0",
-    "5,0",
-    "6,0",
-    "6,1",
-    "7,0",
-    "8,1",
-    "5,0",
-    "4,2",
-    "9,-1",
-    "10,0",
-    "10,1",
-    "7,2",
-    "13,0",
-    "9,1",
-    "11,-1",
-    "3,3",
-    "8,-2",
-    "14,2"
+    {"STR":  3, "CRR":  20, "CRB":  0, "REC": 30, "MP":  0}, # Kingdom Key
+    {"STR":  1, "CRR":  20, "CRB":  0, "REC": 30, "MP":  0}, # Dream Sword
+    {"STR":  1, "CRR":   0, "CRB":  0, "REC": 60, "MP":  0}, # Dream Shield
+    {"STR":  1, "CRR":  10, "CRB":  0, "REC": 30, "MP":  0}, # Dream Rod
+    {"STR":  0, "CRR":  20, "CRB":  0, "REC": 30, "MP":  0}, # Wooden Sword
+    {"STR":  5, "CRR":  10, "CRB":  0, "REC":  1, "MP":  0}, # Jungle King
+    {"STR":  6, "CRR":  20, "CRB":  0, "REC": 60, "MP":  0}, # Three Wishes
+    {"STR":  8, "CRR":  10, "CRB":  2, "REC": 30, "MP":  1}, # Fairy Harp
+    {"STR":  7, "CRR":  40, "CRB":  0, "REC":  1, "MP":  0}, # Pumpkinhead
+    {"STR":  6, "CRR":  20, "CRB":  0, "REC": 30, "MP":  1}, # Crabclaw
+    {"STR": 13, "CRR":  40, "CRB":  0, "REC": 60, "MP":  0}, # Divine Rose
+    {"STR":  4, "CRR":  20, "CRB":  0, "REC": 30, "MP":  2}, # Spellbinder
+    {"STR": 10, "CRR":  20, "CRB":  2, "REC": 90, "MP":  0}, # Olympia
+    {"STR": 10, "CRR":  20, "CRB":  0, "REC": 30, "MP":  1}, # Lionheart
+    {"STR":  9, "CRR":   2, "CRB":  0, "REC": 90, "MP": -1}, # Metal Chocobo
+    {"STR":  9, "CRR":  40, "CRB":  0, "REC":  1, "MP":  1}, # Oathkeeper
+    {"STR": 11, "CRR":  20, "CRB":  2, "REC": 30, "MP": -1}, # Oblivion
+    {"STR":  7, "CRR":  20, "CRB":  0, "REC":  1, "MP":  2}, # Lady Luck
+    {"STR":  5, "CRR": 200, "CRB":  2, "REC":  1, "MP":  0}, # Wishing Star
+    {"STR": 14, "CRR":  40, "CRB":  2, "REC": 90, "MP":  2}, # Ultima Weapon
+    {"STR":  3, "CRR":  20, "CRB":  0, "REC":  1, "MP":  3}, # Diamond Dust
+    {"STR":  8, "CRR":  10, "CRB": 16, "REC": 90, "MP": -2}, # One-Winged Angel
     ]
 VANILLA_PUPPY_LOCATIONS = [
     "Traverse Town Mystical House Glide Chest",
@@ -113,6 +114,8 @@ class KH1World(World):
     fillers.update(get_items_by_category("Item"))
     fillers.update(get_items_by_category("Camping"))
     fillers.update(get_items_by_category("Stat Ups"))
+    slot_2_levels = None
+    keyblade_stats = None
 
     def create_items(self):
         self.place_predetermined_items()
@@ -160,7 +163,7 @@ class KH1World(World):
 
         # Fill remaining pool with items from other pool
         self.random.shuffle(possible_level_up_item_pool)
-        level_up_item_pool = level_up_item_pool + possible_level_up_item_pool[:(100 - len(level_up_item_pool))]
+        level_up_item_pool = level_up_item_pool + possible_level_up_item_pool[:(99 - len(level_up_item_pool))]
 
         level_up_locations = list(get_locations_by_category("Levels").keys())
         self.random.shuffle(level_up_item_pool)
@@ -170,7 +173,7 @@ class KH1World(World):
             current_level_for_placing_stats += 1
         
         # Calculate prefilled locations and items
-        prefilled_items = []
+        prefilled_items = ["Final Door Key"]
         if not self.options.randomize_emblem_pieces:
             prefilled_items = prefilled_items + ["Emblem Piece (Flame)", "Emblem Piece (Chest)", "Emblem Piece (Fountain)", "Emblem Piece (Statue)"]
         
@@ -185,14 +188,14 @@ class KH1World(World):
                 continue
             if name in starting_worlds or name in starting_tools:
                 continue
-            if data.category == "Puppies":
+            if name == "Puppy":
                 if self.options.puppies.current_key != "vanilla":
-                    if self.options.puppies == "triplets" and "-" in name:
-                        item_pool += [self.create_item(name) for _ in range(quantity)]
-                    if self.options.puppies == "individual" and "Puppy" in name:
-                        item_pool += [self.create_item(name) for _ in range(0, quantity)]
-                    if self.options.puppies == "full" and name == "All Puppies":
-                        item_pool += [self.create_item(name) for _ in range(0, quantity)]
+                    if self.options.puppies == "triplets":
+                        item_pool += [self.create_item(name) for _ in range(33)]
+                    if self.options.puppies == "individual":
+                        item_pool += [self.create_item(name) for _ in range(99)]
+                    if self.options.puppies == "full":
+                        item_pool += [self.create_item(name) for _ in range(1)]
             elif name == "Atlantica":
                 if self.options.atlantica:
                     item_pool += [self.create_item(name) for _ in range(0, quantity)]
@@ -229,8 +232,8 @@ class KH1World(World):
             elif name not in prefilled_items:
                 item_pool += [self.create_item(name) for _ in range(0, quantity)]
         
-        for i in range(self.determine_reports_in_pool()):
-            item_pool += [self.create_item("Ansem's Report " + str(i+1))]
+        for i in range(self.determine_lucky_emblems_in_pool()):
+            item_pool += [self.create_item("Lucky Emblem")]
         
         while len(item_pool) < total_locations and len(level_up_item_pool) > 0:
             item_pool += [self.create_item(level_up_item_pool.pop())]
@@ -242,23 +245,23 @@ class KH1World(World):
         self.multiworld.itempool += item_pool
 
     def place_predetermined_items(self) -> None:
-        if self.options.goal.current_key not in ["puppies", "postcards"]:
+        if self.options.final_rest_door_key.current_key not in ["puppies", "postcards", "lucky emblems"]:
             goal_dict = {
                 "sephiroth":       "Olympus Coliseum Defeat Sephiroth Ansem's Report 12",
                 "unknown":         "Hollow Bastion Defeat Unknown Ansem's Report 13",
-                "final_ansem":     "Final Ansem",
                 "final_rest":      "End of the World Final Rest Chest"
             }
-            goal_location_name = goal_dict[self.options.goal.current_key]
-        elif self.options.goal.current_key == "postcards":
+            goal_location_name = goal_dict[self.options.final_rest_door_key.current_key]
+        elif self.options.final_rest_door_key.current_key == "postcards":
             lpad_number = str(self.options.required_postcards).rjust(2, "0")
             goal_location_name = "Traverse Town Mail Postcard " + lpad_number + " Event"
-        elif self.options.goal.current_key == "puppies":
+        elif self.options.final_rest_door_key.current_key == "puppies":
             required_puppies = self.options.required_puppies.value
             goal_location_name = "Traverse Town Piano Room Return " + str(required_puppies) + " Puppies"
             if required_puppies == 50 or required_puppies == 99:
                 goal_location_name = goal_location_name + " Reward 2"
-        self.get_location(goal_location_name).place_locked_item(self.create_item("Victory"))
+        self.get_location(goal_location_name).place_locked_item(self.create_item("Final Door Key"))
+        self.get_location("Final Ansem").place_locked_item(self.create_event("Victory"))
                 
         if not self.options.randomize_emblem_pieces:
             self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Flame)").place_locked_item(self.create_item("Emblem Piece (Flame)"))
@@ -279,7 +282,7 @@ class KH1World(World):
             self.get_location("Traverse Town 1st District Blue Trinity Balcony Chest").place_locked_item(self.create_item("Postcard"))
         if self.options.puppies.current_key == "vanilla":
             for i, location in enumerate(VANILLA_PUPPY_LOCATIONS):
-                self.get_location(location).place_locked_item(self.create_item("Puppies " + str(1+(i*3)).zfill(2) + "-" + str(3+(i*3)).zfill(2)))
+                self.get_location(location).place_locked_item(self.create_item("Puppy"))
 
     def get_filler_item_name(self) -> str:
         weights = [data.weight for data in self.fillers.values()]
@@ -287,52 +290,14 @@ class KH1World(World):
 
     def fill_slot_data(self) -> dict:
         slot_data = {"xpmult": int(self.options.exp_multiplier)/16,
-                    "required_reports_eotw": self.determine_reports_required_to_open_end_of_the_world(),
-                    "required_reports_door": self.determine_reports_required_to_open_final_rest_door(),
-                    "door": self.options.final_rest_door.current_key,
+                    "required_lucky_emblems_eotw": self.determine_lucky_emblems_required_to_open_end_of_the_world(),
+                    "required_lucky_emblems_door": self.determine_lucky_emblems_required_to_open_final_rest_door(),
                     "seed": self.multiworld.seed_name,
                     "advanced_logic": bool(self.options.advanced_logic),
                     "hundred_acre_wood": bool(self.options.hundred_acre_wood),
                     "atlantica": bool(self.options.atlantica),
-                    "goal": str(self.options.goal.current_key)}
-        
-        # Handle shuffling keyblade stats
-        if self.options.keyblade_stats != "vanilla":
-            # Create keyblade stat array from vanilla
-            keyblade_stats = VANILLA_KEYBLADE_STATS.copy()
-            
-            # Fix any minimum and max values from settings
-            min_str_bonus = min(self.options.keyblade_min_str.value, self.options.keyblade_max_str.value)
-            max_str_bonus = max(self.options.keyblade_min_str.value, self.options.keyblade_max_str.value)
-            self.options.keyblade_min_str.value = min_str_bonus
-            self.options.keyblade_max_str.value = max_str_bonus
-            min_mp_bonus = min(self.options.keyblade_min_mp.value, self.options.keyblade_max_mp.value)
-            max_mp_bonus = max(self.options.keyblade_min_mp.value, self.options.keyblade_max_mp.value)
-            self.options.keyblade_min_mp.value = min_mp_bonus
-            self.options.keyblade_max_mp.value = max_mp_bonus
-            
-            # Create initial slot data string
-            slot_data["keyblade_stats"] = ""
-            
-            # Handle bad starting weapons setting
-            if self.options.bad_starting_weapons:
-                keyblade_stats = keyblade_stats[4:]
-                slot_data["keyblade_stats"] = "3,0,1,0,1,0,1,0,"
-            
-            # Handle random keyblade stats
-            if self.options.keyblade_stats == "randomize":
-                for i in range(len(keyblade_stats)):
-                    str_bonus = int(self.random.randint(min_str_bonus, max_str_bonus))
-                    mp_bonus = int(self.random.randint(min_mp_bonus, max_mp_bonus))
-                    keyblade_stats[i] = str(str_bonus) + "," + str(mp_bonus)
-            elif self.options.keyblade_stats == "shuffle":
-                self.random.shuffle(keyblade_stats)
-            
-            # Complete slot data string
-            for i in range(len(keyblade_stats)):
-                slot_data["keyblade_stats"] = slot_data["keyblade_stats"] + keyblade_stats[i] + ","
-            slot_data["keyblade_stats"] = slot_data["keyblade_stats"][:-1]
-
+                    "final_rest_door_key": str(self.options.final_rest_door_key.current_key),
+                    "remote_location_ids": self.get_remote_location_ids()}
         if self.options.donald_death_link:
             slot_data["donalddl"] = ""
         if self.options.goofy_death_link:
@@ -359,42 +324,125 @@ class KH1World(World):
         set_rules(self)
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, self.options)
+        create_regions(self)
+    
+    def generate_output(self, output_directory: str):
+        """
+        Generates the json file for use with mod generator.
+        """
+        generate_json(self, output_directory)
     
     def generate_early(self):
-        value_names = ["Reports to Open End of the World", "Reports to Open Final Rest Door", "Reports in Pool"]
-        initial_report_settings = [self.options.required_reports_eotw.value, self.options.required_reports_door.value, self.options.reports_in_pool.value]
-        self.change_numbers_of_reports_to_consider()
-        new_report_settings = [self.options.required_reports_eotw.value, self.options.required_reports_door.value, self.options.reports_in_pool.value]
+        value_names = ["Lucky Emblems to Open End of the World", "Lucky Emblems to Open Final Rest Door", "Lucky Emblems in Pool"]
+        initial_lucky_emblem_settings = [self.options.required_lucky_emblems_eotw.value, self.options.required_lucky_emblems_door.value, self.options.lucky_emblems_in_pool.value]
+        self.change_numbers_of_lucky_emblems_to_consider()
+        new_lucky_emblem_settings = [self.options.required_lucky_emblems_eotw.value, self.options.required_lucky_emblems_door.value, self.options.lucky_emblems_in_pool.value]
         for i in range(3):
-            if initial_report_settings[i] != new_report_settings[i]:
-                logging.info(f"{self.player_name}'s value {initial_report_settings[i]} for \"{value_names[i]}\" was invalid\n"
-                             f"Setting \"{value_names[i]}\" value to {new_report_settings[i]}")
+            if initial_lucky_emblem_settings[i] != new_lucky_emblem_settings[i]:
+                logging.info(f"{self.player_name}'s value {initial_lucky_emblem_settings[i]} for \"{value_names[i]}\" was invalid\n"
+                             f"Setting \"{value_names[i]}\" value to {new_lucky_emblem_settings[i]}")
     
-    def change_numbers_of_reports_to_consider(self) -> None:
-        if self.options.end_of_the_world_unlock == "reports" and self.options.final_rest_door == "reports":
-            self.options.required_reports_eotw.value, self.options.required_reports_door.value, self.options.reports_in_pool.value = sorted(
-                [self.options.required_reports_eotw.value, self.options.required_reports_door.value, self.options.reports_in_pool.value])
+    def change_numbers_of_lucky_emblems_to_consider(self) -> None:
+        if self.options.end_of_the_world_unlock == "lucky_emblems" and self.options.final_rest_door_key == "lucky_emblems":
+            self.options.required_lucky_emblems_eotw.value, self.options.required_lucky_emblems_door.value, self.options.lucky_emblems_in_pool.value = sorted(
+                [self.options.required_lucky_emblems_eotw.value, self.options.required_lucky_emblems_door.value, self.options.lucky_emblems_in_pool.value])
 
-        elif self.options.end_of_the_world_unlock == "reports":
-            self.options.required_reports_eotw.value, self.options.reports_in_pool.value = sorted(
-                [self.options.required_reports_eotw.value, self.options.reports_in_pool.value])
+        elif self.options.end_of_the_world_unlock == "lucky_emblems":
+            self.options.required_lucky_emblems_eotw.value, self.options.lucky_emblems_in_pool.value = sorted(
+                [self.options.required_lucky_emblems_eotw.value, self.options.lucky_emblems_in_pool.value])
 
-        elif self.options.final_rest_door == "reports":
-            self.options.required_reports_door.value, self.options.reports_in_pool.value = sorted(
-                [self.options.required_reports_door.value, self.options.reports_in_pool.value])
+        elif self.options.final_rest_door_key == "lucky_emblems":
+            self.options.required_lucky_emblems_door.value, self.options.lucky_emblems_in_pool.value = sorted(
+                [self.options.required_lucky_emblems_door.value, self.options.lucky_emblems_in_pool.value])
 
-    def determine_reports_in_pool(self) -> int:
-        if self.options.end_of_the_world_unlock == "reports" or self.options.final_rest_door == "reports":
-            return self.options.reports_in_pool.value
+    def determine_lucky_emblems_in_pool(self) -> int:
+        if self.options.end_of_the_world_unlock == "lucky_emblems" or self.options.final_rest_door_key == "lucky_emblems":
+            return self.options.lucky_emblems_in_pool.value
         return 0
     
-    def determine_reports_required_to_open_end_of_the_world(self) -> int:
-        if self.options.end_of_the_world_unlock == "reports":
-            return self.options.required_reports_eotw.value
+    def determine_lucky_emblems_required_to_open_end_of_the_world(self) -> int:
+        if self.options.end_of_the_world_unlock == "lucky_emblems":
+            return self.options.required_lucky_emblems_eotw.value
         return 14
     
-    def determine_reports_required_to_open_final_rest_door(self) -> int:
-        if self.options.final_rest_door == "reports":
-            return self.options.required_reports_door.value
-        return 14     
+    def determine_lucky_emblems_required_to_open_final_rest_door(self) -> int:
+        if self.options.final_rest_door_key == "lucky_emblems":
+            return self.options.required_lucky_emblems_door.value
+        return 14
+    
+    def get_remote_location_ids(self):
+        remote_location_ids = []
+        for location in self.multiworld.get_filled_locations(self.player):
+            if location.name != "Final Ansem":
+                location_data = location_table[location.name]
+                if self.player == location.item.player and location.item.name != "Victory":
+                    item_data = item_table[location.item.name]
+                    if location_data.type == "Chest":
+                        if item_data.type in ["Stats"]:
+                            remote_location_ids.append(location_data.code)
+                    if location_data.type == "Reward":
+                        if item_data.type in ["Stats"]:
+                            remote_location_ids.append(location_data.code)
+                    if location_data.type == "Static":
+                        if item_data.type not in ["Item"]:
+                            remote_location_ids.append(location_data.code)
+                    if location_data.type == "Level Slot 1":
+                        if item_data.type not in ["Stats"]:
+                            remote_location_ids.append(location_data.code)
+                    if location_data.type == "Level Slot 2":
+                        if item_data.type not in ["Stats", "Ability"]:
+                            remote_location_ids.append(location_data.code)
+        return remote_location_ids
+    
+    def get_slot_2_levels(self):
+        if self.slot_2_levels is None:
+            self.slot_2_levels = []
+            if self.options.slot_2_level_checks.value > self.options.level_checks.value:
+                logging.info(f"{self.player_name}'s value of {self.options.slot_2_level_checks.value} for slot 2 level checks is invalid as it exceeds their value of {self.options.level_checks.value} for Level Checks\n"
+                            f"Setting slot 2 level check's value to {self.options.level_checks.value}")
+                self.options.slot_2_level_checks.value = self.options.level_checks.value
+            self.slot_2_levels = self.random.sample(range(2,self.options.level_checks.value + 1), self.options.slot_2_level_checks.value)
+        return self.slot_2_levels
+    
+    def get_keyblade_stats(self):
+        # Create keyblade stat array from vanilla
+        keyblade_stats = VANILLA_KEYBLADE_STATS.copy()
+        # Handle shuffling keyblade stats
+        if self.options.keyblade_stats != "vanilla":
+            if self.options.keyblade_stats == "randomize":
+                # Fix any minimum and max values from settings
+                min_str_bonus = min(self.options.keyblade_min_str.value, self.options.keyblade_max_str.value)
+                max_str_bonus = max(self.options.keyblade_min_str.value, self.options.keyblade_max_str.value)
+                self.options.keyblade_min_str.value = min_str_bonus
+                self.options.keyblade_max_str.value = max_str_bonus
+                min_crit_rate = min(self.options.keyblade_min_crit_rate.value, self.options.keyblade_max_crit_rate.value)
+                max_crit_rate = max(self.options.keyblade_min_crit_rate.value, self.options.keyblade_max_crit_rate.value)
+                self.options.keyblade_min_crit_rate.value = min_crit_rate
+                self.options.keyblade_max_crit_rate.value = max_crit_rate
+                min_crit_str = min(self.options.keyblade_min_crit_str.value, self.options.keyblade_max_crit_str.value)
+                max_crit_str = max(self.options.keyblade_min_crit_str.value, self.options.keyblade_max_crit_str.value)
+                self.options.keyblade_min_crit_str.value = min_crit_str
+                self.options.keyblade_max_crit_str.value = max_crit_str
+                min_recoil = min(self.options.keyblade_min_recoil.value, self.options.keyblade_max_recoil.value)
+                max_recoil = max(self.options.keyblade_min_recoil.value, self.options.keyblade_max_recoil.value)
+                self.options.keyblade_min_recoil.value = min_recoil
+                self.options.keyblade_max_recoil.value = max_recoil
+                min_mp_bonus = min(self.options.keyblade_min_mp.value, self.options.keyblade_max_mp.value)
+                max_mp_bonus = max(self.options.keyblade_min_mp.value, self.options.keyblade_max_mp.value)
+                self.options.keyblade_min_mp.value = min_mp_bonus
+                self.options.keyblade_max_mp.value = max_mp_bonus
+                for keyblade in keyblade_stats:
+                        keyblade["STR"] = int(self.random.randint(min_str_bonus, max_str_bonus))
+                        keyblade["CRR"] = int(self.random.randint(min_crit_rate, max_crit_rate))
+                        keyblade["CRB"] = int(self.random.randint(min_crit_str, max_crit_str))
+                        keyblade["REC"] = int(self.random.randint(min_recoil, max_recoil))
+                        keyblade["MP"]  = int(self.random.randint(min_mp_bonus, max_mp_bonus))
+            elif self.options.keyblade_stats == "shuffle":
+                if self.options.bad_starting_weapons:
+                    starting_weapons = keyblade_stats[:4]
+                    other_weapons = keyblade_stats[4:]
+                    self.random.shuffle(other_weapons)
+                    keyblade_stats = starting_weapons + other_weapons
+                else:
+                    self.random.shuffle(keyblade_stats)
+        return keyblade_stats
