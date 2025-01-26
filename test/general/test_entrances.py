@@ -34,3 +34,30 @@ class TestBase(unittest.TestCase):
                         self.assertEqual(
                             original_entrances, step_entrances, f"{game_name} modified entrances during {step}"
                         )
+
+    def test_all_state_before_connect_entrances(self):
+        """Before connect_entrances, Entrance objects may be unconnected.
+        Thus, we test that get_all_state is performed with allow_partial_entrances if used before or during
+        connect_entrances."""
+
+        gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "connect_entrances")
+
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            with self.subTest("Game", game_name=game_name):
+                multiworld = setup_solo_multiworld(world_type, ())
+
+                original_get_all_state = multiworld.get_all_state
+
+                def patched_get_all_state(use_cache: bool, allow_partial_entrances: bool = False):
+                    self.assertTrue(allow_partial_entrances, (
+                        "Before the connect_entrances step finishes, other worlds might still have partial entrances. "
+                        "As such, any call to get_all_state must use allow_partial_entrances = True."
+                    ))
+
+                    return original_get_all_state(use_cache, allow_partial_entrances)
+
+                multiworld.get_all_state = patched_get_all_state
+
+                for step in gen_steps:
+                    with self.subTest("Step", step=step):
+                        call_all(multiworld, step)
