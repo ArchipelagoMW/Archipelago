@@ -361,6 +361,7 @@ class WitnessWorld(World):
                 f"are available, so only {enabled_audio_logs} hints were created."
             )
             hint_amount = len(enabled_audio_logs)
+            self.options.hint_amount = hint_amount
 
         if hint_amount:
             area_hints = round(self.options.area_hint_percentage / 100 * hint_amount)
