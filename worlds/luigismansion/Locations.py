@@ -1,5 +1,7 @@
 from typing import NamedTuple, Optional, List
 from BaseClasses import Location, Region
+from worlds.kdl3.rom import room_music
+
 
 class LMLocationData(NamedTuple):
     region: str
@@ -9,6 +11,7 @@ class LMLocationData(NamedTuple):
     access: List[str] = [] # items required to access location, many special cases
     in_game_room_id: Optional[int] = None
     locked_item: Optional[str] = None
+    room_ram_addr: Optional[int] = None
 
 
 class LMLocation(Location):
@@ -51,9 +54,9 @@ class LMLocation(Location):
 # Base Chests / Locations
 BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     #"Luigi's Courage": LMLocationData("Parlor", 708, "Special", -1, []), # Give item during/after E. Gadd cutscene
-    "Ghost Foyer Key": LMLocationData("Foyer", 713, "Freestanding", 1, []),
+    "Ghost Foyer Key": LMLocationData("Foyer", 713, "Freestanding", 1, [], 2),
     "1F Washroom Toilet": LMLocationData("1F Washroom", 4, "Furniture", 233, [], 16),
-    "Fortune Teller Candles": LMLocationData("Fortune-Teller's Room", 6, "Freestanding", 4, ["Fire Element Medal"]),
+    "Fortune Teller Candles": LMLocationData("Fortune-Teller's Room", 6, "Freestanding", 4, ["Fire Element Medal"], 3),
     "Laundry Washing Machine": LMLocationData("Laundry Room", 7, "Furniture", 187, [], 5),
     #"Hidden Room Large Chest L": LMLocationData("Hidden Room", 9, "Furniture", 243, [], 1), # TODO Prevents Ghosts Spawn
     #"Hidden Room Large Chest C": LMLocationData("Hidden Room", 10, "Furniture", 241, [], 1), # TODO Prevents Ghosts Spawn
@@ -64,7 +67,8 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     #"Hidden Room Small Chest R Shelf": LMLocationData("Hidden Room", 15, "Furniture", 247, [], 1), # TODO Prevents Ghosts Spawn
     "Rec Room Treadmill Key": LMLocationData("Rec Room", 18, "Furniture", 106, [], 23),
     "Courtyard Birdhouse": LMLocationData("Courtyard", 20, "Furniture", 146, [], 24),
-    "Observatory Mario Star": LMLocationData("Observatory", 24, "Special", -1, []),  # special event, unknown location
+    #TODO special event, unknown location
+    "Observatory Mario Star": LMLocationData("Observatory", 24, "Special", -1, [], 44),
     "Sealed Room NW Shelf Chest": LMLocationData("Sealed Room", 29, "Furniture", 532, [], 37),
     "Sealed Room NE Shelf Chest": LMLocationData("Sealed Room", 30, "Furniture", 534, [], 37),
     "Sealed Room SW Shelf Chest": LMLocationData("Sealed Room", 31, "Furniture", 531, [], 37),
@@ -94,51 +98,66 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
 
 # Adds all the chests that are spawned after clearing a room of ghosts.
 CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
-    "Guest Room Clear Chest": LMLocationData("Guest Room", 46, "Chest", 17, ["Water Element Medal"]),
-    "Parlor Clear Chest": LMLocationData("Parlor", 47, "Chest", 20, []),
-    "Laundry Clear Chest": LMLocationData("Laundry Room", 710, "Chest", 4, []),
-    "Cold Storage Clear Chest": LMLocationData("Cold Storage", 48, "Chest", 33, ["Fire Element Medal"]),
-    "Breaker Room Clear Chest": LMLocationData("Breaker Room", 49, "Chest", 36, ["Blackout"]),
-    "Twins' Room Clear Chest": LMLocationData("Twins' Room", 25, "Chest", 25, []),  # requires any kind of element medal
-    "Billiards Room Clear Chest": LMLocationData("Billiards Room", 26, "Chest", 9, []),
-    "Balcony Clear Chest": LMLocationData("Balcony", 27, "Chest", 31,  ["Ice Element Medal"]),
-    "Ceramics Studio Clear Chest": LMLocationData("Ceramics Studio", 28, "Chest", 30, ["Ice Element Medal"]),
-    "The Well Key": LMLocationData("The Well", 21, "Freestanding", 0, []),  # keyinfo event
-    "2F Bathroom Clear Chest": LMLocationData("2F Bathroom", 22, "Chest", 24, ["Ice Element Medal"]),
-    "Nana's Room Clear Chest": LMLocationData("Nana's Room", 23, "Chest", 25, []),
-    "Rec Room Clear Chest": LMLocationData("Rec Room", 19, "Chest", 13, []),
-    "Conservatory Clear Chest": LMLocationData("Conservatory", 16, "Chest", 12, []),
-    "Dining Room Clear Chest": LMLocationData("Dining Room", 17, "Chest", 6, ["Fire Element Medal"]),
-    "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0,  ["Fire Element Medal"], 0),
-    "Fortune Teller Clear Chest": LMLocationData("Fortune-Teller's Room", 5, "Chest", 2, []), #requires player chosen amount
-    "Wardrobe Clear Chest": LMLocationData("Wardrobe", 0, "Chest", 22, ["Blackout"]), #TODO not spawning after Grimmly
-    "Study Clear Chest": LMLocationData("Study", 1, "Chest", 19, []),
-    "Master Bedroom Clear Chest": LMLocationData("Master Bedroom", 2, "Chest", 18, []),
-    "Nursery Clear Chest": LMLocationData("Nursery", 3, "Chest", 15, []),
-    "Graveyard Clear Chest": LMLocationData("Graveyard", 711, "Chest", 11, [])
+    "Guest Room Clear Chest": LMLocationData("Guest Room", 46, "Chest", 17, ["Water Element Medal"], 29,
+                                            room_ram_addr=0x803CDF88),
+    "Parlor Clear Chest": LMLocationData("Parlor", 47, "Chest", 20, [], 36, room_ram_addr=0x803CDF96),
+    "Laundry Clear Chest": LMLocationData("Laundry Room", 710, "Chest", 4, [], 5, room_ram_addr=0x803CDF5A),
+    "Cold Storage Clear Chest": LMLocationData("Cold Storage", 48, "Chest", 33, ["Fire Element Medal"], 64,
+                                            room_ram_addr=0x803CDFCA),
+    "Breaker Room Clear Chest": LMLocationData("Breaker Room", 49, "Chest", 36, ["Blackout"], 69,
+                                            room_ram_addr=0x803CDFD6),
+    "Twins' Room Clear Chest": LMLocationData("Twins' Room", 25, "Chest", 25, [], 27,
+                                            room_ram_addr=0x803CDF82),
+    "Billiards Room Clear Chest": LMLocationData("Billiards Room", 26, "Chest", 9, [], 12,
+                                            room_ram_addr=0x803CDF68),
+    "Balcony Clear Chest": LMLocationData("Balcony", 27, "Chest", 31,  ["Ice Element Medal"], 62,
+                                            room_ram_addr=0x803CDFC6),
+    "Ceramics Studio Clear Chest": LMLocationData("Ceramics Studio", 28, "Chest", 30, ["Ice Element Medal"], 58,
+                                            room_ram_addr=0x803CDFBE),
+    "The Well Key": LMLocationData("The Well", 21, "Freestanding", 0, [], 72),  # keyinfo event
+    "2F Bathroom Clear Chest": LMLocationData("2F Bathroom", 22, "Chest", 24, ["Ice Element Medal"], 48,
+                                            room_ram_addr=0x803CDFAA),
+    "Nana's Room Clear Chest": LMLocationData("Nana's Room", 23, "Chest", 25, [], 49, room_ram_addr=0x803CDFAC),
+    "Rec Room Clear Chest": LMLocationData("Rec Room", 19, "Chest", 13, [], 23, room_ram_addr=0x803CDF7C),
+    "Conservatory Clear Chest": LMLocationData("Conservatory", 16, "Chest", 12, [], 22, room_ram_addr=0x803CDF7A),
+    "Dining Room Clear Chest": LMLocationData("Dining Room", 17, "Chest", 6, ["Fire Element Medal"], 8,
+                                            room_ram_addr=0x803CDF62),
+    "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0,  ["Fire Element Medal"], 0,
+                                            room_ram_addr=0x803CDF50),
+    "Fortune Teller Clear Chest": LMLocationData("Fortune-Teller's Room", 5, "Chest", 2, [], 3,
+                                            room_ram_addr=0x803CDF56),
+    "Wardrobe Clear Chest": LMLocationData("Wardrobe", 0, "Chest", 22, ["Blackout"], 41,
+                                            room_ram_addr=0x803CDF9C), #TODO not spawning after Grimmly
+    "Study Clear Chest": LMLocationData("Study", 1, "Chest", 19, [], 35, room_ram_addr=0x803CDF94),
+    "Master Bedroom Clear Chest": LMLocationData("Master Bedroom", 2, "Chest", 18, [], 34, room_ram_addr=0x803CDF92),
+    "Nursery Clear Chest": LMLocationData("Nursery", 3, "Chest", 15, [], 26, room_ram_addr=0x803CDF80),
+    "Graveyard Clear Chest": LMLocationData("Graveyard", 711, "Chest", 11, [], 15, room_ram_addr=0x803CDF70)
 }
 
 
 # Ghost Affected Clear Chests. Rules applied to region entrances
 ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {
-    "Wardrobe Shelf Key": LMLocationData("Wardrobe", 50, "Freestanding", 5, []),  # # TODO  gone for good?
-    "Hidden Room Clear Chest": LMLocationData("Hidden Room", 51, "Chest", 1, [], 1),
-    "Mirror Room Clear Chest": LMLocationData("Mirror Room", 52, "Chest", 3, []),
-    "Kitchen Clear Chest": LMLocationData("Kitchen", 53, "Chest", 5, []),
-    "1F Bathroom Shelf Key": LMLocationData("1F Bathroom", 54, "Freestanding", 3, []),  # keyinfo event
-    "Courtyard Clear Chest": LMLocationData("Courtyard", 55, "Chest", 14, []),
-    "Tea Room Clear Chest": LMLocationData("Tea Room", 56, "Chest", 47, []),
-    "2F Washroom Clear Chest": LMLocationData("2F Washroom", 57, "Chest", 23, []),
-    "Projection Room Clear Chest": LMLocationData("Projection Room", 58, "Chest", 10, []),
-    "Safari Room Clear Chest": LMLocationData("Safari Room", 59, "Chest", 29, []),
-    "Ballroom Clear Chest": LMLocationData("Ballroom", 715, "Chest", 7),
-    "Cellar Clear Chest": LMLocationData("Cellar", 60, "Chest", 34, []),
-    "Roof Clear Chest": LMLocationData("Roof", 61, "Chest", 32, []),
-    "Sealed Room Clear Chest": LMLocationData("Sealed Room", 62, "Chest", 21, []),
-    "Armory Clear Chest": LMLocationData("Armory", 63, "Chest", 27, []),
-    "Pipe Room Clear Chest": LMLocationData("Pipe Room", 64, "Chest", 35, ["Ice Element Medal"]),
-    "Telephone Room Clear Chest": LMLocationData("Telephone Room", 716, "Chest", 28, []),
-    "Artist's Studio Chest Painting": LMLocationData("Artist's Studio", 709, "Furniture", 690, []),
+    "Wardrobe Shelf Key": LMLocationData("Wardrobe", 50, "Freestanding", 5, [], 41),  # TODO  gone for good?
+    "Hidden Room Clear Chest": LMLocationData("Hidden Room", 51, "Chest", 1, [], 1, room_ram_addr=0x803CDF52),
+    "Mirror Room Clear Chest": LMLocationData("Mirror Room", 52, "Chest", 3, [], 4, room_ram_addr=0x803CDF58),
+    "Kitchen Clear Chest": LMLocationData("Kitchen", 53, "Chest", 5, [], 7, room_ram_addr=0x803CDF60),
+    "1F Bathroom Shelf Key": LMLocationData("1F Bathroom", 54, "Freestanding", 3, [], 21),
+    "Courtyard Clear Chest": LMLocationData("Courtyard", 55, "Chest", 14, [], 24, room_ram_addr=0x803CDF7E),
+    "Tea Room Clear Chest": LMLocationData("Tea Room", 56, "Chest", 47, [], 50, room_ram_addr=0x803CDFAE),
+    "2F Washroom Clear Chest": LMLocationData("2F Washroom", 57, "Chest", 23, [], 45, room_ram_addr=0x803CDFA4),
+    "Projection Room Clear Chest": LMLocationData("Projection Room", 58, "Chest", 10, [], 13,
+                                                  room_ram_addr=0x803CDF6A),
+    "Safari Room Clear Chest": LMLocationData("Safari Room", 59, "Chest", 29, [], 55, room_ram_addr=0x803CDFB8),
+    "Ballroom Clear Chest": LMLocationData("Ballroom", 715, "Chest", 7, [], 9, room_ram_addr=0x803CDF64),
+    "Cellar Clear Chest": LMLocationData("Cellar", 60, "Chest", 34, [], 66, room_ram_addr=0x803CDFCE),
+    "Roof Clear Chest": LMLocationData("Roof", 61, "Chest", 32, [], 63, room_ram_addr=0x803CDFC8),
+    "Sealed Room Clear Chest": LMLocationData("Sealed Room", 62, "Chest", 21, [], 37, room_ram_addr=0x803CDF98),
+    "Armory Clear Chest": LMLocationData("Armory", 63, "Chest", 27, [], 51, room_ram_addr=0x803CDFB0),
+    "Pipe Room Clear Chest": LMLocationData("Pipe Room", 64, "Chest", 35, ["Ice Element Medal"], 68,
+                                            room_ram_addr=0x803CDFD4),
+    "Telephone Room Clear Chest": LMLocationData("Telephone Room", 716, "Chest", 28, [], 53, room_ram_addr=0x803CDFB4),
+    "Artist's Studio Chest Painting": LMLocationData("Artist's Studio", 709, "Furniture", 690, [], 60,
+                                                     room_ram_addr=0x803CDFC2),
 }
 
 
