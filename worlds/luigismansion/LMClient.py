@@ -57,93 +57,9 @@ FURNITURE_ADDR_COUNT = 712
 FURN_FLAG_OFFSET = 0x8C
 FURN_ID_OFFSET = 0xBC
 
-# This address (and its other Offsets) are used to check if the player has completed actions within a given room.
-# Each of these roms are 2 bytes / Half word.
-# There are 73 rooms total, but the Mansion walls bordering Graveyard or Courtyard are excluded here.
-# Bit0 indicates player has entered the room at least once.
-# Bit1 indicates the lights have been turned on for that room.
-# Bit2 indicates chest in that room has been opened (if applicable)
-ROOM_STATE_ADDR = 0x803CDF50
-ROOM_STATE_COUNT = 71
-
 # This is an array of length 0x10 where each element is a byte and contains item IDs for items to give the player.
 # 0xFF represents no item. The array is read and cleared every frame.
 # GIVE_ITEM_ARRAY_ADDR = 0x803FE868
-
-room_name_list = {
-    0: "Butler",
-    1: "HiddenRoom",
-    2: "Foyer",
-    3: "FortuneTellersRoom",
-    4: "MirrorRoom",
-    5: "LaundryRoom",
-    6: "Area2Hallway",
-    7: "Area2HallwayNear1FBathroom",
-    8: "Kitchen",
-    9: "DinningRoom",
-    10: "BallRoom",
-    11: "Backyard",
-    12: "BilliardsRoom",
-    13: "ProjectionRoom",
-    14: "StorageRoom",
-    15: "AtticHallwayFrom2F",
-    16: "Graveyard",
-    17: "1FWashroom",
-    18: "Area2HallwayNearConservatory",
-    19: "StairsF1toF2",
-    20: "1FBathroom",
-    21: "Conservatory",
-    22: "RecRoom",
-    23: "Courtyard",
-    24: "Nursery",
-    25: "TheTwinsRoom",
-    26: "Area3HallwayNearAstral",
-    27: "SittingRoom",
-    28: "GuestRoom",
-    29: "Area1Hallway",
-    30: "UpperFoyer",
-    31: "Area3HallwayNearSittingRoom",
-    32: "2FtoAtticStairwell",
-    33: "MasterBedroom",
-    34: "Study",
-    35: "Parlor",
-    36: "SealedRoom",
-    37: "2FBalcony",
-    38: "WardrobeRoom",
-    39: "Anteroom",
-    40: "AstralHall",
-    41: "Observatory",
-    42: "2FWashroom",
-    43: "Area3HallwayEntrance",
-    44: "Area3HallwayNearNana",
-    45: "2FBathroom",
-    46: "NanasRoom",
-    47: "TeaRoom",
-    48: "Armory",
-    49: "AtticHallwayWestNearArmory",
-    50: "TelephoneRoom",
-    51: "AtticHallwayEastNearSafariRoom",
-    52: "SafariRoom",
-    53: "Area2HallwayNearDiningRoom",
-    54: "AtticHallwayWestNearBooBalcony",
-    55: "CeramicsRoom",
-    56: "ClockworkRoom",
-    57: "ArtistStudio",
-    58: "AtticHallwayEastNearArtistsStudio",
-    59: "BigBooBalcony",
-    60: "Roof",
-    61: "ColdStorageRoom",
-    62: "BasementHallwayNearColdStorage",
-    63: "Cellar",
-    64: "Area3HallwayNearSealed",
-    65: "StairsF1toBasement",
-    66: "PipeRoom",
-    67: "BreakerRoom",
-    68: "HallwaytoSecretAltar",
-    69: "BottomOfWell",
-    70: "SecretAltar",
-    71: "BasementHallwayNearPipeRoom"
-}
 
 luigi_recv_text = "Luigi was able to find: "
 
@@ -169,7 +85,7 @@ def get_base_rom_path(file_name: str = "") -> str:
 
 
 def save_patched_iso(output_data):
-    iso_path = get_base_rom_path()  # fix
+    iso_path = get_base_rom_path()  #TODO fix??
     directory_to_iso, file = os.path.split(output_data)
     file_name = os.path.splitext(file)[0]
 
@@ -188,7 +104,6 @@ class LMCommandProcessor(ClientCommandProcessor):
 
 
 class LMContext(CommonContext):
-    checked_furniture = []
     command_processor = LMCommandProcessor
     game = "Luigi's Mansion"
     items_handling = 0b111
@@ -203,9 +118,6 @@ class LMContext(CommonContext):
         self.has_send_death = False
 
         self.len_give_item_array = 0x10
-
-        # Jake temp custom variables
-        self.room_interactions = [-1] * ROOM_STATE_COUNT
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.auth = None
@@ -252,10 +164,16 @@ class LMContext(CommonContext):
 
 
 def _give_death(ctx: LMContext):
-    if (ctx.slot and dme.is_hooked()
-        and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS and check_ingame()):
+    if ctx.slot and dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS and check_ingame():
         ctx.has_send_death = True
         write_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]), 0)
+    return
+
+def get_map_id():
+    return dme.read_word(CURR_MAP_ID_ADDR)
+
+def check_if_addr_is_pointer(addr: int):
+    return 2147483648 <= dme.read_word(addr) <= 2172649471
 
 
 # TODO CORRECT FOR LM
@@ -298,137 +216,70 @@ async def give_items(ctx: LMContext):
 
 # TODO CORRECT FOR LM
 async def check_locations(ctx: LMContext):
-    # We check which locations are currently checked on the current stage
-    # curr_stage_id = dolphin_memory_engine.read_byte(CURR_STAGE_ID_ADDR)
-
-    # Read in various bitfields for the locations in the current stage
-    # charts_bitfield = int.from_bytes(dolphin_memory_engine.read_bytes(CHARTS_BITFLD_ADDR, 8))
-    # sea_alt_bitfield = dolphin_memory_engine.read_word(SEA_ALT_BITFLD_ADDR)
-    # chests_bitfield = dolphin_memory_engine.read_word(CHESTS_BITFLD_ADDR)
-    # switches_bitfield = int.from_bytes(dolphin_memory_engine.read_bytes(SWITCHES_BITFLD_ADDR, 10))
-    # pickups_bitfield = dolphin_memory_engine.read_word(PICKUPS_BITFLD_ADDR)
+    list_types_to_skip_currently = ["BSpeedy", "Portrait", "Event", "Toad", "Boo"]
 
     current_map_id = get_map_id()
-    if current_map_id == 2:
-        current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
-        furniture_name_list: dict[str, LMLocationData] = dict(filter(lambda item: (item[1].type == "Furniture" or
-            item[1].type == "Plant") and item[1].in_game_room_id == current_room_id, ALL_LOCATION_TABLE.items()))
+    for location, data in ALL_LOCATION_TABLE.items():
+        if data.type in list_types_to_skip_currently:
+            continue
 
-        if len(furniture_name_list.keys()) > 0:
-            for current_offset in range(0, FURNITURE_ADDR_COUNT, 4): # TODO Validate this accounts for all furniture
-                current_addr = FURNITURE_MAIN_TABLE_ID+current_offset
+        if not LMLocation.get_apid(data.code) in ctx.missing_locations:
+            continue
 
-                # Not within a valid range for a pointer
-                if  not check_if_addr_is_pointer(current_addr):
-                    continue
+        # If in main mansion map
+        if current_map_id == 2:
+            #TODO Debug remove before release
+            if data.in_game_room_id is None:
+                logger.warn("Missing in game room id: " + location)
 
-                furniture_id = dme.read_word(dme.follow_pointers(current_addr, [FURN_ID_OFFSET]))
-                furniture_flag =  dme.read_word(dme.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
-
-                # ID is a valid piece of furniture in the room, has been interacted with, and not already tracked.
-                named_furniture = next(((key, value) for (key, value) in furniture_name_list.items() if
-                                    value.jmpentry == furniture_id), None)
-                if named_furniture is None or furniture_flag == 0 or (
-                        LMContext.checked_furniture.__contains__(str(named_furniture[0]))):
-                    continue
-
-                logger.info("Luigi knocked on furniture '{named_furniture[0]}' In Game Room #" +
-                            f"{str(current_room_id)}.\nAdditional Debug Details: Current Addr: {hex(current_addr)}; " +
-                            f"Furniture ID: {hex(furniture_id)}; Flag Value: {furniture_flag}")
-
-                LMContext.checked_furniture.append(named_furniture[0])
-
-        for curr_room_state_addr in range(0, ROOM_STATE_COUNT):
-            curr_room_state_int = read_short(ROOM_STATE_ADDR + (curr_room_state_addr*2))
-            if curr_room_state_int != ctx.room_interactions[curr_room_state_addr]:
-                if ctx.room_interactions[curr_room_state_addr] > 0:
-                    bit_int = curr_room_state_int ^ ctx.room_interactions[curr_room_state_addr]
-                else:
-                    bit_int = curr_room_state_int
-                ctx.room_interactions[curr_room_state_addr] = curr_room_state_int
-                room_name = next(room_name_list[key] for key in room_name_list.keys() if key == curr_room_state_addr)
-
-                if (bit_int & (1<<2)) > 0:
-                    logger.info("Luigi opened chest in room '" + room_name + "'")
+            # Only check locations that are currently in the same room as us.
+            current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
+            if not data.in_game_room_id == current_room_id:
                 continue
 
-    # for location, data in ALL_LOCATION_TABLE.items():
-    #     checked = False
-    #
-    #     # Special-case checks TODO CORRECT FOR LM
-    #     if data.type == "Special":
-    #         # The flag for "Windfall Island - Maggie - Delivery Reward" is still unknown.
-    #         # However, as a temporary workaround, we can just check if the player had Moblin's letter at some point,
-    #         # but it's no longer in their Delivery Bag
-    #         if location == "Windfall Island - Maggie - Delivery Reward":
-    #             was_moblins_owned = (dolphin_memory_engine.read_word(LETTER_OWND_ADDR) >> 15) & 1
-    #             dbag_contents = [dolphin_memory_engine.read_byte(LETTER_BASE_ADDR + offset) for offset in range(8)]
-    #             checked = was_moblins_owned and 0x9B not in dbag_contents
-    #
-    #         # For Letter from Baito's Mother, we need to check two bytes
-    #         # 0x1 = Note to Mom sent, 0x2 = Mail sent by Baito's Mother, 0x3 = Mail read by Link
-    #         if location == "Mailbox - Letter from Baito's Mother":
-    #             checked = dolphin_memory_engine.read_byte(data.address) & 0x3 == 0x3
-    #
-    #         # For Letter from Grandma, we need to check two bytes
-    #         # 0x1 = Grandma saved, 0x2 = Mail sent by Grandma, 0x3 = Mail read by Link
-    #         if location == "Mailbox - Letter from Grandma":
-    #             checked = dolphin_memory_engine.read_byte(data.address) & 0x3 == 0x3
-    #
-    #         # For the Ankle's reward, we check if the bits for turning all five statues are set
-    #         # For some reason, the bit for the Dragon Tingle Statue is located in a separate location than the rest
-    #         if location == "Tingle Island - Ankle - Reward for All Tingle Statues":
-    #             dragon_tingle_statue_rewarded = dolphin_memory_engine.read_byte(TINGLE_STATUE_1_ADDR) & 0x40 == 0x40
-    #             other_tingle_statues_rewarded = dolphin_memory_engine.read_byte(TINGLE_STATUE_2_ADDR) & 0x0F == 0x0F
-    #             checked = dragon_tingle_statue_rewarded and other_tingle_statues_rewarded
-    #
-    #         # For the Bird-Man Contest, we check if the high score is greater than 250 yards
-    #         if location == "Flight Control Platform - Bird-Man Contest - First Prize":
-    #             high_score = dolphin_memory_engine.read_byte(FCP_SCORE_LO_ADDR) + (
-    #                     dolphin_memory_engine.read_byte(FCP_SCORE_HI_ADDR) << 8
-    #             )
-    #             checked = high_score > 250
-    #
-    #     # TODO Change from WW flag system
-    #     elif data.stage_id == curr_stage_id:
-    #         match data.type:
-    #             case LMLocationType.CHART:
-    #                 checked = (charts_bitfield >> data.bit) & 1
-    #             case LMLocationType.BOCTO:
-    #                 checked = (read_short(data.address) >> data.bit) & 1
-    #             case LMLocationType.CHEST:
-    #                 checked = (chests_bitfield >> data.bit) & 1
-    #             case LMLocationType.SWTCH:
-    #                 checked = (switches_bitfield >> data.bit) & 1
-    #             case LMLocationType.PCKUP:
-    #                 checked = (pickups_bitfield >> data.bit) & 1
-    #             case LMLocationType.EVENT:
-    #                 checked = (dolphin_memory_engine.read_byte(data.address) >> data.bit) & 1
-    #
-    #     # Sea (Alt) chests
-    #     elif curr_stage_id == 0x0 and data.stage_id == 0x1:
-    #         assert data.type == LMLocationType.CHEST
-    #         checked = (sea_alt_bitfield >> data.bit) & 1
-    #
-    #     if checked:
-    #         location_id = LMLocation.get_apid(data.code)
-    #         if location_id:
-    #             ctx.locations_checked.add(location_id)
-    #         else:
-    #             if not ctx.finished_game:
-    #                 await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-    #                 ctx.finished_game = True
-    #
-    # # Send the list of newly-checked locations to the server
-    # locations_checked = ctx.locations_checked.difference(ctx.checked_locations)
-    # if locations_checked:
-    #     await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
+            match data.type:
+                case "Furniture":
+                    # Check all possible furniture addresses. #TODO Find a way to not check all 600+
+                    for current_offset in range(0, FURNITURE_ADDR_COUNT, 4):
+                        # Only check if the current address is a pointer
+                        current_addr = FURNITURE_MAIN_TABLE_ID + current_offset
+                        if not check_if_addr_is_pointer(current_addr):
+                            continue
 
-def get_map_id():
-    return dme.read_word(CURR_MAP_ID_ADDR)
+                        furn_id = dme.read_word(dme.follow_pointers(current_addr, [FURN_ID_OFFSET]))
+                        if not furn_id == data.jmpentry:
+                            continue
 
-def check_if_addr_is_pointer(addr: int):
-    return 2147483648 <= dme.read_word(addr) <= 2172649471
+                        furn_flag = dme.read_word(dme.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
+                        if furn_flag > 0:
+                            ctx.locations_checked.add(LMLocation.get_apid(data.code))
+                case "Plant":
+                    # Check all possible furniture addresses. #TODO Find a way to not check all 600+
+                    for current_offset in range(0, FURNITURE_ADDR_COUNT, 4):
+                        # Only check if the current address is a pointer
+                        current_addr = FURNITURE_MAIN_TABLE_ID + current_offset
+                        if not check_if_addr_is_pointer(current_addr):
+                            continue
+
+                        furn_id = dme.read_word(dme.follow_pointers(current_addr, [FURN_ID_OFFSET]))
+                        if not furn_id == data.jmpentry:
+                            continue
+
+                        furn_flag = dme.read_word(dme.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
+                        if furn_flag > 0:
+                            ctx.locations_checked.add(LMLocation.get_apid(data.code))
+                case "Chest":
+                    # Bit 2 of the current room address indicates if a chest in that room has been opened.
+                    current_room_state_int = read_short(data.room_ram_addr)
+                    if (current_room_state_int & (1<<2)) > 0:
+                        ctx.locations_checked.add(LMLocation.get_apid(data.code))
+
+
+    locations_checked = ctx.locations_checked.difference(ctx.checked_locations)
+    if locations_checked:
+        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
+    return
+
 
 async def check_alive():
     lm_curr_health = read_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]))
@@ -436,13 +287,11 @@ async def check_alive():
 
 async def check_death(ctx: LMContext):
     if check_ingame():
-        if not check_alive():
-            if not ctx.has_send_death and time.time() >= ctx.last_death_link + 3:
+        if not check_alive() and not ctx.has_send_death and time.time() >= ctx.last_death_link + 3:
                 ctx.has_send_death = True
                 await ctx.send_death(ctx.player_names[ctx.slot] + " scared themselves to death.")
         else:
             ctx.has_send_death = False
-
 
 def check_ingame():
     current_map_id = get_map_id()
