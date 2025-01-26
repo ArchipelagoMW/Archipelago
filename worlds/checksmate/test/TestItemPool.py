@@ -1,7 +1,10 @@
+import functools
+
 from .CMMockTestCase import CMMockTestCase
 from ..ItemPool import CMItemPool
-from ..Items import progression_items
+from ..Items import progression_items, item_table
 from ..Options import EnableTactics
+
 
 class TestItemPool(CMMockTestCase):
     def setUp(self):
@@ -70,6 +73,28 @@ class TestItemPool(CMMockTestCase):
             self.item_pool.items_remaining[self.world.player][test_item],
             initial_quantity - 1
         )
+
+    def test_pocket_limit(self):
+        """Test that pocket limits are correctly applied"""
+        min_mat, max_mat = 4100, 4600
+        max_items = 100
+        locked_items = {}
+        items = self.item_pool.create_progression_items(
+            max_items=max_items,
+            min_material=min_mat,
+            max_material=max_mat,
+            locked_items=locked_items
+        )
+        if self.world.options.pocket_limit_by_pocket.value > 0:
+            self.assertLessEqual(
+                functools.reduce(lambda x, y: x + 1, [item for item in items if item.name == "Progressive Pocket"], 0),
+                self.world.options.pocket_limit_by_pocket.value * 3
+            )
+        if self.world.options.max_pocket.value > 0:
+            self.assertLessEqual(
+                functools.reduce(lambda x, y: x + 1, [item for item in items if item.name == "Progressive Pocket"], 0),
+                self.world.options.max_pocket.value
+            )
 
     def test_progression_item_creation(self):
         """Test that progression items are created within material limits"""
@@ -145,4 +170,4 @@ class TestItemPool(CMMockTestCase):
         
         self.assertEqual(len(starter_items), 3)  # 2 pawns + 1 minor piece
         self.assertEqual(self.item_pool.items_used[self.world.player]["Progressive Pawn"], 2)
-        self.assertEqual(self.item_pool.items_used[self.world.player]["Progressive Minor Piece"], 1) 
+        self.assertEqual(self.item_pool.items_used[self.world.player]["Progressive Minor Piece"], 1)

@@ -13,6 +13,15 @@ class CMCollectionState:
     - Progressive Major Piece
     - Progressive Major To Queen
 
+    However, once we start handling these, it ends up being a convenient place to manage an issue where Item Link and
+    Starting Inventory can add additional items beyond our maximum client supported quantity (indicated by the quantity
+    field in Item). This is especially significant for:
+    - Progressive Pocket, which can be added up to 12 times, depending on the user's Pocket Limit
+    - Progressive King Promotion, which can be added up to 2 times
+    - Progressive Consul, which can be added up to 2 times
+
+    These can be handled in a generic way, except that we have to calculate the user's Pocket Limit dynamically.
+
     Major To Queen is a "child" of the Major Piece, which means it only has a game effect if a Major Piece
     is collected and can be upgraded. This means they need to pair off, and if we can't find a pair, the upgrade
     is not applied. However, a Major Piece is always counted.
@@ -30,6 +39,16 @@ class CMCollectionState:
         """Calculate the material value gained from collecting this item."""
         item_count = state.prog_items[self.world.player][item.name]
         
+        # Check if we're exceeding quantity limits
+        if item_table[item.name].quantity and item_count >= item_table[item.name].quantity:
+            return 0
+            
+        # Special handling for Progressive Pocket
+        if item.name == "Progressive Pocket":
+            pocket_limit = min(self.world.options.max_pocket, self.world.options.pocket_limit_by_pocket.value * 3)
+            if pocket_limit and item_count >= pocket_limit:  # 3 pockets
+                return 0
+
         # Check upgrades from existing children
         child_material = self._check_children(state, item, item_count)
         
@@ -45,6 +64,17 @@ class CMCollectionState:
         item_count = state.prog_items[self.world.player].get(item.name, 0)
         if item_count <= 0:
             return 0
+            
+        # If we're removing an item that was beyond quantity limits, no material change
+        if item_table[item.name].quantity and item_count > item_table[item.name].quantity:
+            return 0
+            
+        # Special handling for Progressive Pocket
+        if item.name == "Progressive Pocket":
+            pocket_limit = min(self.world.options.max_pocket, self.world.options.pocket_limit_by_pocket.value * 3)
+            if pocket_limit and item_count > pocket_limit:  # 3 pockets
+                return 0
+                
         item_count -= 1
 
         # Check downgrades from existing children
@@ -79,6 +109,7 @@ class CMCollectionState:
         parents = get_parents(item.name)
         
         if len(parents) == 0 or item_table[item.name].material == 0:
+            # TODO(chesslogic): This can still be wrong if the item being added is greater than its own max quantity
             # Root element or zero material - add/remove base value
             material = item_table[item.name].material
         else:
