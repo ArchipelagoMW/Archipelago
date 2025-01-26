@@ -40,14 +40,8 @@ class CMCollectionState:
         item_count = state.prog_items[self.world.player][item.name]
         
         # Check if we're exceeding quantity limits
-        if item_table[item.name].quantity and item_count >= item_table[item.name].quantity:
+        if self._is_quantity_limit_exceeded(item, item_count):
             return 0
-            
-        # Special handling for Progressive Pocket
-        if item.name == "Progressive Pocket":
-            pocket_limit = min(self.world.options.max_pocket, self.world.options.pocket_limit_by_pocket.value * 3)
-            if pocket_limit and item_count >= pocket_limit:  # 3 pockets
-                return 0
 
         # Check upgrades from existing children
         child_material = self._check_children(state, item, item_count)
@@ -65,17 +59,11 @@ class CMCollectionState:
         if item_count <= 0:
             return 0
             
-        # If we're removing an item that was beyond quantity limits, no material change
-        if item_table[item.name].quantity and item_count > item_table[item.name].quantity:
-            return 0
-            
-        # Special handling for Progressive Pocket
-        if item.name == "Progressive Pocket":
-            pocket_limit = min(self.world.options.max_pocket, self.world.options.pocket_limit_by_pocket.value * 3)
-            if pocket_limit and item_count > pocket_limit:  # 3 pockets
-                return 0
-                
         item_count -= 1
+
+        # If we're removing an item that was beyond quantity limits, no material change
+        if self._is_quantity_limit_exceeded(item, item_count):
+            return 0
 
         # Check downgrades from existing children
         child_material = self._check_children(state, item, item_count)
@@ -86,6 +74,25 @@ class CMCollectionState:
         total_material = child_material + parent_material
         logging.debug(f"Removing {item.name} with material value {total_material}")
         return total_material
+
+    def _is_quantity_limit_exceeded(self, item: Item, item_count: int) -> bool:
+        """Check if collecting/removing this item would exceed quantity limits.
+        
+        Args:
+            item: The item being collected/removed
+            item_count: Current count of the item
+        """
+        # Check basic quantity limit from item_table
+        if item_table[item.name].quantity and item_count >= item_table[item.name].quantity:
+            return True
+            
+        # Special handling for Progressive Pocket
+        if item.name == "Progressive Pocket":
+            pocket_limit = min(self.world.options.max_pocket.value, self.world.options.pocket_limit_by_pocket.value * 3)
+            if pocket_limit and item_count >= pocket_limit:
+                return True
+                
+        return False
 
     def _check_children(self, state: CollectionState, item: Item, item_count: int) -> Tuple[int, bool]:
         """Check child upgrades and calculate material value."""
