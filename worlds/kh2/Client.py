@@ -25,6 +25,7 @@ class KH2Context(CommonContext):
     def __init__(self, server_address, password):
         super(KH2Context, self).__init__(server_address, password)
 
+
         self.goofy_ability_to_slot = dict()
         self.donald_ability_to_slot = dict()
         self.all_weapon_location_id = None
@@ -86,6 +87,8 @@ class KH2Context(CommonContext):
             },
         }
         self.kh2seedname = None
+        self.kh2_seed_save_path_join = None
+        
         self.kh2slotdata = None
         self.mem_json = None
         self.itemamount = {}
@@ -199,8 +202,7 @@ class KH2Context(CommonContext):
         self.kh2connected = False
         self.serverconneced = False
         if self.kh2seedname is not None and self.auth is not None:
-            with open(os.path.join(self.game_communication_path, self.kh2_seed_save_path),
-                    'w') as f:
+            with open(self.kh2_seed_save_path_join, 'w') as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
         await super(KH2Context, self).connection_closed()
 
@@ -208,8 +210,7 @@ class KH2Context(CommonContext):
         self.kh2connected = False
         self.serverconneced = False
         if self.kh2seedname not in {None} and self.auth not in {None}:
-            with open(os.path.join(self.game_communication_path, self.kh2_seed_save_path),
-                    'w') as f:
+            with open(self.kh2_seed_save_path_join, 'w') as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
         await super(KH2Context, self).disconnect()
 
@@ -222,8 +223,7 @@ class KH2Context(CommonContext):
 
     async def shutdown(self):
         if self.kh2seedname not in {None} and self.auth not in {None}:
-            with open(os.path.join(self.game_communication_path, self.kh2_seed_save_path),
-                    'w') as f:
+            with open(self.kh2_seed_save_path_join, 'w') as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
         await super(KH2Context, self).shutdown()
 
@@ -252,9 +252,11 @@ class KH2Context(CommonContext):
         if cmd == "RoomInfo":
             self.kh2seedname = args['seed_name']
             self.kh2_seed_save_path = f"kh2save2{self.kh2seedname}{self.auth}.json"
+            self.kh2_seed_save_path_join = os.path.join(self.game_communication_path, self.kh2_seed_save_path)
+
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
-            if not os.path.exists(os.path.join(self.game_communication_path, self.kh2_seed_save_path)):
+            if not os.path.exists():
                 self.kh2_seed_save = {
                     "Levels":        {
                         "SoraLevel":   0,
@@ -267,11 +269,10 @@ class KH2Context(CommonContext):
                     },
                     "SoldEquipment": [],
                 }
-                with open(os.path.join(self.game_communication_path, self.kh2_seed_save_path),
-                        'wt') as f:
+                with open(self.kh2_seed_save_path_join,'wt') as f:
                     pass
                 # self.locations_checked = set()
-            elif os.path.exists(os.path.join(self.game_communication_path, self.kh2_seed_save_path)):
+            elif os.path.exists(self.kh2_seed_save_path_join):
                 with open(self.game_communication_path +  self.kh2_seed_save_path) as f:
                     self.kh2_seed_save = json.load(f)
                     if self.kh2_seed_save is None:
