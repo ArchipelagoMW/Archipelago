@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Optional, Any, Dict, List, Set
 import urllib.parse
 import logging
 import asyncio
@@ -8,8 +8,12 @@ import socket
 import random
 from NetUtils import ClientStatus
 from CommonClient import CommonContext, get_base_parser
-from Utils import async_start
+from Utils import async_start, is_windows, is_macos
+from pathlib import Path
+import os
 from .Constants import LOCATION_BOSS_RANGE, LOCATION_RESEARCH_RANGE, VERSION, CLIENT_HOSTNAME, CLIENT_PORT
+from math import floor
+DST_FILE_START = "KLEI     1 "
 
 class DSTInvalidRequest(Exception):
     pass
@@ -34,7 +38,8 @@ class DSTContext(CommonContext):
     def on_deathlink(self, data:Dict):
         self.dst_handler.enqueue({
             "datatype": "Death",
-            "msg": data.get("cause")
+            "msg": data.get("cause"),
+            "timestamp": time.time(),
         })
 
     def run_gui(self):
@@ -124,10 +129,20 @@ class DSTContext(CommonContext):
                 "receivingname": self.player_names[hint["receiving_player"]],
             }, False)
 
-    def on_dst_handler_connected(self):
-        "When the handler connects to DST but is not necessarily connected to AP"
+    # def on_dst_handler_connected(self):
+    #     "When the handler connects to DST but is not necessarily connected to AP"
+    #     if self.connected_to_ap:
+    #         print("Connected to DST!")
+    #         self.on_dst_connect_to_ap()
+    #         self.send_hints_to_dst()
+    #         async_start(self.send_msgs([{"cmd": "Sync"}]))
+    #     else:
+    #         self.logger.info("Waiting to connect to Archipelago.")
+    
+    def on_dst_reader_connected(self):
+        "Counterpart of on_dst_handler_connected. When the reader checks that DST data folder exists."
         if self.connected_to_ap:
-            print("Connected to DST!")
+            print("Located DST data folder!")
             self.on_dst_connect_to_ap()
             self.send_hints_to_dst()
             async_start(self.send_msgs([{"cmd": "Sync"}]))
@@ -349,50 +364,59 @@ class DSTContext(CommonContext):
         except Exception as e:
             self.logger.error(f"Manage event error ({eventtype}): {e}")
 
-def parse_request(req_bytes:bytes):
-    "Parses HTTP request from DST"
-    try:
-        lines = req_bytes.decode("utf-8").splitlines()
-        req_info = lines.pop(0)
-        assert req_info.startswith("POST")
-        headers = {}
-        assert len(lines)
-        while len(lines):
-            line = lines.pop(0)
-            if not line:
-                break
-            entry = line.split(" ", 1)
-            headers[entry[0]] = entry[1]
-        assert len(lines)
-        datastr = "\r\n".join(lines)
-        if datastr.endswith("EOF"):
-            datastr = datastr[:-3]
-        return json.loads(datastr)
-    except AssertionError:
-        raise DSTInvalidRequest("Invalid request")
-    except Exception as e:
-        print(f"Bad parse: {e}")
-        print(req_bytes)
-        raise
+# def parse_request(req_bytes:bytes):
+#     "Parses HTTP request from DST"
+#     try:
+#         lines = req_bytes.decode("utf-8").splitlines()
+#         req_info = lines.pop(0)
+#         assert req_info.startswith("POST")
+#         headers = {}
+#         assert len(lines)
+#         while len(lines):
+#             line = lines.pop(0)
+#             if not line:
+#                 break
+#             entry = line.split(" ", 1)
+#             headers[entry[0]] = entry[1]
+#         assert len(lines)
+#         datastr = "\r\n".join(lines)
+#         if datastr.endswith("EOF"):
+#             datastr = datastr[:-3]
+#         return json.loads(datastr)
+#     except AssertionError:
+#         raise DSTInvalidRequest("Invalid request")
+#     except Exception as e:
+#         print(f"Bad parse: {e}")
+#         print(req_bytes)
+#         raise
 
-class DSTResponse():
-    response:bytes
-    next_ping_time:float = 0.0
-    def __init__(self, content:Dict = {}, status=100, next_ping_time:float=0.0):
-        header  = f"HTTP/1.1 {status}\r\n".encode()
-        header += b"Content-type: application/json\r\n"
-        header += b"\r\n"
+# class DSTResponse():
+#     response:bytes
+#     next_ping_time:float = 0.0
+#     def __init__(self, content:Dict = {}, status=100, next_ping_time:float=0.0):
+#         header  = f"HTTP/1.1 {status}\r\n".encode()
+#         header += b"Content-type: application/json\r\n"
+#         header += b"\r\n"
 
-        body = json.dumps(content).encode()
-        self.response = header + body
-        self.next_ping_time = next_ping_time
+#         body = json.dumps(content).encode()
+#         self.response = header + body
+#         self.next_ping_time = next_ping_time
 
 class DSTHandler():
     logger = logging.getLogger("DSTInterface")
     ctx = None
     lastping = time.time()
-    _sendqueue:List[str] = []
-    _sendqueue_lowpriority:List[str] = []
+    _sendqueue:List[Any] = []
+    _sendqueue_lowpriority:List[Any] = []
+    filedata_location_scouts:Set[int] = set()
+    outgoing_data_dirty = False
+    waiting_for_dst = False
+    connected_timestamp = time.time()
+    session_id:Optional[int] = None # DST's connected timestamp
+    _cached_timestamps:Dict[str, Set[int]] = {
+        "Death": set(),
+        "Hint": set(),
+    }
 
     def __init__(self, ctx:DSTContext):
         self.ctx = ctx
@@ -413,21 +437,66 @@ class DSTHandler():
     def enqueue(self, data, priority = True):
         if self.connected:
             (self._sendqueue if priority else self._sendqueue_lowpriority).append(data)
+            self.outgoing_data_dirty = True
 
-    async def handle_dst_data(self, data) -> DSTResponse:
+    async def handle_incoming_filedata(self, filedata:Dict[str, Any]):
+        """
+        Filereader workaround for handle_dst_data. May be temporary until game adds a solution to restore HTTP functionality.
+        Since the filedata sends everything at once and does not get cleared until the DST reloads, verifying must be done
+        to reduce redundant data.
+        """
+        for datatype, data in filedata.items():
+            if datatype == "Victory":
+                if not self.ctx.finished_game:
+                    await self.handle_dst_filedata_entry({"datatype": datatype})
+            elif datatype == "Item":
+                _sources:Set[int] = set(data)
+                _sources.difference_update(self.ctx.checked_locations)
+                if len(_sources):
+                    await self.handle_dst_filedata_entry({
+                        "datatype": datatype,
+                        "sources": list(_sources),
+                    })
+            elif datatype == "DeathLink":
+                if "DeathLink" in self.ctx.tags:
+                    await self.handle_dst_filedata_entry({
+                        "datatype": datatype,
+                        "enabled": data.get("enabled", False),
+                    })
+            elif datatype == "Death":
+                for deathdata in data:
+                    timestamp:Optional[int] = deathdata.get("timestamp")
+                    # Verify timestamp hasn't been sent yet and is after connection time
+                    if timestamp and timestamp > self.connected_timestamp and not timestamp in self._cached_timestamps[datatype]:
+                        self._cached_timestamps[datatype].add(timestamp)
+                        await self.handle_dst_filedata_entry({
+                            "datatype": datatype,
+                            "msg": deathdata.get("msg", ""),
+                        })
+            elif datatype == "ScoutLocation":
+                _scouts:Set[int] = set(data)
+                _scouts.difference_update(self.filedata_location_scouts)
+                self.filedata_location_scouts.update(_scouts)
+                if len(_scouts):
+                    for id in list(_scouts):
+                        await self.handle_dst_filedata_entry({
+                            "datatype": datatype,
+                            "id": id,
+                        })
+            elif datatype == "Hint":
+                for hintdata in data:
+                    timestamp:Optional[int] = hintdata.get("timestamp")
+                    # Verify timestamp hasn't been sent yet and is after connection time
+                    if timestamp and timestamp > self.connected_timestamp and not timestamp in self._cached_timestamps[datatype]:
+                        self._cached_timestamps[datatype].add(timestamp)
+                        await self.handle_dst_filedata_entry({"datatype": datatype})
+
+    async def handle_dst_filedata_entry(self, data):
+        "Counterpart for handle_dst_data. May be temporary until game adds a solution to restore HTTP functionality."
         try:
             datatype:str = data.get("datatype")
-            next_ping_time = 0.0
-            if datatype == "Ping":
-                if len(self._sendqueue):
-                    return DSTResponse(self._sendqueue.pop(0), 100)
-                elif len(self._sendqueue_lowpriority):
-                    return DSTResponse(self._sendqueue_lowpriority.pop(0), 100)
-                else:
-                    # No data to send. Delay next ping
-                    next_ping_time = 1.0
-
-            elif datatype in {"Chat", "Join", "Leave", "Death", "Connect", "Disconnect", "DeathLink"}:
+            
+            if datatype in {"Chat", "Join", "Leave", "Death", "Connect", "Disconnect", "DeathLink"}:
                  # Instant event
                 await self.ctx.manage_event(data)
 
@@ -435,97 +504,331 @@ class DSTHandler():
                 # Queued event
                 await self.ctx.queue_event(data)
 
-            else:
-                if datatype: self.logger.error(f"Error! Received invalid datatype: {datatype}")
-                return DSTResponse({"datatype": "Error"}, 400, 1.0)
-
-            # Tell DST if we're connected to AP
-            return DSTResponse({"datatype": "State", "connected": self.ctx.connected_to_ap}, 100, next_ping_time)
-
         except Exception as e:
-            print(f"Handle DST data error! {e}")
-            return DSTResponse({"datatype": "Error"}, 400, 1.0)
+            print(f"Handle DST filedata entry error! {e}")
 
-    def on_sock_accept(self, conn, address):
-        if not self.connected:
-            self.connected = True
-            self.logger.info(f"Connected to Don't Starve Together server on: {address[0]}")
-            self.ctx.on_dst_handler_connected()
+    # async def handle_dst_data(self, data) -> DSTResponse:
+    #     try:
+    #         datatype:str = data.get("datatype")
+    #         next_ping_time = 0.0
+    #         if datatype == "Ping":
+    #             pass
+    #             if len(self._sendqueue):
+    #                 return DSTResponse(self._sendqueue.pop(0), 100)
+    #             elif len(self._sendqueue_lowpriority):
+    #                 return DSTResponse(self._sendqueue_lowpriority.pop(0), 100)
+    #             else:
+    #                 # No data to send. Delay next ping
+    #                 next_ping_time = 1.0
 
-    async def handle_dst_request(self, sock:socket.socket):
-        loop = asyncio.get_event_loop()
-        next_ping_time = 0.0
+    #         elif datatype in {"Chat", "Join", "Leave", "Death", "Connect", "Disconnect", "DeathLink"}:
+    #              # Instant event
+    #             await self.ctx.manage_event(data)
+
+    #         elif datatype in {"Item", "Hint", "Victory", "ScoutLocation"}:
+    #             # Queued event
+    #             await self.ctx.queue_event(data)
+
+    #         else:
+    #             if datatype: self.logger.error(f"Error! Received invalid datatype: {datatype}")
+    #             return DSTResponse({"datatype": "Error"}, 400, 1.0)
+
+    #         # Tell DST if we're connected to AP
+    #         return DSTResponse({"datatype": "State", "connected": self.ctx.connected_to_ap}, 100, next_ping_time)
+
+    #     except Exception as e:
+    #         print(f"Handle DST data error! {e}")
+    #         return DSTResponse({"datatype": "Error"}, 400, 1.0)
+
+    # def on_sock_accept(self, conn, address):
+    #     if not self.connected:
+    #         self.connected = True
+    #         self.logger.info(f"Connected to Don't Starve Together server on: {address[0]}")
+    #         self.ctx.on_dst_handler_connected()
+
+    # async def handle_dst_request(self, sock:socket.socket):
+    #     loop = asyncio.get_event_loop()
+    #     next_ping_time = 0.0
+    #     while True:
+    #         conn = None
+    #         try:
+    #             conn, address = await asyncio.wait_for(loop.sock_accept(sock), timeout=(10 if self.connected else None))
+    #             request = await loop.sock_recv(conn, 4096)
+    #             self.on_sock_accept(conn, address)
+    #             if not request: break
+    #             self.lastping = time.time()
+    #             response:DSTResponse = await self.handle_dst_data(parse_request(request))
+    #             next_ping_time = response.next_ping_time
+    #             await loop.sock_sendall(conn, response.response)
+    #         except asyncio.TimeoutError:
+    #             raise
+    #         except DSTInvalidRequest as e:
+    #             print(f"Invalid request! {e}")
+    #             if conn:
+    #                 await loop.sock_sendall(conn, DSTResponse({"datatype": "Error"}, 400).response)
+    #             next_ping_time = 1.0
+    #         except Exception as e:
+    #             self.logger.error(f"DST request error: {e}")
+    #             if conn:
+    #                 await loop.sock_sendall(conn, DSTResponse({"datatype": "Error"}, 500).response)
+    #             next_ping_time = 1.0
+    #             self.connected = False
+    #         finally:
+    #             if conn:
+    #                 conn.shutdown(socket.SHUT_RDWR)
+    #                 conn.close()
+    #             if next_ping_time > 0:
+    #                 await asyncio.sleep(next_ping_time)
+
+    # async def bind_socket(self, sock:socket.socket):
+    #     sock.bind((CLIENT_HOSTNAME, CLIENT_PORT))
+
+    # async def run_handler(self):
+    #     self.logger.info(f"Running Don't Starve Together Client Version {VERSION}")
+    #     while True:
+    #         # Bind the socket and make sure it actually succeeds
+    #         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    #         try:
+    #             await asyncio.wait_for(self.bind_socket(sock), timeout=3)
+    #             sock.listen(5) 
+    #         except Exception as e:
+    #             self.logger.error("Could not bind socket. Check that you don't already have another instance of the client running! Attempting again in 10 seconds.")
+    #             sock.close()
+    #             self.connected = False
+    #             await asyncio.sleep(10.0)
+    #             continue
+
+    #         # Handle requests
+    #         try:
+    #             while True:
+    #                 await self.handle_dst_request(sock)
+    #                 if not self.connected: break
+    #         except asyncio.TimeoutError:
+    #             self.logger.info("Disconnected from Don't Starve Together (timed out).")
+    #         except Exception as e:
+    #             self.logger.error(f"DST handler error: {e}")
+    #         finally:
+    #             sock.close()
+    #             self.connected = False
+    #         print("Restarting connection loop in 5 seconds.")
+    #         await asyncio.sleep(5.0)
+    #         self.logger.info("Waiting for Don't Starve Together server.")
+
+    
+    def get_game_data_folder(self) -> Path:
+        "Gets the path of the savedata folder for DST. May be temporary until game adds a solution to restore HTTP functionality."
+        home_path:Path
+        data_folder_path:Path
+        if is_windows:
+            # Copy-paste from SC2
+            # The next five lines of utterly inscrutable code are brought to you by copy-paste from Stack Overflow.
+            # https://stackoverflow.com/questions/6227590/finding-the-users-my-documents-path/30924555#
+            import ctypes.wintypes
+            CSIDL_PERSONAL = 5  # My Documents
+            SHGFP_TYPE_CURRENT = 0  # Get current, not default value
+
+            buf = ctypes.create_unicode_buffer(ctypes.wintypes.MAX_PATH)
+            ctypes.windll.shell32.SHGetFolderPathW(None, CSIDL_PERSONAL, None, SHGFP_TYPE_CURRENT, buf)
+            documentspath:str = buf.value
+            home_path = Path(documentspath)
+            data_folder_path = Path("Klei/DoNotStarveTogether")
+        elif is_macos: # TODO: Verify if works on macos
+            home_path = Path.home()
+            data_folder_path = Path("Documents/Klei/DoNotStarveTogether")
+        else: # TODO: Verify if works on linux
+            home_path = Path.home()
+            data_folder_path = Path(".klei/DoNotStarveTogether")
+
+        # Check if the file exists.
+        full_path = home_path / data_folder_path
+        if os.path.isdir(full_path):
+            return full_path
+        else:
+            raise IOError(f"Did not find directory at {str(data_folder_path)}")
+
+    def read_incoming_data(self, base_dir:Path) -> Optional[Dict]:
+        "Read AP data coming from DST. May be temporary until game adds a solution to restore HTTP functionality."
+        file = base_dir / "archipelagorandomizer_outgoing"
+        if os.path.isfile(file):
+            raw = ""
+            with open(file) as f:
+                raw = f.read()
+
+            if not raw.startswith(DST_FILE_START):
+                raise IOError(f"Unexpected file format: {str(file)}")
+            
+            data = json.loads(raw[len(DST_FILE_START):])
+
+            # Check timestamp                
+            _timestamp:int = data.get("timestamp", floor(time.time()))
+            _time_difference = floor(time.time()) - _timestamp
+            if _time_difference > 60*3:
+                print(f"Current data is too old! It's from {_time_difference} seconds ago.")
+                return None
+
+            return data
+        return None
+
+    def get_incoming_data_timestamp(self, base_dir:Path) -> Optional[int]:
+        "Just get the timestamp from data. May be temporary until game adds a solution to restore HTTP functionality."
+        file = base_dir / "archipelagorandomizer_outgoing"
+        try:
+            if os.path.isfile(file):
+                raw = ""
+                with open(file) as f:
+                    raw = f.read()
+
+                if not raw.startswith(DST_FILE_START):
+                    raise IOError(f"Unexpected file format: {str(file)}")
+                
+                data = json.loads(raw[len(DST_FILE_START):])
+
+                # Check timestamp                
+                return data.get("timestamp")
+            return None
+        except Exception as e:
+            return None
+
+    def write_outgoing_data(self, base_dir:Path):
+        "Send AP data to DST. May be temporary until game adds a solution to restore HTTP functionality."
+        if not self.outgoing_data_dirty:
+            return
+        self.outgoing_data_dirty = False
+        file = base_dir / "archipelagorandomizer_incoming"
+
+        senddata = {
+            "seed_name": self.ctx.seed_name,
+            "slot": self.ctx.slot,
+            "connected_timestamp": floor(self.connected_timestamp),
+            "timestamp": floor(time.time()),
+        }
+        if self.session_id:
+            # Include queue
+            senddata["session_id"] = self.session_id
+            senddata["sendqueue"] = self.optimize_sendqueue_for_filewrite(self._sendqueue)
+            senddata["sendqueue_lowpriority"] = self.optimize_sendqueue_for_filewrite(self._sendqueue_lowpriority)
+        
+        with open(file, "w") as f:
+            f.write(DST_FILE_START + json.dumps(senddata))
+
+    def optimize_sendqueue_for_filewrite(self, queue:List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        "Remove duplicates and Chat from sendqueue"
+        hint_info_cache:Dict[int, Set[int]] = {}
+        ret:List[Dict[str, Any]] = []
+        for data in queue:
+            datatype:str = data.get("datatype")
+            if datatype == "Chat": # Remove Chat
+                continue
+            elif datatype == "HintInfo":
+                # Remove duplicates
+                hinted_locs_for_player = hint_info_cache.get(data["finding_player"], set())
+                hint_info_cache[data["finding_player"]] = hinted_locs_for_player
+                
+                if not data["location"] in hinted_locs_for_player:
+                    hinted_locs_for_player.add(data["location"])
+                    ret.append(data)
+            else:
+                ret.append(data)
+        return ret
+
+    async def handle_io(self, base_dir:Path):
+        "Counterpart of handle_dst_request. May be temporary until game adds a solution to restore HTTP functionality."
+        # Wait until we have a seed name before proceeding
+        while not self.ctx.seed_name or not self.ctx.slot or not self.ctx.connected_to_ap:
+            await asyncio.sleep(3.0)
+
+        # Start of session
+        self.connected_timestamp = time.time()
+        self.outgoing_data_dirty = True
+
+        # Locate the folder where the active session is. It'll have a new timestamp
+        self.waiting_for_dst = False
+        await asyncio.sleep(3.0)
         while True:
-            conn = None
+            _newest_timestamp = int(self.connected_timestamp)
+            _new_base_dir = base_dir
+            breakout = False
+            dirs = [str(filename) for filename in os.listdir(base_dir) if os.path.isdir(base_dir / filename)]
+            for dirname in dirs:
+                path = dirname / Path("Master/save")
+                if dirname == "client_save":
+                    path = Path(dirname)
+                _timestamp = self.get_incoming_data_timestamp(Path(base_dir / path))
+                if _timestamp and _timestamp > _newest_timestamp:
+                    _newest_timestamp = _timestamp
+                    _new_base_dir = Path(base_dir / path)
+                    breakout = True
+            if breakout:
+                base_dir = _new_base_dir
+                break
+            await asyncio.sleep(3.0)
+            # Tell the player to run DST
+            if not self.waiting_for_dst:
+                self.waiting_for_dst = True
+                self.logger.info(f"Waiting for Don't Starve Together world.")
+        self.waiting_for_dst = False
+
+        # Continue the loop while connected to AP
+        while self.ctx.connected_to_ap:
             try:
-                conn, address = await asyncio.wait_for(loop.sock_accept(sock), timeout=(10 if self.connected else None))
-                request = await loop.sock_recv(conn, 4096)
-                self.on_sock_accept(conn, address)
-                if not request: break
-                self.lastping = time.time()
-                response:DSTResponse = await self.handle_dst_data(parse_request(request))
-                next_ping_time = response.next_ping_time
-                await loop.sock_sendall(conn, response.response)
-            except asyncio.TimeoutError:
-                raise
-            except DSTInvalidRequest as e:
-                print(f"Invalid request! {e}")
-                if conn:
-                    await loop.sock_sendall(conn, DSTResponse({"datatype": "Error"}, 400).response)
-                next_ping_time = 1.0
+                self.write_outgoing_data(base_dir)
+                incoming_data = self.read_incoming_data(base_dir)
+                if incoming_data:
+                    dst_session_id = incoming_data.get("connected_timestamp")
+                    if not self.session_id:
+                        if incoming_data.get("seed") == "None" or (
+                            incoming_data.get("seed") == self.ctx.seed_name
+                            and incoming_data.get("slotnum") == self.ctx.slot
+                        ):
+                            self.session_id = dst_session_id
+                            self.outgoing_data_dirty = True
+                            self.logger.info(f"Connected to Don't Starve Together")
+                        else:
+                            self.logger.error(f"Error! World doesn't match! Got player {incoming_data.get('slotname', 'Unknown')} with seed {incoming_data.get('seed')}")
+                    else:
+                        if self.session_id != dst_session_id:
+                            # Stale session; update session id
+                            self.session_id = dst_session_id
+                            self.outgoing_data_dirty = True
+                            print("Updating session")
+                        await self.handle_incoming_filedata(incoming_data)
+                else:
+                    break
             except Exception as e:
-                self.logger.error(f"DST request error: {e}")
-                if conn:
-                    await loop.sock_sendall(conn, DSTResponse({"datatype": "Error"}, 500).response)
-                next_ping_time = 1.0
-                self.connected = False
+                self.logger.error(f"DST handle io error: {e}")
+                raise
             finally:
-                if conn:
-                    conn.shutdown(socket.SHUT_RDWR)
-                    conn.close()
-                if next_ping_time > 0:
-                    await asyncio.sleep(next_ping_time)
+                await asyncio.sleep(3.0)
 
-    async def bind_socket(self, sock:socket.socket):
-        sock.bind((CLIENT_HOSTNAME, CLIENT_PORT))
-
-    async def run_handler(self):
+    async def run_reader(self):
+        "Counterpart of run_handler. May be temporary until game adds a solution to restore HTTP functionality."
         self.logger.info(f"Running Don't Starve Together Client Version {VERSION}")
         while True:
-            # Bind the socket and make sure it actually succeeds
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
-                await asyncio.wait_for(self.bind_socket(sock), timeout=3)
-                sock.listen(5) 
-            except Exception as e:
-                self.logger.error("Could not bind socket. Check that you don't already have another instance of the client running! Attempting again in 10 seconds.")
-                sock.close()
-                self.connected = False
-                await asyncio.sleep(10.0)
-                continue
-
-            # Handle requests
-            try:
+                base_dir = self.get_game_data_folder()
                 while True:
-                    await self.handle_dst_request(sock)
-                    if not self.connected: break
-            except asyncio.TimeoutError:
-                self.logger.info("Disconnected from Don't Starve Together (timed out).")
+                    if not self.connected:
+                        self.connected = True
+                        self.ctx.on_dst_reader_connected()
+
+                        await self.handle_io(base_dir)
+                        self.connected = False # Reset queues
+                        self.logger.info(f"Disconnected from Don't Starve Together (timed out)")
+                        await asyncio.sleep(3.0)
             except Exception as e:
-                self.logger.error(f"DST handler error: {e}")
+                self.logger.error(f"DST file reader error: {e}")
             finally:
-                sock.close()
                 self.connected = False
             print("Restarting connection loop in 5 seconds.")
             await asyncio.sleep(5.0)
-            self.logger.info("Waiting for Don't Starve Together server.")
+
 
 async def main(args):
     ctx = DSTContext(args.connect, args.password)
     ctx.auth = args.name
     ctx.run_gui()
 
-    dst_handler_task = asyncio.create_task(ctx.dst_handler.run_handler(), name="DST Handler")
+    dst_handler_task = asyncio.create_task(ctx.dst_handler.run_reader(), name="DST Handler")
 
     await ctx.exit_event.wait()
     dst_handler_task.cancel()
