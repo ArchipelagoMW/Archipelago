@@ -75,6 +75,15 @@
 #inventory-table img.acquired.green{ /*32CD32*/
     filter: hue-rotate(84deg) saturate(10) brightness(0.7);
 }
+#inventory-table img.acquired.hotpink{ /*FF69B4*/
+    filter: hue-rotate(330deg) saturate(10) brightness(0.71);
+}
+#inventory-table img.acquired.lightsalmon{ /*FFA07A*/
+    filter: hue-rotate(17deg) saturate(10) brightness(0.74);
+}
+#inventory-table img.acquired.crimson{ /*DB143B*/
+    filter: hue-rotate(348deg) saturate(8.3) brightness(0.47);
+}
 
 #inventory-table div.image-stack{
     display: grid;

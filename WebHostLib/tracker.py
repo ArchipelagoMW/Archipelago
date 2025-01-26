@@ -1071,6 +1071,7 @@ if "Timespinner" in network_data_package["games"]:
             "Plasma Orb":          "https://timespinnerwiki.com/mediawiki/images/4/44/Plasma_Orb.png",
             "Kobo":                "https://timespinnerwiki.com/mediawiki/images/c/c6/Familiar_Kobo.png",
             "Merchant Crow":       "https://timespinnerwiki.com/mediawiki/images/4/4e/Familiar_Crow.png",
+            "Laser Access":        "https://timespinnerwiki.com/mediawiki/images/9/99/Historical_Documents.png",
         }
 
         timespinner_location_ids = {

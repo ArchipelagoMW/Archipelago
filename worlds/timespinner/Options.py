@@ -483,6 +483,7 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
     RisingTidesOverrides: HiddenRisingTidesOverrides
     UnchainedKeys: hidden(UnchainedKeys) # type: ignore
     PresentAccessWithWheelAndSpindle: hidden(PresentAccessWithWheelAndSpindle) # type: ignore
+    PrismBreak: hidden(PrismBreak) # type: ignore
     TrapChance: hidden(TrapChance) # type: ignore
     Traps: HiddenTraps # type: ignore
     DeathLink: HiddenDeathLink # type: ignore
@@ -620,6 +621,10 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
         if self.PresentAccessWithWheelAndSpindle != PresentAccessWithWheelAndSpindle.default and \
             self.back_to_the_future == PresentAccessWithWheelAndSpindle.default:
             self.back_to_the_future.value = self.PresentAccessWithWheelAndSpindle.value
+            self.has_replaced_options.value = Toggle.option_true
+        if self.PrismBreak != PrismBreak.default and \
+            self.prism_break == PrismBreak.default:
+            self.prism_break.value = self.PrismBreak.value
             self.has_replaced_options.value = Toggle.option_true
         if self.TrapChance != TrapChance.default and \
             self.trap_chance == TrapChance.default:
