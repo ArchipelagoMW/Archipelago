@@ -290,7 +290,8 @@ class KH2Context(CommonContext):
         if cmd == "Connected":
             self.kh2slotdata = args['slot_data']
 
-            self.kh2_data_package = Utils.load_data_package_for_checksum("Kingdom Hearts 2", self.checksums["Kingdom Hearts 2"])
+            self.kh2_data_package = Utils.load_data_package_for_checksum(
+                    "Kingdom Hearts 2", self.checksums["Kingdom Hearts 2"])
 
             if "location_name_to_id" in self.kh2_data_package:
                 self.data_package_kh2_cache(
