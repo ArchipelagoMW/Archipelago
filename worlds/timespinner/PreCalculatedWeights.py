@@ -52,11 +52,12 @@ class PreCalculatedWeights:
             self.flood_lab = False
 
         self.pyramid_keys_unlock, self.present_key_unlock, self.past_key_unlock, self.time_key_unlock = \
-            self.get_pyramid_keys_unlocks(options, random, self.flood_maw, self.flood_xarion)
+            self.get_pyramid_keys_unlocks(options, random, self.flood_maw, self.flood_xarion, self.flood_lab)
 
     @staticmethod
     def get_pyramid_keys_unlocks(options: TimespinnerOptions, random: Random,
-                                 is_maw_flooded: bool, is_xarion_flooded: bool) -> Tuple[str, str, str, str]:
+                                 is_maw_flooded: bool, is_xarion_flooded: bool,
+                                 is_lab_flooded: bool) -> Tuple[str, str, str, str]:
         
         present_teleportation_gates: List[str] = [
             "GateKittyBoss",
@@ -85,8 +86,13 @@ class PreCalculatedWeights:
         if not is_maw_flooded:
             past_teleportation_gates.append("GateMaw")
 
-        if not is_xarion_flooded:
-            present_teleportation_gates.append("GateXarion")
+        if options.risky_warps: 
+            past_teleportation_gates.append("GateLakeSereneLeft")
+            present_teleportation_gates.append("GateDadsTower")
+            if not is_xarion_flooded:
+                present_teleportation_gates.append("GateXarion")
+            if not is_lab_flooded:
+                present_teleportation_gates.append("GateLabEntrance")
 
         if options.inverted:
             all_gates: Tuple[str, ...] = present_teleportation_gates

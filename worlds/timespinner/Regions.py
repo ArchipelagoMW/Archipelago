@@ -180,6 +180,8 @@ def create_regions_and_locations(world: MultiWorld, player: int, options: Timesp
     connect(world, player, 'Space time continuum', 'Royal towers (lower)', lambda state: logic.can_teleport_to(state, "Past", "GateRoyalTowers"))
     connect(world, player, 'Space time continuum', 'Caves of Banishment (Maw)', lambda state: logic.can_teleport_to(state, "Past", "GateMaw"))
     connect(world, player, 'Space time continuum', 'Caves of Banishment (upper)', lambda state: logic.can_teleport_to(state, "Past", "GateCavesOfBanishment"))
+    connect(world, player, 'Space time continuum', 'Military Fortress (hangar)', lambda state: logic.can_teleport_to(state, "Present", "GateLabEntrance"))
+    connect(world, player, 'Space time continuum', 'The lab (upper)', lambda state: logic.can_teleport_to(state, "Present", "GateDadsTower"))
     connect(world, player, 'Space time continuum', 'Ancient Pyramid (entrance)', lambda state: logic.can_teleport_to(state, "Time", "GateGyre") or (not options.unchained_keys and options.enter_sandman))
     connect(world, player, 'Space time continuum', 'Ancient Pyramid (left)', lambda state: logic.can_teleport_to(state, "Time", "GateLeftPyramid"))
     connect(world, player, 'Space time continuum', 'Ancient Pyramid (right)', lambda state: logic.can_teleport_to(state, "Time", "GateRightPyramid"))

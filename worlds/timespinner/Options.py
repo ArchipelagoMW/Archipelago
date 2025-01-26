@@ -382,6 +382,10 @@ class PrismBreak(Toggle):
 class LockKeyAmadeus(Toggle):
     """Lasers in Amadeus' Laboratory are disabled via items, rather than by de-powering the lab. Experiments will spawn in the lab."""
     display_name = "Lock Key Amadeus"
+    
+class RiskyWarps(Toggle):
+    """Expanded free-warp eligible locations, including Azure Queen, Xarion, Amadeus' Laboratory, and Emperor's Tower."""
+    display_name = "Risky Warps"
 
 @dataclass
 class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
@@ -421,6 +425,7 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     back_to_the_future: PresentAccessWithWheelAndSpindle
     prism_break: PrismBreak
     lock_key_amadeus: LockKeyAmadeus
+    risky_warps: RiskyWarps
     trap_chance: TrapChance
     traps: Traps
 
@@ -490,6 +495,7 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
     PresentAccessWithWheelAndSpindle: hidden(PresentAccessWithWheelAndSpindle) # type: ignore
     PrismBreak: hidden(PrismBreak) # type: ignore
     LockKeyAmadeus: hidden(LockKeyAmadeus) # type: ignore
+    RiskyWarps: hidden(RiskyWarps) # type: ignore
     TrapChance: hidden(TrapChance) # type: ignore
     Traps: HiddenTraps # type: ignore
     DeathLink: HiddenDeathLink # type: ignore
@@ -635,6 +641,10 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
         if self.LockKeyAmadeus != LockKeyAmadeus.default and \
             self.lock_key_amadeus == LockKeyAmadeus.default:
             self.lock_key_amadeus.value = self.LockKeyAmadeus.value
+            self.has_replaced_options.value = Toggle.option_true
+        if self.RiskyWarps != RiskyWarps.default and \
+            self.risky_warps == RiskyWarps.default:
+            self.risky_warps.value = self.RiskyWarps.value
             self.has_replaced_options.value = Toggle.option_true
         if self.TrapChance != TrapChance.default and \
             self.trap_chance == TrapChance.default:

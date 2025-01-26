@@ -127,6 +127,7 @@ class TimespinnerWorld(World):
             "PresentAccessWithWheelAndSpindle": self.options.back_to_the_future.value,
             "PrismBreak": self.options.prism_break.value,
             "LockKeyAmadeus": self.options.lock_key_amadeus.value,
+            "RiskyWarps": self.options.risky_warps.value,
             "Traps": self.options.traps.value,
             "DeathLink": self.options.death_link.value,
             "StinkyMaw": True,
