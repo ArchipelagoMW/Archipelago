@@ -10,7 +10,7 @@ from .AutopelagoDefinitions import GAME_NAME, version_stamp, AutopelagoGameRequi
     total_available_rat_count, max_required_rat_count, AutopelagoNonProgressionItemType, \
     autopelago_item_classification_of, location_name_to_nonprogression_item, autopelago_regions, item_name_groups, \
     location_name_groups
-from .options import ArchipelagoGameOptions, VictoryLocation
+from .options import ArchipelagoGameOptions, VictoryLocation, EnabledBuffs, EnabledTraps
 
 from BaseClasses import CollectionState, Item, Location, MultiWorld, Region, Tutorial
 from worlds.AutoWorld import World, WebWorld
@@ -222,10 +222,12 @@ class AutopelagoWorld(World):
                     r.connect(new_regions[next_exit], rule=rule)
 
     def get_filler_item_name(self):
-        return "Monkey's Paw"
+        return "Nothing"
 
     def fill_slot_data(self):
         return {
             'version_stamp': version_stamp,
             'victory_location_name': self.victory_location,
+            'enabled_buffs': [EnabledBuffs.map[b] for b in self.options.enabled_buffs.value],
+            'enabled_traps': [EnabledTraps.map[t] for t in self.options.enabled_traps.value],
         }

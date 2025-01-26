@@ -34,6 +34,14 @@ class EnabledBuffs(OptionSet):
     display_name = "Enabled Buffs"
     valid_keys = frozenset({"Well Fed", "Lucky", "Energized", "Stylish", "Confident", "Smart"})
     default = frozenset({"Well Fed", "Lucky", "Energized", "Stylish", "Confident", "Smart"})
+    map = {
+        "Well Fed": "well_fed",
+        "Lucky": "lucky",
+        "Energized": "energized",
+        "Stylish": "stylish",
+        "Confident": "confident",
+        "Smart": "smart",
+    }
 
 
 class EnabledTraps(OptionSet):
@@ -48,6 +56,15 @@ class EnabledTraps(OptionSet):
     display_name = "Enabled Traps"
     valid_keys = frozenset({"Upset Tummy", "Unlucky", "Sluggish", "Distracted", "Startled", "Conspiratorial"})
     default = frozenset({"Upset Tummy", "Unlucky", "Sluggish", "Distracted", "Startled", "Conspiratorial"})
+
+    map = {
+        "Upset Tummy": "upset_tummy",
+        "Unlucky": "unlucky",
+        "Sluggish": "sluggish",
+        "Distracted": "distracted",
+        "Startled": "startled",
+        "Conspiratorial": "conspiratorial",
+    }
 
 
 @dataclass
