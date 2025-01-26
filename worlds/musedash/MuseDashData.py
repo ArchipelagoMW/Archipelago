@@ -612,4 +612,13 @@ SONG_DATA: Dict[str, SongData] = {
     "Usagi Flap": SongData(2900736, "81-1", "MD-level Tactical Training Blu-ray", False, 3, 6, 8),
     "RE Aoharu": SongData(2900737, "81-2", "MD-level Tactical Training Blu-ray", False, 3, 5, 8),
     "Operation*DOTABATA!": SongData(2900738, "81-3", "MD-level Tactical Training Blu-ray", False, 5, 7, 10),
+    "Break Through the Dome": SongData(2900739, "82-0", "MSR Anthology_Vol.02", False, 5, 7, 9),
+    "Here in Vernal Terrene": SongData(2900740, "82-1", "MSR Anthology_Vol.02", False, 3, 5, 7),
+    "Everything's Alright": SongData(2900741, "82-2", "MSR Anthology_Vol.02", False, 3, 5, 8),
+    "Operation Ashring": SongData(2900742, "82-3", "MSR Anthology_Vol.02", False, 3, 5, 7),
+    "Misty Memory Day Version": SongData(2900743, "82-4", "MSR Anthology_Vol.02", False, 3, 5, 7),
+    "Misty Memory Night Version": SongData(2900744, "82-5", "MSR Anthology_Vol.02", False, 2, 6, 9),
+    "Arsonist": SongData(2900745, "82-6", "MSR Anthology_Vol.02", False, 3, 6, 8),
+    "Operation Deepness": SongData(2900746, "82-7", "MSR Anthology_Vol.02", False, 2, 4, 6),
+    "ALL!!!": SongData(2900747, "82-8", "MSR Anthology_Vol.02", False, 6, 8, 10),
 }
