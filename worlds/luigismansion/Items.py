@@ -2,6 +2,7 @@ from typing import NamedTuple, Dict, Set, Optional
 
 from BaseClasses import Item
 from BaseClasses import ItemClassification as IC
+from worlds.alttp.EntranceShuffle import address
 
 
 class LMItemData(NamedTuple):
@@ -74,7 +75,7 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Butler's Room Key": LMItemData("Door Key", 39, IC.progression, 1, address=0x803D5E14, itembit=1),
     "Tea Room Key": LMItemData("Door Key", 40, IC.progression, 47, address=0x803D5E19, itembit=7),
     "South Rec Room Key": LMItemData("Door Key", 41, IC.progression, 24, address=0x803D5E17, itembit=0),
-    "Upper 2F Stairwell Key": LMItemData("Door Key", 42, IC.progression, itembit=75), #TODO 1F - 2F Stairwell (Upper Door) Key
+    "Upper 2F Stairwell Key": LMItemData("Door Key", 42, IC.progression, 75, address=0x803D5E1D, itembit=3), #TODO 1F - 2F Stairwell (Upper Door) Key
     "2F Bathroom Key": LMItemData("Door Key", 43, IC.progression, 48, address=0x803D5E1A, itembit=0),
     "2F Washroom Key": LMItemData("Door Key", 44, IC.progression, 45, address=0x803D5E19, itembit=5),
     "Nana's Room Key": LMItemData("Door Key", 45, IC.progression, 49, address=0x803D5E1A, itembit=1),
