@@ -128,6 +128,7 @@ class TimespinnerWorld(World):
             "PrismBreak": self.options.prism_break.value,
             "LockKeyAmadeus": self.options.lock_key_amadeus.value,
             "RiskyWarps": self.options.risky_warps.value,
+            "PyramidStart": self.options.pyramid_start.value,
             "Traps": self.options.traps.value,
             "DeathLink": self.options.death_link.value,
             "StinkyMaw": True,
@@ -387,7 +388,8 @@ class TimespinnerWorld(World):
         self.place_locked_item(excluded_items, location, item_name)
 
     def place_first_progression_item(self, excluded_items: Set[str]) -> None:
-        if self.options.quick_seed or self.options.inverted or self.precalculated_weights.flood_lake_desolation:
+        if (self.options.quick_seed or self.options.inverted or self.precalculated_weights.flood_lake_desolation) \
+        and not self.options.pyramid_start:
             return
 
         for item_name in self.options.start_inventory.value.keys():

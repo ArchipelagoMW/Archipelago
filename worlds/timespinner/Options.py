@@ -387,6 +387,10 @@ class RiskyWarps(Toggle):
     """Expanded free-warp eligible locations, including Azure Queen, Xarion, Amadeus' Laboratory, and Emperor's Tower."""
     display_name = "Risky Warps"
 
+class PyramidStart(Toggle):
+    """Start in ???. Takes priority over Inverted. Additional chests in Dark Forest and Pyramid. Sandman door behaves as it does in Enter Sandman."""
+    display_name = "Pyramid Start"
+
 @dataclass
 class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     start_with_jewelry_box: StartWithJewelryBox
@@ -426,6 +430,7 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     prism_break: PrismBreak
     lock_key_amadeus: LockKeyAmadeus
     risky_warps: RiskyWarps
+    pyramid_start: PyramidStart
     trap_chance: TrapChance
     traps: Traps
 
@@ -496,6 +501,7 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
     PrismBreak: hidden(PrismBreak) # type: ignore
     LockKeyAmadeus: hidden(LockKeyAmadeus) # type: ignore
     RiskyWarps: hidden(RiskyWarps) # type: ignore
+    PyramidStart: hidden(PyramidStart) # type: ignore
     TrapChance: hidden(TrapChance) # type: ignore
     Traps: HiddenTraps # type: ignore
     DeathLink: HiddenDeathLink # type: ignore
@@ -645,6 +651,10 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
         if self.RiskyWarps != RiskyWarps.default and \
             self.risky_warps == RiskyWarps.default:
             self.risky_warps.value = self.RiskyWarps.value
+            self.has_replaced_options.value = Toggle.option_true
+        if self.PyramidStart != PyramidStart.default and \
+            self.pyramid_start == PyramidStart.default:
+            self.pyramid_start.value = self.PyramidStart.value
             self.has_replaced_options.value = Toggle.option_true
         if self.TrapChance != TrapChance.default and \
             self.trap_chance == TrapChance.default:

@@ -254,7 +254,17 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
             LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Journal - Lower Left Caves (Naivety)',  1337198, lambda state: not flooded.flood_maw or state.has('Water Mask', player))
         )
 
-    # 1337199 - 1337236 Reserved for future use
+    # 1337199 - 1337232 Reserved for future use
+
+    # 1337233 - 1337235 Pyramid Start checks
+    if not options or options.pyramid_start: 
+        location_table += (
+            LocationData('Ancient Pyramid (entrance)', 'Dark Forest: Training Dummy',  1337233),
+            LocationData('Ancient Pyramid (entrance)', 'Temporal Gyre: Forest Entrance',  1337234, lambda state: logic.has_upwarddash(state) or logic.can_teleport_to(state, "Time", "GateGyre")),
+            LocationData('Ancient Pyramid (entrance)', 'Ancient Pyramid: Rubble',  1337235),
+        )
+
+    # 1337236 Nightmare door
 
     # 1337237 - 1337245 GyreArchives
     if not options or options.gyre_archives:

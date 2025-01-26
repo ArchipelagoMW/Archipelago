@@ -94,7 +94,7 @@ class PreCalculatedWeights:
             if not is_lab_flooded:
                 present_teleportation_gates.append("GateLabEntrance")
 
-        if options.inverted:
+        if options.inverted or (options.pyramid_start and not options.back_to_the_future):
             all_gates: Tuple[str, ...] = present_teleportation_gates
         else:
             all_gates: Tuple[str, ...] = past_teleportation_gates + present_teleportation_gates

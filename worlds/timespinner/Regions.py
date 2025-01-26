@@ -125,7 +125,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, options: Timesp
     connect(world, player, 'Sealed Caves (Xarion)', 'Skeleton Shaft')
     connect(world, player, 'Sealed Caves (Xarion)', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Refugee Camp', 'Forest')
-    connect(world, player, 'Refugee Camp', 'Library', lambda state: options.inverted and options.back_to_the_future and state.has_all({'Timespinner Wheel', 'Timespinner Spindle'}, player))
+    connect(world, player, 'Refugee Camp', 'Library', lambda state: (options.pyramid_start or options.inverted) and options.back_to_the_future and state.has_all({'Timespinner Wheel', 'Timespinner Spindle'}, player))
     connect(world, player, 'Refugee Camp', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Forest', 'Refugee Camp')
     connect(world, player, 'Forest', 'Left Side forest Caves', lambda state: flooded.flood_lake_serene_bridge or state.has('Talaria Attachment', player) or logic.has_timestop(state))
@@ -162,9 +162,12 @@ def create_regions_and_locations(world: MultiWorld, player: int, options: Timesp
     connect(world, player, 'Royal towers (upper)', 'Royal towers')
     #connect(world, player, 'Ancient Pyramid (entrance)', 'The lab (upper)', lambda state: not is_option_enabled(world, player, "EnterSandman"))
     connect(world, player, 'Ancient Pyramid (entrance)', 'Ancient Pyramid (left)', logic.has_doublejump)
+    connect(world, player, 'Ancient Pyramid (entrance)', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Ancient Pyramid (left)', 'Ancient Pyramid (entrance)')
     connect(world, player, 'Ancient Pyramid (left)', 'Ancient Pyramid (right)', lambda state: flooded.flood_pyramid_shaft or logic.has_upwarddash(state))
+    connect(world, player, 'Ancient Pyramid (left)', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Ancient Pyramid (right)', 'Ancient Pyramid (left)', lambda state: flooded.flood_pyramid_shaft or logic.has_upwarddash(state))
+    connect(world, player, 'Ancient Pyramid (right)', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Space time continuum', 'Lake desolation', lambda state: logic.can_teleport_to(state, "Present", "GateLakeDesolation"))
     connect(world, player, 'Space time continuum', 'Lower lake desolation', lambda state: logic.can_teleport_to(state, "Present", "GateKittyBoss"))
     connect(world, player, 'Space time continuum', 'Library', lambda state: logic.can_teleport_to(state, "Present", "GateLeftLibrary"))
@@ -229,7 +232,9 @@ def connectStartingRegion(world: MultiWorld, player: int, options: TimespinnerOp
     tutorial = world.get_region('Tutorial', player)
     space_time_continuum = world.get_region('Space time continuum', player)
 
-    if options.inverted:
+    if options.pyramid_start: 
+        starting_region = world.get_region('Ancient Pyramid (entrance)', player)
+    elif options.inverted:
         starting_region = world.get_region('Refugee Camp', player)
     else:
         starting_region = world.get_region('Lake desolation', player)

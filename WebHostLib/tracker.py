@@ -1123,6 +1123,9 @@ if "Timespinner" in network_data_package["games"]:
             timespinner_location_ids["Ancient Pyramid"] += [
                 1337237, 1337238, 1337239,
                 1337240, 1337241, 1337242, 1337243, 1337244, 1337245]
+        if (slot_data["PyramidStart"]):
+            timespinner_location_ids["Ancient Pyramid"] += [
+                1337233, 1337234, 1337235]
 
         display_data = {}
 
