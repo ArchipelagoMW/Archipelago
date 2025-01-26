@@ -235,7 +235,7 @@ class KH2Context(CommonContext):
         return self.kh2.write_bytes(self.kh2.base_address + address, value.to_bytes(1, 'big'), 1)
 
     def kh2_read_byte(self, address):
-        return int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + address, 1), "big")
+        return int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + address, 1))
 
     def kh2_read_int(self, address):
         return self.kh2.read_int(self.kh2.base_address + address)
@@ -251,7 +251,7 @@ class KH2Context(CommonContext):
             self.kh2seedname = args['seed_name']
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
-            if not os.path.exists(self.game_communication_path + f"\kh2save2{self.kh2seedname}{self.auth}.json"):
+            if not os.path.exists(os.path.join(self.game_communication_path, f"kh2save2{self.kh2seedname}{self.auth}.json")):
                 self.kh2_seed_save = {
                     "Levels":        {
                         "SoraLevel":   0,
@@ -268,8 +268,8 @@ class KH2Context(CommonContext):
                         'wt') as f:
                     pass
                 # self.locations_checked = set()
-            elif os.path.exists(self.game_communication_path + f"\kh2save2{self.kh2seedname}{self.auth}.json"):
-                with open(self.game_communication_path + f"\kh2save2{self.kh2seedname}{self.auth}.json", 'r') as f:
+            elif os.path.exists(os.path.join(self.game_communication_path, f"kh2save2{self.kh2seedname}{self.auth}.json")):
+                with open(self.game_communication_path + "kh2save2" + self.kh2seedname + self.auth + ".json") as f:
                     self.kh2_seed_save = json.load(f)
                     if self.kh2_seed_save is None:
                         self.kh2_seed_save = {
@@ -291,10 +291,10 @@ class KH2Context(CommonContext):
             self.kh2slotdata = args['slot_data']
 
             self.kh2_data_package = Utils.load_data_package_for_checksum("Kingdom Hearts 2", self.checksums["Kingdom Hearts 2"])
-            #self.kh2_data_package = {}
+
             if "location_name_to_id" in self.kh2_data_package:
-                self.data_package_kh2_cache(self.kh2_data_package["location_name_to_id"],
-                        self.kh2_data_package["item_name_to_id"])
+                self.data_package_kh2_cache(
+                        self.kh2_data_package["location_name_to_id"], self.kh2_data_package["item_name_to_id"])
                 self.connect_to_game()
             else:
                 asyncio.create_task(self.send_msgs([{"cmd": "GetDataPackage", "games": ["Kingdom Hearts 2"]}]))
@@ -835,7 +835,7 @@ class KH2Context(CommonContext):
                     if self.game_communication_path:
                         logger.info("Checking with most up to date addresses from the addresses json.")
                         #if mem addresses file is found then check version and if old get new one
-                        kh2memaddresses_path = os.path.join(self.game_communication_path, f"kh2memaddresses.json")
+                        kh2memaddresses_path = os.path.join(self.game_communication_path, "kh2memaddresses.json")
                         if not os.path.exists(kh2memaddresses_path):
                             logger.info("File is not found. Downloading json with memory addresses. This might take a moment")
                             mem_resp = requests.get("https://raw.githubusercontent.com/JaredWeakStrike/KH2APMemoryValues/master/kh2memaddresses.json")
