@@ -516,7 +516,7 @@ Laser - 0x17C65 (Laser) - 0x17CA4
 159121 - 0x03BE3 (Garden Right EP) - True - True
 159122 - 0x0A409 (Wall EP) - True - True
 
-Inside Monastery (Monastery) - Monastery North Shutters - 0x09D9B:
+Inside Monastery (Monastery) - Monastery Shutters - 0x09D9B:
 158213 - 0x09D9B (Shutters Control) - True - Dots
 158214 - 0x193A7 (Inside 1) - 0x00037 - True
 158215 - 0x193AA (Inside 2) - 0x193A7 - True
