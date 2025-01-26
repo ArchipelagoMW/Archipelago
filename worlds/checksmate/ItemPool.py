@@ -435,7 +435,8 @@ class CMItemPool:
         # Calculate based on actual items
         item_counts = Counter(item.name for item in items)
         return sum(
-            progression_items[item_name].material * count
+            min(progression_items[item_name].material * count,
+                progression_items[item_name].material * progression_items[item_name].quantity)
             for item_name, count in item_counts.items()
             if item_name in progression_items
         )

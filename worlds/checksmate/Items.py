@@ -1,4 +1,5 @@
 import math
+from sys import maxsize
 from typing import Dict, NamedTuple, Optional, List, Union
 
 from BaseClasses import Item, ItemClassification
@@ -11,7 +12,7 @@ class CMItem(Item):
 class CMItemData(NamedTuple):
     code: Optional[int]
     classification: ItemClassification
-    quantity: float = 1  # maximum, not guaranteed
+    quantity: int = 1  # maximum, not guaranteed
     material: int = 0  # pawns=100, minor=300, major=500, queen=900
     # for each given parent item, the maximum number of child items which may be present
     parents: List[List[Union[str, int]]] = []
@@ -48,7 +49,7 @@ item_table = {
     # Gems are a way to generate filler items and limit use of Pocket items
     # Gems are generated 1/turn and Pocket pieces cost 1 Gem per their material value
     # Turn off Pocket entirely to hide this item.
-    "Progressive Pocket Gems": CMItemData(4_901_023, ItemClassification.filler, quantity=math.inf),
+    "Progressive Pocket Gems": CMItemData(4_901_023, ItemClassification.filler, quantity=maxsize),
     # Allows the player to deploy pocket items one rank further from the home row, but not the opponent's home row
     "Progressive Pocket Range": CMItemData(4_901_024, ItemClassification.filler, quantity=6),
 
