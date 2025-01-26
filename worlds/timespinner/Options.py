@@ -60,6 +60,7 @@ class EnemyRando(Choice):
     option_scaled = 1
     option_unscaled = 2
     option_ryshia = 3
+    option_no_hell_spiders = 4
     alias_true = 1
 
 class DamageRando(Choice):
