@@ -2,7 +2,7 @@ import functools
 
 from .CMMockTestCase import CMMockTestCase
 from ..ItemPool import CMItemPool
-from ..Items import progression_items, item_table
+from ..Items import progression_items
 from ..Options import EnableTactics
 
 

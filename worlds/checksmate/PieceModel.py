@@ -1,7 +1,6 @@
 import math
-from enum import Enum
-from typing import Dict, List, Optional, Union, Callable
-from .Items import item_table, progression_items, item_name_groups
+from typing import Dict, List, Optional, Union
+from .Items import item_table
 from .Options import piece_type_limit_options, piece_limit_options
 from .PieceLimitCascade import PieceLimitCascade
 

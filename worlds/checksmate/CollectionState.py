@@ -1,6 +1,6 @@
-from typing import Dict, List, Union, Tuple
+from typing import Tuple
 from BaseClasses import CollectionState, Item
-from .Items import item_table, progression_items
+from .Items import item_table
 from .ItemUtils import get_parents, get_children
 import logging
 

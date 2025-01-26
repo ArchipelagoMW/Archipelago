@@ -1,8 +1,5 @@
 from .CMMockTestCase import CMMockTestCase
 from ..MaterialModel import MaterialModel
-from ..Items import progression_items
-from ..Options import (FairyChessArmy, FairyChessPieces, FairyChessPawns, 
-                      Difficulty, FairyChessPiecesConfigure)
 
 class TestMaterialModel(CMMockTestCase):
     def setUp(self):

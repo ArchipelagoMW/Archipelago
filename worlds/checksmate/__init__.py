@@ -1,6 +1,4 @@
-import logging
-from collections import Counter
-from typing import List, Dict, ClassVar, Type, Optional
+from typing import List, Dict, ClassVar, Type
 
 from BaseClasses import Tutorial, Region, MultiWorld, Item, CollectionState
 from Options import PerGameCommonOptions

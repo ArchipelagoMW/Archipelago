@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Union
+from typing import Dict, List
 from collections import Counter
 from BaseClasses import Item
 import logging
@@ -6,9 +6,9 @@ import math
 
 from .Items import (CMItem, item_table, filler_items, progression_items,
                    useful_items, item_name_groups)
-from .Locations import location_table, Tactic, highest_chessmen_requirement_small, highest_chessmen_requirement
+from .Locations import location_table, Tactic
 from .Rules import determine_min_material, determine_max_material
-from .PieceModel import PieceModel, PieceLimitCascade
+from .PieceModel import PieceModel
 from .MaterialModel import MaterialModel
 from .ItemRemoval import ItemRemoval
 

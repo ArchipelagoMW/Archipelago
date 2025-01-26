@@ -1,6 +1,5 @@
 from .CMMockTestCase import CMMockTestCase
 from ..PieceModel import PieceModel, PieceLimitCascade
-from ..Items import progression_items
 
 class TestPieceModel(CMMockTestCase):
     def setUp(self):

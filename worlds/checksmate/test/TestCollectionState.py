@@ -1,4 +1,3 @@
-from ..CollectionState import CMCollectionState
 from BaseClasses import CollectionState, Item, ItemClassification
 from ..Items import item_table
 from . import CMTestBase
