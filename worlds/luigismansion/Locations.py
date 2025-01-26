@@ -47,8 +47,9 @@ class LMLocation(Location):
 # Toad item contents are unable to be modifeid without further study, included here for future developments
 # Boo item contents are unable to be modified without further study, included here for future developments. All
 # require Boo Radar
+
+# Base Chests / Locations
 BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
-    # Base Chests / Locations
     #"Luigi's Courage": LMLocationData("Parlor", 708, "Special", -1, []), # Give item during/after E. Gadd cutscene
     "Ghost Foyer Key": LMLocationData("Foyer", 713, "Freestanding", 1, []),
     "1F Washroom Toilet": LMLocationData("1F Washroom", 4, "Furniture", 233, [], 16),
@@ -84,10 +85,10 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     # "Storage Room Cage": LMLocationData("Storage Room", 712, "Special", -1, []), # TODO Do we want this?
 
     # Game Event Locations
-    "Breaker Box":     LMLocationData("Breaker Room", None, "Event", 0, [], locked_item="Blackout"),
+    "Breaker Box":     LMLocationData("Breaker Room", None, "Event", -1, [], locked_item="Blackout"),
     # LMLocationData('Nursery', 'Chauncey',  None),
     # LMLocationData('Graveyard', 'Bogmire',  None),
-    "King Boo":         LMLocationData("Secret Altar", None, "Event", 0, [], locked_item="Mario's Painting"),
+    "King Boo":         LMLocationData("Secret Altar", None, "Event", -1, [], locked_item="Mario's Painting"),
 }
 
 
@@ -157,8 +158,6 @@ PLANT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Wardrobe Balcony Plant C": LMLocationData("Wardrobe Balcony", 67, "Plant", 475, ["Water Element Medal"], 40),
     "Wardrobe Balcony Plant L (in Corner)": LMLocationData("Wardrobe Balcony", 68, "Plant", 476, ["Water Element Medal"], 40),
     "Master Bedroom Plant": LMLocationData("Master Bedroom", 69, "Plant", 542, ["Water Element Medal"], 34),
-    #   LMLocationData('Boneyard', 'Huge Flower70,
-    #               rule=lambda state: state.has("Water Element Medal", player) and state.has()),  #TODO need to determine how to make unskippable
     "Courtyard SW Plant": LMLocationData("Courtyard", 71, "Plant", 142, ["Water Element Medal"], 24),
     "Courtyard NW Plant": LMLocationData("Courtyard", 72, "Plant", 143, ["Water Element Medal"], 24),
     "Courtyard NE Plant": LMLocationData("Courtyard", 73, "Plant", 144, ["Water Element Medal"], 24),
@@ -181,6 +180,9 @@ PLANT_LOCATION_TABLE: dict[str, LMLocationData] = {
     #"Balcony Plant 16" :LMLocationData("Balcony", 90, "Plant", -1,["Water Element Medal"], 62), #TODO Locate
     "Sitting Room Plant": LMLocationData("Sitting Room", 91, "Plant", 409, ["Water Element Medal"], 28),
     "Guest Room Plant": LMLocationData("Guest Room", 92, "Plant", 417, ["Water Element Medal"], 29),
+    # TODO need to determine how to make unskippable
+    #   LMLocationData('Boneyard', 'Huge Flower70,
+    #               rule=lambda state: state.has("Water Element Medal", player) and state.has()),
 }
 
 
