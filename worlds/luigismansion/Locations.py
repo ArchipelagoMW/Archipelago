@@ -532,7 +532,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Billiards Room Chess Table": LMLocationData("Billiards Room", 410, "Furniture", 148, [], 12),
     "Billiards Room C Chair": LMLocationData("Billiards Room", 411, "Furniture", 149, [], 12),
     "Billiards Room L Chair": LMLocationData("Billiards Room", 412, "Furniture", 150, [], 12),
-    "Billiards Room R Chair": LMLocationData("Billiards Room", 413, "Furniture", 151, [], 12),
+    "Billiards Room R Chair": LMLocationData("Billiards Room", 413, "Furniture", 151, [], 12), #TODO Speedy Spirit
     "Billiards Room L Portrait (near Chest)": LMLocationData("Billiards Room", 414, "Furniture", 153, [], 12),
     "Billiards Room L Portrait (near Dart Board)": LMLocationData("Billiards Room", 415, "Furniture", 155, [], 12),
     "Billiards Room C Portrait": LMLocationData("Billiards Room", 416, "Furniture", 152, [], 12),
