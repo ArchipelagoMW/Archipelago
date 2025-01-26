@@ -53,7 +53,7 @@ ROOM_ID_OFFSET = 0x35C
 # A Flag with value 0x00 indicates no interaction, 0x01 indicates it has been interacted with and has either
 # dropped something or had dust, and 0x02 indicates an important item, such as a Mario Item or Elemental Medal.
 FURNITURE_MAIN_TABLE_ID = 0x803CD768
-FURNITURE_ADDR_COUNT = 712
+FURNITURE_ADDR_COUNT = 760
 FURN_FLAG_OFFSET = 0x8C
 FURN_ID_OFFSET = 0xBC
 
