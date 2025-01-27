@@ -160,6 +160,7 @@ class LMContext(CommonContext):
             self.rank_req = int(args["slot_data"]["rank requirement"])
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
+
         if cmd == "ReceivedItems":  # On Receive Item from Server
             if args["index"] >= self.last_rcvd_index:
                 self.last_rcvd_index = args["index"]
@@ -237,14 +238,14 @@ async def give_items(ctx: LMContext):
 
 
 async def check_locations(ctx: LMContext):
-    list_types_to_skip_currently = ["BSpeedy", "Portrait", "Event", "Toad", "Boo"]
+    list_types_to_skip_currently = ["BSpeedy", "Portrait", "Event", "Toad"]
 
     current_map_id = get_map_id()
     for location, data in ALL_LOCATION_TABLE.items():
         if data.type in list_types_to_skip_currently:
             continue
 
-        if not LMLocation.get_apid(data.code) in ctx.missing_locations:
+        if data.code is None or not LMLocation.get_apid(data.code) in ctx.missing_locations:
             continue
 
         # If in main mansion map
@@ -293,6 +294,10 @@ async def check_locations(ctx: LMContext):
                     # Bit 2 of the current room address indicates if a chest in that room has been opened.
                     current_room_state_int = read_short(data.room_ram_addr)
                     if (current_room_state_int & (1 << 2)) > 0:
+                        ctx.locations_checked.add(LMLocation.get_apid(data.code))
+                case "Boo":
+                    current_boo_state_int = dme.read_byte(data.ram_addr)
+                    if (current_boo_state_int & (1 << data.itembit)) > 0:
                         ctx.locations_checked.add(LMLocation.get_apid(data.code))
 
     locations_checked = ctx.locations_checked.difference(ctx.checked_locations)
