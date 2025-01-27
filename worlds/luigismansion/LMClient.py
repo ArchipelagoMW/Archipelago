@@ -119,6 +119,7 @@ class LMContext(CommonContext):
         # Used for handling received items to the client.
         self.local_items_received: list[tuple[NetworkItem, int]] = []
         self.last_rcvd_index = -1
+        self.slot_num = -1
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.auth = None
@@ -128,14 +129,16 @@ class LMContext(CommonContext):
         if cmd == "Connected":  # On Connect
             self.local_items_received = []
             self.last_rcvd_index = -1
+            self.slot_num = int(args["slot"])
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
         if cmd == "ReceivedItems":  # On Receive Item from Server
             if args["index"] >= self.last_rcvd_index:
                 self.last_rcvd_index = args["index"]
                 for item in args["items"]:
-                    self.local_items_received.append((item, self.last_rcvd_index))
-                    self.last_rcvd_index += 1
+                    if not item.player == self.slot_num:
+                        self.local_items_received.append((item, self.last_rcvd_index))
+                        self.last_rcvd_index += 1
             self.local_items_received.sort(key=lambda v: v[1])
 
     def on_deathlink(self, data: dict[str, Any]):
@@ -182,7 +185,7 @@ def check_if_addr_is_pointer(addr: int):
 # TODO Validate this works
 async def give_items(ctx: LMContext):
     # Only try to give items if we are in game and alive.
-    if not (check_ingame() and check_alive()):
+    if not await check_ingame() and await check_alive():
         return
 
     # Only update new items that have come since it was last received.
@@ -284,7 +287,7 @@ async def check_alive():
 
 
 async def check_death(ctx: LMContext):
-    if check_ingame():
+    if await check_ingame():
         if not check_alive() and not ctx.has_send_death and time.time() >= ctx.last_death_link + 3:
             ctx.has_send_death = True
             await ctx.send_death(ctx.player_names[ctx.slot] + " scared themselves to death.")
@@ -292,7 +295,7 @@ async def check_death(ctx: LMContext):
             ctx.has_send_death = False
 
 
-def check_ingame():
+async def check_ingame():
     current_map_id = get_map_id()
     if current_map_id == 2:
         # If this is NOT a pointer, then either we are on another map (aka boss fight) or game is not fully loaded.
@@ -309,7 +312,7 @@ async def dolphin_sync_task(ctx: LMContext):
     while not ctx.exit_event.is_set():
         try:
             if dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
-                if not check_ingame():
+                if not await check_ingame():
                     # Reset give item array while not in game
                     # dolphin_memory_engine.write_bytes(GIVE_ITEM_ARRAY_ADDR, bytes([0xFF] * ctx.len_give_item_array))
                     await asyncio.sleep(0.1)
