@@ -120,6 +120,8 @@ class LMContext(CommonContext):
         self.local_items_received: list[tuple[NetworkItem, int]] = []
         self.last_rcvd_index = -1
         self.slot_num = -1
+        self.goal_type = None
+        self.game_clear = False
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.auth = None
@@ -130,6 +132,7 @@ class LMContext(CommonContext):
             self.local_items_received = []
             self.last_rcvd_index = -1
             self.slot_num = int(args["slot"])
+            self.goal_type = int(args["slot_data"]["goal"])
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
         if cmd == "ReceivedItems":  # On Receive Item from Server
@@ -271,13 +274,21 @@ async def check_locations(ctx: LMContext):
     if locations_checked:
         await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
 
-    # TODO Send game clear
-    # if not ctx.finished_game and game_clear:
-    #    ctx.finished_game = True
-    #    await ctx.send_msgs([{
-    #        "cmd": "StatusUpdate",
-    #        "status": ClientStatus.CLIENT_GOAL,
-    #    }])
+    if current_map_id == 9:
+        beat_king_boo = dme.read_byte(0x803D5DBF)
+        if (beat_king_boo & (1 << 5)) > 0 and not ctx.game_clear:
+            if ctx.goal_type == 0:
+                ctx.game_clear = True
+            elif ctx.goal_type == 1:
+                ctx.game_clear = True
+                #TODO check for Rank Here.
+
+    if not ctx.finished_game and ctx.game_clear:
+        ctx.finished_game = True
+        await ctx.send_msgs([{
+            "cmd": "StatusUpdate",
+            "status": ClientStatus.CLIENT_GOAL,
+        }])
     return
 
 
