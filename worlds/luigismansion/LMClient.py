@@ -11,10 +11,9 @@ import dolphin_memory_engine as dme
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus, NetworkItem
 from settings import get_settings, Settings
-from worlds.luigismansion import LMItem
-from .LMGenerator import LuigisMansionRandomizer
 
-from .Items import LOOKUP_ID_TO_NAME, ALL_ITEMS_TABLE
+from .LMGenerator import LuigisMansionRandomizer
+from .Items import LOOKUP_ID_TO_NAME, ALL_ITEMS_TABLE, LMItem
 from .Locations import ALL_LOCATION_TABLE, LMLocation, LMLocationData
 
 CONNECTION_REFUSED_GAME_STATUS = (
