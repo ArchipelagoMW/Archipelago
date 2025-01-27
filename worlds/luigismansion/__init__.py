@@ -65,7 +65,8 @@ class LMWeb(WebWorld):
             LuigiOptions.StartHiddenMansion,
             LuigiOptions.RandomMusic,
             LuigiOptions.HintDistribution,
-            LuigiOptions.PortraitHints
+            LuigiOptions.PortraitHints,
+            LuigiOptions.Deathlink
         ]),
         OptionGroup("Access Options", [
             LuigiOptions.Goal,
