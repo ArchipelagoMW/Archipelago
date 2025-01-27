@@ -110,6 +110,7 @@ class LMCommandProcessor(ClientCommandProcessor):
 class LMContext(CommonContext):
     command_processor = LMCommandProcessor
     game = "Luigi's Mansion"
+    items_handling = 0b111
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
