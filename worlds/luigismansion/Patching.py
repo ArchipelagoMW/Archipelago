@@ -1025,7 +1025,7 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
             item_appear_info.info_file_field_entries.index(item_appear_entry_idx))
 
         if any((key, val) for (key, val) in filler_items.items() if key == item_data["name"] and val.type == "Money"): # TODO change once more money types are implement to force AP to change.
-            furniture_info.info_file_field_entries[item_data["loc_enum"]]["item_table"] = "money"
+            furniture_info.info_file_field_entries[item_data["loc_enum"]]["item_table"] = 2
             int_money_amt = 1
             if re.search(r"^\d+", item_data["name"]):
                 int_money_amt = int(re.search(r"^\d+", item_data["name"]).group())
