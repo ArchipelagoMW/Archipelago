@@ -194,8 +194,8 @@ class KH2WorldRules(KH2Rules):
             RegionName.Oc:                 lambda state: self.oc_unlocked(state, 1),
             RegionName.Oc2:                lambda state: self.oc_unlocked(state, 2),
 
+            #twtnw1 is actually the roxas fight region thus roxas requires 1 way to the dawn
             RegionName.Twtnw2:             lambda state: self.twtnw_unlocked(state, 2),
-            # These will be swapped and First Visit lock for twtnw is in development.
             # RegionName.Twtnw1: lambda state: self.lod_unlocked(state, 2),
 
             RegionName.Ht:                 lambda state: self.ht_unlocked(state, 1),
@@ -919,8 +919,8 @@ class KH2FightRules(KH2Rules):
         # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus
         # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus
         sephiroth_rules = {
-            "easy":   self.kh2_dict_count(easy_sephiroth_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_sephiroth_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
+            "easy":   self.kh2_dict_count(easy_sephiroth_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state),
+            "normal": self.kh2_dict_count(normal_sephiroth_tools, state) and self.kh2_can_reach(LocationName.Limitlvl5, state) and self.kh2_list_any_sum([gap_closer], state) >= 1,
             "hard":   self.kh2_dict_count(hard_sephiroth_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2,
         }
         return sephiroth_rules[self.fight_logic]
