@@ -191,10 +191,15 @@ async def give_items(ctx: LMContext):
         return
 
     for item, idx in ctx.local_items_received:
-        _, loc_data = next((_, locData) for (_, locData) in ALL_ITEMS_TABLE.items()
-                           if (LMItem.get_apid(locData.code)) == item.item and locData.ram_addr is not None)
-        item_val = dme.read_byte(loc_data.ram_addr)
-        dme.write_byte(loc_data.ram_addr, (item_val | (1 << loc_data.itembit)))
+        if any((_, locData) for (_, locData) in ALL_ITEMS_TABLE.items()
+                           if (LMItem.get_apid(locData.code)) == item.item and locData.ram_addr is not None):
+            _, loc_data = next((_, locData) for (_, locData) in ALL_ITEMS_TABLE.items()
+                               if (LMItem.get_apid(locData.code)) == item.item and locData.ram_addr is not None)
+            item_val = dme.read_byte(loc_data.ram_addr)
+            dme.write_byte(loc_data.ram_addr, (item_val | (1 << loc_data.itembit)))
+        else:
+            # TODO Debug remove before release
+            logger.warn("Missing address for AP ID: " + str(item.item))
 
     write_short(LAST_GIVE_ITEM_ADDR, ctx.last_rcvd_index)
     return
