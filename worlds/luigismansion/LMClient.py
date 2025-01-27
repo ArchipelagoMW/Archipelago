@@ -3,8 +3,6 @@ import os
 import time
 import traceback
 
-from Cython.Utils import is_cython_generated_file
-
 import Utils
 from typing import Any, Optional
 
@@ -19,7 +17,6 @@ from .LMGenerator import LuigisMansionRandomizer
 from .Items import LOOKUP_ID_TO_NAME, ALL_ITEMS_TABLE
 from .Locations import ALL_LOCATION_TABLE, LMLocation, LMLocationData
 
-
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
 )
@@ -29,7 +26,6 @@ CONNECTION_REFUSED_SAVE_STATUS = (
 CONNECTION_LOST_STATUS = "Dolphin connection was lost. Please restart your emulator and make sure LM is running."
 CONNECTION_CONNECTED_STATUS = "Dolphin connected successfully."
 CONNECTION_INITIAL_STATUS = "Dolphin connection has not been initiated."
-
 
 # This is the address that holds the player's slot name.
 # This way, the player does not have to manually authenticate their slot name.
@@ -89,7 +85,7 @@ def get_base_rom_path(file_name: str = "") -> str:
 
 
 def save_patched_iso(output_data):
-    iso_path = get_base_rom_path()  #TODO fix??
+    iso_path = get_base_rom_path()
     directory_to_iso, file = os.path.split(output_data)
     file_name = os.path.splitext(file)[0]
 
@@ -129,12 +125,12 @@ class LMContext(CommonContext):
         await super().disconnect(allow_autoreconnect)
 
     def on_package(self, cmd: str, args: dict):
-        if cmd == "Connected": # On Connect
+        if cmd == "Connected":  # On Connect
             self.local_items_received = []
             self.last_rcvd_index = -1
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
-        if cmd == "ReceivedItems": # On Receive Item from Server
+        if cmd == "ReceivedItems":  # On Receive Item from Server
             if args["index"] >= self.last_rcvd_index:
                 self.last_rcvd_index = args["index"]
                 for item in args["items"]:
@@ -174,8 +170,10 @@ def _give_death(ctx: LMContext):
         write_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]), 0)
     return
 
+
 def get_map_id():
     return dme.read_word(CURR_MAP_ID_ADDR)
+
 
 def check_if_addr_is_pointer(addr: int):
     return 2147483648 <= dme.read_word(addr) <= 2172649471
@@ -193,10 +191,10 @@ async def give_items(ctx: LMContext):
         return
 
     for item, idx in ctx.local_items_received:
-        _ , loc_data = next((_, locData) for (_, locData) in ALL_ITEMS_TABLE.items()
-                                  if locData.code == LMItem.get_apid(item.item))
-        item_val = dme.read_byte(loc_data.ram_address)
-        dme.write_byte(loc_data.ram_address, (item_val | (1 << loc_data.itembit)))
+        _, loc_data = next((_, locData) for (_, locData) in ALL_ITEMS_TABLE.items()
+                           if (LMItem.get_apid(locData.code)) == item.item and locData.ram_addr is not None)
+        item_val = dme.read_byte(loc_data.ram_addr)
+        dme.write_byte(loc_data.ram_addr, (item_val | (1 << loc_data.itembit)))
 
     write_short(LAST_GIVE_ITEM_ADDR, ctx.last_rcvd_index)
     return
@@ -215,7 +213,7 @@ async def check_locations(ctx: LMContext):
 
         # If in main mansion map
         if current_map_id == 2:
-            #TODO Debug remove before release
+            # TODO Debug remove before release
             if data.in_game_room_id is None:
                 logger.warn("Missing in game room id: " + location)
 
@@ -258,16 +256,15 @@ async def check_locations(ctx: LMContext):
                 case "Chest":
                     # Bit 2 of the current room address indicates if a chest in that room has been opened.
                     current_room_state_int = read_short(data.room_ram_addr)
-                    if (current_room_state_int & (1<<2)) > 0:
+                    if (current_room_state_int & (1 << 2)) > 0:
                         ctx.locations_checked.add(LMLocation.get_apid(data.code))
-
 
     locations_checked = ctx.locations_checked.difference(ctx.checked_locations)
     if locations_checked:
         await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
 
     # TODO Send game clear
-    #if not ctx.finished_game and game_clear:
+    # if not ctx.finished_game and game_clear:
     #    ctx.finished_game = True
     #    await ctx.send_msgs([{
     #        "cmd": "StatusUpdate",
@@ -280,13 +277,15 @@ async def check_alive():
     lm_curr_health = read_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]))
     return lm_curr_health > 0
 
+
 async def check_death(ctx: LMContext):
     if check_ingame():
         if not check_alive() and not ctx.has_send_death and time.time() >= ctx.last_death_link + 3:
-                ctx.has_send_death = True
-                await ctx.send_death(ctx.player_names[ctx.slot] + " scared themselves to death.")
+            ctx.has_send_death = True
+            await ctx.send_death(ctx.player_names[ctx.slot] + " scared themselves to death.")
         else:
             ctx.has_send_death = False
+
 
 def check_ingame():
     current_map_id = get_map_id()
@@ -356,7 +355,7 @@ async def dolphin_sync_task(ctx: LMContext):
 def main(output_data: Optional[str] = None, connect=None, password=None):
     Utils.init_logging("Luigi's Mansion Client")
 
-    if output_data :
+    if output_data:
         save_patched_iso(output_data)
 
     async def _main(connect, password):
