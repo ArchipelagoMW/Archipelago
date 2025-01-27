@@ -991,9 +991,9 @@ def set_rules(kh1world):
         lambda state: state.has("Slides", player))
     add_rule(kh1world.get_location("Wonderland Bizarre Room Navi-G Piece Event"),
         lambda state: state.has("Footprints", player))
-    add_rule(kh1world.get_location("Traverse Town Synth Item 1"),
+    add_rule(kh1world.get_location("Traverse Town Synth 15 Items"),
         lambda state: (
-            state.has("Orichalcum", player, 6)
+            max(state.count("Orichalcum", player),9) + max(state.count("Mythril", player),9) >= 15
             and
             (
                 state.has("Green Trinity", player)
@@ -1001,56 +1001,18 @@ def set_rules(kh1world):
                 or (options.advanced_logic and state.has("High Jump", player, 2))
             )
         ))
-    add_rule(kh1world.get_location("Traverse Town Synth Item 2"),
-        lambda state: (
-            state.has("Orichalcum", player, 6)
-            and
-            (
-                state.has("Green Trinity", player)
-                or state.has("High Jump", player, 3)
-                or (options.advanced_logic and state.has("High Jump", player, 2))
-            )
-        ))
-    add_rule(kh1world.get_location("Traverse Town Synth Item 3"),
-        lambda state: (
-            state.has("Orichalcum", player, 6)
-            and
-            (
-                state.has("Green Trinity", player)
-                or state.has("High Jump", player, 3)
-                or (options.advanced_logic and state.has("High Jump", player, 2))
-            )
-        ))
-    add_rule(kh1world.get_location("Traverse Town Synth Item 4"),
-        lambda state: (
-            state.has("Orichalcum", player, 6)
-            and
-            (
-                state.has("Green Trinity", player)
-                or state.has("High Jump", player, 3)
-                or (options.advanced_logic and state.has("High Jump", player, 2))
-            )
-        ))
-    add_rule(kh1world.get_location("Traverse Town Synth Item 5"),
-        lambda state: (
-            state.has("Orichalcum", player, 6)
-            and
-            (
-                state.has("Green Trinity", player)
-                or state.has("High Jump", player, 3)
-                or (options.advanced_logic and state.has("High Jump", player, 2))
-            )
-        ))
-    add_rule(kh1world.get_location("Traverse Town Synth Item 6"),
-        lambda state: (
-            state.has("Orichalcum", player, 6)
-            and
-            (
-                state.has("Green Trinity", player)
-                or state.has("High Jump", player, 3)
-                or (options.advanced_logic and state.has("High Jump", player, 2))
-            )
-        ))
+    for i in range(33):
+        add_rule(kh1world.get_location("Traverse Town Synth Item " + str(i+1).rjust(2,'0')),
+            lambda state: (
+                state.has("Orichalcum", player, 17)
+                and state.has("Mythril", player, 16)
+                and
+                (
+                    state.has("Green Trinity", player)
+                    or state.has("High Jump", player, 3)
+                    or (options.advanced_logic and state.has("High Jump", player, 2))
+                )
+            ))
     add_rule(kh1world.get_location("Traverse Town Gizmo Shop Postcard 1"),
         lambda state: state.has("Progressive Thunder", player))
     add_rule(kh1world.get_location("Traverse Town Gizmo Shop Postcard 2"),
@@ -1129,7 +1091,10 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Wonderland Lotus Forest Blue Trinity in Alcove"),
         lambda state: state.has("Blue Trinity", player))
     add_rule(kh1world.get_location("Wonderland Lotus Forest Blue Trinity by Moving Boulder"),
-        lambda state: state.has("Blue Trinity", player))
+        lambda state: (
+            state.has("Blue Trinity", player)
+            and state.has("Footprints", player)
+            ))
     add_rule(kh1world.get_location("Agrabah Bazaar Blue Trinity"),
         lambda state: state.has("Blue Trinity", player))
     add_rule(kh1world.get_location("Monstro Mouth Blue Trinity"),
