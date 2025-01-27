@@ -22,7 +22,7 @@ Ghosts (Speedy Spirits), and even every interactable object in the game.
 
 ## Which items can be in another player's world?
 
-Keys, Mario's Items, and Element Medals can be found in other worlds, along with money , hearts, and poison mushrooms.
+Keys, Mario's Items, and Element Medals can be found in other worlds, along with money, hearts, and a variety of traps.
 
 ## What does another world's item look like in Luigi's Mansion?
 
@@ -30,7 +30,7 @@ Items belonging to other worlds are represented by an AP icon and are called AP 
 
 ## When the player receives an item, what happens?
 
-_______. 
+items received in Luigi's Mansion will display a popup window that does not interrupt gameplay.. 
 
 ## Changes from the vanilla game
 
@@ -69,7 +69,4 @@ _______.
 ###### Bug fixes:
 
 - Vanilla game bugs that could result in softlocks or save file corruption have been fixed
-- (optional) Bugfix for the algorithm that determines the item pool for red chest gear. Enabling this allows the cave to
-  generate shields, headgear, rings, and jewels in red chests even after floor B9
-- (optional) Bugfix for the outlandish cravings of capsule monsters in the US version. Enabling this makes feeding work
-  like in the JP and EU versions of the game, resulting in more reasonable cravings
+- 
