@@ -62,6 +62,29 @@ FURN_ID_OFFSET = 0xBC
 # TODO in theory we should validate this is saved and maintained in the ROM. If so, then this will always be up to date.
 LAST_GIVE_ITEM_ADDR = 0x80314670
 
+# This address will monitor when you capture the final boss, King Boo
+KING_BOO_ADDR = 0x803D5DBF
+
+# This address will start the point to Luigi's inventory to get his wallet to calculate rank.
+WALLET_START_ADDR = 0x803D8B7C
+
+WALLET_OFFSETS: dict[int, int] = {
+    0x324: 5000,
+    0x328: 20000,
+    0x32C: 100000,
+    0x330: 500000,
+    0x334: 800000,
+    0x338: 1000000,
+    0x33C: 2000000,
+    0x344: 20000000,
+    0x348: 50000,
+    0x34C: 100000,
+    0x350: 1000000
+}
+
+# Rank Requirements for each rank. H, G, F, E, D, C, B, A
+RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000,50000000, 60000000, 70000000, 100000000]
+
 
 def read_short(console_address: int):
     return int.from_bytes(dme.read_bytes(console_address, 2))
@@ -122,6 +145,7 @@ class LMContext(CommonContext):
         self.slot_num = -1
         self.goal_type = None
         self.game_clear = False
+        self.rank_req = -1
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.auth = None
@@ -133,6 +157,7 @@ class LMContext(CommonContext):
             self.last_rcvd_index = -1
             self.slot_num = int(args["slot"])
             self.goal_type = int(args["slot_data"]["goal"])
+            self.rank_req = int(args["slot_data"]["rank requirement"])
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
         if cmd == "ReceivedItems":  # On Receive Item from Server
@@ -275,13 +300,22 @@ async def check_locations(ctx: LMContext):
         await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
 
     if current_map_id == 9:
-        beat_king_boo = dme.read_byte(0x803D5DBF)
+        beat_king_boo = dme.read_byte(KING_BOO_ADDR)
         if (beat_king_boo & (1 << 5)) > 0 and not ctx.game_clear:
             if ctx.goal_type == 0:
                 ctx.game_clear = True
             elif ctx.goal_type == 1:
-                ctx.game_clear = True
-                #TODO check for Rank Here.
+                int_rank_sum = 0
+                req_rank_amt = RANK_REQ_AMTS[ctx.rank_req]
+                for key in WALLET_OFFSETS.keys():
+                    currency_amt = dme.read_word(dme.follow_pointers(WALLET_START_ADDR, [key]))
+                    int_rank_sum += currency_amt * WALLET_OFFSETS[key]
+
+                if int_rank_sum >= req_rank_amt:
+                    ctx.game_clear = True
+                else:
+                    logger.info("Unfortunately, you do NOT have enough money to satisfy the rank requirements.\n" +
+                                f"You are missing: '{(req_rank_amt - int_rank_sum):,}'")
 
     if not ctx.finished_game and ctx.game_clear:
         ctx.finished_game = True
