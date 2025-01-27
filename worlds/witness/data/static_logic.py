@@ -290,7 +290,7 @@ def get_vanilla() -> StaticWitnessLogicObj:
 
 @cache_argsless
 def get_sigma_normal() -> StaticWitnessLogicObj:
-    return StaticWitnessLogicObj(get_umbra_variety_logic())
+    return StaticWitnessLogicObj(get_sigma_normal_logic())
 
 
 @cache_argsless
