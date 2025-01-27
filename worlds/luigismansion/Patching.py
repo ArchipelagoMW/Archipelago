@@ -804,7 +804,7 @@ def __get_key_name(door_id):
 def update_item_appear_table(item_appear_info, output_data):
     # Add the special items, so they can be spawned from treasure chests or furniture in game.
     items_to_add = ["mkinoko", "itembomb", "ice", "elffst", "elwfst", "elifst", "mstar", "mglove", "mshoes",
-                    "rdiamond", "mheart", "lheart", "move_mheart", "banana", "diamond"]
+                    "rdiamond", "mheart", "lheart", "move_mheart", "banana", "diamond", "ruby", "emerald", "sapphire"]
     for new_item in items_to_add:
         __add_appear_item(item_appear_info, new_item)
 
@@ -863,7 +863,7 @@ def update_treasure_table(treasure_info, character_info, output_data):
                 # Generate a random amount of money if the item is supposed to be a money bundle.
                 if treasure_item_name == "money": #TODO support gems as well
                     if any((key, val) for (key, val) in filler_items.items() if key == item_data["name"] and val.type == "Money"):  # TODO change once more money types are implement to force AP to change.
-                        int_money_amt = int(re.search(r"^\d+", item_name).group())
+                        int_money_amt = int(re.search(r"^\d+", item_data["name"]).group())
                         if "Coins" in item_data["name"]:
                             if "Bills" in item_data["name"]:
                                 coin_amount = int_money_amt
@@ -1023,7 +1023,7 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
             item_appear_info.info_file_field_entries.index(item_appear_entry_idx))
 
         if any((key, val) for (key, val) in filler_items.items() if key == item_data["name"] and val.type == "Money"):  # TODO change once more money types are implement to force AP to change.
-            int_money_amt = int(re.search(r"^\d+", item_name).group())
+            int_money_amt = int(re.search(r"^\d+", item_data["name"]).group())
             furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate_num"] = int_money_amt
             if "Coins" in item_data["name"]:
                 if "Bills" in item_data["name"]:
