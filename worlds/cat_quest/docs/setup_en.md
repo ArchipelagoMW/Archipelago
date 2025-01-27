@@ -21,5 +21,6 @@
 You connect by opening `...\ArchipelagoRandomizer\SaveData\RoomInfo.json` from your Cat Quest root folder, and adding your player and room information.
 It should follow the format that the file already has. Then the connection should be established once you start your save. 
 
-You start a new game by picking New Game in your menu. (If you already beat the game and only have New Game +. choose this, and then pick New Game within that menu)
-You continue your game by clicking Continue like normal.
+You start a new game by picking New Game in your menu. If you already beat the game and only have New Game +. choose this, and then pick New Game within that menu
+(Do not play using Mew Game or New Game +)
+You continue your game by clicking Continue like in vanilla Cat Quest.
