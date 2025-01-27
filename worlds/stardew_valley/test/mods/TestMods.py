@@ -1,5 +1,4 @@
 import random
-from typing import Union, Set
 
 from BaseClasses import get_seed
 from .. import SVTestBase, SVTestCase, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x, solo_multiworld, \
