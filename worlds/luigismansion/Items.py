@@ -154,14 +154,11 @@ BOO_ITEM_TABLE: dict[str, LMItemData] = {
 }
 
 filler_items: Dict[str, LMItemData] = {
-    # "10 Coins": LMItemData("Money", 117, IC.filler),
-    # "10 Bills": LMItemData("Money", 118, IC.filler),
-    "Money Bundle": LMItemData("Money", 119, IC.filler),
-    # "Gold Bar": LMItemData("Money", 120, IC.filler),
-    # "Sapphire": LMItemData("Money", 121, IC.filler),
-    # "Emerald": LMItemData("Money", 122, IC.filler),
-    # "Ruby": LMItemData("Money", 123, IC.filler),
-    # "Diamond": LMItemData("Money", 124, IC.filler),
+    "20 Coins & Bills": LMItemData("Money", 119, IC.filler),
+    "Sapphire": LMItemData("Money", 121, IC.filler),
+    "Emerald": LMItemData("Money", 122, IC.filler),
+    "Ruby": LMItemData("Money", 123, IC.filler),
+    "Diamond": LMItemData("Money", 124, IC.filler),
     "Poison Mushroom": LMItemData("Trap", 125, IC.trap),
     # "Ghost": LMItemData("Trap", 126, IC.trap),
     "Nothing": LMItemData("Nothing", 127, IC.filler),
@@ -169,7 +166,14 @@ filler_items: Dict[str, LMItemData] = {
     "Large Heart": LMItemData("Heart", 129, IC.filler),
     "Bomb": LMItemData("Trap", 130, IC.trap),
     "Ice Trap": LMItemData("Trap", 131, IC.trap),
-    "Banana Trap": LMItemData("Trap", 132, IC.trap)
+    "Banana Trap": LMItemData("Trap", 132, IC.trap),
+    "10 Coins": LMItemData("Money", 133, IC.filler),
+    "20 Coins": LMItemData("Money", 134, IC.filler),
+    "30 Coins": LMItemData("Money", 135, IC.filler),
+    "15 Bills": LMItemData("Money", 136, IC.filler),
+    "25 Bills": LMItemData("Money", 137, IC.filler),
+    "2 Gold Bars": LMItemData("Money", 138, IC.filler),
+    "5 Gold Bars": LMItemData("Money", 139, IC.filler)
 }
 
 ALL_ITEMS_TABLE = {**ITEM_TABLE,
