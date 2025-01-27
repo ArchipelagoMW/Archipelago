@@ -80,8 +80,6 @@ class LAClientConstants:
     wSubtractHealthBuffer = 0xDB94
     # RO: We should only act if this is higher then 6, as it indicates that the game is running normally
     wGameplayType = 0xDB95
-    wTradeSequenceItem = 0xDB40
-    wTradeSequenceItem2 = 0xDB7F
     # RO: Starts at 0, increases every time an item is received from the server and processed
     wLinkSyncSequenceNumber = 0xDDF6
     wLinkStatusBits = 0xDDF7          # RW:
