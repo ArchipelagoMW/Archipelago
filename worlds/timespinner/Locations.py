@@ -95,7 +95,7 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
         LocationData('The lab', 'Lab: Lower trash left',  1337068, lambda state: logic.has_doublejump_of_npc(state) if options.lock_key_amadeus else logic.has_upwarddash ),
         LocationData('The lab', 'Lab: Below lab entrance',  1337069, logic.has_doublejump),
         LocationData('The lab (power off)', 'Lab: Trash jump room',  1337070, lambda state: not options.lock_key_amadeus or logic.has_doublejump_of_npc(state) ),
-        LocationData('The lab (power off)', 'Lab: Dynamo Works',  1337071, lambda state: not options.lock_key_amadeus or (state.has('Lab Access Research', player) and state.has('Lab Access Dynamo', player)) ),
+        LocationData('The lab (power off)', 'Lab: Dynamo Works',  1337071, lambda state: not options.lock_key_amadeus or (state.has_all(('Lab Access Research', 'Lab Access Dynamo'), player)) ),
         LocationData('The lab (upper)', 'Lab: Genza (Blob Mom)',  1337072),
         LocationData('The lab (power off)', 'Lab: Experiment #13',  1337073, lambda state: not options.lock_key_amadeus or state.has('Lab Access Experiment', player) ),
         LocationData('The lab (upper)', 'Lab: Download and chest room chest',  1337074),
