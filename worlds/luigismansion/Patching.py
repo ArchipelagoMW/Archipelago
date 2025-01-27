@@ -1,9 +1,15 @@
+import re
 from random import randrange, choice
+
+from .Items import filler_items
+
 
 # Converts AP readable name to in-game name
 def __get_item_name(item_data):
     if item_data["door_id"] != 0:
         return "key_" + str(item_data["door_id"])
+    elif "Bills" in item_data["name"] or "Coins" in item_data["name"] or "Gold Bars" in item_data["name"]:
+        return "money"
 
     match item_data["name"]:
         case "Fire Element Medal":
@@ -26,8 +32,15 @@ def __get_item_name(item_data):
 
         case "Gold Diamond":
             return "rdiamond"
-        case "Money Bundle": #TODO support gems as well
-            return "money"
+        case "Sapphire":
+            return "sapphire"
+        case "Emerald":
+            return "emerald"
+        case "Ruby":
+            return "ruby"
+        case "Diamond":
+            return "diamond"
+
         case "Poison Mushroom":
             return "mkinoko"
         case "Small Heart":
@@ -129,115 +142,6 @@ def update_event_info(event_info, boo_checks: bool):
             x["PlayerStop"] = 1
             x["EventLoad"] = 0
 
-    # Add our new custom events for turning on hallway lights
-    # This one enables the hallway after beating Chauncey
-    #event_info.info_file_field_entries.append({
-    #    "name": "event",
-    #    "CharacterName": "(null)",
-    #    "pos_x": -3000.000000,
-    #    "pos_y": 550.000000,
-    #    "pos_z": -815.000000,
-    #    "dir_x": 0.000000,
-    #    "dir_y": 0.000000,
-    #    "dir_z": 0.000000,
-    #    "scale_x": 0.000000,
-    #    "scale_y": 0.000000,
-    #    "scale_z": 0.000000,
-    #    "EventNo": 102,
-    #    "EventArea": 100,
-    #    "EventFlag": 46,
-    #    "EventTime": 0,
-    #    "EventTime2": 0,
-    #    "EventTime3": 0,
-    #    "EventTime4": 0,
-    #    "EventLoad": 1,
-    #    "disappear_flag": 0,
-    #    "event_parameter": 0,
-    #    "EventIf": 2,
-    #    "EventLock": 0,
-    #    "PlayerStop": 1,
-    #})
-    # This one enables the hallway after beating Bogmire
-    #event_info.info_file_field_entries.append({
-    #    "name": "event",
-    #    "CharacterName": "(null)",
-    #    "pos_x": 1130.000000,
-    #    "pos_y": 0.000000,
-    #    "pos_z": -1860.000000,
-    #    "dir_x": 0.000000,
-    #    "dir_y": 0.000000,
-    #    "dir_z": 0.000000,
-    #    "scale_x": 0.000000,
-    #    "scale_y": 0.000000,
-    #    "scale_z": 0.000000,
-    #    "EventNo": 103,
-    #    "EventArea": 100,
-    #    "EventFlag": 67,
-    #    "EventTime": 0,
-    #    "EventTime2": 0,
-    #    "EventTime3": 0,
-    #    "EventTime4": 0,
-    #    "EventLoad": 1,
-    #    "disappear_flag": 0,
-    #    "event_parameter": 0,
-    #    "EventIf": 2,
-    #    "EventLock": 0,
-    #    "PlayerStop": 1,
-    #})
-    # This one enables the hallway after beating Boolossus (East Side)
-    #event_info.info_file_field_entries.append({
-    #    "name": "event",
-    #    "CharacterName": "(null)",
-    #    "pos_x": 1800.000000,
-    #    "pos_y": 1200.000000,
-    #    "pos_z": -2600.000000,
-    #    "dir_x": 0.000000,
-    #    "dir_y": 0.000000,
-    #    "dir_z": 0.000000,
-    #    "scale_x": 0.000000,
-    #    "scale_y": 0.000000,
-    #    "scale_z": 0.000000,
-    #    "EventNo": 104,
-    #    "EventArea": 100,
-    #    "EventFlag": 81,
-    #    "EventTime": 0,
-    #    "EventTime2": 0,
-    #    "EventTime3": 0,
-    #    "EventTime4": 0,
-    #    "EventLoad": 1,
-    #    "disappear_flag": 0,
-    #    "event_parameter": 0,
-    #    "EventIf": 2,
-    #    "EventLock": 0,
-    #    "PlayerStop": 1,
-    #})
-    # This one enables the hallway after beating Boolossus (West Side)
-    #event_info.info_file_field_entries.append({
-    #    "name": "event",
-    #    "CharacterName": "(null)",
-    #    "pos_x": -1800.000000,
-    #    "pos_y": 1200.000000,
-    #    "pos_z": -2600.000000,
-    #    "dir_x": 0.000000,
-    #    "dir_y": 0.000000,
-    #    "dir_z": 0.000000,
-    #    "scale_x": 0.000000,
-    #    "scale_y": 0.000000,
-    #    "scale_z": 0.000000,
-    #    "EventNo": 104,
-    #    "EventArea": 100,
-    #    "EventFlag": 81,
-    #    "EventTime": 0,
-    #    "EventTime2": 0,
-    #    "EventTime3": 0,
-    #    "EventTime4": 0,
-    #    "EventLoad": 1,
-    #    "disappear_flag": 0,
-    #    "event_parameter": 0,
-    #    "EventIf": 2,
-    #    "EventLock": 0,
-    #    "PlayerStop": 1,
-    #})
 
 def update_character_info(character_info, output_data):
     # Removes useless cutscene objects and the vacuum in the Parlor under the closet.
@@ -823,11 +727,13 @@ def update_obj_info(obj_info):
 
 # Indicates the chest size that will be loaded in game based on item provided. 0 = small, 1 = medium, 2 = large
 def __get_chest_size_from_item(item_name):
+    if "Bills" in item_name or "Coins" in item_name or "Gold Bars" in item_name:
+        item_name = "Money"
     match item_name:
         case "Mario's Hat" | "Mario's Letter" | "Mario's Shoe" | "Mario's Glove" | "Mario's Star":
             return 0
 
-        case "Small Heart":
+        case "Small Heart" | "Money" :
             return 0
         case "Large Heart":
             return 1
@@ -838,7 +744,7 @@ def __get_chest_size_from_item(item_name):
         case "Fire Element Medal" | "Water Element Medal" | "Ice Element Medal":
             return 2
 
-        case "Money Bundle": #Todo change to support gems as well
+        case "Sapphire" | "Emerald" | "Ruby" | "Diamond": #Todo change to support gems as well
             return 1
 
     return 0
@@ -898,7 +804,7 @@ def __get_key_name(door_id):
 def update_item_appear_table(item_appear_info, output_data):
     # Add the special items, so they can be spawned from treasure chests or furniture in game.
     items_to_add = ["mkinoko", "itembomb", "ice", "elffst", "elwfst", "elifst", "mstar", "mglove", "mshoes",
-                    "rdiamond", "mheart", "lheart", "move_mheart", "banana"]
+                    "rdiamond", "mheart", "lheart", "move_mheart", "banana", "diamond"]
     for new_item in items_to_add:
         __add_appear_item(item_appear_info, new_item)
 
@@ -947,12 +853,37 @@ def update_treasure_table(treasure_info, character_info, output_data):
                 coin_amount = 0
                 bill_amount = 0
                 gold_bar_amount = 0
+                sapphire_amount = 0
+                emerald_amount = 0
+                ruby_amount = 0
+                diamond_amount = 0
+
+
 
                 # Generate a random amount of money if the item is supposed to be a money bundle.
                 if treasure_item_name == "money": #TODO support gems as well
-                    coin_amount = randrange(5, 20)
-                    bill_amount = randrange(10, 30)
-                    gold_bar_amount = randrange(1, 5)
+                    if any((key, val) for (key, val) in filler_items.items() if key == item_data["name"] and val.type == "Money"):  # TODO change once more money types are implement to force AP to change.
+                        int_money_amt = int(re.search(r"^\d+", item_name).group())
+                        if "Coins" in item_data["name"]:
+                            if "Bills" in item_data["name"]:
+                                coin_amount = int_money_amt
+                                bill_amount = int_money_amt
+                            else:
+                                coin_amount = int_money_amt
+                        elif "Bills" in item_data["name"]:
+                            bill_amount = int_money_amt
+                        elif "Gold Bars" in item_data["name"]:
+                            gold_bar_amount = int_money_amt
+                        elif "Sapphire" in item_data["name"]:
+                            sapphire_amount = 1
+                        elif "Emerald" in item_data["name"]:
+                            emerald_amount = 1
+                        elif "Ruby" in item_data["name"]:
+                            ruby_amount = 1
+                        elif "Diamond" in item_data["name"]:
+                            diamond_amount = 1
+
+
 
                 # Add the entry for the chest in "treasuretable". Also includes the chest size.
                 treasure_info.info_file_field_entries.append({
@@ -965,10 +896,10 @@ def update_treasure_table(treasure_info, character_info, output_data):
                     "spearl": 0,
                     "mpearl": 0,
                     "lpearl": 0,
-                    "sapphire": 0,
-                    "emerald": 0,
-                    "ruby": 0,
-                    "diamond": 0,
+                    "sapphire": sapphire_amount,
+                    "emerald": emerald_amount,
+                    "ruby": ruby_amount,
+                    "diamond": diamond_amount,
                     "cdiamond": 0,
                     "rdiamond": 0,
                     "effect": 1 if chest_size == 2 else 0,
@@ -987,24 +918,26 @@ def __get_chest_size_from_key(key_id):
 
 # Changes the type of chest loaded in game based on the type of item that is hidden inside
 def __get_item_chest_visual(item_name):
+    if "Bills" in item_name or "Coins" in item_name or "Gold Bars" in item_name:
+        item_name = "Money"
     match item_name:
-        case "Heart Key" | "Club Key" |  "Diamond Key" | "Spade Key":
+        case "Heart Key" | "Club Key" | "Diamond Key" | "Spade Key":
             return "ytakara1"
 
         case "Small Heart" | "Large Heart":
             return "ytakara1"
 
-        case "Fire Element Medal" | "Bomb":
+        case "Fire Element Medal" | "Bomb" | "Ruby":
             return "rtakara1"
-        case "Water Element Medal" | "Poison Mushroom" | "Banana Trap":
+        case "Water Element Medal" | "Poison Mushroom" | "Banana Trap" | "Sapphire":
             return "btakara1"
-        case "Ice Element Medal" | "Ice Trap":
+        case "Ice Element Medal" | "Ice Trap" | "Diamond":
             return "wtakara1"
 
         case "Mario's Hat" | "Mario's Letter" | "Mario's Shoe" | "Mario's Glove" | "Mario's Star":
             return "rtakara1"
 
-        case "Money Bundle" | "Gold Diamond": #Todo support gems as well
+        case "Gold Diamond" | "Emerald" | "Money":
             return "gtakara1"
 
     return "btakara1"
@@ -1049,10 +982,6 @@ def __set_key_info_entry(key_info_single_entry, item_data):
 
 
 def update_furniture_info(furniture_info, item_appear_info, output_data):
-    # TODO Check 1F Hallway Painting, Ballroom, Storage, 1F Bathroom, Fortune Teller, Mirror, Laundry, Butler's
-    # TODO Hidden Room, Conservatory, Dinning, Kitchen, Tea Room, Rec Room, 1F-2F Stairs, 2F Bathoom, 2F Washroom
-    # TODO Nana's Room
-    # TODO Foyer Heart Lamp is 270
     # Adjust the item spawn height based on if the item spawns from the ceiling or high up on the wall.
     # Otherwise items are sent into the floor above or out of bounds, which makes it almost impossible to get.
     ceiling_furniture_list = [4, 43, 62, 63, 76, 77, 81, 84, 85, 91, 92, 101, 110, 111, 137, 156, 158, 159, 163,
@@ -1093,11 +1022,25 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
         furniture_info.info_file_field_entries[item_data["loc_enum"]]["item_table"] = (
             item_appear_info.info_file_field_entries.index(item_appear_entry_idx))
 
-        if actor_item_name == "money":  # TODO change once more money types are implement to force AP to change.
-            furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate"] = (
-                randrange(1, 3))
-            furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate_num"] = (
-                randrange(10, 40))
+        if any((key, val) for (key, val) in filler_items.items() if key == item_data["name"] and val.type == "Money"):  # TODO change once more money types are implement to force AP to change.
+            int_money_amt = int(re.search(r"^\d+", item_name).group())
+            furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate_num"] = int_money_amt
+            if "Coins" in item_data["name"]:
+                if "Bills" in item_data["name"]:
+                    furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate"] = 3
+                else:
+                    furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate"] = 1
+            elif "Bills" in item_data["name"]:
+                furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate"] = 2
+            elif "Sapphire" in item_data["name"]:
+                furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate"] = 4
+            elif "Emerald" in item_data["name"]:
+                furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate"] = 6
+            elif "Ruby" in item_data["name"]:
+                furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate"] = 5
+            elif "Gold Bar" in item_data["name"]:
+                furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate"] = 7
+
         else:
             furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate"] = 0
             furniture_info.info_file_field_entries[item_data["loc_enum"]]["generate_num"] = 0
