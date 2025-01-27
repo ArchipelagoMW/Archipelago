@@ -14,6 +14,7 @@ import os
 from .Constants import LOCATION_BOSS_RANGE, LOCATION_RESEARCH_RANGE, VERSION, CLIENT_HOSTNAME, CLIENT_PORT
 from math import floor
 DST_FILE_START = "KLEI     1 "
+TIMEOUT_TIME:int = 60*3
 
 class DSTInvalidRequest(Exception):
     pass
@@ -183,7 +184,7 @@ class DSTContext(CommonContext):
                         # List goal bosses
                         _bosses = [self.location_names.lookup_in_game(loc_id) for loc_id in self.slotdata.get("goal_locations", [])]
                         self.logger.info(f"Bosses: {_bosses}")
-
+                    self.logger.info("The client needs to read local files. Create your world as a local save, not cloud save.")
                     self.logger.info("The following settings need to be manually set in your world (if not default)!")
                     # Announce cave settings
                     self.logger.info(f"Caves Required: {'Yes' if self.slotdata.get('is_caves_enabled', True) else 'No'}")
@@ -417,6 +418,7 @@ class DSTHandler():
         "Death": set(),
         "Hint": set(),
     }
+    _debug_cache:Set[str] = set()
 
     def __init__(self, ctx:DSTContext):
         self.ctx = ctx
@@ -662,7 +664,7 @@ class DSTHandler():
             # Check timestamp                
             _timestamp:int = data.get("timestamp", floor(time.time()))
             _time_difference = floor(time.time()) - _timestamp
-            if _time_difference > 60*3:
+            if _time_difference > TIMEOUT_TIME:
                 print(f"Current data is too old! It's from {_time_difference} seconds ago.")
                 return None
 
@@ -683,10 +685,11 @@ class DSTHandler():
                 
                 data = json.loads(raw[len(DST_FILE_START):])
 
-                # Check timestamp                
+                # Check timestamp
                 return data.get("timestamp")
             return None
         except Exception as e:
+            self.logger.error(e)
             return None
 
     def write_outgoing_data(self, base_dir:Path):
@@ -735,43 +738,67 @@ class DSTHandler():
         "Counterpart of handle_dst_request. May be temporary until game adds a solution to restore HTTP functionality."
         # Wait until we have a seed name before proceeding
         while not self.ctx.seed_name or not self.ctx.slot or not self.ctx.connected_to_ap:
-            await asyncio.sleep(3.0)
+            await asyncio.sleep(0.5)
 
         # Start of session
         self.connected_timestamp = time.time()
         self.outgoing_data_dirty = True
-
-        # Locate the folder where the active session is. It'll have a new timestamp
         self.waiting_for_dst = False
-        await asyncio.sleep(3.0)
+        await asyncio.sleep(1.0)
+        _session_location = "."
+
+        # Identify all data folders. There could potentially be multiple if there's multiple user profiles(?)
+        profile_dirs:List[Path] = []
+        if os.path.isdir(base_dir / "client_save"):
+            profile_dirs.append(base_dir)
+        
+        dirs = [str(filename) for filename in os.listdir(base_dir) if os.path.isdir(base_dir / filename)]
+        for dirname in dirs:
+            if os.path.isdir(base_dir / dirname / "client_save"):
+                profile_dirs.append(base_dir / dirname)
+
+        print(f"Found {len(profile_dirs)} profile folder(s).")
+        if not len(profile_dirs):
+            raise IOError(f"Did not find any save data folders in {str(base_dir)}")
+        
+        # Locate the folder where the active session is. It'll have a new timestamp
         while True:
-            _newest_timestamp = int(self.connected_timestamp)
+            _newest_timestamp = int(self.connected_timestamp) - TIMEOUT_TIME
             _new_base_dir = base_dir
             breakout = False
-            dirs = [str(filename) for filename in os.listdir(base_dir) if os.path.isdir(base_dir / filename)]
-            for dirname in dirs:
-                path = dirname / Path("Master/save")
-                if dirname == "client_save":
-                    path = Path(dirname)
-                _timestamp = self.get_incoming_data_timestamp(Path(base_dir / path))
-                if _timestamp and _timestamp > _newest_timestamp:
-                    _newest_timestamp = _timestamp
-                    _new_base_dir = Path(base_dir / path)
-                    breakout = True
+            total_dirs_num = 0
+            for profile_dir in profile_dirs:
+                dirs = [str(filename) for filename in os.listdir(profile_dir) if os.path.isdir(profile_dir / filename)]
+                total_dirs_num += len(dirs)
+                for dirname in dirs:
+                    path = dirname / Path("Master/save")
+                    if dirname == "client_save":
+                        path = Path(dirname)
+                    _timestamp = self.get_incoming_data_timestamp(Path(profile_dir / path))
+                    if _timestamp and _timestamp > _newest_timestamp:
+                        _newest_timestamp = _timestamp
+                        _new_base_dir = Path(profile_dir / path)
+                        _session_location = str(path)
+                        breakout = True
+            if not total_dirs_num:
+                raise IOError("No world save folders found within DoNotStarveTogether folder")
             if breakout:
                 base_dir = _new_base_dir
                 break
-            await asyncio.sleep(3.0)
             # Tell the player to run DST
             if not self.waiting_for_dst:
                 self.waiting_for_dst = True
-                self.logger.info(f"Waiting for Don't Starve Together world.")
+                self.logger.info(f"Looking for active Don't Starve Together session. Load up your world and give it a minute to confirm an active session.")
+            await asyncio.sleep(2.0)
+                    
         self.waiting_for_dst = False
+        self.logger.info(f"Located active session in {_session_location} folder.")
 
         # Continue the loop while connected to AP
         while self.ctx.connected_to_ap:
             try:
                 self.write_outgoing_data(base_dir)
+                await asyncio.sleep(1.0)
                 incoming_data = self.read_incoming_data(base_dir)
                 if incoming_data:
                     dst_session_id = incoming_data.get("connected_timestamp")
@@ -785,7 +812,8 @@ class DSTHandler():
                             self.logger.info(f"Connected to Don't Starve Together")
                         else:
                             self.logger.error(f"Error! World doesn't match! Got player {incoming_data.get('slotname', 'Unknown')} with seed {incoming_data.get('seed')}")
-                    else:
+                            await asyncio.sleep(5.0) # It will spam but we'll slow it down a bit
+                    if self.session_id:
                         if self.session_id != dst_session_id:
                             # Stale session; update session id
                             self.session_id = dst_session_id
@@ -797,8 +825,6 @@ class DSTHandler():
             except Exception as e:
                 self.logger.error(f"DST handle io error: {e}")
                 raise
-            finally:
-                await asyncio.sleep(3.0)
 
     async def run_reader(self):
         "Counterpart of run_handler. May be temporary until game adds a solution to restore HTTP functionality."
