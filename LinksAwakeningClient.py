@@ -30,7 +30,6 @@ from worlds.ladx.Common import BASE_ID as LABaseID
 from worlds.ladx.GpsTracker import GpsTracker
 from worlds.ladx.ItemTracker import ItemTracker
 from worlds.ladx.LADXR.checkMetadata import checkMetadataTable
-from worlds.ladx.Items import links_awakening_items
 from worlds.ladx.Locations import get_locations_to_id, meta_to_name
 from worlds.ladx.Tracker import LocationTracker, MagpieBridge
 
@@ -77,19 +76,17 @@ class LAClientConstants:
     # Unused
     # ROMWorldID = 0x0055
     # ROMConnectorVersion = 0x0056
-    wInventoryAppearing = 0xC14F
-    wDialogState = 0xC19F
     wAddHealthBuffer = 0xDB93
     wSubtractHealthBuffer = 0xDB94
     # RO: We should only act if this is higher then 6, as it indicates that the game is running normally
     wGameplayType = 0xDB95
     wTradeSequenceItem = 0xDB40
-    wLinkHealth = 0xDB5A
     wTradeSequenceItem2 = 0xDB7F
     # RO: Starts at 0, increases every time an item is received from the server and processed
     wLinkSyncSequenceNumber = 0xDDF6
     wLinkStatusBits = 0xDDF7          # RW:
     #      Bit0: wLinkGive* contains valid data, set from script cleared from ROM.
+    wLinkHealth = 0xDB5A
     wLinkGiveItem = 0xDDF8  # RW
     wLinkGiveItemFrom = 0xDDF9  # RW
     # All of these six bytes are unused, we can repurpose
@@ -310,7 +307,6 @@ class LinksAwakeningClient():
     game_crc = None
     deathlink_status = None
     no_kill_room_id = None
-    slot = None
     recvd_checks = {}
     retroarch_address = None
     retroarch_port = None
@@ -373,7 +369,7 @@ class LinksAwakeningClient():
         self.item_tracker = ItemTracker(self.gameboy)
         self.gps_tracker = GpsTracker(self.gameboy)
 
-    async def recved_item_from_ap(self, item_id, location, from_player, next_index):
+    async def recved_item_from_ap(self, item_id, from_player, next_index):
         # Don't allow getting an item until you've got your first check
         if not self.tracker.has_start_item():
             return
@@ -394,11 +390,10 @@ class LinksAwakeningClient():
             from_player = 100
 
         next_index += 1
-        if location <= 0 or from_player != self.slot: # items from server or other slots
-            self.gameboy.write_memory(LAClientConstants.wLinkGiveItem, [
-                                    item_id, from_player])
-            status |= 1
-            status = self.gameboy.write_memory(LAClientConstants.wLinkStatusBits, [status])
+        self.gameboy.write_memory(LAClientConstants.wLinkGiveItem, [
+                                item_id, from_player])
+        status |= 1
+        status = self.gameboy.write_memory(LAClientConstants.wLinkStatusBits, [status])
         self.gameboy.write_memory(LAClientConstants.wRecvIndex, struct.pack(">H", next_index))
 
     should_reset_auth = False
@@ -426,7 +421,7 @@ class LinksAwakeningClient():
         # Play back one at a time
         if recv_index in self.recvd_checks:
             item = self.recvd_checks[recv_index]
-            await self.recved_item_from_ap(item.item, item.location, item.player, recv_index)
+            await self.recved_item_from_ap(item.item, item.player, recv_index)
 
         mem = await self.gameboy.read_memory_cache([
             LAClientConstants.wLinkHealth,
@@ -484,7 +479,7 @@ class LinksAwakeningContext(CommonContext):
     tags = {"AP"}
     game = "Links Awakening DX"
     command_processor = LinksAwakeningCommandProcessor
-    items_handling = 0b111
+    items_handling = 0b101
     want_slot_data = True
     la_task = None
     client = None
@@ -601,7 +596,6 @@ class LinksAwakeningContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
-            self.client.slot = self.slot
             self.game = self.slot_info[self.slot].game
             self.slot_data = args.get("slot_data", {})
             if self.slot_data.get("death_link"):
