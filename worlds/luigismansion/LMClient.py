@@ -295,8 +295,8 @@ async def check_locations(ctx: LMContext):
                     if (current_room_state_int & (1 << 2)) > 0:
                         ctx.locations_checked.add(LMLocation.get_apid(data.code))
                 case "Boo":
-                    current_boo_state_int = dme.read_byte(data.ram_addr)
-                    if (current_boo_state_int & (1 << data.itembit)) > 0:
+                    current_boo_state_int = dme.read_byte(data.room_ram_addr)
+                    if (current_boo_state_int & (1 << data.locationbit)) > 0:
                         ctx.locations_checked.add(LMLocation.get_apid(data.code))
 
     locations_checked = ctx.locations_checked.difference(ctx.checked_locations)
