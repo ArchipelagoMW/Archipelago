@@ -1,6 +1,5 @@
 from typing import NamedTuple, Optional, List
 from BaseClasses import Location, Region
-from worlds.kdl3.rom import room_music
 
 
 class LMLocationData(NamedTuple):
