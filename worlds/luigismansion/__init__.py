@@ -566,5 +566,6 @@ class LMWorld(World):
             "washroom boo count": self.options.washroom_boo_count.value,
             "balcony boo count": self.options.balcony_boo_count.value,
             "final boo count": self.options.final_boo_count.value,
-            "enemizer": self.options.enemizer.value
+            "enemizer": self.options.enemizer.value,
+            "death_link": self.options.deathlink
         }
