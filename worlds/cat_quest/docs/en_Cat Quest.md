@@ -16,6 +16,88 @@ Royal Arts, Skills, The Golden Key, Gold and Exp can appear in other players' wo
 You find other world's items by completing quests.
 As of now, you will have to use your client to see which item you got.
 
+| Title	| Royal Art Needed | Magic Needed
+| ----------- | ----------- | ----------- |
+| A Whole New World	| No	| No
+| The Catpital	| No	| No
+| The Catpital (2)	| No	| No
+| The Dragon and the Cat	| No	| No
+| The Old Ruins	| No	| Yes
+| Of Sea and Rock	| Water	| Yes
+| Of Sea and Rock (2)	| Both	| Yes
+| The Old Friend	| Both	| Yes
+| The Dragonblood	| Both	| Yes
+| The Dragonsbane	| Both	| Yes
+| The Dragons Void	| Both	| Yes
+| Epilogue	| Both	| Yes
+| Golden Key	| Either	| No
+| The Growling Peasant	| No	| No
+| The King's Mage	| No	| No
+| The Catnip Ritual	| No	| No
+| Blacksmith Assistance	| No	| Yes
+| The Circle	| No	| No
+| Meat Meat Meat	| No	| No
+| The Mage Search	| No	| No
+| Blacksmith Apprentice	| No	| Yes
+| Fur-reedom	| No	| No
+| The Catnip Cure	| No	| No
+| The Catnip Cure again	No	No
+| The Strange Charm	No	No
+| The East Suspicion	No	Yes
+| Meatmeatmeatmeat!!	No	No
+| The Spirits	No	Yes
+| The West Investigation	No	Yes
+| The Escape	No	No
+| The First Day of Kitmas	No	No
+| The Knightmare	No	No
+| The Knightmare again	No	No
+| The Whispurrer	No	No
+| Meat Disposal Crew	No	No
+| The East Shipment	No	Yes
+| The West Heist	No	Yes
+| Blacksmith Journeyman	No	Yes
+| Blacksmith Master	No	Yes
+| Path to Water Walking	No	No
+| The Book	No	No
+| The Book again	No	No
+| The Lion King	No	Yes
+| The Meat Seller	No	Yes
+| The Sacrifice	No	No
+| The Twin Resolution	No	No
+| The East Escort	No	Yes
+| The Fusion	No	No
+| Rogue Mages	No	No
+| The Magic Lock	No	Yes
+| The Missing Pages	No	No
+| The Missing Soldiers	No	No
+| The Sanctuary	No	No
+| The East Catfrontation	No	Yes
+| The Miracle	Water	No
+| The Revelation	No	Yes
+| The Flying Bush	Either	Yes
+| The Protected Pages	No	Yes
+| The Rescue	No	No
+| The Second Day of Kitmas	No	No
+| The Dragon Worshippers	No	No
+| The Magic Tree	Either	Yes
+| The Runaway Archeologist	No	Yes
+| The Cult	Either	Yes
+| The Servant of God	Either	No
+| The Treasure	No	Yes
+| Dragonflight	Either	Yes
+| The Offerings	Water	No
+| The Third Day of Kitmas	Water	No
+| The Prayer	Water	No
+| The Ultimate Dragonsbane	Water	No
+| The Godcat, Mauth	Water	No
+| The Fourth day of Kitmas	Water	No
+| The Heirloom Armor	Water	Yes
+| The Pawtato Mystery	Water	No
+| Everyone's invited	Flight	No
+| The Forgotten Hero	Either	No
+| Mewry Kitmas	Water	No
+| The Furbidden History	No	No
+
 ## Can I have more than one save at a time?
 
 No, unfortunately only one save slot is available for use in Cat Quest.
