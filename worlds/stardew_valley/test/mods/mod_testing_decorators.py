@@ -3,7 +3,7 @@ from collections.abc import Collection
 from functools import wraps, partial
 from typing import Type
 
-from worlds.stardew_valley import options
+from ... import options
 
 
 def must_test_all_mods(cls: Type[unittest.TestCase] | None = None, /, *, excluded_mods: Collection[str] = None):
@@ -32,9 +32,9 @@ def must_test_all_mods(cls: Type[unittest.TestCase] | None = None, /, *, exclude
     return cls
 
 
-def testing_mod(func=None, /, *, mod: str):
+def mod_testing(func=None, /, *, mod: str):
     if func is None:
-        return partial(testing_mod, mod=mod)
+        return partial(mod_testing, mod=mod)
 
     @wraps(func)
     def wrapper(self: unittest.TestCase, *args, **kwargs):
