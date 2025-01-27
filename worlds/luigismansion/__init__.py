@@ -114,7 +114,7 @@ class LMWorld(World):
     }
     settings: LuigisMansionSettings
     item_name_groups = get_item_names_per_category()
-    required_client_version = (0, 5, 1)
+    required_client_version = (0, 6, 0)
     web = LMWeb()
     ghost_affected_regions: dict[str, str] = GHOST_TO_ROOM
 
