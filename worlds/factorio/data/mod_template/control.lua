@@ -750,6 +750,11 @@ end,
         fire_entity_at_entities("atomic-rocket", {cliffs[math.random(#cliffs)]}, 0.1)
     end
 end,
+["Inventory Spill Trap"] = function ()
+    for _, player in ipairs(game.forces["player"].players) do
+        spill_character_inventory(player.character)
+    end
+end,
 }
 
 commands.add_command("ap-get-technology", "Grant a technology, used by the Archipelago Client.", function(call)
