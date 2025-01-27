@@ -23,6 +23,8 @@
     * Endless, Survival, and Wilderness are also fine if you want more of a challenge.
     * World resets and character resets are fine, though will reset your progress for the Survival goal if that's your victory condition.
     * Lights Out is only appropriate if you have only night enabled in your YAML.
+- On the Settings tab, make sure your Save Type is "Local Save".
+    * If your world is already created, you can change this on the previous screen in the Manage World window.
 - You may be prompted to choose whether or not to add Caves. Refer to the client if you don't remember.
     * It's also fine to always add Caves, even if your logic doesn't include it.
 - Click on the Mods tab. Enable Archipelago Randomizer, from the Server Mods category.
@@ -49,7 +51,4 @@
   you connect to Archipelago again. However, offline progress is lost if you regenerate your world!
 - It is fine to play the same Archipelago slot on multiple worlds, even by multiple people at the same time.
     * You cannot play multiple slots on a single world. The DST's Archipelago client only connects to the DST server on the same machine.
-- It's not recommended to connect a different slot/multiworld to your existing Archipelago DST world.
-    * This shouldn't cause damage to your game, but it may have some unintended effects.
-    * The mod makes an effort to keep data separate.
-    * If you do this, reloading your world is recommended.
+- You cannot connect a different slot/multiworld to your existing Archipelago DST world. Your client will tell you if you have a mismatch.
