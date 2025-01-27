@@ -65,7 +65,7 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
     def test_all_mods_entrance_randomization_buildings(self):
         self.perform_basic_checks_on_mod_with_er(all_mods, options.EntranceRandomization.option_buildings)
 
-    def perform_basic_checks_on_mod_with_er(self, mods: Union[str, Set[str]], er_option: int):
+    def perform_basic_checks_on_mod_with_er(self, mods: str | set[str], er_option: int) -> None:
         if isinstance(mods, str):
             mods = {mods}
         world_options = {
