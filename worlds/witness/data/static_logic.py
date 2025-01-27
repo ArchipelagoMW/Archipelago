@@ -97,7 +97,7 @@ class StaticWitnessLogicObj:
 
             full_entity_name = current_region["shortName"] + " " + entity_name
 
-            if location_id == "Door" or location_id == "Laser" or location_id == "Audio Log":
+            if location_id in ("Door", "Laser", "Audio Log"):
                 self.ENTITIES_BY_HEX[entity_hex] = {
                     "checkName": full_entity_name,
                     "entity_hex": entity_hex,
