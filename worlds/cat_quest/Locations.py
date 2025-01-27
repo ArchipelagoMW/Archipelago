@@ -423,7 +423,7 @@ locations: List[Location] = [
         "name": "I. The West Investigation", 
         "art": "none",
         "progress_type": LocationProgressType.DEFAULT,
-        "hasFist": False
+        "hasFist": True
     },
     {
         "id": base_id + 50, 
@@ -431,7 +431,7 @@ locations: List[Location] = [
         "name": "II. The West Heist", 
         "art": "none",
         "progress_type": LocationProgressType.DEFAULT,
-        "hasFist": False
+        "hasFist": True
     },
     {
         "id": base_id + 51, 
@@ -439,7 +439,7 @@ locations: List[Location] = [
         "name": "III. The Magic Lock", 
         "art": "none",
         "progress_type": LocationProgressType.DEFAULT,
-        "hasFist": False
+        "hasFist": True
     },
     {
         "id": base_id + 52, 
@@ -447,7 +447,7 @@ locations: List[Location] = [
         "name": "IV. The Revelation", 
         "art": "none",
         "progress_type": LocationProgressType.DEFAULT,
-        "hasFist": False
+        "hasFist": True
     },
 
     # Flight Quests
@@ -525,7 +525,7 @@ locations: List[Location] = [
         "name": "I. Blacksmith Assistance", 
         "art": "none",
         "progress_type": LocationProgressType.DEFAULT,
-        "hasFist": False
+        "hasFist": True
     },
     {
         "id": base_id + 62, 
