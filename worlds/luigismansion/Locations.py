@@ -196,7 +196,6 @@ PLANT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Balcony Plant 13": LMLocationData("Balcony", 87, "Plant", 616, ["Water Element Medal"], 62),
     "Balcony Plant 14": LMLocationData("Balcony", 88, "Plant", 712, ["Water Element Medal"], 62),
     "Balcony Plant 15": LMLocationData("Balcony", 89, "Plant", 713, ["Water Element Medal"], 62),
-    #"Balcony Plant 16" :LMLocationData("Balcony", 90, "Plant", -1,["Water Element Medal"], 62), #TODO Locate
     "Sitting Room Plant": LMLocationData("Sitting Room", 91, "Plant", 409, ["Water Element Medal"], 28),
     "Guest Room Plant": LMLocationData("Guest Room", 92, "Plant", 417, ["Water Element Medal"], 29),
     # TODO need to determine how to make unskippable
@@ -229,7 +228,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Parlor End Table": LMLocationData("Parlor", 111, "Furniture", 489, [], 36),
     "Parlor Painting L (closer to 4th Wall)": LMLocationData("Parlor", 112, "Furniture", 344, [], 36),
     "Parlor Painting L (near China Cabinet)": LMLocationData("Parlor", 113, "Furniture", 343, [], 36),
-    "Parlor Painting C (near Candles)": LMLocationData("Parlor", 114, "Furniture", 347, [], 36),
+    "Parlor Center Painting": LMLocationData("Parlor", 114, "Furniture", 347, [], 36),
     "Parlor Painting R (near Anteroom Door)": LMLocationData("Parlor", 115, "Furniture", 346, [], 36),
     "Parlor Painting R (closer to 4th Wall)": LMLocationData("Parlor", 116, "Furniture", 345, [], 36),
     "Anteroom R End Table": LMLocationData("Anteroom", 117, "Furniture", 486, [], 42),
