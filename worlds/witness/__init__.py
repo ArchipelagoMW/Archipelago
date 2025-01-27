@@ -14,7 +14,7 @@ from .data import static_items as static_witness_items
 from .data import static_locations as static_witness_locations
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import DoorItemDefinition, ItemData
-from .data.utils import cast_not_none, get_audio_logs
+from .data.utils import cast_not_none
 from .hints import CompactHintData, create_all_hints, make_compact_hint_data, make_laser_hints
 from .locations import WitnessPlayerLocations
 from .options import TheWitnessOptions, witness_option_groups
@@ -361,7 +361,7 @@ class WitnessWorld(World):
                 f"are available, so only {enabled_audio_logs} hints were created."
             )
             hint_amount = len(enabled_audio_logs)
-            self.options.hint_amount = hint_amount
+            self.options.hint_amount.value = hint_amount
 
         if hint_amount:
             area_hints = round(self.options.area_hint_percentage / 100 * hint_amount)
