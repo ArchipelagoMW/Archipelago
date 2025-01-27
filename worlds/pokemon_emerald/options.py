@@ -4,7 +4,7 @@ Option definitions for Pokemon Emerald
 from dataclasses import dataclass
 
 from Options import (Choice, DeathLink, DefaultOnToggle, OptionSet, NamedRange, Range, Toggle, FreeText,
-                     PerGameCommonOptions)
+                     PerGameCommonOptions, OptionGroup, StartInventory)
 
 from .data import data
 
@@ -803,6 +803,10 @@ class RandomizeFanfares(Toggle):
     display_name = "Randomize Fanfares"
 
 
+class PokemonEmeraldDeathLink(DeathLink):
+    __doc__ = DeathLink.__doc__ + "\n\n    In Pokemon Emerald, whiting out sends a death and receiving a death causes you to white out."
+
+
 class WonderTrading(DefaultOnToggle):
     """
     Allows participation in wonder trading with other players in your current multiworld. Speak with the center receptionist on the second floor of any pokecenter.
@@ -826,6 +830,14 @@ class EasterEgg(FreeText):
     """
     display_name = "Easter Egg"
     default = "EMERALD SECRET"
+
+
+class PokemonEmeraldStartInventory(StartInventory):
+    """
+    Start with these items.
+
+    They will be in your PC, which you can access from your home or a pokemon center.
+    """
 
 
 @dataclass
@@ -904,7 +916,18 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     music: RandomizeMusic
     fanfares: RandomizeFanfares
 
-    death_link: DeathLink
+    death_link: PokemonEmeraldDeathLink
 
     enable_wonder_trading: WonderTrading
     easter_egg: EasterEgg
+
+    start_inventory: PokemonEmeraldStartInventory
+
+
+OPTION_GROUPS = [
+    OptionGroup(
+        "Item & Location Options", [
+            PokemonEmeraldStartInventory,
+        ], True,
+    ),
+]
