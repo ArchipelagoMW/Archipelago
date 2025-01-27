@@ -3,6 +3,7 @@
 ## What does randomization do to this game?
 
 In Cat Quest, all questlines are available from the beginning, and they no longer gain you any Exp or Gold. 
+
 Items like Royal Arts, skills and the Golden Key can no longer be obtained 
 through completing the usual quests associated with them.
 
