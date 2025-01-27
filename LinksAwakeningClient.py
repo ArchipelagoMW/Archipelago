@@ -480,11 +480,6 @@ class LinksAwakeningCommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, LinksAwakeningContext):
             Utils.async_start(self.ctx.update_death_link("DeathLink" not in self.ctx.tags))
 
-    def _cmd_die(self):
-        """Die."""
-        if isinstance(self.ctx, LinksAwakeningContext):
-            self.ctx.client.deathlink_status = 'pending'
-
 class LinksAwakeningContext(CommonContext):
     tags = {"AP"}
     game = "Links Awakening DX"
