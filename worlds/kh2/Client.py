@@ -273,7 +273,7 @@ class KH2Context(CommonContext):
                     pass
                 # self.locations_checked = set()
             elif os.path.exists(self.kh2_seed_save_path_join):
-                with open(self.game_communication_path +  self.kh2_seed_save_path) as f:
+                with open(self.kh2_seed_save_path_join) as f:
                     self.kh2_seed_save = json.load(f)
                     if self.kh2_seed_save is None:
                         self.kh2_seed_save = {
@@ -364,8 +364,8 @@ class KH2Context(CommonContext):
                 self.data_package_kh2_cache(
                     args["data"]["games"]["Kingdom Hearts 2"]["location_name_to_id"],
                     args["data"]["games"]["Kingdom Hearts 2"]["item_name_to_id"])
-            self.connect_to_game()
-            asyncio.create_task(self.send_msgs([{'cmd': 'Sync'}]))
+                self.connect_to_game()
+                asyncio.create_task(self.send_msgs([{'cmd': 'Sync'}]))
 
     def connect_to_game(self):
         if "KeybladeAbilities" in self.kh2slotdata.keys():
