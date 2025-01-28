@@ -102,6 +102,7 @@ dungeonItemOffsets = {
     'STONE_BEAK{}': 2,
     'NIGHTMARE_KEY{}': 3,
     'KEY{}': 4,
+    'UNUSED_KEY{}': 4,
 }
 
 class Item:
