@@ -85,6 +85,18 @@
     filter: hue-rotate(348deg) saturate(8.3) brightness(0.47);
 }
 
+#inventory-table span{
+    color: #B4B4A0;
+    font-size: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    filter: grayscale(100%) contrast(75%) brightness(30%);
+}
+
+#inventory-table span.acquired{
+    filter: none;
+}
+
 #inventory-table div.image-stack{
     display: grid;
     position: relative;

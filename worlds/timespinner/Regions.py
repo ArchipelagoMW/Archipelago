@@ -130,7 +130,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, options: Timesp
     connect(world, player, 'Forest', 'Refugee Camp')
     connect(world, player, 'Forest', 'Left Side forest Caves', lambda state: flooded.flood_lake_serene_bridge or state.has('Talaria Attachment', player) or logic.has_timestop(state))
     connect(world, player, 'Forest', 'Caves of Banishment (Sirens)')
-    connect(world, player, 'Forest', 'Castle Ramparts')
+    connect(world, player, 'Forest', 'Castle Ramparts', lambda state: not options.gate_keep or state.has('Drawbridge Key', player) or logic.has_upwarddash(state))
     connect(world, player, 'Left Side forest Caves', 'Forest')
     connect(world, player, 'Left Side forest Caves', 'Upper Lake Serene', logic.has_timestop)
     connect(world, player, 'Left Side forest Caves', 'Lower Lake Serene', lambda state: not flooded.flood_lake_serene or state.has('Water Mask', player))

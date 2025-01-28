@@ -99,7 +99,7 @@
                 {% endif %}
                 </div>
             </div>
-            {% if 'PrismBreak' in options or 'LockKeyAmadeus' in options %}
+            {% if 'PrismBreak' in options or 'LockKeyAmadeus' in options or 'GateKeep' in options %}
             <div class="table-row">
                 {% if 'PrismBreak' in options %}
                 <div class="C1">
@@ -136,6 +136,11 @@
                             </div>
                         </div>
                     </div>
+		</div>
+                {% endif %}
+                {% if 'GateKeep' in options %}
+                <div class="C3">
+                    <span class="{{ 'acquired' if 'Drawbridge Key' in acquired_items }}" title="Lab Access Experiment">&#10070;</span>
 		</div>
                 {% endif %}
 	    </div>

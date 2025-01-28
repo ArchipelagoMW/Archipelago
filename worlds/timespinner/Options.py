@@ -391,6 +391,10 @@ class PyramidStart(Toggle):
     """Start in ???. Takes priority over Inverted. Additional chests in Dark Forest and Pyramid. Sandman door behaves as it does in Enter Sandman."""
     display_name = "Pyramid Start"
 
+class GateKeep(Toggle):
+    """The castle drawbridge starts raised, and can be lowered via item."""
+    display_name = "Gate Keep"
+
 @dataclass
 class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     start_with_jewelry_box: StartWithJewelryBox
@@ -431,6 +435,7 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     lock_key_amadeus: LockKeyAmadeus
     risky_warps: RiskyWarps
     pyramid_start: PyramidStart
+    gate_keep: GateKeep
     trap_chance: TrapChance
     traps: Traps
 
