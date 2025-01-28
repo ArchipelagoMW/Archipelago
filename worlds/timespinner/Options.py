@@ -498,10 +498,6 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
     RisingTidesOverrides: HiddenRisingTidesOverrides
     UnchainedKeys: hidden(UnchainedKeys) # type: ignore
     PresentAccessWithWheelAndSpindle: hidden(PresentAccessWithWheelAndSpindle) # type: ignore
-    PrismBreak: hidden(PrismBreak) # type: ignore
-    LockKeyAmadeus: hidden(LockKeyAmadeus) # type: ignore
-    RiskyWarps: hidden(RiskyWarps) # type: ignore
-    PyramidStart: hidden(PyramidStart) # type: ignore
     TrapChance: hidden(TrapChance) # type: ignore
     Traps: HiddenTraps # type: ignore
     DeathLink: HiddenDeathLink # type: ignore
@@ -639,22 +635,6 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
         if self.PresentAccessWithWheelAndSpindle != PresentAccessWithWheelAndSpindle.default and \
             self.back_to_the_future == PresentAccessWithWheelAndSpindle.default:
             self.back_to_the_future.value = self.PresentAccessWithWheelAndSpindle.value
-            self.has_replaced_options.value = Toggle.option_true
-        if self.PrismBreak != PrismBreak.default and \
-            self.prism_break == PrismBreak.default:
-            self.prism_break.value = self.PrismBreak.value
-            self.has_replaced_options.value = Toggle.option_true
-        if self.LockKeyAmadeus != LockKeyAmadeus.default and \
-            self.lock_key_amadeus == LockKeyAmadeus.default:
-            self.lock_key_amadeus.value = self.LockKeyAmadeus.value
-            self.has_replaced_options.value = Toggle.option_true
-        if self.RiskyWarps != RiskyWarps.default and \
-            self.risky_warps == RiskyWarps.default:
-            self.risky_warps.value = self.RiskyWarps.value
-            self.has_replaced_options.value = Toggle.option_true
-        if self.PyramidStart != PyramidStart.default and \
-            self.pyramid_start == PyramidStart.default:
-            self.pyramid_start.value = self.PyramidStart.value
             self.has_replaced_options.value = Toggle.option_true
         if self.TrapChance != TrapChance.default and \
             self.trap_chance == TrapChance.default:
