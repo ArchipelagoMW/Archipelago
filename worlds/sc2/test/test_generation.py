@@ -360,6 +360,9 @@ class TestItemFiltering(Sc2SetupTestBase):
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
             'accessibility': 'locations',
+            # Ensure enough locations to fit all wanted items
+            'generic_upgrade_missions': 1,
+            'victory_cache': 5,
             'excluded_items': {item_groups.ItemGroupNames.BARRACKS_UNITS: 0},
         }
         self.generate_world(world_options)
