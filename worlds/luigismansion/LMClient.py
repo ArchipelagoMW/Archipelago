@@ -59,7 +59,7 @@ FURN_ID_OFFSET = 0xBC
 # This is a short of length 0x02 which contains the last received index of the item that was given to Luigi
 # This index is updated every time a new item is received.
 # TODO in theory we should validate this is saved and maintained in the ROM. If so, then this will always be up to date.
-LAST_GIVE_ITEM_ADDR = 0x80314670
+LAST_RECV_ITEM_ADDR = 0x80314670
 
 # This address will monitor when you capture the final boss, King Boo
 KING_BOO_ADDR = 0x803D5DBF
@@ -139,12 +139,10 @@ class LMContext(CommonContext):
         self.has_send_death = False
 
         # Used for handling received items to the client.
-        self.local_items_received: list[tuple[NetworkItem, int]] = []
-        self.last_rcvd_index = -1
-        self.slot_num = -1
         self.goal_type = None
         self.game_clear = False
         self.rank_req = -1
+        self.local_items_received: list[NetworkItem] = []
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.auth = None
@@ -152,22 +150,19 @@ class LMContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":  # On Connect
-            self.local_items_received = []
-            self.last_rcvd_index = -1
-            self.slot_num = int(args["slot"])
             self.goal_type = int(args["slot_data"]["goal"])
             self.rank_req = int(args["slot_data"]["rank requirement"])
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
 
         if cmd == "ReceivedItems":  # On Receive Item from Server
-            if args["index"] >= self.last_rcvd_index:
-                self.last_rcvd_index = args["index"]
-                for item in args["items"]:
-                    if not item.player == self.slot_num:
-                        self.local_items_received.append((item, self.last_rcvd_index))
-                        self.last_rcvd_index += 1
-            self.local_items_received.sort(key=lambda v: v[1])
+            self.items_received = args["items"]
+            list_recv_items: list[NetworkItem] = args["items"].items()
+            last_recv_idx = read_short(LAST_RECV_ITEM_ADDR)
+            self.local_items_received = [netItem for netItem in list_recv_items if
+                            list_recv_items.index(netItem) > last_recv_idx and not netItem.player == self.slot]
+            give_items(self)
+
 
     def on_deathlink(self, data: dict[str, Any]):
         super().on_deathlink(data)
@@ -216,23 +211,17 @@ async def give_items(ctx: LMContext):
     if not await check_ingame() and await check_alive():
         return
 
-    # Only update new items that have come since it was last received.
-    in_game_last_idx = read_short(LAST_GIVE_ITEM_ADDR)
-    if not ctx.last_rcvd_index > in_game_last_idx:
-        return
-
-    for item, idx in ctx.local_items_received:
-        if any((_, locData) for (_, locData) in ALL_ITEMS_TABLE.items()
-                           if (LMItem.get_apid(locData.code)) == item.item and locData.ram_addr is not None):
-            _, loc_data = next((_, locData) for (_, locData) in ALL_ITEMS_TABLE.items()
-                               if (LMItem.get_apid(locData.code)) == item.item and locData.ram_addr is not None)
-            item_val = dme.read_byte(loc_data.ram_addr)
-            dme.write_byte(loc_data.ram_addr, (item_val | (1 << loc_data.itembit)))
+    for item in ctx.local_items_received:
+        if any(key for key in ALL_ITEMS_TABLE.keys() if LMItem.get_apid(ALL_ITEMS_TABLE[key].code) ==
+                item.item and ALL_ITEMS_TABLE[key].ram_addr is not None):
+            lm_item_data = next(key for key in ALL_ITEMS_TABLE.keys() if LMItem.get_apid(ALL_ITEMS_TABLE[key].code) ==
+                item.item and ALL_ITEMS_TABLE[key].ram_addr is not None)
+            item_val = dme.read_byte(lm_item_data[1].ram_addr)
+            dme.write_byte(lm_item_data[1].ram_addr, (item_val | (1 << lm_item_data[1].itembit)))
+            write_short(LAST_RECV_ITEM_ADDR, ctx.items_received.index(item))
         else:
             # TODO Debug remove before release
             logger.warn("Missing address for AP ID: " + str(item.item))
-
-    write_short(LAST_GIVE_ITEM_ADDR, ctx.last_rcvd_index)
     return
 
 
@@ -298,10 +287,12 @@ async def check_locations(ctx: LMContext):
                     current_boo_state_int = dme.read_byte(data.room_ram_addr)
                     if (current_boo_state_int & (1 << data.locationbit)) > 0:
                         ctx.locations_checked.add(LMLocation.get_apid(data.code))
+                        dme.write_byte(current_boo_state_int, 0)
 
-    locations_checked = ctx.locations_checked.difference(ctx.checked_locations)
-    if locations_checked:
-        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
+    await ctx.check_locations(ctx, ctx.locations_checked)
+    #locations_checked = ctx.locations_checked.difference(ctx.checked_locations)
+    #if locations_checked:
+    #    await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
 
     if current_map_id == 9:
         beat_king_boo = dme.read_byte(KING_BOO_ADDR)
