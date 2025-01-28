@@ -15,7 +15,7 @@ Royal Arts, Skills, The Golden Key, Gold and Exp can appear in other players' wo
 
 You find other world's items by completing quests, and as of now, you will have to use your client to see which item you got.
 
-The list of quests in the game as well as what blocks them can be seen down below, until a poptracker is made (The top 12 quests are the Main Quests.)
+The list of quests in the game as well as what blocks them can be seen down below, until a poptracker is made (The top 12 quests are the Main Quests, the rest are side quests in the order of recommended level)
 
 | Title	| Royal Art Needed | Magic Needed
 | ----------- | ----------- | ----------- |
