@@ -60,11 +60,11 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Laundry Washing Machine": LMLocationData("Laundry Room", 7, "Furniture", 187, [], 5),
     #"Hidden Room Large Chest L": LMLocationData("Hidden Room", 9, "Furniture", 243, [], 1), # TODO Prevents Ghosts Spawn
     #"Hidden Room Large Chest C": LMLocationData("Hidden Room", 10, "Furniture", 241, [], 1), # TODO Prevents Ghosts Spawn
-    #"Hidden Room Large Chest R": LMLocationData("Hidden Room", 11, "Furniture", 242, [], 1), # TODO Prevents Ghosts Spawn
-    #"Hidden Room Small Chest L Floor": LMLocationData("Hidden Room", 12, "Furniture", 245, [], 1), # TODO Prevents Ghosts Spawn
-    "Hidden Room Small Chest R Floor": LMLocationData("Hidden Room", 13, "Furniture", 244, [], 1),
-    "Hidden Room Small Chest L Shelf": LMLocationData("Hidden Room", 14, "Furniture", 246, [], 1),
-    #"Hidden Room Small Chest R Shelf": LMLocationData("Hidden Room", 15, "Furniture", 247, [], 1), # TODO Prevents Ghosts Spawn
+    "Hidden Room Large Chest R": LMLocationData("Hidden Room", 11, "Furniture", 242, [], 1),
+    #"Hidden Room Small Chest L Shelf": LMLocationData("Hidden Room", 12, "Furniture", 245, [], 1), # TODO Prevents Ghosts Spawn
+    "Hidden Room Small Chest R Shelf": LMLocationData("Hidden Room", 13, "Furniture", 244, [], 1),
+    "Hidden Room Small Chest L Floor": LMLocationData("Hidden Room", 14, "Furniture", 246, [], 1),
+    #"Hidden Room Small Chest R Floor": LMLocationData("Hidden Room", 15, "Furniture", 247, [], 1), # TODO Prevents Ghosts Spawn
     "Rec Room Treadmill Key": LMLocationData("Rec Room", 18, "Furniture", 106, [], 23),
     "Courtyard Birdhouse": LMLocationData("Courtyard", 20, "Furniture", 146, [], 24),
     #TODO special event, unknown location
