@@ -127,7 +127,8 @@ def set_region_rules(world: "TunicWorld") -> None:
     world.get_entrance("Quarry Back -> Monastery").access_rule = \
         lambda state: state.has(laurels, player)
     world.get_entrance("Monastery -> Monastery Back").access_rule = \
-        lambda state: has_sword(state, player) or state.has(fire_wand, player)
+        lambda state: (has_sword(state, player) or state.has(fire_wand, player)
+                       or laurels_zip(state, world))
     world.get_entrance("Quarry -> Lower Quarry").access_rule = \
         lambda state: has_mask(state, world)
     world.get_entrance("Lower Quarry -> Rooted Ziggurat").access_rule = \
