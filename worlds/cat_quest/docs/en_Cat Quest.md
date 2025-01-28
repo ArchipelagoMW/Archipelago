@@ -18,18 +18,18 @@ As of now, you will have to use your client to see which item you got.
 
 | Title	| Royal Art Needed | Magic Needed
 | ----------- | ----------- | ----------- |
-| A Whole New World	| No	| No
-| The Catpital	| No	| No
-| The Catpital (2)	| No	| No
-| The Dragon and the Cat	| No	| No
-| The Old Ruins	| No	| Yes
-| Of Sea and Rock	| Water	| Yes
-| Of Sea and Rock (2)	| Both	| Yes
-| The Old Friend	| Both	| Yes
-| The Dragonblood	| Both	| Yes
-| The Dragonsbane	| Both	| Yes
-| The Dragons Void	| Both	| Yes
-| Epilogue	| Both	| Yes
+| A Whole New World	(Main Quest 1) | No	| No
+| The Catpital (Main Quest 2) | No	| No
+| The Catpital (2) (Main Quest 3) | No	| No
+| The Dragon and the Cat	(Main Quest 4) | No	| No
+| The Old Ruins	(Main Quest 5) | No	| Yes
+| Of Sea and Rock	(Main Quest 6) | Water	| Yes
+| Of Sea and Rock (2)	(Main Quest 7) | Both	| Yes
+| The Old Friend	(Main Quest 8) | Both	| Yes
+| The Dragonblood	(Main Quest 9) | Both	| Yes
+| The Dragonsbane	(Main Quest 10) | Both	| Yes
+| The Dragons Void	(Main Quest 11) | Both	| Yes
+| Epilogue	(Main Quest 12) | Both	| Yes
 | Golden Key	| Either	| No
 | The Growling Peasant	| No	| No
 | The King's Mage	| No	| No
