@@ -382,6 +382,7 @@ async def dolphin_sync_task(ctx: LMContext):
     logger.info("Starting Dolphin connector. Use /dolphin for status information.")
     while not ctx.exit_event.is_set():
         try:
+            # TODO Handle if Dolphin was closed pre-maturely. Something around here causes the error.
             if dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
                 if not await check_ingame():
                     await asyncio.sleep(0.1)
