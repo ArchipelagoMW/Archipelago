@@ -1932,6 +1932,7 @@ item_table = {
     item_names.MISTWING_NULL_SHROUD: ItemData(413 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_4, 23, SC2Race.PROTOSS, parent=item_names.MISTWING),
     item_names.MISTWING_PILOT: ItemData(414 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_4, 24, SC2Race.PROTOSS, parent=item_names.MISTWING),
     item_names.INSTIGATOR_BLINK_OVERDRIVE: ItemData(415 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_4, 25, SC2Race.PROTOSS, parent=item_names.INSTIGATOR),
+    item_names.INSTIGATOR_RECONSTRUCTION: ItemData(416 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_4, 26, SC2Race.PROTOSS, parent=item_names.INSTIGATOR),
 
 
     # War Council
