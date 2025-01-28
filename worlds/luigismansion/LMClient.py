@@ -1,5 +1,6 @@
 import asyncio
 import os
+import re
 import time
 import traceback
 
@@ -9,12 +10,12 @@ from typing import Any, Optional
 import dolphin_memory_engine as dme
 
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
-from NetUtils import ClientStatus, NetworkItem
+from NetUtils import ClientStatus, NetworkItem, color
 from settings import get_settings, Settings
 
 from .LMGenerator import LuigisMansionRandomizer
-from .Items import LOOKUP_ID_TO_NAME, ALL_ITEMS_TABLE, LMItem
-from .Locations import ALL_LOCATION_TABLE, LMLocation, LMLocationData
+from .Items import ALL_ITEMS_TABLE, LMItem
+from .Locations import ALL_LOCATION_TABLE, LMLocation
 
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
@@ -58,8 +59,7 @@ FURN_ID_OFFSET = 0xBC
 
 # This is a short of length 0x02 which contains the last received index of the item that was given to Luigi
 # This index is updated every time a new item is received.
-# TODO in theory we should validate this is saved and maintained in the ROM. If so, then this will always be up to date.
-LAST_RECV_ITEM_ADDR = 0x80314670
+LAST_RECV_ITEM_ADDR = 0x803CDEBA
 
 # This address will monitor when you capture the final boss, King Boo
 KING_BOO_ADDR = 0x803D5DBF
@@ -85,7 +85,8 @@ WALLET_OFFSETS: dict[int, int] = {
 RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000,50000000, 60000000, 70000000, 100000000]
 
 # List of received items to ignore because they are handled elsewhere
-RECV_ITEMS_IGNORE = [8063, 8064]
+# TODO Remove hearts from here when fixed.
+RECV_ITEMS_IGNORE = [8063, 8064, 8128, 8129]
 
 
 def read_short(console_address: int):
@@ -145,7 +146,6 @@ class LMContext(CommonContext):
         self.goal_type = None
         self.game_clear = False
         self.rank_req = -1
-        self.local_items_received: list[NetworkItem] = []
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.auth = None
@@ -158,13 +158,10 @@ class LMContext(CommonContext):
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
 
-        if cmd == "ReceivedItems":  # On Receive Item from Server
+        if cmd == "ReceivedItems": # On Receive Item from Server
             self.items_received = args["items"]
-            list_recv_items: list[NetworkItem] = list(args["items"])
-            last_recv_idx = read_short(LAST_RECV_ITEM_ADDR)
-            self.local_items_received = [netItem for netItem in list_recv_items if list_recv_items.index(netItem)
-                    > last_recv_idx and not netItem.player == self.slot]
             give_items(self)
+
 
 
     def on_deathlink(self, data: dict[str, Any]):
@@ -214,20 +211,51 @@ async def give_items(ctx: LMContext):
     if not await check_ingame() and await check_alive():
         return
 
-    for item in ctx.local_items_received:
+    last_recv_idx = read_short(LAST_RECV_ITEM_ADDR)
+    if len(ctx.items_received) <= last_recv_idx:
+        return
+
+    # Filter for only items where we have not received yet.
+    list_recv_items = [netItem for netItem in ctx.items_received if ctx.items_received.index(netItem)> last_recv_idx
+        and not netItem.player == ctx.slot and netItem.item in RECV_ITEMS_IGNORE]
+    if len(list_recv_items) == 0:
+        write_short(LAST_RECV_ITEM_ADDR, (len(ctx.items_received) - 1))
+        return
+
+    for item in list_recv_items:
         # If boo radar or super vacuum, ignore these as they are handled in patching.
-        if item.item in RECV_ITEMS_IGNORE:
+        if item.item is None or item.item in RECV_ITEMS_IGNORE:
             write_short(LAST_RECV_ITEM_ADDR, ctx.items_received.index(item))
-        elif any(key for key in ALL_ITEMS_TABLE.keys() if LMItem.get_apid(ALL_ITEMS_TABLE[key].code) ==
-                item.item and ALL_ITEMS_TABLE[key].ram_addr is not None):
-            lm_item_data = next(key for key in ALL_ITEMS_TABLE.keys() if LMItem.get_apid(ALL_ITEMS_TABLE[key].code) ==
-                item.item and ALL_ITEMS_TABLE[key].ram_addr is not None)
-            item_val = dme.read_byte(lm_item_data[1].ram_addr)
-            dme.write_byte(lm_item_data[1].ram_addr, (item_val | (1 << lm_item_data[1].itembit)))
+            continue
+
+        # Get the current LM Item so we can get the various named tuple fields easier.
+        lm_item = ALL_ITEMS_TABLE[next(key for key in ALL_ITEMS_TABLE.keys() if
+                          LMItem.get_apid(ALL_ITEMS_TABLE[key].code) == item.item)]
+        if not lm_item.ram_addr is None and (not lm_item.itembit is None or not lm_item.pointer_offset is None):
+            lm_item_name = ctx.item_names.lookup_in_game(item.item)
+            logger.info('Received %s from %s (%s) (%d/%d in list)' % (
+                color(lm_item_name, 'red', 'bold'),
+                color(ctx.player_names[item.player], 'yellow'),
+                ctx.location_names.lookup_in_slot(item.location, item.player),
+                (ctx.items_received.index(item)+1), len(ctx.items_received)))
+            if not lm_item.pointer_offset is None:
+                # Assume we need to update an existing value of size X with Y value at the pointer's address
+                curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
+                                                    [lm_item.pointer_offset]), lm_item.ram_byte_size))
+                # TODO fix for hearts, will break receival otherwise
+                curr_val += int(re.search(r"^\d+", lm_item_name).group())
+                dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
+                    [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
+            else:
+                # Assume it is a single address with a bit to update, rather than adding to an existing value
+                item_val = dme.read_byte(lm_item.ram_addr)
+                dme.write_byte(lm_item.ram_addr, (item_val | (1 << lm_item.itembit)))
+
+            # Update the last received index to ensure we dont receive the same item over and over.
             write_short(LAST_RECV_ITEM_ADDR, ctx.items_received.index(item))
         else:
             # TODO Debug remove before release
-            logger.warn("Missing address for AP ID: " + str(item.item))
+            logger.warn("Missing information for AP ID: " + str(item.item))
     return
 
 
@@ -356,8 +384,6 @@ async def dolphin_sync_task(ctx: LMContext):
         try:
             if dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
                 if not await check_ingame():
-                    # Reset give item array while not in game
-                    # dolphin_memory_engine.write_bytes(GIVE_ITEM_ARRAY_ADDR, bytes([0xFF] * ctx.len_give_item_array))
                     await asyncio.sleep(0.1)
                     continue
                 if ctx.slot:

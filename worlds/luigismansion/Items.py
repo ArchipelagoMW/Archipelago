@@ -11,6 +11,8 @@ class LMItemData(NamedTuple):
     doorid: Optional[int] = None
     ram_addr: Optional[int] = None
     itembit: Optional[int] = None
+    pointer_offset: Optional[int] = None
+    ram_byte_size: Optional[int] = None
 
 
 class LMItem(Item):
@@ -154,34 +156,30 @@ BOO_ITEM_TABLE: dict[str, LMItemData] = {
 
 filler_items: Dict[str, LMItemData] = {
     "20 Coins & Bills": LMItemData("Money", 119, IC.filler),
-    "Sapphire": LMItemData("Money", 121, IC.filler),
-    "Emerald": LMItemData("Money", 122, IC.filler),
-    "Ruby": LMItemData("Money", 123, IC.filler),
-    "Diamond": LMItemData("Money", 124, IC.filler),
+    "Sapphire": LMItemData("Money", 121, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x330, ram_byte_size=4),
+    "Emerald": LMItemData("Money", 122, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x334, ram_byte_size=4),
+    "Ruby": LMItemData("Money", 123, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x338, ram_byte_size=4),
+    "Diamond": LMItemData("Money", 124, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x33C, ram_byte_size=4),
     "Poison Mushroom": LMItemData("Trap", 125, IC.trap),
     # "Ghost": LMItemData("Trap", 126, IC.trap),
     "Nothing": LMItemData("Nothing", 127, IC.filler),
-    "Small Heart": LMItemData("Heart", 128, IC.filler),
-    "Large Heart": LMItemData("Heart", 129, IC.filler),
+    "Small Heart": LMItemData("Heart", 128, IC.filler, ram_addr=0x803D8B40, pointer_offset=0xB8, ram_byte_size=2),
+    "Large Heart": LMItemData("Heart", 129, IC.filler, ram_addr=0x803D8B40, pointer_offset=0xB8, ram_byte_size=2),
     "Bomb": LMItemData("Trap", 130, IC.trap),
     "Ice Trap": LMItemData("Trap", 131, IC.trap),
     "Banana Trap": LMItemData("Trap", 132, IC.trap),
-    "10 Coins": LMItemData("Money", 133, IC.filler),
-    "20 Coins": LMItemData("Money", 134, IC.filler),
-    "30 Coins": LMItemData("Money", 135, IC.filler),
-    "15 Bills": LMItemData("Money", 136, IC.filler),
-    "25 Bills": LMItemData("Money", 137, IC.filler),
-    "2 Gold Bars": LMItemData("Money", 138, IC.filler),
-    "5 Gold Bars": LMItemData("Money", 139, IC.filler)
+    "10 Coins": LMItemData("Money", 133, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x324, ram_byte_size=4),
+    "20 Coins": LMItemData("Money", 134, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x324, ram_byte_size=4),
+    "30 Coins": LMItemData("Money", 135, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x324, ram_byte_size=4),
+    "15 Bills": LMItemData("Money", 136, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x328, ram_byte_size=4),
+    "25 Bills": LMItemData("Money", 137, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x328, ram_byte_size=4),
+    "2 Gold Bars": LMItemData("Money", 138, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x32C, ram_byte_size=4),
+    "5 Gold Bars": LMItemData("Money", 139, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x32C, ram_byte_size=4)
 }
 
 ALL_ITEMS_TABLE = {**ITEM_TABLE,
                    **BOO_ITEM_TABLE,
                    **filler_items}
-
-LOOKUP_ID_TO_NAME: dict[int, str] = {
-    LMItem.get_apid(data.code): item for item, data in ALL_ITEMS_TABLE.items() if data.code is not None
-}
 
 
 def get_item_names_per_category() -> Dict[str, Set[str]]:
