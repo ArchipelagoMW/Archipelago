@@ -39,10 +39,10 @@ items received in Luigi's Mansion will display a popup window that does not inte
 - Add Plants into the pool as locations
 - Add Portrait Ghosts into the pool as locations (Not yet functional)
 - Add Speedy Spirits and Gold Mice into the pool as locations. These now require the Blackout to be active to reach (Not currently functional)
-- Add Boos into the pool as locations and items (Rceiving Boos not yet functional)
+- Add Boos into the pool as locations and items (Receiving Boos not yet functional)
 - Add Toads into the pool as locations (Not yet functional)
 - Add every interactable object within the game into the pool as locations
-- Require the player to have obatined enough money to get a specific rank upon completion.
+- Require the player to have obtained enough money to get a specific rank upon completion.
 - Customize the Boo count requirement for the 1F Washroom, Balcony, and Secret Altar
 - Customize the number of Mario's items needed to trigger the Fortune-teller
 - Start with the stronger Poltergust or include it in the item pool (Not yet functional)
