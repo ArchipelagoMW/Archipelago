@@ -129,7 +129,7 @@ def connect_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "Sitting Room", "Guest Room", "Guest Room Key", 30,
             lambda state: Rules.can_fst_fire(state, player))
     connect(multiworld, player, "Safari Room", "3F Right Hallway", "3F Right Hallway Key", 55)
-    connect(multiworld, player, "3F Right Hallway", "Artist's Studio", "Art Studio Key", 63)
+    connect(multiworld, player, "3F Right Hallway", "Artist's Studio", "Artist's Studio Key", 63)
     connect(multiworld, player, "3F Right Hallway", "Balcony", "Balcony Key", 62,
             lambda state: state.has_group("Boo", player, multiworld.worlds[player].options.balcony_boo_count)
                           or state.has("Boo", player, multiworld.worlds[player].options.balcony_boo_count))

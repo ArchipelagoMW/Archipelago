@@ -39,7 +39,7 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Parlor Key": LMItemData("Door Key", 4, IC.progression, 34, ram_addr=0x803D5E18, itembit=2),
     "Anteroom Key": LMItemData("Door Key", 5, IC.progression, 38, ram_addr=0x803D5E18, itembit=6),
     "Wardrobe Key": LMItemData("Door Key", 6, IC.progression, 43, ram_addr=0x803D5E19, itembit=3),
-    "Family Hallway Key": LMItemData("Door Key", 7, IC.progression, 33, ram_addr=0x803D5E18, itembit=1), #TODO Family Hallway Key
+    "Family Hallway Key": LMItemData("Door Key", 7, IC.progression, 33, ram_addr=0x803D5E18, itembit=1),
     "Master Bedroom Key": LMItemData("Door Key", 8, IC.progression, 31, ram_addr=0x803D5E17, itembit=7),
     "Nursery Key": LMItemData("Door Key", 9, IC.progression, 27, ram_addr=0x803D5E17, itembit=3),
     "Twins Bedroom Key": LMItemData("Door Key", 10, IC.progression, 28, ram_addr=0x803D5E17, itembit=4),
@@ -54,14 +54,13 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Billiards Key": LMItemData("Door Key", 19, IC.progression, 17, ram_addr=0x803D5E16, itembit=1),
     "Safari Key": LMItemData("Door Key", 20, IC.progression, 56, ram_addr=0x803D5E1B, itembit=0), #TODO North Safari Key
     "Balcony Key": LMItemData("Door Key", 21, IC.progression, 62, ram_addr=0x803D5E1B, itembit=6), #TODO Boolossus Balcony East Side Key
-    "Breaker Key": LMItemData("Door Key", 22, IC.progression, 71, ram_addr=0x803D5E1C, itembit=7),
     "Cellar Key": LMItemData("Door Key", 23, IC.progression, 68, ram_addr=0x803D5E1C, itembit=4),
     "Clockwork Key": LMItemData("Door Key", 24, IC.progression, 53, ram_addr=0x803D5E1A, itembit=5),
     "Armory Key": LMItemData("Door Key", 25, IC.progression, 51, ram_addr=0x803D5E1A, itembit=3),
     "Sitting Room Key": LMItemData("Door Key", 26, IC.progression, 29, ram_addr=0x803D5E17, itembit=5),
     "Pipe Room Key": LMItemData("Door Key", 27, IC.progression, 69, ram_addr=0x803D5E1C, itembit=5),
     "Cold Storage Key": LMItemData("Door Key", 28, IC.progression, 65, ram_addr=0x803D5E1C, itembit=1),
-    "Art Studio Key": LMItemData("Door Key", 29, IC.progression, 63, ram_addr=0x803D5E1B, itembit=7), #TODO Artist's Studio Key
+    "Artist's Studio Key": LMItemData("Door Key", 29, IC.progression, 63, ram_addr=0x803D5E1B, itembit=7), #TODO Artist's Studio Key
     "Wardrobe Balcony Key": LMItemData("Door Key", 30, IC.progression, 41, ram_addr=0x803D5E19, itembit=1),
     "Study Key": LMItemData("Door Key", 31, IC.progression, 32, ram_addr=0x803D5E18, itembit=0),
     "Basement Stairwell Key": LMItemData("Door Key", 32, IC.progression, 9, ram_addr=0x803D5E15, itembit=1),
