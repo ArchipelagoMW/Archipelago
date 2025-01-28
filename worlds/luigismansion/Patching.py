@@ -861,7 +861,7 @@ def update_treasure_table(treasure_info, character_info, output_data):
 
 
                 # Generate a random amount of money if the item is supposed to be a money bundle.
-                if treasure_item_name == "money": #TODO support gems as well
+                if treasure_item_name in ["money", "emerald", "sapphire", "ruby", "diamond"]: #TODO support gems as well
                     if any((key, val) for (key, val) in filler_items.items() if key == item_data["name"] and val.type == "Money"):  # TODO change once more money types are implement to force AP to change.
                         int_money_amt = 1
                         if re.search(r"^\d+", item_data["name"]):
@@ -877,13 +877,13 @@ def update_treasure_table(treasure_info, character_info, output_data):
                         elif "Gold Bars" in item_data["name"]:
                             gold_bar_amount = int_money_amt
                         elif "Sapphire" in item_data["name"]:
-                            sapphire_amount = 1
+                            sapphire_amount = int_money_amt
                         elif "Emerald" in item_data["name"]:
-                            emerald_amount = 1
+                            emerald_amount = int_money_amt
                         elif "Ruby" in item_data["name"]:
-                            ruby_amount = 1
+                            ruby_amount = int_money_amt
                         elif "Diamond" in item_data["name"]:
-                            diamond_amount = 1
+                            diamond_amount = int_money_amt
 
 
 
