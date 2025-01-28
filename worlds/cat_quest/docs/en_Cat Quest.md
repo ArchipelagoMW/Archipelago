@@ -15,7 +15,7 @@ Royal Arts, Skills, The Golden Key, Gold and Exp can appear in other players' wo
 
 You find other world's items by completing quests.
 
-The list of quests in the game as well as what blocks them can be seen down below
+The list of quests in the game as well as what blocks them can be seen down below, until a poptracker is made
 
 | Title	| Royal Art Needed | Magic Needed
 | ----------- | ----------- | ----------- |
@@ -98,6 +98,8 @@ The list of quests in the game as well as what blocks them can be seen down belo
 | The Forgotten Hero	| Either	| No
 | Mewry Kitmas	| Water	| No
 | The Furbidden History	| No	| No
+
+The top 12 quests are the Main Quests.
 
 As of now, you will have to use your client to see which item you got.
 
