@@ -14,7 +14,8 @@ Royal Arts, Skills, The Golden Key, Gold and Exp can appear in other players' wo
 ## What does another world's item look like in Cat Quest?
 
 You find other world's items by completing quests.
-As of now, you will have to use your client to see which item you got.
+
+The list of quests in the game as well as what blocks them can be seen down below
 
 | Title	| Royal Art Needed | Magic Needed
 | ----------- | ----------- | ----------- |
@@ -97,6 +98,8 @@ As of now, you will have to use your client to see which item you got.
 | The Forgotten Hero	| Either	| No
 | Mewry Kitmas	| Water	| No
 | The Furbidden History	| No	| No
+
+As of now, you will have to use your client to see which item you got.
 
 ## Can I have more than one save at a time?
 
