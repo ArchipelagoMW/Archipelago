@@ -12,6 +12,7 @@ import dolphin_memory_engine as dme
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus, NetworkItem, color
 from settings import get_settings, Settings
+from worlds.luigismansion import BOO_LOCATION_TABLE
 
 from .LMGenerator import LuigisMansionRandomizer
 from .Items import ALL_ITEMS_TABLE, LMItem
@@ -87,6 +88,7 @@ RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000,50000000, 60000000, 70000000, 10
 # List of received items to ignore because they are handled elsewhere
 # TODO Remove hearts from here when fixed.
 RECV_ITEMS_IGNORE = [8063, 8064, 8128, 8129]
+RECV_OWN_GAME_LOCATIONS = [BOO_LOCATION_TABLE,]
 
 
 def read_short(console_address: int):
@@ -215,9 +217,12 @@ async def give_items(ctx: LMContext):
     if len(ctx.items_received) <= last_recv_idx:
         return
 
-    # Filter for only items where we have not received yet.
+    # Filter for only items where we have not received yet. If same slot, only receive the locations from the
+    # pre-approved own locations (as everything is currently a NetworkItem), otherwise accept other slots.
     list_recv_items = [netItem for netItem in ctx.items_received if ctx.items_received.index(netItem)> last_recv_idx
-        and not netItem.player == ctx.slot and netItem.item in RECV_ITEMS_IGNORE]
+        and ((netItem.player == ctx.slot and LMLocation.get_apid(netItem.location) in RECV_OWN_GAME_LOCATIONS) or
+             not netItem.player == ctx.slot) and netItem.item in RECV_ITEMS_IGNORE]
+
     if len(list_recv_items) == 0:
         write_short(LAST_RECV_ITEM_ADDR, (len(ctx.items_received) - 1))
         return
