@@ -455,7 +455,7 @@ class LMWorld(World):
         for item, data in ITEM_TABLE.items():
             if data.doorid in self.open_doors.keys() and self.open_doors[data.doorid] == 1:
                 exclude += [item]
-            if data.code == 49:
+            if data.code == 65:
                 copies_to_place = 5
             else:
                 copies_to_place = 1
