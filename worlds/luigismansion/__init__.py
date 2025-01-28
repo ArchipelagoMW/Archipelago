@@ -66,6 +66,10 @@ class LMWeb(WebWorld):
             LuigiOptions.RandomMusic,
             LuigiOptions.HintDistribution,
             LuigiOptions.PortraitHints,
+            LuigiOptions.PoisonTrapWeight,
+            LuigiOptions.BombWeight,
+            LuigiOptions.IceTrapWeight,
+            LuigiOptions.BananaTrapWeight,
             LuigiOptions.Deathlink
         ]),
         OptionGroup("Access Options", [
@@ -475,7 +479,9 @@ class LMWorld(World):
 
     def get_filler_item_name(self) -> str:
         filler = list(filler_items.keys())
-        filler_weights = [10, 5, 5, 5, 2, 10, 20, 10, 5, 10, 15, 15, 15, 10, 5, 10, 5, 10, 5]
+        filler_weights = [10, 5, 5, 5, 2, self.options.poison_trap_weight.value, 20, 10, 5,
+                          self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,
+                          self.options.banana_trap_weight.value, 15, 10, 5, 10, 5, 10, 5]
         return self.random.choices(filler, weights=filler_weights, k=1)[0]
 
     def set_rules(self):

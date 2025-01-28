@@ -9,6 +9,7 @@ class Deathlink(Toggle):
     """All players who have deathlink enabled will die when one person with deathlink on does"""
     display_name = "Deathlink"
 
+
 class LuigiWalkSpeed(Choice):
     """Choose how fast Luigi moves"""
     display_name = "Walk Speed"
@@ -21,6 +22,38 @@ class LuigiWalkSpeed(Choice):
 class RandomMusic(Toggle):
     """Randomize Music"""
     display_name = "Music Randomization"
+
+
+class PoisonTrapWeight(Range):
+    """Set the weight for how often poison mushrooms get chosen as traps. Default is 15"""
+    display_name = "Poison Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 15
+
+
+class BombWeight(Range):
+    """Set the weight for how often bombs get chosen as traps. Default is 15"""
+    display_name = "Bomb Weight"
+    range_start = 0
+    range_end = 100
+    default = 15
+
+
+class IceTrapWeight(Range):
+    """Set the weight for how often ice traps get chosen as traps. Default is 15"""
+    display_name = "Ice Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 15
+
+
+class BananaTrapWeight(Range):
+    """Set the weight for how often bananas get chosen as traps. Default is 15"""
+    display_name = "Banana Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 15
 
 
 class BetterVacuum(Choice):
@@ -225,6 +258,10 @@ class LMOptions(PerGameCommonOptions):
     washroom_boo_count: WashroomBooCount
     balcony_boo_count: BalconyBooCount
     final_boo_count: FinalBooCount
+    poison_trap_weight: PoisonTrapWeight
+    bomb_trap_weight: BombWeight
+    ice_trap_weight: IceTrapWeight
+    banana_trap_weight: BananaTrapWeight
     enemizer: Enemizer
     deathlink: Deathlink
     start_inventory_from_pool: StartInventoryPool
