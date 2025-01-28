@@ -72,7 +72,7 @@ class StartHiddenMansion(Toggle):
 
 
 class SpeedySpirits(Toggle):
-    """Adds Blue Ghosts and Gold Mice to location pool"""
+    """Adds Blue Ghosts to location pool"""
     display_name = "Speedy Spirits"
 
 
