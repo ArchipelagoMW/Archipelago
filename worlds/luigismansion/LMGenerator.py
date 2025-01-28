@@ -76,6 +76,7 @@ class LuigisMansionRandomizer:
         self.jmp_obj_info_table = self.load_maptwo_info_table("objinfo")
         self.jmp_generator_info_table = self.load_maptwo_info_table("generatorinfo")
         self.jmp_enemy_info_table = self.load_maptwo_info_table("enemyinfo")
+        self.jmp_boo_table = self.load_maptwo_info_table("telesa")
 
         # Saves the randomized iso file, with all files updated.
         self.save_randomized_iso()
@@ -156,6 +157,7 @@ class LuigisMansionRandomizer:
         update_obj_info(self.jmp_obj_info_table)
         update_generator_info(self.jmp_generator_info_table)
         update_enemy_info(self.jmp_enemy_info_table, self.output_data)
+        update_boo_table(self.jmp_boo_table)
 
         # Updates all the data entries in each jmp table in the szp file.
         self.update_maptwo_info_table(self.jmp_character_info_table)
@@ -169,6 +171,7 @@ class LuigisMansionRandomizer:
         self.update_maptwo_info_table(self.jmp_obj_info_table)
         self.update_maptwo_info_table(self.jmp_generator_info_table)
         self.update_maptwo_info_table(self.jmp_enemy_info_table)
+        self.update_maptwo_info_table(self.jmp_boo_table)
 
     def save_randomized_iso(self):
         random.seed(self.output_data["Seed"])

@@ -1118,6 +1118,13 @@ def update_enemy_info(enemy_info, output_data):
         # if x["cond_type"] == 17:
             # x["do_type"] = 6
 
+def update_boo_table(telesa_info):
+    for x in telesa_info.info_file_field_entries:
+        x["accel"] = 3.000000
+        x["max_speed"] = 15.000000
+        x["str_hp"] = 30
+        x["move_time"] = 300
+        x["attack"] = 0
 
 def apply_new_ghost(enemy_info_entry, element):
     # The list of ghosts that can replace the vanilla ones. Only includes the ones without elements.

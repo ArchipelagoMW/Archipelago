@@ -264,5 +264,15 @@
         "place_type",
         "invisible",
         "stay"
+    ],
+    "telesa": [
+        "init_room",
+        "next_room_wait",
+        "accel",
+        "max_speed",
+        "rnd_angle",
+        "str_hp",
+        "move_time",
+        "attack"
     ]
 }

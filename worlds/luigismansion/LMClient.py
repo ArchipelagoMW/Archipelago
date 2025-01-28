@@ -84,6 +84,9 @@ WALLET_OFFSETS: dict[int, int] = {
 # Rank Requirements for each rank. H, G, F, E, D, C, B, A
 RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000,50000000, 60000000, 70000000, 100000000]
 
+# List of received items to ignore because they are handled elsewhere
+RECV_ITEMS_IGNORE = [63, 64]
+
 
 def read_short(console_address: int):
     return int.from_bytes(dme.read_bytes(console_address, 2))
@@ -157,10 +160,10 @@ class LMContext(CommonContext):
 
         if cmd == "ReceivedItems":  # On Receive Item from Server
             self.items_received = args["items"]
-            list_recv_items: list[NetworkItem] = args["items"].items()
+            list_recv_items: list[NetworkItem] = list(args["items"])
             last_recv_idx = read_short(LAST_RECV_ITEM_ADDR)
-            self.local_items_received = [netItem for netItem in list_recv_items if
-                            list_recv_items.index(netItem) > last_recv_idx and not netItem.player == self.slot]
+            self.local_items_received = [netItem for netItem in list_recv_items if list_recv_items.index(netItem)
+                    > last_recv_idx and not netItem.player == self.slot]
             give_items(self)
 
 
@@ -212,7 +215,10 @@ async def give_items(ctx: LMContext):
         return
 
     for item in ctx.local_items_received:
-        if any(key for key in ALL_ITEMS_TABLE.keys() if LMItem.get_apid(ALL_ITEMS_TABLE[key].code) ==
+        # If boo radar or super vacuum, ignore these as they are handled in patching.
+        if item.item in RECV_ITEMS_IGNORE:
+            write_short(LAST_RECV_ITEM_ADDR, ctx.items_received.index(item))
+        elif any(key for key in ALL_ITEMS_TABLE.keys() if LMItem.get_apid(ALL_ITEMS_TABLE[key].code) ==
                 item.item and ALL_ITEMS_TABLE[key].ram_addr is not None):
             lm_item_data = next(key for key in ALL_ITEMS_TABLE.keys() if LMItem.get_apid(ALL_ITEMS_TABLE[key].code) ==
                 item.item and ALL_ITEMS_TABLE[key].ram_addr is not None)
@@ -289,10 +295,7 @@ async def check_locations(ctx: LMContext):
                         ctx.locations_checked.add(LMLocation.get_apid(data.code))
                         dme.write_byte(current_boo_state_int, 0)
 
-    await ctx.check_locations(ctx, ctx.locations_checked)
-    #locations_checked = ctx.locations_checked.difference(ctx.checked_locations)
-    #if locations_checked:
-    #    await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
+    await ctx.check_locations(ctx.locations_checked)
 
     if current_map_id == 9:
         beat_king_boo = dme.read_byte(KING_BOO_ADDR)
@@ -328,7 +331,7 @@ async def check_alive():
 
 async def check_death(ctx: LMContext):
     if await check_ingame():
-        if not check_alive() and not ctx.has_send_death and time.time() >= ctx.last_death_link + 3:
+        if not await check_alive() and not ctx.has_send_death and time.time() >= ctx.last_death_link + 3:
             ctx.has_send_death = True
             await ctx.send_death(ctx.player_names[ctx.slot] + " scared themselves to death.")
         else:
