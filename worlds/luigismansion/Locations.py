@@ -187,7 +187,7 @@ PLANT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Balcony Plant 4": LMLocationData("Balcony", 78, "Plant", 607, ["Water Element Medal"], 62),
     "Balcony Plant SW Corner": LMLocationData("Balcony", 81, "Plant", 610, ["Water Element Medal"], 62),
     "Balcony Plant 8": LMLocationData("Balcony", 82, "Plant", 611, ["Water Element Medal"], 62),
-    "Balcony Plant 9": LMLocationData("Balcony", 83, "Plant", 612, ["Water Element Medal"], 62),
+    "Balcony West Double Plant": LMLocationData("Balcony", 83, "Plant", 612, ["Water Element Medal"], 62),
     "Balcony Plant 10": LMLocationData("Balcony", 84, "Plant", 613, ["Water Element Medal"], 62),
     "Balcony Plant 5": LMLocationData("Balcony", 79, "Plant", 608, ["Water Element Medal"], 62),
     "Balcony Plant SE Corner": LMLocationData("Balcony", 80, "Plant", 609, ["Water Element Medal"], 62),
