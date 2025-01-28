@@ -85,7 +85,7 @@ WALLET_OFFSETS: dict[int, int] = {
 RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000,50000000, 60000000, 70000000, 100000000]
 
 # List of received items to ignore because they are handled elsewhere
-RECV_ITEMS_IGNORE = [63, 64]
+RECV_ITEMS_IGNORE = [8063, 8064]
 
 
 def read_short(console_address: int):
