@@ -752,7 +752,7 @@ def __get_chest_size_from_item(item_name):
 # For every key found in the generation output, add an entry for it in "iteminfotable".
 def update_item_info_table(item_info, output_data):
     # Adds the special items so they can spawn in furniture or chests.
-    items_to_add = ["rdiamond", "itembomb", "ice", "mstar", "banana"]
+    items_to_add = ["rdiamond", "itembomb", "ice", "mstar", "banana", "diamond"]
     for new_item in items_to_add:
         __add_info_item(item_info, None, info_item_name=new_item)
 
@@ -1024,7 +1024,7 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
         furniture_info.info_file_field_entries[item_data["loc_enum"]]["item_table"] = (
             item_appear_info.info_file_field_entries.index(item_appear_entry_idx))
 
-        if any((key, val) for (key, val) in filler_items.items() if key == item_data["name"] and not key == "Diamond"
+        if any((key, val) for (key, val) in filler_items.items() if key == item_data["name"] and key != "Diamond"
                                                                     and val.type == "Money"): # TODO change once more money types are implement to force AP to change.
             furniture_info.info_file_field_entries[item_data["loc_enum"]]["item_table"] = 11
             int_money_amt = 1
