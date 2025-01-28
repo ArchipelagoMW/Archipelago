@@ -80,12 +80,12 @@ def connect_regions(multiworld: MultiWorld, player: int):
     connect(multiworld, player, "Parlor", "Anteroom", "Anteroom Key", 38)
     connect(multiworld, player, "Anteroom", "Wardrobe", "Wardrobe Key", 43)
     connect(multiworld, player, "Wardrobe", "Wardrobe Balcony", "Wardrobe Balcony Key", 41)
-    connect(multiworld, player, "Foyer", "2F Front Hallway", "2F Front Hallway Key", 33)
+    connect(multiworld, player, "Foyer", "Family Hallway", "Family Hallway Key", 33)
     connect(multiworld, player, "Foyer", "1F Hallway", "Heart Key", 3)
-    connect(multiworld, player, "2F Front Hallway", "Study", "Study Key", 32)
-    connect(multiworld, player, "2F Front Hallway", "Master Bedroom", "Master Bedroom Key", 31)
-    connect(multiworld, player, "2F Front Hallway", "Nursery", "Nursery Key", 27)
-    connect(multiworld, player, "2F Front Hallway", "Twins' Room", "Twins Bedroom Key", 28)
+    connect(multiworld, player, "Family Hallway", "Study", "Study Key", 32)
+    connect(multiworld, player, "Family Hallway", "Master Bedroom", "Master Bedroom Key", 31)
+    connect(multiworld, player, "Family Hallway", "Nursery", "Nursery Key", 27)
+    connect(multiworld, player, "Family Hallway", "Twins' Room", "Twins Bedroom Key", 28)
     connect(multiworld, player, "1F Hallway", "Basement Stairwell", "Basement Stairwell Key", 9)
     connect(multiworld, player, "1F Hallway", "2F Stairwell", "Lower 2F Stairwell Key", 74)
     connect(multiworld, player, "1F Hallway", "Courtyard", "Club Key", 42)
@@ -155,7 +155,7 @@ def connect_regions(multiworld: MultiWorld, player: int):
 REGION_LIST = {
     35: "Parlor",
     2: "Foyer",
-    29: "2F Front Hallway",
+    29: "Family Hallway",
     6: "1F Hallway",
     39: "Anteroom",
     69: "The Well",
