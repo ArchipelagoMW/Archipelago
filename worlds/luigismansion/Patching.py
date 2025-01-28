@@ -1,5 +1,5 @@
 import re
-from random import randrange, choice
+from random import choice
 
 from .Items import filler_items
 
@@ -744,7 +744,7 @@ def __get_chest_size_from_item(item_name):
         case "Fire Element Medal" | "Water Element Medal" | "Ice Element Medal":
             return 2
 
-        case "Sapphire" | "Emerald" | "Ruby" | "Diamond": #Todo change to support gems as well
+        case "Sapphire" | "Emerald" | "Ruby" | "Diamond":
             return 1
 
     return 0
@@ -804,7 +804,7 @@ def __get_key_name(door_id):
 def update_item_appear_table(item_appear_info, output_data):
     # Add the special items, so they can be spawned from treasure chests or furniture in game.
     items_to_add = ["mkinoko", "itembomb", "ice", "elffst", "elwfst", "elifst", "mstar", "mglove", "mshoes",
-                    "rdiamond", "mheart", "lheart", "move_mheart", "banana", "diamond", "ruby", "emerald", "sapphire"]
+                    "sheart", "lheart", "banana", "rdiamond", "diamond", "ruby", "emerald", "sapphire"]
     for new_item in items_to_add:
         __add_appear_item(item_appear_info, new_item)
 
@@ -861,8 +861,9 @@ def update_treasure_table(treasure_info, character_info, output_data):
 
 
                 # Generate a random amount of money if the item is supposed to be a money bundle.
-                if treasure_item_name in ["money", "emerald", "sapphire", "ruby", "diamond"]: #TODO support gems as well
-                    if any((key, val) for (key, val) in filler_items.items() if key == item_data["name"] and val.type == "Money"):  # TODO change once more money types are implement to force AP to change.
+                if treasure_item_name in ["money", "emerald", "sapphire", "ruby", "diamond"]:
+                    if any((key, val) for (key, val) in filler_items.items() if
+                           key == item_data["name"] and val.type == "Money"):
                         int_money_amt = 1
                         if re.search(r"^\d+", item_data["name"]):
                             int_money_amt = int(re.search(r"^\d+", item_data["name"]).group())
@@ -1018,14 +1019,15 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
 
         # Replace the furnitureinfo entry to spawn an item from the "itemappeartable".
         # If the entry is supposed to be money, then generate a random amount of coins and/or bills from it.
-        item_appear_entry_idx = next(item_appear_entry for item_appear_entry in
+        filtered_item_appear = list(item_appear_entry for item_appear_entry in
             item_appear_info.info_file_field_entries if item_appear_entry["item0"] == actor_item_name)
+        item_appear_entry_idx = filtered_item_appear[len(filtered_item_appear) - 1]
 
         furniture_info.info_file_field_entries[item_data["loc_enum"]]["item_table"] = (
             item_appear_info.info_file_field_entries.index(item_appear_entry_idx))
 
-        if any((key, val) for (key, val) in filler_items.items() if key == item_data["name"] and key != "Diamond"
-                                                                    and val.type == "Money"): # TODO change once more money types are implement to force AP to change.
+        if any((key, val) for (key, val) in filler_items.items() if
+               key == item_data["name"] and key != "Diamond" and val.type == "Money"):
             furniture_info.info_file_field_entries[item_data["loc_enum"]]["item_table"] = 11
             int_money_amt = 1
             if re.search(r"^\d+", item_data["name"]):
