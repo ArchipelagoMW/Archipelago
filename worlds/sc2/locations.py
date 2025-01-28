@@ -1621,6 +1621,9 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.DARK_WHISPERS.mission_name, "Second Pylon", SC2LOTV_LOC_ID_OFFSET + 104, LocationType.VANILLA,
             logic.protoss_common_unit_basic_aa
         ),
+        make_location_data(SC2Mission.DARK_WHISPERS.mission_name, "Zerg Base", SC2LOTV_LOC_ID_OFFSET + 105, LocationType.MASTERY,
+            logic.protoss_competent_comp
+        ),
         make_location_data(SC2Mission.GHOSTS_IN_THE_FOG.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 200, LocationType.VICTORY,
             logic.protoss_common_unit_anti_armor_air
         ),
@@ -1818,6 +1821,12 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION.mission_name, "Titanic Warp Prism", SC2LOTV_LOC_ID_OFFSET + 1206, LocationType.VANILLA,
             logic.protoss_common_unit_anti_armor_air,
             hard_rule=logic.protoss_any_anti_air_unit_or_soa,
+        ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION.mission_name, "Terran Main Base", SC2LOTV_LOC_ID_OFFSET + 1207, LocationType.MASTERY,
+            logic.protoss_competent_comp,
+        ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION.mission_name, "Protoss Main Base", SC2LOTV_LOC_ID_OFFSET + 1208, LocationType.MASTERY,
+            logic.protoss_competent_comp,
         ),
         make_location_data(SC2Mission.THE_INFINITE_CYCLE.mission_name, "Victory", SC2LOTV_LOC_ID_OFFSET + 1300, LocationType.VICTORY,
             logic.the_infinite_cycle_requirement
@@ -4998,6 +5007,11 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.DARK_WHISPERS_T.mission_name, "Second Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 9904, LocationType.VANILLA,
                            logic.terran_competent_comp
                            ),
+        make_location_data(SC2Mission.DARK_WHISPERS_T.mission_name, "Zerg Base", SC2_RACESWAP_LOC_ID_OFFSET + 9905, LocationType.MASTERY,
+                           lambda state: (
+                                  logic.terran_competent_comp(state)
+                                  and logic.terran_base_trasher(state))
+                           ),
         make_location_data(SC2Mission.DARK_WHISPERS_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 10000, LocationType.VICTORY,
                            logic.zerg_competent_comp_basic_aa
                            ),
@@ -5012,6 +5026,11 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                            ),
         make_location_data(SC2Mission.DARK_WHISPERS_Z.mission_name, "Second Pylon", SC2_RACESWAP_LOC_ID_OFFSET + 10004, LocationType.VANILLA,
                            logic.zerg_competent_comp_basic_aa
+                           ),
+        make_location_data(SC2Mission.DARK_WHISPERS_Z.mission_name, "Zerg Base", SC2_RACESWAP_LOC_ID_OFFSET + 10005, LocationType.VANILLA,
+                           lambda state: (
+                               logic.zerg_competent_comp(state)
+                               and logic.zerg_base_buster(state))
                            ),
         make_location_data(SC2Mission.GHOSTS_IN_THE_FOG_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 10100, LocationType.VICTORY,
                            lambda state: (
@@ -5440,6 +5459,19 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             logic.terran_beats_protoss_deathball,
             hard_rule=logic.terran_any_anti_air,
         ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_T.mission_name, "Terran Main Base", SC2_RACESWAP_LOC_ID_OFFSET + 12107, LocationType.MASTERY,
+                           lambda state: (
+                                   logic.terran_competent_comp(state)
+                                   and logic.terran_base_trasher(state)
+                           )
+        ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_T.mission_name, "Protoss Main Base", SC2_RACESWAP_LOC_ID_OFFSET + 12108, LocationType.MASTERY,
+                           lambda state: (
+                                   logic.terran_competent_comp(state)
+                                   and logic.terran_base_trasher(state)
+                                   and logic.terran_beats_protoss_deathball(state)
+                           )
+        ),
         make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 12200, LocationType.VICTORY,
                            logic.zerg_temple_of_unification_requirement
                            ),
@@ -5461,6 +5493,18 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_Z.mission_name, "Titanic Warp Prism", SC2_RACESWAP_LOC_ID_OFFSET + 12206, LocationType.VANILLA,
             logic.zerg_temple_of_unification_requirement,
             hard_rule=logic.zerg_any_anti_air,
+        ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_Z.mission_name, "Terran Main Base", SC2_RACESWAP_LOC_ID_OFFSET + 12207, LocationType.MASTERY,
+                            lambda state: (
+                                    logic.zerg_temple_of_unification_requirement(state)
+                                    and logic.zerg_base_buster(state)
+                            )
+        ),
+        make_location_data(SC2Mission.TEMPLE_OF_UNIFICATION_Z.mission_name, "Protoss Main Base", SC2_RACESWAP_LOC_ID_OFFSET + 12208, LocationType.MASTERY,
+                            lambda state: (
+                                    logic.zerg_temple_of_unification_requirement(state)
+                                    and logic.zerg_base_buster(state)
+                            )
         ),
         make_location_data(SC2Mission.HARBINGER_OF_OBLIVION_T.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 12500, LocationType.VICTORY,
                            logic.terran_harbinger_of_oblivion_requirement
