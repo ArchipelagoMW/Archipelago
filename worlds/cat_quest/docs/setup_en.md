@@ -10,7 +10,7 @@
 
 ## Installation
 
-1. Download and install BepInEx 5 (x86, version 5.4.20 or newer) into your Cat Quest root folder.
+1. Download and install BepInEx 5 (x86, version 5.4.20 or newer) into your Cat Quest root folder. (Don't use the pre-release of 6)
 
 2. Start Cat Quest once, so that BepInEx can create its required configuration files.
 
