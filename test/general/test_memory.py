@@ -9,8 +9,12 @@ class TestWorldMemory(unittest.TestCase):
         """Tests that worlds don't leak references to MultiWorld or themselves with default options."""
         import gc
         import weakref
+        refs = {}
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            with self.subTest("Game", game_name=game_name):
+            with self.subTest("Game creation", game_name=game_name):
                 weak = weakref.ref(setup_solo_multiworld(world_type))
-                gc.collect()
+                refs[game_name] = weak
+        gc.collect()
+        for game_name, weak in refs.items():
+            with self.subTest("Game cleanup", game_name=game_name):
                 self.assertFalse(weak(), "World leaked a reference")
