@@ -10,7 +10,7 @@ from worlds.AutoWorld import WebWorld, World
 from .client import WL4Client
 from .data import Passage, data_path
 from .items import ItemType, WL4Item, ap_id_from_wl4_data, filter_item_names, filter_items, item_table
-from .locations import LocationType, get_level_locations, location_name_to_id, location_table, event_table
+from .locations import get_level_locations, location_name_to_id
 from .options import Difficulty, Goal, GoldenJewels, PoolJewels, WL4Options, wl4_option_groups
 from .regions import connect_regions, create_regions
 from .rom import MD5_JP, MD5_US_EU, WL4ProcedurePatch, write_tokens
@@ -129,8 +129,7 @@ class WL4World(World):
                               'Set the "Required Jewels" option to a lower value and try again.')
 
     def create_regions(self):
-        location_table = self.setup_locations()
-        create_regions(self, location_table)
+        create_regions(self)
         connect_regions(self)
 
     def create_items(self):
@@ -221,16 +220,3 @@ class WL4World(World):
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = (
             lambda state: state.has('Escape the Pyramid', self.player))
-
-    def setup_locations(self):
-        checks = filter(lambda p: self.options.difficulty in p[1].difficulties, location_table.items())
-        if not self.options.goal.needs_treasure_hunt():
-            checks = filter(lambda p: p[1].source != LocationType.CHEST, checks)
-        check_names = {name for name, _ in checks}
-
-        event_names = set(event_table.keys())
-        if self.options.goal.needs_diva():
-            event_names.remove('Sound Room - Emergency Exit')
-        else:
-            event_names.remove('Golden Diva')
-        return check_names.union(event_names)

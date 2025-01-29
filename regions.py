@@ -1,17 +1,17 @@
 from __future__ import annotations
 
 import itertools
-from typing import Callable, Iterable, Optional, Sequence, Set, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING
 
 from worlds.generic.Rules import CollectionRule, add_rule
-from BaseClasses import CollectionState, Location, Region, Entrance
+from BaseClasses import Location, Region, Entrance
 
 from .data import Passage
-from .items import WL4Item
-from .locations import WL4Location, get_level_location_data
+from .items import ItemType, WL4Item, filter_item_names
+from .locations import WL4Location
 from .region_data import passage_levels, level_table, passage_boss_table, golden_diva
 from .rules import *
-from .options import Goal, OpenDoors, Portal
+from .options import OpenDoors, Portal
 
 if TYPE_CHECKING:
     from . import WL4World
@@ -41,7 +41,7 @@ def create_event(region: Region, location_name: str, item_name: str = None):
     return location
 
 
-def create_regions(world: WL4World, location_table: Set[str]):
+def create_regions(world: WL4World):
     regions = []
 
     pyramid = WL4Region("Pyramid", world)

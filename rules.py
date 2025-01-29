@@ -5,12 +5,13 @@ from typing import Callable, Mapping, NamedTuple, Sequence, Tuple, Union, TYPE_C
 
 from BaseClasses import CollectionState
 
-from .data import Passage
 from .items import ItemType, filter_item_names
-from .locations import location_table, event_table
 
 if TYPE_CHECKING:
     from . import WL4World
+
+
+__all__ = ['Requirement', 'has', 'has_all', 'has_any', 'has_treasures', 'option', 'difficulty', 'not_difficulty', 'logic']
 
 
 RequiredItem = Union[str, Tuple[str, int]]

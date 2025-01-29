@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from typing import NamedTuple, Optional, Sequence
 
-from BaseClasses import Region
-
+from .data import Passage
 from .options import Difficulty, Goal, Logic
 from .rules import *
 
