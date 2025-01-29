@@ -578,8 +578,10 @@ class BlasRules:
 
     def load_rule(self, obj_is_region: bool, name: str, obj: Dict[str, Any]) -> Callable[[CollectionState], bool]:
         clauses = []
+        clauses_are_impossible_if_empty = False
         for clause in obj["logic"]:
             reqs = []
+            clause_is_impossible = False
             for req in clause["item_requirements"]:
                 if self.req_is_region(req):
                     if obj_is_region:
@@ -591,7 +593,21 @@ class BlasRules:
                         # add to indirect conditions if object is door and requirement has list of regions
                         for region in self.indirect_regions[req]:
                             self.indirect_conditions.append((region, f"{name} -> {obj['target']}"))
+                    string_rule = self.string_rules[req]
+                    if string_rule is _never:
+                        # This clause is not possible with the options this player has chosen.
+                        clause_is_impossible = True
+                        break
+                    elif string_rule is _always:
+                        # Don't need to add a rule that is always True with the options this player has chosen.
+                        # Continue to the next requirement.
+                        continue
                     reqs.append(self.string_rules[req])
+            if clause_is_impossible:
+                # At least one clause was impossible, so if all clauses were impossible, the entire rule is impossible.
+                clauses_are_impossible_if_empty = True
+                # Continue to the next clause.
+                continue
             if len(reqs) == 1:
                 clauses.append(reqs[0])
             else:
@@ -602,7 +618,10 @@ class BlasRules:
                     return True
                 clauses.append(req_func)
         if not clauses:
-            return lambda state: True
+            if clauses_are_impossible_if_empty:
+                return _never
+            else:
+                return _always
         elif len(clauses) == 1:
             return clauses[0]
         else:
