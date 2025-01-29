@@ -295,7 +295,7 @@ async def run_game(romfile):
         auto_start = True
     else:
         auto_start = options.get("rom_start", True)
-    if auto_start:
+    if auto_start is True:
         import webbrowser
         webbrowser.open(romfile)
     elif os.path.isfile(auto_start):
