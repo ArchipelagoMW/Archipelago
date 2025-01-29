@@ -195,7 +195,7 @@ components: List[Component] = [
     # ChecksFinder
     Component('ChecksFinder Client', 'ChecksFinderClient'),
     # Starcraft 2
-    Component('Starcraft 2 Client', 'Starcraft2Client'),
+    Component('Starcraft 2 Client', 'Starcraft2Client', game_name='Starcraft 2', supports_uri=True),
     # Wargroove
     Component('Wargroove Client', 'WargrooveClient'),
     # Zillion

@@ -17,7 +17,7 @@ from .locations import (
 	get_locations, DEFAULT_LOCATION_LIST, get_location_types, get_location_flags, 
     get_plando_locations, LocationType, lookup_location_id_to_type
 )
-from .mission_order.layout_types import LayoutType, Gauntlet
+from .mission_order.layout_types import Gauntlet
 from .options import (
     get_option_value, LocationInclusion, KerriganLevelItemDistribution,
     KerriganPresence, KerriganPrimalStatus, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence,
@@ -28,13 +28,13 @@ from .options import (
 from .rules import get_basic_units
 from . import settings
 from .pool_filter import filter_items
-from .mission_tables import (
-    SC2Campaign, SC2Mission, SC2Race, MissionFlag, lookup_name_to_mission, lookup_id_to_mission
-)
+from .mission_tables import SC2Campaign, SC2Mission, SC2Race, MissionFlag
 from .regions import create_mission_order
 from .mission_order import SC2MissionOrder
 
+
 logger = logging.getLogger("Starcraft 2")
+
 
 class Starcraft2WebWorld(WebWorld):
     setup_en = Tutorial(
