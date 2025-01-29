@@ -137,9 +137,15 @@ class LMContext(CommonContext):
     items_handling = 0b111
 
     def __init__(self, server_address, password):
+        """
+        Initialize the LM context.
+
+        :param server_address: Address of the Archipelago server.
+        :param password: Password for server authentication.
+        """
         super().__init__(server_address, password)
 
-        self.dolphin_sync_task = None
+        self.dolphin_sync_task: Optional[asyncio.Task[None]] = None
         self.dolphin_status = CONNECTION_INITIAL_STATUS
         self.awaiting_rom = False
         self.has_send_death = False
@@ -150,27 +156,21 @@ class LMContext(CommonContext):
         self.rank_req = -1
 
     async def disconnect(self, allow_autoreconnect: bool = False):
+        """
+        Disconnect the client from the server and reset game state variables.
+
+        :param allow_autoreconnect: Allow the client to auto-reconnect to the server. Defaults to `False`.
+
+        """
         self.auth = None
         await super().disconnect(allow_autoreconnect)
 
-    def on_package(self, cmd: str, args: dict):
-        if cmd == "Connected":  # On Connect
-            self.goal_type = int(args["slot_data"]["goal"])
-            self.rank_req = int(args["slot_data"]["rank requirement"])
-            if "death_link" in args["slot_data"]:
-                Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
-
-        if cmd == "ReceivedItems": # On Receive Item from Server
-            self.items_received = args["items"]
-            give_items(self)
-
-
-
-    def on_deathlink(self, data: dict[str, Any]):
-        super().on_deathlink(data)
-        _give_death(self)
-
     async def server_auth(self, password_requested: bool = False):
+        """
+        Authenticate with the Archipelago server.
+
+        :param password_requested: Whether the server requires a password. Defaults to `False`.
+        """
         if password_requested and not self.password:
             await super(LMContext, self).server_auth(password_requested)
         if not self.auth:
@@ -180,6 +180,30 @@ class LMContext(CommonContext):
             logger.info("Awaiting connection to Dolphin to get player information")
             return
         await self.send_connect()
+
+    def on_package(self, cmd: str, args: dict):
+        """
+        Handle incoming packages from the server.
+
+        :param cmd: The command received from the server.
+        :param args: The command arguments.
+        """
+        super().on_package(cmd, args)
+        if cmd == "Connected":  # On Connect
+            self.goal_type = int(args["slot_data"]["goal"])
+            self.rank_req = int(args["slot_data"]["rank requirement"])
+            if "death_link" in args["slot_data"]:
+                Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
+
+
+    def on_deathlink(self, data: dict[str, Any]):
+        """
+        Handle a DeathLink event.
+
+        :param data: The data associated with the DeathLink event.
+        """
+        super().on_deathlink(data)
+        _give_death(self)
 
     def run_gui(self):
         from kvui import GameManager
@@ -220,6 +244,7 @@ async def give_items(ctx: LMContext):
     # Filter for only items where we have not received yet. If same slot, only receive the locations from the
     # pre-approved own locations (as everything is currently a NetworkItem), otherwise accept other slots.
     list_recv_items = [netItem for netItem in ctx.items_received if ctx.items_received.index(netItem) > last_recv_idx]
+    logger.info(f"Identified the following number of received items to try and validate: {str(len(list_recv_items))}")
 
     if len(list_recv_items) == 0:
         write_short(LAST_RECV_ITEM_ADDR, (len(ctx.items_received) - 1))
