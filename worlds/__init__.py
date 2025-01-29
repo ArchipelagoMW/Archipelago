@@ -1,4 +1,5 @@
 import importlib
+import importlib.abc
 import importlib.machinery
 import importlib.util
 import logging
