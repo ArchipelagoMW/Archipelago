@@ -14,7 +14,6 @@ from .locations import LocationType, get_level_locations, location_name_to_id, l
 from .options import Difficulty, Goal, GoldenJewels, PoolJewels, WL4Options, wl4_option_groups
 from .regions import connect_regions, create_regions
 from .rom import MD5_JP, MD5_US_EU, WL4ProcedurePatch, write_tokens
-from .rules import set_access_rules
 
 
 class WL4Settings(settings.Group):
@@ -61,6 +60,7 @@ class WL4World(World):
     location_name_to_id = location_name_to_id
 
     required_client_version = (0, 5, 0)
+    origin_region_name = "Pyramid"
 
     item_name_groups = {
         'Entry Jewel Pieces': set(filter_item_names(type=ItemType.JEWEL, passage=Passage.ENTRY)),
@@ -131,23 +131,7 @@ class WL4World(World):
     def create_regions(self):
         location_table = self.setup_locations()
         create_regions(self, location_table)
-        set_access_rules(self)
         connect_regions(self)
-
-        passages = ('Emerald', 'Ruby', 'Topaz', 'Sapphire')
-        for passage in passages:
-            location = self.get_region(f'{passage} Passage Boss').locations[0]
-            location.place_locked_item(self.create_item(f'{passage} Passage Clear'))
-            location.show_in_spoiler = False
-
-        if self.options.goal.needs_diva():
-            goal = 'Golden Diva'
-        else:  # Golden Treasure Hunt
-            goal = 'Sound Room - Emergency Exit'
-
-        goal_loc = self.get_location(goal)
-        goal_loc.place_locked_item(self.create_item('Escape the Pyramid'))
-        goal_loc.show_in_spoiler = False
 
     def create_items(self):
         difficulty = self.options.difficulty

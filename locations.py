@@ -275,23 +275,16 @@ class WL4Location(Location):
 
     def __init__(self, player: int, name: str, parent: Optional[Region] = None):
         super().__init__(player, name, location_name_to_id.get(name, None), parent)
-        if name in location_table:
-            self.type, status, _, self.difficulty = location_table[name]
-            self.passage, self.level, self.flag = status
-            self.event = False
-        else:
-            self.type = self.level = self.flag = None
-            self.difficulty = _ALL
-            self.passage = event_table[name]
-            self.event = True
+        self.type, status, _, self.difficulty = location_table[name]
+        self.passage, self.level, self.flag = status
 
     def entry_offset(self):
-        if self.event:
+        if self.is_event:
             return None
         return self.flag.bit_length() - (1 if self.flag < ItemFlag.KEYZER else 2)
 
     def level_offset(self):
-        if self.event:
+        if self.is_event:
             return None
         return (self.passage * 5 + self.level) * (len(ItemFlag) - 1)
 
