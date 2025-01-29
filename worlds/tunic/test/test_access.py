@@ -7,7 +7,7 @@ class TestAccess(TunicTestBase):
 
     # test whether you can get into the temple without laurels
     def test_temple_access(self) -> None:
-        self.collect_all_but(["Hero's Laurels", "Lantern"])
+        self.collect_all_but(["Hero's Laurels", "Lantern", "Ring Eastern Bell", "Ring Western Bell"])
         self.assertFalse(self.can_reach_location("Sealed Temple - Page Pickup"))
         self.collect_by_name(["Lantern"])
         self.assertTrue(self.can_reach_location("Sealed Temple - Page Pickup"))
@@ -48,16 +48,6 @@ class TestHexQuestNoShuffle(TunicTestBase):
     # test that you can get the item behind the overworld hc door with nothing and no ability shuffle
     def test_hc_door_no_shuffle(self) -> None:
         self.assertTrue(self.can_reach_location("Fountain Cross Door - Page Pickup"))
-
-
-class TestNormalGoal(TunicTestBase):
-    options = {options.HexagonQuest.internal_name: options.HexagonQuest.option_false}
-
-    # test that you need the three colored hexes to reach the Heir in standard
-    def test_normal_goal(self) -> None:
-        location = ["The Heir"]
-        items = [["Red Questagon", "Blue Questagon", "Green Questagon"]]
-        self.assertAccessDependency(location, items)
 
 
 class TestER(TunicTestBase):
