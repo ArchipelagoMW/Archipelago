@@ -21,16 +21,16 @@ class BlasRules:
         # BrandenEK/Blasphemous.Randomizer/ItemRando/BlasphemousInventory.cs
         self.string_rules = {
             # Visibility flags
-            "DoubleJump": lambda state: bool(self.world.options.purified_hand),
-            "NormalLogic": lambda state: self.world.options.difficulty >= 1,
-            "NormalLogicAndDoubleJump": lambda state: self.world.options.difficulty >= 1 \
-                and bool(self.world.options.purified_hand),
-            "HardLogic": lambda state: self.world.options.difficulty >= 2,
-            "HardLogicAndDoubleJump": lambda state: self.world.options.difficulty >= 2 \
-                and bool(self.world.options.purified_hand),
+            "DoubleJump": lambda state: bool(self.world.options.purified_hand.value),
+            "NormalLogic": lambda state: self.world.options.difficulty.value >= 1,
+            "NormalLogicAndDoubleJump": lambda state: self.world.options.difficulty.value >= 1 \
+                and bool(self.world.options.purified_hand.value),
+            "HardLogic": lambda state: self.world.options.difficulty.value >= 2,
+            "HardLogicAndDoubleJump": lambda state: self.world.options.difficulty.value >= 2 \
+                and bool(self.world.options.purified_hand.value),
             "EnemySkips": self.enemy_skips_allowed,
             "EnemySkipsAndDoubleJump": lambda state: self.enemy_skips_allowed(state) \
-                and bool(self.world.options.purified_hand),
+                and bool(self.world.options.purified_hand.value),
 
             # Relics
             "blood": self.blood,
@@ -803,14 +803,14 @@ class BlasRules:
     def can_air_stall(self, state: CollectionState) -> bool:
         return (
             self.ranged(state) > 0
-            and self.world.options.difficulty >= 1
+            and self.world.options.difficulty.value >= 1
         )
     
     def can_dawn_jump(self, state: CollectionState) -> bool:
         return (
             self.dawn_heart(state)
             and self.dash(state)
-            and self.world.options.difficulty >= 1
+            and self.world.options.difficulty.value >= 1
         )
     
     def can_water_jump(self, state: CollectionState) -> bool:
@@ -831,7 +831,7 @@ class BlasRules:
     def can_dive_laser(self, state: CollectionState) -> bool:
         return (
             self.dive(state) >= 3
-            and self.world.options.difficulty >= 2
+            and self.world.options.difficulty.value >= 2
         )
     
     # Root tech
@@ -848,22 +848,22 @@ class BlasRules:
     def can_survive_poison_1(self, state: CollectionState) -> bool:
         return (
             self.lung(state)
-            or self.world.options.difficulty >= 1
+            or self.world.options.difficulty.value >= 1
             and self.tiento(state)
-            or self.world.options.difficulty >= 2
+            or self.world.options.difficulty.value >= 2
         )
     
     def can_survive_poison_2(self, state: CollectionState) -> bool:
         return (
             self.lung(state)
-            or self.world.options.difficulty >= 1
+            or self.world.options.difficulty.value >= 1
             and self.tiento(state)
         )
     
     def can_survive_poison_3(self, state: CollectionState) -> bool:
         return (
             self.lung(state)
-            or self.world.options.difficulty >= 2
+            or self.world.options.difficulty.value >= 2
             and self.tiento(state)
             and self.total_fervour(state) >= 120
         )
@@ -1069,22 +1069,22 @@ class BlasRules:
     
     # Special skips
     def upwarp_skips_allowed(self, state: CollectionState) -> bool:
-        return self.world.options.difficulty >= 2
+        return self.world.options.difficulty.value >= 2
     
     def mourning_skip_allowed(self, state: CollectionState) -> bool:
-        return self.world.options.difficulty >= 2
+        return self.world.options.difficulty.value >= 2
     
     def enemy_skips_allowed(self, state: CollectionState) -> bool:
         return (
-            self.world.options.difficulty >= 2
-            and not self.world.options.enemy_randomizer
+            self.world.options.difficulty.value >= 2
+            and not self.world.options.enemy_randomizer.value
         )
     
     def obscure_skips_allowed(self, state: CollectionState) -> bool:
-        return self.world.options.difficulty >= 2
+        return self.world.options.difficulty.value >= 2
     
     def precise_skips_allowed(self, state: CollectionState) -> bool:
-        return self.world.options.difficulty >= 2
+        return self.world.options.difficulty.value >= 2
     
     # Bosses
     def can_beat_brotherhood_boss(self, state: CollectionState) -> bool:
@@ -1278,8 +1278,8 @@ class BlasRules:
             "legionary": 0.20
         }
         boss_strength: float = bosses[boss]
-        return player_strength >= (boss_strength - 0.10 if self.world.options.difficulty >= 2 else 
-                                   (boss_strength if self.world.options.difficulty >= 1 else boss_strength + 0.10))
+        return player_strength >= (boss_strength - 0.10 if self.world.options.difficulty.value >= 2 else
+                                   (boss_strength if self.world.options.difficulty.value >= 1 else boss_strength + 0.10))
 
     def guilt_rooms(self, state: CollectionState) -> int:
         doors = [
