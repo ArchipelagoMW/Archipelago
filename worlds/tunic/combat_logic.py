@@ -41,7 +41,7 @@ area_data: Dict[str, AreaStats] = {
     "Rooted Ziggurat": AreaStats(5, 5, 3, 5, 3, 3, 6, ["Sword", "Shield", "Magic"]),
     "Boss Scavenger": AreaStats(5, 5, 3, 5, 3, 3, 6, ["Sword", "Shield", "Magic"], is_boss=True),
     "Swamp": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic"]),
-    "Cathedral": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic"]),
+    # cathedral has the same requirements as Swamp
     # marked as boss because the garden knights can't get hurt by stick
     "Gauntlet": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic"], is_boss=True),
     "The Heir": AreaStats(5, 5, 3, 5, 3, 3, 6, ["Sword", "Shield", "Magic", "Laurels"], is_boss=True),
@@ -49,8 +49,10 @@ area_data: Dict[str, AreaStats] = {
 
 
 # these are used for caching which areas can currently be reached in state
+# Gauntlet does not have exclusively higher stat requirements, so it will be checked separately
 boss_areas: List[str] = [name for name, data in area_data.items() if data.is_boss and name != "Gauntlet"]
-non_boss_areas: List[str] = [name for name, data in area_data.items() if not data.is_boss]
+# Swamp does not have exclusively higher stat requirements, so it will be checked separately
+non_boss_areas: List[str] = [name for name, data in area_data.items() if not data.is_boss and name != "Swamp"]
 
 
 class CombatState(IntEnum):
@@ -89,6 +91,7 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool
     elif area_name in non_boss_areas:
         area_list = non_boss_areas
     else:
+        # this is to check Swamp and Gauntlet on their own
         area_list = [area_name]
 
     if met_combat_reqs:
@@ -114,7 +117,7 @@ def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_d
     extra_att_needed = 0
     extra_def_needed = 0
     extra_mp_needed = 0
-    has_magic = state.has_any({"Magic Wand", "Gun"}, player)
+    has_magic = state.has_any(("Magic Wand", "Gun"), player)
     stick_bool = False
     sword_bool = False
     for item in data.equipment:
