@@ -515,13 +515,23 @@ class BlasRules:
             if len(reqs) == 1:
                 clauses.append(reqs[0])
             else:
-                clauses.append(lambda state, reqs=reqs: all(req(state) for req in reqs))
+                def req_func(state, reqs=reqs):
+                    for req in reqs:
+                        if not req(state):
+                            return False
+                    return True
+                clauses.append(req_func)
         if not clauses:
             return lambda state: True
         elif len(clauses) == 1:
             return clauses[0]
         else:
-            return lambda state: any(clause(state) for clause in clauses)
+            def clause_func(state, clauses=clauses):
+                for clause in clauses:
+                    if clause(state):
+                        return True
+                return False
+            return clause_func
 
     # Relics
     def blood(self, state: CollectionState) -> bool:
