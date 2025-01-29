@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple, Any, Callable, TYPE_CHECKING
+from typing import Dict, List, Tuple, Any, Callable, TYPE_CHECKING, Mapping
 from BaseClasses import CollectionState
 from worlds.generic.Rules import CollectionRule
 
@@ -23,6 +23,27 @@ def _bool_rule(b) -> CollectionRule:
         return _never
 
 
+# Mapping is an immutable type, so type hints should warn if attempts are made to modify it.
+# Player strengths required to logically beat bosses.
+BOSS_STRENGTHS: Mapping[str, float] = {
+    "warden": -0.10,
+    "ten-piedad": 0.05,
+    "charred-visage": 0.20,
+    "tres-angustias": 0.15,
+    "esdras": 0.25,
+    "melquiades": 0.25,
+    "exposito": 0.30,
+    "quirce": 0.35,
+    "crisanta": 0.50,
+    "isidora": 0.70,
+    "sierpes": 0.70,
+    "amanecida": 0.60,
+    "laudes": 0.60,
+    "perpetua": -0.05,
+    "legionary": 0.20
+}
+
+
 class BlasRules:
     player: int
     world: BlasphemousWorld
@@ -34,6 +55,9 @@ class BlasRules:
     obscure_skips_allowed: bool
     precise_skips_allowed: bool
     can_enemy_bounce: bool
+
+    # Player strengths required to logically beat bosses, adjusted by the player's difficulty option.
+    boss_strengths: Mapping[str, float]
 
     can_enemy_upslash: CollectionRule
     can_air_stall: CollectionRule
@@ -59,6 +83,13 @@ class BlasRules:
         self.enemy_skips_allowed = difficulty >= 2 and not world.options.enemy_randomizer.value
         self.obscure_skips_allowed = difficulty >= 2
         self.precise_skips_allowed = difficulty >= 2
+
+        if difficulty >= 2:
+            self.boss_strengths = {boss: strength - 0.1 for boss, strength in BOSS_STRENGTHS.items()}
+        elif difficulty >= 1:
+            self.boss_strengths = BOSS_STRENGTHS
+        else:
+            self.boss_strengths = {boss: strength + 0.1 for boss, strength in BOSS_STRENGTHS.items()}
 
 
         # Enemy tech
@@ -1298,26 +1329,7 @@ class BlasRules:
             + min(5, quicksilver) * 0.15 / 5
         )
 
-        bosses: Dict[str, float] = {
-            "warden": -0.10,
-            "ten-piedad": 0.05,
-            "charred-visage": 0.20,
-            "tres-angustias": 0.15,
-            "esdras": 0.25,
-            "melquiades": 0.25,
-            "exposito": 0.30,
-            "quirce": 0.35,
-            "crisanta": 0.50,
-            "isidora": 0.70,
-            "sierpes": 0.70,
-            "amanecida": 0.60,
-            "laudes": 0.60,
-            "perpetua": -0.05,
-            "legionary": 0.20
-        }
-        boss_strength: float = bosses[boss]
-        return player_strength >= (boss_strength - 0.10 if self.world.options.difficulty.value >= 2 else
-                                   (boss_strength if self.world.options.difficulty.value >= 1 else boss_strength + 0.10))
+        return player_strength >= self.boss_strengths[boss]
 
     def guilt_rooms(self, state: CollectionState) -> int:
         doors = (
