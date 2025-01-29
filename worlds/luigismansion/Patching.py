@@ -632,14 +632,14 @@ def update_observer_info(observer_info):
         "scale_y": 0.000000,
         "scale_z": 0.000000,
         "room_no": 58,
-        "cond_arg0": 1,  # 81
+        "cond_arg0": 81,
         "arg0": 0,
         "arg1": 0,
         "arg2": 0,
         "arg3": 0,
         "arg4": 0,
         "arg5": 0,
-        "appear_flag": 1,  # 81
+        "appear_flag": 81,
         "disappear_flag": 0,
         "cond_type": 18,
         "do_type": 1,
