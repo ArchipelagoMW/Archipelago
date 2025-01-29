@@ -270,7 +270,8 @@ class Group:
             # fetch class to avoid going through getattr
             cls = self.__class__
             type_hints = cls.get_type_hints()
-            if type_hints == {}:
+            if not type_hints:
+                # write empty dict for empty Group
                 cls._dump_value(type_hints, f, indent="  " * level)
             # validate group
             for name in cls.__annotations__.keys():
