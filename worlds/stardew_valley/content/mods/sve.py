@@ -87,7 +87,8 @@ register_mod_content_pack(SVEContentPack(
         ModEdible.lightning_elixir: (ShopSource(money_price=12000, shop_region=SVERegion.galmoran_outpost),),
         ModEdible.barbarian_elixir: (ShopSource(money_price=22000, shop_region=SVERegion.galmoran_outpost),),
         ModEdible.gravity_elixir: (ShopSource(money_price=4000, shop_region=SVERegion.galmoran_outpost),),
-        SVEMeal.grampleton_orange_chicken: (ShopSource(money_price=650,
+        SVEMeal.grampleton_orange_chicken: (
+            ShopSource(money_price=650,
                                                        shop_region=Region.saloon,
                                                        other_requirements=(RelationshipRequirement(ModNPC.sophia, 6),)),),
         ModEdible.hero_elixir: (ShopSource(money_price=8000, shop_region=SVERegion.isaac_shop),),
