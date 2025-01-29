@@ -61,7 +61,7 @@ class TestLocationExistence(TestBase):
             for location in region.locations
             if difficulty in location.difficulties and not location.event
         }
-        self.assertEquals(locations_from_table, locations_from_tree)
+        self.assertEqual(locations_from_table, locations_from_tree)
 
     def test_normal_locations_match(self):
         self._test_locations_match(Difficulty.option_normal)
