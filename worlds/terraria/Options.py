@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, DeathLink, PerGameCommonOptions, Toggle
+from Options import Choice, DeathLink, PerGameCommonOptions, Toggle, DefaultOnToggle
 
 
 class Calamity(Toggle):
@@ -40,35 +40,31 @@ class Goal(Choice):
     default = 0
 
 
-class EarlyAchievements(Toggle):
+class EarlyAchievements(DefaultOnToggle):
     """Adds checks upon collecting early Pre-Hardmode achievements. Adds many sphere 1 checks."""
 
     display_name = "Early Pre-Hardmode achievements"
-    default = True
 
 
-class NormalAchievements(Toggle):
+class NormalAchievements(DefaultOnToggle):
     """
     Adds checks upon collecting achivements not covered by the other options. Achievements for
     clearing bosses and events are excluded.
     """
 
     display_name = "Normal achievements"
-    default = True
 
 
 class GrindyAchievements(Toggle):
     """Adds checks upon collecting grindy achievements"""
 
     display_name = "Grindy achievements"
-    default = False
 
 
 class FishingAchievements(Toggle):
     """Adds checks upon collecting fishing quest achievements"""
 
     display_name = "Fishing quest achievements"
-    default = False
 
 
 class FillExtraChecksWith(Choice):

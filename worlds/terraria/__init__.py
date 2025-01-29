@@ -68,24 +68,20 @@ class TerrariaWorld(World):
     goal_locations: Set[str]
 
     def generate_early(self) -> None:
-        goal_id = self.options.goal.value
-        goal, goal_locations = goals[goal_id]
+        goal, goal_locations = goals[self.options.goal.value]
         ter_goals = {}
         goal_items = set()
         for location in goal_locations:
             flags = rules[rule_indices[location]].flags
             if not self.options.calamity.value and "Calamity" in flags:
                 logging.warning(
-                    f"Terraria goal `{Goal.name_lookup[goal_id]}`, which requires Calamity, was selected with Calamity disabled; enabling Calamity"
+                    f"Terraria goal `{Goal.name_lookup[self.options.goal.value]}`, which requires Calamity, was selected with Calamity disabled; enabling Calamity"
                 )
                 self.options.calamity.value = True
 
             item = flags.get("Item") or f"Post-{location}"
             ter_goals[item] = location
             goal_items.add(item)
-
-        self.calamity = self.options.calamity.value
-        self.getfixedboi = self.options.getfixedboi.value
 
         location_count = 0
         locations = []
@@ -97,13 +93,13 @@ class TerrariaWorld(World):
             fishing = "Fishing" in rule.flags
 
             if (
-                (not self.getfixedboi and "Getfixedboi" in rule.flags)
-                or (self.getfixedboi and "Not Getfixedboi" in rule.flags)
-                or (not self.calamity and "Calamity" in rule.flags)
-                or (self.calamity and "Not Calamity" in rule.flags)
+                (not self.options.getfixedboi.value and "Getfixedboi" in rule.flags)
+                or (self.options.getfixedboi.value and "Not Getfixedboi" in rule.flags)
+                or (not self.options.calamity.value and "Calamity" in rule.flags)
+                or (self.options.calamity.value and "Not Calamity" in rule.flags)
                 or (
-                    self.getfixedboi
-                    and self.calamity
+                    self.options.getfixedboi.value
+                    and self.options.calamity.value
                     and "Not Calamity Getfixedboi" in rule.flags
                 )
                 or (not self.options.early_achievements.value and early)
@@ -146,23 +142,30 @@ class TerrariaWorld(World):
                 # Event
                 items.append(rule.name)
 
-        extra_checks = self.options.fill_extra_checks_with.value
         ordered_rewards = [
             reward
             for reward in labels["ordered"]
-            if self.calamity or "Calamity" not in rewards[reward]
+            if self.options.calamity.value or "Calamity" not in rewards[reward]
         ]
-        while extra_checks == 1 and item_count < location_count and ordered_rewards:
+        while (
+            self.options.fill_extra_checks_with.value == 1
+            and item_count < location_count
+            and ordered_rewards
+        ):
             items.append(ordered_rewards.pop(0))
             item_count += 1
 
         random_rewards = [
             reward
             for reward in labels["random"]
-            if self.calamity or "Calamity" not in rewards[reward]
+            if self.options.calamity.value or "Calamity" not in rewards[reward]
         ]
         self.multiworld.random.shuffle(random_rewards)
-        while extra_checks == 1 and item_count < location_count and random_rewards:
+        while (
+            self.options.fill_extra_checks_with.value == 1
+            and item_count < location_count
+            and random_rewards
+        ):
             items.append(random_rewards.pop(0))
             item_count += 1
 
@@ -257,7 +260,7 @@ class TerrariaWorld(World):
 
                 return not condition.sign
             elif condition.condition == "calamity":
-                return condition.sign == self.calamity
+                return condition.sign == self.options.calamity.value
             elif condition.condition == "grindy":
                 return condition.sign == self.options.grindy_achievements.value
             elif condition.condition == "pickaxe":
@@ -309,7 +312,7 @@ class TerrariaWorld(World):
 
                 return not condition.sign
             elif condition.condition == "getfixedboi":
-                return condition.sign == self.getfixedboi
+                return condition.sign == self.options.getfixedboi.value
             else:
                 raise Exception(f"Unknown function {condition.condition}")
         elif condition.type == COND_GROUP:

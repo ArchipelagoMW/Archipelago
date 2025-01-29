@@ -85,7 +85,7 @@ Magic Mirror;
 Heart Breaker;                      Achievement;
 Nurse;                              Npc;                                        Merchant;
 The Frequent Flyer;                 Not Calamity Getfixedboi | Achievement;     Nurse;
-Feast of Midas;                     Achievement;
+Feast of Midas;                     Achievement;                                Bug Net;
 Hold on Tight!;                     Achievement | Early;
 Feller of Evergreens;               Calamity;
 Gold Hammer;                        Hammer(55);
@@ -163,7 +163,7 @@ King Slime;                         Location | Item;
 Sticky Situation;                   Not Getfixedboi | Achievement | Grindy;
 The Cavalry;                        Achievement;
 Solidifier;                         ;                                           #King Slime;
-Nerdy Slime;                        Npc;                                        King Slime;
+Nerdy Slime;                        Npc;                                        #King Slime;
 
 // Desert Scourge
 Desert Scourge;                     Calamity | Location | Item;
