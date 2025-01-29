@@ -5,9 +5,18 @@ import enum
 import warnings
 from json import JSONEncoder, JSONDecoder
 
-import websockets
+if typing.TYPE_CHECKING:
+    from websockets import WebSocketServerProtocol as ServerConnection
 
 from Utils import ByValue, Version
+
+
+class HintStatus(ByValue, enum.IntEnum):
+    HINT_FOUND = 0
+    HINT_UNSPECIFIED = 1
+    HINT_NO_PRIORITY = 10
+    HINT_AVOID = 20
+    HINT_PRIORITY = 30
 
 
 class JSONMessagePart(typing.TypedDict, total=False):
@@ -19,6 +28,8 @@ class JSONMessagePart(typing.TypedDict, total=False):
     player: int
     # if type == item indicates item flags
     flags: int
+    # if type == hint_status
+    hint_status: HintStatus
 
 
 class ClientStatus(ByValue, enum.IntEnum):
@@ -27,14 +38,6 @@ class ClientStatus(ByValue, enum.IntEnum):
     CLIENT_READY = 10
     CLIENT_PLAYING = 20
     CLIENT_GOAL = 30
-
-
-class HintStatus(enum.IntEnum):
-    HINT_FOUND = 0
-    HINT_UNSPECIFIED = 1
-    HINT_NO_PRIORITY = 10
-    HINT_AVOID = 20
-    HINT_PRIORITY = 30
 
 
 class SlotType(ByValue, enum.IntFlag):
@@ -149,7 +152,7 @@ decode = JSONDecoder(object_hook=_object_hook).decode
 
 
 class Endpoint:
-    socket: websockets.WebSocketServerProtocol
+    socket: "ServerConnection"
 
     def __init__(self, socket):
         self.socket = socket
@@ -192,6 +195,7 @@ class JSONTypes(str, enum.Enum):
     location_name = "location_name"
     location_id = "location_id"
     entrance_name = "entrance_name"
+    hint_status = "hint_status"
 
 
 class JSONtoTextParser(metaclass=HandlerMeta):
@@ -273,6 +277,10 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         node["color"] = 'blue'
         return self._handle_color(node)
 
+    def _handle_hint_status(self, node: JSONMessagePart):
+        node["color"] = status_colors.get(node["hint_status"], "red")
+        return self._handle_color(node)
+
 
 class RawJSONtoTextParser(JSONtoTextParser):
     def _handle_color(self, node: JSONMessagePart):
@@ -319,6 +327,13 @@ status_colors: typing.Dict[HintStatus, str] = {
     HintStatus.HINT_AVOID: "salmon",
     HintStatus.HINT_PRIORITY: "plum",
 }
+
+
+def add_json_hint_status(parts: list, hint_status: HintStatus, text: typing.Optional[str] = None, **kwargs):
+    parts.append({"text": text if text != None else status_names.get(hint_status, "(unknown)"),
+                  "hint_status": hint_status, "type": JSONTypes.hint_status, **kwargs})
+
+
 class Hint(typing.NamedTuple):
     receiving_player: int
     finding_player: int
@@ -363,8 +378,7 @@ class Hint(typing.NamedTuple):
         else:
             add_json_text(parts, "'s World")
         add_json_text(parts, ". ")
-        add_json_text(parts, status_names.get(self.status, "(unknown)"), type="color",
-                      color=status_colors.get(self.status, "red"))
+        add_json_hint_status(parts, self.status)
 
         return {"cmd": "PrintJSON", "data": parts, "type": "Hint",
                 "receiving": self.receiving_player,
