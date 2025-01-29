@@ -33,27 +33,41 @@ class AutoPatchRegister(abc.ABCMeta):
         return new_class
 
     @staticmethod
-    def get_handler(file: str) -> Optional[AutoPatchRegister]:
-        import worlds
-        try:
-            with zipfile.ZipFile(file) as zf:
-                meta_file = zf.read("archipelago.json")
-                meta = json.loads(meta_file)
-                game = meta.get("game")
-        except (FileNotFoundError, zipfile.BadZipFile, KeyError) as ex:
-            # KeyError may be raised by either zf.read() if the json file is not present, or by meta.get().
-            logging.warning(f"Could not determine game due to \"%s\". Loading all games to determine handler for"
-                            f" patch %s", ex, file)
-            game = None
-
-        if game:
-            worlds.ensure_all_worlds_loaded(game)
-        else:
-            worlds.ensure_all_worlds_loaded()
+    def get_handler(file: str, load_world_from_patch_file=False) -> Optional[AutoPatchRegister]:
+        # load_world_from_patch_file should only be True when there is a real patch file to load, i.e. we are a client
+        # that is trying to patch our local rom from a patch file, and not that we are WebHost that has just finished
+        # generating a game.
 
         for file_ending, handler in AutoPatchRegister.file_endings.items():
             if file.endswith(file_ending):
                 return handler
+
+        if load_world_from_patch_file:
+            import worlds
+            try:
+                with zipfile.ZipFile(file) as zf:
+                    meta_file = zf.read("archipelago.json")
+                    meta = json.loads(meta_file)
+                    game = meta.get("game")
+            except (FileNotFoundError, zipfile.BadZipFile, KeyError) as ex:
+                # KeyError may be raised by either zf.read() if the json file is not present, or by meta.get().
+                logging.warning(f"Could not determine game due to \"%s\". Loading all games to determine handler"
+                                f" for patch %s", ex, file)
+                game = None
+
+            if game:
+                worlds.ensure_all_worlds_loaded(game)
+            else:
+                worlds.ensure_all_worlds_loaded()
+
+            # Try again
+            for file_ending, handler in AutoPatchRegister.file_endings.items():
+                if file.endswith(file_ending):
+                    return handler
+
+        # TODO: Remove this warning. It has been added to assist with debugging.
+        logging.warning(f"No handler found for \"%s\"", file)
+
         return None
 
 

@@ -18,7 +18,7 @@ class RomMeta(TypedDict):
 
 
 def create_rom_file(patch_file: str) -> Tuple[RomMeta, str]:
-    auto_handler = AutoPatchRegister.get_handler(patch_file)
+    auto_handler = AutoPatchRegister.get_handler(patch_file, load_world_from_patch_file=True)
     if auto_handler:
         handler: APAutoPatchInterface = auto_handler(patch_file)
         target = os.path.splitext(patch_file)[0]+handler.result_file_ending
