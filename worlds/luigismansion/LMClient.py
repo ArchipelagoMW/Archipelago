@@ -87,7 +87,7 @@ RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000,50000000, 60000000, 70000000, 10
 
 # List of received items to ignore because they are handled elsewhere
 # TODO Remove hearts from here when fixed.
-RECV_ITEMS_IGNORE = [8063, 8064, 8128, 8129, 8119]
+RECV_ITEMS_IGNORE = [8063, 8064, 8128, 8129, 8119, 8127]
 RECV_OWN_GAME_LOCATIONS: list[int] = [LMLocation.get_apid(location[1].code) for location in BOO_LOCATION_TABLE.items()]
 
 
@@ -247,7 +247,10 @@ async def give_items(ctx: LMContext):
                 curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
                                                     [lm_item.pointer_offset]), lm_item.ram_byte_size))
                 # TODO fix for hearts, will break receival otherwise
-                curr_val += int(re.search(r"^\d+", lm_item_name).group())
+                int_item_amount = 1
+                if re.search(r"^\d+", lm_item_name):
+                    int_item_amount = int(re.search(r"^\d+", lm_item_name).group())
+                curr_val += int_item_amount
                 dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
                     [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
             else:
