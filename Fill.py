@@ -340,47 +340,47 @@ class _RestrictiveFillBatcher:
     costs.
     """
 
-    MIN_BATCH_SIZE = 5
+    _MIN_BATCH_SIZE: typing.ClassVar[int] = 5
     """
     Pick no fewer than this many items per player for each batch, unless that player does not have enough items
     remaining. This is a magic number and will typically be used for most batches.
     """
-    MIN_TOTAL_ITEMS_PER_BATCH = 40
+    _MIN_TOTAL_ITEMS_PER_BATCH: typing.ClassVar[int] = 40
     """
     Try to pick no fewer than this many items total for each batch, unless there are fewer 
     With a low number of players, try to keep the total number of items in the batch from being too small, to prevent
     fills with few players from creating lots of very small batches.
     """
 
-    base_state: CollectionState
+    _base_state: CollectionState
     """
     The base state at the start of the fill_restrictive call. When there are lots of items already placed, this state
     should have already swept for advancements to collect every reachable advancement item.
     """
 
-    reachable_items: dict[int, deque[Item]]
+    _reachable_items: dict[int, deque[Item]]
     """
     Items remaining to place, per-player. Because fill uses a reverse-fill algorithm, these items are always considered
     reachable.
     """
 
-    item_pool: list[Item]
+    _item_pool: list[Item]
     """
     The item pool passed into fill_restrictive. Items are removed from it when placed.
     """
 
-    max_one_item_per_player_batch_size: float
+    _max_one_item_per_player_batch_size: float
     """
     The maximum batch size to be reached once only the player with the largest number of items has items remaining to be
     placed.
     """
 
-    min_batch_size: int
+    _min_batch_size: int
     """
     The minimum batch size for this batcher. Typically will equal MIN_BATCH_SIZE, but can be larger when 
     """
 
-    one_item_per_player: bool
+    _one_item_per_player: bool
     """
     The placement mode of the batcher.
     When True, one item is removed from self.reachable_items per player and those items are placed simultaneously. This
@@ -390,24 +390,27 @@ class _RestrictiveFillBatcher:
     to placements, but is slower.
     """
 
+    _current_batch: _RestrictiveFillBatch | None
+    """The current batch of the batcher, or `None` when there are no more items to place."""
+
     def __init__(self,
                  base_state: CollectionState,
                  reachable_items: dict[int, deque[Item]],
                  item_pool: list[Item],
                  one_item_per_player: bool):
-        self.base_state = base_state
-        self.reachable_items = reachable_items
-        self.item_pool = item_pool
-        self.one_item_per_player = one_item_per_player
+        self._base_state = base_state
+        self._reachable_items = reachable_items
+        self._item_pool = item_pool
+        self._one_item_per_player = one_item_per_player
 
         # With a low number of players, adjust the minimum items to take per player so that there is at least
         # MIN_TOTAL_ITEMS_PER_BATCH total items in the batch, assuming each player has enough items remaining to fully
         # fill out the batch.
         num_players = len(reachable_items)
-        if num_players > 0 and self.MIN_BATCH_SIZE * num_players < self.MIN_TOTAL_ITEMS_PER_BATCH:
-            self.min_batch_size = self.MIN_TOTAL_ITEMS_PER_BATCH // num_players
+        if num_players > 0 and self._MIN_BATCH_SIZE * num_players < self._MIN_TOTAL_ITEMS_PER_BATCH:
+            self._min_batch_size = self._MIN_TOTAL_ITEMS_PER_BATCH // num_players
         else:
-            self.min_batch_size = self.MIN_BATCH_SIZE
+            self._min_batch_size = self._MIN_BATCH_SIZE
 
         # Gradually increase the number of items placed in each batch until only the player with the largest item pool
         # has items remaining, at which point, place 2% of their original item pool in each batch. Most fills won't go
@@ -420,18 +423,18 @@ class _RestrictiveFillBatcher:
         # 975-1024 items: 20
         # etc.
         largest_player_pool = max(map(len, reachable_items.values()), default=0)
-        self.max_one_item_per_player_batch_size = largest_player_pool * 0.02
+        self._max_one_item_per_player_batch_size = largest_player_pool * 0.02
 
-    def new_batch(self, previous_batch: _RestrictiveFillBatch | None = None) -> _RestrictiveFillBatch | None:
+        self._current_batch = self._new_batch(None)
+
+    def _new_batch(self, previous_batch: _RestrictiveFillBatch | None = None) -> _RestrictiveFillBatch | None:
         """
         Create and return a new batch of items to place.
-
-        If there are no items remaining to place, `None` is returned.
 
         :param previous_batch: The previous batch, or `None` if there was no previous batch.
         """
         # Calculate the number of items, per player, to place in the new batch.
-        reachable_items = self.reachable_items
+        reachable_items = self._reachable_items
 
         # Get the count of and individual lengths of non-empty remaining items pools.
         nonzero_remaining_per_player = [len(items) for items in reachable_items.values() if items]
@@ -450,18 +453,18 @@ class _RestrictiveFillBatcher:
             average_remaining = sum(nonzero_remaining_per_player) / num_players_with_remaining_items
             # As the average remaining item pool length approaches the largest remaining item pool length, the batch
             # size approaches `max_one_item_per_player_batch_size`.
-            batch_size_float = self.max_one_item_per_player_batch_size * average_remaining / largest_remaining
+            batch_size_float = self._max_one_item_per_player_batch_size * average_remaining / largest_remaining
         else:
-            batch_size_float = self.max_one_item_per_player_batch_size
+            batch_size_float = self._max_one_item_per_player_batch_size
 
         # Round to the nearest integer.
         batch_size = round(batch_size_float)
         # Limit the minimum number of items per player in the batch.
-        batch_size = max(self.min_batch_size, batch_size)
+        batch_size = max(self._min_batch_size, batch_size)
         # Don't make the batch larger than the largest remaining item pool.
         batch_size = min(batch_size, largest_remaining)
 
-        # Set per-batch variables.
+        # Make per-batch arguments.
 
         # If a player has fewer items remaining than the size of the batch, then that player has some empty spaces
         # for items in the batch. This allows for items belonging to that player, that were displaced by a swap, to
@@ -479,19 +482,19 @@ class _RestrictiveFillBatcher:
 
         # Collect the remaining items, which won't be placed in this batch, into a copy of `base_state` and make
         # that the base state for the batch.
-        batch_base_state = self.base_state.copy()
+        batch_base_state = self._base_state.copy()
         for item_iter in item_iters:
             for item in item_iter:
                 batch_base_state.collect(item, True)
 
-        if self.one_item_per_player:
+        if self._one_item_per_player:
             batched_placements_remaining = batch_size
 
             return _RestrictiveFillBatchOneItemPerPlayer(
                 batch_base_state,
                 batch_empty_spaces,
                 batch_item_pool,
-                self.item_pool,
+                self._item_pool,
                 batched_placements_remaining,
                 reachable_items)
         else:
@@ -511,11 +514,78 @@ class _RestrictiveFillBatcher:
                 batch_base_state,
                 batch_empty_spaces,
                 batch_item_pool,
-                self.item_pool,
+                self._item_pool,
                 batched_placements_remaining,
                 reachable_items,
                 items_per_player_in_batch,
                 next_player_override)
+
+    def pop_items_to_place(self):
+        """
+        Get and remove items to place.
+
+        Automatically creates new batches internally as needed until all items have been placed.
+
+        Returns an empty list when there are no more items to place.
+        """
+        current_batch = self._current_batch
+        if current_batch is None:
+            # No more items to place.
+            return []
+        to_return = current_batch.pop_items_to_place()
+        if not to_return:
+            # Current batch is exhausted, so create a new one.
+            self._current_batch = self._new_batch(current_batch)
+            return self.pop_items_to_place()
+        else:
+            return to_return
+
+    def get_maximum_exploration_state(self, explore_locations: list[Location] | None, unplaced_items: list[Item]
+                                      ) -> CollectionState:
+        """
+        Get the maximum exploration state for the currently reachable items.
+
+        An item is reachable if it matches any one of the following:
+        1. It is in `self.item_pool` and is not being placed in this batch. `self.batch_base_state` has collected these
+           items in advance.
+        2. It is in `self.batch_item_pool`, so is going to be placed later on in this batch.
+        3. It is in `unplaced_items`, so could not be placed at any location.
+        4. It is at a location in `explore_locations` that is reachable with all items in 1-4.
+        Items already placed at reachable locations, items not being placed in this batch, items yet to be removed from
+        this batch in order to be placed, and items that could not be placed at any location are all considered
+        reachable.
+
+        :param explore_locations: The locations to explore for reachable items. Defaults to all filled locations when
+        None.
+        :param unplaced_items: All items that could not be placed at any location.
+        """
+        assert self._current_batch is not None
+        return self._current_batch.get_maximum_exploration_state(explore_locations, unplaced_items)
+
+    def get_swap_state(self, displaced_item: Item, location: Location, explore_locations: list[Location] | None,
+                       unsafe: bool) -> CollectionState:
+        """
+        Get the maximum exploration state for a potential swap.
+
+        :param displaced_item: The item displaced from `location`.
+        :param location: The location of the swap attempt.
+        :param explore_locations: The locations the swap state should sweep. `None` will sweep all filled locations.
+        :param unsafe: Assume it will be possible to collect `displaced_item` before the item that is being placed, by
+        continuing to swap.
+        """
+        assert self._current_batch is not None
+        return self._current_batch.get_swap_state(displaced_item, location, explore_locations, unsafe)
+
+    def update_for_swap(self, displaced_item: Item, item_to_place: Item, swap_location: Location):
+        """
+        Update the batch for the result of a successful swap.
+
+        :param displaced_item: The item that was previously placed at swap_location and has been displaced by the swap.
+        :param item_to_place: The item that has been placed at swap_location.
+        :param swap_location: The location where the two items have been swapped.
+        """
+        assert self._current_batch is not None
+        return self._current_batch.update_for_swap(displaced_item, item_to_place, swap_location)
 
 
 def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locations: typing.List[Location],
@@ -551,31 +621,16 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
     # Fill is performed in batches so that sweeping to produce a maximum exploration state can begin from the state at
     # the start of the batch, rather than having to sweep from `base_state`.
     batcher = _RestrictiveFillBatcher(base_state, reachable_items, item_pool, one_item_per_player)
-    batch = batcher.new_batch()
-
-    if batch is None:
-        # No items to place.
-        return
-
-    batch_exhausted = False
 
     while any(reachable_items.values()) and locations:
-        if batch_exhausted:
-            # Create a new batch.
-            batch = batcher.new_batch(batch)
-            if batch is None:
-                # No more items to place.
-                break
-            batch_exhausted = False
-
-        items_to_place = batch.pop_items_to_place()
+        items_to_place = batcher.pop_items_to_place()
         if not items_to_place:
-            batch_exhausted = True
-            continue
+            # There are no more items to place.
+            break
 
         explore_locations = multiworld.get_filled_locations(item.player) if single_player_placement else None
 
-        maximum_exploration_state = batch.get_maximum_exploration_state(explore_locations, unplaced_items)
+        maximum_exploration_state = batcher.get_maximum_exploration_state(explore_locations, unplaced_items)
 
         has_beaten_game = multiworld.has_beaten_game(maximum_exploration_state)
 
@@ -624,7 +679,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
 
                         explore_locations = (multiworld.get_filled_locations(item.player)
                                              if single_player_placement else None)
-                        swap_state = batch.get_swap_state(placed_item, location, explore_locations, unsafe)
+                        swap_state = batcher.get_swap_state(placed_item, location, explore_locations, unsafe)
                         # unsafe means swap_state assumes we can somehow collect placed_item before item_to_place
                         # by continuing to swap, which is not guaranteed. This is unsafe because there is no mechanic
                         # to clean that up later, so there is a chance generation fails.
@@ -655,7 +710,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                                 # cleanup at the end to hopefully get better errors
                                 cleanup_required = True
 
-                                batch.update_for_swap(placed_item, item_to_place, spot_to_fill)
+                                batcher.update_for_swap(placed_item, item_to_place, spot_to_fill)
                                 break
 
                         # Item can't be placed here, restore original item
