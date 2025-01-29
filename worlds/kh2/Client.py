@@ -25,7 +25,6 @@ class KH2Context(CommonContext):
     def __init__(self, server_address, password):
         super(KH2Context, self).__init__(server_address, password)
 
-
         self.goofy_ability_to_slot = dict()
         self.donald_ability_to_slot = dict()
         self.all_weapon_location_id = None
@@ -88,7 +87,7 @@ class KH2Context(CommonContext):
         }
         self.kh2seedname = None
         self.kh2_seed_save_path_join = None
-        
+
         self.kh2slotdata = None
         self.mem_json = None
         self.itemamount = {}
@@ -120,23 +119,13 @@ class KH2Context(CommonContext):
             #  255: {},  # starting screen
         }
         self.last_world_int = -1
-        # 0x2A09C00+0x40 is the sve anchor. +1 is the last saved room
-        # self.sveroom = 0x2A09C00 + 0x41
-        # 0 not in battle 1 in yellow battle 2 red battle #short
-        # self.inBattle = 0x2A0EAC4 + 0x40
-        # self.onDeath = 0xAB9078
         # PC Address anchors
-        # self.Now = 0x0714DB8 old address
-        # epic addresses
+        # epic .10 addresses
         self.Now = 0x0716DF8
-        self.Save = 0x09A92F0
+        self.Save = 0x9A9330
         self.Journal = 0x743260
         self.Shop = 0x743350
-        self.Slot1 = 0x2A22FD8
-        # self.Sys3 = 0x2A59DF0
-        # self.Bt10 = 0x2A74880
-        # self.BtlEnd = 0x2A0D3E0
-        # self.Slot1 = 0x2A20C98 old address
+        self.Slot1 = 0x2A23018
 
         self.kh2_game_version = None  # can be egs or steam
 
@@ -269,7 +258,7 @@ class KH2Context(CommonContext):
                     },
                     "SoldEquipment": [],
                 }
-                with open(self.kh2_seed_save_path_join,'wt') as f:
+                with open(self.kh2_seed_save_path_join, 'wt') as f:
                     pass
                 # self.locations_checked = set()
             elif os.path.exists(self.kh2_seed_save_path_join):
@@ -362,8 +351,8 @@ class KH2Context(CommonContext):
         if cmd == "DataPackage":
             if "Kingdom Hearts 2" in args["data"]["games"]:
                 self.data_package_kh2_cache(
-                    args["data"]["games"]["Kingdom Hearts 2"]["location_name_to_id"],
-                    args["data"]["games"]["Kingdom Hearts 2"]["item_name_to_id"])
+                        args["data"]["games"]["Kingdom Hearts 2"]["location_name_to_id"],
+                        args["data"]["games"]["Kingdom Hearts 2"]["item_name_to_id"])
                 self.connect_to_game()
                 asyncio.create_task(self.send_msgs([{'cmd': 'Sync'}]))
 
@@ -827,14 +816,15 @@ class KH2Context(CommonContext):
     def get_addresses(self):
         if not self.kh2connected and self.kh2 is not None:
             if self.kh2_game_version is None:
-                if self.kh2_read_string(0x09A9830, 4) == "KH2J":
+                # current verions is .10 then runs the get from github stuff
+                if self.kh2_read_string(0x9A98B0, 4) == "KH2J":
                     self.kh2_game_version = "STEAM"
                     self.Now = 0x0717008
-                    self.Save = 0x09A9830
-                    self.Slot1 = 0x2A23518
+                    self.Save = 0x09A98B0
+                    self.Slot1 = 0x2A23598
                     self.Journal = 0x7434E0
                     self.Shop = 0x7435D0
-                elif self.kh2_read_string(0x09A92F0, 4) == "KH2J":
+                elif self.kh2_read_string(0x9A9330, 4) == "KH2J":
                     self.kh2_game_version = "EGS"
                 else:
                     if self.game_communication_path:
@@ -846,21 +836,20 @@ class KH2Context(CommonContext):
                             mem_resp = requests.get("https://raw.githubusercontent.com/JaredWeakStrike/KH2APMemoryValues/master/kh2memaddresses.json")
                             if mem_resp.status_code == 200:
                                 self.mem_json = json.loads(mem_resp.content)
-                                with open(kh2memaddresses_path,
-                                        'w') as f:
+                                with open(kh2memaddresses_path, 'w') as f:
                                     f.write(json.dumps(self.mem_json, indent=4))
                         else:
-                            with open(kh2memaddresses_path, 'r') as f:
+                            with open(kh2memaddresses_path) as f:
                                 self.mem_json = json.load(f)
                         if self.mem_json:
                             for key in self.mem_json.keys():
 
-                                if self.kh2_read_string(int(self.mem_json[key]["GameVersionCheck"], 0), 4) == "KH2J":
-                                    self.Now = int(self.mem_json[key]["Now"], 0)
-                                    self.Save = int(self.mem_json[key]["Save"], 0)
-                                    self.Slot1 = int(self.mem_json[key]["Slot1"], 0)
-                                    self.Journal = int(self.mem_json[key]["Journal"], 0)
-                                    self.Shop = int(self.mem_json[key]["Shop"], 0)
+                                if self.kh2_read_string(int(self.mem_json[key]["GameVersionCheck"], 16), 4) == "KH2J":
+                                    self.Now = int(self.mem_json[key]["Now"], 16)
+                                    self.Save = int(self.mem_json[key]["Save"], 16)
+                                    self.Slot1 = int(self.mem_json[key]["Slot1"], 16)
+                                    self.Journal = int(self.mem_json[key]["Journal"], 16)
+                                    self.Shop = int(self.mem_json[key]["Shop"], 16)
                                     self.kh2_game_version = key
 
             if self.kh2_game_version is not None:
