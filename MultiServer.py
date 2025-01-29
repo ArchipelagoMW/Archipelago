@@ -1060,21 +1060,37 @@ def send_items_to(ctx: Context, team: int, target_slot: int, *items: NetworkItem
 
 def register_location_checks(ctx: Context, team: int, slot: int, locations: typing.Iterable[int],
                              count_activity: bool = True):
+    slot_locations = ctx.locations[slot]
     new_locations = set(locations) - ctx.location_checks[team, slot]
-    new_locations.intersection_update(ctx.locations[slot])  # ignore location IDs unknown to this multidata
+    new_locations.intersection_update(slot_locations)  # ignore location IDs unknown to this multidata
     if new_locations:
         if count_activity:
             ctx.client_activity_timers[team, slot] = datetime.datetime.now(datetime.timezone.utc)
+
+        sortable: list[tuple[int, int, int, int]] = []
         for location in new_locations:
-            item_id, target_player, flags = ctx.locations[slot][location]
+            # extract all fields to avoid runtime overhead in LocationStore
+            item_id, target_player, flags = slot_locations[location]
+            # sort/group by receiver and item
+            sortable.append((target_player, item_id, location, flags))
+
+        info_texts: list[dict[str, typing.Any]] = []
+        for target_player, item_id, location, flags in sorted(sortable):
             new_item = NetworkItem(item_id, location, slot, flags)
             send_items_to(ctx, team, target_player, new_item)
 
             ctx.logger.info('(Team #%d) %s sent %s to %s (%s)' % (
                 team + 1, ctx.player_names[(team, slot)], ctx.item_names[ctx.slot_info[target_player].game][item_id],
                 ctx.player_names[(team, target_player)], ctx.location_names[ctx.slot_info[slot].game][location]))
-            info_text = json_format_send_event(new_item, target_player)
-            ctx.broadcast_team(team, [info_text])
+            if len(info_texts) >= 140:
+                # split into chunks that are close to compression window of 64K but not too big on the wire
+                # (roughly 1300-2600 bytes after compression depending on repetitiveness)
+                ctx.broadcast_team(team, info_texts)
+                info_texts.clear()
+            info_texts.append(json_format_send_event(new_item, target_player))
+        ctx.broadcast_team(team, info_texts)
+        del info_texts
+        del sortable
 
         ctx.location_checks[team, slot] |= new_locations
         send_new_items(ctx)
