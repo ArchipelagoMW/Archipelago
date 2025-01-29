@@ -1320,7 +1320,7 @@ class BlasRules:
                                    (boss_strength if self.world.options.difficulty.value >= 1 else boss_strength + 0.10))
 
     def guilt_rooms(self, state: CollectionState) -> int:
-        doors = [
+        doors = (
             "D01Z04S01[NE]",
             "D02Z02S11[W]",
             "D03Z03S02[NE]",
@@ -1328,20 +1328,20 @@ class BlasRules:
             "D05Z01S05[NE]",
             "D09Z01S05[W]",
             "D17Z01S04[W]",
-        ]
+        )
 
         return sum(state.can_reach_region(door, self.player) for door in doors)
     
     def sword_rooms(self, state: CollectionState) -> int:
-        doors = [
-            ["D01Z02S07[E]", "D01Z02S02[SW]"],
-            ["D20Z01S04[E]", "D01Z05S23[W]"],
-            ["D02Z03S02[NE]"],
-            ["D04Z02S21[NE]"],
-            ["D05Z01S21[NW]"],
-            ["D06Z01S15[NE]"],
-            ["D17Z01S07[SW]"]
-        ]
+        doors = (
+            ("D01Z02S07[E]", "D01Z02S02[SW]"),
+            ("D20Z01S04[E]", "D01Z05S23[W]"),
+            ("D02Z03S02[NE]",),
+            ("D04Z02S21[NE]",),
+            ("D05Z01S21[NW]",),
+            ("D06Z01S15[NE]",),
+            ("D17Z01S07[SW]",)
+        )
 
         total: int = 0
         for subdoors in doors:
@@ -1386,13 +1386,13 @@ class BlasRules:
         return 0
     
     def miriam_rooms(self, state: CollectionState) -> int:
-        doors = [
+        doors = (
             "D02Z03S07[NWW]",
             "D03Z03S07[NW]",
             "D04Z04S01[E]",
             "D05Z01S06[W]",
             "D06Z01S17[E]"
-        ]
+        )
 
         return sum(state.can_reach_region(door, self.player) for door in doors)
     
@@ -1410,11 +1410,11 @@ class BlasRules:
         return total
     
     def chalice_rooms(self, state: CollectionState) -> int:
-        doors = [
-            ["D03Z01S02[E]", "D01Z05S02[W]", "D20Z01S03[N]"],
-            ["D05Z01S11[SE]", "D05Z02S02[NW]"],
-            ["D09Z01S09[E]", "D09Z01S10[W]", "D09Z01S08[SE]", "D09Z01S02[SW]"]
-        ]
+        doors = (
+            ("D03Z01S02[E]", "D01Z05S02[W]", "D20Z01S03[N]"),
+            ("D05Z01S11[SE]", "D05Z02S02[NW]"),
+            ("D09Z01S09[E]", "D09Z01S10[W]", "D09Z01S08[SE]", "D09Z01S02[SW]")
+        )
 
         total: int = 0
         for subdoors in doors:
