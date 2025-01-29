@@ -583,15 +583,15 @@ class World(metaclass=AutoWorldRegister):
         return res
 
 
+# any methods attached to this can be used as part of CollectionState,
+# please use a prefix as all of them get clobbered together
+class LogicMixin(metaclass=AutoLogicRegister):
+    pass
+
+
 def data_package_checksum(data: "GamesPackage") -> str:
     """Calculates the data package checksum for a game from a dict"""
     assert "checksum" not in data, "Checksum already in data"
     assert sorted(data) == list(data), "Data not ordered"
     from NetUtils import encode
     return hashlib.sha1(encode(data).encode()).hexdigest()
-
-
-# any methods attached to this can be used as part of CollectionState,
-# please use a prefix as all of them get clobbered together
-class LogicMixin(metaclass=AutoLogicRegister):
-    pass
