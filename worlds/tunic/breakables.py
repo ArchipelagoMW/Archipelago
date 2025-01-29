@@ -384,7 +384,8 @@ def can_break_breakables(state: CollectionState, world: "TunicWorld") -> bool:
 
 # and also the table
 def can_break_signs(state: CollectionState, world: "TunicWorld") -> bool:
-    return has_sword(state, world.player) or state.has_any(("Magic Wand", "Gun"), world.player)
+    return (has_sword(state, world.player) or state.has_any(("Magic Wand", "Gun"), world.player)
+            or (has_melee(state, world.player) and state.has("Glass Cannon", world.player)))
 
 
 def can_break_leaf_piles(state: CollectionState, world: "TunicWorld") -> bool:

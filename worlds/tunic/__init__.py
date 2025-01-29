@@ -264,7 +264,8 @@ class TunicWorld(World):
         itemclass: ItemClassification = (classification
                                          or (item_data.combat_ic if self.options.combat_logic else None)
                                          or (ItemClassification.progression | ItemClassification.useful
-                                             if name == "Glass Cannon" and self.options.grass_randomizer
+                                             if name == "Glass Cannon"
+                                             and (self.options.grass_randomizer or self.options.breakable_shuffle)
                                              and not self.options.start_with_sword else None)
                                          or (ItemClassification.progression | ItemClassification.useful
                                              if name == "Shield" and self.options.ladder_storage
