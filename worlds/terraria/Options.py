@@ -11,7 +11,7 @@ class Calamity(Toggle):
 class Getfixedboi(Toggle):
     """Generation accomodates the secret, very difficult "getfixedboi" seed"""
 
-    display_name = """"getfixedboi" seed"""
+    display_name = """"getfixedboi" Seed"""
 
 
 class Goal(Choice):
@@ -43,7 +43,7 @@ class Goal(Choice):
 class EarlyAchievements(DefaultOnToggle):
     """Adds checks upon collecting early Pre-Hardmode achievements. Adds many sphere 1 checks."""
 
-    display_name = "Early Pre-Hardmode achievements"
+    display_name = "Early Pre-Hardmode Achievements"
 
 
 class NormalAchievements(DefaultOnToggle):
@@ -52,19 +52,19 @@ class NormalAchievements(DefaultOnToggle):
     clearing bosses and events are excluded.
     """
 
-    display_name = "Normal achievements"
+    display_name = "Normal Achievements"
 
 
 class GrindyAchievements(Toggle):
     """Adds checks upon collecting grindy achievements"""
 
-    display_name = "Grindy achievements"
+    display_name = "Grindy Achievements"
 
 
 class FishingAchievements(Toggle):
     """Adds checks upon collecting fishing quest achievements"""
 
-    display_name = "Fishing quest achievements"
+    display_name = "Fishing Quest Achievements"
 
 
 class FillExtraChecksWith(Choice):

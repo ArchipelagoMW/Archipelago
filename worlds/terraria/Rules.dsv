@@ -538,6 +538,7 @@ Old One's Army Tier 3;              Location | Item;                            
 
 // Martian Madness
 Martian Madness;                    Location | Item;                            Wall of Flesh & Golem;
+Laser Drill;                        Pickaxe(230);                               #Martian Madness;
 Influx Waver;                       ;                                           #Martian Madness;
 
 // The Plaguebringer Goliath
@@ -582,7 +583,7 @@ Empress of Light;                   Location | Item | Goal;                     
 # empress_of_light
 
 // Lunatic Cultist
-Lunatic Cultist;                    Location | Item | Goal;                     (@calamity | (Dungeon & Golem)) & Wall of Flesh;
+Lunatic Cultist;                    Location | Item | Goal;                     ((@calamity | (Dungeon & Golem)) & Wall of Flesh) | (@calamity & Calamitas Clone);
 Astrum Deus;                        Calamity | Location | Item | Goal;          Titan Heart;
 # lunatic_cultist
 # astrum_deus
@@ -627,7 +628,7 @@ Exodium Cluster;                    Calamity;                                   
 Normality Relocator;                Calamity;                                   Ancient Manipulator & Rod of Discord & Exodium Cluster & Fragment;
 Unholy Essence;                     Calamity;                                   Moon Lord | #Providence, the Profaned Goddess | (Hallow & Providence, the Profaned Goddess) | (@getfixedboi & Plantera);
 Polterplasm;                        Calamity;                                   (Moon Lord & Wall of Flesh) | (Dungeon & (Polterghast | Moon Lord)) | #Polterghast;
-Eldritch Soul Artifact;             Calamity;                                   Exodium Cluster & Navyplate & Polterplasm;
+Eldritch Soul Artifact;             Calamity | Minions(1);                      Exodium Cluster & Navyplate & Polterplasm;
 
 // Profaned Guardians
 Profaned Guardians;                 Calamity | Location | Item;                 Ancient Manipulator & Unholy Essence & Luminite Bar;
@@ -655,7 +656,7 @@ Bloodstone Core;                    Calamity;                                   
 // Sentinels of the Devourer
 Storm Weaver;                       Calamity | Location | Item;                 Rune of Kos;
 Armored Shell;                      Calamity;                                   #Storm Weaver;
-Ceaseless Void;                     Calamity | Location | Item;                 Rune of Kos;
+Ceaseless Void;                     Calamity | Location | Item;                 Dungeon & Rune of Kos;
 Dark Plasma;                        Calamity;                                   #Ceaseless Void;
 Signus, Envoy of the Devourer;      Calamity | Location | Item;                 Rune of Kos;
 Twisting Nether;                    Calamity;                                   #Signus, Envoy of the Devourer;
