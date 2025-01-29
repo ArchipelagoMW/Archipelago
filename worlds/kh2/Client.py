@@ -843,13 +843,12 @@ class KH2Context(CommonContext):
                                 self.mem_json = json.load(f)
                         if self.mem_json:
                             for key in self.mem_json.keys():
-
-                                if self.kh2_read_string(int(self.mem_json[key]["GameVersionCheck"], 16), 4) == "KH2J":
-                                    self.Now = int(self.mem_json[key]["Now"], 16)
-                                    self.Save = int(self.mem_json[key]["Save"], 16)
-                                    self.Slot1 = int(self.mem_json[key]["Slot1"], 16)
-                                    self.Journal = int(self.mem_json[key]["Journal"], 16)
-                                    self.Shop = int(self.mem_json[key]["Shop"], 16)
+                                if self.kh2_read_string(int(self.mem_json[key]["GameVersionCheck"], 0), 4) == "KH2J":
+                                    self.Now = int(self.mem_json[key]["Now"], 0)
+                                    self.Save = int(self.mem_json[key]["Save"], 0)
+                                    self.Slot1 = int(self.mem_json[key]["Slot1"], 0)
+                                    self.Journal = int(self.mem_json[key]["Journal"], 0)
+                                    self.Shop = int(self.mem_json[key]["Shop"], 0)
                                     self.kh2_game_version = key
 
             if self.kh2_game_version is not None:
