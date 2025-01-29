@@ -4,18 +4,18 @@ import re
 import time
 import traceback
 
+import NetUtils
 import Utils
 from typing import Any, Optional
 
 import dolphin_memory_engine as dme
 
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
-from NetUtils import ClientStatus, color
 from settings import get_settings, Settings
 from worlds.luigismansion import BOO_LOCATION_TABLE
 
 from .LMGenerator import LuigisMansionRandomizer
-from .Items import ALL_ITEMS_TABLE
+from .Items import ALL_ITEMS_TABLE, BOO_ITEM_TABLE, filler_items
 from .Locations import ALL_LOCATION_TABLE, LMLocation
 
 CONNECTION_REFUSED_GAME_STATUS = (
@@ -87,8 +87,9 @@ RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000,50000000, 60000000, 70000000, 10
 
 # List of received items to ignore because they are handled elsewhere
 # TODO Remove hearts from here when fixed.
-RECV_ITEMS_IGNORE = [8063, 8064, 8128, 8129, 8119, 8127]
-RECV_OWN_GAME_LOCATIONS: list[int] = [LMLocation.get_apid(location[1].code) for location in BOO_LOCATION_TABLE.items()]
+RECV_ITEMS_IGNORE = [8063, 8064, 8127]
+RECV_OWN_GAME_LOCATIONS: list[str] = [lm_location for lm_location in BOO_LOCATION_TABLE.keys()]
+RECV_OWN_GAME_ITEMS: list[str] = [lm_item for lm_item in BOO_ITEM_TABLE.keys()]
 
 
 def read_short(console_address: int):
@@ -243,18 +244,25 @@ async def give_items(ctx: LMContext):
 
     # Filter for only items where we have not received yet. If same slot, only receive the locations from the
     # pre-approved own locations (as everything is currently a NetworkItem), otherwise accept other slots.
-    list_recv_items = [netItem for netItem in ctx.items_received if ctx.items_received.index(netItem) > last_recv_idx]
-    logger.info(f"Identified the following number of received items to try and validate: {str(len(list_recv_items))}")
+    list_recv_items = [netItem for netItem in ctx.items_received if ctx.items_received.index(netItem) > last_recv_idx
+                       and netItem.item not in RECV_ITEMS_IGNORE]
+    logger.info("DEBUG -- Identified the following number of received items to try and validate: " +
+                str(len(list_recv_items)))
 
     if len(list_recv_items) == 0:
         write_short(LAST_RECV_ITEM_ADDR, (len(ctx.items_received) - 1))
         return
 
+    last_bill_list = [x[1] for x in filler_items.items() if "Bills" in x[0]]
+    bills_rams_pointer = last_bill_list[len(last_bill_list) - 1].pointer_offset
+    last_coin_list = [x[1] for x in filler_items.items() if "Coins" in x[0]]
+    coins_ram_pointer = last_bill_list[len(last_coin_list) - 1].pointer_offset
+
     for item in list_recv_items:
         # If item is handled as start inventory and created in patching, ignore them.
         # If item is something we got from ourselves, but not something we need to give ourselves, ignore it
-        if (item.item is None or item.item in RECV_ITEMS_IGNORE or
-                (item.player == ctx.slot and not item.location in RECV_OWN_GAME_LOCATIONS)):
+        if item.player == ctx.slot and not (ctx.location_names.lookup_in_game(item.location)
+            in RECV_OWN_GAME_LOCATIONS or ctx.item_names.lookup_in_game(item.item) in RECV_OWN_GAME_ITEMS):
             write_short(LAST_RECV_ITEM_ADDR, ctx.items_received.index(item))
             continue
 
@@ -263,20 +271,52 @@ async def give_items(ctx: LMContext):
         # Get the current LM Item so we can get the various named tuple fields easier.
         lm_item = ALL_ITEMS_TABLE[lm_item_name]
         if not lm_item.ram_addr is None and (not lm_item.itembit is None or not lm_item.pointer_offset is None):
-            logger.info('Received %s from %s (%s)' % (
-                color(lm_item_name, 'red', 'bold'),
-                color(ctx.player_names[item.player], 'yellow'),
-                ctx.location_names.lookup_in_slot(item.location, item.player)))
+            # Add a received message in the client for the item that is about to be received.
+            parts = []
+            NetUtils.add_json_text(parts, "Received ")
+            NetUtils.add_json_item(parts, item.item, ctx.slot, item.flags)
+            NetUtils.add_json_text(parts, " from ")
+            NetUtils.add_json_location(parts, item.location, item.player)
+            NetUtils.add_json_text(parts, " by ")
+            NetUtils.add_json_text(parts, item.player, type=NetUtils.JSONTypes.player_id)
+            ctx.on_print_json({"data": parts, "cmd": "PrintJSON"})
+
             if not lm_item.pointer_offset is None:
                 # Assume we need to update an existing value of size X with Y value at the pointer's address
-                curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
-                                                    [lm_item.pointer_offset]), lm_item.ram_byte_size))
-                # TODO fix for hearts, will break receival otherwise
                 int_item_amount = 1
-                if re.search(r"^\d+", lm_item_name):
-                    int_item_amount = int(re.search(r"^\d+", lm_item_name).group())
-                curr_val += int_item_amount
-                dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
+                match lm_item.code:
+                    case 119: # Bills and Coins
+                        coins_curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
+                    [coins_ram_pointer]), lm_item.ram_byte_size))
+                        bills_curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
+                          [bills_rams_pointer]), lm_item.ram_byte_size))
+                        if re.search(r"^\d+", lm_item_name):
+                            int_item_amount = int(re.search(r"^\d+", lm_item_name).group())
+                        coins_curr_val += int_item_amount
+                        bills_curr_val += int_item_amount
+                        dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
+                    [coins_curr_val]), coins_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
+                        dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
+                    [bills_curr_val]), bills_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
+                    case 128:
+                        curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
+                    [lm_item.pointer_offset]), lm_item.ram_byte_size))
+                        curr_val += 10
+                        dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
+                    [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
+                    case 129:
+                        curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
+                    [lm_item.pointer_offset]), lm_item.ram_byte_size))
+                        curr_val += 50
+                        dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
+                    [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
+                    case _:
+                        curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
+                    [lm_item.pointer_offset]), lm_item.ram_byte_size))
+                        if re.search(r"^\d+", lm_item_name):
+                            int_item_amount = int(re.search(r"^\d+", lm_item_name).group())
+                        curr_val += int_item_amount
+                        dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
                     [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
             else:
                 # Assume it is a single address with a bit to update, rather than adding to an existing value
@@ -379,7 +419,7 @@ async def check_locations(ctx: LMContext):
         ctx.finished_game = True
         await ctx.send_msgs([{
             "cmd": "StatusUpdate",
-            "status": ClientStatus.CLIENT_GOAL,
+            "status": NetUtils.ClientStatus.CLIENT_GOAL,
         }])
     return
 
