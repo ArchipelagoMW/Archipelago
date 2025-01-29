@@ -136,16 +136,14 @@ class TestImplemented(unittest.TestCase):
         for game_name, world_type in worlds_to_test.items():
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type, gen_steps)
-                old_location_rules = [location.access_rule for location in multiworld.get_locations()]
-                old_entrance_rules = [entrance.access_rule for entrance in multiworld.get_entrances()]
                 for step in additional_steps:
                     with self.subTest("step", step=step):
+                        old_location_rules = [location.access_rule for location in multiworld.get_locations()]
+                        old_entrance_rules = [entrance.access_rule for entrance in multiworld.get_entrances()]
                         call_all(multiworld, step)
-                        current_location_rules = [location.access_rule for location in multiworld.get_locations()]
-                        current_entrance_rules = [entrance.access_rule for entrance in multiworld.get_entrances()]
-                        self.assertEqual(old_location_rules, current_location_rules,
+                        self.assertEqual(old_location_rules,
+                                         [location.access_rule for location in multiworld.get_locations()],
                                          f"{game_name} modified location rules during {step}")
-                        self.assertEqual(old_entrance_rules, current_entrance_rules,
+                        self.assertEqual(old_entrance_rules,
+                                         [entrance.access_rule for entrance in multiworld.get_entrances()],
                                          f"{game_name} modified entrance rules during {step}")
-                    old_location_rules = current_location_rules
-                    old_entrance_rules = current_entrance_rules
