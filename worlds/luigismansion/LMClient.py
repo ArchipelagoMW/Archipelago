@@ -87,7 +87,7 @@ RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000,50000000, 60000000, 70000000, 10
 
 # List of received items to ignore because they are handled elsewhere
 # TODO Remove hearts from here when fixed.
-RECV_ITEMS_IGNORE = [8063, 8064, 8128, 8129]
+RECV_ITEMS_IGNORE = [8063, 8064, 8128, 8129, 8119]
 RECV_OWN_GAME_LOCATIONS: list[int] = [LMLocation.get_apid(location[1].code) for location in BOO_LOCATION_TABLE.items()]
 
 
