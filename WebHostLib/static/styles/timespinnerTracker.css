@@ -76,13 +76,13 @@
     filter: hue-rotate(84deg) saturate(10) brightness(0.7);
 }
 #inventory-table img.acquired.hotpink{ /*FF69B4*/
-    filter: hue-rotate(330deg) saturate(10) brightness(0.71);
+    filter: sepia(100%) hue-rotate(300deg) saturate(10);
 }
 #inventory-table img.acquired.lightsalmon{ /*FFA07A*/
-    filter: hue-rotate(17deg) saturate(10) brightness(0.74);
+    filter: sepia(100%) hue-rotate(347deg) saturate(10);
 }
 #inventory-table img.acquired.crimson{ /*DB143B*/
-    filter: hue-rotate(348deg) saturate(8.3) brightness(0.47);
+    filter: sepia(100%) hue-rotate(318deg) saturate(10) brightness(0.86);
 }
 
 #inventory-table span{
