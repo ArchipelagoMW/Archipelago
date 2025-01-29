@@ -33,6 +33,18 @@ class StartingPosition(Choice):
     option_dangerous = 2
     option_very_dangerous = 3
 
+class WeaponLogic(Choice):
+    """What level of offensive power is logically required for later dungeons.
+    Easy means the Sword will be required for level 1 and later, the White Sword for levels 4 and later,
+    and the Magical Sword for levels 6, 8, and 9.
+    Moderate means the Swrod for level 1 and later and the White Sword or Magical Rod for levels 4 and later.
+    Hard means no safety logic is added. You may be required to defeat enemies with weak or unusual weaponry, such as
+    Wizzrobes with the basic Sword or Darknuts with the Magical Rod."""
+    display_name = "Combat Logic"
+    option_easy = 0
+    option_moderate = 1
+    option_hard = 2
+
 class EntranceShuffle(Choice):
     """Shuffle entrances around.
     Dungeons means only dungeon entrances will be shuffled with each other.
@@ -62,5 +74,6 @@ class TlozOptions(PerGameCommonOptions):
     ExpandedPool: ExpandedPool
     TriforceLocations: TriforceLocations
     StartingPosition: StartingPosition
+    WeaponLogic: WeaponLogic
     EntranceShuffle: EntranceShuffle
     RandomizeWarpCaves: RandomizeWarpCaves

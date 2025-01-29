@@ -40,6 +40,37 @@ def set_rules(tloz_world: "TLoZWorld"):
                          lambda state: state.has_group("swords", player) or
                                        (state.has("Bow", player) and state.has_group("arrows", player)))
 
+    if tloz_world.options.WeaponLogic == 0:
+        for level in tloz_world.levels[1:]:
+            for location in level.locations:
+                add_rule(tloz_world.get_location(location.name),
+                         lambda state: state.has_group("swords", player))
+        for level in tloz_world.levels[4:]:
+            for location in level.locations:
+                add_rule(tloz_world.get_location(location.name),
+                         lambda state: state.has("White Sword", player) or state.has("Magical Sword", player))
+        for location in tloz_world.levels[6].locations:
+            add_rule(tloz_world.get_location(location.name),
+                     lambda state: state.has("Magical Sword", player))
+        for location in tloz_world.levels[8].locations:
+            add_rule(tloz_world.get_location(location.name),
+                     lambda state: state.has("Magical Sword", player))
+        for location in tloz_world.levels[9].locations:
+            add_rule(tloz_world.get_location(location.name),
+                     lambda state: state.has("Magical Sword", player))
+
+    if tloz_world.options.WeaponLogic == 1:
+        for level in tloz_world.levels[1:]:
+            for location in level.locations:
+                add_rule(tloz_world.get_location(location.name),
+                         lambda state: state.has_group("swords", player))
+        for level in tloz_world.levels[4:]:
+            for location in level.locations:
+                add_rule(tloz_world.get_location(location.name),
+                         lambda state: state.has("White Sword", player)
+                                       or state.has("Magical Sword", player)
+                                       or state.has("Magical Rod", player))
+
     # No requiring anything in a shop until we can farm for money
     for location in shop_locations:
         add_rule(tloz_world.get_location(location),
@@ -153,3 +184,12 @@ def set_rules(tloz_world: "TLoZWorld"):
     add_rule(tloz_world.get_location("Shield Shop Item Right"),
              lambda state: state.has_group("candles", player) or
                            state.has("Bomb", player))
+
+    ganon = tloz_world.get_location("Ganon")
+    ganon.place_locked_item(tloz_world.create_event("Triforce of Power"))
+    add_rule(ganon, lambda state: state.has("Silver Arrow", player) and state.has("Bow", player))
+
+    tloz_world.get_location("Zelda").place_locked_item(tloz_world.create_event("Rescued Zelda!"))
+    add_rule(tloz_world.get_location("Zelda"),
+             lambda state: state.has("Triforce of Power", player))
+    tloz_world.multiworld.completion_condition[player] = lambda state: state.has("Rescued Zelda!", player)
