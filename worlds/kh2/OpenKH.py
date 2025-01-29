@@ -78,6 +78,8 @@ def patch_kh2(self, output_directory):
     mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}"
     all_valid_locations = {location for location, data in all_locations.items()}
 
+    formDict = {1: "Valor", 2: "Wisdom", 3: "Limit", 4: "Master", 5: "Final"}
+
     for location in self.multiworld.get_filled_locations(self.player):
         if location.name in all_valid_locations:
             data = all_locations[location.name]
@@ -140,21 +142,24 @@ def patch_kh2(self, output_directory):
         elif data.yml == "Forms":
             # loc id is form lvl
             # char name is the form name number :)
-            if data.locid == 2:
-                formDict = {1: "Valor", 2: "Wisdom", 3: "Limit", 4: "Master", 5: "Final"}
-                formDictExp = {
-                    1: self.options.Valor_Form_EXP.value,
-                    2: self.options.Wisdom_Form_EXP.value,
-                    3: self.options.Limit_Form_EXP.value,
-                    4: self.options.Master_Form_EXP.value,
-                    5: self.options.Final_Form_EXP.value
-                }
-                formexp = formDictExp[data.charName]
-                formName = formDict[data.charName]
+            formDictExp = {
+                1: self.options.Valor_Form_EXP.value,
+                2: self.options.Wisdom_Form_EXP.value,
+                3: self.options.Limit_Form_EXP.value,
+                4: self.options.Master_Form_EXP.value,
+                5: self.options.Final_Form_EXP.value
+            }
+            formexp = formDictExp[data.charName]
+            formName = formDict[data.charName]
+            currentFormLevelExp = int(formExp[data.charName][data.locid] / formexp)
+            #prevent valor from needing more than 120 hits to level up
+            if data.charName == 1 and currentFormLevelExp >= 100 and formexp > 1:
+                currentFormLevelExp = int(90 + data.locid * 5)
+            if data.locid ==     2:
                 self.formattedFmlv[formName] = []
                 self.formattedFmlv[formName].append({
                     "Ability":            1,
-                    "Experience":         int(formExp[data.charName][data.locid] / formexp),
+                    "Experience":         currentFormLevelExp,
                     "FormId":             data.charName,
                     "FormLevel":          1,
                     "GrowthAbilityLevel": 0,
@@ -162,7 +167,7 @@ def patch_kh2(self, output_directory):
             # row is form column is lvl
             self.formattedFmlv[formName].append({
                 "Ability":            itemcode,
-                "Experience":         int(formExp[data.charName][data.locid] / formexp),
+                "Experience":         currentFormLevelExp,
                 "FormId":             data.charName,
                 "FormLevel":          data.locid,
                 "GrowthAbilityLevel": 0,
