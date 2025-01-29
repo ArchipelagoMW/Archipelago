@@ -1,5 +1,5 @@
 import unittest
-from typing import List, Tuple
+from typing import List, Tuple, override
 from unittest import TestCase
 
 from BaseClasses import CollectionState, Location, MultiWorld
@@ -13,6 +13,7 @@ from ..general import gen_steps, setup_multiworld
 class MultiworldTestBase(TestCase):
 
     @classmethod
+    @override
     def setUpClass(cls):
         super().setUpClass()
         ensure_worlds_loaded()

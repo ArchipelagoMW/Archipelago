@@ -1,3 +1,4 @@
+from typing import override
 import unittest
 
 from BaseClasses import MultiWorld
@@ -9,6 +10,7 @@ from . import setup_solo_multiworld
 class TestWorldMemory(unittest.TestCase):
 
     @classmethod
+    @override
     def setUpClass(cls):
         super().setUpClass()
         ensure_worlds_loaded()
