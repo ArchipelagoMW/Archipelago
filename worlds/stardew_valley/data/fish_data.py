@@ -26,6 +26,7 @@ class FishItem:
 
 fresh_water = (Region.farm, Region.forest, Region.town, Region.mountain)
 ocean = (Region.beach,)
+tide_pools = (Region.tide_pools,)
 town_river = (Region.town,)
 mountain_lake = (Region.mountain,)
 forest_pond = (Region.forest,)
@@ -118,13 +119,13 @@ midnight_squid = create_fish(Fish.midnight_squid, night_market, season.winter, 5
 spook_fish = create_fish(Fish.spook_fish, night_market, season.winter, 60)
 
 angler = create_fish(Fish.angler, town_river, season.fall, 85, True, False)
-crimsonfish = create_fish(Fish.crimsonfish, ocean, season.summer, 95, True, False)
+crimsonfish = create_fish(Fish.crimsonfish, tide_pools, season.summer, 95, True, False)
 glacierfish = create_fish(Fish.glacierfish, forest_river, season.winter, 100, True, False)
 legend = create_fish(Fish.legend, mountain_lake, season.spring, 110, True, False)
 mutant_carp = create_fish(Fish.mutant_carp, sewers, season.all_seasons, 80, True, False)
 
 ms_angler = create_fish(Fish.ms_angler, town_river, season.fall, 85, True, True)
-son_of_crimsonfish = create_fish(Fish.son_of_crimsonfish, ocean, season.summer, 95, True, True)
+son_of_crimsonfish = create_fish(Fish.son_of_crimsonfish, tide_pools, season.summer, 95, True, True)
 glacierfish_jr = create_fish(Fish.glacierfish_jr, forest_river, season.winter, 100, True, True)
 legend_ii = create_fish(Fish.legend_ii, mountain_lake, season.spring, 110, True, True)
 radioactive_carp = create_fish(Fish.radioactive_carp, sewers, season.all_seasons, 80, True, True)

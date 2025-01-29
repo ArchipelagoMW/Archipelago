@@ -73,6 +73,7 @@ _FANFARES: Dict[str, int] = {
     "MUS_OBTAIN_SYMBOL":       318,
     "MUS_REGISTER_MATCH_CALL": 135,
 }
+_EVOLUTION_FANFARE_INDEX = list(_FANFARES.keys()).index("MUS_EVOLVED")
 
 CAVE_EVENT_NAME_TO_ID = {
     "TERRA_CAVE_ROUTE_114_1": 1,
@@ -114,6 +115,14 @@ class PokemonEmeraldProcedurePatch(APProcedurePatch, APTokenMixin):
 
 
 def write_tokens(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePatch) -> None:
+    # TODO: Remove when the base patch is updated to include this change
+    # Moves an NPC to avoid overlapping people during trainersanity
+    patch.write_token(
+        APTokenTypes.WRITE,
+        0x53A298 + (0x18 * 7) + 4,  # Space Center 1F event address + 8th event + 4-byte offset for x coord
+        struct.pack("<H", 11)
+    )
+
     # Set free fly location
     if world.options.free_fly_location:
         patch.write_token(
@@ -653,6 +662,15 @@ def write_tokens(world: "PokemonEmeraldWorld", patch: PokemonEmeraldProcedurePat
         # Shuffle the lists, pair new tracks with original tracks, set the new track ids, and set new fanfare durations
         randomized_fanfares = [fanfare_name for fanfare_name in _FANFARES]
         world.random.shuffle(randomized_fanfares)
+
+        # Prevent the evolution fanfare from receiving the poke flute by swapping it with something else.
+        # The poke flute sound causes the evolution scene to get stuck for like 40 seconds
+        if randomized_fanfares[_EVOLUTION_FANFARE_INDEX] == "MUS_RG_POKE_FLUTE":
+            swap_index = (_EVOLUTION_FANFARE_INDEX + 1) % len(_FANFARES)
+            temp = randomized_fanfares[_EVOLUTION_FANFARE_INDEX]
+            randomized_fanfares[_EVOLUTION_FANFARE_INDEX] = randomized_fanfares[swap_index]
+            randomized_fanfares[swap_index] = temp
+
         for i, fanfare_pair in enumerate(zip(_FANFARES.keys(), randomized_fanfares)):
             patch.write_token(
                 APTokenTypes.WRITE,

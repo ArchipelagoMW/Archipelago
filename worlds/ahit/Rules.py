@@ -381,8 +381,8 @@ def set_moderate_rules(world: "HatInTimeWorld"):
              lambda state: can_use_hat(state, world, HatType.ICE), "or")
 
     # Moderate: Clock Tower Chest + Ruined Tower with nothing
-    add_rule(world.multiworld.get_location("Mafia Town - Clock Tower Chest", world.player), lambda state: True)
-    add_rule(world.multiworld.get_location("Mafia Town - Top of Ruined Tower", world.player), lambda state: True)
+    set_rule(world.multiworld.get_location("Mafia Town - Clock Tower Chest", world.player), lambda state: True)
+    set_rule(world.multiworld.get_location("Mafia Town - Top of Ruined Tower", world.player), lambda state: True)
 
     # Moderate: enter and clear The Subcon Well without Hookshot and without hitting the bell
     for loc in world.multiworld.get_region("The Subcon Well", world.player).locations:
@@ -414,7 +414,7 @@ def set_moderate_rules(world: "HatInTimeWorld"):
 
     # Moderate: Mystifying Time Mesa time trial without hats
     set_rule(world.multiworld.get_location("Alpine Skyline - Mystifying Time Mesa: Zipline", world.player),
-             lambda state: can_use_hookshot(state, world))
+             lambda state: True)
 
     # Moderate: Goat Refinery from TIHS with Sprint only
     add_rule(world.multiworld.get_location("Alpine Skyline - Goat Refinery", world.player),
@@ -432,8 +432,8 @@ def set_moderate_rules(world: "HatInTimeWorld"):
 
     if world.is_dlc1():
         # Moderate: clear Rock the Boat without Ice Hat
-        add_rule(world.multiworld.get_location("Rock the Boat - Post Captain Rescue", world.player), lambda state: True)
-        add_rule(world.multiworld.get_location("Act Completion (Rock the Boat)", world.player), lambda state: True)
+        set_rule(world.multiworld.get_location("Rock the Boat - Post Captain Rescue", world.player), lambda state: True)
+        set_rule(world.multiworld.get_location("Act Completion (Rock the Boat)", world.player), lambda state: True)
 
         # Moderate: clear Deep Sea without Ice Hat
         set_rule(world.multiworld.get_location("Act Completion (Time Rift - Deep Sea)", world.player),
@@ -493,9 +493,6 @@ def set_hard_rules(world: "HatInTimeWorld"):
              lambda state: has_paintings(state, world, 3, True))
 
     # SDJ
-    add_rule(world.multiworld.get_location("Subcon Forest - Long Tree Climb Chest", world.player),
-             lambda state: can_use_hat(state, world, HatType.SPRINT) and has_paintings(state, world, 2), "or")
-
     add_rule(world.multiworld.get_location("Act Completion (Time Rift - Curly Tail Trail)", world.player),
              lambda state: can_use_hat(state, world, HatType.SPRINT), "or")
 
@@ -533,7 +530,10 @@ def set_expert_rules(world: "HatInTimeWorld"):
     # Expert: Mafia Town - Above Boats, Top of Lighthouse, and Hot Air Balloon with nothing
     set_rule(world.multiworld.get_location("Mafia Town - Above Boats", world.player), lambda state: True)
     set_rule(world.multiworld.get_location("Mafia Town - Top of Lighthouse", world.player), lambda state: True)
-    set_rule(world.multiworld.get_location("Mafia Town - Hot Air Balloon", world.player), lambda state: True)
+    # There are not enough buckets/beach balls to bucket/ball hover in Heating Up Mafia Town, so any other Mafia Town
+    # act is required.
+    add_rule(world.multiworld.get_location("Mafia Town - Hot Air Balloon", world.player),
+             lambda state: state.can_reach_region("Mafia Town Area", world.player), "or")
 
     # Expert: Clear Dead Bird Studio with nothing
     for loc in world.multiworld.get_region("Dead Bird Studio - Post Elevator Area", world.player).locations:
@@ -590,7 +590,7 @@ def set_expert_rules(world: "HatInTimeWorld"):
 
     if world.is_dlc2():
         # Expert: clear Rush Hour with nothing
-        if not world.options.NoTicketSkips:
+        if world.options.NoTicketSkips != NoTicketSkips.option_true:
             set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player), lambda state: True)
         else:
             set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player),
@@ -739,7 +739,7 @@ def set_dlc1_rules(world: "HatInTimeWorld"):
 
     # This particular item isn't present in Act 3 for some reason, yes in vanilla too
     add_rule(world.multiworld.get_location("The Arctic Cruise - Toilet", world.player),
-             lambda state: state.can_reach("Bon Voyage!", "Region", world.player)
+             lambda state: (state.can_reach("Bon Voyage!", "Region", world.player) and can_use_hookshot(state, world))
              or state.can_reach("Ship Shape", "Region", world.player))
 
 
@@ -855,6 +855,9 @@ def set_rift_rules(world: "HatInTimeWorld", regions: Dict[str, Region]):
 
     for entrance in regions["Time Rift - Alpine Skyline"].entrances:
         add_rule(entrance, lambda state: has_relic_combo(state, world, "Crayon"))
+        if entrance.parent_region.name == "Alpine Free Roam":
+            add_rule(entrance,
+                     lambda state: can_use_hookshot(state, world) and can_hit(state, world, umbrella_only=True))
 
     if world.is_dlc1():
         for entrance in regions["Time Rift - Balcony"].entrances:
@@ -933,6 +936,9 @@ def set_default_rift_rules(world: "HatInTimeWorld"):
 
     for entrance in world.multiworld.get_region("Time Rift - Alpine Skyline", world.player).entrances:
         add_rule(entrance, lambda state: has_relic_combo(state, world, "Crayon"))
+        if entrance.parent_region.name == "Alpine Free Roam":
+            add_rule(entrance,
+                     lambda state: can_use_hookshot(state, world) and can_hit(state, world, umbrella_only=True))
 
     if world.is_dlc1():
         for entrance in world.multiworld.get_region("Time Rift - Balcony", world.player).entrances:
