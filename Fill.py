@@ -76,7 +76,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
 
         for item in items_to_place:
             # The items added into `reachable_items` are placed starting from the end of each deque in
-            # `reachable_items`, so the items being placed are more likely to found towards the end of `item_pool`.
+            # `reachable_items`, so the items being placed are more likely to be found towards the end of `item_pool`.
             for p, pool_item in enumerate(reversed(item_pool), start=1):
                 if pool_item is item:
                     del item_pool[-p]
