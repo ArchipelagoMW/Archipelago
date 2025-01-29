@@ -1467,12 +1467,12 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         set_rule(cath_entry_to_elev,
                  lambda state: options.entrance_rando
                  or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
-                 or (has_ability(prayer, state, world) and has_combat_reqs("Cathedral", state, player)))
+                 or (has_ability(prayer, state, world) and has_combat_reqs("Swamp", state, player)))
 
         set_rule(cath_entry_to_main,
-                 lambda state: has_combat_reqs("Cathedral", state, player))
+                 lambda state: has_combat_reqs("Swamp", state, player))
         set_rule(cath_elev_to_main,
-                 lambda state: has_combat_reqs("Cathedral", state, player))
+                 lambda state: has_combat_reqs("Swamp", state, player))
 
         # for spots where you can go into and come out of an entrance to reset enemy aggro
         if world.options.entrance_rando:
@@ -1927,4 +1927,4 @@ def set_er_location_rules(world: "TunicWorld") -> None:
 
         # zip through the rubble to sneakily grab this chest, or just fight to it
         add_rule(world.get_location("Cathedral - [1F] Near Spikes"),
-                 lambda state: laurels_zip(state, world) or has_combat_reqs("Cathedral", state, player))
+                 lambda state: laurels_zip(state, world) or has_combat_reqs("Swamp", state, player))
