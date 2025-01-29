@@ -68,7 +68,6 @@ class TerrariaWorld(World):
     goal_locations: Set[str]
 
     def generate_early(self) -> None:
-        self.options.goal
         goal_id = self.options.goal.value
         goal, goal_locations = goals[goal_id]
         ter_goals = {}
