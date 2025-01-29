@@ -1,8 +1,10 @@
-from . import WL4TestBase
+from test.bases import TestBase
 
 from ..data import Passage
 from ..items import ItemType, filter_items, filter_item_names
-from ..locations import get_level_locations
+from ..locations import LocationType, get_level_locations, location_table
+from ..options import Difficulty
+from ..region_data import level_table
 
 
 main_levels = ['Palm Tree Paradise', 'Wildflower Fields', 'Mystic Lake', 'Monsoon Jungle',
@@ -10,8 +12,7 @@ main_levels = ['Palm Tree Paradise', 'Wildflower Fields', 'Mystic Lake', 'Monsoo
                'Toy Block Tower', 'The Big Board', 'Doodle Woods', 'Domino Row',
                'Crescent Moon Village', 'Arabian Night', 'Fiery Cavern', 'Hotel Horror']
 
-class TestHelpers(WL4TestBase):
-
+class TestHelpers(TestBase):
     def test_item_filter(self):
         """Ensure item filters and item names match."""
         with self.subTest('Jewel Pieces'):
@@ -44,3 +45,29 @@ class TestHelpers(WL4TestBase):
         with self.subTest('Golden Passage'):
             checks = get_level_locations(Passage.GOLDEN, 0)
             assert all(map(lambda l: l.startswith('Golden Passage'), checks))
+
+
+class TestLocationExistence(TestBase):
+    def _test_locations_match(self, difficulty):
+        locations_from_table = {
+            name
+            for name, data in location_table.items()
+            if difficulty in data.difficulties and data.source != LocationType.CHEST
+        }
+        locations_from_tree = {
+            f'{level_name} - {location.name}'
+            for level_name, level in level_table.items()
+            for region in level.regions
+            for location in region.locations
+            if difficulty in location.difficulties and not location.event
+        }
+        self.assertEquals(locations_from_table, locations_from_tree)
+
+    def test_normal_locations_match(self):
+        self._test_locations_match(Difficulty.option_normal)
+
+    def test_hard_locations_match(self):
+        self._test_locations_match(Difficulty.option_hard)
+
+    def test_s_hard_locations_match(self):
+        self._test_locations_match(Difficulty.option_s_hard)

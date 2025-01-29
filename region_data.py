@@ -257,7 +257,7 @@ level_table = {
                         difficulties=[hard, s_hard]
                     ),
                     LocationData("CD Box"),
-                    LocationData("Full Health Item Box"),
+                    LocationData("Full Health Item Box", difficulties=[normal]),
                     LocationData("Keyzer", event=True),
                     LocationData("Frog Switch", event=True),
                 ]
@@ -365,7 +365,7 @@ level_table = {
                     LocationData("Fire Box", difficulties=[normal]),
                     LocationData("Hidden Falling Block Door Box", difficulties=[hard]),
                     LocationData("Bonfire Block Box", difficulties=[s_hard]),
-                    LocationData("Red Pipe Box", difficulties=[normal, hard]),
+                    LocationData("Red Pipe Box", difficulties=[normal]),
                     LocationData("Escape Ledge Box", difficulties=[hard, s_hard]),
                     LocationData("CD Box"),
                     LocationData("Full Health Item Box", access_rule=has('Dash Attack'), difficulties=[normal, hard]),
