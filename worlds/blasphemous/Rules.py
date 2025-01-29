@@ -703,7 +703,7 @@ class BlasRules:
 
     # Health boosts
     def flasks(self, state: CollectionState) -> int:
-        doors = {
+        doors = (
             "D01Z05S05[SW]",
             "D02Z02S04[W]",
             "D03Z02S08[W]",
@@ -711,10 +711,11 @@ class BlasRules:
             "D04Z02S13[W]",
             "D05Z01S08[NW]",
             "D20Z01S07[NE]"
-        }
-
-        return state.count("Empty Bile Vessel", self.player) \
-            if sum(state.can_reach_region(door, self.player) for door in doors) >= 1 else 0
+        )
+        for door in doors:
+            if state.can_reach_region(door, self.player):
+                return state.count("Empty Bile Vessel", self.player)
+        return 0
     
     def quicksilver(self, state: CollectionState) -> int:
         return state.count("Quicksilver", self.player) if state.can_reach_region("D01Z05S01[W]", self.player) else 0
