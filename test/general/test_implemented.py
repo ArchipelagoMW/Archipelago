@@ -134,11 +134,9 @@ class TestImplemented(unittest.TestCase):
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type, gen_steps)
-                previous_completion_condition = multiworld.completion_condition.copy()
                 for step in additional_steps:
                     with self.subTest("step", step=step):
+                        previous_completion_condition = multiworld.completion_condition.copy()
                         call_all(multiworld, step)
-                        current_completion_condition = multiworld.completion_condition.copy()
-                        self.assertEqual(previous_completion_condition, current_completion_condition,
+                        self.assertEqual(previous_completion_condition, multiworld.completion_condition,
                                          f"{game_name} modified completion condition during {step}")
-                    previous_completion_condition = current_completion_condition
