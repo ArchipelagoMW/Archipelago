@@ -283,7 +283,7 @@ class Context:
         # Archipelago is always required because its items and locations are added to each data package.
         games = games | {"Archipelago"}
         self.logger.info(f"Loading local game data for worlds {sorted(games)}")
-        worlds.ensure_all_worlds_loaded(games)
+        worlds.ensure_worlds_loaded(games)
         self.gamespackage = worlds.network_data_package["games"]
 
         self.item_name_groups = {world_name: world.item_name_groups for world_name, world in

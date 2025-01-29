@@ -3,7 +3,7 @@ import unittest
 from Fill import distribute_items_restrictive
 from NetUtils import encode
 from worlds.AutoWorld import AutoWorldRegister, call_all
-from worlds import failed_world_loads, ensure_all_worlds_loaded
+from worlds import failed_world_loads, ensure_worlds_loaded
 from . import setup_solo_multiworld
 
 
@@ -12,7 +12,7 @@ class TestImplemented(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        ensure_all_worlds_loaded()
+        ensure_worlds_loaded()
 
     def test_completion_condition(self):
         """Ensure a completion condition is set that has requirements."""

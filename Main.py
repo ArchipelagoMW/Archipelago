@@ -31,7 +31,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         output_path.cached_path = args.outputpath
 
     games = set(args.game.values())
-    worlds.ensure_all_worlds_loaded(games)
+    worlds.ensure_worlds_loaded(games)
     # Prevent additional world loading as a safeguard.
     # Additional worlds must not be loaded after a CollectionState has been created because worlds may add init_mixins
     # and copy_mixins to the CollectionState class.

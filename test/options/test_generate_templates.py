@@ -17,7 +17,7 @@ class TestGenerateYamlTemplates(unittest.TestCase):
 
         # Need to ensure worlds are loaded beforehand because generate_yaml_templates() will also ensure all worlds are
         # loaded.
-        worlds.ensure_all_worlds_loaded()
+        worlds.ensure_worlds_loaded()
         self.old_world_types = worlds.AutoWorld.AutoWorldRegister.world_types
 
     def tearDown(self) -> None:

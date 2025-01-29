@@ -468,8 +468,8 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
             raise Exception('"game" not specified')
         raise Exception(f"Invalid game: {ret.game}")
     if ret.game not in AutoWorldRegister.world_types:
-        from worlds import ensure_all_worlds_loaded
-        ensure_all_worlds_loaded(ret.game)
+        from worlds import ensure_worlds_loaded
+        ensure_worlds_loaded(ret.game)
     if ret.game not in AutoWorldRegister.world_types:
         from worlds import failed_world_loads, world_sources_by_game
         loaded_games = list(AutoWorldRegister.world_types)

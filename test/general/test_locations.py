@@ -1,7 +1,7 @@
 import unittest
 from collections import Counter
 from worlds.AutoWorld import AutoWorldRegister, call_all
-from worlds import ensure_all_worlds_loaded
+from worlds import ensure_worlds_loaded
 from . import setup_solo_multiworld
 
 
@@ -10,7 +10,7 @@ class TestBase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        ensure_all_worlds_loaded()
+        ensure_worlds_loaded()
 
     def test_create_duplicate_locations(self):
         """Tests that no two Locations share a name or ID."""

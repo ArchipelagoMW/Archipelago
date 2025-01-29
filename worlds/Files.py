@@ -56,9 +56,9 @@ class AutoPatchRegister(abc.ABCMeta):
                 game = None
 
             if game:
-                worlds.ensure_all_worlds_loaded(game)
+                worlds.ensure_worlds_loaded(game)
             else:
-                worlds.ensure_all_worlds_loaded()
+                worlds.ensure_worlds_loaded()
 
             # Try again
             for file_ending, handler in AutoPatchRegister.file_endings.items():
@@ -87,7 +87,7 @@ class AutoPatchExtensionRegister(abc.ABCMeta):
         if not game:
             return APPatchExtension
         import worlds
-        worlds.ensure_all_worlds_loaded(game)
+        worlds.ensure_worlds_loaded(game)
         handler = AutoPatchExtensionRegister.extension_types.get(game, APPatchExtension)
         if handler.required_extensions:
             handlers = [handler]

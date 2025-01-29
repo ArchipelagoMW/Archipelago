@@ -36,7 +36,7 @@ __all__ = {
     "GamesPackage",
     "DataPackage",
     "failed_world_loads",
-    "ensure_all_worlds_loaded",
+    "ensure_worlds_loaded",
 }
 
 
@@ -68,7 +68,7 @@ network_data_package: DataPackage = {
 """
 Modified by AutoWorldRegister as new worlds are registered.
 
-Call `ensure_all_worlds_loaded()` before accessing if a datapackage containing all games is required.
+Call `ensure_worlds_loaded()` before accessing if a datapackage containing all games is required.
 """
 
 
@@ -292,7 +292,7 @@ class WorldFinder(importlib.abc.MetaPathFinder):
 sys.meta_path.insert(0, WorldFinder())
 
 
-def ensure_all_worlds_loaded(games: set[str] | str | None = None):
+def ensure_worlds_loaded(games: set[str] | str | None = None):
     if isinstance(games, str):
         games = {games}
 

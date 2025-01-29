@@ -398,8 +398,8 @@ if __name__ == '__main__':
     run_group.add_argument("args", nargs="*",
                            help="Arguments to pass to component.")
 
-    from worlds import ensure_all_worlds_loaded
-    ensure_all_worlds_loaded()
+    from worlds import ensure_worlds_loaded
+    ensure_worlds_loaded()
 
     main(parser.parse_args())
 

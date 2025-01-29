@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from worlds.AutoWorld import AutoWorldRegister
-from worlds import ensure_all_worlds_loaded
+from worlds import ensure_worlds_loaded
 
 
 class TestNameGroups(TestCase):
@@ -9,7 +9,7 @@ class TestNameGroups(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        ensure_all_worlds_loaded()
+        ensure_worlds_loaded()
 
     def test_item_name_groups_not_empty(self) -> None:
         """

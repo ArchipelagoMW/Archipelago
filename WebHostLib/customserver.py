@@ -177,7 +177,7 @@ def get_random_port():
 @cache_argsless
 def get_static_server_data() -> dict:
     import worlds
-    worlds.ensure_all_worlds_loaded()
+    worlds.ensure_worlds_loaded()
     data = {
         "non_hintable_names": {
             world_name: world.hint_blacklist

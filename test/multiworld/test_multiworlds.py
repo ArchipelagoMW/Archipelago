@@ -6,7 +6,7 @@ from BaseClasses import CollectionState, Location, MultiWorld
 from Fill import distribute_items_restrictive
 from Options import Accessibility
 from worlds.AutoWorld import AutoWorldRegister, call_all, call_single
-from worlds import ensure_all_worlds_loaded
+from worlds import ensure_worlds_loaded
 from ..general import gen_steps, setup_multiworld
 
 
@@ -15,7 +15,7 @@ class MultiworldTestBase(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        ensure_all_worlds_loaded()
+        ensure_worlds_loaded()
 
     multiworld: MultiWorld
 
