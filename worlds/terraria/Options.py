@@ -6,14 +6,12 @@ class Calamity(Toggle):
     """Calamity mod bosses and events are shuffled"""
 
     display_name = "Calamity Mod Integration"
-    default = False
 
 
 class Getfixedboi(Toggle):
     """Generation accomodates the secret, very difficult "getfixedboi" seed"""
 
     display_name = """"getfixedboi" seed"""
-    default = False
 
 
 class Goal(Choice):
