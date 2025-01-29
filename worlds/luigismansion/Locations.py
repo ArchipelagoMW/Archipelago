@@ -809,10 +809,10 @@ GOLD_MICE_LOCATION_TABLE: dict[str, LMLocationData] = {
 
 # Boo Locations
 BOO_LOCATION_TABLE: dict[str, LMLocationData] = {
-    "Parlor Boo": LMLocationData("Parlor", 669, "Boo", 19, [], 26, room_ram_addr=0x803D5E06, locationbit=3),
+    "Parlor Boo": LMLocationData("Parlor", 669, "Boo", 19, [], 36, room_ram_addr=0x803D5E06, locationbit=3),
     "Anteroom Boo": LMLocationData("Anteroom", 670, "Boo", 21, [], 42, room_ram_addr=0x803D5E06, locationbit=5),
     "Wardrobe Boo": LMLocationData("Wardrobe", 671, "Boo", 20, [], 41, room_ram_addr=0x803D5E06, locationbit=4),
-    "Study Boo": LMLocationData("Study", 672, "Boo", 18, [], 25, room_ram_addr=0x803D5E06, locationbit=2),
+    "Study Boo": LMLocationData("Study", 672, "Boo", 18, [], 35, room_ram_addr=0x803D5E06, locationbit=2),
     "Master Bedroom Boo": LMLocationData("Master Bedroom", 673, "Boo", 17, [], 34, room_ram_addr=0x803D5E06, locationbit=1),
     "Nursery Boo": LMLocationData("Nursery", 674, "Boo", 13, [], 26, room_ram_addr=0x803D5E05, locationbit=5),
     "Twins' Room Boo": LMLocationData("Twins' Room", 675, "Boo", 14, [], 27, room_ram_addr=0x803D5E05, locationbit=6),
