@@ -10,12 +10,12 @@ from typing import Any, Optional
 import dolphin_memory_engine as dme
 
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
-from NetUtils import ClientStatus, NetworkItem, color
+from NetUtils import ClientStatus, color
 from settings import get_settings, Settings
 from worlds.luigismansion import BOO_LOCATION_TABLE
 
 from .LMGenerator import LuigisMansionRandomizer
-from .Items import ALL_ITEMS_TABLE, LMItem
+from .Items import ALL_ITEMS_TABLE
 from .Locations import ALL_LOCATION_TABLE, LMLocation
 
 CONNECTION_REFUSED_GAME_STATUS = (
@@ -88,7 +88,7 @@ RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000,50000000, 60000000, 70000000, 10
 # List of received items to ignore because they are handled elsewhere
 # TODO Remove hearts from here when fixed.
 RECV_ITEMS_IGNORE = [8063, 8064, 8128, 8129]
-RECV_OWN_GAME_LOCATIONS = BOO_LOCATION_TABLE
+RECV_OWN_GAME_LOCATIONS: list[int] = [LMLocation.get_apid(location[1].code) for location in BOO_LOCATION_TABLE.items()]
 
 
 def read_short(console_address: int):
@@ -214,35 +214,34 @@ async def give_items(ctx: LMContext):
         return
 
     last_recv_idx = read_short(LAST_RECV_ITEM_ADDR)
-    if len(ctx.items_received) <= last_recv_idx:
+    if (len(ctx.items_received) - 1) <= last_recv_idx:
         return
 
     # Filter for only items where we have not received yet. If same slot, only receive the locations from the
     # pre-approved own locations (as everything is currently a NetworkItem), otherwise accept other slots.
-    list_recv_items = [netItem for netItem in ctx.items_received if ctx.items_received.index(netItem)> last_recv_idx
-        and ((netItem.player == ctx.slot and LMLocation.get_apid(netItem.location) in RECV_OWN_GAME_LOCATIONS) or
-             not netItem.player == ctx.slot) and netItem.item in RECV_ITEMS_IGNORE]
+    list_recv_items = [netItem for netItem in ctx.items_received if ctx.items_received.index(netItem) > last_recv_idx]
 
     if len(list_recv_items) == 0:
         write_short(LAST_RECV_ITEM_ADDR, (len(ctx.items_received) - 1))
         return
 
     for item in list_recv_items:
-        # If boo radar or super vacuum, ignore these as they are handled in patching.
-        if item.item is None or item.item in RECV_ITEMS_IGNORE:
+        # If item is handled as start inventory and created in patching, ignore them.
+        # If item is something we got from ourselves, but not something we need to give ourselves, ignore it
+        if (item.item is None or item.item in RECV_ITEMS_IGNORE or
+                (item.player == ctx.slot and not item.location in RECV_OWN_GAME_LOCATIONS)):
             write_short(LAST_RECV_ITEM_ADDR, ctx.items_received.index(item))
             continue
 
+        lm_item_name = ctx.item_names.lookup_in_game(item.item)
+
         # Get the current LM Item so we can get the various named tuple fields easier.
-        lm_item = ALL_ITEMS_TABLE[next(key for key in ALL_ITEMS_TABLE.keys() if
-                          LMItem.get_apid(ALL_ITEMS_TABLE[key].code) == item.item)]
+        lm_item = ALL_ITEMS_TABLE[lm_item_name]
         if not lm_item.ram_addr is None and (not lm_item.itembit is None or not lm_item.pointer_offset is None):
-            lm_item_name = ctx.item_names.lookup_in_game(item.item)
-            logger.info('Received %s from %s (%s) (%d/%d in list)' % (
+            logger.info('Received %s from %s (%s)' % (
                 color(lm_item_name, 'red', 'bold'),
                 color(ctx.player_names[item.player], 'yellow'),
-                ctx.location_names.lookup_in_slot(item.location, item.player),
-                (ctx.items_received.index(item)+1), len(ctx.items_received)))
+                ctx.location_names.lookup_in_slot(item.location, item.player)))
             if not lm_item.pointer_offset is None:
                 # Assume we need to update an existing value of size X with Y value at the pointer's address
                 curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
@@ -326,7 +325,7 @@ async def check_locations(ctx: LMContext):
                     current_boo_state_int = dme.read_byte(data.room_ram_addr)
                     if (current_boo_state_int & (1 << data.locationbit)) > 0:
                         ctx.locations_checked.add(LMLocation.get_apid(data.code))
-                        dme.write_byte(current_boo_state_int, 0)
+                        dme.write_byte(current_boo_state_int, (current_boo_state_int & ~(1 << data.locationbit)))
 
     await ctx.check_locations(ctx.locations_checked)
 
