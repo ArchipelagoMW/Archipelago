@@ -393,6 +393,10 @@ async def check_locations(ctx: LMContext):
                     if (current_boo_state_int & (1 << data.locationbit)) > 0:
                         ctx.locations_checked.add(LMLocation.get_apid(data.code))
                         dme.write_byte(current_boo_state_int, (current_boo_state_int & ~(1 << data.locationbit)))
+                case "Toad":
+                    current_toad_int = dme.read_byte(data.room_ram_addr)
+                    if (current_toad_int & (1 << data.locationbit)) > 0:
+                        ctx.locations_checked.add(LMLocation.get_apid(data.code))
 
     await ctx.check_locations(ctx.locations_checked)
 
