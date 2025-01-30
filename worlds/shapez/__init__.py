@@ -268,7 +268,8 @@ class ShapezWorld(World):
 
     def add_alias(self, location_name: str, alias: str):
         """This method is given as a parameter when locations with helpful aliases for UT are created."""
-        self.location_id_to_alias[self.location_name_to_id[location_name]] = alias
+        if self.ut_active:
+            self.location_id_to_alias[self.location_name_to_id[location_name]] = alias
 
     def create_regions(self) -> None:
         # Create list of all included level and upgrade locations based on player options
