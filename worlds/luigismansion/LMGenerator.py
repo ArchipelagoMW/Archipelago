@@ -253,7 +253,7 @@ class LuigisMansionRandomizer:
 
         toad_hint_events = ["04", "17", "32", "63"]
         for event_no in toad_hint_events:
-            hintfo: dict[str, str] = dict()
+            hintfo: str = ""
             match event_no:
                 case "04":
                     hintfo = self.output_data["Hints"]["Courtyard Toad"]
@@ -263,22 +263,8 @@ class LuigisMansionRandomizer:
                     hintfo = self.output_data["Hints"]["Wardrobe Balcony Toad"]
                 case "63":
                     hintfo = self.output_data["Hints"]["1F Washroom Toad"]
-            hint_item = hintfo["Item"]
-            hint_loc = hintfo["Location"]
-            hint_player = hintfo["Player"]
-            hint_game = hintfo["Game"]
             lines = get_data(__name__, "data/custom_events/event" + event_no + ".txt").decode('utf-8')
-            if self.output_data["Options"]["hint_distribution"] == 4:
-                hint_text = f"<SAY>{hint_player}'s \\ {hint_item} \\ is somewhere in \\ {hint_game}"
-            elif self.output_data["Options"]["hint_distribution"] == 1:
-                jokes = get_data(__name__, "data/jokes.txt").decode('utf-8')
-                joke = ""
-                hint_text = f"<SAY>{joke}" # TODO pull junk hint into here
-            elif self.output_data["Options"]["hint_distribution"] == 5:
-                hint_text = "<SAY>Saving your game now"
-            else:
-                hint_text = f"<SAY>{hint_player}'s \\ {hint_item} \\ can be found at \\ {hint_loc}"
-            lines = lines.replace("{HintText}", str(hint_text))
+            lines = lines.replace("{HintText}", str(hintfo))
             self.update_custom_event(event_no, False, lines)
 
         lines = get_data(__name__, "data/custom_events/event36.txt").decode('utf-8')
