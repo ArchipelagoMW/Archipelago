@@ -305,26 +305,26 @@ class BlasRules:
             "canEnemyUpslash": self.can_enemy_upslash,
 
             # Reaching rooms
-            "guiltRooms1": lambda state: self.guilt_rooms(state) >= 1,
-            "guiltRooms2": lambda state: self.guilt_rooms(state) >= 2,
-            "guiltRooms3": lambda state: self.guilt_rooms(state) >= 3,
-            "guiltRooms4": lambda state: self.guilt_rooms(state) >= 4,
-            "guiltRooms5": lambda state: self.guilt_rooms(state) >= 5,
-            "guiltRooms6": lambda state: self.guilt_rooms(state) >= 6,
-            "guiltRooms7": lambda state: self.guilt_rooms(state) >= 7,
+            "guiltRooms1": lambda state: self.guilt_rooms(state, 1),
+            "guiltRooms2": lambda state: self.guilt_rooms(state, 2),
+            "guiltRooms3": lambda state: self.guilt_rooms(state, 3),
+            "guiltRooms4": lambda state: self.guilt_rooms(state, 4),
+            "guiltRooms5": lambda state: self.guilt_rooms(state, 5),
+            "guiltRooms6": lambda state: self.guilt_rooms(state, 6),
+            "guiltRooms7": lambda state: self.guilt_rooms(state, 7),
 
-            "swordRooms1": lambda state: self.sword_rooms(state) >= 1,
-            "swordRooms2": lambda state: self.sword_rooms(state) >= 2,
-            "swordRooms3": lambda state: self.sword_rooms(state) >= 3,
-            "swordRooms4": lambda state: self.sword_rooms(state) >= 4,
-            "swordRooms5": lambda state: self.sword_rooms(state) >= 5,
-            "swordRooms6": lambda state: self.sword_rooms(state) >= 6,
-            "swordRooms7": lambda state: self.sword_rooms(state) >= 7,
+            "swordRooms1": lambda state: self.sword_rooms(state, 1),
+            "swordRooms2": lambda state: self.sword_rooms(state, 2),
+            "swordRooms3": lambda state: self.sword_rooms(state, 3),
+            "swordRooms4": lambda state: self.sword_rooms(state, 4),
+            "swordRooms5": lambda state: self.sword_rooms(state, 5),
+            "swordRooms6": lambda state: self.sword_rooms(state, 6),
+            "swordRooms7": lambda state: self.sword_rooms(state, 7),
 
-            "redentoRooms2": lambda state: self.redento_rooms(state) >= 2,
-            "redentoRooms3": lambda state: self.redento_rooms(state) >= 3,
-            "redentoRooms4": lambda state: self.redento_rooms(state) >= 4,
-            "redentoRooms5": lambda state: self.redento_rooms(state) >= 5,
+            "redentoRooms2": lambda state: self.redento_rooms(state, 2),
+            "redentoRooms3": lambda state: self.redento_rooms(state, 3),
+            "redentoRooms4": lambda state: self.redento_rooms(state, 4),
+            "redentoRooms5": lambda state: self.redento_rooms(state, 5),
 
             "miriamRooms5": lambda state: self.miriam_rooms(state) >= 5,
 
@@ -1331,7 +1331,7 @@ class BlasRules:
 
         return player_strength >= self.boss_strengths[boss]
 
-    def guilt_rooms(self, state: CollectionState) -> int:
+    def guilt_rooms(self, state: CollectionState, count: int) -> bool:
         doors = (
             "D01Z04S01[NE]",
             "D02Z02S11[W]",
@@ -1344,11 +1344,12 @@ class BlasRules:
 
         total: int = 0
         for door in doors:
-            if state.can_reach_region(door, self.player):
-                total += 1
-        return total
+            total += state.can_reach_region(door, self.player)
+            if total >= count:
+                return True
+        return False
     
-    def sword_rooms(self, state: CollectionState) -> int:
+    def sword_rooms(self, state: CollectionState, count: int) -> bool:
         doors = (
             ("D01Z02S07[E]", "D01Z02S02[SW]"),
             ("D20Z01S04[E]", "D01Z05S23[W]"),
@@ -1365,27 +1366,37 @@ class BlasRules:
                 if state.can_reach_region(door, self.player):
                     total += 1
                     break
+            if total >= count:
+                return True
 
-        return total
+        return False
 
-    def redento_rooms(self, state: CollectionState) -> int:
+    def redento_rooms(self, state: CollectionState, count: int) -> bool:
         if (
             state.can_reach_region("D03Z01S04[E]", self.player)
             or state.can_reach_region("D03Z02S10[N]", self.player)
         ):
+            if 1 >= count:
+                return True
             if (
                 state.can_reach_region("D17Z01S05[S]", self.player)
                 or state.can_reach_region("D17BZ02S01[FrontR]", self.player)
             ):
+                if 2 >= count:
+                    return True
                 if (
                     state.can_reach_region("D01Z03S04[E]", self.player)
                     or state.can_reach_region("D08Z01S01[W]", self.player)
                 ):
+                    if 3 >= count:
+                        return True
                     if (
                         state.can_reach_region("D04Z01S03[E]", self.player)
                         or state.can_reach_region("D04Z02S01[W]", self.player)
                         or state.can_reach_region("D06Z01S18[-Cherubs]", self.player)
                     ):
+                        if 4 >= count:
+                            return True
                         if (
                             self.knots(state) >= 1
                             and self.limestones(state) >= 3
@@ -1394,12 +1405,9 @@ class BlasRules:
                                 or state.can_reach_region("D04BZ02S01[Redento]", self.player)
                             )
                         ):
-                            return 5
-                        return 4
-                    return 3
-                return 2
-            return 1
-        return 0
+                            if 5 >= count:
+                                return True
+        return False
     
     def miriam_rooms(self, state: CollectionState) -> int:
         doors = (
