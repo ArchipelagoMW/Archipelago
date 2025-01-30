@@ -270,14 +270,15 @@ class Group:
             # fetch class to avoid going through getattr
             cls = self.__class__
             type_hints = cls.get_type_hints()
-            if not type_hints:
-                # write empty dict for empty Group
+            entries = [e for e in self]
+            if not type_hints and not entries:
+                # write empty dict for empty Group with no instance values
                 cls._dump_value(type_hints, f, indent="  " * level)
             # validate group
             for name in cls.__annotations__.keys():
                 assert hasattr(cls, name), f"{cls}.{name} is missing a default value"
             # dump ordered members
-            for name in self:
+            for name in entries:
                 attr = cast(object, getattr(self, name))
                 attr_cls = type_hints[name] if name in type_hints else attr.__class__
                 attr_cls_origin = typing.get_origin(attr_cls)
