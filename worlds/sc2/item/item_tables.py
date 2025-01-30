@@ -1845,7 +1845,7 @@ item_table = {
     item_names.CORSAIR_SUSTAINING_DISRUPTION: ItemData(323 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 23, SC2Race.PROTOSS, parent=item_names.CORSAIR),
     item_names.CORSAIR_NEUTRON_SHIELDS: ItemData(324 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 24, SC2Race.PROTOSS, classification=ItemClassification.filler, parent=item_names.CORSAIR),
     item_names.ORACLE_STEALTH_DRIVE: ItemData(325 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 25, SC2Race.PROTOSS, parent=item_names.ORACLE),
-    item_names.ORACLE_STASIS_EXPANSION: ItemData(326 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 26, SC2Race.PROTOSS, parent=item_names.ORACLE),
+    item_names.ORACLE_STASIS_EXPANSION: ItemData(544 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 26, SC2Race.PROTOSS, parent=item_names.ORACLE),
     item_names.ORACLE_TEMPORAL_ACCELERATION_BEAM: ItemData(327 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 27, SC2Race.PROTOSS, parent=item_names.ORACLE),
     item_names.ARBITER_CHRONOSTATIC_REINFORCEMENT: ItemData(328 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 28, SC2Race.PROTOSS, parent=item_names.ARBITER),
     item_names.ARBITER_KHAYDARIN_CORE: ItemData(329 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 29, SC2Race.PROTOSS, parent=item_names.ARBITER),
@@ -1980,7 +1980,7 @@ item_table = {
     item_names.TEMPEST_DISINTEGRATION: ItemData(541 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 11, SC2Race.PROTOSS, parent=item_names.TEMPEST),
     item_names.SCOUT_EXPEDITIONARY_HULL: ItemData(542 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 12, SC2Race.PROTOSS, parent=item_names.SCOUT),
     item_names.ARBITER_ABILITY_EFFICIENCY: ItemData(543 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 13, SC2Race.PROTOSS, parent=item_names.ARBITER),
-    item_names.ORACLE_STASIS_CALIBRATION: ItemData(544 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 14, SC2Race.PROTOSS, parent=item_names.ORACLE),
+    item_names.ORACLE_STASIS_CALIBRATION: ItemData(326 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 14, SC2Race.PROTOSS, parent=item_names.ORACLE),
     item_names.MOTHERSHIP_INTEGRATED_POWER: ItemData(545 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 15, SC2Race.PROTOSS, parent=item_names.MOTHERSHIP),
     # 546-549 reserved for Mothership
     item_names.OPPRESSOR_VULCAN_BLASTER: ItemData(550 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 20, SC2Race.PROTOSS, parent=item_names.OPPRESSOR),
