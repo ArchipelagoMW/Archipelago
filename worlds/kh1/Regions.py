@@ -368,6 +368,7 @@ def create_regions(kh1world):
     regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 99 Puppies Reward 1")
     regions["Traverse Town"].locations.append("Traverse Town Piano Room Return 99 Puppies Reward 2")
     regions["Traverse Town"].locations.append("Traverse Town Red Room Chest")
+    regions["Traverse Town"].locations.append("Traverse Town Secret Waterway Navi Gummi Event")
     regions["Traverse Town"].locations.append("Traverse Town Secret Waterway Near Stairs Chest")
     regions["Traverse Town"].locations.append("Traverse Town Secret Waterway White Trinity Chest")
     regions["Traverse Town"].locations.append("Traverse Town Synth 15 Items")

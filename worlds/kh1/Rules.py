@@ -749,6 +749,12 @@ def set_rules(kh1world):
             and state.has("Hollow Bastion", player)
             and has_x_worlds(state, player, 5, options.keyblades_unlock_chests)
         ))
+    add_rule(kh1world.get_location("Traverse Town Secret Waterway Navi Gummi Event"),
+        lambda state: (
+            has_emblems(state, player, options.keyblades_unlock_chests)
+            and state.has("Hollow Bastion", player)
+            and has_x_worlds(state, player, 5, options.keyblades_unlock_chests)
+        ))
     add_rule(kh1world.get_location("Deep Jungle Defeat Sabor White Fang Event"),
         lambda state: state.has("Slides", player))
     add_rule(kh1world.get_location("Deep Jungle Defeat Clayton Cure Event"),

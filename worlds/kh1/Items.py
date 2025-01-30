@@ -118,7 +118,7 @@ item_table: Dict[str, KH1ItemData] = {
     #"Dream Sword":                      KH1ItemData("Keyblades",        code = 264_1082, classification = ItemClassification.useful,      type = "Item",                            ),
     #"Dream Shield":                     KH1ItemData("Keyblades",        code = 264_1083, classification = ItemClassification.useful,      type = "Item",                            ),
     #"Dream Rod":                        KH1ItemData("Keyblades",        code = 264_1084, classification = ItemClassification.useful,      type = "Item",                            ),
-    "Wooden Sword":                      KH1ItemData("Keyblades",        code = 264_1085, classification = ItemClassification.useful,      type = "Item",                            ),
+    #"Wooden Sword":                     KH1ItemData("Keyblades",        code = 264_1085, classification = ItemClassification.useful,      type = "Item",                            ),
     "Jungle King":                       KH1ItemData("Keyblades",        code = 264_1086, classification = ItemClassification.progression, type = "Item",                            ),
     "Three Wishes":                      KH1ItemData("Keyblades",        code = 264_1087, classification = ItemClassification.progression, type = "Item",                            ),
     "Fairy Harp":                        KH1ItemData("Keyblades",        code = 264_1088, classification = ItemClassification.progression, type = "Item",                            ),
