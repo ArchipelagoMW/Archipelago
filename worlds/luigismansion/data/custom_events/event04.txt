@@ -2,6 +2,7 @@
 <BGM>(11)
 {WindowOpen}
 {HintText}
+<ANYKEY>
 {WindowClose}
 <SAVE>
 <BGMSTOP>
