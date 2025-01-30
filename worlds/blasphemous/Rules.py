@@ -706,7 +706,7 @@ class BlasRules:
         return state.has("Child of Moonlight", self.player, count)
     
     def bones(self, state: CollectionState, count: int) -> bool:
-        return state.has_group_unique("bones", self.player, count)
+        return state.has("bones", self.player, count)
     
     # def tears():
 
@@ -865,10 +865,10 @@ class BlasRules:
     
     # Main quest
     def holy_wounds(self, state: CollectionState, count: int) -> bool:
-        return state.has_group_unique("wounds", self.player, count)
+        return state.has("wounds", self.player, count)
     
     def masks(self, state: CollectionState, count: int) -> bool:
-        return state.has_group_unique("masks", self.player, count)
+        return state.has("masks", self.player, count)
     
     def guilt_bead(self, state: CollectionState) -> bool:
         return state.has("Weight of True Guilt", self.player)
@@ -885,11 +885,11 @@ class BlasRules:
     
     # Tirso quest
     def herbs(self, state: CollectionState, count: int) -> bool:
-        return state.has_group_unique("tirso", self.player, count)
+        return state.has("tirso", self.player, count)
     
     # Tentudia quest
     def tentudia_remains(self, state: CollectionState, count: int) -> bool:
-        return state.has_group_unique("tentudia", self.player, count)
+        return state.has("tentudia", self.player, count)
     
     # Gemino quest
     def empty_thimble(self, state: CollectionState) -> bool:
@@ -903,7 +903,7 @@ class BlasRules:
     
     # Altasgracias quest
     def ceremony_items(self, state: CollectionState, count: int) -> bool:
-        return state.has_group_unique("egg", self.player, count)
+        return state.has("egg", self.player, count)
     
     def egg(self, state: CollectionState) -> bool:
         return state.has("Egg of Deformity", self.player)
@@ -918,7 +918,7 @@ class BlasRules:
     
     # Cleofas quest
     def marks_of_refuge(self, state: CollectionState, count: int) -> bool:
-        return state.has_group_unique("marks", self.player, count)
+        return state.has("marks", self.player, count)
     
     def cord(self, state: CollectionState) -> bool:
         return state.has("Cord of the True Burying", self.player)
@@ -931,7 +931,7 @@ class BlasRules:
         return state.has("Apodictic Heart of Mea Culpa", self.player)
     
     def traitor_eyes(self, state: CollectionState, count: int) -> bool:
-        return state.has_group_unique("eye", self.player, count)
+        return state.has("eye", self.player, count)
     
     # Jibrael quest
     def bell(self, state: CollectionState) -> bool:
