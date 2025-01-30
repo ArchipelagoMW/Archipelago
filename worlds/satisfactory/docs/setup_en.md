@@ -170,6 +170,13 @@ You may wish to use the Text Client to run commands since Satisfactory's in game
 > Use this link instead:
 > <https://archipelago.gg/tutorial/Archipelago/commands/en>
 
+Check out the HUB to get started!
+
+> ⚠ IMPORTANT: Check your HUB immediately upon joining to ensure your save file has been set up correctly!
+> Make sure that you see multiple HUB milestones from Archipelago in Tier 1 and Tier 2.
+> If you don't, create a new Satisfactory save file with the same connection settings and it should resolve itself.
+> See more information about this bug on the [GitHub issue tracker](https://github.com/Jarno458/SatisfactoryArchipelagoMod/issues/120).
+
 <!-- ## Other Settings
 
 TODO implement filter_item_sends and bridge_chat_out mentioned in the Factorio guide? -->
