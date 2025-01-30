@@ -533,9 +533,9 @@ In JSON this may look like:
     {"item": 3, "location": 3, "player": 3, "flags": 0}
 ]
 ```
-`item` is the item id of the item. Item ids are only supported in the range of [-2<sup>53</sup>, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
+`item` is the item id of the item. Item ids are only supported in the range of [-2<sup>53</sup> + 1, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
 
-`location` is the location id of the item inside the world. Location ids are only supported in the range of [-2<sup>53</sup>, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
+`location` is the location id of the item inside the world. Location ids are only supported in the range of [-2<sup>53</sup> + 1, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
 
 `player` is the player slot of the world the item is located in, except when inside an [LocationInfo](#LocationInfo) Packet then it will be the slot of the player to receive the item
 
