@@ -148,7 +148,7 @@ class LMContext(CommonContext):
         self.dolphin_sync_task: Optional[asyncio.Task[None]] = None
         self.dolphin_status = CONNECTION_INITIAL_STATUS
         self.awaiting_rom = False
-        self.has_send_death = False
+        self.is_luigi_dead = False
 
         # Used for handling received items to the client.
         self.goal_type = None
@@ -203,7 +203,9 @@ class LMContext(CommonContext):
         :param data: The data associated with the DeathLink event.
         """
         super().on_deathlink(data)
-        _give_death(self)
+        self.is_luigi_dead = True
+        set_luigi_dead()
+        return
 
     def run_gui(self):
         from kvui import GameManager
@@ -216,16 +218,27 @@ class LMContext(CommonContext):
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
 
-def _give_death(ctx: LMContext):
-    if ctx.slot and dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS and check_ingame():
-        ctx.has_send_death = True
-        write_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]), 0)
+def check_alive():
+    lm_curr_health = read_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]))
+    return lm_curr_health > 0
+
+async def check_death(ctx: LMContext):
+    if check_ingame() and not check_alive():
+        # TODO Determine game over screen reached to ensure Deathlink was already sent.
+        if not ctx.is_luigi_dead and time.time() >= ctx.last_death_link + 3:
+            ctx.is_luigi_dead = True
+            set_luigi_dead()
+            await ctx.send_death(ctx.player_names[ctx.slot] + " scared themselves to death.")
+    else:
+        ctx.is_luigi_dead = False
     return
 
+def set_luigi_dead():
+    write_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]), 0)
+    return
 
 def get_map_id():
     return dme.read_word(CURR_MAP_ID_ADDR)
-
 
 def check_if_addr_is_pointer(addr: int):
     return 2147483648 <= dme.read_word(addr) <= 2172649471
@@ -234,7 +247,7 @@ def check_if_addr_is_pointer(addr: int):
 # TODO Validate this works
 async def give_items(ctx: LMContext):
     # Only try to give items if we are in game and alive.
-    if not await check_ingame() and await check_alive():
+    if not (check_ingame() and check_alive()):
         return
 
     last_recv_idx = read_short(LAST_RECV_ITEM_ADDR)
@@ -255,7 +268,7 @@ async def give_items(ctx: LMContext):
     last_bill_list = [x[1] for x in filler_items.items() if "Bills" in x[0]]
     bills_rams_pointer = last_bill_list[len(last_bill_list) - 1].pointer_offset
     last_coin_list = [x[1] for x in filler_items.items() if "Coins" in x[0]]
-    coins_ram_pointer = last_bill_list[len(last_coin_list) - 1].pointer_offset
+    coins_ram_pointer = last_coin_list[len(last_coin_list) - 1].pointer_offset
 
     for item in list_recv_items:
         # If item is handled as start inventory and created in patching, ignore them.
@@ -265,20 +278,20 @@ async def give_items(ctx: LMContext):
             write_short(LAST_RECV_ITEM_ADDR, ctx.items_received.index(item))
             continue
 
-        lm_item_name = ctx.item_names.lookup_in_game(item.item)
+        # Add a received message in the client for the item that is about to be received.
+        parts = []
+        NetUtils.add_json_text(parts, "Received ")
+        NetUtils.add_json_item(parts, item.item, ctx.slot, item.flags)
+        NetUtils.add_json_text(parts, " from ")
+        NetUtils.add_json_location(parts, item.location, item.player)
+        NetUtils.add_json_text(parts, " by ")
+        NetUtils.add_json_text(parts, item.player, type=NetUtils.JSONTypes.player_id)
+        ctx.on_print_json({"data": parts, "cmd": "PrintJSON"})
 
         # Get the current LM Item so we can get the various named tuple fields easier.
+        lm_item_name = ctx.item_names.lookup_in_game(item.item)
         lm_item = ALL_ITEMS_TABLE[lm_item_name]
         if not lm_item.ram_addr is None and (not lm_item.itembit is None or not lm_item.pointer_offset is None):
-            # Add a received message in the client for the item that is about to be received.
-            parts = []
-            NetUtils.add_json_text(parts, "Received ")
-            NetUtils.add_json_item(parts, item.item, ctx.slot, item.flags)
-            NetUtils.add_json_text(parts, " from ")
-            NetUtils.add_json_location(parts, item.location, item.player)
-            NetUtils.add_json_text(parts, " by ")
-            NetUtils.add_json_text(parts, item.player, type=NetUtils.JSONTypes.player_id)
-            ctx.on_print_json({"data": parts, "cmd": "PrintJSON"})
 
             if not lm_item.pointer_offset is None:
                 # Assume we need to update an existing value of size X with Y value at the pointer's address
@@ -427,21 +440,7 @@ async def check_locations(ctx: LMContext):
     return
 
 
-async def check_alive():
-    lm_curr_health = read_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]))
-    return lm_curr_health > 0
-
-
-async def check_death(ctx: LMContext):
-    if await check_ingame():
-        if not await check_alive() and not ctx.has_send_death and time.time() >= ctx.last_death_link + 3:
-            ctx.has_send_death = True
-            await ctx.send_death(ctx.player_names[ctx.slot] + " scared themselves to death.")
-        else:
-            ctx.has_send_death = False
-
-
-async def check_ingame():
+def check_ingame():
     current_map_id = get_map_id()
     if current_map_id == 2:
         # If this is NOT a pointer, then either we are on another map (aka boss fight) or game is not fully loaded.
@@ -459,7 +458,7 @@ async def dolphin_sync_task(ctx: LMContext):
         try:
             # TODO Handle if Dolphin was closed pre-maturely. Something around here causes the error.
             if dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
-                if not await check_ingame():
+                if not check_ingame():
                     await asyncio.sleep(0.1)
                     continue
                 if ctx.slot:
