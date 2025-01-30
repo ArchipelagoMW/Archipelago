@@ -1252,18 +1252,18 @@ class BlasRules:
             and state.can_reach_region("D20Z02S07[W]", self.player)
         )
     
-    def can_beat_graveyard_boss(self, state: CollectionState) -> bool:
+    def can_beat_graveyard_boss(self, state: CollectionState, player_strength: float | None = None) -> bool:
         return (
-            self.has_boss_strength(state, "amanecida")
+            self.has_boss_strength(state, "amanecida", player_strength)
             and self.wall_climb(state)
             and state.can_reach_region("D01Z06S01[Santos]", self.player)
             and state.can_reach_region("D02Z03S18[NW]", self.player)
             and state.can_reach_region("D02Z02S03[NE]", self.player)
         )
     
-    def can_beat_jondo_boss(self, state: CollectionState) -> bool:
+    def can_beat_jondo_boss(self, state: CollectionState, player_strength: float | None = None) -> bool:
         return (
-            self.has_boss_strength(state, "amanecida")
+            self.has_boss_strength(state, "amanecida", player_strength)
             and state.can_reach_region("D01Z06S01[Santos]", self.player)
             and (
                 state.can_reach_region("D20Z01S06[NE]", self.player)
@@ -1275,9 +1275,9 @@ class BlasRules:
             )
         )
     
-    def can_beat_patio_boss(self, state: CollectionState) -> bool:
+    def can_beat_patio_boss(self, state: CollectionState, player_strength: float | None = None) -> bool:
         return (
-            self.has_boss_strength(state, "amanecida")
+            self.has_boss_strength(state, "amanecida", player_strength)
             and state.can_reach_region("D01Z06S01[Santos]", self.player)
             and state.can_reach_region("D06Z01S02[W]", self.player)
             and (
@@ -1287,9 +1287,9 @@ class BlasRules:
             )
         )
     
-    def can_beat_wall_boss(self, state: CollectionState) -> bool:
+    def can_beat_wall_boss(self, state: CollectionState, player_strength: float | None = None) -> bool:
         return (
-            self.has_boss_strength(state, "amanecida")
+            self.has_boss_strength(state, "amanecida", player_strength)
             and state.can_reach_region("D01Z06S01[Santos]", self.player)
             and state.can_reach_region("D09Z01S09[Cell24]", self.player)
             and (
@@ -1313,8 +1313,7 @@ class BlasRules:
     def can_beat_legionary(self, state: CollectionState) -> bool:
         return self.has_boss_strength(state, "legionary")
 
-
-    def has_boss_strength(self, state: CollectionState, boss: str) -> bool:
+    def get_player_strength(self, state: CollectionState) -> float:
         life: int = state.count("Life Upgrade", self.player)
         sword: int = state.count("Mea Culpa Upgrade", self.player)
         fervour: int = state.count("Fervour Upgrade", self.player)
@@ -1328,8 +1327,13 @@ class BlasRules:
             + min(8, flasks) * 0.15 / 8
             + min(5, quicksilver) * 0.15 / 5
         )
+        return player_strength
 
-        return player_strength >= self.boss_strengths[boss]
+    def has_boss_strength(self, state: CollectionState, boss: str, player_strength: float | None = None) -> bool:
+        if player_strength is None:
+            return self.get_player_strength(state) >= self.boss_strengths[boss]
+        else:
+            return player_strength >= self.boss_strengths[boss]
 
     def guilt_rooms(self, state: CollectionState, count: int) -> bool:
         doors = (
@@ -1424,14 +1428,15 @@ class BlasRules:
         return True
     
     def amanecida_rooms(self, state: CollectionState) -> int:
+        player_strength = self.get_player_strength(state)
         total: int = 0
-        if self.can_beat_graveyard_boss(state):
+        if self.can_beat_graveyard_boss(state, player_strength):
             total += 1
-        if self.can_beat_jondo_boss(state):
+        if self.can_beat_jondo_boss(state, player_strength):
             total += 1
-        if self.can_beat_patio_boss(state):
+        if self.can_beat_patio_boss(state, player_strength):
             total += 1
-        if self.can_beat_wall_boss(state):
+        if self.can_beat_wall_boss(state, player_strength):
             total += 1
 
         return total
