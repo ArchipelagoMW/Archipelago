@@ -25,8 +25,9 @@ def set_rules(world: Celeste64World):
 location_standard_moves_logic: Dict[str, List[List[str]]] = {
     LocationName.strawberry_1:  [[ItemName.ground_dash],
                                  [ItemName.air_dash],
-                                 [ItemName.skid_jump],
                                  [ItemName.climb]],
+    LocationName.strawberry_2:  [[ItemName.air_dash],
+                                 [ItemName.skid_jump]],
     LocationName.strawberry_3:  [[ItemName.air_dash],
                                  [ItemName.skid_jump]],
     LocationName.strawberry_4:  [[ItemName.traffic_block, ItemName.breakables, ItemName.air_dash]],
