@@ -1342,7 +1342,11 @@ class BlasRules:
             "D17Z01S04[W]",
         )
 
-        return sum(state.can_reach_region(door, self.player) for door in doors)
+        total: int = 0
+        for door in doors:
+            if state.can_reach_region(door, self.player):
+                total += 1
+        return total
     
     def sword_rooms(self, state: CollectionState) -> int:
         doors = (
@@ -1406,7 +1410,11 @@ class BlasRules:
             "D06Z01S17[E]"
         )
 
-        return sum(state.can_reach_region(door, self.player) for door in doors)
+        total: int = 0
+        for door in doors:
+            if state.can_reach_region(door, self.player):
+                total += 1
+        return total
     
     def amanecida_rooms(self, state: CollectionState) -> int:
         total: int = 0
