@@ -37,7 +37,7 @@ class LuigisMansionRandomizer:
                 Path(os.path.dirname(self.clean_iso_path)).parent, "%s Randomized.iso" % RANDOMIZER_NAME)
             if ap_output_data is None:
                 select_aplm_path = filedialog.askopenfilename(title="Select your APLM File",
-                                                             filetypes=[("APLM Files", ".aplm")])
+                                                              filetypes=[("APLM Files", ".aplm")])
         else:
             self.clean_iso_path = clean_iso_path
             self.randomized_output_file_path = randomized_output_file_path
@@ -97,7 +97,7 @@ class LuigisMansionRandomizer:
                                            "Only the North American version is supported by this randomizer.")
             else:
                 raise InvalidCleanISOError("Invalid game given as the vanilla ISO. You must specify a " +
-                      "%s ISO (North American version)." % RANDOMIZER_NAME)
+                                           "%s ISO (North American version)." % RANDOMIZER_NAME)
         self.__verify_correct_clean_iso_md5()
 
     # Verify the MD5 hash matches the expectation of a USA-based ISO.
@@ -193,13 +193,14 @@ class LuigisMansionRandomizer:
         bool_boo_checks: bool = True if self.output_data["Options"]["boo_gates"] == 1 else False
         required_mario_item_count: int = int(self.output_data["Options"]["mario_items"])
         bool_randomize_music: bool = True if self.output_data["Options"]["random_music"] == 1 else False
+        bool_portrait_hints: bool = True if self.output_data["Options"]["portrait_hints"] == 1 else False
         washroom_boo_count: int = int(self.output_data["Options"]["washroom_boo_count"])
         balcony_boo_count: int = int(self.output_data["Options"]["balcony_boo_count"])
         final_boo_count: int = int(self.output_data["Options"]["final_boo_count"])
 
         # Update all custom events
         list_events = ["03", "04", "12", "17", "22", "24", "29", "32", "33", "35", "38", "44", "45", "50",
-            "61", "63", "64", "65", "66", "67", "68", "71", "72", "74", "75", "82", "86", "87", "89"]
+                       "61", "63", "64", "65", "66", "67", "68", "71", "72", "74", "75", "82", "86", "87", "89"]
         for custom_event in list_events:
             self.update_custom_event(custom_event, True)
 
@@ -250,6 +251,42 @@ class LuigisMansionRandomizer:
 
                 self.update_custom_event(event_no, False, lines)
 
+        toad_hint_events = ["04", "17", "32", "63"]
+        for event_no in toad_hint_events:
+            hintfo: dict[str, str] = dict()
+            match event_no:
+                case "04":
+                    hintfo = self.output_data["Hints"]["Courtyard Toad"]
+                case "17":
+                    hintfo = self.output_data["Hints"]["Foyer Toad"]
+                case "32":
+                    hintfo = self.output_data["Hints"]["Wardrobe Balcony Toad"]
+                case "63":
+                    hintfo = self.output_data["Hints"]["1F Washroom Toad"]
+            hint_item = hintfo["Item"]
+            hint_loc = hintfo["Location"]
+            hint_player = hintfo["player"]
+            hint_game = hintfo["Game"]
+            lines = get_data(__name__, "data/custom_events/event" + event_no + ".txt").decode('utf-8')
+            if self.output_data["Options"]["hint_distribution"] == 4:
+                lines = lines.replace("{WindowOpen}", "<WINDOW>(0)")
+                lines = lines.replace("{WindowClose}", "<CLOSEWINDOW>(0)")
+                hint_text = f"<SAY> {hint_player}'s {hint_item} is somewhere in {hint_game}"
+            elif self.output_data["Options"]["hint_distribution"] == 1:
+                lines = lines.replace("{WindowOpen}", "<WINDOW>(0)")
+                lines = lines.replace("{WindowClose}", "<CLOSEWINDOW>(0)")
+                hint_text = "<SAY>" # TODO pull junk hint into here
+            elif self.output_data["Options"]["hint_distribution"] == 5:
+                lines = lines.replace("{WindowOpen}", "")
+                lines = lines.replace("{WindowClose}", "")
+                hint_text = "<WAIT>(0.1)"
+            else:
+                lines = lines.replace("{WindowOpen}", "<WINDOW>(0)")
+                lines = lines.replace("{WindowClose}", "<CLOSEWINDOW>(0)")
+                hint_text = f"<SAY> {hint_player}'s {hint_item} can be found at {hint_loc}"
+            lines = lines.replace("{HintText}", str(hint_text))
+            self.update_custom_event(event_no, False, lines)
+
         lines = get_data(__name__, "data/custom_events/event36.txt").decode('utf-8')
         lines = lines.replace("{MarioCount}", str(required_mario_item_count))
 
@@ -257,7 +294,7 @@ class LuigisMansionRandomizer:
         str_good_end = "\"GoodEnd\""
         str_bad_end = "\"MissingItems\""
 
-        for i in range(0,6):
+        for i in range(0, 6):
             if i >= required_mario_item_count:
                 lines = lines.replace(cases_to_replace[i], str_good_end)
             else:
@@ -282,7 +319,7 @@ class LuigisMansionRandomizer:
         # Generator function to combine all necessary files into an ISO file.
         # Returned information is ignored. # Todo Maybe there is something better to put here?
         for _, _ in self.export_files_from_memory():  # next_progress_text, files_done
-            continue # percentage_done = files_done/len(self.gcm.files_by_path)
+            continue  # percentage_done = files_done/len(self.gcm.files_by_path)
 
     # Updates various DOL Offsets per the desired changes of the AP user
     def update_dol_offsets(self):
@@ -329,8 +366,9 @@ class LuigisMansionRandomizer:
         self.dol.data.seek(0x311660)
         self.dol.data.write(struct.pack(str(len(lm_player_name)) + "s", lm_player_name.encode()))
 
-    def update_custom_event(self, event_number: str, check_local_folder: bool, non_local_str="", custom_made: bool = False):
-        #TODO Update custom events to remove any camera files or anything else related.
+    def update_custom_event(self, event_number: str, check_local_folder: bool, non_local_str="",
+                            custom_made: bool = False):
+        # TODO Update custom events to remove any camera files or anything else related.
         if not check_local_folder and not non_local_str:
             raise Exception("If the custom event does not exist in the local data folder, an event string must be " +
                             "provided to overwrite an existing event.")
@@ -344,8 +382,7 @@ class LuigisMansionRandomizer:
                   info_files.name == name_to_find)).name = "event" + event_number + ".txt"
             name_to_find = "event" + event_number + ".txt"
 
-
-        if not any (info_files for info_files in custom_event.file_entries if info_files.name == name_to_find):
+        if not any(info_files for info_files in custom_event.file_entries if info_files.name == name_to_find):
             raise Exception(f"Unable to find an info file with name '{name_to_find}' in provided RARC file.")
 
         if check_local_folder:
@@ -361,7 +398,7 @@ class LuigisMansionRandomizer:
         if event_number.startswith("0"):
             updated_event_number = event_number[1:]
         bool_csv_lines = any((info_files for info_files in custom_event.file_entries if
-              info_files.name == "message" + updated_event_number + ".csv"))
+                              info_files.name == "message" + updated_event_number + ".csv"))
 
         if bool_csv_lines:
             csv_lines = io.BytesIO(get_data(__name__, "data/custom_events/TemplateCSV.csv"))
@@ -373,11 +410,10 @@ class LuigisMansionRandomizer:
             Yay0.compress(custom_event.data, 0))
 
     def copy_existing_event(self, new_event_number: str):
-        event_path = "files/Event/event"+ new_event_number + ".szp"
+        event_path = "files/Event/event" + new_event_number + ".szp"
         data = self.gcm.read_file_data("files/Event/event64.szp")
         self.gcm.add_new_file(event_path, data)
         return
-
 
     # If Export to disc is true, Exports the entire file/directory contents of the ISO to specified folder
     # Otherwise, creates a direct ISO file.
@@ -388,6 +424,7 @@ class LuigisMansionRandomizer:
             yield from self.gcm.export_disc_to_folder_with_changed_files(output_folder_path)
         else:
             yield from self.gcm.export_disc_to_iso_with_changed_files(self.randomized_output_file_path)
+
 
 if __name__ == '__main__':
     unpacked_iso = LuigisMansionRandomizer("", "", None, False, True)

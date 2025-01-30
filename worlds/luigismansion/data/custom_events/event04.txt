@@ -1,5 +1,8 @@
 <MENUOFF>
 <BGM>(11)
+{WindowOpen}
+{HintText}
+{WindowClose}
 <SAVE>
 <BGMSTOP>
 <BGM>(7)

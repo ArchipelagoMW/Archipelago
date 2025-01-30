@@ -30,7 +30,6 @@ def get_other_items(multiworld: MultiWorld, player: int, loc, hinted_loc) -> Loc
 
 
 def get_hints_by_option(multiworld: MultiWorld, player: int) -> Dict[str, Dict[str, Any]]:
-    state = CollectionState(multiworld)
     world = multiworld.worlds[player]
     hint_data = {}
     already_hinted_locations: List[Location] = []
@@ -72,13 +71,13 @@ def get_hints_by_option(multiworld: MultiWorld, player: int) -> Dict[str, Dict[s
                     loc = get_progression_only_items(multiworld, player, loc, already_hinted_locations)
                 else:
                     loc = get_other_items(multiworld, player, loc, already_hinted_locations)
-            elif world.options.hint_distribution == 3:
+            elif world.options.hint_distribution == 3 or world.options.hint_distribution == 1:
                 hint_type = world.random.choices(["Prog", "Other"], [90, 10], k=1)[0]
                 if hint_type == "Prog":
                     loc = get_progression_only_items(multiworld, player, loc, already_hinted_locations)
                 else:
                     loc = get_other_items(multiworld, player, loc, already_hinted_locations)
-            elif world.options.hint_distribution == 2:
+            elif world.options.hint_distribution == 2 or world.options.hint_distribution == 5:
                 while loc is None:
                     item = multiworld.worlds[player].random.choice(multiworld.get_items())
                     if item.location not in already_hinted_locations:
