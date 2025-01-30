@@ -1322,8 +1322,8 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
     if ctx.slot_data_version < 4:
         for compat_item in API3_TO_API4_COMPAT_ITEMS:
             items.extend(compat_item_to_network_items(compat_item))
-        if item_data[item_names.ROGUE_FORCES].code in set(item.item for item in ctx.items_received if item.player == ctx.slot):
-            items.append(NetworkItem(item_data[item_names.UNRESTRICTED_MUTATION].code, 0, 0, 0))
+        if item_list[item_names.ROGUE_FORCES].code in set(item.item for item in ctx.items_received if item.player == ctx.slot):
+            items.append(NetworkItem(item_list[item_names.UNRESTRICTED_MUTATION].code, 0, 0, 0))
 
     # API < 4 Orbital Command Count (Deprecated item)
     orbital_command_count: int = 0
