@@ -90,7 +90,8 @@ class MadelineOneDashHairColor(TextChoice):
 
     The `any_color` option will choose a fully random color
 
-    A custom color entry must be a 6-character RGB hex color code
+    A custom color entry may be supplied as a 6-character RGB hex color code
+    e.g. F542C8
     """
     display_name = "Madeline One Dash Hair Color"
     option_strawberry = 0xDB2C00
@@ -128,7 +129,8 @@ class MadelineTwoDashHairColor(TextChoice):
 
     The `any_color` option will choose a fully random color
 
-    A custom color entry must be a 6-character RGB hex color code
+    A custom color entry may be supplied as a 6-character RGB hex color code
+    e.g. F542C8
     """
     display_name = "Madeline Two Dash Hair Color"
     option_strawberry = 0xDB2C00
@@ -166,7 +168,8 @@ class MadelineNoDashHairColor(TextChoice):
 
     The `any_color` option will choose a fully random color
 
-    A custom color entry must be a 6-character RGB hex color code
+    A custom color entry may be supplied as a 6-character RGB hex color code
+    e.g. F542C8
     """
     display_name = "Madeline No Dash Hair Color"
     option_strawberry = 0xDB2C00
@@ -204,7 +207,8 @@ class MadelineFeatherHairColor(TextChoice):
 
     The `any_color` option will choose a fully random color
 
-    A custom color entry must be a 6-character RGB hex color code
+    A custom color entry may be supplied as a 6-character RGB hex color code
+    e.g. F542C8
     """
     display_name = "Madeline Feather Hair Color"
     option_strawberry = 0xDB2C00
@@ -328,7 +332,7 @@ def resolve_options(world: World):
     # One Dash Hair
     if isinstance(world.options.madeline_one_dash_hair_color.value, str):
         try:
-            world.madeline_one_dash_hair_color = int(world.options.madeline_one_dash_hair_color.value[:6], 16)
+            world.madeline_one_dash_hair_color = int(world.options.madeline_one_dash_hair_color.value.strip("#")[:6], 16)
         except ValueError:
             raise OptionError(f"Invalid input for option `madeline_one_dash_hair_color`:"
                               f"{world.options.madeline_one_dash_hair_color.value} for "
@@ -341,7 +345,7 @@ def resolve_options(world: World):
     # Two Dash Hair
     if isinstance(world.options.madeline_two_dash_hair_color.value, str):
         try:
-            world.madeline_two_dash_hair_color = int(world.options.madeline_two_dash_hair_color.value[:6], 16)
+            world.madeline_two_dash_hair_color = int(world.options.madeline_two_dash_hair_color.value.strip("#")[:6], 16)
         except ValueError:
             raise OptionError(f"Invalid input for option `madeline_two_dash_hair_color`:"
                               f"{world.options.madeline_two_dash_hair_color.value} for "
@@ -354,7 +358,7 @@ def resolve_options(world: World):
     # No Dash Hair
     if isinstance(world.options.madeline_no_dash_hair_color.value, str):
         try:
-            world.madeline_no_dash_hair_color = int(world.options.madeline_no_dash_hair_color.value[:6], 16)
+            world.madeline_no_dash_hair_color = int(world.options.madeline_no_dash_hair_color.value.strip("#")[:6], 16)
         except ValueError:
             raise OptionError(f"Invalid input for option `madeline_no_dash_hair_color`:"
                               f"{world.options.madeline_no_dash_hair_color.value} for "
@@ -367,7 +371,7 @@ def resolve_options(world: World):
     # Feather Hair
     if isinstance(world.options.madeline_feather_hair_color.value, str):
         try:
-            world.madeline_feather_hair_color = int(world.options.madeline_feather_hair_color.value[:6], 16)
+            world.madeline_feather_hair_color = int(world.options.madeline_feather_hair_color.value.strip("#")[:6], 16)
         except ValueError:
             raise OptionError(f"Invalid input for option `madeline_feather_hair_color`:"
                               f"{world.options.madeline_feather_hair_color.value} for "
