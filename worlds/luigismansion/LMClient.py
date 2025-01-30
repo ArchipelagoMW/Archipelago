@@ -12,11 +12,10 @@ import dolphin_memory_engine as dme
 
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from settings import get_settings, Settings
-from worlds.luigismansion import BOO_LOCATION_TABLE
 
 from .LMGenerator import LuigisMansionRandomizer
 from .Items import ALL_ITEMS_TABLE, BOO_ITEM_TABLE, filler_items
-from .Locations import ALL_LOCATION_TABLE, LMLocation
+from .Locations import ALL_LOCATION_TABLE, LMLocation, TOAD_LOCATION_TABLE, BOO_LOCATION_TABLE
 
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
@@ -88,7 +87,7 @@ RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000,50000000, 60000000, 70000000, 10
 # List of received items to ignore because they are handled elsewhere
 # TODO Remove hearts from here when fixed.
 RECV_ITEMS_IGNORE = [8063, 8064, 8127]
-RECV_OWN_GAME_LOCATIONS: list[str] = [lm_location for lm_location in BOO_LOCATION_TABLE.keys()]
+RECV_OWN_GAME_LOCATIONS: list[str] = [lm_location for lm_location in BOO_LOCATION_TABLE.keys() and TOAD_LOCATION_TABLE.keys()]
 RECV_OWN_GAME_ITEMS: list[str] = [lm_item for lm_item in BOO_ITEM_TABLE.keys()]
 
 
