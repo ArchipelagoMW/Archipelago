@@ -326,7 +326,7 @@ class BlasRules:
             "redentoRooms4": lambda state: self.redento_rooms(state, 4),
             "redentoRooms5": lambda state: self.redento_rooms(state, 5),
 
-            "miriamRooms5": lambda state: self.miriam_rooms(state) >= 5,
+            "miriamRooms5": self.all_miriam_rooms,
 
             "amanecidaRooms1": lambda state: self.amanecida_rooms(state) >= 1,
             "amanecidaRooms2": lambda state: self.amanecida_rooms(state) >= 2,
@@ -1409,7 +1409,7 @@ class BlasRules:
                                 return True
         return False
     
-    def miriam_rooms(self, state: CollectionState) -> int:
+    def all_miriam_rooms(self, state: CollectionState) -> bool:
         doors = (
             "D02Z03S07[NWW]",
             "D03Z03S07[NW]",
@@ -1418,11 +1418,10 @@ class BlasRules:
             "D06Z01S17[E]"
         )
 
-        total: int = 0
         for door in doors:
-            if state.can_reach_region(door, self.player):
-                total += 1
-        return total
+            if not state.can_reach_region(door, self.player):
+                return False
+        return True
     
     def amanecida_rooms(self, state: CollectionState) -> int:
         total: int = 0
