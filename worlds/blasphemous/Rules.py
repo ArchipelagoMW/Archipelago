@@ -1376,43 +1376,50 @@ class BlasRules:
         return False
 
     def redento_rooms(self, state: CollectionState, count: int) -> bool:
-        if (
-            state.can_reach_region("D03Z01S04[E]", self.player)
-            or state.can_reach_region("D03Z02S10[N]", self.player)
+        if not (
+                state.can_reach_region("D03Z01S04[E]", self.player)
+                or state.can_reach_region("D03Z02S10[N]", self.player)
         ):
-            if 1 >= count:
-                return True
-            if (
+            # Realistically, count should never be zero or negative.
+            return count < 1
+
+        if count == 1:
+            return True
+
+        if not (
                 state.can_reach_region("D17Z01S05[S]", self.player)
                 or state.can_reach_region("D17BZ02S01[FrontR]", self.player)
-            ):
-                if 2 >= count:
-                    return True
-                if (
-                    state.can_reach_region("D01Z03S04[E]", self.player)
-                    or state.can_reach_region("D08Z01S01[W]", self.player)
-                ):
-                    if 3 >= count:
-                        return True
-                    if (
-                        state.can_reach_region("D04Z01S03[E]", self.player)
-                        or state.can_reach_region("D04Z02S01[W]", self.player)
-                        or state.can_reach_region("D06Z01S18[-Cherubs]", self.player)
-                    ):
-                        if 4 >= count:
-                            return True
-                        if (
-                            self.knots(state) >= 1
-                            and self.limestones(state, 3)
-                            and (
-                                state.can_reach_region("D04Z02S08[E]", self.player)
-                                or state.can_reach_region("D04BZ02S01[Redento]", self.player)
-                            )
-                        ):
-                            if 5 >= count:
-                                return True
-        return False
-    
+        ):
+            return False
+
+        if count == 2:
+            return True
+
+        if not (state.can_reach_region("D01Z03S04[E]", self.player)
+                or state.can_reach_region("D08Z01S01[W]", self.player)):
+            return False
+
+        if count == 3:
+            return True
+
+        if not (state.can_reach_region("D04Z01S03[E]", self.player)
+                or state.can_reach_region("D04Z02S01[W]", self.player)
+                or state.can_reach_region("D06Z01S18[-Cherubs]", self.player)):
+            return False
+
+        if count == 4:
+            return True
+
+        if not (
+                self.knots(state) >= 1
+                and self.limestones(state, 3)
+                and (state.can_reach_region("D04Z02S08[E]", self.player)
+                     or state.can_reach_region("D04BZ02S01[Redento]", self.player))
+        ):
+            return False
+
+        return count == 5
+
     def all_miriam_rooms(self, state: CollectionState) -> bool:
         doors = (
             "D02Z03S07[NWW]",
