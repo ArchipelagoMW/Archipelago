@@ -293,7 +293,7 @@ location_table: Dict[str, KH1LocationData] = {
     "Neverland Seal Keyhole Glide Event":                                               KH1LocationData("Neverland",        265_6095, "Reward"),
     "Neverland Defeat Phantom Stop Event":                                              KH1LocationData("Neverland",        265_6096, "Static"),
     "Neverland Defeat Captain Hook Ars Arcanum Event":                                  KH1LocationData("Neverland",        265_6097, "Reward"),
-    "Hollow Bastion Defeat Riku I White Trinity Event":                                 KH1LocationData("Hollow Bastion",   265_6101, "Reward"),
+    "Hollow Bastion Defeat Riku I White Trinity Event":                                 KH1LocationData("Hollow Bastion",   265_6101, "Static"),
     "Hollow Bastion Defeat Maleficent Donald Cheer Event":                              KH1LocationData("Hollow Bastion",   265_6102, "Reward"),
     "Hollow Bastion Defeat Dragon Maleficent Fireglow Event":                           KH1LocationData("Hollow Bastion",   265_6103, "Reward"),
     "Hollow Bastion Defeat Riku II Ragnarok Event":                                     KH1LocationData("Hollow Bastion",   265_6104, "Reward"),
@@ -301,6 +301,7 @@ location_table: Dict[str, KH1LocationData] = {
     "Hollow Bastion Speak to Princesses Fire Event":                                    KH1LocationData("Hollow Bastion",   265_6106, "Static"),
     "End of the World Defeat Chernabog Superglide Event":                               KH1LocationData("End of the World", 265_6111, "Reward"),
     "Neverland Seal Keyhole Navi-G Piece Event":                                        KH1LocationData("Neverland",        265_6112, "Static"),
+    "Traverse Town Secret Waterway Navi Gummi Event":                                   KH1LocationData("Traverse Town",    265_6113, "Static"),
     
     "Traverse Town Mail Postcard 01 Event":                                             KH1LocationData("Traverse Town",    265_6120, "Reward"),
     "Traverse Town Mail Postcard 02 Event":                                             KH1LocationData("Traverse Town",    265_6121, "Reward"),
