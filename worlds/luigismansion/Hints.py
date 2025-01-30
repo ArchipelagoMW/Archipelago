@@ -35,6 +35,7 @@ def get_hints_by_option(multiworld: MultiWorld, player: int) -> Dict[str, Dict[s
     hint_data = {}
     already_hinted_locations: List[Location] = []
     hint_list = ALWAYS_HINT
+    jokes = get_data(__name__, "data/jokes.txt").decode('utf-8')
     if world.options.portrait_hints == 1:
         hint_list = [*ALWAYS_HINT, *PORTRAIT_HINTS]
     for name in hint_list:
@@ -50,8 +51,7 @@ def get_hints_by_option(multiworld: MultiWorld, player: int) -> Dict[str, Dict[s
             if world.options.hint_distribution.value == 4:
                 hintfo = f"<SAY>{game.player_name}'s \\ {loc.item.name} \\ is somewhere in \\ {game.game}"
             elif world.options.hint_distribution.value == 1:
-                jokes = get_data(__name__, "data/jokes.txt").decode('utf-8')
-                joke = world.random.choice(jokes)
+                joke = world.random.choice(str.splitlines(jokes))
                 hintfo = f"<SAY>{joke}"
             elif world.options.hint_distribution.value == 5:
                 hintfo = "<SAY>I see you've turned off hints"
@@ -86,8 +86,7 @@ def get_hints_by_option(multiworld: MultiWorld, player: int) -> Dict[str, Dict[s
             elif world.options.hint_distribution == 5:
                 hintfo = "<SAY>I see you've turned off hints"
             elif world.options.hint_distribution.value == 1:
-                jokes = get_data(__name__, "data/jokes.txt").decode('utf-8')
-                joke = world.random.choice(jokes)
+                joke = world.random.choice(str.splitlines(jokes))
                 hintfo = f"<SAY>{joke}"
             else:
                 hintfo = f"<SAY>{game.player_name}'s \\ {loc.item.name} \\ can be found at \\ {loc.name}"
