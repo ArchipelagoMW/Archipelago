@@ -102,7 +102,7 @@ class BlasRules:
 
         # Movement tech
         if difficulty >= 1:
-            self.can_air_stall = lambda state: self.ranged(state) > 0
+            self.can_air_stall = self.ranged
             self.can_dawn_jump = lambda state: self.dawn_heart(state) and self.dash(state)
         else:
             self.can_air_stall = _never
@@ -229,7 +229,7 @@ class BlasRules:
             # skip "dive"
             # skip "lunge"
             "chargeBeam": self.charge_beam,
-            "rangedAttack": lambda state: self.ranged(state) > 0,
+            "rangedAttack": self.ranged,
 
             # Main quest
             "holyWounds3": lambda state: self.holy_wounds(state) >= 3,
@@ -851,8 +851,8 @@ class BlasRules:
     def charged(self, state: CollectionState) -> int:
         return state.count("Charged Skill", self.player)
 
-    def ranged(self, state: CollectionState) -> int:
-        return state.count("Ranged Skill", self.player)
+    def ranged(self, state: CollectionState) -> bool:
+        return state.has("Ranged Skill", self.player)
     
     def dive(self, state: CollectionState) -> int:
         return state.count("Dive Skill", self.player)
