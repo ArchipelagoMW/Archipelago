@@ -848,10 +848,13 @@ def update_treasure_table(treasure_info, character_info, output_data):
                 # Act differently if it's a key.
                 # Also define the size of the chest from the item name.
                 treasure_item_name = __get_item_name(item_data)
-                if item_data["door_id"] == 0:
-                    chest_size = __get_chest_size_from_item(item_data["name"])
+                if x["room_no"] == 45 or x["room_no"] == 5:
+                    chest_size = 0
                 else:
-                    chest_size = __get_chest_size_from_key(item_data["door_id"])
+                    if item_data["door_id"] == 0:
+                        chest_size = __get_chest_size_from_item(item_data["name"])
+                    else:
+                        chest_size = __get_chest_size_from_key(item_data["door_id"])
 
                 coin_amount = 0
                 bill_amount = 0
