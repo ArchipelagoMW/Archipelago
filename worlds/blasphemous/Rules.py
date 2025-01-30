@@ -811,7 +811,7 @@ class BlasRules:
             or self.cante(state)
             or self.cantina(state)
             or self.tiento(state)
-            or state.has_any({
+            or state.has_any((
                 "Campanillero to the Sons of the Aurora",
                 "Mirabras of the Return to Port",
                 "Romance to the Crimson Mist",
@@ -819,7 +819,7 @@ class BlasRules:
                 "Seguiriya to your Eyes like Stars",
                 "Verdiales of the Forsaken Hamlet",
                 "Zambra to the Resplendent Crown"
-            }, self.player)
+            ), self.player)
         )
     
     def pillar(self, state: CollectionState) -> bool:
