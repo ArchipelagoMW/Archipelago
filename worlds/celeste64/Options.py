@@ -258,7 +258,7 @@ def resolve_options(world: World):
         except ValueError:
             raise OptionError(f"Invalid input for option `madeline_one_dash_hair_color`:"
                               f"{world.options.madeline_one_dash_hair_color.value} for "
-                              f"{world.multiworld.get_player_name(world.player)}")
+                              f"{world.player_name}")
     elif world.options.madeline_one_dash_hair_color.value == -1:
         world.madeline_one_dash_hair_color = world.random.randint(0, 0xFFFFFF)
     else:
@@ -271,7 +271,7 @@ def resolve_options(world: World):
         except ValueError:
             raise OptionError(f"Invalid input for option `madeline_two_dash_hair_color`:"
                               f"{world.options.madeline_two_dash_hair_color.value} for "
-                              f"{world.multiworld.get_player_name(world.player)}")
+                              f"{world.player_name}")
     elif world.options.madeline_two_dash_hair_color.value == -1:
         world.madeline_two_dash_hair_color = world.random.randint(0, 0xFFFFFF)
     else:
@@ -284,7 +284,7 @@ def resolve_options(world: World):
         except ValueError:
             raise OptionError(f"Invalid input for option `madeline_no_dash_hair_color`:"
                               f"{world.options.madeline_no_dash_hair_color.value} for "
-                              f"{world.multiworld.get_player_name(world.player)}")
+                              f"{world.player_name}")
     elif world.options.madeline_no_dash_hair_color.value == -1:
         world.madeline_no_dash_hair_color = world.random.randint(0, 0xFFFFFF)
     else:
@@ -297,7 +297,7 @@ def resolve_options(world: World):
         except ValueError:
             raise OptionError(f"Invalid input for option `madeline_feather_hair_color`:"
                               f"{world.options.madeline_feather_hair_color.value} for "
-                              f"{world.multiworld.get_player_name(world.player)}")
+                              f"{world.player_name}")
     elif world.options.madeline_feather_hair_color.value == -1:
         world.madeline_feather_hair_color = world.random.randint(0, 0xFFFFFF)
     else:
