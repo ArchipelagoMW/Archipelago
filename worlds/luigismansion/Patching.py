@@ -170,6 +170,7 @@ def update_character_info(character_info, output_data):
         if x["name"] == "fat" and x["room_no"] == 45:
             x["disappear_flag"] = 0
 
+        # Make Shivers not disappear by doing a different appear flag.
         if x["name"] == "situji" and x["room_no"] == 6:
             x["appear_flag"] = 7
 
