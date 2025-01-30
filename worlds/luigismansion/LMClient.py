@@ -331,7 +331,7 @@ async def give_items(ctx: LMContext):
 
 
 async def check_locations(ctx: LMContext):
-    list_types_to_skip_currently = ["BSpeedy", "Portrait", "Event", "Toad"]
+    list_types_to_skip_currently = ["BSpeedy", "Portrait", "Event"]
 
     current_map_id = get_map_id()
     for location, data in ALL_LOCATION_TABLE.items():
