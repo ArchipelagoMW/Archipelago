@@ -7,7 +7,7 @@ import asyncio
 import copy
 import enum
 import subprocess
-from typing import Any, Dict, Optional, Set
+from typing import Any
 
 from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, logger, gui_enabled
 import Patch
@@ -50,7 +50,7 @@ class BizHawkClientCommandProcessor(ClientCommandProcessor):
         elif self.ctx.bizhawk_ctx.connection_status == ConnectionStatus.CONNECTED:
             logger.info("BizHawk Connection Status: Connected")
 
-    def _cmd_toggle_text(self, category: Optional[str] = None, toggle: Optional[str] = None):
+    def _cmd_toggle_text(self, category: str | None = None, toggle: str | None = None):
         """Sets types of incoming messages to forward to the emulator"""
         assert isinstance(self.ctx, BizHawkClientContext)
 
@@ -64,7 +64,7 @@ class BizHawkClientCommandProcessor(ClientCommandProcessor):
             return
 
         category = category.lower()
-        value: Optional[bool]
+        value: bool | None
         if toggle is None:
             value = None
         elif toggle.lower() in ("on", "true"):
@@ -118,18 +118,18 @@ class BizHawkClientCommandProcessor(ClientCommandProcessor):
 
 class BizHawkClientContext(CommonContext):
     command_processor = BizHawkClientCommandProcessor
-    text_passthrough_categories: Set[str]
+    text_passthrough_categories: set[str]
     auth_status: AuthStatus
     password_requested: bool
-    client_handler: Optional[BizHawkClient]
-    slot_data: Optional[Dict[str, Any]] = None
-    rom_hash: Optional[str] = None
+    client_handler: BizHawkClient | None
+    slot_data: dict[str, Any] | None = None
+    rom_hash: str | None = None
     bizhawk_ctx: BizHawkContext
 
     watcher_timeout: float
     """The maximum amount of time the game watcher loop will wait for an update from the server before executing"""
 
-    def __init__(self, server_address: Optional[str], password: Optional[str]):
+    def __init__(self, server_address: str | None, password: str | None):
         super().__init__(server_address, password)
         self.text_passthrough_categories = set()
         self.auth_status = AuthStatus.NOT_AUTHENTICATED
@@ -138,7 +138,7 @@ class BizHawkClientContext(CommonContext):
         self.bizhawk_ctx = BizHawkContext()
         self.watcher_timeout = 0.5
 
-    def _categorize_text(self, args: Dict) -> TextCategory:
+    def _categorize_text(self, args: dict) -> TextCategory:
         if "type" not in args or args["type"] in {"Hint", "Join", "Part", "TagsChanged", "Goal", "Release", "Collect",
                                                   "Countdown", "ServerChat", "ItemCheat"}:
             return TextCategory.SERVER
@@ -151,8 +151,8 @@ class BizHawkClientContext(CommonContext):
                 return TextCategory.INCOMING
             else:
                 return TextCategory.OTHER
-    
-    def on_print_json(self, args: Dict):
+
+    def on_print_json(self, args: dict):
         super().on_print_json(args)
         if self.bizhawk_ctx.connection_status == ConnectionStatus.CONNECTED:
             if self._categorize_text(args) in self.text_passthrough_categories:
@@ -330,19 +330,26 @@ async def _run_game(rom: str):
         )
 
 
-async def _patch_and_run_game(patch_file: str):
+def _patch_and_run_game(patch_file: str):
     try:
         metadata, output_file = Patch.create_rom_file(patch_file)
         Utils.async_start(_run_game(output_file))
+        return metadata
     except Exception as exc:
         logger.exception(exc)
+        return {}
 
 
-def launch(*launch_args) -> None:
+def launch(*launch_args: str) -> None:
     async def main():
         parser = get_base_parser()
         parser.add_argument("patch_file", default="", type=str, nargs="?", help="Path to an Archipelago patch file")
         args = parser.parse_args(launch_args)
+
+        if args.patch_file != "":
+            metadata = _patch_and_run_game(args.patch_file)
+            if "server" in metadata:
+                args.connect = metadata["server"]
 
         ctx = BizHawkClientContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
@@ -350,9 +357,6 @@ def launch(*launch_args) -> None:
         if gui_enabled:
             ctx.run_gui()
         ctx.run_cli()
-
-        if args.patch_file != "":
-            Utils.async_start(_patch_and_run_game(args.patch_file))
 
         watcher_task = asyncio.create_task(_game_watcher(ctx), name="GameWatcher")
 
