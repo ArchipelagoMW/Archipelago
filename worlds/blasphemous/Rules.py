@@ -610,20 +610,18 @@ class BlasRules:
     def load_rule(self, obj_is_region: bool, name: str, obj: Dict[str, Any]) -> Callable[[CollectionState], bool]:
         clauses = []
         clauses_are_impossible_if_empty = False
+        rule_indirect_conditions = []
         for clause in obj["logic"]:
             reqs = []
+            clause_indirect_conditions = []
             clause_is_impossible = False
             for req in clause["item_requirements"]:
                 if self.req_is_region(req):
                     if obj_is_region:
                         # add to indirect conditions if object and requirement are doors
-                        self.indirect_conditions.append((req, f"{name} -> {obj['target']}"))
+                        clause_indirect_conditions.append((req, f"{name} -> {obj['target']}"))
                     reqs.append(lambda state, req=req: state.can_reach_region(req, self.player))
                 else:
-                    if obj_is_region and req in self.indirect_regions:
-                        # add to indirect conditions if object is door and requirement has list of regions
-                        for region in self.indirect_regions[req]:
-                            self.indirect_conditions.append((region, f"{name} -> {obj['target']}"))
                     string_rule = self.string_rules[req]
                     if string_rule is _never:
                         # This clause is not possible with the options this player has chosen.
@@ -633,12 +631,17 @@ class BlasRules:
                         # Don't need to add a rule that is always True with the options this player has chosen.
                         # Continue to the next requirement.
                         continue
+                    if obj_is_region and req in self.indirect_regions:
+                        # add to indirect conditions if object is door and requirement has list of regions
+                        for region in self.indirect_regions[req]:
+                            clause_indirect_conditions.append((region, f"{name} -> {obj['target']}"))
                     reqs.append(self.string_rules[req])
             if clause_is_impossible:
                 # At least one clause was impossible, so if all clauses were impossible, the entire rule is impossible.
                 clauses_are_impossible_if_empty = True
                 # Continue to the next clause.
                 continue
+            rule_indirect_conditions.extend(clause_indirect_conditions)
             if len(reqs) == 1:
                 clauses.append(reqs[0])
             else:
@@ -649,19 +652,25 @@ class BlasRules:
                     return True
                 clauses.append(req_func)
         if not clauses:
+            # There is no need to register the indirect conditions if it turns out the rule is impossible or always
+            # possible.
+            rule_indirect_conditions.clear()
             if clauses_are_impossible_if_empty:
-                return _never
+                to_return = _never
             else:
-                return _always
+                to_return = _always
         elif len(clauses) == 1:
-            return clauses[0]
+            to_return = clauses[0]
         else:
             def clause_func(state, clauses=clauses):
                 for clause in clauses:
                     if clause(state):
                         return True
                 return False
-            return clause_func
+            to_return = clause_func
+        # Update the list of indirect conditions to add.
+        self.indirect_conditions.extend(rule_indirect_conditions)
+        return to_return
 
     # Relics
     def blood(self, state: CollectionState) -> bool:
