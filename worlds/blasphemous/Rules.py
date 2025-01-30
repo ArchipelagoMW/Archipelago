@@ -909,8 +909,8 @@ class BlasRules:
         return state.has("Egg of Deformity", self.player)
     
     # Redento quest
-    def limestones(self, state: CollectionState) -> int:
-        return state.count_group_unique("toe", self.player)
+    def limestones(self, state: CollectionState, count: int) -> bool:
+        return state.has("toe", self.player, count)
     
     def knots(self, state: CollectionState) -> int:
         return state.count("Knot of Rosary Rope", self.player) if state.can_reach_region("D17Z01S07[NW]", self.player)\
@@ -1403,7 +1403,7 @@ class BlasRules:
                             return True
                         if (
                             self.knots(state) >= 1
-                            and self.limestones(state) >= 3
+                            and self.limestones(state, 3)
                             and (
                                 state.can_reach_region("D04Z02S08[E]", self.player)
                                 or state.can_reach_region("D04BZ02S01[Redento]", self.player)
