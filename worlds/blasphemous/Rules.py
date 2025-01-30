@@ -160,21 +160,21 @@ class BlasRules:
             "woodKey": self.wood_key,
 
             # Collections
-            "cherubs20": lambda state: self.cherubs(state) >= 20,
-            "cherubs38": lambda state: self.cherubs(state) >= 38,
+            "cherubs20": lambda state: self.cherubs(state, 20),
+            "cherubs38": lambda state: self.cherubs(state, 38),
 
-            "bones4": lambda state: self.bones(state) >= 4,
-            "bones8": lambda state: self.bones(state) >= 8,
-            "bones12": lambda state: self.bones(state) >= 12,
-            "bones16": lambda state: self.bones(state) >= 16,
-            "bones20": lambda state: self.bones(state) >= 20,
-            "bones24": lambda state: self.bones(state) >= 24,
-            "bones28": lambda state: self.bones(state) >= 28,
-            "bones30": lambda state: self.bones(state) >= 30,
-            "bones32": lambda state: self.bones(state) >= 32,
-            "bones36": lambda state: self.bones(state) >= 36,
-            "bones40": lambda state: self.bones(state) >= 40,
-            "bones44": lambda state: self.bones(state) >= 44,
+            "bones4": lambda state: self.bones(state, 4),
+            "bones8": lambda state: self.bones(state, 8),
+            "bones12": lambda state: self.bones(state, 12),
+            "bones16": lambda state: self.bones(state, 16),
+            "bones20": lambda state: self.bones(state, 20),
+            "bones24": lambda state: self.bones(state, 24),
+            "bones28": lambda state: self.bones(state, 28),
+            "bones30": lambda state: self.bones(state, 30),
+            "bones32": lambda state: self.bones(state, 32),
+            "bones36": lambda state: self.bones(state, 36),
+            "bones40": lambda state: self.bones(state, 40),
+            "bones44": lambda state: self.bones(state, 44),
 
             "tears0": _always,
 
@@ -194,10 +194,10 @@ class BlasRules:
             # skip "quicksilver"
 
             # Puzzles
-            "redWax1": lambda state: self.red_wax(state) >= 1,
-            "redWax3": lambda state: self.red_wax(state) >= 3,
-            "blueWax1": lambda state: self.blue_wax(state) >= 1,
-            "blueWax3": lambda state: self.blue_wax(state) >= 3,
+            "redWax1": lambda state: self.red_wax(state, 1),
+            "redWax3": lambda state: self.red_wax(state, 3),
+            "blueWax1": lambda state: self.blue_wax(state, 1),
+            "blueWax3": lambda state: self.blue_wax(state, 3),
             "chalice": self.chalice,
 
             # Cherubs
@@ -232,10 +232,10 @@ class BlasRules:
             "rangedAttack": self.ranged,
 
             # Main quest
-            "holyWounds3": lambda state: self.holy_wounds(state) >= 3,
-            "masks1": lambda state: self.masks(state) >= 1,
-            "masks2": lambda state: self.masks(state) >= 2,
-            "masks3": lambda state: self.masks(state) >= 3,
+            "holyWounds3": lambda state: self.holy_wounds(state, 3),
+            "masks1": lambda state: self.masks(state, 1),
+            "masks2": lambda state: self.masks(state, 2),
+            "masks3": lambda state: self.masks(state, 3),
             "guiltBead": self.guilt_bead,
 
             # LOTL quest
@@ -244,17 +244,17 @@ class BlasRules:
             "hatchedEgg": self.hatched_egg,
 
             # Tirso quest
-            "herbs1": lambda state: self.herbs(state) >= 1,
-            "herbs2": lambda state: self.herbs(state) >= 2,
-            "herbs3": lambda state: self.herbs(state) >= 3,
-            "herbs4": lambda state: self.herbs(state) >= 4,
-            "herbs5": lambda state: self.herbs(state) >= 5,
-            "herbs6": lambda state: self.herbs(state) >= 6,
+            "herbs1": lambda state: self.herbs(state, 1),
+            "herbs2": lambda state: self.herbs(state, 2),
+            "herbs3": lambda state: self.herbs(state, 3),
+            "herbs4": lambda state: self.herbs(state, 4),
+            "herbs5": lambda state: self.herbs(state, 5),
+            "herbs6": lambda state: self.herbs(state, 6),
 
             # Tentudia quest
-            "tentudiaRemains1": lambda state: self.tentudia_remains(state) >= 1,
-            "tentudiaRemains2": lambda state: self.tentudia_remains(state) >= 2,
-            "tentudiaRemains3": lambda state: self.tentudia_remains(state) >= 3,
+            "tentudiaRemains1": lambda state: self.tentudia_remains(state, 1),
+            "tentudiaRemains2": lambda state: self.tentudia_remains(state, 2),
+            "tentudiaRemains3": lambda state: self.tentudia_remains(state, 3),
 
             # Gemino quest
             "emptyThimble": self.empty_thimble,
@@ -262,7 +262,7 @@ class BlasRules:
             "driedFlowers": self.dried_flowers,
 
             # Altasgracias quest
-            "ceremonyItems3": lambda state: self.ceremony_items(state) >= 3,
+            "ceremonyItems3": lambda state: self.ceremony_items(state, 3),
             "egg": self.egg,
 
             # Redento quest
@@ -270,17 +270,17 @@ class BlasRules:
             # skip "knots", not actually used
 
             # Cleofas quest
-            "marksOfRefuge3": lambda state: self.marks_of_refuge(state) >= 3,
+            "marksOfRefuge3": lambda state: self.marks_of_refuge(state, 3),
             "cord": self.cord,
 
             # Crisanta quest
             "scapular": self.scapular,
             "trueHeart": self.true_heart,
-            "traitorEyes2": lambda state: self.traitor_eyes(state) >= 2,
+            "traitorEyes2": lambda state: self.traitor_eyes(state, 2),
 
             # Jibrael quest
             "bell": self.bell,
-            "verses4": lambda state: self.verses(state) >= 4,
+            "verses4": lambda state: self.verses(state, 4),
 
             # Movement tech
             "canAirStall": self.can_air_stall,
@@ -702,11 +702,11 @@ class BlasRules:
         return state.has("Key Grown from Twisted Wood", self.player)
     
     # Collections
-    def cherubs(self, state: CollectionState) -> int:
-        return state.count("Child of Moonlight", self.player)
+    def cherubs(self, state: CollectionState, count: int) -> bool:
+        return state.has("Child of Moonlight", self.player, count)
     
-    def bones(self, state: CollectionState) -> int:
-        return state.count_group_unique("bones", self.player)
+    def bones(self, state: CollectionState, count: int) -> bool:
+        return state.has_group_unique("bones", self.player, count)
     
     # def tears():
 
@@ -752,11 +752,11 @@ class BlasRules:
         return state.count("Quicksilver", self.player) if state.can_reach_region("D01Z05S01[W]", self.player) else 0
     
     # Puzzles
-    def red_wax(self, state: CollectionState) -> int:
-        return state.count("Bead of Red Wax", self.player)
+    def red_wax(self, state: CollectionState, count: int) -> bool:
+        return state.has("Bead of Red Wax", self.player, count)
     
-    def blue_wax(self, state: CollectionState) -> int:
-        return state.count("Bead of Blue Wax", self.player)
+    def blue_wax(self, state: CollectionState, count: int) -> bool:
+        return state.has("Bead of Blue Wax", self.player, count)
     
     def chalice(self, state: CollectionState) -> bool:
         return state.has("Chalice of Inverted Verses", self.player)
@@ -864,11 +864,11 @@ class BlasRules:
         return self.charged(state) >= 3
     
     # Main quest
-    def holy_wounds(self, state: CollectionState) -> int:
-        return state.count_group_unique("wounds", self.player)
+    def holy_wounds(self, state: CollectionState, count: int) -> bool:
+        return state.has_group_unique("wounds", self.player, count)
     
-    def masks(self, state: CollectionState) -> int:
-        return state.count_group_unique("masks", self.player)
+    def masks(self, state: CollectionState, count: int) -> bool:
+        return state.has_group_unique("masks", self.player, count)
     
     def guilt_bead(self, state: CollectionState) -> bool:
         return state.has("Weight of True Guilt", self.player)
@@ -884,12 +884,12 @@ class BlasRules:
         return state.has("Hatched Egg of Deformity", self.player)
     
     # Tirso quest
-    def herbs(self, state: CollectionState) -> int:
-        return state.count_group_unique("tirso", self.player)
+    def herbs(self, state: CollectionState, count: int) -> bool:
+        return state.has_group_unique("tirso", self.player, count)
     
     # Tentudia quest
-    def tentudia_remains(self, state: CollectionState) -> int:
-        return state.count_group_unique("tentudia", self.player)
+    def tentudia_remains(self, state: CollectionState, count: int) -> bool:
+        return state.has_group_unique("tentudia", self.player, count)
     
     # Gemino quest
     def empty_thimble(self, state: CollectionState) -> bool:
@@ -902,8 +902,8 @@ class BlasRules:
         return state.has("Dried Flowers bathed in Tears", self.player)
     
     # Altasgracias quest
-    def ceremony_items(self, state: CollectionState) -> int:
-        return state.count_group_unique("egg", self.player)
+    def ceremony_items(self, state: CollectionState, count: int) -> bool:
+        return state.has_group_unique("egg", self.player, count)
     
     def egg(self, state: CollectionState) -> bool:
         return state.has("Egg of Deformity", self.player)
@@ -917,8 +917,8 @@ class BlasRules:
             else 0
     
     # Cleofas quest
-    def marks_of_refuge(self, state: CollectionState) -> int:
-        return state.count_group_unique("marks", self.player)
+    def marks_of_refuge(self, state: CollectionState, count: int) -> bool:
+        return state.has_group_unique("marks", self.player, count)
     
     def cord(self, state: CollectionState) -> bool:
         return state.has("Cord of the True Burying", self.player)
@@ -930,15 +930,15 @@ class BlasRules:
     def true_heart(self, state: CollectionState) -> bool:
         return state.has("Apodictic Heart of Mea Culpa", self.player)
     
-    def traitor_eyes(self, state: CollectionState) -> int:
-        return state.count_group_unique("eye", self.player)
+    def traitor_eyes(self, state: CollectionState, count: int) -> bool:
+        return state.has_group_unique("eye", self.player, count)
     
     # Jibrael quest
     def bell(self, state: CollectionState) -> bool:
         return state.has("Petrified Bell", self.player)
     
-    def verses(self, state: CollectionState) -> int:
-        return state.count("Verses Spun from Gold", self.player)
+    def verses(self, state: CollectionState, count: int) -> bool:
+        return state.has("Verses Spun from Gold", self.player, count)
     
     # Movement tech
     def can_water_jump(self, state: CollectionState) -> bool:
