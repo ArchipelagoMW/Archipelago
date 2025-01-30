@@ -1,9 +1,9 @@
 <MENUOFF>
 <BGM>(11)
-{WindowOpen}
+<WINDOW>(0)
 {HintText}
 <ANYKEY>
-{WindowClose}
+<CLOSEWINDOW>(0)
 <SAVE>
 <BGMSTOP>
 <BGM>(7)

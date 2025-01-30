@@ -269,22 +269,14 @@ class LuigisMansionRandomizer:
             hint_game = hintfo["Game"]
             lines = get_data(__name__, "data/custom_events/event" + event_no + ".txt").decode('utf-8')
             if self.output_data["Options"]["hint_distribution"] == 4:
-                lines = lines.replace("{WindowOpen}", "<WINDOW>(0)")
-                lines = lines.replace("{WindowClose}", "<CLOSEWINDOW>(0)")
                 hint_text = f"<SAY>{hint_player}'s \\ {hint_item} \\ is somewhere in \\ {hint_game}"
             elif self.output_data["Options"]["hint_distribution"] == 1:
                 jokes = get_data(__name__, "data/jokes.txt").decode('utf-8')
                 joke = ""
-                lines = lines.replace("{WindowOpen}", "<WINDOW>(0)")
-                lines = lines.replace("{WindowClose}", "<CLOSEWINDOW>(0)")
                 hint_text = f"<SAY>{joke}" # TODO pull junk hint into here
             elif self.output_data["Options"]["hint_distribution"] == 5:
-                lines = lines.replace("{WindowOpen}", "")
-                lines = lines.replace("{WindowClose}", "")
-                hint_text = "<WAIT>(0.1)"
+                hint_text = "<SAY>Saving your game now"
             else:
-                lines = lines.replace("{WindowOpen}", "<WINDOW>(0)")
-                lines = lines.replace("{WindowClose}", "<CLOSEWINDOW>(0)")
                 hint_text = f"<SAY>{hint_player}'s \\ {hint_item} \\ can be found at \\ {hint_loc}"
             lines = lines.replace("{HintText}", str(hint_text))
             self.update_custom_event(event_no, False, lines)
