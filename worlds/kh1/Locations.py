@@ -300,6 +300,7 @@ location_table: Dict[str, KH1LocationData] = {
     "Hollow Bastion Defeat Behemoth Omega Arts Event":                                  KH1LocationData("Hollow Bastion",   265_6105, "Reward"),
     "Hollow Bastion Speak to Princesses Fire Event":                                    KH1LocationData("Hollow Bastion",   265_6106, "Static"),
     "End of the World Defeat Chernabog Superglide Event":                               KH1LocationData("End of the World", 265_6111, "Reward"),
+    "Neverland Seal Keyhole Navi-G Piece Event":                                        KH1LocationData("Neverland",        265_6112, "Static"),
     
     "Traverse Town Mail Postcard 01 Event":                                             KH1LocationData("Traverse Town",    265_6120, "Reward"),
     "Traverse Town Mail Postcard 02 Event":                                             KH1LocationData("Traverse Town",    265_6121, "Reward"),
@@ -313,6 +314,7 @@ location_table: Dict[str, KH1LocationData] = {
     "Traverse Town Mail Postcard 10 Event":                                             KH1LocationData("Traverse Town",    265_6129, "Reward"),
     
     "Traverse Town Defeat Opposite Armor Aero Event":                                   KH1LocationData("Traverse Town",    265_6131, "Static"),
+    "Traverse Town Defeat Opposite Armor Navi-G Piece Event":                           KH1LocationData("Traverse Town",    265_6132, "Static"),
     
     "Atlantica Undersea Gorge Blizzard Clam":                                           KH1LocationData("Atlantica",        265_6201, "Static"),
     "Atlantica Undersea Gorge Ocean Floor Clam":                                        KH1LocationData("Atlantica",        265_6202, "Static"),

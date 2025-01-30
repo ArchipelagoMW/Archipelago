@@ -805,6 +805,8 @@ def set_rules(kh1world):
         lambda state: state.has("Green Trinity", player))
     add_rule(kh1world.get_location("Neverland Seal Keyhole Glide Event"),
         lambda state: state.has("Green Trinity", player))
+    add_rule(kh1world.get_location("Neverland Seal Keyhole Navi-G Piece Event"),
+        lambda state: state.has("Green Trinity", player))
     add_rule(kh1world.get_location("Neverland Defeat Captain Hook Ars Arcanum Event"),
         lambda state: state.has("Green Trinity", player))
     add_rule(kh1world.get_location("Hollow Bastion Defeat Maleficent Donald Cheer Event"),
@@ -838,6 +840,8 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Traverse Town Mail Postcard 10 Event"),
         lambda state: state.has("Postcard", player, 10))
     add_rule(kh1world.get_location("Traverse Town Defeat Opposite Armor Aero Event"),
+        lambda state: state.has("Red Trinity", player))
+    add_rule(kh1world.get_location("Traverse Town Defeat Opposite Armor Navi-G Piece Event"),
         lambda state: state.has("Red Trinity", player))
     add_rule(kh1world.get_location("Hollow Bastion Speak with Aerith Ansem's Report 2"),
         lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
