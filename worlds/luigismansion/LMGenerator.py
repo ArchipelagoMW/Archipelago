@@ -265,7 +265,7 @@ class LuigisMansionRandomizer:
                     hintfo = self.output_data["Hints"]["1F Washroom Toad"]
             hint_item = hintfo["Item"]
             hint_loc = hintfo["Location"]
-            hint_player = hintfo["player"]
+            hint_player = hintfo["Player"]
             hint_game = hintfo["Game"]
             lines = get_data(__name__, "data/custom_events/event" + event_no + ".txt").decode('utf-8')
             if self.output_data["Options"]["hint_distribution"] == 4:
