@@ -8,5 +8,6 @@
 <BGMSTOP>
 <BGM>(7)
 <MENUON>
+<FLAGON>(112)
 <FLAGON>(91)
 <END>
