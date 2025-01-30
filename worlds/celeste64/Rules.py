@@ -204,13 +204,11 @@ def location_rule(state: CollectionState, world: Celeste64World, loc: str) -> bo
 
     return False
 
-def region_connection_rule(state: CollectionState, world: Celeste64World, source_reg: str, dest_reg: str) -> bool:
-    connection: Tuple[str] = (source_reg, dest_reg)
-
-    if connection not in world.active_region_logic_mapping:
+def region_connection_rule(state: CollectionState, world: Celeste64World, region_connection: Tuple[str]) -> bool:
+    if region_connection not in world.active_region_logic_mapping:
         return True
 
-    for possible_access in world.active_region_logic_mapping[connection]:
+    for possible_access in world.active_region_logic_mapping[region_connection]:
         if state.has_all(possible_access, world.player):
             return True
 
@@ -227,6 +225,7 @@ def connect_region(world: Celeste64World, region: Region, dest_regions: List[str
     rules: Dict[str, Callable[[CollectionState], bool]] = {}
 
     for dest_region in dest_regions:
-        rules[dest_region] = lambda state, dest_region=dest_region: region_connection_rule(state, world, region.name, dest_region)
+        region_connection: Tuple[str] = (region.name, dest_region)
+        rules[dest_region] = lambda state, region_connection=region_connection: region_connection_rule(state, world, region_connection)
 
     region.add_exits(dest_regions, rules)
