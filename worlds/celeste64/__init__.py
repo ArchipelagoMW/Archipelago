@@ -85,25 +85,32 @@ class Celeste64World(World):
                       for name in unlockable_item_data_table.keys()
                       if name not in self.options.start_inventory]
 
-        if self.options.move_shuffle:
-            move_items_for_itempool: List[str] = deepcopy(list(move_item_data_table.keys()))
+        chosen_start_item: str = ""
 
+        if self.options.move_shuffle:
             if self.options.logic_difficulty == "standard":
-                # If the start_inventory already includes a move, don't worry about giving it one
-                if not [move for move in move_items_for_itempool if move in self.options.start_inventory]:
-                    chosen_start_move = self.random.choice(move_items_for_itempool)
-                    move_items_for_itempool.remove(chosen_start_move)
+                possible_unwalls: List[str] = [name for name in move_item_data_table.keys()
+                                                if name != ItemName.skid_jump]
+
+                if self.options.checkpointsanity:
+                    possible_unwalls.extend([name for name in checkpoint_item_data_table.keys()
+                                                if name != ItemName.checkpoint_1 and name != ItemName.checkpoint_10])
+
+                # If the start_inventory already includes a move or checkpoint, don't worry about giving it one
+                if not [item for item in possible_unwalls if item in self.multiworld.precollected_items[self.player]]:
+                    chosen_start_item = self.random.choice(possible_unwalls)
 
                     if self.options.carsanity:
                         intro_car_loc: Location = self.multiworld.get_location(LocationName.car_1, self.player)
-                        intro_car_loc.place_locked_item(self.create_item(chosen_start_move))
+                        intro_car_loc.place_locked_item(self.create_item(chosen_start_item))
                         location_count -= 1
                     else:
-                        self.multiworld.push_precollected(self.create_item(chosen_start_move))
+                        self.multiworld.push_precollected(self.create_item(chosen_start_item))
 
             item_pool += [self.create_item(name)
-                          for name in move_items_for_itempool
-                          if name not in self.options.start_inventory]
+                          for name in move_item_data_table.keys()
+                          if name not in self.multiworld.precollected_items[self.player]
+                          and name != chosen_start_item]
         else:
             for start_move in move_item_data_table.keys():
                 self.multiworld.push_precollected(self.create_item(start_move))
@@ -114,7 +121,9 @@ class Celeste64World(World):
             goal_checkpoint_loc.place_locked_item(self.create_item(ItemName.checkpoint_10))
             item_pool += [self.create_item(name)
                           for name in checkpoint_item_data_table.keys()
-                          if name not in self.options.start_inventory and name != ItemName.checkpoint_10]
+                          if name not in self.multiworld.precollected_items[self.player]
+                          and name != ItemName.checkpoint_10
+                          and name != chosen_start_item]
         else:
             for item_name in checkpoint_item_data_table.keys():
                 checkpoint_loc: Location = self.multiworld.get_location(item_name, self.player)
