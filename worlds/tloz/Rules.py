@@ -44,11 +44,14 @@ def set_rules(tloz_world: "TLoZWorld"):
         for level in tloz_world.levels[1:]:
             for location in level.locations:
                 add_rule(tloz_world.get_location(location.name),
-                         lambda state: state.has_group("swords", player))
+                         lambda state: state.has("Sword", player) or
+                                       state.has("White Sword", player) or
+                                       state.has("Magical Sword", player))
         for level in tloz_world.levels[4:]:
             for location in level.locations:
                 add_rule(tloz_world.get_location(location.name),
-                         lambda state: state.has("White Sword", player) or state.has("Magical Sword", player))
+                         lambda state: state.has("White Sword", player) or
+                                       state.has("Magical Sword", player))
         for location in tloz_world.levels[6].locations:
             add_rule(tloz_world.get_location(location.name),
                      lambda state: state.has("Magical Sword", player))

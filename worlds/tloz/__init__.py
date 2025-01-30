@@ -161,6 +161,7 @@ class TLoZWorld(World):
                 level,
                 f"Level {i} Entrance at {entrando_entrance}",
                 lambda state, rule=entrando_rule: rule(state, self.player))
+
             self.multiworld.regions.append(level)
 
         for i, level in enumerate(level_locations):
