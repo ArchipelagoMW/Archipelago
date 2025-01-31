@@ -225,12 +225,13 @@ def check_alive():
 async def check_death(ctx: LMContext):
     if check_ingame() and not check_alive():
         # TODO Determine game over screen reached to ensure Deathlink was already sent.
+        if dme.read_word(CURR_PLAY_STATE_ADDR) == 3:
+            ctx.is_luigi_dead = False
+            return
         if not ctx.is_luigi_dead and time.time() >= ctx.last_death_link + 3:
             ctx.is_luigi_dead = True
             set_luigi_dead()
             await ctx.send_death(ctx.player_names[ctx.slot] + " scared themselves to death.")
-    else:
-        ctx.is_luigi_dead = False
     return
 
 def set_luigi_dead():
