@@ -87,9 +87,9 @@ RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000,50000000, 60000000, 70000000, 10
 # List of received items to ignore because they are handled elsewhere
 # TODO Remove hearts from here when fixed.
 RECV_ITEMS_IGNORE = [8063, 8064, 8127]
-RECV_OWN_GAME_LOCATIONS: list[str] = [lm_location for lm_location in BOO_LOCATION_TABLE.keys() and
-    TOAD_LOCATION_TABLE.keys()]
-RECV_OWN_GAME_ITEMS: list[str] = [lm_item for lm_item in BOO_ITEM_TABLE.keys()]
+
+RECV_OWN_GAME_LOCATIONS: list[str] = list(BOO_LOCATION_TABLE.keys()) + list(TOAD_LOCATION_TABLE.keys())
+RECV_OWN_GAME_ITEMS: list[str] = list(BOO_ITEM_TABLE.keys()) + list(filler_items.keys())
 
 
 def read_short(console_address: int):
@@ -272,16 +272,16 @@ async def give_items(ctx: LMContext):
         return
 
     last_recv_idx = read_short(LAST_RECV_ITEM_ADDR)
-    if (len(ctx.items_received) - 1) == last_recv_idx:
+    if len(ctx.items_received) == last_recv_idx:
         return
 
     # Filter for only items where we have not received yet. If same slot, only receive the locations from the
     # pre-approved own locations (as everything is currently a NetworkItem), otherwise accept other slots.
-    recv_items = [netItem for netItem in ctx.items_received[last_recv_idx+1:] if netItem.item not in RECV_ITEMS_IGNORE]
+    recv_items = ctx.items_received[last_recv_idx:]
     logger.info("DEBUG -- Received items to try and validate: " + str(len(recv_items)))
 
     if len(recv_items) == 0:
-        write_short(LAST_RECV_ITEM_ADDR, (len(ctx.items_received) - 1))
+        write_short(LAST_RECV_ITEM_ADDR, len(ctx.items_received))
         return
 
     last_bill_list = [x[1] for x in filler_items.items() if "Bills" in x[0]]
@@ -291,9 +291,11 @@ async def give_items(ctx: LMContext):
 
     for item in recv_items:
         # If item is handled as start inventory and created in patching, ignore them.
-        # If item is something we got from ourselves, but not something we need to give ourselves, ignore it
-        if item.player == ctx.slot and not (ctx.location_names.lookup_in_game(item.location)
-            in RECV_OWN_GAME_LOCATIONS or ctx.item_names.lookup_in_game(item.item) in RECV_OWN_GAME_ITEMS):
+        # If item is something we found, but not something that is a location we want to get an item from or an
+        # item that is okay to get no matter what, ignore it.
+        if item.item in RECV_ITEMS_IGNORE or (item.player == ctx.slot and not
+        (ctx.location_names.lookup_in_game(item.location) in RECV_OWN_GAME_LOCATIONS or
+         ctx.item_names.lookup_in_game(item.item) in RECV_OWN_GAME_ITEMS)):
             last_recv_idx+=1
             write_short(LAST_RECV_ITEM_ADDR, last_recv_idx)
             continue
@@ -355,7 +357,7 @@ async def give_items(ctx: LMContext):
                 item_val = dme.read_byte(lm_item.ram_addr)
                 dme.write_byte(lm_item.ram_addr, (item_val | (1 << lm_item.itembit)))
 
-            # Update the last received index to ensure we dont receive the same item over and over.
+            # Update the last received index to ensure we don't receive the same item over and over.
             last_recv_idx+=1
             write_short(LAST_RECV_ITEM_ADDR, last_recv_idx)
         else:
