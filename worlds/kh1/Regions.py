@@ -510,10 +510,10 @@ def create_regions(kh1world):
         regions["Neverland"].locations.append("Neverland Defeat Phantom Stop Event")
         regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Zantetsuken Event")
         regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Ansem's Report 11")
-    if options.super_bosses or options.goal.current_key == "sephiroth":
+    if options.super_bosses or options.final_rest_door_key.current_key == "sephiroth":
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Sephiroth Ansem's Report 12")
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Sephiroth One-Winged Angel Event")
-    if options.super_bosses or options.goal.current_key == "unknown":
+    if options.super_bosses or options.final_rest_door_key.current_key == "unknown":
         regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown Ansem's Report 13")
         regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown EXP Necklace Event")
     if options.jungle_slider:

@@ -56,7 +56,8 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "exp_zero_in_pool": False,
         "donald_death_link": False,
         "goofy_death_link": False,
-        "remote_items": True
+        "remote_items": True,
+        "shorten_go_mode": False
     },
     # Puppies are found individually, and the goal is to return them all.
     "Puppy Hunt": {
@@ -111,7 +112,8 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "exp_zero_in_pool": False,
         "donald_death_link": False,
         "goofy_death_link": False,
-        "remote_items": True
+        "remote_items": True,
+        "shorten_go_mode": False
     },
     # Advanced playthrough with most settings on.
     "Advanced": {
@@ -166,7 +168,8 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "exp_zero_in_pool": True,
         "donald_death_link": False,
         "goofy_death_link": False,
-        "remote_items": True
+        "remote_items": True,
+        "shorten_go_mode": False
     },
     # Playthrough meant to enhance the level 1 experience.
     "Level 1": {
@@ -220,6 +223,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "exp_zero_in_pool": False,
         "donald_death_link": False,
         "goofy_death_link": False,
-        "remote_items": True
+        "remote_items": True,
+        "shorten_go_mode": False
     }
 }

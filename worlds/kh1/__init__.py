@@ -173,9 +173,9 @@ class KH1World(World):
             current_level_for_placing_stats += 1
         
         # Calculate prefilled locations and items
-        prefilled_items = ["Final Door Key"]
+        exclude_items = ["Final Door Key", "Lucky Emblem"]
         if not self.options.randomize_emblem_pieces:
-            prefilled_items = prefilled_items + ["Emblem Piece (Flame)", "Emblem Piece (Chest)", "Emblem Piece (Fountain)", "Emblem Piece (Statue)"]
+            exclude_items = exclude_items + ["Emblem Piece (Flame)", "Emblem Piece (Chest)", "Emblem Piece (Fountain)", "Emblem Piece (Statue)"]
         
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
         
@@ -229,7 +229,7 @@ class KH1World(World):
                     item_pool += [self.create_item(name) for _ in range(0, 3)]
                 if self.options.randomize_postcards.current_key == "all":
                     item_pool += [self.create_item(name) for _ in range(0, quantity)]
-            elif name not in prefilled_items:
+            elif name not in exclude_items:
                 item_pool += [self.create_item(name) for _ in range(0, quantity)]
         
         for i in range(self.determine_lucky_emblems_in_pool()):
@@ -245,7 +245,7 @@ class KH1World(World):
         self.multiworld.itempool += item_pool
 
     def place_predetermined_items(self) -> None:
-        if self.options.final_rest_door_key.current_key not in ["puppies", "postcards", "lucky emblems"]:
+        if self.options.final_rest_door_key.current_key not in ["puppies", "postcards", "lucky_emblems"]:
             goal_dict = {
                 "sephiroth":       "Olympus Coliseum Defeat Sephiroth Ansem's Report 12",
                 "unknown":         "Hollow Bastion Defeat Unknown Ansem's Report 13",
@@ -260,7 +260,8 @@ class KH1World(World):
             goal_location_name = "Traverse Town Piano Room Return " + str(required_puppies) + " Puppies"
             if required_puppies == 50 or required_puppies == 99:
                 goal_location_name = goal_location_name + " Reward 2"
-        self.get_location(goal_location_name).place_locked_item(self.create_item("Final Door Key"))
+        if self.options.final_rest_door_key.current_key != "lucky_emblems":
+            self.get_location(goal_location_name).place_locked_item(self.create_item("Final Door Key"))
         self.get_location("Final Ansem").place_locked_item(self.create_event("Victory"))
                 
         if not self.options.randomize_emblem_pieces:

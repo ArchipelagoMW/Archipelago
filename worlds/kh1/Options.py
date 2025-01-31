@@ -231,7 +231,7 @@ class KeybladeStats(Choice):
     """
     Determines whether Keyblade stats should be randomized.
     Randomize: Randomly generates STR and MP bonuses for each keyblade between the defined minimums and maximums
-    Shuffle: Shuffles the stats of the vanilla keyblade amongst each other.
+    Shuffle: Shuffles the stats of the vanilla keyblades amongst each other.
     Vanilla: Keyblade stats are unchanged.
     """
     display_name = "Keyblade Stats"
@@ -471,12 +471,18 @@ class RemoteItems(DefaultOnToggle):
 class Slot2LevelChecks(Range):
     """
     Determines how many levels have an additional item.  Usually, this item is an ability.
-    If Remote Items is OFF, this checks will only contain abilities.
+    If Remote Items is OFF, these checks will only contain abilities.
     """
     display_name = "Slot 2 Level Checks"
     default = 10
     range_start = 0
     range_end = 33
+
+class ShortenGoMode(Toggle):
+    """
+    If on, the player warps to the final cutscene after defeating Ansem 1 > Darkside > Ansem 2, skipping World of Chaos.
+    """
+    display_name = "Shorten Go Mode"
 
 @dataclass
 class KH1Options(PerGameCommonOptions):
@@ -529,6 +535,7 @@ class KH1Options(PerGameCommonOptions):
     jungle_slider: JungleSlider
     starting_tools: StartingTools
     remote_items: RemoteItems
+    shorten_go_mode: ShortenGoMode
 
 kh1_option_groups = [
     OptionGroup("Goal", [
@@ -588,5 +595,6 @@ kh1_option_groups = [
         DonaldDeathLink,
         GoofyDeathLink,
         RemoteItems,
+        ShortenGoMode,
     ])
 ]

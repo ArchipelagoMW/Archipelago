@@ -1458,7 +1458,7 @@ def set_rules(kh1world):
             lambda state: (
                 has_emblems(state, player, options.keyblades_unlock_chests) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) and has_defensive_tools(state, player) and state.has("Progressive Blizzard", player, 3)
             ))
-    if options.super_bosses or options.goal.current_key == "sephiroth":
+    if options.super_bosses or options.final_rest_door_key.current_key == "sephiroth":
         add_rule(kh1world.get_location("Olympus Coliseum Defeat Sephiroth Ansem's Report 12"),
             lambda state: (
                 state.has_all({
@@ -1479,7 +1479,7 @@ def set_rules(kh1world):
                 and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
             ))
-    if options.super_bosses or options.goal.current_key == "unknown":
+    if options.super_bosses or options.final_rest_door_key.current_key == "unknown":
         add_rule(kh1world.get_location("Hollow Bastion Defeat Unknown Ansem's Report 13"),
             lambda state: (
                 has_emblems(state, player, options.keyblades_unlock_chests)
