@@ -50,7 +50,7 @@ area_data: Dict[str, AreaStats] = {
 
 # these are used for caching which areas can currently be reached in state
 boss_areas: List[str] = [name for name, data in area_data.items() if data.is_boss and name != "Gauntlet"]
-non_boss_areas: List[str] = [name for name, data in area_data.items() if not data.is_boss]
+non_boss_areas: List[str] = [name for name, data in area_data.items() if not data.is_boss and name != "Swamp" and name != "Cathedral"]
 
 
 class CombatState(IntEnum):
