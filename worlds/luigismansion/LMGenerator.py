@@ -213,6 +213,11 @@ class LuigisMansionRandomizer:
             mansion_type = "<OMOTELUIGI>"
         lines = lines.replace("{MANSION_TYPE}", mansion_type)
 
+        include_radar = ""
+        if any("Boo Radar" in key for key in self.output_data["Options"]["start_inventory"]):
+            include_radar = "<FLAGON>(73)"  + os.linesep + "<FLAGON>(75)"
+        lines = lines.replace("{BOO RADAR}", include_radar)
+
         event_door_list: list[str] = []
         door_list: dict[int, int] = self.output_data["Entrances"]
 
