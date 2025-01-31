@@ -441,8 +441,8 @@ class LMWorld(World):
                 return LMItem(item, self.player, ALL_ITEMS_TABLE[item], set_non_progress)
         raise Exception(f"Invalid item name: {item}")
 
-    def post_fill(self):
-        visualize_regions(self.multiworld.get_region("Menu", self.player), "luigiregions.puml", linetype_ortho=False)
+    #def post_fill(self):
+        # visualize_regions(self.multiworld.get_region("Menu", self.player), "luigiregions.puml", linetype_ortho=False)
 
     def create_items(self):
         exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
