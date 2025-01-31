@@ -564,7 +564,7 @@ class _RestrictiveFillBatcher:
         Get the maximum exploration state for the currently reachable items.
 
         Must not be called after self.pop_items_to_place() has returned an empty list, indicating that there are no more
-        items to place.
+        items to place, or after self.finish_fill() has been called.
 
         An item is reachable if it matches any one of the following:
         1. It is in `self.item_pool`, so has not been placed yet and is not currently being placed.
@@ -584,7 +584,7 @@ class _RestrictiveFillBatcher:
         Get the maximum exploration state for a potential swap.
 
         Must not be called after self.pop_items_to_place() has returned an empty list, indicating that there are no more
-        items to place.
+        items to place, or after self.finish_fill() has been called.
 
         :param displaced_item: The item displaced from `location`.
         :param location: The location of the swap attempt.
@@ -600,14 +600,27 @@ class _RestrictiveFillBatcher:
         Update the current batch for the result of a successful swap.
 
         Must not be called after self.pop_items_to_place() has returned an empty list, indicating that there are no more
-        items to place.
+        items to place, or after self.finish_fill() has been called.
 
         :param displaced_item: The item that was previously placed at swap_location and has been displaced by the swap.
         :param item_to_place: The item that has been placed at swap_location.
         :param swap_location: The location where the two items have been swapped.
         """
         assert self._current_batch is not None, "Cannot call when there are no more items to place."
+        # Add the item back into the item_pool and the per-player pools in reachable_items.
+        self._item_pool.append(displaced_item)
+        self._reachable_items[displaced_item.player].appendleft(displaced_item)
+        # Update the batch for the swap.
         return self._current_batch.update_for_swap(displaced_item, item_to_place, swap_location)
+
+    def finish_fill(self, unplaced_items: list[Item]):
+        """
+        Add items that could not be placed into the item_pool, and marked the batcher as having finished filling.
+
+        :param unplaced_items: Items that could not be placed.
+        """
+        self._current_batch = None
+        self._item_pool.extend(unplaced_items)
 
 
 def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locations: typing.List[Location],
@@ -645,8 +658,11 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
     # The batcher manages all the batches internally, creating new batches automatically when the current batch runs out
     # of items to place.
     batcher = _RestrictiveFillBatcher(base_state, reachable_items, item_pool, one_item_per_player)
+    # The batcher is responsible for modifying these from this point onwards.
+    del item_pool
+    del reachable_items
 
-    while any(reachable_items.values()) and locations:
+    while locations:
         # Pop items to place from the ends of deques in `reachable_items` and pop those same items from `item_pool`.
         items_to_place = batcher.pop_items_to_place()
         if not items_to_place:
@@ -728,10 +744,6 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                                 swap_count += 1
                                 swapped_items[placed_item.player, placed_item.name, unsafe] = swap_count
 
-                                reachable_items[placed_item.player].appendleft(
-                                    placed_item)
-                                item_pool.append(placed_item)
-
                                 # cleanup at the end to hopefully get better errors
                                 cleanup_required = True
 
@@ -803,7 +815,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                             f"Already placed {len(placements)}:\n"
                             f"{', '.join(str(place) for place in placements)}", multiworld=multiworld)
 
-    item_pool.extend(unplaced_items)
+    batcher.finish_fill(unplaced_items)
 
 
 def remaining_fill(multiworld: MultiWorld,
