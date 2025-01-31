@@ -372,6 +372,129 @@ def patch_kh2(self, output_directory):
         'title':  'Randomizer Seed'
     }
 
+    if self.options.HarderAS == True:
+        self.mod_yml['assets'] +=[
+            {
+                 'name':   'ard/us/hb32.ard',
+                 'multi':  [
+                     {
+                         'name': 'ard/fr/hb32.ard'
+                     },
+                     {
+                         'name': 'ard/gr/hb32.ard'
+                     },
+                     {
+                         'name': 'ard/it/hb32.ard'
+                     },
+                     {
+                         'name': 'ard/sp/hb32.ard'
+                     }
+                 ],
+                 'method': 'binarc',
+                 'source': [
+                     {
+                         'name':   'btl',
+                         'type':   'AreaDataScript',
+                         'method': 'areadatascript',
+                         'source': [
+                             {
+                                 'name':     'hb32btl.script'
+                             }
+                         ]
+                     }
+                 ]
+            },
+            {
+                'name':   'ard/us/hb33.ard',
+                'multi':  [
+                    {
+                        'name': 'ard/fr/hb33.ard'
+                    },
+                    {
+                        'name': 'ard/gr/hb33.ard'
+                    },
+                    {
+                        'name': 'ard/it/hb33.ard'
+                    },
+                    {
+                        'name': 'ard/sp/hb33.ard'
+                    }
+                ],
+                'method': 'binarc',
+                'source': [
+                    {
+                        'name':   'btl',
+                        'type':   'AreaDataScript',
+                        'method': 'areadatascript',
+                        'source': [
+                            {
+                                'name':     'hb33btl.script'
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                'name':   'ard/us/hb34.ard',
+                'multi':  [
+                    {
+                        'name': 'ard/fr/hb34.ard'
+                    },
+                    {
+                        'name': 'ard/gr/hb34.ard'
+                    },
+                    {
+                        'name': 'ard/it/hb34.ard'
+                    },
+                    {
+                        'name': 'ard/sp/hb34.ard'
+                    }
+                ],
+                'method': 'binarc',
+                'source': [
+                    {
+                        'name':   'btl',
+                        'type':   'AreaDataScript',
+                        'method': 'areadatascript',
+                        'source': [
+                            {
+                                'name':     'hb34btl.script'
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                'name':   'ard/us/hb38.ard',
+                'multi':  [
+                    {
+                        'name': 'ard/fr/hb38.ard'
+                    },
+                    {
+                        'name': 'ard/gr/hb38.ard'
+                    },
+                    {
+                        'name': 'ard/it/hb38.ard'
+                    },
+                    {
+                        'name': 'ard/sp/hb38.ard'
+                    }
+                ],
+                'method': 'binarc',
+                'source': [
+                    {
+                        'name':   'btl',
+                        'type':   'AreaDataScript',
+                        'method': 'areadatascript',
+                        'source': [
+                            {
+                                'name':     'hb38btl.script'
+                            }
+                        ]
+                    }
+                ]
+            }]
+
     goal_to_text = {
         0: "Three Proofs",
         1: "Lucky Emblem",
@@ -425,6 +548,24 @@ def patch_kh2(self, output_directory):
         "po.yml":       yaml.dump(self.pooh_text, line_break="\n"),
         "sys.yml":      yaml.dump(self.level_depth_text, line_break="\n"),
     }
+
+    if self.options.HarderAS == True:
+        self.hb32 = ("Program 0x73\nParty DEFAULT\nMission 0x195 \"HB32_FM_VEX\"\nBattleLevel 99\nSpawn \"b_80\"\n" +
+        "Program 0x92\nParty DEFAULT\nMission 0x195 \"HB32_FM_VEX\"\nBattleLevel 99\nSpawn \"b_80\"")
+        self.hb33 = ("Program 0x8E\nAllocEnemy 3145728\nParty DEFAULT\nAllocEffect 0x100000 0x80000" +
+        "Mission 0x196 \"HB33_FM_LEX\"\nBattleLevel 99\nSpawn \"b_80\"\n\nProgram 0x9B\nAllocEnemy 3670016\nParty DEFAULT" +
+        "Mission 0x199 \"HB33_FM_LAR\"\nBattleLevel 99\nSpawn \"b_81\"\n\nProgram 0x8F\nAllocEnemy 3670016\nParty DEFAULT" +
+        "Mission 0x199 \"HB33_FM_LAR\"\nBattleLevel 99\nSpawn \"b_81\"")
+        self.hb34 = ("Program 0x97\nAllocEnemy 3145728\nParty DEFAULT\nAllocEffect 0x100000 0x80000" +
+        "Mission 0x197 \"HB34_FM_ZEX\"\nBattleLevel 99\nSpawn \"b_80\"")
+        self.hb38 = ("Program 0x91\nAllocEnemy 3145728\nParty DEFAULT\nAllocEffect 0x100000 0x80000" +
+        "Mission 0x198 \"HB38_FM_MAR\"\nBattleLevel 99\nSpawn \"b_80\"")
+        openkhmod.update({
+        "hb32btl.script": self.hb32,
+        "hb33btl.script": self.hb33,
+        "hb34btl.script": self.hb34,
+        "hb38btl.script": self.hb38,
+        })
 
     mod = KH2Container(openkhmod, mod_dir, output_directory, self.player,
             self.multiworld.get_file_safe_player_name(self.player))
