@@ -252,6 +252,10 @@ def check_alive(ctx: LMContext):
 
 async def check_death(ctx: LMContext):
     if check_ingame(ctx) and not check_alive(ctx):
+        # Our health gets messed up in the Lab, so we can just ignore that location altogether.
+        if dme.read_word(CURR_MAP_ID_ADDR) == 1:
+            return
+
         if not ctx.is_luigi_dead and time.time() >= ctx.last_death_link + 3:
             ctx.is_luigi_dead = True
             set_luigi_dead()
