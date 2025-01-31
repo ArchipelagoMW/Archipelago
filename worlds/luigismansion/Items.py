@@ -96,7 +96,7 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Mario's Letter": LMItemData("Mario Item", 60, IC.progression, ram_addr=0x803D5DBC, itembit=0),
     "Mario's Star": LMItemData("Mario Item", 61, IC.progression, ram_addr=0x803D5DBB, itembit=5),
     "Mario's Shoe": LMItemData("Mario Item", 62, IC.progression, ram_addr=0x803D5DBB, itembit=7),
-    "Boo Radar": LMItemData("Upgrade", 63, IC.progression), #TODO
+    "Boo Radar": LMItemData("Upgrade", 63, IC.progression, ram_addr=0x803D33A2, itembit=0),
     "Poltergust 4000": LMItemData("Upgrade", 64, IC.useful), #TODO
     "Gold Diamond": LMItemData("Money", 65, IC.progression,
                                ram_addr=0x803D8B7C, pointer_offset=0x344, ram_byte_size=4),
