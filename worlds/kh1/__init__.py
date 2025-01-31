@@ -287,25 +287,38 @@ class KH1World(World):
         return self.random.choices([filler for filler in self.fillers.keys()], weights)[0]
 
     def fill_slot_data(self) -> dict:
-        slot_data = {"required_lucky_emblems_eotw": self.determine_lucky_emblems_required_to_open_end_of_the_world(),
-                    "required_lucky_emblems_door": self.determine_lucky_emblems_required_to_open_final_rest_door(),
+        slot_data = {
                     "advanced_logic": bool(self.options.advanced_logic),
-                    "hundred_acre_wood": bool(self.options.hundred_acre_wood),
                     "atlantica": bool(self.options.atlantica),
-                    "final_rest_door_key": str(self.options.final_rest_door_key.current_key)}
-                    "end_of_the_world_unlock": str(self.options.end_of_the_world_unlock.current_key)}
-        if self.options.donald_death_link:
-            slot_data["donalddl"] = ""
-        if self.options.goofy_death_link:
-            slot_data["goofydl"] = ""
-        if self.options.keyblades_unlock_chests:
-            slot_data["chestslocked"] = ""
-        else:
-            slot_data["chestsunlocked"] = ""
-        if self.options.interact_in_battle:
-            slot_data["interactinbattle"] = ""
-        slot_data["required_postcards"] = self.options.required_postcards.value
-        slot_data["required_puppies"] = self.options.required_puppies.value
+                    "bad_starting_weapons": bool(self.options.bad_starting_weapons),
+                    "cups": str(self.options.cups.current_key),
+                    "death_link": bool(self.options.death_link),
+                    "donald_death_link": bool(self.options.donald_death_link),
+                    "end_of_the_world_unlock": str(self.options.end_of_the_world_unlock.current_key),
+                    "exp_multiplier": int(self.options.exp_multiplier.value)/16,
+                    "exp_zero_in_pool": bool(self.options.exp_zero_in_pool),
+                    "extra_shared_abilities": bool(self.options.extra_shared_abilities),
+                    "final_rest_door_key": str(self.options.final_rest_door_key.current_key),
+                    "force_stats_on_levels": int(self.options.force_stats_on_levels.value),
+                    "goofy_death_link": bool(self.options.goofy_death_link),
+                    "hundred_acre_wood": bool(self.options.hundred_acre_wood),
+                    "interact_in_battle": bool(self.options.interact_in_battle),
+                    "jungle_slider": bool(self.options.jungle_slider),
+                    "keyblades_unlock_chests": bool(self.options.keyblades_unlock_chests),
+                    "level_checks": int(self.options.level_checks.value),
+                    "randomize_emblem_pieces": bool(self.options.exp_zero_in_pool),
+                    "randomize_postcards": str(self.options.randomize_postcards.current_key),
+                    "randomize_puppies": str(self.options.randomize_puppies.current_key),
+                    "remote_items": bool(self.options.remote_items),
+                    "required_lucky_emblems_door": self.determine_lucky_emblems_required_to_open_final_rest_door(),
+                    "required_lucky_emblems_eotw": self.determine_lucky_emblems_required_to_open_end_of_the_world(),
+                    "required_postcards": int(self.options.required_postcards.value),
+                    "required_puppies": int(self.options.required_puppies.value),
+                    "shorten_go_mode": bool(self.options.shorten_go_mode),
+                    "slot_2_level_checks": int(self.options.slot_2_level_checks.value),
+                    "starting_tools": bool(self.options.starting_tools),
+                    "super_bosses": bool(self.options.super_bosses)
+                    }
         return slot_data
     
     def create_item(self, name: str) -> KH1Item:

@@ -35,40 +35,10 @@ class KH1ClientCommandProcessor(ClientCommandProcessor):
     def __init__(self, ctx):
         super().__init__(ctx)
     
-    def _cmd_final_rest_door_key_unlock(self):
-        """Prints Final Rest Door Key Unlock setting"""
-        if "final_rest_door_key" in self.ctx.slot_data.keys():
-            self.output(str(self.ctx.slot_data["final_rest_door_key"]))
-        else:
-            self.output("Unknown")
-    
-    def _cmd_end_of_the_world_unlock(self):
-        """Prints End of the World Unlock setting"""
-        if "end_of_the_world_unlock" in self.ctx.slot_data.keys():
-            self.output(str(self.ctx.slot_data["end_of_the_world_unlock"]))
-        else:
-            self.output("Unknown")
-    
-    def _cmd_advanced_logic(self):
-        """Prints advanced logic setting"""
-        if "advanced_logic" in self.ctx.slot_data.keys():
-            self.output(str(self.ctx.slot_data["advanced_logic"]))
-        else:
-            self.output("Unknown")
-    
-    def _cmd_required_postcards(self):
-        """Prints the number of postcards required if goal is set to postcards"""
-        if "required_postcards" in self.ctx.slot_data.keys():
-            self.output(str(self.ctx.slot_data["required_postcards"]))
-        else:
-            self.output("Unknown")
-    
-    def _cmd_required_puppies(self):
-        """Prints the number of puppies required if goal is set to puppies"""
-        if "required_puppies" in self.ctx.slot_data.keys():
-            self.output(str(self.ctx.slot_data["required_puppies"]))
-        else:
-            self.output("Unknown")
+    def _cmd_slot_data(self):
+        """Prints slot data settings for the connected seed"""
+        for key in self.ctx.slot_data.keys():
+            self.output(str(key) + ": " + str(self.ctx.slot_data[key]))
 
 class KH1Context(CommonContext):
     command_processor: int = KH1ClientCommandProcessor
