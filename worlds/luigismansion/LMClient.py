@@ -272,17 +272,15 @@ async def give_items(ctx: LMContext):
         return
 
     last_recv_idx = read_short(LAST_RECV_ITEM_ADDR)
-    if (len(ctx.items_received) - 1) <= last_recv_idx:
+    if (len(ctx.items_received) - 1) == last_recv_idx:
         return
 
     # Filter for only items where we have not received yet. If same slot, only receive the locations from the
     # pre-approved own locations (as everything is currently a NetworkItem), otherwise accept other slots.
-    list_recv_items = [netItem for netItem in ctx.items_received[last_recv_idx+1:] if
-                       netItem.item not in RECV_ITEMS_IGNORE]
-    logger.info("DEBUG -- Identified the following number of received items to try and validate: " +
-                str(len(list_recv_items)))
+    recv_items = [netItem for netItem in ctx.items_received[last_recv_idx+1:] if netItem.item not in RECV_ITEMS_IGNORE]
+    logger.info("DEBUG -- Received items to try and validate: " + str(len(recv_items)))
 
-    if len(list_recv_items) == 0:
+    if len(recv_items) == 0:
         write_short(LAST_RECV_ITEM_ADDR, (len(ctx.items_received) - 1))
         return
 
@@ -291,12 +289,13 @@ async def give_items(ctx: LMContext):
     last_coin_list = [x[1] for x in filler_items.items() if "Coins" in x[0]]
     coins_ram_pointer = last_coin_list[len(last_coin_list) - 1].pointer_offset
 
-    for item in list_recv_items:
+    for item in recv_items:
         # If item is handled as start inventory and created in patching, ignore them.
         # If item is something we got from ourselves, but not something we need to give ourselves, ignore it
         if item.player == ctx.slot and not (ctx.location_names.lookup_in_game(item.location)
             in RECV_OWN_GAME_LOCATIONS or ctx.item_names.lookup_in_game(item.item) in RECV_OWN_GAME_ITEMS):
-            write_short(LAST_RECV_ITEM_ADDR, ctx.items_received.index(item))
+            last_recv_idx+=1
+            write_short(LAST_RECV_ITEM_ADDR, last_recv_idx)
             continue
 
         # Add a received message in the client for the item that is about to be received.
@@ -319,7 +318,6 @@ async def give_items(ctx: LMContext):
                 int_item_amount = 1
                 match lm_item.code:
                     case 119: # Bills and Coins
-                        print("I AM HERE")
                         coins_curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
                     [coins_ram_pointer]), lm_item.ram_byte_size))
                         bills_curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
@@ -329,9 +327,9 @@ async def give_items(ctx: LMContext):
                         coins_curr_val += int_item_amount
                         bills_curr_val += int_item_amount
                         dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
-                    [coins_curr_val]), coins_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
+                [coins_ram_pointer]), coins_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
                         dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
-                    [bills_curr_val]), bills_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
+                [bills_rams_pointer]), bills_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
                     case 128:
                         curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
                     [lm_item.pointer_offset]), lm_item.ram_byte_size))
@@ -358,7 +356,8 @@ async def give_items(ctx: LMContext):
                 dme.write_byte(lm_item.ram_addr, (item_val | (1 << lm_item.itembit)))
 
             # Update the last received index to ensure we dont receive the same item over and over.
-            write_short(LAST_RECV_ITEM_ADDR, ctx.items_received.index(item))
+            last_recv_idx+=1
+            write_short(LAST_RECV_ITEM_ADDR, last_recv_idx)
         else:
             # TODO Debug remove before release
             logger.warn("Missing information for AP ID: " + str(item.item))
