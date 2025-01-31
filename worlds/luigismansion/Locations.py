@@ -69,7 +69,8 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Rec Room Treadmill Key": LMLocationData("Rec Room", 18, "Furniture", 106, [], 23),
     "Courtyard Birdhouse": LMLocationData("Courtyard", 20, "Furniture", 146, [], 24),
     #TODO special event, unknown location
-    "Observatory Mario Star": LMLocationData("Observatory", 24, "Special", -1, [], 44),
+    "Observatory Mario Star": LMLocationData("Observatory", 24, "Special", -1, [], 44, room_ram_addr=0x803D339F,
+                                             locationbit=2),
     "Sealed Room NW Shelf Chest": LMLocationData("Sealed Room", 29, "Furniture", 532, [], 37),
     "Sealed Room NE Shelf Chest": LMLocationData("Sealed Room", 30, "Furniture", 534, [], 37),
     "Sealed Room SW Shelf Chest": LMLocationData("Sealed Room", 31, "Furniture", 531, [], 37),

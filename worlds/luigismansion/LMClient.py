@@ -415,6 +415,10 @@ async def check_locations(ctx: LMContext):
                     current_item_int = dme.read_byte(data.room_ram_addr)
                     if (current_item_int & (1 << data.locationbit)) > 0:
                         ctx.locations_checked.add(LMLocation.get_apid(data.code))
+                case "Special":
+                    current_item_int = dme.read_byte(data.room_ram_addr)
+                    if (current_item_int & (1 << data.locationbit)) > 0:
+                        ctx.locations_checked.add(LMLocation.get_apid(data.code))
 
     await ctx.check_locations(ctx.locations_checked)
 
