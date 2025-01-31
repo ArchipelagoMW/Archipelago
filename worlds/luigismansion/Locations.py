@@ -743,35 +743,34 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
 
 # Adds Portrait Ghosts as locations
 PORTRAIT_LOCATION_TABLE: dict[str, LMLocationData] = {
-    "Neville, the Bookish Father":          LMLocationData("Study", 621, "Portrait", 70, []),
-    "Lydia, the Mirror-Gazing Mother":      LMLocationData("Master Bedroom", 622, "Portrait", 71, []),
+    "Neville, the Bookish Father":          LMLocationData("Study", 621, "Portrait", 70, [], 35, room_ram_addr=0x803D5DA9, locationbit=6),
+    "Lydia, the Mirror-Gazing Mother":      LMLocationData("Master Bedroom", 622, "Portrait", 71, [], 34, room_ram_addr=0x803D5DA9, locationbit=7),
     #TODO Bosses do not have entries in map2
-    "Chauncey, the Spoiled Baby":           LMLocationData("Nursery", 623, "Portrait", 77, []),
-    "Henry and Orville, the Twin Brothers": LMLocationData("Twins' Room", 624, "Portrait", 79, []),
+    "Chauncey, the Spoiled Baby":           LMLocationData("Nursery", 623, "Portrait", 77, [], 26, room_ram_addr=0x803D5DAC, locationbit=0),
+    "Henry and Orville, the Twin Brothers": LMLocationData("Twins' Room", 624, "Portrait", 79, [], 27, room_ram_addr=0x803D5DAA, locationbit=1),
     # cannot give to ghost actors you capture, as they do not have a table entry
-    # Twins Access rule=lambda state: state.has_group("Medal", player)), this means any medal will make the twin in logic
-    "The Floating Whirlindas":              LMLocationData("Ballroom", 625, "Portrait", 34, []),
+    "The Floating Whirlindas":              LMLocationData("Ballroom", 625, "Portrait", 34, [], 9, room_ram_addr=0x803D5DBE, locationbit=2),
     "Shivers, the Wandering Butler":        LMLocationData("Butler's Room", 626, "Portrait", 29,
-                                                    ["Fire Element Medal"]),
-    "Madame Clairvoya, the Freaky Fortune-Teller": LMLocationData("Fortune-Teller's Room", 627, "Portrait", 31, []),
-    "Melody Pianissima, the Beautiful Pianist": LMLocationData("Conservatory", 628, "Portrait", 24, []),
-    "Mr. Luggs, the Glutton":               LMLocationData("Dining Room", 629, "Portrait", 27, ["Fire Element Medal"]),
-    "Spooky, the Guard Dog":                LMLocationData("Boneyard", 630, "Portrait", 23, ["Water Element Medal"]),
+                                                    ["Fire Element Medal"], 0, room_ram_addr=0x803D5DA5, locationbit=6),
+    "Madame Clairvoya, the Freaky Fortune-Teller": LMLocationData("Fortune-Teller's Room", 627, "Portrait", 31, [], 3, room_ram_addr=0x803D5DBB, locationbit=2),
+    "Melody Pianissima, the Beautiful Pianist": LMLocationData("Conservatory", 628, "Portrait", 24, [], 22, room_ram_addr=0x803D5DA8, locationbit=6),
+    "Mr. Luggs, the Glutton":               LMLocationData("Dining Room", 629, "Portrait", 27, ["Fire Element Medal"], 8, room_ram_addr=0x803D5DA9, locationbit=4),
+    "Spooky, the Guard Dog":                LMLocationData("Boneyard", 630, "Portrait", 23, ["Water Element Medal"], 11, room_ram_addr=0x803D5DB3, locationbit=0),
     #TODO Bosses do not have entries in map2
-    "Bogmire, the Cemetary Shadow":         LMLocationData("Graveyard", 631, "Portrait", 0, []),
-    "Biff Atlas, the Bodybuilder":          LMLocationData("Rec Room", 632, "Portrait", 32, []),
-    "Slim Bankshot, the Lonely Poolshark":  LMLocationData("Billiards Room", 633, "Portrait", 26, []),
-    "Miss Petunia, the Bathing Beauty":     LMLocationData("2F Bathroom", 634, "Portrait", 83, ["Ice Element Medal"]),
-    "Nana, the Scarf-Knitting Granny":      LMLocationData("Nana's Room", 635, "Portrait", 76, []),
-    "Sue Pea, the Dozing Girl":             LMLocationData("Guest Room", 636, "Portrait", 78, ["Water Element Medal"]),
-    "Uncle Grimmly, Hermit of the Darkness": LMLocationData("Wardrobe", 637, "Portrait", 16, ["Blackout"]),
+    "Bogmire, the Cemetary Shadow":         LMLocationData("Graveyard", 631, "Portrait", 0, [], 15, room_ram_addr=0x803D5DBE, locationbit=5),
+    "Biff Atlas, the Bodybuilder":          LMLocationData("Rec Room", 632, "Portrait", 32, [], 23, room_ram_addr=0x803D5DAA, locationbit=6),
+    "Slim Bankshot, the Lonely Poolshark":  LMLocationData("Billiards Room", 633, "Portrait", 26, [], 12, room_ram_addr=0x803D5DAA, locationbit=7),
+    "Miss Petunia, the Bathing Beauty":     LMLocationData("2F Bathroom", 634, "Portrait", 83, ["Ice Element Medal"], 48, room_ram_addr=0x803D5DA9, locationbit=5),
+    "Nana, the Scarf-Knitting Granny":      LMLocationData("Nana's Room", 635, "Portrait", 76, [], 49, room_ram_addr=0x803D5DAA, locationbit=0),
+    "Sue Pea, the Dozing Girl":             LMLocationData("Guest Room", 636, "Portrait", 78, ["Water Element Medal"], 29, room_ram_addr=0x803D5DB9, locationbit=5),
+    "Uncle Grimmly, Hermit of the Darkness": LMLocationData("Wardrobe", 637, "Portrait", 16, ["Blackout"], 41, room_ram_addr=0x803D5DBB, locationbit=3),
     #TODO Bosses not in map2
-    "Boolossus, the Jumbo Ghost":           LMLocationData("Balcony", 638, "Portrait", 56, ["Ice Element Medal"]),
-    "Jarvis, the Jar Collector":            LMLocationData("Ceramics Studio", 639, "Portrait", 0, ["Ice Element Medal"]),
+    "Boolossus, the Jumbo Ghost":           LMLocationData("Balcony", 638, "Portrait", 56, ["Ice Element Medal"], 62, room_ram_addr=0x803D5DBF, locationbit=4),
+    "Jarvis, the Jar Collector":            LMLocationData("Ceramics Studio", 639, "Portrait", 0, ["Ice Element Medal"], 58, room_ram_addr=0x803D5DA8, locationbit=5),
     # Not in characterinfo
-    "Clockwork Soldiers, the Toy Platoon":  LMLocationData("Clockwork Room", 640, "Portrait", 115, []),
-    "Vincent van Gore, the Starving Artist": LMLocationData("Artist's Studio", 641, "Portrait", 107, []),
-    "Sir Weston, the Chilly Climber":       LMLocationData("Cold Storage", 642, "Portrait", 1, ["Fire Element Medal"]),
+    "Clockwork Soldiers, the Toy Platoon":  LMLocationData("Clockwork Room", 640, "Portrait", 115, [], 59, room_ram_addr=0x803D5DAB, locationbit=1),
+    "Vincent van Gore, the Starving Artist": LMLocationData("Artist's Studio", 641, "Portrait", 107, [], 60, room_ram_addr=0x803D5DAA, locationbit=5),
+    "Sir Weston, the Chilly Climber":       LMLocationData("Cold Storage", 642, "Portrait", 1, ["Fire Element Medal"], 64, room_ram_addr=0x803D5DBF, locationbit=1),
 }
 
 
