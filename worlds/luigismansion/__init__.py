@@ -1,3 +1,4 @@
+import math
 import os
 from dataclasses import fields
 from typing import ClassVar
@@ -66,6 +67,11 @@ class LMWeb(WebWorld):
             LuigiOptions.RandomMusic,
             LuigiOptions.HintDistribution,
             LuigiOptions.PortraitHints,
+            LuigiOptions.BundleWeight,
+            LuigiOptions.CoinWeight,
+            LuigiOptions.BillWeight,
+            LuigiOptions.BarsWeight,
+            LuigiOptions.GemsWeight,
             LuigiOptions.PoisonTrapWeight,
             LuigiOptions.BombWeight,
             LuigiOptions.IceTrapWeight,
@@ -479,9 +485,17 @@ class LMWorld(World):
 
     def get_filler_item_name(self) -> str:
         filler = list(filler_items.keys())
-        filler_weights = [10, 5, 5, 5, 2, self.options.poison_trap_weight.value, 20, 10, 5,
-                          self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,
-                          self.options.banana_trap_weight.value, 15, 10, 5, 10, 5, 10, 5]
+        tencoin = 0 if self.options.coin_weight.value - 10 <= 0 else self.options.coin_weight.value - 10
+        twencoin = 0 if self.options.coin_weight.value - 5 <= 0 else self.options.coin_weight.value - 5
+        twenbill = 0 if self.options.bill_weight.value - 5 <= 0 else self.options.bill_weight.value - 5
+        morebar = 0 if self.options.bars_weight.value - 5 <= 0 else self.options.bars_weight.value - 5
+        diamweight = math.ceil(self.options.gems_weight.value * 0.4)
+        filler_weights = [self.options.bundle_weight.value, self.options.gems_weight.value,  # coins & bills, sapphire
+                          self.options.gems_weight.value, self.options.gems_weight.value, diamweight,  # emerald, ruby, diamond
+                          self.options.poison_trap_weight.value, 20, 10, 5,  # poison mush, nothing, sm heart, l heart
+                          self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
+                          self.options.banana_trap_weight.value, self.options.coin_weight.value, twencoin, tencoin,  # banana, 10coin, 20coin, 30coin
+                          self.options.bill_weight.value, twenbill, self.options.bars_weight.value, morebar]  # 15bill, 25bill, 1bar, 2bar
         return self.random.choices(filler, weights=filler_weights, k=1)[0]
 
     def set_rules(self):
