@@ -8,6 +8,9 @@ else:
     BlasphemousWorld = object
 
 
+# Depending on a player's options, some logic can either always be True, or always be False.
+# When combining rules together in load_rule(), optimizations can be made by checking whether a rule being combined is
+# _always or _never.
 def _always(state: CollectionState):
     return True
 
@@ -17,14 +20,15 @@ def _never(state: CollectionState):
 
 
 def _bool_rule(b) -> CollectionRule:
+    """Small helper to return the appropriate rule function for a rule that can be pre-calculated"""
     if b:
         return _always
     else:
         return _never
 
 
-# Mapping is an immutable type, so type hints should warn if attempts are made to modify it.
 # Player strengths required to logically beat bosses.
+# Mapping is an immutable type, so type hints should warn if attempts are made to modify it.
 BOSS_STRENGTHS: Mapping[str, float] = {
     "warden": -0.10,
     "ten-piedad": 0.05,
@@ -85,12 +89,13 @@ class BlasRules:
         self.precise_skips_allowed = difficulty >= 2
 
         if difficulty >= 2:
+            # Beating bosses ends up in logic earlier.
             self.boss_strengths = {boss: strength - 0.1 for boss, strength in BOSS_STRENGTHS.items()}
         elif difficulty >= 1:
             self.boss_strengths = BOSS_STRENGTHS
         else:
+            # Beating bosses ends up in logic later.
             self.boss_strengths = {boss: strength + 0.1 for boss, strength in BOSS_STRENGTHS.items()}
-
 
         # Enemy tech
         if self.enemy_skips_allowed:
@@ -642,6 +647,9 @@ class BlasRules:
                 # Continue to the next clause.
                 continue
             rule_indirect_conditions.extend(clause_indirect_conditions)
+
+            # Combine the requirements if there are multiple.
+            # Requirements are AND-ed together.
             if len(reqs) == 1:
                 clauses.append(reqs[0])
             else:
@@ -651,6 +659,9 @@ class BlasRules:
                             return False
                     return True
                 clauses.append(req_func)
+
+        # Combine the clauses if there are multiple.
+        # Clauses are OR-ed together.
         if not clauses:
             # There is no need to register the indirect conditions if it turns out the rule is impossible or always
             # possible.
@@ -715,6 +726,8 @@ class BlasRules:
         return state.has("Child of Moonlight", self.player, count)
     
     def bones(self, state: CollectionState, count: int) -> bool:
+        # Count of unique items in the "bones" item group that have been collected into state.
+        # BlasphemousWorld.collect/remove adjust the count when items in the group are collected/removed.
         return state.has("bones", self.player, count)
     
     # def tears():
@@ -874,9 +887,13 @@ class BlasRules:
     
     # Main quest
     def holy_wounds(self, state: CollectionState, count: int) -> bool:
+        # Count of unique items in the "wounds" item group that have been collected into state.
+        # BlasphemousWorld.collect/remove adjust the count when items in the group are collected/removed.
         return state.has("wounds", self.player, count)
     
     def masks(self, state: CollectionState, count: int) -> bool:
+        # Count of unique items in the "masks" item group that have been collected into state.
+        # BlasphemousWorld.collect/remove adjust the count when items in the group are collected/removed.
         return state.has("masks", self.player, count)
     
     def guilt_bead(self, state: CollectionState) -> bool:
@@ -894,10 +911,14 @@ class BlasRules:
     
     # Tirso quest
     def herbs(self, state: CollectionState, count: int) -> bool:
+        # Count of unique items in the "tirso" item group that have been collected into state.
+        # BlasphemousWorld.collect/remove adjust the count when items in the group are collected/removed.
         return state.has("tirso", self.player, count)
     
     # Tentudia quest
     def tentudia_remains(self, state: CollectionState, count: int) -> bool:
+        # Count of unique items in the "tentudia" item group that have been collected into state.
+        # BlasphemousWorld.collect/remove adjust the count when items in the group are collected/removed.
         return state.has("tentudia", self.player, count)
     
     # Gemino quest
@@ -912,6 +933,8 @@ class BlasRules:
     
     # Altasgracias quest
     def ceremony_items(self, state: CollectionState, count: int) -> bool:
+        # Count of unique items in the "egg" item group that have been collected into state.
+        # BlasphemousWorld.collect/remove adjust the count when items in the group are collected/removed.
         return state.has("egg", self.player, count)
     
     def egg(self, state: CollectionState) -> bool:
@@ -919,6 +942,8 @@ class BlasRules:
     
     # Redento quest
     def limestones(self, state: CollectionState, count: int) -> bool:
+        # Count of unique items in the "toe" item group that have been collected into state.
+        # BlasphemousWorld.collect/remove adjust the count when items in the group are collected/removed.
         return state.has("toe", self.player, count)
     
     def knots(self, state: CollectionState) -> int:
@@ -927,6 +952,8 @@ class BlasRules:
     
     # Cleofas quest
     def marks_of_refuge(self, state: CollectionState, count: int) -> bool:
+        # Count of unique items in the "marks" item group that have been collected into state.
+        # BlasphemousWorld.collect/remove adjust the count when items in the group are collected/removed.
         return state.has("marks", self.player, count)
     
     def cord(self, state: CollectionState) -> bool:
@@ -940,6 +967,8 @@ class BlasRules:
         return state.has("Apodictic Heart of Mea Culpa", self.player)
     
     def traitor_eyes(self, state: CollectionState, count: int) -> bool:
+        # Count of unique items in the "eye" item group that have been collected into state.
+        # BlasphemousWorld.collect/remove adjust the count when items in the group are collected/removed.
         return state.has("eye", self.player, count)
     
     # Jibrael quest
