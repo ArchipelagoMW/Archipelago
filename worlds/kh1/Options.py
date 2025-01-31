@@ -167,20 +167,21 @@ class RequiredPuppies(Choice):
     option_90 = 90
     option_99 = 99
 
-class Puppies(Choice):
+class PuppyValue(Range):
     """
-    Determines how dalmatian puppies are shuffled into the pool.
-    Full: All puppies are in one location
-    Triplets: Puppies are found in triplets just as they are in the base game
-    Individual: One puppy can be found per location
-    Vanilla: Puppies appear in triplets in the same location as the vanilla game
+    Determines how many dalmation puppies are given when a puppy item is found.
     """
-    display_name = "Puppies"
-    option_full = 0
-    option_triplets = 1
-    option_individual = 2
-    option_vanilla = 3
-    default = 1
+    display_name = "Puppy Value"
+    default = 3
+    range_start = 1
+    range_end = 99
+
+class RandomizePuppies(DefaultOnToggle):
+    """
+    If OFF, the "Puppy" item is worth 3 puppies and puppies are placed in vanilla locations.
+    If ON, the "Puppy" item is worth an amount of puppies defined by "Puppy Value", and are shuffled randomly.
+    """
+    display_name = "Randomize Puppies"
 
 class EXPMultiplier(NamedRange):
     """
@@ -364,6 +365,7 @@ class DeathLink(Toggle):
     If Sora is KO'ed, the other players with "Death Link" on will also be KO'ed.
     The opposite is also true.
     """
+    display_name = "Death Link"
 
 class DonaldDeathLink(Toggle):
     """
@@ -497,7 +499,8 @@ class KH1Options(PerGameCommonOptions):
     atlantica: Atlantica
     hundred_acre_wood: HundredAcreWood
     cups: Cups
-    puppies: Puppies
+    randomize_puppies: RandomizePuppies
+    puppy_value: PuppyValue
     starting_worlds: StartingWorlds
     keyblades_unlock_chests: KeybladesUnlockChests
     interact_in_battle: InteractInBattle
@@ -587,11 +590,13 @@ kh1_option_groups = [
     OptionGroup("Misc", [
         StartingWorlds,
         StartingTools,
-        Puppies,
+        RandomizePuppies,
+        PuppyValue,
         InteractInBattle,
         AdvancedLogic,
         ExtraSharedAbilities,
         EXPZeroInPool,
+        DeathLink,
         DonaldDeathLink,
         GoofyDeathLink,
         RemoteItems,

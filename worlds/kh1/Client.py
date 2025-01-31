@@ -35,40 +35,17 @@ class KH1ClientCommandProcessor(ClientCommandProcessor):
     def __init__(self, ctx):
         super().__init__(ctx)
     
-    def _cmd_deathlink(self):
-        """Toggles Deathlink"""
-        global death_link
-        if death_link:
-            death_link = False
-            self.output(f"Death Link turned off")
-        else:
-            death_link = True
-            self.output(f"Death Link turned on")
-    
-    def _cmd_goal(self):
-        """Prints goal setting"""
-        if "goal" in self.ctx.slot_data.keys():
-            self.output(str(self.ctx.slot_data["goal"]))
+    def _cmd_final_rest_door_key_unlock(self):
+        """Prints Final Rest Door Key Unlock setting"""
+        if "final_rest_door_key" in self.ctx.slot_data.keys():
+            self.output(str(self.ctx.slot_data["final_rest_door_key"]))
         else:
             self.output("Unknown")
     
-    def _cmd_eotw_unlock(self):
+    def _cmd_end_of_the_world_unlock(self):
         """Prints End of the World Unlock setting"""
-        if "required_reports_eotw" in self.ctx.slot_data.keys():
-            if self.ctx.slot_data["required_reports_eotw"] > 13:
-                self.output("Item")
-            else:
-                self.output(str(self.ctx.slot_data["required_reports_eotw"]) + " reports")
-        else:
-            self.output("Unknown")
-    
-    def _cmd_door_unlock(self):
-        """Prints Final Rest Door Unlock setting"""
-        if "door" in self.ctx.slot_data.keys():
-            if self.ctx.slot_data["door"] == "reports":
-                self.output(str(self.ctx.slot_data["required_reports_door"]) + " reports")
-            else:
-                self.output(str(self.ctx.slot_data["door"]))
+        if "end_of_the_world_unlock" in self.ctx.slot_data.keys():
+            self.output(str(self.ctx.slot_data["end_of_the_world_unlock"]))
         else:
             self.output("Unknown")
     
@@ -170,15 +147,10 @@ class KH1Context(CommonContext):
                 if key == "remote_location_ids":
                     global remote_location_ids
                     remote_location_ids = args['slot_data'][key]
-                    
-            ###Support Legacy Games
-            if "Required Reports" in list(args['slot_data'].keys()) and "required_reports_eotw" not in list(args['slot_data'].keys()):
-                reports_required = args['slot_data']["Required Reports"]
-                with open(os.path.join(self.game_communication_path, "required_reports.cfg"), 'w') as f:
-                    f.write(str(reports_required))
-                    f.close()
-            ###End Support Legacy Games
-            
+                if key == "death_link":
+                    if args['slot_data']["death_link"]:
+                        global death_link
+                        death_link = True
             #End Handle Slot Data
 
         if cmd in {"ReceivedItems"}:
@@ -281,14 +253,6 @@ async def game_watcher(ctx: KH1Context):
                     if st != "nil":
                         if timegm(time.strptime(st, '%Y%m%d%H%M%S')) > ctx.last_death_link and int(time.time()) % int(timegm(time.strptime(st, '%Y%m%d%H%M%S'))) < 10:
                             await ctx.send_death(death_text = "Sora was defeated!")
-                if file.find("insynthshop") > -1:
-                    if not ctx.hinted_synth_location_ids:
-                        await ctx.send_msgs([{
-                            "cmd": "LocationScouts",
-                            "locations": [2656401,2656402,2656403,2656404,2656405,2656406],
-                            "create_as_hint": 2
-                        }])
-                        ctx.hinted_synth_location_ids = True
         ctx.locations_checked = sending
         message = [{"cmd": 'LocationChecks', "locations": sending}]
         await ctx.send_msgs(message)
