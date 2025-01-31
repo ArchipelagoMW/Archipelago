@@ -49,6 +49,7 @@
 <CASE>"MissingItems"
 <WINDOW>(0)<COLOR>(9)
 <SAY>You are missing the following #\nof <COLOR>(2)Mario<Color>(0) items: {MarioCount}
+{HintText}
 <ANYKEY>
 <BGM>(7)
 <RAMDOMJMP>"BadEnd"

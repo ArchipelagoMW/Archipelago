@@ -275,6 +275,7 @@ class LuigisMansionRandomizer:
 
         lines = get_data(__name__, "data/custom_events/event36.txt").decode('utf-8')
         lines = lines.replace("{MarioCount}", str(required_mario_item_count))
+        lines = lines.replace("{HintText}", str(self.output_data["Hints"]["Madame Clairvoya"]))
 
         cases_to_replace = ["{CaseZero}", "{CaseOne}", "{CaseTwo}", "{CaseThree}", "{CaseFour}", "{CaseFive}"]
         str_good_end = "\"GoodEnd\""
