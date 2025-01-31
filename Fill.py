@@ -143,7 +143,8 @@ class _RestrictiveFillBatcher:
             An item is reachable if it matches any one of the following:
             1. It is in `self.item_pool` and is not being placed in this batch. `self.batch_base_state` has collected
                these items in advance.
-            2. It is in `self.batch_item_pool`, so is going to be placed later on in this batch.
+            2. It is in both `self.item_pool` and `self.batch_item_pool`, so is going to be placed later on in this
+               batch.
             3. It is in `unplaced_items`, so could not be placed at any location.
             4. It is at a location in `explore_locations` that is reachable with all items in 1-4.
             Items already placed at reachable locations, items not being placed in this batch, items yet to be removed
@@ -532,7 +533,8 @@ class _RestrictiveFillBatcher:
 
     def pop_items_to_place(self):
         """
-        Get and remove items to place from the item_pool that .
+        Get and remove items to place from the ends of deques in `self.reachable_items`, also removing those items from
+        `self.item_pool`.
 
         Automatically creates new batches internally as needed until all items have been placed.
 
@@ -542,10 +544,16 @@ class _RestrictiveFillBatcher:
         if current_batch is None:
             # No more items to place.
             return []
+        # Batches are given references to `self.reachable_items` and `self.item_pool` when they are created, so do not
+        # need to be given again.
         popped_items = current_batch.pop_items_to_place()
         if not popped_items:
             # Current batch is exhausted, so create a new one.
             self._current_batch = self._new_batch(current_batch)
+            # This recursive call is expected to only recurse at most once.
+            # In the recursive call, either there are no more items to place, so `self._current_batch` became `None` and
+            # `current_batch` will be `None`, or there are items to place, so `popped_items` will be non-empty. Either
+            # way will not result in additional recursion.
             return self.pop_items_to_place()
         else:
             return popped_items
@@ -559,14 +567,9 @@ class _RestrictiveFillBatcher:
         items to place.
 
         An item is reachable if it matches any one of the following:
-        1. It is in `self.item_pool` and is not being placed in this batch. `self.batch_base_state` has collected these
-           items in advance.
-        2. It is in `self.batch_item_pool`, so is going to be placed later on in this batch.
-        3. It is in `unplaced_items`, so could not be placed at any location.
-        4. It is at a location in `explore_locations` that is reachable with all items in 1-4.
-        Items already placed at reachable locations, items not being placed in this batch, items yet to be removed from
-        this batch in order to be placed, and items that could not be placed at any location are all considered
-        reachable.
+        1. It is in `self.item_pool`, so has not been placed yet and is not currently being placed.
+        2. It is in `unplaced_items`, so could not be placed at any location.
+        3. It is at a location in `explore_locations` that is reachable with all items in 1-3.
 
         :param explore_locations: The locations to explore for reachable items. Defaults to all filled locations when
         None.
@@ -594,7 +597,7 @@ class _RestrictiveFillBatcher:
 
     def update_for_swap(self, displaced_item: Item, item_to_place: Item, swap_location: Location):
         """
-        Update the batch for the result of a successful swap.
+        Update the current batch for the result of a successful swap.
 
         Must not be called after self.pop_items_to_place() has returned an empty list, indicating that there are no more
         items to place.
@@ -638,10 +641,13 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
     placed = 0
 
     # Fill is performed in batches so that sweeping to produce a maximum exploration state can begin from the state at
-    # the start of the batch, rather than having to sweep from `base_state`.
+    # the start of each batch, rather than having to sweep from `base_state`.
+    # The batcher manages all the batches internally, creating new batches automatically when the current batch runs out
+    # of items to place.
     batcher = _RestrictiveFillBatcher(base_state, reachable_items, item_pool, one_item_per_player)
 
     while any(reachable_items.values()) and locations:
+        # Pop items to place from the ends of deques in `reachable_items` and pop those same items from `item_pool`.
         items_to_place = batcher.pop_items_to_place()
         if not items_to_place:
             # There are no more items to place.
