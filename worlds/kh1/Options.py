@@ -104,12 +104,20 @@ class SuperBosses(Toggle):
     """
     display_name = "Super Bosses"
 
-class Cups(Toggle):
+class Cups(Choice):
     """
-    Toggle whether to include checks behind completing Phil, Pegasus, Hercules, or Hades cups.
-    Please note that the cup items will still appear in the multiworld even if toggled off, as they are required to challenge Sephiroth.
+    Determines which cups have their locations added to the multiworld.
+    Please note that the cup items will still appear in the multiworld even if set to off, as they are required to challenge Sephiroth.
+
+    Off: All cup locations are removed
+    Cups: Phil, Pegasus, and Hercules cups are included
+    Hades Cup: Hades Cup is included in addition to Phil, Pegasus, and Hercules cups. If Super Bosses are enabled, then Ice Titan is included
     """
     display_name = "Cups"
+    option_off = 0
+    option_cups = 1
+    option_hades_cup = 2
+    default = 0
 
 class FinalRestDoorKey(Choice):
     """
@@ -539,6 +547,7 @@ class KH1Options(PerGameCommonOptions):
     starting_tools: StartingTools
     remote_items: RemoteItems
     shorten_go_mode: ShortenGoMode
+    death_link: DeathLink
 
 kh1_option_groups = [
     OptionGroup("Goal", [
