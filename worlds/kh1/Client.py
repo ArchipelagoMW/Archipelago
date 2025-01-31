@@ -50,7 +50,7 @@ class KH1Context(CommonContext):
         self.send_index: int = 0
         self.syncing = False
         self.awaiting_bridge = False
-        self.hinted_synth_location_ids = False
+        self.hinted_location_ids = []
         self.slot_data = {}
         # self.game_communication_path: files go in this path to pass data between us and the actual game
         if "localappdata" in os.environ:
@@ -223,6 +223,15 @@ async def game_watcher(ctx: KH1Context):
                     if st != "nil":
                         if timegm(time.strptime(st, '%Y%m%d%H%M%S')) > ctx.last_death_link and int(time.time()) % int(timegm(time.strptime(st, '%Y%m%d%H%M%S'))) < 10:
                             await ctx.send_death(death_text = "Sora was defeated!")
+                if file.find("hint") > -1:
+                    hint_location_id = int(file.split("hint", -1)[1])
+                    if hint_location_id not in ctx.hinted_location_ids:
+                        await ctx.send_msgs([{
+                            "cmd": "LocationScouts",
+                            "locations": [hint_location_id],
+                            "create_as_hint": 2
+                        }])
+                        ctx.hinted_location_ids.append(hint_location_id)
         ctx.locations_checked = sending
         message = [{"cmd": 'LocationChecks', "locations": sending}]
         await ctx.send_msgs(message)
