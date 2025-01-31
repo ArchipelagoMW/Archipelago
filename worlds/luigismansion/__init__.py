@@ -67,6 +67,9 @@ class LMWeb(WebWorld):
             LuigiOptions.RandomMusic,
             LuigiOptions.HintDistribution,
             LuigiOptions.PortraitHints,
+            LuigiOptions.Deathlink
+        ]),
+        OptionGroup("Filler Weights", [
             LuigiOptions.BundleWeight,
             LuigiOptions.CoinWeight,
             LuigiOptions.BillWeight,
@@ -76,7 +79,6 @@ class LMWeb(WebWorld):
             LuigiOptions.BombWeight,
             LuigiOptions.IceTrapWeight,
             LuigiOptions.BananaTrapWeight,
-            LuigiOptions.Deathlink
         ]),
         OptionGroup("Access Options", [
             LuigiOptions.Goal,
