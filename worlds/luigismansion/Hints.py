@@ -49,14 +49,14 @@ def get_hints_by_option(multiworld: MultiWorld, player: int) -> Dict[str, Dict[s
             reg = loc.parent_region
             game = reg.multiworld.worlds[reg.player]
             if world.options.hint_distribution.value == 4:
-                hintfo = f"<SAY><COLOR>(7){game.player_name}'s \\ <COLOR>(5){loc.item.name} \\ <COLOR>(0)is somewhere in \\ <COLOR>(3){game.game}"
+                hintfo = f"<SAY><COLOR>(7){game.player_name}'s\\\\<COLOR>(5){loc.item.name}\\\\<COLOR>(0)is somewhere in\\\\<COLOR>(3){game.game}"
             elif world.options.hint_distribution.value == 1:
                 joke = world.random.choice(str.splitlines(jokes))
                 hintfo = f"<SAY><COLOR>(0){joke}"
             elif world.options.hint_distribution.value == 5:
                 hintfo = "<SAY><COLOR>(2)I see you've turned off hints"
             else:
-                hintfo = f"<SAY><COLOR>(7){game.player_name}'s \\ <COLOR>(5){loc.item.name} \\ <COLOR>(0)can be found at \\ <COLOR>(1){loc.name}"
+                hintfo = f"<SAY><COLOR>(7){game.player_name}'s\\\\<COLOR>(5){loc.item.name}\\\\<COLOR>(0)can be found at\\\\<COLOR>(1){loc.name}"
             hint = {name: hintfo}
             already_hinted_locations.append(loc)
             hint_data.update(hint)
@@ -88,14 +88,14 @@ def get_hints_by_option(multiworld: MultiWorld, player: int) -> Dict[str, Dict[s
             reg = loc.parent_region
             game = reg.multiworld.worlds[reg.player]
             if world.options.hint_distribution == 4:
-                hintfo = f"<SAY><COLOR>(7){game.player_name}'s \\ <COLOR>({icolor}){loc.item.name} \\ <COLOR>(0)is somewhere in \\ <COLOR>(3){game.game}"
+                hintfo = f"<SAY><COLOR>(7){game.player_name}'s\\\\<COLOR>({icolor}){loc.item.name}\\\\<COLOR>(0)is somewhere in\\\\<COLOR>(3){game.game}"
             elif world.options.hint_distribution == 5:
                 hintfo = "<SAY><COLOR>(2)I see you've turned off hints"
             elif world.options.hint_distribution.value == 1:
                 joke = world.random.choice(str.splitlines(jokes))
                 hintfo = f"<SAY><COLOR>(0){joke}"
             else:
-                hintfo = f"<SAY><COLOR>(7){game.player_name}'s \\ <COLOR>({icolor}){loc.item.name} \\ <COLOR>(0)can be found at \\ <COLOR>(1){loc.name}"
+                hintfo = f"<SAY><COLOR>(7){game.player_name}'s\\\\<COLOR>({icolor}){loc.item.name}\\\\<COLOR>(0)can be found at\\\\<COLOR>(1){loc.name}"
             hint = {name: hintfo}
             already_hinted_locations.append(loc)
             hint_data.update(hint)
