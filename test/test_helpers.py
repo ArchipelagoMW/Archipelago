@@ -2,7 +2,7 @@ from test.bases import TestBase
 
 from ..data import Passage
 from ..items import ItemType, filter_items, filter_item_names
-from ..locations import LocationType, get_level_locations, location_table
+from ..locations import get_level_locations, location_table
 from ..options import Difficulty
 from ..region_data import level_table
 
@@ -52,7 +52,7 @@ class TestLocationExistence(TestBase):
         locations_from_table = {
             name
             for name, data in location_table.items()
-            if difficulty in data.difficulties and data.source != LocationType.CHEST
+            if difficulty in data.difficulties and data.level < 4
         }
         locations_from_tree = {
             f'{level_name} - {location.name}'

@@ -317,7 +317,7 @@ class WL4Client(BizHawkClient):
                         if status:
                             status_bits |= (1 << i)
                 for location in get_level_locations(passage, level):
-                    bit = location_table[location].flag()
+                    bit = location_table[location].flag
                     location_id = location_name_to_id[location]
                     if status_bits & bit and location_id in client_ctx.server_locations:
                         locations.append(location_id)
