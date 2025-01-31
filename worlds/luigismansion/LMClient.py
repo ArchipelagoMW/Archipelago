@@ -85,7 +85,7 @@ WALLET_OFFSETS: dict[int, int] = {
 RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000,50000000, 60000000, 70000000, 100000000]
 
 # List of received items to ignore because they are handled elsewhere
-RECV_ITEMS_IGNORE = [8063, 8064, 8127]
+RECV_ITEMS_IGNORE = [8063, 8064, 8127, 8125, 8130, 8131, 8132]
 RECV_OWN_GAME_LOCATIONS: list[str] = list(BOO_LOCATION_TABLE.keys()) + list(TOAD_LOCATION_TABLE.keys())
 RECV_OWN_GAME_ITEMS: list[str] = list(BOO_ITEM_TABLE.keys()) + list(filler_items.keys())
 
