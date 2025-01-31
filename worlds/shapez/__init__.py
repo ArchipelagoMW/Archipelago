@@ -131,6 +131,7 @@ class ShapezWorld(World):
         self.included_locations: Dict[str, Tuple[str, LocationProgressType]] = {}
         self.client_seed: int = 0
         self.shapesanity_names: List[str] = []
+        self.upgrade_traps_allowed: bool = False
 
         # Universal Tracker support
         self.ut_active: bool = False
@@ -145,6 +146,9 @@ class ShapezWorld(World):
 
     def generate_early(self) -> None:
         # Calculate all the important values used for generating a shapez world, with some of them being random
+        self.upgrade_traps_allowed: bool = (self.options.include_whacky_upgrades and
+                                            (not self.options.goal == GOALS.efficiency_iii) and
+                                            self.options.throughput_levels_ratio == 0)
 
         # Load values from UT if this is a regenerated world
         if hasattr(self.multiworld, "re_gen_passthrough"):
@@ -289,15 +293,11 @@ class ShapezWorld(World):
 
         # Add achievements to included locations based on player options
         if self.options.include_achievements:
-            has_upgrade_traps = (bool(self.options.include_whacky_upgrades)
-                                 and not self.options.goal == GOALS.efficiency_iii)
-            self.included_locations.update(addachievements(bool(self.options.exclude_softlock_achievements),
-                                                           bool(self.options.exclude_long_playtime_achievements),
-                                                           bool(self.options.exclude_progression_unreasonable),
-                                                           self.maxlevel, self.upgrade_logic_type,
-                                                           self.category_random_logic_amounts,
-                                                           self.options.goal.current_key,
-                                                           self.included_locations, self.add_alias, has_upgrade_traps))
+            self.included_locations.update(addachievements(
+                bool(self.options.exclude_softlock_achievements), bool(self.options.exclude_long_playtime_achievements),
+                bool(self.options.exclude_progression_unreasonable), self.maxlevel, self.upgrade_logic_type,
+                self.category_random_logic_amounts, self.options.goal.current_key, self.included_locations,
+                self.add_alias, self.upgrade_traps_allowed))
 
         # Save the final amount of to-be-filled locations
         self.location_count = len(self.included_locations)
@@ -333,13 +333,12 @@ class ShapezWorld(World):
         # Get value from traps probability option and convert to float
         traps_probability = self.options.traps_percentage/100
         split_draining = bool(self.options.split_inventory_draining_trap)
-        whacky_trap_allowed = (bool(self.options.include_whacky_upgrades)
-                               and not self.options.goal == GOALS.efficiency_iii)
         # Fill remaining locations with fillers
         for x in range(self.location_count - len(included_items)):
             if self.random.random() < traps_probability:
                 # Fill with trap
-                included_items.append(self.create_item(trap(self.random.random(), split_draining, whacky_trap_allowed)))
+                included_items.append(self.create_item(trap(self.random.random(), split_draining,
+                                                            self.upgrade_traps_allowed)))
             else:
                 # Fil with random filler item
                 included_items.append(self.create_item(self.get_filler_item_name()))

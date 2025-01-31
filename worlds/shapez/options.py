@@ -261,7 +261,8 @@ class TrapsProbability(NamedRange):
 
 class IncludeWhackyUpgrades(Toggle):
     """Includes some very unusual upgrade items in generation (and logic), that greatly increase or decrease building
-    speeds. If the goal is set to Efficiency III, decreasing upgrades (aka traps) will always be disabled."""
+    speeds. If the goal is set to Efficiency III or throughput levels ratio is not 0, decreasing upgrades (aka traps)
+    will always be disabled."""
     display_name = "Include Whacky Upgrades"
     rich_text_doc = True
     default = False
