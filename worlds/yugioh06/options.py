@@ -111,7 +111,7 @@ class FinalCampaignBossChallenges(Range):
     display_name = "Final Campaign Boss challenges unlock amount"
     range_start = 0
     range_end = 91
-    default = 5
+    default = 3
 
 
 class FourthTier5CampaignBossChallenges(Range):
@@ -120,7 +120,7 @@ class FourthTier5CampaignBossChallenges(Range):
     display_name = "Fourth Tier 5 Campaign Boss unlock amount"
     range_start = 0
     range_end = 91
-    default = 3
+    default = 2
 
 
 class ThirdTier5CampaignBossChallenges(Range):
