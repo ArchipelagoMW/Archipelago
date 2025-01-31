@@ -54,6 +54,11 @@ def __get_item_name(item_data):
         case "Banana Trap":
             return "banana"
 
+        case "Boo Radar":
+            return "gameboy"
+        case "Poltergust 4000":
+            return "vbody"
+
     return "nothing"
 
 
@@ -879,7 +884,7 @@ def __get_chest_size_from_item(item_name):
 # For every key found in the generation output, add an entry for it in "iteminfotable".
 def update_item_info_table(item_info, output_data):
     # Adds the special items so they can spawn in furniture or chests.
-    items_to_add = ["rdiamond", "itembomb", "ice", "mstar", "banana", "diamond"]
+    items_to_add = ["rdiamond", "itembomb", "ice", "mstar", "banana", "diamond", "gameboy", "vbody"]
     for new_item in items_to_add:
         __add_info_item(item_info, None, info_item_name=new_item)
 
@@ -930,8 +935,8 @@ def __get_key_name(door_id):
 
 def update_item_appear_table(item_appear_info, output_data):
     # Add the special items, so they can be spawned from treasure chests or furniture in game.
-    items_to_add = ["mkinoko", "itembomb", "ice", "elffst", "elwfst", "elifst", "mstar", "mglove", "mshoes",
-                    "sheart", "lheart", "banana", "rdiamond", "diamond", "ruby", "emerald", "sapphire"]
+    items_to_add = ["mkinoko", "itembomb", "ice", "elffst", "elwfst", "elifst", "mstar", "mglove", "mshoes", "sheart",
+                 "lheart", "banana", "rdiamond", "diamond", "ruby", "emerald", "sapphire","gameboy", "vbody"]
     for new_item in items_to_add:
         __add_appear_item(item_appear_info, new_item)
 
@@ -1093,10 +1098,6 @@ def update_key_info(key_info, output_data):
             continue
 
         __set_key_info_entry(key_info.info_file_field_entries[LOCATION_TO_INDEX[item_name]], item_data)
-
-        # if item_name == "Ghost Foyer Key":
-            # key_info.info_file_field_entries[LOCATION_TO_INDEX[item_name]]["name"] = "vbody"
-            # Todo remove this line after testing. Proper name is above.
 
     # Remove the cutscene HD key from the Foyer, which only appears in the cutscene.
     key_info.info_file_field_entries.remove(key_info.info_file_field_entries[2])

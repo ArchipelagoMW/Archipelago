@@ -85,9 +85,9 @@ WALLET_OFFSETS: dict[int, int] = {
 RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000,50000000, 60000000, 70000000, 100000000]
 
 # List of received items to ignore because they are handled elsewhere
-RECV_ITEMS_IGNORE = [8063, 8064, 8127, 8125, 8130, 8131, 8132]
+RECV_ITEMS_IGNORE = [8064, 8127, 8125, 8130, 8131, 8132]
 RECV_OWN_GAME_LOCATIONS: list[str] = list(BOO_LOCATION_TABLE.keys()) + list(TOAD_LOCATION_TABLE.keys())
-RECV_OWN_GAME_ITEMS: list[str] = list(BOO_ITEM_TABLE.keys()) + list(filler_items.keys())
+RECV_OWN_GAME_ITEMS: list[str] = list(BOO_ITEM_TABLE.keys()) + list(filler_items.keys()) + ["Boo Radar"]
 
 
 def read_short(console_address: int):
@@ -329,18 +329,17 @@ async def give_items(ctx: LMContext):
                 [coins_ram_pointer]), coins_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
                         dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
                 [bills_rams_pointer]), bills_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
-                    case 128:
+                    case 128 | 129:
                         curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
                     [lm_item.pointer_offset]), lm_item.ram_byte_size))
-                        curr_val += 10
+                        curr_val += 10 if lm_item.code == 128 else 50
                         dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
                     [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
-                    case 129:
-                        curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
-                    [lm_item.pointer_offset]), lm_item.ram_byte_size))
-                        curr_val += 50
-                        dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
-                    [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
+                    case 63:
+                        curr_val = dme.read_byte(lm_item.ram_addr)
+                        curr_val = (curr_val | (1 << 1)) # Enable flag 73
+                        curr_val = (curr_val | (1 << 3)) # Enable flag 75
+                        dme.write_byte(lm_item.ram_addr, curr_val)
                     case _:
                         curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
                     [lm_item.pointer_offset]), lm_item.ram_byte_size))
