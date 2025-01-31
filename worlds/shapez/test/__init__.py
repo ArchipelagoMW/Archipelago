@@ -2,12 +2,12 @@ from unittest import TestCase
 
 from test.bases import WorldTestBase
 from .. import options_presets, ShapezWorld
-from ..data.strings import GOALS
+from ..data.strings import GOALS, OTHER, ITEMS, LOCATIONS, CATEGORY, OPTIONS, SHAPESANITY
 from ..options import max_levels_and_upgrades, max_shapesanity
 
 
 class ShapezTestBase(WorldTestBase):
-    game = "shapez"
+    game = OTHER.game_name
     world: ShapezWorld
 
     def test_location_count(self):
@@ -15,7 +15,7 @@ class ShapezTestBase(WorldTestBase):
                         f"location_count is {self.world.location_count} for some reason.")
 
     def test_logic_lists(self):
-        logic_buildings = ["Cutter", "Rotator", "Painter", "Color Mixer", "Stacker"]
+        logic_buildings = [ITEMS.cutter, ITEMS.rotator, ITEMS.painter, ITEMS.color_mixer, ITEMS.stacker]
         for building in logic_buildings:
             count = self.world.level_logic.count(building)
             self.assertTrue(count == 1, f"{building} was found {count} times in level_logic.")
@@ -54,21 +54,20 @@ class ShapezTestBase(WorldTestBase):
 
     def test_included_locations(self):
         self.assertTrue(len(self.world.included_locations) > 0, "Found no locations cached in included_locations.")
-        self.assertTrue("Level 1" in self.world.included_locations.keys(),
+        self.assertTrue(LOCATIONS.level(1) in self.world.included_locations.keys(),
                         "Could not find Level 1 (guraranteed location) cached in included_locations.")
-        self.assertTrue("Belt Upgrade Tier II" in self.world.included_locations.keys(),
+        self.assertTrue(LOCATIONS.upgrade(CATEGORY.belt, "II") in self.world.included_locations.keys(),
                         "Could not find Belt Upgrade Tier II (guraranteed location) cached in included_locations.")
-        self.assertTrue("Shapesanity 1" in self.world.included_locations.keys(),
+        self.assertTrue(LOCATIONS.shapesanity(1) in self.world.included_locations.keys(),
                         "Could not find Shapesanity 1 (guraranteed location) cached in included_locations.")
 
     def test_shapesanity_names(self):
         names_length = len(self.world.shapesanity_names)
         locations_length = len([0 for loc in self.multiworld.get_locations(self.player) if "Shapesanity" in loc.name])
-        self.assertEqual(names_length,
-                         locations_length,
+        self.assertEqual(names_length, locations_length,
                          f"The amount of shapesanity names ({names_length}) does not match the amount of included " +
                          f"shapesanity locations ({locations_length}).")
-        self.assertTrue("Uncolored Circle" in self.world.shapesanity_names,
+        self.assertTrue(SHAPESANITY.full(SHAPESANITY.uncolored, SHAPESANITY.circle) in self.world.shapesanity_names,
                         "Uncolored Circle is guaranteed but was not found in shapesanity_names.")
 
     def test_efficiency_iii_no_softlock(self):
@@ -107,7 +106,7 @@ class TestRestrictive(ShapezTestBase):
 
 class TestAllRelevantOptions1(ShapezTestBase):
     options = {
-        "goal": "vanilla",
+        "goal": GOALS.vanilla,
         "randomize_level_requirements": False,
         "randomize_upgrade_requirements": False,
         "complexity_growth_gradient": "0.1234",
@@ -124,14 +123,14 @@ class TestAllRelevantOptions1(ShapezTestBase):
 
 class TestAllRelevantOptions2(ShapezTestBase):
     options = {
-        "goal": "mam",
+        "goal": GOALS.mam,
         "goal_amount": max_levels_and_upgrades,
         "randomize_level_requirements": True,
         "randomize_upgrade_requirements": True,
-        "randomize_level_logic": "random_steps",
-        "randomize_upgrade_logic": "vanilla_like",
+        "randomize_level_logic": OPTIONS.logic_random_steps,
+        "randomize_upgrade_logic": OPTIONS.logic_vanilla_like,
         "complexity_growth_gradient": "2",
-        "early_balancer_tunnel_and_trash": "5_buildings",
+        "early_balancer_tunnel_and_trash": OPTIONS.buildings_5,
         "lock_belt_and_extractor": False,
         "include_achievements": True,
         "exclude_softlock_achievements": False,
@@ -144,14 +143,14 @@ class TestAllRelevantOptions2(ShapezTestBase):
 
 class TestAllRelevantOptions3(ShapezTestBase):
     options = {
-        "goal": "even_fasterer",
+        "goal": GOALS.even_fasterer,
         "goal_amount": max_levels_and_upgrades,
         "randomize_level_requirements": True,
         "randomize_upgrade_requirements": True,
-        "randomize_level_logic": "vanilla_shuffled",
-        "randomize_upgrade_logic": "linear",
+        "randomize_level_logic": f"{OPTIONS.logic_vanilla}_shuffled",
+        "randomize_upgrade_logic": OPTIONS.logic_linear,
         "complexity_growth_gradient": "1e-003",
-        "early_balancer_tunnel_and_trash": "3_buildings",
+        "early_balancer_tunnel_and_trash": OPTIONS.buildings_3,
         "lock_belt_and_extractor": False,
         "include_achievements": True,
         "exclude_softlock_achievements": True,
@@ -165,12 +164,12 @@ class TestAllRelevantOptions3(ShapezTestBase):
 
 class TestAllRelevantOptions4(ShapezTestBase):
     options = {
-        "goal": "efficiency_iii",
+        "goal": GOALS.efficiency_iii,
         "randomize_level_requirements": True,
         "randomize_upgrade_requirements": True,
-        "randomize_level_logic": "stretched_shuffled",
-        "randomize_upgrade_logic": "category",
-        "early_balancer_tunnel_and_trash": "sphere_1",
+        "randomize_level_logic": f"{OPTIONS.logic_stretched}_shuffled",
+        "randomize_upgrade_logic": OPTIONS.logic_category,
+        "early_balancer_tunnel_and_trash": OPTIONS.sphere_1,
         "lock_belt_and_extractor": False,
         "include_achievements": True,
         "exclude_softlock_achievements": True,
@@ -183,12 +182,12 @@ class TestAllRelevantOptions4(ShapezTestBase):
 
 class TestAllRelevantOptions5(ShapezTestBase):
     options = {
-        "goal": "mam",
+        "goal": GOALS.mam,
         "goal_amount": "random-range-27-500",
         "randomize_level_requirements": True,
         "randomize_upgrade_requirements": True,
-        "randomize_level_logic": "quick_shuffled",
-        "randomize_upgrade_logic": "category_random",
+        "randomize_level_logic": f"{OPTIONS.logic_quick}_shuffled",
+        "randomize_upgrade_logic": OPTIONS.logic_category_random,
         "lock_belt_and_extractor": False,
         "include_achievements": True,
         "exclude_softlock_achievements": True,
@@ -201,12 +200,12 @@ class TestAllRelevantOptions5(ShapezTestBase):
 
 class TestAllRelevantOptions6(ShapezTestBase):
     options = {
-        "goal": "mam",
+        "goal": GOALS.mam,
         "goal_amount": "random-range-27-500",
         "randomize_level_requirements": True,
         "randomize_upgrade_requirements": True,
-        "randomize_level_logic": "hardcore",
-        "randomize_upgrade_logic": "hardcore",
+        "randomize_level_logic": OPTIONS.logic_hardcore,
+        "randomize_upgrade_logic": OPTIONS.logic_hardcore,
         "lock_belt_and_extractor": False,
         "include_achievements": False,
         "shapesanity_amount": "random",

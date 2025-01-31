@@ -289,13 +289,15 @@ class ShapezWorld(World):
 
         # Add achievements to included locations based on player options
         if self.options.include_achievements:
+            has_upgrade_traps = (bool(self.options.include_whacky_upgrades)
+                                 and not self.options.goal == GOALS.efficiency_iii)
             self.included_locations.update(addachievements(bool(self.options.exclude_softlock_achievements),
                                                            bool(self.options.exclude_long_playtime_achievements),
                                                            bool(self.options.exclude_progression_unreasonable),
                                                            self.maxlevel, self.upgrade_logic_type,
                                                            self.category_random_logic_amounts,
                                                            self.options.goal.current_key,
-                                                           self.included_locations, self.add_alias))
+                                                           self.included_locations, self.add_alias, has_upgrade_traps))
 
         # Save the final amount of to-be-filled locations
         self.location_count = len(self.included_locations)
@@ -305,8 +307,7 @@ class ShapezWorld(World):
                                                              self.location_name_to_id,
                                                              self.level_logic, self.upgrade_logic,
                                                              self.options.early_balancer_tunnel_and_trash.current_key,
-                                                             self.options.goal.current_key,
-                                                             bool(self.options.lock_belt_and_extractor)))
+                                                             self.options.goal.current_key))
 
     def create_items(self) -> None:
         # Include guaranteed items (game mechanic unlocks and 7x4 big upgrades)

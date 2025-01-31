@@ -2,75 +2,79 @@ import itertools
 import time
 from typing import Dict, List
 
+from worlds.shapez.data.strings import SHAPESANITY, REGIONS
+
 shapesanity_simple: Dict[str, str] = {}
 shapesanity_1_4: Dict[str, str] = {}
 shapesanity_two_sided: Dict[str, str] = {}
 shapesanity_three_parts: Dict[str, str] = {}
 shapesanity_four_parts: Dict[str, str] = {}
-subshape_names = ["Circle", "Square", "Star", "Windmill"]
-color_names = ["Red", "Blue", "Green", "Yellow", "Purple", "Cyan", "White", "Uncolored"]
+subshape_names = [SHAPESANITY.circle, SHAPESANITY.square, SHAPESANITY.star, SHAPESANITY.windmill]
+color_names = [SHAPESANITY.red, SHAPESANITY.blue, SHAPESANITY.green, SHAPESANITY.yellow, SHAPESANITY.purple,
+               SHAPESANITY.cyan, SHAPESANITY.white, SHAPESANITY.uncolored]
 short_subshapes = ["C", "R", "S", "W"]
 short_colors = ["b", "c", "g", "p", "r", "u", "w", "y"]
 
 
 def color_to_needed_building(color_list: List[str]) -> str:
     for next_color in color_list:
-        if next_color in ["Yellow", "Purple", "Cyan", "White", "y", "p", "c", "w"]:
-            return "Mixed"
+        if next_color in [SHAPESANITY.yellow, SHAPESANITY.purple, SHAPESANITY.cyan, SHAPESANITY.white,
+                          "y", "p", "c", "w"]:
+            return REGIONS.mixed
     for next_color in color_list:
-        if next_color not in ["Uncolored", "u"]:
-            return "Painted"
-    return "Uncolored"
+        if next_color not in [SHAPESANITY.uncolored, "u"]:
+            return REGIONS.painted
+    return REGIONS.uncol
 
 
 def generate_shapesanity_pool() -> None:
     # same shapes && same color
     for color in color_names:
         color_region = color_to_needed_building([color])
-        shapesanity_simple[f"{color} Circle"] = f"Shapesanity Full {color_region}"
-        shapesanity_simple[f"{color} Square"] = f"Shapesanity Full {color_region}"
-        shapesanity_simple[f"{color} Star"] = f"Shapesanity Full {color_region}"
-        shapesanity_simple[f"{color} Windmill"] = f"Shapesanity East Windmill {color_region}"
+        shapesanity_simple[SHAPESANITY.full(color, SHAPESANITY.circle)] = REGIONS.sanity(REGIONS.full, color_region)
+        shapesanity_simple[SHAPESANITY.full(color, SHAPESANITY.square)] = REGIONS.sanity(REGIONS.full, color_region)
+        shapesanity_simple[SHAPESANITY.full(color, SHAPESANITY.star)] = REGIONS.sanity(REGIONS.full, color_region)
+        shapesanity_simple[SHAPESANITY.full(color, SHAPESANITY.windmill)] = REGIONS.sanity(REGIONS.east_wind, color_region)
     for shape in subshape_names:
         for color in color_names:
             color_region = color_to_needed_building([color])
-            shapesanity_simple[f"Half {color} {shape}"] = f"Shapesanity Half {color_region}"
-            shapesanity_simple[f"{color} {shape} Piece"] = f"Shapesanity Piece {color_region}"
-            shapesanity_simple[f"Cut Out {color} {shape}"] = f"Shapesanity Stitched {color_region}"
-            shapesanity_simple[f"Cornered {color} {shape}"] = f"Shapesanity Stitched {color_region}"
+            shapesanity_simple[SHAPESANITY.half(color, shape)] = REGIONS.sanity(REGIONS.half, color_region)
+            shapesanity_simple[SHAPESANITY.piece(color, shape)] = REGIONS.sanity(REGIONS.piece, color_region)
+            shapesanity_simple[SHAPESANITY.cutout(color, shape)] = REGIONS.sanity(REGIONS.stitched, color_region)
+            shapesanity_simple[SHAPESANITY.cornered(color, shape)] = REGIONS.sanity(REGIONS.stitched, color_region)
 
     # one color && 4 shapes (including empty)
     for first_color, second_color, third_color, fourth_color in itertools.combinations(short_colors+["-"], 4):
         colors = [first_color, second_color, third_color, fourth_color]
         color_region = color_to_needed_building(colors)
-        shape_regions = ["Stitched", "Stitched"] if fourth_color == "-" else ["Colorful Full", "Colorful East Windmill"]
+        shape_regions = [REGIONS.stitched, REGIONS.stitched] if fourth_color == "-" else [REGIONS.col_full, REGIONS.col_east_wind]
         color_code = ''.join(colors)
-        shapesanity_1_4[f"{color_code} Circle"] = f"Shapesanity {shape_regions[0]} {color_region}"
-        shapesanity_1_4[f"{color_code} Square"] = f"Shapesanity {shape_regions[0]} {color_region}"
-        shapesanity_1_4[f"{color_code} Star"] = f"Shapesanity {shape_regions[0]} {color_region}"
-        shapesanity_1_4[f"{color_code} Windmill"] = f"Shapesanity {shape_regions[1]} {color_region}"
+        shapesanity_1_4[SHAPESANITY.full(color_code, SHAPESANITY.circle)] = REGIONS.sanity(shape_regions[0], color_region)
+        shapesanity_1_4[SHAPESANITY.full(color_code, SHAPESANITY.square)] = REGIONS.sanity(shape_regions[0], color_region)
+        shapesanity_1_4[SHAPESANITY.full(color_code, SHAPESANITY.star)] = REGIONS.sanity(shape_regions[0], color_region)
+        shapesanity_1_4[SHAPESANITY.full(color_code, SHAPESANITY.windmill)] = REGIONS.sanity(shape_regions[1], color_region)
 
     # one shape && 4 colors (including empty)
     for first_shape, second_shape, third_shape, fourth_shape in itertools.combinations(short_subshapes+["-"], 4):
         for color in color_names:
-            shapesanity_1_4[f"{color} {''.join([first_shape, second_shape, third_shape, fourth_shape])}"] \
-                = f"Shapesanity Stitched {color_to_needed_building([color])}"
+            shapesanity_1_4[SHAPESANITY.full(color, ''.join([first_shape, second_shape, third_shape, fourth_shape]))] \
+                = REGIONS.sanity(REGIONS.stitched, color_to_needed_building([color]))
 
     combos = [shape + color for shape in short_subshapes for color in short_colors]
     for first_combo, second_combo in itertools.permutations(combos, 2):
         # 2-sided shapes
         color_region = color_to_needed_building([first_combo[1], second_combo[1]])
         ordered_combo = " ".join(sorted([first_combo, second_combo]))
-        shape_regions = ((["East Windmill", "East Windmill", "Colorful Half"]
-                          if first_combo[0] == "W" else ["Colorful Full", "Colorful Full", "Colorful Half"])
-                         if first_combo[0] == second_combo[0] else ["Stitched", "Half-Half", "Stitched"])
-        shapesanity_two_sided[f"3-1 {first_combo} {second_combo}"] = f"Shapesanity {shape_regions[0]} {color_region}"
-        shapesanity_two_sided[f"Half-Half {ordered_combo}"] = f"Shapesanity {shape_regions[1]} {color_region}"
-        shapesanity_two_sided[f"Checkered {ordered_combo}"] = f"Shapesanity {shape_regions[0]} {color_region}"
-        shapesanity_two_sided[f"Adjacent Singles {ordered_combo}"] = f"Shapesanity {shape_regions[2]} {color_region}"
-        shapesanity_two_sided[f"Cornered Singles {ordered_combo}"] = f"Shapesanity Stitched {color_region}"
-        shapesanity_two_sided[f"Adjacent 2-1 {first_combo} {second_combo}"] = f"Shapesanity Stitched {color_region}"
-        shapesanity_two_sided[f"Cornered 2-1 {first_combo} {second_combo}"] = f"Shapesanity Stitched {color_region}"
+        shape_regions = (([REGIONS.east_wind, REGIONS.east_wind, REGIONS.col_half]
+                          if first_combo[0] == "W" else [REGIONS.col_full, REGIONS.col_full, REGIONS.col_half])
+                         if first_combo[0] == second_combo[0] else [REGIONS.stitched, REGIONS.half_half, REGIONS.stitched])
+        shapesanity_two_sided[SHAPESANITY.three_one(first_combo, second_combo)] = REGIONS.sanity(shape_regions[0], color_region)
+        shapesanity_two_sided[SHAPESANITY.halfhalf(ordered_combo)] = REGIONS.sanity(shape_regions[1], color_region)
+        shapesanity_two_sided[SHAPESANITY.checkered(ordered_combo)] = REGIONS.sanity(shape_regions[0], color_region)
+        shapesanity_two_sided[SHAPESANITY.singles(ordered_combo, SHAPESANITY.adjacent_pos)] = REGIONS.sanity(shape_regions[2], color_region)
+        shapesanity_two_sided[SHAPESANITY.singles(ordered_combo, SHAPESANITY.cornered_pos)] = REGIONS.sanity(REGIONS.stitched, color_region)
+        shapesanity_two_sided[SHAPESANITY.two_one(first_combo, second_combo, SHAPESANITY.adjacent_pos)] = REGIONS.sanity(REGIONS.stitched, color_region)
+        shapesanity_two_sided[SHAPESANITY.two_one(first_combo, second_combo, SHAPESANITY.cornered_pos)] = REGIONS.sanity(REGIONS.stitched, color_region)
         for third_combo in combos:
             if third_combo in [first_combo, second_combo]:
                 continue
@@ -81,15 +85,15 @@ def generate_shapesanity_pool() -> None:
             if not (first_combo[1] == second_combo[1] == third_combo[1] or
                     first_combo[0] == second_combo[0] == third_combo[0]):
                 ordered_all = " ".join(sorted([first_combo, second_combo, third_combo]))
-                shapesanity_three_parts[f"Singles {ordered_all}"] = f"Shapesanity Stitched {color_region}"
-            shape_regions = (["Stitched", "Stitched"] if not second_combo[0] == third_combo[0]
-                             else ((["East Windmill", "East Windmill"] if first_combo[0] == "W"
-                                    else ["Colorful Full", "Colorful Full"])
-                                   if first_combo[0] == second_combo[0] else ["Colorful Half-Half", "Stitched"]))
-            shapesanity_three_parts[f"Adjacent 2-1-1 {first_combo} {ordered_two}"] \
-                = f"Shapesanity {shape_regions[0]} {color_region}"
-            shapesanity_three_parts[f"Cornered 2-1-1 {first_combo} {ordered_two}"] \
-                = f"Shapesanity {shape_regions[1]} {color_region}"
+                shapesanity_three_parts[SHAPESANITY.singles(ordered_all)] = REGIONS.sanity(REGIONS.stitched, color_region)
+            shape_regions = ([REGIONS.stitched, REGIONS.stitched] if not second_combo[0] == third_combo[0]
+                             else (([REGIONS.east_wind, REGIONS.east_wind] if first_combo[0] == "W"
+                                    else [REGIONS.col_full, REGIONS.col_full])
+                                   if first_combo[0] == second_combo[0] else [REGIONS.col_half_half, REGIONS.stitched]))
+            shapesanity_three_parts[SHAPESANITY.two_one_one(first_combo, ordered_two, SHAPESANITY.adjacent_pos)] \
+                = REGIONS.sanity(shape_regions[0], color_region)
+            shapesanity_three_parts[SHAPESANITY.two_one_one(first_combo, ordered_two, SHAPESANITY.cornered_pos)] \
+                = REGIONS.sanity(shape_regions[1], color_region)
             for fourth_combo in combos:
                 if fourth_combo in [first_combo, second_combo, third_combo]:
                     continue
@@ -102,9 +106,9 @@ def generate_shapesanity_pool() -> None:
                 if ((first_combo[0] == second_combo[0] and third_combo[0] == fourth_combo[0]) or
                     (first_combo[0] == third_combo[0] and second_combo[0] == fourth_combo[0]) or
                     (first_combo[0] == fourth_combo[0] and third_combo[0] == second_combo[0])):
-                    shapesanity_four_parts[f"Singles {ordered_all}"] = f"Shapesanity Colorful Half-Half {color_region}"
+                    shapesanity_four_parts[SHAPESANITY.singles(ordered_all)] = REGIONS.sanity(REGIONS.col_half_half, color_region)
                 else:
-                    shapesanity_four_parts[f"Singles {ordered_all}"] = f"Shapesanity Stitched {color_region}"
+                    shapesanity_four_parts[SHAPESANITY.singles(ordered_all)] = REGIONS.sanity(REGIONS.stitched, color_region)
 
 
 if __name__ == "__main__":

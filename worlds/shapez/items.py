@@ -83,7 +83,7 @@ gameplay_unlocks: Dict[str, Callable[[ShapezOptions], IClass]] = {
 }
 
 upgrades: Dict[str, Callable[[ShapezOptions], IClass]] = {
-    ITEMS.upgrade_big_belt: is_goal_efficiency_iii,
+    ITEMS.upgrade_big_belt: always_progression,
     ITEMS.upgrade_big_miner: always_useful,
     ITEMS.upgrade_big_proc: always_useful,
     ITEMS.upgrade_big_paint: always_useful,
@@ -94,11 +94,11 @@ upgrades: Dict[str, Callable[[ShapezOptions], IClass]] = {
 }
 
 whacky_upgrades: Dict[str, Callable[[ShapezOptions], IClass]] = {
-    ITEMS.upgrade_gigantic_belt: is_goal_efficiency_iii,
+    ITEMS.upgrade_gigantic_belt: always_progression,
     ITEMS.upgrade_gigantic_miner: always_useful,
     ITEMS.upgrade_gigantic_proc: always_useful,
     ITEMS.upgrade_gigantic_paint: always_useful,
-    ITEMS.upgrade_rising_belt: is_goal_efficiency_iii,
+    ITEMS.upgrade_rising_belt: always_progression,
     ITEMS.upgrade_rising_miner: always_useful,
     ITEMS.upgrade_rising_proc: always_useful,
     ITEMS.upgrade_rising_paint: always_useful,

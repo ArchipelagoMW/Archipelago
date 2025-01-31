@@ -2,7 +2,7 @@ from random import Random
 from typing import List, Tuple, Dict, Optional, Callable
 
 from BaseClasses import Location, LocationProgressType, Region
-from .data.strings import CATEGORY, LOCATIONS, REGIONS, OPTIONS, GOALS, OTHER
+from .data.strings import CATEGORY, LOCATIONS, REGIONS, OPTIONS, GOALS, OTHER, SHAPESANITY
 from .options import max_shapesanity, max_levels_and_upgrades
 
 categories = [CATEGORY.belt, CATEGORY.miner, CATEGORY.processors, CATEGORY.painting]
@@ -368,7 +368,8 @@ def addupgrades(finaltier: int, logictype: str,
 def addachievements(excludesoftlock: bool, excludelong: bool, excludeprogressive: bool,
                     maxlevel: int, upgradelogictype: str, category_random_logic_amounts: Dict[str, int],
                     goal: str, presentlocations: Dict[str, Tuple[str, LocationProgressType]],
-                    add_alias: Callable[[str,str],None]) -> Dict[str, Tuple[str, LocationProgressType]]:
+                    add_alias: Callable[[str, str], None], has_upgrade_traps: bool
+                    ) -> Dict[str, Tuple[str, LocationProgressType]]:
     """Returns a dictionary with all achievement locations based on player options."""
 
     locations: Dict[str, Tuple[str, LocationProgressType]] = dict()
@@ -380,36 +381,38 @@ def addachievements(excludesoftlock: bool, excludelong: bool, excludeprogressive
         add_alias(name, alias)
 
     f(LOCATIONS.my_eyes, REGIONS.menu, "Activate dark mode")
-    f(LOCATIONS.painter, REGIONS.paint, "Paint a shape (no Quad Painter)")
-    f(LOCATIONS.cutter, REGIONS.cut, "Cut a shape (no Quad Cutter)")
-    f(LOCATIONS.rotater, REGIONS.rotate, "Rotate a shape clock wise")
-    f(LOCATIONS.wait_they_stack, REGIONS.stack, "Stack a shape")
-    f(LOCATIONS.storage, REGIONS.store, "Store a shape in the storage")
+    f(LOCATIONS.painter, REGIONS.paint_not_quad, "Paint a shape (no Quad Painter)")
+    f(LOCATIONS.cutter, REGIONS.cut_not_quad, "Cut a shape (no Quad Cutter)")
+    f(LOCATIONS.rotater, REGIONS.rotate_cw, "Rotate a shape clock wise")
+    f(LOCATIONS.wait_they_stack, REGIONS.stack_shape, "Stack a shape")
+    f(LOCATIONS.storage, REGIONS.store_shape, "Store a shape in the storage")
     f(LOCATIONS.the_logo, REGIONS.all_buildings, "Produce the shapez logo")
     f(LOCATIONS.to_the_moon, REGIONS.all_buildings, "Produce the rocket shape")
     f(LOCATIONS.its_piling_up, REGIONS.all_buildings, "100k blueprint shapes")
     f(LOCATIONS.use_it_later, REGIONS.all_buildings, "1 million blueprint shapes")
-    f(LOCATIONS.efficiency_1, REGIONS.all_buildings, "25 blueprints shapes / second")
-    f(LOCATIONS.preparing_to_launch, REGIONS.all_buildings, "10 rocket shapes / second")
-    f(LOCATIONS.spacey, REGIONS.all_buildings, "20 rocket shapes / second")
 
-    f(LOCATIONS.stack_overflow, REGIONS.stack, "4 layers shape")
+    f(LOCATIONS.stack_overflow, REGIONS.stack_shape, "4 layers shape")
     f(LOCATIONS.its_a_mess, REGIONS.main, "100 different shapes in hub")
-    f(LOCATIONS.get_rid_of_them, REGIONS.trash, "1000 shapes trashed")
+    f(LOCATIONS.get_rid_of_them, REGIONS.trash_shape, "1000 shapes trashed")
     f(LOCATIONS.getting_into_it, REGIONS.menu, "1 hour")
     f(LOCATIONS.now_its_easy, REGIONS.blueprint, "Place a blueprint")
     f(LOCATIONS.computer_guy, REGIONS.wiring, "Place 5000 wires")
-    f(LOCATIONS.efficiency_2, REGIONS.all_buildings, "50 blueprints shapes / second")
-    f(LOCATIONS.branding_1, REGIONS.all_buildings, "25 logo shapes / second")
-    f(LOCATIONS.branding_2, REGIONS.all_buildings, "50 logo shapes / second")
-    f(LOCATIONS.perfectionist, REGIONS.main, "Destroy more than 1000 objects at once")
+    f(LOCATIONS.perfectionist, REGIONS.any_building, "Destroy more than 1000 objects at once")
     f(LOCATIONS.next_dimension, REGIONS.wiring, "Open the wires layer")
-    f(LOCATIONS.oops, REGIONS.main, "Deliver an irrelevant shape")
     f(LOCATIONS.copy_pasta, REGIONS.blueprint, "Place a 1000 buildings blueprint")
     f(LOCATIONS.ive_seen_that_before, REGIONS.all_buildings, "Produce RgRyRbRr")
     f(LOCATIONS.memories, REGIONS.all_buildings, "Produce WrRgWrRg:CwCrCwCr:SgSgSgSg")
-    f(LOCATIONS.i_need_trains, REGIONS.main, "Have a 500 tiles belt")
+    f(LOCATIONS.i_need_trains, REGIONS.belt, "Have a 500 tiles belt")
     f(LOCATIONS.gps, REGIONS.menu, "15 map markers")
+
+    # Per second delivery achievements
+    f(LOCATIONS.preparing_to_launch, REGIONS.all_buildings, "10 rocket shapes / second")
+    if not has_upgrade_traps:
+        f(LOCATIONS.spacey, REGIONS.all_buildings, "20 rocket shapes / second")
+        f(LOCATIONS.efficiency_1, REGIONS.all_buildings, "25 blueprints shapes / second")
+        f(LOCATIONS.efficiency_2, REGIONS.all_buildings_x1_6_belt, "50 blueprints shapes / second")
+        f(LOCATIONS.branding_1, REGIONS.all_buildings, "25 logo shapes / second")
+        f(LOCATIONS.branding_2, REGIONS.all_buildings_x1_6_belt, "50 logo shapes / second")
 
     # Achievements that depend on upgrades
     f(LOCATIONS.even_faster, REGIONS.upgrades_5, "All upgrades on tier VIII")
@@ -439,11 +442,11 @@ def addachievements(excludesoftlock: bool, excludelong: bool, excludeprogressive
     elif not goal == GOALS.vanilla:
         f(LOCATIONS.is_this_the_end, REGIONS.levels_5, "Reach level 100")
 
+    # Achievements that depend on player preferences
     if excludeprogressive:
         unreasonable_type = LocationProgressType.EXCLUDED
     else:
         unreasonable_type = LocationProgressType.DEFAULT
-
     if not excludesoftlock:
         f(LOCATIONS.speedrun_master, presentlocations[LOCATIONS.level(12)][0],
           "Complete level 12 in under 30 min", unreasonable_type)
@@ -457,16 +460,19 @@ def addachievements(excludesoftlock: bool, excludelong: bool, excludeprogressive
           "No ccw rotator until level 14", unreasonable_type)
         f(LOCATIONS.a_bit_early, REGIONS.all_buildings,
           "Produce logo shape before level 18", unreasonable_type)
-
     if not excludelong:
         f(LOCATIONS.a_long_time, REGIONS.menu, "10 hours")
         f(LOCATIONS.addicted, REGIONS.menu, "20 hours")
 
+    # Achievements with a softlock chance of less than
+    # 1 divided by 2 to the power of the number of all atoms in the universe
+    f(LOCATIONS.oops, REGIONS.main, "Deliver an irrelevant shape")
+
     return locations
 
 
-def addshapesanity(amount: int, random: Random, append_shapesanity: Callable[[str],None],
-                   add_alias: Callable[[str,str],None]) -> Dict[str, Tuple[str, LocationProgressType]]:
+def addshapesanity(amount: int, random: Random, append_shapesanity: Callable[[str], None],
+                   add_alias: Callable[[str, str], None]) -> Dict[str, Tuple[str, LocationProgressType]]:
     """Returns a dictionary with a given number of random shapesanity locations."""
 
     included_shapes: Dict[str, Tuple[str, LocationProgressType]] = {}
@@ -479,10 +485,14 @@ def addshapesanity(amount: int, random: Random, append_shapesanity: Callable[[st
 
     # Always have at least 4 shapesanity checks because of sphere 1 usefulls + both hardcore logic
     shapes_list = list(shapesanity_simple.items())
-    f(LOCATIONS.shapesanity(1), REGIONS.sanity(REGIONS.full, REGIONS.uncol), REGIONS.uncol_circle)
-    f(LOCATIONS.shapesanity(2), REGIONS.sanity(REGIONS.full, REGIONS.uncol), REGIONS.uncol_square)
-    f(LOCATIONS.shapesanity(3), REGIONS.sanity(REGIONS.full, REGIONS.uncol), REGIONS.uncol_star)
-    f(LOCATIONS.shapesanity(4), REGIONS.sanity(REGIONS.east_wind, REGIONS.uncol), REGIONS.uncol_wind)
+    f(LOCATIONS.shapesanity(1), REGIONS.sanity(REGIONS.full, REGIONS.uncol),
+      SHAPESANITY.full(SHAPESANITY.uncolored, SHAPESANITY.circle))
+    f(LOCATIONS.shapesanity(2), REGIONS.sanity(REGIONS.full, REGIONS.uncol),
+      SHAPESANITY.full(SHAPESANITY.uncolored, SHAPESANITY.square))
+    f(LOCATIONS.shapesanity(3), REGIONS.sanity(REGIONS.full, REGIONS.uncol),
+      SHAPESANITY.full(SHAPESANITY.uncolored, SHAPESANITY.star))
+    f(LOCATIONS.shapesanity(4), REGIONS.sanity(REGIONS.east_wind, REGIONS.uncol),
+      SHAPESANITY.full(SHAPESANITY.uncolored, SHAPESANITY.windmill))
 
     # The pool switches dynamically depending on if either it's ratio or limit is reached
     switched = 0
@@ -508,7 +518,7 @@ def addshapesanity(amount: int, random: Random, append_shapesanity: Callable[[st
     return included_shapes
 
 
-def addshapesanity_ut(shapesanity_names: List[str], add_alias: Callable[[str,str],None]
+def addshapesanity_ut(shapesanity_names: List[str], add_alias: Callable[[str, str], None]
                       ) -> Dict[str, Tuple[str, LocationProgressType]]:
     """Returns the same information as addshapesanity but will add specific values based on a UT rebuild."""
 

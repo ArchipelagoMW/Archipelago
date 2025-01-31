@@ -75,31 +75,37 @@ class OPTIONS:
     logic_category_random = "category_random"
     logic_shuffled = "shuffled"
     sphere_1 = "sphere_1"
+    buildings_3 = "3_buildings"
+    buildings_5 = "5_buildings"
 
 
 class REGIONS:
     menu = "Menu"
+    belt = "Shape transportation"
+    extract = "Shape extraction"
     main = "Main"
-    levels_1 = "Levels with 1 Building"
-    levels_2 = "Levels with 2 Buildings"
-    levels_3 = "Levels with 3 Buildings"
-    levels_4 = "Levels with 4 Buildings"
-    levels_5 = "Levels with 5 Buildings"
-    upgrades_1 = "Upgrades with 1 Building"
-    upgrades_2 = "Upgrades with 2 Buildings"
-    upgrades_3 = "Upgrades with 3 Buildings"
-    upgrades_4 = "Upgrades with 4 Buildings"
-    upgrades_5 = "Upgrades with 5 Buildings"
-    paint = "Painted Shape Achievements"
-    cut = "Cut Shape Achievements"
-    rotate = "Rotated Shape Achievements"
-    stack = "Stacked Shape Achievements"
-    store = "Stored Shape Achievements"
-    all_buildings = "All Buildings Shapes"
-    trash = "Trashed Shape Achievements"
-    blueprint = "Blueprint Achievements"
-    wiring = "Wiring Achievements"
-    mam = "MAM needed"
+    levels_1 = "Levels with 1 building"
+    levels_2 = "Levels with 2 buildings"
+    levels_3 = "Levels with 3 buildings"
+    levels_4 = "Levels with 4 buildings"
+    levels_5 = "Levels with 5 buildings"
+    upgrades_1 = "Upgrades with 1 building"
+    upgrades_2 = "Upgrades with 2 buildings"
+    upgrades_3 = "Upgrades with 3 buildings"
+    upgrades_4 = "Upgrades with 4 buildings"
+    upgrades_5 = "Upgrades with 5 buildings"
+    paint_not_quad = "Achievements with (double) painter"
+    cut_not_quad = "Achievements with half cutter"
+    rotate_cw = "Achievements with clockwise rotator"
+    stack_shape = "Achievements with stacker"
+    store_shape = "Achievements with storage"
+    trash_shape = "Achievements with trash"
+    blueprint = "Achievements with blueprints"
+    wiring = "Achievements with wires"
+    mam = "Achievements needing a MAM"
+    any_building = "Achievements with any placeable building"
+    all_buildings = "Achievements with all main buildings"
+    all_buildings_x1_6_belt = "Achievements with x1.6 belt speed"
     full = "Full"
     half = "Half"
     piece = "Piece"
@@ -111,12 +117,8 @@ class REGIONS:
     col_full = "Colorful Full"
     col_half = "Colorful Half"
     uncol = "Uncolored"
-    san_paint = "Painted"
+    painted = "Painted"
     mixed = "Mixed"
-    uncol_circle = "Uncolored Circle"
-    uncol_square = "Uncolored Square"
-    uncol_star = "Uncolored Star"
-    uncol_wind = "Uncolored Windmill"
 
     @staticmethod
     def sanity(processing: str, coloring: str):
@@ -169,6 +171,7 @@ class LOCATIONS:
     i_need_trains = "I need trains"
     a_bit_early = "A bit early?"
     gps = "GPS"
+    goal = "Goal"
 
     @staticmethod
     def level(number: int, additional: int = 0) -> str:
@@ -268,3 +271,66 @@ class ITEMS:
     trap_draining_blueprint = "Blueprint Shapes Draining Trap"
     trap_draining_level = "Level Shapes Draining Trap"
     trap_draining_upgrade = "Upgrade Shapes Draining Trap"
+
+    goal = "Goal"
+
+
+class SHAPESANITY:
+    circle = "Circle"
+    square = "Square"
+    star = "Star"
+    windmill = "Windmill"
+    red = "Red"
+    blue = "Blue"
+    green = "Green"
+    yellow = "Yellow"
+    purple = "Purple"
+    cyan = "Cyan"
+    white = "White"
+    uncolored = "Uncolored"
+    adjacent_pos = "Adjacent"
+    cornered_pos = "Cornered"
+
+    @staticmethod
+    def full(color: str, subshape: str):
+        return f"{color} {subshape}"
+
+    @staticmethod
+    def half(color: str, subshape: str):
+        return f"Half {color} {subshape}"
+
+    @staticmethod
+    def piece(color: str, subshape: str):
+        return f"{color} {subshape} Piece"
+
+    @staticmethod
+    def cutout(color: str, subshape: str):
+        return f"Cut Out {color} {subshape}"
+
+    @staticmethod
+    def cornered(color: str, subshape: str):
+        return f"Cornered {color} {subshape}"
+
+    @staticmethod
+    def three_one(first: str, second: str):
+        return f"3-1 {first} {second}"
+
+    @staticmethod
+    def halfhalf(combo: str):
+        return f"Half-Half {combo}"
+
+    @staticmethod
+    def checkered(combo: str):
+        return f"Checkered {combo}"
+
+    @staticmethod
+    def singles(combo: str, position: str = ""):
+        return f"{position} Singles {combo}".strip()
+
+    @staticmethod
+    def two_one(first: str, second: str, position: str):
+        return f"{position} 2-1 {first} {second}"
+
+    @staticmethod
+    def two_one_one(first: str, second: str, position: str):
+        return f"{position} 2-1-1 {first} {second}"
