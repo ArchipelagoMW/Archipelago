@@ -85,9 +85,7 @@ WALLET_OFFSETS: dict[int, int] = {
 RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000,50000000, 60000000, 70000000, 100000000]
 
 # List of received items to ignore because they are handled elsewhere
-# TODO Remove hearts from here when fixed.
 RECV_ITEMS_IGNORE = [8063, 8064, 8127]
-
 RECV_OWN_GAME_LOCATIONS: list[str] = list(BOO_LOCATION_TABLE.keys()) + list(TOAD_LOCATION_TABLE.keys())
 RECV_OWN_GAME_ITEMS: list[str] = list(BOO_ITEM_TABLE.keys()) + list(filler_items.keys())
 
@@ -265,7 +263,6 @@ def set_luigi_dead():
     return
 
 
-# TODO Validate this works
 async def give_items(ctx: LMContext):
     # Only try to give items if we are in game and alive.
     if not (check_ingame(ctx) and check_alive(ctx)):
@@ -461,7 +458,6 @@ async def dolphin_sync_task(ctx: LMContext):
     logger.info("Starting Dolphin connector. Use /dolphin for status information.")
     while not ctx.exit_event.is_set():
         try:
-            # TODO Handle if Dolphin was closed pre-maturely. Something around here causes the error.
             if dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
                 if not check_ingame(ctx):
                     await asyncio.sleep(0.1)
