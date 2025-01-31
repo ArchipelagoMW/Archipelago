@@ -12,6 +12,7 @@ import dolphin_memory_engine as dme
 
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from settings import get_settings, Settings
+from worlds.stardew_valley.stardew_rule import False_
 
 from .LMGenerator import LuigisMansionRandomizer
 from .Items import ALL_ITEMS_TABLE, BOO_ITEM_TABLE, filler_items
@@ -35,7 +36,7 @@ SLOT_NAME_STR_LENGTH = 0x10
 # This Play State address lets us know if the game is playable and ready. This should have a value of 2
 # Map ID is used to confirm Luigi is loading into the Mansion or one of the boss maps.
 CURR_PLAY_STATE_ADDR = 0x803A3AE4
-CURR_MAP_ID_ADDR = 0x804D7834
+CURR_MAP_ID_ADDR = 0x804D80A4
 
 # This address is used to check/set the player's health for DeathLink. (2 bytes / Half word)
 CURR_HEALTH_ADDR = 0x803D8B40
@@ -94,13 +95,14 @@ RECV_OWN_GAME_ITEMS: list[str] = [lm_item for lm_item in BOO_ITEM_TABLE.keys()]
 def read_short(console_address: int):
     return int.from_bytes(dme.read_bytes(console_address, 2))
 
-
 def write_short(console_address: int, value: int):
     dme.write_bytes(console_address, value.to_bytes(2))
 
-
 def read_string(console_address: int, strlen: int):
     return dme.read_bytes(console_address, strlen).decode().strip("\0")
+
+def check_if_addr_is_pointer(addr: int):
+    return 2147483648 <= dme.read_word(addr) <= 2172649471
 
 
 def get_base_rom_path(file_name: str = "") -> str:
@@ -148,7 +150,12 @@ class LMContext(CommonContext):
         self.dolphin_sync_task: Optional[asyncio.Task[None]] = None
         self.dolphin_status = CONNECTION_INITIAL_STATUS
         self.awaiting_rom = False
+
+        # All used when death link is enabled.
+        self.death_link_enabled = False
         self.is_luigi_dead = False
+        self.last_health_pointer = 0
+        self.death_check_counter = 0
 
         # Used for handling received items to the client.
         self.goal_type = None
@@ -192,8 +199,9 @@ class LMContext(CommonContext):
         if cmd == "Connected":  # On Connect
             self.goal_type = int(args["slot_data"]["goal"])
             self.rank_req = int(args["slot_data"]["rank requirement"])
+            self.death_link_enabled = bool(args["slot_data"]["death_link"])
             if "death_link" in args["slot_data"]:
-                Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
+                Utils.async_start(self.update_death_link())
 
 
     def on_deathlink(self, data: dict[str, Any]):
@@ -204,6 +212,7 @@ class LMContext(CommonContext):
         """
         super().on_deathlink(data)
         self.is_luigi_dead = True
+        self.death_check_counter = 0
         set_luigi_dead()
         return
 
@@ -218,16 +227,27 @@ class LMContext(CommonContext):
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
 
-def check_alive():
+def check_alive(ctx: LMContext):
+    if ctx.death_link_enabled:
+        # Get the pointer of Luigi's health, as this could shift when warping to bosses or climbing into mouse holes.
+        curr_pointer = read_short(CURR_HEALTH_ADDR)
+        if curr_pointer != ctx.last_health_pointer:
+            ctx.death_check_counter = 0
+            ctx.last_health_pointer = curr_pointer
+            ctx.is_luigi_dead = False
+            return True
+
+        # This ensures we checked the same address 3 times to ensure we are actually dead.
+        if ctx.death_check_counter != 3:
+            ctx.death_check_counter += 1
+            ctx.is_luigi_dead = False
+            return True
+
     lm_curr_health = read_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]))
     return lm_curr_health > 0
 
 async def check_death(ctx: LMContext):
-    if check_ingame() and not check_alive():
-        # TODO Determine game over screen reached to ensure Deathlink was already sent.
-        if dme.read_word(CURR_PLAY_STATE_ADDR) == 3:
-            ctx.is_luigi_dead = False
-            return
+    if check_ingame() and not check_alive(ctx):
         if not ctx.is_luigi_dead and time.time() >= ctx.last_death_link + 3:
             ctx.is_luigi_dead = True
             set_luigi_dead()
@@ -241,14 +261,11 @@ def set_luigi_dead():
 def get_map_id():
     return dme.read_word(CURR_MAP_ID_ADDR)
 
-def check_if_addr_is_pointer(addr: int):
-    return 2147483648 <= dme.read_word(addr) <= 2172649471
-
 
 # TODO Validate this works
 async def give_items(ctx: LMContext):
     # Only try to give items if we are in game and alive.
-    if not (check_ingame() and check_alive()):
+    if not (check_ingame() and check_alive(ctx)):
         return
 
     last_recv_idx = read_short(LAST_RECV_ITEM_ADDR)
