@@ -43,7 +43,7 @@ def get_hints_by_option(multiworld: MultiWorld, player: int) -> Dict[str, Dict[s
             if world.open_doors[72] == 0:
                 loc: Location = multiworld.find_item("Spade Key", player)
             else:
-                iname: str = world.random.choice(["Mario's Glove", "Mario's Letter", "Mario's Cap", "Mario's Glove",
+                iname: str = world.random.choice(["Mario's Glove", "Mario's Letter", "Mario's Hat", "Mario's Star",
                                                  "Mario's Shoe"])
                 loc: Location = multiworld.find_item(iname, player)
             reg = loc.parent_region
