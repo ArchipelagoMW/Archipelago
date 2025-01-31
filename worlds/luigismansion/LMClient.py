@@ -85,9 +85,9 @@ WALLET_OFFSETS: dict[int, int] = {
 RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000,50000000, 60000000, 70000000, 100000000]
 
 # List of received items to ignore because they are handled elsewhere
-RECV_ITEMS_IGNORE = [8063, 8064, 8127]
+RECV_ITEMS_IGNORE = [8127, 8125, 8130, 8131, 8132]
 RECV_OWN_GAME_LOCATIONS: list[str] = list(BOO_LOCATION_TABLE.keys()) + list(TOAD_LOCATION_TABLE.keys())
-RECV_OWN_GAME_ITEMS: list[str] = list(BOO_ITEM_TABLE.keys()) + list(filler_items.keys())
+RECV_OWN_GAME_ITEMS: list[str] = list(BOO_ITEM_TABLE.keys()) + list(filler_items.keys()) + ["Boo Radar", "Poltergust 4000"]
 
 
 def read_short(console_address: int):
@@ -232,6 +232,10 @@ class LMContext(CommonContext):
 
 
 def check_alive(ctx: LMContext):
+    # Our health gets messed up in the Lab, so we can just ignore that location altogether.
+    if dme.read_word(CURR_MAP_ID_ADDR) == 1:
+        return True
+
     if ctx.death_link_enabled:
         # Get the pointer of Luigi's health, as this could shift when warping to bosses or climbing into mouse holes.
         curr_pointer = read_short(CURR_HEALTH_ADDR)
@@ -270,6 +274,10 @@ async def give_items(ctx: LMContext):
 
     last_recv_idx = read_short(LAST_RECV_ITEM_ADDR)
     if len(ctx.items_received) == last_recv_idx:
+        # TODO Potentially move this to reading a memory address instead that is updated only once.
+        if ctx.items_received.__contains__(8064):
+            vac_speed = "3800000F"
+            dme.write_bytes(ALL_ITEMS_TABLE[ctx.item_names.lookup_in_game(8064)].ram_addr, bytes.fromhex(vac_speed))
         return
 
     # Filter for only items where we have not received yet. If same slot, only receive the locations from the
@@ -329,18 +337,20 @@ async def give_items(ctx: LMContext):
                 [coins_ram_pointer]), coins_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
                         dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
                 [bills_rams_pointer]), bills_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
-                    case 128:
+                    case 128 | 129:
                         curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
                     [lm_item.pointer_offset]), lm_item.ram_byte_size))
-                        curr_val += 10
+                        curr_val += 10 if lm_item.code == 128 else 50
                         dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
                     [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
-                    case 129:
-                        curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
-                    [lm_item.pointer_offset]), lm_item.ram_byte_size))
-                        curr_val += 50
-                        dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
-                    [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
+                    case 63:
+                        curr_val = dme.read_byte(lm_item.ram_addr)
+                        curr_val = (curr_val | (1 << 1)) # Enable flag 73
+                        curr_val = (curr_val | (1 << 3)) # Enable flag 75
+                        dme.write_byte(lm_item.ram_addr, curr_val)
+                    case 64:
+                        vac_speed = "3800000F"
+                        dme.write_bytes(lm_item.ram_addr, bytes.fromhex(vac_speed))
                     case _:
                         curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
                     [lm_item.pointer_offset]), lm_item.ram_byte_size))
