@@ -419,11 +419,11 @@ level_table = {
                 [
                     LocationData("Box Behind Wall", difficulties=[normal]),
                     LocationData("Orange Escape Box", difficulties=[normal]),
-                    LocationData("Pink Circle Box", access_rule=has('Ground Pound'), difficulties=[hard, s_hard]),
+                    LocationData("Pink Circle Box", access_rule=has('Enemy Jump'), difficulties=[hard, s_hard]),
                     LocationData("Buried Door Box", difficulties=[normal]),
                     LocationData("Purple Square Box", difficulties=[hard, s_hard]),
                     LocationData("Blue Escape Box", difficulties=[normal]),
-                    LocationData("Blue Circle Box", access_rule=has('Enemy Jump'), difficulties=[hard, s_hard]),
+                    LocationData("Blue Circle Box", access_rule=has('Ground Pound'), difficulties=[hard, s_hard]),
                     LocationData("CD Box", difficulties=[hard, s_hard]),
                     LocationData("Keyzer", event=True),
                     LocationData("Frog Switch", event=True),
