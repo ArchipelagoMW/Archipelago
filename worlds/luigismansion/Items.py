@@ -156,7 +156,7 @@ BOO_ITEM_TABLE: dict[str, LMItemData] = {
 }
 
 filler_items: Dict[str, LMItemData] = {
-    "20 Coins & Bills": LMItemData("Money", 119, IC.filler),
+    "20 Coins & Bills": LMItemData("Money", 119, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x324, ram_byte_size=4),
     "Sapphire": LMItemData("Money", 121, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x330, ram_byte_size=4),
     "Emerald": LMItemData("Money", 122, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x334, ram_byte_size=4),
     "Ruby": LMItemData("Money", 123, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x338, ram_byte_size=4),
