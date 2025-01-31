@@ -1,3 +1,4 @@
+import math
 from typing import Any, List, Dict, Tuple, Mapping
 
 from Options import OptionError
@@ -13,7 +14,8 @@ from .presets import options_presets
 from .options import ShapezOptions
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, LocationProgressType, MultiWorld
-from .regions import create_shapez_regions
+from .regions import create_shapez_regions, has_x_belt_multiplier
+from ..generic.Rules import add_rule
 
 
 class ShapezWeb(WebWorld):
@@ -351,6 +353,31 @@ class ShapezWorld(World):
             self.multiworld.early_items[self.player][ITEMS.balancer] = 1
             self.multiworld.early_items[self.player][ITEMS.tunnel] = 1
             self.multiworld.early_items[self.player][ITEMS.trash] = 1
+
+    def set_rules(self) -> None:
+        # Levels might need more belt speed if they require throughput per second. As the randomization of what levels
+        # need throughput happens in the client mod, this logic needs to be applied to all levels. This is applied to
+        # every individual level instead of regions, because they would need a much more complex calculation to prevent
+        # softlocks.
+
+        def f(x: int, name: str):
+            # These calculations are taken from the client mod
+            if x < 26:
+                throughput = math.ceil((2.999+x*0.333)*self.options.required_shapes_multiplier/10)
+            else:
+                throughput = min((4+(x-26)*0.25)*self.options.required_shapes_multiplier/10, 200)
+            if throughput/32 >= 1:
+                add_rule(self.get_location(name),
+                         lambda state: has_x_belt_multiplier(state, self.player, throughput/32))
+
+        if not self.options.throughput_levels_ratio == 0:
+            f(0, LOCATIONS.level(1, 1))
+            f(19, LOCATIONS.level(20, 1))
+            f(19, LOCATIONS.level(20, 2))
+            for _x in range(self.maxlevel):
+                f(_x, LOCATIONS.level(_x+1))
+            if self.options.goal.current_key in [GOALS.vanilla, GOALS.mam]:
+                f(self.maxlevel, LOCATIONS.goal)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         # Buildings logic; all buildings as individual parameters

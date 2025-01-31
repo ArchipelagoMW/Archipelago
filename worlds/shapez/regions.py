@@ -86,24 +86,16 @@ def can_make_half_shape(state: CollectionState, player: int) -> bool:
     return can_cut_half(state, player) or state.has_all([ITEMS.cutter_quad, ITEMS.stacker], player)
 
 
-def has_8x_belt_multiplier(state: CollectionState, player: int) -> bool:
+def has_x_belt_multiplier(state: CollectionState, player: int, needed: float) -> bool:
     # Assumes there are no upgrade traps
-    # One gigantic upgrade (+10) is enough
-    if state.has(ITEMS.upgrade_gigantic_belt, player):
-        return True
     multiplier = 1.0
     # Rising upgrades do the least improvement if received before other upgrades
     for _ in range(state.count(ITEMS.upgrade_rising_belt, player)):
         multiplier *= 2
+    multiplier += state.count(ITEMS.upgrade_gigantic_belt, player)*10
     multiplier += state.count(ITEMS.upgrade_big_belt, player)
     multiplier += state.count(ITEMS.upgrade_small_belt, player)*0.1
-    return multiplier >= 8
-
-
-def has_1_6x_belt_multiplier(state: CollectionState, player: int) -> bool:
-    # Assumes there are no upgrade traps
-    return (state.has_any([ITEMS.upgrade_gigantic_belt, ITEMS.upgrade_rising_belt, ITEMS.upgrade_big_belt], player) or
-            state.has(ITEMS.upgrade_small_belt, player, 6))
+    return multiplier >= needed
 
 
 def has_logic_list_building(state: CollectionState, player: int, buildings: List[str], index: int,
@@ -151,7 +143,7 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
     goal_location = ShapezLocation(player, LOCATIONS.goal, None, goal_region, LocationProgressType.DEFAULT)
     goal_location.place_locked_item(ShapezItem(ITEMS.goal, ItemClassification.progression_skip_balancing, None, player))
     if goal == GOALS.efficiency_iii:
-        add_rule(goal_location, lambda state: has_8x_belt_multiplier(state, player))
+        add_rule(goal_location, lambda state: has_x_belt_multiplier(state, player, 8))
     goal_region.locations.append(goal_location)
     multiworld.completion_condition[player] = lambda state: state.has(ITEMS.goal, player)
 
@@ -195,7 +187,7 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
                                                 can_paint(state, player) and can_mix_colors(state, player))
     regions[REGIONS.all_buildings].connect(regions[REGIONS.all_buildings_x1_6_belt],
                                            "Delivering per second with 1.6x belt speed",
-                                           lambda state: has_1_6x_belt_multiplier(state, player))
+                                           lambda state: has_x_belt_multiplier(state, player, 1.6))
 
     # Progressively connect level and upgrade regions
     regions[REGIONS.main].connect(
