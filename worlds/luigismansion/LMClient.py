@@ -12,11 +12,10 @@ import dolphin_memory_engine as dme
 
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from settings import get_settings, Settings
-from worlds.stardew_valley.stardew_rule import False_
 
 from .LMGenerator import LuigisMansionRandomizer
 from .Items import ALL_ITEMS_TABLE, BOO_ITEM_TABLE, filler_items
-from .Locations import ALL_LOCATION_TABLE, LMLocation, TOAD_LOCATION_TABLE, BOO_LOCATION_TABLE
+from .Locations import ALL_LOCATION_TABLE, TOAD_LOCATION_TABLE, BOO_LOCATION_TABLE
 
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
@@ -132,6 +131,12 @@ class LMCommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, LMContext):
             logger.info(f"Dolphin Status: {self.ctx.dolphin_status}")
 
+    def _cmd_deathlink(self):
+        """Toggle deathlink from client. Overrides default setting."""
+        if isinstance(self.ctx, LMContext):
+            self.ctx.death_link_enabled = not self.ctx.death_link_enabled
+            Utils.async_start(self.ctx.update_death_link(self.ctx.death_link_enabled), name="Update Deathlink")
+
 
 class LMContext(CommonContext):
     command_processor = LMCommandProcessor
@@ -201,7 +206,7 @@ class LMContext(CommonContext):
             self.rank_req = int(args["slot_data"]["rank requirement"])
             self.death_link_enabled = bool(args["slot_data"]["death_link"])
             if "death_link" in args["slot_data"]:
-                Utils.async_start(self.update_death_link())
+                Utils.async_start(self.update_death_link(self.death_link_enabled))
 
 
     def on_deathlink(self, data: dict[str, Any]):
@@ -247,7 +252,7 @@ def check_alive(ctx: LMContext):
     return lm_curr_health > 0
 
 async def check_death(ctx: LMContext):
-    if check_ingame() and not check_alive(ctx):
+    if check_ingame(ctx) and not check_alive(ctx):
         if not ctx.is_luigi_dead and time.time() >= ctx.last_death_link + 3:
             ctx.is_luigi_dead = True
             set_luigi_dead()
@@ -258,14 +263,11 @@ def set_luigi_dead():
     write_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]), 0)
     return
 
-def get_map_id():
-    return dme.read_word(CURR_MAP_ID_ADDR)
-
 
 # TODO Validate this works
 async def give_items(ctx: LMContext):
     # Only try to give items if we are in game and alive.
-    if not (check_ingame() and check_alive(ctx)):
+    if not (check_ingame(ctx) and check_alive(ctx)):
         return
 
     last_recv_idx = read_short(LAST_RECV_ITEM_ADDR)
@@ -362,29 +364,26 @@ async def give_items(ctx: LMContext):
 
 
 async def check_locations(ctx: LMContext):
-    list_types_to_skip_currently = ["BSpeedy", "Portrait", "Event"]
+    # There will be different checks on different maps.
+    current_map_id = dme.read_word(CURR_MAP_ID_ADDR)
 
-    current_map_id = get_map_id()
-    for location, data in ALL_LOCATION_TABLE.items():
-        if data.type in list_types_to_skip_currently:
-            continue
-
-        if data.code is None or not LMLocation.get_apid(data.code) in ctx.missing_locations:
-            continue
+    for mis_loc in ctx.missing_locations:
+        local_loc = ctx.location_names.lookup_in_game(mis_loc)
+        lm_loc_data = ALL_LOCATION_TABLE[local_loc]
 
         # If in main mansion map
         if current_map_id == 2:
             # TODO Debug remove before release
-            if data.in_game_room_id is None:
-                logger.warn("Missing in game room id: " + location)
+            if lm_loc_data.in_game_room_id is None:
+                logger.warn("Missing in game room id: " + str(mis_loc))
 
             # Only check locations that are currently in the same room as us.
             current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
-            if not data.in_game_room_id == current_room_id:
+            if not lm_loc_data.in_game_room_id == current_room_id:
                 continue
 
-            match data.type:
-                case "Furniture":
+            match lm_loc_data.type:
+                case "Furniture" | "Plant":
                     # Check all possible furniture addresses. #TODO Find a way to not check all 600+
                     for current_offset in range(0, FURNITURE_ADDR_COUNT, 4):
                         # Only check if the current address is a pointer
@@ -393,49 +392,26 @@ async def check_locations(ctx: LMContext):
                             continue
 
                         furn_id = dme.read_word(dme.follow_pointers(current_addr, [FURN_ID_OFFSET]))
-                        if not furn_id == data.jmpentry:
+                        if not furn_id == lm_loc_data.jmpentry:
                             continue
 
                         furn_flag = dme.read_word(dme.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
                         if furn_flag > 0:
-                            ctx.locations_checked.add(LMLocation.get_apid(data.code))
-                case "Plant":
-                    # Check all possible furniture addresses. #TODO Find a way to not check all 600+
-                    for current_offset in range(0, FURNITURE_ADDR_COUNT, 4):
-                        # Only check if the current address is a pointer
-                        current_addr = FURNITURE_MAIN_TABLE_ID + current_offset
-                        if not check_if_addr_is_pointer(current_addr):
-                            continue
-
-                        furn_id = dme.read_word(dme.follow_pointers(current_addr, [FURN_ID_OFFSET]))
-                        if not furn_id == data.jmpentry:
-                            continue
-
-                        furn_flag = dme.read_word(dme.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
-                        if furn_flag > 0:
-                            ctx.locations_checked.add(LMLocation.get_apid(data.code))
+                            ctx.locations_checked.add(mis_loc)
                 case "Chest":
                     # Bit 2 of the current room address indicates if a chest in that room has been opened.
-                    current_room_state_int = read_short(data.room_ram_addr)
+                    current_room_state_int = read_short(lm_loc_data.room_ram_addr)
                     if (current_room_state_int & (1 << 2)) > 0:
-                        ctx.locations_checked.add(LMLocation.get_apid(data.code))
+                        ctx.locations_checked.add(mis_loc)
                 case "Boo":
-                    current_boo_state_int = dme.read_byte(data.room_ram_addr)
-                    if (current_boo_state_int & (1 << data.locationbit)) > 0:
-                        ctx.locations_checked.add(LMLocation.get_apid(data.code))
-                        dme.write_byte(current_boo_state_int, (current_boo_state_int & ~(1 << data.locationbit)))
-                case "Toad":
-                    current_toad_int = dme.read_byte(data.room_ram_addr)
-                    if (current_toad_int & (1 << data.locationbit)) > 0:
-                        ctx.locations_checked.add(LMLocation.get_apid(data.code))
-                case "Freestanding":
-                    current_item_int = dme.read_byte(data.room_ram_addr)
-                    if (current_item_int & (1 << data.locationbit)) > 0:
-                        ctx.locations_checked.add(LMLocation.get_apid(data.code))
-                case "Special":
-                    current_item_int = dme.read_byte(data.room_ram_addr)
-                    if (current_item_int & (1 << data.locationbit)) > 0:
-                        ctx.locations_checked.add(LMLocation.get_apid(data.code))
+                    current_boo_state_int = dme.read_byte(lm_loc_data.room_ram_addr)
+                    if (current_boo_state_int & (1 << lm_loc_data.locationbit)) > 0:
+                        ctx.locations_checked.add(mis_loc)
+                        dme.write_byte(current_boo_state_int, (current_boo_state_int & ~(1 << lm_loc_data.locationbit)))
+                case "Toad" | "Freestanding" | "Special":
+                    current_toad_int = dme.read_byte(lm_loc_data.room_ram_addr)
+                    if (current_toad_int & (1 << lm_loc_data.locationbit)) > 0:
+                        ctx.locations_checked.add(mis_loc)
 
     await ctx.check_locations(ctx.locations_checked)
 
@@ -466,8 +442,8 @@ async def check_locations(ctx: LMContext):
     return
 
 
-def check_ingame():
-    current_map_id = get_map_id()
+def check_ingame(ctx: LMContext):
+    current_map_id = dme.read_word(CURR_MAP_ID_ADDR)
     if current_map_id == 2:
         # If this is NOT a pointer, then either we are on another map (aka boss fight) or game is not fully loaded.
         bool_loaded_in_map = check_if_addr_is_pointer(ROOM_ID_ADDR)
@@ -484,7 +460,7 @@ async def dolphin_sync_task(ctx: LMContext):
         try:
             # TODO Handle if Dolphin was closed pre-maturely. Something around here causes the error.
             if dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
-                if not check_ingame():
+                if not check_ingame(ctx):
                     await asyncio.sleep(0.1)
                     continue
                 if ctx.slot:
