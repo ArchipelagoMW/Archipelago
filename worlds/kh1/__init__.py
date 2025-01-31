@@ -1,5 +1,6 @@
 import logging
 from typing import List
+from math import ceil
 
 from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld, World
@@ -189,13 +190,7 @@ class KH1World(World):
             if name in starting_worlds or name in starting_tools:
                 continue
             if name == "Puppy":
-                if self.options.puppies.current_key != "vanilla":
-                    if self.options.puppies == "triplets":
-                        item_pool += [self.create_item(name) for _ in range(33)]
-                    if self.options.puppies == "individual":
-                        item_pool += [self.create_item(name) for _ in range(99)]
-                    if self.options.puppies == "full":
-                        item_pool += [self.create_item(name) for _ in range(1)]
+                item_pool += [self.create_item(name) for _ in range(ceil(99/self.options.puppy_value.value))]
             elif name == "Atlantica":
                 if self.options.atlantica:
                     item_pool += [self.create_item(name) for _ in range(0, quantity)]
@@ -281,7 +276,9 @@ class KH1World(World):
             self.get_location("Traverse Town 1st District Accessory Shop Roof Chest").place_locked_item(self.create_item("Postcard"))
             self.get_location("Traverse Town 2nd District Boots and Shoes Awning Chest").place_locked_item(self.create_item("Postcard"))
             self.get_location("Traverse Town 1st District Blue Trinity Balcony Chest").place_locked_item(self.create_item("Postcard"))
-        if self.options.puppies.current_key == "vanilla":
+        if not self.options.randomize_puppies:
+            self.options.puppy_value = 3
+            logging.info(f"{self.player_name}'s value of {self.options.puppy_value.value} for puppy value was changed to 3 as Randomize Puppies is OFF")
             for i, location in enumerate(VANILLA_PUPPY_LOCATIONS):
                 self.get_location(location).place_locked_item(self.create_item("Puppy"))
 
@@ -290,15 +287,13 @@ class KH1World(World):
         return self.random.choices([filler for filler in self.fillers.keys()], weights)[0]
 
     def fill_slot_data(self) -> dict:
-        slot_data = {"xpmult": int(self.options.exp_multiplier)/16,
-                    "required_lucky_emblems_eotw": self.determine_lucky_emblems_required_to_open_end_of_the_world(),
+        slot_data = {"required_lucky_emblems_eotw": self.determine_lucky_emblems_required_to_open_end_of_the_world(),
                     "required_lucky_emblems_door": self.determine_lucky_emblems_required_to_open_final_rest_door(),
-                    "seed": self.multiworld.seed_name,
                     "advanced_logic": bool(self.options.advanced_logic),
                     "hundred_acre_wood": bool(self.options.hundred_acre_wood),
                     "atlantica": bool(self.options.atlantica),
-                    "final_rest_door_key": str(self.options.final_rest_door_key.current_key),
-                    "remote_location_ids": self.get_remote_location_ids()}
+                    "final_rest_door_key": str(self.options.final_rest_door_key.current_key)}
+                    "end_of_the_world_unlock": str(self.options.end_of_the_world_unlock.current_key)}
         if self.options.donald_death_link:
             slot_data["donalddl"] = ""
         if self.options.goofy_death_link:
@@ -364,12 +359,12 @@ class KH1World(World):
     def determine_lucky_emblems_required_to_open_end_of_the_world(self) -> int:
         if self.options.end_of_the_world_unlock == "lucky_emblems":
             return self.options.required_lucky_emblems_eotw.value
-        return 14
+        return -1
     
     def determine_lucky_emblems_required_to_open_final_rest_door(self) -> int:
         if self.options.final_rest_door_key == "lucky_emblems":
             return self.options.required_lucky_emblems_door.value
-        return 14
+        return -1
     
     def get_remote_location_ids(self):
         remote_location_ids = []
@@ -432,12 +427,19 @@ class KH1World(World):
                 max_mp_bonus = max(self.options.keyblade_min_mp.value, self.options.keyblade_max_mp.value)
                 self.options.keyblade_min_mp.value = min_mp_bonus
                 self.options.keyblade_max_mp.value = max_mp_bonus
-                for keyblade in keyblade_stats:
+                if self.options.bad_starting_weapons:
+                    starting_weapons = keyblade_stats[:4]
+                    other_weapons = keyblade_stats[4:]
+                else:
+                    starting_weapons = []
+                    other_weapons = keyblade_stats
+                for keyblade in other_weapons:
                         keyblade["STR"] = int(self.random.randint(min_str_bonus, max_str_bonus))
                         keyblade["CRR"] = int(self.random.randint(min_crit_rate, max_crit_rate))
                         keyblade["CRB"] = int(self.random.randint(min_crit_str, max_crit_str))
                         keyblade["REC"] = int(self.random.randint(min_recoil, max_recoil))
                         keyblade["MP"]  = int(self.random.randint(min_mp_bonus, max_mp_bonus))
+                keyblade_stats = starting_weapons + other_weapons
             elif self.options.keyblade_stats == "shuffle":
                 if self.options.bad_starting_weapons:
                     starting_weapons = keyblade_stats[:4]

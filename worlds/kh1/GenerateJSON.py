@@ -71,5 +71,6 @@ def get_settings(self):
                     "remote_location_ids": self.get_remote_location_ids(),
                     "chests_locked": bool(self.options.keyblades_unlock_chests),
                     "interact_in_battle": bool(self.options.interact_in_battle),
-                    "shorten_go_mode": bool(self.options.shorten_go_mode)}
+                    "shorten_go_mode": bool(self.options.shorten_go_mode),
+                    "puppy_value": int(self.options.puppy_value.value)}
     return settings

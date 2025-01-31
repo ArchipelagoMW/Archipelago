@@ -6,8 +6,6 @@ from BaseClasses import ItemClassification
 from .Locations import KH1Location, location_table
 from .Items import KH1Item, item_table, get_items_by_type
 
-SINGLE_PUPPIES = ["Puppy " + str(i).rjust(2,"0") for i in range(1,100)]
-TRIPLE_PUPPIES = ["Puppies " + str(3*(i-1)+1).rjust(2, "0") + "-" + str(3*(i-1)+3).rjust(2, "0") for i in range(1,34)]
 WORLDS =    ["Wonderland", "Olympus Coliseum", "Deep Jungle", "Agrabah",      "Monstro",      "Atlantica", "Halloween Town", "Neverland",  "Hollow Bastion", "End of the World"]
 KEYBLADES = ["Lady Luck",  "Olympia",          "Jungle King", "Three Wishes", "Wishing Star", "Crabclaw",  "Pumpkinhead",    "Fairy Harp", "Divine Rose",    "Oblivion"]
 
@@ -28,14 +26,8 @@ def has_emblems(state: CollectionState, player: int, keyblades_unlock_chests: bo
         "Emblem Piece (Fountain)",
         "Hollow Bastion"}, player) and has_x_worlds(state, player, 5, keyblades_unlock_chests)
 
-def has_puppies_all(state: CollectionState, player: int, puppies_required: int) -> bool:
-    return state.has("Puppy", player)
-
-def has_puppies_triplets(state: CollectionState, player: int, puppies_required: int) -> bool:
-    return state.has("Puppy", player, ceil(puppies_required / 3))
-
-def has_puppies_individual(state: CollectionState, player: int, puppies_required: int) -> bool:
-    return state.has("Puppy", player, puppies_required)
+def has_puppies(state: CollectionState, player: int, puppies_required: int, puppy_value: int) -> bool:
+    return (state.count("Puppy", player) * puppy_value) >= puppies_required
 
 def has_all_arts(state: CollectionState, player: int) -> bool:
     return state.has_all({"Fire Arts", "Blizzard Arts", "Thunder Arts", "Cure Arts", "Gravity Arts", "Stop Arts", "Aero Arts"}, player)
@@ -59,7 +51,7 @@ def has_offensive_magic(state: CollectionState, player: int) -> bool:
 def has_lucky_emblems(state: CollectionState, player: int, required_amt: int) -> bool:
     return state.has("Lucky Emblem", player, required_amt)
 
-def has_final_rest_door(state: CollectionState, player: int, final_rest_door_requirement: str, final_rest_door_required_lucky_emblems: int, keyblades_unlock_chests: bool, puppies_choice: str):
+def has_final_rest_door(state: CollectionState, player: int, final_rest_door_requirement: str, final_rest_door_required_lucky_emblems: int):
     if final_rest_door_requirement == "lucky_emblems":
         return state.has("Lucky Emblem", player, final_rest_door_required_lucky_emblems)
     else:
@@ -91,12 +83,6 @@ def set_rules(kh1world):
     eotw_required_lucky_emblems            = kh1world.determine_lucky_emblems_required_to_open_end_of_the_world()
     final_rest_door_required_lucky_emblems = kh1world.determine_lucky_emblems_required_to_open_final_rest_door()
     final_rest_door_requirement            = kh1world.options.final_rest_door_key.current_key
-    
-    has_puppies = has_puppies_individual
-    if kh1world.options.puppies == "triplets" or kh1world.options.puppies == "vanilla":
-        has_puppies = has_puppies_triplets
-    elif kh1world.options.puppies == "full":
-        has_puppies = has_puppies_all
     
     add_rule(kh1world.get_location("Traverse Town 1st District Candle Puzzle Chest"),
         lambda state: state.has("Progressive Blizzard", player))
@@ -950,29 +936,29 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Traverse Town Magician's Study Obtained All LV3 Magic"),
         lambda state: has_all_magic_lvx(state, player, 3))
     add_rule(kh1world.get_location("Traverse Town Piano Room Return 10 Puppies"),
-        lambda state: has_puppies(state, player, 10))
+        lambda state: has_puppies(state, player, 10, options.puppy_value.value))
     add_rule(kh1world.get_location("Traverse Town Piano Room Return 20 Puppies"),
-        lambda state: has_puppies(state, player, 20))
+        lambda state: has_puppies(state, player, 20, options.puppy_value.value))
     add_rule(kh1world.get_location("Traverse Town Piano Room Return 30 Puppies"),
-        lambda state: has_puppies(state, player, 30))
+        lambda state: has_puppies(state, player, 30, options.puppy_value.value))
     add_rule(kh1world.get_location("Traverse Town Piano Room Return 40 Puppies"),
-        lambda state: has_puppies(state, player, 40))
+        lambda state: has_puppies(state, player, 40, options.puppy_value.value))
     add_rule(kh1world.get_location("Traverse Town Piano Room Return 50 Puppies Reward 1"),
-        lambda state: has_puppies(state, player, 50))
+        lambda state: has_puppies(state, player, 50, options.puppy_value.value))
     add_rule(kh1world.get_location("Traverse Town Piano Room Return 50 Puppies Reward 2"),
-        lambda state: has_puppies(state, player, 50))
+        lambda state: has_puppies(state, player, 50, options.puppy_value.value))
     add_rule(kh1world.get_location("Traverse Town Piano Room Return 60 Puppies"),
-        lambda state: has_puppies(state, player, 60))
+        lambda state: has_puppies(state, player, 60, options.puppy_value.value))
     add_rule(kh1world.get_location("Traverse Town Piano Room Return 70 Puppies"),
-        lambda state: has_puppies(state, player, 70))
+        lambda state: has_puppies(state, player, 70, options.puppy_value.value))
     add_rule(kh1world.get_location("Traverse Town Piano Room Return 80 Puppies"),
-        lambda state: has_puppies(state, player, 80))
+        lambda state: has_puppies(state, player, 80, options.puppy_value.value))
     add_rule(kh1world.get_location("Traverse Town Piano Room Return 90 Puppies"),
-        lambda state: has_puppies(state, player, 90))
+        lambda state: has_puppies(state, player, 90, options.puppy_value.value))
     add_rule(kh1world.get_location("Traverse Town Piano Room Return 99 Puppies Reward 1"),
-        lambda state: has_puppies(state, player, 99))
+        lambda state: has_puppies(state, player, 99, options.puppy_value.value))
     add_rule(kh1world.get_location("Traverse Town Piano Room Return 99 Puppies Reward 2"),
-        lambda state: has_puppies(state, player, 99))
+        lambda state: has_puppies(state, player, 99, options.puppy_value.value))
     add_rule(kh1world.get_location("Neverland Hold Aero Chest"),
         lambda state: state.has("Yellow Trinity", player))
     add_rule(kh1world.get_location("Deep Jungle Camp Hi-Potion Experiment"),
@@ -1514,7 +1500,7 @@ def set_rules(kh1world):
                 ))
     add_rule(kh1world.get_location("Final Ansem"),
         lambda state: (
-            has_final_rest_door(state, player, final_rest_door_requirement, final_rest_door_required_lucky_emblems, options.keyblades_unlock_chests, options.puppies)
+            has_final_rest_door(state, player, final_rest_door_requirement, final_rest_door_required_lucky_emblems)
         ))
     if options.keyblades_unlock_chests:
         add_rule(kh1world.get_location("Traverse Town 1st District Candle Puzzle Chest"),
