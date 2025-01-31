@@ -87,7 +87,8 @@ RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000,50000000, 60000000, 70000000, 10
 # List of received items to ignore because they are handled elsewhere
 # TODO Remove hearts from here when fixed.
 RECV_ITEMS_IGNORE = [8063, 8064, 8127]
-RECV_OWN_GAME_LOCATIONS: list[str] = [lm_location for lm_location in BOO_LOCATION_TABLE.keys() and TOAD_LOCATION_TABLE.keys()]
+RECV_OWN_GAME_LOCATIONS: list[str] = [lm_location for lm_location in BOO_LOCATION_TABLE.keys() and
+    TOAD_LOCATION_TABLE.keys()]
 RECV_OWN_GAME_ITEMS: list[str] = [lm_item for lm_item in BOO_ITEM_TABLE.keys()]
 
 
@@ -276,8 +277,8 @@ async def give_items(ctx: LMContext):
 
     # Filter for only items where we have not received yet. If same slot, only receive the locations from the
     # pre-approved own locations (as everything is currently a NetworkItem), otherwise accept other slots.
-    list_recv_items = [netItem for netItem in ctx.items_received if ctx.items_received.index(netItem) > last_recv_idx
-                       and netItem.item not in RECV_ITEMS_IGNORE]
+    list_recv_items = [netItem for netItem in ctx.items_received[last_recv_idx+1:] if
+                       netItem.item not in RECV_ITEMS_IGNORE]
     logger.info("DEBUG -- Identified the following number of received items to try and validate: " +
                 str(len(list_recv_items)))
 
@@ -318,6 +319,7 @@ async def give_items(ctx: LMContext):
                 int_item_amount = 1
                 match lm_item.code:
                     case 119: # Bills and Coins
+                        print("I AM HERE")
                         coins_curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
                     [coins_ram_pointer]), lm_item.ram_byte_size))
                         bills_curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
