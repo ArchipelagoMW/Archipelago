@@ -274,6 +274,7 @@ async def give_items(ctx: LMContext):
 
     last_recv_idx = read_short(LAST_RECV_ITEM_ADDR)
     if len(ctx.items_received) == last_recv_idx:
+        # TODO Potentially move this to reading a memory address instead that is updated only once.
         if ctx.items_received.__contains__(8064):
             vac_speed = "3800000F"
             dme.write_bytes(ALL_ITEMS_TABLE[ctx.item_names.lookup_in_game(8064)].ram_addr, bytes.fromhex(vac_speed))
