@@ -165,8 +165,8 @@ class BlasRules:
             "woodKey": self.wood_key,
 
             # Collections
-            "cherubs20": lambda state: self.cherubs(state, 20),
-            "cherubs38": lambda state: self.cherubs(state, 38),
+            "cherubs20": lambda state: self.cherubs(state) >= 20,
+            "cherubs38": lambda state: self.cherubs(state) >= 38,
 
             "bones4": lambda state: self.bones(state, 4),
             "bones8": lambda state: self.bones(state, 8),
@@ -199,10 +199,10 @@ class BlasRules:
             # skip "quicksilver"
 
             # Puzzles
-            "redWax1": lambda state: self.red_wax(state, 1),
-            "redWax3": lambda state: self.red_wax(state, 3),
-            "blueWax1": lambda state: self.blue_wax(state, 1),
-            "blueWax3": lambda state: self.blue_wax(state, 3),
+            "redWax1": lambda state: self.red_wax(state) >= 1,
+            "redWax3": lambda state: self.red_wax(state) >= 3,
+            "blueWax1": lambda state: self.blue_wax(state) >= 1,
+            "blueWax3": lambda state: self.blue_wax(state) >= 3,
             "chalice": self.chalice,
 
             # Cherubs
@@ -285,7 +285,7 @@ class BlasRules:
 
             # Jibrael quest
             "bell": self.bell,
-            "verses4": lambda state: self.verses(state, 4),
+            "verses4": lambda state: self.verses(state) >= 4,
 
             # Movement tech
             "canAirStall": self.can_air_stall,
@@ -722,8 +722,8 @@ class BlasRules:
         return state.has("Key Grown from Twisted Wood", self.player)
     
     # Collections
-    def cherubs(self, state: CollectionState, count: int) -> bool:
-        return state.has("Child of Moonlight", self.player, count)
+    def cherubs(self, state: CollectionState) -> int:
+        return state.count("Child of Moonlight", self.player)
     
     def bones(self, state: CollectionState, count: int) -> bool:
         # Count of unique items in the "bones" item group that have been collected into state.
@@ -774,11 +774,11 @@ class BlasRules:
         return state.count("Quicksilver", self.player) if state.can_reach_region("D01Z05S01[W]", self.player) else 0
     
     # Puzzles
-    def red_wax(self, state: CollectionState, count: int) -> bool:
-        return state.has("Bead of Red Wax", self.player, count)
-    
-    def blue_wax(self, state: CollectionState, count: int) -> bool:
-        return state.has("Bead of Blue Wax", self.player, count)
+    def red_wax(self, state: CollectionState) -> int:
+        return state.count("Bead of Red Wax", self.player)
+
+    def blue_wax(self, state: CollectionState) -> int:
+        return state.count("Bead of Blue Wax", self.player)
     
     def chalice(self, state: CollectionState) -> bool:
         return state.has("Chalice of Inverted Verses", self.player)
@@ -975,8 +975,8 @@ class BlasRules:
     def bell(self, state: CollectionState) -> bool:
         return state.has("Petrified Bell", self.player)
     
-    def verses(self, state: CollectionState, count: int) -> bool:
-        return state.has("Verses Spun from Gold", self.player, count)
+    def verses(self, state: CollectionState) -> int:
+        return state.count("Verses Spun from Gold", self.player)
     
     # Movement tech
     def can_water_jump(self, state: CollectionState) -> bool:
