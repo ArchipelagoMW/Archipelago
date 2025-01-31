@@ -778,9 +778,9 @@ class CollectionState():
                 # Retry connections if the new region can unblock them
                 entrances = self.multiworld.indirect_connections.get(new_region)
                 if entrances is not None:
-                    entrances = entrances.intersection(blocked_connections)
-                    entrances.difference_update(queue)
-                    queue.extend(entrances)
+                    relevant_entrances = entrances.intersection(blocked_connections)
+                    relevant_entrances.difference_update(queue)
+                    queue.extend(relevant_entrances)
 
     def _update_reachable_regions_auto_indirect_conditions(self, player: int, queue: deque):
         reachable_regions = self.reachable_regions[player]
