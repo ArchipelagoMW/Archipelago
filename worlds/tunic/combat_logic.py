@@ -204,6 +204,8 @@ def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_d
 def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> bool:
     money_required = 0
     player_att = 0
+    # storing this in case we need it on the "a lot of att so no mp" step
+    money_req_for_att = 0
 
     # check if we actually need the stat before checking state
     if data.att_level > 1:
@@ -216,8 +218,10 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
             # attack upgrades cost 100 for the first, +50 for each additional
             money_per_att = 100
             for _ in range(paid_att):
+                money_req_for_att += money_per_att
                 money_required += money_per_att
                 money_per_att += 50
+            
 
     # adding defense and sp together since they accomplish similar things: making you take less damage
     if data.def_level + data.sp_level > 2:
@@ -257,18 +261,32 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
                 money_per_sp += 200
 
     # if you have 2 more attack than needed, we can forego needing mp
-    if data.mp_level > 1 and player_att < data.att_level + 2:
-        player_mp, mp_offerings = get_mp_level(state, player)
-        if player_mp < data.mp_level:
-            return False
+    if data.mp_level > 1:
+        if player_att == 0:
+            player_att, att_offerings = get_att_level(state, player)
+        # data.att_level gets set to a negative value if we're going with no melee
+        if player_att >= data.att_level + 2 and data.att_level > 0:
+            # rolling this back so we can recalculate att money
+            money_required -= money_req_for_att
+            extra_att = player_att - (data.att_level + 2)
+            paid_att = max(0, att_offerings - extra_att)
+            # attack upgrades cost 100 for the first, +50 for each additional
+            money_per_att = 100
+            for _ in range(paid_att):
+                money_required += money_per_att
+                money_per_att += 50
         else:
-            extra_mp = player_mp - data.mp_level
-            paid_mp = max(0, mp_offerings - extra_mp)
-            # mp costs 300 for the first, +50 for each additional
-            money_per_mp = 300
-            for _ in range(paid_mp):
-                money_required += money_per_mp
-                money_per_mp += 50
+            player_mp, mp_offerings = get_mp_level(state, player)
+            if player_mp < data.mp_level:
+                return False
+            else:
+                extra_mp = player_mp - data.mp_level
+                paid_mp = max(0, mp_offerings - extra_mp)
+                # mp costs 300 for the first, +50 for each additional
+                money_per_mp = 300
+                for _ in range(paid_mp):
+                    money_required += money_per_mp
+                    money_per_mp += 50
 
     req_effective_hp = calc_effective_hp(data.hp_level, data.potion_level, data.potion_count)
     player_potion, potion_offerings = get_potion_level(state, player)
