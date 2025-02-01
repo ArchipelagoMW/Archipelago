@@ -1,4 +1,4 @@
-# Lufia II Ancient Cave Multiworld Setup Guide
+# Luigi's Mansion Multiworld Setup Guide
 
 ## Required Software
 
