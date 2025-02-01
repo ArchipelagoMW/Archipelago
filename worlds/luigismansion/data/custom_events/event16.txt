@@ -11,7 +11,7 @@
 <CLOSEWINDOW>(0)
 <CLEARCOUNT>
 <CHECKTELESA>({Count0})({Count1})({Count2})({Count3})({Count4})
-<COUNTJMP>"{Case0}""{Case1}""{Case2}""{Case3}""{Case4}""{Case5}"
+<COUNTJMP>"{Case0}""{Case1}""{Case2}""{Case3}""{Case4}""boos_captured"
 <CASE>"not_enough"
 <SE>(95)
 <WINDOW>(0)<COLOR>(4)
