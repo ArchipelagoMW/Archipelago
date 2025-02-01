@@ -330,7 +330,7 @@ class LuigisMansionRandomizer:
                         int_music_selection: int = -1
                         while int_music_selection in list_of_bad_music:
                             int_music_selection = random.randint(0, 52)
-                        event_str.replace(music_match, "<BGM>(" + str(int_music_selection) + ")")
+                        event_str = event_str.replace(music_match, "<BGM>(" + str(int_music_selection) + ")")
 
                 updated_event = io.BytesIO(event_str.encode('utf-8'))
 
