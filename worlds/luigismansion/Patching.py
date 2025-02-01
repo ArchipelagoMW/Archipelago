@@ -865,7 +865,7 @@ def __get_chest_size_from_item(item_name):
         case "Mario's Hat" | "Mario's Letter" | "Mario's Shoe" | "Mario's Glove" | "Mario's Star":
             return 0
 
-        case "Small Heart" | "Money" :
+        case "Small Heart" | "Money":
             return 0
         case "Large Heart":
             return 1
@@ -881,16 +881,17 @@ def __get_chest_size_from_item(item_name):
 
     return 0
 
+
 # For every key found in the generation output, add an entry for it in "iteminfotable".
 def update_item_info_table(item_info, output_data):
-    # Adds the special items so they can spawn in furniture or chests.
+    # Adds the special items, so they can spawn in furniture or chests.
     items_to_add = ["rdiamond", "itembomb", "ice", "mstar", "banana", "diamond", "gameboy", "vbody"]
     for new_item in items_to_add:
         __add_info_item(item_info, None, info_item_name=new_item)
 
     # Gets the list of keys already added in the item info table
     already_added_keys = [item_entry["name"] for item_entry in item_info.info_file_field_entries if
-            str(item_entry["name"]).startswith("key_")]
+                          str(item_entry["name"]).startswith("key_")]
 
     for item_name, item_data in output_data["Locations"].items():
         current_item = __get_item_name(item_data)
@@ -898,7 +899,7 @@ def update_item_info_table(item_info, output_data):
             __add_info_item(item_info, item_data)
 
 
-def __add_info_item(item_info, item_data, open_door_no = 0, hp_amount = 0, is_escape = 0, info_item_name=None):
+def __add_info_item(item_info, item_data, open_door_no=0, hp_amount=0, is_escape=0, info_item_name=None):
     if info_item_name is None:
         info_name = __get_item_name(item_data)
         char_name = __get_item_name(item_data) if not item_data["door_id"] > 0 else (
@@ -936,7 +937,7 @@ def __get_key_name(door_id):
 def update_item_appear_table(item_appear_info, output_data):
     # Add the special items, so they can be spawned from treasure chests or furniture in game.
     items_to_add = ["mkinoko", "itembomb", "ice", "elffst", "elwfst", "elifst", "mstar", "mglove", "mshoes", "sheart",
-                 "lheart", "banana", "rdiamond", "diamond", "ruby", "emerald", "sapphire","gameboy", "vbody"]
+                    "lheart", "banana", "rdiamond", "diamond", "ruby", "emerald", "sapphire", "gameboy", "vbody"]
     for new_item in items_to_add:
         __add_appear_item(item_appear_info, new_item)
 
@@ -993,8 +994,6 @@ def update_treasure_table(treasure_info, character_info, output_data):
                 ruby_amount = 0
                 diamond_amount = 0
 
-
-
                 # Generate a random amount of money if the item is supposed to be a money bundle.
                 if treasure_item_name in ["money", "emerald", "sapphire", "ruby", "diamond"]:
                     if any((key, val) for (key, val) in filler_items.items() if
@@ -1021,8 +1020,6 @@ def update_treasure_table(treasure_info, character_info, output_data):
                         elif "Diamond" in item_data["name"]:
                             diamond_amount = int_money_amt
 
-
-
                 # Add the entry for the chest in "treasuretable". Also includes the chest size.
                 treasure_info.info_file_field_entries.append({
                     "other": treasure_item_name,
@@ -1042,7 +1039,7 @@ def update_treasure_table(treasure_info, character_info, output_data):
                     "rdiamond": 0,
                     "effect": 1 if chest_size == 2 else 0,
                     "camera": 0
-                    })
+                })
 
 
 # Indicates the chest size that will be loaded in game based on key type. 0 = small, 1 = medium, 2 = large
@@ -1107,7 +1104,7 @@ def __set_key_info_entry(key_info_single_entry, item_data):
     # Disable the item's invisible status by default.
     # This is needed since we change the appear_type to 0, which makes items other than keys not spawn out of bounds.
     key_info_single_entry["name"] = __get_item_name(item_data) if not item_data["door_id"] > 0 else (
-            __get_key_name(item_data["door_id"]))
+        __get_key_name(item_data["door_id"]))
     key_info_single_entry["open_door_no"] = item_data["door_id"]
     key_info_single_entry["appear_type"] = 0
     key_info_single_entry["invisible"] = 0
@@ -1140,7 +1137,7 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
 
         # If one of Vincent's painting, update the flag to disable zoom instead.
         # if furniture_info_entry.info_file_field_entries.index(x) in {692, 693, 694, 695, 696, 697}:
-            # x["move"] = 0
+        # x["move"] = 0
 
     for item_name, item_data in output_data["Locations"].items():
         if not (item_data["type"] == "Furniture" or item_data["type"] == "Plant"):
@@ -1151,7 +1148,8 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
         # Replace the furnitureinfo entry to spawn an item from the "itemappeartable".
         # If the entry is supposed to be money, then generate a random amount of coins and/or bills from it.
         filtered_item_appear = list(item_appear_entry for item_appear_entry in
-            item_appear_info.info_file_field_entries if item_appear_entry["item0"] == actor_item_name)
+                                    item_appear_info.info_file_field_entries if
+                                    item_appear_entry["item0"] == actor_item_name)
         item_appear_entry_idx = filtered_item_appear[len(filtered_item_appear) - 1]
 
         furniture_info.info_file_field_entries[item_data["loc_enum"]]["item_table"] = (
@@ -1234,20 +1232,21 @@ def update_enemy_info(enemy_info, output_data):
             if not ROOM_ID_TO_NAME.keys().__contains__(x["room_no"]):
                 continue
             room_enemy_entry = next(((key, val) for (key, val) in output_data["Room Enemies"].items() if
-                ROOM_ID_TO_NAME[x["room_no"]] == key and x["name"] in ghost_list), None)
+                                     ROOM_ID_TO_NAME[x["room_no"]] == key and x["name"] in ghost_list), None)
             if not room_enemy_entry is None or x["room_no"] == 35:
                 apply_new_ghost(x, "No Element" if x["room_no"] == 35 else room_enemy_entry[1])
 
         # Disables enemies in furniture to allow them to spawn properly if an item is hidden inside said furniture.
         # if x["access_name"] != "(null)":
-            # if "_99" in x["access_name"]:
-                # TODO: Handle Speedy Ghosts for blackout
-                # owo = True
-            # else:
-                # x["create_name"] = "(null)"
-                # x["access_name"] = "(null)"
+        # if "_99" in x["access_name"]:
+        # TODO: Handle Speedy Ghosts for blackout
+        # owo = True
+        # else:
+        # x["create_name"] = "(null)"
+        # x["access_name"] = "(null)"
         # if x["cond_type"] == 17:
-            # x["do_type"] = 6
+        # x["do_type"] = 6
+
 
 def update_boo_table(telesa_info):
     for x in telesa_info.info_file_field_entries:
@@ -1256,6 +1255,7 @@ def update_boo_table(telesa_info):
         x["str_hp"] = 30
         x["move_time"] = 300
         x["attack"] = 0
+
 
 def apply_new_ghost(enemy_info_entry, element):
     # The list of ghosts that can replace the vanilla ones. Only includes the ones without elements.
