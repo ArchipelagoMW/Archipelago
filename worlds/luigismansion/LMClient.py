@@ -135,8 +135,8 @@ class LMCommandProcessor(ClientCommandProcessor):
     def _cmd_deathlink(self):
         """Toggle deathlink from client. Overrides default setting."""
         if isinstance(self.ctx, LMContext):
-            self.ctx.death_link_enabled = not self.ctx.death_link_enabled
-            Utils.async_start(self.ctx.update_death_link(self.ctx.death_link_enabled), name="Update Deathlink")
+            death_link_enabled = not "DeathLink" in self.ctx.tags
+            Utils.async_start(self.ctx.update_death_link(death_link_enabled), name="Update Deathlink")
 
 
 class LMContext(CommonContext):
@@ -158,7 +158,6 @@ class LMContext(CommonContext):
         self.awaiting_rom = False
 
         # All used when death link is enabled.
-        self.death_link_enabled = False
         self.is_luigi_dead = False
         self.last_health_pointer = 0
         self.death_check_counter = 0
@@ -205,9 +204,9 @@ class LMContext(CommonContext):
         if cmd == "Connected":  # On Connect
             self.goal_type = int(args["slot_data"]["goal"])
             self.rank_req = int(args["slot_data"]["rank requirement"])
-            self.death_link_enabled = bool(args["slot_data"]["death_link"])
+            death_link_enabled = bool(args["slot_data"]["death_link"])
             if "death_link" in args["slot_data"]:
-                Utils.async_start(self.update_death_link(self.death_link_enabled))
+                Utils.async_start(self.update_death_link(death_link_enabled))
 
 
     def on_deathlink(self, data: dict[str, Any]):
@@ -238,7 +237,7 @@ class LMContext(CommonContext):
         if dme.read_word(CURR_MAP_ID_ADDR) == 1:
             return True
 
-        if self.death_link_enabled:
+        if "DeathLink" in self.tags:
             # Get the pointer of Luigi's health, as this could shift when warping to bosses or climbing into mouse holes.
             curr_pointer = read_short(CURR_HEALTH_ADDR)
             if curr_pointer != self.last_health_pointer:
@@ -514,7 +513,6 @@ async def dolphin_sync_task(ctx: LMContext):
             await ctx.disconnect()
             await asyncio.sleep(5)
             continue
-
 
 def main(output_data: Optional[str] = None, connect=None, password=None):
     Utils.init_logging("Luigi's Mansion Client")
