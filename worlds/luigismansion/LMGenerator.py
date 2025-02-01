@@ -44,8 +44,9 @@ class LuigisMansionRandomizer:
             self.randomized_output_file_path = randomized_output_file_path
 
         try:
-            temp_file = open(randomized_output_file_path, "r+")# or "a+", whatever you need
-            temp_file.close()
+            if os.path.isfile(randomized_output_file_path):
+                temp_file = open(randomized_output_file_path, "r+") # or "a+", whatever you need
+                temp_file.close()
         except IOError:
             raise Exception("'" +randomized_output_file_path+ "' is currently in use by another program.")
 
