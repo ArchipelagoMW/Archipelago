@@ -43,7 +43,12 @@ class LuigisMansionRandomizer:
             self.clean_iso_path = clean_iso_path
             self.randomized_output_file_path = randomized_output_file_path
 
-        #TODO Check if output file is already. If open, immediately throw error rather than trying to generate.
+        try:
+            temp_file = open(randomized_output_file_path, "r+")# or "a+", whatever you need
+            temp_file.close()
+        except IOError:
+            raise Exception("'" +randomized_output_file_path+ "' is currently in use by another program.")
+
         with open(os.path.abspath(select_aplm_path)) as stream:
             self.output_data = yaml.safe_load(stream)
 
