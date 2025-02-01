@@ -360,7 +360,7 @@ class LuigisMansionRandomizer:
         name_to_find = "message" + updated_event_number + ".csv"
         if not any(info_files for info_files in custom_event.file_entries if info_files.name == name_to_find):
             raise Exception(f"Unable to find an info file with name '{name_to_find}' in provided RARC file.")
-        lines = io.BytesIO(get_data(__name__, f"data/custom_events/{name_to_find}"))
+        lines = io.BytesIO(get_data(__name__, f"data/custom_csvs/{name_to_find}"))
         next((info_files for info_files in custom_event.file_entries if info_files.name == name_to_find)).data = lines
         custom_event.save_changes()
         self.gcm.changed_files["files/Event/event" + event_number + ".szp"] = (
