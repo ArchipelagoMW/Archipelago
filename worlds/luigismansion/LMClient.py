@@ -11,6 +11,7 @@ from typing import Any, Optional
 import dolphin_memory_engine as dme
 
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
+from worlds import AutoWorldRegister
 from settings import get_settings, Settings
 
 from .LMGenerator import LuigisMansionRandomizer
@@ -157,6 +158,9 @@ class LMContext(CommonContext):
         self.dolphin_status = CONNECTION_INITIAL_STATUS
         self.awaiting_rom = False
 
+        # Used for handling
+        self.already_updated_vac = False
+
         # All used when death link is enabled.
         self.is_luigi_dead = False
         self.last_health_pointer = 0
@@ -202,6 +206,7 @@ class LMContext(CommonContext):
         """
         super().on_package(cmd, args)
         if cmd == "Connected":  # On Connect
+            self.boosanity = int(args["slot_data"]["boosanity"]) == 1
             self.goal_type = int(args["slot_data"]["goal"])
             self.rank_req = int(args["slot_data"]["rank requirement"])
             death_link_enabled = bool(args["slot_data"]["death_link"])
@@ -286,10 +291,6 @@ class LMContext(CommonContext):
 
         last_recv_idx = read_short(LAST_RECV_ITEM_ADDR)
         if len(self.items_received) == last_recv_idx:
-            # TODO Potentially move this to reading a memory address instead that is updated only once.
-            if self.items_received.__contains__(8064):
-                vac_speed = "3800000F"
-                dme.write_bytes(ALL_ITEMS_TABLE[self.item_names.lookup_in_game(8064)].ram_addr, bytes.fromhex(vac_speed))
             return
 
         # Filter for only items where we have not received yet. If same slot, only receive the locations from the
@@ -384,7 +385,6 @@ class LMContext(CommonContext):
                 logger.warn("Missing information for AP ID: " + str(item.item))
         return
 
-
     async def lm_check_locations(self):
         # There will be different checks on different maps.
         current_map_id = dme.read_word(CURR_MAP_ID_ADDR)
@@ -429,7 +429,8 @@ class LMContext(CommonContext):
                         current_boo_state_int = dme.read_byte(lm_loc_data.room_ram_addr)
                         if (current_boo_state_int & (1 << lm_loc_data.locationbit)) > 0:
                             self.locations_checked.add(mis_loc)
-                            dme.write_byte(current_boo_state_int, (current_boo_state_int & ~(1 << lm_loc_data.locationbit)))
+                            dme.write_byte(lm_loc_data.room_ram_addr,
+                                           (current_boo_state_int & ~(1 << lm_loc_data.locationbit)))
                     case "Toad" | "Freestanding" | "Special" | "Portrait":
                         current_toad_int = dme.read_byte(lm_loc_data.room_ram_addr)
                         if (current_toad_int & (1 << lm_loc_data.locationbit)) > 0:
@@ -463,6 +464,23 @@ class LMContext(CommonContext):
             }])
         return
 
+    async def lm_update_non_savable_ram(self):
+        vac_id = AutoWorldRegister.world_types[self.game].item_name_to_id["Poltergust 4000"]
+        if self.items_received.__contains__(vac_id):
+            vac_speed = "3800000F"
+            dme.write_bytes(ALL_ITEMS_TABLE["Poltergust 4000"].ram_addr, bytes.fromhex(vac_speed))
+            self.already_updated_vac = True
+
+        if self.boosanity:
+            in_boo_gate_event = (dme.read_byte(0x803D33A7) & (1 << 0)) > 0
+            for lm_boo in BOO_LOCATION_TABLE.keys():
+                lm_boo_loc = BOO_LOCATION_TABLE[lm_boo]
+                boo_caught = dme.read_byte(lm_boo_loc.room_ram_addr)
+                boo_val = boo_caught | (1 << lm_boo_loc.locationbit) if in_boo_gate_event else \
+                    boo_caught & ~(1 << lm_boo_loc.locationbit)
+                dme.write_byte(lm_boo_loc.room_ram_addr, boo_val)
+        return
+
 
 async def dolphin_sync_task(ctx: LMContext):
     logger.info("Starting Dolphin connector. Use /dolphin for status information.")
@@ -477,6 +495,7 @@ async def dolphin_sync_task(ctx: LMContext):
                         await ctx.check_death()
                     await ctx.lm_give_items()
                     await ctx.lm_check_locations()
+                    await ctx.lm_update_non_savable_ram()
                 else:
                     if not ctx.auth:
                         ctx.auth = read_string(SLOT_NAME_ADDR, SLOT_NAME_STR_LENGTH)
