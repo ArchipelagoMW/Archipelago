@@ -278,8 +278,8 @@ class LuigisMansionRandomizer:
         lines = lines.replace("{HintText}", str(self.output_data["Hints"]["Madame Clairvoya"]))
 
         cases_to_replace = ["{CaseZero}", "{CaseOne}", "{CaseTwo}", "{CaseThree}", "{CaseFour}", "{CaseFive}"]
-        str_good_end = "\"GoodEnd\""
-        str_bad_end = "\"MissingItems\""
+        str_good_end = "GoodEnd"
+        str_bad_end = "MissingItems"
 
         for i in range(0, 6):
             if i >= required_mario_item_count:
@@ -287,7 +287,7 @@ class LuigisMansionRandomizer:
             else:
                 lines = lines.replace(cases_to_replace[i], str_bad_end)
 
-        self.update_custom_event("36", False, lines)
+        self.update_custom_event("36", False, lines, replace_old_csv=True)
 
         # Copy in our newly custom events for hallway light changes
         # Update all custom events
