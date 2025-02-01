@@ -126,11 +126,6 @@ class TestMonstersanityNone(SVTestBase):
         options.Fishsanity.internal_name: options.Fishsanity.option_all
     }
 
-    @property
-    def run_default_tests(self) -> bool:
-        # None is default
-        return False
-
     def test_when_generate_world_then_5_generic_weapons_in_the_pool(self):
         item_pool = [item.name for item in self.multiworld.itempool]
         self.assertEqual(item_pool.count("Progressive Weapon"), 5)
@@ -383,10 +378,6 @@ class TestShipsanityNone(SVTestBase):
     options = {
         Shipsanity.internal_name: Shipsanity.option_none
     }
-
-    def run_default_tests(self) -> bool:
-        # None is default
-        return False
 
     def test_no_shipsanity_locations(self):
         for location in self.get_real_locations():

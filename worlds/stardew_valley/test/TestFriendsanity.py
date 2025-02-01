@@ -100,11 +100,6 @@ class TestFriendsanityNone(SVFriendsanityTestBase):
         Friendsanity: Friendsanity.option_none,
     }
 
-    @property
-    def run_default_tests(self) -> bool:
-        # None is default
-        return False
-
 
 class TestFriendsanityBachelors(SVFriendsanityTestBase):
     options = {

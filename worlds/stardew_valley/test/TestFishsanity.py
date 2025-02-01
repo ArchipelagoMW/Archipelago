@@ -85,11 +85,6 @@ class TestFishsanityNoneVanilla(SVFishsanityTestBase):
         Fishsanity: Fishsanity.option_none,
     })
 
-    @property
-    def run_default_tests(self) -> bool:
-        # None is default
-        return False
-
 
 class TestFishsanityLegendaries_Vanilla(SVFishsanityTestBase):
     options = complete_options_with_default({
@@ -390,12 +385,12 @@ class TestFishsanityOnlyEasyFishes_QiBoard(SVFishsanityTestBase):
     )
 
 
-class TestFishsanityMasterAnglerSVEWithoutQuests(WorldAssertMixin, SVTestBase):
+class TestFishsanityMasterAnglerAllModsWithoutQuests(WorldAssertMixin, SVTestBase):
     options = {
         Fishsanity: Fishsanity.option_all,
         Goal: Goal.option_master_angler,
         QuestLocations: -1,
-        Mods: (ModNames.sve,),
+        Mods: frozenset(Mods.valid_keys),
     }
 
     def run_default_tests(self) -> bool:

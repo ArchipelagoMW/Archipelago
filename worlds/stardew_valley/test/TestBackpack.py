@@ -33,11 +33,6 @@ class TestBackpackProgressive(SVTestBase):
 class TestBackpackEarlyProgressive(TestBackpackProgressive):
     options = {options.BackpackProgression.internal_name: options.BackpackProgression.option_early_progressive}
 
-    @property
-    def run_default_tests(self) -> bool:
-        # EarlyProgressive is default
-        return False
-
     def test_backpack(self):
         super().test_backpack()
 
