@@ -4,18 +4,18 @@
 <SE>(90)
 <FLAGON>(112)
 <WINDOW>(0)<COLOR>(16)
-<SAY><COLOR>(7)Calculating boo count (6seconds)...
-<WAIT>(180)
+<SAY><COLOR>(7)Calculating boo count (5 seconds)...
+<WAIT>(150)
 <SAY><COLOR>(7)Calculated!
 <WAIT>(45)
 <CLOSEWINDOW>(0)
 <CLEARCOUNT>
-<CHECKTELESA>({CountOne})({CountTwo})({CountThree})({CountFour})({CountFive})
-<COUNTJMP>"not_enough""not_enough""not_enough""not_enough""boos_captured""boos_captured"
+<CHECKTELESA>({Count0})({Count1})({Count2})({Count3})({Count4})
+<COUNTJMP>"{Case0}""{Case1}""{Case2}""{Case3}""{Case4}""{Case5}"
 <CASE>"not_enough"
 <SE>(95)
 <WINDOW>(0)<COLOR>(4)
-<SAY><COLOR>(3)You require {CountFive} boo(s) before\nyou can open this door...
+<SAY><COLOR>(3)You require {Count4} boo(s) before\nyou can open this door...
 <ANYKEY>
 <CLOSEWINDOW>(0)
 <FORCEMOVE>(2175.000000)(-550.000000)(-4600.000000)(20)

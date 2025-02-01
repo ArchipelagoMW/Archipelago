@@ -244,16 +244,16 @@ class LuigisMansionRandomizer:
                     case "96":
                         required_boo_count = balcony_boo_count
 
-                min_boo_count = -1 if required_boo_count - 20 <= 0 else required_boo_count - 20
-                second_boo_count = -1 if required_boo_count - 15 <= 0 else required_boo_count - 15
-                third_boo_count = -1 if required_boo_count - 10 <= 0 else required_boo_count - 10
-                fourth_boo_count = -1 if required_boo_count - 5 <= 0 else required_boo_count - 5
+                str_not_enough = "not_enough"
+                str_boo_captured = "boos_captured"
 
-                lines = lines.replace("{CountOne}", str(min_boo_count))
-                lines = lines.replace("{CountTwo}", str(second_boo_count))
-                lines = lines.replace("{CountThree}", str(third_boo_count))
-                lines = lines.replace("{CountFour}", str(fourth_boo_count))
-                lines = lines.replace("{CountFive}", str(required_boo_count))
+                for i in range(0, 5):
+                    curr_boo_count = 0 if required_boo_count - (20-(5*i)) <= 0 else required_boo_count - (20-(5*i))
+                    lines = lines.replace(f"{{Count{str(i)}}}", str(curr_boo_count))
+                    if curr_boo_count < required_boo_count:
+                        lines = lines.replace(f"{{Case{str(i)}}}", str_not_enough)
+                    else:
+                        lines = lines.replace(f"{{Case{str(i)}}}", str_boo_captured)
 
                 self.update_custom_event(event_no, False, lines)
 
