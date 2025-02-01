@@ -2,10 +2,11 @@
 <LUIGISTOP2>
 <FLAGON>(109)
 <BGM>(11)
-<WINDOW>(0)<COLOR>(17)
-<CHOICE>"Hint"(a)"Save"(b)"Close"(c)<LISTEND>
+<CHOICE>"Hint"(1)"Save"(2)"Close"(3)<LISTEND>
+<ANYKEY>
 -------------------------
 <CASE>"Hint"
+<WINDOW>(0)<COLOR>(17)
 {HintText}
 <ANYKEY>
 <CLOSEWINDOW>(0)
@@ -19,5 +20,6 @@
 <CASE>"Close"
 <BGMSTOP>
 <BGM>(7)
+<LUIGIFREE2>
 <MENUON>
 <END>

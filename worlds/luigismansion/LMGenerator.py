@@ -271,8 +271,7 @@ class LuigisMansionRandomizer:
                     hintfo = self.output_data["Hints"]["1F Washroom Toad"]
             lines = get_data(__name__, "data/custom_events/event" + event_no + ".txt").decode('utf-8')
             lines = lines.replace("{HintText}", str(hintfo))
-            self.update_custom_event(event_no, False, lines)
-            self.toad_csv_messages(event_no)
+            self.update_custom_event(event_no, False, lines, replace_old_csv=True)
 
         lines = get_data(__name__, "data/custom_events/event36.txt").decode('utf-8')
         lines = lines.replace("{MarioCount}", str(required_mario_item_count))
@@ -354,20 +353,8 @@ class LuigisMansionRandomizer:
         self.dol.data.seek(0x311660)
         self.dol.data.write(struct.pack(str(len(lm_player_name)) + "s", lm_player_name.encode()))
 
-    def toad_csv_messages(self, event_number: str):
-        custom_event = self.get_arc("files/Event/event" + event_number + ".szp")
-        updated_event_number = event_number if not event_number.startswith("0") else event_number[1:]
-        name_to_find = "message" + updated_event_number + ".csv"
-        if not any(info_files for info_files in custom_event.file_entries if info_files.name == name_to_find):
-            raise Exception(f"Unable to find an info file with name '{name_to_find}' in provided RARC file.")
-        lines = io.BytesIO(get_data(__name__, f"data/custom_csvs/{name_to_find}"))
-        next((info_files for info_files in custom_event.file_entries if info_files.name == name_to_find)).data = lines
-        custom_event.save_changes()
-        self.gcm.changed_files["files/Event/event" + event_number + ".szp"] = (
-            Yay0.compress(custom_event.data, 0))
-
     def update_custom_event(self, event_number: str, check_local_folder: bool, non_local_str="",
-                            custom_made: bool = False):
+                            custom_made: bool = False, replace_old_csv: bool = False):
         # TODO Update custom events to remove any camera files or anything else related.
         if not check_local_folder and not non_local_str:
             raise Exception("If the custom event does not exist in the local data folder, an event string must be " +
@@ -395,13 +382,19 @@ class LuigisMansionRandomizer:
         # Some events don't have a CSV, so no need to set it to blank lines
         # TODO update this to not use a template CSV, as it is now blank.
         updated_event_number = event_number if not event_number.startswith("0") else event_number[1:]
-        bool_csv_lines = any((info_files for info_files in custom_event.file_entries if
-                              info_files.name == "message" + updated_event_number + ".csv"))
-
-        if bool_csv_lines:
-            csv_lines = io.BytesIO(get_data(__name__, "data/custom_events/TemplateCSV.csv"))
+        if replace_old_csv:
+            name_to_find = "message" + updated_event_number + ".csv"
+            lines = io.BytesIO(get_data(__name__, f"data/custom_csvs/{name_to_find}"))
             next((info_files for info_files in custom_event.file_entries if
-                  info_files.name == "message" + updated_event_number + ".csv")).data = csv_lines
+                  info_files.name == name_to_find)).data = lines
+        else:
+            bool_csv_lines = any((info_files for info_files in custom_event.file_entries if
+                                  info_files.name == "message" + updated_event_number + ".csv"))
+
+            if bool_csv_lines:
+                csv_lines = io.BytesIO(get_data(__name__, "data/custom_events/TemplateCSV.csv"))
+                next((info_files for info_files in custom_event.file_entries if
+                      info_files.name == "message" + updated_event_number + ".csv")).data = csv_lines
 
         custom_event.save_changes()
         self.gcm.changed_files["files/Event/event" + event_number + ".szp"] = (
