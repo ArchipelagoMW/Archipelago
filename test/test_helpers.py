@@ -1,3 +1,4 @@
+import itertools
 from test.bases import TestBase
 
 from ..data import Passage
@@ -58,7 +59,7 @@ class TestLocationExistence(TestBase):
             f'{level_name} - {location.name}'
             for level_name, level in level_table.items()
             for region in level.regions
-            for location in region.locations
+            for location in itertools.chain(region.locations, region.diamonds)
             if difficulty in location.difficulties and not location.event
         }
         self.assertEqual(locations_from_table, locations_from_tree)

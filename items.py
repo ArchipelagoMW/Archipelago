@@ -217,6 +217,7 @@ item_table = {
     'Heart':                            ItemData(ItemType.ITEM,     0x82,                              IC.filler),
     'Lightning Trap':                   ItemData(ItemType.ITEM,     0x83,                              IC.trap),
     'Minigame Coin':                    ItemData(ItemType.ITEM,     0x84,                              IC.filler),
+    'Diamond':                          ItemData(ItemType.ITEM,     0x85,                              IC.filler),
 }
 
 

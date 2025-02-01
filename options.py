@@ -124,6 +124,13 @@ class Portal(Choice):
     default = option_vanilla
 
 
+class DiamondShuffle(Toggle):
+    """
+    Shuffle the 1,000-point diamonds into the item pool.
+    """
+    display_name = 'Diamond Shuffle'
+
+
 class SmashThroughHardBlocks(Toggle):
     """
     Break hard, teal blocks with the dash attack and super ground pound without stopping,
@@ -196,6 +203,7 @@ wl4_option_groups = [
         RequiredJewels,
         OpenDoors,
         Portal,
+        DiamondShuffle,
     ]),
     OptionGroup("Quality of Life", [
         MultiworldSend,
@@ -221,6 +229,7 @@ class WL4Options(PerGameCommonOptions):
     required_jewels: RequiredJewels
     open_doors: OpenDoors
     portal: Portal
+    diamond_shuffle: DiamondShuffle
     send_locations_to_server: MultiworldSend
     trap_behavior: TrapBehavior
     smash_through_hard_blocks: SmashThroughHardBlocks

@@ -9,7 +9,7 @@ from BaseClasses import Location, Region, Entrance
 from .data import Passage
 from .items import ItemType, WL4Item, filter_item_names
 from .locations import WL4Location
-from .region_data import passage_levels, level_table, passage_boss_table, golden_diva
+from .region_data import LocationData, passage_levels, level_table, passage_boss_table, golden_diva
 from .rules import *
 from .options import OpenDoors, Portal
 
@@ -54,7 +54,13 @@ def create_regions(world: WL4World):
         for region_data in level_data.regions:
             region_name = get_region_name(level_name, region_data.name)
             region = WL4Region(region_name, world)
-            for location_data in region_data.locations:
+
+            locations: list[LocationData] = []
+            locations.extend(region_data.locations)
+            if (world.options.diamond_shuffle.value):
+               locations.extend(region_data.diamonds)
+
+            for location_data in locations:
                 if world.options.difficulty.value not in location_data.difficulties:
                     continue
                 if world.options.portal.value == Portal.option_open and location_data.name == "Frog Switch":

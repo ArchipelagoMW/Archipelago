@@ -74,6 +74,7 @@ class WL4World(World):
         'Golden Treasure': set(filter_item_names(type=ItemType.TREASURE)),
         'Traps': {'Wario Form Trap', 'Lightning Trap'},
         'Junk': {'Heart', 'Minigame Coin'},
+        'Prizes': {'Full Health Item', 'Diamond'},
     }
 
     location_name_groups = {
@@ -124,7 +125,9 @@ class WL4World(World):
                             'Jewels to 1.')
             self.options.golden_jewels = GoldenJewels(1)
 
-        if self.options.required_jewels == 4 and self.options.difficulty != Difficulty.option_normal:
+        if (self.options.required_jewels == 4 and
+            self.options.diamond_shuffle and
+            self.options.difficulty != Difficulty.option_normal):
             raise OptionError(f'Not enough locations to place abilities for {self.player_name}. '
                               'Set the "Required Jewels" option to a lower value and try again.')
 
@@ -133,14 +136,16 @@ class WL4World(World):
         connect_regions(self)
 
     def create_items(self):
-        difficulty = self.options.difficulty
+        difficulty = self.options.difficulty.value
         treasure_hunt = self.options.goal.needs_treasure_hunt()
+        diamond_shuffle = self.options.diamond_shuffle.value
 
         gem_pieces = 18 * 4
         cds = 16
-        full_health_items = (9, 7, 6)[difficulty.value]
+        full_health_items = (9, 7, 6)[difficulty]
         treasures = 12 * treasure_hunt
-        total_required_locations = gem_pieces + cds + full_health_items + treasures
+        diamonds = diamond_shuffle * (108, 69, 66)[difficulty]
+        total_required_locations = gem_pieces + cds + full_health_items + treasures + diamonds
 
         itempool = []
 
@@ -168,10 +173,13 @@ class WL4World(World):
             if name.startswith('Progressive'):
                 itempool.append(self.create_item(name))
 
-        # Remove full health items to make space for abilities
+        # Remove diamonds or full health items to make space for abilities
         if required_jewels == 4:
-            full_health_items -= 8
-        assert full_health_items > 0
+            if diamond_shuffle:
+                diamonds -= 8
+            else:
+                full_health_items -= 8
+        assert diamonds >= 0 and full_health_items >= 0
 
         for _ in range(full_health_items):
             itempool.append(self.create_item('Full Health Item'))
@@ -180,12 +188,16 @@ class WL4World(World):
             for name in self.GOLDEN_TREASURES:
                 itempool.append(self.create_item(name))
 
+        if diamond_shuffle:
+            itempool.extend(self.create_item('Diamond') for _ in range(diamonds))
+
         junk_count = total_required_locations - len(itempool)
         itempool.extend(self.create_item(self.get_filler_item_name()) for _ in range(junk_count))
 
         self.multiworld.itempool += itempool
 
     def generate_output(self, output_directory: str):
+        return  # TODO
         output_path = Path(output_directory)
 
         patch = WL4ProcedurePatch()
