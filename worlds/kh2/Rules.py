@@ -81,6 +81,12 @@ class KH2Rules:
     def hundred_acre_unlocked(self, state: CollectionState, amount) -> bool:
         return state.has(ItemName.TornPages, self.player, amount)
 
+    def cor_unlocked(self, state: CollectionState) -> bool:
+        return self.kh2_has_final_form(state) or \
+            (self.kh2_has_master_form(state) and self.has_magic_buffer(state)) \
+            or self.has_vertical(state, 1) \
+            or (self.kh2_has_valor_form(state) and self.get_form_level_max(state, 3))  #level 5
+
     def level_locking_unlock(self, state: CollectionState, amount):
         if self.world.options.Promise_Charm and state.has(ItemName.PromiseCharm, self.player):
             return True
@@ -215,6 +221,54 @@ class KH2Rules:
                 return True
         return False
 
+    #movement stuff
+    def has_vertical(self, state: CollectionState, amount=1) -> bool:
+        # amount_to_vertical = {
+        #    1: self.kh2_dict_count({ItemName.HighJump: 1, ItemName.AerialDodge: 1}, state),
+        #    2: self.kh2_dict_count({ItemName.HighJump: 2, ItemName.AerialDodge: 2}, state),
+        #    3: self.kh2_dict_count({ItemName.HighJump: 3, ItemName.AerialDodge: 3}, state),
+        #    4: self.kh2_dict_count({ItemName.HighJump: 4, ItemName.AerialDodge: 4}, state),
+        # }
+        return self.kh2_dict_count({ItemName.HighJump: amount, ItemName.AerialDodge: amount}, state)
+
+    def has_glide(self, state: CollectionState, amount=1) -> bool:
+        return state.has(ItemName.Glide, self.player, amount)
+
+    def has_high_jump(self, state: CollectionState, amount=1):
+        return state.has(ItemName.HighJump, self.player, amount)
+
+    def has_aerial_dodge(self, state: CollectionState, amount=1):
+        return state.has(ItemName.AerialDodge, self.player, amount)
+
+    def has_magic_buffer(self, state: CollectionState) -> bool:
+        return self.kh2_has_any(magic, state)
+
+
+class KH2LocationRules(KH2Rules):
+    def __init__(self, kh2world: KH2World) -> None:
+        # These Rules are Always in effect
+        super().__init__(kh2world)
+        self.location_rules = {
+            LocationName.CoRDepthsManifestIllusion: lambda  state:self.get_cor_depths_illusion_rules(state),
+            LocationName.CoRDepthsAPBoost2: lambda state:self.get_cor_depths_ap_boost_two_rules(state),
+        }
+
+    def get_cor_depths_illusion_rules(self, state: CollectionState):
+        # high jump,aerial dodge and glide 2
+        return (self.has_vertical(state) and self.has_glide(state, 2)) or \
+        (self.kh2_has_final_form(state), self.get_form_level_max(state, 3))  #final 5
+
+    def get_cor_depths_ap_boost_two_rules(self, state: CollectionState):
+        # high jump,aerial dodge and glide 1
+        return (self.has_vertical(state) and self.has_glide(state, 1)) or \
+        self.kh2_has_final_form(state) or self.kh2_has_master_form(state)
+
+
+    def set_kh2_location_rules(self):
+        for location_name, loc_rule in self.location_rules.items():
+            location = self.multiworld.get_location(location_name, self.player)
+            location.access_rule = loc_rule
+
 
 class KH2WorldRules(KH2Rules):
     def __init__(self, kh2world: KH2World) -> None:
@@ -253,6 +307,7 @@ class KH2WorldRules(KH2Rules):
 
             RegionName.Hb:                 lambda state: self.hb_unlocked(state, 1),
             RegionName.Hb2:                lambda state: self.hb_unlocked(state, 2),
+            RegionName.CoR:                lambda state: self.cor_unlocked(state),
             RegionName.Mushroom13:         lambda state: state.has(ItemName.ProofofPeace, self.player),
 
             RegionName.Pl:                 lambda state: self.pl_unlocked(state, 1),
@@ -650,7 +705,6 @@ class KH2FightRules(KH2Rules):
             for entrance in region.entrances:
                 entrance.access_rule = rules
 
-
     def get_easy_shanyu_rules(self, state: CollectionState) -> bool:
         # easy: gap closer, defensive tool,drive form
         return self.kh2_list_any_sum([gap_closer, defensive_tool, form_list], state) >= 3
@@ -782,15 +836,15 @@ class KH2FightRules(KH2Rules):
         return self.kh2_list_any_sum([defensive_tool, gap_closer, [ItemName.AerialRecovery]], state) >= 3
 
     def get_easy_terra_rules(self, state: CollectionState) -> bool:
-        # easy:scom,gap closers,explosion,2 combo pluses,final 7,firaga, donald limits,reflect,guard,3 dodge roll,3 aerial dodge and 3glide
+        # easy:scom,gap closers,explosion,2 combo pluses,final 7,firaga, donald limits,reflect,guard,3 dodge roll,3 aerial dodge and 3glide,aerial recovery
         return self.kh2_dict_count(easy_terra_tools, state) and self.kh2_has_final_form(state) and self.get_form_level_max(state, 5),
 
     def get_normal_terra_rules(self, state: CollectionState) -> bool:
-        # normal:gap closers,explosion,2 combo pluses,2 dodge roll,2 aerial dodge and lvl 2glide,guard,donald limit, guard
+        # normal:gap closers,explosion,2 combo pluses,2 dodge roll,2 aerial dodge and lvl 2glide,guard,donald limit, guard,aerial recovery
         return self.kh2_dict_count(normal_terra_tools, state) and self.kh2_list_any_sum([donald_limit], state) >= 1
 
     def get_hard_terra_rules(self, state: CollectionState) -> bool:
-        # hard:1 gap closer,explosion,2 combo pluses,2 dodge roll,2 aerial dodge and lvl 2glide,guard
+        # hard:1 gap closer,explosion,2 combo pluses,2 dodge roll,2 aerial dodge and lvl 2glide,guard,aerial recovery
         return self.kh2_dict_count(hard_terra_tools, state) and self.kh2_list_any_sum([gap_closer], state) >= 1
 
     def get_easy_barbosa_rules(self, state: CollectionState) -> bool:
@@ -1010,7 +1064,7 @@ class KH2FightRules(KH2Rules):
 
     def get_mcp_rules(self, state: CollectionState) -> bool:
         # same fight rules. Change this if boss enemy
-        return state.has(ItemName.HostileProgramEvent,self.player)
+        return state.has(ItemName.HostileProgramEvent, self.player)
 
     def get_easy_data_larxene_rules(self, state: CollectionState) -> bool:
         # easy: final 7,firaga,scom,both donald limits, Reflega,guard,2 gap closers,2 ground finishers,aerial dodge 3,glide 3
@@ -1118,16 +1172,15 @@ class KH2FightRules(KH2Rules):
         return self.kh2_dict_count(hard_data_demyx, state) and self.kh2_has_wisdom_form(state) and self.get_form_level_max(state, 4)
 
     def get_easy_sephiroth_rules(self, state: CollectionState) -> bool:
-        # easy:both gap closers,limit 5,reflega,guard,both 2 ground finishers,3 dodge roll,finishing plus,scom
-        return self.kh2_dict_count(easy_sephiroth_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit], state) >= 1
+        # easy:both gap closers,limit 5,reflega,guard,both 2 ground finishers,3 dodge roll,finishing plus,scom,aerial recovery
+        return self.kh2_dict_count(easy_sephiroth_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3)
 
     def get_normal_sephiroth_rules(self, state: CollectionState) -> bool:
-        # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus
-        return self.kh2_dict_count(normal_sephiroth_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2
+        # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus,aerial recovery
+        return self.kh2_dict_count(normal_sephiroth_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3)
 
     def get_hard_sephiroth_rules(self, state: CollectionState) -> bool:
-        # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus
-
+        # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus ,aerial recovery
         return self.kh2_dict_count(hard_sephiroth_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
 
     def get_easy_cor_first_fight_movement_rules(self, state: CollectionState) -> bool:
@@ -1273,13 +1326,16 @@ class KH2FightRules(KH2Rules):
         return True
 
     def get_easy_data_roxas_rules(self, state: CollectionState) -> bool:
-        # easy:both gap closers,limit 5,reflega,guard,both 2 ground finishers,3 dodge roll,finishing plus,scom
-        return self.kh2_dict_count(easy_data_roxas_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit], state) >= 1
+        # easy:both gap closers,limit 5,reflega,guard,both 2 ground finishers,3 dodge roll,finishing plus,scom,aerial recovery
+        return self.kh2_dict_count(easy_data_roxas_tools, state) and \
+            self.kh2_has_limit_form(state) and self.get_form_level_max(state, 5)
 
     def get_normal_data_roxas_rules(self, state: CollectionState) -> bool:
-        # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus
+        # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus, one of scom, aerial recovery
 
-        return self.kh2_dict_count(normal_data_roxas_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2
+        return self.kh2_dict_count(normal_data_roxas_tools, state) and \
+            self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and \
+            self.kh2_has_any(scom, state)
 
     def get_hard_data_roxas_rules(self, state: CollectionState) -> bool:
         # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus
@@ -1287,15 +1343,15 @@ class KH2FightRules(KH2Rules):
         return self.kh2_dict_count(hard_data_roxas_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
 
     def get_easy_data_axel_rules(self, state: CollectionState) -> bool:
-        # easy:both gap closers,limit 5,reflega,guard,both 2 ground finishers,3 dodge roll,finishing plus,scom,blizzaga
-        return self.kh2_dict_count(easy_data_axel_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit], state) >= 1
+        # easy:both gap closers,limit 5,reflega,guard,both 2 ground finishers,3 dodge roll,finishing plus,scom,blizzaga and 1 thunder
+        return self.kh2_dict_count(easy_data_axel_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3)
 
     def get_normal_data_axel_rules(self, state: CollectionState) -> bool:
-        # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus,blizzaga
-        return self.kh2_dict_count(normal_data_axel_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2
+        # normal:1 gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus,blizzaga and 1 thunder
+        return self.kh2_dict_count(normal_data_axel_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_has_any([gap_closer], state)
 
     def get_hard_data_axel_rules(self, state: CollectionState) -> bool:
-        # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus,blizzara
+        # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus,blizzara,thunder
 
         return self.kh2_dict_count(hard_data_axel_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
 
