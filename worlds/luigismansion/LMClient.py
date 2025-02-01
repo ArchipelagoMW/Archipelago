@@ -94,6 +94,9 @@ RECV_OWN_GAME_LOCATIONS: list[str] = list(BOO_LOCATION_TABLE.keys()) \
                                      + list(LIGHT_LOCATION_TABLE.keys())
 RECV_OWN_GAME_ITEMS: list[str] = list(BOO_ITEM_TABLE.keys()) + ["Boo Radar", "Poltergust 4000"]
 
+# Static time to wait for health and death checks
+HEALTH_CHECK_WAIT = 15
+
 
 def read_short(console_address: int):
     return int.from_bytes(dme.read_bytes(console_address, 2))
@@ -168,8 +171,7 @@ class LMContext(CommonContext):
 
         # All used when death link is enabled.
         self.is_luigi_dead = False
-        self.last_health_pointer = 0
-        self.death_check_counter = 0
+        self.last_health_checked = time.time()
 
         # Used for handling received items to the client.
         self.goal_type = None
@@ -226,7 +228,6 @@ class LMContext(CommonContext):
         """
         super().on_deathlink(data)
         self.is_luigi_dead = True
-        self.death_check_counter = 0
         self.set_luigi_dead()
         self.last_death_link = time.time()
         return
@@ -244,24 +245,17 @@ class LMContext(CommonContext):
     def check_alive(self):
         # Our health gets messed up in the Lab, so we can just ignore that location altogether.
         if dme.read_word(CURR_MAP_ID_ADDR) == 1:
+            self.is_luigi_dead = False
             return True
 
-        if "DeathLink" in self.tags:
-            # Get the pointer of Luigi's health, as this could shift when warping to bosses or climbing into mouse holes.
-            curr_pointer = read_short(CURR_HEALTH_ADDR)
-            if curr_pointer != self.last_health_pointer:
-                self.death_check_counter = 0
-                self.last_health_pointer = curr_pointer
-                self.is_luigi_dead = False
-                return True
-
-            # This ensures we checked the same address 3 times to ensure we are actually dead.
-            if self.death_check_counter != 3:
-                self.death_check_counter += 1
-                self.is_luigi_dead = False
-                return True
-
         lm_curr_health = read_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]))
+        if "DeathLink" in self.tags:
+            # Get the pointer of Luigi's health, as this changes when warping to bosses or climbing into mouse holes.
+            if lm_curr_health == 0:
+                if time.time() > self.last_health_checked + HEALTH_CHECK_WAIT:
+                    return False
+                self.is_luigi_dead = False
+                return True
         return lm_curr_health > 0
 
     def check_ingame(self):
@@ -277,7 +271,7 @@ class LMContext(CommonContext):
 
     async def check_death(self):
         if self.check_ingame() and not self.check_alive():
-            if not self.is_luigi_dead and time.time() >= self.last_death_link + 15:
+            if not self.is_luigi_dead and time.time() >= self.last_death_link + HEALTH_CHECK_WAIT:
                 self.is_luigi_dead = True
                 self.set_luigi_dead()
                 await self.send_death(self.player_names[self.slot] + " scared themselves to death.")
@@ -288,6 +282,11 @@ class LMContext(CommonContext):
         return
 
     async def lm_give_items(self):
+        current_map_id = dme.read_word(CURR_MAP_ID_ADDR)
+        # If in E. Gadd's lab map
+        if current_map_id == 1:
+            return
+
         # Only try to give items if we are in game and alive.
         if not (self.check_ingame() and self.check_alive()):
             return
@@ -399,6 +398,9 @@ class LMContext(CommonContext):
     async def lm_check_locations(self):
         # There will be different checks on different maps.
         current_map_id = dme.read_word(CURR_MAP_ID_ADDR)
+        # If in E. Gadd's lab map, ignore any check locations
+        if current_map_id == 1:
+            return
 
         for mis_loc in self.missing_locations:
             local_loc = self.location_names.lookup_in_game(mis_loc)
@@ -481,6 +483,11 @@ class LMContext(CommonContext):
         return
 
     async def lm_update_non_savable_ram(self):
+        current_map_id = dme.read_word(CURR_MAP_ID_ADDR)
+        # If in E. Gadd's lab map
+        if current_map_id == 1:
+            return
+
         vac_id = AutoWorldRegister.world_types[self.game].item_name_to_id["Poltergust 4000"]
         if self.items_received.__contains__(vac_id):
             vac_speed = "3800000F"
