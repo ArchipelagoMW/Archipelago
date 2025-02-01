@@ -126,7 +126,7 @@ class WL4World(World):
             self.options.golden_jewels = GoldenJewels(1)
 
         if (self.options.required_jewels == 4 and
-            self.options.diamond_shuffle and
+            not self.options.diamond_shuffle and
             self.options.difficulty != Difficulty.option_normal):
             raise OptionError(f'Not enough locations to place abilities for {self.player_name}. '
                               'Set the "Required Jewels" option to a lower value and try again.')
