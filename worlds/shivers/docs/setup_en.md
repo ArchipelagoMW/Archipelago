@@ -59,7 +59,9 @@ validator page: [YAML Validation page](/mysterycheck)
 
 ## What is a check
 
-- Every puzzle
-- Every puzzle hint/solution
-- Every document that is considered a Flashback
+- All puzzles
+- All puzzle hints or solutions
+- All documents that are considered Flashbacks
+- All Ixupi captures (Lightning only if early)
 - Optionally information plaques
+- Optionally elevators
