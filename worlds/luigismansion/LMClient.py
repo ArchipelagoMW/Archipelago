@@ -276,7 +276,6 @@ class LMContext(CommonContext):
         return int_play_state == 2 and bool_loaded_in_map
 
     async def check_death(self):
-        print(str(self.check_ingame() and not self.check_alive()))
         if self.check_ingame() and not self.check_alive():
             if not self.is_luigi_dead and time.time() >= self.last_death_link + 15:
                 self.is_luigi_dead = True
