@@ -142,7 +142,7 @@ class TestEntrancesBasic(TestEntrances):
 
 
 class TestEntrancesAdvanced(TestEntrances):
-    options = {'logic': options.Logic.option_advanced}
+    options = {'logic': options.Logic.option_advanced, 'open_doors': options.OpenDoors.option_off}
 
     def test_topaz_levels(self):
         self.starting_regions = ['Toy Block Tower (entrance)', 'The Big Board (entrance)',
@@ -168,7 +168,7 @@ class TestEntrancesAdvanced(TestEntrances):
         ])
 
 class TestEntrancesOpenPortal(TestEntrances):
-    options = {'portal': options.Portal.option_open}
+    options = {'portal': options.Portal.option_open, 'open_doors': options.OpenDoors.option_off}
 
     def test_sapphire_levels(self):
         self.starting_regions = ['Crescent Moon Village (entrance)', 'Arabian Night (entrance)',
