@@ -18,7 +18,7 @@
 <FLAGON>(11)
 <BGM>(7)
 <WINDOW>(0)<COLOR>(4)
-<SAY><COLOR>(6)You defeated Boolossus, sending you back...
+<SAY><COLOR>(6)You defeated Boolossus!\nSending you back...
 <WAIT>(120)
 <CLOSEWINDOW>(0)
 <SETLUIGI>(5)
@@ -35,7 +35,7 @@
 <FLAGOFF>(59)
 <BGM>(7)
 <WINDOW>(0)<COLOR>(4)
-<SAY><COLOR>(2)You defeated Bogmire, sending you back...
+<SAY><COLOR>(2)You defeated Bogmire!\nSending you back...
 <WAIT>(120)
 <CLOSEWINDOW>(0)
 <SETLUIGI>(2)
@@ -50,7 +50,7 @@
 <CASE>"46on"
 <BGM>(7)
 <WINDOW>(0)<COLOR>(4)
-<SAY><COLOR>(1)You defeated Chauncey, sending you back...
+<SAY><COLOR>(1)You defeated Chauncey!\nSending you back...
 <WAIT>(120)
 <CLOSEWINDOW>(0)
 <SETLUIGI>(1)
