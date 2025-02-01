@@ -4,7 +4,7 @@ from .Options import (ItemShuffle, MajorMinorSplit, RevealHiddenItem, OmitLocati
                       CharStatShuffle, CharEleShuffle, NoLearningUtilPsy, RandomizeClassStatBoosts,
                       ClassPsynergy, ClassPsynergyLevels, AdjustPsyPower, AdjustPsyCost, RandomizePsyAoe,
                       AdjustEnemyPsyPower, RandomizeEnemyPsyAoe, EnemyEResShuffle, StartWithHealPsynergy,
-                      StartWithRevivePsynergy, StartWithRevealPsynergy, DjinnShuffle, DjinnLogic,
+                      StartWithRevivePsynergy, DjinnShuffle, DjinnLogic,
                       ShuffleDjinnStats, AdjustDjinnPower, RandomizeDjinnAoe, ScaleDjinnBattleDifficulty,
                       RandomizeSummonCosts, AdjustSummonPower, RandomizeEqCompatibility, AdjustEqPrices,
                       AdjustEqStats, ShuffleAttack, ShuffleWpnEffects, ShuffleDefense, ShuffleArmEffect,
@@ -79,7 +79,6 @@ gstla_option_groups = [
     OptionGroup("Quality Of Life", [
         StartWithHealPsynergy,
         StartWithRevivePsynergy,
-        StartWithRevealPsynergy,
         FreeAvoid,
         AvoidPatch,
         FreeRetreat,

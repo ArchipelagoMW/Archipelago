@@ -30,6 +30,7 @@ from .gen.LocationData import LocationType, location_name_to_data
 from .gen.ItemNames import ItemName, item_id_by_name, name_by_item_id
 from .gen.LocationNames import LocationName, ids_by_loc_name, loc_names_by_id
 from .Names.RegionName import RegionName
+from .LocationGroups import goldensuntla_location_groups
 from .Rom import GSTLAPatchExtension, GSTLADeltaPatch, CHECKSUM_GSTLA
 from .BizClient import GSTLAClient
 
@@ -127,6 +128,7 @@ class GSTLAWorld(World):
         "Sea Gods Tear": {ItemName.Sea_Gods_Tear.value},
         "Lil Turtle": {ItemName.Lil_Turtle.value}
     }
+    location_name_groups = goldensuntla_location_groups
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
@@ -140,8 +142,6 @@ class GSTLAWorld(World):
             self.multiworld.push_precollected(create_item(ItemName.Ship, self.player))
         if self.options.start_with_wings_of_anemos == 1:
             self.multiworld.push_precollected(create_item(ItemName.Wings_of_Anemos, self.player))
-        if self.options.start_with_reveal == 1:
-            self.multiworld.push_precollected(create_item(ItemName.Reveal, self.player))
 
         #When we add more traps and none are enabled we should force trap_chance to off
         if self.options.mimic_trap_weight == 0:
@@ -496,8 +496,10 @@ class GSTLAWorld(World):
         debug_file.write('Start Heal: ' + self.options.start_with_healing_psynergy.name_lookup[self.options.start_with_healing_psynergy] + '\n')
         write_me += self.options.start_with_revive << 1 #start-revive
         debug_file.write('Start Revive: ' + self.options.start_with_revive.name_lookup[self.options.start_with_revive] + '\n')
-        write_me += self.options.start_with_reveal #start-reveal
-        debug_file.write('Start Reveal: ' + self.options.start_with_reveal.name_lookup[self.options.start_with_reveal] + '\n')
+
+        if ItemName.Reveal.name in self.options.start_inventory or ItemName.Reveal.name in self.options.start_inventory_from_pool:
+            write_me += 1 #start-reveal
+            debug_file.write('Start Reveal: true\n')
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))
 
 
