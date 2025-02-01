@@ -93,14 +93,14 @@ class KH2Rules:
         return amount <= sum([state.count(item_name, self.player) for item_name in visit_locking_dict["2VisitLocking"]])
 
     def summon_levels_unlocked(self, state: CollectionState, amount) -> bool:
-        return amount <= sum([state.count(item_name, self.player) for item_name in summons])
+        return amount <= sum([1 for item_name in summons if state.has(item_name,self.player)])
 
-    def kh2_list_count_sum(self, item_name_set: list, state: CollectionState) -> int:
+    def kh2_list_count_sum(self, item_name_list: list, state: CollectionState) -> int:
         """
         Returns the sum of state.count() for each item in the list.
         """
         return sum(
-                [state.count(item_name, self.player) for item_name in item_name_set]
+                [state.count(item_name, self.player) for item_name in item_name_list]
         )
 
     def kh2_list_any_sum(self, list_of_item_name_list: list, state: CollectionState) -> int:
@@ -114,7 +114,7 @@ class KH2Rules:
 
     def kh2_dict_count(self, item_name_to_count: dict, state: CollectionState) -> bool:
         """
-        simplifies count to a dictionary.
+        Returns all the count for the items in the dictionary.
         """
         return all(
                 [state.count(item_name, self.player) >= item_amount for item_name, item_amount in
@@ -123,7 +123,7 @@ class KH2Rules:
 
     def kh2_dict_one_count(self, item_name_to_count: dict, state: CollectionState) -> int:
         """
-        simplifies count to a dictionary.
+        returns the sum of the dict count
         """
         return sum(
                 [1 for item_name, item_amount in
@@ -249,20 +249,19 @@ class KH2LocationRules(KH2Rules):
         # These Rules are Always in effect
         super().__init__(kh2world)
         self.location_rules = {
-            LocationName.CoRDepthsManifestIllusion: lambda  state:self.get_cor_depths_illusion_rules(state),
-            LocationName.CoRDepthsAPBoost2: lambda state:self.get_cor_depths_ap_boost_two_rules(state),
+            LocationName.CoRDepthsManifestIllusion: lambda state: self.get_cor_depths_illusion_rules(state),
+            LocationName.CoRDepthsAPBoost2:         lambda state: self.get_cor_depths_ap_boost_two_rules(state),
         }
 
     def get_cor_depths_illusion_rules(self, state: CollectionState):
         # high jump,aerial dodge and glide 2
         return (self.has_vertical(state) and self.has_glide(state, 2)) or \
-        (self.kh2_has_final_form(state), self.get_form_level_max(state, 3))  #final 5
+            (self.kh2_has_final_form(state), self.get_form_level_max(state, 3))  #final 5
 
     def get_cor_depths_ap_boost_two_rules(self, state: CollectionState):
         # high jump,aerial dodge and glide 1
         return (self.has_vertical(state) and self.has_glide(state, 1)) or \
-        self.kh2_has_final_form(state) or self.kh2_has_master_form(state)
-
+            self.kh2_has_final_form(state) or self.kh2_has_master_form(state)
 
     def set_kh2_location_rules(self):
         for location_name, loc_rule in self.location_rules.items():
@@ -549,6 +548,7 @@ class KH2FightRules(KH2Rules):
             self.fight_region_rules[RegionName.OogieBoogie] = lambda state: self.get_oogie_rules()
             self.fight_region_rules[RegionName.Experiment] = lambda state: self.get_easy_experiment_rules(state)
             self.fight_region_rules[RegionName.DataVexen] = lambda state: self.get_easy_data_vexen_rules(state)
+            self.fight_region_rules[RegionName.Hb2Corridors]= lambda state:self.get_easy_corridors_fight_rules(state)
             self.fight_region_rules[RegionName.HBDemyx] = lambda state: self.get_easy_demyx_rules(state)
             self.fight_region_rules[RegionName.ThousandHeartless] = lambda state: self.get_easy_thousand_heartless_rules(state)
             self.fight_region_rules[RegionName.DataDemyx] = lambda state: self.get_easy_data_demyx_rules(state)
@@ -612,6 +612,7 @@ class KH2FightRules(KH2Rules):
             self.fight_region_rules[RegionName.OogieBoogie] = lambda state: self.get_oogie_rules()
             self.fight_region_rules[RegionName.Experiment] = lambda state: self.get_normal_experiment_rules(state)
             self.fight_region_rules[RegionName.DataVexen] = lambda state: self.get_normal_data_vexen_rules(state)
+            self.fight_region_rules[RegionName.Hb2Corridors] = lambda state: self.get_normal_corridors_fight_rules(state)
             self.fight_region_rules[RegionName.HBDemyx] = lambda state: self.get_normal_demyx_rules(state)
             self.fight_region_rules[RegionName.ThousandHeartless] = lambda state: self.get_normal_thousand_heartless_rules(state)
             self.fight_region_rules[RegionName.DataDemyx] = lambda state: self.get_normal_data_demyx_rules(state)
@@ -674,6 +675,7 @@ class KH2FightRules(KH2Rules):
             self.fight_region_rules[RegionName.OogieBoogie] = lambda state: self.get_oogie_rules()
             self.fight_region_rules[RegionName.Experiment] = lambda state: self.get_hard_experiment_rules(state)
             self.fight_region_rules[RegionName.DataVexen] = lambda state: self.get_hard_data_vexen_rules(state)
+            self.fight_region_rules[RegionName.Hb2Corridors] = lambda state: self.get_hard_corridors_fight_rules(state)
             self.fight_region_rules[RegionName.HBDemyx] = lambda state: self.get_hard_demyx_rules(state)
             self.fight_region_rules[RegionName.ThousandHeartless] = lambda state: self.get_hard_thousand_heartless_rules(state)
             self.fight_region_rules[RegionName.DataDemyx] = lambda state: self.get_hard_data_demyx_rules(state)
@@ -1127,9 +1129,21 @@ class KH2FightRules(KH2Rules):
 
         return self.kh2_dict_count(hard_data_vexen, state) and self.kh2_list_any_sum([gap_closer, donald_limit], state) >= 2 and self.kh2_has_final_form(state) and self.get_form_level_max(state, 3),
 
+    def get_easy_corridors_fight_rules(self, state: CollectionState) -> bool:
+        # chicken little,magnera,magnet burst,defensive tool,form and party limit
+        return self.kh2_dict_count({ItemName.ChickenLittle: 1, ItemName.MagnetElement: 2, ItemName.MagnetBurst: 1}, state) and self.kh2_list_any_sum([defensive_tool, form_list, party_limit], state) >= 3
+
+    def get_normal_corridors_fight_rules(self, state: CollectionState) -> bool:
+        # has 3 total of defensive tool,drive form,party limit,magnet,chicken,magnetburst
+        # such as 3 reflects would count here or 3 party limits.
+        return self.kh2_list_any_sum([defensive_tool, form_list, party_limit, [ItemName.ChickenLittle, ItemName.MagnetElement, ItemName.MagnetBurst]], state) >= 3
+
+    def get_hard_corridors_fight_rules(self, state: CollectionState) -> bool:
+        # 2 of normal's rules
+        return self.kh2_list_any_sum([defensive_tool, form_list, party_limit, [ItemName.ChickenLittle, ItemName.MagnetElement, ItemName.MagnetBurst]], state) >= 2
+
     def get_easy_demyx_rules(self, state: CollectionState) -> bool:
         # defensive option,drive form,party limit
-
         return self.kh2_list_any_sum([defensive_tool, form_list, party_limit], state) >= 3
 
     def get_normal_demyx_rules(self, state: CollectionState) -> bool:
