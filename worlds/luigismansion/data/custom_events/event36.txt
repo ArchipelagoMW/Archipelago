@@ -1,8 +1,3 @@
-#TODO Check each flag and increase counter by 1. Use COUNTJMP to Jump to desired count #
-#TODO If 0 mario items required, make case 0 turn on Gen then end. Any other case should go back to case 0.
-#TODO If 1 mario item is required, make case 0 say at least 1 mario item is required. Then case 1 should end and
-#TODO anything else go to case 1. Repeat for each after that
-#TODO Use RAMDOM to jump to desired case.
 <MENUOFF>
 <LUIGISTOP2>
 <FULLSCREEN>
