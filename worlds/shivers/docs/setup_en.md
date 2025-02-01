@@ -10,7 +10,7 @@
 ## Optional Software
 
 - [PopTracker](https://github.com/black-sliver/PopTracker/releases/)
-  - [Jax's Shivers PopTracker pack](https://github.com/blazik-barth/Shivers-Tracker/releases/)
+  - [Shivers PopTracker pack](https://github.com/Shivers-Randomizer/Shivers-AP-Tracker/releases/latest)
 
 ## Setup ScummVM for Shivers
 
