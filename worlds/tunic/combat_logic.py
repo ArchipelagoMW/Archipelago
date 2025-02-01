@@ -221,7 +221,6 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
                 money_req_for_att += money_per_att
                 money_required += money_per_att
                 money_per_att += 50
-            
 
     # adding defense and sp together since they accomplish similar things: making you take less damage
     if data.def_level + data.sp_level > 2:
