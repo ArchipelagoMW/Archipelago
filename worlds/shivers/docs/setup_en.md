@@ -5,7 +5,7 @@
 
 - [Shivers (GOG version)](https://www.gog.com/en/game/shivers) or original disc
 - [ScummVM](https://www.scummvm.org/downloads/) version 2.7.0 or later
-- [Shivers Randomizer](https://github.com/GodlFire/Shivers-Randomizer-CSharp/releases/latest) Latest release version
+- [Shivers Randomizer Client](https://github.com/Shivers-Randomizer/Shivers-Randomizer/releases/latest) Latest release version
 
 ## Optional Software
 
