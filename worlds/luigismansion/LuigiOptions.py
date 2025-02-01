@@ -24,6 +24,46 @@ class RandomMusic(Toggle):
     display_name = "Music Randomization"
 
 
+class BundleWeight(Range):
+    """Set the weight for how often coin & bill bundles get chosen as filler. Default is 10"""
+    display_name = "Money Bundle Weight"
+    range_start = 0
+    range_end = 100
+    default = 10
+
+
+class CoinWeight(Range):
+    """Set the weight for how often coins get chosen as filler. Default is 15"""
+    display_name = "Coin Weight"
+    range_start = 0
+    range_end = 100
+    default = 15
+
+
+class BillWeight(Range):
+    """Set the weight for how often bills get chosen as filler. Default is 10"""
+    display_name = "Bill Weight"
+    range_start = 0
+    range_end = 100
+    default = 10
+
+
+class BarsWeight(Range):
+    """Set the weight for how often gold bars get chosen as filler. Default is 10"""
+    display_name = "Gold Bars Weight"
+    range_start = 0
+    range_end = 100
+    default = 10
+
+
+class GemsWeight(Range):
+    """Set the weight for how often gemstones get chosen as filler. Default is 5"""
+    display_name = "Gems Weight"
+    range_start = 0
+    range_end = 100
+    default = 5
+
+
 class PoisonTrapWeight(Range):
     """Set the weight for how often poison mushrooms get chosen as traps. Default is 15"""
     display_name = "Poison Trap Weight"
@@ -258,6 +298,11 @@ class LMOptions(PerGameCommonOptions):
     washroom_boo_count: WashroomBooCount
     balcony_boo_count: BalconyBooCount
     final_boo_count: FinalBooCount
+    bundle_weight: BundleWeight
+    coin_weight: CoinWeight
+    bill_weight: BillWeight
+    bars_weight: BarsWeight
+    gems_weight: GemsWeight
     poison_trap_weight: PoisonTrapWeight
     bomb_trap_weight: BombWeight
     ice_trap_weight: IceTrapWeight

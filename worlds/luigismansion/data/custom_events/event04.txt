@@ -1,6 +1,6 @@
 <MENUOFF>
 <BGM>(11)
-<WINDOW>(0)
+<WINDOW>(0)<COLOR>(17)
 {HintText}
 <ANYKEY>
 <CLOSEWINDOW>(0)
