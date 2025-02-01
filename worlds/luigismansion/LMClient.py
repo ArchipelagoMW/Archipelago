@@ -471,6 +471,7 @@ class LMContext(CommonContext):
             dme.write_bytes(ALL_ITEMS_TABLE["Poltergust 4000"].ram_addr, bytes.fromhex(vac_speed))
             self.already_updated_vac = True
 
+        local_recv_ids = [netItem.item for netItem in self.items_received]
         if self.boosanity:
             in_boo_gate_event = (dme.read_byte(0x803D33A7) & (1 << 0)) > 0
             for lm_boo in BOO_ITEM_TABLE.keys():
@@ -478,7 +479,7 @@ class LMContext(CommonContext):
                 lm_boo_item = BOO_ITEM_TABLE[lm_boo]
                 boo_caught = dme.read_byte(lm_boo_item.ram_addr)
                 boo_val = boo_caught | (1 << lm_boo_item.itembit) if (in_boo_gate_event and
-                    boo_id in self.items_received) else boo_caught & ~(1 << lm_boo_item.itembit)
+                    boo_id in local_recv_ids) else boo_caught & ~(1 << lm_boo_item.itembit)
                 dme.write_byte(lm_boo_item.ram_addr, boo_val)
         return
 
