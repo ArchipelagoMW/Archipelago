@@ -11,6 +11,7 @@
 
 ### Quality of Life:
 - Gate Stages and Mission Orders are now displayed in the spoiler log
+- Chaos Emeralds are now shown when paused in-level
 - Location Name Groups were created
 - Moved SA2B to the new Options system
 - Option Presets were created
