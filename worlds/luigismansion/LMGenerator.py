@@ -272,6 +272,7 @@ class LuigisMansionRandomizer:
             lines = get_data(__name__, "data/custom_events/event" + event_no + ".txt").decode('utf-8')
             lines = lines.replace("{HintText}", str(hintfo))
             self.update_custom_event(event_no, False, lines)
+            self.toad_csv_messages(event_no)
 
         lines = get_data(__name__, "data/custom_events/event36.txt").decode('utf-8')
         lines = lines.replace("{MarioCount}", str(required_mario_item_count))
@@ -352,6 +353,17 @@ class LuigisMansionRandomizer:
         lm_player_name = str(self.output_data["Name"]).strip()
         self.dol.data.seek(0x311660)
         self.dol.data.write(struct.pack(str(len(lm_player_name)) + "s", lm_player_name.encode()))
+
+    def toad_csv_messages(self, event_number: str):
+        custom_event = self.get_arc("files/Event/event" + event_number + ".szp")
+        name_to_find = "message" + event_number + ".csv"
+        if not any(info_files for info_files in custom_event.file_entries if info_files.name == name_to_find):
+            raise Exception(f"Unable to find an info file with name '{name_to_find}' in provided RARC file.")
+        lines = io.BytesIO(get_data(__name__, f"data/custom_events/{name_to_find}"))
+        next((info_files for info_files in custom_event.file_entries if info_files.name == name_to_find)).data = lines
+        custom_event.save_changes()
+        self.gcm.changed_files["files/Event/event" + event_number + ".szp"] = (
+            Yay0.compress(custom_event.data, 0))
 
     def update_custom_event(self, event_number: str, check_local_folder: bool, non_local_str="",
                             custom_made: bool = False):

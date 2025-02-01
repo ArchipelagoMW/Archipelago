@@ -2,7 +2,7 @@
 <FLAGON>(109)
 <BGM>(11)
 <WINDOW>(0)<COLOR>(17)
-<CHOICE>"HINT"(Hint)"SAVE"(Save)"Close"(Close)<LISTEND>
+<CHOICE>"Hint"(a)"Save"(b)"Close"(c)<LISTEND>
 -------------------------
 <CASE>"Hint"
 {HintText}
