@@ -244,10 +244,10 @@ class LuigisMansionRandomizer:
                     case "96":
                         required_boo_count = balcony_boo_count
 
-                min_boo_count = 0 if required_boo_count - 20 <= 0 else required_boo_count - 20
-                second_boo_count = 0 if required_boo_count - 15 <= 0 else required_boo_count - 15
-                third_boo_count = 0 if required_boo_count - 10 <= 0 else required_boo_count - 10
-                fourth_boo_count = 0 if required_boo_count - 5 <= 0 else required_boo_count - 5
+                min_boo_count = -1 if required_boo_count - 20 <= 0 else required_boo_count - 20
+                second_boo_count = -1 if required_boo_count - 15 <= 0 else required_boo_count - 15
+                third_boo_count = -1 if required_boo_count - 10 <= 0 else required_boo_count - 10
+                fourth_boo_count = -1 if required_boo_count - 5 <= 0 else required_boo_count - 5
 
                 lines = lines.replace("{CountOne}", str(min_boo_count))
                 lines = lines.replace("{CountTwo}", str(second_boo_count))
