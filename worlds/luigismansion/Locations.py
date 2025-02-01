@@ -6,8 +6,8 @@ class LMLocationData(NamedTuple):
     region: str
     code: Optional[int]  # used to create ap_id, None for events
     type: str  # type of randomization option/jmp table and group [Chest, Furniture, Furniture, Plant, Boo, GSpeedy (Gold Mouse), BSpeedy (Blue Ghost), Portrait, Toad]
-    jmpentry: int = -1   # entry number on the jmp table it belongs to
-    access: List[str] = [] # items required to access location, many special cases
+    jmpentry: int = -1  # entry number on the jmp table it belongs to
+    access: List[str] = []  # items required to access location, many special cases
     in_game_room_id: Optional[int] = None
     locked_item: Optional[str] = None
     room_ram_addr: Optional[int] = None
@@ -53,22 +53,22 @@ class LMLocation(Location):
 
 # Base Chests / Locations
 BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
-    #"Luigi's Courage": LMLocationData("Parlor", 708, "KingMickey", -1, []), # Give item on Altar lights turning on
+    "Luigi's Courage": LMLocationData("Foyer", 708, "KingdomHearts", 0, [], 2, room_ram_addr=0x803CDFDC), # Give item on Altar lights turning on
     "Ghost Foyer Key": LMLocationData("Foyer", 713, "Freestanding", 1, [], 2, room_ram_addr=0x803D3399, locationbit=3),
     "1F Washroom Toilet": LMLocationData("1F Washroom", 4, "Furniture", 233, [], 16),
     "Fortune Teller Candles": LMLocationData("Fortune-Teller's Room", 6, "Freestanding", 4, ["Fire Element Medal"], 3,
                                              room_ram_addr=0x803D33A6, locationbit=6),
     "Laundry Washing Machine": LMLocationData("Laundry Room", 7, "Furniture", 187, [], 5),
-    #"Hidden Room Large Chest L": LMLocationData("Hidden Room", 9, "Furniture", 243, [], 1), # TODO Prevents Ghosts Spawn
-    #"Hidden Room Large Chest C": LMLocationData("Hidden Room", 10, "Furniture", 241, [], 1), # TODO Prevents Ghosts Spawn
+    # "Hidden Room Large Chest L": LMLocationData("Hidden Room", 9, "Furniture", 243, [], 1), # TODO Prevents Ghosts Spawn
+    # "Hidden Room Large Chest C": LMLocationData("Hidden Room", 10, "Furniture", 241, [], 1), # TODO Prevents Ghosts Spawn
     "Hidden Room Large Chest R": LMLocationData("Hidden Room", 11, "Furniture", 242, [], 1),
-    #"Hidden Room Small Chest L Shelf": LMLocationData("Hidden Room", 12, "Furniture", 245, [], 1), # TODO Prevents Ghosts Spawn
+    # "Hidden Room Small Chest L Shelf": LMLocationData("Hidden Room", 12, "Furniture", 245, [], 1), # TODO Prevents Ghosts Spawn
     "Hidden Room Small Chest R Shelf": LMLocationData("Hidden Room", 13, "Furniture", 244, [], 1),
     "Hidden Room Small Chest L Floor": LMLocationData("Hidden Room", 14, "Furniture", 246, [], 1),
-    #"Hidden Room Small Chest R Floor": LMLocationData("Hidden Room", 15, "Furniture", 247, [], 1), # TODO Prevents Ghosts Spawn
+    # "Hidden Room Small Chest R Floor": LMLocationData("Hidden Room", 15, "Furniture", 247, [], 1), # TODO Prevents Ghosts Spawn
     "Rec Room Treadmill Key": LMLocationData("Rec Room", 18, "Furniture", 106, [], 23),
     "Courtyard Birdhouse": LMLocationData("Courtyard", 20, "Furniture", 146, [], 24),
-    #TODO special event, unknown location
+    # TODO special event, unknown location
     "Observatory Mario Star": LMLocationData("Observatory", 24, "Special", -1, [], 44, room_ram_addr=0x803D339F,
                                              locationbit=2),
     "Sealed Room NW Shelf Chest": LMLocationData("Sealed Room", 29, "Furniture", 532, [], 37),
@@ -76,58 +76,58 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Sealed Room SW Shelf Chest": LMLocationData("Sealed Room", 31, "Furniture", 531, [], 37),
     "Sealed Room SE Shelf Chest": LMLocationData("Sealed Room", 32, "Furniture", 535, [], 37),
     "Sealed Room Table Chest": LMLocationData("Sealed Room", 33, "Furniture", 533, [], 37),
-    #"Sealed Room Lower Big Chest": LMLocationData("Sealed Room", 34, "Furniture", 529, [], 37), # TODO Prevents Ghosts Spawn
+    # "Sealed Room Lower Big Chest": LMLocationData("Sealed Room", 34, "Furniture", 529, [], 37), # TODO Prevents Ghosts Spawn
     "Sealed Room Upper L Big Chest": LMLocationData("Sealed Room", 35, "Furniture", 528, [], 37),
-    #"Sealed Room Upper C Big Chest": LMLocationData("Sealed Room", 36, "Furniture", 527, [], 37), # TODO Prevents Ghosts Spawn
+    # "Sealed Room Upper C Big Chest": LMLocationData("Sealed Room", 36, "Furniture", 527, [], 37), # TODO Prevents Ghosts Spawn
     "Sealed Room Upper R Big Chest": LMLocationData("Sealed Room", 37, "Furniture", 530, [], 37),
-    #"Armory 4th Gray Chest": LMLocationData("Armory", 38, "Furniture", 651, [], 51), # TODO Prevents Ghosts Spawn
+    # "Armory 4th Gray Chest": LMLocationData("Armory", 38, "Furniture", 651, [], 51), # TODO Prevents Ghosts Spawn
     "Armory Gray Chest (left, back Wall)": LMLocationData("Armory", 39, "Furniture", 652, [], 51),
-    #"Armory 5th Gray Chest": LMLocationData("Armory", 40, "Furniture", 653, [], 51), # TODO Prevents Ghosts Spawn
+    # "Armory 5th Gray Chest": LMLocationData("Armory", 40, "Furniture", 653, [], 51), # TODO Prevents Ghosts Spawn
     "Armory Gray Chest (middle, back Wall)": LMLocationData("Armory", 41, "Furniture", 654, [], 51),
     "Armory Gray Chest (right, back Wall)": LMLocationData("Armory", 42, "Furniture", 655, [], 51),
-    #"Telephone Room C Chest": LMLocationData("Telephone Room", 43, "Furniture", 680, [], 53), # TODO Prevents Ghosts Spawn
-    #"Telephone Room R1 Chest": LMLocationData("Telephone Room", 44, "Furniture", 681, [], 53), # TODO Prevents Ghosts Spawn
+    # "Telephone Room C Chest": LMLocationData("Telephone Room", 43, "Furniture", 680, [], 53), # TODO Prevents Ghosts Spawn
+    # "Telephone Room R1 Chest": LMLocationData("Telephone Room", 44, "Furniture", 681, [], 53), # TODO Prevents Ghosts Spawn
     "Telephone Room R2 Chest": LMLocationData("Telephone Room", 45, "Furniture", 682, [], 53),
     # "Storage Room Cage": LMLocationData("Storage Room", 712, "Special", -1, []), # TODO Do we want this?
 
     # Game Event Locations
-    "Breaker Box":     LMLocationData("Breaker Room", None, "Event", -1, [], locked_item="Blackout"),
+    "Breaker Box": LMLocationData("Breaker Room", None, "Event", -1, [], locked_item="Blackout"),
     # LMLocationData('Nursery', 'Chauncey',  None),
     # LMLocationData('Graveyard', 'Bogmire',  None),
-    "King Boo":         LMLocationData("Secret Altar", None, "Event", -1, [], locked_item="Mario's Painting"),
+    "King Boo": LMLocationData("Secret Altar", None, "Event", -1, [], locked_item="Mario's Painting"),
 }
-
 
 # Adds all the chests that are spawned after clearing a room of ghosts.
 CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Guest Room Clear Chest": LMLocationData("Guest Room", 46, "Chest", 17, ["Water Element Medal"], 29,
-                                            room_ram_addr=0x803CDF88),
+                                             room_ram_addr=0x803CDF88),
     "Parlor Clear Chest": LMLocationData("Parlor", 47, "Chest", 20, [], 36, room_ram_addr=0x803CDF96),
     "Laundry Clear Chest": LMLocationData("Laundry Room", 710, "Chest", 4, [], 5, room_ram_addr=0x803CDF5A),
     "Cold Storage Clear Chest": LMLocationData("Cold Storage", 48, "Chest", 33, ["Fire Element Medal"], 64,
-                                            room_ram_addr=0x803CDFCA),
+                                               room_ram_addr=0x803CDFCA),
     "Breaker Room Clear Chest": LMLocationData("Breaker Room", 49, "Chest", 36, ["Blackout"], 69,
-                                            room_ram_addr=0x803CDFD6),
+                                               room_ram_addr=0x803CDFD6),
     "Twins' Room Clear Chest": LMLocationData("Twins' Room", 25, "Chest", 25, [], 27,
-                                            room_ram_addr=0x803CDF82),
+                                              room_ram_addr=0x803CDF82),
     "Billiards Room Clear Chest": LMLocationData("Billiards Room", 26, "Chest", 9, [], 12,
-                                            room_ram_addr=0x803CDF68),
-    "Balcony Clear Chest": LMLocationData("Balcony", 27, "Chest", 31,  ["Ice Element Medal"], 62,
-                                            room_ram_addr=0x803CDFC6),
+                                                 room_ram_addr=0x803CDF68),
+    "Balcony Clear Chest": LMLocationData("Balcony", 27, "Chest", 31, ["Ice Element Medal"], 62,
+                                          room_ram_addr=0x803CDFC6),
     "Ceramics Studio Clear Chest": LMLocationData("Ceramics Studio", 28, "Chest", 30, ["Ice Element Medal"], 58,
-                                            room_ram_addr=0x803CDFBE),
-    "The Well Key": LMLocationData("The Well", 21, "Freestanding", 0, [], 72, room_ram_addr=0x803D33A6, locationbit=6),  # keyinfo event
+                                                  room_ram_addr=0x803CDFBE),
+    "The Well Key": LMLocationData("The Well", 21, "Freestanding", 0, [], 72, room_ram_addr=0x803D33A6, locationbit=6),
+    # keyinfo event
     "2F Bathroom Clear Chest": LMLocationData("2F Bathroom", 22, "Chest", 24, ["Ice Element Medal"], 48,
-                                            room_ram_addr=0x803CDFAA),
+                                              room_ram_addr=0x803CDFAA),
     "Nana's Room Clear Chest": LMLocationData("Nana's Room", 23, "Chest", 25, [], 49, room_ram_addr=0x803CDFAC),
     "Rec Room Clear Chest": LMLocationData("Rec Room", 19, "Chest", 13, [], 23, room_ram_addr=0x803CDF7C),
     "Conservatory Clear Chest": LMLocationData("Conservatory", 16, "Chest", 12, [], 22, room_ram_addr=0x803CDF7A),
     "Dining Room Clear Chest": LMLocationData("Dining Room", 17, "Chest", 6, ["Fire Element Medal"], 8,
-                                            room_ram_addr=0x803CDF62),
-    "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0,  ["Fire Element Medal"], 0,
-                                            room_ram_addr=0x803CDF50),
+                                              room_ram_addr=0x803CDF62),
+    "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0, ["Fire Element Medal"], 0,
+                                         room_ram_addr=0x803CDF50),
     "Fortune Teller Clear Chest": LMLocationData("Fortune-Teller's Room", 5, "Chest", 2, [], 3,
-                                            room_ram_addr=0x803CDF56),
+                                                 room_ram_addr=0x803CDF56),
     # "Wardrobe Clear Chest": LMLocationData("Wardrobe", 0, "Chest", 22, ["Blackout"], 41,
     #                                         room_ram_addr=0x803CDF9C), #TODO not spawning after Grimmly
     "Study Clear Chest": LMLocationData("Study", 1, "Chest", 19, [], 35, room_ram_addr=0x803CDF94),
@@ -136,14 +136,15 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Graveyard Clear Chest": LMLocationData("Graveyard", 711, "Chest", 11, [], 15, room_ram_addr=0x803CDF70)
 }
 
-
 # Ghost Affected Clear Chests. Rules applied to region entrances
 ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {
-    "Wardrobe Shelf Key": LMLocationData("Wardrobe", 50, "Freestanding", 5, [], 41, room_ram_addr=0x803D33A6, locationbit=6),  # TODO  gone for good?
+    "Wardrobe Shelf Key": LMLocationData("Wardrobe", 50, "Freestanding", 5, [], 41, room_ram_addr=0x803D33A6,
+                                         locationbit=6),  # TODO  gone for good?
     "Hidden Room Clear Chest": LMLocationData("Hidden Room", 51, "Chest", 1, [], 1, room_ram_addr=0x803CDF52),
     "Mirror Room Clear Chest": LMLocationData("Mirror Room", 52, "Chest", 3, [], 4, room_ram_addr=0x803CDF58),
     "Kitchen Clear Chest": LMLocationData("Kitchen", 53, "Chest", 5, [], 7, room_ram_addr=0x803CDF60),
-    "1F Bathroom Shelf Key": LMLocationData("1F Bathroom", 54, "Freestanding", 3, [], 21, room_ram_addr=0x803D33A6, locationbit=6),
+    "1F Bathroom Shelf Key": LMLocationData("1F Bathroom", 54, "Freestanding", 3, [], 21, room_ram_addr=0x803D33A6,
+                                            locationbit=6),
     "Courtyard Clear Chest": LMLocationData("Courtyard", 55, "Chest", 14, [], 24, room_ram_addr=0x803CDF7E),
     "Tea Room Clear Chest": LMLocationData("Tea Room", 56, "Chest", 47, [], 50, room_ram_addr=0x803CDFAE),
     "2F Washroom Clear Chest": LMLocationData("2F Washroom", 57, "Chest", 23, [], 45, room_ram_addr=0x803CDFA4),
@@ -162,22 +163,24 @@ ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {
                                                      room_ram_addr=0x803CDFC2),
 }
 
-
 # Adds Toads as locations
 TOAD_LOCATION_TABLE: dict[str, LMLocationData] = {
-    "Foyer Toad":            LMLocationData("Foyer", 617, "Toad", -1, [], 2, room_ram_addr=0x803D33A6, locationbit=5),
-    "Wardrobe Balcony Toad": LMLocationData("Wardrobe Balcony", 618, "Toad", -1, [], 40, room_ram_addr=0x803D33A6, locationbit=5),
-    "1F Washroom Toad":      LMLocationData("1F Washroom", 619, "Toad", -1, [], 16, room_ram_addr=0x803D33A6, locationbit=5),
-    "Courtyard Toad":        LMLocationData("Courtyard", 620, "Toad", -1, [], 24, room_ram_addr=0x803D33A6, locationbit=5),
+    "Foyer Toad": LMLocationData("Foyer", 617, "Toad", -1, [], 2, room_ram_addr=0x803D33A6, locationbit=5),
+    "Wardrobe Balcony Toad": LMLocationData("Wardrobe Balcony", 618, "Toad", -1, [], 40, room_ram_addr=0x803D33A6,
+                                            locationbit=5),
+    "1F Washroom Toad": LMLocationData("1F Washroom", 619, "Toad", -1, [], 16, room_ram_addr=0x803D33A6, locationbit=5),
+    "Courtyard Toad": LMLocationData("Courtyard", 620, "Toad", -1, [], 24, room_ram_addr=0x803D33A6, locationbit=5),
 }
-
 
 # Adds all waterable plants as locations
 PLANT_LOCATION_TABLE: dict[str, LMLocationData] = {
-    "Wardrobe Balcony Plant R (near Door)": LMLocationData("Wardrobe Balcony", 65, "Plant", 473, ["Water Element Medal"], 40),
-    "Wardrobe Balcony Plant L (next to Toad)": LMLocationData("Wardrobe Balcony", 66, "Plant", 474, ["Water Element Medal"], 40),
+    "Wardrobe Balcony Plant R (near Door)": LMLocationData("Wardrobe Balcony", 65, "Plant", 473,
+                                                           ["Water Element Medal"], 40),
+    "Wardrobe Balcony Plant L (next to Toad)": LMLocationData("Wardrobe Balcony", 66, "Plant", 474,
+                                                              ["Water Element Medal"], 40),
     "Wardrobe Balcony Plant C": LMLocationData("Wardrobe Balcony", 67, "Plant", 475, ["Water Element Medal"], 40),
-    "Wardrobe Balcony Plant L (in Corner)": LMLocationData("Wardrobe Balcony", 68, "Plant", 476, ["Water Element Medal"], 40),
+    "Wardrobe Balcony Plant L (in Corner)": LMLocationData("Wardrobe Balcony", 68, "Plant", 476,
+                                                           ["Water Element Medal"], 40),
     "Master Bedroom Plant": LMLocationData("Master Bedroom", 69, "Plant", 542, ["Water Element Medal"], 34),
     "Courtyard SW Plant": LMLocationData("Courtyard", 71, "Plant", 142, ["Water Element Medal"], 24),
     "Courtyard NW Plant": LMLocationData("Courtyard", 72, "Plant", 143, ["Water Element Medal"], 24),
@@ -204,7 +207,6 @@ PLANT_LOCATION_TABLE: dict[str, LMLocationData] = {
     #   LMLocationData('Boneyard', 'Huge Flower70,
     #               rule=lambda state: state.has("Water Element Medal", player) and state.has()),
 }
-
 
 # Adds the myriad shakable objects or objects that react to elements such as fire as locations
 FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
@@ -242,9 +244,9 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Wardrobe Shoe Rack": LMLocationData("Wardrobe", 124, "Furniture", 453, [], 41),
     "Wardrobe Hat Stand": LMLocationData("Wardrobe", 125, "Furniture", 495, [], 41),
     "Wardrobe Mirror": LMLocationData("Wardrobe", 126, "Furniture", 480, [], 41),
-    #"Wardrobe West Dresser": LMLocationData("Wardrobe", 127, "Furniture", 479, [], 41), #TODO Prevents Ghost Spawns
+    # "Wardrobe West Dresser": LMLocationData("Wardrobe", 127, "Furniture", 479, [], 41), #TODO Prevents Ghost Spawns
     "Wardrobe Center Dresser": LMLocationData("Wardrobe", 128, "Furniture", 478, [], 41),
-    #"Wardrobe East Dresser": LMLocationData("Wardrobe", 129, "Furniture", 477, [], 41), #TODO Prevents Ghost Spawns
+    # "Wardrobe East Dresser": LMLocationData("Wardrobe", 129, "Furniture", 477, [], 41), #TODO Prevents Ghost Spawns
     "Wardrobe Balcony Brazier": LMLocationData("Wardrobe Balcony", 130, "Furniture", 472, [], 41),
     "Wardrobe Purple Dress": LMLocationData("Wardrobe", 131, "Furniture", 452, [], 41),
     "Wardrobe Red Dress": LMLocationData("Wardrobe", 132, "Furniture", 505, [], 41),
@@ -297,7 +299,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Twins' Room Mobile": LMLocationData("Twins' Room", 179, "Furniture", 426, [], 27),
     "Twins' Room Tennis Rackets": LMLocationData("Twins' Room", 180, "Furniture", 562, [], 27),
     "Twins' Room Dartboard": LMLocationData("Twins' Room", 181, "Furniture", 424, [], 27),
-    #"Twins' Room Bunk Bed": LMLocationData("Twins' Room", 182, "Furniture", 425, [], 27), #TODO Prevents Speedy Spirit Spawn
+    # "Twins' Room Bunk Bed": LMLocationData("Twins' Room", 182, "Furniture", 425, [], 27), #TODO Prevents Speedy Spirit Spawn
     "Twins' Room Star Light": LMLocationData("Twins' Room", 183, "Furniture", 423, [], 27),
     "Twins' Room Toy Train": LMLocationData("Twins' Room", 184, "Furniture", 430, [], 27),
     "Twins' Room Toy Car": LMLocationData("Twins' Room", 185, "Furniture", 431, [], 27),
@@ -333,7 +335,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Ballroom Chair L (furthest from Left Wall)": LMLocationData("Ballroom", 212, "Furniture", 169, [], 9),
     "Ballroom Chair R (furthest from Right Wall)": LMLocationData("Ballroom", 213, "Furniture", 170, [], 9),
     "Ballroom Chair R (closest from Right Wall)": LMLocationData("Ballroom", 214, "Furniture", 171, [], 9),
-    #"Storage Room Chair": LMLocationData("Storage Room", 209, "Furniture", 161, [], 14), #TODO Prevents Speedy Spirit Spawn
+    # "Storage Room Chair": LMLocationData("Storage Room", 209, "Furniture", 161, [], 14), #TODO Prevents Speedy Spirit Spawn
     "Storage Room Bucket": LMLocationData("Storage Room", 215, "Furniture", 165, [], 14),
     "Storage Room Ceiling Light": LMLocationData("Storage Room", 216, "Furniture", 163, [], 14),
     "Storage Room Chair Stack": LMLocationData("Storage Room", 217, "Furniture", 162, [], 14),
@@ -413,7 +415,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Conservatory Cabinet": LMLocationData("Conservatory", 291, "Furniture", 197, [], 22),
     "Dining Room L Chair": LMLocationData("Dining Room", 292, "Furniture", 86, [], 8),
     "Dining Room R Chair": LMLocationData("Dining Room", 293, "Furniture", 87, [], 8),
-    #"Dining Room L China Hutch": LMLocationData("Dining Room", 294, "Furniture", 278, [], 8), #TODO Prevents Speedy Spirit Spawn
+    # "Dining Room L China Hutch": LMLocationData("Dining Room", 294, "Furniture", 278, [], 8), #TODO Prevents Speedy Spirit Spawn
     "Dining Room R China Hutch": LMLocationData("Dining Room", 295, "Furniture", 279, [], 8),
     "Dining Room L Brazier": LMLocationData("Dining Room", 296, "Furniture", 281, [], 8),
     "Dining Room R Brazier": LMLocationData("Dining Room", 297, "Furniture", 282, [], 8),
@@ -427,7 +429,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Dining Room R Candles and Plates": LMLocationData("Dining Room", 305, "Furniture", 287, [], 8),
     "Dining Room L Candles": LMLocationData("Dining Room", 306, "Furniture", 288, [], 8),
     "Kitchen Oven": LMLocationData("Kitchen", 307, "Furniture", 80, ["Fire Element Medal"], 7),
-    #"Kitchen Refrigerator": LMLocationData("Kitchen", 308, "Furniture", 78, [], 7), TODO Prevents Ghosts Spawn
+    # "Kitchen Refrigerator": LMLocationData("Kitchen", 308, "Furniture", 78, [], 7), TODO Prevents Ghosts Spawn
     "Kitchen China Hutch": LMLocationData("Kitchen", 309, "Furniture", 79, [], 7),
     "Kitchen L Food Shelf": LMLocationData("Kitchen", 310, "Furniture", 76, [], 7),
     "Kitchen R Food Shelf": LMLocationData("Kitchen", 311, "Furniture", 77, [], 7),
@@ -440,12 +442,12 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Boneyard Faucet": LMLocationData("Boneyard", 318, "Furniture", 98, [], 11),
     "Boneyard Sign": LMLocationData("Boneyard", 319, "Furniture", 280, [], 11),
     "Graveyard Downspout": LMLocationData("Graveyard", 320, "Furniture", 186, [], 15),
-    "Graveyard Big Tombstone": LMLocationData("Graveyard", 321, "Furniture", 181, [], 15), # Bogmire's
+    "Graveyard Big Tombstone": LMLocationData("Graveyard", 321, "Furniture", 181, [], 15),  # Bogmire's
     "Graveyard L Brazier": LMLocationData("Graveyard", 322, "Furniture", 182, [], 15),
     "Graveyard R Brazier": LMLocationData("Graveyard", 323, "Furniture", 183, [], 15),
     "Graveyard Tombstone (near Tree stump)": LMLocationData("Graveyard", 324, "Furniture", 175, [], 15),
     "Graveyard Tombstone (back row, right side)": LMLocationData("Graveyard", 325, "Furniture", 176, [], 15),
-    #"Graveyard Tombstone 3": LMLocationData("Graveyard", 326, "Furniture", 177, [], 15), # TODO Prevents Skeletons Spawn
+    # "Graveyard Tombstone 3": LMLocationData("Graveyard", 326, "Furniture", 177, [], 15), # TODO Prevents Skeletons Spawn
     "Graveyard Tombstone (center, right side)": LMLocationData("Graveyard", 327, "Furniture", 178, [], 15),
     "Graveyard Tombstone (far right near drain pipe)": LMLocationData("Graveyard", 328, "Furniture", 179, [], 15),
     "Graveyard Tombstone (left side, near bogmire)": LMLocationData("Graveyard", 329, "Furniture", 180, [], 15),
@@ -457,7 +459,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Well Lantern": LMLocationData("The Well", 335, "Furniture", 42, [], 72),
     "Rec Room Weight Station": LMLocationData("Rec Room", 336, "Furniture", 109, [], 23),
     "Rec Room Drawer": LMLocationData("Rec Room", 337, "Furniture", 198, [], 23),
-    #"Rec Room Front Bicycle": LMLocationData("Rec Room", 338, "Furniture", 107, [], 23), TODO Prevents Speedy Spirit Spawn
+    # "Rec Room Front Bicycle": LMLocationData("Rec Room", 338, "Furniture", 107, [], 23), TODO Prevents Speedy Spirit Spawn
     "Rec Room Rear Bicycle": LMLocationData("Rec Room", 339, "Furniture", 108, [], 23),
     "Rec Room SW Crest": LMLocationData("Rec Room", 340, "Furniture", 112, [], 23),
     "Rec Room NW Crest": LMLocationData("Rec Room", 341, "Furniture", 113, [], 23),
@@ -497,7 +499,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "2F Rear Hallway Vase 6": LMLocationData("2F Rear Hallway", 375, "Furniture", 524, [], 46),
     "2F Washroom Water Tank (above Toilet)": LMLocationData("2F Washroom", 376, "Furniture", 445, [], 45),
     "2F Washroom Mirror": LMLocationData("2F Washroom", 377, "Furniture", 544, [], 45),
-    #"2F Washroom Toilet": LMLocationData("2F Washroom", 378, "Furniture", 443, [], 45), # TODO Prevents Ghost Spawns
+    # "2F Washroom Toilet": LMLocationData("2F Washroom", 378, "Furniture", 443, [], 45), # TODO Prevents Ghost Spawns
     "2F Washroom Shelf": LMLocationData("2F Washroom", 379, "Furniture", 438, [], 45),
     "2F Washroom Radiator": LMLocationData("2F Washroom", 380, "Furniture", 441, [], 45),
     "2F Washroom Picture": LMLocationData("2F Washroom", 381, "Furniture", 444, [], 45),
@@ -527,13 +529,13 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Astral Hall West Candlabra": LMLocationData("Astral Hall", 406, "Furniture", 449, [], 43),
     "Astral Hall SW Candlabra": LMLocationData("Astral Hall", 407, "Furniture", 450, [], 43),
     "Astral Hall SE Candlabra": LMLocationData("Astral Hall", 408, "Furniture", 451, [], 43),
-    "Observatory Dresser":    LMLocationData("Observatory", 717, "Furniture", 469, [], 44),
-    "Observatory Chair":      LMLocationData("Observatory", 718, "Furniture", 470, [], 44),
+    "Observatory Dresser": LMLocationData("Observatory", 717, "Furniture", 469, [], 44),
+    "Observatory Chair": LMLocationData("Observatory", 718, "Furniture", 470, [], 44),
     "Billiards Room Pool Table": LMLocationData("Billiards Room", 409, "Furniture", 147, [], 12),
     "Billiards Room Chess Table": LMLocationData("Billiards Room", 410, "Furniture", 148, [], 12),
     "Billiards Room C Chair": LMLocationData("Billiards Room", 411, "Furniture", 149, [], 12),
     "Billiards Room L Chair": LMLocationData("Billiards Room", 412, "Furniture", 150, [], 12),
-    "Billiards Room R Chair": LMLocationData("Billiards Room", 413, "Furniture", 151, [], 12), #TODO Speedy Spirit
+    "Billiards Room R Chair": LMLocationData("Billiards Room", 413, "Furniture", 151, [], 12),  # TODO Speedy Spirit
     "Billiards Room L Portrait (near Chest)": LMLocationData("Billiards Room", 414, "Furniture", 153, [], 12),
     "Billiards Room L Portrait (near Dart Board)": LMLocationData("Billiards Room", 415, "Furniture", 155, [], 12),
     "Billiards Room C Portrait": LMLocationData("Billiards Room", 416, "Furniture", 152, [], 12),
@@ -558,33 +560,40 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Safari Room L Ceiling Light": LMLocationData("Safari Room", 436, "Furniture", 631, [], 55),
     "Safari Room R Ceiling Light": LMLocationData("Safari Room", 437, "Furniture", 632, [], 55),
     "Safari Room L Deer Head": LMLocationData("Safari Room", 438, "Furniture", 635, [], 55),
-    #"Safari Room C Deer Head": LMLocationData("Safari Room", 439, "Furniture", 630, [], 55), # TODO Prevents Ghost Spawns
+    # "Safari Room C Deer Head": LMLocationData("Safari Room", 439, "Furniture", 630, [], 55), # TODO Prevents Ghost Spawns
     "Safari Room R Deer Head": LMLocationData("Safari Room", 440, "Furniture", 634, [], 55),
     "Safari Room Leopard Chest Box": LMLocationData("Safari Room", 433, "Furniture", 633, [], 55),
     "Balcony L Bench": LMLocationData("Balcony", 441, "Furniture", 617, [], 62),
     "Balcony R Bench": LMLocationData("Balcony", 442, "Furniture", 618, [], 62),
     "Balcony L Statue": LMLocationData("Balcony", 443, "Furniture", 621, [], 62),
     "Balcony R Statue": LMLocationData("Balcony", 444, "Furniture", 620, [], 62),
-    #"Breaker Room Table": LMLocationData("Breaker Room", 445, "Furniture", 44, [], 69), # TODO Prevents Speedy Spirit Spawn
+    # "Breaker Room Table": LMLocationData("Breaker Room", 445, "Furniture", 44, [], 69), # TODO Prevents Speedy Spirit Spawn
     "Breaker Room Ceiling Light": LMLocationData("Breaker Room", 446, "Furniture", 43, [], 69),
     "Breaker Room Metal Drum L": LMLocationData("Breaker Room", 447, "Furniture", 45, [], 69),
     "Breaker Room Metal Drum R": LMLocationData("Breaker Room", 448, "Furniture", 46, [], 69),
-    "Breaker Room Barrel (bottom row, closest to back Wall)": LMLocationData("Breaker Room", 449, "Furniture", 47, [], 69),
-    "Breaker Room Barrel (bottom row, second from back Wall)": LMLocationData("Breaker Room", 450, "Furniture", 48, [], 69),
-    "Breaker Room Barrel (bottom row, third from back Wall)": LMLocationData("Breaker Room", 451, "Furniture", 49, [], 69),
-    "Breaker Room Barrel (bottom row, third from 4th Wall)": LMLocationData("Breaker Room", 452, "Furniture", 50, [], 69),
-    "Breaker Room Barrel (bottom row, second from 4th Wall)": LMLocationData("Breaker Room", 453, "Furniture", 51, [], 69),
-    "Breaker Room Barrel (bottom row, closest to 4th Wall)": LMLocationData("Breaker Room", 454, "Furniture", 52, [], 69),
+    "Breaker Room Barrel (bottom row, closest to back Wall)": LMLocationData("Breaker Room", 449, "Furniture", 47, [],
+                                                                             69),
+    "Breaker Room Barrel (bottom row, second from back Wall)": LMLocationData("Breaker Room", 450, "Furniture", 48, [],
+                                                                              69),
+    "Breaker Room Barrel (bottom row, third from back Wall)": LMLocationData("Breaker Room", 451, "Furniture", 49, [],
+                                                                             69),
+    "Breaker Room Barrel (bottom row, third from 4th Wall)": LMLocationData("Breaker Room", 452, "Furniture", 50, [],
+                                                                            69),
+    "Breaker Room Barrel (bottom row, second from 4th Wall)": LMLocationData("Breaker Room", 453, "Furniture", 51, [],
+                                                                             69),
+    "Breaker Room Barrel (bottom row, closest to 4th Wall)": LMLocationData("Breaker Room", 454, "Furniture", 52, [],
+                                                                            69),
     "Breaker Room Barrel (top row, closest to 4th Wall)": LMLocationData("Breaker Room", 455, "Furniture", 53, [], 69),
     "Breaker Room Barrel (top row, second from 4th Wall)": LMLocationData("Breaker Room", 456, "Furniture", 54, [], 69),
     "Breaker Room Barrel (top row, middle)": LMLocationData("Breaker Room", 457, "Furniture", 55, [], 69),
-    "Breaker Room Barrel (top row, second from back Wall)": LMLocationData("Breaker Room", 458, "Furniture", 56, [], 69),
+    "Breaker Room Barrel (top row, second from back Wall)": LMLocationData("Breaker Room", 458, "Furniture", 56, [],
+                                                                           69),
     "Breaker Room Barrel (top row, closest to back Wall)": LMLocationData("Breaker Room", 459, "Furniture", 57, [], 69),
     "Cellar Ceiling Light": LMLocationData("Cellar", 460, "Furniture", 4, [], 66),
     "Cellar Crate (along back wall)": LMLocationData("Cellar", 461, "Furniture", 12, [], 66),
-    #"Cellar Crate 1": LMLocationData("Cellar", 462, "Furniture", 67, [], 66), # TODO Prevents Ghost Spawns
-    #"Cellar Barrel 1": LMLocationData("Cellar", 463, "Furniture", 5, [], 66), # TODO Prevents Ghost Spawns
-    #"Cellar Barrel 2": LMLocationData("Cellar", 464, "Furniture", 6, [], 66), # TODO Prevents Ghost Spawns
+    # "Cellar Crate 1": LMLocationData("Cellar", 462, "Furniture", 67, [], 66), # TODO Prevents Ghost Spawns
+    # "Cellar Barrel 1": LMLocationData("Cellar", 463, "Furniture", 5, [], 66), # TODO Prevents Ghost Spawns
+    # "Cellar Barrel 2": LMLocationData("Cellar", 464, "Furniture", 6, [], 66), # TODO Prevents Ghost Spawns
     "Cellar Center Shelf Boxes": LMLocationData("Cellar", 465, "Furniture", 19, [], 66),
     "Cellar Center High Shelf": LMLocationData("Cellar", 466, "Furniture", 13, [], 66),
     "Cellar Center Middle Shelf": LMLocationData("Cellar", 467, "Furniture", 15, [], 66),
@@ -619,7 +628,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Clockwork Room Woman-Windmill Clocks": LMLocationData("Clockwork Room", 496, "Furniture", 622, [], 59),
     "Clockwork Room Cuckoo CLock": LMLocationData("Clockwork Room", 497, "Furniture", 624, [], 59),
     "Clockwork Room Table with Head": LMLocationData("Clockwork Room", 498, "Furniture", 623, [], 59),
-    #TODO These 6 doors are in characterinfo
+    # TODO These 6 doors are in characterinfo
     # "Clockwork Room Tiny Door 1": LMLocationData("Clockwork Room", 499, "Furniture", 108, [], 59),
     # "Clockwork Room Tiny Door 2": LMLocationData("Clockwork Room", 500, "Furniture", 109, [], 59),
     # "Clockwork Room Tiny Door 3": LMLocationData("Clockwork Room", 501, "Furniture", 110, [], 59),
@@ -644,10 +653,10 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Armory Armor Suit (middle, left)": LMLocationData("Armory", 519, "Furniture", 644, [], 51),
     "Armory Armor Suit (middle, second from left)": LMLocationData("Armory", 520, "Furniture", 645, [], 51),
     "Armory Armor Suit L (right side)": LMLocationData("Armory", 521, "Furniture", 646, [], 51),
-    #"Armory Armor Suit 6": LMLocationData("Armory", 522, "Furniture", 647, [], 51), # TODO Prevents Ghost Spawns
-    #"Armory Armor Suit 7": LMLocationData("Armory", 523, "Furniture", 648, [], 51), # TODO Prevents Ghost Spawns
-    #"Armory Armor Suit 8": LMLocationData("Armory", 524, "Furniture", 649, [], 51), # TODO Prevents Ghost Spawns
-    #"Armory Armor Suit 9": LMLocationData("Armory", 525, "Furniture", 650, [], 51), # TODO Prevents Ghost Spawns
+    # "Armory Armor Suit 6": LMLocationData("Armory", 522, "Furniture", 647, [], 51), # TODO Prevents Ghost Spawns
+    # "Armory Armor Suit 7": LMLocationData("Armory", 523, "Furniture", 648, [], 51), # TODO Prevents Ghost Spawns
+    # "Armory Armor Suit 8": LMLocationData("Armory", 524, "Furniture", 649, [], 51), # TODO Prevents Ghost Spawns
+    # "Armory Armor Suit 9": LMLocationData("Armory", 525, "Furniture", 650, [], 51), # TODO Prevents Ghost Spawns
     "Armory Ceiling Light": LMLocationData("Armory", 526, "Furniture", 636, [], 51),
     "Armory Wall Shield": LMLocationData("Armory", 527, "Furniture", 637, [], 51),
     "Armory Crates (near Ceramics Door)": LMLocationData("Armory", 528, "Furniture", 638, [], 51),
@@ -660,7 +669,8 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     # "Ceramics Studio Table":          LMLocationData("Ceramics Studio", 535, "Furniture", , [], 58),
     "Ceramics Studio Boxes (top, back Wall)": LMLocationData("Ceramics Studio", 536, "Furniture", 664, [], 58),
     "Ceramics Studio Boxes (bottom, back Wall)": LMLocationData("Ceramics Studio", 537, "Furniture", 665, [], 58),
-    "Ceramics Studio Boxes (left corner near 4th Wall)": LMLocationData("Ceramics Studio", 538, "Furniture", 670, [], 58),
+    "Ceramics Studio Boxes (left corner near 4th Wall)": LMLocationData("Ceramics Studio", 538, "Furniture", 670, [],
+                                                                        58),
     #        LMLocationData('Ceramics Studio', 'Ceramics Studio Crates 1', 539),
     #        LMLocationData('Ceramics Studio', 'Ceramics Studio Crates 2', 540),
     #        LMLocationData('Ceramics Studio', 'Ceramics Studio Crates 3', 541),
@@ -732,8 +742,10 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     # "Artist's Studio Shy Guy Ghost Easel": LMLocationData("Artist's Studio", 607, "Furniture", 695, [], 60), # TODO Prevents Ghost Spawns
     # "Artist's Studio Green Ghost Easel": LMLocationData("Artist's Studio", 608, "Furniture", 696, [], 60), # TODO Prevents Ghost Spawns
     # "Artist's Studio Purple Ghost Easel": LMLocationData("Artist's Studio", 609, "Furniture", 697, [], 60), # TODO Prevents Ghost Spawns
-    "Secret Altar Brazier (near front, closest to 4th Wall)": LMLocationData("Secret Altar", 610, "Furniture", 28, [], 73),
-    "Secret Altar Brazier (near front, away from 4th Wall)": LMLocationData("Secret Altar", 611, "Furniture", 29, [], 73),
+    "Secret Altar Brazier (near front, closest to 4th Wall)": LMLocationData("Secret Altar", 610, "Furniture", 28, [],
+                                                                             73),
+    "Secret Altar Brazier (near front, away from 4th Wall)": LMLocationData("Secret Altar", 611, "Furniture", 29, [],
+                                                                            73),
     # "Secret Altar R Chandelier": LMLocationData("Secret Altar", 612, "Furniture", 40, [], 73), Cannot access
     "Secret Altar C Chandelier": LMLocationData("Secret Altar", 613, "Furniture", 38, [], 73),
     # "Secret Altar L Chandelier": LMLocationData("Secret Altar", 614, "Furniture", 39, [], 73), Cannot access
@@ -741,48 +753,67 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Secret Altar R Candles": LMLocationData("Secret Altar", 616, "Furniture", 37, [], 73),
 }
 
-
 # Adds Portrait Ghosts as locations
 PORTRAIT_LOCATION_TABLE: dict[str, LMLocationData] = {
-    "Neville, the Bookish Father":          LMLocationData("Study", 621, "Portrait", 70, [], 35, room_ram_addr=0x803D5DA9, locationbit=6),
-    "Lydia, the Mirror-Gazing Mother":      LMLocationData("Master Bedroom", 622, "Portrait", 71, [], 34, room_ram_addr=0x803D5DA9, locationbit=7),
-    #TODO Bosses do not have entries in map2
-    "Chauncey, the Spoiled Baby":           LMLocationData("Nursery", 623, "Portrait", 77, [], 26, room_ram_addr=0x803D5DAC, locationbit=0),
-    "Henry and Orville, the Twin Brothers": LMLocationData("Twins' Room", 624, "Portrait", 79, [], 27, room_ram_addr=0x803D5DAA, locationbit=1),
+    "Neville, the Bookish Father": LMLocationData("Study", 621, "Portrait", 70, [], 35, room_ram_addr=0x803D5DA9,
+                                                  locationbit=6),
+    "Lydia, the Mirror-Gazing Mother": LMLocationData("Master Bedroom", 622, "Portrait", 71, [], 34,
+                                                      room_ram_addr=0x803D5DA9, locationbit=7),
+    # TODO Bosses do not have entries in map2
+    "Chauncey, the Spoiled Baby": LMLocationData("Nursery", 623, "Portrait", 77, [], 26, room_ram_addr=0x803D5DAC,
+                                                 locationbit=0),
+    "Henry and Orville, the Twin Brothers": LMLocationData("Twins' Room", 624, "Portrait", 79, [], 27,
+                                                           room_ram_addr=0x803D5DAA, locationbit=1),
     # cannot give to ghost actors you capture, as they do not have a table entry
-    "The Floating Whirlindas":              LMLocationData("Ballroom", 625, "Portrait", 34, [], 9, room_ram_addr=0x803D5DBE, locationbit=2),
-    "Shivers, the Wandering Butler":        LMLocationData("Butler's Room", 626, "Portrait", 29,
+    "The Floating Whirlindas": LMLocationData("Ballroom", 625, "Portrait", 34, [], 9, room_ram_addr=0x803D5DBE,
+                                              locationbit=2),
+    "Shivers, the Wandering Butler": LMLocationData("Butler's Room", 626, "Portrait", 29,
                                                     ["Fire Element Medal"], 0, room_ram_addr=0x803D5DA5, locationbit=6),
-    "Madame Clairvoya, the Freaky Fortune-Teller": LMLocationData("Fortune-Teller's Room", 627, "Portrait", 31, [], 3, room_ram_addr=0x803D5DBB, locationbit=2),
-    "Melody Pianissima, the Beautiful Pianist": LMLocationData("Conservatory", 628, "Portrait", 24, [], 22, room_ram_addr=0x803D5DA8, locationbit=6),
-    "Mr. Luggs, the Glutton":               LMLocationData("Dining Room", 629, "Portrait", 27, ["Fire Element Medal"], 8, room_ram_addr=0x803D5DA9, locationbit=4),
-    "Spooky, the Guard Dog":                LMLocationData("Boneyard", 630, "Portrait", 23, ["Water Element Medal"], 11, room_ram_addr=0x803D5DB3, locationbit=0),
-    #TODO Bosses do not have entries in map2
-    "Bogmire, the Cemetary Shadow":         LMLocationData("Graveyard", 631, "Portrait", 0, [], 15, room_ram_addr=0x803D5DBE, locationbit=5),
-    "Biff Atlas, the Bodybuilder":          LMLocationData("Rec Room", 632, "Portrait", 32, [], 23, room_ram_addr=0x803D5DAA, locationbit=6),
-    "Slim Bankshot, the Lonely Poolshark":  LMLocationData("Billiards Room", 633, "Portrait", 26, [], 12, room_ram_addr=0x803D5DAA, locationbit=7),
-    "Miss Petunia, the Bathing Beauty":     LMLocationData("2F Bathroom", 634, "Portrait", 83, ["Ice Element Medal"], 48, room_ram_addr=0x803D5DA9, locationbit=5),
-    "Nana, the Scarf-Knitting Granny":      LMLocationData("Nana's Room", 635, "Portrait", 76, [], 49, room_ram_addr=0x803D5DAA, locationbit=0),
-    "Sue Pea, the Dozing Girl":             LMLocationData("Guest Room", 636, "Portrait", 78, ["Water Element Medal"], 29, room_ram_addr=0x803D5DB9, locationbit=5),
-    "Uncle Grimmly, Hermit of the Darkness": LMLocationData("Wardrobe", 637, "Portrait", 16, ["Blackout"], 41, room_ram_addr=0x803D5DBB, locationbit=3),
-    #TODO Bosses not in map2
-    "Boolossus, the Jumbo Ghost":           LMLocationData("Balcony", 638, "Portrait", 56, ["Ice Element Medal"], 62, room_ram_addr=0x803D5DBF, locationbit=4),
-    "Jarvis, the Jar Collector":            LMLocationData("Ceramics Studio", 639, "Portrait", 0, ["Ice Element Medal"], 58, room_ram_addr=0x803D5DA8, locationbit=5),
+    "Madame Clairvoya, the Freaky Fortune-Teller": LMLocationData("Fortune-Teller's Room", 627, "Portrait", 31, [], 3,
+                                                                  room_ram_addr=0x803D5DBB, locationbit=2),
+    "Melody Pianissima, the Beautiful Pianist": LMLocationData("Conservatory", 628, "Portrait", 24, [], 22,
+                                                               room_ram_addr=0x803D5DA8, locationbit=6),
+    "Mr. Luggs, the Glutton": LMLocationData("Dining Room", 629, "Portrait", 27, ["Fire Element Medal"], 8,
+                                             room_ram_addr=0x803D5DA9, locationbit=4),
+    "Spooky, the Guard Dog": LMLocationData("Boneyard", 630, "Portrait", 23, ["Water Element Medal"], 11,
+                                            room_ram_addr=0x803D5DB3, locationbit=0),
+    # TODO Bosses do not have entries in map2
+    "Bogmire, the Cemetary Shadow": LMLocationData("Graveyard", 631, "Portrait", 0, [], 15, room_ram_addr=0x803D5DBE,
+                                                   locationbit=5),
+    "Biff Atlas, the Bodybuilder": LMLocationData("Rec Room", 632, "Portrait", 32, [], 23, room_ram_addr=0x803D5DAA,
+                                                  locationbit=6),
+    "Slim Bankshot, the Lonely Poolshark": LMLocationData("Billiards Room", 633, "Portrait", 26, [], 12,
+                                                          room_ram_addr=0x803D5DAA, locationbit=7),
+    "Miss Petunia, the Bathing Beauty": LMLocationData("2F Bathroom", 634, "Portrait", 83, ["Ice Element Medal"], 48,
+                                                       room_ram_addr=0x803D5DA9, locationbit=5),
+    "Nana, the Scarf-Knitting Granny": LMLocationData("Nana's Room", 635, "Portrait", 76, [], 49,
+                                                      room_ram_addr=0x803D5DAA, locationbit=0),
+    "Sue Pea, the Dozing Girl": LMLocationData("Guest Room", 636, "Portrait", 78, ["Water Element Medal"], 29,
+                                               room_ram_addr=0x803D5DB9, locationbit=5),
+    "Uncle Grimmly, Hermit of the Darkness": LMLocationData("Wardrobe", 637, "Portrait", 16, ["Blackout"], 41,
+                                                            room_ram_addr=0x803D5DBB, locationbit=3),
+    # TODO Bosses not in map2
+    "Boolossus, the Jumbo Ghost": LMLocationData("Balcony", 638, "Portrait", 56, ["Ice Element Medal"], 62,
+                                                 room_ram_addr=0x803D5DBF, locationbit=4),
+    "Jarvis, the Jar Collector": LMLocationData("Ceramics Studio", 639, "Portrait", 0, ["Ice Element Medal"], 58,
+                                                room_ram_addr=0x803D5DA8, locationbit=5),
     # Not in characterinfo
-    "Clockwork Soldiers, the Toy Platoon":  LMLocationData("Clockwork Room", 640, "Portrait", 115, [], 59, room_ram_addr=0x803D5DAB, locationbit=1),
-    "Vincent van Gore, the Starving Artist": LMLocationData("Artist's Studio", 641, "Portrait", 107, [], 60, room_ram_addr=0x803D5DAA, locationbit=5),
-    "Sir Weston, the Chilly Climber":       LMLocationData("Cold Storage", 642, "Portrait", 1, ["Fire Element Medal"], 64, room_ram_addr=0x803D5DBF, locationbit=1),
+    "Clockwork Soldiers, the Toy Platoon": LMLocationData("Clockwork Room", 640, "Portrait", 115, [], 59,
+                                                          room_ram_addr=0x803D5DAB, locationbit=1),
+    "Vincent van Gore, the Starving Artist": LMLocationData("Artist's Studio", 641, "Portrait", 107, [], 60,
+                                                            room_ram_addr=0x803D5DAA, locationbit=5),
+    "Sir Weston, the Chilly Climber": LMLocationData("Cold Storage", 642, "Portrait", 1, ["Fire Element Medal"], 64,
+                                                     room_ram_addr=0x803D5DBF, locationbit=1),
 }
-
 
 # Adds Blue Speedy Spirits as Loacations
 SPEEDY_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Wardrobe Speedy Spirit": LMLocationData("Wardrobe", 643, "BSpeedy", 128, []),
     "Study Speedy Spirit": LMLocationData("Study", 644, "BSpeedy", 113, []),
-    #"Nursery Speedy Spirit": LMLocationData("Nursery", 645, "BSpeedy", 148, ["Blackout"]),
+    # "Nursery Speedy Spirit": LMLocationData("Nursery", 645, "BSpeedy", 148, ["Blackout"]),
     "Storage Room Speedy Spirit": LMLocationData("Storage Room", 646, "BSpeedy", 58, []),
-    #"Hidden Room Speedy Spirit": LMLocationData("Hidden Room", 647, "BSpeedy", 72, ["Blackout"]),
-    #"Conservatory Speedy Spirit": LMLocationData("Conservatory", 648, "BSpeedy", 113, ["Blackout"]),
+    # "Hidden Room Speedy Spirit": LMLocationData("Hidden Room", 647, "BSpeedy", 72, ["Blackout"]),
+    # "Conservatory Speedy Spirit": LMLocationData("Conservatory", 648, "BSpeedy", 113, ["Blackout"]),
     "Dining Room Speedy Spirit": LMLocationData("Dining Room", 649, "BSpeedy", 60, []),
     "Kitchen Speedy Spirit": LMLocationData("Kitchen", 650, "BSpeedy", 66, []),
     "Rec Room Speedy Spirit": LMLocationData("Rec Room", 651, "BSpeedy", 67, []),
@@ -808,14 +839,14 @@ GOLD_MICE_LOCATION_TABLE: dict[str, LMLocationData] = {
     #        LMLocationData('Sealed Room', 'Sealed Room Chance Gold Mouse', 668)
 }
 
-
 # Boo Locations
 BOO_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Parlor Boo": LMLocationData("Parlor", 669, "Boo", 19, [], 36, room_ram_addr=0x803D5E06, locationbit=3),
     "Anteroom Boo": LMLocationData("Anteroom", 670, "Boo", 21, [], 42, room_ram_addr=0x803D5E06, locationbit=5),
     "Wardrobe Boo": LMLocationData("Wardrobe", 671, "Boo", 20, [], 41, room_ram_addr=0x803D5E06, locationbit=4),
     "Study Boo": LMLocationData("Study", 672, "Boo", 18, [], 35, room_ram_addr=0x803D5E06, locationbit=2),
-    "Master Bedroom Boo": LMLocationData("Master Bedroom", 673, "Boo", 17, [], 34, room_ram_addr=0x803D5E06, locationbit=1),
+    "Master Bedroom Boo": LMLocationData("Master Bedroom", 673, "Boo", 17, [], 34, room_ram_addr=0x803D5E06,
+                                         locationbit=1),
     "Nursery Boo": LMLocationData("Nursery", 674, "Boo", 13, [], 26, room_ram_addr=0x803D5E05, locationbit=5),
     "Twins' Room Boo": LMLocationData("Twins' Room", 675, "Boo", 14, [], 27, room_ram_addr=0x803D5E05, locationbit=6),
     "Laundry Room Boo": LMLocationData("Laundry Room", 676, "Boo", 4, [], 5, room_ram_addr=0x803D5E04, locationbit=4),
@@ -832,28 +863,32 @@ BOO_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Kitchen Boo": LMLocationData("Kitchen", 684, "Boo", 5, [], 7, room_ram_addr=0x803D5E04, locationbit=5),
     "Conservatory Boo": LMLocationData("Conservatory", 685, "Boo", 11, [], 22, room_ram_addr=0x803D5E05, locationbit=3),
     "Rec Room Boo": LMLocationData("Rec Room", 686, "Boo", 12, [], 23, room_ram_addr=0x803D5E05, locationbit=4),
-    "Billiards Room Boo": LMLocationData("Billiards Room", 687, "Boo", 8, [], 12, room_ram_addr=0x803D5E05, locationbit=0),
+    "Billiards Room Boo": LMLocationData("Billiards Room", 687, "Boo", 8, [], 12, room_ram_addr=0x803D5E05,
+                                         locationbit=0),
     "Projection Room Boo": LMLocationData("Projection Room", 688, "Boo", 9, [], 13,
                                           room_ram_addr=0x803D5E05, locationbit=1),
     "Tea Room Boo": LMLocationData("Tea Room", 689, "Boo", 24, [], 50, room_ram_addr=0x803D5E07, locationbit=0),
     "Nana's Room Boo": LMLocationData("Nana's Room", 690, "Boo", 23, [], 49, room_ram_addr=0x803D5E06, locationbit=7),
-    "Siting Room Boo": LMLocationData("Sitting Room", 691, "Boo", 15, ["Fire Element Medal","Water Element Medal"], 28,
+    "Sitting Room Boo": LMLocationData("Sitting Room", 691, "Boo", 15, ["Fire Element Medal", "Water Element Medal"], 28,
                                       room_ram_addr=0x803D5E05, locationbit=7),
     "Guest Room Boo": LMLocationData("Guest Room", 692, "Boo", 16, [], 29, room_ram_addr=0x803D5E06, locationbit=0),
     "Safari Room Boo": LMLocationData("Safari Room", 693, "Boo", 27, [], 55, room_ram_addr=0x803D5E07, locationbit=3),
-    "Artist's Studio Boo": LMLocationData("Artist's Studio", 694, "Boo", 30, [], 60, room_ram_addr=0x803D5E07, locationbit=6),
+    "Artist's Studio Boo": LMLocationData("Artist's Studio", 694, "Boo", 30, [], 60, room_ram_addr=0x803D5E07,
+                                          locationbit=6),
     "Armory Boo": LMLocationData("Armory", 695, "Boo", 25, [], 51, room_ram_addr=0x803D5E07, locationbit=1),
     "Ceramics Studio Boo": LMLocationData("Ceramics Studio", 696, "Boo", 28, ["Ice Element Medal"], 58,
                                           room_ram_addr=0x803D5E07, locationbit=4),
-    "Telephone Room Boo": LMLocationData("Telephone Room", 697, "Boo", 26, [], 53, room_ram_addr=0x803D5E07, locationbit=2),
-    "Clockwork Room Boo": LMLocationData("Clockwork Room", 698, "Boo", 29, [], 59, room_ram_addr=0x803D5E07, locationbit=5),
+    "Telephone Room Boo": LMLocationData("Telephone Room", 697, "Boo", 26, [], 53, room_ram_addr=0x803D5E07,
+                                         locationbit=2),
+    "Clockwork Room Boo": LMLocationData("Clockwork Room", 698, "Boo", 29, [], 59, room_ram_addr=0x803D5E07,
+                                         locationbit=5),
     "Astral Hall Boo": LMLocationData("Astral Hall", 699, "Boo", 22, ["Fire Element Medal"], 43,
                                       room_ram_addr=0x803D5E06, locationbit=6),
     "Breaker Room Boo": LMLocationData("Breaker Room", 700, "Boo", 34, [], 69, room_ram_addr=0x803D5E08, locationbit=2),
     "Cellar Boo": LMLocationData("Cellar", 701, "Boo", 32, [], 66, room_ram_addr=0x803D5E08, locationbit=0),
     "Pipe Room Boo": LMLocationData("Pipe Room", 702, "Boo", 33, [], 68, room_ram_addr=0x803D5E08, locationbit=1),
     "Cold Storage Boo": LMLocationData("Cold Storage", 703, "Boo", 31, [], 64, room_ram_addr=0x803D5E07, locationbit=7),
-    "Boolossus Boo 1": LMLocationData("Balcony", 720, "Boo", 0, ["Ice Element Medal"], 62, 
+    "Boolossus Boo 1": LMLocationData("Balcony", 720, "Boo", 0, ["Ice Element Medal"], 62,
                                       room_ram_addr=0x803D5E08, locationbit=3),
     "Boolossus Boo 2": LMLocationData("Balcony", 721, "Boo", 0, ["Ice Element Medal"], 62,
                                       room_ram_addr=0x803D5E08, locationbit=4),
@@ -885,6 +920,141 @@ BOO_LOCATION_TABLE: dict[str, LMLocationData] = {
                                        room_ram_addr=0x803D5E0A, locationbit=1),
 }
 
+LIGHT_LOCATION_TABLE: dict[str, LMLocationData] = {
+    "Parlor Light On": LMLocationData("Parlor", 735, "KingdomHearts", 0, [], 36, room_ram_addr=0x803CDF96),
+    "Anteroom Light On": LMLocationData("Anteroom", 736, "KingdomHearts", 0, [], 42, room_ram_addr=0x803CDF9F),
+    "Wardrobe Light On": LMLocationData("Wardrobe", 737, "KingdomHearts", 0, [], 41, room_ram_addr=0x803CDF9C),
+    "Study Light On": LMLocationData("Study", 738, "KingdomHearts", 0, [], 35, room_ram_addr=0x803CDF94),
+    "Master Bedroom Light On": LMLocationData("Master Bedroom", 739, "KingdomHearts", 0, [], 34, room_ram_addr=0x803CDF92),
+    "Nursery Light On": LMLocationData("Nursery", 740, "KingdomHearts", 13, [], 0, room_ram_addr=0x803CDF80),
+    "Twins' Room Light On": LMLocationData("Twins' Room", 741, "KingdomHearts", 0, [], 27, room_ram_addr=0x803CDF82),
+    "Laundry Room Light On": LMLocationData("Laundry Room", 742, "KingdomHearts", 0, [], 5, room_ram_addr=0x803CDF5A),
+    "Butler's Room Light On": LMLocationData("Butler's Room", 743, "KingdomHearts", 0, ["Fire Element Medal"], 0,
+                                             room_ram_addr=0x803CDF50),
+    "Hidden Room Light On": LMLocationData("Hidden Room", 744, "KingdomHearts", 0, [], 1, room_ram_addr=0x803CDF52),
+    "Fortune-Teller's Room Light On": LMLocationData("Fortune-Teller's Room", 745, "KingdomHearts", 0, [], 3,
+                                                     room_ram_addr=0x803CDF56),
+    "Mirror Room Light On": LMLocationData("Mirror Room", 746, "KingdomHearts", 0, [], 4, room_ram_addr=0x803CDF58),
+    "Ballroom Light On": LMLocationData("Ballroom", 747, "KingdomHearts", 0, [], 9, room_ram_addr=0x803CDF64),
+    "Storage Room Light On": LMLocationData("Storage Room", 748, "KingdomHearts", 0, [], 14, room_ram_addr=0x803CDF6D),
+    "Dining Room Light On": LMLocationData("Dining Room", 749, "KingdomHearts", 0, ["Fire Element Medal"], 8,
+                                           room_ram_addr=0x803CDF62),
+    "Kitchen Light On": LMLocationData("Kitchen", 750, "KingdomHearts", 0, [], 7, room_ram_addr=0x803CDF60),
+    "Conservatory Light On": LMLocationData("Conservatory", 751, "KingdomHearts", 0, [], 22, room_ram_addr=0x803CDF7A),
+    "Rec Room Light On": LMLocationData("Rec Room", 752, "KingdomHearts", 0, [], 23, room_ram_addr=0x803CDF7C),
+    "Billiards Room Light On": LMLocationData("Billiards Room", 753, "KingdomHearts", 0, [], 12, room_ram_addr=0x803CDF68),
+    "Projection Room Light On": LMLocationData("Projection Room", 754, "KingdomHearts", 0, [], 13,
+                                               room_ram_addr=0x803CDF6A),
+    "Tea Room Light On": LMLocationData("Tea Room", 755, "KingdomHearts", 0, [], 50, room_ram_addr=0x803CDFAE),
+    "Nana's Room Light On": LMLocationData("Nana's Room", 756, "KingdomHearts", 0, [], 49, room_ram_addr=0x803CDFAC),
+    "Sitting Room Light On": LMLocationData("Sitting Room", 757, "KingdomHearts", 0,
+                                           ["Fire Element Medal", "Water Element Medal"], 28,
+                                           room_ram_addr=0x803D5E05),
+    "Guest Room Light On": LMLocationData("Guest Room", 758, "KingdomHearts", 0, [], 29, room_ram_addr=0x803CDF88),
+    "Safari Room Light On": LMLocationData("Safari Room", 759, "KingdomHearts", 0, [], 55, room_ram_addr=0x803CDFB8),
+    "Artist's Studio Light On": LMLocationData("Artist's Studio", 760, "KingdomHearts", 0, [], 60, room_ram_addr=0x803CDFC2),
+    "Armory Light On": LMLocationData("Armory", 761, "KingdomHearts", 0, [], 51, room_ram_addr=0x803CDFB0),
+    "Ceramics Studio Light On": LMLocationData("Ceramics Studio", 762, "KingdomHearts", 0, ["Ice Element Medal"], 58,
+                                               room_ram_addr=0x803CDFBE),
+    "Telephone Room Light On": LMLocationData("Telephone Room", 763, "KingdomHearts", 0, [], 53, room_ram_addr=0x803CDFB4),
+    "Clockwork Room Light On": LMLocationData("Clockwork Room", 764, "KingdomHearts", 0, [], 59, room_ram_addr=0x803CDFC1),
+    "Astral Hall Light On": LMLocationData("Astral Hall", 765, "KingdomHearts", 0, ["Fire Element Medal"], 43,
+                                           room_ram_addr=0x803CDFA1),
+    "Breaker Room Light On": LMLocationData("Breaker Room", 766, "KingdomHearts", 0, [], 69, room_ram_addr=0x803CDFD6),
+    "Cellar Light On": LMLocationData("Cellar", 767, "KingdomHearts", 0, [], 66, room_ram_addr=0x803CDFCE),
+    "Pipe Room Light On": LMLocationData("Pipe Room", 768, "KingdomHearts", 0, [], 68, room_ram_addr=0x803CDFD4),
+    "Cold Storage Light On": LMLocationData("Cold Storage", 769, "KingdomHearts", 0, [], 64, room_ram_addr=0x803CDFCA),
+    "Balcony Light On": LMLocationData("Balcony", 770, "KingdomHearts", 0, ["Ice Element Medal"], 62, room_ram_addr=0x803CDFC6),
+    "Foyer Light On": LMLocationData("Foyer", 771, "KingdomHearts", 0, [], 2, room_ram_addr=0x803CDF54),
+    "Family Hallway Light On": LMLocationData("Family Hallway", 772, "KingdomHearts", 0, [], 29, room_ram_addr=0x803CDF8A),
+    "1F Hallway Light On": LMLocationData("1F Hallway", 773, "KingdomHearts", 0, [], 6, room_ram_addr=0x803CDF5C),
+    "Well Light On": LMLocationData("The Well", 774, "KingdomHearts", 0, [], 69, room_ram_addr=0x803CDFDA),
+    "Wardrobe Balcony Light On": LMLocationData("Wardrobe Balcony", 775, "KingdomHearts", 0, [], 37, room_ram_addr=0x803CDF9A),
+    "1F Washroom Light On": LMLocationData("1F Washroom", 776, "KingdomHearts", 0, [], 17, room_ram_addr=0x803CDF72),
+    "1F Bathroom Light On": LMLocationData("1F Bathroom", 777, "KingdomHearts", 0, [], 20, room_ram_addr=0x803CDF78),
+    "Basement Stairwell Light On": LMLocationData("Basement Stairwell", 778, "KingdomHearts", 0, [], 65, room_ram_addr=0x803CDFD2),
+    "Boneyard Light On": LMLocationData("Boneyard", 779, "KingdomHearts", 0, [], 11, room_ram_addr=0x803CDF66),
+    "Graveyard Light On": LMLocationData("Graveyard", 780, "KingdomHearts", 0, [], 16, room_ram_addr=0x803CDF70),
+    "Courtyard Light On": LMLocationData("Courtyard", 781, "KingdomHearts", 0, [], 23, room_ram_addr=0x803CDF7E),
+    "2F Stairwell Light On": LMLocationData("2F Stairwell", 782, "KingdomHearts", 0, [], 19, room_ram_addr=0x803CDF76),
+    "2F Rear Hallway Light On": LMLocationData("2F Rear Hallway", 784, "KingdomHearts", 0, [], 26, room_ram_addr=0x803CDF84),
+    "2F Washroom Light On": LMLocationData("2F Washroom", 785, "KingdomHearts", 0, [], 42, room_ram_addr=0x803CDFA4),
+    "2F Bathroom Light On": LMLocationData("2F Bathroom", 786, "KingdomHearts", 0, ["Ice Element Medal"], 45, room_ram_addr=0x803CDFAA),
+    "Observatory Light On": LMLocationData("Observatory", 787, "KingdomHearts", 0, [], 41, room_ram_addr=0x803CDFA2),
+    "Sealed Room Light On": LMLocationData("Sealed Room", 788, "KingdomHearts", 0, [], 36, room_ram_addr=0x803CDF98),
+    "East Attic Hallway Light On": LMLocationData("East Attic Hallway", 789, "KingdomHearts", 0, [], 51, room_ram_addr=0x803CDFB6),
+    "West Attic Hallway Light On": LMLocationData("West Attic Hallway", 790, "KingdomHearts", 0, [], 49, room_ram_addr=0x803CDFB2),
+    "Roof Light On": LMLocationData("Roof", 791, "KingdomHearts", 0, [], 60, room_ram_addr=0x803CDFC8)
+}
+
+WALK_LOCATION_TABLE: dict[str, LMLocationData] = {
+    "Parlor Visited": LMLocationData("Parlor", 792, "Walk", 0, [], 36, room_ram_addr=0x803CDF96),
+    "Anteroom Visited": LMLocationData("Anteroom", 793, "Walk", 0, [], 42, room_ram_addr=0x803CDF9F),
+    "Wardrobe Visited": LMLocationData("Wardrobe", 794, "Walk", 0, [], 41, room_ram_addr=0x803CDF9C),
+    "Study Visited": LMLocationData("Study", 795, "Walk", 0, [], 35, room_ram_addr=0x803CDF94),
+    "Master Bedroom Visited": LMLocationData("Master Bedroom", 796, "Walk", 0, [], 34, room_ram_addr=0x803CDF92),
+    "Nursery Visited": LMLocationData("Nursery", 797, "Walk", 13, [], 0, room_ram_addr=0x803CDF80),
+    "Twins' Room Visited": LMLocationData("Twins' Room", 798, "Walk", 0, [], 27, room_ram_addr=0x803CDF82),
+    "Laundry Room Visited": LMLocationData("Laundry Room", 799, "Walk", 0, [], 5, room_ram_addr=0x803CDF5A),
+    "Butler's Room Visited": LMLocationData("Butler's Room", 800, "Walk", 0, [], 0,
+                                             room_ram_addr=0x803CDF50),
+    "Hidden Room Visited": LMLocationData("Hidden Room", 801, "Walk", 0, [], 1, room_ram_addr=0x803CDF52),
+    "Fortune-Teller's Room Visited": LMLocationData("Fortune-Teller's Room", 802, "Walk", 0, [], 3,
+                                                     room_ram_addr=0x803CDF56),
+    "Mirror Room Visited": LMLocationData("Mirror Room", 803, "Walk", 0, [], 4, room_ram_addr=0x803CDF58),
+    "Ballroom Visited": LMLocationData("Ballroom", 804, "Walk", 0, [], 9, room_ram_addr=0x803CDF64),
+    "Storage Room Visited": LMLocationData("Storage Room", 805, "Walk", 0, [], 14, room_ram_addr=0x803CDF6D),
+    "Dining Room Visited": LMLocationData("Dining Room", 806, "Walk", 0, [], 8,
+                                           room_ram_addr=0x803CDF62),
+    "Kitchen Visited": LMLocationData("Kitchen", 807, "Walk", 0, [], 7, room_ram_addr=0x803CDF60),
+    "Conservatory Visited": LMLocationData("Conservatory", 808, "Walk", 0, [], 22, room_ram_addr=0x803CDF7A),
+    "Rec Room Visited": LMLocationData("Rec Room", 809, "Walk", 0, [], 23, room_ram_addr=0x803CDF7C),
+    "Billiards Room Visited": LMLocationData("Billiards Room", 810, "Walk", 0, [], 12, room_ram_addr=0x803CDF68),
+    "Projection Room Visited": LMLocationData("Projection Room", 811, "Walk", 0, [], 13,
+                                               room_ram_addr=0x803CDF6A),
+    "Tea Room Visited": LMLocationData("Tea Room", 812, "Walk", 0, [], 50, room_ram_addr=0x803CDFAE),
+    "Nana's Room Visited": LMLocationData("Nana's Room", 813, "Walk", 0, [], 49, room_ram_addr=0x803CDFAC),
+    "Sitting Room Visited": LMLocationData("Sitting Room", 814, "Walk", 0,
+                                           [], 28,
+                                           room_ram_addr=0x803D5E05),
+    "Guest Room Visited": LMLocationData("Guest Room", 815, "Walk", 0, [], 29, room_ram_addr=0x803CDF88),
+    "Safari Room Visited": LMLocationData("Safari Room", 816, "Walk", 0, [], 55, room_ram_addr=0x803CDFB8),
+    "Artist's Studio Visited": LMLocationData("Artist's Studio", 817, "Walk", 0, [], 60, room_ram_addr=0x803CDFC2),
+    "Armory Visited": LMLocationData("Armory", 818, "Walk", 0, [], 51, room_ram_addr=0x803CDFB0),
+    "Ceramics Studio Visited": LMLocationData("Ceramics Studio", 819, "Walk", 0, [], 58,
+                                               room_ram_addr=0x803CDFBE),
+    "Telephone Room Visited": LMLocationData("Telephone Room", 820, "Walk", 0, [], 53, room_ram_addr=0x803CDFB4),
+    "Clockwork Room Visited": LMLocationData("Clockwork Room", 821, "Walk", 0, [], 59, room_ram_addr=0x803CDFC1),
+    "Astral Hall Visited": LMLocationData("Astral Hall", 822, "Walk", 0, [], 43,
+                                           room_ram_addr=0x803CDFA1),
+    "Breaker Room Visited": LMLocationData("Breaker Room", 823, "Walk", 0, [], 69, room_ram_addr=0x803CDFD6),
+    "Cellar Visited": LMLocationData("Cellar", 824, "Walk", 0, [], 66, room_ram_addr=0x803CDFCE),
+    "Pipe Room Visited": LMLocationData("Pipe Room", 825, "Walk", 0, [], 68, room_ram_addr=0x803CDFD4),
+    "Cold Storage Visited": LMLocationData("Cold Storage", 826, "Walk", 0, [], 64, room_ram_addr=0x803CDFCA),
+    "Balcony Visited": LMLocationData("Balcony", 827, "Walk", 0, [], 62, room_ram_addr=0x803CDFC6),
+    "Foyer Visited": LMLocationData("Foyer", 828, "Walk", 0, [], 2, room_ram_addr=0x803CDF54),
+    "Family Hallway Visited": LMLocationData("Family Hallway", 829, "Walk", 0, [], 29, room_ram_addr=0x803CDF8A),
+    "1F Hallway Visited": LMLocationData("1F Hallway", 830, "Walk", 0, [], 6, room_ram_addr=0x803CDF5C),
+    "Well Visited": LMLocationData("The Well", 831, "Walk", 0, [], 69, room_ram_addr=0x803CDFDA),
+    "Wardrobe Balcony Visited": LMLocationData("Wardrobe Balcony", 832, "Walk", 0, [], 37, room_ram_addr=0x803CDF9A),
+    "1F Washroom Visited": LMLocationData("1F Washroom", 833, "Walk", 0, [], 17, room_ram_addr=0x803CDF72),
+    "1F Bathroom Visited": LMLocationData("1F Bathroom", 834, "Walk", 0, [], 20, room_ram_addr=0x803CDF78),
+    "Basement Stairwell Visited": LMLocationData("Basement Stairwell", 835, "Walk", 0, [], 65, room_ram_addr=0x803CDFD2),
+    "Boneyard Visited": LMLocationData("Boneyard", 836, "Walk", 0, [], 11, room_ram_addr=0x803CDF66),
+    "Graveyard Visited": LMLocationData("Graveyard", 837, "Walk", 0, [], 16, room_ram_addr=0x803CDF70),
+    "Courtyard Visited": LMLocationData("Courtyard", 838, "Walk", 0, [], 23, room_ram_addr=0x803CDF7E),
+    "2F Stairwell Visited": LMLocationData("2F Stairwell", 839, "Walk", 0, [], 19, room_ram_addr=0x803CDF76),
+    "Basement Hallway Visited": LMLocationData("Basement Hallway", 840, "Walk", 0, [], 62, room_ram_addr=0x803CDFCC),
+    "2F Rear Hallway Visited": LMLocationData("2F Rear Hallway", 841, "Walk", 0, [], 26, room_ram_addr=0x803CDF84),
+    "2F Washroom Visited": LMLocationData("2F Washroom", 842, "Walk", 0, [], 42, room_ram_addr=0x803CDFA4),
+    "2F Bathroom Visited": LMLocationData("2F Bathroom", 843, "Walk", 0, [], 45, room_ram_addr=0x803CDFAA),
+    "Observatory Visited": LMLocationData("Observatory", 844, "Walk", 0, [], 41, room_ram_addr=0x803CDFA2),
+    "Sealed Room Visited": LMLocationData("Sealed Room", 845, "Walk", 0, [], 36, room_ram_addr=0x803CDF98),
+    "East Attic Hallway Visited": LMLocationData("East Attic", 846, "Walk", 0, [], 51, room_ram_addr=0x803CDFB6),
+    "West Attic Hallway Visited": LMLocationData("West Attic", 847, "Walk", 0, [], 49, room_ram_addr=0x803CDFB2),
+    "Roof Visited": LMLocationData("Roof", 848, "Walk", 0, [], 60, room_ram_addr=0x803CDFC8),
+    "Spade Hallway Visited": LMLocationData("Spade Hallway", 849, "Walk", 0, [], 68, room_ram_addr=0x803CDFD8)
+}
 
 ALL_LOCATION_TABLE = {**BASE_LOCATION_TABLE,
                       **CLEAR_LOCATION_TABLE,
@@ -894,4 +1064,6 @@ ALL_LOCATION_TABLE = {**BASE_LOCATION_TABLE,
                       **SPEEDY_LOCATION_TABLE,
                       **BOO_LOCATION_TABLE,
                       **TOAD_LOCATION_TABLE,
-                      **PORTRAIT_LOCATION_TABLE}
+                      **PORTRAIT_LOCATION_TABLE,
+                      **WALK_LOCATION_TABLE,
+                      **LIGHT_LOCATION_TABLE}

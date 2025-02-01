@@ -158,9 +158,13 @@ class PickupAnim(Toggle):
 
 
 class Toadsanity(Toggle):
-    """Add Toads as locations to be checked. These are remote only items."""
+    """Add Toads as locations to be checked. These are remote only checks."""
     display_name = "Toadsanity"
 
+
+class Lightsanity(Toggle):
+    """Adds the act of lighting up rooms as locations. These are remote only checks"""
+    display_name = "Lightsanity"
 
 class Furnisanity(Toggle):
     """
@@ -212,12 +216,12 @@ class FinalBooCount(Range):
 
 
 class Boosanity(Toggle):
-    """Turns Boos into Items and Locations. These are remote only items."""
+    """Turns Boos into Items and Locations. These are remote only checks."""
     display_name = "Boosanity"
 
 
 class Portrification(Toggle):
-    """Turn Portrait Ghosts into checks in addition to their clear chests. These are remote only items."""
+    """Turn Portrait Ghosts into checks in addition to their clear chests. These are remote only checks."""
     display_name = "Portrification"
 
 
@@ -292,6 +296,7 @@ class LMOptions(PerGameCommonOptions):
     furnisanity: Furnisanity
     boosanity: Boosanity
     portrification: Portrification
+    lightsanity: Lightsanity
     speedy_spirits: SpeedySpirits
     boo_gates: BooGates
     mario_items: MarioItems

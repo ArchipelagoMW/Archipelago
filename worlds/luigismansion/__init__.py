@@ -55,7 +55,8 @@ class LMWeb(WebWorld):
             LuigiOptions.Toadsanity,
             LuigiOptions.Boosanity,
             LuigiOptions.Portrification,
-            LuigiOptions.SpeedySpirits
+            LuigiOptions.SpeedySpirits,
+            LuigiOptions.Lightsanity
         ]),
         OptionGroup("QOL Changes", [
             LuigiOptions.LuigiFearAnim,
@@ -273,6 +274,33 @@ class LMWorld(World):
                         else:
                             add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
                 region.locations.append(entry)
+        if self.options.lightsanity:
+            for location, data in LIGHT_LOCATION_TABLE.items():
+                region = self.multiworld.get_region(data.region, self.player)
+                entry = LMLocation(self.player, location, region, data)
+                if self.options.boo_gates == 1 and self.options.boo_radar != 2:
+                    add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
+                if entry.code == 745:
+                    add_rule(entry,
+                             lambda state: state.has_group("Mario Item", self.player, self.options.mario_items), "and")
+                elif entry.code == 772:
+                    add_rule(entry, lambda state: state.can_reach_location("Nursery Clear Chest", self.player))
+                elif entry.code in [773, 778]:
+                    add_rule(entry, lambda state: state.can_reach_location("Graveyard Clear Chest", self.player))
+                elif entry.code in [782, 784, 789, 790]:
+                    add_rule(entry, lambda state: state.can_reach_location("Balcony Clear Chest", self.player))
+                if len(entry.access) != 0:
+                    for item in entry.access:
+                        if item == "Fire Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                        elif item == "Water Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
+                        elif item == "Ice Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                        else:
+                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                region.locations.append(entry)
+
         if self.options.boosanity:
             for location, data in BOO_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
@@ -581,10 +609,11 @@ class LMWorld(World):
             "plantsanity": self.options.plantsanity.value,
             "furnisanity": self.options.furnisanity.value,
             "boosanity": self.options.boosanity.value,
-            "boo gates": self.options.boo_gates.value,
             "portrait ghosts": self.options.portrification.value,
             "speedy spirits": self.options.speedy_spirits.value,
+            "lightsanity": self.options.lightsanity.value,
             "clairvoya requirement": self.options.mario_items.value,
+            "boo gates": self.options.boo_gates.value,
             "washroom boo count": self.options.washroom_boo_count.value,
             "balcony boo count": self.options.balcony_boo_count.value,
             "final boo count": self.options.final_boo_count.value,
