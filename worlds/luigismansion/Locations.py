@@ -638,6 +638,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Roof Pillar (top row, second from right)": LMLocationData("Roof", 514, "Furniture", 726, [], 63),
     "Roof Pillar (top row, furthest right)": LMLocationData("Roof", 515, "Furniture", 727, [], 63),
     "Roof Pillar (bottom row, furthest right)": LMLocationData("Roof", 516, "Furniture", 728, [], 63),
+    "Roof Campfire": LMLocationData("Roof", 850, "Furniture", 729, [], 63),
     "Armory Armor Suit R (top)": LMLocationData("Armory", 517, "Furniture", 642, [], 51),
     "Armory Armor Suit (middle, right)": LMLocationData("Armory", 518, "Furniture", 643, [], 51),
     "Armory Armor Suit (middle, left)": LMLocationData("Armory", 519, "Furniture", 644, [], 51),
