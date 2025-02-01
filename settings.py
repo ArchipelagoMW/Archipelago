@@ -271,9 +271,9 @@ class Group:
             cls = self.__class__
             type_hints = cls.get_type_hints()
             entries = [e for e in self]
-            if not type_hints and not entries:
+            if not entries:
                 # write empty dict for empty Group with no instance values
-                cls._dump_value(type_hints, f, indent="  " * level)
+                cls._dump_value({}, f, indent="  " * level)
             # validate group
             for name in cls.__annotations__.keys():
                 assert hasattr(cls, name), f"{cls}.{name} is missing a default value"
