@@ -42,6 +42,9 @@ def create_event(region: Region, location_name: str, item_name: str = None):
 
 
 def create_regions(world: WL4World):
+    def can_escape(level):
+        return lambda state: state.can_reach_location(f'{level} - Frog Switch', world.player)
+
     regions = []
 
     pyramid = WL4Region("Pyramid", world)
@@ -73,14 +76,15 @@ def create_regions(world: WL4World):
 
                 location_name = f'{level_name} - {location_data.name}'
                 if location_data.event:
-                    location = create_event(region, location_name)
+                    item_name = f'{location_data.name} ({level_name})'
+                    location = create_event(region, location_name, item_name)
                 else:
                     location = WL4Location(world.player, location_name, region)
 
                 if (location_data.access_rule is not None):
                     add_rule(location, location_data.access_rule.apply_world(world))
                 if (world.options.portal.value == Portal.option_vanilla and location_data.name != "Frog Switch"):
-                    add_rule(location, has(f'{level_name} - Frog Switch').apply_world(world))
+                    add_rule(location, can_escape(level_name))
 
                 region.locations.append(location)
             regions.append(region)
@@ -129,7 +133,7 @@ def connect_regions(world: WL4World):
                 f'{destination} Entrance',
                 get_level_entrance_name(source),
                 get_level_entrance_name(destination),
-                has(f'{source} - Keyzer') if world.options.open_doors.value == OpenDoors.option_off else None
+                has(f'Keyzer ({source})') if world.options.open_doors.value == OpenDoors.option_off else None
             )
         if passage != Passage.ENTRY:
             boss_access = make_boss_access_rule(passage, required_jewels_entry if passage == Passage.GOLDEN else required_jewels)
@@ -138,13 +142,13 @@ def connect_regions(world: WL4World):
                 f'{passage.long_name()} Boss Door',
                 get_level_entrance_name(levels[-1]),
                 f'{passage.long_name()} Boss',
-                boss_access & has(f'{levels[-1]} - Keyzer') if world.options.open_doors.value == OpenDoors.option_off else boss_access
+                boss_access & has(f'Keyzer ({levels[-1]})') if world.options.open_doors.value == OpenDoors.option_off else boss_access
             )
 
     if world.options.open_doors.value != OpenDoors.option_open:
         add_rule(
             world.get_entrance(f'Golden Pyramid Boss Door'),
-            has(f'Golden Passage - Keyzer').apply_world(world)
+            has(f'Keyzer (Golden Passage)').apply_world(world)
         )
 
     add_rule(
