@@ -107,7 +107,8 @@ class WL4World(World):
     CDS = tuple(filter_item_names(type=ItemType.CD))
     ABILITIES = tuple(filter_item_names(type=ItemType.ABILITY))
     GOLDEN_TREASURES = tuple(filter_item_names(type=ItemType.TREASURE))
-    FILLER_ITEMS = tuple(filter_item_names(type=ItemType.ITEM))
+    FILLER_ITEMS = ('Full Health Item', 'Heart', 'Minigame Coin')
+    TRAPS = ('Wario Form Trap', 'Lightning Trap')
 
     def generate_early(self):
         if self.options.goal in (Goal.option_local_golden_treasure_hunt, Goal.option_local_golden_diva_treasure_hunt):
@@ -229,6 +230,8 @@ class WL4World(World):
         )
 
     def get_filler_item_name(self) -> str:
+        if self.random.randrange(100) < self.options.trap_weight.value:
+            return self.random.choice(self.TRAPS)
         return self.random.choice(self.FILLER_ITEMS)
 
     def create_item(self, name: str, force_non_progression=False) -> Item:

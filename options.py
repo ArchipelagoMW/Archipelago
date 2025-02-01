@@ -146,6 +146,18 @@ class MultiworldSend(Choice):
     default = option_immediately
 
 
+# Calling it "weight" is a bit weird when it's only traps vs. not traps, but this will get finer control when diamond
+# shuffle is added
+class TrapWeight(Range):
+    """
+    How often to place traps when filling vacant spots in the item pool.
+    """
+    display_name = 'Trap Weight'
+    range_start = 0
+    range_end = 100
+    default = 10
+
+
 class TrapBehavior(Choice):
     """
     What happens if multiple traps get sent to you while you aren't playing a level.
@@ -191,11 +203,14 @@ wl4_option_groups = [
     ]),
     OptionGroup("World", [
         Difficulty,
-        PoolJewels,
-        GoldenJewels,
         RequiredJewels,
         OpenDoors,
         Portal,
+    ]),
+    OptionGroup("Item Pool", [
+        PoolJewels,
+        GoldenJewels,
+        TrapWeight,
     ]),
     OptionGroup("Quality of Life", [
         MultiworldSend,
@@ -216,11 +231,12 @@ class WL4Options(PerGameCommonOptions):
     goal: Goal
     golden_treasure_count: GoldenTreasureCount
     difficulty: Difficulty
-    pool_jewels: PoolJewels
-    golden_jewels: GoldenJewels
     required_jewels: RequiredJewels
     open_doors: OpenDoors
     portal: Portal
+    pool_jewels: PoolJewels
+    golden_jewels: GoldenJewels
+    trap_weight: TrapWeight
     send_locations_to_server: MultiworldSend
     trap_behavior: TrapBehavior
     smash_through_hard_blocks: SmashThroughHardBlocks
