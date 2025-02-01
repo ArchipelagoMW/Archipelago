@@ -474,10 +474,11 @@ class LMContext(CommonContext):
         if self.boosanity:
             in_boo_gate_event = (dme.read_byte(0x803D33A7) & (1 << 0)) > 0
             for lm_boo in BOO_LOCATION_TABLE.keys():
+                boo_id = AutoWorldRegister.world_types[self.game].item_name_to_id[lm_boo]
                 lm_boo_loc = BOO_LOCATION_TABLE[lm_boo]
                 boo_caught = dme.read_byte(lm_boo_loc.room_ram_addr)
-                boo_val = boo_caught | (1 << lm_boo_loc.locationbit) if in_boo_gate_event else \
-                    boo_caught & ~(1 << lm_boo_loc.locationbit)
+                boo_val = boo_caught | (1 << lm_boo_loc.locationbit) if (in_boo_gate_event and
+                    self.items_received.__contains__(boo_id)) else boo_caught & ~(1 << lm_boo_loc.locationbit)
                 dme.write_byte(lm_boo_loc.room_ram_addr, boo_val)
         return
 
