@@ -158,7 +158,7 @@ class PickupAnim(Toggle):
 
 
 class Toadsanity(Toggle):
-    """Add Toads as locations to be checked"""
+    """Add Toads as locations to be checked. These are remote only items."""
     display_name = "Toadsanity"
 
 
@@ -212,12 +212,12 @@ class FinalBooCount(Range):
 
 
 class Boosanity(Toggle):
-    """Turns Boos into Items and Locations"""
+    """Turns Boos into Items and Locations. These are remote only items."""
     display_name = "Boosanity"
 
 
 class Portrification(Toggle):
-    """Turn Portrait Ghosts into checks in addition to their clear chests"""
+    """Turn Portrait Ghosts into checks in addition to their clear chests. These are remote only items."""
     display_name = "Portrification"
 
 
