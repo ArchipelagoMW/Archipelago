@@ -4,7 +4,6 @@ from .item import item_names
 from .options import (get_option_value, RequiredTactics,
     LocationInclusion, KerriganPresence,
 )
-from .rules import SC2Logic
 from .mission_tables import SC2Mission
 
 from BaseClasses import Location
@@ -136,7 +135,11 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             or not world.options.enable_hots_missions.value
         )
     adv_tactics = logic_level != RequiredTactics.option_standard
-    logic = SC2Logic(world)
+    if world is not None and world.logic is not None:
+        logic = world.logic
+    else:
+        from .rules import SC2Logic
+        logic = SC2Logic(world)
     player = 1 if world is None else world.player
     location_table: List[LocationData] = [
         # WoL

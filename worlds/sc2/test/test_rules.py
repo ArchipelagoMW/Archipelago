@@ -6,8 +6,9 @@ from typing import List, Set, Iterable
 
 from BaseClasses import ItemClassification, MultiWorld
 import Options as CoreOptions
-from worlds.sc2 import options, locations
-from worlds.sc2.item import item_tables
+from .. import options, locations
+from ..item import item_tables
+from ..rules import SC2Logic
 
 
 class TestInventory:
@@ -64,15 +65,6 @@ class TestWorld:
     """
     Mock world to simulate different player options for logic rules
     """
-    has_barracks_unit: bool = True
-    has_factory_unit: bool = True
-    has_starport_unit: bool = True
-    has_zerg_melee_unit: bool = True
-    has_zerg_ranged_unit: bool = True
-    has_zerg_air_unit: bool = True
-    has_protoss_ground_unit: bool = True
-    has_protoss_air_unit: bool = True
-
     def __init__(self):
         defaults = dict()
         for field in fields(options.Starcraft2Options):
@@ -96,19 +88,22 @@ class TestRules(unittest.TestCase):
     def __init__(self, methodName='runTest'):
         unittest.TestCase.__init__(self, methodName)
 
-        required_tactics: List[options.RequiredTactics] = \
-            [options.RequiredTactics.option_standard, options.RequiredTactics.option_advanced]
-        all_in_map: List[options.AllInMap] = \
-            [options.AllInMap.option_ground, options.AllInMap.option_air]
-        take_over_ai_allies: List[options.TakeOverAIAllies] = \
-            [options.TakeOverAIAllies.option_true, options.TakeOverAIAllies.option_false]
-        kerrigan_presence: List[options.KerriganPresence] = \
-            [options.KerriganPresence.option_vanilla, options.KerriganPresence.option_not_present]
-        spear_of_adun_autonomously_cast_presence: List[options.SpearOfAdunAutonomouslyCastAbilityPresence] = \
-            [
-                options.SpearOfAdunAutonomouslyCastAbilityPresence.option_everywhere,
-                options.SpearOfAdunAutonomouslyCastAbilityPresence.option_not_present
-            ]
+        required_tactics: List[options.RequiredTactics] = [
+            options.RequiredTactics.option_standard, options.RequiredTactics.option_advanced
+        ]
+        all_in_map: List[options.AllInMap] = [
+            options.AllInMap.option_ground, options.AllInMap.option_air
+        ]
+        take_over_ai_allies: List[options.TakeOverAIAllies] = [
+            options.TakeOverAIAllies.option_true, options.TakeOverAIAllies.option_false
+        ]
+        kerrigan_presence: List[options.KerriganPresence] = [
+            options.KerriganPresence.option_vanilla, options.KerriganPresence.option_not_present
+        ]
+        spear_of_adun_autonomously_cast_presence: List[options.SpearOfAdunAutonomouslyCastAbilityPresence] = [
+            options.SpearOfAdunAutonomouslyCastAbilityPresence.option_everywhere,
+            options.SpearOfAdunAutonomouslyCastAbilityPresence.option_not_present
+        ]
 
         self.test_worlds: List[TestWorld] = []
         for option_tuple in itertools.product(
@@ -124,6 +119,7 @@ class TestRules(unittest.TestCase):
             test_world.options.take_over_ai_allies.value = option_tuple[2]
             test_world.options.kerrigan_presence.value = option_tuple[3]
             test_world.options.spear_of_adun_autonomously_cast_ability_presence.value = option_tuple[4]
+            test_world.logic = SC2Logic(test_world)
 
             self.test_worlds.append(test_world)
 

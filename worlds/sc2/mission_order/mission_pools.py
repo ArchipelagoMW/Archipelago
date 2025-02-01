@@ -176,7 +176,8 @@ class SC2MOGenMissionPools:
     def _add_mission_stats(self, mission: SC2Mission) -> None:
         # Update used flag counts & missions
         # Done weirdly for Python <= 3.10 compatibility
-        for flag in iter(MissionFlag):
+        flag: MissionFlag
+        for flag in iter(MissionFlag):  # type: ignore
             if flag & mission.flags == flag:
                 self._used_flags.setdefault(flag, 0)
                 self._used_flags[flag] += 1

@@ -398,17 +398,19 @@ def create_location(player: int, location_data: 'LocationData', region: Region,
 
 
 def create_minimal_logic_location(
-    player: int, location_data: 'LocationData', region: Region, location_cache: List[Location], unit_count: int = 0,
+    world: 'SC2World', location_data: 'LocationData', region: Region, location_cache: List[Location], unit_count: int = 0,
 ) -> Location:
-    location = Location(player, location_data.name, location_data.code, region)
+    location = Location(world.player, location_data.name, location_data.code, region)
     mission = lookup_name_to_mission.get(region.name)
     if mission is None:
         pass
     elif location_data.hard_rule:
-        unit_rule = rules.has_race_units(player, unit_count, mission.race)
+        assert world.logic
+        unit_rule = world.logic.has_race_units(unit_count, mission.race)
         location.access_rule = lambda state: unit_rule(state) and location_data.hard_rule(state)
     else:
-        location.access_rule = rules.has_race_units(player, unit_count, mission.race)
+        assert world.logic
+        location.access_rule = world.logic.has_race_units(unit_count, mission.race)
     location_cache.append(location)
     return location
 
@@ -447,16 +449,17 @@ def create_region(
                 easiest_category = LocationType.VICTORY
 
     for location_data in locations_per_region.get(name, ()):
+        assert slot is not None
         if location_data.type == LocationType.VICTORY_CACHE:
             if victory_cache_locations >= target_victory_cache_locations:
                 continue
             victory_cache_locations += 1
         if world.options.required_tactics.value == world.options.required_tactics.option_any_units:
             if mission_needs_unit and not unit_given and location_data.type == easiest_category:
-                location = create_minimal_logic_location(world.player, location_data, region, location_cache, 0)
+                location = create_minimal_logic_location(world, location_data, region, location_cache, 0)
                 unit_given = True
             else:
-                location = create_minimal_logic_location(world.player, location_data, region, location_cache, min(slot.min_depth, 5) + mission_needs_unit)
+                location = create_minimal_logic_location(world, location_data, region, location_cache, min(slot.min_depth, 5) + mission_needs_unit)
         else:
             location = create_location(world.player, location_data, region, location_cache)
         region.locations.append(location)

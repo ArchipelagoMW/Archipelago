@@ -231,7 +231,7 @@ item_table = {
                  classification=ItemClassification.progression, quantity=0),
     item_names.AEGIS_GUARD:
         ItemData(54 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 2, SC2Race.TERRAN,
-                 quantity=0),
+                 classification=ItemClassification.progression, quantity=0),
     item_names.EMPERORS_SHADOW:
         ItemData(55 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 3, SC2Race.TERRAN,
                  classification=ItemClassification.progression, quantity=0),
@@ -888,7 +888,8 @@ item_table = {
         ItemData(501 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 1, SC2Race.TERRAN,
                  classification=ItemClassification.filler),
     item_names.HAMMER_SECURITIES:
-        ItemData(502 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 2, SC2Race.TERRAN),
+        ItemData(502 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 2, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
     item_names.SPARTAN_COMPANY:
         ItemData(503 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 3, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
@@ -905,9 +906,11 @@ item_table = {
         ItemData(507 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 7, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
     item_names.SKIBIS_ANGELS:
-        ItemData(508 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 8, SC2Race.TERRAN),
+        ItemData(508 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 8, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
     item_names.DEATH_HEADS:
-        ItemData(509 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 9, SC2Race.TERRAN),
+        ItemData(509 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 9, SC2Race.TERRAN,
+                 classification=ItemClassification.progression),
     item_names.WINGED_NIGHTMARES:
         ItemData(510 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 10, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
@@ -958,7 +961,7 @@ item_table = {
                  classification=ItemClassification.progression),
     item_names.PREDATOR:
         ItemData(614 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit, 24, SC2Race.TERRAN,
-                 classification=ItemClassification.filler),
+                 classification=ItemClassification.progression),
     item_names.HERCULES:
         ItemData(615 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit, 25, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
@@ -1004,34 +1007,7 @@ item_table = {
         ItemData(632 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Laboratory, 23, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
 
-    # WoL Protoss
-    item_names.ZEALOT:
-        ItemData(700 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 0, SC2Race.PROTOSS,
-                 classification=ItemClassification.progression),
-    item_names.STALKER: 
-        ItemData(701 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 1, SC2Race.PROTOSS, 
-                 classification=ItemClassification.progression),
-    item_names.HIGH_TEMPLAR: 
-        ItemData(702 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 2, SC2Race.PROTOSS, 
-                 classification=ItemClassification.progression),
-    item_names.DARK_TEMPLAR: 
-        ItemData(703 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 3, SC2Race.PROTOSS, 
-                 classification=ItemClassification.progression),
-    item_names.IMMORTAL: 
-        ItemData(704 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 4, SC2Race.PROTOSS,
-                 classification=ItemClassification.progression),
-    item_names.COLOSSUS:
-        ItemData(705 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 5, SC2Race.PROTOSS,
-                 classification=ItemClassification.progression),
-    item_names.PHOENIX:
-        ItemData(706 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 6, SC2Race.PROTOSS,
-                 classification=ItemClassification.progression),
-    item_names.VOID_RAY:
-        ItemData(707 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 7, SC2Race.PROTOSS,
-                 classification=ItemClassification.progression),
-    item_names.CARRIER:
-        ItemData(708 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 8, SC2Race.PROTOSS,
-                 classification=ItemClassification.progression),
+    # WoL Protoss takes SC2WOL + 700~708
 
     item_names.SCIENCE_VESSEL_TACTICAL_JUMP:
         ItemData(750 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 4, SC2Race.TERRAN,
@@ -1684,8 +1660,35 @@ item_table = {
     item_names.ROACH_PRIMAL_IGNITER_ASPECT: ItemData(804 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 9, SC2Race.ZERG, classification=ItemClassification.progression, parent=parent_names.MORPH_SOURCE_ROACH),
     item_names.ULTRALISK_TYRANNOZOR_ASPECT: ItemData(805 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Morph, 10, SC2Race.ZERG, classification=ItemClassification.progression, parent=parent_names.MORPH_SOURCE_ULTRALISK),
 
-
-    # Protoss Units (those that aren't as items in WoL (Prophecy))
+    # Protoss Units
+    # The first several are in SC2WOL offset for historical reasons (show up in prophecy)
+    item_names.ZEALOT:
+        ItemData(700 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 0, SC2Race.PROTOSS,
+                 classification=ItemClassification.progression),
+    item_names.STALKER: 
+        ItemData(701 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 1, SC2Race.PROTOSS, 
+                 classification=ItemClassification.progression),
+    item_names.HIGH_TEMPLAR: 
+        ItemData(702 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 2, SC2Race.PROTOSS, 
+                 classification=ItemClassification.progression),
+    item_names.DARK_TEMPLAR: 
+        ItemData(703 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 3, SC2Race.PROTOSS, 
+                 classification=ItemClassification.progression),
+    item_names.IMMORTAL: 
+        ItemData(704 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 4, SC2Race.PROTOSS,
+                 classification=ItemClassification.progression),
+    item_names.COLOSSUS:
+        ItemData(705 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 5, SC2Race.PROTOSS,
+                 classification=ItemClassification.progression),
+    item_names.PHOENIX:
+        ItemData(706 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 6, SC2Race.PROTOSS,
+                 classification=ItemClassification.progression),
+    item_names.VOID_RAY:
+        ItemData(707 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 7, SC2Race.PROTOSS,
+                 classification=ItemClassification.progression),
+    item_names.CARRIER:
+        ItemData(708 + SC2WOL_ITEM_ID_OFFSET, ProtossItemType.Unit, 8, SC2Race.PROTOSS,
+                 classification=ItemClassification.progression),
     item_names.OBSERVER:
         ItemData(0 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 9, SC2Race.PROTOSS,
                  classification=ItemClassification.progression),
@@ -1711,7 +1714,8 @@ item_table = {
         ItemData(7 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 16, SC2Race.PROTOSS,
                  classification=ItemClassification.progression),
     item_names.HAVOC:
-        ItemData(8 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 17, SC2Race.PROTOSS, important_for_filtering=True),
+        ItemData(8 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 17, SC2Race.PROTOSS,
+                 classification=ItemClassification.progression),
     item_names.SIGNIFIER:
         ItemData(9 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Unit, 18, SC2Race.PROTOSS,
                  classification=ItemClassification.progression),
