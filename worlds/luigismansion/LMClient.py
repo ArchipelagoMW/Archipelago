@@ -118,7 +118,7 @@ def save_patched_iso(output_data):
     file_name = os.path.splitext(file)[0]
 
     if iso_path:
-        LuigisMansionRandomizer(iso_path, os.path.join(directory_to_iso, file_name + ".iso"), output_data)
+        LuigisMansionRandomizer(iso_path, str(os.path.join(directory_to_iso, file_name + ".iso")), output_data)
 
 
 class LMCommandProcessor(ClientCommandProcessor):
@@ -217,7 +217,7 @@ class LMContext(CommonContext):
         super().on_deathlink(data)
         self.is_luigi_dead = True
         self.death_check_counter = 0
-        set_luigi_dead()
+        self.set_luigi_dead()
         return
 
     def run_gui(self):
@@ -231,237 +231,236 @@ class LMContext(CommonContext):
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
 
-def check_alive(ctx: LMContext):
-    # Our health gets messed up in the Lab, so we can just ignore that location altogether.
-    if dme.read_word(CURR_MAP_ID_ADDR) == 1:
-        return True
-
-    if ctx.death_link_enabled:
-        # Get the pointer of Luigi's health, as this could shift when warping to bosses or climbing into mouse holes.
-        curr_pointer = read_short(CURR_HEALTH_ADDR)
-        if curr_pointer != ctx.last_health_pointer:
-            ctx.death_check_counter = 0
-            ctx.last_health_pointer = curr_pointer
-            ctx.is_luigi_dead = False
+    def check_alive(self):
+        # Our health gets messed up in the Lab, so we can just ignore that location altogether.
+        if dme.read_word(CURR_MAP_ID_ADDR) == 1:
             return True
 
-        # This ensures we checked the same address 3 times to ensure we are actually dead.
-        if ctx.death_check_counter != 3:
-            ctx.death_check_counter += 1
-            ctx.is_luigi_dead = False
-            return True
+        if self.death_link_enabled:
+            # Get the pointer of Luigi's health, as this could shift when warping to bosses or climbing into mouse holes.
+            curr_pointer = read_short(CURR_HEALTH_ADDR)
+            if curr_pointer != self.last_health_pointer:
+                self.death_check_counter = 0
+                self.last_health_pointer = curr_pointer
+                self.is_luigi_dead = False
+                return True
 
-    lm_curr_health = read_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]))
-    return lm_curr_health > 0
+            # This ensures we checked the same address 3 times to ensure we are actually dead.
+            if self.death_check_counter != 3:
+                self.death_check_counter += 1
+                self.is_luigi_dead = False
+                return True
 
-async def check_death(ctx: LMContext):
-    if check_ingame(ctx) and not check_alive(ctx):
-        if not ctx.is_luigi_dead and time.time() >= ctx.last_death_link + 3:
-            ctx.is_luigi_dead = True
-            set_luigi_dead()
-            await ctx.send_death(ctx.player_names[ctx.slot] + " scared themselves to death.")
-    return
+        lm_curr_health = read_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]))
+        return lm_curr_health > 0
 
-def set_luigi_dead():
-    write_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]), 0)
-    return
-
-
-async def give_items(ctx: LMContext):
-    # Only try to give items if we are in game and alive.
-    if not (check_ingame(ctx) and check_alive(ctx)):
-        return
-
-    last_recv_idx = read_short(LAST_RECV_ITEM_ADDR)
-    if len(ctx.items_received) == last_recv_idx:
-        # TODO Potentially move this to reading a memory address instead that is updated only once.
-        if ctx.items_received.__contains__(8064):
-            vac_speed = "3800000F"
-            dme.write_bytes(ALL_ITEMS_TABLE[ctx.item_names.lookup_in_game(8064)].ram_addr, bytes.fromhex(vac_speed))
-        return
-
-    # Filter for only items where we have not received yet. If same slot, only receive the locations from the
-    # pre-approved own locations (as everything is currently a NetworkItem), otherwise accept other slots.
-    recv_items = ctx.items_received[last_recv_idx:]
-    logger.info("DEBUG -- Received items to try and validate: " + str(len(recv_items)))
-
-    if len(recv_items) == 0:
-        write_short(LAST_RECV_ITEM_ADDR, len(ctx.items_received))
-        return
-
-    last_bill_list = [x[1] for x in filler_items.items() if "Bills" in x[0]]
-    bills_rams_pointer = last_bill_list[len(last_bill_list) - 1].pointer_offset
-    last_coin_list = [x[1] for x in filler_items.items() if "Coins" in x[0]]
-    coins_ram_pointer = last_coin_list[len(last_coin_list) - 1].pointer_offset
-
-    for item in recv_items:
-        # If item is handled as start inventory and created in patching, ignore them.
-        # If item is something we found, but not something that is a location we want to get an item from or an
-        # item that is okay to get no matter what, ignore it.
-        if item.item in RECV_ITEMS_IGNORE or (item.player == ctx.slot and not
-        (ctx.location_names.lookup_in_game(item.location) in RECV_OWN_GAME_LOCATIONS or
-         ctx.item_names.lookup_in_game(item.item) in RECV_OWN_GAME_ITEMS)):
-            last_recv_idx+=1
-            write_short(LAST_RECV_ITEM_ADDR, last_recv_idx)
-            continue
-
-        # Add a received message in the client for the item that is about to be received.
-        parts = []
-        NetUtils.add_json_text(parts, "Received ")
-        NetUtils.add_json_item(parts, item.item, ctx.slot, item.flags)
-        NetUtils.add_json_text(parts, " from ")
-        NetUtils.add_json_location(parts, item.location, item.player)
-        NetUtils.add_json_text(parts, " by ")
-        NetUtils.add_json_text(parts, item.player, type=NetUtils.JSONTypes.player_id)
-        ctx.on_print_json({"data": parts, "cmd": "PrintJSON"})
-
-        # Get the current LM Item so we can get the various named tuple fields easier.
-        lm_item_name = ctx.item_names.lookup_in_game(item.item)
-        lm_item = ALL_ITEMS_TABLE[lm_item_name]
-        if not lm_item.ram_addr is None and (not lm_item.itembit is None or not lm_item.pointer_offset is None):
-
-            if not lm_item.pointer_offset is None:
-                # Assume we need to update an existing value of size X with Y value at the pointer's address
-                int_item_amount = 1
-                match lm_item.code:
-                    case 119: # Bills and Coins
-                        coins_curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
-                    [coins_ram_pointer]), lm_item.ram_byte_size))
-                        bills_curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
-                          [bills_rams_pointer]), lm_item.ram_byte_size))
-                        if re.search(r"^\d+", lm_item_name):
-                            int_item_amount = int(re.search(r"^\d+", lm_item_name).group())
-                        coins_curr_val += int_item_amount
-                        bills_curr_val += int_item_amount
-                        dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
-                [coins_ram_pointer]), coins_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
-                        dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
-                [bills_rams_pointer]), bills_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
-                    case 128 | 129:
-                        curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
-                    [lm_item.pointer_offset]), lm_item.ram_byte_size))
-                        curr_val += 10 if lm_item.code == 128 else 50
-                        dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
-                    [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
-                    case 63:
-                        curr_val = dme.read_byte(lm_item.ram_addr)
-                        curr_val = (curr_val | (1 << 1)) # Enable flag 73
-                        curr_val = (curr_val | (1 << 3)) # Enable flag 75
-                        dme.write_byte(lm_item.ram_addr, curr_val)
-                    case 64:
-                        vac_speed = "3800000F"
-                        dme.write_bytes(lm_item.ram_addr, bytes.fromhex(vac_speed))
-                    case _:
-                        curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
-                    [lm_item.pointer_offset]), lm_item.ram_byte_size))
-                        if re.search(r"^\d+", lm_item_name):
-                            int_item_amount = int(re.search(r"^\d+", lm_item_name).group())
-                        curr_val += int_item_amount
-                        dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
-                    [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
-            else:
-                # Assume it is a single address with a bit to update, rather than adding to an existing value
-                item_val = dme.read_byte(lm_item.ram_addr)
-                dme.write_byte(lm_item.ram_addr, (item_val | (1 << lm_item.itembit)))
-
-            # Update the last received index to ensure we don't receive the same item over and over.
-            last_recv_idx+=1
-            write_short(LAST_RECV_ITEM_ADDR, last_recv_idx)
-        else:
-            # TODO Debug remove before release
-            logger.warn("Missing information for AP ID: " + str(item.item))
-    return
-
-
-async def check_locations(ctx: LMContext):
-    # There will be different checks on different maps.
-    current_map_id = dme.read_word(CURR_MAP_ID_ADDR)
-
-    for mis_loc in ctx.missing_locations:
-        local_loc = ctx.location_names.lookup_in_game(mis_loc)
-        lm_loc_data = ALL_LOCATION_TABLE[local_loc]
-
-        # If in main mansion map
+    def check_ingame(self):
+        current_map_id = dme.read_word(CURR_MAP_ID_ADDR)
         if current_map_id == 2:
-            # TODO Debug remove before release
-            if lm_loc_data.in_game_room_id is None:
-                logger.warn("Missing in game room id: " + str(mis_loc))
+            # If this is NOT a pointer, then either we are on another map (aka boss fight) or game is not fully loaded.
+            bool_loaded_in_map = check_if_addr_is_pointer(ROOM_ID_ADDR)
+        else:
+            bool_loaded_in_map = 0 < current_map_id < 14
 
-            # Only check locations that are currently in the same room as us.
-            current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
-            if not lm_loc_data.in_game_room_id == current_room_id:
+        int_play_state = dme.read_word(CURR_PLAY_STATE_ADDR)
+        return int_play_state == 2 and bool_loaded_in_map
+
+    async def check_death(self):
+        if self.check_ingame() and not self.check_alive():
+            if not self.is_luigi_dead and time.time() >= self.last_death_link + 3:
+                self.is_luigi_dead = True
+                self.set_luigi_dead()
+                await self.send_death(self.player_names[self.slot] + " scared themselves to death.")
+        return
+
+    def set_luigi_dead(self):
+        write_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]), 0)
+        return
+
+
+    async def lm_give_items(self):
+        # Only try to give items if we are in game and alive.
+        if not (self.check_ingame() and self.check_alive()):
+            return
+
+        last_recv_idx = read_short(LAST_RECV_ITEM_ADDR)
+        if len(self.items_received) == last_recv_idx:
+            # TODO Potentially move this to reading a memory address instead that is updated only once.
+            if self.items_received.__contains__(8064):
+                vac_speed = "3800000F"
+                dme.write_bytes(ALL_ITEMS_TABLE[self.item_names.lookup_in_game(8064)].ram_addr, bytes.fromhex(vac_speed))
+            return
+
+        # Filter for only items where we have not received yet. If same slot, only receive the locations from the
+        # pre-approved own locations (as everything is currently a NetworkItem), otherwise accept other slots.
+        recv_items = self.items_received[last_recv_idx:]
+        logger.info("DEBUG -- Received items to try and validate: " + str(len(recv_items)))
+
+        if len(recv_items) == 0:
+            write_short(LAST_RECV_ITEM_ADDR, len(self.items_received))
+            return
+
+        last_bill_list = [x[1] for x in filler_items.items() if "Bills" in x[0]]
+        bills_rams_pointer = last_bill_list[len(last_bill_list) - 1].pointer_offset
+        last_coin_list = [x[1] for x in filler_items.items() if "Coins" in x[0]]
+        coins_ram_pointer = last_coin_list[len(last_coin_list) - 1].pointer_offset
+
+        for item in recv_items:
+            # If item is handled as start inventory and created in patching, ignore them.
+            # If item is something we found, but not something that is a location we want to get an item from or an
+            # item that is okay to get no matter what, ignore it.
+            if item.item in RECV_ITEMS_IGNORE or (item.player == self.slot and not
+            (self.location_names.lookup_in_game(item.location) in RECV_OWN_GAME_LOCATIONS or
+             self.item_names.lookup_in_game(item.item) in RECV_OWN_GAME_ITEMS)):
+                last_recv_idx+=1
+                write_short(LAST_RECV_ITEM_ADDR, last_recv_idx)
                 continue
 
-            match lm_loc_data.type:
-                case "Furniture" | "Plant":
-                    # Check all possible furniture addresses. #TODO Find a way to not check all 600+
-                    for current_offset in range(0, FURNITURE_ADDR_COUNT, 4):
-                        # Only check if the current address is a pointer
-                        current_addr = FURNITURE_MAIN_TABLE_ID + current_offset
-                        if not check_if_addr_is_pointer(current_addr):
-                            continue
+            # Add a received message in the client for the item that is about to be received.
+            parts = []
+            NetUtils.add_json_text(parts, "Received ")
+            NetUtils.add_json_item(parts, item.item, self.slot, item.flags)
+            NetUtils.add_json_text(parts, " from ")
+            NetUtils.add_json_location(parts, item.location, item.player)
+            NetUtils.add_json_text(parts, " by ")
+            NetUtils.add_json_text(parts, item.player, type=NetUtils.JSONTypes.player_id)
+            self.on_print_json({"data": parts, "cmd": "PrintJSON"})
 
-                        furn_id = dme.read_word(dme.follow_pointers(current_addr, [FURN_ID_OFFSET]))
-                        if not furn_id == lm_loc_data.jmpentry:
-                            continue
+            # Get the current LM Item so we can get the various named tuple fields easier.
+            lm_item_name = self.item_names.lookup_in_game(item.item)
+            lm_item = ALL_ITEMS_TABLE[lm_item_name]
+            if not lm_item.ram_addr is None and (not lm_item.itembit is None or not lm_item.pointer_offset is None):
 
-                        furn_flag = dme.read_word(dme.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
-                        if furn_flag > 0:
-                            ctx.locations_checked.add(mis_loc)
-                case "Chest":
-                    # Bit 2 of the current room address indicates if a chest in that room has been opened.
-                    current_room_state_int = read_short(lm_loc_data.room_ram_addr)
-                    if (current_room_state_int & (1 << 2)) > 0:
-                        ctx.locations_checked.add(mis_loc)
-                case "Boo":
-                    current_boo_state_int = dme.read_byte(lm_loc_data.room_ram_addr)
-                    if (current_boo_state_int & (1 << lm_loc_data.locationbit)) > 0:
-                        ctx.locations_checked.add(mis_loc)
-                        dme.write_byte(current_boo_state_int, (current_boo_state_int & ~(1 << lm_loc_data.locationbit)))
-                case "Toad" | "Freestanding" | "Special":
-                    current_toad_int = dme.read_byte(lm_loc_data.room_ram_addr)
-                    if (current_toad_int & (1 << lm_loc_data.locationbit)) > 0:
-                        ctx.locations_checked.add(mis_loc)
-
-    await ctx.check_locations(ctx.locations_checked)
-
-    if current_map_id == 9:
-        beat_king_boo = dme.read_byte(KING_BOO_ADDR)
-        if (beat_king_boo & (1 << 5)) > 0 and not ctx.game_clear:
-            if ctx.goal_type == 0:
-                ctx.game_clear = True
-            elif ctx.goal_type == 1:
-                int_rank_sum = 0
-                req_rank_amt = RANK_REQ_AMTS[ctx.rank_req]
-                for key in WALLET_OFFSETS.keys():
-                    currency_amt = dme.read_word(dme.follow_pointers(WALLET_START_ADDR, [key]))
-                    int_rank_sum += currency_amt * WALLET_OFFSETS[key]
-
-                if int_rank_sum >= req_rank_amt:
-                    ctx.game_clear = True
+                if not lm_item.pointer_offset is None:
+                    # Assume we need to update an existing value of size X with Y value at the pointer's address
+                    int_item_amount = 1
+                    match lm_item.code:
+                        case 119: # Bills and Coins
+                            coins_curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
+                        [coins_ram_pointer]), lm_item.ram_byte_size))
+                            bills_curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
+                              [bills_rams_pointer]), lm_item.ram_byte_size))
+                            if re.search(r"^\d+", lm_item_name):
+                                int_item_amount = int(re.search(r"^\d+", lm_item_name).group())
+                            coins_curr_val += int_item_amount
+                            bills_curr_val += int_item_amount
+                            dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
+                    [coins_ram_pointer]), coins_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
+                            dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
+                    [bills_rams_pointer]), bills_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
+                        case 128 | 129:
+                            curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
+                        [lm_item.pointer_offset]), lm_item.ram_byte_size))
+                            curr_val += 10 if lm_item.code == 128 else 50
+                            dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
+                        [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
+                        case 63:
+                            curr_val = dme.read_byte(lm_item.ram_addr)
+                            curr_val = (curr_val | (1 << 1)) # Enable flag 73
+                            curr_val = (curr_val | (1 << 3)) # Enable flag 75
+                            dme.write_byte(lm_item.ram_addr, curr_val)
+                        case 64:
+                            vac_speed = "3800000F"
+                            dme.write_bytes(lm_item.ram_addr, bytes.fromhex(vac_speed))
+                        case _:
+                            curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
+                        [lm_item.pointer_offset]), lm_item.ram_byte_size))
+                            if re.search(r"^\d+", lm_item_name):
+                                int_item_amount = int(re.search(r"^\d+", lm_item_name).group())
+                            curr_val += int_item_amount
+                            dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
+                        [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
                 else:
-                    logger.info("Unfortunately, you do NOT have enough money to satisfy the rank requirements.\n" +
-                                f"You are missing: '{(req_rank_amt - int_rank_sum):,}'")
+                    # Assume it is a single address with a bit to update, rather than adding to an existing value
+                    item_val = dme.read_byte(lm_item.ram_addr)
+                    dme.write_byte(lm_item.ram_addr, (item_val | (1 << lm_item.itembit)))
 
-    if not ctx.finished_game and ctx.game_clear:
-        ctx.finished_game = True
-        await ctx.send_msgs([{
-            "cmd": "StatusUpdate",
-            "status": NetUtils.ClientStatus.CLIENT_GOAL,
-        }])
-    return
+                # Update the last received index to ensure we don't receive the same item over and over.
+                last_recv_idx+=1
+                write_short(LAST_RECV_ITEM_ADDR, last_recv_idx)
+            else:
+                # TODO Debug remove before release
+                logger.warn("Missing information for AP ID: " + str(item.item))
+        return
 
 
-def check_ingame(ctx: LMContext):
-    current_map_id = dme.read_word(CURR_MAP_ID_ADDR)
-    if current_map_id == 2:
-        # If this is NOT a pointer, then either we are on another map (aka boss fight) or game is not fully loaded.
-        bool_loaded_in_map = check_if_addr_is_pointer(ROOM_ID_ADDR)
-    else:
-        bool_loaded_in_map = 0 < current_map_id < 14
+    async def lm_check_locations(self):
+        # There will be different checks on different maps.
+        current_map_id = dme.read_word(CURR_MAP_ID_ADDR)
 
-    int_play_state = dme.read_word(CURR_PLAY_STATE_ADDR)
-    return int_play_state == 2 and bool_loaded_in_map
+        for mis_loc in self.missing_locations:
+            local_loc = self.location_names.lookup_in_game(mis_loc)
+            lm_loc_data = ALL_LOCATION_TABLE[local_loc]
+
+            # If in main mansion map
+            if current_map_id == 2:
+                # TODO Debug remove before release
+                if lm_loc_data.in_game_room_id is None:
+                    logger.warn("Missing in game room id: " + str(mis_loc))
+
+                # Only check locations that are currently in the same room as us.
+                current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
+                if not lm_loc_data.in_game_room_id == current_room_id:
+                    continue
+
+                match lm_loc_data.type:
+                    case "Furniture" | "Plant":
+                        # Check all possible furniture addresses. #TODO Find a way to not check all 600+
+                        for current_offset in range(0, FURNITURE_ADDR_COUNT, 4):
+                            # Only check if the current address is a pointer
+                            current_addr = FURNITURE_MAIN_TABLE_ID + current_offset
+                            if not check_if_addr_is_pointer(current_addr):
+                                continue
+
+                            furn_id = dme.read_word(dme.follow_pointers(current_addr, [FURN_ID_OFFSET]))
+                            if not furn_id == lm_loc_data.jmpentry:
+                                continue
+
+                            furn_flag = dme.read_word(dme.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
+                            if furn_flag > 0:
+                                self.locations_checked.add(mis_loc)
+                    case "Chest":
+                        # Bit 2 of the current room address indicates if a chest in that room has been opened.
+                        current_room_state_int = read_short(lm_loc_data.room_ram_addr)
+                        if (current_room_state_int & (1 << 2)) > 0:
+                            self.locations_checked.add(mis_loc)
+                    case "Boo":
+                        current_boo_state_int = dme.read_byte(lm_loc_data.room_ram_addr)
+                        if (current_boo_state_int & (1 << lm_loc_data.locationbit)) > 0:
+                            self.locations_checked.add(mis_loc)
+                            dme.write_byte(current_boo_state_int, (current_boo_state_int & ~(1 << lm_loc_data.locationbit)))
+                    case "Toad" | "Freestanding" | "Special":
+                        current_toad_int = dme.read_byte(lm_loc_data.room_ram_addr)
+                        if (current_toad_int & (1 << lm_loc_data.locationbit)) > 0:
+                            self.locations_checked.add(mis_loc)
+
+        await self.check_locations(self.locations_checked)
+
+        if current_map_id == 9:
+            beat_king_boo = dme.read_byte(KING_BOO_ADDR)
+            if (beat_king_boo & (1 << 5)) > 0 and not self.game_clear:
+                if self.goal_type == 0:
+                    self.game_clear = True
+                elif self.goal_type == 1:
+                    int_rank_sum = 0
+                    req_rank_amt = RANK_REQ_AMTS[self.rank_req]
+                    for key in WALLET_OFFSETS.keys():
+                        currency_amt = dme.read_word(dme.follow_pointers(WALLET_START_ADDR, [key]))
+                        int_rank_sum += currency_amt * WALLET_OFFSETS[key]
+
+                    if int_rank_sum >= req_rank_amt:
+                        self.game_clear = True
+                    else:
+                        logger.info("Unfortunately, you do NOT have enough money to satisfy the rank requirements.\n" +
+                                    f"You are missing: '{(req_rank_amt - int_rank_sum):,}'")
+
+        if not self.finished_game and self.game_clear:
+            self.finished_game = True
+            await self.send_msgs([{
+                "cmd": "StatusUpdate",
+                "status": NetUtils.ClientStatus.CLIENT_GOAL,
+            }])
+        return
 
 
 async def dolphin_sync_task(ctx: LMContext):
@@ -469,14 +468,14 @@ async def dolphin_sync_task(ctx: LMContext):
     while not ctx.exit_event.is_set():
         try:
             if dme.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
-                if not check_ingame(ctx):
+                if not ctx.check_ingame():
                     await asyncio.sleep(0.1)
                     continue
                 if ctx.slot:
                     if "DeathLink" in ctx.tags:
-                        await check_death(ctx)
-                    await give_items(ctx)
-                    await check_locations(ctx)
+                        await ctx.check_death()
+                    await ctx.lm_give_items()
+                    await ctx.lm_check_locations()
                 else:
                     if not ctx.auth:
                         ctx.auth = read_string(SLOT_NAME_ADDR, SLOT_NAME_STR_LENGTH)
