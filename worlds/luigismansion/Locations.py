@@ -808,21 +808,21 @@ PORTRAIT_LOCATION_TABLE: dict[str, LMLocationData] = {
 
 # Adds Blue Speedy Spirits as Loacations
 SPEEDY_LOCATION_TABLE: dict[str, LMLocationData] = {
-    "Wardrobe Speedy Spirit": LMLocationData("Wardrobe", 643, "BSpeedy", 128, []),
-    "Study Speedy Spirit": LMLocationData("Study", 644, "BSpeedy", 113, []),
-    # "Nursery Speedy Spirit": LMLocationData("Nursery", 645, "BSpeedy", 148, ["Blackout"]),
-    "Storage Room Speedy Spirit": LMLocationData("Storage Room", 646, "BSpeedy", 58, []),
-    # "Hidden Room Speedy Spirit": LMLocationData("Hidden Room", 647, "BSpeedy", 72, ["Blackout"]),
-    # "Conservatory Speedy Spirit": LMLocationData("Conservatory", 648, "BSpeedy", 113, ["Blackout"]),
-    "Dining Room Speedy Spirit": LMLocationData("Dining Room", 649, "BSpeedy", 60, []),
-    "Kitchen Speedy Spirit": LMLocationData("Kitchen", 650, "BSpeedy", 66, []),
-    "Rec Room Speedy Spirit": LMLocationData("Rec Room", 651, "BSpeedy", 67, []),
-    "Nana's Room Speedy Spirit": LMLocationData("Nana's Room", 652, "BSpeedy", 115, []),
-    "Billiards Room Speedy Spirit": LMLocationData("Billiards Room", 653, "BSpeedy", 59, []),
-    "Twins' Room Speedy Spirit": LMLocationData("Twins' Room", 655, "BSpeedy", 114, []),
-    "Breaker Room Speedy Spirit": LMLocationData("Breaker Room", 656, "BSpeedy", 7, []),
-    "Cellar Speedy Spirit": LMLocationData("Cellar", 657, "BSpeedy", 6, []),
-    "Sealed Room Speedy Spirit": LMLocationData("Sealed Room", 658, "BSpeedy", 125, []),
+    "Wardrobe Speedy Spirit": LMLocationData("Wardrobe", 643, "BSpeedy", 128, [], 38, room_ram_addr=0x803D5DC3, locationbit=0),
+    "Study Speedy Spirit": LMLocationData("Study", 644, "BSpeedy", 113, [], 34, room_ram_addr=0x803D5DC2, locationbit=2),
+    # "Nursery Speedy Spirit": LMLocationData("Nursery", 645, "BSpeedy", 148, ["Blackout"], 24, room_ram_address=),
+    "Storage Room Speedy Spirit": LMLocationData("Storage Room", 646, "BSpeedy", 58, [], 14, room_ram_addr=0x803D5DC1, locationbit=7),
+    # "Hidden Room Speedy Spirit": LMLocationData("Hidden Room", 647, "BSpeedy", 72, ["Blackout"], 1, room_ram_address=),
+    # "Conservatory Speedy Spirit": LMLocationData("Conservatory", 648, "BSpeedy", 113, ["Blackout"], 21, room_ram_address=),
+    "Dining Room Speedy Spirit": LMLocationData("Dining Room", 649, "BSpeedy", 60, [], 9, room_ram_addr=0x803D5DC2, locationbit=1),
+    "Kitchen Speedy Spirit": LMLocationData("Kitchen", 650, "BSpeedy", 66, [], 8, room_ram_addr=0x803D5DC2, locationbit=5),
+    "Rec Room Speedy Spirit": LMLocationData("Rec Room", 651, "BSpeedy", 67, [], 22, room_ram_addr=0x803D5DC2, locationbit=7),
+    "Nana's Room Speedy Spirit": LMLocationData("Nana's Room", 652, "BSpeedy", 115, [], 46, room_ram_addr=0x803D5DC2, locationbit=4),
+    "Billiards Room Speedy Spirit": LMLocationData("Billiards Room", 653, "BSpeedy", 59, [], 12, room_ram_addr=0x803D5DC2, locationbit=0),
+    "Twins' Room Speedy Spirit": LMLocationData("Twins' Room", 655, "BSpeedy", 114, [], 25, room_ram_addr=0x803D5DC2, locationbit=3),
+    "Breaker Room Speedy Spirit": LMLocationData("Breaker Room", 656, "BSpeedy", 7, [], 67, room_ram_addr=0x803D5DC3, locationbit=2),
+    "Cellar Speedy Spirit": LMLocationData("Cellar", 657, "BSpeedy", 6, [], 63, room_ram_addr=0x803D5DC3, locationbit=1),
+    "Sealed Room Speedy Spirit": LMLocationData("Sealed Room", 658, "BSpeedy", 125, [], 36, room_ram_addr=0x803D5DC2, locationbit=6),
 }
 
 GOLD_MICE_LOCATION_TABLE: dict[str, LMLocationData] = {
