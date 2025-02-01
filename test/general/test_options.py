@@ -78,4 +78,4 @@ class TestOptions(unittest.TestCase):
             if not world_type.hidden:
                 for option_key, option in world_type.options_dataclass.type_hints.items():
                     with self.subTest(game=gamename, option=option_key):
-                        pickle.dumps(option(option.default))
+                        pickle.dumps(option.from_any(option.default))

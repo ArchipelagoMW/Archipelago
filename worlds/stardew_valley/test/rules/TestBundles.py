@@ -56,6 +56,7 @@ class TestRaccoonBundlesLogic(SVTestBase):
         self.collect("Mushroom Boxes")
         self.collect("Progressive Fishing Rod", 4)
         self.collect("Fishing Level", 10)
+        self.collect("Furnace Recipe")
 
         self.assertFalse(raccoon_rule_1(self.multiworld.state))
         self.assertFalse(raccoon_rule_3(self.multiworld.state))

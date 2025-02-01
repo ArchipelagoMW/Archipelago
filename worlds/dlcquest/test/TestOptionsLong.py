@@ -5,7 +5,6 @@ from Options import NamedRange
 from .option_names import options_to_include
 from .checks.world_checks import assert_can_win, assert_same_number_items_locations
 from . import DLCQuestTestBase, setup_dlc_quest_solo_multiworld
-from ... import AutoWorldRegister
 
 
 def basic_checks(tester: DLCQuestTestBase, multiworld: MultiWorld):

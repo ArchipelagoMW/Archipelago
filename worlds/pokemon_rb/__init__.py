@@ -528,8 +528,8 @@ class PokemonRedBlueWorld(World):
         for sphere in multiworld.get_spheres():
             mon_locations_in_sphere = {}
             for location in sphere:
-                if (location.game == "Pokemon Red and Blue" and (location.item.name in poke_data.pokemon_data.keys()
-                                                                 or "Static " in location.item.name)
+                if (location.game == location.item.game == "Pokemon Red and Blue"
+                        and (location.item.name in poke_data.pokemon_data.keys() or "Static " in location.item.name)
                         and location.item.advancement):
                     key = (location.player, location.item.name)
                     if key in found_mons:
@@ -712,6 +712,7 @@ class PokemonRedBlueWorld(World):
             "require_pokedex": self.options.require_pokedex.value,
             "area_1_to_1_mapping": self.options.area_1_to_1_mapping.value,
             "blind_trainers": self.options.blind_trainers.value,
+            "v5_update": True,
 
         }
         if self.options.type_chart_seed == "random" or self.options.type_chart_seed.value.isdigit():
