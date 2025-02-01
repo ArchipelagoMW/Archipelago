@@ -13,7 +13,7 @@ class LocationData(NamedTuple):
     difficulties: Sequence[int]
 
     def level_id(self):
-        return (self.passage, self.level, self.flag)
+        return (self.passage, self.level)
 
     def to_ap_id(self):
         return (ap_id_offset +
