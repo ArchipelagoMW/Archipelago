@@ -922,7 +922,7 @@ BOO_LOCATION_TABLE: dict[str, LMLocationData] = {
 
 LIGHT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Parlor Light On": LMLocationData("Parlor", 735, "KingdomHearts", 0, [], 36, room_ram_addr=0x803CDF96),
-    "Anteroom Light On": LMLocationData("Anteroom", 736, "KingdomHearts", 0, [], 42, room_ram_addr=0x803CDF9F),
+    "Anteroom Light On": LMLocationData("Anteroom", 736, "KingdomHearts", 0, [], 42, room_ram_addr=0x803CDF9E),
     "Wardrobe Light On": LMLocationData("Wardrobe", 737, "KingdomHearts", 0, [], 41, room_ram_addr=0x803CDF9C),
     "Study Light On": LMLocationData("Study", 738, "KingdomHearts", 0, [], 35, room_ram_addr=0x803CDF94),
     "Master Bedroom Light On": LMLocationData("Master Bedroom", 739, "KingdomHearts", 0, [], 34, room_ram_addr=0x803CDF92),
@@ -959,7 +959,7 @@ LIGHT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Telephone Room Light On": LMLocationData("Telephone Room", 763, "KingdomHearts", 0, [], 53, room_ram_addr=0x803CDFB4),
     "Clockwork Room Light On": LMLocationData("Clockwork Room", 764, "KingdomHearts", 0, [], 59, room_ram_addr=0x803CDFC1),
     "Astral Hall Light On": LMLocationData("Astral Hall", 765, "KingdomHearts", 0, ["Fire Element Medal"], 43,
-                                           room_ram_addr=0x803CDFA1),
+                                           room_ram_addr=0x803CDFA0),
     "Breaker Room Light On": LMLocationData("Breaker Room", 766, "KingdomHearts", 0, [], 69, room_ram_addr=0x803CDFD6),
     "Cellar Light On": LMLocationData("Cellar", 767, "KingdomHearts", 0, [], 66, room_ram_addr=0x803CDFCE),
     "Pipe Room Light On": LMLocationData("Pipe Room", 768, "KingdomHearts", 0, [], 68, room_ram_addr=0x803CDFD4),
