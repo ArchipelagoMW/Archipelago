@@ -356,7 +356,8 @@ class LuigisMansionRandomizer:
 
     def toad_csv_messages(self, event_number: str):
         custom_event = self.get_arc("files/Event/event" + event_number + ".szp")
-        name_to_find = "message" + event_number + ".csv"
+        updated_event_number = event_number if not event_number.startswith("0") else event_number[1:]
+        name_to_find = "message" + updated_event_number + ".csv"
         if not any(info_files for info_files in custom_event.file_entries if info_files.name == name_to_find):
             raise Exception(f"Unable to find an info file with name '{name_to_find}' in provided RARC file.")
         lines = io.BytesIO(get_data(__name__, f"data/custom_events/{name_to_find}"))
@@ -393,9 +394,7 @@ class LuigisMansionRandomizer:
 
         # Some events don't have a CSV, so no need to set it to blank lines
         # TODO update this to not use a template CSV, as it is now blank.
-        updated_event_number = event_number
-        if event_number.startswith("0"):
-            updated_event_number = event_number[1:]
+        updated_event_number = event_number if not event_number.startswith("0") else event_number[1:]
         bool_csv_lines = any((info_files for info_files in custom_event.file_entries if
                               info_files.name == "message" + updated_event_number + ".csv"))
 
