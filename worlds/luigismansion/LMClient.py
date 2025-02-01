@@ -168,7 +168,6 @@ class LMContext(CommonContext):
 
         # All used when death link is enabled.
         self.is_luigi_dead = False
-        self.luigi_recv_death = False
         self.last_health_pointer = 0
         self.death_check_counter = 0
 
@@ -226,9 +225,10 @@ class LMContext(CommonContext):
         :param data: The data associated with the DeathLink event.
         """
         super().on_deathlink(data)
-        self.luigi_recv_death = True
+        self.is_luigi_dead = True
         self.death_check_counter = 0
         self.set_luigi_dead()
+        self.last_death_link = time.time()
         return
 
     def run_gui(self):
@@ -276,11 +276,9 @@ class LMContext(CommonContext):
         return int_play_state == 2 and bool_loaded_in_map
 
     async def check_death(self):
+        print(str(self.check_ingame() and not self.check_alive()))
         if self.check_ingame() and not self.check_alive():
-            if self.luigi_recv_death:
-                self.is_luigi_dead = True
-                self.luigi_recv_death = False
-            if not self.is_luigi_dead and time.time() >= self.last_death_link + 3:
+            if not self.is_luigi_dead and time.time() >= self.last_death_link + 15:
                 self.is_luigi_dead = True
                 self.set_luigi_dead()
                 await self.send_death(self.player_names[self.slot] + " scared themselves to death.")
