@@ -238,7 +238,7 @@ def update_observer_info(observer_info):
         "invisible": 1,
         "(Undocumented)": 0,
     })
-    # This one enables the Dinning 1F hallway after beating Bogmire
+    # This one enables the Dining 1F hallway after beating Bogmire
     observer_info.info_file_field_entries.append({
         "name": "observer",
         "code_name": "(null)",
