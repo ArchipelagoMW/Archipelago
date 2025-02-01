@@ -4,8 +4,8 @@
 <SE>(90)
 <FLAGON>(112)
 <WINDOW>(0)<COLOR>(16)
-<SAY><COLOR>(7)Calculating boo count (10seconds)...
-<WAIT>(300)
+<SAY><COLOR>(7)Calculating boo count (6seconds)...
+<WAIT>(180)
 <SAY><COLOR>(7)Calculated!
 <WAIT>(45)
 <CLOSEWINDOW>(0)
