@@ -16,7 +16,8 @@ from settings import get_settings, Settings
 
 from .LMGenerator import LuigisMansionRandomizer
 from .Items import ALL_ITEMS_TABLE, BOO_ITEM_TABLE, filler_items
-from .Locations import ALL_LOCATION_TABLE, TOAD_LOCATION_TABLE, BOO_LOCATION_TABLE, PORTRAIT_LOCATION_TABLE
+from .Locations import ALL_LOCATION_TABLE, TOAD_LOCATION_TABLE, BOO_LOCATION_TABLE, PORTRAIT_LOCATION_TABLE, \
+    LIGHT_LOCATION_TABLE
 
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
@@ -83,24 +84,28 @@ WALLET_OFFSETS: dict[int, int] = {
 }
 
 # Rank Requirements for each rank. H, G, F, E, D, C, B, A
-RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000,50000000, 60000000, 70000000, 100000000]
+RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000, 50000000, 60000000, 70000000, 100000000]
 
 # List of received items to ignore because they are handled elsewhere
 RECV_ITEMS_IGNORE = [8127, 8125, 8130, 8131, 8132]
 RECV_OWN_GAME_LOCATIONS: list[str] = list(BOO_LOCATION_TABLE.keys()) \
                                      + list(TOAD_LOCATION_TABLE.keys()) \
-                                     + list(PORTRAIT_LOCATION_TABLE.keys())
+                                     + list(PORTRAIT_LOCATION_TABLE.keys()) \
+                                     + list(LIGHT_LOCATION_TABLE.keys())
 RECV_OWN_GAME_ITEMS: list[str] = list(BOO_ITEM_TABLE.keys()) + ["Boo Radar", "Poltergust 4000"]
 
 
 def read_short(console_address: int):
     return int.from_bytes(dme.read_bytes(console_address, 2))
 
+
 def write_short(console_address: int, value: int):
     dme.write_bytes(console_address, value.to_bytes(2))
 
+
 def read_string(console_address: int, strlen: int):
     return dme.read_bytes(console_address, strlen).decode().strip("\0")
+
 
 def check_if_addr_is_pointer(addr: int):
     return 2147483648 <= dme.read_word(addr) <= 2172649471
@@ -213,7 +218,6 @@ class LMContext(CommonContext):
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(death_link_enabled))
 
-
     def on_deathlink(self, data: dict[str, Any]):
         """
         Handle a DeathLink event.
@@ -235,7 +239,6 @@ class LMContext(CommonContext):
 
         self.ui = LMManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
-
 
     def check_alive(self):
         # Our health gets messed up in the Lab, so we can just ignore that location altogether.
@@ -283,7 +286,6 @@ class LMContext(CommonContext):
         write_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]), 0)
         return
 
-
     async def lm_give_items(self):
         # Only try to give items if we are in game and alive.
         if not (self.check_ingame() and self.check_alive()):
@@ -314,7 +316,7 @@ class LMContext(CommonContext):
             if item.item in RECV_ITEMS_IGNORE or (item.player == self.slot and not
             (self.location_names.lookup_in_game(item.location) in RECV_OWN_GAME_LOCATIONS or
              self.item_names.lookup_in_game(item.item) in RECV_OWN_GAME_ITEMS)):
-                last_recv_idx+=1
+                last_recv_idx += 1
                 write_short(LAST_RECV_ITEM_ADDR, last_recv_idx)
                 continue
 
@@ -337,48 +339,56 @@ class LMContext(CommonContext):
                     # Assume we need to update an existing value of size X with Y value at the pointer's address
                     int_item_amount = 1
                     match lm_item.code:
-                        case 119: # Bills and Coins
+                        case 119:  # Bills and Coins
                             coins_curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
-                        [coins_ram_pointer]), lm_item.ram_byte_size))
+                                                                                               [coins_ram_pointer]),
+                                                                           lm_item.ram_byte_size))
                             bills_curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
-                              [bills_rams_pointer]), lm_item.ram_byte_size))
+                                                                                               [bills_rams_pointer]),
+                                                                           lm_item.ram_byte_size))
                             if re.search(r"^\d+", lm_item_name):
                                 int_item_amount = int(re.search(r"^\d+", lm_item_name).group())
                             coins_curr_val += int_item_amount
                             bills_curr_val += int_item_amount
                             dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
-                    [coins_ram_pointer]), coins_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
+                                                                [coins_ram_pointer]),
+                                            coins_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
                             dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
-                    [bills_rams_pointer]), bills_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
+                                                                [bills_rams_pointer]),
+                                            bills_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
                         case 128 | 129:
                             curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
-                        [lm_item.pointer_offset]), lm_item.ram_byte_size))
+                                                                                         [lm_item.pointer_offset]),
+                                                                     lm_item.ram_byte_size))
                             curr_val += 10 if lm_item.code == 128 else 50
                             dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
-                        [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
+                                                                [lm_item.pointer_offset]),
+                                            curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
                         case 63:
                             curr_val = dme.read_byte(lm_item.ram_addr)
-                            curr_val = (curr_val | (1 << 1)) # Enable flag 73
-                            curr_val = (curr_val | (1 << 3)) # Enable flag 75
+                            curr_val = (curr_val | (1 << 1))  # Enable flag 73
+                            curr_val = (curr_val | (1 << 3))  # Enable flag 75
                             dme.write_byte(lm_item.ram_addr, curr_val)
                         case 64:
                             vac_speed = "3800000F"
                             dme.write_bytes(lm_item.ram_addr, bytes.fromhex(vac_speed))
                         case _:
                             curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
-                        [lm_item.pointer_offset]), lm_item.ram_byte_size))
+                                                                                         [lm_item.pointer_offset]),
+                                                                     lm_item.ram_byte_size))
                             if re.search(r"^\d+", lm_item_name):
                                 int_item_amount = int(re.search(r"^\d+", lm_item_name).group())
                             curr_val += int_item_amount
                             dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
-                        [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
+                                                                [lm_item.pointer_offset]),
+                                            curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
                 else:
                     # Assume it is a single address with a bit to update, rather than adding to an existing value
                     item_val = dme.read_byte(lm_item.ram_addr)
                     dme.write_byte(lm_item.ram_addr, (item_val | (1 << lm_item.itembit)))
 
                 # Update the last received index to ensure we don't receive the same item over and over.
-                last_recv_idx+=1
+                last_recv_idx += 1
                 write_short(LAST_RECV_ITEM_ADDR, last_recv_idx)
             else:
                 # TODO Debug remove before release
@@ -424,6 +434,11 @@ class LMContext(CommonContext):
                         # Bit 2 of the current room address indicates if a chest in that room has been opened.
                         current_room_state_int = read_short(lm_loc_data.room_ram_addr)
                         if (current_room_state_int & (1 << 2)) > 0:
+                            self.locations_checked.add(mis_loc)
+                    case "KingdomHearts":
+                        # Bit 1 of the current room address indicates if a light in that room has been turned on.
+                        current_room_state_int = read_short(lm_loc_data.room_ram_addr)
+                        if (current_room_state_int & (1 << 1)) > 0:
                             self.locations_checked.add(mis_loc)
                     case "Boo":
                         current_boo_state_int = dme.read_byte(lm_loc_data.room_ram_addr)
@@ -479,7 +494,8 @@ class LMContext(CommonContext):
                 lm_boo_item = BOO_ITEM_TABLE[lm_boo]
                 boo_caught = dme.read_byte(lm_boo_item.ram_addr)
                 boo_val = boo_caught | (1 << lm_boo_item.itembit) if (in_boo_gate_event and
-                    boo_id in local_recv_ids) else boo_caught & ~(1 << lm_boo_item.itembit)
+                                                                      boo_id in local_recv_ids) else boo_caught & ~(
+                        1 << lm_boo_item.itembit)
                 dme.write_byte(lm_boo_item.ram_addr, boo_val)
         return
 
@@ -534,6 +550,7 @@ async def dolphin_sync_task(ctx: LMContext):
             await ctx.disconnect()
             await asyncio.sleep(5)
             continue
+
 
 def main(output_data: Optional[str] = None, connect=None, password=None):
     Utils.init_logging("Luigi's Mansion Client")
