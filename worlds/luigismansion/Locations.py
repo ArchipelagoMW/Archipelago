@@ -949,7 +949,7 @@ LIGHT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Nana's Room Light On": LMLocationData("Nana's Room", 756, "KingdomHearts", 0, [], 49, room_ram_addr=0x803CDFAC),
     "Sitting Room Light On": LMLocationData("Sitting Room", 757, "KingdomHearts", 0,
                                            ["Fire Element Medal", "Water Element Medal"], 28,
-                                           room_ram_addr=0x803D5E04),
+                                           room_ram_addr=0x803CDF86),
     "Guest Room Light On": LMLocationData("Guest Room", 758, "KingdomHearts", 0, [], 29, room_ram_addr=0x803CDF88),
     "Safari Room Light On": LMLocationData("Safari Room", 759, "KingdomHearts", 0, [], 55, room_ram_addr=0x803CDFB8),
     "Artist's Studio Light On": LMLocationData("Artist's Studio", 760, "KingdomHearts", 0, [], 60, room_ram_addr=0x803CDFC2),
