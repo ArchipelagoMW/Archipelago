@@ -70,15 +70,15 @@ def can_destroy_seeds_hanging_by_vines(state: CollectionState, player: int) -> b
 
 
 def has_heros_sword(state: CollectionState, player: int) -> bool:
-    return not state._tww_in_swordless_mode(player) and state.has("Progressive Sword", player, 1)
+    return state.has("Progressive Sword", player, 1)
 
 
 def has_any_master_sword(state: CollectionState, player: int) -> bool:
-    return not state._tww_in_swordless_mode(player) and state.has("Progressive Sword", player, 2)
+    return state.has("Progressive Sword", player, 2)
 
 
 def has_full_power_master_sword(state: CollectionState, player: int) -> bool:
-    return not state._tww_in_swordless_mode(player) and state.has("Progressive Sword", player, 4)
+    return state.has("Progressive Sword", player, 4)
 
 
 def has_heros_shield(state: CollectionState, player: int) -> bool:

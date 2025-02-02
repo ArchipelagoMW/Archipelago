@@ -480,7 +480,7 @@ class TWWWorld(World):
         adjusted_classification = None
         if not self.options.progression_big_octos_gunboats and name == "Quiver Capacity Upgrade":
             adjusted_classification = IC.useful
-        if self.options.sword_mode == "swords_optional" and name == "Progressive Sword":
+        if self.options.sword_mode in ("swords_optional", "swordless") and name == "Progressive Sword":
             adjusted_classification = IC.useful
         if not self.options.enable_tuner_logic and name == "Tingle Tuner":
             adjusted_classification = IC.useful
