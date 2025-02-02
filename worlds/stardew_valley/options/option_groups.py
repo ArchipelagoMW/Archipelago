@@ -53,6 +53,7 @@ else:
             options.NumberOfMovementBuffs,
             options.EnabledFillerBuffs,
             options.TrapDifficulty,
+            options.TrapDistribution,
             options.MultipleDaySleepEnabled,
             options.MultipleDaySleepCost,
             options.QuickStart,
