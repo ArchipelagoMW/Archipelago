@@ -3,12 +3,19 @@ from .assertion import WorldAssertMixin
 from .. import options, items_by_group, Group
 
 
+default_distribution = {trap.name: 10 for trap in items_by_group[Group.TRAP] if Group.DEPRECATED not in trap.groups}
+
+
 class TestTrapDifficultyCanRemoveAllTraps(WorldAssertMixin, SVTestBase):
     options = {
+        options.QuestLocations.internal_name: 56,
         options.Fishsanity.internal_name: options.Fishsanity.option_all,
+        options.Museumsanity.internal_name: options.Museumsanity.option_all,
+        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
         options.Shipsanity.internal_name: options.Shipsanity.option_everything,
         options.Cooksanity.internal_name: options.Cooksanity.option_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
+        options.Mods.internal_name: frozenset(options.Mods.valid_keys),
         options.TrapDifficulty.internal_name: options.TrapDifficulty.option_no_traps,
     }
 
@@ -23,10 +30,14 @@ class TestTrapDifficultyCanRemoveAllTraps(WorldAssertMixin, SVTestBase):
 
 class TestDefaultDistributionHasAllTraps(WorldAssertMixin, SVTestBase):
     options = {
+        options.QuestLocations.internal_name: 56,
         options.Fishsanity.internal_name: options.Fishsanity.option_all,
+        options.Museumsanity.internal_name: options.Museumsanity.option_all,
+        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
         options.Shipsanity.internal_name: options.Shipsanity.option_everything,
         options.Cooksanity.internal_name: options.Cooksanity.option_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
+        options.Mods.internal_name: frozenset(options.Mods.valid_keys),
         options.TrapDifficulty.internal_name: options.TrapDifficulty.option_medium,
     }
 
@@ -41,12 +52,16 @@ class TestDefaultDistributionHasAllTraps(WorldAssertMixin, SVTestBase):
 
 class TestDistributionIsRespectedAllTraps(WorldAssertMixin, SVTestBase):
     options = {
+        options.QuestLocations.internal_name: 56,
         options.Fishsanity.internal_name: options.Fishsanity.option_all,
+        options.Museumsanity.internal_name: options.Museumsanity.option_all,
+        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
         options.Shipsanity.internal_name: options.Shipsanity.option_everything,
         options.Cooksanity.internal_name: options.Cooksanity.option_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
+        options.Mods.internal_name: frozenset(options.Mods.valid_keys),
         options.TrapDifficulty.internal_name: options.TrapDifficulty.option_medium,
-        options.TrapDistribution.internal_name: {"Nudge Trap": 10, "Bark Trap": 1, "Meow Trap": 100, "Shuffle Trap": 0}
+        options.TrapDistribution.internal_name: default_distribution | {"Nudge Trap": 10, "Bark Trap": 1, "Meow Trap": 100, "Shuffle Trap": 0}
     }
 
     def test_fewer_barks_than_nudges_in_item_pool(self):
