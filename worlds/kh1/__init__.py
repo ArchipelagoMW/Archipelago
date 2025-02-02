@@ -317,7 +317,8 @@ class KH1World(World):
                     "shorten_go_mode": bool(self.options.shorten_go_mode),
                     "slot_2_level_checks": int(self.options.slot_2_level_checks.value),
                     "starting_tools": bool(self.options.starting_tools),
-                    "super_bosses": bool(self.options.super_bosses)
+                    "super_bosses": bool(self.options.super_bosses),
+                    "remote_location_ids": self.get_remote_location_ids()
                     }
         return slot_data
     

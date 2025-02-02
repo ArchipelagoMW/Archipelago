@@ -100,6 +100,7 @@ class KH1Context(CommonContext):
         item_num = 1
 
     def on_package(self, cmd: str, args: dict):
+        global remote_location_ids
         if cmd in {"Connected"}:
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
@@ -115,7 +116,6 @@ class KH1Context(CommonContext):
                     f.write(str(args['slot_data'][key]))
                     f.close()
                 if key == "remote_location_ids":
-                    global remote_location_ids
                     remote_location_ids = args['slot_data'][key]
                 if key == "death_link":
                     if args['slot_data']["death_link"]:
@@ -128,8 +128,6 @@ class KH1Context(CommonContext):
             if start_index != len(self.items_received):
                 global item_num
                 for item in args['items']:
-                    print(NetworkItem(*item).location)
-                    print(NetworkItem(*item).player)
                     found = False
                     item_filename = f"AP_{str(item_num)}.item"
                     for filename in os.listdir(self.game_communication_path):
