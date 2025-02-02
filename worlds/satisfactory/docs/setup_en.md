@@ -149,6 +149,12 @@ Note that the Satisfactory Server/Client does _not_ need a copy of your Archipel
 The mod communicates with the Archipelago Server, which already has your config file,
 to generate the required content at runtime.
 
+> Note: Satisfactory dedicated servers do not currently have a user interface for the mod config system.
+> If you are setting up a dedicated server as your Satisfactory Server, to work around this,
+> first, enter the connection details in your Satisfactory Client, then locate the `Archipelago.cfg` file
+> in the [mod config file directory on disk](https://docs.ficsit.app/satisfactory-modding/latest/faq.html#Files_ModConfig).
+> Copy this file to the server's mod config directory.
+
 ### Creating a New World
 
 Once you have entered connection details, create a new world using the game's New Game menu.
@@ -157,6 +163,10 @@ Consider enabling Advanced Game Settings to allow dealing with bugs that may ari
 Within the Advanced Game Settings menus,
 you may wish to switch the "Keep Inventory" setting to "Keep Everything" to avoid dropping items on death,
 although this will never lock you out of progression.
+
+> Note: The [starting inventory feature does not currently work on dedicated servers](https://github.com/Jarno458/SatisfactoryArchipelagoMod/issues/105).
+> To work around this, create the save file in your Satisfactory Client first, join it to receive the items,
+> then upload the save file to your Satisfactory Server using the [Server Manager](https://satisfactory.wiki.gg/wiki/Dedicated_servers#Loading_a_save_file).
 
 ### Verifying Connection Success
 
