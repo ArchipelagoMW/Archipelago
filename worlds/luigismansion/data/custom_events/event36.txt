@@ -2,7 +2,7 @@
 <LUIGISTOP2>
 <FULLSCREEN>
 <BGM>(30)
-<CHOICE>"Hint"(1)"GloveCheck"(2)<LISTEND>
+<CHOICE>"Hint"(1)"GloveCheck"(2)"BadEnd"(3)<LISTEND>
 <WAIT>(45)
 -------------------------
 <CASE>"Hint"
