@@ -522,7 +522,7 @@ class LMWorld(World):
         diamweight = math.ceil(self.options.gems_weight.value * 0.4)
         filler_weights = [self.options.bundle_weight.value, self.options.gems_weight.value,  # coins & bills, sapphire
                           self.options.gems_weight.value, self.options.gems_weight.value, diamweight,  # emerald, ruby, diamond
-                          self.options.poison_trap_weight.value, 20, 10, 5,  # poison mush, nothing, sm heart, l heart
+                          self.options.poison_trap_weight.value, 40, 10, 5,  # poison mush, nothing, sm heart, l heart
                           self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
                           self.options.banana_trap_weight.value, self.options.coin_weight.value, twencoin, tencoin,  # banana, 10coin, 20coin, 30coin
                           self.options.bill_weight.value, twenbill, self.options.bars_weight.value, morebar]  # 15bill, 25bill, 1bar, 2bar
