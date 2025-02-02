@@ -1,4 +1,5 @@
 from BaseClasses import ItemClassification
+from collections import Counter
 from random import Random
 
 from . import TunicTestBase
@@ -35,21 +36,18 @@ class TestCombat(TunicTestBase):
         curr_statuses = {name: False for name in area_data.keys()}
         prev_statuses = curr_statuses.copy()
         area_names = [name for name in area_data.keys()]
-
+        current_items = Counter({name: 0 for name in combat_items})
         while len(combat_items):
             current_item_name = combat_items.pop()
+            current_items[current_item_name] += 1
             current_item = TunicWorld.create_item(self.world, current_item_name)
             self.collect(current_item)
             random_obj.shuffle(area_names)
             for area in area_names:
                 curr_statuses[area] = check_combat_reqs(area, self.multiworld.state, self.player)
-            can_stop = True
             for area, status in curr_statuses.items():
                 if status < prev_statuses[area]:
-                    raise Exception(f"Status for {area} decreased after collecting {current_item_name}.")
-                if not status:
-                    can_stop = False
+                    raise Exception(f"Status for {area} decreased after collecting {current_item_name}.\n"
+                                    f"Current items: {current_items}")
+                print(current_items)
                 prev_statuses[area] = status
-            # if they're all True, we're probably not regressing anymore so let's save some time and stop now
-            if can_stop:
-                break
