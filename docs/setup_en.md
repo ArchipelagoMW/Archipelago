@@ -11,7 +11,6 @@ As we are using BizHawk, this guide is only applicable to Windows and Linux syst
   - Detailed installation instructions for Bizhawk can be found at the above link.
   - Windows users must run the prereq installer first, which can also be found at the above link.
 - The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
-  (select `Wario Land 4 Client` during installation).
 - A Wario Land 4 ROM. Either US/Europe or Japanese is acceptable. You do not need one to generate a seed, only to play it.
 
 ## Configuring BizHawk
@@ -54,7 +53,7 @@ options and export a config file from them: [Wario Land 4 Player Options Page](/
 ### Verifying your config file
 
 If you would like to validate your config file to make sure it works, you may do
-so on the YAML Validator page: [YAML Validation page](/mysterycheck)
+so on the YAML Validator page: [YAML Validation page](/check)
 
 ## Joining a MultiWorld Game
 
@@ -70,7 +69,7 @@ automatically launch the client, and will also create your ROM in the same place
 
 ### Connect to the Multiserver
 
-Once both the client and the emulator are started, they must be connected. **This should happen automatically**
+Once both the client and the emulator are started, they must be connected. **This should happen automatically.**
 However, if the lua script window doesn't appear, then within the emulator click
 on the "Tools" menu and select "Lua Console". Click the folder button or press Ctrl+O to open a Lua
 script. Navigate to your Archipelago install folder and open `data/lua/connector_bizhawk_generic.lua`.
@@ -86,13 +85,12 @@ Now you're ready to start looting the Golden Pyramid.
 The recommended way to host a game is to use our hosting service. The process is relatively simple:
 
 1. Collect config files from your players.
-2. Create a zip file containing your players' config files.
-3. Upload that zip file to the Generate page above.
+2. Upload the config files to the Generate page above.
     - Generate page: [WebHost Seed Generation Page](/generate)
-4. Wait a moment while the seed is generated.
-5. When the seed is generated, you will be redirected to a "Seed Info" page.
-6. Click "Create New Room". This will take you to the server page. Provide the link to this page to
+3. Wait a moment while the seed is generated.
+4. When the seed is generated, you will be redirected to a "Seed Info" page.
+5. Click "Create New Room". This will take you to the server page. Provide the link to this page to
   your players, so they may download their patch files from there.
-7. Note that a link to a MultiWorld Tracker is at the top of the room page. The tracker shows the
+6. Note that a link to a MultiWorld Tracker is at the top of the room page. The tracker shows the
   progress of all players in the game. Any observers may also be given the link to this page.
-8. Once all players have joined, you may begin playing.
+7. Once all players have joined, you may begin playing.
