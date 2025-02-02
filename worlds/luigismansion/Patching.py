@@ -721,6 +721,36 @@ def update_observer_info(observer_info):
         "invisible": 1,
         "(Undocumented)": 0,
     })
+    # This one enables the Basement Stairwell hallway after beating Boolossus
+    observer_info.info_file_field_entries.append({
+        "name": "observer",
+        "code_name": "(null)",
+        "string_arg0": "(null)",
+        "cond_string_arg0": "(null)",
+        "pos_x": 3900.000000,
+        "pos_y": -200.000000,
+        "pos_z": -1050.000000,
+        "dir_x": 0.000000,
+        "dir_y": 0.000000,
+        "dir_z": 0.000000,
+        "scale_x": 0.000000,
+        "scale_y": 0.000000,
+        "scale_z": 0.000000,
+        "room_no": 65,
+        "cond_arg0": 81,
+        "arg0": 0,
+        "arg1": 0,
+        "arg2": 0,
+        "arg3": 0,
+        "arg4": 0,
+        "arg5": 0,
+        "appear_flag": 81,
+        "disappear_flag": 0,
+        "cond_type": 18,
+        "do_type": 1,
+        "invisible": 1,
+        "(Undocumented)": 0,
+    })
     # This one checks for the candles being lit in the Fortune-Teller's Room, flagging that key spawn
     observer_info.info_file_field_entries.append({
         "name": "observer",
@@ -841,6 +871,7 @@ def update_observer_info(observer_info):
         "invisible": 1,
         "(Undocumented)": 0,
     })
+
 
 
 def update_generator_info(generator_info):
