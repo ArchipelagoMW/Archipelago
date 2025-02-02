@@ -49,5 +49,4 @@ class TestCombat(TunicTestBase):
                 if status < prev_statuses[area]:
                     raise Exception(f"Status for {area} decreased after collecting {current_item_name}.\n"
                                     f"Current items: {current_items}")
-                print(current_items)
                 prev_statuses[area] = status
