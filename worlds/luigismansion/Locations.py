@@ -296,7 +296,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Nursery Picture R (closer to Door)": LMLocationData("Nursery", 175, "Furniture", 369, [], 26),
     "Nursery Picture R (closer to 4th Wall)": LMLocationData("Nursery", 176, "Furniture", 370, [], 26),
     "Nursery Ceiling Lamp": LMLocationData("Nursery", 177, "Furniture", 374, [], 26),
-    "Twins' Room Mobile": LMLocationData("Twins' Room", 179, "Furniture", 426, [], 27),
+    # "Twins' Room Mobile": LMLocationData("Twins' Room", 179, "Furniture", 426, [], 27),
     "Twins' Room Tennis Rackets": LMLocationData("Twins' Room", 180, "Furniture", 562, [], 27),
     "Twins' Room Dartboard": LMLocationData("Twins' Room", 181, "Furniture", 424, [], 27),
     # "Twins' Room Bunk Bed": LMLocationData("Twins' Room", 182, "Furniture", 425, [], 27), #TODO Prevents Speedy Spirit Spawn
