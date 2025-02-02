@@ -14,7 +14,6 @@ C:\Users\fello\Documents\GitHub\ArchipelagoBranchSly1\worlds\sly1\Client\bin\Deb
 C:\Users\fello\Documents\GitHub\ArchipelagoBranchSly1\worlds\sly1\Client\bin\Debug\net8.0-windows\Sly1AP.pdb
 C:\Users\fello\Documents\GitHub\ArchipelagoBranchSly1\worlds\sly1\Client\bin\Debug\net8.0-windows\Archipelago.Core.dll
 C:\Users\fello\Documents\GitHub\ArchipelagoBranchSly1\worlds\sly1\Client\bin\Debug\net8.0-windows\Archipelago.MultiClient.Net.dll
-C:\Users\fello\Documents\GitHub\ArchipelagoBranchSly1\worlds\sly1\Client\bin\Debug\net8.0-windows\Archipelago.PCSX2.dll
 C:\Users\fello\Documents\GitHub\ArchipelagoBranchSly1\worlds\sly1\Client\bin\Debug\net8.0-windows\Newtonsoft.Json.dll
 C:\Users\fello\Documents\GitHub\ArchipelagoBranchSly1\worlds\sly1\Client\obj\Debug\net8.0-windows\Sly1AP.csproj.Up2Date
 C:\Users\fello\Documents\GitHub\ArchipelagoBranchSly1\worlds\sly1\Client\obj\Debug\net8.0-windows\Sly1AP.dll
@@ -46,3 +45,10 @@ c:\workspace\ArchipelagoBranchSly1\worlds\sly1\Client\obj\Debug\net8.0-windows\r
 c:\workspace\ArchipelagoBranchSly1\worlds\sly1\Client\obj\Debug\net8.0-windows\Sly1AP.pdb
 c:\workspace\ArchipelagoBranchSly1\worlds\sly1\Client\obj\Debug\net8.0-windows\Sly1AP.genruntimeconfig.cache
 c:\workspace\ArchipelagoBranchSly1\worlds\sly1\Client\obj\Debug\net8.0-windows\ref\Sly1AP.dll
+C:\Users\fello\Documents\GitHub\ArchipelagoBranchSly1\worlds\sly1\Client\bin\Debug\net8.0-windows\Serilog.dll
+C:\Users\fello\Documents\GitHub\ArchipelagoBranchSly1\worlds\sly1\Client\bin\Debug\net8.0-windows\Serilog.Sinks.Console.dll
+C:\Users\fello\Documents\GitHub\ArchipelagoBranchSly1\worlds\sly1\Client\bin\Debug\net8.0-windows\Serilog.Sinks.File.dll
+C:\Users\fello\Documents\GitHub\ArchipelagoBranchSly1\worlds\sly1\Client\bin\Debug\net8.0-windows\System.IO.Pipelines.dll
+C:\Users\fello\Documents\GitHub\ArchipelagoBranchSly1\worlds\sly1\Client\bin\Debug\net8.0-windows\System.Text.Encodings.Web.dll
+C:\Users\fello\Documents\GitHub\ArchipelagoBranchSly1\worlds\sly1\Client\bin\Debug\net8.0-windows\System.Text.Json.dll
+C:\Users\fello\Documents\GitHub\ArchipelagoBranchSly1\worlds\sly1\Client\bin\Debug\net8.0-windows\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll

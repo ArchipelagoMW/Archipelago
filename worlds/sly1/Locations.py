@@ -1,5 +1,6 @@
 from .Types import LocData, EpisodeType, LevelData, Sly1Location
 from typing import Dict, TYPE_CHECKING
+import logging
 
 if TYPE_CHECKING:
     from . import Sly1World
@@ -31,6 +32,18 @@ def get_total_locations(world: "Sly1World") -> int:
     return total
 
 def get_location_names() -> Dict[str, int]:
+    all_possible_bottle_locations = {}
+    for name, data in bottle_amounts.items():
+        # For all possible bottle numbers, create location entries
+        for bottle_number in range(1, data.bottle_amount + 1):
+            bottle_code = data.ap_code + (bottle_number - 1)
+            bottle_location_name = f"{name} Bottle #{bottle_number}"
+            all_possible_bottle_locations[bottle_location_name] = bottle_code
+
+    names = {**{name: data.ap_code for name, data in location_table.items()}, **all_possible_bottle_locations}
+
+    return names
+
     names = {name: data.ap_code for name, data in location_table.items()}
     return names
 
@@ -56,7 +69,7 @@ def get_bundle_amount_for_level(world: "Sly1World", level_name: str) -> int:
 
     return bundle_amount
 
-def generate_bottle_locations(world: "Sly1World", bundle_size: int):
+def generate_bottle_locations(world: "Sly1World", bundle_size: int) -> Dict[str, LocData]:
     for name, data in bottle_amounts.items():
         bundle_amount = get_bundle_amount_for_level(world, name)
 
@@ -67,9 +80,13 @@ def generate_bottle_locations(world: "Sly1World", bundle_size: int):
             if bottle_number > data.bottle_amount:
                 bottle_number = data.bottle_amount
             bottle_code = data.ap_code + (bottle_number - 1)
-            
-            print(f'Creating location {name} Bottle #{bottle_number} with code {bottle_code} in region {reg.name}')
-            location = Sly1Location(world.player, f'{name} Bottle #{bottle_number}', bottle_code, reg)
+            # Delete every bottle so we can add only the ones that are valid
+            bottle_name = f"{name} Bottle #{bottle_number}"
+            if bottle_name in location_table:
+                del location_table[bottle_name]
+
+            logging.info(f'Creating location {bottle_name} with code {bottle_code} in region {reg.name}')
+            location = Sly1Location(world.player, bottle_name, bottle_code, reg)
             reg.locations.append(location)
 
 sly_locations = {

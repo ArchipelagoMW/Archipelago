@@ -66,7 +66,7 @@ namespace Sly1AP.Models
         public static int DuelByTheDragonBottles { get; set; } = 0;
         public static int DuelByTheDragonMax { get; set; } = 40;
         public static int DuelByTheDragonItems { get; set; } = 0;
-        public static void UpdateBottles(int Id, int Bundles)
+        public static void UpdateBottles(long Id, int Bundles)
         {
             //Increment the count. Then, multiply it by the bundle size. If it exceeds the maximum for the level, reduce it to max. Then write it to the memory address.
             if (Id == 10020030)
@@ -262,7 +262,7 @@ namespace Sly1AP.Models
             Memory.Write(0x2027D4B4, FlamingTempleBottles);
             Memory.Write(0x2027D52C, UnseenFoeBottles);
             Memory.Write(0x2027D694, DuelByTheDragonBottles);
-            await Task.Delay(1);
+            await Task.Delay(100);
         }
     }
 }
