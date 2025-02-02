@@ -216,42 +216,43 @@ item_table = {
     item_names.DOMINION_TROOPER:
         ItemData(24 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 4, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
-    # Elites
+    # Elites, currently disabled for balance
     item_names.PRIDE_OF_AUGUSTRGRAD:
         ItemData(50 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit, 28, SC2Race.TERRAN,
-                 classification=ItemClassification.progression),
+                 classification=ItemClassification.progression, quantity=0),
     item_names.SKY_FURY:
         ItemData(51 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit, 29, SC2Race.TERRAN,
-                 classification=ItemClassification.progression),
+                 classification=ItemClassification.progression, quantity=0),
     item_names.SHOCK_DIVISION:
         ItemData(52 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 0, SC2Race.TERRAN,
-                 classification=ItemClassification.progression),
+                 classification=ItemClassification.progression, quantity=0),
     item_names.BLACKHAMMER:
         ItemData(53 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 1, SC2Race.TERRAN,
-                 classification=ItemClassification.progression),
+                 classification=ItemClassification.progression, quantity=0),
     item_names.AEGIS_GUARD:
-        ItemData(54 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 2, SC2Race.TERRAN),
+        ItemData(54 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 2, SC2Race.TERRAN,
+                 quantity=0),
     item_names.EMPERORS_SHADOW:
         ItemData(55 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 3, SC2Race.TERRAN,
-                 classification=ItemClassification.progression),
+                 classification=ItemClassification.progression, quantity=0),
     item_names.SON_OF_KORHAL:
         ItemData(56 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 5, SC2Race.TERRAN,
-                 classification=ItemClassification.progression),
+                 classification=ItemClassification.progression, quantity=0),
     item_names.BULWARK_COMPANY:
         ItemData(57 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 6, SC2Race.TERRAN,
-                 classification=ItemClassification.progression),
+                 classification=ItemClassification.progression, quantity=0),
     item_names.FIELD_RESPONSE_THETA:
         ItemData(58 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 7, SC2Race.TERRAN,
-                 classification=ItemClassification.progression),
+                 classification=ItemClassification.progression, quantity=0),
     item_names.EMPERORS_GUARDIAN:
         ItemData(59 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 8, SC2Race.TERRAN,
-                 classification=ItemClassification.progression),
+                 classification=ItemClassification.progression, quantity=0),
     item_names.NIGHT_HAWK:
         ItemData(60 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 9, SC2Race.TERRAN,
-                 classification=ItemClassification.progression),
+                 classification=ItemClassification.progression, quantity=0),
     item_names.NIGHT_WOLF:
         ItemData(61 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Unit_2, 10, SC2Race.TERRAN,
-                 classification=ItemClassification.progression),
+                 classification=ItemClassification.progression, quantity=0),
 
     # Some other items are moved to Upgrade group because of the way how the bot message is parsed
     item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON: ItemData(100 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Upgrade, 0, SC2Race.TERRAN, classification=ItemClassification.progression, quantity=WEAPON_ARMOR_UPGRADE_MAX_LEVEL, parent=parent_names.INFANTRY_WEAPON_UNITS),
