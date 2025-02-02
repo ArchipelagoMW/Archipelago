@@ -197,7 +197,6 @@ class WL4World(World):
         self.multiworld.itempool += itempool
 
     def generate_output(self, output_directory: str):
-        return  # TODO
         output_path = Path(output_directory)
 
         patch = WL4ProcedurePatch()

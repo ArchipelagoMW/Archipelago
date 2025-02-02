@@ -215,7 +215,7 @@ class StartInventory:
     def __init__(self):
         self.level_table = [[0] * 6 for _ in Passage]
         self.abilities = 0
-        self.junk_counts = [0] * 5
+        self.junk_counts = [0] * 6
 
     def add(self, item: WL4Item):
         if item.type == ItemType.JEWEL:
@@ -259,7 +259,7 @@ class StartInventory:
         patch.write_token(
             APTokenTypes.WRITE,
             get_rom_address('StartingInventoryJunkCounts'),
-            struct.pack('<5B', *(min(255, item) for item in self.junk_counts))
+            struct.pack('<6B', *(min(255, item) for item in self.junk_counts))
         )
 
     def __repr__(self):

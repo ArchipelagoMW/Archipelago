@@ -17,6 +17,8 @@
 03000BE3 scbuf_ucseq
 03000BE4 scbuf_ucwork0
 03000BEA scbuf_usposx
+03000BF4 igmtotalscore
+03000BF8 igmstagescore
 03000C07 has1stgempiece
 03000C08 has2ndgempiece
 03000C09 has3rdgempiece
@@ -88,13 +90,13 @@
 0878F9BC playerid
 0878F9BE seedname
 0878FA00 itemlocationtable
-0878FAD4 itemextdatatable
-0878FE1C startinginventoryitemstatus
-0878FE40 startinginventoryjunkcounts
-0878FE45 startinginventorywarioabilities
-0878FE46 sendmultiworlditemsimmediately
-0878FE47 goaltype
-0878FE48 goldentreasuresneeded
-0878FE49 trapbehavior
-08793718 multiworldstringdump
+0878FC1C itemextdatatable
+0879048C startinginventoryitemstatus
+087904B0 startinginventoryjunkcounts
+087904B5 startinginventorywarioabilities
+087904B6 sendmultiworlditemsimmediately
+087904B7 goaltype
+087904B8 goldentreasuresneeded
+087904B9 trapbehavior
+08793F9C multiworldstringdump
 
