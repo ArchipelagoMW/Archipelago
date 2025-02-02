@@ -17,7 +17,7 @@ from settings import get_settings, Settings
 from .LMGenerator import LuigisMansionRandomizer
 from .Items import ALL_ITEMS_TABLE, BOO_ITEM_TABLE, filler_items
 from .Locations import ALL_LOCATION_TABLE, TOAD_LOCATION_TABLE, BOO_LOCATION_TABLE, PORTRAIT_LOCATION_TABLE, \
-    LIGHT_LOCATION_TABLE
+    LIGHT_LOCATION_TABLE, SPEEDY_LOCATION_TABLE
 
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
@@ -91,7 +91,8 @@ RECV_ITEMS_IGNORE = [8127, 8125, 8130, 8131, 8132]
 RECV_OWN_GAME_LOCATIONS: list[str] = list(BOO_LOCATION_TABLE.keys()) \
                                      + list(TOAD_LOCATION_TABLE.keys()) \
                                      + list(PORTRAIT_LOCATION_TABLE.keys()) \
-                                     + list(LIGHT_LOCATION_TABLE.keys())
+                                     + list(LIGHT_LOCATION_TABLE.keys()) \
+                                     + list(SPEEDY_LOCATION_TABLE.keys())
 RECV_OWN_GAME_ITEMS: list[str] = list(BOO_ITEM_TABLE.keys()) + ["Boo Radar", "Poltergust 4000"]
 
 # Static time to wait for health and death checks
@@ -459,7 +460,7 @@ class LMContext(CommonContext):
                             self.locations_checked.add(mis_loc)
                             dme.write_byte(lm_loc_data.room_ram_addr,
                                            (current_boo_state_int & ~(1 << lm_loc_data.locationbit)))
-                    case "Toad" | "Freestanding" | "Special" | "Portrait":
+                    case "Toad" | "Freestanding" | "Special" | "Portrait" | "BSpeedy":
                         current_toad_int = dme.read_byte(lm_loc_data.room_ram_addr)
                         if (current_toad_int & (1 << lm_loc_data.locationbit)) > 0:
                             self.locations_checked.add(mis_loc)
