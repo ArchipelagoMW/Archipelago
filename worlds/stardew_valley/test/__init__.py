@@ -52,7 +52,7 @@ def default_6_x_x():
         options.SkillProgression.internal_name: options.SkillProgression.default,
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.default,
         options.ToolProgression.internal_name: options.ToolProgression.default,
-        options.TrapItems.internal_name: options.TrapItems.default,
+        options.TrapDifficulty.internal_name: options.TrapDifficulty.default,
         options.Walnutsanity.internal_name: options.Walnutsanity.default
     }
 
@@ -88,7 +88,7 @@ def allsanity_no_mods_6_x_x():
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive_with_masteries,
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
         options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
-        options.TrapItems.internal_name: options.TrapItems.option_nightmare,
+        options.TrapDifficulty.internal_name: options.TrapDifficulty.option_nightmare,
         options.Walnutsanity.internal_name: options.Walnutsanity.preset_all
     }
 
@@ -136,7 +136,7 @@ def get_minsanity_options():
         options.SkillProgression.internal_name: options.SkillProgression.option_vanilla,
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_vanilla,
         options.ToolProgression.internal_name: options.ToolProgression.option_vanilla,
-        options.TrapItems.internal_name: options.TrapItems.option_no_traps,
+        options.TrapDifficulty.internal_name: options.TrapDifficulty.option_no_traps,
         options.Walnutsanity.internal_name: options.Walnutsanity.preset_none
     }
 
@@ -172,7 +172,7 @@ def minimal_locations_maximal_items():
         options.SkillProgression.internal_name: options.SkillProgression.option_vanilla,
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_vanilla,
         options.ToolProgression.internal_name: options.ToolProgression.option_vanilla,
-        options.TrapItems.internal_name: options.TrapItems.option_nightmare,
+        options.TrapDifficulty.internal_name: options.TrapDifficulty.option_nightmare,
         options.Walnutsanity.internal_name: options.Walnutsanity.preset_none
     }
     return min_max_options

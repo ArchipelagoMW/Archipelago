@@ -52,7 +52,7 @@ else:
             options.DebrisMultiplier,
             options.NumberOfMovementBuffs,
             options.EnabledFillerBuffs,
-            options.TrapItems,
+            options.TrapDifficulty,
             options.MultipleDaySleepEnabled,
             options.MultipleDaySleepCost,
             options.QuickStart,
