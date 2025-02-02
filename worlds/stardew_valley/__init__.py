@@ -318,13 +318,13 @@ class StardewValleyWorld(World):
                 if self.multiworld.game[player] != self.game:
                     continue
                 player_options = cast(StardewValleyOptions, self.multiworld.worlds[player].options)
-                if player_options.trap_items == TrapDifficulty.option_no_traps:
+                if player_options.trap_difficulty == TrapDifficulty.option_no_traps:
                     include_traps = False
                 if player_options.exclude_ginger_island == ExcludeGingerIsland.option_true:
                     exclude_island = True
             return include_traps, exclude_island
         else:
-            return self.options.trap_items != TrapDifficulty.option_no_traps, self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
+            return self.options.trap_difficulty != TrapDifficulty.option_no_traps, self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         """Write to the spoiler header. If individual it's right at the end of that player's options,

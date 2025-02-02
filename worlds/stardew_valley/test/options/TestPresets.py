@@ -1,4 +1,4 @@
-from Options import PerGameCommonOptions, OptionSet
+from Options import PerGameCommonOptions, OptionSet, OptionDict
 from .. import SVTestCase
 from ...options import StardewValleyOptions
 from ...options.presets import sv_options_presets
@@ -10,7 +10,8 @@ class TestPresets(SVTestCase):
         omitted_option_names = {option_key for option_key in PerGameCommonOptions.type_hints}
         mandatory_option_names = {option_key for option_key in all_option_names
                                   if option_key not in omitted_option_names and
-                                  not issubclass(StardewValleyOptions.type_hints[option_key], OptionSet)}
+                                  not issubclass(StardewValleyOptions.type_hints[option_key], OptionSet) and
+                                  not issubclass(StardewValleyOptions.type_hints[option_key], OptionDict)}
 
         for preset_name in sv_options_presets:
             with self.subTest(f"{preset_name}"):

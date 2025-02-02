@@ -355,7 +355,7 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
 
     # Yes I reuse the worlds generated between tests, its speeds the execution by a couple seconds
     # If the simple dict caching ends up taking too much memory, we could replace it with some kind of lru cache. 
-    should_cache = "start_inventory" not in test_options
+    should_cache = "start_inventory" not in test_options and "trap_distribution" not in test_options
     if should_cache:
         frozen_options = frozenset(test_options.items()).union({("seed", seed)})
         cached_multi_world = search_world_cache(_cache, frozen_options)

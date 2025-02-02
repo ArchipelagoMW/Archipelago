@@ -594,7 +594,7 @@ def weapons_count(options: StardewValleyOptions):
 def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options: StardewValleyOptions, random: Random,
                                        items_already_added: List[Item],
                                        number_locations: int) -> List[Item]:
-    include_traps = options.trap_items != TrapDifficulty.option_no_traps
+    include_traps = options.trap_difficulty != TrapDifficulty.option_no_traps
     items_already_added_names = [item.name for item in items_already_added]
     useful_resource_packs = [pack for pack in items_by_group[Group.RESOURCE_PACK_USEFUL]
                              if pack.name not in items_already_added_names]
