@@ -160,7 +160,7 @@ def update_character_info(character_info, output_data):
     for x in character_info.info_file_field_entries:
         # Replace the mstar Observatory item with its randomized item.
         if x["name"] == "mstar":
-            x["name"] = __get_item_name(output_data["Locations"]["Observatory Mario Star"], int(output_data["slot"]))
+            x["name"] = __get_item_name(output_data["Locations"]["Observatory Mario Star"], int(output_data["Slot"]))
             x["appear_flag"] = 50
             x["invisible"] = 1
             x["pos_y"] = 600.000000
