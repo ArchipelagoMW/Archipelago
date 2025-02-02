@@ -304,6 +304,11 @@ class EvolutionTrapIncrease(Range):
     range_end = 100
 
 
+class InventorySpillTrapCount(TrapCount):
+    """Trap items that when received trigger dropping your main inventory and trash inventory onto the ground."""
+    display_name = "Inventory Spill Traps"
+
+
 class FactorioWorldGen(OptionDict):
     """World Generation settings. Overview of options at https://wiki.factorio.com/Map_generator,
     with in-depth documentation at https://lua-api.factorio.com/latest/Concepts.html#MapGenSettings"""
@@ -484,6 +489,7 @@ class FactorioOptions(PerGameCommonOptions):
     artillery_traps: ArtilleryTrapCount
     atomic_rocket_traps: AtomicRocketTrapCount
     atomic_cliff_remover_traps: AtomicCliffRemoverTrapCount
+    inventory_spill_traps: InventorySpillTrapCount
     attack_traps: AttackTrapCount
     evolution_traps: EvolutionTrapCount
     evolution_trap_increase: EvolutionTrapIncrease
@@ -518,6 +524,7 @@ option_groups: list[OptionGroup] = [
             ArtilleryTrapCount,
             AtomicRocketTrapCount,
             AtomicCliffRemoverTrapCount,
+            InventorySpillTrapCount,
         ],
         start_collapsed=True
     ),
