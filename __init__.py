@@ -108,8 +108,11 @@ class WL4World(World):
     CDS = tuple(filter_item_names(type=ItemType.CD))
     ABILITIES = tuple(filter_item_names(type=ItemType.ABILITY))
     GOLDEN_TREASURES = tuple(filter_item_names(type=ItemType.TREASURE))
-    FILLER_ITEMS = ('Full Health Item', 'Heart', 'Minigame Coin')
+    PRIZES = ('Full Health Item', 'Diamond')
+    JUNK = ('Heart', 'Minigame Coin')
     TRAPS = ('Wario Form Trap', 'Lightning Trap')
+
+    filler_item_weights: tuple[int, ...]
 
     def generate_early(self):
         if self.options.goal in (Goal.option_local_golden_treasure_hunt, Goal.option_local_golden_diva_treasure_hunt):
@@ -131,6 +134,8 @@ class WL4World(World):
             self.options.difficulty != Difficulty.option_normal):
             raise OptionError(f'Not enough locations to place abilities for {self.player_name}. '
                               'Set the "Required Jewels" option to a lower value and try again.')
+
+        self.filler_item_weights = self.options.prize_weight.value, self.options.junk_weight.value, self.options.trap_weight.value
 
     def create_regions(self):
         create_regions(self)
@@ -225,9 +230,8 @@ class WL4World(World):
         )
 
     def get_filler_item_name(self) -> str:
-        if self.random.randrange(100) < self.options.trap_weight.value:
-            return self.random.choice(self.TRAPS)
-        return self.random.choice(self.FILLER_ITEMS)
+        pool = self.random.choices((self.PRIZES, self.JUNK, self.TRAPS), self.filler_item_weights)[0]
+        return self.random.choice(pool)
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         return WL4Item(name, self.player, force_non_progression)

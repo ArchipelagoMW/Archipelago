@@ -153,8 +153,26 @@ class MultiworldSend(Choice):
     default = option_immediately
 
 
-# Calling it "weight" is a bit weird when it's only traps vs. not traps, but this will get finer control when diamond
-# shuffle is added
+class PrizeWeight(Range):
+    """
+    How often to place prizes (full health items, diamonds) when filling vacant spots in the item pool.
+    """
+    display_name = 'Prize Weight'
+    range_start = 0
+    range_end = 100
+    default = 30
+
+
+class JunkWeight(Range):
+    """
+    How often to place junk items (hearts, minigame coins) when filling vacant spots in the item pool.
+    """
+    display_name = 'Junk Weight'
+    range_start = 0
+    range_end = 100
+    default = 60
+
+
 class TrapWeight(Range):
     """
     How often to place traps when filling vacant spots in the item pool.
@@ -218,6 +236,8 @@ wl4_option_groups = [
         PoolJewels,
         GoldenJewels,
         DiamondShuffle,
+        PrizeWeight,
+        JunkWeight,
         TrapWeight,
     ]),
     OptionGroup("Quality of Life", [
@@ -245,6 +265,8 @@ class WL4Options(PerGameCommonOptions):
     pool_jewels: PoolJewels
     golden_jewels: GoldenJewels
     diamond_shuffle: DiamondShuffle
+    prize_weight: PrizeWeight
+    junk_weight: JunkWeight
     trap_weight: TrapWeight
     send_locations_to_server: MultiworldSend
     trap_behavior: TrapBehavior
