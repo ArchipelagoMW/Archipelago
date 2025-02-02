@@ -869,6 +869,9 @@ class CollectionState():
     def has(self, item: str, player: int, count: int = 1) -> bool:
         return self.prog_items[player][item] >= count
 
+    # for loops are specifically used in all/any/count methods, instead of all()/any()/sum(), to avoid the overhead of
+    # creating and iterating generator instances. In `return all(player_prog_items[item] for item in items)`, the
+    # argument to all() would be a new generator instance, for example.
     def has_all(self, items: Iterable[str], player: int) -> bool:
         """Returns True if each item name of items is in state at least once."""
         player_prog_items = self.prog_items[player]
