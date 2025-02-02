@@ -1081,7 +1081,7 @@ item_table = {
         ItemData(765 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 19, SC2Race.TERRAN,
                  parent=item_names.SENSOR_TOWER),
     item_names.WARHOUND_DEPLOY_TURRET:
-        ItemData(765 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 20, SC2Race.TERRAN,
+        ItemData(766 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 20, SC2Race.TERRAN,
                  parent=item_names.WARHOUND),
 
     # Filler items to fill remaining spots
