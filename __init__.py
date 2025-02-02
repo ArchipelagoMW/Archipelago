@@ -220,6 +220,7 @@ class WL4World(World):
             'required_jewels',
             'open_doors',
             'portal',
+            'diamond_shuffle',
             'death_link',
         )
 
