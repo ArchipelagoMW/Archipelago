@@ -2,8 +2,10 @@ import sys
 import typing
 from dataclasses import dataclass
 from typing import Protocol, ClassVar
+from schema import And, Schema
 
-from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, Visibility
+from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, Visibility, OptionDict
+from ..item_classes import items_by_group, Group
 from ..mods.mod_data import ModNames
 from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName
 from ..strings.bundle_names import all_cc_bundle_names
@@ -643,13 +645,15 @@ class ExcludeGingerIsland(Toggle):
     default = 0
 
 
-class TrapItems(Choice):
+class TrapDifficulty(Choice):
     """When rolling filler items, including resource packs, the game can also roll trap items.
     Trap items are negative items that cause problems or annoyances for the player
-    This setting is for choosing if traps will be in the item pool, and if so, how punishing they will be.
+    This setting is for choosing how punishing traps will be.
+    Lower difficulties will be on the funny annoyance side, higher difficulty will be on the extreme problems side
+    Only play Nightmare at your own risk.
     """
-    internal_name = "trap_items"
-    display_name = "Trap Items"
+    internal_name = "trap_difficulty"
+    display_name = "Trap Difficulty"
     default = 2
     option_no_traps = 0
     option_easy = 1
@@ -657,6 +661,26 @@ class TrapItems(Choice):
     option_hard = 3
     option_hell = 4
     option_nightmare = 5
+
+
+class TrapDistribution(OptionDict):
+    """
+    Specify the weighted chance of rolling individual traps when rolling random filler items.
+    The average filler item should be considered to be "10". So a trap on "20" will be twice as likely to roll as any filler item. A trap on "1" will be 1/10th as likely.
+    You can use weight "0" to disable this trap entirely
+    """
+    internal_name = "trap_distribution"
+    display_name = "Trap Distribution"
+    schema = Schema({
+        trap_data.name: And(int, lambda n: 0 <= n <= 100)
+        for trap_data in items_by_group[Group.TRAP]
+        if Group.DEPRECATED not in trap_data.groups
+    })
+    default = {
+        trap_data.name: 10
+        for trap_data in items_by_group[Group.TRAP]
+        if Group.DEPRECATED not in trap_data.groups
+    }
 
 
 class MultipleDaySleepEnabled(Toggle):
@@ -836,7 +860,8 @@ class StardewValleyOptions(PerGameCommonOptions):
     debris_multiplier: DebrisMultiplier
     movement_buff_number: NumberOfMovementBuffs
     enabled_filler_buffs: EnabledFillerBuffs
-    trap_items: TrapItems
+    trap_difficulty: TrapDifficulty
+    trap_distribution: TrapDistribution
     multiple_day_sleep_enabled: MultipleDaySleepEnabled
     multiple_day_sleep_cost: MultipleDaySleepCost
     gifting: Gifting
