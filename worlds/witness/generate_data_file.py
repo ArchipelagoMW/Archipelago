@@ -47,7 +47,7 @@ if __name__ == "__main__":
         datafile.write("inline std::map<int, std::string> entityToName = {")
         datafile.write(
             "\n".join(
-                '\t{' + entity_hex + ', "' + entity_object["checkName"] + '" },'
+                '\t{ ' + entity_hex + ', "' + entity_object["checkName"] + '" },'
                 for entity_hex, entity_object in static_witness_logic.ENTITIES_BY_HEX.items()
             )
         )
