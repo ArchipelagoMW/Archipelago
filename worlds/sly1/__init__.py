@@ -4,7 +4,7 @@ from typing import Dict
 from BaseClasses import MultiWorld, Item, ItemClassification, Tutorial
 from worlds.AutoWorld import World, CollectionState, WebWorld
 from .Items import item_table, create_itempool, create_item, set_keys, event_item_pairs, sly_episodes
-from .Locations import get_location_names, get_total_locations, did_avoid_early_bk
+from .Locations import get_location_names, get_total_locations, did_avoid_early_bk, generate_bottle_locations
 from .Options import Sly1Options
 from .Regions import create_regions
 from .Types import Sly1Item, EpisodeType, episode_type_to_name, episode_type_to_shortened_name
@@ -60,9 +60,11 @@ class Sly1World(World):
     def create_regions(self):
         create_regions(self)
 
+        if self.options.CluesanityBundleSize.value > 0:
+            generate_bottle_locations(self, self.options.CluesanityBundleSize.value)
+
     def create_items(self):
         self.multiworld.itempool += create_itempool(self)
-
         for event, item in event_item_pairs.items():
             event_item = Sly1Item(item, ItemClassification.progression_skip_balancing, None, self.player)
             self.multiworld.get_location(event, self.player).place_locked_item(event_item)
@@ -78,7 +80,8 @@ class Sly1World(World):
             "options": {
                 "StartingEpisode": episode_type_to_name[EpisodeType(self.options.StartingEpisode)],
                 "IncludeHourglasses": self.options.IncludeHourglasses.value,
-                "AvoidEarlyBK": self.options.AvoidEarlyBK.value
+                "AvoidEarlyBK": self.options.AvoidEarlyBK.value,
+                "CluesanityBundleSize": self.options.CluesanityBundleSize.value
             },
             "Seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "Slot": self.multiworld.player_name[self.player],  # to connect to server

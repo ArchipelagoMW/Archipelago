@@ -49,15 +49,11 @@
           "dependencies": {
             "Archipelago.Core": {
               "target": "Package",
-              "version": "[0.0.14, )"
+              "version": "[0.2.19, )"
             },
             "Archipelago.MultiClient.Net": {
               "target": "Package",
-              "version": "[6.3.1, )"
-            },
-            "Archipelago.PCSX2": {
-              "target": "Package",
-              "version": "[0.0.5, )"
+              "version": "[6.5.0, )"
             }
           },
           "imports": [

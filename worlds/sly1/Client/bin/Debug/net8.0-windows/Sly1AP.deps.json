@@ -8,18 +8,20 @@
     ".NETCoreApp,Version=v8.0": {
       "Sly1AP/1.0.0": {
         "dependencies": {
-          "Archipelago.Core": "0.0.14",
-          "Archipelago.MultiClient.Net": "6.3.1",
-          "Archipelago.PCSX2": "0.0.5"
+          "Archipelago.Core": "0.2.19",
+          "Archipelago.MultiClient.Net": "6.5.0"
         },
         "runtime": {
           "Sly1AP.dll": {}
         }
       },
-      "Archipelago.Core/0.0.14": {
+      "Archipelago.Core/0.2.19": {
         "dependencies": {
-          "Archipelago.MultiClient.Net": "6.3.1",
-          "Newtonsoft.Json": "13.0.3"
+          "Archipelago.MultiClient.Net": "6.5.0",
+          "Serilog": "4.0.2",
+          "Serilog.Sinks.Console": "6.0.0",
+          "Serilog.Sinks.File": "6.0.0",
+          "System.Text.Json": "9.0.0"
         },
         "runtime": {
           "lib/net8.0/Archipelago.Core.dll": {
@@ -28,38 +30,84 @@
           }
         }
       },
-      "Archipelago.MultiClient.Net/6.3.1": {
+      "Archipelago.MultiClient.Net/6.5.0": {
         "runtime": {
           "lib/net6.0/Archipelago.MultiClient.Net.dll": {
-            "assemblyVersion": "6.3.1.0",
-            "fileVersion": "6.3.1.0"
+            "assemblyVersion": "6.5.0.0",
+            "fileVersion": "6.5.0.0"
+          },
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "11.0.0.0",
+            "fileVersion": "11.0.1.0"
           }
         }
       },
-      "Archipelago.PCSX2/0.0.5": {
+      "Serilog/4.0.2": {
+        "runtime": {
+          "lib/net8.0/Serilog.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        }
+      },
+      "Serilog.Sinks.Console/6.0.0": {
         "dependencies": {
-          "Archipelago.Core": "0.0.14",
-          "Microsoft.CSharp": "4.7.0",
-          "Newtonsoft.Json": "13.0.3",
-          "System.Data.DataSetExtensions": "4.5.0"
+          "Serilog": "4.0.2"
         },
         "runtime": {
-          "lib/net8.0/Archipelago.PCSX2.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
+          "lib/net8.0/Serilog.Sinks.Console.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.0.0"
           }
         }
       },
-      "Microsoft.CSharp/4.7.0": {},
-      "Newtonsoft.Json/13.0.3": {
+      "Serilog.Sinks.File/6.0.0": {
+        "dependencies": {
+          "Serilog": "4.0.2"
+        },
         "runtime": {
-          "lib/net6.0/Newtonsoft.Json.dll": {
-            "assemblyVersion": "13.0.0.0",
-            "fileVersion": "13.0.3.27908"
+          "lib/net8.0/Serilog.Sinks.File.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.0.0"
           }
         }
       },
-      "System.Data.DataSetExtensions/4.5.0": {}
+      "System.IO.Pipelines/9.0.0": {
+        "runtime": {
+          "lib/net8.0/System.IO.Pipelines.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
+          }
+        }
+      },
+      "System.Text.Encodings.Web/9.0.0": {
+        "runtime": {
+          "lib/net8.0/System.Text.Encodings.Web.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/browser/lib/net8.0/System.Text.Encodings.Web.dll": {
+            "rid": "browser",
+            "assetType": "runtime",
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
+          }
+        }
+      },
+      "System.Text.Json/9.0.0": {
+        "dependencies": {
+          "System.IO.Pipelines": "9.0.0",
+          "System.Text.Encodings.Web": "9.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/System.Text.Json.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.52809"
+          }
+        }
+      }
     }
   },
   "libraries": {
@@ -68,47 +116,61 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Archipelago.Core/0.0.14": {
+    "Archipelago.Core/0.2.19": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-02ZUSZdB+FXu5DNRcKBOFLAklSNyQYTExNpNVl34MYbsFpxJIPejRm2v5zqlgDwpv4AgQCMbMyxlL3DgfPIp0w==",
-      "path": "archipelago.core/0.0.14",
-      "hashPath": "archipelago.core.0.0.14.nupkg.sha512"
+      "sha512": "sha512-cIC0n5CSDD+W677K4/NBVuNE1F+sdykxzcXTB1mzDS5sJmOfBaCuukCpzvNKkpnz/B4RXrMf21z6ZHw7TANmNA==",
+      "path": "archipelago.core/0.2.19",
+      "hashPath": "archipelago.core.0.2.19.nupkg.sha512"
     },
-    "Archipelago.MultiClient.Net/6.3.1": {
+    "Archipelago.MultiClient.Net/6.5.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-x7N0KHS1UjD1ZS6XGkJrBu6w//pNCe4PgYXEwPedRls/GcbbhgtEsGJmtxfPk/9/cCBXTymHNGMCrWmG9PGlLw==",
-      "path": "archipelago.multiclient.net/6.3.1",
-      "hashPath": "archipelago.multiclient.net.6.3.1.nupkg.sha512"
+      "sha512": "sha512-cWz5UDo7/oIA0OVmOPN70UcwzTteQ2V0/v5n2LgMk0AW+HIYFACL7t4OlLBts/lp6LzNHMyOFxc7Fn7C45di4w==",
+      "path": "archipelago.multiclient.net/6.5.0",
+      "hashPath": "archipelago.multiclient.net.6.5.0.nupkg.sha512"
     },
-    "Archipelago.PCSX2/0.0.5": {
+    "Serilog/4.0.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-nTUO6qRonU7bkXQEXBLaUjma6926dQ9amA+OrdtfTZuw0I+Fcuekct610ySLBRZ1GXnf87HOwYPim+b25U1SsA==",
-      "path": "archipelago.pcsx2/0.0.5",
-      "hashPath": "archipelago.pcsx2.0.0.5.nupkg.sha512"
+      "sha512": "sha512-Vehq4uNYtURe/OnHEpWGvMgrvr5Vou7oZLdn3BuEH5FSCeHXDpNJtpzWoqywXsSvCTuiv0I65mZDRnJSeUvisA==",
+      "path": "serilog/4.0.2",
+      "hashPath": "serilog.4.0.2.nupkg.sha512"
     },
-    "Microsoft.CSharp/4.7.0": {
+    "Serilog.Sinks.Console/6.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-pTj+D3uJWyN3My70i2Hqo+OXixq3Os2D1nJ2x92FFo6sk8fYS1m1WLNTs0Dc1uPaViH0YvEEwvzddQ7y4rhXmA==",
-      "path": "microsoft.csharp/4.7.0",
-      "hashPath": "microsoft.csharp.4.7.0.nupkg.sha512"
+      "sha512": "sha512-fQGWqVMClCP2yEyTXPIinSr5c+CBGUvBybPxjAGcf7ctDhadFhrQw03Mv8rJ07/wR5PDfFjewf2LimvXCDzpbA==",
+      "path": "serilog.sinks.console/6.0.0",
+      "hashPath": "serilog.sinks.console.6.0.0.nupkg.sha512"
     },
-    "Newtonsoft.Json/13.0.3": {
+    "Serilog.Sinks.File/6.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
-      "path": "newtonsoft.json/13.0.3",
-      "hashPath": "newtonsoft.json.13.0.3.nupkg.sha512"
+      "sha512": "sha512-lxjg89Y8gJMmFxVkbZ+qDgjl+T4yC5F7WSLTvA+5q0R04tfKVLRL/EHpYoJ/MEQd2EeCKDuylBIVnAYMotmh2A==",
+      "path": "serilog.sinks.file/6.0.0",
+      "hashPath": "serilog.sinks.file.6.0.0.nupkg.sha512"
     },
-    "System.Data.DataSetExtensions/4.5.0": {
+    "System.IO.Pipelines/9.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-221clPs1445HkTBZPL+K9sDBdJRB8UN8rgjO3ztB0CQ26z//fmJXtlsr6whGatscsKGBrhJl5bwJuKSA8mwFOw==",
-      "path": "system.data.datasetextensions/4.5.0",
-      "hashPath": "system.data.datasetextensions.4.5.0.nupkg.sha512"
+      "sha512": "sha512-eA3cinogwaNB4jdjQHOP3Z3EuyiDII7MT35jgtnsA4vkn0LUrrSHsU0nzHTzFzmaFYeKV7MYyMxOocFzsBHpTw==",
+      "path": "system.io.pipelines/9.0.0",
+      "hashPath": "system.io.pipelines.9.0.0.nupkg.sha512"
+    },
+    "System.Text.Encodings.Web/9.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-e2hMgAErLbKyUUwt18qSBf9T5Y+SFAL3ZedM8fLupkVj8Rj2PZ9oxQ37XX2LF8fTO1wNIxvKpihD7Of7D/NxZw==",
+      "path": "system.text.encodings.web/9.0.0",
+      "hashPath": "system.text.encodings.web.9.0.0.nupkg.sha512"
+    },
+    "System.Text.Json/9.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-js7+qAu/9mQvnhA4EfGMZNEzXtJCDxgkgj8ohuxq/Qxv+R56G+ljefhiJHOxTNiw54q8vmABCWUwkMulNdlZ4A==",
+      "path": "system.text.json/9.0.0",
+      "hashPath": "system.text.json.9.0.0.nupkg.sha512"
     }
   }
 }

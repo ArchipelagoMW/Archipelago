@@ -1,15 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "8KWqrTv1dB8=",
+  "dgSpecHash": "sTM0ZQSn1iU=",
   "success": true,
   "projectFilePath": "C:\\Users\\fello\\Documents\\GitHub\\ArchipelagoBranchSly1\\worlds\\sly1\\Client\\Sly1AP.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\fello\\.nuget\\packages\\archipelago.core\\0.0.14\\archipelago.core.0.0.14.nupkg.sha512",
-    "C:\\Users\\fello\\.nuget\\packages\\archipelago.multiclient.net\\6.3.1\\archipelago.multiclient.net.6.3.1.nupkg.sha512",
-    "C:\\Users\\fello\\.nuget\\packages\\archipelago.pcsx2\\0.0.5\\archipelago.pcsx2.0.0.5.nupkg.sha512",
-    "C:\\Users\\fello\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
-    "C:\\Users\\fello\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
-    "C:\\Users\\fello\\.nuget\\packages\\system.data.datasetextensions\\4.5.0\\system.data.datasetextensions.4.5.0.nupkg.sha512"
+    "C:\\Users\\fello\\.nuget\\packages\\archipelago.core\\0.2.19\\archipelago.core.0.2.19.nupkg.sha512",
+    "C:\\Users\\fello\\.nuget\\packages\\archipelago.multiclient.net\\6.5.0\\archipelago.multiclient.net.6.5.0.nupkg.sha512",
+    "C:\\Users\\fello\\.nuget\\packages\\serilog\\4.0.2\\serilog.4.0.2.nupkg.sha512",
+    "C:\\Users\\fello\\.nuget\\packages\\serilog.sinks.console\\6.0.0\\serilog.sinks.console.6.0.0.nupkg.sha512",
+    "C:\\Users\\fello\\.nuget\\packages\\serilog.sinks.file\\6.0.0\\serilog.sinks.file.6.0.0.nupkg.sha512",
+    "C:\\Users\\fello\\.nuget\\packages\\system.io.pipelines\\9.0.0\\system.io.pipelines.9.0.0.nupkg.sha512",
+    "C:\\Users\\fello\\.nuget\\packages\\system.text.encodings.web\\9.0.0\\system.text.encodings.web.9.0.0.nupkg.sha512",
+    "C:\\Users\\fello\\.nuget\\packages\\system.text.json\\9.0.0\\system.text.json.9.0.0.nupkg.sha512"
   ],
   "logs": []
 }

@@ -1,6 +1,6 @@
 ﻿using Archipelago.Core.Util;
-using Archipelago.PCSX2;
 using Archipelago.Core.Models;
+using Archipelago.Core.GameClients;
 using Newtonsoft.Json;
 using System.Media;
 using System.Reflection;
@@ -13,6 +13,9 @@ using Sly1AP.Models;
 using System.Windows;
 using System.Timers;
 using System.Security.Policy;
+using System.Text.Json;
+using System;
+using System.Linq;
 
 namespace Sly1AP
 {
@@ -21,17 +24,17 @@ namespace Sly1AP
         public static string GameVersion { get; set; } = "0";
         public static bool IsConnected { get; set; } = false;
         public static GameState CurrentGameState = new GameState();
-        public static ArchipelagoClient? Client { get; set; }
+        public static ArchipelagoClient Client { get; set; }
         public static Moves slyMoves = new Moves();
         public static SlyKeys keys = new SlyKeys();
         public static int GameCompletion { get; set; } = 0;
         public static Random rnd = new Random();
+        public static int ClueBundles { get; set; } = 0;
         public Form1()
         {
             InitializeComponent();
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             ThreadPool.SetMinThreads(500, 500);
-            Console.WriteLine($"Sly 1 Archipelago Randomizer");
         }
         public async Task Loop()
         {
@@ -41,16 +44,17 @@ namespace Sly1AP
             {
                 UpdateValues();
                 CutsceneSkip();
-                if (Memory.ReadInt(0x2027DC18) == 2721)
+                UpdateBosses();
+                if (ClueBundles > 0)
                 {
-                    Memory.Write(0x2027D7AC, 1);
+                    Clues.BottleSync();
                 }
                 if (Memory.ReadByte(0x202623C0) == 0)
                 {
                     Thread.Sleep(1000);
                     if (Memory.ReadByte(0x202623C0) == 0)
                     {
-                        WriteLine("Lost connection to PCSX2.");
+                        WriteLine("Lost connection to PCSX2. Are you using 1.6.0?");
                         return;
                     }
                 }
@@ -58,7 +62,7 @@ namespace Sly1AP
                 {
                     return;
                 }
-                await Task.Delay(1);
+                await Task.Delay(100);
             }
         }
 
@@ -85,57 +89,6 @@ namespace Sly1AP
             Client = new ArchipelagoClient(client);
             Client.Connected += OnConnected;
             Client.Disconnected += OnDisconnected;
-            await Client.Connect(hostTextbox.Text, "Sly Cooper and the Thievius Raccoonus");
-            var locations = Helpers.GetLocations();
-            await Client.Login(slotTextbox.Text, passwordTextbox.Text);
-            Client.PopulateLocations(locations);
-            //On startup, set all values to 0. That way, the game won't overwrite Archipelago's values with the loaded game's values.
-            UpdateStart();
-            ConfigureOptions(Client.Options);
-            var SentLocations = Client.GameState.CompletedLocations;
-            var ItemsReceived = Client.GameState.ReceivedItems;
-            var NewItems = new List<Item>(ItemsReceived);
-            var NewLocations = new List<Location>(SentLocations);
-            foreach (var item in NewItems)
-            {
-                if (item.Id >= 10020001 & item.Id <= 10020014)
-                {
-                    UpdateMoves(item.Id);
-                }
-                if (item.Id >= 10020015 & item.Id <= 10020018)
-                {
-                    UpdateKeys(item.Id);
-                }
-                if (item.Id >= 10020021 & item.Id <= 10020024)
-                {
-                    UpdateLevels(item.Id);
-                }
-            }
-            foreach (var loc in NewLocations)
-            {
-                if (loc.Name == "Paris Files")
-                {
-                    GameCompletion += 1;
-                }
-                if (loc.Name == "Eye of the Storm")
-                {
-                    GameCompletion += 32;
-                }
-                if (loc.Name == "Last Call")
-                {
-                    GameCompletion += 128;
-                }
-                if (loc.Name == "Deadly Dance")
-                {
-                    GameCompletion += 512;
-                }
-                if (loc.Name == "Flame-Fu!")
-                {
-                    GameCompletion += 2048;
-                }
-
-            }
-            WriteLine($"Receiving offline items.");
             Client.ItemReceived += (e, args) =>
             {
                 WriteLine($"Received: {JsonConvert.SerializeObject(args.Item.Name)}");
@@ -162,6 +115,84 @@ namespace Sly1AP
                 if (args.Item.Id == 10020025)
                 {
                     Client.SendGoalCompletion();
+                }
+                if (args.Item.Id >= 10020030 & args.Item.Id <= 10020048)
+                {
+                    Clues.UpdateBottles(args.Item.Id, ClueBundles);
+                }
+            };
+            await Client.Connect(hostTextbox.Text, "Sly Cooper and the Thievius Raccoonus");
+            var locations = Helpers.GetLocations();
+            await Client.Login(slotTextbox.Text, passwordTextbox.Text);
+            var PlayerName = slotTextbox.Text;
+            await Client.PopulateLocations(locations);
+            if (Memory.ReadInt(0x2027DBF8) == 0 & Memory.ReadInt(0x2027DBFC) != 4)
+            {
+                WriteLine("Load a save file, start a new game, or finish the prologue.");
+                while (Memory.ReadInt(0x2027DBF8) == 0 & Memory.ReadInt(0x2027DBFC) != 4)
+                {
+                    CutsceneSkip();
+                    await Task.Delay(1000);
+                }
+            }
+            //On startup, set all values to 0. That way, the game won't overwrite Archipelago's values with the loaded game's values.
+            UpdateStart();
+            ConfigureOptions(Client.Options);
+            var SentLocations = Client.GameState.CompletedLocations;
+            var ItemsReceived = Client.GameState.ReceivedItems;
+            var NewItems = new List<Item>(ItemsReceived);
+            var NewLocations = new List<Location>(SentLocations);
+            foreach (var item in NewItems)
+            {
+                for (int i = 0; i < item.Quantity; i++)
+                {
+                    if (item.Id >= 10020001 & item.Id <= 10020014)
+                    {
+                        UpdateMoves(item.Id);
+                    }
+                    if (item.Id >= 10020015 & item.Id <= 10020018)
+                    {
+                        UpdateKeys(item.Id);
+                    }
+                    if (item.Id >= 10020021 & item.Id <= 10020024)
+                    {
+                        UpdateLevels(item.Id);
+                    }
+                    if (item.Id >= 10020030 & item.Id <= 10020048)
+                    {
+                        Clues.UpdateBottles(item.Id, ClueBundles);
+                    }
+                }
+            }
+            foreach (var loc in NewLocations)
+            {
+                if (loc.Name == "Paris Files")
+                {
+                    GameCompletion += 1;
+                }
+                if (loc.Name == "Eye of the Storm")
+                {
+                    GameCompletion += 32;
+                }
+                if (loc.Name == "Last Call")
+                {
+                    GameCompletion += 128;
+                }
+                if (loc.Name == "Deadly Dance")
+                {
+                    GameCompletion += 512;
+                }
+                if (loc.Name == "Flame-Fu!")
+                {
+                    GameCompletion += 2048;
+                }
+            }
+            Client.MessageReceived += (e, args) =>
+            {
+                string ClientMessage = args.Message?.ToString();
+                if (ClientMessage != null & ClientMessage.Contains(PlayerName))
+                {
+                    WriteLine($"{args.Message}");
                 }
             };
             await Loop();
@@ -217,9 +248,14 @@ namespace Sly1AP
                     Memory.Write(0x2027D360, keys.PandaKingStart);
                 }
             }
+            if (options.ContainsKey("CluesanityBundleSize"))
+            {
+                var clueBundleSizeElement = (JsonElement)options["CluesanityBundleSize"];
+                ClueBundles = clueBundleSizeElement.GetUInt16();
+            }
         }
         //This probably looks like gore to actual programmers, but it works.
-        public static void UpdateMoves(int id)
+        public static void UpdateMoves(long id)
         {
             //var addresses = new Addresses();
             //Progressive Moves
@@ -296,7 +332,7 @@ namespace Sly1AP
             }
             return;
         }
-        public static void UpdateKeys(int id)
+        public static void UpdateKeys(long id)
         {
             //Keys
             if (id == 10020015)
@@ -321,7 +357,7 @@ namespace Sly1AP
             }
             return;
         }
-        public static void UpdateLevels(int id)
+        public static void UpdateLevels(long id)
         {
             //Levels
             if (id == 10020021 & Memory.ReadInt(0x2027C67C) == 0)
@@ -346,7 +382,7 @@ namespace Sly1AP
             }
             return;
         }
-        public static void UpdateJunk(int id)
+        public static void UpdateJunk(long id)
         {
             //Junk
             //Don't continuously update these or else they'll never go down!
@@ -373,11 +409,19 @@ namespace Sly1AP
             }
             return;
         }
-        public static async void UpdateTraps(int id)
+        public static async void UpdateTraps(long id)
         {
             var TrapTimer = new System.Timers.Timer(10000);
             TrapTimer.AutoReset = false;
             //Traps
+            uint SlyControl = 0x20262C68;
+            if (Memory.ReadByte(SlyControl) != 7)
+            {
+                while (Memory.ReadByte(SlyControl) != 7)
+                {
+                   await Task.Delay(1000);
+                }
+            }
             if (id == 10020026)
             {
                 TrapTimer.Start();
@@ -544,7 +588,7 @@ namespace Sly1AP
         }
         private void OnConnected(object? sender, EventArgs args)
         {
-            WriteLine("Connected to Archipelago");
+            WriteLine("Connected to Archipelago.");
             WriteLine($"Playing {Client?.CurrentSession.ConnectionInfo.Game} as {Client?.CurrentSession.Players.GetPlayerName(Client.CurrentSession.ConnectionInfo.Slot)}");
             Invoke(() =>
             {
@@ -585,12 +629,13 @@ namespace Sly1AP
         private void CutsceneSkip()
         {
             //Dialogue Skipper
-            //uint Cutscene = Memory.ReadUInt(0x2027051C) + 536870912;
-            //uint Playing = Cutscene + 744;
-            //if (Memory.ReadUInt(Cutscene) != 0)
-            //{
-                //Memory.Write(Playing, 0);
-            //}
+            uint Cutscene = Memory.ReadUInt(0x2027051C) + 0x20000000;
+            uint Playing = Cutscene + 744;
+            int SlyControl = Memory.ReadInt(0x20262C68);
+            if (Memory.ReadUInt(Cutscene) != 0 & SlyControl != 7)
+            {
+                Memory.Write(Playing, 0);
+            }
 
             //Bentley Skipper
             if (Memory.ReadInt(0x20270458) == 2)
@@ -602,6 +647,17 @@ namespace Sly1AP
             if (Memory.ReadInt(0x20269A18) > 20)
             {
                 Memory.Write(0x20269A60, 0);
+            }
+        }
+        private void UpdateBosses()
+        {
+            if ((Memory.ReadBit(0x2027DC18, 5)) & (Memory.ReadBit(0x2027DC18, 7)) & (Memory.ReadBit(0x2027DC19, 1)) & (Memory.ReadBit(0x2027DC19, 3)))
+            {
+                Memory.Write(0x2027D7A8, 53);
+            }
+            else if (Memory.ReadByte(0x2027D7A8) >= 21)
+            {
+                Memory.Write(0x2027D7A8, 21);
             }
         }
     }
