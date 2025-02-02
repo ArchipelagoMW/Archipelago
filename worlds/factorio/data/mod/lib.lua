@@ -113,7 +113,9 @@ function handle_teleport_attempt(event)
 
             attempt_teleport_player(player, nil)
             break
-
+        end
+    end
+end
 function spill_character_inventory(character)
     if not (character and character.valid) then
         return false
