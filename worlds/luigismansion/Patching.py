@@ -83,6 +83,10 @@ def update_event_info(event_info, boo_checks: bool):
         if x["EventNo"] == 71:
             x["EventFlag"] = 22
 
+        # Cause the Chauncey spawn event to on ly load once, preventing later warps to map10
+        if x["EventNo"] == 50:
+            x["EventLoad"] = 1
+
         # Since we have a custom blackout event, we need to update event 44's trigger condition to be A-pressed based.
         # We also update the area ad trigger location to be the same as event45
         if x["EventNo"] == 44:
