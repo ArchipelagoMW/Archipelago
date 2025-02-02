@@ -247,7 +247,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     # "Wardrobe West Dresser": LMLocationData("Wardrobe", 127, "Furniture", 479, [], 41), #TODO Prevents Ghost Spawns
     "Wardrobe Center Dresser": LMLocationData("Wardrobe", 128, "Furniture", 478, [], 41),
     # "Wardrobe East Dresser": LMLocationData("Wardrobe", 129, "Furniture", 477, [], 41), #TODO Prevents Ghost Spawns
-    "Wardrobe Balcony Brazier": LMLocationData("Wardrobe Balcony", 130, "Furniture", 472, [], 41),
+    "Wardrobe Balcony Brazier": LMLocationData("Wardrobe Balcony", 130, "Furniture", 472, [], 40),
     "Wardrobe Purple Dress": LMLocationData("Wardrobe", 131, "Furniture", 452, [], 41),
     "Wardrobe Red Dress": LMLocationData("Wardrobe", 132, "Furniture", 505, [], 41),
     "Wardrobe Blue Shirt": LMLocationData("Wardrobe", 133, "Furniture", 506, [], 41),
