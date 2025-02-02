@@ -314,11 +314,11 @@ class SMWorld(World):
         raise KeyError(f"Item {name} for {self.player_name} is invalid.")
 
     def get_filler_item_name(self) -> str:
-        if self.multiworld.random.randint(0, 100) < self.options.minor_qty.value:
+        if self.random.randint(0, 100) < self.options.minor_qty.value:
             power_bombs = self.options.power_bomb_qty.value
             missiles = self.options.missile_qty.value
             super_missiles = self.options.super_qty.value
-            roll = self.multiworld.random.randint(1, power_bombs + missiles + super_missiles)
+            roll = self.random.randint(1, power_bombs + missiles + super_missiles)
             if roll <= power_bombs:
                 return "Power Bomb"
             elif roll <= power_bombs + missiles:
@@ -340,8 +340,8 @@ class SMWorld(World):
                     else:
                         nonChozoLoc.append(loc)
 
-            self.multiworld.random.shuffle(nonChozoLoc)
-            self.multiworld.random.shuffle(chozoLoc)
+            self.random.shuffle(nonChozoLoc)
+            self.random.shuffle(chozoLoc)
             missingCount = len(self.NothingPool) - len(nonChozoLoc)
             locations = nonChozoLoc
             if (missingCount > 0):
