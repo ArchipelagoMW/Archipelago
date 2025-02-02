@@ -985,7 +985,7 @@ LIGHT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Sealed Room Light On": LMLocationData("Sealed Room", 788, "KingdomHearts", 0, [], 37, room_ram_addr=0x803CDF98),
     "East Attic Hallway Light On": LMLocationData("East Attic Hallway", 789, "KingdomHearts", 0, [], 54, room_ram_addr=0x803CDFB6),
     "West Attic Hallway Light On": LMLocationData("West Attic Hallway", 790, "KingdomHearts", 0, [], 57, room_ram_addr=0x803CDFB2),
-    "Roof Light On": LMLocationData("Roof", 791, "KingdomHearts", 0, [], 60, room_ram_addr=0x803CDFC8)
+    "Roof Light On": LMLocationData("Roof", 791, "KingdomHearts", 0, [], 63, room_ram_addr=0x803CDFC8)
 }
 
 WALK_LOCATION_TABLE: dict[str, LMLocationData] = {
