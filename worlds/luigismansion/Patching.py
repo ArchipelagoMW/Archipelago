@@ -890,16 +890,16 @@ def update_item_info_table(item_info, output_data):
     # Adds the special items, so they can spawn in furniture or chests.
     items_to_add = ["rdiamond", "itembomb", "ice", "mstar", "banana", "diamond", "gameboy", "vbody"]
     for new_item in items_to_add:
-        __add_info_item(item_info, None, info_item_name=new_item, slot=int(output_data["slot"]))
+        __add_info_item(item_info, None, info_item_name=new_item, slot=int(output_data["Slot"]))
 
     # Gets the list of keys already added in the item info table
     already_added_keys = [item_entry["name"] for item_entry in item_info.info_file_field_entries if
                           str(item_entry["name"]).startswith("key_")]
 
     for item_name, item_data in output_data["Locations"].items():
-        current_item = __get_item_name(item_data, int(output_data["slot"]))
+        current_item = __get_item_name(item_data, int(output_data["Slot"]))
         if item_data["door_id"] > 0 and current_item not in already_added_keys:
-            __add_info_item(item_info, item_data, slot=int(output_data["slot"]))
+            __add_info_item(item_info, item_data, slot=int(output_data["Slot"]))
 
 
 def __add_info_item(item_info, item_data, open_door_no=0, hp_amount=0, is_escape=0, info_item_name=None, slot=0):
@@ -950,7 +950,7 @@ def update_item_appear_table(item_appear_info, output_data):
 
     # For every key found in the generation output, add an entry for it in "itemappeartable".
     for item_name, item_data in output_data["Locations"].items():
-        current_item = __get_item_name(item_data, int(output_data["slot"]))
+        current_item = __get_item_name(item_data, int(output_data["Slot"]))
         if item_data["door_id"] > 0 and current_item not in already_added_keys:
             __add_appear_item(item_appear_info, current_item)
 
@@ -980,7 +980,7 @@ def update_treasure_table(treasure_info, character_info, output_data):
                 # Define the actor name to use from the Location in the generation output.
                 # Act differently if it's a key.
                 # Also define the size of the chest from the item name.
-                treasure_item_name = __get_item_name(item_data, int(output_data["slot"]))
+                treasure_item_name = __get_item_name(item_data, int(output_data["Slot"]))
                 if x["room_no"] == 45 or x["room_no"] == 5:
                     chest_size = 0
                 else:
@@ -1098,7 +1098,7 @@ def update_key_info(key_info, output_data):
             continue
 
         __set_key_info_entry(key_info.info_file_field_entries[LOCATION_TO_INDEX[item_name]], item_data,
-                             int(output_data["slot"]))
+                             int(output_data["Slot"]))
 
     # Remove the cutscene HD key from the Foyer, which only appears in the cutscene.
     key_info.info_file_field_entries.remove(key_info.info_file_field_entries[2])
@@ -1147,7 +1147,7 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
         if not (item_data["type"] == "Furniture" or item_data["type"] == "Plant"):
             continue
 
-        actor_item_name = __get_item_name(item_data, int(output_data["slot"]))
+        actor_item_name = __get_item_name(item_data, int(output_data["Slot"]))
 
         # Replace the furnitureinfo entry to spawn an item from the "itemappeartable".
         # If the entry is supposed to be money, then generate a random amount of coins and/or bills from it.
