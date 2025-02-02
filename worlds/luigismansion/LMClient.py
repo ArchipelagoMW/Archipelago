@@ -232,7 +232,6 @@ class LMContext(CommonContext):
         super().on_deathlink(data)
         self.is_luigi_dead = True
         self.set_luigi_dead()
-        self.last_death_link = time.time()
         return
 
     def run_gui(self):
@@ -248,7 +247,6 @@ class LMContext(CommonContext):
     def check_alive(self):
         # Our health gets messed up in the Lab, so we can just ignore that location altogether.
         if dme.read_word(CURR_MAP_ID_ADDR) == 1:
-            self.is_luigi_dead = False
             return True
 
         lm_curr_health = read_short(dme.follow_pointers(CURR_HEALTH_ADDR, [CURR_HEALTH_OFFSET]))
@@ -257,14 +255,14 @@ class LMContext(CommonContext):
             if lm_curr_health == 0:
                 if time.time() > self.last_health_checked + CHECKS_WAIT:
                     return False
-                self.is_luigi_dead = False
                 return True
 
         if lm_curr_health > 0:
             self.last_health_checked = time.time()
+            self.is_luigi_dead = False
             return True
 
-        self.last_not_ingame = time.time()
+        self.last_health_checked = time.time()
         return False
 
     def check_ingame(self):
@@ -287,7 +285,7 @@ class LMContext(CommonContext):
 
     async def check_death(self):
         if self.check_ingame() and not self.check_alive():
-            if not self.is_luigi_dead and time.time() >= self.last_death_link + (CHECKS_WAIT*LONGER_MODIFIER):
+            if not self.is_luigi_dead and time.time() >= self.last_death_link + (CHECKS_WAIT*LONGER_MODIFIER*3):
                 self.is_luigi_dead = True
                 self.set_luigi_dead()
                 await self.send_death(self.player_names[self.slot] + " scared themselves to death.")
