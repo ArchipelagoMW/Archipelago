@@ -299,6 +299,7 @@ item_descriptions = {
     item_names.DIAMONDBACK_ION_THRUSTERS: "Increases Diamondback movement speed.",
     item_names.WARHOUND_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.WARHOUND),
     item_names.WARHOUND_REINFORCED_PLATING: "Increases Warhound armor by 2.",
+    item_names.WARHOUND_DEPLOY_TURRET: "Each Warhound can deploy a single-use Auto-Turret.",
     item_names.HERC_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.HERC),
     item_names.HERC_JUGGERNAUT_PLATING: "Increases HERC armor by 2.",
     item_names.HERC_KINETIC_FOAM: "Increases HERC life by 50.",

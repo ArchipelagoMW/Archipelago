@@ -312,6 +312,7 @@ VULTURE_PROGRESSIVE_REPLENISHABLE_MAGAZINE         = "Progressive Replenishable 
 VULTURE_AUTO_REPAIR                                = "Auto-Repair (Vulture)"
 WARHOUND_RESOURCE_EFFICIENCY                       = "Resource Efficiency (Warhound)"
 WARHOUND_REINFORCED_PLATING                        = "Reinforced Plating (Warhound)"
+WARHOUND_DEPLOY_TURRET                             = "Deploy Turret (Warhound)"
 WIDOW_MINE_BLACK_MARKET_LAUNCHERS                  = "Black Market Launchers (Widow Mine)"
 WIDOW_MINE_CONCEALMENT                             = "Concealment (Widow Mine)"
 WIDOW_MINE_DEMOLITION_ARMAMENTS                    = "Demolition Armaments (Widow Mine)"
