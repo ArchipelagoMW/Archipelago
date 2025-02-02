@@ -4,6 +4,7 @@ from .. import options, items_by_group, Group
 
 
 default_distribution = {trap.name: 10 for trap in items_by_group[Group.TRAP] if Group.DEPRECATED not in trap.groups}
+threshold = 3
 
 
 class TestTrapDifficultyCanRemoveAllTraps(WorldAssertMixin, SVTestBase):
@@ -64,25 +65,38 @@ class TestDistributionIsRespectedAllTraps(WorldAssertMixin, SVTestBase):
         options.TrapDistribution.internal_name: default_distribution | {"Nudge Trap": 10, "Bark Trap": 1, "Meow Trap": 100, "Shuffle Trap": 0}
     }
 
+    def test_about_as_many_nudges_as_other_filler(self):
+        items = self.multiworld.get_items()
+        item_names = [item.name for item in items]
+        num_nudge = len([item for item in item_names if item == "Nudge Trap"])
+        other_fillers = ["Resource Pack: 4 Frozen Geode", "Resource Pack: 50 Wood", "Resource Pack: 5 Warp Totem: Farm", "Resource Pack: 500 Money"]
+        at_least_one_in_ballpark = False
+        for filler_item in other_fillers:
+            num_filler = len([item for item in item_names if item == filler_item])
+            diff_num = abs(num_filler - num_nudge)
+            is_in_ballpark = diff_num <= threshold
+            at_least_one_in_ballpark = at_least_one_in_ballpark or is_in_ballpark
+        self.assertTrue(at_least_one_in_ballpark)
+
     def test_fewer_barks_than_nudges_in_item_pool(self):
         items = self.multiworld.get_items()
         item_names = [item.name for item in items]
         num_nudge = len([item for item in item_names if item == "Nudge Trap"])
         num_bark = len([item for item in item_names if item == "Bark Trap"])
-        self.assertLess(num_bark, num_nudge)
+        self.assertLess(num_bark, num_nudge - threshold)
 
     def test_more_meows_than_nudges_in_item_pool(self):
         items = self.multiworld.get_items()
         item_names = [item.name for item in items]
         num_nudge = len([item for item in item_names if item == "Nudge Trap"])
         num_meow = len([item for item in item_names if item == "Meow Trap"])
-        self.assertGreater(num_meow, num_nudge)
+        self.assertGreater(num_meow, num_nudge + threshold)
 
     def test_no_shuffles_in_item_pool(self):
         items = self.multiworld.get_items()
         item_names = [item.name for item in items]
         num_shuffle = len([item for item in item_names if item == "Shuffle Trap"])
-        self.assertEqual(num_shuffle, 0)
+        self.assertEqual(0, num_shuffle)
 
     def test_omitted_item_same_as_nudge_in_item_pool(self):
         items = self.multiworld.get_items()
@@ -91,8 +105,8 @@ class TestDistributionIsRespectedAllTraps(WorldAssertMixin, SVTestBase):
         num_debris = len([item for item in item_names if item == "Debris Trap"])
         num_bark = len([item for item in item_names if item == "Bark Trap"])
         num_meow = len([item for item in item_names if item == "Meow Trap"])
-        self.assertLess(num_bark, num_time_flies)
-        self.assertLess(num_bark, num_debris)
-        self.assertGreater(num_meow, num_time_flies)
-        self.assertGreater(num_meow, num_debris)
+        self.assertLess(num_bark, num_time_flies - threshold)
+        self.assertLess(num_bark, num_debris - threshold)
+        self.assertGreater(num_meow, num_time_flies + threshold)
+        self.assertGreater(num_meow, num_debris + threshold)
 

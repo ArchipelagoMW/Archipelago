@@ -600,7 +600,9 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
                              if pack.name not in items_already_added_names]
     trap_items = [trap for trap in items_by_group[Group.TRAP]
                   if trap.name not in items_already_added_names and
-                  (trap.mod_name is None or trap.mod_name in options.mods)]
+                  Group.DEPRECATED not in trap.groups and
+                  (trap.mod_name is None or trap.mod_name in options.mods) and
+                  options.trap_distribution[trap.name] > 0]
     player_buffs = get_allowed_player_buffs(options.enabled_filler_buffs)
 
     priority_filler_items = []
@@ -632,12 +634,13 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
                         if Group.MAXIMUM_ONE not in filler_pack.groups or
                         (filler_pack.name not in [priority_item.name for priority_item in
                                                   priority_filler_items] and filler_pack.name not in items_already_added_names)]
+    weighted_filler_packs = get_weighted_filler(options, all_filler_packs)
 
     while required_resource_pack > 0:
-        resource_pack = random.choice(all_filler_packs)
+        resource_pack = random.choice(weighted_filler_packs)
         exactly_2 = Group.EXACTLY_TWO in resource_pack.groups
         while exactly_2 and required_resource_pack == 1:
-            resource_pack = random.choice(all_filler_packs)
+            resource_pack = random.choice(weighted_filler_packs)
             exactly_2 = Group.EXACTLY_TWO in resource_pack.groups
         classification = ItemClassification.useful if resource_pack.classification == ItemClassification.progression else resource_pack.classification
         items.append(item_factory(resource_pack, classification))
@@ -646,9 +649,21 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
             items.append(item_factory(resource_pack, classification))
             required_resource_pack -= 1
         if exactly_2 or Group.MAXIMUM_ONE in resource_pack.groups:
-            all_filler_packs.remove(resource_pack)
+            while resource_pack in weighted_filler_packs:
+                weighted_filler_packs.remove(resource_pack)
 
     return items
+
+
+def get_weighted_filler(options: StardewValleyOptions, all_filler_packs: List[ItemData]):
+    weighted = []
+    for filler in all_filler_packs:
+        if filler.name in options.trap_distribution:
+            num = options.trap_distribution[filler.name]
+        else:
+            num = 10
+        weighted.extend([filler] * num)
+    return weighted
 
 
 def filter_deprecated_items(items: List[ItemData]) -> List[ItemData]:
