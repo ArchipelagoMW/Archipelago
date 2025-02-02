@@ -95,7 +95,8 @@ RECV_OWN_GAME_LOCATIONS: list[str] = list(BOO_LOCATION_TABLE.keys()) \
 RECV_OWN_GAME_ITEMS: list[str] = list(BOO_ITEM_TABLE.keys()) + ["Boo Radar", "Poltergust 4000"]
 
 # Static time to wait for health and death checks
-HEALTH_CHECK_WAIT = 15
+CHECKS_WAIT = 3
+LONGER_MODIFIER = 2
 
 
 def read_short(console_address: int):
@@ -177,6 +178,8 @@ class LMContext(CommonContext):
         self.goal_type = None
         self.game_clear = False
         self.rank_req = -1
+        self.last_not_ingame = time.time()
+        self.boo_gate_enabled = False
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         """
@@ -213,7 +216,7 @@ class LMContext(CommonContext):
         """
         super().on_package(cmd, args)
         if cmd == "Connected":  # On Connect
-            self.boosanity = int(args["slot_data"]["boosanity"]) == 1
+            self.boo_gate_enabled = int(args["slot_data"]["boo gates"]) == 1
             self.goal_type = int(args["slot_data"]["goal"])
             self.rank_req = int(args["slot_data"]["rank requirement"])
             death_link_enabled = bool(args["slot_data"]["death_link"])
@@ -252,26 +255,39 @@ class LMContext(CommonContext):
         if "DeathLink" in self.tags:
             # Get the pointer of Luigi's health, as this changes when warping to bosses or climbing into mouse holes.
             if lm_curr_health == 0:
-                if time.time() > self.last_health_checked + HEALTH_CHECK_WAIT:
+                if time.time() > self.last_health_checked + CHECKS_WAIT:
                     return False
                 self.is_luigi_dead = False
                 return True
-        return lm_curr_health > 0
+
+        if lm_curr_health > 0:
+            self.last_health_checked = time.time()
+            return True
+
+        self.last_not_ingame = time.time()
+        return False
 
     def check_ingame(self):
-        current_map_id = dme.read_word(CURR_MAP_ID_ADDR)
-        if current_map_id == 2:
-            # If this is NOT a pointer, then either we are on another map (aka boss fight) or game is not fully loaded.
-            bool_loaded_in_map = check_if_addr_is_pointer(ROOM_ID_ADDR)
-        else:
-            bool_loaded_in_map = 0 < current_map_id < 14
-
         int_play_state = dme.read_word(CURR_PLAY_STATE_ADDR)
-        return int_play_state == 2 and bool_loaded_in_map
+        if not int_play_state == 2:
+            self.last_not_ingame = time.time()
+            return False
+
+        current_map_id = dme.read_word(CURR_MAP_ID_ADDR)
+        if current_map_id in [2, 9, 10, 11, 13]:
+            if not time.time() > (self.last_not_ingame + (CHECKS_WAIT*LONGER_MODIFIER)):
+                return False
+
+            if current_map_id == 2:
+                bool_loaded_in_map = check_if_addr_is_pointer(ROOM_ID_ADDR)
+                return bool_loaded_in_map
+
+        self.last_not_ingame = time.time()
+        return False
 
     async def check_death(self):
         if self.check_ingame() and not self.check_alive():
-            if not self.is_luigi_dead and time.time() >= self.last_death_link + HEALTH_CHECK_WAIT:
+            if not self.is_luigi_dead and time.time() >= self.last_death_link + (CHECKS_WAIT*LONGER_MODIFIER):
                 self.is_luigi_dead = True
                 self.set_luigi_dead()
                 await self.send_death(self.player_names[self.slot] + " scared themselves to death.")
@@ -282,11 +298,6 @@ class LMContext(CommonContext):
         return
 
     async def lm_give_items(self):
-        current_map_id = dme.read_word(CURR_MAP_ID_ADDR)
-        # If in E. Gadd's lab map
-        if current_map_id == 1:
-            return
-
         # Only try to give items if we are in game and alive.
         if not (self.check_ingame() and self.check_alive()):
             return
@@ -361,6 +372,7 @@ class LMContext(CommonContext):
                                                                                          [lm_item.pointer_offset]),
                                                                      lm_item.ram_byte_size))
                             curr_val += 10 if lm_item.code == 128 else 50
+                            curr_val = curr_val if curr_val <= 100 else 100
                             dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
                                                                 [lm_item.pointer_offset]),
                                             curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
@@ -396,11 +408,11 @@ class LMContext(CommonContext):
         return
 
     async def lm_check_locations(self):
+        if not (self.check_ingame() and self.check_alive()):
+            return
+
         # There will be different checks on different maps.
         current_map_id = dme.read_word(CURR_MAP_ID_ADDR)
-        # If in E. Gadd's lab map, ignore any check locations
-        if current_map_id == 1:
-            return
 
         for mis_loc in self.missing_locations:
             local_loc = self.location_names.lookup_in_game(mis_loc)
@@ -483,9 +495,7 @@ class LMContext(CommonContext):
         return
 
     async def lm_update_non_savable_ram(self):
-        current_map_id = dme.read_word(CURR_MAP_ID_ADDR)
-        # If in E. Gadd's lab map
-        if current_map_id == 1:
+        if not (self.check_ingame() and self.check_alive()):
             return
 
         vac_id = AutoWorldRegister.world_types[self.game].item_name_to_id["Poltergust 4000"]
@@ -495,15 +505,14 @@ class LMContext(CommonContext):
             self.already_updated_vac = True
 
         local_recv_ids = [netItem.item for netItem in self.items_received]
-        if self.boosanity:
+        if self.boo_gate_enabled:
             in_boo_gate_event = (dme.read_byte(0x803D33A7) & (1 << 0)) > 0
             for lm_boo in BOO_ITEM_TABLE.keys():
                 boo_id = AutoWorldRegister.world_types[self.game].item_name_to_id[lm_boo]
                 lm_boo_item = BOO_ITEM_TABLE[lm_boo]
                 boo_caught = dme.read_byte(lm_boo_item.ram_addr)
                 boo_val = boo_caught | (1 << lm_boo_item.itembit) if (in_boo_gate_event and
-                                                                      boo_id in local_recv_ids) else boo_caught & ~(
-                        1 << lm_boo_item.itembit)
+                        boo_id in local_recv_ids) else boo_caught & ~(1 << lm_boo_item.itembit)
                 dme.write_byte(lm_boo_item.ram_addr, boo_val)
         return
 
