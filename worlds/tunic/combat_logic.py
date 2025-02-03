@@ -267,18 +267,16 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
                 # first number is def, second number is sp
                 upgrade_options: set[tuple[int, int]] = set()
                 stats_to_buy = req_stats - free_def - free_sp
-                for i in range(def_offerings):
-                    paid_def = i + 1
-                    if paid_def >= stats_to_buy:
-                        upgrade_options.add((paid_def, 0))
-                    for j in range(sp_offerings):
-                        paid_sp = j + 1
-                        if paid_def + paid_sp >= stats_to_buy:
-                            upgrade_options.add((paid_def, paid_sp))
-                for i in range(sp_offerings):
-                    paid_sp = i + 1
-                    if paid_sp >= stats_to_buy:
-                        upgrade_options.add((0, paid_sp))
+                # check if we can get it with just defense offerings
+                if def_offerings >= stats_to_buy:
+                    upgrade_options.add((stats_to_buy, 0))
+                # check if we can get it with just sp offerings
+                if sp_offerings >= stats_to_buy:
+                    upgrade_options.add((0, stats_to_buy))
+                # check how many sp offerings we need for each defense offering
+                for paid_def in range(1, def_offerings + 1):
+                    if sp_offerings + paid_def >= stats_to_buy:
+                        upgrade_options.add((paid_def, stats_to_buy - paid_def))
                 costs = [calc_def_sp_cost(defense, sp) for defense, sp in upgrade_options]
                 money_required += min(costs)
 
@@ -300,20 +298,23 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
             # we need to pick the cheapest option that gets us above the amount of effective HP we need
             # first number is hp, second number is potion
             upgrade_options: set[tuple[int, int]] = set()
-            for i in range(potion_offerings):
-                paid_potion_count = i + 1
-                if calc_effective_hp(free_hp, free_potion + paid_potion_count, player_potion_count) >= req_effective_hp:
+            got_0_hp_case = False
+            for paid_potion in range(1, potion_offerings + 1):
+                # todo: fix line length when in an IDE
+                # check the 0 hp offerings case
+                if not got_0_hp_case and calc_effective_hp(free_hp, free_potion + paid_potion, player_potion_count) >= req_effective_hp:
                     upgrade_options.add((0, paid_potion_count))
-                for j in range(hp_offerings):
-                    paid_hp_count = j + 1
-                    if (calc_effective_hp(free_hp + paid_hp_count, free_potion + paid_potion_count, player_potion_count)
+                    got_0_hp_case = True
+                # check quantities of hp offerings for each potion offering
+                for paid_hp in range(1, hp_offerings + 1):
+                    if (calc_effective_hp(free_hp + paid_hp, free_potion + paid_potion, player_potion_count)
                             >= req_effective_hp):
-                        upgrade_options.add((paid_hp_count, paid_potion_count))
+                        upgrade_options.add((paid_hp, paid_potion))
                         break
-            for i in range(hp_offerings):
-                paid_hp_count = i + 1
-                if calc_effective_hp(free_hp + paid_hp_count, free_potion, player_potion_count) >= req_effective_hp:
-                    upgrade_options.add((paid_hp_count, 0))
+            # check the 0 potion offerings case
+            for paid_hp in range(1, hp_offerings + 1):
+                if calc_effective_hp(free_hp + paid_hp, free_potion, player_potion_count) >= req_effective_hp:
+                    upgrade_options.add((paid_hp, 0))
                     break
             costs = [calc_hp_potion_cost(hp, potion) for hp, potion in upgrade_options]
             money_required += min(costs)
