@@ -17,7 +17,7 @@ from settings import get_settings, Settings
 from .LMGenerator import LuigisMansionRandomizer
 from .Items import ALL_ITEMS_TABLE, BOO_ITEM_TABLE, filler_items
 from .Locations import ALL_LOCATION_TABLE, TOAD_LOCATION_TABLE, BOO_LOCATION_TABLE, PORTRAIT_LOCATION_TABLE, \
-    LIGHT_LOCATION_TABLE, SPEEDY_LOCATION_TABLE
+    LIGHT_LOCATION_TABLE, SPEEDY_LOCATION_TABLE, WALK_LOCATION_TABLE
 
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
@@ -92,7 +92,8 @@ RECV_OWN_GAME_LOCATIONS: list[str] = list(BOO_LOCATION_TABLE.keys()) \
                                      + list(TOAD_LOCATION_TABLE.keys()) \
                                      + list(PORTRAIT_LOCATION_TABLE.keys()) \
                                      + list(LIGHT_LOCATION_TABLE.keys()) \
-                                     + list(SPEEDY_LOCATION_TABLE.keys())
+                                     + list(SPEEDY_LOCATION_TABLE.keys()) \
+                                     + list(WALK_LOCATION_TABLE.keys())
 RECV_OWN_GAME_ITEMS: list[str] = list(BOO_ITEM_TABLE.keys()) + ["Boo Radar", "Poltergust 4000"]
 
 # Static time to wait for health and death checks
@@ -453,6 +454,11 @@ class LMContext(CommonContext):
                         # Bit 1 of the current room address indicates if a light in that room has been turned on.
                         current_room_state_int = read_short(lm_loc_data.room_ram_addr)
                         if (current_room_state_int & (1 << 1)) > 0:
+                            self.locations_checked.add(mis_loc)
+                    case "Walk":
+                        # Bit 1 of the current room address indicates if a light in that room has been turned on.
+                        current_room_state_int = read_short(lm_loc_data.room_ram_addr)
+                        if (current_room_state_int & (1 << 0)) > 0:
                             self.locations_checked.add(mis_loc)
                     case "Boo":
                         current_boo_state_int = dme.read_byte(lm_loc_data.room_ram_addr)
