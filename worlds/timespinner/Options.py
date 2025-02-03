@@ -395,6 +395,10 @@ class GateKeep(Toggle):
     """The castle drawbridge starts raised, and can be lowered via item."""
     display_name = "Gate Keep"
 
+class RoyalRoadblock(Toggle):
+    """The Royal Towers entrance door requires a royal orb (Plasma Orb, Plasma Geyser, or Royal Ring) to enter."""
+    display_name = "Royal Roadblock"
+
 @dataclass
 class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     start_with_jewelry_box: StartWithJewelryBox
@@ -436,6 +440,7 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     risky_warps: RiskyWarps
     pyramid_start: PyramidStart
     gate_keep: GateKeep
+    royal_roadblock: RoyalRoadblock
     trap_chance: TrapChance
     traps: Traps
 

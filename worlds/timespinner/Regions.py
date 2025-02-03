@@ -152,7 +152,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, options: Timesp
     connect(world, player, 'Castle Ramparts', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Castle Keep', 'Castle Ramparts')
     connect(world, player, 'Castle Keep', 'Castle Basement', lambda state: not flooded.flood_basement or state.has('Water Mask', player))
-    connect(world, player, 'Castle Keep', 'Royal towers (lower)', logic.has_doublejump)
+    connect(world, player, 'Castle Keep', 'Royal towers (lower)', lambda state: logic.has_doublejump(state) and (not options.royal_roadblock or logic.has_pink(state)))
     connect(world, player, 'Castle Keep', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Royal towers (lower)', 'Castle Keep')
     connect(world, player, 'Royal towers (lower)', 'Royal towers', lambda state: state.has('Timespinner Wheel', player) or logic.has_forwarddash_doublejump(state))
