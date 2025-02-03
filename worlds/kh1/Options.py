@@ -457,7 +457,9 @@ class JungleSlider(Toggle):
 
 class StartingWorlds(Range):
     """
-    Number of random worlds to start with in addition to Traverse Town, which is always available.  Will only consider Atlantica if toggled, and will only consider End of the World if its unlock is set to "Item".
+    Number of random worlds to start with in addition to Traverse Town, which is always available.
+    Will only consider Atlantica if toggled, and will only consider End of the World if its unlock is set to "Item".
+    These are given by the server, and are received after connection.
     """
     display_name = "Starting Worlds"
     default = 0
@@ -467,16 +469,22 @@ class StartingWorlds(Range):
 class StartingTools(DefaultOnToggle):
     """
     Determines whether you start with Scan and Dodge Roll.
+    These are given by the server, and are received after connection.
     """
     display_name = "Starting Tools"
 
-class RemoteItems(DefaultOnToggle):
+class RemoteItems(Choice):
     """
     Determines if items can be placed on locations in your own world in such a way that will force them to be remote items.
-    This includes placing abilities or stats on static events, or placing stats in chests, rewards, or events.
-    If this is on, you're expected to be connected to the AP server, even to receive your own items.
+    Off: When your items are placed in your world, they can only be placed in locations that they can be acquired without server connection (stats on levels, items in chests, etc).
+    Allow: When your items are placed in your world, items that normally can't be placed in a location in-game are simply made remote (stats in chests, abilities on static events, etc).
+    Full: All items are remote.  Use this when doing something like a co-op seed.
     """
     display_name = "Remote Items"
+    option_off = 0
+    option_allow = 1
+    option_full = 2
+    default = 0
 
 class Slot2LevelChecks(Range):
     """

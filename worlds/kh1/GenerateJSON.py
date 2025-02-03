@@ -49,7 +49,7 @@ def get_item_location_map(self):
     location_item_map = {}
     for location in self.multiworld.get_filled_locations(self.player):
         if location.name != "Final Ansem":
-            if self.player != location.item.player:
+            if self.player != location.item.player or self.options.remote_items.current_key == "full":
                 item_id = 2641230
             else:
                 item_id = location.item.code

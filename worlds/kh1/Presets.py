@@ -58,7 +58,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "death_link": False,
         "donald_death_link": False,
         "goofy_death_link": False,
-        "remote_items": True,
+        "remote_items": RemoteItems.option_off,
         "shorten_go_mode": False
     },
     # Puppies are found individually, and the goal is to return them all.
@@ -116,7 +116,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "death_link": False,
         "donald_death_link": False,
         "goofy_death_link": False,
-        "remote_items": True,
+        "remote_items": RemoteItems.option_off,
         "shorten_go_mode": False
     },
     # Advanced playthrough with most settings on.
@@ -174,7 +174,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "death_link": False,
         "donald_death_link": False,
         "goofy_death_link": False,
-        "remote_items": True,
+        "remote_items": RemoteItems.option_off,
         "shorten_go_mode": False
     },
     # Playthrough meant to enhance the level 1 experience.
@@ -231,7 +231,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "death_link": False,
         "donald_death_link": False,
         "goofy_death_link": False,
-        "remote_items": True,
+        "remote_items": RemoteItems.option_off,
         "shorten_go_mode": False
     }
 }

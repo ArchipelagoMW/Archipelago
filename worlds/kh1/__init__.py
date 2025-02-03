@@ -309,7 +309,7 @@ class KH1World(World):
                     "randomize_emblem_pieces": bool(self.options.exp_zero_in_pool),
                     "randomize_postcards": str(self.options.randomize_postcards.current_key),
                     "randomize_puppies": str(self.options.randomize_puppies.current_key),
-                    "remote_items": bool(self.options.remote_items),
+                    "remote_items": str(self.options.remote_items.current_key),
                     "required_lucky_emblems_door": self.determine_lucky_emblems_required_to_open_final_rest_door(),
                     "required_lucky_emblems_eotw": self.determine_lucky_emblems_required_to_open_end_of_the_world(),
                     "required_postcards": int(self.options.required_postcards.value),
@@ -385,7 +385,9 @@ class KH1World(World):
         for location in self.multiworld.get_filled_locations(self.player):
             if location.name != "Final Ansem":
                 location_data = location_table[location.name]
-                if self.player == location.item.player and location.item.name != "Victory":
+                if self.options.remote_items.current_key == "full":
+                    remote_location_ids.append(location_data.code)
+                elif self.player == location.item.player and location.item.name != "Victory":
                     item_data = item_table[location.item.name]
                     if location_data.type == "Chest":
                         if item_data.type in ["Stats"]:
