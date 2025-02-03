@@ -16,7 +16,7 @@ defaults:
 jobs:
   bundle:
     name: Bundle APWorld
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
