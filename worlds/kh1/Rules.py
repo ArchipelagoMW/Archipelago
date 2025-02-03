@@ -1501,7 +1501,7 @@ def set_rules(kh1world):
                 lambda state, level_num=i: (
                     has_x_worlds(state, player, min(((level_num//10)*2), 8), options.keyblades_unlock_chests)
                 ))
-            if i+1 < options.force_stats_and_abilities_on_levels.value:
+            if i+1 >= options.force_stats_and_abilities_on_levels.value:
                 add_item_rule(kh1world.get_location("Level " + str(i+1).rjust(3,'0') + " (Slot 2)"),
                     lambda i: (i.player != player or (i.name not in get_items_by_type("Item").keys() and i.name not in get_items_by_type("Shared Ability").keys())))
     add_rule(kh1world.get_location("Final Ansem"),
@@ -1957,7 +1957,7 @@ def set_rules(kh1world):
             kh1world.get_location(location)
         except KeyError:
             continue
-        if not options.remote_items:
+        if options.remote_items.current_key == "off":
             if location_table[location].type == "Chest":
                 add_item_rule(kh1world.get_location(location),
                     lambda i: (i.player != player or i.name not in get_items_by_type("Stats").keys()))
