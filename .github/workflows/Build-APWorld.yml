@@ -45,7 +45,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: Luigis-Mansion_apworld-${{ steps.tag.outputs.tag }}
-          path: worlds/luigismansion/build/target/Luigis-Mansion_apworld-${{ steps.tag.outputs.tag }}.zip
+          path: worlds/luigismansion/build/target/luigismansion_apworld-${{ steps.tag.outputs.tag }}.zip
 #      - uses: softprops/action-gh-release@v2
 #        if: github.ref_type == 'tag'
 #        with:
@@ -53,4 +53,4 @@ jobs:
 #          prerelease: ${{ contains(github.ref_name, '-rc') }}
 #          draft: true
 #          generate_release_notes: true
-#          files: build/target/Luigis-Mansion_apworld-${{ steps.tag.outputs.tag }}.zip
+#          files: build/target/luigismansion_apworld-${{ steps.tag.outputs.tag }}.zip
