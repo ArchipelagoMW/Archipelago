@@ -24,7 +24,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "exp_multiplier": 48,
         "level_checks": 99,
         "slot_2_level_checks": 33,
-        "force_stats_on_levels": 1,
+        "force_stats_and_abilities_on_levels": 1,
         "strength_increase": 24,
         "defense_increase": 24,
         "hp_increase": 23,
@@ -58,6 +58,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "death_link": False,
         "donald_death_link": False,
         "goofy_death_link": False,
+        "remote_items": True,
         "shorten_go_mode": False
     },
     # Puppies are found individually, and the goal is to return them all.
@@ -81,7 +82,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "exp_multiplier": 48,
         "level_checks": 99,
         "slot_2_level_checks": 33,
-        "force_stats_on_levels": 1,
+        "force_stats_and_abilities_on_levels": 1,
         "strength_increase": 24,
         "defense_increase": 24,
         "hp_increase": 23,
@@ -115,6 +116,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "death_link": False,
         "donald_death_link": False,
         "goofy_death_link": False,
+        "remote_items": True,
         "shorten_go_mode": False
     },
     # Advanced playthrough with most settings on.
@@ -138,7 +140,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "exp_multiplier": 48,
         "level_checks": 99,
         "slot_2_level_checks": 33,
-        "force_stats_on_levels": 1,
+        "force_stats_and_abilities_on_levels": 1,
         "strength_increase": 24,
         "defense_increase": 24,
         "hp_increase": 23,
@@ -172,6 +174,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "death_link": False,
         "donald_death_link": False,
         "goofy_death_link": False,
+        "remote_items": True,
         "shorten_go_mode": False
     },
     # Playthrough meant to enhance the level 1 experience.
@@ -195,7 +198,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "exp_multiplier": 16,
         "level_checks": 0,
         "slot_2_level_checks": 0,
-        "force_stats_on_levels": 101,
+        "force_stats_and_abilities_on_levels": 101,
         "strength_increase": 0,
         "defense_increase": 0,
         "hp_increase": 0,
@@ -228,6 +231,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "death_link": False,
         "donald_death_link": False,
         "goofy_death_link": False,
+        "remote_items": True,
         "shorten_go_mode": False
     }
 }

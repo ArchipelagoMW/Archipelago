@@ -347,12 +347,12 @@ class LevelChecks(Range):
     range_start = 0
     range_end = 99
 
-class ForceStatsOnLevels(NamedRange):
+class ForceStatsAbilitiesOnLevels(NamedRange):
     """
     If this value is less than the value for Level Checks, this determines the minimum level from which only stat ups are obtained at level up locations.
     For example, if you want to be able to find any multiworld item from levels 2-50, then just stat ups for levels 51-100, set this value to 51.
     """
-    display_name = "Force Stats on Level Starting From"
+    display_name = "Force Stats and Abilities on Level Starting From"
     default = 2
     range_start = 1
     range_end = 101
@@ -470,6 +470,14 @@ class StartingTools(DefaultOnToggle):
     """
     display_name = "Starting Tools"
 
+class RemoteItems(DefaultOnToggle):
+    """
+    Determines if items can be placed on locations in your own world in such a way that will force them to be remote items.
+    This includes placing abilities or stats on static events, or placing stats in chests, rewards, or events.
+    If this is on, you're expected to be connected to the AP server, even to receive your own items.
+    """
+    display_name = "Remote Items"
+
 class Slot2LevelChecks(Range):
     """
     Determines how many levels have an additional item.  Usually, this item is an ability.
@@ -526,7 +534,7 @@ class KH1Options(PerGameCommonOptions):
     keyblade_max_mp: KeybladeMaxMP
     level_checks: LevelChecks
     slot_2_level_checks: Slot2LevelChecks
-    force_stats_on_levels: ForceStatsOnLevels
+    force_stats_and_abilities_on_levels: ForceStatsAbilitiesOnLevels
     strength_increase: StrengthIncrease
     defense_increase: DefenseIncrease
     hp_increase: HPIncrease
@@ -537,6 +545,7 @@ class KH1Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     jungle_slider: JungleSlider
     starting_tools: StartingTools
+    remote_items: RemoteItems
     shorten_go_mode: ShortenGoMode
     death_link: DeathLink
 
@@ -563,7 +572,7 @@ kh1_option_groups = [
         EXPMultiplier,
         LevelChecks,
         Slot2LevelChecks,
-        ForceStatsOnLevels,
+        ForceStatsAbilitiesOnLevels,
         StrengthIncrease,
         DefenseIncrease,
         HPIncrease,
@@ -599,6 +608,7 @@ kh1_option_groups = [
         DeathLink,
         DonaldDeathLink,
         GoofyDeathLink,
+        RemoteItems,
         ShortenGoMode,
     ])
 ]

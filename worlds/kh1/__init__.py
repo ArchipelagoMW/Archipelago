@@ -168,7 +168,7 @@ class KH1World(World):
 
         level_up_locations = list(get_locations_by_category("Levels").keys())
         self.random.shuffle(level_up_item_pool)
-        current_level_for_placing_stats = self.options.force_stats_on_levels.value
+        current_level_for_placing_stats = self.options.force_stats_and_abilities_on_levels.value
         while len(level_up_item_pool) > 0 and current_level_for_placing_stats <= self.options.level_checks:
             self.get_location(level_up_locations[current_level_for_placing_stats - 1]).place_locked_item(self.create_item(level_up_item_pool.pop()))
             current_level_for_placing_stats += 1
@@ -299,7 +299,7 @@ class KH1World(World):
                     "exp_zero_in_pool": bool(self.options.exp_zero_in_pool),
                     "extra_shared_abilities": bool(self.options.extra_shared_abilities),
                     "final_rest_door_key": str(self.options.final_rest_door_key.current_key),
-                    "force_stats_on_levels": int(self.options.force_stats_on_levels.value),
+                    "force_stats_and_abilities_on_levels": int(self.options.force_stats_and_abilities_on_levels.value),
                     "goofy_death_link": bool(self.options.goofy_death_link),
                     "hundred_acre_wood": bool(self.options.hundred_acre_wood),
                     "interact_in_battle": bool(self.options.interact_in_battle),
@@ -309,6 +309,7 @@ class KH1World(World):
                     "randomize_emblem_pieces": bool(self.options.exp_zero_in_pool),
                     "randomize_postcards": str(self.options.randomize_postcards.current_key),
                     "randomize_puppies": str(self.options.randomize_puppies.current_key),
+                    "remote_items": bool(self.options.remote_items),
                     "required_lucky_emblems_door": self.determine_lucky_emblems_required_to_open_final_rest_door(),
                     "required_lucky_emblems_eotw": self.determine_lucky_emblems_required_to_open_end_of_the_world(),
                     "required_postcards": int(self.options.required_postcards.value),
