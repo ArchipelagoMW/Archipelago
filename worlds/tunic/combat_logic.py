@@ -457,14 +457,3 @@ class TunicState(LogicMixin):
         self.tunic_need_to_reset_combat_from_remove = defaultdict(lambda: False)
         # the per-player, per-area state of combat checking -- unchecked, failed, or succeeded
         self.tunic_area_combat_state = defaultdict(lambda: defaultdict(lambda: CombatState.unchecked))
-
-    def copy_mixin(self, new_state: CollectionState) -> CollectionState:
-        # the per-player need to reset the combat state when collecting a combat item
-        new_state.tunic_need_to_reset_combat_from_collect = defaultdict(lambda: False)
-        # the per-player need to reset the combat state when removing a combat item
-        new_state.tunic_need_to_reset_combat_from_remove = defaultdict(lambda: False)
-        # the per-player, per-area state of combat checking -- unchecked, failed, or succeeded
-        new_state.tunic_area_combat_state = defaultdict(lambda: defaultdict(lambda: CombatState.unchecked))
-
-        return new_state
-
