@@ -85,9 +85,12 @@ def generate_bottle_locations(world: "Sly1World", bundle_size: int) -> Dict[str,
             if bottle_name in location_table:
                 del location_table[bottle_name]
 
-            logging.info(f'Creating location {bottle_name} with code {bottle_code} in region {reg.name}')
             location = Sly1Location(world.player, bottle_name, bottle_code, reg)
             reg.locations.append(location)
+
+def strip_hourglass_from_keys(hourglass_locations):
+    stripped_keys = {key.replace(" Hourglass", ""): data for key, data in hourglass_locations.items()}
+    return stripped_keys
 
 sly_locations = {
     "Paris Files": LocData(10020000, "Paris",),

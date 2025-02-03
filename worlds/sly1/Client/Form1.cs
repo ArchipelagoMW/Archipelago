@@ -126,18 +126,33 @@ namespace Sly1AP
             await Client.Login(slotTextbox.Text, passwordTextbox.Text);
             var PlayerName = slotTextbox.Text;
             await Client.PopulateLocations(locations);
+            ConfigureOptions(Client.Options);
             if (Memory.ReadInt(0x2027DBF8) == 0 & Memory.ReadInt(0x2027DBFC) != 4)
             {
                 WriteLine("Load a save file, start a new game, or finish the prologue.");
                 while (Memory.ReadInt(0x2027DBF8) == 0 & Memory.ReadInt(0x2027DBFC) != 4)
                 {
                     CutsceneSkip();
+                    //Make all maps selectable.
+                    if (Memory.ReadInt(0x2027CAC4) == 0)
+                    {
+                        Memory.Write(0x2027CAC4, keys.Map);
+                    }
+                    if (Memory.ReadInt(0x2027CF10) == 0)
+                    {
+                        Memory.Write(0x2027CF10, keys.Map);
+                    }
+                    if (Memory.ReadInt(0x2027D35C) == 0)
+                    {
+                        Memory.Write(0x2027D35C, keys.Map);
+                    }
+                    if (Memory.ReadInt(0x2027D7A8) == 0)
+                    {
+                        Memory.Write(0x2027D7A8, keys.Map);
+                    }
                     await Task.Delay(1000);
                 }
             }
-            //On startup, set all values to 0. That way, the game won't overwrite Archipelago's values with the loaded game's values.
-            UpdateStart();
-            ConfigureOptions(Client.Options);
             var SentLocations = Client.GameState.CompletedLocations;
             var ItemsReceived = Client.GameState.ReceivedItems;
             var NewItems = new List<Item>(ItemsReceived);
@@ -162,29 +177,6 @@ namespace Sly1AP
                     {
                         Clues.UpdateBottles(item.Id, ClueBundles);
                     }
-                }
-            }
-            foreach (var loc in NewLocations)
-            {
-                if (loc.Name == "Paris Files")
-                {
-                    GameCompletion += 1;
-                }
-                if (loc.Name == "Eye of the Storm")
-                {
-                    GameCompletion += 32;
-                }
-                if (loc.Name == "Last Call")
-                {
-                    GameCompletion += 128;
-                }
-                if (loc.Name == "Deadly Dance")
-                {
-                    GameCompletion += 512;
-                }
-                if (loc.Name == "Flame-Fu!")
-                {
-                    GameCompletion += 2048;
                 }
             }
             Client.MessageReceived += (e, args) =>
@@ -547,32 +539,6 @@ namespace Sly1AP
                 Memory.Write(0x2027D7A8, keys.Map);
             }
             return;
-        }
-        public static void GetValues()
-        {
-            keys.RaleighKeys = Memory.ReadInt(0x2027CAB4);
-            keys.MuggshotKeys = Memory.ReadInt(0x2027CF00);
-            keys.MzRubyKeys = Memory.ReadInt(0x2027D34C);
-            keys.PandaKingKeys = Memory.ReadInt(0x2027D798);
-            keys.RaleighStart = Memory.ReadInt(0x2027C67C);
-            keys.MuggshotStart = Memory.ReadInt(0x2027CAC8);
-            keys.MzRubyStart = Memory.ReadInt(0x2027CF14);
-            keys.PandaKingStart = Memory.ReadInt(0x2027D360);
-        }
-        public static void UpdateStart()
-        {
-            slyMoves.SlyMoves = 0;
-            slyMoves.Roll = 4;
-            slyMoves.DiveAttack = 2;
-            slyMoves.Slow = 8;
-            slyMoves.Safety = 256;
-            slyMoves.Invisibility = 65536;
-            slyMoves.SafetyCount = 0;
-            Memory.Write(0x2027CAB4, 0);
-            Memory.Write(0x2027CF00, 0);
-            Memory.Write(0x2027D34C, 0);
-            Memory.Write(0x2027D798, 0);
-            GetValues();
         }
         public void WriteLine(string output)
         {

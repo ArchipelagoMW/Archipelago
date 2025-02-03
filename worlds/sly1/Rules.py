@@ -1,6 +1,6 @@
 from worlds.generic.Rules import add_rule, set_rule
 from .Types import episode_type_to_shortened_name
-from .Locations import hourglass_locations, vault_locations, did_include_hourglasses, get_bundle_amount_for_level
+from .Locations import hourglass_locations, vault_locations, did_include_hourglasses, get_bundle_amount_for_level, bottle_amounts, strip_hourglass_from_keys
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -80,6 +80,9 @@ def set_rules(world: "Sly1World"):
              lambda state: state.has("Progressive Invisibility", world.player, 1))
     add_rule(world.multiworld.get_location("Unseen Foe Vault", world.player),
              lambda state: state.has("Progressive Invisibility", world.player, 1))
+    for location in world.multiworld.get_locations(world.player):
+        if "Unseen Foe" in location.name and "Bottle" in location.name:
+            add_rule(location, lambda state: state.has("Progressive Invisibility", world.player, 1))
     
     # Cluesanity rules
     if world.options.CluesanityBundleSize.value > 0:
@@ -89,6 +92,14 @@ def set_rules(world: "Sly1World"):
             bottle_name = f'{level_name} Bottle(s)'
             
             set_rule(world.multiworld.get_location(name, world.player),
-                     lambda state, bn=bottle_name, ba=bundle_amount: state.has(bn, world.player, ba))         
+                     lambda state, bn=bottle_name, ba=bundle_amount: state.has(bn, world.player, ba))
+
+        for name, data in hourglass_locations.items():
+            level_name = name.rsplit(' ', 1)[0]
+            bundle_amount = get_bundle_amount_for_level(world, level_name)
+            bottle_name = f'{level_name} Bottle(s)'
+
+            set_rule(world.multiworld.get_location(name, world.player),
+                     lambda state, bn=bottle_name, ba=bundle_amount: state.has(bn, world.player, ba))
 
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)

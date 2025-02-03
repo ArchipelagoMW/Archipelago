@@ -1,17 +1,33 @@
 from BaseClasses import Item, ItemClassification
-from .Types import ItemData, Sly1Item, EpisodeType, episode_type_to_name
-from .Locations import  get_total_locations, get_bundle_amount_for_level
+from .Types import ItemData, Sly1Item, EpisodeType, episode_type_to_name, episode_type_to_shortened_name
+from .Locations import get_total_locations, get_bundle_amount_for_level, did_avoid_early_bk
 from typing import List, Dict, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from . import Sly1World
 
+
 def create_itempool(world: "Sly1World") -> List[Item]:
     itempool: List[Item] = []
 
-    # Create all episodes except for the starting episode as items
-    starting_episode = (episode_type_to_name[EpisodeType(world.options.StartingEpisode)])
+    # Determine if this player has AvoidEarlyBK enabled
+    need_to_modify_item_pool = world.options.AvoidEarlyBK
+    starting_episode = episode_type_to_shortened_name[EpisodeType(world.options.StartingEpisode)]
+    if starting_episode == "All":
+        starting_episode = world.random_episode
 
+    # Create a local copy of item_table to modify only for the current player
+    # We won't modify the global item_table directly
+    final_item_table = item_table.copy() if need_to_modify_item_pool else item_table
+
+    # If AvoidEarlyBK is enabled, adjust the key count for the starting episode
+    if need_to_modify_item_pool:
+        starting_key_name = f"{starting_episode} Key"
+        if starting_key_name in final_item_table:
+            starting_key = final_item_table[starting_key_name]
+            final_item_table[starting_key_name] = starting_key._replace(count=starting_key.count - 1)
+
+    # Create episodes except for the starting episode as items
     for episode in sly_episodes.keys():
         if starting_episode == "All":
             break
@@ -19,28 +35,34 @@ def create_itempool(world: "Sly1World") -> List[Item]:
             continue
         itempool.append(create_item(world, episode))
 
-    for name in item_table.keys():
-        item_type: ItemClassification = item_table.get(name).classification
-        item_amount: int = item_table.get(name).count
-    
+    # Use the modified final_item_table to add items to the item pool
+    for name in final_item_table.keys():
+        item_type: ItemClassification = final_item_table.get(name).classification
+        item_amount: int = final_item_table.get(name).count
+
+        # Add items based on the modified final_item_table
         itempool += create_multiple_items(world, name, item_amount, item_type)
-    
-    # Create Bottle Bundles
+
+    # Create Bottle Bundles if applicable
     if world.options.CluesanityBundleSize.value > 0:
         for name, data in bottles.items():
             bundle_amount = get_bundle_amount_for_level(world, name.rsplit(' ', 1)[0])
-            
             itempool += create_multiple_items(world, name, bundle_amount, data.classification)
 
+    # Add the Victory item to the pool
     victory = create_item(world, "Victory")
     world.multiworld.get_location("Beat Clockwerk", world.player).place_locked_item(victory)
 
+    # Add junk items to the pool if necessary
     itempool += create_junk_items(world, get_total_locations(world) - len(itempool) - len(event_item_pairs) - 1)
+
     return itempool
+
 
 def create_item(world: "Sly1World", name: str) -> Item:
     data = item_table[name]
     return Sly1Item(name, data.classification, data.ap_code, world.player)
+
 
 def create_multiple_items(world: "Sly1World", name: str, count: int = 1,
                           item_type: ItemClassification = ItemClassification.progression) -> List[Item]:
@@ -51,6 +73,7 @@ def create_multiple_items(world: "Sly1World", name: str, count: int = 1,
         itemlist += [Sly1Item(name, item_type, data.ap_code, world.player)]
 
     return itemlist
+
 
 def create_junk_items(world: "Sly1World", count: int) -> List[Item]:
     trap_chance = world.options.TrapChance.value
@@ -74,7 +97,7 @@ def create_junk_items(world: "Sly1World", count: int) -> List[Item]:
                 trap_list[name] = world.options.BallTrapWeight.value
 
     for i in range(count):
-        if trap_chance > 0 and world.random.randint(1,100) <= trap_chance:
+        if trap_chance > 0 and world.random.randint(1, 100) <= trap_chance:
             junk_pool.append(world.create_item(
                 world.random.choices(list(trap_list.keys()), weights=list(trap_list.values()), k=1)[0]))
         else:
@@ -83,11 +106,6 @@ def create_junk_items(world: "Sly1World", count: int) -> List[Item]:
 
     return junk_pool
 
-def set_keys(starting_episode: str):
-    starting_key = f'{starting_episode} Key'
-    key = item_table[starting_key]
-    updated_key = ItemData(key.ap_code, key.classification, key.count - 1)
-    item_table.update({starting_key: updated_key})     
 
 sly_items = {
     # Progressive Moves
@@ -96,7 +114,7 @@ sly_items = {
     "Progressive Slow Motion": ItemData(10020003, ItemClassification.useful, 3),
     "Progressive Safety": ItemData(10020007, ItemClassification.useful, 2),
     "Progressive Invisibility": ItemData(10020010, ItemClassification.progression, 2),
-    
+
     # Non-progressive Moves
     "Coin Magnet": ItemData(10020004, ItemClassification.useful),
     "Mine": ItemData(10020005, ItemClassification.useful),
@@ -128,28 +146,28 @@ sly_episodes = {
 }
 
 bottles = {
-    "Stealthy Approach Bottle(s)":        ItemData(10020030, ItemClassification.progression, 0),
-    "Into the Machine Bottle(s)":         ItemData(10020031, ItemClassification.progression, 0),
-    "High Class Heist Bottle(s)":         ItemData(10020032, ItemClassification.progression, 0),
-    "Fire Down Below Bottle(s)":          ItemData(10020033, ItemClassification.progression, 0),
-    "Cunning Disguise Bottle(s)":         ItemData(10020034, ItemClassification.progression, 0),
-    "Gunboat Graveyard Bottle(s)":        ItemData(10020035, ItemClassification.progression, 0),
+    "Stealthy Approach Bottle(s)": ItemData(10020030, ItemClassification.progression, 0),
+    "Into the Machine Bottle(s)": ItemData(10020031, ItemClassification.progression, 0),
+    "High Class Heist Bottle(s)": ItemData(10020032, ItemClassification.progression, 0),
+    "Fire Down Below Bottle(s)": ItemData(10020033, ItemClassification.progression, 0),
+    "Cunning Disguise Bottle(s)": ItemData(10020034, ItemClassification.progression, 0),
+    "Gunboat Graveyard Bottle(s)": ItemData(10020035, ItemClassification.progression, 0),
 
-    "Rocky Start Bottle(s)":              ItemData(10020036, ItemClassification.progression, 0),
-    "Boneyard Casino Bottle(s)":          ItemData(10020037, ItemClassification.progression, 0),
-    "Straight to the Top Bottle(s)":      ItemData(10020038, ItemClassification.progression, 0),
-    "Two to Tango Bottle(s)":             ItemData(10020039, ItemClassification.progression, 0),
-    "Back Alley Heist Bottle(s)":         ItemData(10020040, ItemClassification.progression, 0),
+    "Rocky Start Bottle(s)": ItemData(10020036, ItemClassification.progression, 0),
+    "Boneyard Casino Bottle(s)": ItemData(10020037, ItemClassification.progression, 0),
+    "Straight to the Top Bottle(s)": ItemData(10020038, ItemClassification.progression, 0),
+    "Two to Tango Bottle(s)": ItemData(10020039, ItemClassification.progression, 0),
+    "Back Alley Heist Bottle(s)": ItemData(10020040, ItemClassification.progression, 0),
 
-    "Dread Swamp Path Bottle(s)":         ItemData(10020041, ItemClassification.progression, 0),
-    "Lair of the Beast Bottle(s)":        ItemData(10020042, ItemClassification.progression, 0),
-    "Grave Undertaking Bottle(s)":        ItemData(10020043, ItemClassification.progression, 0),
-    "Descent into Danger Bottle(s)":      ItemData(10020044, ItemClassification.progression, 0),
+    "Dread Swamp Path Bottle(s)": ItemData(10020041, ItemClassification.progression, 0),
+    "Lair of the Beast Bottle(s)": ItemData(10020042, ItemClassification.progression, 0),
+    "Grave Undertaking Bottle(s)": ItemData(10020043, ItemClassification.progression, 0),
+    "Descent into Danger Bottle(s)": ItemData(10020044, ItemClassification.progression, 0),
 
-    "Perilous Ascent Bottle(s)":          ItemData(10020045, ItemClassification.progression, 0),
-    "Flaming Temple of Flame Bottle(s)":  ItemData(10020046, ItemClassification.progression, 0),
-    "Unseen Foe Bottle(s)":               ItemData(10020047, ItemClassification.progression, 0),
-    "Duel by the Dragon Bottle(s)":       ItemData(10020048, ItemClassification.progression, 0)
+    "Perilous Ascent Bottle(s)": ItemData(10020045, ItemClassification.progression, 0),
+    "Flaming Temple of Flame Bottle(s)": ItemData(10020046, ItemClassification.progression, 0),
+    "Unseen Foe Bottle(s)": ItemData(10020047, ItemClassification.progression, 0),
+    "Duel by the Dragon Bottle(s)": ItemData(10020048, ItemClassification.progression, 0)
 }
 
 junk_items = {

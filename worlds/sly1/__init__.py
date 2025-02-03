@@ -3,7 +3,7 @@ import random
 from typing import Dict
 from BaseClasses import MultiWorld, Item, ItemClassification, Tutorial
 from worlds.AutoWorld import World, CollectionState, WebWorld
-from .Items import item_table, create_itempool, create_item, set_keys, event_item_pairs, sly_episodes
+from .Items import item_table, create_itempool, create_item, event_item_pairs, sly_episodes
 from .Locations import get_location_names, get_total_locations, did_avoid_early_bk, generate_bottle_locations
 from .Options import Sly1Options
 from .Regions import create_regions
@@ -37,7 +37,7 @@ class Sly1World(World):
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
-        
+
     def generate_early(self):
         starting_episode = EpisodeType(self.options.StartingEpisode)
         starting_episode_long = episode_type_to_name[starting_episode]
@@ -54,8 +54,8 @@ class Sly1World(World):
         if did_avoid_early_bk(self):
             if starting_episode_long == "All":
                 starting_episode_short = episode_type_to_shortened_name[EpisodeType(random.randrange(1, 4))]
+                self.random_episode = starting_episode_short
             self.multiworld.push_precollected(self.create_item(f'{starting_episode_short} Key'))
-            set_keys(starting_episode_short)
 
     def create_regions(self):
         create_regions(self)

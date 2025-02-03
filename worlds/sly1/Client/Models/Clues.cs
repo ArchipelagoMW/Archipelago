@@ -254,7 +254,7 @@ namespace Sly1AP.Models
             Memory.Write(0x2027CDFC, StraightToTheTopBottles);
             Memory.Write(0x2027CD84, TwoToTangoBottles);
             Memory.Write(0x2027CE74, BackAlleyHeistBottles);
-            Memory.Write(0x2027CF14, DreadSwampPathBottles);
+            Memory.Write(0x2027CF78, DreadSwampPathBottles);
             Memory.Write(0x2027D068, LairOfTheBeastBottles);
             Memory.Write(0x2027D0E0, GraveUndertakingBottles);
             Memory.Write(0x2027D1D0, DescentIntoDangerBottles);
