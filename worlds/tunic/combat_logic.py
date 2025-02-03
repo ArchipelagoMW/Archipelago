@@ -119,14 +119,14 @@ def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_d
     extra_def_needed = 0
     extra_mp_needed = 0
     has_magic = state.has_any(("Magic Wand", "Gun"), player)
-    stick_bool = has_melee(state, player)
     sword_bool = has_sword(state, player)
+    stick_bool = sword_bool or has_melee(state, player)
     equipment = data.equipment.copy()
     for item in data.equipment:
         if item == "Stick":
             if not stick_bool:
-                equipment.remove("Stick")
                 if has_magic:
+                    equipment.remove("Stick")
                     if "Magic" not in equipment:
                         equipment.append("Magic")
                     # magic can make up for the lack of stick
@@ -161,6 +161,7 @@ def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_d
                 else:
                     return False
 
+        # just increase the stat requirement, we'll check for shield when calculating defense
         elif item == "Shield":
             equipment.remove("Shield")
             extra_def_needed += 2
@@ -237,7 +238,7 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
         else:
             att_required += 2
 
-    if player_att < data.att_level:
+    if player_att < att_required:
         return False
     else:
         extra_att = player_att - att_required
@@ -278,9 +279,7 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
                     paid_sp = i + 1
                     if paid_sp >= stats_to_buy:
                         upgrade_options.add((0, paid_sp))
-                costs = []
-                for defense, sp in upgrade_options:
-                    costs.append(calc_def_sp_cost(defense, sp))
+                costs = [calc_def_sp_cost(defense, sp) for defense, sp in upgrade_options]
                 money_required += min(costs)
 
     req_effective_hp = calc_effective_hp(data.hp_level, data.potion_level, data.potion_count)
@@ -316,9 +315,7 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
                 if calc_effective_hp(free_hp + paid_hp_count, free_potion, player_potion_count) >= req_effective_hp:
                     upgrade_options.add((paid_hp_count, 0))
                     break
-            costs = []
-            for hp, potion in upgrade_options:
-                costs.append(calc_hp_potion_cost(hp, potion))
+            costs = [calc_hp_potion_cost(hp, potion) for hp, potion in upgrade_options]
             money_required += min(costs)
 
     return get_money_count(state, player) >= money_required
