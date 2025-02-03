@@ -44,8 +44,8 @@ function get_deps() {
     local platform="$1" requirements_file="$2" to="$3" install_path="$4"
     echo "=> Bundle requirements for ${platform}"
 
-    local install_platform_dir = "${install_path}}/${platform}}"
-    local main_platform_dir = "${to}/${platform}"
+    local install_platform_dir="${install_path}/${platform}"
+    local main_platform_dir="${to}/${platform}"
     mkdir --parents ${install_platform_dir}
     mkdir --parents ${main_platform_dir}
 
@@ -137,7 +137,7 @@ function main() {
     pre_flight
 
     local target_path="${CWD}/target"
-    local pip_download = "${CWD}/deps"
+    local pip_download="${CWD}/deps"
     local bundle_base="luigismansion_apworld"
     mkdir --parents ${target_path}
 
