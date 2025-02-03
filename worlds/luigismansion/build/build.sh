@@ -83,12 +83,14 @@ function get_deps() {
         fi
 
         # The actual code of the library.
+        local dir="$(basename ${folder})"
+        mkdir -p ${main_platform_dir}/${dir}
         rsync \
             --progress \
             --recursive \
             --prune-empty-dirs \
             --exclude-from="${CWD}/requirements.ignore" \
-            "${dependency_content}/" "${main_platform_dir}"
+            "${dependency_content}/" "${main_platform_dir}/${dir}"
     done
 
     echo "  -> Cleaning"
