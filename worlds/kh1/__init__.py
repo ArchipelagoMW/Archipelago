@@ -309,7 +309,6 @@ class KH1World(World):
                     "randomize_emblem_pieces": bool(self.options.exp_zero_in_pool),
                     "randomize_postcards": str(self.options.randomize_postcards.current_key),
                     "randomize_puppies": str(self.options.randomize_puppies.current_key),
-                    "remote_items": bool(self.options.remote_items),
                     "required_lucky_emblems_door": self.determine_lucky_emblems_required_to_open_final_rest_door(),
                     "required_lucky_emblems_eotw": self.determine_lucky_emblems_required_to_open_end_of_the_world(),
                     "required_postcards": int(self.options.required_postcards.value),

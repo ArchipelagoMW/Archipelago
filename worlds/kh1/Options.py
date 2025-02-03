@@ -470,14 +470,6 @@ class StartingTools(DefaultOnToggle):
     """
     display_name = "Starting Tools"
 
-class RemoteItems(DefaultOnToggle):
-    """
-    Determines if items can be placed on locations in your own world in such a way that will force them to be remote items.
-    This includes placing abilities or stats on static events, or placing stats in chests, rewards, or events.
-    If this is on, you're expected to be connected to the AP server, even to receive your own items.
-    """
-    display_name = "Remote Items"
-
 class Slot2LevelChecks(Range):
     """
     Determines how many levels have an additional item.  Usually, this item is an ability.
@@ -545,7 +537,6 @@ class KH1Options(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     jungle_slider: JungleSlider
     starting_tools: StartingTools
-    remote_items: RemoteItems
     shorten_go_mode: ShortenGoMode
     death_link: DeathLink
 
@@ -608,7 +599,6 @@ kh1_option_groups = [
         DeathLink,
         DonaldDeathLink,
         GoofyDeathLink,
-        RemoteItems,
         ShortenGoMode,
     ])
 ]

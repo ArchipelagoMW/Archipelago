@@ -1954,25 +1954,24 @@ def set_rules(kh1world):
             kh1world.get_location(location)
         except KeyError:
             continue
-        if not options.remote_items:
-            if location_table[location].type == "Chest":
-                add_item_rule(kh1world.get_location(location),
-                    lambda i: (i.player != player or i.name not in get_items_by_type("Stats").keys()))
-            if location_table[location].type == "Reward":
-                add_item_rule(kh1world.get_location(location),
-                    lambda i: (i.player != player or i.name not in get_items_by_type("Stats").keys()))
-            if location_table[location].type == "Static":
-                add_item_rule(kh1world.get_location(location),
-                    lambda i: (i.player != player or i.name in get_items_by_type("Item").keys()))
-            if location_table[location].type == "Level Slot 1":
-                add_item_rule(kh1world.get_location(location),
-                    lambda i: (i.player != player or i.name in get_items_by_type("Stats").keys()))
-            if location_table[location].type == "Level Slot 2":
-                add_item_rule(kh1world.get_location(location),
-                    lambda i: (i.player != player or (i.name not in get_items_by_type("Item").keys() and i.name not in get_items_by_type("Shared Ability").keys())))
-            if location_table[location].type == "Synth":
-                add_item_rule(kh1world.get_location(location),
-                    lambda i: (i.player != player or (i.name in get_items_by_type("Item").keys())))
+        if location_table[location].type == "Chest":
+            add_item_rule(kh1world.get_location(location),
+                lambda i: (i.player != player or i.name not in get_items_by_type("Stats").keys()))
+        if location_table[location].type == "Reward":
+            add_item_rule(kh1world.get_location(location),
+                lambda i: (i.player != player or i.name not in get_items_by_type("Stats").keys()))
+        if location_table[location].type == "Static":
+            add_item_rule(kh1world.get_location(location),
+                lambda i: (i.player != player or i.name in get_items_by_type("Item").keys()))
+        if location_table[location].type == "Level Slot 1":
+            add_item_rule(kh1world.get_location(location),
+                lambda i: (i.player != player or i.name in get_items_by_type("Stats").keys()))
+        if location_table[location].type == "Level Slot 2":
+            add_item_rule(kh1world.get_location(location),
+                lambda i: (i.player != player or (i.name not in get_items_by_type("Item").keys() and i.name not in get_items_by_type("Shared Ability").keys())))
+        if location_table[location].type == "Synth":
+            add_item_rule(kh1world.get_location(location),
+                lambda i: (i.player != player or (i.name in get_items_by_type("Item").keys())))
         if location_table[location].type == "Prize":
             add_item_rule(kh1world.get_location(location),
                 lambda i: (
