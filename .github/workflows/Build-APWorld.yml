@@ -41,7 +41,7 @@ jobs:
             echo "tag=${SHA}" >> $GITHUB_OUTPUT
           fi
       - name: Build bundle
-        run: TAG="${{ steps.tag.outputs.tag }}" bash worlds/luigismansion/build/buid.sh
+        run: TAG="${{ steps.tag.outputs.tag }}" bash worlds/luigismansion/build/build.sh
       - uses: actions/upload-artifact@v4
         with:
           name: Luigis-Mansion_apworld-${{ steps.tag.outputs.tag }}
