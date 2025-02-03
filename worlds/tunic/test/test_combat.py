@@ -42,11 +42,10 @@ class TestCombat(TunicTestBase):
         if item in skipped_items:
             continue
         ic = data.combat_ic or data.classification
+        if item in converter:
+            item = converter[item]
         if ItemClassification.progression in ic:
-            for _ in range(data.quantity_in_item_pool):
-                if item in converter:
-                    item = converter[item]
-                combat_items.append(item)
+            combat_items += [item] * data.quantity_in_item_pool
 
     # we had an issue where collecting certain items brought certain areas out of logic
     # due to the weirdness of swapping between "you have enough attack that you don't need magic"
@@ -57,11 +56,10 @@ class TestCombat(TunicTestBase):
         random_obj.shuffle(combat_items)
         curr_statuses = {name: False for name in area_data.keys()}
         prev_statuses = curr_statuses.copy()
-        area_names = [name for name in area_data.keys()]
-        current_items = Counter({name: 0 for name in combat_items})
+        area_names = list(area_data.keys())
+        current_items = Counter()
         collected_items = []
-        while len(combat_items):
-            current_item_name = combat_items.pop()
+        for current_item_name in combat_items:
             current_items[current_item_name] += 1
             current_item = TunicWorld.create_item(self.world, current_item_name)
             self.collect(current_item)
