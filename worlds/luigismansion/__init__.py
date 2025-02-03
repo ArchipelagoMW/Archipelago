@@ -392,7 +392,7 @@ class LMWorld(World):
             self.open_doors = dict(zip(self.random.sample(k, k=len(self.open_doors)),
                                        v))
 
-        # If sword mode is Start with Hero's Sword, then send the player a starting sword
+        # If player wants to start with boo radar or good vacuum
         if self.options.boo_radar == 0:
             self.options.start_inventory.value["Boo Radar"] = (
                     self.options.start_inventory.value.get("Boo Radar", 0) + 1
