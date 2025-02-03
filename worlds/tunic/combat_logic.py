@@ -303,7 +303,7 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
                 # todo: fix line length when in an IDE
                 # check the 0 hp offerings case
                 if not got_0_hp_case and calc_effective_hp(free_hp, free_potion + paid_potion, player_potion_count) >= req_effective_hp:
-                    upgrade_options.add((0, paid_potion_count))
+                    upgrade_options.add((0, paid_potion))
                     got_0_hp_case = True
                 # check quantities of hp offerings for each potion offering
                 for paid_hp in range(1, hp_offerings + 1):
