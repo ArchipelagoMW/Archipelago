@@ -35,7 +35,6 @@ from kivy.config import Config
 Config.set("input", "mouse", "mouse,disable_multitouch")
 Config.set("kivy", "exit_on_escape", "0")
 Config.set("graphics", "multisamples", "0")  # multisamples crash old intel drivers
-from kivy.uix.image import AsyncImage
 from kivymd.uix.divider import MDDivider
 from kivy.core.window import Window
 from kivy.core.clipboard import Clipboard
@@ -56,7 +55,6 @@ from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.animation import Animation
 from kivy.uix.popup import Popup
-from kivy.uix.dropdown import DropDown
 from kivy.uix.image import AsyncImage
 from kivymd.app import MDApp
 from kivymd.uix.gridlayout import MDGridLayout
@@ -64,6 +62,7 @@ from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.tab.tab import MDTabsPrimary, MDTabsItem, MDTabsItemText, MDTabsCarousel
 from kivymd.uix.menu import MDDropdownMenu
+from kivymd.uix.menu.menu import MDDropdownTextItem
 from kivymd.uix.dropdownitem import MDDropDownItem, MDDropDownItemText
 from kivymd.uix.button import MDButton, MDButtonText, MDButtonIcon, MDIconButton
 from kivymd.uix.label import MDLabel, MDIcon
@@ -374,6 +373,90 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
         self.selected = is_selected
 
 
+class MarkupDropdownTextItem(MDDropdownTextItem):
+    def __init__(self):
+        super().__init__()
+        for child in self.children:
+            if child.__class__ == MDLabel:
+                child.markup = True
+        print(self.text)
+    # Currently, this only lets us do markup on text that does not have any icons
+    # Create new TextItems as needed
+
+
+class MarkupDropdown(MDDropdownMenu):
+    def on_items(self, instance, value: list) -> None:
+        """
+        The method sets the class that will be used to create the menu item.
+        """
+
+        items = []
+        viewclass = "MarkupDropdownTextItem"
+
+        for data in value:
+            if "viewclass" not in data:
+                if (
+                    "leading_icon" not in data
+                    and "trailing_icon" not in data
+                    and "trailing_text" not in data
+                ):
+                    viewclass = "MarkupDropdownTextItem"
+                elif (
+                    "leading_icon" in data
+                    and "trailing_icon" not in data
+                    and "trailing_text" not in data
+                ):
+                    viewclass = "MDDropdownLeadingIconItem"
+                elif (
+                    "leading_icon" not in data
+                    and "trailing_icon" in data
+                    and "trailing_text" not in data
+                ):
+                    viewclass = "MDDropdownTrailingIconItem"
+                elif (
+                    "leading_icon" not in data
+                    and "trailing_icon" in data
+                    and "trailing_text" in data
+                ):
+                    viewclass = "MDDropdownTrailingIconTextItem"
+                elif (
+                    "leading_icon" in data
+                    and "trailing_icon" in data
+                    and "trailing_text" in data
+                ):
+                    viewclass = "MDDropdownLeadingTrailingIconTextItem"
+                elif (
+                    "leading_icon" in data
+                    and "trailing_icon" in data
+                    and "trailing_text" not in data
+                ):
+                    viewclass = "MDDropdownLeadingTrailingIconItem"
+                elif (
+                    "leading_icon" not in data
+                    and "trailing_icon" not in data
+                    and "trailing_text" in data
+                ):
+                    viewclass = "MDDropdownTrailingTextItem"
+                elif (
+                    "leading_icon" in data
+                    and "trailing_icon" not in data
+                    and "trailing_text" in data
+                ):
+                    viewclass = "MDDropdownLeadingIconTrailingTextItem"
+
+                data["viewclass"] = viewclass
+
+            if "height" not in data:
+                data["height"] = dp(48)
+
+            items.append(data)
+
+        self._items = items
+        # Update items in view
+        if hasattr(self, "menu"):
+            self.menu.data = self._items
+
+
 class AutocompleteHintInput(MDTextField):
     min_chars = NumericProperty(3)
     attach_to: bool = False
@@ -381,7 +464,7 @@ class AutocompleteHintInput(MDTextField):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.dropdown = MDDropdownMenu(caller=self, position="bottom")
+        self.dropdown = MarkupDropdown(caller=self, position="bottom", border_margin=dp(24), width=dp(400))
         self.dropdown.bind(on_select=lambda instance, x: setattr(self, 'text', x))
         self.bind(on_text_validate=self.on_message)
 
@@ -396,8 +479,8 @@ class AutocompleteHintInput(MDTextField):
                 return
             item_names = ctx.item_names._game_store[ctx.game].values()
 
-            def on_press(button: MDButton):
-                split_text = MarkupLabel(text=button._button_text.text).markup
+            def on_press(text):
+                split_text = MarkupLabel(text=text).markup
                 return self.dropdown.select("".join(text_frag for text_frag in split_text
                                                     if not text_frag.startswith("[")))
             lowered = value.lower()
@@ -411,7 +494,8 @@ class AutocompleteHintInput(MDTextField):
                     text = text[:index] + "[b]" + text[index:index+len(value)]+"[/b]"+text[index+len(value):]
                     self.dropdown.items.append({
                         "text": text,
-                        "on_release": on_press
+                        "on_release": lambda: on_press(text),
+                        "markup": True
                     })
             if not self.attach_to:
                 self.dropdown.open()
@@ -916,8 +1000,8 @@ class HintLayout(MDBoxLayout):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        boxlayout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(30))
-        boxlayout.add_widget(MDLabel(text="New Hint:", size_hint_x=None, size_hint_y=None, height=dp(30)))
+        boxlayout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(55))
+        boxlayout.add_widget(MDLabel(text="New Hint:", size_hint_x=None, size_hint_y=None, height=dp(55)))
         boxlayout.add_widget(AutocompleteHintInput())
         self.add_widget(boxlayout)
 

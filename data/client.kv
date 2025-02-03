@@ -32,6 +32,31 @@
         Rectangle:
             size: self.size
             pos: self.pos
+<MarkupDropdownItem>
+    orientation: "vertical"
+
+    MDLabel:
+        text: root.text
+        valign: "center"
+        padding_x: "12dp"
+        shorten: True
+        shorten_from: "right"
+        theme_text_color: "Custom"
+        markup: True
+        text_color:
+            app.theme_cls.onSurfaceVariantColor \
+            if not root.text_color else \
+            root.text_color
+
+    MDDivider:
+        md_bg_color:
+            ( \
+            app.theme_cls.outlineVariantColor \
+            if not root.divider_color \
+            else root.divider_color \
+            ) \
+            if root.divider else \
+            (0, 0, 0, 0)
 <UILog>:
     messages: 1000 # amount of messages stored in client logs.
     cols: 1
