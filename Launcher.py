@@ -22,16 +22,15 @@ from os.path import isfile
 from shutil import which
 from typing import Callable, Optional, Sequence, Tuple, Union
 
-import Utils
-import settings
-from worlds.LauncherComponents import Component, components, Type, SuffixIdentifier, icon_paths
-
 if __name__ == "__main__":
     import ModuleUpdate
     ModuleUpdate.update()
 
-from Utils import is_frozen, user_path, local_path, init_logging, open_filename, messagebox, \
-    is_windows, is_macos, is_linux
+import settings
+import Utils
+from Utils import (init_logging, is_frozen, is_linux, is_macos, is_windows, local_path, messagebox, open_filename,
+                   user_path)
+from worlds.LauncherComponents import Component, components, icon_paths, SuffixIdentifier, Type
 
 
 def open_host_yaml():
@@ -127,12 +126,13 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
         elif component.display_name == "Text Client":
             text_client_component = component
 
-    from kvui import App, Button, BoxLayout, Label, Clock, Window
+    if client_component is None:
+        run_component(text_client_component, *launch_args)
+        return
+
+    from kvui import App, Button, BoxLayout, Label, Window
 
     class Popup(App):
-        timer_label: Label
-        remaining_time: Optional[int]
-
         def __init__(self):
             self.title = "Connect to Multiworld"
             self.icon = r"data/icon.png"
@@ -140,47 +140,29 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
 
         def build(self):
             layout = BoxLayout(orientation="vertical")
+            layout.add_widget(Label(text="Select client to open and connect with."))
+            button_row = BoxLayout(orientation="horizontal", size_hint=(1, 0.4))
 
-            if client_component is None:
-                self.remaining_time = 7
-                label_text = (f"A game client able to parse URIs was not detected for {game}.\n"
-                              f"Launching Text Client in 7 seconds...")
-                self.timer_label = Label(text=label_text)
-                layout.add_widget(self.timer_label)
-                Clock.schedule_interval(self.update_label, 1)
-            else:
-                layout.add_widget(Label(text="Select client to open and connect with."))
-                button_row = BoxLayout(orientation="horizontal", size_hint=(1, 0.4))
+            text_client_button = Button(
+                text=text_client_component.display_name,
+                on_release=lambda *args: run_component(text_client_component, *launch_args)
+            )
+            button_row.add_widget(text_client_button)
 
-                text_client_button = Button(
-                    text=text_client_component.display_name,
-                    on_release=lambda *args: run_component(text_client_component, *launch_args)
-                )
-                button_row.add_widget(text_client_button)
+            game_client_button = Button(
+                text=client_component.display_name,
+                on_release=lambda *args: run_component(client_component, *launch_args)
+            )
+            button_row.add_widget(game_client_button)
 
-                game_client_button = Button(
-                    text=client_component.display_name,
-                    on_release=lambda *args: run_component(client_component, *launch_args)
-                )
-                button_row.add_widget(game_client_button)
-
-                layout.add_widget(button_row)
+            layout.add_widget(button_row)
 
             return layout
 
-        def update_label(self, dt):
-            if self.remaining_time > 1:
-                # countdown the timer and string replace the number
-                self.remaining_time -= 1
-                self.timer_label.text = self.timer_label.text.replace(
-                    str(self.remaining_time + 1), str(self.remaining_time)
-                )
-            else:
-                # our timer is finished so launch text client and close down
-                run_component(text_client_component, *launch_args)
-                Clock.unschedule(self.update_label)
-                App.get_running_app().stop()
-                Window.close()
+        def _stop(self, *largs):
+            # see run_gui Launcher _stop comment for details
+            self.root_window.close()
+            super()._stop(*largs)
 
     Popup().run()
 
@@ -242,9 +224,8 @@ refresh_components: Optional[Callable[[], None]] = None
 
 
 def run_gui():
-    from kvui import App, ContainerLayout, GridLayout, Button, Label, ScrollBox, Widget
+    from kvui import App, ContainerLayout, GridLayout, Button, Label, ScrollBox, Widget, ApAsyncImage
     from kivy.core.window import Window
-    from kivy.uix.image import AsyncImage
     from kivy.uix.relativelayout import RelativeLayout
 
     class Launcher(App):
@@ -277,8 +258,8 @@ def run_gui():
                 button.component = component
                 button.bind(on_release=self.component_action)
                 if component.icon != "icon":
-                    image = AsyncImage(source=icon_paths[component.icon],
-                                       size=(38, 38), size_hint=(None, 1), pos=(5, 0))
+                    image = ApAsyncImage(source=icon_paths[component.icon],
+                                         size=(38, 38), size_hint=(None, 1), pos=(5, 0))
                     box_layout = RelativeLayout(size_hint_y=None, height=40)
                     box_layout.add_widget(button)
                     box_layout.add_widget(image)

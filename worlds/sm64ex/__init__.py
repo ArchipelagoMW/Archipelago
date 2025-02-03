@@ -3,7 +3,7 @@ import os
 import json
 from .Items import item_table, action_item_table, cannon_item_table, SM64Item
 from .Locations import location_table, SM64Location
-from .Options import SM64Options
+from .Options import sm64_options_groups, SM64Options
 from .Rules import set_rules
 from .Regions import create_regions, sm64_level_to_entrances, SM64Levels
 from BaseClasses import Item, Tutorial, ItemClassification, Region
@@ -19,6 +19,8 @@ class SM64Web(WebWorld):
         "setup/en",
         ["N00byKing"]
     )]
+
+    option_groups = sm64_options_groups
 
 
 class SM64World(World):
@@ -45,6 +47,17 @@ class SM64World(World):
     move_rando_bitvec: int
     filler_count: int
     star_costs: typing.Dict[str, int]
+
+    # Spoiler specific variable(s)
+    star_costs_spoiler_key_maxlen = len(max([
+        'First Floor Big Star Door',
+        'Basement Big Star Door',
+        'Second Floor Big Star Door',
+        'MIPS 1',
+        'MIPS 2',
+        'Endless Stairs',
+    ], key=len))
+
 
     def generate_early(self):
         max_stars = 120
@@ -102,7 +115,11 @@ class SM64World(World):
         # 1Up Mushrooms
         self.multiworld.itempool += [self.create_item("1Up Mushroom") for i in range(0,self.filler_count)]
         # Power Stars
-        self.multiworld.itempool += [self.create_item("Power Star") for i in range(0,self.number_of_stars)]
+        star_range = self.number_of_stars
+        # Vanilla 100 Coin stars have to removed from the pool if other max star increasing options are active.
+        if self.options.enable_coin_stars == "vanilla":
+            star_range -= 15
+        self.multiworld.itempool += [self.create_item("Power Star") for i in range(0,star_range)]
         # Keys
         if (not self.options.progressive_keys):
             key1 = self.create_item("Basement Key")
@@ -164,6 +181,23 @@ class SM64World(World):
             self.multiworld.get_location("Wing Mario Over the Rainbow 1Up Block", self.player).place_locked_item(self.create_item("1Up Mushroom"))
             self.multiworld.get_location("Bowser in the Sky 1Up Block", self.player).place_locked_item(self.create_item("1Up Mushroom"))
 
+        if (self.options.enable_coin_stars == "vanilla"):
+            self.multiworld.get_location("BoB: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("WF: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("JRB: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("CCM: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("BBH: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("HMC: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("LLL: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("SSL: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("DDD: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("SL: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("WDW: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("TTM: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("THI: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("TTC: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+            self.multiworld.get_location("RR: 100 Coins", self.player).place_locked_item(self.create_item("Power Star"))
+
     def get_filler_item_name(self) -> str:
         return "1Up Mushroom"
 
@@ -215,3 +249,19 @@ class SM64World(World):
                     for location in region.locations:
                         er_hint_data[location.address] = entrance_name
             hint_data[self.player] = er_hint_data
+
+    def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
+        # Write calculated star costs to spoiler.
+        star_cost_spoiler_header = '\n\n' + self.player_name + ' Star Costs for Super Mario 64:\n\n'
+        spoiler_handle.write(star_cost_spoiler_header)
+        # - Reformat star costs dictionary in spoiler to be a bit more readable.
+        star_costs_spoiler = {}
+        star_costs_copy = self.star_costs.copy()
+        star_costs_spoiler['First Floor Big Star Door'] = star_costs_copy['FirstBowserDoorCost']
+        star_costs_spoiler['Basement Big Star Door'] = star_costs_copy['BasementDoorCost']
+        star_costs_spoiler['Second Floor Big Star Door'] = star_costs_copy['SecondFloorDoorCost']
+        star_costs_spoiler['MIPS 1'] = star_costs_copy['MIPS1Cost']
+        star_costs_spoiler['MIPS 2'] = star_costs_copy['MIPS2Cost']
+        star_costs_spoiler['Endless Stairs'] = star_costs_copy['StarsToFinish']
+        for star, cost in star_costs_spoiler.items():
+            spoiler_handle.write(f"{star:{self.star_costs_spoiler_key_maxlen}s} = {cost}\n")
