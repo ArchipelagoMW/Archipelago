@@ -318,17 +318,17 @@ class LMContext(CommonContext):
         if not (self.check_ingame() and self.check_alive()):
             return
 
-        last_recv_idx = read_short(LAST_RECV_ITEM_ADDR)
+        last_recv_idx = dme.read_word(LAST_RECV_ITEM_ADDR)
         if len(self.items_received) == last_recv_idx:
             return
 
         # Filter for only items where we have not received yet. If same slot, only receive the locations from the
         # pre-approved own locations (as everything is currently a NetworkItem), otherwise accept other slots.
         recv_items = self.items_received[last_recv_idx:]
-        logger.info("DEBUG -- Received items to try and validate: " + str(len(recv_items)))
+        #TODO leave for debug logger.info("DEBUG -- Received items to try and validate: " + str(len(recv_items)))
 
         if len(recv_items) == 0:
-            write_short(LAST_RECV_ITEM_ADDR, len(self.items_received))
+            dme.write_word(LAST_RECV_ITEM_ADDR, len(self.items_received))
             return
 
         last_bill_list = [x[1] for x in filler_items.items() if "Bills" in x[0]]
@@ -344,7 +344,7 @@ class LMContext(CommonContext):
             (self.location_names.lookup_in_game(item.location) in RECV_OWN_GAME_LOCATIONS or
              self.item_names.lookup_in_game(item.item) in RECV_OWN_GAME_ITEMS)):
                 last_recv_idx += 1
-                write_short(LAST_RECV_ITEM_ADDR, last_recv_idx)
+                dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
                 continue
 
             # Add a received message in the client for the item that is about to be received.
@@ -417,10 +417,9 @@ class LMContext(CommonContext):
 
                 # Update the last received index to ensure we don't receive the same item over and over.
                 last_recv_idx += 1
-                write_short(LAST_RECV_ITEM_ADDR, last_recv_idx)
-            else:
-                # TODO Debug remove before release
-                logger.warn("Missing information for AP ID: " + str(item.item))
+                dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
+            # TODO else:
+            #   Debug remove before release logger.warn("Missing information for AP ID: " + str(item.item))
         return
 
     async def lm_check_locations(self):
@@ -437,8 +436,8 @@ class LMContext(CommonContext):
             # If in main mansion map
             if current_map_id == 2:
                 # TODO Debug remove before release
-                if lm_loc_data.in_game_room_id is None:
-                    logger.warn("Missing in game room id: " + str(mis_loc))
+                #  if lm_loc_data.in_game_room_id is None:
+                #    logger.warn("Missing in game room id: " + str(mis_loc))
 
                 # Only check locations that are currently in the same room as us.
                 current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
