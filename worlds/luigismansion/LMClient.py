@@ -364,8 +364,8 @@ class LMContext(CommonContext):
             # Get the current LM Item so we can get the various named tuple fields easier.
             lm_item_name = self.item_names.lookup_in_game(item.item)
             lm_item = ALL_ITEMS_TABLE[lm_item_name]
-            if not lm_item.ram_addr is None and (not lm_item.itembit is None or not lm_item.pointer_offset is None):
 
+            if not lm_item.ram_addr is None and (not lm_item.itembit is None or not lm_item.pointer_offset is None):
                 if not lm_item.pointer_offset is None:
                     # Assume we need to update an existing value of size X with Y value at the pointer's address
                     int_item_amount = 1
@@ -407,7 +407,24 @@ class LMContext(CommonContext):
                             dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
                     [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
                 else:
-                    # Assume it is a single address with a bit to update, rather than adding to an existing value
+                    # TODO Mario items need to do extra address changes to flip flags on.
+                    match lm_item.code:
+                        case 58: # Mario's Glove
+                            item_val = dme.read_byte(0x803D339B)
+                            dme.write_byte(lm_item.ram_addr, (item_val | (1 << 5)))
+                        case 59: # Mario's Hat
+                            item_val = dme.read_byte(0x803D339D)
+                            dme.write_byte(lm_item.ram_addr, (item_val | (1 << 1)))
+                        case 60: # Mario's Letter
+                            item_val = dme.read_byte(0x803D339C)
+                            dme.write_byte(lm_item.ram_addr, (item_val | (1 << 3)))
+                        case 61: # Mario's Star
+                            item_val = dme.read_byte(0x803D339C)
+                            dme.write_byte(lm_item.ram_addr, (item_val | (1 << 6)))
+                        case 62: # Mario's Shoe
+                            item_val = dme.read_byte(0x803D339C)
+                            dme.write_byte(lm_item.ram_addr, (item_val | (1 << 0)))
+                    # Assume it is a single address with a bit to update, rather than changing existing value
                     item_val = dme.read_byte(lm_item.ram_addr)
                     dme.write_byte(lm_item.ram_addr, (item_val | (1 << lm_item.itembit)))
 
