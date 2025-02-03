@@ -270,7 +270,7 @@ def logical_or_witness_rules(witness_rules: Iterable[WitnessRule]) -> WitnessRul
 
 def is_easter_time() -> bool:
     today = date.today()
-    earliest_easter_day = date(today.year, 3, 22)
-    last_easter_day = date(today.year, 4, 25)
+    earliest_easter_day = date(today.year, 3, 20)  # Earliest possible is 3/22 + 2 day buffer for Good Friday
+    last_easter_day = date(today.year, 4, 26)  # Latest possible is 4/25 + 1 day buffer for Easter Monday
 
     return earliest_easter_day <= today <= last_easter_day
