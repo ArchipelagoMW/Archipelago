@@ -180,7 +180,7 @@ class LMContext(CommonContext):
         self.game_clear = False
         self.rank_req = -1
         self.last_not_ingame = time.time()
-        self.boo_gate_enabled = False
+        self.boosanity = False
 
         # Used for handling various weird item checks.
         self.last_map_id = 0
@@ -220,7 +220,7 @@ class LMContext(CommonContext):
         """
         super().on_package(cmd, args)
         if cmd == "Connected":  # On Connect
-            self.boo_gate_enabled = int(args["slot_data"]["boo gates"]) == 1
+            self.boosanity = int(args["slot_data"]["boosanity"]) == 1
             self.goal_type = int(args["slot_data"]["goal"])
             self.rank_req = int(args["slot_data"]["rank requirement"])
             death_link_enabled = bool(args["slot_data"]["death_link"])
@@ -541,7 +541,7 @@ class LMContext(CommonContext):
         # Reset the Boo capture bit back to 0, in case they only received this item but did not check their location
         # If in boo gate events, set the Boo capture bits to one ONLY for those in received items.
         local_recv_ids = [netItem.item for netItem in self.items_received]
-        if self.boo_gate_enabled:
+        if self.boosanity:
             in_boo_gate_event = (dme.read_byte(0x803D33A7) & (1 << 0)) > 0
             for lm_boo in BOO_ITEM_TABLE.keys():
                 boo_id = AutoWorldRegister.world_types[self.game].item_name_to_id[lm_boo]
