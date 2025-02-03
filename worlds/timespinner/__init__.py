@@ -130,6 +130,7 @@ class TimespinnerWorld(World):
             "RiskyWarps": self.options.risky_warps.value,
             "PyramidStart": self.options.pyramid_start.value,
             "GateKeep": self.options.gate_keep.value,
+            "RoyalRoadblock": self.options.royal_roadblock.value,
             "Traps": self.options.traps.value,
             "DeathLink": self.options.death_link.value,
             "StinkyMaw": True,
