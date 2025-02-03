@@ -56,7 +56,8 @@ class LMWeb(WebWorld):
             LuigiOptions.Boosanity,
             LuigiOptions.Portrification,
             LuigiOptions.SpeedySpirits,
-            LuigiOptions.Lightsanity
+            LuigiOptions.Lightsanity,
+            LuigiOptions.Walksanity
         ]),
         OptionGroup("QOL Changes", [
             LuigiOptions.LuigiFearAnim,
@@ -300,7 +301,21 @@ class LMWorld(World):
                         else:
                             add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
                 region.locations.append(entry)
-
+        if self.options.walksanity:
+            for location, data in WALK_LOCATION_TABLE.items():
+                region = self.multiworld.get_region(data.region, self.player)
+                entry = LMLocation(self.player, location, region, data)
+                if len(entry.access) != 0:
+                    for item in entry.access:
+                        if item == "Fire Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                        elif item == "Water Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
+                        elif item == "Ice Element Medal":
+                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                        else:
+                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                region.locations.append(entry)
         if self.options.boosanity:
             for location, data in BOO_LOCATION_TABLE.items():
                 region = self.multiworld.get_region(data.region, self.player)
@@ -612,6 +627,7 @@ class LMWorld(World):
             "portrait ghosts": self.options.portrification.value,
             "speedy spirits": self.options.speedy_spirits.value,
             "lightsanity": self.options.lightsanity.value,
+            "walksanity": self.options.walksanity.value,
             "clairvoya requirement": self.options.mario_items.value,
             "boo gates": self.options.boo_gates.value,
             "washroom boo count": self.options.washroom_boo_count.value,

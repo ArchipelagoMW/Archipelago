@@ -166,6 +166,12 @@ class Lightsanity(Toggle):
     """Adds the act of lighting up rooms as locations. These are remote only checks"""
     display_name = "Lightsanity"
 
+
+class Walksanity(Toggle):
+    """Adds the act of visiting rooms as locations. These are remote only checks"""
+    display_name = "Walksanity"
+
+
 class Furnisanity(Toggle):
     """
     Adds every interactable, such a dressers, paintings, candles, and light fixtures, to the location pool
@@ -297,6 +303,7 @@ class LMOptions(PerGameCommonOptions):
     boosanity: Boosanity
     portrification: Portrification
     lightsanity: Lightsanity
+    walksanity: Walksanity
     speedy_spirits: SpeedySpirits
     boo_gates: BooGates
     mario_items: MarioItems
