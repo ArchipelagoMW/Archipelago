@@ -165,12 +165,10 @@ class LMContext(CommonContext):
         """
         super().__init__(server_address, password)
 
+        # Handle various Dolphin connection related tasks
         self.dolphin_sync_task: Optional[asyncio.Task[None]] = None
         self.dolphin_status = CONNECTION_INITIAL_STATUS
         self.awaiting_rom = False
-
-        # Used for handling
-        self.already_updated_vac = False
 
         # All used when death link is enabled.
         self.is_luigi_dead = False
@@ -178,10 +176,15 @@ class LMContext(CommonContext):
 
         # Used for handling received items to the client.
         self.goal_type = None
+        self.already_mentioned_rank_diff = False
         self.game_clear = False
         self.rank_req = -1
         self.last_not_ingame = time.time()
         self.boo_gate_enabled = False
+
+        # Used for handling various weird item checks.
+        self.already_updated_vac = False
+        self.last_map_id = 0
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         """
@@ -268,19 +271,32 @@ class LMContext(CommonContext):
         return False
 
     def check_ingame(self):
+        # The game has an address that lets us know if we are in a playable state or not.
         int_play_state = dme.read_word(CURR_PLAY_STATE_ADDR)
         if not int_play_state == 2:
             self.last_not_ingame = time.time()
             return False
 
-        current_map_id = dme.read_word(CURR_MAP_ID_ADDR)
-        if current_map_id in [2, 9, 10, 11, 13]:
+        curr_map_id = dme.read_word(CURR_MAP_ID_ADDR)
+
+        # This checks for if we warped to another boss arena, which resets our health, so we need a slight delay.
+        if curr_map_id != self.last_map_id:
+            self.last_map_id = curr_map_id
+            self.last_not_ingame = time.time()
+            self.already_mentioned_rank_diff = False
+            return False
+
+        # These are the only valid maps we want Luigi to have checks with or do health detection with.
+        if curr_map_id in [2, 9, 10, 11, 13]:
             if not time.time() > (self.last_not_ingame + (CHECKS_WAIT*LONGER_MODIFIER)):
                 return False
 
-            if current_map_id == 2:
+            # Even though this is the main mansion map, if the map is unloaded for any reason, there won't be a valid
+            # room id, therefore we should not perform any checks yet.
+            if curr_map_id == 2:
                 bool_loaded_in_map = check_if_addr_is_pointer(ROOM_ID_ADDR)
                 return bool_loaded_in_map
+            return True
 
         self.last_not_ingame = time.time()
         return False
@@ -488,8 +504,10 @@ class LMContext(CommonContext):
                     if int_rank_sum >= req_rank_amt:
                         self.game_clear = True
                     else:
-                        logger.info("Unfortunately, you do NOT have enough money to satisfy the rank requirements.\n" +
-                                    f"You are missing: '{(req_rank_amt - int_rank_sum):,}'")
+                        if not self.already_mentioned_rank_diff:
+                            logger.info("Unfortunately, you do NOT have enough money to satisfy the rank" +
+                                    f"requirements.\nYou are missing: '{(req_rank_amt - int_rank_sum):,}'")
+                            self.already_mentioned_rank_diff = True
 
         if not self.finished_game and self.game_clear:
             self.finished_game = True
