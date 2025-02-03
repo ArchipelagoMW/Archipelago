@@ -153,8 +153,8 @@ function main() {
             get_deps "${platform}" "${project}/requirements.txt" "${destdir}/lib"
         done
         mk_apworld "${project}" "${destdir}"
-        bundle "${destdir}" "${target_path}/${bundle}.zip"
-        echo "! Bundle finalized as ${target_path}/${bundle}.zip"
+        # bundle "${destdir}" "${target_path}/${bundle}.zip"
+        echo "! Bundle finalized as ${target_path}" #/${bundle}.zip"
         ;;
     esac
 }
