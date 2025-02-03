@@ -1,0 +1,56 @@
+name: Build
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Build tag
+        required: false
+        type: string
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  bundle:
+    name: Bundle APWorld
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "~3.12.7"
+          cache: pip
+      - name: Compute build tag
+        id: tag
+        run: |
+          EVENT="${{ github.event_name }}"
+          TAG_INPUT="${{ inputs.tag }}"
+          REF="${{ github.ref_name }}"
+          SHA="$(git rev-parse --short=7 ${{ github.sha }})"
+
+          if [ "${EVENT}" = "workflow_dispatch" ]; then
+            echo "tag=${TAG_INPUT:-${SHA}}"  >> $GITHUB_OUTPUT
+          elif [ "${EVENT}" = "push" ]; then
+            echo "tag=${REF}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=${SHA}" >> $GITHUB_OUTPUT
+          fi
+      - name: Build bundle
+        run: TAG="${{ steps.tag.outputs.tag }}" bash build/build.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Twilight_Princess_apworld-${{ steps.tag.outputs.tag }}
+          path: build/target/Twilight_Princess_apworld-${{ steps.tag.outputs.tag }}.zip
+#      - uses: softprops/action-gh-release@v2
+#        if: github.ref_type == 'tag'
+#        with:
+#          name: ${{ github.ref_name }}
+#          prerelease: ${{ contains(github.ref_name, '-rc') }}
+#          draft: true
+#          generate_release_notes: true
+#          files: build/target/Twilight_Princess_apworld-${{ steps.tag.outputs.tag }}.zip
