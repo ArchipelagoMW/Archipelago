@@ -26,6 +26,9 @@ import Utils
 if Utils.is_frozen():
     os.environ["KIVY_DATA_DIR"] = Utils.local_path("data")
 
+import platformdirs
+os.environ["KIVY_HOME"] = os.path.join(platformdirs.user_config_dir("Archipelago", False), "kivy")
+os.makedirs(os.environ["KIVY_HOME"], exist_ok=True)
 
 from kivy.config import Config
 
@@ -41,7 +44,7 @@ from kivy.core.image import ImageLoader, ImageLoaderBase, ImageData
 from kivy.base import ExceptionHandler, ExceptionManager
 from kivy.clock import Clock
 from kivy.factory import Factory
-from kivy.properties import BooleanProperty, ObjectProperty
+from kivy.properties import BooleanProperty, ObjectProperty, NumericProperty
 from kivy.metrics import dp
 from kivy.uix.widget import Widget
 from kivy.uix.layout import Layout
@@ -53,6 +56,7 @@ from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.animation import Animation
 from kivy.uix.popup import Popup
+from kivy.uix.dropdown import DropDown
 from kivy.uix.image import AsyncImage
 from kivymd.app import MDApp
 from kivymd.uix.gridlayout import MDGridLayout
@@ -103,9 +107,11 @@ class ImageButton(MDIconButton):
                 image_args[kwarg.replace("image_", "")] = val
         super().__init__()
         self.image = AsyncImage(**image_args)
+
         def set_center(button, center):
             self.image.center_x = self.center_x
             self.image.center_y = self.center_y
+
         self.bind(center=set_center)
         self.add_widget(self.image)
 
@@ -155,6 +161,7 @@ class ToggleButton(MDButton, ToggleButtonBehavior):
                     child.theme_icon_color = "Custom"
                 child.text_color = self.theme_cls.primaryColor
                 child.icon_color = self.theme_cls.primaryColor
+
 
 # I was surprised to find this didn't already exist in kivy :(
 class HoverBehavior(object):
@@ -365,6 +372,53 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
     def apply_selection(self, rv, index, is_selected):
         """ Respond to the selection of items in the view. """
         self.selected = is_selected
+
+
+class AutocompleteHintInput(MDTextField):
+    min_chars = NumericProperty(3)
+    attach_to: bool = False
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self.dropdown = MDDropdownMenu(caller=self, position="bottom")
+        self.dropdown.bind(on_select=lambda instance, x: setattr(self, 'text', x))
+        self.bind(on_text_validate=self.on_message)
+
+    def on_message(self, instance):
+        MDApp.get_running_app().commandprocessor("!hint "+instance.text)
+
+    def on_text(self, instance, value):
+        if len(value) >= self.min_chars:
+            self.dropdown.items.clear()
+            ctx: context_type = MDApp.get_running_app().ctx
+            if not ctx.game:
+                return
+            item_names = ctx.item_names._game_store[ctx.game].values()
+
+            def on_press(button: MDButton):
+                split_text = MarkupLabel(text=button._button_text.text).markup
+                return self.dropdown.select("".join(text_frag for text_frag in split_text
+                                                    if not text_frag.startswith("[")))
+            lowered = value.lower()
+            for item_name in item_names:
+                try:
+                    index = item_name.lower().index(lowered)
+                except ValueError:
+                    pass  # substring not found
+                else:
+                    text = escape_markup(item_name)
+                    text = text[:index] + "[b]" + text[index:index+len(value)]+"[/b]"+text[index+len(value):]
+                    self.dropdown.items.append({
+                        "text": text,
+                        "on_release": on_press
+                    })
+            if not self.attach_to:
+                self.dropdown.open()
+                self.attach_to = True
+        else:
+            self.dropdown.dismiss()
+            self.attach_to = False
 
 
 status_icons = {
@@ -670,8 +724,10 @@ class GameManager(MDApp):
                 self.tabs.carousel.add_widget(panel.content)
                 self.tabs.add_widget(panel)
 
-        hint_panel = self.add_client_tab("Hints", HintLog(self.json_to_kivy_parser))
+        hint_panel = self.add_client_tab("Hints", HintLayout())
+        self.hint_log = HintLog(self.json_to_kivy_parser)
         self.log_panels["Hints"] = hint_panel.content
+        hint_panel.content.add_widget(self.hint_log)
 
         self.main_area_container = MDGridLayout(size_hint_y=1, rows=1)
         self.main_area_container.add_widget(self.tabs)
@@ -799,7 +855,7 @@ class GameManager(MDApp):
 
     def update_hints(self):
         hints = self.ctx.stored_data.get(f"_read_hints_{self.ctx.team}_{self.ctx.slot}", [])
-        self.log_panels["Hints"].refresh_hints(hints)
+        self.hint_log.refresh_hints(hints)
 
     # default F1 keybind, opens a settings menu, that seems to break the layout engine once closed
     def open_settings(self, *largs):
@@ -855,7 +911,17 @@ class UILog(MDRecycleView):
                 element.height = element.texture_size[1]
 
 
+class HintLayout(MDBoxLayout):
+    orientation = "vertical"
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        boxlayout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(30))
+        boxlayout.add_widget(MDLabel(text="New Hint:", size_hint_x=None, size_hint_y=None, height=dp(30)))
+        boxlayout.add_widget(AutocompleteHintInput())
+        self.add_widget(boxlayout)
+
+        
 status_names: typing.Dict[HintStatus, str] = {
     HintStatus.HINT_FOUND: "Found",
     HintStatus.HINT_UNSPECIFIED: "Unspecified",
