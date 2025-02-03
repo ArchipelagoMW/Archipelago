@@ -13,6 +13,10 @@
 2. Download and install the Dolphin Gamecube/Wii Emulator from the link above, making sure to install the most recent version.
 Run the emulator at least once to make sure it is working.
 
+3. Unzip the APworld from the downloads. Place the luigismansion.apworld in the custom_worlds folder of your Archipelago install
+
+4. Place the contents of the /lib folder from what you unzipped into the /lib folder of your Archipelago install. 
+
 ## Create a Config (.yaml) File
 
 ### What is a config file and why do I need one?
