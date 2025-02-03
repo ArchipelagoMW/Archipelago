@@ -59,10 +59,17 @@ function get_deps() {
 
     # This is for the `.dist-info` folder, which contains the metadata of the mod.
     # We just copy over the license file into the main library folder
+    declare -A dependency_exceptions
+    dependency_exceptions["pillow"]="PIL"
+
     echo "  -> Processing metadata"
     for folder in ${install_platform_dir}/*.dist-info; do
         local dir="$(basename ${folder} | cut -d '-' -f 1)"
-        cp --verbose "${folder}/LICENSE" "${folder}/../${dir}/" ||:
+        if [[ -v dependency_exceptions[${dir}] ]]; then
+           dir=dependency_exceptions[${dir}]
+        fi
+        local license_file = find ${folder} -name "LICENSE" -quit
+        cp --verbose "license_file" "${folder}/../${dir}/" ||:
         rm --force --recursive ${folder}
     done
 
