@@ -45,12 +45,6 @@ class TestDefaultDistributionHasAllTraps(WorldAssertMixin, SVTestBase):
         options.TrapDifficulty.internal_name: options.TrapDifficulty.option_medium,
     }
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        super().setUpClass()
-        if cls.skip_long_tests:
-            raise unittest.SkipTest("Unstable tests disabled to not annoy anyone else when it rarely fails")
-
     def test_all_traps_in_item_pool(self):
         items = self.multiworld.get_items()
         item_names = set(item.name for item in items)
@@ -73,6 +67,12 @@ class TestDistributionIsRespectedAllTraps(WorldAssertMixin, SVTestBase):
         options.TrapDifficulty.internal_name: options.TrapDifficulty.option_medium,
         options.TrapDistribution.internal_name: default_distribution | {"Nudge Trap": 10, "Bark Trap": 1, "Meow Trap": 100, "Shuffle Trap": 0}
     }
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        super().setUpClass()
+        if cls.skip_long_tests:
+            raise unittest.SkipTest("Unstable tests disabled to not annoy anyone else when it rarely fails")
 
     def test_about_as_many_nudges_as_other_filler(self):
         items = self.multiworld.get_items()
