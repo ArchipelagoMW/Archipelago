@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "~3.12.7"
+          python-version: "~3.12.6"
           cache: pip
       - name: Compute build tag
         id: tag
@@ -44,8 +44,8 @@ jobs:
         run: TAG="${{ steps.tag.outputs.tag }}" bash build/build.sh
       - uses: actions/upload-artifact@v4
         with:
-          name: Twilight_Princess_apworld-${{ steps.tag.outputs.tag }}
-          path: build/target/Twilight_Princess_apworld-${{ steps.tag.outputs.tag }}.zip
+          name: Luigis-Mansion_apworld-${{ steps.tag.outputs.tag }}
+          path: build/target/Luigis-Mansion_apworld-${{ steps.tag.outputs.tag }}.zip
 #      - uses: softprops/action-gh-release@v2
 #        if: github.ref_type == 'tag'
 #        with:
@@ -53,4 +53,4 @@ jobs:
 #          prerelease: ${{ contains(github.ref_name, '-rc') }}
 #          draft: true
 #          generate_release_notes: true
-#          files: build/target/Twilight_Princess_apworld-${{ steps.tag.outputs.tag }}.zip
+#          files: build/target/Luigis-Mansion_apworld-${{ steps.tag.outputs.tag }}.zip
