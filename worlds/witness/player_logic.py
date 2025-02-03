@@ -1090,6 +1090,7 @@ class WitnessPlayerLogic:
 
         for region_name, easter_egg_count in self.AVAILABLE_EASTER_EGGS_PER_REGION.items():
             plural = "s" if easter_egg_count != 1 else ""
-            self.EVENT_ITEM_PAIRS[f"{region_name} Easter Egg{plural}"] = (f"+{easter_egg_count} Easter Egg{plural}", region_name)
+            event_name = f"+{easter_egg_count} Easter Egg{plural}"
+            self.EVENT_ITEM_PAIRS[f"{region_name} Easter Egg{plural}"] = (event_name, region_name)
 
         return

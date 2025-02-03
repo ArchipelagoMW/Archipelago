@@ -19,6 +19,7 @@ from Options import (
 
 from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import ItemCategory, WeightedItemDefinition
+from .data.utils import is_easter_time
 from .entity_hunt import ALL_HUNTABLE_PANELS
 
 
@@ -162,7 +163,7 @@ class EasterEggHunt(Choice):
     It is recommended that you play this mode together with Door Shuffle. Without it, more than half of the Easter Eggs will be in sphere 1.
     """
 
-    visibility = Visibility.all if datetime.now().month == 4 else Visibility.none
+    visibility = Visibility.all if is_easter_time() else Visibility.none
 
     display_name = "Easter Egg Hunt"
     option_off = 0

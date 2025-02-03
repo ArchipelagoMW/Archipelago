@@ -1,3 +1,4 @@
+from datetime import date
 from math import floor
 from pkgutil import get_data
 from random import Random
@@ -265,3 +266,11 @@ def logical_and_witness_rules(witness_rules: Iterable[WitnessRule]) -> WitnessRu
 
 def logical_or_witness_rules(witness_rules: Iterable[WitnessRule]) -> WitnessRule:
     return optimize_witness_rule(frozenset.union(*witness_rules))
+
+
+def is_easter_time() -> bool:
+    today = date.today()
+    earliest_easter_day = date(today.year, 3, 22)
+    last_easter_day = date(today.year, 4, 25)
+
+    return earliest_easter_day <= today <= last_easter_day
