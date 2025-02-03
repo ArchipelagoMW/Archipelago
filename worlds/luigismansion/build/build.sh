@@ -44,6 +44,8 @@ function get_deps() {
     local platform="$1" requirements_file="$2" to="$3"
     echo "=> Bundle requirements for ${platform}"
 
+    mkdir "${to}/${platform}"
+
     # Fetch the libraries binary files for the specified platform.
     echo "  -> Fetch requirements"
     pip install \
