@@ -103,7 +103,7 @@ function mk_apworld() {
     zip -9r "luigismansion.apworld" "luigismansion"
     popd
 
-    rm --force --recursive "${destdir}/tww"
+    rm --force --recursive "${destdir}/luigismansion"
 }
 
 ##

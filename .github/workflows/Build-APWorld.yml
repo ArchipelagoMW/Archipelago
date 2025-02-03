@@ -44,7 +44,7 @@ jobs:
         run: TAG="${{ steps.tag.outputs.tag }}" bash worlds/luigismansion/build/build.sh
       - uses: actions/upload-artifact@v4
         with:
-          name: Luigis-Mansion_apworld-${{ steps.tag.outputs.tag }}
+          name: luigismansion_apworld-${{ steps.tag.outputs.tag }}
           path: worlds/luigismansion/build/target/luigismansion_apworld-${{ steps.tag.outputs.tag }}.zip
 #      - uses: softprops/action-gh-release@v2
 #        if: github.ref_type == 'tag'
