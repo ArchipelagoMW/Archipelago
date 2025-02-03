@@ -1,2 +1,4 @@
-dolphin-memory-engine>=1.2.0
+dolphin-memory-engine==1.3.0
+pillow==10.2.0
 gclib @ git+https://github.com/LagoLunatic/gclib.git
+
