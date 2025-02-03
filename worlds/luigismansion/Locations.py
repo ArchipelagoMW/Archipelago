@@ -204,8 +204,7 @@ PLANT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Sitting Room Plant": LMLocationData("Sitting Room", 91, "Plant", 409, ["Water Element Medal"], 28),
     "Guest Room Plant": LMLocationData("Guest Room", 92, "Plant", 417, ["Water Element Medal"], 29),
     # TODO need to determine how to make unskippable
-    #   LMLocationData('Boneyard', 'Huge Flower70,
-    #               rule=lambda state: state.has("Water Element Medal", player) and state.has()),
+    # "Huge Flower":   LMLocationData("Boneyard", 70, "Chest", ???, ["Water Element Medal"], 11, room_ram_addr=0x803CDF66)
 }
 
 # Adds the myriad shakable objects or objects that react to elements such as fire as locations
