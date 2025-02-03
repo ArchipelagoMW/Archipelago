@@ -1,0 +1,5 @@
+<FLAGON>(171)
+<BGM>(20)
+<WIPEKIND>(3)
+<WARP>(11)
+<END>

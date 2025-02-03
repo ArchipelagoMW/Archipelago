@@ -1,0 +1,6 @@
+<BGM>(22)
+<WINDOW>(0)<COLOR>(4)
+<SAY><COLOR>(2)Waiting for Boolossus\nto spawn in (20 secs)...
+<WAIT>(600)
+<CLOSEWINDOW>(0)
+<END>

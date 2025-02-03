@@ -1,7 +1,7 @@
 from ..assembler import ASM
 
 
-def patchTradeSequence(rom, boomerang_option):
+def patchTradeSequence(rom, settings):
     patchTrendy(rom)
     patchPapahlsWife(rom)
     patchYipYip(rom)
@@ -16,7 +16,7 @@ def patchTradeSequence(rom, boomerang_option):
     patchMermaid(rom)
     patchMermaidStatue(rom)
     patchSharedCode(rom)
-    patchVarious(rom, boomerang_option)
+    patchVarious(rom, settings)
     patchInventoryMenu(rom)
 
 
@@ -265,8 +265,11 @@ def patchMermaidStatue(rom):
         and  $10 ; scale
         ret  z
         ldh  a, [$F8]
-        and  $20
+        and  $20 ; ROOM_STATUS_EVENT_2
         ret  nz
+
+        ld hl, wTradeSequenceItem2
+        res 4, [hl] ; take the trade item
     """), fill_nop=True)
 
 
@@ -317,7 +320,7 @@ notSideScroll:
     rom.patch(0x07, 0x3F7F, "00" * 7, ASM("ldh a, [$F8]\nor $20\nldh [$F8], a\nret"))
 
 
-def patchVarious(rom, boomerang_option):
+def patchVarious(rom, settings):
     # Make the zora photo work with the magnifier
     rom.patch(0x18, 0x09F3, 0x0A02, ASM("""
         ld   a, [wTradeSequenceItem2]
@@ -330,22 +333,71 @@ def patchVarious(rom, boomerang_option):
         jp   z, $3F8D ; UnloadEntity 
     """), fill_nop=True)
     # Mimic invisibility
-    rom.patch(0x18, 0x2AC8, 0x2ACE, "", fill_nop=True)
+    rom.patch(0x19, 0x2AC0, ASM("""
+        cp   $97
+        jr   z, mermaidStatueCave
+        cp   $98
+        jr   nz, visible
+    mermaidStatueCave:
+        ld   a, [$DB7F]
+        and  a
+        jr   nz, 6
+    visible:
+    """), ASM("""
+        dec  a ; save one byte by only doing one cp
+        or   $01
+        cp   $97
+        jr   nz, visible
+    mermaidStatueCave:
+        ld   a, [wTradeSequenceItem2]
+        and  $20 ; MAGNIFYING_GLASS
+        jr   z, 6
+    visible:
+    """))
+    # Zol invisibility
+    rom.patch(0x06, 0x3BE9, ASM("""
+        cp   $97
+        jr   z, mermaidStatueCave
+        cp   $98
+        ret  nz ; visible
+    mermaidStatueCave:
+        ld   a, [$DB7F]
+        and  a
+        ret  z
+    """), ASM("""
+        dec  a ; save one byte by only doing one cp
+        or   $01
+        cp   $97
+        ret  nz ; visible
+    mermaidStatueCave:
+        ld   a, [wTradeSequenceItem2]
+        and  $20 ; MAGNIFYING_GLASS
+        ret  nz
+    """))
     # Ignore trade quest state for marin at beach
     rom.patch(0x18, 0x219E, 0x21A6, "", fill_nop=True)
     # Shift the magnifier 8 pixels
     rom.patch(0x03, 0x0F68, 0x0F6F, ASM("""
         ldh a, [$F6] ; map room
-        cp  $97 ; check if we are in the maginfier room
+        cp  $97 ; check if we are in the magnifier room
         jp  z, $4F83
     """), fill_nop=True)
     # Something with the photographer
     rom.patch(0x36, 0x0948, 0x0950, "", fill_nop=True)
 
-    if boomerang_option not in {'trade', 'gift'}:  # Boomerang cave is not patched, so adjust it
+    # Boomerang trade guy
+    # if settings.boomerang not in {'trade', 'gift'} or settings.overworld in {'normal', 'nodungeons'}:
+    if settings.tradequest:
+        # Update magnifier checks
         rom.patch(0x19, 0x05EC, ASM("ld a, [wTradeSequenceItem]\ncp $0E\njp nz, $7E61"), ASM("ld a, [wTradeSequenceItem2]\nand $20\njp z, $7E61"))  # show the guy
         rom.patch(0x00, 0x3199, ASM("ld a, [wTradeSequenceItem]\ncp $0E\njr nz, $06"), ASM("ld a, [wTradeSequenceItem2]\nand $20\njr z, $06"))  # load the proper room layout
-        rom.patch(0x19, 0x05F4, 0x05FB, "", fill_nop=True)
+    else:
+        # Monkey bridge patch, always have the bridge there.
+        rom.patch(0x00, 0x333D, ASM("bit 4, e\njr Z, $05"), b"", fill_nop=True)
+        # Always have the boomerang trade guy enabled (magnifier not needed)
+        rom.patch(0x19, 0x05EC, ASM("ld a, [wTradeSequenceItem]\ncp $0E"), ASM("ld a, $0E\ncp $0E"), fill_nop=True)  # show the guy
+        rom.patch(0x00, 0x3199, ASM("ld a, [wTradeSequenceItem]\ncp $0E"), ASM("ld a, $0E\ncp $0E"), fill_nop=True)  # load the proper room layout
+    rom.patch(0x19, 0x05F4, ASM("ld a, [wTradeSequenceItem2]\nand a"), ASM("xor a"), fill_nop=True)
 
 
 def patchInventoryMenu(rom):

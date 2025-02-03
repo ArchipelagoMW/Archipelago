@@ -1,0 +1,137 @@
+<MENUOFF>
+<CHECKFLAG>(40)"get""no_get"
+---------------------------------
+<CASE>"get"
+<MENUON>
+<END>
+--------------------------------
+<CASE>"no_get"
+<CLEARCOUNT>
+<TIMESTOP>
+<LUIGISTOP3>
+<WAIT>(30)
+<LUIGISTOP>
+<FLAGOFF>(113)
+<GENON>"dm_htubone"
+<BGM>(30)
+<RAMDOMJMP>"minigame"
+--------------------------------
+<CASE>"minigame"
+ <BGM>(31)
+
+ <FLAGON>(117)
+ <FLAGON>(113)
+ <GENOFF>"dm_htubone"
+ <CAMERAEND>
+ <CAMMODEON>(13)
+
+ <LUIGIFREE>
+ <LUIGIFREE2>
+ <TIMEACTIVE>
+ <WAIT>(200)
+
+<GENON>"mg_tubone1"
+<WAIT>(160)
+
+<GENON>"mg_tubone1"
+<WAIT>(140)
+
+<GENON>"mg_tubone1"
+<WAIT>(120)
+
+<GENON>"mg_tubone1"
+<WAIT>(100)
+
+<GENON>"mg_tubone1"
+<WAIT>(80)
+
+<GENON>"mg_tubone1"
+<WAIT>(60)
+
+<GENON>"mg_tubone1"
+<WAIT>(150)
+
+<CAMMODEOFF>(13)
+<TIMESTOP>
+<LUIGISTOP3>
+<WAIT>(15)
+<LUIGISTOP>
+
+<FLAGOFF>(113)
+<GENON>"dm_htubone"
+
+<FLAGON>(113)
+<GENOFF>"dm_htubone"
+<WAIT>(40)
+
+<FLAGOFF>(113)
+<GENON>"dm_htubone"
+-----------------------------------
+<BGM>(30)
+<COUNTJMP>"0""1""2""3""4""5""6""7"
+
+<CASE>"0"
+<RAMDOMJMP>"failed"
+
+<CASE>"1"
+<RAMDOMJMP>"failed"
+
+<CASE>"2"
+<RAMDOMJMP>"failed"
+
+<CASE>"3"
+<RAMDOMJMP>"failed"
+
+<CASE>"4"
+<RAMDOMJMP>"failed"
+
+<CASE>"5"
+<RAMDOMJMP>"failed"
+
+<CASE>"6"
+<RAMDOMJMP>"failed"
+
+<CASE>"7"
+<RAMDOMJMP>"clear"
+------------------------------
+<CASE>"clear"
+ <FLAGON>(113)
+ <GENOFF>"dm_htubone"
+ <CAMERAEND>
+ <FLAGON>(91)
+ <LUIGIFREE>
+ <LUIGIFREE2>
+ <TIMEACTIVE>
+ <GENON>"btl_htubone"
+ <BGM>(32)
+ <MENUON>
+ <WINDOW>(0)<COLOR>(18)
+ <SAY>You win... Come and get me!
+ <WAIT>(150)
+ <CLOSEWINDOW>(0)
+<END>
+------------------------------
+<CASE>"failed"
+<SE>(94)
+<WINDOW>(0)<COLOR>(18)
+<SAY><COLOR>(2)YOU FAILED!
+<WAIT>(150)
+<CLOSEWINDOW>(0)
+<RAMDOMJMP>"warp"
+------------------------------
+<CASE>"warp"
+ <FLAGON>(118)
+ <FLAGON>(113)
+ <GENOFF>"dm_htubone"
+ <CAMERAEND>
+
+<FRAMESTART>
+  <FLAGON>(184)
+  <BGM>(7)
+  <TIMEACTIVE>
+  <LUIGIFREE>
+  <LUIGIFREE2>
+  <WARPMOVE>(8)
+<FRAMEEND>
+<MENUON>
+<END>

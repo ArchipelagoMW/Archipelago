@@ -1,2 +1,0 @@
-gclib @ git+https://github.com/LagoLunatic/gclib.git
-dolphin-memory-engine>=1.2.0

@@ -1,0 +1,5 @@
+<FLAGON>(92)
+<GENON>"dm_gaka"
+<FLAGOFF>(187)
+<BGM>(32)
+<END>

@@ -1,12 +1,23 @@
 import typing
 from dataclasses import dataclass
-from Options import DefaultOnToggle, Range, Toggle, DeathLink, Choice, PerGameCommonOptions, OptionSet
+from Options import DefaultOnToggle, Range, Toggle, DeathLink, Choice, PerGameCommonOptions, OptionSet, OptionGroup
 from .Items import action_item_table
 
-class EnableCoinStars(DefaultOnToggle):
-    """Disable to Ignore 100 Coin Stars. You can still collect them, but they don't do anything.
-    Removes 15 locations from the pool."""
+class EnableCoinStars(Choice):
+    """
+    Determine logic for 100 Coin Stars.
+
+    Off - Removed from pool. You can still collect them, but they don't do anything.
+    Optimal for ignoring 100 Coin Stars entirely. Removes 15 locations from the pool.
+
+    On - Kept in pool, potentially randomized.
+
+    Vanilla - Kept in pool, but NOT randomized.
+    """
     display_name = "Enable 100 Coin Stars"
+    option_off = 0
+    option_on = 1
+    option_vanilla = 2
 
 
 class StrictCapRequirements(DefaultOnToggle):
@@ -126,6 +137,32 @@ class MoveRandomizerActions(OptionSet):
     # HACK: Disable randomization for double jump
     valid_keys = [action for action in action_item_table if action != 'Double Jump']
     default = valid_keys
+
+sm64_options_groups = [
+    OptionGroup("Logic Options", [
+        AreaRandomizer,
+        BuddyChecks,
+        ExclamationBoxes,
+        ProgressiveKeys,
+        EnableCoinStars,
+        StrictCapRequirements,
+        StrictCannonRequirements,
+    ]),
+    OptionGroup("Ability Options", [
+        EnableMoveRandomizer,
+        MoveRandomizerActions,
+        StrictMoveRequirements,
+    ]),
+    OptionGroup("Star Options", [
+        AmountOfStars,
+        FirstBowserStarDoorCost,
+        BasementStarDoorCost,
+        SecondFloorStarDoorCost,
+        MIPS1Cost,
+        MIPS2Cost,
+        StarsToFinish,
+    ]),
+]
 
 @dataclass
 class SM64Options(PerGameCommonOptions):

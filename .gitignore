@@ -30,6 +30,7 @@
 *.apsave
 *.BIN
 *.puml
+*.iso
 
 setups
 build
