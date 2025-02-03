@@ -66,7 +66,7 @@ function get_deps() {
     for folder in ${install_platform_dir}/*.dist-info; do
         local dir="$(basename ${folder} | cut -d '-' -f 1)"
         if [[ -v dependency_exceptions[${dir}] ]]; then
-           dir=dependency_exceptions[${dir}]
+           dir=${dependency_exceptions[${dir}]}
         fi
         local license_file=$(find ${folder} -name "LICENSE" -quit)
         cp --verbose ${license_file} "${folder}/../${dir}/" ||:
@@ -83,13 +83,12 @@ function get_deps() {
         fi
 
         # The actual code of the library.
-        local dir="$(basename ${folder})"
         rsync \
             --progress \
             --recursive \
             --prune-empty-dirs \
             --exclude-from="${CWD}/requirements.ignore" \
-            "${folder}/" "${main_platform_dir}"
+            "${dependency_content}/" "${main_platform_dir}"
     done
 
     echo "  -> Cleaning"
