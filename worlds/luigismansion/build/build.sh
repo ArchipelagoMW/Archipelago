@@ -70,7 +70,7 @@ function get_deps() {
     echo "  -> Transfer requirements to bundle"
     for dependency_content in ${install_platform_dir}/*; do
         echo "    - Processing: ${dependency_content}"
-        if [[ -f ${dependency_content} ]]
+        if [[ -f ${dependency_content} ]]; then
             cp ${dependency_content} ${main_platform_dir}
             continue
         fi
