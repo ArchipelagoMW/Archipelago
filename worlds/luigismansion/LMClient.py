@@ -183,7 +183,6 @@ class LMContext(CommonContext):
         self.boo_gate_enabled = False
 
         # Used for handling various weird item checks.
-        self.already_updated_vac = False
         self.last_map_id = 0
 
     async def disconnect(self, allow_autoreconnect: bool = False):
@@ -272,6 +271,8 @@ class LMContext(CommonContext):
 
     def check_ingame(self):
         # The game has an address that lets us know if we are in a playable state or not.
+        # This isn't perfect indicator however as although the game says ready, we still map be loading in,
+        # warping around, etc.
         int_play_state = dme.read_word(CURR_PLAY_STATE_ADDR)
         if not int_play_state == 2:
             self.last_not_ingame = time.time()
@@ -331,6 +332,7 @@ class LMContext(CommonContext):
             dme.write_word(LAST_RECV_ITEM_ADDR, len(self.items_received))
             return
 
+        # TODO remove this in-favor of transferring to a list of addresses to add / remove things from.
         last_bill_list = [x[1] for x in filler_items.items() if "Bills" in x[0]]
         bills_rams_pointer = last_bill_list[len(last_bill_list) - 1].pointer_offset
         last_coin_list = [x[1] for x in filler_items.items() if "Coins" in x[0]]
@@ -347,7 +349,9 @@ class LMContext(CommonContext):
                 dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
                 continue
 
-            # Add a received message in the client for the item that is about to be received.
+            # TODO remove this after an in-game message / dolphin client message is received per item.
+            #   Note: Common Client does already have a variation of messages supported though.
+            """# Add a received message in the client for the item that is about to be received.
             parts = []
             NetUtils.add_json_text(parts, "Received ")
             NetUtils.add_json_item(parts, item.item, self.slot, item.flags)
@@ -355,7 +359,7 @@ class LMContext(CommonContext):
             NetUtils.add_json_location(parts, item.location, item.player)
             NetUtils.add_json_text(parts, " by ")
             NetUtils.add_json_text(parts, item.player, type=NetUtils.JSONTypes.player_id)
-            self.on_print_json({"data": parts, "cmd": "PrintJSON"})
+            self.on_print_json({"data": parts, "cmd": "PrintJSON"})"""
 
             # Get the current LM Item so we can get the various named tuple fields easier.
             lm_item_name = self.item_names.lookup_in_game(item.item)
@@ -368,48 +372,40 @@ class LMContext(CommonContext):
                     match lm_item.code:
                         case 119:  # Bills and Coins
                             coins_curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
-                                                                                               [coins_ram_pointer]),
-                                                                           lm_item.ram_byte_size))
+                                    [coins_ram_pointer]), lm_item.ram_byte_size))
                             bills_curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
-                                                                                               [bills_rams_pointer]),
-                                                                           lm_item.ram_byte_size))
+                                    [bills_rams_pointer]), lm_item.ram_byte_size))
                             if re.search(r"^\d+", lm_item_name):
                                 int_item_amount = int(re.search(r"^\d+", lm_item_name).group())
                             coins_curr_val += int_item_amount
                             bills_curr_val += int_item_amount
-                            dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
-                                                                [coins_ram_pointer]),
+                            dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,[coins_ram_pointer]),
                                             coins_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
-                            dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
-                                                                [bills_rams_pointer]),
+                            dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,[bills_rams_pointer]),
                                             bills_curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
-                        case 128 | 129:
+                        case 128 | 129: # Small / Large Hearts
                             curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
-                                                                                         [lm_item.pointer_offset]),
-                                                                     lm_item.ram_byte_size))
+                            [lm_item.pointer_offset]), lm_item.ram_byte_size))
                             curr_val += 10 if lm_item.code == 128 else 50
                             curr_val = curr_val if curr_val <= 100 else 100
                             dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
-                                                                [lm_item.pointer_offset]),
-                                            curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
-                        case 63:
+                        [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
+                        case 63: # Boo Radar
                             curr_val = dme.read_byte(lm_item.ram_addr)
                             curr_val = (curr_val | (1 << 1))  # Enable flag 73
                             curr_val = (curr_val | (1 << 3))  # Enable flag 75
                             dme.write_byte(lm_item.ram_addr, curr_val)
-                        case 64:
+                        case 64: # Poltergust 4000
                             vac_speed = "3800000F"
                             dme.write_bytes(lm_item.ram_addr, bytes.fromhex(vac_speed))
                         case _:
                             curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(lm_item.ram_addr,
-                                                                                         [lm_item.pointer_offset]),
-                                                                     lm_item.ram_byte_size))
+                                 [lm_item.pointer_offset]), lm_item.ram_byte_size))
                             if re.search(r"^\d+", lm_item_name):
                                 int_item_amount = int(re.search(r"^\d+", lm_item_name).group())
                             curr_val += int_item_amount
                             dme.write_bytes(dme.follow_pointers(lm_item.ram_addr,
-                                                                [lm_item.pointer_offset]),
-                                            curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
+                    [lm_item.pointer_offset]), curr_val.to_bytes(lm_item.ram_byte_size, 'big'))
                 else:
                     # Assume it is a single address with a bit to update, rather than adding to an existing value
                     item_val = dme.read_byte(lm_item.ram_addr)
@@ -479,8 +475,6 @@ class LMContext(CommonContext):
                         current_boo_state_int = dme.read_byte(lm_loc_data.room_ram_addr)
                         if (current_boo_state_int & (1 << lm_loc_data.locationbit)) > 0:
                             self.locations_checked.add(mis_loc)
-                            dme.write_byte(lm_loc_data.room_ram_addr,
-                                           (current_boo_state_int & ~(1 << lm_loc_data.locationbit)))
                     case "Toad" | "Freestanding" | "Special" | "Portrait" | "BSpeedy":
                         current_toad_int = dme.read_byte(lm_loc_data.room_ram_addr)
                         if (current_toad_int & (1 << lm_loc_data.locationbit)) > 0:
@@ -488,6 +482,7 @@ class LMContext(CommonContext):
 
         await self.check_locations(self.locations_checked)
 
+        # If on final boss with King Boo
         if current_map_id == 9:
             beat_king_boo = dme.read_byte(KING_BOO_ADDR)
             if (beat_king_boo & (1 << 5)) > 0 and not self.game_clear:
@@ -520,12 +515,14 @@ class LMContext(CommonContext):
         if not (self.check_ingame() and self.check_alive()):
             return
 
+        # Always adjust the Vacuum speed as saving and quitting or going to E. Gadds lab could reset it back to normal.
         vac_id = AutoWorldRegister.world_types[self.game].item_name_to_id["Poltergust 4000"]
         if self.items_received.__contains__(vac_id):
             vac_speed = "3800000F"
             dme.write_bytes(ALL_ITEMS_TABLE["Poltergust 4000"].ram_addr, bytes.fromhex(vac_speed))
-            self.already_updated_vac = True
 
+        # Reset the Boo capture bit back to 0, in case they only received this item but did not check their location
+        # If in boo gate events, set the Boo capture bits to one ONLY for those in received items.
         local_recv_ids = [netItem.item for netItem in self.items_received]
         if self.boo_gate_enabled:
             in_boo_gate_event = (dme.read_byte(0x803D33A7) & (1 << 0)) > 0

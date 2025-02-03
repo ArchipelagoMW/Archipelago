@@ -1,7 +1,7 @@
 import hashlib
 import os
-import io
 import re
+import io
 import struct
 import random
 from tkinter import filedialog
@@ -280,6 +280,7 @@ class LuigisMansionRandomizer:
             lines = lines.replace("{HintText}", str(hintfo))
             self.update_custom_event(event_no, False, lines, replace_old_csv=True)
 
+        # Update Madame Clairvoya's event to check mario items.
         lines = get_data(__name__, "data/custom_events/event36.txt").decode('utf-8')
         lines = lines.replace("{MarioCount}", str(required_mario_item_count))
         lines = lines.replace("{HintText}", str(self.output_data["Hints"]["Madame Clairvoya"]))
@@ -303,7 +304,6 @@ class LuigisMansionRandomizer:
             self.copy_existing_event(new_custom_event)
             self.update_custom_event(new_custom_event, True, "", True)
 
-        # TODO After updating all events, randomize music for all events.
         if bool_randomize_music:
             list_ignore_events = ["event00.szp"]
             event_dir = self.gcm.get_or_create_dir_file_entry("files/Event")

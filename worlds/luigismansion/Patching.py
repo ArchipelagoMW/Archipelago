@@ -83,7 +83,7 @@ def update_event_info(event_info, boo_checks: bool):
         if x["EventNo"] == 71:
             x["EventFlag"] = 22
 
-        # Cause the Chauncey spawn event to on ly load once, preventing later warps to map10
+        # Cause the Chauncey spawn event to only load once, preventing later warps to map10
         if x["EventNo"] == 50:
             x["EventLoad"] = 1
 
