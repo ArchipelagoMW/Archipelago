@@ -263,7 +263,8 @@ class KH2WorldRules(KH2Rules):
 
         weapon_region = self.multiworld.get_region(RegionName.Keyblade, self.player)
         for location in weapon_region.locations:
-            add_rule(location, lambda state, exclusion_item=exclusion_table["WeaponSlots"][location.name]: state.has(exclusion_item, self.player))
+            exclusion_item = exclusion_table["WeaponSlots"][location.name]
+            add_rule(location, lambda state, e_item=exclusion_item: state.has(e_item, self.player))
             if location.name in Goofy_Checks:
                 add_item_rule(location, lambda item: item.player == self.player and item.name in GoofyAbility_Table.keys())
             elif location.name in Donald_Checks:
