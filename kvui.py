@@ -459,14 +459,14 @@ class MarkupDropdown(MDDropdownMenu):
 
 class AutocompleteHintInput(MDTextField):
     min_chars = NumericProperty(3)
-    attach_to: bool = False
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.dropdown = MarkupDropdown(caller=self, position="bottom", border_margin=dp(24), width=dp(400))
+        self.dropdown = MarkupDropdown(caller=self, position="bottom", border_margin=dp(24), width=self.width)
         self.dropdown.bind(on_select=lambda instance, x: setattr(self, 'text', x))
         self.bind(on_text_validate=self.on_message)
+        self.bind(width=lambda instance, x: setattr(self.dropdown, "width", x))
 
     def on_message(self, instance):
         MDApp.get_running_app().commandprocessor("!hint "+instance.text)
@@ -497,12 +497,10 @@ class AutocompleteHintInput(MDTextField):
                         "on_release": lambda: on_press(text),
                         "markup": True
                     })
-            if not self.attach_to:
+            if not self.dropdown.parent:
                 self.dropdown.open()
-                self.attach_to = True
         else:
             self.dropdown.dismiss()
-            self.attach_to = False
 
 
 status_icons = {
