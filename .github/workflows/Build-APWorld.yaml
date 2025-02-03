@@ -1,4 +1,4 @@
-name: Build
+name: Build APWorld
 on:
   push:
     tags: ["v*"]
