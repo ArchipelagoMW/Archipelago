@@ -9,7 +9,7 @@
 # Environment:
 # * TAG:
 #     A string used to tag the bundle name
-#     eg: "v1.1.1" will name the bundle "tww_apworld-v1.1.1"
+#     eg: "v1.1.1" will name the bundle "luigis-mansion_apworld-v1.1.1"
 #     (defaut: current date and time)
 ##
 
