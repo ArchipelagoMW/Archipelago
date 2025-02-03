@@ -366,11 +366,13 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
         """ Respond to the selection of items in the view. """
         self.selected = is_selected
 
+
 status_icons = {
     HintStatus.HINT_NO_PRIORITY: "information",
     HintStatus.HINT_PRIORITY: "exclamation-thick",
     HintStatus.HINT_AVOID: "alert"
 }
+
 
 class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
     selected = BooleanProperty(False)
@@ -410,7 +412,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
 
         self.dropdown.bind(on_release=self.dropdown.dismiss)
 
-    def set_height(self, _, _2):
+    def set_height(self, instance, value):
         self.height = max([child.texture_size[1] for child in self.children])
 
     def refresh_view_attrs(self, rv, index, data):
@@ -461,7 +463,9 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
                     key = child.sort_key
                     if key == "status":
                         parent.hint_sorter = lambda element: element["status"]["hint"]["status"]
-                    else: parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
+                    else:
+                        parent.hint_sorter = \
+                            lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
                     if key == parent.sort_key:
                         # second click reverses order
                         parent.reversed = not parent.reversed
@@ -956,7 +960,8 @@ class ImageLoaderPkgutil(ImageLoaderBase):
         data = pkgutil.get_data(module, path)
         return self._bytes_to_data(data)
 
-    def _bytes_to_data(self, data: typing.Union[bytes, bytearray]) -> typing.List[ImageData]:
+    @staticmethod
+    def _bytes_to_data(data: typing.Union[bytes, bytearray]) -> typing.List[ImageData]:
         loader = next(loader for loader in ImageLoader.loaders if loader.can_load_memory())
         return loader.load(loader, io.BytesIO(data))
 

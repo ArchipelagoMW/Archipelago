@@ -140,7 +140,7 @@ def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
         for component in [text_client_component, *client_component]:
             component_buttons.append(MDButton(
                 MDButtonText(text=component.display_name),
-                on_release= lambda *args, comp=component: run_component(comp, *launch_args),
+                on_release=lambda *args, comp=component: run_component(comp, *launch_args),
                 style="text"
             ))
         component_buttons.append(MDDivider())
