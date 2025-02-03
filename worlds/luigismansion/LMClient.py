@@ -220,7 +220,7 @@ class LMContext(CommonContext):
         """
         super().on_package(cmd, args)
         if cmd == "Connected":  # On Connect
-            self.boosanity = int(args["slot_data"]["boosanity"]) == 1
+            self.boosanity = bool(args["slot_data"]["boosanity"])
             self.goal_type = int(args["slot_data"]["goal"])
             self.rank_req = int(args["slot_data"]["rank requirement"])
             death_link_enabled = bool(args["slot_data"]["death_link"])
