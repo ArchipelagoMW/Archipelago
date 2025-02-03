@@ -457,3 +457,5 @@ class TunicState(LogicMixin):
         self.tunic_need_to_reset_combat_from_remove = defaultdict(lambda: False)
         # the per-player, per-area state of combat checking -- unchecked, failed, or succeeded
         self.tunic_area_combat_state = defaultdict(lambda: defaultdict(lambda: CombatState.unchecked))
+        # a copy_mixin was intentionally excluded because the empty state from init_mixin
+        # will always be appropriate for recalculating the logic cache
