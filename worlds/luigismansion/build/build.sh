@@ -150,7 +150,7 @@ function main() {
         local destdir="${target_path}/${bundle}"
 
         for platform in "${SUPPORTED_PLATFORMS[@]}"; do
-            get_deps "win_amd64" "${project}/requirements.txt" "${destdir}/lib"
+            get_deps "${platform}" "${project}/requirements.txt" "${destdir}/lib"
         done
         mk_apworld "${project}" "${destdir}"
         # bundle "${destdir}" "${target_path}/${bundle}.zip"
