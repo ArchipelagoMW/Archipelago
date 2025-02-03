@@ -68,7 +68,7 @@ function get_deps() {
         if [[ -v dependency_exceptions[${dir}] ]]; then
            dir=dependency_exceptions[${dir}]
         fi
-        local license_file = find ${folder} -name "LICENSE" -quit
+        local license_file=$(find ${folder} -name "LICENSE" -quit)
         cp --verbose "license_file" "${folder}/../${dir}/" ||:
         rm --force --recursive ${folder}
     done
