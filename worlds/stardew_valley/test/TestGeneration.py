@@ -2,7 +2,8 @@ from typing import List
 
 from BaseClasses import ItemClassification, Item
 from . import SVTestBase
-from .. import location_table, options, Group, item_classes
+from .. import location_table, options, Group
+from ..items import item_classes
 from ..locations import LocationTags
 from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, ToolProgression, \
     SkillProgression, Booksanity, Walnutsanity

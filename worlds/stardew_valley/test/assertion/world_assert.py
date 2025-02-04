@@ -4,7 +4,7 @@ from unittest import TestCase
 from BaseClasses import MultiWorld, ItemClassification
 from .rule_assert import RuleAssertMixin
 from ... import StardewItem
-from ...item_classes import items_by_group, Group
+from worlds.stardew_valley.items.item_classes import items_by_group, Group
 from ...locations import LocationTags, locations_by_tag
 
 

@@ -1,6 +1,6 @@
 import unittest
 
-from ..item_classes import load_item_csv
+from worlds.stardew_valley.items.item_classes import load_item_csv
 from ..locations import load_location_csv
 from ..options import Mods
 

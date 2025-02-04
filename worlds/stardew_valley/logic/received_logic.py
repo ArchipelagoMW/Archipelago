@@ -4,7 +4,7 @@ from BaseClasses import ItemClassification
 from .base_logic import BaseLogic, BaseLogicMixin
 from .has_logic import HasLogicMixin
 from .logic_event import all_events
-from ..item_classes import item_table
+from worlds.stardew_valley.items.item_classes import item_table
 from ..stardew_rule import StardewRule, Received, TotalReceived
 
 

@@ -9,8 +9,8 @@ from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles
 from .content import StardewContent, create_content
 from .early_items import setup_early_items
-from .item_classes import item_table, ItemData, Group, items_by_group
-from .item_creation import create_items, get_all_filler_items, remove_limited_amount_packs
+from worlds.stardew_valley.items.item_classes import item_table, ItemData, Group, items_by_group
+from worlds.stardew_valley.items.item_creation import create_items, get_all_filler_items, remove_limited_amount_packs
 from .locations import location_table, create_locations, LocationData, locations_by_tag
 from .logic.logic import StardewLogic
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, EnabledFillerBuffs, NumberOfMovementBuffs, \
