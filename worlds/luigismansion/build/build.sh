@@ -41,60 +41,44 @@ function pre_flight() {
 # Uses `requirements.ignore` to specify which files not to copy over from within each of the requirements.
 ##
 function get_deps() {
-    local platform="$1" requirements_file="$2" to="$3" install_path="$4"
+    local platform="$1" requirements_file="$2" to="$3"
     echo "=> Bundle requirements for ${platform}"
-
-    local install_platform_dir="${install_path}/${platform}"
-    local main_platform_dir="${to}/${platform}"
-    mkdir --parents ${install_platform_dir}
-    mkdir --parents ${main_platform_dir}
 
     # Fetch the libraries binary files for the specified platform.
     echo "  -> Fetch requirements"
     pip install \
-        --target ${install_platform_dir} \
+        --target ${to}/${platform} \
         --platform ${platform} \
         --only-binary=:all: \
         --requirement ${requirements_file}
 
     # This is for the `.dist-info` folder, which contains the metadata of the mod.
     # We just copy over the license file into the main library folder
-    declare -A dependency_exceptions
-    dependency_exceptions["pillow"]="PIL"
-
     echo "  -> Processing metadata"
-    for folder in ${install_platform_dir}/*.dist-info; do
+    for folder in ${to}/${platform}/*.dist-info; do
         local dir="$(basename ${folder} | cut -d '-' -f 1)"
-        if [[ -v dependency_exceptions[${dir}] ]]; then
-           dir=${dependency_exceptions[${dir}]}
-        fi
-        local license_file=$(find ${folder} -name "LICENSE" -quit)
-        cp --verbose ${license_file} "${folder}/../${dir}/" ||:
+        cp --verbose "${folder}/LICENSE" "${folder}/../${dir}/" ||:
         rm --force --recursive ${folder}
     done
 
     # Go though each of the downloaded libraries and copy the relevant parts.
     echo "  -> Transfer requirements to bundle"
-    for dependency_content in ${install_platform_dir}/*; do
-        echo "    - Processing: ${dependency_content}"
-        if [[ -f ${dependency_content} ]]; then
-            cp ${dependency_content} ${main_platform_dir}
-            continue
-        fi
+    for folder in ${to}/${platform}/*; do
+        echo "    - Processing: ${folder}"
 
         # The actual code of the library.
         local dir="$(basename ${folder})"
-        mkdir -p ${main_platform_dir}/${dir}
+        mkdir -p ${to}/${dir}
         rsync \
             --progress \
             --recursive \
             --prune-empty-dirs \
             --exclude-from="${CWD}/requirements.ignore" \
-            "${dependency_content}/" "${main_platform_dir}/${dir}"
+            "${folder}/" "${to}/${dir}"
     done
 
     echo "  -> Cleaning"
-    rm --force --recursive ${install_platform_dir}
+    rm --force --recursive ${to}/${platform}
 }
 
 ##
@@ -164,10 +148,9 @@ function main() {
         local project="$(realpath ${CWD}/..)"
         local bundle="${bundle_base}-${tag}"
         local destdir="${target_path}/${bundle}"
-        local pip_download="${CWD}/deps"
 
         for platform in "${SUPPORTED_PLATFORMS[@]}"; do
-            get_deps "${platform}" "${project}/requirements.txt" "${destdir}/lib" "${pip_download}"
+            get_deps "${platform}" "${project}/requirements.txt" "${destdir}/lib"
         done
         mk_apworld "${project}" "${destdir}"
         # bundle "${destdir}" "${target_path}/${bundle}.zip"
