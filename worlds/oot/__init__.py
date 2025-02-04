@@ -1188,16 +1188,15 @@ class OOTWorld(World):
 
     def fill_slot_data(self):
         self.collectible_flags_available.wait()
-        prizes = {}
-        bosses = {}
+
         slot_data = {
             "collectible_override_flags": self.collectible_override_flags,
             "collectible_flag_offsets": self.collectible_flag_offsets,
-            "prizes": prizes,
-            "bosses": bosses,
         }
 
         if not self.multiworld.is_race:
+            prizes = {}
+            bosses = {}
             for location in [
                 "Links Pocket",
                 "Queen Gohma",
@@ -1219,7 +1218,8 @@ class OOTWorld(World):
                 prizes[self.get_location(location).item.name] = dungeon
                 bosses[dungeon] = location
 
-
+            slot_data["prizes"] = prizes
+            slot_data["bosses"] = bosses
             slot_data.update(self.options.as_dict(
                 "open_forest", "open_kakariko", "open_door_of_time", "zora_fountain", "gerudo_fortress",
                 "bridge", "bridge_stones", "bridge_medallions", "bridge_rewards", "bridge_tokens", "bridge_hearts",
