@@ -64,17 +64,17 @@ hard_bonus: Set = {
 }
 
 item_groups = {
-    "Core Booster": set(core_booster),
+    "Core Booster": frozenset(core_booster),
     "Campaign Boss Beaten": {"Tier 1 Beaten", "Tier 2 Beaten", "Tier 3 Beaten", "Tier 4 Beaten", "Tier 5 Beaten"},
-    "Booster Pack": set(booster_packs),
-    "Banlist": set(Banlist_Items),
-    "Challenge": set(challenges),
-    "Tier 1 Opponent": set(tier_1_opponents),
-    "Tier 2 Opponent": set(tier_2_opponents),
-    "Tier 3 Opponent": set(tier_3_opponents),
-    "Tier 4 Opponent": set(tier_4_opponents),
-    "Tier 5 Opponent": set(tier_5_opponents),
-    "Campaign Opponent": set(tier_1_opponents + tier_2_opponents + tier_3_opponents +
+    "Booster Pack": frozenset(booster_packs),
+    "Banlist": frozenset(Banlist_Items),
+    "Challenge": frozenset(challenges),
+    "Tier 1 Opponent": frozenset(tier_1_opponents),
+    "Tier 2 Opponent": frozenset(tier_2_opponents),
+    "Tier 3 Opponent": frozenset(tier_3_opponents),
+    "Tier 4 Opponent": frozenset(tier_4_opponents),
+    "Tier 5 Opponent": frozenset(tier_5_opponents),
+    "Campaign Opponent": frozenset(tier_1_opponents + tier_2_opponents + tier_3_opponents +
                              tier_4_opponents + tier_5_opponents)
 }
 
