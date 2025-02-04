@@ -255,9 +255,7 @@ class Yugioh06World(World):
                     self.structure_deck[card] = 3
                     amount += 3
         elif self.options.structure_deck.value == self.options.structure_deck.option_worst:
-            for card_name, amount in worst_deck.items():
-                card = cards[card_name]
-                self.structure_deck[card] = amount
+            self.structure_deck = {cards[card_name]: amount for card_name, amount in worst_deck.items()}
         elif self.options.structure_deck.value == self.options.structure_deck.option_custom:
             total_amount = 0
             for name, amount in self.options.custom_structure_deck.value.items():
@@ -320,11 +318,11 @@ class Yugioh06World(World):
             set_card_rules(self)
 
         # randomize packs
-        if not self.booster_pack_contents and\
-            self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_shuffle:
+        if (not self.booster_pack_contents and
+            self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_shuffle):
             self.booster_pack_contents = create_shuffled_packs(self)
-        elif not self.booster_pack_contents and\
-                self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_chaos:
+        elif not (self.booster_pack_contents and
+                self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_chaos):
             self.booster_pack_contents = create_chaos_packs(self)
 
     def create_region(self, name: str, locations=None, exits=None):
@@ -370,10 +368,10 @@ class Yugioh06World(World):
                 if opponent.column == 3:
                     challenge_amount = self.options.third_tier_5_campaign_boss_challenges.value
                     campaign_amount = self.options.third_tier_5_campaign_boss_campaign_opponents.value
-                if opponent.column == 4:
+                elif opponent.column == 4:
                     challenge_amount = self.options.fourth_tier_5_campaign_boss_challenges.value
                     campaign_amount = self.options.fourth_tier_5_campaign_boss_campaign_opponents.value
-                if opponent.column == 5:
+                elif opponent.column == 5:
                     challenge_amount = self.options.final_campaign_boss_challenges.value
                     campaign_amount = self.options.final_campaign_boss_campaign_opponents.value
                 entrance.access_rule = lambda state, chal_a=challenge_amount, cam_a=campaign_amount, opp=opponent: (
