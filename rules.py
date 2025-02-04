@@ -6,6 +6,7 @@ from typing import Callable, Mapping, NamedTuple, Sequence, Tuple, Union, TYPE_C
 from BaseClasses import CollectionState
 
 from .items import ItemType, filter_item_names
+from .options import Logic
 
 if TYPE_CHECKING:
     from . import WL4World
@@ -69,5 +70,5 @@ def difficulty(difficulty: int):
 def not_difficulty(_difficulty: int):
     return Requirement(lambda w, s: not difficulty(_difficulty).inner(w, s))
 
-def logic(logic: int):
-    return option('logic', logic)
+def advanced_logic():
+    return option('logic', Logic.option_advanced)

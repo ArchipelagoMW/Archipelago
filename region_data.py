@@ -3,14 +3,13 @@ from __future__ import annotations
 from typing import NamedTuple, Optional, Sequence
 
 from .data import Passage
-from .options import Difficulty, Goal, Logic
-from .rules import *
+from .options import Difficulty, Goal
+from .rules import Requirement, has, has_all, has_any, has_treasures, option, difficulty, not_difficulty, advanced_logic
 
 
 normal = Difficulty.option_normal
 hard = Difficulty.option_hard
 s_hard = Difficulty.option_s_hard
-advanced = Logic.option_advanced
 
 
 class LevelData(NamedTuple):
@@ -115,7 +114,7 @@ level_table = {
                     LocationData("Scienstein Throw Diamond", access_rule=has('Grab')),
                     LocationData(
                         "Ladder Cave Pink Room Diamond",
-                        access_rule=has('Grab') | logic(advanced) & has('Enemy Jump')
+                        access_rule=has('Grab') | advanced_logic() & has('Enemy Jump')
                     ),
                 ]
             ),
@@ -468,7 +467,7 @@ level_table = {
             RegionData(
                 "Early Rooms",
                 [
-                    ExitData("Jungle Room", has('Ground Pound') | logic(advanced)),
+                    ExitData("Jungle Room", has('Ground Pound') | advanced_logic()),
                 ],
                 [
                     LocationData("Rolling Room Box", difficulties=[normal, hard]),
@@ -483,7 +482,7 @@ level_table = {
             RegionData(
                 "Jungle Room",
                 [
-                    ExitData("Late Rooms", has('Ground Pound') | logic(advanced) & has('Heavy Grab')),
+                    ExitData("Late Rooms", has('Ground Pound') | advanced_logic() & has('Heavy Grab')),
                 ],
                 [
                     LocationData("Jungle Room Box"),
@@ -621,7 +620,7 @@ level_table = {
                     ExitData("Blue Circle Room", has('Ground Pound')),
                     ExitData(
                         "Gray Square Room",
-                        has('Ground Pound') | not_difficulty(normal) & logic(advanced) & has('Grab')
+                        has('Ground Pound') | not_difficulty(normal) & advanced_logic() & has('Grab')
                     ),
                 ],
                 [
@@ -676,7 +675,7 @@ level_table = {
             RegionData(
                 "Entrance",
                 [
-                    ExitData("Lake Entrance", has('Ground Pound') | logic(advanced) & has_any(['Head Smash', 'Grab'])),
+                    ExitData("Lake Entrance", has('Ground Pound') | advanced_logic() & has_any(['Head Smash', 'Grab'])),
                 ],
                 [
                     LocationData("Racing Box"),
@@ -992,13 +991,17 @@ level_table = {
 
 
 passage_boss_table = {
-    Passage.EMERALD: BossData("Cractus", has('Ground Pound'), not_difficulty(s_hard) | has('Enemy Jump') | logic(advanced)),
+    Passage.EMERALD: BossData(
+        "Cractus",
+        has('Ground Pound'),
+        not_difficulty(s_hard) | has('Enemy Jump') | advanced_logic()
+    ),
     Passage.RUBY: BossData("Cuckoo Condor", has('Grab')),
     Passage.TOPAZ: BossData("Aerodent", has('Grab')),
     Passage.SAPPHIRE: BossData(
         "Catbat",
-        has('Ground Pound') & (has('Enemy Jump') | logic(advanced)),
-        has('Enemy Jump') | logic(advanced) & not_difficulty(s_hard)
+        has('Ground Pound') & (has('Enemy Jump') | advanced_logic()),
+        has('Enemy Jump') | advanced_logic() & not_difficulty(s_hard)
     ),
 }
 

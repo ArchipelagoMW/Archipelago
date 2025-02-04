@@ -10,7 +10,7 @@ from .data import Passage
 from .items import ItemType, WL4Item, filter_item_names
 from .locations import WL4Location
 from .region_data import LocationData, passage_levels, level_table, passage_boss_table, golden_diva
-from .rules import *
+from .rules import Requirement, has, has_all
 from .options import OpenDoors, Portal
 
 if TYPE_CHECKING:
@@ -181,7 +181,7 @@ def connect_regions(world: WL4World):
             )
 
 
-def connect_entrance(world: WL4World, name: str, source: str, target: str, rule: Requirement = None):
+def connect_entrance(world: WL4World, name: str, source: str, target: str, rule: Requirement | None = None):
     source_region = world.get_region(source)
     target_region = world.get_region(target)
 
