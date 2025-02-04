@@ -16,7 +16,7 @@ from gclib import fs_helpers as fs
 from gclib.gcm import GCM
 from gclib.dol import DOL
 from gclib.rarc import RARC
-import pyfastyaz0yay0
+from gclib.yaz0_yay0 import Yay0
 
 RANDOMIZER_NAME = "Luigi's Mansion"
 CLEAN_LUIGIS_MANSION_ISO_MD5 = 0x6e3d9ae0ed2fbd2f77fa1ca09a60c494  # Based on the USA version of Luigi's Mansion
@@ -189,7 +189,7 @@ class LuigisMansionRandomizer:
         # As mentioned before, these szp files need to be compressed again in order to be properly read by Dolphin/GC.
         # If you forget this, you will get an Invalid read error on a certain memory address typically.
         self.map_two_file.save_changes()
-        self.gcm.changed_files["files/Map/map2.szp"] = pyfastyaz0yay0.compress_yay0(self.map_two_file.data)
+        self.gcm.changed_files["files/Map/map2.szp"] = Yay0.compress(self.map_two_file.data)
 
         # Save the changes of main.dol
         self.update_dol_offsets()
@@ -343,7 +343,7 @@ class LuigisMansionRandomizer:
                 next((info_files for info_files in event_arc.file_entries if
                       info_files.name == name_to_find)).data = updated_event
                 event_arc.save_changes()
-                self.gcm.changed_files[lm_event.file_path] = pyfastyaz0yay0.compress_yay0(event_arc.data)
+                self.gcm.changed_files[lm_event.file_path] = Yay0.compress(event_arc.data)
 
         # Generator function to combine all necessary files into an ISO file.
         # Returned information is ignored. # Todo Maybe there is something better to put here?
@@ -440,7 +440,7 @@ class LuigisMansionRandomizer:
 
         custom_event.save_changes()
         self.gcm.changed_files["files/Event/event" + event_number + ".szp"] = (
-            pyfastyaz0yay0.compress_yay0(custom_event.data))
+            Yay0.compress(custom_event.data))
 
     def copy_existing_event(self, new_event_number: str):
         event_path = "files/Event/event" + new_event_number + ".szp"
