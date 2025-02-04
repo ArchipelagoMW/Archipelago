@@ -163,7 +163,7 @@ filler_items: Dict[str, LMItemData] = {
     "Diamond": LMItemData("Money", 124, IC.filler, ram_addr=0x803D8B7C, pointer_offset=0x33C, ram_byte_size=4),
     "Poison Mushroom": LMItemData("Trap", 125, IC.trap),
     # "Ghost": LMItemData("Trap", 126, IC.trap),
-    "Nothing": LMItemData("Nothing", 127, IC.filler),
+    "Nothing": LMItemData("Nothing Item", 127, IC.filler),
     "Small Heart": LMItemData("Heart", 128, IC.filler, ram_addr=0x803D8B40, pointer_offset=0xB8, ram_byte_size=2),
     "Large Heart": LMItemData("Heart", 129, IC.filler, ram_addr=0x803D8B40, pointer_offset=0xB8, ram_byte_size=2),
     "Bomb": LMItemData("Trap", 130, IC.trap),
