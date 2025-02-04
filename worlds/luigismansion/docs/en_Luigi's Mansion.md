@@ -57,6 +57,7 @@ items received in Luigi's Mansion will display a popup window that does not inte
 - (Optional) Turn off Fear and Pickup animations for Luigi
 - (Optional) Increase Luigi's innate movement speed.
 - (Optional) Randomize music (not yet functional)
+- Credit to discord user rishingfod for out Luigi's Mansion client icon
 
 ###### Quality of death:
 
