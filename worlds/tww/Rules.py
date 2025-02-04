@@ -33,7 +33,10 @@ class TWWLogic(LogicMixin):
 
     def _tww_can_defeat_all_required_bosses(self, player: int) -> bool:
         required_boss_item_locations = self.multiworld.worlds[player].boss_reqs.required_boss_item_locations
-        return all(self.can_reach_location(loc, player) for loc in required_boss_item_locations)
+        for loc in required_boss_item_locations:
+            if not self.can_reach_location(loc, player):
+                return False
+        return True
 
     def _tww_rematch_bosses_skipped(self, player: int) -> bool:
         return self.multiworld.worlds[player].logic_rematch_bosses_skipped
