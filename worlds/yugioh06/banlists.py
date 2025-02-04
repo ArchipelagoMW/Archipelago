@@ -1,15 +1,15 @@
-from typing import Dict, List
+from typing import Dict, Set
 
 # auto-generated
-banlists: Dict[str, Dict[str, List[str]]] = {
+banlists: Dict[str, Dict[str, Set[str]]] = {
     "no_banlist": {
-        "Forbidden": [],
-        "Limited": [],
-        "Semi-Limited": [],
+        "Forbidden": {},
+        "Limited": {},
+        "Semi-Limited": {},
     },
     "september_2003": {
-        "Forbidden": [],
-        "Limited": [
+        "Forbidden": {},
+        "Limited": {
             "Vampire Lord",
             "Injection Fairy Lily",
             "Chaos Emperor Dragon - Envoy of the End",
@@ -60,8 +60,8 @@ banlists: Dict[str, Dict[str, List[str]]] = {
             "Magic Cylinder",
             "Reckless Greed",
             "Call of the Haunted",
-        ],
-        "Semi-Limited": [
+        },
+        "Semi-Limited": {
             "Morphing Jar #2",
             "Marauding Captain",
             "Makyura the Destructor",
@@ -69,10 +69,10 @@ banlists: Dict[str, Dict[str, List[str]]] = {
             "Reinforcement of the Army",
             "Nobleman of Crossout",
             "Last Turn",
-        ],
+        },
     },
     "march_2004": {
-     "Forbidden": [
+     "Forbidden": {
             "Injection Fairy Lily",
             "Cyber Jar",
             "Fiber Jar",
@@ -83,8 +83,8 @@ banlists: Dict[str, Dict[str, List[str]]] = {
             "Raigeki",
             "Harpie's Feather Duster",
             "Imperial Order",
-     ],
-     "Limited": [
+     },
+     "Limited": {
             "Vampire Lord",
             "Chaos Emperor Dragon - Envoy of the End",
             "Black Luster Soldier - Envoy of the Beginning",
@@ -127,8 +127,8 @@ banlists: Dict[str, Dict[str, List[str]]] = {
             "Magic Cylinder",
             "Reckless Greed",
             "Call of the Haunted",
-     ],
-     "Semi-Limited": [
+     },
+     "Semi-Limited": {
             "Manticore of Darkness",
             "Makyura the Destructor",
             "Morphing Jar",
@@ -136,10 +136,10 @@ banlists: Dict[str, Dict[str, List[str]]] = {
             "Reinforcement of the Army",
             "Nobleman of Crossout",
             "Last Turn",
-     ],
+     },
     },
     "september_2004": {
-        "Forbidden": [
+        "Forbidden": {
             "Chaos Emperor Dragon - Envoy of the End",
             "Sangan",
             "Witch of the Black Forest",
@@ -153,8 +153,8 @@ banlists: Dict[str, Dict[str, List[str]]] = {
             "Dark Hole",
             "Imperial Order",
             "Mirror Force",
-        ],
-        "Limited": [
+        },
+        "Limited": {
             "Vampire Lord",
             "Injection Fairy Lily",
             "Black Luster Soldier - Envoy of the Beginning",
@@ -200,8 +200,8 @@ banlists: Dict[str, Dict[str, List[str]]] = {
             "Magic Cylinder",
             "Reckless Greed",
             "Call of the Haunted",
-        ],
-        "Semi-Limited": [
+        },
+        "Semi-Limited": {
             "Manticore of Darkness",
             "Morphing Jar #2",
             "Marauding Captain",
@@ -210,10 +210,10 @@ banlists: Dict[str, Dict[str, List[str]]] = {
             "Reinforcement of the Army",
             "Nobleman of Crossout",
             "Last Turn",
-        ],
+        },
     },
     "march_2005": {
-        "Forbidden": [
+        "Forbidden": {
             "Chaos Emperor Dragon - Envoy of the End",
             "Witch of the Black Forest",
             "Makyura the Destructor",
@@ -232,8 +232,8 @@ banlists: Dict[str, Dict[str, List[str]]] = {
             "Dark Hole",
             "Imperial Order",
             "Sixth Sense",
-        ],
-        "Limited": [
+        },
+        "Limited": {
             "D.D. Warrior Lady",
             "Injection Fairy Lily",
             "Black Luster Soldier - Envoy of the Beginning",
@@ -278,8 +278,8 @@ banlists: Dict[str, Dict[str, List[str]]] = {
             "Magic Cylinder",
             "Reckless Greed",
             "Call of the Haunted",
-        ],
-        "Semi-Limited": [
+        },
+        "Semi-Limited": {
             "Abyss Soldier",
             "Manticore of Darkness",
             "Vampire Lord",
@@ -295,10 +295,10 @@ banlists: Dict[str, Dict[str, List[str]]] = {
             "Gravity Bind",
             "Good Goblin Housekeeping",
             "Last Turn",
-        ],
+        },
     },
     "september_2005": {
-        "Forbidden": [
+        "Forbidden": {
             "0x1386",
             "0x1387",
             "0x1388",
@@ -324,8 +324,8 @@ banlists: Dict[str, Dict[str, List[str]]] = {
             "Mirror Force",
             "Sixth Sense",
             "Ring of Destruction",
-        ],
-        "Limited": [
+        },
+        "Limited": {
             "D.D. Warrior Lady",
             "Injection Fairy Lily",
             "Sangan",
@@ -373,8 +373,8 @@ banlists: Dict[str, Dict[str, List[str]]] = {
             "Magic Cylinder",
             "Reckless Greed",
             "Call of the Haunted",
-        ],
-        "Semi-Limited": [
+        },
+        "Semi-Limited": {
             "Abyss Soldier",
             "Manticore of Darkness",
             "Creature Swap",
@@ -386,6 +386,6 @@ banlists: Dict[str, Dict[str, List[str]]] = {
             "Gravity Bind",
             "Good Goblin Housekeeping",
             "Last Turn",
-        ],
+        },
     }
 }
