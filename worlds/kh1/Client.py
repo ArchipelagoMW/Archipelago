@@ -135,7 +135,7 @@ class KH1Context(CommonContext):
                 if key == "remote_location_ids":
                     remote_location_ids = args['slot_data'][key]
                 if key == "death_link":
-                    if args['slot_data']["death_link"]:
+                    if args['slot_data']["death_link"] != "off":
                         global death_link
                         death_link = True
             #End Handle Slot Data
