@@ -173,7 +173,7 @@ class LocalFill(NamedRange):
     internal_name = "local_fill"
     display_name = "Local Fill Percent"
     range_start = 0
-    range_end = 100
+    range_end = 98
     special_range_names = {
         "default": -1
     }
@@ -197,6 +197,7 @@ class TunicPlandoConnections(PlandoConnections):
 
 class CombatLogic(Choice):
     """
+    EXPERIMENTAL - may cause gen failures, especially when playthrough generation for the spoiler log is enabled, and may have slight logic issues.
     If enabled, the player will logically require a combination of stat upgrade items and equipment to get some checks or navigate to some areas, with a goal of matching the vanilla combat difficulty.
     The player may still be expected to run past enemies, reset aggro (by using a checkpoint or doing a scene transition), or find sneaky paths to checks.
     This option marks many more items as progression and may force weapons much earlier than normal.
