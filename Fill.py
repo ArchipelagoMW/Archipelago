@@ -532,13 +532,13 @@ def distribute_items_restrictive(multiworld: MultiWorld,
                              single_player_placement=single_player, swap=False, on_place=mark_for_locking,
                              name="Priority Retry", one_item_per_player=False)
 
-        accessibility_corrections(
-            multiworld, multiworld.state, prioritylocations, regular_progression + deprioritized_progression
-        )
-        defaultlocations = prioritylocations + defaultlocations
-
         # restore original order of progitempool
         progitempool[:] = [item for item in progitempool if not item.location]
+
+        accessibility_corrections(multiworld, multiworld.state, prioritylocations, progitempool)
+        defaultlocations = prioritylocations + defaultlocations
+
+
 
     if progitempool:
         # "advancement/progression fill"
