@@ -35,8 +35,8 @@ class SecondStartingCharacter(Choice):
     """
     internal_name = "second_starting_character"
     display_name = "Second Starting Character"
-    option_jenna = 1
-    option_sheba= 0
+    option_jenna = 0
+    option_sheba= 1
     option_piers = 2
     option_isaac = 3
     option_garet = 4
