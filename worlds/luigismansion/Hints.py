@@ -55,8 +55,8 @@ def get_hints_by_option(multiworld: MultiWorld, player: int) -> Dict[str, Dict[s
             elif world.options.hint_distribution.value == 5:
                 hintfo = "<SAY><COLOR>(2)I see you've turned off hints"
             else:
-                hintfo = f"<SAY><COLOR>(7){multiworld.player_name[loc.item.player]}'s\\n <COLOR>(5){loc.item.name}" + \
-                    f"\n<ANYKEY>\n<SAY><COLOR>(0) can be found at\\n <COLOR>(1){multiworld.player_name[loc.player]}'s" + \
+                hintfo = f"<SAY><COLOR>(7){multiworld.player_name[loc.item.player]}'s<COLOR>(5)\\n{loc.item.name}" + \
+                    f"\n<ANYKEY>\n<SAY><COLOR>(0)can be found at<COLOR>(1)\\n{multiworld.player_name[loc.player]}'s" + \
                     f"\\n{loc.name}"
             hint = {name: hintfo}
             already_hinted_locations.append(loc)
