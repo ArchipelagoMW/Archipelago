@@ -506,22 +506,37 @@ def distribute_items_restrictive(multiworld: MultiWorld,
                 deprioritized_progression.append(item)
             else:
                 regular_progression.append(item)
-        sorted_progitempool = deprioritized_progression + regular_progression  # fill_restrictive goes back to front
+
 
         # "priority fill"
-        fill_restrictive(multiworld, multiworld.state, prioritylocations, sorted_progitempool,
+        fill_restrictive(multiworld, multiworld.state, prioritylocations, regular_progression,
                          single_player_placement=single_player, swap=False, on_place=mark_for_locking,
                          name="Priority", one_item_per_player=True, allow_partial=True)
 
         if prioritylocations:
             # retry with one_item_per_player off because some priority fills can fail to fill with that optimization
-            fill_restrictive(multiworld, multiworld.state, prioritylocations, sorted_progitempool,
+            fill_restrictive(multiworld, multiworld.state, prioritylocations, regular_progression,
                             single_player_placement=single_player, swap=False, on_place=mark_for_locking,
                             name="Priority Retry", one_item_per_player=False)
+
+        sorted_progitempool = deprioritized_progression + regular_progression  # fill_restrictive goes back to front
+
+        if prioritylocations:
+            # retry with deprioritized items in the mix as well
+            fill_restrictive(multiworld, multiworld.state, prioritylocations, regular_progression,
+                            single_player_placement=single_player, swap=False, on_place=mark_for_locking,
+                            name="Priority Retry", one_item_per_player=False)
+
+        if prioritylocations:
+            # retry with deprioritized items AND without one_item_per_player optimisation
+            fill_restrictive(multiworld, multiworld.state, prioritylocations, regular_progression,
+                            single_player_placement=single_player, swap=False, on_place=mark_for_locking,
+                            name="Priority Retry", one_item_per_player=False)
+
         accessibility_corrections(multiworld, multiworld.state, prioritylocations, sorted_progitempool)
         defaultlocations = prioritylocations + defaultlocations
 
-        # restore original order
+        # restore original order of progitempool
         progitempool[:] = [item for item in progitempool if not item.location]
 
     if progitempool:
