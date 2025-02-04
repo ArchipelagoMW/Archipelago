@@ -507,7 +507,6 @@ def distribute_items_restrictive(multiworld: MultiWorld,
             else:
                 regular_progression.append(item)
 
-
         # "priority fill"
         fill_restrictive(multiworld, multiworld.state, prioritylocations, regular_progression,
                          single_player_placement=single_player, swap=False, on_place=mark_for_locking,
