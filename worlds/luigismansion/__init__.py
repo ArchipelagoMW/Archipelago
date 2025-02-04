@@ -8,9 +8,9 @@ import yaml
 import Options
 import settings
 from BaseClasses import Tutorial, Item, ItemClassification
-from Utils import visualize_regions
+from Utils import visualize_regions, local_path
 from worlds.AutoWorld import WebWorld
-from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
+from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess, icon_paths
 from worlds.generic.Rules import add_item_rule
 from Options import OptionGroup
 
@@ -30,9 +30,11 @@ def run_client(*args):
 
 
 components.append(
-    Component("LM Client", func=run_client, component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".aplm"))
+    Component("LM Client", func=run_client, component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".aplm"),
+              icon="archiboolego")
 )
 
+icon_paths["archiboolego"] = local_path("worlds/luigismansion/data", "archiboolego.png")
 
 class LuigisMansionSettings(settings.Group):
     class ISOFile(settings.UserFilePath):
