@@ -1,7 +1,7 @@
 import logging
 from typing import List, NamedTuple, Callable, Dict
 
-from worlds.yugioh06 import cards
+from worlds.yugioh06 import cards, banlists
 from worlds.yugioh06.boosterpack_contents import not_in_standard_pool
 from worlds.yugioh06.card_data import nomi_monsters
 from worlds.yugioh06.fusions import fusions, fusion_subs
@@ -370,11 +370,16 @@ def set_card_rules(world):
         else:
             logger.critical("Rule for \"" + location + "\" was skipped")
             continue
-        chosen_cards, chosen_starters = resolve_rule(world, chosen_rule, starting_cards)
-        progression_cards[location] = chosen_cards
-        progression_cards[location].extend(chosen_starters)
-        cards_in_booster.extend(chosen_cards)
-        cards_in_starter.extend(chosen_starters)
+        # Exception for Yata cause it needs a specific banlist
+        if location != "Can Yata Lock":
+            chosen_cards, chosen_starters = resolve_rule(world, chosen_rule, starting_cards)
+            progression_cards[location] = chosen_cards
+            progression_cards[location].extend(chosen_starters)
+            cards_in_booster.extend(chosen_cards)
+            cards_in_starter.extend(chosen_starters)
+        else:
+            progression_cards[location] = chosen_rule.cards
+            cards_in_booster.extend(chosen_rule.cards)
         if chosen_rule.additional_cards:
             if isinstance(chosen_rule.additional_cards, List):
                 for a_rule in chosen_rule.additional_cards:
@@ -394,6 +399,7 @@ def set_card_rules(world):
 
 def resolve_rule(world, rule, starter_cards: Dict[str, int]):
     potential_cards: List[str] = []
+    banned_cards = banlists[world.options.banlist.current_key]["Forbidden"]
     if isinstance(rule.cards, str):
         potential_cards.append(rule.cards)
     if isinstance(rule.cards, Callable):
@@ -402,7 +408,8 @@ def resolve_rule(world, rule, starter_cards: Dict[str, int]):
         potential_cards.extend(rule.cards)
     if rule.amount_protocol == "total" and len(potential_cards) > 1:
         overlap = [x for x in potential_cards if x in starter_cards.keys()]
-        potential_cards = [x for x in potential_cards if x in overlap or x not in not_in_standard_pool]
+        potential_cards = [x for x in potential_cards if x in overlap or x not in not_in_standard_pool
+                           or x not in banned_cards]
         a = 0
         potential_starters: List[str] = []
         for c in overlap:
@@ -1017,7 +1024,6 @@ def backrow_removal():
         "Raigeki Break",
         "Calamity of the Wicked",
         "Dust Tornado",
-        "Stamping Destruction",
     ]
     limited_removal = [
         "Mystical Space Typhoon",
