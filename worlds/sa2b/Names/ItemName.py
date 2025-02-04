@@ -65,6 +65,7 @@ reverse_trap          = "Reverse Trap"
 literature_trap       = "Literature Trap"
 controller_drift_trap = "Controller Drift Trap"
 poison_trap           = "Poison Trap"
+bee_trap              = "Bee Trap"
 
 pong_trap            = "Pong Trap"
 breakout_trap        = "Breakout Trap"

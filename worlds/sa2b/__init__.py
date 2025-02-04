@@ -165,6 +165,7 @@ class SA2BWorld(World):
                                  self.options.literature_trap_weight.value + \
                                  self.options.controller_drift_trap_weight.value + \
                                  self.options.poison_trap.value + \
+                                 self.options.bee_trap.value + \
                                  self.options.pong_trap_weight.value + \
                                  self.options.breakout_trap_weight.value + \
                                  self.options.fishing_trap_weight.value + \
@@ -184,6 +185,7 @@ class SA2BWorld(World):
                 self.options.literature_trap_weight.value = 4
                 self.options.controller_drift_trap_weight.value = 4
                 self.options.poison_trap.value = 4
+                self.options.bee_trap.value = 4
                 self.options.pong_trap_weight.value = 4
                 self.options.breakout_trap_weight.value = 4
                 self.options.fishing_trap_weight.value = 4
@@ -352,6 +354,7 @@ class SA2BWorld(World):
         trap_weights += ([ItemName.literature_trap] * self.options.literature_trap_weight.value)
         trap_weights += ([ItemName.controller_drift_trap] * self.options.controller_drift_trap_weight.value)
         trap_weights += ([ItemName.poison_trap] * self.options.poison_trap_weight.value)
+        trap_weights += ([ItemName.bee_trap] * self.options.bee_trap_weight.value)
         trap_weights += ([ItemName.pong_trap] * self.options.pong_trap_weight.value)
         trap_weights += ([ItemName.breakout_trap] * self.options.breakout_trap_weight.value)
         trap_weights += ([ItemName.fishing_trap] * self.options.fishing_trap_weight.value)
@@ -580,6 +583,7 @@ class SA2BWorld(World):
         trap_data[0x3B] = self.options.literature_trap_weight.value
         trap_data[0x3C] = self.options.controller_drift_trap_weight.value
         trap_data[0x3D] = self.options.poison_trap_weight.value
+        trap_data[0x3E] = self.options.bee_trap_weight.value
 
         trap_data[0x50] = self.options.pong_trap_weight.value
         trap_data[0x51] = self.options.breakout_trap_weight.value

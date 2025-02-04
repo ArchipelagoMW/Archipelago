@@ -245,6 +245,13 @@ class PoisonTrapWeight(BaseTrapWeight):
     display_name = "Poison Trap Weight"
 
 
+class BeeTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which spawns a swarm of bees
+    """
+    display_name = "Bee Trap Weight"
+
+
 class PongTrapWeight(BaseTrapWeight):
     """
     Likelihood of receiving a trap which forces you to play a Pong minigame
@@ -1194,6 +1201,7 @@ sa2b_option_groups = [
         LiteratureTrapWeight,
         ControllerDriftTrapWeight,
         PoisonTrapWeight,
+        BeeTrapWeight,
     ]),
     OptionGroup("Minigames", [
         PongTrapWeight,
@@ -1333,6 +1341,7 @@ class SA2BOptions(PerGameCommonOptions):
     literature_trap_weight: LiteratureTrapWeight
     controller_drift_trap_weight: ControllerDriftTrapWeight
     poison_trap_weight: PoisonTrapWeight
+    bee_trap_weight: BeeTrapWeight
     pong_trap_weight: PongTrapWeight
     breakout_trap_weight: BreakoutTrapWeight
     fishing_trap_weight: FishingTrapWeight
