@@ -2,7 +2,7 @@ import random
 
 from BaseClasses import get_seed
 from .mod_testing_decorators import must_test_all_mods, mod_testing
-from .. import SVTestBase, SVTestCase, allsanity_mods_6_x_x, fill_dataclass_with_default
+from .. import SVTestBase, SVTestCase, allsanity_mods_6_x_x, fill_dataclass_with_default, solo_multiworld
 from ..assertion import ModAssertMixin, WorldAssertMixin
 from ... import items, Group, ItemClassification, create_content
 from ... import options
