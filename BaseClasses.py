@@ -1362,6 +1362,7 @@ class ItemClassification(IntFlag):
 
     progression_skip_balancing = 0b01001  # only progression gets balanced
     progression_deprioritized = 0b10001  # only progression can be placed during priority fill
+    progression_deprioritized_skip_balancing = 0b11001
 
     def as_flag(self) -> int:
         """As Network API flag int."""
