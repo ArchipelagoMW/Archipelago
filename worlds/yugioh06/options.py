@@ -189,7 +189,7 @@ class MoneyRewardMultiplier(Range):
 class NormalizeBoosterPackPrices(DefaultOnToggle):
     """If enabled every booster pack costs the same and has 5 cards per pack otherwise vanilla cost is used"""
 
-    display_name = "Normalize Booste Pack Prices"
+    display_name = "Normalize Booster Pack Prices"
 
 
 class BoosterPackPrices(Range):

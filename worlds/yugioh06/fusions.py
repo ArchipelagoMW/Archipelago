@@ -7,7 +7,7 @@ class FusionData(NamedTuple):
     replaceable: bool
     additional_spells: List[str] = []
     contact_fusion: bool = False
-    generic: str = None
+    generic: str | None = None
 
 
 fusions: Dict[str, FusionData] = {

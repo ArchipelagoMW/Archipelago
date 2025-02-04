@@ -534,13 +534,11 @@ class Yugioh06World(World):
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
         spoiler_handle.write(f"\n\nProgression cards for {self.multiworld.player_name[self.player]}")
         for location, p_cards in self.progression_cards.items():
-            spoiler_handle.write(f"\n   {location}: ")
-            for card in p_cards:
-                spoiler_handle.write(f"{card}, ")
-        spoiler_handle.write(f"\n\nProgression cards in start for {self.multiworld.player_name[self.player]}\n")
+            spoiler_handle.write(f"\n   {location}: {', '.join(p_cards)}")
+        spoiler_handle.write(f"\n\nProgression cards in start for {self.player_name}\n")
         for card in self.progression_cards_in_start:
             spoiler_handle.write(f" {card}, ")
-        spoiler_handle.write(f"\n\nProgression cards in booster for {self.multiworld.player_name[self.player]}\n")
+        spoiler_handle.write(f"\n\nProgression cards in booster for {self.player_name}\n")
         for card in self.progression_cards_in_booster:
             spoiler_handle.write(f" {card}, ")
     # for the universal tracker, doesn't get called in standard gen
@@ -548,7 +546,6 @@ class Yugioh06World(World):
     def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
         # returning slot_data so it regens, giving it back in multiworld.re_gen_passthrough
         return slot_data
-
 
 
 class Yugioh2006Item(Item):
