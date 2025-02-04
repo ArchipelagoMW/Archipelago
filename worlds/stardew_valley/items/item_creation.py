@@ -6,7 +6,7 @@ from BaseClasses import Item, ItemClassification
 from worlds.stardew_valley.content.feature import friendsanity
 from worlds.stardew_valley.content.game_content import StardewContent
 from worlds.stardew_valley.data.game_item import ItemTag
-from .item_classes import StardewItemFactory, items_by_group, Group, item_table, ItemData
+from .item_data import StardewItemFactory, items_by_group, Group, item_table, ItemData
 from worlds.stardew_valley.mods.mod_data import ModNames
 from worlds.stardew_valley.options import StardewValleyOptions, TrapDifficulty, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
     BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \

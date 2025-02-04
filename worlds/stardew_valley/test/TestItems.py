@@ -1,7 +1,7 @@
 from BaseClasses import MultiWorld, get_seed
 from . import setup_solo_multiworld, SVTestCase, allsanity_no_mods_6_x_x, get_minsanity_options, solo_multiworld
 from .. import StardewValleyWorld
-from worlds.stardew_valley.items.item_classes import Group, item_table
+from ..items.item_data import Group, item_table
 from ..options import Friendsanity, SeasonRandomization, Museumsanity, Shipsanity, Goal
 from ..strings.wallet_item_names import Wallet
 

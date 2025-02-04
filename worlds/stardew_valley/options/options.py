@@ -5,7 +5,7 @@ from typing import Protocol, ClassVar
 from schema import And, Schema
 
 from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, Visibility, OptionDict
-from worlds.stardew_valley.items.item_classes import items_by_group, Group
+from ..items.item_data import items_by_group, Group
 from ..mods.mod_data import ModNames
 from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName
 from ..strings.bundle_names import all_cc_bundle_names
