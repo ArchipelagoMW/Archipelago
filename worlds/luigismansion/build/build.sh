@@ -18,7 +18,7 @@ shopt -s globstar
 
 CWD="$(dirname $(realpath $0))"
 REQS=("zip" "rsync" "pip")
-SUPPORTED_PLATFORMS=("win_amd64" "manylinux2014_x86_64")
+SUPPORTED_PLATFORMS=("win_amd64") # "manylinux2014_x86_64"
 
 ##
 # Make sure all the required utilities are installed.
@@ -145,7 +145,6 @@ function main() {
     pre_flight
 
     local target_path="${CWD}/target"
-    local pip_download="${CWD}/deps"
     local bundle_base="luigismansion_apworld"
     mkdir --parents ${target_path}
 
@@ -165,6 +164,7 @@ function main() {
         local project="$(realpath ${CWD}/..)"
         local bundle="${bundle_base}-${tag}"
         local destdir="${target_path}/${bundle}"
+        local pip_download="${CWD}/deps"
 
         for platform in "${SUPPORTED_PLATFORMS[@]}"; do
             get_deps "${platform}" "${project}/requirements.txt" "${destdir}/lib" "${pip_download}"
