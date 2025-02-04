@@ -174,7 +174,7 @@ class Walksanity(Toggle):
 
 class Furnisanity(Toggle):
     """
-    Adds every interactable, such a dressers, paintings, candles, and light fixtures, to the location pool
+    Adds interactable objects, such a dressers, paintings, candles, and light fixtures, to the location pool
     """
     display_name = "Furnisanity"
 
