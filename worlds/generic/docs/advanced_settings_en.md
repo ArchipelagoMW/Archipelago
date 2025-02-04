@@ -263,7 +263,7 @@ Timespinner:
   * For `Timespinner` all players in the `TSAll` item link group will share their entire item pool and the `Twin Pyramid
     Key` and `Timespinner Wheel` will be forced among the worlds of those in the group. The `null` replacement item
     will, instead of forcing a specific chosen item, allow the generator to randomly pick a filler item to replace the
-    player items.  This item link will only be created if there are at least two Timespinner players.
+    player items. This item link will only be created if there are at least two players in the group.
 * `triggers` allows us to define a trigger such that if our `smallkey_shuffle` option happens to roll the `any_world`
   result it will also ensure that `bigkey_shuffle`, `map_shuffle`, and `compass_shuffle` are also forced to the
   `any_world` result. More information on triggers can be found in the
