@@ -137,7 +137,7 @@ def set_rules(world: World):
 
         # Combine all rules with AND logic
         if rule_set:
-            set_rule(location, lambda state: all(rule(state) for rule in rule_set))
+            set_rule(location, lambda state, v=rule_set: all(rule(state) for rule in v))
 
     # Add special move rules
     if opts.enable_tactics.value == opts.enable_tactics.option_all:
