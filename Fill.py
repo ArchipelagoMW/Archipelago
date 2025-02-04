@@ -538,8 +538,6 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         accessibility_corrections(multiworld, multiworld.state, prioritylocations, progitempool)
         defaultlocations = prioritylocations + defaultlocations
 
-
-
     if progitempool:
         # "advancement/progression fill"
         if panic_method == "swap":
