@@ -1357,8 +1357,8 @@ class ItemClassification(IntFlag):
     Typically currency or other counted items. """
 
     deprioritized = 0b10000
-    """ Will be sorted to the back of the progression item pool during priority locations fill.
-    This doesn't completely ban it from being placed on priority locations, but makes it very unlikely. """
+    """ Will not be considered for priority locations,
+    unless Priority Locations Fill runs out of regular progression items before filling all priority locations. """
 
     progression_skip_balancing = 0b01001  # only progression gets balanced
     progression_deprioritized = 0b10001  # only progression can be placed during priority fill
