@@ -4,6 +4,7 @@ from . import CMTestBase
 from ..Items import item_table, material_items, item_name_groups
 from ..Locations import location_table
 from ..Rules import determine_difficulty
+import logging
 
 
 class TestLocationLogic(CMTestBase):
@@ -20,8 +21,9 @@ class TestLocationLogic(CMTestBase):
         """Helper to collect an item and return the material gained"""
         item = self.create_test_item(item_name)
         # Only collect through world to ensure proper state updates
+        material_gain = self.world._collection_state.collect(self.collection_state, item)
         self.world.collect(self.collection_state, item)
-        return item_table[item_name].material if item_name in item_table else 0
+        return material_gain
 
     def get_accessible_locations(self) -> Set[str]:
         """Helper to get all currently accessible location names"""
@@ -75,9 +77,17 @@ class TestLocationLogic(CMTestBase):
     def test_initial_locations_unreachable(self):
         """Test that locations with material requirements start unreachable"""
         accessible = self.get_accessible_locations()
+        logging.debug(f"Initial state - Material: {self.collection_state.prog_items[self.player].get('Material', 0)}, Difficulty: {self.difficulty}")
+        
         for loc_name, loc_data in location_table.items():
             if (loc_data.material_expectations > 0 or 
                   loc_data.chessmen_expectations > 0):
+                if loc_name in accessible:
+                    logging.debug(f"Location {loc_name} unexpectedly accessible:")
+                    logging.debug(f"  Material expectation: {loc_data.material_expectations}")
+                    logging.debug(f"  Scaled requirement: {loc_data.material_expectations * self.difficulty}")
+                    logging.debug(f"  Chessmen expectation: {loc_data.chessmen_expectations}")
+                    logging.debug(f"  Current chessmen: {self.get_current_chessmen()}")
                 self.assertNotIn(loc_name, accessible,
                     f"Location {loc_name} should not be accessible with 0 material and 0 chessmen")
 
@@ -122,4 +132,18 @@ class TestLocationLogic(CMTestBase):
                         break
             else:
                 # If we couldn't find any more items to add, we're done
-                break 
+                break
+
+    def test_king_to_center_pawn_access(self):
+        """Test that King to Center is accessible with just a pawn"""
+        # Initially unreachable
+        self.assertFalse("King to Center" in self.get_accessible_locations(),
+            "King to Center should be unreachable initially")
+        
+        # Collect a pawn
+        item = self.create_test_item("Progressive Pawn")
+        self.world.collect(self.collection_state, item)
+        
+        # Should now be accessible
+        self.assertTrue("King to Center" in self.get_accessible_locations(),
+            "King to Center should be accessible with a pawn") 
