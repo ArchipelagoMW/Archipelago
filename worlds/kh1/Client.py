@@ -39,6 +39,23 @@ class KH1ClientCommandProcessor(ClientCommandProcessor):
         """Prints slot data settings for the connected seed"""
         for key in self.ctx.slot_data.keys():
             self.output(str(key) + ": " + str(self.ctx.slot_data[key]))
+    
+    def _cmd_deathlink(self):
+        """If your Death Link setting is set to "Toggle", use this command to turn Death Link on and off."""
+        if "death_link" in self.ctx.slot_data.keys():
+            if self.ctx.slot_data["death_link"] == "toggle":
+                global death_link
+                if death_link:
+                    death_link = False
+                    self.output(f"Death Link turned off")
+                else:
+                    death_link = True
+                    self.output(f"Death Link turned on")
+            else:
+                self.output(f"'death_link' is not set to 'toggle' for this seed.")
+                self.output(f"'death_link' = " + str(self.ctx.slot_data["death_link"]))
+        else:
+            self.output(f"No 'death_link' in slot_data keys. You probably aren't connected or are playing an older seed.")
 
 class KH1Context(CommonContext):
     command_processor: int = KH1ClientCommandProcessor
