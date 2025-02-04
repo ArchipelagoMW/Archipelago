@@ -292,7 +292,7 @@ class KH1World(World):
                     "atlantica": bool(self.options.atlantica),
                     "bad_starting_weapons": bool(self.options.bad_starting_weapons),
                     "cups": str(self.options.cups.current_key),
-                    "death_link": bool(self.options.death_link),
+                    "death_link": str(self.options.death_link.current_key),
                     "donald_death_link": bool(self.options.donald_death_link),
                     "end_of_the_world_unlock": str(self.options.end_of_the_world_unlock.current_key),
                     "exp_multiplier": int(self.options.exp_multiplier.value)/16,

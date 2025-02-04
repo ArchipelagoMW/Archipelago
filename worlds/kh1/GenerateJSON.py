@@ -73,7 +73,7 @@ def get_settings(self):
                     "interact_in_battle": bool(self.options.interact_in_battle),
                     "shorten_go_mode": bool(self.options.shorten_go_mode),
                     "puppy_value": int(self.options.puppy_value.value),
-                    "death_link": bool(self.options.death_link),
+                    "death_link": str(self.options.death_link.current_key),
                     "donald_death_link": bool(self.options.donald_death_link),
                     "goofy_death_link": bool(self.options.goofy_death_link)}
     return settings

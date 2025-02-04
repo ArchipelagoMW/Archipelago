@@ -368,12 +368,16 @@ class BadStartingWeapons(Toggle):
     """
     display_name = "Bad Starting Weapons"
 
-class DeathLink(Toggle):
+class DeathLink(Choice):
     """
     If Sora is KO'ed, the other players with "Death Link" on will also be KO'ed.
     The opposite is also true.
     """
     display_name = "Death Link"
+    option_off = 0
+    option_toggle = 1
+    option_on = 2
+    default = 0
 
 class DonaldDeathLink(Toggle):
     """

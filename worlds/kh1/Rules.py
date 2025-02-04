@@ -1503,7 +1503,7 @@ def set_rules(kh1world):
                 ))
             if i+1 >= options.force_stats_and_abilities_on_levels.value:
                 add_item_rule(kh1world.get_location("Level " + str(i+1).rjust(3,'0') + " (Slot 2)"),
-                    lambda i: (i.player != player or (i.name not in get_items_by_type("Item").keys() and i.name not in get_items_by_type("Shared Ability").keys())))
+                    lambda i: (i.player == player and (i.name not in get_items_by_type("Item").keys() and i.name not in get_items_by_type("Shared Ability").keys())))
     add_rule(kh1world.get_location("Final Ansem"),
         lambda state: (
             has_final_rest_door(state, player, final_rest_door_requirement, final_rest_door_required_lucky_emblems)
