@@ -271,7 +271,6 @@ level_table = {
                     LocationData("Full Health Item Box", access_rule=has('Swim')),
                 ],
                 diamonds=[
-#                   LocationData("Pink Room Diamond in Floor"),
                     LocationData("Archer Pink Room Diamond"),
                     LocationData("Rock Catching Diamond", access_rule=has('Grab')),
                 ]

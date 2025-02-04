@@ -115,8 +115,8 @@ location_table = {
     'Monsoon Jungle - Fat Plummet Diamond':                     LocationData(Passage.EMERALD,  3, ItemFlag.DIAMOND_1,     _NORMAL),
     'Monsoon Jungle - Puffy Hallway Diamond':                   LocationData(Passage.EMERALD,  3, ItemFlag.DIAMOND_2,     _NORMAL),
     'Monsoon Jungle - Buried Cave Diamond':                     LocationData(Passage.EMERALD,  3, ItemFlag.DIAMOND_3,     _NORMAL),
-    'Monsoon Jungle - Archer Pink Room Diamond':                LocationData(Passage.EMERALD,  3, ItemFlag.DIAMOND_5,     _ALL),
-    'Monsoon Jungle - Rock Catching Diamond':                   LocationData(Passage.EMERALD,  3, ItemFlag.DIAMOND_6,     _ALL),
+    'Monsoon Jungle - Archer Pink Room Diamond':                LocationData(Passage.EMERALD,  3, ItemFlag.DIAMOND_4,     _ALL),
+    'Monsoon Jungle - Rock Catching Diamond':                   LocationData(Passage.EMERALD,  3, ItemFlag.DIAMOND_5,     _ALL),
 
     'Cractus - 0:55':                                           LocationData(Passage.EMERALD,  4, ItemFlag.JEWEL_NE,      _ALL),
     'Cractus - 0:35':                                           LocationData(Passage.EMERALD,  4, ItemFlag.JEWEL_SE,      _ALL),

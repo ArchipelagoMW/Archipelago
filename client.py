@@ -239,13 +239,7 @@ class WL4Client(BizHawkClient):
         passage_address = get_symbol('PassageID')
         level_address = get_symbol('InPassageLevelID')
         room_address = get_symbol('CurrentRoomId')
-        gem_1_address = get_symbol('Has1stGemPiece')
-        gem_2_address = get_symbol('Has2ndGemPiece')
-        gem_3_address = get_symbol('Has3rdGemPiece')
-        gem_4_address = get_symbol('Has4thGemPiece')
-        cd_address = get_symbol('HasCD')
-        fhi_1_address = get_symbol('HasFullHealthItem')
-        fhi_2_address = get_symbol('HasFullHealthItem2')
+        collected_items_address = get_symbol('CollectedItems')
 
         try:
             read_result = iter(await bizhawk.read(bizhawk_ctx, [
@@ -261,13 +255,7 @@ class WL4Client(BizHawkClient):
                 read8(passage_address),
                 read8(level_address),
                 read8(room_address),
-                read8(gem_1_address),
-                read8(gem_2_address),
-                read8(gem_3_address),
-                read8(gem_4_address),
-                read8(cd_address),
-                read8(fhi_1_address),
-                read8(fhi_2_address),
+                read32(collected_items_address),
             ]))
         except bizhawk.RequestFailedError:
             return
@@ -284,8 +272,7 @@ class WL4Client(BizHawkClient):
         passage_id = next_int(read_result)
         in_passage_level_id = next_int(read_result)
         room_id = next_int(read_result)
-        level_items = list(next_int(read_result) for _ in range(7))
-        level_items.insert(5, 0)
+        level_item_flags = next_int(read_result)
 
         # Ensure safe state
         gameplay_state = (game_mode, game_state)
@@ -313,9 +300,7 @@ class WL4Client(BizHawkClient):
                     and in_passage_level_id < 4
                     and (passage, level) == (passage_id, in_passage_level_id)
                 ):
-                    for i, status in enumerate(level_items):
-                        if status:
-                            status_bits |= (1 << i)
+                    status_bits |= level_item_flags
                 for location in get_level_locations(passage, level):
                     bit = location_table[location].flag
                     location_id = location_name_to_id[location]

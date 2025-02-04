@@ -158,6 +158,11 @@ def write_tokens(world: WL4World, patch: WL4ProcedurePatch):
         get_rom_address('TrapBehavior'),
         world.options.trap_behavior.value.to_bytes(1, 'little')
     )
+    patch.write_token(
+        APTokenTypes.WRITE,
+        get_rom_address('DiamondShuffle'),
+        world.options.diamond_shuffle.value.to_bytes(1, 'little')
+    )
 
     patch.write_file('token_data.bin', patch.get_token_binary())
 
