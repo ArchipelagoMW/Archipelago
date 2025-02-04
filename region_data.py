@@ -897,7 +897,14 @@ level_table = {
             RegionData(
                 "Entrance",
                 [
-                    ExitData("Switch Room", access_rule=has('Heavy Grab') | difficulty(s_hard)),
+                    ExitData(
+                        "Switch Room",
+                        access_rule=(
+                            has('Heavy Grab')
+                            | difficulty(hard) & advanced_logic() & has_all(['Grab', 'Enemy Jump', 'Super Ground Pound'])
+                            | difficulty(s_hard)
+                        )
+                    ),
                 ],
                 [
                     LocationData("1F Hallway Box", difficulties=[normal]),
@@ -936,7 +943,8 @@ level_table = {
             RegionData(
                 "Entrance",
                 [
-                    ExitData("Passage", has('Swim')),
+                    ExitData("Current Puzzle", has('Swim')),
+                    ExitData("Passage", advanced_logic()),
                 ],
                 [
                     LocationData("Frog Switch", event=True),
@@ -947,23 +955,33 @@ level_table = {
                 ]
             ),
             RegionData(
+                "Current Puzzle",
+                [
+                    ExitData("Passage"),
+                ],
+                [
+                    LocationData("Current Puzzle Box"),
+                ],
+                diamonds=[
+                    LocationData("Current Puzzle Diamond"),
+                ]
+            ),
+            RegionData(
                 "Passage",
                 [
                     ExitData("Scienstein Area", has('Ground Pound')),
                 ],
                 [
-                    LocationData("Current Puzzle Box"),
                     LocationData("River Box"),
                     LocationData("Bat Room Box"),
                 ],
                 diamonds=[
-                    LocationData("Current Puzzle Diamond"),
                     LocationData("Spring Shaft Diamond"),
                     LocationData("Zombie Hall Left Diamond"),
                     LocationData("Zombie Hall Right Diamond"),
                     LocationData("Digging Diamond"),
                     LocationData("Slope Diamond", access_rule=has('Dash Attack')),
-                    LocationData("Scienstein Escape Diamond", access_rule=has('Dash Attack')),
+                    LocationData("Scienstein Escape Diamond", access_rule=has_all(['Dash Attack', 'Swim'])),
                 ]
             ),
             RegionData(

@@ -166,6 +166,7 @@ class TestEntrancesAdvanced(TestEntrances):
             ['Topaz Passage Boss Door', True, ['Swim', 'Progressive Grab']],
         ])
 
+
 class TestEntrancesOpenPortal(TestEntrances):
     options = {'portal': options.Portal.option_open, 'open_doors': options.OpenDoors.option_off, 'required_jewels': 0}
 

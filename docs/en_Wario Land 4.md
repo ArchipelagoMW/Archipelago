@@ -76,10 +76,14 @@ gray blocks. The Normal version of that room doesn't have any enemies you can th
 - In Domino Row, you can open the way down the red tower by either breaking the blocks with Head Smash
 or by throwing a Toy Car from the top of the room. You need to do one of these things to escape
 without Ground Pound.
+- In Hotel Horror, you can access the frog switch on Hard without carrying the Ringosuki by throwing
+the Marumen upward and bouncing on it in midair to start a Super Ground Pound.
 - To fight Catbat, you're normally expected to use Enemy Jump as the behavior when jumping off of
 the waves is strange without it. To ground pound his head without Enemy Jump, you need to start
 walking before you jump; jumps from a standstill won't work. When the waves start oscillating, jump
 at the apex or else you will be bounced off.
+- In Golden Passage, you can skip the current puzzle room by repeatedly jumping out of the river with
+good timing.
 
 Videos of some of these strategies can be found at this YouTube playlist: [Wario Land 4 Archipelago
 Tricks](https://www.youtube.com/playlist?list=PL9fyDZ3k7Qw0WclTCDDImKQDjNi2Sy0Gp)

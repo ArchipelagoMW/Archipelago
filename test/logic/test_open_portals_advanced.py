@@ -148,6 +148,29 @@ class TestAdvancedHardOpenPortal(TestAdvancedHard, TestHardOpenPortal):
             ['Domino Row - CD Box', True, ['Swim', 'Progressive Grab']],
         ])
 
+    def _test_hotel_horror(self):
+        self.run_location_tests([
+            ['Hotel Horror - Room 102 Box', True, []],
+
+            ['Hotel Horror - Room 303 Box', True, []],
+
+            ['Hotel Horror - Room 402 Box', True, []],
+
+            ['Hotel Horror - Exterior Box', True, []],
+
+
+            ['Hotel Horror - CD Box', False, []],
+            ['Hotel Horror - CD Box', False, ['Progressive Grab', 'Progressive Ground Pound'],
+             ['Progressive Grab', 'Progressive Ground Pound']],
+            ['Hotel Horror - CD Box', False,
+             ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound'],
+             ['Progressive Grab', 'Enemy Jump']],
+            ['Hotel Horror - CD Box', True, ['Progressive Grab', 'Progressive Grab']],
+            ['Hotel Horror - CD Box', True,
+             ['Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound', 'Enemy Jump'],
+             ['Progressive Grab']],
+        ])
+
 
 class TestAdvancedSHardOpenPortal(TestAdvancedSHard, TestSHardOpenPortal):
     options = {'difficulty': Difficulty.option_s_hard,
