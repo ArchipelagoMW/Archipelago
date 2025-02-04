@@ -647,7 +647,7 @@ class ExcludeGingerIsland(Toggle):
 
 class TrapDifficulty(Choice):
     """When rolling filler items, including resource packs, the game can also roll trap items.
-    Trap items are negative items that cause problems or annoyances for the player
+    Trap items are negative items that cause problems or annoyances for the player.
     This setting is for choosing how punishing traps will be.
     Lower difficulties will be on the funny annoyance side, higher difficulty will be on the extreme problems side
     Only play Nightmare at your own risk.
