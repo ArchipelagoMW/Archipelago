@@ -18,7 +18,7 @@ shopt -s globstar
 
 CWD="$(dirname $(realpath $0))"
 REQS=("zip" "rsync" "pip")
-SUPPORTED_PLATFORMS=("win_amd64") # "manylinux2014_x86_64"
+SUPPORTED_PLATFORMS=("win_amd64" "manylinux2014_x86_64")
 
 ##
 # Make sure all the required utilities are installed.

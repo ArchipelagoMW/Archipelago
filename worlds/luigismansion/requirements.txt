@@ -1,4 +1,7 @@
 dolphin-memory-engine==1.3.0
 pillow==10.2.0
 gclib[speedups] @ git+https://github.com/LagoLunatic/gclib.git
+pyfastbti @ git+https://github.com/LagoLunatic/PyFastBTI.git@da01c14562a4711e031fd0a01c52d2131035e228
+pyfasttextureutils @ git+https://github.com/LagoLunatic/PyFastTextureUtils.git@786d7cda8210ec2ad01f3397059ebf4d24365391
+pyfastyaz0yay0 @ git+https://github.com/LagoLunatic/PyFastYaz0Yay0.git@77cfa8b92cde95e8928a68e499c1d8d719e0c7ea
 
