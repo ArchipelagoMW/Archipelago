@@ -1336,27 +1336,32 @@ class Location:
 
 
 class ItemClassification(IntFlag):
-    filler = 0b0000
+    filler = 0b00000
     """ aka trash, as in filler items like ammo, currency etc """
 
-    progression = 0b0001
+    progression = 0b00001
     """ Item that is logically relevant.
     Protects this item from being placed on excluded or unreachable locations. """
 
-    useful = 0b0010
+    useful = 0b00010
     """ Item that is especially useful.
     Protects this item from being placed on excluded or unreachable locations.
     When combined with another flag like "progression", it means "an especially useful progression item". """
 
-    trap = 0b0100
+    trap = 0b00100
     """ Item that is detrimental in some way. """
 
-    skip_balancing = 0b1000
+    skip_balancing = 0b01000
     """ should technically never occur on its own
     Item that is logically relevant, but progression balancing should not touch.
     Typically currency or other counted items. """
 
-    progression_skip_balancing = 0b1001  # only progression gets balanced
+    deprioritized = 0b10000
+    """ Will be sorted to the back of the progression item pool during priority locations fill.
+    This doesn't completely ban it from being placed on priority locations, but makes it very unlikely. """
+
+    progression_skip_balancing = 0b01001  # only progression gets balanced
+    progression_deprioritized = 0b10001  # only progression can be placed during priority fill
 
     def as_flag(self) -> int:
         """As Network API flag int."""
@@ -1403,6 +1408,10 @@ class Item:
     @property
     def trap(self) -> bool:
         return ItemClassification.trap in self.classification
+
+    @property
+    def deprioritized(self) -> bool:
+        return ItemClassification.deprioritized in self.classification
 
     @property
     def filler(self) -> bool:

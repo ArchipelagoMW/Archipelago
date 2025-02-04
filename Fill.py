@@ -499,18 +499,30 @@ def distribute_items_restrictive(multiworld: MultiWorld,
     single_player = multiworld.players == 1 and not multiworld.groups
 
     if prioritylocations:
+        regular_progression = []
+        deprioritized_progression = []
+        for item in progitempool:
+            if item.deprioritized:
+                deprioritized_progression.append(item)
+            else:
+                regular_progression.append(item)
+        sorted_progitempool = deprioritized_progression + regular_progression  # fill_restrictive goes back to front
+
         # "priority fill"
-        fill_restrictive(multiworld, multiworld.state, prioritylocations, progitempool,
+        fill_restrictive(multiworld, multiworld.state, prioritylocations, sorted_progitempool,
                          single_player_placement=single_player, swap=False, on_place=mark_for_locking,
                          name="Priority", one_item_per_player=True, allow_partial=True)
 
         if prioritylocations:
             # retry with one_item_per_player off because some priority fills can fail to fill with that optimization
-            fill_restrictive(multiworld, multiworld.state, prioritylocations, progitempool,
+            fill_restrictive(multiworld, multiworld.state, prioritylocations, sorted_progitempool,
                             single_player_placement=single_player, swap=False, on_place=mark_for_locking,
                             name="Priority Retry", one_item_per_player=False)
-        accessibility_corrections(multiworld, multiworld.state, prioritylocations, progitempool)
+        accessibility_corrections(multiworld, multiworld.state, prioritylocations, sorted_progitempool)
         defaultlocations = prioritylocations + defaultlocations
+
+        # restore original order
+        progitempool[:] = [item for item in progitempool if not item.location]
 
     if progitempool:
         # "advancement/progression fill"
