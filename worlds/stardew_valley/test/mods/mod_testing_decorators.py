@@ -17,12 +17,16 @@ def must_test_all_mods(cls: Type[unittest.TestCase] | None = None, /, *, exclude
 
 
 def _must_test_all_mods(cls: Type[unittest.TestCase], excluded_mods: Iterable[str]) -> Type[unittest.TestCase]:
-    setattr(cls, "tested_mods", set(excluded_mods))
     orignal_tear_down_class = cls.tearDownClass
 
     @wraps(cls.tearDownClass)
     def wrapper() -> None:
-        tested_mods: set[str] = getattr(cls, "tested_mods")
+        tested_mods = set(excluded_mods)
+        for attr in dir(cls):
+            if attr.startswith("test"):
+                func = getattr(cls, attr)
+                if hasattr(func, "tested_mod"):
+                    tested_mods.add(getattr(func, "tested_mod"))
 
         diff = options.Mods.valid_keys - tested_mods
         if diff:
@@ -40,9 +44,5 @@ def mod_testing(mod: str) -> partial[Callable]:
 
 
 def _mod_testing(func: Callable, mod: str) -> Callable:
-    @wraps(func)
-    def wrapper(self: unittest.TestCase, *args, **kwargs):
-        getattr(self, "tested_mods").add(mod)
-        return func(self, *args, **kwargs)
-
-    return wrapper
+    setattr(func, "tested_mod", mod)
+    return func
