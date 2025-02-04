@@ -167,7 +167,7 @@ class YuGiOh2006Client(BizHawkClient):
                 [(0x5308, local_items, "EWRAM")],
             )
             money_received = 0
-            for item in list(ctx.items_received):
+            for item in ctx.items_received:
                 if item.item == item_to_index["5000DP"] + 5730000:
                     money_received += 1
             if money_received > amount_items:
@@ -197,14 +197,14 @@ class YuGiOh2006Client(BizHawkClient):
                             locs_to_send.add(location_id)
 
             # Send locations if there are any to send.
-            if locs_to_send != set(self.local_checked_locations):
+            if locs_to_send != self.local_checked_locations:
                 self.local_checked_locations = locs_to_send
 
                 if locs_to_send is not None:
                     await ctx.send_msgs([{"cmd": "LocationChecks", "locations": list(locs_to_send)}])
 
             # Set collected Challenges to complete
-            for location in set(ctx.checked_locations):
+            for location in ctx.checked_locations:
                 if location not in self.local_checked_locations and 5730037 < location < 5730129:
                     cid = location - 5730038
                     old_score = await bizhawk.read(
