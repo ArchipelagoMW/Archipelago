@@ -1196,7 +1196,7 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
 
         if any((key, val) for (key, val) in filler_items.items() if
                 key == item_data["name"] and key != "Diamond" and val.type == "Money") \
-                and item_data["player"] == output_data["slot"]:
+                and item_data["player"] == output_data["Slot"]:
             furniture_info.info_file_field_entries[item_data["loc_enum"]]["item_table"] = 11
             int_money_amt = 1
             if re.search(r"^\d+", item_data["name"]):
