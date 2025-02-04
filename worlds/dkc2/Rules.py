@@ -910,7 +910,7 @@ class DKC2StrictRules(DKC2Rules):
                     self.has_invincibility(state) and self.has_enguarde(state),
             LocationName.lava_lagoon_banana_bunch_4:
                 lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state) and 
-                    self.has_invincibility(state) and self.has_enguarde(state),
+                    self.has_invincibility(state) and self.has_enguarde(state) and self.can_carry(state),
             LocationName.lava_lagoon_banana_bunch_5:
                 lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state) and 
                     self.has_invincibility(state) and self.has_enguarde(state),
@@ -987,9 +987,9 @@ class DKC2StrictRules(DKC2Rules):
             LocationName.barrel_bayou_banana_bunch_2:
                 lambda state: self.has_controllable_barrels(state) and self.has_rambi(state),
             LocationName.barrel_bayou_green_balloon:
-                lambda state: self.has_controllable_barrels(state) and self.has_rambi(state) and self.can_carry(state),
+                lambda state: self.has_controllable_barrels(state) and self.has_rambi(state) and self.can_carry(state) and self.has_kannons(state),
             LocationName.barrel_bayou_banana_coin_2:
-                lambda state: self.has_controllable_barrels(state) and self.has_rambi(state),
+                lambda state: self.has_controllable_barrels(state) and self.has_rambi(state) and self.has_kannons(state),
             LocationName.barrel_bayou_banana_bunch_3:
                 lambda state: self.has_controllable_barrels(state) and self.has_rambi(state) and 
                     self.has_kannons(state) and self.can_team_attack(state),
@@ -1287,9 +1287,9 @@ class DKC2StrictRules(DKC2Rules):
             LocationName.web_woods_green_balloon_1:
                 lambda state: self.can_team_attack(state) and self.can_carry(state) and self.has_kannons(state),
             LocationName.web_woods_banana_bunch_1:
-                self.can_carry,
-            LocationName.web_woods_banana_bunch_2:
                 self.can_cartwheel,
+            LocationName.web_woods_banana_bunch_2:
+                self.can_carry,
             LocationName.web_woods_banana_bunch_3:
                 self.has_squitter,
             LocationName.web_woods_banana_coin_3:
@@ -2356,11 +2356,9 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.lava_lagoon_banana_coin_7:
                 lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state),
             LocationName.lava_lagoon_red_balloon_1:
-                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state) and 
-                    self.has_invincibility(state) and self.has_enguarde(state),
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state) and self.has_enguarde(state),
             LocationName.lava_lagoon_banana_bunch_4:
-                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state) and 
-                    self.has_invincibility(state) and self.has_enguarde(state),
+                lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state) and self.can_carry(state) and self.has_enguarde(state),
             LocationName.lava_lagoon_banana_bunch_5:
                 lambda state: self.can_swim(state) and self.has_clapper(state) and self.has_kannons(state),
             LocationName.lava_lagoon_banana_coin_8:
@@ -2386,7 +2384,7 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.red_hot_ride_banana_coin_4:
                 self.true,
             LocationName.red_hot_ride_banana_coin_5:
-                lambda state: self.can_carry(state) or self.has_rambi(state),
+                lambda state: self.can_carry(state) and self.has_rambi(state),
             LocationName.red_hot_ride_banana_coin_6:
                 lambda state: self.can_carry(state),
             LocationName.red_hot_ride_banana_bunch_4:
@@ -2434,7 +2432,7 @@ class DKC2LooseRules(DKC2Rules):
             LocationName.barrel_bayou_banana_bunch_2:
                 self.has_controllable_barrels,
             LocationName.barrel_bayou_green_balloon:
-                lambda state: self.has_controllable_barrels(state) and self.can_carry(state),
+                lambda state: self.has_controllable_barrels(state) and self.can_carry(state) and self.has_kannons(state),
             LocationName.barrel_bayou_banana_coin_2:
                 lambda state: self.has_controllable_barrels(state) and self.has_kannons(state),
             LocationName.barrel_bayou_banana_bunch_3:
@@ -2803,19 +2801,19 @@ class DKC2LooseRules(DKC2Rules):
                     self.has_squawks(state),
 
             LocationName.castle_crush_banana_coin_1:
-                lambda state: self.has_rambi(state) and self.can_carry(state) and 
+                lambda state: self.can_carry(state) and 
                     self.has_both_kongs(state),
             LocationName.castle_crush_banana_bunch_1:
-                lambda state: self.has_rambi(state) and self.can_carry(state) and 
+                lambda state: self.can_carry(state) and 
                     self.has_both_kongs(state),
             LocationName.castle_crush_banana_bunch_2:
-                lambda state: self.has_rambi(state) and self.can_carry(state) and 
+                lambda state: self.can_carry(state) and 
                     self.has_both_kongs(state),
             LocationName.castle_crush_banana_coin_2:
-                lambda state: self.has_rambi(state) and self.can_carry(state) and 
+                lambda state: self.can_carry(state) and 
                     self.has_both_kongs(state),
             LocationName.castle_crush_banana_bunch_3:
-                lambda state: self.can_carry(state) and 
+                lambda state: self.has_rambi(state) and self.can_carry(state) and 
                     self.has_both_kongs(state),
             LocationName.castle_crush_banana_bunch_4:
                 lambda state: self.can_carry(state) and 
@@ -3502,24 +3500,24 @@ class DKC2ExpertRules(DKC2Rules):
             LocationName.arctic_abyss_clear:
                 lambda state: self.can_swim(state) or (
                     self.has_enguarde(state) and (
-                        self.can_cartwheel(state) or self.can_hover(state)
+                        (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
                     )
                 ),
             LocationName.arctic_abyss_kong:
                 lambda state: (
                     (self.can_swim(state) or self.has_enguarde(state)) and
-                    (self.can_cartwheel(state) or self.can_hover(state))
+                    ( (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state))
                 ),
             LocationName.arctic_abyss_dk_coin:
                 lambda state: self.can_swim(state) or (
                     self.has_enguarde(state) and (
-                        self.can_cartwheel(state) or self.can_hover(state)
+                         (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
                     )
                 ),
             LocationName.arctic_abyss_bonus_1:
                 lambda state: self.has_enguarde(state) and ( 
                     self.can_swim(state) or (
-                        self.can_cartwheel(state) or self.can_hover(state)
+                         (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
                     )
                 ),
             LocationName.arctic_abyss_bonus_2:
@@ -3527,7 +3525,7 @@ class DKC2ExpertRules(DKC2Rules):
                 lambda state: self.can_carry(state) and (
                     self.can_swim(state) or (
                         self.has_enguarde(state) and (
-                            self.can_cartwheel(state) or self.can_hover(state)
+                             (self.has_diddy(state) and self.can_cartwheel(state)) or self.can_hover(state)
                         )
                     )
                 ),
