@@ -65,6 +65,10 @@ function get_deps() {
     echo "  -> Transfer requirements to bundle"
     for folder in ${to}/${platform}/*; do
         echo "    - Processing: ${folder}"
+        if [[ -f ${folder} ]]; then
+            cp ${folder} "${to}/${dir}"
+            continue
+        fi
 
         # The actual code of the library.
         local dir="$(basename ${folder})"
