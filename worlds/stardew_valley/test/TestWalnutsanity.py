@@ -81,10 +81,10 @@ class TestWalnutsanityPuzzles(SVTestBase):
         self.collect("Combat Level", 10)
         self.collect("Mining Level", 10)
         for location in locations:
-            self.assert_reach_location_false(location, self.multiworld.state)
+            self.assert_cannot_reach_location(location, self.multiworld.state)
         self.collect("Open Professor Snail Cave")
         for location in locations:
-            self.assert_reach_location_true(location, self.multiworld.state)
+            self.assert_can_reach_location(location, self.multiworld.state)
 
 
 class TestWalnutsanityBushes(SVTestBase):

@@ -40,7 +40,7 @@ class RuleAssertMixin(TestCase):
             raise AssertionError(f"Error while checking rule {rule}: {e}"
                                  f"\nExplanation: {expl}")
 
-    def assert_reach_location_true(self, location: Location | str, state: CollectionState) -> None:
+    def assert_can_reach_location(self, location: Location | str, state: CollectionState) -> None:
         location_name = location.name if isinstance(location, Location) else location
         expl = explain(Reach(location_name, "Location", 1), state)
         try:
@@ -50,7 +50,7 @@ class RuleAssertMixin(TestCase):
             raise AssertionError(f"Error while checking location {location_name}: {e}"
                                  f"\nExplanation: {expl}")
 
-    def assert_reach_location_false(self, location: Location | str, state: CollectionState) -> None:
+    def assert_cannot_reach_location(self, location: Location | str, state: CollectionState) -> None:
         location_name = location.name if isinstance(location, Location) else location
         expl = explain(Reach(location_name, "Location", 1), state, expected=False)
         try:
@@ -60,7 +60,7 @@ class RuleAssertMixin(TestCase):
             raise AssertionError(f"Error while checking location {location_name}: {e}"
                                  f"\nExplanation: {expl}")
 
-    def assert_reach_region_true(self, region: Region | str, state: CollectionState) -> None:
+    def assert_can_reach_region(self, region: Region | str, state: CollectionState) -> None:
         region_name = region.name if isinstance(region, Region) else region
         expl = explain(Reach(region_name, "Region", 1), state)
         try:
@@ -70,7 +70,7 @@ class RuleAssertMixin(TestCase):
             raise AssertionError(f"Error while checking region {region_name}: {e}"
                                  f"\nExplanation: {expl}")
 
-    def assert_reach_region_false(self, region: Region | str, state: CollectionState) -> None:
+    def assert_cannot_reach_region(self, region: Region | str, state: CollectionState) -> None:
         region_name = region.name if isinstance(region, Region) else region
         expl = explain(Reach(region_name, "Region", 1), state, expected=False)
         try:
