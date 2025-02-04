@@ -19,6 +19,7 @@ from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items
 from .Locations import *
 from .LuigiOptions import LMOptions
 from .Hints import get_hints_by_option
+from .Presets import lm_options_presets
 from .Regions import *
 from . import Rules
 
@@ -50,6 +51,7 @@ class LuigisMansionSettings(settings.Group):
 
 class LMWeb(WebWorld):
     theme = "stone"
+    options_presets = lm_options_presets
     option_groups = [
         OptionGroup("Extra Locations", [
             LuigiOptions.Furnisanity,
@@ -60,6 +62,28 @@ class LMWeb(WebWorld):
             LuigiOptions.SpeedySpirits,
             LuigiOptions.Lightsanity,
             LuigiOptions.Walksanity
+        ]),
+        OptionGroup("Access Options", [
+            LuigiOptions.Goal,
+            LuigiOptions.RankRequirement,
+            LuigiOptions.MarioItems,
+            LuigiOptions.BooGates,
+            LuigiOptions.WashroomBooCount,
+            LuigiOptions.BalconyBooCount,
+            LuigiOptions.FinalBooCount,
+            LuigiOptions.Enemizer,
+            LuigiOptions.DoorRando
+        ]),
+        OptionGroup("Filler Weights", [
+            LuigiOptions.BundleWeight,
+            LuigiOptions.CoinWeight,
+            LuigiOptions.BillWeight,
+            LuigiOptions.BarsWeight,
+            LuigiOptions.GemsWeight,
+            LuigiOptions.PoisonTrapWeight,
+            LuigiOptions.BombWeight,
+            LuigiOptions.IceTrapWeight,
+            LuigiOptions.BananaTrapWeight,
         ]),
         OptionGroup("QOL Changes", [
             LuigiOptions.LuigiFearAnim,
@@ -73,28 +97,6 @@ class LMWeb(WebWorld):
             LuigiOptions.PortraitHints,
             LuigiOptions.Deathlink
         ]),
-        OptionGroup("Filler Weights", [
-            LuigiOptions.BundleWeight,
-            LuigiOptions.CoinWeight,
-            LuigiOptions.BillWeight,
-            LuigiOptions.BarsWeight,
-            LuigiOptions.GemsWeight,
-            LuigiOptions.PoisonTrapWeight,
-            LuigiOptions.BombWeight,
-            LuigiOptions.IceTrapWeight,
-            LuigiOptions.BananaTrapWeight,
-        ]),
-        OptionGroup("Access Options", [
-            LuigiOptions.Goal,
-            LuigiOptions.RankRequirement,
-            LuigiOptions.MarioItems,
-            LuigiOptions.BooGates,
-            LuigiOptions.WashroomBooCount,
-            LuigiOptions.BalconyBooCount,
-            LuigiOptions.FinalBooCount,
-            LuigiOptions.Enemizer,
-            LuigiOptions.DoorRando
-        ])
     ]
 
     tutorials = [
