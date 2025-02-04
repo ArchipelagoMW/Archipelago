@@ -48,7 +48,7 @@ def get_hints_by_option(multiworld: MultiWorld, player: int) -> Dict[str, Dict[s
                 loc: Location = multiworld.find_item(iname, player)
             if world.options.hint_distribution.value == 4:
                 hintfo = f"<SAY><COLOR>(7){multiworld.player_name[loc.item.player]}'s<COLOR>(5)\\n{loc.item.name}"+ \
-                    f"\n<ANYKEY>\n<SAY>COLOR>(0)is somewhere in<COLOR>(3)\\n{multiworld.player_name[loc.player]}'s\\n{loc.game}"
+                    f"\n<ANYKEY>\n<SAY><COLOR>(0)is somewhere in<COLOR>(3)\\n{multiworld.player_name[loc.player]}'s\\n{loc.game}"
             elif world.options.hint_distribution.value == 1:
                 joke = world.random.choice(str.splitlines(jokes)).replace("\\n", "\n")
                 hintfo = f"<SAY><COLOR>(0){joke}"
