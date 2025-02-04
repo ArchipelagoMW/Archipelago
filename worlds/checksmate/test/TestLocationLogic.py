@@ -50,7 +50,7 @@ class TestLocationLogic(CMTestBase):
                 continue
                 
             # Calculate scaled material requirement
-            scaled_requirement = loc_data.material_expectations_grand * self.difficulty
+            scaled_requirement = loc_data.material_expectations * self.difficulty
             
             # Check if location should be accessible
             should_be_accessible = (
@@ -62,7 +62,7 @@ class TestLocationLogic(CMTestBase):
             if should_be_accessible:
                 self.assertIn(loc_name, accessible, 
                     f"Location {loc_name} with material requirement {scaled_requirement} "
-                    f"(base: {loc_data.material_expectations_grand}, difficulty: {self.difficulty}) "
+                    f"(base: {loc_data.material_expectations}, difficulty: {self.difficulty}) "
                     f"and chessmen requirement {loc_data.chessmen_expectations} "
                     f"should be accessible with current material {current_material} "
                     f"and chessmen {current_chessmen}")
@@ -76,8 +76,8 @@ class TestLocationLogic(CMTestBase):
         """Test that locations with material requirements start unreachable"""
         accessible = self.get_accessible_locations()
         for loc_name, loc_data in location_table.items():
-            if (loc_data.material_expectations_grand > 0 or 
-                loc_data.chessmen_expectations > 0):
+            if (loc_data.material_expectations > 0 or 
+                  loc_data.chessmen_expectations > 0):
                 self.assertNotIn(loc_name, accessible,
                     f"Location {loc_name} should not be accessible with 0 material and 0 chessmen")
 
@@ -107,9 +107,9 @@ class TestLocationLogic(CMTestBase):
         material_items_sorted = full_chessmen + partial_chessmen + non_chessmen
         
         # Keep adding items until we have enough material for all locations
-        max_material = max(loc.material_expectations_grand * self.difficulty
+        max_material = max(loc.material_expectations * self.difficulty
                            for loc in location_table.values() 
-                           if loc.material_expectations_grand > 0)
+                           if loc.material_expectations > 0)
                            
         while current_material < max_material:
             # Find next item to add that gives us the least material gain
