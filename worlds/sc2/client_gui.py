@@ -141,7 +141,10 @@ class SC2Manager(GameManager):
         from . import gui_config
         warnings, window_width, window_height = gui_config.get_window_defaults()
         from kivy.core.window import Window
+        original_size_x, original_size_y = Window.size
         Window.size = window_width, window_height
+        Window.left -= max((window_width - original_size_x) // 2, 0)
+        Window.top -= max((window_height - original_size_y) // 2, 0)
         # Add the logging handler manually here instead of using `logging_pairs` to avoid adding 2 unnecessary tabs
         logging.getLogger("Starcraft2").addHandler(LogtoUI(self.log_panels["All"].on_log))
         for startup_warning in warnings:
