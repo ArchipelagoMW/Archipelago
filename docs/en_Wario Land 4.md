@@ -76,6 +76,8 @@ gray blocks. The Normal version of that room doesn't have any enemies you can th
 - In Domino Row, you can open the way down the red tower by either breaking the blocks with Head Smash
 or by throwing a Toy Car from the top of the room. You need to do one of these things to escape
 without Ground Pound.
+- In Arabian Night, you can reach the bottom of the room full of mummy enemies by throwing them at
+the wooden boxes if you have Grab.
 - In Hotel Horror, you can access the frog switch on Hard without carrying the Ringosuki by throwing
 the Marumen upward and bouncing on it in midair to start a Super Ground Pound.
 - To fight Catbat, you're normally expected to use Enemy Jump as the behavior when jumping off of

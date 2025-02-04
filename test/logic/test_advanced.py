@@ -139,6 +139,35 @@ class TestAdvancedHard(TestHard):
             ['Domino Row - CD Box', True, ['Swim', 'Progressive Grab']],
         ])
 
+    def _test_arabian_night(self):
+        self.run_location_tests([
+            ['Arabian Night - Onomi Box', False, []],
+            ['Arabian Night - Onomi Box', False, [], ['Swim']],
+            ['Arabian Night - Onomi Box', False, [], ['Progressive Ground Pound', 'Head Smash', 'Progressive Grab']],
+            ['Arabian Night - Onomi Box', True, ['Swim', 'Progressive Ground Pound']],
+            ['Arabian Night - Onomi Box', True, ['Swim', 'Head Smash']],
+            ['Arabian Night - Onomi Box', True, ['Swim', 'Progressive Grab']],
+
+            ['Arabian Night - Flying Carpet Dash Attack Box', False, []],
+            ['Arabian Night - Flying Carpet Dash Attack Box', False, [], ['Swim']],
+            ['Arabian Night - Flying Carpet Dash Attack Box', False, [], ['Dash Attack']],
+            ['Arabian Night - Flying Carpet Dash Attack Box', True, ['Swim', 'Dash Attack']],
+
+            ['Arabian Night - Kool-Aid Box', False, []],
+            ['Arabian Night - Kool-Aid Box', False, [], ['Swim']],
+            ['Arabian Night - Kool-Aid Box', False, [], ['Dash Attack']],
+            ['Arabian Night - Kool-Aid Box', True, ['Swim', 'Dash Attack']],
+
+            ['Arabian Night - Sewer Box', False, []],
+            ['Arabian Night - Sewer Box', False, [], ['Swim']],
+            ['Arabian Night - Sewer Box', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
+            ['Arabian Night - Sewer Box', True, ['Swim', 'Progressive Ground Pound', 'Progressive Ground Pound']],
+
+            ['Arabian Night - CD Box', False, []],
+            ['Arabian Night - CD Box', False, [], ['Swim']],
+            ['Arabian Night - CD Box', True, ['Swim']],
+        ])
+
     def _test_hotel_horror(self):
         self.run_location_tests([
             ['Hotel Horror - Room 102 Box', False, []],
@@ -276,6 +305,35 @@ class TestAdvancedSHard(TestSHard):
             ['Domino Row - CD Box', True, ['Swim', 'Progressive Ground Pound']],
             ['Domino Row - CD Box', True, ['Swim', 'Head Smash']],
             ['Domino Row - CD Box', True, ['Swim', 'Progressive Grab']],
+        ])
+
+    def _test_arabian_night(self):
+        self.run_location_tests([
+            ['Arabian Night - Onomi Box', False, []],
+            ['Arabian Night - Onomi Box', False, [], ['Swim']],
+            ['Arabian Night - Onomi Box', False, [], ['Progressive Ground Pound', 'Head Smash', 'Progressive Grab']],
+            ['Arabian Night - Onomi Box', True, ['Swim', 'Progressive Ground Pound']],
+            ['Arabian Night - Onomi Box', True, ['Swim', 'Head Smash']],
+            ['Arabian Night - Onomi Box', True, ['Swim', 'Progressive Grab']],
+
+            ['Arabian Night - Flying Carpet Dash Attack Box', False, []],
+            ['Arabian Night - Flying Carpet Dash Attack Box', False, [], ['Swim']],
+            ['Arabian Night - Flying Carpet Dash Attack Box', False, [], ['Dash Attack']],
+            ['Arabian Night - Flying Carpet Dash Attack Box', True, ['Swim', 'Dash Attack']],
+
+            ['Arabian Night - Kool-Aid Box', False, []],
+            ['Arabian Night - Kool-Aid Box', False, [], ['Swim']],
+            ['Arabian Night - Kool-Aid Box', False, [], ['Dash Attack']],
+            ['Arabian Night - Kool-Aid Box', True, ['Swim', 'Dash Attack']],
+
+            ['Arabian Night - Sewer Box', False, []],
+            ['Arabian Night - Sewer Box', False, [], ['Swim']],
+            ['Arabian Night - Sewer Box', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
+            ['Arabian Night - Sewer Box', True, ['Swim', 'Progressive Ground Pound', 'Progressive Ground Pound']],
+
+            ['Arabian Night - CD Box', False, []],
+            ['Arabian Night - CD Box', False, [], ['Swim']],
+            ['Arabian Night - CD Box', True, ['Swim']],
         ])
 
     def _test_catbat(self):

@@ -781,7 +781,10 @@ level_table = {
             RegionData(
                 "Entrance",
                 [
-                    ExitData("Onomi Room Bottom", has_any(['Ground Pound', 'Head Smash'])),
+                    ExitData(
+                        "Onomi Room Bottom",
+                        has_any(['Ground Pound', 'Head Smash']) | advanced_logic() & has('Grab')
+                    ),
                     ExitData("Flying Carpet Dash Attack Puzzle", has('Dash Attack')),
                     ExitData("Kool-Aid Man", has('Dash Attack')),
                     ExitData("Sewer", has('Swim')),
