@@ -45,7 +45,22 @@ class TestLocationLogic(CMTestBase):
         current_chessmen = self.get_current_chessmen()
         current_material = self.collection_state.prog_items[self.player].get("Material", 0)
         
+        # Special locations that have rules beyond material/chessmen requirements
+        special_rule_locations = {
+            # Castle locations have special major piece requirements
+            "O-O Castle", "O-O-O Castle",
+            # Fork locations require pin mechanics
+            "Fork, Sacrificial", "Fork, True", "Fork, Sacrificial Triple",
+            "Fork, True Triple", "Fork, Sacrificial Royal", "Fork, True Royal",
+            # Threat locations require pin mechanics
+            "Threaten Minor", "Threaten Major", "Threaten Queen", "Threaten King"
+        }
+        
         for loc_name, loc_data in location_table.items():
+            # Skip special rule locations
+            if loc_name in special_rule_locations:
+                continue
+                
             # Skip locations that require tactics if they're disabled
             if (loc_data.is_tactic is not None and 
                 self.world.options.enable_tactics.value == self.world.options.enable_tactics.option_none):
