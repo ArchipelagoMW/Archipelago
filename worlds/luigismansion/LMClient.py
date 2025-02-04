@@ -6,7 +6,7 @@ import traceback
 
 import NetUtils
 import Utils
-from typing import Any, Optional
+from typing import Any, Optional, Collection
 
 import dolphin_memory_engine as dme
 
@@ -551,6 +551,14 @@ class LMContext(CommonContext):
                         boo_id in local_recv_ids) else boo_caught & ~(1 << lm_boo_item.itembit)
                 dme.write_byte(lm_boo_item.ram_addr, boo_val)
         return
+
+    # TODO remove this in favor of 0.6.0's implementation.
+    async def check_locations(self, locations: Collection[int]) -> set[int]:
+        """Send new location checks to the server. Returns the set of actually new locations that were sent."""
+        locations = set(locations) & self.missing_locations
+        if locations:
+            await self.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(locations)}])
+        return locations
 
 
 async def dolphin_sync_task(ctx: LMContext):
