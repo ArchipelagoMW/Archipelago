@@ -305,6 +305,7 @@ level_names: Dict[int, str] = {
     0x74: "Toxic Air Ship",
     0x75: "Vat of the Plague Fiend",
     0x81: "Gates of the Underworld",
+    0x82: "Gates of the Underworld",
     0x91: "Arctic Docks",
     0x92: "Frozen Camp",
     0x93: "Crystal Mine",
