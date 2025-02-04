@@ -420,7 +420,7 @@ class EntranceRandomizer:
         for en in relevant_entrances:
             if en.nested_in is not None and en.nested_in not in non_terminal_exits:
                 non_terminal_exits.append(en.nested_in)
-        terminal_exits = [ex for ex in relevant_exits if ex not in non_terminal_exits]
+        terminal_exits = {ex for ex in relevant_exits if ex not in non_terminal_exits}
 
         remaining_entrances = relevant_entrances.copy()
         remaining_exits = relevant_exits.copy()
@@ -520,14 +520,14 @@ class EntranceRandomizer:
         return nonprogress_entrances, nonprogress_exits
 
     def randomize_one_set_of_exits(
-        self, relevant_entrances: list[ZoneEntrance], relevant_exits: list[ZoneExit], terminal_exits: list[ZoneExit]
+        self, relevant_entrances: list[ZoneEntrance], relevant_exits: list[ZoneExit], terminal_exits: set[ZoneExit]
     ) -> None:
         """
         Randomize a single set of entrances and their corresponding exits.
 
         :param relevant_entrances: A list of entrances to be randomized.
         :param relevant_exits: A list of exits corresponding to the entrances.
-        :param terminal_exits: A list of exits which do not contain any entrances.
+        :param terminal_exits: A set of exits which do not contain any entrances.
         :raises FillError: If there are no valid exits to assign to an entrance.
         """
         options = self.world.options
