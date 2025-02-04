@@ -219,7 +219,7 @@ level_table = {
                 ],
                 diamonds=[
                     LocationData("Large Cave Diamond", difficulties=[normal]),
-                    LocationData("Shallow Pool Puzzle Diamond", access_rule=has_all(['Super Ground Pound'])),  # TODO
+                    LocationData("Shallow Pool Puzzle Diamond", access_rule=has_all(['Super Ground Pound', 'Grab'])),
                 ]
             ),
             RegionData(
