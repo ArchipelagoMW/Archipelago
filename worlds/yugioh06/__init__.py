@@ -532,11 +532,10 @@ class Yugioh06World(World):
         for location, p_cards in self.progression_cards.items():
             spoiler_handle.write(f"\n   {location}: {', '.join(p_cards)}")
         spoiler_handle.write(f"\n\nProgression cards in start for {self.player_name}\n")
-        for card in self.progression_cards_in_start:
-            spoiler_handle.write(f" {card}, ")
+        spoiler_handle.write(f" {', '.join(self.progression_cards_in_start)} ")
         spoiler_handle.write(f"\n\nProgression cards in booster for {self.player_name}\n")
-        for card in self.progression_cards_in_booster:
-            spoiler_handle.write(f" {card}, ")
+        spoiler_handle.write(f" {', '.join(self.progression_cards_in_booster)}")
+
     # for the universal tracker, doesn't get called in standard gen
     @staticmethod
     def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
