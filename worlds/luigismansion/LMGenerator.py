@@ -189,7 +189,7 @@ class LuigisMansionRandomizer:
         # As mentioned before, these szp files need to be compressed again in order to be properly read by Dolphin/GC.
         # If you forget this, you will get an Invalid read error on a certain memory address typically.
         self.map_two_file.save_changes()
-        self.gcm.changed_files["files/Map/map2.szp"] = pyfastyaz0yay0.compress_yay0(self.map_two_file.data, 0)
+        self.gcm.changed_files["files/Map/map2.szp"] = pyfastyaz0yay0.compress_yay0(self.map_two_file.data)
 
         # Save the changes of main.dol
         self.update_dol_offsets()
