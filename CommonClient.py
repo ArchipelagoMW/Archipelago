@@ -907,6 +907,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             ctx.disconnected_intentionally = True
             ctx.event_invalid_game()
         elif 'IncompatibleVersion' in errors:
+            ctx.disconnected_intentionally = True
             raise Exception('Server reported your client version as incompatible. '
                             'This probably means you have to update.')
         elif 'InvalidItemsHandling' in errors:
