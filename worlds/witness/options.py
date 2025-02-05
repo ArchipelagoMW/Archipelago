@@ -609,7 +609,7 @@ witness_option_groups = [
     ])
 ]
 
-# Make sure that Easter Egg Hunt is VERY visible durinig easter time (when it's enabled by default)
+# Make sure that Easter Egg Hunt is VERY visible during easter time (when it's enabled by default)
 if is_easter_time():
     easter_special_option_group = OptionGroup("EASTER SPECIAL", [
         EasterEggHunt,
