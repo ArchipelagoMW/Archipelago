@@ -1,6 +1,6 @@
 from worlds.generic.Rules import add_rule, set_rule
 from .Types import episode_type_to_shortened_name
-from .Locations import hourglass_locations, vault_locations, did_include_hourglasses, get_bundle_amount_for_level, bottle_amounts, hourglasses_roll
+from .Locations import hourglass_locations, vault_locations, did_include_hourglasses, get_bundle_amount_for_level
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -9,6 +9,7 @@ if TYPE_CHECKING:
 def set_rules(world: "Sly1World"):
     player = world.player
     options = world.options
+    bosses = ["Beat Raleigh", "Beat Muggshot", "Beat Mz. Ruby", "Beat Panda King"]
 
     # Episode Access
     add_rule(world.multiworld.get_entrance("Hideout -> Stealthy Approach", player),
@@ -64,10 +65,7 @@ def set_rules(world: "Sly1World"):
              lambda state: state.has("FitS Key", player, 7))
     
     set_rule(world.multiworld.get_entrance("Hideout -> Cold Heart of Hate", player),
-             lambda state: state.has("Beat Raleigh", player)
-             and state.has("Beat Muggshot", player)
-             and state.has("Beat Mz. Ruby", player)
-             and state.has("Beat Panda King", player))
+             lambda state: sum(state.has(boss, player) for boss in bosses) >= options.RequiredBosses.value)
     
     # Hourglass Rules
     if did_include_hourglasses(world):

@@ -1,6 +1,7 @@
 from BaseClasses import Item, ItemClassification
 from .Types import ItemData, Sly1Item, EpisodeType, episode_type_to_name, episode_type_to_shortened_name
-from .Locations import get_total_locations, get_bundle_amount_for_level, did_avoid_early_bk, hourglasses_roll
+from .Locations import get_total_locations, get_bundle_amount_for_level, did_avoid_early_bk, hourglasses_roll, \
+    did_include_hourglasses
 from typing import List, Dict, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -27,7 +28,7 @@ def create_itempool(world: "Sly1World") -> List[Item]:
             starting_key = final_item_table[starting_key_name]
             final_item_table[starting_key_name] = starting_key._replace(count=starting_key.count - 1)
 
-    if hourglasses_roll(world):
+    if did_include_hourglasses(world) and hourglasses_roll(world):
         roll_name = "Progressive Roll"
         for key, item in final_item_table.items():
             if key == roll_name and item.classification == ItemClassification.useful:

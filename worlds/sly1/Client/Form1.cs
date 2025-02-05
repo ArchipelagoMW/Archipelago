@@ -30,6 +30,8 @@ namespace Sly1AP
         public static int GameCompletion { get; set; } = 0;
         public static Random rnd = new Random();
         public static int ClueBundles { get; set; } = 0;
+        public static int MurrayTextAddress { get; set; } = 0x2024A7B0;
+        public static int RequiredBosses { get; set; } = 0;
         public Form1()
         {
             InitializeComponent();
@@ -242,8 +244,13 @@ namespace Sly1AP
             }
             if (options.ContainsKey("CluesanityBundleSize"))
             {
-                var clueBundleSizeElement = (JsonElement)options["CluesanityBundleSize"];
-                ClueBundles = clueBundleSizeElement.GetUInt16();
+                var ClueBundleSizeElement = (JsonElement)options["CluesanityBundleSize"];
+                ClueBundles = ClueBundleSizeElement.GetUInt16();
+            }
+            if (options.ContainsKey("RequiredBosses"))
+            {
+                var RequiredBossesElement = (JsonElement)options["RequiredBosses"];
+                RequiredBosses = RequiredBossesElement.GetUInt16();
             }
         }
         //This probably looks like gore to actual programmers, but it works.
@@ -617,7 +624,24 @@ namespace Sly1AP
         }
         private void UpdateBosses()
         {
-            if ((Memory.ReadBit(0x2027DC18, 5)) & (Memory.ReadBit(0x2027DC18, 7)) & (Memory.ReadBit(0x2027DC19, 1)) & (Memory.ReadBit(0x2027DC19, 3)))
+            int Bosses = 0;
+            if (Memory.ReadBit(0x2027DC18, 5))
+            {
+                Bosses += 1;
+            }
+            if (Memory.ReadBit(0x2027DC18, 7))
+            {
+                Bosses += 1;
+            }
+            if (Memory.ReadBit(0x2027DC19, 1))
+            {
+                Bosses += 1;
+            }
+            if (Memory.ReadBit(0x2027DC19, 3))
+            {
+                Bosses += 1;
+            }
+            if (Bosses >= RequiredBosses)
             {
                 Memory.Write(0x2027D7A8, 53);
             }

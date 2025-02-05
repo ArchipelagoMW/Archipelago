@@ -77,6 +77,7 @@ class Sly1World(World):
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {
             "options": {
+                "RequiredBosses": self.options.RequiredBosses.value,
                 "StartingEpisode": episode_type_to_name[EpisodeType(self.options.StartingEpisode)],
                 "IncludeHourglasses": self.options.IncludeHourglasses.value,
                 "HourglassesRequireRoll": self.options.HourglassesRequireRoll.value,
