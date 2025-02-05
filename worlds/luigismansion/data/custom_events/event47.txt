@@ -14,6 +14,7 @@
 <COUNTJMP>"{Case0}""{Case1}""{Case2}""{Case3}""{Case4}""boos_captured"
 <CASE>"not_enough"
 <SE>(95)
+<FLAGOFF>(112)
 <WINDOW>(0)<COLOR>(4)
 <SAY><COLOR>(3)You require {Count4} boo(s) before\nyou can open this door...
 <ANYKEY>
@@ -25,6 +26,7 @@
 <END>
 <CASE>"boos_captured"
 <FLAGON>(28)
+<FLAGOFF>(112)
 <NORMALSCREEN>
 <LUIGIFREE2>
 <MENUON>
