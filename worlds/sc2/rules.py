@@ -1441,7 +1441,8 @@ class SC2Logic:
                 item_names.DARK_TEMPLAR,  # Archon, Dark Archon Meld
                 # Stargate
                 item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR,
-                item_names.SCOUT, item_names.ARBITER,
+                item_names.SCOUT, item_names.MISTWING, item_names.CALADRIUS, item_names.OPPRESSOR,
+                item_names.ARBITER,
                 item_names.VOID_RAY, item_names.DESTROYER, item_names.INTERCESSOR,
                 item_names.CARRIER, item_names.SKYLORD, item_names.TEMPEST,
                 item_names.MOTHERSHIP,
