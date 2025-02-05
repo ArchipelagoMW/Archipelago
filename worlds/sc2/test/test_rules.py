@@ -21,7 +21,7 @@ class TestInventory:
         self.progression_types: Set[ItemClassification] = {ItemClassification.progression, ItemClassification.progression_skip_balancing}
 
     def is_item_progression(self, item: str) -> bool:
-        return item_tables.get_full_item_list()[item].classification in self.progression_types
+        return item_tables.item_table[item].classification in self.progression_types
 
     def random_boolean(self):
         return self.random.choice([True, False])
@@ -138,9 +138,9 @@ class TestRules(unittest.TestCase):
         test_inventory = TestInventory()
         for test_world in self.test_worlds:
             location_data = locations.get_locations(test_world)
-            for _ in range(100):
-                for location in location_data:
-                    if location.rule is not None:
+            for location in location_data:
+                if location.rule is not None:
+                    for _ in range(100):
                         location.rule(test_inventory)
     
     def test_items_in_hard_rules_are_progression(self) -> None:
@@ -149,9 +149,9 @@ class TestRules(unittest.TestCase):
         test_world.options.required_tactics.value = options.RequiredTactics.option_any_units
         test_world.logic = SC2Logic(test_world)
         location_data = locations.get_locations(test_world)
-        for _ in range(10):
-            for location in location_data:
-                if location.hard_rule is not None:
+        for location in location_data:
+            if location.hard_rule is not None:
+                for _ in range(10):
                     location.hard_rule(test_inventory)
 
     def test_items_in_any_units_rules_are_progression(self) -> None:
