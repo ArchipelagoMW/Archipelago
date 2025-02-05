@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Protocol, ClassVar
 from schema import And, Schema
 
-from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, Visibility, OptionDict
+from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, Visibility, OptionDict, Removed
 from ..items.item_data import items_by_group, Group
 from ..mods.mod_data import ModNames
 from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName
@@ -645,6 +645,18 @@ class ExcludeGingerIsland(Toggle):
     default = 0
 
 
+class TrapItems(Removed):
+    internal_name = "trap_items"
+    display_name = "Trap Items"
+    default = ""
+    visibility = Visibility.none
+
+    def __init__(self, value: str):
+        if value:
+            raise Exception("Option trap_items was replaced by trap_difficulty, please update your options file")
+        super().__init__(value)
+
+
 class TrapDifficulty(Choice):
     """When rolling filler items, including resource packs, the game can also roll trap items.
     Trap items are negative items that cause problems or annoyances for the player.
@@ -868,3 +880,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     mods: Mods
     bundle_plando: BundlePlando
     death_link: DeathLink
+
+    # removed:
+    trap_items: TrapItems
+    
