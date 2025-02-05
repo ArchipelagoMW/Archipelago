@@ -523,7 +523,7 @@ class GeneralOptions(Group):
         """Version to skip auto updating to as simple string."""
 
     output_path: OutputPath = OutputPath("output")
-    auto_update: Union[AutoUpdate, bool] = True
+    auto_update: AutoUpdate | bool = True
     skip_update: SkipUpdate = SkipUpdate("")
 
 
