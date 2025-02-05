@@ -13,8 +13,6 @@ import argparse
 import itertools
 import logging
 import multiprocessing
-import os
-import platform
 import shlex
 import subprocess
 import sys
@@ -391,6 +389,8 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
 
 def check_for_update() -> None:
     """Checks if an update is available, and prompts the user if they'd like to update."""
+    import os
+    import platform
     # no mac release and dropping windows 7
     if is_macos or (is_windows and platform.release() == "NT"):
         return
