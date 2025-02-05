@@ -1,19 +1,5 @@
 import typing
 
-from .Logic import (
-    can_ice_beam,
-    can_missile,
-    can_phazon,
-    can_plasma_beam,
-    can_power_beam,
-    can_scan,
-    can_super_missile,
-    can_thermal,
-    can_wave_beam,
-    can_xray,
-    has_required_artifact_count,
-)
-from .LogicCombat import can_combat_prime, can_combat_ridley
 from .data.RoomNames import RoomName
 from BaseClasses import CollectionState, Region
 
@@ -42,7 +28,7 @@ def create_regions(world: "MetroidPrimeWorld", final_boss_selection: int):
     def can_access_elevator(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
         if world.options.pre_scan_elevators:
             return True
-        return can_scan(world, state)
+        return world.logic.can_scan(world, state)
 
     for mappings in world.elevator_mapping.values():
         for elevator, target in mappings.items():
@@ -59,17 +45,19 @@ def create_regions(world: "MetroidPrimeWorld", final_boss_selection: int):
             impact_crater,
             "Crater Access",
             lambda state, artifact_count=world.options.required_artifacts.value: (
-                can_missile(world, state)
-                and has_required_artifact_count(world, state, artifact_count)
-                and can_combat_prime(world, state)
-                and can_combat_ridley(world, state)
-                and can_phazon(world, state)
-                and can_plasma_beam(world, state)
-                and can_wave_beam(world, state)
-                and can_ice_beam(world, state)
-                and can_power_beam(world, state)
-                and can_xray(world, state, True)
-                and can_thermal(world, state, True)
+                world.logic.can_missile(world, state)
+                and world.logic.has_required_artifact_count(
+                    world, state, artifact_count
+                )
+                and world.logic.can_combat_prime(world, state)
+                and world.logic.can_combat_ridley(world, state)
+                and world.logic.can_phazon(world, state)
+                and world.logic.can_plasma_beam(world, state)
+                and world.logic.can_wave_beam(world, state)
+                and world.logic.can_ice_beam(world, state)
+                and world.logic.can_power_beam(world, state)
+                and world.logic.can_xray(world, state, True)
+                and world.logic.can_thermal(world, state, True)
             ),
         )
         impact_crater.connect(mission_complete, "Mission Complete")
@@ -78,19 +66,24 @@ def create_regions(world: "MetroidPrimeWorld", final_boss_selection: int):
         artifact_temple.connect(
             mission_complete,
             "Mission Complete",
-            lambda state, artifact_count=world.options.required_artifacts.value: can_missile(
+            lambda state, artifact_count=world.options.required_artifacts.value: world.logic.can_missile(
                 world, state
             )
-            and has_required_artifact_count(world, state, artifact_count)
-            and (can_plasma_beam(world, state) or can_super_missile(world, state))
-            and can_combat_ridley(world, state),
+            and world.logic.has_required_artifact_count(world, state, artifact_count)
+            and (
+                world.logic.can_plasma_beam(world, state)
+                or world.logic.can_super_missile(world, state)
+            )
+            and world.logic.can_combat_ridley(world, state),
         )
     elif final_boss_selection == 3:
         artifact_temple.connect(
             mission_complete,
             "Mission Complete",
             lambda state, artifact_count=world.options.required_artifacts.value: (
-                can_missile(world, state)
-                and has_required_artifact_count(world, state, artifact_count)
+                world.logic.can_missile(world, state)
+                and world.logic.has_required_artifact_count(
+                    world, state, artifact_count
+                )
             ),
         )

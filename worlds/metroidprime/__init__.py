@@ -3,6 +3,10 @@ import os
 from Options import NumericOption
 from typing import Any, Dict, List, Optional, TextIO, Union, cast
 from logging import info
+
+from worlds.metroidprime.data.Tricks import Tricks
+
+from .Logic import Logic
 from .data.RoomNames import RoomName
 from .data.PhazonMines import PhazonMinesAreaData
 from .data.PhendranaDrifts import PhendranaDriftsAreaData
@@ -135,16 +139,6 @@ class MetroidPrimeWorld(World):
     starting_room_name: Optional[str] = None
     starting_beam: Optional[str] = None
 
-    def __init__(self, multiworld: MultiWorld, player: int):
-        super().__init__(multiworld, player)
-        self.game_region_data = {
-            MetroidPrimeArea.Tallon_Overworld: TallonOverworldAreaData(),
-            MetroidPrimeArea.Chozo_Ruins: ChozoRuinsAreaData(),
-            MetroidPrimeArea.Magmoor_Caverns: MagmoorCavernsAreaData(),
-            MetroidPrimeArea.Phendrana_Drifts: PhendranaDriftsAreaData(),
-            MetroidPrimeArea.Phazon_Mines: PhazonMinesAreaData(),
-        }
-
     def get_filler_item_name(self) -> str:
         return SuitUpgrade.Missile_Expansion.value
 
@@ -156,11 +150,11 @@ class MetroidPrimeWorld(World):
             passthrough = tracker_multiworld.re_gen_passthrough[self.game]
             # Need to re initialize the game region data
             self.game_region_data = {
-                MetroidPrimeArea.Tallon_Overworld: TallonOverworldAreaData(),
-                MetroidPrimeArea.Chozo_Ruins: ChozoRuinsAreaData(),
-                MetroidPrimeArea.Magmoor_Caverns: MagmoorCavernsAreaData(),
-                MetroidPrimeArea.Phendrana_Drifts: PhendranaDriftsAreaData(),
-                MetroidPrimeArea.Phazon_Mines: PhazonMinesAreaData(),
+                MetroidPrimeArea.Tallon_Overworld: TallonOverworldAreaData(self),
+                MetroidPrimeArea.Chozo_Ruins: ChozoRuinsAreaData(self),
+                MetroidPrimeArea.Magmoor_Caverns: MagmoorCavernsAreaData(self),
+                MetroidPrimeArea.Phendrana_Drifts: PhendranaDriftsAreaData(self),
+                MetroidPrimeArea.Phazon_Mines: PhazonMinesAreaData(self),
             }
 
             for key, value in passthrough.items():
@@ -196,7 +190,19 @@ class MetroidPrimeWorld(World):
                 if key == "starting_beam":
                     self.starting_beam = value
 
+    def init_world_data(self) -> None:
+        self.logic = Logic(self)
+        self.tricks = Tricks(self)
+        self.game_region_data = {
+            MetroidPrimeArea.Tallon_Overworld: TallonOverworldAreaData(self),
+            MetroidPrimeArea.Chozo_Ruins: ChozoRuinsAreaData(self),
+            MetroidPrimeArea.Magmoor_Caverns: MagmoorCavernsAreaData(self),
+            MetroidPrimeArea.Phendrana_Drifts: PhendranaDriftsAreaData(self),
+            MetroidPrimeArea.Phazon_Mines: PhazonMinesAreaData(self),
+        }
+
     def generate_early(self) -> None:
+        self.init_world_data()
         if hasattr(self.multiworld, "re_gen_passthrough"):
             self.init_tracker_data()
 

@@ -27,7 +27,9 @@ if TYPE_CHECKING:
     from .. import MetroidPrimeWorld
 
 
-def _get_default_area_data(area: MetroidPrimeArea) -> AreaData:
+def _get_default_area_data(
+    area: MetroidPrimeArea, world: "MetroidPrimeWorld"
+) -> AreaData:
     mapping: Dict[MetroidPrimeArea, Any] = {
         MetroidPrimeArea.Tallon_Overworld: TallonOverworldAreaData,
         MetroidPrimeArea.Chozo_Ruins: ChozoRuinsAreaData,
@@ -36,7 +38,7 @@ def _get_default_area_data(area: MetroidPrimeArea) -> AreaData:
         MetroidPrimeArea.Phazon_Mines: PhazonMinesAreaData,
     }
 
-    return mapping[area]()
+    return mapping[area](world)
 
 
 beam_combo_items = [
@@ -100,7 +102,7 @@ class TestReplaceBlastShieldRando(MetroidPrimeTestBase):
             blast_shield_doors = [
                 door_id
                 for room in _get_default_area_data(
-                    MetroidPrimeArea(area)
+                    MetroidPrimeArea(area), self.world
                 ).rooms.values()
                 for door_id, door_data in room.doors.items()
                 if door_data.blast_shield
