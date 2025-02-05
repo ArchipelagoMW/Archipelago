@@ -389,10 +389,10 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
 
 def check_for_update() -> None:
     """Checks if an update is available, and prompts the user if they'd like to update."""
-    import os
     import platform
-    # no mac release and dropping windows 7
-    if is_macos or (is_windows and platform.release() == "NT"):
+    # explicitly don't support windows 7
+    # TODO support other platforms
+    if not is_windows or platform.release() == "NT":
         return
     update, version, remote_data = Utils.available_update()
     logging.info(f"Update available: {update}. Latest remote version: {version.as_simple_string()}")
@@ -416,13 +416,7 @@ def check_for_update() -> None:
         }
         download_names = []
         for name in latest_files:
-            if is_linux:
-                if name.endswith(".AppImage") and "APPIMAGE" in os.environ:
-                    download_names.append(name)
-                elif name.endswith(".tar.gz"):
-                    download_names.append(name)
-            # the windows check isn't technically necessary here but presumably may support macos in the future
-            elif is_windows and name.endswith(".exe"):
+            if is_windows and name.endswith(".exe"):
                 download_names.append(name)
 
         def download_selection(asset: str) -> None:
@@ -438,13 +432,7 @@ def check_for_update() -> None:
             with open(asset, "wb") as f:
                 f.write(content)
             if is_windows:
-                launch([asset], True)
-            else:
-                exe = which('sensible-editor') or which('gedit') or \
-                      which('xdg-open') or which('gnome-open') or which('kde-open')
-                subprocess.Popen([exe, os.getcwd()])
-
-            messagebox("Update Downloaded Successfully", f"{asset} has been downloaded successfully!")
+                launch([cached_path], True)
 
         if not download_names:
             raise FileNotFoundError(f"No download available for {version.as_simple_string()} for {platform.platform()}")
