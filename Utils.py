@@ -1098,7 +1098,7 @@ def available_update() -> tuple[bool, Version, Any]:
     """
     release_url = "https://api.github.com/repos/ArchipelagoMW/Archipelago/releases"
     latest_release_json_data = request_remote_json_data(release_url)[0]
-    remote_version = latest_release_json_data["tag_name"]
+    remote_version = tuplize_version(latest_release_json_data["tag_name"])
     return remote_version > version_tuple, remote_version, latest_release_json_data
 
 

@@ -456,7 +456,7 @@ def check_for_update() -> None:
                 "Select update to download",
                 download_selection,
                 *download_names
-            )
+            ).open()
 
     ButtonsPrompt(
         "Update Available",
