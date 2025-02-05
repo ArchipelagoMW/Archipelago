@@ -1078,7 +1078,7 @@ def request_remote_json_data(request_url: str) -> Any:
     :param request_url: URL to send a GET request to.
     :return: JSON response from server.
     """
-    logging.info(f"requesting {request_url}")
+    logging.debug(f"requesting {request_url}")
     response = requests.get(request_url)
     if response.status_code == 200:  # success
         try:
