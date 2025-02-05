@@ -42,6 +42,8 @@ class _RestrictiveFillBatcher:
     costs.
     """
 
+    # Adjust these ClassVars to adjust batch sizes, as needed, when external changes to generation performance are made.
+
     _MIN_BATCH_SIZE: typing.ClassVar[int] = 5
     """
     Pick no fewer than this many items per player for each batch, unless that player does not have enough items
@@ -52,6 +54,12 @@ class _RestrictiveFillBatcher:
     Try to pick no fewer than this many items total for each batch, unless there are fewer 
     With a low number of players, try to keep the total number of items in the batch from being too small, to prevent
     fills with few players from creating lots of very small batches.
+    """
+    _MAX_PERCENT_OF_LARGEST_STARTING_POOL_TO_PLACE: typing.ClassVar[float] = 0.02  # 2%
+    """
+    When players have items pools with different sizes, the percentage of remaining items to place gradually approaches
+    being 100% the player with the largest item pool. While this happens, gradually increase the number of items in each
+    batch until the last player with items remaining places this percentage of their starting item pool in each batch.
     """
 
     class _RestrictiveFillBatch(abc.ABC):
@@ -420,9 +428,9 @@ class _RestrictiveFillBatcher:
             self._min_batch_size = self._MIN_BATCH_SIZE
 
         # Gradually increase the number of items placed in each batch until only the player with the largest item pool
-        # has items remaining, at which point, place 2% of their original item pool in each batch. Most fills won't go
-        # above `min_batch_size`, so this is mostly to account for progression fill with worlds with very large numbers
-        # of advancement items that are likely to individually have minimal effect on progression.
+        # has items remaining, at which point, place a percentage of their original item pool in each batch. Most fills
+        # won't go above `min_batch_size`, so this is mostly to account for progression fill with outlier worlds with
+        # very large numbers of advancement items that are likely to individually have minimal effect on progression.
         # 0-274 items: 5  # This will be most fills.
         # 275-324 items: 6
         # 325-374 items: 7  # Few worlds will be higher than this in progression fill.
@@ -430,7 +438,8 @@ class _RestrictiveFillBatcher:
         # 975-1024 items: 20
         # etc.
         largest_player_pool = max(map(len, reachable_items.values()), default=0)
-        self._max_one_item_per_player_batch_size = largest_player_pool * 0.02
+        self._max_one_item_per_player_batch_size = (
+                largest_player_pool * self._MAX_PERCENT_OF_LARGEST_STARTING_POOL_TO_PLACE)
 
         self._current_batch = self._new_batch(None)
 
