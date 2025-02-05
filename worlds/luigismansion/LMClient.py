@@ -535,10 +535,11 @@ class LMContext(CommonContext):
                 dme.write_byte(lm_boo_item.ram_addr, boo_val)
 
         # Mario item flag updates # TODO Move this after multiple ram addr updates to check and give
-        mario_items_in_inventory = ["Mario's Glove", "Mario's Hat", "Mario's Letter", "Mario's Star", "Mario's Shoe"]
+        mario_items_in_inventory = ["Mario's Glove", "Mario's Hat", "Mario's Letter", "Mario's Star", "Mario's Shoe",
+                                    "Fire Element Medal", "Water Element Medal", "Ice Element Medal"]
         for mario_item in mario_items_in_inventory:
             mario_id = AutoWorldRegister.world_types[self.game].item_name_to_id[mario_item]
-            if self.items_received.__contains__(mario_id):
+            if mario_id in local_recv_ids:
                 lm_item = ALL_ITEMS_TABLE[mario_item]
                 match lm_item.code:
                     case 58:  # Mario's Glove
