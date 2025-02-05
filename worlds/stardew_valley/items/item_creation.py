@@ -8,7 +8,7 @@ from ..content.feature import friendsanity
 from ..content.game_content import StardewContent
 from ..data.game_item import ItemTag
 from ..mods.mod_data import ModNames
-from ..options import StardewValleyOptions, TrapDifficulty, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
+from ..options.options import StardewValleyOptions, TrapDifficulty, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
     BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, Chefsanity, Craftsanity, \
     BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, EnabledFillerBuffs
 from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName

@@ -6,8 +6,8 @@ from pathlib import Path
 from typing import Dict, List, Protocol, Union, Set, Optional
 
 from BaseClasses import Item, ItemClassification
-from worlds.stardew_valley import data
-from worlds.stardew_valley.logic.logic_event import all_events
+from .. import data
+from ..logic.logic_event import all_events
 
 ITEM_CODE_OFFSET = 717000
 
