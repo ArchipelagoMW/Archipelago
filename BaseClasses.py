@@ -264,7 +264,7 @@ class MultiWorld():
                         "local_items": set(item_link.get("local_items", [])),
                         "non_local_items": set(item_link.get("non_local_items", [])),
                         "link_replacement": replacement_prio.index(item_link["link_replacement"]),
-                        "skip_if_solo": item_link.get("skip_if_solo", False)
+                        "skip_if_solo": item_link.get("skip_if_solo", False),
                     }
 
         for _name, item_link in item_links.items():
