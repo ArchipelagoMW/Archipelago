@@ -502,7 +502,7 @@ Temple Raider;                      Achievement;                                
 Lihzahrd Temple;                    ;                                           #Plantera | (Plantera & Actuator) | @pickaxe(210) | (@calamity & Hardmode Anvil & Soul of Light & Soul of Night);
 Lihzahrd Furniture;                 ;                                           Lihzahrd Temple;
 Solar Eclipse;                      ;                                           Lihzahrd Temple & Wall of Flesh;
-Broken Hero Sword;                  ;                                           (Solar Eclipse & Plantera & @mech_boss(3)) | (@calamity & #Calamitas Clone);
+Broken Hero Sword;                  ;                                           Solar Eclipse & Plantera & @mech_boss(3);
 Terra Blade;                        ;                                           Hardmode Anvil & True Night's Edge & True Excalibur & Broken Hero Sword & (~@calamity | Living Shard);
 Sword of the Hero;                  Achievement;                                Terra Blade;
 Neptune's Shell;                    ;                                           Solar Eclipse;
@@ -538,7 +538,7 @@ Old One's Army Tier 3;              Location | Item;                            
 
 // Martian Madness
 Martian Madness;                    Location | Item;                            Wall of Flesh & Golem;
-Laser Drill;                        Pickaxe(230);                               #Martian Madness;
+Laser Drill;                        Pickaxe(220);                               #Martian Madness;
 Influx Waver;                       ;                                           #Martian Madness;
 
 // The Plaguebringer Goliath
