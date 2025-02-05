@@ -394,8 +394,8 @@ def check_for_update() -> None:
     # no mac release and dropping windows 7
     if is_macos or (is_windows and platform.release() == "NT"):
         return
-    update, version = Utils.available_update()
-    logging.info(f"Update available: {update}. New version: {version.as_simple_string()}")
+    update, version, remote_data = Utils.available_update()
+    logging.info(f"Update available: {update}. Latest remote version: {version.as_simple_string()}")
     if not update:
         return
     if settings.get_settings().general_options.skip_update == version.as_simple_string():
@@ -411,8 +411,7 @@ def check_for_update() -> None:
             update_settings()
             return
         # download and install the latest Archipelago release
-        release_url = "https://api.github.com/repos/ArchipelagoMW/Archipelago/releases"
-        latest_release = Utils.request_remote_json_data(release_url)[0]["assets"]
+        latest_release = remote_data["assets"]
         latest_files: Dict[str, Any] = {
             asset["name"]: asset["browser_download_url"] for asset in latest_release
         }

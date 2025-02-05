@@ -1090,15 +1090,16 @@ def request_remote_json_data(request_url: str) -> Any:
     return data
 
 
-def available_update() -> typing.Tuple[bool, Version]:
+def available_update() -> tuple[bool, Version, Any]:
     """
     Checks if there is an available update for Archipelago.
 
-    :return: True if there is an update available, False if not, and the found remote version.
+    :return: True if there is an update available, False if not, the found remote version and the json response.
     """
     release_url = "https://api.github.com/repos/ArchipelagoMW/Archipelago/releases"
-    remote_version = tuplize_version(request_remote_json_data(release_url)[0]["tag_name"])
-    return remote_version > version_tuple, remote_version
+    latest_release_json_data = request_remote_json_data(release_url)[0]
+    remote_version = latest_release_json_data["tag_name"]
+    return remote_version > version_tuple, remote_version, latest_release_json_data
 
 
 def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]]:
