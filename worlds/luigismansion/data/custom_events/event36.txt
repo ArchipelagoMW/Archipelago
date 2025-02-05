@@ -77,7 +77,7 @@
 ------------
 <CASE>"MissingItems"
 <WINDOW>(0)<COLOR>(9)
-<SAY>You are missing the following #\nof <COLOR>(2)Mario<Color>(0) items: {MarioCount}
+<SAY>Come back again once you've collected\n {MarioCount} <COLOR>(2)Mario<Color>(0) items
 <ANYKEY>
 <CLOSEWINDOW>(0)
 <BGM>(7)
