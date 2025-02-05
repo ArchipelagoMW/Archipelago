@@ -194,7 +194,7 @@ Pumpkin;                            ;                                           
 Purification Powder;                ;                                           (~@getfixedboi & Dryad) | Evil Powder;
 Mystic Slime;                       Npc;                                        Purification Powder;
 And Good Riddance!;                 Achievement | Grindy;                       Dryad;
-Acid Rain Tier 1;                   Calamity | Location | Item;                 Eye of Cthulhu | #Acid Rain Tier 2 | #Acid Rain Tier 3;
+Acid Rain Tier 1;                   Calamity | Location | Item;                 Eye of Cthulhu | Wall of Flesh | Aquatic Scourge;
 
 // Crabulon
 Crabulon;                           Calamity | Location | Item;
@@ -385,7 +385,7 @@ Forbidden Armor;                    Armor Minions(2);                           
 Aquatic Scourge;                    Calamity | Location | Item;
 Cragmaw Mire;                       Calamity | Location | Item;                 #Acid Rain Tier 2;
 Nuclear Fuel Rod;                   Calamity | Minions(1);                      #Cragmaw Mire | Star-Tainted Generator;
-Acid Rain Tier 2;                   Calamity | Location | Item;                 Aquatic Scourge | #Acid Rain Tier 3;
+Acid Rain Tier 2;                   Calamity | Location | Item;                 #Acid Rain Tier 1 & (Aquatic Scourge | Acid Rain Tier 3);
 Mechanical Eye;                     ;                                           (@calamity | Hardmode Anvil) & Soul of Light;
 Mechanical Worm;                    ;                                           (@calamity | Hardmode Anvil) & Soul of Night;
 Mechanical Skull;                   ;                                           (@calamity | Hardmode Anvil) & Soul of Night & Soul of Light & Bone;
@@ -671,7 +671,7 @@ Omega Blue Armor;                   Calamity | Armor Minions(2);                
 // The Old Duke
 Mauler;                             Calamity | Location | Item;                 Acid Rain Tier 3;
 Nuclear Terror;                     Calamity | Location | Item;                 Acid Rain Tier 3;
-Acid Rain Tier 3;                   Calamity;                                   Polterghast;
+Acid Rain Tier 3;                   Calamity;                                   #Acid Rain Tier 1 & Polterghast;
 The Old Duke;                       Calamity | Location | Item;                 Acid Rain Tier 3 | (Bug Net & Moon Lord) | (Amidias & The Old Duke) | (@getfixedboi & #The Destroyer);
 
 // The Devourer of Gods
