@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from schema import And, Optional, Or, Schema
 
 from Options import Choice, DeathLinkMixin, DefaultOnToggle, ItemsAccessibility, OptionDict, PerGameCommonOptions, \
-    PlandoConnections, Range, StartInventoryPool, Toggle, Visibility
+    PlandoConnections, Range, StartInventoryPool, Toggle
 from . import RANDOMIZED_CONNECTIONS
 from .portals import CHECKPOINTS, PORTALS, SHOP_POINTS
 
@@ -32,8 +32,8 @@ class PortalPlando(PlandoConnections):
     shop_points = [point for points in SHOP_POINTS.values() for point in points]
     checkpoints = [point for points in CHECKPOINTS.values() for point in points]
 
-    entrances = PORTALS
-    exits = portals + shop_points + checkpoints
+    entrances = frozenset(PORTALS)
+    exits = frozenset(portals + shop_points + checkpoints)
 
 
 class TransitionPlando(PlandoConnections):
@@ -46,8 +46,8 @@ class TransitionPlando(PlandoConnections):
       exit: Dark Cave - Right
       direction: both
     """
-    entrances = set(RANDOMIZED_CONNECTIONS.keys())
-    exits = set(RANDOMIZED_CONNECTIONS.values())
+    entrances = frozenset(RANDOMIZED_CONNECTIONS.keys())
+    exits = frozenset(RANDOMIZED_CONNECTIONS.values())
 
 
 class Logic(Choice):
