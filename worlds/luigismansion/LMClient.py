@@ -556,6 +556,16 @@ class LMContext(CommonContext):
                     case 62:  # Mario's Shoe
                         item_val = dme.read_byte(0x803D339C)
                         dme.write_byte(lm_item.ram_addr, (item_val | (1 << 0)))
+                    case 55:  # Fire Element Medal
+                        item_val = dme.read_byte(0x803D339E)
+                        dme.write_byte(lm_item.ram_addr, (item_val | (1 << 3)))
+                    case 56:  # Water Element Medal
+                        item_val = dme.read_byte(0x803D339E)
+                        dme.write_byte(lm_item.ram_addr, (item_val | (1 << 4)))
+                    case 57:  # Ice Element Medal
+                        item_val = dme.read_byte(0x803D339B)
+                        dme.write_byte(lm_item.ram_addr, (item_val | (1 << 6)))
+
         return
 
     # TODO remove this in favor of 0.6.0's implementation.
