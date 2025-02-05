@@ -52,17 +52,15 @@ def create_regions(world: "MetroidPrimeWorld", final_boss_selection: int):
                 destination, elevator, lambda state: can_access_elevator(world, state)
             )
 
-    artifact_temple = world.get_region(
-        RoomName.Artifact_Temple.value
-    )
+    artifact_temple = world.get_region(RoomName.Artifact_Temple.value)
 
     if final_boss_selection == 0 or final_boss_selection == 2:
         artifact_temple.connect(
             impact_crater,
             "Crater Access",
-            lambda state: (
+            lambda state, artifact_count=world.options.required_artifacts.value: (
                 can_missile(world, state)
-                and has_required_artifact_count(world, state)
+                and has_required_artifact_count(world, state, artifact_count)
                 and can_combat_prime(world, state)
                 and can_combat_ridley(world, state)
                 and can_phazon(world, state)
@@ -80,8 +78,10 @@ def create_regions(world: "MetroidPrimeWorld", final_boss_selection: int):
         artifact_temple.connect(
             mission_complete,
             "Mission Complete",
-            lambda state: can_missile(world, state)
-            and has_required_artifact_count(world, state)
+            lambda state, artifact_count=world.options.required_artifacts.value: can_missile(
+                world, state
+            )
+            and has_required_artifact_count(world, state, artifact_count)
             and (can_plasma_beam(world, state) or can_super_missile(world, state))
             and can_combat_ridley(world, state),
         )
@@ -89,7 +89,8 @@ def create_regions(world: "MetroidPrimeWorld", final_boss_selection: int):
         artifact_temple.connect(
             mission_complete,
             "Mission Complete",
-            lambda state: (
-                can_missile(world, state) and has_required_artifact_count(world, state)
+            lambda state, artifact_count=world.options.required_artifacts.value: (
+                can_missile(world, state)
+                and has_required_artifact_count(world, state, artifact_count)
             ),
         )

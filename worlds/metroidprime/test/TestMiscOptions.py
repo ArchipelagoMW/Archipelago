@@ -1,4 +1,4 @@
-from ..Items import SuitUpgrade
+from ..Items import SuitUpgrade, artifact_table
 from ..data.RoomNames import RoomName
 from .. import MetroidPrimeWorld
 from . import MetroidPrimeTestBase
@@ -35,3 +35,19 @@ class TestNonVariaHeatDamageTrue(MetroidPrimeTestBase):
 
         self.collect_by_name(SuitUpgrade.Varia_Suit.value)
         self.assertTrue(self.can_reach_region(test_region))
+
+
+class TestRequiredArtifactCount(MetroidPrimeTestBase):
+    run_default_tests = False  # type: ignore
+    options = {"required_artifacts": 3}
+
+    def test_required_artifact_count(self):
+        self.assertFalse(self.can_reach_region("Impact Crater"))
+        self.collect_all_but(artifact_table.keys())
+        self.assertFalse(self.can_reach_region("Impact Crater"))
+        self.collect_by_name("Artifact of Truth")
+        self.assertFalse(self.can_reach_region("Impact Crater"))
+        self.collect_by_name("Artifact of Warrior")
+        self.assertFalse(self.can_reach_region("Impact Crater"))
+        self.collect_by_name("Artifact of Chozo")
+        self.assertTrue(self.can_reach_region("Impact Crater"))

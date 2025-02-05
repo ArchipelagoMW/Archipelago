@@ -8,9 +8,8 @@ if TYPE_CHECKING:
 
 
 def has_required_artifact_count(
-    world: "MetroidPrimeWorld", state: CollectionState
+    world: "MetroidPrimeWorld", state: CollectionState, required_count: int
 ) -> bool:
-    required_count = world.options.required_artifacts.value
     return state.has_group("Artifacts", world.player, required_count)
 
 
