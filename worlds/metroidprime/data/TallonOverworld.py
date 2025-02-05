@@ -113,7 +113,8 @@ class TallonOverworldAreaData(AreaData):
                     PickupData(
                         "Tallon Overworld: Cargo Freight Lift to Deck Gamma",
                         rule_func=lambda world, state: (
-                            self.logic.can_missile(world, state) or self.logic.can_charge_beam(world, state)
+                            self.logic.can_missile(world, state, 1)
+                            or self.logic.can_charge_beam(world, state)
                         )
                         and (
                             self.can_crashed_frigate(world, state)
@@ -148,7 +149,9 @@ class TallonOverworldAreaData(AreaData):
                     0: DoorData(
                         RoomName.Waterfall_Cavern,
                         blast_shield=BlastShieldType.Missile,
-                        rule_func=self.logic.can_missile,
+                        rule_func=lambda world, state: self.logic.can_missile(
+                            world, state, 1
+                        ),
                     ),
                     1: DoorData(
                         RoomName.Frigate_Access_Tunnel, defaultLock=DoorLockType.Ice
@@ -157,13 +160,17 @@ class TallonOverworldAreaData(AreaData):
                         RoomName.Overgrown_Cavern,
                         defaultLock=DoorLockType.Ice,
                         rule_func=lambda world, state: False,  # Can't reach unless a trick is used
-                        tricks=[self.tricks.frigate_crash_site_climb_to_overgrown_cavern],
+                        tricks=[
+                            self.tricks.frigate_crash_site_climb_to_overgrown_cavern
+                        ],
                     ),
                 },
                 pickups=[
                     PickupData(
                         "Tallon Overworld: Frigate Crash Site",
-                        rule_func=lambda world, state: self.logic.can_space_jump(world, state)
+                        rule_func=lambda world, state: self.logic.can_space_jump(
+                            world, state
+                        )
                         and self.logic.can_move_underwater(world, state),
                         tricks=[
                             self.tricks.frigate_crash_site_scan_dash,
@@ -232,7 +239,9 @@ class TallonOverworldAreaData(AreaData):
                 doors={
                     0: DoorData(
                         RoomName.Great_Tree_Hall,
-                        rule_func=lambda world, state: self.can_crashed_frigate(world, state)
+                        rule_func=lambda world, state: self.can_crashed_frigate(
+                            world, state
+                        )
                         and self.logic.can_boost(world, state),
                         tricks=[self.tricks.hydro_access_tunnel_no_gravity],
                         sub_region_door_index=4,
@@ -259,7 +268,9 @@ class TallonOverworldAreaData(AreaData):
                 doors={
                     0: DoorData(
                         RoomName.Gully,
-                        rule_func=lambda world, state: self.logic.can_space_jump(world, state),
+                        rule_func=lambda world, state: self.logic.can_space_jump(
+                            world, state
+                        ),
                         tricks=[self.tricks.landing_site_scan_dash],
                     ),
                     1: DoorData(RoomName.Canyon_Cavern),
@@ -273,7 +284,8 @@ class TallonOverworldAreaData(AreaData):
                 },
                 pickups=[
                     PickupData(
-                        "Tallon Overworld: Landing Site", rule_func=self.logic.can_morph_ball
+                        "Tallon Overworld: Landing Site",
+                        rule_func=self.logic.can_morph_ball,
                     ),
                 ],
             ),
@@ -282,14 +294,18 @@ class TallonOverworldAreaData(AreaData):
                     0: DoorData(
                         RoomName.Great_Tree_Hall,
                         defaultLock=DoorLockType.Ice,
-                        rule_func=lambda world, state: self.logic.can_power_bomb(world, state)
+                        rule_func=lambda world, state: self.logic.can_power_bomb(
+                            world, state
+                        )
                         and self.logic.can_boost(world, state)
                         and self.logic.can_bomb(world, state),
                     ),
                     1: DoorData(
                         RoomName.Life_Grove,
                         defaultLock=DoorLockType.None_,
-                        rule_func=lambda world, state: self.logic.can_power_beam(world, state)
+                        rule_func=lambda world, state: self.logic.can_power_beam(
+                            world, state
+                        )
                         and self.logic.can_combat_ghosts(world, state)
                         and self.logic.can_power_bomb(world, state)
                         and self.logic.can_boost(world, state)
@@ -300,7 +316,9 @@ class TallonOverworldAreaData(AreaData):
                 pickups=[
                     PickupData(
                         "Tallon Overworld: Life Grove Tunnel",
-                        rule_func=lambda world, state: self.logic.can_power_bomb(world, state)
+                        rule_func=lambda world, state: self.logic.can_power_bomb(
+                            world, state
+                        )
                         and self.logic.can_bomb(world, state)
                         and self.logic.can_boost(world, state),
                     ),
@@ -311,7 +329,9 @@ class TallonOverworldAreaData(AreaData):
                     0: DoorData(
                         RoomName.Life_Grove_Tunnel,
                         defaultLock=DoorLockType.None_,
-                        rule_func=lambda world, state: self.logic.can_power_bomb(world, state)
+                        rule_func=lambda world, state: self.logic.can_power_bomb(
+                            world, state
+                        )
                         and self.logic.can_space_jump(world, state)
                         and self.logic.can_morph_ball(world, state)
                         and self.logic.can_power_beam(world, state),
@@ -323,7 +343,9 @@ class TallonOverworldAreaData(AreaData):
                     PickupData("Tallon Overworld: Life Grove - Start"),
                     PickupData(
                         "Tallon Overworld: Life Grove - Underwater Spinner",
-                        rule_func=lambda world, state: self.logic.can_boost(world, state)
+                        rule_func=lambda world, state: self.logic.can_boost(
+                            world, state
+                        )
                         and self.logic.can_bomb(world, state),
                     ),
                 ],
@@ -353,7 +375,8 @@ class TallonOverworldAreaData(AreaData):
                 },
                 pickups=[
                     PickupData(
-                        "Tallon Overworld: Overgrown Cavern", rule_func=self.logic.can_morph_ball
+                        "Tallon Overworld: Overgrown Cavern",
+                        rule_func=self.logic.can_morph_ball,
                     ),
                 ],
             ),
@@ -371,7 +394,9 @@ class TallonOverworldAreaData(AreaData):
                     2: DoorData(
                         RoomName.Arbor_Chamber,
                         defaultLock=DoorLockType.Plasma,
-                        rule_func=lambda world, state: self.logic.can_grapple(world, state)
+                        rule_func=lambda world, state: self.logic.can_grapple(
+                            world, state
+                        )
                         and self.logic.can_xray(world, state)
                         and self.logic.can_space_jump(world, state),
                         tricks=[self.tricks.root_cave_arbor_chamber_no_grapple_xray],
@@ -380,7 +405,9 @@ class TallonOverworldAreaData(AreaData):
                 pickups=[
                     PickupData(
                         "Tallon Overworld: Root Cave",
-                        rule_func=lambda world, state: self.logic.can_space_jump(world, state)
+                        rule_func=lambda world, state: self.logic.can_space_jump(
+                            world, state
+                        )
                         and self.logic.can_grapple(world, state)
                         and self.logic.can_xray(world, state),
                         tricks=[self.tricks.root_cave_arbor_chamber_no_grapple_xray],
@@ -407,7 +434,9 @@ class TallonOverworldAreaData(AreaData):
                     2: DoorData(
                         RoomName.Gully,
                         defaultLock=DoorLockType.Blue,
-                        rule_func=lambda world, state: self.logic.can_boost(world, state)
+                        rule_func=lambda world, state: self.logic.can_boost(
+                            world, state
+                        )
                         and self.logic.can_bomb(world, state),
                     ),
                     3: DoorData(RoomName.Root_Tunnel),
@@ -536,7 +565,9 @@ class TallonOverworldAreaData(AreaData):
             ),
             RoomName.Waterfall_Cavern: RoomData(
                 doors={
-                    0: DoorData(RoomName.Landing_Site, rule_func=self.logic.can_morph_ball),
+                    0: DoorData(
+                        RoomName.Landing_Site, rule_func=self.logic.can_morph_ball
+                    ),
                     1: DoorData(
                         RoomName.Frigate_Crash_Site,
                         blast_shield=BlastShieldType.Missile,

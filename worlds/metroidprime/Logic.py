@@ -27,6 +27,14 @@ class Logic:
             else self._can_power_bomb
         )
 
+        self.can_missile: Callable[
+            ["MetroidPrimeWorld", CollectionState, int], bool
+        ] = (
+            self._can_missile_launcher
+            if world.options.missile_launcher
+            else self._can_missile
+        )
+
     def _can_power_bomb(
         self, world: "MetroidPrimeWorld", state: CollectionState
     ) -> bool:
@@ -75,33 +83,38 @@ class Logic:
             [SuitUpgrade.Spider_Ball.value, SuitUpgrade.Morph_Ball.value], world.player
         )
 
-    def can_missile(
+    def _can_missile_launcher(
         self,
         world: "MetroidPrimeWorld",
         state: CollectionState,
         num_expansions: int = 1,
     ) -> bool:
-        if world.options.missile_launcher:
-            can_shoot = state.has(SuitUpgrade.Missile_Launcher.value, world.player)
-            return can_shoot and (
-                num_expansions <= 1
-                or state.has(
-                    SuitUpgrade.Missile_Expansion.value,
-                    world.player,
-                    num_expansions - 1,
-                )
+        can_shoot = state.has(SuitUpgrade.Missile_Launcher.value, world.player)
+        return can_shoot and (
+            num_expansions <= 1
+            or state.has(
+                SuitUpgrade.Missile_Expansion.value,
+                world.player,
+                num_expansions - 1,
             )
-        else:
-            return state.has(
-                SuitUpgrade.Missile_Expansion.value, world.player, num_expansions
-            )
+        )
+
+    def _can_missile(
+        self,
+        world: "MetroidPrimeWorld",
+        state: CollectionState,
+        num_expansions: int = 1,
+    ) -> bool:
+        return state.has(
+            SuitUpgrade.Missile_Expansion.value, world.player, num_expansions
+        )
 
     def can_super_missile(
         self, world: "MetroidPrimeWorld", state: CollectionState
     ) -> bool:
         return (
             self.can_power_beam(world, state)
-            and self.can_missile(world, state)
+            and self.can_missile(world, state, 1)
             and (
                 state.has_all(
                     [SuitUpgrade.Charge_Beam.value, SuitUpgrade.Super_Missile.value],
@@ -285,7 +298,7 @@ class Logic:
     ) -> bool:
         return (
             self.can_bomb(world, state)
-            or self.can_missile(world, state)
+            or self.can_missile(world, state, 1)
             or self.can_power_bomb(world, state)
             or self.can_plasma_beam(world, state)
         )

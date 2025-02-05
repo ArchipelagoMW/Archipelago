@@ -370,7 +370,7 @@ class AreaData:
             elif lock == DoorLockType.Power_Beam:
                 can_color = self.logic.can_power_beam(world, state)
             elif lock == DoorLockType.Missile:
-                can_color = self.logic.can_missile(world, state)
+                can_color = self.logic.can_missile(world, state, 1)
             elif lock == DoorLockType.Bomb:
                 can_color = self.logic.can_bomb(world, state)
         else:
@@ -380,7 +380,7 @@ class AreaData:
             if door_data.blast_shield == BlastShieldType.Bomb:
                 can_blast_shield = self.logic.can_bomb(world, state)
             elif door_data.blast_shield == BlastShieldType.Missile:
-                can_blast_shield = self.logic.can_missile(world, state)
+                can_blast_shield = self.logic.can_missile(world, state, 1)
             elif door_data.blast_shield == BlastShieldType.Power_Bomb:
                 can_blast_shield = self.logic.can_power_bomb(world, state)
             elif door_data.blast_shield == BlastShieldType.Charge_Beam:

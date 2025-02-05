@@ -48,7 +48,7 @@ class ChozoRuinsAreaData(AreaData):
         return (
             state.can_reach_region(RoomName.Sunchamber.value, world.player)
             and self.logic.can_combat_flaahgra(world, state)
-            and self.logic.can_missile(world, state)
+            and self.logic.can_missile(world, state, 1)
             and self.logic.can_scan(world, state)
             and bomb_req
         )
@@ -57,7 +57,7 @@ class ChozoRuinsAreaData(AreaData):
         self, world: "MetroidPrimeWorld", state: CollectionState
     ) -> bool:
         return (
-            self.logic.can_missile(world, state)
+            self.logic.can_missile(world, state, 1)
             and state.has(SuitUpgrade.Missile_Expansion.value, world.player, 8)
             and self.logic.can_space_jump(world, state)
         )
@@ -212,7 +212,10 @@ class ChozoRuinsAreaData(AreaData):
                 },
                 pickups=[
                     PickupData(
-                        "Chozo Ruins: Dynamo - Lower", rule_func=self.logic.can_missile
+                        "Chozo Ruins: Dynamo - Lower",
+                        rule_func=lambda world, state: self.logic.can_missile(
+                            world, state, 1
+                        ),
                     ),
                     PickupData(
                         "Chozo Ruins: Dynamo - Spider Track",
@@ -375,7 +378,7 @@ class ChozoRuinsAreaData(AreaData):
                             world, state
                         )
                         and self.logic.can_boost(world, state)
-                        and self.logic.can_missile(world, state)
+                        and self.logic.can_missile(world, state, 1)
                         and self.logic.can_space_jump(world, state),
                     ),
                     2: DoorData(
@@ -661,7 +664,7 @@ class ChozoRuinsAreaData(AreaData):
                 pickups=[
                     PickupData(
                         "Chozo Ruins: Ruined Gallery - Missile Wall",
-                        rule_func=self.logic.can_missile,
+                        rule_func=lambda world, state: self.logic.can_missile(world, state, 1)
                     ),
                     PickupData(
                         "Chozo Ruins: Ruined Gallery - Tunnel",
@@ -809,9 +812,7 @@ class ChozoRuinsAreaData(AreaData):
                     ),
                     PickupData(
                         "Chozo Ruins: Sunchamber - Ghosts",
-                        rule_func=lambda world, state: self.can_flaahgra(
-                            world, state
-                        )
+                        rule_func=lambda world, state: self.can_flaahgra(world, state)
                         and self.logic.can_combat_ghosts(world, state)
                         and self.can_climb_sun_tower(world, state),
                     ),
@@ -931,7 +932,7 @@ class ChozoRuinsAreaData(AreaData):
                             state.can_reach(
                                 RoomName.Hive_Totem.value, None, world.player
                             )
-                            and self.logic.can_missile(world, state)
+                            and self.logic.can_missile(world, state, 1)
                         ),
                     )
                 ],
@@ -994,7 +995,7 @@ class ChozoRuinsAreaData(AreaData):
                 pickups=[
                     PickupData(
                         "Chozo Ruins: Watery Hall Access",
-                        rule_func=self.logic.can_missile,
+                        rule_func=lambda world, state: self.logic.can_missile(world, state, 1)
                     ),
                 ],
             ),

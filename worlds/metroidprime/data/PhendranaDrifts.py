@@ -102,7 +102,7 @@ class PhendranaDriftsAreaData(AreaData):
                         RoomName.Chapel_Tunnel,
                         rule_func=lambda world, state: self.logic.can_bomb(world, state)
                         and self.logic.can_space_jump(world, state)
-                        and self.logic.can_missile(world, state),
+                        and self.logic.can_missile(world, state, 1),
                         tricks=[self.tricks.ice_temple_to_chapel_no_sj],
                     ),
                 },
@@ -133,7 +133,7 @@ class PhendranaDriftsAreaData(AreaData):
                         "Phendrana Drifts: Control Tower",
                         rule_func=lambda world, state: self.logic.can_combat_labs(world, state)
                         and self.logic.can_space_jump(world, state)
-                        and self.logic.can_missile(world, state)
+                        and self.logic.can_missile(world, state, 1)
                         and self.logic.can_melt_ice(world, state)
                         and self.logic.can_bomb(world, state),
                         tricks=[self.tricks.control_tower_item_no_plasma],
@@ -176,7 +176,7 @@ class PhendranaDriftsAreaData(AreaData):
                         RoomName.Save_Station_C,
                         defaultLock=DoorLockType.Wave,
                         rule_func=lambda world, state: self.logic.can_space_jump(world, state)
-                        and self.logic.can_missile(world, state),
+                        and self.logic.can_missile(world, state, 1),
                     ),
                     1: DoorData(
                         RoomName.Frost_Cave_Access,
@@ -187,14 +187,14 @@ class PhendranaDriftsAreaData(AreaData):
                         RoomName.Upper_Edge_Tunnel,
                         defaultLock=DoorLockType.Wave,
                         rule_func=lambda world, state: self.logic.can_space_jump(world, state)
-                        and self.logic.can_missile(world, state),
+                        and self.logic.can_missile(world, state, 1),
                     ),
                 },
                 pickups=[
                     PickupData(
                         "Phendrana Drifts: Frost Cave",
                         rule_func=lambda world, state: self.logic.can_grapple(world, state)
-                        and self.logic.can_missile(world, state)
+                        and self.logic.can_missile(world, state, 1)
                         and self.logic.can_move_underwater(world, state),
                         tricks=[self.tricks.frost_cave_no_grapple],
                     ),
@@ -272,7 +272,7 @@ class PhendranaDriftsAreaData(AreaData):
                     0: DoorData(
                         RoomName.Hunter_Cave_Access,
                         defaultLock=DoorLockType.Wave,
-                        rule_func=lambda world, state: self.logic.can_missile(world, state)
+                        rule_func=lambda world, state: self.logic.can_missile(world, state, 1)
                         and self.logic.can_grapple(world, state)
                         and self.logic.can_space_jump(world, state),
                     ),
@@ -292,7 +292,7 @@ class PhendranaDriftsAreaData(AreaData):
                         destination_area=MetroidPrimeArea.Phendrana_Drifts,
                         defaultLock=DoorLockType.Wave,
                         rule_func=lambda world, state: self.logic.can_space_jump(world, state)
-                        and self.logic.can_missile(world, state),
+                        and self.logic.can_missile(world, state, 1),
                     ),
                 }
             ),
@@ -310,12 +310,12 @@ class PhendranaDriftsAreaData(AreaData):
                 doors={
                     0: DoorData(
                         RoomName.Ice_Ruins_East,
-                        rule_func=lambda world, state: self.logic.can_missile(world, state)
+                        rule_func=lambda world, state: self.logic.can_missile(world, state, 1)
                         or self.logic.can_charge_beam(world, state),
                     ),
                     1: DoorData(
                         RoomName.Phendrana_Shorelines,
-                        rule_func=lambda world, state: self.logic.can_missile(world, state)
+                        rule_func=lambda world, state: self.logic.can_missile(world, state, 1)
                         or self.logic.can_charge_beam(world, state),
                     ),
                 }
@@ -353,7 +353,7 @@ class PhendranaDriftsAreaData(AreaData):
                         "Phendrana Drifts: Ice Ruins West",
                         rule_func=lambda world, state: self.logic.can_melt_ice(world, state)
                         and self.logic.can_space_jump(world, state)
-                        and self.logic.can_missile(world, state),
+                        and self.logic.can_missile(world, state, 1),
                     ),
                 ],
             ),
@@ -467,7 +467,7 @@ class PhendranaDriftsAreaData(AreaData):
                     4: DoorData(RoomName.Plaza_Walkway, rule_func=self.logic.can_space_jump),
                     5: DoorData(
                         RoomName.Ice_Ruins_Access,
-                        rule_func=lambda world, state: self.logic.can_missile(world, state)
+                        rule_func=lambda world, state: self.logic.can_missile(world, state, 1)
                         and self.logic.can_scan(world, state),
                     ),
                 },
@@ -642,7 +642,7 @@ class PhendranaDriftsAreaData(AreaData):
                         RoomName.Research_Core_Access,
                         defaultLock=DoorLockType.Wave,
                         rule_func=lambda world, state: self.logic.can_combat_labs(world, state)
-                        and self.logic.can_missile(world, state)
+                        and self.logic.can_missile(world, state, 1)
                         or self.logic.can_power_bomb(world, state),
                     ),  # Vertical door, going down
                 },
@@ -650,7 +650,7 @@ class PhendranaDriftsAreaData(AreaData):
                     PickupData(
                         "Phendrana Drifts: Research Lab Aether - Tank",
                         rule_func=lambda world, state: self.logic.can_combat_labs(world, state)
-                        and self.logic.can_missile(world, state),
+                        and self.logic.can_missile(world, state, 1),
                     ),
                     PickupData(
                         "Phendrana Drifts: Research Lab Aether - Morph Track",
@@ -771,12 +771,12 @@ class PhendranaDriftsAreaData(AreaData):
                     0: DoorData(
                         RoomName.Transport_to_Magmoor_Caverns_West,
                         rule_func=lambda world, state: self.logic.can_charge_beam(world, state)
-                        or self.logic.can_missile(world, state),
+                        or self.logic.can_missile(world, state, 1),
                     ),
                     1: DoorData(
                         RoomName.Phendrana_Shorelines,
                         rule_func=lambda world, state: self.logic.can_charge_beam(world, state)
-                        or self.logic.can_missile(world, state),
+                        or self.logic.can_missile(world, state, 1),
                     ),
                 }
             ),
@@ -816,13 +816,13 @@ class PhendranaDriftsAreaData(AreaData):
                 doors={
                     0: DoorData(
                         RoomName.Chozo_Ice_Temple,
-                        rule_func=lambda world, state: self.logic.can_missile(world, state)
+                        rule_func=lambda world, state: self.logic.can_missile(world, state, 1)
                         or self.logic.can_charge_beam(world, state)
                         or self.logic.can_plasma_beam(world, state),
                     ),
                     1: DoorData(
                         RoomName.Phendrana_Shorelines,
-                        rule_func=lambda world, state: self.logic.can_missile(world, state)
+                        rule_func=lambda world, state: self.logic.can_missile(world, state, 1)
                         or self.logic.can_charge_beam(world, state)
                         or self.logic.can_plasma_beam(world, state),
                     ),

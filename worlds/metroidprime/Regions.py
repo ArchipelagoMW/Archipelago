@@ -45,7 +45,7 @@ def create_regions(world: "MetroidPrimeWorld", final_boss_selection: int):
             impact_crater,
             "Crater Access",
             lambda state, artifact_count=world.options.required_artifacts.value: (
-                world.logic.can_missile(world, state)
+                world.logic.can_missile(world, state, 1)
                 and world.logic.has_required_artifact_count(
                     world, state, artifact_count
                 )
@@ -81,7 +81,7 @@ def create_regions(world: "MetroidPrimeWorld", final_boss_selection: int):
             mission_complete,
             "Mission Complete",
             lambda state, artifact_count=world.options.required_artifacts.value: (
-                world.logic.can_missile(world, state)
+                world.logic.can_missile(world, state, 1)
                 and world.logic.has_required_artifact_count(
                     world, state, artifact_count
                 )

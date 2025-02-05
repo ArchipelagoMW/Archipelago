@@ -137,7 +137,7 @@ class MagmoorCavernsAreaData(AreaData):
                     PickupData(
                         "Magmoor Caverns: Lava Lake",
                         rule_func=lambda world, state: self.logic.can_missile(
-                            world, state
+                            world, state, 1
                         )
                         and self.logic.can_space_jump(world, state)
                         and self.logic.can_heat(world, state)
@@ -428,7 +428,7 @@ class MagmoorCavernsAreaData(AreaData):
                         "Magmoor Caverns: Triclops Pit",
                         rule_func=lambda world, state: self.logic.can_xray(world, state)
                         and self.logic.can_space_jump(world, state)
-                        and self.logic.can_missile(world, state),
+                        and self.logic.can_missile(world, state, 1),
                         tricks=[
                             self.tricks.triclops_pit_item_no_missiles,
                             self.tricks.triclops_pit_item_no_sj,

@@ -193,7 +193,7 @@ class Tricks:
             "Climb Tower of Light through a series of double bomb jumps",
             TrickDifficulty.Hard,
             rule_func=lambda world, state: (
-                self.logic.can_missile(world, state)
+                self.logic.can_missile(world, state, 1)
                 and state.has(SuitUpgrade.Missile_Expansion.value, world.player, 8)
             )
             and self.logic.can_bomb(world, state),
@@ -391,7 +391,7 @@ class Tricks:
             "Lava Lake Item Suitless",
             "Reach the Lava Lake item without the Varia Suit",
             TrickDifficulty.Medium,
-            lambda world, state: self.logic.can_missile(world, state)
+            lambda world, state: self.logic.can_missile(world, state, 1)
             and self.logic.can_space_jump(world, state)
             and self.logic.has_energy_tanks(world, state, 4)
             and self.logic.can_heat(world, state)
@@ -401,7 +401,7 @@ class Tricks:
             "Lava Lake Item Missiles Only",
             "Reach lava lake item without space jump by jumping on base of column",
             TrickDifficulty.Easy,
-            lambda world, state: self.logic.can_missile(world, state)
+            lambda world, state: self.logic.can_missile(world, state, 1)
             and state.can_reach(RoomName.Burning_Trail.value, None, world.player),
         )
 
@@ -411,7 +411,7 @@ class Tricks:
             TrickDifficulty.Medium,
             lambda world, state: self.logic.can_xray(world, state)
             and (
-                self.logic.can_missile(world, state)
+                self.logic.can_missile(world, state, 1)
                 or self.logic.can_charge_beam(world, state)
             ),
         )
@@ -421,7 +421,7 @@ class Tricks:
             TrickDifficulty.Medium,
             lambda world, state: self.logic.can_space_jump(world, state)
             and (
-                self.logic.can_missile(world, state)
+                self.logic.can_missile(world, state, 1)
                 or self.logic.can_charge_beam(world, state)
             ),
         )
@@ -429,7 +429,7 @@ class Tricks:
             "Triclops Pit Item No SJ No XRay",
             "Reach the Triclops Pit item without Space Jump or XRay Visor, assumes has charge or missiles",
             TrickDifficulty.Medium,
-            lambda world, state: self.logic.can_missile(world, state)
+            lambda world, state: self.logic.can_missile(world, state, 1)
             or self.logic.can_charge_beam(world, state),
         )
         self.triclops_pit_item_no_missiles = TrickInfo(
@@ -526,7 +526,7 @@ class Tricks:
             "You can reach these locations by doing a hyper bomb jump in Phendrana Shorelines to reach the temple, and double bomb jumping to climb the temple itself",
             TrickDifficulty.Medium,
             rule_func=lambda world, state: self.logic.can_bomb(world, state)
-            and self.logic.can_missile(world, state),
+            and self.logic.can_missile(world, state, 1),
         )
         self.shorelines_spider_track_no_sj = TrickInfo(
             "Shorelines Spider Track No SJ",
@@ -579,7 +579,7 @@ class Tricks:
             "Reach the Control Tower item without Plasma Beam by jumping off of crates in the middle and missiling the tower base",
             TrickDifficulty.Easy,
             lambda world, state: self.logic.can_bomb(world, state)
-            and self.logic.can_missile(world, state)
+            and self.logic.can_missile(world, state, 1)
             and self.logic.can_space_jump(world, state),
         )
 
@@ -622,7 +622,7 @@ class Tricks:
             "Frost Cave No Grapple",
             "Reach the Frost Cave item without the Grapple Beam",
             TrickDifficulty.Easy,
-            lambda world, state: self.logic.can_missile(world, state)
+            lambda world, state: self.logic.can_missile(world, state, 1)
             and self.logic.can_space_jump(world, state)
             and self.logic.can_move_underwater(world, state),
         )  # Requires gravity
