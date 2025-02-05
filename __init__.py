@@ -180,7 +180,7 @@ class WL4World(World):
                 itempool.append(self.create_item(name))
 
         # Remove diamonds or full health items to make space for abilities
-        if required_jewels == 4:
+        if pool_jewels == 4:
             if diamond_shuffle:
                 diamonds -= 8
             else:
