@@ -282,7 +282,8 @@ class Group:
                 attr = cast(object, getattr(self, name))
                 attr_cls = type_hints[name] if name in type_hints else attr.__class__
                 attr_cls_origin = typing.get_origin(attr_cls)
-                while attr_cls_origin is Union:  # resolve to first type for doc string
+                # resolve to first type for doc string
+                while attr_cls_origin is Union or attr_cls_origin is types.UnionType:
                     attr_cls = typing.get_args(attr_cls)[0]
                     attr_cls_origin = typing.get_origin(attr_cls)
                 if attr_cls.__doc__ and attr_cls.__module__ != "builtins":

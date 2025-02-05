@@ -12,15 +12,13 @@ class TestBooksLogic(SVTestBase):
 
         location = self.multiworld.get_location("Read Mapping Cave Systems", self.player)
 
-        self.assert_reach_location_false(location, self.multiworld.state)
+        self.assert_cannot_reach_location(location, self.multiworld.state)
 
         self.collect("Progressive Mine Elevator")
         self.collect("Progressive Mine Elevator")
         self.collect("Progressive Mine Elevator")
         self.collect("Progressive Mine Elevator")
-        self.assert_reach_location_false(location, self.multiworld.state)
+        self.assert_cannot_reach_location(location, self.multiworld.state)
 
         self.collect("Progressive Weapon")
-        self.assert_reach_location_true(location, self.multiworld.state)
-
-
+        self.assert_can_reach_location(location, self.multiworld.state)
