@@ -614,7 +614,7 @@ if is_easter_time():
     easter_special_option_group = OptionGroup("EASTER SPECIAL", [
         EasterEggHunt,
     ])
-    witness_option_groups = [easter_special_option_group] + witness_option_groups
+    witness_option_groups = [easter_special_option_group, *witness_option_groups]
 else:
     silly_options_group = next(group for group in witness_option_groups if group.name == "Silly Options")
     silly_options_group.options.append(EasterEggHunt)
