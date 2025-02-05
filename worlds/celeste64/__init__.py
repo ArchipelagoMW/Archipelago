@@ -181,14 +181,13 @@ class Celeste64World(World):
             from .Rules import connect_region
             connect_region(self, region, region_data_table[region_name].connecting_regions)
 
+        # Have to do this here because of other games using State in a way that's bad
+        from .Rules import set_rules
+        set_rules(self)
+
 
     def get_filler_item_name(self) -> str:
         return ItemName.raspberry
-
-
-    def set_rules(self) -> None:
-        from .Rules import set_rules
-        set_rules(self)
 
 
     def fill_slot_data(self):
