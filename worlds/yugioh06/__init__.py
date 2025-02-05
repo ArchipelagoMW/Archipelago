@@ -170,12 +170,12 @@ class Yugioh06World(World):
                 self.starting_opponent = slot_data["starting_opponent"]
                 if "progression_cards" in slot_data:
                     self.progression_cards_in_start = [collection_id_to_name[cid] for cid in
-                                                   slot_data["progression_cards_in_start"]]
+                                                       slot_data["progression_cards_in_start"]]
                     self.progression_cards_in_booster = [collection_id_to_name[cid] for cid in
-                                                     slot_data["progression_cards_in_booster"]]
+                                                         slot_data["progression_cards_in_booster"]]
                     for name, v in slot_data["progression_cards"].items():
                         self.progression_cards[name] = [collection_id_to_name[cid] for cid in
-                                                    slot_data["progression_cards"][name]]
+                                                        slot_data["progression_cards"][name]]
                     for name, content in slot_data["booster_pack_contents"].items():
                         con = {}
                         for cid in slot_data["booster_pack_contents"][name]:
@@ -319,10 +319,10 @@ class Yugioh06World(World):
 
         # randomize packs
         if (not self.booster_pack_contents and
-            self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_shuffle):
+                self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_shuffle):
             self.booster_pack_contents = create_shuffled_packs(self)
-        elif not (self.booster_pack_contents and
-                self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_chaos):
+        elif (not self.booster_pack_contents and
+                  self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_chaos):
             self.booster_pack_contents = create_chaos_packs(self)
 
     def create_region(self, name: str, locations=None, exits=None):
@@ -345,7 +345,7 @@ class Yugioh06World(World):
         structure_deck = self.options.structure_deck.current_key
         self.multiworld.regions += [
             self.create_region("Menu", None, ["to Deck Edit", "to Campaign", "to Challenges", "to Card Shop"]),
-            self.create_region("Campaign", {**Bonuses,  **Campaign_Opponents}),
+            self.create_region("Campaign", {**Bonuses, **Campaign_Opponents}),
             self.create_region("Challenges"),
             self.create_region("Card Shop", {**Required_Cards, **collection_events}),
             self.create_region("Structure Deck", get_deck_content_locations(self, structure_deck)),
@@ -374,14 +374,14 @@ class Yugioh06World(World):
                 elif opponent.column == 5:
                     challenge_amount = self.options.final_campaign_boss_challenges.value
                     campaign_amount = self.options.final_campaign_boss_campaign_opponents.value
-                entrance.access_rule = lambda state, chal_a=challenge_amount, cam_a=campaign_amount, opp=opponent: (
-                    state.has("Challenge Beaten", self.player, chal_a)) and \
-                    state.has_group("Campaign Boss Beaten", self.player, cam_a) and \
-                    state.has_all(opp.additional_info, self.player)
+                entrance.access_rule = lambda state, chal_a=challenge_amount, cam_a=campaign_amount, opp=opponent: ((
+                    state.has("Challenge Beaten", self.player, chal_a)) and
+                    state.has_group("Campaign Boss Beaten", self.player, cam_a) and
+                    state.has_all(opp.additional_info, self.player))
             else:
-                entrance.access_rule = lambda state, unlock=unlock_item, opp=opponent: state.has(
-                    unlock, self.player
-                ) and yugioh06_difficulty(self, state, self.player, opp.difficulty)
+                entrance.access_rule = lambda state, unlock=unlock_item, opp=opponent: (
+                        state.has(unlock, self.player) and
+                        yugioh06_difficulty(self, state, self.player, opp.difficulty))
             campaign.exits.append(entrance)
             entrance.connect(region)
             self.multiworld.regions.append(region)

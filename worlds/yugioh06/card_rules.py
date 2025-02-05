@@ -1234,5 +1234,5 @@ raise_attack = [
     CardRule("Witch's Apprentice", 1, additional_cards=InnerCardRule(
         lambda: find_cards_with(min_attack=2550, attribute="DARK"), 1)),
     CardRule("Yami", 1, additional_cards=InnerCardRule(
-        lambda: find_cards_with(min_attack=2850, types=["Fiend, Spellcaster"]), 1)),
+        lambda: find_cards_with(min_attack=2850, types=["Fiend", "Spellcaster"]), 1)),
 ]
