@@ -3,21 +3,21 @@ from random import Random
 from typing import List, Set
 
 from BaseClasses import Item, ItemClassification
-from worlds.stardew_valley.content.feature import friendsanity
-from worlds.stardew_valley.content.game_content import StardewContent
-from worlds.stardew_valley.data.game_item import ItemTag
-from .item_data import StardewItemFactory, items_by_group, Group, item_table, ItemData
-from worlds.stardew_valley.mods.mod_data import ModNames
-from worlds.stardew_valley.options import StardewValleyOptions, TrapDifficulty, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
-    BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
-    Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, EnabledFillerBuffs
-from worlds.stardew_valley.strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName
-from worlds.stardew_valley.strings.ap_names.ap_weapon_names import APWeapon
-from worlds.stardew_valley.strings.ap_names.buff_names import Buff
-from worlds.stardew_valley.strings.ap_names.community_upgrade_names import CommunityUpgrade
-from worlds.stardew_valley.strings.ap_names.mods.mod_items import SVEQuestItem
-from worlds.stardew_valley.strings.currency_names import Currency
-from worlds.stardew_valley.strings.wallet_item_names import Wallet
+from .item_data import StardewItemFactory, items_by_group, Group, ItemData, item_table
+from ..content.feature import friendsanity
+from ..content.game_content import StardewContent
+from ..data.game_item import ItemTag
+from ..mods.mod_data import ModNames
+from ..options import StardewValleyOptions, TrapDifficulty, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
+    BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, Chefsanity, Craftsanity, \
+    BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, EnabledFillerBuffs
+from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName
+from ..strings.ap_names.ap_weapon_names import APWeapon
+from ..strings.ap_names.buff_names import Buff
+from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
+from ..strings.ap_names.mods.mod_items import SVEQuestItem
+from ..strings.currency_names import Currency
+from ..strings.wallet_item_names import Wallet
 
 logger = logging.getLogger(__name__)
 

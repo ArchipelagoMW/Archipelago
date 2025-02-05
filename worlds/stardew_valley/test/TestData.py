@@ -1,6 +1,6 @@
 import unittest
 
-from ..items.item_data import load_item_csv
+from ..items import load_item_csv
 from ..locations import load_location_csv
 from ..options import Mods
 
