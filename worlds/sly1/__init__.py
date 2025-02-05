@@ -69,8 +69,7 @@ class Sly1World(World):
             event_item = Sly1Item(item, ItemClassification.progression_skip_balancing, None, self.player)
             self.multiworld.get_location(event, self.player).place_locked_item(event_item)
 
-    def set_rules(self):
-        set_rules(self)
+    set_rules = set_rules
 
     def create_item(self, name: str) -> Item:
         return create_item(self, name)
@@ -80,6 +79,7 @@ class Sly1World(World):
             "options": {
                 "StartingEpisode": episode_type_to_name[EpisodeType(self.options.StartingEpisode)],
                 "IncludeHourglasses": self.options.IncludeHourglasses.value,
+                "HourglassesRequireRoll": self.options.HourglassesRequireRoll.value,
                 "AvoidEarlyBK": self.options.AvoidEarlyBK.value,
                 "CluesanityBundleSize": self.options.CluesanityBundleSize.value
             },

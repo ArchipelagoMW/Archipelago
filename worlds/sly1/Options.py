@@ -36,6 +36,13 @@ class IncludeHourglasses(Toggle):
     """
     display_name = "Include Hourglasses"
 
+class HourglassesRequireRoll(Toggle):
+    """
+    Some Hourglasses are tough without the Roll move.
+    If enabled, at least one Progressive Roll will logically be required for Hourglasses.
+    """
+    display_name = "Hourglasses Require Roll"
+
 class ExcludeMinigames(OptionSet):
     """
     Choose which minigames types you want to exclude as locations.
@@ -120,6 +127,7 @@ class CluesanityBundleSize(Range):
 class Sly1Options(PerGameCommonOptions):
     StartingEpisode:                StartingEpisode
     IncludeHourglasses:             IncludeHourglasses
+    HourglassesRequireRoll:         HourglassesRequireRoll
     AvoidEarlyBK:                   AvoidEarlyBK
     ExcludeMinigames:               ExcludeMinigames
     TrapChance:                     TrapChance
@@ -130,7 +138,7 @@ class Sly1Options(PerGameCommonOptions):
     CluesanityBundleSize:           CluesanityBundleSize
 
 sly1_option_groups: Dict[str, List[Any]] = {
-    "General Options": [StartingEpisode, IncludeHourglasses, CluesanityBundleSize],
+    "General Options": [StartingEpisode, IncludeHourglasses, HourglassesRequireRoll, CluesanityBundleSize],
     "Exclude Minigames": [ExcludeMinigames],
     "Trap Options": [TrapChance, IcePhysicsTrapWeight,
                      SpeedChangeTrapWeight, BentleyJumpscareTrapWeight,
@@ -140,6 +148,7 @@ sly1_option_groups: Dict[str, List[Any]] = {
 slot_data_options: List[str] = {
     "StartingEpisode",
     "IncludeHourglasses",
+    "HourglassesRequireRoll",
     "AvoidEarlyBK",
     "ExcludeMinigames",
     "CluesanityBundleSize"
