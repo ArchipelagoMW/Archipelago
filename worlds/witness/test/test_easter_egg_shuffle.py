@@ -135,7 +135,7 @@ class TestBunkerElevatorEgg(WitnessMultiworldTestBase):
         "shuffle_symbols": False,
     }
 
-    def test_bunker_elevator_egg(self):
+    def test_bunker_elevator_egg(self) -> None:
         items_to_reach_bunker_elevator = [
             "Bunker Entry (Panel)",
             "Bunker Tinted Glass Door (Panel)",

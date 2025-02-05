@@ -549,7 +549,7 @@ class WitnessPlayerLogic:
                 "entities": frozenset({frozenset({f"{requirement} Eggs"})})
             }
 
-    def finalize_easter_eggs(self, world: "WitnessWorld"):
+    def finalize_easter_eggs(self, world: "WitnessWorld") -> None:
         self.AVAILABLE_EASTER_EGGS = {
             entity_hex for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
             if entity_obj["entityType"] == "Easter Egg" and self.solvability_guaranteed(entity_hex)

@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Tuple
 
 from schema import And, Schema
 
@@ -175,7 +176,7 @@ class EasterEggHunt(Choice):
     option_extreme = 5
     default = 2 if datetime.now().month == 4 else 0
 
-    def get_step_and_logical_step(self):
+    def get_step_and_logical_step(self) -> Tuple[int, int]:
         if self == "easy":
             return 3, 8
         if self == "normal":
