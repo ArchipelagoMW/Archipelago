@@ -23,12 +23,11 @@
 <FLAGON>(25)
 <FLAGON>(57)
 <FRAMEEND>
-<LUIGIFREE>
-<LUIGIFREE2>
 <SE>(132)
 <WINDOW>(1)<COLOR>(1)
-<SAY><COLOR>(0)Phew! The lights are back on!\nLeave the room to re-activate
+<SAY><COLOR>(0)Phew! The lights are back on!\nLet's take a break at the lab.
 <TURNON>
 <WAIT>(120)
 <CLOSEWINDOW>(1)
+<WARP>(1)
 <END>
