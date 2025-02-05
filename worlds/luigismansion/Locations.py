@@ -128,8 +128,8 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
                                          room_ram_addr=0x803CDF50),
     "Fortune Teller Clear Chest": LMLocationData("Fortune-Teller's Room", 5, "Chest", 2, [], 3,
                                                  room_ram_addr=0x803CDF56),
-    # "Wardrobe Clear Chest": LMLocationData("Wardrobe", 0, "Chest", 22, ["Blackout"], 41,
-    #                                         room_ram_addr=0x803CDF9C), #TODO not spawning after Grimmly
+    "Wardrobe Clear Chest": LMLocationData("Wardrobe", 0, "Chest", 22, ["Blackout"], 41,
+                                            room_ram_addr=0x803CDF9C), #TODO not spawning after Grimmly
     "Study Clear Chest": LMLocationData("Study", 1, "Chest", 19, [], 35, room_ram_addr=0x803CDF94),
     "Master Bedroom Clear Chest": LMLocationData("Master Bedroom", 2, "Chest", 18, [], 34, room_ram_addr=0x803CDF92),
     "Nursery Clear Chest": LMLocationData("Nursery", 3, "Chest", 15, [], 26, room_ram_addr=0x803CDF80),

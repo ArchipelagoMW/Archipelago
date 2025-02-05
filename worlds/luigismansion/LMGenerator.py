@@ -85,6 +85,9 @@ class LuigisMansionRandomizer:
         self.jmp_generator_info_table = self.load_maptwo_info_table("generatorinfo")
         self.jmp_enemy_info_table = self.load_maptwo_info_table("enemyinfo")
         self.jmp_boo_table = self.load_maptwo_info_table("telesa")
+        self.jmp_teiden_observer_info_table = self.load_maptwo_info_table("teidenobserverinfo")
+        self.jmp_teiden_enemy_info_table = self.load_maptwo_info_table("teidenenemyinfo")
+        self.jmp_teiden_character_info_table = self.load_maptwo_info_table("teidencharacterinfo")
 
         # Saves the randomized iso file, with all files updated.
         self.save_randomized_iso()
@@ -158,6 +161,7 @@ class LuigisMansionRandomizer:
         update_item_info_table(self.jmp_item_info_table, self.output_data)
         update_item_appear_table(self.jmp_item_appear_table, self.output_data)
         update_treasure_table(self.jmp_treasure_table, self.jmp_character_info_table, self.output_data)
+        update_treasure_table(self.jmp_treasure_table, self.jmp_teiden_character_info_table, self.output_data, True)
         update_furniture_info(self.jmp_furniture_info_table, self.jmp_item_appear_table, self.output_data)
         update_event_info(self.jmp_event_info_table, bool_boo_checks)
         update_observer_info(self.jmp_observer_info_table)
@@ -169,6 +173,7 @@ class LuigisMansionRandomizer:
 
         # Updates all the data entries in each jmp table in the szp file.
         self.update_maptwo_info_table(self.jmp_character_info_table)
+        self.update_maptwo_info_table(self.jmp_teiden_character_info_table)
         self.update_maptwo_info_table(self.jmp_item_info_table)
         self.update_maptwo_info_table(self.jmp_item_appear_table)
         self.update_maptwo_info_table(self.jmp_treasure_table)
