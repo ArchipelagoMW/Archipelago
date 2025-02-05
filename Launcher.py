@@ -408,27 +408,22 @@ def check_for_update() -> None:
             return
         elif answer == "Skip Version":
             settings.get_settings().general_options.skip_update = version.as_simple_string()
-            update_settings()
             return
         # download and install the latest Archipelago release
         latest_release = remote_data["assets"]
         latest_files: Dict[str, Any] = {
             asset["name"]: asset["browser_download_url"] for asset in latest_release
         }
-        linux_name = None
-        windows_name = None
+        download_names = []
         for name in latest_files:
-            if name.endswith(".AppImage") and "APPIMAGE" in os.environ:
-                linux_name = name
-            elif name.endswith(".tar.gz") and linux_name is None:
-                linux_name = name
-            elif name.endswith(".exe") and windows_name is None:
-                windows_name = name
-
-        if is_windows:
-            to_download = windows_name
-        else:
-            to_download = linux_name
+            if is_linux:
+                if name.endswith(".AppImage") and "APPIMAGE" in os.environ:
+                    download_names.append(name)
+                elif name.endswith(".tar.gz"):
+                    download_names.append(name)
+            # the windows check isn't technically necessary here but presumably may support macos in the future
+            elif is_windows and name.endswith(".exe"):
+                download_names.append(name)
 
         def download_selection(asset: str) -> None:
             import os
@@ -451,7 +446,17 @@ def check_for_update() -> None:
 
             messagebox("Update Downloaded Successfully", f"{asset} has been downloaded successfully!")
 
-        download_selection(to_download)
+        if not download_names:
+            raise FileNotFoundError(f"No download available for {version.as_simple_string()} for {platform.platform()}")
+        if len(download_names) == 1:
+            download_selection(download_names[0])
+        else:
+            ButtonsPrompt(
+                "Available Update",
+                "Select update to download",
+                download_selection,
+                *download_names
+            )
 
     ButtonsPrompt(
         "Update Available",
