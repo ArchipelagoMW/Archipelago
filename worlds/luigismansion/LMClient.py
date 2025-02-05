@@ -544,28 +544,29 @@ class LMContext(CommonContext):
                 match lm_item.code:
                     case 58:  # Mario's Glove
                         item_val = dme.read_byte(0x803D339B)
-                        dme.write_byte(lm_item.ram_addr, (item_val | (1 << 5)))
+                        dme.write_byte(0x803D339B, (item_val | (1 << 5)))
                     case 59:  # Mario's Hat
                         item_val = dme.read_byte(0x803D339D)
-                        dme.write_byte(lm_item.ram_addr, (item_val | (1 << 1)))
+                        dme.write_byte(0x803D339D, (item_val | (1 << 1)))
                     case 60:  # Mario's Letter
                         item_val = dme.read_byte(0x803D339C)
-                        dme.write_byte(lm_item.ram_addr, (item_val | (1 << 3)))
+                        dme.write_byte(0x803D339C, (item_val | (1 << 3)))
                     case 61:  # Mario's Star
                         item_val = dme.read_byte(0x803D339C)
-                        dme.write_byte(lm_item.ram_addr, (item_val | (1 << 6)))
+                        dme.write_byte(0x803D339C, (item_val | (1 << 6)))
                     case 62:  # Mario's Shoe
                         item_val = dme.read_byte(0x803D339C)
-                        dme.write_byte(lm_item.ram_addr, (item_val | (1 << 0)))
+                        dme.write_byte(0x803D339C, (item_val | (1 << 0)))
                     case 55:  # Fire Element Medal
                         item_val = dme.read_byte(0x803D339E)
-                        dme.write_byte(lm_item.ram_addr, (item_val | (1 << 3)))
+                        dme.write_byte(0x803D339E, (item_val | (1 << 3)))
                     case 56:  # Water Element Medal
                         item_val = dme.read_byte(0x803D339E)
-                        dme.write_byte(lm_item.ram_addr, (item_val | (1 << 4)))
+                        dme.write_byte(0x803D339E, (item_val | (1 << 4)))
                     case 57:  # Ice Element Medal
+                        print("random bullshit go")
                         item_val = dme.read_byte(0x803D339B)
-                        dme.write_byte(lm_item.ram_addr, (item_val | (1 << 6)))
+                        dme.write_byte(0x803D339B, (item_val | (1 << 6)))
 
         return
 
