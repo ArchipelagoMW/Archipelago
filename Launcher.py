@@ -317,7 +317,7 @@ def run_gui():
             return self.container
 
         def on_start(self):
-            if settings.get_settings().general_options.AutoUpdate:
+            if is_frozen() and settings.get_settings().general_options.auto_update:
                 check_for_update()
 
         @staticmethod
