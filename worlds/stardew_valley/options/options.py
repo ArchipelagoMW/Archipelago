@@ -678,18 +678,20 @@ class TrapDifficulty(Choice):
 class TrapDistribution(OptionDict):
     """
     Specify the weighted chance of rolling individual traps when rolling random filler items.
-    The average filler item should be considered to be "10". So a trap on "20" will be twice as likely to roll as any filler item. A trap on "1" will be 1/10th as likely.
-    You can use weight "0" to disable this trap entirely. The maximum weight is 100
+    The average filler item should be considered to be "100", as in 100%.
+    So a trap on "200" will be twice as likely to roll as any filler item. A trap on "10" will be 10% as likely.
+    You can use weight "0" to disable this trap entirely. The maximum weight is 1000, for x10 chance
     """
     internal_name = "trap_distribution"
     display_name = "Trap Distribution"
+    default_weight = 100
     schema = Schema({
         trap_data.name: And(int, lambda n: 0 <= n <= 100)
         for trap_data in items_by_group[Group.TRAP]
         if Group.DEPRECATED not in trap_data.groups
     })
     default = {
-        trap_data.name: 10
+        trap_data.name: default_weight
         for trap_data in items_by_group[Group.TRAP]
         if Group.DEPRECATED not in trap_data.groups
     }

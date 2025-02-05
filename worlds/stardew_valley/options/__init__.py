@@ -3,4 +3,4 @@ from .options import StardewValleyOption, Goal, FarmType, StartingMoney, ProfitM
     ArcadeMachineLocations, SpecialOrderLocations, QuestLocations, Fishsanity, Museumsanity, Monstersanity, Shipsanity, Cooksanity, Chefsanity, Craftsanity, \
     Friendsanity, FriendsanityHeartSize, Booksanity, Walnutsanity, NumberOfMovementBuffs, EnabledFillerBuffs, ExcludeGingerIsland, TrapDifficulty, \
     MultipleDaySleepEnabled, MultipleDaySleepCost, ExperienceMultiplier, FriendshipMultiplier, DebrisMultiplier, QuickStart, Gifting, Mods, BundlePlando, \
-    TrapDistribution, StardewValleyOptions
+    TrapDistribution, TrapItems, StardewValleyOptions

@@ -661,7 +661,7 @@ def get_weighted_filler(options: StardewValleyOptions, all_filler_packs: List[It
         if filler.name in options.trap_distribution:
             num = options.trap_distribution[filler.name]
         else:
-            num = 10
+            num = StardewValleyOptions.trap_distribution.default_weight
         weighted.extend([filler] * num)
     return weighted
 
