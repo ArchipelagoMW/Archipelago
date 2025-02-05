@@ -61,8 +61,8 @@ location_table = {
     'Palm Tree Paradise - Hidden Tunnel Diamond':               LocationData(Passage.EMERALD,  0, ItemFlag.DIAMOND_3,     _NORMAL),
     'Palm Tree Paradise - Platform Cave Hidden Diamond':        LocationData(Passage.EMERALD,  0, ItemFlag.DIAMOND_4,     _NORMAL),
     'Palm Tree Paradise - Submerged Diamond':                   LocationData(Passage.EMERALD,  0, ItemFlag.DIAMOND_5,     _ALL),
-    'Palm Tree Paradise - Scienstein Throw Diamond':            LocationData(Passage.EMERALD,  0, ItemFlag.DIAMOND_6,     _ALL),
-    'Palm Tree Paradise - Ladder Cave Pink Room Diamond':       LocationData(Passage.EMERALD,  0, ItemFlag.DIAMOND_7,     _ALL),
+    'Palm Tree Paradise - Switch Staircase Diamond':            LocationData(Passage.EMERALD,  0, ItemFlag.DIAMOND_6,     _ALL),
+    'Palm Tree Paradise - Scienstein Throw Diamond':            LocationData(Passage.EMERALD,  0, ItemFlag.DIAMOND_7,     _ALL),
 
     # Wildflower Fields
     'Wildflower Fields - Current Cave Box':                     LocationData(Passage.EMERALD,  1, ItemFlag.JEWEL_NE,      _ALL),

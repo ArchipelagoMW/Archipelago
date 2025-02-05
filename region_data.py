@@ -111,11 +111,11 @@ level_table = {
                     LocationData("Hidden Tunnel Diamond", difficulties=[normal]),
                     LocationData("Platform Cave Hidden Diamond", difficulties=[normal]),
                     LocationData("Submerged Diamond", access_rule=has('Swim')),
-                    LocationData("Scienstein Throw Diamond", access_rule=has('Grab')),
                     LocationData(
-                        "Ladder Cave Pink Room Diamond",
+                        "Switch Staircase Diamond",
                         access_rule=has('Grab') | advanced_logic() & has('Enemy Jump')
                     ),
+                    LocationData("Scienstein Throw Diamond", access_rule=has('Grab')),
                 ]
             ),
         ],
