@@ -1012,6 +1012,10 @@ def update_treasure_table(treasure_info, character_info, output_data):
                 # Replace the Chest visuals with something that matches the item name in "characterinfo".
                 x["name"] = __get_item_chest_visual(item_data["name"])
 
+                # Move the Laundry room chest back from Butler door
+                if x["room_no"] == 5:
+                    x["pos_z"] -= 50
+
                 # Define the actor name to use from the Location in the generation output.
                 # Act differently if it's a key.
                 # Also define the size of the chest from the item name.
