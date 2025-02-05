@@ -187,7 +187,7 @@ class WL4World(World):
                 itempool.append(self.create_item(name))
 
         # Remove full health items to make space for abilities
-        if required_jewels == 4:
+        if pool_jewels == 4:
             full_health_items -= 8
         assert full_health_items > 0
 
