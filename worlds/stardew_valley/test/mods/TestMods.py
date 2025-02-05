@@ -1,7 +1,7 @@
 import random
 
 from BaseClasses import get_seed
-from .mod_testing_decorators import must_test_all_mods, mod_testing
+from .mod_testing_decorators import must_test_all_mods, tests_mod
 from .. import SVTestBase, SVTestCase, allsanity_mods_6_x_x, fill_dataclass_with_default
 from ..assertion import ModAssertMixin, WorldAssertMixin
 from ... import items, Group, ItemClassification, create_content
@@ -42,51 +42,51 @@ class TestModsEntranceRandomization(WorldAssertMixin, SVTestCase):
     Not all ER settings are tested, because 'buildings' is, essentially, a superset of all others
     """
 
-    @mod_testing(ModNames.deepwoods)
+    @tests_mod(ModNames.deepwoods)
     def test_deepwoods_entrance_randomization_buildings(self):
         self.perform_basic_checks_on_mod_with_er(ModNames.deepwoods, options.EntranceRandomization.option_buildings)
 
-    @mod_testing(ModNames.juna)
+    @tests_mod(ModNames.juna)
     def test_juna_entrance_randomization_buildings(self):
         self.perform_basic_checks_on_mod_with_er(ModNames.juna, options.EntranceRandomization.option_buildings)
 
-    @mod_testing(ModNames.jasper)
+    @tests_mod(ModNames.jasper)
     def test_jasper_entrance_randomization_buildings(self):
         self.perform_basic_checks_on_mod_with_er(ModNames.jasper, options.EntranceRandomization.option_buildings)
 
-    @mod_testing(ModNames.alec)
+    @tests_mod(ModNames.alec)
     def test_alec_entrance_randomization_buildings(self):
         self.perform_basic_checks_on_mod_with_er(ModNames.alec, options.EntranceRandomization.option_buildings)
 
-    @mod_testing(ModNames.yoba)
+    @tests_mod(ModNames.yoba)
     def test_yoba_entrance_randomization_buildings(self):
         self.perform_basic_checks_on_mod_with_er(ModNames.yoba, options.EntranceRandomization.option_buildings)
 
-    @mod_testing(ModNames.eugene)
+    @tests_mod(ModNames.eugene)
     def test_eugene_entrance_randomization_buildings(self):
         self.perform_basic_checks_on_mod_with_er(ModNames.eugene, options.EntranceRandomization.option_buildings)
 
-    @mod_testing(ModNames.ayeisha)
+    @tests_mod(ModNames.ayeisha)
     def test_ayeisha_entrance_randomization_buildings(self):
         self.perform_basic_checks_on_mod_with_er(ModNames.ayeisha, options.EntranceRandomization.option_buildings)
 
-    @mod_testing(ModNames.riley)
+    @tests_mod(ModNames.riley)
     def test_riley_entrance_randomization_buildings(self):
         self.perform_basic_checks_on_mod_with_er(ModNames.riley, options.EntranceRandomization.option_buildings)
 
-    @mod_testing(ModNames.sve)
+    @tests_mod(ModNames.sve)
     def test_sve_entrance_randomization_buildings(self):
         self.perform_basic_checks_on_mod_with_er(ModNames.sve, options.EntranceRandomization.option_buildings)
 
-    @mod_testing(ModNames.alecto)
+    @tests_mod(ModNames.alecto)
     def test_alecto_entrance_randomization_buildings(self):
         self.perform_basic_checks_on_mod_with_er(ModNames.alecto, options.EntranceRandomization.option_buildings)
 
-    @mod_testing(ModNames.lacey)
+    @tests_mod(ModNames.lacey)
     def test_lacey_entrance_randomization_buildings(self):
         self.perform_basic_checks_on_mod_with_er(ModNames.lacey, options.EntranceRandomization.option_buildings)
 
-    @mod_testing(ModNames.boarding_house)
+    @tests_mod(ModNames.boarding_house)
     def test_boarding_house_entrance_randomization_buildings(self):
         self.perform_basic_checks_on_mod_with_er(ModNames.boarding_house, options.EntranceRandomization.option_buildings)
 
