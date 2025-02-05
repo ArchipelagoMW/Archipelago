@@ -27,7 +27,7 @@
 <WINDOW>(1)<COLOR>(1)
 <SAY><COLOR>(0)Phew! The lights are back on!\nLet's take a break at the lab.
 <TURNON>
-<WAIT>(120)
+<ANYKEY>
 <CLOSEWINDOW>(1)
 <WARP>(1)
 <END>
