@@ -387,7 +387,7 @@ item_table = {
                  parent=item_names.MARAUDER),
     item_names.REAPER_JET_PACK_OVERDRIVE:
         ItemData(239 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_2, 6, SC2Race.TERRAN,
-                 parent=item_names.REAPER),
+                 classification=ItemClassification.progression_skip_balancing, parent=item_names.REAPER),
     item_names.HELLION_INFERNAL_PLATING:
         ItemData(240 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_2, 7, SC2Race.TERRAN,
                  parent=item_names.HELLION),
@@ -836,7 +836,7 @@ item_table = {
                  parent=item_names.PLANETARY_FORTRESS, quantity=2),
     item_names.PLANETARY_FORTRESS_ADVANCED_TARGETING:
         ItemData(389 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 7, SC2Race.TERRAN,
-                 parent=item_names.PLANETARY_FORTRESS),
+                 classification=ItemClassification.progression, parent=item_names.PLANETARY_FORTRESS),
     item_names.VALKYRIE_LAUNCHING_VECTOR_COMPENSATOR:
         ItemData(390 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 8, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent=item_names.VALKYRIE),
@@ -876,7 +876,8 @@ item_table = {
         ItemData(401 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Building, 1, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
     item_names.SENSOR_TOWER:
-        ItemData(402 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Building, 2, SC2Race.TERRAN),
+        ItemData(402 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Building, 2, SC2Race.TERRAN,
+                 classification=ItemClassification.progression_skip_balancing),
     item_names.DEVASTATOR_TURRET:
         ItemData(403 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Building, 7, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
@@ -886,7 +887,7 @@ item_table = {
                  classification=ItemClassification.progression),
     item_names.DEVIL_DOGS:
         ItemData(501 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 1, SC2Race.TERRAN,
-                 classification=ItemClassification.filler),
+                 classification=ItemClassification.progression_skip_balancing),
     item_names.HAMMER_SECURITIES:
         ItemData(502 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Mercenary, 2, SC2Race.TERRAN,
                  classification=ItemClassification.progression),
@@ -1049,7 +1050,7 @@ item_table = {
         ItemData(762 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 16, SC2Race.TERRAN),
     item_names.WIDOW_MINE_DEMOLITION_ARMAMENTS:
         ItemData(763 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 17, SC2Race.TERRAN,
-                 parent=item_names.WIDOW_MINE),
+                 classification=ItemClassification.progression, parent=item_names.WIDOW_MINE),
     item_names.SENSOR_TOWER_ASSISTIVE_TARGETING:
         ItemData(764 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 18, SC2Race.TERRAN,
                  parent=item_names.SENSOR_TOWER),
@@ -1576,7 +1577,7 @@ item_table = {
         ItemData(380 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 8, SC2Race.ZERG, parent=item_names.INFESTED_LIBERATOR,
                  classification=ItemClassification.progression),
     item_names.ABERRATION_PROGRESSIVE_BANELING_LAUNCH:
-        ItemData(381 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Progressive, 4, SC2Race.ZERG, parent=item_names.ABERRATION, quantity=2),
+        ItemData(381 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Progressive, 4, SC2Race.ZERG, parent=item_names.ABERRATION, quantity=2, classification=ItemClassification.progression),
     item_names.PYGALISK_STIM:
         ItemData(382 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_5, 9, SC2Race.ZERG, parent=item_names.PYGALISK),
     item_names.PYGALISK_DUCAL_BLADES:
@@ -1629,15 +1630,15 @@ item_table = {
     item_names.KERRIGAN_LEVELS_70: ItemData(512 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Level, 70, SC2Race.ZERG, quantity=0, classification=ItemClassification.progression),
 
     # Zerg Mercs
-    item_names.INFESTED_MEDICS: ItemData(600 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 0, SC2Race.ZERG),
+    item_names.INFESTED_MEDICS: ItemData(600 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 0, SC2Race.ZERG, classification=ItemClassification.progression),
     item_names.INFESTED_SIEGE_BREAKERS: ItemData(601 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 1, SC2Race.ZERG, classification=ItemClassification.progression),
     item_names.INFESTED_DUSK_WINGS: ItemData(602 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 2, SC2Race.ZERG, classification=ItemClassification.progression),
-    item_names.DEVOURING_ONES: ItemData(603 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 3, SC2Race.ZERG),
-    item_names.HUNTER_KILLERS: ItemData(604 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 4, SC2Race.ZERG),
-    item_names.TORRASQUE_MERC: ItemData(605 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 5, SC2Race.ZERG),
+    item_names.DEVOURING_ONES: ItemData(603 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 3, SC2Race.ZERG, classification=ItemClassification.progression),
+    item_names.HUNTER_KILLERS: ItemData(604 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 4, SC2Race.ZERG, classification=ItemClassification.progression),
+    item_names.TORRASQUE_MERC: ItemData(605 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 5, SC2Race.ZERG, classification=ItemClassification.progression),
     item_names.HUNTERLING: ItemData(606 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 6, SC2Race.ZERG, classification=ItemClassification.progression),
     item_names.YGGDRASIL: ItemData(607 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 7, SC2Race.ZERG, classification=ItemClassification.progression),
-    item_names.THORNSHELL: ItemData(608 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 8, SC2Race.ZERG),
+    item_names.THORNSHELL: ItemData(608 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mercenary, 8, SC2Race.ZERG, classification=ItemClassification.progression),
 
 
     # Misc Upgrades
@@ -1992,7 +1993,7 @@ item_table = {
     item_names.MOTHERSHIP_INTEGRATED_POWER: ItemData(545 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 15, SC2Race.PROTOSS, parent=item_names.MOTHERSHIP),
     # 546-549 reserved for Mothership
     item_names.OPPRESSOR_VULCAN_BLASTER: ItemData(550 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 20, SC2Race.PROTOSS, parent=item_names.OPPRESSOR),
-    item_names.CALADRIUS_CORONA_BEAM: ItemData(551 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 21, SC2Race.PROTOSS, parent=item_names.CALADRIUS),
+    item_names.CALADRIUS_CORONA_BEAM: ItemData(551 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 21, SC2Race.PROTOSS, classification=ItemClassification.progression, parent=item_names.CALADRIUS),
     item_names.MISTWING_PHANTOM_DASH: ItemData(552 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 22, SC2Race.PROTOSS, parent=item_names.MISTWING),
     
 
@@ -2037,7 +2038,7 @@ item_table = {
     item_names.OPTIMIZED_ORDNANCE:
         ItemData(810 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Solarite_Core, 10, SC2Race.PROTOSS, parent=parent_names.PROTOSS_ATTACKING_BUILDING),
     item_names.KHALAI_INGENUITY:
-        ItemData(811 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Solarite_Core, 11, SC2Race.PROTOSS),
+        ItemData(811 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Solarite_Core, 11, SC2Race.PROTOSS, classification=ItemClassification.progression),
     item_names.AMPLIFIED_ASSIMILATORS:
         ItemData(812 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Solarite_Core, 12, SC2Race.PROTOSS),
     item_names.PROGRESSIVE_WARP_RELOCATE:

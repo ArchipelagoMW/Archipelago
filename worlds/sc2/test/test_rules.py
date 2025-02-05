@@ -9,6 +9,7 @@ import Options as CoreOptions
 from .. import options, locations
 from ..item import item_tables
 from ..rules import SC2Logic
+from ..mission_tables import SC2Race
 
 
 class TestInventory:
@@ -59,6 +60,16 @@ class TestInventory:
 
     def count_from_list_unique(self, items: Iterable[str], player: int) -> int:
         return sum(self.count(item_name, player) for item_name in items)
+
+
+class AnyUnitsTestInventory(TestInventory):
+    def has(self, item: str, player: int, count: int = 1) -> bool:
+        return False
+    
+    def count(self, item: str, player: int) -> int:
+        super().count(item, player)
+        # Always return enough to pass the 'and' portion of the check
+        return 2
 
 
 class TestWorld:
@@ -131,3 +142,28 @@ class TestRules(unittest.TestCase):
                 for location in location_data:
                     if location.rule is not None:
                         location.rule(test_inventory)
+    
+    def test_items_in_hard_rules_are_progression(self) -> None:
+        test_inventory = TestInventory()
+        test_world = TestWorld()
+        test_world.options.required_tactics.value = options.RequiredTactics.option_any_units
+        test_world.logic = SC2Logic(test_world)
+        location_data = locations.get_locations(test_world)
+        for _ in range(10):
+            for location in location_data:
+                if location.hard_rule is not None:
+                    location.hard_rule(test_inventory)
+
+    def test_items_in_any_units_rules_are_progression(self) -> None:
+        test_inventory = TestInventory()
+        test_world = TestWorld()
+        test_world.options.required_tactics.value = options.RequiredTactics.option_any_units
+        logic = SC2Logic(test_world)
+        test_world.logic = logic
+        for race in (SC2Race.TERRAN, SC2Race.PROTOSS, SC2Race.ZERG):
+            for target in range(1, 5):
+                rule = logic.has_race_units(target, race)
+                for _ in range(10):
+                    rule(test_inventory)
+
+
