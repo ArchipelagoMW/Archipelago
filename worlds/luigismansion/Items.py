@@ -126,7 +126,7 @@ BOO_ITEM_TABLE: dict[str, LMItemData] = {
     "Wardrobe Boo (GameBoo Advance)": LMItemData("Boo", 86, IC.progression, ram_addr=0x803D5E06, itembit=4),
     "Anteroom Boo (Bootha)": LMItemData("Boo", 87, IC.progression, ram_addr=0x803D5E06, itembit=5),
     "Astral Boo (Boonswoggle)": LMItemData("Boo", 88, IC.progression, ram_addr=0x803D5E06, itembit=6),
-    "Nana's Room (LamBooger)": LMItemData("Boo", 89, IC.progression, ram_addr=0x803D5E06, itembit=7),
+    "Nana's Room Boo (LamBooger)": LMItemData("Boo", 89, IC.progression, ram_addr=0x803D5E06, itembit=7),
     "Tea Room Boo (Mr. Boojangles)": LMItemData("Boo", 90, IC.progression, ram_addr=0x803D5E07, itembit=0),
     "Armory Boo (Underboo)": LMItemData("Boo", 91, IC.progression, ram_addr=0x803D5E07, itembit=1),
     "Telephone Room Boo (Boomerang)": LMItemData("Boo", 92, IC.progression, ram_addr=0x803D5E07, itembit=2),
