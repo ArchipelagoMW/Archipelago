@@ -423,14 +423,27 @@ def check_for_update() -> None:
             import os
             nonlocal latest_files
 
-            download_url = latest_files[asset]
-            response = urllib.request.urlopen(download_url)
-            content = response.read()
-            response.close()
-            if os.path.exists(asset):
-                os.remove(asset)
-            with open(asset, "wb") as f:
-                f.write(content)
+            cached_folder = Utils.cache_path("Downloads")
+            cached_path = os.path.join(cached_folder, asset)
+            if not os.path.exists(cached_path):
+                download_url = latest_files[asset]
+                temp_name = os.path.join(cached_folder, f"{asset}.tmp")
+                if not os.path.exists(cached_folder):
+                    os.makedirs(cached_folder)
+                try:
+                    with urllib.request.urlopen(download_url) as response:
+                        with open(temp_name, "wb") as f:
+                            import shutil
+                            shutil.copyfileobj(response, f)
+                    os.rename(temp_name, cached_path)
+                except Exception as e:
+                    if os.path.exists(cached_path):
+                        os.remove(cached_path)
+                    elif os.path.exists(temp_name):
+                        os.remove(temp_name)
+                    raise e
+
+            messagebox("Update Downloaded Successfully", f"{asset} has been downloaded successfully!")
             if is_windows:
                 launch([cached_path], True)
 
