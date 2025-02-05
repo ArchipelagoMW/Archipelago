@@ -186,7 +186,7 @@ def update_character_info(character_info, output_data):
             x["disappear_flag"] = 0
 
         # Make Shivers not disappear by doing a different appear flag.
-        if x["name"] == "situji" and x["room_no"] == 6:
+        if x["name"] == "situji":
             x["appear_flag"] = 7
 
 
@@ -275,7 +275,7 @@ def update_observer_info(observer_info):
         "invisible": 1,
         "(Undocumented)": 0,
     })
-    # This one enables the Conservatory 1F hallway after beating Bogmire
+    # This one enables the Conservatory 1F hallway after catching Shivers
     observer_info.info_file_field_entries.append({
         "name": "observer",
         "code_name": "(null)",
@@ -291,17 +291,47 @@ def update_observer_info(observer_info):
         "scale_y": 0.000000,
         "scale_z": 0.000000,
         "room_no": 18,
-        "cond_arg0": 67,
+        "cond_arg0": 60,
         "arg0": 0,
         "arg1": 0,
         "arg2": 0,
         "arg3": 0,
         "arg4": 0,
         "arg5": 0,
-        "appear_flag": 67,
+        "appear_flag": 60,
         "disappear_flag": 0,
         "cond_type": 18,
         "do_type": 1,
+        "invisible": 1,
+        "(Undocumented)": 0,
+    })
+    # Check that Shivers is caught to turn on Conservatory Hallway Light
+    observer_info.info_file_field_entries.append({
+        "name": "observer",
+        "code_name": "(null)",
+        "string_arg0": "(null)",
+        "cond_string_arg0": "(null)",
+        "pos_x": -3500.000000,
+        "pos_y": 0.000000,
+        "pos_z": -100.000000,
+        "dir_x": 0.000000,
+        "dir_y": 0.000000,
+        "dir_z": 0.000000,
+        "scale_x": 0.000000,
+        "scale_y": 0.000000,
+        "scale_z": 0.000000,
+        "room_no": 0,
+        "cond_arg0": 60,
+        "arg0": 0,
+        "arg1": 0,
+        "arg2": 0,
+        "arg3": 0,
+        "arg4": 0,
+        "arg5": 0,
+        "appear_flag": 0,
+        "disappear_flag": 0,
+        "cond_type": 13,
+        "do_type": 7,
         "invisible": 1,
         "(Undocumented)": 0,
     })
