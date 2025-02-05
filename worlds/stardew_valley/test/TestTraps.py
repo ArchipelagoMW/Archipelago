@@ -3,9 +3,9 @@ import unittest
 from . import SVTestBase
 from .assertion import WorldAssertMixin
 from .. import options, items_by_group, Group
+from ..options import TrapDistribution
 
-
-default_distribution = {trap.name: 10 for trap in items_by_group[Group.TRAP] if Group.DEPRECATED not in trap.groups}
+default_distribution = {trap.name: TrapDistribution.default_weight for trap in items_by_group[Group.TRAP] if Group.DEPRECATED not in trap.groups}
 threshold_difference = 2
 threshold_ballpark = 3
 
@@ -65,7 +65,7 @@ class TestDistributionIsRespectedAllTraps(WorldAssertMixin, SVTestBase):
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
         options.Mods.internal_name: frozenset(options.Mods.valid_keys),
         options.TrapDifficulty.internal_name: options.TrapDifficulty.option_medium,
-        options.TrapDistribution.internal_name: default_distribution | {"Nudge Trap": 10, "Bark Trap": 1, "Meow Trap": 100, "Shuffle Trap": 0}
+        options.TrapDistribution.internal_name: default_distribution | {"Nudge Trap": 100, "Bark Trap": 1, "Meow Trap": 1000, "Shuffle Trap": 0}
     }
 
     @classmethod

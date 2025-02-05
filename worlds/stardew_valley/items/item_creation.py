@@ -634,13 +634,14 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
                         if Group.MAXIMUM_ONE not in filler_pack.groups or
                         (filler_pack.name not in [priority_item.name for priority_item in
                                                   priority_filler_items] and filler_pack.name not in items_already_added_names)]
-    weighted_filler_packs = get_weighted_filler(options, all_filler_packs)
+
+    filler_weights = get_filler_weights(options, all_filler_packs)
 
     while required_resource_pack > 0:
-        resource_pack = random.choice(weighted_filler_packs)
+        resource_pack = random.choices(all_filler_packs, weights=filler_weights, k=1)[0]
         exactly_2 = Group.EXACTLY_TWO in resource_pack.groups
         while exactly_2 and required_resource_pack == 1:
-            resource_pack = random.choice(weighted_filler_packs)
+            resource_pack = random.choices(all_filler_packs, weights=filler_weights, k=1)[0]
             exactly_2 = Group.EXACTLY_TWO in resource_pack.groups
         classification = ItemClassification.useful if resource_pack.classification == ItemClassification.progression else resource_pack.classification
         items.append(item_factory(resource_pack, classification))
@@ -649,21 +650,22 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
             items.append(item_factory(resource_pack, classification))
             required_resource_pack -= 1
         if exactly_2 or Group.MAXIMUM_ONE in resource_pack.groups:
-            while resource_pack in weighted_filler_packs:
-                weighted_filler_packs.remove(resource_pack)
+            index = all_filler_packs.index(resource_pack)
+            all_filler_packs.pop(index)
+            filler_weights.pop(index)
 
     return items
 
 
-def get_weighted_filler(options: StardewValleyOptions, all_filler_packs: List[ItemData]):
-    weighted = []
+def get_filler_weights(options: StardewValleyOptions, all_filler_packs: List[ItemData]):
+    weights = []
     for filler in all_filler_packs:
         if filler.name in options.trap_distribution:
             num = options.trap_distribution[filler.name]
         else:
             num = options.trap_distribution.default_weight
-        weighted.extend([filler] * num)
-    return weighted
+        weights.append(num)
+    return weights
 
 
 def filter_deprecated_items(items: List[ItemData]) -> List[ItemData]:

@@ -689,7 +689,7 @@ class TrapDistribution(OptionDict):
     display_name = "Trap Distribution"
     default_weight = trap_default_weight
     schema = Schema({
-        trap_data.name: And(int, lambda n: 0 <= n <= 100)
+        trap_data.name: And(int, lambda n: 0 <= n <= 1000)
         for trap_data in items_by_group[Group.TRAP]
         if Group.DEPRECATED not in trap_data.groups
     })
