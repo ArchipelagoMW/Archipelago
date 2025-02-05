@@ -646,6 +646,8 @@ class ExcludeGingerIsland(Toggle):
 
 
 class TrapItems(Removed):
+    """Deprecated setting, replaced by TrapDifficulty
+    """
     internal_name = "trap_items"
     display_name = "Trap Items"
     default = ""
