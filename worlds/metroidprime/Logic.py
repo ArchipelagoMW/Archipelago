@@ -33,14 +33,15 @@ def can_power_beam(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
 
 
 def can_power_bomb(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
-    if world.options.main_power_bomb:
-        return state.has_all(
-            [SuitUpgrade.Morph_Ball.value, SuitUpgrade.Main_Power_Bomb.value],
-            world.player,
-        )
-
     return state.has_all(
         [SuitUpgrade.Power_Bomb_Expansion.value, SuitUpgrade.Morph_Ball.value],
+        world.player,
+    )
+
+
+def can_main_power_bomb(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
+    return state.has_all(
+        [SuitUpgrade.Morph_Ball.value, SuitUpgrade.Main_Power_Bomb.value],
         world.player,
     )
 
@@ -62,7 +63,10 @@ def can_missile(
                 SuitUpgrade.Missile_Expansion.value, world.player, num_expansions - 1
             )
         )
-    return state.has(SuitUpgrade.Missile_Expansion.value, world.player, num_expansions)
+    else:
+        return state.has(
+            SuitUpgrade.Missile_Expansion.value, world.player, num_expansions
+        )
 
 
 def can_super_missile(world: "MetroidPrimeWorld", state: CollectionState) -> bool:

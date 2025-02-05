@@ -51,3 +51,22 @@ class TestRequiredArtifactCount(MetroidPrimeTestBase):
         self.assertFalse(self.can_reach_region("Impact Crater"))
         self.collect_by_name("Artifact of Chozo")
         self.assertTrue(self.can_reach_region("Impact Crater"))
+
+
+class TestMainPowerBomb(MetroidPrimeTestBase):
+    options = {"main_power_bomb": 1}
+
+    def test_main_power_bomb_required(self):
+        self.collect_all_but([SuitUpgrade.Main_Power_Bomb.value])
+        self.assertFalse(self.can_reach_location("Chozo Ruins: Magma Pool"))
+        self.collect_by_name(SuitUpgrade.Main_Power_Bomb.value)
+        self.assertTrue(self.can_reach_location("Chozo Ruins: Magma Pool"))
+
+
+class TestNoMainPowerBomb(MetroidPrimeTestBase):
+    options = {"main_power_bomb": 0}
+
+    def test_main_power_bomb_not_required(self):
+        self.assertFalse(self.can_reach_location("Chozo Ruins: Magma Pool"))
+        self.collect_all_but([SuitUpgrade.Main_Power_Bomb.value])
+        self.assertTrue(self.can_reach_location("Chozo Ruins: Magma Pool"))

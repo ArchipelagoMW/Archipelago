@@ -4,7 +4,7 @@ from ..PrimeOptions import DoorColorRandomization
 from ..Items import SuitUpgrade
 from ..data.RoomNames import RoomName
 from typing import Any, TYPE_CHECKING, Dict
-from . import MetroidPrimeTestBase, MetroidPrimeUniversalTrackerTestBase
+from . import MetroidPrimeUniversalTrackerTestBase
 
 if TYPE_CHECKING:
     from .. import MetroidPrimeWorld
