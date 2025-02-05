@@ -675,6 +675,9 @@ class TrapDifficulty(Choice):
     option_nightmare = 5
 
 
+trap_default_weight = 100
+
+
 class TrapDistribution(OptionDict):
     """
     Specify the weighted chance of rolling individual traps when rolling random filler items.
@@ -684,14 +687,14 @@ class TrapDistribution(OptionDict):
     """
     internal_name = "trap_distribution"
     display_name = "Trap Distribution"
-    default_weight = 100
+    default_weight = trap_default_weight
     schema = Schema({
         trap_data.name: And(int, lambda n: 0 <= n <= 100)
         for trap_data in items_by_group[Group.TRAP]
         if Group.DEPRECATED not in trap_data.groups
     })
     default = {
-        trap_data.name: default_weight
+        trap_data.name: trap_default_weight
         for trap_data in items_by_group[Group.TRAP]
         if Group.DEPRECATED not in trap_data.groups
     }
