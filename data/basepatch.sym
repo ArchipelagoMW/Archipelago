@@ -7,6 +7,7 @@
 03000024 currentroomid
 03000044 ucflashloop
 03000047 uctimeup
+030000D0 gcolorfading
 03000104 currententityinfolist_tebuf
 03000564 entityleftoverstatelist
 03000A24 currentenemydata
@@ -83,5 +84,5 @@
 087904B9 goldentreasuresneeded
 087904BA trapbehavior
 087904BB diamondshuffle
-087944C8 multiworldstringdump
+08794500 multiworldstringdump
 
