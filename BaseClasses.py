@@ -1357,8 +1357,11 @@ class ItemClassification(IntFlag):
     Typically currency or other counted items. """
 
     deprioritized = 0b10000
-    """ Will not be considered for priority locations,
-    unless Priority Locations Fill runs out of regular progression items before filling all priority locations. """
+    """ Should technically never occur on its own.
+    Will not be considered for priority locations,
+    unless Priority Locations Fill runs out of regular progression items before filling all priority locations. 
+    Primarily intended to be used for progression copies of farmable currency and items with many copies which are
+    only relevant to goaling ("McGuffins"). """
 
     progression_skip_balancing = 0b01001  # only progression gets balanced
     progression_deprioritized = 0b10001  # only progression can be placed during priority fill
