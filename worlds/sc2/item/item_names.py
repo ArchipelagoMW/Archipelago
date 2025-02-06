@@ -713,6 +713,7 @@ SUPPLICANT_BLOOD_SHIELD                                 = "Blood Shield (Supplic
 SUPPLICANT_SOUL_AUGMENTATION                            = "Soul Augmentation (Supplicant)"
 SUPPLICANT_SHIELD_REGENERATION                          = "Shield Regeneration (Supplicant)"
 SUPPLICANT_ZENITH_PITCH                                 = "Zenith Pitch (Supplicant)"
+SUPPLICANT_SACRIFICE                                    = "Sacrifice (Supplicant)"
 ADEPT_SHOCKWAVE                                         = "Shockwave (Adept)"
 ADEPT_RESONATING_GLAIVES                                = "Resonating Glaives (Adept)"
 ADEPT_PHASE_BULWARK                                     = "Phase Bulwark (Adept)"
