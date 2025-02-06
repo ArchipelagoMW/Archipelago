@@ -18,6 +18,7 @@ ModuleUpdate.update()
 import Utils
 import json
 import logging
+import settings
 
 if __name__ == "__main__":
     Utils.init_logging("WargrooveClient", exception_logger="Client")
@@ -30,6 +31,15 @@ wg_logger = logging.getLogger("WG")
 
 
 class WargrooveClientCommandProcessor(ClientCommandProcessor):
+    def _cmd_deathlink(self):
+        """Toggles deathlink On/Off"""
+        if isinstance(self.ctx, WargrooveContext):
+            self.ctx.has_death_link = not self.ctx.has_death_link
+            if self.ctx.has_death_link:
+                self.output(f"Deathlink enabled.")
+            else:
+                self.output(f"Deathlink disabled.")
+
     def _cmd_resync(self):
         """Manually trigger a resync."""
         self.output(f"Syncing items.")
@@ -80,12 +90,43 @@ class WargrooveContext(CommonContext):
         self.syncing = False
         self.awaiting_bridge = False
         # self.game_communication_path: files go in this path to pass data between us and the actual game
-        options = Utils.get_settings()
-        root_directory = os.path.join(options["wargroove_options"]["root_directory"])
-        appdata_wargroove = os.path.expandvars(os.path.join(os.environ['appdata'], "Chucklefish", "Wargroove"))
+        game_options = settings.get_settings()["wargroove_options"]
+
+        # Validate the AppData directory with Wargroove save data.
+        # By default, Windows sets an environment variable we can leverage.
+        # However, other OSes don't usually have this value set, so we need to rely on a settings value instead.
+        appdata_wargroove = None
+        if "appdata" in os.environ:
+            appdata_wargroove = os.environ['appdata']
+        else:
+            try:
+                appdata_wargroove = game_options["save_directory"]
+            except FileNotFoundError:
+                print_error_and_close("WargrooveClient couldn't detect a path to the AppData folder.\n"
+                                      "Unable to infer required game_communication_path.\n"
+                                      "Try setting the \"save_directory\" value in your local options file "
+                                      "to the AppData folder containing your Wargroove saves.")
+        appdata_wargroove = os.path.expandvars(os.path.join(appdata_wargroove, "Chucklefish", "Wargroove"))
+        if not os.path.isdir(appdata_wargroove):
+            print_error_and_close(f"WargrooveClient couldn't find Wargroove data in your AppData folder.\n"
+                                  f"Looked in \"{appdata_wargroove}\".\n"
+                                  f"If you haven't yet booted the game at least once, boot Wargroove "
+                                  f"and then close it to attempt to fix this error.\n"
+                                  f"If the AppData folder above seems wrong, try setting the "
+                                  f"\"save_directory\" value in your local options file "
+                                  f"to the AppData folder containing your Wargroove saves.")
+
+        # Check for the Wargroove game executable path.
+        # This should always be set regardless of the OS.
+        root_directory = os.path.join(game_options["root_directory"])
+        data_directory = os.path.join("lib", "worlds", "wargroove", "data")
+        dev_data_directory = os.path.join("worlds", "wargroove", "data")
         if not os.path.isfile(os.path.join(root_directory, "win64_bin", "wargroove64.exe")):
-            print_error_and_close("WargrooveClient couldn't find wargroove64.exe. "
-                                  "Unable to infer required game_communication_path")
+            print_error_and_close(f"WargrooveClient couldn't find wargroove64.exe in "
+                                  f"\"{root_directory}/win64_bin/\".\n"
+                                  f"Unable to infer required game_communication_path.\n"
+                                  f"Please verify the \"root_directory\" value in your local "
+                                  f"options file is set correctly.")
         self.game_communication_path = os.path.join(root_directory, "AP")
         if not os.path.exists(self.game_communication_path):
             os.makedirs(self.game_communication_path)
@@ -113,7 +154,9 @@ class WargrooveContext(CommonContext):
         for i in range(0, len(resources)):
             file_data = pkgutil.get_data("worlds.wargroove", resources[i])
             if file_data is None:
-                print_error_and_close("WargrooveClient couldn't find Wargoove mod and save files in install!")
+                print_error_and_close(f"WargrooveClient couldn't find Wargoove mod and save files in install!\n"
+                                      f"Please make sure the mod files exist in \"{data_directory}\" "
+                                      f"and reinstall Archipelago if they are missing.")
             with open(file_paths[i], 'wb') as f:
                 f.write(file_data)
 
