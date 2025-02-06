@@ -31,7 +31,7 @@ class WargrooveSettings(settings.Group):
     class SaveDirectory(settings.UserFolderPath):
         """
         Locates the Wargroove save file directory on your system.
-        This is used by the Wargroove client, so it knows where to send communication files to.
+        This is used by the Wargroove client, so it knows where to send mod and save files to.
         """
         description = "Wargroove save file/appdata directory"
 

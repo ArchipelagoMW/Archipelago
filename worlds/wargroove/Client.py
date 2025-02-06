@@ -36,8 +36,14 @@ class WargrooveClientCommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, WargrooveContext):
             self.ctx.has_death_link = not self.ctx.has_death_link
             if self.ctx.has_death_link:
+                death_link_send_file = os.path.join(self.ctx.game_communication_path, "deathLinkSend")
+                if os.path.exists(death_link_send_file):
+                    os.remove(death_link_send_file)
                 self.output(f"Deathlink enabled.")
             else:
+                death_link_receive_file = os.path.join(self.ctx.game_communication_path, "deathLinkReceive")
+                if os.path.exists(death_link_receive_file):
+                    os.remove(death_link_receive_file)
                 self.output(f"Deathlink disabled.")
 
     def _cmd_resync(self):
@@ -119,8 +125,6 @@ class WargrooveContext(CommonContext):
         # Check for the Wargroove game executable path.
         # This should always be set regardless of the OS.
         root_directory = os.path.join(game_options["root_directory"])
-        data_directory = os.path.join("lib", "worlds", "wargroove", "data")
-        dev_data_directory = os.path.join("worlds", "wargroove", "data")
         if not os.path.isfile(os.path.join(root_directory, "win64_bin", "wargroove64.exe")):
             print_error_and_close(f"WargrooveClient couldn't find wargroove64.exe in "
                                   f"\"{root_directory}/win64_bin/\".\n"
@@ -154,9 +158,7 @@ class WargrooveContext(CommonContext):
         for i in range(0, len(resources)):
             file_data = pkgutil.get_data("worlds.wargroove", resources[i])
             if file_data is None:
-                print_error_and_close(f"WargrooveClient couldn't find Wargoove mod and save files in install!\n"
-                                      f"Please make sure the mod files exist in \"{data_directory}\" "
-                                      f"and reinstall Archipelago if they are missing.")
+                print_error_and_close("WargrooveClient couldn't find Wargoove mod and save files in install!")
             with open(file_paths[i], 'wb') as f:
                 f.write(file_data)
 
