@@ -100,6 +100,12 @@ RECV_OWN_GAME_ITEMS: list[str] = list(BOO_ITEM_TABLE.keys()) + ["Boo Radar", "Po
 CHECKS_WAIT = 3
 LONGER_MODIFIER = 2
 
+boolossus_list = [ALL_LOCATION_TABLE[local_loc] for local_loc in
+                              ["Boolossus Boo 1", "Boolossus Boo 2", "Boolossus Boo 3", "Boolossus Boo 4",
+                               "Boolossus Boo 5", "Boolossus Boo 6", "Boolossus Boo 7", "Boolossus Boo 8",
+                               "Boolossus Boo 9", "Boolossus Boo 10", "Boolossus Boo 11", "Boolossus Boo 12",
+                               "Boolossus Boo 13", "Boolossus Boo 14", "Boolossus Boo 15"]]
+
 
 def read_short(console_address: int):
     return int.from_bytes(dme.read_bytes(console_address, 2))
@@ -429,8 +435,17 @@ class LMContext(CommonContext):
             local_loc = self.location_names.lookup_in_game(mis_loc)
             lm_loc_data = ALL_LOCATION_TABLE[local_loc]
 
+            # If in Boolossus Arena, check Boo ids
+            if current_map_id == 11:
+                if lm_loc_data in boolossus_list:
+                    match lm_loc_data.type:
+                        case "Boo":
+                            current_boo_state_int = dme.read_byte(lm_loc_data.room_ram_addr)
+                            if (current_boo_state_int & (1 << lm_loc_data.locationbit)) > 0:
+                                self.locations_checked.add(mis_loc)
+
             # If in main mansion map
-            if current_map_id == 2:
+            elif current_map_id == 2:
                 # TODO Debug remove before release
                 #  if lm_loc_data.in_game_room_id is None:
                 #    logger.warn("Missing in game room id: " + str(mis_loc))
@@ -467,7 +482,7 @@ class LMContext(CommonContext):
                         if (current_room_state_int & (1 << 1)) > 0:
                             self.locations_checked.add(mis_loc)
                     case "Walk":
-                        # Bit 1 of the current room address indicates if a light in that room has been turned on.
+                        # Bit 0 of the current room address indicates if a room has been visited.
                         current_room_state_int = read_short(lm_loc_data.room_ram_addr)
                         if (current_room_state_int & (1 << 0)) > 0:
                             self.locations_checked.add(mis_loc)
