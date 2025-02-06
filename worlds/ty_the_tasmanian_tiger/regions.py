@@ -61,9 +61,8 @@ def connect_regions(world: MultiWorld, player: int, options: Ty1Options, from_na
 def create_region(world: MultiWorld, player: int, options: Ty1Options, name: str):
     reg = Region(name, player, world)
     create_locations(player, options, reg)
-    print("Creating region: " + name)
+    #print("Creating region: " + name)
     world.regions.append(reg)
-    print("Current region count: " + str(len(world.regions)))
 
 def create_regions(world: MultiWorld, options: Ty1Options, player: int):
     create_region(world, player, options, "Menu")
@@ -106,134 +105,136 @@ def create_regions(world: MultiWorld, options: Ty1Options, player: int):
     create_region(world, player, options, "Cass' Crest")
     create_region(world, player, options, "Final Battle")
 
-def connect_all_regions(world: MultiWorld, player: int, options: Ty1Options, portal_map: List[Ty1LevelCode], boss_map: List[Ty1LevelCode] ):
+def connect_all_regions(world: MultiWorld, player: int, options: Ty1Options, portal_map: List[int], boss_map: List[int] ):
     if options.level_shuffle:
         world.random.shuffle(portal_map)
     if options.boss_shuffle:
         world.random.shuffle(boss_map)
     pr_mod = 1 if options.start_with_boom and options.progressive_elementals else 0
+    pl_mod = 1 if options.level_unlock_style == 1 else 0
     connect_regions(world, player, options, "Menu", "Rainbow Cliffs", "Menu -> Z1")
     connect_regions(world, player, options, "Rainbow Cliffs", "Rainbow Cliffs - PF", "Z1 - Rang Needed",
                     lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)),
                     lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)))
     connect_regions(world, player, options, "Rainbow Cliffs", "Bli Bli Station", "Z1 -> A Zone")
     connect_regions(world, player, options, "Bli Bli Station", "Bli Bli Station Gate", "A Zone Gate",
-                    lambda state: (state.has("Progressive Rang", player, 1 + pr_mod) or state.has("Second Rang", player, 1)))
+                    lambda state: (state.has("Progressive Rang", player, 1 + pr_mod) or state.has("Second Rang", player)))
     connect_regions(world, player, options, "Rainbow Cliffs", "Pippy Beach", "Z1 -> B Zone",
-                    lambda state: (state.has("Progressive Rang", player, 5 + pr_mod) or state.has("Flamerang", player, 1)),
-                    lambda state: (state.has("Progressive Rang", player, 4 + pr_mod) or state.has("Flamerang", player, 1) or state.has("Dive", player, 1)))
+                    lambda state: (state.has("Progressive Rang", player, 5 + pr_mod) or state.has("Flamerang", player)),
+                    lambda state: (state.has("Progressive Rang", player, 4 + pr_mod) or state.has("Flamerang", player) or state.has("Dive", player)))
     connect_regions(world, player, options, "Rainbow Cliffs", "Lake Burril", "Z1 -> C Zone",
-                    lambda state: (state.has("Progressive Rang", player, 6 + pr_mod) or state.has("Frostyrang", player, 1)),
-                    lambda state: (state.has("Progressive Rang", player, 4 + pr_mod) or state.has("Frostyrang", player, 1) or state.has("Dive", player, 1)))
+                    lambda state: (state.has("Progressive Rang", player, 6 + pr_mod) or state.has("Frostyrang", player)),
+                    lambda state: (state.has("Progressive Rang", player, 4 + pr_mod) or state.has("Frostyrang", player) or state.has("Dive", player)))
     connect_regions(world, player, options, "Rainbow Cliffs", "Final Gauntlet", "Z1 -> E Zone",
-                    lambda state: (state.has("Progressive Rang", player, 7 + pr_mod) or state.has("Zappyrang", player, 1)),
-                    lambda state: (state.has("Progressive Rang", player, 4 + pr_mod) or state.has("Zappyrang", player, 1) or state.has("Dive", player, 1)))
+                    lambda state: (state.has("Progressive Rang", player, 7 + pr_mod) or state.has("Zappyrang", player)),
+                    lambda state: (state.has("Progressive Rang", player, 4 + pr_mod) or state.has("Zappyrang", player) or state.has("Dive", player)))
 
-    connect_regions(world, player, options, "Bli Bli Station", ty1_levels[portal_map[0]], "A1 Portal")
+    connect_regions(world, player, options, "Bli Bli Station", ty1_levels[Ty1LevelCode(portal_map[0])], "A1 Portal")
 
     condition = None
-    portal_name = "Portal - " + ty1_levels[portal_map[1]]
-    required_progressives = 1
+    a2_portal_name = "Portal - " + ty1_levels[Ty1LevelCode(portal_map[1])]
     if options.level_unlock_style != 0:
-        condition = lambda state: (state.has("Progressive Level", player, required_progressives) or state.has(portal_name, player))
-    connect_regions(world, player, options, "Bli Bli Station Gate", ty1_levels[portal_map[1]],
+        condition = lambda state: (state.has("Progressive Level", player, 1) or state.has(a2_portal_name, player))
+    connect_regions(world, player, options, "Bli Bli Station Gate", ty1_levels[Ty1LevelCode(portal_map[1])],
                     "A2 Portal", condition, condition)
 
-    portal_name = "Portal - " + ty1_levels[portal_map[2]]
-    required_progressives += 1
+    condition = None
+    a3_portal_name = "Portal - " + ty1_levels[Ty1LevelCode(portal_map[2])]
     if options.level_unlock_style != 0:
-        condition = lambda state: (state.has("Progressive Level", player, required_progressives) or state.has(portal_name, player))
-    connect_regions(world, player, options, "Bli Bli Station Gate", ty1_levels[portal_map[2]],
+        condition = lambda state: (state.has("Progressive Level", player, 2) or state.has(a3_portal_name, player))
+    connect_regions(world, player, options, "Bli Bli Station Gate", ty1_levels[Ty1LevelCode(portal_map[2])],
                     "A3 Portal", condition, condition)
 
-    portal_name = "Portal - " + ty1_levels[boss_map[0]]
+    condition = None
+    a4_portal_name = "Portal - " + ty1_levels[Ty1LevelCode(boss_map[0])]
     if options.level_unlock_style == 1:
-        required_progressives += 1
-        condition = lambda state: (state.has("Progressive Level", player, required_progressives) or state.has(portal_name, player))
-    if options.level_unlock_style == 2:
-        condition = None
-    connect_regions(world, player, options, "Bli Bli Station Gate", ty1_levels[boss_map[0]], "A4 Portal",
-                    lambda state: (state.has("Fire Thunder Egg", player, options.hub_te_counts) and condition),
-                    lambda state: (state.has("Fire Thunder Egg", player, options.hub_te_counts) and condition))
+        condition = lambda state: (state.has("Progressive Level", player, 3) or state.has(a4_portal_name, player))
+    else:
+        condition = lambda state: (state.has("Fire Thunder Egg", player, options.hub_te_counts))
+    connect_regions(world, player, options, "Bli Bli Station Gate", ty1_levels[Ty1LevelCode(boss_map[0])],
+                    "A4 Portal", condition, condition)
 
-    portal_name = "Portal - " + ty1_levels[portal_map[3]]
-    required_progressives += 1
+    condition = None
+    b1_portal_name = "Portal - " + ty1_levels[Ty1LevelCode(portal_map[3])]
     if options.level_unlock_style != 0:
-        condition = lambda state: (state.has("Progressive Level", player, required_progressives) or state.has(portal_name, player))
-    connect_regions(world, player, options, "Pippy Beach", ty1_levels[portal_map[3]],
+        condition = lambda state: (state.has("Progressive Level", player, 3 + pl_mod) or state.has(b1_portal_name, player))
+    connect_regions(world, player, options, "Pippy Beach", ty1_levels[Ty1LevelCode(portal_map[3])],
                     "B1 Portal", condition, condition)
 
-    portal_name = "Portal - " + ty1_levels[portal_map[4]]
-    required_progressives += 1
+    condition = None
+    b2_portal_name = "Portal - " + ty1_levels[Ty1LevelCode(portal_map[4])]
     if options.level_unlock_style != 0:
-        condition = lambda state: (state.has("Progressive Level", player, required_progressives) or state.has(portal_name, player))
-    connect_regions(world, player, options, "Pippy Beach", ty1_levels[portal_map[4]],
+        condition = lambda state: (state.has("Progressive Level", player, 4 + pl_mod) or state.has(b2_portal_name, player))
+    connect_regions(world, player, options, "Pippy Beach", ty1_levels[Ty1LevelCode(portal_map[4])],
                     "B2 Portal", condition, condition)
 
-    portal_name = "Portal - " + ty1_levels[portal_map[5]]
-    required_progressives += 1
+    condition = None
+    b3_portal_name = "Portal - " + ty1_levels[Ty1LevelCode(portal_map[5])]
     if options.level_unlock_style != 0:
-        condition = lambda state: (state.has("Progressive Level", player, required_progressives) or state.has(portal_name, player))
-    connect_regions(world, player, options, "Pippy Beach", ty1_levels[portal_map[5]],
+        condition = lambda state: (state.has("Progressive Level", player, 5 + pl_mod) or state.has(b3_portal_name, player))
+    connect_regions(world, player, options, "Pippy Beach", ty1_levels[Ty1LevelCode(portal_map[5])],
                     "B3 Portal", condition, condition)
 
-    portal_name = "Portal - " + ty1_levels[boss_map[1]]
+    condition = None
+    d4_portal_name = "Portal - " + ty1_levels[Ty1LevelCode(boss_map[1])]
     if options.level_unlock_style == 1:
-        required_progressives += 1
-        condition = lambda state: (state.has("Progressive Level", player, required_progressives) or state.has(portal_name, player))
-    if options.level_unlock_style == 2:
-        condition = None
-    connect_regions(world, player, options, "Pippy Beach", ty1_levels[boss_map[1]], "D4 Portal",
-                    lambda state: (state.has("Ice Thunder Egg", player, options.hub_te_counts) and condition),
-                    lambda state: (state.has("Ice Thunder Egg", player, options.hub_te_counts) and condition))
+        condition = lambda state: (state.has("Progressive Level", player, 7) or state.has(d4_portal_name, player))
+    else:
+        condition = lambda state: (state.has("Ice Thunder Egg", player, options.hub_te_counts))
+    connect_regions(world, player, options, "Pippy Beach", ty1_levels[Ty1LevelCode(boss_map[1])],
+                    "D4 Portal", condition, condition)
 
-    portal_name = "Portal - " + ty1_levels[portal_map[6]]
-    required_progressives += 1
+    condition = None
+    c1_portal_name = "Portal - " + ty1_levels[Ty1LevelCode(portal_map[6])]
     if options.level_unlock_style != 0:
-        condition = lambda state: (state.has("Progressive Level", player, required_progressives) or state.has(portal_name, player))
-    connect_regions(world, player, options, "Lake Burril", ty1_levels[portal_map[6]],
+        condition = lambda state: (state.has("Progressive Level", player, 6 + pl_mod * 2) or state.has(c1_portal_name, player))
+    connect_regions(world, player, options, "Lake Burril", ty1_levels[Ty1LevelCode(portal_map[6])],
                     "C1 Portal", condition, condition)
 
-    portal_name = "Portal - " + ty1_levels[portal_map[7]]
-    required_progressives += 1
+    condition = None
+    c2_portal_name = "Portal - " + ty1_levels[Ty1LevelCode(portal_map[7])]
     if options.level_unlock_style != 0:
-        condition = lambda state: (state.has("Progressive Level", player, required_progressives) or state.has(portal_name, player))
-    connect_regions(world, player, options, "Lake Burril", ty1_levels[portal_map[7]],
+        condition = lambda state: (state.has("Progressive Level", player, 7 + pl_mod * 2) or state.has(c2_portal_name, player))
+    connect_regions(world, player, options, "Lake Burril", ty1_levels[Ty1LevelCode(portal_map[7])],
                     "C2 Portal", condition, condition)
 
-    portal_name = "Portal - " + ty1_levels[portal_map[8]]
-    required_progressives += 1
+    condition = None
+    c3_portal_name = "Portal - " + ty1_levels[Ty1LevelCode(portal_map[8])]
     if options.level_unlock_style != 0:
-        condition = lambda state: (state.has("Progressive Level", player, required_progressives) or state.has(portal_name, player))
-    connect_regions(world, player, options, "Lake Burril", ty1_levels[portal_map[8]],
+        condition = lambda state: (state.has("Progressive Level", player, 8 + pl_mod * 2) or state.has(c3_portal_name, player))
+    connect_regions(world, player, options, "Lake Burril", ty1_levels[Ty1LevelCode(portal_map[8])],
                     "C3 Portal", condition, condition)
 
-    portal_name = "Portal - " + ty1_levels[boss_map[2]]
+    condition = None
+    c4_portal_name = "Portal - " + ty1_levels[Ty1LevelCode(boss_map[2])]
     if options.level_unlock_style == 1:
-        required_progressives += 1
-        condition = lambda state: (state.has("Progressive Level", player, required_progressives) or state.has(portal_name, player))
-    if options.level_unlock_style == 2:
-        condition = None
-    connect_regions(world, player, options, "Lake Burril", ty1_levels[boss_map[2]], "C4 Portal",
-                    lambda state: (state.has("Air Thunder Egg", player, options.hub_te_counts) and condition),
-                    lambda state: (state.has("Air Thunder Egg", player, options.hub_te_counts) and condition))
+        condition = lambda state: (state.has("Progressive Level", player, 11) or state.has(c4_portal_name, player))
+    else:
+        condition = lambda state: (state.has("Air Thunder Egg", player, options.hub_te_counts))
+    connect_regions(world, player, options, "Lake Burril", ty1_levels[Ty1LevelCode(boss_map[2])],
+                    "C4 Portal", condition, condition)
 
+    condition = None
+    e1_portal_name = "Portal - Cass' Pass"
+    if options.level_unlock_style != 0:
+        condition = lambda state: (state.has("Progressive Level", player, 9 + pl_mod * 3) or state.has(e1_portal_name, player))
+    connect_regions(world, player, options, "Final Gauntlet", "Cass' Pass",
+                    "E1 Portal", condition, condition)
 
-    connect_regions(world, player, options, "Final Gauntlet", "Cass' Pass", "Z1 -> E1")
     connect_regions(world, player, options, "Cass' Pass", "Cass' Crest", "E1 -> D2")
     connect_regions(world, player, options, "Cass' Crest", "Final Battle", "D2 -> E4",
-                    lambda state: (state.has("Progressive Rang", player, 1 + pr_mod) or state.has("Second Rang", player, 1)),
-                    lambda state: (state.has("Progressive Rang", player, 1 + pr_mod) or state.has("Second Rang", player, 1)))
+                    lambda state: (state.has("Progressive Rang", player, 1 + pr_mod) or state.has("Second Rang", player)),
+                    lambda state: (state.has("Progressive Rang", player, 1 + pr_mod) or state.has("Second Rang", player)))
     connect_regions(world, player, options, "Two Up", "Two Up - PF", "Two Up - Rang Needed",
                     lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)),
                     lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)))
     connect_regions(world, player, options, "Two Up", "Two Up - Upper Area", "Two Up - Upper Area",
-                    lambda state: (state.has("Swim", player) or state.has("Dive", player) or state.has("Second Rang", player, 1) or state.has("Progressive Rang", 1 + pr_mod)))
+                    lambda state: (state.has("Swim", player) or state.has("Dive", player) or state.has("Second Rang", player) or state.has("Progressive Rang", player, 1 + pr_mod)))
     connect_regions(world, player, options, "Two Up - Upper Area", "Two Up - Upper Area - PF", "Two Up - Upper Area - Rang Needed",
                     lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)),
                     lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)))
     connect_regions(world, player, options, "Two Up", "Two Up - End Area", "Two Up - End Area",
-                    lambda state: (state.has("Second Rang", player) or state.has("Progressive Rang", 1 + pr_mod)))
+                    lambda state: (state.has("Second Rang", player) or state.has("Progressive Rang", player, 1 + pr_mod)))
     connect_regions(world, player, options, "Walk in the Park", "Walk in the Park - PF", "Walk in the Park - Rang Needed",
                     lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)),
                     lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)))

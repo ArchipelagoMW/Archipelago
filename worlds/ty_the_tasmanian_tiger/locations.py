@@ -1,7 +1,7 @@
+from collections import Counter
+
 from BaseClasses import Location, Region
 from worlds.ty_the_tasmanian_tiger.options import Ty1Options
-
-from worlds.ty_the_tasmanian_tiger.rules import calculate_rule
 
 
 class Ty1Location(Location):
@@ -12,34 +12,19 @@ class ReqData:
     count: int = 1
 
 class LocData:
-    def __init__(self, id: int, region: str,
-                 standard_condition=None,
-                 advanced_condition=None):
+    def __init__(self, code: int, region: str,):
         """
         Represents a location with associated conditions.
 
-        :param id: A unique identifier for the location.
+        :param code: A unique identifier for the location.
         :param region: Name of the containing region.
-        :param standard_condition: Standard logic condition.
-        :param advanced_condition: Advanced logic condition.
         """
-        self.id = id
+        self.code = code
         self.region = region
-        self.standard_condition = standard_condition
-        self.advanced_condition = advanced_condition
-
-    def __repr__(self):
-        return (
-            f"LocData(id={self.id}, region={self.region}, "
-            f"standard_condition={self.standard_condition}, "
-            f"advanced_condition={self.advanced_condition})"
-        )
 
 def create_location(player: int, options: Ty1Options, reg: Region, name: str, data: LocData):
-    location = Ty1Location(player, name, data.id, reg)
-    condition = data.standard_condition if options.logic_difficulty == 0 else data.advanced_condition
-    location.access_rule = calculate_rule(player, options, condition)
-    print("Creating location: " + name + " in " + reg.name)
+    location = Ty1Location(player, name, data.code, reg)
+    #print("Creating location: " + name + " in " + reg.name)
     reg.locations.append(location)
 
 def create_locations(player: int, options: Ty1Options, reg: Region):
@@ -48,6 +33,16 @@ def create_locations(player: int, options: Ty1Options, reg: Region):
         if data.region != reg.name:
             continue
         if options.bilbysanity == 0 and "Find 5 Bilbies" in key:
+            continue
+        create_location(player, options, reg, key, data)
+    # BILBY COMPLETION
+    for (key, data) in bilby_completion_dict.items():
+        if data.region != reg.name:
+            continue
+        create_location(player, options, reg, key, data)
+    # TALISMANS
+    for (key, data) in talismans_dict.items():
+        if data.region != reg.name:
             continue
         create_location(player, options, reg, key, data)
     # GOLDEN COGS
@@ -68,11 +63,6 @@ def create_locations(player: int, options: Ty1Options, reg: Region):
             if data.region != reg.name:
                 continue
             create_location(player, options, reg, key, data)
-    # TALISMANS
-    for (key, data) in talismans_dict.items():
-        if data.region != reg.name:
-            continue
-        create_location(player, options, reg, key, data)
     # FRAME COMPLETION
     if options.framesanity == 1:
         for (key, data) in frame_completion_dict.items():
@@ -102,15 +92,11 @@ def create_locations(player: int, options: Ty1Options, reg: Region):
 thunder_eggs_dict = {
     # Two Up ---------------------------------------------------------------------------------------------------------
     "Two Up - Collect 300 Opals":
-        LocData(0x08750100, "Two Up",
-                "Second Rang | Progressive Rang,1"),
+        LocData(0x08750100, "Two Up"),
     "Two Up - Find 5 Bilbies":
-        LocData(0x08750101, "Two Up",
-                "Second Rang | Swim | Dive | Progressive Rang,1"),
+        LocData(0x08750101, "Two Up - Upper Area"),
     "Two Up - Time Attack":
-        LocData(0x08750102, "Two Up",
-                "Stopwatch - Two Up",
-                "Stopwatch - Two Up"),
+        LocData(0x08750102, "Two Up"),
     "Two Up - Glide The Gap":
         LocData(0x08750103, "Two Up - End Area"),
     "Two Up - Rang The Frills":
@@ -127,19 +113,13 @@ thunder_eggs_dict = {
     "WitP - Find 5 Bilbies":
         LocData(0x08750109, "Walk in the Park"),
     "WitP - Wombat Race":
-        LocData(0x0875010A, "Walk in the Park",
-                "Stopwatch - WitP",
-                "Stopwatch - WitP"),
+        LocData(0x0875010A, "Walk in the Park"),
     "WitP - Truck Trouble":
-        LocData(0x0875010B, "Walk in the Park",
-                "Progressive Rang,0",
-                "Progressive Rang,0"),
+        LocData(0x0875010B, "Walk in the Park"),
     "WitP - Bounce Tree":
         LocData(0x0875010C, "Walk in the Park"),
     "WitP - Drive Me Batty":
-        LocData(0x0875010D, "Walk in the Park",
-                "Progressive Rang,0",
-                "Progressive Rang,0"),
+        LocData(0x0875010D, "Walk in the Park"),
     "WitP - Turkey Chase":
         LocData(0x0875010E, "Walk in the Park"),
     "WitP - Log Climb":
@@ -150,81 +130,49 @@ thunder_eggs_dict = {
     "Ship Rex - Find 5 Bilbies":
         LocData(0x08750111, "Ship Rex - Beyond Gate 1"),
     "Ship Rex - Race Rex":
-        LocData(0x08750112, "Ship Rex",
-                "(Stopwatch - Ship Rex & (Swim | Dive)) | Progressive Rang,2",
-                "(Stopwatch - Ship Rex & (Swim | Dive)) | Progressive Rang,2"),
+        LocData(0x08750112, "Ship Rex"),
     "Ship Rex - Where's Elle?":
         LocData(0x08750113, "Ship Rex - Beyond Gate 1"),
     "Ship Rex - Aurora's Kids":
         LocData(0x08750114, "Ship Rex - Beyond Gate 1"),
     "Ship Rex - Quicksand Coconuts":
-        LocData(0x08750115, "Ship Rex - Beyond Gate 1",
-                "Progressive Rang,0",
-                "Progressive Rang,0"),
+        LocData(0x08750115, "Ship Rex - Beyond Gate 1"),
     "Ship Rex - Ship Wreck":
         LocData(0x08750116, "Ship Rex - Beyond Gate 1"),
     "Ship Rex - Nest Egg":
         LocData(0x08750117, "Ship Rex - Beyond Gate 1"),
     # Bridge ---------------------------------------------------------------------------------------------------------
     "BotRT - Collect 300 Opals":
-        LocData(0x08750118, "Bridge on the River Ty",
-                "Swim | Dive | Progressive Rang,2",
-                "Swim | Dive | Progressive Rang,2"),
+        LocData(0x08750118, "Bridge on the River Ty"),
     "BotRT - Find 5 Bilbies":
-        LocData(0x08750119, "Bridge on the River Ty",
-                "Flamerang | Progressive Rang,5",
-                "(Second Rang & Swim) | Flamerang | Progressive Rang,2"),
+        LocData(0x08750119, "Bridge on the River Ty"),
     "BotRT - Time Attack":
-        LocData(0x0875011A, "Bridge on the River Ty",
-                "Stopwatch - BotRT",
-                "Stopwatch - BotRT"),
+        LocData(0x0875011A, "Bridge on the River Ty"),
     "BotRT - Home, Sweet, Home":
-        LocData(0x0875011B, "Bridge on the River Ty",
-                "Flamerang | Progressive Rang,5" ,
-                "Flamerang | Progressive Rang,5"),
+        LocData(0x0875011B, "Bridge on the River Ty"),
     "BotRT - Heat Dennis' House":
-        LocData(0x0875011C, "Bridge on the River Ty",
-                "Flamerang | Progressive Rang,5",
-                "Flamerang | Progressive Rang,5"),
+        LocData(0x0875011C, "Bridge on the River Ty"),
     "BotRT - Tag Team Turkeys":
-        LocData(0x0875011D, "Bridge on the River Ty",
-                "Progressive Rang,0"),
+        LocData(0x0875011D, "Bridge on the River Ty"),
     "BotRT - Ty Diving":
-        LocData(0x0875011E, "Bridge on the River Ty",
-                "Dive | Progressive Rang,4",
-                "Dive | Progressive Rang,4 | Zappyrang"),
+        LocData(0x0875011E, "Bridge on the River Ty"),
     "BotRT - Neddy The Bully":
         LocData(0x0875011F, "Bridge on the River Ty"),
     # Snow -----------------------------------------------------------------------------------------------------------
     "Snow Worries - Collect 300 Opals":
-        LocData(0x08750120, "Snow Worries - Underwater",
-                "Aquarang | Progressive Rang,3",
-                "Aquarang | Progressive Rang,3"),
+        LocData(0x08750120, "Snow Worries - Underwater"),
     "Snow Worries - Find 5 Bilbies":
-        LocData(0x08750121, "Snow Worries",
-                "Flamerang | Progressive Rang,5",
-                "Flamerang | Second Rang | Progressive Rang,1"),
+        LocData(0x08750121, "Snow Worries"),
     "Snow Worries - Time Attack":
-        LocData(0x08750122, "Snow Worries",
-                "Stopwatch - Snow Worries",
-                "Stopwatch - Snow Worries"),
+        LocData(0x08750122, "Snow Worries"),
     "Snow Worries - Koala Chaos":
-        LocData(0x08750123, "Snow Worries",
-                "Progressive Rang,0",
-                "Progressive Rang,0"),
+        LocData(0x08750123, "Snow Worries"),
     "Snow Worries - The Old Mill":
-        LocData(0x08750124, "Snow Worries",
-                "Progressive Rang,0",
-                "Swim | Second Rang | Progressive Rang,0"),
-
+        LocData(0x08750124, "Snow Worries"),
     "Snow Worries - Trap The Yabby":
-        LocData(0x08750125, "Snow Worries - Underwater",
-                "Progressive Rang,3 | Aquarang",
-                "Progressive Rang,3 | Aquarang"),
+        LocData(0x08750125, "Snow Worries - Underwater"),
     "Snow Worries - Musical Icicle":
-        LocData(0x08750126, "Snow Worries",
-                "Progressive Rang,0",
-                "Progressive Rang,0"),
+        LocData(0x08750126, "Snow Worries"),
     "Snow Worries - Snowy Peak":
         LocData(0x08750127, "Snow Worries"),
     # Outback --------------------------------------------------------------------------------------------------------
@@ -233,9 +181,7 @@ thunder_eggs_dict = {
     "Outback Safari - Find 5 Bilbies":
         LocData(0x08750129, "Outback Safari"),
     "Outback Safari - Time Attack":
-        LocData(0x0875012A, "Outback Safari",
-                "Stopwatch - Outback Safari",
-                "Stopwatch - Outback Safari"),
+        LocData(0x0875012A, "Outback Safari"),
     "Outback Safari - Emu Roundup":
         LocData(0x0875012B, "Outback Safari"),
     "Outback Safari - Frill Frenzy":
@@ -243,10 +189,7 @@ thunder_eggs_dict = {
     "Outback Safari - Fire Fight":
         LocData(0x0875012D, "Outback Safari"),
     "Outback Safari - Toxic Trouble":
-        LocData(0x0875012E, "Outback Safari",
-                "Progressive Rang,0",
-                "Progressive Rang,0"),
-
+        LocData(0x0875012E, "Outback Safari"),
     "Outback Safari - Secret Thunder Egg":
         LocData(0x0875012F, "Outback Safari"),
     # Lyre -----------------------------------------------------------------------------------------------------------
@@ -255,39 +198,28 @@ thunder_eggs_dict = {
     "LLPoF - Find 5 Bilbies":
         LocData(0x08750131, "Lyre, Lyre Pants on Fire - Beyond Gate"),
     "LLPoF - Time Attack":
-        LocData(0x08750132, "Lyre, Lyre Pants on Fire",
-                "Stopwatch - LLPoF",
-                "Stopwatch - LLPoF"),
+        LocData(0x08750132, "Lyre, Lyre Pants on Fire"),
     "LLPoF - Lenny The Lyrebird":
         LocData(0x08750133, "Lyre, Lyre Pants on Fire - Beyond Gate"),
     "LLPoF - Fiery Furnace":
-        LocData(0x08750134, "Lyre, Lyre Pants on Fire - Beyond Gate",
-                "Frostyrang | Progressive Rang,6",
-                "Frostyrang | Progressive Rang,6"),
+        LocData(0x08750134, "Lyre, Lyre Pants on Fire - Beyond Gate"),
     "LLPoF - Water Worries":
         LocData(0x08750135, "Lyre, Lyre Pants on Fire - Beyond Gate"),
     "LLPoF - Muddy Towers":
-        LocData(0x08750136, "Lyre, Lyre Pants on Fire - Beyond Gate",
-                "Flamerang | Progressive Rang,5",
-                "Dive | Flamerang | Progressive Rang,4"),
+        LocData(0x08750136, "Lyre, Lyre Pants on Fire - Beyond Gate"),
     "LLPoF - Gantry Glide":
         LocData(0x08750137, "Lyre, Lyre Pants on Fire - Beyond Gate"),
     # Stump ----------------------------------------------------------------------------------------------------------
     "BtBS - Collect 300 Opals":
-        LocData(0x08750138, "Beyond the Black Stump - Upper Area",
-                advanced_condition = "Second Rang | Progressive Rang,1"),
+        LocData(0x08750138, "Beyond the Black Stump - Upper Area"),
     "BtBS - Find 5 Bilbies":
-        LocData(0x08750139, "Beyond the Black Stump - Upper Area",
-                "Flamerang | Progressive Rang,5"),
+        LocData(0x08750139, "Beyond the Black Stump - Upper Area"),
     "BtBS - Wombat Rematch":
-        LocData(0x0875013A, "Beyond the Black Stump",
-                "Stopwatch - BtBS",
-                "Stopwatch - BtBS"),
+        LocData(0x0875013A, "Beyond the Black Stump"),
     "BtBS - Koala Crisis":
         LocData(0x0875013B, "Beyond the Black Stump"),
     "BtBS - Cable Car Capers":
-        LocData(0x0875013C, "Beyond the Black Stump - Upper Area",
-                advanced_condition = "Progressive Rang,0"),
+        LocData(0x0875013C, "Beyond the Black Stump - Upper Area"),
     "BtBS - Flame Frills":
         LocData(0x0875013D, "Beyond the Black Stump - Upper Area"),
     "BtBS - Catch Boonie":
@@ -300,27 +232,17 @@ thunder_eggs_dict = {
     "RMtS - Find 5 Bilbies":
         LocData(0x08750141, "Rex Marks the Spot"),
     "RMtS - Race Rex":
-        LocData(0x08750142, "Rex Marks the Spot - Underwater",
-                "Stopwatch - Rex Marks the Spot",
-                "Stopwatch - Rex Marks the Spot"),
+        LocData(0x08750142, "Rex Marks the Spot - Underwater"),
     "RMtS - Treasure Hunt":
         LocData(0x08750143, "Rex Marks the Spot - Underwater"),
     "RMtS - Parrot Beard's Booty":
-        LocData(0x08750144, "Rex Marks the Spot",
-                "Progressive Rang,0",
-                "Progressive Rang,0"),
+        LocData(0x08750144, "Rex Marks the Spot"),
     "RMtS - Frill Boat Battle":
-        LocData(0x08750145, "Rex Marks the Spot - Underwater",
-                "Progressive Rang,0",
-                "Progressive Rang,0"),
+        LocData(0x08750145, "Rex Marks the Spot - Underwater"),
     "RMtS - Geyser Hop":
-        LocData(0x08750146, "Rex Marks the Spot",
-                "Progressive Rang,1 | Second Rang",
-                "Progressive Rang,1 | Second Rang | Doomerang | (Swim & Frostyrang)"),
+        LocData(0x08750146, "Rex Marks the Spot"),
     "RMtS - Volcanic Panic":
-        LocData(0x08750147, "Rex Marks the Spot",
-                "Progressive Rang,1 | Second Rang",
-                "Progressive Rang,1 | Second Rang | (Swim & Frostyrang)"),
+        LocData(0x08750147, "Rex Marks the Spot"),
 }
 
 # Golden_cogs Dictionary
@@ -357,265 +279,244 @@ golden_cogs_dict = {
         LocData(0x08750151, "Two Up"),
     # On platform near frills near start before logs
     "WitP - Golden Cog 1":
-        LocData(0x08750153, "Walk in the Park"),
+        LocData(0x08750152, "Walk in the Park"),
     # Logs area near two crates towards top of slide 1
     "WitP - Golden Cog 2":
-        LocData(0x08750154, "Walk in the Park"),
+        LocData(0x08750153, "Walk in the Park"),
     # Behind waterfall at top of slide 1
     "WitP - Golden Cog 3":
-        LocData(0x08750155, "Walk in the Park"),
+        LocData(0x08750154, "Walk in the Park"),
     # In slide 1 cave
     "WitP - Golden Cog 4":
-        LocData(0x08750156, "Walk in the Park"),
+        LocData(0x08750155, "Walk in the Park"),
     # Wood platform in valley
     "WitP - Golden Cog 5":
-        LocData(0x08750157, "Walk in the Park"),
+        LocData(0x08750156, "Walk in the Park"),
     # Platform at bottom of slide 2
     "WitP - Golden Cog 6":
-        LocData(0x08750158, "Walk in the Park"),
+        LocData(0x08750157, "Walk in the Park"),
     # Logs area, first cog seen to the right after first two logs
     "WitP - Golden Cog 7":
-        LocData(0x08750159, "Walk in the Park"),
+        LocData(0x08750158, "Walk in the Park"),
     # Platform halfway up boulder slopes
     "WitP - Golden Cog 8":
-        LocData(0x0875015A, "Walk in the Park"),
+        LocData(0x08750159, "Walk in the Park"),
     # Under bridge at end
     "WitP - Golden Cog 9":
-        LocData(0x0875015B, "Walk in the Park"),
+        LocData(0x0875015A, "Walk in the Park"),
     # Behind at the very start
     "WitP - Golden Cog 10":
-        LocData(0x0875015C, "Walk in the Park"),
+        LocData(0x0875015B, "Walk in the Park"),
     # On floating platform to the right after entering spire area beyond gate 2
     "Ship Rex - Golden Cog 1":
-        LocData(0x0875015D, "Ship Rex - Beyond Gate 1"),
+        LocData(0x0875015C, "Ship Rex - Beyond Gate 1"),
     # On pillar to the right after entering main area beyond gate 1
     "Ship Rex - Golden Cog 2":
-        LocData(0x0875015E, "Ship Rex - Beyond Gate 1"),
+        LocData(0x0875015D, "Ship Rex - Beyond Gate 1"),
     # Wood platform at start
     "Ship Rex - Golden Cog 3":
-        LocData(0x0875015F, "Ship Rex"),
+        LocData(0x0875015E, "Ship Rex"),
     # Large rockpool
     "Ship Rex - Golden Cog 4":
-        LocData(0x08750160, "Ship Rex - Beyond Gate 1"),
+        LocData(0x0875015F, "Ship Rex - Beyond Gate 1"),
     # Floating platform reached from geyser
     "Ship Rex - Golden Cog 5":
-        LocData(0x08750161, "Ship Rex - Beyond Gate 1"),
+        LocData(0x08750160, "Ship Rex - Beyond Gate 1"),
     # Island in the corner near end of coconuts (left of eels)
     "Ship Rex - Golden Cog 6":
-        LocData(0x08750162, "Ship Rex - Beyond Gate 1"),
+        LocData(0x08750161, "Ship Rex - Beyond Gate 1"),
     # Small rockpool
     "Ship Rex - Golden Cog 7":
-        LocData(0x08750163, "Ship Rex - Beyond Gate 1"),
+        LocData(0x08750162, "Ship Rex - Beyond Gate 1"),
     # Top of spire
     "Ship Rex - Golden Cog 8":
-        LocData(0x08750164, "Ship Rex - Beyond Gate 1"),
+        LocData(0x08750163, "Ship Rex - Beyond Gate 1"),
     # Floating platform near opal machine
     "Ship Rex - Golden Cog 9":
-        LocData(0x08750165, "Ship Rex - Beyond Gate 1"),
+        LocData(0x08750164, "Ship Rex - Beyond Gate 1"),
     # Large raised area in ship wreck area
     "Ship Rex - Golden Cog 10":
-        LocData(0x08750166, "Ship Rex - Beyond Gate 1"),
+        LocData(0x08750165, "Ship Rex - Beyond Gate 1"),
     # On pillar near big tree in starting area (glide down from higher area)
     "BotRT - Golden Cog 1":
-        LocData(0x08750167, "Bridge on the River Ty",
-                "Second Rang | Progressive Rang,1"),
+        LocData(0x08750166, "Bridge on the River Ty"),
     # Behind cobweb after first dunny
     "BotRT - Golden Cog 2":
-        LocData(0x08750168, "Bridge on the River Ty",
-                "Flamerang | Progressive Rang,5"),
+        LocData(0x08750167, "Bridge on the River Ty"),
     # Hidden in corner below first dunny
     "BotRT - Golden Cog 3":
-        LocData(0x08750169, "Bridge on the River Ty"),
+        LocData(0x08750168, "Bridge on the River Ty"),
     # On pillar in spider den
     "BotRT - Golden Cog 4":
-        LocData(0x0875016A, "Bridge on the River Ty"),
+        LocData(0x08750169, "Bridge on the River Ty"),
     # Hidden side of steps near dennis
     "BotRT - Golden Cog 5":
-        LocData(0x0875016B, "Bridge on the River Ty"),
+        LocData(0x0875016A, "Bridge on the River Ty"),
     # Dead tree near opal machine
     "BotRT - Golden Cog 6":
-        LocData(0x0875016C, "Bridge on the River Ty",
-                "Second Rang | Progressive Rang,1"),
+        LocData(0x0875016B, "Bridge on the River Ty"),
     # Platform protected by bats and pontoons in corner
     "BotRT - Golden Cog 7":
-        LocData(0x0875016D, "Bridge on the River Ty",
-                "Second Rang | Progressive Rang,1"), #"
+        LocData(0x0875016C, "Bridge on the River Ty"),
     # Platform in middle of water under large bridge
     "BotRT - Golden Cog 8":
-        LocData(0x0875016E, "Bridge on the River Ty",
-                "((Swim | Dive) & Aquarang) | Frostyrang | Progressive Rang,3",
-                "((Swim | Dive) & Aquarang) | Frostyrang | Second Rang | Progressive Rang,1"),
+        LocData(0x0875016D, "Bridge on the River Ty"),
     # Hollow log in Dennis' house
     "BotRT - Golden Cog 9":
-        LocData(0x0875016F, "Bridge on the River Ty"),
+        LocData(0x0875016E, "Bridge on the River Ty"),
     # Under small bridge along Dennis escort path
     "BotRT - Golden Cog 10":
-        LocData(0x08750170, "Bridge on the River Ty",
-                "Swim | Dive | Progressive Rang,2",
-                "Swim | Dive | Progressive Rang,2"),
+        LocData(0x0875016F, "Bridge on the River Ty"),
     # Pillar platforming on the right side of right ice path at start
     "Snow Worries - Golden Cog 1":
-        LocData(0x08750171, "Snow Worries"),
+        LocData(0x08750170, "Snow Worries"),
     # Middle of hole in ice above ice sheet
     "Snow Worries - Golden Cog 2":
-        LocData(0x08750172, "Snow Worries"),
+        LocData(0x08750171, "Snow Worries"),
     # Pillar at the base of mountain steps
     "Snow Worries - Golden Cog 3":
-        LocData(0x08750173, "Snow Worries",
-            "Second Rang | Progressive Rang,1",
-            "Swim | Dive | Second Rang | Progressive Rang,1"),
+        LocData(0x08750172, "Snow Worries"),
     # Underwater before gate
     "Snow Worries - Golden Cog 4":
-        LocData(0x08750174, "Snow Worries - Underwater"),
+        LocData(0x08750173, "Snow Worries - Underwater"),
     # Behind house at start
     "Snow Worries - Golden Cog 5":
-        LocData(0x08750175, "Snow Worries"),
+        LocData(0x08750174, "Snow Worries"),
     # On central raised area in ice valley
     "Snow Worries - Golden Cog 6":
-        LocData(0x08750176, "Snow Worries"),
+        LocData(0x08750175, "Snow Worries"),
     # Underwater behind gate
     "Snow Worries - Golden Cog 7":
-        LocData(0x08750177, "Snow Worries - Underwater",
-                "Aquarang | Progressive Rang,3",
-                "Aquarang | Progressive Rang,3"),
+        LocData(0x08750176, "Snow Worries - Underwater"),
     # Hidden cave beyond icicle cave
     "Snow Worries - Golden Cog 8":
-        LocData(0x08750178, "Snow Worries"),
+        LocData(0x08750177, "Snow Worries"),
     # Small platform on right side ice path before bilby and opal ring around tree
     "Snow Worries - Golden Cog 9":
-        LocData(0x08750179, "Snow Worries"),
+        LocData(0x08750178, "Snow Worries"),
     # On beam above arena steps
     "Snow Worries - Golden Cog 10":
-        LocData(0x0875017A, "Snow Worries"),
+        LocData(0x08750179, "Snow Worries"),
     # On ledge after gap jump in upper waterfall area
     "Outback Safari - Golden Cog 1":
-        LocData(0x0875017B, "Outback Safari"),
+        LocData(0x0875017A, "Outback Safari"),
     # Behind rock in lower waterfall cave
     "Outback Safari - Golden Cog 2":
-        LocData(0x0875017C, "Outback Safari"),
+        LocData(0x0875017B, "Outback Safari"),
     # In ring of hay bales towards end of Shazza escort path
     "Outback Safari - Golden Cog 3":
-        LocData(0x0875017D, "Outback Safari"),
+        LocData(0x0875017C, "Outback Safari"),
     # Inside shed between emus and Shazza escort path
     "Outback Safari - Golden Cog 4":
-        LocData(0x0875017E, "Outback Safari"),
+        LocData(0x0875017D, "Outback Safari"),
     # Inside shed down right path near start
     "Outback Safari - Golden Cog 5":
-        LocData(0x0875017F, "Outback Safari"),
+        LocData(0x0875017E, "Outback Safari"),
     # Inside shed in emus area
     "Outback Safari - Golden Cog 6":
-        LocData(0x08750180, "Outback Safari"),
+        LocData(0x0875017F, "Outback Safari"),
     # Inside shed in water towers area
     "Outback Safari - Golden Cog 7":
-        LocData(0x08750181, "Outback Safari"),
+        LocData(0x08750180, "Outback Safari"),
     # Inside shed in corner of lower waterfall area
     "Outback Safari - Golden Cog 8":
-        LocData(0x08750182, "Outback Safari"),
+        LocData(0x08750181, "Outback Safari"),
     # In ring of hay bales near path leading up to upper area
     "Outback Safari - Golden Cog 9":
-        LocData(0x08750183, "Outback Safari"),
+        LocData(0x08750182, "Outback Safari"),
     # In shed on spiral path leading to upper area
     "Outback Safari - Golden Cog 10":
-        LocData(0x08750184, "Outback Safari"),
+        LocData(0x08750183, "Outback Safari"),
     # Hidden by trees on right at bottom of slide
     "LLPoF - Golden Cog 1":
-        LocData(0x08750185, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750184, "Lyre, Lyre Pants on Fire - Beyond Gate"),
     # On pillar at the bottom of slide
     "LLPoF - Golden Cog 2":
-        LocData(0x08750186, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750185, "Lyre, Lyre Pants on Fire - Beyond Gate"),
     # On pillar near spy eggs and bilby in alcove
     "LLPoF - Golden Cog 3":
-        LocData(0x08750187, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750186, "Lyre, Lyre Pants on Fire - Beyond Gate"),
     # Ice block
     "LLPoF - Golden Cog 4":
-        LocData(0x08750188, "Lyre, Lyre Pants on Fire - Beyond Gate",
-                "Flamerang | Kaboomerang | Progressive Rang,5"),
+        LocData(0x08750187, "Lyre, Lyre Pants on Fire - Beyond Gate"),
     # On metal pillar next to water worries log entrance
     "LLPoF - Golden Cog 5":
-        LocData(0x08750189, "Lyre, Lyre Pants on Fire - Beyond Gate",
-                "Second Rang | Progressive Rang,1"),
+        LocData(0x08750188, "Lyre, Lyre Pants on Fire - Beyond Gate"),
     # Bounce tree
     "LLPoF - Golden Cog 6":
-        LocData(0x0875018A, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x08750189, "Lyre, Lyre Pants on Fire - Beyond Gate"),
     # On pillar before slide
     "LLPoF - Golden Cog 7":
-        LocData(0x0875018B, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x0875018A, "Lyre, Lyre Pants on Fire - Beyond Gate"),
     # Spy egg pillar after first log teleport
     "LLPoF - Golden Cog 8":
-        LocData(0x0875018C, "Lyre, Lyre Pants on Fire"),
+        LocData(0x0875018B, "Lyre, Lyre Pants on Fire"),
     # Hidden behind cobweb in lever area
     "LLPoF - Golden Cog 9":
-        LocData(0x0875018D, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x0875018C, "Lyre, Lyre Pants on Fire - Beyond Gate"),
     # Pillar between "jump to the other side" broken bridge
     "LLPoF - Golden Cog 10":
-        LocData(0x0875018E, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+        LocData(0x0875018D, "Lyre, Lyre Pants on Fire - Beyond Gate"),
     # Hidden alcove after pillar ponder thunder egg
     "BtBS - Golden Cog 1":
-        LocData(0x0875018F, "Beyond the Black Stump - Upper Area"),
+        LocData(0x0875018E, "Beyond the Black Stump - Upper Area"),
     # Snow pile at bottom of cliff area at end
     "BtBS - Golden Cog 2":
-        LocData(0x08750190, "Beyond the Black Stump - Upper Area"),
+        LocData(0x0875018F, "Beyond the Black Stump - Upper Area"),
     # On platform in logs area
     "BtBS - Golden Cog 3":
-        LocData(0x08750191, "Beyond the Black Stump - Upper Area"),
+        LocData(0x08750190, "Beyond the Black Stump - Upper Area"),
     # On ledge on cliff at end
     "BtBS - Golden Cog 4":
-        LocData(0x08750192, "Beyond the Black Stump - Upper Area"),
+        LocData(0x08750191, "Beyond the Black Stump - Upper Area"),
     # At end of opal path on ground at bottom of cliff area at end
     "BtBS - Golden Cog 5":
-        LocData(0x08750193, "Beyond the Black Stump - Upper Area"),
+        LocData(0x08750192, "Beyond the Black Stump - Upper Area"),
     # Ice cave spire
     "BtBS - Golden Cog 6":
-        LocData(0x08750194, "Beyond the Black Stump"),
+        LocData(0x08750193, "Beyond the Black Stump"),
     # Ice block
     "BtBS - Golden Cog 7":
-        LocData(0x08750195, "Beyond the Black Stump",
-                "Flamerang | Kaboomerang | Progressive Rang,5"),
+        LocData(0x08750194, "Beyond the Black Stump"),
     # Pillar near to Elizabeth in corner
     "BtBS - Golden Cog 8":
-        LocData(0x08750196, "Beyond the Black Stump"),
+        LocData(0x08750195, "Beyond the Black Stump"),
     # Warp flower cog
     "BtBS - Golden Cog 9":
-        LocData(0x08750197, "Beyond the Black Stump"),
+        LocData(0x08750196, "Beyond the Black Stump"),
     # Next to portal at top of cable cars
     "BtBS - Golden Cog 10":
-        LocData(0x08750198, "Beyond the Black Stump - Upper Area"),
+        LocData(0x08750197, "Beyond the Black Stump - Upper Area"),
     # Underwater near volcano thunder egg and warp flower cog
     "RMtS - Golden Cog 1":
-        LocData(0x08750199, "Rex Marks the Spot - Underwater"),
+        LocData(0x08750198, "Rex Marks the Spot - Underwater"),
     # On moving platform
     "RMtS - Golden Cog 2":
-        LocData(0x0875019A, "Rex Marks the Spot",
-                "Second Rang | Frostyrang | Progressive Rang,1",
-                "Second Rang | Frostyrang | Progressive Rang,1"),
+        LocData(0x08750199, "Rex Marks the Spot"),
     # On large platform near skull rock at start
     "RMtS - Golden Cog 3":
-        LocData(0x0875019B, "Rex Marks the Spot"),
+        LocData(0x0875019A, "Rex Marks the Spot"),
     # In middle of sea mines
     "RMtS - Golden Cog 4":
-        LocData(0x0875019C, "Rex Marks the Spot - Underwater"),
+        LocData(0x0875019B, "Rex Marks the Spot - Underwater"),
     # Underwater near eels between coconut shores and bald island !!!!!FRANK!!!!!!
     "RMtS - Golden Cog 5":
-        LocData(0x0875019D, "Rex Marks the Spot - Underwater"),
+        LocData(0x0875019C, "Rex Marks the Spot - Underwater"),
     # Bald island cog
     "RMtS - Golden Cog 6":
-        LocData(0x0875019E, "Rex Marks the Spot",
-                "Second Rang | Progressive Rang,1",
-                "Second Rang | Progressive Rang,1"),
+        LocData(0x0875019D, "Rex Marks the Spot"),
     # Volcano cog
     "RMtS - Golden Cog 7":
-        LocData(0x0875019F, "Rex Marks the Spot"),
+        LocData(0x0875019E, "Rex Marks the Spot"),
     # Coconut shores cog (on floating platform requiring button hit)
     "RMtS - Golden Cog 8":
-        LocData(0x087501A0, "Rex Marks the Spot",
-                "((Swim | Dive) & Aquarang) | Frostyrang | Progressive Rang,3",
-                "((Swim | Dive) & Aquarang) | Frostyrang | Progressive Rang,3"),
+        LocData(0x0875019F, "Rex Marks the Spot"),
     # Anchor island
     "RMtS - Golden Cog 9":
-        LocData(0x087501A1, "Rex Marks the Spot"),
+        LocData(0x087501A0, "Rex Marks the Spot"),
     # Warp flower cog
     "RMtS - Golden Cog 10":
-        LocData(0x087501A2, "Rex Marks the Spot"),
+        LocData(0x087501A1, "Rex Marks the Spot"),
 }
 
 # Bilbies Dictionary
@@ -653,9 +554,7 @@ bilbies_dict = {
     "BotRT - Bilby Dad":
         LocData(0x087501BB, "Bridge on the River Ty"),
     "BotRT - Bilby Mum":
-        LocData(0x087501BC, "Bridge on the River Ty",
-                "Flamerang | Progressive Rang,5",
-                "(Second Rang & Swim) | Flamerang | Progressive Rang,2"),
+        LocData(0x087501BC, "Bridge on the River Ty"),
     "BotRT - Bilby Boy":
         LocData(0x087501BD, "Bridge on the River Ty"),
     "BotRT - Bilby Girl":
@@ -665,9 +564,7 @@ bilbies_dict = {
     "Snow Worries - Bilby Dad":
         LocData(0x087501C0, "Snow Worries"),
     "Snow Worries - Bilby Mum":
-        LocData(0x087501C1, "Snow Worries",
-                "Flamerang | Progressive Rang,5",
-                "Flamerang | Second Rang | Progressive Rang,1"),
+        LocData(0x087501C1, "Snow Worries"),
     "Snow Worries - Bilby Boy":
         LocData(0x087501C2, "Snow Worries"),
     "Snow Worries - Bilby Girl":
@@ -695,11 +592,9 @@ bilbies_dict = {
     "LLPoF - Bilby Grandma":
         LocData(0x087501CE, "Lyre, Lyre Pants on Fire - Beyond Gate"),
     "BtBS - Bilby Dad":
-        LocData(0x087501CF, "Beyond the Black Stump - Upper Area",
-                "Flamerang | Progressive Rang,5"),
+        LocData(0x087501CF, "Beyond the Black Stump - Upper Area"),
     "BtBS - Bilby Mum":
-        LocData(0x087501D0, "Beyond the Black Stump",
-                "Flamerang | Progressive Rang,5"),
+        LocData(0x087501D0, "Beyond the Black Stump"),
     "BtBS - Bilby Boy":
         LocData(0x087501D1, "Beyond the Black Stump"),
     "BtBS - Bilby Girl":
@@ -911,9 +806,7 @@ picture_frames_dict = {
         LocData(0x08750217, "Snow Worries - PF"),
     # Behind ice blocks
     "Snow Worries - PF 13":
-        LocData(0x08750218, "Snow Worries - PF",
-                "Flamerang | Progressive Rang,5",
-                "Flamerang | Second Rang | Progressive Rang,1"),
+        LocData(0x08750218, "Snow Worries - PF"),
     # Above round dirt patch near icicle cave
     "Snow Worries - PF 14":
         LocData(0x08750219, "Snow Worries - PF"),
@@ -1108,101 +1001,94 @@ picture_frames_dict = {
 # Attributes Dictionary
 attributes_dict = {
     "Attribute - Second Rang":
-        LocData(0x08750012, "Two Up"),
+        LocData(0x08750312, "Two Up"),
     "Attribute - Swim":
-        LocData(0x08750010, "Ship Rex"),
+        LocData(0x08750310, "Ship Rex"),
     "Attribute - Dive":
-        LocData(0x08750011, "Bridge on the River Ty"),
+        LocData(0x08750311, "Bridge on the River Ty"),
     "Attribute - Doomerang":
-        LocData(0x0875001F, "Final Battle",
-                "(Frostyrang & Flamerang) | Progressive Rang,6",
-                "(Frostyrang & Flamerang) | Progressive Rang,6"),
+        LocData(0x08750318, "Final Battle"),
     "Attribute - Extra Health":
-        LocData(0x08750013, "Rainbow Cliffs",
-                "((Swim | Dive) & (Second Rang & Flamerang & Frostyrang & Zappyrang)) | Progressive Rang,7",
-                "Dive | (Second Rang & Swim & Flamerang & Frostyrang & Zappyrang) | Progressive Rang,4"),
+        LocData(0x08750313, "Rainbow Cliffs"),
     "Attribute - Aquarang":
-        LocData(0x08750018, "Ship Rex"),
+        LocData(0x0875031D, "Ship Rex"),
     "Attribute - Zoomerang":
-        LocData(0x08750019, "Rainbow Cliffs",
-                ("Golden Cog", 15),
-                ("Golden Cog", 15)),
+        LocData(0x0875031A, "Rainbow Cliffs"),
     "Attribute - Multirang":
-        LocData(0x0875001A, "Rainbow Cliffs",
-                ("Golden Cog", 15),
-                ("Golden Cog", 30)),
+        LocData(0x0875031E, "Rainbow Cliffs"),
     "Attribute - Infrarang":
-        LocData(0x0875001B, "Rainbow Cliffs",
-                ("Golden Cog", 15),
-                ("Golden Cog", 45)),
+        LocData(0x0875031B, "Rainbow Cliffs"),
     "Attribute - Megarang":
-        LocData(0x0875001C, "Rainbow Cliffs",
-                ("Golden Cog", 60),
-                ("Golden Cog", 60)),
+        LocData(0x08750319, "Rainbow Cliffs"),
     "Attribute - Kaboomarang":
-        LocData(0x0875001D, "Rainbow Cliffs",
-                ("Golden Cog", 75),
-                ("Golden Cog", 15)),
+        LocData(0x08750317, "Rainbow Cliffs"),
     "Attribute - Chronorang":
-        LocData(0x0875001E, "Rainbow Cliffs",
-                ("Golden Cog", 90),
-                ("Golden Cog", 90)),
+        LocData(0x0875031F, "Rainbow Cliffs"),
 }
 
 # Cog_completion Dictionary
 cog_completion_dict = {
     "Two Up - All Golden Cogs":
-        LocData(0x087501A3, "Two Up - Upper Area"),
+        LocData(0x087501A2, "Two Up - Upper Area"),
     "WitP - All Golden Cogs":
-        LocData(0x087501A4, "Walk in the Park"),
+        LocData(0x087501A3, "Walk in the Park"),
     "Ship Rex - All Golden Cogs":
-        LocData(0x087501A5, "Ship Rex - Beyond Gate 1"),
+        LocData(0x087501A4, "Ship Rex - Beyond Gate 1"),
     "BotRT - All Golden Cogs":
-        LocData(0x087501A6, "Bridge on the River Ty",
-                "Progressive Rang,5 | (Second Rang & Flamerang & (Swim | Dive) & (Aquarang | Frostyrang))",
-                "Progressive Rang,2 | ((Swim | Dive) & (Aquarang | Frostyrang | Second Rang))"),
+        LocData(0x087501A5, "Bridge on the River Ty"),
     "Snow Worries - All Golden Cogs":
-        LocData(0x087501A7, "Snow Worries - Underwater",
-                "(Aquarang & Second Rang) | Progressive Rang,3",
-                "Aquarang | Progressive Rang,3"),
+        LocData(0x087501A6, "Snow Worries - Underwater"),
     "Outback Safari - All Golden Cogs":
-        LocData(0x087501A8, "Outback Safari"),
+        LocData(0x087501A7, "Outback Safari"),
     "LLPoF - All Golden Cogs":
-        LocData(0x087501A9, "Lyre, Lyre Pants on Fire - Beyond Gate",
-                "(Second Rang & Flamerang) | Kaboomerrang | Progressive Rang,5"),
+        LocData(0x087501A8, "Lyre, Lyre Pants on Fire - Beyond Gate"),
     "BtBS - All Golden Cogs":
-        LocData(0x087501AA, "Beyond the Black Stump - Upper Area",
-                "Flamerang | Kaboomerang | Progressive Rang,5"),
+        LocData(0x087501A9, "Beyond the Black Stump - Upper Area"),
     "RMtS - All Golden Cogs":
-        LocData(0x087501AB, "Rex Marks the Spot - Underwater",
-                 "(Second Rang & (Aquarang | Frostyrang)) | Progressive Rang,3",
-                 "(Second Rang & (Aquarang | Frostyrang)) | Progressive Rang,3"),
+        LocData(0x087501AA, "Rex Marks the Spot - Underwater"),
 }
 
 # Frame_completion Dictionary
 frame_completion_dict = {
-    "Two Up - All Picture Frames":
-        LocData(0x08750258, "Two Up - Upper Area - PF"),
-    "WitP - All Picture Frames":
-        LocData(0x08750259, "Walk in the Park - PF"),
-    "Ship Rex - All Picture Frames":
-        LocData(0x0875025A, "Ship Rex - Beyond Gate 1"),
-    "BotRT - All Picture Frames":
-        LocData(0x0875025B, "Bridge on the River Ty - PF"),
-    "Snow Worries - All Picture Frames":
-        LocData(0x0875025C, "Snow Worries - PF",
-                "Flamerang | Progressive Rang,5",
-                "Flamerang | Second Rang | Progressive Rang,1"),
-    "LLPoF - All Picture Frames":
-        LocData(0x0875025D, "Lyre, Lyre Pants on Fire - Beyond Gate"),
-    "BtBS - All Picture Frames":
-        LocData(0x0875025E, "Beyond the Black Stump - Upper Area - PF"),
-    "RMtS - All Picture Frames":
-        LocData(0x0875025F, "Rex Marks the Spot - PF"),
     "Rainbow Cliffs - All Picture Frames":
-        LocData(0x08750260, "Final Gauntlet",
-                "(Second Rang & Flamerang) | Progressive Rang,5",
-                "Dive | Flamerang | Progressive Rang 4"),
+        LocData(0x08750258, "Final Gauntlet"),
+    "Two Up - All Picture Frames":
+        LocData(0x08750259, "Two Up - Upper Area - PF"),
+    "WitP - All Picture Frames":
+        LocData(0x0875025A, "Walk in the Park - PF"),
+    "Ship Rex - All Picture Frames":
+        LocData(0x0875025B, "Ship Rex - Beyond Gate 1"),
+    "BotRT - All Picture Frames":
+        LocData(0x0875025C, "Bridge on the River Ty - PF"),
+    "Snow Worries - All Picture Frames":
+        LocData(0x0875025D, "Snow Worries - PF"),
+    "LLPoF - All Picture Frames":
+        LocData(0x0875025E, "Lyre, Lyre Pants on Fire - Beyond Gate"),
+    "BtBS - All Picture Frames":
+        LocData(0x0875025F, "Beyond the Black Stump - Upper Area - PF"),
+    "RMtS - All Picture Frames":
+        LocData(0x08750260, "Rex Marks the Spot - PF"),
+}
+
+bilby_completion_dict = {
+    "Two Up - Bilby Completion":
+        LocData(0x08750270, "Rainbow Cliffs"),
+    "WitP - Bilby Completion":
+        LocData(0x08750271, "Rainbow Cliffs"),
+    "Ship Rex - Bilby Completion":
+        LocData(0x08750272, "Rainbow Cliffs"),
+    "BotRT - Bilby Completion":
+        LocData(0x08750273, "Rainbow Cliffs"),
+    "Snow Worries - Bilby Completion":
+        LocData(0x08750274, "Rainbow Cliffs"),
+    "Outback Safari - Bilby Completion":
+        LocData(0x08750275, "Rainbow Cliffs"),
+    "LLPoF - Bilby Completion":
+        LocData(0x08750276, "Rainbow Cliffs"),
+    "BtBS - Bilby Completion":
+        LocData(0x08750277, "Rainbow Cliffs"),
+    "RMtS - Bilby Completion":
+        LocData(0x08750278, "Rainbow Cliffs"),
 }
 
 # Talismans Dictionary
@@ -1210,43 +1096,27 @@ talismans_dict = {
     "Frog Talisman":
         LocData(0x08750261, "Bull's Pen"),
     "Platypus Talisman":
-        LocData(0x08750262, "Crikey's Cove",
-                "((Swim | Dive) & Aquarang & Flamerang) | Progressive Rang 5",
-                "((Swim | Dive) & Aquarang & Flamerang) | Progressive Rang 5"),
+        LocData(0x08750262, "Crikey's Cove"),
     "Cockatoo Talisman":
-        LocData(0x08750263, "Fluffy's Fjord",
-        "(Frostyrang & Flamerang) | Progressive Rang,6",
-        "(Frostyrang & Flamerang) | Progressive Rang,6 | Doomerang"),
+        LocData(0x08750263, "Fluffy's Fjord"),
     "Dingo Talisman":
-        LocData(0x08750264, "Cass' Crest",
-                "Progressive Rang,1 | Second Rang",
-                "Progressive Rang,1 | Second Rang"),
+        LocData(0x08750264, "Cass' Crest"),
     "Tiger Talisman":
-        LocData(0x08750265, "Final Battle",
-                "(Frostyrang & Flamerang & Doomerang) | Progressive Rang,8",
-                "Doomerang | Progressive Rang,8"),
+        LocData(0x08750265, "Final Battle"),
 }
 
 # Elemental Rangs Dictionary
 elemental_rangs_dict = {
     # Counts are set to hub te count in regions.py in evaluate_condition
     "Attribute - Flamerang":
-        LocData(0x08750015, "Rainbow Cliffs",
-                "Fire Thunder Egg,0 & Frog Talisman",
-                "Fire Thunder Egg,0 & Frog Talisman"),
+        LocData(0x08750316, "Rainbow Cliffs"),
     "Attribute - Frostyrang":
-        LocData(0x08750016, "Rainbow Cliffs",
-                "Ice Thunder Egg,0 & Platypus Talisman",
-                "Ice Thunder Egg,0 & Platypus Talisman"),
+        LocData(0x08750315, "Rainbow Cliffs"),
     "Attribute - Zappyrang":
-        LocData(0x08750017, "Rainbow Cliffs",
-                "Air Thunder Egg,0 & Cockatoo Talisman",
-                "Air Thunder Egg,0 & Cockatoo Talisman")
+        LocData(0x0875031C, "Rainbow Cliffs")
 }
 
 ty1_location_table = {
-    **thunder_eggs_dict,
-    **golden_cogs_dict,
     **thunder_eggs_dict,
     **golden_cogs_dict,
     **bilbies_dict,
@@ -1254,6 +1124,7 @@ ty1_location_table = {
     **attributes_dict,
     **cog_completion_dict,
     **frame_completion_dict,
+    **bilby_completion_dict,
     **talismans_dict,
     **elemental_rangs_dict
 }

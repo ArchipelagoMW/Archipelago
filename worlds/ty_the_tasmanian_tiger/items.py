@@ -1,5 +1,5 @@
 from collections import namedtuple
-from typing import Dict
+from typing import Dict, Optional
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 from worlds.ty_the_tasmanian_tiger.options import Ty1Options
@@ -8,42 +8,57 @@ from worlds.ty_the_tasmanian_tiger.options import Ty1Options
 class Ty1Item(Item):
     game: str = "Ty the Tasmanian Tiger"
 
+def get_junk_item_names(rand, k: int) -> str:
+    junk = rand.choices(
+        list(junk_weights.keys()),
+        weights=list(junk_weights.values()),
+        k=k)
+    return junk
 
-def create_single(name: str, world: MultiWorld, player: int):
-    world.itempool.append(Ty1Item(name, ty1_item_table[name].classification, ty1_item_table[name].id, player))
+def create_single(name: str, world: MultiWorld, player: int, item_class: ItemClassification = None):
+    classification = ty1_item_table[name].classification if item_class is None else item_class
+    world.itempool.append(Ty1Item(name, classification, ty1_item_table[name].code, player))
 
-def create_multiple(name: str, amount: int, world: MultiWorld, player: int):
+def create_multiple(name: str, amount: int, world: MultiWorld, player: int, item_class: ItemClassification = None):
     for i in range(amount):
-        create_single(name, world, player)
+        create_single(name, world, player, item_class)
 
 def create_items(world: MultiWorld, options: Ty1Options, player: int):
+
+    total_location_count = len(world.get_unfilled_locations(player))
+
     # Generic
-    create_multiple("Fire Thunder Egg", 21, world, player) # Drop 3 TEs for bilby redundancy
-    create_multiple("Ice Thunder Egg", 21, world, player)
-    create_multiple("Air Thunder Egg", 21, world, player)
+    extra_class = ItemClassification.progression_skip_balancing if options.goal.value == 2 or 3 else ItemClassification.useful
+    extra_theggs_per_hub = 21 - options.hub_te_counts.value
+    create_multiple("Fire Thunder Egg", options.hub_te_counts.value, world, player)
+    create_multiple("Fire Thunder Egg", extra_theggs_per_hub, world, player, extra_class)
+    create_multiple("Ice Thunder Egg", options.hub_te_counts.value, world, player)
+    create_multiple("Ice Thunder Egg", extra_theggs_per_hub, world, player, extra_class)
+    create_multiple("Air Thunder Egg", options.hub_te_counts.value, world, player)
+    create_multiple("Air Thunder Egg", extra_theggs_per_hub, world, player, extra_class)
     create_multiple("Golden Cog", 90, world, player)
 
     # Bilbies
     create_multiple("Bilby - Two Up", 5, world, player)
-    create_multiple("Bilby - WitP", 5, world, player)
+    create_multiple("Bilby - Walk in the Park", 5, world, player)
     create_multiple("Bilby - Ship Rex", 5, world, player)
-    create_multiple("Bilby - BotRT", 5, world, player)
+    create_multiple("Bilby - Bridge on the River Ty", 5, world, player)
     create_multiple("Bilby - Snow Worries", 5, world, player)
     create_multiple("Bilby - Outback Safari", 5, world, player)
-    create_multiple("Bilby - LLPoF", 5, world, player)
-    create_multiple("Bilby - BtBS", 5, world, player)
-    create_multiple("Bilby - RMtS", 5, world, player)
+    create_multiple("Bilby - Lyre, Lyre Pants on Fire", 5, world, player)
+    create_multiple("Bilby - Beyond the Black Stump", 5, world, player)
+    create_multiple("Bilby - Rex Marks the Spot", 5, world, player)
 
     # Stopwatches 
     create_single("Stopwatch - Two Up", world, player)
-    create_single("Stopwatch - WitP", world, player)
+    create_single("Stopwatch - Walk in the Park", world, player)
     create_single("Stopwatch - Ship Rex", world, player)
-    create_single("Stopwatch - BotRT", world, player)
+    create_single("Stopwatch - Bridge on the River Ty", world, player)
     create_single("Stopwatch - Snow Worries", world, player)
     create_single("Stopwatch - Outback Safari", world, player)
-    create_single("Stopwatch - LLPoF", world, player)
-    create_single("Stopwatch - BtBS", world, player)
-    create_single("Stopwatch - RMtS", world, player)
+    create_single("Stopwatch - Lyre, Lyre Pants on Fire", world, player)
+    create_single("Stopwatch - Beyond the Black Stump", world, player)
+    create_single("Stopwatch - Rex Marks the Spot", world, player)
 
     # Attributes
     if options.progressive_elementals:
@@ -59,7 +74,7 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
         create_single("Flamerang", world, player)
         create_single("Frostyrang", world, player)
         create_single("Zappyrang", world, player)
-        create_single("Doomarang", world, player)
+        create_single("Doomerang", world, player)
         create_single("Extra Health", world, player)
         create_single("Zoomerang", world, player)
         create_single("Multirang", world, player)
@@ -74,25 +89,64 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
             level_count = 12 if options.level_unlock_style == 1 else 9
             create_multiple("Progressive Level", level_count, world, player)
         else:
-            create_single("Portal - WitP", world, player)
+            create_single("Portal - Walk in the Park", world, player)
             create_single("Portal - Ship Rex", world, player)
-            create_single("Portal - BotRT", world, player)
+            create_single("Portal - Bridge on the River Ty", world, player)
             create_single("Portal - Snow Worries", world, player)
             create_single("Portal - Outback Safari", world, player)
-            create_single("Portal - LLPoF", world, player)
-            create_single("Portal - BtBS", world, player)
-            create_single("Portal - RMtS", world, player)
+            create_single("Portal - Lyre, Lyre Pants on Fire", world, player)
+            create_single("Portal - Beyond the Black Stump", world, player)
+            create_single("Portal - Rex Marks the Spot", world, player)
             create_single("Portal - Cass' Pass", world, player)
-            if options.level_unlock_style != 2:
+            if options.level_unlock_style == 1:
                 create_single("Portal - Bull's Pen", world, player)
                 create_single("Portal - Crikey's Cove", world, player)
                 create_single("Portal - Fluffy's Fjord", world, player)
-    
-    # Junk
 
-class ItemData():
-    def __init__(self, id: int, classification: ItemClassification):
-        self.id = id
+    create_single("Frog Talisman", world, player)
+    create_single("Platypus Talisman", world, player)
+    create_single("Cockatoo Talisman", world, player)
+    create_single("Dingo Talisman", world, player)
+    create_single("Tiger Talisman", world, player)
+
+    # Junk
+    junk = get_junk_item_names(world.random, total_location_count - len(world.itempool))
+    for name in junk:
+        create_single(name, world, player)
+
+def place_bilby_theggs(world: MultiWorld, options: Ty1Options, player: int):
+    classification = ItemClassification.progression_skip_balancing if options.goal.value == 2 or 3 else ItemClassification.useful
+    a1_bilby_loc = world.get_location("Two Up - Bilby Completion", player)
+    a1_bilby_thegg = Ty1Item("Fire Thunder Egg", classification, 0x8750000, player)
+    a1_bilby_loc.place_locked_item(a1_bilby_thegg)
+    a2_bilby_loc = world.get_location("WitP - Bilby Completion", player)
+    a2_bilby_thegg = Ty1Item("Fire Thunder Egg", classification, 0x8750000, player)
+    a2_bilby_loc.place_locked_item(a2_bilby_thegg)
+    a3_bilby_loc = world.get_location("Ship Rex - Bilby Completion", player)
+    a3_bilby_thegg = Ty1Item("Fire Thunder Egg", classification, 0x8750000, player)
+    a3_bilby_loc.place_locked_item(a3_bilby_thegg)
+    b1_bilby_loc = world.get_location("BotRT - Bilby Completion", player)
+    b1_bilby_thegg = Ty1Item("Ice Thunder Egg", classification, 0x8750001, player)
+    b1_bilby_loc.place_locked_item(b1_bilby_thegg)
+    b2_bilby_loc = world.get_location("Snow Worries - Bilby Completion", player)
+    b2_bilby_thegg = Ty1Item("Ice Thunder Egg", classification, 0x8750001, player)
+    b2_bilby_loc.place_locked_item(b2_bilby_thegg)
+    b3_bilby_loc = world.get_location("Outback Safari - Bilby Completion", player)
+    b3_bilby_thegg = Ty1Item("Ice Thunder Egg", classification, 0x8750001, player)
+    b3_bilby_loc.place_locked_item(b3_bilby_thegg)
+    c1_bilby_loc = world.get_location("LLPoF - Bilby Completion", player)
+    c1_bilby_thegg = Ty1Item("Air Thunder Egg", classification, 0x8750002, player)
+    c1_bilby_loc.place_locked_item(c1_bilby_thegg)
+    c2_bilby_loc = world.get_location("BtBS - Bilby Completion", player)
+    c2_bilby_thegg = Ty1Item("Air Thunder Egg", classification, 0x8750002, player)
+    c2_bilby_loc.place_locked_item(c2_bilby_thegg)
+    c3_bilby_loc = world.get_location("RMtS - Bilby Completion", player)
+    c3_bilby_thegg = Ty1Item("Air Thunder Egg", classification, 0x8750002, player)
+    c3_bilby_loc.place_locked_item(c3_bilby_thegg)
+
+class ItemData:
+    def __init__(self, code: Optional[int], classification: Optional[ItemClassification]):
+        self.code = code
         self.classification = classification
 
 ty1_item_table: Dict[str, ItemData] = {
@@ -108,10 +162,10 @@ ty1_item_table: Dict[str, ItemData] = {
     "Fire Thunder Egg": ItemData(0x8750000, ItemClassification.progression_skip_balancing),
     "Ice Thunder Egg": ItemData(0x8750001, ItemClassification.progression_skip_balancing),
     "Air Thunder Egg": ItemData(0x8750002, ItemClassification.progression_skip_balancing),
-    "Golden Cog":  ItemData(0x8750003, ItemClassification.skip_balancing),
+    "Golden Cog":  ItemData(0x8750003, ItemClassification.progression_skip_balancing),
 
     # Attributes
-    "Progressive Rang": ItemData(0x8750070, ItemClassification.progression_skip_balancing),
+    "Progressive Rang": ItemData(0x8750070, ItemClassification.progression),
     "Swim": ItemData(0x8750010, ItemClassification.progression),
     "Dive": ItemData(0x8750011, ItemClassification.progression),
     "Second Rang": ItemData(0x8750012, ItemClassification.progression),
@@ -127,48 +181,60 @@ ty1_item_table: Dict[str, ItemData] = {
     "Megarang": ItemData(0x875001C, ItemClassification.filler),
     "Kaboomarang": ItemData(0x875001D, ItemClassification.filler),
     "Chronorang": ItemData(0x875001E, ItemClassification.trap),
-    "Doomarang": ItemData(0x875001F, ItemClassification.progression),
+    "Doomerang": ItemData(0x875001F, ItemClassification.progression),
 
     # Bilby
-    "Bilby - Two Up": ItemData(0x8750020, ItemClassification.useful),
-    "Bilby - WitP": ItemData(0x8750021, ItemClassification.useful),
-    "Bilby - Ship Rex": ItemData(0x8750022, ItemClassification.useful),
-    "Bilby - BotRT": ItemData(0x8750023, ItemClassification.useful),
-    "Bilby - Snow Worries": ItemData(0x8750024, ItemClassification.useful),
-    "Bilby - Outback Safari": ItemData(0x8750025, ItemClassification.useful),
-    "Bilby - LLPoF": ItemData(0x8750026, ItemClassification.useful),
-    "Bilby - BtBS": ItemData(0x8750027, ItemClassification.useful),
-    "Bilby - RMtS": ItemData(0x8750028, ItemClassification.useful),
+    "Bilby - Two Up": ItemData(0x8750024, ItemClassification.progression_skip_balancing),
+    "Bilby - Walk in the Park": ItemData(0x8750025, ItemClassification.progression_skip_balancing),
+    "Bilby - Ship Rex": ItemData(0x8750026, ItemClassification.progression_skip_balancing),
+    "Bilby - Bridge on the River Ty": ItemData(0x8750028, ItemClassification.progression_skip_balancing),
+    "Bilby - Snow Worries": ItemData(0x8750029, ItemClassification.progression_skip_balancing),
+    "Bilby - Outback Safari": ItemData(0x875002A, ItemClassification.progression_skip_balancing),
+    "Bilby - Lyre, Lyre Pants on Fire": ItemData(0x875002C, ItemClassification.progression_skip_balancing),
+    "Bilby - Beyond the Black Stump": ItemData(0x875002D, ItemClassification.progression_skip_balancing),
+    "Bilby - Rex Marks the Spot": ItemData(0x875002E, ItemClassification.progression_skip_balancing),
 
     # Levels
-    "Progressive Level": ItemData(0x8750071, ItemClassification.progression_skip_balancing),
-    "Portal - Two Up": ItemData(0x8750030, ItemClassification.progression_skip_balancing),
-    "Portal - WitP": ItemData(0x8750031, ItemClassification.progression_skip_balancing),
-    "Portal - Ship Rex": ItemData(0x8750032, ItemClassification.progression_skip_balancing),
-    "Portal - Bull's Pen": ItemData(0x8750033, ItemClassification.progression_skip_balancing),
-    "Portal - BotRT": ItemData(0x8750034, ItemClassification.progression_skip_balancing),
-    "Portal - Snow Worries": ItemData(0x8750035, ItemClassification.progression_skip_balancing),
-    "Portal - Outback Safari": ItemData(0x8750036, ItemClassification.progression_skip_balancing),
-    "Portal - Crikey's Cove": ItemData(0x8750037, ItemClassification.progression_skip_balancing),
-    "Portal - LLPoF": ItemData(0x8750038, ItemClassification.progression_skip_balancing),
-    "Portal - BtBS": ItemData(0x8750039, ItemClassification.progression_skip_balancing),
-    "Portal - RMtS": ItemData(0x875003A, ItemClassification.progression_skip_balancing),
-    "Portal - Fluffy's Fjord": ItemData(0x875003B, ItemClassification.progression_skip_balancing),
-    "Portal - Cass' Pass": ItemData(0x875003C, ItemClassification.progression_skip_balancing),
+    "Progressive Level": ItemData(0x8750071, ItemClassification.progression),
+    "Portal - Two Up": ItemData(0x8750030, ItemClassification.progression),
+    "Portal - Walk in the Park": ItemData(0x8750031, ItemClassification.progression),
+    "Portal - Ship Rex": ItemData(0x8750032, ItemClassification.progression),
+    "Portal - Bull's Pen": ItemData(0x8750033, ItemClassification.progression),
+    "Portal - Bridge on the River Ty": ItemData(0x8750034, ItemClassification.progression),
+    "Portal - Snow Worries": ItemData(0x8750035, ItemClassification.progression),
+    "Portal - Outback Safari": ItemData(0x8750036, ItemClassification.progression),
+    "Portal - Crikey's Cove": ItemData(0x8750037, ItemClassification.progression),
+    "Portal - Lyre, Lyre Pants on Fire": ItemData(0x8750038, ItemClassification.progression),
+    "Portal - Beyond the Black Stump": ItemData(0x8750039, ItemClassification.progression),
+    "Portal - Rex Marks the Spot": ItemData(0x875003A, ItemClassification.progression),
+    "Portal - Fluffy's Fjord": ItemData(0x875003B, ItemClassification.progression),
+    "Portal - Cass' Pass": ItemData(0x875003C, ItemClassification.progression),
 
-    "Stopwatch - Two Up": ItemData(0x875040, ItemClassification.useful),
-    "Stopwatch - WitP": ItemData(0x875041, ItemClassification.useful),
-    "Stopwatch - Ship Rex": ItemData(0x875042, ItemClassification.useful),
-    "Stopwatch - BotRT": ItemData(0x875043, ItemClassification.useful),
-    "Stopwatch - Snow Worries": ItemData(0x875044, ItemClassification.useful),
-    "Stopwatch - Outback Safari": ItemData(0x875045, ItemClassification.useful),
-    "Stopwatch - LLPoF": ItemData(0x875046, ItemClassification.useful),
-    "Stopwatch - BtBS": ItemData(0x875047, ItemClassification.useful),
-    "Stopwatch - RMtS": ItemData(0x875048, ItemClassification.useful),
+    "Stopwatch - Two Up": ItemData(0x8750044, ItemClassification.progression),
+    "Stopwatch - Walk in the Park": ItemData(0x8750045, ItemClassification.progression),
+    "Stopwatch - Ship Rex": ItemData(0x8750046, ItemClassification.progression),
+    "Stopwatch - Bridge on the River Ty": ItemData(0x8750048, ItemClassification.progression),
+    "Stopwatch - Snow Worries": ItemData(0x8750049, ItemClassification.progression),
+    "Stopwatch - Outback Safari": ItemData(0x875004A, ItemClassification.progression),
+    "Stopwatch - Lyre, Lyre Pants on Fire": ItemData(0x875004C, ItemClassification.progression),
+    "Stopwatch - Beyond the Black Stump": ItemData(0x875004D, ItemClassification.progression),
+    "Stopwatch - Rex Marks the Spot": ItemData(0x875004E, ItemClassification.progression),
+
+    "Frog Talisman": ItemData(0x8750050, ItemClassification.progression),
+    "Platypus Talisman": ItemData(0x8750051, ItemClassification.progression),
+    "Cockatoo Talisman": ItemData(0x8750052, ItemClassification.progression),
+    "Dingo Talisman": ItemData(0x8750053, ItemClassification.progression),
+    "Tiger Talisman": ItemData(0x8750054, ItemClassification.progression),
 
     # Junk
     "Picture Frame":  ItemData(0x8750080, ItemClassification.filler),
-    "Talisman": ItemData(0x8750081, ItemClassification.filler),
     "Extra Life": ItemData(0x8750082, ItemClassification.filler),
     "Opal Magnet": ItemData(0x8750083, ItemClassification.filler),
 }
+
+junk_weights = {
+    "Picture Frame": 70,
+    "Extra Life": 20,
+    "Opal Magnet": 10
+}
+

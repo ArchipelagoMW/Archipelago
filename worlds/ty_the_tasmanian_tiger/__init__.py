@@ -2,10 +2,12 @@ import typing
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
 
-from .items import Ty1Item, ty1_item_table, create_items, ItemData
-from .locations import ty1_location_table
+from .items import Ty1Item, ty1_item_table, create_items, ItemData, place_bilby_theggs
+from .locations import ty1_location_table, Ty1Location
 from .options import Ty1Options, ty1_option_groups
 from .regions import create_regions, connect_regions, ty1_levels, Ty1LevelCode, connect_all_regions
+from .rules import set_rules
+
 
 class Ty1Web(WebWorld):
     theme = "jungle"
@@ -30,14 +32,13 @@ class Ty1World(World):
     options_dataclass = Ty1Options
     options: Ty1Options
     topology_present = True
-    item_name_to_id = {name: item.id for name, item in ty1_item_table.items()}
-    location_name_to_id = {name: item.id for name, item in ty1_location_table.items()}
-    id_to_item_name = {item.id: name for name, item in ty1_item_table.items()}
+    item_name_to_id = {name: item.code for name, item in ty1_item_table.items()}
+    location_name_to_id = {name: item.code for name, item in ty1_location_table.items()}
 
-    portal_map: typing.List[Ty1LevelCode] = [Ty1LevelCode.A1, Ty1LevelCode.A2, Ty1LevelCode.A3,
-                                            Ty1LevelCode.B1, Ty1LevelCode.B2, Ty1LevelCode.B3,
-                                            Ty1LevelCode.C1, Ty1LevelCode.C2, Ty1LevelCode.C3]
-    boss_map: typing.List[Ty1LevelCode] = [Ty1LevelCode.A4, Ty1LevelCode.D4, Ty1LevelCode.C4]
+    portal_map: typing.List[int] = [Ty1LevelCode.A1.value, Ty1LevelCode.A2.value, Ty1LevelCode.A3.value,
+                                            Ty1LevelCode.B1.value, Ty1LevelCode.B2.value, Ty1LevelCode.B3.value,
+                                            Ty1LevelCode.C1.value, Ty1LevelCode.C2.value, Ty1LevelCode.C3.value]
+    boss_map: typing.List[int] = [Ty1LevelCode.A4.value, Ty1LevelCode.D4.value, Ty1LevelCode.C4.value]
 
     web = Ty1Web()
 
@@ -45,41 +46,50 @@ class Ty1World(World):
         return {
             "ModVersion": 100,
             "Goal": self.options.goal.value,
-            "LogicDifficulty": self.options.logic_difficulty,
-            "ProgressiveElementals": self.options.progressive_elementals,
-            "StartWithBoom": self.options.start_with_boom,
-            "LevelShuffle": self.options.level_shuffle,
+            "ProgressiveElementals": self.options.progressive_elementals.value,
+            "ProgressiveLevel": self.options.progressive_level.value,
+            "StartWithBoom": self.options.start_with_boom.value,
+            "LevelUnlockStyle": self.options.level_unlock_style.value,
+            "HubTheggCounts": self.options.hub_te_counts.value,
             "PortalMap": self.portal_map,
-            "BossShuffle": self.options.boss_shuffle,
             "BossMap": self.boss_map,
-            "LevelUnlockStyle": self.options.level_unlock_style,
-            "ProgressiveLevel": self.options.progressive_level,
-            "HubTheggCounts": self.options.hub_te_counts,
-            "RegionTheggMap": self.region_thegg_map,
             "Cogsanity": self.options.cogsanity.value,
+            "Framesanity": self.options.framesanity.value,
             "Bilbysanity": self.options.bilbysanity.value,
             "Attributesanity": self.options.attributesanity.value,
-            "Framesanity": self.options.framesanity.value,
-            "DeathLink": self.options.death_link.value,
-            "PlayerNum": self.player,
+            "DeathLink": self.options.death_link.value
         }
+
+    # Portal Map
+    # Bilbies
 
     def create_item(self, name: str) -> Item:
         item_info = ty1_item_table[name]
-        return Ty1Item(name, item_info.classification, item_info.id, self.player)
+        return Ty1Item(name, item_info.classification, item_info.code, self.player)
 
     def create_items(self):
         create_items(self.multiworld, self.options, self.player)
 
+    def create_event(self, region_name: str, event_name: str) -> None:
+        region = self.multiworld.get_region(region_name, self.player)
+        loc = Ty1Location(self.player, event_name, None, region)
+        loc.place_locked_item(Ty1Item(event_name, ItemClassification.progression, None, self.player))
+        region.locations.append(loc)
+
     def create_regions(self):
         create_regions(self.multiworld, self.options, self.player)
+        place_bilby_theggs(self.multiworld, self.options, self.player)
         connect_all_regions(self.multiworld, self.player, self.options, self.portal_map, self.boss_map)
-        from Utils import visualize_regions
-        state = self.multiworld.get_all_state(False)
-        print("HELLO WORLD")
+        self.create_event("Bull's Pen", "Beat Bull")
+        self.create_event("Crikey's Cove", "Beat Crikey")
+        self.create_event("Fluffy's Fjord", "Beat Fluffy")
+        self.create_event("Cass' Crest", "Beat Shadow")
+        self.create_event("Final Battle", "Beat Cass")
+        state = self.multiworld.get_all_state(True)
         state.update_reachable_regions(self.player)
-        visualize_regions(self.get_region("Menu"), "ty_the_tasmanian_tiger.puml", show_entrance_names=True)
+        for reg in state.reachable_regions.values():
+            for i in reg:
+                print(i.name)
 
-
-
-
+    def set_rules(self):
+        set_rules(self.multiworld, self.options, self.player)

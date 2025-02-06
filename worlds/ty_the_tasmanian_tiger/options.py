@@ -44,8 +44,7 @@ class StartWithBoom(DefaultOnToggle):
     """
     Determines if Ty starts with his boomerang (only for progressive elementals)
     """
-    display_name = ("Start With Boomerang")
-    default = True
+    display_name = "Start With Boomerang"
 
 class LevelShuffle(Toggle):
     """
@@ -173,6 +172,7 @@ ty1_option_groups = [
     ]),
     OptionGroup("Stages", [
         LevelShuffle,
+        BossShuffle,
         LevelUnlockStyle,
         ProgressiveLevel,
         HubThunderEggCounts,
