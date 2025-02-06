@@ -1044,19 +1044,19 @@ def update_treasure_table(treasure_info, character_info, output_data, teiden: bo
         treasure_info.info_file_field_entries.clear()
 
     for x in character_info.info_file_field_entries:
+        # Move the Laundry room chest back from Butler door
+        if x["room_no"] == 5:
+            x["pos_z"] -= 50
+
+        # Move 2F Bathroom chest back from wall
+        if x["room_no"] == 45:
+            x["pos_x"] -= 100
+            x["pos_z"] -= 50
+
         for item_name, item_data in output_data["Locations"].items():
             # Ignore output data not related to chests that are not chests.
             if not item_data["type"] == "Chest":
                 continue
-
-            # Move the Laundry room chest back from Butler door
-            if x["room_no"] == 5:
-                x["pos_z"] -= 50
-
-            # Move 2F Bathroom chest back from wall
-            if x["room_no"] == 45:
-                x["pos_x"] -= 100
-                x["pos_z"] -= 50
 
             # Find the proper chest in the proper room by looking comparing the Room ID.
             if x["name"].find("takara") != -1 and x["room_no"] == item_data["room_no"]:
