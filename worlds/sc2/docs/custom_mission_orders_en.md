@@ -23,6 +23,7 @@
     - [Static Presets](#static-presets)
       - [Preset Options](#preset-options)
         - [Missions](#missions)
+        - [Shuffle Raceswaps](#shuffle-raceswaps)
         - [Keys](#keys)
     - [Golden Path](#golden-path)
   - [Layout Options](#layout-options)
@@ -644,6 +645,7 @@ With all presets, you can override their layout options by defining the layouts 
     My Campaign:
       preset: wol + prophecy
       missions: random # Optional
+      shuffle_raceswaps: false # Optional
       keys: none # Optional
       Prophecy:
         mission_pool:
@@ -690,6 +692,9 @@ The `missions` option accepts these possible values:
 - `random` (default), which removes pre-defined `mission_pool` options from layouts and missions, meaning all missions will follow the pool defined in your campaign's `global` layout. This is the default if you don't define the `missions` option.
 - `vanilla_shuffled`, which will leave `mission_pool`s on layouts to shuffle vanilla missions within their respective campaigns.
 - `vanilla`, which will leave all missions as they are in the vanilla campaigns.
+
+##### Shuffle Raceswaps
+The `shuffle_raceswaps` option accepts `true` and `false` (default). If enabled, the missions pools in the preset will contain raceswapped missions. This means `missions: vanilla_shuffled` will shuffle raceswaps alongside their regular variants, and `missions: vanilla` will allow a random variant of the mission in each slot. This option does nothing if `missions` is set to `random`.
 
 ##### Keys
 The `keys` option accepts these possible values:

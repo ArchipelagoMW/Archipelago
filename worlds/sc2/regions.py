@@ -8,7 +8,7 @@ from .mission_tables import (
 from .options import (
     get_option_value, ShuffleNoBuild, RequiredTactics, ExtraLocations, ShuffleCampaigns,
     kerrigan_unit_available, TakeOverAIAllies, MissionOrder, get_excluded_missions, get_enabled_campaigns, static_mission_orders,
-    GridTwoStartPositions, KeyMode, EnableMissionRaceBalancing
+    GridTwoStartPositions, KeyMode, EnableMissionRaceBalancing, EnableRaceSwapVariants
 )
 from .mission_order.options import CustomMissionOrder
 from .mission_order import SC2MissionOrder
@@ -177,6 +177,12 @@ def create_static_mission_order(world: 'SC2World', mission_order_type: int, miss
     else:
         missions = "vanilla_shuffled"
     
+    if get_option_value(world, "enable_race_swap") == EnableRaceSwapVariants.option_disabled:
+        shuffle_raceswaps = False
+    else:
+        # Picking specific raceswap variants is handled by mission exclusion
+        shuffle_raceswaps = True
+
     key_mode_option = get_option_value(world, "key_mode")
     if key_mode_option == KeyMode.option_missions:
         keys = "missions"
@@ -200,16 +206,16 @@ def create_static_mission_order(world: 'SC2World', mission_order_type: int, miss
         return {
             "preset": prefix + name,
             "missions": missions,
+            "shuffle_raceswaps": shuffle_raceswaps,
             "keys": keys
         }
 
     prophecy_enabled = SC2Campaign.PROPHECY in enabled_campaigns
-    if SC2Campaign.WOL in enabled_campaigns:
-        if prophecy_enabled:
-            mission_order[SC2Campaign.WOL.campaign_name] = mission_order_preset("wol + prophecy")
-        else:
-            mission_order[SC2Campaign.WOL.campaign_name] = mission_order_preset("wol")   
-    elif prophecy_enabled:
+    wol_enabled = SC2Campaign.WOL in enabled_campaigns
+    if wol_enabled:
+        mission_order[SC2Campaign.WOL.campaign_name] = mission_order_preset("wol") 
+
+    if prophecy_enabled:
         mission_order[SC2Campaign.PROPHECY.campaign_name] = mission_order_preset("prophecy")
 
     if SC2Campaign.HOTS in enabled_campaigns:
@@ -238,6 +244,11 @@ def create_static_mission_order(world: 'SC2World', mission_order_type: int, miss
     # Resolve immediately so the layout updates are simpler
     mission_order = CustomMissionOrder(mission_order).value
 
+    # WoL requirements should count missions from Prophecy if both are enabled, and Prophecy should require a WoL mission
+    # There is a preset that already does this, but special-casing this way is easier to work with for other code
+    if wol_enabled and prophecy_enabled:
+        fix_wol_prophecy_entry_rules(mission_order)
+    
     # Vanilla Shuffled is allowed to drop some slots
     if mission_order_type == MissionOrder.option_vanilla_shuffled:
         remove_missions(world, mission_order, mission_pools)
@@ -247,10 +258,40 @@ def create_static_mission_order(world: 'SC2World', mission_order_type: int, miss
 
     return mission_order
 
+
+def fix_wol_prophecy_entry_rules(mission_order: Dict[str, Dict[str, Any]]):
+    prophecy_name = SC2Campaign.PROPHECY.campaign_name
+
+    # Make the mission count entry rules in WoL also count Prophecy
+    def fix_entry_rule(entry_rule: Dict[str, Any], local_campaign_scope: str):
+        # This appends Prophecy to any scope that points at the local campaign (WoL)
+        if "scope" in entry_rule:
+            if entry_rule["scope"] == local_campaign_scope:
+                entry_rule["scope"] = [local_campaign_scope, prophecy_name]
+            elif isinstance(entry_rule["scope"], list) and local_campaign_scope in entry_rule["scope"]:
+                entry_rule["scope"] = entry_rule["scope"] + [prophecy_name]
+    
+    for layout_dict in mission_order[SC2Campaign.WOL.campaign_name].values():
+        if not isinstance(layout_dict, dict):
+            continue
+        if "entry_rules" in layout_dict:
+            for entry_rule in layout_dict["entry_rules"]:
+                fix_entry_rule(entry_rule, "..")
+        if "missions" in layout_dict:
+            for mission_dict in layout_dict["missions"]:
+                if "entry_rules" in mission_dict:
+                    for entry_rule in mission_dict["entry_rules"]:
+                        fix_entry_rule(entry_rule, "../..")
+    
+    # Make Prophecy require Artifact's second mission
+    mission_order[prophecy_name][prophecy_name]["entry_rules"] = [{ "scope": [f"{SC2Campaign.WOL.campaign_name}/Artifact/1"]}]
+
+
 def force_final_missions(world: 'SC2World', mission_order: Dict[str, Dict[str, Any]], mission_order_type: int):
     goal_mission: Optional[SC2Mission] = None
     excluded_missions = get_excluded_missions(world)
     enabled_campaigns = get_enabled_campaigns(world)
+    raceswap_variants = [mission for mission in SC2Mission if mission.flags & MissionFlag.RaceSwap]
     # Prefer long campaigns over shorter ones and harder missions over easier ones
     goal_priorities = {campaign: get_campaign_goal_priority(campaign, excluded_missions) for campaign in enabled_campaigns}
     goal_level = max(goal_priorities.values())
@@ -264,6 +305,10 @@ def force_final_missions(world: 'SC2World', mission_order: Dict[str, Dict[str, A
             if primary_goal is None or primary_goal.mission in excluded_missions:
                 # No primary goal or its mission is excluded
                 candidate_missions = list(campaign_alt_final_mission_locations[goal_campaign].keys())
+                # Also allow raceswaps of curated final missions, provided they're not excluded
+                for candidate_with_raceswaps in [mission for mission in candidate_missions if mission.flags & MissionFlag.HasRaceSwap]:
+                    raceswap_candidates = [mission for mission in raceswap_variants if mission.map_file == candidate_with_raceswaps.map_file]
+                    candidate_missions.extend(raceswap_candidates)
                 candidate_missions = [mission for mission in candidate_missions if mission not in excluded_missions]
                 if len(candidate_missions) == 0:
                     raise Exception(f"There are no valid goal missions for campaign {goal_campaign.campaign_name}. Please exclude fewer missions.")

@@ -316,12 +316,16 @@ class EnableRaceSwapVariants(Choice):
 
     Disabled: Don't shuffle any non-vanilla map variants into the pool.
     Pick One: Shuffle up to 1 valid version of each map into the pool, depending on other settings.
+    Pick One Non-Vanilla: Shuffle up to 1 valid version other than the original one of each map into the pool, depending on other settings.
     Shuffle All: Each version of a map can appear in the same pool (so a map can appear up to 3 times as different races)
+    Shuffle All Non-Vanilla: Each version of a map besides the original can appear in the same pool (so a map can appear up to 2 times as different races)
     """
     display_name = "Enable Race-Swapped Mission Variants"
     option_disabled = 0
     option_pick_one = 1
-    option_shuffle_all = 2
+    option_pick_one_non_vanilla = 2
+    option_shuffle_all = 3
+    option_shuffle_all_non_vanilla = 4
     default = option_disabled
 
 
@@ -1381,8 +1385,11 @@ def get_disabled_flags(world: 'SC2World') -> MissionFlag:
     # filter out no-build missions
     if not get_option_value(world, "shuffle_no_build"):
         excluded |= MissionFlag.NoBuild
-    if get_option_value(world, "enable_race_swap") == EnableRaceSwapVariants.option_disabled:
+    raceswap_option = get_option_value(world, "enable_race_swap")
+    if raceswap_option == EnableRaceSwapVariants.option_disabled:
         excluded |= MissionFlag.RaceSwap
+    elif raceswap_option in [EnableRaceSwapVariants.option_pick_one_non_vanilla, EnableRaceSwapVariants.option_shuffle_all_non_vanilla]:
+        excluded |= MissionFlag.HasRaceSwap
     # TODO: add more flags to potentially exclude once we have a way to get that from the player
     return MissionFlag(excluded)
 
@@ -1413,7 +1420,7 @@ def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
     for campaign in disabled_campaigns:
         excluded_missions = excluded_missions.union(campaign_mission_table[campaign])
     # Omitting unwanted mission variants
-    if get_option_value(world, "enable_race_swap") == EnableRaceSwapVariants.option_pick_one:
+    if get_option_value(world, "enable_race_swap") in [EnableRaceSwapVariants.option_pick_one, EnableRaceSwapVariants.option_pick_one_non_vanilla]:
         swaps = [
             mission for mission in SC2Mission
             if mission not in excluded_missions
