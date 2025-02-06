@@ -2,7 +2,7 @@ import ModuleUpdate
 import Utils
 
 ModuleUpdate.update()
-
+import re
 import os
 import asyncio
 import json
@@ -47,6 +47,23 @@ class KH2Context(CommonContext):
         self.location_name_to_worlddata = {name: data for name, data, in all_world_locations.items()}
 
         self.sending = []
+        # queue for the strings to display on the screen
+        self.queued_display_info = []
+        # special characters for printing in game
+        # A dictionary of all the special characters, which
+        # are hard to convert through a mathematical formula.
+        self.special_dict = {
+            ' ': 0x01, '\n': 0x02, '-': 0x54, '!': 0x48, '?': 0x49, '%': 0x4A, '/': 0x4B,
+            '.': 0x4F, ',': 0x50, ';': 0x51, ':': 0x52, '\'': 0x57, '(': 0x5A, ')': 0x5B,
+            '[': 0x62, ']': 0x63, 'à': 0xB7, 'á': 0xB8, 'â': 0xB9, 'ä': 0xBA, 'è': 0xBB,
+            'é': 0xBC, 'ê': 0xBD, 'ë': 0xBE, 'ì': 0xBF, 'í': 0xC0, 'î': 0xC1, 'ï': 0xC2,
+            'ñ': 0xC3, 'ò': 0xC4, 'ó': 0xC5, 'ô': 0xC6, 'ö': 0xC7, 'ù': 0xC8, 'ú': 0xC9,
+            'û': 0xCA, 'ü': 0xCB, 'ç': 0xE8, 'À': 0xD0, 'Á': 0xD1, 'Â': 0xD2, 'Ä': 0xD3,
+            'È': 0xD4, 'É': 0xD5, 'Ê': 0xD6, 'Ë': 0xD7, 'Ì': 0xD8, 'Í': 0xD9, 'Î': 0xDA,
+            'Ï': 0xDB, 'Ñ': 0xDC, 'Ò': 0xDD, 'Ó': 0xDE, 'Ô': 0xDF, 'Ö': 0xE0, 'Ù': 0xE1,
+            'Ú': 0xE2, 'Û': 0xE3, 'Ü': 0xE4, '¡': 0xE5, '¿': 0xE6, 'Ç': 0xE7
+        }
+
         # list used to keep track of locations+items player has. Used for disoneccting
         self.kh2_seed_save_cache = {
             "itemIndex":  -1,
@@ -236,6 +253,55 @@ class KH2Context(CommonContext):
 
     def kh2_read_string(self, address, length):
         return self.kh2.read_string(self.kh2.base_address + address, length)
+
+    def kh2_write_bytes(self, address, value):
+        return self.kh2.write_bytes(self.kh2.base_address + address, bytes(value), len(value))
+
+    def to_khscii(self, item_name):
+        # credit to TopazTK for this.
+        out_list = []
+        char_count = 0
+        # Throughout the text, do:
+        while char_count < len(item_name):
+            char = item_name[char_count]
+            # Simple character conversion through mathematics.
+            if 'a' <= char <= 'z':
+                out_list.append(ord(char) + 0x39)
+                char_count += 1
+            elif 'A' <= char <= 'Z':
+                out_list.append(ord(char) - 0x13)
+                char_count += 1
+            elif '0' <= char <= '9':
+                out_list.append(ord(char) + 0x60)
+                char_count += 1
+            # If it hits a "{", we will know it's a command, not a character.
+            elif char == '{':
+                # A command is 6 characters long, in the format of "{0xTT}",
+                # with the "TT" being the 2-digit encode for that command.
+                command = item_name[char_count:char_count + 6]
+                if re.match(r'^{0x[a-fA-F0-9][a-fA-F0-9]}$', command):
+                    value = command[1:5]
+                    out_list.append(int(value, 16))
+                    char_count += 6
+            # Should it be anything we do not know, we look through
+            # the special dictionary.
+            else:
+                if char in self.special_dict:
+                    out_list.append(self.special_dict[char])
+                else:
+                    out_list.append(0x01)
+                char_count += 1
+                if char_count >= 24:
+                    break
+
+        # When the list ends, we add a terminator and return the string.
+
+        if len(item_name) >= 24:
+            for _ in range(3):
+                out_list.append(0x2E)
+
+        out_list.append(0x00)
+        return out_list
 
     def on_package(self, cmd: str, args: dict):
         if cmd == "RoomInfo":
@@ -813,6 +879,12 @@ class KH2Context(CommonContext):
             logger.info(e)
             logger.info("line 840")
 
+    async def displayItemInGame(self, string_to_display):
+        if self.kh2_read_byte(0x800000)==0:
+            self.kh2_write_byte(0x800000, 1)
+            self.kh2_write_bytes(0x800004, self.to_khscii(string_to_display))
+            self.queued_display_info.remove(string_to_display) # dont remember if this is index or the value
+
     def get_addresses(self):
         if not self.kh2connected and self.kh2 is not None:
             if self.kh2_game_version is None:
@@ -944,6 +1016,7 @@ async def kh2_watcher(ctx: KH2Context):
                 if ctx.sending:
                     message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
                     await ctx.send_msgs(message)
+                await asyncio.create_task(ctx.displayItemInGame("foo bar"))
             elif not ctx.kh2connected and ctx.serverconneced:
                 logger.info("Game Connection lost. waiting 15 seconds until trying to reconnect.")
                 ctx.kh2 = None
