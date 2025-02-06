@@ -301,7 +301,7 @@ def create_regions(kh1world):
     regions["Traverse Town"].locations.append("Traverse Town 1st District Blue Trinity Balcony Chest")
     regions["Traverse Town"].locations.append("Traverse Town 1st District Blue Trinity by Exit Door")
     regions["Traverse Town"].locations.append("Traverse Town 1st District Candle Puzzle Chest")
-    #regions["Traverse Town"].locations.append("Traverse Town 1st District Leon Gift")
+    regions["Traverse Town"].locations.append("Traverse Town 1st District Leon Gift")
     regions["Traverse Town"].locations.append("Traverse Town 1st District Safe Postcard")
    #regions["Traverse Town"].locations.append("Traverse Town 1st District Speak with Cid Event")
     regions["Traverse Town"].locations.append("Traverse Town 2nd District Boots and Shoes Awning Chest")
