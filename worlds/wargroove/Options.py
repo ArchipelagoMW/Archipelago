@@ -142,18 +142,18 @@ wargroove_option_groups = [
             CommanderDefenseBoost,
             CommanderChoice
         ]),
-        OptionGroup("Traps", [
-            CustomTrap1Amount,
-            CustomTrap1Units,
-            CustomTrap2Amount,
-            CustomTrap2Units,
-            CustomTrap3Amount,
-            CustomTrap3Units,
-            CustomTrap4Amount,
-            CustomTrap4Units,
-            CustomTrap5Amount,
-            CustomTrap5Units
-        ]),
+        # OptionGroup("Traps", [
+        #     CustomTrap1Amount,
+        #     CustomTrap1Units,
+        #     CustomTrap2Amount,
+        #     CustomTrap2Units,
+        #     CustomTrap3Amount,
+        #     CustomTrap3Units,
+        #     CustomTrap4Amount,
+        #     CustomTrap4Units,
+        #     CustomTrap5Amount,
+        #     CustomTrap5Units
+        # ]),
 ]
 
 @dataclass
@@ -161,15 +161,15 @@ class WargrooveOptions(PerGameCommonOptions):
     income_boost: IncomeBoost
     commander_defense_boost: CommanderDefenseBoost
     commander_choice: CommanderChoice
-    custom_trap_1_amount: CustomTrap1Amount
-    custom_trap_1_units: CustomTrap1Units
-    custom_trap_2_amount: CustomTrap2Amount
-    custom_trap_2_units: CustomTrap2Units
-    custom_trap_3_amount: CustomTrap3Amount
-    custom_trap_3_units: CustomTrap3Units
-    custom_trap_4_amount: CustomTrap4Amount
-    custom_trap_4_units: CustomTrap4Units
-    custom_trap_5_amount: CustomTrap5Amount
-    custom_trap_5_units: CustomTrap5Units
+    # custom_trap_1_amount: CustomTrap1Amount
+    # custom_trap_1_units: CustomTrap1Units
+    # custom_trap_2_amount: CustomTrap2Amount
+    # custom_trap_2_units: CustomTrap2Units
+    # custom_trap_3_amount: CustomTrap3Amount
+    # custom_trap_3_units: CustomTrap3Units
+    # custom_trap_4_amount: CustomTrap4Amount
+    # custom_trap_4_units: CustomTrap4Units
+    # custom_trap_5_amount: CustomTrap5Amount
+    # custom_trap_5_units: CustomTrap5Units
     death_link: DeathLink
     start_inventory_from_pool: StartInventoryPool

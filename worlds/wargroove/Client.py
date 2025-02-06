@@ -161,7 +161,7 @@ class WargrooveContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
             slot_data = args["slot_data"]
-            self.has_death_link = slot_data["death_link"]
+            self.has_death_link = slot_data.get("death_link", False)
             filename = f"AP_settings.json"
             with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                 json.dump(slot_data, f)
