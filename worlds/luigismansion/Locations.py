@@ -427,7 +427,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Dining Room Table Mess L (underneath Table)": LMLocationData("Dining Room", 304, "Furniture", 215, [], 8),
     "Dining Room R Candles and Plates": LMLocationData("Dining Room", 305, "Furniture", 287, [], 8),
     "Dining Room L Candles": LMLocationData("Dining Room", 306, "Furniture", 288, [], 8),
-    # "Mr' Lugg's Stool": LMLocationData("Dining Room", , "Furniture", , [], 8),
+    # "Mr' Lugg's Stool": LMLocationData("Dining Room", 852, "Furniture", , [], 8),
     "Kitchen Oven": LMLocationData("Kitchen", 307, "Furniture", 80, ["Fire Element Medal"], 7),
     # "Kitchen Refrigerator": LMLocationData("Kitchen", 308, "Furniture", 78, [], 7), TODO Prevents Ghosts Spawn
     "Kitchen China Hutch": LMLocationData("Kitchen", 309, "Furniture", 79, [], 7),
@@ -812,11 +812,14 @@ SPEEDY_LOCATION_TABLE: dict[str, LMLocationData] = {
                                              room_ram_addr=0x803D5DC3, locationbit=0),
     "Study Speedy Spirit": LMLocationData("Study", 644, "BSpeedy", 113, [], 35,
                                           room_ram_addr=0x803D5DC2, locationbit=2),
-    # "Nursery Speedy Spirit": LMLocationData("Nursery", 645, "BSpeedy", 148, ["Blackout"], 24, room_ram_address=),
+    "Nursery Speedy Spirit": LMLocationData("Nursery", 645, "BSpeedy", 148, [], 26, room_ram_addr=0x803D5DC3, # is this correct?
+                                            locationbit=3),
     "Storage Room Speedy Spirit": LMLocationData("Storage Room", 646, "BSpeedy", 58, [], 14,
                                                  room_ram_addr=0x803D5DC1, locationbit=7),
-    # "Hidden Room Speedy Spirit": LMLocationData("Hidden Room", 647, "BSpeedy", 72, ["Blackout"], 1, room_ram_address=),
-    # "Conservatory Speedy Spirit": LMLocationData("Conservatory", 648, "BSpeedy", 113, ["Blackout"], 21, room_ram_address=),
+    "Hidden Room Speedy Spirit": LMLocationData("Hidden Room", 647, "BSpeedy", 72, [], 1, room_ram_addr=0x803D5DC3, # is this correct?
+                                                locationbit=4),
+    "Conservatory Speedy Spirit": LMLocationData("Conservatory", 648, "BSpeedy", 113, [], 22, room_ram_addr=0x803D5DC3, # is this correct?
+                                                 locationbit=5),
     "Dining Room Speedy Spirit": LMLocationData("Dining Room", 649, "BSpeedy", 60, [], 8,
                                                 room_ram_addr=0x803D5DC2, locationbit=1),
     "Kitchen Speedy Spirit": LMLocationData("Kitchen", 650, "BSpeedy", 66, [], 7,
