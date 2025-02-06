@@ -1,13 +1,13 @@
-from kvui import (App, ScrollBox, Button, MainLayout, ContainerLayout, dp, Widget, BoxLayout, TooltipLabel, ToolTip,
-                  Label)
+from kvui import (MDApp, ScrollBox, MainLayout, ContainerLayout, dp, Widget, MDBoxLayout, TooltipLabel, ToolTip,
+                  MDLabel, ToggleButton)
 from kivy.graphics import Rectangle, Color
-from kivy.uix.accordion import Accordion, AccordionItem
-from kivy.uix.anchorlayout import AnchorLayout
-from kivy.uix.slider import Slider
-from kivy.uix.dropdown import DropDown
-from kivy.uix.checkbox import CheckBox
-from kivy.uix.textinput import TextInput
-from kivy.uix.togglebutton import ToggleButton
+from kivymd.uix.anchorlayout import MDAnchorLayout
+from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelContent, MDExpansionPanelHeader
+from kivymd.uix.list import MDListItem, MDListItemTrailingIcon
+from kivymd.uix.slider import MDSlider
+from kivymd.uix.menu import MDDropdownMenu
+from kivymd.uix.button import MDButton, MDButtonText, MDIconButton
+from kivymd.uix.textfield import MDTextField
 from kivy.metrics import sp
 from textwrap import dedent
 import Utils
@@ -50,15 +50,15 @@ def check_random(value: typing.Any):
         return "random"
     return value
 
-class YamlCreator(App):
+class YamlCreator(MDApp):
     container: ContainerLayout
     main_layout: MainLayout
     scrollbox: ScrollBox
     main_panel: MainLayout
     player_options: MainLayout
     option_layout: MainLayout
-    name_input: TextInput
-    game_label: Label
+    name_input: MDTextField
+    game_label: MDLabel
     current_game: str
     options: typing.Dict[str, typing.Any]
 
@@ -82,9 +82,9 @@ class YamlCreator(App):
             self.options[name] = int(slider.value)
             return
 
-        box = BoxLayout(spacing=15, orientation="horizontal")
-        slider = Slider(min=option.range_start, max=option.range_end, value=option.default, step=1)
-        number_label = Label(text=str(option.default))
+        box = MDBoxLayout(spacing=15, orientation="horizontal")
+        slider = MDSlider(min=option.range_start, max=option.range_end, value=option.default, step=1)
+        number_label = MDLabel(text=str(option.default))
         slider.text = number_label
         slider.bind(on_touch_move=update_text)
         box.add_widget(slider)
@@ -106,31 +106,34 @@ class YamlCreator(App):
 
         def open(button):
             # for some reason this fixes an issue causing some to not open
-            slider_box.slider.dropdown.open(button)
+            slider_box.slider.dropdown.open()
 
-        box = BoxLayout(orientation="vertical", spacing=5)
+        box = MDBoxLayout(orientation="vertical", spacing=5)
         slider_box = self.create_range(option, name)
         slider_box.slider.bind(on_touch_move=set_to_custom)
-        slider_box.slider.dropdown = DropDown()
-        for choice in option.special_range_names:
-            btn = Button(text=choice.title(), size_hint_y=None)
-            btn.bind(on_release=set_value)
-            slider_box.slider.dropdown.add_widget(btn)
+        items = [
+            {
+                "text": choice.title(),
+                "on_release": set_value
+            }
+            for choice in option.special_range_names
+        ]
+        slider_box.slider.dropdown = MDDropdownMenu(caller=slider_box.slider, items=items)
         if option.default in option.special_range_names.values():
             default = list(option.special_range_names.keys())[list(option.special_range_names.values())
                                                               .index(option.default)]
         else:
             default = "Custom"
-        main_button = Button(text=default.title())
+        main_button = MDButton(MDButtonText(default.title()))
         main_button.bind(on_release=open)
-        slider_box.slider.dropdown.bind(on_select=lambda instance, x: setattr(main_button, 'text', x))
+        slider_box.slider.dropdown.bind(on_select=lambda instance, x: setattr(main_button, '_text', x))
         box.add_widget(main_button)
         box.add_widget(slider_box)
         self.options[name] = option.default
         return box
 
     def create_free_text(self, option: typing.Union[typing.Type[FreeText], typing.Type[TextChoice]], name: str):
-        text = TextInput(multiline=False, font_size=sp(11),
+        text = MDTextField(multiline=False, font_size=sp(11),
                          text=option.default if isinstance(option.default, str) else "")
         def set_value(instance):
             self.options[name] = instance.text
@@ -139,32 +142,35 @@ class YamlCreator(App):
         return text
 
     def create_choice(self, option: typing.Type[Choice], name: str):
-        def set_value(button):
-            dropdown.select(button.text)
-            self.options[name] = button.value
+        def set_value(text, value):
+            dropdown.select(text)
+            self.options[name] = value
 
         def open(button):
             # for some reason this fixes an issue causing some to not open
-            dropdown.open(button)
+            dropdown.open()
 
-        dropdown = DropDown()
-        for choice in option.name_lookup:
-            btn = Button(text=option.get_option_name(choice), size_hint_y=None)
-            btn.value = option.name_lookup[choice]
-            btn.bind(on_release=set_value)
-            dropdown.add_widget(btn)
         default_random = option.default == "random"
         default = option.default if not default_random else list(option.options.values())[0]
-        main_button = Button(text=option.get_option_name(default))
+        main_button = MDButton(MDButtonText(option.get_option_name(default)))
         main_button.bind(on_release=open)
+
+        items = [
+            {
+                "text": option.get_option_name(choice),
+                "on_release": lambda val=choice: set_value(option.get_option_name(val), option.name_lookup[val])
+            }
+            for choice in option.name_lookup
+        ]
+        dropdown = MDDropdownMenu(caller=main_button, items=items)
         self.options[name] = option.name_lookup[option.default] if not default_random else option.default
-        dropdown.bind(on_select=lambda instance, x: setattr(main_button, 'text', x))
+        dropdown.bind(on_select=lambda instance, x: setattr(main_button, '_text', x))
         return main_button
 
     def create_text_choice(self, option: typing.Type[TextChoice], name: str):
         choice_button = self.create_choice(option, name)
         text = self.create_free_text(option, name)
-        box = BoxLayout(orientation="vertical")
+        box = MDBoxLayout(orientation="vertical")
         box.add_widget(choice_button)
         box.add_widget(text)
 
@@ -177,15 +183,20 @@ class YamlCreator(App):
 
     def create_toggle(self, option: typing.Type[Toggle], name: str) -> Widget:
         def set_value(instance, value):
+            if value:
+                instance.icon = "checkbox-blank-outline"
+            else:
+                instance.icon = "checkbox-outline"
             self.options[name] = bool(value)
-        checkbox = CheckBox(active=option.default)
-        checkbox.bind(active=set_value)
+        def_icon = "checkbox-outline" if option.default else "checkbox-blank-outline"
+        checkbox = MDIconButton(icon=def_icon)
+        checkbox.bind(on_release=set_value)
         self.options[name]=bool(option.default)
         return checkbox
 
 
     def create_option(self, option: typing.Type[Option], name: str) -> Widget:
-        option_base = BoxLayout(orientation="vertical", size_hint_y=None)
+        option_base = MDBoxLayout(orientation="vertical", )
         with option_base.canvas:
             Color(0.2, 0.2, 0.2, 1)
             option_base.bg_rect = Rectangle(size=option_base.size, pos=option_base.pos)
@@ -197,10 +208,9 @@ class YamlCreator(App):
         option_base.bind(pos=redraw, size=redraw)
 
         tooltip = filter_tooltip(option.__doc__)
-        option_label = FixedTooltipLabel(text=f"[ref=0|{tooltip}]{getattr(option, 'display_name', name)}",
-                                    size_hint_y=None)
-        label_box = BoxLayout(orientation="horizontal")
-        label_anchor = AnchorLayout(anchor_x="right", anchor_y="center")
+        option_label = FixedTooltipLabel(text=f"[ref=0|{tooltip}]{getattr(option, 'display_name', name)}")
+        label_box = MDBoxLayout(orientation="horizontal")
+        label_anchor = MDAnchorLayout(anchor_x="right", anchor_y="center")
         label_anchor.add_widget(option_label)
         label_box.add_widget(label_anchor)
 
@@ -234,8 +244,7 @@ class YamlCreator(App):
                     if child is not label_object:
                         child.disabled = value
             default_random = option.default == "random"
-            random_toggle = ToggleButton(size_hint_x=None, width=100, text="Random?",
-                                         state="down" if default_random else "normal")
+            random_toggle = ToggleButton(MDButtonText("Random?"), size_hint_x=None, width=100, state="down" if default_random else "normal")
             random_toggle.bind(state=randomize_option)
             label_box.add_widget(random_toggle)
             if default_random:
@@ -263,18 +272,18 @@ class YamlCreator(App):
                     webbrowser.open(new_url)
                 # else just fall through
         else:
-            def set_min(instance: Accordion, value: int):
-                while (instance.min_space * len(instance.children)) + 120 >= value:
-                    instance.min_space -= 1
-            accordion = Accordion(orientation="vertical")
-            accordion.bind(height=set_min)
+            expansion_box = MDBoxLayout(orientation="vertical")
             group_names = ["Game Options", *(group.name for group in cls.web.option_groups)]
             groups = {name: [] for name in group_names}
             for name, option in cls.options_dataclass.type_hints.items():
                 group = next((group.name for group in cls.web.option_groups if option in group.options), "Game Options")
                 groups[group].append((name, option))
             for group, options in groups.items():
-                group_item = AccordionItem(title=group)
+                group_content = MDExpansionPanelContent()
+                group_header = MDExpansionPanelHeader(MDListItem(MDLabel(), MDListItemTrailingIcon(icon="chevron-right")))
+                group_item = MDExpansionPanel()
+                group_item.add_widget(group_header)
+                group_item.add_widget(group_content)
                 group_box = ScrollBox()
                 group_box.layout.orientation = "vertical"
                 group_box.layout.spacing = dp(3)
@@ -283,14 +292,15 @@ class YamlCreator(App):
                     if name and option is not Removed and option.visibility & Visibility.simple_ui:
                         group_box.layout.add_widget(self.create_option(option, name))
                 group_item.box = group_box
-                def disable_box(instance, value):
-                    instance.box.disabled = value
-                group_item.bind(collapse=disable_box)
-                disable_box(group_item, True)
-                group_item.add_widget(group_box)
-                accordion.add_widget(group_item)
-            accordion.children[-1].collapse = False
-            self.option_layout.add_widget(accordion)
+                def disable_box(instance):
+                    instance.box.disabled = True
+                def enable_box(instance):
+                    instance.box.disabled = False
+                group_item.bind(on_close=disable_box)
+                group_item.bind(on_open=enable_box)
+                group_content.add_widget(group_box)
+                expansion_box.add_widget(group_item)
+            self.option_layout.add_widget(expansion_box)
         self.game_label.text = f"Game: {self.current_game}"
 
     def build(self):
@@ -303,22 +313,21 @@ class YamlCreator(App):
         for world, cls in sorted(AutoWorldRegister.world_types.items(), key=lambda x: x[0]):
             if world == "Archipelago":
                 continue
-            world_button = Button(text=world, size_hint_y=None)
-            world_button.text_size = (dp(100), None)
+            world_button = MDButton(MDButtonText(world))
             world_button.bind(on_release=self.create_options_panel)
             world_button.world_cls = cls
             self.scrollbox.layout.add_widget(world_button)
         self.main_panel = MainLayout(rows=2)
-        self.player_options = BoxLayout(orientation="horizontal", size_hint_y=None, height=dp(60))
-        name_box = BoxLayout(orientation="vertical")
-        button_box = BoxLayout(orientation="vertical")
-        self.game_label = Label(text="Game: None")
+        self.player_options = MDBoxLayout(orientation="horizontal", height=dp(60))
+        name_box = MDBoxLayout(orientation="vertical")
+        button_box = MDBoxLayout(orientation="vertical")
+        self.game_label = MDLabel(text="Game: None")
         button_box.add_widget(self.game_label)
-        name_box.add_widget(Label(text="Player Name"))
-        self.name_input = TextInput(multiline=False)
+        name_box.add_widget(MDLabel(text="Player Name"))
+        self.name_input = MDTextField(multiline=False)
         name_box.add_widget(self.name_input)
         self.player_options.add_widget(name_box)
-        export_button = Button(text="Export Options")
+        export_button = MDButton(MDButtonText("Export Options"))
         export_button.bind(on_press=self.export_options)
         button_box.add_widget(export_button)
         self.player_options.add_widget(button_box)
