@@ -311,10 +311,6 @@ class LuigisMansionRandomizer:
 
         # Copy in our newly custom events for hallway light changes
         # Update all custom events
-        new_list_events = ["102", "103", "104"]
-        for new_custom_event in new_list_events:
-            self.copy_existing_event(new_custom_event)
-            self.update_custom_event(new_custom_event, True, "", True)
 
         if bool_randomize_music:
             list_ignore_events = ["event00.szp"]
