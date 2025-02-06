@@ -9,14 +9,14 @@ import Options as CoreOptions
 from .. import options, locations
 from ..item import item_tables
 from ..rules import SC2Logic
-from .. import mission_tables
+from ..mission_tables import SC2Race, MissionFlag, lookup_name_to_mission
 
 
 class TestInventory:
     """
     Runs checks against inventory with validation if all target items are progression and returns a random result
     """
-    def __init__(self):
+    def __init__(self) -> None:
         self.random: Random = Random()
         self.progression_types: Set[ItemClassification] = {ItemClassification.progression, ItemClassification.progression_skip_balancing}
 
@@ -66,7 +66,7 @@ class TestWorld:
     """
     Mock world to simulate different player options for logic rules
     """
-    def __init__(self):
+    def __init__(self) -> None:
         defaults = dict()
         for field in fields(options.Starcraft2Options):
             field_class = field.type
@@ -86,7 +86,7 @@ class TestWorld:
 
 
 class TestRules(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.required_tactics_values: List[int] = [
             options.RequiredTactics.option_standard, options.RequiredTactics.option_advanced
         ]
@@ -116,7 +116,7 @@ class TestRules(unittest.TestCase):
         test_world.options.take_over_ai_allies.value = take_over_ai_allies
         test_world.options.kerrigan_presence.value = kerrigan_presence
         test_world.options.spear_of_adun_autonomously_cast_ability_presence.value = spear_of_adun_passive_presence
-        test_world.logic = SC2Logic(test_world)
+        test_world.logic = SC2Logic(test_world)  # type: ignore
         return test_world
 
     def test_items_in_rules_are_progression(self):
@@ -128,7 +128,7 @@ class TestRules(unittest.TestCase):
                 for _ in range(self.NUM_TEST_RUNS):
                     location.rule(test_inventory)
     
-    def test_items_in_all_in_are_progression(self) -> None:
+    def test_items_in_all_in_are_progression(self):
         test_inventory = TestInventory()
         for test_options in itertools.product(self.required_tactics_values, self.all_in_map_values):
             test_world = self._get_world(required_tactics=test_options[0], all_in_map=test_options[1])
@@ -138,29 +138,29 @@ class TestRules(unittest.TestCase):
                 for _ in range(self.NUM_TEST_RUNS):
                     location.rule(test_inventory)
 
-    def test_items_in_kerriganless_missions_are_progression(self) -> None:
+    def test_items_in_kerriganless_missions_are_progression(self):
         test_inventory = TestInventory()
         for test_options in itertools.product(self.required_tactics_values, self.kerrigan_presence_values):
             test_world = self._get_world(required_tactics=test_options[0], kerrigan_presence=test_options[1])
             for location in locations.get_locations(test_world):
-                mission = mission_tables.lookup_name_to_mission[location.region]
-                if mission_tables.MissionFlag.Kerrigan not in mission.flags:
+                mission = lookup_name_to_mission[location.region]
+                if MissionFlag.Kerrigan not in mission.flags:
                     continue
                 for _ in range(self.NUM_TEST_RUNS):
                     location.rule(test_inventory)
 
-    def test_items_in_ai_takeover_missions_are_progression(self) -> None:
+    def test_items_in_ai_takeover_missions_are_progression(self):
         test_inventory = TestInventory()
         for test_options in itertools.product(self.required_tactics_values, self.take_over_ai_allies_values):
             test_world = self._get_world(required_tactics=test_options[0], take_over_ai_allies=test_options[1])
             for location in locations.get_locations(test_world):
-                mission = mission_tables.lookup_name_to_mission[location.region]
-                if mission_tables.MissionFlag.AiAlly not in mission.flags:
+                mission = lookup_name_to_mission[location.region]
+                if MissionFlag.AiAlly not in mission.flags:
                     continue
                 for _ in range(self.NUM_TEST_RUNS):
                     location.rule(test_inventory)
     
-    def test_items_in_hard_rules_are_progression(self) -> None:
+    def test_items_in_hard_rules_are_progression(self):
         test_inventory = TestInventory()
         test_world = TestWorld()
         test_world.options.required_tactics.value = options.RequiredTactics.option_any_units
@@ -171,13 +171,13 @@ class TestRules(unittest.TestCase):
                 for _ in range(10):
                     location.hard_rule(test_inventory)
 
-    def test_items_in_any_units_rules_are_progression(self) -> None:
+    def test_items_in_any_units_rules_are_progression(self):
         test_inventory = TestInventory()
         test_world = TestWorld()
         test_world.options.required_tactics.value = options.RequiredTactics.option_any_units
         logic = SC2Logic(test_world)
         test_world.logic = logic
-        for race in (mission_tables.SC2Race.TERRAN, mission_tables.SC2Race.PROTOSS, mission_tables.SC2Race.ZERG):
+        for race in (SC2Race.TERRAN, SC2Race.PROTOSS, SC2Race.ZERG):
             for target in range(1, 5):
                 rule = logic.has_race_units(target, race)
                 for _ in range(10):
