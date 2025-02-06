@@ -579,7 +579,6 @@ class LMContext(CommonContext):
                         item_val = dme.read_byte(0x803D339E)
                         dme.write_byte(0x803D339E, (item_val | (1 << 4)))
                     case 57:  # Ice Element Medal
-                        print("random bullshit go")
                         item_val = dme.read_byte(0x803D339B)
                         dme.write_byte(0x803D339B, (item_val | (1 << 6)))
 
