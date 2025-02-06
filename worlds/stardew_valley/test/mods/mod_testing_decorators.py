@@ -39,10 +39,10 @@ def _must_test_all_mods(cls: Type[unittest.TestCase], excluded_mods: Iterable[st
     return cls
 
 
-def tests_mod(mod: str) -> partial[Callable]:
-    return partial(_tests_mod, mod=mod)
+def is_testing_mod(mod: str) -> partial[Callable]:
+    return partial(_is_testing_mod, mod=mod)
 
 
-def _tests_mod(func: Callable, mod: str) -> Callable:
+def _is_testing_mod(func: Callable, mod: str) -> Callable:
     setattr(func, "tested_mod", mod)
     return func
