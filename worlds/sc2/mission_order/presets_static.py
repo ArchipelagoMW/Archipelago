@@ -785,7 +785,7 @@ def _build_static_preset(preset: Dict[str, Any], options: Dict[str, Any]) -> Dic
     elif not isinstance(raceswaps, bool):
         # The presets are set up for no raceswaps, so this covers the case that the option is not a bool
         raise ValueError(
-            f"Preset option \"shuffle_raceswaps\" received unknown value \"{missions}\".\n"
+            f"Preset option \"shuffle_raceswaps\" received unknown value \"{raceswaps}\".\n"
             "Valid values are: true, false"
         )
 
