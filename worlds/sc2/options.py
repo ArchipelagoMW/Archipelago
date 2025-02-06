@@ -73,7 +73,6 @@ class SelectRaces(Choice):
     option_terran_and_zerg = (MissionFlag.Terran|MissionFlag.Zerg).value
     option_terran_and_protoss = (MissionFlag.Terran|MissionFlag.Protoss).value
     option_zerg_and_protoss = (MissionFlag.Zerg|MissionFlag.Protoss).value
-    option_plando = 0
     default = option_all
 
 

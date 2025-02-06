@@ -203,13 +203,14 @@ def create_static_mission_order(world: 'SC2World', mission_order_type: int, miss
             "keys": keys
         }
 
+    prophecy_enabled = SC2Campaign.PROPHECY in enabled_campaigns
     if SC2Campaign.WOL in enabled_campaigns:
-        mission_order[SC2Campaign.WOL.campaign_name] = mission_order_preset("wol")
-        
-    if SC2Campaign.PROPHECY in enabled_campaigns:
+        if prophecy_enabled:
+            mission_order[SC2Campaign.WOL.campaign_name] = mission_order_preset("wol + prophecy")
+        else:
+            mission_order[SC2Campaign.WOL.campaign_name] = mission_order_preset("wol")   
+    elif prophecy_enabled:
         mission_order[SC2Campaign.PROPHECY.campaign_name] = mission_order_preset("prophecy")
-        if SC2Campaign.WOL in enabled_campaigns:
-            mission_order[SC2Campaign.PROPHECY.campaign_name]["entry_rules"] = [{ "scope": SC2Campaign.WOL.campaign_name + "/Artifact/1" }]
 
     if SC2Campaign.HOTS in enabled_campaigns:
         mission_order[SC2Campaign.HOTS.campaign_name] = mission_order_preset("hots")
