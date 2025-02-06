@@ -101,10 +101,10 @@ CHECKS_WAIT = 3
 LONGER_MODIFIER = 2
 
 boolossus_list = [ALL_LOCATION_TABLE[local_loc] for local_loc in
-                              ["Boolossus Boo 1", "Boolossus Boo 2", "Boolossus Boo 3", "Boolossus Boo 4",
-                               "Boolossus Boo 5", "Boolossus Boo 6", "Boolossus Boo 7", "Boolossus Boo 8",
-                               "Boolossus Boo 9", "Boolossus Boo 10", "Boolossus Boo 11", "Boolossus Boo 12",
-                               "Boolossus Boo 13", "Boolossus Boo 14", "Boolossus Boo 15"]]
+                              ["Boolossus Fragment 1", "Boolossus Fragment 2", "Boolossus Fragment 3", "Boolossus Fragment 4",
+                               "Boolossus Fragment 5", "Boolossus Fragment 6", "Boolossus Fragment 7", "Boolossus Fragment 8",
+                               "Boolossus Fragment 9", "Boolossus Fragment 10", "Boolossus Fragment 11", "Boolossus Fragment 12",
+                               "Boolossus Fragment 13", "Boolossus Fragment 14", "Boolossus Fragment 15"]]
 
 
 def read_short(console_address: int):
