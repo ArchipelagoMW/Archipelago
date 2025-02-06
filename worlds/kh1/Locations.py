@@ -469,7 +469,7 @@ location_table: Dict[str, KH1LocationData] = {
     "Hollow Bastion Entrance Hall Emblem Piece (Chest)":                                KH1LocationData("Hollow Bastion",   265_6517, "Static"),
     "Hollow Bastion Entrance Hall Emblem Piece (Statue)":                               KH1LocationData("Hollow Bastion",   265_6518, "Static"),
     "Hollow Bastion Entrance Hall Emblem Piece (Fountain)":                             KH1LocationData("Hollow Bastion",   265_6519, "Static"),
-    #"Traverse Town 1st District Leon Gift":                                            KH1LocationData("Traverse Town",    265_6520, "Reward"),
+    "Traverse Town 1st District Leon Gift":                                             KH1LocationData("Traverse Town",    265_6520, "Reward"),
     #"Traverse Town 1st District Aerith Gift":                                          KH1LocationData("Traverse Town",    265_6521, "Reward"),
     "Hollow Bastion Library Speak to Belle Divine Rose":                                KH1LocationData("Hollow Bastion",   265_6522, "Reward"),
     "Hollow Bastion Library Speak to Aerith Cure":                                      KH1LocationData("Hollow Bastion",   265_6523, "Static"),
