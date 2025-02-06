@@ -52,11 +52,12 @@ You will be prompted to locate your Luigi's Mansion ISO the first time you do th
    - This will automatically run the Luigi's Mansion Client.
    - You will ***not*** need to patch the game every time, and can simply run the `LMClient` from the list on the right of the Archipelago Launcher
 to continue later.
-6. Open Dolphin and from Dolphin, open your newly patched Luigi's Mansion ISO
+6. Open Dolphin and from Dolphin, open your newly patched Luigi's Mansion ISO. Load all the way into a save file, and pause.
    - This will be placed in the same folder as your patch file by default.
 7. In the server page, there will be a port number. Copy this port number into the top of your LMClient. 
    - The field should read `archipelago.gg:<port number>`
 8. Once you have loaded into the game, click the `Connect` button at the top of the LMClient. You are now connected and ready to play!
+   - The client takes around 10 seconds to finish connecting, and only connects once you are actually in the mansion
    - Unfortunately, due to the nature of some checks, you must be connected to a server while playing
 
 ## Joining a MultiWorld Game
