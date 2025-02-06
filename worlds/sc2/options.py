@@ -1381,11 +1381,11 @@ def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
 
 
 def get_disabled_flags(world: 'SC2World') -> MissionFlag:
-    excluded = (MissionFlag.Terran|MissionFlag.Zerg|MissionFlag.Protoss) ^ MissionFlag(get_option_value(world, "selected_races"))
+    excluded = (MissionFlag.Terran|MissionFlag.Zerg|MissionFlag.Protoss) ^ MissionFlag(world.options.selected_races.value)
     # filter out no-build missions
-    if not get_option_value(world, "shuffle_no_build"):
+    if not world.options.shuffle_no_build.value:
         excluded |= MissionFlag.NoBuild
-    raceswap_option = get_option_value(world, "enable_race_swap")
+    raceswap_option = world.options.enable_race_swap.value
     if raceswap_option == EnableRaceSwapVariants.option_disabled:
         excluded |= MissionFlag.RaceSwap
     elif raceswap_option in [EnableRaceSwapVariants.option_pick_one_non_vanilla, EnableRaceSwapVariants.option_shuffle_all_non_vanilla]:
@@ -1420,7 +1420,7 @@ def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
     for campaign in disabled_campaigns:
         excluded_missions = excluded_missions.union(campaign_mission_table[campaign])
     # Omitting unwanted mission variants
-    if get_option_value(world, "enable_race_swap") in [EnableRaceSwapVariants.option_pick_one, EnableRaceSwapVariants.option_pick_one_non_vanilla]:
+    if world.options.enable_race_swap.value in [EnableRaceSwapVariants.option_pick_one, EnableRaceSwapVariants.option_pick_one_non_vanilla]:
         swaps = [
             mission for mission in SC2Mission
             if mission not in excluded_missions

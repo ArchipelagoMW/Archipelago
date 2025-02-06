@@ -763,7 +763,12 @@ preset_nco = {
 def _build_static_preset(preset: Dict[str, Any], options: Dict[str, Any]) -> Dict[str, Any]:
     # Raceswap shuffling
     raceswaps = options.pop("shuffle_raceswaps", False)
-    if raceswaps == True:
+    if not isinstance(raceswaps, bool):
+        raise ValueError(
+            f"Preset option \"shuffle_raceswaps\" received unknown value \"{raceswaps}\".\n"
+            "Valid values are: true, false"
+        )
+    elif raceswaps == True:
         # Remove "~ Raceswap Missions" operation from mission pool options
         # Also add raceswap variants to plando'd vanilla missions
         for layout in preset.values():
@@ -782,12 +787,7 @@ def _build_static_preset(preset: Dict[str, Any], options: Dict[str, Any]) -> Dic
                             mission_name = slot_mission_pool[:slot_mission_pool.rfind("(")]
                             new_mission_pool = [f"{mission_name}({race})" for race in ["Terran", "Zerg", "Protoss"]]
                             slot["mission_pool"] = new_mission_pool
-    elif not isinstance(raceswaps, bool):
-        # The presets are set up for no raceswaps, so this covers the case that the option is not a bool
-        raise ValueError(
-            f"Preset option \"shuffle_raceswaps\" received unknown value \"{raceswaps}\".\n"
-            "Valid values are: true, false"
-        )
+    # The presets are set up for no raceswaps, so raceswaps == False doesn't need to be covered
 
     # Mission pool selection
     missions = options.pop("missions", "random")
