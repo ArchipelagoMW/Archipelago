@@ -421,31 +421,32 @@ def check_for_update() -> None:
 
         def download_selection(asset: str) -> None:
             import os
+            import tempfile
             nonlocal latest_files
 
-            cached_folder = Utils.cache_path("Downloads")
-            cached_path = os.path.join(cached_folder, asset)
-            if not os.path.exists(cached_path):
+            temp_dir = os.path.join(tempfile.gettempdir(), "Archipelago", "Downloads")
+            asset_path = os.path.join(temp_dir, asset)
+            if not os.path.exists(asset_path):
                 download_url = latest_files[asset]
-                temp_name = os.path.join(cached_folder, f"{asset}.tmp")
-                if not os.path.exists(cached_folder):
-                    os.makedirs(cached_folder)
+                temp_path = os.path.join(temp_dir, f"{asset}.tmp")
+                if not os.path.exists(temp_dir):
+                    os.makedirs(temp_dir)
                 try:
                     with urllib.request.urlopen(download_url) as response:
-                        with open(temp_name, "wb") as f:
+                        with open(temp_path, "wb") as f:
                             import shutil
                             shutil.copyfileobj(response, f)
-                    os.rename(temp_name, cached_path)
+                    os.rename(temp_path, asset_path)
                 except Exception as e:
-                    if os.path.exists(cached_path):
-                        os.remove(cached_path)
-                    elif os.path.exists(temp_name):
-                        os.remove(temp_name)
+                    if os.path.exists(asset_path):
+                        os.remove(asset_path)
+                    elif os.path.exists(temp_path):
+                        os.remove(temp_path)
                     raise e
 
             messagebox("Update Downloaded Successfully", f"{asset} has been downloaded successfully!")
             if is_windows:
-                launch([cached_path], True)
+                launch([asset_path], True)
 
         if not download_names:
             raise FileNotFoundError(f"No download available for {version.as_simple_string()} for {platform.platform()}")
