@@ -54,6 +54,7 @@ items received in Luigi's Mansion will display a popup window that does not inte
 
 - Various streamlining tweaks (removed cutscenes, dialogue, transitions, and animations)
 - Many events have had text changed to better represent the state or events of the randomizer
+- Breaker Room starts locked unless Door Rando is on
 - In-game hints for the locations of items appear on Toads, Telephones and Madame Clairvoya
 - Boolossus will not spawn if you do not have Ice Element Medal
 - The Blackout can be toggled from the breaker in the breaker room, to access certain locations of the game.
