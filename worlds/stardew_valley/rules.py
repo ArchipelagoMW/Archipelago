@@ -47,6 +47,7 @@ from .strings.geode_names import Geode
 from .strings.machine_names import Machine
 from .strings.material_names import Material
 from .strings.metal_names import Artifact as ArtifactName, MetalBar, Mineral
+from .strings.monster_drop_names import Loot
 from .strings.monster_names import Monster
 from .strings.performance_names import Performance
 from .strings.quest_names import Quest
@@ -864,7 +865,7 @@ def set_secrets_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, 
         set_location_rule(multiworld, player, "Confront Marnie", logic.relationship.can_gift_to(SpecialItem.lucky_purple_shorts, NPC.marnie))
         set_location_rule(multiworld, player, "Lucky Purple Bobber", logic.fishing.can_use_tackle(SpecialItem.lucky_purple_shorts))
         set_location_rule(multiworld, player, "Something For Santa", logic.season.has(Season.winter) & logic.has_any(AnimalProduct.any_milk, Meal.cookie))
-        set_location_rule(multiworld, player, "Take In The Nature", logic.action.can_speak_junimo())
+        set_location_rule(multiworld, player, "Jungle Junimo", logic.action.can_speak_junimo())
         set_location_rule(multiworld, player, "??HMTGF??", logic.has(Fish.super_cucumber))
         set_location_rule(multiworld, player, "??Pinky Lemon??", logic.has(ArtisanGood.duck_mayonnaise))
         set_location_rule(multiworld, player, "??Foroguemon??", logic.has(Meal.strange_bun) & logic.relationship.has_hearts(NPC.vincent, 2))
@@ -874,7 +875,7 @@ def set_secrets_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, 
         set_location_rule(multiworld, player, "Meowmere", logic.has(SpecialItem.far_away_stone) & logic.region.can_reach(Region.wizard_basement))
         set_location_rule(multiworld, player, "A Familiar Tune", logic.relationship.can_meet(NPC.elliott))
         set_location_rule(multiworld, player, "Flubber Experiment",
-                          logic.relationship.can_get_married() & logic.building.has_building(Building.slime_hutch) & logic.has(Machine.slime_incubator))
+                          logic.relationship.can_get_married() & logic.building.has_building(Building.slime_hutch) & logic.has(Machine.slime_incubator) & logic.has(Loot.green_slime_egg))
         set_location_rule(multiworld, player, "Seems Fishy", logic.money.can_spend_at(Region.wizard_basement, 500))
         set_location_rule(multiworld, player, "What kind of monster is this?", logic.relationship.can_gift_to(Fish.mutant_carp, NPC.willy))
         set_location_rule(multiworld, player, "My mouth is watering already", logic.relationship.can_gift_to(Meal.magic_rock_candy, NPC.abigail))
@@ -902,7 +903,7 @@ def set_secrets_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, 
         set_location_rule(multiworld, player, "Thank the Devs", logic.received("Stardrop") & logic.money.can_spend_at(Region.wizard_basement, 500))
         set_location_rule(multiworld, player, "Annoy the Moon Man", logic.shipping.can_use_shipping_bin & logic.time.has_lived_months(6))
         set_location_rule(multiworld, player, "Strange Sighting", logic.region.can_reach_all((Region.bus_stop, Region.town)) & logic.time.has_lived_months(6))
-        set_location_rule(multiworld, player, "Merperson Sighting", logic.region.can_reach(Region.beach) & logic.time.has_lived_months(2))
+        set_location_rule(multiworld, player, "Sea Monster Sighting", logic.region.can_reach(Region.beach) & logic.time.has_lived_months(2))
         set_location_rule(multiworld, player, "...Bigfoot?",
                           logic.region.can_reach_all((Region.forest, Region.town, Region.secret_woods)) & logic.time.has_lived_months(4))
         set_location_rule(multiworld, player, "'Me me me me me me me me me me me me me me me me'",
