@@ -6,7 +6,8 @@ from typing import TYPE_CHECKING, Callable, Dict
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 
-from .data import NATIONAL_ID_TO_SPECIES_ID, NUM_REAL_SPECIES, data
+from .data import LocationCategory, NATIONAL_ID_TO_SPECIES_ID, NUM_REAL_SPECIES, data
+from .locations import PokemonEmeraldLocation
 from .options import DarkCavesRequireFlash, EliteFourRequirement, NormanRequirement, Goal
 
 if TYPE_CHECKING:
@@ -19,20 +20,20 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     hm_rules: Dict[str, Callable[[CollectionState], bool]] = {}
     for hm, badges in world.hm_requirements.items():
         if isinstance(badges, list):
-            hm_rules[hm] = lambda state, hm=hm, badges=badges: state.has(hm, world.player) \
-                                                               and state.has_all(badges, world.player)
+            hm_rules[hm] = lambda state, hm=hm, badges=badges: \
+                state.has(hm, world.player) and state.has_all(badges, world.player)
         else:
-            hm_rules[hm] = lambda state, hm=hm, badges=badges: state.has(hm, world.player) \
-                                                               and state.has_group("Badges", world.player, badges)
+            hm_rules[hm] = lambda state, hm=hm, badges=badges: \
+                state.has(hm, world.player) and state.has_group_unique("Badge", world.player, badges)
 
     def has_acro_bike(state: CollectionState):
         return state.has("Acro Bike", world.player)
 
     def has_mach_bike(state: CollectionState):
         return state.has("Mach Bike", world.player)
-    
+
     def defeated_n_gym_leaders(state: CollectionState, n: int) -> bool:
-        return sum([state.has(event, world.player) for event in [
+        return state.has_from_list_unique([
             "EVENT_DEFEAT_ROXANNE",
             "EVENT_DEFEAT_BRAWLY",
             "EVENT_DEFEAT_WATTSON",
@@ -41,7 +42,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
             "EVENT_DEFEAT_WINONA",
             "EVENT_DEFEAT_TATE_AND_LIZA",
             "EVENT_DEFEAT_JUAN",
-        ]]) >= n
+        ], world.player, n)
 
     huntable_legendary_events = [
         f"EVENT_ENCOUNTER_{key}"
@@ -61,8 +62,9 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         }.items()
         if name in world.options.allowed_legendary_hunt_encounters.value
     ]
+
     def encountered_n_legendaries(state: CollectionState, n: int) -> bool:
-        return sum(int(state.has(event, world.player)) for event in huntable_legendary_events) >= n
+        return state.has_from_list_unique(huntable_legendary_events, world.player, n)
 
     def get_entrance(entrance: str):
         return world.multiworld.get_entrance(entrance, world.player)
@@ -235,11 +237,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     if world.options.norman_requirement == NormanRequirement.option_badges:
         set_rule(
             get_entrance("MAP_PETALBURG_CITY_GYM:2/MAP_PETALBURG_CITY_GYM:3"),
-            lambda state: state.has_group("Badges", world.player, world.options.norman_count.value)
+            lambda state: state.has_group_unique("Badge", world.player, world.options.norman_count.value)
         )
         set_rule(
             get_entrance("MAP_PETALBURG_CITY_GYM:5/MAP_PETALBURG_CITY_GYM:6"),
-            lambda state: state.has_group("Badges", world.player, world.options.norman_count.value)
+            lambda state: state.has_group_unique("Badge", world.player, world.options.norman_count.value)
         )
     else:
         set_rule(
@@ -299,15 +301,15 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE116/EAST -> REGION_TERRA_CAVE_ENTRANCE/MAIN"),
-        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
-            state.has("TERRA_CAVE_ROUTE_116_1", world.player) and \
-            state.has("EVENT_DEFEAT_SHELLY", world.player)
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player)
+            and state.has("TERRA_CAVE_ROUTE_116_1", world.player)
+            and state.has("EVENT_DEFEAT_SHELLY", world.player)
     )
     set_rule(
         get_entrance("REGION_ROUTE116/WEST -> REGION_TERRA_CAVE_ENTRANCE/MAIN"),
-        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
-            state.has("TERRA_CAVE_ROUTE_116_2", world.player) and \
-            state.has("EVENT_DEFEAT_SHELLY", world.player)
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player)
+            and state.has("TERRA_CAVE_ROUTE_116_2", world.player)
+            and state.has("EVENT_DEFEAT_SHELLY", world.player)
     )
 
     # Rusturf Tunnel
@@ -347,19 +349,19 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_ROUTE115/NORTH_ABOVE_SLOPE"),
-        lambda state: has_mach_bike(state)
+        has_mach_bike
     )
     set_rule(
         get_entrance("REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_TERRA_CAVE_ENTRANCE/MAIN"),
-        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
-            state.has("TERRA_CAVE_ROUTE_115_1", world.player) and \
-            state.has("EVENT_DEFEAT_SHELLY",  world.player)
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player)
+            and state.has("TERRA_CAVE_ROUTE_115_1", world.player)
+            and state.has("EVENT_DEFEAT_SHELLY",  world.player)
     )
     set_rule(
         get_entrance("REGION_ROUTE115/NORTH_ABOVE_SLOPE -> REGION_TERRA_CAVE_ENTRANCE/MAIN"),
-        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
-            state.has("TERRA_CAVE_ROUTE_115_2", world.player) and \
-            state.has("EVENT_DEFEAT_SHELLY",  world.player)
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player)
+            and state.has("TERRA_CAVE_ROUTE_115_2", world.player)
+            and state.has("EVENT_DEFEAT_SHELLY",  world.player)
     )
 
     if world.options.extra_boulders:
@@ -375,7 +377,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     if world.options.extra_bumpy_slope:
         set_rule(
             get_entrance("REGION_ROUTE115/SOUTH_BELOW_LEDGE -> REGION_ROUTE115/SOUTH_ABOVE_LEDGE"),
-            lambda state: has_acro_bike(state)
+            has_acro_bike
         )
     else:
         set_rule(
@@ -386,17 +388,17 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 105
     set_rule(
         get_entrance("REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"),
-        lambda state: hm_rules["HM08 Dive"](state) and \
-            state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
-            state.has("MARINE_CAVE_ROUTE_105_1", world.player) and \
-            state.has("EVENT_DEFEAT_SHELLY", world.player)
+        lambda state: hm_rules["HM08 Dive"](state)
+            and state.has("EVENT_DEFEAT_CHAMPION", world.player)
+            and state.has("MARINE_CAVE_ROUTE_105_1", world.player)
+            and state.has("EVENT_DEFEAT_SHELLY", world.player)
     )
     set_rule(
         get_entrance("REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"),
-        lambda state: hm_rules["HM08 Dive"](state) and \
-            state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
-            state.has("MARINE_CAVE_ROUTE_105_2", world.player) and \
-            state.has("EVENT_DEFEAT_SHELLY", world.player)
+        lambda state: hm_rules["HM08 Dive"](state)
+            and state.has("EVENT_DEFEAT_CHAMPION", world.player)
+            and state.has("MARINE_CAVE_ROUTE_105_2", world.player)
+            and state.has("EVENT_DEFEAT_SHELLY", world.player)
     )
     set_rule(
         get_entrance("MAP_ROUTE105:0/MAP_ISLAND_CAVE:0"),
@@ -414,13 +416,16 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
 
     # Dewford Town
+    entrance = get_entrance("REGION_DEWFORD_TOWN/MAIN -> REGION_ROUTE109/BEACH")
     set_rule(
-        get_entrance("REGION_DEWFORD_TOWN/MAIN -> REGION_ROUTE109/BEACH"),
+        entrance,
         lambda state:
             state.can_reach("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN", "Entrance", world.player)
             and state.has("EVENT_TALK_TO_MR_STONE", world.player)
             and state.has("EVENT_DELIVER_LETTER", world.player)
     )
+    world.multiworld.register_indirect_condition(
+        get_entrance("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN").parent_region, entrance)
     set_rule(
         get_entrance("REGION_DEWFORD_TOWN/MAIN -> REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN"),
         lambda state:
@@ -439,7 +444,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_GRANITE_CAVE_B1F/LOWER -> REGION_GRANITE_CAVE_B1F/UPPER"),
-        lambda state: has_mach_bike(state)
+        has_mach_bike
     )
 
     # Route 107
@@ -449,14 +454,17 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
 
     # Route 109
+    entrance = get_entrance("REGION_ROUTE109/BEACH -> REGION_DEWFORD_TOWN/MAIN")
     set_rule(
-        get_entrance("REGION_ROUTE109/BEACH -> REGION_DEWFORD_TOWN/MAIN"),
+        entrance,
         lambda state:
             state.can_reach("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN", "Entrance", world.player)
             and state.can_reach("REGION_DEWFORD_TOWN/MAIN -> REGION_ROUTE109/BEACH", "Entrance", world.player)
             and state.has("EVENT_TALK_TO_MR_STONE", world.player)
             and state.has("EVENT_DELIVER_LETTER", world.player)
     )
+    world.multiworld.register_indirect_condition(
+        get_entrance("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN").parent_region, entrance)
     set_rule(
         get_entrance("REGION_ROUTE109/BEACH -> REGION_ROUTE109/SEA"),
         hm_rules["HM03 Surf"]
@@ -643,15 +651,15 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE114/ABOVE_WATERFALL -> REGION_TERRA_CAVE_ENTRANCE/MAIN"),
-        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
-            state.has("TERRA_CAVE_ROUTE_114_1", world.player) and \
-            state.has("EVENT_DEFEAT_SHELLY", world.player)
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player)
+            and state.has("TERRA_CAVE_ROUTE_114_1", world.player)
+            and state.has("EVENT_DEFEAT_SHELLY", world.player)
     )
     set_rule(
         get_entrance("REGION_ROUTE114/MAIN -> REGION_TERRA_CAVE_ENTRANCE/MAIN"),
-        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
-            state.has("TERRA_CAVE_ROUTE_114_2", world.player) and \
-            state.has("EVENT_DEFEAT_SHELLY", world.player)
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player)
+            and state.has("TERRA_CAVE_ROUTE_114_2", world.player)
+            and state.has("EVENT_DEFEAT_SHELLY", world.player)
     )
 
     # Meteor Falls
@@ -699,11 +707,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Jagged Pass
     set_rule(
         get_entrance("REGION_JAGGED_PASS/BOTTOM -> REGION_JAGGED_PASS/MIDDLE"),
-        lambda state: has_acro_bike(state)
+        has_acro_bike
     )
     set_rule(
         get_entrance("REGION_JAGGED_PASS/MIDDLE -> REGION_JAGGED_PASS/TOP"),
-        lambda state: has_acro_bike(state)
+        has_acro_bike
     )
     set_rule(
         get_entrance("MAP_JAGGED_PASS:4/MAP_MAGMA_HIDEOUT_1F:0"),
@@ -719,11 +727,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Mirage Tower
     set_rule(
         get_entrance("REGION_MIRAGE_TOWER_2F/TOP -> REGION_MIRAGE_TOWER_2F/BOTTOM"),
-        lambda state: has_mach_bike(state)
+        has_mach_bike
     )
     set_rule(
         get_entrance("REGION_MIRAGE_TOWER_2F/BOTTOM -> REGION_MIRAGE_TOWER_2F/TOP"),
-        lambda state: has_mach_bike(state)
+        has_mach_bike
     )
     set_rule(
         get_entrance("REGION_MIRAGE_TOWER_3F/TOP -> REGION_MIRAGE_TOWER_3F/BOTTOM"),
@@ -812,15 +820,15 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE118/EAST -> REGION_TERRA_CAVE_ENTRANCE/MAIN"),
-        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
-            state.has("TERRA_CAVE_ROUTE_118_1", world.player) and \
-            state.has("EVENT_DEFEAT_SHELLY", world.player)
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player)
+            and state.has("TERRA_CAVE_ROUTE_118_1", world.player)
+            and state.has("EVENT_DEFEAT_SHELLY", world.player)
     )
     set_rule(
         get_entrance("REGION_ROUTE118/WEST -> REGION_TERRA_CAVE_ENTRANCE/MAIN"),
-        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
-            state.has("TERRA_CAVE_ROUTE_118_2", world.player) and \
-            state.has("EVENT_DEFEAT_SHELLY", world.player)
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player)
+            and state.has("TERRA_CAVE_ROUTE_118_2", world.player)
+            and state.has("EVENT_DEFEAT_SHELLY", world.player)
     )
 
     # Route 119
@@ -830,11 +838,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE119/LOWER -> REGION_ROUTE119/LOWER_ACROSS_RAILS"),
-        lambda state: has_acro_bike(state)
+        has_acro_bike
     )
     set_rule(
         get_entrance("REGION_ROUTE119/LOWER_ACROSS_RAILS -> REGION_ROUTE119/LOWER"),
-        lambda state: has_acro_bike(state)
+        has_acro_bike
     )
     set_rule(
         get_entrance("REGION_ROUTE119/UPPER -> REGION_ROUTE119/MIDDLE_RIVER"),
@@ -850,7 +858,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE119/ABOVE_WATERFALL -> REGION_ROUTE119/ABOVE_WATERFALL_ACROSS_RAILS"),
-        lambda state: has_acro_bike(state)
+        has_acro_bike
     )
     if "Route 119 Aqua Grunts" not in world.options.remove_roadblocks.value:
         set_rule(
@@ -927,11 +935,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_SAFARI_ZONE_SOUTH/MAIN -> REGION_SAFARI_ZONE_NORTH/MAIN"),
-        lambda state: has_acro_bike(state)
+        has_acro_bike
     )
     set_rule(
         get_entrance("REGION_SAFARI_ZONE_SOUTHWEST/MAIN -> REGION_SAFARI_ZONE_NORTHWEST/MAIN"),
-        lambda state: has_mach_bike(state)
+        has_mach_bike
     )
     set_rule(
         get_entrance("REGION_SAFARI_ZONE_SOUTHWEST/MAIN -> REGION_SAFARI_ZONE_SOUTHWEST/POND"),
@@ -1115,17 +1123,17 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 125
     set_rule(
         get_entrance("REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"),
-        lambda state: hm_rules["HM08 Dive"](state) and \
-            state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
-            state.has("MARINE_CAVE_ROUTE_125_1", world.player) and \
-            state.has("EVENT_DEFEAT_SHELLY", world.player)
+        lambda state: hm_rules["HM08 Dive"](state)
+            and state.has("EVENT_DEFEAT_CHAMPION", world.player)
+            and state.has("MARINE_CAVE_ROUTE_125_1", world.player)
+            and state.has("EVENT_DEFEAT_SHELLY", world.player)
     )
     set_rule(
         get_entrance("REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"),
-        lambda state: hm_rules["HM08 Dive"](state) and \
-            state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
-            state.has("MARINE_CAVE_ROUTE_125_2", world.player) and \
-            state.has("EVENT_DEFEAT_SHELLY", world.player)
+        lambda state: hm_rules["HM08 Dive"](state)
+            and state.has("EVENT_DEFEAT_CHAMPION", world.player)
+            and state.has("MARINE_CAVE_ROUTE_125_2", world.player)
+            and state.has("EVENT_DEFEAT_SHELLY", world.player)
     )
 
     # Shoal Cave
@@ -1257,17 +1265,17 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"),
-        lambda state: hm_rules["HM08 Dive"](state) and \
-            state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
-            state.has("MARINE_CAVE_ROUTE_127_1", world.player) and \
-            state.has("EVENT_DEFEAT_SHELLY", world.player)
+        lambda state: hm_rules["HM08 Dive"](state)
+            and state.has("EVENT_DEFEAT_CHAMPION", world.player)
+            and state.has("MARINE_CAVE_ROUTE_127_1", world.player)
+            and state.has("EVENT_DEFEAT_SHELLY", world.player)
     )
     set_rule(
         get_entrance("REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"),
-        lambda state: hm_rules["HM08 Dive"](state) and \
-            state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
-            state.has("MARINE_CAVE_ROUTE_127_2", world.player) and \
-            state.has("EVENT_DEFEAT_SHELLY", world.player)
+        lambda state: hm_rules["HM08 Dive"](state)
+            and state.has("EVENT_DEFEAT_CHAMPION", world.player)
+            and state.has("MARINE_CAVE_ROUTE_127_2", world.player)
+            and state.has("EVENT_DEFEAT_SHELLY", world.player)
     )
 
     # Route 128
@@ -1374,17 +1382,17 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 129
     set_rule(
         get_entrance("REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"),
-        lambda state: hm_rules["HM08 Dive"](state) and \
-            state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
-            state.has("MARINE_CAVE_ROUTE_129_1", world.player) and \
-            state.has("EVENT_DEFEAT_SHELLY", world.player)
+        lambda state: hm_rules["HM08 Dive"](state)
+            and state.has("EVENT_DEFEAT_CHAMPION", world.player)
+            and state.has("MARINE_CAVE_ROUTE_129_1", world.player)
+            and state.has("EVENT_DEFEAT_SHELLY", world.player)
     )
     set_rule(
         get_entrance("REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"),
-        lambda state: hm_rules["HM08 Dive"](state) and \
-            state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
-            state.has("MARINE_CAVE_ROUTE_129_2", world.player) and \
-            state.has("EVENT_DEFEAT_SHELLY", world.player)
+        lambda state: hm_rules["HM08 Dive"](state)
+            and state.has("EVENT_DEFEAT_CHAMPION", world.player)
+            and state.has("MARINE_CAVE_ROUTE_129_2", world.player)
+            and state.has("EVENT_DEFEAT_SHELLY", world.player)
     )
 
     # Pacifidlog Town
@@ -1505,7 +1513,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     if world.options.elite_four_requirement == EliteFourRequirement.option_badges:
         set_rule(
             get_entrance("REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/MAIN -> REGION_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F/BEHIND_BADGE_CHECKERS"),
-            lambda state: state.has_group("Badges", world.player, world.options.elite_four_count.value)
+            lambda state: state.has_group_unique("Badge", world.player, world.options.elite_four_count.value)
         )
     else:
         set_rule(
@@ -1658,7 +1666,8 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Add Itemfinder requirement to hidden items
     if world.options.require_itemfinder:
         for location in world.multiworld.get_locations(world.player):
-            if location.tags is not None and "HiddenItem" in location.tags:
+            assert isinstance(location, PokemonEmeraldLocation)
+            if location.key is not None and data.locations[location.key].category == LocationCategory.HIDDEN_ITEM:
                 add_rule(
                     location,
                     lambda state: state.has("Itemfinder", world.player)
