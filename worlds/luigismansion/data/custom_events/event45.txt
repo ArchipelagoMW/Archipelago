@@ -18,7 +18,7 @@
 <FLAGON>(57)
 <SE>(132)
 <WINDOW>(1)<COLOR>(1)
-<SAY><COLOR>(0)Phew! The lights are back on!\nLet's take a break at the lab.
+<SAY><COLOR>(0)Phew! The lights are back on!\nLeave the room to re-activate
 <ANYKEY>
 <CLOSEWINDOW>(1)
 <LUIGIFREE>
