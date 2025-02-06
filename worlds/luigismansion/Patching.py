@@ -1220,7 +1220,7 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
         furniture_info.info_file_field_entries[furniture_jmp_id]["item_offset_y"] = current_y_offset - adjust_y_offset
 
     # Foyer Chandelier will never ever hurt anyone ever again.
-    furniture_info.info_file_field_entries[101]["move_type"] = 7
+    furniture_info.info_file_field_entries[101]["move"] = 7
 
     for x in furniture_info.info_file_field_entries:
         # If this is a book/bookshelf, set it to just shake, no book interaction.
