@@ -62,16 +62,6 @@ class TestInventory:
         return sum(self.count(item_name, player) for item_name in items)
 
 
-class AnyUnitsTestInventory(TestInventory):
-    def has(self, item: str, player: int, count: int = 1) -> bool:
-        return False
-    
-    def count(self, item: str, player: int) -> int:
-        super().count(item, player)
-        # Always return enough to pass the 'and' portion of the check
-        return 2
-
-
 class TestWorld:
     """
     Mock world to simulate different player options for logic rules
