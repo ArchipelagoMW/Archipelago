@@ -85,8 +85,9 @@ class LuigisMansionRandomizer:
         self.jmp_generator_info_table = self.load_maptwo_info_table("generatorinfo")
         self.jmp_enemy_info_table = self.load_maptwo_info_table("enemyinfo")
         self.jmp_boo_table = self.load_maptwo_info_table("telesa")
-        self.jmp_teiden_observer_info_table = self.load_maptwo_info_table("teidenobserverinfo")
-        self.jmp_teiden_enemy_info_table = self.load_maptwo_info_table("teidenenemyinfo")
+        if self.output_data["Options"]["speedy_spirits"]:
+            self.jmp_teiden_enemy_info_table = self.load_maptwo_info_table("teidenenemyinfo")
+            self.jmp_teiden_observer_info_table = self.load_maptwo_info_table("teidenobserverinfo")
         self.jmp_teiden_character_info_table = self.load_maptwo_info_table("teidencharacterinfo")
 
         # Saves the randomized iso file, with all files updated.
@@ -169,6 +170,9 @@ class LuigisMansionRandomizer:
         update_obj_info(self.jmp_obj_info_table)
         update_generator_info(self.jmp_generator_info_table)
         update_enemy_info(self.jmp_enemy_info_table, self.output_data)
+        if self.output_data["Options"]["speedy_spirits"]:
+            update_teiden_enemy_info(self.jmp_enemy_info_table, self.jmp_teiden_enemy_info_table)
+            update_teiden_observer_info(self.jmp_observer_info_table, self.jmp_teiden_observer_info_table)
         update_boo_table(self.jmp_boo_table)
 
         # Updates all the data entries in each jmp table in the szp file.
@@ -184,6 +188,9 @@ class LuigisMansionRandomizer:
         self.update_maptwo_info_table(self.jmp_obj_info_table)
         self.update_maptwo_info_table(self.jmp_generator_info_table)
         self.update_maptwo_info_table(self.jmp_enemy_info_table)
+        if self.output_data["Options"]["speedy_spirits"]:
+            self.update_maptwo_info_table(self.jmp_teiden_enemy_info_table)
+            self.update_maptwo_info_table(self.jmp_teiden_observer_info_table)
         self.update_maptwo_info_table(self.jmp_boo_table)
 
     def save_randomized_iso(self):
