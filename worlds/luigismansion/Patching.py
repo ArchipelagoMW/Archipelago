@@ -102,6 +102,7 @@ def update_event_info(event_info, boo_checks: bool):
 
         # Update the blackout off event trigger to be A-pressed based
         if x["EventNo"] == 45:
+            x["EventFlag"] = 8
             x["EventIf"] = 1
             x["EventArea"] = 400
             x["EventLock"] = 0
