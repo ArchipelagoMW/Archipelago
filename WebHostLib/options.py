@@ -238,6 +238,10 @@ def generate_yaml(game: str):
 
                 del options[key]
 
+            # Detect keys which end with -select-all, indicating a "Select All" checkbox for OptionSets
+            elif key_parts[-1].endswith("-select-all"):
+                del options[key]
+
         # Detect random-* keys and set their options accordingly
         for key, val in options.copy().items():
             if key.startswith("random-"):
