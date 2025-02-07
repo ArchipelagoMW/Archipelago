@@ -259,7 +259,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Study Chandelier": LMLocationData("Study", 140, "Furniture", 352, [], 35),
     "Study Bottled Ship": LMLocationData("Study", 142, "Furniture", 353, [], 35),
     "Study Desk": LMLocationData("Study", 143, "Furniture", 351, [], 35),
-    "Neville's Chair": LMLocationData("Study", 144, "Furniture", 350, [], 35),
+    "Study Chair": LMLocationData("Study", 144, "Furniture", 350, [], 35),
     "Study Book (on Desk closer to Door)": LMLocationData("Study", 145, "Furniture", 503, [], 35),
     "Study Book (on Desk closer to Bookshelves)": LMLocationData("Study", 146, "Furniture", 504, [], 35),
     "Study Painting L (closer to 4th Wall)": LMLocationData("Study", 147, "Furniture", 553, [], 35),
