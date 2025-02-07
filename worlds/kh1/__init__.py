@@ -183,6 +183,8 @@ class KH1World(World):
         non_filler_item_categories = ["Key", "Magic", "Worlds", "Trinities", "Cups", "Summons", "Abilities", "Shared Abilities", "Keyblades", "Accessory", "Weapons", "Puppies"]
         if self.options.hundred_acre_wood:
             non_filler_item_categories.append("Torn Pages")
+        if self.options.destiny_islands:
+            non_filler_item_categories.append("DI")
         for name, data in item_table.items():
             quantity = data.max_quantity
             if data.category not in non_filler_item_categories:
@@ -293,6 +295,7 @@ class KH1World(World):
                     "bad_starting_weapons": bool(self.options.bad_starting_weapons),
                     "cups": str(self.options.cups.current_key),
                     "death_link": str(self.options.death_link.current_key),
+                    "destiny_islands": bool(self.options.destiny_islands),
                     "donald_death_link": bool(self.options.donald_death_link),
                     "end_of_the_world_unlock": str(self.options.end_of_the_world_unlock.current_key),
                     "exp_multiplier": int(self.options.exp_multiplier.value)/16,

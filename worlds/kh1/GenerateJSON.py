@@ -75,5 +75,6 @@ def get_settings(self):
                     "puppy_value": int(self.options.puppy_value.value),
                     "death_link": str(self.options.death_link.current_key),
                     "donald_death_link": bool(self.options.donald_death_link),
-                    "goofy_death_link": bool(self.options.goofy_death_link)}
+                    "goofy_death_link": bool(self.options.goofy_death_link),
+                    "destiny_islands": bool(self.options.destiny_islands)}
     return settings

@@ -506,6 +506,14 @@ class ShortenGoMode(Toggle):
     """
     display_name = "Shorten Go Mode"
 
+class DestinyIslands(Toggle):
+    """
+    If on, Traverse Town will have an additional place to land - Seashore in Destiny Islands.
+    Destiny Islands items will be shuffled into the item pool.
+    Turning in all Destiny Islands items to Kairi sends the player to the final fights.
+    """
+    display_name = "Destiny Islands"
+
 @dataclass
 class KH1Options(PerGameCommonOptions):
     final_rest_door_key: FinalRestDoorKey
@@ -560,6 +568,7 @@ class KH1Options(PerGameCommonOptions):
     remote_items: RemoteItems
     shorten_go_mode: ShortenGoMode
     death_link: DeathLink
+    destiny_islands: DestinyIslands
 
 kh1_option_groups = [
     OptionGroup("Goal", [
@@ -576,6 +585,7 @@ kh1_option_groups = [
         Atlantica,
         Cups,
         HundredAcreWood,
+        DestinyIslands,
         JungleSlider,
         RandomizeEmblemPieces,
         RandomizePostcards,

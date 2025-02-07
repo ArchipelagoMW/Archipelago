@@ -31,10 +31,11 @@ def create_regions(kh1world):
         "End of the World": KH1RegionData([],   []),
         "100 Acre Wood":    KH1RegionData([],   []),
         "Levels":           KH1RegionData([],   []),
+        "Homecoming":       KH1RegionData([],   []),
         "World Map":        KH1RegionData([],   ["Wonderland", "Olympus Coliseum", "Deep Jungle",
                                          "Agrabah", "Monstro", "Atlantica",
                                          "Halloween Town", "Neverland", "Hollow Bastion",
-                                         "End of the World", "100 Acre Wood"])
+                                         "End of the World", "100 Acre Wood", "Homecoming"])
     }
 
     # Set up locations
@@ -527,7 +528,24 @@ def create_regions(kh1world):
         regions["Levels"].locations.append("Level " + str(i+1).rjust(3, '0') + " (Slot 1)")
         if i+1 in kh1world.get_slot_2_levels():
             regions["Levels"].locations.append("Level " + str(i+1).rjust(3, '0') + " (Slot 2)")
-    regions["End of the World"].locations.append("Final Ansem")
+    if options.destiny_islands:
+        regions["Destiny Islands"].locations.append("Destiny Islands Seashore Capture Fish 1 (Day 2)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Seashore Capture Fish 2 (Day 2)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Seashore Capture Fish 3 (Day 2)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Seashore Gather Seagull Egg (Day 2)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Seashore Log on Riku's Island (Day 1)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Seashore Log under Bridge (Day 1)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Seashore Gather Cloth (Day 1)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Seashore Gather Rope (Day 1)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Seashore Deliver Kairi Items (Day 1)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Secret Place Gather Mushroom (Day 2)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Cove Gather Mushroom Near Zip Line (Day 2)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Cove Gather Mushroom in Small Cave (Day 2)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Cove Talk to Kairi (Day 2)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Gather Drinking Water (Day 2)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Cove Deliver Kairi Items (Day 2)")
+        regions["Destiny Islands"].locations.append("Destiny Islands Chest")
+    regions["Homecoming"].locations.append("Final Ansem")
 
     # Set up the regions correctly.
     for name, data in regions.items():
@@ -549,6 +567,7 @@ def create_regions(kh1world):
     multiworld.get_entrance("100 Acre Wood", player).connect(multiworld.get_region("100 Acre Wood", player))
     multiworld.get_entrance("World Map", player).connect(multiworld.get_region("World Map", player))
     multiworld.get_entrance("Levels", player).connect(multiworld.get_region("Levels", player))
+    multiworld.get_entrance("Homecoming", player).connect(multiworld.get_region("Homecoming", player))
 
 def create_region(multiworld: MultiWorld, player: int, name: str, data: KH1RegionData):
     region = Region(name, player, multiworld)
