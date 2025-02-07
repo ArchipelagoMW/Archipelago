@@ -158,10 +158,12 @@ def generate_weighted_yaml(game: str):
 
                 options[key] = val
             else:
+                [option, setting] = key.split("||")
+                if setting == "select-all":
+                    continue
                 if int(val) == 0:
                     continue
 
-                [option, setting] = key.split("||")
                 options.setdefault(option, {})[setting] = int(val)
 
         # Error checking
