@@ -75,7 +75,7 @@ location_table = {
     'Wildflower Fields - Full Health Item Box':                 LocationData(Passage.EMERALD,  1, ItemFlag.FULL_HEALTH,   _NORMAL),
     'Wildflower Fields - Hidden Tunnel Diamond':                LocationData(Passage.EMERALD,  1, ItemFlag.DIAMOND_1,     _ALL),
     'Wildflower Fields - Escape Detour Diamond':                LocationData(Passage.EMERALD,  1, ItemFlag.DIAMOND_2,     _ALL),
-    'Wildflower Fields - Escape Detour Corner Diamond':         LocationData(Passage.EMERALD,  1, ItemFlag.DIAMOND_3,     _NORMAL),
+    'Wildflower Fields - Escape Detour Corner Diamond':         LocationData(Passage.EMERALD,  1, ItemFlag.DIAMOND_3,     _ALL),
     'Wildflower Fields - 8-Shaped Cave Diamond':                LocationData(Passage.EMERALD,  1, ItemFlag.DIAMOND_4,     _NORMAL),
     'Wildflower Fields - Current Cave Diamond':                 LocationData(Passage.EMERALD,  1, ItemFlag.DIAMOND_5,     _ALL),
     'Wildflower Fields - Sunflower Diamond':                    LocationData(Passage.EMERALD,  1, ItemFlag.DIAMOND_6,     _NORMAL),

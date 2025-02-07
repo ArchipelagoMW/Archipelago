@@ -172,7 +172,7 @@ level_table = {
                 diamonds=[
                     LocationData("Hidden Tunnel Diamond"),
                     LocationData("Escape Detour Diamond"),
-                    LocationData("Escape Detour Corner Diamond", difficulties=[normal]),
+                    LocationData("Escape Detour Corner Diamond"),
                     LocationData("Current Cave Diamond"),
                     LocationData("Sunflower Diamond", difficulties=[normal]),
                     LocationData("Switch Puzzle Diamond", access_rule=has('Grab')),
