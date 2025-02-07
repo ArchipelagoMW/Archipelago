@@ -40,7 +40,7 @@ class WeaponLogic(Choice):
     Moderate means the Swrod for level 1 and later and the White Sword or Magical Rod for levels 4 and later.
     Hard means no safety logic is added. You may be required to defeat enemies with weak or unusual weaponry, such as
     Wizzrobes with the basic Sword or Darknuts with the Magical Rod."""
-    display_name = "Combat Logic"
+    display_name = "Weapon Logic"
     option_easy = 0
     option_moderate = 1
     option_hard = 2

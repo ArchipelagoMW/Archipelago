@@ -1,6 +1,6 @@
 import logging
 from copy import deepcopy
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 from NetUtils import ClientStatus
 
@@ -27,6 +27,7 @@ class TLOZClient(BizHawkClient):
         self.rom = "PRG ROM"
         self.bonus_items = []
         self.major_location_offsets = None
+        self.guard_list = [(Rom.game_mode, [0x05], self.wram)] # 0x05 is normal gameplay in overworld or dungeon
 
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
@@ -66,12 +67,10 @@ class TLOZClient(BizHawkClient):
                 self.major_location_offsets["Magical Sword Grave"] = magical_sword_grave_location
                 self.major_location_offsets["Letter Cave"] = letter_cave_location
             await self.check_victory(ctx)
-            game_mode = await self.read_ram_value(ctx, Rom.game_mode)
-            if game_mode == 0x05:
-                await self.location_check(ctx)
-                await self.received_items_check(ctx)
-                await self.resolve_shop_items(ctx)
-                await self.resolve_triforce_fragments(ctx)
+            await self.location_check(ctx)
+            await self.received_items_check(ctx)
+            await self.resolve_shop_items(ctx)
+            await self.resolve_triforce_fragments(ctx)
 
         except bizhawk.RequestFailedError:
             # The connector didn't respond. Exit handler and return to main loop to reconnect
@@ -87,9 +86,11 @@ class TLOZClient(BizHawkClient):
 
     async def location_check(self, ctx):
         locations_checked = []
-        overworld_data = await self.read_ram_values(ctx, Rom.overworld_status_block, 0x80)
-        underworld_early_data = await self.read_ram_values(ctx, Rom.underworld_early_status_block, 0x80)
-        underworld_late_data = await self.read_ram_values(ctx, Rom.underworld_late_status_block, 0x80)
+        overworld_data = await self.read_ram_values_guarded(ctx, Rom.overworld_status_block, 0x80)
+        underworld_early_data = await self.read_ram_values_guarded(ctx, Rom.underworld_early_status_block, 0x80)
+        underworld_late_data = await self.read_ram_values_guarded(ctx, Rom.underworld_late_status_block, 0x80)
+        if overworld_data is None or underworld_early_data is None or underworld_late_data is None:
+            return
         for location, index in self.major_location_offsets.items():
             if (int(overworld_data[index]) & 0x10) > 0:
                 locations_checked.append(Locations.location_table[location])
@@ -100,9 +101,11 @@ class TLOZClient(BizHawkClient):
             if (int(underworld_late_data[index]) & 0x10 > 0):
                 locations_checked.append(Locations.location_table[location])
 
-        left_shop_slots = await self.read_ram_value(ctx, Rom.left_shop_slots)
-        middle_shop_slots = await self.read_ram_value(ctx, Rom.middle_shop_slots)
-        right_shop_slots = await self.read_ram_value(ctx, Rom.right_shop_slots)
+        left_shop_slots = await self.read_ram_value_guarded(ctx, Rom.left_shop_slots)
+        middle_shop_slots = await self.read_ram_value_guarded(ctx, Rom.middle_shop_slots)
+        right_shop_slots = await self.read_ram_value_guarded(ctx, Rom.right_shop_slots)
+        if left_shop_slots is None or middle_shop_slots is None or right_shop_slots is None:
+            return
         shop_slots = {"Left": left_shop_slots, "Middle": middle_shop_slots, "Right": right_shop_slots}
         for name, shop in shop_slots.items():
             if shop & Rom.arrow_shop > 0:
@@ -117,7 +120,9 @@ class TLOZClient(BizHawkClient):
                 locations_checked.append(Locations.location_table[f"Potion Shop Item {name}"])
             if shop & Rom.take_any > 0:
                 locations_checked.append(Locations.location_table[f"Take Any Item {name}"])
-        take_any_caves_checked = await self.read_ram_value(ctx, Rom.take_any_caves_checked)
+        take_any_caves_checked = await self.read_ram_value_guarded(ctx, Rom.take_any_caves_checked)
+        if take_any_caves_checked is None:
+            return
         if take_any_caves_checked >= 4:
             if "Take Any Item Left" not in ctx.checked_locations:
                 locations_checked.append(Locations.location_table[f"Take Any Item Left"])
@@ -140,162 +145,200 @@ class TLOZClient(BizHawkClient):
 
 
     async def received_items_check(self, ctx):
-        items_received_count_low = await self.read_ram_value(ctx, Rom.items_obtained_low)
-        items_received_count_high = await self.read_ram_value(ctx, Rom.items_obtained_high)
+        items_received_count_low = await self.read_ram_value_guarded(ctx, Rom.items_obtained_low)
+        items_received_count_high = await self.read_ram_value_guarded(ctx, Rom.items_obtained_high)
+        if items_received_count_low is None or items_received_count_high is None:
+            return
         items_received_count = list([items_received_count_low, items_received_count_high])
         items_received_count_value = int.from_bytes(items_received_count, "little")
         if items_received_count_value < len(ctx.items_received):
             current_item = ctx.items_received[items_received_count_value]
             current_item_id = current_item.item
             current_item_name = ctx.item_names.lookup_in_game(current_item_id, ctx.game)
-            await self.write_item(ctx, current_item_name)
             items_received_count_value += 1
             new_items_received_count_low = items_received_count_value % 256
             new_items_received_count_high = items_received_count_value // 256
-            await self.write(ctx, Rom.items_obtained_low, new_items_received_count_low)
-            await self.write(ctx, Rom.items_obtained_high, new_items_received_count_high)
+            new_items_received_count_low_write = (Rom.items_obtained_low, [new_items_received_count_low], self.wram)
+            new_items_received_count_high_write = (Rom.items_obtained_high, [new_items_received_count_high], self.wram)
+            write_list: List[tuple[int, List[int], str]] = [new_items_received_count_low_write, new_items_received_count_high_write]
+            await self.write_item(ctx, current_item_name, write_list)
 
     async def resolve_shop_items(self, ctx):
         pass
 
     async def resolve_triforce_fragments(self, ctx):
-        current_triforce_count = await self.read_ram_value(ctx, Rom.triforce_count)
+        current_triforce_count = await self.read_ram_value_guarded(ctx, Rom.triforce_count)
+        if current_triforce_count is None:
+            return
         current_triforce_byte = 0xFF >> (8 - min(current_triforce_count, 8))
-        await self.write(ctx, Rom.triforce_fragments, current_triforce_byte)
+        write_list = [(Rom.triforce_fragments, [current_triforce_byte], self.wram)]
+        await self.write(ctx, write_list)
 
-    async def write_item(self, ctx, item_name):
+    async def write_item(self, ctx, item_name, write_list: List[tuple[int, List[int], str]]):
         item_game_id = Items.item_game_ids[item_name]
         if item_name == "Bomb":
             item_game_id = 0x29 # Hack to allow bombs to be shown being lifted.
-        await self.write(ctx, Rom.item_to_lift, item_game_id)
-        await self.write(ctx, Rom.item_lift_timer, 128) # 128 frames of lifting an item
-        await self.write(ctx, Rom.sound_effect_queue, 4) # "Found secret" sound
-        await self.handle_item(ctx, item_name)
+        lift_write = (Rom.item_to_lift, [item_game_id], self.wram)
+        timer_write = (Rom.item_lift_timer, [128], self.wram) # 128 frames of lifting an item
+        sound_write = (Rom.sound_effect_queue, [4], self.wram) # "Found secret" sound
+        write_list.extend([lift_write, timer_write, sound_write])
+        await self.handle_item(ctx, item_name, write_list)
 
     async def resolve_bonus_items(self, ctx):
         for item in self.bonus_items:
             current_item_name = ctx.item_names.lookup_in_game(item, ctx.game)
-            await self.write_item(ctx, current_item_name)
+            await self.write_item(ctx, current_item_name, [])
         self.bonus_items.clear()
 
-    async def handle_item(self, ctx, item_name):
+    async def handle_item(self, ctx, item_name, write_list: List[tuple[int, List[int], str]]):
         # No nice way to do this, since basically every item needs to be handled a little differently.
         if item_name == "Sword":
-            current_sword_value = await self.read_ram_value(ctx, Rom.sword)
-            await self.write(ctx, Rom.sword, max(1, current_sword_value))
+            current_sword_value = await self.read_ram_value_guarded(ctx, Rom.sword)
+            if current_sword_value is None:
+                return
+            write_list.append((Rom.sword, [max(1, current_sword_value)], self.wram))
         elif item_name == "White Sword":
-            current_sword_value = await self.read_ram_value(ctx, Rom.sword)
-            await self.write(ctx, Rom.sword, max(2, current_sword_value))
+            current_sword_value = await self.read_ram_value_guarded(ctx, Rom.sword)
+            if current_sword_value is None:
+                return
+            write_list.append((Rom.sword, [max(2, current_sword_value)], self.wram))
         elif item_name == "Magical Sword":
-            current_sword_value = await self.read_ram_value(ctx, Rom.sword)
-            await self.write(ctx, Rom.sword, max(3, current_sword_value))
+            write_list.append((Rom.sword, [3], self.wram))
         elif item_name == "Bomb":
-            current_bombs_value = await self.read_ram_value(ctx, Rom.bombs)
-            current_max_bombs_value = await self.read_ram_value(ctx, Rom.max_bombs)
-            await self.write(ctx, Rom.bombs, min(current_max_bombs_value, current_bombs_value + 4))
+            current_bombs_value = await self.read_ram_value_guarded(ctx, Rom.bombs)
+            current_max_bombs_value = await self.read_ram_value_guarded(ctx, Rom.max_bombs)
+            if current_bombs_value is None or current_max_bombs_value is None:
+                return
+            write_list.append((Rom.bombs, [min(current_max_bombs_value, current_bombs_value + 4)], self.wram))
         elif item_name == "Bow":
-            await self.write(ctx, Rom.bow, 1)
+            write_list.append((Rom.bow, [1], self.wram))
         elif item_name == "Arrow":
-            current_arrow_value = await self.read_ram_value(ctx, Rom.arrow)
-            await self.write(ctx, Rom.arrow, max(1, current_arrow_value))
+            current_arrow_value = await self.read_ram_value_guarded(ctx, Rom.arrow)
+            if current_arrow_value is None:
+                return
+            write_list.append((Rom.arrow, [max(1, current_arrow_value)], self.wram))
         elif item_name == "Silver Arrow":
-            current_arrow_value = await self.read_ram_value(ctx, Rom.arrow)
-            await self.write(ctx, Rom.arrow, max(2, current_arrow_value))
+            write_list.append((Rom.arrow, [2], self.wram))
         elif item_name == "Candle":
-            current_candle_value = await self.read_ram_value(ctx, Rom.candle)
-            await self.write(ctx, Rom.candle, max(1, current_candle_value))
+            current_candle_value = await self.read_ram_value_guarded(ctx, Rom.candle)
+            if current_candle_value is None:
+                return
+            write_list.append((Rom.candle, [max(1, current_candle_value)], self.wram))
         elif item_name == "Red Candle":
-            current_candle_value = await self.read_ram_value(ctx, Rom.candle)
-            await self.write(ctx, Rom.candle, max(2, current_candle_value))
+            write_list.append(((Rom.candle, [2], self.wram)))
         elif item_name == "Recorder":
-            await self.write(ctx, Rom.recorder, 1)
+            write_list.append((Rom.recorder, [1], self.wram))
         elif item_name == "Water of Life (Blue)":
-            current_potion_value = await self.read_ram_value(ctx, Rom.potion)
-            await self.write(ctx, Rom.potion, max(1, current_potion_value))
+            current_potion_value = await self.read_ram_value_guarded(ctx, Rom.potion)
+            if current_potion_value is None:
+                return
+            write_list.append((Rom.potion, [max(1, current_potion_value)], self.wram))
         elif item_name == "Water of Life (Red)":
-            current_potion_value = await self.read_ram_value(ctx, Rom.potion)
-            await self.write(ctx, Rom.potion, max(2, current_potion_value))
+            write_list.append((Rom.potion, [2], self.wram))
         elif item_name == "Magical Rod":
-            await self.write(ctx, Rom.magical_rod, 1)
+            write_list.append((Rom.magical_rod, [1], self.wram))
         elif item_name == "Book of Magic":
-            await self.write(ctx, Rom.book_of_magic, 1)
+            write_list.append((Rom.book_of_magic, [1], self.wram))
         elif item_name == "Raft":
-            await self.write(ctx, Rom.raft, 1)
+            write_list.append((Rom.raft, [1], self.wram))
         elif item_name == "Blue Ring":
-            current_ring_value = await self.read_ram_value(ctx, Rom.ring)
+            current_ring_value = await self.read_ram_value_guarded(ctx, Rom.ring)
+            if current_ring_value is None:
+                return
             if current_ring_value < 2:
-                await self.write(ctx, Rom.ring, max(1, current_ring_value))
-                await bizhawk.write(ctx.bizhawk_ctx, [(0x0B92, [0x32], self.sram), (0x0804, [0x32], self.sram)])
+                write_list.append((Rom.ring, [max(1, current_ring_value)], self.wram))
+                write_list.extend([(0x0B92, [0x32], self.sram), (0x0804, [0x32], self.sram)]) # Palette data
         elif item_name == "Red Ring":
-            current_ring_value = await self.read_ram_value(ctx, Rom.ring)
-            await self.write(ctx, Rom.ring, max(2, current_ring_value))
-            await bizhawk.write(ctx.bizhawk_ctx, [(0x0B92, [0x16], self.sram), (0x0804, [0x16], self.sram)])
+            write_list.append((Rom.ring, [2], self.wram))
+            write_list.extend([(0x0B92, [0x16], self.sram), (0x0804, [0x16], self.sram)])
         elif item_name == "Stepladder":
-            await self.write(ctx, Rom.stepladder, 1)
+            write_list.append((Rom.stepladder, [1], self.wram))
         elif item_name == "Magical Key":
-            await self.write(ctx, Rom.magical_key, 1)
+            write_list.append((Rom.magical_key, [1], self.wram))
         elif item_name == "Power Bracelet":
-            await self.write(ctx, Rom.power_bracelet, 1)
+            write_list.append((Rom.power_bracelet, [1], self.wram))
         elif item_name == "Letter":
-            await self.write(ctx, Rom.letter, 1)
+            write_list.append((Rom.letter, [1], self.wram))
         elif item_name == "Heart Container":
-            current_heart_byte_value = await self.read_ram_value(ctx, Rom.heart_containers)
+            current_heart_byte_value = await self.read_ram_value_guarded(ctx, Rom.heart_containers)
+            if current_heart_byte_value is None:
+                return
             current_container_count = min(((current_heart_byte_value & 0xF0) >> 4) + 1, 15)
             current_hearts_count = min((current_heart_byte_value & 0x0F) + 1, 15)
-            await self.write(ctx, Rom.heart_containers, (current_container_count << 4) | current_hearts_count)
+            write_list.append((Rom.heart_containers, [(current_container_count << 4) | current_hearts_count], self.wram))
         elif item_name == "Triforce Fragment":
-            current_triforce_value = await self.read_ram_value(ctx, Rom.triforce_count)
-            await self.write(ctx, Rom.triforce_count, min(current_triforce_value + 1, 8))
+            current_triforce_value = await self.read_ram_value_guarded(ctx, Rom.triforce_count)
+            if current_triforce_value is None:
+                return
+            write_list.append((Rom.triforce_count, [min(current_triforce_value + 1, 8)], self.wram))
         elif item_name == "Boomerang":
-            await self.write(ctx, Rom.boomerang, 1)
+            write_list.append((Rom.boomerang, [1], self.wram))
         elif item_name == "Magical Boomerang":
-            await self.write(ctx, Rom.magical_boomerang, 1)
+            write_list.append((Rom.magical_boomerang, [1], self.wram))
         elif item_name == "Magical Shield":
-            await self.write(ctx, Rom.magical_shield, 1)
+            write_list.append((Rom.magical_shield, [1], self.wram))
         elif item_name == "Recovery Heart":
-            current_heart_byte_value = await self.read_ram_value(ctx, Rom.heart_containers)
+            current_heart_byte_value = await self.read_ram_value_guarded(ctx, Rom.heart_containers)
+            if current_heart_byte_value is None:
+                return
             current_container_count = ((current_heart_byte_value & 0xF0) >> 4)
             current_hearts_count = current_heart_byte_value & 0x0F
             if current_hearts_count >= current_container_count:
-                await self.write(ctx, Rom.partial_hearts, 0xFF)
-                await self.write(ctx, Rom.heart_containers, (current_container_count << 4) | current_container_count)
+                write_list.append((Rom.partial_hearts, [0xFF], self.wram))
+                write_list.append((Rom.heart_containers, [(current_container_count << 4) | current_container_count], self.wram))
             else:
                 current_hearts_count = min(current_hearts_count + 1, 15)
-                await self.write(ctx, Rom.heart_containers, (current_container_count << 4) | current_hearts_count)
+                write_list.append((Rom.heart_containers, [(current_container_count << 4) | current_hearts_count], self.wram))
         elif item_name == "Fairy":
-            current_heart_byte_value = await self.read_ram_value(ctx, Rom.heart_containers)
+            current_heart_byte_value = await self.read_ram_value_guarded(ctx, Rom.heart_containers)
+            if current_heart_byte_value is None:
+                return
             current_container_count = ((current_heart_byte_value & 0xF0) >> 4)
             current_hearts_count = current_heart_byte_value & 0x0F
             if (current_hearts_count + 3) >= current_container_count:
-                await self.write(ctx, Rom.partial_hearts, 0xFF)
-                await self.write(ctx, Rom.heart_containers, (current_container_count << 4) | current_container_count)
+                write_list.append((Rom.partial_hearts, [0xFF], self.wram))
+                write_list.append((Rom.heart_containers, [(current_container_count << 4) | current_container_count], self.wram))
             else:
-                current_hearts_count = min(current_hearts_count + 3, 15)
-                await self.write(ctx, Rom.heart_containers, (current_container_count << 4) | current_hearts_count)
+                write_list.append((Rom.heart_containers, [(current_container_count << 4) | current_hearts_count], self.wram))
         elif item_name == "Clock":
-            await self.write(ctx, Rom.clock, 1)
+            write_list.append((Rom.clock, [1], self.wram))
         elif item_name == "Five Rupees":
-            current_rupees_to_add_value = await self.read_ram_value(ctx, Rom.rupees_to_add)
-            await self.write(ctx, Rom.rupees_to_add, min(current_rupees_to_add_value + 5, 255))
+            current_rupees_to_add_value = await self.read_ram_value_guarded(ctx, Rom.rupees_to_add)
+            if current_rupees_to_add_value is None:
+                return
+            write_list.append((Rom.rupees_to_add, [min(current_rupees_to_add_value + 5, 255)], self.wram))
         elif item_name == "Small Key":
-            current_keys = await self.read_ram_value(ctx, Rom.keys)
-            await self.write(ctx, Rom.keys, min(current_keys + 1, 255))
+            current_keys = await self.read_ram_value_guarded(ctx, Rom.keys)
+            if current_keys is None:
+                return
+            write_list.append((Rom.keys, [min(current_keys + 1, 255)], self.wram))
         elif item_name == "Food":
-            await self.write(ctx, Rom.food, 1)
-        else:
-            print(item_name)
-            raise Exception
+            write_list.append((Rom.keys, [1], self.wram))
+        await self.write(ctx, write_list)
 
-
-    async def read_ram_values(self, ctx, location, size):
-        return (await bizhawk.read(ctx.bizhawk_ctx, [(location, size, self.wram)]))[0]
 
     async def read_ram_value(self, ctx, location):
         value = ((await bizhawk.read(ctx.bizhawk_ctx, [(location, 1, self.wram)]))[0])
-        return int.from_bytes(value)
+        return int.from_bytes(value, "little")
+
+    async def read_ram_value_guarded(self, ctx, location):
+        value = await bizhawk.guarded_read(ctx.bizhawk_ctx,
+                                           [(location, 1, self.wram)],
+                                           self.guard_list)
+        if value is None:
+            return None
+        return int.from_bytes(value[0], "little")
+
+    async def read_ram_values_guarded(self, ctx, location, size):
+        value = await bizhawk.guarded_read(ctx.bizhawk_ctx,
+                                          [(location, size, self.wram)],
+                                          self.guard_list)
+        if value is None:
+            return None
+        return value[0]
 
     async def read_rom(self, ctx, location, size):
         return (await bizhawk.read(ctx.bizhawk_ctx, [(location, size, self.rom)]))[0]
 
-    async def write(self, ctx, location, value):
-        return await bizhawk.write(ctx.bizhawk_ctx, [(location, [value], self.wram)])
+    async def write(self, ctx, write_list: List[tuple[int, List[int], str]]):
+        return await bizhawk.guarded_write(ctx.bizhawk_ctx, write_list, self.guard_list)
