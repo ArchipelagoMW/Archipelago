@@ -2118,7 +2118,7 @@ def set_rules(kh1world):
                 lambda i: (
                     i.player == player 
                     and i.name in get_items_by_type("Item").keys()
-                    and i.name not in ["Puppy", "Lucky Emblem"]
+                    and i.name not in ["Puppy", "Lucky Emblem", "EXP Necklace", "Ribbon"]
                     and
                     (
                         (
