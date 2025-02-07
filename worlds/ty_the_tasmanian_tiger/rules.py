@@ -341,10 +341,10 @@ def get_location_rules(world: MultiWorld, options: Ty1Options, player: int):
                     state.has("Golden Cog", player, 60) and state.has("Infrarang", player),
             "Attribute - Kaboomarang":
                 lambda state:
-                    state.has("Golden Cog", player, 75) and state.has("Megarang"),
+                    state.has("Golden Cog", player, 75) and state.has("Megarang", player),
             "Attribute - Chronorang":
                 lambda state:
-                    state.has("Golden Cog", player, 90) and state.has("Kaboomerang"),
+                    state.has("Golden Cog", player, 90) and state.has("Kaboomerang", player),
             "BotRT - All Golden Cogs":
                 lambda state:
                     (options.logic_difficulty == 0 and
