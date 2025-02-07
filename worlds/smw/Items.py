@@ -74,4 +74,13 @@ item_table = {
     **event_table,
 }
 
+smw_item_groups = {
+    "Upgrades": list(upgrade_table.keys()),
+    "Switch Palaces": list(switch_palace_table.keys()),
+    "Collectables": list(collectable_table.keys()),
+    "Junk": list(junk_table.keys()),
+    "Traps": list(trap_table.keys()),
+    "Events": list(event_table.keys()),
+}
+
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}

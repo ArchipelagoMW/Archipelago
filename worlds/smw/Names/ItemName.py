@@ -40,27 +40,3 @@ thwimp_trap           = "Thwimp Trap"
 # Other Definitions
 victory   = "The Princess"
 koopaling = "Boss Token"
-
-smw_item_groups = {
-    "Upgrades": {
-        mario_run, mario_carry, mario_swim, mario_spin_jump, mario_climb,
-        yoshi_activate, p_switch, p_balloon, progressive_powerup, super_star_active,
-    },
-    "Switch Palaces": {
-        yellow_switch_palace, green_switch_palace, red_switch_palace, blue_switch_palace
-    },
-    "Collectables": {
-        yoshi_egg
-    },
-    "Junk": {
-        one_up_mushroom,
-        one_coin, five_coins, ten_coins, fifty_coins,
-    },
-    "Traps": {
-        ice_trap, stun_trap, literature_trap,
-        timer_trap, reverse_controls_trap, thwimp_trap,
-    },
-    "Events": {
-        victory, koopaling
-    }
-}
