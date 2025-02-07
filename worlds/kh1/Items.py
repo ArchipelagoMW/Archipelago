@@ -125,7 +125,7 @@ item_table: Dict[str, KH1ItemData] = {
     "Pumpkinhead":                       KH1ItemData("Keyblades",        code = 264_1089, classification = ItemClassification.progression, type = "Item",                            ),
     "Crabclaw":                          KH1ItemData("Keyblades",        code = 264_1090, classification = ItemClassification.useful,      type = "Item",                            ),
     "Divine Rose":                       KH1ItemData("Keyblades",        code = 264_1091, classification = ItemClassification.progression, type = "Item",                            ),
-    "Spellbinder":                       KH1ItemData("Keyblades",        code = 264_1092, classification = ItemClassification.useful,      type = "Item",                            ),
+    "Spellbinder":                       KH1ItemData("Keyblades",        code = 264_1092, classification = ItemClassification.progression, type = "Item",                            ),
     "Olympia":                           KH1ItemData("Keyblades",        code = 264_1093, classification = ItemClassification.progression, type = "Item",                            ),
     "Lionheart":                         KH1ItemData("Keyblades",        code = 264_1094, classification = ItemClassification.progression, type = "Item",                            ),
     "Metal Chocobo":                     KH1ItemData("Keyblades",        code = 264_1095, classification = ItemClassification.useful,      type = "Item",                            ),

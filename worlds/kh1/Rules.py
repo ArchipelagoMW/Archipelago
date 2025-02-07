@@ -2080,12 +2080,15 @@ def set_rules(kh1world):
             lambda state: state.has("Divine Rose", player) or options.advanced_logic)
         if options.hundred_acre_wood:
             add_rule(kh1world.get_location("100 Acre Wood Meadow Inside Log Chest"),
-                lambda state: state.has("Oathkeeper", player))
+                lambda state: state.has("Spellbinder", player))
             add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Left Cliff Chest"),
-                lambda state: state.has("Oathkeeper", player))
+                lambda state: state.has("Spellbinder", player))
             add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Right Tree Alcove Chest"),
-                lambda state: state.has("Oathkeeper", player))
+                lambda state: state.has("Spellbinder", player))
             add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Under Giant Pot Chest"),
+                lambda state: state.has("Spellbinder", player))
+        if options.destiny_islands:
+            add_rule(kh1world.get_location("100 Acre Wood Meadow Inside Log Chest"),
                 lambda state: state.has("Oathkeeper", player))
     
     
