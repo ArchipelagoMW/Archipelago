@@ -92,7 +92,7 @@ def create_locations(player: int, options: Ty1Options, reg: Region):
 thunder_eggs_dict = {
     # Two Up ---------------------------------------------------------------------------------------------------------
     "Two Up - Collect 300 Opals":
-        LocData(0x08750100, "Two Up"),
+        LocData(0x08750100, "Two Up - End Area"),
     "Two Up - Find 5 Bilbies":
         LocData(0x08750101, "Two Up - Upper Area"),
     "Two Up - Time Attack":

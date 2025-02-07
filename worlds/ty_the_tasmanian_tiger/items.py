@@ -75,13 +75,13 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
         create_single("Frostyrang", world, player)
         create_single("Zappyrang", world, player)
         create_single("Doomerang", world, player)
-        create_single("Extra Health", world, player)
-        create_single("Zoomerang", world, player)
-        create_single("Multirang", world, player)
-        create_single("Infrarang", world, player)
-        create_single("Megarang", world, player)
-        create_single("Kaboomarang", world, player)
-        create_single("Chronorang", world, player)
+    create_single("Extra Health", world, player)
+    create_single("Zoomerang", world, player)
+    create_single("Multirang", world, player)
+    create_single("Infrarang", world, player)
+    create_single("Megarang", world, player)
+    create_single("Kaboomarang", world, player)
+    create_single("Chronorang", world, player)
     
     # Levels
     if options.level_unlock_style != 0:
@@ -110,7 +110,7 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
     create_single("Tiger Talisman", world, player)
 
     # Junk
-    junk = get_junk_item_names(world.random, total_location_count - len(world.itempool))
+    junk = get_junk_item_names(world.random, total_location_count - len(world.worlds[player].itempool))
     for name in junk:
         create_single(name, world, player)
 

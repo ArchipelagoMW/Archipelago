@@ -12,7 +12,7 @@ class Goal(Choice):
 
     All Thunder Eggs: Collect all Thunder Eggs
 
-    100%: Reach 100% completion by collecting all Thunder Eggs, Golden Cogs, and Talismans
+    Completion: Reach 100% completion by collecting all Thunder Eggs, Golden Cogs, and Talismans
     """
     display_name = "Goal"
     option_final_battle = 0
