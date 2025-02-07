@@ -386,15 +386,17 @@ class LuigisMansionRandomizer:
         # Turn off pickup animations
         if self.output_data["Options"]["pickup_animation"] == 1:
             pickup_val = [0x01]
-            #gem_val = [0x05]
+            gem_val = [0x05]
         else:
             pickup_val = [0x02]
-            #gem_val = [0x06]
+            gem_val = [0x06]
+
+        # Keys and important animations
         self.dol.data.seek(0xCD39B)
         self.dol.data.write(struct.pack(">B", *pickup_val))
 
-        self.dol.data.seek(0xCE8D3)
-        gem_val = [0x05]
+        # Diamonds and other treasure animations
+        self.dol.data.seek(0xCEFC3)
         self.dol.data.write(struct.pack(">B", *gem_val))
 
         # Turn off luigi scare animations
