@@ -97,5 +97,13 @@ def set_rules(world: "Sly1World"):
             
             set_rule(world.multiworld.get_location(name, player),
                      lambda state, bn=bottle_name, ba=bundle_amount: state.has(bn, player, ba))
+            
+        for name, data in hourglass_locations.items():
+            level_name = name.rsplit(' ', 1)[0]
+            bundle_amount = get_bundle_amount_for_level(level_name, world.options.ItemCluesanityBundleSize.value)
+            bottle_name = f'{level_name} Bottle(s)'
+            
+            set_rule(world.multiworld.get_location(name, player),
+                     lambda state, bn=bottle_name, ba=bundle_amount: state.has(bn, player, ba))
 
     world.multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
