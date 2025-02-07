@@ -82,18 +82,18 @@ def update_event_info(event_info, boo_checks: bool):
 
     for x in event_info.info_file_field_entries:
         # Enables a text box to appear when the user receives a key
-        if x["EventNo"] == 1:
-            x["CharacterName"] = "(null)"
-            x["pos_x"] = -1293.728000
-            x["pos_y"] = 812.320000
-            x["pos_z"] = -513.154700
-            x["EventFlag"] = 10
-            x["EventArea"] = 0
-            x["EventLoad"] = 0
-            x["EventLock"] = 1
-            x["disappear_flag"] = 0
-            x["EventIf"] = 0
-            x["PlayerStop"] = 0
+        #if x["EventNo"] == 1:
+        #    x["CharacterName"] = "(null)"
+        #    x["pos_x"] = -1293.728000
+        #    x["pos_y"] = 812.320000
+        #    x["pos_z"] = -513.154700
+        #    x["EventFlag"] = 10
+        #    x["EventArea"] = 0
+        #    x["EventLoad"] = 0
+        #    x["EventLock"] = 1
+        #    x["disappear_flag"] = 0
+        #    x["EventIf"] = 0
+        #    x["PlayerStop"] = 0
 
         # Allows the Ring of Boos on the 3F Balcony to only appear when the Ice Medal has been collected.
         # This prevents being soft locked in Boolossus and having to reset the game without saving.
