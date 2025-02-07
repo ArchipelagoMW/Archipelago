@@ -93,7 +93,7 @@ RECV_OWN_GAME_LOCATIONS: list[str] = list(BOO_LOCATION_TABLE.keys()) \
                                      + list(PORTRAIT_LOCATION_TABLE.keys()) \
                                      + list(LIGHT_LOCATION_TABLE.keys()) \
                                      + list(SPEEDY_LOCATION_TABLE.keys()) \
-                                     + list(WALK_LOCATION_TABLE.keys()) + ["Luigi's Courage"]
+                                     + list(WALK_LOCATION_TABLE.keys()) + ["Luigi's Courage", "Observatory Mario Star"]
 RECV_OWN_GAME_ITEMS: list[str] = list(BOO_ITEM_TABLE.keys()) + ["Boo Radar", "Poltergust 4000"]
 
 # Static time to wait for health and death checks
