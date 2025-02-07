@@ -71,7 +71,7 @@ def __get_item_name(item_data, slot: int):
 def update_event_info(event_info, boo_checks: bool):
     # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
     # boss battles / grabbing boss keys, and various cutscenes etc.
-    events_to_remove = [1, 7, 11, 15, 42, 54, 69, 70, 73, 80, 81, 85, 91, 92, 93, 94]
+    events_to_remove = [7, 11, 15, 42, 54, 69, 70, 73, 80, 81, 85, 91, 92, 93, 94]
 
     # Only remove the boo checks if the player does not want them.
     if not boo_checks:
@@ -81,6 +81,20 @@ def update_event_info(event_info, boo_checks: bool):
         lambda info_entry: not info_entry["EventNo"] in events_to_remove, event_info.info_file_field_entries))
 
     for x in event_info.info_file_field_entries:
+        # Enables a text box to appear when the user receives a key
+        if x["EventNo"] == 1:
+            x["CharacterName"] = "(null)"
+            x["pos_x"] = -1293.728000
+            x["pos_y"] = 812.320000
+            x["pos_z"] = -513.154700
+            x["EventFlag"] = 10
+            x["EventArea"] = 0
+            x["EventLoad"] = 0
+            x["EventLock"] = 1
+            x["disappear_flag"] = 0
+            x["EventIf"] = 0
+            x["PlayerStop"] = 0
+
         # Allows the Ring of Boos on the 3F Balcony to only appear when the Ice Medal has been collected.
         # This prevents being soft locked in Boolossus and having to reset the game without saving.
         if x["EventNo"] == 71:
