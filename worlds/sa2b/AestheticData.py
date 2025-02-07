@@ -165,6 +165,11 @@ sample_chao_names = [
 	"TzTokJad",
 	"Sora",
 	"WoodMan",
+	"Yachty",
+	"Grieve",
+	"Portia",
+	"Graves",
+	"Kaycee",
 ]
 
 totally_real_item_names = [
@@ -269,6 +274,21 @@ totally_real_item_names = [
 	"POWER OF THE ELEMENTS",
 	"S:P Little Knight",
 	"Red-Eyes Dark Dragoon",
+
+	"Fire Hat",
+
+	"Area: Taverly",
+	"Area: Meiyerditch",
+	"Fire Cape",
+
+	"Donald Zeta Flare",
+
+	"Category One of a Kind",
+	"Category Fuller House",
+
+	"Passive Camoflage",
+
+	"Earth Card",
 ]
 
 all_exits = [
