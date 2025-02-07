@@ -47,6 +47,9 @@ Packets are simple JSON lists in which any number of ordered network commands ca
 
 An object can contain the "class" key, which will tell the content data type, such as "Version" in the following example.
 
+Websocket connections should support per-message compression. Uncompressed connections are deprecated and may stop
+working in the future.
+
 Example:
 ```javascript
 [{"cmd": "RoomInfo", "version": {"major": 0, "minor": 1, "build": 3, "class": "Version"}, "tags": ["WebHost"], ... }]
@@ -261,6 +264,7 @@ Sent to clients in response to a [Set](#Set) package if want_reply was set to tr
 | key            | str  | The key that was updated.                                                                  |
 | value          | any  | The new value for the key.                                                                 |
 | original_value | any  | The value the key had before it was updated. Not present on "_read" prefixed special keys. |
+| slot           | int  | The slot that originally sent the Set package causing this change.                         |
 
 Additional arguments added to the [Set](#Set) package that triggered this [SetReply](#SetReply) will also be passed along.
 
@@ -529,9 +533,9 @@ In JSON this may look like:
     {"item": 3, "location": 3, "player": 3, "flags": 0}
 ]
 ```
-`item` is the item id of the item. Item ids are only supported in the range of [-2<sup>53</sup>, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
+`item` is the item id of the item. Item ids are only supported in the range of [-2<sup>53</sup> + 1, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
 
-`location` is the location id of the item inside the world. Location ids are only supported in the range of [-2<sup>53</sup>, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
+`location` is the location id of the item inside the world. Location ids are only supported in the range of [-2<sup>53</sup> + 1, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
 
 `player` is the player slot of the world the item is located in, except when inside an [LocationInfo](#LocationInfo) Packet then it will be the slot of the player to receive the item
 
@@ -744,6 +748,7 @@ Tags are represented as a list of strings, the common client tags follow:
 | HintGame  | Indicates the client is a hint game, made to send hints instead of locations. Special join/leave message,¹ `game` is optional.²      |
 | Tracker   | Indicates the client is a tracker, made to track instead of sending locations. Special join/leave message,¹ `game` is optional.²     |
 | TextOnly  | Indicates the client is a basic client, made to chat instead of sending locations. Special join/leave message,¹ `game` is optional.² |
+| NoText    | Indicates the client does not want to receive text messages, improving performance if not needed.                                    |
 
 ¹: When connecting or disconnecting, the chat message shows e.g. "tracking".\
 ²: Allows `game` to be empty or null in [Connect](#connect). Game and version validation will then be skipped.
