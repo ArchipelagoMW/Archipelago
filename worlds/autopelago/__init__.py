@@ -230,4 +230,6 @@ class AutopelagoWorld(World):
             'victory_location_name': self.victory_location,
             'enabled_buffs': [EnabledBuffs.map[b] for b in self.options.enabled_buffs.value],
             'enabled_traps': [EnabledTraps.map[t] for t in self.options.enabled_traps.value],
+            'death_link': not not self.options.death_link,
+            'death_delay_seconds': self.options.death_delay_seconds - 0,
         }

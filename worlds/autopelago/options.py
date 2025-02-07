@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Toggle, PerGameCommonOptions, Choice, OptionSet
+from Options import Toggle, PerGameCommonOptions, Choice, OptionSet, DeathLink, Range
 
 
 class FillWithDetermination(Toggle):
@@ -67,9 +67,21 @@ class EnabledTraps(OptionSet):
     }
 
 
+class DeathDelaySeconds(Range):
+    """Sets the delay (in seconds) from a death trigger to when the rat actually "dies". Has no effect if DeathLink is disabled.
+
+    Default: 5 (seconds)
+    """
+    display_name = "Death Link Delay"
+    range_start = 0
+    range_end = 60
+    default = 5
+
 @dataclass
 class ArchipelagoGameOptions(PerGameCommonOptions):
     fill_with_determination: FillWithDetermination
     victory_location: VictoryLocation
     enabled_buffs: EnabledBuffs
     enabled_traps: EnabledTraps
+    death_link: DeathLink
+    death_delay_seconds: DeathDelaySeconds
