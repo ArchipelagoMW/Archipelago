@@ -14,6 +14,8 @@ from .Items import SMWItem, ItemData, item_table, junk_table
 from .Levels import full_level_list, generate_level_list, location_id_to_level_id
 from .Locations import SMWLocation, all_locations, setup_locations, special_zone_level_names, special_zone_dragon_coin_names, special_zone_hidden_1up_names, special_zone_blocksanity_names
 from .Names import ItemName, LocationName
+from .Names.ItemName import smw_item_groups
+from .Names.LocationName import smw_location_groups
 from .Options import SMWOptions, smw_option_groups
 from .Presets import smw_options_presets
 from .Regions import create_regions, connect_regions
@@ -67,6 +69,9 @@ class SMWWorld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
+
+    item_name_groups = smw_item_groups
+    location_name_groups = smw_location_groups
 
     active_level_dict: typing.Dict[int,int]
     web = SMWWeb()
