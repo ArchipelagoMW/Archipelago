@@ -13,7 +13,7 @@ from . import item_dictionary_table, exclusion_item_table, CheckDupingItems, all
 from .Names import ItemName
 from .WorldLocations import *
 
-from NetUtils import ClientStatus
+from NetUtils import ClientStatus, NetworkItem
 from CommonClient import gui_enabled, logger, get_base_parser, CommonContext, server_loop
 
 
@@ -291,14 +291,14 @@ class KH2Context(CommonContext):
                 else:
                     out_list.append(0x01)
                 char_count += 1
-                if char_count >= 24:
-                    break
+                #if char_count >= 24:
+                #    break
 
         # When the list ends, we add a terminator and return the string.
 
-        if len(item_name) >= 24:
-            for _ in range(3):
-                out_list.append(0x2E)
+        #if len(item_name) >= 24:
+        #    for _ in range(3):
+        #        out_list.append(0x2E)
 
         out_list.append(0x00)
         return out_list
@@ -421,6 +421,23 @@ class KH2Context(CommonContext):
                         args["data"]["games"]["Kingdom Hearts 2"]["item_name_to_id"])
                 self.connect_to_game()
                 asyncio.create_task(self.send_msgs([{'cmd': 'Sync'}]))
+        if cmd == "PrintJSON":
+            #print(cmd)
+            #print(args)
+            # shamelessly stolen from kh1
+            if args["type"] == "ItemSend":
+                item = args["item"]
+                networkItem = NetworkItem(*item)
+                recieverID = args["receiving"]
+                senderID = networkItem.player
+                locationID = networkItem.location
+                #if recieverID != self.slot and senderID == self.slot:
+                itemName = self.item_names[networkItem.item]
+                itemCategory = networkItem.flags
+                recieverName = self.player_names[recieverID]
+                itemKHSCII = self.to_khscii(itemName)
+                playerKHSCII = self.to_khscii(recieverName)
+                self.queued_display_info += [f"You found {recieverName} their {itemName}"]
 
     def connect_to_game(self):
         if "KeybladeAbilities" in self.kh2slotdata.keys():
@@ -879,11 +896,23 @@ class KH2Context(CommonContext):
             logger.info(e)
             logger.info("line 840")
 
-    async def displayItemInGame(self, string_to_display):
-        if self.kh2_read_byte(0x800000)==0:
+    async def displayInfoTextinGame(self, string_to_display):
+        if self.kh2_read_byte(0x800000) == 0:
             self.kh2_write_byte(0x800000, 1)
-            self.kh2_write_bytes(0x800004, self.to_khscii(string_to_display))
-            self.queued_display_info.remove(string_to_display) # dont remember if this is index or the value
+            displayed_string = self.to_khscii(string_to_display)
+            self.kh2_write_bytes(0x800004, displayed_string)
+            #print(f"removed string to display{string_to_display}")
+            self.queued_display_info.remove(string_to_display)  # dont remember if this is index or the value
+            await asyncio.sleep(2)
+
+    async def displayPuzzlePieceTextinGame(self, string_to_display):
+        if self.kh2_read_byte(0x800000) == 0:
+            self.kh2_write_byte(0x800000, 2)
+            displayed_string = self.to_khscii(string_to_display)
+            self.kh2_write_bytes(0x800104, displayed_string)
+            #print(f"removed string to display{string_to_display}")
+            self.queued_display_info.remove(string_to_display)  # dont remember if this is index or the value
+            await asyncio.sleep(2)
 
     def get_addresses(self):
         if not self.kh2connected and self.kh2 is not None:
@@ -1016,7 +1045,8 @@ async def kh2_watcher(ctx: KH2Context):
                 if ctx.sending:
                     message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
                     await ctx.send_msgs(message)
-                await asyncio.create_task(ctx.displayItemInGame("foo bar"))
+                if ctx.queued_display_info:
+                    await asyncio.create_task(ctx.displayInfoTextinGame(ctx.queued_display_info[0]))  #send the num 1 index of whats in the queue
             elif not ctx.kh2connected and ctx.serverconneced:
                 logger.info("Game Connection lost. waiting 15 seconds until trying to reconnect.")
                 ctx.kh2 = None
