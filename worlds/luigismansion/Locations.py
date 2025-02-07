@@ -812,14 +812,14 @@ SPEEDY_LOCATION_TABLE: dict[str, LMLocationData] = {
                                              room_ram_addr=0x803D5DC3, locationbit=0),
     "Study Speedy Spirit": LMLocationData("Study", 644, "BSpeedy", 113, [], 35,
                                           room_ram_addr=0x803D5DC2, locationbit=2),
-    "Nursery Speedy Spirit": LMLocationData("Nursery", 645, "BSpeedy", 148, [], 26, room_ram_addr=0x803D5DC3, # is this correct?
-                                            locationbit=3),
+    "Nursery Speedy Spirit": LMLocationData("Nursery", 645, "BSpeedy", 148, [], 26, room_ram_addr=0x803D5DC3,
+                                            locationbit=5),
     "Storage Room Speedy Spirit": LMLocationData("Storage Room", 646, "BSpeedy", 58, [], 14,
                                                  room_ram_addr=0x803D5DC1, locationbit=7),
-    "Hidden Room Speedy Spirit": LMLocationData("Hidden Room", 647, "BSpeedy", 72, [], 1, room_ram_addr=0x803D5DC3, # is this correct?
-                                                locationbit=4),
-    "Conservatory Speedy Spirit": LMLocationData("Conservatory", 648, "BSpeedy", 113, [], 22, room_ram_addr=0x803D5DC3, # is this correct?
-                                                 locationbit=5),
+    "Hidden Room Speedy Spirit": LMLocationData("Hidden Room", 647, "BSpeedy", 72, [], 1, room_ram_addr=0x803D5DC3,
+                                                locationbit=3),
+    "Conservatory Speedy Spirit": LMLocationData("Conservatory", 648, "BSpeedy", 113, [], 22, room_ram_addr=0x803D5DC3,
+                                                 locationbit=4),
     "Dining Room Speedy Spirit": LMLocationData("Dining Room", 649, "BSpeedy", 60, [], 8,
                                                 room_ram_addr=0x803D5DC2, locationbit=1),
     "Kitchen Speedy Spirit": LMLocationData("Kitchen", 650, "BSpeedy", 66, [], 7,
