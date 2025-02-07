@@ -2088,7 +2088,7 @@ def set_rules(kh1world):
             add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Under Giant Pot Chest"),
                 lambda state: state.has("Spellbinder", player))
         if options.destiny_islands:
-            add_rule(kh1world.get_location("100 Acre Wood Meadow Inside Log Chest"),
+            add_rule(kh1world.get_location("Destiny Islands Chest"),
                 lambda state: state.has("Oathkeeper", player))
     
     
