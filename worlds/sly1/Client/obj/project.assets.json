@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net8.0-windows7.0": {
-      "Archipelago.Core/0.2.19": {
+      "Archipelago.Core/0.3.2": {
         "type": "package",
         "dependencies": {
           "Archipelago.MultiClient.Net": "6.5.0",
@@ -139,14 +139,14 @@
     }
   },
   "libraries": {
-    "Archipelago.Core/0.2.19": {
-      "sha512": "cIC0n5CSDD+W677K4/NBVuNE1F+sdykxzcXTB1mzDS5sJmOfBaCuukCpzvNKkpnz/B4RXrMf21z6ZHw7TANmNA==",
+    "Archipelago.Core/0.3.2": {
+      "sha512": "IEbEKrKyuxBHwmaf+msPsVeJs+thGqpdeQU5sbKwvRLnyWV90JnolepJWxXogltc+HHtAxr6wJrSsSVy8v3rww==",
       "type": "package",
-      "path": "archipelago.core/0.2.19",
+      "path": "archipelago.core/0.3.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "archipelago.core.0.2.19.nupkg.sha512",
+        "archipelago.core.0.3.2.nupkg.sha512",
         "archipelago.core.nuspec",
         "lib/net8.0/Archipelago.Core.dll"
       ]
@@ -389,7 +389,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0-windows7.0": [
-      "Archipelago.Core >= 0.2.19",
+      "Archipelago.Core >= 0.3.2",
       "Archipelago.MultiClient.Net >= 6.5.0"
     ]
   },
@@ -441,7 +441,7 @@
         "dependencies": {
           "Archipelago.Core": {
             "target": "Package",
-            "version": "[0.2.19, )"
+            "version": "[0.3.2, )"
           },
           "Archipelago.MultiClient.Net": {
             "target": "Package",
