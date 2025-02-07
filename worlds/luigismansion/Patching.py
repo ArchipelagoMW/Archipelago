@@ -4,6 +4,9 @@ from random import choice
 from .Items import filler_items
 
 
+speedy_create_name = ["63_99", "67_99", "14_99", "12_99", "9_99", "8_99", "22_99", "34_99", "25_99", "46_99",
+                          "36_99", "38_99"]
+
 # Converts AP readable name to in-game name
 def __get_item_name(item_data, slot: int):
     if int(item_data["player"]) != slot:
@@ -192,13 +195,9 @@ def update_character_info(character_info, output_data):
 
 
 def update_teiden_observer_info(observer_info, teiden_observer_info):
-    speedy_create_name = ["63_99", "67_99", "14_99", "12_99", "9_99", "8_99", "22_99", "34_99", "25_99", "46_99",
-                          "36_99", "38_99"]
 
     for x in observer_info.info_file_field_entries:
         if x["string_arg0"] in speedy_create_name:
-            if x["string_arg0"] == "67_99":
-                x["cond_type"] = 17
             teiden_observer_info.info_file_field_entries.append(x)
             observer_info.info_file_field_entries.remove(x)
 
@@ -1306,11 +1305,9 @@ ROOM_ID_TO_NAME = {
 
 def update_teiden_enemy_info(enemy_info, teiden_enemy_info):
     # List of all Speedy Spirit actor names
-    speedy_table = ["iyapoo1", "iyapoo2", "iyapoo3", "iyapoo4", "iyapoo5", "iyapoo6", "iyapoo7", "iyapoo8", "iyapoo9",
-                    "iyapoo10", "iyapoo11", "iyapoo12", "iyapoo13", "iyapoo14", "iyapoo15"]
 
     for x in enemy_info.info_file_field_entries:
-        if x["name"] in speedy_table:
+        if x["create_name"] in speedy_create_name:
             teiden_enemy_info.info_file_field_entries.append(x)
             enemy_info.info_file_field_entries.remove(x)
 
