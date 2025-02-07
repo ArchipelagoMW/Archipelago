@@ -46,8 +46,8 @@ def connect(multiworld: MultiWorld, player: int, source: str, target: str, key: 
     target_region = multiworld.get_region(target, player)
     name = source + " -> " + target
     connection = Entrance(player, name, source_region)
-    if doorid in multiworld.worlds[player].open_doors.keys() and multiworld.worlds[player].open_doors[doorid] == 0:
-        add_rule(connection, lambda state: state.has(key, player))
+    if doorid in multiworld.worlds[player].open_doors.keys() and multiworld.worlds[player].open_doors.get(doorid) == 0:
+        add_rule(connection, rule=lambda state: state.has(key, player))
 
     if rule is not None:
         add_rule(connection, rule, "and")

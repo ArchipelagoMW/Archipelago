@@ -3,8 +3,8 @@ from random import choice
 
 from .Items import filler_items
 
-speedy_create_name = ["63_99", "67_99", "14_99", "12_99", "9_99", "8_99", "22_99", "34_99", "25_99", "46_99",
-                      "36_99", "38_99"]
+speedy_observer_index: [int] = [183, 182, 179, 178, 177, 101, 100, 99, 98, 97, 21, 19]
+speedy_enemy_index: [int] = [128, 125, 115, 114, 113, 67, 66, 60, 59, 58, 7, 6]
 
 
 # Converts AP readable name to in-game name
@@ -209,10 +209,10 @@ def update_character_info(character_info, output_data):
 
 
 def update_teiden_observer_info(observer_info, teiden_observer_info):
-    for x in observer_info.info_file_field_entries:
-        if x["string_arg0"] in speedy_create_name:
-            teiden_observer_info.info_file_field_entries.append(x)
-            observer_info.info_file_field_entries.remove(x)
+    for entry_no in speedy_observer_index:
+        x = observer_info.info_file_field_entries[entry_no]
+        teiden_observer_info.info_file_field_entries.append(x)
+        observer_info.info_file_field_entries.remove(x)
 
 
 def update_observer_info(observer_info):
@@ -876,9 +876,9 @@ def update_observer_info(observer_info):
         "code_name": "(null)",
         "string_arg0": "(null)",
         "cond_string_arg0": "(null)",
-        "pos_x": 1100.000000,
-        "pos_y": -290.000000,
-        "pos_z": -5960.000000,
+        "pos_x": 760.000000,
+        "pos_y": -550.000000,
+        "pos_z": -5950.000000,
         "dir_x": 0.000000,
         "dir_y": 0.000000,
         "dir_z": 0.000000,
@@ -1321,12 +1321,11 @@ ROOM_ID_TO_NAME = {
 
 
 def update_teiden_enemy_info(enemy_info, teiden_enemy_info):
-    # List of all Speedy Spirit actor names
 
-    for x in enemy_info.info_file_field_entries:
-        if x["create_name"] in speedy_create_name:
-            teiden_enemy_info.info_file_field_entries.append(x)
-            enemy_info.info_file_field_entries.remove(x)
+    for entry_no in speedy_enemy_index:
+        x = enemy_info.info_file_field_entries[entry_no]
+        teiden_enemy_info.info_file_field_entries.append(x)
+        enemy_info.info_file_field_entries.remove(x)
 
 
 def update_enemy_info(enemy_info, output_data):
