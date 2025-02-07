@@ -77,10 +77,6 @@ def get_location_rules(world: MultiWorld, options: Ty1Options, player: int):
             "BotRT - Heat Dennis' House":
                 lambda state:
                     state.has("Flamerang", player) or has_progressive_rang(player, options, state, 5),
-            "BotRT - Tag Team Turkeys":
-                lambda state:
-                    (options.logic_difficulty == 0 and has_progressive_rang(player, options, state, 0))
-                    or options.logic_difficulty == 1,
             "BotRT - Ty Diving":
                 lambda state:
                     (options.logic_difficulty == 0 and
@@ -187,16 +183,6 @@ def get_location_rules(world: MultiWorld, options: Ty1Options, player: int):
                 lambda state:
                     (options.logic_difficulty == 0 and
                         (state.has("Flamerang", player) or has_progressive_rang(player, options, state, 5)))
-                    or options.logic_difficulty == 1,
-            "BotRT - Golden Cog 6":
-                lambda state:
-                    (options.logic_difficulty == 0 and
-                        (state.has("Second Rang", player) or has_progressive_rang(player, options, state, 1)))
-                    or options.logic_difficulty == 1,
-            "BotRT - Golden Cog 7":
-                lambda state:
-                    (options.logic_difficulty == 0 and
-                        (state.has("Second Rang", player) or has_progressive_rang(player, options, state, 1)))
                     or options.logic_difficulty == 1,
             "BotRT - Golden Cog 8":
                 lambda state:
@@ -349,8 +335,7 @@ def get_location_rules(world: MultiWorld, options: Ty1Options, player: int):
                 lambda state:
                     (options.logic_difficulty == 0 and
                         (has_progressive_rang(player, options, state, 5) or
-                            (state.has("Second Rang", player) and
-                            state.has("Flamerang", player) and
+                            (state.has("Flamerang", player) and
                             can_go_water(player, options, state) and
                             (state.has("Aquarang", player) or state.has("Frostyrang", player))))
                     )

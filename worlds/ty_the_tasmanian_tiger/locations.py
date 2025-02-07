@@ -24,7 +24,6 @@ class LocData:
 
 def create_location(player: int, options: Ty1Options, reg: Region, name: str, data: LocData):
     location = Ty1Location(player, name, data.code, reg)
-    #print("Creating location: " + name + " in " + reg.name)
     reg.locations.append(location)
 
 def create_locations(player: int, options: Ty1Options, reg: Region):
@@ -69,7 +68,7 @@ def create_locations(player: int, options: Ty1Options, reg: Region):
             if data.region != reg.name:
                 continue
             create_location(player, options, reg, key, data)
-    # COG COMPLETION#
+    # COG COMPLETION
     if options.cogsanity == 1:
         for (key, data) in cog_completion_dict.items():
             if data.region != reg.name:
@@ -143,21 +142,21 @@ thunder_eggs_dict = {
         LocData(0x08750117, "Ship Rex - Beyond Gate 1"),
     # Bridge ---------------------------------------------------------------------------------------------------------
     "BotRT - Collect 300 Opals":
-        LocData(0x08750118, "Bridge on the River Ty"),
+        LocData(0x08750118, "Bridge on the River Ty - Beyond Broken Bridge"),
     "BotRT - Find 5 Bilbies":
-        LocData(0x08750119, "Bridge on the River Ty"),
+        LocData(0x08750119, "Bridge on the River Ty - Beyond Broken Bridge"),
     "BotRT - Time Attack":
-        LocData(0x0875011A, "Bridge on the River Ty"),
+        LocData(0x0875011A, "Bridge on the River Ty - Beyond Broken Bridge"),
     "BotRT - Home, Sweet, Home":
-        LocData(0x0875011B, "Bridge on the River Ty"),
+        LocData(0x0875011B, "Bridge on the River Ty - Beyond Broken Bridge"),
     "BotRT - Heat Dennis' House":
-        LocData(0x0875011C, "Bridge on the River Ty"),
+        LocData(0x0875011C, "Bridge on the River Ty - Beyond Broken Bridge"),
     "BotRT - Tag Team Turkeys":
-        LocData(0x0875011D, "Bridge on the River Ty"),
+        LocData(0x0875011D, "Bridge on the River Ty - Beyond Broken Bridge"),
     "BotRT - Ty Diving":
-        LocData(0x0875011E, "Bridge on the River Ty"),
+        LocData(0x0875011E, "Bridge on the River Ty - Beyond Broken Bridge"),
     "BotRT - Neddy The Bully":
-        LocData(0x0875011F, "Bridge on the River Ty"),
+        LocData(0x0875011F, "Bridge on the River Ty - Beyond Broken Bridge - PF"),
     # Snow -----------------------------------------------------------------------------------------------------------
     "Snow Worries - Collect 300 Opals":
         LocData(0x08750120, "Snow Worries - Underwater"),
@@ -351,22 +350,22 @@ golden_cogs_dict = {
         LocData(0x08750169, "Bridge on the River Ty"),
     # Hidden side of steps near dennis
     "BotRT - Golden Cog 5":
-        LocData(0x0875016A, "Bridge on the River Ty"),
+        LocData(0x0875016A, "Bridge on the River Ty - Beyond Broken Bridge"),
     # Dead tree near opal machine
     "BotRT - Golden Cog 6":
-        LocData(0x0875016B, "Bridge on the River Ty"),
+        LocData(0x0875016B, "Bridge on the River Ty - Beyond Broken Bridge"),
     # Platform protected by bats and pontoons in corner
     "BotRT - Golden Cog 7":
-        LocData(0x0875016C, "Bridge on the River Ty"),
+        LocData(0x0875016C, "Bridge on the River Ty - Beyond Broken Bridge"),
     # Platform in middle of water under large bridge
     "BotRT - Golden Cog 8":
-        LocData(0x0875016D, "Bridge on the River Ty"),
+        LocData(0x0875016D, "Bridge on the River Ty - Beyond Broken Bridge"),
     # Hollow log in Dennis' house
     "BotRT - Golden Cog 9":
-        LocData(0x0875016E, "Bridge on the River Ty"),
+        LocData(0x0875016E, "Bridge on the River Ty - Beyond Broken Bridge"),
     # Under small bridge along Dennis escort path
     "BotRT - Golden Cog 10":
-        LocData(0x0875016F, "Bridge on the River Ty"),
+        LocData(0x0875016F, "Bridge on the River Ty - Beyond Broken Bridge"),
     # Pillar platforming on the right side of right ice path at start
     "Snow Worries - Golden Cog 1":
         LocData(0x08750170, "Snow Worries"),
@@ -558,9 +557,9 @@ bilbies_dict = {
     "BotRT - Bilby Boy":
         LocData(0x087501BD, "Bridge on the River Ty"),
     "BotRT - Bilby Girl":
-        LocData(0x087501BE, "Bridge on the River Ty"),
+        LocData(0x087501BE, "Bridge on the River Ty - Beyond Broken Bridge"),
     "BotRT - Bilby Grandma":
-        LocData(0x087501BF, "Bridge on the River Ty"),
+        LocData(0x087501BF, "Bridge on the River Ty - Beyond Broken Bridge"),
     "Snow Worries - Bilby Dad":
         LocData(0x087501C0, "Snow Worries"),
     "Snow Worries - Bilby Mum":
@@ -623,7 +622,7 @@ picture_frames_dict = {
         LocData(0x087501DA, "Rainbow Cliffs - PF"),
     # Above 1-up down path near Julius' lab
     "Rainbow Cliffs - PF 3":
-        LocData(0x087501DB, "Rainbow Cliff - PF"),
+        LocData(0x087501DB, "Rainbow Cliffs - PF"),
     # Corner island next to waterfall cave
     "Rainbow Cliffs - PF 4":
         LocData(0x087501DC, "Rainbow Cliffs - PF"),
@@ -710,7 +709,7 @@ picture_frames_dict = {
         LocData(0x087501F7, "Ship Rex - Beyond Gate 1"),
     # Above Neddy bilby (Above bridge)
     "BotRT - PF 1":
-        LocData(0x087501F8, "Bridge on the River Ty - PF"),
+        LocData(0x087501F8, "Bridge on the River Ty - Beyond Broken Bridge - PF"),
     # Ledge near large tree - Large tree (Glide to cog)
     "BotRT - PF 2":
         LocData(0x087501F9, "Bridge on the River Ty - PF"),
@@ -725,49 +724,49 @@ picture_frames_dict = {
         LocData(0x087501FC, "Bridge on the River Ty - PF"),
     # Next to Rex Diving
     "BotRT - PF 6":
-        LocData(0x087501FD, "Bridge on the River Ty - PF"),
+        LocData(0x087501FD, "Bridge on the River Ty - Beyond Broken Bridge - PF"),
     # Under big tree at start - Before 1st Bridge
     "BotRT - PF 7":
         LocData(0x087501FE, "Bridge on the River Ty - PF"),
     # Next to Neddy bilby (Between burner and bridge)
     "BotRT - PF 8":
-        LocData(0x087501FF, "Bridge on the River Ty - PF"),
+        LocData(0x087501FF, "Bridge on the River Ty - Beyond Broken Bridge - PF"),
     # Above gap in big bridge (near Neddy)
     "BotRT - PF 9":
-        LocData(0x08750200, "Bridge on the River Ty - PF"),
+        LocData(0x08750200, "Bridge on the River Ty - Beyond Broken Bridge - PF"),
     # Under tree at Ramp onto big bridge
     "BotRT - PF 10":
-        LocData(0x08750201, "Bridge on the River Ty - PF"),
+        LocData(0x08750201, "Bridge on the River Ty - Beyond Broken Bridge - PF"),
     # Under waterfall before spider den
     "BotRT - PF 11":
         LocData(0x08750202, "Bridge on the River Ty - PF"),
     # Dennis House
     "BotRT - PF 12":
-        LocData(0x08750203, "Bridge on the River Ty - PF"),
+        LocData(0x08750203, "Bridge on the River Ty - Beyond Broken Bridge - PF"),
     # Above big bridge - Dennis House side
     "BotRT - PF 13":
-        LocData(0x08750204, "Bridge on the River Ty - PF"),
+        LocData(0x08750204, "Bridge on the River Ty - Beyond Broken Bridge - PF"),
     # Under big bridge - Dennis House side
     "BotRT - PF 14":
-        LocData(0x08750205, "Bridge on the River Ty - PF"),
+        LocData(0x08750205, "Bridge on the River Ty - Beyond Broken Bridge - PF"),
     # Corner near moving platforms
     "BotRT - PF 15":
-        LocData(0x08750206, "Bridge on the River Ty - PF"),
+        LocData(0x08750206, "Bridge on the River Ty - Beyond Broken Bridge - PF"),
     # Above pontoon next to Dennis Starting location
     "BotRT - PF 16":
-        LocData(0x08750207, "Bridge on the River Ty - PF"),
+        LocData(0x08750207, "Bridge on the River Ty - Beyond Broken Bridge - PF"),
     # Neddy Den 1
     "BotRT - PF 17":
-        LocData(0x08750208, "Bridge on the River Ty - PF"),
+        LocData(0x08750208, "Bridge on the River Ty - Beyond Broken Bridge - PF"),
     # Neddy Den 2
     "BotRT - PF 18":
-        LocData(0x08750209, "Bridge on the River Ty - PF"),
+        LocData(0x08750209, "Bridge on the River Ty - Beyond Broken Bridge - PF"),
     # Neddy Den 3
     "BotRT - PF 19":
-        LocData(0x0875020A, "Bridge on the River Ty - PF"),
+        LocData(0x0875020A, "Bridge on the River Ty - Beyond Broken Bridge - PF"),
     # Neddy Den 4
     "BotRT - PF 20":
-        LocData(0x0875020B, "Bridge on the River Ty - PF"),
+        LocData(0x0875020B, "Bridge on the River Ty - Beyond Broken Bridge - PF"),
     # Above round dirt patch at start
     "Snow Worries - PF 1":
         LocData(0x0875020C, "Snow Worries - PF"),
@@ -1035,7 +1034,7 @@ cog_completion_dict = {
     "Ship Rex - All Golden Cogs":
         LocData(0x087501A4, "Ship Rex - Beyond Gate 1"),
     "BotRT - All Golden Cogs":
-        LocData(0x087501A5, "Bridge on the River Ty"),
+        LocData(0x087501A5, "Bridge on the River Ty - Beyond Broken Bridge"),
     "Snow Worries - All Golden Cogs":
         LocData(0x087501A6, "Snow Worries - Underwater"),
     "Outback Safari - All Golden Cogs":
@@ -1059,7 +1058,7 @@ frame_completion_dict = {
     "Ship Rex - All Picture Frames":
         LocData(0x0875025B, "Ship Rex - Beyond Gate 1"),
     "BotRT - All Picture Frames":
-        LocData(0x0875025C, "Bridge on the River Ty - PF"),
+        LocData(0x0875025C, "Bridge on the River Ty - Beyond Broken Bridge - PF"),
     "Snow Worries - All Picture Frames":
         LocData(0x0875025D, "Snow Worries - PF"),
     "LLPoF - All Picture Frames":

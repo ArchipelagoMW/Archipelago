@@ -61,7 +61,6 @@ def connect_regions(world: MultiWorld, player: int, options: Ty1Options, from_na
 def create_region(world: MultiWorld, player: int, options: Ty1Options, name: str):
     reg = Region(name, player, world)
     create_locations(player, options, reg)
-    #print("Creating region: " + name)
     world.regions.append(reg)
 
 def create_regions(world: MultiWorld, options: Ty1Options, player: int):
@@ -85,7 +84,9 @@ def create_regions(world: MultiWorld, options: Ty1Options, player: int):
     create_region(world, player, options, "Ship Rex - Beyond Gate 1")
     create_region(world, player, options, "Bull's Pen")
     create_region(world, player, options, "Bridge on the River Ty")
+    create_region(world, player, options, "Bridge on the River Ty - Beyond Broken Bridge")
     create_region(world, player, options, "Bridge on the River Ty - PF")
+    create_region(world, player, options, "Bridge on the River Ty - Beyond Broken Bridge - PF")
     create_region(world, player, options, "Snow Worries")
     create_region(world, player, options, "Snow Worries - PF")
     create_region(world, player, options, "Snow Worries - Underwater")
@@ -110,6 +111,7 @@ def connect_all_regions(world: MultiWorld, player: int, options: Ty1Options, por
         world.random.shuffle(portal_map)
     if options.boss_shuffle:
         world.random.shuffle(boss_map)
+    print(str(portal_map[0]) + " " + str(portal_map[1]) + " " + str(portal_map[2]))
     pr_mod = 1 if options.start_with_boom and options.progressive_elementals else 0
     pl_mod = 1 if options.level_unlock_style == 1 else 0
     connect_regions(world, player, options, "Menu", "Rainbow Cliffs", "Menu -> Z1")
@@ -247,6 +249,10 @@ def connect_all_regions(world: MultiWorld, player: int, options: Ty1Options, por
     connect_regions(world, player, options, "Bridge on the River Ty", "Bridge on the River Ty - PF", "Bridge on the River Ty - Rang Needed",
                     lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)),
                     lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)))
+    connect_regions(world, player, options, "Bridge on the River Ty", "Bridge on the River Ty - Beyond Broken Bridge", "Bridge on the River Ty - Broken Bridge Glide",
+                    lambda state: (state.has("Progressive Rang", player, 1 + pr_mod) or state.has("Second Rang", player)))
+    connect_regions(world, player, options, "Bridge on the River Ty - Beyond Broken Bridge", "Bridge on the River Ty - Beyond Broken Bridge - PF", "Bridge on the River Ty - Broken Bridge - Rang Needed",
+                    rule_adv=lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)))
     connect_regions(world, player, options, "Snow Worries", "Snow Worries - PF", "Snow Worries - Rang Needed",
                     lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)),
                     lambda state: (state.has("Progressive Rang", player, 0 + pr_mod)))
@@ -270,4 +276,3 @@ def connect_all_regions(world: MultiWorld, player: int, options: Ty1Options, por
     connect_regions(world, player, options, "Rex Marks the Spot", "Rex Marks the Spot - Underwater", "Rex Marks the Spot - Underwater",
                     lambda state: (state.has("Swim", player) or state.has("Dive", player) or state.has("Progressive Rang", player, 2)),
                     lambda state: (state.has("Swim", player) or state.has("Dive", player) or state.has("Progressive Rang", player, 2)))
-    print("Location count: " + str(len(world.get_placeable_locations())))

@@ -24,6 +24,7 @@ class Ty1Web(WebWorld):
     tutorials = [setup_en]
     option_groups = ty1_option_groups
 
+
 class Ty1World(World):
     """
     Ty the Tasmanian Tiger is a 3D platformer collectathon created by Australian developers Krome Studios. Play as Ty and travel the Australian outback to snowy mountains to defeat Boss Cass and rescue your family from The Dreaming.
@@ -34,13 +35,20 @@ class Ty1World(World):
     topology_present = True
     item_name_to_id = {name: item.code for name, item in ty1_item_table.items()}
     location_name_to_id = {name: item.code for name, item in ty1_location_table.items()}
-
     portal_map: typing.List[int] = [Ty1LevelCode.A1.value, Ty1LevelCode.A2.value, Ty1LevelCode.A3.value,
-                                            Ty1LevelCode.B1.value, Ty1LevelCode.B2.value, Ty1LevelCode.B3.value,
-                                            Ty1LevelCode.C1.value, Ty1LevelCode.C2.value, Ty1LevelCode.C3.value]
+                                    Ty1LevelCode.B1.value, Ty1LevelCode.B2.value, Ty1LevelCode.B3.value,
+                                    Ty1LevelCode.C1.value, Ty1LevelCode.C2.value, Ty1LevelCode.C3.value]
     boss_map: typing.List[int] = [Ty1LevelCode.A4.value, Ty1LevelCode.D4.value, Ty1LevelCode.C4.value]
 
     web = Ty1Web()
+
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
+        self.itempool = []
+        self.portal_map = [Ty1LevelCode.A1.value, Ty1LevelCode.A2.value, Ty1LevelCode.A3.value,
+                           Ty1LevelCode.B1.value, Ty1LevelCode.B2.value, Ty1LevelCode.B3.value,
+                           Ty1LevelCode.C1.value, Ty1LevelCode.C2.value, Ty1LevelCode.C3.value]
+        self.boss_map = [Ty1LevelCode.A4.value, Ty1LevelCode.D4.value, Ty1LevelCode.C4.value]
 
     def fill_slot_data(self) -> id:
         return {
@@ -59,9 +67,6 @@ class Ty1World(World):
             "Attributesanity": self.options.attributesanity.value,
             "DeathLink": self.options.death_link.value
         }
-
-    # Portal Map
-    # Bilbies
 
     def create_item(self, name: str) -> Item:
         item_info = ty1_item_table[name]
@@ -85,11 +90,6 @@ class Ty1World(World):
         self.create_event("Fluffy's Fjord", "Beat Fluffy")
         self.create_event("Cass' Crest", "Beat Shadow")
         self.create_event("Final Battle", "Beat Cass")
-        state = self.multiworld.get_all_state(True)
-        state.update_reachable_regions(self.player)
-        for reg in state.reachable_regions.values():
-            for i in reg:
-                print(i.name)
 
     def set_rules(self):
         set_rules(self.multiworld, self.options, self.player)

@@ -2,11 +2,13 @@ from collections import namedtuple
 from typing import Dict, Optional
 
 from BaseClasses import Item, ItemClassification, MultiWorld
+from worlds.ty_the_tasmanian_tiger.regions import ty1_levels, Ty1LevelCode
 from worlds.ty_the_tasmanian_tiger.options import Ty1Options
 
 
 class Ty1Item(Item):
     game: str = "Ty the Tasmanian Tiger"
+
 
 def get_junk_item_names(rand, k: int) -> str:
     junk = rand.choices(
@@ -15,28 +17,29 @@ def get_junk_item_names(rand, k: int) -> str:
         k=k)
     return junk
 
+
 def create_single(name: str, world: MultiWorld, player: int, item_class: ItemClassification = None):
     classification = ty1_item_table[name].classification if item_class is None else item_class
-    world.itempool.append(Ty1Item(name, classification, ty1_item_table[name].code, player))
+    world.worlds[player].itempool.append(Ty1Item(name, classification, ty1_item_table[name].code, player))
+
 
 def create_multiple(name: str, amount: int, world: MultiWorld, player: int, item_class: ItemClassification = None):
     for i in range(amount):
         create_single(name, world, player, item_class)
+
 
 def create_items(world: MultiWorld, options: Ty1Options, player: int):
 
     total_location_count = len(world.get_unfilled_locations(player))
 
     # Generic
-    extra_class = ItemClassification.progression_skip_balancing if options.goal.value == 2 or 3 else ItemClassification.useful
-    extra_theggs_per_hub = 21 - options.hub_te_counts.value
-    create_multiple("Fire Thunder Egg", options.hub_te_counts.value, world, player)
-    create_multiple("Fire Thunder Egg", extra_theggs_per_hub, world, player, extra_class)
-    create_multiple("Ice Thunder Egg", options.hub_te_counts.value, world, player)
-    create_multiple("Ice Thunder Egg", extra_theggs_per_hub, world, player, extra_class)
-    create_multiple("Air Thunder Egg", options.hub_te_counts.value, world, player)
-    create_multiple("Air Thunder Egg", extra_theggs_per_hub, world, player, extra_class)
-    create_multiple("Golden Cog", 90, world, player)
+    thegg_class = ItemClassification.progression_skip_balancing if options.goal.value == 2 or 3 else (
+        ItemClassification.filler if options.level_unlock_style == 1 else ItemClassification.skip_balancing)
+    cog_class = ItemClassification.progression_skip_balancing if options.goal == 3 else ItemClassification.skip_balancing
+    create_multiple("Fire Thunder Egg", 21, world, player, thegg_class)
+    create_multiple("Ice Thunder Egg", 21, world, player, thegg_class)
+    create_multiple("Air Thunder Egg", 21, world, player, thegg_class)
+    create_multiple("Golden Cog", 90, world, player, cog_class)
 
     # Bilbies
     create_multiple("Bilby - Two Up", 5, world, player)
@@ -82,21 +85,18 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
     create_single("Megarang", world, player)
     create_single("Kaboomarang", world, player)
     create_single("Chronorang", world, player)
-    
+
     # Levels
     if options.level_unlock_style != 0:
         if options.progressive_level:
             level_count = 12 if options.level_unlock_style == 1 else 9
             create_multiple("Progressive Level", level_count, world, player)
         else:
-            create_single("Portal - Walk in the Park", world, player)
-            create_single("Portal - Ship Rex", world, player)
-            create_single("Portal - Bridge on the River Ty", world, player)
-            create_single("Portal - Snow Worries", world, player)
-            create_single("Portal - Outback Safari", world, player)
-            create_single("Portal - Lyre, Lyre Pants on Fire", world, player)
-            create_single("Portal - Beyond the Black Stump", world, player)
-            create_single("Portal - Rex Marks the Spot", world, player)
+            for levelIndex, portal_value in enumerate(world.worlds[player].portal_map):
+                if levelIndex == 0:
+                    continue
+                portal_name = "Portal - " + ty1_levels[Ty1LevelCode(portal_value)]
+                create_single(portal_name, world, player)
             create_single("Portal - Cass' Pass", world, player)
             if options.level_unlock_style == 1:
                 create_single("Portal - Bull's Pen", world, player)
@@ -110,9 +110,12 @@ def create_items(world: MultiWorld, options: Ty1Options, player: int):
     create_single("Tiger Talisman", world, player)
 
     # Junk
-    junk = get_junk_item_names(world.random, total_location_count - len(world.itempool))
+    junk = get_junk_item_names(world.random, total_location_count - len(world.worlds[player].itempool))
     for name in junk:
         create_single(name, world, player)
+
+    world.itempool += world.worlds[player].itempool
+
 
 def place_bilby_theggs(world: MultiWorld, options: Ty1Options, player: int):
     classification = ItemClassification.progression_skip_balancing if options.goal.value == 2 or 3 else ItemClassification.useful
@@ -144,10 +147,12 @@ def place_bilby_theggs(world: MultiWorld, options: Ty1Options, player: int):
     c3_bilby_thegg = Ty1Item("Air Thunder Egg", classification, 0x8750002, player)
     c3_bilby_loc.place_locked_item(c3_bilby_thegg)
 
+
 class ItemData:
     def __init__(self, code: Optional[int], classification: Optional[ItemClassification]):
         self.code = code
         self.classification = classification
+
 
 ty1_item_table: Dict[str, ItemData] = {
     # IDs
@@ -231,6 +236,7 @@ ty1_item_table: Dict[str, ItemData] = {
     "Extra Life": ItemData(0x8750082, ItemClassification.filler),
     "Opal Magnet": ItemData(0x8750083, ItemClassification.filler),
 }
+
 
 junk_weights = {
     "Picture Frame": 70,
