@@ -396,7 +396,7 @@ class LuigisMansionRandomizer:
         self.dol.data.write(struct.pack(">B", *pickup_val))
 
         # Diamonds and other treasure animations
-        self.dol.data.seek(0xCEFC3)
+        self.dol.data.seek(0xCF0F7)
         self.dol.data.write(struct.pack(">B", *gem_val))
 
         # Turn off luigi scare animations
