@@ -8,6 +8,9 @@ if TYPE_CHECKING:
 def did_include_hourglasses(world: "Sly1World") -> bool:
     return bool(world.options.IncludeHourglasses)
 
+def hourglasses_roll(world: "Sly1World") -> bool:
+    return bool(world.options.HourglassesRequireRoll)
+
 def did_avoid_early_bk(world: "Sly1World") -> bool:
     return bool(world.options.AvoidEarlyBK)
 
@@ -87,10 +90,6 @@ def generate_bottle_locations(world: "Sly1World", bundle_size: int) -> Dict[str,
 
             location = Sly1Location(world.player, bottle_name, bottle_code, reg)
             reg.locations.append(location)
-
-def strip_hourglass_from_keys(hourglass_locations):
-    stripped_keys = {key.replace(" Hourglass", ""): data for key, data in hourglass_locations.items()}
-    return stripped_keys
 
 sly_locations = {
     "Paris Files": LocData(10020000, "Paris",),

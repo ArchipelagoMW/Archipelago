@@ -11,68 +11,49 @@ namespace Sly1AP.Models
     {
         public static int StealthyApproachBottles { get; set; } = 0;
         public static int StealthyApproachMax { get; set; } = 20;
-        public static int StealthyApproachItems { get; set; } = 0;
         public static int IntoTheMachineBottles { get; set; } = 0;
         public static int IntoTheMachineMax { get; set; } = 30;
-        public static int IntoTheMachineItems { get; set; } = 0;
         public static int HighClassHeistBottles { get; set; } = 0;
         public static int HighClassHeistMax { get; set; } = 30;
-        public static int HighClassHeistItems { get; set; } = 0;
         public static int FireDownBelowBottles { get; set; } = 0;
         public static int FireDownBelowMax { get; set; } = 30;
-        public static int FireDownBelowItems { get; set; } = 0;
         public static int CunningDisguiseBottles { get; set; } = 0;
         public static int CunningDisguiseMax { get; set; } = 30;
-        public static int CunningDisguiseItems { get; set; } = 0;
         public static int GunboatGraveyardBottles { get; set; } = 0;
         public static int GunboatGraveyardMax { get; set; } = 20;
-        public static int GunboatGraveyardItems { get; set; } = 0;
         public static int RockyStartBottles { get; set; } = 0;
         public static int RockyStartMax { get; set; } = 40;
-        public static int RockyStartItems { get; set; } = 0;
         public static int BoneyardCasinoBottles { get; set; } = 0;
         public static int BoneyardCasinoMax { get; set; } = 40;
-        public static int BoneyardCasinoItems { get; set; } = 0;
         public static int StraightToTheTopBottles { get; set; } = 0;
         public static int StraightToTheTopMax { get; set; } = 40;
-        public static int StraightToTheTopItems { get; set; } = 0;
         public static int TwoToTangoBottles { get; set; } = 0;
         public static int TwoToTangoMax { get; set; } = 30;
-        public static int TwoToTangoItems { get; set; } = 0;
         public static int BackAlleyHeistBottles { get; set; } = 0;
         public static int BackAlleyHeistMax { get; set; } = 30;
-        public static int BackAlleyHeistItems { get; set; } = 0;
         public static int DreadSwampPathBottles { get; set; } = 0;
         public static int DreadSwampPathMax { get; set; } = 20;
-        public static int DreadSwampPathItems { get; set; } = 0;
         public static int LairOfTheBeastBottles { get; set; } = 0;
         public static int LairOfTheBeastMax { get; set; } = 30;
-        public static int LairOfTheBeastItems { get; set; } = 0;
         public static int GraveUndertakingBottles { get; set; } = 0;
         public static int GraveUndertakingMax { get; set; } = 40;
-        public static int GraveUndertakingItems { get; set; } = 0;
         public static int DescentIntoDangerBottles { get; set; } = 0;
         public static int DescentIntoDangerMax { get; set; } = 40;
-        public static int DescentIntoDangerItems { get; set; } = 0;
         public static int PerilousAscentBottles { get; set; } = 0;
         public static int PerilousAscentMax { get; set; } = 30;
-        public static int PerilousAscentItems { get; set; } = 0;
         public static int FlamingTempleBottles { get; set; } = 0;
         public static int FlamingTempleMax { get; set; } = 25;
-        public static int FlamingTempleItems { get; set; } = 0;
         public static int UnseenFoeBottles { get; set; } = 0;
         public static int UnseenFoeMax { get; set; } = 30;
-        public static int UnseenFoeItems { get; set; } = 0;
         public static int DuelByTheDragonBottles { get; set; } = 0;
         public static int DuelByTheDragonMax { get; set; } = 40;
-        public static int DuelByTheDragonItems { get; set; } = 0;
         public static void UpdateBottles(long Id, int Bundles)
         {
             //Increment the count. Then, multiply it by the bundle size. If it exceeds the maximum for the level, reduce it to max. Then write it to the memory address.
             if (Id == 10020030)
             {
-                StealthyApproachItems++;
-                StealthyApproachBottles = StealthyApproachItems * Bundles;
+                Helpers.StealthyApproachItems++;
+                StealthyApproachBottles = Helpers.StealthyApproachItems * Bundles;
                 if (StealthyApproachBottles > StealthyApproachMax)
                 {
                     StealthyApproachBottles = StealthyApproachMax;
@@ -80,8 +61,8 @@ namespace Sly1AP.Models
             }
             if (Id == 10020031)
             {
-                IntoTheMachineItems++;
-                IntoTheMachineBottles = IntoTheMachineItems * Bundles;
+                Helpers.IntoTheMachineItems++;
+                IntoTheMachineBottles = Helpers.IntoTheMachineItems * Bundles;
                 if (IntoTheMachineBottles > IntoTheMachineMax)
                 {
                     IntoTheMachineBottles = IntoTheMachineMax;
@@ -89,8 +70,8 @@ namespace Sly1AP.Models
             }
             if (Id == 10020032)
             {
-                HighClassHeistItems++;
-                HighClassHeistBottles = HighClassHeistItems * Bundles;
+                Helpers.HighClassHeistItems++;
+                HighClassHeistBottles = Helpers.HighClassHeistItems * Bundles;
                 if (HighClassHeistBottles > HighClassHeistMax)
                 {
                     HighClassHeistBottles = HighClassHeistMax;
@@ -98,8 +79,8 @@ namespace Sly1AP.Models
             }
             if (Id == 10020033)
             {
-                FireDownBelowItems++;
-                FireDownBelowBottles = FireDownBelowItems * Bundles;
+                Helpers.FireDownBelowItems++;
+                FireDownBelowBottles = Helpers.FireDownBelowItems * Bundles;
                 if (FireDownBelowBottles > FireDownBelowMax)
                 {
                     FireDownBelowBottles = FireDownBelowMax;
@@ -107,8 +88,8 @@ namespace Sly1AP.Models
             }
             if (Id == 10020034)
             {
-                CunningDisguiseItems++;
-                CunningDisguiseBottles = CunningDisguiseItems * Bundles;
+                Helpers.CunningDisguiseItems++;
+                CunningDisguiseBottles = Helpers.CunningDisguiseItems * Bundles;
                 if (CunningDisguiseBottles > CunningDisguiseMax)
                 {
                     CunningDisguiseBottles = CunningDisguiseMax;
@@ -116,8 +97,8 @@ namespace Sly1AP.Models
             }
             if (Id == 10020035)
             {
-                GunboatGraveyardItems++;
-                GunboatGraveyardBottles = GunboatGraveyardItems * Bundles;
+                Helpers.GunboatGraveyardItems++;
+                GunboatGraveyardBottles = Helpers.GunboatGraveyardItems * Bundles;
                 if (GunboatGraveyardBottles > GunboatGraveyardMax)
                 {
                     GunboatGraveyardBottles = GunboatGraveyardMax;
@@ -125,8 +106,8 @@ namespace Sly1AP.Models
             }
             if (Id == 10020036)
             {
-                RockyStartItems++;
-                RockyStartBottles = RockyStartItems * Bundles;
+                Helpers.RockyStartItems++;
+                RockyStartBottles = Helpers.RockyStartItems * Bundles;
                 if (RockyStartBottles > RockyStartMax)
                 {
                     RockyStartBottles = RockyStartMax;
@@ -134,8 +115,8 @@ namespace Sly1AP.Models
             }
             if (Id == 10020037)
             {
-                BoneyardCasinoItems++;
-                BoneyardCasinoBottles = BoneyardCasinoItems * Bundles;
+                Helpers.BoneyardCasinoItems++;
+                BoneyardCasinoBottles = Helpers.BoneyardCasinoItems * Bundles;
                 if (BoneyardCasinoBottles > BoneyardCasinoMax)
                 {
                     BoneyardCasinoBottles = BoneyardCasinoMax;
@@ -143,8 +124,8 @@ namespace Sly1AP.Models
             }
             if (Id == 10020038)
             {
-                StraightToTheTopItems++;
-                StraightToTheTopBottles = StraightToTheTopItems * Bundles;
+                Helpers.StraightToTheTopItems++;
+                StraightToTheTopBottles = Helpers.StraightToTheTopItems * Bundles;
                 if (StraightToTheTopBottles > StraightToTheTopMax)
                 {
                     StraightToTheTopBottles = StraightToTheTopMax;
@@ -152,8 +133,8 @@ namespace Sly1AP.Models
             }
             if (Id == 10020039)
             {
-                TwoToTangoItems++;
-                TwoToTangoBottles = TwoToTangoItems * Bundles;
+                Helpers.TwoToTangoItems++;
+                TwoToTangoBottles = Helpers.TwoToTangoItems * Bundles;
                 if (TwoToTangoBottles > TwoToTangoMax)
                 {
                     TwoToTangoBottles = TwoToTangoMax;
@@ -161,8 +142,8 @@ namespace Sly1AP.Models
             }
             if (Id == 10020040)
             {
-                BackAlleyHeistItems++;
-                BackAlleyHeistBottles = BackAlleyHeistItems * Bundles;
+                Helpers.BackAlleyHeistItems++;
+                BackAlleyHeistBottles = Helpers.BackAlleyHeistItems * Bundles;
                 if (BackAlleyHeistBottles > BackAlleyHeistMax)
                 {
                     BackAlleyHeistBottles = BackAlleyHeistMax;
@@ -170,8 +151,8 @@ namespace Sly1AP.Models
             }
             if (Id == 10020041)
             {
-                DreadSwampPathItems++;
-                DreadSwampPathBottles = DreadSwampPathItems * Bundles;
+                Helpers.DreadSwampPathItems++;
+                DreadSwampPathBottles = Helpers.DreadSwampPathItems * Bundles;
                 if (DreadSwampPathBottles > DreadSwampPathMax)
                 {
                     DreadSwampPathBottles = DreadSwampPathMax;
@@ -179,8 +160,8 @@ namespace Sly1AP.Models
             }
             if (Id == 10020042)
             {
-                LairOfTheBeastItems++;
-                LairOfTheBeastBottles = LairOfTheBeastItems * Bundles;
+                Helpers.LairOfTheBeastItems++;
+                LairOfTheBeastBottles = Helpers.LairOfTheBeastItems * Bundles;
                 if (LairOfTheBeastBottles > LairOfTheBeastMax)
                 {
                     LairOfTheBeastBottles = LairOfTheBeastMax;
@@ -188,8 +169,8 @@ namespace Sly1AP.Models
             }
             if (Id == 10020043)
             {
-                GraveUndertakingItems++;
-                GraveUndertakingBottles = GraveUndertakingItems * Bundles;
+                Helpers.GraveUndertakingItems++;
+                GraveUndertakingBottles = Helpers.GraveUndertakingItems * Bundles;
                 if (GraveUndertakingBottles > GraveUndertakingMax)
                 {
                     GraveUndertakingBottles = GraveUndertakingMax;
@@ -197,8 +178,8 @@ namespace Sly1AP.Models
             }
             if (Id == 10020044)
             {
-                DescentIntoDangerItems++;
-                DescentIntoDangerBottles = DescentIntoDangerItems * Bundles;
+                Helpers.DescentIntoDangerItems++;
+                DescentIntoDangerBottles = Helpers.DescentIntoDangerItems * Bundles;
                 if (DescentIntoDangerBottles > DescentIntoDangerMax)
                 {
                     DescentIntoDangerBottles = DescentIntoDangerMax;
@@ -206,8 +187,8 @@ namespace Sly1AP.Models
             }
             if (Id == 10020045)
             {
-                PerilousAscentItems++;
-                PerilousAscentBottles = PerilousAscentItems * Bundles;
+                Helpers.PerilousAscentItems++;
+                PerilousAscentBottles = Helpers.PerilousAscentItems * Bundles;
                 if (PerilousAscentBottles > PerilousAscentMax)
                 {
                     PerilousAscentBottles = PerilousAscentMax;
@@ -215,8 +196,8 @@ namespace Sly1AP.Models
             }
             if (Id == 10020046)
             {
-                FlamingTempleItems++;
-                FlamingTempleBottles = FlamingTempleItems * Bundles;
+                Helpers.FlamingTempleItems++;
+                FlamingTempleBottles = Helpers.FlamingTempleItems * Bundles;
                 if (FlamingTempleBottles > FlamingTempleMax)
                 {
                     FlamingTempleBottles = FlamingTempleMax;
@@ -224,8 +205,8 @@ namespace Sly1AP.Models
             }
             if (Id == 10020047)
             {
-                UnseenFoeItems++;
-                UnseenFoeBottles = UnseenFoeItems * Bundles;
+                Helpers.UnseenFoeItems++;
+                UnseenFoeBottles = Helpers.UnseenFoeItems * Bundles;
                 if (UnseenFoeBottles > UnseenFoeMax)
                 {
                     UnseenFoeBottles = UnseenFoeMax;
@@ -233,13 +214,38 @@ namespace Sly1AP.Models
             }
             if (Id == 10020048)
             {
-                DuelByTheDragonItems++;
-                DuelByTheDragonBottles = DuelByTheDragonItems * Bundles;
+                Helpers.DuelByTheDragonItems++;
+                DuelByTheDragonBottles = Helpers.DuelByTheDragonItems * Bundles;
                 if (DuelByTheDragonBottles > DuelByTheDragonMax)
                 {
                     DuelByTheDragonBottles = DuelByTheDragonMax;
                 }
             }
+            //var UpdatedLevels = Helpers.GetUpdatedLevels();
+            //foreach (var Level in UpdatedLevels)
+            //{
+            //    //Uncollected Key = &3l&., Uncollected Vault = &3w&., Uncollected Sprint = &1i&.
+            //    //Collected Key = &3k&., Collected Vault = &3v&., Collected Sprint = &1h&.
+            //    var KeyComp = "&3l&. ";
+            //    var VaultComp = "&3w&. ";
+            //    var SprintComp = "&1i&. ";
+
+            //    if (Memory.ReadBit(Level.Address, 1))
+            //    {
+            //        KeyComp = "&3k&. ";
+            //    }
+            //    if (Memory.ReadBit(Level.Address, 2))
+            //    {
+            //        VaultComp = "&3v&. ";
+            //    }
+            //    if (Memory.ReadBit(Level.Address, 3))
+            //    {
+            //        SprintComp = "&1h&. ";
+            //    }
+
+            //    var NameLocation = Memory.ReadUInt(Level.NamePointer) + 0x20000000;
+            //    Memory.WriteString(NameLocation, Level.Name + " (" + Level.ItemBottles + "/" + Level.MaxBottles + ") " + KeyComp + VaultComp + SprintComp);
+            //}
         }
         public static async void BottleSync()
         {

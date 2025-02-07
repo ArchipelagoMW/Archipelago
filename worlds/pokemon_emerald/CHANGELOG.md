@@ -1,3 +1,41 @@
+# 2.4.0
+
+### Features
+
+- New option `free_fly_blacklist` limits which cities can show up as a free fly location.
+- Spoiler log and hint text for maps where a species can be found now use human-friendly labels.
+- Added many item and location groups based on item type, location type, and location geography.
+
+### Fixes
+
+- Now excludes the location "Navel Rock Top - Hidden Item Sacred Ash" if your goal is Champion and you didn't randomize
+event tickets.
+
+# 2.3.0
+
+### Features
+
+- Added a Swedish translation of the setup guide.
+- The client communicates map transitions to any trackers connected to the slot.
+- Added the player's Normalize Encounter Rates option to slot data for trackers.
+
+### Fixes
+
+- Fixed a rare issue where receiving a wonder trade could partially corrupt the save data, preventing the player from
+receiving new items.
+- Fixed the client spamming the "goal complete" status update to the server instead of sending it once.
+- Fixed the `trainer_party_blacklist` option checking for the existence of the "_Legendaries" shortcut in the
+`starter_blacklist` option instead of itself.
+- Fixed a logic issue where the "Mauville City - Coin Case from Lady in House" location only required a Harbor Mail if
+the player randomized NPC gifts.
+- The Dig tutor has its compatibility percentage raised to 50% if the player's TM/tutor compatibility is set lower.
+- A Team Magma Grunt in the Space Center which could become unreachable while trainersanity is active by overlapping
+with another NPC was moved to an unoccupied space.
+- Fixed a problem where the client would crash on certain operating systems while using certain python versions if the
+player tried to wonder trade.
+- Prevent the poke flute sound from replacing the evolution fanfare, which would cause the game to wait in silence for
+a long time during the evolution scene.
+
 # 2.2.0
 
 ### Features
@@ -175,6 +213,7 @@ turn to face you when you run.
 species equally likely to appear, but makes rare encounters less rare.
 - Added `Trick House` location group.
 - Removed `Postgame Locations` location group.
+- Added a Spanish translation of the setup guide.
 
 ### QoL
 

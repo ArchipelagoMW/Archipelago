@@ -6,6 +6,10 @@ indications pour obtenir un fichier de configuration de *StarCraft 2 Archipelago
 ## Logiciels requis
 
 - [*StarCraft 2*](https://starcraft2.com/en-us/)
+   - Bien que *StarCraft 2 Archipelago* supporte les quatre campagnes, elles ne sont pas obligatoires pour jouer au 
+   *randomizer*. 
+   Si vous ne possédez pas certaines campagnes, il vous suffit de les exclure dans le fichier de configuration de 
+   votre monde.
 - [La version la plus récente d'Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
 
 ## Comment est-ce que j'installe ce *randomizer*?
@@ -41,10 +45,6 @@ préférences.
 Prenez soin de vous rappeler du nom de joueur que vous avez inscrit dans la page à options ou dans le fichier *yaml* 
 puisque vous en aurez besoin pour vous connecter à votre monde!
 
-Notez que la page *Player options* ne permet pas de définir certaines des options avancées, e.g., l'exclusion de 
-certaines unités ou de leurs améliorations. 
-Utilisez la page [*Weighted Options*](/weighted-options) pour avoir accès à ces dernières.
-
 Si vous désirez des informations et/ou instructions générales sur l'utilisation d'un fichier *yaml* pour Archipelago, 
 veuillez consulter [*Creating a YAML*](/tutorial/Archipelago/setup/en#creating-a-yaml).
 
@@ -66,15 +66,15 @@ dans le dossier `logs/`.
 
 #### À quoi sert l'option *Progression Balancing*?
 
-Pour *Starcraft 2*, cette option ne fait pas grand-chose.
+Pour *StarCraft 2*, cette option ne fait pas grand-chose.
 Il s'agit d'une option d'Archipelago permettant d'équilibrer la progression des mondes en interchangeant les *items* 
 dans les *spheres*. 
 Si le *Progression Balancing* d'un monde est plus grand que ceux des autres, les *items* de progression de ce monde ont 
 plus de chance d'être obtenus tôt et vice-versa si sa valeur est plus petite que celle des autres mondes. 
-Cependant, *Starcraft 2* est beaucoup plus permissif en termes d'*items* qui permettent de progresser, ce réglage à 
+Cependant, *StarCraft 2* est beaucoup plus permissif en termes d'*items* qui permettent de progresser, ce réglage à 
 donc peu d'influence sur la progression dans *StarCraft 2*. 
 Vu qu'il augmente le temps de génération d'un *MultiWorld*, nous recommandons de le désactiver, c-à-d le définir à 
-zéro, pour *Starcraft 2*. 
+zéro, pour *StarCraft 2*. 
 
 
 #### Comment est-ce que je définis une liste d'*items*, e.g. pour l'option *excluded items*?
@@ -122,6 +122,10 @@ Cependant, l'information présente dans cette dernière peut différer de celle 
 puisqu'elle est générée, habituellement, à partir de la version en développement de *StarCraft 2 Archipelago* qui 
 n'ont peut-être pas encore été inclus dans le site web d'Archipelago.
 
+Pour ce qui concerne les *locations*, vous pouvez consulter tous les *locations* associés à une mission dans votre 
+monde en plaçant votre curseur sur la case correspondante dans l'onglet *StarCraft 2 Launcher* du client.
+
+
 ## Comment est-ce que je peux joindre un *MultiWorld*?
 
 1. Exécuter `ArchipelagoStarcraft2Client.exe`.
@@ -152,7 +156,7 @@ qui se trouve dans `Documents/StarCraft II/Accounts/######/Hotkeys` vers `Docume
 Si le dossier n'existe pas, créez-le.
 
 Pour que *StarCraft 2 Archipelago* utilise votre profil, suivez les étapes suivantes.
-Lancez *Starcraft 2* via l'application *Battle.net*. 
+Lancez *StarCraft 2* via l'application *Battle.net*. 
 Changez votre profil de raccourcis clavier pour le mode standard et acceptez, puis sélectionnez votre profil 
 personnalisé et acceptez. 
 Vous n'aurez besoin de faire ça qu'une seule fois.

@@ -1,6 +1,7 @@
 from BaseClasses import Item, ItemClassification
 from .Types import ItemData, Sly1Item, EpisodeType, episode_type_to_name, episode_type_to_shortened_name
-from .Locations import get_total_locations, get_bundle_amount_for_level, did_avoid_early_bk
+from .Locations import get_total_locations, get_bundle_amount_for_level, did_avoid_early_bk, hourglasses_roll, \
+    did_include_hourglasses
 from typing import List, Dict, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -11,14 +12,14 @@ def create_itempool(world: "Sly1World") -> List[Item]:
     itempool: List[Item] = []
 
     # Determine if this player has AvoidEarlyBK enabled
-    need_to_modify_item_pool = world.options.AvoidEarlyBK
-    starting_episode = episode_type_to_shortened_name[EpisodeType(world.options.StartingEpisode)]
-    if starting_episode == "All":
+    need_to_modify_item_pool = did_avoid_early_bk(world)
+    starting_episode = episode_type_to_name[EpisodeType(world.options.StartingEpisode)]
+    if starting_episode == "All" and need_to_modify_item_pool:
         starting_episode = world.random_episode
 
     # Create a local copy of item_table to modify only for the current player
     # We won't modify the global item_table directly
-    final_item_table = item_table.copy() if need_to_modify_item_pool else item_table
+    final_item_table = item_table.copy() if need_to_modify_item_pool or hourglasses_roll(world) else item_table
 
     # If AvoidEarlyBK is enabled, adjust the key count for the starting episode
     if need_to_modify_item_pool:
@@ -27,13 +28,19 @@ def create_itempool(world: "Sly1World") -> List[Item]:
             starting_key = final_item_table[starting_key_name]
             final_item_table[starting_key_name] = starting_key._replace(count=starting_key.count - 1)
 
+    if did_include_hourglasses(world) and hourglasses_roll(world):
+        roll_name = "Progressive Roll"
+        for key, item in final_item_table.items():
+            if key == roll_name and item.classification == ItemClassification.useful:
+                final_item_table[key] = item._replace(classification=ItemClassification.progression)
+
     # Create episodes except for the starting episode as items
-    for episode in sly_episodes.keys():
-        if starting_episode == "All":
-            break
-        if starting_episode == episode:
-            continue
-        itempool.append(create_item(world, episode))
+    if not starting_episode == "All":
+        for episode in sly_episodes.keys():
+            if starting_episode == episode:
+                continue
+            else:
+                itempool.append(create_item(world, episode))
 
     # Use the modified final_item_table to add items to the item pool
     for name in final_item_table.keys():

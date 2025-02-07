@@ -10,6 +10,14 @@ def create_option_groups() -> List[OptionGroup]:
 
     return option_group_list
 
+class RequiredBosses(Range):
+    """
+    How many members of the Fiendish Five you need to defeat before Cold Heart of Hate is unlocked.
+    """
+    range_start = 1
+    range_end = 4
+    default = 4
+
 class StartingEpisode(Choice):
     """
     Determines which episode you will have the intro for at the beginning of the game.
@@ -35,6 +43,13 @@ class IncludeHourglasses(Toggle):
     If Hourglasses are disabled then there are more items than locations for this game alone.
     """
     display_name = "Include Hourglasses"
+
+class HourglassesRequireRoll(Toggle):
+    """
+    Some Hourglasses are tough without the Roll move.
+    If enabled, at least one Progressive Roll will logically be required for Hourglasses.
+    """
+    display_name = "Hourglasses Require Roll"
 
 class ExcludeMinigames(OptionSet):
     """
@@ -118,8 +133,10 @@ class CluesanityBundleSize(Range):
 
 @dataclass
 class Sly1Options(PerGameCommonOptions):
+    RequiredBosses:                 RequiredBosses
     StartingEpisode:                StartingEpisode
     IncludeHourglasses:             IncludeHourglasses
+    HourglassesRequireRoll:         HourglassesRequireRoll
     AvoidEarlyBK:                   AvoidEarlyBK
     ExcludeMinigames:               ExcludeMinigames
     TrapChance:                     TrapChance
@@ -130,7 +147,7 @@ class Sly1Options(PerGameCommonOptions):
     CluesanityBundleSize:           CluesanityBundleSize
 
 sly1_option_groups: Dict[str, List[Any]] = {
-    "General Options": [StartingEpisode, IncludeHourglasses, CluesanityBundleSize],
+    "General Options": [RequiredBosses, StartingEpisode, IncludeHourglasses, HourglassesRequireRoll, CluesanityBundleSize],
     "Exclude Minigames": [ExcludeMinigames],
     "Trap Options": [TrapChance, IcePhysicsTrapWeight,
                      SpeedChangeTrapWeight, BentleyJumpscareTrapWeight,
@@ -138,8 +155,10 @@ sly1_option_groups: Dict[str, List[Any]] = {
 }
 
 slot_data_options: List[str] = {
+    "RequiredBosses",
     "StartingEpisode",
     "IncludeHourglasses",
+    "HourglassesRequireRoll",
     "AvoidEarlyBK",
     "ExcludeMinigames",
     "CluesanityBundleSize"
