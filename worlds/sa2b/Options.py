@@ -25,7 +25,7 @@ class Goal(Choice):
 
     Chaos Chao: Raise a Chaos Chao to win
 
-    Minigame Madness: Win one of each Minigame Trap, then defeat Finalhazard
+    Minigame Madness: Win a certain amount of each Minigame Trap, then defeat Finalhazard
     """
     display_name = "Goal"
     option_biolizard = 0
@@ -428,7 +428,7 @@ class ItemBoxsanity(Choice):
     Determines whether collecting Item Boxes grants checks
     None: No Item Boxes grant checks
     Extra Lives: Extra Life Boxes grant checks (94 Locations)
-    All: All Item Boxes grant checks (494 Locations Total)
+    All: All Item Boxes grant checks (502 Locations Total)
     """
     display_name = "Itemboxsanity"
     option_none = 0
@@ -1031,6 +1031,9 @@ class RingLink(Toggle):
 class TrapLink(Toggle):
     """
     Whether your received traps are linked to other players
+
+    You will also receive any linked traps from other players with Trap Link enabled,
+    if you have a weight above "none" set for that trap
     """
     display_name = "Trap Link"
 
