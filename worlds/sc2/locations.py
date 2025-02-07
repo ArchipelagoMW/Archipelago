@@ -2411,10 +2411,28 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.END_GAME.mission_name, "Victory", SC2NCO_LOC_ID_OFFSET + 900, LocationType.VICTORY,
             lambda state: logic.end_game_requirement(state) and logic.nova_any_weapon(state)
         ),
-        make_location_data(SC2Mission.END_GAME.mission_name, "Xanthos", SC2NCO_LOC_ID_OFFSET + 901, LocationType.VANILLA,
+        make_location_data(SC2Mission.END_GAME.mission_name, "Destroy the Xanthos", SC2NCO_LOC_ID_OFFSET + 901, LocationType.VANILLA,
             logic.end_game_requirement
         ),
-
+        make_location_data(SC2Mission.END_GAME.mission_name, "Disable Xanthos Railgun", SC2NCO_LOC_ID_OFFSET + 902, LocationType.EXTRA,
+            logic.end_game_requirement
+        ),
+        make_location_data(SC2Mission.END_GAME.mission_name, "Disable Xanthos Flamethrower", SC2NCO_LOC_ID_OFFSET + 903, LocationType.EXTRA,
+            logic.end_game_requirement
+        ),
+        make_location_data(SC2Mission.END_GAME.mission_name, "Disable Xanthos Fighter Bay", SC2NCO_LOC_ID_OFFSET + 904, LocationType.EXTRA,
+            logic.end_game_requirement
+        ),
+        make_location_data(SC2Mission.END_GAME.mission_name, "Disable Xanthos Missile Pods", SC2NCO_LOC_ID_OFFSET + 905, LocationType.EXTRA,
+            logic.end_game_requirement
+        ),
+        make_location_data(SC2Mission.END_GAME.mission_name, "Protect Hyperion", SC2NCO_LOC_ID_OFFSET + 906, LocationType.CHALLENGE,
+            logic.end_game_requirement
+        ),
+        make_location_data(SC2Mission.END_GAME.mission_name, "Destroy Orbital Commands", SC2NCO_LOC_ID_OFFSET + 907, LocationType.CHALLENGE,
+            logic.end_game_requirement,
+            flags=LocationFlag.PREVENTATIVE
+        ),
         # Mission Variants
         # 10X/20X - Liberation Day
         make_location_data(SC2Mission.THE_OUTLAWS_Z.mission_name, "Victory", SC2_RACESWAP_LOC_ID_OFFSET + 300, LocationType.VICTORY,
