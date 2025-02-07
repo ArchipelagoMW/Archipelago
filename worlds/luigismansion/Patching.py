@@ -1041,18 +1041,18 @@ def __add_appear_item(item_appear_table_entry, item_name):
 
 def update_treasure_table(treasure_info, character_info, output_data, teiden: bool = False):
     # Clear out the vanilla treasuretable from everything.
-    if teiden == False:
+    if not teiden:
         treasure_info.info_file_field_entries.clear()
 
     for x in character_info.info_file_field_entries:
         # Move the Laundry room chest back from Butler door
         if x["room_no"] == 5:
-            x["pos_z"] -= 50
+            x["pos_z"] = -1100.000000
 
         # Move 2F Bathroom chest back from wall
-        if x["room_no"] == 45:
-            x["pos_x"] -= 100
-            x["pos_z"] -= 50
+        if x["room_no"] == 45 and "takara" in x["name"]:
+            x["pos_x"] = -1900.000000
+            x["pos_z"] = -4830.000000
 
         for item_name, item_data in output_data["Locations"].items():
             # Ignore output data not related to chests that are not chests.
@@ -1064,13 +1064,10 @@ def update_treasure_table(treasure_info, character_info, output_data, teiden: bo
                 # Replace the Chest visuals with something that matches the item name in "characterinfo".
                 x["name"] = __get_item_chest_visual(item_data["name"])
 
-                if x["room_no"] == 45 or x["room_no"] == 5:
-                    chest_size = 0
+                if item_data["door_id"] == 0:
+                    chest_size = __get_chest_size_from_item(item_data["name"])
                 else:
-                    if item_data["door_id"] == 0:
-                        chest_size = __get_chest_size_from_item(item_data["name"])
-                    else:
-                        chest_size = __get_chest_size_from_key(item_data["door_id"])
+                    chest_size = __get_chest_size_from_key(item_data["door_id"])
 
                 # Define the actor name to use from the Location in the generation output.
                 # Act differently if it's a key.
@@ -1126,7 +1123,7 @@ def update_treasure_table(treasure_info, character_info, output_data, teiden: bo
                     "diamond": diamond_amount,
                     "cdiamond": 0,
                     "rdiamond": 0,
-                    "effect": 1 if chest_size == 2 else 0,
+                    "effect": 0,
                     "camera": 0
                 })
 
