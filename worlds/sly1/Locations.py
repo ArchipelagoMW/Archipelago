@@ -26,9 +26,9 @@ def get_total_locations(world: "Sly1World") -> int:
         if is_valid_location:
             total += 1
     
-    if world.options.CluesanityBundleSize.value > 0:
+    if world.options.LocationCluesanityBundleSize.value > 0:
             for name in bottle_amounts.keys():
-                bundle_amount = get_bundle_amount_for_level(world, name)
+                bundle_amount = get_bundle_amount_for_level(name, world.options.LocationCluesanityBundleSize.value)
                 
                 total += bundle_amount
 
@@ -57,14 +57,13 @@ def is_valid_location(world: "Sly1World", name) -> bool:
     if location_table[name].level_type in world.options.ExcludeMinigames.value:
         return False
     
-    if world.options.CluesanityBundleSize.value == 0 and 'Bottle' in name:
+    if world.options.LocationCluesanityBundleSize.value == 0 and 'Bottle' in name:
         return False
     
     return True
 
-def get_bundle_amount_for_level(world: "Sly1World", level_name: str) -> int:
+def get_bundle_amount_for_level(level_name: str, bundle_size: int) -> int:
     level_data = bottle_amounts[level_name]
-    bundle_size = world.options.CluesanityBundleSize.value
 
     bundle_amount = int(level_data.bottle_amount/bundle_size)
     if level_data.bottle_amount%bundle_size != 0:
@@ -74,7 +73,7 @@ def get_bundle_amount_for_level(world: "Sly1World", level_name: str) -> int:
 
 def generate_bottle_locations(world: "Sly1World", bundle_size: int) -> Dict[str, LocData]:
     for name, data in bottle_amounts.items():
-        bundle_amount = get_bundle_amount_for_level(world, name)
+        bundle_amount = get_bundle_amount_for_level(name, bundle_size)
 
         reg = world.multiworld.get_region(data.region, world.player)
 

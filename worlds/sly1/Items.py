@@ -51,9 +51,9 @@ def create_itempool(world: "Sly1World") -> List[Item]:
         itempool += create_multiple_items(world, name, item_amount, item_type)
 
     # Create Bottle Bundles if applicable
-    if world.options.CluesanityBundleSize.value > 0:
+    if world.options.ItemCluesanityBundleSize.value > 0:
         for name, data in bottles.items():
-            bundle_amount = get_bundle_amount_for_level(world, name.rsplit(' ', 1)[0])
+            bundle_amount = get_bundle_amount_for_level(name.rsplit(' ', 1)[0], world.options.ItemCluesanityBundleSize.value)
             itempool += create_multiple_items(world, name, bundle_amount, data.classification)
 
     # Add the Victory item to the pool
