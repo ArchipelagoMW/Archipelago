@@ -219,7 +219,7 @@ class LuigisMansionRandomizer:
         final_boo_count: int = int(self.output_data["Options"]["final_boo_count"])
 
         # Update all custom events
-        list_events = ["03", "12", "22", "24", "29", "33", "35", "38", "44", "45", "50", "61", "64", "65",
+        list_events = ["01", "03", "12", "22", "24", "29", "33", "35", "38", "44", "45", "50", "61", "64", "65",
                        "66", "67", "68", "71", "72", "74", "75", "82", "86", "87", "89"]
         for custom_event in list_events:
             self.update_custom_event(custom_event, True)
@@ -386,10 +386,16 @@ class LuigisMansionRandomizer:
         # Turn off pickup animations
         if self.output_data["Options"]["pickup_animation"] == 1:
             pickup_val = [0x01]
+            #gem_val = [0x05]
         else:
             pickup_val = [0x02]
+            #gem_val = [0x06]
         self.dol.data.seek(0xCD39B)
         self.dol.data.write(struct.pack(">B", *pickup_val))
+
+        self.dol.data.seek(0xCE8D3)
+        gem_val = [0x05]
+        self.dol.data.write(struct.pack(">B", *gem_val))
 
         # Turn off luigi scare animations
         if self.output_data["Options"]["fear_animation"] == 1:
