@@ -9,7 +9,7 @@ _INACTIVITY_TIMEOUT = 10
 
 
 def create_error():
-    msg = bytearray([0xFF])
+    msg = bytearray([0xFF, 0x01, 0x00, 0x00])
     return len(msg).to_bytes(2, "big") + msg
 
 

@@ -16,7 +16,7 @@ import Utils
 from .broker import CLIENT_PORT
 # from . import PolyEmuContext, ConnectionStatus, NotConnectedError, RequestFailedError, connect, disconnect, get_hash, \
 #     get_script_version, get_system, ping
-from . import PolyEmuContext, ConnectionStatus, NotConnectedError, RequestFailedError, connect, disconnect, ping, read
+from . import PolyEmuContext, ConnectionStatus, NotConnectedError, RequestFailedError, connect, disconnect, ping, read, get_platform
 from .client import PolyEmuClient, AutoPolyEmuClientRegister
 from .enums import PLATFORMS
 
@@ -154,8 +154,6 @@ async def _game_watcher(ctx: PolyEmuClientContext):
             # showed_connecting_message = False
 
             await ping(ctx.polyemu_ctx)
-            print(await read(ctx.polyemu_ctx, [(0x108, 32, PLATFORMS.GBA.ROM)]))
-            continue
 
             # if not showed_connected_message:
             #     showed_connected_message = True
@@ -173,23 +171,23 @@ async def _game_watcher(ctx: PolyEmuClientContext):
             #     await ctx.disconnect(False)
             # ctx.rom_hash = rom_hash
 
-            # if ctx.client_handler is None:
-            #     system = await get_system(ctx.polyemu_ctx)
-            #     ctx.client_handler = await AutoPolyEmuClientRegister.get_handler(ctx, system)
+            if ctx.client_handler is None:
+                system = await get_platform(ctx.polyemu_ctx)
+                ctx.client_handler = await AutoPolyEmuClientRegister.get_handler(ctx, system)
 
-            #     if ctx.client_handler is None:
-            #         if not showed_no_handler_message:
-            #             logger.info("No handler was found for this game. Double-check that the apworld is installed "
-            #                         "correctly and that you loaded the right ROM file.")
-            #             showed_no_handler_message = True
-            #         continue
-            #     else:
-            #         showed_no_handler_message = False
-            #         logger.info(f"Running handler for {ctx.client_handler.game}")
+                if ctx.client_handler is None:
+                    if not showed_no_handler_message:
+                        logger.info("No handler was found for this game. Double-check that the apworld is installed "
+                                    "correctly and that you loaded the right ROM file.")
+                        showed_no_handler_message = True
+                    continue
+                else:
+                    showed_no_handler_message = False
+                    logger.info(f"Running handler for {ctx.client_handler.game}")
         except RequestFailedError as exc:
             logger.info(f"Lost connection to emulator: {exc.args[0]}")
             continue
-        except NotConnectedError:
+        except (ExceptionGroup, NotConnectedError):
             continue
 
         # Server auth

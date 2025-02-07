@@ -22,7 +22,7 @@
 |`0x02`|Write|Writes data to a specified address and memory domain.|
 |`0x03`|Guard|Skips all following requests if some piece of memory does not match expected value.|
 |`0x04`|Lock|Halts emulation and processes requests until unlocked.|
-|`0x05`|Unock|Resumes emulation (requests in the same chain will still be processed on this frame).|
+|`0x05`|Unlock|Resumes emulation (requests in the same chain will still be processed on this frame).|
 |`0x06`|Platform|Returns the platform id.|
 |`0x07`|Game ID|Returns some identifier for the game. This remains consistent until the game is swapped for another, and is only used to track that the same game is loaded as was during previous requests. It could be a hash of the ROM, but may also be a timestamp representing when the game was first loaded, or any other arbitrary data.|
 
@@ -79,7 +79,8 @@ No body
 
 |Offset|Field Name|Size|Description|
 |--|--|--|--|
-|`0x00`|Data|1+|The data requested in the read.|
+|`0x00`|Data Size|2|The size of the data.|
+|`0x02`|Data|1+|The data requested in the read.|
 
 ### [`0x82`] Write
 
@@ -90,6 +91,12 @@ No body
 |Offset|Field Name|Size|Description|
 |--|--|--|--|
 |`0x00`|Validated|1|Whether the data validated. 0 if validation failed.|
+
+### [`0x86`] Platform
+
+|Offset|Field Name|Size|Description|
+|--|--|--|--|
+|`0x00`|Platform ID|1|The ID of the platform the emulator is emulating.|
 
 
 ### [`0xFF`] Error

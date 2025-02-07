@@ -13,9 +13,9 @@ class OperationEnum(IntEnum):
 
 
 class PlatformEnum(int):
-    # _domains: tuple[str, ...] = ()
     def __new__(cls, platform_id: int, domains: list[str]):
         obj = int.__new__(cls, platform_id)
+        setattr(obj, "SYSTEM", 0)
         for domain_id, domain_name in enumerate(domains):
             setattr(obj, domain_name, domain_id + 1)
         return obj
@@ -38,6 +38,9 @@ class Platforms:
         if name in self._platforms_dict:
             return self._platforms_dict[name]
         raise AttributeError(f"Unknown platform: {name}")
+
+    def get_by_id(self, platform_id: int):
+        return next(platform for platform in self._platforms_dict.values() if platform_id == platform)
     
 
 PLATFORMS = Platforms()

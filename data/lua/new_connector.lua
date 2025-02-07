@@ -1,3 +1,5 @@
+local DEBUG = false
+
 local POLYEMU_DEVICE_PORT = 43031
 local polyemu_socket = nil
 
@@ -55,7 +57,7 @@ local request_handlers = {
 
         data = memory_domains[domain]:readRange(address, size)
 
-        return string.char(0x81) .. data, msg
+        return string.char(0x81) .. int_to_bytes(size, 2) .. data, msg
     end,
     [0x02] = function (msg, dry)
         local domain, address, size, data
@@ -68,8 +70,8 @@ local request_handlers = {
             return "", msg
         end
 
-        for i, byte in ipairs(data) do
-            memory_domains[domain]:write8(address + (i - 1), byte:byte())
+        for i = 1, #data do
+            memory_domains[domain]:write8(address + (i - 1), data:byte(i))
         end
 
         return string.char(0x82), msg
@@ -94,6 +96,13 @@ local request_handlers = {
 
         return string.char(0x83) .. string.char(data_is_validated), msg
     end,
+    [0x06] = function (msg, dry)
+        if dry then
+            return "", msg
+        end
+
+        return string.char(0x86) .. string.char(0x01), msg
+    end,
 }
 
 local function received()
@@ -117,7 +126,9 @@ local function received()
         end
     end
 
-    console:log("Message Received: " .. bytes_to_hex_str(msg))
+    if DEBUG then
+        console:log("Message Received: " .. bytes_to_hex_str(msg))
+    end
 
     local header, requests = consume_str(msg, 1)
     local response_buffer = ""

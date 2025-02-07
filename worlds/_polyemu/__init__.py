@@ -4,16 +4,17 @@ A module for interacting with BizHawk through `connector_bizhawk_generic.lua`.
 Any mention of `domain` in this module refers to the names BizHawk gives to memory domains in its own lua api. They are
 naively passed to BizHawk without validation or modification.
 """
+from __future__ import annotations
 
 import abc
 import asyncio
 import enum
 import struct
 import sys
-from typing import Sequence
+from typing import Any, ClassVar, Self, Sequence, Type  # Self py 3.11+
 
 from .broker import CLIENT_PORT
-from .enums import PLATFORMS, OperationEnum
+from .enums import PLATFORMS, PlatformEnum, OperationEnum
 
 
 class ConnectionStatus(enum.IntEnum):
@@ -99,7 +100,128 @@ class GuardRequest(Request):
             self.expected_data
 
 
-# ABC that registers response types and has a "consume next response" function
+class PlatformRequest(Request):
+    type = OperationEnum.PLATFORM
+
+    def _get_body(self):
+        return b""
+
+
+class AutoResponseRegister(abc.ABCMeta):
+    response_types: ClassVar[dict[int, Response]] = {}
+
+    def __new__(cls, name: str, bases: tuple[type, ...], namespace: dict[str, Any]) -> AutoResponseRegister:
+        new_class = super().__new__(cls, name, bases, namespace)
+
+        # Register response type
+        if "type" in namespace:
+            AutoResponseRegister.response_types[namespace["type"]] = new_class
+
+        return new_class
+
+    @staticmethod
+    def get_response_type(code: int) -> Type[Response]:
+        try:
+            return AutoResponseRegister.response_types[code]
+        except KeyError:
+            raise KeyError(f"Response code [{hex(code)}] does not have a corresponding response type")
+
+    @staticmethod
+    def convert_message_chain(msg: bytes) -> list[Response]:
+        responses: list[Response] = []
+        while len(msg) > 0:
+            response, msg = AutoResponseRegister.get_response_type(msg[0]).consume_from_message(msg)
+            responses.append(response)
+        return responses
+
+
+class Response(abc.ABC, metaclass=AutoResponseRegister):
+    type: ClassVar[int]
+
+    @staticmethod
+    @abc.abstractmethod
+    def consume_from_message(msg: bytes) -> tuple[Self, bytes]:
+        ...
+
+
+class PingResponse(Response):
+    type = 0x80
+
+    @staticmethod
+    def consume_from_message(msg) -> tuple[PingResponse, bytes]:
+        assert msg[0] == PingResponse.type
+        return (PingResponse(), msg[1:])
+
+
+class ReadResponse(Response):
+    type = 0x81
+
+    data: bytes
+
+    def __init__(self, data: bytes):
+        self.data = data
+
+    @staticmethod
+    def consume_from_message(msg) -> tuple[ReadResponse, bytes]:
+        assert msg[0] == ReadResponse.type
+
+        data_size = int.from_bytes(msg[1:3], "big")
+        return (ReadResponse(msg[3:data_size + 3]), msg[data_size + 3:])
+
+
+class WriteResponse(Response):
+    type = 0x82
+
+    @staticmethod
+    def consume_from_message(msg) -> tuple[WriteResponse, bytes]:
+        assert msg[0] == WriteResponse.type
+        return (WriteResponse(), msg[1:])
+
+
+class GuardResponse(Response):
+    type = 0x83
+
+    validated: bool
+
+    def __init__(self, validated: bool):
+        self.validated = validated
+
+    @staticmethod
+    def consume_from_message(msg) -> tuple[GuardResponse, bytes]:
+        assert msg[0] == GuardResponse.type
+        return (GuardResponse(msg[1] != 0), msg[2:])
+
+
+class PlatformResponse(Response):
+    type = 0x86
+
+    platform_id: PlatformEnum
+
+    def __init__(self, platform_id: int):
+        self.platform_id = PLATFORMS.get_by_id(platform_id)
+
+    @staticmethod
+    def consume_from_message(msg) -> tuple[PlatformResponse, bytes]:
+        assert msg[0] == PlatformResponse.type
+        return (PlatformResponse(msg[1]), msg[2:])
+
+
+class ErrorResponse(Response):
+    type = 0xFF
+
+    error_code: int
+    error_context: bytes
+
+    def __init__(self, code: int, context: bytes):
+        self.error_code = code
+        self.error_context = context
+
+    @staticmethod
+    def consume_from_message(msg) -> tuple[ErrorResponse, bytes]:
+        assert msg[0] == ErrorResponse.type
+
+        context_size = int.from_bytes(msg[2:4], "big")
+        return (ErrorResponse(msg[1], msg[4:context_size + 4]), msg[context_size + 4:])
 
 
 class NotConnectedError(Exception):
@@ -199,7 +321,7 @@ async def get_script_version(ctx: PolyEmuContext) -> int:
     return 1
 
 
-async def send_requests(ctx: PolyEmuContext, request_list: list[Request]) -> list[bytes]:
+async def send_requests(ctx: PolyEmuContext, request_list: list[Request]) -> list[Response]:
     """Sends a list of requests to the Emulator and returns their responses.
 
     It's likely you want to use the wrapper functions instead of this."""
@@ -207,30 +329,30 @@ async def send_requests(ctx: PolyEmuContext, request_list: list[Request]) -> lis
     for request in request_list:
         message += request.to_bytes()
 
-    response = await ctx._send_message(message)
+    responses = AutoResponseRegister.convert_message_chain(await ctx._send_message(message))
 
-    return [response]
-    # errors: list[ConnectorError] = []
+    errors: list[Exception] = []
 
-    # for response in responses:
-    #     if response["type"] == "ERROR":
-    #         errors.append(ConnectorError(response["err"]))
+    for response in responses:
+        if response.type == 0xFF:
+            errors.append(RequestFailedError(response.error_context))
+            # if response.error_code == 0x01:
+            #     errors.append(NotConnectedError(response.error_context))
+            # else:
+            #     errors.append(ConnectorError(response.error_context))
 
-    # if errors:
-    #     if sys.version_info >= (3, 11, 0):
-    #         raise ExceptionGroup("Connector script returned errors", errors)  # noqa
-    #     else:
-    #         raise errors[0]
+    if errors:
+        if sys.version_info >= (3, 11, 0):
+            raise ExceptionGroup("Connector script returned errors", errors)  # noqa
+        else:
+            raise errors[0]
 
-    # return responses
+    return responses
 
 
 async def ping(ctx: PolyEmuContext) -> None:
     """Sends a PING request and receives a PONG response."""
-    res = await send_requests(ctx, [NoOpRequest()])
-
-#     if res["type"] != "PONG":
-#         raise SyncError(f"Expected response of type PONG but got {res['type']}")
+    await send_requests(ctx, [NoOpRequest()])
 
 
 # async def get_game_id(ctx: PolyEmuContext) -> bytes:
@@ -253,14 +375,10 @@ async def ping(ctx: PolyEmuContext) -> None:
 #     return res["value"]
 
 
-# async def get_system(ctx: BizHawkContext) -> str:
-#     """Gets the system name for the currently loaded ROM"""
-#     res = (await send_requests(ctx, [{"type": "SYSTEM"}]))[0]
-
-#     if res["type"] != "SYSTEM_RESPONSE":
-#         raise SyncError(f"Expected response of type SYSTEM_RESPONSE but got {res['type']}")
-
-#     return res["value"]
+async def get_platform(ctx: PolyEmuContext) -> str:
+    """Gets the platform for the currently loaded ROM"""
+    res: PlatformResponse = (await send_requests(ctx, [PlatformRequest()]))[0]
+    return res.platform_id
 
 
 # async def get_cores(ctx: BizHawkContext) -> dict[str, str]:
@@ -335,21 +453,16 @@ async def guarded_read(ctx: PolyEmuContext, read_list: Sequence[tuple[int, int, 
     were requested."""
     guards = [GuardRequest(domain, address, expected_data) for address, expected_data, domain in guard_list]
     reads = [ReadRequest(domain, address, size) for address, size, domain in read_list]
-    res = await send_requests(ctx, guards + reads)
 
-    # ret: list[bytes] = []
-    # for item in res:
-    #     if item["type"] == "GUARD_RESPONSE":
-    #         if not item["value"]:
-    #             return None
-    #     else:
-    #         if item["type"] != "READ_RESPONSE":
-    #             raise SyncError(f"Expected response of type READ_RESPONSE or GUARD_RESPONSE but got {item['type']}")
+    responses = await send_requests(ctx, guards + reads)
+    guard_responses: list[GuardResponse] = responses[:len(guards)]
+    read_responses: list[ReadResponse | GuardResponse] = responses[len(guards):]
 
-    #         ret.append(base64.b64decode(item["value"]))
+    for res in guard_responses:
+        if not res.validated:
+            return None
 
-    # return ret
-    return res
+    return [res.data for res in read_responses]
 
 
 async def read(ctx: PolyEmuContext, read_list: Sequence[tuple[int, int, str]]) -> list[bytes]:
@@ -364,49 +477,40 @@ async def read(ctx: PolyEmuContext, read_list: Sequence[tuple[int, int, str]]) -
     return await guarded_read(ctx, read_list, [])
 
 
-# async def guarded_write(ctx: BizHawkContext, write_list: Sequence[tuple[int, Sequence[int], str]],
-#                         guard_list: Sequence[tuple[int, Sequence[int], str]]) -> bool:
-#     """Writes data to 1 or more addresses if and only if every byte in guard_list matches its expected value.
+async def guarded_write(ctx: PolyEmuContext, write_list: Sequence[tuple[int, Sequence[int], int]],
+                        guard_list: Sequence[tuple[int, Sequence[int], int]]) -> bool:
+    """Writes data to 1 or more addresses if and only if every byte in guard_list matches its expected value.
 
-#     Items in `write_list` should be organized `(address, value, domain)` where
-#     - `address` is the address of the first byte of data
-#     - `value` is a list of bytes to write, in order, starting at `address`
-#     - `domain` is the name of the region of memory the address corresponds to
+    Items in `write_list` should be organized `(address, value, domain)` where
+    - `address` is the address of the first byte of data
+    - `value` is a list of bytes to write, in order, starting at `address`
+    - `domain` is the name of the region of memory the address corresponds to
 
-#     Items in `guard_list` should be organized `(address, expected_data, domain)` where
-#     - `address` is the address of the first byte of data
-#     - `expected_data` is the bytes that the data starting at this address is expected to match
-#     - `domain` is the name of the region of memory the address corresponds to
+    Items in `guard_list` should be organized `(address, expected_data, domain)` where
+    - `address` is the address of the first byte of data
+    - `expected_data` is the bytes that the data starting at this address is expected to match
+    - `domain` is the name of the region of memory the address corresponds to
 
-#     Returns False if any item in guard_list failed to validate. Otherwise returns True."""
-#     res = await send_requests(ctx, [{
-#         "type": "GUARD",
-#         "address": address,
-#         "expected_data": base64.b64encode(bytes(expected_data)).decode("ascii"),
-#         "domain": domain
-#     } for address, expected_data, domain in guard_list] + [{
-#         "type": "WRITE",
-#         "address": address,
-#         "value": base64.b64encode(bytes(value)).decode("ascii"),
-#         "domain": domain
-#     } for address, value, domain in write_list])
+    Returns False if any item in guard_list failed to validate. Otherwise returns True."""
+    guards = [GuardRequest(domain, address, expected_data) for address, expected_data, domain in guard_list]
+    writes = [WriteRequest(domain, address, data) for address, data, domain in write_list]
 
-#     for item in res:
-#         if item["type"] == "GUARD_RESPONSE":
-#             if not item["value"]:
-#                 return False
-#         else:
-#             if item["type"] != "WRITE_RESPONSE":
-#                 raise SyncError(f"Expected response of type WRITE_RESPONSE or GUARD_RESPONSE but got {item['type']}")
+    responses = await send_requests(ctx, guards + writes)
+    guard_responses: list[GuardResponse] = responses[:len(guards)]
+    write_responses: list[WriteResponse | GuardResponse] = responses[len(guards):]
 
-#     return True
+    for res in guard_responses:
+        if not res.validated:
+            return False
+
+    return True
 
 
-# async def write(ctx: BizHawkContext, write_list: Sequence[tuple[int, Sequence[int], str]]) -> None:
-#     """Writes data to 1 or more addresses.
+async def write(ctx: PolyEmuContext, write_list: Sequence[tuple[int, Sequence[int], int]]) -> None:
+    """Writes data to 1 or more addresses.
 
-#     Items in write_list should be organized `(address, value, domain)` where
-#     - `address` is the address of the first byte of data
-#     - `value` is a list of bytes to write, in order, starting at `address`
-#     - `domain` is the name of the region of memory the address corresponds to"""
-#     await guarded_write(ctx, write_list, [])
+    Items in write_list should be organized `(address, value, domain)` where
+    - `address` is the address of the first byte of data
+    - `value` is a list of bytes to write, in order, starting at `address`
+    - `domain` is the name of the region of memory the address corresponds to"""
+    await guarded_write(ctx, write_list, [])

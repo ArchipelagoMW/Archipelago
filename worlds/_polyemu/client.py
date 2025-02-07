@@ -8,6 +8,7 @@ import abc
 from typing import TYPE_CHECKING, Any, ClassVar
 
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
+from .enums import PlatformEnum
 
 if TYPE_CHECKING:
     from .context import PolyEmuClientContext
@@ -31,7 +32,8 @@ class AutoPolyEmuClientRegister(abc.ABCMeta):
 
         # Register handler
         if "system" in namespace:
-            systems = (namespace["system"],) if type(namespace["system"]) is str else tuple(sorted(namespace["system"]))
+            systems = int(namespace["system"]) if type(namespace["system"]) is PlatformEnum else namespace["system"]
+            systems = (systems,) if type(systems) is int else tuple(sorted(int(s) for s in systems))
             if systems not in AutoPolyEmuClientRegister.game_handlers:
                 AutoPolyEmuClientRegister.game_handlers[systems] = {}
 
@@ -65,7 +67,7 @@ class AutoPolyEmuClientRegister(abc.ABCMeta):
 
 
 class PolyEmuClient(abc.ABC, metaclass=AutoPolyEmuClientRegister):
-    system: ClassVar[str | tuple[str, ...]]
+    system: ClassVar[int | tuple[int, ...]]
     """The system(s) that the game this client is for runs on"""
 
     game: ClassVar[str]
