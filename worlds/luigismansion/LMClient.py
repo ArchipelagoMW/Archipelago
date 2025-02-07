@@ -349,8 +349,8 @@ class LMContext(CommonContext):
             # If item is something we found, but not something that is a location we want to get an item from or an
             # item that is okay to get no matter what, ignore it.
             if item.item in RECV_ITEMS_IGNORE or (item.player == self.slot and not
-            (self.location_names.lookup_in_game(item.location) in RECV_OWN_GAME_LOCATIONS or
-             self.item_names.lookup_in_game(item.item) in RECV_OWN_GAME_ITEMS)):
+            ((self.location_names.lookup_in_game(item.location) in RECV_OWN_GAME_LOCATIONS or
+             self.item_names.lookup_in_game(item.item) in RECV_OWN_GAME_ITEMS) or item.location < 0)):
                 last_recv_idx += 1
                 dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
                 continue
