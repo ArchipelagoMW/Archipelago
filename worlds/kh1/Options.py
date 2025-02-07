@@ -404,7 +404,8 @@ class KeybladesUnlockChests(Toggle):
     NL   - Fairy Harp
     HB   - Divine Rose
     EotW - Oblivion
-    HAW  - Oathkeeper
+    HAW  - Spellbinder
+    DI   - Oathkeeper
     
     Note: Does not apply to Atlantica, the emblem and carousel chests in Hollow Bastion, or the Aero chest in Neverland currently.
     """
