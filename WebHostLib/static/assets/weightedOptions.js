@@ -232,7 +232,7 @@ const toggleAll = (source, name) => {
   this.indeterminate = false;
 };
 
-const toggleOne = (source, name) => {
-  checkbox = document.getElementsByName(name)[0];
+const toggleOne = (source, id) => {
+  checkbox = document.getElementById(id);
   checkbox.indeterminate = true;
 };
