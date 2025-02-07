@@ -30,6 +30,7 @@ namespace Sly1AP
         public static int GameCompletion { get; set; } = 0;
         public static Random rnd = new Random();
         public static int ClueBundles { get; set; } = 0;
+        public static int ClueLocations { get; set; } = 0;
         public static int MurrayTextAddress { get; set; } = 0x2024A7B0;
         public static int RequiredBosses { get; set; } = 0;
         public Form1()
@@ -47,9 +48,14 @@ namespace Sly1AP
                 UpdateValues();
                 CutsceneSkip();
                 UpdateBosses();
+                StopAnticheat();
                 if (ClueBundles > 0)
                 {
                     Clues.BottleSync();
+                }
+                if (ClueLocations > 0)
+                {
+                    Helpers.SendBottles(Helpers.Levels, Client);
                 }
                 if (Memory.ReadByte(0x202623C0) == 0)
                 {
@@ -83,10 +89,6 @@ namespace Sly1AP
                 return false;
             }
             WriteLine($"Connected to PCSX2.");
-
-            //Set the game completion flag to 0, so boss locations won't be sent unintentionally.
-            //Memory.Write(0x2027DC18, 0);
-
             WriteLine($"Connecting to Archipelago.");
             Client = new ArchipelagoClient(client);
             Client.Connected += OnConnected;
@@ -155,29 +157,31 @@ namespace Sly1AP
                     await Task.Delay(1000);
                 }
             }
-            var SentLocations = Client.GameState.CompletedLocations;
-            var ItemsReceived = Client.GameState.ReceivedItems;
-            var NewItems = new List<Item>(ItemsReceived);
-            var NewLocations = new List<Location>(SentLocations);
-            foreach (var item in NewItems)
+            if (Client.GameState.ReceivedItems != null && Client.GameState.ReceivedItems.Any())
             {
-                for (int i = 0; i < item.Quantity; i++)
+                var ItemsReceived = Client.GameState.ReceivedItems;
+                var NewItems = new List<Item>(ItemsReceived);
+
+                foreach (var item in NewItems)
                 {
-                    if (item.Id >= 10020001 & item.Id <= 10020014)
+                    for (int i = 0; i < item.Quantity; i++)
                     {
-                        UpdateMoves(item.Id);
-                    }
-                    if (item.Id >= 10020015 & item.Id <= 10020018)
-                    {
-                        UpdateKeys(item.Id);
-                    }
-                    if (item.Id >= 10020021 & item.Id <= 10020024)
-                    {
-                        UpdateLevels(item.Id);
-                    }
-                    if (item.Id >= 10020030 & item.Id <= 10020048)
-                    {
-                        Clues.UpdateBottles(item.Id, ClueBundles);
+                        if (item.Id >= 10020001 && item.Id <= 10020014)
+                        {
+                            UpdateMoves(item.Id);
+                        }
+                        if (item.Id >= 10020015 && item.Id <= 10020018)
+                        {
+                            UpdateKeys(item.Id);
+                        }
+                        if (item.Id >= 10020021 && item.Id <= 10020024)
+                        {
+                            UpdateLevels(item.Id);
+                        }
+                        if (item.Id >= 10020030 && item.Id <= 10020048)
+                        {
+                            Clues.UpdateBottles(item.Id, ClueBundles);
+                        }
                     }
                 }
             }
@@ -242,10 +246,30 @@ namespace Sly1AP
                     Memory.Write(0x2027D360, keys.PandaKingStart);
                 }
             }
-            if (options.ContainsKey("CluesanityBundleSize"))
+            if (options.ContainsKey("ItemCluesanityBundleSize"))
             {
-                var ClueBundleSizeElement = (JsonElement)options["CluesanityBundleSize"];
+                var ClueBundleSizeElement = (JsonElement)options["ItemCluesanityBundleSize"];
                 ClueBundles = ClueBundleSizeElement.GetUInt16();
+                //if (ClueBundles > 0)
+                //{
+                //    int Offset = 0;
+                //    uint Address = 0x25EA00;
+                //    foreach (var Level in Helpers.Levels)
+                //    {
+                //        if (Level.NamePointer == 0)
+                //        {
+                //            return;
+                //        }
+                //        Memory.Write(Level.NamePointer, (Address + Offset));
+                //        Offset += 50;
+                //    }
+                //    Clues.UpdateBottles(0, 0);
+                //}
+            }
+            if (options.ContainsKey("LocationCluesanityBundleSize"))
+            {
+                var LocationBundleSizeElement = (JsonElement)options["LocationCluesanityBundleSize"];
+                ClueLocations = LocationBundleSizeElement.GetUInt16();
             }
             if (options.ContainsKey("RequiredBosses"))
             {
@@ -649,6 +673,15 @@ namespace Sly1AP
             {
                 Memory.Write(0x2027D7A8, 21);
             }
+        }
+        //Sly 1 has anti-piracy measures that can seriously mess with the randomizer's functionality.
+        //We freeze the related flags to stop them from ever being flipped.
+        private void StopAnticheat()
+        {
+            Memory.Write(0x20261080, 0);
+            Memory.Write(0x20262310, 0);
+            Memory.Write(0x20269B48, 0);
+            Memory.Write(0x20275C34, 0);
         }
     }
 }
