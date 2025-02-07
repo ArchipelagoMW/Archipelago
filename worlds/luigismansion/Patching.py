@@ -3,11 +3,14 @@ from random import choice
 
 from .Items import filler_items
 
+speedy_create_name = ["63_99", "67_99", "14_99", "12_99", "9_99", "8_99", "22_99", "34_99", "25_99", "46_99",
+                      "36_99", "38_99"]
+
 
 # Converts AP readable name to in-game name
 def __get_item_name(item_data, slot: int):
     if int(item_data["player"]) != slot:
-        return "nothing" #TODO return AP item(s) here
+        return "nothing"  # TODO return AP item(s) here
 
     if item_data["door_id"] != 0:
         return "key_" + str(item_data["door_id"])
@@ -192,15 +195,11 @@ def update_character_info(character_info, output_data):
 
 
 def update_teiden_observer_info(observer_info, teiden_observer_info):
-    speedy_create_name = ["63_99", "67_99", "14_99", "12_99", "9_99", "8_99", "22_99", "34_99", "25_99", "46_99",
-                          "36_99", "38_99"]
-
     for x in observer_info.info_file_field_entries:
         if x["string_arg0"] in speedy_create_name:
-            if x["string_arg0"] == "67_99":
-                x["cond_type"] = 17
             teiden_observer_info.info_file_field_entries.append(x)
             observer_info.info_file_field_entries.remove(x)
+
 
 def update_observer_info(observer_info):
     for x in observer_info.info_file_field_entries:
@@ -919,7 +918,6 @@ def update_observer_info(observer_info):
     })
 
 
-
 def update_generator_info(generator_info):
     for x in generator_info.info_file_field_entries:
         # Allows the Ring of Boos on the 3F Balcony to only appear when the Ice Medal has been collected.
@@ -1203,13 +1201,16 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
     # Adjust the item spawn height based on if the item spawns from the ceiling or high up on the wall.
     # Otherwise items are sent into the floor above or out of bounds, which makes it almost impossible to get.
     ceiling_furniture_list = [4, 43, 62, 63, 76, 77, 81, 84, 85, 91, 92, 101, 110, 111, 137, 156, 158, 159, 163,
-        173, 174, 189, 190, 195, 199, 200, 228, 240, 266, 310, 342, 352, 354, 355, 356, 357, 358, 359, 373, 374,
-        378, 379, 380, 381, 399, 423, 426, 445, 446, 454, 459, 460, 463, 467, 485, 547, 595, 596, 631, 632, 636,
-        657, 671, 672]
+                              173, 174, 189, 190, 195, 199, 200, 228, 240, 266, 310, 342, 352, 354, 355, 356, 357, 358,
+                              359, 373, 374,
+                              378, 379, 380, 381, 399, 423, 426, 445, 446, 454, 459, 460, 463, 467, 485, 547, 595, 596,
+                              631, 632, 636,
+                              657, 671, 672]
     medium_height_furniture_list = [0, 1, 104, 112, 113, 114, 124, 125, 135, 136, 210, 232, 234, 235, 264, 265,
-        270, 315, 343, 344, 345, 346, 347, 353, 361, 362, 363, 368, 369, 370, 388, 397, 398, 411, 418, 438, 444, 520,
-        526, 544, 552, 553, 554, 555, 602, 603, 634, 635]
-    for furniture_jmp_id in (ceiling_furniture_list+medium_height_furniture_list):
+                                    270, 315, 343, 344, 345, 346, 347, 353, 361, 362, 363, 368, 369, 370, 388, 397, 398,
+                                    411, 418, 438, 444, 520,
+                                    526, 544, 552, 553, 554, 555, 602, 603, 634, 635]
+    for furniture_jmp_id in (ceiling_furniture_list + medium_height_furniture_list):
         current_y_offset = furniture_info.info_file_field_entries[furniture_jmp_id]["item_offset_y"]
         adjust_y_offset = 125.0
         if furniture_jmp_id in ceiling_furniture_list:
@@ -1246,7 +1247,7 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
             item_appear_info.info_file_field_entries.index(item_appear_entry_idx))
 
         if any((key, val) for (key, val) in filler_items.items() if
-                key == item_data["name"] and key != "Diamond" and val.type == "Money") \
+               key == item_data["name"] and key != "Diamond" and val.type == "Money") \
                 and item_data["player"] == output_data["Slot"]:
             furniture_info.info_file_field_entries[item_data["loc_enum"]]["item_table"] = 11
             int_money_amt = 1
@@ -1304,13 +1305,12 @@ ROOM_ID_TO_NAME = {
     57: "Artist's Studio"
 }
 
+
 def update_teiden_enemy_info(enemy_info, teiden_enemy_info):
     # List of all Speedy Spirit actor names
-    speedy_table = ["iyapoo1", "iyapoo2", "iyapoo3", "iyapoo4", "iyapoo5", "iyapoo6", "iyapoo7", "iyapoo8", "iyapoo9",
-                    "iyapoo10", "iyapoo11", "iyapoo12", "iyapoo13", "iyapoo14", "iyapoo15"]
 
     for x in enemy_info.info_file_field_entries:
-        if x["name"] in speedy_table:
+        if x["create_name"] in speedy_create_name:
             teiden_enemy_info.info_file_field_entries.append(x)
             enemy_info.info_file_field_entries.remove(x)
 
