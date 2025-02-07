@@ -25,7 +25,7 @@ def get_locations_by_category(category: str) -> Dict[str, KH1LocationData]:
 
 
 location_table: Dict[str, KH1LocationData] = {
-    #"Destiny Islands Chest":                                                           KH1LocationData("Destiny Islands",  265_0011, "Chest"), missable
+    "Destiny Islands Chest":                                                            KH1LocationData("Destiny Islands",  265_0011, "Chest"),
     "Traverse Town 1st District Candle Puzzle Chest":                                   KH1LocationData("Traverse Town",    265_0211, "Chest"),
     "Traverse Town 1st District Accessory Shop Roof Chest":                             KH1LocationData("Traverse Town",    265_0212, "Chest"),
     "Traverse Town 2nd District Boots and Shoes Awning Chest":                          KH1LocationData("Traverse Town",    265_0213, "Chest"),
@@ -487,6 +487,22 @@ location_table: Dict[str, KH1LocationData] = {
     "Deep Jungle Treetop Green Trinity":                                                KH1LocationData("Deep Jungle",      265_6610, "Prize"),
     "Agrabah Cave of Wonders Treasure Room Red Trinity":                                KH1LocationData("Agrabah",          265_6611, "Prize"),
     
+    "Destiny Islands Seashore Capture Fish 1 (Day 2)":                                  KH1LocationData("Destiny Islands",  265_6700, "Static"),
+    "Destiny Islands Seashore Capture Fish 2 (Day 2)":                                  KH1LocationData("Destiny Islands",  265_6701, "Static"),
+    "Destiny Islands Seashore Capture Fish 3 (Day 2)":                                  KH1LocationData("Destiny Islands",  265_6702, "Static"),
+    "Destiny Islands Seashore Gather Seagull Egg (Day 2)":                              KH1LocationData("Destiny Islands",  265_6703, "Static"),
+    "Destiny Islands Seashore Log on Riku's Island (Day 1)":                            KH1LocationData("Destiny Islands",  265_6704, "Static"),
+    "Destiny Islands Seashore Log under Bridge (Day 1)":                                KH1LocationData("Destiny Islands",  265_6705, "Static"),
+    "Destiny Islands Seashore Gather Cloth (Day 1)":                                    KH1LocationData("Destiny Islands",  265_6706, "Static"),
+    "Destiny Islands Seashore Gather Rope (Day 1)":                                     KH1LocationData("Destiny Islands",  265_6707, "Static"),
+    "Destiny Islands Seashore Deliver Kairi Items (Day 1)":                             KH1LocationData("Destiny Islands",  265_6710, "Static"),
+    "Destiny Islands Secret Place Gather Mushroom (Day 2)":                             KH1LocationData("Destiny Islands",  265_6711, "Static"),
+    "Destiny Islands Cove Gather Mushroom Near Zip Line (Day 2)":                       KH1LocationData("Destiny Islands",  265_6712, "Static"),
+    "Destiny Islands Cove Gather Mushroom in Small Cave (Day 2)":                       KH1LocationData("Destiny Islands",  265_6713, "Static"),
+    "Destiny Islands Cove Talk to Kairi (Day 2)":                                       KH1LocationData("Destiny Islands",  265_6714, "Static"),
+    "Destiny Islands Gather Drinking Water (Day 2)":                                    KH1LocationData("Destiny Islands",  265_6715, "Static"),
+    "Destiny Islands Cove Deliver Kairi Items (Day 2)":                                 KH1LocationData("Destiny Islands",  265_6716, "Static"),
+    
     "Agrabah Defeat Jafar Genie Ansem's Report 1":                                      KH1LocationData("Agrabah",          265_7018, "Static"),
     "Hollow Bastion Speak with Aerith Ansem's Report 2":                                KH1LocationData("Hollow Bastion",   265_7017, "Static"),
     "Atlantica Defeat Ursula II Ansem's Report 3":                                      KH1LocationData("Atlantica",        265_7016, "Static"),
@@ -722,7 +738,7 @@ location_table: Dict[str, KH1LocationData] = {
 }
 
 event_location_table: Dict[str, KH1LocationData] = {
-        "Final Ansem": KH1LocationData("Final", 265_9999, "None")
+        "Final Ansem": KH1LocationData("Homecoming", 265_9999, "None")
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in location_table.items() if data.code}
