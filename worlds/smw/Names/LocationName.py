@@ -973,9 +973,6 @@ star_road_5_green_block_20 = "Star Road 5 - Green Switch Palace Block #20"
 
 smw_location_groups = {
     # Single level groups
-    "Yoshi's House": {
-        yoshis_house,
-    },
     "Yoshi's Island 1": {
         yoshis_island_1_exit_1,
         yoshis_island_1_dragon,
@@ -1600,5 +1597,8 @@ smw_location_groups = {
     # Multi-level groups
     "Switch Palaces": {
         yellow_switch_palace, green_switch_palace, red_switch_palace, blue_switch_palace
+    },
+    "Victory": {
+        yoshis_house, bowser
     }
 }
