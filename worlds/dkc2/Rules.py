@@ -538,7 +538,7 @@ class DKC2StrictRules(DKC2Rules):
                 lambda state: self.can_cling(state) and self.has_skull_kart(state),
 
             LocationName.gusty_glade_clear:
-                lambda state: self.can_cling(state) and self.has_kannons(state),
+                lambda state: self.can_cling(state) and self.has_kannons(state) and self.can_cartwheel(state),
             LocationName.gusty_glade_kong:
                 lambda state: self.can_cling(state) and self.has_kannons(state) and self.can_carry(state) and
                     self.can_cartwheel(state),
