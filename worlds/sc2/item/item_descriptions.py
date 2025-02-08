@@ -1039,7 +1039,7 @@ item_descriptions = {
     item_names.MIRAGE_GRAVITON_BEAM: "Mirage War Council upgrade. Allows Mirages to use Graviton Beam.",
     item_names.SKIRMISHER_PEER_CONTEMPT: "Skirmisher War Council upgrade. Allows Skirmishers to target air units.",
     item_names.VOID_RAY_PRISMATIC_RANGE: "Void Ray War Council upgrade. Void Rays gain increased range as they charge their beam.",
-    item_names.DESTROYER_REFORGED_BLOODSHARD_CORE: "Destroyer War Council upgrade. When fully charged, the Destroyer's Destruction Beam weapon does full damage to secondary targets.",
+    item_names.DESTROYER_REFORGED_BLOODSHARD_CORE: "Destroyer War Council upgrade. Increases the Destroyer's bounce attack damage to 3 (+2 vs armored) at all charge levels, and allows the bounces to benefit from protoss air weapon upgrades.",
     item_names.INTERCESSOR_LIMINAL_MAGNIFIERS: "Intercessor War Council upgrade. Intercessor slow now also applies to structures.",
     item_names.DAWNBRINGER_SOLARITE_LENS: "Dawnbringer War Council upgrade. Dawnbringers gain +2 range.",
     item_names.CARRIER_REPAIR_DRONES: "Carrier War Council upgrade. Carriers gain 2 repair drones which heal nearby mechanical units.",
