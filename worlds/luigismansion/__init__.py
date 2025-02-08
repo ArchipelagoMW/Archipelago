@@ -624,6 +624,8 @@ class LMWorld(World):
             "rank requirement": self.options.rank_requirement.value,
             "better vacuum": self.options.good_vacuum.value,
             "door rando": self.options.door_rando.value,
+            "door rando list": self.open_doors,
+            "ghost elements": self.ghost_affected_regions,
             "toadsanity": self.options.toadsanity.value,
             "plantsanity": self.options.plantsanity.value,
             "furnisanity": self.options.furnisanity.value,
