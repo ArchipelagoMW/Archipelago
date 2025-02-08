@@ -6,20 +6,22 @@ from typing import List, Set, Iterable
 
 from BaseClasses import ItemClassification, MultiWorld
 import Options as CoreOptions
-from worlds.sc2 import options, locations
-from worlds.sc2.item import item_tables
+from .. import options, locations
+from ..item import item_tables
+from ..rules import SC2Logic
+from ..mission_tables import SC2Race, MissionFlag, lookup_name_to_mission
 
 
 class TestInventory:
     """
     Runs checks against inventory with validation if all target items are progression and returns a random result
     """
-    def __init__(self):
+    def __init__(self) -> None:
         self.random: Random = Random()
         self.progression_types: Set[ItemClassification] = {ItemClassification.progression, ItemClassification.progression_skip_balancing}
 
     def is_item_progression(self, item: str) -> bool:
-        return item_tables.get_full_item_list()[item].classification in self.progression_types
+        return item_tables.item_table[item].classification in self.progression_types
 
     def random_boolean(self):
         return self.random.choice([True, False])
@@ -64,16 +66,7 @@ class TestWorld:
     """
     Mock world to simulate different player options for logic rules
     """
-    has_barracks_unit: bool = True
-    has_factory_unit: bool = True
-    has_starport_unit: bool = True
-    has_zerg_melee_unit: bool = True
-    has_zerg_ranged_unit: bool = True
-    has_zerg_air_unit: bool = True
-    has_protoss_ground_unit: bool = True
-    has_protoss_air_unit: bool = True
-
-    def __init__(self):
+    def __init__(self) -> None:
         defaults = dict()
         for field in fields(options.Starcraft2Options):
             field_class = field.type
@@ -93,45 +86,101 @@ class TestWorld:
 
 
 class TestRules(unittest.TestCase):
-    def __init__(self, methodName='runTest'):
-        unittest.TestCase.__init__(self, methodName)
+    def setUp(self) -> None:
+        self.required_tactics_values: List[int] = [
+            options.RequiredTactics.option_standard, options.RequiredTactics.option_advanced
+        ]
+        self.all_in_map_values: List[int] = [
+            options.AllInMap.option_ground, options.AllInMap.option_air
+        ]
+        self.take_over_ai_allies_values: List[int] = [
+            options.TakeOverAIAllies.option_true, options.TakeOverAIAllies.option_false
+        ]
+        self.kerrigan_presence_values: List[int] = [
+            options.KerriganPresence.option_vanilla, options.KerriganPresence.option_not_present
+        ]
+        self.NUM_TEST_RUNS = 100
 
-        required_tactics: List[options.RequiredTactics] = \
-            [options.RequiredTactics.option_standard, options.RequiredTactics.option_advanced]
-        all_in_map: List[options.AllInMap] = \
-            [options.AllInMap.option_ground, options.AllInMap.option_air]
-        take_over_ai_allies: List[options.TakeOverAIAllies] = \
-            [options.TakeOverAIAllies.option_true, options.TakeOverAIAllies.option_false]
-        kerrigan_presence: List[options.KerriganPresence] = \
-            [options.KerriganPresence.option_vanilla, options.KerriganPresence.option_not_present]
-        spear_of_adun_autonomously_cast_presence: List[options.SpearOfAdunAutonomouslyCastAbilityPresence] = \
-            [
-                options.SpearOfAdunAutonomouslyCastAbilityPresence.option_everywhere,
-                options.SpearOfAdunAutonomouslyCastAbilityPresence.option_not_present
-            ]
-
-        self.test_worlds: List[TestWorld] = []
-        for option_tuple in itertools.product(
-            required_tactics,
-            all_in_map,
-            take_over_ai_allies,
-            kerrigan_presence,
-            spear_of_adun_autonomously_cast_presence
-        ):
-            test_world = TestWorld()
-            test_world.options.required_tactics.value = option_tuple[0]
-            test_world.options.all_in_map.value = option_tuple[1]
-            test_world.options.take_over_ai_allies.value = option_tuple[2]
-            test_world.options.kerrigan_presence.value = option_tuple[3]
-            test_world.options.spear_of_adun_autonomously_cast_ability_presence.value = option_tuple[4]
-
-            self.test_worlds.append(test_world)
+    @staticmethod
+    def _get_world(
+        required_tactics: int = options.RequiredTactics.default,
+        all_in_map: int = options.AllInMap.default,
+        take_over_ai_allies: int = options.TakeOverAIAllies.default,
+        kerrigan_presence: int = options.KerriganPresence.default,
+        # setting this to everywhere catches one extra logic check for Amon's Fall without missing any
+        spear_of_adun_passive_presence: int = options.SpearOfAdunAutonomouslyCastAbilityPresence.option_everywhere,
+    ) -> TestWorld:
+        test_world = TestWorld()
+        test_world.options.required_tactics.value = required_tactics
+        test_world.options.all_in_map.value = all_in_map
+        test_world.options.take_over_ai_allies.value = take_over_ai_allies
+        test_world.options.kerrigan_presence.value = kerrigan_presence
+        test_world.options.spear_of_adun_autonomously_cast_ability_presence.value = spear_of_adun_passive_presence
+        test_world.logic = SC2Logic(test_world)  # type: ignore
+        return test_world
 
     def test_items_in_rules_are_progression(self):
         test_inventory = TestInventory()
-        for test_world in self.test_worlds:
+        for option in self.required_tactics_values:
+            test_world = self._get_world(required_tactics=option)
             location_data = locations.get_locations(test_world)
-            for _ in range(100):
-                for location in location_data:
-                    if location.rule is not None:
-                        location.rule(test_inventory)
+            for location in location_data:
+                for _ in range(self.NUM_TEST_RUNS):
+                    location.rule(test_inventory)
+    
+    def test_items_in_all_in_are_progression(self):
+        test_inventory = TestInventory()
+        for test_options in itertools.product(self.required_tactics_values, self.all_in_map_values):
+            test_world = self._get_world(required_tactics=test_options[0], all_in_map=test_options[1])
+            for location in locations.get_locations(test_world):
+                if 'All-In' not in location.region:
+                    continue
+                for _ in range(self.NUM_TEST_RUNS):
+                    location.rule(test_inventory)
+
+    def test_items_in_kerriganless_missions_are_progression(self):
+        test_inventory = TestInventory()
+        for test_options in itertools.product(self.required_tactics_values, self.kerrigan_presence_values):
+            test_world = self._get_world(required_tactics=test_options[0], kerrigan_presence=test_options[1])
+            for location in locations.get_locations(test_world):
+                mission = lookup_name_to_mission[location.region]
+                if MissionFlag.Kerrigan not in mission.flags:
+                    continue
+                for _ in range(self.NUM_TEST_RUNS):
+                    location.rule(test_inventory)
+
+    def test_items_in_ai_takeover_missions_are_progression(self):
+        test_inventory = TestInventory()
+        for test_options in itertools.product(self.required_tactics_values, self.take_over_ai_allies_values):
+            test_world = self._get_world(required_tactics=test_options[0], take_over_ai_allies=test_options[1])
+            for location in locations.get_locations(test_world):
+                mission = lookup_name_to_mission[location.region]
+                if MissionFlag.AiAlly not in mission.flags:
+                    continue
+                for _ in range(self.NUM_TEST_RUNS):
+                    location.rule(test_inventory)
+    
+    def test_items_in_hard_rules_are_progression(self):
+        test_inventory = TestInventory()
+        test_world = TestWorld()
+        test_world.options.required_tactics.value = options.RequiredTactics.option_any_units
+        test_world.logic = SC2Logic(test_world)
+        location_data = locations.get_locations(test_world)
+        for location in location_data:
+            if location.hard_rule is not None:
+                for _ in range(10):
+                    location.hard_rule(test_inventory)
+
+    def test_items_in_any_units_rules_are_progression(self):
+        test_inventory = TestInventory()
+        test_world = TestWorld()
+        test_world.options.required_tactics.value = options.RequiredTactics.option_any_units
+        logic = SC2Logic(test_world)
+        test_world.logic = logic
+        for race in (SC2Race.TERRAN, SC2Race.PROTOSS, SC2Race.ZERG):
+            for target in range(1, 5):
+                rule = logic.has_race_units(target, race)
+                for _ in range(10):
+                    rule(test_inventory)
+
+

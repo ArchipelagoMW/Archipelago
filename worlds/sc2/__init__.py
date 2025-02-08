@@ -25,7 +25,7 @@ from .options import (
     GrantStoryTech, GenericUpgradeResearch, RequiredTactics,
     upgrade_included_names, EnableVoidTrade, FillerRatio, MissionOrderScouting, option_groups,
 )
-from .rules import get_basic_units
+from .rules import get_basic_units, SC2Logic
 from . import settings
 from .pool_filter import filter_items
 from .mission_tables import SC2Campaign, SC2Mission, SC2Race, MissionFlag
@@ -91,14 +91,7 @@ class SC2World(World):
     final_missions: List[int]
     required_client_version = 0, 4, 5
     custom_mission_order: SC2MissionOrder
-    has_barracks_unit: bool = True
-    has_factory_unit: bool = True
-    has_starport_unit: bool = True
-    has_zerg_melee_unit: bool = True
-    has_zerg_ranged_unit: bool = True
-    has_zerg_air_unit: bool = True
-    has_protoss_ground_unit: bool = True
-    has_protoss_air_unit: bool = True
+    logic: Optional['SC2Logic']
     filler_ratio: Dict[str, int]
 
     def __init__(self, multiworld: MultiWorld, player: int):
@@ -106,17 +99,19 @@ class SC2World(World):
         self.location_cache = []
         self.locked_locations = []
         self.filler_ratio = FillerRatio.default
+        self.logic = None
 
     def create_item(self, name: str) -> Item:
         data = get_full_item_list()[name]
         return StarcraftItem(name, data.classification, data.code, self.player)
 
     def create_regions(self):
+        self.logic = SC2Logic(self)
         self.custom_mission_order = create_mission_order(
             self, get_locations(self), self.location_cache
         )
 
-    def create_items(self):
+    def create_items(self) -> None:
         # Starcraft 2-specific item setup:
         # * Filter item pool based on player options
         # * Plando starter units
@@ -145,22 +140,23 @@ class SC2World(World):
         # Tell the logic which unit classes are used for required W/A upgrades
         used_item_names: Set[str] = {item.name for item in pruned_items}
         used_item_names = used_item_names.union(item.name for item in self.multiworld.itempool if item.player == self.player)
+        assert self.logic is not None
         if used_item_names.isdisjoint(item_groups.barracks_wa_group):
-            self.has_barracks_unit = False
+            self.logic.has_barracks_unit = False
         if used_item_names.isdisjoint(item_groups.factory_wa_group):
-            self.has_factory_unit = False
+            self.logic.has_factory_unit = False
         if used_item_names.isdisjoint(item_groups.starport_wa_group):
-            self.has_starport_unit = False
+            self.logic.has_starport_unit = False
         if used_item_names.isdisjoint(item_groups.zerg_melee_wa):
-            self.has_zerg_melee_unit = False
+            self.logic.has_zerg_melee_unit = False
         if used_item_names.isdisjoint(item_groups.zerg_ranged_wa):
-            self.has_zerg_ranged_unit = False
+            self.logic.has_zerg_ranged_unit = False
         if used_item_names.isdisjoint(item_groups.zerg_air_units):
-            self.has_zerg_air_unit = False
+            self.logic.has_zerg_air_unit = False
         if used_item_names.isdisjoint(item_groups.protoss_ground_wa):
-            self.has_protoss_ground_unit = False
+            self.logic.has_protoss_ground_unit = False
         if used_item_names.isdisjoint(item_groups.protoss_air_wa):
-            self.has_protoss_air_unit = False
+            self.logic.has_protoss_air_unit = False
 
         pad_item_pool_with_filler(self, len(self.location_cache) - len(self.locked_locations) - len(pool), pool)
 
@@ -201,10 +197,12 @@ class SC2World(World):
             slot_data["kerrigan_presence"] = KerriganPresence.option_not_present
 
         if self.options.mission_order_scouting != MissionOrderScouting.option_none:
-            mission_item_classification: Dict[str, ItemClassification] = {}
+            mission_item_classification: Dict[str, int] = {}
             for location in self.multiworld.get_locations(self.player):
                 # Event do not hold items
                 if not location.is_event:
+                    assert location.address is not None
+                    assert location.item is not None
                     if lookup_location_id_to_type[location.address] == LocationType.VICTORY:
                         location_name = location.name
                         mission_item_classification[location_name] = location.item.classification.as_flag()
@@ -223,7 +221,7 @@ class SC2World(World):
         traders = [
             world
             for world in self.multiworld.worlds.values()
-            if world.game == self.game and world.options.enable_void_trade == EnableVoidTrade.option_true
+            if world.game == self.game and world.options.enable_void_trade == EnableVoidTrade.option_true  # type: ignore
         ]
         if len(traders) < 2:
             slot_data["enable_void_trade"] = EnableVoidTrade.option_false
@@ -235,6 +233,8 @@ class SC2World(World):
             self.options.generic_upgrade_missions > 0
             and self.options.required_tactics != RequiredTactics.option_no_logic
         ):
+            assert self.logic is not None
+            self.logic.total_mission_count = self.custom_mission_order.get_mission_count()
             # Attempt to resolve situation when the option is too high for the mission order rolled
             # TODO: Attempt to resolve Kerrigan levels too
             weapon_armor_item_names = [
@@ -833,7 +833,7 @@ def item_list_contains_parent(world: SC2World, item_data: ItemData, item_name_li
     return item_parents.parent_present[item_data.parent](item_name_list, world.options)
 
 
-def pad_item_pool_with_filler(world: SC2World, num_items: int, pool: List[Item]):
+def pad_item_pool_with_filler(world: SC2World, num_items: int, pool: List[StarcraftItem]):
     for _ in range(num_items):
         item = create_item_with_correct_settings(world.player, world.get_filler_item_name())
         pool.append(item)

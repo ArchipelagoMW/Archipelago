@@ -74,22 +74,11 @@ The logic is a little more restrictive than a player's creativity, so an advance
 more items than they need in any situation. These levels are entirely safe to use in a multiworld.
 
 The "Any Units" level only guarantees that a minimum number of faction-appropriate units or buildings are reachable
-early on, but not what those units are.
-Before starting a build mission, the generator will guarantee that N units or buildings can be acquired before starting it,
-where N is the number of missions the player needs to beat to access the mission, and the units belong to the faction
-the player will play in the mission. For a linear order of missions, ordered [zerg, protoss, terran], a protoss unit
-is guaranteed to be unlocked in the zerg mission, and 2 terran units are guaranteed to be unlocked
-in the preceding 2 missions. This effect maxes out at 5 units guaranteed for each faction.
-
-It's possible to get stuck on "Any Units" if the units can't attack,
-like getting only medics and medivacs for the first 2 units, only getting units that take too long to build
-for the missions at hand, or simply not having enough damage output.
-Some safeguards exist to make sure terrain traversal, no-builds, and having something that can hit air objectives exists,
-so a stuck world can be recovered by either setting the difficulty to casual with `/difficulty casual` in the client
-or using cheat codes like `terribleterribledamage` in-game.
-This logic option is likely to be beatable without cheats, but not guaranteed to be.
-Thus, it is only safe to use in a multiworld if the player is willing to use cheats to get a world unstuck if
-the situation calls for it, or uses settings like start inventory or mission exclusions to guarantee beatability.
+early on, with minimal restrictions on what those units are.
+Generation will guarantee a number of faction-appropriate units are reachable before starting a mission,
+based on the depth of that mission. For example, if the third mission is a zerg mission, it is guaranteed that 2
+zerg units are somewhere in the preceding 2 missions. This logic level is not guaranteed to be beatable, and may
+require lowering the difficulty level (`/difficulty` in the client) if many no-build missions are excluded.
 
 The "No Logic" level provides no logical safeguards for beatability. It is only safe to use in a multiworld if the player curates
 a start inventory or the organizer is okay with the possibility of the StarCraft 2 world being unbeatable.

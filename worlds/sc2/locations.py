@@ -4,7 +4,6 @@ from .item import item_names
 from .options import (get_option_value, RequiredTactics,
     LocationInclusion, KerriganPresence,
 )
-from .rules import SC2Logic
 from .mission_tables import SC2Mission
 
 from BaseClasses import Location
@@ -136,7 +135,11 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             or not world.options.enable_hots_missions.value
         )
     adv_tactics = logic_level != RequiredTactics.option_standard
-    logic = SC2Logic(world)
+    if world is not None and world.logic is not None:
+        logic = world.logic
+    else:
+        from .rules import SC2Logic
+        logic = SC2Logic(world)
     player = 1 if world is None else world.player
     location_table: List[LocationData] = [
         # WoL
@@ -1143,25 +1146,31 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                         item_names.ROACH,
                         item_names.HYDRALISK,
                         item_names.INFESTOR
-                    }, player)))
+                    }, player))),
+            hard_rule=logic.zerg_pass_vents,
         ),
         make_location_data(SC2Mission.ENEMY_WITHIN.mission_name, "Infest Giant Ursadon", SC2HOTS_LOC_ID_OFFSET + 601, LocationType.VANILLA,
-            logic.zerg_pass_vents
+            logic.zerg_pass_vents,
+            hard_rule=logic.zerg_pass_vents,
         ),
         make_location_data(SC2Mission.ENEMY_WITHIN.mission_name, "First Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 602, LocationType.VANILLA,
-            logic.zerg_pass_vents
+            logic.zerg_pass_vents,
         ),
         make_location_data(SC2Mission.ENEMY_WITHIN.mission_name, "Second Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 603, LocationType.VANILLA,
-            logic.zerg_pass_vents
+            logic.zerg_pass_vents,
+            hard_rule=logic.zerg_pass_vents,
         ),
         make_location_data(SC2Mission.ENEMY_WITHIN.mission_name, "Third Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 604, LocationType.VANILLA,
-            logic.zerg_pass_vents
+            logic.zerg_pass_vents,
+            hard_rule=logic.zerg_pass_vents,
         ),
         make_location_data(SC2Mission.ENEMY_WITHIN.mission_name, "Warp Drive", SC2HOTS_LOC_ID_OFFSET + 605, LocationType.EXTRA,
-            logic.zerg_pass_vents
+            logic.zerg_pass_vents,
+            hard_rule=logic.zerg_pass_vents,
         ),
         make_location_data(SC2Mission.ENEMY_WITHIN.mission_name, "Stasis Quadrant", SC2HOTS_LOC_ID_OFFSET + 606, LocationType.EXTRA,
-            logic.zerg_pass_vents
+            logic.zerg_pass_vents,
+            hard_rule=logic.zerg_pass_vents,
         ),
         make_location_data(SC2Mission.DOMINATION.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 700, LocationType.VICTORY,
             logic.zerg_common_unit_basic_aa

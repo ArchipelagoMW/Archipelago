@@ -1,5 +1,5 @@
 from math import floor
-from typing import TYPE_CHECKING, Set, Optional, Callable
+from typing import TYPE_CHECKING, Set, Optional, Callable, Dict, Tuple
 
 from BaseClasses import CollectionState, Location
 from .options import (
@@ -21,6 +21,48 @@ if TYPE_CHECKING:
 
 
 class SC2Logic:
+    def __init__(self, world: Optional['SC2World']):
+        # Note: Don't store a reference to the world so we can cache this object on the world object
+        self.player = -1 if world is None else world.player
+        self.logic_level: int = world.options.required_tactics.value if world else RequiredTactics.default
+        self.advanced_tactics = self.logic_level != RequiredTactics.option_standard
+        self.take_over_ai_allies = bool(world and world.options.take_over_ai_allies)
+        self.kerrigan_unit_available = (
+            get_option_value(world, 'kerrigan_presence') in kerrigan_unit_available
+            and SC2Campaign.HOTS in get_enabled_campaigns(world)
+            and SC2Race.ZERG in get_enabled_races(world)
+        )
+        self.kerrigan_levels_per_mission_completed = get_option_value(world, "kerrigan_levels_per_mission_completed")
+        self.kerrigan_levels_per_mission_completed_cap = get_option_value(world, "kerrigan_levels_per_mission_completed_cap")
+        self.kerrigan_total_level_cap = get_option_value(world, "kerrigan_total_level_cap")
+        self.morphling_enabled = get_option_value(world, "enable_morphling") == EnableMorphling.option_true
+        self.story_tech_granted = get_option_value(world, "grant_story_tech") == GrantStoryTech.option_true
+        self.story_levels_granted = get_option_value(world, "grant_story_levels") != GrantStoryLevels.option_disabled
+        self.basic_terran_units = get_basic_units(self.logic_level, SC2Race.TERRAN)
+        self.basic_zerg_units = get_basic_units(self.logic_level, SC2Race.ZERG)
+        self.basic_protoss_units = get_basic_units(self.logic_level, SC2Race.PROTOSS)
+        self.spear_of_adun_presence = SpearOfAdunPresence.default if world is None else world.options.spear_of_adun_presence.value
+        self.spear_of_adun_autonomously_cast_presence = get_option_value(world, "spear_of_adun_autonomously_cast_ability_presence")
+        self.enabled_campaigns = get_enabled_campaigns(world)
+        self.mission_order = get_option_value(world, "mission_order")
+        self.generic_upgrade_missions = get_option_value(world, "generic_upgrade_missions")
+        self.all_in_map = get_option_value(world, "all_in_map")
+
+        # Must be set externally for accurate logic checking of upgrade level when generic_upgrade_missions is checked
+        self.total_mission_count = 1
+
+        # Conditionally set to False by the world after culling items
+        self.has_barracks_unit: bool = True
+        self.has_factory_unit: bool = True
+        self.has_starport_unit: bool = True
+        self.has_zerg_melee_unit: bool = True
+        self.has_zerg_ranged_unit: bool = True
+        self.has_zerg_air_unit: bool = True
+        self.has_protoss_ground_unit: bool = True
+        self.has_protoss_air_unit: bool = True
+
+        self.unit_count_functions: Dict[Tuple[SC2Race, int], Callable[[CollectionState], bool]] = {}
+        """Cache of logic functions used by any_units logic level"""
 
     def is_item_placement(self, state: CollectionState):
         """
@@ -29,39 +71,6 @@ class SC2Logic:
         """
         # has_group with count = 0 is always true for item placement and always false for SC2 item filtering
         return state.has_group("Missions", self.player, 0)
-
-    # Needs to react on how many missions actually got generated
-    def total_mission_count(self):
-        return (
-            1 if (self.world is None or not hasattr(self.world, 'custom_mission_order'))
-            else self.world.custom_mission_order.get_mission_count()
-        )
-
-    # Unit classes in world, these are set properly into the world after the item culling is done
-    # Therefore need to get from the world
-    def world_has_barracks_unit(self):
-        return self.world is not None and self.world.has_barracks_unit
-
-    def world_has_factory_unit(self):
-        return self.world is not None and self.world.has_factory_unit
-
-    def world_has_starport_unit(self):
-        return self.world is not None and self.world.has_starport_unit
-
-    def world_has_zerg_melee_unit(self):
-        return self.world is not None and self.world.has_zerg_melee_unit
-
-    def world_has_zerg_ranged_unit(self):
-        return self.world is not None and self.world.has_zerg_ranged_unit
-
-    def world_has_zerg_air_unit(self):
-        return self.world is not None and self.world.has_zerg_air_unit
-
-    def world_has_protoss_ground_unit(self):
-        return self.world is not None and self.world.has_protoss_ground_unit
-
-    def world_has_protoss_air_unit(self):
-        return self.world is not None and self.world.has_protoss_air_unit
 
     def get_very_hard_required_upgrade_level(self):
         return 2 if self.advanced_tactics else 3
@@ -77,7 +86,7 @@ class SC2Logic:
             else:
                 count += floor(
                     (100 / self.generic_upgrade_missions)
-                    * (state.count_group("Missions", self.player) / self.total_mission_count())
+                    * (state.count_group("Missions", self.player) / self.total_mission_count)
                 )
         count += state.count(upgrade_item, self.player)
         count += state.count_from_list(upgrade_bundle_inverted_lookup[upgrade_item], self.player)
@@ -98,19 +107,19 @@ class SC2Logic:
         Minimum W/A upgrade level for unit classes present in the world
         """
         count: int = WEAPON_ARMOR_UPGRADE_MAX_LEVEL
-        if self.world_has_barracks_unit():
+        if self.has_barracks_unit:
             count = min(
                 count,
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON, state),
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR, state)
             )
-        if self.world_has_factory_unit():
+        if self.has_factory_unit:
             count = min(
                 count,
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_VEHICLE_WEAPON, state),
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_VEHICLE_ARMOR, state)
             )
-        if self.world_has_starport_unit():
+        if self.has_starport_unit:
             count = min(
                 count,
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, state),
@@ -468,7 +477,7 @@ class SC2Logic:
             or state.has(item_names.ABERRATION, self.player)
             or (self.advanced_tactics
                 and (
-                    state.has_all({item_names.ZERGLING_BANELING_ASPECT, item_names.BANELING_CORROSIVE_ACID}, self.player)
+                    (self.morph_baneling(state) and state.has(item_names.BANELING_CORROSIVE_ACID, self.player))
                     or state.has_all({item_names.ROACH, item_names.ROACH_GLIAL_RECONSTITUTION}, self.player)
                 )
             )
@@ -736,7 +745,7 @@ class SC2Logic:
             or state.has_all({item_names.REAPER, item_names.REAPER_RESOURCE_EFFICIENCY}, self.player)
             or self.advanced_tactics
         )
-        if get_option_value(self.world, 'all_in_map') == AllInMap.option_ground:
+        if self.all_in_map == AllInMap.option_ground:
             # Ground
             defense_rating = self.terran_defense_rating(state, True, False)
             if state.has_any({item_names.BATTLECRUISER, item_names.BANSHEE}, self.player):
@@ -763,7 +772,7 @@ class SC2Logic:
                 or self.morph_brood_lord(state)
                 or self.advanced_tactics
         )
-        if get_option_value(self.world, 'all_in_map') == AllInMap.option_ground:
+        if self.all_in_map == AllInMap.option_ground:
             # Ground
             defense_rating = self.zerg_defense_rating(state, True, False)
             if state.has_any({item_names.MUTALISK, item_names.INFESTED_BANSHEE, item_names.INFESTED_DUSK_WINGS}, self.player) or self.morph_brood_lord(state):
@@ -793,7 +802,7 @@ class SC2Logic:
                 or (self.protoss_can_merge_dark_archon(state) and state.has(item_names.DARK_ARCHON_FEEDBACK, self.player))
                 or self.advanced_tactics
         )
-        if get_option_value(self.world, 'all_in_map') == AllInMap.option_ground:
+        if self.all_in_map == AllInMap.option_ground:
             # Ground
             defense_rating = self.protoss_defense_rating(state, True)
             if state.has_any({item_names.SKIRMISHER, item_names.DARK_TEMPLAR, item_names.TEMPEST, item_names.TRIREME}, self.player):
@@ -878,11 +887,11 @@ class SC2Logic:
 
     def zerg_army_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
         count: int = WEAPON_ARMOR_UPGRADE_MAX_LEVEL
-        if self.world_has_zerg_melee_unit():
+        if self.has_zerg_melee_unit:
             count = min(count, self.zerg_melee_weapon_armor_upgrade_min_level(state))
-        if self.world_has_zerg_ranged_unit():
+        if self.has_zerg_ranged_unit:
             count = min(count, self.zerg_ranged_weapon_armor_upgrade_min_level(state))
-        if self.world_has_zerg_air_unit():
+        if self.has_zerg_air_unit:
             count = min(count, self.zerg_flyer_weapon_armor_upgrade_min_level(state))
         return count
     
@@ -986,6 +995,12 @@ class SC2Logic:
                         or state.has(item_names.INFESTED_BUNKER, self.player)
                         or state.count(item_names.INFESTED_SIEGE_TANK_PROGRESSIVE_AUTOMATED_MITOSIS, self.player) >= (1 if self.advanced_tactics else 2)
                 )
+        )
+
+    def morph_baneling(self, state: CollectionState) -> bool:
+        return (
+            (state.has(item_names.ZERGLING, self.player) or self.morphling_enabled)
+            and state.has(item_names.ZERGLING_BANELING_ASPECT, self.player)
         )
 
     def morph_ravager(self, state: CollectionState) -> bool:
@@ -1352,19 +1367,19 @@ class SC2Logic:
     # LotV
     def protoss_army_weapon_armor_upgrade_min_level(self, state: CollectionState) -> int:
         count: int = WEAPON_ARMOR_UPGRADE_MAX_LEVEL + 1 # +1 for Quatro
-        if self.world_has_protoss_ground_unit():
+        if self.has_protoss_ground_unit:
             count = min(
                 count,
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_PROTOSS_GROUND_WEAPON, state),
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_PROTOSS_GROUND_ARMOR, state)
             )
-        if self.world_has_protoss_air_unit():
+        if self.has_protoss_air_unit:
             count = min(
                 count,
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON, state),
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_PROTOSS_AIR_ARMOR, state)
             )
-        if self.world_has_protoss_ground_unit() or self.world_has_protoss_air_unit():
+        if self.has_protoss_ground_unit or self.has_protoss_air_unit:
             count = min(
                 count,
                 self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_PROTOSS_SHIELDS, state),
@@ -1426,7 +1441,8 @@ class SC2Logic:
                 item_names.DARK_TEMPLAR,  # Archon, Dark Archon Meld
                 # Stargate
                 item_names.PHOENIX, item_names.MIRAGE, item_names.CORSAIR,
-                item_names.SCOUT, item_names.ARBITER,
+                item_names.SCOUT, item_names.MISTWING, item_names.CALADRIUS, item_names.OPPRESSOR,
+                item_names.ARBITER,
                 item_names.VOID_RAY, item_names.DESTROYER, item_names.INTERCESSOR,
                 item_names.CARRIER, item_names.SKYLORD, item_names.TEMPEST,
                 item_names.MOTHERSHIP,
@@ -2518,76 +2534,131 @@ class SC2Logic:
             and self.terran_very_hard_mission_weapon_armor_level(state)
         )
 
-    def __init__(self, world: Optional['SC2World']):
-        self.world = world
-        self.player = -1 if world is None else world.player
-        self.logic_level: int = world.options.required_tactics.value if world else RequiredTactics.default
-        self.advanced_tactics = self.logic_level != RequiredTactics.option_standard
-        self.take_over_ai_allies = bool(world and world.options.take_over_ai_allies)
-        self.kerrigan_unit_available = (
-            get_option_value(world, 'kerrigan_presence') in kerrigan_unit_available
-            and SC2Campaign.HOTS in get_enabled_campaigns(world)
-            and SC2Race.ZERG in get_enabled_races(world)
-        )
-        self.kerrigan_levels_per_mission_completed = get_option_value(world, "kerrigan_levels_per_mission_completed")
-        self.kerrigan_levels_per_mission_completed_cap = get_option_value(world, "kerrigan_levels_per_mission_completed_cap")
-        self.kerrigan_total_level_cap = get_option_value(world, "kerrigan_total_level_cap")
-        self.morphling_enabled = get_option_value(world, "enable_morphling") == EnableMorphling.option_true
-        self.story_tech_granted = get_option_value(world, "grant_story_tech") == GrantStoryTech.option_true
-        self.story_levels_granted = get_option_value(world, "grant_story_levels") != GrantStoryLevels.option_disabled
-        self.basic_terran_units = get_basic_units(self.logic_level, SC2Race.TERRAN)
-        self.basic_zerg_units = get_basic_units(self.logic_level, SC2Race.ZERG)
-        self.basic_protoss_units = get_basic_units(self.logic_level, SC2Race.PROTOSS)
-        self.spear_of_adun_presence = SpearOfAdunPresence.default if world is None else world.options.spear_of_adun_presence.value
-        self.spear_of_adun_autonomously_cast_presence = get_option_value(world, "spear_of_adun_autonomously_cast_ability_presence")
-        self.enabled_campaigns = get_enabled_campaigns(world)
-        self.mission_order = get_option_value(world, "mission_order")
-        self.generic_upgrade_missions = get_option_value(world, "generic_upgrade_missions")
+    def has_terran_units(self, target: int) -> Callable[['CollectionState'], bool]:
+        def _has_terran_units(state: CollectionState) -> bool:
+            return (
+                state.count_from_list_unique(item_groups.terran_units + item_groups.terran_buildings, self.player) >= target
+            ) and (
+                # Anything that can hit buildings
+                state.has_any((
+                    # Infantry
+                    item_names.MARINE, item_names.FIREBAT, item_names.MARAUDER,
+                    item_names.REAPER, item_names.HERC, item_names.DOMINION_TROOPER,
+                    item_names.GHOST, item_names.SPECTRE,
+                    # Vehicles
+                    item_names.HELLION, item_names.VULTURE, item_names.SIEGE_TANK,
+                    item_names.WARHOUND, item_names.GOLIATH, item_names.DIAMONDBACK,
+                    item_names.THOR, item_names.PREDATOR, item_names.CYCLONE,
+                    # Ships
+                    item_names.WRAITH, item_names.VIKING, item_names.BANSHEE,
+                    item_names.RAVEN, item_names.BATTLECRUISER,
+                    # RG
+                    item_names.SON_OF_KORHAL, item_names.AEGIS_GUARD, item_names.EMPERORS_SHADOW,
+                    item_names.BULWARK_COMPANY, item_names.SHOCK_DIVISION, item_names.BLACKHAMMER,
+                    item_names.SKY_FURY, item_names.NIGHT_WOLF, item_names.NIGHT_HAWK,
+                    item_names.PRIDE_OF_AUGUSTRGRAD,
+                    # Mercs with shortest initial cooldown (300s)
+                    item_names.WAR_PIGS, item_names.DEATH_HEADS,
+                    item_names.HELS_ANGELS, item_names.WINGED_NIGHTMARES,
+                ), self.player)
+                or state.has_all((item_names.LIBERATOR, item_names.LIBERATOR_RAID_ARTILLERY), self.player)
+                or state.has_all((item_names.EMPERORS_GUARDIAN, item_names.LIBERATOR_RAID_ARTILLERY), self.player)
+                or state.has_all((item_names.VALKYRIE, item_names.VALKYRIE_FLECHETTE_MISSILES), self.player)
+                or state.has_all((item_names.WIDOW_MINE, item_names.WIDOW_MINE_DEMOLITION_ARMAMENTS), self.player)
+            )
+        return _has_terran_units
+
+    def has_zerg_units(self, target: int) -> Callable[['CollectionState'], bool]:
+        def _has_zerg_units(state: CollectionState) -> bool:
+            return (
+                state.count_from_list_unique(item_groups.zerg_units + item_groups.zerg_buildings, self.player) >= target
+            ) and (
+                # Anything that can hit buildings
+                state.has_any((
+                    item_names.ZERGLING, item_names.SWARM_QUEEN,
+                    item_names.ROACH, item_names.HYDRALISK,
+                    item_names.ABERRATION, item_names.SWARM_HOST,
+                    item_names.MUTALISK, item_names.ULTRALISK,
+                    item_names.PYGALISK,
+                    item_names.INFESTED_MARINE, item_names.INFESTED_BUNKER,
+                    item_names.INFESTED_DIAMONDBACK, item_names.INFESTED_SIEGE_TANK,
+                    item_names.INFESTED_BANSHEE,
+                    # Mercs with <= 300s first drop time
+                    item_names.DEVOURING_ONES, item_names.HUNTER_KILLERS,
+                    item_names.THORNSHELL, item_names.HUNTERLING,
+                ), self.player)
+                or state.has_all((item_names.INFESTOR, item_names.INFESTOR_INFESTED_TERRAN), self.player)
+                or self.morph_baneling(state)
+                or self.morph_lurker(state)
+                or self.morph_impaler(state)
+                or self.morph_brood_lord(state)
+                or self.morph_guardian(state)
+                or self.morph_ravager(state)
+                or self.morph_igniter(state)
+                or self.morph_tyrannozor(state)
+                or self.morph_devourer(state) and state.has(item_names.DEVOURER_PRESCIENT_SPORES, self.player)
+            )
+        return _has_zerg_units
+
+    def has_protoss_units(self, target: int) -> Callable[['CollectionState'], bool]:
+        def _has_protoss_units(state: CollectionState) -> bool:
+            return (
+                state.count_from_list_unique(
+                    item_groups.protoss_units
+                    + item_groups.protoss_buildings
+                    + [item_names.NEXUS_OVERCHARGE],
+                    self.player
+                ) >= target
+            ) and (
+                # Anything that can hit buildings
+                state.has_any((
+                    # Gateway
+                    item_names.ZEALOT, item_names.CENTURION, item_names.SENTINEL, item_names.SUPPLICANT,
+                    item_names.STALKER, item_names.INSTIGATOR, item_names.SLAYER,
+                    item_names.DRAGOON, item_names.ADEPT,
+                    item_names.SENTRY, item_names.ENERGIZER,
+                    item_names.AVENGER, item_names.DARK_TEMPLAR, item_names.BLOOD_HUNTER,
+                    item_names.HIGH_TEMPLAR, item_names.SIGNIFIER, item_names.ASCENDANT,
+                    item_names.DARK_ARCHON,
+                    # Robo
+                    item_names.IMMORTAL, item_names.ANNIHILATOR, item_names.VANGUARD, item_names.STALWART,
+                    item_names.COLOSSUS, item_names.WRATHWALKER,
+                    item_names.REAVER, item_names.DISRUPTOR,
+                    # Stargate
+                    item_names.SKIRMISHER,
+                    item_names.SCOUT, item_names.MISTWING, item_names.OPPRESSOR,
+                    item_names.INTERCESSOR, item_names.VOID_RAY, item_names.DESTROYER, item_names.DAWNBRINGER,
+                    item_names.ARBITER, item_names.ORACLE,
+                    item_names.CARRIER, item_names.TRIREME, item_names.SKYLORD,
+                    item_names.TEMPEST, item_names.MOTHERSHIP,
+                ), self.player)
+                or state.has_all((item_names.WARP_PRISM, item_names.WARP_PRISM_PHASE_BLASTER), self.player)
+                or state.has_all((item_names.CALADRIUS, item_names.CALADRIUS_CORONA_BEAM), self.player)
+                or state.has_all((item_names.PHOTON_CANNON, item_names.KHALAI_INGENUITY), self.player)
+            )
+        return _has_protoss_units
+
+    def has_race_units(self, target: int, race: SC2Race) -> Callable[['CollectionState'], bool]:
+        if target == 0 or race == SC2Race.ANY:
+            return Location.access_rule
+        result = self.unit_count_functions.get((race, target))
+        if result is not None:
+            return result
+        if race == SC2Race.TERRAN:
+            result = self.has_terran_units(target)
+        if race == SC2Race.ZERG:
+            result = self.has_zerg_units(target)
+        if race == SC2Race.PROTOSS:
+            result = self.has_protoss_units(target)
+        assert result
+        self.unit_count_functions[(race, target)] = result
+        return result
 
 
 def get_basic_units(logic_level: int, race: SC2Race) -> Set[str]:
-    if logic_level == RequiredTactics.option_no_logic:
+    if logic_level > RequiredTactics.option_advanced:
         return no_logic_basic_units[race]
     elif logic_level == RequiredTactics.option_advanced:
         return advanced_basic_units[race]
     else:
         return basic_units[race]
-
-
-def has_terran_units(player: int, target: int) -> Callable[['CollectionState'], bool]:
-    def _has_terran_units(state: CollectionState) -> bool:
-        return (
-            state.count_from_list_unique(item_groups.terran_units + item_groups.terran_buildings, player) >= target
-        )
-    return _has_terran_units
-
-
-def has_zerg_units(player: int, target: int) -> Callable[['CollectionState'], bool]:
-    def _has_zerg_units(state: CollectionState) -> bool:
-        return (
-            state.count_from_list_unique(item_groups.zerg_units + item_groups.zerg_buildings, player) >= target
-        )
-    return _has_zerg_units
-
-
-def has_protoss_units(player: int, target: int) -> Callable[['CollectionState'], bool]:
-    def _has_protoss_units(state: CollectionState) -> bool:
-        return (
-            state.count_from_list_unique(
-                item_groups.protoss_units
-                + item_groups.protoss_buildings
-                + [item_names.NEXUS_OVERCHARGE],
-                player
-            ) >= target
-        )
-    return _has_protoss_units
-
-
-def has_race_units(player: int, target: int, race: SC2Race) -> Callable[['CollectionState'], bool]:
-    if race == SC2Race.TERRAN:
-        return has_terran_units(player, target)
-    if race == SC2Race.ZERG:
-        return has_zerg_units(player, target)
-    if race == SC2Race.PROTOSS:
-        return has_protoss_units(player, target)
-    return Location.access_rule
