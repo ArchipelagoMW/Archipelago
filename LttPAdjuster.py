@@ -41,7 +41,7 @@ class AdjusterWorld(object):
         import random
         self.sprite_pool = {1: sprite_pool}
         self.per_slot_randoms = {1: random}
-        self.worlds = {1: AdjusterSubWorld(random)}
+        self.worlds = {1: self.AdjusterSubWorld(random)}
 
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
